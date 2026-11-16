@@ -1,0 +1,143 @@
+{
+  "id": "ohH6LBM2EiU",
+  "title": "Dan Norder: Chase: The BASIC Language Proto-Roguelike",
+  "speaker": "Dan Norder",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=ohH6LBM2EiU",
+  "talk_type": "history",
+  "summary": "Dan Norder, marking BASIC's 60th anniversary, traces the history of Chase, a BASIC game he calls a proto-roguelike: top-down, turn-based, randomly placed, with permadeath, in which the player lures predictable pursuing robots into electrified fences. He covers BASIC's origins at Dartmouth, Chase's first appearance in Creative Computing (1976), its many variants (teleport, wait, last stand, Escape, Hi-Volts, Hobbit, Robots for UNIX, Daleks, Trolls) and its influence on Robotron: 2084, plus the unresolved question of who originally wrote it. He closes by recommending Chase as an addictive, easily non-violent beginner project whose skills transfer to roguelikes, and suggests ways to fold its mechanics into roguelikes.",
+  "games": [
+    "Chase",
+    "Robots",
+    "Daleks",
+    "Robotron: 2084",
+    "Escape",
+    "Hi-Volts",
+    "Hobbit",
+    "Seven Seas",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "proto-roguelikes",
+      "kind": "history",
+      "claim": "Chase counts as a proto-roguelike because it is top-down, turn-based, map-based, randomly placed and has permadeath, but lacks inventory, stats, true procedural generation and conventional combat.",
+      "detail": "Norder says the randomness is 'too random' — it throws objects out wherever they land — and there are no multiple ways to do things. The whole game is a player, robots and electrified fences.",
+      "t": 90,
+      "quote": "it is top-down, it is turn-based, and the GIFs here are a symbol of the location of items",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "predictable enemies",
+      "kind": "example",
+      "claim": "Chase's whole tactics come from robots that always take the shortest route to the player, so players can predict their moves exactly and lure them into fences or each other.",
+      "detail": "There is no real combat: the player avoids death and gets robots to crash into obstacles. Because the robots were predictable, one early variant let players skip printing the map.",
+      "t": 234,
+      "quote": "the robots always follow the shortest passable route to chase you. You can predict exactly where they are going to go",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "basic and dartmouth",
+      "kind": "history",
+      "claim": "BASIC was created at Dartmouth in 1964 to be accessible beyond science and math students, and John Kemeny encouraged games there, unlike other institutions that deleted games and lost them.",
+      "detail": "Up to 85% of Dartmouth students used it via teletype terminals, sharing and adapting programs. Kemeny believed games would popularize the language. Chase was probably created on this system, though no original copy survives.",
+      "t": 430,
+      "quote": "if they saw you were using up the university resources to have a game they would delete it. They lost a lot of really good games that way",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "chase variants",
+      "kind": "history",
+      "claim": "Chase first appears in Creative Computing's first 1976 issue, where players could only move in eight directions; later variants added the panic teleport, waiting in place and a 'last stand' option.",
+      "detail": "The original version could not even wait in place. An assembly port added the first teleport ('P' for panic); a 1978 version added last stand; a later Creative Computing version combined teleport, wait and last stand into 'the Chase we know'. Teleports were random and could land you on an obstacle or robot.",
+      "t": 518,
+      "quote": "You couldn't teleport which is a major feature later. You couldn't even wait in place",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "authorship",
+      "kind": "open-question",
+      "claim": "The original author of Chase is unknown: it was attributed to Mac Oglesby, who denied writing it, and Norder speculates about a David Sweet who wrote a Dartmouth BASIC game and later the Chase-like Hobbit.",
+      "detail": "Per Maury Markowitz, Oglesby said he only saw the game. Norder found a David Sweet who wrote a bullfighting BASIC game at Dartmouth before 1974; both that and Hobbit (1983, Rainbow) reward riskier actions with more points, but it is unknown if they're the same person.",
+      "t": 743,
+      "quote": "Problem is Oglesby denied creating the game. Said he didn't create it or port it and just saw it at some point",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "chase variants",
+      "kind": "example",
+      "claim": "Chase variants experimented with rules like colliding attackers teleporting randomly (Escape), a destroy-everything tank, enemies that mirror your moves (H-Volt), and diagonal movement only for robots (Robot Minefield).",
+      "detail": "Escape (1979) also was probably the first non-robot theme (military) and limited teleports to two. Norder finds the collide-and-teleport rule frustrating and the robots-move-diagonally-but-you-can't rule unfair; in Robot Minefield colliding robots merged instead of dying.",
+      "t": 809,
+      "quote": "when the attackers collided they both randomly teleport which I can only imagine was really a pain",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "robotron",
+      "kind": "history",
+      "claim": "Williams' arcade game Robotron: 2084 (1982) was directly inspired by Chase, starting with only grunts and electrodes before adding humans to rescue, more enemies and twin-stick shooting.",
+      "detail": "Norder includes it because the developers credited Chase as a direct inspiration. In Q&A he says Robotron is great because it added so much that it doesn't seem like Chase, yet is.",
+      "t": 1026,
+      "quote": "I have included this one because it was actually directly inspired by Chase",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "risk and reward",
+      "kind": "example",
+      "claim": "The Chase variant Hobbit let players choose how many orcs to face per round, scoring more for more enemies and bonuses for killing all, but negative points for dying.",
+      "detail": "It had three rounds and a 'new screen' option to reroll a layout you didn't like, encouraging players to take on as many orcs as they thought they could beat.",
+      "t": 1213,
+      "quote": "You wanted to face as many orcs as you think you could defeat",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "robots for unix",
+      "kind": "history",
+      "claim": "Allan Black's Robots for UNIX (1984) became most people's idea of Chase by starting with no obstacles, creating junk heaps only when robots crash; Daleks for the Mac followed, and later versions mostly adapt these two.",
+      "detail": "Daleks added a sonic screwdriver from Doctor Who. Trolls by Bob Nystrom and Mark Cenicola had an elf firing arrows and blocks that stopped trolls.",
+      "t": 1371,
+      "quote": "You don't get an obstacle until two or more of the robots crash and make a junk heap",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "beginner projects",
+      "kind": "principle",
+      "claim": "A Chase clone is a good entry-level programming project because it is addictive, simple, easy to make non-violent, and its techniques carry over to building a full roguelike.",
+      "detail": "Norder notes many people pull their hair out with roguelikes because there's so much to do; Chase adapts to many themes, as in PopCap's pirate-themed Seven Seas (2001) with three ship types, whirlpools and sea monsters.",
+      "t": 1532,
+      "quote": "anything you learn how to do when you make Chase can also be applied to a roguelike later",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "chase mechanics",
+      "kind": "technique",
+      "claim": "Chase's mechanics can add variety to roguelikes by making pursuing enemies deal heavy damage or status effects instead of instant death, and turning electrified fences into traps, fields or lava.",
+      "detail": "Norder suggests themes like robots, zombies and orcs, noting instant fatality isn't very roguelike.",
+      "t": 1586,
+      "quote": "The enemies wouldn't have to be instantly fatal because that's not really a roguelike thing",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "minimalism",
+      "kind": "principle",
+      "claim": "Adding many features to Chase dilutes the minimalist purity that makes it addictive and helped it persist across generations.",
+      "detail": "In Q&A Norder says he excluded variants that no longer felt like Chase and that adding a bunch of stuff dilutes it; host Alexei compares this to long-surviving simple games like chess and Go.",
+      "t": 1777,
+      "quote": "adding a bunch of stuff to it somehow dilutes the purity of it which is part of why it is so addictive",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

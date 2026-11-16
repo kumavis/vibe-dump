@@ -1,0 +1,171 @@
+{
+  "id": "60MTG-__dt4",
+  "title": "Lightning Talks - Roguelike Celebration 2018",
+  "speaker": "Various (Kawa, Eben Howard, Kate Compton, and unnamed speakers)",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=60MTG-__dt4",
+  "talk_type": "other",
+  "summary": "Six lightning talks. An unnamed speaker connects Gillian Smith's generative-space visualization of procedural generators to phase portraits and bifurcation diagrams in chaos theory. Kawa examines the 'morgue' (everything between a character's death and the next run) as an extra-ludic space for conveying tone, improving play and generating stories. Eben Howard promotes the open-source Java roguelike library SquidLib. An unnamed tabletop GM proposes letting players write a description of their own death for the high score or morgue file. Kate Compton demos Chancery, a finite-state-machine chatbot language built on Tracery. A final unnamed developer shows a procedural alien-whale observation game and asks who its audience would be.",
+  "games": [
+    "NetHack",
+    "N++",
+    "Dungeons of Dredmor",
+    "Caves of Qud",
+    "Dungeon Crawl Stone Soup",
+    "Crypt of the NecroDancer",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range",
+      "kind": "technique",
+      "claim": "A generator can be understood as a whole by scoring many outputs on numeric metrics and plotting them as axes of a generative space, for example a heat map of level linearity against leniency.",
+      "detail": "The first speaker summarizes Gillian Smith's essay in Procedural Generation in Game Design: define metrics such as density or AI-measured difficulty, generate a thousand levels, and plot them to see what the generator tends to produce, such as clustering mid-leniency with very low or very high linearity.",
+      "t": 142,
+      "quote": "every piece of content created by the system can be measured and plotted on this n-dimensional generative space",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range",
+      "kind": "technique",
+      "claim": "Varying a generator's tuning parameters and re-plotting its generative space each time reveals its expressive space, letting a developer pick the parameter set whose output shape best matches what they want.",
+      "detail": "Relaying Gillian Smith, the speaker describes changing parameters such as maximum level size or number of platforms to produce new outputs, comparing the plots, and choosing the one with the best representation of desired levels.",
+      "t": 200,
+      "quote": "you can tweak the parameters of your generator so if you have something like max level size or number of platforms",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "chaos theory",
+      "kind": "open-question",
+      "claim": "Procedural generation and chaos theory approach the same problem from opposite directions: generator designers build systems and try to understand their output, while chaos theorists visualize observed systems to find the generator behind them.",
+      "detail": "The speaker draws parallels between generative-space plots and chaos theory's phase portraits and Robert May's bifurcation diagram of population dynamics, which revealed fractal structure in apparent chaos. The framing of opposite directions is credited to a conversation with another attendee.",
+      "t": 471,
+      "quote": "as procedural content generators were creating these generators and trying to understand the output and for chaos theory they're looking at existing systems in nature",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "Roguelike players expect frequent death as normal, whereas N++ playtesters were so distressed by dying that the developers made an attract screen showing the ninja dying repeatedly to signal that death is normal.",
+      "detail": "Kawa uses this contrast to argue that death is core to the roguelike experience and therefore deserves design attention.",
+      "t": 595,
+      "quote": "it's a roguelike thing that death is completely normal that failure is completely normal",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "morgue files",
+      "kind": "principle",
+      "claim": "The 'morgue', everything between a character's death and the player choosing to quit or retry, is an extra-ludic space with three functions: conveying lore and tone, improving play, and fueling storytelling.",
+      "detail": "Kawa expands the old roguelike term for a death printout to cover any post-death experience, from a simple try-again prompt to a huge file, and notes that player discussion between games is also extra-ludic and forms the game's culture.",
+      "t": 655,
+      "quote": "I am expanding that definition to be literally anything between when the character dies and when the player decides to quit or try again",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "death screens",
+      "kind": "example",
+      "claim": "A death screen immediately tells the player what kind of game they played: Dungeons of Dredmor's ornate 'congratulations, you have died' is jokey, while Caves of Qud reports who killed you, their faction and beliefs.",
+      "detail": "Kawa contrasts Dredmor's trope-mocking tone with Qud's world information, which conveys that you are just one mutant of many in a living world.",
+      "t": 753,
+      "quote": "the very first screen when the player is aware that they're dead tells you a lot about what game you've just played",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "morgue files",
+      "kind": "example",
+      "claim": "Morgue detail should fit the game: Dungeon Crawl Stone Soup records everything about a character so players can study how they could have done better, while Crypt of the NecroDancer shows only the last twelve moves, which is enough for a small game.",
+      "detail": "Kawa says her mid-game DCSS morgue would have been 41 pages, and public Crawl servers keep morgue folders anyone can read to learn. NecroDancer's last-twelve-beats replay is lost forever if not saved.",
+      "t": 880,
+      "quote": "crypt in the necrodancer literally just shows you the last twelve moves you did just the last twelve beats and it's perfectly valid",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "death stories",
+      "kind": "principle",
+      "claim": "Telling stories about deaths and failures, such as Yet Another Silly Death posts, looted screenshots and Boatmurdered, is central to roguelike culture and something games should support.",
+      "detail": "Kawa calls storytelling the third morgue function and says creating such stories from randomness is everything she wants from roguelikes.",
+      "t": 946,
+      "quote": "this is what we do when we're not actually able to play a game it's think about and work on the stories we tell around those games",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "squidlib",
+      "kind": "technique",
+      "claim": "SquidLib is an Apache 2.0 Java roguelike library offering grid math, many dungeon generators and colored glyph display, with a modern libGDX-based version and an older Swing-based version for drawing characters to a JPanel.",
+      "detail": "Eben Howard notes most recent work is by Tommy Ettinger, the 3.0 line is split into pick-what-you-want modules and supports web via GWT, while 2.9.1 is the last Swing release. A user-requested castle generator (moat, curtain wall, keep) was being added.",
+      "t": 1228,
+      "quote": "here's all the pieces of the library pick the parts you want",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player-written deaths",
+      "kind": "technique",
+      "claim": "A roguelike could ask the player 'would you like to describe your death?' on dying and store a short player-written blurb in the high score or morgue file, borrowing a tabletop RPG practice to make frequent deaths meaningful.",
+      "detail": "The speaker, a GM of lethal old-school tabletop games, says frequent death must be made special. A terse message like being killed by an orc becomes meaningful when described; letting the player write it relieves the game of generating zany descriptions, as the GM's job is eased in tabletop play.",
+      "t": 1500,
+      "quote": "what if at the moment of your death when it says you have died you would get the question would you like to describe your death",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "death messages",
+      "kind": "example",
+      "claim": "A specific death message such as a barbarian who 'choked on his own vomit while paralyzed' tells a story by itself, unlike a generic 'killed by an orc'.",
+      "detail": "The tabletop GM speaker cites this as his most meaningful death in his favorite roguelike (the transcript name is unclear), saying you can visualize the story without being told it.",
+      "t": 1443,
+      "quote": "choked on his own vomit while paralyzed now that's a very good death message that really stands out",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "role-playing",
+      "kind": "principle",
+      "claim": "Recording player-described deaths encourages healthy metagaming: when death is foreseeable, players act in character to make it dramatic rather than purely tactical.",
+      "detail": "The speaker compares charging a dragon when doomed in a tabletop game to a roguelike where you know you have about five moves left; if the story is recorded, people will see it. He argues acting in character is more fun than thinking tactically.",
+      "t": 1602,
+      "quote": "acting and character is more fun than thinking tactically in my opinion therefore it is better because the object of the game is to have fun",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "chatbots",
+      "kind": "technique",
+      "claim": "Kate Compton's Chancery models chatbots as finite state machines like a board game with instructions written on its spaces, combined with an internal blackboard and Tracery text generation.",
+      "detail": "Her kitten simulator moves between idle, hungry and angry states on timers and tracks how many pets it tolerates before biting; a 'Zork at the end of the world' runs multiple state machines at once. She live-codes D&D bots with states and exits triggered by speech or waiting, inspired by talk of chat-only accessible roguelikes.",
+      "t": 1775,
+      "quote": "a finite state machine you can't kind of think of it as like a board game but one of those old-fashioned board games",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "familiarity",
+      "kind": "principle",
+      "claim": "Procedural content is easier to generate convincingly the less familiar its audience is with the real thing: alien spacecraft are easy, human faces hardest, and you should never procedurally generate a '57 Chevy.",
+      "detail": "The final speaker places all generated content on this familiarity continuum, which led him to generate extraterrestrial whales in alien seas rather than terrestrial ones.",
+      "t": 2260,
+      "quote": "the human face is the hardest thing to procedurally generate that we could possibly do because everybody has looked at and studied human faces",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience",
+      "kind": "open-question",
+      "claim": "A contemplative procedural game about observing and photographing alien whale species raises the problem of identifying and reaching an audience for a non-combat generative game.",
+      "detail": "The developer can only zoom in on generated whale pods and compare species features like flukes and dorsal fins; having built his vision, he is at a loss as to who would want it and asks for feedback.",
+      "t": 2475,
+      "quote": "I'm having a really really hard time figuring out what the audience is for this or where I would find that audience",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

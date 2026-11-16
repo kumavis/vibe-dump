@@ -1,0 +1,225 @@
+{
+  "id": "xSYVQc7cH-4",
+  "title": "Jeremiah Reid - Juice your Turns",
+  "speaker": "Jeremiah Reid",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=xSYVQc7cH-4",
+  "talk_type": "design",
+  "summary": "Jeremiah Reid, developer of Golden Krone Hotel and several 7DRLs, argues that 'juice' (excessive, satisfying feedback for player input) suits traditional turn-based roguelikes and is cheap to add because it is mostly code-driven interpolation rather than art. He surveys juicy roguelikes (Brogue, Cogmind, Fidel Dungeon Rescue, Crypt of the NecroDancer, Dungeonmans, Jupiter Hell) and then live-demos layering techniques onto a plain ASCII roguelike: palette, smooth movement and camera, squash and stretch, hops, anticipation, bump attacks, screen shake variants, damage numbers, corpses, sound and music. His one hard rule is that animation must never block the player from acting as fast as they want. Q&A covers sequencing animations and juice in strategy games.",
+  "games": [
+    "Golden Krone Hotel",
+    "Brogue",
+    "Cogmind",
+    "Fidel Dungeon Rescue",
+    "Crypt of the NecroDancer",
+    "Dungeonmans",
+    "Jupiter Hell",
+    "Dungeons of Dredmor",
+    "Final Fantasy",
+    "Teleglitch",
+    "Infra Arcana"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game juice",
+      "kind": "principle",
+      "claim": "Juice is excessive feedback relative to player input that makes interacting with a game satisfying, and it can be mechanical or textual as well as visual or auditory.",
+      "detail": "Reid defines juice via fruit juice: responsive, alive, messy. He quotes definitions describing juice as maximum output for minimum input, but pushes back on calling it mechanically superfluous, since mechanics themselves can be juicy.",
+      "t": 121,
+      "quote": "juice is typically auditory or visual but it doesn't really need to be it's about maximum output output for minimum input",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game juice",
+      "kind": "warning",
+      "claim": "Reid regrets not adding juice to Golden Krone Hotel in its first years, believing it would have drawn a bigger audience earlier.",
+      "detail": "He held off because he didn't know the techniques existed, assumed they were harder than they turned out to be, and thought juice belonged to action games rather than traditional roguelikes. All three assumptions proved wrong.",
+      "t": 222,
+      "quote": "why didn't i add some of these things like early on like in year one or two it would have drawn in a bigger audience",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii effects",
+      "kind": "example",
+      "claim": "Brogue and Cogmind show that a terminal-style grid limited to glyph, foreground and background colour can still look striking and juicy.",
+      "detail": "Reid distinguishes on-grid roguelikes, where you only choose a character and two colours per cell, from off-grid ones with rotation, scaling and offsets. Brogue's water and gas effects and Cogmind's explosions achieve a lot within the on-grid constraint.",
+      "t": 323,
+      "quote": "can you make a really great looking game or a juicy game within those confines and i think brogue is an example that you really can",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game juice",
+      "kind": "example",
+      "claim": "Fidel Dungeon Rescue's level-up moment layers many animations together and also restores health, making it feel good both visually and mechanically.",
+      "detail": "Reid calls a three-second clip of it a master class in juice: the 'level up' text alone has around ten things animating, and mechanically leveling refills health and adds a heart.",
+      "t": 381,
+      "quote": "even mechanically it feels good because when you level up you get all your health back",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game juice",
+      "kind": "principle",
+      "claim": "Juice is cheap because it is 'coded in, not drawn in': it is mostly interpolating scale, position, rotation and colour, so solo programmer-developers can do it without art skills.",
+      "detail": "Reid compares the belief that juice needs lots of art to the Juicero, an expensive device that turned out to just squeeze packets you could squeeze by hand. A generic tween that moves a property toward a target is about 30 lines in a dynamic language.",
+      "t": 562,
+      "quote": "juice is cheap juice is coated in not drawn in it's really at the end of the day a programming technique",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "easing",
+      "kind": "technique",
+      "claim": "Linear and exponential easing cover most roguelike animation needs, and exponential easing is just shaving a fixed percentage off the remaining distance each frame.",
+      "detail": "To move a sprite from tile A to tile B, you reduce the delta toward zero. Linear easing uses constant velocity; exponential removes e.g. 10% of the delta per step, which moves fast at first then slows near the target and looks pleasing.",
+      "t": 656,
+      "quote": "all you do is like shave off percent of the delta every turn 10 10 or whatever value is appropriate",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "animation speed",
+      "kind": "principle",
+      "claim": "Animations in a traditional roguelike must never block the player from acting as fast as they want, because mashing keys to fly across the map is a staple of the genre.",
+      "detail": "Reid says this is the one rule that must be followed; critics associate juice with slow press-wait-press gameplay, citing Dungeons of Dredmor. There is no strictly necessary reason to stop a player from mashing a key and moving instantly.",
+      "t": 676,
+      "quote": "do not block the player from playing as fast as they want",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "frame timing",
+      "kind": "technique",
+      "claim": "Scaling every animation by elapsed frame time both smooths choppy frame rates and lets the developer 'lie about time' to slow animations for debugging, add drama, or speed them up.",
+      "detail": "If a frame is skipped, the next frame animates twice as much. Once all animations run on this time system, a global time multiplier can slow everything to inspect odd-looking motion or accelerate everything so it doesn't block the player.",
+      "t": 765,
+      "quote": "once you have all your animations uh using this time system you can control time and lie about it",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "colour palette",
+      "kind": "technique",
+      "claim": "Desaturating colours and choosing a deliberate palette is one of the simplest ways to make a plain ASCII roguelike look better.",
+      "detail": "The first step of Reid's demo replaces garish default colours with a more considered palette, followed by a slight screen rotation to make the view look less static.",
+      "t": 835,
+      "quote": "we can just desaturate the colors and choose a better color palette so basically just take some time to think about your colors",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "movement animation",
+      "kind": "technique",
+      "claim": "Queue each tile-to-tile move separately when animating monsters, and have the camera follow the player's animated position with a slight lag.",
+      "detail": "Animating all of a turn's moves at once makes a monster turning a corner slide diagonally, so each step is tracked individually. Tying the camera to the player's animated position removes jerkiness, and a slow follow makes it feel less stiff.",
+      "t": 871,
+      "quote": "you want to keep track of them individually because if you do it all in one go and there's many movements",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "squash and stretch",
+      "kind": "technique",
+      "claim": "Adding squash-and-stretch bouncing and a parabolic hop to grid movement makes a turn-based game feel dramatically better.",
+      "detail": "Inspired by the 7DRL Acatha in Absurdia, Reid applies the first Disney animation principle: the character crouches short and wide, then stretches tall and thin, looping even while idle. The z-position of the hop is a simple parabola.",
+      "t": 962,
+      "quote": "if you just add a little bit of bouncing to the game uh it makes it feel really great",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "anticipation",
+      "kind": "technique",
+      "claim": "A slight lean in the movement direction and a short anticipation delay before leaving a tile give movement a bouncy, poppy feel.",
+      "detail": "Like a real jump requiring a crouch first, the character pauses briefly before moving to the next tile; tuning the delay changes how sticky and bouncy the movement feels.",
+      "t": 1072,
+      "quote": "before they actually move to the next tile there's a small delay",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "animation speed",
+      "kind": "technique",
+      "claim": "To keep input responsive, apply every keypress immediately and speed up outstanding animations (Reid doubles their speed) so visuals catch up.",
+      "detail": "With anticipation delays, pressing right twice originally moved only once. Reid instead processes every input and doubles the speed of each pending animation, letting the player cross a dozen tiles in about twice the time of a single move.",
+      "t": 1139,
+      "quote": "for every outstanding animation i double the speed and it gets pretty ridiculously fast",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "screen shake",
+      "kind": "technique",
+      "claim": "Screen shake is a core juice technique, and directional variants (shaking toward the attacked enemy, rotating when hit) make attacks feel more satisfying than random shake.",
+      "detail": "Basic shake randomizes camera x/y. Inspired by Crypt of the NecroDancer, Reid's Golden Krone Hotel attacks nudge the camera toward the enemy so it feels like leaning into the blow; when the player is hit, the camera rotation shakes as if slapped.",
+      "t": 1212,
+      "quote": "instead of randomly moving uh the camera all around i just move in one given direction of the enemy",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "damage numbers",
+      "kind": "technique",
+      "claim": "Hit flashes and damage numbers are essential feedback, with critical hits shown larger to stand out.",
+      "detail": "Reid adds the classic white flash on being hit and says every game needs damage numbers regardless of how much other juice it has; crits get doubled size.",
+      "t": 1256,
+      "quote": "every game regardless of what you're doing with juice you need to have damage numbers",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "persistent feedback",
+      "kind": "technique",
+      "claim": "Leaving visible evidence of the player's actions in the world, like corpses, makes actions feel impactful.",
+      "detail": "Taking an idea from another talk, Reid argues a character fighting through a dungeon should leave traces; his demo leaves corpses and later sends killed enemies flying through the air with rotation.",
+      "t": 1289,
+      "quote": "have the player's actions have more of an impact on the world or be more visibly present",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juicy mechanics",
+      "kind": "example",
+      "claim": "Jupiter Hell's one-shell-at-a-time reloading shows how a mechanic itself can be juice.",
+      "detail": "Reid calls individually reloading a shotgun or revolver his favourite juicy mechanic in Jupiter Hell and copies it into his demo, alongside cheap sound effects made with free sounds or a sound generator.",
+      "t": 1374,
+      "quote": "you have to individually reload your bullets and it feels really satisfying so it's just an example where a mechanic can be juiced too",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game juice",
+      "kind": "warning",
+      "claim": "Juice must fit the game's tone: bouncy cartoon effects suit a silly game but may be wrong for a serious one, and excessive juice can be bloated and slow.",
+      "detail": "Reid notes his game involves drinking blood off the floor so silliness fits, but a game like Infra Arcana might not want these techniques. Asked about misuse, he cites blocking animations and that some found Teleglitch too much.",
+      "t": 1620,
+      "quote": "if your game is cartoony it can be a little bouncy if you're making like infra arcana maybe these are not necessarily good techniques to use",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "animation sequencing",
+      "kind": "open-question",
+      "claim": "Sequencing animations so they follow the logical order of simultaneous turn events, such as an arrow landing before its target moves away, is the hardest part of roguelike juice.",
+      "detail": "Reid did not attempt it for the talk prototype. If animations play out unsynchronized, a monster can step away before the arrow reaches it; such glitches remain in Golden Krone Hotel because scheduling animations is a lot of work.",
+      "t": 1678,
+      "quote": "if you let the animations play out but you don't synchronize as well the monster can move away from the arrow before it's actually landed",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ui feedback",
+      "kind": "principle",
+      "claim": "Even strategic or resource-management games benefit from juice in UI elements, since juice is ultimately polish.",
+      "detail": "Asked about strategy games, Reid says buttons and unlocks should flash and look good; no one can argue their game has enough polish.",
+      "t": 1729,
+      "quote": "this is about polish and i don't think anyone can argue that their game has enough polish",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

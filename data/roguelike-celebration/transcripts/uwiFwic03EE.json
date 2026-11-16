@@ -1,0 +1,2943 @@
+{
+ "id": "uwiFwic03EE",
+ "url": "https://www.youtube.com/watch?v=uwiFwic03EE",
+ "title": "Alexander King - Don't Pick Just One: Set-Based Card Mechanics in Roguelike-Deckbuilders",
+ "speaker": "Alexander King",
+ "talk_title": "Don't Pick Just One: Set-Based Card Mechanics in Roguelike-Deckbuilders",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 1187,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Most deckbuilders (roguelike or otherwise) focus on the interesting choices around an adding single card at a time to your deck. But there's actually a underexplored design space in deckbuilding games that has the player adding (or removing) cards in groups or sets. The set-based approach has very different affordances, and might actually be a better fit for certain kinds of roguelike deckbuilders. This talk is a quick look at this mechanical space, showing some of the games that have used it, and taking a critical look from a design perspective\n\n.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and welcome"
+  },
+  {
+   "start": 92,
+   "title": "Singleton deck mechanics"
+  },
+  {
+   "start": 253,
+   "title": "Challenges of singleton design"
+  },
+  {
+   "start": 402,
+   "title": "Set-based deck building"
+  },
+  {
+   "start": 561,
+   "title": "Advantages of set-based systems"
+  },
+  {
+   "start": 728,
+   "title": "Design implications of sets"
+  },
+  {
+   "start": 885,
+   "title": "Conclusion and call to action"
+  },
+  {
+   "start": 988,
+   "title": "Q&A and discussion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3867,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.8,
+   "d": 3.16,
+   "text": "And our next speaker is Alexander King,"
+  },
+  {
+   "t": 10.96,
+   "d": 1.56,
+   "text": "a game designer, analyst, and teaching"
+  },
+  {
+   "t": 12.52,
+   "d": 2.56,
+   "text": "artist based in Brooklyn, New York. His"
+  },
+  {
+   "t": 15.08,
+   "d": 1.56,
+   "text": "work centers on data-driven design,"
+  },
+  {
+   "t": 16.64,
+   "d": 1.52,
+   "text": "simulation, and has been featured in"
+  },
+  {
+   "t": 18.16,
+   "d": 1.68,
+   "text": "festivals like Alt-Ctrl, GDC, and"
+  },
+  {
+   "t": 19.84,
+   "d": 2.52,
+   "text": "IndieCade. He's the economy designer for"
+  },
+  {
+   "t": 22.36,
+   "d": 2.84,
+   "text": "Dear Reader, a puzzle game about public"
+  },
+  {
+   "t": 25.2,
+   "d": 1.92,
+   "text": "domain literature that is frequently"
+  },
+  {
+   "t": 27.12,
+   "d": 1.52,
+   "text": "listed as one of the best games in"
+  },
+  {
+   "t": 28.64,
+   "d": 1.52,
+   "text": "Apple's subscription service Apple"
+  },
+  {
+   "t": 30.16,
+   "d": 2.32,
+   "text": "Arcade. He's also an adjunct professor"
+  },
+  {
+   "t": 32.48,
+   "d": 2.48,
+   "text": "at NYU Game Center and Parsons Design"
+  },
+  {
+   "t": 34.96,
+   "d": 1.36,
+   "text": "and Technology program where he teaches"
+  },
+  {
+   "t": 36.32,
+   "d": 2.16,
+   "text": "classes on games and systems design and"
+  },
+  {
+   "t": 38.48,
+   "d": 1.56,
+   "text": "spreadsheets, which is I think how I"
+  },
+  {
+   "t": 40.04,
+   "d": 1.44,
+   "text": "first met Alexander was to nerd out"
+  },
+  {
+   "t": 41.48,
+   "d": 2.44,
+   "text": "about spreadsheets, which we love here."
+  },
+  {
+   "t": 43.92,
+   "d": 1.76,
+   "text": "Uh he's a staff data analyst and proud"
+  },
+  {
+   "t": 45.68,
+   "d": 2.8,
+   "text": "member of the ACT-UAW"
+  },
+  {
+   "t": 48.48,
+   "d": 2.72,
+   "text": "Local 7902, which represents part-time"
+  },
+  {
+   "t": 51.2,
+   "d": 2.12,
+   "text": "faculty at NYU and New School. And"
+  },
+  {
+   "t": 53.32,
+   "d": 1.64,
+   "text": "before working on games, Alexander was"
+  },
+  {
+   "t": 54.96,
+   "d": 2.44,
+   "text": "an analyst consultant working in finance"
+  },
+  {
+   "t": 57.4,
+   "d": 2.32,
+   "text": "and e-commerce, but the economies he"
+  },
+  {
+   "t": 59.72,
+   "d": 2.96,
+   "text": "models now are fictional. And is that"
+  },
+  {
+   "t": 62.68,
+   "d": 1.04,
+   "text": "not"
+  },
+  {
+   "t": 63.72,
+   "d": 2.2,
+   "text": "more fun to work on?"
+  },
+  {
+   "t": 65.92,
+   "d": 4.24,
+   "text": "Welcome to the stage, Alexander."
+  },
+  {
+   "t": 70.24,
+   "d": 2.04,
+   "text": "You do a mic check."
+  },
+  {
+   "t": 72.28,
+   "d": 2.16,
+   "text": "Hey, yeah, can you hear me okay?"
+  },
+  {
+   "t": 74.44,
+   "d": 1.72,
+   "text": "Yeah, you sound great."
+  },
+  {
+   "t": 76.16,
+   "d": 0.52,
+   "text": "Awesome."
+  },
+  {
+   "t": 76.68,
+   "d": 1.64,
+   "text": ">> mention what you're here to talk about,"
+  },
+  {
+   "t": 78.32,
+   "d": 2.9,
+   "text": "but it's set Well, you know, no need."
+  },
+  {
+   "t": 81.22,
+   "d": 1.22,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 82.44,
+   "d": 2.6,
+   "text": ">> That's why I'm here, I guess."
+  },
+  {
+   "t": 85.04,
+   "d": 2.12,
+   "text": "Um I see you're so should I just uh get"
+  },
+  {
+   "t": 87.16,
+   "d": 2.44,
+   "text": "started?"
+  },
+  {
+   "t": 89.88,
+   "d": 0.64,
+   "text": "Uh"
+  },
+  {
+   "t": 90.52,
+   "d": 1.24,
+   "text": "cool, cool, cool."
+  },
+  {
+   "t": 91.76,
+   "d": 3.08,
+   "text": ">> Um uh so yeah, so so super super happy"
+  },
+  {
+   "t": 94.84,
+   "d": 2.44,
+   "text": "to to be here. I'm a a long-time"
+  },
+  {
+   "t": 97.28,
+   "d": 2.44,
+   "text": "lurker, first-time poster, so to speak,"
+  },
+  {
+   "t": 99.72,
+   "d": 3.8,
+   "text": "at uh Roguelike Celebration. Um so this"
+  },
+  {
+   "t": 103.52,
+   "d": 2.44,
+   "text": "is I want to give a quick a little"
+  },
+  {
+   "t": 105.96,
+   "d": 2.4,
+   "text": "design talk about um what I think is an"
+  },
+  {
+   "t": 108.36,
+   "d": 2.68,
+   "text": "underappreciated subgenre of of deck"
+  },
+  {
+   "t": 111.04,
+   "d": 2.72,
+   "text": "builders, uh what I'm calling set-based"
+  },
+  {
+   "t": 113.76,
+   "d": 1.2,
+   "text": "deck builders."
+  },
+  {
+   "t": 114.96,
+   "d": 1.92,
+   "text": "Um does not have anything actually to do"
+  },
+  {
+   "t": 116.88,
+   "d": 2.2,
+   "text": "with Marsha Falco's game Set. I just"
+  },
+  {
+   "t": 119.08,
+   "d": 1.56,
+   "text": "couldn't think of a good opening image,"
+  },
+  {
+   "t": 120.64,
+   "d": 3.0,
+   "text": "so I just used the game Set. Um I was"
+  },
+  {
+   "t": 123.64,
+   "d": 1.84,
+   "text": "going to introduce myself, but but uh"
+  },
+  {
+   "t": 125.48,
+   "d": 2.28,
+   "text": "Alexa just did a just such a great um"
+  },
+  {
+   "t": 127.76,
+   "d": 2.52,
+   "text": "intro for me. Um but um"
+  },
+  {
+   "t": 130.28,
+   "d": 2.12,
+   "text": "as as she said, yeah, I am assistant"
+  },
+  {
+   "t": 132.4,
+   "d": 3.68,
+   "text": "designer, I teach, and and I also work"
+  },
+  {
+   "t": 136.08,
+   "d": 3.32,
+   "text": "um at my union at UAW Local 7902 as the"
+  },
+  {
+   "t": 139.4,
+   "d": 1.96,
+   "text": "staff data analyst. This"
+  },
+  {
+   "t": 141.36,
+   "d": 2.96,
+   "text": "some of the hats that I wear. Um okay."
+  },
+  {
+   "t": 144.32,
+   "d": 2.68,
+   "text": "Uh so if you're if you're here,"
+  },
+  {
+   "t": 147.0,
+   "d": 2.72,
+   "text": "um I think it's probably safe to assume"
+  },
+  {
+   "t": 149.72,
+   "d": 2.32,
+   "text": "that you you know and love roguelike"
+  },
+  {
+   "t": 152.04,
+   "d": 1.44,
+   "text": "deck builders."
+  },
+  {
+   "t": 153.48,
+   "d": 1.6,
+   "text": "Um and if you don't and and you want to"
+  },
+  {
+   "t": 155.08,
+   "d": 3.84,
+   "text": "learn more about the general design of"
+  },
+  {
+   "t": 158.92,
+   "d": 1.28,
+   "text": "of this genre, I don't have time to"
+  },
+  {
+   "t": 160.2,
+   "d": 2.32,
+   "text": "cover everything about it, but luckily I"
+  },
+  {
+   "t": 162.52,
+   "d": 2.2,
+   "text": "don't have to. You can check out"
+  },
+  {
+   "t": 164.72,
+   "d": 1.68,
+   "text": "Benjamin Berman's talk from a few years"
+  },
+  {
+   "t": 166.4,
+   "d": 1.2,
+   "text": "ago at here here at Roguelike"
+  },
+  {
+   "t": 167.6,
+   "d": 1.76,
+   "text": "Celebration. There's a a great talk"
+  },
+  {
+   "t": 169.36,
+   "d": 1.24,
+   "text": "about the design and sort of the"
+  },
+  {
+   "t": 170.6,
+   "d": 2.76,
+   "text": "precedents of this of this genre. Um but"
+  },
+  {
+   "t": 173.36,
+   "d": 1.24,
+   "text": "I'm going to assume we're we're we're"
+  },
+  {
+   "t": 174.6,
+   "d": 2.28,
+   "text": "generally up to speed on on on"
+  },
+  {
+   "t": 176.88,
+   "d": 1.44,
+   "text": "deck-building roguelike deck builders in"
+  },
+  {
+   "t": 178.32,
+   "d": 2.92,
+   "text": "general. Um and so you know sort of the"
+  },
+  {
+   "t": 181.24,
+   "d": 1.52,
+   "text": "the the how these work. The the main"
+  },
+  {
+   "t": 182.76,
+   "d": 2.2,
+   "text": "mechanic is going to center on having a"
+  },
+  {
+   "t": 184.96,
+   "d": 2.4,
+   "text": "deck that you've got cards and you're"
+  },
+  {
+   "t": 187.36,
+   "d": 1.56,
+   "text": "going to add cards to that deck over"
+  },
+  {
+   "t": 188.92,
+   "d": 2.36,
+   "text": "time and draw from it."
+  },
+  {
+   "t": 191.28,
+   "d": 1.92,
+   "text": "And that's kind of the main the main way"
+  },
+  {
+   "t": 193.2,
+   "d": 2.92,
+   "text": "that these games work. Um and that that"
+  },
+  {
+   "t": 196.12,
+   "d": 2.12,
+   "text": "those cards and that deck are usually an"
+  },
+  {
+   "t": 198.24,
+   "d": 2.48,
+   "text": "abstraction of combat, but it that"
+  },
+  {
+   "t": 200.72,
+   "d": 2.04,
+   "text": "doesn't have to be the case. The main"
+  },
+  {
+   "t": 202.76,
+   "d": 1.72,
+   "text": "point is just having this a set of"
+  },
+  {
+   "t": 204.48,
+   "d": 2.32,
+   "text": "resources or or actions that are"
+  },
+  {
+   "t": 206.8,
+   "d": 1.56,
+   "text": "randomly ordered and you're changing the"
+  },
+  {
+   "t": 208.36,
+   "d": 1.72,
+   "text": "composition of that that random"
+  },
+  {
+   "t": 210.08,
+   "d": 1.84,
+   "text": "arrangement over time."
+  },
+  {
+   "t": 211.92,
+   "d": 2.56,
+   "text": "And what I think is sort of interesting"
+  },
+  {
+   "t": 214.48,
+   "d": 2.76,
+   "text": "is that most all deck builders are about"
+  },
+  {
+   "t": 217.24,
+   "d": 2.56,
+   "text": "adding and removing single cards from a"
+  },
+  {
+   "t": 219.8,
+   "d": 2.4,
+   "text": "deck. That is like the the main decision"
+  },
+  {
+   "t": 222.2,
+   "d": 2.24,
+   "text": "that the player makes is picking a"
+  },
+  {
+   "t": 224.44,
+   "d": 2.24,
+   "text": "single card and adding it to their deck"
+  },
+  {
+   "t": 226.68,
+   "d": 2.2,
+   "text": "or or not adding it. It's almost always"
+  },
+  {
+   "t": 228.88,
+   "d": 2.32,
+   "text": "a single card and it's very often in"
+  },
+  {
+   "t": 231.2,
+   "d": 1.72,
+   "text": "this like choice of three, which I think"
+  },
+  {
+   "t": 232.92,
+   "d": 2.32,
+   "text": "has become sort of like a like a"
+  },
+  {
+   "t": 235.24,
+   "d": 1.72,
+   "text": "almost like a cliché. Like you you have"
+  },
+  {
+   "t": 236.96,
+   "d": 0.84,
+   "text": "this"
+  },
+  {
+   "t": 237.8,
+   "d": 1.16,
+   "text": "you three cards and you're going to pick"
+  },
+  {
+   "t": 238.96,
+   "d": 2.72,
+   "text": "one. Um because it works so well. Um"
+  },
+  {
+   "t": 241.68,
+   "d": 2.44,
+   "text": "it's so totally normal and expected that"
+  },
+  {
+   "t": 244.12,
+   "d": 2.24,
+   "text": "this kind of like hardly bears noticing."
+  },
+  {
+   "t": 246.36,
+   "d": 2.12,
+   "text": "But having gameplay revolve around"
+  },
+  {
+   "t": 248.48,
+   "d": 2.68,
+   "text": "individual cards actually has some"
+  },
+  {
+   "t": 251.16,
+   "d": 2.16,
+   "text": "particular qualities if you if you think"
+  },
+  {
+   "t": 253.32,
+   "d": 1.64,
+   "text": "about it. So I just want to think about"
+  },
+  {
+   "t": 254.96,
+   "d": 1.84,
+   "text": "some of these these affordances of this"
+  },
+  {
+   "t": 256.8,
+   "d": 3.36,
+   "text": "singleton deck-building. Um the first is"
+  },
+  {
+   "t": 260.16,
+   "d": 1.6,
+   "text": "that it's it's going to be high friction"
+  },
+  {
+   "t": 261.76,
+   "d": 2.2,
+   "text": "because the the player has to make many"
+  },
+  {
+   "t": 263.96,
+   "d": 1.48,
+   "text": "decisions. Every if they're going to"
+  },
+  {
+   "t": 265.44,
+   "d": 1.68,
+   "text": "construct a full deck over the course of"
+  },
+  {
+   "t": 267.12,
+   "d": 2.4,
+   "text": "a run or a game,"
+  },
+  {
+   "t": 269.52,
+   "d": 2.6,
+   "text": "they're adding each card one by one,"
+  },
+  {
+   "t": 272.12,
+   "d": 2.48,
+   "text": "maybe after an initial set. Um and so"
+  },
+  {
+   "t": 274.6,
+   "d": 1.96,
+   "text": "those decisions kind of need to be"
+  },
+  {
+   "t": 276.56,
+   "d": 1.32,
+   "text": "spread out."
+  },
+  {
+   "t": 277.88,
+   "d": 2.0,
+   "text": "Uh and so it really lends itself to"
+  },
+  {
+   "t": 279.88,
+   "d": 1.72,
+   "text": "having deck-building take place over the"
+  },
+  {
+   "t": 281.6,
+   "d": 1.76,
+   "text": "course of a game, not all at once."
+  },
+  {
+   "t": 283.36,
+   "d": 1.92,
+   "text": "Otherwise you'd be you know, do doing"
+  },
+  {
+   "t": 285.28,
+   "d": 2.12,
+   "text": "too many decisions all at once."
+  },
+  {
+   "t": 287.4,
+   "d": 1.72,
+   "text": "Um and the player needs to evaluate"
+  },
+  {
+   "t": 289.12,
+   "d": 2.52,
+   "text": "every single card individually. And so"
+  },
+  {
+   "t": 291.64,
+   "d": 2.24,
+   "text": "there's an upper limit on how complex"
+  },
+  {
+   "t": 293.88,
+   "d": 1.96,
+   "text": "any given card can be. This they really"
+  },
+  {
+   "t": 295.84,
+   "d": 2.28,
+   "text": "kind of need to be relatively simple."
+  },
+  {
+   "t": 298.12,
+   "d": 1.88,
+   "text": "And that's a lot for the player to keep"
+  },
+  {
+   "t": 300.0,
+   "d": 1.64,
+   "text": "track of because the deck that you're"
+  },
+  {
+   "t": 301.64,
+   "d": 2.16,
+   "text": "playing with is constantly changing in"
+  },
+  {
+   "t": 303.8,
+   "d": 2.0,
+   "text": "composition in a deck builder. And the"
+  },
+  {
+   "t": 305.8,
+   "d": 2.32,
+   "text": "player has to remember and reassess all"
+  },
+  {
+   "t": 308.12,
+   "d": 1.88,
+   "text": "of their cards somewhat frequently when"
+  },
+  {
+   "t": 310.0,
+   "d": 1.76,
+   "text": "playing this kind of game."
+  },
+  {
+   "t": 311.76,
+   "d": 2.2,
+   "text": "And so the cards as well need to be"
+  },
+  {
+   "t": 313.96,
+   "d": 2.24,
+   "text": "reasonably balanced against all other"
+  },
+  {
+   "t": 316.2,
+   "d": 1.96,
+   "text": "cards like within a tier maybe or"
+  },
+  {
+   "t": 318.16,
+   "d": 1.52,
+   "text": "something like that. Um because if they"
+  },
+  {
+   "t": 319.68,
+   "d": 2.04,
+   "text": "weren't, then the decision of whether to"
+  },
+  {
+   "t": 321.72,
+   "d": 2.12,
+   "text": "add them to the deck or not would be too"
+  },
+  {
+   "t": 323.84,
+   "d": 2.76,
+   "text": "easy. Um so so there's a a burden on the"
+  },
+  {
+   "t": 326.6,
+   "d": 1.4,
+   "text": "designer here."
+  },
+  {
+   "t": 328.0,
+   "d": 2.56,
+   "text": "Um and because of this selection process"
+  },
+  {
+   "t": 330.56,
+   "d": 1.76,
+   "text": "where you're seeing one card and there's"
+  },
+  {
+   "t": 332.32,
+   "d": 1.24,
+   "text": "a few other cards that you're not going"
+  },
+  {
+   "t": 333.56,
+   "d": 2.24,
+   "text": "to choose, the player naturally is going"
+  },
+  {
+   "t": 335.8,
+   "d": 1.96,
+   "text": "to see a lot of cards that they don't"
+  },
+  {
+   "t": 337.76,
+   "d": 1.96,
+   "text": "immediately get to play with. And as a"
+  },
+  {
+   "t": 339.72,
+   "d": 2.12,
+   "text": "consequence, the game needs a high"
+  },
+  {
+   "t": 341.84,
+   "d": 2.52,
+   "text": "quantity of viable cards even if the"
+  },
+  {
+   "t": 344.36,
+   "d": 1.68,
+   "text": "player isn't immediately using them. So"
+  },
+  {
+   "t": 346.04,
+   "d": 1.92,
+   "text": "you you need a big universe of good"
+  },
+  {
+   "t": 347.96,
+   "d": 1.2,
+   "text": "cards."
+  },
+  {
+   "t": 349.16,
+   "d": 1.96,
+   "text": "And you're probably going to need to"
+  },
+  {
+   "t": 351.12,
+   "d": 2.08,
+   "text": "allow pruning from the deck or trashing"
+  },
+  {
+   "t": 353.2,
+   "d": 1.96,
+   "text": "to help the player filter out bad cards"
+  },
+  {
+   "t": 355.16,
+   "d": 1.64,
+   "text": "that they've added or that they started"
+  },
+  {
+   "t": 356.8,
+   "d": 1.96,
+   "text": "with or cards that ended up not being"
+  },
+  {
+   "t": 358.76,
+   "d": 2.04,
+   "text": "useful because of uh decisions that they"
+  },
+  {
+   "t": 360.8,
+   "d": 1.68,
+   "text": "made in drafting."
+  },
+  {
+   "t": 362.48,
+   "d": 2.2,
+   "text": "Uh this is not like an exhaustive list."
+  },
+  {
+   "t": 364.68,
+   "d": 1.36,
+   "text": "Um and these aren't good or bad"
+  },
+  {
+   "t": 366.04,
+   "d": 1.56,
+   "text": "qualities. They're just things that"
+  },
+  {
+   "t": 367.6,
+   "d": 1.96,
+   "text": "naturally inhere in the way in this"
+  },
+  {
+   "t": 369.56,
+   "d": 2.12,
+   "text": "mechanic works, which pushes the overall"
+  },
+  {
+   "t": 371.68,
+   "d": 1.36,
+   "text": "design of the game in certain"
+  },
+  {
+   "t": 373.04,
+   "d": 2.48,
+   "text": "directions. Um and not all these aren't"
+  },
+  {
+   "t": 375.52,
+   "d": 1.84,
+   "text": "like required. A given game might"
+  },
+  {
+   "t": 377.36,
+   "d": 2.16,
+   "text": "embrace or push against any one of"
+  },
+  {
+   "t": 379.52,
+   "d": 2.16,
+   "text": "these. But the structure of the mechanic"
+  },
+  {
+   "t": 381.68,
+   "d": 1.96,
+   "text": "lends itself to certain designs over"
+  },
+  {
+   "t": 383.64,
+   "d": 1.32,
+   "text": "others. And so if you're making a"
+  },
+  {
+   "t": 384.96,
+   "d": 1.84,
+   "text": "roguelike deck builder, there are these"
+  },
+  {
+   "t": 386.8,
+   "d": 2.08,
+   "text": "kind of these paths that that the design"
+  },
+  {
+   "t": 388.88,
+   "d": 2.0,
+   "text": "is going to to take you down."
+  },
+  {
+   "t": 390.88,
+   "d": 2.68,
+   "text": "Um and so singleton drafting lends"
+  },
+  {
+   "t": 393.56,
+   "d": 1.52,
+   "text": "itself to this particular kind of"
+  },
+  {
+   "t": 395.08,
+   "d": 2.04,
+   "text": "deck-building game, one with a large but"
+  },
+  {
+   "t": 397.12,
+   "d": 1.68,
+   "text": "balanced card pool,"
+  },
+  {
+   "t": 398.8,
+   "d": 2.08,
+   "text": "which you use to slowly construct a deck"
+  },
+  {
+   "t": 400.88,
+   "d": 1.76,
+   "text": "over the course of the game."
+  },
+  {
+   "t": 402.64,
+   "d": 1.88,
+   "text": "So here's the alternative that is a"
+  },
+  {
+   "t": 404.52,
+   "d": 1.68,
+   "text": "little rarer, but I just think is is"
+  },
+  {
+   "t": 406.2,
+   "d": 1.92,
+   "text": "neat and and what more people to know"
+  },
+  {
+   "t": 408.12,
+   "d": 2.48,
+   "text": "about. So what if what if instead of"
+  },
+  {
+   "t": 410.6,
+   "d": 2.56,
+   "text": "adding one card at a time, we did it in"
+  },
+  {
+   "t": 413.16,
+   "d": 2.08,
+   "text": "a larger number than one? Like in in"
+  },
+  {
+   "t": 415.24,
+   "d": 3.48,
+   "text": "groups or sets. Um and basically like"
+  },
+  {
+   "t": 418.72,
+   "d": 1.76,
+   "text": "that's the that's the that's the whole"
+  },
+  {
+   "t": 420.48,
+   "d": 1.88,
+   "text": "idea that I'm here to to introduce to"
+  },
+  {
+   "t": 422.36,
+   "d": 2.6,
+   "text": "you, too. Um so the the the first time"
+  },
+  {
+   "t": 424.96,
+   "d": 2.0,
+   "text": "that I saw this mechanic was in a game"
+  },
+  {
+   "t": 426.96,
+   "d": 2.72,
+   "text": "called Card Hunter from 2013,"
+  },
+  {
+   "t": 429.68,
+   "d": 1.72,
+   "text": "which is a [clears throat] tactics RPG"
+  },
+  {
+   "t": 431.4,
+   "d": 2.64,
+   "text": "and in a rare like non-roguelike deck"
+  },
+  {
+   "t": 434.04,
+   "d": 1.04,
+   "text": "builder"
+  },
+  {
+   "t": 435.08,
+   "d": 2.32,
+   "text": "in this genre. Um if you haven't played"
+  },
+  {
+   "t": 437.4,
+   "d": 2.16,
+   "text": "it, it's a grid-based tactics game where"
+  },
+  {
+   "t": 439.56,
+   "d": 1.56,
+   "text": "you control three heroes. You can see at"
+  },
+  {
+   "t": 441.12,
+   "d": 1.88,
+   "text": "the bottom of the the screen there. And"
+  },
+  {
+   "t": 443.0,
+   "d": 3.12,
+   "text": "each one of which has a 36-card deck"
+  },
+  {
+   "t": 446.12,
+   "d": 2.28,
+   "text": "that makes up all of their actions, both"
+  },
+  {
+   "t": 448.4,
+   "d": 3.12,
+   "text": "attacks and movement. So that's 108"
+  },
+  {
+   "t": 451.52,
+   "d": 1.72,
+   "text": "cards for the player to manage across"
+  },
+  {
+   "t": 453.24,
+   "d": 2.44,
+   "text": "three decks. That would be way overly"
+  },
+  {
+   "t": 455.68,
+   "d": 1.84,
+   "text": "fiddly for a player to manage at the"
+  },
+  {
+   "t": 457.52,
+   "d": 1.88,
+   "text": "individual card level. Um so the"
+  },
+  {
+   "t": 459.4,
+   "d": 1.8,
+   "text": "solution that they came up with in this"
+  },
+  {
+   "t": 461.2,
+   "d": 2.84,
+   "text": "game is a metaphor where equipment that"
+  },
+  {
+   "t": 464.04,
+   "d": 1.96,
+   "text": "that each of those heroes equips gives"
+  },
+  {
+   "t": 466.0,
+   "d": 2.48,
+   "text": "you groups of cards rather than cards"
+  },
+  {
+   "t": 468.48,
+   "d": 1.76,
+   "text": "one by one. Um so let's let's take a"
+  },
+  {
+   "t": 470.24,
+   "d": 2.32,
+   "text": "look at that. Um so each character in"
+  },
+  {
+   "t": 472.56,
+   "d": 1.76,
+   "text": "the game has a bunch of equipment slots"
+  },
+  {
+   "t": 474.32,
+   "d": 2.24,
+   "text": "and you get all sorts of loot to equip."
+  },
+  {
+   "t": 476.56,
+   "d": 2.0,
+   "text": "And each item is going to contribute"
+  },
+  {
+   "t": 478.56,
+   "d": 2.36,
+   "text": "three cards to the final deck for that"
+  },
+  {
+   "t": 480.92,
+   "d": 2.6,
+   "text": "character or six if it's a weapon slot."
+  },
+  {
+   "t": 483.52,
+   "d": 1.92,
+   "text": "Um their UI is doing a lot of heavy"
+  },
+  {
+   "t": 485.44,
+   "d": 1.92,
+   "text": "lifting for showing how this works,"
+  },
+  {
+   "t": 487.36,
+   "d": 1.76,
+   "text": "indicating not just the cards that"
+  },
+  {
+   "t": 489.12,
+   "d": 2.12,
+   "text": "you're getting from a given item, but"
+  },
+  {
+   "t": 491.24,
+   "d": 2.4,
+   "text": "what it's replacing if you if you swap"
+  },
+  {
+   "t": 493.64,
+   "d": 1.64,
+   "text": "and then how it's being added to the"
+  },
+  {
+   "t": 495.28,
+   "d": 2.44,
+   "text": "final overall deck, which you can see in"
+  },
+  {
+   "t": 497.72,
+   "d": 2.08,
+   "text": "the bottom half of the of the character"
+  },
+  {
+   "t": 499.8,
+   "d": 1.04,
+   "text": "sheet there."
+  },
+  {
+   "t": 500.84,
+   "d": 1.88,
+   "text": "And so what does that this get us"
+  },
+  {
+   "t": 502.72,
+   "d": 2.48,
+   "text": "design-wise? It it cuts the complexity"
+  },
+  {
+   "t": 505.2,
+   "d": 3.2,
+   "text": "quite a lot. To fill out a 36-card deck"
+  },
+  {
+   "t": 508.4,
+   "d": 2.52,
+   "text": "here, we're making 10 picks instead of"
+  },
+  {
+   "t": 510.92,
+   "d": 2.76,
+   "text": "36, which is which is pretty good."
+  },
+  {
+   "t": 513.68,
+   "d": 2.04,
+   "text": "Um another example of this is Card"
+  },
+  {
+   "t": 515.72,
+   "d": 1.8,
+   "text": "Quest, like one of my favorite favorite"
+  },
+  {
+   "t": 517.52,
+   "d": 2.04,
+   "text": "deep cuts games. Um and here you're"
+  },
+  {
+   "t": 519.56,
+   "d": 2.88,
+   "text": "assembling an even smaller deck, just 17"
+  },
+  {
+   "t": 522.44,
+   "d": 2.64,
+   "text": "cards made up of three sets of four or"
+  },
+  {
+   "t": 525.08,
+   "d": 2.2,
+   "text": "five or six cards each, which are also"
+  },
+  {
+   "t": 527.28,
+   "d": 2.16,
+   "text": "tied to equipment. So each piece of"
+  },
+  {
+   "t": 529.44,
+   "d": 2.36,
+   "text": "equipment is contributing this group of"
+  },
+  {
+   "t": 531.8,
+   "d": 1.88,
+   "text": "cards. I'll talk a little bit more about"
+  },
+  {
+   "t": 533.68,
+   "d": 2.2,
+   "text": "Card Quest in a moment."
+  },
+  {
+   "t": 535.88,
+   "d": 1.92,
+   "text": "Um so you can get a sense"
+  },
+  {
+   "t": 537.8,
+   "d": 2.48,
+   "text": "from these examples um"
+  },
+  {
+   "t": 540.28,
+   "d": 1.2,
+   "text": "some of the ways that set-based"
+  },
+  {
+   "t": 541.48,
+   "d": 1.72,
+   "text": "deck-building is similar to but"
+  },
+  {
+   "t": 543.2,
+   "d": 2.76,
+   "text": "different than singleton deck-building."
+  },
+  {
+   "t": 545.96,
+   "d": 2.2,
+   "text": "Um so so having this means that there"
+  },
+  {
+   "t": 548.16,
+   "d": 2.44,
+   "text": "are going to be fewer decisions needed"
+  },
+  {
+   "t": 550.6,
+   "d": 1.52,
+   "text": "to assemble the deck because you're"
+  },
+  {
+   "t": 552.12,
+   "d": 2.32,
+   "text": "assembling some number of sets of cards"
+  },
+  {
+   "t": 554.44,
+   "d": 2.04,
+   "text": "instead of card by card. Um so even if"
+  },
+  {
+   "t": 556.48,
+   "d": 2.12,
+   "text": "the game has a lot of cards, the player"
+  },
+  {
+   "t": 558.6,
+   "d": 1.4,
+   "text": "doesn't need to consider them each"
+  },
+  {
+   "t": 560.0,
+   "d": 2.96,
+   "text": "individually, one by one. Um you can see"
+  },
+  {
+   "t": 562.96,
+   "d": 1.64,
+   "text": "the how this mechanic is used in"
+  },
+  {
+   "t": 564.6,
+   "d": 1.6,
+   "text": "tabletop, I think is really taking"
+  },
+  {
+   "t": 566.2,
+   "d": 1.44,
+   "text": "advantage of this."
+  },
+  {
+   "t": 567.64,
+   "d": 1.64,
+   "text": "There's a deck-building drafting game"
+  },
+  {
+   "t": 569.28,
+   "d": 2.12,
+   "text": "called Star Star Trek Fleet Commanders"
+  },
+  {
+   "t": 571.4,
+   "d": 2.08,
+   "text": "from 2011, which I think might be the"
+  },
+  {
+   "t": 573.48,
+   "d": 2.32,
+   "text": "first set-based deck builder at at least"
+  },
+  {
+   "t": 575.8,
+   "d": 1.72,
+   "text": "that I know of. And there's a the Star"
+  },
+  {
+   "t": 577.52,
+   "d": 1.6,
+   "text": "Wars the card game"
+  },
+  {
+   "t": 579.12,
+   "d": 1.36,
+   "text": "from the following year does something"
+  },
+  {
+   "t": 580.48,
+   "d": 2.28,
+   "text": "similar. Um and it's being used there to"
+  },
+  {
+   "t": 582.76,
+   "d": 2.24,
+   "text": "cut down on the decision-making. There"
+  },
+  {
+   "t": 585.0,
+   "d": 1.0,
+   "text": "are"
+  },
+  {
+   "t": 586.0,
+   "d": 1.56,
+   "text": "it's sort of like a Android:"
+  },
+  {
+   "t": 587.56,
+   "d": 1.72,
+   "text": "Netrunner-like"
+  },
+  {
+   "t": 589.28,
+   "d": 3.24,
+   "text": "kind of game. And you've got 10 sets of"
+  },
+  {
+   "t": 592.52,
+   "d": 2.56,
+   "text": "10 cards each. You pick four of those"
+  },
+  {
+   "t": 595.08,
+   "d": 1.88,
+   "text": "and they're themed around characters."
+  },
+  {
+   "t": 596.96,
+   "d": 2.68,
+   "text": "And then presto you have a viable deck"
+  },
+  {
+   "t": 599.64,
+   "d": 2.32,
+   "text": "of 40 cards and so you're making four"
+  },
+  {
+   "t": 601.96,
+   "d": 2.6,
+   "text": "choices to assemble this this deck of 40"
+  },
+  {
+   "t": 604.56,
+   "d": 2.0,
+   "text": "cards instead of needing to make 40"
+  },
+  {
+   "t": 606.56,
+   "d": 2.96,
+   "text": "choices each time you sit down to play."
+  },
+  {
+   "t": 609.52,
+   "d": 2.64,
+   "text": "I'm so while there are fewer decisions,"
+  },
+  {
+   "t": 612.16,
+   "d": 1.72,
+   "text": "the decisions themselves can be more"
+  },
+  {
+   "t": 613.88,
+   "d": 2.04,
+   "text": "complex because they're potentially more"
+  },
+  {
+   "t": 615.92,
+   "d": 2.4,
+   "text": "cards to assess and compare. So instead"
+  },
+  {
+   "t": 618.32,
+   "d": 1.8,
+   "text": "of just swapping out you know one card"
+  },
+  {
+   "t": 620.12,
+   "d": 1.72,
+   "text": "for one card or something like that, you"
+  },
+  {
+   "t": 621.84,
+   "d": 1.72,
+   "text": "could be potentially looking at you know"
+  },
+  {
+   "t": 623.56,
+   "d": 2.92,
+   "text": "six cards versus another six cards."
+  },
+  {
+   "t": 626.48,
+   "d": 1.44,
+   "text": "I sort of think of this is like a game"
+  },
+  {
+   "t": 627.92,
+   "d": 2.68,
+   "text": "has a fixed complexity budget and it's"
+  },
+  {
+   "t": 630.6,
+   "d": 1.84,
+   "text": "about how you you can allocate that"
+  },
+  {
+   "t": 632.44,
+   "d": 3.4,
+   "text": "against like smaller bigger decisions a"
+  },
+  {
+   "t": 635.84,
+   "d": 1.76,
+   "text": "smaller number of bigger decisions or a"
+  },
+  {
+   "t": 637.6,
+   "d": 3.12,
+   "text": "larger number of quicker decisions. And"
+  },
+  {
+   "t": 640.72,
+   "d": 1.56,
+   "text": "set based deck building kind of takes us"
+  },
+  {
+   "t": 642.28,
+   "d": 2.32,
+   "text": "towards you're making less choices but"
+  },
+  {
+   "t": 644.6,
+   "d": 1.52,
+   "text": "those choices have kind of like more"
+  },
+  {
+   "t": 646.12,
+   "d": 2.28,
+   "text": "going on in them. And so they can be"
+  },
+  {
+   "t": 648.4,
+   "d": 2.2,
+   "text": "kind of more agonizing which is which is"
+  },
+  {
+   "t": 650.6,
+   "d": 1.44,
+   "text": "which is good."
+  },
+  {
+   "t": 652.04,
+   "d": 2.68,
+   "text": "This also allows from a design"
+  },
+  {
+   "t": 654.72,
+   "d": 2.48,
+   "text": "standpoint you can make synergistic or"
+  },
+  {
+   "t": 657.2,
+   "d": 2.96,
+   "text": "thematic groupings of cards because the"
+  },
+  {
+   "t": 660.16,
+   "d": 2.6,
+   "text": "cards don't need to stand alone. They"
+  },
+  {
+   "t": 662.76,
+   "d": 1.84,
+   "text": "can take on meaning contextually as a"
+  },
+  {
+   "t": 664.6,
+   "d": 1.56,
+   "text": "group and so they can kind of be"
+  },
+  {
+   "t": 666.16,
+   "d": 2.12,
+   "text": "thematic. Like this is a card in Card"
+  },
+  {
+   "t": 668.28,
+   "d": 2.4,
+   "text": "Hunter. It's a really big pickaxe so you"
+  },
+  {
+   "t": 670.68,
+   "d": 2.48,
+   "text": "get a really good impaling card that"
+  },
+  {
+   "t": 673.16,
+   "d": 2.28,
+   "text": "ignores armor a bunch of powerful cards"
+  },
+  {
+   "t": 675.44,
+   "d": 2.0,
+   "text": "that have a drawback and then this large"
+  },
+  {
+   "t": 677.44,
+   "d": 2.44,
+   "text": "weapon drawback which represents it"
+  },
+  {
+   "t": 679.88,
+   "d": 2.12,
+   "text": "being unwieldy. This look that's cool."
+  },
+  {
+   "t": 682.0,
+   "d": 1.32,
+   "text": "They're not just you're not just adding"
+  },
+  {
+   "t": 683.32,
+   "d": 2.2,
+   "text": "one card at a time represents you"
+  },
+  {
+   "t": 685.52,
+   "d": 2.0,
+   "text": "attacking it's that this item gives you"
+  },
+  {
+   "t": 687.52,
+   "d": 2.2,
+   "text": "these cards that really works well from"
+  },
+  {
+   "t": 689.72,
+   "d": 2.04,
+   "text": "a from a thematic standpoint."
+  },
+  {
+   "t": 691.76,
+   "d": 2.44,
+   "text": "This allows for making sort of pre-built"
+  },
+  {
+   "t": 694.2,
+   "d": 3.12,
+   "text": "mini combos of cards helping ensure that"
+  },
+  {
+   "t": 697.32,
+   "d": 0.92,
+   "text": "the player is going to have an"
+  },
+  {
+   "t": 698.24,
+   "d": 1.28,
+   "text": "interesting"
+  },
+  {
+   "t": 699.52,
+   "d": 1.96,
+   "text": "and in working deck. A card quest is"
+  },
+  {
+   "t": 701.48,
+   "d": 2.76,
+   "text": "full of these like this cursed dagger"
+  },
+  {
+   "t": 704.24,
+   "d": 2.08,
+   "text": "gives you two sets of cards that work"
+  },
+  {
+   "t": 706.32,
+   "d": 1.28,
+   "text": "well together."
+  },
+  {
+   "t": 707.6,
+   "d": 1.96,
+   "text": "They don't appear on any other items."
+  },
+  {
+   "t": 709.56,
+   "d": 2.36,
+   "text": "One is kind of increasing this this"
+  },
+  {
+   "t": 711.92,
+   "d": 1.84,
+   "text": "resource that will eventually hurt you"
+  },
+  {
+   "t": 713.76,
+   "d": 1.92,
+   "text": "and then one of them increments it and"
+  },
+  {
+   "t": 715.68,
+   "d": 1.16,
+   "text": "then those will work with the other"
+  },
+  {
+   "t": 716.84,
+   "d": 2.16,
+   "text": "cards that you're you're assembling. And"
+  },
+  {
+   "t": 719.0,
+   "d": 1.24,
+   "text": "so"
+  },
+  {
+   "t": 720.24,
+   "d": 1.96,
+   "text": "what this does is it allows for the"
+  },
+  {
+   "t": 722.2,
+   "d": 1.48,
+   "text": "player to create interesting and"
+  },
+  {
+   "t": 723.68,
+   "d": 1.84,
+   "text": "distinctive decks because they're given"
+  },
+  {
+   "t": 725.52,
+   "d": 2.0,
+   "text": "sort of working parts"
+  },
+  {
+   "t": 727.52,
+   "d": 2.52,
+   "text": "to start with and for the deck building."
+  },
+  {
+   "t": 730.04,
+   "d": 2.36,
+   "text": "And so I think the design here then can"
+  },
+  {
+   "t": 732.4,
+   "d": 2.48,
+   "text": "support more viable deck archetypes"
+  },
+  {
+   "t": 734.88,
+   "d": 1.92,
+   "text": "because you have much more control over"
+  },
+  {
+   "t": 736.8,
+   "d": 1.8,
+   "text": "what the player is going to have and so"
+  },
+  {
+   "t": 738.6,
+   "d": 2.36,
+   "text": "more complex strategies can be supported"
+  },
+  {
+   "t": 740.96,
+   "d": 1.28,
+   "text": "than if they were adding them just one"
+  },
+  {
+   "t": 742.24,
+   "d": 1.64,
+   "text": "by one randomly."
+  },
+  {
+   "t": 743.88,
+   "d": 1.4,
+   "text": "And this also means that pruning and"
+  },
+  {
+   "t": 745.28,
+   "d": 1.8,
+   "text": "filtering mechanics aren't really needed"
+  },
+  {
+   "t": 747.08,
+   "d": 1.84,
+   "text": "as much because the designer has so much"
+  },
+  {
+   "t": 748.92,
+   "d": 2.24,
+   "text": "more control over the card combinations"
+  },
+  {
+   "t": 751.16,
+   "d": 2.56,
+   "text": "to ensure reasonable deck composition."
+  },
+  {
+   "t": 753.72,
+   "d": 1.36,
+   "text": "Like in"
+  },
+  {
+   "t": 755.08,
+   "d": 3.12,
+   "text": "Card Hunter it would be a problem if the"
+  },
+  {
+   "t": 758.2,
+   "d": 2.08,
+   "text": "player was adding like a ton of movement"
+  },
+  {
+   "t": 760.28,
+   "d": 1.52,
+   "text": "cards to their deck. You really only"
+  },
+  {
+   "t": 761.8,
+   "d": 2.76,
+   "text": "need a couple in in that game. So that's"
+  },
+  {
+   "t": 764.56,
+   "d": 2.52,
+   "text": "okay. Only the boots slot typically"
+  },
+  {
+   "t": 767.08,
+   "d": 2.04,
+   "text": "gives you movement cards and so sort of"
+  },
+  {
+   "t": 769.12,
+   "d": 1.72,
+   "text": "like ensuring that the player is is only"
+  },
+  {
+   "t": 770.84,
+   "d": 1.8,
+   "text": "going to have the right number"
+  },
+  {
+   "t": 772.64,
+   "d": 2.2,
+   "text": "and things like that."
+  },
+  {
+   "t": 774.84,
+   "d": 1.72,
+   "text": "The other thing I think this is"
+  },
+  {
+   "t": 776.56,
+   "d": 2.16,
+   "text": "interesting from a design standpoint is"
+  },
+  {
+   "t": 778.72,
+   "d": 1.96,
+   "text": "that because you're balancing sets of"
+  },
+  {
+   "t": 780.68,
+   "d": 2.48,
+   "text": "cards together rather than build"
+  },
+  {
+   "t": 783.16,
+   "d": 1.48,
+   "text": "balancing individual cards, you have a"
+  },
+  {
+   "t": 784.64,
+   "d": 2.96,
+   "text": "lot more levers in the tuning. So like"
+  },
+  {
+   "t": 787.6,
+   "d": 1.76,
+   "text": "this staff of the inferno for for"
+  },
+  {
+   "t": 789.36,
+   "d": 2.04,
+   "text": "example, there are a number of different"
+  },
+  {
+   "t": 791.4,
+   "d": 2.2,
+   "text": "ways that you can balance this item. It"
+  },
+  {
+   "t": 793.6,
+   "d": 2.16,
+   "text": "could be that the kind of the good card"
+  },
+  {
+   "t": 795.76,
+   "d": 3.12,
+   "text": "Ember Burst needs to be made less good"
+  },
+  {
+   "t": 798.88,
+   "d": 2.48,
+   "text": "or that the bad card combustible needs"
+  },
+  {
+   "t": 801.36,
+   "d": 2.84,
+   "text": "to be made less bad. Or you could swap"
+  },
+  {
+   "t": 804.2,
+   "d": 1.72,
+   "text": "out the composition of these. Maybe we"
+  },
+  {
+   "t": 805.92,
+   "d": 1.92,
+   "text": "get rid of one of the firestorm cards"
+  },
+  {
+   "t": 807.84,
+   "d": 1.36,
+   "text": "and replace it with something else. Like"
+  },
+  {
+   "t": 809.2,
+   "d": 1.52,
+   "text": "so there's all these different ways that"
+  },
+  {
+   "t": 810.72,
+   "d": 1.84,
+   "text": "you can balance it rather than balancing"
+  },
+  {
+   "t": 812.56,
+   "d": 1.84,
+   "text": "just the individual card being made"
+  },
+  {
+   "t": 814.4,
+   "d": 2.2,
+   "text": "better or worse. It's the composition of"
+  },
+  {
+   "t": 816.6,
+   "d": 2.04,
+   "text": "cards in the item that needs to be"
+  },
+  {
+   "t": 818.64,
+   "d": 1.72,
+   "text": "balanced. And so having having those"
+  },
+  {
+   "t": 820.36,
+   "d": 2.24,
+   "text": "levers is great from a from a balance"
+  },
+  {
+   "t": 822.6,
+   "d": 1.32,
+   "text": "perspective."
+  },
+  {
+   "t": 823.92,
+   "d": 2.64,
+   "text": "And again all this isn't like a better"
+  },
+  {
+   "t": 826.56,
+   "d": 1.6,
+   "text": "or anything. It's just different and it"
+  },
+  {
+   "t": 828.16,
+   "d": 2.16,
+   "text": "has different affordances."
+  },
+  {
+   "t": 830.32,
+   "d": 3.04,
+   "text": "And lastly it sort of shifts the focus"
+  },
+  {
+   "t": 833.36,
+   "d": 2.52,
+   "text": "in in these kinds of games to to playing"
+  },
+  {
+   "t": 835.88,
+   "d": 2.4,
+   "text": "the deck because you're not building the"
+  },
+  {
+   "t": 838.28,
+   "d": 1.8,
+   "text": "deck at one card at a time. You're not"
+  },
+  {
+   "t": 840.08,
+   "d": 2.16,
+   "text": "kind of agonizing about the"
+  },
+  {
+   "t": 842.24,
+   "d": 2.28,
+   "text": "building the deck and and making each"
+  },
+  {
+   "t": 844.52,
+   "d": 1.92,
+   "text": "decision for each card. And so you can"
+  },
+  {
+   "t": 846.44,
+   "d": 2.84,
+   "text": "actually focus more on playing the cards"
+  },
+  {
+   "t": 849.28,
+   "d": 1.8,
+   "text": "that you've got."
+  },
+  {
+   "t": 851.08,
+   "d": 2.12,
+   "text": "The analogy I think is like a normal"
+  },
+  {
+   "t": 853.2,
+   "d": 2.08,
+   "text": "singleton deck builder. The player is"
+  },
+  {
+   "t": 855.28,
+   "d": 2.08,
+   "text": "finding individual parts and they're"
+  },
+  {
+   "t": 857.36,
+   "d": 2.44,
+   "text": "trying to assemble a working engine out"
+  },
+  {
+   "t": 859.8,
+   "d": 1.96,
+   "text": "of those parts. In a set based deck"
+  },
+  {
+   "t": 861.76,
+   "d": 1.8,
+   "text": "builder, it's more like you're finding"
+  },
+  {
+   "t": 863.56,
+   "d": 1.96,
+   "text": "working parts and you're trying to build"
+  },
+  {
+   "t": 865.52,
+   "d": 3.0,
+   "text": "a car that is fun to drive. That's my"
+  },
+  {
+   "t": 868.52,
+   "d": 1.92,
+   "text": "analogy of these two things."
+  },
+  {
+   "t": 870.44,
+   "d": 1.68,
+   "text": "Not that you can't do this kind of"
+  },
+  {
+   "t": 872.12,
+   "d": 1.96,
+   "text": "assemble over time"
+  },
+  {
+   "t": 874.08,
+   "d": 1.6,
+   "text": "sort of mechanic with set based deck"
+  },
+  {
+   "t": 875.68,
+   "d": 2.56,
+   "text": "building. There are games that do that."
+  },
+  {
+   "t": 878.24,
+   "d": 2.28,
+   "text": "Deep Sky Derelicts uses this system"
+  },
+  {
+   "t": 880.52,
+   "d": 2.64,
+   "text": "where items contribute groups of cards"
+  },
+  {
+   "t": 883.16,
+   "d": 2.6,
+   "text": "and you assemble your deck over time."
+  },
+  {
+   "t": 885.76,
+   "d": 2.48,
+   "text": "And Trials of Fire also does this where"
+  },
+  {
+   "t": 888.24,
+   "d": 1.6,
+   "text": "cards are tied to equipment that you"
+  },
+  {
+   "t": 889.84,
+   "d": 1.48,
+   "text": "find over the course of the game and"
+  },
+  {
+   "t": 891.32,
+   "d": 2.68,
+   "text": "they give you groups of cards."
+  },
+  {
+   "t": 894.0,
+   "d": 2.4,
+   "text": "So anyway that's like that's that's"
+  },
+  {
+   "t": 896.4,
+   "d": 2.12,
+   "text": "wraps up my my quick little talk."
+  },
+  {
+   "t": 898.52,
+   "d": 1.64,
+   "text": "I really just think this is a neat"
+  },
+  {
+   "t": 900.16,
+   "d": 3.64,
+   "text": "mechanic that I want to see used more"
+  },
+  {
+   "t": 903.8,
+   "d": 1.48,
+   "text": "and I think it has some kind of"
+  },
+  {
+   "t": 905.28,
+   "d": 2.32,
+   "text": "interesting design affordances. So I"
+  },
+  {
+   "t": 907.6,
+   "d": 1.6,
+   "text": "hope this kind of like peaks your your"
+  },
+  {
+   "t": 909.2,
+   "d": 1.12,
+   "text": "interest"
+  },
+  {
+   "t": 910.32,
+   "d": 2.64,
+   "text": "a little bit. And I think it might"
+  },
+  {
+   "t": 912.96,
+   "d": 1.48,
+   "text": "actually be kind of a better fit for"
+  },
+  {
+   "t": 914.44,
+   "d": 1.76,
+   "text": "certain kinds of rogue like deck"
+  },
+  {
+   "t": 916.2,
+   "d": 1.6,
+   "text": "builders"
+  },
+  {
+   "t": 917.8,
+   "d": 1.88,
+   "text": "even if especially where deck building"
+  },
+  {
+   "t": 919.68,
+   "d": 1.28,
+   "text": "isn't necessarily the overwhelming"
+  },
+  {
+   "t": 920.96,
+   "d": 1.88,
+   "text": "central focus. Set set based building I"
+  },
+  {
+   "t": 922.84,
+   "d": 1.6,
+   "text": "think"
+  },
+  {
+   "t": 924.44,
+   "d": 1.32,
+   "text": "enables some some kind of different"
+  },
+  {
+   "t": 925.76,
+   "d": 1.56,
+   "text": "kinds of play styles."
+  },
+  {
+   "t": 927.32,
+   "d": 1.92,
+   "text": "And I think that there aren't that many"
+  },
+  {
+   "t": 929.24,
+   "d": 2.28,
+   "text": "examples of this because there hasn't"
+  },
+  {
+   "t": 931.52,
+   "d": 2.68,
+   "text": "been like a knockout hit using it but"
+  },
+  {
+   "t": 934.2,
+   "d": 2.44,
+   "text": "that's just an opportunity for for you."
+  },
+  {
+   "t": 936.64,
+   "d": 1.48,
+   "text": "You could you could be you could make"
+  },
+  {
+   "t": 938.12,
+   "d": 2.72,
+   "text": "the the next set based deck builder then"
+  },
+  {
+   "t": 940.84,
+   "d": 1.8,
+   "text": "then there'll be a bunch of things that"
+  },
+  {
+   "t": 942.64,
+   "d": 2.88,
+   "text": "will then iterate on it further. Lots of"
+  },
+  {
+   "t": 945.52,
+   "d": 2.12,
+   "text": "talks at Roguelike Celebration are you"
+  },
+  {
+   "t": 947.64,
+   "d": 1.84,
+   "text": "know these kind of selfless like here's"
+  },
+  {
+   "t": 949.48,
+   "d": 1.92,
+   "text": "how I did something. Here's this useful."
+  },
+  {
+   "t": 951.4,
+   "d": 2.36,
+   "text": "This is purely selfish. This is just a"
+  },
+  {
+   "t": 953.76,
+   "d": 2.12,
+   "text": "cool mechanic that I think is neat and"
+  },
+  {
+   "t": 955.88,
+   "d": 2.28,
+   "text": "this is like the best audience to just"
+  },
+  {
+   "t": 958.16,
+   "d": 2.56,
+   "text": "like here's a cool mechanic."
+  },
+  {
+   "t": 960.72,
+   "d": 1.76,
+   "text": "We should use it more and so so"
+  },
+  {
+   "t": 962.48,
+   "d": 1.04,
+   "text": "hopefully"
+  },
+  {
+   "t": 963.52,
+   "d": 1.56,
+   "text": "I'll get to them play some some set"
+  },
+  {
+   "t": 965.08,
+   "d": 2.68,
+   "text": "based deck building games in the future."
+  },
+  {
+   "t": 967.76,
+   "d": 1.24,
+   "text": "Thanks a lot. Thanks a lot for"
+  },
+  {
+   "t": 969.0,
+   "d": 1.6,
+   "text": "listening."
+  },
+  {
+   "t": 970.6,
+   "d": 1.52,
+   "text": "Appreciate appreciate it."
+  },
+  {
+   "t": 972.12,
+   "d": 1.8,
+   "text": "I like it's layers of selfish because"
+  },
+  {
+   "t": 973.92,
+   "d": 1.84,
+   "text": "you wrote a blog post about this and I"
+  },
+  {
+   "t": 975.76,
+   "d": 2.64,
+   "text": "read it and I was like selfishly I want"
+  },
+  {
+   "t": 978.4,
+   "d": 3.46,
+   "text": "this to be like presented and so"
+  },
+  {
+   "t": 981.86,
+   "d": 0.86,
+   "text": "[laughter]"
+  },
+  {
+   "t": 982.72,
+   "d": 1.48,
+   "text": "because I also want to play these games."
+  },
+  {
+   "t": 984.2,
+   "d": 2.36,
+   "text": ">> I know. Yeah. It would be good."
+  },
+  {
+   "t": 986.56,
+   "d": 1.72,
+   "text": "We have a little bit of time for"
+  },
+  {
+   "t": 988.28,
+   "d": 1.24,
+   "text": "questions if people want to put them on"
+  },
+  {
+   "t": 989.52,
+   "d": 2.4,
+   "text": "the wall but I actually I was curious so"
+  },
+  {
+   "t": 991.92,
+   "d": 1.88,
+   "text": "I had a thought and I'm I'm interested"
+  },
+  {
+   "t": 993.8,
+   "d": 2.2,
+   "text": "on your take on it and that I have seen"
+  },
+  {
+   "t": 996.0,
+   "d": 1.6,
+   "text": "a development from the like Roguelike"
+  },
+  {
+   "t": 997.6,
+   "d": 2.92,
+   "text": "deck builders into kind of dice based"
+  },
+  {
+   "t": 1000.52,
+   "d": 2.0,
+   "text": "basically Roguelike dice dice builders"
+  },
+  {
+   "t": 1002.52,
+   "d": 1.96,
+   "text": "like Slay the Spire being a big one that"
+  },
+  {
+   "t": 1004.48,
+   "d": 1.28,
+   "text": "was successful."
+  },
+  {
+   "t": 1005.76,
+   "d": 0.96,
+   "text": "And I was like if you think about it a"
+  },
+  {
+   "t": 1006.72,
+   "d": 2.96,
+   "text": "D6 it's kind of like it's six cards that"
+  },
+  {
+   "t": 1009.68,
+   "d": 2.2,
+   "text": "come in together because you bring in"
+  },
+  {
+   "t": 1011.88,
+   "d": 1.68,
+   "text": "the die and I see a lot of Slay the"
+  },
+  {
+   "t": 1013.56,
+   "d": 1.48,
+   "text": "Spire where I feel like they do it where"
+  },
+  {
+   "t": 1015.04,
+   "d": 1.76,
+   "text": "it's like oh this die has like two of"
+  },
+  {
+   "t": 1016.8,
+   "d": 2.36,
+   "text": "its faces are really good but the other"
+  },
+  {
+   "t": 1019.16,
+   "d": 1.44,
+   "text": "ones are blank or there's a couple that"
+  },
+  {
+   "t": 1020.6,
+   "d": 2.32,
+   "text": "are like negatives and it seems like the"
+  },
+  {
+   "t": 1022.92,
+   "d": 1.32,
+   "text": "whole thing is like okay do I want this"
+  },
+  {
+   "t": 1024.24,
+   "d": 1.48,
+   "text": "die because it comes with some good"
+  },
+  {
+   "t": 1025.72,
+   "d": 3.08,
+   "text": "faces but also some bad faces."
+  },
+  {
+   "t": 1028.8,
+   "d": 1.72,
+   "text": "Which is maybe kind of like somewhat"
+  },
+  {
+   "t": 1030.52,
+   "d": 2.12,
+   "text": "you're talking about. So do you think"
+  },
+  {
+   "t": 1032.64,
+   "d": 1.88,
+   "text": "is there anything there? Yeah I mean I"
+  },
+  {
+   "t": 1034.52,
+   "d": 2.68,
+   "text": "think that's a yeah I the only I so I"
+  },
+  {
+   "t": 1037.2,
+   "d": 1.88,
+   "text": "haven't played I haven't played Slay the"
+  },
+  {
+   "t": 1039.08,
+   "d": 1.88,
+   "text": "Spire so maybe that would have"
+  },
+  {
+   "t": 1040.96,
+   "d": 2.0,
+   "text": "I would have included that as as exactly"
+  },
+  {
+   "t": 1042.96,
+   "d": 1.76,
+   "text": "as as an example. Because yeah that"
+  },
+  {
+   "t": 1044.72,
+   "d": 1.56,
+   "text": "sounds exactly right that like yeah"
+  },
+  {
+   "t": 1046.28,
+   "d": 2.92,
+   "text": "you're evaluating a set"
+  },
+  {
+   "t": 1049.2,
+   "d": 2.12,
+   "text": "you know of six or whatever. I've"
+  },
+  {
+   "t": 1051.32,
+   "d": 1.96,
+   "text": "definitely seen yeah dice as the deck"
+  },
+  {
+   "t": 1053.28,
+   "d": 2.12,
+   "text": "building metaphor"
+  },
+  {
+   "t": 1055.4,
+   "d": 2.08,
+   "text": "like I think is a good"
+  },
+  {
+   "t": 1057.48,
+   "d": 1.24,
+   "text": "you know example of these yeah little"
+  },
+  {
+   "t": 1058.72,
+   "d": 1.48,
+   "text": "little mini"
+  },
+  {
+   "t": 1060.2,
+   "d": 1.0,
+   "text": "you know mini sets and there's"
+  },
+  {
+   "t": 1061.2,
+   "d": 1.96,
+   "text": "definitely some table top. I'm trying to"
+  },
+  {
+   "t": 1063.16,
+   "d": 1.8,
+   "text": "think that what's that like Dragon Dice"
+  },
+  {
+   "t": 1064.96,
+   "d": 2.88,
+   "text": "is the is like a is sort of a you have"
+  },
+  {
+   "t": 1067.84,
+   "d": 2.76,
+   "text": "an army but they're all dice"
+  },
+  {
+   "t": 1070.6,
+   "d": 2.12,
+   "text": "is is is a game that um"
+  },
+  {
+   "t": 1072.72,
+   "d": 1.84,
+   "text": "you're you're not set building but but"
+  },
+  {
+   "t": 1074.56,
+   "d": 1.16,
+   "text": "it has those kind of these these"
+  },
+  {
+   "t": 1075.72,
+   "d": 1.88,
+   "text": "metaphors that yeah I think I think are"
+  },
+  {
+   "t": 1077.6,
+   "d": 1.04,
+   "text": "good good"
+  },
+  {
+   "t": 1078.64,
+   "d": 1.47,
+   "text": "use case for it."
+  },
+  {
+   "t": 1080.11,
+   "d": 0.41,
+   "text": ">> [snorts]"
+  },
+  {
+   "t": 1080.52,
+   "d": 1.68,
+   "text": ">> Yeah I'm I'm curious cuz I think I"
+  },
+  {
+   "t": 1082.2,
+   "d": 2.56,
+   "text": "wonder almost if it's like a sideways"
+  },
+  {
+   "t": 1084.76,
+   "d": 2.68,
+   "text": "way cuz I think all of your reasons why"
+  },
+  {
+   "t": 1087.44,
+   "d": 2.36,
+   "text": "a set based design can have a bunch of"
+  },
+  {
+   "t": 1089.8,
+   "d": 2.36,
+   "text": "advantages over single cards in terms of"
+  },
+  {
+   "t": 1092.16,
+   "d": 2.08,
+   "text": "like balance like as a designer it feels"
+  },
+  {
+   "t": 1094.24,
+   "d": 1.48,
+   "text": "like it does a lot of like you can start"
+  },
+  {
+   "t": 1095.72,
+   "d": 1.4,
+   "text": "to like"
+  },
+  {
+   "t": 1097.12,
+   "d": 1.48,
+   "text": "control really interesting choices in a"
+  },
+  {
+   "t": 1098.6,
+   "d": 1.32,
+   "text": "way that's kind of"
+  },
+  {
+   "t": 1099.92,
+   "d": 1.72,
+   "text": "tricky if you just have a like one at a"
+  },
+  {
+   "t": 1101.64,
+   "d": 1.24,
+   "text": "time"
+  },
+  {
+   "t": 1102.88,
+   "d": 2.64,
+   "text": "Yeah mechanic. So I wonder like it is"
+  },
+  {
+   "t": 1105.52,
+   "d": 2.16,
+   "text": "the development towards dice based like"
+  },
+  {
+   "t": 1107.68,
+   "d": 1.84,
+   "text": "almost it's it's the that desire is"
+  },
+  {
+   "t": 1109.52,
+   "d": 1.76,
+   "text": "there but instead of thinking about it"
+  },
+  {
+   "t": 1111.28,
+   "d": 1.84,
+   "text": "as like packs of cards it's just like a"
+  },
+  {
+   "t": 1113.12,
+   "d": 2.64,
+   "text": "convergent evolution. Yeah yeah. I mean"
+  },
+  {
+   "t": 1115.76,
+   "d": 1.68,
+   "text": "I think that the big problem it solves"
+  },
+  {
+   "t": 1117.44,
+   "d": 1.8,
+   "text": "is how to get bad cards into the"
+  },
+  {
+   "t": 1119.24,
+   "d": 2.04,
+   "text": "player's deck which which a Roguelike"
+  },
+  {
+   "t": 1121.28,
+   "d": 2.32,
+   "text": "deck builder has to"
+  },
+  {
+   "t": 1123.6,
+   "d": 1.56,
+   "text": "like like"
+  },
+  {
+   "t": 1125.16,
+   "d": 2.44,
+   "text": "Monster Train has all these like like an"
+  },
+  {
+   "t": 1127.6,
+   "d": 1.8,
+   "text": "event will add a bunch of bad cards or"
+  },
+  {
+   "t": 1129.4,
+   "d": 2.12,
+   "text": "whatever. But I like in a set based you"
+  },
+  {
+   "t": 1131.52,
+   "d": 2.24,
+   "text": "can like in in Card Hunter you can"
+  },
+  {
+   "t": 1133.76,
+   "d": 2.52,
+   "text": "voluntarily like oh this thing that has"
+  },
+  {
+   "t": 1136.28,
+   "d": 1.4,
+   "text": "a bunch of good cards and a bunch of bad"
+  },
+  {
+   "t": 1137.68,
+   "d": 2.36,
+   "text": "cards but like I'm going the rest of my"
+  },
+  {
+   "t": 1140.04,
+   "d": 2.44,
+   "text": "cards will mitigate those bad cards and"
+  },
+  {
+   "t": 1142.48,
+   "d": 1.8,
+   "text": "and I get those good cards and so that's"
+  },
+  {
+   "t": 1144.28,
+   "d": 1.76,
+   "text": "like a cool decision to"
+  },
+  {
+   "t": 1146.04,
+   "d": 2.0,
+   "text": "for the player to be able to make. And"
+  },
+  {
+   "t": 1148.04,
+   "d": 2.12,
+   "text": "so dice I think allow you to do the same"
+  },
+  {
+   "t": 1150.16,
+   "d": 2.12,
+   "text": "thing that like oh this this die that"
+  },
+  {
+   "t": 1152.28,
+   "d": 2.32,
+   "text": "has like a bunch of good faces and then"
+  },
+  {
+   "t": 1154.6,
+   "d": 2.44,
+   "text": "the one that kills me you know like is"
+  },
+  {
+   "t": 1157.04,
+   "d": 1.4,
+   "text": "is I'm going to take that one. And yeah"
+  },
+  {
+   "t": 1158.44,
+   "d": 2.48,
+   "text": "it's just a it's just a different"
+  },
+  {
+   "t": 1160.92,
+   "d": 1.76,
+   "text": "sort of experience and and that's that's"
+  },
+  {
+   "t": 1162.68,
+   "d": 1.24,
+   "text": "With different trade-offs. It's almost"
+  },
+  {
+   "t": 1163.92,
+   "d": 1.48,
+   "text": "now I'm just like okay so when I have"
+  },
+  {
+   "t": 1165.4,
+   "d": 1.44,
+   "text": "like six dice it's like I have six"
+  },
+  {
+   "t": 1166.84,
+   "d": 2.04,
+   "text": "little piles of cards that I"
+  },
+  {
+   "t": 1168.88,
+   "d": 1.92,
+   "text": "can pick one card from each one. Yeah I"
+  },
+  {
+   "t": 1170.8,
+   "d": 0.92,
+   "text": "think that's a great that's a great"
+  },
+  {
+   "t": 1171.72,
+   "d": 1.2,
+   "text": "metaphor."
+  },
+  {
+   "t": 1172.92,
+   "d": 1.2,
+   "text": "Cool. Okay."
+  },
+  {
+   "t": 1174.12,
+   "d": 1.52,
+   "text": "Well that wasn't really a question but"
+  },
+  {
+   "t": 1175.64,
+   "d": 1.41,
+   "text": "this was a great discussion. So"
+  },
+  {
+   "t": 1177.05,
+   "d": 1.39,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1178.44,
+   "d": 1.28,
+   "text": ">> Thank you for indulging me."
+  },
+  {
+   "t": 1179.72,
+   "d": 1.24,
+   "text": ">> Yeah well thanks thanks thanks for"
+  },
+  {
+   "t": 1180.96,
+   "d": 1.96,
+   "text": "thanks for having me. Much appreciated."
+  },
+  {
+   "t": 1182.92,
+   "d": 2.32,
+   "text": "For a fantastic talk. So thank you very"
+  },
+  {
+   "t": 1185.24,
+   "d": 2.44,
+   "text": "much."
+  }
+ ]
+}

@@ -1,0 +1,139 @@
+{
+  "id": "66O6WDcT8KY",
+  "title": "Max Kreminski - ProcGen Character Arcs",
+  "speaker": "Max Kreminski",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=66O6WDcT8KY",
+  "talk_type": "design",
+  "summary": "Max Kreminski presents techniques from his prototype Star Freighter, a Reigns-like game about a quirky spaceship crew, for giving procedurally generated characters compelling arcs. His central principle is that relationships take time, so generators should reveal character traits gradually rather than dumping them up front. He gives five techniques: foreshadowing via hidden latent traits, building expectations before surprising players, reusing characters instead of discarding them, drama-manager character focus, and generating good and bad endings per character. He illustrates them with a fugitive-passenger storylet chain and discusses spoilers and simulation versus drama management in Q&A.",
+  "games": [
+    "Star Freighter",
+    "Epitaph",
+    "Reigns",
+    "Fallen London",
+    "Middle-earth: Shadow of Mordor"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "storylets",
+      "kind": "technique",
+      "claim": "Star Freighter structures narrative as storylets, small self-contained story units with prerequisites, and the system dynamically picks which eligible storylet plays next rather than letting the player choose as Fallen London does.",
+      "detail": "Kreminski borrows the term from Failbetter's Fallen London. An example storylet selects two crew members who have not recently had a very negative interaction, generates text with a grammar, and adds a memory of a slightly more positive relationship to each.",
+      "t": 308,
+      "quote": "in star freighter it's actually selecting dynamically from the pool of story lights whose prerequisites are currently met",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "crew simulation",
+      "kind": "example",
+      "claim": "Star Freighter evolved from a Reigns-like game with a single crew morale bar into a finer-grained simulation where each generated crew member has their own mood driven by the player's responses and their relationships.",
+      "detail": "The original prototype had three stat bars; the bottom one was crew morale, a flat number from 0 to 100. Individual moods eventually subsumed the average mood, and the design question became how to get players invested in generated characters.",
+      "t": 221,
+      "quote": "each of our crew members actually has their own mood now and these individual crew moods have now",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character arcs",
+      "kind": "principle",
+      "claim": "Relationships with characters take time, so generators should reveal a character's traits gradually through actions over many interactions instead of dumping a trait list up front.",
+      "detail": "Kreminski acknowledges Tanya Short's argument that showing traits up front helps players notice characters have inner lives at all, but says it's not how real life or other storytelling works, where traits are revealed by actions over time.",
+      "t": 375,
+      "quote": "generative systems tend to fall into a certain trap they tend to generate a lot of information upfront and then dump it on the player all at once",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "foreshadowing",
+      "kind": "technique",
+      "claim": "Generated characters with hidden latent traits (a dark secret, an untapped potential) let a procedural system foreshadow, because storylets can drop hints about traits that will later develop.",
+      "detail": "Foreshadowing normally requires knowing the future. In Star Freighter, a storylet fires only if a character has latent fighting potential: after a near-fatal fight they decide to learn self-defence, and a later storylet brings aboard a martial-arts passenger to teach them.",
+      "t": 501,
+      "quote": "generating characters with hidden or latent traits so a character might have say a dark secret",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "expectation and surprise",
+      "kind": "principle",
+      "claim": "Players need time to learn a generator's baseline before they can recognise exceptional events, and early streaks of true randomness can give them a false picture of the possibility space.",
+      "detail": "Kreminski shows a sequence of random digits 0-4 containing long runs of only one or two values; if a player's first experience is such a run, they may conclude the game always does the same thing. Surprise is what makes players intrigued by and care about a character.",
+      "t": 598,
+      "quote": "you have to spend some time building expectations before you can start subverting them",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "weighted randomness",
+      "kind": "technique",
+      "claim": "Star Freighter tips the scales so that exceptional events never happen first, e.g. a passenger hijacking the ship never occurs among the player's first three passengers.",
+      "detail": "If the hijack were the first thing that happened it would seem random and unexceptional; after a run of safe passengers it feels far more impactful.",
+      "t": 674,
+      "quote": "this is never going to happen to you on your first three passengers that you take ever because when it happens it has to be surprising to matter",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "character reuse",
+      "kind": "technique",
+      "claim": "Star Freighter keeps every generated character in its database and brings them back in new roles (escaped bounty hunters, former passengers, persistent merchants) rather than discarding them after use.",
+      "detail": "Throwing away characters after a fight or quest limits how much development they can receive. Defeated bounty hunters often survive to return; merchants track reputation so backtracking brings repercussions. Kreminski likens it to a generalization of Shadow of Mordor's nemesis system to all characters.",
+      "t": 745,
+      "quote": "instead of throwing characters away it reuses them",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "drama management",
+      "kind": "technique",
+      "claim": "A procedural storytelling system can emulate TV's character-focus episodes by tracking which characters are in focus and up-weighting storylets involving them.",
+      "detail": "Focus reveals backstory, motivations and relationships and deepens connection (making a later death sadder). Kreminski proposes a drama manager that boosts selection of storylets involving focused characters or relationships; not yet implemented in Star Freighter.",
+      "t": 880,
+      "quote": "randomly up wait the selection of story lets that involve these characters",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character endings",
+      "kind": "technique",
+      "claim": "Generating a best and worst possible outcome for each significant character in advance, then offering storylets that let the player bring either about, adapts Emily Short's authoring advice to procedural characters.",
+      "detail": "Short's tip is to write down best and worst outcomes and give the player ways to realize them, e.g. making characters' goals incompatible. Kreminski calls this speculative and unimplemented, building on the hidden-traits framework.",
+      "t": 905,
+      "quote": "generating a good end and a bad end for every significant character",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "storylet chains",
+      "kind": "example",
+      "claim": "In Star Freighter, a fugitive passenger acts nervous about a heavily policed destination, the ship's chance of a random search is raised because contraband is aboard, and the player chooses to hide or turn them in.",
+      "detail": "The nervousness is foreshadowing from a hidden trait; the search weight increases because searches that find nothing are dull. The hide-or-turn-in choice is a manual version of offering the character's best or worst outcome.",
+      "t": 1052,
+      "quote": "star fighter chooses to increase the weight of being stopped for a random search when you actually have someone who is a fugitive",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "Designers worry too much about players spoiling generated stories via wikis; players who strategize from spoilers only affect their own experience, and enough storylets can outlast their interest.",
+      "detail": "Asked whether wikis will reduce storylets to probabilities, Kreminski says the main approach is not to fight it; invested players making and using such resources is fine.",
+      "t": 1171,
+      "quote": "we tend to worry too much about players spoiling themselves or learning about the game outside of the game",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "drama management",
+      "kind": "open-question",
+      "claim": "Retroactively assigning a character a secret because the plot needs drama right now is a valid drama-management approach, but Kreminski prefers a simulationist one where state is set first and events follow from it.",
+      "detail": "He calls backfilling traits 'cheating' relative to how he wants his system to work, but says it could work in other contexts.",
+      "t": 1246,
+      "quote": "I'm aiming for a more simulation as sort of the state is set up a certain way first and then things fall out of that state",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

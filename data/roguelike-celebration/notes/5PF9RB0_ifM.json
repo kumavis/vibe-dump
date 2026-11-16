@@ -1,0 +1,167 @@
+{
+  "id": "5PF9RB0_ifM",
+  "title": "Jack Schlesinger: Your Puzzle Is A Secret Dungeon",
+  "speaker": "Jack Schlesinger",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=5PF9RB0_ifM",
+  "talk_type": "design",
+  "summary": "Jack Schlesinger, co-developer with Zach Gage of Good Sudoku and Knotwords, explains how generating logic puzzles mirrors generating roguelike dungeons. Solving techniques are treated as monsters and the solve order as the path through the dungeon; generation borrows from BSP (fill then step back through decisions) and cellular automata (refine regions you like, remove what you don't). A solver built from observing human play guarantees solvability, detects dead ends, enables hints and scores difficulty for beginner and expert models. Interestingness is judged by variety of techniques along the solve path and by low variance in difficulty across solve orders, framed as a dramatic arc of tension and release.",
+  "games": [
+    "Good Sudoku",
+    "Knotwords",
+    "Sudoku"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "puzzle generation",
+      "kind": "principle",
+      "claim": "Procedurally generating puzzles is justified because computers are far better than humans at checking solvability and uniqueness and exploring huge spaces, and hand-authoring would cap the game below players who outgrow the designer.",
+      "detail": "Schlesinger notes a human usually has to solve a puzzle to know it has a solution. Ideally players become much better than the designer, and Sudoku's space is so vast that all humans together could not hand-explore it for centuries; most of the space is not valid puzzles, so pure random or pure hand work won't get there.",
+      "t": 263,
+      "quote": "You are going to be only limiting your possible audience if you, you know, say you are going to be the author and pen all of the puzzles",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation",
+      "kind": "principle",
+      "claim": "Computers are bad at judging whether a step is easy or hard for a human, so generators need ways of culling and scoring output rather than trusting raw generation.",
+      "detail": "Schlesinger says computers do exactly what they're told even when it is a mistake, and there are too many generated puzzles to review by hand, so they had to cull and decide what to use when.",
+      "t": 479,
+      "quote": "We have to come up with ways of culling down all of the generated puzzles and figure out what we are going to use",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "puzzle generation",
+      "kind": "technique",
+      "claim": "Treat a puzzle as a dungeon: the solving techniques are the monsters and the order of solving steps is the path through the dungeon.",
+      "detail": "This framing applies especially to unique-solution, no-guessing puzzles; Schlesinger says they took many cues from roguelike dungeon generation that may be useful back to roguelike designers.",
+      "t": 590,
+      "quote": "We think of the techniques needed in order to solve the puzzles as monsters in the order that you solve the puzzle",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "puzzle generation",
+      "kind": "technique",
+      "claim": "Good Sudoku generates puzzles by starting from a filled valid grid and removing symmetric pairs of digits, re-checking with a solver after each removal that the puzzle is still valid.",
+      "detail": "Making a filled correct Sudoku is easy; digits are removed mirrored over the center two at a time, with the solver confirming validity at every step.",
+      "t": 703,
+      "quote": "Every step we would just remove two of the digits out of it, double check using our solver that it was still a valid Sudoku",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "backtracking",
+      "kind": "technique",
+      "claim": "Knotwords' initial generator, inspired by BSP dungeon generation, randomly fills the grid with fitting words until it runs out of space, then steps backward through its decisions trying alternatives to fill gaps.",
+      "detail": "Example: swapping 'yak' for another word closes remaining gaps. Schlesinger stresses this only fills the space; it does not make the puzzle good or appropriately difficult, and acknowledges (responding to Boris the Brave in chat) it has drifted far from BSP.",
+      "t": 747,
+      "quote": "step backwards through each of the decisions we made while we were filling it in and see if we can make it better",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "solvability",
+      "kind": "principle",
+      "claim": "A dungeon or puzzle is solvable when it has no inaccessible rooms and no unintentional dead ends; for Knotwords, disconnected regions are detected with a flood fill.",
+      "detail": "A Knotwords grid that isn't fully attached is really several adjacent puzzles, so flood fill checks connectivity. The other sense of 'inaccessible' is a puzzle that cannot be uniquely solved, e.g. a Sudoku with 'deadly patterns' where four cells could all be 5 or 6.",
+      "t": 875,
+      "quote": "what makes a dungeon solvable? No inaccessible rooms and no unintentional deadends",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "solvers",
+      "kind": "technique",
+      "claim": "Building a solver to validate generated puzzles lets the generator backtrack on ambiguity and, as a side effect, powers a verbose hint system.",
+      "detail": "For Sudoku they drew on the community's catalogued techniques and deadly patterns, making ambiguity easy to identify.",
+      "t": 953,
+      "quote": "our solution for that was to make a solver. If we ran into any ambiguities we knew we would have to go backwards. This had the side effect",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "player modelling",
+      "kind": "technique",
+      "claim": "Derive solver rules by playing a lot, naming the intuitive steps you take, confirming them with statistics on the content, and watching playtesters' decisions, then iterating.",
+      "detail": "In Knotwords, an intuition like 'EY is almost always E then Y' became a solver technique, verified by frequency analysis over common-word lists (which letter pairs are ordered 90-95% of the time). Watching where playtesters start and asking what they think yields more rules.",
+      "t": 1003,
+      "quote": "we play the game a lot, examine the steps we are taking, and then try to create like rules to describe the steps you have taken",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "dead ends",
+      "kind": "warning",
+      "claim": "Watch for states where a locally correct move makes the rest of the level or puzzle unsolvable, like locking a door that blocks the exit; Knotwords added zone rules to prevent such cascades.",
+      "detail": "In Knotwords a correct-looking solution on one side can cascade and make the rest impossible, especially where two parts connect in only one place. They created per-zone rules and kept asking what dead ends and pain points would feel really bad.",
+      "t": 1135,
+      "quote": "Can you lock a door over here so you can't get through this other thing to get to the exit",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "difficulty estimation",
+      "kind": "technique",
+      "claim": "Estimate a generated puzzle's difficulty by scoring each solving technique and counting them along the solver's path, running beginner and expert solvers to see difficulty for each kind of player.",
+      "detail": "A beginner solver knowing only easy techniques takes a roundabout path while an expert solver can shortcut. For Knotwords, lacking a technique catalogue, they looked at features like letter sets with only one possible ordering (less interesting) versus multiple valid vowel and consonant positions (more interesting).",
+      "t": 1302,
+      "quote": "how difficult is this puzzle for an expert player and a beginner player",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Like cellular-automata cave smoothing removes isolated wall pillars while keeping clustered walls, Knotwords refines a generated grid by keeping regions it likes and regenerating the parts it doesn't.",
+      "detail": "Schlesinger explains Conway's B3/S23 and cave generation that passes a 'gut check'. In Knotwords they keep e.g. a good top-left corner, remove the bottom-right, and step through better English words, ending with a cleaner puzzle with less common words and more vowel variety.",
+      "t": 1486,
+      "quote": "we like the top-left corner of this and don't like the bottom right corner of this. So we can remove that and start stepping through",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "pacing",
+      "kind": "principle",
+      "claim": "Dungeons and puzzles should follow a dramatic arc of tension and release: accessible at first, growing tougher until the key is unlocked, then a short release to the conclusion.",
+      "detail": "Schlesinger, coming from theater writing, wants single-player games to feel like the dramatic arts, rather than a dungeon being one big room with all the monsters (though that depends on the game).",
+      "t": 1574,
+      "quote": "the more that you get into it the tup tougher it gets until you finally unlock the answer to the game and you have a short release",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "interestingness metrics",
+      "kind": "technique",
+      "claim": "Judge a generated puzzle's interestingness by the solver's path: how often the same technique repeats, whether one dominates, how many techniques appear, and how different alternative paths are.",
+      "detail": "For no-guessing puzzles like Sudoku, run the solver with different seeds and check for runs like 'hidden single, hidden single, hidden single'. For puzzles with guessing, look for spots that are consistently easy or hard versus inconsistent ones.",
+      "t": 1609,
+      "quote": "How often do you just have like hidden single, hidden single, hidden single? Is there one technique that dominates",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "interestingness metrics",
+      "kind": "technique",
+      "claim": "Use the population variance of difficulty across solver runs to reject puzzles that are arbitrarily hard or arbitrarily easy depending on the order the player approaches them.",
+      "detail": "Schlesinger wants plenty of difficulty but not swingy difficulty; variance is just his preferred measure of how swingy each part is, and others could be used.",
+      "t": 1687,
+      "quote": "we don't want the puzzle to either be arbitrarily hard or arbitrarily easy depending on the order which you go through it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "player modelling",
+      "kind": "principle",
+      "claim": "Treating a roguelike dungeon like a puzzle, with a solver or simple player model, can teach you about its difficulty, consistency and interestingness; treating puzzles like dungeons shows creation is refinement and solving is storytelling.",
+      "detail": "Schlesinger recommends adapting techniques from other domains; Knotwords even uses Markov-chain AI techniques from fighting games to predict which words make sense in remaining places.",
+      "t": 1742,
+      "quote": "making a solver or simple player model can probably teach you a lot and help you assess difficulty, consistency and maybe some kind of variable of interestingness",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

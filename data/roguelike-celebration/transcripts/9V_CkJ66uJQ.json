@@ -1,0 +1,1268 @@
+{
+ "id": "9V_CkJ66uJQ",
+ "url": "https://www.youtube.com/watch?v=9V_CkJ66uJQ",
+ "title": "Jesse Collet & Keni - Fireside chat about the development of NetHack",
+ "speaker": "Jesse Collet & Keni",
+ "talk_title": "Fireside chat about the development of NetHack",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1929,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Host Alexei Pepers and Jesse Collet and Keni (former NetHack devs) talk about the early days of NetHack and the role of open-source development in Roguelike games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introductions and origins"
+  },
+  {
+   "start": 60,
+   "title": "Joining the dev team"
+  },
+  {
+   "start": 310,
+   "title": "Collaborative culture"
+  },
+  {
+   "start": 665,
+   "title": "Community and recognition"
+  },
+  {
+   "start": 881,
+   "title": "Technical contributions"
+  },
+  {
+   "start": 1190,
+   "title": "Playing and debugging"
+  },
+  {
+   "start": 1301,
+   "title": "Memorable system design"
+  },
+  {
+   "start": 1674,
+   "title": "Legacy and closing thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4171,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 23.47,
+   "d": 4.45,
+   "text": ">> Morning. ALEXEI: I tried to pitch"
+  },
+  {
+   "t": 27.92,
+   "d": 8.76,
+   "text": "having a hooded figure visual effect to lean into the secrecy but it is great to just, you know,"
+  },
+  {
+   "t": 36.68,
+   "d": 5.92,
+   "text": "have you here to chat. I will say for people in the discussion since this is an AMA I will be"
+  },
+  {
+   "t": 42.6,
+   "d": 5.16,
+   "text": "keeping an eye on questions as we talk, so, please submit those. Don't just wait until the end. This"
+  },
+  {
+   "t": 47.76,
+   "d": 7.96,
+   "text": "is a discussion. Let's kicko ff by introductions and maybe a bit of what was your history as a"
+  },
+  {
+   "t": 55.72,
+   "d": 5.92,
+   "text": "member of the NetHack dev team and things you contributed to. We can start with you, Keni."
+  },
+  {
+   "t": 61.64,
+   "d": 13.32,
+   "text": "KENI: OK. I got into NetHack through Rogue. And then in graduate school,"
+  },
+  {
+   "t": 74.96,
+   "d": 6.84,
+   "text": "I was porting everything I could to the omega because I had a bunch of friends I had forced"
+  },
+  {
+   "t": 81.8,
+   "d": 6.52,
+   "text": "to buy them instead of Apples and needed to prove to them that this computer could"
+  },
+  {
+   "t": 88.32,
+   "d": 9.2,
+   "text": "handle all this stuff. So I hit NetHack in comp sources games. It didn't work. This was"
+  },
+  {
+   "t": 97.52,
+   "d": 8.64,
+   "text": "my first experience with what I guess would be called a meme these days of NetHack breaks"
+  },
+  {
+   "t": 106.16,
+   "d": 8.88,
+   "text": "compilers. I also broke the compiler on the Cray. -- with NetHack. Many people"
+  },
+  {
+   "t": 115.04,
+   "d": 8.72,
+   "text": "have done it with other things. But through the discussion with dev team about that bug,"
+  },
+  {
+   "t": 123.76,
+   "d": 6.32,
+   "text": "I ended up on the Amiga porting team and did that for years and years and then as the Amiga"
+  },
+  {
+   "t": 130.08,
+   "d": 11.84,
+   "text": "was petering out the web was coming in so I moved over to the building of our website and then more"
+  },
+  {
+   "t": 141.92,
+   "d": 7.84,
+   "text": "email tools and back-end stuff. Occasionally I dipped my toe in the main part of the game."
+  },
+  {
+   "t": 149.76,
+   "d": 9.24,
+   "text": "ALEXEI: Excellent. Jesse, how about you? JESSE: I skipped Rogue. I think I started"
+  },
+  {
+   "t": 159.0,
+   "d": 13.6,
+   "text": "directly with Hack if I remember correctly. I was very young. I discovered computer games on"
+  },
+  {
+   "t": 172.6,
+   "d": 10.6,
+   "text": "Unix systems either at companies I worked for or at universities. At the time, computers were kind"
+  },
+  {
+   "t": 183.2,
+   "d": 11.2,
+   "text": "of a rarity. So we didn't have access to that much games. And like Keni the first thing I did was to"
+  },
+  {
+   "t": 194.4,
+   "d": 9.12,
+   "text": "port it on some system that didn't support it. At that time I put NetHack 3.2 came out which was a"
+  },
+  {
+   "t": 203.52,
+   "d": 7.84,
+   "text": "direct descendent of Hack and I really got into it and started porting it to wherever I needed"
+  },
+  {
+   "t": 211.36,
+   "d": 7.32,
+   "text": "to port and one thing led to another and I fixed bugs and you have to remember that at the time,"
+  },
+  {
+   "t": 218.68,
+   "d": 9.88,
+   "text": "the community was working in a very different way. We had Use Net with built-in boards. Whatever you"
+  },
+  {
+   "t": 228.56,
+   "d": 8.32,
+   "text": "posted, you fixed the bugs and you posted the difs. Here is the fix for that particular bug"
+  },
+  {
+   "t": 236.88,
+   "d": 5.08,
+   "text": "or that kind of thing. Once you do that, after that you start having your own ideas on how to"
+  },
+  {
+   "t": 241.96,
+   "d": 6.68,
+   "text": "improve the game and you start posting suggestions with the code because you tested it. And I did a"
+  },
+  {
+   "t": 248.64,
+   "d": 9.36,
+   "text": "number of patches like that and that's why I got contacted by the -- at the time dev team"
+  },
+  {
+   "t": 258.0,
+   "d": 6.76,
+   "text": "in 1988 so, you know, within the first year of the creation of NetHack and I joined the team to start"
+  },
+  {
+   "t": 264.76,
+   "d": 9.76,
+   "text": "working on NetHack 3.0 which was a very first version with a really full dev team at the time."
+  },
+  {
+   "t": 274.52,
+   "d": 9.12,
+   "text": "I stayed active for quite a long time. Let's see. About 12-13 years. And around the turn"
+  },
+  {
+   "t": 283.64,
+   "d": 11.16,
+   "text": "of the century, I kind of went off but I still stayed connected to the team. I am"
+  },
+  {
+   "t": 294.8,
+   "d": 6.08,
+   "text": "still technically part of the dev team and get the emails wherever anyone sends suggestions"
+  },
+  {
+   "t": 301.88,
+   "d": 6.92,
+   "text": "but I haven't contributed in 20 years except maybe some discussions and stuff like that."
+  },
+  {
+   "t": 308.8,
+   "d": 5.92,
+   "text": "ALEXEI: That's wonderful. I think the format of the dev team is both kind of familiar to"
+  },
+  {
+   "t": 314.72,
+   "d": 7.8,
+   "text": "like some people are doing open source and have GIT repos and how did that work in terms"
+  },
+  {
+   "t": 322.52,
+   "d": 6.4,
+   "text": "of deciding which directions to take NetHack in? Was it a lot of discussions within the dev team?"
+  },
+  {
+   "t": 328.92,
+   "d": 4.48,
+   "text": "Are there certain people that own that and over time is it a lot of people coming and"
+  },
+  {
+   "t": 333.4,
+   "d": 7.84,
+   "text": "going and passing the torch of like now you are going to start taking charge of this element?"
+  },
+  {
+   "t": 341.24,
+   "d": 4.39,
+   "text": "JESSE: That's a great question. KENI: Yeah."
+  },
+  {
+   "t": 345.63,
+   "d": 10.09,
+   "text": "JESSE: It is also one that is very hard to actually answer because I suppose it depends a lot"
+  },
+  {
+   "t": 355.72,
+   "d": 12.08,
+   "text": "on that time period that you are looking at. But for the time I was on the team, there was no real"
+  },
+  {
+   "t": 367.8,
+   "d": 7.04,
+   "text": "leadership so to speak. Nobody was deciding what the others would do and so on. We were discussing"
+  },
+  {
+   "t": 374.84,
+   "d": 7.32,
+   "text": "ideas over email basically and usually societies would come up in the form of here is what I coded,"
+  },
+  {
+   "t": 382.16,
+   "d": 8.76,
+   "text": "what do you think about it? And then usually, it would evolve from there. What I realize much"
+  },
+  {
+   "t": 390.92,
+   "d": 8.04,
+   "text": "later on in my life is that it was actually very close to what the improv mechanisms are which is"
+  },
+  {
+   "t": 400.2,
+   "d": 8.8,
+   "text": "now that I look back we never said no or but. We also said yes and you try to improve on what"
+  },
+  {
+   "t": 409.0,
+   "d": 6.08,
+   "text": "was done. That's why I always insist on saying that, you know, NetHack is first and foremost a"
+  },
+  {
+   "t": 415.08,
+   "d": 8.72,
+   "text": "collaborative project. Nobody owned any part of the code. Nobody own any part of the features."
+  },
+  {
+   "t": 423.8,
+   "d": 7.2,
+   "text": "Everybody worked on everything basically. When I say everybody, there is a dev team, but we got"
+  },
+  {
+   "t": 431.0,
+   "d": 6.8,
+   "text": "so many contributions from all of the players that it is very hard to keep track of that."
+  },
+  {
+   "t": 437.8,
+   "d": 5.28,
+   "text": "KENI: From my point of view, I guess the timeframe is just a little different. I came"
+  },
+  {
+   "t": 443.08,
+   "d": 13.88,
+   "text": "in when Ischock Mailer was the librarian. He is not a programmer. He was in charge of the source"
+  },
+  {
+   "t": 456.96,
+   "d": 7.24,
+   "text": "tree which at that point in time was sitting on some computer at the University of Pennsylvania"
+  },
+  {
+   "t": 464.2,
+   "d": 8.48,
+   "text": "and if you needed a new copy, he would make a copy and mail it to you as a large tar ball."
+  },
+  {
+   "t": 473.36,
+   "d": 3.96,
+   "text": "Other than that it was up to you to keep up with your email and apply patches and then"
+  },
+  {
+   "t": 477.32,
+   "d": 6.6,
+   "text": "they started failing you got to start again. JESSE: Yeah, no [indiscernible] at the time."
+  },
+  {
+   "t": 483.92,
+   "d": 9.12,
+   "text": "ALEXEI: Of course. JESSE: It is true. Hit shack was very much"
+  },
+  {
+   "t": 495.2,
+   "d": 7.52,
+   "text": "the moderator of the team in many ways. He was, if I remember correctly, a professor in philosophy,"
+  },
+  {
+   "t": 502.72,
+   "d": 10.2,
+   "text": "so that gives you an idea of his background. He was a great guy. I miss him terribly to be fair."
+  },
+  {
+   "t": 513.52,
+   "d": 4.92,
+   "text": "KENI: Yes. JESSE: He was much more the"
+  },
+  {
+   "t": 518.44,
+   "d": 5.12,
+   "text": "stabilizing core of the team than somebody who would tell you what to do and what not to do."
+  },
+  {
+   "t": 524.24,
+   "d": 8.16,
+   "text": "KENI: I keep waiting to find out he has left a book, you know? Peering at us as lab rats."
+  },
+  {
+   "t": 532.4,
+   "d": 6.8,
+   "text": "Let's see what happens if we try to develop a game using this organizational format."
+  },
+  {
+   "t": 539.2,
+   "d": 3.72,
+   "text": "ALEXEI: Yeah, it is beautiful. I think in librarian is a beautiful term for that. I"
+  },
+  {
+   "t": 542.92,
+   "d": 5.96,
+   "text": "think it is amazing, a lot of projects have failed due to lack of structure and things"
+  },
+  {
+   "t": 548.88,
+   "d": 4.84,
+   "text": "like that. For it to stay so collaborative, and I think that's very beautiful too. When"
+  },
+  {
+   "t": 553.72,
+   "d": 4.88,
+   "text": "I first got in touch with you, Jesse, you told me about how I think the roguelike"
+  },
+  {
+   "t": 558.6,
+   "d": 4.72,
+   "text": "community jokes about the NetHack dev team being secretive and you are like,"
+  },
+  {
+   "t": 563.32,
+   "d": 5.4,
+   "text": "no, it is more about embracing the fact it is not just a select set of people who built"
+  },
+  {
+   "t": 568.72,
+   "d": 5.84,
+   "text": "NetHack and it is this community effort and I think that's a lovely way to think of it."
+  },
+  {
+   "t": 574.56,
+   "d": 4.68,
+   "text": "JESSE: I can tell you when you send that mail initially asking if you wanted to speak"
+  },
+  {
+   "t": 579.24,
+   "d": 9.48,
+   "text": "anonymously it got a good laugh from the team. KENI: Yeah, I think it is more obviously"
+  },
+  {
+   "t": 588.72,
+   "d": 10.24,
+   "text": "collaborative now but it has always been attached pretty sturdily to at least those"
+  },
+  {
+   "t": 598.96,
+   "d": 7.68,
+   "text": "people who are willing to reach out to us. ALEXEI: Right. Yeah. Yeah. No, that's wonderful."
+  },
+  {
+   "t": 607.4,
+   "d": 7.04,
+   "text": "JESSE: To give you an example, recently NetHack got added to the collection of the museum of"
+  },
+  {
+   "t": 614.44,
+   "d": 5.96,
+   "text": "modern New York and when the creator asked us, you know, who should we attribute it,"
+  },
+  {
+   "t": 623.24,
+   "d": 5.48,
+   "text": "without any discretion we knew it would have to be the NetHack dev team period."
+  },
+  {
+   "t": 628.72,
+   "d": 8.48,
+   "text": "Nobody else. That's really important to us. ALEXEI: Yeah. I think that that is wonderful."
+  },
+  {
+   "t": 637.2,
+   "d": 4.6,
+   "text": "That's why I am glad to get to do this because so many people have been inspired about NetHack"
+  },
+  {
+   "t": 641.8,
+   "d": 7.36,
+   "text": "and want to know more about the history and the development. A lot of people in"
+  },
+  {
+   "t": 649.16,
+   "d": 5.24,
+   "text": "this community have done scraping of -- I know people who would kill to read those emails of"
+  },
+  {
+   "t": 654.4,
+   "d": 7.32,
+   "text": "the yes/and development of NetHack over time. JESSE: We should have kept them, yes. It wasn't"
+  },
+  {
+   "t": 661.72,
+   "d": 6.12,
+   "text": "a law to keep that stuff at the time. ALEXEI: Absolutely. I will grab a question"
+  },
+  {
+   "t": 667.84,
+   "d": 7.4,
+   "text": "from the audience from jines. It is about the fact there are so many community projects that"
+  },
+  {
+   "t": 675.24,
+   "d": 8.52,
+   "text": "build off NetHack and forks and I don't know if you have heard of Facebook is"
+  },
+  {
+   "t": 683.76,
+   "d": 4.96,
+   "text": "created this environment to train AI agents on playing NetHack because their argument was"
+  },
+  {
+   "t": 688.72,
+   "d": 6.76,
+   "text": "that NetHack is this super rich game that's not very resource intensive so it is something that,"
+  },
+  {
+   "t": 695.48,
+   "d": 4.56,
+   "text": "you know, they can work with that just has so much complexity. How does it feel? Have you heard"
+  },
+  {
+   "t": 700.04,
+   "d": 6.32,
+   "text": "things like that? How do you feel about these even huge companies are using NetHack as this perfect"
+  },
+  {
+   "t": 706.36,
+   "d": 6.44,
+   "text": "example of this really unique game? JESSE: [Laughter] Go ahead,"
+  },
+  {
+   "t": 712.8,
+   "d": 8.0,
+   "text": "Keni. I am lost there. KENI: I hadn't heard that. People"
+  },
+  {
+   "t": 720.8,
+   "d": 5.44,
+   "text": "shouldn't feel afraid to contact us and, you know, if you have some piece of news like that,"
+  },
+  {
+   "t": 726.24,
+   "d": 13.48,
+   "text": "we will add it to the web page. I actually went to the MOMA opening with my wife and we have been"
+  },
+  {
+   "t": 739.72,
+   "d": 8.2,
+   "text": "married 25 years but I think getting into MOMA and being there and seeing other developers of"
+  },
+  {
+   "t": 747.92,
+   "d": 8.76,
+   "text": "much more visually exciting games, like NetHack, oh, wow. That's so important in my life. It just"
+  },
+  {
+   "t": 756.68,
+   "d": 10.68,
+   "text": "gave her a better perspective -- I am not just wasting my time completely. And honestly, it was"
+  },
+  {
+   "t": 767.36,
+   "d": 9.72,
+   "text": "good for me too because I don't think we get the feedback that we could because we spend all our"
+  },
+  {
+   "t": 777.08,
+   "d": 8.22,
+   "text": "time writing it and not so much sitting around in chat rooms listening to people talk about it."
+  },
+  {
+   "t": 785.3,
+   "d": 11.18,
+   "text": "JESSE: Yeah, actually, I realize something leading up to that talk is that I was reminiscing and what"
+  },
+  {
+   "t": 796.48,
+   "d": 11.72,
+   "text": "struck me is NetHack didn't become kind of famous until very late in its lifetime. Until I would"
+  },
+  {
+   "t": 808.2,
+   "d": 14.0,
+   "text": "say the late '90s, you know? We only heard from the community for direct -- from the mid to late"
+  },
+  {
+   "t": 822.2,
+   "d": 7.24,
+   "text": "'90s we started getting queries from journalists who wanted to write articles, authors who wanted"
+  },
+  {
+   "t": 829.44,
+   "d": 8.4,
+   "text": "to write books and so on and that was kind of wow. How did that happen? Are you sure they are talking"
+  },
+  {
+   "t": 837.84,
+   "d": 7.6,
+   "text": "about NetHack? Not confusing it with something else? I think to me the day it really dawned on"
+  },
+  {
+   "t": 845.44,
+   "d": 9.32,
+   "text": "me is when we received male from the Blizzard North -- mail -- who sent an email saying when"
+  },
+  {
+   "t": 854.76,
+   "d": 5.8,
+   "text": "they pitched Diablo to their management they said we want to do NetHack with graphics and"
+  },
+  {
+   "t": 860.56,
+   "d": 9.08,
+   "text": "sounds. That they had been inspired by that. And I looked at it and I had played Diablo like crazy at"
+  },
+  {
+   "t": 869.64,
+   "d": 7.68,
+   "text": "the time so I looked at that mail and my mind was blown. It is another one of those emails I wish I"
+  },
+  {
+   "t": 877.32,
+   "d": 5.72,
+   "text": "had kept. Sometimes you are stupid, you know? ALEXEI: I am glad to have this event because it"
+  },
+  {
+   "t": 883.04,
+   "d": 7.0,
+   "text": "is. NetHack is so beloved and a huge influence. It is still like coming up constantly. Actually,"
+  },
+  {
+   "t": 890.76,
+   "d": 6.48,
+   "text": "this is a question we had yesterday a talk from Kes about the asphynx and the prominence of the"
+  },
+  {
+   "t": 897.24,
+   "d": 14.44,
+   "text": "encyclopedia and digging back to the asphynx. Did either of you ever contribute to things"
+  },
+  {
+   "t": 911.68,
+   "d": 9.44,
+   "text": "like the encyclopedia and did people throw in let's have a reference to this and that or"
+  },
+  {
+   "t": 921.12,
+   "d": 11.8,
+   "text": "were some people really more into that? KENI: Well, I actually dug through the commits,"
+  },
+  {
+   "t": 932.92,
+   "d": 8.84,
+   "text": "and a lot of what I did happened before we got to GIT or even subversion. So exactly what line,"
+  },
+  {
+   "t": 941.76,
+   "d": 10.6,
+   "text": "you know, is mine, long gone. Some of my jokes are in there. I never did anything like a monster. It"
+  },
+  {
+   "t": 952.36,
+   "d": 13.72,
+   "text": "is just not the way I tend to approach things. I am responsible for the ripped screen on the Amiga"
+  },
+  {
+   "t": 966.08,
+   "d": 8.52,
+   "text": "that has a moving moon. It is really terrible because I am not an artist but I think that was"
+  },
+  {
+   "t": 974.6,
+   "d": 7.56,
+   "text": "the first not completely ASCII art rip screen. ALEXEI: Wow. Amazing."
+  },
+  {
+   "t": 982.16,
+   "d": 6.88,
+   "text": "KENI: Just little things that have gotten lost. I think I did fake mail. I couldn't"
+  },
+  {
+   "t": 989.04,
+   "d": 6.4,
+   "text": "prove it from the history we've got. ALEXEI: Can you explain fake mail briefly?"
+  },
+  {
+   "t": 996.24,
+   "d": 7.48,
+   "text": "KENI: Once upon a time if you run NetHack on a system you are sharing with 500 friends,"
+  },
+  {
+   "t": 1003.72,
+   "d": 7.08,
+   "text": "when you get mail, email in our mailbox, it will show up as a scroll in NetHack."
+  },
+  {
+   "t": 1010.8,
+   "d": 4.16,
+   "text": "JESSE: You would have the mail demon show up actually."
+  },
+  {
+   "t": 1014.96,
+   "d": 9.68,
+   "text": "KENI: Yes. And when I moved NetHack to the Amiga, I missed that. It was the occasional interruption"
+  },
+  {
+   "t": 1024.64,
+   "d": 9.52,
+   "text": "that was kind of fun so, I believe it was me, I just added this thing that just triggered the mail"
+  },
+  {
+   "t": 1034.16,
+   "d": 6.56,
+   "text": "demon relatively randomly and a bunch of pieces of mail that obviously aren't real because you"
+  },
+  {
+   "t": 1040.72,
+   "d": 7.48,
+   "text": "can't extract the mail from a PC real well. ALEXEI: That's wonderful. I am pretty sure,"
+  },
+  {
+   "t": 1048.2,
+   "d": 3.4,
+   "text": "and someone can correct me if I am wrong, I think if you play NetHack"
+  },
+  {
+   "t": 1051.6,
+   "d": 3.72,
+   "text": "in the browser and I believe there is a way to send messages to people who are"
+  },
+  {
+   "t": 1055.32,
+   "d": 4.36,
+   "text": "playing NetHack in the browser and look in the game and it uses the mail demon system"
+  },
+  {
+   "t": 1059.68,
+   "d": 7.44,
+   "text": "to deliver that message. That's repurposed. JESSE: I had completely forgotten about the"
+  },
+  {
+   "t": 1067.12,
+   "d": 9.16,
+   "text": "mail demon. We tried it as a UNIX joke because the mail demon is what distributes emails on UNIX."
+  },
+  {
+   "t": 1076.28,
+   "d": 8.66,
+   "text": "KENI: If you don't remember that, nobody is going to remember most of what I do."
+  },
+  {
+   "t": 1084.94,
+   "d": 5.42,
+   "text": "ALEXEI: Some of us remember. People at this conference."
+  },
+  {
+   "t": 1090.36,
+   "d": 5.68,
+   "text": "KENI: How many people have dug into 3.7 code enough to know I added sandboxing."
+  },
+  {
+   "t": 1099.96,
+   "d": 4.2,
+   "text": "Or the crashing port stuff. JESSE: Not very user-facing."
+  },
+  {
+   "t": 1105.28,
+   "d": 10.6,
+   "text": "KENI: Actually, the data librarian, the code isn't mine but the original concept was. Not the kind of"
+  },
+  {
+   "t": 1115.88,
+   "d": 9.52,
+   "text": "user-facing stuff that people really know. ALEXEI: But crucial for it to run. I work in"
+  },
+  {
+   "t": 1125.4,
+   "d": 5.92,
+   "text": "the source code and I had a talk actually once that was a guide to reading the source"
+  },
+  {
+   "t": 1131.32,
+   "d": 4.64,
+   "text": "code of NetHack just because there is so many amazing comments and really clever functions."
+  },
+  {
+   "t": 1135.96,
+   "d": 7.8,
+   "text": "My favorite was string kitten instead of string cat for concatenating one character. It was"
+  },
+  {
+   "t": 1143.76,
+   "d": 5.52,
+   "text": "lovely. I was surprised by just how much code is in there for porting and supporting so many"
+  },
+  {
+   "t": 1149.28,
+   "d": 5.6,
+   "text": "different systems which makes a lot of sense given just like the community nature of it but, yeah,"
+  },
+  {
+   "t": 1154.88,
+   "d": 4.48,
+   "text": "there is so much work in there. People don't see it other than the fact they see NetHack runs on"
+  },
+  {
+   "t": 1159.36,
+   "d": 4.64,
+   "text": "their system whatever their system is. JESSE: It was a hit dev nightmare for a"
+  },
+  {
+   "t": 1164.0,
+   "d": 8.48,
+   "text": "long time. Going through the code because you had code for porting and also certain"
+  },
+  {
+   "t": 1172.48,
+   "d": 6.04,
+   "text": "features that could be turned on and off. We had let's stop with the nonsense and"
+  },
+  {
+   "t": 1179.56,
+   "d": 4.76,
+   "text": "made options completely permanent so we wouldn't have to deal with that."
+  },
+  {
+   "t": 1190.68,
+   "d": 5.92,
+   "text": "ALEXEI: What character class is your favorite? Either to play"
+  },
+  {
+   "t": 1196.6,
+   "d": 10.88,
+   "text": "or conceptually? Another audience question. KENI: I honestly play whatever it brings up under"
+  },
+  {
+   "t": 1207.48,
+   "d": 10.44,
+   "text": "random because I honestly don't play much these days. If I want to do something with NetHack,"
+  },
+  {
+   "t": 1217.92,
+   "d": 6.6,
+   "text": "I want to change it, add something to it. If I am playing it, it means I am debugging something"
+  },
+  {
+   "t": 1224.52,
+   "d": 11.8,
+   "text": "specific. If you want stories, how frustrated I get actually playing something like NetHack, I"
+  },
+  {
+   "t": 1236.32,
+   "d": 10.92,
+   "text": "managed to get my hands on a tandem that was being decommissioned and had privileges on that for a"
+  },
+  {
+   "t": 1247.24,
+   "d": 8.92,
+   "text": "while. Sorry. It was a pyramid not a tandem. The first thing I did was I built a version of Rogue"
+  },
+  {
+   "t": 1256.16,
+   "d": 6.12,
+   "text": "with like a plus 50 broad sword and plus 50 armor just so I could see how it went after the first"
+  },
+  {
+   "t": 1262.28,
+   "d": 10.88,
+   "text": "couple levels. Yeah. I don't actually play much. JESSE: Yeah, I ended up in the same situation"
+  },
+  {
+   "t": 1273.16,
+   "d": 6.4,
+   "text": "in the later years. I played more and more for debugging and testing purposes"
+  },
+  {
+   "t": 1279.56,
+   "d": 7.32,
+   "text": "than actually playing itself. If I remember, I used to favor the knight"
+  },
+  {
+   "t": 1286.88,
+   "d": 14.28,
+   "text": "mostly because I would go after Excalibur. ALEXEI: Same reason. Here is another question. Are"
+  },
+  {
+   "t": 1301.16,
+   "d": 5.92,
+   "text": "there any other from a nonsense contributions or systems that you are personally proud of no matter"
+  },
+  {
+   "t": 1307.08,
+   "d": 8.44,
+   "text": "how back end and invisible they might be? JESSE: In my case, I think the biggest thing"
+  },
+  {
+   "t": 1315.52,
+   "d": 8.8,
+   "text": "I remember starting, because, again, you know, you start something, you don't do it,"
+  },
+  {
+   "t": 1324.32,
+   "d": 11.92,
+   "text": "was the special levels. Initially, NetHack was just completely procedurally generated and since"
+  },
+  {
+   "t": 1336.24,
+   "d": 5.88,
+   "text": "we were all trying to tell stories, because a lot of inspiration from NetHack comes from"
+  },
+  {
+   "t": 1342.12,
+   "d": 11.16,
+   "text": "literature and so on, I wanted to start to add some, you know, pre-designed environments. And"
+  },
+  {
+   "t": 1353.28,
+   "d": 7.88,
+   "text": "the challenge was multiple because -- the first one was you don't want to lose the"
+  },
+  {
+   "t": 1361.16,
+   "d": 7.2,
+   "text": "randomness and what makes the game what it is, you know, every place is different. If"
+  },
+  {
+   "t": 1368.36,
+   "d": 8.24,
+   "text": "you start with levels that are the same it would lower that fun. How can I have a preconceived,"
+  },
+  {
+   "t": 1376.6,
+   "d": 7.68,
+   "text": "pre-designed environment in a random environment while keeping that path? And that was what we"
+  },
+  {
+   "t": 1384.28,
+   "d": 5.48,
+   "text": "used to call at the time the reveler compiler and the reason we went with the compiler is we didn't"
+  },
+  {
+   "t": 1389.76,
+   "d": 8.64,
+   "text": "want to leave too much hints on the file systems because multi-user systems and so on and people"
+  },
+  {
+   "t": 1398.4,
+   "d": 8.64,
+   "text": "could read the files. Everything was compiled in advance. On top of that, avoiding compiling you"
+  },
+  {
+   "t": 1407.04,
+   "d": 7.36,
+   "text": "catch errors early instead of during runtime. So I designed the very first level like that which was"
+  },
+  {
+   "t": 1414.4,
+   "d": 6.64,
+   "text": "the castle at the bottom of the normal dungeon. And later on, the one that I am really proud of"
+  },
+  {
+   "t": 1421.04,
+   "d": 12.8,
+   "text": "was Vladivostok? I remember reading years and years later that it was the most evil part of"
+  },
+  {
+   "t": 1433.84,
+   "d": 7.32,
+   "text": "NetHack for a lot of people because -- at the time I wanted to really break the idea that each"
+  },
+  {
+   "t": 1441.16,
+   "d": 7.32,
+   "text": "level is completely independent from the previous one. So I got the idea of having something that's"
+  },
+  {
+   "t": 1448.48,
+   "d": 7.04,
+   "text": "spread over three levels or more. It is a fair number that were three. To get to the top level"
+  },
+  {
+   "t": 1455.52,
+   "d": 8.28,
+   "text": "we had to first enter at the bottom level. So I had to create a -- I had to take into account a"
+  },
+  {
+   "t": 1463.8,
+   "d": 8.08,
+   "text": "number of things. And, you know, first part was that, OK, how do I stop them from getting to the"
+  },
+  {
+   "t": 1471.88,
+   "d": 7.48,
+   "text": "top level without going from the bottom so digging holes and teleporting and I had to add a lot of"
+  },
+  {
+   "t": 1479.36,
+   "d": 8.48,
+   "text": "mechanisms to prevent that stuff. And then we had the stairs problem where at the time it was very"
+  },
+  {
+   "t": 1487.84,
+   "d": 4.4,
+   "text": "straightforward. You know, you take the stairs down, generate the next level, and you look where"
+  },
+  {
+   "t": 1492.24,
+   "d": 8.08,
+   "text": "the stairs are and put the player there. Done. Well, once you have two stairs, one outside and"
+  },
+  {
+   "t": 1500.32,
+   "d": 8.72,
+   "text": "one inside, you have a problem. I went with a hack for lack of a better word and introduced ladders."
+  },
+  {
+   "t": 1509.72,
+   "d": 4.8,
+   "text": "You know that way I would connect two ladders and the stairs would connect and that was it."
+  },
+  {
+   "t": 1516.04,
+   "d": 5.84,
+   "text": "That triggered a discussion that came up to a few design for the stairs where we could now connect"
+  },
+  {
+   "t": 1521.88,
+   "d": 8.76,
+   "text": "stairs between levels and that led later on to the branches system and the branches in the dungeon. I"
+  },
+  {
+   "t": 1530.64,
+   "d": 9.0,
+   "text": "didn't do that but that kind of evolved that way. I got really fond memories of all that work."
+  },
+  {
+   "t": 1539.64,
+   "d": 9.56,
+   "text": "ALEXEI: That's wonderful. What about you, Keni? Do you have any other particular"
+  },
+  {
+   "t": 1549.2,
+   "d": 7.0,
+   "text": "moments you are especially proud of? KENI: Oh, um. I have mentioned most of what's"
+  },
+  {
+   "t": 1556.2,
+   "d": 6.12,
+   "text": "still there. One thing maybe I will mention for history books is something that never got subtle"
+  },
+  {
+   "t": 1562.32,
+   "d": 11.92,
+   "text": "light of day. The Amiga port was starting to run out of RAM and so the PC port had an overlay"
+  },
+  {
+   "t": 1574.24,
+   "d": 9.28,
+   "text": "system, so I went and wrote an overlay system for the Amiga but I didn't like how intrusive"
+  },
+  {
+   "t": 1583.52,
+   "d": 9.0,
+   "text": "the PC port -- the PC overlay system was. You had everything function needed a declaration about"
+  },
+  {
+   "t": 1592.52,
+   "d": 10.84,
+   "text": "where it was going and it was a frequent cause of breakage. Unfortunately, the way I did this was to"
+  },
+  {
+   "t": 1603.36,
+   "d": 8.84,
+   "text": "run the source code through a modified version of GCC that would figure out where everything had to"
+  },
+  {
+   "t": 1612.2,
+   "d": 8.68,
+   "text": "go and set-up the tables and rewrite the code to do that. Then we went to think about distributing"
+  },
+  {
+   "t": 1620.88,
+   "d": 11.12,
+   "text": "this and I asked Jim Stalman is this OK? I need to send this one file from GCC and he says no, you"
+  },
+  {
+   "t": 1632.0,
+   "d": 8.68,
+   "text": "have to send the entire GCC distribution. Since at that point, distributing NetHack was already"
+  },
+  {
+   "t": 1640.68,
+   "d": 7.96,
+   "text": "something that required a lot of coordination with the moderators for comp sources games because it"
+  },
+  {
+   "t": 1648.64,
+   "d": 8.32,
+   "text": "was the largest thing that got distributed by I don't know a factor of 5 or 10 depending on the"
+  },
+  {
+   "t": 1656.96,
+   "d": 13.52,
+   "text": "year. The idea of making it 10 times larger so this one port could have this one file -- so,"
+  },
+  {
+   "t": 1670.48,
+   "d": 7.08,
+   "text": "yeah. That never happened but it did work. ALEXEI: [Laughter] now everyone knows. I am"
+  },
+  {
+   "t": 1677.56,
+   "d": 8.56,
+   "text": "glad you got a chance to share. One question I think is fun, you know, one of the most famous"
+  },
+  {
+   "t": 1686.12,
+   "d": 5.44,
+   "text": "phrases I think associated with NetHack is the dev team thinks of everything. How does that feel"
+  },
+  {
+   "t": 1691.56,
+   "d": 4.84,
+   "text": "when you are on the dev team? KENI: It is a challenge."
+  },
+  {
+   "t": 1696.4,
+   "d": 5.48,
+   "text": "JESSE: No pressure there. KENI: Yeah, every time I see a patch go by,"
+  },
+  {
+   "t": 1701.88,
+   "d": 6.48,
+   "text": "because internally while we are using GIT, it does get mailed to us so we have a chance to"
+  },
+  {
+   "t": 1708.36,
+   "d": 5.96,
+   "text": "comment on each individual thing or fork a discussion. Each time I see a patch go by,"
+  },
+  {
+   "t": 1714.32,
+   "d": 9.92,
+   "text": "it is like OK, but what if you did this in this situation? Sometimes I will send"
+  },
+  {
+   "t": 1724.24,
+   "d": 6.68,
+   "text": "email about that which people will generally reject. And sometimes I will write a piece of"
+  },
+  {
+   "t": 1730.92,
+   "d": 11.16,
+   "text": "code. But yeah. I look at it as a challenge. JESSE: Actually, you would be surprised that"
+  },
+  {
+   "t": 1742.08,
+   "d": 8.28,
+   "text": "initially, you know, we would be very surprised at what the players would attempt and report on."
+  },
+  {
+   "t": 1751.0,
+   "d": 7.0,
+   "text": "So a lot of the dev team thinks of everything is kind of taking credit for all those people's"
+  },
+  {
+   "t": 1758.0,
+   "d": 6.68,
+   "text": "suggestions or even, you know, trying to do something. One of my favorite ones was"
+  },
+  {
+   "t": 1764.68,
+   "d": 11.24,
+   "text": "the polypiling of the metal. We didn't see that one coming for sure. I will tell you that. That"
+  },
+  {
+   "t": 1775.92,
+   "d": 5.6,
+   "text": "the player would start piling up worms on top of each other and that one of the polymorphs"
+  },
+  {
+   "t": 1782.12,
+   "d": 7.2,
+   "text": "to try get more worms. We didn't see that one coming but we said yeah, that's smart"
+  },
+  {
+   "t": 1789.32,
+   "d": 8.0,
+   "text": "and we tonight -- don't want to stop that. That wouldn't be fair. But we added the possibility of"
+  },
+  {
+   "t": 1798.28,
+   "d": 7.04,
+   "text": "integrating the objects when zapping around or one of polymorph because then you have a"
+  },
+  {
+   "t": 1805.32,
+   "d": 7.96,
+   "text": "risk that comes with that plus a limited amount of charges. That's very much what I was saying"
+  },
+  {
+   "t": 1813.28,
+   "d": 9.56,
+   "text": "about the yes/and. We take all that stuff coming in and say first question is does make sense?"
+  },
+  {
+   "t": 1822.84,
+   "d": 5.8,
+   "text": "If it makes sense, how can we make it work? ALEXEI: Yeah, no, I think that's beautiful. I"
+  },
+  {
+   "t": 1828.64,
+   "d": 5.28,
+   "text": "love that that's still a lesson people can take today and that I think, yeah, explains a lot of"
+  },
+  {
+   "t": 1833.92,
+   "d": 5.64,
+   "text": "how NetHack got to where it is, and it is very neat to see how it is an evolving process and it"
+  },
+  {
+   "t": 1839.56,
+   "d": 3.64,
+   "text": "got to what it is because of so many people working together in the community and the"
+  },
+  {
+   "t": 1843.2,
+   "d": 8.32,
+   "text": "developers. Thank you. We are at time. I will say I want to just Thank you in terms of I got started"
+  },
+  {
+   "t": 1851.52,
+   "d": 4.88,
+   "text": "at Roguelike Celebration talking about NetHack and got into roguelikes because of NetHack and my"
+  },
+  {
+   "t": 1856.4,
+   "d": 6.28,
+   "text": "mother wanted to thank you because she plays NetHack and that's how I got into it. She told"
+  },
+  {
+   "t": 1862.68,
+   "d": 6.12,
+   "text": "me I probably wouldn't exist without NetHack because she started dating my father because he"
+  },
+  {
+   "t": 1868.8,
+   "d": 7.76,
+   "text": "had a computer and if she started dating him she would be able to play NetHack on his computer. I"
+  },
+  {
+   "t": 1876.56,
+   "d": 6.04,
+   "text": "wouldn't be here without NetHack in many ways. KENI: It is not my story to tell but that is not"
+  },
+  {
+   "t": 1882.6,
+   "d": 6.28,
+   "text": "the only marriage associated with NetHack. ALEXEI: My fiancé went to the MOMA NetHack"
+  },
+  {
+   "t": 1890.2,
+   "d": 12.64,
+   "text": "together. Thank you so much for being here. This is really special. Thanks so much for taking the"
+  },
+  {
+   "t": 1902.84,
+   "d": 6.08,
+   "text": "time. I am glad to get the chance to be kind of a voice for the community that is so thankful for"
+  },
+  {
+   "t": 1908.92,
+   "d": 3.42,
+   "text": "all of the work you did on this wonderful game. KENI: Thank you."
+  },
+  {
+   "t": 1912.34,
+   "d": 4.9,
+   "text": "JESSE: Well, Thank you. It was great to be here. Always just love to talk about NetHack."
+  },
+  {
+   "t": 1917.24,
+   "d": 5.88,
+   "text": "It has been a huge part of my life. I can't shut up about it when you get me started."
+  }
+ ]
+}

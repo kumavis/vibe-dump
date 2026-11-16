@@ -1,0 +1,2838 @@
+{
+ "id": "UGPkEWqwSAY",
+ "url": "https://www.youtube.com/watch?v=UGPkEWqwSAY",
+ "title": "Bruno Dias - Procedural Text in Voyageur",
+ "speaker": "Bruno Dias",
+ "talk_title": "Procedural Text in Voyageur",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2022-07-04",
+ "duration_s": 1140,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration, re-uploaded in 2022.\n\nProcedurally generating prose requires different considerations and techniques than many other types of procedural generation; language is difficult to simplify, but has huge potential for perceptual uniqueness.. Bruno Dias talks about the methods he used in Voyageur, his literary space exploration role-playing game set in a procedural galaxy. \n\nBruno Dias is currently a writer-designer at Failbetter Games. In the past he has worked on Neo Cab, Pathologic 2, Voyageur, and Where the Water Tastes Like Wine.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 50,
+   "title": "Space Exploration"
+  },
+  {
+   "start": 284,
+   "title": "Approaches to Prose Generation"
+  },
+  {
+   "start": 466,
+   "title": "The Annals of the Parrigues"
+  },
+  {
+   "start": 582,
+   "title": "Perceptual Difference The \"10,000 Bowls of Oatmeal Problem\""
+  },
+  {
+   "start": 616,
+   "title": "The Food Generator"
+  },
+  {
+   "start": 694,
+   "title": "The Labor Fallacy"
+  },
+  {
+   "start": 763,
+   "title": "Elite: Dangerous (2015)"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3125,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.42,
+   "text": "foreign"
+  },
+  {
+   "t": 2.42,
+   "d": 14.38,
+   "text": "[Music]"
+  },
+  {
+   "t": 16.8,
+   "d": 2.16,
+   "text": "hey roguelike celebration i hope you're"
+  },
+  {
+   "t": 18.96,
+   "d": 2.0,
+   "text": "all having a great time this is bruno"
+  },
+  {
+   "t": 20.96,
+   "d": 2.48,
+   "text": "diaz i'm a game developer writer and"
+  },
+  {
+   "t": 23.44,
+   "d": 2.72,
+   "text": "theorist based out of sao paulo brazil"
+  },
+  {
+   "t": 26.16,
+   "d": 1.6,
+   "text": "this video presentation is about"
+  },
+  {
+   "t": 27.76,
+   "d": 2.24,
+   "text": "procedurally generating pros for voyager"
+  },
+  {
+   "t": 30.0,
+   "d": 1.52,
+   "text": "my upcoming game"
+  },
+  {
+   "t": 31.52,
+   "d": 1.68,
+   "text": "i'm coming to you through video as a way"
+  },
+  {
+   "t": 33.2,
+   "d": 2.88,
+   "text": "of circumventing region restrictions"
+  },
+  {
+   "t": 36.08,
+   "d": 2.56,
+   "text": "voyager is a literary space exploration"
+  },
+  {
+   "t": 38.64,
+   "d": 3.36,
+   "text": "rpg setting procedural galaxy"
+  },
+  {
+   "t": 42.0,
+   "d": 2.08,
+   "text": "literary the game communicates mostly"
+  },
+  {
+   "t": 44.08,
+   "d": 2.16,
+   "text": "through prose it's a text game in the"
+  },
+  {
+   "t": 46.24,
+   "d": 2.64,
+   "text": "interactive fiction tradition"
+  },
+  {
+   "t": 48.88,
+   "d": 2.24,
+   "text": "space exploration it's a space traveling"
+  },
+  {
+   "t": 51.12,
+   "d": 1.36,
+   "text": "story with the tradition of science"
+  },
+  {
+   "t": 52.48,
+   "d": 2.32,
+   "text": "fiction games like elite"
+  },
+  {
+   "t": 54.8,
+   "d": 1.92,
+   "text": "but it takes a very different gameplay"
+  },
+  {
+   "t": 56.72,
+   "d": 1.84,
+   "text": "approach to those ideas"
+  },
+  {
+   "t": 58.56,
+   "d": 1.6,
+   "text": "some of which is based on my own"
+  },
+  {
+   "t": 60.16,
+   "d": 3.28,
+   "text": "frustrations with the space sim journal"
+  },
+  {
+   "t": 63.44,
+   "d": 2.48,
+   "text": "rpg you play the role of a character"
+  },
+  {
+   "t": 65.92,
+   "d": 1.6,
+   "text": "that develops over the course of the"
+  },
+  {
+   "t": 67.52,
+   "d": 1.2,
+   "text": "story"
+  },
+  {
+   "t": 68.72,
+   "d": 1.68,
+   "text": "voyager has a very simple and"
+  },
+  {
+   "t": 70.4,
+   "d": 2.08,
+   "text": "straightforward role-playing game mode"
+  },
+  {
+   "t": 72.48,
+   "d": 2.24,
+   "text": "another involved complex systems stats"
+  },
+  {
+   "t": 74.72,
+   "d": 1.28,
+   "text": "and abilities like you might find in"
+  },
+  {
+   "t": 76.0,
+   "d": 1.44,
+   "text": "some road lights"
+  },
+  {
+   "t": 77.44,
+   "d": 1.68,
+   "text": "but it's a game about playing a role and"
+  },
+  {
+   "t": 79.12,
+   "d": 1.12,
+   "text": "developing your character over the"
+  },
+  {
+   "t": 80.24,
+   "d": 1.76,
+   "text": "course of your travels"
+  },
+  {
+   "t": 82.0,
+   "d": 1.6,
+   "text": "procedural"
+  },
+  {
+   "t": 83.6,
+   "d": 1.76,
+   "text": "the places and things you encounter are"
+  },
+  {
+   "t": 85.36,
+   "d": 2.24,
+   "text": "procedurally generated a lot of the pros"
+  },
+  {
+   "t": 87.6,
+   "d": 1.76,
+   "text": "you encounter is procedurally generated"
+  },
+  {
+   "t": 89.36,
+   "d": 1.76,
+   "text": "too and i'll be talking at length about"
+  },
+  {
+   "t": 91.12,
+   "d": 1.52,
+   "text": "how that works"
+  },
+  {
+   "t": 92.64,
+   "d": 1.44,
+   "text": "so the planets you visit in your game"
+  },
+  {
+   "t": 94.08,
+   "d": 1.68,
+   "text": "are unique to your game they're"
+  },
+  {
+   "t": 95.76,
+   "d": 1.6,
+   "text": "assembled from different possible"
+  },
+  {
+   "t": 97.36,
+   "d": 2.72,
+   "text": "elements by the game as you visit them"
+  },
+  {
+   "t": 100.08,
+   "d": 2.4,
+   "text": "and of course i have to caveat that it's"
+  },
+  {
+   "t": 102.48,
+   "d": 1.44,
+   "text": "not a roguelike"
+  },
+  {
+   "t": 103.92,
+   "d": 2.32,
+   "text": "it's probably like adjacent there's"
+  },
+  {
+   "t": 106.24,
+   "d": 1.92,
+   "text": "procedural generation there's rpg"
+  },
+  {
+   "t": 108.16,
+   "d": 1.04,
+   "text": "elements"
+  },
+  {
+   "t": 109.2,
+   "d": 1.76,
+   "text": "and there's even a sort of cyclical"
+  },
+  {
+   "t": 110.96,
+   "d": 2.24,
+   "text": "endgame like when it broke with lights"
+  },
+  {
+   "t": 113.2,
+   "d": 1.76,
+   "text": "like rogue legacy"
+  },
+  {
+   "t": 114.96,
+   "d": 1.68,
+   "text": "but there's no perma-death and the"
+  },
+  {
+   "t": 116.64,
+   "d": 2.32,
+   "text": "difficulty is calibrated to be fairly"
+  },
+  {
+   "t": 118.96,
+   "d": 2.24,
+   "text": "gentle"
+  },
+  {
+   "t": 121.2,
+   "d": 1.84,
+   "text": "at this point i'm required to let you"
+  },
+  {
+   "t": 123.04,
+   "d": 1.92,
+   "text": "all know that voyager is coming out on"
+  },
+  {
+   "t": 124.96,
+   "d": 1.52,
+   "text": "ios and android"
+  },
+  {
+   "t": 126.48,
+   "d": 2.0,
+   "text": "sometime in the next three months"
+  },
+  {
+   "t": 128.48,
+   "d": 1.6,
+   "text": "and that it is being made with funding"
+  },
+  {
+   "t": 130.08,
+   "d": 1.68,
+   "text": "for fail better games is fun battery"
+  },
+  {
+   "t": 131.76,
+   "d": 2.24,
+   "text": "initiative"
+  },
+  {
+   "t": 134.0,
+   "d": 1.6,
+   "text": "mostly this video is about how"
+  },
+  {
+   "t": 135.6,
+   "d": 2.4,
+   "text": "procedural generation works in voyager"
+  },
+  {
+   "t": 138.0,
+   "d": 1.68,
+   "text": "and how that can be applied to other"
+  },
+  {
+   "t": 139.68,
+   "d": 1.84,
+   "text": "roguelikes it's about a series of"
+  },
+  {
+   "t": 141.52,
+   "d": 1.44,
+   "text": "techniques that i've put together to"
+  },
+  {
+   "t": 142.96,
+   "d": 1.92,
+   "text": "generate places and descriptions in ways"
+  },
+  {
+   "t": 144.88,
+   "d": 1.6,
+   "text": "that are made to surprise and light"
+  },
+  {
+   "t": 146.48,
+   "d": 0.54,
+   "text": "players"
+  },
+  {
+   "t": 147.02,
+   "d": 4.18,
+   "text": "[Music]"
+  },
+  {
+   "t": 151.2,
+   "d": 2.48,
+   "text": "so to start with let me pull a planet"
+  },
+  {
+   "t": 153.68,
+   "d": 3.68,
+   "text": "description directly from the game"
+  },
+  {
+   "t": 157.36,
+   "d": 2.8,
+   "text": "this planet's port is a bustling city"
+  },
+  {
+   "t": 160.16,
+   "d": 3.04,
+   "text": "buried under the noise of transit"
+  },
+  {
+   "t": 163.2,
+   "d": 2.0,
+   "text": "an improvised installation commemorating"
+  },
+  {
+   "t": 165.2,
+   "d": 1.44,
+   "text": "the establishment of the santiago"
+  },
+  {
+   "t": 166.64,
+   "d": 1.28,
+   "text": "confederation"
+  },
+  {
+   "t": 167.92,
+   "d": 1.68,
+   "text": "stands at the center of this inhabited"
+  },
+  {
+   "t": 169.6,
+   "d": 1.04,
+   "text": "area"
+  },
+  {
+   "t": 170.64,
+   "d": 2.24,
+   "text": "you pass by an orange couple fronted"
+  },
+  {
+   "t": 172.88,
+   "d": 1.44,
+   "text": "with tall windows that let in the"
+  },
+  {
+   "t": 174.32,
+   "d": 2.48,
+   "text": "sunlight soft chanting comes from inside"
+  },
+  {
+   "t": 176.8,
+   "d": 1.52,
+   "text": "it"
+  },
+  {
+   "t": 178.32,
+   "d": 2.08,
+   "text": "bounding loud music emanates from"
+  },
+  {
+   "t": 180.4,
+   "d": 2.0,
+   "text": "somewhere distant and you are sure some"
+  },
+  {
+   "t": 182.4,
+   "d": 1.92,
+   "text": "of the colorful crowd are nodding a lung"
+  },
+  {
+   "t": 184.32,
+   "d": 2.4,
+   "text": "to it"
+  },
+  {
+   "t": 189.36,
+   "d": 1.68,
+   "text": "this is the first description that came"
+  },
+  {
+   "t": 191.04,
+   "d": 1.84,
+   "text": "out when i was writing this"
+  },
+  {
+   "t": 192.88,
+   "d": 2.32,
+   "text": "and you can probably see the seams"
+  },
+  {
+   "t": 195.2,
+   "d": 1.76,
+   "text": "so here it is with the component parts"
+  },
+  {
+   "t": 196.96,
+   "d": 1.92,
+   "text": "highlighted so you can actually see them"
+  },
+  {
+   "t": 198.88,
+   "d": 2.56,
+   "text": "in detail"
+  },
+  {
+   "t": 201.92,
+   "d": 1.92,
+   "text": "you can see that the approach i'm taking"
+  },
+  {
+   "t": 203.84,
+   "d": 1.92,
+   "text": "is actually pretty coarse"
+  },
+  {
+   "t": 205.76,
+   "d": 2.0,
+   "text": "the descriptions are constructed mostly"
+  },
+  {
+   "t": 207.76,
+   "d": 2.4,
+   "text": "from sentences but the sentences can"
+  },
+  {
+   "t": 210.16,
+   "d": 2.48,
+   "text": "contain inner variations this is an"
+  },
+  {
+   "t": 212.64,
+   "d": 2.0,
+   "text": "approach based mostly on assembling"
+  },
+  {
+   "t": 214.64,
+   "d": 1.76,
+   "text": "chunks of authored content into"
+  },
+  {
+   "t": 216.4,
+   "d": 2.8,
+   "text": "surprising combinations"
+  },
+  {
+   "t": 219.2,
+   "d": 1.28,
+   "text": "which is different from the way most"
+  },
+  {
+   "t": 220.48,
+   "d": 1.92,
+   "text": "procedural generation is done"
+  },
+  {
+   "t": 222.4,
+   "d": 1.44,
+   "text": "usually you're trying to work purely in"
+  },
+  {
+   "t": 223.84,
+   "d": 2.4,
+   "text": "terms of rules and procedures which"
+  },
+  {
+   "t": 226.24,
+   "d": 1.44,
+   "text": "works well for generating levels of"
+  },
+  {
+   "t": 227.68,
+   "d": 3.12,
+   "text": "terrain but pros is different"
+  },
+  {
+   "t": 230.8,
+   "d": 1.44,
+   "text": "grilles is different because it's"
+  },
+  {
+   "t": 232.24,
+   "d": 2.32,
+   "text": "complicated and hard to store"
+  },
+  {
+   "t": 234.56,
+   "d": 1.68,
+   "text": "when we procedurally generate terrain in"
+  },
+  {
+   "t": 236.24,
+   "d": 1.68,
+   "text": "a game we're usually not concerned with"
+  },
+  {
+   "t": 237.92,
+   "d": 3.36,
+   "text": "having a perfect level of detail"
+  },
+  {
+   "t": 241.28,
+   "d": 2.0,
+   "text": "you can reduce things down to stylize"
+  },
+  {
+   "t": 243.28,
+   "d": 2.32,
+   "text": "representations of stuff like one by one"
+  },
+  {
+   "t": 245.6,
+   "d": 2.08,
+   "text": "by one meter blocks and that simpler"
+  },
+  {
+   "t": 247.68,
+   "d": 1.92,
+   "text": "model of reality lets you operate with"
+  },
+  {
+   "t": 249.6,
+   "d": 1.92,
+   "text": "simple rules"
+  },
+  {
+   "t": 251.52,
+   "d": 1.84,
+   "text": "with pros"
+  },
+  {
+   "t": 253.36,
+   "d": 2.24,
+   "text": "it's hard to find those simplifications"
+  },
+  {
+   "t": 255.6,
+   "d": 1.92,
+   "text": "and it's hard to find straightforward"
+  },
+  {
+   "t": 257.52,
+   "d": 1.04,
+   "text": "rules"
+  },
+  {
+   "t": 258.56,
+   "d": 1.52,
+   "text": "language is something you can't really"
+  },
+  {
+   "t": 260.08,
+   "d": 1.36,
+   "text": "simplify"
+  },
+  {
+   "t": 261.44,
+   "d": 1.76,
+   "text": "because if you give people a simpler"
+  },
+  {
+   "t": 263.2,
+   "d": 1.6,
+   "text": "gentler version of terrain made out of"
+  },
+  {
+   "t": 264.8,
+   "d": 2.48,
+   "text": "one cubic meter blocks they think that's"
+  },
+  {
+   "t": 267.28,
+   "d": 2.32,
+   "text": "cute and gentle and fun"
+  },
+  {
+   "t": 269.6,
+   "d": 1.68,
+   "text": "and if you give them an incentive for"
+  },
+  {
+   "t": 271.28,
+   "d": 1.52,
+   "text": "vision of language they think you're"
+  },
+  {
+   "t": 272.8,
+   "d": 2.48,
+   "text": "talking down to them"
+  },
+  {
+   "t": 275.28,
+   "d": 2.08,
+   "text": "so the normal simplifying approach to"
+  },
+  {
+   "t": 277.36,
+   "d": 2.08,
+   "text": "procedural generation won't work very"
+  },
+  {
+   "t": 279.44,
+   "d": 2.24,
+   "text": "well for first generation"
+  },
+  {
+   "t": 281.68,
+   "d": 1.84,
+   "text": "what then"
+  },
+  {
+   "t": 283.52,
+   "d": 1.52,
+   "text": "well there are three approaches that"
+  },
+  {
+   "t": 285.04,
+   "d": 2.24,
+   "text": "have historically been taken"
+  },
+  {
+   "t": 287.28,
+   "d": 1.84,
+   "text": "the first approach says"
+  },
+  {
+   "t": 289.12,
+   "d": 1.84,
+   "text": "okay we can sit down and write software"
+  },
+  {
+   "t": 290.96,
+   "d": 1.44,
+   "text": "that contains all the rules about"
+  },
+  {
+   "t": 292.4,
+   "d": 1.84,
+   "text": "language works because we don't even"
+  },
+  {
+   "t": 294.24,
+   "d": 2.8,
+   "text": "understand how language works so you use"
+  },
+  {
+   "t": 297.04,
+   "d": 1.76,
+   "text": "machine learning as a way of making"
+  },
+  {
+   "t": 298.8,
+   "d": 1.52,
+   "text": "software that behaves as though it"
+  },
+  {
+   "t": 300.32,
+   "d": 1.6,
+   "text": "understands those rules without having"
+  },
+  {
+   "t": 301.92,
+   "d": 2.0,
+   "text": "to explicitly tell it what those rules"
+  },
+  {
+   "t": 303.92,
+   "d": 2.24,
+   "text": "are"
+  },
+  {
+   "t": 306.56,
+   "d": 2.0,
+   "text": "this is a very fertile field being"
+  },
+  {
+   "t": 308.56,
+   "d": 1.76,
+   "text": "mostly worked on by people who are about"
+  },
+  {
+   "t": 310.32,
+   "d": 1.84,
+   "text": "10 times smarter than i am"
+  },
+  {
+   "t": 312.16,
+   "d": 2.08,
+   "text": "it's resource intensive it's complicated"
+  },
+  {
+   "t": 314.24,
+   "d": 3.6,
+   "text": "and very hard to exert for your control"
+  },
+  {
+   "t": 317.84,
+   "d": 1.84,
+   "text": "so it's mostly in the realm of"
+  },
+  {
+   "t": 319.68,
+   "d": 2.24,
+   "text": "experimental research for now but i"
+  },
+  {
+   "t": 321.92,
+   "d": 1.28,
+   "text": "think we will eventually start to see"
+  },
+  {
+   "t": 323.2,
+   "d": 1.36,
+   "text": "real games that use those kinds of"
+  },
+  {
+   "t": 324.56,
+   "d": 1.6,
+   "text": "approaches"
+  },
+  {
+   "t": 326.16,
+   "d": 1.92,
+   "text": "as they get more accessible as they get"
+  },
+  {
+   "t": 328.08,
+   "d": 0.88,
+   "text": "more"
+  },
+  {
+   "t": 328.96,
+   "d": 2.0,
+   "text": "distributed"
+  },
+  {
+   "t": 330.96,
+   "d": 2.0,
+   "text": "the second approach is throwing up your"
+  },
+  {
+   "t": 332.96,
+   "d": 2.0,
+   "text": "hands and not using pros or using it in"
+  },
+  {
+   "t": 334.96,
+   "d": 2.72,
+   "text": "very limited and regimented ways"
+  },
+  {
+   "t": 337.68,
+   "d": 1.36,
+   "text": "you ended up with content that's"
+  },
+  {
+   "t": 339.04,
+   "d": 2.24,
+   "text": "interesting to read of its own accord"
+  },
+  {
+   "t": 341.28,
+   "d": 0.8,
+   "text": "but"
+  },
+  {
+   "t": 342.08,
+   "d": 1.36,
+   "text": "you will end up with content that"
+  },
+  {
+   "t": 343.44,
+   "d": 1.68,
+   "text": "straightforwardly communicates a world"
+  },
+  {
+   "t": 345.12,
+   "d": 0.88,
+   "text": "model"
+  },
+  {
+   "t": 346.0,
+   "d": 1.6,
+   "text": "and you try to make the road model as"
+  },
+  {
+   "t": 347.6,
+   "d": 1.52,
+   "text": "interesting as possible"
+  },
+  {
+   "t": 349.12,
+   "d": 1.84,
+   "text": "this is basically the approach that more"
+  },
+  {
+   "t": 350.96,
+   "d": 2.32,
+   "text": "fortress uses there's a lot of textual"
+  },
+  {
+   "t": 353.28,
+   "d": 1.84,
+   "text": "descriptions of things in blood fortress"
+  },
+  {
+   "t": 355.12,
+   "d": 1.76,
+   "text": "but they all fit basically the same"
+  },
+  {
+   "t": 356.88,
+   "d": 1.52,
+   "text": "format and they're all very matter of"
+  },
+  {
+   "t": 358.4,
+   "d": 1.6,
+   "text": "fact"
+  },
+  {
+   "t": 360.0,
+   "d": 1.76,
+   "text": "but they can be surprising or even"
+  },
+  {
+   "t": 361.76,
+   "d": 1.6,
+   "text": "poignant because of their content which"
+  },
+  {
+   "t": 363.36,
+   "d": 2.8,
+   "text": "is drawn from a really rich world model"
+  },
+  {
+   "t": 366.16,
+   "d": 1.76,
+   "text": "in this approach your world model is"
+  },
+  {
+   "t": 367.92,
+   "d": 1.92,
+   "text": "really the star of the show"
+  },
+  {
+   "t": 369.84,
+   "d": 1.92,
+   "text": "the complexity and depth of simulation"
+  },
+  {
+   "t": 371.76,
+   "d": 1.6,
+   "text": "is what you're showcasing"
+  },
+  {
+   "t": 373.36,
+   "d": 1.84,
+   "text": "and text is just a cheap way of making"
+  },
+  {
+   "t": 375.2,
+   "d": 3.12,
+   "text": "the player understand what's going on"
+  },
+  {
+   "t": 378.32,
+   "d": 1.68,
+   "text": "the third approach and the one that i'm"
+  },
+  {
+   "t": 380.0,
+   "d": 2.88,
+   "text": "taking is the assemblage method this is"
+  },
+  {
+   "t": 382.88,
+   "d": 1.6,
+   "text": "a way of doing things that's very"
+  },
+  {
+   "t": 384.48,
+   "d": 2.56,
+   "text": "pragmatic it's really designed to be"
+  },
+  {
+   "t": 387.04,
+   "d": 1.68,
+   "text": "something that i can use in a game and"
+  },
+  {
+   "t": 388.72,
+   "d": 2.0,
+   "text": "actually ship it in a reasonable time"
+  },
+  {
+   "t": 390.72,
+   "d": 1.76,
+   "text": "frame"
+  },
+  {
+   "t": 392.48,
+   "d": 2.0,
+   "text": "what i mean by assemblage is building"
+  },
+  {
+   "t": 394.48,
+   "d": 2.4,
+   "text": "text out of relatively large human"
+  },
+  {
+   "t": 396.88,
+   "d": 1.52,
+   "text": "written chunks"
+  },
+  {
+   "t": 398.4,
+   "d": 3.2,
+   "text": "mostly sentences"
+  },
+  {
+   "t": 401.6,
+   "d": 2.32,
+   "text": "in voyager i use something similar to"
+  },
+  {
+   "t": 403.92,
+   "d": 2.48,
+   "text": "kate compton's stray streak which some"
+  },
+  {
+   "t": 406.4,
+   "d": 2.24,
+   "text": "of you are probably familiar with"
+  },
+  {
+   "t": 408.64,
+   "d": 2.56,
+   "text": "trace3 is a text expansion library based"
+  },
+  {
+   "t": 411.2,
+   "d": 2.4,
+   "text": "on a simple generative grammar so the"
+  },
+  {
+   "t": 413.6,
+   "d": 1.76,
+   "text": "simplest way to generate text is to"
+  },
+  {
+   "t": 415.36,
+   "d": 1.68,
+   "text": "start with a list of phrases and pick"
+  },
+  {
+   "t": 417.04,
+   "d": 0.88,
+   "text": "one"
+  },
+  {
+   "t": 417.92,
+   "d": 2.4,
+   "text": "tracery is a recursive version of that"
+  },
+  {
+   "t": 420.32,
+   "d": 1.84,
+   "text": "the phrases that you can choose contain"
+  },
+  {
+   "t": 422.16,
+   "d": 2.4,
+   "text": "symbols that reference other phrases"
+  },
+  {
+   "t": 424.56,
+   "d": 1.92,
+   "text": "that's a really powerful model for"
+  },
+  {
+   "t": 426.48,
+   "d": 1.6,
+   "text": "generating text"
+  },
+  {
+   "t": 428.08,
+   "d": 1.76,
+   "text": "you start from the outside maybe by"
+  },
+  {
+   "t": 429.84,
+   "d": 2.0,
+   "text": "picking a paragraph structure"
+  },
+  {
+   "t": 431.84,
+   "d": 1.68,
+   "text": "then you pick appropriate sentence"
+  },
+  {
+   "t": 433.52,
+   "d": 1.84,
+   "text": "structures to fill in that paragraph and"
+  },
+  {
+   "t": 435.36,
+   "d": 2.08,
+   "text": "then you pick specific words to use in"
+  },
+  {
+   "t": 437.44,
+   "d": 2.08,
+   "text": "those sentences"
+  },
+  {
+   "t": 439.52,
+   "d": 2.4,
+   "text": "most of the text content in voyager is"
+  },
+  {
+   "t": 441.92,
+   "d": 2.48,
+   "text": "not variable down to the word level"
+  },
+  {
+   "t": 444.4,
+   "d": 2.24,
+   "text": "mostly the generators are working by"
+  },
+  {
+   "t": 446.64,
+   "d": 2.2,
+   "text": "assembling sentences"
+  },
+  {
+   "t": 448.84,
+   "d": 2.36,
+   "text": "together but i'm also going further than"
+  },
+  {
+   "t": 451.2,
+   "d": 2.72,
+   "text": "you can go with just tracery"
+  },
+  {
+   "t": 453.92,
+   "d": 1.84,
+   "text": "voyager is filtering the phrases that it"
+  },
+  {
+   "t": 455.76,
+   "d": 2.24,
+   "text": "can choose based on a model of what it's"
+  },
+  {
+   "t": 458.0,
+   "d": 1.44,
+   "text": "describing"
+  },
+  {
+   "t": 459.44,
+   "d": 1.76,
+   "text": "that itself is an approach that emily"
+  },
+  {
+   "t": 461.2,
+   "d": 1.76,
+   "text": "short came up with to write a procedural"
+  },
+  {
+   "t": 462.96,
+   "d": 2.64,
+   "text": "novel called the annals of the paris"
+  },
+  {
+   "t": 465.6,
+   "d": 2.08,
+   "text": "in shorts the system the text generator"
+  },
+  {
+   "t": 467.68,
+   "d": 1.68,
+   "text": "would essentially make statements about"
+  },
+  {
+   "t": 469.36,
+   "d": 2.24,
+   "text": "what it was describing as it went along"
+  },
+  {
+   "t": 471.6,
+   "d": 1.52,
+   "text": "and it would stick to those statements"
+  },
+  {
+   "t": 473.12,
+   "d": 1.44,
+   "text": "and try to pick other statements that"
+  },
+  {
+   "t": 474.56,
+   "d": 2.28,
+   "text": "would be a good fit for the model it was"
+  },
+  {
+   "t": 476.84,
+   "d": 2.6,
+   "text": "evolving so as it generated attacks the"
+  },
+  {
+   "t": 479.44,
+   "d": 1.68,
+   "text": "generator would also create an internal"
+  },
+  {
+   "t": 481.12,
+   "d": 1.6,
+   "text": "model of the place it was describing and"
+  },
+  {
+   "t": 482.72,
+   "d": 1.52,
+   "text": "that model would gradually become more"
+  },
+  {
+   "t": 484.24,
+   "d": 1.2,
+   "text": "detailed"
+  },
+  {
+   "t": 485.44,
+   "d": 3.44,
+   "text": "loya uses a similar approach"
+  },
+  {
+   "t": 488.88,
+   "d": 2.16,
+   "text": "first the generator picks some baseline"
+  },
+  {
+   "t": 491.04,
+   "d": 2.08,
+   "text": "facts about the planet some of those are"
+  },
+  {
+   "t": 493.12,
+   "d": 1.28,
+   "text": "inherited from the region of space"
+  },
+  {
+   "t": 494.4,
+   "d": 1.68,
+   "text": "templates and some of them are chosen at"
+  },
+  {
+   "t": 496.08,
+   "d": 1.28,
+   "text": "random"
+  },
+  {
+   "t": 497.36,
+   "d": 2.72,
+   "text": "then it generates text making phrases"
+  },
+  {
+   "t": 500.08,
+   "d": 1.92,
+   "text": "and words based on a somewhat complex"
+  },
+  {
+   "t": 502.0,
+   "d": 2.4,
+   "text": "set of priority rules"
+  },
+  {
+   "t": 504.4,
+   "d": 1.6,
+   "text": "for instance the generator is trying to"
+  },
+  {
+   "t": 506.0,
+   "d": 1.76,
+   "text": "pick phrases that bring up aspects of"
+  },
+  {
+   "t": 507.76,
+   "d": 1.44,
+   "text": "the model that haven't been brought up"
+  },
+  {
+   "t": 509.2,
+   "d": 3.04,
+   "text": "yet or that highlight a focal aspect of"
+  },
+  {
+   "t": 512.24,
+   "d": 1.68,
+   "text": "it that was selected at random when the"
+  },
+  {
+   "t": 513.92,
+   "d": 2.88,
+   "text": "generator started"
+  },
+  {
+   "t": 517.36,
+   "d": 1.6,
+   "text": "an important step in making those"
+  },
+  {
+   "t": 518.96,
+   "d": 2.16,
+   "text": "planets thematically consistent is using"
+  },
+  {
+   "t": 521.12,
+   "d": 2.16,
+   "text": "a symbolic system"
+  },
+  {
+   "t": 523.28,
+   "d": 2.4,
+   "text": "there are six distinct ideological and"
+  },
+  {
+   "t": 525.68,
+   "d": 2.8,
+   "text": "aesthetical alignments in voyager that"
+  },
+  {
+   "t": 528.48,
+   "d": 1.92,
+   "text": "permeate a lot of the continent"
+  },
+  {
+   "t": 530.4,
+   "d": 4.32,
+   "text": "chrysalis hammer star dome and ladder"
+  },
+  {
+   "t": 534.72,
+   "d": 1.36,
+   "text": "[Music]"
+  },
+  {
+   "t": 536.08,
+   "d": 1.68,
+   "text": "there's a couple consequences to this"
+  },
+  {
+   "t": 537.76,
+   "d": 1.12,
+   "text": "approach"
+  },
+  {
+   "t": 538.88,
+   "d": 2.32,
+   "text": "the first is that there's a large but by"
+  },
+  {
+   "t": 541.2,
+   "d": 1.76,
+   "text": "no means gigantic number of possible"
+  },
+  {
+   "t": 542.96,
+   "d": 1.28,
+   "text": "planets"
+  },
+  {
+   "t": 544.24,
+   "d": 1.76,
+   "text": "if we call it down to the six most"
+  },
+  {
+   "t": 546.0,
+   "d": 3.04,
+   "text": "important factors class alignment state"
+  },
+  {
+   "t": 549.04,
+   "d": 1.52,
+   "text": "and shape of the economy whether or not"
+  },
+  {
+   "t": 550.56,
+   "d": 2.08,
+   "text": "it's a frontier world what special"
+  },
+  {
+   "t": 552.64,
+   "d": 2.08,
+   "text": "features it has"
+  },
+  {
+   "t": 554.72,
+   "d": 1.92,
+   "text": "there's about ten thousand possible"
+  },
+  {
+   "t": 556.64,
+   "d": 2.32,
+   "text": "worlds give or take a couple thousand"
+  },
+  {
+   "t": 558.96,
+   "d": 1.44,
+   "text": "but the text generator will make even"
+  },
+  {
+   "t": 560.4,
+   "d": 1.92,
+   "text": "supposedly identical planets distinct"
+  },
+  {
+   "t": 562.32,
+   "d": 2.48,
+   "text": "from each other a storyline city world"
+  },
+  {
+   "t": 564.8,
+   "d": 2.16,
+   "text": "might be a foreboding rainy gothic"
+  },
+  {
+   "t": 566.96,
+   "d": 2.24,
+   "text": "metropolis or it might be this really"
+  },
+  {
+   "t": 569.2,
+   "d": 1.6,
+   "text": "utopian place"
+  },
+  {
+   "t": 570.8,
+   "d": 1.6,
+   "text": "the text in voyager isn't a"
+  },
+  {
+   "t": 572.4,
+   "d": 1.6,
+   "text": "straightforward description of a game"
+  },
+  {
+   "t": 574.0,
+   "d": 2.24,
+   "text": "model it's a lens to which the player"
+  },
+  {
+   "t": 576.24,
+   "d": 2.16,
+   "text": "can look at the world model and it picks"
+  },
+  {
+   "t": 578.4,
+   "d": 3.44,
+   "text": "a different angle each time"
+  },
+  {
+   "t": 583.84,
+   "d": 1.84,
+   "text": "kate compton has talked a lot about the"
+  },
+  {
+   "t": 585.68,
+   "d": 3.2,
+   "text": "problem perceptual difference in bcg"
+  },
+  {
+   "t": 588.88,
+   "d": 1.6,
+   "text": "the issue is that you can end up with"
+  },
+  {
+   "t": 590.48,
+   "d": 1.68,
+   "text": "something that looks like 10 000 bowls"
+  },
+  {
+   "t": 592.16,
+   "d": 1.36,
+   "text": "of oatmeal"
+  },
+  {
+   "t": 593.52,
+   "d": 2.24,
+   "text": "each one's oats are uniquely arranged"
+  },
+  {
+   "t": 595.76,
+   "d": 2.56,
+   "text": "but they're all still indistinguishable"
+  },
+  {
+   "t": 598.32,
+   "d": 2.08,
+   "text": "the text is really great at creating"
+  },
+  {
+   "t": 600.4,
+   "d": 1.6,
+   "text": "perceptual difference because it's so"
+  },
+  {
+   "t": 602.0,
+   "d": 2.64,
+   "text": "expressive and so easy to recombine"
+  },
+  {
+   "t": 604.64,
+   "d": 2.48,
+   "text": "voyager is full of little miniature text"
+  },
+  {
+   "t": 607.12,
+   "d": 1.28,
+   "text": "generators that are used to create"
+  },
+  {
+   "t": 608.4,
+   "d": 1.44,
+   "text": "background detail"
+  },
+  {
+   "t": 609.84,
+   "d": 1.68,
+   "text": "an example is a generator that creates"
+  },
+  {
+   "t": 611.52,
+   "d": 2.4,
+   "text": "weird futuristic fusion food for city"
+  },
+  {
+   "t": 613.92,
+   "d": 2.0,
+   "text": "worlds"
+  },
+  {
+   "t": 615.92,
+   "d": 3.76,
+   "text": "it outputs stuff like miso squash kebab"
+  },
+  {
+   "t": 619.68,
+   "d": 1.2,
+   "text": "salted"
+  },
+  {
+   "t": 620.88,
+   "d": 2.24,
+   "text": "stuffed octopus fritters"
+  },
+  {
+   "t": 623.12,
+   "d": 4.54,
+   "text": "or aerated kimchi time kibba"
+  },
+  {
+   "t": 627.66,
+   "d": 1.7,
+   "text": "[Music]"
+  },
+  {
+   "t": 629.36,
+   "d": 2.16,
+   "text": "i like that one so much i made it into a"
+  },
+  {
+   "t": 631.52,
+   "d": 1.28,
+   "text": "twitter bot"
+  },
+  {
+   "t": 632.8,
+   "d": 1.68,
+   "text": "the text generator is working from a"
+  },
+  {
+   "t": 634.48,
+   "d": 2.08,
+   "text": "pretty simple corpus of words but it's"
+  },
+  {
+   "t": 636.56,
+   "d": 1.68,
+   "text": "still generating very distinctive and"
+  },
+  {
+   "t": 638.24,
+   "d": 2.48,
+   "text": "sometimes evocative things which act as"
+  },
+  {
+   "t": 640.72,
+   "d": 1.76,
+   "text": "a tiny detail to help paint a picture of"
+  },
+  {
+   "t": 642.48,
+   "d": 2.56,
+   "text": "what a planet or a culture is like"
+  },
+  {
+   "t": 645.04,
+   "d": 1.36,
+   "text": "sometimes you get something really"
+  },
+  {
+   "t": 646.4,
+   "d": 2.0,
+   "text": "simple and honest and sometimes you get"
+  },
+  {
+   "t": 648.4,
+   "d": 1.6,
+   "text": "something really elaborate"
+  },
+  {
+   "t": 650.0,
+   "d": 1.76,
+   "text": "and while they are clearly the output of"
+  },
+  {
+   "t": 651.76,
+   "d": 2.4,
+   "text": "pcg they're definitely distinctive from"
+  },
+  {
+   "t": 654.16,
+   "d": 1.68,
+   "text": "each other"
+  },
+  {
+   "t": 655.84,
+   "d": 1.52,
+   "text": "so what i'm hoping to accomplish with"
+  },
+  {
+   "t": 657.36,
+   "d": 2.64,
+   "text": "voyager is that by recombining chunks of"
+  },
+  {
+   "t": 660.0,
+   "d": 2.32,
+   "text": "authored content and using text"
+  },
+  {
+   "t": 662.32,
+   "d": 1.68,
+   "text": "i'm not hoping to get pcg that has"
+  },
+  {
+   "t": 664.0,
+   "d": 1.44,
+   "text": "infinite longevity or can keep"
+  },
+  {
+   "t": 665.44,
+   "d": 2.24,
+   "text": "surprising players forever"
+  },
+  {
+   "t": 667.68,
+   "d": 2.24,
+   "text": "i'm hoping to get pcg that gives players"
+  },
+  {
+   "t": 669.92,
+   "d": 2.56,
+   "text": "a weird unique universe that's made out"
+  },
+  {
+   "t": 672.48,
+   "d": 2.4,
+   "text": "of tiny digestible glimpses"
+  },
+  {
+   "t": 674.88,
+   "d": 1.36,
+   "text": "and i'm hoping that each planet has"
+  },
+  {
+   "t": 676.24,
+   "d": 1.68,
+   "text": "something to latch out to"
+  },
+  {
+   "t": 677.92,
+   "d": 2.4,
+   "text": "a detail you haven't seen it yet"
+  },
+  {
+   "t": 680.32,
+   "d": 2.48,
+   "text": "some kind of fashion or architecture or"
+  },
+  {
+   "t": 682.8,
+   "d": 2.88,
+   "text": "society or biology that is specific to"
+  },
+  {
+   "t": 685.68,
+   "d": 1.92,
+   "text": "that planet"
+  },
+  {
+   "t": 687.6,
+   "d": 2.0,
+   "text": "at least as much as your experience is"
+  },
+  {
+   "t": 689.6,
+   "d": 2.48,
+   "text": "concerned"
+  },
+  {
+   "t": 692.96,
+   "d": 1.76,
+   "text": "this is actually really labor intensive"
+  },
+  {
+   "t": 694.72,
+   "d": 2.0,
+   "text": "on my end phrases have to be tagged"
+  },
+  {
+   "t": 696.72,
+   "d": 1.52,
+   "text": "comprehensively so that they show up in"
+  },
+  {
+   "t": 698.24,
+   "d": 1.36,
+   "text": "the right places and with the right"
+  },
+  {
+   "t": 699.6,
+   "d": 1.2,
+   "text": "frequency"
+  },
+  {
+   "t": 700.8,
+   "d": 1.52,
+   "text": "and of course all this content is"
+  },
+  {
+   "t": 702.32,
+   "d": 2.24,
+   "text": "effectively handwritten"
+  },
+  {
+   "t": 704.56,
+   "d": 1.6,
+   "text": "which gets into another problem with the"
+  },
+  {
+   "t": 706.16,
+   "d": 1.76,
+   "text": "way we talk about procedural generation"
+  },
+  {
+   "t": 707.92,
+   "d": 2.0,
+   "text": "in games"
+  },
+  {
+   "t": 709.92,
+   "d": 1.6,
+   "text": "too often we think of procedural"
+  },
+  {
+   "t": 711.52,
+   "d": 2.0,
+   "text": "generation as a force multiplier as a"
+  },
+  {
+   "t": 713.52,
+   "d": 1.92,
+   "text": "way of getting a lot of content for very"
+  },
+  {
+   "t": 715.44,
+   "d": 1.6,
+   "text": "little later"
+  },
+  {
+   "t": 717.04,
+   "d": 2.0,
+   "text": "but we know that's not really true the"
+  },
+  {
+   "t": 719.04,
+   "d": 1.52,
+   "text": "goal is to create surprise and"
+  },
+  {
+   "t": 720.56,
+   "d": 2.4,
+   "text": "replayability to allow players to really"
+  },
+  {
+   "t": 722.96,
+   "d": 1.76,
+   "text": "go in blind because the game content"
+  },
+  {
+   "t": 724.72,
+   "d": 1.92,
+   "text": "can't be known beforehand"
+  },
+  {
+   "t": 726.64,
+   "d": 2.48,
+   "text": "roguelikes need this so their dive retry"
+  },
+  {
+   "t": 729.12,
+   "d": 2.32,
+   "text": "cycle against dangers"
+  },
+  {
+   "t": 731.44,
+   "d": 2.16,
+   "text": "voyager has a similar cycle of gamers"
+  },
+  {
+   "t": 733.6,
+   "d": 1.76,
+   "text": "starting so procedural generation is a"
+  },
+  {
+   "t": 735.36,
+   "d": 1.2,
+   "text": "good fit"
+  },
+  {
+   "t": 736.56,
+   "d": 1.68,
+   "text": "more than that though"
+  },
+  {
+   "t": 738.24,
+   "d": 1.92,
+   "text": "one thing that always attracted me to"
+  },
+  {
+   "t": 740.16,
+   "d": 1.84,
+   "text": "space sims was their sense of"
+  },
+  {
+   "t": 742.0,
+   "d": 2.56,
+   "text": "serendipity"
+  },
+  {
+   "t": 744.56,
+   "d": 2.16,
+   "text": "you just set off in a direction and you"
+  },
+  {
+   "t": 746.72,
+   "d": 1.76,
+   "text": "deal with whatever you found"
+  },
+  {
+   "t": 748.48,
+   "d": 2.0,
+   "text": "as you found it"
+  },
+  {
+   "t": 750.48,
+   "d": 1.6,
+   "text": "the problem though is that traditional"
+  },
+  {
+   "t": 752.08,
+   "d": 1.76,
+   "text": "space sims don't really encourage that"
+  },
+  {
+   "t": 753.84,
+   "d": 2.56,
+   "text": "kind of play they incentivize finding a"
+  },
+  {
+   "t": 756.4,
+   "d": 2.0,
+   "text": "profitable trade route or a place where"
+  },
+  {
+   "t": 758.4,
+   "d": 2.0,
+   "text": "you can pick up good quests and sticking"
+  },
+  {
+   "t": 760.4,
+   "d": 1.2,
+   "text": "there"
+  },
+  {
+   "t": 761.6,
+   "d": 1.68,
+   "text": "some of them actually encourage the"
+  },
+  {
+   "t": 763.28,
+   "d": 2.56,
+   "text": "player to put down words"
+  },
+  {
+   "t": 765.84,
+   "d": 1.92,
+   "text": "in the x series the games begin as a"
+  },
+  {
+   "t": 767.76,
+   "d": 1.68,
+   "text": "space sim but eventually become the sort"
+  },
+  {
+   "t": 769.44,
+   "d": 2.24,
+   "text": "of management strategy"
+  },
+  {
+   "t": 771.68,
+   "d": 1.68,
+   "text": "eve of course is notorious as a"
+  },
+  {
+   "t": 773.36,
+   "d": 2.0,
+   "text": "spreadsheet simulator"
+  },
+  {
+   "t": 775.36,
+   "d": 2.08,
+   "text": "in voyager i wanted to make a game that"
+  },
+  {
+   "t": 777.44,
+   "d": 1.84,
+   "text": "really was about the unknown thing that"
+  },
+  {
+   "t": 779.28,
+   "d": 1.76,
+   "text": "was beyond the next jump"
+  },
+  {
+   "t": 781.04,
+   "d": 2.0,
+   "text": "it takes a lot after sunday c which"
+  },
+  {
+   "t": 783.04,
+   "d": 2.0,
+   "text": "randomizes its map each time so that you"
+  },
+  {
+   "t": 785.04,
+   "d": 1.68,
+   "text": "won't have a vague idea of where to find"
+  },
+  {
+   "t": 786.72,
+   "d": 1.76,
+   "text": "any given thing"
+  },
+  {
+   "t": 788.48,
+   "d": 1.92,
+   "text": "i wanted a sense of slight uncertainty"
+  },
+  {
+   "t": 790.4,
+   "d": 1.68,
+   "text": "and i wanted that sense of serendipity"
+  },
+  {
+   "t": 792.08,
+   "d": 1.52,
+   "text": "that you get from running across just"
+  },
+  {
+   "t": 793.6,
+   "d": 2.16,
+   "text": "the right thing at the right time and a"
+  },
+  {
+   "t": 795.76,
+   "d": 2.16,
+   "text": "game you know is randomized"
+  },
+  {
+   "t": 797.92,
+   "d": 1.6,
+   "text": "so to get that feeling i came up with a"
+  },
+  {
+   "t": 799.52,
+   "d": 3.04,
+   "text": "set of mechanics that work in concert"
+  },
+  {
+   "t": 802.56,
+   "d": 2.32,
+   "text": "the first one is procedural generation"
+  },
+  {
+   "t": 804.88,
+   "d": 1.84,
+   "text": "the places you visit in the game are all"
+  },
+  {
+   "t": 806.72,
+   "d": 1.84,
+   "text": "assembled from the game's content as you"
+  },
+  {
+   "t": 808.56,
+   "d": 2.16,
+   "text": "visit them"
+  },
+  {
+   "t": 810.72,
+   "d": 1.76,
+   "text": "this allows for surprise but it also"
+  },
+  {
+   "t": 812.48,
+   "d": 1.12,
+   "text": "means that they can't see that you're"
+  },
+  {
+   "t": 813.6,
+   "d": 2.24,
+   "text": "constantly visiting your places works"
+  },
+  {
+   "t": 815.84,
+   "d": 2.08,
+   "text": "narrative"
+  },
+  {
+   "t": 817.92,
+   "d": 1.92,
+   "text": "if voyager was just shuffling"
+  },
+  {
+   "t": 819.84,
+   "d": 2.48,
+   "text": "pre-generated planets around"
+  },
+  {
+   "t": 822.32,
+   "d": 1.68,
+   "text": "players would probably question why they"
+  },
+  {
+   "t": 824.0,
+   "d": 1.36,
+   "text": "keep seeing the same planet over and"
+  },
+  {
+   "t": 825.36,
+   "d": 1.76,
+   "text": "over again"
+  },
+  {
+   "t": 827.12,
+   "d": 2.32,
+   "text": "so i need to generate new planets all"
+  },
+  {
+   "t": 829.44,
+   "d": 2.48,
+   "text": "the time to create the illusion of a"
+  },
+  {
+   "t": 831.92,
+   "d": 2.96,
+   "text": "vast space that they're moving through"
+  },
+  {
+   "t": 834.88,
+   "d": 1.84,
+   "text": "the second one is perpetual forward"
+  },
+  {
+   "t": 836.72,
+   "d": 1.28,
+   "text": "motion"
+  },
+  {
+   "t": 838.0,
+   "d": 1.44,
+   "text": "part of the reason the storytelling in"
+  },
+  {
+   "t": 839.44,
+   "d": 1.76,
+   "text": "80 days works is that you can't revisit"
+  },
+  {
+   "t": 841.2,
+   "d": 2.08,
+   "text": "places you've been to before you're"
+  },
+  {
+   "t": 843.28,
+   "d": 2.48,
+   "text": "constantly picking up new story threads"
+  },
+  {
+   "t": 845.76,
+   "d": 2.0,
+   "text": "playing with them for just a bit and"
+  },
+  {
+   "t": 847.76,
+   "d": 2.32,
+   "text": "then abandoning them"
+  },
+  {
+   "t": 850.08,
+   "d": 1.84,
+   "text": "and it means that procedural planets are"
+  },
+  {
+   "t": 851.92,
+   "d": 2.72,
+   "text": "actually feasible because no individual"
+  },
+  {
+   "t": 854.64,
+   "d": 2.16,
+   "text": "planet has the obligation of carrying"
+  },
+  {
+   "t": 856.8,
+   "d": 3.2,
+   "text": "that much narrative weight"
+  },
+  {
+   "t": 860.0,
+   "d": 1.6,
+   "text": "the third mechanic is limited"
+  },
+  {
+   "t": 861.6,
+   "d": 1.2,
+   "text": "information"
+  },
+  {
+   "t": 862.8,
+   "d": 1.84,
+   "text": "players get an option of a few planets"
+  },
+  {
+   "t": 864.64,
+   "d": 2.0,
+   "text": "they might visit next and they're given"
+  },
+  {
+   "t": 866.64,
+   "d": 1.44,
+   "text": "pretty limited information about those"
+  },
+  {
+   "t": 868.08,
+   "d": 0.96,
+   "text": "planets"
+  },
+  {
+   "t": 869.04,
+   "d": 2.56,
+   "text": "just one or two facts about them"
+  },
+  {
+   "t": 871.6,
+   "d": 1.92,
+   "text": "this encourages players to juggle"
+  },
+  {
+   "t": 873.52,
+   "d": 1.76,
+   "text": "multiple interests"
+  },
+  {
+   "t": 875.28,
+   "d": 1.76,
+   "text": "that increases their chances of seeing a"
+  },
+  {
+   "t": 877.04,
+   "d": 3.36,
+   "text": "rumor that's relevant to them"
+  },
+  {
+   "t": 880.4,
+   "d": 1.68,
+   "text": "none of this would work either without"
+  },
+  {
+   "t": 882.08,
+   "d": 2.4,
+   "text": "the framework of trait-based narrative"
+  },
+  {
+   "t": 884.48,
+   "d": 2.56,
+   "text": "voyager like fallen london is made up of"
+  },
+  {
+   "t": 887.04,
+   "d": 2.16,
+   "text": "individually authored chunks of content"
+  },
+  {
+   "t": 889.2,
+   "d": 1.84,
+   "text": "that are called storylights"
+  },
+  {
+   "t": 891.04,
+   "d": 2.48,
+   "text": "each storyline is modular it can give"
+  },
+  {
+   "t": 893.52,
+   "d": 1.68,
+   "text": "the player choices to follow which lead"
+  },
+  {
+   "t": 895.2,
+   "d": 2.4,
+   "text": "into other starlets but most of the time"
+  },
+  {
+   "t": 897.6,
+   "d": 1.6,
+   "text": "players are encountering them as options"
+  },
+  {
+   "t": 899.2,
+   "d": 1.68,
+   "text": "they can pursue while on any given"
+  },
+  {
+   "t": 900.88,
+   "d": 2.4,
+   "text": "planet"
+  },
+  {
+   "t": 903.44,
+   "d": 1.44,
+   "text": "which storylights you'll see on the"
+  },
+  {
+   "t": 904.88,
+   "d": 2.48,
+   "text": "planet depend on both the planet itself"
+  },
+  {
+   "t": 907.36,
+   "d": 1.28,
+   "text": "and the character traits you've"
+  },
+  {
+   "t": 908.64,
+   "d": 1.68,
+   "text": "accumulated in your story through the"
+  },
+  {
+   "t": 910.32,
+   "d": 1.36,
+   "text": "game"
+  },
+  {
+   "t": 911.68,
+   "d": 2.16,
+   "text": "so that's the basic structure you have"
+  },
+  {
+   "t": 913.84,
+   "d": 1.36,
+   "text": "free floating star lights that are"
+  },
+  {
+   "t": 915.2,
+   "d": 2.56,
+   "text": "available to the player based on traits"
+  },
+  {
+   "t": 917.76,
+   "d": 1.84,
+   "text": "the outcome of entering those starlets"
+  },
+  {
+   "t": 919.6,
+   "d": 2.4,
+   "text": "is dynamic sometimes random and it's"
+  },
+  {
+   "t": 922.0,
+   "d": 2.16,
+   "text": "often based on the traits themselves and"
+  },
+  {
+   "t": 924.16,
+   "d": 2.0,
+   "text": "this outcome is expressed and trade"
+  },
+  {
+   "t": 926.16,
+   "d": 1.84,
+   "text": "changes"
+  },
+  {
+   "t": 928.0,
+   "d": 1.76,
+   "text": "if you find a stowaway in your spaceship"
+  },
+  {
+   "t": 929.76,
+   "d": 1.52,
+   "text": "you can blow them out of the airlock"
+  },
+  {
+   "t": 931.28,
+   "d": 1.6,
+   "text": "which gives you points in the ruffles"
+  },
+  {
+   "t": 932.88,
+   "d": 1.68,
+   "text": "straight and takes away points from the"
+  },
+  {
+   "t": 934.56,
+   "d": 1.44,
+   "text": "kind trait"
+  },
+  {
+   "t": 936.0,
+   "d": 1.68,
+   "text": "taking them in and carrying them to the"
+  },
+  {
+   "t": 937.68,
+   "d": 2.56,
+   "text": "destination do the opposite"
+  },
+  {
+   "t": 940.24,
+   "d": 1.92,
+   "text": "and this will impact other stories"
+  },
+  {
+   "t": 942.16,
+   "d": 1.68,
+   "text": "certain crew members will be more loyal"
+  },
+  {
+   "t": 943.84,
+   "d": 2.08,
+   "text": "to a kind captain but a ruthless captain"
+  },
+  {
+   "t": 945.92,
+   "d": 1.6,
+   "text": "will have more options in dealing with"
+  },
+  {
+   "t": 947.52,
+   "d": 2.4,
+   "text": "certain situations"
+  },
+  {
+   "t": 949.92,
+   "d": 2.16,
+   "text": "all of this forms a gameplay loop where"
+  },
+  {
+   "t": 952.08,
+   "d": 2.32,
+   "text": "traits act sometimes as stats sometimes"
+  },
+  {
+   "t": 954.4,
+   "d": 2.08,
+   "text": "as meters and sometimes have expendable"
+  },
+  {
+   "t": 956.48,
+   "d": 1.41,
+   "text": "resources"
+  },
+  {
+   "t": 957.89,
+   "d": 2.43,
+   "text": "[Music]"
+  },
+  {
+   "t": 960.32,
+   "d": 1.84,
+   "text": "traits are inherently transparent to the"
+  },
+  {
+   "t": 962.16,
+   "d": 2.0,
+   "text": "player all those state changes are"
+  },
+  {
+   "t": 964.16,
+   "d": 2.0,
+   "text": "explicit"
+  },
+  {
+   "t": 966.16,
+   "d": 2.24,
+   "text": "so there's a design contract in voyager"
+  },
+  {
+   "t": 968.4,
+   "d": 2.0,
+   "text": "at no point is the game tracking hidden"
+  },
+  {
+   "t": 970.4,
+   "d": 0.96,
+   "text": "state"
+  },
+  {
+   "t": 971.36,
+   "d": 1.68,
+   "text": "everything about your character that"
+  },
+  {
+   "t": 973.04,
+   "d": 1.92,
+   "text": "influences game outcomes is visible to"
+  },
+  {
+   "t": 974.96,
+   "d": 0.88,
+   "text": "you"
+  },
+  {
+   "t": 975.84,
+   "d": 1.68,
+   "text": "even if you don't necessarily know how"
+  },
+  {
+   "t": 977.52,
+   "d": 2.72,
+   "text": "it influences those outcomes"
+  },
+  {
+   "t": 980.24,
+   "d": 2.08,
+   "text": "so like a physics engine or a porsche"
+  },
+  {
+   "t": 982.32,
+   "d": 1.76,
+   "text": "game world model this is really a"
+  },
+  {
+   "t": 984.08,
+   "d": 2.96,
+   "text": "toolbox for building game mechanics"
+  },
+  {
+   "t": 987.04,
+   "d": 2.08,
+   "text": "for example there's a large storyline in"
+  },
+  {
+   "t": 989.12,
+   "d": 1.28,
+   "text": "the game that involves going on an"
+  },
+  {
+   "t": 990.4,
+   "d": 2.0,
+   "text": "expedition into an alien and hostile"
+  },
+  {
+   "t": 992.4,
+   "d": 1.36,
+   "text": "world"
+  },
+  {
+   "t": 993.76,
+   "d": 1.52,
+   "text": "all of the mechanics of this are"
+  },
+  {
+   "t": 995.28,
+   "d": 2.0,
+   "text": "expressed in terms of traits"
+  },
+  {
+   "t": 997.28,
+   "d": 1.92,
+   "text": "there's a trait that drags how deep into"
+  },
+  {
+   "t": 999.2,
+   "d": 2.32,
+   "text": "the alien landscape you've gone"
+  },
+  {
+   "t": 1001.52,
+   "d": 2.08,
+   "text": "going deeper gives you better resources"
+  },
+  {
+   "t": 1003.6,
+   "d": 2.24,
+   "text": "which are themselves traits and which"
+  },
+  {
+   "t": 1005.84,
+   "d": 1.92,
+   "text": "can be cashed in for various other"
+  },
+  {
+   "t": 1007.76,
+   "d": 2.0,
+   "text": "resources in other storylines and other"
+  },
+  {
+   "t": 1009.76,
+   "d": 1.2,
+   "text": "planets"
+  },
+  {
+   "t": 1010.96,
+   "d": 1.92,
+   "text": "so the player is free to pursue"
+  },
+  {
+   "t": 1012.88,
+   "d": 2.24,
+   "text": "free-floating starlets as they wish"
+  },
+  {
+   "t": 1015.12,
+   "d": 1.68,
+   "text": "assuming they can find their proper type"
+  },
+  {
+   "t": 1016.8,
+   "d": 1.12,
+   "text": "of planet"
+  },
+  {
+   "t": 1017.92,
+   "d": 1.52,
+   "text": "to assemble their own path through the"
+  },
+  {
+   "t": 1019.44,
+   "d": 2.16,
+   "text": "content which is somewhat randomized and"
+  },
+  {
+   "t": 1021.6,
+   "d": 3.6,
+   "text": "somewhat based on player choice"
+  },
+  {
+   "t": 1025.2,
+   "d": 1.92,
+   "text": "this plays heavily into the procedural"
+  },
+  {
+   "t": 1027.12,
+   "d": 1.92,
+   "text": "generation because it allows me to"
+  },
+  {
+   "t": 1029.04,
+   "d": 1.6,
+   "text": "generate planets one at a time without"
+  },
+  {
+   "t": 1030.64,
+   "d": 1.68,
+   "text": "worrying about how they would slot into"
+  },
+  {
+   "t": 1032.32,
+   "d": 3.2,
+   "text": "some overarching narrative"
+  },
+  {
+   "t": 1035.76,
+   "d": 1.92,
+   "text": "everything is modular so the player gets"
+  },
+  {
+   "t": 1037.68,
+   "d": 1.84,
+   "text": "to build their own narrative arcs out of"
+  },
+  {
+   "t": 1039.52,
+   "d": 2.64,
+   "text": "what they find as they go along"
+  },
+  {
+   "t": 1042.16,
+   "d": 1.84,
+   "text": "this requires a particular style of"
+  },
+  {
+   "t": 1044.0,
+   "d": 1.6,
+   "text": "writing where you're trying to be brief"
+  },
+  {
+   "t": 1045.6,
+   "d": 2.8,
+   "text": "evocative and not overly detailed"
+  },
+  {
+   "t": 1048.4,
+   "d": 1.84,
+   "text": "i want to give the players small morsels"
+  },
+  {
+   "t": 1050.24,
+   "d": 1.84,
+   "text": "of writing to lead them on but let them"
+  },
+  {
+   "t": 1052.08,
+   "d": 3.28,
+   "text": "fill in the gaps themselves"
+  },
+  {
+   "t": 1055.36,
+   "d": 1.52,
+   "text": "so to make the procedural console a good"
+  },
+  {
+   "t": 1056.88,
+   "d": 1.52,
+   "text": "backdrop for the narrative and the game"
+  },
+  {
+   "t": 1058.4,
+   "d": 0.96,
+   "text": "design"
+  },
+  {
+   "t": 1059.36,
+   "d": 1.68,
+   "text": "i have to make sure that both the game's"
+  },
+  {
+   "t": 1061.04,
+   "d": 1.28,
+   "text": "systems and the way i write the"
+  },
+  {
+   "t": 1062.32,
+   "d": 2.52,
+   "text": "narrative fit well with"
+  },
+  {
+   "t": 1064.84,
+   "d": 2.76,
+   "text": "pcg this is an important point about"
+  },
+  {
+   "t": 1067.6,
+   "d": 1.68,
+   "text": "procedural generation that sometimes"
+  },
+  {
+   "t": 1069.28,
+   "d": 1.6,
+   "text": "gets lost in the broader conversation"
+  },
+  {
+   "t": 1070.88,
+   "d": 0.96,
+   "text": "about it"
+  },
+  {
+   "t": 1071.84,
+   "d": 1.76,
+   "text": "it needs to be an integral part of the"
+  },
+  {
+   "t": 1073.6,
+   "d": 2.32,
+   "text": "design you can't substitute authored"
+  },
+  {
+   "t": 1075.92,
+   "d": 2.08,
+   "text": "content with procedural content and"
+  },
+  {
+   "t": 1078.0,
+   "d": 2.8,
+   "text": "expect it to just work out you have to"
+  },
+  {
+   "t": 1080.8,
+   "d": 1.6,
+   "text": "make sure that the systems and ideas in"
+  },
+  {
+   "t": 1082.4,
+   "d": 2.48,
+   "text": "the game work with procedural content"
+  },
+  {
+   "t": 1084.88,
+   "d": 2.72,
+   "text": "and that's a bit of an art in itself"
+  },
+  {
+   "t": 1087.6,
+   "d": 2.24,
+   "text": "if you take one thing away from this"
+  },
+  {
+   "t": 1089.84,
+   "d": 1.36,
+   "text": "procedure generation needs to be"
+  },
+  {
+   "t": 1091.2,
+   "d": 2.88,
+   "text": "demystified it has to be taken out of"
+  },
+  {
+   "t": 1094.08,
+   "d": 2.8,
+   "text": "the grimoire and into the toolbox"
+  },
+  {
+   "t": 1096.88,
+   "d": 1.84,
+   "text": "so thank you for having me thanks to"
+  },
+  {
+   "t": 1098.72,
+   "d": 2.64,
+   "text": "nova scots for organizing this"
+  },
+  {
+   "t": 1101.36,
+   "d": 2.64,
+   "text": "you can find voyager on twitter at virgo"
+  },
+  {
+   "t": 1104.0,
+   "d": 2.8,
+   "text": "game or on our website voyager.space"
+  },
+  {
+   "t": 1106.8,
+   "d": 2.32,
+   "text": "yeah space is a child"
+  },
+  {
+   "t": 1109.12,
+   "d": 2.4,
+   "text": "and i will be posting some notes for"
+  },
+  {
+   "t": 1111.52,
+   "d": 3.2,
+   "text": "this talk on my personal website segway"
+  },
+  {
+   "t": 1114.72,
+   "d": 1.6,
+   "text": "dot pw"
+  },
+  {
+   "t": 1116.32,
+   "d": 1.04,
+   "text": "slash"
+  },
+  {
+   "t": 1117.36,
+   "d": 1.52,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1118.88,
+   "d": 4.52,
+   "text": "okay thank you and good day"
+  },
+  {
+   "t": 1139.84,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

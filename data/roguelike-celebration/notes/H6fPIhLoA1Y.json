@@ -1,0 +1,88 @@
+{
+  "id": "H6fPIhLoA1Y",
+  "title": "Roguelike Celebration - Lightning Talks",
+  "speaker": "Thomas Robertson; Jim Shepard; Mark (surname not given); Kyla (quietdragoness); Britta; Joe Sondow",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=H6fPIhLoA1Y",
+  "talk_type": "other",
+  "summary": "A set of six 2017 lightning talks. Thomas Robertson (Artemis Spaceship Bridge Simulator) demos 'smart variables' that draw their own debug UI to speed up prototyping; Jim Shepard pitches his Stop the Hunger Clock charity trading Steam keys for local food donations; Mark shows a joke compiler from Tracery grammars to Ethereum smart contracts; Kyla reads a NetHack fanfic diary of the Oracle; Britta compares fan-fiction tropes and tags to procedural generation; and Joe Sondow shows his Star Trek parody Twitter accounts. Design content is limited to the prototyping UI idea and the fanfic-as-procedural-generation analogy.",
+  "games": [
+    "Artemis Spaceship Bridge Simulator",
+    "Dungeonmans",
+    "NetHack",
+    "Tracery"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "prototyping ui",
+      "kind": "technique",
+      "claim": "Thomas Robertson's prototyping approach declares game data as 'smart variables' (with limits and lists) that can draw themselves into any given screen rectangle, removing most UI work from early prototypes.",
+      "detail": "Players and monsters (a flesh golem, a plant monster) are defined as data; the main loop just calls draw-my-data with a rectangle, and the UI lays itself out, including inventories and drag bars to tune values like movement speed live. It is a developer tool, not player-facing, and gets you about 80% of the way.",
+      "t": 126,
+      "quote": "maybe these variables are smart enough to draw themselves",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "warning",
+      "claim": "The drudgery of building UI during rapid prototyping eats time and can sap a developer's creativity and motivation to work on a game idea.",
+      "detail": "Robertson says you end up budgeting more time for UI whether you like it or not, leading to procrastination; this motivated his self-drawing variables experiment.",
+      "t": 68,
+      "quote": "that drudgery is something you don't particularly like and that can actually impact your creativity",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "charity",
+      "kind": "example",
+      "claim": "Jim Shepard's Stop the Hunger Clock drive gives donated Steam keys to players who buy hunger-relief food locally and mail in a receipt, deliberately avoiding a push-button online donation.",
+      "detail": "Developers and players donated keys. Shepard wanted people to make a difference in their own communities; one player who couldn't find food bags volunteered four hours at a church food drive instead.",
+      "t": 426,
+      "quote": "it does not push button receive game on the internet because I want folks to go out in their community",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tracery",
+      "kind": "example",
+      "claim": "Mark built a joke compiler from Tracery grammars to Ethereum smart contracts, producing permanent, unique-to-you generated text at great expense.",
+      "detail": "He describes it as the world's most expensive way to generate a bit of text; the default gas amount wasn't even enough to produce a string on the test chain.",
+      "t": 516,
+      "quote": "I created a tracery to aetherium compiler so you can take your trace tracery recipe which spits out a little bit of text",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "fan fiction",
+      "kind": "example",
+      "claim": "Roguelike fan fiction exists: Kyla reads a 2015 Yuletide NetHack story written as the Oracle's diary, built around NetHack's fortune-cookie rumors and dungeon characters.",
+      "detail": "The Oracle receives a rumor-a-day desk calendar, takes up statue carving with Medusa's advice, throws a party, and has her statues smashed by an adventurer, ending with her ordering statue traps.",
+      "t": 618,
+      "quote": "wrote a fanfic in nethack called just because it says readme doesn't mean you should",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "fan fiction",
+      "kind": "principle",
+      "claim": "Fan fiction works like a procedural generator: writers combine tagged characters, relationship types, tropes (hurt/comfort, mirror universe) and structures ('five times X and the one time Y') into self-contained variations on familiar starting points.",
+      "detail": "Britta notes the tags at the top of each story act like generator inputs; she has read hundreds of stories with the same starting points and enjoys each because it's a little different, much like restarting a roguelike such as NetHack.",
+      "t": 1327,
+      "quote": "they take these structural elements that are tagged at the top of every story",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "markov chains",
+      "kind": "example",
+      "claim": "Joe Sondow notes that Markov chain bots spun off from his hand-written Star Trek parody accounts produce a different quality of comedy than the authored originals.",
+      "detail": "His manual parody accounts (Picard Tips, Riker Googling, Worf Email) built the follower base that later boosted his procedural emoji bots.",
+      "t": 1456,
+      "quote": "our Markov chain BOTS that results in a different quality of comedy",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

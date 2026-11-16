@@ -1,0 +1,215 @@
+{
+  "id": "b8uoQHedFV0",
+  "title": "Nicholas Feinberg - Dungeon Crawl Stone Soup",
+  "speaker": "Nicholas Feinberg",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=b8uoQHedFV0",
+  "talk_type": "design",
+  "summary": "Nicholas Feinberg, a Dungeon Crawl Stone Soup developer, presents 'hypothetically optimal play' as a design lens: imagine a player with infinite patience and ask whether the way they would maximise their win chance is fun. Using examples from Civilization II, Crawl's old skill training, NetHack's pudding farming and Crypt of the NecroDancer, he argues that actions without cost are the root problem, and that the informal split between in-combat and out-of-combat time is the 'great sin' of old-school roguelikes. He reviews fixes (action costs, removing regeneration, time limits, food clocks) and their downsides, concluding that a huge game like Crawl must keep its clocks weak.",
+  "games": [
+    "Dungeon Crawl Stone Soup",
+    "Civilization II",
+    "NetHack",
+    "Crypt of the NecroDancer",
+    "Dwarf Fortress",
+    "IVAN",
+    "DoomRL",
+    "Sproggiwood",
+    "Desktop Dungeons",
+    "Rogue",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optimal play",
+      "kind": "principle",
+      "claim": "Test every game system by imagining a player with infinite patience and tolerance for tedium: if their win-maximising use of the system is not fun, the design has a problem.",
+      "detail": "Feinberg says Crawl taught him this way of thinking. Forget a system's intended purpose and ask how a bottomless-patience player would exploit it to maximise their chance of winning, and whether that play style looks fun.",
+      "t": 28,
+      "quote": "if a player has a bottomless pi supply of patience an infinite tolerance for tedium how can they use this system to maximize their chances of winning",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "make-work",
+      "kind": "example",
+      "claim": "In Civilization II, wasted overflow when a production bar filled made optimal players reassign every city's workers every turn, which later games reduced by carrying excess resources over.",
+      "detail": "Tile assignment was meant for temporary focus, such as building a defender before barbarians arrive, but optimal players micromanaged dozens of cities for hundreds of turns. Feinberg calls this make-work that distracts from the intended strategic decisions. Carry-over is not perfect since players can still tweak workers to finish things exactly, but the impact is much smaller.",
+      "t": 120,
+      "quote": "it's a huge distraction from the sort of strategic and tactical decisions that the game is supposed to be about in fact it's just make work",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill training",
+      "kind": "example",
+      "claim": "Dungeon Crawl's original use-based skill training encouraged 'victory dancing', such as letting a rat hit you for hundreds of turns to train armour, until it was replaced by manual skill allocation.",
+      "detail": "Experience from kills went into whatever skills you used, which sounds intuitive, but straightforward play gave a haphazard mix of skills. Players could train conjurations by casting Magic Dart at a wall repeatedly, and nothing stopped them. You could win without victory dancing but with much worse odds in an already hard game.",
+      "t": 243,
+      "quote": "maybe you could train conjurations by casting magic dart on a wall over and over and over again was there anything stopping you from doing that it turned out no",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optimal play",
+      "kind": "principle",
+      "claim": "Unfun optimal strategies hurt a roguelike even when players don't use them, because after each death they leave the player thinking they only lost by skipping the tedious grind.",
+      "detail": "Feinberg contrasts a fun death, which leaves you planning to teleport sooner or find haste next time, with dying while thinking you would have won had you sat in a corner training fire magic for hundreds of turns or cast detect monsters every other step.",
+      "t": 355,
+      "quote": "what's not fun is dying and having at the back of your mind the thought oh if only i'd sat in a corner for several hundred turns",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optimal play",
+      "kind": "warning",
+      "claim": "NetHack's pudding farming shows how a game is at war with itself when the most effective way to play is the least fun; the 'punishment is the tedium' attitude is a bad philosophy.",
+      "detail": "Players split puddings with a weak weapon and sacrificed the corpses for divine rewards. One player's reply to complaints was that the punishment for pudding farming is pudding farming; Feinberg calls it a great line but a terrible philosophy. He notes NetHack 3.6 removed pudding corpses, which more or less solved it.",
+      "t": 420,
+      "quote": "a situation like pudding farming puts a game at war with itself puts the fun way to play in conflict with the way that makes you most likely to win",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "goals",
+      "kind": "principle",
+      "claim": "Optimal-play analysis applies to roguelikes built on tactical and strategic choices and to any part of a game with clear goals, but matters less for games like IVAN or Dwarf Fortress adventure mode.",
+      "detail": "Feinberg calls IVAN essentially a cruel prank on the player and Dwarf Fortress adventure mode a story-generation tool with no way to win, so optimising is less meaningful, as with a joke training regimen of wrestling a crab while arguing with a bard. But even there, battles have tactical goals, so the lens still applies to those parts.",
+      "t": 548,
+      "quote": "as long as you have clear goals for the player to achieve hypothetically optimal play does remain a relevant concept",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "time pressure",
+      "kind": "example",
+      "claim": "Crypt of the NecroDancer turns deterministic enemy patterns into a fun challenge through time pressure, where the same solved patterns would be rote repetition in a traditional roguelike.",
+      "detail": "Red dragons follow exact patterns, so a fixed dance beats them every time without damage. In Crawl or Angband, doing a dance for dozens or hundreds of dragons would be tedious, but with only about a second per move, executing the maneuver becomes satisfying in itself.",
+      "t": 637,
+      "quote": "necrodancer has time pressure you only have about a second to take each move that doesn't just add challenge to the actions involved it fundamentally transforms them",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "action cost",
+      "kind": "principle",
+      "claim": "The core problem behind degenerate optimal play is actions without a cost, and real-time is only one way to give actions a cost.",
+      "detail": "Feinberg says real-time mechanics are heretical for a roguelike, but what NecroDancer really solves is the existence of free actions like rearranging workers in Civilization. There are often other ways to solve that.",
+      "t": 679,
+      "quote": "the core problem the necrodancer solves is the existence of actions without a cost",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "ally commands",
+      "kind": "example",
+      "claim": "Dungeon Crawl makes each ally order cost a turn, turning unit management into a tactical choice instead of free per-turn micromanagement.",
+      "detail": "If orders were free, players would micromanage a dozen orc minions every turn of every battle and the game would bog down. With a cost, the player must decide whether ordering all orcs to focus the wizard matters more than attacking himself.",
+      "t": 721,
+      "quote": "crawl has a cost for giving orders each order takes a turn just like moving or attacking that turns unit management into a real tactical choice",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster item use",
+      "kind": "example",
+      "claim": "Dungeon Crawl removed monsters' ability to pick up items because optimal players spent post-fight time hiding dangerous weapons, trading away interesting tactics to remove a frequent annoyance.",
+      "detail": "An orc with a scimitar of distortion created tactical situations about keeping her friends from re-grabbing it. But after fights, players tossed weapons into lava or corners. Feinberg thinks removal was the right call, since it is hard for a mechanic to be interesting enough to justify frequent annoyance, but calls it a net improvement with some loss.",
+      "t": 806,
+      "quote": "it's really hard for any tactical mechanic to be interesting enough to justify common annoyances like that frequent annoyances",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "out of combat time",
+      "kind": "warning",
+      "claim": "The emergent split between in-combat and out-of-combat time is the 'great sin' of old-school roguelikes, because out-of-combat turns are nearly free and that breeds degenerate play.",
+      "detail": "It is not a formal game state, just whether enemies are near. Out of combat, players can precast buffs and summons so they're active at every fight start, and retry abilities with failure chances until they succeed. Balancing around it is hard because there is no formal line, and an enemy might be just around the corner.",
+      "t": 842,
+      "quote": "the great sin of crawl and of all the old school roguelikes these concepts of being in combat versus out of combat",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "regeneration",
+      "kind": "technique",
+      "claim": "Removing HP and MP regeneration over time, as DoomRL, Sproggiwood and Desktop Dungeons do, makes loitering worthless, but creates new farming exploits around whatever restores resources.",
+      "detail": "In Sproggiwood, kills give stamina (and HP with a vampiric weapon), and spider pots endlessly spawn weak spiders, so it is sometimes right to farm them, which is boring. Crawl's Deep Dwarf race has no HP regeneration and relies on vampiric effects, so players could leave weak enemies on an earlier level as a 'vampire farm'.",
+      "t": 919,
+      "quote": "games like do morel sprogywood and desktop dungeons solve the problem by removing health and magic regeneration over time",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "good as dead",
+      "kind": "warning",
+      "claim": "Removing regeneration makes roguelikes less forgiving, letting mistakes accumulate so death feels inevitable long before it happens, especially when designs assume some damage per fight.",
+      "detail": "Without the reset of resting between fights, death often follows from decisions made much earlier, and the player feels already dead and just going through the motions. Feinberg says this hits fuzzier designs like Crawl or DoomRL that assume damage each fight harder than Sproggiwood or NecroDancer. He likes no-regeneration designs but says they are not a cure-all.",
+      "t": 1042,
+      "quote": "makes death feel inevitable like your character is already as good as dead and you're just going through the motions it's not very fun",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "time limits",
+      "kind": "warning",
+      "claim": "A simple fixed turn limit makes out-of-combat time meaningful but badly creates 'good as dead' games where the player has long since lost but the game doesn't end.",
+      "detail": "Feinberg's example is a 4,000-turn limit: win before then or die. Especially for new players it is easy to have lost long before the game has the dignity to end itself.",
+      "t": 1093,
+      "quote": "it's very easy to end up in a situation where you've actually lost a long time ago but the game doesn't have the dignity to end itself",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "food clock",
+      "kind": "history",
+      "claim": "Food clocks, starting with Rogue, act like a time limit with checkpoints, but later roguelikes loosened them until in Crawl food is a vestigial stub that only restrains extreme strategies.",
+      "detail": "In Rogue, a simple game with a harsh clock, every turn until starvation counts. Starving isn't fun, so later games became lenient and added complications like monsters eating food or spells costing food, making balance harder. Different classes with different resting and movement needs meant no clock could be tight for fast styles without being impossible for slow ones.",
+      "t": 1211,
+      "quote": "what you end up with in roguelikes like crawl is food as a sort of a weird vestigial stub capable of reigning in only the most ridiculously time consuming strategies",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "game length",
+      "kind": "warning",
+      "claim": "In a huge roguelike like Crawl, strong clocks would push optimal players to turn off auto-explore and travel automation, so all of Crawl's clocks are kept weak and out-of-combat time stays free.",
+      "detail": "Crawl has at least three clocks (food, piety, out-of-depth spawning) and all are flawed. A winning game covers many dozens of huge levels, and automation wastes turns compared to an optimal human. If time mattered, clearing levels by hand would be optimal and not fun.",
+      "t": 1276,
+      "quote": "if time did matter though an optimal player planning to maximize their chance of winning would be encouraged to turn off all the automation",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "free actions",
+      "kind": "principle",
+      "claim": "Designers of tactical games should be wary of free actions and consider how the game plays in and out of combat, or avoid an out-of-combat state entirely.",
+      "detail": "This is Feinberg's closing advice for any game focused on strategic and tactical decisions. He adds, wryly, good luck to anyone building a huge sprawling old-school roguelike like Crawl.",
+      "t": 1320,
+      "quote": "be wary of free actions consider how the game will act in and out of combat or whether you can avoid an out of combat state entirely",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "scoring",
+      "kind": "example",
+      "claim": "Crawl's turn-count scoring creates an implicit clock for speedrunners but does not help most players, who are just trying to win, and it produces odd exploits like swinging a loaf of bread to rest in fewer turns.",
+      "detail": "After a win, score rises sharply for fewer in-game turns, so out-of-combat time matters for high-score chasers. But they are a small minority and Feinberg says it doesn't make sense to design for them. Because score counts player actions rather than in-game time, slow actions while resting are optimal.",
+      "t": 1427,
+      "quote": "the vast majority of players aren't doing this the vast majority of players are just trying to win a game",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "turn checkpoints",
+      "kind": "open-question",
+      "claim": "Hard turn checkpoints (reach floor N by turn T or lose) could work in principle, but only in a simpler game with closely spaced checkpoints and play styles that take similar time.",
+      "detail": "Answering a question, Feinberg says widely spaced checkpoints bring back the already-dead problem when you realise mid-way you're too slow. Play styles would need to be well balanced in time taken, or some won't be constrained by the clock and others won't work.",
+      "t": 1575,
+      "quote": "i think you need to have the checkpoints be very close together very short",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

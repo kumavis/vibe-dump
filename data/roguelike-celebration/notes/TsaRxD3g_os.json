@@ -1,0 +1,105 @@
+{
+  "id": "TsaRxD3g_os",
+  "title": "Josh Grams - Turn-based Space Flight?",
+  "speaker": "Josh Grams",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=TsaRxD3g_os",
+  "talk_type": "postmortem",
+  "summary": "Josh Grams describes a 7DRL prototype that turns Asteroids-style inertial space flight into a turn-based roguelike on a subdivided hex grid, aiming to make a fast, unapproachable genre something players can experiment with. He walks through how he displayed velocity with shadow markers, simplified turning to one key per direction, used a random-walk room generator, and tuned two enemy types. Later versions added a story, playtest-driven fixes (including removing a way to lose on the first keypress), tooltips, and gamepad support whose controls only settled after a cousin suggested a single move button. He closes by noting players still make real-time mistakes until they realize they can stop and think, and encourages prototyping improbable ideas.",
+  "games": [
+    "Asteroids"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "genre translation",
+      "kind": "principle",
+      "claim": "Making inertial Asteroids-style space flight turn-based can make an unapproachable, too-fast genre something players can experiment with and get comfortable in.",
+      "detail": "Grams likes games where you thrust around avoiding rocks but finds they drop you into action with little chance to experiment. Modifying the mechanics (e.g. making the ship drive like a car) tends to backfire because people drive fast and don't engage, so he prototyped a turn-based version for 7DRL.",
+      "t": 25,
+      "quote": "They drop you right in the action with little opportunity to experiment and get comfortable",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "velocity display",
+      "kind": "technique",
+      "claim": "To represent fractional velocity on a hex grid, the prototype subdivided each hex into four steps and drew shadow markers ahead of the ship, but players misread a line of shadows as one shadow per turn.",
+      "detail": "Whole grid cells would force speed to jump between coarse values, so Grams subdivided the grid. His first line of shadows looked cool but looked like it should trail behind, and many players thought each shadow was a turn rather than the whole line being a single turn.",
+      "t": 124,
+      "quote": "A lot of people I found out later thought each shadow was a turn instead of the whole",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "turn-based controls",
+      "kind": "technique",
+      "claim": "Combining turn, accelerate and shoot in one turn is a UX problem in turn-based flight, so the game gives each direction its own key and turning to any direction costs one turn.",
+      "detail": "In real time you can do all three at once, but turn-based raises questions of how to specify and cancel parts of a move, and confirming turns feels slow. One-step rotation was also too expensive, taking three turns to turn around, so tapping a direction key turns directly to it.",
+      "t": 158,
+      "quote": "I just gave each direction a key and you just tap the key and you can turn from any direction to that direction and it just takes a turn",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "random walk",
+      "kind": "technique",
+      "claim": "A random-walk room stamper (stamp a room, move to a random exit, repeat, occasionally spawn another walker) guarantees connected floors and produces organic shapes whose character is easy to change.",
+      "detail": "Grams says the generator creates all the floor tiles and guarantees they are connected, makes more organic shapes than other algorithms, and lets you drastically change the space by choosing the rooms and exits, though he did little with that.",
+      "t": 188,
+      "quote": "You stamp out a room, turn to a random exit, repeat and facility off another walker occasionally",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "enemy tuning",
+      "kind": "example",
+      "claim": "The game's splitting acid jellies were terrifying at first and were tuned down by reducing their number, letting them steer only every few turns and halving their sight range.",
+      "detail": "There are only two enemies: a rotating shooter and an acid jelly that splits into smaller contact-kill jellies when shot. Starting with eight was too much. Grams was struck in hindsight by how small each individual change was.",
+      "t": 244,
+      "quote": "I backed off the number and made them only steer every five ranges and cut their site in half",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "playtesting",
+      "kind": "warning",
+      "claim": "Binding the stairs/exit to W meant new players pressing W to accelerate could lose immediately, so the exit stairs on the first level were disabled.",
+      "detail": "Playtesting with friends revealed that hitting W right at the start produced the losing message, a bad thing to do to a new player using WASD. Grams disabled the original exit so you cannot lose off the bat; you must leave the level and come back.",
+      "t": 333,
+      "quote": "if you hit W right off the bat it gives you this losing message",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "gamepad",
+      "kind": "technique",
+      "claim": "Mapping turn-based aiming to an analog stick caused accidental turns, which was solved by a single move button that accelerates when held and coasts when released.",
+      "detail": "Pointing the stick seemed perfect, but players hold the stick and small wiggles cost a turn. Merging consecutive aiming turns did not help enough. His cousin's suggested move button simplified controls to the face buttons and the stick, and an overlay shows where the stick points and when it will trigger a turn.",
+      "t": 410,
+      "quote": "my cousin suggested having a move button that would accelerate if you were turning forward and pointing another direction and coast if you were not holding it at all",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player habits",
+      "kind": "example",
+      "claim": "Even in turn-based space flight, players make the same mistakes as in real-time space games (accelerating too fast, panicking and mashing keys) until they realize they can stop and think.",
+      "detail": "Grams enjoyed watching players crash into walls or panic in tight spaces, and seeing the realization when told to take their hands off the keyboard.",
+      "t": 458,
+      "quote": "take your hands off the keyboard and you can stop and think and seeing that realization",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "principle",
+      "claim": "Improbable ideas that have been brewing for a while are worth prototyping, since the worst case is learning it has no legs.",
+      "detail": "Grams closes by encouraging others to prototype such ideas; the best case is finding something really cool.",
+      "t": 481,
+      "quote": "Worst thing is you find out it doesn't have legs and best case you might come up with something really cool",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

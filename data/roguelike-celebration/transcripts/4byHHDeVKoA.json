@@ -1,0 +1,2367 @@
+{
+ "id": "4byHHDeVKoA",
+ "url": "https://www.youtube.com/watch?v=4byHHDeVKoA",
+ "title": "Joe Sondow - Twitter and Procedural Generation",
+ "speaker": "Joe Sondow",
+ "talk_title": "Twitter and Procedural Generation",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1137,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Joe Sondow talks about his twitter bots and his creative limits with procedural generation.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 57,
+   "title": "Emoji bots"
+  },
+  {
+   "start": 150,
+   "title": "Emoji aquariums"
+  },
+  {
+   "start": 649,
+   "title": "Making a Twitter bot"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3362,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.77,
+   "d": 4.39,
+   "text": "hi I'm Joe and I have 15 minutes but I"
+  },
+  {
+   "t": 5.16,
+   "d": 1.89,
+   "text": "want to thank Tim for running short so"
+  },
+  {
+   "t": 7.05,
+   "d": 2.4,
+   "text": "if I go over it will interfere with the"
+  },
+  {
+   "t": 9.45,
+   "d": 1.56,
+   "text": "schedule but I will try to keep it short"
+  },
+  {
+   "t": 11.01,
+   "d": 2.34,
+   "text": "I'm gonna talk about emoji Twitter BOTS"
+  },
+  {
+   "t": 13.35,
+   "d": 3.57,
+   "text": "and procedural generation within that"
+  },
+  {
+   "t": 16.92,
+   "d": 2.55,
+   "text": "arena and the possibility of creating"
+  },
+  {
+   "t": 19.47,
+   "d": 1.86,
+   "text": "game-like experiences on the Internet"
+  },
+  {
+   "t": 21.33,
+   "d": 3.18,
+   "text": "I have a lot of these mostly Star Trek"
+  },
+  {
+   "t": 24.51,
+   "d": 2.72,
+   "text": "related parody Twitter accounts if you"
+  },
+  {
+   "t": 27.23,
+   "d": 3.34,
+   "text": "are see someone who's doing the home"
+  },
+  {
+   "t": 30.57,
+   "d": 1.32,
+   "text": "alone face cuz they're like oh my god"
+  },
+  {
+   "t": 31.89,
+   "d": 3.0,
+   "text": "it's Riker googling they some of these"
+  },
+  {
+   "t": 34.89,
+   "d": 1.47,
+   "text": "have like a hundred thousand or eighty"
+  },
+  {
+   "t": 36.36,
+   "d": 1.14,
+   "text": "thousand thank you I've never had an"
+  },
+  {
+   "t": 37.5,
+   "d": 3.66,
+   "text": "applause for these before and so these"
+  },
+  {
+   "t": 41.16,
+   "d": 1.8,
+   "text": "are a lot of work because they I write"
+  },
+  {
+   "t": 42.96,
+   "d": 3.27,
+   "text": "them manually and but I'm programmer and"
+  },
+  {
+   "t": 46.23,
+   "d": 3.81,
+   "text": "I wanted to get into getting that same"
+  },
+  {
+   "t": 50.04,
+   "d": 1.61,
+   "text": "kind of high that you get from"
+  },
+  {
+   "t": 51.65,
+   "d": 2.35,
+   "text": "notifications on Twitter but having it"
+  },
+  {
+   "t": 54.0,
+   "d": 2.16,
+   "text": "be done for me rather than having to"
+  },
+  {
+   "t": 56.16,
+   "d": 3.42,
+   "text": "think of everything so I looked at a"
+  },
+  {
+   "t": 59.58,
+   "d": 2.85,
+   "text": "tiny star filled by Katie Rose Pipkin"
+  },
+  {
+   "t": 62.43,
+   "d": 2.22,
+   "text": "and it has a hundred thousand followers"
+  },
+  {
+   "t": 64.65,
+   "d": 3.09,
+   "text": "and it just makes pictures of stars not"
+  },
+  {
+   "t": 67.74,
+   "d": 3.26,
+   "text": "even they're just little dots and"
+  },
+  {
+   "t": 71.0,
+   "d": 3.79,
+   "text": "they're like this and every few hours"
+  },
+  {
+   "t": 74.79,
+   "d": 2.55,
+   "text": "it's a random assortment of dots and"
+  },
+  {
+   "t": 77.34,
+   "d": 3.81,
+   "text": "people love it because Twitter is a"
+  },
+  {
+   "t": 81.15,
+   "d": 3.96,
+   "text": "nightmare and this is not a nightmare"
+  },
+  {
+   "t": 85.11,
+   "d": 1.65,
+   "text": "it's something else and you can be like"
+  },
+  {
+   "t": 86.76,
+   "d": 1.47,
+   "text": "oh I don't have to think about"
+  },
+  {
+   "t": 88.23,
+   "d": 1.56,
+   "text": "everything in the world that's broken I"
+  },
+  {
+   "t": 89.79,
+   "d": 2.01,
+   "text": "can just look at the sky for one second"
+  },
+  {
+   "t": 91.8,
+   "d": 3.21,
+   "text": "and and I was like oh that's interesting"
+  },
+  {
+   "t": 95.01,
+   "d": 2.73,
+   "text": "so what if you used emoji and then I"
+  },
+  {
+   "t": 97.74,
+   "d": 1.26,
+   "text": "started looking around and I saw that"
+  },
+  {
+   "t": 99.0,
+   "d": 3.24,
+   "text": "people do this is tiny Gardens author"
+  },
+  {
+   "t": 102.24,
+   "d": 3.39,
+   "text": "unknown and I like it but it's there's"
+  },
+  {
+   "t": 105.63,
+   "d": 2.64,
+   "text": "some things like it's got these these"
+  },
+  {
+   "t": 108.27,
+   "d": 2.13,
+   "text": "like bundles of flowers from a store"
+  },
+  {
+   "t": 110.4,
+   "d": 1.89,
+   "text": "sitting out in the forest and and"
+  },
+  {
+   "t": 112.29,
+   "d": 1.89,
+   "text": "there's like this tree that's been"
+  },
+  {
+   "t": 114.18,
+   "d": 2.25,
+   "text": "shrunk down and so there was things"
+  },
+  {
+   "t": 116.43,
+   "d": 1.71,
+   "text": "about it that I was like I like to add"
+  },
+  {
+   "t": 118.14,
+   "d": 1.17,
+   "text": "an animal I'd like to do some different"
+  },
+  {
+   "t": 119.31,
+   "d": 2.73,
+   "text": "things so that's interesting to me"
+  },
+  {
+   "t": 122.04,
+   "d": 3.0,
+   "text": "and then there's Noah's tiny dungeons"
+  },
+  {
+   "t": 125.04,
+   "d": 3.39,
+   "text": "which I was gonna say I think he's at"
+  },
+  {
+   "t": 128.43,
+   "d": 1.14,
+   "text": "this conference and then I was writing"
+  },
+  {
+   "t": 129.57,
+   "d": 1.14,
+   "text": "the slides like oh he's the organizer"
+  },
+  {
+   "t": 130.71,
+   "d": 2.97,
+   "text": "right well worth mentioning this is the"
+  },
+  {
+   "t": 133.68,
+   "d": 0.18,
+   "text": "mo"
+  },
+  {
+   "t": 133.86,
+   "d": 1.8,
+   "text": "most roguelike of all of the emoji bots"
+  },
+  {
+   "t": 135.66,
+   "d": 3.15,
+   "text": "on Twitter and if you click from here to"
+  },
+  {
+   "t": 138.81,
+   "d": 1.98,
+   "text": "its bio to its website you can play"
+  },
+  {
+   "t": 140.79,
+   "d": 3.21,
+   "text": "these in JavaScript what you cannot do"
+  },
+  {
+   "t": 144.0,
+   "d": 2.76,
+   "text": "is play them on Twitter which is kind of"
+  },
+  {
+   "t": 146.76,
+   "d": 1.77,
+   "text": "what I'm moving towards the end of this"
+  },
+  {
+   "t": 148.53,
+   "d": 3.12,
+   "text": "talk let's see so then I started making"
+  },
+  {
+   "t": 151.65,
+   "d": 1.92,
+   "text": "some and the first ones that I've made"
+  },
+  {
+   "t": 153.57,
+   "d": 2.16,
+   "text": "so far are emoji aquarium and emoji"
+  },
+  {
+   "t": 155.73,
+   "d": 3.27,
+   "text": "meadow emoji aquarium looks like this it"
+  },
+  {
+   "t": 159.0,
+   "d": 1.53,
+   "text": "was basically I was looking at tiny star"
+  },
+  {
+   "t": 160.53,
+   "d": 2.97,
+   "text": "field and I was thinking what else in"
+  },
+  {
+   "t": 163.5,
+   "d": 3.27,
+   "text": "the emoji set would look proper when"
+  },
+  {
+   "t": 166.77,
+   "d": 1.8,
+   "text": "arranged like this where things are"
+  },
+  {
+   "t": 168.57,
+   "d": 1.38,
+   "text": "above each other but you're looking at"
+  },
+  {
+   "t": 169.95,
+   "d": 2.31,
+   "text": "them from the side it doesn't totally"
+  },
+  {
+   "t": 172.26,
+   "d": 2.25,
+   "text": "match anything roguelikes do look like"
+  },
+  {
+   "t": 174.51,
+   "d": 2.43,
+   "text": "that but they don't look like a top-down"
+  },
+  {
+   "t": 176.94,
+   "d": 2.88,
+   "text": "or a 3/4 angle or a front angle of"
+  },
+  {
+   "t": 179.82,
+   "d": 1.92,
+   "text": "reality they look like a you know a"
+  },
+  {
+   "t": 181.74,
+   "d": 2.7,
+   "text": "weird hodgepodge of looking at things"
+  },
+  {
+   "t": 184.44,
+   "d": 1.53,
+   "text": "from the side and looking at things from"
+  },
+  {
+   "t": 185.97,
+   "d": 3.15,
+   "text": "the top but an aquarium is it something"
+  },
+  {
+   "t": 189.12,
+   "d": 1.26,
+   "text": "you look at from the side and fish"
+  },
+  {
+   "t": 190.38,
+   "d": 1.83,
+   "text": "actually hover above each other so this"
+  },
+  {
+   "t": 192.21,
+   "d": 3.15,
+   "text": "is a grid but I added whitespace to"
+  },
+  {
+   "t": 195.36,
+   "d": 1.55,
+   "text": "destroy the appearance of the grid"
+  },
+  {
+   "t": 196.91,
+   "d": 3.61,
+   "text": "because I want the fish to look more"
+  },
+  {
+   "t": 200.52,
+   "d": 2.73,
+   "text": "organic and I have a design for an"
+  },
+  {
+   "t": 203.25,
+   "d": 1.65,
+   "text": "algorithm I haven't implemented yet to"
+  },
+  {
+   "t": 204.9,
+   "d": 3.03,
+   "text": "make them clump into schools and have"
+  },
+  {
+   "t": 207.93,
+   "d": 2.61,
+   "text": "just you know a percentage chance that"
+  },
+  {
+   "t": 210.54,
+   "d": 1.76,
+   "text": "they're gonna be closer to other fish"
+  },
+  {
+   "t": 212.3,
+   "d": 3.1,
+   "text": "probably of their own kind and then"
+  },
+  {
+   "t": 215.4,
+   "d": 3.6,
+   "text": "there's there's various more rare"
+  },
+  {
+   "t": 219.0,
+   "d": 2.49,
+   "text": "elements like a crab or something at the"
+  },
+  {
+   "t": 221.49,
+   "d": 1.98,
+   "text": "bottom or something else swimming like a"
+  },
+  {
+   "t": 223.47,
+   "d": 4.05,
+   "text": "squid to give a little prize like it's"
+  },
+  {
+   "t": 227.52,
+   "d": 1.56,
+   "text": "every three hours there's some fish and"
+  },
+  {
+   "t": 229.08,
+   "d": 1.68,
+   "text": "some plants but then there's something"
+  },
+  {
+   "t": 230.76,
+   "d": 1.95,
+   "text": "surprising that people are always saying"
+  },
+  {
+   "t": 232.71,
+   "d": 2.25,
+   "text": "I want more squid and I'm like I know"
+  },
+  {
+   "t": 234.96,
+   "d": 3.12,
+   "text": "you too that's the point you're not"
+  },
+  {
+   "t": 238.08,
+   "d": 1.62,
+   "text": "gonna get more squid you're gonna wait"
+  },
+  {
+   "t": 239.7,
+   "d": 4.26,
+   "text": "for the squid so there's three fish"
+  },
+  {
+   "t": 243.96,
+   "d": 3.9,
+   "text": "types in the emoji set there's the rare"
+  },
+  {
+   "t": 247.86,
+   "d": 1.89,
+   "text": "swimmers that I liked because I thought"
+  },
+  {
+   "t": 249.75,
+   "d": 2.7,
+   "text": "their size matched the squid the dolphin"
+  },
+  {
+   "t": 252.45,
+   "d": 3.15,
+   "text": "the the octopus and the shark there's"
+  },
+  {
+   "t": 255.6,
+   "d": 1.8,
+   "text": "their small sharks and people are saying"
+  },
+  {
+   "t": 257.4,
+   "d": 2.25,
+   "text": "always saying can you add the whale can"
+  },
+  {
+   "t": 259.65,
+   "d": 1.59,
+   "text": "you and I'm like whales are big it"
+  },
+  {
+   "t": 261.24,
+   "d": 1.76,
+   "text": "doesn't make any sense"
+  },
+  {
+   "t": 263.0,
+   "d": 2.44,
+   "text": "and we have arguments on Twitter about"
+  },
+  {
+   "t": 265.44,
+   "d": 1.64,
+   "text": "this which is great because it's better"
+  },
+  {
+   "t": 267.08,
+   "d": 3.51,
+   "text": "arguing about politics and then there's"
+  },
+  {
+   "t": 270.59,
+   "d": 1.65,
+   "text": "the rare bottom-dwellers a snail the"
+  },
+  {
+   "t": 272.24,
+   "d": 2.4,
+   "text": "castle and stuff every I don't know how"
+  },
+  {
+   "t": 274.64,
+   "d": 1.38,
+   "text": "many there's there's you can look"
+  },
+  {
+   "t": 276.02,
+   "d": 2.07,
+   "text": "through the code to see the odds and"
+  },
+  {
+   "t": 278.09,
+   "d": 1.92,
+   "text": "then there's the super rare stuff like"
+  },
+  {
+   "t": 280.01,
+   "d": 1.8,
+   "text": "the die and the game control or the junk"
+  },
+  {
+   "t": 281.81,
+   "d": 4.02,
+   "text": "that's people are like what and those"
+  },
+  {
+   "t": 285.83,
+   "d": 1.95,
+   "text": "come up every few days there's one of"
+  },
+  {
+   "t": 287.78,
+   "d": 1.98,
+   "text": "those and then there's just various"
+  },
+  {
+   "t": 289.76,
+   "d": 2.25,
+   "text": "different kinds of spaces what I learned"
+  },
+  {
+   "t": 292.01,
+   "d": 1.77,
+   "text": "when I was trying to make all this was"
+  },
+  {
+   "t": 293.78,
+   "d": 2.67,
+   "text": "that emojis are Manos based which is"
+  },
+  {
+   "t": 296.45,
+   "d": 2.4,
+   "text": "great because you can use them no matter"
+  },
+  {
+   "t": 298.85,
+   "d": 1.95,
+   "text": "what platform they appear on they are"
+  },
+  {
+   "t": 300.8,
+   "d": 1.59,
+   "text": "all the same width if you don't add any"
+  },
+  {
+   "t": 302.39,
+   "d": 2.22,
+   "text": "space and you can make a grid if you"
+  },
+  {
+   "t": 304.61,
+   "d": 3.09,
+   "text": "want to unfortunately there is no such"
+  },
+  {
+   "t": 307.7,
+   "d": 2.46,
+   "text": "thing as a space character that is the"
+  },
+  {
+   "t": 310.16,
+   "d": 2.61,
+   "text": "same width as an emoji"
+  },
+  {
+   "t": 312.77,
+   "d": 3.15,
+   "text": "there's the ideograph expect to a lot of"
+  },
+  {
+   "t": 315.92,
+   "d": 1.35,
+   "text": "people on Twitter who had a lot of"
+  },
+  {
+   "t": 317.27,
+   "d": 2.55,
+   "text": "advice and the ADA graphic space is"
+  },
+  {
+   "t": 319.82,
+   "d": 1.68,
+   "text": "depending on the platform slightly wider"
+  },
+  {
+   "t": 321.5,
+   "d": 3.15,
+   "text": "or slightly narrower maybe the same and"
+  },
+  {
+   "t": 324.65,
+   "d": 1.52,
+   "text": "then there's a few other spaces in"
+  },
+  {
+   "t": 326.17,
+   "d": 2.02,
+   "text": "different from different languages and"
+  },
+  {
+   "t": 328.19,
+   "d": 2.25,
+   "text": "different reasons why characters exist"
+  },
+  {
+   "t": 330.44,
+   "d": 1.74,
+   "text": "none of them are quite the right width"
+  },
+  {
+   "t": 332.18,
+   "d": 2.22,
+   "text": "so you cannot use white space if you"
+  },
+  {
+   "t": 334.4,
+   "d": 2.04,
+   "text": "want a grid of emoji that's perfectly"
+  },
+  {
+   "t": 336.44,
+   "d": 2.49,
+   "text": "aligned and then there's these other"
+  },
+  {
+   "t": 338.93,
+   "d": 3.48,
+   "text": "kinds of spaces which are just to make"
+  },
+  {
+   "t": 342.41,
+   "d": 1.86,
+   "text": "jitter between the fish so that they do"
+  },
+  {
+   "t": 344.27,
+   "d": 3.21,
+   "text": "not line up and then this is emoji"
+  },
+  {
+   "t": 347.48,
+   "d": 2.07,
+   "text": "meadow where I was like well I like tiny"
+  },
+  {
+   "t": 349.55,
+   "d": 1.68,
+   "text": "gardens I want to copy it but I want to"
+  },
+  {
+   "t": 351.23,
+   "d": 3.47,
+   "text": "make it my way and limit what kinds of"
+  },
+  {
+   "t": 354.7,
+   "d": 3.01,
+   "text": "plants show up but also put some animals"
+  },
+  {
+   "t": 357.71,
+   "d": 1.86,
+   "text": "and start making it look like this is a"
+  },
+  {
+   "t": 359.57,
+   "d": 2.42,
+   "text": "place where something's happening and"
+  },
+  {
+   "t": 361.99,
+   "d": 2.65,
+   "text": "people actually really like when there's"
+  },
+  {
+   "t": 364.64,
+   "d": 1.89,
+   "text": "a green animal a turtle or a snake"
+  },
+  {
+   "t": 366.53,
+   "d": 1.71,
+   "text": "because they can't find it so it's like"
+  },
+  {
+   "t": 368.24,
+   "d": 3.09,
+   "text": "ooh let me take a minute let me see if I"
+  },
+  {
+   "t": 371.33,
+   "d": 2.93,
+   "text": "can solve this tweet"
+  },
+  {
+   "t": 374.63,
+   "d": 2.46,
+   "text": "and then here's the bunny in the corner"
+  },
+  {
+   "t": 377.09,
+   "d": 3.45,
+   "text": "also hard to see which is good then I"
+  },
+  {
+   "t": 380.54,
+   "d": 1.65,
+   "text": "was looking at these and I was like you"
+  },
+  {
+   "t": 382.19,
+   "d": 2.94,
+   "text": "know what's what I wish if I could play"
+  },
+  {
+   "t": 385.13,
+   "d": 2.61,
+   "text": "this as a game or something make it"
+  },
+  {
+   "t": 387.74,
+   "d": 0.57,
+   "text": "game-like"
+  },
+  {
+   "t": 388.31,
+   "d": 2.85,
+   "text": "I wish that there were a path through"
+  },
+  {
+   "t": 391.16,
+   "d": 2.76,
+   "text": "the flowers that was made of grass that"
+  },
+  {
+   "t": 393.92,
+   "d": 3.06,
+   "text": "was easier to traverse than the flowers"
+  },
+  {
+   "t": 396.98,
+   "d": 2.43,
+   "text": "so I was like okay and we write an"
+  },
+  {
+   "t": 399.41,
+   "d": 2.37,
+   "text": "algorithm for that and some of the time"
+  },
+  {
+   "t": 401.78,
+   "d": 2.37,
+   "text": "there will be an animal that will always"
+  },
+  {
+   "t": 404.15,
+   "d": 2.04,
+   "text": "start on the right because all the moji"
+  },
+  {
+   "t": 406.19,
+   "d": 1.14,
+   "text": "animals face left"
+  },
+  {
+   "t": 407.33,
+   "d": 2.91,
+   "text": "and although I'm thinking of making him"
+  },
+  {
+   "t": 410.24,
+   "d": 1.56,
+   "text": "start at the top and bottom - that seems"
+  },
+  {
+   "t": 411.8,
+   "d": 1.14,
+   "text": "ok"
+  },
+  {
+   "t": 412.94,
+   "d": 2.01,
+   "text": "and then each animal should have a treat"
+  },
+  {
+   "t": 414.95,
+   "d": 3.6,
+   "text": "which is not an animal so you know which"
+  },
+  {
+   "t": 418.55,
+   "d": 2.06,
+   "text": "one is the target and which one is the"
+  },
+  {
+   "t": 420.61,
+   "d": 3.49,
+   "text": "predator and they should have a path"
+  },
+  {
+   "t": 424.1,
+   "d": 1.89,
+   "text": "through the forest or through the"
+  },
+  {
+   "t": 425.99,
+   "d": 3.27,
+   "text": "flowers and many people many many people"
+  },
+  {
+   "t": 429.26,
+   "d": 1.95,
+   "text": "say I thought this was amazed but"
+  },
+  {
+   "t": 431.21,
+   "d": 1.38,
+   "text": "actually the bunny can just jump over"
+  },
+  {
+   "t": 432.59,
+   "d": 1.53,
+   "text": "the flowers haha I gotcha"
+  },
+  {
+   "t": 434.12,
+   "d": 2.85,
+   "text": "and yes they could jump over the flowers"
+  },
+  {
+   "t": 436.97,
+   "d": 2.4,
+   "text": "pretend that they're big flowers what I"
+  },
+  {
+   "t": 439.37,
+   "d": 4.44,
+   "text": "didn't like was this spot here that's"
+  },
+  {
+   "t": 443.81,
+   "d": 2.1,
+   "text": "the spot that kept happening that I was"
+  },
+  {
+   "t": 445.91,
+   "d": 3.03,
+   "text": "like I wish I hadn't coded it that way I"
+  },
+  {
+   "t": 448.94,
+   "d": 2.73,
+   "text": "wish that the path didn't touch a corner"
+  },
+  {
+   "t": 451.67,
+   "d": 2.1,
+   "text": "of another part of the path later on and"
+  },
+  {
+   "t": 453.77,
+   "d": 2.97,
+   "text": "that was a bigger problem to solve the"
+  },
+  {
+   "t": 456.74,
+   "d": 2.07,
+   "text": "way I wrote the algorithm the candidates"
+  },
+  {
+   "t": 458.81,
+   "d": 3.23,
+   "text": "for what is the next step in the path"
+  },
+  {
+   "t": 462.04,
+   "d": 2.11,
+   "text": "and then eventually I did figure out how"
+  },
+  {
+   "t": 464.15,
+   "d": 2.55,
+   "text": "to solve that and then it doesn't happen"
+  },
+  {
+   "t": 466.7,
+   "d": 1.62,
+   "text": "anymore and to me that was a huge relief"
+  },
+  {
+   "t": 468.32,
+   "d": 2.55,
+   "text": "I don't think anyone else cared but I"
+  },
+  {
+   "t": 470.87,
+   "d": 1.44,
+   "text": "was like ok I want to look at those"
+  },
+  {
+   "t": 472.31,
+   "d": 3.0,
+   "text": "little corners anymore thank God so now"
+  },
+  {
+   "t": 475.31,
+   "d": 4.35,
+   "text": "it's just you know lovely fully I like"
+  },
+  {
+   "t": 479.66,
+   "d": 2.1,
+   "text": "really realized paths where you there's"
+  },
+  {
+   "t": 481.76,
+   "d": 2.55,
+   "text": "no question that they can't cut through"
+  },
+  {
+   "t": 484.31,
+   "d": 2.1,
+   "text": "a corner I thought about making it"
+  },
+  {
+   "t": 486.41,
+   "d": 1.8,
+   "text": "branch but there's not much room"
+  },
+  {
+   "t": 488.21,
+   "d": 5.52,
+   "text": "although there's 280 now so maybe and it"
+  },
+  {
+   "t": 493.73,
+   "d": 1.38,
+   "text": "actually generates a whole bunch of"
+  },
+  {
+   "t": 495.11,
+   "d": 2.28,
+   "text": "paths and discards most of them until it"
+  },
+  {
+   "t": 497.39,
+   "d": 3.57,
+   "text": "finds one that's long enough to to look"
+  },
+  {
+   "t": 500.96,
+   "d": 2.01,
+   "text": "good to look like it's filling it a lot"
+  },
+  {
+   "t": 502.97,
+   "d": 2.34,
+   "text": "of the space which was just the fastest"
+  },
+  {
+   "t": 505.31,
+   "d": 1.89,
+   "text": "way to make it do what I wanted which is"
+  },
+  {
+   "t": 507.2,
+   "d": 0.36,
+   "text": "to"
+  },
+  {
+   "t": 507.56,
+   "d": 3.21,
+   "text": "make a big windy path it's still not a"
+  },
+  {
+   "t": 510.77,
+   "d": 2.55,
+   "text": "playable game but it does make people"
+  },
+  {
+   "t": 513.32,
+   "d": 3.24,
+   "text": "stop and think about this situation from"
+  },
+  {
+   "t": 516.56,
+   "d": 1.17,
+   "text": "the point of view of the animal as a"
+  },
+  {
+   "t": 517.73,
+   "d": 4.02,
+   "text": "game as a very simple game and then one"
+  },
+  {
+   "t": 521.75,
+   "d": 1.23,
+   "text": "of the things that I like about emoji"
+  },
+  {
+   "t": 522.98,
+   "d": 1.92,
+   "text": "and what I want to get you thinking"
+  },
+  {
+   "t": 524.9,
+   "d": 2.52,
+   "text": "about is that how many people here are"
+  },
+  {
+   "t": 527.42,
+   "d": 3.54,
+   "text": "coders yeah right I won't ask who's not"
+  },
+  {
+   "t": 530.96,
+   "d": 1.68,
+   "text": "a coder I don't worry about it"
+  },
+  {
+   "t": 532.64,
+   "d": 2.67,
+   "text": "but the you're probably thinking about"
+  },
+  {
+   "t": 535.31,
+   "d": 1.68,
+   "text": "making games that are like roguelikes in"
+  },
+  {
+   "t": 536.99,
+   "d": 2.61,
+   "text": "some way oh right like rogue in some way"
+  },
+  {
+   "t": 539.6,
+   "d": 4.98,
+   "text": "and what's cool about social media if it"
+  },
+  {
+   "t": 544.58,
+   "d": 2.19,
+   "text": "doesn't eat itself and get destroyed by"
+  },
+  {
+   "t": 546.77,
+   "d": 4.35,
+   "text": "management is the that you get a"
+  },
+  {
+   "t": 551.12,
+   "d": 1.14,
+   "text": "different audience you get people who"
+  },
+  {
+   "t": 552.26,
+   "d": 1.59,
+   "text": "don't have the patience to go download"
+  },
+  {
+   "t": 553.85,
+   "d": 2.34,
+   "text": "something and trust it and run it and"
+  },
+  {
+   "t": 556.19,
+   "d": 1.92,
+   "text": "yeah you can write something in"
+  },
+  {
+   "t": 558.11,
+   "d": 1.62,
+   "text": "JavaScript on your web page we have to"
+  },
+  {
+   "t": 559.73,
+   "d": 1.44,
+   "text": "get them to your web page so you get"
+  },
+  {
+   "t": 561.17,
+   "d": 1.35,
+   "text": "different audiences in different places"
+  },
+  {
+   "t": 562.52,
+   "d": 2.31,
+   "text": "and if you're on Twitter something just"
+  },
+  {
+   "t": 564.83,
+   "d": 1.89,
+   "text": "gets retweeted into your timeline you"
+  },
+  {
+   "t": 566.72,
+   "d": 1.44,
+   "text": "find out about it and you go look at it"
+  },
+  {
+   "t": 568.16,
+   "d": 2.63,
+   "text": "and there you you can interact with it"
+  },
+  {
+   "t": 570.79,
+   "d": 3.88,
+   "text": "experience it in whatever way and emoji"
+  },
+  {
+   "t": 574.67,
+   "d": 3.27,
+   "text": "are kind of like HTML mostly used to be"
+  },
+  {
+   "t": 577.94,
+   "d": 3.57,
+   "text": "in that it's platform dependent its"
+  },
+  {
+   "t": 581.51,
+   "d": 1.95,
+   "text": "appearance will change depending on what"
+  },
+  {
+   "t": 583.46,
+   "d": 1.62,
+   "text": "phone you're using what computer using"
+  },
+  {
+   "t": 585.08,
+   "d": 3.63,
+   "text": "and I kind of like that and I like that"
+  },
+  {
+   "t": 588.71,
+   "d": 3.81,
+   "text": "like I like dark mode because I get"
+  },
+  {
+   "t": 592.52,
+   "d": 2.4,
+   "text": "migraines with too much light but the"
+  },
+  {
+   "t": 594.92,
+   "d": 3.93,
+   "text": "default on Twitter is not and it looks"
+  },
+  {
+   "t": 598.85,
+   "d": 1.35,
+   "text": "however you want it to look"
+  },
+  {
+   "t": 600.2,
+   "d": 1.71,
+   "text": "depends what platform you choose to use"
+  },
+  {
+   "t": 601.91,
+   "d": 1.65,
+   "text": "and whether you use night mode or not"
+  },
+  {
+   "t": 603.56,
+   "d": 3.27,
+   "text": "and how you zoom and it's text there's"
+  },
+  {
+   "t": 606.83,
+   "d": 3.36,
+   "text": "no image here really so from the point"
+  },
+  {
+   "t": 610.19,
+   "d": 2.19,
+   "text": "of view of the computer systems so you"
+  },
+  {
+   "t": 612.38,
+   "d": 1.64,
+   "text": "could add more stuff you can add polls"
+  },
+  {
+   "t": 614.02,
+   "d": 2.11,
+   "text": "under the underneath this which Twitter"
+  },
+  {
+   "t": 616.13,
+   "d": 1.5,
+   "text": "doesn't currently let you do a poll in"
+  },
+  {
+   "t": 617.63,
+   "d": 2.04,
+   "text": "an image I don't know why but you can't"
+  },
+  {
+   "t": 619.67,
+   "d": 1.92,
+   "text": "yet so you could add a poll under this"
+  },
+  {
+   "t": 621.59,
+   "d": 1.68,
+   "text": "which is something that I'm getting to"
+  },
+  {
+   "t": 623.27,
+   "d": 4.44,
+   "text": "and just a bit of a scrap of code from"
+  },
+  {
+   "t": 627.71,
+   "d": 3.66,
+   "text": "the meadow in similar spirit to the"
+  },
+  {
+   "t": 631.37,
+   "d": 2.1,
+   "text": "fishes there's the the grass types the"
+  },
+  {
+   "t": 633.47,
+   "d": 1.74,
+   "text": "flower types and the animals and then"
+  },
+  {
+   "t": 635.21,
+   "d": 2.43,
+   "text": "there's the chance of the animal to"
+  },
+  {
+   "t": 637.64,
+   "d": 3.45,
+   "text": "treat mapping in which case the"
+  },
+  {
+   "t": 641.09,
+   "d": 1.47,
+   "text": "these are the lists of animals that have"
+  },
+  {
+   "t": 642.56,
+   "d": 2.52,
+   "text": "distinctive non animal treats to go eat"
+  },
+  {
+   "t": 645.08,
+   "d": 1.5,
+   "text": "the bacon is an animal but it's not a"
+  },
+  {
+   "t": 646.58,
+   "d": 4.44,
+   "text": "living thing and so how do you make a"
+  },
+  {
+   "t": 651.02,
+   "d": 1.95,
+   "text": "Twitter bot if I have what did your"
+  },
+  {
+   "t": 652.97,
+   "d": 2.1,
+   "text": "appetite to consider this it's not that"
+  },
+  {
+   "t": 655.07,
+   "d": 1.29,
+   "text": "hard there's a lot of different ways to"
+  },
+  {
+   "t": 656.36,
+   "d": 1.77,
+   "text": "do it depends on your background what"
+  },
+  {
+   "t": 658.13,
+   "d": 2.1,
+   "text": "languages you're comfortable with it's"
+  },
+  {
+   "t": 660.23,
+   "d": 2.22,
+   "text": "mostly just learning an API someone"
+  },
+  {
+   "t": 662.45,
+   "d": 1.89,
+   "text": "else's library that touches the Twitter"
+  },
+  {
+   "t": 664.34,
+   "d": 3.15,
+   "text": "API and this simplest place to start is"
+  },
+  {
+   "t": 667.49,
+   "d": 3.21,
+   "text": "bot wiki org which is a nice collection"
+  },
+  {
+   "t": 670.7,
+   "d": 3.93,
+   "text": "of BOTS as well as a bunch of tutorials"
+  },
+  {
+   "t": 674.63,
+   "d": 2.73,
+   "text": "and links to resources and is a slack"
+  },
+  {
+   "t": 677.36,
+   "d": 1.8,
+   "text": "channel the the bomb-maker slash at"
+  },
+  {
+   "t": 679.16,
+   "d": 3.44,
+   "text": "slack channel which is very friendly and"
+  },
+  {
+   "t": 682.6,
+   "d": 3.13,
+   "text": "the simplest starting point for most"
+  },
+  {
+   "t": 685.73,
+   "d": 2.4,
+   "text": "people is basically zero coding it's"
+  },
+  {
+   "t": 688.13,
+   "d": 4.26,
+   "text": "chief Botts done quick comm which is an"
+  },
+  {
+   "t": 692.39,
+   "d": 2.58,
+   "text": "implementation will uses the"
+  },
+  {
+   "t": 694.97,
+   "d": 2.28,
+   "text": "implementation of Kate Compton's tracery"
+  },
+  {
+   "t": 697.25,
+   "d": 3.08,
+   "text": "language which is a storytelling"
+  },
+  {
+   "t": 700.33,
+   "d": 2.08,
+   "text": "procedurally generated storytelling"
+  },
+  {
+   "t": 702.41,
+   "d": 2.85,
+   "text": "system where you feed it a bunch of"
+  },
+  {
+   "t": 705.26,
+   "d": 3.21,
+   "text": "possibilities for phrases or four"
+  },
+  {
+   "t": 708.47,
+   "d": 2.25,
+   "text": "characters or four sets of characters"
+  },
+  {
+   "t": 710.72,
+   "d": 1.8,
+   "text": "and then there's symbols within there"
+  },
+  {
+   "t": 712.52,
+   "d": 1.77,
+   "text": "and I won't get into the whole thing but"
+  },
+  {
+   "t": 714.29,
+   "d": 3.36,
+   "text": "it's it makes a you can make it have a"
+  },
+  {
+   "t": 717.65,
+   "d": 2.19,
+   "text": "very wide variety of randomization based"
+  },
+  {
+   "t": 719.84,
+   "d": 2.7,
+   "text": "on your criteria and a lot of Twitter"
+  },
+  {
+   "t": 722.54,
+   "d": 1.62,
+   "text": "bots are made with G pods done quick"
+  },
+  {
+   "t": 724.16,
+   "d": 1.83,
+   "text": "it's free and it can handle replies you"
+  },
+  {
+   "t": 725.99,
+   "d": 2.75,
+   "text": "can have interactivity with people and"
+  },
+  {
+   "t": 728.74,
+   "d": 2.53,
+   "text": "then there's glitch comm which everybody"
+  },
+  {
+   "t": 731.27,
+   "d": 1.38,
+   "text": "in the bot makers slack is always"
+  },
+  {
+   "t": 732.65,
+   "d": 1.26,
+   "text": "talking about but I haven't tried yet"
+  },
+  {
+   "t": 733.91,
+   "d": 1.5,
+   "text": "because I like doing things the hard way"
+  },
+  {
+   "t": 735.41,
+   "d": 3.24,
+   "text": "because I'm used to it but I'm told that"
+  },
+  {
+   "t": 738.65,
+   "d": 2.73,
+   "text": "glitch comm is the easy way and that it"
+  },
+  {
+   "t": 741.38,
+   "d": 3.51,
+   "text": "is a platform made by bob creek software"
+  },
+  {
+   "t": 744.89,
+   "d": 2.76,
+   "text": "that made Stack Overflow and Trello that"
+  },
+  {
+   "t": 747.65,
+   "d": 2.94,
+   "text": "is designed to make it faster and easier"
+  },
+  {
+   "t": 750.59,
+   "d": 1.89,
+   "text": "to code simple things like BOTS"
+  },
+  {
+   "t": 752.48,
+   "d": 3.9,
+   "text": "and I have a background in AWS and Java"
+  },
+  {
+   "t": 756.38,
+   "d": 4.44,
+   "text": "so I use AWS in Java but and that's"
+  },
+  {
+   "t": 760.82,
+   "d": 1.08,
+   "text": "because I'm a control freak with"
+  },
+  {
+   "t": 761.9,
+   "d": 4.29,
+   "text": "grandiose ideas but the but glitch comm"
+  },
+  {
+   "t": 766.19,
+   "d": 2.31,
+   "text": "is is worth looking at but of course as"
+  },
+  {
+   "t": 768.5,
+   "d": 2.36,
+   "text": "a programmer most of you are probably"
+  },
+  {
+   "t": 770.86,
+   "d": 2.14,
+   "text": "first thinking of leaning on the thing"
+  },
+  {
+   "t": 773.0,
+   "d": 1.07,
+   "text": "you already know how to do"
+  },
+  {
+   "t": 774.07,
+   "d": 3.45,
+   "text": "that was what I ended up doing so I use"
+  },
+  {
+   "t": 777.52,
+   "d": 2.94,
+   "text": "AWS lambda which is pretty great it's"
+  },
+  {
+   "t": 780.46,
+   "d": 3.02,
+   "text": "free um Amazon Web Services has a lot of"
+  },
+  {
+   "t": 783.48,
+   "d": 2.38,
+   "text": "so-called free services that are not"
+  },
+  {
+   "t": 785.86,
+   "d": 2.34,
+   "text": "free after the first year and you forget"
+  },
+  {
+   "t": 788.2,
+   "d": 2.43,
+   "text": "and then you get a bill and it's very"
+  },
+  {
+   "t": 790.63,
+   "d": 2.37,
+   "text": "disappointing so I made a list of which"
+  },
+  {
+   "t": 793.0,
+   "d": 2.97,
+   "text": "ones are free with no time limit and all"
+  },
+  {
+   "t": 795.97,
+   "d": 3.06,
+   "text": "of the ones that that I need dynamodb"
+  },
+  {
+   "t": 799.03,
+   "d": 4.68,
+   "text": "for storage of state and lambda for"
+  },
+  {
+   "t": 803.71,
+   "d": 4.38,
+   "text": "running programs and then cloud they"
+  },
+  {
+   "t": 808.09,
+   "d": 2.54,
+   "text": "want the monitoring one I forgot for"
+  },
+  {
+   "t": 810.63,
+   "d": 3.37,
+   "text": "that does the scheduling for the every"
+  },
+  {
+   "t": 814.0,
+   "d": 2.94,
+   "text": "three hours or whatever and if you keep"
+  },
+  {
+   "t": 816.94,
+   "d": 1.2,
+   "text": "everything within their reasonable"
+  },
+  {
+   "t": 818.14,
+   "d": 2.04,
+   "text": "limits it's free and it handles Java or"
+  },
+  {
+   "t": 820.18,
+   "d": 0.6,
+   "text": "nodejs"
+  },
+  {
+   "t": 820.78,
+   "d": 3.6,
+   "text": "or Python or C sharp and let's see"
+  },
+  {
+   "t": 824.38,
+   "d": 2.93,
+   "text": "what's next so I live stream on Twitch"
+  },
+  {
+   "t": 827.31,
+   "d": 2.74,
+   "text": "coding sessions I livestream a variety"
+  },
+  {
+   "t": 830.05,
+   "d": 3.0,
+   "text": "of different things but I have a lot of"
+  },
+  {
+   "t": 833.05,
+   "d": 3.09,
+   "text": "BOTS still in the works that I tend to"
+  },
+  {
+   "t": 836.14,
+   "d": 1.41,
+   "text": "just turn on my stream when I'm going to"
+  },
+  {
+   "t": 837.55,
+   "d": 3.21,
+   "text": "code them and they I should be looking"
+  },
+  {
+   "t": 840.76,
+   "d": 3.87,
+   "text": "down the so because I have this grid"
+  },
+  {
+   "t": 844.63,
+   "d": 1.23,
+   "text": "system and I've solved a lot of the"
+  },
+  {
+   "t": 845.86,
+   "d": 1.59,
+   "text": "problems that I wanted to solve with"
+  },
+  {
+   "t": 847.45,
+   "d": 2.4,
+   "text": "these static BOTS that just have output"
+  },
+  {
+   "t": 849.85,
+   "d": 2.07,
+   "text": "I wanted to have interactivity because"
+  },
+  {
+   "t": 851.92,
+   "d": 3.75,
+   "text": "to me social media is a game and I I go"
+  },
+  {
+   "t": 855.67,
+   "d": 2.55,
+   "text": "there for the game-like experience but"
+  },
+  {
+   "t": 858.22,
+   "d": 1.62,
+   "text": "with the social aspect of knowing that"
+  },
+  {
+   "t": 859.84,
+   "d": 3.42,
+   "text": "there's real people and with Twitter"
+  },
+  {
+   "t": 863.26,
+   "d": 2.79,
+   "text": "polls there's a lot you can do to make"
+  },
+  {
+   "t": 866.05,
+   "d": 3.69,
+   "text": "things interactive how am I on time it's"
+  },
+  {
+   "t": 869.74,
+   "d": 2.99,
+   "text": "it's now time for me to start my talk so"
+  },
+  {
+   "t": 872.73,
+   "d": 4.54,
+   "text": "but I'm almost done so I have an almost"
+  },
+  {
+   "t": 877.27,
+   "d": 1.26,
+   "text": "I have about half finished"
+  },
+  {
+   "t": 878.53,
+   "d": 1.59,
+   "text": "implementation of Tetris that'll be"
+  },
+  {
+   "t": 880.12,
+   "d": 4.8,
+   "text": "playable by the community and with emoji"
+  },
+  {
+   "t": 884.92,
+   "d": 2.16,
+   "text": "and the emoji set that will be used will"
+  },
+  {
+   "t": 887.08,
+   "d": 3.27,
+   "text": "change periodically because there's no"
+  },
+  {
+   "t": 890.35,
+   "d": 1.92,
+   "text": "absolute squares and emoji but there are"
+  },
+  {
+   "t": 892.27,
+   "d": 1.2,
+   "text": "different symbols that look close enough"
+  },
+  {
+   "t": 893.47,
+   "d": 3.09,
+   "text": "to squares minesweeper battleship RPGs"
+  },
+  {
+   "t": 896.56,
+   "d": 2.46,
+   "text": "that are like rogue or Ultima a fellow"
+  },
+  {
+   "t": 899.02,
+   "d": 2.04,
+   "text": "and Connect four are all totally"
+  },
+  {
+   "t": 901.06,
+   "d": 2.22,
+   "text": "reasonable things to do in on Twitter"
+  },
+  {
+   "t": 903.28,
+   "d": 1.62,
+   "text": "and some of them are even easier now"
+  },
+  {
+   "t": 904.9,
+   "d": 2.3,
+   "text": "because of 280"
+  },
+  {
+   "t": 907.2,
+   "d": 3.24,
+   "text": "let's see ya questions do you have time"
+  },
+  {
+   "t": 910.44,
+   "d": 6.42,
+   "text": "for question ish yeah we have time for a"
+  },
+  {
+   "t": 916.86,
+   "d": 1.47,
+   "text": "few questions while I switch over the"
+  },
+  {
+   "t": 918.33,
+   "d": 1.94,
+   "text": "slides yes"
+  },
+  {
+   "t": 920.27,
+   "d": 5.7,
+   "text": "thank you Joe thank you"
+  },
+  {
+   "t": 926.09,
+   "d": 2.2,
+   "text": "Britta is gonna bring around the mic"
+  },
+  {
+   "t": 928.29,
+   "d": 1.98,
+   "text": "drew can you put on the title screen"
+  },
+  {
+   "t": 930.27,
+   "d": 6.41,
+   "text": "second switch the slides any questions"
+  },
+  {
+   "t": 936.92,
+   "d": 2.19,
+   "text": "hi"
+  },
+  {
+   "t": 939.11,
+   "d": 2.29,
+   "text": "when you talk about implementation for"
+  },
+  {
+   "t": 941.4,
+   "d": 1.77,
+   "text": "actual interests you raise your hand"
+  },
+  {
+   "t": 943.17,
+   "d": 2.43,
+   "text": "hi I'm over here okay it's all ready to"
+  },
+  {
+   "t": 945.6,
+   "d": 2.04,
+   "text": "close when you talk about implementation"
+  },
+  {
+   "t": 947.64,
+   "d": 2.4,
+   "text": "for actual like games yeah you talked"
+  },
+  {
+   "t": 950.04,
+   "d": 2.28,
+   "text": "about polls could you elaborate on like"
+  },
+  {
+   "t": 952.32,
+   "d": 2.19,
+   "text": "the mechanics and also like maybe the"
+  },
+  {
+   "t": 954.51,
+   "d": 2.34,
+   "text": "idea of using polls except versus like a"
+  },
+  {
+   "t": 956.85,
+   "d": 1.35,
+   "text": "direct message system"
+  },
+  {
+   "t": 958.2,
+   "d": 3.24,
+   "text": "sure yes so there's I started out"
+  },
+  {
+   "t": 961.44,
+   "d": 2.31,
+   "text": "thinking of minesweeper and thinking it"
+  },
+  {
+   "t": 963.75,
+   "d": 1.68,
+   "text": "would just be the first thinking it was"
+  },
+  {
+   "t": 965.43,
+   "d": 1.95,
+   "text": "gonna be like threads where one person"
+  },
+  {
+   "t": 967.38,
+   "d": 1.17,
+   "text": "will make a choice and it will branch"
+  },
+  {
+   "t": 968.55,
+   "d": 1.62,
+   "text": "and they'll just follow their game"
+  },
+  {
+   "t": 970.17,
+   "d": 1.8,
+   "text": "because they'll reply to the tweet with"
+  },
+  {
+   "t": 971.97,
+   "d": 4.86,
+   "text": "a command like dig at a4 or flag at a4"
+  },
+  {
+   "t": 976.83,
+   "d": 4.02,
+   "text": "and then that would become the new the"
+  },
+  {
+   "t": 980.85,
+   "d": 1.5,
+   "text": "branch for them to play and that seemed"
+  },
+  {
+   "t": 982.35,
+   "d": 1.83,
+   "text": "like a nightmare because it's gonna"
+  },
+  {
+   "t": 984.18,
+   "d": 1.59,
+   "text": "branch into a whole bunch of different"
+  },
+  {
+   "t": 985.77,
+   "d": 3.06,
+   "text": "states so then I just decided well I'll"
+  },
+  {
+   "t": 988.83,
+   "d": 2.19,
+   "text": "probably just have people reply and then"
+  },
+  {
+   "t": 991.02,
+   "d": 2.55,
+   "text": "whoever for replies first they did the"
+  },
+  {
+   "t": 993.57,
+   "d": 2.34,
+   "text": "thing did they break this did they did"
+  },
+  {
+   "t": 995.91,
+   "d": 1.82,
+   "text": "they lose the game for everyone maybe"
+  },
+  {
+   "t": 997.73,
+   "d": 2.53,
+   "text": "but it's a community effort and they can"
+  },
+  {
+   "t": 1000.26,
+   "d": 1.98,
+   "text": "all bungle it and that'll just be the"
+  },
+  {
+   "t": 1002.24,
+   "d": 2.52,
+   "text": "next tweet so it'll be whoever comes"
+  },
+  {
+   "t": 1004.76,
+   "d": 3.56,
+   "text": "first will do the next move that's"
+  },
+  {
+   "t": 1008.32,
+   "d": 3.31,
+   "text": "that's with replies with direct message"
+  },
+  {
+   "t": 1011.63,
+   "d": 2.55,
+   "text": "I guess you could do a whole chat thing"
+  },
+  {
+   "t": 1014.18,
+   "d": 1.83,
+   "text": "and have each person have their own game"
+  },
+  {
+   "t": 1016.01,
+   "d": 1.89,
+   "text": "going in direct message but to me that"
+  },
+  {
+   "t": 1017.9,
+   "d": 1.32,
+   "text": "defeats the point of Twitter which is"
+  },
+  {
+   "t": 1019.22,
+   "d": 3.06,
+   "text": "public and is a group shared experience"
+  },
+  {
+   "t": 1022.28,
+   "d": 2.31,
+   "text": "but with polls you're limited to four"
+  },
+  {
+   "t": 1024.59,
+   "d": 2.31,
+   "text": "options so you have to find situations"
+  },
+  {
+   "t": 1026.9,
+   "d": 2.31,
+   "text": "where there are only four options or"
+  },
+  {
+   "t": 1029.21,
+   "d": 1.32,
+   "text": "where it's reasonable to limit it to"
+  },
+  {
+   "t": 1030.53,
+   "d": 2.19,
+   "text": "four tetris is one of those you can go"
+  },
+  {
+   "t": 1032.72,
+   "d": 4.74,
+   "text": "left right rotate or down and then"
+  },
+  {
+   "t": 1037.46,
+   "d": 2.22,
+   "text": "there's situations in like a roguelike"
+  },
+  {
+   "t": 1039.68,
+   "d": 0.99,
+   "text": "if you"
+  },
+  {
+   "t": 1040.67,
+   "d": 1.86,
+   "text": "an emoji roguelike and you wanted to go"
+  },
+  {
+   "t": 1042.53,
+   "d": 1.65,
+   "text": "north south east west those are your"
+  },
+  {
+   "t": 1044.18,
+   "d": 0.54,
+   "text": "options"
+  },
+  {
+   "t": 1044.72,
+   "d": 1.38,
+   "text": "you're never gonna do anything but move"
+  },
+  {
+   "t": 1046.1,
+   "d": 3.72,
+   "text": "unless you come across an object or a"
+  },
+  {
+   "t": 1049.82,
+   "d": 2.01,
+   "text": "wall where you can't go in that"
+  },
+  {
+   "t": 1051.83,
+   "d": 1.74,
+   "text": "direction or there's something better to"
+  },
+  {
+   "t": 1053.57,
+   "d": 2.88,
+   "text": "do then move then you'd have to decide"
+  },
+  {
+   "t": 1056.45,
+   "d": 1.35,
+   "text": "what are the four options that are the"
+  },
+  {
+   "t": 1057.8,
+   "d": 2.16,
+   "text": "most interesting right now and make it a"
+  },
+  {
+   "t": 1059.96,
+   "d": 1.17,
+   "text": "choose-your-own-adventure that's"
+  },
+  {
+   "t": 1061.13,
+   "d": 1.83,
+   "text": "basically what it is it's to choose your"
+  },
+  {
+   "t": 1062.96,
+   "d": 1.41,
+   "text": "own adventure with a maximum of four"
+  },
+  {
+   "t": 1064.37,
+   "d": 1.74,
+   "text": "options and you have to programmatically"
+  },
+  {
+   "t": 1066.11,
+   "d": 2.49,
+   "text": "decide what are the best options now but"
+  },
+  {
+   "t": 1068.6,
+   "d": 1.47,
+   "text": "no don't get on a loop make sure they"
+  },
+  {
+   "t": 1070.07,
+   "d": 1.68,
+   "text": "can always get away from you know look"
+  },
+  {
+   "t": 1071.75,
+   "d": 3.12,
+   "text": "at the chests someday get away from the"
+  },
+  {
+   "t": 1074.87,
+   "d": 4.08,
+   "text": "chest don't stay there forever all right"
+  },
+  {
+   "t": 1078.95,
+   "d": 2.25,
+   "text": "Jim and then we're gonna move on because"
+  },
+  {
+   "t": 1081.2,
+   "d": 2.6,
+   "text": "I want to save some time for later"
+  },
+  {
+   "t": 1083.8,
+   "d": 7.27,
+   "text": "that's fine yeah so Twitter as the"
+  },
+  {
+   "t": 1091.07,
+   "d": 1.2,
+   "text": "medium have you thought about how that"
+  },
+  {
+   "t": 1092.27,
+   "d": 2.07,
+   "text": "would affect having two BOTS play"
+  },
+  {
+   "t": 1094.34,
+   "d": 1.56,
+   "text": "against each other like battleship or"
+  },
+  {
+   "t": 1095.9,
+   "d": 1.89,
+   "text": "something and how does Twitter make that"
+  },
+  {
+   "t": 1097.79,
+   "d": 1.47,
+   "text": "interesting or bad or good or what would"
+  },
+  {
+   "t": 1099.26,
+   "d": 2.16,
+   "text": "it be like would it be interesting for"
+  },
+  {
+   "t": 1101.42,
+   "d": 1.56,
+   "text": "BOTS to play against each other I don't"
+  },
+  {
+   "t": 1102.98,
+   "d": 2.18,
+   "text": "know I mean that's a performance it's a"
+  },
+  {
+   "t": 1105.16,
+   "d": 2.29,
+   "text": "that that you could script and it would"
+  },
+  {
+   "t": 1107.45,
+   "d": 1.65,
+   "text": "be this a very similar experience for"
+  },
+  {
+   "t": 1109.1,
+   "d": 2.82,
+   "text": "the for the audience the whole point of"
+  },
+  {
+   "t": 1111.92,
+   "d": 1.56,
+   "text": "it for me is to make people feel"
+  },
+  {
+   "t": 1113.48,
+   "d": 3.78,
+   "text": "included and so it's not just output"
+  },
+  {
+   "t": 1117.26,
+   "d": 2.37,
+   "text": "from a system that's like art which is"
+  },
+  {
+   "t": 1119.63,
+   "d": 1.44,
+   "text": "what these things the things that I"
+  },
+  {
+   "t": 1121.07,
+   "d": 2.22,
+   "text": "showed you are the just art but for"
+  },
+  {
+   "t": 1123.29,
+   "d": 1.8,
+   "text": "people to participate I want them to"
+  },
+  {
+   "t": 1125.09,
+   "d": 2.13,
+   "text": "impact what happens next and to feel"
+  },
+  {
+   "t": 1127.22,
+   "d": 1.23,
+   "text": "like they're part of it even if they're"
+  },
+  {
+   "t": 1128.45,
+   "d": 1.35,
+   "text": "just one of a hundred people who are"
+  },
+  {
+   "t": 1129.8,
+   "d": 3.24,
+   "text": "voting it's something cool well thank"
+  },
+  {
+   "t": 1133.04,
+   "d": 2.78,
+   "text": "you thank you"
+  },
+  {
+   "t": 1136.06,
+   "d": 3.13,
+   "text": "[Applause]"
+  }
+ ]
+}

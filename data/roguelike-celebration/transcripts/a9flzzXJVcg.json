@@ -1,0 +1,1060 @@
+{
+ "id": "a9flzzXJVcg",
+ "url": "https://www.youtube.com/watch?v=a9flzzXJVcg",
+ "title": "Quinten Konyn - Anatomy of a Morgue File",
+ "speaker": "Quinten Konyn",
+ "talk_title": "Anatomy of a Morgue File",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 540,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Each game in Dungeon Crawl Stone Soup ends with a morgue file: a detailed textual artifact of the game that you get to cherish forever. Let's dig through a morgue file, look at all the different pieces, and see if we can imagine how that player might have lived... and died!",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1055,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 8.08,
+   "d": 1.28,
+   "text": "Okay, we're going to keep moving with"
+  },
+  {
+   "t": 9.36,
+   "d": 2.28,
+   "text": "these lightning talks. Um so, our next"
+  },
+  {
+   "t": 11.64,
+   "d": 1.76,
+   "text": "talk uh we're going to play a"
+  },
+  {
+   "t": 13.4,
+   "d": 2.6,
+   "text": "pre-recording. Unfortunately, uh Quintin"
+  },
+  {
+   "t": 16.0,
+   "d": 2.56,
+   "text": "had some last-minute um"
+  },
+  {
+   "t": 18.56,
+   "d": 1.56,
+   "text": "things come up and won't be able to"
+  },
+  {
+   "t": 20.12,
+   "d": 2.72,
+   "text": "present live, but maybe in chat. So,"
+  },
+  {
+   "t": 22.84,
+   "d": 1.08,
+   "text": "we'll see."
+  },
+  {
+   "t": 23.92,
+   "d": 2.56,
+   "text": "Uh but, we do have a recording on the"
+  },
+  {
+   "t": 26.48,
+   "d": 2.48,
+   "text": "anatomy of a morgue file. Quintin is a"
+  },
+  {
+   "t": 28.96,
+   "d": 1.6,
+   "text": "tinkerer in the Pacific Northwest who"
+  },
+  {
+   "t": 30.56,
+   "d": 1.16,
+   "text": "likes traditional roguelikes,"
+  },
+  {
+   "t": 31.72,
+   "d": 1.88,
+   "text": "programming, and fiber arts. And he's"
+  },
+  {
+   "t": 33.6,
+   "d": 1.44,
+   "text": "going to talk a bit about, yeah, the"
+  },
+  {
+   "t": 35.04,
+   "d": 2.4,
+   "text": "Dungeon Crawl Stone Soup morgue file as"
+  },
+  {
+   "t": 37.44,
+   "d": 1.6,
+   "text": "an artifact, which is something that I"
+  },
+  {
+   "t": 39.04,
+   "d": 2.84,
+   "text": "think is well suited to our interest"
+  },
+  {
+   "t": 41.88,
+   "d": 0.88,
+   "text": "here."
+  },
+  {
+   "t": 42.76,
+   "d": 3.52,
+   "text": "So, let's roll the tape."
+  },
+  {
+   "t": 56.36,
+   "d": 2.36,
+   "text": ">> Oh, hi there. Just a sec. I'm going to"
+  },
+  {
+   "t": 58.72,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 59.52,
+   "d": 1.64,
+   "text": "play a little bit more of my game before"
+  },
+  {
+   "t": 61.16,
+   "d": 2.04,
+   "text": "we get started cuz I was in the middle"
+  },
+  {
+   "t": 63.2,
+   "d": 1.92,
+   "text": "of something."
+  },
+  {
+   "t": 65.12,
+   "d": 2.88,
+   "text": "Okay, here we are."
+  },
+  {
+   "t": 68.0,
+   "d": 2.8,
+   "text": "I'm a mountain dwarf."
+  },
+  {
+   "t": 70.8,
+   "d": 0.68,
+   "text": "Uh"
+  },
+  {
+   "t": 71.48,
+   "d": 2.4,
+   "text": "oh."
+  },
+  {
+   "t": 73.96,
+   "d": 2.96,
+   "text": "That was fast."
+  },
+  {
+   "t": 76.92,
+   "d": 2.76,
+   "text": "Oh, dear."
+  },
+  {
+   "t": 80.04,
+   "d": 3.0,
+   "text": "I die."
+  },
+  {
+   "t": 84.76,
+   "d": 2.16,
+   "text": "That's ridiculous. I don't even know."
+  },
+  {
+   "t": 86.92,
+   "d": 1.04,
+   "text": "Okay."
+  },
+  {
+   "t": 87.96,
+   "d": 3.72,
+   "text": "Um I guess we can get started now."
+  },
+  {
+   "t": 93.28,
+   "d": 3.76,
+   "text": "Anatomy of a morgue file, a Dungeon"
+  },
+  {
+   "t": 97.04,
+   "d": 4.12,
+   "text": "Crawl Stone Soup Murder Mystery."
+  },
+  {
+   "t": 101.16,
+   "d": 4.16,
+   "text": "I have lost another friend."
+  },
+  {
+   "t": 105.32,
+   "d": 1.8,
+   "text": "All that's left of Purple Mustard the"
+  },
+  {
+   "t": 107.12,
+   "d": 1.32,
+   "text": "Severer"
+  },
+  {
+   "t": 108.44,
+   "d": 3.92,
+   "text": "is this morgue file. It's just 19.3"
+  },
+  {
+   "t": 112.36,
+   "d": 3.44,
+   "text": "kilobytes of text."
+  },
+  {
+   "t": 116.16,
+   "d": 2.6,
+   "text": "Let's take a look."
+  },
+  {
+   "t": 118.76,
+   "d": 1.76,
+   "text": "Oh."
+  },
+  {
+   "t": 120.52,
+   "d": 2.6,
+   "text": "Yes, 19 kilobytes of text is kind of a"
+  },
+  {
+   "t": 123.12,
+   "d": 2.2,
+   "text": "lot."
+  },
+  {
+   "t": 125.32,
+   "d": 2.08,
+   "text": "Let's break this down."
+  },
+  {
+   "t": 127.4,
+   "d": 3.12,
+   "text": "We've got an overview,"
+  },
+  {
+   "t": 130.52,
+   "d": 1.96,
+   "text": "inventory,"
+  },
+  {
+   "t": 132.48,
+   "d": 2.0,
+   "text": "skills,"
+  },
+  {
+   "t": 134.48,
+   "d": 2.04,
+   "text": "spells,"
+  },
+  {
+   "t": 136.52,
+   "d": 2.16,
+   "text": "dungeon,"
+  },
+  {
+   "t": 138.68,
+   "d": 1.92,
+   "text": "weirdness,"
+  },
+  {
+   "t": 140.6,
+   "d": 1.64,
+   "text": "death,"
+  },
+  {
+   "t": 142.24,
+   "d": 1.88,
+   "text": "map of death,"
+  },
+  {
+   "t": 144.12,
+   "d": 2.08,
+   "text": "vanquished,"
+  },
+  {
+   "t": 146.2,
+   "d": 2.08,
+   "text": "notes,"
+  },
+  {
+   "t": 148.28,
+   "d": 2.0,
+   "text": "vaults,"
+  },
+  {
+   "t": 150.28,
+   "d": 1.56,
+   "text": "timelines,"
+  },
+  {
+   "t": 151.84,
+   "d": 2.44,
+   "text": "and timing."
+  },
+  {
+   "t": 154.28,
+   "d": 2.04,
+   "text": "Let's see if we can find out who killed"
+  },
+  {
+   "t": 156.32,
+   "d": 4.04,
+   "text": "my friend with this text document."
+  },
+  {
+   "t": 160.36,
+   "d": 1.84,
+   "text": "Maybe the overview is a good place to"
+  },
+  {
+   "t": 162.2,
+   "d": 2.4,
+   "text": "start."
+  },
+  {
+   "t": 164.6,
+   "d": 1.68,
+   "text": "The overview"
+  },
+  {
+   "t": 166.28,
+   "d": 2.08,
+   "text": "is made up of concise, structured"
+  },
+  {
+   "t": 168.36,
+   "d": 2.76,
+   "text": "information about the character, mostly"
+  },
+  {
+   "t": 171.12,
+   "d": 2.44,
+   "text": "directly copied from in-game status"
+  },
+  {
+   "t": 173.56,
+   "d": 3.44,
+   "text": "menus or the death screen."
+  },
+  {
+   "t": 177.72,
+   "d": 2.24,
+   "text": "That's a lot of information."
+  },
+  {
+   "t": 179.96,
+   "d": 3.76,
+   "text": "Let's zoom in on the summary for now."
+  },
+  {
+   "t": 184.36,
+   "d": 3.52,
+   "text": "Oh, my poor friend the Sevirer. I had so"
+  },
+  {
+   "t": 187.88,
+   "d": 1.92,
+   "text": "much fun with this character. They had"
+  },
+  {
+   "t": 189.8,
+   "d": 1.76,
+   "text": "so much potential."
+  },
+  {
+   "t": 191.56,
+   "d": 1.88,
+   "text": "Sure, I might have been a little"
+  },
+  {
+   "t": 193.44,
+   "d": 2.0,
+   "text": "reckless, but really I shouldn't blame"
+  },
+  {
+   "t": 195.44,
+   "d": 2.4,
+   "text": "myself for their death. There must be"
+  },
+  {
+   "t": 197.84,
+   "d": 5.4,
+   "text": "someone else responsible. A murderer."
+  },
+  {
+   "t": 203.36,
+   "d": 1.68,
+   "text": "Aha!"
+  },
+  {
+   "t": 205.04,
+   "d": 2.32,
+   "text": "It was the orc warrior in the orcish"
+  },
+  {
+   "t": 207.36,
+   "d": 4.32,
+   "text": "mines with the glaive."
+  },
+  {
+   "t": 213.72,
+   "d": 3.12,
+   "text": "But wait."
+  },
+  {
+   "t": 218.04,
+   "d": 2.88,
+   "text": "The orc only did the final blow."
+  },
+  {
+   "t": 220.92,
+   "d": 5.44,
+   "text": "Who got our friend to four hit points?"
+  },
+  {
+   "t": 226.36,
+   "d": 1.88,
+   "text": "Maybe we'll get some answers in the"
+  },
+  {
+   "t": 228.24,
+   "d": 3.04,
+   "text": "death section."
+  },
+  {
+   "t": 231.52,
+   "d": 2.68,
+   "text": "This is a record of the messages leading"
+  },
+  {
+   "t": 234.2,
+   "d": 3.2,
+   "text": "up to the player's death."
+  },
+  {
+   "t": 237.4,
+   "d": 2.04,
+   "text": "I've highlighted every message where my"
+  },
+  {
+   "t": 239.44,
+   "d": 2.88,
+   "text": "friend was damaged."
+  },
+  {
+   "t": 242.32,
+   "d": 2.04,
+   "text": "Take a look at this one. The cobalt"
+  },
+  {
+   "t": 244.36,
+   "d": 3.04,
+   "text": "blast miner fired a cannon and hit. The"
+  },
+  {
+   "t": 247.4,
+   "d": 3.24,
+   "text": "more exclamation marks, the more damage."
+  },
+  {
+   "t": 250.64,
+   "d": 2.72,
+   "text": "This one has two. Maybe the cobalt was"
+  },
+  {
+   "t": 253.36,
+   "d": 2.56,
+   "text": "the culprit."
+  },
+  {
+   "t": 255.92,
+   "d": 1.64,
+   "text": "We'll get a better understanding if we"
+  },
+  {
+   "t": 257.56,
+   "d": 1.76,
+   "text": "look at the next section, which has a"
+  },
+  {
+   "t": 259.32,
+   "d": 2.08,
+   "text": "map."
+  },
+  {
+   "t": 261.4,
+   "d": 2.36,
+   "text": "This is an ASCII screenshot of the map"
+  },
+  {
+   "t": 263.76,
+   "d": 2.32,
+   "text": "at the moment of death."
+  },
+  {
+   "t": 266.08,
+   "d": 1.76,
+   "text": "It's a little ambiguous because it's"
+  },
+  {
+   "t": 267.84,
+   "d": 3.0,
+   "text": "missing color. So, we also get a list of"
+  },
+  {
+   "t": 270.84,
+   "d": 2.56,
+   "text": "the visible creatures."
+  },
+  {
+   "t": 273.4,
+   "d": 2.64,
+   "text": "I'm going to zoom in on the action."
+  },
+  {
+   "t": 276.04,
+   "d": 2.04,
+   "text": "Okay, here we are."
+  },
+  {
+   "t": 278.08,
+   "d": 1.56,
+   "text": "Let's clean this up so we can focus on"
+  },
+  {
+   "t": 279.64,
+   "d": 2.48,
+   "text": "the interesting part."
+  },
+  {
+   "t": 282.12,
+   "d": 1.8,
+   "text": "First, I'll make the walls solid white"
+  },
+  {
+   "t": 283.92,
+   "d": 2.4,
+   "text": "and the floors blank."
+  },
+  {
+   "t": 286.32,
+   "d": 1.52,
+   "text": "And the demons were summoned at the"
+  },
+  {
+   "t": 287.84,
+   "d": 2.36,
+   "text": "exact moment of death and didn't have"
+  },
+  {
+   "t": 290.2,
+   "d": 1.68,
+   "text": "enough time to do anything. So, let's"
+  },
+  {
+   "t": 291.88,
+   "d": 1.84,
+   "text": "just ignore them."
+  },
+  {
+   "t": 293.72,
+   "d": 2.12,
+   "text": "There, that's better."
+  },
+  {
+   "t": 295.84,
+   "d": 3.4,
+   "text": "These must be our three murderers."
+  },
+  {
+   "t": 299.24,
+   "d": 2.16,
+   "text": "Here's the orc warrior who did the"
+  },
+  {
+   "t": 301.4,
+   "d": 1.56,
+   "text": "killing blow."
+  },
+  {
+   "t": 302.96,
+   "d": 3.12,
+   "text": "It had a glaive with a range of two, so"
+  },
+  {
+   "t": 306.08,
+   "d": 3.2,
+   "text": "it can attack from where it stands."
+  },
+  {
+   "t": 309.28,
+   "d": 3.2,
+   "text": "Here's the orc high priest whose god"
+  },
+  {
+   "t": 312.48,
+   "d": 2.8,
+   "text": "used power"
+  },
+  {
+   "t": 315.28,
+   "d": 4.56,
+   "text": "to attack from far away."
+  },
+  {
+   "t": 319.84,
+   "d": 1.92,
+   "text": "Here's the cobalt blast miner whose"
+  },
+  {
+   "t": 321.76,
+   "d": 2.52,
+   "text": "cannon attack has a range of four."
+  },
+  {
+   "t": 324.28,
+   "d": 1.8,
+   "text": "It was the one that hit my friend the"
+  },
+  {
+   "t": 326.08,
+   "d": 4.04,
+   "text": "most often and the hardest."
+  },
+  {
+   "t": 330.12,
+   "d": 2.6,
+   "text": "And here's my poor friend purple mustard"
+  },
+  {
+   "t": 332.72,
+   "d": 2.52,
+   "text": "the severer using an axe with a range of"
+  },
+  {
+   "t": 335.24,
+   "d": 2.0,
+   "text": "one."
+  },
+  {
+   "t": 337.24,
+   "d": 2.24,
+   "text": "Judging based off how I usually play in"
+  },
+  {
+   "t": 339.48,
+   "d": 1.32,
+   "text": "position"
+  },
+  {
+   "t": 340.8,
+   "d": 2.44,
+   "text": "uh and the position of these enemies,"
+  },
+  {
+   "t": 343.24,
+   "d": 3.16,
+   "text": "here's my guess as to what happened."
+  },
+  {
+   "t": 346.4,
+   "d": 2.44,
+   "text": "I was probably running away from north"
+  },
+  {
+   "t": 348.84,
+   "d": 2.32,
+   "text": "to hide around the corner."
+  },
+  {
+   "t": 351.16,
+   "d": 1.68,
+   "text": "The cobalt caught up"
+  },
+  {
+   "t": 352.84,
+   "d": 1.52,
+   "text": "first."
+  },
+  {
+   "t": 354.36,
+   "d": 2.12,
+   "text": "In this position, it can attack me, but"
+  },
+  {
+   "t": 356.48,
+   "d": 2.64,
+   "text": "I couldn't attack it."
+  },
+  {
+   "t": 359.12,
+   "d": 3.16,
+   "text": "I stepped out of hiding to use my axe."
+  },
+  {
+   "t": 362.28,
+   "d": 2.76,
+   "text": "The cobalt shot its cannon and s-"
+  },
+  {
+   "t": 365.04,
+   "d": 4.12,
+   "text": "flew so hard backwards."
+  },
+  {
+   "t": 369.92,
+   "d": 2.6,
+   "text": "The killing blow"
+  },
+  {
+   "t": 372.52,
+   "d": 0.64,
+   "text": "uh"
+  },
+  {
+   "t": 373.16,
+   "d": 2.4,
+   "text": "from the orcish warrior came shortly"
+  },
+  {
+   "t": 375.56,
+   "d": 2.56,
+   "text": "afterwards."
+  },
+  {
+   "t": 378.12,
+   "d": 2.6,
+   "text": "But, did our poor friend have to step"
+  },
+  {
+   "t": 380.72,
+   "d": 1.48,
+   "text": "forward?"
+  },
+  {
+   "t": 382.2,
+   "d": 3.48,
+   "text": "Or was there another option?"
+  },
+  {
+   "t": 385.68,
+   "d": 2.36,
+   "text": "I want to show you something that's been"
+  },
+  {
+   "t": 388.04,
+   "d": 2.48,
+   "text": "bothering me."
+  },
+  {
+   "t": 390.52,
+   "d": 3.08,
+   "text": "Take a look at this."
+  },
+  {
+   "t": 393.64,
+   "d": 2.96,
+   "text": "The lowercase A in the status effects is"
+  },
+  {
+   "t": 396.6,
+   "d": 3.92,
+   "text": "our currently available abilities."
+  },
+  {
+   "t": 400.52,
+   "d": 2.08,
+   "text": "Here's heal other, which my friend can"
+  },
+  {
+   "t": 402.6,
+   "d": 4.52,
+   "text": "do because they worship Elyvilon."
+  },
+  {
+   "t": 407.28,
+   "d": 2.44,
+   "text": "It is a powerful ability to neutralize"
+  },
+  {
+   "t": 409.72,
+   "d": 4.4,
+   "text": "enemies from afar."
+  },
+  {
+   "t": 414.12,
+   "d": 1.48,
+   "text": "Let me show you what this ability can"
+  },
+  {
+   "t": 415.6,
+   "d": 1.92,
+   "text": "do."
+  },
+  {
+   "t": 417.52,
+   "d": 1.68,
+   "text": "The note section is a list of"
+  },
+  {
+   "t": 419.2,
+   "d": 2.88,
+   "text": "interesting events, both automatic and"
+  },
+  {
+   "t": 422.08,
+   "d": 2.76,
+   "text": "player written."
+  },
+  {
+   "t": 424.84,
+   "d": 1.44,
+   "text": "Here,"
+  },
+  {
+   "t": 426.28,
+   "d": 2.08,
+   "text": "I've collected the ones that are related"
+  },
+  {
+   "t": 428.36,
+   "d": 2.32,
+   "text": "to Elyvilon."
+  },
+  {
+   "t": 430.68,
+   "d": 1.88,
+   "text": "My friend was able to use heal other"
+  },
+  {
+   "t": 432.56,
+   "d": 3.24,
+   "text": "earlier to pacify an orc warlord,"
+  },
+  {
+   "t": 435.8,
+   "d": 2.16,
+   "text": "one of the scariest enemies you'll ever"
+  },
+  {
+   "t": 437.96,
+   "d": 2.96,
+   "text": "encounter in the orc mines, entirely"
+  },
+  {
+   "t": 440.92,
+   "d": 3.28,
+   "text": "skipping the fight."
+  },
+  {
+   "t": 444.64,
+   "d": 2.36,
+   "text": "Heal other gets stronger the better your"
+  },
+  {
+   "t": 447.0,
+   "d": 3.8,
+   "text": "skill in invocations is."
+  },
+  {
+   "t": 450.8,
+   "d": 2.48,
+   "text": "Skills is a section showing the skill"
+  },
+  {
+   "t": 453.28,
+   "d": 2.28,
+   "text": "levels at the time of death,"
+  },
+  {
+   "t": 455.56,
+   "d": 1.96,
+   "text": "and which ones the player was currently"
+  },
+  {
+   "t": 457.52,
+   "d": 3.64,
+   "text": "investing experience towards."
+  },
+  {
+   "t": 461.16,
+   "d": 2.32,
+   "text": "Wow, look at how high that invocation"
+  },
+  {
+   "t": 463.48,
+   "d": 1.56,
+   "text": "level was."
+  },
+  {
+   "t": 465.04,
+   "d": 2.6,
+   "text": "If it's tied with their axe skill, maybe"
+  },
+  {
+   "t": 467.64,
+   "d": 4.32,
+   "text": "we need to take this weapon seriously."
+  },
+  {
+   "t": 471.96,
+   "d": 2.08,
+   "text": "Back to our map."
+  },
+  {
+   "t": 474.04,
+   "d": 2.08,
+   "text": "Let's put down heal other next to their"
+  },
+  {
+   "t": 476.12,
+   "d": 1.96,
+   "text": "axe."
+  },
+  {
+   "t": 478.08,
+   "d": 2.44,
+   "text": "So I could have stayed in my hidey-hole"
+  },
+  {
+   "t": 480.52,
+   "d": 2.48,
+   "text": "and tried to heal the cobalt until it"
+  },
+  {
+   "t": 483.0,
+   "d": 3.08,
+   "text": "decided to leave me alone."
+  },
+  {
+   "t": 486.08,
+   "d": 2.32,
+   "text": "Oh dear."
+  },
+  {
+   "t": 488.4,
+   "d": 1.2,
+   "text": "And I'll never know if it would have"
+  },
+  {
+   "t": 489.6,
+   "d": 2.76,
+   "text": "worked."
+  },
+  {
+   "t": 492.92,
+   "d": 1.72,
+   "text": "Maybe I should have tried to heal that"
+  },
+  {
+   "t": 494.64,
+   "d": 1.72,
+   "text": "cobalt."
+  },
+  {
+   "t": 496.36,
+   "d": 2.56,
+   "text": "It might have taken it a couple tries,"
+  },
+  {
+   "t": 498.92,
+   "d": 2.36,
+   "text": "and I was afraid to use up my favor with"
+  },
+  {
+   "t": 501.28,
+   "d": 3.08,
+   "text": "my god."
+  },
+  {
+   "t": 504.36,
+   "d": 0.12,
+   "text": ">> [sighs]"
+  },
+  {
+   "t": 504.48,
+   "d": 1.6,
+   "text": ">> It's It's not like with that work"
+  },
+  {
+   "t": 506.08,
+   "d": 2.0,
+   "text": "warlord where like I I knew it was"
+  },
+  {
+   "t": 508.08,
+   "d": 3.28,
+   "text": "serious. Um it it was It was highlighted"
+  },
+  {
+   "t": 511.36,
+   "d": 2.44,
+   "text": "red. It was so so high-leveled compared"
+  },
+  {
+   "t": 513.8,
+   "d": 1.76,
+   "text": "to me and"
+  },
+  {
+   "t": 515.56,
+   "d": 1.36,
+   "text": "and I didn't really think that little"
+  },
+  {
+   "t": 516.92,
+   "d": 2.48,
+   "text": "cobalt could kill me. I already killed"
+  },
+  {
+   "t": 519.4,
+   "d": 3.6,
+   "text": "five of them in the vanquished category."
+  },
+  {
+   "t": 523.0,
+   "d": 2.0,
+   "text": "Oh no."
+  },
+  {
+   "t": 525.0,
+   "d": 2.64,
+   "text": "Maybe my own poor judgment was the"
+  },
+  {
+   "t": 527.64,
+   "d": 3.76,
+   "text": "murderer all along."
+  },
+  {
+   "t": 537.88,
+   "d": 2.8,
+   "text": "Delightful."
+  }
+ ]
+}

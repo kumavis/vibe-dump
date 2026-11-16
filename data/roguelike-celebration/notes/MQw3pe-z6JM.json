@@ -1,0 +1,110 @@
+{
+  "id": "MQw3pe-z6JM",
+  "title": "Florence Smith Nicholls- Another Stupid Date: Love Island as a Roguelike",
+  "speaker": "Florence Smith Nicholls",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=MQw3pe-z6JM",
+  "talk_type": "culture",
+  "summary": "Florence Smith Nicholls, a games AI researcher working on archaeological approaches to procedural content, playfully reads the reality show Love Island as a roguelike: weekly recouplings are runs that reshuffle the dating landscape and being dumped is permadeath. The talk compares the two through archetypes, curation of generated content, hosted retellings, glitches, audience participation, confessionals and the problem of conceptual uniqueness. Comparisons are drawn with Bad News, Blaseball, Dwarf Fortress, Necrocracy, Boyfriend Dungeon and Hades. It closes on the honesty of reality TV's fakeness as a lens on how simulations construct ideas about relationships.",
+  "games": [
+    "Bad News",
+    "Blaseball",
+    "Dwarf Fortress",
+    "Necrocracy",
+    "Boyfriend Dungeon",
+    "Hades"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "reality tv",
+      "kind": "example",
+      "claim": "Love Island's core loop resembles a roguelike: each week's recoupling reshuffles the dating landscape like a new run, and a dumped islander suffers permadeath.",
+      "detail": "Smith Nicholls models islanders as abstract symbols; a newcomer can break up a couple, the order of choosing at the recoupling matters, and whoever is left single is dumped, ending their game.",
+      "t": 138,
+      "quote": "sadly that does mean umbrella is dumped and that's permadeath in Love Island. That's the end of the game for the umbrella",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "archetypes",
+      "kind": "warning",
+      "claim": "Character archetypes, whether reality TV's 'girl next door' and 'vixen' or roguelike classes inherited from tabletop RPGs, are often gendered and can become toxic, so designers should examine how they use them.",
+      "detail": "Smith Nicholls notes reality TV relies on archetypes like the everyman, the joker, the girl next door and the vixen, and that many are gendered. Roguelikes have classes via TTRPG influence, making this a general concern for games.",
+      "t": 212,
+      "quote": "a lot of these are gendered and become toxic and I think that's a useful thing to think about in general in terms of how we use archetypes",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "curation",
+      "kind": "example",
+      "claim": "Love Island heavily curates its generated content, with a spin-off show holding material interesting enough to air but not canonical, showing there are degrees of curation of generated output.",
+      "detail": "Smith Nicholls compares this to Bad News, where James Ryan acted as a 'wizard' curating in real time how an actor responded to a participant within a simulated American town.",
+      "t": 237,
+      "quote": "Love Island is heavily edited so in that sense the content generated is highly curated",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "retellings",
+      "kind": "principle",
+      "claim": "If players are motivated to retell their play experience, that indicates the generated experience was interesting or memorable, and some systems encourage hosted retellings directly.",
+      "detail": "Smith Nicholls uses 'retellings' as a critical instrument for interactive fiction-style systems. Love Island generates hosted retellings via its spin-off show and weekly panels; Blaseball had official round-ups that organised its history into eras.",
+      "t": 314,
+      "quote": "if players are motivated to retell their gameplay experience, then that is an indicator they found something interesting or memorable",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "glitches",
+      "kind": "example",
+      "claim": "Glitches in procedural systems prompt players to reflect on and share their experiences because they are unexpected and weird, as with a Dwarf Fortress artifact depicting world history including versions of itself.",
+      "detail": "Smith Nicholls found in her research on procedural generation that glitches compel reflection. She cites a fractal-like Dwarf Fortress artifact and Love Island editing glitches where a contestant appears in foreground and background at once, which viewers found funny.",
+      "t": 383,
+      "quote": "players are compelled to reflect on their experience with glitches because it is unexpected and weird things that happen",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience participation",
+      "kind": "example",
+      "claim": "Live games can let audience interpretation steer design, as Necrocracy did with a conspiracy-board tool whose player theories informed weekly live game design.",
+      "detail": "Smith Nicholls compares this to Love Island, where viewers vote for couples and an on-site social media team informs editing in real time.",
+      "t": 476,
+      "quote": "they had a bespoke conspiracy board tool allowing players to visualize their own ideas of what a was happening",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "confessionals",
+      "kind": "open-question",
+      "claim": "Reality TV's confessional, which gives the viewer intimate knowledge other characters lack, is hard to translate to digital games but might suit live or hybrid game design.",
+      "detail": "Smith Nicholls says the voyeurism of reality TV depends on the participants being real people, which is also high risk. She points to the intimate installation setting of Bad News as a comparison.",
+      "t": 590,
+      "quote": "I think the confessional would lend well to live game design or kind of hybrid game design as well",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "conceptual uniqueness",
+      "kind": "warning",
+      "claim": "Both roguelikes and reality TV face the problem of conceptual uniqueness: generating lots of content that stays interesting, and limited diversity of characters makes a format feel boring.",
+      "detail": "Smith Nicholls cites controversy over Love Island's lack of racial diversity and broader limited diversity as a reason people tire of it, and notes Hades has been critiqued for limited diversity despite allowing queer relationships, as has been discussed for Boyfriend Dungeon-style games.",
+      "t": 610,
+      "quote": "You will generate a lot of content and will it be interesting and with roguelikes is the replayability still there?",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "simulation",
+      "kind": "principle",
+      "claim": "Reality TV's 'honesty of fakeness' exposes how constructed our ideas about relationships are, which is a useful lens for how roguelikes approach simulation.",
+      "detail": "Contestants accused of 'playing the game' are ironically all playing a game. Smith Nicholls quotes the novel Patricia Wants to Cuddle on reality TV laying bare everything fake about the real world.",
+      "t": 713,
+      "quote": "there is almost an honesty to the fakeness and the fact it shows how constructed ideas about relationships are",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

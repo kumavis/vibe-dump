@@ -1,0 +1,142 @@
+{
+  "id": "AwOuZTCeOrU",
+  "title": "Harry Solomons: Trampling on Ghosts: Hauntology and Permadeath",
+  "speaker": "Harry Solomons",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=AwOuZTCeOrU",
+  "talk_type": "culture",
+  "summary": "Harry Solomons, a UX and urban designer, applies the cultural-criticism concept of hauntology (Derrida, Simon Reynolds, Mark Fisher) to permadeath. Hauntology centres on a paradoxical relationship with time, eeriness (something present that should be absent, or absent that should be present), and places stained by traces of what happened there. His thesis is that roguelikes are inherently hauntological: permadeath makes players walk over the ghosts of failed runs, made explicit in Inscryption's death cards and Returnal's reanimating corpses of the player. He urges designers to take permadeath seriously as a theme, letting worlds be stained by repeated failure and considering what is gained by withholding the time-loop power fantasy. Q&A with host Alexei extends this to save reloads, winning runs, Hades' narrative justification for loops, and meta-progression that accrues burdens rather than upgrades.",
+  "games": [
+    "Inscryption",
+    "Returnal",
+    "Balatro",
+    "Hades",
+    "NetHack",
+    "Loop Hero",
+    "Rogue Legacy",
+    "Football Manager"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "death cards",
+      "kind": "example",
+      "claim": "Inscryption turns player defeat into a 'death card' built from your failed run's cards and bearing your name and photo, which you later play and sacrifice, creating an eerie self-haunting.",
+      "detail": "When defeated, the entity invites you to compose a card from attributes of your deck and to write your name; your photo is taken and you return as a 'new player'. Solomons describes the skin-crawling feeling of pulling yourself out of the deck and violently sacrificing yourself.",
+      "t": 123,
+      "quote": "Instead of killing you, this entity invites you to create what it calls a death card",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "hauntology",
+      "kind": "principle",
+      "claim": "Hauntology, as used here, describes media with a paradoxical relationship to time, an eeriness of things wrongly present or absent, and places stained by traces of past events.",
+      "detail": "Solomons traces the term from a French philosopher's pun about Marxism, through Simon Reynolds' use for 2000s decay-themed music, to Mark Fisher's 'haunting of lost futures'. Fisher defines eeriness as a failure of absence or a failure of presence, and describes intense events staining places like chalk marks left on a board.",
+      "t": 428,
+      "quote": "A failure of absence, something being present when it shouldn't be, or a failure of presence something being missing when it should be there.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Roguelikes are inherently hauntological because permadeath forces players to retread and 'trample over the ghosts' of their own failed runs.",
+      "detail": "This is Solomons' main thesis. In Inscryption, the card encodes information about a failed run, likely remnants of failure that couldn't win, so 'what might have been' stains the current run.",
+      "t": 619,
+      "quote": "roguelikes are inherently hauntology. Permadeath forces you to confront and walk in the footsteps, trample over the ghosts",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "Returnal makes repeated death explicit: protagonist Selene knows she is looping, finds her own corpses with notes she doesn't remember, and those corpses can reanimate and kill her.",
+      "detail": "Solomons argues the thing failing to be absent is the player's own failure, not just the character's. Each corpse represents a version of you that failed, a lost successful future that stains and makes harsher the space you must traverse.",
+      "t": 749,
+      "quote": "Each corpse represents a version of you that failed. A potential successful future that never came to pass.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "failed runs",
+      "kind": "principle",
+      "claim": "The 'lost future' feeling of hauntology is not limited to horror roguelikes; it is the ordinary 'I almost had it that time' sensation of any failed run.",
+      "detail": "Solomons gives a Balatro-style example of a great joker combination ruined by an unlucky draw. He says this shows how well roguelikes and roguelites are equipped to explore such feelings.",
+      "t": 794,
+      "quote": "The same feeling of I almost had it that time.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "death as theme",
+      "kind": "principle",
+      "claim": "Designers should engage with what death means in their worlds, letting places become stained by repeated permadeath so the loop of failure becomes something to confront.",
+      "detail": "Solomons says the genre lets designers 'write death over and over again on top of itself', making worlds explorations of the palimpsest of daily life and foregrounding loops of failure.",
+      "t": 812,
+      "quote": "The aim of this talk is to get you engaging in what death means in the worlds you create.",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "time loops",
+      "kind": "principle",
+      "claim": "Time-loop games offer a power fantasy that enough retries and information can prevent tragedy, and games that wrestle that fantasy away from the player can powerfully reframe the present.",
+      "detail": "Citing a Polygon video, Solomons ties the popularity of time loops to doomscrolling and anxiety, and links hauntology to a widely felt sense, intensified by COVID-19 lockdowns, that 'time is out of joint'.",
+      "t": 890,
+      "quote": "Time loops are suited for a time defined by doom scrolling and anxiety because they offer a power fancy",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "power fantasy",
+      "kind": "principle",
+      "claim": "Designers should consider how failure loops imprint on the places players move through, and what is gained by taking away the power fantasy they offer.",
+      "detail": "Solomons says Inscryption and especially Returnal indict the loop power fantasy and don't quite give players what they want. His closing request to designers is to think about this deliberately.",
+      "t": 1090,
+      "quote": "Think of the power fantasy you provide your players and think carefully about what might be gained when you take that away.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "save reloading",
+      "kind": "example",
+      "claim": "Reloading a save can feel like possessing a past self; host Alexei adds that it turns eerie in decision-heavy games where you remember a timeline in which you got someone killed.",
+      "detail": "Answering an audience question, Solomons agrees save points cordon off ground you covered and stepping back in is like possessing yourself. Host Alexei adds the eeriness of talking to a character you killed in an erased save; Solomons compares reloading Football Manager to watch the same men make the same errors.",
+      "t": 1255,
+      "quote": "I real like the idea of stepping back into the shoes of what that is because you are definitely almost like possessing yourself.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "victory and loops",
+      "kind": "example",
+      "claim": "Restarting after a win can undercut a roguelike's themes unless done deliberately, as in Inscryption where a perfect win drags you back into the same chair.",
+      "detail": "Asked by Alexei whether winning undercuts the horror, Solomons says Inscryption makes the point that you haven't really escaped; you're over the same ground again. Undercutting is a risk only if not deliberate.",
+      "t": 1384,
+      "quote": "I think if it is not done deliberately it has the potential to undercut that. But I think it doesn't necessarily have to.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative justification",
+      "kind": "principle",
+      "claim": "Roguelike restarts began as a technical limitation but are a powerful narrative tool, and Hades' framing of the same character with the same memories mirrors the player's own experience.",
+      "detail": "Alexei notes higher-fidelity, narrative-focused roguelikes face pressure to explain restarts. Solomons calls this a good thing; leaving restarts unexplained invites players to draw their own conclusions, while Hades plays with the ontological relationship of what the player knows versus the character.",
+      "t": 1470,
+      "quote": "there is this inherent mechanic that start as a limitation but it is an immensely powerful tool",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "open-question",
+      "claim": "Meta-progression could invert the usual power fantasy by having runs accrue burdens or eerie baggage that weigh down future runs instead of granting upgrades.",
+      "detail": "Alexei proposes this flip side; Solomons warns it risks frustration if each death simply makes you worse, but notes characters could accrue relationships to death as spaces do. Examples raised: NetHack bones files with your own grave and cursed items, Loop Hero's world solidifying, and Rogue Legacy's dynasty reminding you it took 48 generations.",
+      "t": 1577,
+      "quote": "every run you are accumulate things that are weighing you down or adding something eerie and strange to future runs",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

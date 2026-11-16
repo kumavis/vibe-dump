@@ -1,0 +1,208 @@
+{
+  "id": "TlLIOgWYVpI",
+  "title": "Herbert Wolverson - Procedural Map Generation Techniques",
+  "speaker": "Herbert Wolverson",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=TlLIOgWYVpI",
+  "talk_type": "technical",
+  "summary": "Herbert Wolverson, author of the Rust Roguelike Tutorial, gives a fast survey of map generation algorithms and then of algorithms to check and refine generated maps. He covers simple room placement, BSP, cellular automata, drunkard's walk, diffusion-limited aggregation (with central attractor and symmetry), Voronoi diagrams with different distance metrics, and Perlin/Simplex noise with layered octaves. He stresses combining techniques and prefabs to make maps that tell a story, then shows Dijkstra maps for culling unreachable areas, placing starts and exits, and computing a 'hot path' used to cull branches, hide bonuses and order story beats and lock-and-key puzzles. His thesis: guide your randomness, then use algorithms to check it matches what you want.",
+  "games": [
+    "Rogue",
+    "Dwarf Fortress",
+    "NetHack",
+    "Apocalypse Taxi"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "replayability",
+      "kind": "principle",
+      "claim": "Rogue's randomly generated levels made players learn the game's systems rather than memorise routes, giving effectively infinite replay.",
+      "detail": "Wolverson notes Rogue placed up to nine randomly connected rooms, reportedly to keep the game small, but this created a core strength of the genre: instead of memorising 'up, up, right', you learn how to interact with monsters and rooms.",
+      "t": 149,
+      "quote": "learning the system rather than learning the game itself, giving you effectively infinite replay",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "guided randomness",
+      "kind": "principle",
+      "claim": "In good procedural games randomness doesn't define the game; it feeds an algorithm that approximates what the designer wants while differing every time.",
+      "detail": "Wolverson draws this from Rogue and Dwarf Fortress, the latter generating everything from overworld and civilizations to individual dwarves' deities and taverns, with mid-scale maps matching the world above.",
+      "t": 230,
+      "quote": "while they're random, their randomness doesn't define the game. The randomness is fed into an algorithm that generates something that approximates what you want",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room placement",
+      "kind": "technique",
+      "claim": "Simple room placement starts from a solid map, adds random non-overlapping rectangles (discarding overlaps) until enough, then joins them with dog-leg corridors that randomly go horizontal or vertical first.",
+      "detail": "Wolverson notes this is essentially the algorithm from the Python roguelike dev tutorial that the roguelikedev subreddit recommends beginners start with.",
+      "t": 250,
+      "quote": "You start with a solid map. You pick a random rectangle. If there isn't a room already there, you fill in the rectangle",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "binary space partition",
+      "kind": "technique",
+      "claim": "Binary space partitioning recursively halves the map in random directions down to room-sized spaces, giving well-spaced rooms with no rejections; a one-tile gutter prevents rooms merging.",
+      "detail": "Wolverson says it gives similar results to random placement but better spacing and is used in NetHack among other games.",
+      "t": 308,
+      "quote": "It gives a similar result to random room placement, but it pretty much guarantees that everything is better spaced out",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Cellular automata caves start from roughly half-random walls and repeatedly apply neighbour-count rules (0 neighbours: wall; 1-4: floor; 5+: wall) to turn noise into natural-looking caverns.",
+      "detail": "Wolverson says the rules should be tweaked to suit the game. It is simple, fast and deterministic given the same seed, like Conway's Game of Life.",
+      "t": 393,
+      "quote": "If there are no neighbors, then it becomes a wall. If there's one to four neighbors, it becomes empty. Five or more neighbors, it becomes a wall",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "drunkard's walk",
+      "kind": "technique",
+      "claim": "Drunkard's walk carves a solid map with random walkers that have a maximum travel distance, respawning new walkers inside open space until a target fraction (e.g. one third) is open, guaranteeing a contiguous map.",
+      "detail": "Wolverson frames it as drunken Umber Hulks smashing through walls. The result looks carved by water, ideal for limestone caverns.",
+      "t": 480,
+      "quote": "One big advantage of this is that you can guarantee that your map will be contiguous",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "diffusion limited aggregation",
+      "kind": "technique",
+      "claim": "Diffusion-limited aggregation fires particles from random points until they hit open space, carving the last solid tile passed, producing winding contiguous maps; aiming at the centre leaves an open central area.",
+      "detail": "Wolverson recommends the RogueBasin article. A central attractor suits e.g. a dragon's lair in the middle; applying vertical symmetry produces creature-like shapes, which he recommends using sparingly to make any algorithm look less random.",
+      "t": 523,
+      "quote": "In the event that you do hit a target area, then you carve out the last solid area that you passed through",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "voronoi diagrams",
+      "kind": "technique",
+      "claim": "Voronoi diagrams assign each tile to its nearest seed, and changing the distance metric changes the feel: Euclidean gives smooth edges, Manhattan sharp man-made shapes, Chebyshev in between.",
+      "detail": "Seeds can be random or deliberately placed (even spacing gives a beehive). Wolverson brute-forced it rather than using Delaunay triangulation.",
+      "t": 658,
+      "quote": "Using Manhattan distance, which is the same distance that you get if you ask a New York taxi driver",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "voronoi diagrams",
+      "kind": "technique",
+      "claim": "Voronoi cells can drive monster placement (spawn allied groups like an orc king and retinue in one cell, keep enemies apart) and city layout (roads on cell edges, districts per cell).",
+      "detail": "Wolverson used Voronoi edges for roads in his PROCJAM game Apocalypse Taxi, filling cells with types like heavy or light industrial. Cell edges can also become walls for an alien cell structure.",
+      "t": 701,
+      "quote": "you'll spawn the monsters together within a Voronoi cell. So, for example, you've decided that the orc king should always be seated with his retinue",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "noise",
+      "kind": "technique",
+      "claim": "Perlin/Simplex noise gives smooth, continuous, seed-deterministic values tunable by octaves, gain, lacunarity and frequency; thresholding altitude yields an overworld of water, land and mountains.",
+      "detail": "Wolverson recommends playing with values in a noise tool. He notes it is continuous under zoom, and also usable for clouds, particles and wood grain.",
+      "t": 839,
+      "quote": "Because Perlin is deterministic by random seed, every time you use the same seed, you get the same map",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "noise",
+      "kind": "technique",
+      "claim": "Single-layer noise gradients look dull up close; blending in a second, bumpier noise layer whose proportion grows as the player zooms in adds bays, peaks and valleys while keeping the continent coherent.",
+      "detail": "In Q&A, asked how to avoid noticeably 'samey' Perlin overworlds, Wolverson adds mixing in height values from more mountainous maps for mountain regions and running an erosion simulation, especially with rocks of varying hardness.",
+      "t": 878,
+      "quote": "The best way to fix that is to make a second layer of noise",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "combining techniques",
+      "kind": "principle",
+      "claim": "Combining generation techniques and a prefab can make a map tell a story, e.g. a BSP dwarven fortress that breaks into a cellular-automata underworld with prefab fortifications between.",
+      "detail": "Wolverson says you rarely need to use just one technique. The fortifications suggest dwarves dug into the underworld and had to protect themselves. Another combo is firing DLA particles at a map to erode it organically while keeping its structure.",
+      "t": 988,
+      "quote": "with two very simple techniques, you've produced a map that actually tells a story, rather than just being a bunch of random rooms",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "prefabs",
+      "kind": "technique",
+      "claim": "Injecting hand-designed prefabs (like a trap-ringed treasure chest) into generated maps adds human design; place them in rooms big enough or at random locations where they fit, and use only some each game.",
+      "detail": "Wolverson says rooms make placement easy since you can scan the room list for one bigger than the prefab; on roomless maps he tests random locations. Not adding all prefabs keeps the next game different.",
+      "t": 1020,
+      "quote": "if you start injecting human design elements into it, then you get the chance to really make the game your own",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "dijkstra maps",
+      "kind": "technique",
+      "claim": "Dijkstra maps flood outward from one or more start points, numbering each walkable tile by step distance and leaving unreachable tiles at a sentinel value, and underpin many map-checking tasks.",
+      "detail": "Wolverson strongly recommends the RogueBasin article 'The Incredible Power of Dijkstra Maps'.",
+      "t": 1146,
+      "quote": "the numbered tiles tell you how far away you are from a starting point",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "connectivity",
+      "kind": "technique",
+      "claim": "Use a Dijkstra map from an open central tile to find and delete unreachable regions (or hide tunnel-only rewards there), and cull before placing the start so the player isn't trapped.",
+      "detail": "Cellular automata in particular leave unreachable chunks. Wolverson places the start near the desired region then searches for a nearby open, unculled tile, avoiding the embarrassing map with only two walkable tiles, which he says has happened to him.",
+      "t": 1167,
+      "quote": "all of the tiles that are open that have the sentinel value on your Dijkstra map can't be reached",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "exit placement",
+      "kind": "technique",
+      "claim": "A Dijkstra map from the start finds the least accessible point on the map, a poor place for the exit if the start is central but a good place to hide a bonus item.",
+      "detail": "Wolverson says this forces a treasure hunt for the bonus. For exits he usually picks the rough area wanted and places on a nearby open tile.",
+      "t": 1276,
+      "quote": "if you want to hide something, this is a great way to do it. Find the starting point, then find the least accessible point on the map",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "hot path",
+      "kind": "technique",
+      "claim": "The 'hot path' is the start-to-exit path plus tiles within a small Dijkstra distance (e.g. under ten) of it; it lets you cull irrelevant branches or mark off-path rooms for bonuses and harder optional content.",
+      "detail": "Wolverson's favourite refinement. For less-branchy games it removes purposeless labyrinths. In room maps, off-path grey rooms can be culled or used for bonus items and scary things, with breadcrumbs on the hot path guiding the player.",
+      "t": 1312,
+      "quote": "everything with a tile value of under, say ten, is the hot path and is close, but not necessarily directly on the best path",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story ordering",
+      "kind": "technique",
+      "claim": "Knowing the room order along the hot path lets a generator sequence story beats and place lock-and-key puzzles validly: put the locked door at a chokepoint and the key only in rooms before it.",
+      "detail": "A flood fill confirms there's no alternative route past room five, so the key must spawn in rooms one to four or the puzzle is unsolvable. Story beats like the grandfather's destiny speech go near room one.",
+      "t": 1451,
+      "quote": "you absolutely know that the key has to be somewhere between rooms one and four, for this to be a solvable puzzle",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "validation",
+      "kind": "principle",
+      "claim": "Guide your randomness, then use algorithms to check that the generated result matches what you want.",
+      "detail": "Wolverson states this as the point of the whole talk, following the lock-and-key example where an unchecked generator could put the key behind its own door.",
+      "t": 1475,
+      "quote": "guide your randomness and then use algorithms to check your randomness, to make sure that it matches what you want",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

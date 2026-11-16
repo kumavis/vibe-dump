@@ -1,0 +1,3535 @@
+{
+ "id": "H6fPIhLoA1Y",
+ "url": "https://www.youtube.com/watch?v=H6fPIhLoA1Y",
+ "title": "Roguelike Celebration - Lightning Talks",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1755,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Various arrendees talk about roguelike games, culture, and art.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Rapid UI prototyping"
+  },
+  {
+   "start": 327,
+   "title": "Stop the hunger clock"
+  },
+  {
+   "start": 495,
+   "title": "Blockchain procedural gen"
+  },
+  {
+   "start": 593,
+   "title": "Roguelike fan fiction"
+  },
+  {
+   "start": 1177,
+   "title": "Procedural storytelling"
+  },
+  {
+   "start": 1386,
+   "title": "Star Trek parody accounts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4955,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.16,
+   "text": "mmm-hmm sweet hi everybody I'm Tom"
+  },
+  {
+   "t": 2.16,
+   "d": 2.79,
+   "text": "Robertson I've been in around the video"
+  },
+  {
+   "t": 4.95,
+   "d": 3.45,
+   "text": "game industry for a long time and I've"
+  },
+  {
+   "t": 8.4,
+   "d": 2.1,
+   "text": "never I've always loved roguelikes but"
+  },
+  {
+   "t": 10.5,
+   "d": 2.34,
+   "text": "I've never worked on a big one some of"
+  },
+  {
+   "t": 12.84,
+   "d": 1.95,
+   "text": "you may know me from my indie game"
+  },
+  {
+   "t": 14.79,
+   "d": 3.84,
+   "text": "Artemus spaceship bridge simulator thank"
+  },
+  {
+   "t": 18.63,
+   "d": 3.17,
+   "text": "you thank you"
+  },
+  {
+   "t": 22.04,
+   "d": 1.69,
+   "text": "sweet feels good"
+  },
+  {
+   "t": 23.73,
+   "d": 4.44,
+   "text": "keep coming all right but what I wanted"
+  },
+  {
+   "t": 28.17,
+   "d": 4.98,
+   "text": "to talk to you about today is an idea I"
+  },
+  {
+   "t": 33.15,
+   "d": 3.57,
+   "text": "had based it well so if you're like me"
+  },
+  {
+   "t": 36.72,
+   "d": 1.19,
+   "text": "and I know I am"
+  },
+  {
+   "t": 37.91,
+   "d": 1.87,
+   "text": "that's all Mystery Science Theater"
+  },
+  {
+   "t": 39.78,
+   "d": 5.22,
+   "text": "chugging you get an idea for a game"
+  },
+  {
+   "t": 45.0,
+   "d": 2.16,
+   "text": "you rapid prototype you put you put"
+  },
+  {
+   "t": 47.16,
+   "d": 1.77,
+   "text": "together some variables in some code and"
+  },
+  {
+   "t": 48.93,
+   "d": 2.28,
+   "text": "then you realize oh I have to also spend"
+  },
+  {
+   "t": 51.21,
+   "d": 3.02,
+   "text": "time building the user interface"
+  },
+  {
+   "t": 54.23,
+   "d": 2.32,
+   "text": "everything got dark oh it's probably my"
+  },
+  {
+   "t": 56.55,
+   "d": 4.5,
+   "text": "screen sorry and the problem is is that"
+  },
+  {
+   "t": 61.05,
+   "d": 2.97,
+   "text": "the you you you basically budget on a"
+  },
+  {
+   "t": 64.02,
+   "d": 2.49,
+   "text": "more time for the user interface whether"
+  },
+  {
+   "t": 66.51,
+   "d": 1.98,
+   "text": "you like it or not and often you know"
+  },
+  {
+   "t": 68.49,
+   "d": 1.26,
+   "text": "that drudgery is something you don't"
+  },
+  {
+   "t": 69.75,
+   "d": 2.88,
+   "text": "particularly like and that can actually"
+  },
+  {
+   "t": 72.63,
+   "d": 1.83,
+   "text": "impact your creativity who say I could"
+  },
+  {
+   "t": 74.46,
+   "d": 1.68,
+   "text": "work on this game but all that user"
+  },
+  {
+   "t": 76.14,
+   "d": 2.16,
+   "text": "interface work I got to do maybe I'll do"
+  },
+  {
+   "t": 78.3,
+   "d": 1.17,
+   "text": "it tomorrow"
+  },
+  {
+   "t": 79.47,
+   "d": 3.03,
+   "text": "so I was thinking about that and mulling"
+  },
+  {
+   "t": 82.5,
+   "d": 2.85,
+   "text": "it over and I did some prototyping of"
+  },
+  {
+   "t": 85.35,
+   "d": 2.19,
+   "text": "this prototyping stuff a week ago and"
+  },
+  {
+   "t": 87.54,
+   "d": 2.7,
+   "text": "I'd like to share it with you so can"
+  },
+  {
+   "t": 90.24,
+   "d": 2.4,
+   "text": "everybody see the code that's here now"
+  },
+  {
+   "t": 92.64,
+   "d": 3.32,
+   "text": "or should i zoom in a bit"
+  },
+  {
+   "t": 104.2,
+   "d": 2.62,
+   "text": "No maybe without my mouse it's gonna be"
+  },
+  {
+   "t": 106.82,
+   "d": 2.31,
+   "text": "harder than its but hopefully if you"
+  },
+  {
+   "t": 109.13,
+   "d": 2.97,
+   "text": "look carefully this code just shows a"
+  },
+  {
+   "t": 112.1,
+   "d": 3.45,
+   "text": "player object and it shows how I'm"
+  },
+  {
+   "t": 115.55,
+   "d": 2.55,
+   "text": "adding some data to it using a"
+  },
+  {
+   "t": 118.1,
+   "d": 2.31,
+   "text": "particular syntax so I'm making some"
+  },
+  {
+   "t": 120.41,
+   "d": 4.5,
+   "text": "variables that are smart and as you'll"
+  },
+  {
+   "t": 124.91,
+   "d": 1.65,
+   "text": "see when I'm going towards is maybe"
+  },
+  {
+   "t": 126.56,
+   "d": 1.65,
+   "text": "thinking maybe these variables are smart"
+  },
+  {
+   "t": 128.21,
+   "d": 4.2,
+   "text": "enough to draw themselves so putting"
+  },
+  {
+   "t": 132.41,
+   "d": 1.4,
+   "text": "together a bunch of variables for this"
+  },
+  {
+   "t": 133.81,
+   "d": 4.6,
+   "text": "player I've got some you know some"
+  },
+  {
+   "t": 138.41,
+   "d": 2.73,
+   "text": "limits on those types of things"
+  },
+  {
+   "t": 141.14,
+   "d": 3.9,
+   "text": "and then down here I also built a list"
+  },
+  {
+   "t": 145.04,
+   "d": 1.74,
+   "text": "of things so I can have an inventory for"
+  },
+  {
+   "t": 146.78,
+   "d": 3.24,
+   "text": "my character here over on my monster"
+  },
+  {
+   "t": 150.02,
+   "d": 2.22,
+   "text": "same thing I've got two basic types of"
+  },
+  {
+   "t": 152.24,
+   "d": 4.11,
+   "text": "monsters flesh golem and a plant monster"
+  },
+  {
+   "t": 156.35,
+   "d": 2.67,
+   "text": "and they're just different data for the"
+  },
+  {
+   "t": 159.02,
+   "d": 2.67,
+   "text": "different types putting together data so"
+  },
+  {
+   "t": 161.69,
+   "d": 2.7,
+   "text": "basically you make an object and you the"
+  },
+  {
+   "t": 164.39,
+   "d": 1.59,
+   "text": "data you want to see on the screen you"
+  },
+  {
+   "t": 165.98,
+   "d": 3.21,
+   "text": "make in a particular way now here in my"
+  },
+  {
+   "t": 169.19,
+   "d": 3.54,
+   "text": "main loop if my draw I have my selected"
+  },
+  {
+   "t": 172.73,
+   "d": 3.6,
+   "text": "unit and what do I do I call draw my"
+  },
+  {
+   "t": 176.33,
+   "d": 2.37,
+   "text": "data just called draw my data and the"
+  },
+  {
+   "t": 178.7,
+   "d": 2.88,
+   "text": "only argument is the rectangle that I'm"
+  },
+  {
+   "t": 181.58,
+   "d": 3.81,
+   "text": "gonna put on the screen so let me fire"
+  },
+  {
+   "t": 185.39,
+   "d": 0.66,
+   "text": "this up"
+  },
+  {
+   "t": 186.05,
+   "d": 1.5,
+   "text": "now what I'm gonna show you here is not"
+  },
+  {
+   "t": 187.55,
+   "d": 3.53,
+   "text": "for the players it's for the developer"
+  },
+  {
+   "t": 192.1,
+   "d": 2.92,
+   "text": "if it'll load load load think you think"
+  },
+  {
+   "t": 195.02,
+   "d": 7.44,
+   "text": "a little computer here it is so there's"
+  },
+  {
+   "t": 202.46,
+   "d": 2.85,
+   "text": "just a little intro screen now I've got"
+  },
+  {
+   "t": 205.31,
+   "d": 2.52,
+   "text": "these the player and the two monsters"
+  },
+  {
+   "t": 207.83,
+   "d": 1.83,
+   "text": "that I showed you earlier I click on the"
+  },
+  {
+   "t": 209.66,
+   "d": 2.96,
+   "text": "monster and now you can see that the"
+  },
+  {
+   "t": 212.62,
+   "d": 5.05,
+   "text": "user interface is built dynamically no"
+  },
+  {
+   "t": 217.67,
+   "d": 4.17,
+   "text": "matter what rectangle I give it for the"
+  },
+  {
+   "t": 221.84,
+   "d": 3.9,
+   "text": "user interface to fit inside and I'll"
+  },
+  {
+   "t": 225.74,
+   "d": 2.85,
+   "text": "show you the more complex version of the"
+  },
+  {
+   "t": 228.59,
+   "d": 2.58,
+   "text": "player data because the player just has"
+  },
+  {
+   "t": 231.17,
+   "d": 1.65,
+   "text": "more complex data including that"
+  },
+  {
+   "t": 232.82,
+   "d": 3.0,
+   "text": "inventory I can get him you know I can"
+  },
+  {
+   "t": 235.82,
+   "d": 1.68,
+   "text": "shuffle it around"
+  },
+  {
+   "t": 237.5,
+   "d": 2.19,
+   "text": "to find you know what box works best for"
+  },
+  {
+   "t": 239.69,
+   "d": 4.17,
+   "text": "that character data and that's generally"
+  },
+  {
+   "t": 243.86,
+   "d": 1.89,
+   "text": "it but remember this is not for the"
+  },
+  {
+   "t": 245.75,
+   "d": 2.13,
+   "text": "player the player you know is just gonna"
+  },
+  {
+   "t": 247.88,
+   "d": 1.41,
+   "text": "see your game after it's done this is"
+  },
+  {
+   "t": 249.29,
+   "d": 2.43,
+   "text": "for rapid prototyping and hopefully"
+  },
+  {
+   "t": 251.72,
+   "d": 2.25,
+   "text": "skipping that whole I've got to write"
+  },
+  {
+   "t": 253.97,
+   "d": 2.04,
+   "text": "all that user interface code because"
+  },
+  {
+   "t": 256.01,
+   "d": 2.73,
+   "text": "hopefully this code we get you more like"
+  },
+  {
+   "t": 258.74,
+   "d": 1.65,
+   "text": "80% of the way there and that's good"
+  },
+  {
+   "t": 260.39,
+   "d": 2.04,
+   "text": "enough for prototyping you know at the"
+  },
+  {
+   "t": 262.43,
+   "d": 1.53,
+   "text": "end of the day you can overload your"
+  },
+  {
+   "t": 263.96,
+   "d": 2.25,
+   "text": "draw my data function and draw it"
+  },
+  {
+   "t": 266.21,
+   "d": 1.23,
+   "text": "however you want and make it really"
+  },
+  {
+   "t": 267.44,
+   "d": 1.88,
+   "text": "pretty but this is for prototyping"
+  },
+  {
+   "t": 269.32,
+   "d": 2.86,
+   "text": "notice also that using my arrow keys I"
+  },
+  {
+   "t": 272.18,
+   "d": 3.3,
+   "text": "can move my little player object around"
+  },
+  {
+   "t": 275.48,
+   "d": 2.52,
+   "text": "but it's pretty slow with this user"
+  },
+  {
+   "t": 278.0,
+   "d": 2.76,
+   "text": "interface I can also integrate a drag"
+  },
+  {
+   "t": 280.76,
+   "d": 4.59,
+   "text": "bar go ahead and speed him up so I can"
+  },
+  {
+   "t": 285.35,
+   "d": 3.03,
+   "text": "quickly and easily pick you know certain"
+  },
+  {
+   "t": 288.38,
+   "d": 2.97,
+   "text": "what what number is best for me now from"
+  },
+  {
+   "t": 291.35,
+   "d": 3.75,
+   "text": "a rapid prototyping point of view so"
+  },
+  {
+   "t": 295.1,
+   "d": 2.34,
+   "text": "that's all I just wanted to share this"
+  },
+  {
+   "t": 297.44,
+   "d": 2.37,
+   "text": "work that I had done in terms of this"
+  },
+  {
+   "t": 299.81,
+   "d": 3.54,
+   "text": "idea of getting smart variables to"
+  },
+  {
+   "t": 303.35,
+   "d": 3.39,
+   "text": "display themselves as a way to really"
+  },
+  {
+   "t": 306.74,
+   "d": 2.43,
+   "text": "tighten up the initial prototyping loop"
+  },
+  {
+   "t": 309.17,
+   "d": 3.24,
+   "text": "for some of my games I thought I didn't"
+  },
+  {
+   "t": 312.41,
+   "d": 2.43,
+   "text": "want to keep the idea to myself and"
+  },
+  {
+   "t": 314.84,
+   "d": 6.15,
+   "text": "that's why I got show you are we doing"
+  },
+  {
+   "t": 320.99,
+   "d": 6.15,
+   "text": "questions ok yeah sorry lightning cool"
+  },
+  {
+   "t": 327.14,
+   "d": 3.0,
+   "text": "now if Jim who's going to talk more"
+  },
+  {
+   "t": 330.14,
+   "d": 2.73,
+   "text": "about I figure out the name but you know"
+  },
+  {
+   "t": 332.87,
+   "d": 4.35,
+   "text": "the name cool alright I make video games"
+  },
+  {
+   "t": 337.22,
+   "d": 1.37,
+   "text": "for a living because I love doing it and"
+  },
+  {
+   "t": 338.59,
+   "d": 2.2,
+   "text": "I'm pretty good at it and I want to make"
+  },
+  {
+   "t": 340.79,
+   "d": 1.2,
+   "text": "people laugh and have a good time and"
+  },
+  {
+   "t": 341.99,
+   "d": 2.16,
+   "text": "have fun I also want to help people and"
+  },
+  {
+   "t": 344.15,
+   "d": 2.46,
+   "text": "I'm really also bad at making games cuz"
+  },
+  {
+   "t": 346.61,
+   "d": 1.47,
+   "text": "I'm broke almost all the time right I"
+  },
+  {
+   "t": 348.08,
+   "d": 1.35,
+   "text": "sell games on Steam what the hell does"
+  },
+  {
+   "t": 349.43,
+   "d": 2.25,
+   "text": "that do and I have this near infinite"
+  },
+  {
+   "t": 351.68,
+   "d": 2.64,
+   "text": "pile of steam keys then I want to do"
+  },
+  {
+   "t": 354.32,
+   "d": 1.77,
+   "text": "something cool with and I I want to turn"
+  },
+  {
+   "t": 356.09,
+   "d": 1.86,
+   "text": "them into food for people besides me"
+  },
+  {
+   "t": 357.95,
+   "d": 1.38,
+   "text": "right I couldn't do it I couldn't do it"
+  },
+  {
+   "t": 359.33,
+   "d": 1.5,
+   "text": "then I realized wait a minute other"
+  },
+  {
+   "t": 360.83,
+   "d": 0.84,
+   "text": "people can do it"
+  },
+  {
+   "t": 361.67,
+   "d": 2.4,
+   "text": "they can turn their money into food and"
+  },
+  {
+   "t": 364.07,
+   "d": 2.82,
+   "text": "get one of my keys and then now somebody"
+  },
+  {
+   "t": 366.89,
+   "d": 1.47,
+   "text": "hungry is less hungry because a dungeon"
+  },
+  {
+   "t": 368.36,
+   "d": 1.95,
+   "text": "man's well that rules who else can I can"
+  },
+  {
+   "t": 370.31,
+   "d": 0.63,
+   "text": "I rope into the"
+  },
+  {
+   "t": 370.94,
+   "d": 2.04,
+   "text": "and so last year I did something called"
+  },
+  {
+   "t": 372.98,
+   "d": 2.88,
+   "text": "stop the hunger clock which is a charity"
+  },
+  {
+   "t": 375.86,
+   "d": 1.62,
+   "text": "of sorts where people give me keys and"
+  },
+  {
+   "t": 377.48,
+   "d": 2.46,
+   "text": "then real people in the world go out to"
+  },
+  {
+   "t": 379.94,
+   "d": 2.43,
+   "text": "their real communities and the easiest"
+  },
+  {
+   "t": 382.37,
+   "d": 1.59,
+   "text": "way to do it is buy one of those $10"
+  },
+  {
+   "t": 383.96,
+   "d": 1.8,
+   "text": "bags of food at your grocery store right"
+  },
+  {
+   "t": 385.76,
+   "d": 1.8,
+   "text": "they all pile up like consumables and"
+  },
+  {
+   "t": 387.56,
+   "d": 2.07,
+   "text": "around Thanksgiving and you buy one and"
+  },
+  {
+   "t": 389.63,
+   "d": 2.25,
+   "text": "it's for hunger relief and they tell you"
+  },
+  {
+   "t": 391.88,
+   "d": 1.32,
+   "text": "how much good it's gonna do it's"
+  },
+  {
+   "t": 393.2,
+   "d": 2.37,
+   "text": "probably true so you buy that and then"
+  },
+  {
+   "t": 395.57,
+   "d": 1.23,
+   "text": "you take a picture to receipt you mail"
+  },
+  {
+   "t": 396.8,
+   "d": 1.11,
+   "text": "it in to me and you get your choice of"
+  },
+  {
+   "t": 397.91,
+   "d": 1.41,
+   "text": "keys right because there's a whole bunch"
+  },
+  {
+   "t": 399.32,
+   "d": 3.21,
+   "text": "of generous developers like you and the"
+  },
+  {
+   "t": 402.53,
+   "d": 3.0,
+   "text": "camera who who brought keys and"
+  },
+  {
+   "t": 405.53,
+   "d": 1.29,
+   "text": "delivered them and said hey you know"
+  },
+  {
+   "t": 406.82,
+   "d": 1.89,
+   "text": "what I got ten keys if I can turn that"
+  },
+  {
+   "t": 408.71,
+   "d": 1.08,
+   "text": "into a whole bunch of food for people"
+  },
+  {
+   "t": 409.79,
+   "d": 1.65,
+   "text": "cool do it I had people who aren't"
+  },
+  {
+   "t": 411.44,
+   "d": 1.56,
+   "text": "developers who were just players who"
+  },
+  {
+   "t": 413.0,
+   "d": 2.04,
+   "text": "said I have a bunch of steam keys for"
+  },
+  {
+   "t": 415.04,
+   "d": 2.37,
+   "text": "games I'll never play you want him and I"
+  },
+  {
+   "t": 417.41,
+   "d": 1.44,
+   "text": "would give those away and random people"
+  },
+  {
+   "t": 418.85,
+   "d": 1.77,
+   "text": "who pitched in and delivered something"
+  },
+  {
+   "t": 420.62,
+   "d": 2.55,
+   "text": "so the way it works is human beings in"
+  },
+  {
+   "t": 423.17,
+   "d": 1.59,
+   "text": "their real world real communities go out"
+  },
+  {
+   "t": 424.76,
+   "d": 1.92,
+   "text": "buy one of these things take a picture"
+  },
+  {
+   "t": 426.68,
+   "d": 1.74,
+   "text": "the receipt send it in they get a key it"
+  },
+  {
+   "t": 428.42,
+   "d": 2.43,
+   "text": "does not push button receive game on the"
+  },
+  {
+   "t": 430.85,
+   "d": 2.16,
+   "text": "internet because I want folks to go out"
+  },
+  {
+   "t": 433.01,
+   "d": 1.29,
+   "text": "in their community and actually make a"
+  },
+  {
+   "t": 434.3,
+   "d": 2.25,
+   "text": "difference and help locally one person"
+  },
+  {
+   "t": 436.55,
+   "d": 1.68,
+   "text": "last year couldn't find any of those"
+  },
+  {
+   "t": 438.23,
+   "d": 2.25,
+   "text": "damn brown bags and he really wanted to"
+  },
+  {
+   "t": 440.48,
+   "d": 2.16,
+   "text": "partake so he mailed me afterward and"
+  },
+  {
+   "t": 442.64,
+   "d": 1.38,
+   "text": "said I looked and looked I couldn't find"
+  },
+  {
+   "t": 444.02,
+   "d": 2.13,
+   "text": "one so what I did is I went to my local"
+  },
+  {
+   "t": 446.15,
+   "d": 1.98,
+   "text": "church and I said y'all need any help"
+  },
+  {
+   "t": 448.13,
+   "d": 1.86,
+   "text": "and they had a food drive and he ended"
+  },
+  {
+   "t": 449.99,
+   "d": 1.29,
+   "text": "up working at the food drive for four"
+  },
+  {
+   "t": 451.28,
+   "d": 1.56,
+   "text": "hours and meeting people and cooking"
+  },
+  {
+   "t": 452.84,
+   "d": 1.56,
+   "text": "things into holy [ __ ] for like for a"
+  },
+  {
+   "t": 454.4,
+   "d": 3.15,
+   "text": "copy of dungeon man's like come on it"
+  },
+  {
+   "t": 457.55,
+   "d": 0.78,
+   "text": "was awesome"
+  },
+  {
+   "t": 458.33,
+   "d": 1.83,
+   "text": "I was very happy I'm doing it again this"
+  },
+  {
+   "t": 460.16,
+   "d": 1.77,
+   "text": "year and it starts next Friday it's"
+  },
+  {
+   "t": 461.93,
+   "d": 2.19,
+   "text": "called stop the hunger clock if you're a"
+  },
+  {
+   "t": 464.12,
+   "d": 1.62,
+   "text": "dev and you want to support some with"
+  },
+  {
+   "t": 465.74,
+   "d": 1.83,
+   "text": "keys do it if you're a player and you"
+  },
+  {
+   "t": 467.57,
+   "d": 1.08,
+   "text": "want to get in do it if you have"
+  },
+  {
+   "t": 468.65,
+   "d": 1.56,
+   "text": "anything you can do to help promote this"
+  },
+  {
+   "t": 470.21,
+   "d": 2.85,
+   "text": "get the word out make it cooler so less"
+  },
+  {
+   "t": 473.06,
+   "d": 1.47,
+   "text": "people are hunger and Thanksgiving"
+  },
+  {
+   "t": 474.53,
+   "d": 1.92,
+   "text": "because that's [ __ ] and we can stop"
+  },
+  {
+   "t": 476.45,
+   "d": 3.3,
+   "text": "it we should let me know Jim at dungeon"
+  },
+  {
+   "t": 479.75,
+   "d": 2.43,
+   "text": "man's calm that's my email address at"
+  },
+  {
+   "t": 482.18,
+   "d": 1.44,
+   "text": "dungeon man's hunger clock is the hash"
+  },
+  {
+   "t": 483.62,
+   "d": 2.88,
+   "text": "tag it starts in a few days and and"
+  },
+  {
+   "t": 486.5,
+   "d": 1.32,
+   "text": "that's it that's all I got"
+  },
+  {
+   "t": 487.82,
+   "d": 2.24,
+   "text": "thanks"
+  },
+  {
+   "t": 495.43,
+   "d": 2.98,
+   "text": "hey cat if you could put the computer on"
+  },
+  {
+   "t": 498.41,
+   "d": 2.4,
+   "text": "the screen again we have mark who's"
+  },
+  {
+   "t": 500.81,
+   "d": 2.15,
+   "text": "going to tell us about a project of his"
+  },
+  {
+   "t": 502.96,
+   "d": 4.32,
+   "text": "so I love procedural generation and I"
+  },
+  {
+   "t": 507.28,
+   "d": 4.51,
+   "text": "love distributed systems so instead of"
+  },
+  {
+   "t": 511.79,
+   "d": 1.59,
+   "text": "putting them together in a way that it"
+  },
+  {
+   "t": 513.38,
+   "d": 2.07,
+   "text": "was sensible I put them together in a"
+  },
+  {
+   "t": 515.45,
+   "d": 1.2,
+   "text": "way that is very silly"
+  },
+  {
+   "t": 516.65,
+   "d": 2.64,
+   "text": "I created a tracery to aetherium"
+  },
+  {
+   "t": 519.29,
+   "d": 2.88,
+   "text": "compiler so you can take your trace"
+  },
+  {
+   "t": 522.17,
+   "d": 3.33,
+   "text": "tracery recipe which spits out a little"
+  },
+  {
+   "t": 525.5,
+   "d": 2.67,
+   "text": "bit of text compile that to a blockchain"
+  },
+  {
+   "t": 528.17,
+   "d": 2.88,
+   "text": "smart contract and have the world's most"
+  },
+  {
+   "t": 531.05,
+   "d": 2.1,
+   "text": "expensive way of generating a little"
+  },
+  {
+   "t": 533.15,
+   "d": 4.17,
+   "text": "piece of text not only that the contract"
+  },
+  {
+   "t": 537.32,
+   "d": 2.69,
+   "text": "will ensure that it is unique to you and"
+  },
+  {
+   "t": 540.01,
+   "d": 3.25,
+   "text": "it will be around forever because there"
+  },
+  {
+   "t": 543.26,
+   "d": 1.77,
+   "text": "is no way to delete it from the"
+  },
+  {
+   "t": 545.03,
+   "d": 4.95,
+   "text": "blockchain so the I have not yet you"
+  },
+  {
+   "t": 549.98,
+   "d": 2.58,
+   "text": "know paid my five bucks to to span the"
+  },
+  {
+   "t": 552.56,
+   "d": 2.51,
+   "text": "blockchain but I can you know show you"
+  },
+  {
+   "t": 555.07,
+   "d": 2.26,
+   "text": "assuming the Internet is up the the"
+  },
+  {
+   "t": 557.33,
+   "d": 2.64,
+   "text": "transaction that I did on the test"
+  },
+  {
+   "t": 559.97,
+   "d": 2.85,
+   "text": "blockchain here's the here's the"
+  },
+  {
+   "t": 562.82,
+   "d": 4.59,
+   "text": "transaction and this is a very I"
+  },
+  {
+   "t": 567.41,
+   "d": 2.13,
+   "text": "actually showed you how expensive it was"
+  },
+  {
+   "t": 569.54,
+   "d": 2.16,
+   "text": "that the default amount of gas will not"
+  },
+  {
+   "t": 571.7,
+   "d": 3.15,
+   "text": "get you any text string but there in the"
+  },
+  {
+   "t": 574.85,
+   "d": 5.07,
+   "text": "debug output is the one of the sample of"
+  },
+  {
+   "t": 579.92,
+   "d": 4.17,
+   "text": "tracery recipes you'll find an kate"
+  },
+  {
+   "t": 584.09,
+   "d": 2.31,
+   "text": "compton site preserved in the blockchain"
+  },
+  {
+   "t": 586.4,
+   "d": 6.36,
+   "text": "for all eternity thank you that was"
+  },
+  {
+   "t": 592.76,
+   "d": 7.38,
+   "text": "great okay now we have kala hi i'm kyla"
+  },
+  {
+   "t": 600.14,
+   "d": 1.95,
+   "text": "at quite dragoness on all sorts of"
+  },
+  {
+   "t": 602.09,
+   "d": 2.4,
+   "text": "places on the Internet I love roguelikes"
+  },
+  {
+   "t": 604.49,
+   "d": 1.92,
+   "text": "I love roguelike stories so here is a"
+  },
+  {
+   "t": 606.41,
+   "d": 4.95,
+   "text": "roguelike story from a rare fandom"
+  },
+  {
+   "t": 611.36,
+   "d": 3.48,
+   "text": "fanfic exchange called Yuletide in 2015"
+  },
+  {
+   "t": 614.84,
+   "d": 3.93,
+   "text": "the user Molly bead molybdenum antek I"
+  },
+  {
+   "t": 618.77,
+   "d": 3.45,
+   "text": "may be mispronouncing that wrote a"
+  },
+  {
+   "t": 622.22,
+   "d": 1.53,
+   "text": "fanfic"
+  },
+  {
+   "t": 623.75,
+   "d": 4.92,
+   "text": "in nethack called just because it says"
+  },
+  {
+   "t": 628.67,
+   "d": 7.74,
+   "text": "readme doesn't mean you should my diary"
+  },
+  {
+   "t": 636.41,
+   "d": 3.45,
+   "text": "the Oracle came out it found returned to"
+  },
+  {
+   "t": 639.86,
+   "d": 3.45,
+   "text": "the Oracle Oracle level level 7 ish the"
+  },
+  {
+   "t": 643.31,
+   "d": 4.11,
+   "text": "dungeons of doom 1st January dear diary"
+  },
+  {
+   "t": 647.42,
+   "d": 2.97,
+   "text": "I've decided to keep a diary you're the"
+  },
+  {
+   "t": 650.39,
+   "d": 2.34,
+   "text": "first no of course he's Chuck you be"
+  },
+  {
+   "t": 652.73,
+   "d": 2.04,
+   "text": "such a lovely notebook for my birthday"
+  },
+  {
+   "t": 654.77,
+   "d": 1.41,
+   "text": "then if fault I needed to do something"
+  },
+  {
+   "t": 656.18,
+   "d": 2.7,
+   "text": "really worthwhile to do with it and it's"
+  },
+  {
+   "t": 658.88,
+   "d": 1.41,
+   "text": "New Year's so an excellent time for"
+  },
+  {
+   "t": 660.29,
+   "d": 1.86,
+   "text": "starting new endeavors so here we are"
+  },
+  {
+   "t": 662.15,
+   "d": 2.88,
+   "text": "I'm writing in you it will make a change"
+  },
+  {
+   "t": 665.03,
+   "d": 1.98,
+   "text": "from only ever inventing eternal"
+  },
+  {
+   "t": 667.01,
+   "d": 2.58,
+   "text": "verities or ambiguous prophecies to be"
+  },
+  {
+   "t": 669.59,
+   "d": 1.5,
+   "text": "fully understood only as your"
+  },
+  {
+   "t": 671.09,
+   "d": 2.16,
+   "text": "possessions are identified frivolity"
+  },
+  {
+   "t": 673.25,
+   "d": 5.07,
+   "text": "here we come 2nd January dear diary one"
+  },
+  {
+   "t": 678.32,
+   "d": 1.86,
+   "text": "of my other presents was a desk calendar"
+  },
+  {
+   "t": 680.18,
+   "d": 2.51,
+   "text": "from Vlad every day there is a new"
+  },
+  {
+   "t": 682.69,
+   "d": 3.55,
+   "text": "supposedly witty aphorism today's was an"
+  },
+  {
+   "t": 686.24,
+   "d": 2.81,
+   "text": "umber Hulk can be a confusing sight I"
+  },
+  {
+   "t": 689.05,
+   "d": 2.47,
+   "text": "must start trying to work these into my"
+  },
+  {
+   "t": 691.52,
+   "d": 2.7,
+   "text": "routine so hopeful and yet so unhelpful"
+  },
+  {
+   "t": 694.22,
+   "d": 3.36,
+   "text": "at the same time yesterday's was I smell"
+  },
+  {
+   "t": 697.58,
+   "d": 2.88,
+   "text": "a maze of twisty little passages comedy"
+  },
+  {
+   "t": 700.46,
+   "d": 4.64,
+   "text": "gold 3rd January dear diary"
+  },
+  {
+   "t": 705.1,
+   "d": 2.71,
+   "text": "today's adventurer was not amused when I"
+  },
+  {
+   "t": 707.81,
+   "d": 2.88,
+   "text": "told her if you're lost try buying a map"
+  },
+  {
+   "t": 710.69,
+   "d": 2.4,
+   "text": "next time you're in a shop but she did"
+  },
+  {
+   "t": 713.09,
+   "d": 2.43,
+   "text": "only pay me 50 assortments I don't know"
+  },
+  {
+   "t": 715.52,
+   "d": 2.01,
+   "text": "what she was expecting I hid behind a"
+  },
+  {
+   "t": 717.53,
+   "d": 1.7,
+   "text": "fountain until she was gone"
+  },
+  {
+   "t": 719.23,
+   "d": 4.21,
+   "text": "4th January dear diary cleaned up the"
+  },
+  {
+   "t": 723.44,
+   "d": 1.41,
+   "text": "fountains today they were looking a"
+  },
+  {
+   "t": 724.85,
+   "d": 2.73,
+   "text": "little dreary got rid of a load of algae"
+  },
+  {
+   "t": 727.58,
+   "d": 2.34,
+   "text": "and polished everything up a bit can see"
+  },
+  {
+   "t": 729.92,
+   "d": 2.34,
+   "text": "my face and the caryatids now maybe I"
+  },
+  {
+   "t": 732.26,
+   "d": 2.73,
+   "text": "need a new hobby calendar says someone's"
+  },
+  {
+   "t": 734.99,
+   "d": 2.04,
+   "text": "been spiking the pits not a good hobby"
+  },
+  {
+   "t": 737.03,
+   "d": 3.36,
+   "text": "suggestion too vindictive Apollo knows"
+  },
+  {
+   "t": 740.39,
+   "d": 1.32,
+   "text": "the adventures have a hard enough time"
+  },
+  {
+   "t": 741.71,
+   "d": 4.56,
+   "text": "as it is 5th January dear diary not much"
+  },
+  {
+   "t": 746.27,
+   "d": 0.63,
+   "text": "to do today"
+  },
+  {
+   "t": 746.9,
+   "d": 2.58,
+   "text": "squash a few grid bugs nasty scuttling"
+  },
+  {
+   "t": 749.48,
+   "d": 2.28,
+   "text": "things and pointed a golden Naga in the"
+  },
+  {
+   "t": 751.76,
+   "d": 0.75,
+   "text": "right direction"
+  },
+  {
+   "t": 752.51,
+   "d": 2.22,
+   "text": "the calendar says the lithium crystals"
+  },
+  {
+   "t": 754.73,
+   "d": 2.34,
+   "text": "are rare indeed but that's also"
+  },
+  {
+   "t": 757.07,
+   "d": 1.47,
+   "text": "terrible suggestion I don't have the"
+  },
+  {
+   "t": 758.54,
+   "d": 2.01,
+   "text": "time or money for rare gem collecting"
+  },
+  {
+   "t": 760.55,
+   "d": 3.33,
+   "text": "something more frugal would be better 6"
+  },
+  {
+   "t": 763.88,
+   "d": 3.09,
+   "text": "January dear diary finally a useful"
+  },
+  {
+   "t": 766.97,
+   "d": 0.75,
+   "text": "suggestion"
+  },
+  {
+   "t": 767.72,
+   "d": 2.1,
+   "text": "they say that Medusa would like to put"
+  },
+  {
+   "t": 769.82,
+   "d": 2.37,
+   "text": "you on a pedestal I could learn to stone"
+  },
+  {
+   "t": 772.19,
+   "d": 2.25,
+   "text": "carving there's no shortage of rocks"
+  },
+  {
+   "t": 774.44,
+   "d": 1.56,
+   "text": "around here and I could ask Medusa for"
+  },
+  {
+   "t": 776.0,
+   "d": 2.25,
+   "text": "tips plus a few extra statues would make"
+  },
+  {
+   "t": 778.25,
+   "d": 1.71,
+   "text": "the temple look a bit more respectable"
+  },
+  {
+   "t": 779.96,
+   "d": 2.46,
+   "text": "I wonder whether whether an ask or"
+  },
+  {
+   "t": 782.42,
+   "d": 1.77,
+   "text": "a--they has any books on the subject I"
+  },
+  {
+   "t": 784.19,
+   "d": 1.67,
+   "text": "see a trip to mind town in the future"
+  },
+  {
+   "t": 785.86,
+   "d": 3.13,
+   "text": "some of the January dear diary trip down"
+  },
+  {
+   "t": 788.99,
+   "d": 1.62,
+   "text": "to mine town of today to buy supplies"
+  },
+  {
+   "t": 790.61,
+   "d": 2.49,
+   "text": "had to traipse around all the shops in"
+  },
+  {
+   "t": 793.1,
+   "d": 1.5,
+   "text": "the place before I found what I wanted"
+  },
+  {
+   "t": 794.6,
+   "d": 2.46,
+   "text": "but as they don't know how to pick axe"
+  },
+  {
+   "t": 797.06,
+   "d": 2.07,
+   "text": "which you reluctantly let me have and a"
+  },
+  {
+   "t": 799.13,
+   "d": 1.56,
+   "text": "couple of girls of Earth so the trip"
+  },
+  {
+   "t": 800.69,
+   "d": 2.43,
+   "text": "wasn't wasted inside a shop you better"
+  },
+  {
+   "t": 803.12,
+   "d": 1.44,
+   "text": "take a look at the price tags before"
+  },
+  {
+   "t": 804.56,
+   "d": 2.31,
+   "text": "buying anything too true calendar to"
+  },
+  {
+   "t": 806.87,
+   "d": 2.64,
+   "text": "true also trout did on his childhood"
+  },
+  {
+   "t": 809.51,
+   "d": 1.83,
+   "text": "picked up a few extra candles for"
+  },
+  {
+   "t": 811.34,
+   "d": 3.21,
+   "text": "lighting my studio 8th January dear"
+  },
+  {
+   "t": 814.55,
+   "d": 2.91,
+   "text": "diary today added veg fried died on my"
+  },
+  {
+   "t": 817.46,
+   "d": 2.43,
+   "text": "level unprepared for a baby red dragon"
+  },
+  {
+   "t": 819.89,
+   "d": 2.19,
+   "text": "and I wouldn't normally but I just have"
+  },
+  {
+   "t": 822.08,
+   "d": 2.04,
+   "text": "to spot a wand of digging poking out of"
+  },
+  {
+   "t": 824.12,
+   "d": 2.61,
+   "text": "his pack grave robbers sometimes get"
+  },
+  {
+   "t": 826.73,
+   "d": 2.19,
+   "text": "rich as the calendar would say did just"
+  },
+  {
+   "t": 828.92,
+   "d": 1.68,
+   "text": "say this morning coincidentally maybe"
+  },
+  {
+   "t": 830.6,
+   "d": 2.04,
+   "text": "that's where I got the idea from the"
+  },
+  {
+   "t": 832.64,
+   "d": 4.29,
+   "text": "sanctuary plan is go 9th January dear"
+  },
+  {
+   "t": 836.93,
+   "d": 2.37,
+   "text": "diary quiet day today so I had my first"
+  },
+  {
+   "t": 839.3,
+   "d": 1.8,
+   "text": "go ahead carving I picked a grid bug"
+  },
+  {
+   "t": 841.1,
+   "d": 2.49,
+   "text": "partly inspired by the calendar they say"
+  },
+  {
+   "t": 843.59,
+   "d": 1.53,
+   "text": "that a grid bug won't hit you when you"
+  },
+  {
+   "t": 845.12,
+   "d": 2.58,
+   "text": "cross it but also they had nice straight"
+  },
+  {
+   "t": 847.7,
+   "d": 1.86,
+   "text": "lines in a simple shape perfect for a"
+  },
+  {
+   "t": 849.56,
+   "d": 2.19,
+   "text": "first attempt came out a bit wonky but"
+  },
+  {
+   "t": 851.75,
+   "d": 1.62,
+   "text": "overall quite pleased with it"
+  },
+  {
+   "t": 853.37,
+   "d": 3.06,
+   "text": "10th January so I tried to something"
+  },
+  {
+   "t": 856.43,
+   "d": 2.79,
+   "text": "else simple today a floating eye not"
+  },
+  {
+   "t": 859.22,
+   "d": 1.44,
+   "text": "sure how I will get it to float and"
+  },
+  {
+   "t": 860.66,
+   "d": 1.62,
+   "text": "fresh out of levitation potions and"
+  },
+  {
+   "t": 862.28,
+   "d": 1.65,
+   "text": "obviously it can't wear a ring or boots"
+  },
+  {
+   "t": 863.93,
+   "d": 2.28,
+   "text": "they say that wiping its face is"
+  },
+  {
+   "t": 866.21,
+   "d": 1.8,
+   "text": "impossible float for a floating eye"
+  },
+  {
+   "t": 868.01,
+   "d": 4.19,
+   "text": "thanks calendar 11th January dear diary"
+  },
+  {
+   "t": 872.2,
+   "d": 2.71,
+   "text": "felt confident to tackle my first quad"
+  },
+  {
+   "t": 874.91,
+   "d": 2.19,
+   "text": "repent today I led the calendar choose"
+  },
+  {
+   "t": 877.1,
+   "d": 2.43,
+   "text": "and it said it would be purely sad if"
+  },
+  {
+   "t": 879.53,
+   "d": 2.28,
+   "text": "your where your dog turned to stone my"
+  },
+  {
+   "t": 881.81,
+   "d": 1.8,
+   "text": "way was much more work than getting hold"
+  },
+  {
+   "t": 883.61,
+   "d": 1.65,
+   "text": "of a cockatrice egg and a dog would have"
+  },
+  {
+   "t": 885.26,
+   "d": 1.29,
+   "text": "been but ultimate and"
+  },
+  {
+   "t": 886.55,
+   "d": 2.34,
+   "text": "ultimately a bit of a mess considering"
+  },
+  {
+   "t": 888.89,
+   "d": 1.47,
+   "text": "just giving up and paying gargles to"
+  },
+  {
+   "t": 890.36,
+   "d": 0.21,
+   "text": "fill"
+  },
+  {
+   "t": 890.57,
+   "d": 1.8,
+   "text": "alcoves instead I'm not very good at"
+  },
+  {
+   "t": 892.37,
+   "d": 4.38,
+   "text": "this 12 January dear diary decide have"
+  },
+  {
+   "t": 896.75,
+   "d": 1.77,
+   "text": "one last go before giving up the"
+  },
+  {
+   "t": 898.52,
+   "d": 1.8,
+   "text": "calendar says they say that Dragon"
+  },
+  {
+   "t": 900.32,
+   "d": 2.25,
+   "text": "Skelton can be quite enchanting so I"
+  },
+  {
+   "t": 902.57,
+   "d": 1.89,
+   "text": "tried to dragon been ambitious but"
+  },
+  {
+   "t": 904.46,
+   "d": 1.86,
+   "text": "actually it came out ok I'm pleasantly"
+  },
+  {
+   "t": 906.32,
+   "d": 4.74,
+   "text": "surprised 13th January invited Medusa"
+  },
+  {
+   "t": 911.06,
+   "d": 2.01,
+   "text": "round for tea and to show off my dragon"
+  },
+  {
+   "t": 913.07,
+   "d": 2.97,
+   "text": "she was heartedly impressed I think she"
+  },
+  {
+   "t": 916.04,
+   "d": 1.56,
+   "text": "says she prefers a more naturalistic"
+  },
+  {
+   "t": 917.6,
+   "d": 2.07,
+   "text": "style and likes to capture things as"
+  },
+  {
+   "t": 919.67,
+   "d": 3.51,
+   "text": "they are lucky for some I guess they say"
+  },
+  {
+   "t": 923.18,
+   "d": 1.32,
+   "text": "that in the dungeon you don't usually"
+  },
+  {
+   "t": 924.5,
+   "d": 2.85,
+   "text": "have any luck at all she invited me back"
+  },
+  {
+   "t": 927.35,
+   "d": 1.98,
+   "text": "to her level to see her work I must take"
+  },
+  {
+   "t": 929.33,
+   "d": 2.73,
+   "text": "her up on that to offer sometime 14th"
+  },
+  {
+   "t": 932.06,
+   "d": 3.66,
+   "text": "January dear diary I'm a loose end today"
+  },
+  {
+   "t": 935.72,
+   "d": 2.19,
+   "text": "no adventures due for a week apparently"
+  },
+  {
+   "t": 937.91,
+   "d": 2.33,
+   "text": "to pop down to see Medusa after all"
+  },
+  {
+   "t": 940.24,
+   "d": 2.5,
+   "text": "seriously awed by her work such a range"
+  },
+  {
+   "t": 942.74,
+   "d": 2.52,
+   "text": "of subjects and poses natural talent as"
+  },
+  {
+   "t": 945.26,
+   "d": 3.36,
+   "text": "opposed to tell done with mirrors she"
+  },
+  {
+   "t": 948.62,
+   "d": 1.92,
+   "text": "had a particularly nice centaur statue"
+  },
+  {
+   "t": 950.54,
+   "d": 1.68,
+   "text": "that I might have a go I think it might"
+  },
+  {
+   "t": 952.22,
+   "d": 3.81,
+   "text": "go very nicely in the temple 15 January"
+  },
+  {
+   "t": 956.03,
+   "d": 2.85,
+   "text": "dear diary had decided to give centaurs"
+  },
+  {
+   "t": 958.88,
+   "d": 1.89,
+   "text": "ago I think that might strike the right"
+  },
+  {
+   "t": 960.77,
+   "d": 1.71,
+   "text": "balance between imposing and technically"
+  },
+  {
+   "t": 962.48,
+   "d": 1.98,
+   "text": "impressive without being to outright"
+  },
+  {
+   "t": 964.46,
+   "d": 2.16,
+   "text": "monstrous have to keep the temple at"
+  },
+  {
+   "t": 966.62,
+   "d": 1.86,
+   "text": "least slightly welcoming I wouldn't want"
+  },
+  {
+   "t": 968.48,
+   "d": 1.35,
+   "text": "to adventurous mistake yet for from"
+  },
+  {
+   "t": 969.83,
+   "d": 1.8,
+   "text": "News's level in trying to destroy the"
+  },
+  {
+   "t": 971.63,
+   "d": 2.4,
+   "text": "place they say that dwarves lawfully"
+  },
+  {
+   "t": 974.03,
+   "d": 1.56,
+   "text": "mind their own business but I'm not sure"
+  },
+  {
+   "t": 975.59,
+   "d": 1.26,
+   "text": "I could trust everyone to be so"
+  },
+  {
+   "t": 976.85,
+   "d": 4.14,
+   "text": "considerate 16th January dear diary busy"
+  },
+  {
+   "t": 980.99,
+   "d": 2.52,
+   "text": "carving today it's hiring not much"
+  },
+  {
+   "t": 983.51,
+   "d": 1.71,
+   "text": "effort left for writing me to get to"
+  },
+  {
+   "t": 985.22,
+   "d": 2.82,
+   "text": "sleep first centaur nearly done as the"
+  },
+  {
+   "t": 988.04,
+   "d": 1.92,
+   "text": "calendar helpfully says they say that"
+  },
+  {
+   "t": 989.96,
+   "d": 1.73,
+   "text": "some stones are much heavier than others"
+  },
+  {
+   "t": 991.69,
+   "d": 4.24,
+   "text": "more prompt 20th January dear diary been"
+  },
+  {
+   "t": 995.93,
+   "d": 1.98,
+   "text": "too busy to write three and a half"
+  },
+  {
+   "t": 997.91,
+   "d": 1.98,
+   "text": "centaurs done so far the calendar"
+  },
+  {
+   "t": 999.89,
+   "d": 1.65,
+   "text": "obliquely reminds me that I will need"
+  },
+  {
+   "t": 1001.54,
+   "d": 1.38,
+   "text": "help to get the statues into their"
+  },
+  {
+   "t": 1002.92,
+   "d": 2.22,
+   "text": "places they say that in lighter moments"
+  },
+  {
+   "t": 1005.14,
+   "d": 2.0,
+   "text": "you could think of ways to pass a stone"
+  },
+  {
+   "t": 1007.14,
+   "d": 2.49,
+   "text": "still that's a problem for another day"
+  },
+  {
+   "t": 1009.63,
+   "d": 3.79,
+   "text": "more prompt 25th January dear diary"
+  },
+  {
+   "t": 1013.42,
+   "d": 2.04,
+   "text": "finally all the centaurs are finished"
+  },
+  {
+   "t": 1015.46,
+   "d": 2.01,
+   "text": "got it passing Pony to help me put them"
+  },
+  {
+   "t": 1017.47,
+   "d": 0.96,
+   "text": "into place today"
+  },
+  {
+   "t": 1018.43,
+   "d": 2.04,
+   "text": "they say that no one notices the junk"
+  },
+  {
+   "t": 1020.47,
+   "d": 1.56,
+   "text": "underneath a boulder and you would not"
+  },
+  {
+   "t": 1022.03,
+   "d": 1.44,
+   "text": "believe how dusty its"
+  },
+  {
+   "t": 1023.47,
+   "d": 1.95,
+   "text": "getting around here I must have a good"
+  },
+  {
+   "t": 1025.42,
+   "d": 4.23,
+   "text": "sweep up 26 January your diary after a"
+  },
+  {
+   "t": 1029.65,
+   "d": 1.38,
+   "text": "giant dinner and a good night's sleep"
+  },
+  {
+   "t": 1031.03,
+   "d": 1.59,
+   "text": "I'm feeling very pleased with myself the"
+  },
+  {
+   "t": 1032.62,
+   "d": 2.7,
+   "text": "temple looks lovely really pleased that"
+  },
+  {
+   "t": 1035.32,
+   "d": 1.35,
+   "text": "all my hard work paid off"
+  },
+  {
+   "t": 1036.67,
+   "d": 2.19,
+   "text": "in fact it's so nice I'm wondering"
+  },
+  {
+   "t": 1038.86,
+   "d": 1.53,
+   "text": "whether I ought to have some sort of"
+  },
+  {
+   "t": 1040.39,
+   "d": 1.83,
+   "text": "official opening party and invite"
+  },
+  {
+   "t": 1042.22,
+   "d": 1.59,
+   "text": "everyone round to admire it"
+  },
+  {
+   "t": 1043.81,
+   "d": 2.22,
+   "text": "spend the day whistling to myself and"
+  },
+  {
+   "t": 1046.03,
+   "d": 1.41,
+   "text": "when an adventurer came around I told"
+  },
+  {
+   "t": 1047.44,
+   "d": 2.28,
+   "text": "him a blindfold can be very useful if"
+  },
+  {
+   "t": 1049.72,
+   "d": 1.02,
+   "text": "you're telepathic"
+  },
+  {
+   "t": 1050.74,
+   "d": 2.19,
+   "text": "if that's not actually useful advice I"
+  },
+  {
+   "t": 1052.93,
+   "d": 3.69,
+   "text": "don't know what is may he go far 27th"
+  },
+  {
+   "t": 1056.62,
+   "d": 2.31,
+   "text": "January your diary I mentioned my party"
+  },
+  {
+   "t": 1058.93,
+   "d": 1.38,
+   "text": "idea to Rodney and he thought it was"
+  },
+  {
+   "t": 1060.31,
+   "d": 1.86,
+   "text": "great so I have preparations are well"
+  },
+  {
+   "t": 1062.17,
+   "d": 0.75,
+   "text": "underway"
+  },
+  {
+   "t": 1062.92,
+   "d": 1.68,
+   "text": "went down to mine town to pick up some"
+  },
+  {
+   "t": 1064.6,
+   "d": 2.22,
+   "text": "fortune cookies and potions at booze and"
+  },
+  {
+   "t": 1066.82,
+   "d": 2.22,
+   "text": "made myself a nice sign temple closed"
+  },
+  {
+   "t": 1069.04,
+   "d": 2.88,
+   "text": "two adventurers private party they say"
+  },
+  {
+   "t": 1071.92,
+   "d": 2.01,
+   "text": "that a wand of locking can close more"
+  },
+  {
+   "t": 1073.93,
+   "d": 0.84,
+   "text": "than just doors"
+  },
+  {
+   "t": 1074.77,
+   "d": 1.62,
+   "text": "I wonder if mine could do an entire"
+  },
+  {
+   "t": 1076.39,
+   "d": 3.69,
+   "text": "level 28th January dear diary the big"
+  },
+  {
+   "t": 1080.08,
+   "d": 3.0,
+   "text": "day I hope people come they say that the"
+  },
+  {
+   "t": 1083.08,
+   "d": 1.89,
+   "text": "Delphic Oracle knows that lizard corpses"
+  },
+  {
+   "t": 1084.97,
+   "d": 1.8,
+   "text": "aren't confusing but I certainly don't"
+  },
+  {
+   "t": 1086.77,
+   "d": 1.79,
+   "text": "quite know what to expect from tonight"
+  },
+  {
+   "t": 1088.56,
+   "d": 3.25,
+   "text": "29th January dear diary now unwell"
+  },
+  {
+   "t": 1091.81,
+   "d": 2.34,
+   "text": "absolutely everyone came which was good"
+  },
+  {
+   "t": 1094.15,
+   "d": 1.95,
+   "text": "as I had I was worried I might have over"
+  },
+  {
+   "t": 1096.1,
+   "d": 2.37,
+   "text": "catered spinach carrot and jelly a meal"
+  },
+  {
+   "t": 1098.47,
+   "d": 1.8,
+   "text": "fit for a nurse the high priests of"
+  },
+  {
+   "t": 1100.27,
+   "d": 2.13,
+   "text": "Moloch even popped in for a bit and I"
+  },
+  {
+   "t": 1102.4,
+   "d": 2.67,
+   "text": "know how terribly busy he is master Kane"
+  },
+  {
+   "t": 1105.07,
+   "d": 2.1,
+   "text": "was very complimentary about my work and"
+  },
+  {
+   "t": 1107.17,
+   "d": 1.32,
+   "text": "it's not like he's known for his bright"
+  },
+  {
+   "t": 1108.49,
+   "d": 2.52,
+   "text": "and kindly nature the Minotaur City"
+  },
+  {
+   "t": 1111.01,
+   "d": 1.65,
+   "text": "didn't know we had a budding artist in"
+  },
+  {
+   "t": 1112.66,
+   "d": 1.53,
+   "text": "the dungeon but I liked to cast my eye"
+  },
+  {
+   "t": 1114.19,
+   "d": 2.37,
+   "text": "over his maze at some point and see if I"
+  },
+  {
+   "t": 1116.56,
+   "d": 1.5,
+   "text": "had any thoughts about lightening it up"
+  },
+  {
+   "t": 1118.06,
+   "d": 0.48,
+   "text": "a bit"
+  },
+  {
+   "t": 1118.54,
+   "d": 2.28,
+   "text": "Croesus took me to one side and offered"
+  },
+  {
+   "t": 1120.82,
+   "d": 1.41,
+   "text": "me quite a lot of sword from it for a"
+  },
+  {
+   "t": 1122.23,
+   "d": 1.89,
+   "text": "commission on all our very successful"
+  },
+  {
+   "t": 1124.12,
+   "d": 5.61,
+   "text": "evening 30th January absolutely livid"
+  },
+  {
+   "t": 1129.73,
+   "d": 2.4,
+   "text": "some snotty-nosed adventurer came by"
+  },
+  {
+   "t": 1132.13,
+   "d": 1.5,
+   "text": "this afternoon and reduce all of my"
+  },
+  {
+   "t": 1133.63,
+   "d": 2.52,
+   "text": "beautiful statues to smithereens he said"
+  },
+  {
+   "t": 1136.15,
+   "d": 1.8,
+   "text": "he was looking for spell books I said"
+  },
+  {
+   "t": 1137.95,
+   "d": 1.68,
+   "text": "did you want his possessions identified"
+  },
+  {
+   "t": 1139.63,
+   "d": 1.89,
+   "text": "because he was going the right way about"
+  },
+  {
+   "t": 1141.52,
+   "d": 3.96,
+   "text": "it they say that a summoned demon could"
+  },
+  {
+   "t": 1145.48,
+   "d": 1.8,
+   "text": "improve your game but I think it's"
+  },
+  {
+   "t": 1147.28,
+   "d": 1.8,
+   "text": "highly unlikely to prove his game"
+  },
+  {
+   "t": 1149.08,
+   "d": 1.44,
+   "text": "unprepared little nobody"
+  },
+  {
+   "t": 1150.52,
+   "d": 1.44,
+   "text": "hopefully it'll chase him downstairs"
+  },
+  {
+   "t": 1151.96,
+   "d": 1.71,
+   "text": "first so he won't even have to mop up"
+  },
+  {
+   "t": 1153.67,
+   "d": 3.3,
+   "text": "the floor 31st January"
+  },
+  {
+   "t": 1156.97,
+   "d": 2.04,
+   "text": "had the right idea in the first place"
+  },
+  {
+   "t": 1159.01,
+   "d": 1.68,
+   "text": "I've ordered two eighth stature traps"
+  },
+  {
+   "t": 1160.69,
+   "d": 1.8,
+   "text": "the next lot of statues will be able to"
+  },
+  {
+   "t": 1162.49,
+   "d": 2.46,
+   "text": "fight back there is a mastermind deep in"
+  },
+  {
+   "t": 1164.95,
+   "d": 1.89,
+   "text": "the dungeon little wait let me suspect"
+  },
+  {
+   "t": 1166.84,
+   "d": 2.88,
+   "text": "it to me and next year I'm asking flood"
+  },
+  {
+   "t": 1169.72,
+   "d": 3.24,
+   "text": "for the false rumors calendar thanks"
+  },
+  {
+   "t": 1172.96,
+   "d": 6.72,
+   "text": "everyone that was great now we have"
+  },
+  {
+   "t": 1179.68,
+   "d": 1.77,
+   "text": "Britta I think talking about similar"
+  },
+  {
+   "t": 1181.45,
+   "d": 2.76,
+   "text": "things for those of you who didn't make"
+  },
+  {
+   "t": 1184.21,
+   "d": 2.88,
+   "text": "the connection the back of your t-shirts"
+  },
+  {
+   "t": 1187.09,
+   "d": 2.19,
+   "text": "is the Oracle level from nethack or is"
+  },
+  {
+   "t": 1189.28,
+   "d": 1.8,
+   "text": "at least supposed to be so you can think"
+  },
+  {
+   "t": 1191.08,
+   "d": 2.19,
+   "text": "of that wonderful piece of fanfic as you"
+  },
+  {
+   "t": 1193.27,
+   "d": 2.97,
+   "text": "wear that shirt this is completely"
+  },
+  {
+   "t": 1196.24,
+   "d": 3.27,
+   "text": "coincidentally also that fanfiction so I"
+  },
+  {
+   "t": 1199.51,
+   "d": 2.28,
+   "text": "love fanfiction I love specifically"
+  },
+  {
+   "t": 1201.79,
+   "d": 2.37,
+   "text": "fanfiction about characters from TV"
+  },
+  {
+   "t": 1204.16,
+   "d": 2.67,
+   "text": "shows and movies and books and other"
+  },
+  {
+   "t": 1206.83,
+   "d": 1.56,
+   "text": "kinds of media like traditional kinds of"
+  },
+  {
+   "t": 1208.39,
+   "d": 1.29,
+   "text": "fanfiction you also get stuff about"
+  },
+  {
+   "t": 1209.68,
+   "d": 2.1,
+   "text": "games but it's less common and I also"
+  },
+  {
+   "t": 1211.78,
+   "d": 2.91,
+   "text": "love games like knack where you start"
+  },
+  {
+   "t": 1214.69,
+   "d": 2.31,
+   "text": "and and similar things happen and you"
+  },
+  {
+   "t": 1217.0,
+   "d": 1.77,
+   "text": "dial out and you start again and similar"
+  },
+  {
+   "t": 1218.77,
+   "d": 0.87,
+   "text": "things happen that are a little"
+  },
+  {
+   "t": 1219.64,
+   "d": 0.6,
+   "text": "different"
+  },
+  {
+   "t": 1220.24,
+   "d": 2.4,
+   "text": "each time and fanfiction has some really"
+  },
+  {
+   "t": 1222.64,
+   "d": 2.13,
+   "text": "interestingly similar aspects that I'm"
+  },
+  {
+   "t": 1224.77,
+   "d": 1.86,
+   "text": "not sure people have ever connected"
+  },
+  {
+   "t": 1226.63,
+   "d": 3.72,
+   "text": "before very weird warped sort of brain"
+  },
+  {
+   "t": 1230.35,
+   "d": 4.05,
+   "text": "this over the past couple days so in a"
+  },
+  {
+   "t": 1234.4,
+   "d": 1.83,
+   "text": "typical fanfiction store if you haven't"
+  },
+  {
+   "t": 1236.23,
+   "d": 2.58,
+   "text": "read thousands and thousands of them you"
+  },
+  {
+   "t": 1238.81,
+   "d": 2.31,
+   "text": "take a couple characters who may or may"
+  },
+  {
+   "t": 1241.12,
+   "d": 1.5,
+   "text": "not already have some kind of connection"
+  },
+  {
+   "t": 1242.62,
+   "d": 2.49,
+   "text": "in your favorite show occasionally"
+  },
+  {
+   "t": 1245.11,
+   "d": 1.26,
+   "text": "characters from completely different"
+  },
+  {
+   "t": 1246.37,
+   "d": 2.52,
+   "text": "shows and you make up some kind of"
+  },
+  {
+   "t": 1248.89,
+   "d": 1.86,
+   "text": "reason for them to have a new friendship"
+  },
+  {
+   "t": 1250.75,
+   "d": 1.77,
+   "text": "or deepen their friendship or more"
+  },
+  {
+   "t": 1252.52,
+   "d": 1.91,
+   "text": "commonly have some kind of romantic"
+  },
+  {
+   "t": 1254.43,
+   "d": 1.84,
+   "text": "connection or interaction or"
+  },
+  {
+   "t": 1256.27,
+   "d": 2.16,
+   "text": "relationship or something who knows it"
+  },
+  {
+   "t": 1258.43,
+   "d": 2.94,
+   "text": "really depends and so at the top of your"
+  },
+  {
+   "t": 1261.37,
+   "d": 2.37,
+   "text": "story you'll have like okay so what kind"
+  },
+  {
+   "t": 1263.74,
+   "d": 1.77,
+   "text": "of friendship are you talking about or"
+  },
+  {
+   "t": 1265.51,
+   "d": 0.96,
+   "text": "what kind of relationship are you"
+  },
+  {
+   "t": 1266.47,
+   "d": 4.56,
+   "text": "talking about and also what kind of like"
+  },
+  {
+   "t": 1271.03,
+   "d": 1.5,
+   "text": "there's a certain set of tropes"
+  },
+  {
+   "t": 1272.53,
+   "d": 1.85,
+   "text": "in a lot of fan fiction especially"
+  },
+  {
+   "t": 1274.38,
+   "d": 3.4,
+   "text": "tropes that your first time writers are"
+  },
+  {
+   "t": 1277.78,
+   "d": 2.28,
+   "text": "starting with a lot of fan fiction is"
+  },
+  {
+   "t": 1280.06,
+   "d": 1.2,
+   "text": "written by a whole lot of different"
+  },
+  {
+   "t": 1281.26,
+   "d": 2.54,
+   "text": "people and there'll be things like"
+  },
+  {
+   "t": 1283.8,
+   "d": 2.59,
+   "text": "aliens made us do it like like there's"
+  },
+  {
+   "t": 1286.39,
+   "d": 1.74,
+   "text": "some like external thing that that made"
+  },
+  {
+   "t": 1288.13,
+   "d": 1.82,
+   "text": "them have to like have some kind of"
+  },
+  {
+   "t": 1289.95,
+   "d": 2.94,
+   "text": "action there's also things like Mirror"
+  },
+  {
+   "t": 1292.89,
+   "d": 2.49,
+   "text": "Universe like put them into like you"
+  },
+  {
+   "t": 1295.38,
+   "d": 3.27,
+   "text": "know the evil version of your universe"
+  },
+  {
+   "t": 1298.65,
+   "d": 2.01,
+   "text": "and and something else happens to them"
+  },
+  {
+   "t": 1300.66,
+   "d": 2.94,
+   "text": "there's also the specific trope of hurt"
+  },
+  {
+   "t": 1303.6,
+   "d": 1.68,
+   "text": "comfort where like one of them gets hurt"
+  },
+  {
+   "t": 1305.28,
+   "d": 1.2,
+   "text": "the other one takes care of them and"
+  },
+  {
+   "t": 1306.48,
+   "d": 2.18,
+   "text": "something develops out of that there's"
+  },
+  {
+   "t": 1308.66,
+   "d": 2.92,
+   "text": "things there's also really specific"
+  },
+  {
+   "t": 1311.58,
+   "d": 2.19,
+   "text": "tropes for structures so a very common"
+  },
+  {
+   "t": 1313.77,
+   "d": 3.21,
+   "text": "structure is five times x thing happened"
+  },
+  {
+   "t": 1316.98,
+   "d": 2.1,
+   "text": "and the one time it didn't so like five"
+  },
+  {
+   "t": 1319.08,
+   "d": 3.03,
+   "text": "times you know the aliens made us do it"
+  },
+  {
+   "t": 1322.11,
+   "d": 1.62,
+   "text": "and the one time we were like oh that's"
+  },
+  {
+   "t": 1323.73,
+   "d": 1.71,
+   "text": "actually you know go on a date just for"
+  },
+  {
+   "t": 1325.44,
+   "d": 2.55,
+   "text": "fun right like and so what people do is"
+  },
+  {
+   "t": 1327.99,
+   "d": 3.0,
+   "text": "they take these structural elements that"
+  },
+  {
+   "t": 1330.99,
+   "d": 2.01,
+   "text": "are tagged at the top of every story and"
+  },
+  {
+   "t": 1333.0,
+   "d": 2.22,
+   "text": "in most sort of fanfiction browsing"
+  },
+  {
+   "t": 1335.22,
+   "d": 2.04,
+   "text": "systems and then they generate a story"
+  },
+  {
+   "t": 1337.26,
+   "d": 1.44,
+   "text": "out of that and it's different every"
+  },
+  {
+   "t": 1338.7,
+   "d": 2.28,
+   "text": "time and I've read hundreds and hundreds"
+  },
+  {
+   "t": 1340.98,
+   "d": 2.34,
+   "text": "of you know stories that have the same"
+  },
+  {
+   "t": 1343.32,
+   "d": 2.01,
+   "text": "starting points with the same characters"
+  },
+  {
+   "t": 1345.33,
+   "d": 1.68,
+   "text": "and it's fun every time it's a little"
+  },
+  {
+   "t": 1347.01,
+   "d": 1.77,
+   "text": "different every time and they're often"
+  },
+  {
+   "t": 1348.78,
+   "d": 1.35,
+   "text": "pretty self-contained they're often like"
+  },
+  {
+   "t": 1350.13,
+   "d": 1.77,
+   "text": "a few thousand words of this one person"
+  },
+  {
+   "t": 1351.9,
+   "d": 1.86,
+   "text": "writing this one story this one time and"
+  },
+  {
+   "t": 1353.76,
+   "d": 2.49,
+   "text": "that universe that split off from the"
+  },
+  {
+   "t": 1356.25,
+   "d": 1.98,
+   "text": "main universe doesn't continue it stops"
+  },
+  {
+   "t": 1358.23,
+   "d": 2.22,
+   "text": "there and then you read another one and"
+  },
+  {
+   "t": 1360.45,
+   "d": 2.31,
+   "text": "it stops there so it has this it reminds"
+  },
+  {
+   "t": 1362.76,
+   "d": 2.43,
+   "text": "me a little bit of playing a sort of"
+  },
+  {
+   "t": 1365.19,
+   "d": 4.14,
+   "text": "procedural ish game of you know here's"
+  },
+  {
+   "t": 1369.33,
+   "d": 2.88,
+   "text": "here's a new iteration of a bunch of"
+  },
+  {
+   "t": 1372.21,
+   "d": 2.4,
+   "text": "common starting points and and see where"
+  },
+  {
+   "t": 1374.61,
+   "d": 1.8,
+   "text": "you end up and that makes it really fun"
+  },
+  {
+   "t": 1376.41,
+   "d": 2.93,
+   "text": "that's all"
+  },
+  {
+   "t": 1386.0,
+   "d": 4.51,
+   "text": "um this is our last lightning talk with"
+  },
+  {
+   "t": 1390.51,
+   "d": 7.17,
+   "text": "Joe let's see if we can do the thing"
+  },
+  {
+   "t": 1397.68,
+   "d": 2.22,
+   "text": "that you want which is to have this"
+  },
+  {
+   "t": 1399.9,
+   "d": 2.55,
+   "text": "computer be a computer yeah but it's not"
+  },
+  {
+   "t": 1402.45,
+   "d": 4.38,
+   "text": "even hold the mic hi I'm Joe I talked"
+  },
+  {
+   "t": 1406.83,
+   "d": 2.49,
+   "text": "yesterday I'm gonna talk real briefly if"
+  },
+  {
+   "t": 1409.32,
+   "d": 2.13,
+   "text": "we can get the visuals to work if we"
+  },
+  {
+   "t": 1411.45,
+   "d": 1.59,
+   "text": "can't get the visuals to work it's gonna"
+  },
+  {
+   "t": 1413.04,
+   "d": 5.01,
+   "text": "be audio only from my mouth but it's not"
+  },
+  {
+   "t": 1418.05,
+   "d": 6.42,
+   "text": "as good so a lot of people have talked"
+  },
+  {
+   "t": 1424.47,
+   "d": 2.13,
+   "text": "to me about my Star Trek parody Twitter"
+  },
+  {
+   "t": 1426.6,
+   "d": 3.57,
+   "text": "accounts since I got here which are even"
+  },
+  {
+   "t": 1430.17,
+   "d": 3.42,
+   "text": "less related to Rolex than the emoji"
+  },
+  {
+   "t": 1433.59,
+   "d": 2.64,
+   "text": "bots that I showed you in my"
+  },
+  {
+   "t": 1436.23,
+   "d": 3.21,
+   "text": "presentation but they are how I got"
+  },
+  {
+   "t": 1439.44,
+   "d": 2.67,
+   "text": "almost all of the followers for those"
+  },
+  {
+   "t": 1442.11,
+   "d": 2.82,
+   "text": "BOTS because I've been working on these"
+  },
+  {
+   "t": 1444.93,
+   "d": 3.12,
+   "text": "parody accounts for many years I don't"
+  },
+  {
+   "t": 1448.05,
+   "d": 5.34,
+   "text": "know why I just did and they also did"
+  },
+  {
+   "t": 1453.39,
+   "d": 2.76,
+   "text": "spawn some procedurally generated BOTS"
+  },
+  {
+   "t": 1456.15,
+   "d": 3.33,
+   "text": "of their own that I made but our Markov"
+  },
+  {
+   "t": 1459.48,
+   "d": 3.84,
+   "text": "chain BOTS that results in a different"
+  },
+  {
+   "t": 1463.32,
+   "d": 2.85,
+   "text": "quality of comedy if we could get the"
+  },
+  {
+   "t": 1466.17,
+   "d": 2.19,
+   "text": "computer on the screen then if you want"
+  },
+  {
+   "t": 1468.36,
+   "d": 4.08,
+   "text": "to go to the proper websites while you"
+  },
+  {
+   "t": 1472.44,
+   "d": 1.08,
+   "text": "do that we're gonna set up some other"
+  },
+  {
+   "t": 1473.52,
+   "d": 3.15,
+   "text": "heavy stuff so ignore us oh okay so I"
+  },
+  {
+   "t": 1476.67,
+   "d": 1.44,
+   "text": "can see there it is"
+  },
+  {
+   "t": 1478.11,
+   "d": 4.32,
+   "text": "so going in order of how I made them"
+  },
+  {
+   "t": 1482.43,
+   "d": 3.27,
+   "text": "which is by not not a coincidence also"
+  },
+  {
+   "t": 1485.7,
+   "d": 3.42,
+   "text": "the order in which they have the most"
+  },
+  {
+   "t": 1489.12,
+   "d": 3.81,
+   "text": "followers Picard tips is imagining if"
+  },
+  {
+   "t": 1492.93,
+   "d": 1.74,
+   "text": "Captain Picard of the Starship"
+  },
+  {
+   "t": 1494.67,
+   "d": 2.73,
+   "text": "Enterprise were giving advice mostly"
+  },
+  {
+   "t": 1497.4,
+   "d": 3.03,
+   "text": "about leadership because that's his"
+  },
+  {
+   "t": 1500.43,
+   "d": 2.61,
+   "text": "forte but also about various other"
+  },
+  {
+   "t": 1503.04,
+   "d": 2.55,
+   "text": "things and I just want to read you a few"
+  },
+  {
+   "t": 1505.59,
+   "d": 1.92,
+   "text": "this is the stuff that I queued up"
+  },
+  {
+   "t": 1507.51,
+   "d": 1.47,
+   "text": "because I was going to be busy this"
+  },
+  {
+   "t": 1508.98,
+   "d": 2.28,
+   "text": "weekend Picard civics tip becoming"
+  },
+  {
+   "t": 1511.26,
+   "d": 2.37,
+   "text": "subservient to an oppressive regime it"
+  },
+  {
+   "t": 1513.63,
+   "d": 1.72,
+   "text": "shows profound disrespect"
+  },
+  {
+   "t": 1515.35,
+   "d": 2.46,
+   "text": "to the people being governed sometimes I"
+  },
+  {
+   "t": 1517.81,
+   "d": 4.23,
+   "text": "read the news the card management tip if"
+  },
+  {
+   "t": 1522.04,
+   "d": 2.43,
+   "text": "you have a psychic on staff think unsexy"
+  },
+  {
+   "t": 1524.47,
+   "d": 3.45,
+   "text": "thoughts the card management tip you're"
+  },
+  {
+   "t": 1527.92,
+   "d": 1.5,
+   "text": "not supposed to come up with all the"
+  },
+  {
+   "t": 1529.42,
+   "d": 3.45,
+   "text": "ideas yourself ask for suggestions these"
+  },
+  {
+   "t": 1532.87,
+   "d": 1.53,
+   "text": "are not quotes these are things that he"
+  },
+  {
+   "t": 1534.4,
+   "d": 4.29,
+   "text": "does that I observed apply today just as"
+  },
+  {
+   "t": 1538.69,
+   "d": 2.85,
+   "text": "much as they do in the future and there"
+  },
+  {
+   "t": 1541.54,
+   "d": 2.58,
+   "text": "was that there was that talk we had saw"
+  },
+  {
+   "t": 1544.12,
+   "d": 1.89,
+   "text": "about how to be a CEO and leadership"
+  },
+  {
+   "t": 1546.01,
+   "d": 3.15,
+   "text": "books and I'm sharing here in your"
+  },
+  {
+   "t": 1549.16,
+   "d": 2.19,
+   "text": "research you saw not only Shakespeare"
+  },
+  {
+   "t": 1551.35,
+   "d": 2.34,
+   "text": "but Captain Picard is one of the popular"
+  },
+  {
+   "t": 1553.69,
+   "d": 2.1,
+   "text": "choices people have for learning"
+  },
+  {
+   "t": 1555.79,
+   "d": 3.3,
+   "text": "leadership from fictional characters so"
+  },
+  {
+   "t": 1559.09,
+   "d": 2.46,
+   "text": "I also out Patrick Stewart follows"
+  },
+  {
+   "t": 1561.55,
+   "d": 2.1,
+   "text": "Picard tips which is quite an honor and"
+  },
+  {
+   "t": 1563.65,
+   "d": 1.19,
+   "text": "[Music]"
+  },
+  {
+   "t": 1564.84,
+   "d": 2.56,
+   "text": "he also follows Riker tips which I"
+  },
+  {
+   "t": 1567.4,
+   "d": 2.67,
+   "text": "pretty much didn't do as much with but I"
+  },
+  {
+   "t": 1570.07,
+   "d": 1.77,
+   "text": "did think of a Riker tip one day which"
+  },
+  {
+   "t": 1571.84,
+   "d": 2.49,
+   "text": "when I was on the VPN for my work but I"
+  },
+  {
+   "t": 1574.33,
+   "d": 1.5,
+   "text": "was also doing something on the internet"
+  },
+  {
+   "t": 1575.83,
+   "d": 1.86,
+   "text": "that I shouldn't have been letting my"
+  },
+  {
+   "t": 1577.69,
+   "d": 1.98,
+   "text": "work know about and I realized you"
+  },
+  {
+   "t": 1579.67,
+   "d": 1.08,
+   "text": "shouldn't do those two things at the"
+  },
+  {
+   "t": 1580.75,
+   "d": 1.95,
+   "text": "same time cuz they're logging at all so"
+  },
+  {
+   "t": 1582.7,
+   "d": 2.25,
+   "text": "I tweeted from Riker tips don't like log"
+  },
+  {
+   "t": 1584.95,
+   "d": 2.61,
+   "text": "off the work VPN before you search for"
+  },
+  {
+   "t": 1587.56,
+   "d": 1.59,
+   "text": "something embarrassing on Google and"
+  },
+  {
+   "t": 1589.15,
+   "d": 3.48,
+   "text": "then I realized wait a minute that's an"
+  },
+  {
+   "t": 1592.63,
+   "d": 2.4,
+   "text": "interesting question what would Riker"
+  },
+  {
+   "t": 1595.03,
+   "d": 4.17,
+   "text": "Google and these are just some recent"
+  },
+  {
+   "t": 1599.2,
+   "d": 3.06,
+   "text": "the most recent things how to impeach"
+  },
+  {
+   "t": 1602.26,
+   "d": 4.35,
+   "text": "your Federation judge sex clams these"
+  },
+  {
+   "t": 1606.61,
+   "d": 1.62,
+   "text": "are not always not say these are not"
+  },
+  {
+   "t": 1608.23,
+   "d": 2.31,
+   "text": "always safe for work because it's it's a"
+  },
+  {
+   "t": 1610.54,
+   "d": 1.56,
+   "text": "google search history"
+  },
+  {
+   "t": 1612.1,
+   "d": 1.77,
+   "text": "why don't holodeck safeties work in"
+  },
+  {
+   "t": 1613.87,
+   "d": 3.12,
+   "text": "spelunky I was here at the time door"
+  },
+  {
+   "t": 1616.99,
+   "d": 2.46,
+   "text": "stops for automatic doors blueprints to"
+  },
+  {
+   "t": 1619.45,
+   "d": 2.13,
+   "text": "build an actual Millennium Falcon can"
+  },
+  {
+   "t": 1621.58,
+   "d": 2.43,
+   "text": "nightmares come true are the Borg always"
+  },
+  {
+   "t": 1624.01,
+   "d": 3.39,
+   "text": "clothed or always naked how to draw a"
+  },
+  {
+   "t": 1627.4,
+   "d": 3.14,
+   "text": "turtle Beverly Crusher tap dance youtube"
+  },
+  {
+   "t": 1630.54,
+   "d": 2.68,
+   "text": "these come from a variety of sources of"
+  },
+  {
+   "t": 1633.22,
+   "d": 2.33,
+   "text": "just whatever goes through my head and"
+  },
+  {
+   "t": 1635.55,
+   "d": 5.5,
+   "text": "let's see from there I had Worf tips but"
+  },
+  {
+   "t": 1641.05,
+   "d": 1.29,
+   "text": "I don't think Worf gives very good"
+  },
+  {
+   "t": 1642.34,
+   "d": 3.63,
+   "text": "advice I ended up preferring the format"
+  },
+  {
+   "t": 1645.97,
+   "d": 3.04,
+   "text": "of worth e-mail because Worth is a very"
+  },
+  {
+   "t": 1649.01,
+   "d": 2.79,
+   "text": "polite person and he speaks in"
+  },
+  {
+   "t": 1651.8,
+   "d": 2.49,
+   "text": "succinctly that fit on Twitter in the"
+  },
+  {
+   "t": 1654.29,
+   "d": 1.68,
+   "text": "form of an email such as captain while"
+  },
+  {
+   "t": 1655.97,
+   "d": 1.86,
+   "text": "you were away the enterprise computer"
+  },
+  {
+   "t": 1657.83,
+   "d": 1.32,
+   "text": "has become infected with ransomware"
+  },
+  {
+   "t": 1659.15,
+   "d": 2.46,
+   "text": "recommend evacuation and self-destruct"
+  },
+  {
+   "t": 1661.61,
+   "d": 2.67,
+   "text": "Worf commander does the Beck captain's"
+  },
+  {
+   "t": 1664.28,
+   "d": 1.59,
+   "text": "behavior this morning seem strange to"
+  },
+  {
+   "t": 1665.87,
+   "d": 0.48,
+   "text": "you"
+  },
+  {
+   "t": 1666.35,
+   "d": 3.27,
+   "text": "Worf all crew again please do not insert"
+  },
+  {
+   "t": 1669.62,
+   "d": 2.13,
+   "text": "unknown USB drives from random planets"
+  },
+  {
+   "t": 1671.75,
+   "d": 1.92,
+   "text": "into computer points ports on the"
+  },
+  {
+   "t": 1673.67,
+   "d": 2.73,
+   "text": "enterprise Worf thank you for"
+  },
+  {
+   "t": 1676.4,
+   "d": 1.11,
+   "text": "subscribing to the enterprise security"
+  },
+  {
+   "t": 1677.51,
+   "d": 2.37,
+   "text": "newsletter there have been 580 security"
+  },
+  {
+   "t": 1679.88,
+   "d": 1.85,
+   "text": "breaches this week all dealt with Worf"
+  },
+  {
+   "t": 1681.73,
+   "d": 7.71,
+   "text": "and then the significantly darker and"
+  },
+  {
+   "t": 1689.44,
+   "d": 3.34,
+   "text": "more emotionally draining I'm squinting"
+  },
+  {
+   "t": 1692.78,
+   "d": 2.13,
+   "text": "to see the screen that I can see up"
+  },
+  {
+   "t": 1694.91,
+   "d": 8.91,
+   "text": "there real real Dukat this is the"
+  },
+  {
+   "t": 1703.82,
+   "d": 2.57,
+   "text": "fictional universe that started with"
+  },
+  {
+   "t": 1706.39,
+   "d": 3.37,
+   "text": "Riker record googling live tweeting the"
+  },
+  {
+   "t": 1709.76,
+   "d": 5.16,
+   "text": "debates from 2015 which was a huge"
+  },
+  {
+   "t": 1714.92,
+   "d": 3.72,
+   "text": "success and created its whole fanfic"
+  },
+  {
+   "t": 1718.64,
+   "d": 2.58,
+   "text": "universe in which Kathryn Janeway was"
+  },
+  {
+   "t": 1721.22,
+   "d": 3.66,
+   "text": "running against Golda cot for president"
+  },
+  {
+   "t": 1724.88,
+   "d": 2.64,
+   "text": "of the Federation and to everyone's"
+  },
+  {
+   "t": 1727.52,
+   "d": 4.94,
+   "text": "horror and surprise Gul Dukat won and"
+  },
+  {
+   "t": 1732.46,
+   "d": 4.6,
+   "text": "these are absolutely not written by me"
+  },
+  {
+   "t": 1737.06,
+   "d": 1.86,
+   "text": "these are written by our current"
+  },
+  {
+   "t": 1738.92,
+   "d": 2.1,
+   "text": "president with a couple words changed"
+  },
+  {
+   "t": 1741.02,
+   "d": 4.46,
+   "text": "and there they're always appropriate"
+  },
+  {
+   "t": 1745.48,
+   "d": 2.38,
+   "text": "accepted when money exists cuz money"
+  },
+  {
+   "t": 1747.86,
+   "d": 1.83,
+   "text": "doesn't exist in Star Trek my at a time"
+  },
+  {
+   "t": 1749.69,
+   "d": 3.83,
+   "text": "ok that's it thanks"
+  }
+ ]
+}

@@ -1,0 +1,99 @@
+{
+  "id": "hdhKErNIYgE",
+  "title": "Tyler Robertson: Prototyping your games in Google Sheets",
+  "speaker": "Tyler Robertson",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=hdhKErNIYgE",
+  "talk_type": "technical",
+  "summary": "Tyler Robertson walks through how he builds playable games inside Google Sheets as a fast way to prototype whether an idea is fun before moving to a real engine. Using a spreadsheet as his slides, he shows conditional formatting for pixel art, checkboxes plus iterative calculation to store state, and exploiting the left-to-right, top-to-bottom calculation order to detect the most recent button press. He builds these into a turn-based roguelike with an @ character, an ASCII map with walls, a scrolling camera and emoji tiles, then shows Snake, checkers, a text adventure, and early 3D rendering. Because spreadsheets only update on input, he says they suit turn-based games like roguelikes.",
+  "games": [
+    "Super Mario Bros.",
+    "Rogue",
+    "NetHack",
+    "Snake",
+    "Slay the Spire"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "principle",
+      "claim": "Spreadsheets are a poor engine for shipping games but a fun, fast way to prototype whether an idea is fun before moving to an engine like Unity or Unreal.",
+      "detail": "Robertson became a spreadsheet 'super user' during the 2020 lockdown and wanted to make games rather than dashboards. He doesn't expect AAA spreadsheet games but presents two years of tricks for prototyping in them.",
+      "t": 120,
+      "quote": "they are really fun for prototyping games and seeing if an idea is going to be fun before you move to something sensible like unity or unreal engine",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "conditional formatting",
+      "kind": "technique",
+      "claim": "Conditional formatting lets a spreadsheet render tile graphics by colouring cells from rules, so tile types become numbers whose colour can be changed in one place.",
+      "detail": "Robertson's pixel-accurate Mario 1-1 used about 90,000 cells. By typing a 6 into every sky cell and using a rule to colour sixes, he can recolour the whole sky by editing one rule.",
+      "t": 208,
+      "quote": "that lets you change color and styling of cells based on rules like is it empty? Is there a character?",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "iterative calculation",
+      "kind": "technique",
+      "claim": "Checkbox inputs combined with Google Sheets' iterative calculation (max iterations 1) let a cell reference itself and keep state, such as a counter incremented on each click.",
+      "detail": "A formula says if the checkbox is true, increment my value, otherwise keep it. Self-reference errors by default, so iterative calculation must be enabled under file settings. Each checkbox can then act like a controller button.",
+      "t": 365,
+      "quote": "This let's the cell see what's in the cell and calculate based on that",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "calculation order",
+      "kind": "technique",
+      "claim": "Because spreadsheets compute left to right, top to bottom, paired helper formulas can detect which checkbox was clicked most recently.",
+      "detail": "A left helper fires when the checkbox and the right helper disagree; the right helper then copies the checkbox. Since the left one calculates first, it flags the latest change. Robertson says this took him about a year to understand.",
+      "t": 420,
+      "quote": "Spreadsheets read information from left to right and top to bottom",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "turn-based input",
+      "kind": "principle",
+      "claim": "Because a spreadsheet only updates when the player clicks something, it suits turn-based roguelikes better than real-time games like Mario.",
+      "detail": "With X and Y values driven by direction buttons, formulas across the grid show an @ wherever coordinates match, yielding a movable character as in Rogue or NetHack.",
+      "t": 503,
+      "quote": "While it is not maybe great for a game like Mario because it only updates when I click something it is great for a roguelike game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "spreadsheet roguelike",
+      "kind": "technique",
+      "claim": "A spreadsheet roguelike can store the map as text of dots and pound signs, use a regex formula to render the player or map tile, check walls before moving, and offset coordinates for a scrolling camera.",
+      "detail": "Extra formulas decide whether the target cell is walkable so the @ cannot pass walls. Formulas along the top and left shift when the player passes screen centre, giving a camera that follows the character. A VLOOKUP can swap characters for emoji tiles.",
+      "t": 550,
+      "quote": "Dots are places where the character can move and where they can't move are pound signs",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "spreadsheet games",
+      "kind": "example",
+      "claim": "The same spreadsheet techniques extend to Snake, checkers with clickable cells, turn-based strategy, chess, text adventures and even slow 3D rendering.",
+      "detail": "Snake grows when the head's X,Y matches the apple. Making every board cell a checkbox gives a rules-enforcing checkers game; a text adventure shows room text instead of graphics. Robertson's turn-based strategy game took a month with cells containing 200 nested IF functions.",
+      "t": 745,
+      "quote": "You could do lots of things. Term-based strategy game, you can do chess, you could do even just another roguelike game",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping speed",
+      "kind": "example",
+      "claim": "Once the reusable building blocks were worked out, Robertson built all the talk's spreadsheet games in about a week, though discovering the advanced button technique took a year.",
+      "detail": "Answering how long prototypes take, he says reusing earlier work helps a lot. Nobody writes about these techniques, which he jokes is because it's a bad idea.",
+      "t": 897,
+      "quote": "Everything you see in that presentation and in that spreadsheet I made over the course of about a week",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,62 @@
+Benet Devereux: Seeking Treasure in the Tangled Bank: Biological Inspiration for Roguelike Me
+Speaker: Benet Devereux
+https://www.youtube.com/watch?v=0iNW5AYYWWw
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:11] ALEXEI: We have Benet Devereux talking about "Seeking Treasure in the Tangled Bank: Biological Inspiration for Roguelike Mechanics." Another one I am personally very excited for so go ahead and take it away. BENET: OK. Hi. Not sure going on. I am Benet Devereux and I work as a software engineer and in my spare time I put around making games or walking in the woods taking pictures of flying moles or playing. I would like to speak about my experiences in "Seeking Treasure in the Tangled Bank: Biological Inspiration for Roguelike Mechanics." And I can't advance -- my slides for some reason. That's great.
+
+[0:01:18] Seriously. OK.
+
+## Charles Darwin
+
+[0:01:30] Here we go. This is a passage from Charles Darwin that provided the title of the talk. It is a good one for this. Not just because it is passion meditation about the diversity of life on earth but also like the amergeant properties of that diversity and the complexity comes from the interaction of agents following simple principles. You can also flip this on its head and say well, let's put complexity from simplicity as a design goal which in a way I think turns this into a bit of a manifesto for procedural generation in other words biology is roguelike.
+
+## Why Roguelike Me
+
+[0:02:14] This all came about because I wanted to make a roguelike game and learn a particular engine which happens to be rod JS and I like tardigrades and I decided to make that the PC in my game and I wanted it to be meaningful and I wanted to narrative to be tardigrade-inspired. Since it is a very small game the mechanic was the most famous one which is the ability to go dormant and survive extreme situations and the goal became survival and surviving for a set amount of time in extreme situations and the rest of the design involved generating various extreme situations that needed to be survived.
+
+## Biological Inspiration
+
+[0:03:08] This experience got me thinking in more general terms about taking strategies from nature, from organisms, and using them to build game mechanics and artifacts and NPNs and -- NPCs. Has been developing and it is a pretty mature codebase so there should be pretty of inspiration. If you are going to draft from that, you know, that's a large set of things dealing with a vast host of situations and even the largest game can't present every single situation that a real organism might encounter so to make it work you have to do abstraction. And a couple ways to do that are consider what resources matter to different actors in the game, what the different sensory modalties to actors are and the art action between the actors. The
+
+[0:04:18] mechanics in the game need to make the strategies make sense and the choice to use one or not be meaningful. Not useful as in not a button you keep smashing. My goal in this investigation was
+
+## Abstraction
+
+[0:04:32] doing some philosophical induction. I dug through the catalog of strategies on asknature.org and picked some and thought about how they could be abstracted into game terms. Convinced myself and hopefully you that this is a fruitful approach and maybe start to extract principles and heuristics. I do want to provide several caveats here for what is to follow. I have generated some ideas and it is really the generation of ideas that I am presenting on. I am not making any claims that these, you know, are original, that they have never been used before or that they are very good. They would still need to go through a whole process of refining and filtering but the process of creating and documenting them was a quick and fun one.
+
+## Taxonomy
+
+[0:05:33] If you go to asknature.org they have a risk taxonomy of strategies. Their target audience is designers and engineers who want to solve problems in the real world and my focus for this investigation was creating problems in an imaginary world. I have this simple set of buckets/axes and I say axes because you can see how some of them might overlap like defense and deception, navigation and resource gathering, these things might be reflected in a single, you know, behavior. First example. Cataglyphis fortis smells and using antennue for smell gives them more precise localization of the scent. They use this when out foraging to keep a mental map of
+
+[0:06:39] where they have been to find their way home and it helps them with the task of foraging itself. This is an example of something that combines navigation and resource gathering. Cool fact the they forage for is insect and they forage in the hottest part of the day which they can handle but many other insects can't and they are looking for the ones who couldn't take the heat.
+
+## Sensory modality
+
+[0:07:10] What are possible ideas you might draw from this? An obvious one is say you create a smell map sensory modality overlaid on the visual map or instead but that's getting weird and thetas that has different notions of field of vision and the way smells interact and mask or can be washed off say are very different. These two illustrations showing that in action. In the illustration on the left, player character is able to smell the acid from a green dragon lurking in the far corridor that it can't see. In the second one because there is a fresh smelly corpse in the room it can't smell the dragon on the other side so it might walk into a dangerous situation. Not good.
+
+## Cone snails
+
+[0:08:06] Example number two. Cone snails. These are a group of predatory sea snails found worldwide and they have all this ability to shootout a provase cans to the prey they are attacking and use that to shoot a custom like tar -- harpoon tooth into the the predator. This is an attack defense strategy. Some species, not all, are able to mix and match a cocktail of venoms they will deliver for a specific target. You may ask are any of them fatal to humans and some definitely are. If you see anything in the ocean that looks like it was generated with this please do not pick it up.
+
+## Short range attacks
+
+[0:09:01] They have short-range distance range attacks but I think the combination types of venom. In this illustration we have a cone snail in a dungeon somehow and not underwater. It is delivering a paraalizing toxin with white dragon venom which targets this PC's vulnerability.
+
+## Anglerfish
+
+[0:09:36] Here is a more familiar creature. The anglerfish. Most people are familiar with the bioluminescent lure it attracts prey with but they have non-reflective skin. Completely black. It can be very hard for prey to see the fish even with the light of the lure before it is too late for them.
+
+## Invisible Monster
+
+[0:10:05] You know, disclaimer about originality, having an invisible monster has been probably done before. Still a need idea. You don't even have the touch the lure. In this illustration because this creature knows what's what the lure looks like money. You know, other cool property of the lure, you know, which I didn't come up with immediately is it can make it harder for prey animals to see in the dark. If you have dark adaptation as a game mechanic that is something that's potentially interesting. As I said, quick and fun but just browse through some of these strategies and spend some time thinking about how you can put them in the game world. A lot of ideas I looked at I needed to
+
+[0:11:20] discard because they really rely a lot on form and material properties and require like a pretty rich physics engine. It an is a whole can of worms. Other unexplored avenues and really digging into constraints on resources that I talked about at the beginning but none of the examples illustrated and complex collective behavior of organisms is another interesting area.
+
+## Credits
+
+[0:11:57] All right. I would like to extend my thanks first of all to all of you for listening, to Amy Kaufmann Phillips for BLEEPing me about biomimicry and the whetsten Discord server and Roguelike Celebration for the opportunity to speak and the committees endless hours making everything work. >> I love cone snails. Excellent. Does your angular fish have a name? It is very cute. BENET: Full disclosure. I borrowed the name from my wife. ALEXEI: I think lots of discussion in chat and people like the angular fish idea of the mimic is a familiar but a mimic with a lure is an extra layer that is intriguing.
+
+[0:13:04] Maybe overlaps nicely with the trap discussion and a heads up this is a trap.

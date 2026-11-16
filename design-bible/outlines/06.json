@@ -1,0 +1,200 @@
+{
+  "chapter": 6,
+  "title": "Combat and tactics",
+  "thesis": "Tactical depth in a roguelike comes less from the size of the combat ruleset than from three things: every action costing something (above all, time), the player being able to read the threat in front of them, and space, enemies and hazards that combine into problems with more than one answer. The talks converge on simple, legible verbs (bump-to-attack, one action per turn, predictable enemies, transparent numbers) set against interlocking threats, and they show that the same principles carry over to real-time hybrids, traps, non-violent games and multiplayer, where the turn itself has to be redesigned.",
+  "sections": [
+    {
+      "part": 1,
+      "heading": "Bump, step, act: the grammar of a roguelike turn",
+      "brief": "Open with Michael Brough's case that Rogue's bump-to-attack (one key moves or hits depending on what is there) is an elegant foundation, then show how much it can be varied: invisible enemies making a direction key's outcome uncertain, 868-HACK folding ranged attacks into movement, Nightmare Cooperative moving a whole party with one input (contrast the Wii Shiren's full party control), Rift Wizard removing player melee entirely, and Leif Bloomquist choosing an explicit attack command so ranged weapons fit. Then frame the turn as a mutually exclusive choice: Sersa Victory's one-action-before-monsters-act and Dylan White's move / attack / spend-resources taxonomy converge, and Darius Kazemi's Hoplite point (few options, none of them a no-op) and Todd Furmanski's life-or-death-with-unlimited-time tension show why that is enough. Use Darren Grey on single-character pacing, and the Chogue (one-hit capture vs HP, chess vs Rogue turns, knights teleporting over walls), Knight's momentum and Word Processor cursor cases to show how changing one movement or damage rule changes everything. Close with Benjamin Berman's advice for card roguelikes: either commit fully to beating Hearthstone's battle format or adopt it and innovate elsewhere. End with guidance: pick the smallest set of verbs that makes every turn a real choice, and change one rule at a time.",
+      "keys": [
+        "X4be22WoVgg#0",
+        "TeURjrAYFEU#5",
+        "kvgKKRLil_8#0",
+        "CLi4PWxDmAI#13",
+        "X4be22WoVgg#1",
+        "X4be22WoVgg#2",
+        "X4be22WoVgg#3",
+        "0MdNwIHwXy0#12",
+        "VVRomN99Ygw#0",
+        "Y0K-e83wYnQ#3",
+        "ST6s_8ekeOg#9",
+        "C2sm-z7Ag4U#17",
+        "l1YEJBKehAY#5",
+        "l1YEJBKehAY#6",
+        "l1YEJBKehAY#4",
+        "jviNpRGuCIU#6",
+        "R8DSq8qSJ44@1660#1",
+        "DT9_7sW5knY#5"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Every action should cost something: free actions and time as a resource",
+      "brief": "Lead with Nicholas Feinberg's argument from Dungeon Crawl Stone Soup: degenerate optimal play comes from actions without a cost, the in-combat/out-of-combat split is the 'great sin' of old-school roguelikes (precasting buffs, retrying failure-prone abilities for free), and real time is only one way to put a price on actions. Show his own fix, ally orders that cost a turn, and his NecroDancer example where time pressure turns rote dancing into a satisfying challenge; pair it with Dan Recht's 'act on this beat or wait' as risk management. Then Dylan White's warning from Rift Wizard that turns are an implicit, renewing resource that can outweigh explicit spell costs, so spells felt not worth a turn. Broaden to other clocks: Rosalind Miles Chapman on wandering monsters as a clock with counterplay, Tom Francis on how Heat Signature's alarm types (timed escape, fleeing target, none) transform the same layout, and Gavin Verhey on how format speed decides which strategies survive. Close with the physical cost of input (Yong Zhen Zhou's motion inputs and high-effort buttons) and Pandamander's System 1 autopilot as the counterweight: not every turn should be expensive. Guidance: audit for free actions and out-of-combat states, and decide deliberately what each clock is for.",
+      "keys": [
+        "b8uoQHedFV0#7",
+        "b8uoQHedFV0#10",
+        "b8uoQHedFV0#16",
+        "kvgKKRLil_8#9",
+        "b8uoQHedFV0#8",
+        "b8uoQHedFV0#6",
+        "FnJxkId-1eE#9",
+        "j9ykOdQRUQk#3",
+        "3vSCncV5hkI#11",
+        "lGm8cZC8Lfk#21",
+        "KRZHT-gktD0#4",
+        "KRZHT-gktD0#5",
+        "KtQh4QrsUzs#4"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Turn-based, real-time and the hybrids between",
+      "brief": "Start from history: Santiago Zapata on Moria's brief real-time conversion that players rejected, showing a technical constraint becoming core design. Then the cautionary case of Andrea Interguglielmi's Nauticrawl, where avoiding 'your turn' banners drifted the crawl into real time and beta players died without understanding why, and his fix of making turns emerge from engine pressure inside the simulation; set Zapata's failed turn-based Mega Man (hanging jumps, slow projectiles) beside it as the opposite failure. Show David Brevik's Diablo as the bridge: a time-cost system (10 orthogonal, 14 diagonal) that converted to real time by mapping costs to seconds, and how Diablo II's micro-decisions sped everything up. Add Red Rogue's switchable modes, Roundguard's plan-then-react turn and its inversion of uncertainty (the player's shot is unpredictable, enemies are not), and Bloomquist's 50 ms server tick with per-entity move timers. End with guidance: if you go real-time or hybrid, keep the player able to understand what killed them, and consider an energy/time-cost scheduler because it survives the conversion.",
+      "keys": [
+        "ZMdxP7fO6wE#11",
+        "wxmio1S3iN0#5",
+        "wxmio1S3iN0#7",
+        "wxmio1S3iN0#6",
+        "TMxzVy7-VYQ#8",
+        "OwFrTY3IoQQ#1",
+        "OwFrTY3IoQQ#5",
+        "OwFrTY3IoQQ#8",
+        "2BHfpAF76J8#4",
+        "2BHfpAF76J8#3",
+        "OVSi3NzA0KM#3",
+        "Y0K-e83wYnQ#9"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Fair fights: readable threats and odds the player can work with",
+      "brief": "Argue that tactics require information. Begin with predictability: Dan Norder's Chase, whose robots always take the shortest route so every tactic comes from predicting them, Tyriq Plummer on Spelunky's simple consistent enemies enabling forethought, Into the Breach's fully visible puzzle (Justin Ma and Matthew Davis) and Shiren 6's always-visible, pre-warned behemoths; Scrubbin' Trubble's displayed threat zones and Berman's 'a good card tells you how to play around it' converge here. Then Albert Ford's three requirements for field of view (efficient, consistent with targeting, symmetric) and the unfairness of an unseen enemy that can target you. Set against this the deliberate uses of hidden or stale information: Nic Tringali on secretly committed information making battles feel simultaneous, Jeff Lait's 1812 messenger delay, and Johnathan Pagnutti's discovery that Jaw Worm's pattern is hard to read from play alone. Second half, randomness: Rift Wizard's countable damage formula, Evan Debenham's Shattered Pixel Dungeon pyramid armour rolls and guaranteed surprise attacks, the principle that players accept RNG they can manipulate, and Darkest Dungeon 2's tokens; contrast Stella Vermilion's Nuzlocke, where an opaque multiplicative damage formula plus permanent loss turns battles into attrition and calculated sacrifice, with Younès Rabii's percentage-damage counter and Thomas Biskup's case for keeping crippling effects rare. End with guidance: show threats, keep the math countable, and give the player levers over the dice.",
+      "keys": [
+        "ohH6LBM2EiU#1",
+        "y1zkrTcNJbc#0",
+        "OVSi3NzA0KM#6",
+        "rNi5nO5yqLs#0",
+        "0MdNwIHwXy0#16",
+        "UNBAoc0TJSs#2",
+        "DT9_7sW5knY#7",
+        "y1zkrTcNJbc#1",
+        "R8DSq8qSJ44@17074#8",
+        "LQPGmxytTws#15",
+        "Uf34SbuWIos#2",
+        "VVRomN99Ygw#8",
+        "kaojiu9syPE#12",
+        "kaojiu9syPE#4",
+        "kaojiu9syPE#11",
+        "kaojiu9syPE#13",
+        "R8DSq8qSJ44@31561#3",
+        "R8DSq8qSJ44@31561#4",
+        "R8DSq8qSJ44@31561#6",
+        "Ove6z8zDsjE#6",
+        "iZUXjbcAfYs#19"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Space is the weapon: positioning, zones of influence and geometry",
+      "brief": "Begin with John Harris's history: Rogue advanced the random dungeon by making space matter because monsters used it too (doorways as safe spots, dark rooms as exposure). Then Brian Walker's chess analogy: monsters and effects as distinct zones of influence, and his rule to make weapons maximally distinct (Brogue's axe hits all adjacent foes), which bhauth extends in DCSS to the link between a strategic choice (axe plus shield) and tactical positioning; Shawn Main's call to test players along multiple axes supports this. Show positioning rules that create tactics: Wildermyth's cover softened by guaranteed flanking hits, Into the Breach inverting XCOM by rewarding stepping in front of damage, Red Rogue's height stuns versus horizontal-only ranged fire, Ultimate ADOM's four-way melee with any-direction missiles, HyperRogue's heptagons giving an escape direction, and NetHack's Elbereth on stairs. Close with Quinten Konyn's morgue-file death to a ranged enemy in a spot the axe could not reach, as a worked example of geometry deciding a fight. Guidance: design threats as shapes on the map, and make each weapon or ability change which shapes are safe.",
+      "keys": [
+        "KY-TmRw5sR8#7",
+        "lfb6uehmrWo#15",
+        "lfb6uehmrWo#9",
+        "tg-CjNodlmY#1",
+        "WLBJJTc6LWI#9",
+        "vtU3Xa0ShKw#18",
+        "rNi5nO5yqLs#8",
+        "OVSi3NzA0KM#4",
+        "hnoF_bL-HjI#16",
+        "wOlSws-OI2o#2",
+        "rIB0y_kwFuY#4",
+        "a9flzzXJVcg#2"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Enemies as problems, not damage sponges",
+      "brief": "Argue that a monster earns its place by posing a distinct problem. Lead with John Harris's tour of Shiren monsters that attack resources and position (archers, item-to-rice-ball converters, thief walrus) and Eric Billingsley on Brogue's small roster where each monster has something special; Atty Vohra relays Matt Colville's view that monsters should react and have tactics that tell a story. Add Tom Francis's Heat Signature enemy traits as bypasses and constraints, NetHack's cascading demon summons, and Benet Devereux's biology-inspired ideas (the tailored-venom cone snail, the anglerfish lure). Then the economics of a small roster: Billingsley reusing early enemies deeper in larger groups once XP scaling is gone, Todd Furmanski making every two-sprite Atari room a small tactical puzzle, and Josh Grams tuning his acid jellies with tiny changes. Finish with Tyler Coleman's sonnet-scripted boss as a playful frontier. Guidance: give each enemy one clear trick, then get variety from mixing them.",
+      "keys": [
+        "0MdNwIHwXy0#3",
+        "3S6uRMCdvNs#2",
+        "0ydWz1EvMJs#2",
+        "3vSCncV5hkI#8",
+        "rIB0y_kwFuY#25",
+        "0iNW5AYYWWw#4",
+        "0iNW5AYYWWw#5",
+        "3S6uRMCdvNs#8",
+        "l9eE4mT8xqI#7",
+        "TsaRxD3g_os#4",
+        "R8DSq8qSJ44@18888#8"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Traps that are more than a hit-point tax",
+      "brief": "Reed Lockwood (2022) and Sersa Victory with Joris Dormans (2026) converge on the diagnosis: the typical roguelike trap is hidden, instant, single-tile damage, a 'tax' for walking on unexplored tiles, and real-time trap design does not transfer to turn-based, symbolic games. Then the fixes, ordered from simple to structural: Lockwood's split of trigger and hazard (hide one, reveal the other; multi-tile beats single-tile), effects beyond damage (status, inventory, movement), and timed traps that only matter combined with other pressure; the tabletop lineage of treating traps like monsters; Victory and Dormans's pattern language across time (foreshadowing, ramp-up, staged effects), space (separate trigger and effect, networked traps, remote solutions) and consequences (lingering effects, encounter triggers, salvage), judged by six desired player behaviours, with their acid-statue worked example. End with Dormans's lesson, which also ties back to enemy design: make combinations of hazards the challenge, not each hazard on its own.",
+      "keys": [
+        "ymgmhtkRLyY#1",
+        "NjIduRLJL7U#0",
+        "ymgmhtkRLyY#0",
+        "ymgmhtkRLyY#2",
+        "ymgmhtkRLyY#3",
+        "ymgmhtkRLyY#6",
+        "ymgmhtkRLyY#8",
+        "NjIduRLJL7U#1",
+        "NjIduRLJL7U#3",
+        "NjIduRLJL7U#4",
+        "NjIduRLJL7U#5",
+        "NjIduRLJL7U#6",
+        "NjIduRLJL7U#7",
+        "NjIduRLJL7U#18"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Winning without fighting: escape, stealth and non-violent tactics",
+      "brief": "Start with Darren Grey's case that a rogue wins by caution and craftiness, that games must offer real escape options (even unkillable monsters that teach fleeing), and his Toby the Trapper 7DRL where the player can only harm enemies with traps. Then Ludipe on why combat is the easy default (recognisable symbols, an active opponent) and how passive opposition (Desktop Dungeons' static enemies, The Waking Knot's forces of nature) can replace it; Nick Bush's Word Processor shows pure movement tactics like warp strafing, and Dan Norder suggests softening Chase-style instant death into damage or status. Stealth as tactics: Billingsley's Into Ruins ties detection to light so enemies see as the player does (contrast Brogue's separate stealth range), and Alexandra Leonhart's per-entity fog of war makes play about managing your signal. Close with Tabea Iseli's Grimoire Groves, which kept crowd control by reducing it to its mechanics (burning becomes energizing over time) and replaced projectiles with ground-targeted spells. Guidance: if fighting is optional or absent, make movement, information and evasion carry the decisions.",
+      "keys": [
+        "C2sm-z7Ag4U#9",
+        "C2sm-z7Ag4U#6",
+        "C2sm-z7Ag4U#14",
+        "pYtlU9wGopo#2",
+        "pYtlU9wGopo#5",
+        "R8DSq8qSJ44@1660#4",
+        "ohH6LBM2EiU#10",
+        "3S6uRMCdvNs#13",
+        "R8DSq8qSJ44@28748#10",
+        "ZJAgY73c8bA#9",
+        "ZJAgY73c8bA#8"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Sharing the turn: tactics with more than one player",
+      "brief": "Frame the problem with Tyriq Plummer's three goals (no timers, no long waits, multiplayer that matters) and Adrian Zeyfang's NecroDancer Synchrony goal that every player should feel they are playing locally. Stage the design space as a sequence of trade-offs: HVNTRS's simultaneous queued turns (easy coordination, but priority rules and waiting in low-stakes moments), Clean Sweep's parallel asynchronous schedule where each enemy follows the player it targets, its failure at three or four players in Scrubbin' Trubble, and the pivot to combat zones that wait only for players in the same fight (giving fights clear starts and ends, at the cost of the no-waiting goal). Contrast Synchrony's approach, where time simply does not pass for a player who did not act, plus its rollback fixes (no player collision, invisible 'tombstones' on slain monsters), and Bloomquist's effectively real-time 50 ms turns. Add the smaller warnings: exploits of attention-switching should be designed in as tactics, friendly fire may just be unpleasant, Bloomquist's planned cooperative puzzles, and Gavin Verhey's 'net fun' (PvE lets you crush the AI; PvP must weigh fun taken from the opponent, as with Magic's land destruction). Guidance: decide which goal you will sacrifice, because none of the speakers kept all of them.",
+      "keys": [
+        "neuJCYmbAG8#5",
+        "zwhNSbFVKQM#2",
+        "neuJCYmbAG8#6",
+        "neuJCYmbAG8#10",
+        "UNBAoc0TJSs#7",
+        "UNBAoc0TJSs#8",
+        "UNBAoc0TJSs#0",
+        "UNBAoc0TJSs#9",
+        "zwhNSbFVKQM#5",
+        "zwhNSbFVKQM#9",
+        "zwhNSbFVKQM#10",
+        "bpSnPNr6ETc#7",
+        "neuJCYmbAG8#12",
+        "neuJCYmbAG8#8",
+        "bpSnPNr6ETc#4",
+        "lGm8cZC8Lfk#7",
+        "lGm8cZC8Lfk#8"
+      ]
+    }
+  ],
+  "omitted": []
+}

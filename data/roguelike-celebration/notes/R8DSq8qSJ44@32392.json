@@ -1,0 +1,105 @@
+{
+  "id": "R8DSq8qSJ44@32392",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 32392,
+    "end": 33342
+  },
+  "title": "The Decades-Long Design Experiment That Escapes Permadeath and Finds a New Form Every Run",
+  "speaker": "slashie",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=32392s",
+  "talk_type": "postmortem",
+  "summary": "In the conference's closing lightning talk, Slashie, creator of Temple of the Roguelike and RogueBasin and a participant in every 7DRL, maps more than 20 years of his projects as a 'lineage' of influences. He concludes that he has been running one long design experiment, treats roguelike development itself as a roguelike in which projects are allowed to die, and describes his two long 'quests': a streamlined, accessible traditional roguelike (from CastlevaniaRL to mobile experiments) and exploration as the main reason to play (from Expedition through NovaMundi to Emerald Woods and a purely exploratory forest game). He invites developers to identify the questions their own work is trying to answer.",
+  "games": [
+    "CastlevaniaRL",
+    "Rodney",
+    "Ananias",
+    "Expedition",
+    "NovaMundi",
+    "Emerald Woods"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "long-running projects",
+      "kind": "principle",
+      "claim": "Mapping two decades of projects as a network of influences showed Slashie that he had not been making separate games but running one long design experiment, each game a partial answer to a few recurring design questions.",
+      "detail": "The 'lineage' map is built from a JSON file listing every project on his website (years, collaborators, genre, links) and from his blog. He kept these records mainly for himself, to pick up old projects; in Q&A he says he moved from LiveJournal to a WordPress blog and began a structured history around 2015, which has helped him look back and analyse his work. He stresses it is a personal experiment, not academic research.",
+      "t": 32640,
+      "quote": "running one long design experiment where each game is just a fragment of an answer to a few design questions",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "jams",
+      "kind": "principle",
+      "claim": "Roguelike development is itself a roguelike: hard design questions cannot be solved in one pass, so each project should be allowed to die rather than be prolonged forever, with its 'postmortem' and player feedback carried into the next attempt.",
+      "detail": "Slashie likens starting a project to character creation and the design question to the near-impossible Amulet of Yendor. Seven-day roguelike challenges and game jams helped him finish projects; most nodes in his map took under a year, some just days. Each new game is a mutation: what worked, plus new inspirations, plus ideas that may fail. Players' views matter because game design is not an exact science.",
+      "t": 32728,
+      "quote": "you got to give yourself a chance of the project dying instead of prolonging it indefinitely until you hit a solution",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "accessibility",
+      "kind": "open-question",
+      "claim": "Slashie's longest-running design question is how far a traditional roguelike's entry barrier can be lowered, for players now largely on phones, without losing its essence.",
+      "detail": "He notes roguelikes have historically had obscure interfaces that scare people away, and that since he began around 2005, play has drifted from computers to phones, so much of the work is about a mobile roguelike that keeps the essence. He declines to define 'roguelike'.",
+      "t": 32832,
+      "quote": "how much we can lower the entry barrier without losing the essence of a traditional rogike",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "streamlined controls",
+      "kind": "principle",
+      "claim": "A roguelike's UI and systems should be streamlined so that depth comes from simple commands and movement: drop redundant or historical commands and trigger actions and skills contextually by moving or using the space around you instead of through menus.",
+      "detail": "Slashie traces this from CastlevaniaRL (2005), which inherited arcade simplicity, through an Ultima-inspired game where skills were first triggered by movement (an idea kept in almost every later game), to Rodney and his Steam roguelike formerly called Ananias, built on the idea that movement plus a few interactions is enough and less intimidating to new players.",
+      "t": 32933,
+      "quote": "Streamline the UI, streamline the systems so that depth can be found through simple commands and simple movement.",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "exploration",
+      "kind": "warning",
+      "claim": "Exploration works well alongside other elements but is hard to make the main reason players come back, as Slashie found when his 15th-century exploration sandbox Expedition left him asking what players should actually do.",
+      "detail": "Once the mechanics were in place, sailing alone, discovering and mapping weren't enough, and he didn't want to make a Colonization clone, so the project stalled. His second long 'quest' asks what makes a player want to explore a world and care about it.",
+      "t": 32963,
+      "quote": "exploration works great alongside other elements but it's hard to make it be the element that makes a players come back to the game",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world scale",
+      "kind": "technique",
+      "claim": "Instead of a huge procedurally generated world, which is very hard to make interesting to explore, Slashie found success in scaling down to a smaller region packed with things worth discovering.",
+      "detail": "Expedition evolved into a 3D version that became NovaMundi, where the downscaling began, and he pushed it further in Emerald Woods, his biggest project, which he says is likely headed to Steam early access with a demo on itch.io.",
+      "t": 33018,
+      "quote": "instead of trying to create a huge world that was interesting to explore which is very hard to do with procedural uh content generation",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "discovery",
+      "kind": "technique",
+      "claim": "Emerald Woods motivates exploration with a discovery system: the woods' history is told through documents, magazine articles and video clips in scattered buildings, and some animal species appear only in very specific places.",
+      "detail": "Slashie says this always gives players a reason to go a bit further, because they hope to find a new species or a building with something strange inside. The game also inherits accessibility lessons from his first quest.",
+      "t": 33096,
+      "quote": "So you always have a reason to go a bit further because the player holds the the hope that maybe they'll find a new species",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "shared discovery",
+      "kind": "example",
+      "claim": "Slashie's newest, exploration-only forest game drops procedural generation for a large handmade world so players can share their findings socially, and keeps its discoveries strange and unexplained so players form their own hypotheses.",
+      "detail": "The unreleased, early project strips out crafting and combat entirely. He wants discoveries to make players ask what on earth they just saw, without explanation.",
+      "t": 33142,
+      "quote": "I have dropped a little bit of the procedural aspects. And it's kind of a huge world, but not procedural. uh so that players can share socially their findings",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

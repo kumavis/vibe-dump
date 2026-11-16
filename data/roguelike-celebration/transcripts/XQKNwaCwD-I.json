@@ -1,0 +1,844 @@
+{
+ "id": "XQKNwaCwD-I",
+ "url": "https://www.youtube.com/watch?v=XQKNwaCwD-I",
+ "title": "Sraëka-Lillian - Procedural Phonology: Generating Name Generators",
+ "speaker": "Sraëka-Lillian",
+ "talk_title": "Procedural Phonology: Generating Name Generators",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 887,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "A high-level overview of procedural phonology generation, or how you can use phonology (the study of linguistic sound systems) to generate not only random names, but random naming languages (i.e., name generators), such that their outputs sound similar to each other and distinct from the outputs of other generated languages - much as each real-world language has its own unique character.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "procgen phonology generating name generators"
+  },
+  {
+   "start": 119,
+   "title": "goals of name generators"
+  },
+  {
+   "start": 295,
+   "title": "what is phonology?"
+  },
+  {
+   "start": 370,
+   "title": "basic structure"
+  },
+  {
+   "start": 421,
+   "title": "phonemic inventory"
+  },
+  {
+   "start": 550,
+   "title": "phonotactics"
+  },
+  {
+   "start": 661,
+   "title": "morphology"
+  },
+  {
+   "start": 728,
+   "title": "concluding reflections"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1779,
+ "trimmed": {
+  "segments": 46,
+  "words": 466
+ },
+ "segments": [
+  {
+   "t": 8.05,
+   "d": 9.3,
+   "text": "who will be talking about \"The Cost of Magic\" -- procedural phonology."
+  },
+  {
+   "t": 17.35,
+   "d": 2.53,
+   "text": "Sraëka-Lillian: Good morning."
+  },
+  {
+   "t": 19.88,
+   "d": 13.12,
+   "text": "It is a tremendous honor to talk about my all time"
+  },
+  {
+   "t": 33.0,
+   "d": 3.87,
+   "text": "favorite subtags with all my time favorite community."
+  },
+  {
+   "t": 36.87,
+   "d": 4.51,
+   "text": "My name is Sraëka-Lillian and I am going to talk about random name generators and how"
+  },
+  {
+   "t": 41.38,
+   "d": 5.18,
+   "text": "we can use phonology to generate names."
+  },
+  {
+   "t": 46.56,
+   "d": 6.87,
+   "text": "My goals are to introduce fundamental concepts clearly and precisely, to open a window into"
+  },
+  {
+   "t": 53.43,
+   "d": 4.76,
+   "text": "a world you might not know existed and highlight a thing I love."
+  },
+  {
+   "t": 58.19,
+   "d": 9.62,
+   "text": "As a disclaimer, I am not an expert on phonology, never studied linguistic formally."
+  },
+  {
+   "t": 67.81,
+   "d": 5.18,
+   "text": "I am a nerd who wanted to make a random naming generator which I have been working on on"
+  },
+  {
+   "t": 72.99,
+   "d": 4.31,
+   "text": "and off for the past couple years and everything I know about phonology I have learned through"
+  },
+  {
+   "t": 77.3,
+   "d": 1.48,
+   "text": "that experience."
+  },
+  {
+   "t": 78.78,
+   "d": 11.56,
+   "text": "My perspective might be informal so bear in mind this is just one count among many."
+  },
+  {
+   "t": 90.34,
+   "d": 5.56,
+   "text": "Sometimes in works of fancy fiction, you have worlds with multiple nations or cultures and"
+  },
+  {
+   "t": 95.9,
+   "d": 2.04,
+   "text": "sometimes they speak different languages."
+  },
+  {
+   "t": 97.94,
+   "d": 4.6,
+   "text": "When we give different characters and names that are identifiable as names that belong"
+  },
+  {
+   "t": 102.54,
+   "d": 10.36,
+   "text": "to the same language it ties them to culture and suggests the distinction of the cultures."
+  },
+  {
+   "t": 112.9,
+   "d": 12.63,
+   "text": "If you are doing procgen work and generating arbitrarily many worlds with arbitrarily many"
+  },
+  {
+   "t": 125.53,
+   "d": 5.82,
+   "text": "culture and you want the names used in the cultures to reflect state cultural identities"
+  },
+  {
+   "t": 131.35,
+   "d": 8.34,
+   "text": "you need a way to generate names and generating random name generators is a great way to supply"
+  },
+  {
+   "t": 139.69,
+   "d": 1.82,
+   "text": "yourself with this."
+  },
+  {
+   "t": 141.51,
+   "d": 9.11,
+   "text": "With this purpose in mind, we can name a couple of goals for our generators and the languages"
+  },
+  {
+   "t": 150.62,
+   "d": 1.3,
+   "text": "they represent."
+  },
+  {
+   "t": 151.92,
+   "d": 1.59,
+   "text": "First their output should be varied."
+  },
+  {
+   "t": 153.51,
+   "d": 6.79,
+   "text": "A name generator that only Jenn jet -- generates one name won't do the job or a generator that"
+  },
+  {
+   "t": 160.3,
+   "d": 3.57,
+   "text": "produces a 1,000 names that are distinct but similar."
+  },
+  {
+   "t": 163.87,
+   "d": 2.86,
+   "text": "It is OK to have a couple similar names."
+  },
+  {
+   "t": 166.73,
+   "d": 9.78,
+   "text": "English names survive John, June, Jan all in their rotation but if these were all the"
+  },
+  {
+   "t": 176.51,
+   "d": 3.54,
+   "text": "names we had it would get confusing."
+  },
+  {
+   "t": 180.05,
+   "d": 4.88,
+   "text": "We want mostly distinct from other names."
+  },
+  {
+   "t": 184.93,
+   "d": 4.52,
+   "text": "At the same time, the name generator should be cohesive."
+  },
+  {
+   "t": 189.45,
+   "d": 4.73,
+   "text": "Names within a language have a sense of sharing something in common which isn't necessarily"
+  },
+  {
+   "t": 194.18,
+   "d": 5.9,
+   "text": "evident in every pair of names but across larger order of names patterns of sound and"
+  },
+  {
+   "t": 200.08,
+   "d": 1.62,
+   "text": "shape occur."
+  },
+  {
+   "t": 201.7,
+   "d": 13.25,
+   "text": "In this list of Latin masculine names you can see the sounds coming up and what is universal"
+  },
+  {
+   "t": 214.95,
+   "d": 1.53,
+   "text": "in these names."
+  },
+  {
+   "t": 216.48,
+   "d": 10.26,
+   "text": "At the same time, the overall is the distinctiveness saying the patterns of sounds and structure"
+  },
+  {
+   "t": 226.74,
+   "d": 4.33,
+   "text": "consistent with the language should be different from the patterns and sounds of structure"
+  },
+  {
+   "t": 231.07,
+   "d": 2.58,
+   "text": "in other languages at hand."
+  },
+  {
+   "t": 233.65,
+   "d": 5.76,
+   "text": "When you compare these Japanese masculine given names to the Latin ones earlier you"
+  },
+  {
+   "t": 239.41,
+   "d": 5.88,
+   "text": "see different sounds and clusters and so on."
+  },
+  {
+   "t": 245.29,
+   "d": 4.61,
+   "text": "A language that is both internally cohesive and externally distinctive is likely to have"
+  },
+  {
+   "t": 249.9,
+   "d": 4.51,
+   "text": "a strong sense of identity which is essential."
+  },
+  {
+   "t": 254.41,
+   "d": 5.9,
+   "text": "And then on a functional level, we want the names each generator produces to feel intentionally"
+  },
+  {
+   "t": 260.31,
+   "d": 1.35,
+   "text": "formed."
+  },
+  {
+   "t": 261.66,
+   "d": 6.65,
+   "text": "What this means precisely is a matter of interpretation but we at least want to keep names with generation"
+  },
+  {
+   "t": 268.31,
+   "d": 1.37,
+   "text": "errors to a minimum."
+  },
+  {
+   "t": 269.68,
+   "d": 10.42,
+   "text": "We should hope that our names are generally pronounceable whether that pronunciation people"
+  },
+  {
+   "t": 280.1,
+   "d": 1.67,
+   "text": "come to is correct or not."
+  },
+  {
+   "t": 281.77,
+   "d": 5.48,
+   "text": "If you can't come to any way to pronounce the name that's in front of you you will have"
+  },
+  {
+   "t": 287.25,
+   "d": 8.93,
+   "text": "a harder time sticking in memory and risks degenerating into noise and being forgotten."
+  },
+  {
+   "t": 296.18,
+   "d": 5.66,
+   "text": "Phonology is a brand of linguistic concerning speech sounds and their relationship to each"
+  },
+  {
+   "t": 301.84,
+   "d": 5.97,
+   "text": "other specifically as they occur within a language."
+  },
+  {
+   "t": 307.81,
+   "d": 4.41,
+   "text": "How do we break a language and speech up into different sounds?"
+  },
+  {
+   "t": 312.22,
+   "d": 3.32,
+   "text": "What sequences of sounds are allowed and which are forbidden?"
+  },
+  {
+   "t": 315.54,
+   "d": 4.9,
+   "text": "How do different sounds influence each other in proximity?"
+  },
+  {
+   "t": 320.44,
+   "d": 2.88,
+   "text": "And how do language sounds change over time?"
+  },
+  {
+   "t": 323.32,
+   "d": 6.71,
+   "text": "Phonology is not not concerned with the production of speech sounds as physical phenomenon."
+  },
+  {
+   "t": 330.03,
+   "d": 9.86,
+   "text": "This is the concern of phonetics which is often relevant to phonology."
+  },
+  {
+   "t": 339.89,
+   "d": 3.94,
+   "text": "Phonology helps us make name generators is a couple different ways."
+  },
+  {
+   "t": 343.83,
+   "d": 4.19,
+   "text": "It helps us identify the different components that come together to make up the sound system"
+  },
+  {
+   "t": 348.02,
+   "d": 7.27,
+   "text": "of language and second it highlights the patterns that shape each of those components individually."
+  },
+  {
+   "t": 355.29,
+   "d": 4.49,
+   "text": "Once we identify these components we can describe the basic shape of procedural for generating"
+  },
+  {
+   "t": 359.78,
+   "d": 4.05,
+   "text": "a language which I will do next -- procedure -- and then we will take a closer look at"
+  },
+  {
+   "t": 363.83,
+   "d": 7.97,
+   "text": "each component and see what phonology can tell us about generating them individually."
+  },
+  {
+   "t": 371.8,
+   "d": 2.98,
+   "text": "Our basic strategy is built around three components."
+  },
+  {
+   "t": 374.78,
+   "d": 8.86,
+   "text": "To start naming language has to know what sounds or phonames are and this is called"
+  },
+  {
+   "t": 383.64,
+   "d": 1.88,
+   "text": "our phonomic library."
+  },
+  {
+   "t": 385.52,
+   "d": 9.9,
+   "text": "And it combines how the sounds are distributed and arranged."
+  },
+  {
+   "t": 395.42,
+   "d": 7.89,
+   "text": "We can generate syllabus and combine them to make multi-syllabic names."
+  },
+  {
+   "t": 403.31,
+   "d": 8.24,
+   "text": "We might use additional techniques to smooth out the syllabus and this comes into play"
+  },
+  {
+   "t": 411.55,
+   "d": 7.54,
+   "text": "if we have complex names with with roots and suffices attached."
+  },
+  {
+   "t": 419.09,
+   "d": 18.53,
+   "text": "Deciding on the language phonemic inventoryy is the first step."
+  },
+  {
+   "t": 437.62,
+   "d": 7.27,
+   "text": "There are more than 2,000 sounds across the language and the Roman alphabet in English"
+  },
+  {
+   "t": 444.89,
+   "d": 4.33,
+   "text": "has only 26 letters for us to work with."
+  },
+  {
+   "t": 449.22,
+   "d": 7.27,
+   "text": "For the sake of keeping our workload manageable and our outputs readable there is a wisdom"
+  },
+  {
+   "t": 456.49,
+   "d": 6.6,
+   "text": "in keeping our master inventory small and mostly limiting it to sounds folks in the"
+  },
+  {
+   "t": 463.09,
+   "d": 4.3,
+   "text": "audience have prior intuition about how to pronounce already."
+  },
+  {
+   "t": 467.39,
+   "d": 5.96,
+   "text": "For me this means not using a lot of accent marks which help distinguish sounds but also"
+  },
+  {
+   "t": 473.35,
+   "d": 6.49,
+   "text": "I think risk coming off as visual noise to a lot of English speakers not used to interpreting"
+  },
+  {
+   "t": 479.84,
+   "d": 1.25,
+   "text": "them."
+  },
+  {
+   "t": 481.09,
+   "d": 11.2,
+   "text": "And then to keep things from feeling too English or European in general, I use a handful of"
+  },
+  {
+   "t": 492.29,
+   "d": 1.0,
+   "text": "non-English sounds."
+  },
+  {
+   "t": 493.29,
+   "d": 5.27,
+   "text": "These all represent relatively common sounds worldwide but are still pronounced reasonably"
+  },
+  {
+   "t": 498.56,
+   "d": 7.33,
+   "text": "close to the letters I use to spell them so they can add flavor without causing too much"
+  },
+  {
+   "t": 505.89,
+   "d": 2.65,
+   "text": "confusion."
+  },
+  {
+   "t": 508.54,
+   "d": 5.57,
+   "text": "With a master inventory decided we can decide which sounds should be available in the specific"
+  },
+  {
+   "t": 514.11,
+   "d": 1.7,
+   "text": "language we are generating."
+  },
+  {
+   "t": 515.81,
+   "d": 6.18,
+   "text": "There is a couple different databases online that can describe the prevalence of each sound"
+  },
+  {
+   "t": 521.99,
+   "d": 3.32,
+   "text": "across languages as individual sounds."
+  },
+  {
+   "t": 525.31,
+   "d": 5.73,
+   "text": "We can use that to estimate the chance of each sound appearing independently in the"
+  },
+  {
+   "t": 531.04,
+   "d": 1.0,
+   "text": "generator."
+  },
+  {
+   "t": 532.04,
+   "d": 8.5,
+   "text": "There are more sophisticated ways of doing this that mice produce more cohesive results"
+  },
+  {
+   "t": 540.54,
+   "d": 2.91,
+   "text": "but in practice the results are a little subtle."
+  },
+  {
+   "t": 543.45,
+   "d": 7.28,
+   "text": "It is perfectly valid to select phonames independently and not worry about how they work to each"
+  },
+  {
+   "t": 550.73,
+   "d": 1.36,
+   "text": "other."
+  },
+  {
+   "t": 552.09,
+   "d": 7.42,
+   "text": "Phonotactics are about where sounds are allowed to appear structurally."
+  },
+  {
+   "t": 559.51,
+   "d": 7.37,
+   "text": "Syllabus structure has a huge impact on the shape of the words."
+  },
+  {
+   "t": 566.88,
+   "d": 6.92,
+   "text": "The traditional model is the onset, followed by the vowel portion called the nucleus and"
+  },
+  {
+   "t": 573.8,
+   "d": 7.31,
+   "text": "a constenant called coda."
+  },
+  {
+   "t": 581.11,
+   "d": 6.17,
+   "text": "All languages allow codas and languages differ on other factors like whether onset and coda"
+  },
+  {
+   "t": 587.28,
+   "d": 11.85,
+   "text": "can include multiple constenants or occur at the end or middle or both."
+  },
+  {
+   "t": 599.13,
+   "d": 4.68,
+   "text": "With syllabus structure established, we can ask questions about how frequently each sound"
+  },
+  {
+   "t": 603.81,
+   "d": 3.83,
+   "text": "in the language occurs and what context."
+  },
+  {
+   "t": 607.64,
+   "d": 3.14,
+   "text": "Sometimes constants appear in one place more often than others."
+  },
+  {
+   "t": 610.78,
+   "d": 9.84,
+   "text": "Perhaps the H sound only appears in the onset and I think literally never in the coda which"
+  },
+  {
+   "t": 620.62,
+   "d": 7.21,
+   "text": "you can see in the great number of English words beginning with the sound compared to"
+  },
+  {
+   "t": 627.83,
+   "d": 5.51,
+   "text": "the complete absent of any at the end form."
+  },
+  {
+   "t": 633.34,
+   "d": 5.06,
+   "text": "We can ask sounds about how sounds operate within the structure."
+  },
+  {
+   "t": 638.4,
+   "d": 4.05,
+   "text": "Particularly important are constant clusters."
+  },
+  {
+   "t": 642.45,
+   "d": 5.56,
+   "text": "Most languages are stricted and constants are allowed to touch so if we are not careful"
+  },
+  {
+   "t": 648.01,
+   "d": 14.69,
+   "text": "we can end up with contant soup."
+  },
+  {
+   "t": 662.7,
+   "d": 9.36,
+   "text": "Morphology describes how we create more complex words and these are called units of [indiscernible]"
+  },
+  {
+   "t": 672.06,
+   "d": 6.25,
+   "text": "and it isn't necessary to have multiple ones in a name but seeing elements reoccurring"
+  },
+  {
+   "t": 678.31,
+   "d": 6.63,
+   "text": "across different names can help in terms of structure which helps tell if there is an"
+  },
+  {
+   "t": 684.94,
+   "d": 3.85,
+   "text": "intentional order to how names are shaped."
+  },
+  {
+   "t": 688.79,
+   "d": 4.56,
+   "text": "When two are combined to make a more complex words sometimes sounds change the boundary"
+  },
+  {
+   "t": 693.35,
+   "d": 1.41,
+   "text": "between them."
+  },
+  {
+   "t": 694.76,
+   "d": 5.32,
+   "text": "We are free to ignore this area but we should be aware if you potentially put two sounds"
+  },
+  {
+   "t": 700.08,
+   "d": 8.02,
+   "text": "together that our touching in real language these meanings can result in complex changes"
+  },
+  {
+   "t": 708.1,
+   "d": 7.34,
+   "text": "to one or both sounds or to sounds surrounding them but I have learned that one of the most"
+  },
+  {
+   "t": 715.44,
+   "d": 4.38,
+   "text": "common results of these changes is just to delete one of the offending sounds entirely."
+  },
+  {
+   "t": 719.82,
+   "d": 5.26,
+   "text": "I used to be hesitant to doing this but once I learned how prominent it was I wish I had"
+  },
+  {
+   "t": 725.08,
+   "d": 7.51,
+   "text": "always known because you can solve a lot of problems by just deleting them."
+  },
+  {
+   "t": 732.59,
+   "d": 5.43,
+   "text": "But no matter how well we answer our phonology questions we will still get some names that"
+  },
+  {
+   "t": 738.02,
+   "d": 2.76,
+   "text": "don't look right."
+  },
+  {
+   "t": 740.78,
+   "d": 2.17,
+   "text": "We have a couple options when this happens."
+  },
+  {
+   "t": 742.95,
+   "d": 4.59,
+   "text": "We can try to identify what we don't like about them and change the strategy or add"
+  },
+  {
+   "t": 747.54,
+   "d": 5.44,
+   "text": "safeguards to prevent them in the first place or we can try to embrace the weirdness of"
+  },
+  {
+   "t": 752.98,
+   "d": 2.99,
+   "text": "them."
+  },
+  {
+   "t": 755.97,
+   "d": 8.08,
+   "text": "We ask be humble in making adjustments about -- in judgments about what names are normal"
+  },
+  {
+   "t": 764.05,
+   "d": 7.95,
+   "text": "because the possibility of language space is enormous and our exposure is quite limited"
+  },
+  {
+   "t": 772.0,
+   "d": 7.18,
+   "text": "oh specially for many of us who only speak English and our exposure to languages outside"
+  },
+  {
+   "t": 779.18,
+   "d": 9.89,
+   "text": "of English is heavily bias in favor of the handful of European and maybe Asian languages"
+  },
+  {
+   "t": 789.07,
+   "d": 4.21,
+   "text": "that we have the most contact with."
+  },
+  {
+   "t": 793.28,
+   "d": 4.78,
+   "text": "When we generate name that looks weird to us, we have the option to ask if that's something"
+  },
+  {
+   "t": 798.06,
+   "d": 1.67,
+   "text": "that might be normal."
+  },
+  {
+   "t": 799.73,
+   "d": 5.13,
+   "text": "In another language, we don't have context for, or that could be normal or could have"
+  },
+  {
+   "t": 804.86,
+   "d": 5.18,
+   "text": "been normal in a language that exist in the past but no longer does or could still exist"
+  },
+  {
+   "t": 810.04,
+   "d": 4.27,
+   "text": "in a language that doesn't yet exist."
+  },
+  {
+   "t": 814.31,
+   "d": 4.51,
+   "text": "This brings me to my final thought."
+  },
+  {
+   "t": 818.82,
+   "d": 3.95,
+   "text": "When we are playing with language we don't have to feel beholden to submit to the real"
+  },
+  {
+   "t": 822.77,
+   "d": 1.72,
+   "text": "world."
+  },
+  {
+   "t": 824.49,
+   "d": 6.86,
+   "text": "This is a generative art that has the potential to be creative, speculative or an endeavor"
+  },
+  {
+   "t": 831.35,
+   "d": 7.97,
+   "text": "that celebrates the real, unreal and potentially real right alongside with the actionable."
+  },
+  {
+   "t": 839.32,
+   "d": 1.3,
+   "text": "Generating names is an art."
+  },
+  {
+   "t": 840.62,
+   "d": 8.39,
+   "text": "As much as a science, an art can and should do more than reproduce established rules."
+  },
+  {
+   "t": 849.01,
+   "d": 1.0,
+   "text": "That's I will know."
+  },
+  {
+   "t": 850.01,
+   "d": 3.07,
+   "text": "Thanks for coming to my talk and have a lovely Roguelike Celebration."
+  },
+  {
+   "t": 853.08,
+   "d": 1.22,
+   "text": "EMCEE: Thank you."
+  },
+  {
+   "t": 854.3,
+   "d": 7.81,
+   "text": "Love a lovely final slide."
+  },
+  {
+   "t": 862.11,
+   "d": 3.49,
+   "text": "People in chat were definitely engaging and sharing lots of other things that reminded"
+  },
+  {
+   "t": 865.6,
+   "d": 1.0,
+   "text": "them of this."
+  },
+  {
+   "t": 866.6,
+   "d": 1.0,
+   "text": "Sraëka-Lillian: I am thrilled to hear."
+  },
+  {
+   "t": 867.6,
+   "d": 1.0,
+   "text": "EMCEE: It spawned a lot of conversation."
+  },
+  {
+   "t": 874.81,
+   "d": 1.0,
+   "text": "Sraëka-Lillian: I think -- did I leave time for questions?"
+  },
+  {
+   "t": 881.78,
+   "d": 1.0,
+   "text": "EMCEE: You timed it just right."
+  }
+ ],
+ "note": "re-timed 2 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 12 s off the audio)"
+}

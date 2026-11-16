@@ -1,0 +1,145 @@
+{
+  "id": "C2CzHLtt1Fw",
+  "title": "Jamie Brittain - Don't Save the @",
+  "speaker": "Jamie Brittain",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=C2CzHLtt1Fw",
+  "talk_type": "design",
+  "summary": "TV writer (Skins) and game writer Jamie Brittain argues that film and TV suffer a 'narrative predictability crisis' because story-structure manuals like the hero's journey and Save the Cat have turned from descriptive tools into prescriptions enforced by executives. Structured around Vogler's 12-step hero's journey, the talk draws eight lessons from roguelikes about story: they honour power fantasies, find meaning in chaos and player mistakes, demand imaginative participation, are indifferent to whether you live or die, use procedural characters to diversify stories, cater to multiple layers of audience, resist algorithmic homogenisation, and offer disobedient possibilities (you can kill the cat instead of saving it).",
+  "games": [
+    "NetHack",
+    "The Binding of Isaac",
+    "Shiren the Wanderer",
+    "Heat Signature",
+    "Cogmind",
+    "Caves of Qud",
+    "Wildermyth",
+    "Spelunky",
+    "Dwarf Fortress",
+    "Monkey Island 2",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story structure",
+      "kind": "warning",
+      "claim": "Story-structure manuals such as the hero's journey and Save the Cat become harmful when they shift from descriptive tools to prescriptions, producing predictable stories.",
+      "detail": "Brittain says he has no problem with structure guides and most writers use them, but when they reach executives and commissioners they become acts of prescription. He calls the result a 'narrative predictability crisis' where audiences can predict when it is safe to leave a film for the toilet.",
+      "t": 545,
+      "quote": "when you basically start stop seeing these things as acts of description, of acts of understanding, and turn them into instead acts of prescription",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story structure",
+      "kind": "principle",
+      "claim": "Brittain connects Brian Walker's warning that games die when challenge becomes rote and systematised to the way story structure makes film and TV rote.",
+      "detail": "He cites Brian Walker's 2016 Roguelike Celebration point about longevity of a game, and argues films and TV are a form of play whose friction is killed by screenwriting manuals in the same way.",
+      "t": 631,
+      "quote": "the biggest risk to the longevity of a game is where challenge and uh becomes wrote and systematized",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "power fantasy",
+      "kind": "principle",
+      "claim": "Roguelikes show that hero narratives and power fantasies are worth keeping: an overpowered Binding of Isaac run is a uniquely strong feeling, so players should be allowed to feel powerful.",
+      "detail": "Lesson one: structure is a tool, not a prescription. A winning NetHack run is an exquisite hero's journey by design (descend, retrieve, ascend), yet in actual play most players feel anything but heroic, which is an interesting tension between designed arc and lived experience.",
+      "t": 715,
+      "quote": "an overpowered run in Isaac uh the binding of Isaac up there feels like nothing else",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "Shiren the Wanderer produces meaningful, funny stories through chaos, such as losing to the final dragon because the player's hand got stuck in a pot.",
+      "detail": "Brittain's most successful run ended at the final dragon because his hand was stuck in a pot and he could not fight. He argues no blockbuster would script such an ending, but chaos flowing through game systems creates a memorable narrative experience.",
+      "t": 825,
+      "quote": "you're still capable of failing to beat the dragon at the end of the story because your hand gets stuck in a pot",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player mistakes",
+      "kind": "example",
+      "claim": "Heat Signature builds stories out of player mistakes, relying on the fallibility of how players engage its systems.",
+      "detail": "Brittain recounts entering a capture mission with only lethal gear, then improvising with a subverter on a teleport pad to send the target into space for pickup; designer Tom Francis replied that this was the kind of high jinks he hoped for. Brittain contrasts this with story structures that encourage compliance; his summary line is that compliance is the enemy of surprise.",
+      "t": 942,
+      "quote": "I'd never played a game up until that point which basically relied on you making mistakes that relied on the fallibility and the imperfection",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii imagination",
+      "kind": "principle",
+      "claim": "The low graphical fidelity of traditional roguelikes cues players to use their imagination and effectively co-create the look and feel of the space with the designer.",
+      "detail": "Lesson three: roguelikes demand creative participation. A Reddit suggestion to imagine NetHack's halls as a thousand metres high changed how Brittain played; he notes Caves of Qud now treats ASCII-style presentation as a deliberate function of play rather than a necessity.",
+      "t": 1032,
+      "quote": "you're cued by the game to use your imagination more",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "unhappy endings",
+      "kind": "principle",
+      "claim": "Roguelikes' indifference to whether the player lives or dies is a narrative strength, countering story structures' bias toward happy endings.",
+      "detail": "Lesson four: story structures favour the hero returning with the elixir, but some of the best narrative experiences lack happy endings. Roguelike death, even on NetHack level one, is part of a world that does not bend to an easy pattern.",
+      "t": 1194,
+      "quote": "storytelling structures do when they impose a structure on us is they tend to favor happy endings",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural characters",
+      "kind": "example",
+      "claim": "Wildermyth pairs heavily authored writing with procedurally generated characters who age, mutate, retire and return, producing a unique character-driven story.",
+      "detail": "Brittain calls it one of the greatest games ever made: stories are written with sensitivity but the people in them are procedurally generated with small customization, giving a sense of time passing and intimate moments against an epic quest backdrop.",
+      "t": 1296,
+      "quote": "those stories are offered but the characters that take place in them are procedurally generated",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural characters",
+      "kind": "principle",
+      "claim": "Procedurally generated characters inside a hero story break down the hierarchies that narrative structures tend to reinforce, much as a diverse writers' room improves stories.",
+      "detail": "From writer-room experience, Brittain says rooms full of similar people make stories 'round themselves down'. Procedural generation plus permadeath, where things have consequence, makes roguelikes engines for character development.",
+      "t": 1375,
+      "quote": "simply by uh having a procedurally generated character system within a hero story, you immediately start to break those systems down",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optional content",
+      "kind": "principle",
+      "claim": "Roguelikes like Spelunky create large amounts of content that not every player will see, catering to different layers of audience rather than marching everyone at the same pace.",
+      "detail": "Lesson six, illustrated by the Eggplant run and Spelunky's multiple endings: hardcore players get a whole extra game, while it is fine for others to stop early. Audiences commit to a story to the degree they choose.",
+      "t": 1428,
+      "quote": "rogue likes do is they create vast amounts of content um that not every player will see",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "Kruggsmash's Dwarf Fortress videos show that extracting stories from a simulation like Legends mode is a genuine creative act, not just reading logs.",
+      "detail": "Brittain presents procedural roguelikes as a defence against AI-generated media, which he says reinforces structures. He holds up Kruggsmash's storytelling from Dwarf Fortress legends as collaborative creation honouring both the chaos of the world and the creator's input.",
+      "t": 1604,
+      "quote": "It's a genuine act of creation that he takes part in when he goes through the legends mode",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player freedom",
+      "kind": "example",
+      "claim": "NetHack's pet cat illustrates roguelike disobedience: saving the cat is only one option among many, since the cat can steal from shops, be eaten or be polymorphed.",
+      "detail": "Lesson eight, 'roguelikes kill cats', plays on Save the Cat. By offering possibilities the player would never otherwise encounter, roguelikes can change how people think about stories.",
+      "t": 1655,
+      "quote": "rogue likes do is that they they give the option of saving the cat. Um, but that's just one option amongst uh, many",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

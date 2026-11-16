@@ -1,0 +1,1733 @@
+{
+ "id": "Xwa1KbXqeGQ",
+ "url": "https://www.youtube.com/watch?v=Xwa1KbXqeGQ",
+ "title": "Evan Ovadia - ASCII, Sprites, and Symbolic Graphics",
+ "speaker": "Evan Ovadia",
+ "talk_title": "ASCII, Sprites, and Symbolic Graphics",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 717,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nBio: I'm a roguelike player and developer, raised on ADOM. In my free time I like to program, snowboard, and refer to roguelites as a roguelikes where purists can overhear me. I'm currently a software engineer at Google, specializing in application architecture, working on Google Earth. I'm the developer of the 7DRL 2019 game Incendian Falls.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 17,
+   "title": "The journey and agenda"
+  },
+  {
+   "start": 38,
+   "title": "Inspiration and ASCII"
+  },
+  {
+   "start": 74,
+   "title": "Developing the Domino concept"
+  },
+  {
+   "start": 133,
+   "title": "Implementing the graphics"
+  },
+  {
+   "start": 189,
+   "title": "Indian Falls game"
+  },
+  {
+   "start": 217,
+   "title": "Comparing graphics approaches"
+  },
+  {
+   "start": 286,
+   "title": "Aesthetics and beauty"
+  },
+  {
+   "start": 344,
+   "title": "Imagination and symbolism"
+  },
+  {
+   "start": 400,
+   "title": "Clarity and information"
+  },
+  {
+   "start": 464,
+   "title": "Efficiency and reuse"
+  },
+  {
+   "start": 529,
+   "title": "Conclusion and wrap-up"
+  },
+  {
+   "start": 561,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2357,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 1.74,
+   "text": "all right hello fellow roguelike ears"
+  },
+  {
+   "t": 1.77,
+   "d": 2.01,
+   "text": "I'm super excited to be here I'm gonna"
+  },
+  {
+   "t": 3.78,
+   "d": 1.44,
+   "text": "tell you a story about the inspiration"
+  },
+  {
+   "t": 5.22,
+   "d": 1.83,
+   "text": "that took me on a whirlwind adventure to"
+  },
+  {
+   "t": 7.05,
+   "d": 1.47,
+   "text": "realize and discover my own personal"
+  },
+  {
+   "t": 8.52,
+   "d": 3.48,
+   "text": "holy grail of roguelike graphics once I"
+  },
+  {
+   "t": 12.0,
+   "d": 6.15,
+   "text": "figure out how to advance the slide so"
+  },
+  {
+   "t": 18.15,
+   "d": 2.25,
+   "text": "this talk is gonna come in two parts I'm"
+  },
+  {
+   "t": 20.4,
+   "d": 1.74,
+   "text": "gonna tell you about the journey and"
+  },
+  {
+   "t": 22.14,
+   "d": 1.29,
+   "text": "making in send Ian Falls and its"
+  },
+  {
+   "t": 23.43,
+   "d": 1.95,
+   "text": "graphics layer Domino and then I'm gonna"
+  },
+  {
+   "t": 25.38,
+   "d": 1.56,
+   "text": "tell you about the benefits of a ski"
+  },
+  {
+   "t": 26.94,
+   "d": 5.88,
+   "text": "sprites and the symbolic approach so I"
+  },
+  {
+   "t": 32.82,
+   "d": 0.96,
+   "text": "hope you come away with a new"
+  },
+  {
+   "t": 33.78,
+   "d": 2.82,
+   "text": "appreciation of a ski sprites and how"
+  },
+  {
+   "t": 36.6,
+   "d": 2.31,
+   "text": "much more there is to explore so a"
+  },
+  {
+   "t": 38.91,
+   "d": 0.99,
+   "text": "little bit about me"
+  },
+  {
+   "t": 39.9,
+   "d": 1.32,
+   "text": "I make programming languages and"
+  },
+  {
+   "t": 41.22,
+   "d": 1.23,
+   "text": "roguelike things and I think the most"
+  },
+  {
+   "t": 42.45,
+   "d": 1.53,
+   "text": "important thing to know about me is that"
+  },
+  {
+   "t": 43.98,
+   "d": 3.72,
+   "text": "I and not an artist I am terrible at art"
+  },
+  {
+   "t": 47.7,
+   "d": 2.07,
+   "text": "ironically this is a talk about art so"
+  },
+  {
+   "t": 49.77,
+   "d": 1.8,
+   "text": "take everything I say with a huge grain"
+  },
+  {
+   "t": 51.57,
+   "d": 2.07,
+   "text": "of salt asteroid of salt a comet of salt"
+  },
+  {
+   "t": 53.64,
+   "d": 2.43,
+   "text": "salt comment so with my art skills I was"
+  },
+  {
+   "t": 56.07,
+   "d": 1.53,
+   "text": "naturally drawn to developing roguelikes"
+  },
+  {
+   "t": 57.6,
+   "d": 2.79,
+   "text": "ASCII was the perfect medium for me life"
+  },
+  {
+   "t": 60.39,
+   "d": 2.13,
+   "text": "was great and then I saw this on the 8"
+  },
+  {
+   "t": 62.52,
+   "d": 2.67,
+   "text": "on site I'm like whoa dude what is this"
+  },
+  {
+   "t": 65.19,
+   "d": 2.01,
+   "text": "is this like some sort like new a-tom"
+  },
+  {
+   "t": 67.2,
+   "d": 1.95,
+   "text": "4.0 kind of thing like this is cool you"
+  },
+  {
+   "t": 69.15,
+   "d": 2.79,
+   "text": "can do ASCII and 3d that's amazing and I"
+  },
+  {
+   "t": 71.94,
+   "d": 1.56,
+   "text": "was inspired like I had to try making"
+  },
+  {
+   "t": 73.5,
+   "d": 1.77,
+   "text": "something like this so I hacked together"
+  },
+  {
+   "t": 75.27,
+   "d": 1.41,
+   "text": "a program that would generate some 3d"
+  },
+  {
+   "t": 76.68,
+   "d": 2.13,
+   "text": "character meshes and eventually I had"
+  },
+  {
+   "t": 78.81,
+   "d": 1.86,
+   "text": "something like this now don't be"
+  },
+  {
+   "t": 80.67,
+   "d": 1.92,
+   "text": "distracted by the pentagonal tiling and"
+  },
+  {
+   "t": 82.59,
+   "d": 1.32,
+   "text": "the elevation that's how to talk for"
+  },
+  {
+   "t": 83.91,
+   "d": 2.01,
+   "text": "next year but look at the little uh bad"
+  },
+  {
+   "t": 85.92,
+   "d": 1.62,
+   "text": "sign this jumping around that's a 3d at"
+  },
+  {
+   "t": 87.54,
+   "d": 4.68,
+   "text": "sign and it's got a little shadow it"
+  },
+  {
+   "t": 92.22,
+   "d": 2.19,
+   "text": "looks pretty neat but I could tell like"
+  },
+  {
+   "t": 94.41,
+   "d": 2.25,
+   "text": "something was missing and years later it"
+  },
+  {
+   "t": 96.66,
+   "d": 1.59,
+   "text": "occurred to me that I could put it on a"
+  },
+  {
+   "t": 98.25,
+   "d": 1.71,
+   "text": "little domino tile thing he actually"
+  },
+  {
+   "t": 99.96,
+   "d": 1.05,
+   "text": "kind of looked really good"
+  },
+  {
+   "t": 101.01,
+   "d": 3.66,
+   "text": "and of course with any new graphics"
+  },
+  {
+   "t": 104.67,
+   "d": 1.83,
+   "text": "project you had to add particle systems"
+  },
+  {
+   "t": 106.5,
+   "d": 2.16,
+   "text": "right gotta add a fire effect you can't"
+  },
+  {
+   "t": 108.66,
+   "d": 2.49,
+   "text": "just not add a fire effect but something"
+  },
+  {
+   "t": 111.15,
+   "d": 2.13,
+   "text": "was still wrong tasks even seem to fit"
+  },
+  {
+   "t": 113.28,
+   "d": 2.64,
+   "text": "somehow with everything around it and I"
+  },
+  {
+   "t": 115.92,
+   "d": 1.38,
+   "text": "was thinking maybe I could use Unicode"
+  },
+  {
+   "t": 117.3,
+   "d": 1.56,
+   "text": "characters and it actually kind of"
+  },
+  {
+   "t": 118.86,
+   "d": 1.95,
+   "text": "worked like there was something about"
+  },
+  {
+   "t": 120.81,
+   "d": 1.68,
+   "text": "Unicode characters that at least I'm not"
+  },
+  {
+   "t": 122.49,
+   "d": 2.52,
+   "text": "familiar with that kind of worked with"
+  },
+  {
+   "t": 125.01,
+   "d": 1.98,
+   "text": "the rest of the tiles and then I was"
+  },
+  {
+   "t": 126.99,
+   "d": 2.97,
+   "text": "thinking what if I went full symbolic"
+  },
+  {
+   "t": 129.96,
+   "d": 2.25,
+   "text": "and then an ominous Thunder boomed in"
+  },
+  {
+   "t": 132.21,
+   "d": 0.15,
+   "text": "the"
+  },
+  {
+   "t": 132.36,
+   "d": 2.88,
+   "text": "distance so I found a font editing"
+  },
+  {
+   "t": 135.24,
+   "d": 1.56,
+   "text": "program called bird font and I traced"
+  },
+  {
+   "t": 136.8,
+   "d": 2.19,
+   "text": "this fancy-looking D it might sound like"
+  },
+  {
+   "t": 138.99,
+   "d": 2.22,
+   "text": "it's hard to trace fonts and you know"
+  },
+  {
+   "t": 141.21,
+   "d": 2.22,
+   "text": "add curves and stuff but it's actually"
+  },
+  {
+   "t": 143.43,
+   "d": 1.17,
+   "text": "just the pen tool like any regular"
+  },
+  {
+   "t": 144.6,
+   "d": 2.22,
+   "text": "graphics program the symbol took less"
+  },
+  {
+   "t": 146.82,
+   "d": 1.98,
+   "text": "than a minute to trace i'ma pause for a"
+  },
+  {
+   "t": 148.8,
+   "d": 2.04,
+   "text": "bit and let that sink in it took him"
+  },
+  {
+   "t": 150.84,
+   "d": 1.56,
+   "text": "less than a minute to trace that really"
+  },
+  {
+   "t": 152.4,
+   "d": 3.48,
+   "text": "pretty symbol and I am NOT an artist so"
+  },
+  {
+   "t": 155.88,
+   "d": 1.26,
+   "text": "I hope you can see the implications of"
+  },
+  {
+   "t": 157.14,
+   "d": 2.73,
+   "text": "something like this and actually worked"
+  },
+  {
+   "t": 159.87,
+   "d": 1.83,
+   "text": "really well it really seemed to fit with"
+  },
+  {
+   "t": 161.7,
+   "d": 2.16,
+   "text": "the rest of the tiles and then my friend"
+  },
+  {
+   "t": 163.86,
+   "d": 1.5,
+   "text": "Kevin Navarro made a tool called lift"
+  },
+  {
+   "t": 165.36,
+   "d": 1.92,
+   "text": "which could generate way better meshes"
+  },
+  {
+   "t": 167.28,
+   "d": 2.19,
+   "text": "than the tool I hacked together and it"
+  },
+  {
+   "t": 169.47,
+   "d": 4.59,
+   "text": "gave us outline meshes so left yes your"
+  },
+  {
+   "t": 174.06,
+   "d": 2.13,
+   "text": "left as well on the left is without"
+  },
+  {
+   "t": 176.19,
+   "d": 1.83,
+   "text": "meshes without outline meshes and on the"
+  },
+  {
+   "t": 178.02,
+   "d": 1.59,
+   "text": "right is without my meshes and it turned"
+  },
+  {
+   "t": 179.61,
+   "d": 1.44,
+   "text": "out really well so let's give it a hand"
+  },
+  {
+   "t": 181.05,
+   "d": 6.06,
+   "text": "to Kevin actually his outlines made this"
+  },
+  {
+   "t": 187.11,
+   "d": 2.37,
+   "text": "work it was ready so we named it Domino"
+  },
+  {
+   "t": 189.48,
+   "d": 2.94,
+   "text": "and then in the 7d RL I used Domino to"
+  },
+  {
+   "t": 192.42,
+   "d": 2.13,
+   "text": "make this game called Indian Falls where"
+  },
+  {
+   "t": 194.55,
+   "d": 1.26,
+   "text": "you can time travel to work with your"
+  },
+  {
+   "t": 195.81,
+   "d": 3.33,
+   "text": "past self in combat my favorite part was"
+  },
+  {
+   "t": 199.14,
+   "d": 2.04,
+   "text": "on Thursday when I found a nice set of"
+  },
+  {
+   "t": 201.18,
+   "d": 1.38,
+   "text": "icons that I was allowed to trace and I"
+  },
+  {
+   "t": 202.56,
+   "d": 2.25,
+   "text": "brought them into the game in under 30"
+  },
+  {
+   "t": 204.81,
+   "d": 2.01,
+   "text": "minutes I had someone taking the most"
+  },
+  {
+   "t": 206.82,
+   "d": 1.74,
+   "text": "frustrating challenging thing about game"
+  },
+  {
+   "t": 208.56,
+   "d": 2.28,
+   "text": "development for me our work and reduce"
+  },
+  {
+   "t": 210.84,
+   "d": 2.22,
+   "text": "it to just a half hour of tracing it was"
+  },
+  {
+   "t": 213.06,
+   "d": 1.41,
+   "text": "almost as prettiest sprites and it was"
+  },
+  {
+   "t": 214.47,
+   "d": 2.88,
+   "text": "almost as easy as ASCII so let's take a"
+  },
+  {
+   "t": 217.35,
+   "d": 1.62,
+   "text": "step back down put this in context I"
+  },
+  {
+   "t": 218.97,
+   "d": 1.17,
+   "text": "think we found just the tip of the"
+  },
+  {
+   "t": 220.14,
+   "d": 2.64,
+   "text": "iceberg Domino is just one approach what"
+  },
+  {
+   "t": 222.78,
+   "d": 1.11,
+   "text": "if there are other ways to combine the"
+  },
+  {
+   "t": 223.89,
+   "d": 1.92,
+   "text": "good parts of ASCII and sprites to show"
+  },
+  {
+   "t": 225.81,
+   "d": 1.02,
+   "text": "you what I mean let's talk about what"
+  },
+  {
+   "t": 226.83,
+   "d": 1.32,
+   "text": "makes ASCII great what makes sprite"
+  },
+  {
+   "t": 228.15,
+   "d": 1.98,
+   "text": "great and I'll talk about where Domino"
+  },
+  {
+   "t": 230.13,
+   "d": 1.47,
+   "text": "does well and where it falls flat let's"
+  },
+  {
+   "t": 231.6,
+   "d": 1.38,
+   "text": "decompose what's good about each of"
+  },
+  {
+   "t": 232.98,
+   "d": 1.32,
+   "text": "these and maybe we can figure out new"
+  },
+  {
+   "t": 234.3,
+   "d": 2.43,
+   "text": "ways to combine things into something"
+  },
+  {
+   "t": 236.73,
+   "d": 0.6,
+   "text": "even better"
+  },
+  {
+   "t": 237.33,
+   "d": 2.67,
+   "text": "I think the seven most important"
+  },
+  {
+   "t": 240.0,
+   "d": 1.98,
+   "text": "differences are the learning curve the"
+  },
+  {
+   "t": 241.98,
+   "d": 2.55,
+   "text": "beauty how it can evoke imagination the"
+  },
+  {
+   "t": 244.53,
+   "d": 1.68,
+   "text": "clarity of what you're presenting how"
+  },
+  {
+   "t": 246.21,
+   "d": 1.98,
+   "text": "much information you can present design"
+  },
+  {
+   "t": 248.19,
+   "d": 1.86,
+   "text": "efficiency which is like how fast you"
+  },
+  {
+   "t": 250.05,
+   "d": 1.26,
+   "text": "can bring a new graphic into the game"
+  },
+  {
+   "t": 251.31,
+   "d": 3.09,
+   "text": "and the reusability of those graphics so"
+  },
+  {
+   "t": 254.4,
+   "d": 1.32,
+   "text": "with the learning curve there's"
+  },
+  {
+   "t": 255.72,
+   "d": 1.29,
+   "text": "obviously three demons at a table"
+  },
+  {
+   "t": 257.01,
+   "d": 1.86,
+   "text": "there's a stool over there there's some"
+  },
+  {
+   "t": 258.87,
+   "d": 1.83,
+   "text": "person in a bed like you can tell that"
+  },
+  {
+   "t": 260.7,
+   "d": 0.62,
+   "text": "just by look"
+  },
+  {
+   "t": 261.32,
+   "d": 1.43,
+   "text": "and that's really the power of sprites"
+  },
+  {
+   "t": 262.75,
+   "d": 2.74,
+   "text": "but with ASCII as much as I love ASCII"
+  },
+  {
+   "t": 265.49,
+   "d": 1.95,
+   "text": "we have to learn what these letters mean"
+  },
+  {
+   "t": 267.44,
+   "d": 1.32,
+   "text": "what's the T what are those quote things"
+  },
+  {
+   "t": 268.76,
+   "d": 1.56,
+   "text": "are they friends or the enemies are the"
+  },
+  {
+   "t": 270.32,
+   "d": 1.89,
+   "text": "objects are they food can I eat them we"
+  },
+  {
+   "t": 272.21,
+   "d": 1.59,
+   "text": "don't really know and you've all seen it"
+  },
+  {
+   "t": 273.8,
+   "d": 1.35,
+   "text": "most people look at roguelikes and just"
+  },
+  {
+   "t": 275.15,
+   "d": 1.8,
+   "text": "see noise they don't know what they're"
+  },
+  {
+   "t": 276.95,
+   "d": 2.22,
+   "text": "looking at it's intimidating ASCII"
+  },
+  {
+   "t": 279.17,
+   "d": 1.47,
+   "text": "requires you to learn before you can"
+  },
+  {
+   "t": 280.64,
+   "d": 1.85,
+   "text": "have fun of course once you learn it"
+  },
+  {
+   "t": 282.49,
+   "d": 2.59,
+   "text": "ASCII is amazing but until you get to"
+  },
+  {
+   "t": 285.08,
+   "d": 1.35,
+   "text": "that point it's kind of hard to play"
+  },
+  {
+   "t": 286.43,
+   "d": 2.69,
+   "text": "I think Domino landed somewhere between"
+  },
+  {
+   "t": 289.12,
+   "d": 3.01,
+   "text": "ASCII and sprites on learning a cloud"
+  },
+  {
+   "t": 292.13,
+   "d": 1.29,
+   "text": "doesn't really tell you that something's"
+  },
+  {
+   "t": 293.42,
+   "d": 2.1,
+   "text": "a goblin but it also doesn't require you"
+  },
+  {
+   "t": 295.52,
+   "d": 2.49,
+   "text": "to learn before you can play all you"
+  },
+  {
+   "t": 298.01,
+   "d": 1.59,
+   "text": "need to know as a player is that it's"
+  },
+  {
+   "t": 299.6,
+   "d": 2.27,
+   "text": "scary it's an enemy life goes on so"
+  },
+  {
+   "t": 301.87,
+   "d": 1.78,
+   "text": "let's talk about the beauty aspect"
+  },
+  {
+   "t": 303.65,
+   "d": 2.55,
+   "text": "sprites are beautiful just look at angle"
+  },
+  {
+   "t": 306.2,
+   "d": 1.62,
+   "text": "D it is one of the best beautiful games"
+  },
+  {
+   "t": 307.82,
+   "d": 2.58,
+   "text": "I've ever seen but not all sprites are"
+  },
+  {
+   "t": 310.4,
+   "d": 2.79,
+   "text": "beautiful without an artist you'll be"
+  },
+  {
+   "t": 313.19,
+   "d": 1.65,
+   "text": "using sprite sheets and eventually your"
+  },
+  {
+   "t": 314.84,
+   "d": 1.47,
+   "text": "sprite sheet won't have something you"
+  },
+  {
+   "t": 316.31,
+   "d": 1.62,
+   "text": "want and reaching for other sprite"
+  },
+  {
+   "t": 317.93,
+   "d": 1.32,
+   "text": "sheets is kind of dangerous because"
+  },
+  {
+   "t": 319.25,
+   "d": 1.32,
+   "text": "their art styles will clash and look"
+  },
+  {
+   "t": 320.57,
+   "d": 3.15,
+   "text": "like this let's not forget ASCII can be"
+  },
+  {
+   "t": 323.72,
+   "d": 1.74,
+   "text": "really beautiful too baroque did an"
+  },
+  {
+   "t": 325.46,
+   "d": 2.73,
+   "text": "amazing job with artwork and I gotta"
+  },
+  {
+   "t": 328.19,
+   "d": 1.62,
+   "text": "mention cog mine which supports ASCII"
+  },
+  {
+   "t": 329.81,
+   "d": 2.22,
+   "text": "with beautiful colors and animations the"
+  },
+  {
+   "t": 332.03,
+   "d": 1.38,
+   "text": "beginning of ASCII will probably never"
+  },
+  {
+   "t": 333.41,
+   "d": 2.16,
+   "text": "catch up the sprites but Wow like brogue"
+  },
+  {
+   "t": 335.57,
+   "d": 2.88,
+   "text": "and bind to get really close in my"
+  },
+  {
+   "t": 338.45,
+   "d": 2.19,
+   "text": "personal opinion Domino looks almost as"
+  },
+  {
+   "t": 340.64,
+   "d": 1.08,
+   "text": "good as sprites and especially"
+  },
+  {
+   "t": 341.72,
+   "d": 2.07,
+   "text": "considering my art skills I think it's"
+  },
+  {
+   "t": 343.79,
+   "d": 2.19,
+   "text": "it pretty well here so in the"
+  },
+  {
+   "t": 345.98,
+   "d": 2.22,
+   "text": "imagination ASCII games rely on your"
+  },
+  {
+   "t": 348.2,
+   "d": 1.44,
+   "text": "imagination which is way better than any"
+  },
+  {
+   "t": 349.64,
+   "d": 1.77,
+   "text": "graphics card I think there's some new"
+  },
+  {
+   "t": 351.41,
+   "d": 1.86,
+   "text": "ones here though just switching to ASCII"
+  },
+  {
+   "t": 353.27,
+   "d": 1.74,
+   "text": "isn't enough to evoke imagination I"
+  },
+  {
+   "t": 355.01,
+   "d": 1.89,
+   "text": "don't feel it as much in randomly"
+  },
+  {
+   "t": 356.9,
+   "d": 1.86,
+   "text": "generated levels as much as say this"
+  },
+  {
+   "t": 358.76,
+   "d": 2.13,
+   "text": "town Torino or the tower of eternal"
+  },
+  {
+   "t": 360.89,
+   "d": 2.07,
+   "text": "flames where the floor and wall colors"
+  },
+  {
+   "t": 362.96,
+   "d": 1.47,
+   "text": "flickered - hands up waving fire"
+  },
+  {
+   "t": 364.43,
+   "d": 1.68,
+   "text": "I think switching to ASCII is the first"
+  },
+  {
+   "t": 366.11,
+   "d": 1.59,
+   "text": "step but I think one has to give a tiny"
+  },
+  {
+   "t": 367.7,
+   "d": 2.13,
+   "text": "bit of extra detail like just enough to"
+  },
+  {
+   "t": 369.83,
+   "d": 2.34,
+   "text": "trigger imagination also with ASCII I"
+  },
+  {
+   "t": 372.17,
+   "d": 1.38,
+   "text": "can throw in an orange M called an"
+  },
+  {
+   "t": 373.55,
+   "d": 1.92,
+   "text": "ambling sham blurr and IVA vocht a"
+  },
+  {
+   "t": 375.47,
+   "d": 1.26,
+   "text": "different image in each of your minds"
+  },
+  {
+   "t": 376.73,
+   "d": 2.34,
+   "text": "and I think there's power in that and in"
+  },
+  {
+   "t": 379.07,
+   "d": 2.04,
+   "text": "send Ian Falls no symbol tried to look"
+  },
+  {
+   "t": 381.11,
+   "d": 0.78,
+   "text": "like what it is"
+  },
+  {
+   "t": 381.89,
+   "d": 2.4,
+   "text": "for example the Goblin symbol doesn't"
+  },
+  {
+   "t": 384.29,
+   "d": 1.14,
+   "text": "look like the Goblin it's a claw"
+  },
+  {
+   "t": 385.43,
+   "d": 1.62,
+   "text": "hopefully just enough to trigger"
+  },
+  {
+   "t": 387.05,
+   "d": 1.74,
+   "text": "imagination but stepping back I'm not"
+  },
+  {
+   "t": 388.79,
+   "d": 1.89,
+   "text": "actually sure it works quite yet I"
+  },
+  {
+   "t": 390.68,
+   "d": 1.56,
+   "text": "suspect there's too much distracting"
+  },
+  {
+   "t": 392.24,
+   "d": 1.01,
+   "text": "detail in color for the"
+  },
+  {
+   "t": 393.25,
+   "d": 1.86,
+   "text": "imagination to really kick and hopefully"
+  },
+  {
+   "t": 395.11,
+   "d": 1.23,
+   "text": "someone here can tell me what the secret"
+  },
+  {
+   "t": 396.34,
+   "d": 1.8,
+   "text": "sauce is for evoke imagination and we"
+  },
+  {
+   "t": 398.14,
+   "d": 0.93,
+   "text": "can figure out how to bring it into"
+  },
+  {
+   "t": 399.07,
+   "d": 3.24,
+   "text": "Domino let's talk about clarity these"
+  },
+  {
+   "t": 402.31,
+   "d": 1.53,
+   "text": "two images show the exact same situation"
+  },
+  {
+   "t": 403.84,
+   "d": 1.56,
+   "text": "on the right you can see that sprites"
+  },
+  {
+   "t": 405.4,
+   "d": 1.74,
+   "text": "are beautiful and on the left you can"
+  },
+  {
+   "t": 407.14,
+   "d": 1.26,
+   "text": "see the ASCII gives you a much more"
+  },
+  {
+   "t": 408.4,
+   "d": 2.7,
+   "text": "accurate picture of the situation it's a"
+  },
+  {
+   "t": 411.1,
+   "d": 1.68,
+   "text": "lot easier to tell what's going on just"
+  },
+  {
+   "t": 412.78,
+   "d": 2.91,
+   "text": "looking at the ASCII and since Domino is"
+  },
+  {
+   "t": 415.69,
+   "d": 1.53,
+   "text": "symbols and they didn't have to be"
+  },
+  {
+   "t": 417.22,
+   "d": 1.83,
+   "text": "humanoid that let me focus on the"
+  },
+  {
+   "t": 419.05,
+   "d": 1.32,
+   "text": "distinguishing characteristics of each"
+  },
+  {
+   "t": 420.37,
+   "d": 1.8,
+   "text": "creature I think that it made it much"
+  },
+  {
+   "t": 422.17,
+   "d": 1.38,
+   "text": "clearer what was going on in a given"
+  },
+  {
+   "t": 423.55,
+   "d": 2.1,
+   "text": "scene and look in the center at the"
+  },
+  {
+   "t": 425.65,
+   "d": 2.13,
+   "text": "level where the stairs are objects like"
+  },
+  {
+   "t": 427.78,
+   "d": 1.89,
+   "text": "stairs trees tables chairs and so on"
+  },
+  {
+   "t": 429.67,
+   "d": 2.37,
+   "text": "they're not backed by a domino and that"
+  },
+  {
+   "t": 432.04,
+   "d": 1.35,
+   "text": "makes it easier to add a glance to"
+  },
+  {
+   "t": 433.39,
+   "d": 1.23,
+   "text": "figure out okay what do I actually have"
+  },
+  {
+   "t": 434.62,
+   "d": 1.5,
+   "text": "to pay attention to in this scene what"
+  },
+  {
+   "t": 436.12,
+   "d": 1.56,
+   "text": "is an enemy what am I scared of a frame"
+  },
+  {
+   "t": 437.68,
+   "d": 2.1,
+   "text": "I think I'm gonna did pretty well here"
+  },
+  {
+   "t": 439.78,
+   "d": 1.62,
+   "text": "although I do suspect the heights of the"
+  },
+  {
+   "t": 441.4,
+   "d": 2.43,
+   "text": "dominoes and the pentagonal terrain kind"
+  },
+  {
+   "t": 443.83,
+   "d": 4.05,
+   "text": "of sacrificed some clarity for beauty so"
+  },
+  {
+   "t": 447.88,
+   "d": 1.38,
+   "text": "let's talk about the information here"
+  },
+  {
+   "t": 449.26,
+   "d": 1.08,
+   "text": "you can see that two of the characters"
+  },
+  {
+   "t": 450.34,
+   "d": 1.65,
+   "text": "are holding swords they're writing sword"
+  },
+  {
+   "t": 451.99,
+   "d": 1.95,
+   "text": "attacks and one of the characters here"
+  },
+  {
+   "t": 453.94,
+   "d": 2.04,
+   "text": "is using the gun right you can't really"
+  },
+  {
+   "t": 455.98,
+   "d": 1.97,
+   "text": "show that kind of detail with ASCII in"
+  },
+  {
+   "t": 457.95,
+   "d": 1.87,
+   "text": "Domino these little symbols about the"
+  },
+  {
+   "t": 459.82,
+   "d": 1.59,
+   "text": "characters they sacrifice a little bit"
+  },
+  {
+   "t": 461.41,
+   "d": 1.35,
+   "text": "of clarity but they show that extra"
+  },
+  {
+   "t": 462.76,
+   "d": 2.58,
+   "text": "information and I saved the most"
+  },
+  {
+   "t": 465.34,
+   "d": 1.98,
+   "text": "important two aspects for last with"
+  },
+  {
+   "t": 467.32,
+   "d": 1.8,
+   "text": "ASCII when I throw on my ambling sham"
+  },
+  {
+   "t": 469.12,
+   "d": 1.29,
+   "text": "blur I don't need to draw it in 20"
+  },
+  {
+   "t": 470.41,
+   "d": 1.77,
+   "text": "different poses like I would with the"
+  },
+  {
+   "t": 472.18,
+   "d": 1.5,
+   "text": "sprite I just type in the ASCII code in"
+  },
+  {
+   "t": 473.68,
+   "d": 2.55,
+   "text": "the color and I'm done and with ASCII"
+  },
+  {
+   "t": 476.23,
+   "d": 1.32,
+   "text": "you don't defend time thinking about"
+  },
+  {
+   "t": 477.55,
+   "d": 1.26,
+   "text": "whether the art fits with the rest of"
+  },
+  {
+   "t": 478.81,
+   "d": 3.03,
+   "text": "your game it just kind of does I think"
+  },
+  {
+   "t": 481.84,
+   "d": 2.13,
+   "text": "Domino really shined here it takes very"
+  },
+  {
+   "t": 483.97,
+   "d": 1.2,
+   "text": "little time to bring a new symbol into"
+  },
+  {
+   "t": 485.17,
+   "d": 2.22,
+   "text": "the game design efficiency is super"
+  },
+  {
+   "t": 487.39,
+   "d": 1.11,
+   "text": "important for roguelikes"
+  },
+  {
+   "t": 488.5,
+   "d": 1.86,
+   "text": "if we can get graphics out of the way we"
+  },
+  {
+   "t": 490.36,
+   "d": 1.17,
+   "text": "can focus more time what makes"
+  },
+  {
+   "t": 491.53,
+   "d": 2.1,
+   "text": "roguelikes really great gameplay in"
+  },
+  {
+   "t": 493.63,
+   "d": 2.61,
+   "text": "storyline and other things of course"
+  },
+  {
+   "t": 496.24,
+   "d": 2.64,
+   "text": "let's talk about reusability when I make"
+  },
+  {
+   "t": 498.88,
+   "d": 1.92,
+   "text": "a goblin sprite I can't really reuse it"
+  },
+  {
+   "t": 500.8,
+   "d": 1.74,
+   "text": "for much it's a goblin and changing the"
+  },
+  {
+   "t": 502.54,
+   "d": 1.73,
+   "text": "color is kind of harder than you think"
+  },
+  {
+   "t": 504.27,
+   "d": 2.17,
+   "text": "but we can reuse symbols with different"
+  },
+  {
+   "t": 506.44,
+   "d": 1.8,
+   "text": "colors all day long we can have a light"
+  },
+  {
+   "t": 508.24,
+   "d": 1.53,
+   "text": "blue claw and a dark blue background an"
+  },
+  {
+   "t": 509.77,
+   "d": 0.92,
+   "text": "orange claw and a red background"
+  },
+  {
+   "t": 510.69,
+   "d": 4.54,
+   "text": "anything ASCII is also super reusable we"
+  },
+  {
+   "t": 515.23,
+   "d": 1.8,
+   "text": "can reuse any letter with any color any"
+  },
+  {
+   "t": 517.03,
+   "d": 2.22,
+   "text": "background color all day long right for"
+  },
+  {
+   "t": 519.25,
+   "d": 1.62,
+   "text": "example a green oh as an orc purple oh"
+  },
+  {
+   "t": 520.87,
+   "d": 2.37,
+   "text": "isn't our chieftain and so on I think"
+  },
+  {
+   "t": 523.24,
+   "d": 1.15,
+   "text": "this is also incredibly"
+  },
+  {
+   "t": 524.39,
+   "d": 1.68,
+   "text": "the more we can reuse our symbols the"
+  },
+  {
+   "t": 526.07,
+   "d": 1.77,
+   "text": "more time we can spend on the important"
+  },
+  {
+   "t": 527.84,
+   "d": 2.67,
+   "text": "things like gameplay and story so those"
+  },
+  {
+   "t": 530.51,
+   "d": 1.47,
+   "text": "are the seven main differences between"
+  },
+  {
+   "t": 531.98,
+   "d": 1.26,
+   "text": "these graphical schemes"
+  },
+  {
+   "t": 533.24,
+   "d": 1.44,
+   "text": "I think Domino found a really nice"
+  },
+  {
+   "t": 534.68,
+   "d": 1.8,
+   "text": "balance but I'm sure there's many other"
+  },
+  {
+   "t": 536.48,
+   "d": 2.58,
+   "text": "local Maxo many other local maxima out"
+  },
+  {
+   "t": 539.06,
+   "d": 2.37,
+   "text": "there that we can discover there's a lot"
+  },
+  {
+   "t": 541.43,
+   "d": 1.41,
+   "text": "more I could talk about like all these"
+  },
+  {
+   "t": 542.84,
+   "d": 1.62,
+   "text": "things so feel free to ask me now or at"
+  },
+  {
+   "t": 544.46,
+   "d": 2.1,
+   "text": "lunch later today online that's the end"
+  },
+  {
+   "t": 546.56,
+   "d": 1.23,
+   "text": "of my talk I hope you all enjoyed it and"
+  },
+  {
+   "t": 547.79,
+   "d": 1.44,
+   "text": "are inspired to make the next generation"
+  },
+  {
+   "t": 549.23,
+   "d": 1.32,
+   "text": "of interesting looking burglars thank"
+  },
+  {
+   "t": 550.55,
+   "d": 2.72,
+   "text": "you and enjoy the rest of celebration"
+  },
+  {
+   "t": 553.27,
+   "d": 0.23,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 553.5,
+   "d": 4.89,
+   "text": "[Music]"
+  },
+  {
+   "t": 561.4,
+   "d": 2.77,
+   "text": "cool weave I'm for a question or two if"
+  },
+  {
+   "t": 564.17,
+   "d": 5.55,
+   "text": "you want to take questions I got asked"
+  },
+  {
+   "t": 569.72,
+   "d": 1.65,
+   "text": "about that tiling pattern show that"
+  },
+  {
+   "t": 571.37,
+   "d": 11.75,
+   "text": "again that's beautiful it's a"
+  },
+  {
+   "t": 583.12,
+   "d": 3.0,
+   "text": "non-periodic is it I mean what is it"
+  },
+  {
+   "t": 586.12,
+   "d": 2.77,
+   "text": "this that's a question this is"
+  },
+  {
+   "t": 588.89,
+   "d": 2.19,
+   "text": "pentagonal pattern number nine it turns"
+  },
+  {
+   "t": 591.08,
+   "d": 0.9,
+   "text": "out there's like thirteen or fourteen"
+  },
+  {
+   "t": 591.98,
+   "d": 1.32,
+   "text": "different ways you can tile up the"
+  },
+  {
+   "t": 593.3,
+   "d": 1.56,
+   "text": "Pentagon's as long as they're not"
+  },
+  {
+   "t": 594.86,
+   "d": 2.55,
+   "text": "perfectly you know perfect sides are all"
+  },
+  {
+   "t": 597.41,
+   "d": 2.16,
+   "text": "equal Pentagon's and it turns out you"
+  },
+  {
+   "t": 599.57,
+   "d": 2.37,
+   "text": "can actually generalize any repeating"
+  },
+  {
+   "t": 601.94,
+   "d": 4.8,
+   "text": "group of polygons like this as long as"
+  },
+  {
+   "t": 606.74,
+   "d": 1.59,
+   "text": "you can find a group that tiles with"
+  },
+  {
+   "t": 608.33,
+   "d": 1.14,
+   "text": "them I can't really show with the mouse"
+  },
+  {
+   "t": 609.47,
+   "d": 3.3,
+   "text": "that easily but um there's certain"
+  },
+  {
+   "t": 612.77,
+   "d": 2.22,
+   "text": "repeating groups of eight Pentagon's and"
+  },
+  {
+   "t": 614.99,
+   "d": 3.63,
+   "text": "yeah eight Pentagon's and that group"
+  },
+  {
+   "t": 618.62,
+   "d": 3.09,
+   "text": "tiles in a 2d fashion and inside that"
+  },
+  {
+   "t": 621.71,
+   "d": 1.77,
+   "text": "group of eight you can identify which"
+  },
+  {
+   "t": 623.48,
+   "d": 2.01,
+   "text": "tile in the eight and it turns out with"
+  },
+  {
+   "t": 625.49,
+   "d": 2.1,
+   "text": "that pattern you can use a ton of"
+  },
+  {
+   "t": 627.59,
+   "d": 3.44,
+   "text": "combinations of different polygons"
+  },
+  {
+   "t": 631.24,
+   "d": 4.47,
+   "text": "it's definitely repeating pattern yeah"
+  },
+  {
+   "t": 639.04,
+   "d": 2.35,
+   "text": "yes dinner graph it was a data structure"
+  },
+  {
+   "t": 641.39,
+   "d": 2.16,
+   "text": "was a hash map of a tuple of three"
+  },
+  {
+   "t": 643.55,
+   "d": 2.49,
+   "text": "integers group X group Y an indexing"
+  },
+  {
+   "t": 646.04,
+   "d": 2.1,
+   "text": "group and then the value of that hash"
+  },
+  {
+   "t": 648.14,
+   "d": 3.65,
+   "text": "map was the tile itself ooh"
+  },
+  {
+   "t": 653.57,
+   "d": 3.83,
+   "text": "we have time for maybe one more question"
+  },
+  {
+   "t": 657.4,
+   "d": 2.38,
+   "text": "great and do you want to set up your"
+  },
+  {
+   "t": 659.78,
+   "d": 11.73,
+   "text": "computer of all video discussion hi have"
+  },
+  {
+   "t": 671.51,
+   "d": 2.43,
+   "text": "you considered using audio to combine"
+  },
+  {
+   "t": 673.94,
+   "d": 5.01,
+   "text": "with your iconography well there was"
+  },
+  {
+   "t": 678.95,
+   "d": 3.08,
+   "text": "audio Indians just basic like you know"
+  },
+  {
+   "t": 682.03,
+   "d": 3.04,
+   "text": "sword sounds spear sounds if swords and"
+  },
+  {
+   "t": 685.07,
+   "d": 4.05,
+   "text": "spears make sounds but nothing past that"
+  },
+  {
+   "t": 689.12,
+   "d": 3.32,
+   "text": "do you have any interesting ideas there"
+  },
+  {
+   "t": 693.43,
+   "d": 2.76,
+   "text": "what"
+  },
+  {
+   "t": 696.19,
+   "d": 1.95,
+   "text": "one sound / gleeful that's interesting"
+  },
+  {
+   "t": 698.14,
+   "d": 2.13,
+   "text": "yeah I can imagine using that as such as"
+  },
+  {
+   "t": 700.27,
+   "d": 1.26,
+   "text": "like you know when a certain Goblin"
+  },
+  {
+   "t": 701.53,
+   "d": 1.35,
+   "text": "comes onto the screen for the first time"
+  },
+  {
+   "t": 702.88,
+   "d": 2.22,
+   "text": "you play a sound draw attention to that"
+  },
+  {
+   "t": 705.1,
+   "d": 4.83,
+   "text": "that's a good idea let's let's talk well"
+  },
+  {
+   "t": 709.93,
+   "d": 2.81,
+   "text": "thank you so much"
+  }
+ ]
+}

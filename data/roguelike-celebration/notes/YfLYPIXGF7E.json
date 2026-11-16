@@ -1,0 +1,95 @@
+{
+  "id": "YfLYPIXGF7E",
+  "title": "Spencer Egart- Tooling for Roguelikes and Procgen",
+  "speaker": "Spencer Egart",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=YfLYPIXGF7E",
+  "talk_type": "technical",
+  "summary": "Spencer Egart, a game engineer on Slime Rancher 2 and procgen hobbyist, argues that developers can build content-creation tools for procedural generation that give a non-code interface to the generation procedure. As a case study he builds a node-graph tool in Unity with the open-source xNode framework for a simple dungeon generator (empty level, binary space partitioning, prefab room placement, A* hallways, player spawn), including a branching node for regions too small for prefabs. He recommends modular, reusable, parameterised steps and a friendly UI, points to existing tools (Dungeon Architect, xNode, Sxelix-style procedural engine), and in Q&A discusses weighing time saved against time invested, especially in jams like 7DRL.",
+  "games": [
+    "Unexplored"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "node-based tools",
+      "kind": "principle",
+      "claim": "Procedural generators can be exposed through content-creation tools that give a non-code interface to the generation procedure, usable by non-engineers and teams as well as the developer.",
+      "detail": "Egart frames tools as software that creates content by creating the procedures of procgen. He caveats 'non-code': visual scripting and domain-specific languages are in a way still code; he means not writing code in an IDE.",
+      "t": 93,
+      "quote": "you can build and use tools for your roguelike for procgen for uh your team for yourself for non-engineers",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "binary space partitioning",
+      "kind": "technique",
+      "claim": "A basic dungeon generator can be built in four steps: start with an empty area, split it with binary space partitioning, fill regions with prefab rooms, and connect them with A* hallways.",
+      "detail": "BSP repeatedly halves the space into rectangles. Egart's example used only two prefab room shapes. He uses A* pathfinding for hallways because it makes it easy for corridors to skirt the edges of other rooms.",
+      "t": 222,
+      "quote": "you use binary space partitioning which if you're not familiar is a way of just taking a space and splitting it in half repeatedly",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "node graph editor",
+      "kind": "technique",
+      "claim": "Egart built his dungeon generator as a visual node graph in Unity with the open-source xNode framework, getting the drag-and-drop UI working in a couple of hours.",
+      "detail": "The graph runs left to right: blank level, BSP, prefab rooms, A* hallways, then a node placing the player spawn, showing that non-geometry steps can be part of the same pipeline.",
+      "t": 314,
+      "quote": "a tool that i built in unity using a framework called xnode which is a an open source library for unity",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "branching pipelines",
+      "kind": "technique",
+      "claim": "Node pipelines can branch with if-then-else nodes, such as routing BSP regions too small for prefab rooms into a node that carves plain square rooms instead.",
+      "detail": "A 'region has room' node sends regions with a prefab room out one output and empty ones out another; empty regions get a padded rectangle carved, then everything feeds back into the A* hallway carver. Real generators will have more steps and branching.",
+      "t": 437,
+      "quote": "that allows us to branch in a kind of if then else manner",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "item generation",
+      "kind": "technique",
+      "claim": "The same step-by-step node approach used for dungeon geometry can place encounters and loot or generate items, for example by piping through base item and curse nodes.",
+      "detail": "Egart says any problem whose component steps can be identified can be broken into nodes, layers in a list, or another useful representation.",
+      "t": 515,
+      "quote": "i could also be placing enemy encounters in here i could be using this tool to place a loot i could be using it to generate loot",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modular steps",
+      "kind": "principle",
+      "claim": "Procgen tools should be built from modular, self-contained, reusable steps with exposed parameters, because more interconnectable pieces give the tool more expressive power.",
+      "detail": "Egart likens steps to Lego pieces. His BSP node exposes parameters like minimum and maximum region size, adding power to each step.",
+      "t": 563,
+      "quote": "the more reusable and interconnectable your lego pieces are the more expressive power you're going to eventually have with that tool",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tool usability",
+      "kind": "warning",
+      "claim": "The secretly hard part of procgen tooling is making it friendly to use, so frameworks that handle the UI free you to focus on the generation itself.",
+      "detail": "Egart points to existing tools: Dungeon Architect (Unity and Unreal, based on the cyclic generation from Unexplored's developers), xNode, and a procedural engine for Unity that generates trees and buildings in a similar way.",
+      "t": 602,
+      "quote": "the secretly hard part of all of this is making it uh friendly to work with",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tooling cost",
+      "kind": "principle",
+      "claim": "Decide whether to build a tool by weighing time saved against time invested, and generally avoid building tools during a game jam like 7DRL.",
+      "detail": "Egart's demo generator sits in a project named '7DRL 2021', and he shipped no game for that jam. On Slime Rancher he asks whether a tool will save everyone a lot of time. When a tool is for broader expressive range, the value is harder to quantify and becomes a judgment call.",
+      "t": 824,
+      "quote": "you can make a very um kind of mathematical judgment of time saved versus time invested",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

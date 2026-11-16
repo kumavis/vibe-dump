@@ -1,0 +1,56 @@
+{
+  "id": "qogCwa12jEg",
+  "title": "Eiríkr Åsheim: Uxn: Permacomputing & Roguelikes",
+  "speaker": "Eiríkr Åsheim",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=qogCwa12jEg",
+  "talk_type": "technical",
+  "summary": "In a lightning talk, Angband maintainer Eiríkr Åsheim introduces Uxn, a tiny virtual machine ecosystem (assembly language, VM spec, emulators and ROMs, with 64KB memory and 8/16-bit integers) created by the Hundred Rabbits collective, and the permacomputing philosophy behind it: keep old devices useful, conserve energy and materials, and minimize complexity. He argues Rogue itself embodied these values — procedural generation instead of assets, playable over a phone line, small teams, and simplicity that let it be ported and remixed — so Uxn is a good fit for roguelikes. He planned to show his own roguelike but had nothing ready, and instead walks through the Varvara system and encourages developers to consider smaller, simpler environments.",
+  "games": [
+    "Rogue",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "uxn",
+      "kind": "technique",
+      "claim": "Uxn is a small self-contained platform — assembly language, VM spec, many emulators and ROMs — with 64KB of memory and 8/16-bit integers, whose constraints Åsheim finds freeing.",
+      "detail": "Emulators exist for SDL, X11, Nintendo handhelds and browsers; ROMs are tiny (e.g. a Mandelbrot of a few thousand bytes). The VM is mostly single-threaded, sandboxed to one directory, with a four-colour display. The Varvara system is just a program counter, two stacks, 64KB of memory and device ports, with event vectors for console, audio, mouse and controller.",
+      "t": 191,
+      "quote": "These limitations are constraining but can be free constraining but can be freeing",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "permacomputing",
+      "kind": "principle",
+      "claim": "Permacomputing aims to keep older devices useful, conserve energy and materials, and minimize complexity, which Uxn serves by running on 20–30-year-old hardware and modern browsers alike.",
+      "detail": "Åsheim says ROMs should keep working as long as emulators exist and the spec is available, and a simple system is easier to test.",
+      "t": 288,
+      "quote": "It is designed to keep older devices as useful as possible. It lets you do more with less and do less with less",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue",
+      "kind": "principle",
+      "claim": "Åsheim argues Rogue fits permacomputing values: it used procedural generation to minimize assets, was playable over phone lines, was made by a handful of people, and was simple enough to be ported and remixed for 40 years.",
+      "detail": "He counters Dennis Ritchie's quip that Rogue was the biggest waste of CPU cycles in history, saying it targeted existing hardware rather than requiring new hardware, and that its precision made it influential.",
+      "t": 390,
+      "quote": "It used procedural generation to minimize assets and could be played over a phone line in the early '80s",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "small platforms",
+      "kind": "principle",
+      "claim": "Developers should consider whether a smaller, simpler, cozier environment is adequate for their roguelike, since such platforms are easier to understand and reimplement than big languages or consoles.",
+      "detail": "Åsheim notes Uxn is much simpler than Python or Java and reimplementing popular consoles can require reverse engineering; he demonstrates his slides running on a 3DS and says if the constraints ever limit him he can create a new system and port over.",
+      "t": 625,
+      "quote": "help you consider whether a smaller, simpler, and cozier environment is adequate",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

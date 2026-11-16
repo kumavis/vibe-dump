@@ -1,0 +1,2606 @@
+{
+ "id": "PTIsUSbQ0TA",
+ "url": "https://www.youtube.com/watch?v=PTIsUSbQ0TA",
+ "title": "Thomas Biskup - Ultimate ADOM live demo",
+ "speaker": "Thomas Biskup",
+ "talk_title": "Ultimate ADOM live demo",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 2441,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Thomas Biskup presents Ultimate ADOM at the 2018 Roguelike Celebration - http://roguelike.club",
+ "chapters": [],
+ "caption_source": "whisper",
+ "caption_lang": "en",
+ "word_count": 6959,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 4.02,
+   "d": 5.88,
+   "text": "Welcome to the final talk of the day. Actually, I have no slides. I'm Thomas Biskup,"
+  },
+  {
+   "t": 10.06,
+   "d": 4.2,
+   "text": "maintainer, creator of ADOM. I've been doing this for 27 years and we are now nine months"
+  },
+  {
+   "t": 14.26,
+   "d": 6.76,
+   "text": "in the development of Ultimate ADOM. What I basically want to do in the next maximum 30"
+  },
+  {
+   "t": 21.02,
+   "d": 3.56,
+   "text": "minutes is give you an impression where we are standing and talk a little bit about design"
+  },
+  {
+   "t": 24.58,
+   "d": 5.0,
+   "text": "decisions and why we have decided to do certain things, hopefully providing interesting information"
+  },
+  {
+   "t": 29.58,
+   "d": 6.32,
+   "text": "for our Oclack developers while presenting Ultimate Atom a little bit. First of all,"
+  },
+  {
+   "t": 36.1,
+   "d": 6.88,
+   "text": "a little warning. All I'm going to show is pre-pre-pre-alpha. That's very, very alpha"
+  },
+  {
+   "t": 42.98,
+   "d": 5.68,
+   "text": "code. We do not yet have a game. We've spent the last nine months working on the underlying"
+  },
+  {
+   "t": 48.66,
+   "d": 5.68,
+   "text": "engine because we are doing an ECS-based approach about which I'm going to talk tomorrow technically"
+  },
+  {
+   "t": 54.34,
+   "d": 5.74,
+   "text": "to explain the benefits and challenges of that. And it took us roughly nine months to"
+  },
+  {
+   "t": 60.08,
+   "d": 6.02,
+   "text": "get the underlying content engine into a working, stable and pretty powerful state. And also"
+  },
+  {
+   "t": 66.1,
+   "d": 5.28,
+   "text": "it took us quite a while to decide upon the graphics we want to use for the game because"
+  },
+  {
+   "t": 71.38,
+   "d": 6.18,
+   "text": "this is no longer ASCII only or Unicode only. Because the goal for us for Ultimate ADOM is"
+  },
+  {
+   "t": 77.56,
+   "d": 4.42,
+   "text": "really try to widen our audience. And we don't want to disappoint the existing community"
+  },
+  {
+   "t": 81.98,
+   "d": 5.12,
+   "text": "base and the fans of ADOM, but we do want to reach more players because we really want"
+  },
+  {
+   "t": 87.1,
+   "d": 1.1,
+   "text": "to earn some money with this."
+  },
+  {
+   "t": 89.02,
+   "d": 1.48,
+   "text": "This requires a little more players."
+  },
+  {
+   "t": 90.74,
+   "d": 4.62,
+   "text": "So we really try to think very hard about how to avoid the many mistakes we have made"
+  },
+  {
+   "t": 95.36,
+   "d": 1.14,
+   "text": "in 27 years of ADOM."
+  },
+  {
+   "t": 96.98,
+   "d": 3.2,
+   "text": "Because we went wrong in many places and now we are trying to do better."
+  },
+  {
+   "t": 100.5,
+   "d": 3.42,
+   "text": "That's also something I hope for today."
+  },
+  {
+   "t": 104.54,
+   "d": 4.28,
+   "text": "If you want to talk to me during the arcade, have ideas, comments, opinions, they are all"
+  },
+  {
+   "t": 108.82,
+   "d": 5.48,
+   "text": "welcome because we are learning with each and every step we take here. It's our attempt"
+  },
+  {
+   "t": 114.3,
+   "d": 6.36,
+   "text": "to bring Roguelike gaming to a wider, let's say casual audience without sacrificing complexity,"
+  },
+  {
+   "t": 120.66,
+   "d": 6.18,
+   "text": "fun or anything that makes Roguelikes worthwhile to play. I have two versions here. I will first"
+  },
+  {
+   "t": 126.84,
+   "d": 4.72,
+   "text": "start with the graphical version. We have also an ASCII version. I'm using the ASCII version"
+  },
+  {
+   "t": 131.56,
+   "d": 4.54,
+   "text": "for quick prototyping and quickly implementing features because that's much faster than"
+  },
+  {
+   "t": 136.1,
+   "d": 4.26,
+   "text": "waiting for graphics and nice animations and all that. But because the graphical version"
+  },
+  {
+   "t": 140.36,
+   "d": 4.12,
+   "text": "is the one that hopefully will address a wider audience, I'm going to show that one first."
+  },
+  {
+   "t": 145.28,
+   "d": 5.28,
+   "text": "Final warning for that, ignore the user interface. Basically it does not have a user interface"
+  },
+  {
+   "t": 150.56,
+   "d": 3.84,
+   "text": "right now. We have lots of ideas about a very good user interface and I will comment on"
+  },
+  {
+   "t": 154.4,
+   "d": 6.58,
+   "text": "that because let's say one of the biggest sins of ADOM probably is its rather complex"
+  },
+  {
+   "t": 160.98,
+   "d": 5.4,
+   "text": "accessibility, to put it carefully. There are too many commands, they are very hard to use, and you"
+  },
+  {
+   "t": 166.38,
+   "d": 5.52,
+   "text": "note that the user interface is cobbled onto a game that is 27 years old, and that's very hard to"
+  },
+  {
+   "t": 171.9,
+   "d": 3.92,
+   "text": "change. So this time we are trying to do a different, but the current state, as I said,"
+  },
+  {
+   "t": 175.86,
+   "d": 4.74,
+   "text": "is more the content engine and features we try to implement. The user interface is going to follow"
+  },
+  {
+   "t": 180.6,
+   "d": 6.26,
+   "text": "in the next months, and then we probably also will have in the not too far future a real prototype"
+  },
+  {
+   "t": 186.86,
+   "d": 7.68,
+   "text": "game to show to have people try and everything that being said i now will try to start the game"
+  },
+  {
+   "t": 196.22,
+   "d": 3.26,
+   "text": "and hopefully it just starts okay"
+  },
+  {
+   "t": 204.12,
+   "d": 3.18,
+   "text": "and we'll see if the sound works the world of"
+  },
+  {
+   "t": 208.34,
+   "d": 7.3,
+   "text": "a lush, peaceful place where many kin coexisted for eons."
+  },
+  {
+   "t": 215.96,
+   "d": 12.1,
+   "text": "Until one day chaos charged forth and began corrupting any life it encountered, turning good into evil, life into death."
+  },
+  {
+   "t": 228.06,
+   "d": 12.06,
+   "text": "Many warlords fell in battle until an unknown hero finally came face to face with Andor Dracon, the lord of chaos himself."
+  },
+  {
+   "t": 240.84,
+   "d": 16.22,
+   "text": "Their mighty clash unleashed the cataclysm that destroyed them both and ripped open the very fabric of reality, changing Ankerdia into a prison of interconnected dimensions."
+  },
+  {
+   "t": 258.06,
+   "d": 4.86,
+   "text": "Many came to be buried alive in the surrounding mountains."
+  },
+  {
+   "t": 263.58,
+   "d": 7.58,
+   "text": "You are one of them and must now escape the caverns of chaos."
+  },
+  {
+   "t": 277.02,
+   "d": 0.94,
+   "text": "Thank you."
+  },
+  {
+   "t": 279.7,
+   "d": 2.6,
+   "text": "Maybe we can tone down the sound a little bit."
+  },
+  {
+   "t": 282.42,
+   "d": 2.4,
+   "text": "I'm not sure if I should turn it off."
+  },
+  {
+   "t": 286.52,
+   "d": 1.2,
+   "text": "because otherwise it not."
+  },
+  {
+   "t": 288.34,
+   "d": 0.66,
+   "text": "Ah, perfect."
+  },
+  {
+   "t": 289.3,
+   "d": 0.28,
+   "text": "Thank you."
+  },
+  {
+   "t": 290.4,
+   "d": 0.88,
+   "text": "Oh, no, that was me."
+  },
+  {
+   "t": 291.48,
+   "d": 0.26,
+   "text": "Okay."
+  },
+  {
+   "t": 292.52,
+   "d": 0.44,
+   "text": "Sorry."
+  },
+  {
+   "t": 294.16,
+   "d": 1.22,
+   "text": "But we'll get to that."
+  },
+  {
+   "t": 295.58,
+   "d": 0.12,
+   "text": "Oops."
+  },
+  {
+   "t": 298.36,
+   "d": 0.44,
+   "text": "Okay."
+  },
+  {
+   "t": 300.66,
+   "d": 1.22,
+   "text": "For now, turn it off."
+  },
+  {
+   "t": 302.0,
+   "d": 1.48,
+   "text": "We have beautiful music, beautiful sound,"
+  },
+  {
+   "t": 303.52,
+   "d": 2.08,
+   "text": "but I guess it won't be very helpful"
+  },
+  {
+   "t": 305.6,
+   "d": 1.78,
+   "text": "if I try to talk while it's playing."
+  },
+  {
+   "t": 307.8,
+   "d": 1.16,
+   "text": "So first thing,"
+  },
+  {
+   "t": 309.1,
+   "d": 1.88,
+   "text": "we now have an introductory trailer"
+  },
+  {
+   "t": 310.98,
+   "d": 1.38,
+   "text": "because we noticed that"
+  },
+  {
+   "t": 312.36,
+   "d": 1.94,
+   "text": "for the first 25 years of ADOM,"
+  },
+  {
+   "t": 314.3,
+   "d": 1.48,
+   "text": "we failed to explain the backstory."
+  },
+  {
+   "t": 317.74,
+   "d": 5.9,
+   "text": "Adam always was known for having a kind of story and some quite involved story elements,"
+  },
+  {
+   "t": 323.9,
+   "d": 4.68,
+   "text": "but for 26 years we just forgot to explain it in the start of the game, which was kind of strange."
+  },
+  {
+   "t": 328.82,
+   "d": 6.12,
+   "text": "So we thought this time we'll start with a brief trailer explaining what's kind of going on and where you are in the setting."
+  },
+  {
+   "t": 335.24,
+   "d": 1.92,
+   "text": "So first things first, the trailer."
+  },
+  {
+   "t": 339.28,
+   "d": 14.12,
+   "text": "The coming version first will focus on a dungeon crawl because we said, okay, if we are trying to replicate all the things we have in ADOM plus Surface World plus many other things, the game probably will ship in like 2036 or so."
+  },
+  {
+   "t": 353.4,
+   "d": 5.24,
+   "text": "Not quite, but we want to have a shippable first version of the game as soon as possible,"
+  },
+  {
+   "t": 358.78,
+   "d": 6.68,
+   "text": "so we decided to focus on an exciting and really challenging dungeon trawl first and"
+  },
+  {
+   "t": 365.46,
+   "d": 3.92,
+   "text": "deliver it from there so that we have something that we can provide to the players and community"
+  },
+  {
+   "t": 369.38,
+   "d": 3.26,
+   "text": "and show and not just work for years and years and years to come."
+  },
+  {
+   "t": 373.14,
+   "d": 2.56,
+   "text": "So the first thing is this Caveants of Chaos dungeon trawler."
+  },
+  {
+   "t": 376.12,
+   "d": 5.32,
+   "text": "And I'm now just going to start the demo parkour we designed."
+  },
+  {
+   "t": 381.44,
+   "d": 3.98,
+   "text": "It's really not a random dungeon or anything, although we can generate random dungeons by"
+  },
+  {
+   "t": 385.42,
+   "d": 6.16,
+   "text": "now, but it's more like parkour to show off features and explain some of the nice functionalities"
+  },
+  {
+   "t": 391.58,
+   "d": 2.14,
+   "text": "that are waiting for the future game."
+  },
+  {
+   "t": 396.1,
+   "d": 3.7,
+   "text": "As I said, please remember, user interface is something you have to forget."
+  },
+  {
+   "t": 399.9,
+   "d": 0.96,
+   "text": "There is no user interface."
+  },
+  {
+   "t": 401.26,
+   "d": 2.74,
+   "text": "All that exists only exists so that I can do anything at all."
+  },
+  {
+   "t": 404.1,
+   "d": 3.24,
+   "text": "It's not beautiful, it's not nice, and it's not how it will look later on."
+  },
+  {
+   "t": 408.14,
+   "d": 1.7,
+   "text": "So and now start the game."
+  },
+  {
+   "t": 409.84,
+   "d": 1.5,
+   "text": "It takes a short moment."
+  },
+  {
+   "t": 413.18,
+   "d": 2.86,
+   "text": "We have these modern, newfangled, important hints."
+  },
+  {
+   "t": 418.44,
+   "d": 1.78,
+   "text": "Trying to cope with casual players here."
+  },
+  {
+   "t": 421.88,
+   "d": 5.3,
+   "text": "First thing in the new Atom is that we have decided to include factions to strengthen the"
+  },
+  {
+   "t": 427.18,
+   "d": 0.38,
+   "text": "storyline."
+  },
+  {
+   "t": 427.96,
+   "d": 5.64,
+   "text": "So, now you are not necessarily an adventurer on your own, but you can decide to fight for"
+  },
+  {
+   "t": 433.6,
+   "d": 1.1,
+   "text": "a certain faction in the game."
+  },
+  {
+   "t": 434.96,
+   "d": 2.26,
+   "text": "There are a total of seven factions currently planned."
+  },
+  {
+   "t": 437.22,
+   "d": 2.52,
+   "text": "You can also see the posters hanging on the outside of those factions."
+  },
+  {
+   "t": 440.48,
+   "d": 4.06,
+   "text": "And each of these factions has its own agenda in the battle between law and chaos."
+  },
+  {
+   "t": 445.5,
+   "d": 7.16,
+   "text": "As we were doing the very interesting storytelling talks, not everything might be as it seems first."
+  },
+  {
+   "t": 452.88,
+   "d": 5.5,
+   "text": "So we really have some quite involved plans there to make the game a lot more than just a straight junction crawl"
+  },
+  {
+   "t": 458.38,
+   "d": 4.26,
+   "text": "by having those factions vying for certain aspects of things you can do."
+  },
+  {
+   "t": 462.64,
+   "d": 2.7,
+   "text": "And naturally we have Ender Drakon or his followers."
+  },
+  {
+   "t": 466.16,
+   "d": 2.8,
+   "text": "Bran Albin for those who know will require us a powerful magician."
+  },
+  {
+   "t": 469.7,
+   "d": 5.7,
+   "text": "We have a new Church of the Eternal Sun working for order and bringing organization to the world."
+  },
+  {
+   "t": 476.18,
+   "d": 4.4,
+   "text": "We have a very nice mercenary we like who will show up on all sides that pay well."
+  },
+  {
+   "t": 481.72,
+   "d": 3.98,
+   "text": "The Mad Minstrel actually will become a faction and have its own agenda in the game."
+  },
+  {
+   "t": 486.56,
+   "d": 5.4,
+   "text": "And we always say Nizera, our high elven druidus with anger management problems."
+  },
+  {
+   "t": 491.96,
+   "d": 1.88,
+   "text": "She's a very interesting person."
+  },
+  {
+   "t": 494.74,
+   "d": 4.28,
+   "text": "Rolf, the last dwarven emperor, who also now shows up in classical art, will be there."
+  },
+  {
+   "t": 499.26,
+   "d": 1.24,
+   "text": "And you can choose to play unaligned."
+  },
+  {
+   "t": 500.64,
+   "d": 4.98,
+   "text": "So if you just say, I don't care for politics, I want to explore a dungeon, okay, just do that."
+  },
+  {
+   "t": 506.02,
+   "d": 0.8,
+   "text": "That's no problem."
+  },
+  {
+   "t": 507.08,
+   "d": 2.36,
+   "text": "Those factions will modify the way the story works."
+  },
+  {
+   "t": 509.58,
+   "d": 5.56,
+   "text": "They will give you some minor benefits, but also probably some minor hindrances in the way you can cope with the environment."
+  },
+  {
+   "t": 516.92,
+   "d": 0.98,
+   "text": "Stay in the spotlight."
+  },
+  {
+   "t": 518.16,
+   "d": 1.88,
+   "text": "Oh, sorry. I stay in the spotlight."
+  },
+  {
+   "t": 520.04,
+   "d": 10.66,
+   "text": "that. We have genders to select, lots of them. I forgot to show something, it doesn't matter."
+  },
+  {
+   "t": 531.08,
+   "d": 5.06,
+   "text": "We have initially four races you can choose from because for the very first version we"
+  },
+  {
+   "t": 536.14,
+   "d": 4.7,
+   "text": "want to really differentiate those races so that almost every level something interesting"
+  },
+  {
+   "t": 540.84,
+   "d": 4.68,
+   "text": "will happen. But we decided to have a triple game. We can't start with like 15 races and"
+  },
+  {
+   "t": 545.52,
+   "d": 5.96,
+   "text": "20 classes because we won't be able to finish in time with that. So we decided to choose"
+  },
+  {
+   "t": 551.48,
+   "d": 4.94,
+   "text": "some of the more interesting ones. The thing I want to show, if you look to the text box"
+  },
+  {
+   "t": 556.42,
+   "d": 6.62,
+   "text": "to the right, Ultimate ADOM in contrast to ADOM is written or programmed as a data-driven"
+  },
+  {
+   "t": 563.04,
+   "d": 4.32,
+   "text": "game. We use entity component systems to model everything in the game from maps, locations,"
+  },
+  {
+   "t": 567.62,
+   "d": 4.82,
+   "text": "quests, items, monsters, races, whatever. This has a nice advantage over what we did"
+  },
+  {
+   "t": 572.44,
+   "d": 5.08,
+   "text": "in ADOM because we can, during the game, introspect everything and explain it. For example, I"
+  },
+  {
+   "t": 577.52,
+   "d": 4.66,
+   "text": "can look into the Archer definition and can see, okay, playing in Archer gives me a plus"
+  },
+  {
+   "t": 582.18,
+   "d": 3.84,
+   "text": "one bonus to strength, plus four bonus to toughness. There can be lots of other explanations."
+  },
+  {
+   "t": 586.44,
+   "d": 4.0,
+   "text": "The good thing is for us as developers, I no longer have to write this by hand as I"
+  },
+  {
+   "t": 590.44,
+   "d": 3.86,
+   "text": "need to do it in ADOM because in ADOM everything is hard coded. Here it's just looking at the"
+  },
+  {
+   "t": 594.3,
+   "d": 5.34,
+   "text": "data structure and providing a readable explanation of what happens and format that nicely. This"
+  },
+  {
+   "t": 599.64,
+   "d": 3.8,
+   "text": "This is basic formatting, but it's something you will see in many places in the game."
+  },
+  {
+   "t": 603.58,
+   "d": 4.2,
+   "text": "There are tooltips and all kinds of things making it much easier for the player to access"
+  },
+  {
+   "t": 607.78,
+   "d": 1.68,
+   "text": "the knowledge about the things in the game."
+  },
+  {
+   "t": 610.02,
+   "d": 4.6,
+   "text": "So I'm going to play a wizard here because that will allow me to show the most interesting"
+  },
+  {
+   "t": 615.48,
+   "d": 0.4,
+   "text": "features."
+  },
+  {
+   "t": 618.4,
+   "d": 2.72,
+   "text": "This character is just styled for the demo."
+  },
+  {
+   "t": 621.3,
+   "d": 3.66,
+   "text": "Later on they will show their equipment, how the equipment changes, all these things."
+  },
+  {
+   "t": 625.18,
+   "d": 0.98,
+   "text": "We don't yet have that."
+  },
+  {
+   "t": 626.96,
+   "d": 7.48,
+   "text": "assets being drawn right now. But you already can see we tried to increase things like animations"
+  },
+  {
+   "t": 634.44,
+   "d": 7.74,
+   "text": "and make it generally more interesting to see, to visualize the environment. We had long discussions"
+  },
+  {
+   "t": 642.18,
+   "d": 5.14,
+   "text": "about which type of graphics to use. We first thought, okay, we should do 3D because that's so"
+  },
+  {
+   "t": 647.32,
+   "d": 6.56,
+   "text": "cool. Then we calculated the costs and said, okay, we probably can't do 3D because it's much too"
+  },
+  {
+   "t": 653.88,
+   "d": 6.84,
+   "text": "expensive for our budget. Then we thought about 2D, decided that's not enough for our ambition."
+  },
+  {
+   "t": 660.9,
+   "d": 4.6,
+   "text": "We want to be a little more than just 2D. So for example, if you move around here, you can see on"
+  },
+  {
+   "t": 665.5,
+   "d": 6.1,
+   "text": "the stairs shadows and stuff. We wanted to have a little bit of that, so 2D alone probably wouldn't"
+  },
+  {
+   "t": 671.6,
+   "d": 6.56,
+   "text": "have cut it. Then we thought about isometric and decided isometric, we don't like that because you"
+  },
+  {
+   "t": 678.84,
+   "d": 4.72,
+   "text": "have to think all the time about which walls to fade out to be able to see everything. It's very"
+  },
+  {
+   "t": 683.56,
+   "d": 4.28,
+   "text": "hard to target things and that's something we also learned from ADOM. The grid in ADOM"
+  },
+  {
+   "t": 687.84,
+   "d": 4.9,
+   "text": "is barely visible and it's very hard for casual players to even hit a target or see where"
+  },
+  {
+   "t": 692.74,
+   "d": 3.92,
+   "text": "something is hovering or flying. So we said no, we have to change that. And so in the"
+  },
+  {
+   "t": 696.66,
+   "d": 5.58,
+   "text": "end we decided to go for 2.5D. So this actually, the environment, the walls and everything"
+  },
+  {
+   "t": 702.24,
+   "d": 5.2,
+   "text": "is actually 3D, but the sprites of the monsters items and everything else is 2D because that"
+  },
+  {
+   "t": 707.44,
+   "d": 5.4,
+   "text": "was a nice compromise for us in, let's say, visual clarity effort we need to implement"
+  },
+  {
+   "t": 712.84,
+   "d": 5.64,
+   "text": "it and it being nice enough. Right now there's not much variation in the walls and everything,"
+  },
+  {
+   "t": 718.66,
+   "d": 3.44,
+   "text": "but that's just a matter of, let's say, hard work. So there will be a lot more variation"
+  },
+  {
+   "t": 722.1,
+   "d": 5.92,
+   "text": "in the final versions with all kinds of decorations for the dungeon and everything. For the current"
+  },
+  {
+   "t": 728.02,
+   "d": 5.22,
+   "text": "version it was very important for us to clearly show the grid and show how things are positioned"
+  },
+  {
+   "t": 733.24,
+   "d": 5.28,
+   "text": "to prevent misclicks, wrong targeting, all those things. And you already could see it"
+  },
+  {
+   "t": 739.72,
+   "d": 4.1,
+   "text": "When I go here, hover with the mouse over the player, I get a tooltip."
+  },
+  {
+   "t": 743.96,
+   "d": 1.48,
+   "text": "That's a very technical visualization."
+  },
+  {
+   "t": 745.76,
+   "d": 1.48,
+   "text": "It will become more beautiful in later versions."
+  },
+  {
+   "t": 747.54,
+   "d": 3.8,
+   "text": "But the idea is already I can hover over everything and get explanations about it."
+  },
+  {
+   "t": 751.48,
+   "d": 4.04,
+   "text": "This is the high detail level, so I really get to see everything from all the statistics"
+  },
+  {
+   "t": 755.52,
+   "d": 3.54,
+   "text": "to the attributes, the modifiers, the capabilities and everything."
+  },
+  {
+   "t": 759.5,
+   "d": 4.78,
+   "text": "And that's one of the changes we plan for the basic Ultimate Atom version."
+  },
+  {
+   "t": 764.58,
+   "d": 3.3,
+   "text": "We will do away with item identification by default."
+  },
+  {
+   "t": 767.88,
+   "d": 3.78,
+   "text": "So you will get lots of information about the things that are in the game, no longer"
+  },
+  {
+   "t": 772.44,
+   "d": 2.78,
+   "text": "having to wonder what's a red potion, a blue potion, a green potion."
+  },
+  {
+   "t": 775.5,
+   "d": 1.98,
+   "text": "There is a simple reason behind that."
+  },
+  {
+   "t": 778.06,
+   "d": 5.92,
+   "text": "We really see as the main point for Ultimate Artem to make it very, very interesting to"
+  },
+  {
+   "t": 783.98,
+   "d": 4.3,
+   "text": "have all kinds of interactions with interesting items, interesting features, interesting monsters."
+  },
+  {
+   "t": 789.06,
+   "d": 4.98,
+   "text": "And if you first have to identify almost everything to understand what it might be able to do,"
+  },
+  {
+   "t": 794.18,
+   "d": 2.58,
+   "text": "you are losing a large part of the fun aspect of that."
+  },
+  {
+   "t": 796.76,
+   "d": 4.68,
+   "text": "that. We noticed with more casual players, they don't understand identification, it's"
+  },
+  {
+   "t": 801.44,
+   "d": 4.36,
+   "text": "not fun to look for the scrolls, it's just tedium. So we said, okay, we are going to"
+  },
+  {
+   "t": 805.8,
+   "d": 4.88,
+   "text": "do away with that, be gone. Maybe there will be a hardcore roguelike mode that allows you"
+  },
+  {
+   "t": 810.68,
+   "d": 3.98,
+   "text": "to do that if you like it, but we don't want that for the basic version, basically. The"
+  },
+  {
+   "t": 814.66,
+   "d": 6.0,
+   "text": "fun will be in trying to determine what can I do in interesting things with what I have."
+  },
+  {
+   "t": 820.66,
+   "d": 3.12,
+   "text": "So what are the uses for it? How can I use it in interesting ways?"
+  },
+  {
+   "t": 825.62,
+   "d": 5.66,
+   "text": "Yeah, now I'm going to walk around a little bit. First, I have to unequip a weapon. The"
+  },
+  {
+   "t": 831.28,
+   "d": 5.5,
+   "text": "sprite will not change. Ignore the inventory UI, as I said. It's ugly. It's not ugly, but it's not"
+  },
+  {
+   "t": 836.78,
+   "d": 7.48,
+   "text": "the final one. So currently for the demo, we have certain, let's say, core features we would like to"
+  },
+  {
+   "t": 844.74,
+   "d": 5.14,
+   "text": "we planned from the very beginning for Ultimate Atom. One of those features is that we saw this"
+  },
+  {
+   "t": 849.88,
+   "d": 8.32,
+   "text": "in the NetHack code that our monsters, everything has a very elaborate body structure. Body"
+  },
+  {
+   "t": 858.2,
+   "d": 3.06,
+   "text": "structure is nice to have, but it becomes nicer when you can do something with that."
+  },
+  {
+   "t": 861.46,
+   "d": 5.64,
+   "text": "So if you can hack off body parts, for example, that's already kind of interesting as long"
+  },
+  {
+   "t": 867.1,
+   "d": 3.64,
+   "text": "as you are on the target, but hacking off monster or body parts already is kind of nice."
+  },
+  {
+   "t": 870.96,
+   "d": 3.74,
+   "text": "But it becomes even more interesting if you introduce, let's say, interesting magic to,"
+  },
+  {
+   "t": 874.78,
+   "d": 4.56,
+   "text": "for example, take the head of a dragon and graft it to your body, melting it with your"
+  },
+  {
+   "t": 879.34,
+   "d": 2.26,
+   "text": "body and then allowing you to breath fire, for example."
+  },
+  {
+   "t": 881.96,
+   "d": 3.16,
+   "text": "So that's one of the aspects we really are focusing on."
+  },
+  {
+   "t": 885.36,
+   "d": 1.06,
+   "text": "We call it grafting."
+  },
+  {
+   "t": 886.66,
+   "d": 4.96,
+   "text": "So you can basically collect body parts from other beings and put them either to you or"
+  },
+  {
+   "t": 891.62,
+   "d": 4.68,
+   "text": "to other beings and give them new, let's say, uses, special powers and things."
+  },
+  {
+   "t": 896.96,
+   "d": 4.58,
+   "text": "I will two rooms further illustrate how this works."
+  },
+  {
+   "t": 901.78,
+   "d": 1.96,
+   "text": "But first I want to show something else."
+  },
+  {
+   "t": 903.94,
+   "d": 4.68,
+   "text": "So I'm putting away my Battle Axe of Sharpness because it might kill my opponents, the coming"
+  },
+  {
+   "t": 908.62,
+   "d": 5.2,
+   "text": "opponents too quickly. Now I'm going to move to this door. There's no… okay, we don't"
+  },
+  {
+   "t": 913.82,
+   "d": 2.92,
+   "text": "hear the music and it's probably good because otherwise you wouldn't understand me, but"
+  },
+  {
+   "t": 916.74,
+   "d": 5.14,
+   "text": "there are nice sounds naturally for everything you do. Step sounds, door sounds, whatever."
+  },
+  {
+   "t": 922.44,
+   "d": 3.4,
+   "text": "It's very nice. Sorry to Lukas for not playing this right now if you're watching."
+  },
+  {
+   "t": 927.54,
+   "d": 4.8,
+   "text": "Here we have a room with two monsters. As you can see, we've tried to find an interesting style."
+  },
+  {
+   "t": 932.56,
+   "d": 4.74,
+   "text": "They are slightly animated, at least the frog right now. And now I can, for example,"
+  },
+  {
+   "t": 937.3,
+   "d": 4.44,
+   "text": "I will strike the Minotaur. It's a little bit bloody. And I'm right now wielding a"
+  },
+  {
+   "t": 941.74,
+   "d": 4.28,
+   "text": "Wand of Fire and Brimstone, which is a magical wand that ignites beings when I hit them."
+  },
+  {
+   "t": 946.18,
+   "d": 5.54,
+   "text": "So now we have this nice animation on the Minotaur that's burning. And if I flee,"
+  },
+  {
+   "t": 952.22,
+   "d": 4.68,
+   "text": "yep, he's getting damaged. You can see that in the health bar. I'm afraid he's too tough"
+  },
+  {
+   "t": 957.54,
+   "d": 3.6,
+   "text": "to quickly die, so I will re-equip my axe."
+  },
+  {
+   "t": 968.64,
+   "d": 6.42,
+   "text": "to kill him and the frog begun to. So I'll ignore the items there. But one idea is to"
+  },
+  {
+   "t": 975.06,
+   "d": 5.62,
+   "text": "really show all the effects. Right now there are no text messages in the UI. When I later"
+  },
+  {
+   "t": 980.68,
+   "d": 3.06,
+   "text": "show the ESCII version, you will see there are lots of text messages, but we are going"
+  },
+  {
+   "t": 983.74,
+   "d": 3.98,
+   "text": "for an approach where there is very little text and you basically just can focus on the"
+  },
+  {
+   "t": 987.72,
+   "d": 5.36,
+   "text": "player play just watching his environment and what happens. So most of the things shouldn't"
+  },
+  {
+   "t": 993.08,
+   "d": 5.14,
+   "text": "require reading any text. You can turn that on if you like it, but we right now try to"
+  },
+  {
+   "t": 998.22,
+   "d": 5.22,
+   "text": "get rid of most of that. The latest ADOM release also includes hovering texts and stuff, and"
+  },
+  {
+   "t": 1003.44,
+   "d": 3.9,
+   "text": "we really found it changes the way a play is much more compelling to do it in that way"
+  },
+  {
+   "t": 1007.34,
+   "d": 5.82,
+   "text": "than having to read endless boxes of text, no matter how nice they are. But okay, I'm"
+  },
+  {
+   "t": 1013.16,
+   "d": 11.5,
+   "text": "going to explore further. We have these nice creeps. They will serve for the grafting example."
+  },
+  {
+   "t": 1025.08,
+   "d": 6.48,
+   "text": "I need to kill a couple of them. Come, Spidey. Maybe one, two more just to make sure I get"
+  },
+  {
+   "t": 1031.56,
+   "d": 5.48,
+   "text": "the body parts I need. Now, if the text messages were there, you would be seeing which body"
+  },
+  {
+   "t": 1037.04,
+   "d": 3.82,
+   "text": "parts get hacked off, where they land and all this stuff. It's not in the graphical"
+  },
+  {
+   "t": 1040.86,
+   "d": 7.6,
+   "text": "vertical version right now, but I will kill one more and when I have killed it, I will"
+  },
+  {
+   "t": 1048.46,
+   "d": 7.2,
+   "text": "quickly do it away with the rest. Now it's time for a spell. I'm a mighty wizard. Also"
+  },
+  {
+   "t": 1055.66,
+   "d": 4.1,
+   "text": "here you can see I can hover over the spells. It's not yet beautiful, so as I said, ignore"
+  },
+  {
+   "t": 1059.76,
+   "d": 5.8,
+   "text": "the UI, but we already have tooltips that show what the spell does, what the costs are"
+  },
+  {
+   "t": 1065.56,
+   "d": 4.56,
+   "text": "and all that stuff. Ignore the powerpoint costs and everything, that's just for testing."
+  },
+  {
+   "t": 1070.86,
+   "d": 4.92,
+   "text": "Now I'm for example going to take a blade storm. One of the things, of the other things we are"
+  },
+  {
+   "t": 1075.78,
+   "d": 4.48,
+   "text": "planning is to have a much more interesting magic system than we have in ADOM, because in ADOM it's"
+  },
+  {
+   "t": 1080.26,
+   "d": 4.06,
+   "text": "basically just, okay, a little damage here, a little damage there, open something, close something,"
+  },
+  {
+   "t": 1085.2,
+   "d": 5.34,
+   "text": "do away with the trap or something like that, a little bit of curing. We really want to be our"
+  },
+  {
+   "t": 1090.54,
+   "d": 3.84,
+   "text": "spell system something very magical with, let's say, very very flexible effects."
+  },
+  {
+   "t": 1094.62,
+   "d": 3.9,
+   "text": "For example, the Bladestorm spell, which probably in the final game will be a very powerful,"
+  },
+  {
+   "t": 1098.74,
+   "d": 5.6,
+   "text": "very rare spell, is one that creates lots of very sharp blades in your environment and"
+  },
+  {
+   "t": 1104.34,
+   "d": 6.18,
+   "text": "starts amputating body parts of beings and severely injuring them, which is kind of gruesome"
+  },
+  {
+   "t": 1110.52,
+   "d": 0.9,
+   "text": "but interesting."
+  },
+  {
+   "t": 1111.62,
+   "d": 4.32,
+   "text": "I'll now activate it and we get a huge massacre."
+  },
+  {
+   "t": 1117.78,
+   "d": 6.52,
+   "text": "I'll just wait for a moment. They should bleed to death. Yes, very nice. Spiders are gone."
+  },
+  {
+   "t": 1124.7,
+   "d": 6.02,
+   "text": "Now I'm going to pick up something. We don't yet have all the graphics. One of the spiders"
+  },
+  {
+   "t": 1130.72,
+   "d": 5.68,
+   "text": "lost its spinarits. Those glands they use to generate web. Currently the demo version"
+  },
+  {
+   "t": 1136.4,
+   "d": 3.18,
+   "text": "is configured in such a way that when I pick them up, they are ultimately grafted to my"
+  },
+  {
+   "t": 1139.58,
+   "d": 4.5,
+   "text": "body if there is a free spot for that. That's just for the demo version. In the final game,"
+  },
+  {
+   "t": 1144.08,
+   "d": 3.92,
+   "text": "naturally would have some kind of necromantic magic that, for example, would allow to graph body"
+  },
+  {
+   "t": 1148.0,
+   "d": 7.3,
+   "text": "parts of different sizes or power capabilities. Here I just can draw it to the top, close the menu,"
+  },
+  {
+   "t": 1156.06,
+   "d": 6.68,
+   "text": "go one step back, and when I now press the F… why? I love demos."
+  },
+  {
+   "t": 1165.3,
+   "d": 6.5,
+   "text": "I'll try that again. It worked this morning, so I'll go back again,"
+  },
+  {
+   "t": 1173.06,
+   "d": 12.88,
+   "text": "Press the button. Man, that's not fair. Okay. One moment. I'll try it again. This really"
+  },
+  {
+   "t": 1185.94,
+   "d": 4.56,
+   "text": "should work. It did work this morning, and I haven't recompiled the game, so there's"
+  },
+  {
+   "t": 1190.5,
+   "d": 9.28,
+   "text": "no reason for it not working. No. For some reason, it doesn't work on me right now. Damn."
+  },
+  {
+   "t": 1199.78,
+   "d": 4.24,
+   "text": "What I expected to show was that a new option now shows up that says spin a web."
+  },
+  {
+   "t": 1204.32,
+   "d": 3.98,
+   "text": "Then I can start spinning webs because I have those spider glands attached to my body and"
+  },
+  {
+   "t": 1208.3,
+   "d": 0.5,
+   "text": "can use them."
+  },
+  {
+   "t": 1208.92,
+   "d": 1.84,
+   "text": "I have no idea why this doesn't work right now."
+  },
+  {
+   "t": 1211.24,
+   "d": 3.88,
+   "text": "I really refused to recompile this thing because I thought, okay, it's working."
+  },
+  {
+   "t": 1217.62,
+   "d": 1.38,
+   "text": "Welcome to the world of programming."
+  },
+  {
+   "t": 1219.24,
+   "d": 3.06,
+   "text": "No, for some reason it doesn't work."
+  },
+  {
+   "t": 1222.56,
+   "d": 0.38,
+   "text": "Shame."
+  },
+  {
+   "t": 1223.8,
+   "d": 1.66,
+   "text": "Okay, it would have been a cool feature."
+  },
+  {
+   "t": 1226.36,
+   "d": 5.94,
+   "text": "and for some reason it stopped working. This is just a room of orgs to show, yes, we have"
+  },
+  {
+   "t": 1232.3,
+   "d": 4.92,
+   "text": "lots of statistical data for orgs. You can also see their alignment, capabilities and"
+  },
+  {
+   "t": 1237.22,
+   "d": 5.36,
+   "text": "stuff. I basically just want to use a fireball to clear the room to show a nice fireball"
+  },
+  {
+   "t": 1242.58,
+   "d": 8.62,
+   "text": "animation. There we go. Some orgs left, but we can do that again because the demo character"
+  },
+  {
+   "t": 1251.2,
+   "d": 1.32,
+   "text": "character is a very powerful wizard."
+  },
+  {
+   "t": 1253.76,
+   "d": 1.82,
+   "text": "Okay, that should be it."
+  },
+  {
+   "t": 1256.62,
+   "d": 4.88,
+   "text": "We continue through the demo dungeon."
+  },
+  {
+   "t": 1261.98,
+   "d": 2.9,
+   "text": "Next thing is, it was possible to do that in Atom."
+  },
+  {
+   "t": 1264.94,
+   "d": 3.8,
+   "text": "It will be much more flexible in the new game, thanks to the ECS system."
+  },
+  {
+   "t": 1268.98,
+   "d": 2.86,
+   "text": "You can interact in many ways with the environment."
+  },
+  {
+   "t": 1272.18,
+   "d": 4.58,
+   "text": "For example, the blue stuff to the right, that's barely recognizable, is not deep water."
+  },
+  {
+   "t": 1277.02,
+   "d": 2.82,
+   "text": "You can't swim in that, it's just water and liquid on the floor."
+  },
+  {
+   "t": 1280.4,
+   "d": 7.1,
+   "text": "What I can do is cast another spell, for example an ice storm, just to freeze the ground."
+  },
+  {
+   "t": 1287.78,
+   "d": 1.04,
+   "text": "We now have frozen ground."
+  },
+  {
+   "t": 1289.02,
+   "d": 3.68,
+   "text": "When monsters walk over that, they can slip, they can get stunned, they can get slowed,"
+  },
+  {
+   "t": 1292.88,
+   "d": 0.12,
+   "text": "whatever."
+  },
+  {
+   "t": 1293.22,
+   "d": 3.6,
+   "text": "There are many effects that can happen due to modifying the environment."
+  },
+  {
+   "t": 1297.48,
+   "d": 4.94,
+   "text": "Naturally, if I don't like that, I can use my trusty fireball, for example, and turn"
+  },
+  {
+   "t": 1302.42,
+   "d": 1.08,
+   "text": "it back to water, for example."
+  },
+  {
+   "t": 1304.16,
+   "d": 3.72,
+   "text": "There will be lots more ways to interact with the environment in general."
+  },
+  {
+   "t": 1308.46,
+   "d": 4.5,
+   "text": "fireballs, for example, also will gradually damage walls, so there might be unintended"
+  },
+  {
+   "t": 1312.96,
+   "d": 3.64,
+   "text": "effects. So if you cast fireball too often in a small room, maybe the walls break down,"
+  },
+  {
+   "t": 1316.72,
+   "d": 4.82,
+   "text": "other monsters can reach you more easily. The whole game will be, let's say, very, very"
+  },
+  {
+   "t": 1322.02,
+   "d": 7.38,
+   "text": "defined and not just decoration, so you really will interact with everything. I continue"
+  },
+  {
+   "t": 1329.4,
+   "d": 7.74,
+   "text": "my killing spree. Here is a small demo room with lots of monsters. For the demo, they"
+  },
+  {
+   "t": 1337.14,
+   "d": 4.6,
+   "text": "are defined as not moving, so don't be surprised if they don't move, they are just my target"
+  },
+  {
+   "t": 1341.74,
+   "d": 1.26,
+   "text": "areas so to speak."
+  },
+  {
+   "t": 1343.48,
+   "d": 1.58,
+   "text": "I can zoom out a little."
+  },
+  {
+   "t": 1346.12,
+   "d": 3.4,
+   "text": "You can see it's a pretty large room full with all kinds of monsters."
+  },
+  {
+   "t": 1349.94,
+   "d": 4.26,
+   "text": "There are some special things here that I would like to demo, again for an interesting"
+  },
+  {
+   "t": 1354.2,
+   "d": 1.5,
+   "text": "thing to interact with the environment."
+  },
+  {
+   "t": 1357.2,
+   "d": 2.68,
+   "text": "Here for example is a crystal of power lying on the ground."
+  },
+  {
+   "t": 1360.56,
+   "d": 4.66,
+   "text": "We have more crystals of power that have been placed among all those monsters for some sinister"
+  },
+  {
+   "t": 1365.22,
+   "d": 0.34,
+   "text": "reason."
+  },
+  {
+   "t": 1365.56,
+   "d": 1.64,
+   "text": "There is a crystal of fire."
+  },
+  {
+   "t": 1367.9,
+   "d": 6.12,
+   "text": "The idea is that one new mechanism of many new mechanisms is you can, for example, emit magical pulses."
+  },
+  {
+   "t": 1374.48,
+   "d": 4.68,
+   "text": "That's a kind of signal that you shoot into the environment and other things might get activated by that."
+  },
+  {
+   "t": 1379.94,
+   "d": 8.16,
+   "text": "For example, if you know the items, the crystal of power is able to be activated by a magical pulse, which is a spell right now."
+  },
+  {
+   "t": 1388.64,
+   "d": 7.32,
+   "text": "When this magical pulse reaches the crystal of power, it emits yet another wave of magical energy, activating other things."
+  },
+  {
+   "t": 1396.18,
+   "d": 1.38,
+   "text": "So I can build a kind of fuse."
+  },
+  {
+   "t": 1398.68,
+   "d": 6.58,
+   "text": "Once those explosions reach the crystal of fire, they explode in a fireball, doing something nasty."
+  },
+  {
+   "t": 1406.5,
+   "d": 4.22,
+   "text": "That's what I'm now going to do to show how we clear a room."
+  },
+  {
+   "t": 1411.48,
+   "d": 4.0,
+   "text": "You always have to think about, okay, in the later game I will be able to have these items."
+  },
+  {
+   "t": 1415.62,
+   "d": 2.8,
+   "text": "I can combine them to build very interesting setups."
+  },
+  {
+   "t": 1418.58,
+   "d": 5.0,
+   "text": "For example, lure stronger monsters in specific situations where I maybe change the environment"
+  },
+  {
+   "t": 1423.58,
+   "d": 2.76,
+   "text": "by combining things in exciting and new ways."
+  },
+  {
+   "t": 1427.94,
+   "d": 1.18,
+   "text": "You know the bug there."
+  },
+  {
+   "t": 1430.16,
+   "d": 1.08,
+   "text": "So magical pulse now."
+  },
+  {
+   "t": 1433.2,
+   "d": 2.72,
+   "text": "So now my magical pulse activates those other things."
+  },
+  {
+   "t": 1437.24,
+   "d": 1.44,
+   "text": "There are some fireballs."
+  },
+  {
+   "t": 1438.68,
+   "d": 10.96,
+   "text": "There is a minor bug I'm going to explain. We see lots of things now exploding. When"
+  },
+  {
+   "t": 1449.64,
+   "d": 5.6,
+   "text": "this massacre ends, they finally are going to die. That's the bug that's still in the"
+  },
+  {
+   "t": 1455.24,
+   "d": 4.82,
+   "text": "code. They should be dying while these explosions happen, but it's a minor thing. I cleared"
+  },
+  {
+   "t": 1460.06,
+   "d": 5.7,
+   "text": "the room with a nice planned setup of those crystals of power and fire. That's just one"
+  },
+  {
+   "t": 1465.76,
+   "d": 5.66,
+   "text": "of the many other ways you will have to interact with items in an interesting way. Which brings"
+  },
+  {
+   "t": 1471.42,
+   "d": 8.7,
+   "text": "us to the next thing. When we thought about interesting ways of interacting, we thought"
+  },
+  {
+   "t": 1480.12,
+   "d": 7.62,
+   "text": "that items, monsters, are probably the core things you use to interact with and equip"
+  },
+  {
+   "t": 1487.74,
+   "d": 5.96,
+   "text": "yourself and change things. Then we thought, okay, but we have many other things like the"
+  },
+  {
+   "t": 1493.7,
+   "d": 7.22,
+   "text": "walls, the altars. This here is, by the way, an altar. And an altar now also has hell out"
+  },
+  {
+   "t": 1500.92,
+   "d": 6.52,
+   "text": "ground before it. Then we thought, wouldn't it be fun if we could turn items into monsters"
+  },
+  {
+   "t": 1508.2,
+   "d": 6.22,
+   "text": "by dark magic? Because that again allows new interesting combinations of things. And I'm"
+  },
+  {
+   "t": 1514.42,
+   "d": 4.76,
+   "text": "going to illustrate this briefly. You can cast a spell like any made object and say,"
+  },
+  {
+   "t": 1519.18,
+   "d": 8.74,
+   "text": "okay, this altar here is very nice and now it should move around. So now I have a living altar."
+  },
+  {
+   "t": 1528.22,
+   "d": 6.96,
+   "text": "It has statistics, it has capabilities and I probably could charm it to allow it to follow me"
+  },
+  {
+   "t": 1535.18,
+   "d": 8.28,
+   "text": "and suddenly have a new interesting companion. This was the altar example. We'll proceed one step"
+  },
+  {
+   "t": 1543.46,
+   "d": 7.56,
+   "text": "further. This is also an interesting thing. I already stepped on it. This is one other thing."
+  },
+  {
+   "t": 1551.36,
+   "d": 5.56,
+   "text": "We like the idea of exploring the game in a much deeper way because only playing, let's say,"
+  },
+  {
+   "t": 1557.22,
+   "d": 4.64,
+   "text": "dwarves, elves, humans, whatever, is kind of interesting. But wouldn't it be nice to be able"
+  },
+  {
+   "t": 1561.86,
+   "d": 8.32,
+   "text": "to play a goblin, ogre, giant, dragon, demon, whatever? And this here is one of the means that"
+  },
+  {
+   "t": 1570.18,
+   "d": 5.78,
+   "text": "could allow for that, a pentagram of possession. When you step on that it gets attuned to the"
+  },
+  {
+   "t": 1575.96,
+   "d": 5.58,
+   "text": "being that steps on it. When our second being steps on it, they exchange their souls and you"
+  },
+  {
+   "t": 1581.54,
+   "d": 5.3,
+   "text": "suddenly are in the body of something else and have all the powers of this other thing. This"
+  },
+  {
+   "t": 1586.84,
+   "d": 3.24,
+   "text": "other thing is in your body, which can be very interesting especially for the demo because"
+  },
+  {
+   "t": 1590.58,
+   "d": 5.94,
+   "text": "this guy is a pretty powerful spellcaster and that's why I'm showing this last because"
+  },
+  {
+   "t": 1597.56,
+   "d": 3.44,
+   "text": "Because strange things could happen, but I'll show one more thing."
+  },
+  {
+   "t": 1601.46,
+   "d": 4.18,
+   "text": "Because we just saw this Alter animation thing, and we thought, okay, we should push things"
+  },
+  {
+   "t": 1605.64,
+   "d": 1.76,
+   "text": "to more limits, for example."
+  },
+  {
+   "t": 1608.08,
+   "d": 1.12,
+   "text": "We have one other spell."
+  },
+  {
+   "t": 1610.66,
+   "d": 1.72,
+   "text": "It's called the Wave of Life."
+  },
+  {
+   "t": 1613.6,
+   "d": 7.6,
+   "text": "You might guess what it does, because when I use that, suddenly everything in the, let's"
+  },
+  {
+   "t": 1621.2,
+   "d": 1.72,
+   "text": "say, area of effect becomes animated."
+  },
+  {
+   "t": 1623.66,
+   "d": 8.24,
+   "text": "Now I'm facing an animated pair of thick gauntlets, an iron ration I could fight, or sandals"
+  },
+  {
+   "t": 1631.9,
+   "d": 2.78,
+   "text": "that are walking around, and many other things."
+  },
+  {
+   "t": 1634.84,
+   "d": 5.12,
+   "text": "Weapons, and naturally you can imagine that this creates interesting possibilities to"
+  },
+  {
+   "t": 1640.7,
+   "d": 5.18,
+   "text": "create new types of companions to change the general battlescape of the dungeon."
+  },
+  {
+   "t": 1647.78,
+   "d": 1.32,
+   "text": "Things naturally also can be combined."
+  },
+  {
+   "t": 1649.1,
+   "d": 6.24,
+   "text": "For example, you could animate a piece of armor and then graft arms to it or a dragon head or something."
+  },
+  {
+   "t": 1655.5,
+   "d": 2.72,
+   "text": "When you charm it, things become more and more interesting."
+  },
+  {
+   "t": 1660.2,
+   "d": 7.36,
+   "text": "I naturally can fight them, although it's probably not very interesting to fight a piece of food."
+  },
+  {
+   "t": 1668.2,
+   "d": 9.22,
+   "text": "You can also see the walls start moving because the spell is defined in a way that it hits the first, let's say, blocking feature and animates that too."
+  },
+  {
+   "t": 1677.42,
+   "d": 3.7,
+   "text": "So I now have a pretty chaotic dungeon here. Oops, now it happened."
+  },
+  {
+   "t": 1682.78,
+   "d": 4.82,
+   "text": "This wall moved into the pentagram and now as the TrueTip says, I'm now the wall."
+  },
+  {
+   "t": 1687.92,
+   "d": 1.78,
+   "text": "So I'm now playing the wall."
+  },
+  {
+   "t": 1690.5,
+   "d": 5.18,
+   "text": "Which is not very helpful because as you can see a wall doesn't have arms or legs."
+  },
+  {
+   "t": 1695.92,
+   "d": 3.4,
+   "text": "So walls for example have problems opening doors because how should they do that?"
+  },
+  {
+   "t": 1700.56,
+   "d": 5.38,
+   "text": "And now the soul of the wall is in the body of my spellcaster and I don't know if I managed to"
+  },
+  {
+   "t": 1710.04,
+   "d": 1.54,
+   "text": "I want to go back there."
+  },
+  {
+   "t": 1711.9,
+   "d": 2.5,
+   "text": "No, no, I'm burning, shit."
+  },
+  {
+   "t": 1716.22,
+   "d": 2.52,
+   "text": "This is not going to end nicely."
+  },
+  {
+   "t": 1719.76,
+   "d": 1.32,
+   "text": "Please let me go there."
+  },
+  {
+   "t": 1722.74,
+   "d": 1.72,
+   "text": "I'm back in my body, at least."
+  },
+  {
+   "t": 1725.64,
+   "d": 1.34,
+   "text": "I can do other things."
+  },
+  {
+   "t": 1727.14,
+   "d": 3.16,
+   "text": "I can do, for example, now that I'm back in my body, cast another spell."
+  },
+  {
+   "t": 1730.54,
+   "d": 1.72,
+   "text": "Naturally we have a Swap the Soul spell."
+  },
+  {
+   "t": 1732.56,
+   "d": 1.26,
+   "text": "If I like this, what is it?"
+  },
+  {
+   "t": 1734.4,
+   "d": 1.02,
+   "text": "Oh, where's the tooltip?"
+  },
+  {
+   "t": 1737.54,
+   "d": 0.78,
+   "text": "Swap in there."
+  },
+  {
+   "t": 1739.6,
+   "d": 4.24,
+   "text": "Okay, now I'm a kind of ring as it seems, and again I have statistics and could use the"
+  },
+  {
+   "t": 1743.84,
+   "d": 0.46,
+   "text": "ring powers."
+  },
+  {
+   "t": 1745.08,
+   "d": 2.54,
+   "text": "But now I also have the problem of getting back to my body."
+  },
+  {
+   "t": 1750.04,
+   "d": 6.76,
+   "text": "We are lucky right now that the soul of the ring has decided to not yet cast spells because"
+  },
+  {
+   "t": 1756.8,
+   "d": 0.88,
+   "text": "things otherwise…"
+  },
+  {
+   "t": 1757.68,
+   "d": 1.28,
+   "text": "Ah, okay, now it's happening."
+  },
+  {
+   "t": 1759.24,
+   "d": 1.66,
+   "text": "The ring has decided to cast spells."
+  },
+  {
+   "t": 1760.9,
+   "d": 5.96,
+   "text": "So, yeah, this basically ends this part of the demo because as a ring I can't do much"
+  },
+  {
+   "t": 1766.86,
+   "d": 1.12,
+   "text": "more here."
+  },
+  {
+   "t": 1768.14,
+   "d": 3.32,
+   "text": "But I guess it gives you a general idea where we are going."
+  },
+  {
+   "t": 1771.78,
+   "d": 1.82,
+   "text": "So our moniker for this is your dungeon, your rules."
+  },
+  {
+   "t": 1773.72,
+   "d": 3.96,
+   "text": "You really should be able to do really everything."
+  },
+  {
+   "t": 1777.96,
+   "d": 4.66,
+   "text": "By making everything in the dungeon something you can interact with, we can go pretty far"
+  },
+  {
+   "t": 1782.62,
+   "d": 6.68,
+   "text": "and hope that this will create a very new emergent style of strategy playing and interaction"
+  },
+  {
+   "t": 1789.3,
+   "d": 4.56,
+   "text": "with the challenges we provide. And yeah, that's what I wanted to show for the graphical version."
+  },
+  {
+   "t": 1794.82,
+   "d": 3.48,
+   "text": "And if you're giving me five minutes more, I'll show you briefly the ASCII version"
+  },
+  {
+   "t": 1798.3,
+   "d": 9.1,
+   "text": "so that you have seen that too. Any questions so far? Otherwise, I... Okay. I'm hopefully not"
+  },
+  {
+   "t": 1807.4,
+   "d": 6.8,
+   "text": "crushing the program by doing it in this order, but okay. Excuse me?"
+  },
+  {
+   "t": 1817.26,
+   "d": 6.54,
+   "text": "Yeah, that's hard work. Basically, the question was how do we generate all the artwork for"
+  },
+  {
+   "t": 1823.8,
+   "d": 4.46,
+   "text": "this? Basically, we have two approaches. For the items, we actually take the item images"
+  },
+  {
+   "t": 1828.26,
+   "d": 4.4,
+   "text": "we need in any case, but extend them with a nice hovering animation and this blue glow"
+  },
+  {
+   "t": 1832.66,
+   "d": 4.72,
+   "text": "and stuff so that we basically can reuse the item images. For the other features like walls,"
+  },
+  {
+   "t": 1837.5,
+   "d": 5.48,
+   "text": "altars, we actually draw special pictures. That's actually hand-drawn. So there are all"
+  },
+  {
+   "t": 1842.98,
+   "d": 3.54,
+   "text": "those features which are not too many, there are special animations then."
+  },
+  {
+   "t": 1847.98,
+   "d": 4.06,
+   "text": "Any other questions? I have a microphone now."
+  },
+  {
+   "t": 1852.28,
+   "d": 3.0,
+   "text": "Otherwise I'll quickly do the ASCII version maybe."
+  },
+  {
+   "t": 1855.76,
+   "d": 3.34,
+   "text": "Well, which would you prefer? We can do the ASCII now and then take questions?"
+  },
+  {
+   "t": 1859.44,
+   "d": 3.56,
+   "text": "Okay, I'll quickly do the ASCII version just to show it and then otherwise it becomes too unstructured."
+  },
+  {
+   "t": 1863.28,
+   "d": 0.2,
+   "text": "We'll come back."
+  },
+  {
+   "t": 1864.36,
+   "d": 5.16,
+   "text": "So the ASCII version is really just for prototyping right now so that I can quickly implement features into the engine."
+  },
+  {
+   "t": 1871.5,
+   "d": 4.42,
+   "text": "It's much more basic, wall of text and stuff like that."
+  },
+  {
+   "t": 1876.14,
+   "d": 2.86,
+   "text": "So I have a mouse-based ASCII version."
+  },
+  {
+   "t": 1879.66,
+   "d": 1.68,
+   "text": "Can do my selections here."
+  },
+  {
+   "t": 1883.1,
+   "d": 0.96,
+   "text": "Take the wizard."
+  },
+  {
+   "t": 1888.38,
+   "d": 4.52,
+   "text": "One of the things we have been discussing is the level of statistical detail we want"
+  },
+  {
+   "t": 1892.9,
+   "d": 2.26,
+   "text": "to have in the game, because ADOM is pretty statistics heavy."
+  },
+  {
+   "t": 1895.7,
+   "d": 3.24,
+   "text": "And we noticed with casual gamers, they easily get confused by that."
+  },
+  {
+   "t": 1898.94,
+   "d": 5.3,
+   "text": "what is this DV thing, PV thing and all this strange stuff you have there. So what we did"
+  },
+  {
+   "t": 1904.24,
+   "d": 5.0,
+   "text": "is we have introduced modes that regulate the amount of statistical detail. It's not"
+  },
+  {
+   "t": 1909.24,
+   "d": 5.06,
+   "text": "yet fully implemented but for example one of the things we noticed is now when you look"
+  },
+  {
+   "t": 1914.3,
+   "d": 4.94,
+   "text": "here the values are spelled out. It's a dodger value, a production value, no longer DV, PV"
+  },
+  {
+   "t": 1919.24,
+   "d": 9.18,
+   "text": "so that on simple statistics you have a better chance of understanding what it means. It"
+  },
+  {
+   "t": 1928.42,
+   "d": 6.18,
+   "text": "weapon damage of a battle axe is 3 to 8 in this display. You see this 3 to 8 here. There"
+  },
+  {
+   "t": 1934.6,
+   "d": 4.18,
+   "text": "is still too much statistics but we are working on that. If I now change to a higher detail"
+  },
+  {
+   "t": 1938.78,
+   "d": 8.08,
+   "text": "level, you again get the dice notation. One die six plus two. We learned that casual gamers"
+  },
+  {
+   "t": 1946.86,
+   "d": 3.68,
+   "text": "no longer understand dice notations so we decided to only have them for expert players"
+  },
+  {
+   "t": 1950.54,
+   "d": 3.78,
+   "text": "and otherwise you just get a damage range, maybe in the most basic version, even just"
+  },
+  {
+   "t": 1954.32,
+   "d": 4.26,
+   "text": "just one number maybe to help you judge the weapon. That's one of the many things we are"
+  },
+  {
+   "t": 1958.58,
+   "d": 5.7,
+   "text": "doing there. The rest is an ASCII version. So here's again the Minotaur, the giant frog"
+  },
+  {
+   "t": 1964.28,
+   "d": 8.26,
+   "text": "we saw, the spiders. I can cast my spells like a fireball. It's much faster animation-wise."
+  },
+  {
+   "t": 1973.64,
+   "d": 7.3,
+   "text": "I need to try this thing with the spinnerets once more. I want to spin my web. So here"
+  },
+  {
+   "t": 1980.94,
+   "d": 6.52,
+   "text": "Here we have the spinnerets. You can see the text message at the bottom, Dvoialf, my wizard,"
+  },
+  {
+   "t": 1987.64,
+   "d": 6.78,
+   "text": "melts the spinnerets with her body. And now I should be able… Yes, yeah, there it is."
+  },
+  {
+   "t": 1994.8,
+   "d": 4.36,
+   "text": "I have no idea why it doesn't work in the graphical version. There is the spin a web"
+  },
+  {
+   "t": 1999.62,
+   "d": 3.82,
+   "text": "thing. If it were the graphical version and I press it, you now would see a nice animation"
+  },
+  {
+   "t": 2003.44,
+   "d": 4.36,
+   "text": "how the web is spun. And if I move from the tile, you can see, wow, there's a web actually."
+  },
+  {
+   "t": 2007.8,
+   "d": 4.14,
+   "text": "So, by grafting the spider spirits to me, I'm now able to spin webs."
+  },
+  {
+   "t": 2012.26,
+   "d": 1.28,
+   "text": "It works with everything else."
+  },
+  {
+   "t": 2013.7,
+   "d": 4.44,
+   "text": "So, if I, for example, amputate the hand of a ghoul and graft that to my arm, I have this"
+  },
+  {
+   "t": 2018.14,
+   "d": 0.78,
+   "text": "paralytic touch."
+  },
+  {
+   "t": 2019.14,
+   "d": 1.72,
+   "text": "I can use dragon heads to breath fire."
+  },
+  {
+   "t": 2021.14,
+   "d": 1.74,
+   "text": "I can do whatever I want."
+  },
+  {
+   "t": 2023.24,
+   "d": 0.8,
+   "text": "It's quite interesting."
+  },
+  {
+   "t": 2024.26,
+   "d": 3.84,
+   "text": "Tomorrow in my talk, I will explain how it works technically and what the fun of this"
+  },
+  {
+   "t": 2028.1,
+   "d": 0.2,
+   "text": "is."
+  },
+  {
+   "t": 2028.74,
+   "d": 2.28,
+   "text": "So I think this is enough for demoing."
+  },
+  {
+   "t": 2031.88,
+   "d": 0.4,
+   "text": "Okay."
+  },
+  {
+   "t": 2032.76,
+   "d": 1.2,
+   "text": "I'm happy to take more questions."
+  },
+  {
+   "t": 2034.2,
+   "d": 0.38,
+   "text": "Great."
+  },
+  {
+   "t": 2034.58,
+   "d": 1.4,
+   "text": "We have time for some questions."
+  },
+  {
+   "t": 2044.78,
+   "d": 5.68,
+   "text": "I noticed that the characters have very reasonable interpretations of units,"
+  },
+  {
+   "t": 2050.72,
+   "d": 1.92,
+   "text": "for example, thousand metric grams."
+  },
+  {
+   "t": 2053.16,
+   "d": 6.54,
+   "text": "Are there intentions of having, for example, orcish inches or barbaric thermal units?"
+  },
+  {
+   "t": 2063.46,
+   "d": 5.86,
+   "text": "Let's put it like this. We have decided to convert from the Adam Ankadian stones to grams"
+  },
+  {
+   "t": 2069.32,
+   "d": 5.22,
+   "text": "to have a, let's say, universal unit of measurement. And one of the configuration options is to"
+  },
+  {
+   "t": 2074.54,
+   "d": 4.28,
+   "text": "actually change the units you can see. So for the first versions, it just will be pounds,"
+  },
+  {
+   "t": 2079.3,
+   "d": 5.82,
+   "text": "grams, or stones to accommodate the old players. But it would be very easy to add later on,"
+  },
+  {
+   "t": 2085.12,
+   "d": 5.4,
+   "text": "let's say racial specialties in this and it might happen at some point but not in"
+  },
+  {
+   "t": 2090.52,
+   "d": 3.04,
+   "text": "the very near future because we are first focusing on the actual gameplay"
+  },
+  {
+   "t": 2093.56,
+   "d": 10.58,
+   "text": "before elaborating on that but it's possible finally more questions there"
+  },
+  {
+   "t": 2105.82,
+   "d": 4.62,
+   "text": "hey I'm over here yeah so inspired by Josh's talk this morning I'm curious"
+  },
+  {
+   "t": 2110.44,
+   "d": 6.96,
+   "text": "what you would describe as like the core mechanic of this game? Basically I would say interaction,"
+  },
+  {
+   "t": 2118.26,
+   "d": 4.38,
+   "text": "everything with everything. So we really try to build a new kind of world where you"
+  },
+  {
+   "t": 2122.64,
+   "d": 5.42,
+   "text": "can do a lot more interesting things and we really hope for a very emergent gameplay because"
+  },
+  {
+   "t": 2128.72,
+   "d": 4.24,
+   "text": "the technology underneath really allows an endless amount of combinations and we are pretty sure we"
+  },
+  {
+   "t": 2132.96,
+   "d": 4.08,
+   "text": "can't think of all of all the things that will arise from that and having seen the ingenuity"
+  },
+  {
+   "t": 2137.04,
+   "d": 3.4,
+   "text": "of the current community with a rather limited scope of ADOM, we are very much looking forward"
+  },
+  {
+   "t": 2140.44,
+   "d": 3.94,
+   "text": "to the things that are going to happen. So interaction, creative interaction probably,"
+  },
+  {
+   "t": 2144.5,
+   "d": 5.52,
+   "text": "is the core mechanic allowing everything and making everything possible like crafting body"
+  },
+  {
+   "t": 2150.02,
+   "d": 5.36,
+   "text": "parts to items that then get charmed, you phase into them, whatever, and see what happens."
+  },
+  {
+   "t": 2160.48,
+   "d": 4.76,
+   "text": "Okay, a silly question from a long time ADOM player. Is the strange item going to return?"
+  },
+  {
+   "t": 2165.24,
+   "d": 2.44,
+   "text": "Yes. It's already in the game."
+  },
+  {
+   "t": 2171.08,
+   "d": 7.2,
+   "text": "Hey, man. So you talked about dropping the item ID game, because that's not as fun as what you really want, which is interaction with everything, right?"
+  },
+  {
+   "t": 2178.52,
+   "d": 5.94,
+   "text": "And there's a wave of modern roguelike thinking that we're all marching forward, it's the 21st century, we're going to do smarter, better stuff."
+  },
+  {
+   "t": 2184.66,
+   "d": 8.88,
+   "text": "But there was charm, quote charm, in ADOM where like, oh, you forgot to wipe your eyes of the mud because you didn't press the wipe your eye foot pedal."
+  },
+  {
+   "t": 2193.54,
+   "d": 4.44,
+   "text": "and like, oh, someone, the banshee shouted and you died, you didn't have beeswax New Year's."
+  },
+  {
+   "t": 2198.06,
+   "d": 1.42,
+   "text": "Like, there's charm in those things."
+  },
+  {
+   "t": 2199.7,
+   "d": 6.9,
+   "text": "They don't really feel quite as good nowadays, but like, that sort of curiosity and interaction and depth,"
+  },
+  {
+   "t": 2206.74,
+   "d": 1.58,
+   "text": "like, can you take that essence?"
+  },
+  {
+   "t": 2208.5,
+   "d": 1.98,
+   "text": "Do you think you're going to take the essence of that crazy stuff"
+  },
+  {
+   "t": 2210.48,
+   "d": 3.96,
+   "text": "and then move it into the 21st century with your new ideas about making this game more streamlined?"
+  },
+  {
+   "t": 2215.36,
+   "d": 1.98,
+   "text": "I really hope we will be able to do that."
+  },
+  {
+   "t": 2217.34,
+   "d": 8.46,
+   "text": "referencing to your talk, for example, if you think about, let's say, B-Wax, there probably"
+  },
+  {
+   "t": 2225.8,
+   "d": 5.82,
+   "text": "would be a description like it's sticky and gluey and strange stuff. It wouldn't tell you you can"
+  },
+  {
+   "t": 2231.62,
+   "d": 5.52,
+   "text": "plug your ears with it. But we have a mechanism, no longer 100 keys, but there is a core mechanism,"
+  },
+  {
+   "t": 2237.3,
+   "d": 5.3,
+   "text": "just press the F button, which stands for fiddle with the environment. And the F button is very"
+  },
+  {
+   "t": 2242.6,
+   "d": 4.28,
+   "text": "smart, it detects all the things you reasonably could do right now, so you might by accident"
+  },
+  {
+   "t": 2246.88,
+   "d": 4.8,
+   "text": "discover that you suddenly are able to plug your ears. So it won't spoil you in the sense"
+  },
+  {
+   "t": 2251.68,
+   "d": 4.84,
+   "text": "of telling you everything you can do, but giving those textual hints that tell you,"
+  },
+  {
+   "t": 2256.98,
+   "d": 6.94,
+   "text": "sticky, gluey, don't know. And so by this means we hope to keep some of the magic, but"
+  },
+  {
+   "t": 2263.92,
+   "d": 4.98,
+   "text": "making it more accessible. Yeah, that's probably the answer to this. We want to do that definitely."
+  },
+  {
+   "t": 2270.7,
+   "d": 3.18,
+   "text": "Time for one more question. Does anyone else have a question?"
+  },
+  {
+   "t": 2275.12,
+   "d": 0.96,
+   "text": "Final chance."
+  },
+  {
+   "t": 2276.52,
+   "d": 3.22,
+   "text": "Oh no, two people have questions. We'll see."
+  },
+  {
+   "t": 2284.56,
+   "d": 5.5,
+   "text": "Maybe this will be quick. You mentioned a lot like changing things to be more accessible to casual players."
+  },
+  {
+   "t": 2290.22,
+   "d": 3.24,
+   "text": "If casual players don't understand dice rolls, things like that."
+  },
+  {
+   "t": 2293.46,
+   "d": 4.38,
+   "text": "Obviously there's been many years worth of being able to look at how people have played"
+  },
+  {
+   "t": 2297.84,
+   "d": 3.58,
+   "text": "ADOM, but what kind of ways have you been collecting that information of, you know,"
+  },
+  {
+   "t": 2301.5,
+   "d": 3.48,
+   "text": "how are you getting that, you know, casual players are finding this, are you looking"
+  },
+  {
+   "t": 2304.98,
+   "d": 4.48,
+   "text": "at reviews online, are you doing like beta tests in person? I'm curious what kind of methods"
+  },
+  {
+   "t": 2309.46,
+   "d": 6.04,
+   "text": "you're using for that. Actually, when we went to Steam, we got lots of, let's say, feedback about"
+  },
+  {
+   "t": 2315.5,
+   "d": 5.9,
+   "text": "our user interface. This was kind of helpful, but as a consequence, we decided to do actual"
+  },
+  {
+   "t": 2321.4,
+   "d": 4.28,
+   "text": "user testing. So for ADOM we already really invited test users that never played ADOM,"
+  },
+  {
+   "t": 2326.14,
+   "d": 5.76,
+   "text": "just put them before a notebook and watched them playing ADOM and took notes. It was a"
+  },
+  {
+   "t": 2331.9,
+   "d": 5.58,
+   "text": "very, let's say, enlightening process. I remember our very first session, it was about 60 minutes"
+  },
+  {
+   "t": 2337.48,
+   "d": 3.88,
+   "text": "and I had like 150 notes afterwards where I thought, oh wow, this is all very stupid"
+  },
+  {
+   "t": 2341.36,
+   "d": 4.64,
+   "text": "what we are doing. So we really tried to test this on users and see if they understand things"
+  },
+  {
+   "t": 2346.0,
+   "d": 4.06,
+   "text": "without explaining anything, just watch them. And user testing for us right now is the most"
+  },
+  {
+   "t": 2350.06,
+   "d": 3.52,
+   "text": "important mechanism there and we intend to do that very heavily."
+  },
+  {
+   "t": 2356.36,
+   "d": 4.46,
+   "text": "I was wondering with your grafting system, maybe wonder if there's upsides and downsides,"
+  },
+  {
+   "t": 2360.98,
+   "d": 3.74,
+   "text": "like if the dragon head gives you powers but also slows you down or encumbers you or the"
+  },
+  {
+   "t": 2364.72,
+   "d": 3.78,
+   "text": "spider parts give you special powers but affect your charisma because you're not as attractive"
+  },
+  {
+   "t": 2368.5,
+   "d": 1.92,
+   "text": "anymore with spider bits attached to you."
+  },
+  {
+   "t": 2371.56,
+   "d": 2.38,
+   "text": "Actually, there are preparations in the engine."
+  },
+  {
+   "t": 2373.94,
+   "d": 2.68,
+   "text": "and they are not yet fully implemented, but preparations..."
+  },
+  {
+   "t": 2377.88,
+   "d": 3.12,
+   "text": "The game knows what your normal physique is."
+  },
+  {
+   "t": 2381.16,
+   "d": 3.34,
+   "text": "For example, normally you are a humanoid with two arms, two legs and one head,"
+  },
+  {
+   "t": 2384.8,
+   "d": 1.6,
+   "text": "and a certain number of fingers and stuff."
+  },
+  {
+   "t": 2386.94,
+   "d": 3.48,
+   "text": "And when you deviate from that, it has negative effects,"
+  },
+  {
+   "t": 2390.46,
+   "d": 1.48,
+   "text": "because it's harder to control for you,"
+  },
+  {
+   "t": 2392.1,
+   "d": 3.08,
+   "text": "because having like four legs without being trained in that"
+  },
+  {
+   "t": 2395.18,
+   "d": 2.58,
+   "text": "could lower your dexterity for a while."
+  },
+  {
+   "t": 2397.92,
+   "d": 1.54,
+   "text": "You can get accustomed to that."
+  },
+  {
+   "t": 2399.74,
+   "d": 3.12,
+   "text": "So there are several layers of detail that try to accommodate that."
+  },
+  {
+   "t": 2402.86,
+   "d": 5.28,
+   "text": "for example you also can't just take a let's say gnome body of a small gnome and attach a huge"
+  },
+  {
+   "t": 2408.14,
+   "d": 4.72,
+   "text": "ancient red worm head to it because it would be squashed by it so there are certain let's say"
+  },
+  {
+   "t": 2412.86,
+   "d": 5.22,
+   "text": "binary limits you can't combine everything with every every creature size limits play a role"
+  },
+  {
+   "t": 2418.08,
+   "d": 5.38,
+   "text": "and then there are let's say implicit effects of combining things that are pretty alien to you or"
+  },
+  {
+   "t": 2424.98,
+   "d": 5.12,
+   "text": "devolving you very much so that your attributes your capabilities to act will be affected"
+  },
+  {
+   "t": 2430.1,
+   "d": 3.0,
+   "text": "But yes, so there are side effects in any case."
+  },
+  {
+   "t": 2433.2,
+   "d": 0.72,
+   "text": "Everything is a price."
+  },
+  {
+   "t": 2436.02,
+   "d": 1.28,
+   "text": "OK, great."
+  },
+  {
+   "t": 2437.3,
+   "d": 1.02,
+   "text": "Thank you so much."
+  }
+ ],
+ "note": "Transcript made locally with speech-to-text (Whisper large-v3-turbo, language forced to English) because YouTube's only caption track for this video is a mis-detected German track."
+}

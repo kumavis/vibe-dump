@@ -1,0 +1,62 @@
+Adrian Herbez - Make a thing to make a thing: 3d-printable Procedural Content in the Browser
+Speaker: Adrian Herbez
+https://www.youtube.com/watch?v=SMQuoI_M-kk
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] I got the order mixed up so the next talk will be Adrian Herbez talk about 3D printed dudgeons. It is a follow-up from a talk he had previously at the Roguelike celebration about generating these cool little dungeon toys with a 3D printer. As soon as that's ready, let's kick it off. >> What I want to talk about today is how I made a web based semi procedural cad mad modler.
+
+## Demo
+
+[0:00:11] I make toys. A lot of what I make is action figures. I make accessories and what I wanted to make was a greeblies which is tech that makes things more interesting. I wanted to fill a room full of tech pals and greeblies. Demo time. This is all running in a browser. I can rotate around. I can drag. I can zoom in and out. All things you would expect. I can add semi procedural parametric details. I have to hold the space and drag the rectangle and that is filled in with whatever feature
+
+[0:01:11] it is. We are extruding and I will extrude out more. I can also set this to negative and extrude in. We will make a divot here. That's extrusion. I can also add buttons. This will add an array of buttons that will fill in the rectangle. Let's just put a bunch of buttons there. We have got some buttons. I can add handles to what you see in equipment. And finally there is dials. You will see we have got this indicator dial with a needle set at a random position. Let's add some more to see how that works. That's the tool. Once I have something I like I can download an STL and download and 3D print it.
+
+[0:02:13] We can see an example of one of the panels printed out. That works by three.js which is a fantastic library. It has been around for years and it is really great. It does all sorts of stuff. It is very powerful and out of the box you get a lot of great stuff but there is also add-ons that give you more great stuff. What I am using here is orbit controls and there is STL export. Let's look at how to make something with that. We will do hello world which is hello cube for 3D.
+
+## Hello World
+
+[0:02:52] I got some boilerplate. I tried to make it as simple as possible so at the end of the talk I will have a link to the GitHub repo. It is definitely not best practices for JavaScript in 2020 but it is, hopefully, the most straightforward and easiest to use to jump into this kind of stuff if you want. The key thing is this is pretty much the whole file and what is important here is that this make geo function. That's where all the of magic will happen and you will get something that gives a render context and use the orb controls and gives you a button to export the stl.
+
+## Box Geometry
+
+[0:03:39] The easiest way to do it is to the built-in. Three.js comes with the box geometry. We want the artisan, handcrafted, 100% organic way.
+
+## MakeGeo
+
+[0:04:01] In the make geofunction we want to make a new geometry object and add stuff to that. We get a blank geometry object and we can put stuff in it. Let's talk about geometry. Here is our cube. All 3d geometry is vertices.
+
+## Geometry
+
+[0:04:24] We will number them in some order. Here is an ordering. There is a number of different orderings we could have. You want to do something sensible. For me I am thinking of a cube as a flat plain that's been extruded up. Clock wise around the bottom and the top. We have an ordering. Now let's actually figure out where the points lived. The important thing is to the left you get a negative X and to the right has a positive XKS and front and back for Z and up and down for Y. We have an ordering and specific locations. Putting those together, we can add vertices.
+
+## Vertex
+
+[0:05:23] A geometry object in 3d has a number of attribute and one is the vertices list. It is just a straight array. We can push stuff to it. In this case we want to push vertex data which is represented by a three dimensional vector. We have the eight vertices once we do that. Now we need faces.
+
+## Faces
+
+[0:05:50] They don't hold positional data at all. They reference existing points. The other thing you have to know about-faces is there is a weird thing where faces only exist from one side. There is something called a normal which is a line that's perpendicular to that. If you have a flat surface with a line that perpendicular it could point up or down. Either one is equally valid for something that's perpendicular to the surface. You can render things double sided but it is better if you think of faces only existing from one side because the normals matter when you go to 3d print. Your slicing software will complain. You need to care about it, trust me. The way we specify which side we want because either side could be valid is with the order
+
+[0:06:54] in which we specify faces. What we need to do is let's say we are making one of the triangles for our front face. We need to make sure that the indices we give are given in counter clockwise order. From the front counter clockwise is 4, 0, 3. If we were to look from the interior of the cube and had 4, 0, 3 that would be clockwise. We have our numbered vertices and are ready to add them in. Let's see what that looks like.
+
+## Face Order
+
+[0:07:33] Just like the geometry object has the list it has a list of faces also. Each face of the cube since it is a four sided face, we need two triangles. We are just going to push and use the constructor which takes three integers and these are positional data and indices into the vertices. The vertices are what hold the actual positions. We get a cube.
+
+## Cube
+
+[0:08:08] That's cool and all. But it is a little stack. Let's get at least some sort of flavor of some Proc Gen going on. It is not exactly procedurally but at least we will get input.
+
+## Arbitrary Dimensions
+
+[0:08:23] This is basically the same as what we had before it adds an ability for arbitrary dimensions. What I am doing is pretty simple. Three vanilla HTML inputs with IDs for height and depth I grabbed the value and parsed it and divide by two. What I have done is have the place with the variables and I have all of the same stuff and just replaced all of the ones with the variables for the width and depth. If we do that, we have got this.
+
+## Github repo
+
+[0:09:02] So here is a simple thing. This is what's in the GitHub repo if you want to grab it. We can change these values and update geometry and we are back to the 10 by 10 cube. Let's make it flat. We have a nice flat surface.
+
+## Outro
+
+[0:09:22] Yeah, that's about it. I have got links here. You can grab the repo if you want to play with our little box example. You can play with the greeblie modeler as well. Hopefully this seems more straightforward and my hope is all you lovely people will take your Proc Gen ability and go out and make awesome web based modeling tools and 3d content creation stuff. Thanks a lot. Hope you enjoyed it.

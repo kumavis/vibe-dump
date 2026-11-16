@@ -1,0 +1,117 @@
+{
+  "id": "S5Ukp6AOdQY",
+  "title": "Paul Hembree- Coordinate Systems as a Resource for Music Generation",
+  "speaker": "Paul Hembree",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=S5Ukp6AOdQY",
+  "talk_type": "technical",
+  "summary": "Paul Hembree, composer for the roguelite spelunker Rite of Tephra by Platypus Games, argues that the coordinate system of a game world can drive procedural music so that harmony shifts subtly as players explore. He introduces spatial models of pitch from music theory (lattices where related pitches sit near each other) and analyses Kenji Yamamoto's Norfair music from Super Metroid as motion through a cubic pitch lattice. He then explains Rite of Tephra's implementation: a cubic lattice of pitch-class nodes overlaid on procedurally generated caves, a sphere of influence around the player selecting which pitch classes sound, and live remixing of pre-composed orchestral stems, one per pitch class, whose phasing loops produce emergent chords and melodies. The Q&A portion of the transcript is effectively empty.",
+  "games": [
+    "Rite of Tephra",
+    "Super Metroid",
+    "Metroid Prime"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "adaptive music",
+      "kind": "principle",
+      "claim": "In procedurally generated games a composer cannot write linear music that tracks the player's psychological states, because the order of exploration is unknown in advance.",
+      "detail": "A generated dungeon with branches and loops moves players in and out of states via monsters, treasure or visual changes. Hembree notes horizontal resequencing and vertical remixing exist, but proposes tying music to the world's coordinate system instead so it shifts subtly with movement.",
+      "t": 235,
+      "quote": "you can’t compose a linear piece of music that is guaranteed to underscore the player’s succession of psychological states",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music and exploration",
+      "kind": "principle",
+      "claim": "Hembree argues composers can underscore traversal of a game world by subtly changing the scales, harmony or melodic material as the player moves, not only by marking story beats.",
+      "detail": "Exploration reveals things with emotional impact, so traversing the world is a traversal of psychological states. Big events like a character death deserve large musical arrivals, but movement itself can be underscored subtly.",
+      "t": 108,
+      "quote": "composers can also underscore the traversal of the game world, by subtly changing the scalar, harmonic or melodic material audible at any one moment",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "pitch space",
+      "kind": "technique",
+      "claim": "Spatial models of pitch place related pitches near each other in a lattice, and square or cubic lattices are the most useful for game designers because they match standard 2D and 3D coordinate systems.",
+      "detail": "Hembree surveys Shepard's double helix and the Euler/Riemann lattice tiled by intervals of seven and four semitones. In these spaces short-range relations act like harmonies and medium-range like scales; 'related' usually means consonant but could be dissonant, e.g. for survival horror.",
+      "t": 451,
+      "quote": "square or cubic lattices are perhaps the most useful for game designers because they are commensurate with the standard coordinate",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "modulation",
+      "kind": "example",
+      "claim": "Super Metroid's Norfair music transposes up three semitones each section, a modulation that travels far through tonal space and embeds an aesthetic of surprise and discovery in the music.",
+      "detail": "Kenji Yamamoto's piece alternates Phrygian chords a semitone apart; each three-semitone modulation keeps four pitches and adds three, reaching all twelve pitches in four modulations versus twelve along the circle of fifths. This underscores movement and ratchets tension with each ascent.",
+      "t": 637,
+      "quote": "The aesthetic of surprise and discovery is thus embedded in the tonal framework of the music",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cellular automata caves",
+      "kind": "technique",
+      "claim": "Rite of Tephra generates 3D caves by randomly filling a 3D grid, running a 3D cellular automaton, pruning small isolated caves, then meshing with marching cubes and a single smoothing step.",
+      "detail": "The weighted random fill marks cells as rock or space; the automaton works like a kind of simulated annealing. A triplanar shader gives a natural stone look, and Hembree says the whole process is surprisingly efficient.",
+      "t": 929,
+      "quote": "We then run a 3D-cellular automaton over that initial random fill to create a cave like structure",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "pitch lattice",
+      "kind": "technique",
+      "claim": "Rite of Tephra overlays a cubic lattice of pitch nodes on the level, spaced 36 meters apart to match walking pace, and the nodes nearest the player set the music's scale and the colour of light-emitting objects.",
+      "detail": "Edge length is calibrated so harmony shifts neither too fast nor too slow at normal exploration pace. Pitch C sits at the origin; each axis transposes by a chosen interval, summed and wrapped modulo 12. Pitch classes are mapped onto the RGB colour wheel along the circle of fifths.",
+      "t": 972,
+      "quote": "The pitch nodes nearest the player make up the scalar material heard in the music, and they also control the color of light emitting objects in the level",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sphere of influence",
+      "kind": "technique",
+      "claim": "Rite of Tephra fades pitch classes in and out within a 52-meter sphere around the player, sized so seven to eight nodes are audible at once, the right number for a typical scale.",
+      "detail": "Nodes fully fade in at 24 meters using a half-cosine curve. A bigger radius would hear eleven nodes and a smaller one only one. Hembree stresses this is not realistic sound attenuation but a musically pleasing control of abstract qualities.",
+      "t": 1031,
+      "quote": "allowing us to “hear” between seven and eight nodes at a time - the perfect amount to make up a typical scale",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "randomised tiling",
+      "kind": "technique",
+      "claim": "Rite of Tephra randomly picks one of a hand-selected subset of appealing lattice tilings for each level, so each cave explores a different pitch space.",
+      "detail": "Each tiling's affordances can be summarised by a centred scale (player on a node hearing six neighbours) and an equidistant scale (player in a cube centre hearing eight corners); other positions blend these.",
+      "t": 1095,
+      "quote": "I selected a subset of tilings that sound appealing to me, and for each level I randomly pick one",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "stem remixing",
+      "kind": "technique",
+      "claim": "Rather than just-in-time composition, Rite of Tephra live-remixes pre-composed orchestral stems, one per pitch class, fading in the stems that match nearby pitch nodes.",
+      "detail": "This allowed high-quality orchestral samples, with in-game reverb blending transitions. The cost: rhythms are baked into each stem, any combination must work texturally, and stepwise melodies became extremely hard to rely on.",
+      "t": 1118,
+      "quote": "live remixing of pre-composed orchestral stems, each devoted to a single pitch class",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "phasing loops",
+      "kind": "technique",
+      "claim": "Each Rite of Tephra stem uses the same ordered chain of events (drones, morse-like signals, outbursts, octave leaps) at different speeds and offsets, so loops phase and chords and melodies emerge from their interaction.",
+      "detail": "Suited to an ambient-horror cave vibe, events are separated by empty space. Hembree likens overlapping octave leaps to moire patterns and the whole to a mobile or kinetic sculpture activated by the player's movement.",
+      "t": 1182,
+      "quote": "Smaller units of pitch information, like chords and melodies, are the emergent property of these systems interacting with each other",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

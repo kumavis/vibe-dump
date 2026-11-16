@@ -1,0 +1,1931 @@
+{
+ "id": "M6t5W5PPVW0",
+ "url": "https://www.youtube.com/watch?v=M6t5W5PPVW0",
+ "title": "Isaac Io Schankler: Orb Pondering Simulator LIVE!",
+ "speaker": "Isaac Io Schankler",
+ "talk_title": "Orb Pondering Simulator LIVE!",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1279,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Orb Pondering Simulator LIVE! is an audiovisual meditation opportunity and/or game about boredom played by a live online audience. Breathe in sync with a glowing, pulsating orb for increasingly extended periods of time! Interact with the synesthetic music system using chat commands! Gamify enlightenment!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Isaac IO"
+  },
+  {
+   "start": 68,
+   "title": "Orb pondering demonstration"
+  },
+  {
+   "start": 235,
+   "title": "Live chat interaction"
+  },
+  {
+   "start": 695,
+   "title": "Q&A session"
+  },
+  {
+   "start": 1103,
+   "title": "Final simulation demonstration"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2145,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 3.68,
+   "text": "uh let me introduce Isaac iio schankler"
+  },
+  {
+   "t": 7.28,
+   "d": 2.32,
+   "text": "um Isaac is a composer and audio"
+  },
+  {
+   "t": 9.6,
+   "d": 1.76,
+   "text": "designer whose work Bridges the worlds"
+  },
+  {
+   "t": 11.36,
+   "d": 2.48,
+   "text": "of concert music and interactive media"
+  },
+  {
+   "t": 13.84,
+   "d": 1.52,
+   "text": "they have written music for several"
+  },
+  {
+   "t": 15.36,
+   "d": 1.88,
+   "text": "aclaimed independent video games"
+  },
+  {
+   "t": 17.24,
+   "d": 2.88,
+   "text": "including Lady Killer and a bind analog"
+  },
+  {
+   "t": 20.12,
+   "d": 2.24,
+   "text": "a Hate Story red shirt depression Quest"
+  },
+  {
+   "t": 22.36,
+   "d": 1.76,
+   "text": "and the upcoming poly rhythm game the"
+  },
+  {
+   "t": 24.12,
+   "d": 2.64,
+   "text": "onebody problem shanker's recent album"
+  },
+  {
+   "t": 26.76,
+   "d": 2.56,
+   "text": "because patterns released on arade music"
+  },
+  {
+   "t": 29.32,
+   "d": 2.2,
+   "text": "has been loed beautiful algorithmic"
+  },
+  {
+   "t": 31.52,
+   "d": 2.76,
+   "text": "organic dystopian those are some of my"
+  },
+  {
+   "t": 34.28,
+   "d": 1.88,
+   "text": "favorite adjectives I don't know about"
+  },
+  {
+   "t": 36.16,
+   "d": 2.8,
+   "text": "you um and schankler is also an artistic"
+  },
+  {
+   "t": 38.96,
+   "d": 2.32,
+   "text": "director of concert series people inside"
+  },
+  {
+   "t": 41.28,
+   "d": 2.24,
+   "text": "electronics and an associate professor"
+  },
+  {
+   "t": 43.52,
+   "d": 3.48,
+   "text": "of Music at Cal Poly pona thank you so"
+  },
+  {
+   "t": 47.0,
+   "d": 2.44,
+   "text": "much for joining"
+  },
+  {
+   "t": 49.44,
+   "d": 5.52,
+   "text": "us thank you thank you for that great"
+  },
+  {
+   "t": 54.96,
+   "d": 2.92,
+   "text": "introduction um I just want to ask"
+  },
+  {
+   "t": 57.88,
+   "d": 2.56,
+   "text": "everyone if they can see and hear me and"
+  },
+  {
+   "t": 60.44,
+   "d": 4.92,
+   "text": "also see and hear the orb in front of"
+  },
+  {
+   "t": 65.56,
+   "d": 3.2,
+   "text": "them okay"
+  },
+  {
+   "t": 68.8,
+   "d": 3.4,
+   "text": "wonderful so welcome everyone I'm really"
+  },
+  {
+   "t": 72.2,
+   "d": 2.76,
+   "text": "glad you're here my name is Isaac IO and"
+  },
+  {
+   "t": 74.96,
+   "d": 1.68,
+   "text": "I will be your guide through the world"
+  },
+  {
+   "t": 76.64,
+   "d": 2.4,
+   "text": "of orb pondering"
+  },
+  {
+   "t": 79.04,
+   "d": 2.52,
+   "text": "simulator um orb pondering simulator is"
+  },
+  {
+   "t": 81.56,
+   "d": 2.24,
+   "text": "based on scientifically proven breathing"
+  },
+  {
+   "t": 83.8,
+   "d": 3.68,
+   "text": "exercises that help calm and focus your"
+  },
+  {
+   "t": 87.48,
+   "d": 3.36,
+   "text": "mind so you'll notice there is an orb in"
+  },
+  {
+   "t": 90.84,
+   "d": 2.92,
+   "text": "front of you you can see that the orb is"
+  },
+  {
+   "t": 93.76,
+   "d": 2.16,
+   "text": "growing and shrinking"
+  },
+  {
+   "t": 95.92,
+   "d": 3.8,
+   "text": "gradually and you'll notice there's a"
+  },
+  {
+   "t": 99.72,
+   "d": 2.68,
+   "text": "sound that gets louder as the orb grows"
+  },
+  {
+   "t": 102.4,
+   "d": 2.08,
+   "text": "and quieter as the orb"
+  },
+  {
+   "t": 104.48,
+   "d": 2.08,
+   "text": "shrinks and there's also period where"
+  },
+  {
+   "t": 106.56,
+   "d": 2.68,
+   "text": "the orb doesn't do anything where it"
+  },
+  {
+   "t": 109.24,
+   "d": 3.84,
+   "text": "holds its shape and the sound is"
+  },
+  {
+   "t": 113.08,
+   "d": 3.16,
+   "text": "steady so what I want us to do together"
+  },
+  {
+   "t": 116.24,
+   "d": 2.88,
+   "text": "is to breathe with the orb we'll breathe"
+  },
+  {
+   "t": 119.12,
+   "d": 2.2,
+   "text": "in as the orb"
+  },
+  {
+   "t": 121.32,
+   "d": 2.72,
+   "text": "grows we'll hold our breath while the"
+  },
+  {
+   "t": 124.04,
+   "d": 2.64,
+   "text": "orb holds its shape and then we'll"
+  },
+  {
+   "t": 126.68,
+   "d": 2.6,
+   "text": "breathe out as the orb shrinks so we're"
+  },
+  {
+   "t": 129.28,
+   "d": 3.64,
+   "text": "going to try that a couple times and"
+  },
+  {
+   "t": 132.92,
+   "d": 3.24,
+   "text": "we're just going to wait for the orb to"
+  },
+  {
+   "t": 136.16,
+   "d": 2.36,
+   "text": "get back to its get back to the"
+  },
+  {
+   "t": 138.52,
+   "d": 3.12,
+   "text": "beginning here we"
+  },
+  {
+   "t": 144.28,
+   "d": 4.7,
+   "text": "go so let's breathe in"
+  },
+  {
+   "t": 148.98,
+   "d": 3.68,
+   "text": "[Music]"
+  },
+  {
+   "t": 156.32,
+   "d": 3.44,
+   "text": "hold and breathe out"
+  },
+  {
+   "t": 159.76,
+   "d": 3.8,
+   "text": "good are we not hearing the"
+  },
+  {
+   "t": 171.08,
+   "d": 3.08,
+   "text": "orb it's a little"
+  },
+  {
+   "t": 174.16,
+   "d": 3.48,
+   "text": "quiet yeah this is related to box"
+  },
+  {
+   "t": 177.64,
+   "d": 2.52,
+   "text": "breathing"
+  },
+  {
+   "t": 180.16,
+   "d": 1.68,
+   "text": "so one more"
+  },
+  {
+   "t": 181.84,
+   "d": 3.52,
+   "text": "time breathe"
+  },
+  {
+   "t": 186.08,
+   "d": 1.88,
+   "text": "in"
+  },
+  {
+   "t": 187.96,
+   "d": 3.16,
+   "text": "[Music]"
+  },
+  {
+   "t": 191.92,
+   "d": 2.44,
+   "text": "hold"
+  },
+  {
+   "t": 194.36,
+   "d": 3.64,
+   "text": "and breathe out"
+  },
+  {
+   "t": 198.0,
+   "d": 5.4,
+   "text": "okay great just do that a few more"
+  },
+  {
+   "t": 204.2,
+   "d": 4.6,
+   "text": "times breathe in"
+  },
+  {
+   "t": 212.68,
+   "d": 1.92,
+   "text": "okay"
+  },
+  {
+   "t": 214.6,
+   "d": 5.84,
+   "text": "um hold on sorry about that one"
+  },
+  {
+   "t": 222.92,
+   "d": 2.6,
+   "text": "second"
+  },
+  {
+   "t": 225.52,
+   "d": 1.84,
+   "text": "okay"
+  },
+  {
+   "t": 227.36,
+   "d": 2.6,
+   "text": "um that's"
+  },
+  {
+   "t": 229.96,
+   "d": 5.28,
+   "text": "weird that hasn't happened before okay"
+  },
+  {
+   "t": 235.24,
+   "d": 4.72,
+   "text": "um okay I have an idea um so it appears"
+  },
+  {
+   "t": 239.96,
+   "d": 3.8,
+   "text": "I'm not um I'm locked out for some"
+  },
+  {
+   "t": 243.76,
+   "d": 2.88,
+   "text": "reason but we have a backup plan so if"
+  },
+  {
+   "t": 246.64,
+   "d": 3.24,
+   "text": "you were in the chat right now in the"
+  },
+  {
+   "t": 249.88,
+   "d": 3.4,
+   "text": "theater um I could use some help um"
+  },
+  {
+   "t": 253.28,
+   "d": 3.6,
+   "text": "there's some debug commands that we can"
+  },
+  {
+   "t": 256.88,
+   "d": 2.88,
+   "text": "access so if one of you could type into"
+  },
+  {
+   "t": 259.76,
+   "d": 4.04,
+   "text": "chat exclamation point then"
+  },
+  {
+   "t": 263.8,
+   "d": 2.48,
+   "text": "spawn then"
+  },
+  {
+   "t": 266.28,
+   "d": 6.44,
+   "text": "orb um exclamation point no space s p a"
+  },
+  {
+   "t": 272.72,
+   "d": 4.28,
+   "text": "w n oh there we"
+  },
+  {
+   "t": 277.0,
+   "d": 5.6,
+   "text": "okay um okay now we have a few"
+  },
+  {
+   "t": 282.6,
+   "d": 2.08,
+   "text": "orbs"
+  },
+  {
+   "t": 284.68,
+   "d": 2.16,
+   "text": "um that's"
+  },
+  {
+   "t": 286.84,
+   "d": 4.92,
+   "text": "okay but um really it's orb pondering"
+  },
+  {
+   "t": 291.76,
+   "d": 3.2,
+   "text": "simulator not orbs pondering simulator"
+  },
+  {
+   "t": 294.96,
+   "d": 3.32,
+   "text": "right so"
+  },
+  {
+   "t": 298.28,
+   "d": 2.8,
+   "text": "um oh"
+  },
+  {
+   "t": 301.08,
+   "d": 2.32,
+   "text": "um okay so I'm going to teach you"
+  },
+  {
+   "t": 303.4,
+   "d": 1.08,
+   "text": "another"
+  },
+  {
+   "t": 304.48,
+   "d": 3.28,
+   "text": "command which is"
+  },
+  {
+   "t": 307.76,
+   "d": 4.08,
+   "text": "kill okay"
+  },
+  {
+   "t": 312.48,
+   "d": 4.28,
+   "text": "interesting not even an"
+  },
+  {
+   "t": 316.76,
+   "d": 1.6,
+   "text": "orb"
+  },
+  {
+   "t": 318.36,
+   "d": 4.48,
+   "text": "um okay so yeah exclamation point kill"
+  },
+  {
+   "t": 322.84,
+   "d": 1.36,
+   "text": "space"
+  },
+  {
+   "t": 324.2,
+   "d": 2.68,
+   "text": "orb don't don't"
+  },
+  {
+   "t": 326.88,
+   "d": 2.94,
+   "text": "worry it's just a figure of speech"
+  },
+  {
+   "t": 329.82,
+   "d": 7.86,
+   "text": "[Music]"
+  },
+  {
+   "t": 338.2,
+   "d": 3.16,
+   "text": "um okay we're getting"
+  },
+  {
+   "t": 341.36,
+   "d": 3.59,
+   "text": "there we're getting"
+  },
+  {
+   "t": 344.95,
+   "d": 3.65,
+   "text": "[Music]"
+  },
+  {
+   "t": 349.56,
+   "d": 4.84,
+   "text": "there okay maybe maybe just focus on one"
+  },
+  {
+   "t": 354.4,
+   "d": 1.98,
+   "text": "orb and"
+  },
+  {
+   "t": 356.38,
+   "d": 2.26,
+   "text": "[Music]"
+  },
+  {
+   "t": 358.64,
+   "d": 2.64,
+   "text": "breathe okay we're getting closer just"
+  },
+  {
+   "t": 361.28,
+   "d": 3.4,
+   "text": "make sure you don't kill anything that"
+  },
+  {
+   "t": 364.68,
+   "d": 3.12,
+   "text": "doesn't exist I haven't tested that so I"
+  },
+  {
+   "t": 367.8,
+   "d": 4.28,
+   "text": "don't know what will happen"
+  },
+  {
+   "t": 374.22,
+   "d": 20.95,
+   "text": "[Music]"
+  },
+  {
+   "t": 397.44,
+   "d": 2.36,
+   "text": "okay let's see if we can get rid of all"
+  },
+  {
+   "t": 399.8,
+   "d": 3.52,
+   "text": "the things that aren't"
+  },
+  {
+   "t": 406.32,
+   "d": 3.48,
+   "text": "orbs getting"
+  },
+  {
+   "t": 410.76,
+   "d": 2.44,
+   "text": "there just don't kill something when"
+  },
+  {
+   "t": 413.2,
+   "d": 4.48,
+   "text": "there's like zero orbs or zero"
+  },
+  {
+   "t": 418.08,
+   "d": 3.44,
+   "text": "oh okay"
+  },
+  {
+   "t": 424.12,
+   "d": 3.08,
+   "text": "I guess that's what happens when you try"
+  },
+  {
+   "t": 427.2,
+   "d": 4.84,
+   "text": "and kill something with do"
+  },
+  {
+   "t": 434.16,
+   "d": 4.24,
+   "text": "oh oh dear"
+  },
+  {
+   "t": 440.96,
+   "d": 6.07,
+   "text": "[Music]"
+  },
+  {
+   "t": 450.1,
+   "d": 3.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 453.64,
+   "d": 4.96,
+   "text": "okay um I think we can get rid of those"
+  },
+  {
+   "t": 458.6,
+   "d": 4.32,
+   "text": "if you do exclamation point"
+  },
+  {
+   "t": 462.92,
+   "d": 3.44,
+   "text": "kill okay just ignore that if you type"
+  },
+  {
+   "t": 466.36,
+   "d": 3.4,
+   "text": "exclamation point cck"
+  },
+  {
+   "t": 475.6,
+   "d": 5.84,
+   "text": "kill don't pay any attention to that um"
+  },
+  {
+   "t": 487.76,
+   "d": 1.28,
+   "text": "yeah"
+  },
+  {
+   "t": 489.04,
+   "d": 3.12,
+   "text": "[Applause]"
+  },
+  {
+   "t": 492.16,
+   "d": 1.96,
+   "text": "um"
+  },
+  {
+   "t": 494.12,
+   "d": 3.88,
+   "text": "okay so yeah so exclamation point kill"
+  },
+  {
+   "t": 498.0,
+   "d": 5.4,
+   "text": "error and error is in all caps"
+  },
+  {
+   "t": 515.28,
+   "d": 1.0,
+   "text": "okay I'll"
+  },
+  {
+   "t": 516.28,
+   "d": 2.96,
+   "text": "see okay yeah we're doing it we're doing"
+  },
+  {
+   "t": 519.24,
+   "d": 3.22,
+   "text": "it we're killing the"
+  },
+  {
+   "t": 522.46,
+   "d": 1.34,
+   "text": "[Music]"
+  },
+  {
+   "t": 523.8,
+   "d": 3.52,
+   "text": "errors most of"
+  },
+  {
+   "t": 535.56,
+   "d": 4.32,
+   "text": "them much better"
+  },
+  {
+   "t": 546.74,
+   "d": 2.82,
+   "text": "[Music]"
+  },
+  {
+   "t": 549.56,
+   "d": 3.16,
+   "text": "but come"
+  },
+  {
+   "t": 557.83,
+   "d": 2.25,
+   "text": "[Music]"
+  },
+  {
+   "t": 560.08,
+   "d": 3.0,
+   "text": "on"
+  },
+  {
+   "t": 563.52,
+   "d": 2.75,
+   "text": "okay seriously"
+  },
+  {
+   "t": 566.27,
+   "d": 5.89,
+   "text": "[Music]"
+  },
+  {
+   "t": 572.16,
+   "d": 3.16,
+   "text": "very funny very"
+  },
+  {
+   "t": 575.89,
+   "d": 1.83,
+   "text": "[Music]"
+  },
+  {
+   "t": 577.72,
+   "d": 1.6,
+   "text": "funny"
+  },
+  {
+   "t": 579.32,
+   "d": 2.28,
+   "text": "okay you know"
+  },
+  {
+   "t": 581.6,
+   "d": 2.6,
+   "text": "what fine I wasn't going to tell you"
+  },
+  {
+   "t": 584.2,
+   "d": 5.88,
+   "text": "about this but there's one one more"
+  },
+  {
+   "t": 590.08,
+   "d": 2.84,
+   "text": "keyword that"
+  },
+  {
+   "t": 592.92,
+   "d": 3.64,
+   "text": "will um get rid of everything all at"
+  },
+  {
+   "t": 596.56,
+   "d": 3.76,
+   "text": "once this is kind of like a last resort"
+  },
+  {
+   "t": 600.32,
+   "d": 3.64,
+   "text": "nuclear option just to speak uh so to"
+  },
+  {
+   "t": 603.96,
+   "d": 1.72,
+   "text": "speak"
+  },
+  {
+   "t": 605.68,
+   "d": 3.24,
+   "text": "um uh and that's the word"
+  },
+  {
+   "t": 608.92,
+   "d": 3.04,
+   "text": "everybody um so if you type exclamation"
+  },
+  {
+   "t": 611.96,
+   "d": 4.56,
+   "text": "point kill every not"
+  },
+  {
+   "t": 616.52,
+   "d": 4.2,
+   "text": "everything um oh no oh"
+  },
+  {
+   "t": 620.72,
+   "d": 3.44,
+   "text": "no what did you"
+  },
+  {
+   "t": 624.56,
+   "d": 2.48,
+   "text": "[Music]"
+  },
+  {
+   "t": 627.04,
+   "d": 2.72,
+   "text": "do that's it I'm shutting this down down"
+  },
+  {
+   "t": 629.76,
+   "d": 1.83,
+   "text": "I'm shutting this"
+  },
+  {
+   "t": 631.59,
+   "d": 6.28,
+   "text": "[Music]"
+  },
+  {
+   "t": 638.0,
+   "d": 3.96,
+   "text": "down how do I shut it"
+  },
+  {
+   "t": 643.38,
+   "d": 10.0,
+   "text": "[Music]"
+  },
+  {
+   "t": 654.84,
+   "d": 1.96,
+   "text": "down"
+  },
+  {
+   "t": 656.8,
+   "d": 3.0,
+   "text": "okay well uh"
+  },
+  {
+   "t": 659.8,
+   "d": 3.36,
+   "text": "um thanks I guess"
+  },
+  {
+   "t": 663.16,
+   "d": 3.36,
+   "text": "um that didn't go exactly as planned but"
+  },
+  {
+   "t": 666.52,
+   "d": 2.16,
+   "text": "I hope you got something out of"
+  },
+  {
+   "t": 668.68,
+   "d": 1.68,
+   "text": "it"
+  },
+  {
+   "t": 670.36,
+   "d": 3.32,
+   "text": "um uh that's orb pondering"
+  },
+  {
+   "t": 673.68,
+   "d": 3.52,
+   "text": "simulator um I don't know if it will"
+  },
+  {
+   "t": 677.2,
+   "d": 3.36,
+   "text": "ever exist again but I'm glad you were"
+  },
+  {
+   "t": 680.56,
+   "d": 3.32,
+   "text": "here for possibly the"
+  },
+  {
+   "t": 683.88,
+   "d": 3.44,
+   "text": "only iteration of orb pondering"
+  },
+  {
+   "t": 687.32,
+   "d": 3.92,
+   "text": "simulator so thank you very much"
+  },
+  {
+   "t": 695.84,
+   "d": 3.44,
+   "text": "thank you so much Isaac that was really"
+  },
+  {
+   "t": 699.28,
+   "d": 2.04,
+   "text": "really wonderful it seems like we've got"
+  },
+  {
+   "t": 701.32,
+   "d": 3.2,
+   "text": "plenty of time for questions if anyone"
+  },
+  {
+   "t": 704.52,
+   "d": 2.96,
+   "text": "um wants to type those in chat I found"
+  },
+  {
+   "t": 707.48,
+   "d": 3.16,
+   "text": "that very relaxing so thank you for"
+  },
+  {
+   "t": 710.64,
+   "d": 3.12,
+   "text": "that um while we're waiting for"
+  },
+  {
+   "t": 713.76,
+   "d": 2.68,
+   "text": "questions to come in I do have one was"
+  },
+  {
+   "t": 716.44,
+   "d": 2.4,
+   "text": "there any particular inspiration you had"
+  },
+  {
+   "t": 718.84,
+   "d": 3.44,
+   "text": "for that experience it seems rather"
+  },
+  {
+   "t": 722.28,
+   "d": 3.36,
+   "text": "unique um"
+  },
+  {
+   "t": 725.64,
+   "d": 4.32,
+   "text": "many many different things"
+  },
+  {
+   "t": 729.96,
+   "d": 4.12,
+   "text": "um one is doing uh concerts with um"
+  },
+  {
+   "t": 734.08,
+   "d": 2.72,
+   "text": "electronic music everything is bound to"
+  },
+  {
+   "t": 736.8,
+   "d": 2.48,
+   "text": "go wrong in a way that it that it never"
+  },
+  {
+   "t": 739.28,
+   "d": 2.28,
+   "text": "has before so it's partly inspired by"
+  },
+  {
+   "t": 741.56,
+   "d": 3.52,
+   "text": "that um are there any adverse effects"
+  },
+  {
+   "t": 745.08,
+   "d": 2.44,
+   "text": "from pondering orbs that's a good"
+  },
+  {
+   "t": 747.52,
+   "d": 2.36,
+   "text": "question um"
+  },
+  {
+   "t": 749.88,
+   "d": 4.24,
+   "text": "yes uh no comment no comment on that"
+  },
+  {
+   "t": 754.12,
+   "d": 5.36,
+   "text": "one okay none we found yet Perhaps uh is"
+  },
+  {
+   "t": 759.48,
+   "d": 3.92,
+   "text": "there any way that people can like play"
+  },
+  {
+   "t": 763.4,
+   "d": 2.24,
+   "text": "this on their own or is this truly that"
+  },
+  {
+   "t": 765.64,
+   "d": 2.76,
+   "text": "unique U one of a kind of or partnering"
+  },
+  {
+   "t": 768.4,
+   "d": 2.48,
+   "text": "experience it won't be exactly like this"
+  },
+  {
+   "t": 770.88,
+   "d": 2.32,
+   "text": "but there will be a version of for"
+  },
+  {
+   "t": 773.2,
+   "d": 1.36,
+   "text": "obvious reasons it won't be exactly like"
+  },
+  {
+   "t": 774.56,
+   "d": 1.28,
+   "text": "this but there will be a version that"
+  },
+  {
+   "t": 775.84,
+   "d": 2.28,
+   "text": "you can kind of play around with um that"
+  },
+  {
+   "t": 778.12,
+   "d": 4.24,
+   "text": "I will probably release on itch um soon"
+  },
+  {
+   "t": 782.36,
+   "d": 1.92,
+   "text": "not sure exactly when but"
+  },
+  {
+   "t": 784.28,
+   "d": 1.76,
+   "text": "yeah"
+  },
+  {
+   "t": 786.04,
+   "d": 2.56,
+   "text": "awesome one remember you can put"
+  },
+  {
+   "t": 788.6,
+   "d": 2.64,
+   "text": "questions on the question board if you"
+  },
+  {
+   "t": 791.24,
+   "d": 3.68,
+   "text": "want me to read"
+  },
+  {
+   "t": 794.92,
+   "d": 1.84,
+   "text": "them"
+  },
+  {
+   "t": 796.76,
+   "d": 4.68,
+   "text": "um yeah that was really wonderful um"
+  },
+  {
+   "t": 801.44,
+   "d": 2.76,
+   "text": "so the errors uh what is it that"
+  },
+  {
+   "t": 804.2,
+   "d": 1.28,
+   "text": "originally spawn the errors killing"
+  },
+  {
+   "t": 805.48,
+   "d": 1.44,
+   "text": "something that wasn't"
+  },
+  {
+   "t": 806.92,
+   "d": 2.36,
+   "text": "there yeah so if you if there are no"
+  },
+  {
+   "t": 809.28,
+   "d": 1.48,
+   "text": "orbs and you're try and spawn an orb"
+  },
+  {
+   "t": 810.76,
+   "d": 2.32,
+   "text": "that's what that's what creates an error"
+  },
+  {
+   "t": 813.08,
+   "d": 2.68,
+   "text": "gotta one thing that really impressed me"
+  },
+  {
+   "t": 815.76,
+   "d": 2.96,
+   "text": "about this was how you were able to use"
+  },
+  {
+   "t": 818.72,
+   "d": 3.84,
+   "text": "um a limited like supply of keywords to"
+  },
+  {
+   "t": 822.56,
+   "d": 3.04,
+   "text": "do very interesting things like that"
+  },
+  {
+   "t": 825.6,
+   "d": 3.24,
+   "text": "like um having not being able to do"
+  },
+  {
+   "t": 828.84,
+   "d": 1.88,
+   "text": "something be a separate input I think"
+  },
+  {
+   "t": 830.72,
+   "d": 1.4,
+   "text": "that's really cool and reminds me a lot"
+  },
+  {
+   "t": 832.12,
+   "d": 2.72,
+   "text": "of like creative inputs in text games um"
+  },
+  {
+   "t": 834.84,
+   "d": 5.28,
+   "text": "I saw a couple spawn ye flask Etc"
+  },
+  {
+   "t": 840.12,
+   "d": 2.56,
+   "text": "yeah I I got to look through at the"
+  },
+  {
+   "t": 842.68,
+   "d": 3.4,
+   "text": "there was some really uh great uh"
+  },
+  {
+   "t": 846.08,
+   "d": 2.64,
+   "text": "command attempts that uh that I need to"
+  },
+  {
+   "t": 848.72,
+   "d": 2.76,
+   "text": "go back and look at just to see what um"
+  },
+  {
+   "t": 851.48,
+   "d": 2.72,
+   "text": "what people tried to do I I will say one"
+  },
+  {
+   "t": 854.2,
+   "d": 1.92,
+   "text": "other um in answer your question before"
+  },
+  {
+   "t": 856.12,
+   "d": 4.08,
+   "text": "one other inspiration uh for This was um"
+  },
+  {
+   "t": 860.2,
+   "d": 1.6,
+   "text": "a few years ago I think it was in 2020"
+  },
+  {
+   "t": 861.8,
+   "d": 2.8,
+   "text": "or 2021 you know when I was trying to do"
+  },
+  {
+   "t": 864.6,
+   "d": 3.08,
+   "text": "lots of like uh trying to reimagine you"
+  },
+  {
+   "t": 867.68,
+   "d": 1.48,
+   "text": "know how can we possibly do a musical"
+  },
+  {
+   "t": 869.16,
+   "d": 3.36,
+   "text": "performance and um feeling ambivalent"
+  },
+  {
+   "t": 872.52,
+   "d": 2.04,
+   "text": "about streaming and"
+  },
+  {
+   "t": 874.56,
+   "d": 3.04,
+   "text": "um uh so I did a project called the"
+  },
+  {
+   "t": 877.6,
+   "d": 1.64,
+   "text": "public modular that was basically you"
+  },
+  {
+   "t": 879.24,
+   "d": 2.92,
+   "text": "could play a modular synth remotely uh"
+  },
+  {
+   "t": 882.16,
+   "d": 2.32,
+   "text": "through twitch chat commands so that was"
+  },
+  {
+   "t": 884.48,
+   "d": 2.8,
+   "text": "kind of an initial inspiration for this"
+  },
+  {
+   "t": 887.28,
+   "d": 3.56,
+   "text": "um but that had like very intricate kind"
+  },
+  {
+   "t": 890.84,
+   "d": 2.72,
+   "text": "of complicated commands and it ended up"
+  },
+  {
+   "t": 893.56,
+   "d": 1.48,
+   "text": "being fun but it ended up just being"
+  },
+  {
+   "t": 895.04,
+   "d": 2.2,
+   "text": "that kind of like only a handful of"
+  },
+  {
+   "t": 897.24,
+   "d": 2.24,
+   "text": "people could were like able to like get"
+  },
+  {
+   "t": 899.48,
+   "d": 1.92,
+   "text": "a handle on it and actually participate"
+  },
+  {
+   "t": 901.4,
+   "d": 2.52,
+   "text": "in it um so for this what for this I"
+  },
+  {
+   "t": 903.92,
+   "d": 1.2,
+   "text": "tried to like"
+  },
+  {
+   "t": 905.12,
+   "d": 1.88,
+   "text": "really"
+  },
+  {
+   "t": 907.0,
+   "d": 3.56,
+   "text": "um uh yeah strip down the the commands"
+  },
+  {
+   "t": 910.56,
+   "d": 3.28,
+   "text": "to like a really simple set awesome kind"
+  },
+  {
+   "t": 913.84,
+   "d": 3.4,
+   "text": "of along those lines um Travis asks were"
+  },
+  {
+   "t": 917.24,
+   "d": 2.64,
+   "text": "there any commands that were not tight"
+  },
+  {
+   "t": 919.88,
+   "d": 5.28,
+   "text": "that people missed oh well um there are"
+  },
+  {
+   "t": 925.16,
+   "d": 2.44,
+   "text": "as you may have guessed two kind of"
+  },
+  {
+   "t": 927.6,
+   "d": 2.0,
+   "text": "alternate endings"
+  },
+  {
+   "t": 929.6,
+   "d": 3.28,
+   "text": "um spawn everybody and kill everybody"
+  },
+  {
+   "t": 932.88,
+   "d": 3.24,
+   "text": "and um it's just kind of a matter of uh"
+  },
+  {
+   "t": 936.12,
+   "d": 2.12,
+   "text": "what people get to first and so I was"
+  },
+  {
+   "t": 938.24,
+   "d": 3.32,
+   "text": "curious what what people would do first"
+  },
+  {
+   "t": 941.56,
+   "d": 2.88,
+   "text": "um and I was kind of happy that the that"
+  },
+  {
+   "t": 944.44,
+   "d": 2.0,
+   "text": "people figured out the the spawn"
+  },
+  {
+   "t": 946.44,
+   "d": 3.44,
+   "text": "everybody command and went with that"
+  },
+  {
+   "t": 949.88,
+   "d": 3.72,
+   "text": "first yes I that was my first thought on"
+  },
+  {
+   "t": 953.6,
+   "d": 2.08,
+   "text": "as soon as he'd give us new keyword I"
+  },
+  {
+   "t": 955.68,
+   "d": 3.36,
+   "text": "was very excited to use other verbs um"
+  },
+  {
+   "t": 959.04,
+   "d": 2.6,
+   "text": "Alexi asks if I want to start exploring"
+  },
+  {
+   "t": 961.64,
+   "d": 2.84,
+   "text": "more electronic experiences like orb"
+  },
+  {
+   "t": 964.48,
+   "d": 2.0,
+   "text": "simulator where should I start to look"
+  },
+  {
+   "t": 966.48,
+   "d": 1.16,
+   "text": "for"
+  },
+  {
+   "t": 967.64,
+   "d": 4.08,
+   "text": "those um uh well there's"
+  },
+  {
+   "t": 971.72,
+   "d": 2.8,
+   "text": "uh there's another"
+  },
+  {
+   "t": 974.52,
+   "d": 5.04,
+   "text": "um uh experience created in um an Unreal"
+  },
+  {
+   "t": 979.56,
+   "d": 2.36,
+   "text": "Engine recently that I'm trying to"
+  },
+  {
+   "t": 981.92,
+   "d": 1.76,
+   "text": "remember the name of I will I will look"
+  },
+  {
+   "t": 983.68,
+   "d": 4.12,
+   "text": "it up um uh but then also you know there"
+  },
+  {
+   "t": 987.8,
+   "d": 1.52,
+   "text": "are"
+  },
+  {
+   "t": 989.32,
+   "d": 3.84,
+   "text": "um visual uh programming languages for"
+  },
+  {
+   "t": 993.16,
+   "d": 3.8,
+   "text": "audio like um one called Max MSP um one"
+  },
+  {
+   "t": 996.96,
+   "d": 2.12,
+   "text": "called Pure data and if you look up uh"
+  },
+  {
+   "t": 999.08,
+   "d": 3.12,
+   "text": "stuff about the communities um for those"
+  },
+  {
+   "t": 1002.2,
+   "d": 4.44,
+   "text": "kinds of software there's a lot of um uh"
+  },
+  {
+   "t": 1006.64,
+   "d": 1.76,
+   "text": "patches that people share and stuff like"
+  },
+  {
+   "t": 1008.4,
+   "d": 2.52,
+   "text": "that um so that might be that might be a"
+  },
+  {
+   "t": 1010.92,
+   "d": 2.72,
+   "text": "good window into that um and let me just"
+  },
+  {
+   "t": 1013.64,
+   "d": 1.44,
+   "text": "find the name of"
+  },
+  {
+   "t": 1015.08,
+   "d": 3.16,
+   "text": "the uh Cycles is the name of the the"
+  },
+  {
+   "t": 1018.24,
+   "d": 3.16,
+   "text": "other one I was thinking of um so it's"
+  },
+  {
+   "t": 1021.4,
+   "d": 2.68,
+   "text": "on Steam if you look up Cycles um"
+  },
+  {
+   "t": 1024.08,
+   "d": 2.76,
+   "text": "someone else did a a a generative music"
+  },
+  {
+   "t": 1026.84,
+   "d": 3.24,
+   "text": "project um or a procedural music project"
+  },
+  {
+   "t": 1030.08,
+   "d": 3.28,
+   "text": "um that's pretty"
+  },
+  {
+   "t": 1033.36,
+   "d": 3.2,
+   "text": "cool that's awesome um we've got some"
+  },
+  {
+   "t": 1036.56,
+   "d": 2.0,
+   "text": "related questions in chat about what do"
+  },
+  {
+   "t": 1038.56,
+   "d": 2.32,
+   "text": "you think the implications are of Errors"
+  },
+  {
+   "t": 1040.88,
+   "d": 2.28,
+   "text": "also being in harmony with breathing and"
+  },
+  {
+   "t": 1043.16,
+   "d": 2.76,
+   "text": "did error gain"
+  },
+  {
+   "t": 1045.92,
+   "d": 1.56,
+   "text": "sentience"
+  },
+  {
+   "t": 1047.48,
+   "d": 4.2,
+   "text": "um that's a good question so uh"
+  },
+  {
+   "t": 1051.68,
+   "d": 2.72,
+   "text": "the um so I don't know how apparent it"
+  },
+  {
+   "t": 1054.4,
+   "d": 3.84,
+   "text": "was but um uh the erors have a very diff"
+  },
+  {
+   "t": 1058.24,
+   "d": 1.56,
+   "text": "have a different"
+  },
+  {
+   "t": 1059.8,
+   "d": 2.12,
+   "text": "um uh or at least some of them have a"
+  },
+  {
+   "t": 1061.92,
+   "d": 4.44,
+   "text": "different breathing rate um than most of"
+  },
+  {
+   "t": 1066.36,
+   "d": 2.76,
+   "text": "the other objects so if you were trying"
+  },
+  {
+   "t": 1069.12,
+   "d": 1.96,
+   "text": "to breathe along with something with"
+  },
+  {
+   "t": 1071.08,
+   "d": 2.76,
+   "text": "some of those you might end up like"
+  },
+  {
+   "t": 1073.84,
+   "d": 3.04,
+   "text": "hyperventilating um might not be"
+  },
+  {
+   "t": 1076.88,
+   "d": 3.84,
+   "text": "recommended um"
+  },
+  {
+   "t": 1080.72,
+   "d": 1.03,
+   "text": "and"
+  },
+  {
+   "t": 1081.75,
+   "d": 1.37,
+   "text": "[Music]"
+  },
+  {
+   "t": 1083.12,
+   "d": 3.96,
+   "text": "um I will I I'll say this the um in"
+  },
+  {
+   "t": 1087.08,
+   "d": 2.16,
+   "text": "terms of what's going on in terms of The"
+  },
+  {
+   "t": 1089.24,
+   "d": 1.56,
+   "text": "Narrative of the"
+  },
+  {
+   "t": 1090.8,
+   "d": 4.28,
+   "text": "game um the orbs didn't become"
+  },
+  {
+   "t": 1095.08,
+   "d": 2.28,
+   "text": "sentient they were already"
+  },
+  {
+   "t": 1097.36,
+   "d": 2.16,
+   "text": "sentient and there's there's a reason"
+  },
+  {
+   "t": 1099.52,
+   "d": 2.28,
+   "text": "for"
+  },
+  {
+   "t": 1101.96,
+   "d": 3.64,
+   "text": "that interesting well could we maybe"
+  },
+  {
+   "t": 1105.6,
+   "d": 3.28,
+   "text": "fire it back up um and see if we can see"
+  },
+  {
+   "t": 1108.88,
+   "d": 2.84,
+   "text": "the other ending as well oh sure it's"
+  },
+  {
+   "t": 1111.72,
+   "d": 1.12,
+   "text": "it's much less"
+  },
+  {
+   "t": 1112.84,
+   "d": 5.24,
+   "text": "exciting um but yeah alternate"
+  },
+  {
+   "t": 1118.48,
+   "d": 3.4,
+   "text": "ending here we"
+  },
+  {
+   "t": 1126.64,
+   "d": 4.44,
+   "text": "go uh whoops did I not oh no it's there"
+  },
+  {
+   "t": 1131.08,
+   "d": 2.48,
+   "text": "so I think you might have"
+  },
+  {
+   "t": 1133.56,
+   "d": 3.0,
+   "text": "to"
+  },
+  {
+   "t": 1137.2,
+   "d": 2.48,
+   "text": "oops um so I it's I don't know if it's"
+  },
+  {
+   "t": 1139.68,
+   "d": 1.76,
+   "text": "appearing it's in it's backstage but I"
+  },
+  {
+   "t": 1141.44,
+   "d": 1.92,
+   "text": "don't know if you if the people in the"
+  },
+  {
+   "t": 1143.36,
+   "d": 1.36,
+   "text": "theater can see"
+  },
+  {
+   "t": 1144.72,
+   "d": 3.72,
+   "text": "it uh I think we'll probably need to yes"
+  },
+  {
+   "t": 1148.44,
+   "d": 2.52,
+   "text": "add it to the screen"
+  },
+  {
+   "t": 1150.96,
+   "d": 3.48,
+   "text": "there um"
+  },
+  {
+   "t": 1163.0,
+   "d": 2.16,
+   "text": "okay so if we make a whole bunch of"
+  },
+  {
+   "t": 1165.16,
+   "d": 2.56,
+   "text": "objects"
+  },
+  {
+   "t": 1167.72,
+   "d": 3.57,
+   "text": "[Music]"
+  },
+  {
+   "t": 1176.4,
+   "d": 2.56,
+   "text": "text on"
+  },
+  {
+   "t": 1179.16,
+   "d": 2.95,
+   "text": "means oh wait hold"
+  },
+  {
+   "t": 1182.11,
+   "d": 2.09,
+   "text": "[Music]"
+  },
+  {
+   "t": 1184.2,
+   "d": 2.28,
+   "text": "on okay now it should work if someone"
+  },
+  {
+   "t": 1186.48,
+   "d": 1.99,
+   "text": "types kill"
+  },
+  {
+   "t": 1188.47,
+   "d": 7.45,
+   "text": "[Music]"
+  },
+  {
+   "t": 1195.92,
+   "d": 2.24,
+   "text": "everything it's like we did get to kill"
+  },
+  {
+   "t": 1198.16,
+   "d": 2.44,
+   "text": "everything in"
+  },
+  {
+   "t": 1200.6,
+   "d": 5.64,
+   "text": "chat oh sorry everybody kill everybody"
+  },
+  {
+   "t": 1206.24,
+   "d": 4.48,
+   "text": "right yeah so that's probably what you"
+  },
+  {
+   "t": 1210.72,
+   "d": 1.28,
+   "text": "would think of as the bad"
+  },
+  {
+   "t": 1212.0,
+   "d": 2.92,
+   "text": "[Music]"
+  },
+  {
+   "t": 1214.92,
+   "d": 3.0,
+   "text": "ending"
+  },
+  {
+   "t": 1219.44,
+   "d": 4.04,
+   "text": "so let me check the question"
+  },
+  {
+   "t": 1227.04,
+   "d": 2.84,
+   "text": "board yeah it would be very ominous if"
+  },
+  {
+   "t": 1229.88,
+   "d": 3.36,
+   "text": "the commands worked after closing during"
+  },
+  {
+   "t": 1233.24,
+   "d": 2.32,
+   "text": "L I would say that"
+  },
+  {
+   "t": 1235.56,
+   "d": 4.4,
+   "text": "is a true are"
+  },
+  {
+   "t": 1239.96,
+   "d": 5.36,
+   "text": "um awesome so we do have some extra time"
+  },
+  {
+   "t": 1245.32,
+   "d": 2.36,
+   "text": "in the middle here um we had a talk we"
+  },
+  {
+   "t": 1247.68,
+   "d": 1.36,
+   "text": "had to cancel that's why we've got like"
+  },
+  {
+   "t": 1249.04,
+   "d": 2.92,
+   "text": "a 15 minute Gap here um if anyone does"
+  },
+  {
+   "t": 1251.96,
+   "d": 2.24,
+   "text": "have any more questions that's great"
+  },
+  {
+   "t": 1254.2,
+   "d": 2.96,
+   "text": "otherwise um we'll probably take a brief"
+  },
+  {
+   "t": 1257.16,
+   "d": 2.44,
+   "text": "uh break to SP some time exploring this"
+  },
+  {
+   "t": 1259.6,
+   "d": 2.12,
+   "text": "space and then come back maybe a little"
+  },
+  {
+   "t": 1261.72,
+   "d": 3.32,
+   "text": "bit early for 's talk thank you so much"
+  },
+  {
+   "t": 1265.04,
+   "d": 1.6,
+   "text": "Isaac that was a really awesome"
+  },
+  {
+   "t": 1266.64,
+   "d": 2.92,
+   "text": "experience thank you and thanks"
+  },
+  {
+   "t": 1269.56,
+   "d": 2.64,
+   "text": "everybody this was really fun thanks for"
+  },
+  {
+   "t": 1272.2,
+   "d": 1.48,
+   "text": "being the guinea"
+  },
+  {
+   "t": 1273.68,
+   "d": 2.36,
+   "text": "pigs yeah I think this is one that will"
+  },
+  {
+   "t": 1276.04,
+   "d": 3.8,
+   "text": "be remembered for sure"
+  }
+ ]
+}

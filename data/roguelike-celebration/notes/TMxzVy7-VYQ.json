@@ -1,0 +1,231 @@
+{
+  "id": "TMxzVy7-VYQ",
+  "title": "Santiago Zapata - Get your game done: experiences through the development of 13 roguelikes",
+  "speaker": "Santiago Zapata",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=TMxzVy7-VYQ",
+  "talk_type": "postmortem",
+  "summary": "Santiago Zapata (Slashie) walks through the roguelikes he built, mostly for the 7-Day Roguelike Challenge, from 2005 up to his commercial project Ananias, drawing one lesson from each. After years stuck building an ambitious world simulator inspired by ADOM and JADE, shipping a small 7DRL broke the deadlock. His lessons include shipping early, iterating incrementally and reusing code, setting design guidelines up front, controlling scope, playtesting, budgeting for content, matching art quality to audience expectations, designing for a specific platform, and listening to player feedback even when it conflicts with your vision.",
+  "games": [
+    "ADOM",
+    "JADE",
+    "Castlevania Roguelike",
+    "DrashRL",
+    "Metroid Roguelike",
+    "Zelda Roguelike",
+    "Mega Man Roguelike",
+    "Expedition",
+    "Ruler",
+    "Elite International Detective",
+    "Hope",
+    "Rodney",
+    "Ananias",
+    "Fusion Abyss",
+    "Ultima Underworld",
+    "DoomRL",
+    "Brogue"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "warning",
+      "claim": "Beginning roguelike developers who start with a huge world-simulation sandbox, as Zapata did inspired by ADOM and JADE, can work for years without producing a game.",
+      "detail": "Zapata spent about two years trying to build a complete medieval fantasy world simulator, and said many on the Usenet roguelike development group were doing the same. They were building sandboxes where 'the game will rise' rather than designing a game.",
+      "t": 169,
+      "quote": "we were not really thinking on doing a game, right? We were thinking on doing like a sandbox where you could like play and then the game will rise",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "principle",
+      "claim": "Shipping something playable, however incomplete, is a crucial step because without it a developer keeps working on demos and technical work and never gets feedback.",
+      "detail": "Zapata entered the 7DRL thinking it a waste of time after two unproductive years, but shipped Castlevania Roguelike: playable, not very fun or complete, but a finished game. He also learned he could focus on a single fun feature; that game had no procedural generation at all.",
+      "t": 254,
+      "quote": "being able to ship something because else you just keep working and working on that on demos or or technical stuff and never get feedback",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "incremental development",
+      "kind": "technique",
+      "claim": "Reusing code from one small roguelike in the next lets a developer add complexity incrementally, such as adding procedural generation and then richer world generators across successive games.",
+      "detail": "DrashRL reused Castlevania Roguelike's code and added procedural generation; Metroid Roguelike reused code again and invested in world generation; Zelda Roguelike added an overworld generator and a more complex dungeon generator.",
+      "t": 291,
+      "quote": "have a work incrementally, right? Like having a first iteration of your game and then continue developing on it",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design guidelines",
+      "kind": "technique",
+      "claim": "Setting explicit design guidelines at the start of a roguelike project, such as no experience grinding and no commands or menus, gives the developer a plan instead of improvising.",
+      "detail": "For DrashRL Zapata decided up front on no experience grind and no commands or menus. He also abandoned his original ant-colony simulator idea when research did not yield a fun mechanic, switching to a survival arena that worked much better.",
+      "t": 324,
+      "quote": "I established some design guidelines from the beginning. So, I knew what I wanted, right? So, I had a plan",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "metroidvania generation",
+      "kind": "example",
+      "claim": "Metroid Roguelike procedurally generated a Metroid-style base where the player finds a power-up in one area and backtracks to use it in another, with pseudo-3D cell heights enabling jumps.",
+      "detail": "Zapata invested heavily in world generation for this game, generating backtracking structure randomly. Each cell had a different height in an overhead view so the player could jump into different parts of the world.",
+      "t": 418,
+      "quote": "explore the different areas of the base and find a power up and then go to another part of the base and use that power up",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music",
+      "kind": "principle",
+      "claim": "Background music is a large help in creating mood in a roguelike, a practice Zapata credits DoomRL with pioneering.",
+      "detail": "He added background music to Metroid Roguelike. Using existing universes such as Castlevania, Ultima and Metroid also let him find music online without needing an artist.",
+      "t": 464,
+      "quote": "I think it's a huge uh help like to create a mood for the games",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "overworld generation",
+      "kind": "technique",
+      "claim": "Zelda Roguelike generated an overworld of forests, lakes and mountains based on the dungeon the player was about to explore.",
+      "detail": "Zapata described this as another incremental step in his generators, alongside a more complex dungeon generator; the game was complete but somewhat unbalanced.",
+      "t": 498,
+      "quote": "I added like um overworld generator, which generated like forests and lakes and mountains based on the dungeon that you were going to explore",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "fan games",
+      "kind": "technique",
+      "claim": "Building small roguelikes in established universes like Zelda, Metroid or Castlevania draws players in and gets the feedback a learning developer needs.",
+      "detail": "Zapata argued that developers with a grand vision who don't yet know how to make a good game walk in circles; treating 7DRLs as learning experiences in known universes let him learn, get feedback, reuse algorithms and move on.",
+      "t": 526,
+      "quote": "including elements for um an really established universe like Zelda or Metroid or or Castlevania, of course, helps you get people into the game and get gets you feedback",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn-based platforming",
+      "kind": "warning",
+      "claim": "Zapata's turn-based side-scrolling Mega Man Roguelike failed because jumps hanging in the air between turns and slow projectiles as world objects made it too hard to understand what was happening.",
+      "detail": "When you jump you hang in the air, pass a turn, rise another tile and fall; arm-cannon bullets travel as objects so you must calculate when they will hit. He took the lesson that experimentation is important but should be done at small scale.",
+      "t": 634,
+      "quote": "since it was to turn-based, so when you jump, you stand in the air. And then you pass your turn and you continue going up like another tile",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "warning",
+      "claim": "Expedition, a Seven Cities of Gold-style colonisation roguelike, was too big for a 7DRL and shipped without its procedural generation, showing beginners should keep iterations small.",
+      "detail": "Zapata had wanted to make it for a while, but it was impossible in seven days; it ended up with only a fixed high-resolution map to travel and settle.",
+      "t": 731,
+      "quote": "another lesson lesson here was to watch out for the scope, right? Especially, I mean, if you're starting",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "warning",
+      "claim": "Zapata's Civilization-inspired Ruler had extensive infrastructure but was not playtested until the very end and turned out broken, letting players reach the space age very quickly.",
+      "detail": "Technically you could build cities, roads and trade, but the game itself was broken. His lesson: invest in playtesting, get friends or online contacts to help test, because a developer needs someone else to test.",
+      "t": 766,
+      "quote": "you need to really invest into playtesting, right? I didn't get to playtest until the very last, and it ended up being completely broken",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content volume",
+      "kind": "warning",
+      "claim": "A working engine is not enough: Zapata's Carmen Sandiego-inspired Elite International Detective failed because it lacked the quantity of quality content, like a database of countries and clues.",
+      "detail": "The engine was tested and stable, but finding clues to the next country needed data about cities, countries and their features that he never assembled, so the player experience was poor.",
+      "t": 854,
+      "quote": "what what was missing was quality content, right? So, all the all the engine was there",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "graphics vs ascii",
+      "kind": "principle",
+      "claim": "Going from ASCII to graphics in a roguelike targets a larger audience that expects clarity and polish, so mediocre graphics please no one.",
+      "detail": "Zapata's Hope was his first graphical game, without a good pixel artist, and looked poor. Console-mode players have the imagination to fill gaps, but graphics players expect clearer feedback; a middle ground won't please anyone.",
+      "t": 949,
+      "quote": "if you're going for graphics, you're targeting a much larger audience and they have different expectations",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "single action button",
+      "kind": "technique",
+      "claim": "Rodney uses only movement plus a single action button, with skills triggered contextually by movement, such as a wall-jump skill firing when you run into a wall.",
+      "detail": "Zapata described this as 'recapitulation and simplification': reviewing his previous games, picking features that worked, simplifying them and combining them. He also moved from Java to JavaScript because players found his Java games hard to run.",
+      "t": 1040,
+      "quote": "If you have the wall jump skill, you just run into a wall and then it gets triggered when you actually run into it",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "mobile",
+      "kind": "principle",
+      "claim": "A mobile roguelike must be designed for touch from the start, since ports of desktop roguelikes with many commands were very hard to play on phones.",
+      "detail": "Zapata made the 7DRL version of Ananias for touch devices because there were no good mobile roguelikes. He set himself the goal of making his following games accessible, and it was also his first time using a library instead of writing everything from scratch.",
+      "t": 1132,
+      "quote": "the ports we had for Roguelikes um were very difficult to play because you had a lot of commands. It was not made for that",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "team roles",
+      "kind": "technique",
+      "claim": "Teaming up so each person works on the component they add the most value to, such as one on 3D display code and one on dungeon generation, helps small roguelike projects.",
+      "detail": "For Fusion Abyss, a 3D dungeon crawler, Zapata's partner did the display code while he wrote an Ultima Underworld-style level generator. They struggled to get graphics, and he advised getting an artist on board.",
+      "t": 1187,
+      "quote": "focusing on what you can really provide the most value, right? So, teaming up with someone with someone getting an artist",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player feedback",
+      "kind": "warning",
+      "claim": "Refusing an automap in Fusion Abyss's huge dark levels, on the belief that getting lost was good, made the game unplayable for most players.",
+      "detail": "Players had to find a single stairway tile in vast, empty, dark Ultima Underworld-like levels. People suggested an automap; Zapata refused to protect his vision, but almost no one will wander for two hours looking for a tile. You must sometimes listen if you want others to play.",
+      "t": 1277,
+      "quote": "you got to listen sometimes to to people if you want to make a game that someone else will play",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "smartwatch",
+      "kind": "example",
+      "claim": "Zapata's smartwatch roguelike uses a very simplified roguelike formula in which the player climbs a tower as far as possible, suited to short waits like a bus stop.",
+      "detail": "He framed it as exploring new media and technologies; he had also considered VR but lacked the hardware.",
+      "t": 1310,
+      "quote": "It's like a very simplified uh version of the roguelike formula. But it works well",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "technique",
+      "claim": "In a 7-Day Roguelike, Zapata reserves the last day for playtesting and tweaks and at least two days for data such as monsters, items and quests, with the rest for coding.",
+      "detail": "Answering an audience question, he said first entries usually aren't good, but the compressed cycle gives experience of finishing a whole game and moving on, building skills quickly.",
+      "t": 1456,
+      "quote": "Usually I keep like the last day for that, like to do playtesting playtesting, excuse me. And doing any tweaks that are needed.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "7drl feedback",
+      "kind": "principle",
+      "claim": "Player feedback is the most important metric for judging what worked in a game, and the 7DRL's 200-plus entries and attention make it a good source of feedback.",
+      "detail": "Asked how he distills lessons each year, Zapata said listening to what players think is his main source. He also said the key long-term lesson is to look back and apply accumulated lessons to new projects rather than falling into the trap of never releasing.",
+      "t": 1572,
+      "quote": "that helps you like get the feedback and I think that's like the most important metric",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

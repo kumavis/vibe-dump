@@ -1,0 +1,2078 @@
+{
+ "id": "YfLYPIXGF7E",
+ "url": "https://www.youtube.com/watch?v=YfLYPIXGF7E",
+ "title": "Spencer Egart- Tooling for Roguelikes and Procgen",
+ "speaker": "Spencer Egart",
+ "talk_title": "Tooling for Roguelikes and Procgen",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 896,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "A high-level overview of the notion of creating specialized tools for both procgen and roguelike development. Focus on non-code solutions such as visual editors, why that canbe valuable in both gamedev and especially elements of roguelike development, even for solo devs.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 30,
+   "title": "Philosophy of tooling"
+  },
+  {
+   "start": 78,
+   "title": "Dungeon generation study"
+  },
+  {
+   "start": 309,
+   "title": "Building the node-based tool"
+  },
+  {
+   "start": 541,
+   "title": "Tooling best practices"
+  },
+  {
+   "start": 579,
+   "title": "User-friendly framework design"
+  },
+  {
+   "start": 595,
+   "title": "Existing tools and resources"
+  },
+  {
+   "start": 720,
+   "title": "Balancing time and effort"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2296,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 2.16,
+   "text": "they are i'm going to be talking about"
+  },
+  {
+   "t": 5.76,
+   "d": 2.4,
+   "text": "tooling for roguelikes and proctor"
+  },
+  {
+   "t": 8.16,
+   "d": 2.24,
+   "text": "they're a senior game design"
+  },
+  {
+   "t": 10.4,
+   "d": 2.8,
+   "text": "uh engineer at minomi park and roguelike"
+  },
+  {
+   "t": 13.2,
+   "d": 1.76,
+   "text": "tinkerine enthusiast they've spoken here"
+  },
+  {
+   "t": 14.96,
+   "d": 1.92,
+   "text": "a number of times in the past"
+  },
+  {
+   "t": 16.88,
+   "d": 1.36,
+   "text": "on various things including very"
+  },
+  {
+   "t": 18.24,
+   "d": 2.8,
+   "text": "memorably a ritual system um set which"
+  },
+  {
+   "t": 21.04,
+   "d": 2.56,
+   "text": "was pretty pretty fantastic but this"
+  },
+  {
+   "t": 23.6,
+   "d": 2.32,
+   "text": "time they're talking about tooling and"
+  },
+  {
+   "t": 25.92,
+   "d": 2.56,
+   "text": "how we can make specialized tools for"
+  },
+  {
+   "t": 28.48,
+   "d": 2.88,
+   "text": "procter and and roguelike development so"
+  },
+  {
+   "t": 31.36,
+   "d": 1.84,
+   "text": "without further ado"
+  },
+  {
+   "t": 33.2,
+   "d": 2.8,
+   "text": "take it away"
+  },
+  {
+   "t": 36.24,
+   "d": 2.64,
+   "text": "awesome uh so thank you very much"
+  },
+  {
+   "t": 38.88,
+   "d": 2.24,
+   "text": "and thank you all for"
+  },
+  {
+   "t": 41.12,
+   "d": 2.48,
+   "text": "coming to listen to me talk about"
+  },
+  {
+   "t": 43.6,
+   "d": 1.84,
+   "text": "tooling"
+  },
+  {
+   "t": 45.44,
+   "d": 1.68,
+   "text": "so"
+  },
+  {
+   "t": 47.12,
+   "d": 2.72,
+   "text": "my name is spencer and i"
+  },
+  {
+   "t": 49.84,
+   "d": 2.08,
+   "text": "as kawa said i am a game engineer at"
+  },
+  {
+   "t": 51.92,
+   "d": 1.6,
+   "text": "miami park i'm working on slime rancher"
+  },
+  {
+   "t": 53.52,
+   "d": 0.8,
+   "text": "2"
+  },
+  {
+   "t": 54.32,
+   "d": 2.08,
+   "text": "which is not a roguelike but some of the"
+  },
+  {
+   "t": 56.4,
+   "d": 2.0,
+   "text": "same stuff that i'm going to talk about"
+  },
+  {
+   "t": 58.4,
+   "d": 1.84,
+   "text": "actually still applies"
+  },
+  {
+   "t": 60.24,
+   "d": 2.8,
+   "text": "um and in my free time i'm a dabbler in"
+  },
+  {
+   "t": 63.04,
+   "d": 2.88,
+   "text": "um proc gin and roguelikes"
+  },
+  {
+   "t": 65.92,
+   "d": 1.6,
+   "text": "uh which means that i have a lot of"
+  },
+  {
+   "t": 67.52,
+   "d": 1.84,
+   "text": "projects that i've started and never"
+  },
+  {
+   "t": 69.36,
+   "d": 3.28,
+   "text": "finished or released in any form"
+  },
+  {
+   "t": 72.64,
+   "d": 2.56,
+   "text": "so when i signed up i signed up to do"
+  },
+  {
+   "t": 75.2,
+   "d": 0.72,
+   "text": "a"
+  },
+  {
+   "t": 75.92,
+   "d": 1.92,
+   "text": "lightning talk"
+  },
+  {
+   "t": 77.84,
+   "d": 2.0,
+   "text": "but i live in california so i don't"
+  },
+  {
+   "t": 79.84,
+   "d": 2.64,
+   "text": "really know what lightning is"
+  },
+  {
+   "t": 82.48,
+   "d": 2.64,
+   "text": "so instead i'm going to talk about tools"
+  },
+  {
+   "t": 85.12,
+   "d": 2.56,
+   "text": "and the"
+  },
+  {
+   "t": 87.68,
+   "d": 1.92,
+   "text": "big idea that i'd like you all to be"
+  },
+  {
+   "t": 89.6,
+   "d": 2.4,
+   "text": "able to take away"
+  },
+  {
+   "t": 92.0,
+   "d": 1.84,
+   "text": "from this presentation"
+  },
+  {
+   "t": 93.84,
+   "d": 2.48,
+   "text": "is that you can build and use tools for"
+  },
+  {
+   "t": 96.32,
+   "d": 2.56,
+   "text": "your roguelike for procgen"
+  },
+  {
+   "t": 98.88,
+   "d": 3.88,
+   "text": "for uh your team for yourself for"
+  },
+  {
+   "t": 102.76,
+   "d": 2.76,
+   "text": "non-engineers or people who aren't"
+  },
+  {
+   "t": 105.52,
+   "d": 1.6,
+   "text": "involved in coding"
+  },
+  {
+   "t": 107.12,
+   "d": 2.32,
+   "text": "uh and you can build like tooling is you"
+  },
+  {
+   "t": 109.44,
+   "d": 1.68,
+   "text": "know such a broad topic so i'm"
+  },
+  {
+   "t": 111.12,
+   "d": 1.92,
+   "text": "definitely not gonna cover literally"
+  },
+  {
+   "t": 113.04,
+   "d": 1.68,
+   "text": "everything because that would be you"
+  },
+  {
+   "t": 114.72,
+   "d": 0.8,
+   "text": "know"
+  },
+  {
+   "t": 115.52,
+   "d": 1.44,
+   "text": "years of"
+  },
+  {
+   "t": 116.96,
+   "d": 2.08,
+   "text": "a talk and i'm here for"
+  },
+  {
+   "t": 119.04,
+   "d": 2.88,
+   "text": "you know 10 minutes"
+  },
+  {
+   "t": 121.92,
+   "d": 1.12,
+   "text": "but"
+  },
+  {
+   "t": 123.04,
+   "d": 2.56,
+   "text": "we can do lots of interesting things"
+  },
+  {
+   "t": 125.6,
+   "d": 2.64,
+   "text": "with tools in roguelikes and in"
+  },
+  {
+   "t": 128.24,
+   "d": 1.76,
+   "text": "procedural generation so what do i mean"
+  },
+  {
+   "t": 130.0,
+   "d": 1.28,
+   "text": "by tools"
+  },
+  {
+   "t": 131.28,
+   "d": 1.68,
+   "text": "what i'm going to be talking about"
+  },
+  {
+   "t": 132.96,
+   "d": 2.88,
+   "text": "specifically is content creation tools"
+  },
+  {
+   "t": 135.84,
+   "d": 2.96,
+   "text": "as they relate to procedural generation"
+  },
+  {
+   "t": 138.8,
+   "d": 2.32,
+   "text": "and so i mean software that helps to"
+  },
+  {
+   "t": 141.12,
+   "d": 4.0,
+   "text": "create content for the game by creating"
+  },
+  {
+   "t": 145.12,
+   "d": 1.92,
+   "text": "the procedures"
+  },
+  {
+   "t": 147.04,
+   "d": 2.88,
+   "text": "in the procedural generation"
+  },
+  {
+   "t": 149.92,
+   "d": 2.0,
+   "text": "these provide kind of a non-code"
+  },
+  {
+   "t": 151.92,
+   "d": 1.36,
+   "text": "interface"
+  },
+  {
+   "t": 153.28,
+   "d": 2.16,
+   "text": "around the game data and i have a little"
+  },
+  {
+   "t": 155.44,
+   "d": 3.52,
+   "text": "asterisk next to non-code because"
+  },
+  {
+   "t": 158.96,
+   "d": 1.36,
+   "text": "i"
+  },
+  {
+   "t": 160.32,
+   "d": 1.84,
+   "text": "am using that term here but i think it"
+  },
+  {
+   "t": 162.16,
+   "d": 1.84,
+   "text": "is sometimes kind of a"
+  },
+  {
+   "t": 164.0,
+   "d": 1.92,
+   "text": "misleading term because"
+  },
+  {
+   "t": 165.92,
+   "d": 1.28,
+   "text": "uh"
+  },
+  {
+   "t": 167.2,
+   "d": 2.4,
+   "text": "things like visual scripting"
+  },
+  {
+   "t": 169.6,
+   "d": 1.52,
+   "text": "or"
+  },
+  {
+   "t": 171.12,
+   "d": 2.64,
+   "text": "domain specific languages are tools that"
+  },
+  {
+   "t": 173.76,
+   "d": 2.08,
+   "text": "help to create these kinds of things but"
+  },
+  {
+   "t": 175.84,
+   "d": 2.24,
+   "text": "they are also in a way"
+  },
+  {
+   "t": 178.08,
+   "d": 2.08,
+   "text": "code or equivalent to code so saying"
+  },
+  {
+   "t": 180.16,
+   "d": 2.32,
+   "text": "that like a visual thing is is not code"
+  },
+  {
+   "t": 182.48,
+   "d": 2.64,
+   "text": "is not entirely accurate in my opinion"
+  },
+  {
+   "t": 185.12,
+   "d": 1.76,
+   "text": "but i'm using the shorthand here because"
+  },
+  {
+   "t": 186.88,
+   "d": 2.64,
+   "text": "i mean not literally writing code like"
+  },
+  {
+   "t": 189.52,
+   "d": 3.28,
+   "text": "in an ide in an editor like that"
+  },
+  {
+   "t": 192.8,
+   "d": 0.88,
+   "text": "so"
+  },
+  {
+   "t": 193.68,
+   "d": 2.56,
+   "text": "to demonstrate this i'm going to quickly"
+  },
+  {
+   "t": 196.24,
+   "d": 1.28,
+   "text": "step through"
+  },
+  {
+   "t": 197.52,
+   "d": 2.4,
+   "text": "a case study in dungeon generation"
+  },
+  {
+   "t": 199.92,
+   "d": 1.2,
+   "text": "because that's something that i think a"
+  },
+  {
+   "t": 201.12,
+   "d": 2.88,
+   "text": "lot of folks here are familiar with"
+  },
+  {
+   "t": 204.0,
+   "d": 1.92,
+   "text": "and the dungeon that i'm showing here is"
+  },
+  {
+   "t": 205.92,
+   "d": 1.68,
+   "text": "what i'm going to be building a tool to"
+  },
+  {
+   "t": 207.6,
+   "d": 1.04,
+   "text": "generate"
+  },
+  {
+   "t": 208.64,
+   "d": 1.28,
+   "text": "and it is"
+  },
+  {
+   "t": 209.92,
+   "d": 3.44,
+   "text": "one of the most basic dungeons that"
+  },
+  {
+   "t": 213.36,
+   "d": 1.12,
+   "text": "i think"
+  },
+  {
+   "t": 214.48,
+   "d": 2.64,
+   "text": "i could think to make"
+  },
+  {
+   "t": 217.12,
+   "d": 2.4,
+   "text": "the steps for it are"
+  },
+  {
+   "t": 219.52,
+   "d": 1.92,
+   "text": "you start with an empty"
+  },
+  {
+   "t": 221.44,
+   "d": 1.04,
+   "text": "area"
+  },
+  {
+   "t": 222.48,
+   "d": 1.12,
+   "text": "you"
+  },
+  {
+   "t": 223.6,
+   "d": 2.08,
+   "text": "use binary space partitioning which if"
+  },
+  {
+   "t": 225.68,
+   "d": 2.4,
+   "text": "you're not familiar is a way of just"
+  },
+  {
+   "t": 228.08,
+   "d": 1.2,
+   "text": "taking"
+  },
+  {
+   "t": 229.28,
+   "d": 2.0,
+   "text": "a space and splitting it in half"
+  },
+  {
+   "t": 231.28,
+   "d": 2.24,
+   "text": "repeatedly until you get a bunch of"
+  },
+  {
+   "t": 233.52,
+   "d": 1.04,
+   "text": "little"
+  },
+  {
+   "t": 234.56,
+   "d": 3.04,
+   "text": "uh areas usually rectangles in in this"
+  },
+  {
+   "t": 237.6,
+   "d": 1.36,
+   "text": "case the rectangles because we're"
+  },
+  {
+   "t": 238.96,
+   "d": 2.08,
+   "text": "starting with a rectangular area"
+  },
+  {
+   "t": 241.04,
+   "d": 1.2,
+   "text": "we're going to fill each of those"
+  },
+  {
+   "t": 242.24,
+   "d": 1.68,
+   "text": "regions with a prefab room you can"
+  },
+  {
+   "t": 243.92,
+   "d": 1.6,
+   "text": "actually see in the example here i only"
+  },
+  {
+   "t": 245.52,
+   "d": 1.2,
+   "text": "have two"
+  },
+  {
+   "t": 246.72,
+   "d": 2.0,
+   "text": "shapes of prefab room these kind of"
+  },
+  {
+   "t": 248.72,
+   "d": 2.4,
+   "text": "space invadery looking ones and these"
+  },
+  {
+   "t": 251.12,
+   "d": 1.2,
+   "text": "sideways"
+  },
+  {
+   "t": 252.32,
+   "d": 2.72,
+   "text": "tetris t blocks over here"
+  },
+  {
+   "t": 255.04,
+   "d": 1.28,
+   "text": "and"
+  },
+  {
+   "t": 256.32,
+   "d": 1.68,
+   "text": "after we have all of those rooms we want"
+  },
+  {
+   "t": 258.0,
+   "d": 2.32,
+   "text": "to wire them all up with some hallways"
+  },
+  {
+   "t": 260.32,
+   "d": 2.08,
+   "text": "here i'm using an a-star pathfinding"
+  },
+  {
+   "t": 262.4,
+   "d": 2.08,
+   "text": "algorithm the exact algorithm isn't"
+  },
+  {
+   "t": 264.48,
+   "d": 1.68,
+   "text": "really relevant but i like to use a-star"
+  },
+  {
+   "t": 266.16,
+   "d": 2.32,
+   "text": "so that i can have hallways like skirt"
+  },
+  {
+   "t": 268.48,
+   "d": 2.08,
+   "text": "around the edges of other rooms and"
+  },
+  {
+   "t": 270.56,
+   "d": 1.44,
+   "text": "stuff it's"
+  },
+  {
+   "t": 272.0,
+   "d": 3.04,
+   "text": "you can do it much more easily than that"
+  },
+  {
+   "t": 275.04,
+   "d": 1.04,
+   "text": "anyways"
+  },
+  {
+   "t": 276.08,
+   "d": 2.24,
+   "text": "so that process looks like this where we"
+  },
+  {
+   "t": 278.32,
+   "d": 3.12,
+   "text": "start and we divide up the area we place"
+  },
+  {
+   "t": 281.44,
+   "d": 1.36,
+   "text": "some rooms"
+  },
+  {
+   "t": 282.8,
+   "d": 0.88,
+   "text": "we"
+  },
+  {
+   "t": 283.68,
+   "d": 1.52,
+   "text": "connect them all"
+  },
+  {
+   "t": 285.2,
+   "d": 1.52,
+   "text": "and we can look at each of those steps"
+  },
+  {
+   "t": 286.72,
+   "d": 1.52,
+   "text": "individually and that's actually what"
+  },
+  {
+   "t": 288.24,
+   "d": 2.0,
+   "text": "i'm going to be doing for"
+  },
+  {
+   "t": 290.24,
+   "d": 1.52,
+   "text": "creating"
+  },
+  {
+   "t": 291.76,
+   "d": 3.6,
+   "text": "the tool to build dungeons like this"
+  },
+  {
+   "t": 295.36,
+   "d": 2.88,
+   "text": "so the four steps that i have shown here"
+  },
+  {
+   "t": 298.24,
+   "d": 2.32,
+   "text": "are the empty level the binary space"
+  },
+  {
+   "t": 300.56,
+   "d": 1.6,
+   "text": "partitioning"
+  },
+  {
+   "t": 302.16,
+   "d": 2.48,
+   "text": "the prefab room placement and then the"
+  },
+  {
+   "t": 304.64,
+   "d": 1.92,
+   "text": "hallway connection"
+  },
+  {
+   "t": 306.56,
+   "d": 2.64,
+   "text": "and we can build a tool to do this and"
+  },
+  {
+   "t": 309.2,
+   "d": 1.52,
+   "text": "in fact i did"
+  },
+  {
+   "t": 310.72,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 312.08,
+   "d": 2.32,
+   "text": "and this is what this looks like so this"
+  },
+  {
+   "t": 314.4,
+   "d": 2.24,
+   "text": "is a tool that i built in unity"
+  },
+  {
+   "t": 316.64,
+   "d": 3.12,
+   "text": "using a framework called"
+  },
+  {
+   "t": 319.76,
+   "d": 2.48,
+   "text": "xnode which is a"
+  },
+  {
+   "t": 322.24,
+   "d": 2.0,
+   "text": "an open source library for unity that"
+  },
+  {
+   "t": 324.24,
+   "d": 2.64,
+   "text": "allows you to create these kind of"
+  },
+  {
+   "t": 326.88,
+   "d": 3.6,
+   "text": "visual node graph interfaces very easily"
+  },
+  {
+   "t": 330.48,
+   "d": 1.44,
+   "text": "uh the actual"
+  },
+  {
+   "t": 331.92,
+   "d": 2.32,
+   "text": "setup time to get the ui parts of this"
+  },
+  {
+   "t": 334.24,
+   "d": 1.76,
+   "text": "where i can drag and drop nodes around"
+  },
+  {
+   "t": 336.0,
+   "d": 0.88,
+   "text": "was"
+  },
+  {
+   "t": 336.88,
+   "d": 1.92,
+   "text": "you know on the order of a couple hours"
+  },
+  {
+   "t": 338.8,
+   "d": 1.68,
+   "text": "maybe so"
+  },
+  {
+   "t": 340.48,
+   "d": 1.44,
+   "text": "super powerful tool if you're working in"
+  },
+  {
+   "t": 341.92,
+   "d": 1.68,
+   "text": "unity i highly recommend checking it out"
+  },
+  {
+   "t": 343.6,
+   "d": 1.2,
+   "text": "and i'll have a"
+  },
+  {
+   "t": 344.8,
+   "d": 1.36,
+   "text": "shout out for that at the end of the"
+  },
+  {
+   "t": 346.16,
+   "d": 1.68,
+   "text": "presentation"
+  },
+  {
+   "t": 347.84,
+   "d": 2.32,
+   "text": "um but this is the"
+  },
+  {
+   "t": 350.16,
+   "d": 3.2,
+   "text": "uh the process that i described earlier"
+  },
+  {
+   "t": 353.36,
+   "d": 2.8,
+   "text": "represented as a node graph"
+  },
+  {
+   "t": 356.16,
+   "d": 2.64,
+   "text": "and so you can see going from left to"
+  },
+  {
+   "t": 358.8,
+   "d": 1.6,
+   "text": "right we start with"
+  },
+  {
+   "t": 360.4,
+   "d": 2.56,
+   "text": "a blank level we do a binary space"
+  },
+  {
+   "t": 362.96,
+   "d": 1.84,
+   "text": "partitioning so all of these colorful"
+  },
+  {
+   "t": 364.8,
+   "d": 2.8,
+   "text": "rectangles are the"
+  },
+  {
+   "t": 367.6,
+   "d": 2.24,
+   "text": "uh areas that"
+  },
+  {
+   "t": 369.84,
+   "d": 3.2,
+   "text": "we've divided that big area into we're"
+  },
+  {
+   "t": 373.04,
+   "d": 2.64,
+   "text": "placing some prefabricated rooms in here"
+  },
+  {
+   "t": 375.68,
+   "d": 1.76,
+   "text": "and then we're connecting them up with a"
+  },
+  {
+   "t": 377.44,
+   "d": 3.76,
+   "text": "star to make hallways the second to last"
+  },
+  {
+   "t": 381.2,
+   "d": 2.32,
+   "text": "node there i have actually placing the"
+  },
+  {
+   "t": 383.52,
+   "d": 1.52,
+   "text": "player spawn"
+  },
+  {
+   "t": 385.04,
+   "d": 3.52,
+   "text": "so you know non-non-uh"
+  },
+  {
+   "t": 388.56,
+   "d": 1.84,
+   "text": "level geometry things can also be part"
+  },
+  {
+   "t": 390.4,
+   "d": 1.76,
+   "text": "of this process"
+  },
+  {
+   "t": 392.16,
+   "d": 4.08,
+   "text": "i can incorporate um you know any part"
+  },
+  {
+   "t": 396.24,
+   "d": 1.84,
+   "text": "of the the overall process can be part"
+  },
+  {
+   "t": 398.08,
+   "d": 1.92,
+   "text": "of a tool that you're building for it uh"
+  },
+  {
+   "t": 400.0,
+   "d": 1.52,
+   "text": "it doesn't have to just be limited to"
+  },
+  {
+   "t": 401.52,
+   "d": 2.0,
+   "text": "the geometry and we can actually look at"
+  },
+  {
+   "t": 403.52,
+   "d": 2.48,
+   "text": "a slightly more"
+  },
+  {
+   "t": 406.0,
+   "d": 2.8,
+   "text": "complex example that"
+  },
+  {
+   "t": 408.8,
+   "d": 1.76,
+   "text": "basically handles the case where our"
+  },
+  {
+   "t": 410.56,
+   "d": 2.56,
+   "text": "binary space partitioning has"
+  },
+  {
+   "t": 413.12,
+   "d": 2.56,
+   "text": "divided out some areas that are too"
+  },
+  {
+   "t": 415.68,
+   "d": 2.24,
+   "text": "small to fit any of our prefabricated"
+  },
+  {
+   "t": 417.92,
+   "d": 1.6,
+   "text": "rooms into"
+  },
+  {
+   "t": 419.52,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 420.64,
+   "d": 2.0,
+   "text": "we're going to branch so i have a node"
+  },
+  {
+   "t": 422.64,
+   "d": 1.84,
+   "text": "up here at the top called region has"
+  },
+  {
+   "t": 424.48,
+   "d": 1.36,
+   "text": "room that just"
+  },
+  {
+   "t": 425.84,
+   "d": 3.2,
+   "text": "takes uh the regions that come in and if"
+  },
+  {
+   "t": 429.04,
+   "d": 1.84,
+   "text": "they have a room it"
+  },
+  {
+   "t": 430.88,
+   "d": 2.4,
+   "text": "pipes them out through one"
+  },
+  {
+   "t": 433.28,
+   "d": 2.32,
+   "text": "output node and if it if they don't have"
+  },
+  {
+   "t": 435.6,
+   "d": 1.6,
+   "text": "any rooms in them it pipes them out"
+  },
+  {
+   "t": 437.2,
+   "d": 1.36,
+   "text": "through the other one and that allows us"
+  },
+  {
+   "t": 438.56,
+   "d": 2.96,
+   "text": "to branch in a kind of if then"
+  },
+  {
+   "t": 441.52,
+   "d": 3.04,
+   "text": "else manner"
+  },
+  {
+   "t": 444.56,
+   "d": 2.0,
+   "text": "and if there's no prefab room placed in"
+  },
+  {
+   "t": 446.56,
+   "d": 2.48,
+   "text": "there then all i'm doing is filling out"
+  },
+  {
+   "t": 449.04,
+   "d": 1.76,
+   "text": "some square rooms"
+  },
+  {
+   "t": 450.8,
+   "d": 2.24,
+   "text": "uh which are just you know carving out"
+  },
+  {
+   "t": 453.04,
+   "d": 2.72,
+   "text": "the rectangle that fits inside of the"
+  },
+  {
+   "t": 455.76,
+   "d": 2.16,
+   "text": "area with some padding on the sides for"
+  },
+  {
+   "t": 457.92,
+   "d": 2.0,
+   "text": "walls and then piping all of those back"
+  },
+  {
+   "t": 459.92,
+   "d": 4.16,
+   "text": "into the a-star uh hallway carver um"
+  },
+  {
+   "t": 464.08,
+   "d": 2.56,
+   "text": "this is a super simple example uh you"
+  },
+  {
+   "t": 466.64,
+   "d": 1.44,
+   "text": "know obviously there's a lot more that"
+  },
+  {
+   "t": 468.08,
+   "d": 1.44,
+   "text": "goes into"
+  },
+  {
+   "t": 469.52,
+   "d": 2.72,
+   "text": "dungeon generation or any"
+  },
+  {
+   "t": 472.24,
+   "d": 2.88,
+   "text": "procedural generated content of"
+  },
+  {
+   "t": 475.12,
+   "d": 2.56,
+   "text": "any complexity it'll probably be more"
+  },
+  {
+   "t": 477.68,
+   "d": 2.08,
+   "text": "than you know five or six"
+  },
+  {
+   "t": 479.76,
+   "d": 1.76,
+   "text": "uh steps and there will probably be more"
+  },
+  {
+   "t": 481.52,
+   "d": 2.0,
+   "text": "branching and logic but i i hope that by"
+  },
+  {
+   "t": 483.52,
+   "d": 1.68,
+   "text": "showing you this you can kind of get the"
+  },
+  {
+   "t": 485.2,
+   "d": 3.28,
+   "text": "idea and maybe think about how you could"
+  },
+  {
+   "t": 488.48,
+   "d": 1.36,
+   "text": "apply this to"
+  },
+  {
+   "t": 489.84,
+   "d": 1.92,
+   "text": "you know not just dungeons but any kind"
+  },
+  {
+   "t": 491.76,
+   "d": 1.84,
+   "text": "of problem where"
+  },
+  {
+   "t": 493.6,
+   "d": 3.12,
+   "text": "you can identify all of the component"
+  },
+  {
+   "t": 496.72,
+   "d": 1.92,
+   "text": "steps and"
+  },
+  {
+   "t": 498.64,
+   "d": 2.16,
+   "text": "break them down into things so in this"
+  },
+  {
+   "t": 500.8,
+   "d": 1.92,
+   "text": "case i've broken them down into nodes"
+  },
+  {
+   "t": 502.72,
+   "d": 1.44,
+   "text": "but it could also be"
+  },
+  {
+   "t": 504.16,
+   "d": 3.44,
+   "text": "you know layers in a in a list or"
+  },
+  {
+   "t": 507.6,
+   "d": 2.24,
+   "text": "any other kind of representation that is"
+  },
+  {
+   "t": 509.84,
+   "d": 2.0,
+   "text": "useful for you to work with"
+  },
+  {
+   "t": 511.84,
+   "d": 1.6,
+   "text": "uh and as i said you know it doesn't"
+  },
+  {
+   "t": 513.44,
+   "d": 1.92,
+   "text": "have to be just one thing in here with"
+  },
+  {
+   "t": 515.36,
+   "d": 1.92,
+   "text": "the geometry i could also be placing"
+  },
+  {
+   "t": 517.28,
+   "d": 2.0,
+   "text": "enemy encounters in here i could be"
+  },
+  {
+   "t": 519.28,
+   "d": 2.4,
+   "text": "using this tool to place a loot i could"
+  },
+  {
+   "t": 521.68,
+   "d": 2.08,
+   "text": "be using it to generate loot so if i had"
+  },
+  {
+   "t": 523.76,
+   "d": 1.6,
+   "text": "nodes that were like"
+  },
+  {
+   "t": 525.36,
+   "d": 2.16,
+   "text": "you know item base"
+  },
+  {
+   "t": 527.52,
+   "d": 2.32,
+   "text": "item curse and you know"
+  },
+  {
+   "t": 529.84,
+   "d": 2.8,
+   "text": "piping through those different"
+  },
+  {
+   "t": 532.64,
+   "d": 2.56,
+   "text": "nodes generating an item along the way i"
+  },
+  {
+   "t": 535.2,
+   "d": 1.92,
+   "text": "could be doing that in exactly the same"
+  },
+  {
+   "t": 537.12,
+   "d": 3.68,
+   "text": "way that we're doing a dungeon here"
+  },
+  {
+   "t": 540.8,
+   "d": 0.35,
+   "text": "so"
+  },
+  {
+   "t": 541.15,
+   "d": 1.81,
+   "text": "[Music]"
+  },
+  {
+   "t": 542.96,
+   "d": 2.64,
+   "text": "to kind of summarize the general"
+  },
+  {
+   "t": 545.6,
+   "d": 2.96,
+   "text": "approach that i go with when i'm doing"
+  },
+  {
+   "t": 548.56,
+   "d": 3.6,
+   "text": "any kind of tooling like this"
+  },
+  {
+   "t": 552.16,
+   "d": 1.36,
+   "text": "as i've said"
+  },
+  {
+   "t": 553.52,
+   "d": 3.52,
+   "text": "the first thing is to kind of"
+  },
+  {
+   "t": 557.04,
+   "d": 2.08,
+   "text": "break it down into modular"
+  },
+  {
+   "t": 559.12,
+   "d": 2.32,
+   "text": "self-contained steps"
+  },
+  {
+   "t": 561.44,
+   "d": 2.0,
+   "text": "and these kind of become like lego"
+  },
+  {
+   "t": 563.44,
+   "d": 3.28,
+   "text": "pieces and so the more reusable and"
+  },
+  {
+   "t": 566.72,
+   "d": 2.32,
+   "text": "interconnectable your lego pieces are"
+  },
+  {
+   "t": 569.04,
+   "d": 2.48,
+   "text": "the more expressive power you're going"
+  },
+  {
+   "t": 571.52,
+   "d": 3.32,
+   "text": "to eventually have with that tool"
+  },
+  {
+   "t": 574.84,
+   "d": 2.68,
+   "text": "um and you'll want to expose parameters"
+  },
+  {
+   "t": 577.52,
+   "d": 1.52,
+   "text": "on these so"
+  },
+  {
+   "t": 579.04,
+   "d": 2.4,
+   "text": "uh if i actually go back to the previous"
+  },
+  {
+   "t": 581.44,
+   "d": 2.24,
+   "text": "thing on the binary space partitioning"
+  },
+  {
+   "t": 583.68,
+   "d": 1.76,
+   "text": "node the second one in the list there i"
+  },
+  {
+   "t": 585.44,
+   "d": 2.32,
+   "text": "actually have a number of parameters"
+  },
+  {
+   "t": 587.76,
+   "d": 1.2,
+   "text": "like the"
+  },
+  {
+   "t": 588.96,
+   "d": 3.36,
+   "text": "max and minimum size that it'll divide"
+  },
+  {
+   "t": 592.32,
+   "d": 1.44,
+   "text": "things up into"
+  },
+  {
+   "t": 593.76,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 595.12,
+   "d": 2.24,
+   "text": "so exposing those parameters you know"
+  },
+  {
+   "t": 597.36,
+   "d": 1.92,
+   "text": "provides more power to each step in the"
+  },
+  {
+   "t": 599.28,
+   "d": 1.68,
+   "text": "in the process as well"
+  },
+  {
+   "t": 600.96,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 602.16,
+   "d": 2.08,
+   "text": "the secretly hard part of all of this is"
+  },
+  {
+   "t": 604.24,
+   "d": 2.72,
+   "text": "making it uh friendly to work with"
+  },
+  {
+   "t": 606.96,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 607.76,
+   "d": 2.96,
+   "text": "so you know finding frameworks that make"
+  },
+  {
+   "t": 610.72,
+   "d": 2.56,
+   "text": "the user interface part easier"
+  },
+  {
+   "t": 613.28,
+   "d": 2.48,
+   "text": "is always a boon because"
+  },
+  {
+   "t": 615.76,
+   "d": 2.32,
+   "text": "then you don't have to"
+  },
+  {
+   "t": 618.08,
+   "d": 3.68,
+   "text": "worry so much about that when you're"
+  },
+  {
+   "t": 623.04,
+   "d": 2.32,
+   "text": "trying to build the the hard procedural"
+  },
+  {
+   "t": 625.36,
+   "d": 1.68,
+   "text": "generation part"
+  },
+  {
+   "t": 627.04,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 628.08,
+   "d": 1.52,
+   "text": "so real quickly i just want to shout out"
+  },
+  {
+   "t": 629.6,
+   "d": 2.88,
+   "text": "some existing tools that do this"
+  },
+  {
+   "t": 632.48,
+   "d": 1.92,
+   "text": "actually a few people have shown off"
+  },
+  {
+   "t": 634.4,
+   "d": 2.32,
+   "text": "their cool tools in talks today so i was"
+  },
+  {
+   "t": 636.72,
+   "d": 1.76,
+   "text": "really excited to see that"
+  },
+  {
+   "t": 638.48,
+   "d": 2.4,
+   "text": "um and i'm sure you know a lot of people"
+  },
+  {
+   "t": 640.88,
+   "d": 2.0,
+   "text": "have their own little tools that they've"
+  },
+  {
+   "t": 642.88,
+   "d": 2.16,
+   "text": "built for things or not so little tools"
+  },
+  {
+   "t": 645.04,
+   "d": 2.16,
+   "text": "even um so this is a thing called"
+  },
+  {
+   "t": 647.2,
+   "d": 1.52,
+   "text": "dungeon architect it's available for"
+  },
+  {
+   "t": 648.72,
+   "d": 2.88,
+   "text": "unity and unreal and it creates dungeons"
+  },
+  {
+   "t": 651.6,
+   "d": 3.92,
+   "text": "based off cyclic uh generation so if"
+  },
+  {
+   "t": 655.52,
+   "d": 3.2,
+   "text": "you've heard the really great talk by"
+  },
+  {
+   "t": 658.72,
+   "d": 3.36,
+   "text": "the unexplored developers about how they"
+  },
+  {
+   "t": 662.08,
+   "d": 2.24,
+   "text": "do cyclic dungeon generation"
+  },
+  {
+   "t": 664.32,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 665.28,
+   "d": 1.12,
+   "text": "this tool"
+  },
+  {
+   "t": 666.4,
+   "d": 1.52,
+   "text": "is built off of that it's super"
+  },
+  {
+   "t": 667.92,
+   "d": 2.72,
+   "text": "impressive uh it's way beyond the little"
+  },
+  {
+   "t": 670.64,
+   "d": 2.48,
+   "text": "demo thing i put together um"
+  },
+  {
+   "t": 673.12,
+   "d": 4.08,
+   "text": "super neat this is xnode which i"
+  },
+  {
+   "t": 677.2,
+   "d": 1.76,
+   "text": "mentioned having used it's available on"
+  },
+  {
+   "t": 678.96,
+   "d": 2.32,
+   "text": "github uh it's a framework for building"
+  },
+  {
+   "t": 681.28,
+   "d": 2.64,
+   "text": "these kind of node charts in unity"
+  },
+  {
+   "t": 683.92,
+   "d": 3.04,
+   "text": "and this is celix or skelix procedural"
+  },
+  {
+   "t": 686.96,
+   "d": 2.0,
+   "text": "engine also for unity and it uses a"
+  },
+  {
+   "t": 688.96,
+   "d": 1.44,
+   "text": "similar approach"
+  },
+  {
+   "t": 690.4,
+   "d": 3.12,
+   "text": "but they have um"
+  },
+  {
+   "t": 693.52,
+   "d": 2.32,
+   "text": "uh different examples like doing trees"
+  },
+  {
+   "t": 695.84,
+   "d": 1.68,
+   "text": "and buildings and such"
+  },
+  {
+   "t": 697.52,
+   "d": 2.56,
+   "text": "um yeah so that is my talk thank you"
+  },
+  {
+   "t": 700.08,
+   "d": 2.0,
+   "text": "very much you can find me on twitter at"
+  },
+  {
+   "t": 702.08,
+   "d": 3.28,
+   "text": "spencer eggert or on itch dot io at"
+  },
+  {
+   "t": 705.36,
+   "d": 2.4,
+   "text": "xeno.io"
+  },
+  {
+   "t": 707.76,
+   "d": 3.88,
+   "text": "uh yeah thank you"
+  },
+  {
+   "t": 725.28,
+   "d": 1.52,
+   "text": "hi i'm back"
+  },
+  {
+   "t": 726.8,
+   "d": 1.2,
+   "text": "i exist"
+  },
+  {
+   "t": 728.0,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 728.96,
+   "d": 1.92,
+   "text": "uh that was extremely cool that was"
+  },
+  {
+   "t": 730.88,
+   "d": 4.0,
+   "text": "super fun um it was great um"
+  },
+  {
+   "t": 734.88,
+   "d": 1.6,
+   "text": "the"
+  },
+  {
+   "t": 736.48,
+   "d": 2.16,
+   "text": "we have time for maybe one question"
+  },
+  {
+   "t": 738.64,
+   "d": 2.8,
+   "text": "before our next speaker is on and then"
+  },
+  {
+   "t": 741.44,
+   "d": 1.04,
+   "text": "after"
+  },
+  {
+   "t": 742.48,
+   "d": 1.68,
+   "text": "at the top of the hour if you're"
+  },
+  {
+   "t": 744.16,
+   "d": 2.88,
+   "text": "available um we've assigned the rogue"
+  },
+  {
+   "t": 747.04,
+   "d": 2.08,
+   "text": "breakout room to you"
+  },
+  {
+   "t": 749.12,
+   "d": 2.88,
+   "text": "um and the question that i had honestly"
+  },
+  {
+   "t": 752.0,
+   "d": 2.96,
+   "text": "was how do you balance"
+  },
+  {
+   "t": 754.96,
+   "d": 1.84,
+   "text": "time building a tool versus time"
+  },
+  {
+   "t": 756.8,
+   "d": 2.4,
+   "text": "implementing stuff in a game you know it"
+  },
+  {
+   "t": 759.2,
+   "d": 2.08,
+   "text": "feels like it'd be very easy to just get"
+  },
+  {
+   "t": 761.28,
+   "d": 1.84,
+   "text": "constantly stuck in building and"
+  },
+  {
+   "t": 763.12,
+   "d": 1.84,
+   "text": "refining tools and tool ui and then"
+  },
+  {
+   "t": 764.96,
+   "d": 1.92,
+   "text": "never actually make a product you know"
+  },
+  {
+   "t": 766.88,
+   "d": 1.84,
+   "text": "project happen"
+  },
+  {
+   "t": 768.72,
+   "d": 1.84,
+   "text": "yeah that's actually a really uh great"
+  },
+  {
+   "t": 770.56,
+   "d": 2.16,
+   "text": "question and a very um"
+  },
+  {
+   "t": 772.72,
+   "d": 3.12,
+   "text": "so funny story the uh demo thing i was"
+  },
+  {
+   "t": 775.84,
+   "d": 2.56,
+   "text": "showing off uh the dungeon generator"
+  },
+  {
+   "t": 778.4,
+   "d": 1.2,
+   "text": "that i had"
+  },
+  {
+   "t": 779.6,
+   "d": 2.24,
+   "text": "created um it is"
+  },
+  {
+   "t": 781.84,
+   "d": 2.88,
+   "text": "very hilariously in a"
+  },
+  {
+   "t": 784.72,
+   "d": 4.32,
+   "text": "project titled 7drl 2021 um"
+  },
+  {
+   "t": 789.04,
+   "d": 0.88,
+   "text": "which"
+  },
+  {
+   "t": 789.92,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 790.8,
+   "d": 4.0,
+   "text": "i did not ship a game uh for 7drl um"
+  },
+  {
+   "t": 794.8,
+   "d": 2.72,
+   "text": "and for the for the audience um that"
+  },
+  {
+   "t": 797.52,
+   "d": 2.56,
+   "text": "might not be familiar 7drl uh if you"
+  },
+  {
+   "t": 800.08,
+   "d": 2.24,
+   "text": "want to explain yeah yeah so it's a a"
+  },
+  {
+   "t": 802.32,
+   "d": 2.4,
+   "text": "seven day roguelike uh development game"
+  },
+  {
+   "t": 804.72,
+   "d": 1.36,
+   "text": "jam um"
+  },
+  {
+   "t": 806.08,
+   "d": 3.2,
+   "text": "so uh yeah so on the uh in the interest"
+  },
+  {
+   "t": 809.28,
+   "d": 3.36,
+   "text": "of time versus tooling uh"
+  },
+  {
+   "t": 812.64,
+   "d": 2.32,
+   "text": "that is not usually a situation in which"
+  },
+  {
+   "t": 814.96,
+   "d": 1.44,
+   "text": "you would want to invest a lot of time"
+  },
+  {
+   "t": 816.4,
+   "d": 2.24,
+   "text": "building tools um because you are on"
+  },
+  {
+   "t": 818.64,
+   "d": 1.6,
+   "text": "such a tight timeline"
+  },
+  {
+   "t": 820.24,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 821.44,
+   "d": 3.44,
+   "text": "i i think it it really does come down to"
+  },
+  {
+   "t": 824.88,
+   "d": 1.96,
+   "text": "uh the you can make a"
+  },
+  {
+   "t": 826.84,
+   "d": 2.2,
+   "text": "very um"
+  },
+  {
+   "t": 829.04,
+   "d": 1.92,
+   "text": "kind of mathematical"
+  },
+  {
+   "t": 830.96,
+   "d": 3.44,
+   "text": "judgment of time saved versus time"
+  },
+  {
+   "t": 834.4,
+   "d": 1.2,
+   "text": "invested"
+  },
+  {
+   "t": 835.6,
+   "d": 1.2,
+   "text": "if you want"
+  },
+  {
+   "t": 836.8,
+   "d": 1.92,
+   "text": "and that's something that you know in"
+  },
+  {
+   "t": 838.72,
+   "d": 1.44,
+   "text": "kind of"
+  },
+  {
+   "t": 840.16,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 841.52,
+   "d": 1.92,
+   "text": "professionally when when i'm looking at"
+  },
+  {
+   "t": 843.44,
+   "d": 2.16,
+   "text": "building tools on slime rancher that's"
+  },
+  {
+   "t": 845.6,
+   "d": 2.64,
+   "text": "one of the big considerations is is this"
+  },
+  {
+   "t": 848.24,
+   "d": 2.96,
+   "text": "gonna save everybody a lot of time"
+  },
+  {
+   "t": 851.2,
+   "d": 2.48,
+   "text": "uh while taking me a little bit of time"
+  },
+  {
+   "t": 853.68,
+   "d": 2.16,
+   "text": "to create or you know like am i going to"
+  },
+  {
+   "t": 855.84,
+   "d": 2.48,
+   "text": "invest a ton of time and people are not"
+  },
+  {
+   "t": 858.32,
+   "d": 1.68,
+   "text": "going to really gain anything out of it"
+  },
+  {
+   "t": 860.0,
+   "d": 2.0,
+   "text": "so that's really the kind of"
+  },
+  {
+   "t": 862.0,
+   "d": 1.92,
+   "text": "mental calculus that goes into it a lot"
+  },
+  {
+   "t": 863.92,
+   "d": 1.6,
+   "text": "of the time sometimes you're building"
+  },
+  {
+   "t": 865.52,
+   "d": 2.24,
+   "text": "tools for the"
+  },
+  {
+   "t": 867.76,
+   "d": 2.48,
+   "text": "broader range of expression that they"
+  },
+  {
+   "t": 870.24,
+   "d": 3.28,
+   "text": "give you and then it's harder to kind of"
+  },
+  {
+   "t": 873.52,
+   "d": 1.76,
+   "text": "put that into"
+  },
+  {
+   "t": 875.28,
+   "d": 1.6,
+   "text": "uh a"
+  },
+  {
+   "t": 876.88,
+   "d": 2.88,
+   "text": "strict value like time value"
+  },
+  {
+   "t": 879.76,
+   "d": 2.16,
+   "text": "equation so then it kind of becomes more"
+  },
+  {
+   "t": 881.92,
+   "d": 3.04,
+   "text": "of a judgment call but uh yeah usually"
+  },
+  {
+   "t": 884.96,
+   "d": 1.52,
+   "text": "you don't want to do it probably in a"
+  },
+  {
+   "t": 886.48,
+   "d": 2.16,
+   "text": "game jam scenario if you don't have the"
+  },
+  {
+   "t": 888.64,
+   "d": 3.84,
+   "text": "time to do that don't do what i did"
+  },
+  {
+   "t": 892.48,
+   "d": 2.0,
+   "text": "do as they say not as they do"
+  },
+  {
+   "t": 894.48,
+   "d": 2.88,
+   "text": "excellent"
+  }
+ ]
+}

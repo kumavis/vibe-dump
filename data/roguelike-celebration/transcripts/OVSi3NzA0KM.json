@@ -1,0 +1,4707 @@
+{
+ "id": "OVSi3NzA0KM",
+ "url": "https://www.youtube.com/watch?v=OVSi3NzA0KM",
+ "title": "Tyriq Plummer - Roguelikes and Platformers",
+ "speaker": "Tyriq Plummer",
+ "talk_title": "Roguelikes and Platformers",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1956,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Tyriq Plumme talks about the influence of roguelike mechanics on platformers.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Roguelike Celebration 2017"
+  },
+  {
+   "start": 17,
+   "title": "About Me"
+  },
+  {
+   "start": 176,
+   "title": "Why this combination?"
+  },
+  {
+   "start": 312,
+   "title": "Tyriq's Dimensions of Roguelikitude"
+  },
+  {
+   "start": 485,
+   "title": "Red Rogue"
+  },
+  {
+   "start": 671,
+   "title": "Spelunky"
+  },
+  {
+   "start": 911,
+   "title": "Vagante"
+  },
+  {
+   "start": 941,
+   "title": "Catacomb Kids"
+  },
+  {
+   "start": 968,
+   "title": "2 Kool Gamez"
+  },
+  {
+   "start": 1077,
+   "title": "Adapted Adoptions"
+  },
+  {
+   "start": 1105,
+   "title": "Vision and Darkness"
+  },
+  {
+   "start": 1201,
+   "title": "Hunger Clocks"
+  },
+  {
+   "start": 1396,
+   "title": "Inventories"
+  },
+  {
+   "start": 1506,
+   "title": "Gods and Shrines"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6254,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.32,
+   "d": 2.64,
+   "text": "hello I'm Tariq"
+  },
+  {
+   "t": 3.96,
+   "d": 1.95,
+   "text": "I'm making a game called catacomb kids"
+  },
+  {
+   "t": 5.91,
+   "d": 2.7,
+   "text": "which is a roguelike platformer and"
+  },
+  {
+   "t": 8.61,
+   "d": 1.11,
+   "text": "that's what I'm going to be talking"
+  },
+  {
+   "t": 9.72,
+   "d": 1.56,
+   "text": "about today not catacomb kids"
+  },
+  {
+   "t": 11.28,
+   "d": 1.5,
+   "text": "specifically although that will play a"
+  },
+  {
+   "t": 12.78,
+   "d": 2.4,
+   "text": "large part but roguelike platformers in"
+  },
+  {
+   "t": 15.18,
+   "d": 4.82,
+   "text": "general the first little backstory"
+  },
+  {
+   "t": 20.0,
+   "d": 3.07,
+   "text": "catacomb kids is a platformer that as I"
+  },
+  {
+   "t": 23.07,
+   "d": 1.56,
+   "text": "said takes very heavy inspiration from"
+  },
+  {
+   "t": 24.63,
+   "d": 2.25,
+   "text": "the roguelike genre I ran a Kickstarter"
+  },
+  {
+   "t": 26.88,
+   "d": 2.19,
+   "text": "for it a few years back and now it's"
+  },
+  {
+   "t": 29.07,
+   "d": 2.04,
+   "text": "currently available on Steam and it's do"
+  },
+  {
+   "t": 31.11,
+   "d": 2.04,
+   "text": "an early access I've been told it's"
+  },
+  {
+   "t": 33.15,
+   "d": 2.37,
+   "text": "pretty neat the game has been in"
+  },
+  {
+   "t": 35.52,
+   "d": 1.44,
+   "text": "development for much longer than I"
+  },
+  {
+   "t": 36.96,
+   "d": 2.1,
+   "text": "expected by now but looking at the long"
+  },
+  {
+   "t": 39.06,
+   "d": 1.68,
+   "text": "development cycles of some other more"
+  },
+  {
+   "t": 40.74,
+   "d": 1.74,
+   "text": "classic roguelikes makes me feel if"
+  },
+  {
+   "t": 42.48,
+   "d": 1.35,
+   "text": "anything a little more at home than"
+  },
+  {
+   "t": 43.83,
+   "d": 2.16,
+   "text": "discouraged roguelike seem to be the"
+  },
+  {
+   "t": 45.99,
+   "d": 1.47,
+   "text": "kinds of games that you could possibly"
+  },
+  {
+   "t": 47.46,
+   "d": 1.77,
+   "text": "work on forever if there's no one to"
+  },
+  {
+   "t": 49.23,
+   "d": 2.78,
+   "text": "stop you or you don't starve to death I"
+  },
+  {
+   "t": 52.01,
+   "d": 2.2,
+   "text": "have to admit however that I haven't"
+  },
+  {
+   "t": 54.21,
+   "d": 2.22,
+   "text": "always felt at home in this way with"
+  },
+  {
+   "t": 56.43,
+   "d": 1.98,
+   "text": "roguelikes I feel like I kind of came to"
+  },
+  {
+   "t": 58.41,
+   "d": 1.25,
+   "text": "them a little late to the party"
+  },
+  {
+   "t": 59.66,
+   "d": 2.17,
+   "text": "my first roguelike that I can truly"
+  },
+  {
+   "t": 61.83,
+   "d": 1.74,
+   "text": "claim to have played and enjoyed was"
+  },
+  {
+   "t": 63.57,
+   "d": 2.46,
+   "text": "powder RL by Jeff Flake when I was maybe"
+  },
+  {
+   "t": 66.03,
+   "d": 3.96,
+   "text": "16 or 17 because it had graphics I had"
+  },
+  {
+   "t": 69.99,
+   "d": 1.83,
+   "text": "tried playing other roguelikes before"
+  },
+  {
+   "t": 71.82,
+   "d": 1.44,
+   "text": "them but I didn't really understand what"
+  },
+  {
+   "t": 73.26,
+   "d": 2.13,
+   "text": "the game what the genre even was at the"
+  },
+  {
+   "t": 75.39,
+   "d": 1.59,
+   "text": "time I'm pretty sure I just looked at"
+  },
+  {
+   "t": 76.98,
+   "d": 1.41,
+   "text": "the moon was like what's this is dumb"
+  },
+  {
+   "t": 78.39,
+   "d": 1.44,
+   "text": "there's just letters this is where's"
+  },
+  {
+   "t": 79.83,
+   "d": 2.46,
+   "text": "this stuff and then closed them and"
+  },
+  {
+   "t": 82.29,
+   "d": 2.04,
+   "text": "uninstalled them but after playing"
+  },
+  {
+   "t": 84.33,
+   "d": 2.46,
+   "text": "powder for a while and familiarizing"
+  },
+  {
+   "t": 86.79,
+   "d": 1.8,
+   "text": "myself with the basic genre conventions"
+  },
+  {
+   "t": 88.59,
+   "d": 1.92,
+   "text": "and tropes I went back and retried some"
+  },
+  {
+   "t": 90.51,
+   "d": 1.5,
+   "text": "of the ones I had bounced off of earlier"
+  },
+  {
+   "t": 92.01,
+   "d": 1.74,
+   "text": "and found myself getting really into"
+  },
+  {
+   "t": 93.75,
+   "d": 2.91,
+   "text": "them especially Angband and and Ivan and"
+  },
+  {
+   "t": 96.66,
+   "d": 1.44,
+   "text": "many of the 7-day roguelikes"
+  },
+  {
+   "t": 98.1,
+   "d": 2.22,
+   "text": "and as I did I learned a lot about"
+  },
+  {
+   "t": 100.32,
+   "d": 3.42,
+   "text": "myself the first of which is that I love"
+  },
+  {
+   "t": 103.74,
+   "d": 2.43,
+   "text": "roguelikes they were the kind of game"
+  },
+  {
+   "t": 106.17,
+   "d": 1.95,
+   "text": "that I had been dreaming of making since"
+  },
+  {
+   "t": 108.12,
+   "d": 1.38,
+   "text": "before I had ever even heard the term"
+  },
+  {
+   "t": 109.5,
+   "d": 1.8,
+   "text": "and then once I found out about them I"
+  },
+  {
+   "t": 111.3,
+   "d": 1.77,
+   "text": "realized that a lot of what I had been"
+  },
+  {
+   "t": 113.07,
+   "d": 1.77,
+   "text": "wanting to do for a very long time had"
+  },
+  {
+   "t": 114.84,
+   "d": 2.45,
+   "text": "already been done just without graphics"
+  },
+  {
+   "t": 117.29,
+   "d": 1.75,
+   "text": "the other thing that I learned about"
+  },
+  {
+   "t": 119.04,
+   "d": 1.89,
+   "text": "myself is that I am very bad at"
+  },
+  {
+   "t": 120.93,
+   "d": 3.12,
+   "text": "roguelikes I die a lot just all the time"
+  },
+  {
+   "t": 124.05,
+   "d": 1.44,
+   "text": "and I know that's like kind of part of"
+  },
+  {
+   "t": 125.49,
+   "d": 3.26,
+   "text": "the genre but you know I"
+  },
+  {
+   "t": 129.74,
+   "d": 2.16,
+   "text": "I could do pretty okay with with coffee"
+  },
+  {
+   "t": 131.9,
+   "d": 1.29,
+   "text": "break roguelikes but when it comes to"
+  },
+  {
+   "t": 133.19,
+   "d": 1.68,
+   "text": "the classic stuff and the deeper stuff"
+  },
+  {
+   "t": 134.87,
+   "d": 2.31,
+   "text": "I'm dead I make stupid mistakes I get"
+  },
+  {
+   "t": 137.18,
+   "d": 1.8,
+   "text": "impatient I forget about mechanics I"
+  },
+  {
+   "t": 138.98,
+   "d": 2.25,
+   "text": "misjudge enemies it's all bad but so"
+  },
+  {
+   "t": 141.23,
+   "d": 0.99,
+   "text": "here's where the other part of the"
+  },
+  {
+   "t": 142.22,
+   "d": 2.55,
+   "text": "equation comes into play platformers"
+  },
+  {
+   "t": 144.77,
+   "d": 2.37,
+   "text": "I love platformers unlike roguelikes"
+  },
+  {
+   "t": 147.14,
+   "d": 1.38,
+   "text": "platformers are the kinds of games that"
+  },
+  {
+   "t": 148.52,
+   "d": 2.37,
+   "text": "I grew up with and they're the kind of"
+  },
+  {
+   "t": 150.89,
+   "d": 1.95,
+   "text": "defined what my default conception of"
+  },
+  {
+   "t": 152.84,
+   "d": 2.34,
+   "text": "what a game is even now if you tell me"
+  },
+  {
+   "t": 155.18,
+   "d": 1.53,
+   "text": "to think of a video game the first thing"
+  },
+  {
+   "t": 156.71,
+   "d": 1.2,
+   "text": "that pops into my head is going to be a"
+  },
+  {
+   "t": 157.91,
+   "d": 4.32,
+   "text": "platformer of some kind and except sonic"
+  },
+  {
+   "t": 162.23,
+   "d": 5.49,
+   "text": "I hate Sonic and also unlike roguelikes"
+  },
+  {
+   "t": 167.72,
+   "d": 2.37,
+   "text": "I'm pretty decent at platformers I'm not"
+  },
+  {
+   "t": 170.09,
+   "d": 1.26,
+   "text": "like a speed runner good or anything"
+  },
+  {
+   "t": 171.35,
+   "d": 2.1,
+   "text": "like that but I'm good enough I usually"
+  },
+  {
+   "t": 173.45,
+   "d": 3.18,
+   "text": "can make it to the end of them so now we"
+  },
+  {
+   "t": 176.63,
+   "d": 1.68,
+   "text": "get to the actual thing the question the"
+  },
+  {
+   "t": 178.31,
+   "d": 0.93,
+   "text": "point of this"
+  },
+  {
+   "t": 179.24,
+   "d": 2.76,
+   "text": "why these two why combine platformers"
+  },
+  {
+   "t": 182.0,
+   "d": 2.19,
+   "text": "and roguelikes well for catacomb kids my"
+  },
+  {
+   "t": 184.19,
+   "d": 2.79,
+   "text": "answer was pretty simple I wanted to"
+  },
+  {
+   "t": 186.98,
+   "d": 2.52,
+   "text": "make a roguelike I'd be good at since"
+  },
+  {
+   "t": 189.5,
+   "d": 1.56,
+   "text": "I'm so bad at roguelike so I wondered"
+  },
+  {
+   "t": 191.06,
+   "d": 1.53,
+   "text": "how I could go about making one that I"
+  },
+  {
+   "t": 192.59,
+   "d": 1.86,
+   "text": "could actually play and not suck at I"
+  },
+  {
+   "t": 194.45,
+   "d": 1.98,
+   "text": "could just make a normal traditional"
+  },
+  {
+   "t": 196.43,
+   "d": 1.89,
+   "text": "roguelike maybe dumb it down here ease"
+  },
+  {
+   "t": 198.32,
+   "d": 1.05,
+   "text": "it up there until I come up with"
+  },
+  {
+   "t": 199.37,
+   "d": 1.29,
+   "text": "something that I can actually play and"
+  },
+  {
+   "t": 200.66,
+   "d": 1.86,
+   "text": "win but that felt disingenuous"
+  },
+  {
+   "t": 202.52,
+   "d": 1.56,
+   "text": "presumptuous even to think that I"
+  },
+  {
+   "t": 204.08,
+   "d": 2.04,
+   "text": "someone who sucks at roguelikes could"
+  },
+  {
+   "t": 206.12,
+   "d": 2.01,
+   "text": "make a good roguelike I don't like"
+  },
+  {
+   "t": 208.13,
+   "d": 1.26,
+   "text": "roguelikes for what they're not I like"
+  },
+  {
+   "t": 209.39,
+   "d": 1.2,
+   "text": "them for what they are it just happens"
+  },
+  {
+   "t": 210.59,
+   "d": 1.41,
+   "text": "that what they are and what I'm good at"
+  },
+  {
+   "t": 212.0,
+   "d": 2.97,
+   "text": "don't overlap very much but if I take"
+  },
+  {
+   "t": 214.97,
+   "d": 1.77,
+   "text": "platformers this other thing that I know"
+  },
+  {
+   "t": 216.74,
+   "d": 2.16,
+   "text": "and love and make a roguelike within"
+  },
+  {
+   "t": 218.9,
+   "d": 1.53,
+   "text": "that framework then I can make something"
+  },
+  {
+   "t": 220.43,
+   "d": 1.62,
+   "text": "that will properly challenge me with the"
+  },
+  {
+   "t": 222.05,
+   "d": 3.33,
+   "text": "skillset that I have another possible"
+  },
+  {
+   "t": 225.38,
+   "d": 1.89,
+   "text": "answer to this question is it's just"
+  },
+  {
+   "t": 227.27,
+   "d": 2.85,
+   "text": "what we do as developers as creative"
+  },
+  {
+   "t": 230.12,
+   "d": 2.07,
+   "text": "people as scientists we take things and"
+  },
+  {
+   "t": 232.19,
+   "d": 1.92,
+   "text": "mash them together to make something new"
+  },
+  {
+   "t": 234.11,
+   "d": 2.7,
+   "text": "to see what happens of course there are"
+  },
+  {
+   "t": 236.81,
+   "d": 2.16,
+   "text": "things that we evolve on from a single"
+  },
+  {
+   "t": 238.97,
+   "d": 1.32,
+   "text": "root but the things that really interest"
+  },
+  {
+   "t": 240.29,
+   "d": 2.34,
+   "text": "me are these mashups especially mashups"
+  },
+  {
+   "t": 242.63,
+   "d": 1.44,
+   "text": "that pull from the same sources because"
+  },
+  {
+   "t": 244.07,
+   "d": 1.95,
+   "text": "then it becomes a matter of degree how"
+  },
+  {
+   "t": 246.02,
+   "d": 2.22,
+   "text": "much of what is pulled from each source"
+  },
+  {
+   "t": 248.24,
+   "d": 1.95,
+   "text": "three parts beat them up two parts"
+  },
+  {
+   "t": 250.19,
+   "d": 2.04,
+   "text": "first-person-shooter two parts roguelike"
+  },
+  {
+   "t": 252.23,
+   "d": 2.87,
+   "text": "one part platformer a tablespoon of JRPG"
+  },
+  {
+   "t": 255.1,
+   "d": 2.89,
+   "text": "do you mix the elements lightly so that"
+  },
+  {
+   "t": 257.99,
+   "d": 1.77,
+   "text": "the bits are still chunky and"
+  },
+  {
+   "t": 259.76,
+   "d": 1.65,
+   "text": "distinguishable from one another or do"
+  },
+  {
+   "t": 261.41,
+   "d": 1.7,
+   "text": "you rapidly whisk it"
+  },
+  {
+   "t": 263.11,
+   "d": 2.19,
+   "text": "until everything becomes the homogenous"
+  },
+  {
+   "t": 265.3,
+   "d": 3.45,
+   "text": "froth I do think there's one other"
+  },
+  {
+   "t": 268.75,
+   "d": 3.96,
+   "text": "aspect of this that that uh which is"
+  },
+  {
+   "t": 272.71,
+   "d": 1.8,
+   "text": "that the two styles are fundamentally"
+  },
+  {
+   "t": 274.51,
+   "d": 1.77,
+   "text": "different enough to force uniqueness and"
+  },
+  {
+   "t": 276.28,
+   "d": 1.86,
+   "text": "innovation when they're combined it's"
+  },
+  {
+   "t": 278.14,
+   "d": 2.1,
+   "text": "not like combining beat em up with Zelda"
+  },
+  {
+   "t": 280.24,
+   "d": 1.59,
+   "text": "style game for instance where the basic"
+  },
+  {
+   "t": 281.83,
+   "d": 2.16,
+   "text": "interactions roughly map to each other"
+  },
+  {
+   "t": 283.99,
+   "d": 2.07,
+   "text": "and it's also not like combining an"
+  },
+  {
+   "t": 286.06,
+   "d": 1.38,
+   "text": "arena shooter shooter with a roguelike"
+  },
+  {
+   "t": 287.44,
+   "d": 2.13,
+   "text": "where the similarities of perspective"
+  },
+  {
+   "t": 289.57,
+   "d": 1.92,
+   "text": "and movement space overlap most of the"
+  },
+  {
+   "t": 291.49,
+   "d": 1.62,
+   "text": "defining aspects of roguelikes and"
+  },
+  {
+   "t": 293.11,
+   "d": 1.71,
+   "text": "platformers are non-overlapping such"
+  },
+  {
+   "t": 294.82,
+   "d": 2.76,
+   "text": "that they can coexist but it's also"
+  },
+  {
+   "t": 297.58,
+   "d": 1.86,
+   "text": "there's no non-overlapping aspect of the"
+  },
+  {
+   "t": 299.44,
+   "d": 1.02,
+   "text": "nature that leads me to believe that"
+  },
+  {
+   "t": 300.46,
+   "d": 1.92,
+   "text": "they can come together in in a more"
+  },
+  {
+   "t": 302.38,
+   "d": 3.5,
+   "text": "interesting way than other genres so"
+  },
+  {
+   "t": 305.88,
+   "d": 6.31,
+   "text": "right did I skip something no anyway"
+  },
+  {
+   "t": 312.19,
+   "d": 4.32,
+   "text": "this is weird I messed up so this is the"
+  },
+  {
+   "t": 316.51,
+   "d": 1.59,
+   "text": "dimensions of Rogue latitude when I look"
+  },
+  {
+   "t": 318.1,
+   "d": 1.83,
+   "text": "at a roguelike like game I tend to try"
+  },
+  {
+   "t": 319.93,
+   "d": 1.17,
+   "text": "and map just how roguelike you they are"
+  },
+  {
+   "t": 321.1,
+   "d": 1.98,
+   "text": "and I know there's already a site that"
+  },
+  {
+   "t": 323.08,
+   "d": 1.5,
+   "text": "tells you how roguelike EA game is by"
+  },
+  {
+   "t": 324.58,
+   "d": 1.35,
+   "text": "checking a bunch of boxes and whatnot"
+  },
+  {
+   "t": 325.93,
+   "d": 2.49,
+   "text": "but I have my own set of criteria and we"
+  },
+  {
+   "t": 328.42,
+   "d": 1.23,
+   "text": "already know that these aren't going to"
+  },
+  {
+   "t": 329.65,
+   "d": 1.38,
+   "text": "be traditional roguelike so that's not"
+  },
+  {
+   "t": 331.03,
+   "d": 1.86,
+   "text": "really what's in question here now this"
+  },
+  {
+   "t": 332.89,
+   "d": 1.56,
+   "text": "is my own personal method of mentally"
+  },
+  {
+   "t": 334.45,
+   "d": 1.89,
+   "text": "placing non roguelike games in relation"
+  },
+  {
+   "t": 336.34,
+   "d": 3.9,
+   "text": "to one another and the first thing is"
+  },
+  {
+   "t": 340.24,
+   "d": 1.35,
+   "text": "procedural space it's got to be"
+  },
+  {
+   "t": 341.59,
+   "d": 2.76,
+   "text": "procedural that's easy the second thing"
+  },
+  {
+   "t": 344.35,
+   "d": 2.61,
+   "text": "is once we have our procedural spaces it"
+  },
+  {
+   "t": 346.96,
+   "d": 1.53,
+   "text": "matters of course what happens within"
+  },
+  {
+   "t": 348.49,
+   "d": 1.92,
+   "text": "them complex situations that emerge as a"
+  },
+  {
+   "t": 350.41,
+   "d": 1.95,
+   "text": "result of more fundamental rules in my"
+  },
+  {
+   "t": 352.36,
+   "d": 2.28,
+   "text": "mind is one of the strongest hallmarks"
+  },
+  {
+   "t": 354.64,
+   "d": 1.92,
+   "text": "of roguelikes they let you get into some"
+  },
+  {
+   "t": 356.56,
+   "d": 1.77,
+   "text": "wild situations and then get back out"
+  },
+  {
+   "t": 358.33,
+   "d": 1.5,
+   "text": "again or die trying"
+  },
+  {
+   "t": 359.83,
+   "d": 2.55,
+   "text": "which brings us to my next dimension"
+  },
+  {
+   "t": 362.38,
+   "d": 1.5,
+   "text": "which is strategic and tactical"
+  },
+  {
+   "t": 363.88,
+   "d": 1.65,
+   "text": "approaches and I know there's a"
+  },
+  {
+   "t": 365.53,
+   "d": 1.35,
+   "text": "difference between those two concepts"
+  },
+  {
+   "t": 366.88,
+   "d": 1.74,
+   "text": "but I'm just using them for shorthand"
+  },
+  {
+   "t": 368.62,
+   "d": 1.71,
+   "text": "for the idea of planning ahead"
+  },
+  {
+   "t": 370.33,
+   "d": 2.25,
+   "text": "the idea being once you get into a"
+  },
+  {
+   "t": 372.58,
+   "d": 1.86,
+   "text": "situations how do you get out this"
+  },
+  {
+   "t": 374.44,
+   "d": 1.56,
+   "text": "dimension represents not necessarily how"
+  },
+  {
+   "t": 376.0,
+   "d": 1.71,
+   "text": "much forethought is required by a game"
+  },
+  {
+   "t": 377.71,
+   "d": 1.53,
+   "text": "but more how much is possible and how"
+  },
+  {
+   "t": 379.24,
+   "d": 1.53,
+   "text": "frequently it's encouraged or allowed"
+  },
+  {
+   "t": 380.77,
+   "d": 2.34,
+   "text": "this is the ability to have of having"
+  },
+  {
+   "t": 383.11,
+   "d": 2.52,
+   "text": "the ability to take some time to assess"
+  },
+  {
+   "t": 385.63,
+   "d": 2.19,
+   "text": "a particular situation and decide what"
+  },
+  {
+   "t": 387.82,
+   "d": 1.97,
+   "text": "the best course of action is and lastly"
+  },
+  {
+   "t": 389.79,
+   "d": 2.29,
+   "text": "there's permanence of consequence I bet"
+  },
+  {
+   "t": 392.08,
+   "d": 0.72,
+   "text": "you thought there were only three"
+  },
+  {
+   "t": 392.8,
+   "d": 1.78,
+   "text": "dimensions but there's four"
+  },
+  {
+   "t": 394.58,
+   "d": 2.49,
+   "text": "this one usually manifests itself as"
+  },
+  {
+   "t": 397.07,
+   "d": 1.86,
+   "text": "permadeath but I also take it to mean"
+  },
+  {
+   "t": 398.93,
+   "d": 2.64,
+   "text": "the lasting impact of one's decisions"
+  },
+  {
+   "t": 401.57,
+   "d": 1.68,
+   "text": "all those little micro decisions that"
+  },
+  {
+   "t": 403.25,
+   "d": 1.17,
+   "text": "build up over time to change the"
+  },
+  {
+   "t": 404.42,
+   "d": 1.65,
+   "text": "trajectory of an entire run the"
+  },
+  {
+   "t": 406.07,
+   "d": 1.68,
+   "text": "potential for losing or passing"
+  },
+  {
+   "t": 407.75,
+   "d": 0.99,
+   "text": "something that you only get one chance"
+  },
+  {
+   "t": 408.74,
+   "d": 2.79,
+   "text": "at so these are four dimensions of rogue"
+  },
+  {
+   "t": 411.53,
+   "d": 1.8,
+   "text": "lakitu that come to dig together to"
+  },
+  {
+   "t": 413.33,
+   "d": 2.37,
+   "text": "define for me how roguelike a non"
+  },
+  {
+   "t": 415.7,
+   "d": 1.53,
+   "text": "traditional roguelike is and it's"
+  },
+  {
+   "t": 417.23,
+   "d": 1.26,
+   "text": "important to note that their dimensions"
+  },
+  {
+   "t": 418.49,
+   "d": 1.83,
+   "text": "and not just checkboxes they aren't just"
+  },
+  {
+   "t": 420.32,
+   "d": 2.04,
+   "text": "there or not there they can be sort of"
+  },
+  {
+   "t": 422.36,
+   "d": 1.98,
+   "text": "there or way there or it's just a little"
+  },
+  {
+   "t": 424.34,
+   "d": 3.09,
+   "text": "bit there as an example is down well"
+  },
+  {
+   "t": 427.43,
+   "d": 1.74,
+   "text": "which is a fantastic game in which you"
+  },
+  {
+   "t": 429.17,
+   "d": 2.91,
+   "text": "go down oh well it has procedurally"
+  },
+  {
+   "t": 432.08,
+   "d": 1.32,
+   "text": "generated levels but not really a whole"
+  },
+  {
+   "t": 433.4,
+   "d": 1.47,
+   "text": "lot in the way of emergent interactions"
+  },
+  {
+   "t": 434.87,
+   "d": 1.08,
+   "text": "and while there is a bit of strategy"
+  },
+  {
+   "t": 435.95,
+   "d": 1.86,
+   "text": "involved in deciding what upgrades to"
+  },
+  {
+   "t": 437.81,
+   "d": 2.25,
+   "text": "take and what I what upgrades and"
+  },
+  {
+   "t": 440.06,
+   "d": 2.16,
+   "text": "weapons and to take that stuff always"
+  },
+  {
+   "t": 442.22,
+   "d": 1.68,
+   "text": "happens in a safe zone away from any"
+  },
+  {
+   "t": 443.9,
+   "d": 2.85,
+   "text": "immediate situational context I wouldn't"
+  },
+  {
+   "t": 446.75,
+   "d": 1.14,
+   "text": "necessarily call it a roguelike"
+  },
+  {
+   "t": 447.89,
+   "d": 1.77,
+   "text": "platformer so much as a platformer shoot"
+  },
+  {
+   "t": 449.66,
+   "d": 3.18,
+   "text": "up shoot him up that has roguelike sort"
+  },
+  {
+   "t": 452.84,
+   "d": 2.61,
+   "text": "of yeah flavor tinge just a little tinge"
+  },
+  {
+   "t": 455.45,
+   "d": 2.58,
+   "text": "a teaspoon tablespoon but even though"
+  },
+  {
+   "t": 458.03,
+   "d": 1.83,
+   "text": "you can see that it still has a presence"
+  },
+  {
+   "t": 459.86,
+   "d": 3.6,
+   "text": "in road like a toodle space catacomb"
+  },
+  {
+   "t": 463.46,
+   "d": 1.83,
+   "text": "kids on the other hand when compared to"
+  },
+  {
+   "t": 465.29,
+   "d": 1.8,
+   "text": "down well has much more complex level"
+  },
+  {
+   "t": 467.09,
+   "d": 2.1,
+   "text": "generation a heavy focus on emergent"
+  },
+  {
+   "t": 469.19,
+   "d": 1.95,
+   "text": "gameplay situations rewards planning"
+  },
+  {
+   "t": 471.14,
+   "d": 1.77,
+   "text": "ahead and many of the choices you make"
+  },
+  {
+   "t": 472.91,
+   "d": 2.22,
+   "text": "have long lasting consequences even"
+  },
+  {
+   "t": 475.13,
+   "d": 2.07,
+   "text": "aside from just dying forever"
+  },
+  {
+   "t": 477.2,
+   "d": 2.04,
+   "text": "so that's the set up that's just the"
+  },
+  {
+   "t": 479.24,
+   "d": 1.11,
+   "text": "reference point for how I think about"
+  },
+  {
+   "t": 480.35,
+   "d": 1.59,
+   "text": "these things going forward so now let's"
+  },
+  {
+   "t": 481.94,
+   "d": 1.65,
+   "text": "look at some actual examples of"
+  },
+  {
+   "t": 483.59,
+   "d": 2.73,
+   "text": "roguelike platformers and the first one"
+  },
+  {
+   "t": 486.32,
+   "d": 1.89,
+   "text": "is something that sticks very close to"
+  },
+  {
+   "t": 488.21,
+   "d": 2.64,
+   "text": "the origin red rogue is a flash based"
+  },
+  {
+   "t": 490.85,
+   "d": 1.76,
+   "text": "game developed by Aaron Steve that is"
+  },
+  {
+   "t": 492.61,
+   "d": 2.2,
+   "text": "basically just a prediction trigger"
+  },
+  {
+   "t": 494.81,
+   "d": 3.21,
+   "text": "based a traditional roguelike all the"
+  },
+  {
+   "t": 498.02,
+   "d": 1.2,
+   "text": "platformers I'm going to talk about red"
+  },
+  {
+   "t": 499.22,
+   "d": 1.74,
+   "text": "rogue sticks the closest to traditional"
+  },
+  {
+   "t": 500.96,
+   "d": 1.86,
+   "text": "roguelike gameplay conventions so you"
+  },
+  {
+   "t": 502.82,
+   "d": 1.26,
+   "text": "can tell by that statement that it's"
+  },
+  {
+   "t": 504.08,
+   "d": 1.29,
+   "text": "obviously got procedurally generated"
+  },
+  {
+   "t": 505.37,
+   "d": 1.71,
+   "text": "levels perma deaths and dungeon crawl"
+  },
+  {
+   "t": 507.08,
+   "d": 1.62,
+   "text": "and all that good stuff but it also has"
+  },
+  {
+   "t": 508.7,
+   "d": 1.29,
+   "text": "another feature which makes it pretty"
+  },
+  {
+   "t": 509.99,
+   "d": 1.56,
+   "text": "standard among roguelikes and pretty"
+  },
+  {
+   "t": 511.55,
+   "d": 2.91,
+   "text": "unique among platformers the game is"
+  },
+  {
+   "t": 514.46,
+   "d": 2.04,
+   "text": "split into two different modes of play"
+  },
+  {
+   "t": 516.5,
+   "d": 2.58,
+   "text": "which is our action RPG and dogmatic an"
+  },
+  {
+   "t": 519.08,
+   "d": 2.76,
+   "text": "action RPG it plays how you would assume"
+  },
+  {
+   "t": 521.84,
+   "d": 1.86,
+   "text": "a platform or would play everything is"
+  },
+  {
+   "t": 523.7,
+   "d": 1.71,
+   "text": "in real time regardless of what the"
+  },
+  {
+   "t": 525.41,
+   "d": 2.31,
+   "text": "player's actions are if you move or"
+  },
+  {
+   "t": 527.72,
+   "d": 0.32,
+   "text": "stand"
+  },
+  {
+   "t": 528.04,
+   "d": 1.8,
+   "text": "still or do whatever the game just keeps"
+  },
+  {
+   "t": 529.84,
+   "d": 2.37,
+   "text": "plugging along like normal in dogmatic"
+  },
+  {
+   "t": 532.21,
+   "d": 2.01,
+   "text": "mode however time only moves forward"
+  },
+  {
+   "t": 534.22,
+   "d": 1.68,
+   "text": "when the player moves or performs an"
+  },
+  {
+   "t": 535.9,
+   "d": 1.68,
+   "text": "action as soon as you stop pressing"
+  },
+  {
+   "t": 537.58,
+   "d": 2.49,
+   "text": "input the game stops dead even the"
+  },
+  {
+   "t": 540.07,
+   "d": 2.13,
+   "text": "particle effects as long as the player"
+  },
+  {
+   "t": 542.2,
+   "d": 1.83,
+   "text": "has control over the character time does"
+  },
+  {
+   "t": 544.03,
+   "d": 1.95,
+   "text": "not progress without their consent and"
+  },
+  {
+   "t": 545.98,
+   "d": 1.29,
+   "text": "that sounds pretty familiar doesn't it"
+  },
+  {
+   "t": 547.27,
+   "d": 1.74,
+   "text": "but even more than this this time"
+  },
+  {
+   "t": 549.01,
+   "d": 2.13,
+   "text": "dilation redroad that it's even more"
+  },
+  {
+   "t": 551.14,
+   "d": 1.11,
+   "text": "than just this time dilation that red"
+  },
+  {
+   "t": 552.25,
+   "d": 1.23,
+   "text": "rope has in common with traditional"
+  },
+  {
+   "t": 553.48,
+   "d": 2.31,
+   "text": "roguelikes in the main way you attack"
+  },
+  {
+   "t": 555.79,
+   "d": 1.86,
+   "text": "enemies is by bumping into them there is"
+  },
+  {
+   "t": 557.65,
+   "d": 1.2,
+   "text": "a text scroll at the bottom of the"
+  },
+  {
+   "t": 558.85,
+   "d": 1.14,
+   "text": "screen that tells you what events are"
+  },
+  {
+   "t": 559.99,
+   "d": 0.84,
+   "text": "happening around you"
+  },
+  {
+   "t": 560.83,
+   "d": 2.4,
+   "text": "item identification is a very large part"
+  },
+  {
+   "t": 563.23,
+   "d": 1.08,
+   "text": "of the game you start out with a"
+  },
+  {
+   "t": 564.31,
+   "d": 1.68,
+   "text": "skeleton minion that acts a lot like a"
+  },
+  {
+   "t": 565.99,
+   "d": 2.07,
+   "text": "pet in net hacker other roguelikes I"
+  },
+  {
+   "t": 568.06,
+   "d": 1.95,
+   "text": "mean heck there's not even any jumping"
+  },
+  {
+   "t": 570.01,
+   "d": 1.56,
+   "text": "in the game unless you have a very"
+  },
+  {
+   "t": 571.57,
+   "d": 2.58,
+   "text": "specific item and even somatically the"
+  },
+  {
+   "t": 574.15,
+   "d": 1.92,
+   "text": "game sets itself up is being directly"
+  },
+  {
+   "t": 576.07,
+   "d": 1.98,
+   "text": "tied to the original rogue so the"
+  },
+  {
+   "t": 578.05,
+   "d": 1.17,
+   "text": "question might be where is the"
+  },
+  {
+   "t": 579.22,
+   "d": 1.65,
+   "text": "platformer part of this roguelike"
+  },
+  {
+   "t": 580.87,
+   "d": 2.55,
+   "text": "platformer well it's got gravity which"
+  },
+  {
+   "t": 583.42,
+   "d": 1.77,
+   "text": "is a pretty big giveaway and it's still"
+  },
+  {
+   "t": 585.19,
+   "d": 1.74,
+   "text": "a side scroller so even though you can't"
+  },
+  {
+   "t": 586.93,
+   "d": 1.8,
+   "text": "necessarily jump vertical positioning is"
+  },
+  {
+   "t": 588.73,
+   "d": 2.07,
+   "text": "immensely important rather than jumping"
+  },
+  {
+   "t": 590.8,
+   "d": 1.71,
+   "text": "over obstacles or onto enemies you need"
+  },
+  {
+   "t": 592.51,
+   "d": 1.29,
+   "text": "to take advantage of the numerous"
+  },
+  {
+   "t": 593.8,
+   "d": 2.19,
+   "text": "ladders and interconnected platforms if"
+  },
+  {
+   "t": 595.99,
+   "d": 2.01,
+   "text": "you want to explore upwards or gain a"
+  },
+  {
+   "t": 598.0,
+   "d": 1.4,
+   "text": "height advantage over enemies and"
+  },
+  {
+   "t": 599.4,
+   "d": 2.23,
+   "text": "gaining a height advantage is a real"
+  },
+  {
+   "t": 601.63,
+   "d": 1.98,
+   "text": "advantage because if you drop down onto"
+  },
+  {
+   "t": 603.61,
+   "d": 2.52,
+   "text": "enemies from higher position it inflicts"
+  },
+  {
+   "t": 606.13,
+   "d": 1.35,
+   "text": "a long stun on them and lets you follow"
+  },
+  {
+   "t": 607.48,
+   "d": 1.95,
+   "text": "up with a series of attacks without fear"
+  },
+  {
+   "t": 609.43,
+   "d": 1.89,
+   "text": "of retribution and the same applies in"
+  },
+  {
+   "t": 611.32,
+   "d": 1.38,
+   "text": "Reverse though so you have to be careful"
+  },
+  {
+   "t": 612.7,
+   "d": 1.41,
+   "text": "not to let enemies get the drop on you"
+  },
+  {
+   "t": 614.11,
+   "d": 2.28,
+   "text": "in addition to the verticality however"
+  },
+  {
+   "t": 616.39,
+   "d": 1.83,
+   "text": "horizontal positioning is also an"
+  },
+  {
+   "t": 618.22,
+   "d": 1.59,
+   "text": "important factor since arranged and"
+  },
+  {
+   "t": 619.81,
+   "d": 2.19,
+   "text": "thrown weapons can only a m-- directly"
+  },
+  {
+   "t": 622.0,
+   "d": 2.4,
+   "text": "to the left and right this results in an"
+  },
+  {
+   "t": 624.4,
+   "d": 1.5,
+   "text": "interesting dynamic where if you want to"
+  },
+  {
+   "t": 625.9,
+   "d": 1.32,
+   "text": "take advantage of ranged weapons you"
+  },
+  {
+   "t": 627.22,
+   "d": 1.89,
+   "text": "need to create horizontal space with"
+  },
+  {
+   "t": 629.11,
+   "d": 1.8,
+   "text": "your between you and your foe while"
+  },
+  {
+   "t": 630.91,
+   "d": 1.41,
+   "text": "still staying on the same level which"
+  },
+  {
+   "t": 632.32,
+   "d": 1.89,
+   "text": "conflicts with the strategy of always"
+  },
+  {
+   "t": 634.21,
+   "d": 1.56,
+   "text": "trying to gain the higher ground and"
+  },
+  {
+   "t": 635.77,
+   "d": 2.01,
+   "text": "drop in on their heads like I said it's"
+  },
+  {
+   "t": 637.78,
+   "d": 1.83,
+   "text": "mostly a normal roguelike with the twist"
+  },
+  {
+   "t": 639.61,
+   "d": 1.95,
+   "text": "of being side view but that one twist"
+  },
+  {
+   "t": 641.56,
+   "d": 1.77,
+   "text": "and a few others that come about because"
+  },
+  {
+   "t": 643.33,
+   "d": 2.37,
+   "text": "of it what might otherwise be a pretty"
+  },
+  {
+   "t": 645.7,
+   "d": 1.44,
+   "text": "standard roguelike mechanically turns"
+  },
+  {
+   "t": 647.14,
+   "d": 2.43,
+   "text": "into something fresh and unique in this"
+  },
+  {
+   "t": 649.57,
+   "d": 1.74,
+   "text": "way I think wrote read Rogue is a good"
+  },
+  {
+   "t": 651.31,
+   "d": 1.5,
+   "text": "example of how varied the balance of"
+  },
+  {
+   "t": 652.81,
+   "d": 2.25,
+   "text": "ingredients can be when smashing two"
+  },
+  {
+   "t": 655.06,
+   "d": 1.41,
+   "text": "things together like this and of just"
+  },
+  {
+   "t": 656.47,
+   "d": 1.71,
+   "text": "how little you need of one to add to"
+  },
+  {
+   "t": 658.18,
+   "d": 1.38,
+   "text": "another to get something interesting and"
+  },
+  {
+   "t": 659.56,
+   "d": 0.68,
+   "text": "worthwhile"
+  },
+  {
+   "t": 660.24,
+   "d": 1.92,
+   "text": "in the same way that side say down well"
+  },
+  {
+   "t": 662.16,
+   "d": 1.68,
+   "text": "is a platformer with Stoudamire"
+  },
+  {
+   "t": 663.84,
+   "d": 1.68,
+   "text": "shoot-'em-up elements I'd say that this"
+  },
+  {
+   "t": 665.52,
+   "d": 2.79,
+   "text": "is a roguelike primarily with some"
+  },
+  {
+   "t": 668.31,
+   "d": 3.03,
+   "text": "sparse platformer elements on the"
+  },
+  {
+   "t": 671.34,
+   "d": 1.65,
+   "text": "opposite end of the spectrum we have a"
+  },
+  {
+   "t": 672.99,
+   "d": 1.92,
+   "text": "very platformer platformer with some"
+  },
+  {
+   "t": 674.91,
+   "d": 2.97,
+   "text": "roguelike elements glorious spelunky"
+  },
+  {
+   "t": 677.88,
+   "d": 1.89,
+   "text": "beloved spelunky magnum opus of derek"
+  },
+  {
+   "t": 679.77,
+   "d": 1.86,
+   "text": "you at least until spunky two comes out"
+  },
+  {
+   "t": 681.63,
+   "d": 2.25,
+   "text": "which i am very excited about but the"
+  },
+  {
+   "t": 683.88,
+   "d": 1.53,
+   "text": "original was maybe the first platformer"
+  },
+  {
+   "t": 685.41,
+   "d": 1.83,
+   "text": "to take direct and explicit influence"
+  },
+  {
+   "t": 687.24,
+   "d": 1.77,
+   "text": "from roguelikes and if it wasn't then it"
+  },
+  {
+   "t": 689.01,
+   "d": 3.53,
+   "text": "was at least the first that mattered"
+  },
+  {
+   "t": 692.54,
+   "d": 2.11,
+   "text": "with palanca we've suddenly flipped"
+  },
+  {
+   "t": 694.65,
+   "d": 2.61,
+   "text": "around the ingredients ratio compared to"
+  },
+  {
+   "t": 697.26,
+   "d": 2.19,
+   "text": "red rogue spelunky has a lot more"
+  },
+  {
+   "t": 699.45,
+   "d": 2.04,
+   "text": "platformer DNA in it not only can you"
+  },
+  {
+   "t": 701.49,
+   "d": 1.65,
+   "text": "actually jump in this one but the game"
+  },
+  {
+   "t": 703.14,
+   "d": 2.22,
+   "text": "has an entirely different vibe to it the"
+  },
+  {
+   "t": 705.36,
+   "d": 1.83,
+   "text": "classic mario and nintendo influences"
+  },
+  {
+   "t": 707.19,
+   "d": 1.17,
+   "text": "shine through not only in the players"
+  },
+  {
+   "t": 708.36,
+   "d": 2.28,
+   "text": "movement in physics but in the very"
+  },
+  {
+   "t": 710.64,
+   "d": 3.06,
+   "text": "visual style itself it at times gets"
+  },
+  {
+   "t": 713.7,
+   "d": 2.22,
+   "text": "very chaotic and frenetic and it feels"
+  },
+  {
+   "t": 715.92,
+   "d": 3.24,
+   "text": "like and it feels very rkt because it"
+  },
+  {
+   "t": 719.16,
+   "d": 2.43,
+   "text": "places a heavy focus on your score which"
+  },
+  {
+   "t": 721.59,
+   "d": 2.66,
+   "text": "always has a prominent place in the UI"
+  },
+  {
+   "t": 724.25,
+   "d": 2.29,
+   "text": "to that end the game frequently goads"
+  },
+  {
+   "t": 726.54,
+   "d": 1.8,
+   "text": "you into taking an excess of risk in"
+  },
+  {
+   "t": 728.34,
+   "d": 1.62,
+   "text": "order to collect more or more valuable"
+  },
+  {
+   "t": 729.96,
+   "d": 0.63,
+   "text": "treasure"
+  },
+  {
+   "t": 730.59,
+   "d": 1.77,
+   "text": "so with red rogue I asked where the"
+  },
+  {
+   "t": 732.36,
+   "d": 1.77,
+   "text": "platforming was in this mostly roguelike"
+  },
+  {
+   "t": 734.13,
+   "d": 1.38,
+   "text": "and now the question is where is the"
+  },
+  {
+   "t": 735.51,
+   "d": 2.81,
+   "text": "rogue liking in this mostly platformer"
+  },
+  {
+   "t": 738.32,
+   "d": 2.08,
+   "text": "well you know this already because it's"
+  },
+  {
+   "t": 740.4,
+   "d": 1.59,
+   "text": "spelunky and it's been mentioned quite a"
+  },
+  {
+   "t": 741.99,
+   "d": 3.33,
+   "text": "few times in this and other talks but"
+  },
+  {
+   "t": 745.32,
+   "d": 1.11,
+   "text": "it's procedurally generated"
+  },
+  {
+   "t": 746.43,
+   "d": 2.52,
+   "text": "it's got perma death is that enough to"
+  },
+  {
+   "t": 748.95,
+   "d": 2.67,
+   "text": "be considered a roguelike platformer I'm"
+  },
+  {
+   "t": 751.62,
+   "d": 2.88,
+   "text": "not sure maybe but if that were all it"
+  },
+  {
+   "t": 754.5,
+   "d": 1.17,
+   "text": "had borrowed from roguelikes then it"
+  },
+  {
+   "t": 755.67,
+   "d": 1.14,
+   "text": "would have been a very different game"
+  },
+  {
+   "t": 756.81,
+   "d": 2.4,
+   "text": "there's one other aspect of roguelikes"
+  },
+  {
+   "t": 759.21,
+   "d": 1.83,
+   "text": "that Derek you mentions lifting for"
+  },
+  {
+   "t": 761.04,
+   "d": 1.32,
+   "text": "spelunky in his book about the game"
+  },
+  {
+   "t": 762.36,
+   "d": 2.46,
+   "text": "three points of value from the Berlin"
+  },
+  {
+   "t": 764.82,
+   "d": 1.47,
+   "text": "interpretation of roguelikes became"
+  },
+  {
+   "t": 766.29,
+   "d": 1.62,
+   "text": "important principles for guiding of the"
+  },
+  {
+   "t": 767.91,
+   "d": 3.24,
+   "text": "design randomized level generation"
+  },
+  {
+   "t": 771.15,
+   "d": 2.82,
+   "text": "obviously permanent death of course but"
+  },
+  {
+   "t": 773.97,
+   "d": 2.28,
+   "text": "also a shared rule set for players NPCs"
+  },
+  {
+   "t": 776.25,
+   "d": 1.32,
+   "text": "and items and I think that's the"
+  },
+  {
+   "t": 777.57,
+   "d": 1.47,
+   "text": "important part and that's the part that"
+  },
+  {
+   "t": 779.04,
+   "d": 1.86,
+   "text": "really brings it all together everything"
+  },
+  {
+   "t": 780.9,
+   "d": 1.68,
+   "text": "follows the same rules and this is what"
+  },
+  {
+   "t": 782.58,
+   "d": 1.11,
+   "text": "allows for the complexity of"
+  },
+  {
+   "t": 783.69,
+   "d": 1.62,
+   "text": "interactions it makes it feel more like"
+  },
+  {
+   "t": 785.31,
+   "d": 2.64,
+   "text": "more than just a platformer and like a"
+  },
+  {
+   "t": 787.95,
+   "d": 1.59,
+   "text": "roguelike platformer this is what gives"
+  },
+  {
+   "t": 789.54,
+   "d": 3.69,
+   "text": "rise to emergence and as you can see the"
+  },
+  {
+   "t": 793.23,
+   "d": 0.36,
+   "text": "freedom"
+  },
+  {
+   "t": 793.59,
+   "d": 1.38,
+   "text": "mentions of rogue Laika tude can be"
+  },
+  {
+   "t": 794.97,
+   "d": 3.48,
+   "text": "mapped directly onto the three aspects"
+  },
+  {
+   "t": 798.45,
+   "d": 1.56,
+   "text": "of the Berlin interpretation that"
+  },
+  {
+   "t": 800.01,
+   "d": 3.78,
+   "text": "spelunky and employs the procedure"
+  },
+  {
+   "t": 803.79,
+   "d": 1.35,
+   "text": "allottee of the level is the consequence"
+  },
+  {
+   "t": 805.14,
+   "d": 1.17,
+   "text": "of perma deaths and the emergent"
+  },
+  {
+   "t": 806.31,
+   "d": 1.53,
+   "text": "interactions that arise from the fact"
+  },
+  {
+   "t": 807.84,
+   "d": 1.71,
+   "text": "that everything is equally subject to"
+  },
+  {
+   "t": 809.55,
+   "d": 1.86,
+   "text": "the same spike traps and explosions and"
+  },
+  {
+   "t": 811.41,
+   "d": 3.51,
+   "text": "equally pick up Abel and throwable but"
+  },
+  {
+   "t": 814.92,
+   "d": 1.38,
+   "text": "what about the last dimension strategy"
+  },
+  {
+   "t": 816.3,
+   "d": 1.92,
+   "text": "tactics for thought well despite the"
+  },
+  {
+   "t": 818.22,
+   "d": 1.8,
+   "text": "aforementioned at times chaotic"
+  },
+  {
+   "t": 820.02,
+   "d": 1.92,
+   "text": "atmosphere and Arkady vibes spelunky"
+  },
+  {
+   "t": 821.94,
+   "d": 1.83,
+   "text": "isn't generally a mindless split second"
+  },
+  {
+   "t": 823.77,
+   "d": 1.74,
+   "text": "reaction fest unless you intentionally"
+  },
+  {
+   "t": 825.51,
+   "d": 1.47,
+   "text": "play it that way like speedrunning or"
+  },
+  {
+   "t": 826.98,
+   "d": 2.01,
+   "text": "something most often it's beneficial to"
+  },
+  {
+   "t": 828.99,
+   "d": 1.8,
+   "text": "look over a particular situation before"
+  },
+  {
+   "t": 830.79,
+   "d": 2.37,
+   "text": "jumping in and enemy behaviors are both"
+  },
+  {
+   "t": 833.16,
+   "d": 2.01,
+   "text": "simplistic enough and consistent enough"
+  },
+  {
+   "t": 835.17,
+   "d": 1.41,
+   "text": "that they can be easily predicted and"
+  },
+  {
+   "t": 836.58,
+   "d": 1.65,
+   "text": "therefore planned around or taken"
+  },
+  {
+   "t": 838.23,
+   "d": 2.1,
+   "text": "advantage of when the same can be said"
+  },
+  {
+   "t": 840.33,
+   "d": 2.54,
+   "text": "of traps and other environmental hazards"
+  },
+  {
+   "t": 842.87,
+   "d": 3.28,
+   "text": "so somewhere between spelunky and red"
+  },
+  {
+   "t": 846.15,
+   "d": 2.07,
+   "text": "rogue we have Vogon teh vacante is"
+  },
+  {
+   "t": 848.22,
+   "d": 2.58,
+   "text": "another pretty platformer roguelike"
+  },
+  {
+   "t": 850.8,
+   "d": 1.68,
+   "text": "platformer but it's much more grounded"
+  },
+  {
+   "t": 852.48,
+   "d": 1.62,
+   "text": "in traditional roguelike tropes and"
+  },
+  {
+   "t": 854.1,
+   "d": 2.37,
+   "text": "atmosphere than spelunky is it's much"
+  },
+  {
+   "t": 856.47,
+   "d": 1.44,
+   "text": "more of a dungeon crawler with a heavier"
+  },
+  {
+   "t": 857.91,
+   "d": 1.95,
+   "text": "heavier focus on combat and equipment"
+  },
+  {
+   "t": 859.86,
+   "d": 1.62,
+   "text": "and carefully picking your way through"
+  },
+  {
+   "t": 861.48,
+   "d": 1.29,
+   "text": "different level up skills and"
+  },
+  {
+   "t": 862.77,
+   "d": 3.12,
+   "text": "identifying items and so it's catacomb"
+  },
+  {
+   "t": 865.89,
+   "d": 2.34,
+   "text": "kids so up until now we've mostly been"
+  },
+  {
+   "t": 868.23,
+   "d": 1.38,
+   "text": "looking at how these games relate to"
+  },
+  {
+   "t": 869.61,
+   "d": 1.29,
+   "text": "traditional roguelikes but as I"
+  },
+  {
+   "t": 870.9,
+   "d": 1.35,
+   "text": "mentioned earlier I think it's also"
+  },
+  {
+   "t": 872.25,
+   "d": 1.29,
+   "text": "important to look at how they relate to"
+  },
+  {
+   "t": 873.54,
+   "d": 2.16,
+   "text": "each other why are some elements taken"
+  },
+  {
+   "t": 875.7,
+   "d": 1.8,
+   "text": "and some are left behind which ones are"
+  },
+  {
+   "t": 877.5,
+   "d": 1.62,
+   "text": "adapted adopted and how do they change"
+  },
+  {
+   "t": 879.12,
+   "d": 2.64,
+   "text": "in the process I think vacante and"
+  },
+  {
+   "t": 881.76,
+   "d": 1.47,
+   "text": "catacomb kids are an interesting example"
+  },
+  {
+   "t": 883.23,
+   "d": 2.22,
+   "text": "of this because but both games are"
+  },
+  {
+   "t": 885.45,
+   "d": 1.41,
+   "text": "setting out with a similar goal of"
+  },
+  {
+   "t": 886.86,
+   "d": 2.1,
+   "text": "taking a spelunky inspired platformer"
+  },
+  {
+   "t": 888.96,
+   "d": 2.04,
+   "text": "and pulling it back towards the"
+  },
+  {
+   "t": 891.0,
+   "d": 1.74,
+   "text": "roguelike dungeon crawler side of the"
+  },
+  {
+   "t": 892.74,
+   "d": 1.92,
+   "text": "equation and in doing so both games"
+  },
+  {
+   "t": 894.66,
+   "d": 1.41,
+   "text": "borrow many of the same elements and"
+  },
+  {
+   "t": 896.07,
+   "d": 1.68,
+   "text": "mechanics but two wildly different"
+  },
+  {
+   "t": 897.75,
+   "d": 2.04,
+   "text": "effect it becomes less about the"
+  },
+  {
+   "t": 899.79,
+   "d": 1.95,
+   "text": "proportion of each stuff of stuff each"
+  },
+  {
+   "t": 901.74,
+   "d": 1.59,
+   "text": "game borrows from roguelikes"
+  },
+  {
+   "t": 903.33,
+   "d": 1.56,
+   "text": "and more about which things they borrow"
+  },
+  {
+   "t": 904.89,
+   "d": 1.59,
+   "text": "specifically and the difference is in"
+  },
+  {
+   "t": 906.48,
+   "d": 1.74,
+   "text": "application which when the same"
+  },
+  {
+   "t": 908.22,
+   "d": 4.41,
+   "text": "mechanics are used in vacante you pick"
+  },
+  {
+   "t": 912.63,
+   "d": 1.59,
+   "text": "from three different classes and each"
+  },
+  {
+   "t": 914.22,
+   "d": 1.77,
+   "text": "has their own unique skills to level up"
+  },
+  {
+   "t": 915.99,
+   "d": 1.47,
+   "text": "and different starting equipment and"
+  },
+  {
+   "t": 917.46,
+   "d": 2.01,
+   "text": "stats the combat is reactive and evasive"
+  },
+  {
+   "t": 919.47,
+   "d": 2.25,
+   "text": "and each weapon type has a different"
+  },
+  {
+   "t": 921.72,
+   "d": 1.68,
+   "text": "behavior but the weapons and armors"
+  },
+  {
+   "t": 923.4,
+   "d": 1.83,
+   "text": "themselves are randomly generated with"
+  },
+  {
+   "t": 925.23,
+   "d": 1.92,
+   "text": "any number of different properties the"
+  },
+  {
+   "t": 927.15,
+   "d": 0.39,
+   "text": "atmosphere"
+  },
+  {
+   "t": 927.54,
+   "d": 2.31,
+   "text": "dark and it uses a roguelike style fog"
+  },
+  {
+   "t": 929.85,
+   "d": 1.77,
+   "text": "of war that gradually reveals the level"
+  },
+  {
+   "t": 931.62,
+   "d": 2.52,
+   "text": "as you explore potions and other items"
+  },
+  {
+   "t": 934.14,
+   "d": 1.65,
+   "text": "are unidentified until you drink them or"
+  },
+  {
+   "t": 935.79,
+   "d": 1.62,
+   "text": "use a scroll to identify the properties"
+  },
+  {
+   "t": 937.41,
+   "d": 2.19,
+   "text": "and you find spell books to learn spells"
+  },
+  {
+   "t": 939.6,
+   "d": 3.09,
+   "text": "from and catacomb kids you pick from"
+  },
+  {
+   "t": 942.69,
+   "d": 1.32,
+   "text": "four classes and each has their own"
+  },
+  {
+   "t": 944.01,
+   "d": 1.56,
+   "text": "unique skills to level up and different"
+  },
+  {
+   "t": 945.57,
+   "d": 2.19,
+   "text": "starting equipment stats the combat is"
+  },
+  {
+   "t": 947.76,
+   "d": 1.47,
+   "text": "reactive and evasive and each weapon"
+  },
+  {
+   "t": 949.23,
+   "d": 1.32,
+   "text": "type has a different behavior but the"
+  },
+  {
+   "t": 950.55,
+   "d": 1.23,
+   "text": "weapons and armors themselves are"
+  },
+  {
+   "t": 951.78,
+   "d": 1.38,
+   "text": "randomly generated with any number of"
+  },
+  {
+   "t": 953.16,
+   "d": 1.62,
+   "text": "different properties the atmosphere is"
+  },
+  {
+   "t": 954.78,
+   "d": 1.83,
+   "text": "dark and it uses roguelikes file fog of"
+  },
+  {
+   "t": 956.61,
+   "d": 1.14,
+   "text": "war that would gradually reveals the"
+  },
+  {
+   "t": 957.75,
+   "d": 1.62,
+   "text": "level as you explore potions are"
+  },
+  {
+   "t": 959.37,
+   "d": 1.47,
+   "text": "unidentified until you drink them as or"
+  },
+  {
+   "t": 960.84,
+   "d": 1.35,
+   "text": "throw them at enemies to identify the"
+  },
+  {
+   "t": 962.19,
+   "d": 2.07,
+   "text": "properties and you use spell books to"
+  },
+  {
+   "t": 964.26,
+   "d": 1.92,
+   "text": "learn spells from this sound very"
+  },
+  {
+   "t": 966.18,
+   "d": 2.94,
+   "text": "similar but for all their apparent"
+  },
+  {
+   "t": 969.12,
+   "d": 2.16,
+   "text": "similarities however each game becomes"
+  },
+  {
+   "t": 971.28,
+   "d": 2.07,
+   "text": "immediately apparent that they're got"
+  },
+  {
+   "t": 973.35,
+   "d": 2.55,
+   "text": "different souls if you play them and"
+  },
+  {
+   "t": 975.9,
+   "d": 1.41,
+   "text": "each of the aforementioned roguelike key"
+  },
+  {
+   "t": 977.31,
+   "d": 1.32,
+   "text": "mechanics is handled in a completely"
+  },
+  {
+   "t": 978.63,
+   "d": 2.46,
+   "text": "different way Vogon taste classes are"
+  },
+  {
+   "t": 981.09,
+   "d": 2.52,
+   "text": "classic fantasy style classes and RPG"
+  },
+  {
+   "t": 983.61,
+   "d": 2.1,
+   "text": "roles the knight the rogue and the mage"
+  },
+  {
+   "t": 985.71,
+   "d": 1.83,
+   "text": "and the class system was mechanically"
+  },
+  {
+   "t": 987.54,
+   "d": 2.4,
+   "text": "inspired in part by Diablo catacomb kids"
+  },
+  {
+   "t": 989.94,
+   "d": 2.16,
+   "text": "classes on the other hand I kind of just"
+  },
+  {
+   "t": 992.1,
+   "d": 3.6,
+   "text": "made up there I made them up after the"
+  },
+  {
+   "t": 995.7,
+   "d": 2.76,
+   "text": "fact to justify the stats and they"
+  },
+  {
+   "t": 998.46,
+   "d": 3.12,
+   "text": "define the rules by which your"
+  },
+  {
+   "t": 1001.58,
+   "d": 1.74,
+   "text": "characters are generated rather than"
+  },
+  {
+   "t": 1003.32,
+   "d": 1.56,
+   "text": "guaranteeing a specific set of starting"
+  },
+  {
+   "t": 1004.88,
+   "d": 3.99,
+   "text": "conditions Vedanta is combat is reactive"
+  },
+  {
+   "t": 1008.87,
+   "d": 1.8,
+   "text": "innovate and evasive because of enemy"
+  },
+  {
+   "t": 1010.67,
+   "d": 1.59,
+   "text": "behavior that demands attention and"
+  },
+  {
+   "t": 1012.26,
+   "d": 1.89,
+   "text": "caution but otherwise it sticks fairly"
+  },
+  {
+   "t": 1014.15,
+   "d": 1.71,
+   "text": "close to spelunky in terms of the timing"
+  },
+  {
+   "t": 1015.86,
+   "d": 1.65,
+   "text": "and mana directionality of attacks"
+  },
+  {
+   "t": 1017.51,
+   "d": 2.7,
+   "text": "catacomb kids combat is reactive and"
+  },
+  {
+   "t": 1020.21,
+   "d": 1.38,
+   "text": "evasive because the players own moves"
+  },
+  {
+   "t": 1021.59,
+   "d": 1.71,
+   "text": "that encourages mobility and the combat"
+  },
+  {
+   "t": 1023.3,
+   "d": 1.53,
+   "text": "was heavily inspired by a Smash Brothers"
+  },
+  {
+   "t": 1024.83,
+   "d": 2.01,
+   "text": "games from which I lifted both attack"
+  },
+  {
+   "t": 1026.84,
+   "d": 1.5,
+   "text": "directionality and the dodge maneuver"
+  },
+  {
+   "t": 1028.34,
+   "d": 3.48,
+   "text": "which play a very big role and even the"
+  },
+  {
+   "t": 1031.82,
+   "d": 1.8,
+   "text": "way we approach our primary influences"
+  },
+  {
+   "t": 1033.62,
+   "d": 2.13,
+   "text": "is different with rip which ripples"
+  },
+  {
+   "t": 1035.75,
+   "d": 2.25,
+   "text": "throughout the rest of the game new"
+  },
+  {
+   "t": 1038.0,
+   "d": 1.71,
+   "text": "clean the developers of a ghonte site"
+  },
+  {
+   "t": 1039.71,
+   "d": 1.83,
+   "text": "spelunky and dungeon crawl Stone Soup as"
+  },
+  {
+   "t": 1041.54,
+   "d": 1.53,
+   "text": "the two major influences of the game"
+  },
+  {
+   "t": 1043.07,
+   "d": 1.77,
+   "text": "with spelunky providing the basis for"
+  },
+  {
+   "t": 1044.84,
+   "d": 1.52,
+   "text": "the platforming while dungeon crawl"
+  },
+  {
+   "t": 1046.36,
+   "d": 2.29,
+   "text": "inspired a system of gods and shrines"
+  },
+  {
+   "t": 1048.65,
+   "d": 2.85,
+   "text": "and branching levels on the other hand I"
+  },
+  {
+   "t": 1051.5,
+   "d": 1.38,
+   "text": "didn't really have a specific roguelike"
+  },
+  {
+   "t": 1052.88,
+   "d": 1.47,
+   "text": "in mind when working on catacomb kids"
+  },
+  {
+   "t": 1054.35,
+   "d": 1.83,
+   "text": "more just the general idea that I wanted"
+  },
+  {
+   "t": 1056.18,
+   "d": 2.07,
+   "text": "a game like spelunky but more roguelike"
+  },
+  {
+   "t": 1058.25,
+   "d": 1.8,
+   "text": "I ended up taking bits and pieces from"
+  },
+  {
+   "t": 1060.05,
+   "d": 2.76,
+   "text": "whatever I felt like at the time"
+  },
+  {
+   "t": 1062.81,
+   "d": 1.2,
+   "text": "and aside from just the shared"
+  },
+  {
+   "t": 1064.01,
+   "d": 1.95,
+   "text": "foundation of spelunky + roguelike each"
+  },
+  {
+   "t": 1065.96,
+   "d": 2.09,
+   "text": "game has numerous different inspirations"
+  },
+  {
+   "t": 1068.05,
+   "d": 2.26,
+   "text": "beyond those for mood and atmosphere"
+  },
+  {
+   "t": 1070.31,
+   "d": 2.88,
+   "text": "world building and pacing that all build"
+  },
+  {
+   "t": 1073.19,
+   "d": 1.62,
+   "text": "upon each other and send them down very"
+  },
+  {
+   "t": 1074.81,
+   "d": 4.17,
+   "text": "different paths so we've looked at some"
+  },
+  {
+   "t": 1078.98,
+   "d": 1.68,
+   "text": "specific games and their relationships"
+  },
+  {
+   "t": 1080.66,
+   "d": 1.41,
+   "text": "with roguelikes and with each other but"
+  },
+  {
+   "t": 1082.07,
+   "d": 1.59,
+   "text": "what about specific roguelike mechanics"
+  },
+  {
+   "t": 1083.66,
+   "d": 2.64,
+   "text": "and how are they're adapted to different"
+  },
+  {
+   "t": 1086.3,
+   "d": 2.19,
+   "text": "roguelike platformers so let's look"
+  },
+  {
+   "t": 1088.49,
+   "d": 1.56,
+   "text": "beyond the broad-strokes now and dig"
+  },
+  {
+   "t": 1090.05,
+   "d": 1.05,
+   "text": "into the details of how certain"
+  },
+  {
+   "t": 1091.1,
+   "d": 2.1,
+   "text": "mechanics have been applied to roguelike"
+  },
+  {
+   "t": 1093.2,
+   "d": 1.62,
+   "text": "platformers starting with darkness and"
+  },
+  {
+   "t": 1094.82,
+   "d": 3.48,
+   "text": "vision in traditional roguelikes the"
+  },
+  {
+   "t": 1098.3,
+   "d": 1.26,
+   "text": "players ability to see threats around"
+  },
+  {
+   "t": 1099.56,
+   "d": 1.5,
+   "text": "them is often a large part of the game"
+  },
+  {
+   "t": 1101.06,
+   "d": 1.92,
+   "text": "strategic qualities and is usually"
+  },
+  {
+   "t": 1102.98,
+   "d": 1.35,
+   "text": "represented by a combination of"
+  },
+  {
+   "t": 1104.33,
+   "d": 2.16,
+   "text": "line-of-sight fog of war and the actual"
+  },
+  {
+   "t": 1106.49,
+   "d": 2.22,
+   "text": "radius outwards your vision extends of"
+  },
+  {
+   "t": 1108.71,
+   "d": 1.44,
+   "text": "these three line-of-sight is the one"
+  },
+  {
+   "t": 1110.15,
+   "d": 2.04,
+   "text": "that's nearly universal in traditional"
+  },
+  {
+   "t": 1112.19,
+   "d": 1.65,
+   "text": "roguelikes that seems to be much less"
+  },
+  {
+   "t": 1113.84,
+   "d": 2.97,
+   "text": "common in roguelike platformers and even"
+  },
+  {
+   "t": 1116.81,
+   "d": 2.88,
+   "text": "so many platformers do try to if not"
+  },
+  {
+   "t": 1119.69,
+   "d": 1.8,
+   "text": "copy the mechanics directly at least"
+  },
+  {
+   "t": 1121.49,
+   "d": 3.27,
+   "text": "approximate them as I mentioned catacomb"
+  },
+  {
+   "t": 1124.76,
+   "d": 3.3,
+   "text": "kids and vu ghonte are both used the"
+  },
+  {
+   "t": 1128.06,
+   "d": 2.25,
+   "text": "roguelike style fog of war and the game"
+  },
+  {
+   "t": 1130.31,
+   "d": 2.66,
+   "text": "red rogue and crystal catacombs also"
+  },
+  {
+   "t": 1132.97,
+   "d": 4.48,
+   "text": "have darkness as mechanics but only red"
+  },
+  {
+   "t": 1137.45,
+   "d": 2.03,
+   "text": "rogue actually employs line-of-sight i"
+  },
+  {
+   "t": 1139.48,
+   "d": 1.96,
+   "text": "tried implementing line-of-sight and"
+  },
+  {
+   "t": 1141.44,
+   "d": 1.65,
+   "text": "catacomb kids a long time ago but I"
+  },
+  {
+   "t": 1143.09,
+   "d": 1.38,
+   "text": "wasn't really smart enough at the time"
+  },
+  {
+   "t": 1144.47,
+   "d": 1.53,
+   "text": "to code it efficiently enough to run in"
+  },
+  {
+   "t": 1146.0,
+   "d": 2.58,
+   "text": "real time I could probably do it now but"
+  },
+  {
+   "t": 1148.58,
+   "d": 2.61,
+   "text": "by now the game is designed without that"
+  },
+  {
+   "t": 1151.19,
+   "d": 4.32,
+   "text": "in mind many other platformer roguelikes"
+  },
+  {
+   "t": 1155.51,
+   "d": 1.77,
+   "text": "like spelunky cave blazers and tower"
+  },
+  {
+   "t": 1157.28,
+   "d": 2.43,
+   "text": "climb tend to largely ignore this aspect"
+  },
+  {
+   "t": 1159.71,
+   "d": 1.47,
+   "text": "of roguelikes unless it's used to mark a"
+  },
+  {
+   "t": 1161.18,
+   "d": 1.98,
+   "text": "special situation as is the case in"
+  },
+  {
+   "t": 1163.16,
+   "d": 3.84,
+   "text": "spelunky x' occasional dark floors even"
+  },
+  {
+   "t": 1167.0,
+   "d": 1.77,
+   "text": "despite its sporadic usage in roguelike"
+  },
+  {
+   "t": 1168.77,
+   "d": 1.32,
+   "text": "platformers the mechanical of light and"
+  },
+  {
+   "t": 1170.09,
+   "d": 1.59,
+   "text": "visibility is still worth exploring I"
+  },
+  {
+   "t": 1171.68,
+   "d": 3.06,
+   "text": "think as shown by rogue light by daniel"
+  },
+  {
+   "t": 1174.74,
+   "d": 2.85,
+   "text": "linson AKA mana gor AKA he makes amazing"
+  },
+  {
+   "t": 1177.59,
+   "d": 2.85,
+   "text": "games in rogue light the player"
+  },
+  {
+   "t": 1180.44,
+   "d": 1.59,
+   "text": "character has no visibility ranged"
+  },
+  {
+   "t": 1182.03,
+   "d": 1.62,
+   "text": "herself and is instead entirely"
+  },
+  {
+   "t": 1183.65,
+   "d": 1.74,
+   "text": "dependent on environmental light sources"
+  },
+  {
+   "t": 1185.39,
+   "d": 1.98,
+   "text": "to navigate erratically generated levels"
+  },
+  {
+   "t": 1187.37,
+   "d": 1.98,
+   "text": "full of spike traps and hooded coal"
+  },
+  {
+   "t": 1189.35,
+   "d": 2.49,
+   "text": "cysts enemies and flying skeletons you"
+  },
+  {
+   "t": 1191.84,
+   "d": 1.71,
+   "text": "have to make use of your limited number"
+  },
+  {
+   "t": 1193.55,
+   "d": 1.33,
+   "text": "of flaming arrows to both"
+  },
+  {
+   "t": 1194.88,
+   "d": 1.86,
+   "text": "light the way ahead and to defeat"
+  },
+  {
+   "t": 1196.74,
+   "d": 0.96,
+   "text": "enemies which makes for a pretty"
+  },
+  {
+   "t": 1197.7,
+   "d": 1.47,
+   "text": "interesting trade-off in game of"
+  },
+  {
+   "t": 1199.17,
+   "d": 3.18,
+   "text": "resource management another mechanic"
+  },
+  {
+   "t": 1202.35,
+   "d": 1.35,
+   "text": "that's commonly found in roguelikes but"
+  },
+  {
+   "t": 1203.7,
+   "d": 0.51,
+   "text": "that's similar"
+  },
+  {
+   "t": 1204.21,
+   "d": 1.95,
+   "text": "similarly infrequent in platformer"
+  },
+  {
+   "t": 1206.16,
+   "d": 1.53,
+   "text": "roguelikes is the hunger clock in"
+  },
+  {
+   "t": 1207.69,
+   "d": 1.65,
+   "text": "traditional roguelikes the threat of"
+  },
+  {
+   "t": 1209.34,
+   "d": 2.13,
+   "text": "starvation acts as a way to enforce if"
+  },
+  {
+   "t": 1211.47,
+   "d": 2.07,
+   "text": "efficiency and resource management and"
+  },
+  {
+   "t": 1213.54,
+   "d": 1.71,
+   "text": "to discourage just waiting around"
+  },
+  {
+   "t": 1215.25,
+   "d": 1.44,
+   "text": "somewhere whenever you get a boo-boo in"
+  },
+  {
+   "t": 1216.69,
+   "d": 1.77,
+   "text": "games that have health written Minori"
+  },
+  {
+   "t": 1218.46,
+   "d": 2.7,
+   "text": "man mana regeneration in real-time games"
+  },
+  {
+   "t": 1221.16,
+   "d": 2.43,
+   "text": "this ends up just translating to time"
+  },
+  {
+   "t": 1223.59,
+   "d": 3.33,
+   "text": "pressure some games like spelunky and"
+  },
+  {
+   "t": 1226.92,
+   "d": 1.95,
+   "text": "crystal catacombs take this time"
+  },
+  {
+   "t": 1228.87,
+   "d": 2.34,
+   "text": "pressure and keep it and use it the"
+  },
+  {
+   "t": 1231.21,
+   "d": 1.53,
+   "text": "ghost in spelunky that appears after"
+  },
+  {
+   "t": 1232.74,
+   "d": 1.8,
+   "text": "five minutes serves to keep the player"
+  },
+  {
+   "t": 1234.54,
+   "d": 1.56,
+   "text": "from just cleaning house on every floor"
+  },
+  {
+   "t": 1236.1,
+   "d": 1.71,
+   "text": "and grabbing every last piece of"
+  },
+  {
+   "t": 1237.81,
+   "d": 2.88,
+   "text": "treasure uncontested and also to force"
+  },
+  {
+   "t": 1240.69,
+   "d": 1.65,
+   "text": "players to act if they're taking too"
+  },
+  {
+   "t": 1242.34,
+   "d": 1.59,
+   "text": "long and mulling over a situation to"
+  },
+  {
+   "t": 1243.93,
+   "d": 2.97,
+   "text": "keep the rkt pace in crystal catacombs"
+  },
+  {
+   "t": 1246.9,
+   "d": 1.47,
+   "text": "levels are generated in a fairly"
+  },
+  {
+   "t": 1248.37,
+   "d": 1.68,
+   "text": "straightforward way such that the timer"
+  },
+  {
+   "t": 1250.05,
+   "d": 1.74,
+   "text": "doesn't become onerous or overly"
+  },
+  {
+   "t": 1251.79,
+   "d": 1.23,
+   "text": "punishing unless the players are"
+  },
+  {
+   "t": 1253.02,
+   "d": 1.86,
+   "text": "exceedingly slow however the hooker"
+  },
+  {
+   "t": 1254.88,
+   "d": 1.41,
+   "text": "clock might be a little harder to fit"
+  },
+  {
+   "t": 1256.29,
+   "d": 2.19,
+   "text": "into a slower paced game or one with"
+  },
+  {
+   "t": 1258.48,
+   "d": 2.22,
+   "text": "larger more complex levels and I know"
+  },
+  {
+   "t": 1260.7,
+   "d": 2.01,
+   "text": "this because I spent a few days trying"
+  },
+  {
+   "t": 1262.71,
+   "d": 2.04,
+   "text": "to put one in catacomb kids and it was a"
+  },
+  {
+   "t": 1264.75,
+   "d": 2.24,
+   "text": "terrible terrible fit for the game"
+  },
+  {
+   "t": 1266.99,
+   "d": 3.07,
+   "text": "eating corpses eating enemy corpses has"
+  },
+  {
+   "t": 1270.06,
+   "d": 1.41,
+   "text": "always been one of those weird quirky"
+  },
+  {
+   "t": 1271.47,
+   "d": 2.61,
+   "text": "mechanics that seem very specific to two"
+  },
+  {
+   "t": 1274.08,
+   "d": 1.8,
+   "text": "roguelikes and so when I made catacomb"
+  },
+  {
+   "t": 1275.88,
+   "d": 1.23,
+   "text": "kids it was obviously one of the first"
+  },
+  {
+   "t": 1277.11,
+   "d": 2.61,
+   "text": "things I stole for a long time though it"
+  },
+  {
+   "t": 1279.72,
+   "d": 1.8,
+   "text": "was just a way to restore health and"
+  },
+  {
+   "t": 1281.52,
+   "d": 1.86,
+   "text": "didn't feel very interesting within the"
+  },
+  {
+   "t": 1283.38,
+   "d": 1.95,
+   "text": "larger context of the game I had never"
+  },
+  {
+   "t": 1285.33,
+   "d": 2.16,
+   "text": "actually added the starvation component"
+  },
+  {
+   "t": 1287.49,
+   "d": 1.23,
+   "text": "to eating things because I was just so"
+  },
+  {
+   "t": 1288.72,
+   "d": 1.71,
+   "text": "bemused by the idea that you could kill"
+  },
+  {
+   "t": 1290.43,
+   "d": 1.38,
+   "text": "anything and just eat it right there I"
+  },
+  {
+   "t": 1291.81,
+   "d": 2.79,
+   "text": "kind of just stopped after that so later"
+  },
+  {
+   "t": 1294.6,
+   "d": 2.25,
+   "text": "on when I like took a good look at the"
+  },
+  {
+   "t": 1296.85,
+   "d": 1.92,
+   "text": "mechanic and realized that aside from"
+  },
+  {
+   "t": 1298.77,
+   "d": 1.77,
+   "text": "the somatic absurdity it was just kind"
+  },
+  {
+   "t": 1300.54,
+   "d": 1.53,
+   "text": "of mechanically boring it seemed like"
+  },
+  {
+   "t": 1302.07,
+   "d": 1.89,
+   "text": "the natural thing to do would be to take"
+  },
+  {
+   "t": 1303.96,
+   "d": 1.38,
+   "text": "the other half of the mechanic I had"
+  },
+  {
+   "t": 1305.34,
+   "d": 2.61,
+   "text": "already stolen and adds starvation and a"
+  },
+  {
+   "t": 1307.95,
+   "d": 2.49,
+   "text": "need to eat but it sucked and it was bad"
+  },
+  {
+   "t": 1310.44,
+   "d": 2.67,
+   "text": "it ruined the pace of the game to have"
+  },
+  {
+   "t": 1313.11,
+   "d": 1.38,
+   "text": "this time pressure where I was trying to"
+  },
+  {
+   "t": 1314.49,
+   "d": 2.13,
+   "text": "encourage thoughtfulness and caution"
+  },
+  {
+   "t": 1316.62,
+   "d": 1.71,
+   "text": "because being thoughtfulness thoughtful"
+  },
+  {
+   "t": 1318.33,
+   "d": 2.16,
+   "text": "and cautious was then punished it also"
+  },
+  {
+   "t": 1320.49,
+   "d": 1.59,
+   "text": "ruined the possibility of ever doing a"
+  },
+  {
+   "t": 1322.08,
+   "d": 1.98,
+   "text": "pacifist run because you had to kill"
+  },
+  {
+   "t": 1324.06,
+   "d": 1.65,
+   "text": "things just to eat them and stay alive"
+  },
+  {
+   "t": 1325.71,
+   "d": 2.1,
+   "text": "and I don't want to force people to ever"
+  },
+  {
+   "t": 1327.81,
+   "d": 0.66,
+   "text": "have to fight"
+  },
+  {
+   "t": 1328.47,
+   "d": 2.52,
+   "text": "anything if they can avoid it so I"
+  },
+  {
+   "t": 1330.99,
+   "d": 2.37,
+   "text": "killed that real quick however the"
+  },
+  {
+   "t": 1333.36,
+   "d": 1.83,
+   "text": "experiment did end up leading to the"
+  },
+  {
+   "t": 1335.19,
+   "d": 1.62,
+   "text": "food queue mechanic in the game which is"
+  },
+  {
+   "t": 1336.81,
+   "d": 2.25,
+   "text": "I think one of the few original ideas"
+  },
+  {
+   "t": 1339.06,
+   "d": 2.28,
+   "text": "that I have in the game that wasn't"
+  },
+  {
+   "t": 1341.34,
+   "d": 1.89,
+   "text": "stolen from somewhere else with the food"
+  },
+  {
+   "t": 1343.23,
+   "d": 1.8,
+   "text": "queue every five items you eat will"
+  },
+  {
+   "t": 1345.03,
+   "d": 2.79,
+   "text": "grant you some kind of bonus just eating"
+  },
+  {
+   "t": 1347.82,
+   "d": 4.25,
+   "text": "a random mix of things corpses bats rats"
+  },
+  {
+   "t": 1352.07,
+   "d": 3.79,
+   "text": "grumbles which are the the goblin type"
+  },
+  {
+   "t": 1355.86,
+   "d": 1.77,
+   "text": "enemies in the game does the a randomly"
+  },
+  {
+   "t": 1357.63,
+   "d": 2.43,
+   "text": "will generally result in a small heal or"
+  },
+  {
+   "t": 1360.06,
+   "d": 2.37,
+   "text": "some restoration of some spell charges"
+  },
+  {
+   "t": 1362.43,
+   "d": 1.74,
+   "text": "but if you're more picky about what you"
+  },
+  {
+   "t": 1364.17,
+   "d": 1.74,
+   "text": "eat and eat certain things in a certain"
+  },
+  {
+   "t": 1365.91,
+   "d": 0.36,
+   "text": "order"
+  },
+  {
+   "t": 1366.27,
+   "d": 1.8,
+   "text": "then the bonuses can become more"
+  },
+  {
+   "t": 1368.07,
+   "d": 2.79,
+   "text": "powerful and unique for example eating a"
+  },
+  {
+   "t": 1370.86,
+   "d": 1.89,
+   "text": "meal of five grumbles gives you the meal"
+  },
+  {
+   "t": 1372.75,
+   "d": 1.83,
+   "text": "effect called butcher which means that"
+  },
+  {
+   "t": 1374.58,
+   "d": 2.1,
+   "text": "all all healing to you is reduced to"
+  },
+  {
+   "t": 1376.68,
+   "d": 2.43,
+   "text": "just storing just restoring one or two"
+  },
+  {
+   "t": 1379.11,
+   "d": 2.67,
+   "text": "HP but on the other hand every corpse or"
+  },
+  {
+   "t": 1381.78,
+   "d": 1.74,
+   "text": "piece of meat that you eat heals you for"
+  },
+  {
+   "t": 1383.52,
+   "d": 2.46,
+   "text": "extra and this changed the way food work"
+  },
+  {
+   "t": 1385.98,
+   "d": 1.41,
+   "text": "ended up encouraging people to eat"
+  },
+  {
+   "t": 1387.39,
+   "d": 1.92,
+   "text": "specific things and try different"
+  },
+  {
+   "t": 1389.31,
+   "d": 1.83,
+   "text": "combinations of food but it didn't"
+  },
+  {
+   "t": 1391.14,
+   "d": 1.71,
+   "text": "punish them for not engaging with the"
+  },
+  {
+   "t": 1392.85,
+   "d": 1.8,
+   "text": "system so it doesn't distract from the"
+  },
+  {
+   "t": 1394.65,
+   "d": 3.03,
+   "text": "rest of the game another aspect of"
+  },
+  {
+   "t": 1397.68,
+   "d": 1.28,
+   "text": "roguelikes that is adopted to"
+  },
+  {
+   "t": 1398.96,
+   "d": 3.52,
+   "text": "platformers is more frequently is some"
+  },
+  {
+   "t": 1402.48,
+   "d": 1.17,
+   "text": "sort of inventory or equipment"
+  },
+  {
+   "t": 1403.65,
+   "d": 3.69,
+   "text": "management it seems to be universally"
+  },
+  {
+   "t": 1407.34,
+   "d": 1.44,
+   "text": "present aspect of most roguelike"
+  },
+  {
+   "t": 1408.78,
+   "d": 1.59,
+   "text": "platformers although this might just be"
+  },
+  {
+   "t": 1410.37,
+   "d": 2.91,
+   "text": "attributable to them being more RPG like"
+  },
+  {
+   "t": 1413.28,
+   "d": 2.46,
+   "text": "games in the first place and to that"
+  },
+  {
+   "t": 1415.74,
+   "d": 1.59,
+   "text": "effect many of the games feature fairly"
+  },
+  {
+   "t": 1417.33,
+   "d": 1.74,
+   "text": "straightforward RPG style inventories"
+  },
+  {
+   "t": 1419.07,
+   "d": 1.25,
+   "text": "where the items you pick up are either"
+  },
+  {
+   "t": 1420.32,
+   "d": 3.4,
+   "text": "represented as a list of menu options or"
+  },
+  {
+   "t": 1423.72,
+   "d": 3.12,
+   "text": "on a grid neither Vogon tane or cave"
+  },
+  {
+   "t": 1426.84,
+   "d": 1.92,
+   "text": "blazers however pause the game while"
+  },
+  {
+   "t": 1428.76,
+   "d": 1.14,
+   "text": "you're looking at your inventory so"
+  },
+  {
+   "t": 1429.9,
+   "d": 2.34,
+   "text": "equipping weapons and armor while we're"
+  },
+  {
+   "t": 1432.24,
+   "d": 1.08,
+   "text": "looking through your backpack for"
+  },
+  {
+   "t": 1433.32,
+   "d": 1.71,
+   "text": "healing items can be risky in a combat"
+  },
+  {
+   "t": 1435.03,
+   "d": 1.83,
+   "text": "situation if you aren't paying attention"
+  },
+  {
+   "t": 1436.86,
+   "d": 1.76,
+   "text": "to your surroundings"
+  },
+  {
+   "t": 1438.62,
+   "d": 2.32,
+   "text": "there are also less conventional ways of"
+  },
+  {
+   "t": 1440.94,
+   "d": 1.68,
+   "text": "handling inventory however such as in"
+  },
+  {
+   "t": 1442.62,
+   "d": 1.5,
+   "text": "spelunky where most items can be"
+  },
+  {
+   "t": 1444.12,
+   "d": 2.19,
+   "text": "categorized as either accessories or"
+  },
+  {
+   "t": 1446.31,
+   "d": 2.49,
+   "text": "karya Ballabh jects karya Ballabh jects"
+  },
+  {
+   "t": 1448.8,
+   "d": 1.59,
+   "text": "include most of the objects in the world"
+  },
+  {
+   "t": 1450.39,
+   "d": 3.84,
+   "text": "enemy corpses weapons and the player can"
+  },
+  {
+   "t": 1454.23,
+   "d": 1.77,
+   "text": "only carry one such thing at a time they"
+  },
+  {
+   "t": 1456.0,
+   "d": 1.8,
+   "text": "need to drop it and if they want to pick"
+  },
+  {
+   "t": 1457.8,
+   "d": 1.74,
+   "text": "something else up accessories on the"
+  },
+  {
+   "t": 1459.54,
+   "d": 1.71,
+   "text": "other hand grant passive benefits and"
+  },
+  {
+   "t": 1461.25,
+   "d": 1.0,
+   "text": "once you pick them up there"
+  },
+  {
+   "t": 1462.25,
+   "d": 1.89,
+   "text": "no way to lose them except through"
+  },
+  {
+   "t": 1464.14,
+   "d": 1.62,
+   "text": "special circumstances which means"
+  },
+  {
+   "t": 1465.76,
+   "d": 2.25,
+   "text": "there's no inventory management or menus"
+  },
+  {
+   "t": 1468.01,
+   "d": 1.65,
+   "text": "or anything to slow down the game or"
+  },
+  {
+   "t": 1469.66,
+   "d": 2.31,
+   "text": "take you out of the game space and this"
+  },
+  {
+   "t": 1471.97,
+   "d": 1.53,
+   "text": "is something that I really am admired"
+  },
+  {
+   "t": 1473.5,
+   "d": 1.83,
+   "text": "about spelunky so with catacomb kids I"
+  },
+  {
+   "t": 1475.33,
+   "d": 2.04,
+   "text": "borrowed this idea of minimal inventory"
+  },
+  {
+   "t": 1477.37,
+   "d": 1.86,
+   "text": "management but decided to interpret it"
+  },
+  {
+   "t": 1479.23,
+   "d": 2.13,
+   "text": "more as no hammer space rule for the"
+  },
+  {
+   "t": 1481.36,
+   "d": 2.52,
+   "text": "game anything that you're carrying has"
+  },
+  {
+   "t": 1483.88,
+   "d": 1.86,
+   "text": "to actually be present on your person"
+  },
+  {
+   "t": 1485.74,
+   "d": 1.65,
+   "text": "you don't get a nebulous void space"
+  },
+  {
+   "t": 1487.39,
+   "d": 2.19,
+   "text": "within which to tuck away like a dozen"
+  },
+  {
+   "t": 1489.58,
+   "d": 2.67,
+   "text": "swords instead you have five equipment"
+  },
+  {
+   "t": 1492.25,
+   "d": 1.86,
+   "text": "spots your head your body your weapon"
+  },
+  {
+   "t": 1494.11,
+   "d": 2.16,
+   "text": "your offhand and your shoes and anything"
+  },
+  {
+   "t": 1496.27,
+   "d": 1.17,
+   "text": "that isn't equipped to one of those"
+  },
+  {
+   "t": 1497.44,
+   "d": 1.68,
+   "text": "slots is either in your hand in your"
+  },
+  {
+   "t": 1499.12,
+   "d": 2.52,
+   "text": "pocket which is large enough for one"
+  },
+  {
+   "t": 1501.64,
+   "d": 2.34,
+   "text": "small item or lying on the floor of the"
+  },
+  {
+   "t": 1503.98,
+   "d": 4.49,
+   "text": "dungeon somewhere another thing that's a"
+  },
+  {
+   "t": 1508.47,
+   "d": 2.74,
+   "text": "feature of a lot of roguelikes is gods"
+  },
+  {
+   "t": 1511.21,
+   "d": 1.8,
+   "text": "and shrines and they're one of those"
+  },
+  {
+   "t": 1513.01,
+   "d": 1.62,
+   "text": "aspects of traditional ask additional"
+  },
+  {
+   "t": 1514.63,
+   "d": 1.62,
+   "text": "roguelike that you might think would be"
+  },
+  {
+   "t": 1516.25,
+   "d": 1.77,
+   "text": "more niche and less applicable to other"
+  },
+  {
+   "t": 1518.02,
+   "d": 2.16,
+   "text": "games and say line of sight but they're"
+  },
+  {
+   "t": 1520.18,
+   "d": 1.95,
+   "text": "surprisingly common in roguelike"
+  },
+  {
+   "t": 1522.13,
+   "d": 1.44,
+   "text": "platformers granted they're usually"
+  },
+  {
+   "t": 1523.57,
+   "d": 2.04,
+   "text": "paired down to just a single nebulous"
+  },
+  {
+   "t": 1525.61,
+   "d": 1.71,
+   "text": "God rather than having a full Pantheon"
+  },
+  {
+   "t": 1527.32,
+   "d": 2.28,
+   "text": "but shrines where players can pray or"
+  },
+  {
+   "t": 1529.6,
+   "d": 2.04,
+   "text": "sacrifice items creatures or health for"
+  },
+  {
+   "t": 1531.64,
+   "d": 3.0,
+   "text": "a powerful boon to an unseen deity have"
+  },
+  {
+   "t": 1534.64,
+   "d": 1.74,
+   "text": "managed to find their way into games as"
+  },
+  {
+   "t": 1536.38,
+   "d": 2.16,
+   "text": "diverses spelunky cave Blazers vogue"
+  },
+  {
+   "t": 1538.54,
+   "d": 2.79,
+   "text": "Antigua Gant a red robe"
+  },
+  {
+   "t": 1541.33,
+   "d": 1.83,
+   "text": "rogue legacy and eventually there will"
+  },
+  {
+   "t": 1543.16,
+   "d": 1.92,
+   "text": "be a way to interact with the God that"
+  },
+  {
+   "t": 1545.08,
+   "d": 1.89,
+   "text": "exists in the catacomb kids world as"
+  },
+  {
+   "t": 1546.97,
+   "d": 0.99,
+   "text": "well"
+  },
+  {
+   "t": 1547.96,
+   "d": 2.31,
+   "text": "evolved is however only Vogon take keeps"
+  },
+  {
+   "t": 1550.27,
+   "d": 1.74,
+   "text": "the idea of a pantheon of gods with"
+  },
+  {
+   "t": 1552.01,
+   "d": 1.89,
+   "text": "differing personalities desires and"
+  },
+  {
+   "t": 1553.9,
+   "d": 2.28,
+   "text": "rewards as mentioned earlier inspired by"
+  },
+  {
+   "t": 1556.18,
+   "d": 2.4,
+   "text": "dungeon crawl Stone Soup and even though"
+  },
+  {
+   "t": 1558.58,
+   "d": 2.16,
+   "text": "these gods are also simplified from what"
+  },
+  {
+   "t": 1560.74,
+   "d": 1.68,
+   "text": "traditional roguelikes have to offer and"
+  },
+  {
+   "t": 1562.42,
+   "d": 2.16,
+   "text": "what the devs actually set out to turn"
+  },
+  {
+   "t": 1564.58,
+   "d": 2.04,
+   "text": "them into vacante manages to maintain a"
+  },
+  {
+   "t": 1566.62,
+   "d": 2.73,
+   "text": "sense of a world with living in fickle"
+  },
+  {
+   "t": 1569.35,
+   "d": 4.74,
+   "text": "gods so I'm gonna stop there I guess"
+  },
+  {
+   "t": 1574.09,
+   "d": 1.17,
+   "text": "because this talk is already pretty"
+  },
+  {
+   "t": 1575.26,
+   "d": 1.77,
+   "text": "freakin long and I could keep going on"
+  },
+  {
+   "t": 1577.03,
+   "d": 3.33,
+   "text": "and on and on and on but yeah those"
+  },
+  {
+   "t": 1580.36,
+   "d": 1.38,
+   "text": "that's those are my thoughts about"
+  },
+  {
+   "t": 1581.74,
+   "d": 2.4,
+   "text": "roguelike platformers and I like them a"
+  },
+  {
+   "t": 1584.14,
+   "d": 2.95,
+   "text": "lot and I hope you like them too"
+  },
+  {
+   "t": 1587.09,
+   "d": 10.49,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1602.27,
+   "d": 3.19,
+   "text": "now it's on okay we have time for a few"
+  },
+  {
+   "t": 1605.46,
+   "d": 4.2,
+   "text": "questions I have a question as well"
+  },
+  {
+   "t": 1609.66,
+   "d": 1.89,
+   "text": "which I'm going to ask as I walk over"
+  },
+  {
+   "t": 1611.55,
+   "d": 2.79,
+   "text": "there which is one clear thing that's"
+  },
+  {
+   "t": 1614.34,
+   "d": 1.2,
+   "text": "different between platformers and"
+  },
+  {
+   "t": 1615.54,
+   "d": 1.89,
+   "text": "roguelikes is how you view the map and"
+  },
+  {
+   "t": 1617.43,
+   "d": 1.89,
+   "text": "one thing that you do a lot in"
+  },
+  {
+   "t": 1619.32,
+   "d": 1.95,
+   "text": "roguelikes is traversing large amounts"
+  },
+  {
+   "t": 1621.27,
+   "d": 1.38,
+   "text": "of the map and large amounts of space"
+  },
+  {
+   "t": 1622.65,
+   "d": 2.52,
+   "text": "really quickly because it's like super"
+  },
+  {
+   "t": 1625.17,
+   "d": 0.93,
+   "text": "simple and you can sort of"
+  },
+  {
+   "t": 1626.1,
+   "d": 1.59,
+   "text": "programmatically do it which is not"
+  },
+  {
+   "t": 1627.69,
+   "d": 2.16,
+   "text": "something you can do in a platformer"
+  },
+  {
+   "t": 1629.85,
+   "d": 2.4,
+   "text": "because traversing a platformer is sort"
+  },
+  {
+   "t": 1632.25,
+   "d": 3.12,
+   "text": "of the fun of the game how do you deal"
+  },
+  {
+   "t": 1635.37,
+   "d": 2.28,
+   "text": "with that tension that design tension"
+  },
+  {
+   "t": 1637.65,
+   "d": 2.49,
+   "text": "have you thought about how it applies to"
+  },
+  {
+   "t": 1640.14,
+   "d": 2.79,
+   "text": "platformers I've noticed that I feel"
+  },
+  {
+   "t": 1642.93,
+   "d": 1.98,
+   "text": "like a lot of roguelike platformers"
+  },
+  {
+   "t": 1644.91,
+   "d": 2.73,
+   "text": "possibly for that exact reason tend to"
+  },
+  {
+   "t": 1647.64,
+   "d": 3.21,
+   "text": "have much smaller level spaces than"
+  },
+  {
+   "t": 1650.85,
+   "d": 1.53,
+   "text": "traditional roguelikes they aren't as"
+  },
+  {
+   "t": 1652.38,
+   "d": 3.09,
+   "text": "sprawling and so they're much more"
+  },
+  {
+   "t": 1655.47,
+   "d": 2.55,
+   "text": "compact and within that that space there"
+  },
+  {
+   "t": 1658.02,
+   "d": 2.67,
+   "text": "they try to fit a lot of interesting"
+  },
+  {
+   "t": 1660.69,
+   "d": 1.59,
+   "text": "things and interesting interactions I"
+  },
+  {
+   "t": 1662.28,
+   "d": 3.0,
+   "text": "know personally I do use much smaller"
+  },
+  {
+   "t": 1665.28,
+   "d": 3.33,
+   "text": "levels but even so I feel like part of"
+  },
+  {
+   "t": 1668.61,
+   "d": 3.11,
+   "text": "that sense of getting lost can also be a"
+  },
+  {
+   "t": 1671.72,
+   "d": 3.82,
+   "text": "big part of the appeal of roguelikes and"
+  },
+  {
+   "t": 1675.54,
+   "d": 1.44,
+   "text": "where you're exploring this vast space"
+  },
+  {
+   "t": 1676.98,
+   "d": 1.26,
+   "text": "you don't know what's around the next"
+  },
+  {
+   "t": 1678.24,
+   "d": 2.85,
+   "text": "corner or like where you have to go like"
+  },
+  {
+   "t": 1681.09,
+   "d": 1.86,
+   "text": "that sensation isn't necessarily"
+  },
+  {
+   "t": 1682.95,
+   "d": 6.51,
+   "text": "something to be avoided so yeah how do"
+  },
+  {
+   "t": 1689.46,
+   "d": 4.5,
+   "text": "you generate your Maps I gave a GDC talk"
+  },
+  {
+   "t": 1693.96,
+   "d": 2.52,
+   "text": "about that a few years ago it's online"
+  },
+  {
+   "t": 1696.48,
+   "d": 3.18,
+   "text": "you can watch it but as a general"
+  },
+  {
+   "t": 1699.66,
+   "d": 5.31,
+   "text": "overview I sort of I have the I use sort"
+  },
+  {
+   "t": 1704.97,
+   "d": 2.55,
+   "text": "of a system of rooms that that are"
+  },
+  {
+   "t": 1707.52,
+   "d": 2.49,
+   "text": "connected so I generate a grid of rooms"
+  },
+  {
+   "t": 1710.01,
+   "d": 3.03,
+   "text": "and I can like define their dimensions"
+  },
+  {
+   "t": 1713.04,
+   "d": 1.95,
+   "text": "and that sort of thing and then I shift"
+  },
+  {
+   "t": 1714.99,
+   "d": 2.07,
+   "text": "them around so that they're not aligned"
+  },
+  {
+   "t": 1717.06,
+   "d": 1.42,
+   "text": "to the grid anymore and then"
+  },
+  {
+   "t": 1718.48,
+   "d": 3.99,
+   "text": "I connected them via tunnels and and and"
+  },
+  {
+   "t": 1722.47,
+   "d": 3.12,
+   "text": "that sort of thing and then once they're"
+  },
+  {
+   "t": 1725.59,
+   "d": 1.35,
+   "text": "all connected and everything is like"
+  },
+  {
+   "t": 1726.94,
+   "d": 3.09,
+   "text": "looking pretty I define certain rooms to"
+  },
+  {
+   "t": 1730.03,
+   "d": 3.6,
+   "text": "be pre-made which are very similar to"
+  },
+  {
+   "t": 1733.63,
+   "d": 3.27,
+   "text": "the spelunky sort of grid system where I"
+  },
+  {
+   "t": 1736.9,
+   "d": 2.91,
+   "text": "can define certain tiles to have a"
+  },
+  {
+   "t": 1739.81,
+   "d": 1.83,
+   "text": "probabilistic chance of appearing or not"
+  },
+  {
+   "t": 1741.64,
+   "d": 1.02,
+   "text": "appearing and that sort of thing and"
+  },
+  {
+   "t": 1742.66,
+   "d": 2.1,
+   "text": "certain rooms are pre-made in that way"
+  },
+  {
+   "t": 1744.76,
+   "d": 2.22,
+   "text": "where they they like load a template"
+  },
+  {
+   "t": 1746.98,
+   "d": 2.69,
+   "text": "from a text file and just use that but"
+  },
+  {
+   "t": 1749.67,
+   "d": 3.04,
+   "text": "those those are also mixed in with other"
+  },
+  {
+   "t": 1752.71,
+   "d": 3.69,
+   "text": "rooms that are entirely random so yeah"
+  },
+  {
+   "t": 1756.4,
+   "d": 2.52,
+   "text": "but if you want to watch that GDC talk"
+  },
+  {
+   "t": 1758.92,
+   "d": 2.25,
+   "text": "that that would probably help a lot more"
+  },
+  {
+   "t": 1761.17,
+   "d": 4.73,
+   "text": "I don't have slides for ready for that"
+  },
+  {
+   "t": 1765.9,
+   "d": 3.43,
+   "text": "so I I'm I really like spelunky and"
+  },
+  {
+   "t": 1769.33,
+   "d": 1.89,
+   "text": "tower climb but I couldn't get into for"
+  },
+  {
+   "t": 1771.22,
+   "d": 1.62,
+   "text": "example K flavors because I thought the"
+  },
+  {
+   "t": 1772.84,
+   "d": 2.04,
+   "text": "combat was super clunky how do you as a"
+  },
+  {
+   "t": 1774.88,
+   "d": 2.58,
+   "text": "dev choose what elements of certain"
+  },
+  {
+   "t": 1777.46,
+   "d": 1.56,
+   "text": "games you want to take inspiration from"
+  },
+  {
+   "t": 1779.02,
+   "d": 3.15,
+   "text": "and what you like cut out or like where"
+  },
+  {
+   "t": 1782.17,
+   "d": 3.42,
+   "text": "do you draw the line I mean honestly"
+  },
+  {
+   "t": 1785.59,
+   "d": 1.02,
+   "text": "it's just a matter of personal"
+  },
+  {
+   "t": 1786.61,
+   "d": 1.23,
+   "text": "preference"
+  },
+  {
+   "t": 1787.84,
+   "d": 4.86,
+   "text": "I love spelunky but I the combat I have"
+  },
+  {
+   "t": 1792.7,
+   "d": 2.16,
+   "text": "found the combat like too straight"
+  },
+  {
+   "t": 1794.86,
+   "d": 2.49,
+   "text": "forward like it's just oh you hit the"
+  },
+  {
+   "t": 1797.35,
+   "d": 2.64,
+   "text": "thing this yo I only have one attack"
+  },
+  {
+   "t": 1799.99,
+   "d": 3.06,
+   "text": "whereas me I am really really into like"
+  },
+  {
+   "t": 1803.05,
+   "d": 1.95,
+   "text": "different combat systems and especially"
+  },
+  {
+   "t": 1805.0,
+   "d": 2.07,
+   "text": "as I mentioned Smash Brothers and so"
+  },
+  {
+   "t": 1807.07,
+   "d": 1.47,
+   "text": "that was one of the things that I that"
+  },
+  {
+   "t": 1808.54,
+   "d": 1.71,
+   "text": "was a huge inspiration for me for the"
+  },
+  {
+   "t": 1810.25,
+   "d": 3.27,
+   "text": "combat of the game and I know it's just"
+  },
+  {
+   "t": 1813.52,
+   "d": 2.37,
+   "text": "whatever inspires you like it for me I"
+  },
+  {
+   "t": 1815.89,
+   "d": 1.8,
+   "text": "look at something I'm like oh that looks"
+  },
+  {
+   "t": 1817.69,
+   "d": 2.04,
+   "text": "red and then I'll steal it and then"
+  },
+  {
+   "t": 1819.73,
+   "d": 1.62,
+   "text": "sometimes it works out sometimes it"
+  },
+  {
+   "t": 1821.35,
+   "d": 2.7,
+   "text": "doesn't if it doesn't people will yell"
+  },
+  {
+   "t": 1824.05,
+   "d": 2.82,
+   "text": "at me or I will yell at myself or as"
+  },
+  {
+   "t": 1826.87,
+   "d": 1.89,
+   "text": "with the case of the hunger mechanic"
+  },
+  {
+   "t": 1828.76,
+   "d": 1.74,
+   "text": "it's it's obvious when it's not working"
+  },
+  {
+   "t": 1830.5,
+   "d": 2.76,
+   "text": "out but I I don't really think there's a"
+  },
+  {
+   "t": 1833.26,
+   "d": 1.86,
+   "text": "problem with trying something and then"
+  },
+  {
+   "t": 1835.12,
+   "d": 1.89,
+   "text": "finding out it doesn't work or that it's"
+  },
+  {
+   "t": 1837.01,
+   "d": 1.65,
+   "text": "not quite your speed but I feel like you"
+  },
+  {
+   "t": 1838.66,
+   "d": 3.33,
+   "text": "generally have an idea of what what your"
+  },
+  {
+   "t": 1841.99,
+   "d": 2.76,
+   "text": "preferences are and will those who sort"
+  },
+  {
+   "t": 1844.75,
+   "d": 1.62,
+   "text": "of guide you to something that will be"
+  },
+  {
+   "t": 1846.37,
+   "d": 4.04,
+   "text": "enjoyable for you anyone"
+  },
+  {
+   "t": 1850.41,
+   "d": 4.53,
+   "text": "I ask one more question yes I have the"
+  },
+  {
+   "t": 1854.94,
+   "d": 5.25,
+   "text": "mic in your talk you talked about lots"
+  },
+  {
+   "t": 1860.19,
+   "d": 1.47,
+   "text": "of different aspects of specifically"
+  },
+  {
+   "t": 1861.66,
+   "d": 1.62,
+   "text": "roguelikes liberland interpretation but"
+  },
+  {
+   "t": 1863.28,
+   "d": 2.16,
+   "text": "you sort of just waved your hands over"
+  },
+  {
+   "t": 1865.44,
+   "d": 2.25,
+   "text": "what a platformer is to you what our"
+  },
+  {
+   "t": 1867.69,
+   "d": 1.92,
+   "text": "canonical platform is when you think"
+  },
+  {
+   "t": 1869.61,
+   "d": 3.36,
+   "text": "platformer what is it that is inspiring"
+  },
+  {
+   "t": 1872.97,
+   "d": 3.71,
+   "text": "catacomb kids is a fantastic question oh"
+  },
+  {
+   "t": 1876.68,
+   "d": 4.99,
+   "text": "man there's so many there's so many I"
+  },
+  {
+   "t": 1881.67,
+   "d": 3.09,
+   "text": "don't so I like Kirby I like I like"
+  },
+  {
+   "t": 1884.76,
+   "d": 3.66,
+   "text": "Nintendo platformers Mario Kirby Zelda -"
+  },
+  {
+   "t": 1888.42,
+   "d": 5.07,
+   "text": "surprisingly there's there was a SNES"
+  },
+  {
+   "t": 1893.49,
+   "d": 2.16,
+   "text": "platform or I don't remember what it was"
+  },
+  {
+   "t": 1895.65,
+   "d": 2.1,
+   "text": "called but you like played as a bard and"
+  },
+  {
+   "t": 1897.75,
+   "d": 3.0,
+   "text": "you like played musical notes to kill"
+  },
+  {
+   "t": 1900.75,
+   "d": 2.28,
+   "text": "enemies it was weird I don't know I"
+  },
+  {
+   "t": 1903.03,
+   "d": 2.76,
+   "text": "played like a lot like I didn't have an"
+  },
+  {
+   "t": 1905.79,
+   "d": 3.57,
+   "text": "SNES as a kid but I heard it literally"
+  },
+  {
+   "t": 1909.36,
+   "d": 2.04,
+   "text": "everything and so I play basically like"
+  },
+  {
+   "t": 1911.4,
+   "d": 2.19,
+   "text": "all the platformers on that so like that"
+  },
+  {
+   "t": 1913.59,
+   "d": 6.3,
+   "text": "just entire library is like what is in"
+  },
+  {
+   "t": 1919.89,
+   "d": 2.1,
+   "text": "my head so like I said earlier if you"
+  },
+  {
+   "t": 1921.99,
+   "d": 2.16,
+   "text": "help tell me to think of a videogame"
+  },
+  {
+   "t": 1924.15,
+   "d": 1.29,
+   "text": "something that will pop into my head it"
+  },
+  {
+   "t": 1925.44,
+   "d": 2.04,
+   "text": "will be a platformer but it won't be"
+  },
+  {
+   "t": 1927.48,
+   "d": 1.53,
+   "text": "like a specific platformer it will be"
+  },
+  {
+   "t": 1929.01,
+   "d": 2.04,
+   "text": "like an amalgamation of all of those"
+  },
+  {
+   "t": 1931.05,
+   "d": 3.33,
+   "text": "platformers also Inspira inspirational"
+  },
+  {
+   "t": 1934.38,
+   "d": 2.31,
+   "text": "are sort of the animation based"
+  },
+  {
+   "t": 1936.69,
+   "d": 1.5,
+   "text": "platformers like prince of persia and"
+  },
+  {
+   "t": 1938.19,
+   "d": 3.69,
+   "text": "heart of darkness and flashback all"
+  },
+  {
+   "t": 1941.88,
+   "d": 1.86,
+   "text": "those stuff I knew I could yeah I like"
+  },
+  {
+   "t": 1943.74,
+   "d": 1.59,
+   "text": "plat I like like platformers they're all"
+  },
+  {
+   "t": 1945.33,
+   "d": 2.22,
+   "text": "good I like them heart of darkness is an"
+  },
+  {
+   "t": 1947.55,
+   "d": 4.58,
+   "text": "amazing game cool well thank you so much"
+  },
+  {
+   "t": 1952.13,
+   "d": 3.03,
+   "text": "thank you"
+  }
+ ]
+}

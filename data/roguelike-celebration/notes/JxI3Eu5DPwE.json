@@ -1,0 +1,106 @@
+{
+  "id": "JxI3Eu5DPwE",
+  "title": "Bob Nystrom - Is There More to Game Architecture than ECS?",
+  "speaker": "Bob Nystrom",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=JxI3Eu5DPwE",
+  "talk_type": "technical",
+  "summary": "Bob Nystrom, author of Game Programming Patterns and developer of a long-running hobby roguelike, explains the classic entity-component-system pattern as a solution to two AAA problems: monolithic entity classes spanning many domains, and CPU cache misses. He argues neither problem really applies to turn-based tile roguelikes, whose complexity is concentrated in behaviour (AI) and breadth of content. Instead he recommends three patterns he uses: components split by capability rather than domain (for items), the type object pattern (breeds for monsters, also for tiles and item types), and the command pattern (actions as first-class turns), which decouples behaviour from actor classes, handles energy-based speed systems, and lets AI and player input share the same behaviour code.",
+  "games": [
+    "Angband",
+    "Fortnite"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component system",
+      "kind": "history",
+      "claim": "ECS arose in real-time AAA games to split monolithic game-object classes along domains (AI, physics, animation, rendering) and to store components in contiguous arrays for CPU cache performance.",
+      "detail": "Nystrom recounts 1990s game-object classes of around 20,000 lines mixing all domains. Pulling each domain into a component makes the entity a bag of components, and the game loop runs each domain as a separate phase. Because RAM speed lagged CPUs, homogeneous component arrays avoid cache misses that can be two orders of magnitude slower.",
+      "t": 228,
+      "quote": "you pull the the data and the code for that out into a separate class so you have an AI component of physics component",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component system",
+      "kind": "warning",
+      "claim": "Classic domain-split ECS is a poor fit for turn-based tile roguelikes, because their physics and graphics are trivial and nearly all complexity sits in AI, and few have cache-miss performance problems.",
+      "detail": "Splitting a roguelike monster by domain yields lopsided components: useless animation and physics components and an AI component that does everything. Polling the audience, Nystrom found only about three people with performance problems traced to cache misses. He likens wanting ECS without those problems to asking a doctor for a C-section when not pregnant.",
+      "t": 474,
+      "quote": "if you imagine taking your entity class in your roguelike and splitting it along domains you get the super lopsided thing",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "content breadth",
+      "kind": "principle",
+      "claim": "The real architectural challenge in roguelikes is behavioural richness and breadth of content, not per-entity domain complexity.",
+      "detail": "Nystrom notes entities in his game can do many different things, from inventory management to special effects. He contrasts Fortnite's roughly sixteen monster kinds with the 317-odd monsters Angband has according to its wiki; that breadth is an organisational challenge.",
+      "t": 618,
+      "quote": "your typical roguelike just has like a lot more breadth of content right and that is an organizational challenge",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "capability components",
+      "kind": "technique",
+      "claim": "Nystrom models items as combinations of capability objects (attack, defense, use) instead of an inheritance hierarchy, so a sword that shoots fireballs or a shield that bashes is just a mix of capabilities.",
+      "detail": "Inheritance-based item subclasses break down once you want something like a fireball-shooting sword. Each capability lives in a separate field; 'use' is itself a shallow, wide polymorphic hierarchy, where he thinks inheritance works well. This also suits defining content in data files and constructing item kinds procedurally. He frames it as components split by capability rather than domain, i.e. composition over inheritance, and uses the same idea for monster special moves.",
+      "t": 698,
+      "quote": "I split out each capability that an item has into a separate class in a separate field",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "type object pattern",
+      "kind": "technique",
+      "claim": "The type object pattern gives each kind of monster a single shared 'breed' instance that all individuals point to, effectively reimplementing classes at the application level.",
+      "detail": "Twenty goblins share many properties, so instead of stuffing that state into every monster, a Breed object holds it while monsters keep position and health. Because Breed is effectively a metaclass, you can add features like a parent breed with your own inheritance semantics. Nystrom uses the same pattern for tile types, item types and item modifiers.",
+      "t": 830,
+      "quote": "there is there's one instance of this breed class for a goblin and then every monster every Goblin just has a breed that points to that",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "command pattern",
+      "kind": "technique",
+      "claim": "Representing each turn as an Action object (the command pattern) keeps behaviour code out of the actor class and fits an energy-based speed system where actors take turns at different rates.",
+      "detail": "With speed systems, a loop of 'hero moves, then all monsters move' fails. Nystrom's game loop gives actors energy by speed; when an actor crosses a threshold it is asked for an action, which the loop then performs (iteratively, as consequences percolate). Actions like walking (which may open a door or attack) contain lots of code that would otherwise bloat the actor, leaving actors as mostly data.",
+      "t": 1038,
+      "quote": "an action is a you can think of it as a first class turn it represents a single step in the game that an actor can perform",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "command pattern",
+      "kind": "principle",
+      "claim": "Decoupled action classes let a roguelike keep adding new behaviours without the codebase's complexity growing quadratically.",
+      "detail": "Nystrom loves that roguelikes let you do a lot of things, making the world feel real. Because actions are fairly independent of each other, he can scale up the fun of the game without increasing the cognitive load of maintaining an ever-growing class.",
+      "t": 1133,
+      "quote": "this model makes it easy for me to add new behaviors without feeling like the sort of quadratic complexity of the code base is getting worse",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "shared behaviour",
+      "kind": "technique",
+      "claim": "If both player input and monster AI simply produce Action objects, heroes and monsters share one implementation of stepping, opening doors, attacking and spell effects.",
+      "detail": "The hero's turn is built from user input, a monster's from running AI, but both yield an action that the game loop performs. Without this layer you end up with two implementations of each behaviour.",
+      "t": 1215,
+      "quote": "we get to share all of the same behavioral code between AI controlled and player controlled characters",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "reification",
+      "kind": "principle",
+      "claim": "When code lacks flexibility, turn a verb into a noun: make an object that represents the operation so it can be created in one place, used in another, and given extra properties.",
+      "detail": "Nystrom generalises from his actions to a broader technique that has always worked for him. He adds that the command pattern makes undo in a level editor straightforward, since each command can undo itself and history is a list of commands.",
+      "t": 1240,
+      "quote": "take some some verb that's in the program some of the thing that's being done and turn it into a noun",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

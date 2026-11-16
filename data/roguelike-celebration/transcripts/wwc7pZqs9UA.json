@@ -1,0 +1,3257 @@
+{
+ "id": "wwc7pZqs9UA",
+ "url": "https://www.youtube.com/watch?v=wwc7pZqs9UA",
+ "title": "Santiago Zapata - What is a Roguelike",
+ "speaker": "Santiago Zapata",
+ "talk_title": "What is a Roguelike",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1842,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Santiago Zapata talks about conserving the classic roguelike definition, does it make any sense in 2017?\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and debate"
+  },
+  {
+   "start": 83,
+   "title": "Why definitions matter"
+  },
+  {
+   "start": 192,
+   "title": "Literal definition challenges"
+  },
+  {
+   "start": 311,
+   "title": "Historical context and origins"
+  },
+  {
+   "start": 625,
+   "title": "The original definition"
+  },
+  {
+   "start": 934,
+   "title": "Formalizing the genre"
+  },
+  {
+   "start": 1036,
+   "title": "Modern genre evolution"
+  },
+  {
+   "start": 1272,
+   "title": "Future of classic roguelikes"
+  },
+  {
+   "start": 1439,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4508,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.07,
+   "d": 4.45,
+   "text": "all right hello everybody and welcome to"
+  },
+  {
+   "t": 5.52,
+   "d": 2.85,
+   "text": "the rogue Lake celebration what is a"
+  },
+  {
+   "t": 8.37,
+   "d": 2.22,
+   "text": "roguelike so that's what we are going to"
+  },
+  {
+   "t": 10.59,
+   "d": 3.03,
+   "text": "try to find out I am Santa Rosa Potter I"
+  },
+  {
+   "t": 13.62,
+   "d": 2.22,
+   "text": "am the creator of temple of the"
+  },
+  {
+   "t": 15.84,
+   "d": 2.84,
+   "text": "roguelike one of the first looks that"
+  },
+  {
+   "t": 18.68,
+   "d": 2.77,
+   "text": "appear there that were focused on Rogue"
+  },
+  {
+   "t": 21.45,
+   "d": 2.42,
+   "text": "legs and I am also the developer of"
+  },
+  {
+   "t": 23.87,
+   "d": 3.58,
+   "text": "ananias roguelike and in this talk I"
+  },
+  {
+   "t": 27.45,
+   "d": 2.01,
+   "text": "would like to share with you some"
+  },
+  {
+   "t": 29.46,
+   "d": 3.24,
+   "text": "thoughts about this eternal question of"
+  },
+  {
+   "t": 32.7,
+   "d": 2.55,
+   "text": "what is a roguelike and maybe we can"
+  },
+  {
+   "t": 35.25,
+   "d": 5.85,
+   "text": "find an answer for it so if you are a"
+  },
+  {
+   "t": 41.1,
+   "d": 2.31,
+   "text": "newcomer to this style of games or if"
+  },
+  {
+   "t": 43.41,
+   "d": 1.41,
+   "text": "you have been playing for a long time"
+  },
+  {
+   "t": 44.82,
+   "d": 2.7,
+   "text": "you will often find this kind of"
+  },
+  {
+   "t": 47.52,
+   "d": 1.92,
+   "text": "comments you know what that game is not"
+  },
+  {
+   "t": 49.44,
+   "d": 3.3,
+   "text": "a real roguelike and then after that"
+  },
+  {
+   "t": 52.74,
+   "d": 2.07,
+   "text": "there will be like a heated debate of"
+  },
+  {
+   "t": 54.81,
+   "d": 2.91,
+   "text": "what really is a roguelike this happens"
+  },
+  {
+   "t": 57.72,
+   "d": 2.82,
+   "text": "very regularly like every week you will"
+  },
+  {
+   "t": 60.54,
+   "d": 2.37,
+   "text": "see like a very long flame war regarding"
+  },
+  {
+   "t": 62.91,
+   "d": 4.89,
+   "text": "this topic but yeah if you are if it's"
+  },
+  {
+   "t": 67.8,
+   "d": 1.17,
+   "text": "the first time that you see that debate"
+  },
+  {
+   "t": 68.97,
+   "d": 2.1,
+   "text": "don't worry it's been going on for years"
+  },
+  {
+   "t": 71.07,
+   "d": 2.58,
+   "text": "and no one has a right to an answer for"
+  },
+  {
+   "t": 73.65,
+   "d": 5.34,
+   "text": "it so if there's no answer or if there"
+  },
+  {
+   "t": 78.99,
+   "d": 1.59,
+   "text": "is no answer why bother"
+  },
+  {
+   "t": 80.58,
+   "d": 4.47,
+   "text": "like discussing that so the the actual a"
+  },
+  {
+   "t": 85.05,
+   "d": 2.25,
+   "text": "real reason why I think is important"
+  },
+  {
+   "t": 87.3,
+   "d": 2.31,
+   "text": "besides confusing young people and being"
+  },
+  {
+   "t": 89.61,
+   "d": 3.45,
+   "text": "a grumpy old gamer is discoverability"
+  },
+  {
+   "t": 93.06,
+   "d": 3.54,
+   "text": "right do some people really like this"
+  },
+  {
+   "t": 96.6,
+   "d": 2.55,
+   "text": "style of the original games and you want"
+  },
+  {
+   "t": 99.15,
+   "d": 2.04,
+   "text": "to be able to find them and it's a bit"
+  },
+  {
+   "t": 101.19,
+   "d": 2.52,
+   "text": "annoying when you go to steam or you go"
+  },
+  {
+   "t": 103.71,
+   "d": 3.33,
+   "text": "to any App Store and you go and try to"
+  },
+  {
+   "t": 107.04,
+   "d": 3.12,
+   "text": "find a roguelike like expecting to find"
+  },
+  {
+   "t": 110.16,
+   "d": 2.97,
+   "text": "a turn-based game where you can take"
+  },
+  {
+   "t": 113.13,
+   "d": 2.37,
+   "text": "your time to make the decisions and you"
+  },
+  {
+   "t": 115.5,
+   "d": 2.25,
+   "text": "are agreed by a lot of shooters and"
+  },
+  {
+   "t": 117.75,
+   "d": 2.1,
+   "text": "action games that don't look like a"
+  },
+  {
+   "t": 119.85,
+   "d": 2.94,
+   "text": "roguelike to you so that may be one of"
+  },
+  {
+   "t": 122.79,
+   "d": 2.37,
+   "text": "the reason why it makes sense to try to"
+  },
+  {
+   "t": 125.16,
+   "d": 1.56,
+   "text": "keep a definition for it"
+  },
+  {
+   "t": 126.72,
+   "d": 2.31,
+   "text": "the second reason keeping the original"
+  },
+  {
+   "t": 129.03,
+   "d": 3.12,
+   "text": "meaning as we will see may not make much"
+  },
+  {
+   "t": 132.15,
+   "d": 1.11,
+   "text": "sense we"
+  },
+  {
+   "t": 133.26,
+   "d": 6.66,
+   "text": "see in a bit so as I say it is very hard"
+  },
+  {
+   "t": 139.92,
+   "d": 3.08,
+   "text": "to get a definitive roguelike definition"
+  },
+  {
+   "t": 143.0,
+   "d": 2.89,
+   "text": "there is no governing authority that can"
+  },
+  {
+   "t": 145.89,
+   "d": 2.82,
+   "text": "say what is a roguelike unlike for"
+  },
+  {
+   "t": 148.71,
+   "d": 0.6,
+   "text": "examples"
+  },
+  {
+   "t": 149.31,
+   "d": 2.21,
+   "text": "dude you can know what is HTTP 1.1"
+  },
+  {
+   "t": 151.52,
+   "d": 7.15,
+   "text": "because the I electronic sorry the IETF"
+  },
+  {
+   "t": 158.67,
+   "d": 2.4,
+   "text": "and really describes what it is and it's"
+  },
+  {
+   "t": 161.07,
+   "d": 3.15,
+   "text": "a governing authority and well when you"
+  },
+  {
+   "t": 164.22,
+   "d": 1.2,
+   "text": "have a definition is something"
+  },
+  {
+   "t": 165.42,
+   "d": 2.58,
+   "text": "definitive it's something objective and"
+  },
+  {
+   "t": 168.0,
+   "d": 2.55,
+   "text": "it's accepted widely you do not have"
+  },
+  {
+   "t": 170.55,
+   "d": 1.8,
+   "text": "that for roguelikes because it's like a"
+  },
+  {
+   "t": 172.35,
+   "d": 4.01,
+   "text": "much more high level current concept and"
+  },
+  {
+   "t": 176.36,
+   "d": 2.77,
+   "text": "well then it's evolving it's personal"
+  },
+  {
+   "t": 179.13,
+   "d": 3.12,
+   "text": "and it's contested anyone that comes up"
+  },
+  {
+   "t": 182.25,
+   "d": 1.5,
+   "text": "with a roguelike definition will"
+  },
+  {
+   "t": 183.75,
+   "d": 4.86,
+   "text": "instantly get like challenge to see why"
+  },
+  {
+   "t": 188.61,
+   "d": 4.01,
+   "text": "do you think it's that why is that true"
+  },
+  {
+   "t": 192.68,
+   "d": 2.68,
+   "text": "so let's take a look at some of these"
+  },
+  {
+   "t": 195.36,
+   "d": 2.01,
+   "text": "efforts that have tried to define what"
+  },
+  {
+   "t": 197.37,
+   "d": 2.85,
+   "text": "is a roguelike and we have literal"
+  },
+  {
+   "t": 200.22,
+   "d": 2.61,
+   "text": "interpretations which are just guiding"
+  },
+  {
+   "t": 202.83,
+   "d": 2.69,
+   "text": "themselves by the name of roguelike"
+  },
+  {
+   "t": 205.52,
+   "d": 2.41,
+   "text": "historical interpretations which is I"
+  },
+  {
+   "t": 207.93,
+   "d": 1.98,
+   "text": "think the most important part that we're"
+  },
+  {
+   "t": 209.91,
+   "d": 3.06,
+   "text": "going to see in this talk and then those"
+  },
+  {
+   "t": 212.97,
+   "d": 1.47,
+   "text": "that have been tried to be established"
+  },
+  {
+   "t": 214.44,
+   "d": 1.92,
+   "text": "by an authority as I say there is no"
+  },
+  {
+   "t": 216.36,
+   "d": 3.96,
+   "text": "authority but they have tried so the"
+  },
+  {
+   "t": 220.32,
+   "d": 2.52,
+   "text": "literal interpretation roguelikes our"
+  },
+  {
+   "t": 222.84,
+   "d": 3.9,
+   "text": "game that are like rogue interestingly"
+  },
+  {
+   "t": 226.74,
+   "d": 5.61,
+   "text": "this has been one of the most used ways"
+  },
+  {
+   "t": 232.35,
+   "d": 4.53,
+   "text": "of trying to define it and I don't know"
+  },
+  {
+   "t": 236.88,
+   "d": 2.04,
+   "text": "if it makes much sense it's I think I"
+  },
+  {
+   "t": 238.92,
+   "d": 2.4,
+   "text": "find it funny that when you look at the"
+  },
+  {
+   "t": 241.32,
+   "d": 4.29,
+   "text": "Wikipedia page of roguelike that doesn't"
+  },
+  {
+   "t": 245.61,
+   "d": 2.01,
+   "text": "seem to have been like an effort to go"
+  },
+  {
+   "t": 247.62,
+   "d": 2.4,
+   "text": "into the history of the term and try to"
+  },
+  {
+   "t": 250.02,
+   "d": 2.07,
+   "text": "determine what it is rather they have"
+  },
+  {
+   "t": 252.09,
+   "d": 2.07,
+   "text": "tried to analyze the world all right"
+  },
+  {
+   "t": 254.16,
+   "d": 2.79,
+   "text": "very simple roguelike like wrote the"
+  },
+  {
+   "t": 256.95,
+   "d": 2.07,
+   "text": "game from the eighties the problem with"
+  },
+  {
+   "t": 259.02,
+   "d": 3.03,
+   "text": "this is that what features of rogue are"
+  },
+  {
+   "t": 262.05,
+   "d": 1.8,
+   "text": "you taking and what features are you"
+  },
+  {
+   "t": 263.85,
+   "d": 2.62,
+   "text": "leaving because rogue"
+  },
+  {
+   "t": 266.47,
+   "d": 2.67,
+   "text": "some character it characteristics that"
+  },
+  {
+   "t": 269.14,
+   "d": 2.04,
+   "text": "are not don't really apply to modern"
+  },
+  {
+   "t": 271.18,
+   "d": 4.62,
+   "text": "games so do a roguelike have to be able"
+  },
+  {
+   "t": 275.8,
+   "d": 1.68,
+   "text": "to run on UNIX mainframes"
+  },
+  {
+   "t": 277.48,
+   "d": 2.22,
+   "text": "okay no that's one of the features of"
+  },
+  {
+   "t": 279.7,
+   "d": 4.2,
+   "text": "rogue so maybe we could take it and then"
+  },
+  {
+   "t": 283.9,
+   "d": 3.27,
+   "text": "if we go to like a higher level so then"
+  },
+  {
+   "t": 287.17,
+   "d": 2.52,
+   "text": "a roguelike should have a identified"
+  },
+  {
+   "t": 289.69,
+   "d": 3.48,
+   "text": "entity Cajun game like rogue maybe maybe"
+  },
+  {
+   "t": 293.17,
+   "d": 1.98,
+   "text": "not so we're to draw the line that's the"
+  },
+  {
+   "t": 295.15,
+   "d": 2.01,
+   "text": "issue when you try to use this literal"
+  },
+  {
+   "t": 297.16,
+   "d": 7.5,
+   "text": "interpretation of of a roguelike and in"
+  },
+  {
+   "t": 304.66,
+   "d": 2.31,
+   "text": "the end all games are like rogue in one"
+  },
+  {
+   "t": 306.97,
+   "d": 4.28,
+   "text": "way or another so it's not very helpful"
+  },
+  {
+   "t": 311.25,
+   "d": 2.44,
+   "text": "so the next one is digging up the"
+  },
+  {
+   "t": 313.69,
+   "d": 2.94,
+   "text": "history of the term and what what comes"
+  },
+  {
+   "t": 316.63,
+   "d": 0.54,
+   "text": "next"
+  },
+  {
+   "t": 317.17,
+   "d": 2.97,
+   "text": "it's a partial result of research I have"
+  },
+  {
+   "t": 320.14,
+   "d": 1.8,
+   "text": "been doing on the historical meaning of"
+  },
+  {
+   "t": 321.94,
+   "d": 2.94,
+   "text": "the world of the world I have not seen"
+  },
+  {
+   "t": 324.88,
+   "d": 2.1,
+   "text": "it in many other places so I think it"
+  },
+  {
+   "t": 326.98,
+   "d": 1.59,
+   "text": "will be interesting at least to take a"
+  },
+  {
+   "t": 328.57,
+   "d": 5.07,
+   "text": "look so it looks like the first broad"
+  },
+  {
+   "t": 333.64,
+   "d": 3.27,
+   "text": "usage of the world came from a"
+  },
+  {
+   "t": 336.91,
+   "d": 2.61,
+   "text": "reorganization effort by andreasolo Bay"
+  },
+  {
+   "t": 339.52,
+   "d": 4.86,
+   "text": "for using it so using it I was a I am"
+  },
+  {
+   "t": 344.38,
+   "d": 2.58,
+   "text": "not like very technically savvy on this"
+  },
+  {
+   "t": 346.96,
+   "d": 3.27,
+   "text": "aspect but what I what I understand"
+  },
+  {
+   "t": 350.23,
+   "d": 2.16,
+   "text": "about using it is that it was like a"
+  },
+  {
+   "t": 352.39,
+   "d": 2.1,
+   "text": "predecessor of the Internet of sort"
+  },
+  {
+   "t": 354.49,
+   "d": 2.37,
+   "text": "right so it was discussions growth"
+  },
+  {
+   "t": 356.86,
+   "d": 4.47,
+   "text": "groups that were distributed and dude"
+  },
+  {
+   "t": 361.33,
+   "d": 3.33,
+   "text": "you just follow that group and you had"
+  },
+  {
+   "t": 364.66,
+   "d": 1.77,
+   "text": "to connect your server which was"
+  },
+  {
+   "t": 366.43,
+   "d": 2.22,
+   "text": "replicating the new messages or"
+  },
+  {
+   "t": 368.65,
+   "d": 1.65,
+   "text": "everything going on there this was"
+  },
+  {
+   "t": 370.3,
+   "d": 2.93,
+   "text": "before the internet became available"
+  },
+  {
+   "t": 373.23,
+   "d": 5.05,
+   "text": "even but sometime after internet was"
+  },
+  {
+   "t": 378.28,
+   "d": 2.67,
+   "text": "established there was some ways to"
+  },
+  {
+   "t": 380.95,
+   "d": 1.83,
+   "text": "access that the news group using for"
+  },
+  {
+   "t": 382.78,
+   "d": 1.41,
+   "text": "example Google Groups and some other"
+  },
+  {
+   "t": 384.19,
+   "d": 2.94,
+   "text": "technologies but in any case it seems"
+  },
+  {
+   "t": 387.13,
+   "d": 3.36,
+   "text": "that this was the first time that there"
+  },
+  {
+   "t": 390.49,
+   "d": 3.83,
+   "text": "there was an effort to group these games"
+  },
+  {
+   "t": 394.32,
+   "d": 3.22,
+   "text": "that seem to be similar and Andrus"
+  },
+  {
+   "t": 397.54,
+   "d": 2.73,
+   "text": "Holloway sent a request for discussion"
+  },
+  {
+   "t": 400.27,
+   "d": 2.37,
+   "text": "to create the wreck that Gaines dot"
+  },
+  {
+   "t": 402.64,
+   "d": 2.34,
+   "text": "dong-geon hierarchy that this happened"
+  },
+  {
+   "t": 404.98,
+   "d": 4.5,
+   "text": "on 1993 so he proposed that it made"
+  },
+  {
+   "t": 409.48,
+   "d": 2.4,
+   "text": "sense to create to group these rogue"
+  },
+  {
+   "t": 411.88,
+   "d": 3.23,
+   "text": "type games and the two character it"
+  },
+  {
+   "t": 415.11,
+   "d": 3.37,
+   "text": "characteristics that he said group these"
+  },
+  {
+   "t": 418.48,
+   "d": 3.24,
+   "text": "games were that they were character"
+  },
+  {
+   "t": 421.72,
+   "d": 2.67,
+   "text": "based so everything was represented by"
+  },
+  {
+   "t": 424.39,
+   "d": 3.18,
+   "text": "characters and that they were easy to"
+  },
+  {
+   "t": 427.57,
+   "d": 5.25,
+   "text": "port to various architectures and well"
+  },
+  {
+   "t": 432.82,
+   "d": 2.34,
+   "text": "this mainly happened because the"
+  },
+  {
+   "t": 435.16,
+   "d": 2.85,
+   "text": "discussions on the undirected gains dot"
+  },
+  {
+   "t": 438.01,
+   "d": 3.51,
+   "text": "rogue news group were overflowing with"
+  },
+  {
+   "t": 441.52,
+   "d": 2.22,
+   "text": "discussion from new games that were"
+  },
+  {
+   "t": 443.74,
+   "d": 3.21,
+   "text": "popping up so he thought it it was he"
+  },
+  {
+   "t": 446.95,
+   "d": 2.22,
+   "text": "saw that there was a general being"
+  },
+  {
+   "t": 449.17,
+   "d": 7.02,
+   "text": "created there of sorts but then as I"
+  },
+  {
+   "t": 456.19,
+   "d": 2.76,
+   "text": "said initially it was read that gains"
+  },
+  {
+   "t": 458.95,
+   "d": 3.36,
+   "text": "that dungeon and this was a request for"
+  },
+  {
+   "t": 462.31,
+   "d": 1.65,
+   "text": "discussion and there was a lot of"
+  },
+  {
+   "t": 463.96,
+   "d": 3.6,
+   "text": "discussion so some people could express"
+  },
+  {
+   "t": 467.56,
+   "d": 2.07,
+   "text": "concerns about this because other games"
+  },
+  {
+   "t": 469.63,
+   "d": 2.18,
+   "text": "cosna keen that did not look very"
+  },
+  {
+   "t": 471.81,
+   "d": 3.07,
+   "text": "similar to to to what they say it would"
+  },
+  {
+   "t": 474.88,
+   "d": 6.44,
+   "text": "be a roguelike and again there's a"
+  },
+  {
+   "t": 481.32,
+   "d": 2.86,
+   "text": "there's like an emphasis on the style of"
+  },
+  {
+   "t": 484.18,
+   "d": 3.83,
+   "text": "the interface being like the defining"
+  },
+  {
+   "t": 488.01,
+   "d": 2.62,
+   "text": "characteristic of these kind of games so"
+  },
+  {
+   "t": 490.63,
+   "d": 1.59,
+   "text": "he proposed well since rogue is the"
+  },
+  {
+   "t": 492.22,
+   "d": 2.28,
+   "text": "granddaddy of all these games I think it"
+  },
+  {
+   "t": 494.5,
+   "d": 1.88,
+   "text": "should because it shall be called"
+  },
+  {
+   "t": 496.38,
+   "d": 3.19,
+   "text": "roguelike or perhaps something else any"
+  },
+  {
+   "t": 499.57,
+   "d": 2.49,
+   "text": "ideas and then a lot of more discussion"
+  },
+  {
+   "t": 502.06,
+   "d": 5.97,
+   "text": "happened and surprisingly something that"
+  },
+  {
+   "t": 508.03,
+   "d": 4.11,
+   "text": "is very surprising for me yeah most"
+  },
+  {
+   "t": 512.14,
+   "d": 2.43,
+   "text": "people thought it was crazy drug like"
+  },
+  {
+   "t": 514.57,
+   "d": 2.52,
+   "text": "that's the horse the horse hierarchy"
+  },
+  {
+   "t": 517.09,
+   "d": 2.46,
+   "text": "name I have ever seen some other people"
+  },
+  {
+   "t": 519.55,
+   "d": 2.31,
+   "text": "say that it was a very poor name and"
+  },
+  {
+   "t": 521.86,
+   "d": 3.48,
+   "text": "then this is very interesting some"
+  },
+  {
+   "t": 525.34,
+   "d": 2.43,
+   "text": "people did not see any relationship at"
+  },
+  {
+   "t": 527.77,
+   "d": 4.47,
+   "text": "all between Moria Egmond and rogue for"
+  },
+  {
+   "t": 532.24,
+   "d": 1.37,
+   "text": "example"
+  },
+  {
+   "t": 533.61,
+   "d": 1.86,
+   "text": "they say okay well yeah they look"
+  },
+  {
+   "t": 535.47,
+   "d": 2.13,
+   "text": "similar but they play very differently"
+  },
+  {
+   "t": 537.6,
+   "d": 2.31,
+   "text": "they are not the same genre of games why"
+  },
+  {
+   "t": 539.91,
+   "d": 3.66,
+   "text": "should we create a turn for that and ya"
+  },
+  {
+   "t": 543.57,
+   "d": 2.31,
+   "text": "know nowadays with things yeah they have"
+  },
+  {
+   "t": 545.88,
+   "d": 2.64,
+   "text": "some common gameplay mechanics but but"
+  },
+  {
+   "t": 548.52,
+   "d": 1.68,
+   "text": "then there were there were no similar"
+  },
+  {
+   "t": 550.2,
+   "d": 3.38,
+   "text": "games that looked similar but did not"
+  },
+  {
+   "t": 553.58,
+   "d": 3.67,
+   "text": "have enough features in common to be to"
+  },
+  {
+   "t": 557.25,
+   "d": 3.66,
+   "text": "create a genre and I think it's similar"
+  },
+  {
+   "t": 560.91,
+   "d": 2.01,
+   "text": "to nowadays when we we see for example"
+  },
+  {
+   "t": 562.92,
+   "d": 3.09,
+   "text": "Call of Duty and we see I don't know for"
+  },
+  {
+   "t": 566.01,
+   "d": 2.94,
+   "text": "example hearthstone yeah they are"
+  },
+  {
+   "t": 568.95,
+   "d": 2.19,
+   "text": "similar they are both playing computer"
+  },
+  {
+   "t": 571.14,
+   "d": 1.89,
+   "text": "screens or computer displays but they"
+  },
+  {
+   "t": 573.03,
+   "d": 2.04,
+   "text": "are completely different so why should"
+  },
+  {
+   "t": 575.07,
+   "d": 2.34,
+   "text": "we group them and the thing is that byte"
+  },
+  {
+   "t": 577.41,
+   "d": 2.85,
+   "text": "back then the character display was like"
+  },
+  {
+   "t": 580.26,
+   "d": 1.44,
+   "text": "one of the only ways that the games"
+  },
+  {
+   "t": 581.7,
+   "d": 3.18,
+   "text": "could be played so people did not think"
+  },
+  {
+   "t": 584.88,
+   "d": 2.46,
+   "text": "of that being a unifying feature just"
+  },
+  {
+   "t": 587.34,
+   "d": 3.12,
+   "text": "like accounting that all games had so"
+  },
+  {
+   "t": 590.46,
+   "d": 3.78,
+   "text": "really it was not very well received I"
+  },
+  {
+   "t": 594.24,
+   "d": 3.03,
+   "text": "mean they this request was like why why"
+  },
+  {
+   "t": 597.27,
+   "d": 5.46,
+   "text": "we do not need that and yeah for example"
+  },
+  {
+   "t": 602.73,
+   "d": 1.86,
+   "text": "the third correct the third paragraph"
+  },
+  {
+   "t": 604.59,
+   "d": 7.23,
+   "text": "here playing them was very different so"
+  },
+  {
+   "t": 611.82,
+   "d": 4.05,
+   "text": "in the end in any case it was the last"
+  },
+  {
+   "t": 615.87,
+   "d": 3.0,
+   "text": "unpopular option so that's how it came"
+  },
+  {
+   "t": 618.87,
+   "d": 2.37,
+   "text": "to be used in the indie groups hierarchy"
+  },
+  {
+   "t": 621.24,
+   "d": 3.12,
+   "text": "being the list of all available evil"
+  },
+  {
+   "t": 624.36,
+   "d": 5.1,
+   "text": "evils and then people started using it"
+  },
+  {
+   "t": 629.46,
+   "d": 3.48,
+   "text": "and it became like established but as I"
+  },
+  {
+   "t": 632.94,
+   "d": 3.0,
+   "text": "said it was not very a very good option"
+  },
+  {
+   "t": 635.94,
+   "d": 2.61,
+   "text": "but that what ended up in the in the end"
+  },
+  {
+   "t": 638.55,
+   "d": 2.67,
+   "text": "some people even say that which will"
+  },
+  {
+   "t": 641.22,
+   "d": 2.55,
+   "text": "cause well if we create this genre maybe"
+  },
+  {
+   "t": 643.77,
+   "d": 1.98,
+   "text": "it should be called Moria like seeing"
+  },
+  {
+   "t": 645.75,
+   "d": 3.45,
+   "text": "rogue is now much more like a basic"
+  },
+  {
+   "t": 649.2,
+   "d": 2.7,
+   "text": "basic game and Moria is more advanced"
+  },
+  {
+   "t": 651.9,
+   "d": 3.12,
+   "text": "some people say that since the unifying"
+  },
+  {
+   "t": 655.02,
+   "d": 2.64,
+   "text": "feature was the display then maybe they"
+  },
+  {
+   "t": 657.66,
+   "d": 1.98,
+   "text": "should be called as ASCII dungeon games"
+  },
+  {
+   "t": 659.64,
+   "d": 1.37,
+   "text": "or TTY games"
+  },
+  {
+   "t": 661.01,
+   "d": 3.25,
+   "text": "well there were a lot of suggestions but"
+  },
+  {
+   "t": 664.26,
+   "d": 3.04,
+   "text": "in the end roguelike one the one decay"
+  },
+  {
+   "t": 667.3,
+   "d": 3.48,
+   "text": "and that's how it became established and"
+  },
+  {
+   "t": 670.78,
+   "d": 3.81,
+   "text": "well Usenet became like the cradle of"
+  },
+  {
+   "t": 674.59,
+   "d": 1.89,
+   "text": "the genre because that's where most of"
+  },
+  {
+   "t": 676.48,
+   "d": 3.48,
+   "text": "the discussion happened does well then"
+  },
+  {
+   "t": 679.96,
+   "d": 3.18,
+   "text": "the development group group was created"
+  },
+  {
+   "t": 683.14,
+   "d": 5.1,
+   "text": "and eventually after the years everyone"
+  },
+  {
+   "t": 688.24,
+   "d": 2.61,
+   "text": "everybody forgot about that forgot about"
+  },
+  {
+   "t": 690.85,
+   "d": 5.64,
+   "text": "it how it was how it was defined and we"
+  },
+  {
+   "t": 696.49,
+   "d": 3.75,
+   "text": "just started trying to use the literal"
+  },
+  {
+   "t": 700.24,
+   "d": 2.61,
+   "text": "definition this is another piece of"
+  },
+  {
+   "t": 702.85,
+   "d": 2.28,
+   "text": "information from Usenet this one is from"
+  },
+  {
+   "t": 705.13,
+   "d": 4.02,
+   "text": "all these planets and I think this is a"
+  },
+  {
+   "t": 709.15,
+   "d": 2.22,
+   "text": "bit closer than as we can get to an"
+  },
+  {
+   "t": 711.37,
+   "d": 1.77,
+   "text": "historical definition of roguelikes"
+  },
+  {
+   "t": 713.14,
+   "d": 2.1,
+   "text": "even if today we feel a bit"
+  },
+  {
+   "t": 715.24,
+   "d": 3.06,
+   "text": "uncomfortable about it but this this one"
+  },
+  {
+   "t": 718.3,
+   "d": 1.95,
+   "text": "is a little bit more high level than the"
+  },
+  {
+   "t": 720.25,
+   "d": 1.88,
+   "text": "original one proposed from the era of"
+  },
+  {
+   "t": 722.13,
+   "d": 4.09,
+   "text": "t44 directed games roguelike hierarchy"
+  },
+  {
+   "t": 726.22,
+   "d": 4.74,
+   "text": "mmm so yeah as you can see it focuses on"
+  },
+  {
+   "t": 730.96,
+   "d": 1.95,
+   "text": "being single user fantasy role-playing"
+  },
+  {
+   "t": 732.91,
+   "d": 3.6,
+   "text": "games set in a dungeon run with a simple"
+  },
+  {
+   "t": 736.51,
+   "d": 3.15,
+   "text": "character graphic interface and single"
+  },
+  {
+   "t": 739.66,
+   "d": 2.58,
+   "text": "character sword & Sworcery and they are"
+  },
+  {
+   "t": 742.24,
+   "d": 5.64,
+   "text": "all free games so as we can see in this"
+  },
+  {
+   "t": 747.88,
+   "d": 2.4,
+   "text": "definition basically we are taking the"
+  },
+  {
+   "t": 750.28,
+   "d": 2.49,
+   "text": "games that were popular back then all of"
+  },
+  {
+   "t": 752.77,
+   "d": 2.61,
+   "text": "them were like derivatives of Dungeons &"
+  },
+  {
+   "t": 755.38,
+   "d": 1.53,
+   "text": "Dragons or sort of sorcery"
+  },
+  {
+   "t": 756.91,
+   "d": 2.64,
+   "text": "there was no notion of being sci-fi a"
+  },
+  {
+   "t": 759.55,
+   "d": 2.34,
+   "text": "sci-fi roguelike another different kind"
+  },
+  {
+   "t": 761.89,
+   "d": 3.57,
+   "text": "of rogue like and again character"
+  },
+  {
+   "t": 765.46,
+   "d": 1.92,
+   "text": "graphic interface that was like the main"
+  },
+  {
+   "t": 767.38,
+   "d": 2.85,
+   "text": "thing that people thought was important"
+  },
+  {
+   "t": 770.23,
+   "d": 1.92,
+   "text": "for being a roguelike and then being"
+  },
+  {
+   "t": 772.15,
+   "d": 4.68,
+   "text": "free free games I was able to contact a"
+  },
+  {
+   "t": 776.83,
+   "d": 4.08,
+   "text": "Lisa yesterday and I hope that she"
+  },
+  {
+   "t": 780.91,
+   "d": 2.52,
+   "text": "managed to get to come here not sure if"
+  },
+  {
+   "t": 783.43,
+   "d": 4.05,
+   "text": "she did or he sure"
+  },
+  {
+   "t": 787.48,
+   "d": 3.48,
+   "text": "and if if she managed to come here I"
+  },
+  {
+   "t": 790.96,
+   "d": 2.67,
+   "text": "would love to hear about about that age"
+  },
+  {
+   "t": 793.63,
+   "d": 2.22,
+   "text": "of roguelike that is almost forgotten on"
+  },
+  {
+   "t": 795.85,
+   "d": 3.18,
+   "text": "the 90s and the community was very"
+  },
+  {
+   "t": 799.03,
+   "d": 2.1,
+   "text": "different it was not very wise"
+  },
+  {
+   "t": 801.13,
+   "d": 3.12,
+   "text": "spread so if if you can talk about that"
+  },
+  {
+   "t": 804.25,
+   "d": 2.1,
+   "text": "maybe on that spot where people can"
+  },
+  {
+   "t": 806.35,
+   "d": 3.09,
+   "text": "propose talking that would be great"
+  },
+  {
+   "t": 809.44,
+   "d": 5.22,
+   "text": "and she also proposed what is not a"
+  },
+  {
+   "t": 814.66,
+   "d": 2.88,
+   "text": "roguelike game right to further like"
+  },
+  {
+   "t": 817.54,
+   "d": 3.15,
+   "text": "define these boundaries commercial games"
+  },
+  {
+   "t": 820.69,
+   "d": 2.91,
+   "text": "were discarded from the definition as"
+  },
+  {
+   "t": 823.6,
+   "d": 2.07,
+   "text": "well as multi-user games puzzle games"
+  },
+  {
+   "t": 825.67,
+   "d": 2.46,
+   "text": "and text adventure games and as you can"
+  },
+  {
+   "t": 828.13,
+   "d": 2.04,
+   "text": "imagine there was like an overlap"
+  },
+  {
+   "t": 830.17,
+   "d": 3.99,
+   "text": "because the text adventure games were"
+  },
+  {
+   "t": 834.16,
+   "d": 2.58,
+   "text": "considered will also use the console"
+  },
+  {
+   "t": 836.74,
+   "d": 1.71,
+   "text": "display right the character based"
+  },
+  {
+   "t": 838.45,
+   "d": 3.75,
+   "text": "display so if you what you're looking"
+  },
+  {
+   "t": 842.2,
+   "d": 2.04,
+   "text": "for is only Stern about don't post the"
+  },
+  {
+   "t": 844.24,
+   "d": 1.95,
+   "text": "roguelike groups and you will use an"
+  },
+  {
+   "t": 846.19,
+   "d": 2.58,
+   "text": "audience in dragons so already there was"
+  },
+  {
+   "t": 848.77,
+   "d": 1.68,
+   "text": "some people trying to keep the"
+  },
+  {
+   "t": 850.45,
+   "d": 4.47,
+   "text": "definition and keep like a barrack close"
+  },
+  {
+   "t": 854.92,
+   "d": 4.53,
+   "text": "definition so as we can see these"
+  },
+  {
+   "t": 859.45,
+   "d": 2.13,
+   "text": "historical interpretations don't make"
+  },
+  {
+   "t": 861.58,
+   "d": 2.31,
+   "text": "any mention of being turn base being"
+  },
+  {
+   "t": 863.89,
+   "d": 1.74,
+   "text": "perma debt or primal failure or"
+  },
+  {
+   "t": 865.63,
+   "d": 2.46,
+   "text": "permanent consequences or even being"
+  },
+  {
+   "t": 868.09,
+   "d": 3.09,
+   "text": "procedural generated it was not like a"
+  },
+  {
+   "t": 871.18,
+   "d": 2.46,
+   "text": "defining feature originally historically"
+  },
+  {
+   "t": 873.64,
+   "d": 3.21,
+   "text": "for the for the genre and it is now of"
+  },
+  {
+   "t": 876.85,
+   "d": 2.76,
+   "text": "sort so the emphasis was on some other"
+  },
+  {
+   "t": 879.61,
+   "d": 2.22,
+   "text": "things which may not be very relevant"
+  },
+  {
+   "t": 881.83,
+   "d": 2.73,
+   "text": "today it was a bit too open it was"
+  },
+  {
+   "t": 884.56,
+   "d": 1.94,
+   "text": "contested in the beginning of the times"
+  },
+  {
+   "t": 886.5,
+   "d": 2.53,
+   "text": "but by the time the request for"
+  },
+  {
+   "t": 889.03,
+   "d": 2.97,
+   "text": "discussion for the rec games roguelike"
+  },
+  {
+   "t": 892.0,
+   "d": 2.94,
+   "text": "development group was posted which was"
+  },
+  {
+   "t": 894.94,
+   "d": 3.81,
+   "text": "around five years after that that term"
+  },
+  {
+   "t": 898.75,
+   "d": 2.22,
+   "text": "was already established within them so"
+  },
+  {
+   "t": 900.97,
+   "d": 8.52,
+   "text": "they learned to love it okay so but as"
+  },
+  {
+   "t": 909.49,
+   "d": 1.83,
+   "text": "we know the usage of the word has"
+  },
+  {
+   "t": 911.32,
+   "d": 3.21,
+   "text": "evolved now and it has evolved to focus"
+  },
+  {
+   "t": 914.53,
+   "d": 1.74,
+   "text": "on game design features rather than"
+  },
+  {
+   "t": 916.27,
+   "d": 3.27,
+   "text": "these like presentation features or the"
+  },
+  {
+   "t": 919.54,
+   "d": 5.91,
+   "text": "distribution features and that's why"
+  },
+  {
+   "t": 925.45,
+   "d": 5.37,
+   "text": "that historical definition not sure how"
+  },
+  {
+   "t": 930.82,
+   "d": 3.57,
+   "text": "how useful it will be today right"
+  },
+  {
+   "t": 934.39,
+   "d": 3.48,
+   "text": "so the third source of roguelike"
+  },
+  {
+   "t": 937.87,
+   "d": 3.57,
+   "text": "definition is by Authority but there's"
+  },
+  {
+   "t": 941.44,
+   "d": 1.65,
+   "text": "no authority that kind of stuff is what"
+  },
+  {
+   "t": 943.09,
+   "d": 4.92,
+   "text": "a roguelike is for now so some examples"
+  },
+  {
+   "t": 948.01,
+   "d": 2.46,
+   "text": "here as they're widely known berline"
+  },
+  {
+   "t": 950.47,
+   "d": 3.84,
+   "text": "interpretation and we must say here that"
+  },
+  {
+   "t": 954.31,
+   "d": 2.52,
+   "text": "they did not really try to make like a"
+  },
+  {
+   "t": 956.83,
+   "d": 5.13,
+   "text": "very like way to divide whether again is"
+  },
+  {
+   "t": 961.96,
+   "d": 1.92,
+   "text": "a roguelike or not they did it more like"
+  },
+  {
+   "t": 963.88,
+   "d": 3.18,
+   "text": "for purposes of studying the disk"
+  },
+  {
+   "t": 967.06,
+   "d": 3.02,
+   "text": "company's original rogue type games and"
+  },
+  {
+   "t": 970.08,
+   "d": 5.38,
+   "text": "they took like the five more important"
+  },
+  {
+   "t": 975.46,
+   "d": 0.66,
+   "text": "roguelikes"
+  },
+  {
+   "t": 976.12,
+   "d": 5.49,
+   "text": "for that time which was on 2008 and they"
+  },
+  {
+   "t": 981.61,
+   "d": 2.61,
+   "text": "took that as a canon and then extracted"
+  },
+  {
+   "t": 984.22,
+   "d": 2.7,
+   "text": "some features from these games and said"
+  },
+  {
+   "t": 986.92,
+   "d": 2.46,
+   "text": "a roguelike has these features and"
+  },
+  {
+   "t": 989.38,
+   "d": 2.43,
+   "text": "there's a similar one which was I"
+  },
+  {
+   "t": 991.81,
+   "d": 1.59,
+   "text": "created for the temple of the roguelike"
+  },
+  {
+   "t": 993.4,
+   "d": 3.03,
+   "text": "which has 13 features so basically they"
+  },
+  {
+   "t": 996.43,
+   "d": 3.15,
+   "text": "did take these tilting features and try"
+  },
+  {
+   "t": 999.58,
+   "d": 2.79,
+   "text": "to complement and define further based"
+  },
+  {
+   "t": 1002.37,
+   "d": 2.94,
+   "text": "on that but there's a problem with with"
+  },
+  {
+   "t": 1005.31,
+   "d": 4.44,
+   "text": "that and it's that interpretation based"
+  },
+  {
+   "t": 1009.75,
+   "d": 1.8,
+   "text": "on a list of feature may block the"
+  },
+  {
+   "t": 1011.55,
+   "d": 1.68,
+   "text": "innovation because you are not leading"
+  },
+  {
+   "t": 1013.23,
+   "d": 2.58,
+   "text": "letting other kind of games come so you"
+  },
+  {
+   "t": 1015.81,
+   "d": 5.76,
+   "text": "end up with copies of the same game so"
+  },
+  {
+   "t": 1021.57,
+   "d": 2.91,
+   "text": "these are like the three kinds of rocket"
+  },
+  {
+   "t": 1024.48,
+   "d": 3.51,
+   "text": "definitions and as I said all of them"
+  },
+  {
+   "t": 1027.99,
+   "d": 2.46,
+   "text": "are efforts that have not reached like"
+  },
+  {
+   "t": 1030.45,
+   "d": 2.97,
+   "text": "an answer but what what is the result of"
+  },
+  {
+   "t": 1033.42,
+   "d": 2.75,
+   "text": "not having like a clear interpretation"
+  },
+  {
+   "t": 1036.17,
+   "d": 3.19,
+   "text": "so these are some of the sad results of"
+  },
+  {
+   "t": 1039.36,
+   "d": 2.31,
+   "text": "not having a clear interpretation of the"
+  },
+  {
+   "t": 1041.67,
+   "d": 3.18,
+   "text": "genre a bunch of amazingly form"
+  },
+  {
+   "t": 1044.85,
+   "d": 2.04,
+   "text": "procedural games that's like one of the"
+  },
+  {
+   "t": 1046.89,
+   "d": 2.24,
+   "text": "most important things that has happened"
+  },
+  {
+   "t": 1049.13,
+   "d": 3.22,
+   "text": "and I think most of people here knows"
+  },
+  {
+   "t": 1052.35,
+   "d": 1.89,
+   "text": "all these modern games which are mostly"
+  },
+  {
+   "t": 1054.24,
+   "d": 3.6,
+   "text": "procedural may not be turn-based but are"
+  },
+  {
+   "t": 1057.84,
+   "d": 4.17,
+   "text": "very fun to play the second result is"
+  },
+  {
+   "t": 1062.01,
+   "d": 2.13,
+   "text": "roguelikes being much less I don't know"
+  },
+  {
+   "t": 1064.14,
+   "d": 1.92,
+   "text": "how to pronounce this sorry another net"
+  },
+  {
+   "t": 1066.06,
+   "d": 2.37,
+   "text": "native speaker"
+  },
+  {
+   "t": 1068.43,
+   "d": 2.37,
+   "text": "but now much more people knows about"
+  },
+  {
+   "t": 1070.8,
+   "d": 1.02,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1071.82,
+   "d": 3.27,
+   "text": "and on the 19th and on the first decade"
+  },
+  {
+   "t": 1075.09,
+   "d": 5.4,
+   "text": "of the 2000s rogue lights were still"
+  },
+  {
+   "t": 1080.49,
+   "d": 1.95,
+   "text": "like a developer thing I mean most of"
+  },
+  {
+   "t": 1082.44,
+   "d": 1.98,
+   "text": "the players were also developers and"
+  },
+  {
+   "t": 1084.42,
+   "d": 2.31,
+   "text": "also the players wanted to create their"
+  },
+  {
+   "t": 1086.73,
+   "d": 2.88,
+   "text": "own roguelike but that has changed and"
+  },
+  {
+   "t": 1089.61,
+   "d": 2.49,
+   "text": "rogue lights are now known by a lot of"
+  },
+  {
+   "t": 1092.1,
+   "d": 2.43,
+   "text": "more of people that are enjoying and"
+  },
+  {
+   "t": 1094.53,
+   "d": 3.9,
+   "text": "playing and now rogue lights also have"
+  },
+  {
+   "t": 1098.43,
+   "d": 3.03,
+   "text": "higher production values because we need"
+  },
+  {
+   "t": 1101.46,
+   "d": 2.61,
+   "text": "to reach more people so we cannot like a"
+  },
+  {
+   "t": 1104.07,
+   "d": 2.67,
+   "text": "stick to unusable"
+  },
+  {
+   "t": 1106.74,
+   "d": 2.43,
+   "text": "user interfaces or things that no one"
+  },
+  {
+   "t": 1109.17,
+   "d": 2.79,
+   "text": "understands the I mean the all these new"
+  },
+  {
+   "t": 1111.96,
+   "d": 1.74,
+   "text": "competition and all these new interest"
+  },
+  {
+   "t": 1113.7,
+   "d": 2.91,
+   "text": "on the genre has elevated like the the"
+  },
+  {
+   "t": 1116.61,
+   "d": 3.06,
+   "text": "the bar so that has been good for the"
+  },
+  {
+   "t": 1119.67,
+   "d": 1.8,
+   "text": "rogue legs because we are not stuck in"
+  },
+  {
+   "t": 1121.47,
+   "d": 2.13,
+   "text": "the past we are trying to make things"
+  },
+  {
+   "t": 1123.6,
+   "d": 5.61,
+   "text": "better and it every time so we are now"
+  },
+  {
+   "t": 1129.21,
+   "d": 2.7,
+   "text": "in 2017 and devs are being much more"
+  },
+  {
+   "t": 1131.91,
+   "d": 3.03,
+   "text": "careful things as I say this discussion"
+  },
+  {
+   "t": 1134.94,
+   "d": 1.77,
+   "text": "has been happening for a long time now"
+  },
+  {
+   "t": 1136.71,
+   "d": 3.54,
+   "text": "and nowadays if you check the stores you"
+  },
+  {
+   "t": 1140.25,
+   "d": 2.55,
+   "text": "will see that most games that are not"
+  },
+  {
+   "t": 1142.8,
+   "d": 2.88,
+   "text": "turn-based are now labeled as rogue"
+  },
+  {
+   "t": 1145.68,
+   "d": 4.19,
+   "text": "lights right or as action rogue likes"
+  },
+  {
+   "t": 1149.87,
+   "d": 2.71,
+   "text": "the term rogue like like which used to"
+  },
+  {
+   "t": 1152.58,
+   "d": 3.09,
+   "text": "be somewhat popular some years ago no"
+  },
+  {
+   "t": 1155.67,
+   "d": 3.15,
+   "text": "longer being using a lot a new term"
+  },
+  {
+   "t": 1158.82,
+   "d": 2.88,
+   "text": "procedural dungeons of death was created"
+  },
+  {
+   "t": 1161.7,
+   "d": 3.3,
+   "text": "and we also see a lot of games just"
+  },
+  {
+   "t": 1165.0,
+   "d": 2.07,
+   "text": "saying that they have roguelike elements"
+  },
+  {
+   "t": 1167.07,
+   "d": 3.3,
+   "text": "or are being procedural so based on all"
+  },
+  {
+   "t": 1170.37,
+   "d": 1.71,
+   "text": "these flame wars and all the discussion"
+  },
+  {
+   "t": 1172.08,
+   "d": 1.86,
+   "text": "that has happened that are more careful"
+  },
+  {
+   "t": 1173.94,
+   "d": 1.86,
+   "text": "now to label their game must roguelike"
+  },
+  {
+   "t": 1175.8,
+   "d": 3.48,
+   "text": "right of all these I think action"
+  },
+  {
+   "t": 1179.28,
+   "d": 1.95,
+   "text": "roguelike I think it's the one that I"
+  },
+  {
+   "t": 1181.23,
+   "d": 2.97,
+   "text": "like the most because as I said the"
+  },
+  {
+   "t": 1184.2,
+   "d": 2.52,
+   "text": "problem with having rogue light is that"
+  },
+  {
+   "t": 1186.72,
+   "d": 2.04,
+   "text": "you're kind of diminish in that game"
+  },
+  {
+   "t": 1188.76,
+   "d": 1.68,
+   "text": "it's like a roguelike what is not bad"
+  },
+  {
+   "t": 1190.44,
+   "d": 3.12,
+   "text": "like hardcore is it's like a more for"
+  },
+  {
+   "t": 1193.56,
+   "d": 2.36,
+   "text": "casual gamers and that's not really true"
+  },
+  {
+   "t": 1195.92,
+   "d": 3.4,
+   "text": "some some of these games are very very"
+  },
+  {
+   "t": 1199.32,
+   "d": 1.83,
+   "text": "good production values are a lot of"
+  },
+  {
+   "t": 1201.15,
+   "d": 0.84,
+   "text": "depth"
+  },
+  {
+   "t": 1201.99,
+   "d": 1.77,
+   "text": "so I call them like roguelite like"
+  },
+  {
+   "t": 1203.76,
+   "d": 1.23,
+   "text": "almost a roguelike"
+  },
+  {
+   "t": 1204.99,
+   "d": 2.25,
+   "text": "but not enough no it's not I don't feel"
+  },
+  {
+   "t": 1207.24,
+   "d": 3.72,
+   "text": "that it's good roguelike like then you"
+  },
+  {
+   "t": 1210.96,
+   "d": 2.04,
+   "text": "have the same problem you need to define"
+  },
+  {
+   "t": 1213.0,
+   "d": 1.83,
+   "text": "what a roguelike like is so you are"
+  },
+  {
+   "t": 1214.83,
+   "d": 3.77,
+   "text": "stuck on the same on the same point"
+  },
+  {
+   "t": 1218.6,
+   "d": 2.14,
+   "text": "procedural dungeon of that it's good"
+  },
+  {
+   "t": 1220.74,
+   "d": 1.44,
+   "text": "because it's very specific but the"
+  },
+  {
+   "t": 1222.18,
+   "d": 2.34,
+   "text": "problem is that same thing because it's"
+  },
+  {
+   "t": 1224.52,
+   "d": 1.56,
+   "text": "only only applies to a very specific"
+  },
+  {
+   "t": 1226.08,
+   "d": 2.49,
+   "text": "kind of roguelikes where Jordan in a"
+  },
+  {
+   "t": 1228.57,
+   "d": 2.67,
+   "text": "dungeon and it's procedural and then"
+  },
+  {
+   "t": 1231.24,
+   "d": 1.95,
+   "text": "maybe it's taking out the turn-based"
+  },
+  {
+   "t": 1233.19,
+   "d": 3.48,
+   "text": "from the equation but I think the"
+  },
+  {
+   "t": 1236.67,
+   "d": 1.59,
+   "text": "roguelike elements applied to a broader"
+  },
+  {
+   "t": 1238.26,
+   "d": 3.14,
+   "text": "set of game so I stick to that"
+  },
+  {
+   "t": 1241.4,
+   "d": 3.97,
+   "text": "particular one and as I say the two on"
+  },
+  {
+   "t": 1245.37,
+   "d": 1.53,
+   "text": "the bottom roguelike elements and"
+  },
+  {
+   "t": 1246.9,
+   "d": 4.4,
+   "text": "procedural are fine are very correct but"
+  },
+  {
+   "t": 1251.3,
+   "d": 3.4,
+   "text": "as I said action roguelike most of the"
+  },
+  {
+   "t": 1254.7,
+   "d": 3.69,
+   "text": "times it is enough for the for the issue"
+  },
+  {
+   "t": 1258.39,
+   "d": 2.31,
+   "text": "of discoverability when I am browsing a"
+  },
+  {
+   "t": 1260.7,
+   "d": 2.4,
+   "text": "steam and I'm looking for roguelikes"
+  },
+  {
+   "t": 1263.1,
+   "d": 2.25,
+   "text": "if I see that it's labelled as an action"
+  },
+  {
+   "t": 1265.35,
+   "d": 1.98,
+   "text": "roguelike I know that it may not be very"
+  },
+  {
+   "t": 1267.33,
+   "d": 5.76,
+   "text": "liked or what I am looking for so does"
+  },
+  {
+   "t": 1273.09,
+   "d": 2.04,
+   "text": "it make sense to conserve this original"
+  },
+  {
+   "t": 1275.13,
+   "d": 2.58,
+   "text": "definition from the eighties I mean we"
+  },
+  {
+   "t": 1277.71,
+   "d": 1.59,
+   "text": "have a lot of new games that are very"
+  },
+  {
+   "t": 1279.3,
+   "d": 3.51,
+   "text": "fun to play so why worry about this"
+  },
+  {
+   "t": 1282.81,
+   "d": 2.19,
+   "text": "original definition well the thing is"
+  },
+  {
+   "t": 1285.0,
+   "d": 2.55,
+   "text": "that I think classic style roguelikes"
+  },
+  {
+   "t": 1287.55,
+   "d": 2.67,
+   "text": "roguelikes which are turn-based can be"
+  },
+  {
+   "t": 1290.22,
+   "d": 2.46,
+   "text": "fun and can be modern and can be enjoyed"
+  },
+  {
+   "t": 1292.68,
+   "d": 3.63,
+   "text": "by by modern players and I think it"
+  },
+  {
+   "t": 1296.31,
+   "d": 3.21,
+   "text": "makes sense to have a definition or set"
+  },
+  {
+   "t": 1299.52,
+   "d": 3.09,
+   "text": "of of parameters that allows you to"
+  },
+  {
+   "t": 1302.61,
+   "d": 2.07,
+   "text": "continue looking for this kind of games"
+  },
+  {
+   "t": 1304.68,
+   "d": 3.21,
+   "text": "in the future I'm finding them so as I"
+  },
+  {
+   "t": 1307.89,
+   "d": 2.1,
+   "text": "said an interpretation is a very"
+  },
+  {
+   "t": 1309.99,
+   "d": 1.92,
+   "text": "personal thing and this is the one I"
+  },
+  {
+   "t": 1311.91,
+   "d": 1.98,
+   "text": "have for a classic style roguelike a"
+  },
+  {
+   "t": 1313.89,
+   "d": 2.76,
+   "text": "roguelike that is turn-based a roguelike"
+  },
+  {
+   "t": 1316.65,
+   "d": 2.34,
+   "text": "that has permanent consequences and had"
+  },
+  {
+   "t": 1318.99,
+   "d": 2.91,
+   "text": "procedural content and basically what's"
+  },
+  {
+   "t": 1321.9,
+   "d": 1.59,
+   "text": "happening here is that I have a list of"
+  },
+  {
+   "t": 1323.49,
+   "d": 2.79,
+   "text": "13 features but I think these three are"
+  },
+  {
+   "t": 1326.28,
+   "d": 3.3,
+   "text": "enough like to have the most important"
+  },
+  {
+   "t": 1329.58,
+   "d": 2.79,
+   "text": "part of the spirit of these classic"
+  },
+  {
+   "t": 1332.37,
+   "d": 2.37,
+   "text": "roguelikes and have it survived on the"
+  },
+  {
+   "t": 1334.74,
+   "d": 2.19,
+   "text": "time"
+  },
+  {
+   "t": 1336.93,
+   "d": 4.9,
+   "text": "and this this style of roguelike are"
+  },
+  {
+   "t": 1341.83,
+   "d": 2.49,
+   "text": "still alive we can see some a list of"
+  },
+  {
+   "t": 1344.32,
+   "d": 3.51,
+   "text": "some games here that are have that's"
+  },
+  {
+   "t": 1347.83,
+   "d": 2.04,
+   "text": "that original style of the of the"
+  },
+  {
+   "t": 1349.87,
+   "d": 2.03,
+   "text": "roguelike games from the eighties but"
+  },
+  {
+   "t": 1351.9,
+   "d": 3.61,
+   "text": "had done a lot of effort trying to be"
+  },
+  {
+   "t": 1355.51,
+   "d": 2.79,
+   "text": "much more accessible for people and for"
+  },
+  {
+   "t": 1358.3,
+   "d": 3.96,
+   "text": "modern gamers you can see them in the in"
+  },
+  {
+   "t": 1362.26,
+   "d": 5.34,
+   "text": "the modern stores like on Steam so for"
+  },
+  {
+   "t": 1367.6,
+   "d": 1.26,
+   "text": "the problem of fixed index"
+  },
+  {
+   "t": 1368.86,
+   "d": 2.79,
+   "text": "discoverability I think two of the"
+  },
+  {
+   "t": 1371.65,
+   "d": 1.8,
+   "text": "solution that could be applied would be"
+  },
+  {
+   "t": 1373.45,
+   "d": 2.88,
+   "text": "having curated catalogs so that people"
+  },
+  {
+   "t": 1376.33,
+   "d": 2.7,
+   "text": "that likes in this kind of games has a"
+  },
+  {
+   "t": 1379.03,
+   "d": 2.82,
+   "text": "list of reviews these kind of games and"
+  },
+  {
+   "t": 1381.85,
+   "d": 2.82,
+   "text": "can provide like a way for people to to"
+  },
+  {
+   "t": 1384.67,
+   "d": 2.76,
+   "text": "find them more easily and created so"
+  },
+  {
+   "t": 1387.43,
+   "d": 2.34,
+   "text": "communities around that topic I think"
+  },
+  {
+   "t": 1389.77,
+   "d": 2.64,
+   "text": "that may be two different solutions for"
+  },
+  {
+   "t": 1392.41,
+   "d": 4.98,
+   "text": "this so yeah I think as a conclusion as"
+  },
+  {
+   "t": 1397.39,
+   "d": 2.58,
+   "text": "as I said you cannot define a roguelike"
+  },
+  {
+   "t": 1399.97,
+   "d": 2.61,
+   "text": "and I don't think we should try to"
+  },
+  {
+   "t": 1402.58,
+   "d": 1.86,
+   "text": "define a roguelike which will let the"
+  },
+  {
+   "t": 1404.44,
+   "d": 2.82,
+   "text": "general continue evolving but it makes"
+  },
+  {
+   "t": 1407.26,
+   "d": 1.83,
+   "text": "sense to also keep this definition of a"
+  },
+  {
+   "t": 1409.09,
+   "d": 2.52,
+   "text": "classic style roguelike so that at the"
+  },
+  {
+   "t": 1411.61,
+   "d": 2.1,
+   "text": "same time we can continue find in that"
+  },
+  {
+   "t": 1413.71,
+   "d": 5.37,
+   "text": "kind of games all right all right I"
+  },
+  {
+   "t": 1419.08,
+   "d": 1.59,
+   "text": "think that what I wanted to share and"
+  },
+  {
+   "t": 1420.67,
+   "d": 4.61,
+   "text": "let's celebrate roguelikes of all sorts"
+  },
+  {
+   "t": 1432.18,
+   "d": 4.48,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1439.56,
+   "d": 1.68,
+   "text": "we have a few minutes does anyone have"
+  },
+  {
+   "t": 1441.24,
+   "d": 9.89,
+   "text": "any questions for Santiago No"
+  },
+  {
+   "t": 1453.86,
+   "d": 2.98,
+   "text": "so how would you define a roguelike like"
+  },
+  {
+   "t": 1456.84,
+   "d": 1.35,
+   "text": "if you had to come up with a definition"
+  },
+  {
+   "t": 1458.19,
+   "d": 3.81,
+   "text": "Oh off the top of your head well as I"
+  },
+  {
+   "t": 1462.0,
+   "d": 1.5,
+   "text": "say that would be also a personal"
+  },
+  {
+   "t": 1463.5,
+   "d": 2.88,
+   "text": "interpretation and yeah I would take out"
+  },
+  {
+   "t": 1466.38,
+   "d": 2.37,
+   "text": "the term based from the from the"
+  },
+  {
+   "t": 1468.75,
+   "d": 3.98,
+   "text": "equation that's enough of a distinction"
+  },
+  {
+   "t": 1472.73,
+   "d": 2.98,
+   "text": "because most of those kind of games"
+  },
+  {
+   "t": 1475.71,
+   "d": 1.95,
+   "text": "roguelike lights what what they have is"
+  },
+  {
+   "t": 1477.66,
+   "d": 2.88,
+   "text": "the procedural part right and I think"
+  },
+  {
+   "t": 1480.54,
+   "d": 3.99,
+   "text": "these three things as I said are like"
+  },
+  {
+   "t": 1484.53,
+   "d": 2.37,
+   "text": "what where most of the discussion goes"
+  },
+  {
+   "t": 1486.9,
+   "d": 3.54,
+   "text": "on when you remove turn-based it's very"
+  },
+  {
+   "t": 1490.44,
+   "d": 1.35,
+   "text": "different to play you have an action"
+  },
+  {
+   "t": 1491.79,
+   "d": 2.82,
+   "text": "roguelike or a roguelike light when you"
+  },
+  {
+   "t": 1494.61,
+   "d": 1.86,
+   "text": "remove permanent consequences that may"
+  },
+  {
+   "t": 1496.47,
+   "d": 1.62,
+   "text": "be also one of the things that define"
+  },
+  {
+   "t": 1498.09,
+   "d": 3.15,
+   "text": "the roguelike likes but most of the"
+  },
+  {
+   "t": 1501.24,
+   "d": 2.01,
+   "text": "times it's tied to removing the"
+  },
+  {
+   "t": 1503.25,
+   "d": 2.76,
+   "text": "turn-based for some reason like to make"
+  },
+  {
+   "t": 1506.01,
+   "d": 1.32,
+   "text": "it more accessible for players or"
+  },
+  {
+   "t": 1507.33,
+   "d": 1.89,
+   "text": "something so for example you can save"
+  },
+  {
+   "t": 1509.22,
+   "d": 2.46,
+   "text": "the game or you have like a model where"
+  },
+  {
+   "t": 1511.68,
+   "d": 3.69,
+   "text": "you have persistence of the items or the"
+  },
+  {
+   "t": 1515.37,
+   "d": 2.03,
+   "text": "achievements that you have done in other"
+  },
+  {
+   "t": 1517.4,
+   "d": 3.85,
+   "text": "in other gameplays so I think that's how"
+  },
+  {
+   "t": 1521.25,
+   "d": 4.65,
+   "text": "I would define a roguelike light anyone"
+  },
+  {
+   "t": 1525.9,
+   "d": 2.15,
+   "text": "else"
+  },
+  {
+   "t": 1530.87,
+   "d": 3.97,
+   "text": "so you talked about how you like the"
+  },
+  {
+   "t": 1534.84,
+   "d": 2.37,
+   "text": "action roguelike term because it kind of"
+  },
+  {
+   "t": 1537.21,
+   "d": 2.24,
+   "text": "explains the turn-based versus real-time"
+  },
+  {
+   "t": 1539.45,
+   "d": 1.96,
+   "text": "difference and to you that's really"
+  },
+  {
+   "t": 1541.41,
+   "d": 3.75,
+   "text": "important for me permanent consequences"
+  },
+  {
+   "t": 1545.16,
+   "d": 2.37,
+   "text": "permanent death versus some sort of meta"
+  },
+  {
+   "t": 1547.53,
+   "d": 1.71,
+   "text": "progression system is the thing that I"
+  },
+  {
+   "t": 1549.24,
+   "d": 2.55,
+   "text": "am most bothered by in the you know"
+  },
+  {
+   "t": 1551.79,
+   "d": 4.05,
+   "text": "newer games so I guess like how do we"
+  },
+  {
+   "t": 1555.84,
+   "d": 2.76,
+   "text": "find a way to like you know how because"
+  },
+  {
+   "t": 1558.6,
+   "d": 1.35,
+   "text": "action roguelike doesn't describe that"
+  },
+  {
+   "t": 1559.95,
+   "d": 2.01,
+   "text": "distinction and it's also much harder to"
+  },
+  {
+   "t": 1561.96,
+   "d": 1.89,
+   "text": "see when I look at a game I'm like oh"
+  },
+  {
+   "t": 1563.85,
+   "d": 1.56,
+   "text": "this looks really cool and I watch"
+  },
+  {
+   "t": 1565.41,
+   "d": 1.35,
+   "text": "somebody play it for a while and then"
+  },
+  {
+   "t": 1566.76,
+   "d": 2.07,
+   "text": "and then they unlock something that is"
+  },
+  {
+   "t": 1568.83,
+   "d": 1.2,
+   "text": "gonna work in their next run and I'm"
+  },
+  {
+   "t": 1570.03,
+   "d": 4.41,
+   "text": "just like oh so yeah I don't I don't"
+  },
+  {
+   "t": 1574.44,
+   "d": 2.4,
+   "text": "know like how do we find ways of"
+  },
+  {
+   "t": 1576.84,
+   "d": 1.47,
+   "text": "classifying them more specifically"
+  },
+  {
+   "t": 1578.31,
+   "d": 1.53,
+   "text": "because action roguelike isn't quite"
+  },
+  {
+   "t": 1579.84,
+   "d": 3.81,
+   "text": "enough yeah as I said yeah I mean you"
+  },
+  {
+   "t": 1583.65,
+   "d": 2.82,
+   "text": "can more much more easily see when a"
+  },
+  {
+   "t": 1586.47,
+   "d": 1.98,
+   "text": "game is not turn-based because you look"
+  },
+  {
+   "t": 1588.45,
+   "d": 2.76,
+   "text": "at the screenshot or the videos and it's"
+  },
+  {
+   "t": 1591.21,
+   "d": 2.79,
+   "text": "evident right but you cannot see the"
+  },
+  {
+   "t": 1594.0,
+   "d": 2.73,
+   "text": "other part and I think maybe what what"
+  },
+  {
+   "t": 1596.73,
+   "d": 2.61,
+   "text": "we can do is have the developers take a"
+  },
+  {
+   "t": 1599.34,
+   "d": 2.76,
+   "text": "little bit more of care of these and"
+  },
+  {
+   "t": 1602.1,
+   "d": 2.01,
+   "text": "maybe announced about that kind of"
+  },
+  {
+   "t": 1604.11,
+   "d": 2.31,
+   "text": "things when I mean the same way that"
+  },
+  {
+   "t": 1606.42,
+   "d": 2.67,
+   "text": "they are currently aware that they"
+  },
+  {
+   "t": 1609.09,
+   "d": 2.07,
+   "text": "should say whether they roguelike is"
+  },
+  {
+   "t": 1611.16,
+   "d": 3.21,
+   "text": "turn-based or action based maybe they"
+  },
+  {
+   "t": 1614.37,
+   "d": 2.88,
+   "text": "can also describe the model that it has"
+  },
+  {
+   "t": 1617.25,
+   "d": 2.82,
+   "text": "for handling this meta progression or"
+  },
+  {
+   "t": 1620.07,
+   "d": 3.12,
+   "text": "all these new like non permanent"
+  },
+  {
+   "t": 1623.19,
+   "d": 5.85,
+   "text": "consequences in terms of discoverability"
+  },
+  {
+   "t": 1629.04,
+   "d": 2.13,
+   "text": "I'm thinking about the the term"
+  },
+  {
+   "t": 1631.17,
+   "d": 2.19,
+   "text": "procedural content and feel like that's"
+  },
+  {
+   "t": 1633.36,
+   "d": 3.78,
+   "text": "a real inside thing right that we all"
+  },
+  {
+   "t": 1637.14,
+   "d": 1.98,
+   "text": "know that oh that means that the"
+  },
+  {
+   "t": 1639.12,
+   "d": 2.52,
+   "text": "computer is running a procedure to"
+  },
+  {
+   "t": 1641.64,
+   "d": 3.54,
+   "text": "create a world but we mean right"
+  },
+  {
+   "t": 1645.18,
+   "d": 3.99,
+   "text": "infinite replayability kind of do you"
+  },
+  {
+   "t": 1649.17,
+   "d": 2.34,
+   "text": "think just as you were using the word"
+  },
+  {
+   "t": 1651.51,
+   "d": 1.95,
+   "text": "procedural and then I'm thinking right"
+  },
+  {
+   "t": 1653.46,
+   "d": 2.43,
+   "text": "in America a procedural means a police"
+  },
+  {
+   "t": 1655.89,
+   "d": 3.75,
+   "text": "drama right and and that if we like put"
+  },
+  {
+   "t": 1659.64,
+   "d": 2.64,
+   "text": "that out there in on Steam or something"
+  },
+  {
+   "t": 1662.28,
+   "d": 0.4,
+   "text": "like that"
+  },
+  {
+   "t": 1662.68,
+   "d": 1.52,
+   "text": "are people gonna know what that means"
+  },
+  {
+   "t": 1664.2,
+   "d": 4.27,
+   "text": "well yeah I think that term procedural"
+  },
+  {
+   "t": 1668.47,
+   "d": 3.33,
+   "text": "inside the gamers for for the reasons"
+  },
+  {
+   "t": 1671.8,
+   "d": 2.1,
+   "text": "that I mean for this explosion of new"
+  },
+  {
+   "t": 1673.9,
+   "d": 3.33,
+   "text": "kind of roguelikes is know a bit more"
+  },
+  {
+   "t": 1677.23,
+   "d": 3.42,
+   "text": "known so even if we can we may think"
+  },
+  {
+   "t": 1680.65,
+   "d": 2.79,
+   "text": "that some years ago again we will not"
+  },
+  {
+   "t": 1683.44,
+   "d": 2.01,
+   "text": "know what procedural was but I think"
+  },
+  {
+   "t": 1685.45,
+   "d": 2.52,
+   "text": "nowadays they do know it and for some"
+  },
+  {
+   "t": 1687.97,
+   "d": 1.83,
+   "text": "reason it's become like a good way of"
+  },
+  {
+   "t": 1689.8,
+   "d": 2.97,
+   "text": "knowing what what like that specific"
+  },
+  {
+   "t": 1692.77,
+   "d": 3.36,
+   "text": "feature of the game because I mean yeah"
+  },
+  {
+   "t": 1696.13,
+   "d": 3.39,
+   "text": "infinitive replayability like sounds"
+  },
+  {
+   "t": 1699.52,
+   "d": 3.08,
+   "text": "like a much better term for that I mean"
+  },
+  {
+   "t": 1702.6,
+   "d": 2.98,
+   "text": "facing the player right not the way that"
+  },
+  {
+   "t": 1705.58,
+   "d": 2.61,
+   "text": "is done but how the player perceives"
+  },
+  {
+   "t": 1708.19,
+   "d": 2.76,
+   "text": "that that that thing but I think a"
+  },
+  {
+   "t": 1710.95,
+   "d": 1.86,
+   "text": "procedural as I said has been"
+  },
+  {
+   "t": 1712.81,
+   "d": 3.0,
+   "text": "established and is useful for people to"
+  },
+  {
+   "t": 1715.81,
+   "d": 2.46,
+   "text": "know that that game generates content"
+  },
+  {
+   "t": 1718.27,
+   "d": 4.92,
+   "text": "and has not fixed content or levels when"
+  },
+  {
+   "t": 1723.19,
+   "d": 2.91,
+   "text": "did that presumption of procedure ality"
+  },
+  {
+   "t": 1726.1,
+   "d": 3.03,
+   "text": "start jumping into people's like"
+  },
+  {
+   "t": 1729.13,
+   "d": 2.52,
+   "text": "assumption of the genre since it wasn't"
+  },
+  {
+   "t": 1731.65,
+   "d": 2.16,
+   "text": "there even in 95 I'm really curious I"
+  },
+  {
+   "t": 1733.81,
+   "d": 3.81,
+   "text": "don't know I am still researching that"
+  },
+  {
+   "t": 1737.62,
+   "d": 2.37,
+   "text": "I'm still doing that research as I said"
+  },
+  {
+   "t": 1739.99,
+   "d": 3.39,
+   "text": "by 1998 there was her already a group"
+  },
+  {
+   "t": 1743.38,
+   "d": 1.65,
+   "text": "for developing roguelikes"
+  },
+  {
+   "t": 1745.03,
+   "d": 3.87,
+   "text": "and I think by then it was like the term"
+  },
+  {
+   "t": 1748.9,
+   "d": 3.09,
+   "text": "had already evolved into into that into"
+  },
+  {
+   "t": 1751.99,
+   "d": 1.95,
+   "text": "considering that it was not about"
+  },
+  {
+   "t": 1753.94,
+   "d": 1.86,
+   "text": "character based display they were or"
+  },
+  {
+   "t": 1755.8,
+   "d": 4.62,
+   "text": "1998 there was graphic games already 3d"
+  },
+  {
+   "t": 1760.42,
+   "d": 2.37,
+   "text": "games so there should be something else"
+  },
+  {
+   "t": 1762.79,
+   "d": 2.1,
+   "text": "that keeps these games together and"
+  },
+  {
+   "t": 1764.89,
+   "d": 2.49,
+   "text": "maybe that's when they found these"
+  },
+  {
+   "t": 1767.38,
+   "d": 8.88,
+   "text": "gameplay things last question it's less"
+  },
+  {
+   "t": 1776.26,
+   "d": 1.47,
+   "text": "of a question more of an observation"
+  },
+  {
+   "t": 1777.73,
+   "d": 2.58,
+   "text": "that the differentiation was actually"
+  },
+  {
+   "t": 1780.31,
+   "d": 1.23,
+   "text": "ready occurring but I don't think it was"
+  },
+  {
+   "t": 1781.54,
+   "d": 3.36,
+   "text": "as explicit so they were they they made"
+  },
+  {
+   "t": 1784.9,
+   "d": 2.37,
+   "text": "the explicit comparison to things like"
+  },
+  {
+   "t": 1787.27,
+   "d": 3.12,
+   "text": "Zork interactive fiction in which there"
+  },
+  {
+   "t": 1790.39,
+   "d": 3.36,
+   "text": "is this fixed world and this consistent"
+  },
+  {
+   "t": 1793.75,
+   "d": 1.59,
+   "text": "experience each time you go through it"
+  },
+  {
+   "t": 1795.34,
+   "d": 0.36,
+   "text": "and"
+  },
+  {
+   "t": 1795.7,
+   "d": 2.4,
+   "text": "there are random elements but at the"
+  },
+  {
+   "t": 1798.1,
+   "d": 1.98,
+   "text": "same time it is to fix universe as"
+  },
+  {
+   "t": 1800.08,
+   "d": 3.18,
+   "text": "opposed to something like roar yeah the"
+  },
+  {
+   "t": 1803.26,
+   "d": 2.4,
+   "text": "rest of them are all dynamically"
+  },
+  {
+   "t": 1805.66,
+   "d": 2.46,
+   "text": "generated and possibly procedurally"
+  },
+  {
+   "t": 1808.12,
+   "d": 2.22,
+   "text": "generate and procedure generation maybe"
+  },
+  {
+   "t": 1810.34,
+   "d": 2.73,
+   "text": "a little bit too industry specific but"
+  },
+  {
+   "t": 1813.07,
+   "d": 2.85,
+   "text": "saying a generated world or universe or"
+  },
+  {
+   "t": 1815.92,
+   "d": 2.82,
+   "text": "environment might be more accurate"
+  },
+  {
+   "t": 1818.74,
+   "d": 4.77,
+   "text": "representation to a larger audience yeah"
+  },
+  {
+   "t": 1823.51,
+   "d": 3.45,
+   "text": "as we can see here they had the idea but"
+  },
+  {
+   "t": 1826.96,
+   "d": 3.0,
+   "text": "they did not put it in words right so a"
+  },
+  {
+   "t": 1829.96,
+   "d": 2.69,
+   "text": "roguelike these are not roguelikes"
+  },
+  {
+   "t": 1832.65,
+   "d": 3.49,
+   "text": "but yeah they did not had like at at"
+  },
+  {
+   "t": 1836.14,
+   "d": 1.95,
+   "text": "this point it was not like a clear"
+  },
+  {
+   "t": 1838.09,
+   "d": 5.6,
+   "text": "distinction of the terms so yeah great"
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+Jonathan Lessard - A Simulation with a View
+Speaker: Jonathan Lessard
+https://www.youtube.com/watch?v=D8A9dpITLAU
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] ALEXEI: Without further ado, we are going to be bringing up a recording of the next talk. The speaker who is around for chat. This is a "A Simulation with a View" from Jonathan Lessard. Game designer, researcher and professor; long-time independent game developer. Now focused on research-creation in the field of # simulations and emergent narratives. Let's go ahead and play that video. JONATHAN: Hi, everyone. Jonathan Lessard.
+
+## Welcome
+
+[0:00:45] I should be here live but I recorded this to make sure this would go smoothly and I wouldn't forget everything. I wanted to talk about a project I have been working on and it has many names the last is design affairs. There are angles to this project that I find are possibly interesting for both roguelike players and roguelike developers. Hopefully that will be true. The title is "A Simulation with a View." Hopefully it will make sense soon.
+
+## Assumptions
+
+[0:01:20] We start from this assumption that many roguelikes have an underlying simulation. To a different extent but some of them have an intense simulation thinking of Dwarf Fortress, for example, crusader kings and the Sims. When I began on this project, it was building a complex social simulation was one of my starting points. This was my view a few years ago of trying to figure out what was happening under the hood. Tons of stuff is happening as simulations do. You
+
+## Intentions
+
+[0:02:00] know, in my case, I also had some intentions in terms of what I wanted to model. I wanted to try to model the social conditions that led to the newly thick revolution in the sore story of humans and the history of humans and I am not sure I achieved it but at least I informed myself as to social and ecological mechanisms and stuff like that. The truth is most of that is unseen.
+
+## How will people know
+
+[0:02:31] My first big question is how will people know about all that? I am sure that resonates to some of you. You have complex systems but exposing them is a challenge actually. Typical approach to roguelikes is you have a game view meaning exposure is through what you are paying attention to and the information you get and the actions you are undertaking. That's what you can see. Obviously you can't know or pay attention to what's outside your game view. Tons of stuff is missing from your attention which is not an issue. It is design on purpose because the positioning of the player as a limited awareness is definitely part of the game. But we could imagine something else. There is also the issue of all this stuff that I missed in the past, things all happen in the present. And if I miss something, then it is buried somewhere and I can't
+
+[0:03:32] necessarily access as it. That's all lost. Pay attention to what happened in the simulation.
+
+## Inspirations
+
+[0:03:38] So my intuition was first what if everything was documented? Training as a historian and definitely have a fantasy if the world was all completely objectively documented in some huge archive that would be really interesting. I didn't make this up. I have these inspirations in mind when I started doing this. So the Dwarf Fortress legend mode is a big one. James Ryan's work in general but in particular diety which outputs the whole simulation as a series of web pages and to me that's interesting. This is what the game looks like and this
+
+## Chronicles
+
+[0:04:18] is like the game view. The new and different thing I want to introduce to you is these ideas of chronicles. In this game, at any given moment, you can click on the chronicles down there, and you have access to something like as exhaustive as possible Wikipedia of the world. This is live meaning if you move forward in the game all of the information is updated. People who are live are now dead and you can get graphs, for example, in the world page. I can see the fluctuations in the human population should attract my attention to something happened here and maybe I should dig deeper and find out. Every person and character in the game has their own Wikipedia page with biography, current situation, even their face and information is there. It has multiple
+
+[0:05:22] tabs. You can look at families. This person has a husband right now but two ex-husbands so I could be curious as to what happened to them. They died? Died of what? What age were they? I can see there are children here and looking at the different last names I see that possibly of different marriages so my curiosity can be aroused here. For each character, I have the full timeline of their life. All simulated events are reported year by year with hyperlinks so for example on the year, 151 that character found a new mate. No, that's the person who was introduced to the new mate and I can click on the new mate and find out about them. And then a bunch of other things happened that year of either sometimes of importance and sometimes trivial in nature but it is there.
+
+[0:06:32] This is my view to the simulation. The chronicles give me all this. Most game objects can generate graphs. For example, this character had a big uptake in influence, social influence somewhere around the year 116-117. Once again, maybe a lead to go figure out this story here of what happened and why did they lose influence. I could also cross reference values and stuff like that.
+
+## Why Care
+
+[0:07:03] Which leads me to the other issue. There is a lot of information being generated. That information is now accessible and to some extent parseable and legible. It is not hard to figure out. But the big question now is why would people/players care about all that information? All these fictional people living or dead and all the minor details of their lives? A big issue I don't claim to have an answer to this. The main approach that games have is to create a game around it. When you first made a game where you played one character in there but the lives of the NPCs are not all that interesting so we -- I mean, it is unlikely that the one character will be interesting. But we thought it is kind of likely if you could look at many characters at once, or had reasons to look at many characters, then you could find out possibly interesting emergent stories in there, so we were designing design affair as a God game but you play one of the
+
+[0:08:09] numerous gods in the simulation and as everything else in the simulations these Gods are part of the simulation. They are created by groups of people, communities, as protector gods, and then they are living in a relationship of reciprocal service where believers of these gods endue them with energy but in response the gods are expected to fulfill the believer's desires or ambitions. God has its own page. It is not super sexy right now. This one big story. They are currently associated to chins and the ritual is to celebrate them by decorating a severe song. But the fun thing is people communicate through prayers. For example, Jessica is in love with Valerie and says if you make this happen she will sacrifice food for you but if you don't she will be disappointed and make
+
+[0:09:18] that disappointment known to her peers. You have to do it or at least she expects you to do it.
+
+## Exploring the Situation
+
+[0:09:26] You have a reason to explore the situation. I find out these two people are actually pretty far away. That might be one of the problems. Maybe worse is one of them is definitely attracted to the other but the other not really. So that's an issue. But if I look deeper, I see that one of them -- that Jessica has been pretty active in trying to seduce Valerie. I mean, it seems to be not working too bad. At least progress is happening. Valerie blushes as she listens to the poetry I compose in her name so it is going maybe not too bad. Whoops. I skipped one. Maybe what I can do is I will move and intervene in the simulation by acting miracles. You have a bunch of possible miracles that you can do. The thing here I decide I can do is at least move one of them to the other
+
+[0:10:30] place and see what happens. But of course I am taking responsibility for this because, I mean, Valerie especially didn't ask for anything. So who am I to mess with her life? So I decided to move Jessica and induce her to travel the world and go at the same place as Valerie but the outcome was that she did move there and then I can look at this incentive to look at the aftermath or what happened or what are the consequences to my action so I have to play attention to the simulation. She did PUFB -- move there and settled in the new place and joined a clan but it was attacked by another clan and so she was immediately involved in that battle. She was attacked by a certain Julian show body and lost in the battle and died. So because of my action she went to the other end of the world and she was immediately killed. Because she was far from her family and home then
+
+[0:11:36] nobody attended her funeral. I think maybe one person. I wonder if that's her love interest. That might be an interesting turnout. I am stopping here because you see the point. But the idea is that if instead of being a single player or small group of player, having a top-down view in the game as a role, then you have this opportunity and incentive to go explore the details of that story. All right. I will stop here. Thank you and hopefully there is some questions. ALEXEI: Excellent. Hello. JONATHAN: Hey.
+
+## Questions
+
+[0:12:20] ALEXEI: As you saw in chat, people were enjoying that. I think we have time for one question if anyone wants to submit one right away. People were asking in chat where they can get this game when it is ready? JONATHAN: I wish I had something ready for this weekend. I will share. I saw there is place where we can share links. I can share -- there is my Twitter that you can follow. The Itch page is almost ready and I can put a Discord invite or something like that. There is no clear way but it should be around soon-ish. ALEXEI: We will include that and maybe put it in the description of the upload of this talk when it is up. We have some questions right away. We are getting lost of questions. We won't have time to get all of them. I will pick the first one I saw show up from Aaron which is how do you handle social structures in the game? JONATHAN: Thanks for the question. Pretty happy about it. I read this book and put it in the reference, stone age economics because
+
+[0:13:26] right now things happen in the stone age or paleolithic and hoping to move it forward but it is mostly structured around GIF economy and the basic -- give economy -- you give something to someone and exchange. It is like a fractal thing and when a family does this together it has a social distribution mechanism. But when the families do it among themselves you have a higher structure that can form something like a clan and when clans do it together they can form something higher like a tribe and when tribes do this together it can be like a kingdom. In terms of system modeling it is very pleasant because it is a one action that at very levels pile up to become a full social structure. It doesn't really show when you play the game but to me it works and makes the world very alive and people have relationships from each other from the
+
+[0:14:27] basic pact. There is stuff like that in there. ALEXEI: That's really interesting. I love hearing about all these different inspirations people have for this and you get different flavors. We maybe have time for one more quick question from hypergardens. What kind of decisions do you make as a player in the game and how often do you decide the pacing of those decisions? JONATHAN: The basic any -- the basic economy as the player is as a divinity you get credit from sacrifices from your believers. At the beginning you have maybe 20 people believing in you and have limited action and as the society grows and if you do your job well people talk about you and you get more well known then you have a little bit more action potential. But then you also -- the world lives on without you. That's one thing I like. You can just do nothing and hope for the best. It will go ahead and move and people will still believe in you. But when you act you are taking
+
+[0:15:33] ethical decisions and positioning yourself to say how much do I want to meddle in these people's life and will it pay off? Is someone paying the price for this? It leaves room for sandbox experiments as a deity. ALEXEI: Wonderful. There are other discussions but we will save them for the breakout room. Thank you, Jonathan.

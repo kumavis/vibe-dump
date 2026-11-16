@@ -1,0 +1,195 @@
+{
+  "id": "KYlq0Msu6hc",
+  "title": "Roguelike Celebration 2022 Preview: Casey Yano - Slay the Spire",
+  "speaker": "Casey Yano",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=KYlq0Msu6hc",
+  "talk_type": "postmortem",
+  "summary": "In a preview-event interview, Mega Crit co-founder Casey Yano discusses how Slay the Spire came together: Anthony Giovannetti as the card-game person and Yano as the roguelike/action person who wanted digital card UI to do things physical cards can't. He reveals abandoned roguelike mechanics (unidentified, combinable potions; three relic slots; door choices instead of a map), and explains how events, the map and enemy intents were found organically through rapid, throwaway prototyping with a two-page design doc. He describes cutting more than half of the cards, balancing pure and weird cards for flow, designing from player-strategy goals, playing the game constantly to talk about the possibility space, his pride in tooltips, and his advice that roguelikes need a content-density tipping point before the game becomes unpredictable.",
+  "games": [
+    "Slay the Spire",
+    "Hades",
+    "FTL: Faster Than Light",
+    "The Binding of Isaac",
+    "Spelunky",
+    "Hearthstone",
+    "Dominion",
+    "Ascension",
+    "Super Smash Bros.",
+    "Geometry Wars 2",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "slay the spire origins",
+      "kind": "history",
+      "claim": "Slay the Spire combined Anthony Giovannetti's background in board and card games with Casey Yano's interest in action games and spontaneously generated content, which he had explored as early as a 2009 shmup with randomized spawn points and boss patterns.",
+      "detail": "Yano says he liked not memorizing levels; in their earlier game God Laser, enemies spawned from varying locations and bosses randomized the order of their bullet patterns. He cites Spelunky's Derek Yu as an inspiration.",
+      "t": 171,
+      "quote": "instead of spawning enemies from like predetermined locations we'd be like oh maybe it would spawn from like here",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "digital card games",
+      "kind": "principle",
+      "claim": "Digital card games should not feel like a sad secondary mode of physical play: the computer can explain rules dynamically in context, shuffle for you, and clarify rules by enforcing them through code.",
+      "detail": "Yano found earlier digital card game UI awful, with static, hard-to-read cards; Hearthstone showed handling virtual cards could feel fun. The interviewer adds that digital decks allow effects that would be tedious or impossible physically, like scaling damage per Strike card in the deck.",
+      "t": 317,
+      "quote": "we can clarify rules by enforcing them through game system mechanics by programming them",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "history",
+      "claim": "Slay the Spire originally had traditional roguelike unidentified potions that you had to use to identify and could combine, but they were simplified away.",
+      "detail": "Potion drops weren't frequent and there were already many items on screen, so the team made potions simpler. The mechanic didn't last long into beta-type playtesting.",
+      "t": 409,
+      "quote": "we used to have potions that were unidentified and you had to like use them and figure out what they were",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "relic synergies",
+      "kind": "example",
+      "claim": "Slay the Spire dropped a three-slot relic limit in favour of unlimited Binding of Isaac-style accumulation, letting items trigger off other items in cascading chaos, which playtested much better internally.",
+      "detail": "With slots, players had to discard excess relics, which felt bad, and the team enjoyed designing many relics. The change was validated over an internal playtest period of more than a year.",
+      "t": 457,
+      "quote": "items can trigger off other items and it's just kind of these cascading event stuff",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "run map",
+      "kind": "history",
+      "claim": "Slay the Spire initially had no map, just a choice of three ornamented doors signalling the next room type (like Hades), but switched to a map because a static game needs another way to convey the feeling of traversal.",
+      "detail": "Yano notes Hades can work without a map because the character physically moves around. He calls the Spire map evolutionary rather than created in a vacuum; they studied several games for events, the map and enemy move systems.",
+      "t": 552,
+      "quote": "in a game that's like mainly static it's really hard to kind of convey that feeling whereas in hades you're literally like physically moving around",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "organic design",
+      "kind": "history",
+      "claim": "Slay the Spire's design document was about two pages (deckbuilding, classes, monsters); pacing, maps, potions, relics and map node types were all discovered organically during development.",
+      "detail": "Yano says these elements weren't written in a design doc at the start but emerged while building.",
+      "t": 664,
+      "quote": "i think the design document was like two pages very short it was like deck building classes yeah monsters",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "technique",
+      "claim": "Yano prototyped Slay the Spire by writing disposable, decoupled code he wasn't afraid to delete, so systems came and went in under a week, fixing code quality only when content work exposed problems.",
+      "detail": "He admits this isn't recommended for teams larger than two. Converting enemy text move descriptions to intent icons took about a week, the biggest overhaul. He advises naming functions after actual game concepts (an elite room) rather than vague ones (strong monster).",
+      "t": 720,
+      "quote": "nothing is like reliant on something else and if something is i just remove it",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "example",
+      "claim": "Slay the Spire's act length was tuned iteratively from 17 floors to 16 and eventually 13, partly because the developers got tired of replaying act 1.",
+      "detail": "The map started as a crude image with a few hitboxes and was iterated over a long period, also experimenting with four or five starting branches.",
+      "t": 777,
+      "quote": "instead of 17 floors we should go down to 16 floors and eventually became 13 floors",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "cutting features",
+      "kind": "technique",
+      "claim": "Mega Crit would try a new feature for a single run and axe it on gut feeling if it didn't seem to work, with the two founders acting as harsh editors of each other's ideas.",
+      "detail": "Examples tried included an enemy that eats your cards or cards growing horns. Yano credits their long friendship and years of critiquing games together for making blunt feedback work.",
+      "t": 888,
+      "quote": "we would just play one run and i think um and if it doesn't feel like it's going to work we just kind of axe it",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "starter cards",
+      "kind": "principle",
+      "claim": "Starter cards must be tuned just right, because a weak one is removed immediately and an overly strong one is always upgraded; Yano's favourite, Bash, is pure because it makes the next turn's Strikes worth it.",
+      "detail": "Bash is the one Ironclad starter card besides Strikes and Defends, so it has to be on point. Yano likes cards with a specific, clean purpose.",
+      "t": 1114,
+      "quote": "the starter cards have to be like on point right otherwise it's like oh this is the card i'm gonna remove immediately",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "card design",
+      "kind": "principle",
+      "claim": "Slay the Spire mixes 'vanilla' (pure) and 'French vanilla' (slightly special) cards with some weird ones, because too many weird cards make every turn overthinky and break flow; more than half of cards made were cut.",
+      "detail": "Yano says cards are easy to make, so they made many and cut more than half. French vanilla is a term Anthony brought from Magic for basic cards with a small twist.",
+      "t": 1203,
+      "quote": "if you have too much weird things then you're like kind of like overthinking every turn",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build archetypes",
+      "kind": "technique",
+      "claim": "Yano designs content by starting from a goal strategy and funnelling players toward it, so they get an aha moment, and cuts anything that doesn't interact interestingly with other content however strong it is.",
+      "detail": "A low-HP berserker archetype didn't really work for Slay the Spire. He cites a rare combo of a relic letting you play status cards with one dealing damage after five cards played; they ensure such rare cases can happen.",
+      "t": 1406,
+      "quote": "no matter how good something is if it's a little boring or doesn't work with anything you want to get rid of it",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "principle",
+      "claim": "Developers should play their own game a lot (Mega Crit played two or three runs a week) so their conversation moves from mechanics to the possibility space, which they can then make real as developers.",
+      "detail": "Yano wants to create 'moments of delight' and worries that in larger productions with separate designer, implementer and tester roles this loop is harder to close.",
+      "t": 1434,
+      "quote": "instead of talking about the mechanics you start talking about the possibility space",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent chaos",
+      "kind": "principle",
+      "claim": "Roguelikes, like Super Smash Bros., are about many chaotic levers whose combinations occasionally produce something very unusual the developer never accounted for.",
+      "detail": "Yano's playful example: laying an egg while you are a robot, so what hatches is a robot dragon.",
+      "t": 1486,
+      "quote": "you have all these levers that are chaotic and then sometimes something very unusual can happen",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "route setting",
+      "kind": "example",
+      "claim": "Indoor climbing route setters act like level designers, using colour-coded holds as UX and judging whether a route is satisfying versus a luck-based jump or a grueling slog.",
+      "detail": "Yano draws design inspiration from climbing, which also offers incremental progress.",
+      "t": 1570,
+      "quote": "there are people who are literally like level designers they're just trying to make all sorts of like weird like combinations of like holds",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "tooltips",
+      "kind": "example",
+      "claim": "Slay the Spire's hover tooltips are Yano's proudest feature; a delay timer was removed because waiting a second to recall what something does was more annoying than an instant tooltip.",
+      "detail": "The interviewer praises Slay the Spire's consistent visual language and the ability to hover for reminders instead of memorising effects.",
+      "t": 1665,
+      "quote": "we used to have a timer which made it show up after a second because we thought it might be annoying",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "content density",
+      "kind": "principle",
+      "claim": "A roguelike needs to reach a content-density tipping point where it becomes unpredictable even to its developers; if every player always goes for the same build, there isn't enough randomization.",
+      "detail": "Yano remembers hitting that point and wondering what build he'd get. He thinks many roguelites enter early access before reaching it. His summary advice: make stuff, cut stuff, play your game.",
+      "t": 1725,
+      "quote": "you kind of have to hit um like a tipping point of like content and then the game becomes sort of unpredictable even to the developer",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

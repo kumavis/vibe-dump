@@ -1,0 +1,155 @@
+{
+  "id": "XFFyN10o87I",
+  "title": "Roguelike Celebration 2016 - Bad News Live",
+  "speaker": "Bad News team (James, wizard; Ben, actor; with a co-designer narrating)",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=XFFyN10o87I",
+  "talk_type": "performance",
+  "summary": "A live, publicly narrated playthrough of Bad News, a mixed-reality game built by UC Santa Cruz PhD students on a Python town simulation. A small American town of a few hundred people is simulated, someone dies, and the player as the mortician's assistant must identify the deceased from a physical description, find the next of kin and notify them without telling anyone else. A hidden 'wizard' live-codes queries into the simulation to surface dramatic material and feeds it to an actor who improvises every townsperson, constrained by that character's simulated personality and beliefs. The commentary explains the setup, the knowledge-propagation model, the day/night command structure and the generated epilogue; much of the transcript is gameplay dialogue rather than design discussion.",
+  "games": [
+    "Bad News"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "mixed reality play",
+      "kind": "example",
+      "claim": "Bad News is a game about death notification: the player must identify a dead townsperson from only a physical description, find the closest living relative in town, and tell them.",
+      "detail": "The player is the county mortician's assistant, sent in because the mortician is busy elsewhere. Next of kin is defined as the closest living family member in the town. The player is told they lose if they inform anyone other than the next of kin, so they must use a cover story.",
+      "t": 99,
+      "quote": "the player's job as the mortician's assistant to identify this deceased person given only a physical description",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "wizard of oz",
+      "kind": "technique",
+      "claim": "In Bad News a hidden 'wizard' live-codes queries into the simulated town to find dramatic material such as love triangles, rival businesses and founding families, and passes it to the actor to work into conversations.",
+      "detail": "After generating the town, the wizard digs out narrative elements that are in the simulation but not explicitly coded as story, setting variables for the deceased and next of kin and looking up workplaces, family and romantic attractions. The actor starts with about three to five dramatic high points to build into an arc.",
+      "t": 150,
+      "quote": "i start talking to the actor about all the dramatic intrigue that's in this town so like there's this love triangle here",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "surfacing emergent story",
+      "kind": "principle",
+      "claim": "Much of a simulation's narrative interest is latent and needs a human (or tool) to bring it to the surface, which is the wizard's job in Bad News.",
+      "detail": "The narrator explains that the wizard finds elements that are not explicitly coded but that a human recognises as narratively interesting; they are all in the simulation and just need surfacing. In this run the chosen storyline was that the deceased was in love with his brother's wife, and both worked at the family brewery.",
+      "t": 442,
+      "quote": "realizes through his human meat brain that they are really really narratively interesting they're all there they just need to be brought to the surface",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "character beliefs",
+      "kind": "technique",
+      "claim": "Bad News implants subjective beliefs in each simulated character, and the actor must stick to the beliefs of whoever they are playing.",
+      "detail": "After town generation the system implants characters' beliefs about others. The hidden actor interface shows the current character's personality, and when the player asks about someone, the character's beliefs about that person populate a subject-of-conversation panel that the actor must follow, such as where someone works.",
+      "t": 181,
+      "quote": "these beliefs can be very important during gameplay because the actor is has to adhere to the beliefs of the person that they're playing",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "knowledge propagation",
+      "kind": "technique",
+      "claim": "Bad News characters' knowledge spreads as rumours: confidence grows with more evidence, but characters can misremember.",
+      "detail": "The team explains during play that characters' beliefs come from the simulation, propagated by people telling each other things.",
+      "t": 1925,
+      "quote": "the more evidence they get by people propagating telling them rumors and so forth the better they feel about it but people can misremember",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "physical setup",
+      "kind": "technique",
+      "claim": "Bad News is staged in a small room with a model theatre: the player sees an iPad interface, while a curtain opens whenever the actor plays a townsperson live.",
+      "detail": "The actor's side has a hidden screen with the actor interface that changes with each character; the wizard sits out of sight, chatting with the actor. The player has a sheet of commands to speak aloud, such as knocking on a door or waiting until day or night.",
+      "t": 223,
+      "quote": "players on one side of the actors on the other there's a curtain between them",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "town simulation",
+      "kind": "example",
+      "claim": "Bad News simulates a small 1970s-style American town of roughly 150 to 300 people, small enough that people know each other, which helps produce narrative connections.",
+      "detail": "The narrator says the town scale gives a small-town feel where everyone knows each other; in this run everyone in the diner knew the deceased in some way. The town has history: a cemetery of 257 people who lived and died there, generated gravestones, and jobs that change over time, so a town stopped in 1890 would have no bartender.",
+      "t": 513,
+      "quote": "the size of the town i think is around maybe 150 to 300 people small american town in the 70s feel so often people know each other",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "businesses",
+      "kind": "example",
+      "claim": "Every business in Bad News's town was started by a simulated person who had the idea, and businesses persist, close or change ownership over the simulation.",
+      "detail": "The player can consult a business directory listing every current business. Names such as the bar 'Tiki Freaky' are drawn from real corpora of bar and hospital names stored as text files.",
+      "t": 1055,
+      "quote": "this is every business in the town currently they're all started by people so they have to someone has to have that idea",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "daily routines",
+      "kind": "example",
+      "claim": "Bad News characters follow daily routines across only two time periods, day and night, and the player can issue a wait command to switch between them.",
+      "detail": "Players often try to visit a bar in daytime when it is only open at night and find it locked, which is when the wait command comes out. People in the diner are there as part of their routine or at work, like the cook or dishwasher.",
+      "t": 2247,
+      "quote": "there's a day and night cycle uh one affordance is you can wait until night or day and then people move between that so they have a daily routine",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fidelity on demand",
+      "kind": "technique",
+      "claim": "Bad News allows 'arbitrary simulation fidelity': the wizard can type in what is going on or make characters appear when the simulation cannot handle the player's action.",
+      "detail": "When the player was locked outside an apartment building, the wizard had the night janitor emerge with an explicit command. He also has a command to change the location text on the fly, and the narrator jokes that the actor is the best natural language understanding system.",
+      "t": 2395,
+      "quote": "i have a special command where i can just change that text up here yeah so arbitrary simulation fidelity when you can just type in what's going on",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player strategy",
+      "kind": "example",
+      "claim": "Bad News players commonly start at a bar or diner, because after role-playing with the actor it feels awkward to approach people at their homes or businesses.",
+      "detail": "The team says players do this without being told. Players also tend to take a lot of notes, which the team encourages. A smart technique is to look up the body's address in the directory to learn the deceased's last name.",
+      "t": 1120,
+      "quote": "it's a pretty common strategy without us telling anyone to start at a bar or a diner because it does feel awkward",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tension",
+      "kind": "example",
+      "claim": "Face-to-face conversation with a live actor raises player tension in Bad News, so time that feels slow to spectators passes quickly for the player.",
+      "detail": "The narrator says the actor gives pushback, for instance when the player leaves mid-conversation to look things up, so players feel they need to be prepared, which amps up their adrenaline.",
+      "t": 2815,
+      "quote": "when you are talking to the actor and they're in front of you and he does give you pushback for like leaving and to talk on your phone",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "technique",
+      "claim": "Bad News opens with a fixed scene with the mortician character, who acts as a guide to get players used to role-playing before they enter the town.",
+      "detail": "The mortician asks the player to explain the job, stresses discretion, and helps devise a cover story. The team says this static part of the game was developed over time.",
+      "t": 3022,
+      "quote": "the mortician is another part that we often introduce the game with because it kind of helps the player get used to like the role-playing element",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "epilogue",
+      "kind": "technique",
+      "claim": "After the notification, Bad News simulates the town forward to 2010 to generate an epilogue of what happened to characters the player met.",
+      "detail": "The wizard simulated decades ahead to see what became of the waitress Evelyn and the brothers: she left town in 2000, and Mark was still a brewer. Normally this is part of a debrief with the player.",
+      "t": 4153,
+      "quote": "i'm gonna simulate until the year 2010 and i want to see what happened to evelyn in particular in the next 30 years of her life",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

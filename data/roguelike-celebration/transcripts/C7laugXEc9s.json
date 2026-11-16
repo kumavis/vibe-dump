@@ -1,0 +1,1126 @@
+{
+ "id": "C7laugXEc9s",
+ "url": "https://www.youtube.com/watch?v=C7laugXEc9s",
+ "title": "Stella Mazeika - Turning Classic Games Into Multiplayer Roguelike Experiences",
+ "speaker": "Stella Mazeika",
+ "talk_title": "Turning Classic Games Into Multiplayer Roguelike Experiences",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1002,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nStella is a now graduated Doctor of Computer Science from UCSC; she's now working on Proxi making interesting things out of memories. In her free time, she's a twitch streamer, speedrunner, and randomizer developer/community leader.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 41,
+   "title": "What is this talk?"
+  },
+  {
+   "start": 126,
+   "title": "What's a Randomizer?"
+  },
+  {
+   "start": 225,
+   "title": "What's been Randomized? What hasn't been?"
+  },
+  {
+   "start": 390,
+   "title": "The Danger Zone"
+  },
+  {
+   "start": 479,
+   "title": "Randomizers as Games"
+  },
+  {
+   "start": 619,
+   "title": "Randomizers as Roguelikes"
+  },
+  {
+   "start": 738,
+   "title": "Randomizers as Software"
+  },
+  {
+   "start": 772,
+   "title": "Randomizers as Communities"
+  },
+  {
+   "start": 821,
+   "title": "Summary"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2307,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.18,
+   "d": 1.59,
+   "text": "STELLA MAZEIKA: So, hi."
+  },
+  {
+   "t": 1.77,
+   "d": 3.58,
+   "text": "Thank you for the introduction."
+  },
+  {
+   "t": 5.35,
+   "d": 6.55,
+   "text": "Let's start this off by talking a little bit more about me because let's face it."
+  },
+  {
+   "t": 11.9,
+   "d": 1.45,
+   "text": "I am Stella."
+  },
+  {
+   "t": 13.35,
+   "d": 2.0,
+   "text": "I am a recovering games academic."
+  },
+  {
+   "t": 15.35,
+   "d": 5.54,
+   "text": "I almost, almost fully out."
+  },
+  {
+   "t": 20.89,
+   "d": 5.42,
+   "text": "I am currently working at kind of an Indy-ish studio."
+  },
+  {
+   "t": 26.31,
+   "d": 3.03,
+   "text": "Details for offline."
+  },
+  {
+   "t": 29.34,
+   "d": 4.25,
+   "text": "By night I am a Twitch streamer, I am a speed runner and I’m a randomizer dev."
+  },
+  {
+   "t": 33.59,
+   "d": 4.93,
+   "text": "It is that last topic that I am really here talking about today."
+  },
+  {
+   "t": 38.52,
+   "d": 1.0,
+   "text": "What is this talk?"
+  },
+  {
+   "t": 39.52,
+   "d": 4.79,
+   "text": "We’re going to define and contextualize randomizers, such as that Sonic Adventure"
+  },
+  {
+   "t": 44.31,
+   "d": 8.73,
+   "text": "2 rando thing, talk about what is a randomizer, what have we randomized and what context do"
+  },
+  {
+   "t": 53.04,
+   "d": 4.58,
+   "text": "we look at these randomizer things in."
+  },
+  {
+   "t": 57.62,
+   "d": 5.42,
+   "text": "And befitting kind of a good talk for the last talk of the day, this is gonna be a Paladin"
+  },
+  {
+   "t": 63.04,
+   "d": 0.64,
+   "text": "talk."
+  },
+  {
+   "t": 63.68,
+   "d": 4.28,
+   "text": "My job here is to get you all hyped."
+  },
+  {
+   "t": 67.97,
+   "d": 10.91,
+   "text": "Let's start off by watching this which is me playing the Final Fantasy One randomizer"
+  },
+  {
+   "t": 78.88,
+   "d": 3.34,
+   "text": "and not expecting to find that enemy there."
+  },
+  {
+   "t": 82.22,
+   "d": 8.41,
+   "text": "That enemy was randomly placed there by the randomizer."
+  },
+  {
+   "t": 90.63,
+   "d": 4.01,
+   "text": "How many of you are familiar with the original Zelda?"
+  },
+  {
+   "t": 94.64,
+   "d": 3.28,
+   "text": "Let's watch this clip."
+  },
+  {
+   "t": 97.92,
+   "d": 4.56,
+   "text": "There I am playing with - wait that sprite looks a little weird."
+  },
+  {
+   "t": 102.48,
+   "d": 2.43,
+   "text": "Why are those enemies there?"
+  },
+  {
+   "t": 104.91,
+   "d": 3.3,
+   "text": "Oh, we’re going in here."
+  },
+  {
+   "t": 108.21,
+   "d": 1.9,
+   "text": "Who recognizes the screen?"
+  },
+  {
+   "t": 110.11,
+   "d": 4.2,
+   "text": "Who wants to shout-out what happens when I go in there?"
+  },
+  {
+   "t": 114.31,
+   "d": 1.36,
+   "text": "Where are we?"
+  },
+  {
+   "t": 115.67,
+   "d": 1.84,
+   "text": "AUDIENCE: It’s randomized."
+  },
+  {
+   "t": 117.51,
+   "d": 7.33,
+   "text": "STELLA MAZEIKA: Yes, it is randomized but in the original, or as we say vanilla game,"
+  },
+  {
+   "t": 124.84,
+   "d": 1.38,
+   "text": "that is level one."
+  },
+  {
+   "t": 126.22,
+   "d": 2.59,
+   "text": "In this case, no, it has been randomized."
+  },
+  {
+   "t": 128.81,
+   "d": 1.0,
+   "text": "It is level 9."
+  },
+  {
+   "t": 129.81,
+   "d": 2.85,
+   "text": "This is our final dungeon."
+  },
+  {
+   "t": 132.66,
+   "d": 6.64,
+   "text": "This kind of is like that small sampling of experiences we have out of these randomizer"
+  },
+  {
+   "t": 139.3,
+   "d": 2.39,
+   "text": "programs."
+  },
+  {
+   "t": 141.69,
+   "d": 4.92,
+   "text": "How they work kind of on a high level is you have some external piece of software be it"
+  },
+  {
+   "t": 146.61,
+   "d": 2.86,
+   "text": "something you download or a website."
+  },
+  {
+   "t": 149.47,
+   "d": 3.04,
+   "text": "One of them might look something like this."
+  },
+  {
+   "t": 152.51,
+   "d": 5.03,
+   "text": "You take a ROM and I’m not going to talk about where you got those ROMs, I’m not"
+  },
+  {
+   "t": 157.54,
+   "d": 4.0,
+   "text": "allowed to."
+  },
+  {
+   "t": 161.54,
+   "d": 6.43,
+   "text": "You feed it into the program and then you have a series of flags that choose different"
+  },
+  {
+   "t": 167.97,
+   "d": 1.2,
+   "text": "settings."
+  },
+  {
+   "t": 169.17,
+   "d": 3.82,
+   "text": "Here you might shuffle around the key items, you might shuffle around what is in the various"
+  },
+  {
+   "t": 172.99,
+   "d": 4.82,
+   "text": "treasure chests, you might slide up or down the amount of experience you’re getting"
+  },
+  {
+   "t": 177.81,
+   "d": 5.61,
+   "text": "from doing the different enemy encounters in Final Fantasy One."
+  },
+  {
+   "t": 183.42,
+   "d": 5.9,
+   "text": "Then you choose a random seed, which - this is Roguelike, I’m sure you know all about"
+  },
+  {
+   "t": 189.32,
+   "d": 4.52,
+   "text": "these, but for those of you who are watching at home and might not be familiar, this is"
+  },
+  {
+   "t": 193.84,
+   "d": 7.36,
+   "text": "basically how we choose what particular random choices the generator is going to make."
+  },
+  {
+   "t": 201.2,
+   "d": 4.14,
+   "text": "This is useful if you and your friend want to play the exact same randomized version"
+  },
+  {
+   "t": 205.34,
+   "d": 1.0,
+   "text": "of the game."
+  },
+  {
+   "t": 206.34,
+   "d": 6.08,
+   "text": "Then you generate, you load it up into however you want to play these again, ask me about"
+  },
+  {
+   "t": 212.42,
+   "d": 4.39,
+   "text": "that offline, and go."
+  },
+  {
+   "t": 216.81,
+   "d": 2.38,
+   "text": "What has been randomized?"
+  },
+  {
+   "t": 219.19,
+   "d": 5.13,
+   "text": "Here are some screenshots of a whole bunch of games."
+  },
+  {
+   "t": 224.32,
+   "d": 4.89,
+   "text": "The real answer is here what hasn't been randomized."
+  },
+  {
+   "t": 229.21,
+   "d": 6.21,
+   "text": "The link we have up for the debigare.com/randomizers."
+  },
+  {
+   "t": 235.42,
+   "d": 7.3,
+   "text": "I did a count a few nights ago and there are at least 300 different randomizers on that"
+  },
+  {
+   "t": 242.72,
+   "d": 8.09,
+   "text": "list, including the Final Fantasy 4 Roguelikeifyer which I am sure no one here is interested"
+  },
+  {
+   "t": 250.81,
+   "d": 1.09,
+   "text": "in."
+  },
+  {
+   "t": 251.9,
+   "d": 2.18,
+   "text": "NES golf."
+  },
+  {
+   "t": 254.08,
+   "d": 7.59,
+   "text": "La-Mulana, which is kind of a - both the new versions of La-Mulana and the original."
+  },
+  {
+   "t": 261.67,
+   "d": 3.2,
+   "text": "Dwarf Fortress has a randomizer, that’s wild."
+  },
+  {
+   "t": 264.87,
+   "d": 3.05,
+   "text": "And shout-out to The Witness."
+  },
+  {
+   "t": 267.92,
+   "d": 4.0,
+   "text": "It has been randomized."
+  },
+  {
+   "t": 271.92,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 272.92,
+   "d": 2.77,
+   "text": "So we can randomize a whole bunch of different games."
+  },
+  {
+   "t": 275.69,
+   "d": 4.11,
+   "text": "What things in these games are we even looking at?"
+  },
+  {
+   "t": 279.8,
+   "d": 2.51,
+   "text": "For starters we can do aesthetic changes."
+  },
+  {
+   "t": 282.31,
+   "d": 5.72,
+   "text": "As you can see there, the dialogue in that Zelda cave is definitely not what you remember."
+  },
+  {
+   "t": 288.03,
+   "d": 8.11,
+   "text": "Also, Link is not the Zelda sprite in a pink dress, though why not I don't know."
+  },
+  {
+   "t": 296.14,
+   "d": 7.85,
+   "text": "In the FF4 screenshot there, I don’t think Sans Undertale is in FF4."
+  },
+  {
+   "t": 303.99,
+   "d": 4.03,
+   "text": "That's just a sprite swap that happens."
+  },
+  {
+   "t": 308.02,
+   "d": 2.4,
+   "text": "You can randomize enemy skills and locations."
+  },
+  {
+   "t": 310.42,
+   "d": 5.02,
+   "text": "Darknuts in the Zelda overworld is definitely unusual."
+  },
+  {
+   "t": 315.44,
+   "d": 6.68,
+   "text": "Getting your party nuked down by wizards in FF1 is unfortunate but also that was a hilarious"
+  },
+  {
+   "t": 322.12,
+   "d": 2.55,
+   "text": "thing that happened."
+  },
+  {
+   "t": 324.67,
+   "d": 2.3,
+   "text": "You can randomize player abilities."
+  },
+  {
+   "t": 326.97,
+   "d": 2.79,
+   "text": "You can procedurally generate maps."
+  },
+  {
+   "t": 329.76,
+   "d": 5.85,
+   "text": "What we have here is the waterfall cave from Final Fantasy 1 as well as the Dragon Warrior"
+  },
+  {
+   "t": 335.61,
+   "d": 2.22,
+   "text": "1 overworld."
+  },
+  {
+   "t": 337.83,
+   "d": 7.29,
+   "text": "Just randomly generated maps using interesting feed forward techniques."
+  },
+  {
+   "t": 345.12,
+   "d": 8.03,
+   "text": "And the big thing that gets randomized are these key item locations because these really"
+  },
+  {
+   "t": 353.15,
+   "d": 1.44,
+   "text": "effect the space of game."
+  },
+  {
+   "t": 354.59,
+   "d": 3.12,
+   "text": "If you think about a game like Link to the Past, where you have these different items, you"
+  },
+  {
+   "t": 357.71,
+   "d": 4.32,
+   "text": "have the hookshot that lets you cross cliffs, you have the power gloves, as you can see"
+  },
+  {
+   "t": 362.03,
+   "d": 3.13,
+   "text": "Link grabbing there, that allow you to pick up boulders."
+  },
+  {
+   "t": 365.16,
+   "d": 6.84,
+   "text": "If you shuffle them around, you kind of run into the danger zone."
+  },
+  {
+   "t": 372.0,
+   "d": 5.25,
+   "text": "If you just randomly position these important items that gate different parts of the game"
+  },
+  {
+   "t": 377.25,
+   "d": 6.55,
+   "text": "off from different places you can run into situations where, well, I need the flippers"
+  },
+  {
+   "t": 383.8,
+   "d": 4.24,
+   "text": "to get the gloves but I need the gloves to get the flippers and the game is no longer"
+  },
+  {
+   "t": 388.04,
+   "d": 4.12,
+   "text": "beatable."
+  },
+  {
+   "t": 392.17,
+   "d": 4.67,
+   "text": "The real answer here is that this is where a lot of the time and effort in randomizers"
+  },
+  {
+   "t": 396.84,
+   "d": 3.44,
+   "text": "has gone into."
+  },
+  {
+   "t": 400.28,
+   "d": 9.32,
+   "text": "We take a lot of care to place these key items in beatable ways usually by just doing a generate-and-test."
+  },
+  {
+   "t": 410.6,
+   "d": 2.72,
+   "text": "You put all the key items out there."
+  },
+  {
+   "t": 413.32,
+   "d": 3.91,
+   "text": "You make sure that you can get them and if you can't you throw it away, you try it again,"
+  },
+  {
+   "t": 417.23,
+   "d": 3.0,
+   "text": "you throw it away, you try again, you throw it away, you try again."
+  },
+  {
+   "t": 420.23,
+   "d": 3.53,
+   "text": "Computers are pretty fast about things."
+  },
+  {
+   "t": 423.76,
+   "d": 4.5,
+   "text": "Recently there have been a few things that have used logic or constraint systems."
+  },
+  {
+   "t": 428.26,
+   "d": 4.53,
+   "text": "The only one I know about is the one I wrote."
+  },
+  {
+   "t": 432.79,
+   "d": 5.62,
+   "text": "If you do that generate and test, generation time can be a bit of a concern if your system"
+  },
+  {
+   "t": 438.41,
+   "d": 5.27,
+   "text": "is a little complex, if there are a lot of dependencies, if there are a lot of places"
+  },
+  {
+   "t": 443.68,
+   "d": 1.93,
+   "text": "you can put things."
+  },
+  {
+   "t": 445.61,
+   "d": 10.86,
+   "text": "That screenshot was taken at about 10:30 A.M. eastern."
+  },
+  {
+   "t": 456.47,
+   "d": 5.15,
+   "text": "With that out of the way, hey, cool, you know what these things are and, hopefully, you"
+  },
+  {
+   "t": 461.62,
+   "d": 3.24,
+   "text": "are excited about them because I know I am."
+  },
+  {
+   "t": 464.86,
+   "d": 3.22,
+   "text": "What context do we view these things as?"
+  },
+  {
+   "t": 468.08,
+   "d": 1.77,
+   "text": "They’re games."
+  },
+  {
+   "t": 469.85,
+   "d": 2.66,
+   "text": "They are Roguelikes."
+  },
+  {
+   "t": 472.51,
+   "d": 2.86,
+   "text": "I’m going to stand up here and defend that one."
+  },
+  {
+   "t": 475.37,
+   "d": 1.97,
+   "text": "They are pieces of software."
+  },
+  {
+   "t": 477.34,
+   "d": 2.5,
+   "text": "And they are communities."
+  },
+  {
+   "t": 479.84,
+   "d": 4.97,
+   "text": "As a game, if you play a randomizer, usually you don't think about it as a single playthrough"
+  },
+  {
+   "t": 484.81,
+   "d": 2.75,
+   "text": "though that's totally valid."
+  },
+  {
+   "t": 487.56,
+   "d": 6.35,
+   "text": "But a lot of people who play randomizers play through multiple seeds of the same game and"
+  },
+  {
+   "t": 493.91,
+   "d": 6.42,
+   "text": "learn and explore both the nuances of the original game and also the nuances that the"
+  },
+  {
+   "t": 500.33,
+   "d": 2.11,
+   "text": "randomizer provides."
+  },
+  {
+   "t": 502.44,
+   "d": 4.41,
+   "text": "You have different flag sets if you remember back."
+  },
+  {
+   "t": 506.85,
+   "d": 3.72,
+   "text": "You have a whole bunch of different flags you can turn on and off and sliders you can"
+  },
+  {
+   "t": 510.57,
+   "d": 6.91,
+   "text": "tune different parameters on, and so you can build vastly different experiences out of"
+  },
+  {
+   "t": 517.48,
+   "d": 6.28,
+   "text": "the feature richness of these randomizers."
+  },
+  {
+   "t": 523.76,
+   "d": 5.51,
+   "text": "You get this sort of meta progression as you go through the games where you get more interesting"
+  },
+  {
+   "t": 529.27,
+   "d": 6.86,
+   "text": "base game knowledge such as that Final Fantasy screenshot of Lich being exiled to the fourth"
+  },
+  {
+   "t": 536.13,
+   "d": 5.9,
+   "text": "dimension by an instakill spell which you may or may be something you knew about until"
+  },
+  {
+   "t": 542.03,
+   "d": 2.63,
+   "text": "you tried it out in a randomizer."
+  },
+  {
+   "t": 544.66,
+   "d": 4.45,
+   "text": "You have randomizer specific knowledge, such as that Fusoya challenge, which is a lot of"
+  },
+  {
+   "t": 549.11,
+   "d": 5.87,
+   "text": "text but it’s a particular flag that only exists in the Free Enterprise Final Fantasy"
+  },
+  {
+   "t": 554.98,
+   "d": 4.68,
+   "text": "4 randomizer because Fusoya is kind of overpowered otherwise."
+  },
+  {
+   "t": 559.66,
+   "d": 2.45,
+   "text": "You get things like routing."
+  },
+  {
+   "t": 562.11,
+   "d": 4.13,
+   "text": "If I go to this section of the game what items can I get with these sets of items?"
+  },
+  {
+   "t": 566.24,
+   "d": 6.88,
+   "text": "And of course things like, we have this particular diagram for doing a glitch in Link to the"
+  },
+  {
+   "t": 573.12,
+   "d": 5.24,
+   "text": "Past that allows you to swim in the water without having the flipper item."
+  },
+  {
+   "t": 578.36,
+   "d": 8.0,
+   "text": "So, next, I said randomizers were Roguelikes so obviously I have to quote Wikipedia because"
+  },
+  {
+   "t": 586.36,
+   "d": 2.1,
+   "text": "none of you know what a Roguelike is."
+  },
+  {
+   "t": 588.46,
+   "d": 5.84,
+   "text": "According to Wikipedia Roguelike is a subgenre of role-playing video games characterized"
+  },
+  {
+   "t": 594.3,
+   "d": 4.68,
+   "text": "by a dudgeon crawl through procedurally generated levels, turn-based gameplay, tile-based graphics,"
+  },
+  {
+   "t": 598.98,
+   "d": 1.8,
+   "text": "and permanent death of a main character."
+  },
+  {
+   "t": 600.78,
+   "d": 5.64,
+   "text": "Well, we can eliminate two of these right away because let’s face it, a lot of these"
+  },
+  {
+   "t": 606.42,
+   "d": 7.08,
+   "text": "base games are not turn based and don’t not use the tile based graphics."
+  },
+  {
+   "t": 613.5,
+   "d": 5.01,
+   "text": "Does that make them Roguelike-likes?"
+  },
+  {
+   "t": 618.51,
+   "d": 5.92,
+   "text": "We have these three bullet points that I do want to address."
+  },
+  {
+   "t": 624.43,
+   "d": 3.39,
+   "text": "You have the notion of the dungeon crawl, you have the procedurally generated levels,"
+  },
+  {
+   "t": 627.82,
+   "d": 4.36,
+   "text": "and you have permadeath."
+  },
+  {
+   "t": 632.18,
+   "d": 3.83,
+   "text": "For the dungeon crawl and procedurally generated levels, for some games, yeah no that's pretty"
+  },
+  {
+   "t": 636.01,
+   "d": 1.0,
+   "text": "obvious."
+  },
+  {
+   "t": 637.01,
+   "d": 2.34,
+   "text": "We procedurally generated those maps."
+  },
+  {
+   "t": 639.35,
+   "d": 6.98,
+   "text": "But for other games, you get this sort of procedurally generated route through the game."
+  },
+  {
+   "t": 646.33,
+   "d": 5.73,
+   "text": "Oh, I have this item which unlocks this corner of the map which I probably would have gone"
+  },
+  {
+   "t": 652.06,
+   "d": 6.04,
+   "text": "to like sixth in the main vanilla version of the game and now I have to piece together"
+  },
+  {
+   "t": 658.1,
+   "d": 4.69,
+   "text": "how I am exploring this space to get all the tools I need to beat it."
+  },
+  {
+   "t": 662.79,
+   "d": 6.97,
+   "text": "It’s kind of this weird meta procedurally generated level, in that context."
+  },
+  {
+   "t": 669.76,
+   "d": 3.73,
+   "text": "Additionally, most of the games don't feature permadeath."
+  },
+  {
+   "t": 673.49,
+   "d": 7.04,
+   "text": "A lot of them are RPGs or ARPGs where you die, you respawn, you again."
+  },
+  {
+   "t": 680.53,
+   "d": 4.54,
+   "text": "But in a lot of the randomizer communities one of the big things going on is racing."
+  },
+  {
+   "t": 685.07,
+   "d": 6.15,
+   "text": "You have people sitting down and playing a seed that they know nothing about, they’ve"
+  },
+  {
+   "t": 691.22,
+   "d": 4.61,
+   "text": "never seen it before, and they are both playing through it blind to see who can get through"
+  },
+  {
+   "t": 695.83,
+   "d": 2.58,
+   "text": "it faster than the other person."
+  },
+  {
+   "t": 698.41,
+   "d": 6.58,
+   "text": "I would argue that in that context, you kind of have a permadeath situation going on where"
+  },
+  {
+   "t": 704.99,
+   "d": 8.18,
+   "text": "you die when you stop playing the seed because it’s kind of considered cheating to stop"
+  },
+  {
+   "t": 713.17,
+   "d": 5.04,
+   "text": "playing a seed, come back and try to rerun that race again later."
+  },
+  {
+   "t": 718.21,
+   "d": 6.07,
+   "text": "So you have this weird kind of instead of looking at the individual life of the character,"
+  },
+  {
+   "t": 724.28,
+   "d": 6.49,
+   "text": "you have this permadeath over the course of an entire run and for the next race you roll"
+  },
+  {
+   "t": 730.77,
+   "d": 9.42,
+   "text": "a new seed and try the new layout and generated space again."
+  },
+  {
+   "t": 740.19,
+   "d": 2.66,
+   "text": "Next we have randomizer as a software."
+  },
+  {
+   "t": 742.85,
+   "d": 4.6,
+   "text": "Straight up, these are automated procedural ROM hacking programs."
+  },
+  {
+   "t": 747.45,
+   "d": 7.9,
+   "text": "They are usually external pieces of software from the actual games that go in and transform"
+  },
+  {
+   "t": 755.35,
+   "d": 6.32,
+   "text": "the underlying actual game that you’re actually playing into a new thing that you’re playing."
+  },
+  {
+   "t": 761.67,
+   "d": 5.37,
+   "text": "They have known sets of features and make promises about their output."
+  },
+  {
+   "t": 767.04,
+   "d": 8.0,
+   "text": "And finally, and most importantly to me, randomizers are communities."
+  },
+  {
+   "t": 775.04,
+   "d": 3.72,
+   "text": "As we all know, no system can exist in a vacuum."
+  },
+  {
+   "t": 778.76,
+   "d": 5.78,
+   "text": "We require people to go in and play and interact with our software for it to actually have"
+  },
+  {
+   "t": 784.54,
+   "d": 3.36,
+   "text": "any existence or meaning."
+  },
+  {
+   "t": 787.9,
+   "d": 6.97,
+   "text": "Communities build around every single one of these randomizers I have encountered, has"
+  },
+  {
+   "t": 794.87,
+   "d": 7.5,
+   "text": "a community where people organize to play the game, race each other, teach new people,"
+  },
+  {
+   "t": 802.37,
+   "d": 7.58,
+   "text": "host events, get the randomizer promoted and get races of it featured in bigger events."
+  },
+  {
+   "t": 809.95,
+   "d": 6.24,
+   "text": "At the end of the day, software is made out of people and building strong and inclusive"
+  },
+  {
+   "t": 816.19,
+   "d": 6.0,
+   "text": "communities around your software is very, very important."
+  },
+  {
+   "t": 822.19,
+   "d": 5.56,
+   "text": "In summary, reminder, this is a Paladin talk, randomizers are awesome."
+  },
+  {
+   "t": 827.75,
+   "d": 5.8,
+   "text": "Randomizers are tools for generating ROM hacks that feature random things that the output"
+  },
+  {
+   "t": 833.55,
+   "d": 2.75,
+   "text": "of which you hopefully can't predict."
+  },
+  {
+   "t": 836.3,
+   "d": 6.41,
+   "text": "They are very popular and prolific and more often than not open source."
+  },
+  {
+   "t": 842.71,
+   "d": 3.43,
+   "text": "Every single community I have run into is welcome to new people both on a player and"
+  },
+  {
+   "t": 846.14,
+   "d": 5.67,
+   "text": "development side and I double clicked there."
+  },
+  {
+   "t": 851.81,
+   "d": 5.81,
+   "text": "If you are more academic leaning like me they are actually really strong examples of interesting"
+  },
+  {
+   "t": 857.62,
+   "d": 3.9,
+   "text": "proc gen in the wild."
+  },
+  {
+   "t": 861.52,
+   "d": 5.05,
+   "text": "So thank you. [Applause]"
+  },
+  {
+   "t": 866.57,
+   "d": 11.34,
+   "text": "STELLA MAZEIKA: Are there any questions?"
+  },
+  {
+   "t": 877.91,
+   "d": 7.04,
+   "text": "AUDIENCE: One you didn't mention, which I’m surprised by, is the one that mashes Legend"
+  },
+  {
+   "t": 884.95,
+   "d": 5.87,
+   "text": "of Zelda Link to the Past and Super Metroid together and switches the items between games"
+  },
+  {
+   "t": 890.82,
+   "d": 3.56,
+   "text": "so you have to play through both games to win."
+  },
+  {
+   "t": 894.38,
+   "d": 8.46,
+   "text": "STELLA MAZEIKA: Yes, in fact, you see these combo randomizers, the Super Metroid and Link"
+  },
+  {
+   "t": 902.84,
+   "d": 4.98,
+   "text": "to the Past being probably the most well-known one, but they also did one for Zelda 1 and"
+  },
+  {
+   "t": 907.82,
+   "d": 1.55,
+   "text": "Metroid 1 as well."
+  },
+  {
+   "t": 909.37,
+   "d": 6.6,
+   "text": "There’s also the notion of multi-world randomizers, which basically take multiple copies of the"
+  },
+  {
+   "t": 915.97,
+   "d": 6.01,
+   "text": "same game and shuffle the items around different players where people are playing through network"
+  },
+  {
+   "t": 921.98,
+   "d": 2.53,
+   "text": "connected emulators."
+  },
+  {
+   "t": 924.51,
+   "d": 4.31,
+   "text": "I might be running around and I’ll find your hookshot in Link to the Past and now"
+  },
+  {
+   "t": 928.82,
+   "d": 9.18,
+   "text": "you have it but it really makes some of the cooperative experience really interesting."
+  },
+  {
+   "t": 938.0,
+   "d": 5.76,
+   "text": "AUDIENCE: Do you think there is like a practical limit to the complexity of these?"
+  },
+  {
+   "t": 943.76,
+   "d": 6.15,
+   "text": "I am thinking about a randomized run through of Morrowind and it hurts my head because"
+  },
+  {
+   "t": 949.91,
+   "d": 1.34,
+   "text": "there is a lot going on."
+  },
+  {
+   "t": 951.25,
+   "d": 8.58,
+   "text": "STELLA MAZEIKA: Well, I mean, there’s two ways I want to answer that question."
+  },
+  {
+   "t": 959.83,
+   "d": 2.24,
+   "text": "Practical from a player limitation, yes."
+  },
+  {
+   "t": 962.07,
+   "d": 8.03,
+   "text": "A lot of these randomizers do have wacky modes you can get into but most people are going"
+  },
+  {
+   "t": 970.1,
+   "d": 1.92,
+   "text": "to take those and dial them back."
+  },
+  {
+   "t": 972.02,
+   "d": 5.61,
+   "text": "I could see a Morrowind randomizer but one that says okay we’re not shuffling everything"
+  },
+  {
+   "t": 977.63,
+   "d": 6.13,
+   "text": "everywhere but we are taking the key items and putting those in different locations,"
+  },
+  {
+   "t": 983.92,
+   "d": 4.5,
+   "text": "so you have some guarantees about where you need to go or where you don’t need to go."
+  },
+  {
+   "t": 988.42,
+   "d": 5.37,
+   "text": "From a software side, no, I think the sky is the limit."
+  },
+  {
+   "t": 993.79,
+   "d": 1.0,
+   "text": ">> Cool."
+  },
+  {
+   "t": 994.79,
+   "d": 0.65,
+   "text": "Thank you so much."
+  }
+ ]
+}

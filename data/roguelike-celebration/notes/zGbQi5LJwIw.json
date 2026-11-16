@@ -1,0 +1,113 @@
+{
+  "id": "zGbQi5LJwIw",
+  "title": "Julian K  Jarboe - Procedural Sound Design for Roguelikes",
+  "speaker": "Julian K. Jarboe",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=zGbQi5LJwIw",
+  "talk_type": "design",
+  "summary": "Writer and sound designer Julian K. Jarboe gives a lightning talk arguing that roguelike developers should thoughtfully incorporate sound design and can do so without musical talent, money or much time. Organized as three concepts plus thoughts on process and technique, the talk covers treating your own sensory quirks as style, the many reasons people listen, making sounds feel accurate rather than be accurate, legitimacy of collage and free assets, atmospheric sound and the player's listening environment, and practical techniques like audio sprites, mixing on decent headphones, frequency bands, MIDI and consistent volume. It closes by framing a game's genre or mood as a promise to players, with a worksheet for imagining what a setting sounds like.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sound design",
+      "kind": "principle",
+      "claim": "Sound, including its absence, is an important and meaningful part of any roguelike, and developers should thoughtfully design it rather than ignore it.",
+      "detail": "Jarboe argues roguelike developers already have the key quality for sound design: they understand that simple, abstract symbols can convey an enormous amount of information, and they like to tinker. Talent, software and time help but are not required.",
+      "t": 72,
+      "quote": "If you think sound, including its absence, is not an important or meaningful part of your game, I am sorry to tell you this, but you're mistaken",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "player listening",
+      "kind": "principle",
+      "claim": "Players listen (or wear headphones) for many different reasons, so a designer should understand those reasons, accept that some will mute the game, and at least make sound they would want to hear themselves.",
+      "detail": "Jarboe lists ten reasons for wearing headphones, from quieting the outside world to asserting personal space while listening to nothing. They also urge being honest about your own sensory quirks, which are assets that form your style and voice.",
+      "t": 195,
+      "quote": "understand the different reasons people do listen, and try to make your game something at least you would want to listen to",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "foley",
+      "kind": "principle",
+      "claim": "Game sounds need to feel accurate rather than be accurate; snapping celery sells a punch better than a recording of a real boxing match.",
+      "detail": "This is the first of Jarboe's thoughts on process.",
+      "t": 207,
+      "quote": "It needs to feel accurate, not be accurate. If you want that punch to sound like a punch, you're better off snapping celery",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural audio",
+      "kind": "principle",
+      "claim": "Procedural sound generation covers everything from software that composes music to randomly picking from a folder of recorded sounds, and collaging free or licensed assets or hiring collaborators is legitimate, not cheating.",
+      "detail": "Jarboe says writing software to compose a sonata is no more or less legitimate than recording burps and picking one at random. Mixing pre-existing assets you have rights to until they are your own, using free assets, and collaborating or hiring are all valid; you don't need to do it all yourself.",
+      "t": 245,
+      "quote": "Collaging and mixing together pre-existing assets (that you have the right to use) until you make them your own is a legitimate way to design",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ambient sound",
+      "kind": "principle",
+      "claim": "Sound design is more than music and sound effects: atmospheric sound can be simple, subtle and powerful, and a game need not include music or effects at all.",
+      "detail": "Jarboe notes atmospheric sound often fits neither category. The sounds of the player's own environment, including sounds they make, are also part of their experience of the design.",
+      "t": 277,
+      "quote": "THERE IS MORE TO SOUND DESIGN THAN JUST MUSIC AND SOUND EFFECTS, AND YOU DON'T NECESSARILY NEED TO INCORPORATE EITHER OR BOTH OF THEM",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "playback environment",
+      "kind": "technique",
+      "claim": "Designers should imagine their game's audio on very different setups, from cheap earbuds on a commuter train to a home theater, just as they already consider accessibility and numpads.",
+      "detail": "Jarboe's three scenarios are a small ThinkPad with drugstore earbuds and no mouse on a cramped train, a surround sound system with a projector and recliner, and a 4K monitor with good headphones in a rented bedroom. 'Same deal but for ears.'",
+      "t": 315,
+      "quote": "Consider (imagine) playing and listening to your game and design on a small ThinkPad and a set of CVS earbuds and no mouse, on a cramped commuter train",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "audio sprites",
+      "kind": "technique",
+      "claim": "Audio sprites let a game economically bundle a small library of sounds and reuse them with effects modified on the fly, just as visual sprites do.",
+      "detail": "First of Jarboe's thoughts on technique, aimed at developers with limited budgets and scope.",
+      "t": 352,
+      "quote": "Audio sprites exist, exactly the way visual sprites do. You can economically bundle and reuse a fairly small library of sounds and modify effects on the fly",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "mixing",
+      "kind": "technique",
+      "claim": "Mix game audio on the best over-ear headphones available rather than earbuds, learn basic frequency bands to fix noisy or muddy overlaps, and prioritize consistent volume over consistent quality.",
+      "detail": "Jarboe admits studio monitors are a luxury they cannot always use for lack of space. Understanding frequency bands lets you fix overlapping audio without removing sounds. You can't always control consistent quality, but it matters less than consistent volume, which you can control.",
+      "t": 408,
+      "quote": "You can't always control for consistent quality. Luckily, it matters less in the overall design than consistent volume, which you can control",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "midi",
+      "kind": "technique",
+      "claim": "Developers should understand why MIDI persists, partly because lots of public-domain music is available as MIDI and is very easy to adapt.",
+      "detail": "Jarboe says deep understanding is great but at minimum one should understand MIDI's value.",
+      "t": 406,
+      "quote": "there's a lot of audio in the public domain that is available in MIDI form, and therefore very, very easy to make your own/adjust",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "genre and tone",
+      "kind": "technique",
+      "claim": "A game's genre or mood is a promise to players, and designers can find its sound by listing sonic associations with the setting and asking which music, machines, animals, weather and people are present or absent and why.",
+      "detail": "Jarboe adapts a worksheet originally written for fiction podcast writers: write down sounds associated with the setting, consider what makes them feel like the genre, and imagine the real world sounding like only those things tomorrow.",
+      "t": 426,
+      "quote": "IT IS A PROMISE THAT YOU AS A DESIGNER ARE MAKING TO YOUR PLAYERS AND LISTENERS",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

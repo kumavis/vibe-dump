@@ -1,0 +1,42 @@
+Rosalind Miles Chapman - Hungry Rogues: The evolution of roguelike hunger mechanics
+Speaker: Rosalind Miles Chapman
+https://www.youtube.com/watch?v=j9ykOdQRUQk
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] MODERATOR: I was so excited in the bar having a discussion about randomness and if that's not the Roguelike Celebration. Without further ado, let's get into this and start with Rosalind Miles Chapman. >> I am going to jump into it because 10 minutes isn't a lot of time. My name is rosalind chaptan and you can find me on Twitter and play -- Chapman -- my games at that website. I am going to talk about hunger mechanics in Roguelikes.
+
+## Wait Hunger Mechanics?
+
+[0:00:42] Some people who are only familiar with modern Roguelikes might be confused because hunger mechanics are a stable of old Roguelikes but they don't make it into a lot of newer Roguelikes in a conventional form. Instead the sort of system and dynamics still exists but it comes in different forms than a traditional hunger mechanics.
+
+## Why Include a Hunger Mechanic
+
+[0:01:13] Why do these games have hunger mechanics and what is a hunger mechanics? Roguelikes typically have this tension where the Roguelike protagonist gets stronger the more they explore or fight things and basically if you could grind this would be the best thing. The the way you play the game isn't that fun because you are encouraged, if you had no time pressure, you would be encourage to ground them out as absolute as possible and never progressing anywhere until you have completely exhausted every resource. What hunger does is turns time into a resource. Now they are a strategic choice you have to weigh up against other options rather than
+
+[0:02:17] a clearly optimal strategy.
+
+## Hunger 101
+
+[0:02:21] The traditional hunger mechanics is hunger so they get hungry over time, get weaker, lose health and possibly just die. You do this with items. Typically your hunger can only go so positive so you want to keep items around so if your game as limited inventory that is another consideration. In pixel Rogue there is a cornicopa idea that takes up the trinket slot and the trinket slot is cool and helpful but not having to do deal with the hunger mechanics is also really helpful. It limits powerful options that take a long time like sleeping which can be effective but not the most fun to play.
+
+[0:03:21] That's what traditional hunger does. More modern games have this same sort of time pressure approach but they are done in a very different way. A lot of games have systems where you can't throw the explorer. There is lots of mutually exclusive choices in where you travel. Sorry. There is a lot of mutually exclusive choices in where you travel. If you go down one path, you can't go down the other path. What is really need about these systems is they turn a previously invisible layer of strategy about how much do you push your luck of thorough exploration versus dwindling food and make it really explicit. If I go down this path, I will face this challenge and get this reward. If I go down this path, I will face that challenge and get that reward. What does my run need right now?
+
+[0:04:23] What does my run need in the future which is really neat.
+
+## Wandering Monsters
+
+[0:04:28] Another way to do this is with monsters. This is really common in bor -- board games that are Roguelike adjacent. The only way this works is if the cost doesn't outweigh. If monsters are threatening or don't give you anything, monsters can be a good way to push things forward and you can use monsters as a clock. What's wonderful is there is a lot of counterplay and because combat is likely the most detailed system you can evade them and try to power through rather than just having sometimes players find it really arbitrary and there is a lot of really game field attached to a timer that just kills you so monsters can be a good way of avoiding the problems.
+
+[0:05:29] Sometimes the monsters break the normal rules like splunky but the point is still the same. It is a thing that pushes the clock. There is another unique ways people have done it. There is difficulty scaling. Basically an invisible inc everything in the game gets harder the longer you stick around. It is kind of like the pure version of this. It is remove everything else which is the absolute baseline essentials of the mechanics. Games get harder everywhere by spending so much time. There are other games that use a stress mechanic. You can use some things to minimize stress gain but there is no way you will ever break
+
+[0:06:31] even or net positive on these resources. There are things that are dwindling and they put a hard cap on your run.
+
+## Castle Cthulhu
+
+[0:06:39] I am going to quickly talk about what I am going to try to do special in my game castle cthulhu. I am going to have a bunch of haunts which are spooky effects that happen if you linger too long in this horrible castle that wants you dead. Doors might randomly jam and force you to do a mini game. Things might collapse office certain passageways. An important part about the haunts is lots of horror games have used a similar system of when your character sees spooky stuff here is a list of bad things that can happen but they are usually very esthetic focused. An important thing about haunts in this game is in order for them to serve that purpose is they can all kill you and screw with your map and spawn things that are dangerous and none of these are things you want. They are bad things.
+
+[0:07:39] And I can tie it in thematically. This is great flavor and I love it. I don't know how much time I have left. My name is Rosalind Chapman and you can play my games at the website and I would appreciate any questions. MODERATOR: Is there a place people can find you to ask questions later on in the day? Want to pick a room? >> Later in the day, probably Twitter, but right now I am currently in the main area but might go off to run of the -- I haven't thought of.
+
+[0:08:43] People want me to make sure the drawings in the slides were lovely.

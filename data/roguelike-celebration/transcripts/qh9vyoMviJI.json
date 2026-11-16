@@ -1,0 +1,1819 @@
+{
+ "id": "qh9vyoMviJI",
+ "url": "https://www.youtube.com/watch?v=qh9vyoMviJI",
+ "title": "Mark R Johnson - Speech Generation in a Procedurally Generated World",
+ "speaker": "Mark R Johnson",
+ "talk_title": "Speech Generation in a Procedurally Generated World",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1806,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nBio: I'm a game studies academic and roguelike developer. In my academic life I currently work at the University of Alberta where I study live streaming, esports, gamification, and loot boxes. I'm particularly known for my research on live streaming and Twitch, while my first book - The Unpredictability of Gameplay - has just been released, and explores roguelikes in a lot of detail! As a game developer I'm known for making Ultima Ratio Regum, a huge world-building / culture-generation roguelike project, which is finally back in development after something of a hiatus. I have also run a game design and game studies blog for the last eight years, I'm a co-host of the Roguelike Radio podcast, and I used to be a professional online poker player.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the game"
+  },
+  {
+   "start": 108,
+   "title": "Procedural world building"
+  },
+  {
+   "start": 406,
+   "title": "Procedural people and speech"
+  },
+  {
+   "start": 717,
+   "title": "Language and naming systems"
+  },
+  {
+   "start": 1152,
+   "title": "Cultural dialogue dynamics"
+  },
+  {
+   "start": 1367,
+   "title": "Interaction and limitations"
+  },
+  {
+   "start": 1707,
+   "title": "Conclusion and contact"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4718,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.52,
+   "d": 2.17,
+   "text": ">> Hello, thank you for coming to the talk."
+  },
+  {
+   "t": 2.69,
+   "d": 2.29,
+   "text": "I am really sorry I couldn't be there in person."
+  },
+  {
+   "t": 4.98,
+   "d": 5.32,
+   "text": "But four days ago, I moved from northern Canada to Sydney and as I'm sure you might guess"
+  },
+  {
+   "t": 10.3,
+   "d": 3.81,
+   "text": "I'm kinda disinclined to go back across the Pacific Ocean again four days later."
+  },
+  {
+   "t": 14.11,
+   "d": 2.85,
+   "text": "So sadly, this is going to be a remote talk."
+  },
+  {
+   "t": 16.96,
+   "d": 1.0,
+   "text": "But yes."
+  },
+  {
+   "t": 17.96,
+   "d": 1.0,
+   "text": "Hi, my name is Mark."
+  },
+  {
+   "t": 18.96,
+   "d": 4.17,
+   "text": "I am the dev of the roguelike game Ultima Ratio Regum, which I am sure a fair number"
+  },
+  {
+   "t": 23.13,
+   "d": 1.11,
+   "text": "of you know of."
+  },
+  {
+   "t": 24.24,
+   "d": 5.87,
+   "text": "The goal of the talk is to talk about the biggest new feature in the new release which"
+  },
+  {
+   "t": 30.11,
+   "d": 4.19,
+   "text": "to my everlasting shame I have been working on for four years now."
+  },
+  {
+   "t": 34.3,
+   "d": 7.11,
+   "text": "This is speech and dialect and language, and the relation of these three aspects both within"
+  },
+  {
+   "t": 41.41,
+   "d": 5.75,
+   "text": "the procedural creation of the game world, but also in terms of how NPCs within the game"
+  },
+  {
+   "t": 47.16,
+   "d": 4.54,
+   "text": "world speak with each other, speak with you, and how you speak with them."
+  },
+  {
+   "t": 51.7,
+   "d": 6.72,
+   "text": "The goal of all this is to create a set of NPCs in the game world who don't function"
+  },
+  {
+   "t": 58.42,
+   "d": 7.03,
+   "text": "as NPCs do in most games where they have a preset volume of things they can say to you"
+  },
+  {
+   "t": 65.45,
+   "d": 5.5,
+   "text": "and which they only say to you in response to your questions but rather to create a world"
+  },
+  {
+   "t": 70.95,
+   "d": 4.65,
+   "text": "in which its people seem slightly more real, slightly more grounded."
+  },
+  {
+   "t": 75.6,
+   "d": 4.95,
+   "text": "They talk more like real people, they give informed responses to what you say, they ask"
+  },
+  {
+   "t": 80.55,
+   "d": 3.47,
+   "text": "you questions back and so on and so forth."
+  },
+  {
+   "t": 84.02,
+   "d": 1.14,
+   "text": "Let's get started."
+  },
+  {
+   "t": 85.16,
+   "d": 2.36,
+   "text": "Actually, hang on one second."
+  },
+  {
+   "t": 87.52,
+   "d": 4.57,
+   "text": "I just listened back to this and for some reason some of the slides start with a slightly"
+  },
+  {
+   "t": 92.09,
+   "d": 1.0,
+   "text": "weird noise."
+  },
+  {
+   "t": 93.09,
+   "d": 4.83,
+   "text": "I'm not sure what it is, I think it is clicking my laptop to stop and end each slide."
+  },
+  {
+   "t": 97.92,
+   "d": 7.58,
+   "text": "If there is a weird noise, it is not me making it but it's some weird part of my computer."
+  },
+  {
+   "t": 105.5,
+   "d": 2.24,
+   "text": "Sorry about that."
+  },
+  {
+   "t": 107.74,
+   "d": 1.5,
+   "text": "Right, anyway."
+  },
+  {
+   "t": 109.24,
+   "d": 3.18,
+   "text": "This is the game which I have beenmericing for the last eight years."
+  },
+  {
+   "t": 112.42,
+   "d": 2.98,
+   "text": "It has somewhat changed in form quite a few times."
+  },
+  {
+   "t": 115.4,
+   "d": 6.54,
+   "text": "But now, given my life has changed somewhat in the last eight years as I think most people's"
+  },
+  {
+   "t": 121.94,
+   "d": 7.38,
+   "text": "lives would, my goal is not quite to reach the rather lofty goals I once set myself but"
+  },
+  {
+   "t": 129.32,
+   "d": 5.83,
+   "text": "rather to get it to a finished point within the next few months or year, and probably,"
+  },
+  {
+   "t": 135.15,
+   "d": 3.54,
+   "text": "although not for sure, call it then and there."
+  },
+  {
+   "t": 138.69,
+   "d": 6.73,
+   "text": "If you have not seen the game it is a gigantic culture-based world builder where there is"
+  },
+  {
+   "t": 145.42,
+   "d": 6.87,
+   "text": "a lot of procedurally created graphics and also lots of things where you can look and"
+  },
+  {
+   "t": 152.29,
+   "d": 7.73,
+   "text": "gain info about things like the parts of the world and cultures and how people dress, how"
+  },
+  {
+   "t": 160.02,
+   "d": 4.37,
+   "text": "people behave, how people talk and all these sorts of things."
+  },
+  {
+   "t": 164.39,
+   "d": 10.84,
+   "text": "So like a lot of big large-scale roguelikes, the game creates a world when you start it"
+  },
+  {
+   "t": 175.23,
+   "d": 1.0,
+   "text": "up."
+  },
+  {
+   "t": 176.23,
+   "d": 1.99,
+   "text": "The world might like something like this."
+  },
+  {
+   "t": 178.22,
+   "d": 2.83,
+   "text": "You have different kinds of nation."
+  },
+  {
+   "t": 181.05,
+   "d": 1.71,
+   "text": "Each has their own flag."
+  },
+  {
+   "t": 182.76,
+   "d": 6.03,
+   "text": "Some are highly PCG and some of which are slightly more fixed."
+  },
+  {
+   "t": 188.79,
+   "d": 2.99,
+   "text": "A world map looks something like this."
+  },
+  {
+   "t": 191.78,
+   "d": 7.37,
+   "text": "250 tiles by 250 and each of the tiles, when you go on to that world map tile, is 200 by"
+  },
+  {
+   "t": 199.15,
+   "d": 6.02,
+   "text": "200 tiles of what you can in fact walk around."
+  },
+  {
+   "t": 205.17,
+   "d": 4.99,
+   "text": "And then if you zoom in further, as in if your player character goes off the world map"
+  },
+  {
+   "t": 210.16,
+   "d": 5.28,
+   "text": "on to the kind of human scale map on which the game itself takes place, you might see"
+  },
+  {
+   "t": 215.44,
+   "d": 1.0,
+   "text": "something like this."
+  },
+  {
+   "t": 216.44,
+   "d": 5.29,
+   "text": "On the left and right-hand side, these are single world map tiles expanded to their full"
+  },
+  {
+   "t": 221.73,
+   "d": 3.87,
+   "text": "size with the player then able to walk around in these."
+  },
+  {
+   "t": 225.6,
+   "d": 3.76,
+   "text": "From the left hand side we have a town, on the right-hand side we have a fortress."
+  },
+  {
+   "t": 229.36,
+   "d": 6.71,
+   "text": "If you go to a city, which tend to be several world map tiles all joined together, you might"
+  },
+  {
+   "t": 236.07,
+   "d": 1.76,
+   "text": "see something like we have in the middle."
+  },
+  {
+   "t": 237.83,
+   "d": 6.48,
+   "text": "And yes, I do of course know that real world cities are not quite this well structured"
+  },
+  {
+   "t": 244.31,
+   "d": 4.33,
+   "text": "but partly for gameplay reasons and partly for technical reasons this is how the game"
+  },
+  {
+   "t": 248.64,
+   "d": 1.77,
+   "text": "cities wound up working."
+  },
+  {
+   "t": 250.41,
+   "d": 4.54,
+   "text": "You can see a bunch of farms around the edge of that."
+  },
+  {
+   "t": 254.95,
+   "d": 5.85,
+   "text": "But then once you got on to this scale where you can walk, see things and go to build things"
+  },
+  {
+   "t": 260.8,
+   "d": 5.87,
+   "text": "and so on, the game then also still zooms in quite a bit further."
+  },
+  {
+   "t": 266.67,
+   "d": 1.69,
+   "text": "Then you hit something like this."
+  },
+  {
+   "t": 268.36,
+   "d": 5.88,
+   "text": "Here are a bunch of buildings within the game and every culture has its own architectural"
+  },
+  {
+   "t": 274.24,
+   "d": 6.0,
+   "text": "styles which are to some extent repeated across all buildings in the culture but also all"
+  },
+  {
+   "t": 280.24,
+   "d": 7.36,
+   "text": "buildings of the same type irrespective of the culture have some similar aspects to them,"
+  },
+  {
+   "t": 287.6,
+   "d": 6.75,
+   "text": "with the idea being the player can go to a brand new city and look at a certain structure"
+  },
+  {
+   "t": 294.35,
+   "d": 6.03,
+   "text": "and say, oh, yes, I think that's a house, a shop, a church, a mansion, or whatever it"
+  },
+  {
+   "t": 300.38,
+   "d": 1.0,
+   "text": "might be."
+  },
+  {
+   "t": 301.38,
+   "d": 8.85,
+   "text": "Here, for instance, going clockwise from the top left, we have a cathedral, church, mansion,"
+  },
+  {
+   "t": 310.23,
+   "d": 5.7,
+   "text": "hospital, and governmental building."
+  },
+  {
+   "t": 315.93,
+   "d": 7.67,
+   "text": "The idea with all of these like I say is that both vertically within the culture and horizontally"
+  },
+  {
+   "t": 323.6,
+   "d": 6.43,
+   "text": "across all cultures, the player should be able to slowly come to learn what these kinds"
+  },
+  {
+   "t": 330.03,
+   "d": 6.97,
+   "text": "of buildings look like and come to be able to make kind of good, informed judgments about"
+  },
+  {
+   "t": 337.0,
+   "d": 6.64,
+   "text": "what sorts of buildings are there and what sorts of building they might want to explore."
+  },
+  {
+   "t": 343.64,
+   "d": 6.24,
+   "text": "As you can see in the pictures, lots of the tiles within these buildings are various sorts"
+  },
+  {
+   "t": 349.88,
+   "d": 1.3,
+   "text": "of things."
+  },
+  {
+   "t": 351.18,
+   "d": 3.65,
+   "text": "The kind of upside down rotated Fs are chairs."
+  },
+  {
+   "t": 354.83,
+   "d": 6.52,
+   "text": "You can see things like doors and tables and so on but each of those also comes with quite"
+  },
+  {
+   "t": 361.35,
+   "d": 2.98,
+   "text": "a lot of detail."
+  },
+  {
+   "t": 364.33,
+   "d": 4.3,
+   "text": "Every single object within the game world is also procedurally created."
+  },
+  {
+   "t": 368.63,
+   "d": 6.41,
+   "text": "Here we see a piece of clothing, a chair, and an altar, a grave, a vase, an incense"
+  },
+  {
+   "t": 375.04,
+   "d": 3.79,
+   "text": "stand, and a tombstone in the bottom left."
+  },
+  {
+   "t": 378.83,
+   "d": 7.92,
+   "text": "In lots of cases, these are designed by the game/by me in such a way as to give the player"
+  },
+  {
+   "t": 386.75,
+   "d": 6.33,
+   "text": "info about who wears them, who owns them, about the culture or religion to which they"
+  },
+  {
+   "t": 393.08,
+   "d": 3.13,
+   "text": "belong and so on and so forth."
+  },
+  {
+   "t": 396.21,
+   "d": 8.25,
+   "text": "This is the scope and scale of the world building detail which the game tries to make."
+  },
+  {
+   "t": 404.46,
+   "d": 6.49,
+   "text": "One really crucial part of new detail and the kind of foundation of this talk is people."
+  },
+  {
+   "t": 410.95,
+   "d": 5.36,
+   "text": "As those who played the last version will know, the world is super detailed but devoid"
+  },
+  {
+   "t": 416.31,
+   "d": 1.0,
+   "text": "of people."
+  },
+  {
+   "t": 417.31,
+   "d": 6.31,
+   "text": "In the new version, which to my shame I working on for four years, is absolutely full to the"
+  },
+  {
+   "t": 423.62,
+   "d": 1.87,
+   "text": "brim of PCG people."
+  },
+  {
+   "t": 425.49,
+   "d": 2.63,
+   "text": "There are various aspects to this."
+  },
+  {
+   "t": 428.12,
+   "d": 5.46,
+   "text": "One of those is on the left hand side there - Every culture and religion has its own clothing"
+  },
+  {
+   "t": 433.58,
+   "d": 5.38,
+   "text": "style and that varsed based on whether you are rich, middle class, or poor and so on."
+  },
+  {
+   "t": 438.96,
+   "d": 5.0,
+   "text": "The idea as with the lots of stuff on the previous few sides, is that the player should"
+  },
+  {
+   "t": 443.96,
+   "d": 5.48,
+   "text": "be able to learn a lot and reason a lot about the world simply by looking at it and making"
+  },
+  {
+   "t": 449.44,
+   "d": 4.39,
+   "text": "sense of it rather than having some kind of extra diegetic message which has to pop in"
+  },
+  {
+   "t": 453.83,
+   "d": 3.27,
+   "text": "and say NPC X is from cultural royal."
+  },
+  {
+   "t": 457.1,
+   "d": 7.85,
+   "text": "Then you will see face creation in the top left and on the lower right you will see is"
+  },
+  {
+   "t": 464.95,
+   "d": 10.73,
+   "text": "a bunch of average people which is H for human and P for priest and might be an S for servant"
+  },
+  {
+   "t": 475.68,
+   "d": 3.1,
+   "text": "walking around a cathedral."
+  },
+  {
+   "t": 478.78,
+   "d": 4.86,
+   "text": "Even how NPCs move are based on cultures."
+  },
+  {
+   "t": 483.64,
+   "d": 9.48,
+   "text": "Some cultures are far more inclined to have people group up and kind of act collectively"
+  },
+  {
+   "t": 493.12,
+   "d": 6.24,
+   "text": "in some sense, while in other cultures the kind of distance at which people feel comfortable"
+  },
+  {
+   "t": 499.36,
+   "d": 3.24,
+   "text": "keeping from other people is much broader."
+  },
+  {
+   "t": 502.6,
+   "d": 5.71,
+   "text": "In all these sorts of ways once more, even just by seeing how NPCs walk around on the"
+  },
+  {
+   "t": 508.31,
+   "d": 5.83,
+   "text": "game map you should be able to get some sense of what culture they are from or roughly where"
+  },
+  {
+   "t": 514.14,
+   "d": 3.1,
+   "text": "they hail from."
+  },
+  {
+   "t": 517.24,
+   "d": 3.64,
+   "text": "But - the most important part of all this, though, was speech."
+  },
+  {
+   "t": 520.88,
+   "d": 2.89,
+   "text": "So my goals, like I said at the start, were twofold."
+  },
+  {
+   "t": 523.77,
+   "d": 6.66,
+   "text": "I wanted to create NPCs who have a lot more to say to you and can tell you more about"
+  },
+  {
+   "t": 530.43,
+   "d": 6.73,
+   "text": "the world and who seem real and grounded and genuinely based within this creative world"
+  },
+  {
+   "t": 537.16,
+   "d": 3.37,
+   "text": "than the average NPC within the average game."
+  },
+  {
+   "t": 540.53,
+   "d": 7.09,
+   "text": "But also to create those who can talk to you and let you talk to them also in a way that"
+  },
+  {
+   "t": 547.62,
+   "d": 4.8,
+   "text": "actual human conversations function and that's - I don't know what it is like for you guys,"
+  },
+  {
+   "t": 552.42,
+   "d": 5.05,
+   "text": "but I tend to not go up to strangers in the street and ask for life stories and they give"
+  },
+  {
+   "t": 557.47,
+   "d": 3.19,
+   "text": "me a quest to do XYZ."
+  },
+  {
+   "t": 560.66,
+   "d": 1.69,
+   "text": "I don't think that's how the real world works!"
+  },
+  {
+   "t": 562.35,
+   "d": 6.31,
+   "text": "In the real world, we have greetings, we have farewells, we have questions which go kind"
+  },
+  {
+   "t": 568.66,
+   "d": 3.25,
+   "text": "of back and forth as well."
+  },
+  {
+   "t": 571.91,
+   "d": 5.84,
+   "text": "Conversations aren't just the player asking NPCs things but the NPC will also ask back"
+  },
+  {
+   "t": 577.75,
+   "d": 10.58,
+   "text": "things and the ways that the NPCs behave will to some extent be contingent on how you respond"
+  },
+  {
+   "t": 588.33,
+   "d": 2.84,
+   "text": "to the questions you ask them as well as vice versa."
+  },
+  {
+   "t": 591.17,
+   "d": 7.44,
+   "text": "So as it says here - The goal was to create characters who kind of fit in within these"
+  },
+  {
+   "t": 598.61,
+   "d": 8.6,
+   "text": "kinds of large simulation-heavy worlds and also to bring some kinds of weird gameplay"
+  },
+  {
+   "t": 607.21,
+   "d": 8.01,
+   "text": "potential to bear also, in quite a crucial part of the new release will be how the player"
+  },
+  {
+   "t": 615.22,
+   "d": 7.73,
+   "text": "learns these forms of speech and these different dialects across different cultures, and also"
+  },
+  {
+   "t": 622.95,
+   "d": 6.19,
+   "text": "trying to pick up kind of clues from what characters say relating to the world, or things"
+  },
+  {
+   "t": 629.14,
+   "d": 2.33,
+   "text": "which the player might want to do."
+  },
+  {
+   "t": 631.47,
+   "d": 6.67,
+   "text": "And then also, it also allows for this kind of gameplay system where the player can try"
+  },
+  {
+   "t": 638.14,
+   "d": 9.27,
+   "text": "to blend in by doing a kind of accurate impersonation for lack of a superior word of someone else's"
+  },
+  {
+   "t": 647.41,
+   "d": 5.51,
+   "text": "form of speaking in order to blend into that culture and that then also ties in with things"
+  },
+  {
+   "t": 652.92,
+   "d": 7.6,
+   "text": "like how the player kind of dresses, and how they move, and what kinds of items they have"
+  },
+  {
+   "t": 660.52,
+   "d": 6.45,
+   "text": "as well as how they speak all contribute to potentially deceiving another NPC within that"
+  },
+  {
+   "t": 666.97,
+   "d": 3.28,
+   "text": "game as to what culture the player hails from."
+  },
+  {
+   "t": 670.25,
+   "d": 7.46,
+   "text": "Also, just as a final point here, I am in fact completely aware that games have come"
+  },
+  {
+   "t": 677.71,
+   "d": 6.23,
+   "text": "out since the old discourse, where you talk to people and they talk back."
+  },
+  {
+   "t": 683.94,
+   "d": 7.27,
+   "text": "I put these pictures on the slide because when I first played this game when was 10,"
+  },
+  {
+   "t": 691.21,
+   "d": 7.02,
+   "text": "I remember this game stood out beyond all others for the back and forth Q&A style speech"
+  },
+  {
+   "t": 698.23,
+   "d": 4.06,
+   "text": "where you meet someone, ask them things and then you walk off."
+  },
+  {
+   "t": 702.29,
+   "d": 5.75,
+   "text": "And it just really, lodged in my brain as this is the -- it is not the worst ever, but"
+  },
+  {
+   "t": 708.04,
+   "d": 6.9,
+   "text": "it is a pretty shocking example, I think, of this sort of style which I wanted to escape"
+  },
+  {
+   "t": 714.94,
+   "d": 2.49,
+   "text": "from if at all possible."
+  },
+  {
+   "t": 717.43,
+   "d": 2.16,
+   "text": "xpausex OK."
+  },
+  {
+   "t": 719.59,
+   "d": 4.63,
+   "text": "For quite a while, I thought I would create in game language for the player to try to"
+  },
+  {
+   "t": 724.22,
+   "d": 1.0,
+   "text": "learn."
+  },
+  {
+   "t": 725.22,
+   "d": 5.71,
+   "text": "But if you've ever tried to do this, this really tricky to to strangely enough."
+  },
+  {
+   "t": 730.93,
+   "d": 9.1,
+   "text": "You basically wind up with the Final Fantasy 10 model where a different \"language\" is a"
+  },
+  {
+   "t": 740.03,
+   "d": 2.38,
+   "text": "substitution cipher for English."
+  },
+  {
+   "t": 742.41,
+   "d": 7.48,
+   "text": "Instead, I settled on a model where English is this kind of trade language within the"
+  },
+  {
+   "t": 749.89,
+   "d": 6.78,
+   "text": "game world and all characters from all cultures speak English but they will speak it in their"
+  },
+  {
+   "t": 756.67,
+   "d": 4.08,
+   "text": "own ways, with their own accents and ways of speaking as, of course, in the real world"
+  },
+  {
+   "t": 760.75,
+   "d": 1.18,
+   "text": "to some extent."
+  },
+  {
+   "t": 761.93,
+   "d": 7.85,
+   "text": "The first step is for each culture and each dialect to create a certain form of proper"
+  },
+  {
+   "t": 769.78,
+   "d": 4.04,
+   "text": "nouns for things like names and places and so on."
+  },
+  {
+   "t": 773.82,
+   "d": 7.13,
+   "text": "The way that the game does this is by creating sets of letters and then clumping those into"
+  },
+  {
+   "t": 780.95,
+   "d": 4.63,
+   "text": "sets of syllables and from those creating all these sorts of names that that culture"
+  },
+  {
+   "t": 785.58,
+   "d": 1.56,
+   "text": "might need."
+  },
+  {
+   "t": 787.14,
+   "d": 6.23,
+   "text": "On the right hand column here, you should be able to see each row of names is quite"
+  },
+  {
+   "t": 793.37,
+   "d": 5.64,
+   "text": "different from the row above it and below it, but within a set row, the names should"
+  },
+  {
+   "t": 799.01,
+   "d": 2.76,
+   "text": "be broadly speaking similar-ish."
+  },
+  {
+   "t": 801.77,
+   "d": 6.16,
+   "text": "I think the bottom two were the set that were the most consistent but the other three, I"
+  },
+  {
+   "t": 807.93,
+   "d": 5.38,
+   "text": "think, I hope, still also stand out as being quite distinctive."
+  },
+  {
+   "t": 813.31,
+   "d": 9.72,
+   "text": "Once this kind of system is built, every name, place, every town, city, these sorts of things,"
+  },
+  {
+   "t": 823.03,
+   "d": 6.53,
+   "text": "every artwork, surname, nickname, are built from the set of pieces which could be put"
+  },
+  {
+   "t": 829.56,
+   "d": 2.38,
+   "text": "into proper nouns."
+  },
+  {
+   "t": 831.94,
+   "d": 7.21,
+   "text": "With that done, I realized in real normal human speech, people do lot of things where"
+  },
+  {
+   "t": 839.15,
+   "d": 8.35,
+   "text": "they reference culture or the past or friends, family, foes, of the people and so to make"
+  },
+  {
+   "t": 847.5,
+   "d": 6.03,
+   "text": "people within my game talk as we do in the real world to some extent at least, I realized"
+  },
+  {
+   "t": 853.53,
+   "d": 9.52,
+   "text": "I would need to create a kind of set of reference points for every culture or every religion"
+  },
+  {
+   "t": 863.05,
+   "d": 7.98,
+   "text": "that people within that cultural group could refer back to and do so in an informed and"
+  },
+  {
+   "t": 871.03,
+   "d": 5.06,
+   "text": "appropriate way given whatever the context it to make their points."
+  },
+  {
+   "t": 876.09,
+   "d": 6.56,
+   "text": "This would be so every time a culture is made, right at the end of that process, it creates"
+  },
+  {
+   "t": 882.65,
+   "d": 6.23,
+   "text": "a database of points that people in that culture could talk about, when they want to talk about"
+  },
+  {
+   "t": 888.88,
+   "d": 8.55,
+   "text": "war, or family, travel, people, love, death, life, or religion, or whatever it is, every"
+  },
+  {
+   "t": 897.43,
+   "d": 6.59,
+   "text": "domain has a set of unique reference points and stories distinct to that culture which"
+  },
+  {
+   "t": 904.02,
+   "d": 4.24,
+   "text": "people from that culture can then draw."
+  },
+  {
+   "t": 908.26,
+   "d": 6.08,
+   "text": "And so that then creates sentences like these."
+  },
+  {
+   "t": 914.34,
+   "d": 5.68,
+   "text": "When you are talking with an NPC within the game they will make some kind of comment that"
+  },
+  {
+   "t": 920.02,
+   "d": 5.81,
+   "text": "refers back to one of the references the game has for people from that culture to talk about"
+  },
+  {
+   "t": 925.83,
+   "d": 3.44,
+   "text": "some topic or other."
+  },
+  {
+   "t": 929.27,
+   "d": 7.69,
+   "text": "These sorts of cases, again, the idea is once more that the game is not explicitly telling"
+  },
+  {
+   "t": 936.96,
+   "d": 5.44,
+   "text": "you where these folks come from, and nor is there any in game encyclopedia like say in"
+  },
+  {
+   "t": 942.4,
+   "d": 6.02,
+   "text": "a Mass Effect game or something like that, but rather that the player should, as time"
+  },
+  {
+   "t": 948.42,
+   "d": 5.7,
+   "text": "goes by, come to learn broadly speaking what the world's cultural is, what the world's"
+  },
+  {
+   "t": 954.12,
+   "d": 7.02,
+   "text": "beliefs are and all these things the NPC can say."
+  },
+  {
+   "t": 961.14,
+   "d": 7.52,
+   "text": "It contributes more to the pragmatic goal of making sure the player learns this world"
+  },
+  {
+   "t": 968.66,
+   "d": 6.69,
+   "text": "but it also, I think, does a lot for making the world feel kind of grounded and lived"
+  },
+  {
+   "t": 975.35,
+   "d": 7.2,
+   "text": "in where lots of people from one culture will all, say, fixate on the same ancient battle"
+  },
+  {
+   "t": 982.55,
+   "d": 6.79,
+   "text": "which they won or all people from the same culture when you ask them about the health"
+  },
+  {
+   "t": 989.34,
+   "d": 7.79,
+   "text": "of their king, and the king is ill, then they will all be able to both give their own comments"
+  },
+  {
+   "t": 997.13,
+   "d": 7.82,
+   "text": "but also to refer back to to shared concept of like life, death, and things of this sort."
+  },
+  {
+   "t": 1004.95,
+   "d": 3.93,
+   "text": "And then one more crucial part of this, of course, is names for people."
+  },
+  {
+   "t": 1008.88,
+   "d": 4.91,
+   "text": "So the goal here was every culture should have its own style of naming its people and"
+  },
+  {
+   "t": 1013.79,
+   "d": 4.45,
+   "text": "within the culture everyone should be named in a broadly speaking comparable way while"
+  },
+  {
+   "t": 1018.24,
+   "d": 2.65,
+   "text": "every culture's naming convention should be different."
+  },
+  {
+   "t": 1020.89,
+   "d": 8.82,
+   "text": "So how this works - There are dozens of name style pieces and when the game creates a brand"
+  },
+  {
+   "t": 1029.71,
+   "d": 8.89,
+   "text": "new game world, these pieces are stitched together in pairs or triplets and each set"
+  },
+  {
+   "t": 1038.6,
+   "d": 6.89,
+   "text": "of archetype piece then constructs the overall name archetype of that culture and whenever"
+  },
+  {
+   "t": 1045.49,
+   "d": 7.03,
+   "text": "the game needs to create a name in the culture for a person it goes back to this procedurally"
+  },
+  {
+   "t": 1052.52,
+   "d": 4.7,
+   "text": "created archetype and then based on that procedurally created archetype, it can create thousands"
+  },
+  {
+   "t": 1057.22,
+   "d": 6.58,
+   "text": "and thousands of names which are unique to that culture within the context of that particular"
+  },
+  {
+   "t": 1063.8,
+   "d": 1.22,
+   "text": "game."
+  },
+  {
+   "t": 1065.02,
+   "d": 5.58,
+   "text": "So that then yields something which looks kind of like this."
+  },
+  {
+   "t": 1070.6,
+   "d": 4.5,
+   "text": "These are -- well, these are nine sets of four names."
+  },
+  {
+   "t": 1075.1,
+   "d": 7.33,
+   "text": "Each name has been PCGed by the game but the style of each name is unique to the particular"
+  },
+  {
+   "t": 1082.43,
+   "d": 6.6,
+   "text": "game world as in these styles themselves will likely no longer exist with you create a brand"
+  },
+  {
+   "t": 1089.03,
+   "d": 2.7,
+   "text": "new game world and play in that instead."
+  },
+  {
+   "t": 1091.73,
+   "d": 7.03,
+   "text": "I tried to kind of strike some sort of balance here between name types, which we might be"
+  },
+  {
+   "t": 1098.76,
+   "d": 3.48,
+   "text": "to some extent we might be kind of familiar-ish with."
+  },
+  {
+   "t": 1102.24,
+   "d": 7.17,
+   "text": "The top left ones are the kind of Homeric epithets, that kind of thing, and the bottom"
+  },
+  {
+   "t": 1109.41,
+   "d": 5.93,
+   "text": "left ones, I don't know if any language on earth which names people in that style, but"
+  },
+  {
+   "t": 1115.34,
+   "d": 4.72,
+   "text": "we can still imagine a culture which did act like that."
+  },
+  {
+   "t": 1120.06,
+   "d": 5.87,
+   "text": "In the case of each of these, if you meet someone who gives you a name and you don't"
+  },
+  {
+   "t": 1125.93,
+   "d": 5.71,
+   "text": "know the culture they are from, based on the style of the name you should be able to kind"
+  },
+  {
+   "t": 1131.64,
+   "d": 7.37,
+   "text": "of guess and slowly come to learn what particular culture was within that particular world someone"
+  },
+  {
+   "t": 1139.01,
+   "d": 2.13,
+   "text": "is from."
+  },
+  {
+   "t": 1141.14,
+   "d": 5.49,
+   "text": "Every time you create a new world, not just do all the names of folks change, but the"
+  },
+  {
+   "t": 1146.63,
+   "d": 6.58,
+   "text": "archetypes assigned to each culture by which the names are created also changes."
+  },
+  {
+   "t": 1153.21,
+   "d": 5.27,
+   "text": "Next up, like I said a few slides back, in real world human speech, we tend to say things"
+  },
+  {
+   "t": 1158.48,
+   "d": 5.5,
+   "text": "like hello, goodbye and we tend to say nice things and insult people and so on and so"
+  },
+  {
+   "t": 1163.98,
+   "d": 1.0,
+   "text": "forth."
+  },
+  {
+   "t": 1164.98,
+   "d": 5.88,
+   "text": "So the game also creates sets of greetings, farewells, compliments and insults which are"
+  },
+  {
+   "t": 1170.86,
+   "d": 5.61,
+   "text": "distinct to every culture based on what that culture things is worthwhile and what that"
+  },
+  {
+   "t": 1176.47,
+   "d": 7.44,
+   "text": "culture prizes and based on what that culture hates and dislikes and so on but which also"
+  },
+  {
+   "t": 1183.91,
+   "d": 6.41,
+   "text": "vary based on who you speak to and what they think of you when they say hi, or bye, or"
+  },
+  {
+   "t": 1190.32,
+   "d": 1.96,
+   "text": "insult you or say something nice."
+  },
+  {
+   "t": 1192.28,
+   "d": 6.33,
+   "text": "In these four columns here: in the green we have a bunch of procedurally created greetings."
+  },
+  {
+   "t": 1198.61,
+   "d": 2.7,
+   "text": "In the - what the hell is that color?"
+  },
+  {
+   "t": 1201.31,
+   "d": 3.73,
+   "text": "- In the gray, we have a bunch of farewells."
+  },
+  {
+   "t": 1205.04,
+   "d": 7.15,
+   "text": "In the kind of purply lilac color we have a bunch of compliments which NPCs might gave"
+  },
+  {
+   "t": 1212.19,
+   "d": 10.59,
+   "text": "to the player and NPCs only give compliments when the player has done something which merits"
+  },
+  {
+   "t": 1222.78,
+   "d": 4.07,
+   "text": "praise within the speaker's culture."
+  },
+  {
+   "t": 1226.85,
+   "d": 6.45,
+   "text": "If the player said something witty, but the culture of the NPC who the player is talking"
+  },
+  {
+   "t": 1233.3,
+   "d": 6.95,
+   "text": "to, thinks that wit is pointless and only respects artistic skills they won't compliment"
+  },
+  {
+   "t": 1240.25,
+   "d": 1.0,
+   "text": "the player."
+  },
+  {
+   "t": 1241.25,
+   "d": 7.44,
+   "text": "On the right, we have a bunch of insults which I think are my favorite of the bunch especially"
+  },
+  {
+   "t": 1248.69,
+   "d": 3.55,
+   "text": "the second one, I think."
+  },
+  {
+   "t": 1252.24,
+   "d": 7.2,
+   "text": "As once once more with lots of the other factors within this game world, the idea was that"
+  },
+  {
+   "t": 1259.44,
+   "d": 6.4,
+   "text": "you should have as many things relate to as many other things as you can and so answer"
+  },
+  {
+   "t": 1265.84,
+   "d": 7.02,
+   "text": "not just \"do the statements reflect the culture or the religious beliefs of the speaker\","
+  },
+  {
+   "t": 1272.86,
+   "d": 5.92,
+   "text": "in some cases where it fits, they should refer back to other aspects of the game world if"
+  },
+  {
+   "t": 1278.78,
+   "d": 8.44,
+   "text": "to make some kind of comparison with it or to insult it or to praise it or whatever."
+  },
+  {
+   "t": 1287.22,
+   "d": 3.79,
+   "text": "And then it gets even more complex as if all that wasn't enough."
+  },
+  {
+   "t": 1291.01,
+   "d": 7.82,
+   "text": "I also realized that some language in the real world tend to be far more verbose than"
+  },
+  {
+   "t": 1298.83,
+   "d": 5.73,
+   "text": "others and also, of course, some people tend to speak more or less than others."
+  },
+  {
+   "t": 1304.56,
+   "d": 8.07,
+   "text": "So the idea here was that based both on cultural factors, but also the personality of the speaker,"
+  },
+  {
+   "t": 1312.63,
+   "d": 5.63,
+   "text": "and the inclination of the speaker towards the player, the same sentence can make many,"
+  },
+  {
+   "t": 1318.26,
+   "d": 5.08,
+   "text": "many forms based on how long and detailed that sentence wind up being and the game just"
+  },
+  {
+   "t": 1323.34,
+   "d": 3.11,
+   "text": "works all of this type of stuff out based on all these factors."
+  },
+  {
+   "t": 1326.45,
+   "d": 8.95,
+   "text": "Here is one case where someone is saying \"Hi, welcome to our country\" to the player but"
+  },
+  {
+   "t": 1335.4,
+   "d": 5.5,
+   "text": "the level of detail they choose to give to the player when the player speaks with them"
+  },
+  {
+   "t": 1340.9,
+   "d": 6.7,
+   "text": "is contingent on many, many factors all of which can add up to a fairly brusque welcome"
+  },
+  {
+   "t": 1347.6,
+   "d": 6.8,
+   "text": "to our nation, or a very lengthy one as in that final sentence there at the bottom of"
+  },
+  {
+   "t": 1354.4,
+   "d": 1.45,
+   "text": "the screen."
+  },
+  {
+   "t": 1355.85,
+   "d": 6.37,
+   "text": "Everything I have shown until now is also affected by how willing a speaker is to basically"
+  },
+  {
+   "t": 1362.22,
+   "d": 4.24,
+   "text": "have a long-winded conversation or not with the player."
+  },
+  {
+   "t": 1366.46,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 1367.46,
+   "d": 2.93,
+   "text": "Here are some examples."
+  },
+  {
+   "t": 1370.39,
+   "d": 7.18,
+   "text": "At the bottom of the screenshot are the topic groupings you can ask people things on."
+  },
+  {
+   "t": 1377.57,
+   "d": 5.19,
+   "text": "When you click on a topic grouping, it gives you all of the questions you can ask them"
+  },
+  {
+   "t": 1382.76,
+   "d": 5.37,
+   "text": "and the color shows how well you can ask that question and the dialect you are currently"
+  },
+  {
+   "t": 1388.13,
+   "d": 1.0,
+   "text": "using."
+  },
+  {
+   "t": 1389.13,
+   "d": 4.24,
+   "text": "In your home one, of course, everything is bright green because it is your kind of native"
+  },
+  {
+   "t": 1393.37,
+   "d": 7.06,
+   "text": "way of speaking but if you are speaking in a non-native dialect then you might be better"
+  },
+  {
+   "t": 1400.43,
+   "d": 2.75,
+   "text": "or worse at asking some sort of questions."
+  },
+  {
+   "t": 1403.18,
+   "d": 5.65,
+   "text": "In total, there is something like 500 questions you can ask people."
+  },
+  {
+   "t": 1408.83,
+   "d": 6.05,
+   "text": "Something like a few hundred are default questions you can ask any NPC while the other questions"
+  },
+  {
+   "t": 1414.88,
+   "d": 10.32,
+   "text": "are only things you can ask an NPC of a certain class or belongs to a certain category such"
+  },
+  {
+   "t": 1425.2,
+   "d": 3.97,
+   "text": "as say you can't ask a priest \"What's there to drink?\""
+  },
+  {
+   "t": 1429.17,
+   "d": 3.6,
+   "text": "whereas you can ask an inn keeper what is there to drink."
+  },
+  {
+   "t": 1432.77,
+   "d": 4.83,
+   "text": "You can't ask the innkeeper \"Where do they keep the holy book?\""
+  },
+  {
+   "t": 1437.6,
+   "d": 5.1,
+   "text": "whereas you can ask that to a priest and so on and so forth."
+  },
+  {
+   "t": 1442.7,
+   "d": 5.79,
+   "text": "Also, because there are so many queries you can ask people you also have the option to"
+  },
+  {
+   "t": 1448.49,
+   "d": 7.26,
+   "text": "type in words and if the words match up with the queries then it shortens the list to that"
+  },
+  {
+   "t": 1455.75,
+   "d": 1.63,
+   "text": "block of words."
+  },
+  {
+   "t": 1457.38,
+   "d": 2.75,
+   "text": "For a fairly short list that might be a small thing."
+  },
+  {
+   "t": 1460.13,
+   "d": 6.17,
+   "text": "But some of the broader questions which you might ask are things like \"What do you think"
+  },
+  {
+   "t": 1466.3,
+   "d": 6.27,
+   "text": "of X?\" where X is a book or a person or a piece of art or something."
+  },
+  {
+   "t": 1472.57,
+   "d": 6.27,
+   "text": "If you have met 10,000 people, that's a bit high, if you have met a 1,000 people, then"
+  },
+  {
+   "t": 1478.84,
+   "d": 5.24,
+   "text": "you don't want to scroll through all those names, of course, you just type in the name"
+  },
+  {
+   "t": 1484.08,
+   "d": 6.51,
+   "text": "of the NPC who you want to ask someone about."
+  },
+  {
+   "t": 1490.59,
+   "d": 6.09,
+   "text": "And then here we see roughly speaking what a chat might kind of look like in game."
+  },
+  {
+   "t": 1496.68,
+   "d": 5.7,
+   "text": "Both characters are saying stuff and asking stuff and also towards the end of this GIF"
+  },
+  {
+   "t": 1502.38,
+   "d": 3.92,
+   "text": "you will see the player changes the dialect they are speaking with and where you will"
+  },
+  {
+   "t": 1506.3,
+   "d": 7.29,
+   "text": "see the green, red and yellow of the conversations options will change because they have shifted"
+  },
+  {
+   "t": 1513.59,
+   "d": 4.53,
+   "text": "out of a dialect which they speak extremely clearly into one which they don't know quite"
+  },
+  {
+   "t": 1518.12,
+   "d": 1.29,
+   "text": "as well."
+  },
+  {
+   "t": 1519.41,
+   "d": 6.09,
+   "text": "Now these next two screen shots show the sentence complexity issues."
+  },
+  {
+   "t": 1525.5,
+   "d": 5.6,
+   "text": "We see the player is asking an NPC 3 simple things."
+  },
+  {
+   "t": 1531.1,
+   "d": 1.32,
+   "text": "First they say hi."
+  },
+  {
+   "t": 1532.42,
+   "d": 5.67,
+   "text": "Then they say could you tell me where a certain person lives and they say what's he like and"
+  },
+  {
+   "t": 1538.09,
+   "d": 7.55,
+   "text": "here the NPC gives a very lengthy and friendly greeting, mentioning his culture and religious"
+  },
+  {
+   "t": 1545.64,
+   "d": 5.84,
+   "text": "background and gives you detailed and exact directions to the person who you are looking"
+  },
+  {
+   "t": 1551.48,
+   "d": 4.76,
+   "text": "for and when asked what this person is like he gives you lots of information about what"
+  },
+  {
+   "t": 1556.24,
+   "d": 5.22,
+   "text": "this person is like how they might be to speak with, the idea being this information can"
+  },
+  {
+   "t": 1561.46,
+   "d": 4.5,
+   "text": "later inform the player speaking with this person if they do indeed then go and find"
+  },
+  {
+   "t": 1565.96,
+   "d": 2.75,
+   "text": "them."
+  },
+  {
+   "t": 1568.71,
+   "d": 5.75,
+   "text": "If you ask the same set of queries to someone else from a different culture, as you can"
+  },
+  {
+   "t": 1574.46,
+   "d": 4.89,
+   "text": "see here, they say very little about it and very little about the person who the player"
+  },
+  {
+   "t": 1579.35,
+   "d": 1.69,
+   "text": "is asking about."
+  },
+  {
+   "t": 1581.04,
+   "d": 6.19,
+   "text": "These two screen shots are pretty extreme cases of the lots of words and few words parts"
+  },
+  {
+   "t": 1587.23,
+   "d": 3.68,
+   "text": "of the spectrum but I think you get the idea."
+  },
+  {
+   "t": 1590.91,
+   "d": 5.3,
+   "text": "Now, although I think that the system is pretty good, it did run into one pretty significant"
+  },
+  {
+   "t": 1596.21,
+   "d": 1.88,
+   "text": "unexpected issue which is this."
+  },
+  {
+   "t": 1598.09,
+   "d": 3.84,
+   "text": "If you have millions of people within a game world, and you can ask them all hundreds or"
+  },
+  {
+   "t": 1601.93,
+   "d": 6.69,
+   "text": "even thousands of questions, and if any answer to any one of those questions might potentially"
+  },
+  {
+   "t": 1608.62,
+   "d": 4.42,
+   "text": "yield information which is a value to the player, you can see where I am going with"
+  },
+  {
+   "t": 1613.04,
+   "d": 1.0,
+   "text": "this."
+  },
+  {
+   "t": 1614.04,
+   "d": 4.75,
+   "text": "Players who like to play in some kind of optimal play style are likely to basically ask every"
+  },
+  {
+   "t": 1618.79,
+   "d": 3.5,
+   "text": "single NPC in the game world every question they can be asked."
+  },
+  {
+   "t": 1622.29,
+   "d": 6.76,
+   "text": "That is a pretty boring way to play even if it might be successful or useful in some way."
+  },
+  {
+   "t": 1629.05,
+   "d": 3.4,
+   "text": "To deal with that, I put in two systems in the game."
+  },
+  {
+   "t": 1632.45,
+   "d": 4.41,
+   "text": "One being NPCs get bored talking to the player quite quickly."
+  },
+  {
+   "t": 1636.86,
+   "d": 5.44,
+   "text": "If you ask them questions they don't care for or which in some way offend them they"
+  },
+  {
+   "t": 1642.3,
+   "d": 2.46,
+   "text": "will end the conversation with you faster."
+  },
+  {
+   "t": 1644.76,
+   "d": 4.31,
+   "text": "Alternatively of course, if you really engage them on topics on which they want to talk"
+  },
+  {
+   "t": 1649.07,
+   "d": 2.46,
+   "text": "about, they'll talk for longer."
+  },
+  {
+   "t": 1651.53,
+   "d": 5.53,
+   "text": "But that still led to the issue where you could just ask one NPC as many questions as"
+  },
+  {
+   "t": 1657.06,
+   "d": 7.79,
+   "text": "you can and move on to the next and keep hopping from NPC to NPC asking these sorts of inane"
+  },
+  {
+   "t": 1664.85,
+   "d": 1.0,
+   "text": "questions."
+  },
+  {
+   "t": 1665.85,
+   "d": 5.56,
+   "text": "To fix that, within a cultural religious group, knowledge of the questions you are asking"
+  },
+  {
+   "t": 1671.41,
+   "d": 6.7,
+   "text": "spreads extremely quickly, such that if you exhausted an amount an entire group is willing"
+  },
+  {
+   "t": 1678.11,
+   "d": 6.64,
+   "text": "to talk about something, someone will be wary or maybe kind of suspicious about all these"
+  },
+  {
+   "t": 1684.75,
+   "d": 5.11,
+   "text": "questions you are asking, and refuse to answer based on there fact that their friends within"
+  },
+  {
+   "t": 1689.86,
+   "d": 5.08,
+   "text": "that culture or group have told them that you have been asking on this topic a lot."
+  },
+  {
+   "t": 1694.94,
+   "d": 4.47,
+   "text": "So the idea of all of this is to force players to think intelligently about what questions"
+  },
+  {
+   "t": 1699.41,
+   "d": 5.42,
+   "text": "do I ask, and to who, and in what way in order to yield the information in which they are"
+  },
+  {
+   "t": 1704.83,
+   "d": 1.41,
+   "text": "looking for."
+  },
+  {
+   "t": 1706.24,
+   "d": 5.08,
+   "text": "That's pretty much everything I have to say here."
+  },
+  {
+   "t": 1711.32,
+   "d": 3.33,
+   "text": "Hopefully, although this talk has been clearly far more designed focus than tech focused,"
+  },
+  {
+   "t": 1714.65,
+   "d": 5.18,
+   "text": "I hope it gives you an idea of how language and dialect ands peech systems within the"
+  },
+  {
+   "t": 1719.83,
+   "d": 5.56,
+   "text": "game work and how they connect to each other, and connect to and draw on the wide aspects"
+  },
+  {
+   "t": 1725.39,
+   "d": 6.1,
+   "text": "of the world which it do is to its past, its geography, its cultures, and religions, and"
+  },
+  {
+   "t": 1731.49,
+   "d": 2.73,
+   "text": "so on and so forth."
+  },
+  {
+   "t": 1734.22,
+   "d": 5.35,
+   "text": "And as I hope you will agree when I finally release the damn thing it really does give"
+  },
+  {
+   "t": 1739.57,
+   "d": 6.84,
+   "text": "the sense this is a word not occupied by drones whose only job is to stand there until a player"
+  },
+  {
+   "t": 1746.41,
+   "d": 5.07,
+   "text": "comes over and speak to them - but rather a world full of people who are broadly speaking"
+  },
+  {
+   "t": 1751.48,
+   "d": 5.96,
+   "text": "grounded and somewhat more real and who are situated within their cultures and religions"
+  },
+  {
+   "t": 1757.44,
+   "d": 6.38,
+   "text": "and their ways of life and who also to a greater or less extent talk to you like real humans"
+  },
+  {
+   "t": 1763.82,
+   "d": 1.0,
+   "text": "do."
+  },
+  {
+   "t": 1764.82,
+   "d": 4.03,
+   "text": "If anything got vaguely close to that, that probably puts me closer to that objective"
+  },
+  {
+   "t": 1768.85,
+   "d": 5.12,
+   "text": "of most games any way so I will be happy with that either way."
+  },
+  {
+   "t": 1773.97,
+   "d": 4.31,
+   "text": "Lastly, I am really sorry I couldn't be there in person."
+  },
+  {
+   "t": 1778.28,
+   "d": 3.23,
+   "text": "Hopefully, I will next year, although we will see how that goes."
+  },
+  {
+   "t": 1781.51,
+   "d": 5.13,
+   "text": "If you want to get in touch and talk about any aspect of this or check out the game,"
+  },
+  {
+   "t": 1786.64,
+   "d": 4.02,
+   "text": "please give me a shout on Twitter, by email or my website."
+  },
+  {
+   "t": 1790.66,
+   "d": 5.37,
+   "text": "I would love to chat with any and every one of you about this weird speech PCG language"
+  },
+  {
+   "t": 1796.03,
+   "d": 3.8,
+   "text": "dialect nonsense I talked for the last half hour."
+  },
+  {
+   "t": 1799.83,
+   "d": 1.0,
+   "text": "Thanks, everyone."
+  },
+  {
+   "t": 1800.83,
+   "d": 3.84,
+   "text": "Hope you have a great event and I look forward to speaking with some of you online."
+  },
+  {
+   "t": 1804.67,
+   "d": 1.0,
+   "text": "Thanks, everyone."
+  },
+  {
+   "t": 1805.67,
+   "d": 0.0,
+   "text": "Bye."
+  }
+ ]
+}

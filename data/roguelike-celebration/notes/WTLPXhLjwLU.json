@@ -1,0 +1,105 @@
+{
+  "id": "WTLPXhLjwLU",
+  "title": "Nathan Savant - One Quest To Rule Them All: Quest Design in Non-Games Media",
+  "speaker": "Nathan Savant",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=WTLPXhLjwLU",
+  "talk_type": "design",
+  "summary": "Narrative designer Nathan Savant offers a simple framework for building procedural quest stories by decomposing the quests in The Lord of the Rings into beginning, middle and end. Beginnings vary by the player's response (accept, reject, reject then accept, be forced), the type of choice (conscious, implied, none) and the acceptance mechanic (talk to a character, interact with an object, gain an item or knowledge, enter an area, use a verb). Middles combine external struggles (events, environments, mechanical stresses) with internal struggles expressed through UI, character progression changes and altered moment-to-moment input. Endings return to normalcy, and gameplay alterations should be used sparingly because they are stressful.",
+  "games": [
+    "The Last of Us"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "quest structure",
+      "kind": "principle",
+      "claim": "Procedural quest stories can be built by decomposing quests into beginning, middle and end, each with its own component types that systems can combine.",
+      "detail": "Savant addresses solo programmer-developers who aren't writers, proposing to learn from older media by breaking Lord of the Rings quests into simple parts. He frames these as simple tools for building complex things.",
+      "t": 104,
+      "quote": "Quests are stories. Because quests are stories, quests break down into three sections. You have a beginning, you have a middle, and you have an end.",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "quest acceptance",
+      "kind": "technique",
+      "claim": "A quest can be accepted, rejected, rejected then accepted later, or rejected then forced on the protagonist, and each response changes how the rest of the quest reads without extra writing.",
+      "detail": "Frodo accepts willingly, but a player might walk away, return out of guilt, or be dragged back by Gandalf. Savant notes Gandalf gives Frodo a quest to take the ring to the elves, while Frodo gives himself the quest to Mordor.",
+      "t": 231,
+      "quote": "Each of those things will change how the rest of the quest is perceived, and thus will tell the story in a slightly different way",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "quest triggers",
+      "kind": "technique",
+      "claim": "Quests can begin by conscious choice, implied choice (entering a space or acting without realizing it), or no choice at all, as with the One Ring's unrefusable quest.",
+      "detail": "Gandalf takes on his quest by reading old books with no explicit offer; entering a giant spider's nest triggers a fight; making noise changes a quest. Putting on the ring gives a quest you can't refuse.",
+      "t": 340,
+      "quote": "You can make a conscious choice on purpose because you were offered more information.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "quest triggers",
+      "kind": "technique",
+      "claim": "Quest acceptance mechanics include talking to a character, interacting with an object, gaining an item, gaining knowledge, entering an area, or using a verb such as casting an illegal spell.",
+      "detail": "Objects can be job boards or treasure maps; using an outlawed spell might put you on the run from magical authorities. Savant presents this list as covering every way a quest might start.",
+      "t": 403,
+      "quote": "you have interact with a character, interact with an object, gain an item, gain some knowledge, enter an area, and use a verb",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "external struggles",
+      "kind": "technique",
+      "claim": "The middle of a quest can apply external struggles: scripted events, changing or new environments, and mechanical stresses like status effects that change how the player must play.",
+      "detail": "Wearing the One Ring acts like a status effect flagging Frodo as a target for the ringwraiths; their pursuit means not following roads or lighting fires, altering core gameplay.",
+      "t": 486,
+      "quote": "your core gameplay has changed because of some, you know, difference in you know, some mechanical change here",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ui as character state",
+      "kind": "principle",
+      "claim": "In games, a character's internal struggles are represented concretely through the UI, which can be animated, obscured or distorted (visually or aurally) to show mental state.",
+      "detail": "Savant says the UI exists to communicate character state; most games use it only for health points. Examples: animating the UI after a head blow so skills are forgotten, blocking the screen for blindness, distorting audio.",
+      "t": 546,
+      "quote": "This is what the UI is for. It exists as a means of communicating character state to the player.",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill trees",
+      "kind": "technique",
+      "claim": "Character progression trees can express long-term internal change in a story: mentors can unlock trees, trauma can remove them, and quests or items can grant temporary skills.",
+      "detail": "Savant describes skill trees as the kind of person a character can imagine becoming. The hobbits learn swords in the wild but their primary verb stays sneak.",
+      "t": 591,
+      "quote": "character progression trees represent the type of person that your character can imagine themself becoming and that can change over the course of a story",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "mechanics as story",
+      "kind": "warning",
+      "claim": "Altering moment-to-moment input to express internal struggle (as in The Last of Us when Ellie doesn't respond) is powerful but risky, since changing movement or input response is usually the worst thing to do to a player.",
+      "detail": "Options include a character moving differently because they can't focus or failing to distinguish friend from foe in anger. Savant calls these very touchy tools.",
+      "t": 658,
+      "quote": "99% of the time, changing the player's movement speed or the response to an input command is about the worst thing you can do to them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "quest reward",
+      "kind": "principle",
+      "claim": "A quest's end is usually a return to normalcy, and since gameplay and interface alterations are exhausting, reserve significant ones for the main quest and pace them carefully.",
+      "detail": "In Lord of the Rings only the main quest heavily alters 'gameplay'; others such as the Palantír or corrupted kings change environments rather than the character directly.",
+      "t": 738,
+      "quote": "be aware that anything you change about the interface stressful to the player and pace accordingly",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

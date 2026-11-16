@@ -1,0 +1,1721 @@
+{
+ "id": "aBbaUSWFQPM",
+ "url": "https://www.youtube.com/watch?v=aBbaUSWFQPM",
+ "title": "Julian Day - Poetry at the Edge of Roguelikes: Writing Around Iterative Media",
+ "speaker": "Julian Day",
+ "talk_title": "Poetry at the Edge of Roguelikes: Writing Around Iterative Media",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1851,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nJulian Day is a software developer and poet from Winnipeg, Canada. He is the author of Shadow of the Wyrm, a traditional roguelike. \n\nIn this talk he explores the ways elements of roguelikes and other interactive media intersect with traditional and more experimental poetry. Poetry is often \"that thing I hated in school\", or \"too complicated/abstract/I don't understand it\", and his talk shares his perspective on the interesting work people are doing around two of the most important interests of his life.\n\nFind him on Twitter: https://twitter.com/juliancday\nShadow of the Wyrm: https://www.shadowofthewyrm.org/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 52,
+   "title": "Who am I"
+  },
+  {
+   "start": 119,
+   "title": "Early Roguelikes"
+  },
+  {
+   "start": 202,
+   "title": "Roguelike Development"
+  },
+  {
+   "start": 317,
+   "title": "The Fairy Queen"
+  },
+  {
+   "start": 794,
+   "title": "Mythmaking"
+  },
+  {
+   "start": 1038,
+   "title": "Poetry and Genocide"
+  },
+  {
+   "start": 1221,
+   "title": "Procedural Generation"
+  },
+  {
+   "start": 1430,
+   "title": "Results"
+  },
+  {
+   "start": 1494,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3584,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.38,
+   "d": 4.1,
+   "text": "EMCEE: Hello and welcome back to Roguelike Celebration."
+  },
+  {
+   "t": 5.48,
+   "d": 2.63,
+   "text": "I hope everyone enjoyed that break."
+  },
+  {
+   "t": 8.11,
+   "d": 3.42,
+   "text": "We have some more talks for all of you."
+  },
+  {
+   "t": 11.53,
+   "d": 3.91,
+   "text": "Our next talk is by Julian Day."
+  },
+  {
+   "t": 15.44,
+   "d": 1.58,
+   "text": "Julian is a software developer."
+  },
+  {
+   "t": 17.02,
+   "d": 8.07,
+   "text": "He is the author of shadows of the worm, a traditional Roguelike but today he is talking"
+  },
+  {
+   "t": 25.09,
+   "d": 5.98,
+   "text": "about poetry."
+  },
+  {
+   "t": 31.07,
+   "d": 12.38,
+   "text": "I am really excited about it because he is going to reference Christian Book, one of"
+  },
+  {
+   "t": 43.45,
+   "d": 5.31,
+   "text": "my favorites."
+  },
+  {
+   "t": 48.76,
+   "d": 5.31,
+   "text": ">> Julian: Hi."
+  },
+  {
+   "t": 54.07,
+   "d": 8.83,
+   "text": "I am a software developer living in Winnipeg, Canada throw I have lived across the country"
+  },
+  {
+   "t": 62.9,
+   "d": 2.06,
+   "text": "throughout my life."
+  },
+  {
+   "t": 64.96,
+   "d": 3.71,
+   "text": "I am the creator of Shadow of the Worm."
+  },
+  {
+   "t": 68.67,
+   "d": 3.97,
+   "text": "I have been around the Roguelike scene since the mid to late '90s."
+  },
+  {
+   "t": 72.64,
+   "d": 6.46,
+   "text": "A friend got me into NetHack and then I discovered use net and fell in love with ADOM back in"
+  },
+  {
+   "t": 79.1,
+   "d": 3.74,
+   "text": "the gamma pre-release dates."
+  },
+  {
+   "t": 82.84,
+   "d": 4.33,
+   "text": "This talk about is poetry and specifically the ways in which poetry intersects with Roguelikes"
+  },
+  {
+   "t": 87.17,
+   "d": 1.65,
+   "text": "in different ways."
+  },
+  {
+   "t": 88.82,
+   "d": 4.53,
+   "text": "The first part of my talk I want to talk about how Roguelikes are using poetry to create"
+  },
+  {
+   "t": 93.35,
+   "d": 7.63,
+   "text": "a more imesh -- immersive gaming experience."
+  },
+  {
+   "t": 100.98,
+   "d": 5.21,
+   "text": "Video games and Roguelikes become a way of coping with grief."
+  },
+  {
+   "t": 106.19,
+   "d": 7.54,
+   "text": "I will take a thousand steps back and look how procedural generation has been used by"
+  },
+  {
+   "t": 113.73,
+   "d": 8.66,
+   "text": "Christian Book."
+  },
+  {
+   "t": 122.39,
+   "d": 3.82,
+   "text": "Whether or not you believe the first head like was Rogue, the early games followed a"
+  },
+  {
+   "t": 126.21,
+   "d": 1.55,
+   "text": "template."
+  },
+  {
+   "t": 127.76,
+   "d": 5.37,
+   "text": "You start at the top of the dudgeon and make your way down."
+  },
+  {
+   "t": 133.13,
+   "d": 18.2,
+   "text": "There wasn't a lot of room for nuance back then."
+  },
+  {
+   "t": 151.33,
+   "d": 6.94,
+   "text": "ADOM took it further and added descriptions to give the game more flavor and a complete"
+  },
+  {
+   "t": 158.27,
+   "d": 1.23,
+   "text": "set of lore."
+  },
+  {
+   "t": 159.5,
+   "d": 7.0,
+   "text": "If you play ADOM, you might have seen this map before or maybe not at all."
+  },
+  {
+   "t": 166.5,
+   "d": 4.23,
+   "text": "You don't actually have to care about the mad menstrual to complete a regular win but"
+  },
+  {
+   "t": 170.73,
+   "d": 2.44,
+   "text": "he is central to the game in a number of ways."
+  },
+  {
+   "t": 173.17,
+   "d": 7.99,
+   "text": "If you talk to him outside the win condition you are sure to have seen something like this."
+  },
+  {
+   "t": 181.16,
+   "d": 2.18,
+   "text": "This is one of the mad menstruals poem."
+  },
+  {
+   "t": 183.34,
+   "d": 2.43,
+   "text": "Thomas uses these in interesting ways."
+  },
+  {
+   "t": 185.77,
+   "d": 6.29,
+   "text": "He uses them to give information on places and people and the Dracula lore chain game"
+  },
+  {
+   "t": 192.06,
+   "d": 1.0,
+   "text": "mechanics."
+  },
+  {
+   "t": 193.06,
+   "d": 6.49,
+   "text": "This is similar to what NetHack does but to do it with poetry was new and in many ways"
+  },
+  {
+   "t": 199.55,
+   "d": 5.07,
+   "text": "still is."
+  },
+  {
+   "t": 204.62,
+   "d": 4.39,
+   "text": "ADOM is one of the few Roguelikes to explicitly use poetry."
+  },
+  {
+   "t": 209.01,
+   "d": 2.53,
+   "text": "This isn't incredibly prizing."
+  },
+  {
+   "t": 211.54,
+   "d": 4.88,
+   "text": "Most teams are teams of one and most Roguelike developers are not writers."
+  },
+  {
+   "t": 216.42,
+   "d": 5.68,
+   "text": "There is a sense any writing you have to do is something you to do get back to implementing"
+  },
+  {
+   "t": 222.1,
+   "d": 5.77,
+   "text": "cool mechanics and stuff you like to do as a developer but every decision we make in"
+  },
+  {
+   "t": 227.87,
+   "d": 3.78,
+   "text": "a Roguelike is a step toward building a world."
+  },
+  {
+   "t": 231.65,
+   "d": 1.11,
+   "text": "Are there graphics?"
+  },
+  {
+   "t": 232.76,
+   "d": 1.0,
+   "text": "Plain ASCII?"
+  },
+  {
+   "t": 233.76,
+   "d": 5.24,
+   "text": "What does the ASCII look like?"
+  },
+  {
+   "t": 239.0,
+   "d": 5.1,
+   "text": "All these things impact the feel of the world you are creating."
+  },
+  {
+   "t": 244.1,
+   "d": 4.62,
+   "text": "Just as the decision to add monster memory or item look up creates a certain kind of"
+  },
+  {
+   "t": 248.72,
+   "d": 5.85,
+   "text": "world, how you describe and impart that information to the player takes it further."
+  },
+  {
+   "t": 254.57,
+   "d": 4.81,
+   "text": "If this comes via endgame books are pros you have suddenly created a world with pros."
+  },
+  {
+   "t": 259.38,
+   "d": 5.41,
+   "text": "If you do it with poetry, your world has poetry."
+  },
+  {
+   "t": 264.79,
+   "d": 4.05,
+   "text": "With that, I am just talk about shadow of the wyrm."
+  },
+  {
+   "t": 268.84,
+   "d": 4.38,
+   "text": "It is my third Roguelike."
+  },
+  {
+   "t": 273.22,
+   "d": 10.81,
+   "text": "I only ever released them to a couple of friends."
+  },
+  {
+   "t": 284.03,
+   "d": 4.62,
+   "text": "Shadow of the worm I started back in 2011 while ADOM was still in a long period of non"
+  },
+  {
+   "t": 288.65,
+   "d": 4.7,
+   "text": "release and had its first release in 2015."
+  },
+  {
+   "t": 293.35,
+   "d": 4.56,
+   "text": "It became evident to me quickly I wasn't a game designer and the game was destined to"
+  },
+  {
+   "t": 297.91,
+   "d": 5.83,
+   "text": "become a zen garden."
+  },
+  {
+   "t": 303.74,
+   "d": 4.42,
+   "text": "Blood alcohol levels and alcohol poisoning."
+  },
+  {
+   "t": 308.16,
+   "d": 12.28,
+   "text": "And in 2016, I started the fateful decision to write the fragment of a long poem."
+  },
+  {
+   "t": 320.44,
+   "d": 5.6,
+   "text": "In late 2014 I was in the midst of a long and difficult project at work and reading"
+  },
+  {
+   "t": 326.04,
+   "d": 14.69,
+   "text": "the fairy queen as a way"
+  },
+  {
+   "t": 340.73,
+   "d": 1.53,
+   "text": "to de-stress at night."
+  },
+  {
+   "t": 342.26,
+   "d": 4.77,
+   "text": "The language is archaic even for the time."
+  },
+  {
+   "t": 347.03,
+   "d": 7.83,
+   "text": "Honestly, for me, it took awhile to get through it."
+  },
+  {
+   "t": 354.86,
+   "d": 4.94,
+   "text": "Once I did, the rhythms and metre were kicking around in my head and a year later I started"
+  },
+  {
+   "t": 359.8,
+   "d": 2.06,
+   "text": "a poem of my own."
+  },
+  {
+   "t": 361.86,
+   "d": 6.32,
+   "text": "It is a more modern take on the Shakespearean stanza."
+  },
+  {
+   "t": 368.18,
+   "d": 3.59,
+   "text": "It tells lore about the early game world but no views in game."
+  },
+  {
+   "t": 371.77,
+   "d": 5.57,
+   "text": "It is meant as lore for people who like lore and I am one of those people which is why"
+  },
+  {
+   "t": 377.34,
+   "d": 1.62,
+   "text": "I worked on it."
+  },
+  {
+   "t": 378.96,
+   "d": 3.21,
+   "text": "Before I get into that, I want to show you what the source poem or the fairy queen looks"
+  },
+  {
+   "t": 382.17,
+   "d": 5.3,
+   "text": "like."
+  },
+  {
+   "t": 387.47,
+   "d": 11.3,
+   "text": "You will see archaic language and the stanza reads as capital P poetry."
+  },
+  {
+   "t": 398.77,
+   "d": 8.22,
+   "text": "Even if it is not your cup of tea, you can field the lines as you read it."
+  },
+  {
+   "t": 406.99,
+   "d": 6.15,
+   "text": "Naturally propelling you forward while the six stress last line neatly closes the whole"
+  },
+  {
+   "t": 413.14,
+   "d": 1.65,
+   "text": "thing off."
+  },
+  {
+   "t": 414.79,
+   "d": 7.78,
+   "text": "Here is an example stanza from my long poem which a company of soldiers march out to take"
+  },
+  {
+   "t": 422.57,
+   "d": 2.36,
+   "text": "revenge for a killing."
+  },
+  {
+   "t": 424.93,
+   "d": 4.13,
+   "text": "The language is modern and the feeling is different."
+  },
+  {
+   "t": 429.06,
+   "d": 6.8,
+   "text": "I will get into the techniques I used to make it read a little more modern."
+  },
+  {
+   "t": 435.86,
+   "d": 3.78,
+   "text": "If I read it out, it could pass as prose."
+  },
+  {
+   "t": 439.64,
+   "d": 4.87,
+   "text": "The following morning the company made their way around brackish pools that buzzed with"
+  },
+  {
+   "t": 444.51,
+   "d": 2.77,
+   "text": "mosquitos and delayed their schedule."
+  },
+  {
+   "t": 447.28,
+   "d": 3.87,
+   "text": "The weather never cooled remaining humid."
+  },
+  {
+   "t": 451.15,
+   "d": 7.84,
+   "text": "With the flight of an ax head touched the back the thin cotton became a butterfly or"
+  },
+  {
+   "t": 458.99,
+   "d": 2.66,
+   "text": "violin."
+  },
+  {
+   "t": 461.65,
+   "d": 8.15,
+   "text": "Here is another stanza in which two giants brothers are tricked by a forest to wander"
+  },
+  {
+   "t": 469.8,
+   "d": 6.6,
+   "text": "deep inside to find a creature."
+  },
+  {
+   "t": 476.4,
+   "d": 6.43,
+   "text": "This incredibly well done presentation here is how I am illustrating the approach I tried"
+  },
+  {
+   "t": 482.83,
+   "d": 1.0,
+   "text": "to take."
+  },
+  {
+   "t": 483.83,
+   "d": 6.03,
+   "text": "Almost always I stick with modern English in terms of diction and word style."
+  },
+  {
+   "t": 489.86,
+   "d": 7.16,
+   "text": "To allow myself a greater set of rhymes I use imperfect rhymes like dread and stretch"
+  },
+  {
+   "t": 497.02,
+   "d": 5.08,
+   "text": "which are based on the ea sound in the middle of the word."
+  },
+  {
+   "t": 502.1,
+   "d": 5.84,
+   "text": "I break lines mid sentence rather than on punctuation with commas and periods."
+  },
+  {
+   "t": 507.94,
+   "d": 6.68,
+   "text": "This allows more variation in sentence length reducing the feeling of sameness you can feel"
+  },
+  {
+   "t": 514.62,
+   "d": 1.89,
+   "text": "in the fairy queen."
+  },
+  {
+   "t": 516.51,
+   "d": 5.27,
+   "text": "Also I don't rhyme the center lines, lines 4 and 5 like Spencer did."
+  },
+  {
+   "t": 521.78,
+   "d": 5.81,
+   "text": "If you look at the example here, you can see the fourth line end with trees and the fifth"
+  },
+  {
+   "t": 527.59,
+   "d": 3.25,
+   "text": "line ends with stretch and there is absolutely no rhyme whatsoever."
+  },
+  {
+   "t": 530.84,
+   "d": 3.83,
+   "text": "This creates a more natural feel."
+  },
+  {
+   "t": 534.67,
+   "d": 9.27,
+   "text": "I almost always end each stanza with Alexander and there is only one part in the mome where"
+  },
+  {
+   "t": 543.94,
+   "d": 6.24,
+   "text": "I don't dothat and I do it for a very good reason."
+  },
+  {
+   "t": 550.18,
+   "d": 7.81,
+   "text": "Besides the long poem, the game uses this in other ways."
+  },
+  {
+   "t": 557.99,
+   "d": 7.6,
+   "text": "There is a retelling of Robin Roberts poem at roan head in one area of the game."
+  },
+  {
+   "t": 565.59,
+   "d": 4.62,
+   "text": "After the long poem, the most important usage is probably in the game lore."
+  },
+  {
+   "t": 570.21,
+   "d": 5.49,
+   "text": "Shadow of the wrym has an item code X and you can use these to look up information on"
+  },
+  {
+   "t": 575.7,
+   "d": 2.38,
+   "text": "anything you come across."
+  },
+  {
+   "t": 578.08,
+   "d": 7.88,
+   "text": "Because I am not content with describing clinically, I struck prose into the item description as"
+  },
+  {
+   "t": 585.96,
+   "d": 1.56,
+   "text": "well."
+  },
+  {
+   "t": 587.52,
+   "d": 3.84,
+   "text": "Pose poetry is poetry in prose forms."
+  },
+  {
+   "t": 591.36,
+   "d": 3.7,
+   "text": "Basically think of it as paragraph poems."
+  },
+  {
+   "t": 595.06,
+   "d": 16.29,
+   "text": "I didn't want it to feel like a giant block of poetic practice but I used it as descriptions"
+  },
+  {
+   "t": 611.35,
+   "d": 4.29,
+   "text": "in the wild field."
+  },
+  {
+   "t": 615.64,
+   "d": 4.49,
+   "text": "Players told me how nice it is to stumble across the descriptions and tucked inside"
+  },
+  {
+   "t": 620.13,
+   "d": 6.91,
+   "text": "what is otherwise a goblin murder simulator so after hitting the item code X to understand"
+  },
+  {
+   "t": 627.04,
+   "d": 11.59,
+   "text": "what this is you might look up the blue flower and read the small flu -- flowers lie to say"
+  },
+  {
+   "t": 638.63,
+   "d": 6.05,
+   "text": "this is not for me why not you?"
+  },
+  {
+   "t": 644.68,
+   "d": 1.0,
+   "text": "Salt water Daisy."
+  },
+  {
+   "t": 645.68,
+   "d": 1.19,
+   "text": "False Sapphire."
+  },
+  {
+   "t": 646.87,
+   "d": 1.24,
+   "text": "Sailors promise."
+  },
+  {
+   "t": 648.11,
+   "d": 1.19,
+   "text": "Blue sky."
+  },
+  {
+   "t": 649.3,
+   "d": 1.74,
+   "text": "Spring clover."
+  },
+  {
+   "t": 651.04,
+   "d": 1.69,
+   "text": "Wild flax further in."
+  },
+  {
+   "t": 652.73,
+   "d": 1.51,
+   "text": "Racing to the shore."
+  },
+  {
+   "t": 654.24,
+   "d": 5.89,
+   "text": "Silky skin oily in your hand."
+  },
+  {
+   "t": 660.13,
+   "d": 3.08,
+   "text": "Using this limited way for the wild flowers was always intentional."
+  },
+  {
+   "t": 663.21,
+   "d": 6.58,
+   "text": "It is a cliche poets love their flowers and trees but I wanted it to be a world of not"
+  },
+  {
+   "t": 669.79,
+   "d": 4.49,
+   "text": "just monsters and dudgeons but poetry and art."
+  },
+  {
+   "t": 674.28,
+   "d": 8.81,
+   "text": "I hope I have managed to find a way to enrich its small strange world."
+  },
+  {
+   "t": 683.09,
+   "d": 11.64,
+   "text": "Other Roguelikes are going to be more streamlined and actual graphics but shadow of"
+  },
+  {
+   "t": 694.73,
+   "d": 4.89,
+   "text": "the wrym is like an underexplored space."
+  },
+  {
+   "t": 699.62,
+   "d": 9.66,
+   "text": "I am usually self deprecateing to a fault but I am deeply proud of the work I have been"
+  },
+  {
+   "t": 709.28,
+   "d": 2.66,
+   "text": "able to do here."
+  },
+  {
+   "t": 711.94,
+   "d": 5.41,
+   "text": "I want to talk about Matthew henderson's collection Roguelike for the second part of the talk."
+  },
+  {
+   "t": 717.35,
+   "d": 4.58,
+   "text": "Roguelikes have been around for 40 years and are such a niche community that their impact"
+  },
+  {
+   "t": 721.93,
+   "d": 3.04,
+   "text": "on other art forms has been mall."
+  },
+  {
+   "t": 724.97,
+   "d": 11.14,
+   "text": "Matthew henderson released a set of poems about family loss, myth making and grief."
+  },
+  {
+   "t": 736.11,
+   "d": 4.09,
+   "text": "Roguelike is at its heart about the poet's relationship with his dead mother and her"
+  },
+  {
+   "t": 740.2,
+   "d": 2.32,
+   "text": "addiction to narcotics and pills during her life."
+  },
+  {
+   "t": 742.52,
+   "d": 6.99,
+   "text": "It is about helplessness and grief and the things we do and tell ourselves to cope."
+  },
+  {
+   "t": 749.51,
+   "d": 6.71,
+   "text": "Henderson explores the ship relationship to video games."
+  },
+  {
+   "t": 756.22,
+   "d": 8.69,
+   "text": "Gamers of certain ages will have played many of them."
+  },
+  {
+   "t": 764.91,
+   "d": 6.31,
+   "text": "Henderson writes about tapping out up, up, down, down, trying to find something better."
+  },
+  {
+   "t": 771.22,
+   "d": 5.34,
+   "text": "Talking about runs and glitching and working way to figure his grief."
+  },
+  {
+   "t": 776.56,
+   "d": 8.1,
+   "text": "He uses the concept of the genre to layout the ground work for myth making and the ultimate"
+  },
+  {
+   "t": 784.66,
+   "d": 3.39,
+   "text": "central feature of Roguelikes had unbreakable permanence of death."
+  },
+  {
+   "t": 788.05,
+   "d": 8.34,
+   "text": "He talks about turning sideways and slipping through the earth."
+  },
+  {
+   "t": 796.39,
+   "d": 2.5,
+   "text": "Myth making is really a central feature to Roguelikes."
+  },
+  {
+   "t": 798.89,
+   "d": 2.62,
+   "text": "Maybe not the games themselves but the community."
+  },
+  {
+   "t": 801.51,
+   "d": 4.16,
+   "text": "We create stories about our best and most unfortunate friends and share them on forums,"
+  },
+  {
+   "t": 805.67,
+   "d": 6.66,
+   "text": "Twitter, and post to news groups back in the day."
+  },
+  {
+   "t": 812.33,
+   "d": 4.69,
+   "text": "Any way, when we make myths we repeat things."
+  },
+  {
+   "t": 817.02,
+   "d": 11.88,
+   "text": "What do you think about when you think of Dwarf Fortress?"
+  },
+  {
+   "t": 828.9,
+   "d": 4.53,
+   "text": "I read about it online and it became part of the share experience that the participants"
+  },
+  {
+   "t": 833.43,
+   "d": 4.33,
+   "text": "and the readers created while the save file was pashed back and forth."
+  },
+  {
+   "t": 837.76,
+   "d": 3.27,
+   "text": "It is a common feature of the tale."
+  },
+  {
+   "t": 841.03,
+   "d": 6.7,
+   "text": "It has become a myth."
+  },
+  {
+   "t": 847.73,
+   "d": 3.15,
+   "text": "Central to henderson's Roguelike is the idea of transformation."
+  },
+  {
+   "t": 850.88,
+   "d": 1.97,
+   "text": "We see it in Roguelikes all the time."
+  },
+  {
+   "t": 852.85,
+   "d": 4.59,
+   "text": "The kitten kills a goblin and becomes a Cat."
+  },
+  {
+   "t": 857.44,
+   "d": 6.31,
+   "text": "In ADOM you can get mutations and change yourself in a variety of ways."
+  },
+  {
+   "t": 863.75,
+   "d": 6.24,
+   "text": "And pole piling is a central strategy in NetHack."
+  },
+  {
+   "t": 869.99,
+   "d": 4.58,
+   "text": "Transformation is so important because it promotes the belief that things can change"
+  },
+  {
+   "t": 874.57,
+   "d": 6.11,
+   "text": "in an easy, understandable way and allows an understanding to form."
+  },
+  {
+   "t": 880.68,
+   "d": 11.95,
+   "text": "Henderson sees his mother as a kill dear dragging her broken wing to protect the family."
+  },
+  {
+   "t": 892.63,
+   "d": 4.99,
+   "text": "Or sees her as a raven stocking the early years and hunting the rest of the life."
+  },
+  {
+   "t": 897.62,
+   "d": 2.1,
+   "text": "All of it pivots around a central point."
+  },
+  {
+   "t": 899.72,
+   "d": 6.31,
+   "text": "She is gone and mow to make sense of it."
+  },
+  {
+   "t": 906.03,
+   "d": 4.23,
+   "text": "Throughout the collection you can see traces of the discussion of permadeath."
+  },
+  {
+   "t": 910.26,
+   "d": 3.01,
+   "text": "How many games of ADOM have I played over the years?"
+  },
+  {
+   "t": 913.27,
+   "d": 5.42,
+   "text": "How many nameless characters forgotten the next time I start the game?"
+  },
+  {
+   "t": 918.69,
+   "d": 4.88,
+   "text": "I have probably played through the game thousands of times."
+  },
+  {
+   "t": 923.57,
+   "d": 4.32,
+   "text": "Runs become a way of normalizing the incredibly difficulty and expected failure when playing"
+  },
+  {
+   "t": 927.89,
+   "d": 1.0,
+   "text": "a Roguelike."
+  },
+  {
+   "t": 928.89,
+   "d": 6.25,
+   "text": "I have won ADOM four times, my one game once, and I have never won NetHack but who cares?"
+  },
+  {
+   "t": 935.14,
+   "d": 7.25,
+   "text": "There is always the next roll and run of the dice."
+  },
+  {
+   "t": 942.39,
+   "d": 3.53,
+   "text": "Maybe this time death isn't permanent."
+  },
+  {
+   "t": 945.92,
+   "d": 7.45,
+   "text": "Our lives are bits of data and memory and what we had once we can have again."
+  },
+  {
+   "t": 953.37,
+   "d": 3.15,
+   "text": "But ultimately runs are an escape."
+  },
+  {
+   "t": 956.52,
+   "d": 1.78,
+   "text": "In life, they are fiction."
+  },
+  {
+   "t": 958.3,
+   "d": 4.22,
+   "text": "In Roguelikes we can play endlessly and talk about our win rate or plan for our next game"
+  },
+  {
+   "t": 962.52,
+   "d": 5.77,
+   "text": "but all we have is the life we make for ourselves and the people we surround ourselves and what"
+  },
+  {
+   "t": 968.29,
+   "d": 6.29,
+   "text": "we choose to do with our precious time."
+  },
+  {
+   "t": 974.58,
+   "d": 8.0,
+   "text": "Henderson uses Caves of Qud as the backdrop of searching for his lost mother tracking"
+  },
+  {
+   "t": 982.58,
+   "d": 2.9,
+   "text": "her traces to the glade."
+  },
+  {
+   "t": 985.48,
+   "d": 3.62,
+   "text": "Roguelike is a wonderful collection in the way that it uses the concept of the genre"
+  },
+  {
+   "t": 989.1,
+   "d": 4.95,
+   "text": "and video games generally to examine love, loss, addiction and family."
+  },
+  {
+   "t": 994.05,
+   "d": 5.24,
+   "text": "At the heart of it is henderson's message is we have one life and how we live it and"
+  },
+  {
+   "t": 999.29,
+   "d": 5.53,
+   "text": "mythologyize the things that happen are up to us good and bad."
+  },
+  {
+   "t": 1004.82,
+   "d": 4.56,
+   "text": "All right."
+  },
+  {
+   "t": 1009.38,
+   "d": 9.03,
+   "text": "For the third part of the talk I want to take a thousand steps back."
+  },
+  {
+   "t": 1018.41,
+   "d": 8.97,
+   "text": "Where -- I talked about how poetry can be used in Roguelikes and in the last part I"
+  },
+  {
+   "t": 1027.38,
+   "d": 6.94,
+   "text": "want to look at how maybe the most central mechanics and Roguelikes can be used to create"
+  },
+  {
+   "t": 1034.32,
+   "d": 6.09,
+   "text": "a poetry that out last us all."
+  },
+  {
+   "t": 1040.41,
+   "d": 2.69,
+   "text": "Generally speaking we think of poetry as taking a couple different forms."
+  },
+  {
+   "t": 1043.1,
+   "d": 1.56,
+   "text": "Oral and written."
+  },
+  {
+   "t": 1044.66,
+   "d": 4.27,
+   "text": "Oral poetry and songs have a long history in many cultures throughout the world."
+  },
+  {
+   "t": 1048.93,
+   "d": 6.07,
+   "text": "In Europe, there was a long standing tradition of telling long tails to music and the records"
+  },
+  {
+   "t": 1055.0,
+   "d": 7.07,
+   "text": "-- tales -- came from SGHAEN thought they might have been sung or chanted."
+  },
+  {
+   "t": 1062.07,
+   "d": 4.97,
+   "text": "The people like the welsh were oral."
+  },
+  {
+   "t": 1067.04,
+   "d": 7.91,
+   "text": "But written records have become more durable."
+  },
+  {
+   "t": 1074.95,
+   "d": 4.08,
+   "text": "Since they are more easily reproduced a good print run and wide distribution can mean a"
+  },
+  {
+   "t": 1079.03,
+   "d": 3.58,
+   "text": "poet's work can last long past their actual lifetime."
+  },
+  {
+   "t": 1082.61,
+   "d": 5.25,
+   "text": "Here I have three examples of oral poetry."
+  },
+  {
+   "t": 1087.86,
+   "d": 14.81,
+   "text": "Homer from ancient Greece and -- each one worked at a different time but lived at a"
+  },
+  {
+   "t": 1102.67,
+   "d": 7.09,
+   "text": "point where poetry or song was expected to be heard and performed."
+  },
+  {
+   "t": 1109.76,
+   "d": 7.53,
+   "text": "And from similarly distant times this is a fragment of the \"Epic of Gilgamesh\" written"
+  },
+  {
+   "t": 1117.29,
+   "d": 2.9,
+   "text": "more than a thousand years before homer."
+  },
+  {
+   "t": 1120.19,
+   "d": 5.3,
+   "text": "My favorite anglosaxon poem the wander by an anonymous monk."
+  },
+  {
+   "t": 1125.49,
+   "d": 13.38,
+   "text": "Perhaps one of the greatest problem with art is how precarious it is."
+  },
+  {
+   "t": 1138.87,
+   "d": 3.42,
+   "text": "Genocide both physical and cultural can wipe out a people's history and record whether"
+  },
+  {
+   "t": 1142.29,
+   "d": 1.86,
+   "text": "oral or written."
+  },
+  {
+   "t": 1144.15,
+   "d": 2.75,
+   "text": "As a species, humans tend toward violence."
+  },
+  {
+   "t": 1146.9,
+   "d": 6.8,
+   "text": "The list of acts that destroyed art and literature is as long as it is tragic."
+  },
+  {
+   "t": 1153.7,
+   "d": 11.19,
+   "text": "In the last 128 years we have seen destruction by the Germans, ISIS, Iraq, and cultural genocide"
+  },
+  {
+   "t": 1164.89,
+   "d": 5.8,
+   "text": "by the Canadian and American governments in the residential school systems."
+  },
+  {
+   "t": 1170.69,
+   "d": 7.5,
+   "text": "Sometimes the damage is temporary but more often it is permanent."
+  },
+  {
+   "t": 1178.19,
+   "d": 3.54,
+   "text": "So just to move a bit further into the text."
+  },
+  {
+   "t": 1181.73,
+   "d": 7.67,
+   "text": "Christian Book is experimental poet and his project was an attempt to create a durable"
+  },
+  {
+   "t": 1189.4,
+   "d": 1.84,
+   "text": "poem that can outlive humanity."
+  },
+  {
+   "t": 1191.24,
+   "d": 11.4,
+   "text": "He wants to do this with procedural generation."
+  },
+  {
+   "t": 1202.64,
+   "d": 9.32,
+   "text": "Each Roguelike has its own take on Proc Gen in terms of how it is used and Book harnesses"
+  },
+  {
+   "t": 1211.96,
+   "d": 6.32,
+   "text": "it in a biological way using the mechanisms of bacteria to make one poem and generate"
+  },
+  {
+   "t": 1218.28,
+   "d": 4.69,
+   "text": "another over and over again."
+  },
+  {
+   "t": 1222.97,
+   "d": 6.43,
+   "text": "To do this, Book first worked with the E. Coli bacteria because it was cheap to use"
+  },
+  {
+   "t": 1229.4,
+   "d": 4.95,
+   "text": "but he had his eye on a different bacteria."
+  },
+  {
+   "t": 1234.35,
+   "d": 3.02,
+   "text": "A special bacterial that can just survive about anything."
+  },
+  {
+   "t": 1237.37,
+   "d": 7.17,
+   "text": "It can survive cold, acid, dehydration and incredible doses of radiation."
+  },
+  {
+   "t": 1244.54,
+   "d": 4.71,
+   "text": "To create a poem that could outlast humanity this seemed like the perfect fit."
+  },
+  {
+   "t": 1249.25,
+   "d": 10.22,
+   "text": "He sought out about finding a cipher to make this procedural generation possible."
+  },
+  {
+   "t": 1259.47,
+   "d": 3.43,
+   "text": "His approach was to use a substitution cipher."
+  },
+  {
+   "t": 1262.9,
+   "d": 4.39,
+   "text": "You are probably familiar with these in terms of newspaper where you start off with gobblely"
+  },
+  {
+   "t": 1267.29,
+   "d": 6.16,
+   "text": "gook and you get a meaningful phrase."
+  },
+  {
+   "t": 1273.45,
+   "d": 5.24,
+   "text": "A substitution cipher is a mapping from one set of letters to another where the letter"
+  },
+  {
+   "t": 1278.69,
+   "d": 7.0,
+   "text": "A in the original might correspond to Z in the coded version."
+  },
+  {
+   "t": 1285.69,
+   "d": 4.56,
+   "text": "If you look at the example on this slide it is essentially meaningless."
+  },
+  {
+   "t": 1290.25,
+   "d": 6.66,
+   "text": "However, if you find a different mapping, then you can see we have meaningful text on"
+  },
+  {
+   "t": 1296.91,
+   "d": 1.49,
+   "text": "both sides."
+  },
+  {
+   "t": 1298.4,
+   "d": 1.42,
+   "text": "This is Book's aim."
+  },
+  {
+   "t": 1299.82,
+   "d": 7.58,
+   "text": "To create a meaningful source code himself that decodes to a second."
+  },
+  {
+   "t": 1307.4,
+   "d": 2.97,
+   "text": "To be able to do this, he has to have a cipher."
+  },
+  {
+   "t": 1310.37,
+   "d": 6.46,
+   "text": "To fund a suitable cipher, Book created a Python program that would help recruit candidates."
+  },
+  {
+   "t": 1316.83,
+   "d": 7.94,
+   "text": "I have assumed part of what the program does is create a list of comeaningful words or"
+  },
+  {
+   "t": 1324.77,
+   "d": 5.29,
+   "text": "words that decode to other words instead of gibberish when decoded."
+  },
+  {
+   "t": 1330.06,
+   "d": 6.6,
+   "text": "The letter A becomes I when you go from the source to the destination which is good."
+  },
+  {
+   "t": 1336.66,
+   "d": 9.23,
+   "text": "You use the personal pronoun and the destination and you get examples where, say, a base equals"
+  },
+  {
+   "t": 1345.89,
+   "d": 3.48,
+   "text": "ice and other word wears emerge."
+  },
+  {
+   "t": 1349.37,
+   "d": 1.37,
+   "text": "-- pairs."
+  },
+  {
+   "t": 1350.74,
+   "d": 7.18,
+   "text": "Book selects one and sets about writing the source poem."
+  },
+  {
+   "t": 1357.92,
+   "d": 6.63,
+   "text": "This is part of the source poem Book created himself."
+  },
+  {
+   "t": 1364.55,
+   "d": 3.98,
+   "text": "This is the start of the outbook which is generated by the bacteria."
+  },
+  {
+   "t": 1368.53,
+   "d": 3.8,
+   "text": "So far, all we have is a cipher and a carefully constructed pair of poems."
+  },
+  {
+   "t": 1372.33,
+   "d": 9.17,
+   "text": "How do we get from the source to the destination using the bacteria?"
+  },
+  {
+   "t": 1381.5,
+   "d": 4.97,
+   "text": "Book does this by mapping each letter of the source alphabet to a biological codeon."
+  },
+  {
+   "t": 1386.47,
+   "d": 10.61,
+   "text": "Each represents an amino acid and Book and the teams he worked with were able to find"
+  },
+  {
+   "t": 1397.08,
+   "d": 4.69,
+   "text": "a viable gene to work with."
+  },
+  {
+   "t": 1401.77,
+   "d": 8.07,
+   "text": "The gene was then sequenced and put in the bacterium and then the bacterium takes over"
+  },
+  {
+   "t": 1409.84,
+   "d": 6.75,
+   "text": "and act said on the gene and creates a new gene."
+  },
+  {
+   "t": 1416.59,
+   "d": 7.84,
+   "text": "From there we can extract the output poem and when examining the sequence of codeons"
+  },
+  {
+   "t": 1424.43,
+   "d": 4.71,
+   "text": "they should spell out the full text."
+  },
+  {
+   "t": 1429.14,
+   "d": 1.16,
+   "text": "Results."
+  },
+  {
+   "t": 1430.3,
+   "d": 12.01,
+   "text": "Books has been working on this project since 2002 and through various grants he spent more"
+  },
+  {
+   "t": 1442.31,
+   "d": 7.75,
+   "text": "than $100,000 on the project."
+  },
+  {
+   "t": 1450.06,
+   "d": 13.8,
+   "text": "Book is not overly prolific apart from the book he published five years ago."
+  },
+  {
+   "t": 1463.86,
+   "d": 4.06,
+   "text": "He has only published a couple other collections in the last 26 years."
+  },
+  {
+   "t": 1467.92,
+   "d": 2.18,
+   "text": "Good news is he has had success."
+  },
+  {
+   "t": 1470.1,
+   "d": 5.86,
+   "text": "The process worked as execed in E. Coli causing the code to go red and allowing the team to"
+  },
+  {
+   "t": 1475.96,
+   "d": 1.88,
+   "text": "decode."
+  },
+  {
+   "t": 1477.84,
+   "d": 8.06,
+   "text": "D radio moves quickly and takes apart Book's work."
+  },
+  {
+   "t": 1485.9,
+   "d": 9.61,
+   "text": "He has found proof that nature is resistant to our novel and clever ideas."
+  },
+  {
+   "t": 1495.51,
+   "d": 9.11,
+   "text": "Ultimately, the $120,000 question, the amount of funding the project has received, is whether"
+  },
+  {
+   "t": 1504.62,
+   "d": 4.46,
+   "text": "Book it be successful."
+  },
+  {
+   "t": 1509.08,
+   "d": 7.89,
+   "text": "It is not lasting long enough to be detected in the full form in the lab environment but"
+  },
+  {
+   "t": 1516.97,
+   "d": 6.32,
+   "text": "even if he can get it to stop undoing the work in the lab how would it fair in the ecosystem?"
+  },
+  {
+   "t": 1523.29,
+   "d": 9.38,
+   "text": "How can you stop evolution and cause the genes to remain unchanged?"
+  },
+  {
+   "t": 1532.67,
+   "d": 5.68,
+   "text": "But for all the problems around written records, we have found a way to outlast ourselves."
+  },
+  {
+   "t": 1538.35,
+   "d": 7.12,
+   "text": "When the voyage of spacecraft set out in the '70s it left with an encoded format and it"
+  },
+  {
+   "t": 1545.47,
+   "d": 4.24,
+   "text": "seems certain it will continue the journey past the stars and planets long after the"
+  },
+  {
+   "t": 1549.71,
+   "d": 2.35,
+   "text": "species are dead and done."
+  },
+  {
+   "t": 1552.06,
+   "d": 4.51,
+   "text": "Maybe the problem isn't which traditional inscription."
+  },
+  {
+   "t": 1556.57,
+   "d": 6.45,
+   "text": "Maybe you just have to take us into the equation."
+  },
+  {
+   "t": 1563.02,
+   "d": 6.15,
+   "text": "Here I have a few references if you are interested I can email them to you."
+  },
+  {
+   "t": 1569.17,
+   "d": 2.81,
+   "text": "Just want to provide links and credit for the reading."
+  },
+  {
+   "t": 1571.98,
+   "d": 4.4,
+   "text": "I have a link to my review of henderson's Roguelike."
+  },
+  {
+   "t": 1576.38,
+   "d": 5.43,
+   "text": "Otherwise, I think we have four minutes for Q&A."
+  },
+  {
+   "t": 1581.81,
+   "d": 2.46,
+   "text": "EMCEE: Wonderful."
+  },
+  {
+   "t": 1584.27,
+   "d": 3.69,
+   "text": "That was great."
+  },
+  {
+   "t": 1587.96,
+   "d": 2.46,
+   "text": "Yeah, fascinating."
+  },
+  {
+   "t": 1590.42,
+   "d": 3.55,
+   "text": "I had heard -- I have Xeno text."
+  },
+  {
+   "t": 1593.97,
+   "d": 12.13,
+   "text": "I saw Christian do a recitation of it but he is tight lipped where he is in the progress."
+  },
+  {
+   "t": 1606.1,
+   "d": 6.65,
+   "text": ">> I could not a 2020 what's the status of the project."
+  },
+  {
+   "t": 1612.75,
+   "d": 4.24,
+   "text": "It seems announced in bits."
+  },
+  {
+   "t": 1616.99,
+   "d": 6.18,
+   "text": "I know they were successful with E. Coli."
+  },
+  {
+   "t": 1623.17,
+   "d": 3.17,
+   "text": "EMCEE: That's super cool."
+  },
+  {
+   "t": 1626.34,
+   "d": 4.97,
+   "text": "Let's see what questions we have."
+  },
+  {
+   "t": 1631.31,
+   "d": 2.0,
+   "text": "It looks we have one question."
+  },
+  {
+   "t": 1633.31,
+   "d": 5.31,
+   "text": "Someone wants you to recite the description of the mansions chef?"
+  },
+  {
+   "t": 1638.62,
+   "d": 2.58,
+   "text": ">> Mansions chef?"
+  },
+  {
+   "t": 1641.2,
+   "d": 9.02,
+   "text": "Let me just pull that up here."
+  },
+  {
+   "t": 1650.22,
+   "d": 8.41,
+   "text": "Other people are saying they feel totally overwhelmed by your presentation."
+  },
+  {
+   "t": 1658.63,
+   "d": 6.84,
+   "text": "I think conceptually things like embedding poetry into a bacteria is"
+  },
+  {
+   "t": 1665.47,
+   "d": 10.38,
+   "text": ">> I remember being like what the heck is he doing?"
+  },
+  {
+   "t": 1675.85,
+   "d": 3.09,
+   "text": "This is next level stuff."
+  },
+  {
+   "t": 1678.94,
+   "d": 7.18,
+   "text": "Am I going to recite the cook's description?"
+  },
+  {
+   "t": 1686.12,
+   "d": 6.7,
+   "text": "An important position in any noble's household is that of the cook."
+  },
+  {
+   "t": 1692.82,
+   "d": 2.9,
+   "text": "Cooking one's only meal is a something peasants do."
+  },
+  {
+   "t": 1695.72,
+   "d": 9.97,
+   "text": "A well bred noble will have someone doing the cooking for them."
+  },
+  {
+   "t": 1705.69,
+   "d": 8.31,
+   "text": "Drinking powered dragon tea as a penile enhancer or on rainy days oppressing the plants."
+  },
+  {
+   "t": 1714.0,
+   "d": 5.4,
+   "text": "It falls on the cook to make the daily meals for an often considerable household and so"
+  },
+  {
+   "t": 1719.4,
+   "d": 4.31,
+   "text": "many do so without outright poisoning their employ e -- employers might be considered"
+  },
+  {
+   "t": 1723.71,
+   "d": 3.37,
+   "text": "one of the ongoing mysteries of the world."
+  },
+  {
+   "t": 1727.08,
+   "d": 3.64,
+   "text": "EMCEE: Cool."
+  },
+  {
+   "t": 1730.72,
+   "d": 5.21,
+   "text": "We have another question."
+  },
+  {
+   "t": 1735.93,
+   "d": 7.98,
+   "text": "What kinds of constraints in poetry do you find work well in sort of the procedural space?"
+  },
+  {
+   "t": 1743.91,
+   "d": 5.3,
+   "text": ">> I know there is probably a lot more to the procedural space that people are doing"
+  },
+  {
+   "t": 1749.21,
+   "d": 1.01,
+   "text": "that I am not aware of."
+  },
+  {
+   "t": 1750.22,
+   "d": 6.02,
+   "text": "I went with a very kind of constrained sort of presentation."
+  },
+  {
+   "t": 1756.24,
+   "d": 6.83,
+   "text": "One of the ones I really like is working with cut out poetry where you can take source poems,"
+  },
+  {
+   "t": 1763.07,
+   "d": 8.64,
+   "text": "cut them into pieces, and reassemble them in various ways like using either, you know,"
+  },
+  {
+   "t": 1771.71,
+   "d": 5.96,
+   "text": "just your own creativity or algorithms and getting interesting new poems that way."
+  },
+  {
+   "t": 1777.67,
+   "d": 4.95,
+   "text": "That's something I have played around with a little bit and I want to do more."
+  },
+  {
+   "t": 1782.62,
+   "d": 1.3,
+   "text": "EMCEE: Cool."
+  },
+  {
+   "t": 1783.92,
+   "d": 4.34,
+   "text": "Maybe we have time for one more question."
+  },
+  {
+   "t": 1788.26,
+   "d": 7.92,
+   "text": "Oh, yeah, what is the weirdest other information store you found during the research in reference"
+  },
+  {
+   "t": 1796.18,
+   "d": 3.35,
+   "text": "to Christian Book's method of encoding bacteria?"
+  },
+  {
+   "t": 1799.53,
+   "d": 22.23,
+   "text": ">> The one I really like is there are 8th or 9th century China."
+  },
+  {
+   "t": 1821.76,
+   "d": 7.39,
+   "text": "How else are you going to make it last for thousands and thousands of years."
+  },
+  {
+   "t": 1829.15,
+   "d": 20.96,
+   "text": "That was one of my favorite ones."
+  }
+ ]
+}

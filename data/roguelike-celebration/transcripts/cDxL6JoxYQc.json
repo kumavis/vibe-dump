@@ -1,0 +1,1317 @@
+{
+ "id": "cDxL6JoxYQc",
+ "url": "https://www.youtube.com/watch?v=cDxL6JoxYQc",
+ "title": "Roguelike Celebration 2023 Preview: Nic Junius - Play as in Stage Play",
+ "speaker": "Nic Junius",
+ "talk_title": "Play as in Stage Play",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-10-01",
+ "duration_s": 2253,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "I find telling stories through systems fascinating and love uncovering the themes and metaphors baked into their designs. When designing character interactions or narrative scenes, the focus is often on the consequences in the broader context of the world rather than on the intricacies of being and expressing a character. In this talk I will discuss approaches to designing character interaction, including sources of inspiration from theater to fighting games, as well as the commonalities between character acting and emergent narrative more broadly.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 72,
+   "title": "Theater as design inspiration"
+  },
+  {
+   "start": 209,
+   "title": "The nature of theater"
+  },
+  {
+   "start": 480,
+   "title": "Performance and acting"
+  },
+  {
+   "start": 776,
+   "title": "Story volumes and games"
+  },
+  {
+   "start": 947,
+   "title": "Decoupling design elements"
+  },
+  {
+   "start": 1263,
+   "title": "Building a physical language"
+  },
+  {
+   "start": 1583,
+   "title": "Conclusion and resources"
+  },
+  {
+   "start": 1774,
+   "title": "Question and answer session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3961,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 8.76,
+   "d": 12.84,
+   "text": "Nic is an independent game developer and PhD candidate in computational media at UC"
+  },
+  {
+   "t": 21.6,
+   "d": 14.76,
+   "text": "Santa Cruz. Nic is developing -- their background is a Playwright drawing heavily"
+  },
+  {
+   "t": 36.36,
+   "d": 15.48,
+   "text": "from theatrical -- we can go ahead and play that talk. Nic will be around hopefully for"
+  },
+  {
+   "t": 51.84,
+   "d": 1.54,
+   "text": "discussion. >>"
+  },
+  {
+   "t": 60.24,
+   "d": 5.94,
+   "text": "Hi, everyone. I am Nic. I am going to be talking about ways of using theater in system design"
+  },
+  {
+   "t": 66.18,
+   "d": 8.04,
+   "text": "and why you would want to even do such a thing. First I will start with little bit about myself."
+  },
+  {
+   "t": 76.08,
+   "d": 10.32,
+   "text": "I am a PhD candidate at UC Santa Cruz in the computational media lab where I"
+  },
+  {
+   "t": 86.4,
+   "d": 9.18,
+   "text": "research character AI and design character AI and build and study interactive narrative systems."
+  },
+  {
+   "t": 97.38,
+   "d": 9.84,
+   "text": "I am an indie game developer making a mix of text based games and AI-based games for"
+  },
+  {
+   "t": 107.22,
+   "d": 5.7,
+   "text": "interact narratives which is what this talk is about. I don't do machine learning kind of AI."
+  },
+  {
+   "t": 112.92,
+   "d": 13.44,
+   "text": "I am a pure symbolics person and pure rules based. Also, I am a Playwright. I have had multiple shows"
+  },
+  {
+   "t": 126.36,
+   "d": 6.3,
+   "text": "produced and arguably without writing plays and getting them produced I wouldn't be doing"
+  },
+  {
+   "t": 132.66,
+   "d": 6.36,
+   "text": "the work that I am currently doing. I wouldn't be designing the systems I currently am. Any"
+  },
+  {
+   "t": 139.02,
+   "d": 5.94,
+   "text": "of it because the theater production process is fascinating and I want to share it with you all."
+  },
+  {
+   "t": 147.06,
+   "d": 6.6,
+   "text": "So to come back to what this talk is about, it is my attempt to answer the question,"
+  },
+  {
+   "t": 153.66,
+   "d": 7.92,
+   "text": "how do we make this kind of thing, i.e. character interaction, even more systemic"
+  },
+  {
+   "t": 161.58,
+   "d": 5.58,
+   "text": "and narrative feeling tan what we currently do? I also want to make sure this isn't seen as a"
+  },
+  {
+   "t": 167.16,
+   "d": 8.4,
+   "text": "dig against dark days ahead. It has some amazing systemic character things in it especially the way"
+  },
+  {
+   "t": 178.5,
+   "d": 8.16,
+   "text": "that characters make first impressions of you. This talk is mostly like I want more of that kind"
+  },
+  {
+   "t": 186.66,
+   "d": 7.26,
+   "text": "of thing. I want that to be a huge part of like the way that we can design character interactions."
+  },
+  {
+   "t": 196.32,
+   "d": 5.64,
+   "text": "So my broadest possible answer as you probably could guess to this"
+  },
+  {
+   "t": 203.4,
+   "d": 4.74,
+   "text": "problem of how do we make more interesting character interaction is theater."
+  },
+  {
+   "t": 210.3,
+   "d": 7.44,
+   "text": "I want to talk first about sort of in general why we should be looking at theater as systemic game"
+  },
+  {
+   "t": 217.74,
+   "d": 9.3,
+   "text": "developers before talking more in-depth about my approach to translating theater into game systems."
+  },
+  {
+   "t": 229.8,
+   "d": 5.16,
+   "text": "Theater if you are not familiar is very playful by design and its approach."
+  },
+  {
+   "t": 236.28,
+   "d": 8.1,
+   "text": "To the point we call the works it produces plays. When you work in theater or in a theatrical style"
+  },
+  {
+   "t": 245.4,
+   "d": 6.24,
+   "text": "what you are ultimately doing is playing with characters, playing with the themes in a story,"
+  },
+  {
+   "t": 251.64,
+   "d": 4.98,
+   "text": "playing with moments, all of these things and more to make something new"
+  },
+  {
+   "t": 257.4,
+   "d": 6.3,
+   "text": "even in a story that's been told for hundreds, if not thousands of years. So like"
+  },
+  {
+   "t": 264.3,
+   "d": 7.14,
+   "text": "we still produce Shakespeare. We still retell Shakespeare. I am coming back from"
+  },
+  {
+   "t": 271.44,
+   "d": 6.6,
+   "text": "the Oregon Shakespeare festival where I have seen multiple versions of these plays at some point."
+  },
+  {
+   "t": 279.96,
+   "d": 6.3,
+   "text": "Or thousands of years with Greek tragedy. Like we are still making these. We are still producing"
+  },
+  {
+   "t": 286.26,
+   "d": 5.1,
+   "text": "them. We are still telling these stories because there is always something you can find in them."
+  },
+  {
+   "t": 293.82,
+   "d": 10.56,
+   "text": "You might ask does that mean, even with all that things, aren't scripts forcing structure and a"
+  },
+  {
+   "t": 304.38,
+   "d": 7.98,
+   "text": "bunch of creative choices on to everyone else? And yes but it is not as true as you might expect."
+  },
+  {
+   "t": 314.22,
+   "d": 6.48,
+   "text": "Something if you are a Playwright you have to deeply comes to grips with pretty quickly is"
+  },
+  {
+   "t": 320.7,
+   "d": 7.68,
+   "text": "anything that you make is going to be unfinished. There is never going to be a single universal"
+  },
+  {
+   "t": 330.12,
+   "d": 5.04,
+   "text": "version of your story because the nature of theater is"
+  },
+  {
+   "t": 337.08,
+   "d": 4.8,
+   "text": "every single one of these productions is different and it has to be to make"
+  },
+  {
+   "t": 341.88,
+   "d": 5.22,
+   "text": "it relevant for the audience and relevant for the people at the time it is produced."
+  },
+  {
+   "t": 348.78,
+   "d": 8.16,
+   "text": "And the production process is the thing that finishes a play. You finish a play by pulling"
+  },
+  {
+   "t": 356.94,
+   "d": 7.44,
+   "text": "at it, poking it, playing with all of its themes, what parts of it you want to highlight. How you"
+  },
+  {
+   "t": 364.38,
+   "d": 7.74,
+   "text": "want to play characters. And all these other bits of stage craft you can do to support"
+  },
+  {
+   "t": 373.26,
+   "d": 8.16,
+   "text": "the themes you want to highlight in the script. This is why no two productions"
+  },
+  {
+   "t": 382.26,
+   "d": 6.54,
+   "text": "are the same even if they take place in the same year even with the same people involved because"
+  },
+  {
+   "t": 391.5,
+   "d": 5.28,
+   "text": "everything about the production process is about"
+  },
+  {
+   "t": 397.86,
+   "d": 4.68,
+   "text": "trying new things and playing with what you have available to you."
+  },
+  {
+   "t": 405.78,
+   "d": 4.5,
+   "text": "So to sort of frame the first little section of this talk,"
+  },
+  {
+   "t": 411.9,
+   "d": 7.86,
+   "text": "I want to argue that theater is an analog human powered generator of stories. It is one"
+  },
+  {
+   "t": 419.76,
+   "d": 3.84,
+   "text": "that we have been iterating and refining for a few thousand years at this point."
+  },
+  {
+   "t": 425.04,
+   "d": 6.48,
+   "text": "The two opponents of the generator are your constraints which are the play script and anything"
+  },
+  {
+   "t": 431.52,
+   "d": 11.4,
+   "text": "else the Playwright will force you to do. And the script and your generative machinery that is"
+  },
+  {
+   "t": 443.64,
+   "d": 6.96,
+   "text": "working within those constraints to produce the final finished work of a play."
+  },
+  {
+   "t": 455.4,
+   "d": 4.8,
+   "text": "How we tell these stories and how we tell stories in general matter just"
+  },
+  {
+   "t": 460.2,
+   "d": 6.96,
+   "text": "as much as what story we choose to tell and what the words we are saying are."
+  },
+  {
+   "t": 468.72,
+   "d": 8.88,
+   "text": "This is also how we can tell the same story in so many different ways. And with such variation. With"
+  },
+  {
+   "t": 477.6,
+   "d": 6.84,
+   "text": "this framing in mind, how we can start talking more in detail about acting, what it values,"
+  },
+  {
+   "t": 485.46,
+   "d": 9.12,
+   "text": "and sort of how you can be creative within even what appears to be very ridged constraints. This"
+  },
+  {
+   "t": 494.58,
+   "d": 10.62,
+   "text": "last bit is what I really want to focus on with this talk. Because even if you have a story with"
+  },
+  {
+   "t": 505.2,
+   "d": 7.68,
+   "text": "or a scene with foe choices and it is entirely linearly that doesn't mean you can't have people"
+  },
+  {
+   "t": 512.88,
+   "d": 7.86,
+   "text": "find new things in it and find interactivity and find play within something that's linear."
+  },
+  {
+   "t": 520.74,
+   "d": 10.02,
+   "text": "We do that all of time with levels in other kinds of games. Why can't we do that with storytelling?"
+  },
+  {
+   "t": 533.82,
+   "d": 7.56,
+   "text": "To sort of come back to what acting is about, this image is probably the single best example I have"
+  },
+  {
+   "t": 542.04,
+   "d": 7.26,
+   "text": "of summarizing what acting cares about. How you say something or do something can completely"
+  },
+  {
+   "t": 549.3,
+   "d": 11.4,
+   "text": "change the meaning of a line or moment between characters. All these different line reads have"
+  },
+  {
+   "t": 560.7,
+   "d": 5.82,
+   "text": "very different connotations and say different things about the relationship between the speaker"
+  },
+  {
+   "t": 566.52,
+   "d": 7.86,
+   "text": "and who they're talking to and give impressions about the state of the world as it were."
+  },
+  {
+   "t": 577.62,
+   "d": 6.84,
+   "text": "To return to my two Mac Beth that is a running theme of the talk,"
+  },
+  {
+   "t": 586.2,
+   "d": 8.1,
+   "text": "the words in these two versions of it are the same and even like the core of each scene is because if"
+  },
+  {
+   "t": 594.3,
+   "d": 5.22,
+   "text": "you are doing the scene you have to do the scene. But there is so many small differences in here."
+  },
+  {
+   "t": 600.6,
+   "d": 6.72,
+   "text": "Even things just like whether or not three witches are touching Mac Beth"
+  },
+  {
+   "t": 607.32,
+   "d": 5.94,
+   "text": "and whether or not he is Cognizant of it. That is all going to change"
+  },
+  {
+   "t": 614.28,
+   "d": 8.52,
+   "text": "how much it feels like he is being manipulated versus finding things about himself by himself"
+  },
+  {
+   "t": 623.52,
+   "d": 6.06,
+   "text": "in sort of the way he approaches doing these terrible things leading to tragedy"
+  },
+  {
+   "t": 631.92,
+   "d": 6.48,
+   "text": "and all of these smaller decisions about his relationship to the witch and how these scenes"
+  },
+  {
+   "t": 638.4,
+   "d": 8.04,
+   "text": "get played then informs the relationships he has to other characters i.e. lady Mac Beth and"
+  },
+  {
+   "t": 646.44,
+   "d": 9.9,
+   "text": "that will change thongs things like who is making the decisions pushing for these horrible things?"
+  },
+  {
+   "t": 658.44,
+   "d": 12.32,
+   "text": "In the top it is lady McBeth but in the bottom she might be doing a little pushing but it"
+  },
+  {
+   "t": 670.76,
+   "d": 8.44,
+   "text": "is ultimately him making all these choices and making the situation worse and worse constantly."
+  },
+  {
+   "t": 679.86,
+   "d": 4.98,
+   "text": "But it is the same script. It is the same scenes. It is the same everything else."
+  },
+  {
+   "t": 685.62,
+   "d": 8.64,
+   "text": "It just how we are choosing to play things. Really can completely change the way the"
+  },
+  {
+   "t": 694.26,
+   "d": 4.98,
+   "text": "relationship works and thus sort of the feel of the themes of the story."
+  },
+  {
+   "t": 701.52,
+   "d": 5.34,
+   "text": "And as you read through a lot of performance practices from all over the world"
+  },
+  {
+   "t": 708.6,
+   "d": 6.0,
+   "text": "and even across performances. One is going to say"
+  },
+  {
+   "t": 718.44,
+   "d": 6.42,
+   "text": "about finding something new in the old and familiar. They will sometimes talk about it"
+  },
+  {
+   "t": 724.86,
+   "d": 5.34,
+   "text": "exclusively as like a night to night thing of how do you keep yourself, the performer,"
+  },
+  {
+   "t": 730.2,
+   "d": 6.54,
+   "text": "invested in the story you are telling because, you know, if you are bored, how are you going to"
+  },
+  {
+   "t": 736.74,
+   "d": 9.9,
+   "text": "convince the audience to not be bored? That sort of thing. But it also is applicable to different"
+  },
+  {
+   "t": 746.64,
+   "d": 5.1,
+   "text": "versions and different productions of the same play because you have to answer the same question"
+  },
+  {
+   "t": 751.74,
+   "d": 11.28,
+   "text": "why are we doing this play now. You always need to be finding something new or some different way of"
+  },
+  {
+   "t": 763.02,
+   "d": 8.88,
+   "text": "presenting or relating themes to perform a play, to make a play you have to play with the play."
+  },
+  {
+   "t": 773.52,
+   "d": 7.74,
+   "text": "As it were. And to come back up to my generator and theater generator here,"
+  },
+  {
+   "t": 784.02,
+   "d": 9.36,
+   "text": "you take the constraints in the shape of the story with the script, but there is potentially"
+  },
+  {
+   "t": 793.38,
+   "d": 7.8,
+   "text": "an infinite number of versions of this story that can be told in different versions of themes and"
+  },
+  {
+   "t": 801.18,
+   "d": 6.24,
+   "text": "different ways of playing all these characters thanks to the production process and the inherent"
+  },
+  {
+   "t": 807.42,
+   "d": 9.42,
+   "text": "creativity of acting and performance. What you can then view these scripts as"
+  },
+  {
+   "t": 817.92,
+   "d": 9.06,
+   "text": "are story volumes which are, if you are not familiar, they are a term coined by Jason Grimlat"
+  },
+  {
+   "t": 828.78,
+   "d": 6.84,
+   "text": "and they are generative functions that produce storylines where their meaning isn't just"
+  },
+  {
+   "t": 835.62,
+   "d": 8.34,
+   "text": "contained in the storylines that produce and also the relationships between the storylines"
+  },
+  {
+   "t": 845.52,
+   "d": 13.32,
+   "text": "produced as a whole. So reading the script of Macbeth is not -- and seeing a single production"
+  },
+  {
+   "t": 859.68,
+   "d": 9.78,
+   "text": "will not get you a clear picture of all the possibilities of Macbeth so you need to keep"
+  },
+  {
+   "t": 870.12,
+   "d": 6.78,
+   "text": "trying new things and doing different things to better explore the story volume of a play."
+  },
+  {
+   "t": 879.36,
+   "d": 4.68,
+   "text": "This is how roguelikes, i.e. Caves of Qud in this example,"
+  },
+  {
+   "t": 886.32,
+   "d": 6.42,
+   "text": "can be viewed as theater and how a play like Macbeth can be viewed as a roguelike. When you"
+  },
+  {
+   "t": 892.74,
+   "d": 8.88,
+   "text": "play Qud you are always telling a story contained in there and when you are telling Macbeth you are"
+  },
+  {
+   "t": 901.62,
+   "d": 9.3,
+   "text": "always telling Macbeth and doing something contained in the volume of the story world."
+  },
+  {
+   "t": 912.54,
+   "d": 4.14,
+   "text": "The reason we keep playing them again and again is because"
+  },
+  {
+   "t": 917.94,
+   "d": 6.78,
+   "text": "we want to find something new in the old. We want to find something new in the familiar space and"
+  },
+  {
+   "t": 925.68,
+   "d": 9.42,
+   "text": "explore the space as much as possible in the story volumes that are these different experiences."
+  },
+  {
+   "t": 937.62,
+   "d": 6.78,
+   "text": "All of this positioning is hopefully convincing you that -- and"
+  },
+  {
+   "t": 947.88,
+   "d": 5.4,
+   "text": "now the question is how do we make something with this? What do we do with this?"
+  },
+  {
+   "t": 955.92,
+   "d": 9.72,
+   "text": "We need to look at what acting sees as the primary vector of being creative and how"
+  },
+  {
+   "t": 967.26,
+   "d": 5.52,
+   "text": "it works which is ultimately the how of a character, the how of a scene,"
+  },
+  {
+   "t": 972.78,
+   "d": 4.26,
+   "text": "the how of a story. The how do we do this? How do we play with it?"
+  },
+  {
+   "t": 979.74,
+   "d": 10.5,
+   "text": "And back to my example about line reads. Different ways of versions of playing with a line"
+  },
+  {
+   "t": 994.68,
+   "d": 7.26,
+   "text": "but that is all something under the preview of an actor and director. I feel like"
+  },
+  {
+   "t": 1001.94,
+   "d": 7.44,
+   "text": "this one of the ways you play with the meaning of a scene and play with the meaning of"
+  },
+  {
+   "t": 1010.4,
+   "d": 5.76,
+   "text": "a character in the scene. And then another tool that is also related to"
+  },
+  {
+   "t": 1019.94,
+   "d": 6.0,
+   "text": "is physicality and using all the movements and expressions to convey"
+  },
+  {
+   "t": 1026.78,
+   "d": 8.52,
+   "text": "how a character feels in juxtaposition to the script and with the line read you do"
+  },
+  {
+   "t": 1035.9,
+   "d": 8.34,
+   "text": "and all of these things put together can add a whole extra layer of texture and theming on to a"
+  },
+  {
+   "t": 1044.24,
+   "d": 7.86,
+   "text": "character and scene they would not otherwise have if you were not carefully juxtaposing everything."
+  },
+  {
+   "t": 1056.42,
+   "d": 11.46,
+   "text": "Another thing with juxtaposing is you need it there to help ground all this physicality"
+  },
+  {
+   "t": 1067.88,
+   "d": 9.6,
+   "text": "into something more concrete because without the text, without the lines, and even without the line"
+  },
+  {
+   "t": 1077.48,
+   "d": 9.66,
+   "text": "readings, exactly what a gesture means can be very vague and when it is not grounded by anything,"
+  },
+  {
+   "t": 1087.14,
+   "d": 7.2,
+   "text": "you at that point, are making vague gestures at nothing that's readable to your audience."
+  },
+  {
+   "t": 1097.4,
+   "d": 7.14,
+   "text": "Acting is built on physicality. What does this mean for us as system designers and"
+  },
+  {
+   "t": 1104.54,
+   "d": 3.66,
+   "text": "people who care about interacting with a narrative in a systemic way?"
+  },
+  {
+   "t": 1110.78,
+   "d": 6.9,
+   "text": "Well when looking at the way dialogue scenes are made playable in many different games"
+  },
+  {
+   "t": 1120.8,
+   "d": 6.24,
+   "text": "it is often the case that the place we hand control over to our players"
+  },
+  {
+   "t": 1128.3,
+   "d": 6.96,
+   "text": "is in what gets said and everything else flows from that choice of what gets said."
+  },
+  {
+   "t": 1135.26,
+   "d": 6.48,
+   "text": "All the gestures, all the movements, all the expressions. Everything that isn't exactly"
+  },
+  {
+   "t": 1141.74,
+   "d": 8.22,
+   "text": "what gets said down to the line readings all of that flows off of what line gets chosen."
+  },
+  {
+   "t": 1153.26,
+   "d": 5.52,
+   "text": "There is a very tight coupling between the text and the lines of"
+  },
+  {
+   "t": 1158.78,
+   "d": 5.22,
+   "text": "a scene and the reads and the gestures and expressions that the characters perform."
+  },
+  {
+   "t": 1166.04,
+   "d": 6.54,
+   "text": "All of this is to say there isn't very much play within a dialogue scene designed this way."
+  },
+  {
+   "t": 1173.48,
+   "d": 5.7,
+   "text": "There is only so many versions of this scene, of these scenes, that are possible."
+  },
+  {
+   "t": 1181.28,
+   "d": 7.14,
+   "text": "Because as many options as you write, each option only has one way of playing it. You can"
+  },
+  {
+   "t": 1189.38,
+   "d": 10.08,
+   "text": "read it differently but there is a limit on that versus being able to play directly with"
+  },
+  {
+   "t": 1201.92,
+   "d": 8.1,
+   "text": "the reads and the gestures and the expressions. If we break the tight coupling between"
+  },
+  {
+   "t": 1210.92,
+   "d": 7.98,
+   "text": "our dialogue lines and our reads and gestures and expressions we suddenly"
+  },
+  {
+   "t": 1218.9,
+   "d": 5.4,
+   "text": "have the freedom to play with the feel of the scene in a dimension we didn't before."
+  },
+  {
+   "t": 1225.86,
+   "d": 8.52,
+   "text": "And letting all of our different kinds of expression inform the way a line gets read"
+  },
+  {
+   "t": 1234.38,
+   "d": 5.4,
+   "text": "and a line feels suddenly let's us have a whole new dimension of interactivity."
+  },
+  {
+   "t": 1241.82,
+   "d": 9.0,
+   "text": "It helps us move from strictly role-playing in one sense to being able to fully act out a character"
+  },
+  {
+   "t": 1251.48,
+   "d": 4.92,
+   "text": "and role-play them instead of being constrained in a very specific way."
+  },
+  {
+   "t": 1259.64,
+   "d": 6.12,
+   "text": "There is a lot of ways you can do this decoupling work. I am going to be talking about my approach"
+  },
+  {
+   "t": 1265.76,
+   "d": 12.48,
+   "text": "for the last bit of this talk. I am not saying this is the only way and in fact I would love"
+  },
+  {
+   "t": 1278.24,
+   "d": 7.14,
+   "text": "people to try new versions and take what I am saying in the rest of the talk and run with it"
+  },
+  {
+   "t": 1287.54,
+   "d": 3.66,
+   "text": "because I like seeing new things in case that wasn't obvious."
+  },
+  {
+   "t": 1293.66,
+   "d": 9.0,
+   "text": "Yeah. I am going to talk about my whole process with this and where I started is the idea of"
+  },
+  {
+   "t": 1303.38,
+   "d": 8.04,
+   "text": "any action a character can take in the game, in the world, should convey something additional"
+  },
+  {
+   "t": 1312.14,
+   "d": 6.96,
+   "text": "beyond the basic like forming function of that action. These actions can be anything. They don't"
+  },
+  {
+   "t": 1319.1,
+   "d": 5.52,
+   "text": "have to be gestures but for the sake of this talk I will mostly be talking about them as gestures."
+  },
+  {
+   "t": 1327.2,
+   "d": 15.54,
+   "text": "Something others can understand, interpret and react to to continue the scene and continue"
+  },
+  {
+   "t": 1342.74,
+   "d": 12.06,
+   "text": "the sort of live interpretation. We do have some existing examples of the way building your entire"
+  },
+  {
+   "t": 1354.8,
+   "d": 5.88,
+   "text": "game around physicality and the way characters express physicality and that's fighting games."
+  },
+  {
+   "t": 1362.18,
+   "d": 8.1,
+   "text": "If you are not familiar, fighting games have this idea of frame data attached to every single action"
+  },
+  {
+   "t": 1371.3,
+   "d": 7.74,
+   "text": "a character can take which details all the different ways your attacks interact with"
+  },
+  {
+   "t": 1379.58,
+   "d": 4.74,
+   "text": "another character whether or not they hit them or you whiff or they block."
+  },
+  {
+   "t": 1385.1,
+   "d": 6.6,
+   "text": "All of that is contained in the frame data. My sort of pitch here"
+  },
+  {
+   "t": 1393.02,
+   "d": 9.6,
+   "text": "is and the way I approach doing this is rather than using that sort of markup of animations and"
+  },
+  {
+   "t": 1402.62,
+   "d": 6.0,
+   "text": "physicality to express how dangerous something is, when it becomes dangerous, what happens"
+  },
+  {
+   "t": 1408.62,
+   "d": 10.2,
+   "text": "if it connects, what happens if it is blocked, that sort of thing, what if instead we attached"
+  },
+  {
+   "t": 1419.6,
+   "d": 9.6,
+   "text": "an expression of emotional affect to these suggestions that then allow you to have specific"
+  },
+  {
+   "t": 1430.76,
+   "d": 7.26,
+   "text": "emotions conveyed by gestures which then inform what your other character perceives"
+  },
+  {
+   "t": 1438.02,
+   "d": 7.08,
+   "text": "you as and then they can make choices about the way they act based on what they see you doing."
+  },
+  {
+   "t": 1446.72,
+   "d": 9.6,
+   "text": "And ultimately, the goal here is building a language of physicality. Ultimately this is"
+  },
+  {
+   "t": 1456.32,
+   "d": 11.16,
+   "text": "what I want to encourage you all to do is create a small language that your human and AI characters"
+  },
+  {
+   "t": 1468.74,
+   "d": 7.14,
+   "text": "can use to communicate to a similar level to each other at."
+  },
+  {
+   "t": 1478.64,
+   "d": 4.98,
+   "text": "The example of -- the example I am using here is"
+  },
+  {
+   "t": 1485.72,
+   "d": 6.0,
+   "text": "having a set of actions available for one character so they can point in a couple"
+  },
+  {
+   "t": 1491.72,
+   "d": 7.38,
+   "text": "different ways. They can point aggressively, lazily, or shrug notchlantly or demissively."
+  },
+  {
+   "t": 1505.82,
+   "d": 6.24,
+   "text": "This is how the character would want to convey something about them and the they way are feeling."
+  },
+  {
+   "t": 1513.5,
+   "d": 11.94,
+   "text": "They pick something to do and then our other characters well respond and react"
+  },
+  {
+   "t": 1526.1,
+   "d": 6.3,
+   "text": "and think about what this first character is doing based on sort of their relationships, their"
+  },
+  {
+   "t": 1532.4,
+   "d": 7.68,
+   "text": "opinions, their read of the situation and any kind of information you want to factor in. So if they"
+  },
+  {
+   "t": 1540.08,
+   "d": 7.86,
+   "text": "like character 0, so character 1 apparently likes character 0 and generally agree with the fact"
+  },
+  {
+   "t": 1549.68,
+   "d": 7.53,
+   "text": "being notch lent and chill is fine and they will do something back and in this case shrug notch"
+  },
+  {
+   "t": 1557.21,
+   "d": 14.43,
+   "text": "lent. And then character 0 sees this and goes this ain't the time for that. This is a more formal"
+  },
+  {
+   "t": 1571.64,
+   "d": 9.0,
+   "text": "occasion and point aggressively at them. Saying you need to shape up buddy or something like that."
+  },
+  {
+   "t": 1593.54,
+   "d": 5.34,
+   "text": "Acting and having this sort of language for"
+  },
+  {
+   "t": 1599.78,
+   "d": 8.28,
+   "text": "characters is ultimately about trying to again find something new in the old. And get fresh"
+  },
+  {
+   "t": 1608.06,
+   "d": 9.72,
+   "text": "perspectives on stories and themes and even like parts of stories in ways you might not expect."
+  },
+  {
+   "t": 1620.78,
+   "d": 8.22,
+   "text": "We will encourage players and ourselves to allow this to happen more organically by"
+  },
+  {
+   "t": 1629.0,
+   "d": 5.58,
+   "text": "decoupling our line reads and gestures and expressions from our dialogue"
+  },
+  {
+   "t": 1635.36,
+   "d": 6.78,
+   "text": "to then let players play with those elements and do their own reads on characters."
+  },
+  {
+   "t": 1653.18,
+   "d": 11.04,
+   "text": "And we can do this using what I was talking about by building a language of where actions"
+  },
+  {
+   "t": 1664.22,
+   "d": 9.06,
+   "text": "take can convey certain things and be interpreted by your fellow characters to"
+  },
+  {
+   "t": 1674.3,
+   "d": 5.7,
+   "text": "produce a new version of a scene or bounce off each other in a way you might not expect."
+  },
+  {
+   "t": 1683.66,
+   "d": 10.02,
+   "text": "And hopefully find something new. That is my talk. Thank you all for coming and listening."
+  },
+  {
+   "t": 1694.88,
+   "d": 8.22,
+   "text": "If you are curious about the nitty-gritty details of the technical way I worked on this idea,"
+  },
+  {
+   "t": 1703.82,
+   "d": 6.78,
+   "text": "I am happy to answer questions about that. I am happy to talk about like the specific"
+  },
+  {
+   "t": 1711.38,
+   "d": 9.06,
+   "text": "design aspects of it that I didn't go into in this talk and I can do that here offline whenever."
+  },
+  {
+   "t": 1722.36,
+   "d": 5.94,
+   "text": "If you are interested in more of what I do, my personal site is the first link there."
+  },
+  {
+   "t": 1730.22,
+   "d": 8.34,
+   "text": "If you want to see some of my published games my H-page is the second link there. If you want to"
+  },
+  {
+   "t": 1738.56,
+   "d": 6.42,
+   "text": "look at the codebase for the acting system I built which I was talking in a very high level about"
+  },
+  {
+   "t": 1746.3,
+   "d": 6.24,
+   "text": "that is the last link there. And you can find me on the different social media platforms."
+  },
+  {
+   "t": 1753.98,
+   "d": 8.16,
+   "text": "Cohost, blue sky, Twitter, Mastodon. All of those at quickful tales."
+  },
+  {
+   "t": 1763.46,
+   "d": 1.5,
+   "text": "All right, everybody. Thanks, again."
+  },
+  {
+   "t": 1768.86,
+   "d": 6.48,
+   "text": "I hope you enjoyed it. ALEXEI:"
+  },
+  {
+   "t": 1776.42,
+   "d": 7.92,
+   "text": "That was wonderful. Very exciting. I think most got problems. Sort of kind of worked"
+  },
+  {
+   "t": 1784.34,
+   "d": 6.12,
+   "text": "out. We are taking some questions and I believe that Nic is here to join us for a bit of Q&A."
+  },
+  {
+   "t": 1791.24,
+   "d": 10.32,
+   "text": "I know you traveling so we are using a mix of recorded and live. Do we have Nic, Kawa?"
+  },
+  {
+   "t": 1805.16,
+   "d": 5.88,
+   "text": "Any minute now. Want to bring Nic on?"
+  },
+  {
+   "t": 1815.18,
+   "d": 15.3,
+   "text": "We will get into a bit of Q&A. It could be just audio if that what works. Excellent. Hi, Nic."
+  },
+  {
+   "t": 1830.48,
+   "d": 4.26,
+   "text": "NIC: Hey, oh hang on. For some reason I can't hear."
+  },
+  {
+   "t": 1834.74,
+   "d": 4.56,
+   "text": "ALEXEI: Oh, OK. I am just going to keep talking so it is easier for"
+  },
+  {
+   "t": 1839.3,
+   "d": 8.82,
+   "text": "you to tell when it is fixed. Yes, for people in the stream, it should be working better in"
+  },
+  {
+   "t": 1848.12,
+   "d": 3.78,
+   "text": "the social space. Should be able to refresh if it is too quite and hopefully hear chat."
+  },
+  {
+   "t": 1853.22,
+   "d": 6.16,
+   "text": "How is it, Nic? How I can't hear you if you can hear me. --"
+  },
+  {
+   "t": 1867.32,
+   "d": 9.9,
+   "text": "now. We have 5 minutes to work things out."
+  },
+  {
+   "t": 1885.98,
+   "d": 5.4,
+   "text": "We are working through it. Yeah."
+  },
+  {
+   "t": 1896.12,
+   "d": 8.22,
+   "text": "I am going to pontificate about things from the chat. If you figure out what's"
+  },
+  {
+   "t": 1904.34,
+   "d": 2.82,
+   "text": "up with your mic feel free to interrupt me and start talking."
+  },
+  {
+   "t": 1908.78,
+   "d": 6.42,
+   "text": "I know one question that came up and got answered in the chat was about the different"
+  },
+  {
+   "t": 1915.2,
+   "d": 6.6,
+   "text": "ways to do kind of expression and gesture in things like text-based. So you were bringing"
+  },
+  {
+   "t": 1921.8,
+   "d": 5.82,
+   "text": "up some points there about using different elements of typeography like the kerning,"
+  },
+  {
+   "t": 1927.62,
+   "d": 7.5,
+   "text": "the bold, the italics and different things with text which I think is interesting. -- to get into"
+  },
+  {
+   "t": 1935.12,
+   "d": 4.14,
+   "text": "how that works in different kinds of medium and how that is built into some things like run pie."
+  },
+  {
+   "t": 1940.46,
+   "d": 12.0,
+   "text": "Oh, I heard something. Is it working better? >> Can you hear me?"
+  },
+  {
+   "t": 1954.98,
+   "d": 5.46,
+   "text": "There we go. It was just stream decided to use different audio."
+  },
+  {
+   "t": 1960.44,
+   "d": 6.84,
+   "text": "ALEXEI: That's totally fine. We got a few minutes. We finally made it. Excellent"
+  },
+  {
+   "t": 1967.28,
+   "d": 5.16,
+   "text": "talk. Thank you very much for taking part in dealing with our technical challenges today."
+  },
+  {
+   "t": 1975.92,
+   "d": 5.88,
+   "text": "Hill-X asked what techniques from theater haven't made their way into the roguelike or game design"
+  },
+  {
+   "t": 1981.8,
+   "d": 5.7,
+   "text": "space? What are some that you think will be interesting to bring into those spaces."
+  },
+  {
+   "t": 1999.68,
+   "d": 14.34,
+   "text": "NIC: I talked about acting and part of that is because a lot of stuff hasn't made it in. But"
+  },
+  {
+   "t": 2014.02,
+   "d": 10.5,
+   "text": "even stuff like directing and the way that you can play with the scene at a high level as a director"
+  },
+  {
+   "t": 2027.08,
+   "d": 7.34,
+   "text": "is like figuring out sort of the general tone of the scene, sort of the themes present in a scene,"
+  },
+  {
+   "t": 2034.42,
+   "d": 8.94,
+   "text": "and playing with those beyond like I am a character that's embodied. That's one of them."
+  },
+  {
+   "t": 2046.96,
+   "d": 10.78,
+   "text": "I am a Playwright like I said. Doing things like it is hard to be a Playwright in a game but --"
+  },
+  {
+   "t": 2062.38,
+   "d": 5.85,
+   "text": "I will be academic for a minute and -- ALEXEI: Be as academic as you want."
+  },
+  {
+   "t": 2068.23,
+   "d": 4.95,
+   "text": "NIC: Aristotle has change about Playwrights shouldn't do anything"
+  },
+  {
+   "t": 2073.18,
+   "d": 8.4,
+   "text": "new. They should just remix whatever they are doing. And"
+  },
+  {
+   "t": 2083.98,
+   "d": 6.96,
+   "text": "so you can almost argue like hypertext is sort of that style of oh, we have this authored thing,"
+  },
+  {
+   "t": 2090.94,
+   "d": 8.94,
+   "text": "and you are moving around it and changing the way your experiencing with as -- and that's"
+  },
+  {
+   "t": 2100.78,
+   "d": 5.7,
+   "text": "sort of like what he talks about in terms of what a Playwrights job is."
+  },
+  {
+   "t": 2107.68,
+   "d": 8.46,
+   "text": "ALEXEI: There is also stuff with lighting design because you can do a lot with like mood and then"
+  },
+  {
+   "t": 2116.14,
+   "d": 3.42,
+   "text": "that's another job I have done -- NIC: -- I am more familiar with like"
+  },
+  {
+   "t": 2119.56,
+   "d": 7.98,
+   "text": "you can play around with -- yeah. ALEXEI: The question of interpretation"
+  },
+  {
+   "t": 2127.54,
+   "d": 5.4,
+   "text": "and being more aware of how are people interpreting this and trying to encourage"
+  },
+  {
+   "t": 2132.94,
+   "d": 3.66,
+   "text": "them to interpret in different ways is something interesting to me and I"
+  },
+  {
+   "t": 2136.6,
+   "d": 2.94,
+   "text": "feel hasn't come up as often in how we talk about game design."
+  },
+  {
+   "t": 2147.34,
+   "d": 11.88,
+   "text": "NIC: Yeah. And so I have talked a little bit about the game project I have been"
+  },
+  {
+   "t": 2159.22,
+   "d": 4.74,
+   "text": "working on as part of my research and being an independent game developer."
+  },
+  {
+   "t": 2168.22,
+   "d": 8.1,
+   "text": "I have described this in my MFA as something that was too close to fighting games in terms of how"
+  },
+  {
+   "t": 2176.98,
+   "d": 7.78,
+   "text": "successfully it captured that esthetic and part of the reason I said that was --"
+  },
+  {
+   "t": 2186.94,
+   "d": 5.22,
+   "text": "it is game that requires a lot of interpretation and leg work on the players part to figure out"
+  },
+  {
+   "t": 2192.16,
+   "d": 17.58,
+   "text": "if you like the performance or what you were doing with the text -- different than fighting"
+  },
+  {
+   "t": 2209.74,
+   "d": 6.54,
+   "text": "games but sort of that similar feel. ALEXEI: That's really interesting."
+  },
+  {
+   "t": 2229.06,
+   "d": 4.2,
+   "text": "Thank you so much were joining and getting a few questions in there."
+  }
+ ]
+}

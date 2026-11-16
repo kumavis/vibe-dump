@@ -1,0 +1,40 @@
+Matt Ritche - Tips for Finishing Your Video Games
+Speaker: Matt Ritche
+https://www.youtube.com/watch?v=KKwgKTbiEY0
+Year: 2017   Kind: talk   Captions: auto (en)
+
+## Introduction to scope
+
+[0:00:00] everyone how are you doing so I know this is going to be a stupid question but how many of you guys are developing roguelikes put up your hand all right cool keep your hands up keep your hands up so how many of you have run into problems of scope everyone yeah exactly right so you could imagine being a developer in your spare time I work full-time so I probably spend maybe two to three hours a day on developing my game anyways so who is this handsome young man before you that is a question I'm Matt Ritchie I'm 25 years old I'm a hobby game developer from British Columbia Canada so it was obviously a really long trip you know dogsled all that stuff it's really warm here I'm currently working on the roguelike Axew which is uh oh sorry but also sorry I prepared these slides last night also hi my name is
+
+[0:01:01] Matt Ritchie and I'm a scope addict hi who else right okay cool
+
+## Project overview: Axew
+
+[0:01:10] so what is act 2 I use a science fantasy open-world roguelike that's set on a prison colony planet you are sent there as an exile and you have done some crime or maybe you haven't I know that's up to you there's a persistent procedural open-world static and randomized maps yadda yadda yadda and it has over four years of part-time development it's currently available for download a niche and it's about sixty percent done so I'm just hit that hump there it's heavily influenced by caves akkad ivan a domina Lona those are my four favorite roguelikes and they're amazing alright so this is the character selection screen where you can see the felony up at the top left corner there and yeah there's a bunch of attributes and stuff it with that previous talk about character creation screens this one here is awful don't do this don't do this it's terrible this is another screenshot of a predefined map I just shown off a little bit here underground you can see that the slime
+
+[0:02:10] monster stripes meet strikes me in the lake with their bones opportunity so there's a limbic system involved and yeah and this is the another character screen here where it shows all the tract limbs the Trey's proficiencies etc etc and the world map so there is a 200 by 200 grid of tiles that makes up the world map and each one of these ones can be entered for a 45 by 30 grid of local map tiles so you can see how the scope gets out of hand here so that's why it's taken me four years but first of all
+
+## Lessons from past projects
+
+[0:02:45] let's talk about my previous learning experiences and I've got to here write a passage was the very first game that I started working on in unity which is the engine I'm using and yeah it failed spectacularly it took up multiple years and it changed from the top left there you can see was a survival game and then changed you're like a rogue light like Binding of Isaac it was just a mess and then I started working with two artists which is a big mistake again on boku forest yeah I know right Bokke force which was a 3d platformer and you can see my programmer art in there because the artist never did anything and of course accident itself never went so well you can see the 100% disk usage which is Windows 10 brought to you by and this was the original prototype that I came up with when coming up with the main game loop and combine that with Perlin noise and you have axle which
+
+[0:03:47] started off looking like this and now it's alright and now looks like this and it's very beautiful I think so what
+
+## Managing development scope
+
+[0:03:56] drives you to make games is it creativity is it money is it the challenge or is it that you love learning these are very very important to maintaining motivation you need to know why you're making your game and who you're making your game for and what means you put down your last project was it lack of time which is a huge constraint for me working my spare time you know is it lack of motivation your idea didn't work out scope creep etc cetera scope is one of those things that I it's it's my nemesis I create these large large games because I never think I'm gonna complete them so my challenge with Axew is to make a large game and do it in my spare time but you have to always adhere to the core of the game always if it doesn't add to the core of
+
+[0:04:56] the game get rid of it and design some ways that I've found are very useful when making a large project you want to make it easy to modify in that systems so you want to start out with something maybe like a mod system that's what I've done in my game so the modders have the tools that I have as well you build from the ground up that are by layer you don't build a tall tower and have it fall over you want to build a pyramid that's why that's there and this one's
+
+## Tips for sustainable progress
+
+[0:05:26] really important you want to add something new every day that you're working on it even if it's small if you're tweaking you're not getting anything done you're pre optimizing and it's bad you're gonna replace it anyways who cares if so something doesn't add to the core throw it out do not start all over again because you can do it better faster this is another pitfall that I see a lot of people fall into they will start a project and then they will throw it away because oh I've learned so much I could do it so much better next time don't do this work with what you have keep it malleable and you will be fine I promise don't treat any roguelike interpretation as gospel this is kind of what /you was talking about and just make a game you don't have to make it a roguelike it can be inspired by roguelikes but don't make it a roguelike just because you want to make a roguelike make it a game make it fun put your own spin on it and then they'll be entertaining and have fun yourself even just one hour can make a
+
+[0:06:27] difference one hour a day that's not that big of a commitment that's probably how much time you spend watching TV you know it's it's not that big of a commitment to make anyways that was my very short talk thank you very much
+
+## Q&A and closing thoughts
+
+[0:06:45] any questions yes which of those four motivations drives you the most I'll go back to that for me it's a combination of the creativity the challenge and the learning because let's be honest I'm not gonna make any money I have donations open and I've made 400 dollars in two years you know I mean that's pretty good right that's pretty good but it's not gonna keep me fed how do you how do you organize and decide what you work on for that one hour each day oh well that's that's kind of an interesting question um well usually since I'm doing the majority of the art I have an artist that intermittently comes when he's not busy and does over some of the tiles so I'll work on art one day and maybe I'll
+
+[0:07:47] work on like some system code maybe I'll work on making some new enemies you want to diversify and keep yourself working on something new so it's always fresh you don't want to keep yourself stuck in a rut anyone else

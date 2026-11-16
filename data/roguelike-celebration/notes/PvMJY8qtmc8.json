@@ -1,0 +1,78 @@
+{
+  "id": "PvMJY8qtmc8",
+  "title": "Kes - Hunting the Asphynx: Roguelikes, Provenance, and You",
+  "speaker": "Kes",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=PvMJY8qtmc8",
+  "talk_type": "history",
+  "summary": "Kes, a library science student, tells the story of tracing the origin of an in-game encyclopedia entry for the asphynx, a petrifying snake in the NetHack variant Slash'EM, which is attributed to a fictional 'New Bestiary' by a fictional wizard Endelbrook. Through community forums and contacting 1990s variant developers, the trail leads back through Slash to NetHack-- (1992) and goes cold, with the likely author the Slash developer, who did not remember writing it. She argues that such small human stories in the tangled history of variants are worth preserving, that version history is storytelling, and that they are at risk of fading as the internet fills with commercial and generated content.",
+  "games": [
+    "NetHack",
+    "Slash'EM",
+    "Slash",
+    "NetHack--"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "variants and forks",
+      "kind": "history",
+      "claim": "NetHack variants (forks) routinely incorporate patches and code from one another, producing a tangled version history that is hard to trace.",
+      "detail": "Kes describes NetHack as in development for decades with a modding scene of playable variants, whose cross-pollination produces 'terrifying' version history flowcharts. Even that chart omits variants like NetHack--.",
+      "t": 236,
+      "quote": "Variances frequently incorporate patches and code from one another resulting in terrify version history flow charts",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "in-game encyclopedia",
+      "kind": "history",
+      "claim": "Older roguelikes like NetHack include an internal database of monster and item entries so players can look up unfamiliar things, often using real literary quotes.",
+      "detail": "When a suitable quote can't be found, developer-written text is used and formatted differently. The asphynx entry was formatted as if quoting a real author, which is what made it suspicious.",
+      "t": 363,
+      "quote": "many older roguelikes contain an internal base with information about monsters, items and the like",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "provenance",
+      "kind": "example",
+      "claim": "The Slash'EM asphynx encyclopedia entry cites a fictional book and wizard, and tracing it showed fictional attributions spreading across about a dozen monsters and migrating into other variants.",
+      "detail": "Kes found no real author or book in academic databases. Community members found other entries attributed to the same fictional source, carried along as variants pull from one another.",
+      "t": 482,
+      "quote": "Another user discovers that the asphynx encyclopedia's entry isn't the only one attributed. There are about a dozen other monsters",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "archival research",
+      "kind": "warning",
+      "claim": "Researching the provenance of 1990s roguelike content is very hard because developers' contact details are lost and memories fade.",
+      "detail": "Most emails bounced; the original Slash developer confirmed the monster's literary source but didn't remember writing the entry. The trail went cold between Slash and NetHack--, and the author will probably never be known.",
+      "t": 570,
+      "quote": "finding emails of developers from back then is very, very difficult. When I did manage to find emails all but one bounced",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "preservation",
+      "kind": "principle",
+      "claim": "Small human stories in roguelike development history are worth preserving because games have an unstable relationship with their history and such stories will fade as the internet fills with commercial and generated content.",
+      "detail": "Kes argues the story's apparent pointlessness is what makes it human and beautiful, evidence the games were made by many passionate people. Tracing this one took enormous effort; the next story might matter more.",
+      "t": 807,
+      "quote": "human stories like this one are going to continue fading away",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "version control",
+      "kind": "principle",
+      "claim": "Version control and project history are not just backups of work but stories, which roguelike communities should value.",
+      "detail": "This is Kes's closing argument, linking roguelike players' love of story to the history recorded in version control.",
+      "t": 831,
+      "quote": "Version control itself and things aren't just backups of existing work. They are stories",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

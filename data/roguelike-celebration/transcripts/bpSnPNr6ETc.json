@@ -1,0 +1,2111 @@
+{
+ "id": "bpSnPNr6ETc",
+ "url": "https://www.youtube.com/watch?v=bpSnPNr6ETc",
+ "title": "Leif Bloomquist - Dungeon of The Rogue Daemon: A multiplayer roguelike for retro + modern platforms",
+ "speaker": "Leif Bloomquist",
+ "talk_title": "Dungeon of The Rogue Daemon: A multiplayer roguelike for retro + modern platforms",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 829,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nLeif is a retro gamer and hacker! His passion is exploring the intersection of old and new technologies, and how to reinvent classic genres into multiplayer experiences. He discusses the continued development of his multiplayer roguelike, now titled Dungeon of The Rogue Daemon, and opens it up to the conference to play live.\n\nFind him on Twitter: https://twitter.com/schemafactor\nPlay Dungeon of The Rogue Daemon! http://rogue.jammingsignal.com/rogue/\nLeif's 2019 Roguelike Celebration update: https://www.youtube.com/watch?v=ASGn5J9PHbs\nLeif's 2018 Roguelike Celebration talk first introducing his game: https://www.youtube.com/watch?v=Y0K-e83wYnQ",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 61,
+   "title": "Project overview"
+  },
+  {
+   "start": 140,
+   "title": "Commodore 64 and community"
+  },
+  {
+   "start": 223,
+   "title": "Multiplayer design philosophy"
+  },
+  {
+   "start": 325,
+   "title": "Mechanics and cooperation"
+  },
+  {
+   "start": 433,
+   "title": "Cross-platform accessibility"
+  },
+  {
+   "start": 504,
+   "title": "Recent updates and goals"
+  },
+  {
+   "start": 605,
+   "title": "Community reach and credits"
+  },
+  {
+   "start": 655,
+   "title": "Live demo and walkthrough"
+  },
+  {
+   "start": 788,
+   "title": "Closing remarks"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2379,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.24,
+   "d": 3.2,
+   "text": "hopefully people find you in the space"
+  },
+  {
+   "t": 4.56,
+   "d": 3.12,
+   "text": "all right hello link hey everybody can"
+  },
+  {
+   "t": 7.68,
+   "d": 1.36,
+   "text": "you hear me all right"
+  },
+  {
+   "t": 9.04,
+   "d": 3.76,
+   "text": "yes i can hear you and yeah we're"
+  },
+  {
+   "t": 12.8,
+   "d": 3.36,
+   "text": "right along um this is leaf"
+  },
+  {
+   "t": 16.16,
+   "d": 2.32,
+   "text": "lung kissed retro gamer and hacker"
+  },
+  {
+   "t": 18.48,
+   "d": 1.52,
+   "text": "wearer of wonderful hats"
+  },
+  {
+   "t": 20.0,
+   "d": 1.92,
+   "text": "it makes me so happy to see your hat you"
+  },
+  {
+   "t": 21.92,
+   "d": 1.6,
+   "text": "have it every year and"
+  },
+  {
+   "t": 23.52,
+   "d": 3.6,
+   "text": "uh yeah it's it's a you know a mainstay"
+  },
+  {
+   "t": 27.12,
+   "d": 1.76,
+   "text": "of roguelike celebration i feel like i'm"
+  },
+  {
+   "t": 28.88,
+   "d": 1.28,
+   "text": "there in person to get to see the"
+  },
+  {
+   "t": 30.16,
+   "d": 2.96,
+   "text": "wonderful hat once more"
+  },
+  {
+   "t": 34.32,
+   "d": 1.68,
+   "text": "passion is exploring the intersection of"
+  },
+  {
+   "t": 36.0,
+   "d": 2.24,
+   "text": "old and new technology how it reinvents"
+  },
+  {
+   "t": 38.24,
+   "d": 1.6,
+   "text": "classic genres into multiplayer"
+  },
+  {
+   "t": 39.84,
+   "d": 2.08,
+   "text": "experiences a great follow-up to our"
+  },
+  {
+   "t": 41.92,
+   "d": 0.88,
+   "text": "last talk"
+  },
+  {
+   "t": 42.8,
+   "d": 1.6,
+   "text": "and you're going to tell us about"
+  },
+  {
+   "t": 44.4,
+   "d": 2.0,
+   "text": "dungeons of the rogue daemon"
+  },
+  {
+   "t": 46.4,
+   "d": 3.28,
+   "text": "demon damage all right"
+  },
+  {
+   "t": 49.68,
+   "d": 1.44,
+   "text": "it's a little in joke for the unix"
+  },
+  {
+   "t": 51.12,
+   "d": 1.84,
+   "text": "programmers in the in the group"
+  },
+  {
+   "t": 52.96,
+   "d": 5.52,
+   "text": "i love the male damon in nethack so"
+  },
+  {
+   "t": 58.48,
+   "d": 1.52,
+   "text": "all right all right we have screen and"
+  },
+  {
+   "t": 60.0,
+   "d": 1.92,
+   "text": "we have video so"
+  },
+  {
+   "t": 61.92,
+   "d": 1.6,
+   "text": "hey everybody uh good morning good"
+  },
+  {
+   "t": 63.52,
+   "d": 1.6,
+   "text": "afternoon depending where you are i'm in"
+  },
+  {
+   "t": 65.12,
+   "d": 1.04,
+   "text": "toronto so it's"
+  },
+  {
+   "t": 66.16,
+   "d": 3.12,
+   "text": "currently the 3 30. uh my name is elite"
+  },
+  {
+   "t": 69.28,
+   "d": 1.68,
+   "text": "bloomquist i presented at the"
+  },
+  {
+   "t": 70.96,
+   "d": 2.48,
+   "text": "roguelike celebration a couple of years"
+  },
+  {
+   "t": 73.44,
+   "d": 0.8,
+   "text": "so i'm going to keep"
+  },
+  {
+   "t": 74.24,
+   "d": 2.64,
+   "text": "today's talk short it's really just an"
+  },
+  {
+   "t": 76.88,
+   "d": 1.6,
+   "text": "update on where the game has gone"
+  },
+  {
+   "t": 78.48,
+   "d": 2.72,
+   "text": "in the last year or so and also an"
+  },
+  {
+   "t": 81.2,
+   "d": 1.76,
+   "text": "invitation for everyone who's watching"
+  },
+  {
+   "t": 82.96,
+   "d": 0.64,
+   "text": "to play"
+  },
+  {
+   "t": 83.6,
+   "d": 2.4,
+   "text": "and yeah fool around it's a little bit"
+  },
+  {
+   "t": 86.0,
+   "d": 2.16,
+   "text": "of a stress test for the server too"
+  },
+  {
+   "t": 88.16,
+   "d": 2.88,
+   "text": "uh but i was thinking the forum would be"
+  },
+  {
+   "t": 91.04,
+   "d": 1.44,
+   "text": "in the game rather than"
+  },
+  {
+   "t": 92.48,
+   "d": 3.04,
+   "text": "me blathering i'm also not going to get"
+  },
+  {
+   "t": 95.52,
+   "d": 0.32,
+   "text": "as"
+  },
+  {
+   "t": 95.84,
+   "d": 2.88,
+   "text": "uh philosophical as uh tyrique so thank"
+  },
+  {
+   "t": 98.72,
+   "d": 1.36,
+   "text": "you very much for the uh"
+  },
+  {
+   "t": 100.08,
+   "d": 1.6,
+   "text": "yeah i agree with everything you said"
+  },
+  {
+   "t": 101.68,
+   "d": 2.08,
+   "text": "and your game looks amazing"
+  },
+  {
+   "t": 103.76,
+   "d": 2.32,
+   "text": "and so thanks for setting the stage for"
+  },
+  {
+   "t": 106.08,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 106.96,
+   "d": 2.4,
+   "text": "multiplayer roguelikes my approach has"
+  },
+  {
+   "t": 109.36,
+   "d": 1.6,
+   "text": "been a little different"
+  },
+  {
+   "t": 110.96,
+   "d": 1.76,
+   "text": "uh he mentioned that my game was"
+  },
+  {
+   "t": 112.72,
+   "d": 1.6,
+   "text": "stripped down"
+  },
+  {
+   "t": 114.32,
+   "d": 3.04,
+   "text": "so the reason my uh game you know"
+  },
+  {
+   "t": 117.36,
+   "d": 2.32,
+   "text": "dungeon of the rogue gaming is stripped"
+  },
+  {
+   "t": 119.68,
+   "d": 1.2,
+   "text": "down is because"
+  },
+  {
+   "t": 120.88,
+   "d": 3.04,
+   "text": "it was designed to run on"
+  },
+  {
+   "t": 123.92,
+   "d": 3.04,
+   "text": "a commodore 64 from"
+  },
+  {
+   "t": 126.96,
+   "d": 2.48,
+   "text": "the 1980s oh can everyone see that all"
+  },
+  {
+   "t": 129.44,
+   "d": 1.2,
+   "text": "right"
+  },
+  {
+   "t": 130.64,
+   "d": 3.12,
+   "text": "so i went through this last year but"
+  },
+  {
+   "t": 133.76,
+   "d": 1.68,
+   "text": "for folks who are new or who might not"
+  },
+  {
+   "t": 135.44,
+   "d": 1.68,
+   "text": "be familiar with the commodore 64 you"
+  },
+  {
+   "t": 137.12,
+   "d": 1.12,
+   "text": "might be thinking why"
+  },
+  {
+   "t": 138.24,
+   "d": 3.36,
+   "text": "why are you doing this so first of all"
+  },
+  {
+   "t": 141.6,
+   "d": 2.56,
+   "text": "the commodore 64 was the best the"
+  },
+  {
+   "t": 144.16,
+   "d": 2.0,
+   "text": "best-selling computer of all time"
+  },
+  {
+   "t": 146.16,
+   "d": 1.44,
+   "text": "according to the guinness book of world"
+  },
+  {
+   "t": 147.6,
+   "d": 2.48,
+   "text": "records they sold 17 million"
+  },
+  {
+   "t": 150.08,
+   "d": 2.16,
+   "text": "although unofficially it's the number is"
+  },
+  {
+   "t": 152.24,
+   "d": 1.6,
+   "text": "expected to be around 20 million"
+  },
+  {
+   "t": 153.84,
+   "d": 0.96,
+   "text": "because not everyone returned their"
+  },
+  {
+   "t": 154.8,
+   "d": 3.52,
+   "text": "warranty cards and things like that"
+  },
+  {
+   "t": 159.68,
+   "d": 2.48,
+   "text": "uh it was a huge game platform any child"
+  },
+  {
+   "t": 162.16,
+   "d": 1.12,
+   "text": "of the 80s is a"
+  },
+  {
+   "t": 163.28,
+   "d": 2.88,
+   "text": "new uh either had a commodore 64 or knew"
+  },
+  {
+   "t": 166.16,
+   "d": 1.6,
+   "text": "somebody that had a commodore 64 and"
+  },
+  {
+   "t": 167.76,
+   "d": 1.12,
+   "text": "there were 25"
+  },
+  {
+   "t": 168.88,
+   "d": 2.4,
+   "text": "000 games available for it so it was"
+  },
+  {
+   "t": 171.28,
+   "d": 2.0,
+   "text": "primarily a gaming platform but was also"
+  },
+  {
+   "t": 173.28,
+   "d": 1.2,
+   "text": "open to a lot of hacking and"
+  },
+  {
+   "t": 174.48,
+   "d": 1.12,
+   "text": "productivity"
+  },
+  {
+   "t": 175.6,
+   "d": 2.64,
+   "text": "and many of those were roguelikes so"
+  },
+  {
+   "t": 178.24,
+   "d": 3.28,
+   "text": "there's a strong history there"
+  },
+  {
+   "t": 181.52,
+   "d": 2.32,
+   "text": "uh the c64 is fun to program on it's"
+  },
+  {
+   "t": 183.84,
+   "d": 1.76,
+   "text": "bare metal machine language and it's"
+  },
+  {
+   "t": 185.6,
+   "d": 1.52,
+   "text": "very well documented after"
+  },
+  {
+   "t": 187.12,
+   "d": 4.16,
+   "text": "30 some years of reverse engineering"
+  },
+  {
+   "t": 191.28,
+   "d": 1.84,
+   "text": "there's a very active community there's"
+  },
+  {
+   "t": 193.12,
+   "d": 2.56,
+   "text": "thousands of users"
+  },
+  {
+   "t": 195.68,
+   "d": 3.6,
+   "text": "worldwide and people are into gaming"
+  },
+  {
+   "t": 199.28,
+   "d": 2.32,
+   "text": "collecting developing hardware hacking"
+  },
+  {
+   "t": 201.6,
+   "d": 1.68,
+   "text": "and so on i'll talk a little bit about"
+  },
+  {
+   "t": 203.28,
+   "d": 2.32,
+   "text": "some new hardware coming up"
+  },
+  {
+   "t": 205.6,
+   "d": 2.48,
+   "text": "but especially there's in the last 10"
+  },
+  {
+   "t": 208.08,
+   "d": 0.64,
+   "text": "years"
+  },
+  {
+   "t": 208.72,
+   "d": 1.92,
+   "text": "the community has created networking"
+  },
+  {
+   "t": 210.64,
+   "d": 1.36,
+   "text": "hardware you could now hook your"
+  },
+  {
+   "t": 212.0,
+   "d": 2.64,
+   "text": "commodore 64 up to the internet why"
+  },
+  {
+   "t": 214.64,
+   "d": 1.44,
+   "text": "would you do that"
+  },
+  {
+   "t": 216.08,
+   "d": 2.48,
+   "text": "well partly because you can but this"
+  },
+  {
+   "t": 218.56,
+   "d": 1.92,
+   "text": "also opens a lot of doors for"
+  },
+  {
+   "t": 220.48,
+   "d": 2.56,
+   "text": "multiplay"
+  },
+  {
+   "t": 223.52,
+   "d": 3.12,
+   "text": "so the multiplayer experience you know i"
+  },
+  {
+   "t": 226.64,
+   "d": 0.64,
+   "text": "grew up in"
+  },
+  {
+   "t": 227.28,
+   "d": 2.32,
+   "text": "them i spent my formative years playing"
+  },
+  {
+   "t": 229.6,
+   "d": 2.32,
+   "text": "multiplayer games in the same room"
+  },
+  {
+   "t": 231.92,
+   "d": 1.44,
+   "text": "you know playing with friends you know"
+  },
+  {
+   "t": 233.36,
+   "d": 2.08,
+   "text": "playing competitive and cooperative"
+  },
+  {
+   "t": 235.44,
+   "d": 0.88,
+   "text": "games"
+  },
+  {
+   "t": 236.32,
+   "d": 1.2,
+   "text": "and part of my goal here was to"
+  },
+  {
+   "t": 237.52,
+   "d": 2.08,
+   "text": "recapture that feeling except with"
+  },
+  {
+   "t": 239.6,
+   "d": 3.2,
+   "text": "you know the online element uh yeah"
+  },
+  {
+   "t": 242.8,
+   "d": 0.56,
+   "text": "because"
+  },
+  {
+   "t": 243.36,
+   "d": 3.6,
+   "text": "us uh commodore 64 fans are fairly"
+  },
+  {
+   "t": 246.96,
+   "d": 2.48,
+   "text": "spread spread around a little bit but"
+  },
+  {
+   "t": 249.44,
+   "d": 1.68,
+   "text": "this new networking hardware"
+  },
+  {
+   "t": 251.12,
+   "d": 1.84,
+   "text": "gives you so many opportunities for new"
+  },
+  {
+   "t": 252.96,
+   "d": 1.84,
+   "text": "games and reinventing new games"
+  },
+  {
+   "t": 254.8,
+   "d": 2.64,
+   "text": "which is something i think is pretty"
+  },
+  {
+   "t": 257.44,
+   "d": 1.04,
+   "text": "cool"
+  },
+  {
+   "t": 258.48,
+   "d": 3.28,
+   "text": "so i've been messing around with"
+  },
+  {
+   "t": 261.76,
+   "d": 2.0,
+   "text": "different uh different genres for"
+  },
+  {
+   "t": 263.76,
+   "d": 2.0,
+   "text": "multiplay and a couple years ago i"
+  },
+  {
+   "t": 265.76,
+   "d": 2.96,
+   "text": "thought i'm going to tackle a roguelike"
+  },
+  {
+   "t": 268.72,
+   "d": 1.68,
+   "text": "so you know this is repeating some of"
+  },
+  {
+   "t": 270.4,
+   "d": 2.72,
+   "text": "what tariq said but this is my uh"
+  },
+  {
+   "t": 273.12,
+   "d": 1.84,
+   "text": "input on it so you're wandering around"
+  },
+  {
+   "t": 274.96,
+   "d": 1.84,
+   "text": "in the dungeon but you see other"
+  },
+  {
+   "t": 276.8,
+   "d": 0.72,
+   "text": "characters"
+  },
+  {
+   "t": 277.52,
+   "d": 2.0,
+   "text": "and what if those other characters were"
+  },
+  {
+   "t": 279.52,
+   "d": 1.52,
+   "text": "other players"
+  },
+  {
+   "t": 281.04,
+   "d": 2.64,
+   "text": "so you can interact with them you can go"
+  },
+  {
+   "t": 283.68,
+   "d": 2.4,
+   "text": "and quest together with them"
+  },
+  {
+   "t": 286.08,
+   "d": 3.04,
+   "text": "you can team up against monsters"
+  },
+  {
+   "t": 289.12,
+   "d": 3.28,
+   "text": "work together to solve puzzles and leave"
+  },
+  {
+   "t": 292.4,
+   "d": 1.04,
+   "text": "each other tools"
+  },
+  {
+   "t": 293.44,
+   "d": 3.04,
+   "text": "clues and share equipment i think that"
+  },
+  {
+   "t": 296.48,
+   "d": 2.88,
+   "text": "would be pretty cool"
+  },
+  {
+   "t": 299.76,
+   "d": 2.08,
+   "text": "i've also taken a slightly different uh"
+  },
+  {
+   "t": 301.84,
+   "d": 2.24,
+   "text": "approach uh from uh tyrique in that"
+  },
+  {
+   "t": 304.08,
+   "d": 2.32,
+   "text": "i haven't there's no specific strategy"
+  },
+  {
+   "t": 306.4,
+   "d": 2.0,
+   "text": "or anything it's like think of it as"
+  },
+  {
+   "t": 308.4,
+   "d": 2.48,
+   "text": "a sandbox i've created the game a set of"
+  },
+  {
+   "t": 310.88,
+   "d": 1.04,
+   "text": "rules"
+  },
+  {
+   "t": 311.92,
+   "d": 2.56,
+   "text": "drop players into it and see what"
+  },
+  {
+   "t": 314.48,
+   "d": 0.96,
+   "text": "happens"
+  },
+  {
+   "t": 315.44,
+   "d": 1.92,
+   "text": "uh we saw what happened when i launched"
+  },
+  {
+   "t": 317.36,
+   "d": 2.4,
+   "text": "the game uh i did a little live demo at"
+  },
+  {
+   "t": 319.76,
+   "d": 1.92,
+   "text": "rogue celebration last year"
+  },
+  {
+   "t": 321.68,
+   "d": 1.84,
+   "text": "and something like 50 people joined the"
+  },
+  {
+   "t": 323.52,
+   "d": 2.16,
+   "text": "game and the first part of the game is"
+  },
+  {
+   "t": 325.68,
+   "d": 1.68,
+   "text": "you have to find a key and unlock the"
+  },
+  {
+   "t": 327.36,
+   "d": 0.56,
+   "text": "door"
+  },
+  {
+   "t": 327.92,
+   "d": 1.84,
+   "text": "but with 50 people in the way you know"
+  },
+  {
+   "t": 329.76,
+   "d": 1.28,
+   "text": "we had to let the guy with the key"
+  },
+  {
+   "t": 331.04,
+   "d": 1.36,
+   "text": "through and there's a lot of pushing and"
+  },
+  {
+   "t": 332.4,
+   "d": 0.72,
+   "text": "shoving and"
+  },
+  {
+   "t": 333.12,
+   "d": 1.68,
+   "text": "they're passing the key along finally we"
+  },
+  {
+   "t": 334.8,
+   "d": 1.6,
+   "text": "got the door open when i had you know 10"
+  },
+  {
+   "t": 336.4,
+   "d": 1.6,
+   "text": "seconds left in my"
+  },
+  {
+   "t": 338.0,
+   "d": 2.0,
+   "text": "my talk it was the one of the funnest"
+  },
+  {
+   "t": 340.0,
+   "d": 2.16,
+   "text": "experiences ever"
+  },
+  {
+   "t": 342.16,
+   "d": 1.12,
+   "text": "but i've also added a couple of"
+  },
+  {
+   "t": 343.28,
+   "d": 2.64,
+   "text": "different uh gameplay mechanics to kind"
+  },
+  {
+   "t": 345.92,
+   "d": 0.64,
+   "text": "of"
+  },
+  {
+   "t": 346.56,
+   "d": 3.52,
+   "text": "uh engage that uh tyrique said"
+  },
+  {
+   "t": 350.08,
+   "d": 2.4,
+   "text": "multi make multiplayer necessary so here"
+  },
+  {
+   "t": 352.48,
+   "d": 1.84,
+   "text": "i haven't taken a very heavy hand to"
+  },
+  {
+   "t": 354.32,
+   "d": 0.72,
+   "text": "that"
+  },
+  {
+   "t": 355.04,
+   "d": 2.48,
+   "text": "but there's a couple of instances where"
+  },
+  {
+   "t": 357.52,
+   "d": 0.8,
+   "text": "i'm"
+  },
+  {
+   "t": 358.32,
+   "d": 1.28,
+   "text": "you know just kind of nudging the"
+  },
+  {
+   "t": 359.6,
+   "d": 2.16,
+   "text": "players to work together"
+  },
+  {
+   "t": 361.76,
+   "d": 2.4,
+   "text": "uh so the way the inventory system works"
+  },
+  {
+   "t": 364.16,
+   "d": 0.64,
+   "text": "in"
+  },
+  {
+   "t": 364.8,
+   "d": 1.52,
+   "text": "my game is you can carry an item in your"
+  },
+  {
+   "t": 366.32,
+   "d": 2.96,
+   "text": "left hand or your right hand"
+  },
+  {
+   "t": 369.28,
+   "d": 1.68,
+   "text": "and that's so you can double up swords"
+  },
+  {
+   "t": 370.96,
+   "d": 2.0,
+   "text": "or double up shields or one of each you"
+  },
+  {
+   "t": 372.96,
+   "d": 2.24,
+   "text": "know that's up to you"
+  },
+  {
+   "t": 375.2,
+   "d": 1.6,
+   "text": "and there's also other things to find i"
+  },
+  {
+   "t": 376.8,
+   "d": 1.52,
+   "text": "won't give everything away but there's"
+  },
+  {
+   "t": 378.32,
+   "d": 3.36,
+   "text": "potions and keys and gold and so on"
+  },
+  {
+   "t": 381.68,
+   "d": 2.32,
+   "text": "but there's no inventory if you need to"
+  },
+  {
+   "t": 384.0,
+   "d": 0.72,
+   "text": "carry"
+  },
+  {
+   "t": 384.72,
+   "d": 3.36,
+   "text": "a sword and a shield and a magic item"
+  },
+  {
+   "t": 388.08,
+   "d": 2.24,
+   "text": "and the key that unlocks a very"
+  },
+  {
+   "t": 390.32,
+   "d": 1.2,
+   "text": "important room"
+  },
+  {
+   "t": 391.52,
+   "d": 2.4,
+   "text": "towards the end of the game how can you"
+  },
+  {
+   "t": 393.92,
+   "d": 0.96,
+   "text": "do that"
+  },
+  {
+   "t": 394.88,
+   "d": 2.56,
+   "text": "well get some friends and get them"
+  },
+  {
+   "t": 397.44,
+   "d": 0.56,
+   "text": "together"
+  },
+  {
+   "t": 398.0,
+   "d": 4.48,
+   "text": "and and share it so that's uh"
+  },
+  {
+   "t": 402.88,
+   "d": 1.6,
+   "text": "how inventory is handled again it"
+  },
+  {
+   "t": 404.48,
+   "d": 1.6,
+   "text": "encourages multiplayer get a team"
+  },
+  {
+   "t": 406.08,
+   "d": 0.88,
+   "text": "together"
+  },
+  {
+   "t": 406.96,
+   "d": 2.08,
+   "text": "and i want to eventually introduce"
+  },
+  {
+   "t": 409.04,
+   "d": 1.84,
+   "text": "puzzles where you know you have to be at"
+  },
+  {
+   "t": 410.88,
+   "d": 1.28,
+   "text": "the right place at the right time when"
+  },
+  {
+   "t": 412.16,
+   "d": 1.2,
+   "text": "something happens"
+  },
+  {
+   "t": 413.36,
+   "d": 1.76,
+   "text": "that's all developing and gave me some"
+  },
+  {
+   "t": 415.12,
+   "d": 2.64,
+   "text": "really great ideas"
+  },
+  {
+   "t": 417.76,
+   "d": 2.08,
+   "text": "uh when you run across an item you can"
+  },
+  {
+   "t": 419.84,
+   "d": 1.84,
+   "text": "inspect it to see what it is or use it"
+  },
+  {
+   "t": 421.68,
+   "d": 0.96,
+   "text": "which"
+  },
+  {
+   "t": 422.64,
+   "d": 2.96,
+   "text": "enables its function"
+  },
+  {
+   "t": 426.16,
+   "d": 2.08,
+   "text": "though oddly enough not everybody seems"
+  },
+  {
+   "t": 428.24,
+   "d": 1.84,
+   "text": "to have a commodore 64 at home that they"
+  },
+  {
+   "t": 430.08,
+   "d": 1.2,
+   "text": "can hook up to the internet"
+  },
+  {
+   "t": 431.28,
+   "d": 3.28,
+   "text": "fancy that so i was thinking well i'm"
+  },
+  {
+   "t": 434.56,
+   "d": 0.48,
+   "text": "going to"
+  },
+  {
+   "t": 435.04,
+   "d": 1.76,
+   "text": "also re-implemented it on a couple of"
+  },
+  {
+   "t": 436.8,
+   "d": 1.28,
+   "text": "different platforms to make it"
+  },
+  {
+   "t": 438.08,
+   "d": 1.68,
+   "text": "accessible to everybody"
+  },
+  {
+   "t": 439.76,
+   "d": 2.48,
+   "text": "but the one design element i had right"
+  },
+  {
+   "t": 442.24,
+   "d": 1.44,
+   "text": "from one goal i had right from the"
+  },
+  {
+   "t": 443.68,
+   "d": 0.72,
+   "text": "beginning was"
+  },
+  {
+   "t": 444.4,
+   "d": 1.76,
+   "text": "this is all going to be a shared world"
+  },
+  {
+   "t": 446.16,
+   "d": 1.76,
+   "text": "so no matter whether you're playing on a"
+  },
+  {
+   "t": 447.92,
+   "d": 2.88,
+   "text": "commodore 64."
+  },
+  {
+   "t": 450.8,
+   "d": 3.04,
+   "text": "or on a modern web browser"
+  },
+  {
+   "t": 453.84,
+   "d": 3.28,
+   "text": "or on your phone or"
+  },
+  {
+   "t": 457.12,
+   "d": 3.36,
+   "text": "telnet from an old main"
+  },
+  {
+   "t": 460.48,
+   "d": 2.4,
+   "text": "or you found some weird mainframe at a"
+  },
+  {
+   "t": 462.88,
+   "d": 2.08,
+   "text": "vintage computer festival that you might"
+  },
+  {
+   "t": 464.96,
+   "d": 1.92,
+   "text": "also manage to hook up to the internet"
+  },
+  {
+   "t": 466.88,
+   "d": 1.84,
+   "text": "i want these platforms to all be able to"
+  },
+  {
+   "t": 468.72,
+   "d": 1.2,
+   "text": "play together"
+  },
+  {
+   "t": 469.92,
+   "d": 2.0,
+   "text": "and so they can you know interact and"
+  },
+  {
+   "t": 471.92,
+   "d": 1.44,
+   "text": "you get the uh"
+  },
+  {
+   "t": 473.36,
+   "d": 2.24,
+   "text": "the essence of each platform but still a"
+  },
+  {
+   "t": 475.6,
+   "d": 3.2,
+   "text": "unique and fair game between them all"
+  },
+  {
+   "t": 478.8,
+   "d": 1.28,
+   "text": "so this has been kind of fun i've had"
+  },
+  {
+   "t": 480.08,
+   "d": 1.92,
+   "text": "some success with this i've got the"
+  },
+  {
+   "t": 482.0,
+   "d": 4.0,
+   "text": "the commodore the web browser telnet"
+  },
+  {
+   "t": 486.0,
+   "d": 2.08,
+   "text": "interface is working other retro"
+  },
+  {
+   "t": 488.08,
+   "d": 1.6,
+   "text": "platforms can use telnet"
+  },
+  {
+   "t": 489.68,
+   "d": 1.76,
+   "text": "the mobile interface is still a little"
+  },
+  {
+   "t": 491.44,
+   "d": 1.28,
+   "text": "sketchy but"
+  },
+  {
+   "t": 492.72,
+   "d": 1.44,
+   "text": "it's getting there it's all written in"
+  },
+  {
+   "t": 494.16,
+   "d": 1.28,
+   "text": "javascript which i've been teaching"
+  },
+  {
+   "t": 495.44,
+   "d": 0.96,
+   "text": "myself the last"
+  },
+  {
+   "t": 496.4,
+   "d": 4.16,
+   "text": "few months and i see folks are starting"
+  },
+  {
+   "t": 500.56,
+   "d": 0.56,
+   "text": "to"
+  },
+  {
+   "t": 501.12,
+   "d": 1.76,
+   "text": "you know log into the server which is"
+  },
+  {
+   "t": 502.88,
+   "d": 1.28,
+   "text": "great"
+  },
+  {
+   "t": 504.16,
+   "d": 1.92,
+   "text": "so quick update on what's new since last"
+  },
+  {
+   "t": 506.08,
+   "d": 1.76,
+   "text": "year um"
+  },
+  {
+   "t": 507.84,
+   "d": 1.52,
+   "text": "i named the game that was actually the"
+  },
+  {
+   "t": 509.36,
+   "d": 1.6,
+   "text": "hardest part programming's"
+  },
+  {
+   "t": 510.96,
+   "d": 1.52,
+   "text": "no problem took me a year and a half to"
+  },
+  {
+   "t": 512.48,
+   "d": 2.0,
+   "text": "think of a name"
+  },
+  {
+   "t": 514.48,
+   "d": 1.76,
+   "text": "uh you can now choose your own avatar so"
+  },
+  {
+   "t": 516.24,
+   "d": 1.76,
+   "text": "your character can be a little more"
+  },
+  {
+   "t": 518.0,
+   "d": 1.68,
+   "text": "customized there's four to choose from i"
+  },
+  {
+   "t": 519.68,
+   "d": 1.68,
+   "text": "might expand those"
+  },
+  {
+   "t": 521.36,
+   "d": 1.76,
+   "text": "i've added many new items and monster"
+  },
+  {
+   "t": 523.12,
+   "d": 2.08,
+   "text": "types"
+  },
+  {
+   "t": 525.2,
+   "d": 2.8,
+   "text": "and for the super nerds in the in the"
+  },
+  {
+   "t": 528.0,
+   "d": 0.56,
+   "text": "audience"
+  },
+  {
+   "t": 528.56,
+   "d": 1.36,
+   "text": "there is now something called the"
+  },
+  {
+   "t": 529.92,
+   "d": 2.88,
+   "text": "ultimate 64 which is a commodore 64 re"
+  },
+  {
+   "t": 532.8,
+   "d": 3.44,
+   "text": "implemented an fpga an fpga is a field"
+  },
+  {
+   "t": 536.24,
+   "d": 1.84,
+   "text": "programmable gateway"
+  },
+  {
+   "t": 538.08,
+   "d": 2.8,
+   "text": "gate array which is a revolutionary new"
+  },
+  {
+   "t": 540.88,
+   "d": 1.92,
+   "text": "type of chip that can be reconfigured to"
+  },
+  {
+   "t": 542.8,
+   "d": 2.08,
+   "text": "be anything you want it to be a pentium"
+  },
+  {
+   "t": 544.88,
+   "d": 1.68,
+   "text": "done you want it to be a commodore you"
+  },
+  {
+   "t": 546.56,
+   "d": 2.0,
+   "text": "want done you want it to be a"
+  },
+  {
+   "t": 548.56,
+   "d": 3.2,
+   "text": "whatever done so uh"
+  },
+  {
+   "t": 551.76,
+   "d": 1.68,
+   "text": "someone by the name of gideon has a"
+  },
+  {
+   "t": 553.44,
+   "d": 2.0,
+   "text": "company called gideon's logic"
+  },
+  {
+   "t": 555.44,
+   "d": 2.56,
+   "text": "has launched a brand new commodore 64"
+  },
+  {
+   "t": 558.0,
+   "d": 2.64,
+   "text": "all done with this fpga technology"
+  },
+  {
+   "t": 560.64,
+   "d": 1.44,
+   "text": "you can also hook it up to the internet"
+  },
+  {
+   "t": 562.08,
+   "d": 2.48,
+   "text": "so i had to spend a bit of time"
+  },
+  {
+   "t": 564.56,
+   "d": 3.84,
+   "text": "uh putting that in and again mobile"
+  },
+  {
+   "t": 568.4,
+   "d": 0.4,
+   "text": "version"
+  },
+  {
+   "t": 568.8,
+   "d": 2.64,
+   "text": "not perfect yet a couple things i have"
+  },
+  {
+   "t": 571.44,
+   "d": 0.72,
+   "text": "left to"
+  },
+  {
+   "t": 572.16,
+   "d": 2.0,
+   "text": "address i want to improve the mobile"
+  },
+  {
+   "t": 574.16,
+   "d": 3.52,
+   "text": "interface i want to add ranged weapons"
+  },
+  {
+   "t": 577.68,
+   "d": 1.52,
+   "text": "i want to prove the monster ai it's a"
+  },
+  {
+   "t": 579.2,
+   "d": 1.6,
+   "text": "little sketchy but they're uh"
+  },
+  {
+   "t": 580.8,
+   "d": 2.56,
+   "text": "there's still a challenge and i want to"
+  },
+  {
+   "t": 583.36,
+   "d": 1.52,
+   "text": "make the dungeon much larger"
+  },
+  {
+   "t": 584.88,
+   "d": 1.84,
+   "text": "uh we might might get a little crowded"
+  },
+  {
+   "t": 586.72,
+   "d": 1.52,
+   "text": "in there today but we'll see how it goes"
+  },
+  {
+   "t": 588.24,
+   "d": 2.88,
+   "text": "and of course procedurally generated"
+  },
+  {
+   "t": 591.12,
+   "d": 1.76,
+   "text": "of course because this is a multiplayer"
+  },
+  {
+   "t": 592.88,
+   "d": 1.2,
+   "text": "shared instance this would be"
+  },
+  {
+   "t": 594.08,
+   "d": 1.84,
+   "text": "procedurally generated you know at the"
+  },
+  {
+   "t": 595.92,
+   "d": 0.64,
+   "text": "beginning"
+  },
+  {
+   "t": 596.56,
+   "d": 1.76,
+   "text": "you know when the server is instantiated"
+  },
+  {
+   "t": 598.32,
+   "d": 1.28,
+   "text": "and then everyone would enter that"
+  },
+  {
+   "t": 599.6,
+   "d": 0.96,
+   "text": "procedurally"
+  },
+  {
+   "t": 600.56,
+   "d": 4.56,
+   "text": "generated dungeon"
+  },
+  {
+   "t": 605.12,
+   "d": 1.84,
+   "text": "here's how you can uh reach me i'll be"
+  },
+  {
+   "t": 606.96,
+   "d": 1.6,
+   "text": "hanging around all of the"
+  },
+  {
+   "t": 608.56,
+   "d": 1.68,
+   "text": "uh the various roguelike celebration"
+  },
+  {
+   "t": 610.24,
+   "d": 1.04,
+   "text": "rooms i'll be wandering through the"
+  },
+  {
+   "t": 611.28,
+   "d": 2.0,
+   "text": "rooms i'm on discord"
+  },
+  {
+   "t": 613.28,
+   "d": 1.76,
+   "text": "uh but here's my email address twitter"
+  },
+  {
+   "t": 615.04,
+   "d": 2.16,
+   "text": "handle finding me on facebook i even"
+  },
+  {
+   "t": 617.2,
+   "d": 1.36,
+   "text": "have a blog that i haven't touched in a"
+  },
+  {
+   "t": 618.56,
+   "d": 1.28,
+   "text": "long time"
+  },
+  {
+   "t": 619.84,
+   "d": 2.24,
+   "text": "so please reach out with any comments"
+  },
+  {
+   "t": 622.08,
+   "d": 3.28,
+   "text": "and suggestions you got for the game"
+  },
+  {
+   "t": 625.36,
+   "d": 1.36,
+   "text": "and a couple of quick credits because"
+  },
+  {
+   "t": 626.72,
+   "d": 2.64,
+   "text": "i've got uh one minute left"
+  },
+  {
+   "t": 629.36,
+   "d": 1.84,
+   "text": "thanks to all everyone who wrote the"
+  },
+  {
+   "t": 631.2,
+   "d": 1.28,
+   "text": "actual networking code"
+  },
+  {
+   "t": 632.48,
+   "d": 2.24,
+   "text": "my play testers uh the graphics were"
+  },
+  {
+   "t": 634.72,
+   "d": 1.84,
+   "text": "done by a mysterious entity calls"
+  },
+  {
+   "t": 636.56,
+   "d": 1.32,
+   "text": "himself"
+  },
+  {
+   "t": 637.88,
+   "d": 3.56,
+   "text": "qozoww and of course the organizers of"
+  },
+  {
+   "t": 641.44,
+   "d": 0.96,
+   "text": "roguelike who"
+  },
+  {
+   "t": 642.4,
+   "d": 1.44,
+   "text": "i just reached out out of the blue a"
+  },
+  {
+   "t": 643.84,
+   "d": 1.28,
+   "text": "couple years ago said hey i made this"
+  },
+  {
+   "t": 645.12,
+   "d": 1.76,
+   "text": "crazy game can i come"
+  },
+  {
+   "t": 646.88,
+   "d": 1.36,
+   "text": "check it out and i've discovered this"
+  },
+  {
+   "t": 648.24,
+   "d": 1.84,
+   "text": "amazing community of"
+  },
+  {
+   "t": 650.08,
+   "d": 3.04,
+   "text": "like-minded folks which is fantastic so"
+  },
+  {
+   "t": 653.12,
+   "d": 2.0,
+   "text": "enough talking let's play"
+  },
+  {
+   "t": 655.12,
+   "d": 2.72,
+   "text": "so there is a web interface for the game"
+  },
+  {
+   "t": 657.84,
+   "d": 2.8,
+   "text": "you go to rogue rogue.jammingsignal.com"
+  },
+  {
+   "t": 660.64,
+   "d": 3.44,
+   "text": "rogue for the die hards you can telnet"
+  },
+  {
+   "t": 664.08,
+   "d": 0.48,
+   "text": "to"
+  },
+  {
+   "t": 664.56,
+   "d": 2.56,
+   "text": "and get to the address there and that"
+  },
+  {
+   "t": 667.12,
+   "d": 3.04,
+   "text": "gives you the full ascii experience"
+  },
+  {
+   "t": 670.16,
+   "d": 2.88,
+   "text": "and just so everybody knows the game is"
+  },
+  {
+   "t": 673.04,
+   "d": 0.56,
+   "text": "winnable"
+  },
+  {
+   "t": 673.6,
+   "d": 2.16,
+   "text": "i have put a goal at the end of the game"
+  },
+  {
+   "t": 675.76,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 676.88,
+   "d": 4.24,
+   "text": "and you have to determine the magic word"
+  },
+  {
+   "t": 683.04,
+   "d": 2.16,
+   "text": "i'm just going to show i'm running short"
+  },
+  {
+   "t": 685.2,
+   "d": 1.12,
+   "text": "on time but i'm going to"
+  },
+  {
+   "t": 686.32,
+   "d": 3.2,
+   "text": "give everybody a quick look let's stop"
+  },
+  {
+   "t": 689.52,
+   "d": 1.44,
+   "text": "screen"
+  },
+  {
+   "t": 690.96,
+   "d": 2.8,
+   "text": "there we go and share screen share"
+  },
+  {
+   "t": 693.76,
+   "d": 1.52,
+   "text": "screen"
+  },
+  {
+   "t": 695.28,
+   "d": 2.8,
+   "text": "chrome tab"
+  },
+  {
+   "t": 699.12,
+   "d": 3.84,
+   "text": "all right can everybody see that"
+  },
+  {
+   "t": 702.96,
+   "d": 2.96,
+   "text": "or any of the moderators let me know if"
+  },
+  {
+   "t": 705.92,
+   "d": 2.88,
+   "text": "this is not visible"
+  },
+  {
+   "t": 708.88,
+   "d": 2.24,
+   "text": "this is a you know little you know very"
+  },
+  {
+   "t": 711.12,
+   "d": 1.12,
+   "text": "simple hand-coded"
+  },
+  {
+   "t": 712.24,
+   "d": 3.84,
+   "text": "html thing to get it started"
+  },
+  {
+   "t": 716.08,
+   "d": 1.6,
+   "text": "and here's where you can download"
+  },
+  {
+   "t": 717.68,
+   "d": 1.44,
+   "text": "clients for all the different"
+  },
+  {
+   "t": 719.12,
+   "d": 2.0,
+   "text": "uh retro machines and setup instructions"
+  },
+  {
+   "t": 721.12,
+   "d": 1.6,
+   "text": "i've also got a discord voice chat and a"
+  },
+  {
+   "t": 722.72,
+   "d": 1.04,
+   "text": "text chat"
+  },
+  {
+   "t": 723.76,
+   "d": 1.76,
+   "text": "so that you can chat along with the"
+  },
+  {
+   "t": 725.52,
+   "d": 1.84,
+   "text": "other players for the really"
+  },
+  {
+   "t": 727.36,
+   "d": 2.0,
+   "text": "keeners there's developer forums please"
+  },
+  {
+   "t": 729.36,
+   "d": 1.04,
+   "text": "join and"
+  },
+  {
+   "t": 730.4,
+   "d": 2.48,
+   "text": "give us give me some suggestions all"
+  },
+  {
+   "t": 732.88,
+   "d": 0.8,
+   "text": "right let's"
+  },
+  {
+   "t": 733.68,
+   "d": 2.64,
+   "text": "run through it"
+  },
+  {
+   "t": 737.6,
+   "d": 2.32,
+   "text": "demo"
+  },
+  {
+   "t": 741.12,
+   "d": 3.52,
+   "text": "using my avatar and wow see there's tons"
+  },
+  {
+   "t": 744.64,
+   "d": 1.2,
+   "text": "of people"
+  },
+  {
+   "t": 745.84,
+   "d": 1.76,
+   "text": "i tried to get into the game a little"
+  },
+  {
+   "t": 747.6,
+   "d": 2.4,
+   "text": "earlier and get down to the second level"
+  },
+  {
+   "t": 750.0,
+   "d": 0.4,
+   "text": "first"
+  },
+  {
+   "t": 750.4,
+   "d": 2.96,
+   "text": "but the game timed out while i was"
+  },
+  {
+   "t": 753.36,
+   "d": 0.64,
+   "text": "talking"
+  },
+  {
+   "t": 754.0,
+   "d": 1.68,
+   "text": "it because it's multiplayer you know i"
+  },
+  {
+   "t": 755.68,
+   "d": 2.56,
+   "text": "had to have a timeout mechanism"
+  },
+  {
+   "t": 758.24,
+   "d": 1.76,
+   "text": "so if you don't touch a command for five"
+  },
+  {
+   "t": 760.0,
+   "d": 2.48,
+   "text": "minutes it it boots you out"
+  },
+  {
+   "t": 762.48,
+   "d": 3.2,
+   "text": "so you can see it's more real time"
+  },
+  {
+   "t": 765.68,
+   "d": 1.92,
+   "text": "than turn based you could say it's turn"
+  },
+  {
+   "t": 767.6,
+   "d": 1.36,
+   "text": "based except the turns are 50"
+  },
+  {
+   "t": 768.96,
+   "d": 2.32,
+   "text": "milliseconds"
+  },
+  {
+   "t": 771.28,
+   "d": 1.2,
+   "text": "but there it is so i'm going to be"
+  },
+  {
+   "t": 772.48,
+   "d": 1.68,
+   "text": "joining in the game and following the"
+  },
+  {
+   "t": 774.16,
+   "d": 1.6,
+   "text": "hordes down into the second level"
+  },
+  {
+   "t": 775.76,
+   "d": 2.08,
+   "text": "i encourage everyone to explore and give"
+  },
+  {
+   "t": 777.84,
+   "d": 1.44,
+   "text": "me feedback and"
+  },
+  {
+   "t": 779.28,
+   "d": 2.16,
+   "text": "let's hang out in the dungeon of the"
+  },
+  {
+   "t": 781.44,
+   "d": 1.44,
+   "text": "rogue damon"
+  },
+  {
+   "t": 782.88,
+   "d": 3.12,
+   "text": "and have some fun and some"
+  },
+  {
+   "t": 786.0,
+   "d": 3.68,
+   "text": "adventure excellent thank you so much"
+  },
+  {
+   "t": 789.68,
+   "d": 2.0,
+   "text": "uh yeah it's funny some people have been"
+  },
+  {
+   "t": 791.68,
+   "d": 1.6,
+   "text": "here before and are excited to see it"
+  },
+  {
+   "t": 793.28,
+   "d": 1.52,
+   "text": "show up again some people this is their"
+  },
+  {
+   "t": 794.8,
+   "d": 0.96,
+   "text": "first time"
+  },
+  {
+   "t": 795.76,
+   "d": 2.4,
+   "text": "um definite suggestion of wanting wider"
+  },
+  {
+   "t": 798.16,
+   "d": 1.2,
+   "text": "hallways"
+  },
+  {
+   "t": 799.36,
+   "d": 3.36,
+   "text": "but yeah so everybody"
+  },
+  {
+   "t": 802.72,
+   "d": 1.92,
+   "text": "go ahead and have fun we are now"
+  },
+  {
+   "t": 804.64,
+   "d": 1.36,
+   "text": "officially on our"
+  },
+  {
+   "t": 806.0,
+   "d": 3.12,
+   "text": "lunch break of the day um i guess i'll"
+  },
+  {
+   "t": 809.12,
+   "d": 2.0,
+   "text": "i'll let you go leaf but people can find"
+  },
+  {
+   "t": 811.12,
+   "d": 2.24,
+   "text": "you in the space and can find you inside"
+  },
+  {
+   "t": 813.36,
+   "d": 0.8,
+   "text": "of"
+  },
+  {
+   "t": 814.16,
+   "d": 1.76,
+   "text": "you know your own game hopefully people"
+  },
+  {
+   "t": 815.92,
+   "d": 1.52,
+   "text": "can send you the magic word and we can"
+  },
+  {
+   "t": 817.44,
+   "d": 0.72,
+   "text": "maybe"
+  },
+  {
+   "t": 818.16,
+   "d": 2.8,
+   "text": "um people can try and post it and"
+  },
+  {
+   "t": 820.96,
+   "d": 1.44,
+   "text": "hopefully if we can keep track of it the"
+  },
+  {
+   "t": 822.4,
+   "d": 0.96,
+   "text": "first person to"
+  },
+  {
+   "t": 823.36,
+   "d": 2.64,
+   "text": "actually find it we can call them out so"
+  },
+  {
+   "t": 826.0,
+   "d": 1.68,
+   "text": "thank you so much for sharing again"
+  },
+  {
+   "t": 827.68,
+   "d": 2.88,
+   "text": "okay thank you"
+  }
+ ]
+}

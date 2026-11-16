@@ -1,0 +1,180 @@
+{
+  "id": "Gk5uWXBANkA",
+  "title": "Jeff Olson - Alphaman: Developing and releasing a post-apocalyptic Roguelike game in the DOS days",
+  "speaker": "Jeff Olson",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=Gk5uWXBANkA",
+  "talk_type": "history",
+  "summary": "Jeff Olson recounts developing Alphaman, a humorous science-fiction roguelike for DOS begun in 1988 while he was a physics PhD student and released as shareware in 1995. Inspired by Rogue and the tabletop games Metamorphosis Alpha and Gamma World, it featured random 3d6 characters with mutations, ripening mutated berries in place of potions, tech devices in place of magic items, a world map of regenerated local terrain maps, a one-week time limit and pop-culture-themed castles. He covers working within QuickBasic, floppy and math-coprocessor limits, regrets about simple monster AI and an irrelevant stat, shareware economics, playtesters, and the game's recent rediscovery and open-source release. He closes with advice for hobbyist developers.",
+  "games": [
+    "Alphaman",
+    "Rogue",
+    "NetHack",
+    "Moria",
+    "ADOM",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "early roguelikes",
+      "kind": "history",
+      "claim": "Alphaman was an early science-fiction roguelike begun in the late 1980s and released in 1995, inspired by Rogue and the tabletop games Metamorphosis Alpha and Gamma World, and humorous by design.",
+      "detail": "Olson notes the name came from Metamorphosis Alpha. On a genealogy chart of early roguelikes, Alphaman was influenced by no other computer games and influenced none, which he attributes to being the only sci-fi game and having a quite different interface since he didn't have time to play the others.",
+      "t": 83,
+      "quote": "It is science fiction rather than swords and sorcery and based on a couple paper and pencil games",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "colored ascii",
+      "kind": "history",
+      "claim": "Alphaman used coloured ASCII characters to look beautiful at a time when most roguelikes were monochrome.",
+      "detail": "Olson admits it doesn't look like much today but says compared to the prison grey of most roguelikes of the time it was positively stunning. The game ran on DOS only, with no mouse, sound or music.",
+      "t": 127,
+      "quote": "compared to the kind of prison gray of most of the roguelikes this was positively stunning",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "hardware constraints",
+      "kind": "history",
+      "claim": "Alphaman was built in QuickBasic on an IBM XT to fit on a single floppy and run without a math coprocessor, which led to integer math, bit shifts and QuickC/assembly modules.",
+      "detail": "Olson replaced sines and cosines with integer multiplication and bit shifts for speed, wrote a makeshift string handler to work around QuickBasic string issues, and added QuickC modules with embedded assembly because QuickBasic executables were bloated and outgrew a 5.25-inch floppy.",
+      "t": 1036,
+      "quote": "I got rid of all my signs and cosigns and went to integer multiplication and when I could I went to bit shift to speed up the math calculations",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "stats",
+      "kind": "warning",
+      "claim": "Olson regrets including an Intelligence stat in Alphaman that turned out irrelevant; the screen space would have been better used for something interesting like a third mutation.",
+      "detail": "Alphaman characters were randomly generated with 3d6 stats from Metamorphosis Alpha and no player choice. He also regrets that identified berries didn't show their identity on the main screen, forcing a trip to another page.",
+      "t": 378,
+      "quote": "Intelligence was pretty irrelevant. If I had eliminated it I would have had one more line in the character box",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutations",
+      "kind": "example",
+      "claim": "Alphaman gave characters random physical and mental mutations, mostly adapted from Gamma World, that functioned somewhat like classes, including active attacks, always-on traits and ranged quills.",
+      "detail": "There were 17 physical and 13 mental mutations. Some, like sonic attack or life leech, were activated; some, like a tough exoskeleton, were always on; quills could be fired periodically as a ranged weapon.",
+      "t": 439,
+      "quote": "They were a little bit like your class in NetHack or something like that",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "consumables",
+      "kind": "example",
+      "claim": "Alphaman replaced potions with mutated berries that ripen over time, with riper berries more powerful, some giving permanent stat changes, and all throwable to blind creatures.",
+      "detail": "Violet berries permanently raised dexterity and red lowered it, while others were temporary. A tech device could ripen berries quickly. Tech devices such as laser pistols, force field generators and a transmogrifier replaced magic items, and some items were deliberately useless.",
+      "t": 510,
+      "quote": "The fun items were mutated berries. They differed from potion and had varying degrees of ripeness. More ripe was more powerful",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "seeded regeneration",
+      "kind": "technique",
+      "claim": "Because memory was too limited to store local maps, Alphaman regenerated each local terrain map from a random seed derived from its position on the world map whenever the player returned.",
+      "detail": "Each square on the main world map (set in New York's Finger Lakes) corresponded to a local terrain map. Leaving and re-entering produced the same map via the location-based seed.",
+      "t": 629,
+      "quote": "I would regenerate the local map based on a specific random number seed based on where you were in the main map",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster ai",
+      "kind": "warning",
+      "claim": "Olson's biggest regret in Alphaman is its simplistic monster AI; he would add more behavioural variation so creatures felt different from each other.",
+      "detail": "Monsters were coloured upper and lowercase letters. Players usually cleared a screen before moving on because otherwise a crowd of creatures would follow, since the map remembered them.",
+      "t": 705,
+      "quote": "my monster AI was simplistic. If there was one thing to change it would be to go back and work on the AI",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "time limit",
+      "kind": "example",
+      "claim": "Alphaman used food, fatigue and a day-night sleep cycle, with night shrinking visibility to adjacent squares, partly to remind players of a one-week deadline to complete the mission.",
+      "detail": "Heavy loads caused fatigue requiring rest. The mission was to defeat the Grinch within a week by visiting five main castles in any order, with tape recorders found at the start giving the mission and a suggested first castle.",
+      "t": 766,
+      "quote": "I also included the sleep pattern as a reminder to characters that they had a one-week time period to complete their mission",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "lairs",
+      "kind": "example",
+      "claim": "Alphaman's lairs held a single creature type guarding good loot, so a player strong against that type could clear it easily and collect everything.",
+      "detail": "Olson describes random ruins and lairs; a lair might contain three tech devices, three berries and a can of Beefaroni.",
+      "t": 804,
+      "quote": "Layers were fun. Good places to find stuff",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humour",
+      "kind": "example",
+      "claim": "Alphaman's castles were built around pop-culture parodies with special mechanics, such as Grandpa Munster turning you into a bat and scattering your items, and Gilligan breaking an item every turn.",
+      "detail": "Players had to beat Elvis impersonators for blue suede shoes, visit 1313 Mockingbird Lane, and get Gilligan's serum. Grandpa and Gilligan were annoying but easy if you knew the secret. Olson notes much of the topical humour has not survived the test of time.",
+      "t": 900,
+      "quote": "Grandpa and Gilligan were easy to defeat if you knew the right secret, though",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "in-game clues",
+      "kind": "example",
+      "claim": "Alphaman's final boss required thought rather than just tech weapons, with in-game computers providing clues about each castle's secret.",
+      "detail": "The Grinch's stronghold was invisible, irradiated and full of toxic gas, and the Grinch was extremely well protected. One computer clue revealed that the Grinch has a soft spot for roast beef.",
+      "t": 979,
+      "quote": "Winning the game required thought and not just tech weapons. Alphaman had three different kinds of computers in it",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "shareware",
+      "kind": "history",
+      "claim": "Alphaman was released as shareware and earned about 30 paid registrations; Olson wishes he had asked for postcards as ADOM's developer did, since meeting people mattered more to him than the money.",
+      "detail": "He decided to release it about four years into development, telling players to send money if they liked it. He jokes the effective hourly wage was below Victorian child labour.",
+      "t": 1110,
+      "quote": "I wish I had done what the ADOM guy did which is he said, if you like this game, send me a postcard from where you are",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "example",
+      "claim": "Alphaman relied on two dedicated playtesters, one who tried weird edge cases (like using a mental mutation on his own backpack) and one who contributed many ideas.",
+      "detail": "Greg Krol tried all the hard, weird things and probably crashed DOS several times; Peter Jessop, then a struggling actor, gave many ideas for additions.",
+      "t": 1145,
+      "quote": "He would try all the hard challenging weird things and use the mental",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "hobby development",
+      "kind": "principle",
+      "claim": "Olson advises making games for your own enjoyment, trying something nobody has done, using many playtesters and embracing their criticism, and expecting the last 10% to take as long as the first 90%.",
+      "detail": "If you do it for enjoyment your time is never wasted; novelty is where creativity comes out. He compares finishing a complex game to completing a PhD thesis, full of loose ends, and says the skills transferred to his job.",
+      "t": 1252,
+      "quote": "Use as many play testers you can get and accept their criticism and embrace their ideas and look for anything in the game you don't like and change it",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "source release",
+      "kind": "history",
+      "claim": "Alphaman resurfaced years later via a YouTube playthrough and a fan who recompiled and released its source on GitHub with Olson's blessing.",
+      "detail": "Olson notes the YouTuber never used mutations or tech devices, the things he thought made the game fun. Jaime Bainbridge tracked him down through his work email after the embedded CompuServe address had lapsed.",
+      "t": 1335,
+      "quote": "I gave Jaime my source code and he astonish panged to recompile it and released the source code on GitHub with my blessing",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

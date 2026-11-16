@@ -1,0 +1,1431 @@
+{
+ "id": "tWFIQaeSs6M",
+ "url": "https://www.youtube.com/watch?v=tWFIQaeSs6M",
+ "title": "Aron Pietroń, Michał Ogłoziński - Discussion (Against the Storm)",
+ "speaker": "Aron Pietroń, Michał Ogłoziński",
+ "talk_title": "Discussion (Against the Storm)",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-10-01",
+ "duration_s": 2106,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Host Alexei Pepers and developers Aron Pietroń and Michał Ogłoziński of Eremite Games will discuss the development of their Roguelite citybuilder Against the Storm.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 92,
+   "title": "Against the Storm"
+  },
+  {
+   "start": 508,
+   "title": "Replayability"
+  },
+  {
+   "start": 796,
+   "title": "Analytics"
+  },
+  {
+   "start": 926,
+   "title": "Feedback"
+  },
+  {
+   "start": 1091,
+   "title": "Solutions"
+  },
+  {
+   "start": 1164,
+   "title": "Player Feedback"
+  },
+  {
+   "start": 1253,
+   "title": "Dealing with Feedback"
+  },
+  {
+   "start": 1631,
+   "title": "Timer"
+  },
+  {
+   "start": 1810,
+   "title": "Favorite stories"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4578,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.06,
+   "d": 2.67,
+   "text": ">> Hi. ALEXEI: Welcoming Aron"
+  },
+  {
+   "t": 6.6,
+   "d": 17.22,
+   "text": "and Michal of Emrites Games. Doing proper introductions. Aron is a co-founder and"
+  },
+  {
+   "t": 23.82,
+   "d": 5.22,
+   "text": "is the producer of Against the Storm. His previous work on dying light two and dying"
+  },
+  {
+   "t": 29.04,
+   "d": 4.02,
+   "text": "light bad blood taught him how to create scalable products which benefit the early"
+  },
+  {
+   "t": 33.06,
+   "d": 4.56,
+   "text": "access growth of Against the Storm. When not making games he is playing with his puppies"
+  },
+  {
+   "t": 39.78,
+   "d": 4.56,
+   "text": "and relentlessly trying to convince Michal that gothic is a better game than morian."
+  },
+  {
+   "t": 47.88,
+   "d": 8.46,
+   "text": "And Michal another co-founder of Emrites Games -- puts the past experience working on live service"
+  },
+  {
+   "t": 56.34,
+   "d": 4.5,
+   "text": "games into practice by releasing new Against the Storm content updates every two weeks."
+  },
+  {
+   "t": 61.74,
+   "d": 5.34,
+   "text": "Very fast. >> Thank you for having"
+  },
+  {
+   "t": 67.08,
+   "d": 7.32,
+   "text": "us tonight. Hello from across the Atlantic. >> Yes, it is always wonderful when we can get"
+  },
+  {
+   "t": 74.4,
+   "d": 5.94,
+   "text": "people from a little further away than the usual San Francisco locale. Thank you for working with"
+  },
+  {
+   "t": 80.34,
+   "d": 1.6,
+   "text": "our time zones. >>"
+  },
+  {
+   "t": 83.16,
+   "d": 5.16,
+   "text": "It has been fun. Hi. We've played some games before hopping on the"
+  },
+  {
+   "t": 88.32,
+   "d": 6.18,
+   "text": "stream. So we had a long night. ALEXEI: Excellent. Well, yeah,"
+  },
+  {
+   "t": 94.5,
+   "d": 4.8,
+   "text": "to get into it, I think that, you know, maybe actually, hopefully, people have played Against"
+  },
+  {
+   "t": 99.3,
+   "d": 5.64,
+   "text": "the Storm but if not, if you want to talk about it and the most interesting thing to"
+  },
+  {
+   "t": 104.94,
+   "d": 5.94,
+   "text": "us is the roguelite citybuilder connection and how you got to that combination which is"
+  },
+  {
+   "t": 110.88,
+   "d": 3.0,
+   "text": "interesting and one that works extremely well. I have played a lot of Against the"
+  },
+  {
+   "t": 113.88,
+   "d": 7.86,
+   "text": "Storm in the last week. I will tell you that. >> Maybe Aron can kickoff and talk about the"
+  },
+  {
+   "t": 121.74,
+   "d": 3.3,
+   "text": "game itself and I can continue with the roguelike elements."
+  },
+  {
+   "t": 125.04,
+   "d": 5.76,
+   "text": ">> Yeah. Let's go with that. So for those of you who haven't played Against the Storm"
+  },
+  {
+   "t": 131.52,
+   "d": 7.74,
+   "text": "it is a game that takes the citybuilder core of all the mechanics of the player's actions"
+  },
+  {
+   "t": 139.26,
+   "d": 9.06,
+   "text": "and spices them up with roguelike/roguelite elements. When we designed Against the Storm"
+  },
+  {
+   "t": 148.32,
+   "d": 5.76,
+   "text": "from the beginning we tried to distill the essence of our citybuilder of the beginning"
+  },
+  {
+   "t": 154.08,
+   "d": 10.68,
+   "text": "1-2 hours of gameplay loop in the citybuilder. We focused mostly on the repairability side and the"
+  },
+  {
+   "t": 164.76,
+   "d": 8.16,
+   "text": "generation side of roguelites and we took those elements, implemented them into the game and the"
+  },
+  {
+   "t": 172.92,
+   "d": 8.28,
+   "text": "game is out on Steam right now. It has been almost two years of early access biweekly updates and a"
+  },
+  {
+   "t": 181.2,
+   "d": 7.2,
+   "text": "lot of player feedback so the game is evolving still. That's being a roguelite is helpful in that"
+  },
+  {
+   "t": 188.4,
+   "d": 6.3,
+   "text": "because we changed the balance here and there. The game is heavily reliant on RNG, of course,"
+  },
+  {
+   "t": 195.78,
+   "d": 6.0,
+   "text": "so we know tuning that and giving players new content results in basically a lot of"
+  },
+  {
+   "t": 201.78,
+   "d": 7.86,
+   "text": "replayability. One of the main, I think, draws to the game is we have like a perk system, blueprints"
+  },
+  {
+   "t": 209.64,
+   "d": 7.56,
+   "text": "for buildings which are generated so you never play the same hand, you have something of random,"
+  },
+  {
+   "t": 217.2,
+   "d": 6.12,
+   "text": "pseudo random hand you are dealt, and you have to find ways of playing with it basically."
+  },
+  {
+   "t": 224.46,
+   "d": 5.28,
+   "text": "And the game is like cut in some smaller like sessions where you build a city for"
+  },
+  {
+   "t": 229.74,
+   "d": 5.64,
+   "text": "two hours and then you move on to the world map where you find another way to settle somewhere"
+  },
+  {
+   "t": 235.38,
+   "d": 7.02,
+   "text": "and you start this loop again. Then, of course, the game is progressively getting harder the more"
+  },
+  {
+   "t": 242.4,
+   "d": 8.4,
+   "text": "you play and there is also roguelite elements come into play. That's why we call it roguelite because"
+  },
+  {
+   "t": 250.8,
+   "d": 7.44,
+   "text": "we have permanent progression there that you can buy in the main City of the game basically."
+  },
+  {
+   "t": 259.44,
+   "d": 3.72,
+   "text": "I don't know if you, Michal, want to add something to the roguelike element here."
+  },
+  {
+   "t": 263.16,
+   "d": 8.82,
+   "text": ">> Sure. I think you heard this discussion but just to be sure, for us, like when we thought"
+  },
+  {
+   "t": 271.98,
+   "d": 7.86,
+   "text": "about it initially, the roguelite is more of an RPG elements is the same basically. You can have"
+  },
+  {
+   "t": 282.3,
+   "d": 8.7,
+   "text": "RPG elements and a farming game with RPG elements. We thought he could capture the same feeling with"
+  },
+  {
+   "t": 291.0,
+   "d": 9.48,
+   "text": "roguelikes. We have built a very simple prototype of a simple citybuilder and then we thought OK,"
+  },
+  {
+   "t": 301.2,
+   "d": 10.62,
+   "text": "if a roguelike is just like an element of RPG, how does it manifest? What does it mean for a game to"
+  },
+  {
+   "t": 311.82,
+   "d": 9.84,
+   "text": "be a roguelike? What do we need? So we identified a few elements. For example, the most important"
+  },
+  {
+   "t": 321.66,
+   "d": 10.8,
+   "text": "for us was the power fund -- sorry. Ultimate power fund. This ability in roguelikes and roguelites"
+  },
+  {
+   "t": 332.46,
+   "d": 11.1,
+   "text": "and you play to find this one magical build 1 time out of 20 and absolutely break the game and in any"
+  },
+  {
+   "t": 343.56,
+   "d": 8.58,
+   "text": "other generate would be unacceptable. It would be boring and just one strategy to play but in this"
+  },
+  {
+   "t": 352.14,
+   "d": 8.94,
+   "text": "one magical generates it is actually what we do. That was one of the elements to the decisions and"
+  },
+  {
+   "t": 364.74,
+   "d": 8.04,
+   "text": "the meaningful repercussions of those decisions was very important to us. Also,"
+  },
+  {
+   "t": 372.78,
+   "d": 7.2,
+   "text": "the cycle, the roguelikes have very unique beats about them. You can play them for two"
+  },
+  {
+   "t": 379.98,
+   "d": 6.3,
+   "text": "hours and leave them to return after two weeks and play eight hours or whatever"
+  },
+  {
+   "t": 386.28,
+   "d": 7.32,
+   "text": "and leave the game for another month. We enjoyed that and felt it is great thing to"
+  },
+  {
+   "t": 394.56,
+   "d": 7.8,
+   "text": "find a way into the citybuilder generator which is great. We love it. But we thought that we can"
+  },
+  {
+   "t": 402.36,
+   "d": 9.36,
+   "text": "breathe a bit of life to genre that is getting stalled maybe. It was much easier to think that"
+  },
+  {
+   "t": 411.72,
+   "d": 7.14,
+   "text": "way. Those are the elements. Those are like flavors. Let's put it into a citybuilder."
+  },
+  {
+   "t": 420.24,
+   "d": 0.84,
+   "text": "ALEXEI: That's really"
+  },
+  {
+   "t": 421.08,
+   "d": 7.2,
+   "text": "interesting in the way that with roguelites you can push what a really good combination"
+  },
+  {
+   "t": 428.28,
+   "d": 3.39,
+   "text": "looks like and also what a really bad combination because worst case you will fail the run but there"
+  },
+  {
+   "t": 431.67,
+   "d": 6.03,
+   "text": "will be another one right after and that's interesting in comparison -- I like how"
+  },
+  {
+   "t": 437.7,
+   "d": 6.12,
+   "text": "especially I find at the beginning of a game of a citybuilder you often end up with a pattern that"
+  },
+  {
+   "t": 443.82,
+   "d": 4.5,
+   "text": "you do every single time because that's kind of optimal but there are so many conditions"
+  },
+  {
+   "t": 448.32,
+   "d": 5.46,
+   "text": "that change in Against the Storm because of the roguelike elements that will make you push what"
+  },
+  {
+   "t": 453.78,
+   "d": 8.82,
+   "text": "you do and you have to restrategize every time. >> That is something that we struggled with."
+  },
+  {
+   "t": 463.62,
+   "d": 7.38,
+   "text": "Almost every change we implement into the game was measured in a way does it help replayability,"
+  },
+  {
+   "t": 471.0,
+   "d": 8.76,
+   "text": "does it make run different between each other? And if the feature didn't make the game different,"
+  },
+  {
+   "t": 479.76,
+   "d": 9.96,
+   "text": "even if it was fantastic, in most cases, we didn't go for it. We thought very hard about"
+  },
+  {
+   "t": 491.52,
+   "d": 11.1,
+   "text": "what could make players play differently basically. That's something that as you mentioned"
+  },
+  {
+   "t": 502.62,
+   "d": 4.14,
+   "text": "it is not -- it is quite unique in citybuilder. ALEXEI:"
+  },
+  {
+   "t": 508.98,
+   "d": 5.22,
+   "text": "Yeah, were there any examples where you found something that seemed like a good idea but didn't"
+  },
+  {
+   "t": 514.2,
+   "d": 5.88,
+   "text": "help with that replayability? How drew test that? Think through? Or is that one where the speed of"
+  },
+  {
+   "t": 520.08,
+   "d": 4.5,
+   "text": "your updates help and seeing how the community plays with the new update? Do you take things out"
+  },
+  {
+   "t": 524.58,
+   "d": 2.64,
+   "text": "if it isn't impacting the replayability? >> There are multiple steps"
+  },
+  {
+   "t": 528.12,
+   "d": 9.36,
+   "text": "to be honest. The first one is the designer in his head and to be honest there were many ideas that"
+  },
+  {
+   "t": 537.48,
+   "d": 9.24,
+   "text": "we as designers think are great but then when we slip it in the look at the screen on another"
+  },
+  {
+   "t": 546.72,
+   "d": 7.26,
+   "text": "day we can clearly see it is a bad idea. The second feature is the team itself. We are really"
+  },
+  {
+   "t": 553.98,
+   "d": 11.82,
+   "text": "believing in democrucized project and all decide if the future is worth it or not -- feature. I"
+  },
+  {
+   "t": 565.8,
+   "d": 6.84,
+   "text": "can give an example from like last month that I thought about would be great system, like"
+  },
+  {
+   "t": 573.24,
+   "d": 6.12,
+   "text": "city is having walls because walls look fantastic and they would breathe a lot of life to the game,"
+  },
+  {
+   "t": 579.36,
+   "d": 9.42,
+   "text": "but on the very first stage Aron was like I don't think that will make -- like in every game players"
+  },
+  {
+   "t": 588.78,
+   "d": 6.12,
+   "text": "will feel obliged to do it and every town will look the same and there will just be another"
+  },
+  {
+   "t": 594.9,
+   "d": 7.74,
+   "text": "action you have to complete in another game and to be honest that was enough because he"
+  },
+  {
+   "t": 602.64,
+   "d": 13.02,
+   "text": "was right. If you would add such an overwhelmingly impactful system to the game it would be repeated"
+  },
+  {
+   "t": 615.66,
+   "d": 9.0,
+   "text": "in every game and defeat the purpose. But also, as you said, the next filter is the players"
+  },
+  {
+   "t": 624.66,
+   "d": 6.66,
+   "text": "themselves. I don't think there are many occasions where we cut the feature entirely but there are"
+  },
+  {
+   "t": 632.16,
+   "d": 6.42,
+   "text": "multiple examples of features that we iterated like three or four times before we settled on a"
+  },
+  {
+   "t": 638.58,
+   "d": 6.72,
+   "text": "version that both we and the players enjoyed and thought it helped their playability."
+  },
+  {
+   "t": 645.3,
+   "d": 6.24,
+   "text": "I don't know about an example. >> Not sure about an example but"
+  },
+  {
+   "t": 651.54,
+   "d": 7.62,
+   "text": "I think even if we focus very heavily on creating replayability and creating difference experiences"
+  },
+  {
+   "t": 659.16,
+   "d": 6.36,
+   "text": "between different runs we still have some small actions in the game or some points where it's"
+  },
+  {
+   "t": 666.12,
+   "d": 8.16,
+   "text": "unavoidable to an extent. Like in an action game, in a turn-base game, those actions are so"
+  },
+  {
+   "t": 674.28,
+   "d": 6.72,
+   "text": "small that you don't really nets them. -- notice them. In a citybuilder, your basic actions are a"
+  },
+  {
+   "t": 681.0,
+   "d": 6.54,
+   "text": "lot longer and their time span is longer. For example, in our game, most sessions start with"
+  },
+  {
+   "t": 687.54,
+   "d": 8.46,
+   "text": "you build up some roads for your city. You build up wood camp. You build up a gathering camp. These"
+  },
+  {
+   "t": 696.0,
+   "d": 6.0,
+   "text": "are the basic actions that basically happen every time. Sometimes you do them in a different order"
+  },
+  {
+   "t": 702.0,
+   "d": 11.22,
+   "text": "but they are sometimes the same. It is always a bit of that repeated action there. But also"
+  },
+  {
+   "t": 713.88,
+   "d": 6.54,
+   "text": "I think that when miMichal was talk about the last filter, which are the players,"
+  },
+  {
+   "t": 721.74,
+   "d": 7.86,
+   "text": "one very good tool we were using for filtering those repeatable and not so interesting mechanics"
+  },
+  {
+   "t": 729.6,
+   "d": 7.68,
+   "text": "is we do experimental branch. We do biweekly updates but when we have something controversial"
+  },
+  {
+   "t": 737.28,
+   "d": 10.5,
+   "text": "to add and aren't sure ourselves if it is the best idea we just give the most dedicated players"
+  },
+  {
+   "t": 747.78,
+   "d": 7.68,
+   "text": "access to a beta branch basically and they can test the new feature and give us feedback."
+  },
+  {
+   "t": 757.38,
+   "d": 5.94,
+   "text": "We always ask like pointed questions in those beta stages. We ask one of the most important"
+  },
+  {
+   "t": 763.32,
+   "d": 5.46,
+   "text": "questions there is always like how does this feature or this change influence the gameplay"
+  },
+  {
+   "t": 768.78,
+   "d": 7.32,
+   "text": "over all? Is the gameplay more boring or repeatable? Or is it more interesting?"
+  },
+  {
+   "t": 777.3,
+   "d": 8.34,
+   "text": "I can't think of any other like big features that we cut lately. There has been a lot of features."
+  },
+  {
+   "t": 788.64,
+   "d": 7.08,
+   "text": "Yeah. I think that's all that we can think of on that topic."
+  },
+  {
+   "t": 795.72,
+   "d": 4.86,
+   "text": "ALEXEI: Yeah, and then it is interesting that, you know, element of getting information from"
+  },
+  {
+   "t": 800.58,
+   "d": 3.96,
+   "text": "the community. Travis asked what kind of metrics do you collect? Do you get things"
+  },
+  {
+   "t": 804.54,
+   "d": 5.28,
+   "text": "like the average game time from players? What difficulty they are on? What kind of information"
+  },
+  {
+   "t": 809.82,
+   "d": 5.58,
+   "text": "have you found helpful to collect there? >> Our background is actually like mobile"
+  },
+  {
+   "t": 815.4,
+   "d": 9.36,
+   "text": "games so we are a bit skewed. -- in that sense. We really enjoy going, of course anonymous analytics"
+  },
+  {
+   "t": 824.76,
+   "d": 8.82,
+   "text": "like gameplay analytics and going through it with like every basically two weeks in some form. But"
+  },
+  {
+   "t": 833.58,
+   "d": 7.74,
+   "text": "of course that's only small part of the picture. Like there are so many occasions in which the"
+  },
+  {
+   "t": 841.32,
+   "d": 8.34,
+   "text": "data is pointing in one direction. Even like the simplest examples like havingperks and you look"
+  },
+  {
+   "t": 849.66,
+   "d": 8.88,
+   "text": "at the percentage of perks being picked and even just looking at the numbers can be very misleading"
+  },
+  {
+   "t": 858.54,
+   "d": 6.9,
+   "text": "because very often the most interesting and beloved perks are also the most situational"
+  },
+  {
+   "t": 865.44,
+   "d": 6.12,
+   "text": "and they won't be picked that often. They are completely fine and we don't want to change them."
+  },
+  {
+   "t": 871.56,
+   "d": 7.74,
+   "text": "But looking at the numbers themselves you could say here is the most boring perk every made and it"
+  },
+  {
+   "t": 879.3,
+   "d": 7.5,
+   "text": "is most -- we have this one that's actually 50% to wood cutting speed and it is horrible but we can't"
+  },
+  {
+   "t": 886.8,
+   "d": 9.78,
+   "text": "convince the community that it's not. It is always there in the top. So we gather a lot of analytics"
+  },
+  {
+   "t": 896.58,
+   "d": 9.78,
+   "text": "but we don't go blindly into it. We really read the feedback on all of the channels that we can"
+  },
+  {
+   "t": 906.36,
+   "d": 8.52,
+   "text": "put our hands-on. Maybe those days, nowadays, we don't have that much time and sometimes we miss"
+  },
+  {
+   "t": 914.88,
+   "d": 7.98,
+   "text": "a thing or two but we really focus on that. I think it is crucial for our like process."
+  },
+  {
+   "t": 924.18,
+   "d": 8.34,
+   "text": "Aron probably could have summarized it better. >> With analytics we have the most basic ones like"
+  },
+  {
+   "t": 932.52,
+   "d": 3.84,
+   "text": "the perks that people choose, the buildings they choose because this is also generated."
+  },
+  {
+   "t": 937.56,
+   "d": 6.24,
+   "text": "The basic actions they take in a game. The events they encounter and how do they solve"
+  },
+  {
+   "t": 943.8,
+   "d": 7.68,
+   "text": "them. So these are like as Michal said it is helping us create a good balance background"
+  },
+  {
+   "t": 951.48,
+   "d": 5.64,
+   "text": "so for example because those spiky perks as Michal said are the most interesting ones but"
+  },
+  {
+   "t": 957.12,
+   "d": 10.32,
+   "text": "they have to be juxtapose to a background that's balanced. That helps us with that."
+  },
+  {
+   "t": 968.52,
+   "d": 6.78,
+   "text": "There is also like the issue of scale a bit because before you have a game released it is"
+  },
+  {
+   "t": 975.3,
+   "d": 5.64,
+   "text": "hard to get feedback because nobody really cares about the game. When you have the game released"
+  },
+  {
+   "t": 980.94,
+   "d": 5.46,
+   "text": "now and people are playing it daily then the feedback is almost overwhelming to a degree."
+  },
+  {
+   "t": 988.08,
+   "d": 6.54,
+   "text": "It is also, aside from pick thing right feedback from the analytics -- picking -- we monitor the"
+  },
+  {
+   "t": 995.16,
+   "d": 3.9,
+   "text": "YouTube channels, disorder messages, Reddit and Team forums and so on."
+  },
+  {
+   "t": 1002.3,
+   "d": 8.46,
+   "text": "Our duty is to basically read everything but we also have to correctly filter it because between"
+  },
+  {
+   "t": 1010.76,
+   "d": 7.38,
+   "text": "the lines, between the feedback, there is a lot of feedback that is saying something else that"
+  },
+  {
+   "t": 1018.14,
+   "d": 6.54,
+   "text": "is written. For example, people wanting some perks or some abilities or anything to be more"
+  },
+  {
+   "t": 1024.68,
+   "d": 7.38,
+   "text": "powerful doesn't really mean that something is like not -- is too weak or not really fun."
+  },
+  {
+   "t": 1032.72,
+   "d": 6.84,
+   "text": "Sometimes it is just because that's their favorite play style and they want to have even more power"
+  },
+  {
+   "t": 1040.22,
+   "d": 7.02,
+   "text": "tied to it. So we have to be careful witht at a. -- with that. I have this problem where I try to"
+  },
+  {
+   "t": 1047.24,
+   "d": 4.68,
+   "text": "reactively change stuff in the game because when there is player feedback there has to be something"
+  },
+  {
+   "t": 1051.92,
+   "d": 6.48,
+   "text": "wrong but that's not always the case. I think we slowed down with the feedback a bit because"
+  },
+  {
+   "t": 1058.4,
+   "d": 6.84,
+   "text": "of the scale but always because of the scale -- also -- and there sea of feedback you can see"
+  },
+  {
+   "t": 1065.24,
+   "d": 7.08,
+   "text": "the points more clearly. The best thing about balance for example is balance if people talk"
+  },
+  {
+   "t": 1072.32,
+   "d": 10.08,
+   "text": "about it from both sides and argue it is the best because then there is no clear answer and that's"
+  },
+  {
+   "t": 1082.4,
+   "d": 8.76,
+   "text": "a fun thing to witness because, you know, talking about balance is something we as gamers enjoy."
+  },
+  {
+   "t": 1091.16,
+   "d": 7.02,
+   "text": "ALEXEI: It is great point. I have heard the advice before when someone says they have a"
+  },
+  {
+   "t": 1098.18,
+   "d": 4.62,
+   "text": "problem usually that's true. And then they say here is the solution and that's when"
+  },
+  {
+   "t": 1102.8,
+   "d": 4.74,
+   "text": "you know you need to take a minute and think about if that's actually the best solution."
+  },
+  {
+   "t": 1107.54,
+   "d": 8.94,
+   "text": ">> Yeah, we also use like this special site for example in React called up vote where people can"
+  },
+  {
+   "t": 1116.48,
+   "d": 5.7,
+   "text": "post their feature requests, their balance requests, and so on. It is very good tool"
+  },
+  {
+   "t": 1122.18,
+   "d": 6.72,
+   "text": "to collect and collect up-votes for different like feature requests from players. But it is"
+  },
+  {
+   "t": 1128.9,
+   "d": 6.0,
+   "text": "also a tool where you have to be careful with the solutions as you said because people offer"
+  },
+  {
+   "t": 1134.9,
+   "d": 6.3,
+   "text": "a lot of solutions for things that they think should change in the game but a lot of the time"
+  },
+  {
+   "t": 1141.2,
+   "d": 5.82,
+   "text": "the solutions are somewhere else. It is not that this perk for example is weak. It is maybe that"
+  },
+  {
+   "t": 1147.02,
+   "d": 6.06,
+   "text": "this play style is not really well defined and it should have more definition before we change the"
+  },
+  {
+   "t": 1153.08,
+   "d": 6.54,
+   "text": "perks that are tied to it and so on and so on. So it is always a bit of a guessing game and also a"
+  },
+  {
+   "t": 1159.62,
+   "d": 11.64,
+   "text": "bit of -- yeah. Reading between the lines. >> I just wanted to add that maybe I am a"
+  },
+  {
+   "t": 1171.26,
+   "d": 8.1,
+   "text": "bit -- or we are a bit freaked out about player feedback but we always talked about"
+  },
+  {
+   "t": 1180.86,
+   "d": 8.04,
+   "text": "players have the full right in our opinion to write convoluted and emotional feedback,"
+  },
+  {
+   "t": 1188.9,
+   "d": 8.34,
+   "text": "to write just blatantly wrong feedback, whatever. It is like -- it is not"
+  },
+  {
+   "t": 1197.24,
+   "d": 7.74,
+   "text": "their job to give perfect informed and designed well thoughtful feedback because"
+  },
+  {
+   "t": 1205.88,
+   "d": 6.54,
+   "text": "we really believe that that's something that the designer is responsible for. Like we need"
+  },
+  {
+   "t": 1212.42,
+   "d": 6.3,
+   "text": "to look at this -- sometimes emotional ranting. Especially in games like ours when there is like"
+  },
+  {
+   "t": 1219.38,
+   "d": 12.9,
+   "text": "the stakes can be high. People can get emotional sometimes. I must admit we have"
+  },
+  {
+   "t": 1233.0,
+   "d": 12.78,
+   "text": "communities -- it is not like league of legends or something. We all know it. But I truly believe"
+  },
+  {
+   "t": 1245.78,
+   "d": 7.26,
+   "text": "it is our job as designers to unpack it, to really get to the bottom of the feedback."
+  },
+  {
+   "t": 1254.0,
+   "d": 6.36,
+   "text": "ALEXEI: And I wanted to ask because Aron you mentioned at one point the need to resist the"
+  },
+  {
+   "t": 1260.36,
+   "d": 4.2,
+   "text": "urge to get too caught up in the feedback and kind of be reactive. Have you found"
+  },
+  {
+   "t": 1264.56,
+   "d": 6.24,
+   "text": "any good techniques to help especially there is sometimes that emotional toll if you are hearing"
+  },
+  {
+   "t": 1270.8,
+   "d": 5.88,
+   "text": "emotionally charged feedback. How do you take that in in a way that stops you from being too"
+  },
+  {
+   "t": 1276.68,
+   "d": 6.12,
+   "text": "reactive or getting too stressed out? It is a lot of work and can be overwhelming"
+  },
+  {
+   "t": 1282.8,
+   "d": 5.94,
+   "text": "especially negative or emotional feedback. >> Probably the best advice is waiting two weeks."
+  },
+  {
+   "t": 1290.72,
+   "d": 7.98,
+   "text": "There are multiple occasions where people are like it is horrible and after a week or two"
+  },
+  {
+   "t": 1298.7,
+   "d": 8.76,
+   "text": "people get used to it. And not in a bad way. In like oh, yeah, it is horrible but now I can"
+  },
+  {
+   "t": 1307.46,
+   "d": 12.72,
+   "text": "live with that. More like after they play with it a bit they find a way to basically"
+  },
+  {
+   "t": 1322.22,
+   "d": 8.76,
+   "text": "implement it into their play style, for example, to use this mechanic, to basically win with it,"
+  },
+  {
+   "t": 1330.98,
+   "d": 7.14,
+   "text": "or just find a niche for it. In many cases that's the time that's the factor that we need."
+  },
+  {
+   "t": 1338.12,
+   "d": 7.86,
+   "text": ">> Yeah, because of the time we can judge if this change was influencing the play style in"
+  },
+  {
+   "t": 1345.98,
+   "d": 5.4,
+   "text": "a good way because we want to sometimes disrupt the player's play style a bit especially if the"
+  },
+  {
+   "t": 1351.38,
+   "d": 8.7,
+   "text": "game has such a long lifetime or if it is just a bad design and people universally hate it. I"
+  },
+  {
+   "t": 1360.08,
+   "d": 7.14,
+   "text": "think the other tool that's very useful, not very useful for solo devs, but a team it is useful. We"
+  },
+  {
+   "t": 1367.22,
+   "d": 6.72,
+   "text": "basically talk about it a lot. And for example, I am a bit more reactive but Michal is a bit"
+  },
+  {
+   "t": 1373.94,
+   "d": 7.2,
+   "text": "more level headed, so we find common ground there when it comes to addressing feedback."
+  },
+  {
+   "t": 1383.42,
+   "d": 8.34,
+   "text": "Luke our community manager is very player centered so even if we have an urge to"
+  },
+  {
+   "t": 1391.76,
+   "d": 8.1,
+   "text": "dismiss or not dismiss feedback but say let's wait with that it will be fine in two days we"
+  },
+  {
+   "t": 1399.86,
+   "d": 6.78,
+   "text": "still have this itch from the team to respond to that and take into consideration and makes it in."
+  },
+  {
+   "t": 1411.38,
+   "d": 5.4,
+   "text": "Being in a team of different individuals is helping with that and coping with the"
+  },
+  {
+   "t": 1416.78,
+   "d": 5.34,
+   "text": "feedback especially if the emotional one which somebody takes emotional feedback too serious"
+  },
+  {
+   "t": 1422.12,
+   "d": 12.3,
+   "text": "and too hard. Then the rest can console them. ALEXEI: You mentioned a couple times the longer"
+  },
+  {
+   "t": 1434.42,
+   "d": 6.42,
+   "text": "cycle which is something I found interesting. A citybuilder with the way it is broken and runs has"
+  },
+  {
+   "t": 1440.84,
+   "d": 8.16,
+   "text": "a longer feel than a typical roguelike does. I am curious how some of that came into it and Travis"
+  },
+  {
+   "t": 1449.0,
+   "d": 7.08,
+   "text": "asked a question about the queens impatience bar something that mechanically forces the player's"
+  },
+  {
+   "t": 1456.08,
+   "d": 6.48,
+   "text": "speed and you have to end up completing by a certain time and was that a thematic choice"
+  },
+  {
+   "t": 1462.56,
+   "d": 5.46,
+   "text": "or coming from mechanically needing a way to limit how long a run is? How do you think about"
+  },
+  {
+   "t": 1468.62,
+   "d": 4.56,
+   "text": "the time a run takes when you bring in those roguelike elements which are a little faster?"
+  },
+  {
+   "t": 1473.18,
+   "d": 8.76,
+   "text": ">> I think early on in the project we were thinking about how long the session could"
+  },
+  {
+   "t": 1481.94,
+   "d": 7.56,
+   "text": "possibly be and very quickly we came to the like hour and a half and two hours so we were always"
+  },
+  {
+   "t": 1492.44,
+   "d": 9.78,
+   "text": "designing the game to be so the runs would be as long. Every major positive change was always the"
+  },
+  {
+   "t": 1502.22,
+   "d": 17.52,
+   "text": "balance to make the game shorter or longer. The queens impatience for us was very important in the"
+  },
+  {
+   "t": 1519.74,
+   "d": 13.56,
+   "text": "project. We publuxed a demo on steam one year into production. -- published. The game was in a rough"
+  },
+  {
+   "t": 1533.3,
+   "d": 8.22,
+   "text": "state. It was playable and people had fun but it was very simplistic. The queens impatience was a"
+  },
+  {
+   "t": 1541.52,
+   "d": 6.12,
+   "text": "timer basically. Nowadays it is more of a resource and you can stretch it, reduce it, increase it,"
+  },
+  {
+   "t": 1547.64,
+   "d": 9.22,
+   "text": "there are benefits to having it but back in the day it was 30 minutes or one hour time out. It"
+  },
+  {
+   "t": 1556.86,
+   "d": 4.16,
+   "text": "is horrible. Like one of the worst mechanics in the game. People should be upset about it."
+  },
+  {
+   "t": 1563.6,
+   "d": 9.12,
+   "text": "We didn't have time to implement anything more interesting because when you race with time it"
+  },
+  {
+   "t": 1572.72,
+   "d": 12.48,
+   "text": "doesn't sound that fun. But we put like a very fantasy taste of a queen that's very impatient. It"
+  },
+  {
+   "t": 1585.2,
+   "d": 12.42,
+   "text": "matches expectations. You can see her. I remember watching the first few streams that someone posted"
+  },
+  {
+   "t": 1598.58,
+   "d": 14.58,
+   "text": "and he was screaming like please. I knew it was 24 minutes out of 25. There is absolutely nothing."
+  },
+  {
+   "t": 1613.16,
+   "d": 8.1,
+   "text": "Like behind this thin layer of fiction. It was enough for players. I remember I was stunned by"
+  },
+  {
+   "t": 1621.26,
+   "d": 8.34,
+   "text": "how much one can achieve and just a thin layer of friction that matches the expectation because if"
+  },
+  {
+   "t": 1629.6,
+   "d": 5.46,
+   "text": "that would be I don't know -- >>"
+  },
+  {
+   "t": 1635.06,
+   "d": 2.8,
+   "text": "Oh, we lost Michal. >>"
+  },
+  {
+   "t": 1645.02,
+   "d": 1.62,
+   "text": "He is logging back in. >> The queen just cut him off because he was"
+  },
+  {
+   "t": 1646.64,
+   "d": 13.68,
+   "text": "saying bad stuff about her. No, but you had some early problems with that. We had early problems"
+  },
+  {
+   "t": 1660.32,
+   "d": 6.18,
+   "text": "with that when we first pitched the idea to publishers. We talked about feedback from outside"
+  },
+  {
+   "t": 1666.5,
+   "d": 8.22,
+   "text": "the team in the early days before the demo even. We encountered an issue from the beginning that"
+  },
+  {
+   "t": 1674.72,
+   "d": 6.78,
+   "text": "this is just a timer and that some people even today when they buy the game on Steam and play it"
+  },
+  {
+   "t": 1681.5,
+   "d": 6.42,
+   "text": "like they would a normal citybuilder they still feel like this is the expectation. They want to"
+  },
+  {
+   "t": 1687.92,
+   "d": 7.5,
+   "text": "play a longer game. They don't want to be rushed. That's a raiment where I think we manage to create"
+  },
+  {
+   "t": 1696.68,
+   "d": 7.68,
+   "text": "more of a resource out of it. -- moment. It is decreased because you have reputation. We want"
+  },
+  {
+   "t": 1704.36,
+   "d": 6.9,
+   "text": "more sometimes because it lowers the possibility of the forest. It is now more mechanic than a"
+  },
+  {
+   "t": 1711.26,
+   "d": 6.06,
+   "text": "timer but even to this day there is some people who don't really like that but that's something"
+  },
+  {
+   "t": 1717.92,
+   "d": 5.16,
+   "text": "we want to really address because the game has an identity right now. It is roguelike"
+  },
+  {
+   "t": 1723.86,
+   "d": 17.09,
+   "text": "citybuilder. That's one of the elements. And some pressure. There has to be some pressure. We can"
+  },
+  {
+   "t": 1740.95,
+   "d": 7.92,
+   "text": ">> I will note there is a negative thing that is controlling how long can you play"
+  },
+  {
+   "t": 1748.88,
+   "d": 6.84,
+   "text": "but also there is a positive thing. When you are doing great, every species very happy,"
+  },
+  {
+   "t": 1755.72,
+   "d": 12.06,
+   "text": "the game is done. Completed quickly. Like a minute or two. It is also very like intentional decision."
+  },
+  {
+   "t": 1768.62,
+   "d": 7.2,
+   "text": "We don't want the player to be satisfied for too long. It is like -- it is very"
+  },
+  {
+   "t": 1777.02,
+   "d": 7.74,
+   "text": "I would say blaming like if you are having a perfect build you are just going to absolutely"
+  },
+  {
+   "t": 1784.76,
+   "d": 10.8,
+   "text": "demolish everything you encounter and that's great. But the game cannot give you too much of"
+  },
+  {
+   "t": 1795.56,
+   "d": 5.64,
+   "text": "this power because otherwise you would just get bored with a regular game and like a very thin"
+  },
+  {
+   "t": 1801.2,
+   "d": 7.74,
+   "text": "ice I would say. We need to step on as project designers. It is like controlled on both sides."
+  },
+  {
+   "t": 1821.78,
+   "d": 10.2,
+   "text": "ALEXEI: I think a question that can be fun is are there any particular favorite fun stories you have"
+  },
+  {
+   "t": 1831.98,
+   "d": 6.84,
+   "text": "had either seeing people achieve combinations in the game you didn't expect or if you know when"
+  },
+  {
+   "t": 1838.82,
+   "d": 5.4,
+   "text": "you were testing things you had an idea that when you went into it created some situation"
+  },
+  {
+   "t": 1844.22,
+   "d": 9.48,
+   "text": "that was unexpected like some favorite moments? >> We routinely get screen shots from players when"
+  },
+  {
+   "t": 1853.7,
+   "d": 6.96,
+   "text": "they break a record in resource gathering. That's one of the measures of success in citybuilder."
+  },
+  {
+   "t": 1864.08,
+   "d": 3.12,
+   "text": "Your economy is like your power measure in the game a bit."
+  },
+  {
+   "t": 1868.22,
+   "d": 6.48,
+   "text": "So we routinely get some screen shots where somebody has like 50,000 meet and there are"
+  },
+  {
+   "t": 1874.7,
+   "d": 5.52,
+   "text": "some perks used to get to that because we have perks that the more you produce the more you gain"
+  },
+  {
+   "t": 1880.22,
+   "d": 7.68,
+   "text": "in the next production cycle plus you get meat when somebody dies and you get a perk that doesn't"
+  },
+  {
+   "t": 1887.9,
+   "d": 6.24,
+   "text": "increase the queen's impatience because normally it grows when somebody dies in the village."
+  },
+  {
+   "t": 1895.16,
+   "d": 9.0,
+   "text": "There is a perk that disables that. They give them meat if somebody dies. They trigger hostile events"
+  },
+  {
+   "t": 1904.16,
+   "d": 7.32,
+   "text": "to kill people off and gather more resources but I can't think of anything crazier than"
+  },
+  {
+   "t": 1911.48,
+   "d": 6.78,
+   "text": "that. I don't know if you have anything. >> There was one thing where we had an event"
+  },
+  {
+   "t": 1918.26,
+   "d": 9.42,
+   "text": "called living matter and it was an event that was slowly chewing your food. And if"
+  },
+  {
+   "t": 1927.68,
+   "d": 5.58,
+   "text": "you wouldn't solve it, it would like duplicate and stay on the map. Now we have two and they"
+  },
+  {
+   "t": 1933.26,
+   "d": 8.04,
+   "text": "will duplicate to four. If you thought it is a great event. Well, if you want to solve it,"
+  },
+  {
+   "t": 1941.3,
+   "d": 18.3,
+   "text": "and it had some really good rewards and you could farm T. You had to be careful. You forget about"
+  },
+  {
+   "t": 1959.6,
+   "d": 5.1,
+   "text": "them or won't have resources to fix them and everything will spiral out of control"
+  },
+  {
+   "t": 1964.7,
+   "d": 8.04,
+   "text": "and destroy privilege on a wonderful design. But there players of course find a way to stop"
+  },
+  {
+   "t": 1972.74,
+   "d": 7.74,
+   "text": "it. They were building like those small fences around four of them. They were like creating"
+  },
+  {
+   "t": 1980.48,
+   "d": 8.34,
+   "text": "a small farm of living matter just because -- we want it to be cool. The event was avoiding"
+  },
+  {
+   "t": 1988.82,
+   "d": 7.32,
+   "text": "any buildings or structures so not to destroy anything. The players were using it to farm the"
+  },
+  {
+   "t": 1996.14,
+   "d": 7.2,
+   "text": "living matter for like the entirety of the game. >> Yeah because you could basically enclose it in"
+  },
+  {
+   "t": 2003.34,
+   "d": 4.68,
+   "text": "a small fence and the game would then say I don't have space to duplicate so I am going to stay"
+  },
+  {
+   "t": 2008.02,
+   "d": 5.64,
+   "text": "here and they just use that to create an enclosure for the living matter, yeah."
+  },
+  {
+   "t": 2014.5,
+   "d": 5.16,
+   "text": "ALEXEI: Did you decide to leave it that way? Or fix it?"
+  },
+  {
+   "t": 2019.66,
+   "d": 3.12,
+   "text": ">> No, no. It destroyed buildings, no. ALEXEI:"
+  },
+  {
+   "t": 2026.2,
+   "d": 5.58,
+   "text": "I love -- only in roguelikes can you get away with having those exponential every"
+  },
+  {
+   "t": 2031.78,
+   "d": 4.44,
+   "text": "time you do this this happens and the loops but they can go too far."
+  },
+  {
+   "t": 2038.92,
+   "d": 4.14,
+   "text": "Well, excellent. Yeah, I know we gave a little extra time because we started late"
+  },
+  {
+   "t": 2043.06,
+   "d": 5.64,
+   "text": "but we should let you go. It has been wonderful to have you here. It is great when we can have"
+  },
+  {
+   "t": 2048.7,
+   "d": 6.18,
+   "text": "people from the other side of the ocean and I am excited, yeah, for more people hopefully in"
+  },
+  {
+   "t": 2054.88,
+   "d": 5.58,
+   "text": "the roguelike community if they didn't know to try it out. I think the roguelike citybuilder"
+  },
+  {
+   "t": 2060.46,
+   "d": 6.66,
+   "text": "concept just worked so well. It is great to see the game keeps changing so quickly that"
+  },
+  {
+   "t": 2067.12,
+   "d": 4.92,
+   "text": "there is always new stuff to check out. >> Thank you very much. Yeah. We will keep"
+  },
+  {
+   "t": 2072.04,
+   "d": 4.32,
+   "text": "updating the game probably this year at the end of the year it is going to be out of early"
+  },
+  {
+   "t": 2076.36,
+   "d": 6.72,
+   "text": "access so it is going to be a bit less chaotic and balance wise you don't have to relearn it"
+  },
+  {
+   "t": 2083.08,
+   "d": 3.24,
+   "text": "every two weeks maybe. We will see about that."
+  },
+  {
+   "t": 2087.34,
+   "d": 2.52,
+   "text": "Yeah. It is going to be fun. Yeah. Thank you very much for the talk."
+  },
+  {
+   "t": 2089.86,
+   "d": 3.6,
+   "text": ">> Thank you for having us. Yeah. It was great talking to you."
+  }
+ ]
+}

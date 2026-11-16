@@ -1,0 +1,53 @@
+{
+  "id": "SMQuoI_M-kk",
+  "title": "Adrian Herbez - Make a thing to make a thing: 3d-printable Procedural Content in the Browser",
+  "speaker": "Adrian Herbez",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=SMQuoI_M-kk",
+  "talk_type": "technical",
+  "summary": "Toy maker Adrian Herbez demos a browser-based, semi-procedural CAD tool built on three.js for designing 3D-printable sci-fi 'greeble' panels (extrusions, button arrays, handles, randomized dials) and exporting them as STL. He then walks through building geometry by hand in three.js: defining vertices, building triangular faces with counter-clockwise winding so normals face outward for 3D printing, and parameterizing dimensions from HTML inputs. The talk is a tutorial encouraging others to build web-based procedural modeling tools; it has little roguelike design content.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "procedural 3d printing",
+      "kind": "example",
+      "claim": "Adrian Herbez's browser greeble modeler fills user-drawn rectangles with semi-procedural parametric details and exports STL files for 3D printing.",
+      "detail": "The user drags a rectangle and fills it with a feature: positive or negative extrusions, an array of buttons filling the rectangle, equipment-style handles, or indicator dials whose needles are set at random positions. The result downloads as an STL and prints as toy accessories, built with three.js plus its orbit-controls and STL-export add-ons.",
+      "t": 89,
+      "quote": "This will add an array of buttons that will fill in the rectangle",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "mesh generation",
+      "kind": "technique",
+      "claim": "Hand-building a three.js mesh means pushing vertex positions into a list and then defining triangle faces that only reference vertex indices.",
+      "detail": "Herbez numbers a cube's eight vertices in a sensible order (around the bottom, then the top), pushes them as 3D vectors into the geometry's vertex array, then adds two triangles per quad face as index triples. Faces hold no positional data themselves.",
+      "t": 350,
+      "quote": "They don't hold positional data at all. They reference existing points",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "mesh generation",
+      "kind": "warning",
+      "claim": "Procedurally generated meshes meant for 3D printing must have consistent counter-clockwise face winding, because slicers rely on outward-facing normals.",
+      "detail": "Faces exist from only one side, determined by the normal; either perpendicular direction is valid, so the side is specified by the order of the indices. Herbez says to give indices counter-clockwise as seen from outside, since slicing software will complain otherwise.",
+      "t": 391,
+      "quote": "it is better if you think of faces only existing from one side because the normals matter when you go to 3d print",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "parametric geometry",
+      "kind": "technique",
+      "claim": "A first step toward procedural geometry is replacing hard-coded vertex coordinates with parameters read from user inputs.",
+      "detail": "Herbez reads width, height and depth from plain HTML inputs, halves them, and substitutes them for the unit coordinates of the cube, so the user can regenerate anything from a cube to a flat slab. The boilerplate is published as a deliberately simple GitHub repo.",
+      "t": 529,
+      "quote": "just replaced all of the ones with the variables for the width and depth",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

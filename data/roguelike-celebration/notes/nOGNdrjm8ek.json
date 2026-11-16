@@ -1,0 +1,159 @@
+{
+  "id": "nOGNdrjm8ek",
+  "title": "Mike Cook - The City, The Street, The Lens: Building and Appreciating Generative Systems",
+  "speaker": "Mike Cook",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=nOGNdrjm8ek",
+  "talk_type": "design",
+  "summary": "Mike Cook uses street photography as an extended analogy for understanding procedural generators. He argues that the usual ways of discussing generators (sample grids, statistics, expressive range histograms) treat content in isolation, whereas street photography is about collisions between many systems in a city. He proposes three scales for appreciating generators: the city (the whole game and the dream generators serve), the street (a specific place in the game where generators meet other systems), and the lens (a cropped single object or screenshot, the scale at which players share and tell stories). His thesis is that a generator is best understood through how its output collides with everything else around it.",
+  "games": [
+    "Dwarf Fortress",
+    "Caves of Qud",
+    "Spelunky",
+    "Minecraft",
+    "Bleed Map"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "principle",
+      "claim": "Standard ways of evaluating procedural generators, such as output sample grids, statistics and expressive range histograms, are useful but leave out other ways of understanding what a generator does in a game.",
+      "detail": "Cook says the way we talk about procgen has barely changed since the early 80s: we post samplers of outputs or, if deeper, do sampling and expressive range analysis. He uses these every day but asks whether there are other ways of thinking about generators, which motivates the rest of the talk.",
+      "t": 163,
+      "quote": "this is all good stuff. This is all really, really good. But um I'm wondering you know are there other ways of thinking about this stuff?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "principle",
+      "claim": "A procedural generator is best understood not by what it generates in isolation but by how its output collides with the other systems around it in the game.",
+      "detail": "This is Cook's central thesis, drawn from street photography being about collisions between people, traffic, weather, buildings and laws. Analysing generated content alone is like posing it in a portrait studio, but games are tangled webs of systems and designers have to engage with the context around generated content.",
+      "t": 1381,
+      "quote": "a generator is best understood not through what it generates, but through the way what it generates collides with everything else around it",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "collisions between systems",
+      "kind": "principle",
+      "claim": "Interesting moments come from collisions between independent systems, the way a good street photograph needs at least two reasons to be taken.",
+      "detail": "Cook's rule is that a photo needs two reasons: an inflatable location pin floating over London's South Bank is one reason, while two tourists reading a map beneath it adds a second. He concludes street photography is about witnessing, framing and capturing collisions, and a city is full of colliding systems like people, traffic, buildings, nature, weather and laws.",
+      "t": 601,
+      "quote": "street photography is primarily about collisions between things. Um, it is about witnessing these collisions, noticing them, figuring out a way to frame them and capture them",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "sampling and curation",
+      "kind": "example",
+      "claim": "Liam Wong's photo 'Night City' was made like sampling a procedural generator: he shot an intersection repeatedly while systems changed at different speeds, then curated one result.",
+      "detail": "Rain and advertising boards changed in seconds, crowds more slowly, and Tokyo itself over years and decades. The contact sheet at the back of Wong's book showed the many samples, and after sampling he did more curation and even changed the crop afterward, so the final image depends on many layered processes.",
+      "t": 772,
+      "quote": "he was sampling a procedural generator because he sat there at this intersection in Tokyo one night and he kept taking photos",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fragmentary storytelling",
+      "kind": "principle",
+      "claim": "Partial descriptions that crop out most of the context, as in FromSoftware-style item descriptions, can suggest a whole world through what is left unsaid.",
+      "detail": "Cook compares a good street photo to FromSoftware-style storytelling: a partial description of an item, place or person with trails coming off it that tell you about the society or world as a whole. Just like things cropped off the edge of a photo, things exist beyond the description that the player cannot see.",
+      "t": 390,
+      "quote": "you have this partial description of an item or or an object or a place or a person, and there's all of these trails that come off it",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "design intent",
+      "kind": "principle",
+      "claim": "At the 'city' scale, designers should ask how their generators contribute to the overall dream or concept of the game, since a whole game is as hard to describe as a whole city.",
+      "detail": "Cook notes Dwarf Fortress's store page itself says it is hard to explain how good its generation is. Tourist-board descriptions of New York boroughs are generic, while a poetic line from You've Got Mail says more; similarly we can't describe all of Dwarf Fortress but can ask what its generators contribute to the dream of the game.",
+      "t": 1017,
+      "quote": "thinking about generators on the scale of a city is thinking about how they contribute to this bigger dream",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "history generation",
+      "kind": "technique",
+      "claim": "Comparing two games' generators the way one compares two cities, by what differs in character, is a useful exercise, for example how Dwarf Fortress and Caves of Qud each generate history.",
+      "detail": "Cook proposes treating Dwarf Fortress and Caves of Qud as London and Paris: they share a lot because both are cities, so the interesting discussion is what is different about their character and soul. Applied to history generation, the question is what differs in the dream of how each game handles that concept.",
+      "t": 982,
+      "quote": "if Dwarf Fortress and Caves of Cut are two cities, right? They are London and Paris, right? What is different and what is similar about how they deal with history?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "technique",
+      "claim": "At the 'street' scale, a designer should sample the whole game at one location, recording every system and source of generated content visible there, like a school field quadrant survey.",
+      "detail": "A street is a moment or place in the game, such as Joppa in Caves of Qud. Instead of thinking about the game's feature list, ask what can be seen from where you stand, which systems are talking to each other, and how much generated content is present and where it comes from.",
+      "t": 1094,
+      "quote": "So you're not sampling a generator. You're sampling all of your game. Like what can you see right now?",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "context-dependent generation",
+      "kind": "example",
+      "claim": "Spelunky's level generator behaves differently in different worlds because new enemies and room templates change what it combines, so it should not be discussed only in the abstract.",
+      "detail": "Cook says his own past talks on Spelunky's generator treated it abstractly, but world 1-1 differs from 4-1 and even from 1-3 or 1-4. The same algorithm responds to different inputs and expresses itself in different ways, and walking from 'street to street' reveals how other game systems collide with it.",
+      "t": 1126,
+      "quote": "Spelunky's level generator on world one level one is very different from world four level one",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "mindful play",
+      "kind": "technique",
+      "claim": "Drawing and annotating a map while playing a game, as in Florence Smith Nicholls's keepsake game Bleed Map, helps a designer notice what they are and aren't paying attention to.",
+      "detail": "Cook has been playing Bleed Map, where you draw a map of what you are doing in a video game and annotate it from prompts. He found it a good way to be mindful about play and to notice what he chooses to record; he suggests doing this while playing your own game, though he has not yet tried it on one of his.",
+      "t": 1210,
+      "quote": "as you're playing your game, mapping out what you're seeing and what are you noticing, right?",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "sharing generated content",
+      "kind": "principle",
+      "claim": "At the 'lens' scale, a single cropped object or screenshot is how players actually share and tell stories about procedurally generated games, so designers should examine generators at that scale.",
+      "detail": "Players share screenshots, short clips and single things. A Minecraft seed describes a world larger than Earth, but people share it because of one specific thing near spawn; Dwarf Fortress stories are complex but are usually told starting from a specific cropped-out thing like a dwarf description.",
+      "t": 1322,
+      "quote": "they're sharing the seed, but the real reason that they're sharing it is because there's a very specific thing they want you to see",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "technique",
+      "claim": "Crop a single object or screenshot out of your game and ask what evidence of all your generative systems is visible in it and what stories it leads the player to.",
+      "detail": "Using a Dwarf Fortress dwarf description as an example, Cook notes we cannot see the fortress or the year but can intuit how certain generators shaped how the dwarf is presented. He credits Florence Smith Nicholls's work on archaeological game design as an influence on this lens-level approach.",
+      "t": 1370,
+      "quote": "cropping something out of your game and asking yourself, what evidence can I see of all of my generative systems here?",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Non-permadeath modes let players return to and really get to know a generated location, so the fewer things that change get more attention.",
+      "detail": "Asked about Caves of Qud's permadeath and non-permadeath modes, Cook compares it to photo spots he keeps revisiting because they reliably set up a good shot. Returning to a place means fewer things are changing, so the player notices the changes more; he also jokes that all games are permadeath on some scale.",
+      "t": 1637,
+      "quote": "when you have non-per death, you have a chance to actually really get to know a location or or or a particular setup for a procedural like world",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "technique",
+      "claim": "Limiting yourself to a fixed number of screenshots when examining a game, like a 30-exposure roll of film, forces more deliberate choices about what is worth capturing.",
+      "detail": "In Q&A about over-recording, Cook contrasts old screenshot-and-text let's plays, where shots were chosen carefully, with full playthrough streams. Film's expense made him think hard before each photo, and he suggests a designer could go into their game with a 'roll of 30 photos' and would likely take different screenshots.",
+      "t": 1720,
+      "quote": "if you go into your game with a roll of 30 photos, right, and you don't allow yourself to take any more, you probably would take different screenshots",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

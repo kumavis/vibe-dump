@@ -1,0 +1,150 @@
+{
+  "id": "OwFrTY3IoQQ",
+  "title": "David Brevik - Fireside Chat (The Making of Diablo)",
+  "speaker": "David Brevik",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=OwFrTY3IoQQ",
+  "talk_type": "history",
+  "summary": "In a fireside chat with Alexei, Diablo creator David Brevik recounts how Moria and Angband shaped Diablo, which was pitched as a turn-based permadeath game with an action-point time system. Blizzard asked for real-time and no permadeath; Brevik resisted because turn-based play created roguelike tension, lost a team vote, then built a real-time prototype in an afternoon by converting action costs to fractions of a second and immediately saw it was right. He explains how Diablo II's speed escalated through micro-decisions (finer movement grid, 16 directions, running), and how Diablo's 'anyone can do anything' classes confused players, leading to more guided classes and late-game item sets. He closes by advocating prototypes, listening to feedback and being willing to change the vision.",
+  "games": [
+    "Diablo",
+    "Diablo II",
+    "Angband",
+    "Moria",
+    "Rogue",
+    "Wizardry"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "diablo origins",
+      "kind": "history",
+      "claim": "Diablo began as a party-based RPG design in Brevik's high school days and shifted toward a roguelike after he spent college playing Rogue, Moria and Angband.",
+      "detail": "Brevik says he played these roguelikes hour after hour in the computer lab, and Moria's successor Angband was a huge influence. He adds that the term 'roguelike' did not exist in marketing when Diablo launched; people didn't know whether it was an RPG or action game.",
+      "t": 168,
+      "quote": "I started playing a bunch of rogue and roguelike games and Moria and roguelike and others were really big influences on the design",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "action point time",
+      "kind": "technique",
+      "claim": "Diablo's original turn-based design used a time-cost system (10 points orthogonal, 14 diagonal) rather than strict alternating turns, so action order constantly changed.",
+      "detail": "The original pitch document described turn-based play with permadeath. Brevik stresses it was never going to be a simple my-turn/your-turn system.",
+      "t": 320,
+      "quote": "moving left, right or up and down is 10 points and diagonally moving takes 14 points so kind of like time segments so the order would constantly change",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "tension and permadeath",
+      "kind": "principle",
+      "claim": "Brevik saw turn-based play and permadeath as the source of roguelike tension: getting lazy, then suddenly facing a deadly monster with a weeks-old character at stake.",
+      "detail": "He describes rounding a corner into an ancient multi-hued dragon, palms sweating, rummaging through the backpack for anything to escape. That is why he fought Blizzard's request to go real-time and drop permadeath.",
+      "t": 418,
+      "quote": "for me, the turn-based and stuff was really the tension in a roguelike game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "team vote",
+      "kind": "history",
+      "claim": "Diablo's switch from turn-based to real-time was decided by a vote of about 15-17 staff in the kitchen, with only about four wanting to keep turn-based.",
+      "detail": "Brevik held out after Blizzard's repeated requests. Once he tried real-time, he knew it was right for the game and the market.",
+      "t": 529,
+      "quote": "about four of us wanted to keep it turned base and everyone else wanted to switch to real-time",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "principle",
+      "claim": "Cheap prototypes let a designer test a contested idea without much cost; Brevik still prototypes constantly and shelves what doesn't work.",
+      "detail": "He built the real-time Diablo prototype over a Friday afternoon, 6-8 hours, after sending everyone home. Even if it had failed, it wouldn't have been a big waste. He mentions currently prototyping a puzzle roguelike.",
+      "t": 606,
+      "quote": "The cool part about prototypes is you don't put a whole bunch of effort into it so if it is throw away",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn-based to real-time",
+      "kind": "technique",
+      "claim": "Because Diablo's turn system was already time-cost based, converting to real-time meant mapping costs to seconds and running about 10 turns per second, with tunable numbers.",
+      "detail": "Moving orthogonally became 1 second and diagonally 1.4. The main change was having player and monster turns resolve simultaneously; much of the underlying data still applied.",
+      "t": 797,
+      "quote": "turned those into fractions of a second and said 1.4 second do is move diagonally and 1 second to move orthogonally",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "reverse engineering",
+      "kind": "history",
+      "claim": "Diablo's source was reverse-engineered after the PlayStation port shipped with its symbol table on the disc.",
+      "detail": "A separate developer ported Diablo to PS1 and left the symbol table on the CD image. Once PS1 encryption was cracked, people used it to disassemble Diablo; Brevik has seen it running on a phone.",
+      "t": 943,
+      "quote": "people looked at the disks and found the symbol table for Diablo and then reverse, you know, engineered the whole thing",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "tileset conversion",
+      "kind": "technique",
+      "claim": "Diablo generated dungeon layouts like an ASCII roguelike, then converted cells such as doors and floors into graphics with a separate handmade algorithm per tileset.",
+      "detail": "Each tileset had its own conversion process and substitution tiles; Brevik calls it a total nightmare. The large grid dictated play: tile-to-tile movement and at most eight neighbours.",
+      "t": 1085,
+      "quote": "Each tileset had a different algorithm, conversion process, different tiles that had to be substituted in. It was a total nightmare",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "movement fidelity",
+      "kind": "example",
+      "claim": "Diablo II's faster pace came from micro-decisions: a finer 5x5 subgrid per tile, varying monster footprints, 16-direction movement and running, which then forced faster monsters.",
+      "detail": "More enemies could surround you and pathing looked smoother. Running was added because players hated the 30-40 second walk in town; a stamina bar limited it, which Brevik calls a terrible decision. Running monsters escalated speed further.",
+      "t": 1221,
+      "quote": "it was kind of a bunch of micro decisions",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "classless design",
+      "kind": "warning",
+      "claim": "Diablo's 'anyone can do anything, just better or worse' class design produced a soup where average players didn't know what to do.",
+      "detail": "Classes differed mainly in animation speeds for casting or attacking, balanced in theory. Brevik says the average consumer didn't understand which direction to go.",
+      "t": 1377,
+      "quote": "It was supposed to be anybody can do anything but you were just bad at some stuff and better at other things",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "guided classes",
+      "kind": "technique",
+      "claim": "Diablo II guided and restricted classes more, offering distinct paths within a class (e.g. Amazon bows vs spears), and added item sets as a late-game twist enabling powerful combinations.",
+      "detail": "Off-class options remained possible but harder, via stat requirements. Better skill design narrowed choices and focused players. Sets, crafting and skill synergies gave exciting late-game combinations.",
+      "t": 1416,
+      "quote": "in Diablo II we were like OK we have to guide people much better and restrict people in many ways",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "niche audiences",
+      "kind": "principle",
+      "claim": "Today's huge gaming audience and direct community channels let niche games succeed even without AAA-sized audiences.",
+      "detail": "Brevik contrasts 1994 with today's streaming, YouTube and Discord giving unprecedented developer access, which can be supportive or grueling when you screw up.",
+      "t": 1633,
+      "quote": "you can even make niche games and it can still be successful even though the audience isn't huge",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "flexible vision",
+      "kind": "principle",
+      "claim": "Keep a vision but don't be rigid: listen to trusted feedback and expect the final game to differ from what you imagined.",
+      "detail": "Brevik cites the turn-based to real-time switch as the lesson. 'The smartest person in the room... is the person that listens to everybody.'",
+      "t": 1733,
+      "quote": "Never be afraid to make changes in what your grand vision was because almost always your end",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

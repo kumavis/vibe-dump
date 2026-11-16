@@ -1,0 +1,166 @@
+{
+  "id": "_s-Tn0biyEk",
+  "title": "Abdelrahman Madkour: Controlling your generator using Expressive Range Analysis",
+  "speaker": "Abdelrahman Madkour",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=_s-Tn0biyEk",
+  "talk_type": "technical",
+  "summary": "A PhD researcher explains expressive range analysis (ERA), the academic technique of generating many outputs, scoring them on metrics and plotting the distribution to see what a generator can make. He argues ERA can be used not only to evaluate but to control generators: parameterize the generator and adjust parameters, by hand, by search, or by learning from selected examples. The second half applies this to graph grammars for mission generation (following Joris Dormans), weighting rules and right-hand sides by tracking which rules produced the outputs a designer selects in an ERA plot. He closes on limitations: metrics are crude, the approach needs an existing grammar, and reweighting cannot make a grammar more diverse than it already is.",
+  "games": [
+    "Super Mario Bros.",
+    "Unexplored"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range analysis",
+      "kind": "technique",
+      "claim": "Expressive range analysis evaluates a generator by producing many outputs, scoring each on metrics, and plotting the distribution as a heatmap to show which regions of design space it covers.",
+      "detail": "Madkour credits the idea to a paper by Smith and Whitehead, who generated many Mario-style levels and scored them with 0-1 metrics such as linearity and leniency. Darker cells show where more generated levels fall, which reveals how expressive the generator is.",
+      "t": 164,
+      "quote": "have it spit out a bunch of things, academic PCG researchers love Mario. Have it generate a bunch of Mario levels",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "open-question",
+      "claim": "Evaluating whether a procedural content generator is any good remains an open research problem, which is why tools like expressive range analysis exist.",
+      "detail": "Madkour notes that much academic effort goes into making generators diverse and playable, but even humans struggle to explain why outputs work, so there is no settled way to judge a generator.",
+      "t": 124,
+      "quote": "Evaluation is still an open research problem",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator metrics",
+      "kind": "principle",
+      "claim": "Metrics for expressive range analysis are heavily game-dependent proxies for quality; designers must pick measurements that matter for their own game rather than expecting a function that says a level is good.",
+      "detail": "He suggests examples for dungeon levels such as how many paths there are to completion, and in Q&A stresses that linearity versus leniency is just the canonical example: number of rooms, number of enemies or how many arms an enemy has are equally valid.",
+      "t": 304,
+      "quote": "the proxies of quality you will not get a mash function that tells you level good",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator metrics",
+      "kind": "principle",
+      "claim": "Any measurable property relevant to design can be an axis of an expressive range plot; linearity and leniency are only the canonical examples.",
+      "detail": "Answering a question, Madkour says you can use whatever metrics are useful in your design context. Host Alexei adds that in a AAA survival crafting game he built similar visualizations of how resources are distributed over the spatial map.",
+      "t": 1656,
+      "quote": "You can use whatever metrics you deem necessary or useful to you in a design context. Number of rooms or number of enemies",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "debugging generators",
+      "kind": "technique",
+      "claim": "Mike Cook's Danesh tool (a Unity plugin) lets designers visualize a generator's expressive range, click a point in the plot to see the corresponding output, and adjust parameters with sliders.",
+      "detail": "Madkour describes Danesh as letting you look at a point in the expressive range and see the level behind it, tweak sliders to see how the range shifts, and run local search to optimize parameters toward specific metrics.",
+      "t": 407,
+      "quote": "Danish lets you visualize your generators and use expressive range analysis",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "parameterized generators",
+      "kind": "principle",
+      "claim": "Parameterizing a generator (iteration counts, limits, rule weights) turns its expressive range into something you can steer by turning knobs instead of rewriting the algorithm.",
+      "detail": "Rather than repeatedly hand-editing a manual algorithm until it hits the desired region, expose parameters. For grammars, you can control which rules are applied or weight the rules and adjust those weights.",
+      "t": 513,
+      "quote": "Parameterize your generator. You can have limits and number of iterations",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "parameter optimization",
+      "kind": "warning",
+      "claim": "Automatically tuning generator parameters with brute force, hill climbing or genetic algorithms works but hides control inside the search method rather than giving the designer direct control of the generative space.",
+      "detail": "Madkour says optimization is a clear-cut problem you can brute force if the space is small, but then you become dependent on designing the optimization itself, which is the same difficulty PCG researchers already face.",
+      "t": 672,
+      "quote": "It doesn't give you a direct way of controlling the generative space. It is hidden in the hill climbing",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "learning from examples",
+      "kind": "technique",
+      "claim": "A generator can be steered by learning from examples: the designer selects outputs in a desirable region of the expressive range and the system adjusts parameters to produce more like them.",
+      "detail": "This is the approach Madkour pursues: identify which parameterizations land in the region you want, mark them as good, and shift the generator toward doing more of them.",
+      "t": 699,
+      "quote": "these parameterizations are good. Let's try to do more of these. So you are learning from examples",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "grammars",
+      "kind": "technique",
+      "claim": "Generative grammars are string rewriting systems: start from a sentence, find a non-terminal, and replace it using a rule whose left-hand side matches, until only terminals remain.",
+      "detail": "Madkour notes grammars came from linguistics and now underlie city and building generation; each rule's left side must be a non-terminal while the right side mixes terminals and non-terminals.",
+      "t": 802,
+      "quote": "They are string rewriting systems where you have a start sentence and you have something called terminals and non-terminal",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "grammars",
+      "kind": "warning",
+      "claim": "Grammars are hard to author because the rules do not map intuitively to the outputs, which is why grammar-based tools like CityEngine and SpeedTree use grammars specialized to one domain.",
+      "detail": "CityEngine uses a shape grammar for buildings and SpeedTree uses L-systems for trees; if you want to generate something else, like guns, you cannot reuse them. Madkour says the input to many generators does not directly map to the output, so it is hard to reason from rules to expressive range.",
+      "t": 948,
+      "quote": "the input tolet -- to a lot of your generators doesn't directly map to the output",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "mission and space",
+      "kind": "technique",
+      "claim": "Joris Dormans' approach to Zelda-style dungeon generation splits it into mission generation (the tasks to finish the level) and space generation (where those tasks happen), which can be done in either order.",
+      "detail": "Madkour cites Dormans, who made the game Unexplored, which Steam reviewers praised for its generation. Madkour focused on mission generation using Dormans' graph grammars.",
+      "t": 1082,
+      "quote": "mentions space and mission generation. Mission being the things you do to finish the level and space generation being there space",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "graph grammars",
+      "kind": "technique",
+      "claim": "Graph grammars rewrite graphs instead of strings: find a subgraph matching a rule's left-hand side and replace it with the right-hand side, where nodes can be rooms and edges doors or paths.",
+      "detail": "Madkour presents graph grammars as the representation for Dormans-style mission generation, starting from an initial graph and applying rules with terminals and non-terminals.",
+      "t": 1175,
+      "quote": "you try to find a subgraph of that graph that matches one your rules and replace that subgraph with the thing on the right-hand side",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "graph grammars",
+      "kind": "technique",
+      "claim": "Madkour's system controls a graph grammar by recording each output's generation chain (which rules and right-hand sides were chosen when applicable) and reweighting those choices toward the examples a designer selects in the expressive range plot.",
+      "detail": "Probabilities are placed at two levels: which applicable rule is picked, and which right-hand side of a rule is used. Tracking these choices for selected outputs lets the system compute new weights; the demo lets you select a region, train on it and see the result.",
+      "t": 1330,
+      "quote": "Which rules were applied when they were applicable and which right-hand side was applied when applicable",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "learning from examples",
+      "kind": "warning",
+      "claim": "Reweighting a grammar's rules changes how often each output appears but not what the grammar can produce, so it keeps outputs playable but cannot make the generator more diverse than its base grammar.",
+      "detail": "Madkour calls this a double-edged sword: if the grammar is well formed, levels stay playable, but the adjusted generator is bounded by the original. He also notes the method does not avoid the '1,000 bowls of oatmeal' problem, since that comes from the underlying grammar and metrics.",
+      "t": 1978,
+      "quote": "It makes your levels are playable if your grammar is well-formed but the downside is it can't be more diverse than the original",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator metrics",
+      "kind": "open-question",
+      "claim": "Current generator metrics are not nuanced enough to capture the design qualities designers actually care about, and designing useful metrics is an ongoing research question.",
+      "detail": "Among the limitations of his system, Madkour notes the metrics came from other people's work and the field's metrics are relatively crude; the system also requires an already-established grammar, and creating grammars is a separate unsolved problem.",
+      "t": 1502,
+      "quote": "metrics we come up with are relatively sort of not nuanced enough to capture design nuances you may care about",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

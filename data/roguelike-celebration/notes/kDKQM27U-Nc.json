@@ -1,0 +1,239 @@
+{
+  "id": "kDKQM27U-Nc",
+  "title": "Caves of Qud Live Playthrough with Developer Commentary",
+  "speaker": "Jason Grinblat, Nick DeCapua",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=kDKQM27U-Nc",
+  "talk_type": "performance",
+  "summary": "Caves of Qud co-creator Jason Grinblat game-masters a live, audience-directed playthrough while primary playtester Nick DeCapua plays. The audience votes on a quest scenario and builds a mutant character (light manipulation, multiple legs, pyrokinesis, sense psychic, and the evil twin defect), which is boosted to level 18 with a debug command. Along the way the developers explain the mutant vs True Kin split, defects, water as currency, the static world map of procedurally generated zones, discoverable locations and procedurally generated sultan history, factions and reputation, proselytizing followers, and psychic hunters drawn by mental power. The run ends in death at the horns of a unique goat folk shaman before reaching the quest target.",
+  "games": [
+    "Caves of Qud",
+    "ADOM",
+    "Gamma World",
+    "Master of Magic",
+    "Fallout"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "setting",
+      "kind": "history",
+      "claim": "Caves of Qud's post-apocalyptic setting draws on Gamma World, but obscures the pre-fall past through time and cultural mashups so it is less recognisable than in Fallout.",
+      "detail": "Grinblat describes Qud as an open-world science fantasy roguelike heavily inspired by ADOM and by the tabletop game Gamma World, where radiation uplifted animals and plants to human intelligence. Unlike Fallout, players cannot readily identify with the culture that existed before the fall.",
+      "t": 107,
+      "quote": "the vestiges of the old pre-fall past were like obscured enough through time and through weird cultural like mashups that they weren't as discernible",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character creation",
+      "kind": "principle",
+      "claim": "Caves of Qud treats character creation as a creative act, modelled on 1990s 4X games like Master of Magic, meant to flood players with possibilities about what the game is about.",
+      "detail": "Grinblat explicitly ties this to Ben McGraw's talk on character creators and calls character creation in Qud very important and intimate.",
+      "t": 442,
+      "quote": "it's supposed to just sort of like flood your brain with possibilities for what maybe this games about what you can do in the world",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutations",
+      "kind": "example",
+      "claim": "Caves of Qud splits characters into mutated humans, who assemble a build from over seventy mutations, and True Kin, who have better attributes and install cybernetic implants instead.",
+      "detail": "Mutations range from animal body parts like tails, stingers or extra legs to mental powers like teleporting or making time clones. True Kin are described as harder, descendants of sealed arcologies, with implants like treads or metal fists.",
+      "t": 466,
+      "quote": "there's over seventy mutations in the game and you assemble your character from like as many as you can choose",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "build experimentation",
+      "kind": "principle",
+      "claim": "In Caves of Qud many of the hundreds of thousands of mutation combinations produce characters that simply die, and the developers regard that as part of learning the game.",
+      "detail": "Grinblat explains that the playtester alternates picks with the audience so the character has a chance of surviving within the hour.",
+      "t": 638,
+      "quote": "a lot of them will create characters that will just flat-out die and that's part of the experience of learning caves of cut",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "cut features",
+      "kind": "history",
+      "claim": "An early echolocation mutation in Caves of Qud, with sonar bouncing off walls and a sonar attack, was one of the first mutations cut because it did not work well.",
+      "detail": "When an audience member asks for echolocation, Grinblat offers heightened hearing or light manipulation instead and notes the sonar mutation likely never made it into a public version.",
+      "t": 729,
+      "quote": "one of the first mutations we cut we had this like complex like sonar bouncing off walls",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "defects",
+      "kind": "technique",
+      "claim": "Caves of Qud lets players take a defect, such as an unsightly beak or involuntary teleportation, to gain extra points for more mutations.",
+      "detail": "When the build lacks points for pyrokinesis, the players select a defect. Examples given are blinking tic (random teleporting), spontaneous combustion and beak.",
+      "t": 901,
+      "quote": "we actually don't have enough points we don't fire Kinesis but well what we can do is we can Hindle right there we can select a defect",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "evil twin",
+      "kind": "example",
+      "claim": "Caves of Qud's evil twin defect can spawn a clone of the player, with all current powers and equipment, whenever they enter a new map, so every upgrade also strengthens the threat.",
+      "detail": "DeCapua and Grinblat note it is especially dangerous for a strong offensive character. Leveling up pyrokinesis or finding a great rifle means the twin has the same; in play, the twin also used the player's tonics, gaining burrowing claws.",
+      "t": 1427,
+      "quote": "his evil twin has everything that we have when he spawns so if we like find an awesome like rifle he's gonna show up with it",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "evil twin",
+      "kind": "technique",
+      "claim": "The evil twin's equipment in Caves of Qud despawns when it is killed, so players cannot farm duplicates of their own loot.",
+      "detail": "Because the twin comes from another dimension, its gear disappears on death; another version can come back later.",
+      "t": 2280,
+      "quote": "it D spawns when we kill him so you can't like kill your evil twin and then double all your loot every time",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "classes",
+      "kind": "example",
+      "claim": "Caves of Qud's castes and callings act like classes but mostly just set starting skills and adjust stats, because mutations matter much more.",
+      "detail": "Examples include Marauder, Apostle and Tinker; the audience chooses Water Merchant (snake oiler), which starts with high Ego for trade and mental mutations and lots of water.",
+      "t": 1132,
+      "quote": "it's basically like a class it doesn't actually have too much effect in case of cut you're you're mutations are much more important",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "economy",
+      "kind": "example",
+      "claim": "In Caves of Qud fresh water is both the currency and a survival resource the player must carry and drink.",
+      "detail": "Water merchants start with so much water they can be overburdened. The merchant screen shows the player's water in grams, used to buy food and ammo.",
+      "t": 1173,
+      "quote": "fresh water is actually the currency of the world so not only do you have to carry it around and drink it",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world map",
+      "kind": "technique",
+      "claim": "Caves of Qud's world map is statically generated, and each world tile expands into a 3x3 grid of procedurally generated zones whose builders depend on the terrain type.",
+      "detail": "Grinblat cites ADOM and other open-world games as inspiration for travelling across a world map.",
+      "t": 1340,
+      "quote": "the world maps actually statically generated and each of these little tiles that you enter is a map of 3x3 procedurally generated tiles",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutations",
+      "kind": "technique",
+      "claim": "On leveling up in Caves of Qud, mutation points can either raise an existing mutation's level or buy a new mutation chosen from three random options.",
+      "detail": "Raising pyrokinesis increases its damage and heat; raising multiple legs increases speed rather than adding legs. Buying new costs four points; the offered choices were time dilation, cryokinesis and force bubble.",
+      "t": 1399,
+      "quote": "you can like level up your mutation for by one point and it'll get your mutation to the Lexx level",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "secrets",
+      "kind": "technique",
+      "claim": "Procedurally generated locations discovered in Caves of Qud are inscribed in the player's journal as secrets that can later be traded to interested NPCs.",
+      "detail": "Discovering the ruin Tomb Rod adds it to the journal; NPCs interested in ruins may want that knowledge.",
+      "t": 1923,
+      "quote": "it gets inscribed in your journal and then it's kind of a secret that you have that you can trade to people later",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "generated history",
+      "kind": "example",
+      "claim": "Caves of Qud generates a history of ancient sultans that players encounter through shrines, engravings and paintings at real in-game locations.",
+      "detail": "The shrine read in play told of a sultan adopted as a baby by gamblers, which the hosts joked sounded like a debt payment. Grinblat points to his separate talk on the history generator.",
+      "t": 2079,
+      "quote": "there's procedurally generated history in caves of cod and if you want to hear about it come to my talk tomorrow",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger",
+      "kind": "example",
+      "claim": "The Caves of Qud developers considered their hunger system weak and planned a replacement so players would starve to death less often.",
+      "detail": "The boosted character starts starving with no food and must eat a giant dragonfly. In the current system, starvation stops natural regeneration from resting.",
+      "t": 2013,
+      "quote": "hunger system soon no current one isn't great and everything but the the next one will be better too so we won't like starve",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "factions",
+      "kind": "technique",
+      "claim": "In Caves of Qud any creature, such as the hostile goat folk, becomes friendly, invites the player into its towns and may fight alongside them once the player has enough reputation with its faction.",
+      "detail": "Goat folk have villages in the jungle and mostly try to kill the player by default.",
+      "t": 2533,
+      "quote": "if you if you get enough reputation with their faction they'll actually like be friendly with you and invite you into their town",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "followers",
+      "kind": "example",
+      "claim": "Caves of Qud's high-Ego proselytize ability persuades a creature to join the player, but only one follower can be held at a time.",
+      "detail": "The water merchant converts a goat folk savage and renames it, choosing from random names of either culture. Later the developers note proselytizing another creature would lose the existing follower.",
+      "t": 3252,
+      "quote": "with proselytize you can only persuade one person at a time so if we do if we use that ability will lose our other goat folk friend",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "psychic hunters",
+      "kind": "example",
+      "claim": "In Caves of Qud, accumulating enough mental mutation power makes waves in the psychic aether, attracting psychics from across space and time who try to absorb the player's psyche.",
+      "detail": "An earlier 'you are being watched' message foreshadowed this. The character's sense psychic mutation shows such hunters as question marks on the map, letting the player choose to avoid or fight them.",
+      "t": 2904,
+      "quote": "we have sort of made waves in the psychic Heather and and so other psychics from across space and time kind of like our evil twin",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "legendary monsters",
+      "kind": "example",
+      "claim": "Caves of Qud marks legendary unique monsters in magenta and gives them faction relationships, such as being hated by particular groups for past deeds.",
+      "detail": "A unique chrome idol is hated by two groups for torching their villages; a unique goat folk shaman is hated by bears for slaying a leader and by the merchants guild for casting doubts on their beliefs.",
+      "t": 3145,
+      "quote": "a pink or purple whatever magenta is usual is a signal that this is the sort of legendary version of a monster",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "faction conflict",
+      "kind": "example",
+      "claim": "Caves of Qud's factions fight each other over territory independently of the player, which can turn into chaotic multi-sided battles.",
+      "detail": "During the run, a tribe of goat folk clashes with another jungle tribe while the player is caught between them and has to run.",
+      "t": 3201,
+      "quote": "there's a tribe of goat folk here that is interacting with this tribe",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "temperature",
+      "kind": "example",
+      "claim": "In Caves of Qud, jumping into water while on fire can be counterproductive because a hot enough body turns the water to steam, which can be deadlier than the fire.",
+      "detail": "DeCapua raises this while the burning character considers escaping into water; fire set during combat also spreads to trees.",
+      "t": 3303,
+      "quote": "depending upon our temperature at this point it may turn the water to steam which is in some ways more deadly than the fire itself",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "chronology",
+      "kind": "example",
+      "claim": "Caves of Qud's death screen includes a chronology that retells the character's life as a list of story events, from quests and discoveries to gained mutations and the killer.",
+      "detail": "Rodney's chronology lists discovering Tomb Rod, recruiting the goat folk follower, slaying a psychic and being killed by the goat folk shaman, plus quests the debug skip auto-completed; the last 30 turns are also shown.",
+      "t": 3482,
+      "quote": "the chronology actually we could read through it actually includes some quests that we didn't do as part of our debug skipping",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

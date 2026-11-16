@@ -1,0 +1,1923 @@
+{
+ "id": "NANqgqeqh2k",
+ "url": "https://www.youtube.com/watch?v=NANqgqeqh2k",
+ "title": "Caelyn Sandel and Grahu-Rubufo - Teaching the Fun of Losing",
+ "speaker": "Caelyn Sandel and Grahu-Rubufo",
+ "talk_title": "Teaching the Fun of Losing",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1751,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nCaelyn Sandel is an experimental author and narrative designer living in the greater Boston area. In addition to contributing writing and design to Caves of Qud, she also voices Grahu-Rubufo, Learned Snapjaw VTuber.\n\nRoguelikes are hard, and everyone knows it. Within a genre that prides itself on steep learning curves, there isn't much discussion of onboarding new players in spite of the glut of new roguelikes all seeking a growing audience. Although game difficulty and accessibility have become an ongoing discussion among devs and players alike, most such discussions have been tragically polarized. What does it look like to make new players comfortable? How do you figure out what unintended messages you're sending to new players? In this talk, Caelyn will tell you - with a bit of help from Grahu-Rubufo herself!\n\nFind Caelyn on Twitter: https://twitter.com/inurashii\nFollow Gra on Twitch: https://www.twitch.tv/inurashii\nGet Caves of Qud: https://store.steampowered.com/app/333640/Caves_of_Qud/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 64,
+   "title": "Meet the vtuber"
+  },
+  {
+   "start": 196,
+   "title": "Caves of cud complexity"
+  },
+  {
+   "start": 370,
+   "title": "UI and onboarding challenges"
+  },
+  {
+   "start": 506,
+   "title": "Future UI and outreach"
+  },
+  {
+   "start": 600,
+   "title": "The hindrance guide"
+  },
+  {
+   "start": 794,
+   "title": "Community management"
+  },
+  {
+   "start": 937,
+   "title": "Twitch streaming and avatars"
+  },
+  {
+   "start": 1058,
+   "title": "VTuber marketing success"
+  },
+  {
+   "start": 1165,
+   "title": "Tips for player outreach"
+  },
+  {
+   "start": 1302,
+   "title": "Community values"
+  },
+  {
+   "start": 1404,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1461,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3585,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.16,
+   "d": 16.92,
+   "text": "EMCEE: Writing and designing Caves of Qud she also voices."
+  },
+  {
+   "t": 17.08,
+   "d": 3.75,
+   "text": "Let's bring up this wonderful video from Caelyn."
+  },
+  {
+   "t": 20.83,
+   "d": 3.78,
+   "text": "CAELYN SANDEL: Oh, shit."
+  },
+  {
+   "t": 24.61,
+   "d": 3.79,
+   "text": "Oh, we are live."
+  },
+  {
+   "t": 28.4,
+   "d": 3.03,
+   "text": "Hang on a second."
+  },
+  {
+   "t": 31.43,
+   "d": 7.06,
+   "text": "This is going to have to go."
+  },
+  {
+   "t": 38.49,
+   "d": 6.94,
+   "text": "Let me just get under it."
+  },
+  {
+   "t": 45.43,
+   "d": 10.9,
+   "text": "Always remember to lift with your legs."
+  },
+  {
+   "t": 56.33,
+   "d": 1.56,
+   "text": "OK."
+  },
+  {
+   "t": 57.89,
+   "d": 3.51,
+   "text": "Camera feeds are heavy."
+  },
+  {
+   "t": 61.4,
+   "d": 3.0,
+   "text": "Hello, everyone."
+  },
+  {
+   "t": 64.4,
+   "d": 10.39,
+   "text": "My name is grahoob and I am doing this one."
+  },
+  {
+   "t": 74.79,
+   "d": 5.5,
+   "text": "Gra is doing it."
+  },
+  {
+   "t": 80.29,
+   "d": 6.38,
+   "text": "My pronouns are she and her and you can call me Gra for short but only if you follow me"
+  },
+  {
+   "t": 86.67,
+   "d": 1.05,
+   "text": "on Twitch."
+  },
+  {
+   "t": 87.72,
+   "d": 2.63,
+   "text": "I will make it easy."
+  },
+  {
+   "t": 90.35,
+   "d": 1.0,
+   "text": "Boom."
+  },
+  {
+   "t": 91.35,
+   "d": 2.24,
+   "text": "Look at that beautiful mug."
+  },
+  {
+   "t": 93.59,
+   "d": 3.88,
+   "text": "This art was by dige my the way."
+  },
+  {
+   "t": 97.47,
+   "d": 6.28,
+   "text": "I am voiced by Caelyn Sandel give credentials."
+  },
+  {
+   "t": 103.75,
+   "d": 2.63,
+   "text": "Sorry."
+  },
+  {
+   "t": 106.38,
+   "d": 7.62,
+   "text": "Caelyn Sandel who is an indy narrative game designer and developer and one of the additional"
+  },
+  {
+   "t": 114.0,
+   "d": 5.11,
+   "text": "writers and designs for Caves of Qud."
+  },
+  {
+   "t": 119.11,
+   "d": 6.32,
+   "text": "She was supposed to give this talk but she had an anxiety attack and chickened out so"
+  },
+  {
+   "t": 125.43,
+   "d": 2.42,
+   "text": "I guess it falls on me."
+  },
+  {
+   "t": 127.85,
+   "d": 1.0,
+   "text": "That's fine."
+  },
+  {
+   "t": 128.85,
+   "d": 3.39,
+   "text": "I will probably do a better job than she would have."
+  },
+  {
+   "t": 132.24,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 133.24,
+   "d": 5.86,
+   "text": "As you can see, I am a snap jaw."
+  },
+  {
+   "t": 139.1,
+   "d": 5.61,
+   "text": "I am one of Caves of Qud ever present trash mobs and I am also a V tuber."
+  },
+  {
+   "t": 144.71,
+   "d": 1.96,
+   "text": "You might wonder what a V tuber is."
+  },
+  {
+   "t": 146.67,
+   "d": 2.55,
+   "text": "Well you are looking at one."
+  },
+  {
+   "t": 149.22,
+   "d": 9.49,
+   "text": "You can see that I am in 2D animated Avatar made slightly 3D through the application of"
+  },
+  {
+   "t": 158.71,
+   "d": 1.73,
+   "text": "rigging."
+  },
+  {
+   "t": 160.44,
+   "d": 2.23,
+   "text": "There is a program on my desktop."
+  },
+  {
+   "t": 162.67,
+   "d": 3.65,
+   "text": "Here is the interface."
+  },
+  {
+   "t": 166.32,
+   "d": 9.62,
+   "text": "It streams information about Caelyn's face from her phone and uses it to animate me."
+  },
+  {
+   "t": 175.94,
+   "d": 3.72,
+   "text": "Good use of technology."
+  },
+  {
+   "t": 179.66,
+   "d": 8.68,
+   "text": "Usually Vtubers are cute Anime girls but I think I am opening the art form for cute animal"
+  },
+  {
+   "t": 188.34,
+   "d": 2.6,
+   "text": "girls."
+  },
+  {
+   "t": 190.94,
+   "d": 5.69,
+   "text": "I am here to talk about Caves of Qud."
+  },
+  {
+   "t": 196.63,
+   "d": 1.11,
+   "text": "This is Caves of Qud."
+  },
+  {
+   "t": 197.74,
+   "d": 2.04,
+   "text": "It my favorite game."
+  },
+  {
+   "t": 199.78,
+   "d": 4.2,
+   "text": "It is absolutely my favorite."
+  },
+  {
+   "t": 203.98,
+   "d": 8.56,
+   "text": "Between us, K and I have logs over 1800 hours and we still YASDery constantly because we"
+  },
+  {
+   "t": 212.54,
+   "d": 4.2,
+   "text": "are careless people."
+  },
+  {
+   "t": 216.74,
+   "d": 5.65,
+   "text": "Once a mobile version comes out we will probably never need to leave bed and if a switch version"
+  },
+  {
+   "t": 222.39,
+   "d": 4.12,
+   "text": "every comes out, well, forget it."
+  },
+  {
+   "t": 226.51,
+   "d": 6.57,
+   "text": "The fact of the matter is I come here not to praise Qud but to roast it because let's"
+  },
+  {
+   "t": 233.08,
+   "d": 1.86,
+   "text": "be real."
+  },
+  {
+   "t": 234.94,
+   "d": 3.21,
+   "text": "Caves of Qud is hard to get into."
+  },
+  {
+   "t": 238.15,
+   "d": 1.72,
+   "text": "It just is."
+  },
+  {
+   "t": 239.87,
+   "d": 1.0,
+   "text": "Sorry."
+  },
+  {
+   "t": 240.87,
+   "d": 5.94,
+   "text": "I am not saying this to be hard on the game."
+  },
+  {
+   "t": 246.81,
+   "d": 4.98,
+   "text": "I am just admitting that it has shortcomings."
+  },
+  {
+   "t": 251.79,
+   "d": 4.68,
+   "text": "Here, I will show you."
+  },
+  {
+   "t": 256.47,
+   "d": 2.0,
+   "text": "Let's play Caves of Qud for a second."
+  },
+  {
+   "t": 258.47,
+   "d": 5.15,
+   "text": "Coming in as a new player nothing turned on, nothing interesting happening."
+  },
+  {
+   "t": 263.62,
+   "d": 7.3,
+   "text": "Just this fairly austere but understandably smart screen."
+  },
+  {
+   "t": 270.92,
+   "d": 5.15,
+   "text": "Once we start a new game things start to get more opaque."
+  },
+  {
+   "t": 276.07,
+   "d": 6.61,
+   "text": "See there is only one option here that actually matters to a new player and that's create"
+  },
+  {
+   "t": 282.68,
+   "d": 1.59,
+   "text": "new character."
+  },
+  {
+   "t": 284.27,
+   "d": 5.48,
+   "text": "Rolling a random character would make for a pretty bad experience and they are not going"
+  },
+  {
+   "t": 289.75,
+   "d": 6.59,
+   "text": "to have a build library yet so already you can see a new player's intended experience"
+  },
+  {
+   "t": 296.34,
+   "d": 4.24,
+   "text": "fits in just a little corner of the screen."
+  },
+  {
+   "t": 300.58,
+   "d": 2.85,
+   "text": "If we create new character, it just gets worse."
+  },
+  {
+   "t": 303.43,
+   "d": 2.65,
+   "text": "Let's choose mutated human and look."
+  },
+  {
+   "t": 306.08,
+   "d": 2.63,
+   "text": "Look at all this D&D nonsense."
+  },
+  {
+   "t": 308.71,
+   "d": 9.37,
+   "text": "I suppose it is great if you like D&D nonsense but a lot of people aren't into this kind"
+  },
+  {
+   "t": 318.08,
+   "d": 7.61,
+   "text": "of stat stuff, so let's just assign random points and because I raised some of them ahead"
+  },
+  {
+   "t": 325.69,
+   "d": 4.56,
+   "text": "of time this looks OK and I can play with this."
+  },
+  {
+   "t": 330.25,
+   "d": 1.0,
+   "text": "What's this?"
+  },
+  {
+   "t": 331.25,
+   "d": 1.68,
+   "text": "What is this screen?"
+  },
+  {
+   "t": 332.93,
+   "d": 2.14,
+   "text": "What is all this nonsense?"
+  },
+  {
+   "t": 335.07,
+   "d": 1.0,
+   "text": "Look at all this."
+  },
+  {
+   "t": 336.07,
+   "d": 2.5,
+   "text": "That's so much reading."
+  },
+  {
+   "t": 338.57,
+   "d": 1.57,
+   "text": "It is one of the best parts of the game."
+  },
+  {
+   "t": 340.14,
+   "d": 5.76,
+   "text": "It is wonderful there are this many mutations and it is so cool to learn what they will"
+  },
+  {
+   "t": 345.9,
+   "d": 5.43,
+   "text": "do but for a new player how are they going to know which ones to take?"
+  },
+  {
+   "t": 351.33,
+   "d": 3.69,
+   "text": "Let's pick random ones."
+  },
+  {
+   "t": 355.02,
+   "d": 2.79,
+   "text": "We don't know what we are doing but we have to keep going."
+  },
+  {
+   "t": 357.81,
+   "d": 2.22,
+   "text": "Still more choices."
+  },
+  {
+   "t": 360.03,
+   "d": 9.01,
+   "text": "At least are relatively easy to understand from a relatively low amount of description."
+  },
+  {
+   "t": 369.04,
+   "d": 1.0,
+   "text": "Here we are."
+  },
+  {
+   "t": 370.04,
+   "d": 1.0,
+   "text": "Let's start the game."
+  },
+  {
+   "t": 371.04,
+   "d": 1.39,
+   "text": "It is only now."
+  },
+  {
+   "t": 372.43,
+   "d": 8.67,
+   "text": "It is only now that the game really shows what it is good at which is to say mood, writing,"
+  },
+  {
+   "t": 381.1,
+   "d": 7.82,
+   "text": "atmosphere and to a certain extent, like procedural generation but that's not visible just yet."
+  },
+  {
+   "t": 388.92,
+   "d": 9.76,
+   "text": "You will have to forgive my monumental UI size but even now what do we do?"
+  },
+  {
+   "t": 398.68,
+   "d": 4.09,
+   "text": "We are in this town."
+  },
+  {
+   "t": 402.77,
+   "d": 2.43,
+   "text": "Now, we did get a little hint here."
+  },
+  {
+   "t": 405.2,
+   "d": 2.44,
+   "text": "It says press space and F1 for help."
+  },
+  {
+   "t": 407.64,
+   "d": 2.57,
+   "text": "Let's do that."
+  },
+  {
+   "t": 410.21,
+   "d": 1.27,
+   "text": "OK."
+  },
+  {
+   "t": 411.48,
+   "d": 1.45,
+   "text": "Here is our help index."
+  },
+  {
+   "t": 412.93,
+   "d": 2.75,
+   "text": "It still looks like a lot of plaintext."
+  },
+  {
+   "t": 415.68,
+   "d": 3.02,
+   "text": "10 things you should do when you start to play."
+  },
+  {
+   "t": 418.7,
+   "d": 1.83,
+   "text": "That's getting somewhere."
+  },
+  {
+   "t": 420.53,
+   "d": 3.23,
+   "text": "That sounds like a quick start guide."
+  },
+  {
+   "t": 423.76,
+   "d": 8.28,
+   "text": "Well, it is a quick start guide but that's still a lot of reading."
+  },
+  {
+   "t": 432.04,
+   "d": 3.67,
+   "text": "And a lot of this stuff is pretty technical."
+  },
+  {
+   "t": 435.71,
+   "d": 3.24,
+   "text": "And it tells you to go to other menus and look at other things."
+  },
+  {
+   "t": 438.95,
+   "d": 1.5,
+   "text": "That's a lot."
+  },
+  {
+   "t": 440.45,
+   "d": 2.26,
+   "text": "It is asking a lot."
+  },
+  {
+   "t": 442.71,
+   "d": 8.18,
+   "text": "A lot of players are just going to, you know, give up."
+  },
+  {
+   "t": 450.89,
+   "d": 6.91,
+   "text": "And that's a shame because just because someone was daunted by that experience doesn't mean"
+  },
+  {
+   "t": 457.8,
+   "d": 5.91,
+   "text": "that they don't have the fortitude to play a game like Qud or to learn about it or to"
+  },
+  {
+   "t": 463.71,
+   "d": 2.41,
+   "text": "delve into those complexities."
+  },
+  {
+   "t": 466.12,
+   "d": 6.82,
+   "text": "It is just, you know, Caves of Qud is hard to get into."
+  },
+  {
+   "t": 472.94,
+   "d": 9.41,
+   "text": "Like I said, and, you know, I am kind of kidding but I am also kind of not kidding."
+  },
+  {
+   "t": 482.35,
+   "d": 4.53,
+   "text": "Apologies to the team for roasting them in front of everybody but everybody seems to"
+  },
+  {
+   "t": 486.88,
+   "d": 1.0,
+   "text": "like Qud a got."
+  },
+  {
+   "t": 487.88,
+   "d": 3.5,
+   "text": "I figure it is fine."
+  },
+  {
+   "t": 491.38,
+   "d": 3.75,
+   "text": "Brian is probably nodding his head and going that's fair."
+  },
+  {
+   "t": 495.13,
+   "d": 5.36,
+   "text": "Yeah, yeah, I see you Brian."
+  },
+  {
+   "t": 500.49,
+   "d": 6.05,
+   "text": "And yeah, the thing is as an early access game, we have new players before things are"
+  },
+  {
+   "t": 506.54,
+   "d": 1.0,
+   "text": "finished."
+  },
+  {
+   "t": 507.54,
+   "d": 1.02,
+   "text": "This isn't finished."
+  },
+  {
+   "t": 508.56,
+   "d": 1.0,
+   "text": "Don't get me wrong."
+  },
+  {
+   "t": 509.56,
+   "d": 2.62,
+   "text": "Let me show you something."
+  },
+  {
+   "t": 512.18,
+   "d": 7.33,
+   "text": "This design here was by an artist that the Freehold Games team hired to help us figure"
+  },
+  {
+   "t": 519.51,
+   "d": 3.14,
+   "text": "out what your new interface was going to look like."
+  },
+  {
+   "t": 522.65,
+   "d": 1.73,
+   "text": "Look at that."
+  },
+  {
+   "t": 524.38,
+   "d": 1.0,
+   "text": "It is beautiful."
+  },
+  {
+   "t": 525.38,
+   "d": 4.25,
+   "text": "It gives us an impression of what everything looks like in addition to how everything plays."
+  },
+  {
+   "t": 529.63,
+   "d": 3.41,
+   "text": "I think that's real cool."
+  },
+  {
+   "t": 533.04,
+   "d": 4.73,
+   "text": "Once it goes in it is probably likely to be more friendly to new players but it is not"
+  },
+  {
+   "t": 537.77,
+   "d": 5.22,
+   "text": "there yet and it is not going to be there for awhile so still Caves of Qud is hard to"
+  },
+  {
+   "t": 542.99,
+   "d": 7.99,
+   "text": "get into but there are stopgap measures and we have been taking them for a long time."
+  },
+  {
+   "t": 550.98,
+   "d": 1.65,
+   "text": "That's what this talk is really about."
+  },
+  {
+   "t": 552.63,
+   "d": 4.58,
+   "text": "Let's call it the path to outreach."
+  },
+  {
+   "t": 557.21,
+   "d": 9.82,
+   "text": "It is not so much a manual or a style guide as it is just going over what Caelyn has observed"
+  },
+  {
+   "t": 567.03,
+   "d": 8.73,
+   "text": "from the years of doing outreach work for Caves of Qud and what that work was and well"
+  },
+  {
+   "t": 575.76,
+   "d": 6.87,
+   "text": "it worked or didn't work or how well we can estimate that it worked."
+  },
+  {
+   "t": 582.63,
+   "d": 2.25,
+   "text": "Let's get into it."
+  },
+  {
+   "t": 584.88,
+   "d": 1.73,
+   "text": "This isn't the solution."
+  },
+  {
+   "t": 586.61,
+   "d": 6.54,
+   "text": "It is just a perspective but it is a perspective based on years of player and as a dev."
+  },
+  {
+   "t": 593.15,
+   "d": 6.97,
+   "text": "It is subject to bias and the circumstances framing but it is probably worth listening"
+  },
+  {
+   "t": 600.12,
+   "d": 2.82,
+   "text": "to so tune in."
+  },
+  {
+   "t": 602.94,
+   "d": 11.18,
+   "text": "When Cae first started playing Caves of Qud there were no secrets or random starts but"
+  },
+  {
+   "t": 614.12,
+   "d": 1.33,
+   "text": "she was hooked."
+  },
+  {
+   "t": 615.45,
+   "d": 7.57,
+   "text": "Long, long ago on a friend's PC compatible computer, sorry IBM compatible computer, she"
+  },
+  {
+   "t": 623.02,
+   "d": 8.41,
+   "text": "played the construction kit and it was the first introduction to fantasy and sci-fi being"
+  },
+  {
+   "t": 631.43,
+   "d": 4.34,
+   "text": "presented alongside and mixing possibly."
+  },
+  {
+   "t": 635.77,
+   "d": 8.58,
+   "text": "It had gorgeous graphics and bright colors over black backgrounds."
+  },
+  {
+   "t": 644.35,
+   "d": 7.28,
+   "text": "Qud has managed to capture that perfectly and was the perfect hook for Caelyn."
+  },
+  {
+   "t": 651.63,
+   "d": 7.46,
+   "text": "It held her at least and she invested and that investment paid off big time because"
+  },
+  {
+   "t": 659.09,
+   "d": 8.28,
+   "text": "Qud is huge and its atmosphere and writing are wonderful and fun but she needed a way"
+  },
+  {
+   "t": 667.37,
+   "d": 5.75,
+   "text": "to make the early game which was very flat and very difficult a little bit easier to"
+  },
+  {
+   "t": 673.12,
+   "d": 9.54,
+   "text": "do, so she picked a single starting build, the hendron."
+  },
+  {
+   "t": 682.66,
+   "d": 8.53,
+   "text": "This is -- I hid the wrong thing."
+  },
+  {
+   "t": 691.19,
+   "d": 4.38,
+   "text": "I am hiding the title."
+  },
+  {
+   "t": 695.57,
+   "d": 6.34,
+   "text": "This the main character of a game called a hindren's guide to Qud."
+  },
+  {
+   "t": 701.91,
+   "d": 9.13,
+   "text": "This is also an interactive fiction story Cae wrote after playing a bunch of Caves of"
+  },
+  {
+   "t": 711.04,
+   "d": 5.49,
+   "text": "Qud and deciding everyone else needed to play it too."
+  },
+  {
+   "t": 716.53,
+   "d": 6.68,
+   "text": "She wrote this twine game designed to tell a story and get across the feel of being in"
+  },
+  {
+   "t": 723.21,
+   "d": 9.3,
+   "text": "Qud but to give people an easier time in addition to showing the world of Qud and introducing"
+  },
+  {
+   "t": 732.51,
+   "d": 3.78,
+   "text": "the environment, the idea was also to let people know about some of the tricks early"
+  },
+  {
+   "t": 736.29,
+   "d": 9.74,
+   "text": "on like using witch wood bark to heal yourself or having enough armor to move on or knowing"
+  },
+  {
+   "t": 746.03,
+   "d": 3.02,
+   "text": "which enemies to run from and which ones to fight."
+  },
+  {
+   "t": 749.05,
+   "d": 7.65,
+   "text": "It proved to be reasonably popular but most of all it also got the attention of the lead"
+  },
+  {
+   "t": 756.7,
+   "d": 1.0,
+   "text": "designer."
+  },
+  {
+   "t": 757.7,
+   "d": 5.79,
+   "text": "At this point, Brian, our lead coder had been following me on Twitter, but once Hindren's"
+  },
+  {
+   "t": 763.49,
+   "d": 10.44,
+   "text": "guide happened that made Jason take notice and asked if Hindren could go into Qud and"
+  },
+  {
+   "t": 773.93,
+   "d": 3.74,
+   "text": "Cae was thrilled and said 100%."
+  },
+  {
+   "t": 777.67,
+   "d": 9.48,
+   "text": "He never added Hindren to Qud and that's OK because he hired Caelyn to do it."
+  },
+  {
+   "t": 787.15,
+   "d": 4.48,
+   "text": "This was wonderful for us."
+  },
+  {
+   "t": 791.63,
+   "d": 5.93,
+   "text": "But it did cause outreach to drop off."
+  },
+  {
+   "t": 797.56,
+   "d": 8.89,
+   "text": "Learning the basics of XML and bits of C# to work with the rest of the team look a lot"
+  },
+  {
+   "t": 806.45,
+   "d": 8.2,
+   "text": "and for awhile Caelyn wasn't do a whole lot of outreach work but that's changed."
+  },
+  {
+   "t": 814.65,
+   "d": 4.74,
+   "text": "She got more comfortable and she realized that there was still this niche that needed"
+  },
+  {
+   "t": 819.39,
+   "d": 4.98,
+   "text": "to be filled and that other people were contributing more and more but there was still more she"
+  },
+  {
+   "t": 824.37,
+   "d": 2.3,
+   "text": "could do."
+  },
+  {
+   "t": 826.67,
+   "d": 2.17,
+   "text": "She started reaching out."
+  },
+  {
+   "t": 828.84,
+   "d": 5.79,
+   "text": "A lot of it started with the publization of our public discord."
+  },
+  {
+   "t": 834.63,
+   "d": 7.32,
+   "text": "The Caves of Qud discord was initially just a place for free hold friends and others who"
+  },
+  {
+   "t": 841.95,
+   "d": 7.55,
+   "text": "were working with the project to come and talk about that project but in 2018, we opened"
+  },
+  {
+   "t": 849.5,
+   "d": 5.84,
+   "text": "up the discord to the public and Ivy Melinda was hired as a community manager and that"
+  },
+  {
+   "t": 855.34,
+   "d": 6.81,
+   "text": "was the beginning of this amazing community that is now cholked full of inside jokes and"
+  },
+  {
+   "t": 862.15,
+   "d": 10.44,
+   "text": "a wonderful image of a cute girl dabbing if you can see that and an entire channel devoted"
+  },
+  {
+   "t": 872.59,
+   "d": 3.64,
+   "text": "to posting weird pictures and saying the words Caves of Qud."
+  },
+  {
+   "t": 876.23,
+   "d": 4.23,
+   "text": "It kind of rules."
+  },
+  {
+   "t": 880.46,
+   "d": 1.0,
+   "text": "There was more to do."
+  },
+  {
+   "t": 881.46,
+   "d": 7.94,
+   "text": "Now that Cae new how to do basic programming she could go further."
+  },
+  {
+   "t": 889.4,
+   "d": 10.43,
+   "text": "She made the Qud survival guide and starred the same Hindren that, you know, years ago"
+  },
+  {
+   "t": 899.83,
+   "d": 5.8,
+   "text": "had walked the water vine marshes and met another one of her kind who taught her the"
+  },
+  {
+   "t": 905.63,
+   "d": 1.0,
+   "text": "ropes."
+  },
+  {
+   "t": 906.63,
+   "d": 6.08,
+   "text": "Now they are teaching the player and showing up and waiting for someone to instruct in"
+  },
+  {
+   "t": 912.71,
+   "d": 6.14,
+   "text": "the art of staying alive in Qud."
+  },
+  {
+   "t": 918.85,
+   "d": 3.8,
+   "text": "This way we could actually couch the lessons as quest."
+  },
+  {
+   "t": 922.65,
+   "d": 6.73,
+   "text": "Possibly paving the way for a new starting game quest which, well, it is not guaranteed"
+  },
+  {
+   "t": 929.38,
+   "d": 4.21,
+   "text": "to go in but Cae will be discussing it with Jason at the very least."
+  },
+  {
+   "t": 933.59,
+   "d": 2.91,
+   "text": "We will see what happens."
+  },
+  {
+   "t": 936.5,
+   "d": 5.15,
+   "text": "After that, there was more to learn and do."
+  },
+  {
+   "t": 941.65,
+   "d": 7.81,
+   "text": "A matter of figuring out what was giving people problems and Twitch was perfect for that."
+  },
+  {
+   "t": 949.46,
+   "d": 8.79,
+   "text": "By watching people stream Qud Cae was able to observe"
+  },
+  {
+   "t": 958.25,
+   "d": 6.3,
+   "text": "problems and common points of confuse and frustration."
+  },
+  {
+   "t": 964.55,
+   "d": 1.89,
+   "text": "It was really helpful."
+  },
+  {
+   "t": 966.44,
+   "d": 11.25,
+   "text": "But even with all of this stuff, Cae was yet to come up with her best idea yet."
+  },
+  {
+   "t": 977.69,
+   "d": 1.68,
+   "text": "Me."
+  },
+  {
+   "t": 979.37,
+   "d": 7.55,
+   "text": "See, when Cae was appointed as on official broadcaster for Caves of Qud, she tried to"
+  },
+  {
+   "t": 986.92,
+   "d": 1.61,
+   "text": "do a face cam game stream."
+  },
+  {
+   "t": 988.53,
+   "d": 7.95,
+   "text": "It went about as well as face cam game streams typically do in front of a large gaming audience"
+  },
+  {
+   "t": 996.48,
+   "d": 5.48,
+   "text": "when the broadcaster is a transwoman which is to say she was immediately mocked and called"
+  },
+  {
+   "t": 1001.96,
+   "d": 6.03,
+   "text": "ugly and, you know, sometimes she can power through but sometimes she can't and it is"
+  },
+  {
+   "t": 1007.99,
+   "d": 7.39,
+   "text": "exhausting in any case, so someone jokingly suggested that she could stream with a v2"
+  },
+  {
+   "t": 1015.38,
+   "d": 2.21,
+   "text": "Avatar like a dinosaur or something."
+  },
+  {
+   "t": 1017.59,
+   "d": 4.13,
+   "text": "She said I don't want to be a dinosaur."
+  },
+  {
+   "t": 1021.72,
+   "d": 1.0,
+   "text": "I want to be myself."
+  },
+  {
+   "t": 1022.72,
+   "d": 1.0,
+   "text": "It turned out there was a better option."
+  },
+  {
+   "t": 1023.72,
+   "d": 2.39,
+   "text": "There was me."
+  },
+  {
+   "t": 1026.11,
+   "d": 6.59,
+   "text": "One of our community moderators said her sister was doing commissions for live 2D Avatars"
+  },
+  {
+   "t": 1032.7,
+   "d": 5.22,
+   "text": "and would Cae be interested in maybe commissioning one."
+  },
+  {
+   "t": 1037.92,
+   "d": 9.18,
+   "text": "Cae sat down and thought up a good snap jaw name based on the in-game name generator and"
+  },
+  {
+   "t": 1047.1,
+   "d": 2.48,
+   "text": "drew this."
+  },
+  {
+   "t": 1049.58,
+   "d": 3.53,
+   "text": "Ignore the bear baiter part."
+  },
+  {
+   "t": 1053.11,
+   "d": 1.6,
+   "text": "I wasn't baiting that guy."
+  },
+  {
+   "t": 1054.71,
+   "d": 6.93,
+   "text": "He just didn't ask me for my pronouns."
+  },
+  {
+   "t": 1061.64,
+   "d": 8.24,
+   "text": "We started streaming as me."
+  },
+  {
+   "t": 1069.88,
+   "d": 3.78,
+   "text": "It has taken off."
+  },
+  {
+   "t": 1073.66,
+   "d": 5.73,
+   "text": "Every Monday we do a teaching stream and every Friday we play whatever we want and then we"
+  },
+  {
+   "t": 1079.39,
+   "d": 4.86,
+   "text": "do miscellaneous Qud streams as we see fit in the meantime."
+  },
+  {
+   "t": 1084.25,
+   "d": 6.74,
+   "text": "We have the backing and support of the founding devs and this counts effectively as a marketing"
+  },
+  {
+   "t": 1090.99,
+   "d": 5.38,
+   "text": "expense and in the process it has been a huge and wonderful success."
+  },
+  {
+   "t": 1096.37,
+   "d": 3.45,
+   "text": "V-tubers are pretty hot right now."
+  },
+  {
+   "t": 1099.82,
+   "d": 10.65,
+   "text": "If you look up dog girl who streams video games like doom and banjo-kazooey all over"
+  },
+  {
+   "t": 1110.47,
+   "d": 5.97,
+   "text": "the place."
+  },
+  {
+   "t": 1116.44,
+   "d": 5.36,
+   "text": "If you scroll past and see this pretty face playing video games at you how you going to"
+  },
+  {
+   "t": 1121.8,
+   "d": 1.0,
+   "text": "click away?"
+  },
+  {
+   "t": 1122.8,
+   "d": 1.0,
+   "text": "You can't."
+  },
+  {
+   "t": 1123.8,
+   "d": 1.0,
+   "text": "You can't do it."
+  },
+  {
+   "t": 1124.8,
+   "d": 2.73,
+   "text": "Best of all, though, it was fun."
+  },
+  {
+   "t": 1127.53,
+   "d": 2.11,
+   "text": "It was really fun."
+  },
+  {
+   "t": 1129.64,
+   "d": 1.94,
+   "text": "It was such a fun way of interacting with people."
+  },
+  {
+   "t": 1131.58,
+   "d": 4.36,
+   "text": "I had this bombastic personality that I could put out there."
+  },
+  {
+   "t": 1135.94,
+   "d": 7.57,
+   "text": "I could enthusiastically promote this game in a way that would instantly be eye catching"
+  },
+  {
+   "t": 1143.51,
+   "d": 9.15,
+   "text": "and ear catching and fly catching to anybody who watched it."
+  },
+  {
+   "t": 1152.66,
+   "d": 5.51,
+   "text": "And that enthusiasm is reflected in the way I look and sound."
+  },
+  {
+   "t": 1158.17,
+   "d": 11.41,
+   "text": "So having done all this stuff, we would like to share with you what we figured out and"
+  },
+  {
+   "t": 1169.58,
+   "d": 4.53,
+   "text": "specifically what we have noticed and how we think it might help new players find you"
+  },
+  {
+   "t": 1174.11,
+   "d": 2.79,
+   "text": "and help you keep them."
+  },
+  {
+   "t": 1176.9,
+   "d": 2.03,
+   "text": "There is a lot of stuff out there."
+  },
+  {
+   "t": 1178.93,
+   "d": 6.06,
+   "text": "I think it is important to note that, like, a new player's time and energy are very important."
+  },
+  {
+   "t": 1184.99,
+   "d": 6.69,
+   "text": "It is important that you don't squander that investment from them."
+  },
+  {
+   "t": 1191.68,
+   "d": 7.8,
+   "text": "To that end, presenting more complexity up front means asking the player for more investment."
+  },
+  {
+   "t": 1199.48,
+   "d": 4.93,
+   "text": "You can't be frivolous with that investment and you have to make it payoff and that payoff"
+  },
+  {
+   "t": 1204.41,
+   "d": 6.16,
+   "text": "can vary from game to game and the complexity can present from game to game but you should"
+  },
+  {
+   "t": 1210.57,
+   "d": 5.93,
+   "text": "keep your eye out for nots of progresses and things that slow players down and figure out"
+  },
+  {
+   "t": 1216.5,
+   "d": 2.49,
+   "text": "how to make it worth it them to push through."
+  },
+  {
+   "t": 1218.99,
+   "d": 8.28,
+   "text": "It isn't about making it easier necessarily but making continuing trying fun."
+  },
+  {
+   "t": 1227.27,
+   "d": 3.63,
+   "text": "Core players don't know what it is like to be a new player and that goes the other way"
+  },
+  {
+   "t": 1230.9,
+   "d": 8.43,
+   "text": "around too but their needs aren't at odds."
+  },
+  {
+   "t": 1239.33,
+   "d": 3.87,
+   "text": "Core players will often be convinced that they are."
+  },
+  {
+   "t": 1243.2,
+   "d": 6.72,
+   "text": "Accessibility options and ways to make the game less miserable for people outside the"
+  },
+  {
+   "t": 1249.92,
+   "d": 2.72,
+   "text": "community may be seen as pandering."
+  },
+  {
+   "t": 1252.64,
+   "d": 4.81,
+   "text": "It is kind of your job to convince them it is not."
+  },
+  {
+   "t": 1257.45,
+   "d": 5.86,
+   "text": "New players need have a welcome intro to your game but core players need to be kept interesting."
+  },
+  {
+   "t": 1263.31,
+   "d": 8.17,
+   "text": "It is a balancing act that requires paying attention and staying open minded."
+  },
+  {
+   "t": 1271.48,
+   "d": 2.72,
+   "text": "Questions that keep coming up may reflect a gap in accessibility."
+  },
+  {
+   "t": 1274.2,
+   "d": 7.42,
+   "text": "If the same thing keeps affecting new players, if new players keep having the same issue,"
+  },
+  {
+   "t": 1281.62,
+   "d": 6.21,
+   "text": "or the same confusion, or failing to figure out a particular part of your user interface"
+  },
+  {
+   "t": 1287.83,
+   "d": 4.58,
+   "text": "that's a good indication that you could stand to shore that up a little bit and make it"
+  },
+  {
+   "t": 1292.41,
+   "d": 2.16,
+   "text": "a little bit more apparent somehow."
+  },
+  {
+   "t": 1294.57,
+   "d": 5.96,
+   "text": "Figure out how you are not speaking the language of the new player and speak it."
+  },
+  {
+   "t": 1300.53,
+   "d": 8.13,
+   "text": "Now this one is a little bit controversial because of the community but you shouldn't"
+  },
+  {
+   "t": 1308.66,
+   "d": 5.69,
+   "text": "let the RNG manage your community."
+  },
+  {
+   "t": 1314.35,
+   "d": 2.67,
+   "text": "Create a space where new players feel welcome."
+  },
+  {
+   "t": 1317.02,
+   "d": 12.04,
+   "text": "If there are hostile or distasteful elements in the gaming community they will take over"
+  },
+  {
+   "t": 1329.06,
+   "d": 5.38,
+   "text": "unless you show them the door or tell them that they need to quiet down and let everybody"
+  },
+  {
+   "t": 1334.44,
+   "d": 1.01,
+   "text": "else play."
+  },
+  {
+   "t": 1335.45,
+   "d": 7.17,
+   "text": "It is really, really easy to just let community form itself but what that means is that the"
+  },
+  {
+   "t": 1342.62,
+   "d": 3.37,
+   "text": "loudest and meanest voices are going to be the ones that run things."
+  },
+  {
+   "t": 1345.99,
+   "d": 2.91,
+   "text": "We didn't do that."
+  },
+  {
+   "t": 1348.9,
+   "d": 6.56,
+   "text": "Ivy Melinda and their team have been doing an amazing job of creating a space that feels"
+  },
+  {
+   "t": 1355.46,
+   "d": 2.89,
+   "text": "good for the people that Qud ought to be aimed at."
+  },
+  {
+   "t": 1358.35,
+   "d": 2.62,
+   "text": "The people who are different."
+  },
+  {
+   "t": 1360.97,
+   "d": 4.34,
+   "text": "The people who get pushed out of other gaming spaces."
+  },
+  {
+   "t": 1365.31,
+   "d": 5.14,
+   "text": "And that's why I am telling you that the last point here is to reach out, reach out."
+  },
+  {
+   "t": 1370.45,
+   "d": 5.62,
+   "text": "Whenever Caelyn sees somebody talking about how they wish they could play Caves of Qud"
+  },
+  {
+   "t": 1376.07,
+   "d": 4.27,
+   "text": "but they are too broke that's a perfect person to bring in the old."
+  },
+  {
+   "t": 1380.34,
+   "d": 1.66,
+   "text": "Give them a key."
+  },
+  {
+   "t": 1382.0,
+   "d": 2.49,
+   "text": "That's what she has been doing."
+  },
+  {
+   "t": 1384.49,
+   "d": 5.81,
+   "text": "Especially if you aim at the people who are likely to enjoy what you put down which is"
+  },
+  {
+   "t": 1390.3,
+   "d": 5.9,
+   "text": "bodily autonomy and anti-authoritarian messages."
+  },
+  {
+   "t": 1396.2,
+   "d": 7.7,
+   "text": "We have to make sure the community reflects those values and we have and we are proud"
+  },
+  {
+   "t": 1403.9,
+   "d": 1.49,
+   "text": "of that."
+  },
+  {
+   "t": 1405.39,
+   "d": 4.65,
+   "text": "Here are some questions that you just want to be thinking about and asking yourself."
+  },
+  {
+   "t": 1410.04,
+   "d": 3.66,
+   "text": "This is the last part I will go over before questions."
+  },
+  {
+   "t": 1413.7,
+   "d": 6.18,
+   "text": "Just chew on these and you know, I can talk about them to people if you want but, you"
+  },
+  {
+   "t": 1419.88,
+   "d": 4.49,
+   "text": "know, there isn't so much time left so I will go over them."
+  },
+  {
+   "t": 1424.37,
+   "d": 3.38,
+   "text": "What's it like to be your new players?"
+  },
+  {
+   "t": 1427.75,
+   "d": 2.51,
+   "text": "Who feels welcome by your game?"
+  },
+  {
+   "t": 1430.26,
+   "d": 1.97,
+   "text": "Who feels alienated?"
+  },
+  {
+   "t": 1432.23,
+   "d": 2.52,
+   "text": "Who is your audience?"
+  },
+  {
+   "t": 1434.75,
+   "d": 2.69,
+   "text": "How do you find them and how do you keep them?"
+  },
+  {
+   "t": 1437.44,
+   "d": 7.13,
+   "text": "If you are not guiding your games online presence who is because someone will."
+  },
+  {
+   "t": 1444.57,
+   "d": 4.15,
+   "text": "So those are our findings so far."
+  },
+  {
+   "t": 1448.72,
+   "d": 1.93,
+   "text": "Not conclusive."
+  },
+  {
+   "t": 1450.65,
+   "d": 6.46,
+   "text": "Not exhaustive but they are definitely things I think a lot of devs should be thinking about"
+  },
+  {
+   "t": 1457.11,
+   "d": 5.47,
+   "text": "and don't necessarily always get the most airtime."
+  },
+  {
+   "t": 1462.58,
+   "d": 11.97,
+   "text": "So with that having been said, I am grahu-rubufo and learned snapjaw on VTuber."
+  },
+  {
+   "t": 1474.55,
+   "d": 10.54,
+   "text": "Thank you so much and play Caves of Qud and follow by Twitch stream."
+  },
+  {
+   "t": 1485.09,
+   "d": 3.33,
+   "text": "Bye."
+  },
+  {
+   "t": 1488.42,
+   "d": 7.34,
+   "text": "EMCEE: Well, my goodness."
+  },
+  {
+   "t": 1495.76,
+   "d": 2.67,
+   "text": "The best way to do this."
+  },
+  {
+   "t": 1498.43,
+   "d": 1.46,
+   "text": "Here we go."
+  },
+  {
+   "t": 1499.89,
+   "d": 6.98,
+   "text": "The continued quest to make your emcee try goes well."
+  },
+  {
+   "t": 1506.87,
+   "d": 6.49,
+   "text": "Do we have your audio now, Gra?"
+  },
+  {
+   "t": 1513.36,
+   "d": 1.0,
+   "text": ">> We should."
+  },
+  {
+   "t": 1514.36,
+   "d": 2.03,
+   "text": "EMCEE: We can hear you."
+  },
+  {
+   "t": 1516.39,
+   "d": 1.03,
+   "text": "Can I call you Gra?"
+  },
+  {
+   "t": 1517.42,
+   "d": 1.63,
+   "text": ">> Yes, of course."
+  },
+  {
+   "t": 1519.05,
+   "d": 4.53,
+   "text": "You are following my Twitch?"
+  },
+  {
+   "t": 1523.58,
+   "d": 3.11,
+   "text": "If you follow my Twitch you can call me Gra."
+  },
+  {
+   "t": 1526.69,
+   "d": 3.26,
+   "text": "Oh, boy."
+  },
+  {
+   "t": 1529.95,
+   "d": 1.0,
+   "text": "I see how it is."
+  },
+  {
+   "t": 1530.95,
+   "d": 1.0,
+   "text": "EMCEE: Right after this."
+  },
+  {
+   "t": 1531.95,
+   "d": 1.68,
+   "text": "I am working."
+  },
+  {
+   "t": 1533.63,
+   "d": 1.0,
+   "text": ">> No, that's fine."
+  },
+  {
+   "t": 1534.63,
+   "d": 1.05,
+   "text": "A commitment will do."
+  },
+  {
+   "t": 1535.68,
+   "d": 1.59,
+   "text": "Gra is fine."
+  },
+  {
+   "t": 1537.27,
+   "d": 3.5,
+   "text": "EMCEE: Thank you so much."
+  },
+  {
+   "t": 1540.77,
+   "d": 1.0,
+   "text": "Beautiful talk."
+  },
+  {
+   "t": 1541.77,
+   "d": 1.0,
+   "text": "Very much agree."
+  },
+  {
+   "t": 1542.77,
+   "d": 1.0,
+   "text": "Absolutely."
+  },
+  {
+   "t": 1543.77,
+   "d": 5.45,
+   "text": "I think it is important that -- a great reminder we have a code of conduct and everything in"
+  },
+  {
+   "t": 1549.22,
+   "d": 5.43,
+   "text": "there is important and we have no tolerance for transphobic."
+  },
+  {
+   "t": 1554.65,
+   "d": 7.18,
+   "text": "The first important question is Gra how are you so cool and sexy at all times?"
+  },
+  {
+   "t": 1561.83,
+   "d": 5.48,
+   "text": ">> I was literally created with sexiness and coolness at the core of my being."
+  },
+  {
+   "t": 1567.31,
+   "d": 2.27,
+   "text": "I could not be anything else."
+  },
+  {
+   "t": 1569.58,
+   "d": 1.96,
+   "text": "That's just how it is."
+  },
+  {
+   "t": 1571.54,
+   "d": 3.57,
+   "text": "EMCEE: I will skip this question from someone."
+  },
+  {
+   "t": 1575.11,
+   "d": 4.16,
+   "text": "I don't think it is important asking how dare you."
+  },
+  {
+   "t": 1579.27,
+   "d": 2.72,
+   "text": ">> Oh, how dare I?"
+  },
+  {
+   "t": 1581.99,
+   "d": 1.75,
+   "text": "Well, like this."
+  },
+  {
+   "t": 1583.74,
+   "d": 1.49,
+   "text": "Hi, Jason."
+  },
+  {
+   "t": 1585.23,
+   "d": 2.17,
+   "text": "You have made an incredibly good product."
+  },
+  {
+   "t": 1587.4,
+   "d": 2.58,
+   "text": "Don't be mad at me please."
+  },
+  {
+   "t": 1589.98,
+   "d": 3.48,
+   "text": "EMCEE: Who could stay mad at Gra?"
+  },
+  {
+   "t": 1593.46,
+   "d": 6.13,
+   "text": "You can't be mad."
+  },
+  {
+   "t": 1599.59,
+   "d": 2.95,
+   "text": "One more serious question."
+  },
+  {
+   "t": 1602.54,
+   "d": 6.2,
+   "text": "It keeps refreshing because people are upvoting Jason's response."
+  },
+  {
+   "t": 1608.74,
+   "d": 1.46,
+   "text": "How do you communicate with new players?"
+  },
+  {
+   "t": 1610.2,
+   "d": 7.73,
+   "text": "I imagine many players bounce off a game quickly and quietly without telling anyone they tried."
+  },
+  {
+   "t": 1617.93,
+   "d": 1.01,
+   "text": ">> That's absolutely true."
+  },
+  {
+   "t": 1618.94,
+   "d": 6.02,
+   "text": "It is not the kind of thing you can necessarily stay on top of."
+  },
+  {
+   "t": 1624.96,
+   "d": 6.82,
+   "text": "There is no way for you to catch everyone who is bounced off the game but part of it"
+  },
+  {
+   "t": 1631.78,
+   "d": 4.71,
+   "text": "is by creating more points of exposure, more different perspectives."
+  },
+  {
+   "t": 1636.49,
+   "d": 5.98,
+   "text": "Don't just have the same community, same materials or the same videos with the same trailers."
+  },
+  {
+   "t": 1642.47,
+   "d": 6.24,
+   "text": "You need new things and different ways to look at the game so people who is it will"
+  },
+  {
+   "t": 1648.71,
+   "d": 1.56,
+   "text": "see it again later."
+  },
+  {
+   "t": 1650.27,
+   "d": 1.96,
+   "text": "EMCEE: That's a great point."
+  },
+  {
+   "t": 1652.23,
+   "d": 5.96,
+   "text": "There is a lot of posts on the board in terms of linking to your Twitch and things like"
+  },
+  {
+   "t": 1658.19,
+   "d": 1.0,
+   "text": "that."
+  },
+  {
+   "t": 1659.19,
+   "d": 1.36,
+   "text": "One other good question."
+  },
+  {
+   "t": 1660.55,
+   "d": 4.58,
+   "text": "Cuds inclusive community subverts common misconceptions about players and complex games."
+  },
+  {
+   "t": 1665.13,
+   "d": 5.46,
+   "text": "Can you point to other communities that are successful in the regard of making an inclusive"
+  },
+  {
+   "t": 1670.59,
+   "d": 7.18,
+   "text": "community despite being one of those difficult games?"
+  },
+  {
+   "t": 1677.77,
+   "d": 5.19,
+   "text": ">> I don't know much about communities outside of Qud."
+  },
+  {
+   "t": 1682.96,
+   "d": 2.33,
+   "text": "It just takes up a lot of time, you know?"
+  },
+  {
+   "t": 1685.29,
+   "d": 1.98,
+   "text": "It is a lot of time and focus."
+  },
+  {
+   "t": 1687.27,
+   "d": 8.06,
+   "text": "Honestly, what I have seen though is there have been some teams that seem to be consistently"
+  },
+  {
+   "t": 1695.33,
+   "d": 6.06,
+   "text": "pretty good about the responses and engaging with the smaller devs."
+  },
+  {
+   "t": 1701.39,
+   "d": 4.48,
+   "text": "Teams like brace yourself games and fail better is fantastic."
+  },
+  {
+   "t": 1705.87,
+   "d": 9.3,
+   "text": "Fail better has a very good track record with regard to heading the needs of marginalized"
+  },
+  {
+   "t": 1715.17,
+   "d": 1.75,
+   "text": "employees."
+  },
+  {
+   "t": 1716.92,
+   "d": 8.13,
+   "text": "I feel like the larger a game is the less likely it is their community will be carefully"
+  },
+  {
+   "t": 1725.05,
+   "d": 1.22,
+   "text": "controlled and curated."
+  },
+  {
+   "t": 1726.27,
+   "d": 23.9,
+   "text": "It is pretty rare."
+  }
+ ]
+}

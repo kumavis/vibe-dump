@@ -1,0 +1,4350 @@
+{
+ "id": "NjIduRLJL7U",
+ "url": "https://www.youtube.com/watch?v=NjIduRLJL7U",
+ "title": "Sersa Victory and Joris Dormans - “Unfolding” Traps: Extending Hazards Across Time and Space",
+ "speaker": "Sersa Victory and Joris Dormans",
+ "talk_title": "“Unfolding” Traps: Extending Hazards Across Time and Space",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1943,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "Many dungeon-crawling roguelikes treat traps as single-turn events: the player triggers a hazard, experiences its effect, and moves on. This talk explores an alternative approach in which traps and hazards unfold across multiple turns and areas of the dungeon.\n\nDrawing on examples from both tabletop and digital dungeon design, we’ll present a set of reusable patterns for creating these “unfolding” hazards.\n\nAlong the way, we’ll highlight procedural generation techniques—including graph-based, multi-pass, and context-aware approaches—that help support more varied and integrated hazard design without requiring a large catalog of handcrafted traps.\n\nAttendees will come away with a practical framework for designing traps and hazards that create more opportunities for player choice, planning, tension, and interaction with the surrounding dungeon.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5191,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.1,
+   "d": 2.2,
+   "text": "So, our very first talk of the"
+  },
+  {
+   "t": 5.3,
+   "d": 2.6,
+   "text": "conference is going to be from Sersa"
+  },
+  {
+   "t": 7.9,
+   "d": 3.1,
+   "text": "Victory and Joris Dormans. Joris is the"
+  },
+  {
+   "t": 11.0,
+   "d": 2.0,
+   "text": "founder and game director at Ludomotion"
+  },
+  {
+   "t": 13.0,
+   "d": 1.4,
+   "text": "where he puts into practice his"
+  },
+  {
+   "t": 14.4,
+   "d": 2.2,
+   "text": "theoretical PhD in emerging gameplay and"
+  },
+  {
+   "t": 16.6,
+   "d": 2.3,
+   "text": "procedural content generation, you know,"
+  },
+  {
+   "t": 18.9,
+   "d": 1.9,
+   "text": "into practice. Uh, you might know"
+  },
+  {
+   "t": 20.8,
+   "d": 2.2,
+   "text": "Ludomotion from Unexplored and the"
+  },
+  {
+   "t": 23.0,
+   "d": 1.9,
+   "text": "successor Unexplored 2 The Wayfarer's"
+  },
+  {
+   "t": 24.9,
+   "d": 1.0,
+   "text": "Legacy."
+  },
+  {
+   "t": 25.9,
+   "d": 2.7,
+   "text": "And currently he's working on Bane Dawn"
+  },
+  {
+   "t": 28.6,
+   "d": 2.0,
+   "text": "of the Lost and is also a assistant"
+  },
+  {
+   "t": 30.6,
+   "d": 1.7,
+   "text": "professor at Leiden University. Fun"
+  },
+  {
+   "t": 32.3,
+   "d": 2.7,
+   "text": "fact, I went to Leiden briefly."
+  },
+  {
+   "t": 35.0,
+   "d": 1.5,
+   "text": "It's a good place. Like it, recommend"
+  },
+  {
+   "t": 36.5,
+   "d": 1.4,
+   "text": "it. Hello to all the Dutch people in the"
+  },
+  {
+   "t": 37.9,
+   "d": 2.0,
+   "text": "audience. Um,"
+  },
+  {
+   "t": 39.9,
+   "d": 3.2,
+   "text": "and then uh Sersa is a award-winning"
+  },
+  {
+   "t": 43.1,
+   "d": 1.8,
+   "text": "game designer and writer specializing in"
+  },
+  {
+   "t": 44.9,
+   "d": 2.7,
+   "text": "tournament adventures for tabletop RPGs."
+  },
+  {
+   "t": 47.6,
+   "d": 2.0,
+   "text": "And in addition to the top-selling Death"
+  },
+  {
+   "t": 49.6,
+   "d": 2.9,
+   "text": "Trap Dungeons he releases uh through"
+  },
+  {
+   "t": 52.5,
+   "d": 1.8,
+   "text": "Triden Game Books. He's also had work"
+  },
+  {
+   "t": 54.3,
+   "d": 2.3,
+   "text": "published by Kobold Press, Merry"
+  },
+  {
+   "t": 56.6,
+   "d": 2.8,
+   "text": "Mushmen, basically many many many uh"
+  },
+  {
+   "t": 59.4,
+   "d": 2.3,
+   "text": "publications. But my favorite detail"
+  },
+  {
+   "t": 61.7,
+   "d": 2.3,
+   "text": "here is that in 2012 Chris Perkins and"
+  },
+  {
+   "t": 64.0,
+   "d": 2.3,
+   "text": "the D&D community voted him apprentice"
+  },
+  {
+   "t": 66.3,
+   "d": 2.1,
+   "text": "of the Acererak, the undead architect of"
+  },
+  {
+   "t": 68.4,
+   "d": 1.4,
+   "text": "the infamous Tomb of Horrors, which"
+  },
+  {
+   "t": 69.8,
+   "d": 1.3,
+   "text": "isn't that something great to be able to"
+  },
+  {
+   "t": 71.1,
+   "d": 2.1,
+   "text": "put on your biography."
+  },
+  {
+   "t": 73.2,
+   "d": 3.2,
+   "text": "So, without further ado, got a"
+  },
+  {
+   "t": 76.4,
+   "d": 2.8,
+   "text": "double speaker excitement."
+  },
+  {
+   "t": 79.2,
+   "d": 1.2,
+   "text": "If we're ready."
+  },
+  {
+   "t": 80.4,
+   "d": 1.7,
+   "text": "Hello Sersa and Joris."
+  },
+  {
+   "t": 82.1,
+   "d": 1.0,
+   "text": ">> Hello."
+  },
+  {
+   "t": 83.1,
+   "d": 1.3,
+   "text": ">> Hey, [snorts] how are you?"
+  },
+  {
+   "t": 84.4,
+   "d": 2.8,
+   "text": ">> I am fantastic. All right, take it away"
+  },
+  {
+   "t": 87.2,
+   "d": 1.9,
+   "text": "talking about traps."
+  },
+  {
+   "t": 89.1,
+   "d": 1.6,
+   "text": ">> Perfect. First, can you uh hear me okay?"
+  },
+  {
+   "t": 90.7,
+   "d": 3.2,
+   "text": "Can you see my slides okay?"
+  },
+  {
+   "t": 95.2,
+   "d": 2.6,
+   "text": "Perfect. I'll uh Awesome. Great. So uh"
+  },
+  {
+   "t": 97.8,
+   "d": 1.9,
+   "text": "thank you so much. It's uh great to be"
+  },
+  {
+   "t": 99.7,
+   "d": 2.3,
+   "text": "back. This is my second time presenting"
+  },
+  {
+   "t": 102.0,
+   "d": 1.7,
+   "text": "at Roguelike Celebration. I'm also"
+  },
+  {
+   "t": 103.7,
+   "d": 1.6,
+   "text": "excited that we're kicking off the first"
+  },
+  {
+   "t": 105.3,
+   "d": 3.4,
+   "text": "day. Uh, so as Alexi mentioned, our talk"
+  },
+  {
+   "t": 108.7,
+   "d": 2.5,
+   "text": "is called Unfolding Traps, Extending"
+  },
+  {
+   "t": 111.2,
+   "d": 2.6,
+   "text": "Hazards Across Time and Space. I'm Sersa"
+  },
+  {
+   "t": 113.8,
+   "d": 1.5,
+   "text": "Victory and joining me for this"
+  },
+  {
+   "t": 115.3,
+   "d": 3.8,
+   "text": "presentation is Joris Dormans."
+  },
+  {
+   "t": 119.1,
+   "d": 1.79,
+   "text": "So in this talk we're going four"
+  },
+  {
+   "t": 120.89,
+   "d": 2.0,
+   "text": "different topics. So, first, we'll"
+  },
+  {
+   "t": 122.89,
+   "d": 2.6,
+   "text": "briefly go over the challenges with"
+  },
+  {
+   "t": 125.49,
+   "d": 2.8,
+   "text": "traps in dungeon crawling roguelikes and"
+  },
+  {
+   "t": 128.29,
+   "d": 2.1,
+   "text": "the lessons that both of us have learned"
+  },
+  {
+   "t": 130.39,
+   "d": 3.0,
+   "text": "from designing traps for tabletop RPGs."
+  },
+  {
+   "t": 133.39,
+   "d": 1.8,
+   "text": "After that, we'll get into the meat of"
+  },
+  {
+   "t": 135.19,
+   "d": 3.3,
+   "text": "the talk, discussing in detail patterns"
+  },
+  {
+   "t": 138.49,
+   "d": 2.7,
+   "text": "for unfolding hazards along with some"
+  },
+  {
+   "t": 141.19,
+   "d": 2.5,
+   "text": "strategies that help enable procedural"
+  },
+  {
+   "t": 143.69,
+   "d": 2.1,
+   "text": "generation of traps using these"
+  },
+  {
+   "t": 145.79,
+   "d": 1.9,
+   "text": "patterns."
+  },
+  {
+   "t": 147.69,
+   "d": 2.3,
+   "text": "Before we start, I'd like to quickly"
+  },
+  {
+   "t": 149.99,
+   "d": 2.2,
+   "text": "first note that this slide deck will be"
+  },
+  {
+   "t": 152.19,
+   "d": 2.7,
+   "text": "available at the URL on the screen. So,"
+  },
+  {
+   "t": 154.89,
+   "d": 2.2,
+   "text": "that's"
+  },
+  {
+   "t": 158.99,
+   "d": 2.7,
+   "text": "Uh you'll also find there a free PDF"
+  },
+  {
+   "t": 161.69,
+   "d": 1.7,
+   "text": "that explores the topics we'll talk"
+  },
+  {
+   "t": 163.39,
+   "d": 2.6,
+   "text": "about in greater detail. We're going to"
+  },
+  {
+   "t": 165.99,
+   "d": 1.6,
+   "text": "be moving through the material pretty"
+  },
+  {
+   "t": 167.59,
+   "d": 2.8,
+   "text": "quickly today, so that PDF is there to"
+  },
+  {
+   "t": 170.39,
+   "d": 1.8,
+   "text": "give you an opportunity to check out the"
+  },
+  {
+   "t": 172.19,
+   "d": 2.6,
+   "text": "patterns more closely afterward. I'll"
+  },
+  {
+   "t": 174.79,
+   "d": 4.2,
+   "text": "also post that URL on the obelisk."
+  },
+  {
+   "t": 179.49,
+   "d": 2.2,
+   "text": "To understand why a pattern language for"
+  },
+  {
+   "t": 181.69,
+   "d": 2.5,
+   "text": "traps is useful, we first need to look"
+  },
+  {
+   "t": 184.19,
+   "d": 2.2,
+   "text": "at why traps have been so challenging to"
+  },
+  {
+   "t": 186.39,
+   "d": 2.8,
+   "text": "design effectively despite being an"
+  },
+  {
+   "t": 189.19,
+   "d": 1.9,
+   "text": "iconic part of the dungeon crawler"
+  },
+  {
+   "t": 191.09,
+   "d": 1.9,
+   "text": "genre."
+  },
+  {
+   "t": 192.99,
+   "d": 3.5,
+   "text": "Traps have long been a staple of stories"
+  },
+  {
+   "t": 196.49,
+   "d": 2.6,
+   "text": "and games about exploring forbidden"
+  },
+  {
+   "t": 199.09,
+   "d": 2.4,
+   "text": "places in search of treasure."
+  },
+  {
+   "t": 201.49,
+   "d": 1.9,
+   "text": "We see them in fiction going back to at"
+  },
+  {
+   "t": 203.39,
+   "d": 2.7,
+   "text": "least the 1880s in novels like King"
+  },
+  {
+   "t": 206.09,
+   "d": 1.6,
+   "text": "Solomon's Mines"
+  },
+  {
+   "t": 207.69,
+   "d": 3.1,
+   "text": "and later in tabletop games like D&D,"
+  },
+  {
+   "t": 210.79,
+   "d": 2.4,
+   "text": "movies like Raiders of the Lost Ark,"
+  },
+  {
+   "t": 213.19,
+   "d": 2.6,
+   "text": "video games like Tomb Raider,"
+  },
+  {
+   "t": 215.79,
+   "d": 1.7,
+   "text": "and of course, dungeon crawling"
+  },
+  {
+   "t": 217.49,
+   "d": 2.6,
+   "text": "roguelikes."
+  },
+  {
+   "t": 220.09,
+   "d": 2.4,
+   "text": "Despite their iconic role in dungeon"
+  },
+  {
+   "t": 222.49,
+   "d": 2.2,
+   "text": "delving stories, traps and hazards are a"
+  },
+  {
+   "t": 224.69,
+   "d": 2.0,
+   "text": "common source of frustration for"
+  },
+  {
+   "t": 226.69,
+   "d": 2.5,
+   "text": "players, including in roguelikes."
+  },
+  {
+   "t": 229.19,
+   "d": 2.3,
+   "text": "Compared to combat and other kinds of"
+  },
+  {
+   "t": 231.49,
+   "d": 2.2,
+   "text": "encounters, they're often described as"
+  },
+  {
+   "t": 233.69,
+   "d": 4.9,
+   "text": "boring, unfair, or underdeveloped."
+  },
+  {
+   "t": 238.59,
+   "d": 2.2,
+   "text": "Reed Lockwood's 2022 roguelike"
+  },
+  {
+   "t": 240.79,
+   "d": 2.1,
+   "text": "celebration talk provides an excellent"
+  },
+  {
+   "t": 242.89,
+   "d": 3.1,
+   "text": "overview of these issues. It's one of my"
+  },
+  {
+   "t": 245.99,
+   "d": 1.6,
+   "text": "favorite talks from the conference. I"
+  },
+  {
+   "t": 247.59,
+   "d": 2.2,
+   "text": "wanted to give it a shout out, and we"
+  },
+  {
+   "t": 249.79,
+   "d": 2.5,
+   "text": "see our talk as a continuation of the"
+  },
+  {
+   "t": 252.29,
+   "d": 3.1,
+   "text": "conversation that he started."
+  },
+  {
+   "t": 255.39,
+   "d": 2.7,
+   "text": "To summarize the problems that Reed and"
+  },
+  {
+   "t": 258.09,
+   "d": 1.8,
+   "text": "others identify,"
+  },
+  {
+   "t": 259.89,
+   "d": 3.0,
+   "text": "traps are often one-and-done encounters"
+  },
+  {
+   "t": 262.89,
+   "d": 2.6,
+   "text": "that end as soon as they begin."
+  },
+  {
+   "t": 265.49,
+   "d": 3.7,
+   "text": "Their effects are limited to damage or"
+  },
+  {
+   "t": 269.19,
+   "d": 2.1,
+   "text": "standard conditions like being stuck for"
+  },
+  {
+   "t": 271.29,
+   "d": 1.4,
+   "text": "a few turns."
+  },
+  {
+   "t": 272.69,
+   "d": 2.2,
+   "text": "And as a result, they offer few"
+  },
+  {
+   "t": 274.89,
+   "d": 2.6,
+   "text": "meaningful choices and rarely produce"
+  },
+  {
+   "t": 277.49,
+   "d": 2.1,
+   "text": "interesting gameplay."
+  },
+  {
+   "t": 279.59,
+   "d": 2.9,
+   "text": "They can feel more like a surprise tax"
+  },
+  {
+   "t": 282.49,
+   "d": 2.0,
+   "text": "for moving through the dungeon than"
+  },
+  {
+   "t": 284.49,
+   "d": 1.5,
+   "text": "something that contributes to the"
+  },
+  {
+   "t": 285.99,
+   "d": 2.21,
+   "text": "desired play experience."
+  },
+  {
+   "t": 288.2,
+   "d": 0.99,
+   "text": "[snorts]"
+  },
+  {
+   "t": 289.19,
+   "d": 3.3,
+   "text": "So, how can we address these challenges"
+  },
+  {
+   "t": 292.49,
+   "d": 2.1,
+   "text": "in trap and hazard design?"
+  },
+  {
+   "t": 294.59,
+   "d": 2.3,
+   "text": "For that, we think we can draw on some"
+  },
+  {
+   "t": 296.89,
+   "d": 3.8,
+   "text": "lessons from tabletop RPGs."
+  },
+  {
+   "t": 300.69,
+   "d": 2.4,
+   "text": "As in computer rogue-likes,"
+  },
+  {
+   "t": 303.09,
+   "d": 1.7,
+   "text": "traps have been a persistent design"
+  },
+  {
+   "t": 304.79,
+   "d": 2.4,
+   "text": "challenge in tabletop dungeon crawling"
+  },
+  {
+   "t": 307.19,
+   "d": 1.9,
+   "text": "RPGs as well."
+  },
+  {
+   "t": 309.09,
+   "d": 2.4,
+   "text": "Players and GMs express similar"
+  },
+  {
+   "t": 311.49,
+   "d": 2.8,
+   "text": "frustrations while adventure authors"
+  },
+  {
+   "t": 314.29,
+   "d": 2.5,
+   "text": "like myself grapple with many of the"
+  },
+  {
+   "t": 316.79,
+   "d": 1.8,
+   "text": "same problems that are faced by"
+  },
+  {
+   "t": 318.59,
+   "d": 2.8,
+   "text": "rogue-like designers."
+  },
+  {
+   "t": 321.39,
+   "d": 2.2,
+   "text": "A number of books and articles have"
+  },
+  {
+   "t": 323.59,
+   "d": 2.2,
+   "text": "tried to address these problems from"
+  },
+  {
+   "t": 325.79,
+   "d": 1.7,
+   "text": "Dragon Magazine all the way back in the"
+  },
+  {
+   "t": 327.49,
+   "d": 3.3,
+   "text": "'80s to D&D's Encounter Traps in the"
+  },
+  {
+   "t": 330.79,
+   "d": 1.4,
+   "text": "2000s"
+  },
+  {
+   "t": 332.19,
+   "d": 2.3,
+   "text": "to the complex traps of the Treacherous"
+  },
+  {
+   "t": 334.49,
+   "d": 4.2,
+   "text": "Traps series in 2020 and in more recent"
+  },
+  {
+   "t": 338.69,
+   "d": 3.2,
+   "text": "magazines like Knock."
+  },
+  {
+   "t": 341.89,
+   "d": 2.5,
+   "text": "One really important innovation across"
+  },
+  {
+   "t": 344.39,
+   "d": 2.8,
+   "text": "these sources is treating traps more"
+  },
+  {
+   "t": 347.19,
+   "d": 2.6,
+   "text": "like monsters, giving them more than one"
+  },
+  {
+   "t": 349.79,
+   "d": 2.8,
+   "text": "action, giving them effects that change"
+  },
+  {
+   "t": 352.59,
+   "d": 2.6,
+   "text": "or worsen over time, and giving them"
+  },
+  {
+   "t": 355.19,
+   "d": 2.5,
+   "text": "multiple ways to be overcome."
+  },
+  {
+   "t": 357.69,
+   "d": 2.2,
+   "text": "And this really helps move trap design"
+  },
+  {
+   "t": 359.89,
+   "d": 2.6,
+   "text": "beyond the familiar pattern of move to a"
+  },
+  {
+   "t": 362.49,
+   "d": 3.6,
+   "text": "square, make a save, take damage, end of"
+  },
+  {
+   "t": 366.1,
+   "d": 2.4,
+   "text": "interaction."
+  },
+  {
+   "t": 368.6,
+   "d": 2.1,
+   "text": "Now, that all being said,"
+  },
+  {
+   "t": 370.69,
+   "d": 2.0,
+   "text": "we believe that a formal pattern"
+  },
+  {
+   "t": 372.69,
+   "d": 2.6,
+   "text": "language for traps still remains pretty"
+  },
+  {
+   "t": 375.3,
+   "d": 1.4,
+   "text": "elusive."
+  },
+  {
+   "t": 376.69,
+   "d": 2.3,
+   "text": "And in spite of these innovations, many"
+  },
+  {
+   "t": 379.0,
+   "d": 3.6,
+   "text": "designers still lack a shared vocabulary"
+  },
+  {
+   "t": 382.6,
+   "d": 2.4,
+   "text": "for describing how traps work."
+  },
+  {
+   "t": 385.0,
+   "d": 2.9,
+   "text": "And the large tables of very specific"
+  },
+  {
+   "t": 387.89,
+   "d": 2.7,
+   "text": "traps in many RPG supplements don't"
+  },
+  {
+   "t": 390.6,
+   "d": 3.3,
+   "text": "necessarily help articulate to designers"
+  },
+  {
+   "t": 393.89,
+   "d": 1.8,
+   "text": "the underlying interaction patterns that"
+  },
+  {
+   "t": 395.69,
+   "d": 3.5,
+   "text": "make those traps interesting."
+  },
+  {
+   "t": 399.19,
+   "d": 2.3,
+   "text": "My work publishing Tournament Death Trap"
+  },
+  {
+   "t": 401.5,
+   "d": 2.8,
+   "text": "Adventures and Joris's use of tabletop"
+  },
+  {
+   "t": 404.3,
+   "d": 3.3,
+   "text": "RPGs to prototype ideas for games like"
+  },
+  {
+   "t": 407.6,
+   "d": 2.1,
+   "text": "Unexplored and Bane"
+  },
+  {
+   "t": 409.69,
+   "d": 2.6,
+   "text": "led the both of us to a set of reusable"
+  },
+  {
+   "t": 412.3,
+   "d": 3.2,
+   "text": "trap design patterns. And we're using"
+  },
+  {
+   "t": 415.5,
+   "d": 2.8,
+   "text": "the term patterns in the same sense as"
+  },
+  {
+   "t": 418.3,
+   "d": 3.1,
+   "text": "design patterns in fields like UI design"
+  },
+  {
+   "t": 421.39,
+   "d": 2.3,
+   "text": "or software architecture."
+  },
+  {
+   "t": 423.69,
+   "d": 2.3,
+   "text": "Most importantly though, the both of us"
+  },
+  {
+   "t": 426.0,
+   "d": 2.9,
+   "text": "found that these patterns were similar"
+  },
+  {
+   "t": 428.89,
+   "d": 1.9,
+   "text": "and that they all described how traps"
+  },
+  {
+   "t": 430.8,
+   "d": 4.5,
+   "text": "can unfold across time, across space,"
+  },
+  {
+   "t": 435.3,
+   "d": 3.3,
+   "text": "and through their consequences."
+  },
+  {
+   "t": 438.6,
+   "d": 1.2,
+   "text": "Now, it's important to note that"
+  },
+  {
+   "t": 439.8,
+   "d": 2.7,
+   "text": "patterns are generic. They describe an"
+  },
+  {
+   "t": 442.5,
+   "d": 3.2,
+   "text": "abstract, reusable way that a trap can"
+  },
+  {
+   "t": 445.69,
+   "d": 0.9,
+   "text": "work."
+  },
+  {
+   "t": 446.6,
+   "d": 3.4,
+   "text": "So, unlike long lists of specific traps"
+  },
+  {
+   "t": 450.0,
+   "d": 1.8,
+   "text": "picked by a generator,"
+  },
+  {
+   "t": 451.8,
+   "d": 3.7,
+   "text": "patterns provide us a generic vocabulary"
+  },
+  {
+   "t": 455.5,
+   "d": 3.1,
+   "text": "for modeling, combining, and ultimately"
+  },
+  {
+   "t": 458.6,
+   "d": 3.1,
+   "text": "generating the underlying interactions."
+  },
+  {
+   "t": 461.69,
+   "d": 2.7,
+   "text": "They can then be reified into whatever"
+  },
+  {
+   "t": 464.39,
+   "d": 2.5,
+   "text": "concrete elements best fit your game's"
+  },
+  {
+   "t": 466.89,
+   "d": 2.75,
+   "text": "theme and setting."
+  },
+  {
+   "t": 469.64,
+   "d": 0.96,
+   "text": "[snorts]"
+  },
+  {
+   "t": 470.6,
+   "d": 2.3,
+   "text": "Theory of quality"
+  },
+  {
+   "t": 472.89,
+   "d": 2.3,
+   "text": "is essential to any useful pattern"
+  },
+  {
+   "t": 475.19,
+   "d": 3.6,
+   "text": "language. So, we first need some way"
+  },
+  {
+   "t": 478.8,
+   "d": 2.1,
+   "text": "to define what a successful trap"
+  },
+  {
+   "t": 480.89,
+   "d": 2.3,
+   "text": "interaction even looks like"
+  },
+  {
+   "t": 483.19,
+   "d": 1.9,
+   "text": "because the player's emotional state,"
+  },
+  {
+   "t": 485.1,
+   "d": 2.2,
+   "text": "are they having fun? Are they engaged?"
+  },
+  {
+   "t": 487.3,
+   "d": 1.8,
+   "text": "Are they feeling challenged?"
+  },
+  {
+   "t": 489.1,
+   "d": 3.4,
+   "text": "It's not always directly observable, but"
+  },
+  {
+   "t": 492.5,
+   "d": 2.2,
+   "text": "we think we can use player behavior as a"
+  },
+  {
+   "t": 494.7,
+   "d": 2.0,
+   "text": "practical proxy."
+  },
+  {
+   "t": 496.7,
+   "d": 3.2,
+   "text": "These desired behaviors then help define"
+  },
+  {
+   "t": 499.9,
+   "d": 1.8,
+   "text": "the patterns themselves and give us a"
+  },
+  {
+   "t": 501.7,
+   "d": 2.6,
+   "text": "metric to measure whether the patterns"
+  },
+  {
+   "t": 504.3,
+   "d": 2.5,
+   "text": "have been effective."
+  },
+  {
+   "t": 506.8,
+   "d": 1.8,
+   "text": "So these are the six player behaviors"
+  },
+  {
+   "t": 508.6,
+   "d": 2.7,
+   "text": "that we use as indicators of successful"
+  },
+  {
+   "t": 511.3,
+   "d": 1.5,
+   "text": "trap design."
+  },
+  {
+   "t": 512.8,
+   "d": 3.1,
+   "text": "Deliberation, collaboration,"
+  },
+  {
+   "t": 515.9,
+   "d": 1.6,
+   "text": "investigation,"
+  },
+  {
+   "t": 517.5,
+   "d": 4.4,
+   "text": "avoiding, exploiting, and enduring."
+  },
+  {
+   "t": 521.9,
+   "d": 1.9,
+   "text": "Now in the interest of time, I won't"
+  },
+  {
+   "t": 523.8,
+   "d": 2.6,
+   "text": "define each one of these here, but the"
+  },
+  {
+   "t": 526.4,
+   "d": 3.6,
+   "text": "companion PDF at that URL on the screen"
+  },
+  {
+   "t": 530.0,
+   "d": 2.2,
+   "text": "provides a complete breakdown and I'll"
+  },
+  {
+   "t": 532.2,
+   "d": 2.5,
+   "text": "refer back to these behaviors as we look"
+  },
+  {
+   "t": 534.7,
+   "d": 3.8,
+   "text": "at the patterns in the next few slides."
+  },
+  {
+   "t": 538.8,
+   "d": 1.9,
+   "text": "Finally, we can turn to the patterns"
+  },
+  {
+   "t": 540.7,
+   "d": 3.7,
+   "text": "themselves. They fall into three broad"
+  },
+  {
+   "t": 544.4,
+   "d": 2.9,
+   "text": "categories, traps that unfold across"
+  },
+  {
+   "t": 547.3,
+   "d": 1.1,
+   "text": "time,"
+  },
+  {
+   "t": 548.4,
+   "d": 2.3,
+   "text": "across space, and through their"
+  },
+  {
+   "t": 550.7,
+   "d": 1.8,
+   "text": "consequences."
+  },
+  {
+   "t": 552.5,
+   "d": 2.1,
+   "text": "Now naturally there's some overlap"
+  },
+  {
+   "t": 554.6,
+   "d": 2.5,
+   "text": "between these categories, so think of"
+  },
+  {
+   "t": 557.1,
+   "d": 2.1,
+   "text": "them as just useful groupings rather"
+  },
+  {
+   "t": 559.2,
+   "d": 2.8,
+   "text": "than rigid classifications. We put them"
+  },
+  {
+   "t": 562.0,
+   "d": 2.7,
+   "text": "together to give us a way to communicate"
+  },
+  {
+   "t": 564.7,
+   "d": 1.6,
+   "text": "the broader ideas without stepping"
+  },
+  {
+   "t": 566.3,
+   "d": 2.9,
+   "text": "through every pattern in extreme detail,"
+  },
+  {
+   "t": 569.2,
+   "d": 1.8,
+   "text": "which would take a lot longer than we"
+  },
+  {
+   "t": 571.0,
+   "d": 2.4,
+   "text": "have time for in a single talk."
+  },
+  {
+   "t": 573.4,
+   "d": 2.7,
+   "text": "And again, that companion PDF at the URL"
+  },
+  {
+   "t": 576.1,
+   "d": 1.5,
+   "text": "on screen"
+  },
+  {
+   "t": 577.6,
+   "d": 1.5,
+   "text": "provides a full breakdown of each"
+  },
+  {
+   "t": 579.1,
+   "d": 1.4,
+   "text": "pattern, but let's step through some of"
+  },
+  {
+   "t": 580.5,
+   "d": 2.4,
+   "text": "them pretty quickly here."
+  },
+  {
+   "t": 582.9,
+   "d": 3.5,
+   "text": "So first, patterns in the time category"
+  },
+  {
+   "t": 586.4,
+   "d": 3.1,
+   "text": "extend a trap interaction over time"
+  },
+  {
+   "t": 589.5,
+   "d": 2.9,
+   "text": "rather than resolving it immediately."
+  },
+  {
+   "t": 592.4,
+   "d": 2.9,
+   "text": "This helps create more opportunities for"
+  },
+  {
+   "t": 595.3,
+   "d": 1.9,
+   "text": "players to observe,"
+  },
+  {
+   "t": 597.2,
+   "d": 3.0,
+   "text": "to react, and to make decisions as the"
+  },
+  {
+   "t": 600.2,
+   "d": 2.0,
+   "text": "situation develops."
+  },
+  {
+   "t": 602.2,
+   "d": 2.0,
+   "text": "Now patterns in this category can"
+  },
+  {
+   "t": 604.2,
+   "d": 3.6,
+   "text": "include foreshadowing, so clues earlier"
+  },
+  {
+   "t": 607.8,
+   "d": 1.3,
+   "text": "in the delve"
+  },
+  {
+   "t": 609.1,
+   "d": 1.6,
+   "text": "hint at a trap before the player"
+  },
+  {
+   "t": 610.7,
+   "d": 1.8,
+   "text": "encounters it later."
+  },
+  {
+   "t": 612.5,
+   "d": 2.0,
+   "text": "We have ramp-up window,"
+  },
+  {
+   "t": 614.5,
+   "d": 3.2,
+   "text": "where a trap's activation is delayed,"
+  },
+  {
+   "t": 617.7,
+   "d": 3.1,
+   "text": "giving players time to react."
+  },
+  {
+   "t": 620.8,
+   "d": 2.7,
+   "text": "We have staged effect where the trap's"
+  },
+  {
+   "t": 623.5,
+   "d": 4.0,
+   "text": "effects ratchet up over multiple stages."
+  },
+  {
+   "t": 627.5,
+   "d": 1.7,
+   "text": "And we have sequence to disable, so"
+  },
+  {
+   "t": 629.2,
+   "d": 2.9,
+   "text": "defeating the hazard requires multiple"
+  },
+  {
+   "t": 632.1,
+   "d": 3.1,
+   "text": "discrete actions rather than a single"
+  },
+  {
+   "t": 635.2,
+   "d": 4.09,
+   "text": "disable action or attack action."
+  },
+  {
+   "t": 639.29,
+   "d": 2.71,
+   "text": "[snorts] Second, patterns in the space"
+  },
+  {
+   "t": 642.0,
+   "d": 1.3,
+   "text": "category"
+  },
+  {
+   "t": 643.3,
+   "d": 2.0,
+   "text": "spread trap interactions across"
+  },
+  {
+   "t": 645.3,
+   "d": 3.3,
+   "text": "locations or interconnected parts of the"
+  },
+  {
+   "t": 648.6,
+   "d": 1.2,
+   "text": "environment."
+  },
+  {
+   "t": 649.8,
+   "d": 3.1,
+   "text": "And this helps encourage players to"
+  },
+  {
+   "t": 652.9,
+   "d": 2.0,
+   "text": "think beyond the immediate tile or the"
+  },
+  {
+   "t": 654.9,
+   "d": 2.4,
+   "text": "immediate room and consider how"
+  },
+  {
+   "t": 657.3,
+   "d": 2.1,
+   "text": "different parts of the dungeon relate to"
+  },
+  {
+   "t": 659.4,
+   "d": 1.3,
+   "text": "one another."
+  },
+  {
+   "t": 660.7,
+   "d": 2.6,
+   "text": "The patterns in this category include"
+  },
+  {
+   "t": 663.3,
+   "d": 1.4,
+   "text": "foreshadowing, making a second"
+  },
+  {
+   "t": 664.7,
+   "d": 3.3,
+   "text": "appearance, so clues in earlier areas,"
+  },
+  {
+   "t": 668.0,
+   "d": 3.3,
+   "text": "hinted hazards in later areas."
+  },
+  {
+   "t": 671.3,
+   "d": 3.1,
+   "text": "We have separate trigger and effect."
+  },
+  {
+   "t": 674.4,
+   "d": 2.1,
+   "text": "So the trigger and the effect occupy"
+  },
+  {
+   "t": 676.5,
+   "d": 2.4,
+   "text": "different locations rather than being"
+  },
+  {
+   "t": 678.9,
+   "d": 1.8,
+   "text": "co-located or part of the same"
+  },
+  {
+   "t": 680.7,
+   "d": 1.9,
+   "text": "mechanism."
+  },
+  {
+   "t": 682.6,
+   "d": 2.8,
+   "text": "We have networked traps where multiple"
+  },
+  {
+   "t": 685.4,
+   "d": 2.8,
+   "text": "traps or hazards interact across the"
+  },
+  {
+   "t": 688.2,
+   "d": 2.2,
+   "text": "environment. A chain reaction, like a"
+  },
+  {
+   "t": 690.4,
+   "d": 2.3,
+   "text": "boulder that rolls down a hallway, rolls"
+  },
+  {
+   "t": 692.7,
+   "d": 1.5,
+   "text": "over a pressure plate which triggers"
+  },
+  {
+   "t": 694.2,
+   "d": 2.0,
+   "text": "another trap."
+  },
+  {
+   "t": 696.2,
+   "d": 2.8,
+   "text": "Remote solution means that to circumvent"
+  },
+  {
+   "t": 699.0,
+   "d": 1.7,
+   "text": "a hazard you have to go somewhere else"
+  },
+  {
+   "t": 700.7,
+   "d": 1.7,
+   "text": "in the dungeon, that the means to solve"
+  },
+  {
+   "t": 702.4,
+   "d": 2.0,
+   "text": "it is not in the same area."
+  },
+  {
+   "t": 704.4,
+   "d": 2.4,
+   "text": "And forced division, and this is a bit"
+  },
+  {
+   "t": 706.8,
+   "d": 2.6,
+   "text": "more relevant to multiplayer roguelikes"
+  },
+  {
+   "t": 709.4,
+   "d": 2.5,
+   "text": "or roguelikes where you control a party,"
+  },
+  {
+   "t": 711.9,
+   "d": 2.1,
+   "text": "but the players or the heroes must act"
+  },
+  {
+   "t": 714.0,
+   "d": 2.7,
+   "text": "simultaneously in separate locations, a"
+  },
+  {
+   "t": 716.7,
+   "d": 2.2,
+   "text": "simple example being two people have to"
+  },
+  {
+   "t": 718.9,
+   "d": 2.4,
+   "text": "stand on two separate pressure plates at"
+  },
+  {
+   "t": 721.3,
+   "d": 2.6,
+   "text": "the same time."
+  },
+  {
+   "t": 724.7,
+   "d": 2.2,
+   "text": "Third and finally, patterns in the"
+  },
+  {
+   "t": 726.9,
+   "d": 2.6,
+   "text": "consequences category extend the trap"
+  },
+  {
+   "t": 729.5,
+   "d": 2.0,
+   "text": "interaction beyond the immediate"
+  },
+  {
+   "t": 731.5,
+   "d": 2.7,
+   "text": "encounter allowing the trap's effects to"
+  },
+  {
+   "t": 734.2,
+   "d": 2.1,
+   "text": "shape what happens later in the"
+  },
+  {
+   "t": 736.3,
+   "d": 1.3,
+   "text": "adventure."
+  },
+  {
+   "t": 737.6,
+   "d": 2.3,
+   "text": "So, this helps create continuity between"
+  },
+  {
+   "t": 739.9,
+   "d": 1.4,
+   "text": "encounters"
+  },
+  {
+   "t": 741.3,
+   "d": 2.0,
+   "text": "and gives players reasons to consider"
+  },
+  {
+   "t": 743.3,
+   "d": 2.6,
+   "text": "the longer-term implications of how they"
+  },
+  {
+   "t": 745.9,
+   "d": 1.9,
+   "text": "interact with the hazard."
+  },
+  {
+   "t": 747.8,
+   "d": 1.9,
+   "text": "And the patterns in this category"
+  },
+  {
+   "t": 749.7,
+   "d": 2.8,
+   "text": "include lingering consequence, so an"
+  },
+  {
+   "t": 752.5,
+   "d": 2.6,
+   "text": "effect persists beyond the immediate"
+  },
+  {
+   "t": 755.1,
+   "d": 2.2,
+   "text": "encounter, so the player might have a"
+  },
+  {
+   "t": 757.3,
+   "d": 2.1,
+   "text": "curse or a disease or have their"
+  },
+  {
+   "t": 759.4,
+   "d": 1.8,
+   "text": "equipment degraded."
+  },
+  {
+   "t": 761.2,
+   "d": 2.6,
+   "text": "We have delayed payoff where the trap's"
+  },
+  {
+   "t": 763.8,
+   "d": 3.7,
+   "text": "effect primarily manifests in a later"
+  },
+  {
+   "t": 767.5,
+   "d": 2.2,
+   "text": "area rather than creating an effect in"
+  },
+  {
+   "t": 769.7,
+   "d": 1.9,
+   "text": "immediate vicinity."
+  },
+  {
+   "t": 771.6,
+   "d": 1.9,
+   "text": "There is encounter trigger where the"
+  },
+  {
+   "t": 773.5,
+   "d": 1.8,
+   "text": "trap's effect kicks off another"
+  },
+  {
+   "t": 775.3,
+   "d": 1.5,
+   "text": "encounter, and that can be a combat"
+  },
+  {
+   "t": 776.8,
+   "d": 2.6,
+   "text": "encounter, an NPC interaction, and so"
+  },
+  {
+   "t": 779.4,
+   "d": 1.3,
+   "text": "on."
+  },
+  {
+   "t": 780.7,
+   "d": 2.9,
+   "text": "And finally, salvage value where the"
+  },
+  {
+   "t": 783.6,
+   "d": 2.1,
+   "text": "trap's components become useful"
+  },
+  {
+   "t": 785.7,
+   "d": 2.5,
+   "text": "resources after the trap has been"
+  },
+  {
+   "t": 788.2,
+   "d": 3.3,
+   "text": "triggered or disabled."
+  },
+  {
+   "t": 791.5,
+   "d": 2.3,
+   "text": "So, now that we've covered the unfolding"
+  },
+  {
+   "t": 793.8,
+   "d": 1.7,
+   "text": "patterns, let's take a look at an"
+  },
+  {
+   "t": 795.5,
+   "d": 1.2,
+   "text": "example."
+  },
+  {
+   "t": 796.7,
+   "d": 2.0,
+   "text": "Uh so, we'll start with a simple trap,"
+  },
+  {
+   "t": 798.7,
+   "d": 3.1,
+   "text": "a serpent statue overlooks an altar, and"
+  },
+  {
+   "t": 801.8,
+   "d": 3.1,
+   "text": "that altar is displaying a golden idol."
+  },
+  {
+   "t": 804.9,
+   "d": 2.1,
+   "text": "Taking the idol causes the statue to"
+  },
+  {
+   "t": 807.0,
+   "d": 1.5,
+   "text": "spray acid."
+  },
+  {
+   "t": 808.5,
+   "d": 1.3,
+   "text": "The game makes a saving throw for the"
+  },
+  {
+   "t": 809.8,
+   "d": 2.3,
+   "text": "rogue, and on a failure, she takes"
+  },
+  {
+   "t": 812.1,
+   "d": 1.7,
+   "text": "damage. So, a pretty pretty common,"
+  },
+  {
+   "t": 813.8,
+   "d": 2.0,
+   "text": "pretty typical trap that you might see"
+  },
+  {
+   "t": 815.8,
+   "d": 1.7,
+   "text": "in a traditional dungeon crawling"
+  },
+  {
+   "t": 817.5,
+   "d": 1.91,
+   "text": "roguelike."
+  },
+  {
+   "t": 819.41,
+   "d": 2.38,
+   "text": "[snorts] Now, let's improve this trap by"
+  },
+  {
+   "t": 821.8,
+   "d": 2.9,
+   "text": "applying some of our unfolding patterns."
+  },
+  {
+   "t": 824.7,
+   "d": 2.0,
+   "text": "Our hypothetical procedural generator"
+  },
+  {
+   "t": 826.7,
+   "d": 2.2,
+   "text": "has selected one pattern from each"
+  },
+  {
+   "t": 828.9,
+   "d": 1.8,
+   "text": "category,"
+  },
+  {
+   "t": 830.7,
+   "d": 2.3,
+   "text": "foreshadowing across space,"
+  },
+  {
+   "t": 833.0,
+   "d": 2.3,
+   "text": "ramp up window across time,"
+  },
+  {
+   "t": 835.3,
+   "d": 1.9,
+   "text": "and an encounter trigger through"
+  },
+  {
+   "t": 837.2,
+   "d": 2.8,
+   "text": "consequences."
+  },
+  {
+   "t": 840.0,
+   "d": 1.5,
+   "text": "So, here's what the unfolded version"
+  },
+  {
+   "t": 841.5,
+   "d": 1.8,
+   "text": "might look like."
+  },
+  {
+   "t": 843.3,
+   "d": 2.2,
+   "text": "Earlier in the dungeon, the player finds"
+  },
+  {
+   "t": 845.5,
+   "d": 3.1,
+   "text": "remains with armor corroded by acid,"
+  },
+  {
+   "t": 848.6,
+   "d": 3.3,
+   "text": "foreshadowing the hazard to come."
+  },
+  {
+   "t": 851.9,
+   "d": 2.4,
+   "text": "Later, taking the idol causes the"
+  },
+  {
+   "t": 854.3,
+   "d": 2.8,
+   "text": "serpent statue's mouth to grind open,"
+  },
+  {
+   "t": 857.1,
+   "d": 2.7,
+   "text": "but instead of attacking immediately,"
+  },
+  {
+   "t": 859.8,
+   "d": 1.8,
+   "text": "there's a three-turn ramp-up window"
+  },
+  {
+   "t": 861.6,
+   "d": 2.4,
+   "text": "before it sprays, giving the player time"
+  },
+  {
+   "t": 864.0,
+   "d": 2.9,
+   "text": "to reposition, to use an escape item,"
+  },
+  {
+   "t": 866.9,
+   "d": 3.0,
+   "text": "destroy the trap, or something similar."
+  },
+  {
+   "t": 869.9,
+   "d": 2.4,
+   "text": "Now, the acid doesn't simply deal damage"
+  },
+  {
+   "t": 872.3,
+   "d": 1.4,
+   "text": "and disappear."
+  },
+  {
+   "t": 873.7,
+   "d": 2.8,
+   "text": "It burns through a nearby sarcophagus,"
+  },
+  {
+   "t": 876.5,
+   "d": 2.2,
+   "text": "releasing a hostile mummy that moves"
+  },
+  {
+   "t": 878.7,
+   "d": 2.6,
+   "text": "toward an adjacent chamber, carrying the"
+  },
+  {
+   "t": 881.3,
+   "d": 2.7,
+   "text": "consequences of the trap's effect into"
+  },
+  {
+   "t": 884.0,
+   "d": 2.8,
+   "text": "another encounter."
+  },
+  {
+   "t": 886.8,
+   "d": 1.5,
+   "text": "To generate something like this"
+  },
+  {
+   "t": 888.3,
+   "d": 2.9,
+   "text": "procedurally, we have to translate each"
+  },
+  {
+   "t": 891.2,
+   "d": 2.5,
+   "text": "abstract pattern into relationships"
+  },
+  {
+   "t": 893.7,
+   "d": 2.0,
+   "text": "between concrete elements in the"
+  },
+  {
+   "t": 895.7,
+   "d": 1.9,
+   "text": "dungeon."
+  },
+  {
+   "t": 897.6,
+   "d": 2.3,
+   "text": "A generator needs awareness of the"
+  },
+  {
+   "t": 899.9,
+   "d": 1.4,
+   "text": "larger dungeon,"
+  },
+  {
+   "t": 901.3,
+   "d": 2.6,
+   "text": "the arrangement and order of its rooms,"
+  },
+  {
+   "t": 903.9,
+   "d": 2.5,
+   "text": "the elements those rooms contain, and"
+  },
+  {
+   "t": 906.4,
+   "d": 2.1,
+   "text": "the ways those elements can interact"
+  },
+  {
+   "t": 908.5,
+   "d": 2.3,
+   "text": "thematically. So, acid can corrode"
+  },
+  {
+   "t": 910.8,
+   "d": 2.8,
+   "text": "armor, it can burn open stone,"
+  },
+  {
+   "t": 913.6,
+   "d": 1.9,
+   "text": "a sarcophagus can contain a mummy, and a"
+  },
+  {
+   "t": 915.5,
+   "d": 2.7,
+   "text": "mummy can move and go to another room."
+  },
+  {
+   "t": 918.2,
+   "d": 2.1,
+   "text": "So, Joris will talk next about"
+  },
+  {
+   "t": 920.3,
+   "d": 1.9,
+   "text": "procedural generation techniques that"
+  },
+  {
+   "t": 922.2,
+   "d": 2.7,
+   "text": "help enable this kind of interactive uh"
+  },
+  {
+   "t": 924.9,
+   "d": 2.1,
+   "text": "interconnected design, but for now, I"
+  },
+  {
+   "t": 927.0,
+   "d": 2.4,
+   "text": "hope that this illustrates how some"
+  },
+  {
+   "t": 929.4,
+   "d": 2.4,
+   "text": "relatively simple unfolding patterns can"
+  },
+  {
+   "t": 931.8,
+   "d": 2.1,
+   "text": "provide the structure for much richer"
+  },
+  {
+   "t": 933.9,
+   "d": 1.9,
+   "text": "trap interactions. So, take it away,"
+  },
+  {
+   "t": 935.8,
+   "d": 3.3,
+   "text": "Joris. I'm going to drink some water."
+  },
+  {
+   "t": 939.6,
+   "d": 2.0,
+   "text": ">> So, yes, I'm taking over from here. So,"
+  },
+  {
+   "t": 941.6,
+   "d": 1.8,
+   "text": "thank you Joris for this wonderful"
+  },
+  {
+   "t": 943.4,
+   "d": 1.8,
+   "text": "introduction to the the problems that"
+  },
+  {
+   "t": 945.2,
+   "d": 1.7,
+   "text": "we've been thinking about."
+  },
+  {
+   "t": 946.9,
+   "d": 1.0,
+   "text": "Um"
+  },
+  {
+   "t": 947.9,
+   "d": 1.5,
+   "text": "and I'm going to talk to you a little"
+  },
+  {
+   "t": 949.4,
+   "d": 3.1,
+   "text": "bit about how I go about implementing"
+  },
+  {
+   "t": 952.5,
+   "d": 3.9,
+   "text": "these these these type of traps into"
+  },
+  {
+   "t": 956.4,
+   "d": 1.8,
+   "text": "uh roguelike video games."
+  },
+  {
+   "t": 958.2,
+   "d": 1.1,
+   "text": "Um"
+  },
+  {
+   "t": 959.3,
+   "d": 2.0,
+   "text": "so, as you may know as as been told in"
+  },
+  {
+   "t": 961.3,
+   "d": 1.2,
+   "text": "the introduction, I've been working on"
+  },
+  {
+   "t": 962.5,
+   "d": 2.4,
+   "text": "Exploit One and Exploit Two, and I've"
+  },
+  {
+   "t": 964.9,
+   "d": 1.9,
+   "text": "been working on very sophisticated"
+  },
+  {
+   "t": 966.8,
+   "d": 1.2,
+   "text": "levels."
+  },
+  {
+   "t": 968.0,
+   "d": 1.8,
+   "text": "Um and"
+  },
+  {
+   "t": 969.8,
+   "d": 2.6,
+   "text": "in my experience, you can have many"
+  },
+  {
+   "t": 972.4,
+   "d": 1.8,
+   "text": "interesting features in the in the game"
+  },
+  {
+   "t": 974.2,
+   "d": 1.3,
+   "text": "and many"
+  },
+  {
+   "t": 975.5,
+   "d": 1.8,
+   "text": "interesting interactions,"
+  },
+  {
+   "t": 977.3,
+   "d": 3.4,
+   "text": "but uh to really make them work together"
+  },
+  {
+   "t": 980.7,
+   "d": 2.2,
+   "text": "you generate it needs more than just a"
+  },
+  {
+   "t": 982.9,
+   "d": 1.8,
+   "text": "random assortment of random collection"
+  },
+  {
+   "t": 984.7,
+   "d": 2.7,
+   "text": "of these things. The generator basically"
+  },
+  {
+   "t": 987.4,
+   "d": 1.6,
+   "text": "needs a plan."
+  },
+  {
+   "t": 989.0,
+   "d": 2.9,
+   "text": "Uh and and I found that for me"
+  },
+  {
+   "t": 991.9,
+   "d": 2.8,
+   "text": "if I want the generator to create plans"
+  },
+  {
+   "t": 994.7,
+   "d": 1.9,
+   "text": "uh I always go to a graph based"
+  },
+  {
+   "t": 996.6,
+   "d": 2.4,
+   "text": "generation. So it's it's it's one step"
+  },
+  {
+   "t": 999.0,
+   "d": 2.1,
+   "text": "in the generation process usually an"
+  },
+  {
+   "t": 1001.1,
+   "d": 1.5,
+   "text": "earlier step"
+  },
+  {
+   "t": 1002.6,
+   "d": 2.3,
+   "text": "where I represent the space and the"
+  },
+  {
+   "t": 1004.9,
+   "d": 2.5,
+   "text": "structure of a level or a multiple"
+  },
+  {
+   "t": 1007.4,
+   "d": 2.1,
+   "text": "levels as"
+  },
+  {
+   "t": 1009.5,
+   "d": 1.7,
+   "text": "as a graph because graphs have the"
+  },
+  {
+   "t": 1011.2,
+   "d": 2.8,
+   "text": "advantage that they can show immediate"
+  },
+  {
+   "t": 1014.0,
+   "d": 2.1,
+   "text": "surroundings but they also uh"
+  },
+  {
+   "t": 1016.1,
+   "d": 2.1,
+   "text": "show relationships or they are aware of"
+  },
+  {
+   "t": 1018.2,
+   "d": 2.3,
+   "text": "relationships across space and possibly"
+  },
+  {
+   "t": 1020.5,
+   "d": 1.7,
+   "text": "across time as well."
+  },
+  {
+   "t": 1022.2,
+   "d": 1.8,
+   "text": "Uh so this this example here on the"
+  },
+  {
+   "t": 1024.0,
+   "d": 1.2,
+   "text": "screen"
+  },
+  {
+   "t": 1025.2,
+   "d": 2.5,
+   "text": "is actually a a level from an explore"
+  },
+  {
+   "t": 1027.7,
+   "d": 2.0,
+   "text": "one and you can see there is locks and"
+  },
+  {
+   "t": 1029.7,
+   "d": 1.9,
+   "text": "keys and the and the locks they are"
+  },
+  {
+   "t": 1031.6,
+   "d": 2.1,
+   "text": "aware where the keys are and this is"
+  },
+  {
+   "t": 1033.7,
+   "d": 2.2,
+   "text": "very helpful and there is abstract"
+  },
+  {
+   "t": 1035.9,
+   "d": 1.6,
+   "text": "patterns at this stage where there are"
+  },
+  {
+   "t": 1037.5,
+   "d": 2.1,
+   "text": "going to be features, obstacles and and"
+  },
+  {
+   "t": 1039.6,
+   "d": 1.3,
+   "text": "what not."
+  },
+  {
+   "t": 1040.9,
+   "d": 1.2,
+   "text": "Um"
+  },
+  {
+   "t": 1042.1,
+   "d": 2.6,
+   "text": "and I actually use this type of"
+  },
+  {
+   "t": 1044.7,
+   "d": 2.3,
+   "text": "graphs to really plan out the dungeon in"
+  },
+  {
+   "t": 1047.0,
+   "d": 2.1,
+   "text": "a very abstract overview high level"
+  },
+  {
+   "t": 1049.1,
+   "d": 3.9,
+   "text": "overview way. So an explore one has 20"
+  },
+  {
+   "t": 1053.0,
+   "d": 2.9,
+   "text": "or 21 levels in a dungeon so but in this"
+  },
+  {
+   "t": 1055.9,
+   "d": 2.0,
+   "text": "example I showed nine but this is a very"
+  },
+  {
+   "t": 1057.9,
+   "d": 2.6,
+   "text": "similar structure. So and the way the"
+  },
+  {
+   "t": 1060.5,
+   "d": 3.6,
+   "text": "level generation starts out is by just"
+  },
+  {
+   "t": 1064.1,
+   "d": 2.3,
+   "text": "lining up those 20 levels or in this"
+  },
+  {
+   "t": 1066.4,
+   "d": 1.9,
+   "text": "case nine levels and then start"
+  },
+  {
+   "t": 1068.3,
+   "d": 1.5,
+   "text": "populating with them from the bottom"
+  },
+  {
+   "t": 1069.8,
+   "d": 1.8,
+   "text": "upwards from the from the last level you"
+  },
+  {
+   "t": 1071.6,
+   "d": 2.4,
+   "text": "are going to encounter working its way"
+  },
+  {
+   "t": 1074.0,
+   "d": 1.0,
+   "text": "forward."
+  },
+  {
+   "t": 1075.0,
+   "d": 1.3,
+   "text": "Um and in this case in an explore"
+  },
+  {
+   "t": 1076.3,
+   "d": 2.5,
+   "text": "there's always a dragon at the very end."
+  },
+  {
+   "t": 1078.8,
+   "d": 1.2,
+   "text": "There's there's multiple dragons that"
+  },
+  {
+   "t": 1080.0,
+   "d": 2.2,
+   "text": "the game can choose from but the the and"
+  },
+  {
+   "t": 1082.2,
+   "d": 1.5,
+   "text": "the particular choice the particular"
+  },
+  {
+   "t": 1083.7,
+   "d": 2.1,
+   "text": "dragon dragon it picked is going to"
+  },
+  {
+   "t": 1085.8,
+   "d": 2.4,
+   "text": "theme the levels leading up to it and"
+  },
+  {
+   "t": 1088.2,
+   "d": 1.2,
+   "text": "that's already playing into"
+  },
+  {
+   "t": 1089.4,
+   "d": 2.8,
+   "text": "foreshadowing if if there is a fire"
+  },
+  {
+   "t": 1092.2,
+   "d": 1.6,
+   "text": "theme for the final levels there's a"
+  },
+  {
+   "t": 1093.8,
+   "d": 2.6,
+   "text": "good chance the red dragon will be fire"
+  },
+  {
+   "t": 1096.4,
+   "d": 3.0,
+   "text": "based enemy as well."
+  },
+  {
+   "t": 1099.4,
+   "d": 2.1,
+   "text": "Now to be able to deal with the dragon,"
+  },
+  {
+   "t": 1101.5,
+   "d": 2.0,
+   "text": "the the generator is also planning some"
+  },
+  {
+   "t": 1103.5,
+   "d": 2.8,
+   "text": "tools. So maybe it's going to say uh the"
+  },
+  {
+   "t": 1106.3,
+   "d": 1.0,
+   "text": "player is going to need a sort of"
+  },
+  {
+   "t": 1107.3,
+   "d": 2.5,
+   "text": "slaying to to face the dragon and I'm"
+  },
+  {
+   "t": 1109.8,
+   "d": 1.9,
+   "text": "going to seed that at level six and"
+  },
+  {
+   "t": 1111.7,
+   "d": 2.4,
+   "text": "because it's a sort of slaying I like"
+  },
+  {
+   "t": 1114.1,
+   "d": 2.0,
+   "text": "it's match matching with an undead team"
+  },
+  {
+   "t": 1116.1,
+   "d": 2.4,
+   "text": "and it gives it to a Lich King. So you"
+  },
+  {
+   "t": 1118.5,
+   "d": 1.7,
+   "text": "have to to get it from from their tomb"
+  },
+  {
+   "t": 1120.2,
+   "d": 2.6,
+   "text": "or whatever and it's going to seed some"
+  },
+  {
+   "t": 1122.8,
+   "d": 2.3,
+   "text": "undead themes as well and then you can"
+  },
+  {
+   "t": 1125.1,
+   "d": 1.3,
+   "text": "seed a"
+  },
+  {
+   "t": 1126.4,
+   "d": 1.3,
+   "text": "a tool that can help you defeat the"
+  },
+  {
+   "t": 1127.7,
+   "d": 1.9,
+   "text": "undead a little bit earlier and you can"
+  },
+  {
+   "t": 1129.6,
+   "d": 2.9,
+   "text": "start hinting at all these things at at"
+  },
+  {
+   "t": 1132.5,
+   "d": 1.3,
+   "text": "earlier stage of the level so you can"
+  },
+  {
+   "t": 1133.8,
+   "d": 1.0,
+   "text": "start"
+  },
+  {
+   "t": 1134.8,
+   "d": 2.0,
+   "text": "um referencing the Lich King or the Red"
+  },
+  {
+   "t": 1136.8,
+   "d": 1.3,
+   "text": "Dragon"
+  },
+  {
+   "t": 1138.1,
+   "d": 2.9,
+   "text": "as as in levels one or two already. And"
+  },
+  {
+   "t": 1141.0,
+   "d": 2.3,
+   "text": "this creates a very high level plan and"
+  },
+  {
+   "t": 1143.3,
+   "d": 2.4,
+   "text": "every individual level there then is"
+  },
+  {
+   "t": 1145.7,
+   "d": 1.7,
+   "text": "taken to next steps in the in the"
+  },
+  {
+   "t": 1147.4,
+   "d": 2.4,
+   "text": "generator and you already know what sort"
+  },
+  {
+   "t": 1149.8,
+   "d": 1.8,
+   "text": "of creatures, what sort of tools, what"
+  },
+  {
+   "t": 1151.6,
+   "d": 2.3,
+   "text": "sort of themes are going to be"
+  },
+  {
+   "t": 1153.9,
+   "d": 3.3,
+   "text": "applicable to that to that level."
+  },
+  {
+   "t": 1157.2,
+   "d": 2.5,
+   "text": "And so I can so the levels the way I"
+  },
+  {
+   "t": 1159.7,
+   "d": 1.5,
+   "text": "generate levels it's it's really a"
+  },
+  {
+   "t": 1161.2,
+   "d": 2.8,
+   "text": "multi-step process where I start out"
+  },
+  {
+   "t": 1164.0,
+   "d": 4.3,
+   "text": "with high level graph like overviews of"
+  },
+  {
+   "t": 1168.3,
+   "d": 1.6,
+   "text": "a level that's really focused on"
+  },
+  {
+   "t": 1169.9,
+   "d": 2.8,
+   "text": "structure and outline um and that sort"
+  },
+  {
+   "t": 1172.7,
+   "d": 3.4,
+   "text": "of also help you to to focus on themes,"
+  },
+  {
+   "t": 1176.1,
+   "d": 1.5,
+   "text": "make sure that you do not have too many"
+  },
+  {
+   "t": 1177.6,
+   "d": 2.5,
+   "text": "rooms and the rooms are tight together"
+  },
+  {
+   "t": 1180.1,
+   "d": 1.7,
+   "text": "in in a particular theme. So you"
+  },
+  {
+   "t": 1181.8,
+   "d": 2.6,
+   "text": "basically built a gestalt and only in"
+  },
+  {
+   "t": 1184.4,
+   "d": 2.2,
+   "text": "later stages I'm going to flash out"
+  },
+  {
+   "t": 1186.6,
+   "d": 3.0,
+   "text": "these these rooms, add a lot of detail,"
+  },
+  {
+   "t": 1189.6,
+   "d": 2.0,
+   "text": "add floors, populate them according to"
+  },
+  {
+   "t": 1191.6,
+   "d": 2.7,
+   "text": "what the graph basically says is needed"
+  },
+  {
+   "t": 1194.3,
+   "d": 3.1,
+   "text": "in in each individual room."
+  },
+  {
+   "t": 1197.4,
+   "d": 2.4,
+   "text": "Um however you still going to still hit"
+  },
+  {
+   "t": 1199.8,
+   "d": 1.1,
+   "text": "barriers."
+  },
+  {
+   "t": 1200.9,
+   "d": 2.0,
+   "text": "I Unexplored one was sophisticated,"
+  },
+  {
+   "t": 1202.9,
+   "d": 2.5,
+   "text": "Unexplored two I tried to step step up"
+  },
+  {
+   "t": 1205.4,
+   "d": 1.8,
+   "text": "my game a little bit but I really ran"
+  },
+  {
+   "t": 1207.2,
+   "d": 2.5,
+   "text": "into into problems because you end up"
+  },
+  {
+   "t": 1209.7,
+   "d": 1.9,
+   "text": "making levels"
+  },
+  {
+   "t": 1211.6,
+   "d": 2.9,
+   "text": "very complex machines and they become"
+  },
+  {
+   "t": 1214.5,
+   "d": 2.0,
+   "text": "fragile and error-prone as a result."
+  },
+  {
+   "t": 1216.5,
+   "d": 1.8,
+   "text": "Right? So you can come up with a plan"
+  },
+  {
+   "t": 1218.3,
+   "d": 1.2,
+   "text": "for"
+  },
+  {
+   "t": 1219.5,
+   "d": 1.8,
+   "text": "a player to traverse a level in a"
+  },
+  {
+   "t": 1221.3,
+   "d": 2.2,
+   "text": "particular way but if the if the player"
+  },
+  {
+   "t": 1223.51,
+   "d": 1.5,
+   "text": "deviates from the path, everything can"
+  },
+  {
+   "t": 1225.01,
+   "d": 1.5,
+   "text": "grind to a hold. Or if they miss an"
+  },
+  {
+   "t": 1226.51,
+   "d": 2.6,
+   "text": "important clue, uh your whole fragile"
+  },
+  {
+   "t": 1229.11,
+   "d": 2.7,
+   "text": "game uh card of houses of a house house"
+  },
+  {
+   "t": 1231.81,
+   "d": 1.6,
+   "text": "of cards comes tumbling down very"
+  },
+  {
+   "t": 1233.4,
+   "d": 4.9,
+   "text": "easily. So I had to basically try try to"
+  },
+  {
+   "t": 1238.31,
+   "d": 1.9,
+   "text": "stop myself from"
+  },
+  {
+   "t": 1240.2,
+   "d": 1.7,
+   "text": "trying to generate any everything"
+  },
+  {
+   "t": 1241.9,
+   "d": 2.3,
+   "text": "beforehand because that in itself"
+  },
+  {
+   "t": 1244.2,
+   "d": 2.8,
+   "text": "basically is a trap."
+  },
+  {
+   "t": 1247.01,
+   "d": 2.3,
+   "text": "Um and if we look at the patterns that"
+  },
+  {
+   "t": 1249.31,
+   "d": 3.3,
+   "text": "Cerza already discussed, um"
+  },
+  {
+   "t": 1252.61,
+   "d": 1.4,
+   "text": "there is some clues there as well,"
+  },
+  {
+   "t": 1254.01,
+   "d": 2.3,
+   "text": "right? So because space"
+  },
+  {
+   "t": 1256.31,
+   "d": 1.8,
+   "text": "patterns that unfold over space, there"
+  },
+  {
+   "t": 1258.11,
+   "d": 2.0,
+   "text": "are sort of you can you can generate the"
+  },
+  {
+   "t": 1260.11,
+   "d": 2.1,
+   "text": "space beforehand, but time and"
+  },
+  {
+   "t": 1262.2,
+   "d": 2.3,
+   "text": "consequences are much much difficult"
+  },
+  {
+   "t": 1264.51,
+   "d": 1.8,
+   "text": "more difficult to do in this particular"
+  },
+  {
+   "t": 1266.31,
+   "d": 2.6,
+   "text": "way. And for that we actually need a"
+  },
+  {
+   "t": 1268.9,
+   "d": 2.0,
+   "text": "different strategy which which we start"
+  },
+  {
+   "t": 1270.9,
+   "d": 2.2,
+   "text": "to experiment a little bit already in"
+  },
+  {
+   "t": 1273.11,
+   "d": 2.8,
+   "text": "Under Explore one, but also more more"
+  },
+  {
+   "t": 1275.9,
+   "d": 1.9,
+   "text": "more recently in Bane."
+  },
+  {
+   "t": 1277.81,
+   "d": 1.9,
+   "text": "Um and"
+  },
+  {
+   "t": 1279.7,
+   "d": 2.5,
+   "text": "that strategy is is taking cues from"
+  },
+  {
+   "t": 1282.2,
+   "d": 2.2,
+   "text": "tabletops again, right? So because if we"
+  },
+  {
+   "t": 1284.4,
+   "d": 2.1,
+   "text": "run into this problem in a in a tabletop"
+  },
+  {
+   "t": 1286.51,
+   "d": 1.4,
+   "text": "environment,"
+  },
+  {
+   "t": 1287.9,
+   "d": 2.2,
+   "text": "it turns out it's for the the dungeon"
+  },
+  {
+   "t": 1290.11,
+   "d": 2.0,
+   "text": "master, the game master, it's very easy"
+  },
+  {
+   "t": 1292.11,
+   "d": 2.1,
+   "text": "to adapt and improvise, right? They they"
+  },
+  {
+   "t": 1294.2,
+   "d": 1.3,
+   "text": "can see whether not the players are"
+  },
+  {
+   "t": 1295.51,
+   "d": 2.0,
+   "text": "taking a turn or missing a a particular"
+  },
+  {
+   "t": 1297.51,
+   "d": 2.1,
+   "text": "clue and can recede"
+  },
+  {
+   "t": 1299.61,
+   "d": 3.1,
+   "text": "uh dangers and enemies and clues"
+  },
+  {
+   "t": 1302.7,
+   "d": 1.2,
+   "text": "accordingly."
+  },
+  {
+   "t": 1303.9,
+   "d": 2.2,
+   "text": "Um and it's a sort of"
+  },
+  {
+   "t": 1306.11,
+   "d": 2.6,
+   "text": "live orchestration going on for the for"
+  },
+  {
+   "t": 1308.7,
+   "d": 2.9,
+   "text": "the for the players. And and and and the"
+  },
+  {
+   "t": 1311.61,
+   "d": 1.9,
+   "text": "fact that it is a live orchestration is"
+  },
+  {
+   "t": 1313.51,
+   "d": 2.2,
+   "text": "really the the the the pivotal insight"
+  },
+  {
+   "t": 1315.7,
+   "d": 2.8,
+   "text": "here because we need to have a technique"
+  },
+  {
+   "t": 1318.51,
+   "d": 1.7,
+   "text": "and we need to have a a method that's"
+  },
+  {
+   "t": 1320.2,
+   "d": 3.5,
+   "text": "also live basically. We have to do it uh"
+  },
+  {
+   "t": 1323.7,
+   "d": 2.0,
+   "text": "just in time."
+  },
+  {
+   "t": 1325.7,
+   "d": 3.2,
+   "text": "Um so and and there is a lot of games"
+  },
+  {
+   "t": 1328.9,
+   "d": 1.4,
+   "text": "that actually have just in time"
+  },
+  {
+   "t": 1330.31,
+   "d": 2.0,
+   "text": "techniques to help"
+  },
+  {
+   "t": 1332.31,
+   "d": 1.9,
+   "text": "mitigate these problems, right? So Zelda"
+  },
+  {
+   "t": 1334.2,
+   "d": 2.7,
+   "text": "is is quite infamous for spawning things"
+  },
+  {
+   "t": 1336.9,
+   "d": 1.8,
+   "text": "that you really need at the moment if"
+  },
+  {
+   "t": 1338.7,
+   "d": 2.2,
+   "text": "you open smaller containers. If you"
+  },
+  {
+   "t": 1340.9,
+   "d": 1.5,
+   "text": "break a vase and you're low on hearts,"
+  },
+  {
+   "t": 1342.4,
+   "d": 1.3,
+   "text": "the chances will increase that you"
+  },
+  {
+   "t": 1343.7,
+   "d": 2.8,
+   "text": "actually find a new heart or if you low"
+  },
+  {
+   "t": 1346.51,
+   "d": 3.0,
+   "text": "on on arrows increased increased chance"
+  },
+  {
+   "t": 1349.51,
+   "d": 1.8,
+   "text": "that you find these"
+  },
+  {
+   "t": 1351.31,
+   "d": 1.4,
+   "text": "these arrows."
+  },
+  {
+   "t": 1352.71,
+   "d": 3.2,
+   "text": "Um so what we can we can look at those"
+  },
+  {
+   "t": 1355.91,
+   "d": 1.7,
+   "text": "techniques in a more sophisticated way."
+  },
+  {
+   "t": 1357.61,
+   "d": 2.5,
+   "text": "As I mentioned already Unexplored One"
+  },
+  {
+   "t": 1360.11,
+   "d": 2.2,
+   "text": "had this type of real-time adaptation."
+  },
+  {
+   "t": 1362.31,
+   "d": 2.6,
+   "text": "So what Unexplored One did is to"
+  },
+  {
+   "t": 1364.91,
+   "d": 2.4,
+   "text": "mitigate sometimes problems with the"
+  },
+  {
+   "t": 1367.31,
+   "d": 2.2,
+   "text": "sophisticated level generation is to"
+  },
+  {
+   "t": 1369.51,
+   "d": 2.5,
+   "text": "implement the the pray for help method."
+  },
+  {
+   "t": 1372.01,
+   "d": 2.0,
+   "text": "So at any moment in moment in time you"
+  },
+  {
+   "t": 1374.01,
+   "d": 2.6,
+   "text": "could basically press a button say help"
+  },
+  {
+   "t": 1376.61,
+   "d": 1.6,
+   "text": "I think I'm stuck"
+  },
+  {
+   "t": 1378.21,
+   "d": 2.1,
+   "text": "and at that moment the the game behind"
+  },
+  {
+   "t": 1380.31,
+   "d": 1.3,
+   "text": "the scenes would actually look at the"
+  },
+  {
+   "t": 1381.61,
+   "d": 2.8,
+   "text": "graphs would try to see where you are"
+  },
+  {
+   "t": 1384.41,
+   "d": 2.0,
+   "text": "which which part of the level is"
+  },
+  {
+   "t": 1386.41,
+   "d": 2.3,
+   "text": "accessible where certain tools are and"
+  },
+  {
+   "t": 1388.71,
+   "d": 1.9,
+   "text": "whether or not you're justified in"
+  },
+  {
+   "t": 1390.61,
+   "d": 1.8,
+   "text": "believing that you cannot reach the"
+  },
+  {
+   "t": 1392.41,
+   "d": 1.4,
+   "text": "other side of this particular door for"
+  },
+  {
+   "t": 1393.81,
+   "d": 2.7,
+   "text": "example and if you are justified then it"
+  },
+  {
+   "t": 1396.51,
+   "d": 2.3,
+   "text": "can sort of decide to help you out in in"
+  },
+  {
+   "t": 1398.81,
+   "d": 1.5,
+   "text": "an interesting way. So doors could"
+  },
+  {
+   "t": 1400.31,
+   "d": 2.6,
+   "text": "magically open or tools could be spawned"
+  },
+  {
+   "t": 1402.91,
+   "d": 3.1,
+   "text": "to to help you deal with this particular"
+  },
+  {
+   "t": 1406.01,
+   "d": 2.7,
+   "text": "hazard or obstacle."
+  },
+  {
+   "t": 1408.71,
+   "d": 2.6,
+   "text": "And this is something that we starting"
+  },
+  {
+   "t": 1411.31,
+   "d": 2.2,
+   "text": "to lean in more and more because I think"
+  },
+  {
+   "t": 1413.51,
+   "d": 1.2,
+   "text": "if you really want to spread out"
+  },
+  {
+   "t": 1414.71,
+   "d": 3.7,
+   "text": "consequences and make hazards as"
+  },
+  {
+   "t": 1418.41,
+   "d": 1.7,
+   "text": "interesting and combat and as diverse as"
+  },
+  {
+   "t": 1420.11,
+   "d": 2.4,
+   "text": "combat as is one of our goals here is"
+  },
+  {
+   "t": 1422.51,
+   "d": 2.4,
+   "text": "that we you really have to have to lean"
+  },
+  {
+   "t": 1424.91,
+   "d": 2.4,
+   "text": "in on these just in time techniques. So"
+  },
+  {
+   "t": 1427.31,
+   "d": 1.9,
+   "text": "for Bane which is out on the demo on"
+  },
+  {
+   "t": 1429.21,
+   "d": 2.0,
+   "text": "Steam right now"
+  },
+  {
+   "t": 1431.21,
+   "d": 1.3,
+   "text": "we are"
+  },
+  {
+   "t": 1432.51,
+   "d": 2.2,
+   "text": "experimenting more and more with"
+  },
+  {
+   "t": 1434.71,
+   "d": 1.0,
+   "text": "with"
+  },
+  {
+   "t": 1435.71,
+   "d": 2.0,
+   "text": "encounters that and hazards that that"
+  },
+  {
+   "t": 1437.71,
+   "d": 2.6,
+   "text": "lean in on elements that can be spawned"
+  },
+  {
+   "t": 1440.31,
+   "d": 2.3,
+   "text": "and added to a game and to the mix at"
+  },
+  {
+   "t": 1442.61,
+   "d": 2.2,
+   "text": "any any time."
+  },
+  {
+   "t": 1444.81,
+   "d": 2.9,
+   "text": "And as a sort of design exercise in"
+  },
+  {
+   "t": 1447.71,
+   "d": 2.2,
+   "text": "preparation of this talk"
+  },
+  {
+   "t": 1449.91,
+   "d": 2.3,
+   "text": "what I did is take a couple of"
+  },
+  {
+   "t": 1452.21,
+   "d": 1.7,
+   "text": "underdeveloped hazards that we already"
+  },
+  {
+   "t": 1453.91,
+   "d": 3.0,
+   "text": "had in Bane and try to apply some of the"
+  },
+  {
+   "t": 1456.91,
+   "d": 2.5,
+   "text": "patterns that we've been discussing and"
+  },
+  {
+   "t": 1459.41,
+   "d": 2.0,
+   "text": "see where that would lead. So one of the"
+  },
+  {
+   "t": 1461.41,
+   "d": 2.7,
+   "text": "first hazards that I was"
+  },
+  {
+   "t": 1464.11,
+   "d": 3.0,
+   "text": "was talking about is that I experimented"
+  },
+  {
+   "t": 1467.11,
+   "d": 2.4,
+   "text": "with was the"
+  },
+  {
+   "t": 1469.51,
+   "d": 3.0,
+   "text": "uh the the the tangle thorns, which is a"
+  },
+  {
+   "t": 1472.51,
+   "d": 2.1,
+   "text": "plant like"
+  },
+  {
+   "t": 1474.61,
+   "d": 1.7,
+   "text": "that's which are plants which is which"
+  },
+  {
+   "t": 1476.31,
+   "d": 1.7,
+   "text": "are difficult to get through or at least"
+  },
+  {
+   "t": 1478.01,
+   "d": 1.7,
+   "text": "not very difficult, but you have to move"
+  },
+  {
+   "t": 1479.71,
+   "d": 1.7,
+   "text": "cautiously, so it costs time and that's"
+  },
+  {
+   "t": 1481.41,
+   "d": 2.1,
+   "text": "actually um and that's a sort of"
+  },
+  {
+   "t": 1483.51,
+   "d": 2.7,
+   "text": "resource that is is of uh valuable in"
+  },
+  {
+   "t": 1486.21,
+   "d": 1.6,
+   "text": "this in this game."
+  },
+  {
+   "t": 1487.81,
+   "d": 2.2,
+   "text": "Um I randomly selected lingering"
+  },
+  {
+   "t": 1490.01,
+   "d": 2.4,
+   "text": "consequence and remote solutions as as"
+  },
+  {
+   "t": 1492.41,
+   "d": 1.9,
+   "text": "as patterns to make this hazard more"
+  },
+  {
+   "t": 1494.31,
+   "d": 1.5,
+   "text": "interesting. And what I came up with is"
+  },
+  {
+   "t": 1495.81,
+   "d": 2.4,
+   "text": "that you so you can"
+  },
+  {
+   "t": 1498.21,
+   "d": 2.7,
+   "text": "pass these these hazards in in in"
+  },
+  {
+   "t": 1500.91,
+   "d": 2.8,
+   "text": "slowly, but you can also hack hack them"
+  },
+  {
+   "t": 1503.71,
+   "d": 1.8,
+   "text": "away and then"
+  },
+  {
+   "t": 1505.51,
+   "d": 1.4,
+   "text": "but that might make up wake up the"
+  },
+  {
+   "t": 1506.91,
+   "d": 1.2,
+   "text": "plants and that makes them actually more"
+  },
+  {
+   "t": 1508.11,
+   "d": 1.5,
+   "text": "dangerous, so you can take a risk. So"
+  },
+  {
+   "t": 1509.61,
+   "d": 1.9,
+   "text": "you by cutting down some plants in the"
+  },
+  {
+   "t": 1511.51,
+   "d": 1.3,
+   "text": "neighborhood,"
+  },
+  {
+   "t": 1512.81,
+   "d": 1.7,
+   "text": "lots of plants"
+  },
+  {
+   "t": 1514.51,
+   "d": 2.2,
+   "text": "everywhere in the level can get angry at"
+  },
+  {
+   "t": 1516.71,
+   "d": 3.2,
+   "text": "you uh and all of the sudden the risks"
+  },
+  {
+   "t": 1519.91,
+   "d": 3.1,
+   "text": "of traversing those plants is increased."
+  },
+  {
+   "t": 1523.01,
+   "d": 2.5,
+   "text": "Uh to mitigate that problem I introduced"
+  },
+  {
+   "t": 1525.51,
+   "d": 2.2,
+   "text": "the remote solution which is which are"
+  },
+  {
+   "t": 1527.71,
+   "d": 1.7,
+   "text": "the druidic stones that you can find at"
+  },
+  {
+   "t": 1529.41,
+   "d": 1.4,
+   "text": "certain spots in the level where that"
+  },
+  {
+   "t": 1530.81,
+   "d": 2.3,
+   "text": "allow you to channel magic that sort of"
+  },
+  {
+   "t": 1533.11,
+   "d": 2.4,
+   "text": "calms those uh plants again. So that's"
+  },
+  {
+   "t": 1535.51,
+   "d": 2.0,
+   "text": "that's one way of of dealing with with"
+  },
+  {
+   "t": 1537.51,
+   "d": 0.9,
+   "text": "it."
+  },
+  {
+   "t": 1538.41,
+   "d": 3.2,
+   "text": "Um another example is uh another plant"
+  },
+  {
+   "t": 1541.61,
+   "d": 3.0,
+   "text": "like or there's mushrooms um that"
+  },
+  {
+   "t": 1544.61,
+   "d": 2.0,
+   "text": "release poisonous spores if you if you"
+  },
+  {
+   "t": 1546.61,
+   "d": 1.6,
+   "text": "disturb them. Again you can walk walk"
+  },
+  {
+   "t": 1548.21,
+   "d": 1.7,
+   "text": "through them cautiously"
+  },
+  {
+   "t": 1549.91,
+   "d": 2.6,
+   "text": "um but if you don't if you're not"
+  },
+  {
+   "t": 1552.51,
+   "d": 1.8,
+   "text": "careful or if you're in a fight or"
+  },
+  {
+   "t": 1554.31,
+   "d": 1.8,
+   "text": "something else disturbs them, they going"
+  },
+  {
+   "t": 1556.11,
+   "d": 2.1,
+   "text": "to release a cloud of poisonous spores"
+  },
+  {
+   "t": 1558.21,
+   "d": 1.1,
+   "text": "that are going to stay for a little"
+  },
+  {
+   "t": 1559.31,
+   "d": 2.2,
+   "text": "while, so also creating effects that are"
+  },
+  {
+   "t": 1561.51,
+   "d": 4.1,
+   "text": "going to be uh lingering on um"
+  },
+  {
+   "t": 1565.61,
+   "d": 2.5,
+   "text": "but in a slightly different way. Um one"
+  },
+  {
+   "t": 1568.11,
+   "d": 2.7,
+   "text": "thing that I found in in in"
+  },
+  {
+   "t": 1570.81,
+   "d": 1.8,
+   "text": "trying out this exercise is that the"
+  },
+  {
+   "t": 1572.61,
+   "d": 1.7,
+   "text": "thing that you really quickly get to is"
+  },
+  {
+   "t": 1574.31,
+   "d": 2.7,
+   "text": "the idea of network traps. So so one"
+  },
+  {
+   "t": 1577.01,
+   "d": 2.0,
+   "text": "plant reacts to the destruction of"
+  },
+  {
+   "t": 1579.01,
+   "d": 2.6,
+   "text": "another. All these plants they are also"
+  },
+  {
+   "t": 1581.61,
+   "d": 2.2,
+   "text": "fire hazards, so if if there is a"
+  },
+  {
+   "t": 1583.81,
+   "d": 2.3,
+   "text": "fire-based trap nearby or if some if if"
+  },
+  {
+   "t": 1586.11,
+   "d": 2.8,
+   "text": "the player is firing a fireball"
+  },
+  {
+   "t": 1588.91,
+   "d": 3.0,
+   "text": "in this in this area, you can create new"
+  },
+  {
+   "t": 1591.91,
+   "d": 3.1,
+   "text": "problems very very very very quickly."
+  },
+  {
+   "t": 1595.01,
+   "d": 0.9,
+   "text": "Um,"
+  },
+  {
+   "t": 1595.91,
+   "d": 3.0,
+   "text": "but I also found that um,"
+  },
+  {
+   "t": 1598.91,
+   "d": 2.0,
+   "text": "things really started to get shine as as"
+  },
+  {
+   "t": 1600.91,
+   "d": 1.4,
+   "text": "as soon as you start introducing"
+  },
+  {
+   "t": 1602.31,
+   "d": 3.0,
+   "text": "elements that can be added just in time."
+  },
+  {
+   "t": 1605.31,
+   "d": 1.8,
+   "text": "Um, and for this"
+  },
+  {
+   "t": 1607.11,
+   "d": 2.3,
+   "text": "for this I came up with the idea of of"
+  },
+  {
+   "t": 1609.41,
+   "d": 1.8,
+   "text": "Flutter mods which are basically sort of"
+  },
+  {
+   "t": 1611.21,
+   "d": 1.2,
+   "text": "sentient seed"
+  },
+  {
+   "t": 1612.41,
+   "d": 1.9,
+   "text": "all but they're attracted to your light"
+  },
+  {
+   "t": 1614.31,
+   "d": 1.3,
+   "text": "and they sort of if you if you're"
+  },
+  {
+   "t": 1615.61,
+   "d": 1.5,
+   "text": "walking around in a dark place with a"
+  },
+  {
+   "t": 1617.11,
+   "d": 2.1,
+   "text": "torch, they can create these fire"
+  },
+  {
+   "t": 1619.21,
+   "d": 1.8,
+   "text": "hazards on the on the fly. And the"
+  },
+  {
+   "t": 1621.01,
+   "d": 1.5,
+   "text": "beauty is obviously these are sort of"
+  },
+  {
+   "t": 1622.51,
+   "d": 2.1,
+   "text": "creatures so you can spawn them at any"
+  },
+  {
+   "t": 1624.61,
+   "d": 2.4,
+   "text": "moment you you feel feel them that"
+  },
+  {
+   "t": 1627.01,
+   "d": 1.6,
+   "text": "they're necessary even if if you come"
+  },
+  {
+   "t": 1628.61,
+   "d": 2.4,
+   "text": "back to a room you were previously it's"
+  },
+  {
+   "t": 1631.01,
+   "d": 2.0,
+   "text": "it's it's not inconceivable that they"
+  },
+  {
+   "t": 1633.01,
+   "d": 2.5,
+   "text": "are there all of a sudden."
+  },
+  {
+   "t": 1635.51,
+   "d": 3.6,
+   "text": "So it's it's allowing you to play around"
+  },
+  {
+   "t": 1639.11,
+   "d": 1.3,
+   "text": "with these things in a more"
+  },
+  {
+   "t": 1640.41,
+   "d": 1.6,
+   "text": "sophisticated way because the the game"
+  },
+  {
+   "t": 1642.01,
+   "d": 1.3,
+   "text": "can decide"
+  },
+  {
+   "t": 1643.31,
+   "d": 2.3,
+   "text": "well I haven't seen enough action in a"
+  },
+  {
+   "t": 1645.61,
+   "d": 2.0,
+   "text": "while so let's let's spice up the mix a"
+  },
+  {
+   "t": 1647.61,
+   "d": 1.1,
+   "text": "little bit."
+  },
+  {
+   "t": 1648.71,
+   "d": 3.4,
+   "text": "Um, and it doesn't need to be um,"
+  },
+  {
+   "t": 1652.11,
+   "d": 1.8,
+   "text": "just creatures that you can do this with"
+  },
+  {
+   "t": 1653.91,
+   "d": 2.2,
+   "text": "right? So the the the poisonous spores"
+  },
+  {
+   "t": 1656.11,
+   "d": 2.2,
+   "text": "they can be disturbed by any by falling"
+  },
+  {
+   "t": 1658.31,
+   "d": 1.7,
+   "text": "rocks for example and and being the"
+  },
+  {
+   "t": 1660.01,
+   "d": 2.6,
+   "text": "perspective allows us to spawn those off"
+  },
+  {
+   "t": 1662.61,
+   "d": 1.7,
+   "text": "in off camera and just drop them"
+  },
+  {
+   "t": 1664.31,
+   "d": 1.4,
+   "text": "anywhere in the level so that's also"
+  },
+  {
+   "t": 1665.71,
+   "d": 2.3,
+   "text": "something that you can add to a random"
+  },
+  {
+   "t": 1668.01,
+   "d": 2.1,
+   "text": "encounter table that's pretty specific"
+  },
+  {
+   "t": 1670.11,
+   "d": 1.6,
+   "text": "for that level because"
+  },
+  {
+   "t": 1671.71,
+   "d": 1.2,
+   "text": "uh,"
+  },
+  {
+   "t": 1672.91,
+   "d": 1.6,
+   "text": "this doesn't make as much sense in in"
+  },
+  {
+   "t": 1674.51,
+   "d": 1.5,
+   "text": "the levels where these these spores do"
+  },
+  {
+   "t": 1676.01,
+   "d": 1.9,
+   "text": "not appear."
+  },
+  {
+   "t": 1677.91,
+   "d": 2.7,
+   "text": "Uh, but adding these things to the mix"
+  },
+  {
+   "t": 1680.61,
+   "d": 3.7,
+   "text": "uh, really creates uh, levels and traps"
+  },
+  {
+   "t": 1684.31,
+   "d": 3.1,
+   "text": "that start to feel much more dynamic and"
+  },
+  {
+   "t": 1687.41,
+   "d": 1.5,
+   "text": "really your the the things that you're"
+  },
+  {
+   "t": 1688.91,
+   "d": 2.6,
+   "text": "doing have more consequences."
+  },
+  {
+   "t": 1691.51,
+   "d": 2.0,
+   "text": "Uh, and for me this pointed at a very"
+  },
+  {
+   "t": 1693.51,
+   "d": 2.8,
+   "text": "important design lessons"
+  },
+  {
+   "t": 1696.31,
+   "d": 2.0,
+   "text": "that I have to learn over and over again"
+  },
+  {
+   "t": 1698.31,
+   "d": 1.7,
+   "text": "I I've I've been aware of this for a"
+  },
+  {
+   "t": 1700.01,
+   "d": 1.1,
+   "text": "long time"
+  },
+  {
+   "t": 1701.11,
+   "d": 2.6,
+   "text": "but every time I design stuff I"
+  },
+  {
+   "t": 1703.71,
+   "d": 1.4,
+   "text": "completely forget about it again and"
+  },
+  {
+   "t": 1705.11,
+   "d": 2.0,
+   "text": "that's not to over design these these"
+  },
+  {
+   "t": 1707.11,
+   "d": 2.0,
+   "text": "these hazards individually."
+  },
+  {
+   "t": 1709.11,
+   "d": 1.6,
+   "text": "Uh, right? So when I ever every time I"
+  },
+  {
+   "t": 1710.71,
+   "d": 2.9,
+   "text": "start implementing uh, uh hazards such"
+  },
+  {
+   "t": 1713.61,
+   "d": 2.9,
+   "text": "as the the poisonous spores, uh I try to"
+  },
+  {
+   "t": 1716.51,
+   "d": 2.0,
+   "text": "make them uh in and of itself a"
+  },
+  {
+   "t": 1718.51,
+   "d": 2.8,
+   "text": "challenge. But that's not necessary."
+  },
+  {
+   "t": 1721.31,
+   "d": 2.1,
+   "text": "Um you want to make the combinations of"
+  },
+  {
+   "t": 1723.41,
+   "d": 2.4,
+   "text": "things challenging, not necessarily the"
+  },
+  {
+   "t": 1725.81,
+   "d": 1.9,
+   "text": "individual things. And the beauty of"
+  },
+  {
+   "t": 1727.71,
+   "d": 1.4,
+   "text": "that is that you can create different"
+  },
+  {
+   "t": 1729.11,
+   "d": 2.1,
+   "text": "combinations and the challenges can"
+  },
+  {
+   "t": 1731.21,
+   "d": 2.0,
+   "text": "become very diverse"
+  },
+  {
+   "t": 1733.21,
+   "d": 2.5,
+   "text": "uh as a result. Right? So very much like"
+  },
+  {
+   "t": 1735.71,
+   "d": 0.9,
+   "text": "you would"
+  },
+  {
+   "t": 1736.61,
+   "d": 2.7,
+   "text": "encounter design and combat design"
+  },
+  {
+   "t": 1739.31,
+   "d": 2.2,
+   "text": "uh adding different types of soldiers"
+  },
+  {
+   "t": 1741.51,
+   "d": 2.6,
+   "text": "and and and bruisers and and leaders and"
+  },
+  {
+   "t": 1744.11,
+   "d": 1.8,
+   "text": "and summoners uh"
+  },
+  {
+   "t": 1745.91,
+   "d": 1.7,
+   "text": "and that makes creates an more dynamic"
+  },
+  {
+   "t": 1747.61,
+   "d": 2.3,
+   "text": "combat. Here too the"
+  },
+  {
+   "t": 1749.91,
+   "d": 3.1,
+   "text": "particular mix of hazards that can that"
+  },
+  {
+   "t": 1753.01,
+   "d": 2.7,
+   "text": "are active in a level can create a very"
+  },
+  {
+   "t": 1755.71,
+   "d": 3.1,
+   "text": "dynamic and very interesting environment"
+  },
+  {
+   "t": 1758.81,
+   "d": 2.5,
+   "text": "in which hazards are become much more"
+  },
+  {
+   "t": 1761.31,
+   "d": 4.0,
+   "text": "than just a a health tax basically."
+  },
+  {
+   "t": 1765.31,
+   "d": 2.5,
+   "text": "So for the final part I'm going to hand"
+  },
+  {
+   "t": 1767.81,
+   "d": 2.1,
+   "text": "it back to Sersa"
+  },
+  {
+   "t": 1769.91,
+   "d": 2.1,
+   "text": "uh and then we have some time to to do"
+  },
+  {
+   "t": 1772.01,
+   "d": 2.4,
+   "text": "questions hopefully."
+  },
+  {
+   "t": 1774.41,
+   "d": 2.6,
+   "text": ">> Perfect. Thanks. Uh yeah, so a couple"
+  },
+  {
+   "t": 1777.01,
+   "d": 2.9,
+   "text": "final takeaways before uh we wrap things"
+  },
+  {
+   "t": 1779.91,
+   "d": 2.6,
+   "text": "up. Uh so unfolding patterns, you know,"
+  },
+  {
+   "t": 1782.51,
+   "d": 2.4,
+   "text": "our hope is that it helps you visualize"
+  },
+  {
+   "t": 1784.91,
+   "d": 2.4,
+   "text": "how you can create more opportunities"
+  },
+  {
+   "t": 1787.31,
+   "d": 2.0,
+   "text": "for the desired player experience, the"
+  },
+  {
+   "t": 1789.31,
+   "d": 1.8,
+   "text": "desired player behaviors in your"
+  },
+  {
+   "t": 1791.11,
+   "d": 1.2,
+   "text": "roguelike."
+  },
+  {
+   "t": 1792.31,
+   "d": 2.3,
+   "text": "Uh by using these generic composable"
+  },
+  {
+   "t": 1794.61,
+   "d": 3.0,
+   "text": "patterns you can create more variety"
+  },
+  {
+   "t": 1797.61,
+   "d": 3.0,
+   "text": "even with a smaller trap roster."
+  },
+  {
+   "t": 1800.61,
+   "d": 2.2,
+   "text": "Uh by using techniques like graph"
+  },
+  {
+   "t": 1802.81,
+   "d": 2.5,
+   "text": "generation, multipass generation, and"
+  },
+  {
+   "t": 1805.31,
+   "d": 2.3,
+   "text": "just-in-time generation, this these can"
+  },
+  {
+   "t": 1807.61,
+   "d": 1.8,
+   "text": "assist you in implementing these"
+  },
+  {
+   "t": 1809.41,
+   "d": 1.5,
+   "text": "patterns in your own procedural"
+  },
+  {
+   "t": 1810.91,
+   "d": 2.3,
+   "text": "generator. And ultimately, you know, as"
+  },
+  {
+   "t": 1813.21,
+   "d": 2.3,
+   "text": "as Joris mentioned, our goal is to help"
+  },
+  {
+   "t": 1815.51,
+   "d": 3.2,
+   "text": "make traps as meaningful as combat and"
+  },
+  {
+   "t": 1818.71,
+   "d": 2.4,
+   "text": "as exploration in your dungeon delving"
+  },
+  {
+   "t": 1821.11,
+   "d": 2.9,
+   "text": "game. So uh that is"
+  },
+  {
+   "t": 1824.01,
+   "d": 1.7,
+   "text": "all we had. Uh thank you again so much"
+  },
+  {
+   "t": 1825.71,
+   "d": 2.6,
+   "text": "to the organizers for putting this on"
+  },
+  {
+   "t": 1828.31,
+   "d": 1.9,
+   "text": "and inviting us to talk. Hopefully this"
+  },
+  {
+   "t": 1830.21,
+   "d": 2.8,
+   "text": "was a fun way to start off the day. And"
+  },
+  {
+   "t": 1833.01,
+   "d": 1.1,
+   "text": "yeah, we can take questions at their"
+  },
+  {
+   "t": 1834.11,
+   "d": 3.5,
+   "text": "time or we'll chat in the breakout room."
+  },
+  {
+   "t": 1837.61,
+   "d": 1.7,
+   "text": "So thank you so much."
+  },
+  {
+   "t": 1839.31,
+   "d": 1.7,
+   "text": ">> Thank you. Excellent. Yeah, I think"
+  },
+  {
+   "t": 1841.01,
+   "d": 1.3,
+   "text": "that's a great kickoff. We do have, I"
+  },
+  {
+   "t": 1842.31,
+   "d": 1.4,
+   "text": "think, time for one question, which"
+  },
+  {
+   "t": 1843.71,
+   "d": 2.2,
+   "text": "someone had already put up. So"
+  },
+  {
+   "t": 1845.91,
+   "d": 3.4,
+   "text": "Silence Walker asks about"
+  },
+  {
+   "t": 1849.31,
+   "d": 2.0,
+   "text": "should means to interact or disable a"
+  },
+  {
+   "t": 1851.31,
+   "d": 2.1,
+   "text": "trap be immediately obvious to the"
+  },
+  {
+   "t": 1853.41,
+   "d": 2.3,
+   "text": "player the same as combat affordances"
+  },
+  {
+   "t": 1855.71,
+   "d": 1.3,
+   "text": "of, you know, if you're relating it to"
+  },
+  {
+   "t": 1857.01,
+   "d": 2.3,
+   "text": "combat of like how much do you"
+  },
+  {
+   "t": 1859.31,
+   "d": 1.9,
+   "text": "make that obvious versus should traps be"
+  },
+  {
+   "t": 1861.21,
+   "d": 1.4,
+   "text": "more hidden? What were some of your"
+  },
+  {
+   "t": 1862.61,
+   "d": 2.1,
+   "text": "thoughts on that?"
+  },
+  {
+   "t": 1864.71,
+   "d": 1.1,
+   "text": ">> Yeah, do you want to jump on that cuz I"
+  },
+  {
+   "t": 1865.81,
+   "d": 1.5,
+   "text": "know you were a blog post about this"
+  },
+  {
+   "t": 1867.31,
+   "d": 1.1,
+   "text": "very topic."
+  },
+  {
+   "t": 1868.41,
+   "d": 2.4,
+   "text": ">> Yeah, but I I missed one crucial word"
+  },
+  {
+   "t": 1870.81,
+   "d": 1.2,
+   "text": "and so can you can you ask the question"
+  },
+  {
+   "t": 1872.01,
+   "d": 1.0,
+   "text": "again, please? Because I"
+  },
+  {
+   "t": 1873.01,
+   "d": 1.0,
+   "text": ">> Sure."
+  },
+  {
+   "t": 1874.01,
+   "d": 1.6,
+   "text": "So when it comes to interacting or"
+  },
+  {
+   "t": 1875.61,
+   "d": 1.9,
+   "text": "disabling traps,"
+  },
+  {
+   "t": 1877.51,
+   "d": 2.0,
+   "text": "should the way to do that be immediately"
+  },
+  {
+   "t": 1879.51,
+   "d": 3.1,
+   "text": "obvious to the player or"
+  },
+  {
+   "t": 1882.61,
+   "d": 2.3,
+   "text": "hidden to start with? Kind of like how"
+  },
+  {
+   "t": 1884.91,
+   "d": 1.8,
+   "text": "clear are those affordances?"
+  },
+  {
+   "t": 1886.71,
+   "d": 1.6,
+   "text": ">> Right, right. So I I think I believe"
+  },
+  {
+   "t": 1888.31,
+   "d": 1.5,
+   "text": "that affordances should be should be"
+  },
+  {
+   "t": 1889.81,
+   "d": 2.2,
+   "text": "clear, right? So the especially if"
+  },
+  {
+   "t": 1892.01,
+   "d": 2.5,
+   "text": "you're making changes to a"
+  },
+  {
+   "t": 1894.51,
+   "d": 2.3,
+   "text": "dungeon, you should always be aware that"
+  },
+  {
+   "t": 1896.81,
+   "d": 1.8,
+   "text": "changes have been made. Now you can"
+  },
+  {
+   "t": 1898.61,
+   "d": 1.6,
+   "text": "still be a little bit less clear about"
+  },
+  {
+   "t": 1900.21,
+   "d": 1.9,
+   "text": "the exact nature of these changes, but"
+  },
+  {
+   "t": 1902.11,
+   "d": 1.4,
+   "text": "you should at least know there is"
+  },
+  {
+   "t": 1903.51,
+   "d": 2.3,
+   "text": "something has changed."
+  },
+  {
+   "t": 1905.81,
+   "d": 2.4,
+   "text": "And when I working with traps, I always"
+  },
+  {
+   "t": 1908.21,
+   "d": 2.2,
+   "text": "try to make at least one component of"
+  },
+  {
+   "t": 1910.41,
+   "d": 2.1,
+   "text": "the trap very visible, right? So traps"
+  },
+  {
+   "t": 1912.51,
+   "d": 3.5,
+   "text": "that are completely hidden in every way,"
+  },
+  {
+   "t": 1916.01,
+   "d": 2.1,
+   "text": "they they never become interesting. So I"
+  },
+  {
+   "t": 1918.11,
+   "d": 2.2,
+   "text": "always say, well, the more you can"
+  },
+  {
+   "t": 1920.31,
+   "d": 2.0,
+   "text": "expose of the trap without giving away"
+  },
+  {
+   "t": 1922.31,
+   "d": 2.0,
+   "text": "everything, the more interesting it"
+  },
+  {
+   "t": 1924.31,
+   "d": 1.3,
+   "text": "becomes."
+  },
+  {
+   "t": 1925.61,
+   "d": 1.6,
+   "text": ">> Right. Excellent. Well, thank you so"
+  },
+  {
+   "t": 1927.21,
+   "d": 2.3,
+   "text": "much and that's perfectly time. So great"
+  },
+  {
+   "t": 1929.51,
+   "d": 2.2,
+   "text": "time management. Thank you so much,"
+  },
+  {
+   "t": 1931.71,
+   "d": 2.8,
+   "text": "and yeah, we'll do breakouts at the end."
+  },
+  {
+   "t": 1934.51,
+   "d": 1.9,
+   "text": "You guys will be in the dugout if you're"
+  },
+  {
+   "t": 1936.41,
+   "d": 1.6,
+   "text": "able to hang around and I'll repeat"
+  },
+  {
+   "t": 1938.01,
+   "d": 1.2,
+   "text": "those breakout rooms at the end. But"
+  },
+  {
+   "t": 1939.21,
+   "d": 1.0,
+   "text": "thank you so much."
+  },
+  {
+   "t": 1940.21,
+   "d": 1.6,
+   "text": ">> Yeah, thank you for having us. Bye-bye."
+  },
+  {
+   "t": 1941.81,
+   "d": 0.9,
+   "text": ">> Of course."
+  },
+  {
+   "t": 1942.71,
+   "d": 2.2,
+   "text": "Bye."
+  }
+ ]
+}

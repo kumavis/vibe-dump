@@ -1,0 +1,143 @@
+{
+  "id": "IYNKs8vfocc",
+  "title": "Everest Pipkin - Corpora as medium: on the work of curating a poetic textual dataset",
+  "speaker": "Everest Pipkin",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=IYNKs8vfocc",
+  "talk_type": "design",
+  "summary": "Everest Pipkin argues that generative text is always made from other text, so choosing and curating the source corpus is the most important decision in a generative text system. After defining corpus, generative text and common techniques (templates, cut-ups, Markov chains, context-free grammars, neural networks), they argue that huge undifferentiated corpora such as GPT-2's Reddit-sourced training set produce bland averages and tech-demo novelty that wears off. Interesting work either builds small, hand-curated corpora from sources the maker cares about, or layers careful hand-defined rules on top of big corpora. Curating your own corpus gives control over tone, content, ethics and poetics, and lets you treat the original writers as collaborators, for example by crediting them.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "generative text",
+      "kind": "principle",
+      "claim": "Generated text always derives from source text, so the provenance of a generator's input determines what it can say.",
+      "detail": "Pipkin walks through templates, cut-ups, Markov chains and neural networks and notes that even neural networks rely heavily on the text they learn from. The takeaway they emphasise is that no technique produces text from nothing.",
+      "t": 551,
+      "quote": "even when techniques use a computer to generate text text never comes from nowhere generated text comes from other text",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "markov chains",
+      "kind": "technique",
+      "claim": "A Markov chain text generator splits text into word or character states and recombines them by following observed successors, producing semi-grammatical output that breaks down in obvious ways.",
+      "detail": "Using 'it was the best of times', Pipkin shows that the n-gram 'it was' can be followed by 'the best', 'the age' or 'the epoch', so reshuffling picks among them. This explains why Markov output feels semi-coherent but visibly falls apart.",
+      "t": 470,
+      "quote": "a Markov chain is a little different it breaks text into states which can be words or characters that can sort of flow into each other in new ways",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generative text",
+      "kind": "technique",
+      "claim": "Template systems and context-free grammars such as Tracery usually embed hand-written word lists that are picked from randomly to make speech feel natural.",
+      "detail": "Pipkin lists common techniques (templates/Mad Libs, shuffled text, cut-ups, Markov chains, synonym replacement, sentiment analysis, context-free grammars, neural networks) and notes that templates and grammars often hold hand-defined lists of nouns, place names or adjectives. With Tracery or RiTa you have probably used a context-free grammar.",
+      "t": 393,
+      "quote": "template systems and context-free grammars often have hand to find content inside of them",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generative text",
+      "kind": "principle",
+      "claim": "Designers use generative text for surprise, emergent play, replayability and stories that respond differently each time, and because writing everything by hand is hard.",
+      "detail": "Pipkin lists the motives: increased capacity for surprise, systems producing ideas humans would not, stories you can re-enter for a different experience, and sometimes it is easier to write code that does the writing.",
+      "t": 303,
+      "quote": "an increased capacity for surprise and emergent gameplay systems that can produce sort of novel ideas that humans can or do not",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus curation",
+      "kind": "principle",
+      "claim": "Choosing source material that feels right is the most important decision in a generative text system, and should be done with care for what the work is made from.",
+      "detail": "Pipkin ties 'curation' to the Latin for care and argues care applies not just to the output but to the material the work is made from. In a hand-written grammar this happens naturally because you choose favourite words; with Markov chains the input is still chosen for its resulting feeling.",
+      "t": 639,
+      "quote": "picking the right source material the material that feels right is perhaps like the most important decision in generative text",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus curation",
+      "kind": "warning",
+      "claim": "The more complex and larger a generative system becomes, the more the author's choice of material becomes invisible and the further the output drifts from intended feeling.",
+      "detail": "Pipkin contrasts hand grammars with GPT-2, trained on millions of Reddit-linked articles with more than three upvotes. At that scale the curatorial choice disappears from view.",
+      "t": 710,
+      "quote": "the farther its result sort of fuels from it and the more invisible that choice becomes",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generative text",
+      "kind": "warning",
+      "claim": "Much generative text is boring because novelty fades like a tech demo, and without real meaning or poetics at its heart the shine wears off.",
+      "detail": "Pipkin notes Markov chains used to be funny and are not any more; computational power cannot make up for a lack of argument, poetics or meaning, and once the technology's magic disappears nothing is left.",
+      "t": 900,
+      "quote": "nobody likes a tech demo eventually you know eventually it's sort of the magic of like oh we made this thing and Technology disappears",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus curation",
+      "kind": "warning",
+      "claim": "Models trained on huge generic corpora sound like the totalized average of their source, which tends to be bland.",
+      "detail": "Pipkin says a model trained on Reddit sounds like Reddit, a Twitter bot sounds like Twitter, and random Project Gutenberg pulls give a mushy well-to-do 18th-century vibe. Averaging any of these yields blandness.",
+      "t": 940,
+      "quote": "when you take sort of a totalizing average of any of those phases you kind of just get like Blair",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraints",
+      "kind": "technique",
+      "claim": "Large corpora can produce interesting work when artists hand-define rules and constraints that sit on top of the corpus rather than relying on its raw content.",
+      "detail": "Pipkin cites Allison Parrish's work with a three-million-line Gutenberg poetry corpus, a Twitter bot that retweets tweets matching iambic pentameter into an endless sonnet, and Jonathan Basile's Library of Babel. The key is careful exploration guided by logical and poetic constraints.",
+      "t": 968,
+      "quote": "they do so by hand defining rules that sit on top of these structures rather inside of the content of them",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "principle",
+      "claim": "Building a generative system is curatorial work: deciding what is compelling and encoding it as rules that find the bounded edges of an interesting possibility space.",
+      "detail": "Pipkin compares it to curating an art show or playlist or editing a book of poems: learn the ethos of the space, know what is right, then design a system that reliably produces that kind of result.",
+      "t": 1064,
+      "quote": "to work with generative systems is to be a curator",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus curation",
+      "kind": "technique",
+      "claim": "Rather than using precompiled NLP datasets, build corpora from niche sources you love, such as old forums, DIY resources or gardening comment sections.",
+      "detail": "Pipkin says you should not be expected to make evocative art from a dataset intended for natural language processing; look instead to spaces that never make it into precompiled sets because no one cares about them as deeply as you do. The simplest guide to the right text is to work with sources you care about.",
+      "t": 1202,
+      "quote": "you shouldn't be expected to make an evocative artwork directly from a precompiled dataset intended for a natural language processing",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus curation",
+      "kind": "principle",
+      "claim": "Curating your own corpus gives hyper-specific control of tone, content, ethics and language while still letting the generator surprise you with specifics.",
+      "detail": "Pipkin says you understand the broad strokes of what you want to say up front, and the generator supplies surprising specifics each time.",
+      "t": 1252,
+      "quote": "to curate your own corpora is to let you have a hyper specific control for the tone 5 content ethics language and poetics of that space",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus ethics",
+      "kind": "technique",
+      "claim": "A hand-curated corpus lets you treat source authors as collaborators and credit them individually, which large datasets never do.",
+      "detail": "Pipkin's book 'I've never picked a protected flower' has an 18-page thank-you section listing the usernames of the forum posters whose titles it uses. Keeping data and its sources at a distance is a choice artists can reverse.",
+      "t": 1323,
+      "quote": "it lets us make a credits page in our work that thinks individuals something that I've never seen a large dataset do",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

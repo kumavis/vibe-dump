@@ -1,0 +1,220 @@
+{
+  "id": "lfb6uehmrWo",
+  "title": "Brian Walker - Proc gen & gameplay",
+  "speaker": "Brian Walker",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=lfb6uehmrWo",
+  "talk_type": "design",
+  "summary": "Brian Walker, creator of Brogue, explains how Brogue generates emergent stories by chaining exciting situations. He defines an exciting situation by five elements (high stakes, motivation, immersion, perceived meritocracy, cognitive interest) and argues the main threat to longevity is play becoming rote or looked up on a wiki. Brogue's answer is improvised item-based character advancement under imperfect information, abilities that are extremely powerful but situational, and dungeons built from combinatorially overlapping terrain zones with qualitatively different advantages. The story is co-authored by the player's improvised build and the path it takes through those zones.",
+  "games": [
+    "Brogue",
+    "Dungeon Crawl Stone Soup",
+    "Diablo II",
+    "Rogue",
+    "Chess",
+    "Tic-tac-toe"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "Brogue's best emergent stories come from chained system interactions, such as a misidentified incineration potion burning a bridge, dropping goblins into water and an explosive bog.",
+      "detail": "Walker reads a player's account from a developer blog: trapped on a bridge by goblins, the player drank an unknown potion hoping for levitation, got incineration, fell into water that doused the flames, and a burning goblin ignited explosive swamp gas. He says if every game included vignettes like this the genre would be more popular than big-budget games.",
+      "t": 72,
+      "quote": "unfortunately it was a potion of incineration a huge burst of flames erupts setting him the goblins and the bridge on fire",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "exciting situations",
+      "kind": "principle",
+      "claim": "A roguelike succeeds by chaining exciting situations back to back, each needing high stakes, strong motivation to win, immersion, perceived meritocracy, and a cognitively interesting puzzle to optimize.",
+      "detail": "Walker lists the five elements: failure very possible or the default, the player really wants to win, the player identifies with the character rather than a data structure, skill rather than luck decides the outcome, and solving it is fun. If a game chains these for an hour, the designer has done the job well.",
+      "t": 161,
+      "quote": "it has to be a situation where the player really wants to win highly motivated it's got to be immersive",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "solved games",
+      "kind": "warning",
+      "claim": "The biggest risk to a game's longevity is play becoming rote, when the player immediately knows the answer to every situation, as with solved tic-tac-toe.",
+      "detail": "Once you memorize tic-tac-toe's solution tree you'll never be entertained by it again. Walker adds that the internet means players don't even build the intuition themselves; they alt-tab to a wiki mid-game, so designers must make systems resistant to crowdsourced data dumps.",
+      "t": 198,
+      "quote": "the biggest risk to the longevity of a game is where the game fails to maintain that sense of interestingness where it becomes wrote and systematized",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "optimal play",
+      "kind": "principle",
+      "claim": "Optimal play should be fun, and looking up dominant strategies or item effects on a wiki is an optimal-play strategy that isn't fun, which designers must account for.",
+      "detail": "Walker credits the Crawl team with popularizing the idea that optimal play should be fun and calls it the most important aspect of game design. Alt-tabbing to read the dominant strategy or look up each item is a metagame behaviour designers must cope with in the internet age.",
+      "t": 280,
+      "quote": "the crawl team in particular has done excellent work in popularizing that notion i think it's the most important uh aspect of game design",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character classes",
+      "kind": "warning",
+      "claim": "Adding character classes is a poor way to maximize hours of fun per unit of content because one class or build tends to dominate and optimal players simply look it up.",
+      "detail": "Walker grants classes suit games inheriting a legacy audience wanting diverse play styles. But unless perfectly balanced, one class is strongest and each class has a dominant build; he looked up the best sorceress build in Diablo II and all other content was wasted for him.",
+      "t": 439,
+      "quote": "adding classes like new classes is probably not the way that you maximize the number of hours of fun per unit of content",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item-based advancement",
+      "kind": "technique",
+      "claim": "Brogue replaces skills with reusable 'skill items' (weapons, armor, staffs, charms, rings) and skill points with single-use scrolls of enchantment that permanently upgrade one item.",
+      "detail": "Enchanting makes weapons hit harder and more often, armor lighter and more protective, staffs and charms stronger and faster to recharge. Though enchant scrolls look random, their spawn rate is carefully controlled so every player gets about the same number of points at the same rate.",
+      "t": 479,
+      "quote": "instead of skill points uh which is a pretty common rpg trope you have basically skill point items which in brogue's case are scrolls of enchantment",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "improvised classes",
+      "kind": "example",
+      "claim": "In Brogue, players assemble improvised classes from found item synergies, such as a fire mage, a berserker with axe and transference, or a stealth assassin, without any class existing in code.",
+      "detail": "Because only a subset of items appear per game, players can't rigidly systematize. Special vault rooms let you pick one item from a set, but you must commit to a build before knowing what will appear because difficulty ramps quickly. A limited pool of disposable 'wild card' items like teleportation scrolls covers emergencies.",
+      "t": 601,
+      "quote": "there's no line of code that that refers to a fire mage or distinguishes a fire mage from a berserker these are sort of improvised character classes",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "decoupled advancement",
+      "kind": "principle",
+      "claim": "Decoupling advancement from combat by removing experience points enables builds based on avoidance and trickery, which suit roguelikes because deviousness is a skill the player actually has.",
+      "detail": "Walker says forced improvisation and imperfect information are the system's key features. A warrior's strength isn't a skill the player expresses at a keyboard, but being a scheming scoundrel is, which aligns character and player skill and adds immersion. Contingent builds also make wiki lookups much less useful, so the game resists spoilers.",
+      "t": 706,
+      "quote": "there's no experience points from fighting monsters anymore and it really lets you build alternative types of builds that are not just about killing monsters",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "situational balance",
+      "kind": "principle",
+      "claim": "Make abilities as powerful as possible and balance them by situationality rather than by dialing down their power, because strong situational effects make each run feel different.",
+      "detail": "Turning power up encourages optimal players to exploit the effect and makes that character feel distinct from previous games, so the game tells different stories each time. Brogue examples: entangled creatures in spiderwebs are hit 100% of the time (earlier he used -4 modifiers), and lava instantly kills any non-flying, non-fire-immune creature, but you must find it and lure monsters there.",
+      "t": 819,
+      "quote": "instead of balancing power by dialing it back down balance it with situationality",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "weapon differentiation",
+      "kind": "principle",
+      "claim": "Weapons should be made as distinct as possible, as with Brogue's axes hitting every adjacent enemy, which helps against crowds but gives no edge in one-on-one fights.",
+      "detail": "Walker says many games struggle to make weapons feel distinct and the answer is maximum difference: don't hit just three monsters in front, hit all around. Negation similarly instantly kills magical monsters like spectral blades but only affects certain monsters.",
+      "t": 971,
+      "quote": "the right answer is to just make them as distinct as possible to make them as different from one another as possible",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "overlapping zones",
+      "kind": "principle",
+      "claim": "Interesting dungeon space comes from combinatorially overlapping zones with qualitatively different advantages and disadvantages, layered so every permutation appears.",
+      "detail": "Walker says it took him a while to realize this is the key to making the space itself interesting, the complement to designing character abilities.",
+      "t": 1006,
+      "quote": "come up with combinatorially overlapping zones with qualitatively different advantages and disadvantages",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "square grids",
+      "kind": "principle",
+      "claim": "Square grids where diagonal moves cost one step are a strength, because many equal-length paths between points make choosing among them under soft constraints strategically interesting.",
+      "detail": "Walker rejects the push toward hex grids. He notes Euclidean roundness still emerges underneath: Brogue's gas diffusion averages each tile with its eight neighbours each turn and spreads into round shapes.",
+      "t": 1045,
+      "quote": "the fact that diagonals take you farther actually increases the the strategic interest of the space",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "gas diffusion",
+      "kind": "technique",
+      "claim": "Brogue simulates gas by storing a quantity per tile and each turn averaging it with its eight neighbours, which produces round clouds even on a grid.",
+      "detail": "Walker uses it to show an element of Euclidean geometry hidden under the grid that emerges in combinatorial situations.",
+      "t": 1083,
+      "quote": "the diffusion formula is simple it just averages the gas quantities of itself and it's it's eight neighbors every turn",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "terrain",
+      "kind": "principle",
+      "claim": "Rich terrain is fundamentally more interesting than monsters because it is self-explanatory, creates evocative space, and supports satisfying player plans.",
+      "detail": "Walker points to dungeon-crawl films like Indiana Jones where most encounters are spikes, traps, floods and burning vegetation, and terrain often resolves monster conflicts. Dry grass obviously burns, while a goblin shaman's abilities are unclear. Throwing an incendiary dart to burn grass toward an acid mound is a 'MacGyver moment', more exciting than standing aside while monsters fight each other.",
+      "t": 1130,
+      "quote": "i would argue that terrain is just fundamentally more interesting than monsters",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "spreading terrain",
+      "kind": "technique",
+      "claim": "Brogue uses a single general mechanic, terrain spreading over other terrain, for spreading fire, collapsing bridges, extending walkways, receding lakes, growing vegetation and appearing tunnels.",
+      "detail": "Walker says this very common effect makes terrain feel alive and dynamic.",
+      "t": 1273,
+      "quote": "one particular mechanic that's that's useful in a variety of different places is terrain spreading over other terrain",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "zones of influence",
+      "kind": "technique",
+      "claim": "Like chess pieces, monsters and effects can create distinct zones of influence and jeopardy, such as terrain-bound monsters, line-of-sight effects, directional ranged attacks, light-dependent effects and choke-point-avoiding monsters.",
+      "detail": "Chess pieces differ only in how they move and attack, yet their interlocking zones produce all of chess's depth. Walker's examples include water-bound monsters, flyers crossing chasms that others can't, known-shape area attacks, and intensifying effects deeper in the dungeon as players grow stronger.",
+      "t": 1319,
+      "quote": "chess is a testament to how deep uh gameplay can get with just that technique",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural story",
+      "kind": "principle",
+      "claim": "In Brogue a procedural story is the player's path through dense, intense, interlocking zones, chosen by an improvised build, so story is co-authored by player choices and the dungeon.",
+      "detail": "High-intensity zone effects make the story exciting, qualitatively varied zones make it novel, and dense interlocking makes finding the optimal path cognitively interesting. Macros and in-game info let players move quickly between situations without grinding or alt-tabbing.",
+      "t": 1473,
+      "quote": "the story is really kind of co-authored between the players choices and the environment created by the dungeon",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "metaphor vs gameplay",
+      "kind": "warning",
+      "claim": "Let go of a thematic metaphor when it breaks gameplay, as when Brogue's vomiting zombie gas originally drained the food clock and undermined it.",
+      "detail": "Asked what didn't work, Walker describes a zombie whose noxious gas makes you randomly lose turns vomiting; originally each vomit decreased food, but the food clock served an important purpose and this broke it.",
+      "t": 1593,
+      "quote": "it's good to like let go of the metaphor when there's a gameplay reason to do so",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "wikis",
+      "kind": "principle",
+      "claim": "A rich, contingent strategy space can't defeat wikis outright but tips the balance so players are less tempted to leave the game for strategy advice.",
+      "detail": "Answering a question that guides can adapt to contingent builds, Walker agrees and says he's happy the Brogue wiki exists, but describes an ongoing competition between the game and metagame elements that can never be decisively won, only gently pushed back.",
+      "t": 1664,
+      "quote": "having uh a richer and more contingent uh strategy space uh tips the odds in the game's fader favor",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "flavor text clues",
+      "kind": "technique",
+      "claim": "Brogue makes terrain effects discoverable by dedicating a screen line to flavor text and cursor descriptions that weave in clues about what terrain does.",
+      "detail": "Whenever you step on terrain, the line tells you what the character sees, hears or feels; mousing or cursoring over a glyph describes it. Walker hopes that for really powerful effects players get a clue before it explodes on them.",
+      "t": 1736,
+      "quote": "there's a line on the screen it's very precious screen real estate",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

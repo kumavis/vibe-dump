@@ -1,0 +1,235 @@
+{
+  "id": "vtU3Xa0ShKw",
+  "title": "Patrick Belanger & Jackson Wagner - Hand-Crafted Randomness: Storytelling in Wildermyth",
+  "speaker": "Patrick Belanger & Jackson Wagner",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=vtU3Xa0ShKw",
+  "talk_type": "postmortem",
+  "summary": "Two former Wildermyth developers explain how the game combines randomly generated heroes and maps with large amounts of handcrafted content to create story moments that feel unique and genuine. Patrick covers hero generation (personality traits, relationships, injuries, non-swappable gear, visible transformations) and the event system, which casts heroes into a 'library of plays' via role-matching and scoring, then varies text and panels per hero. Jackson covers combat maps (procedural vs handcrafted trade-offs), biome- and monster-driven scenery that acts as cover and fuels the Mystic class, and how the overland map's procedural tiles shape resources and defence. Their takeaway: acknowledging generated traits with handcrafted variation works, but it is a lot of work and procgen is not free content.",
+  "games": [
+    "Wildermyth"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural characters",
+      "kind": "principle",
+      "claim": "Wildermyth's core goal is character and story moments that feel unique to each playthrough yet feel genuine and memorable, achieved by having random generation guide or lead into handcrafted content.",
+      "detail": "Heroes and maps are randomly chosen, but that generation is often guided by or leads to many pieces of handcrafted content, organised around three pillars: heroes, myths (events) and combat.",
+      "t": 191,
+      "quote": "creating character and story moments that feel unique to each play through but also stick with the player and feel gene genuine",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "personality traits",
+      "kind": "principle",
+      "claim": "Wildermyth heroes have 11 possible personality traits but only the primary and secondary matter most, because asking players to remember more than two traits per hero dilutes them.",
+      "detail": "The traits are poet, healer, hothead, bookish, coward, leader, romantic, loner, snark, greedy and goofball. Hero histories about upbringing and motivation also feed hook quests focused on that hero.",
+      "t": 254,
+      "quote": "If you try to get players to remember more than two personality traits on a hero it tend do is dilute",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "random stats",
+      "kind": "warning",
+      "claim": "Randomly generated starting stat bonuses in Wildermyth are kept small, because if they are too impactful players reroll heroes until they get the stats they want, which isn't fun.",
+      "detail": "The developers wanted stats earned over the adventure to matter more than stats from generation, which only add flair.",
+      "t": 288,
+      "quote": "if you make them too impactful players will reroll heroes until they get stats they want which isn't fun",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "relationships",
+      "kind": "technique",
+      "claim": "Wildermyth relationships (friendship, romance, rivalry, family) form randomly or by player choice and carry both story impact and combat buffs, and players get very invested in them.",
+      "detail": "For example, romance makes a hero deal more damage to those who attack their lover. A choice among relationships is put at the start of campaigns; a simple family system with children and siblings added late gave nice story variation.",
+      "t": 316,
+      "quote": "Players get really invested in relationships",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "character death",
+      "kind": "technique",
+      "claim": "When a Wildermyth hero drops to zero health, the player makes a 'mortal choice': fall back maimed (losing an arm or eye or gaining a scar) or die in a blaze of glory with a powerful final act, making death meaningful but uncommon.",
+      "detail": "Because it is a party game spanning years, heroes can die, leave, age and retire; the designers didn't want to shy away from death but didn't want it common, and mitigated retirement losses with experience.",
+      "t": 385,
+      "quote": "there is a mortal choice choosing to be named and fall back often losing an arm, or eye or getting a permanent scar",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "gear ownership",
+      "kind": "technique",
+      "claim": "Wildermyth does not allow swapping weapons between heroes, so gear characterises each hero rather than being passed to whoever is most useful at the moment.",
+      "detail": "Gear is among the biggest factors in how heroes play; when swapping was possible weapons felt separate from heroes. Gear also appears visually in combat and comics, showing progression, and event loot serves as a reminder of the event that granted it.",
+      "t": 418,
+      "quote": "we don't allow swapping weapons. The gears is theirs and theirs alone. This helps to further characterize the heroes",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "transformations",
+      "kind": "principle",
+      "claim": "Visible transformations (like a wolf head) are among Wildermyth's most successful forms of hero progression because they change combat abilities and are easy for story events to reference, since players never forget what they can see.",
+      "detail": "Players may forget a hero's past deeds but won't forget the hero has a wolf head, so referencing visible features lands reliably.",
+      "t": 509,
+      "quote": "the player might forget something their hero did in the past but definitely won't forget their hero has a wolf head",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "event casting",
+      "kind": "technique",
+      "claim": "Wildermyth treats its random events as a 'library of plays' with heroes as the cast, selecting events whose roles can be filled by the current party and weighting more specific events higher.",
+      "detail": "An event with a wolf hero talking to a parent in a forest scores higher than generic friends chatting, so the game picks the event best suited to the party. The goal is acknowledging who the heroes are and pushing them toward who they can become.",
+      "t": 532,
+      "quote": "we refer to this random collection of events as a library of plays where the heroes are the cast",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "role matching",
+      "kind": "technique",
+      "claim": "Wildermyth event roles are filled by scoring candidate heroes, e.g. picking a second hero who is friend or lover of the first (preferring lovers) and a third with the highest leader stat among those remaining.",
+      "detail": "Events can also filter by overland tile, site, party and foes. Role names like 'hero', 'friend' and 'leader' are arbitrary labels; the logic lives in the scoring, and optional roles let extra content trigger, such as a lover-only choice.",
+      "t": 686,
+      "quote": "Note hero, friend and leader are just names we are giving the roles. It doesn't matter the name. The logic is happening in the scoring",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character voice",
+      "kind": "principle",
+      "claim": "Wildermyth writes text splits for all 11 personalities rather than sharing lines between a few, because consistent hero voices are essential to a game about memorable heroes.",
+      "detail": "Earlier, romantic and bookish heroes sometimes shared lines; that proved inadequate. The tooling shows the comic live, colour-codes splits and breadcrumbs the branch being edited.",
+      "t": 801,
+      "quote": "writing 11 splits was important for heroes to have consistent voices",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character voice",
+      "kind": "warning",
+      "claim": "In a system where any hero can fill a role, personalities cannot be caricatures and relationships must stay broadly friendly, since extremes like a hero who only speaks in poetry or heroes who hate each other can't be kept consistent across all events.",
+      "detail": "Even rivals in Wildermyth get on each other's nerves but still work together; a hero speaking only poetry in one split but normally elsewhere would feel out of line.",
+      "t": 843,
+      "quote": "We can't have any of our heroes hate each other because there would be no way to have that happen consistently",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "acknowledgment",
+      "kind": "technique",
+      "claim": "Wildermyth uses panel splits so a hero's unique trait changes how a scene plays out, e.g. a wolf hero sniffing out a cave, convincing players events are not just templates.",
+      "detail": "Panel splits take more effort than text splits so are rarer. A useful prompt is asking which trait you'd expect to dramatically alter an encounter: a fire-touched hero in an ice cave gets a special panel and can trivialise a skill check, which feels rewarding.",
+      "t": 923,
+      "quote": "encourages the belief in the player this isn't just a template. They are doing something only they could do",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "acknowledgment",
+      "kind": "principle",
+      "claim": "Add variation wherever it would feel weird not to have it, such as an estranged father commenting on his child's new animal head, even if only in one panel.",
+      "detail": "This guideline was adopted later in development by the lead writer. A single acknowledging panel is enough to satisfy players.",
+      "t": 1020,
+      "quote": "try to add variation wherever it would feel weird not to have it",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "event exclusion",
+      "kind": "technique",
+      "claim": "Sometimes it is cheaper to forbid an event for heroes it doesn't fit than to write variations, as Wildermyth does by not triggering a fall-in-a-hole event for winged heroes.",
+      "detail": "Reworking an event for one specific case can cost more than losing that case.",
+      "t": 1040,
+      "quote": "It is also OK, and sometimes easier to forbid events for certain heroes",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Acknowledging things that happened to a hero randomly, not just player choices, is just as impactful, so procedurally generated misfortunes become story when the game references them.",
+      "detail": "One-line 'tidings' between battles reference transformations and follow-ups (e.g. carving art with a hook hand). Losing a hand or random relationships weren't chosen, so the player discovers a hero's story while providing a guiding hand.",
+      "t": 1130,
+      "quote": "It can be just as impactful to acknowledge things that happened to the hero randomly",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "procedural vs handcrafted",
+      "kind": "warning",
+      "claim": "Wildermyth's procedural combat maps were cheap to multiply but made fights feel less special and could fail with large monsters that couldn't fit through narrow pathways.",
+      "detail": "Initially almost all maps were procedural. Large monsters stuck in small passages meant heroes stood still rather than exploring and discovering new pockets of monsters, which felt odd over time.",
+      "t": 1302,
+      "quote": "if you have big monsters they would have a hard time fitting through the smaller pathways",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "procedural vs handcrafted",
+      "kind": "principle",
+      "claim": "Handcrafted Wildermyth maps allowed intentional spawn regions, pacing with large engagement areas and breather corridors, and unique goals beyond 'kill all enemies', but took long to design, iterate and playtest.",
+      "detail": "Handcrafted maps are critical for story moments and boss fights and can feel like real places, such as a forge site that actually looks like a forge. Goals like destroying scenery or escaping a region weren't possible on procedural maps.",
+      "t": 1401,
+      "quote": "You could make sure there were larger areas meant for bigger interactions with lots of enemies and smaller hallways or pathways",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "scenery",
+      "kind": "technique",
+      "claim": "Wildermyth fills maps with scenery chosen by biome, site and enemy type, which keeps fights feeling fresh even when map shapes vary only slightly.",
+      "detail": "Jackson notes small shape variations don't make a map feel different, but scenery reflecting where you are and what you're fighting (e.g. tentacles for gorgons, mossy stone in hills) does.",
+      "t": 1469,
+      "quote": "if we had what fills the scene change based on the environment you are in or what you are fighting, it could feel more interesting and keep things fresher",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "cover and flanking",
+      "kind": "technique",
+      "claim": "Wildermyth scenery acts as cover, but flanking guarantees a hit, so cover never becomes too annoying and positioning becomes the core of tactical strategy.",
+      "detail": "Attacking from the opposite side of an ally flanking an enemy guarantees a hit; hunters with daggers deal double damage when flanking.",
+      "t": 1518,
+      "quote": "we made sure it would never be too annoying because if you make an attack against an enemy and the ally is flanking them, they are guaranteed to hit",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "environment abilities",
+      "kind": "example",
+      "claim": "Wildermyth's Mystics gain abilities by infusing their soul into scenery objects, so the available spells change with each map's scenery and force different approaches to combat.",
+      "detail": "Infusing a bookshelf might let a mystic pull knowledge from books into someone's mind or make wood explode. Since mystics are up to a third of the party, scenery variety changes play significantly.",
+      "t": 1568,
+      "quote": "as the scenery change the ability is available to the mystic",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "overland map",
+      "kind": "example",
+      "claim": "Wildermyth's procedurally generated overland tiles subtly shape strategy: mountains slow raiding monsters and the resource sites available constrain what gear you can buy.",
+      "detail": "Tiles follow rough proportions (lots of grass, fewer mountains and swamps). Lacking the right resources pushes players toward wood or nature-based items, and positioning matters when defending towns from raids.",
+      "t": 1656,
+      "quote": "mountains as they would slow down monsters that would kind of be launching raids against your out posts",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "cost of procgen",
+      "kind": "warning",
+      "claim": "Procedural generation is often seen as a way for small teams to get lots of content, but honing it to high quality takes substantial time that must be weighed when deciding to use it.",
+      "detail": "Patrick's summary: give generated heroes many traits, show them visually, keep voices consistent, and handcraft stories selected by traits with added acknowledgment, which is 'a lot of work'.",
+      "t": 1806,
+      "quote": "the time it take do is hone it into something of high-quality is something you have to consider",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

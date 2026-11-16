@@ -1,0 +1,165 @@
+{
+  "id": "R8DSq8qSJ44@22364",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 22364,
+    "end": 24194
+  },
+  "title": "Please Hold: Building a Playable Museum Exhibit About 1993 Game Support",
+  "speaker": "Paris Buttfield-Addison",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=22364s",
+  "talk_type": "postmortem",
+  "summary": "Paris Buttfield-Addison of Secret Lab (makers of Yarn Spinner) describes Hintline 93, a museum exhibit at ACMI in Melbourne. Visitors play a 1993 hint-line operator in a visual novel, answering callers stuck on fictional games, using a huge physical compendium on a real desk. He covers the research with former Sega Australia hint-line operators, inventing a fake publisher and seven fake games so that only the parts people get stuck on had to be designed, photographing actors as caller archetypes, and building a 200-page binder full of deliberately wrong official material. Throughout he draws roguelike parallels: hint lines as purchasable spoiler knowledge, puzzles that are 'obtuse but not unfair', random calls as runs, and the storylet and salience system in Yarn Spinner, which he demonstrates with a small roguelike including bones.",
+  "games": [
+    "Hintline 93",
+    "NetHack",
+    "Keep Talking and Nobody Explodes",
+    "Fallen London",
+    "Sunless Sea",
+    "Dungeons of Mild Peril"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical props",
+      "kind": "example",
+      "claim": "Hintline 93 puts the information players need outside the game, in a real binder on a real desk, so solving a caller's problem means looking things up in a physical compendium, as in Keep Talking and Nobody Explodes.",
+      "detail": "The exhibit was a full cubicle at ACMI with a beige PC, CRT, phone, 1993 calendar, Newton's cradle and a deliberately dead plant that staff kept trying to save. The museum's brief asked for 5-10 minute micro games built in two months, celebrating screen culture; the team chose to recreate a lost experience of getting game help from a real person.",
+      "t": 22815,
+      "quote": "the answers would be in a physical binder on the desk. It's a bit like keep talking and nobody explodes where the information you need lives outside the game",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "Hint lines sold, by the minute, the same knowledge roguelike players trade in spoiler files, because in a roguelike what carries over between deaths is what you know.",
+      "detail": "Buttfield-Addison notes roguelikes even have hint lines inside them: NetHack's Oracle sells cheap minor and expensive major consultations that scale with experience level, so some players play pacifist to save gold for it. A hint line differed from a wiki in being centralised, commercial and answered by a person with a ring binder.",
+      "t": 22644,
+      "quote": "you're expected to die and what carries over to the next run is what you know",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hints",
+      "kind": "principle",
+      "claim": "Good hint-line counsellors asked where callers were stuck and what they had tried so the caller felt they had solved the problem themselves, and Hintline 93's own hint button likewise points to where to look rather than giving the answer.",
+      "detail": "Many museum visitors had a few minutes and had never heard of a hint line, so any Yarn line tagged as a hint can be surfaced with a button, and most hints direct the player through the compendium. The team removed a planned patience system because it didn't fit a museum game; there is no score, money or timer.",
+      "t": 22789,
+      "quote": "They were always trying to make it feel like you were solving the problem rather than asking someone to solve the problem for you.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "puzzle fairness",
+      "kind": "principle",
+      "claim": "Hintline 93's puzzles for its invented games had to be 'obtuse but not unfair': rationally solvable with enough time, but hard enough that a player would pay a few dollars a minute to get past them.",
+      "detail": "Because the seven fictional games don't exist, the team designed only the parts people get stuck on, e.g. a temporal lock that requires standing exactly two steps from a door for five seconds during a green light phase, with a clue in the rhythm of the lights. An in-fiction marketing memo bans describing the games as obtuse, arbitrary or unfair.",
+      "t": 23046,
+      "quote": "Our rule here was they had to be obtuse but not unfair.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "deaths",
+      "kind": "technique",
+      "claim": "A roguelike designer can decide which deaths players should have to look up, like NetHack's cockatrice corpse, and then make sure the answer exists somewhere in the game.",
+      "detail": "Buttfield-Addison contrasts things you can work out yourself in NetHack with the cockatrice corpse, which you look up after the first time it kills you, and applies the same 'would you call the hint line?' test to roguelike death design.",
+      "t": 23086,
+      "quote": "what deaths you want people to go and look up and then make sure the answer is somewhere in the game",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "unreliable information",
+      "kind": "example",
+      "claim": "Hintline 93's compendium deliberately includes wrong official guidance, like the real hint lines' mistranslated or early-version documentation and like NetHack's fortune-cookie rumours, so players must check sources against each other.",
+      "detail": "A strategy guide section is crossed out in red and marked 'wrong', next to a player's letter that an operator annotated as the correct, more concise solution. In NetHack, Buttfield-Addison says, the Oracle's rumours are always true but fortune-cookie rumours can be false.",
+      "t": 23151,
+      "quote": "The Oracles rumors always true, but fortune cookie rumors can be false, so you have to kind of check them against what you've seen",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "character portraits",
+      "kind": "technique",
+      "claim": "Hintline 93's callers are actors photographed on green screen in many poses for each of about 23 emotions, and each written line is tagged with a mood so the game swaps photos as the caller talks.",
+      "detail": "Illustration was too costly, 3D felt wrong and full-motion video too ambitious, so still photos suited a 1993-style game. Actors brought their own 90s outfits. Archetypes such as the confused parent, conspiracy theorist, hyper kid and 'midday mom' are assembled from real stories told by former operators.",
+      "t": 23217,
+      "quote": "Every caller has at least 23 emotions, and each of those emotions has a bunch of different poses for that emotion.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "foreshadowing",
+      "kind": "technique",
+      "claim": "Hintline 93 picks the next random event first and then shows flavour text leaning towards it before it is revealed, a technique Buttfield-Addison says roguelikes also use.",
+      "detail": "Each call opens with a few lines about the operator written to match the coming caller: the phone already knows things before the know-it-all calls, the in-a-hurry caller is preceded by messages about speed, and the confused parent by a feeling that you left your child at school even though you have none.",
+      "t": 23305,
+      "quote": "We picked the event first, and then we show some flavor to that leans towards that event before it's revealed. And rogues do this as well.",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "variety",
+      "kind": "technique",
+      "claim": "About one in eight Hintline 93 calls is a wrong number, and roguelikes can do the same by including content that doesn't fit, such as a room that doesn't match the rest of the floor, so the pool never feels solved.",
+      "detail": "Wrong-number callers want pizza or have the wrong console (describing a fast blue guy who runs out of air underwater, or Yoshi as 'hatless Dorothy'), so the compendium needs a pizza menu and the procedures for redirecting them. The real operators said wrong numbers and pranks were a huge part of the job.",
+      "t": 23487,
+      "quote": "You can do the same with a room that kind of doesn't fit the rest of the floor. So your pool never feels solved.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "storylets",
+      "kind": "technique",
+      "claim": "Hintline 93 is built from storylets (chunks of content with a condition) and salience (how the engine picks the best-fitting one), so each call plays like a roguelike run from a shuffle bag of about 52 calls.",
+      "detail": "Caller and game are random, answer options are shuffled, and a call ends when the caller hangs up happy or angry with no reload. In Yarn Spinner all call nodes share a title, forming a node group; since every condition passes, the engine picks a random, least-recently-seen call, so visitors queueing behind each other rarely see the same one. One call per file let five people write simultaneously, and follow-ups can relate to the previous call.",
+      "t": 23588,
+      "quote": "A storylet is a chunk of content with a condition on it. Salency is how the engine decides which storylet fits right now.",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "storylets",
+      "kind": "technique",
+      "claim": "Yarn Spinner node groups can act as pools, where many nodes qualify and the least-seen one is dealt out (rooms, random events, barks), or as rules, where conditions don't overlap so only one passes, like an if-else in which each branch can be added without touching the others.",
+      "detail": "Buttfield-Addison credits the ideas to others: Failbetter's quality-based narrative in Fallen London, Emily Short's naming of salience, and later uses including Left 4 Dead. Sunless Sea uses storylets with a legacy and a reshuffled map between captains; in a roguelike you see the same storylets every run, so you must decide which may repeat.",
+      "t": 23756,
+      "quote": "In a pool, lots of nodes pass at once, and the strategy deals out whichever you've seen the least.",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "bones files",
+      "kind": "technique",
+      "claim": "Salience can implement roguelike bones: a room saving a dead character's floor, name and gold has an extra condition, so it scores higher than ordinary rooms and usually wins, but not always.",
+      "detail": "In Buttfield-Addison's demo roguelike, Dungeons of Mild Peril (one Yarn file, rooms as a pool and names as a random table), the bones room only qualifies on the floor where you died. When rooms tie on least-seen, the ghost wins, but a less-seen room still goes first, so the bones are not guaranteed; he notes they aren't in NetHack either.",
+      "t": 23835,
+      "quote": "Bones in a rog like are a great example of specificity.",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical props",
+      "kind": "principle",
+      "claim": "Hintline 93's paper compendium, though costlier than an on-screen one, made players flip pages while a caller yelled at them, like the real job, and was allowed to wear out as real binders did.",
+      "detail": "The 200-plus-page binder has misprinted manuals, much-photocopied magazine pages, hand-fixed maps, bug memos, Usenet posts, letters, sticky notes in different handwriting, decoder wheels and red-cellophane anaglyph decoders, made by hand in four identical copies. Some of it only builds the fictional Damocles company. Visitors scribbled in the binders and even stole pages.",
+      "t": 24005,
+      "quote": "with a real binder on the desk, you have to flip through it while someone in the game yells at you, which we felt was close to the job",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "hint lines",
+      "kind": "history",
+      "claim": "Commercial game hint lines died once free walkthroughs appeared online, and their knowledge moved to spoiler files, wikis, forums, Reddit and Discord; Hintline 93 recreates the job from interviews with former Sega Australia operators.",
+      "detail": "Journalist Megan O'Neal interviewed two former operators. One had been a caller who made a dot-matrix fanzine before being hired, and kept his own binder of clippings and notes. Operators used green-screen terminals and documentation from Sega of America; Nintendo moved its counsellors' green binder onto a computer system; and lines closed between 2005 and 2010 depending on the country.",
+      "t": 24048,
+      "quote": "the internet killed hint lines once Gamefax had a walkthrough for free",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,197 @@
+{
+  "id": "_Si626-Y_q0",
+  "title": "Jim Shepard - Tone and Humor in Dungeonmans",
+  "speaker": "Jim Shepard",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=_Si626-Y_q0",
+  "talk_type": "design",
+  "summary": "Jim Shepard explains how he established and enforced a consistent tone, 'lighthearted heroic adventure', in his roguelike Dungeonmans, which has almost no plot yet produces rich player narratives. He plotted reference works on two axes (comedy quotient vs value of heroism, and value of lore and setting) to define a target, then used it as a razor for all text. He shows how tone is delivered through item names and descriptions, death memorials, unique hero names, monster naming and design, and procedurally generated location names. He ends with humor 'danger zones': references must be unnoticeable if not recognised, play to your strengths, avoid edgy humor, and veer from your tone only with great caution.",
+  "games": [
+    "Dungeonmans",
+    "Kingdom of Loathing",
+    "Diablo",
+    "Dungeons of Dredmor",
+    "Skyrim",
+    "Myst",
+    "Rastan",
+    "Dragon Warrior",
+    "HackMaster",
+    "Golden Axe",
+    "The Lord of the Rings Online",
+    "Grand Theft Auto V",
+    "Borderlands 2"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player narrative",
+      "kind": "principle",
+      "claim": "Dungeonmans has almost no authored plot, yet players tell rich stories about their runs, because a well-established tone gives them a trellis on which their own player narratives grow.",
+      "detail": "When Shepard asks players what the story is, they describe what they did, not the game's minimal legend of past heroes and a villain. He doubted he was a good enough writer for a grand story, and notes many indie trailers lose people within seconds of introducing their fictional world.",
+      "t": 196,
+      "quote": "tone is what helped create a feel for dungeon mans where players could do stuff and rise up on this cool trellis of gameplay",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tone",
+      "kind": "technique",
+      "claim": "To define Dungeonmans' tone, Shepard plotted existing fiction on axes of comedy (serious to zany), value of heroism, and importance of lore and setting, then picked a target point to aim all writing at.",
+      "detail": "Game of Thrones and Warhammer sit at the serious end, Dungeons of Dredmor and Monty Python at the zany end. At both extremes heroism lacks weight. On lore, Pac-Man needs no story and Myst needs it to win; Skyrim has huge lore but players can ignore it. He aimed funny-but-not-zany, with heroism mattering, and lore less necessary than Skyrim's.",
+      "t": 269,
+      "quote": "i decided to take other pieces of fiction and put them on effectively a graph like a two-axis line and the first axis is humor",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tone",
+      "kind": "principle",
+      "claim": "A defined tone target works as a razor for every piece of text: the test is not whether something is funny but whether it fits the game, since not all text can be funny.",
+      "detail": "Shepard's resulting tone for Dungeonmans is 'lighthearted heroic adventure'. He adds that he also wanted some of the pulp, sometimes dark feel of Robert E. Howard, keeping what fits and cutting text that is too serious.",
+      "t": 420,
+      "quote": "that for me became a razor of does this work in the game not necessarily is it funny but does it work in the game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "Dungeonmans frames permadeath heroically: when a hero dies, another, stronger one arrives from the academy, and players win by throwing heroes at evil until it gives up.",
+      "detail": "Shepard describes this as how people usually beat Dungeonmans. The heroes are not 'murder hobos': they don't stab shopkeepers or burn villages. He wanted heroic deaths 'Boromir style', not deaths from starving.",
+      "t": 433,
+      "quote": "it doesn't matter if your guy dies another one shows up from the academy and he's even stronger",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "delivering tone",
+      "kind": "principle",
+      "claim": "Shepard argues the worst way to deliver tone is to shove the humor in the player's face; better is to place it along the critical path, and best is to make it a comfortable background to the gameplay.",
+      "detail": "He uses the image of a fire in the background keeping you warm while what you care about is the warm cup of 'gameplay tea'. Pushing humor at the player only works if you are very good at fully zany comedy.",
+      "t": 493,
+      "quote": "the worst possible way as indicated by the dumpster fire is to shove it in their faces",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "item descriptions",
+      "kind": "technique",
+      "claim": "Item names, descriptions and flavor text are the easiest way to convey a roguelike's tone because players constantly look at loot; Dungeonmans' starting weapon, a thick plank with a bent nail, is funny but still plausible and sets up a heroic rags-to-riches arc.",
+      "detail": "Shepard rejected zanier options like a wet noodle or squeaky hammer because you can't really hurt anyone with them. Higher-tier items become less goofy and more serious, which supports the heroic progression.",
+      "t": 553,
+      "quote": "item naming and description and flavor these are the easiest ways to get your tone across players see items all the time",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "legacy",
+      "kind": "example",
+      "claim": "In Dungeonmans, a sufficiently high-level dead hero leaves a pyre marked with their name where a later character may find the weapon they dropped, making previous heroes part of the game's legends.",
+      "detail": "Shepard says the idea was borrowed from Rastan's game-over screen and reflects his theme that legends matter.",
+      "t": 619,
+      "quote": "if you are of sufficient level in dungeon mans and die you leave a little pyre behind with a sword and flames",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character creation",
+      "kind": "example",
+      "claim": "Dungeonmans forbids reusing a hero's name and has no stat reroll: rejecting a rolled character stores the name, and that person may reappear later as an NPC such as a shopkeeper or bandit.",
+      "detail": "Players name before rolling stats; dismissing a character says the person 'is no Dungeonman'. This generated angry mail and a negative Steam review calling it ridiculous, which Shepard accepts because the game is not for that player.",
+      "t": 658,
+      "quote": "that name actually gets stored to be an npc later he might be a shopkeeper he might be a bandit",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monster design",
+      "kind": "technique",
+      "claim": "Dungeonmans' monsters are written like field-guide entries for real beasts, one notch above standard fantasy, and cartoonishly funny monsters were cut because they didn't fit the tone.",
+      "detail": "Shepard drew on HackMaster and Knights of the Dinner Table, citing names like 'viridian helmed pout spider'. Monsters like a crab-rat or a three-headed creature with brains, schemer and brute heads are funny but have an ecology; smiling slimes suit other games but not his, and suggested funny bosses like 'Clownicus' felt wrong.",
+      "t": 791,
+      "quote": "when they name their monsters it's like real field guides",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "place names",
+      "kind": "technique",
+      "claim": "Procedurally generated place names in Dungeonmans use different naming schemes per location type so that players get the right feeling about a place even without remembering the names.",
+      "detail": "Regular dungeons include the names of about 30 legendary past figures, reinforcing that greatness happened there. Bandit camps, lizardman caves and roadblocks named like battles each have their own style; the roadblocks are pure fights with epic music.",
+      "t": 966,
+      "quote": "you get the feeling of what the locations evoke without having to remember the names",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "place names",
+      "kind": "warning",
+      "claim": "Invented words in place names must carry meaning; otherwise players get lost and confused, as Shepard did with Lord of the Rings Online's Tolkien-derived names.",
+      "detail": "Dungeonmans' special towers mix one strange word with understandable ones, like 'Tower Unparalleled', so players grasp that an unknown historical people built them, and they play differently from regular dungeons.",
+      "t": 986,
+      "quote": "if you're really going to use weird words they have to mean something",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humor",
+      "kind": "principle",
+      "claim": "Shepard's rule for references in game humor is that they must be unnoticeable if not recognised: a reference should read as a normal in-world fact to players who miss it.",
+      "detail": "He would not write 'how many Bothans had to die' because players who haven't seen Star Wars would wonder what a Bothan is, but 'many scrollbulls died to bring this information' works because scrollbulls exist in Dungeonmans. References should never be the main punchline, since the audience might miss them.",
+      "t": 1105,
+      "quote": "if you reference something if you don't know what it is you don't care it just goes over your head and it's fine and it doesn't disrupt your experience",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "flavor text",
+      "kind": "example",
+      "claim": "Dungeonmans' Psychomancer (monk) power names and flavor text borrow the consistent structure of karate tall tales: a thing happens, a thing happens, then a twist at the end.",
+      "detail": "Shepard took virtues from his martial arts training and the rhythm of tall tales from a karate book he had to read, choosing the source because its tone was consistent with his target.",
+      "t": 1326,
+      "quote": "they have the same rhythm like a thing happens a thing happens and there's a twist at the end",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humor",
+      "kind": "principle",
+      "claim": "Designers should take creative risks elsewhere but play it safe with humor, using only the kinds they are good at, because being called unfunny hurts.",
+      "detail": "Shepard knew he could do funny dialogue, descriptions and objects but not long-form humor or slapstick cutscenes, so he left those out.",
+      "t": 1362,
+      "quote": "do what you do best and i have strengths and weaknesses",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humor",
+      "kind": "warning",
+      "claim": "Edgy humor alienates players and ages badly, and the gaming audience is moving toward inclusiveness.",
+      "detail": "Shepard cites Lamar in Grand Theft Auto V as a character people find problematic despite strong writing, plus homophobic language in Predator and racist passages in Robert E. Howard that do not hold up today.",
+      "t": 1445,
+      "quote": "edgy language doesn't work uh in long form",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tonal shifts",
+      "kind": "warning",
+      "claim": "Abruptly moving a funny game into dark drama to make the player 'feel it' tends to backfire unless your audience wants it, and it wastes the power of the tone target you set.",
+      "detail": "Shepard's example is Borderlands 2 killing off a beloved character's bird and other characters in a sudden shift from a clever comedic game.",
+      "t": 1526,
+      "quote": "if your audience wants this great but if they don't don't do it to them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humor",
+      "kind": "technique",
+      "claim": "To develop game humor, study funny works to learn what works for you, pick a target, and playtest jokes on friends, dropping what doesn't land.",
+      "detail": "In Q&A Shepard says he wrote for a known audience using his natural humor from running tabletop games, and that bad reviews are unavoidable; you QA humor like anything else.",
+      "t": 1640,
+      "quote": "you have to study humor right watch funny things play funny games read funny stuff and say what works for me",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

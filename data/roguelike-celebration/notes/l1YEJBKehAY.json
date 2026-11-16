@@ -1,0 +1,188 @@
+{
+  "id": "l1YEJBKehAY",
+  "title": "Pippin Barr + Jonathan Lessard: Chess + Rogue = Chogue",
+  "speaker": "Jonathan Lessard (with Pippin Barr, not present)",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=l1YEJBKehAY",
+  "talk_type": "postmortem",
+  "summary": "Jonathan Lessard presents Chogue, a hybrid of chess and the original Rogue made with Pippin Barr, in which the player's chess army descends procedurally generated Rogue dungeons hunting the fled black king. Every design element had to come from either chess or Rogue, making a mappable design space, and they documented every step (emails, design journal, code) on GitHub as a research-creation method. He walks through decisions about corridor width, knight movement through walls, turn structure, pawn promotion, visibility, multi-level progression, replenishing pieces, and the ending, showing how combining chess's one-hit captures with Rogue's darkness produced survival horror and how a fleeing king emerged. He previews Cherry Chogue, which swaps in hit points, and discusses chess players' and roguelike players' differing expectations.",
+  "games": [
+    "Chogue",
+    "Cherry Chogue",
+    "Rogue",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "wordless onboarding",
+      "kind": "example",
+      "claim": "Chogue opens on a plain chessboard where the black king leaves after the player's first move, creating a mystery and goal with no text or exposition.",
+      "detail": "Lessard says they are happy with this splash screen because chess players already know what to do, and the missing king immediately draws them toward the stairs to find and checkmate him.",
+      "t": 68,
+      "quote": "we need no exposition there's no text no explanation it's chess but there's already a mystery where's the black King",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design documentation",
+      "kind": "technique",
+      "claim": "Barr and Lessard document every step of making a game, publishing emails, a design journal and code history on GitHub, because the knowledge about design lies in the path of decisions rather than the end result.",
+      "detail": "Their MDMA research-creation model treats a game's development as a trajectory in design space; with source control they can see what the prototype looked like when each decision was made. Lessard imagines how valuable this would be for NetHack.",
+      "t": 372,
+      "quote": "looking only at the end result is insufficient because the end result is only part of the story and all the steps that led you there",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "game hybrids",
+      "kind": "technique",
+      "claim": "Chogue constrained its design so that every aspect had to come from either chess or Rogue, turning an almost infinite design space into a small mappable one where each decision is a choice between two models or a point between them.",
+      "detail": "Lessard says the result is a miniature case study: in a small game every element matters, and pulling something out shows how dynamics collapse and recombine, which forced them to understand both chess and Rogue better.",
+      "t": 474,
+      "quote": "we set ourselves that any design aspect of chalk had to come either from chess or from rogue and from nothing else",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "corridor width",
+      "kind": "example",
+      "claim": "Chogue widened Rogue's one-tile corridors to two tiles so that bishops can zigzag through them instead of being stuck in the first room.",
+      "detail": "Bishops (and knights) can't traverse one-wide corridors; leaving half the pieces stuck was funny but not interesting. In later levels when only a bishop remains, the player actually must zigzag. They also reduced the tile count for readability.",
+      "t": 614,
+      "quote": "the corridors are at least two they're always two cells wide so that your bishop can stupidly zigzag its way through it",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "movement rules",
+      "kind": "example",
+      "claim": "Transplanting chess moves into a dungeon forced Chogue to decide whether a knight can jump over walls; they ruled that chess pieces teleport, so knights ignore walls.",
+      "detail": "Pippin Barr argued that lifting and placing a piece is teleportation from the pieces' 2D perspective. This also suited their Unity implementation, which attached colliders for each possible move; that later ran at 2 fps because queens have huge collider sets and there can be up to 50 units.",
+      "t": 687,
+      "quote": "when you lift a piece from the board and place it in a new location how is that perceived by the other pieces",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "one-hit captures",
+      "kind": "example",
+      "claim": "Choosing chess's one-hit capture over Rogue's chipping away at hit points is a pivotal decision; Cherry Chogue reverses it, giving pieces HP equal to their chess value, and it changes everything.",
+      "detail": "In Cherry Chogue a rook has five points and attacks exchange hits with Rogue-style messages. They also extended algebraic chess notation into a 'Chogue notation' merged with Rogue messages, including a way to show a hit without a capture.",
+      "t": 765,
+      "quote": "you use the chess pattern where you die on a single hit whereas rope would be you chip away at the HP until until it's dead",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "example",
+      "claim": "Chess and Rogue are both turn-based but differ: chess moves one chosen unit per turn while Rogue moves all of a side's units; Chogue tried moving all pieces, found it scary but tedious and complex, and reverted to chess turns.",
+      "detail": "Watching all black units move one by one changed chess thinking, as you had to plan where they'd be next turn, but moving every piece each turn raised questions of order and tracking which had moved.",
+      "t": 797,
+      "quote": "there are actually many flavors of turn-based in chess yes you each one have a turn but not all units have a turn",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "pawn promotion",
+      "kind": "example",
+      "claim": "Chogue kept chess's minimal unit state, with pawns promoting to queens when they reach a wall, because the spirit of promotion is ambiguous and a Rogue map has no reliable far edge.",
+      "detail": "Lessard asks whether promotion rewards crossing the board or meeting a wall; generated levels sometimes never reach the top of the screen. Promoting at walls lets players convert pawns almost immediately, which is fine since queens move much faster in that world.",
+      "t": 928,
+      "quote": "since there is no walls in chess what's the spirit of that role is it that pawns are rewarded for crossing the whole board",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "fog of war",
+      "kind": "example",
+      "claim": "Adding Rogue's limited visibility to chess's one-hit captures turned Chogue into survival horror, as pieces lurking in dark rooms instantly take your units.",
+      "detail": "Chess is a full-information game; Lessard says the combination of earlier decisions congealed around visibility and venturing into darkness to see your queen taken felt horrible in an engaging way.",
+      "t": 1003,
+      "quote": "you essentially turn chess into a survival horror",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fairness",
+      "kind": "warning",
+      "claim": "Using Rogue's exact rule that rooms go dark again when you leave let a roaming queen capture piece after piece as the player re-entered, so Chogue made rooms stay visible once revealed.",
+      "detail": "Pippin Barr wrote that being captured from the dark is funny but repeatedly entering, being captured, and losing sight again felt too unfair; players could drain their whole party crossing one room. The compromise became a hallmark of Chogue.",
+      "t": 1046,
+      "quote": "there's something not good about repeatedly getting into a new room then instantly being captured leaving it dark again",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "stairs and parties",
+      "kind": "example",
+      "claim": "Adopting Rogue's multi-level dungeon raised party-transition problems in Chogue, such as bishops that can never reach stairs on the wrong colour, so they let a single unit on the stairs advance the whole party.",
+      "detail": "Lessard describes how a seemingly obvious decision spawns many problems: whether all units must reach the stairs, and how and where the party appears on the next level.",
+      "t": 1102,
+      "quote": "you make a seemingly obvious decision and the slew of my mini problems come out of this",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "emergent behavior",
+      "kind": "example",
+      "claim": "Combining chess's king-capture victory with Rogue's multiple levels produced an emergent 'cowardly king' in Chogue who flees down the stairs when cornered, both hilarious and frustrating.",
+      "detail": "The king's AI avoids being taken at all costs and appears only on a late level, so after hard work to reach and corner him, he escapes and the player must clear yet another level.",
+      "t": 1182,
+      "quote": "I was trying to corner him and he fled by the stairs so this is both hilarious and super frustrating",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource replenishment",
+      "kind": "technique",
+      "claim": "Chogue fixed an asymmetry where the player only lost pieces while enemies grew stronger by borrowing Rogue items that grant new party members, treating party size as the equivalent of hit points, capped at 16.",
+      "detail": "Lessard contrasts chess's long-term entropy on both sides with Rogue's growth on both sides; the hybrid's entropy-versus-growth was a dead end. The cap of 16 matched the minimum room size and chess's 16 pieces.",
+      "t": 1262,
+      "quote": "the metaphor is that party members are the equivalent of HP in rogue and the more you have the more you can move forward",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "win conditions",
+      "kind": "example",
+      "claim": "Testers resisted Chogue ending as soon as the black king was captured because a good roguelike run should continue, so the designers adopted Rogue's actual ending: capture the King of Yendor and return to the surface.",
+      "detail": "Lessard had assumed Rogue had infinite levels until Pippin Barr pointed out the Amulet of Yendor and backtracking ending; Chogue reuses Rogue's selling-your-loot victory text. Only Barr and one other known player had finished it.",
+      "t": 1326,
+      "quote": "if you're doing a good run you don't want to stop there and so they were frustrated by the fact that there would be an end",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "unicode glyphs",
+      "kind": "technique",
+      "claim": "Chogue's visuals use Unicode chess characters and the CGA palette to evoke Rogue and early computing, since chess has no specified visual representation.",
+      "detail": "Lessard says visual design was where they were freest, but he still wanted to hint at Rogue.",
+      "t": 1583,
+      "quote": "everything in there is just Unicode characters it's not the it's not the ASCII characters but there unicode characters and the CGA palette",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience expectations",
+      "kind": "warning",
+      "claim": "A hybrid game faces two communities with different expectations: chess players gave Chogue harsh feedback for omitting rules like castling and en passant.",
+      "detail": "Lessard says castling was left out mostly from laziness, and he had never thought of en passant until chess players complained; they may implement it in Cherry Chogue. Barr also insisted on a resign option, as chess players expect.",
+      "t": 1776,
+      "quote": "they have very harsh feedback with us not implementing all the rules so for example castling doesn't exist",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "chess problems",
+      "kind": "open-question",
+      "claim": "Chogue's late levels sometimes generate genuine chess problems, such as two remaining pieces facing three queens and two rooks, suggesting generated or user-made chess-problem dungeons as further work.",
+      "detail": "Lessard says they originally imagined the game as generated chess problems in arbitrary spaces; asked about an editor, he thinks user generation might be better, though that enters the whole field of chess problems.",
+      "t": 1839,
+      "quote": "in the later levels some rooms are real chess problems because you only have maybe two pieces left you need to go through that room",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

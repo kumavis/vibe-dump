@@ -1,0 +1,955 @@
+{
+ "id": "KKwgKTbiEY0",
+ "url": "https://www.youtube.com/watch?v=KKwgKTbiEY0",
+ "title": "Matt Ritche - Tips for Finishing Your Video Games",
+ "speaker": "Matt Ritche",
+ "talk_title": "Tips for Finishing Your Video Games",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 481,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Matt Ritchie talks about working on and completing a larger game in your spare time.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to scope"
+  },
+  {
+   "start": 69,
+   "title": "Project overview: Axew"
+  },
+  {
+   "start": 164,
+   "title": "Lessons from past projects"
+  },
+  {
+   "start": 234,
+   "title": "Managing development scope"
+  },
+  {
+   "start": 325,
+   "title": "Tips for sustainable progress"
+  },
+  {
+   "start": 405,
+   "title": "Q&A and closing thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1316,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.74,
+   "d": 5.53,
+   "text": "everyone how are you doing so I know"
+  },
+  {
+   "t": 6.27,
+   "d": 1.23,
+   "text": "this is going to be a stupid question"
+  },
+  {
+   "t": 7.5,
+   "d": 1.56,
+   "text": "but how many of you guys are developing"
+  },
+  {
+   "t": 9.06,
+   "d": 0.72,
+   "text": "roguelikes"
+  },
+  {
+   "t": 9.78,
+   "d": 3.15,
+   "text": "put up your hand all right cool keep"
+  },
+  {
+   "t": 12.93,
+   "d": 2.4,
+   "text": "your hands up keep your hands up so how"
+  },
+  {
+   "t": 15.33,
+   "d": 2.13,
+   "text": "many of you have run into problems of"
+  },
+  {
+   "t": 17.46,
+   "d": 5.1,
+   "text": "scope everyone yeah exactly right so you"
+  },
+  {
+   "t": 22.56,
+   "d": 2.04,
+   "text": "could imagine being a developer in your"
+  },
+  {
+   "t": 24.6,
+   "d": 2.1,
+   "text": "spare time I work full-time so I"
+  },
+  {
+   "t": 26.7,
+   "d": 2.43,
+   "text": "probably spend maybe two to three hours"
+  },
+  {
+   "t": 29.13,
+   "d": 3.84,
+   "text": "a day on developing my game anyways so"
+  },
+  {
+   "t": 32.97,
+   "d": 1.5,
+   "text": "who is this handsome young man before"
+  },
+  {
+   "t": 34.47,
+   "d": 4.64,
+   "text": "you that is a question I'm Matt Ritchie"
+  },
+  {
+   "t": 39.11,
+   "d": 3.76,
+   "text": "I'm 25 years old I'm a hobby game"
+  },
+  {
+   "t": 42.87,
+   "d": 1.32,
+   "text": "developer from British Columbia Canada"
+  },
+  {
+   "t": 44.19,
+   "d": 2.31,
+   "text": "so it was obviously a really long trip"
+  },
+  {
+   "t": 46.5,
+   "d": 3.33,
+   "text": "you know dogsled all that stuff it's"
+  },
+  {
+   "t": 49.83,
+   "d": 2.88,
+   "text": "really warm here I'm currently working"
+  },
+  {
+   "t": 52.71,
+   "d": 3.84,
+   "text": "on the roguelike Axew which is uh oh"
+  },
+  {
+   "t": 56.55,
+   "d": 1.98,
+   "text": "sorry but also sorry I prepared these"
+  },
+  {
+   "t": 58.53,
+   "d": 2.82,
+   "text": "slides last night also hi my name is"
+  },
+  {
+   "t": 61.35,
+   "d": 4.04,
+   "text": "Matt Ritchie and I'm a scope addict hi"
+  },
+  {
+   "t": 65.39,
+   "d": 4.75,
+   "text": "who else right okay cool"
+  },
+  {
+   "t": 70.14,
+   "d": 2.94,
+   "text": "so what is act 2 I use a science fantasy"
+  },
+  {
+   "t": 73.08,
+   "d": 1.44,
+   "text": "open-world roguelike that's set on a"
+  },
+  {
+   "t": 74.52,
+   "d": 2.22,
+   "text": "prison colony planet you are sent there"
+  },
+  {
+   "t": 76.74,
+   "d": 3.06,
+   "text": "as an exile and you have done some crime"
+  },
+  {
+   "t": 79.8,
+   "d": 2.58,
+   "text": "or maybe you haven't I know that's up to"
+  },
+  {
+   "t": 82.38,
+   "d": 2.16,
+   "text": "you there's a persistent procedural"
+  },
+  {
+   "t": 84.54,
+   "d": 1.74,
+   "text": "open-world static and randomized maps"
+  },
+  {
+   "t": 86.28,
+   "d": 3.03,
+   "text": "yadda yadda yadda and it has over four"
+  },
+  {
+   "t": 89.31,
+   "d": 1.53,
+   "text": "years of part-time development it's"
+  },
+  {
+   "t": 90.84,
+   "d": 1.47,
+   "text": "currently available for download a niche"
+  },
+  {
+   "t": 92.31,
+   "d": 3.57,
+   "text": "and it's about sixty percent done so I'm"
+  },
+  {
+   "t": 95.88,
+   "d": 2.07,
+   "text": "just hit that hump there it's heavily"
+  },
+  {
+   "t": 97.95,
+   "d": 2.4,
+   "text": "influenced by caves akkad ivan a domina"
+  },
+  {
+   "t": 100.35,
+   "d": 1.44,
+   "text": "Lona those are my four favorite"
+  },
+  {
+   "t": 101.79,
+   "d": 2.91,
+   "text": "roguelikes and they're amazing alright"
+  },
+  {
+   "t": 104.7,
+   "d": 1.2,
+   "text": "so this is the character selection"
+  },
+  {
+   "t": 105.9,
+   "d": 1.77,
+   "text": "screen where you can see the felony up"
+  },
+  {
+   "t": 107.67,
+   "d": 2.73,
+   "text": "at the top left corner there and yeah"
+  },
+  {
+   "t": 110.4,
+   "d": 1.47,
+   "text": "there's a bunch of attributes and stuff"
+  },
+  {
+   "t": 111.87,
+   "d": 2.97,
+   "text": "it with that previous talk about"
+  },
+  {
+   "t": 114.84,
+   "d": 2.97,
+   "text": "character creation screens this one here"
+  },
+  {
+   "t": 117.81,
+   "d": 3.54,
+   "text": "is awful don't do this don't do this"
+  },
+  {
+   "t": 121.35,
+   "d": 1.77,
+   "text": "it's terrible"
+  },
+  {
+   "t": 123.12,
+   "d": 1.59,
+   "text": "this is another screenshot of a"
+  },
+  {
+   "t": 124.71,
+   "d": 1.41,
+   "text": "predefined map"
+  },
+  {
+   "t": 126.12,
+   "d": 1.38,
+   "text": "I just shown off a little bit here"
+  },
+  {
+   "t": 127.5,
+   "d": 2.7,
+   "text": "underground you can see that the slime"
+  },
+  {
+   "t": 130.2,
+   "d": 1.77,
+   "text": "monster stripes meet strikes me in the"
+  },
+  {
+   "t": 131.97,
+   "d": 2.13,
+   "text": "lake with their bones opportunity"
+  },
+  {
+   "t": 134.1,
+   "d": 2.3,
+   "text": "so there's a limbic system involved and"
+  },
+  {
+   "t": 136.4,
+   "d": 3.82,
+   "text": "yeah and this is the another character"
+  },
+  {
+   "t": 140.22,
+   "d": 2.43,
+   "text": "screen here where it shows all the tract"
+  },
+  {
+   "t": 142.65,
+   "d": 1.83,
+   "text": "limbs the Trey's proficiencies etc etc"
+  },
+  {
+   "t": 144.48,
+   "d": 4.32,
+   "text": "and the world map so there is a 200 by"
+  },
+  {
+   "t": 148.8,
+   "d": 2.49,
+   "text": "200 grid of tiles that makes up the"
+  },
+  {
+   "t": 151.29,
+   "d": 1.77,
+   "text": "world map and each one of these ones can"
+  },
+  {
+   "t": 153.06,
+   "d": 5.55,
+   "text": "be entered for a 45 by 30 grid of local"
+  },
+  {
+   "t": 158.61,
+   "d": 1.8,
+   "text": "map tiles so you can see how the scope"
+  },
+  {
+   "t": 160.41,
+   "d": 2.76,
+   "text": "gets out of hand here so that's why it's"
+  },
+  {
+   "t": 163.17,
+   "d": 1.83,
+   "text": "taken me four years but first of all"
+  },
+  {
+   "t": 165.0,
+   "d": 1.71,
+   "text": "let's talk about my previous learning"
+  },
+  {
+   "t": 166.71,
+   "d": 3.09,
+   "text": "experiences and I've got to here write a"
+  },
+  {
+   "t": 169.8,
+   "d": 2.04,
+   "text": "passage was the very first game that I"
+  },
+  {
+   "t": 171.84,
+   "d": 1.59,
+   "text": "started working on in unity which is the"
+  },
+  {
+   "t": 173.43,
+   "d": 3.81,
+   "text": "engine I'm using and yeah it failed"
+  },
+  {
+   "t": 177.24,
+   "d": 2.88,
+   "text": "spectacularly it took up multiple years"
+  },
+  {
+   "t": 180.12,
+   "d": 2.55,
+   "text": "and it changed from the top left there"
+  },
+  {
+   "t": 182.67,
+   "d": 1.62,
+   "text": "you can see was a survival game and then"
+  },
+  {
+   "t": 184.29,
+   "d": 1.38,
+   "text": "changed you're like a rogue light like"
+  },
+  {
+   "t": 185.67,
+   "d": 2.46,
+   "text": "Binding of Isaac it was just a mess and"
+  },
+  {
+   "t": 188.13,
+   "d": 2.55,
+   "text": "then I started working with two artists"
+  },
+  {
+   "t": 190.68,
+   "d": 2.52,
+   "text": "which is a big mistake again on boku"
+  },
+  {
+   "t": 193.2,
+   "d": 2.3,
+   "text": "forest yeah I know right"
+  },
+  {
+   "t": 195.5,
+   "d": 3.4,
+   "text": "Bokke force which was a 3d platformer"
+  },
+  {
+   "t": 198.9,
+   "d": 1.65,
+   "text": "and you can see my programmer art in"
+  },
+  {
+   "t": 200.55,
+   "d": 1.38,
+   "text": "there because the artist never did"
+  },
+  {
+   "t": 201.93,
+   "d": 0.81,
+   "text": "anything"
+  },
+  {
+   "t": 202.74,
+   "d": 3.99,
+   "text": "and of course accident itself never went"
+  },
+  {
+   "t": 206.73,
+   "d": 1.8,
+   "text": "so well you can see the 100% disk usage"
+  },
+  {
+   "t": 208.53,
+   "d": 2.9,
+   "text": "which is Windows 10 brought to you by"
+  },
+  {
+   "t": 211.43,
+   "d": 4.93,
+   "text": "and this was the original prototype that"
+  },
+  {
+   "t": 216.36,
+   "d": 3.0,
+   "text": "I came up with when coming up with the"
+  },
+  {
+   "t": 219.36,
+   "d": 3.2,
+   "text": "main game loop and combine that with"
+  },
+  {
+   "t": 222.56,
+   "d": 4.93,
+   "text": "Perlin noise and you have axle which"
+  },
+  {
+   "t": 227.49,
+   "d": 2.79,
+   "text": "started off looking like this and now"
+  },
+  {
+   "t": 230.28,
+   "d": 2.31,
+   "text": "it's alright and now looks like this and"
+  },
+  {
+   "t": 232.59,
+   "d": 4.2,
+   "text": "it's very beautiful I think so what"
+  },
+  {
+   "t": 236.79,
+   "d": 1.83,
+   "text": "drives you to make games is it"
+  },
+  {
+   "t": 238.62,
+   "d": 3.15,
+   "text": "creativity is it money is it the"
+  },
+  {
+   "t": 241.77,
+   "d": 1.44,
+   "text": "challenge or is it that you love"
+  },
+  {
+   "t": 243.21,
+   "d": 3.45,
+   "text": "learning these are very very important"
+  },
+  {
+   "t": 246.66,
+   "d": 2.64,
+   "text": "to maintaining motivation you need to"
+  },
+  {
+   "t": 249.3,
+   "d": 2.61,
+   "text": "know why you're making your game and who"
+  },
+  {
+   "t": 251.91,
+   "d": 3.57,
+   "text": "you're making your game for and what"
+  },
+  {
+   "t": 255.48,
+   "d": 2.67,
+   "text": "means you put down your last project was"
+  },
+  {
+   "t": 258.15,
+   "d": 2.07,
+   "text": "it lack of time which is a huge"
+  },
+  {
+   "t": 260.22,
+   "d": 1.74,
+   "text": "constraint for me working my spare time"
+  },
+  {
+   "t": 261.96,
+   "d": 2.97,
+   "text": "you know is it lack of motivation your"
+  },
+  {
+   "t": 264.93,
+   "d": 3.06,
+   "text": "idea didn't work out scope creep etc"
+  },
+  {
+   "t": 267.99,
+   "d": 4.68,
+   "text": "cetera scope is one of those things that"
+  },
+  {
+   "t": 272.67,
+   "d": 6.45,
+   "text": "I it's it's my nemesis I create these"
+  },
+  {
+   "t": 279.12,
+   "d": 2.85,
+   "text": "large large games because I never think"
+  },
+  {
+   "t": 281.97,
+   "d": 2.94,
+   "text": "I'm gonna complete them so my challenge"
+  },
+  {
+   "t": 284.91,
+   "d": 3.27,
+   "text": "with Axew is to make a large game and do"
+  },
+  {
+   "t": 288.18,
+   "d": 3.08,
+   "text": "it in my spare time but you have to"
+  },
+  {
+   "t": 291.26,
+   "d": 3.27,
+   "text": "always adhere to the core of the game"
+  },
+  {
+   "t": 294.53,
+   "d": 2.32,
+   "text": "always if it doesn't add to the core of"
+  },
+  {
+   "t": 296.85,
+   "d": 3.39,
+   "text": "the game get rid of it and design some"
+  },
+  {
+   "t": 300.24,
+   "d": 4.14,
+   "text": "ways that I've found are very useful"
+  },
+  {
+   "t": 304.38,
+   "d": 2.61,
+   "text": "when making a large project you want to"
+  },
+  {
+   "t": 306.99,
+   "d": 1.95,
+   "text": "make it easy to modify in that systems"
+  },
+  {
+   "t": 308.94,
+   "d": 3.03,
+   "text": "so you want to start out with something"
+  },
+  {
+   "t": 311.97,
+   "d": 1.77,
+   "text": "maybe like a mod system that's what I've"
+  },
+  {
+   "t": 313.74,
+   "d": 1.74,
+   "text": "done in my game so the modders have the"
+  },
+  {
+   "t": 315.48,
+   "d": 3.78,
+   "text": "tools that I have as well you build from"
+  },
+  {
+   "t": 319.26,
+   "d": 1.47,
+   "text": "the ground up that are by layer you"
+  },
+  {
+   "t": 320.73,
+   "d": 1.29,
+   "text": "don't build a tall tower and have it"
+  },
+  {
+   "t": 322.02,
+   "d": 1.35,
+   "text": "fall over you want to build a pyramid"
+  },
+  {
+   "t": 323.37,
+   "d": 3.27,
+   "text": "that's why that's there and this one's"
+  },
+  {
+   "t": 326.64,
+   "d": 1.35,
+   "text": "really important you want to add"
+  },
+  {
+   "t": 327.99,
+   "d": 2.73,
+   "text": "something new every day that you're"
+  },
+  {
+   "t": 330.72,
+   "d": 1.98,
+   "text": "working on it even if it's small if"
+  },
+  {
+   "t": 332.7,
+   "d": 1.89,
+   "text": "you're tweaking you're not getting"
+  },
+  {
+   "t": 334.59,
+   "d": 1.89,
+   "text": "anything done you're pre optimizing and"
+  },
+  {
+   "t": 336.48,
+   "d": 1.77,
+   "text": "it's bad you're gonna replace it anyways"
+  },
+  {
+   "t": 338.25,
+   "d": 3.36,
+   "text": "who cares if so something doesn't add to"
+  },
+  {
+   "t": 341.61,
+   "d": 2.43,
+   "text": "the core throw it out do not start all"
+  },
+  {
+   "t": 344.04,
+   "d": 1.44,
+   "text": "over again because you can do it better"
+  },
+  {
+   "t": 345.48,
+   "d": 2.1,
+   "text": "faster this is another pitfall that I"
+  },
+  {
+   "t": 347.58,
+   "d": 2.61,
+   "text": "see a lot of people fall into they will"
+  },
+  {
+   "t": 350.19,
+   "d": 3.75,
+   "text": "start a project and then they will throw"
+  },
+  {
+   "t": 353.94,
+   "d": 1.44,
+   "text": "it away because oh I've learned so much"
+  },
+  {
+   "t": 355.38,
+   "d": 1.65,
+   "text": "I could do it so much better next time"
+  },
+  {
+   "t": 357.03,
+   "d": 3.08,
+   "text": "don't do this work with what you have"
+  },
+  {
+   "t": 360.11,
+   "d": 3.31,
+   "text": "keep it malleable and you will be fine I"
+  },
+  {
+   "t": 363.42,
+   "d": 1.04,
+   "text": "promise"
+  },
+  {
+   "t": 364.46,
+   "d": 2.68,
+   "text": "don't treat any roguelike interpretation"
+  },
+  {
+   "t": 367.14,
+   "d": 1.59,
+   "text": "as gospel this is kind of what /you was"
+  },
+  {
+   "t": 368.73,
+   "d": 4.77,
+   "text": "talking about and just make a game you"
+  },
+  {
+   "t": 373.5,
+   "d": 1.65,
+   "text": "don't have to make it a roguelike it can"
+  },
+  {
+   "t": 375.15,
+   "d": 1.98,
+   "text": "be inspired by roguelikes but don't make"
+  },
+  {
+   "t": 377.13,
+   "d": 1.23,
+   "text": "it a roguelike just because you want to"
+  },
+  {
+   "t": 378.36,
+   "d": 2.13,
+   "text": "make a roguelike make it a game make it"
+  },
+  {
+   "t": 380.49,
+   "d": 1.98,
+   "text": "fun put your own spin on it and then"
+  },
+  {
+   "t": 382.47,
+   "d": 1.92,
+   "text": "they'll be entertaining and have fun"
+  },
+  {
+   "t": 384.39,
+   "d": 3.39,
+   "text": "yourself even just one hour can make a"
+  },
+  {
+   "t": 387.78,
+   "d": 1.65,
+   "text": "difference one hour a day that's not"
+  },
+  {
+   "t": 389.43,
+   "d": 1.62,
+   "text": "that big of a commitment that's probably"
+  },
+  {
+   "t": 391.05,
+   "d": 2.13,
+   "text": "how much time you spend watching TV you"
+  },
+  {
+   "t": 393.18,
+   "d": 2.88,
+   "text": "know it's it's not that big of a"
+  },
+  {
+   "t": 396.06,
+   "d": 2.58,
+   "text": "commitment to make anyways that was my"
+  },
+  {
+   "t": 398.64,
+   "d": 4.04,
+   "text": "very short talk thank you very much"
+  },
+  {
+   "t": 405.66,
+   "d": 12.64,
+   "text": "any questions yes which of those four"
+  },
+  {
+   "t": 418.3,
+   "d": 4.38,
+   "text": "motivations drives you the most I'll go"
+  },
+  {
+   "t": 422.68,
+   "d": 2.94,
+   "text": "back to that for me it's a combination"
+  },
+  {
+   "t": 425.62,
+   "d": 2.07,
+   "text": "of the creativity the challenge and the"
+  },
+  {
+   "t": 427.69,
+   "d": 4.89,
+   "text": "learning because let's be honest I'm not"
+  },
+  {
+   "t": 432.58,
+   "d": 0.84,
+   "text": "gonna make any money"
+  },
+  {
+   "t": 433.42,
+   "d": 3.18,
+   "text": "I have donations open and I've made 400"
+  },
+  {
+   "t": 436.6,
+   "d": 2.67,
+   "text": "dollars in two years you know I mean"
+  },
+  {
+   "t": 439.27,
+   "d": 1.32,
+   "text": "that's pretty good right that's pretty"
+  },
+  {
+   "t": 440.59,
+   "d": 6.18,
+   "text": "good but it's not gonna keep me fed how"
+  },
+  {
+   "t": 446.77,
+   "d": 3.3,
+   "text": "do you how do you organize and decide"
+  },
+  {
+   "t": 450.07,
+   "d": 1.62,
+   "text": "what you work on for that one hour each"
+  },
+  {
+   "t": 451.69,
+   "d": 4.02,
+   "text": "day oh well that's that's kind of an"
+  },
+  {
+   "t": 455.71,
+   "d": 0.78,
+   "text": "interesting question"
+  },
+  {
+   "t": 456.49,
+   "d": 3.09,
+   "text": "um well usually since I'm doing the"
+  },
+  {
+   "t": 459.58,
+   "d": 1.59,
+   "text": "majority of the art I have an artist"
+  },
+  {
+   "t": 461.17,
+   "d": 1.59,
+   "text": "that intermittently comes when he's not"
+  },
+  {
+   "t": 462.76,
+   "d": 2.52,
+   "text": "busy and does over some of the tiles so"
+  },
+  {
+   "t": 465.28,
+   "d": 1.8,
+   "text": "I'll work on art one day and maybe I'll"
+  },
+  {
+   "t": 467.08,
+   "d": 2.58,
+   "text": "work on like some system code maybe I'll"
+  },
+  {
+   "t": 469.66,
+   "d": 2.01,
+   "text": "work on making some new enemies you want"
+  },
+  {
+   "t": 471.67,
+   "d": 2.34,
+   "text": "to diversify and keep yourself working"
+  },
+  {
+   "t": 474.01,
+   "d": 1.44,
+   "text": "on something new so it's always fresh"
+  },
+  {
+   "t": 475.45,
+   "d": 1.5,
+   "text": "you don't want to keep yourself stuck in"
+  },
+  {
+   "t": 476.95,
+   "d": 4.28,
+   "text": "a rut anyone else"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "SjttI9N9KSM",
+  "title": "Xalavier Nelson Jr - Procedural Generation for Dogs",
+  "speaker": "Xalavier Nelson Jr.",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=SjttI9N9KSM",
+  "talk_type": "design",
+  "summary": "A lightning talk arguing that procedural generation is not only for builders of simulated civilizations: at its simplest it is 'making stuff according to a set of rules', which can mean picking from lists. Using An Airport for Aliens Currently Run by Dogs, Nelson describes the 'pedestrian' system, which picks a character type from a list (including an empty one to simulate crowd flow) and then picks a line and a picture from further lists. He argues modular design is the key, and that procedural generation's value is creating endless context for players to find their own meaning.",
+  "games": [
+    "An Airport for Aliens Currently Run by Dogs",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "list picking",
+      "kind": "principle",
+      "claim": "Procedural generation means making stuff according to a set of rules, and picking items from lists is as valid an approach as deep simulation.",
+      "detail": "Nelson long assumed procgen was only for people simulating universes and grammars, until he split the term into 'procedure' (according to rules) and 'generation' (making stuff). He says lists speak to him and are a legitimate route to lots of weird content.",
+      "t": 271,
+      "quote": "picking stuff from a list. I understand lists. They speak to me on a deep and spiritual level",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "modular design",
+      "kind": "principle",
+      "claim": "Procedural generation is approachable when treated as designing modular pieces that combine into a whole, not as building a whole civilization at once.",
+      "detail": "Nelson compares it to making the windows, doors and garage of a house rather than a house in a day; pieces can grow more complex and be made to match. He says Dwarf Fortress's scope is intimidating until you see it is not built in a day, and that this modular framing made him believe he could be a game designer.",
+      "t": 348,
+      "quote": "What you are doing is making the pieces of the house. You are making the Windows, the doors, and the garage",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "personal journey",
+      "kind": "example",
+      "claim": "Airports suit procedural generation because they mix standardized and unique elements, and each player's own route defines what they encounter.",
+      "detail": "In An Airport for Aliens Currently Run by Dogs, a traveller heading to gate B6 ignores terminals A and C, so randomized presentation tied to the player's journey makes each experience different.",
+      "t": 127,
+      "quote": "If your gate is at B6 you can't care about terminal A or C",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "npc generation",
+      "kind": "technique",
+      "claim": "The pedestrian system in An Airport for Aliens Currently Run by Dogs picks a character type from a list, and that object then picks a line and a visual from two more lists.",
+      "detail": "Types include greyscale dogs with hats and super-buff dogs. Combinations produce characters like a buff dog who thinks of his parents' sacrifices while lifting weights, generated as play starts across the airport.",
+      "t": 537,
+      "quote": "all we are really doing is picking an object from a list and then that object is picking two more things from two different lists",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "population density",
+      "kind": "technique",
+      "claim": "Including an 'empty' entry that spawns nothing in the pedestrian list lets An Airport for Aliens Currently Run by Dogs simulate crowd flow, such as a near-empty airport early in the morning.",
+      "detail": "Nelson calls these 'emptystrians': picking one creates an empty object so nothing appears, which gives a basic simulation of population flow.",
+      "t": 516,
+      "quote": "emptystrians which create an empty object and nothing is spawned and we can in a basic way simulate the flow of population",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player-made meaning",
+      "kind": "principle",
+      "claim": "Procedural generation's value is creating an endless supply of context for players to find their own meaning in.",
+      "detail": "Nelson says the combinations offer potentially infinite situations and contexts into which players inject meaning, and that procgen is a simple, fundamental tool available to everyone.",
+      "t": 601,
+      "quote": "It is about creating context, endless amount of context for people to find their own meaning in.",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

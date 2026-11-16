@@ -1,0 +1,100 @@
+{
+  "id": "KtQh4QrsUzs",
+  "title": "Pandamander: \"Out of Book\": The Psychology of Why Roguelikes Keep Us Playing",
+  "speaker": "Pandamander",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=KtQh4QrsUzs",
+  "talk_type": "design",
+  "summary": "Pandamander, a game designer formerly at EA and Warner Bros. Games now making the cozy roguelike deckbuilder World's Goodest Pup, explains three psychological reasons roguelikes keep players engaged. First, dopamine drives anticipation rather than reward, so the buildup toward rare combos is the fun and designers must keep rare moments rare and plan troughs. Second, good roguelikes engage both fast intuitive System 1 play and slow deliberate System 2 choices such as card picking. Third, borrowing chess's 'out of book' concept, roguelikes reliably push players into never-before-seen situations, and avoiding dominant strategies keeps that happening.",
+  "games": [
+    "Slay the Spire",
+    "Hades",
+    "The Binding of Isaac",
+    "Spelunky",
+    "World's Goodest Pup",
+    "Chess"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "dopamine and anticipation",
+      "kind": "principle",
+      "claim": "Dopamine is the neurotransmitter of motivation and anticipation rather than pleasure, so in roguelikes the buildup toward a payoff is the enjoyable part, not the payoff itself.",
+      "detail": "Pandamander, following a talk by Ben Lewis-Evans, explains that dopamine rises while anticipating a reward and drops back to baseline when the brain gets what it seeks. They stress that the buildup is the fun part, not hitting the peak.",
+      "t": 151,
+      "quote": "Dopamine is closer to being the neurotransmitter of motivation, drive, craving, and can desire.",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build-around cards",
+      "kind": "example",
+      "claim": "Slay the Spire's Grand Finale card, which only works with an empty draw pile and lots of draw, creates long anticipation across a run that pays off in rare memorable moments.",
+      "detail": "Usually it looks useless, but when a run starts gathering cards like Acrobatics that empty the draw pile, the player starts anticipating the combo, and dopamine rises. Once in a blue moon it lines up and deals damage to all enemies, the kind of moment people make YouTube videos about.",
+      "t": 206,
+      "quote": "It only works if you have a small draw pile and a lot of card draw in your deck.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "reward pacing",
+      "kind": "warning",
+      "claim": "Stacking rare drops one after another makes players' brains adjust so they stop feeling special, so roguelikes must plan troughs between highs.",
+      "detail": "Pandamander notes the brain has a built-in recovery after spikes; a stream of rare, then mythical drops starts to feel suspicious and stops being exciting, something they say mobile games often do. They contrast a backlit Eiffel Tower to Vegas where everything is always on and it all starts to feel the same.",
+      "t": 307,
+      "quote": "You can overdo it. You can't keep stacking and stacking dopamine.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "reward pacing",
+      "kind": "principle",
+      "claim": "Roguelike designers should keep rare moments rare, leave time for anticipation to build, and allow lows and relaxing moments to prevent staleness.",
+      "detail": "These are Pandamander's key takeaways from the dopamine section. Without lows and relaxing moments, they say, the game will get stale and players will get bored.",
+      "t": 387,
+      "quote": "you want to keep rare moments rare. You want to allow time for building anticipation. That's the fun part.",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "system 1 thinking",
+      "kind": "principle",
+      "claim": "Fast, intuitive System 1 thinking drives action roguelike moments like dashing in Hades, and also the relaxing autopilot stretches of turn-based games like Slay the Spire.",
+      "detail": "Pandamander uses Kahneman-style System 1 (fast, automatic) and System 2 (slow, deliberate). Action games train System 1 for jumps, dashes and blocks, as in Hades or dodging in The Binding of Isaac. In Slay the Spire, automatically selecting block cards is a relaxing trough players enjoy, sometimes while watching a video.",
+      "t": 477,
+      "quote": "In roguelike, system one appears most obviously. Dashing in Hades and moving to avoid injury in binding Isaacs.",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "system 2 choices",
+      "kind": "principle",
+      "claim": "Slow, deliberate System 2 choices such as picking upgrades or cards balance out System 1 play, and satisfying roguelikes need both.",
+      "detail": "Pandamander cites Anthony Giovannetti saying Slay the Spire is about card picking, plus risk choices in Spelunky and item choices in The Binding of Isaac. In their own game, the chosen dog breed shapes the runs and challenges to pursue.",
+      "t": 583,
+      "quote": "When you are choosing upgrades in roguelikes, that's the slow deliberate choice that balances out the system one of these types of play",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "out of book",
+      "kind": "principle",
+      "claim": "Roguelikes reliably push players 'out of book', like chess games that leave recorded openings, into never-seen situations where they must generalize from what they've learned.",
+      "detail": "In chess, the first 10-15 moves are memorized 'book' openings, but every game eventually reaches a position never recorded. With memorization gone, the pattern-matching brain applies what it learned. Pandamander calls going out of book the signature move of roguelikes: each generated map is unique, every run is personal and every permadeath meaningful.",
+      "t": 856,
+      "quote": "going out of book the signature move of roguelike style games",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "dominant strategies",
+      "kind": "warning",
+      "claim": "Roguelikes should avoid dominant strategies that win every time, because breaking into new possibility space distinguishes games that last 50 hours from those that last 5,000.",
+      "detail": "Pandamander urges designers to give systems enough room to expand so that, as in chess, play frequently opens into spaces no one has seen. A strategy that can roll through 100% of the time removes those out-of-book moments.",
+      "t": 921,
+      "quote": "You want to avoid strategies that are super dominating and can get 100% of the time where you can just like kind of roll through",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,2565 @@
+{
+ "id": "mYMdMAvTHpo",
+ "url": "https://www.youtube.com/watch?v=mYMdMAvTHpo",
+ "title": "Alexei Pepers - A Guide to Proc Gen Practitioners",
+ "speaker": "Alexei Pepers",
+ "talk_title": "A Guide to Proc Gen Practitioners",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1885,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nI am a game designer, programmer, and roguelike fanatic - starting with a love for Nethack and D&D, and leading to a broad passion for all things procedural that I love to encourage in others.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 60,
+   "title": "Proc Gen Practitioners"
+  },
+  {
+   "start": 150,
+   "title": "Proc Gen vs Magic"
+  },
+  {
+   "start": 260,
+   "title": "Magic is not monolithic"
+  },
+  {
+   "start": 405,
+   "title": "Wizards"
+  },
+  {
+   "start": 518,
+   "title": "Sorcerer"
+  },
+  {
+   "start": 584,
+   "title": "Bard"
+  },
+  {
+   "start": 660,
+   "title": "Artificer"
+  },
+  {
+   "start": 811,
+   "title": "Cleric"
+  },
+  {
+   "start": 912,
+   "title": "Warlock"
+  },
+  {
+   "start": 998,
+   "title": "Druid"
+  },
+  {
+   "start": 1124,
+   "title": "Ranger"
+  },
+  {
+   "start": 1178,
+   "title": "Paladin"
+  },
+  {
+   "start": 1323,
+   "title": "Summary"
+  },
+  {
+   "start": 1381,
+   "title": "Final Thoughts"
+  },
+  {
+   "start": 1482,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 5666,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.53,
+   "d": 1.0,
+   "text": "ALEXEI PEPERS: Excellent."
+  },
+  {
+   "t": 1.53,
+   "d": 1.0,
+   "text": "All right."
+  },
+  {
+   "t": 2.53,
+   "d": 2.0,
+   "text": "So yes, my talk is a practical guide to Proc Gen practitioners."
+  },
+  {
+   "t": 4.53,
+   "d": 4.91,
+   "text": "An extremely non-descriptive name, so thanks for being here to hear me talk about whatever."
+  },
+  {
+   "t": 9.44,
+   "d": 1.11,
+   "text": "Click."
+  },
+  {
+   "t": 10.55,
+   "d": 1.11,
+   "text": "Nope."
+  },
+  {
+   "t": 12.77,
+   "d": 5.53,
+   "text": "Which button should I click?"
+  },
+  {
+   "t": 18.3,
+   "d": 2.22,
+   "text": "That works."
+  },
+  {
+   "t": 20.52,
+   "d": 6.15,
+   "text": "OK, so who the heck am I?"
+  },
+  {
+   "t": 26.67,
+   "d": 4.13,
+   "text": "My name's Alexei Pepers, she/her, you can find me on Twitter at ampepers."
+  },
+  {
+   "t": 30.8,
+   "d": 4.65,
+   "text": "I am a NetHack enthusiast, is probably the best way I can think of to describe my kind"
+  },
+  {
+   "t": 35.45,
+   "d": 1.45,
+   "text": "of Proc Gen stuff."
+  },
+  {
+   "t": 36.9,
+   "d": 3.02,
+   "text": "I've been here before, talking mostly about NetHack."
+  },
+  {
+   "t": 39.92,
+   "d": 6.46,
+   "text": "I am a technical designer at Improbable, which helped sponsor the conference, so yay for"
+  },
+  {
+   "t": 46.38,
+   "d": 1.36,
+   "text": "that, super happy about it."
+  },
+  {
+   "t": 47.74,
+   "d": 5.01,
+   "text": "Super short - they make SpatialOS, which is this technology for helping you make massive"
+  },
+  {
+   "t": 52.75,
+   "d": 4.02,
+   "text": "multiplayer games really easily - so check it out, I would love if there was a roguelike"
+  },
+  {
+   "t": 56.77,
+   "d": 3.76,
+   "text": "built on SpatialOS, that's just something I want in my life."
+  },
+  {
+   "t": 60.53,
+   "d": 2.1,
+   "text": "What am I actually here to talk about?"
+  },
+  {
+   "t": 62.63,
+   "d": 5.44,
+   "text": "Something else about me is that I have loved getting to know Proc Gen practitioners throughout"
+  },
+  {
+   "t": 68.07,
+   "d": 1.06,
+   "text": "the whole community."
+  },
+  {
+   "t": 69.13,
+   "d": 4.29,
+   "text": "I was lucky enough to come speak at Roguelike Celebration at the first one, I think, in"
+  },
+  {
+   "t": 73.42,
+   "d": 1.0,
+   "text": "2016."
+  },
+  {
+   "t": 74.42,
+   "d": 5.43,
+   "text": "That was kind of the time I was welcomed into the roguelike and wider Proc Gen community,"
+  },
+  {
+   "t": 79.85,
+   "d": 1.75,
+   "text": "which is something that's meant a lot to me."
+  },
+  {
+   "t": 81.6,
+   "d": 3.56,
+   "text": "It has meant I have had the chance to meet all kinds of Proc Gen practitioners, and I"
+  },
+  {
+   "t": 85.16,
+   "d": 5.29,
+   "text": "use the word practitioner because that includes hobbyists, professionals, people who have"
+  },
+  {
+   "t": 90.45,
+   "d": 4.12,
+   "text": "made a Twitter bot here and there, or who just like reading about Proc Gen, or who have"
+  },
+  {
+   "t": 94.57,
+   "d": 4.95,
+   "text": "shipped full titles that are entirely Proc Gen. Everyone is some kind of Proc Gen practitioner,"
+  },
+  {
+   "t": 99.52,
+   "d": 4.51,
+   "text": "and I love talking to all of them about Proc Gen just because I love it so much."
+  },
+  {
+   "t": 104.03,
+   "d": 5.27,
+   "text": "One thing I notice that was interesting talking to so many people is that Proc Gen practitioners"
+  },
+  {
+   "t": 109.3,
+   "d": 3.46,
+   "text": "tend to have very different attitudes towards Proc Gen and the method of working with it."
+  },
+  {
+   "t": 112.76,
+   "d": 4.46,
+   "text": "Some of this makes sense because Proc Gen is a very wide field, it includes most disciplines"
+  },
+  {
+   "t": 117.22,
+   "d": 3.96,
+   "text": "within games, there's lots of different techniques, but there seemed to also be an underlying"
+  },
+  {
+   "t": 121.18,
+   "d": 4.18,
+   "text": "philosophical difference in how people thought about Proc Gen."
+  },
+  {
+   "t": 125.36,
+   "d": 2.36,
+   "text": "But the more I thought about it, the more I noticed there was one thing that seemed"
+  },
+  {
+   "t": 127.72,
+   "d": 4.86,
+   "text": "to be in common, which is that Proc Gen is magic."
+  },
+  {
+   "t": 132.58,
+   "d": 4.1,
+   "text": "And before you grab your pitchforks and drive me into the sea, I don't mean video games"
+  },
+  {
+   "t": 136.68,
+   "d": 4.48,
+   "text": "are made by elves in the night, Proc Gen makes all your content for you, it's so magical"
+  },
+  {
+   "t": 141.16,
+   "d": 2.15,
+   "text": "and wonderful - that's not what I mean."
+  },
+  {
+   "t": 143.31,
+   "d": 4.02,
+   "text": "The easiest way to explain what I mean is - so I made a slide for a talk I gave locally"
+  },
+  {
+   "t": 147.33,
+   "d": 2.88,
+   "text": "to people as an introduction to Proc Gen."
+  },
+  {
+   "t": 150.21,
+   "d": 2.28,
+   "text": "And this is the slide."
+  },
+  {
+   "t": 152.49,
+   "d": 6.66,
+   "text": "Beside being an excuse to use a really cool picture in a slide deck, the point I was trying"
+  },
+  {
+   "t": 159.15,
+   "d": 4.35,
+   "text": "to make to these Proc Gen newbies was that people tend to talk and think about Proc Gen"
+  },
+  {
+   "t": 163.5,
+   "d": 5.22,
+   "text": "in a way that is very similar to the positive of magic in fantasy universes, where magic"
+  },
+  {
+   "t": 168.72,
+   "d": 3.8,
+   "text": "is a system that is presumed to be real inside of that world."
+  },
+  {
+   "t": 172.52,
+   "d": 3.82,
+   "text": "In those, magic is often appealing because it is this mysterious, fascinating thing,"
+  },
+  {
+   "t": 176.34,
+   "d": 4.38,
+   "text": "and it obviously grants great power to the people who know how to use it."
+  },
+  {
+   "t": 180.72,
+   "d": 3.87,
+   "text": "People seem to often talk about Proc Gen in a similar way - it's this kind of magical"
+  },
+  {
+   "t": 184.59,
+   "d": 3.25,
+   "text": "force, where if you can understand it, you can do these great things."
+  },
+  {
+   "t": 187.84,
+   "d": 3.82,
+   "text": "What people talk about less is that I think Proc Gen also has the downsides of traditional"
+  },
+  {
+   "t": 191.66,
+   "d": 1.0,
+   "text": "magic."
+  },
+  {
+   "t": 192.66,
+   "d": 5.09,
+   "text": "It is very unpredictable because it is so mysterious, especially if you're new to it"
+  },
+  {
+   "t": 197.75,
+   "d": 4.15,
+   "text": "- it can do things you don't expect and that are very bad."
+  },
+  {
+   "t": 201.9,
+   "d": 4.13,
+   "text": "In worlds where magic is real, you don't go to a wizard to get them to fix your fence,"
+  },
+  {
+   "t": 206.03,
+   "d": 3.65,
+   "text": "because they are just as likely to turn it into a sentient fence, or send it back in"
+  },
+  {
+   "t": 209.68,
+   "d": 2.21,
+   "text": "time, or grow it 10 feet and turn it blue."
+  },
+  {
+   "t": 211.89,
+   "d": 4.57,
+   "text": "It's not a good idea just because magic exists to use it to solve every problem, and similarly,"
+  },
+  {
+   "t": 216.46,
+   "d": 3.35,
+   "text": "just because Proc Gen is very powerful does not mean it should be used to solve every"
+  },
+  {
+   "t": 219.81,
+   "d": 1.0,
+   "text": "problem."
+  },
+  {
+   "t": 220.81,
+   "d": 4.56,
+   "text": "Part of why I think this happens is because Proc Gen is beguiling in a very fantasy kind"
+  },
+  {
+   "t": 225.37,
+   "d": 2.2,
+   "text": "of way."
+  },
+  {
+   "t": 227.57,
+   "d": 4.33,
+   "text": "That promise of: you have these infinite worlds, you have endless gameplay possibilities."
+  },
+  {
+   "t": 231.9,
+   "d": 5.03,
+   "text": "There is a feeling I think you can get when you are working with your generator, and you're"
+  },
+  {
+   "t": 236.93,
+   "d": 4.89,
+   "text": "putting in your input, you're watching it spin out content, and it feels like spinning"
+  },
+  {
+   "t": 241.82,
+   "d": 1.0,
+   "text": "straw into gold."
+  },
+  {
+   "t": 242.82,
+   "d": 4.29,
+   "text": "It is this very appealing thing, and you can watch your generator and play with it and"
+  },
+  {
+   "t": 247.11,
+   "d": 4.97,
+   "text": "see what it does - and then days have gone by, and years have gone by, and there was"
+  },
+  {
+   "t": 252.08,
+   "d": 4.2,
+   "text": "maybe a game you were trying to make, but you don't really remember any more."
+  },
+  {
+   "t": 256.28,
+   "d": 3.11,
+   "text": "Not that anyone here would know anything about that."
+  },
+  {
+   "t": 259.39,
+   "d": 3.44,
+   "text": "[Laughter] ALEXEI PEPERS: This is something I like."
+  },
+  {
+   "t": 262.83,
+   "d": 3.82,
+   "text": "This idea that magic is an analogy for how we think about Proc Gen."
+  },
+  {
+   "t": 266.65,
+   "d": 5.42,
+   "text": "The other reason why I thought this was interesting is that we tend to understand magic is not"
+  },
+  {
+   "t": 272.07,
+   "d": 4.75,
+   "text": "monolithic, even in words where magic is just taken to be a true thing - there are lots"
+  },
+  {
+   "t": 276.82,
+   "d": 2.43,
+   "text": "of different ways people approach magic in those universes."
+  },
+  {
+   "t": 279.25,
+   "d": 3.23,
+   "text": "In Harry Potter magic is presumed to be real - there are still lots of different people"
+  },
+  {
+   "t": 282.48,
+   "d": 4.99,
+   "text": "who approach it in different ways, who specialize in different areas, who have different thoughts"
+  },
+  {
+   "t": 287.47,
+   "d": 2.48,
+   "text": "on what magic means to them."
+  },
+  {
+   "t": 289.95,
+   "d": 3.04,
+   "text": "I think that's really cool because I think Proc Gen is like that too."
+  },
+  {
+   "t": 292.99,
+   "d": 4.47,
+   "text": "I think that all of us who work with it have very unique relationships."
+  },
+  {
+   "t": 297.46,
+   "d": 4.68,
+   "text": "I think we take our own experiences with the world, I think we take our own kind of dreams"
+  },
+  {
+   "t": 302.14,
+   "d": 4.35,
+   "text": "for what we want to make as creators, and it gives us this approach that no one else"
+  },
+  {
+   "t": 306.49,
+   "d": 1.0,
+   "text": "could have."
+  },
+  {
+   "t": 307.49,
+   "d": 6.56,
+   "text": "I think it is just - everyone has a really unique perspective and can make something"
+  },
+  {
+   "t": 314.05,
+   "d": 1.33,
+   "text": "that no one else could."
+  },
+  {
+   "t": 315.38,
+   "d": 4.17,
+   "text": "You know no one can be compared to each other because everyone is completely unique."
+  },
+  {
+   "t": 319.55,
+   "d": 6.03,
+   "text": "Then I realized - wait a minute, I have been playing D&D and its derivatives for most of"
+  },
+  {
+   "t": 325.58,
+   "d": 6.18,
+   "text": "my life, and everyone knows that all magic users fit into nine distinct character classes,"
+  },
+  {
+   "t": 331.76,
+   "d": 3.65,
+   "text": "and that everyone in the world can fit in some combination of those character classes,"
+  },
+  {
+   "t": 335.41,
+   "d": 2.01,
+   "text": "allowing for multi-classing of course."
+  },
+  {
+   "t": 337.42,
+   "d": 5.86,
+   "text": "In this talk, I am going to describe how every type of Proc Gen practitioner maps to an analogous"
+  },
+  {
+   "t": 343.28,
+   "d": 4.48,
+   "text": "spell-casting class."
+  },
+  {
+   "t": 347.76,
+   "d": 3.39,
+   "text": "You might have heard someone describe themselves as a Proc Gen wizard, but by the end of this"
+  },
+  {
+   "t": 351.15,
+   "d": 2.82,
+   "text": "talk, I hope to hear people say they're a Proc Gen cleric."
+  },
+  {
+   "t": 353.97,
+   "d": 3.21,
+   "text": "So, some ground rules."
+  },
+  {
+   "t": 357.18,
+   "d": 5.73,
+   "text": "To keep things organized, I will maintain the arcane-divine distinction in traditional"
+  },
+  {
+   "t": 362.91,
+   "d": 1.0,
+   "text": "D&D."
+  },
+  {
+   "t": 363.91,
+   "d": 4.51,
+   "text": "So our arcane classes are going to be wizard, sorcerer, bard, and artificer, and our divine"
+  },
+  {
+   "t": 368.42,
+   "d": 4.07,
+   "text": "classes are going to be cleric, warlock, druid, ranger, and paladin."
+  },
+  {
+   "t": 372.49,
+   "d": 5.34,
+   "text": "Now, some of you just physically restrained yourselves from shouting \"Alexei, warlock"
+  },
+  {
+   "t": 377.83,
+   "d": 5.8,
+   "text": "is not a divine class\", to which I would like to respond: first of all, as you know, warlock"
+  },
+  {
+   "t": 383.63,
+   "d": 4.38,
+   "text": "was not a main class until fifth edition, and in 3.5 is an optional class - and invocations"
+  },
+  {
+   "t": 388.01,
+   "d": 3.59,
+   "text": "were technically spell-like abilities, not spells, putting them outside the arcane-divine"
+  },
+  {
+   "t": 391.6,
+   "d": 3.23,
+   "text": "distinction - and besides which, by the point they were in fifth edition, divine-arcane"
+  },
+  {
+   "t": 394.83,
+   "d": 1.67,
+   "text": "is no longer a mechanical distinction."
+  },
+  {
+   "t": 396.5,
+   "d": 3.83,
+   "text": "So really it could be argued either way - also I have the microphone and I am making shit"
+  },
+  {
+   "t": 400.33,
+   "d": 7.35,
+   "text": "up - so you can fight me."
+  },
+  {
+   "t": 407.68,
+   "d": 1.0,
+   "text": "Wizards."
+  },
+  {
+   "t": 408.68,
+   "d": 1.0,
+   "text": "The archetypical arcane caster."
+  },
+  {
+   "t": 409.68,
+   "d": 4.21,
+   "text": "The first thing most people tend to think of when they hear magic, and for good reason."
+  },
+  {
+   "t": 413.89,
+   "d": 5.44,
+   "text": "The wizard is someone who thinks of Proc Gen or magic as a system of rules that can be"
+  },
+  {
+   "t": 419.33,
+   "d": 1.0,
+   "text": "mastered."
+  },
+  {
+   "t": 420.33,
+   "d": 4.56,
+   "text": "Something that can be understood and taken advantage of."
+  },
+  {
+   "t": 424.89,
+   "d": 2.76,
+   "text": "Their approach is rooted in study and understanding."
+  },
+  {
+   "t": 427.65,
+   "d": 5.33,
+   "text": "If you learn all of the formula and magical sigils and everything that underlies magic"
+  },
+  {
+   "t": 432.98,
+   "d": 6.65,
+   "text": "or Proc Gen you can change the universe or make cool dungeon levels, same thing."
+  },
+  {
+   "t": 439.63,
+   "d": 4.56,
+   "text": "The other thing about wizard is that they're prone to specialization because they view"
+  },
+  {
+   "t": 444.19,
+   "d": 4.78,
+   "text": "Proc Gen or magic as something they should understand fully and it tends to be that you"
+  },
+  {
+   "t": 448.97,
+   "d": 2.31,
+   "text": "can understand one piece better than anything else."
+  },
+  {
+   "t": 451.28,
+   "d": 6.19,
+   "text": "So in the same way you have magical wizards with domain expertise in illusion, or evocation,"
+  },
+  {
+   "t": 457.47,
+   "d": 5.68,
+   "text": "or necromancy - you get Proc Gen wizards who have expertise in generative narrative or"
+  },
+  {
+   "t": 463.15,
+   "d": 6.52,
+   "text": "ecosystem simulation, or necromancy."
+  },
+  {
+   "t": 469.67,
+   "d": 1.0,
+   "text": "Wizards are really powerful."
+  },
+  {
+   "t": 470.67,
+   "d": 3.51,
+   "text": "They are really good to have on your side and often at the forefront of their particular"
+  },
+  {
+   "t": 474.18,
+   "d": 1.0,
+   "text": "Proc Gen technique."
+  },
+  {
+   "t": 475.18,
+   "d": 2.12,
+   "text": "Though there are some downsides."
+  },
+  {
+   "t": 477.3,
+   "d": 5.06,
+   "text": "Wizards often end up with a very arcane and incomprehensible way of speaking that is based"
+  },
+  {
+   "t": 482.36,
+   "d": 5.41,
+   "text": "in their deep understanding, a kind of knowledge of PCG, WFC, ECS..."
+  },
+  {
+   "t": 487.77,
+   "d": 5.28,
+   "text": "But don't worry, if you memorized all the characters in Rogue you can handle the acronyms."
+  },
+  {
+   "t": 493.05,
+   "d": 5.33,
+   "text": "The last thing is if you have a wizard in your life, they can be prone to falling into"
+  },
+  {
+   "t": 498.38,
+   "d": 6.38,
+   "text": "the clutches of evil, staring too long into the abyss, filling out too many grant applications"
+  },
+  {
+   "t": 504.76,
+   "d": 4.26,
+   "text": "- and you will want to be ready to take them for walks in natural light and feed them home"
+  },
+  {
+   "t": 509.02,
+   "d": 5.31,
+   "text": "cook meals if you seen any signs of imminent turn to villainy such as sudden obsessions"
+  },
+  {
+   "t": 514.33,
+   "d": 4.28,
+   "text": "with jewelry or trying out spelling their names backwards."
+  },
+  {
+   "t": 518.61,
+   "d": 1.0,
+   "text": "Sorcerers."
+  },
+  {
+   "t": 519.61,
+   "d": 2.69,
+   "text": "The next arcane class."
+  },
+  {
+   "t": 522.3,
+   "d": 5.54,
+   "text": "Now in Dungeons and Dragons Sorcerers are people who have an inborn capability for magic"
+  },
+  {
+   "t": 527.84,
+   "d": 7.0,
+   "text": "because someone in their family tree got intimate with a dragon... mapping that to Proc Gen,"
+  },
+  {
+   "t": 534.84,
+   "d": 3.5,
+   "text": "first of all I won't say that some people have an inborn capability for Proc Gen because"
+  },
+  {
+   "t": 538.34,
+   "d": 3.76,
+   "text": "that's kind of gatekeeping and shitty, and I'm not going speculate about your relations'"
+  },
+  {
+   "t": 542.1,
+   "d": 3.83,
+   "text": "interest in dragons because that's none of my business."
+  },
+  {
+   "t": 545.93,
+   "d": 4.96,
+   "text": "To me what defines a Proc Gen sorcerer is that they are centered around intuition and"
+  },
+  {
+   "t": 550.89,
+   "d": 1.0,
+   "text": "introspection."
+  },
+  {
+   "t": 551.89,
+   "d": 5.59,
+   "text": "To them, it is about using Proc Gen to look inward and have a dialogue with yourself through"
+  },
+  {
+   "t": 557.48,
+   "d": 1.14,
+   "text": "your tools."
+  },
+  {
+   "t": 558.62,
+   "d": 6.45,
+   "text": "They are examining their own ideas, biases, and assumptions, using Proc Gen as the lens"
+  },
+  {
+   "t": 565.07,
+   "d": 1.01,
+   "text": "to do that."
+  },
+  {
+   "t": 566.08,
+   "d": 5.35,
+   "text": "It certainly is powerful and Proc Gen is still a worthwhile method - but in the end it is"
+  },
+  {
+   "t": 571.43,
+   "d": 4.27,
+   "text": "a focus where the power is coming from inside of you and Proc Gen is more of a method of"
+  },
+  {
+   "t": 575.7,
+   "d": 1.0,
+   "text": "unleashing it."
+  },
+  {
+   "t": 576.7,
+   "d": 5.69,
+   "text": "It is more like a mirror reflecting your own ideas back at you in a way that you can visualize,"
+  },
+  {
+   "t": 582.39,
+   "d": 2.43,
+   "text": "tweak, and work with from there."
+  },
+  {
+   "t": 584.82,
+   "d": 3.36,
+   "text": "Building on the theme of introspection, we hit the Bard."
+  },
+  {
+   "t": 588.18,
+   "d": 3.2,
+   "text": "Now I could say Bards are the one that make Proc Gen music but if you haven't picked up"
+  },
+  {
+   "t": 591.38,
+   "d": 4.74,
+   "text": "on it by now I am going to do my full due diligence on each single one of these because"
+  },
+  {
+   "t": 596.12,
+   "d": 1.85,
+   "text": "you fine folks deserve nothing less."
+  },
+  {
+   "t": 597.97,
+   "d": 6.4,
+   "text": "So, I define a Proc Gen bard as someone who does tend toward artistic, musical, and narrative"
+  },
+  {
+   "t": 604.37,
+   "d": 4.31,
+   "text": "sides of Proc Gen, but the thing that defines them is that they use Proc Gen to guide and"
+  },
+  {
+   "t": 608.68,
+   "d": 5.45,
+   "text": "enhance their own creativity, making it part of their creative process."
+  },
+  {
+   "t": 614.13,
+   "d": 3.58,
+   "text": "One thing interesting about this is that while a lot of times with other classes you will"
+  },
+  {
+   "t": 617.71,
+   "d": 4.55,
+   "text": "be trying to get your Proc Gen to kind of blend in with handcrafted content, but a Proc"
+  },
+  {
+   "t": 622.26,
+   "d": 5.7,
+   "text": "Gen bard is more willing to embrace the weirdness and strangeness and flavor of procedural generation"
+  },
+  {
+   "t": 627.96,
+   "d": 1.87,
+   "text": "that other classes might be trying to hide."
+  },
+  {
+   "t": 629.83,
+   "d": 4.93,
+   "text": "It's still their hands on the keyboard, they are still doing the creating, but they are"
+  },
+  {
+   "t": 634.76,
+   "d": 5.88,
+   "text": "much more willing to let this feeling of Proc Gen flow through them and create something"
+  },
+  {
+   "t": 640.64,
+   "d": 1.81,
+   "text": "more unique and strange."
+  },
+  {
+   "t": 642.45,
+   "d": 5.43,
+   "text": "As a Proc Gen bard, your arch nemeses are the people who made memes about making a bot"
+  },
+  {
+   "t": 647.88,
+   "d": 4.36,
+   "text": "watching 1,000 hours of Olive Garden commercials and look it wrote this script (that was clearly"
+  },
+  {
+   "t": 652.24,
+   "d": 2.18,
+   "text": "handcrafted and not made by a bot.)"
+  },
+  {
+   "t": 654.42,
+   "d": 7.23,
+   "text": "If you meet these people you are actually entitled and required to fight them on sight."
+  },
+  {
+   "t": 661.65,
+   "d": 3.98,
+   "text": "The final arcane class is the artificer."
+  },
+  {
+   "t": 665.63,
+   "d": 4.8,
+   "text": "These in D&D are people who have skills in the magical arts themselves and they take"
+  },
+  {
+   "t": 670.43,
+   "d": 3.86,
+   "text": "those years of diligence and training that taught them how to make a really rad fireball"
+  },
+  {
+   "t": 674.29,
+   "d": 4.54,
+   "text": "and they use that to make a stick they can just hand to a peasant, and the peasant can"
+  },
+  {
+   "t": 678.83,
+   "d": 4.49,
+   "text": "blow a smoking hole in their village, and I don't know about you but I respect the hell"
+  },
+  {
+   "t": 683.32,
+   "d": 2.23,
+   "text": "out of that."
+  },
+  {
+   "t": 685.55,
+   "d": 5.71,
+   "text": "Within Proc Gen, these people filter the mind bending nature of Proc Gen into approachable"
+  },
+  {
+   "t": 691.26,
+   "d": 1.0,
+   "text": "interfaces."
+  },
+  {
+   "t": 692.26,
+   "d": 6.26,
+   "text": "They take that weirdness and make a tool that people can use in order to have sliders with"
+  },
+  {
+   "t": 698.52,
+   "d": 4.38,
+   "text": "buttons and labels where they don't have to change their entire concept of what content"
+  },
+  {
+   "t": 702.9,
+   "d": 3.2,
+   "text": "is in order to work with it."
+  },
+  {
+   "t": 706.1,
+   "d": 3.9,
+   "text": "This is really impressive because it's hard enough to grok Proc Gen yourself and make"
+  },
+  {
+   "t": 710.0,
+   "d": 1.37,
+   "text": "it act like you want to."
+  },
+  {
+   "t": 711.37,
+   "d": 3.89,
+   "text": "Making it seem more friendly is a skill unto itself."
+  },
+  {
+   "t": 715.26,
+   "d": 5.04,
+   "text": "I don't think I am allowed to have favorites but artificers, you are the real MVPs."
+  },
+  {
+   "t": 720.3,
+   "d": 2.19,
+   "text": "Now the divine casters."
+  },
+  {
+   "t": 722.49,
+   "d": 4.64,
+   "text": "You might be thinking where am I going with this since the divine casters in D&D are like"
+  },
+  {
+   "t": 727.13,
+   "d": 4.89,
+   "text": "\"bless Talos, god of storms, who gave me my abilities\" - and I'm not going to say Odin"
+  },
+  {
+   "t": 732.02,
+   "d": 2.93,
+   "text": "gave me the ability to make shitposting twitter bots."
+  },
+  {
+   "t": 734.95,
+   "d": 5.74,
+   "text": "To me, what's interesting about the divine casters in Proc Gen is that they have this"
+  },
+  {
+   "t": 740.69,
+   "d": 4.34,
+   "text": "external focused relationship where they think of their generator as an entity."
+  },
+  {
+   "t": 745.03,
+   "d": 6.08,
+   "text": "I am not saying literally they think it has its own agency and have gone full Dr. Frankenstein"
+  },
+  {
+   "t": 751.11,
+   "d": 1.28,
+   "text": "and created life."
+  },
+  {
+   "t": 752.39,
+   "d": 5.68,
+   "text": "I mean we have a feeling sometimes that our Proc Gen generators are something external"
+  },
+  {
+   "t": 758.07,
+   "d": 4.82,
+   "text": "to us that we are able to have a dialogue with, that are able to have capacity to surprise"
+  },
+  {
+   "t": 762.89,
+   "d": 1.0,
+   "text": "us."
+  },
+  {
+   "t": 763.89,
+   "d": 3.17,
+   "text": "We can think and act in a way as if it had some degree of agency."
+  },
+  {
+   "t": 767.06,
+   "d": 4.04,
+   "text": "I am also using generator as a very broad term."
+  },
+  {
+   "t": 771.1,
+   "d": 3.15,
+   "text": "This could be any kind of Proc Gen techniques."
+  },
+  {
+   "t": 774.25,
+   "d": 4.73,
+   "text": "I do think you will see this more often with things that are AI-ish but I think it could"
+  },
+  {
+   "t": 778.98,
+   "d": 1.0,
+   "text": "apply anywhere."
+  },
+  {
+   "t": 779.98,
+   "d": 5.25,
+   "text": "A final point there - I put out a post on Twitter asking people to define their relationship"
+  },
+  {
+   "t": 785.23,
+   "d": 3.77,
+   "text": "with Proc Gen and got a lot of insightful and interesting responses but my favourite"
+  },
+  {
+   "t": 789.0,
+   "d": 5.81,
+   "text": "phrasing was from Darren Grey of Roguelike Radio who said \"Proc Gen is a half wild horse"
+  },
+  {
+   "t": 794.81,
+   "d": 4.32,
+   "text": "I try to steer in certain directions but often takes me to fun unexpected places... or keeps"
+  },
+  {
+   "t": 799.13,
+   "d": 1.85,
+   "text": "running around in circles as I curse.\""
+  },
+  {
+   "t": 800.98,
+   "d": 4.08,
+   "text": "To me that is the attitude of the divine classes."
+  },
+  {
+   "t": 805.06,
+   "d": 3.73,
+   "text": "You can think about and talk about your generator as if it were an external half wild horse"
+  },
+  {
+   "t": 808.79,
+   "d": 3.65,
+   "text": "instead of just a set of rules."
+  },
+  {
+   "t": 812.44,
+   "d": 1.31,
+   "text": "So first up, Cleric."
+  },
+  {
+   "t": 813.75,
+   "d": 5.74,
+   "text": "In the same way the wizard is emblematic of the arcane, the cleric is emblematic of divine."
+  },
+  {
+   "t": 819.49,
+   "d": 3.74,
+   "text": "This is an especially whacky one in that what am I going to do, clerics are really about"
+  },
+  {
+   "t": 823.23,
+   "d": 1.0,
+   "text": "deities!"
+  },
+  {
+   "t": 824.23,
+   "d": 5.27,
+   "text": "The thing I would ask you to consider is - have you developed rituals around your work?"
+  },
+  {
+   "t": 829.5,
+   "d": 6.17,
+   "text": "Do you ever have a rule in your generator that runs better if you run it twice instead"
+  },
+  {
+   "t": 835.67,
+   "d": 2.18,
+   "text": "of once?"
+  },
+  {
+   "t": 837.85,
+   "d": 3.1,
+   "text": "And you don't want to think about why, you just know it works better that way."
+  },
+  {
+   "t": 840.95,
+   "d": 4.79,
+   "text": "Or code with a comment that says don't take out this code and you are hoping no one ever"
+  },
+  {
+   "t": 845.74,
+   "d": 3.47,
+   "text": "asks you why that code or comment is there because you don't know."
+  },
+  {
+   "t": 849.21,
+   "d": 2.33,
+   "text": "All you know is that it works better that way."
+  },
+  {
+   "t": 851.54,
+   "d": 1.46,
+   "text": "How does this microphone work?"
+  },
+  {
+   "t": 853.0,
+   "d": 1.96,
+   "text": "I don't know."
+  },
+  {
+   "t": 854.96,
+   "d": 3.03,
+   "text": "But I trust that it will and I even have certain rituals."
+  },
+  {
+   "t": 857.99,
+   "d": 3.69,
+   "text": "If it stops working I will try turning it off and on again."
+  },
+  {
+   "t": 861.68,
+   "d": 4.4,
+   "text": "I thought I would be holding a microphone so I would hold it differently, this one isn't"
+  },
+  {
+   "t": 866.08,
+   "d": 4.12,
+   "text": "held so my rituals will fall flat if it stops working."
+  },
+  {
+   "t": 870.2,
+   "d": 4.43,
+   "text": "If all else fails, I will reboot my computer which is the default ritual every single one"
+  },
+  {
+   "t": 874.63,
+   "d": 2.7,
+   "text": "of us prescribes to."
+  },
+  {
+   "t": 877.33,
+   "d": 3.25,
+   "text": "This to me defines a cleric way of thinking."
+  },
+  {
+   "t": 880.58,
+   "d": 5.0,
+   "text": "It's embracing the fact that sometimes you just don't need to know."
+  },
+  {
+   "t": 885.58,
+   "d": 6.31,
+   "text": "Sometimes you can have faith that if we keep trying eventually things are probably going"
+  },
+  {
+   "t": 891.89,
+   "d": 2.38,
+   "text": "to work out."
+  },
+  {
+   "t": 894.27,
+   "d": 4.95,
+   "text": "And you know, the generator might be cold and indifferent to your deadlines and feelings,"
+  },
+  {
+   "t": 899.22,
+   "d": 4.58,
+   "text": "but if you are willing to kind of, you know, keep going at it, keep trying to figure out"
+  },
+  {
+   "t": 903.8,
+   "d": 3.46,
+   "text": "what the hell it wants, then eventually things will probably work out."
+  },
+  {
+   "t": 907.26,
+   "d": 4.28,
+   "text": "I think we might not want to admit it but we act like clerics a lot more than we would"
+  },
+  {
+   "t": 911.54,
+   "d": 1.0,
+   "text": "like."
+  },
+  {
+   "t": 912.54,
+   "d": 5.57,
+   "text": "Finally, the warlock, the much advertised divine class."
+  },
+  {
+   "t": 918.11,
+   "d": 4.21,
+   "text": "Now to me they are very similar to the cleric in that they see the generator as this external"
+  },
+  {
+   "t": 922.32,
+   "d": 4.6,
+   "text": "thing they are working with but the cleric is about beliefs and the warlock is about"
+  },
+  {
+   "t": 926.92,
+   "d": 1.0,
+   "text": "bargains."
+  },
+  {
+   "t": 927.92,
+   "d": 3.26,
+   "text": "A kind of deals warlock, if you will."
+  },
+  {
+   "t": 931.18,
+   "d": 3.27,
+   "text": "They are coming to an 'arrangement' with their generator."
+  },
+  {
+   "t": 934.45,
+   "d": 4.78,
+   "text": "It might not be willing to listen to your commands but if you are willing to do some"
+  },
+  {
+   "t": 939.23,
+   "d": 4.69,
+   "text": "give and take, if you are willing to change your inputs in a way that makes it happy,"
+  },
+  {
+   "t": 943.92,
+   "d": 5.03,
+   "text": "and you are willing to kind of modify your process, then it is probably going to meet"
+  },
+  {
+   "t": 948.95,
+   "d": 1.3,
+   "text": "you halfway, probably."
+  },
+  {
+   "t": 950.25,
+   "d": 3.23,
+   "text": "So it is pretty simple."
+  },
+  {
+   "t": 953.48,
+   "d": 5.65,
+   "text": "You just meet its whims and you get ultimate power in return."
+  },
+  {
+   "t": 959.13,
+   "d": 2.94,
+   "text": "That doesn't sound so bad, does it?"
+  },
+  {
+   "t": 962.07,
+   "d": 4.67,
+   "text": "And the mark then of a good Proc Gen warlock is that they get very talented at knowing"
+  },
+  {
+   "t": 966.74,
+   "d": 2.82,
+   "text": "how to nudge their generator in the right directions."
+  },
+  {
+   "t": 969.56,
+   "d": 4.02,
+   "text": "It might be unreasonable, but they can find a way to work with it."
+  },
+  {
+   "t": 973.58,
+   "d": 6.52,
+   "text": "This is where they might see their generator like a teacher or an overlord who is taking"
+  },
+  {
+   "t": 980.1,
+   "d": 3.65,
+   "text": "them in strange directions that don't make sense at the time but, hopefully, eventually"
+  },
+  {
+   "t": 983.75,
+   "d": 3.85,
+   "text": "you will be able to look back on it and have a better understanding of oh that's why it"
+  },
+  {
+   "t": 987.6,
+   "d": 3.79,
+   "text": "wanted me to do this.. or you will be five years down the road with a generator that"
+  },
+  {
+   "t": 991.39,
+   "d": 4.09,
+   "text": "still makes no God damn sense but you are too far down the road of promising to use"
+  },
+  {
+   "t": 995.48,
+   "d": 1.24,
+   "text": "it to be able to back out."
+  },
+  {
+   "t": 996.72,
+   "d": 1.33,
+   "text": "So you know."
+  },
+  {
+   "t": 998.05,
+   "d": 1.75,
+   "text": "Choose wisely."
+  },
+  {
+   "t": 999.8,
+   "d": 1.0,
+   "text": "Druids."
+  },
+  {
+   "t": 1000.8,
+   "d": 1.98,
+   "text": "Another one you might be wondering what am I going to do with this."
+  },
+  {
+   "t": 1002.78,
+   "d": 3.48,
+   "text": "The extension of nature's will."
+  },
+  {
+   "t": 1006.26,
+   "d": 4.52,
+   "text": "I think we could all use a little more literal druid in our lives, sniff a tree every now"
+  },
+  {
+   "t": 1010.78,
+   "d": 1.0,
+   "text": "and then."
+  },
+  {
+   "t": 1011.78,
+   "d": 4.7,
+   "text": "I would love if what I was going to say was that there was a Proc Gen technique that lets"
+  },
+  {
+   "t": 1016.48,
+   "d": 8.03,
+   "text": "you speak to animals or turn into a bear but the best we get is playing Caves of Qud."
+  },
+  {
+   "t": 1024.51,
+   "d": 2.71,
+   "text": "This is another one where the meaning is not so much literal, it's a bit more abstract,"
+  },
+  {
+   "t": 1027.22,
+   "d": 4.46,
+   "text": "and it's that to me a druid is someone who sees their generator in a way that is focused"
+  },
+  {
+   "t": 1031.68,
+   "d": 2.72,
+   "text": "around tending, nurturing, and observing it."
+  },
+  {
+   "t": 1034.4,
+   "d": 3.83,
+   "text": "They still have this external relationship but instead of seeing that generator as their"
+  },
+  {
+   "t": 1038.23,
+   "d": 5.19,
+   "text": "teacher or overlord they see it more like a student or a even like a child, something"
+  },
+  {
+   "t": 1043.42,
+   "d": 5.48,
+   "text": "they are watching learn and they're trying to meet its need and sort of pruning it."
+  },
+  {
+   "t": 1048.9,
+   "d": 5.36,
+   "text": "So where a wizard might see creating a generator as like snapping together all these intricate"
+  },
+  {
+   "t": 1054.26,
+   "d": 3.7,
+   "text": "little pieces of a model, a druid sees it more like a bonsai."
+  },
+  {
+   "t": 1057.96,
+   "d": 4.78,
+   "text": "You're pruning away the parts you don't like but it's still growing in an organic fashion"
+  },
+  {
+   "t": 1062.74,
+   "d": 4.41,
+   "text": "and might be able to surprise you."
+  },
+  {
+   "t": 1067.15,
+   "d": 4.02,
+   "text": "We watch them grow and they can surprise us while we are taking care of them."
+  },
+  {
+   "t": 1071.17,
+   "d": 6.35,
+   "text": "I think that obviously this applies more to evolutionary algorithm type multigeneration"
+  },
+  {
+   "t": 1077.52,
+   "d": 3.36,
+   "text": "generator stuff but I think it can come up in anything."
+  },
+  {
+   "t": 1080.88,
+   "d": 3.51,
+   "text": "I have made some Twitter bots using Tracery."
+  },
+  {
+   "t": 1084.39,
+   "d": 2.97,
+   "text": "Tracery as far as Proc Gen goes is fairly understandable."
+  },
+  {
+   "t": 1087.36,
+   "d": 2.7,
+   "text": "You have the inputs and the rules are easy to understand."
+  },
+  {
+   "t": 1090.06,
+   "d": 3.85,
+   "text": "I know what is happening under the hood, but I still often find when working on a Twitter"
+  },
+  {
+   "t": 1093.91,
+   "d": 7.15,
+   "text": "bot that I am putting stuff in and watching it and feeling proud of it, or angry at it,"
+  },
+  {
+   "t": 1101.06,
+   "d": 5.05,
+   "text": "and trying to cut away the bits I don't like and I am like God damn it, you stupid bot."
+  },
+  {
+   "t": 1106.11,
+   "d": 1.0,
+   "text": "It is OK."
+  },
+  {
+   "t": 1107.11,
+   "d": 1.0,
+   "text": "It's my fault."
+  },
+  {
+   "t": 1108.11,
+   "d": 1.0,
+   "text": "I made you."
+  },
+  {
+   "t": 1109.11,
+   "d": 1.21,
+   "text": "I will try to make you better."
+  },
+  {
+   "t": 1110.32,
+   "d": 5.73,
+   "text": "I get this very weirdly parental sense of pride in my Twitter bots."
+  },
+  {
+   "t": 1116.05,
+   "d": 2.88,
+   "text": "God bless shitgibbon_bot, my dear child."
+  },
+  {
+   "t": 1118.93,
+   "d": 2.92,
+   "text": "They grow up so fast."
+  },
+  {
+   "t": 1121.85,
+   "d": 5.71,
+   "text": "And now we hit the ranger."
+  },
+  {
+   "t": 1127.56,
+   "d": 3.28,
+   "text": "From a spellcasting standpoint kind of just a shitty druid."
+  },
+  {
+   "t": 1130.84,
+   "d": 2.99,
+   "text": "Sorry Drizzt and other rangers."
+  },
+  {
+   "t": 1133.83,
+   "d": 2.01,
+   "text": "I played a ranger."
+  },
+  {
+   "t": 1135.84,
+   "d": 1.29,
+   "text": "It's OK."
+  },
+  {
+   "t": 1137.13,
+   "d": 6.72,
+   "text": "The strength of the ranger lies in their ability to guide their party through dangerous terrain"
+  },
+  {
+   "t": 1143.85,
+   "d": 3.59,
+   "text": "and know where the good paths are and where are the bad."
+  },
+  {
+   "t": 1147.44,
+   "d": 4.08,
+   "text": "When you are working on a team, the ranger is the one who can guide you through the oatmealy"
+  },
+  {
+   "t": 1151.52,
+   "d": 2.74,
+   "text": "bogs of procedural generation."
+  },
+  {
+   "t": 1154.26,
+   "d": 1.49,
+   "text": "Which is hugely important."
+  },
+  {
+   "t": 1155.75,
+   "d": 6.07,
+   "text": "They might not be as talented in one particular area of Proc Gen as something like a wizard,"
+  },
+  {
+   "t": 1161.82,
+   "d": 2.92,
+   "text": "but they know the paths that have safe to tread and which will lead to ruin."
+  },
+  {
+   "t": 1164.74,
+   "d": 5.2,
+   "text": "They can tell you that maybe generating your entire map from the terrain up pixel by pixel"
+  },
+  {
+   "t": 1169.94,
+   "d": 3.98,
+   "text": "is a very bad idea, but doing something like defining chunks of maps and snapping them"
+  },
+  {
+   "t": 1173.92,
+   "d": 2.6,
+   "text": "together is a good idea."
+  },
+  {
+   "t": 1176.52,
+   "d": 1.87,
+   "text": "Very important from a team standpoint."
+  },
+  {
+   "t": 1178.39,
+   "d": 2.17,
+   "text": "Finally, we get to the paladin."
+  },
+  {
+   "t": 1180.56,
+   "d": 3.57,
+   "text": "I'll admit this one gave me a bit of trouble."
+  },
+  {
+   "t": 1184.13,
+   "d": 4.68,
+   "text": "From a D&D standpoint they don't do as much casting magic themselves, they more defend"
+  },
+  {
+   "t": 1188.81,
+   "d": 4.25,
+   "text": "other spellcasters... and within D&D they are kind of hated."
+  },
+  {
+   "t": 1193.06,
+   "d": 7.45,
+   "text": "They have a reputation of being overly self righteous, initiating inter-party conflict,"
+  },
+  {
+   "t": 1200.51,
+   "d": 2.31,
+   "text": "not being willing to compromise."
+  },
+  {
+   "t": 1202.82,
+   "d": 4.04,
+   "text": "I played a paladin so it's okay I can say these things."
+  },
+  {
+   "t": 1206.86,
+   "d": 6.52,
+   "text": "When it clicked for me was when I was reading the comments online, a bad idea I know, and"
+  },
+  {
+   "t": 1213.38,
+   "d": 4.12,
+   "text": "saw someone saying you should never use procedural generation for anything in your game you want"
+  },
+  {
+   "t": 1217.5,
+   "d": 5.74,
+   "text": "to be coherant because Proc Gen is random and randomness can't be coherent."
+  },
+  {
+   "t": 1223.24,
+   "d": 1.18,
+   "text": "AUDIENCE: Lies!"
+  },
+  {
+   "t": 1224.42,
+   "d": 1.78,
+   "text": "ALEXEI PEPERS: Lies!"
+  },
+  {
+   "t": 1226.2,
+   "d": 2.39,
+   "text": "Yes, you get it, you might be a paladin!"
+  },
+  {
+   "t": 1228.59,
+   "d": 7.27,
+   "text": "Put up your hand if you ever had to explain that Proc Gen is not randomness and keep it"
+  },
+  {
+   "t": 1235.86,
+   "d": 3.66,
+   "text": "up if you are really sick of having to explain that."
+  },
+  {
+   "t": 1239.52,
+   "d": 2.81,
+   "text": "Or how about trying to define what a Roguelike is?"
+  },
+  {
+   "t": 1242.33,
+   "d": 2.34,
+   "text": "Or someone asking you 'is this game a Roguelike?"
+  },
+  {
+   "t": 1244.67,
+   "d": 1.99,
+   "text": "Is this game a Roguelike?'"
+  },
+  {
+   "t": 1246.66,
+   "d": 5.19,
+   "text": "Or having someone saying a Proc Gen designer doesn't make sense because it's just an algorithm,"
+  },
+  {
+   "t": 1251.85,
+   "d": 2.0,
+   "text": "what does a designer have to do with it?"
+  },
+  {
+   "t": 1253.85,
+   "d": 6.16,
+   "text": "How about the people that say Proc Gen algorithms can't be political or have bias or views because"
+  },
+  {
+   "t": 1260.01,
+   "d": 3.57,
+   "text": "it is just an algorithm and algorithms are inherently neutral, right?"
+  },
+  {
+   "t": 1263.58,
+   "d": 1.58,
+   "text": "Yes, you should boo."
+  },
+  {
+   "t": 1265.16,
+   "d": 5.58,
+   "text": "Paladins are the heroes who stand up and say that just because it is made with an algorithm,"
+  },
+  {
+   "t": 1270.74,
+   "d": 3.95,
+   "text": "that algorithm was made by human beings who brought in their own biases and assumptions,"
+  },
+  {
+   "t": 1274.69,
+   "d": 4.38,
+   "text": "biased input leads to biased output, and just because you are using an algorithm as an in-between"
+  },
+  {
+   "t": 1279.07,
+   "d": 3.55,
+   "text": "doesn't absolve you of your ethical obligations as a creator."
+  },
+  {
+   "t": 1282.62,
+   "d": 2.02,
+   "text": "We need paladins."
+  },
+  {
+   "t": 1284.64,
+   "d": 6.11,
+   "text": "They are so great, I got carried away."
+  },
+  {
+   "t": 1290.75,
+   "d": 7.88,
+   "text": "They are the people who have the strength and energy to continue correcting misconceptions"
+  },
+  {
+   "t": 1298.63,
+   "d": 4.57,
+   "text": "and representing the actual strengths and weaknesses of Proc Gen."
+  },
+  {
+   "t": 1303.2,
+   "d": 5.48,
+   "text": "It is very important, particularly, to have paladins in the room for any kind of planning"
+  },
+  {
+   "t": 1308.68,
+   "d": 1.14,
+   "text": "and marketing."
+  },
+  {
+   "t": 1309.82,
+   "d": 3.98,
+   "text": "Or else you'll find out by the way your game is going to have thousands of unique NPCs"
+  },
+  {
+   "t": 1313.8,
+   "d": 3.25,
+   "text": "you can talk to and no we won't hire additional writers, why would we do that, an algorithm"
+  },
+  {
+   "t": 1317.05,
+   "d": 1.44,
+   "text": "is going to do it!"
+  },
+  {
+   "t": 1318.49,
+   "d": 7.25,
+   "text": "You need a teammate who can smite people."
+  },
+  {
+   "t": 1325.74,
+   "d": 1.0,
+   "text": "And so that wraps it up."
+  },
+  {
+   "t": 1326.74,
+   "d": 1.0,
+   "text": "To have a quick overview."
+  },
+  {
+   "t": 1327.74,
+   "d": 2.35,
+   "text": "We have our arcane casters."
+  },
+  {
+   "t": 1330.09,
+   "d": 3.4,
+   "text": "Wizards who view Proc Gen as rules they can study and master."
+  },
+  {
+   "t": 1333.49,
+   "d": 4.72,
+   "text": "Sorcerers who see it as a medium to examine their own ideas and intuitions."
+  },
+  {
+   "t": 1338.21,
+   "d": 3.71,
+   "text": "Bards who embrace it as part of their creative process - it might be a bit weird but it's"
+  },
+  {
+   "t": 1341.92,
+   "d": 1.61,
+   "text": "unique to them."
+  },
+  {
+   "t": 1343.53,
+   "d": 3.94,
+   "text": "Artificers who build tools that provide an approachable interface for other people."
+  },
+  {
+   "t": 1347.47,
+   "d": 4.35,
+   "text": "And on the divine side we have clerics who embrace not always knowing, who use rituals"
+  },
+  {
+   "t": 1351.82,
+   "d": 1.0,
+   "text": "in their work."
+  },
+  {
+   "t": 1352.82,
+   "d": 5.34,
+   "text": "We have the warlock who bargains and coaxes the generator into a useful direction."
+  },
+  {
+   "t": 1358.16,
+   "d": 4.05,
+   "text": "We have our druids who nurture and organically look after their generator."
+  },
+  {
+   "t": 1362.21,
+   "d": 4.54,
+   "text": "We have rangers who guide the non-experts and know how to avoid common pitfalls."
+  },
+  {
+   "t": 1366.75,
+   "d": 4.42,
+   "text": "And we have the paladins who fight misconceptions and ensure fair representation of Proc Gen"
+  },
+  {
+   "t": 1371.17,
+   "d": 2.07,
+   "text": "as a tool for better or for worse."
+  },
+  {
+   "t": 1373.24,
+   "d": 3.81,
+   "text": "Now, everyone uses tag me memes these days as a way to explain that information."
+  },
+  {
+   "t": 1377.05,
+   "d": 1.0,
+   "text": "I will tweet this."
+  },
+  {
+   "t": 1378.05,
+   "d": 4.38,
+   "text": "This is how the millenials talk these days."
+  },
+  {
+   "t": 1382.43,
+   "d": 4.78,
+   "text": "So - we have all had a lot of fun here, I hope."
+  },
+  {
+   "t": 1387.21,
+   "d": 6.79,
+   "text": "This has obviously been a talk that somewhat has the intent of amusing as much as being"
+  },
+  {
+   "t": 1394.0,
+   "d": 1.0,
+   "text": "full of knowledge."
+  },
+  {
+   "t": 1395.0,
+   "d": 4.5,
+   "text": "Not as academic as my previous talks have been but I do think there are interesting"
+  },
+  {
+   "t": 1399.5,
+   "d": 1.42,
+   "text": "questions to consider."
+  },
+  {
+   "t": 1400.92,
+   "d": 4.96,
+   "text": "First is to think about how do you view your own relationship with Proc Gen and how does"
+  },
+  {
+   "t": 1405.88,
+   "d": 1.67,
+   "text": "that impact the way you work?"
+  },
+  {
+   "t": 1407.55,
+   "d": 5.16,
+   "text": "Obviously, I hope you find it useful to define it as one of the classes listed here and I"
+  },
+  {
+   "t": 1412.71,
+   "d": 4.87,
+   "text": "hope you come tell me what class you are because I am curious where people will fall."
+  },
+  {
+   "t": 1417.58,
+   "d": 4.34,
+   "text": "But I think taking the time to think about what is your view of procedural generation"
+  },
+  {
+   "t": 1421.92,
+   "d": 3.98,
+   "text": "and how do you actually work with your generator - even if you don't change anything, doing"
+  },
+  {
+   "t": 1425.9,
+   "d": 6.77,
+   "text": "it with intent lets you be that much more efficient and meaningful in your work."
+  },
+  {
+   "t": 1432.67,
+   "d": 3.6,
+   "text": "And secondly, consider how people around you might feel differently."
+  },
+  {
+   "t": 1436.27,
+   "d": 4.05,
+   "text": "Talk to other people about what they think of as Proc Gen and listen to how they describe"
+  },
+  {
+   "t": 1440.32,
+   "d": 2.67,
+   "text": "their generators and what kind of terms they use."
+  },
+  {
+   "t": 1442.99,
+   "d": 3.49,
+   "text": "It might be a perspective you find really weird especially if you are firmly on the"
+  },
+  {
+   "t": 1446.48,
+   "d": 4.65,
+   "text": "arcane side and they are firmly on the divine, but I think that you could gain something"
+  },
+  {
+   "t": 1451.13,
+   "d": 1.9,
+   "text": "from trying out a new perspective."
+  },
+  {
+   "t": 1453.03,
+   "d": 2.48,
+   "text": "There is nothing wrong with a little multiclassing."
+  },
+  {
+   "t": 1455.51,
+   "d": 6.08,
+   "text": "You don't have to abandon your levels in your existing class but you might find that you"
+  },
+  {
+   "t": 1461.59,
+   "d": 5.77,
+   "text": "make for a more balanced party composition if you're willing to mix and match a little"
+  },
+  {
+   "t": 1467.36,
+   "d": 1.0,
+   "text": "bit."
+  },
+  {
+   "t": 1468.36,
+   "d": 1.0,
+   "text": "Let me know how that goes."
+  },
+  {
+   "t": 1469.36,
+   "d": 3.15,
+   "text": "Keep talking as a community about how you feel about your generators, because I find"
+  },
+  {
+   "t": 1472.51,
+   "d": 1.0,
+   "text": "that fascinating."
+  },
+  {
+   "t": 1473.51,
+   "d": 3.3,
+   "text": "And make sure to preserve your spell slots for difficult encounters."
+  },
+  {
+   "t": 1476.81,
+   "d": 1.27,
+   "text": "Have a great conference!"
+  },
+  {
+   "t": 1478.08,
+   "d": 18.23,
+   "text": "I don't know if we have time to questions because I don't have a timer but thank you!"
+  },
+  {
+   "t": 1496.31,
+   "d": 4.13,
+   "text": "[Applause] ALEXEI PEPERS: Do we have time for questions?"
+  },
+  {
+   "t": 1500.44,
+   "d": 1.83,
+   "text": "What time is it?"
+  },
+  {
+   "t": 1502.27,
+   "d": 2.29,
+   "text": "Is there an organizer around?"
+  },
+  {
+   "t": 1504.56,
+   "d": 1.38,
+   "text": "There is Noah."
+  },
+  {
+   "t": 1505.94,
+   "d": 1.0,
+   "text": "Hey."
+  },
+  {
+   "t": 1506.94,
+   "d": 1.75,
+   "text": ">> There is time for questions."
+  },
+  {
+   "t": 1508.69,
+   "d": 2.1,
+   "text": "ALEXEI PEPERS: Anyone have a question?"
+  },
+  {
+   "t": 1510.79,
+   "d": 1.0,
+   "text": "AUDIENCE: What class are you?"
+  },
+  {
+   "t": 1511.79,
+   "d": 1.0,
+   "text": "ALEXEI PEPERS: Oh I forgot to say!"
+  },
+  {
+   "t": 1512.79,
+   "d": 3.7,
+   "text": "I think in my day job I am a ranger, I'm not working directly on Proc Gen but doing a lot"
+  },
+  {
+   "t": 1516.49,
+   "d": 2.44,
+   "text": "of talking to others about it."
+  },
+  {
+   "t": 1518.93,
+   "d": 4.06,
+   "text": "In my spare time, I surprised myself when I wrote this, I think I do act like a druid"
+  },
+  {
+   "t": 1522.99,
+   "d": 1.92,
+   "text": "most of the time."
+  },
+  {
+   "t": 1524.91,
+   "d": 4.07,
+   "text": "I'm from the woods so it kind of makes sense I have ended up with very nature-ry classes,"
+  },
+  {
+   "t": 1528.98,
+   "d": 1.69,
+   "text": "it's weird how that works out."
+  },
+  {
+   "t": 1530.67,
+   "d": 5.43,
+   "text": "I think I have one level in wizard I indulge when I go to GDC, like yes, tell me exactly"
+  },
+  {
+   "t": 1536.1,
+   "d": 2.58,
+   "text": "how wave function collapse works, yes!"
+  },
+  {
+   "t": 1538.68,
+   "d": 5.63,
+   "text": "So, mostly ranger-druid with a tiny bit of wizard."
+  },
+  {
+   "t": 1544.31,
+   "d": 1.38,
+   "text": "Any other questions?"
+  },
+  {
+   "t": 1545.69,
+   "d": 1.0,
+   "text": ">> Hi."
+  },
+  {
+   "t": 1546.69,
+   "d": 8.26,
+   "text": "Do you think there is a relationship, if any, between types of Proc Gen implementations"
+  },
+  {
+   "t": 1554.95,
+   "d": 8.12,
+   "text": "that are inherently less introspectible like neural nets versus rolling random numbers"
+  },
+  {
+   "t": 1563.07,
+   "d": 5.25,
+   "text": "and gluing them together that is a transparent process, and the class system?"
+  },
+  {
+   "t": 1568.32,
+   "d": 1.0,
+   "text": "ALEXEI PEPERS: Good question!"
+  },
+  {
+   "t": 1569.32,
+   "d": 4.76,
+   "text": "I mentioned I think druidy approaches and even just the divine classes as a whole are"
+  },
+  {
+   "t": 1574.08,
+   "d": 5.15,
+   "text": "more directly applicable to things that are more opaque and have a feeling more where"
+  },
+  {
+   "t": 1579.23,
+   "d": 3.46,
+   "text": "you are not sure, it's harder to know what is going on under the hood, and you do have"
+  },
+  {
+   "t": 1582.69,
+   "d": 3.75,
+   "text": "a feeling of working through multiple generations of a generator."
+  },
+  {
+   "t": 1586.44,
+   "d": 3.82,
+   "text": "I think there is a tendency that some things fit more into others."
+  },
+  {
+   "t": 1590.26,
+   "d": 6.55,
+   "text": "Yeah, on the introspection approach it could be true things that are more opaque could"
+  },
+  {
+   "t": 1596.81,
+   "d": 2.85,
+   "text": "be harder to learn from in an introspective way."
+  },
+  {
+   "t": 1599.66,
+   "d": 5.26,
+   "text": "I do find it interesting, I feel like when I hear people talking about this I am always"
+  },
+  {
+   "t": 1604.92,
+   "d": 7.15,
+   "text": "surprised, like I said, Tracery is a very clear understandable technique but I still"
+  },
+  {
+   "t": 1612.07,
+   "d": 3.38,
+   "text": "end up thinking about it in a druid-y divine way."
+  },
+  {
+   "t": 1615.45,
+   "d": 6.88,
+   "text": "I think people work with black box techniques are still able to look at the outputs and"
+  },
+  {
+   "t": 1622.33,
+   "d": 5.91,
+   "text": "get a sense of the possibility space and see how do my ideas turn into that possibility"
+  },
+  {
+   "t": 1628.24,
+   "d": 5.72,
+   "text": "space, and can still glean introspection from that even though it is harder to know exactly"
+  },
+  {
+   "t": 1633.96,
+   "d": 6.47,
+   "text": "what's going on in that black box."
+  },
+  {
+   "t": 1640.43,
+   "d": 1.22,
+   "text": "AUDIENCE: Awesome talk."
+  },
+  {
+   "t": 1641.65,
+   "d": 8.15,
+   "text": "I am curious, in your experience, what Proc Gen parties actually work the best?"
+  },
+  {
+   "t": 1649.8,
+   "d": 5.35,
+   "text": "ALEXEI PEPERS: That feels like a highly controversial trap kind of question."
+  },
+  {
+   "t": 1655.15,
+   "d": 4.47,
+   "text": "[Laughter] ALEXEI PEPERS: One thing is I think that it"
+  },
+  {
+   "t": 1659.62,
+   "d": 4.78,
+   "text": "can depend on your party size, as in D&D."
+  },
+  {
+   "t": 1664.4,
+   "d": 6.1,
+   "text": "Like I am working in more AAA and I think in AAA having paladins around is really important,"
+  },
+  {
+   "t": 1670.5,
+   "d": 4.73,
+   "text": "like I mentioned, and having rangers around is really important."
+  },
+  {
+   "t": 1675.23,
+   "d": 6.04,
+   "text": "I think you need more of those support classes just because you have enough fighters and"
+  },
+  {
+   "t": 1681.27,
+   "d": 5.4,
+   "text": "rogues in the room that you want to make sure that there is someone who can bridge the gap"
+  },
+  {
+   "t": 1686.67,
+   "d": 4.6,
+   "text": "because I think a wizard can easily get written off as oh they are talking in tongues and"
+  },
+  {
+   "t": 1691.27,
+   "d": 1.93,
+   "text": "who knows what they're working on."
+  },
+  {
+   "t": 1693.2,
+   "d": 5.85,
+   "text": "The fighter and the wizard will have difficulty speaking to each other whereas having support"
+  },
+  {
+   "t": 1699.05,
+   "d": 1.63,
+   "text": "classes helps bridge the gap."
+  },
+  {
+   "t": 1700.68,
+   "d": 6.17,
+   "text": "If you are on smaller teams, I think you are more able to have a pure spellcasting composition."
+  },
+  {
+   "t": 1706.85,
+   "d": 6.55,
+   "text": "Though like I said in terms of wizards having problems looking increasingly down and down"
+  },
+  {
+   "t": 1713.4,
+   "d": 5.52,
+   "text": "into the code and losing track of time and sense, I think that is a reason why wizards"
+  },
+  {
+   "t": 1718.92,
+   "d": 2.92,
+   "text": "need other classes to balance them out."
+  },
+  {
+   "t": 1721.84,
+   "d": 3.26,
+   "text": "A wizard/sorcerer might be an interesting pairing."
+  },
+  {
+   "t": 1725.1,
+   "d": 7.32,
+   "text": "I think my favorite is if you were to take a bard and surround them with wizards so that"
+  },
+  {
+   "t": 1732.42,
+   "d": 4.05,
+   "text": "they had access to all kinds of power and were just like yes, I am going to make the"
+  },
+  {
+   "t": 1736.47,
+   "d": 2.66,
+   "text": "weirdest shit you have ever seen."
+  },
+  {
+   "t": 1739.13,
+   "d": 3.85,
+   "text": "[Laughter] ALEXEI PEPERS: That would be just my personal"
+  },
+  {
+   "t": 1742.98,
+   "d": 1.94,
+   "text": "favorite party composition."
+  },
+  {
+   "t": 1744.92,
+   "d": 6.13,
+   "text": "I've also run an all-bards Tomb of Horrors, so that's just my preference."
+  },
+  {
+   "t": 1751.05,
+   "d": 5.2,
+   "text": "But I would be curious for other groups of roguelike developers in our community to describe"
+  },
+  {
+   "t": 1756.25,
+   "d": 5.51,
+   "text": "their class compositions and then we can discuss how well they seem to work."
+  },
+  {
+   "t": 1761.76,
+   "d": 8.28,
+   "text": "AUDIENCE: So, I was wondering, just curious, if you had any ideas you would like to share"
+  },
+  {
+   "t": 1770.04,
+   "d": 3.72,
+   "text": "about a few pages out of the Proc Gen universe Monster Manual."
+  },
+  {
+   "t": 1773.76,
+   "d": 5.92,
+   "text": "With all of these classes around, I would like to know what kind of horrors they are"
+  },
+  {
+   "t": 1779.68,
+   "d": 1.0,
+   "text": "battling here."
+  },
+  {
+   "t": 1780.68,
+   "d": 1.44,
+   "text": "ALEXEI PEPERS: That is a very good question."
+  },
+  {
+   "t": 1782.12,
+   "d": 7.2,
+   "text": "I wish I had thought of it ahead of time so I had any amount of preparation."
+  },
+  {
+   "t": 1789.32,
+   "d": 5.66,
+   "text": "I think that -- well, for one thing I mentioned the bards and their arch nemesis which are"
+  },
+  {
+   "t": 1794.98,
+   "d": 3.08,
+   "text": "the people who pretend they are using Proc Gen and they are not."
+  },
+  {
+   "t": 1798.06,
+   "d": 3.67,
+   "text": "That's definitely something evil."
+  },
+  {
+   "t": 1801.73,
+   "d": 4.49,
+   "text": "Maybe like a mimic?"
+  },
+  {
+   "t": 1806.22,
+   "d": 3.98,
+   "text": "Yeah, generally that sense of things that proclaim to be Proc Gen but are not, I think"
+  },
+  {
+   "t": 1810.2,
+   "d": 2.05,
+   "text": "those are mimic kind of things."
+  },
+  {
+   "t": 1812.25,
+   "d": 6.0,
+   "text": "I think when you get into the liches and evil magic users on the other side, that's a cool"
+  },
+  {
+   "t": 1818.25,
+   "d": 5.66,
+   "text": "one, maybe those are the ones who misrepresent Proc Gen actively and use it to do bad things"
+  },
+  {
+   "t": 1823.91,
+   "d": 3.61,
+   "text": "and make the whole field harder to defend for everybody."
+  },
+  {
+   "t": 1827.52,
+   "d": 4.44,
+   "text": "I am trying to think of a monster with an anti-magic field and I'm drawing a blank,"
+  },
+  {
+   "t": 1831.96,
+   "d": 1.45,
+   "text": "that'd be the real concern."
+  },
+  {
+   "t": 1833.41,
+   "d": 1.0,
+   "text": "Beholders?"
+  },
+  {
+   "t": 1834.41,
+   "d": 2.44,
+   "text": "Yes, thank you, thank you Jim."
+  },
+  {
+   "t": 1836.85,
+   "d": 1.0,
+   "text": "Yes, beholders."
+  },
+  {
+   "t": 1837.85,
+   "d": 1.0,
+   "text": "Anti-magic fields."
+  },
+  {
+   "t": 1838.85,
+   "d": 1.65,
+   "text": "I don't know what that would be."
+  },
+  {
+   "t": 1840.5,
+   "d": 1.81,
+   "text": "Or -- I guess producers?"
+  },
+  {
+   "t": 1842.31,
+   "d": 2.27,
+   "text": "I shouldn't have said that."
+  },
+  {
+   "t": 1844.58,
+   "d": 2.49,
+   "text": "I love producers."
+  },
+  {
+   "t": 1847.07,
+   "d": 4.95,
+   "text": "I am so sorry."
+  },
+  {
+   "t": 1852.02,
+   "d": 5.01,
+   "text": "AUDIENCE: The hydra of polynomial complexity."
+  },
+  {
+   "t": 1857.03,
+   "d": 1.0,
+   "text": "ALEXEI PEPERS: The hydra of polynomial complexity?"
+  },
+  {
+   "t": 1858.03,
+   "d": 3.93,
+   "text": "That's very good, high fives for that gentleman."
+  },
+  {
+   "t": 1861.96,
+   "d": 3.03,
+   "text": "Please come up with them and tweet them."
+  },
+  {
+   "t": 1864.99,
+   "d": 1.0,
+   "text": "That would be fantastic."
+  },
+  {
+   "t": 1865.99,
+   "d": 1.92,
+   "text": "I should write a generator..."
+  },
+  {
+   "t": 1867.91,
+   "d": 1.08,
+   "text": "All right."
+  },
+  {
+   "t": 1868.99,
+   "d": 4.32,
+   "text": ">> On that note, thank you very much, Alexei."
+  },
+  {
+   "t": 1873.31,
+   "d": 2.7,
+   "text": "ALEXEI PEPERS: Thank you, everybody."
+  },
+  {
+   "t": 1876.01,
+   "d": 1.18,
+   "text": "Have a great conference."
+  },
+  {
+   "t": 1877.19,
+   "d": 0.31,
+   "text": "[Applause]"
+  }
+ ]
+}

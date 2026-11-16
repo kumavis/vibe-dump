@@ -1,0 +1,4041 @@
+{
+ "id": "b8uoQHedFV0",
+ "url": "https://www.youtube.com/watch?v=b8uoQHedFV0",
+ "title": "Nicholas Feinberg - Dungeon Crawl Stone Soup",
+ "speaker": "Nicholas Feinberg",
+ "talk_title": "Dungeon Crawl Stone Soup",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1642,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nThe eternal war against the Hypothetical Optimal Player: how to avoid players' worst instincts and make a game that's fun to play well.\n\nNicholas Feinberg is an obscure independent game developer (best known for Manufactoria), Nicholas joined the Stone Soup team in early 2014. He's since become one of the most active developers. Likes: elegant, minimalist designs, non-traditional settings, and long walks on the beach.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "The problem of optimal play"
+  },
+  {
+   "start": 44,
+   "title": "Resource management example"
+  },
+  {
+   "start": 129,
+   "title": "Improving game design"
+  },
+  {
+   "start": 161,
+   "title": "Skill training in roguelikes"
+  },
+  {
+   "start": 255,
+   "title": "The impact on player behavior"
+  },
+  {
+   "start": 323,
+   "title": "Winning vs having fun"
+  },
+  {
+   "start": 443,
+   "title": "Applicability to other games"
+  },
+  {
+   "start": 561,
+   "title": "Understanding the core problem"
+  },
+  {
+   "start": 566,
+   "title": "Lack of time pressure"
+  },
+  {
+   "start": 581,
+   "title": "Real-time mechanics"
+  },
+  {
+   "start": 635,
+   "title": "Imposing costs on actions"
+  },
+  {
+   "start": 693,
+   "title": "Trade-offs and mechanics"
+  },
+  {
+   "start": 741,
+   "title": "Combat vs out of combat"
+  },
+  {
+   "start": 822,
+   "title": "The great sin of roguelikes"
+  },
+  {
+   "start": 911,
+   "title": "Restricting resources"
+  },
+  {
+   "start": 978,
+   "title": "Implementing time limits"
+  },
+  {
+   "start": 1104,
+   "title": "The limitations of food clocks"
+  },
+  {
+   "start": 1226,
+   "title": "Automation and scale"
+  },
+  {
+   "start": 1307,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1313,
+   "title": "Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4341,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.24,
+   "text": "calling open source roguelike i've been"
+  },
+  {
+   "t": 2.24,
+   "d": 0.96,
+   "text": "working on the game"
+  },
+  {
+   "t": 3.2,
+   "d": 2.48,
+   "text": "for a few years now and i'm here what"
+  },
+  {
+   "t": 5.68,
+   "d": 1.12,
+   "text": "i'm here to talk about today"
+  },
+  {
+   "t": 6.8,
+   "d": 1.68,
+   "text": "is the things i've learned from working"
+  },
+  {
+   "t": 8.48,
+   "d": 1.92,
+   "text": "on the game during that time"
+  },
+  {
+   "t": 10.4,
+   "d": 1.6,
+   "text": "more specifically about a certain way of"
+  },
+  {
+   "t": 12.0,
+   "d": 2.56,
+   "text": "thinking about game design"
+  },
+  {
+   "t": 14.56,
+   "d": 3.04,
+   "text": "that crawls taught me so think about a"
+  },
+  {
+   "t": 17.6,
+   "d": 1.12,
+   "text": "game system"
+  },
+  {
+   "t": 18.72,
+   "d": 1.84,
+   "text": "a way that the player can interact with"
+  },
+  {
+   "t": 20.56,
+   "d": 1.44,
+   "text": "a game"
+  },
+  {
+   "t": 22.0,
+   "d": 2.08,
+   "text": "forget whatever the intended purpose of"
+  },
+  {
+   "t": 24.08,
+   "d": 1.28,
+   "text": "the system is"
+  },
+  {
+   "t": 25.36,
+   "d": 3.2,
+   "text": "how it's supposed to be used and think"
+  },
+  {
+   "t": 28.56,
+   "d": 2.56,
+   "text": "if a player has a bottomless pi supply"
+  },
+  {
+   "t": 31.12,
+   "d": 0.96,
+   "text": "of patience"
+  },
+  {
+   "t": 32.08,
+   "d": 2.88,
+   "text": "an infinite tolerance for tedium how can"
+  },
+  {
+   "t": 34.96,
+   "d": 2.0,
+   "text": "they use this system to maximize their"
+  },
+  {
+   "t": 36.96,
+   "d": 1.6,
+   "text": "chances of winning the game"
+  },
+  {
+   "t": 38.56,
+   "d": 2.08,
+   "text": "what does that play style look like does"
+  },
+  {
+   "t": 40.64,
+   "d": 1.84,
+   "text": "that seem like it would be fun"
+  },
+  {
+   "t": 42.48,
+   "d": 3.28,
+   "text": "if not you may have found a problem"
+  },
+  {
+   "t": 45.76,
+   "d": 2.8,
+   "text": "so uh this is simpler to understand with"
+  },
+  {
+   "t": 48.56,
+   "d": 1.04,
+   "text": "an example"
+  },
+  {
+   "t": 49.6,
+   "d": 2.88,
+   "text": "so in civilization two pictured you"
+  },
+  {
+   "t": 52.48,
+   "d": 1.68,
+   "text": "control a number of cities"
+  },
+  {
+   "t": 54.16,
+   "d": 2.56,
+   "text": "each of which gathers various resources"
+  },
+  {
+   "t": 56.72,
+   "d": 0.88,
+   "text": "production"
+  },
+  {
+   "t": 57.6,
+   "d": 3.12,
+   "text": "food research from a subset of nearby"
+  },
+  {
+   "t": 60.72,
+   "d": 0.8,
+   "text": "tiles"
+  },
+  {
+   "t": 61.52,
+   "d": 2.32,
+   "text": "each of those resources fills up a bar"
+  },
+  {
+   "t": 63.84,
+   "d": 1.12,
+   "text": "to make a unit"
+  },
+  {
+   "t": 64.96,
+   "d": 2.16,
+   "text": "or to grow the city or to get a new"
+  },
+  {
+   "t": 67.12,
+   "d": 1.2,
+   "text": "technology"
+  },
+  {
+   "t": 68.32,
+   "d": 3.2,
+   "text": "and when the bar fills any excess"
+  },
+  {
+   "t": 71.52,
+   "d": 0.8,
+   "text": "resources"
+  },
+  {
+   "t": 72.32,
+   "d": 3.28,
+   "text": "are wasted the player is allowed to"
+  },
+  {
+   "t": 75.6,
+   "d": 1.44,
+   "text": "choose which tiles"
+  },
+  {
+   "t": 77.04,
+   "d": 2.4,
+   "text": "each uh city gathers from with its"
+  },
+  {
+   "t": 79.44,
+   "d": 1.76,
+   "text": "limited population"
+  },
+  {
+   "t": 81.2,
+   "d": 1.6,
+   "text": "and that's supposed to be so the player"
+  },
+  {
+   "t": 82.8,
+   "d": 2.48,
+   "text": "can temporarily focus their city on some"
+  },
+  {
+   "t": 85.28,
+   "d": 2.08,
+   "text": "specific goal like say building a new"
+  },
+  {
+   "t": 87.36,
+   "d": 1.68,
+   "text": "defensive unit before the barbarians"
+  },
+  {
+   "t": 89.04,
+   "d": 1.28,
+   "text": "arrive"
+  },
+  {
+   "t": 90.32,
+   "d": 3.2,
+   "text": "but what do you suppose a hypothetically"
+  },
+  {
+   "t": 93.52,
+   "d": 2.24,
+   "text": "optimal player might do with this system"
+  },
+  {
+   "t": 95.76,
+   "d": 0.64,
+   "text": "someone who's"
+  },
+  {
+   "t": 96.4,
+   "d": 3.92,
+   "text": "doing everything they can to win"
+  },
+  {
+   "t": 100.32,
+   "d": 1.84,
+   "text": "they're going to go over every city they"
+  },
+  {
+   "t": 102.16,
+   "d": 1.6,
+   "text": "have dozens of cities"
+  },
+  {
+   "t": 103.76,
+   "d": 2.56,
+   "text": "eventually and every turn for hundreds"
+  },
+  {
+   "t": 106.32,
+   "d": 1.04,
+   "text": "of turns"
+  },
+  {
+   "t": 107.36,
+   "d": 2.24,
+   "text": "they're going to manually reallocate"
+  },
+  {
+   "t": 109.6,
+   "d": 2.08,
+   "text": "their city's populations"
+  },
+  {
+   "t": 111.68,
+   "d": 2.08,
+   "text": "to make sure that no resources are being"
+  },
+  {
+   "t": 113.76,
+   "d": 2.4,
+   "text": "wasted after a bar fills up"
+  },
+  {
+   "t": 116.16,
+   "d": 1.68,
+   "text": "this does produce a significant"
+  },
+  {
+   "t": 117.84,
+   "d": 1.76,
+   "text": "advantage for a player who's doing this"
+  },
+  {
+   "t": 119.6,
+   "d": 1.12,
+   "text": "over time"
+  },
+  {
+   "t": 120.72,
+   "d": 2.08,
+   "text": "but it's a huge distraction from the"
+  },
+  {
+   "t": 122.8,
+   "d": 0.96,
+   "text": "sort of strategic"
+  },
+  {
+   "t": 123.76,
+   "d": 2.4,
+   "text": "and tactical decisions that the game is"
+  },
+  {
+   "t": 126.16,
+   "d": 1.44,
+   "text": "supposed to be about"
+  },
+  {
+   "t": 127.6,
+   "d": 3.36,
+   "text": "in fact it's just make work"
+  },
+  {
+   "t": 131.04,
+   "d": 2.24,
+   "text": "later civilization games improve the"
+  },
+  {
+   "t": 133.28,
+   "d": 1.76,
+   "text": "situation considerably"
+  },
+  {
+   "t": 135.04,
+   "d": 2.0,
+   "text": "by the simple tweak of letting excess"
+  },
+  {
+   "t": 137.04,
+   "d": 2.48,
+   "text": "resources carry over into the next thing"
+  },
+  {
+   "t": 139.52,
+   "d": 1.12,
+   "text": "build the next"
+  },
+  {
+   "t": 140.64,
+   "d": 3.12,
+   "text": "city growth whatever it's not a perfect"
+  },
+  {
+   "t": 143.76,
+   "d": 0.96,
+   "text": "fix"
+  },
+  {
+   "t": 144.72,
+   "d": 1.84,
+   "text": "since the hypothetically optimal player"
+  },
+  {
+   "t": 146.56,
+   "d": 1.6,
+   "text": "will be on the lookout in every city"
+  },
+  {
+   "t": 148.16,
+   "d": 0.96,
+   "text": "every turn"
+  },
+  {
+   "t": 149.12,
+   "d": 1.52,
+   "text": "to see if they can bump around their"
+  },
+  {
+   "t": 150.64,
+   "d": 1.92,
+   "text": "workers just enough to get"
+  },
+  {
+   "t": 152.56,
+   "d": 3.28,
+   "text": "a bar exactly filled up"
+  },
+  {
+   "t": 155.84,
+   "d": 1.68,
+   "text": "to complete it once or in early but the"
+  },
+  {
+   "t": 157.52,
+   "d": 2.08,
+   "text": "impact that has is much smaller"
+  },
+  {
+   "t": 159.6,
+   "d": 3.2,
+   "text": "it is an improvement in the game"
+  },
+  {
+   "t": 162.8,
+   "d": 2.4,
+   "text": "another example here going back to stone"
+  },
+  {
+   "t": 165.2,
+   "d": 1.2,
+   "text": "soup"
+  },
+  {
+   "t": 166.4,
+   "d": 1.84,
+   "text": "when stone soup when it was released had"
+  },
+  {
+   "t": 168.24,
+   "d": 2.48,
+   "text": "a pretty unusual experience system"
+  },
+  {
+   "t": 170.72,
+   "d": 1.68,
+   "text": "you gained experience by killing"
+  },
+  {
+   "t": 172.4,
+   "d": 1.92,
+   "text": "monsters that part is normal"
+  },
+  {
+   "t": 174.32,
+   "d": 2.56,
+   "text": "but in addition to leveling up your"
+  },
+  {
+   "t": 176.88,
+   "d": 0.8,
+   "text": "experience"
+  },
+  {
+   "t": 177.68,
+   "d": 2.0,
+   "text": "also went to improving your various"
+  },
+  {
+   "t": 179.68,
+   "d": 1.76,
+   "text": "skills like you had"
+  },
+  {
+   "t": 181.44,
+   "d": 2.72,
+   "text": "your stealth skill your great sword"
+  },
+  {
+   "t": 184.16,
+   "d": 0.48,
+   "text": "skill"
+  },
+  {
+   "t": 184.64,
+   "d": 2.24,
+   "text": "your divination skill you didn't"
+  },
+  {
+   "t": 186.88,
+   "d": 1.68,
+   "text": "explicitly choose"
+  },
+  {
+   "t": 188.56,
+   "d": 1.92,
+   "text": "what skills your experience went into"
+  },
+  {
+   "t": 190.48,
+   "d": 1.28,
+   "text": "this is the really interesting part"
+  },
+  {
+   "t": 191.76,
+   "d": 3.12,
+   "text": "instead whenever you perform a related"
+  },
+  {
+   "t": 194.88,
+   "d": 0.88,
+   "text": "action you"
+  },
+  {
+   "t": 195.76,
+   "d": 4.48,
+   "text": "swung a sword or you cast a spell"
+  },
+  {
+   "t": 200.24,
+   "d": 2.08,
+   "text": "experience from your pool the pool you"
+  },
+  {
+   "t": 202.32,
+   "d": 1.76,
+   "text": "got from killing monsters went into the"
+  },
+  {
+   "t": 204.08,
+   "d": 1.84,
+   "text": "related skill"
+  },
+  {
+   "t": 205.92,
+   "d": 2.16,
+   "text": "that sounds kind of cool on the face of"
+  },
+  {
+   "t": 208.08,
+   "d": 1.12,
+   "text": "it"
+  },
+  {
+   "t": 209.2,
+   "d": 2.16,
+   "text": "to your skills are based on what you"
+  },
+  {
+   "t": 211.36,
+   "d": 1.68,
+   "text": "actually do"
+  },
+  {
+   "t": 213.04,
+   "d": 2.32,
+   "text": "to get better at swinging a sword kill"
+  },
+  {
+   "t": 215.36,
+   "d": 2.0,
+   "text": "monsters by swinging swords"
+  },
+  {
+   "t": 217.36,
+   "d": 4.16,
+   "text": "awesome except playing through the game"
+  },
+  {
+   "t": 221.52,
+   "d": 1.84,
+   "text": "straightforwardly just without thinking"
+  },
+  {
+   "t": 223.36,
+   "d": 1.52,
+   "text": "about where your skills"
+  },
+  {
+   "t": 224.88,
+   "d": 2.24,
+   "text": "were going gets you a sort of a"
+  },
+  {
+   "t": 227.12,
+   "d": 0.88,
+   "text": "haphazard"
+  },
+  {
+   "t": 228.0,
+   "d": 2.72,
+   "text": "mix not it turns out this wasn't really"
+  },
+  {
+   "t": 230.72,
+   "d": 1.6,
+   "text": "optimal for winning"
+  },
+  {
+   "t": 232.32,
+   "d": 2.0,
+   "text": "and so maybe like maybe if you wanted"
+  },
+  {
+   "t": 234.32,
+   "d": 1.92,
+   "text": "some more armor skill"
+  },
+  {
+   "t": 236.24,
+   "d": 2.32,
+   "text": "what if you just like sat in a corner"
+  },
+  {
+   "t": 238.56,
+   "d": 1.44,
+   "text": "for a few hundred turns while"
+  },
+  {
+   "t": 240.0,
+   "d": 3.92,
+   "text": "a harmless rat attacked you well or"
+  },
+  {
+   "t": 243.92,
+   "d": 2.24,
+   "text": "maybe you could train conjurations by"
+  },
+  {
+   "t": 246.16,
+   "d": 2.24,
+   "text": "casting magic dart on a wall"
+  },
+  {
+   "t": 248.4,
+   "d": 2.24,
+   "text": "over and over and over again was there"
+  },
+  {
+   "t": 250.64,
+   "d": 2.48,
+   "text": "anything stopping you from doing that"
+  },
+  {
+   "t": 253.12,
+   "d": 3.52,
+   "text": "it turned out no"
+  },
+  {
+   "t": 257.36,
+   "d": 2.56,
+   "text": "so until that system was replaced with"
+  },
+  {
+   "t": 259.92,
+   "d": 0.64,
+   "text": "manual"
+  },
+  {
+   "t": 260.56,
+   "d": 2.48,
+   "text": "skill point allocation some years ago"
+  },
+  {
+   "t": 263.04,
+   "d": 0.56,
+   "text": "people"
+  },
+  {
+   "t": 263.6,
+   "d": 3.2,
+   "text": "did all of those tremendously tedious"
+  },
+  {
+   "t": 266.8,
+   "d": 2.16,
+   "text": "repetitive skill training exercises"
+  },
+  {
+   "t": 268.96,
+   "d": 4.16,
+   "text": "victory dancing it was called"
+  },
+  {
+   "t": 273.76,
+   "d": 3.04,
+   "text": "you you could win without victory"
+  },
+  {
+   "t": 276.8,
+   "d": 1.2,
+   "text": "dancing"
+  },
+  {
+   "t": 278.0,
+   "d": 2.72,
+   "text": "but your odds were a lot worse and crawl"
+  },
+  {
+   "t": 280.72,
+   "d": 0.96,
+   "text": "is and was"
+  },
+  {
+   "t": 281.68,
+   "d": 3.12,
+   "text": "not an easy game to begin with so some"
+  },
+  {
+   "t": 284.8,
+   "d": 1.28,
+   "text": "people may be wondering"
+  },
+  {
+   "t": 286.08,
+   "d": 2.24,
+   "text": "why is this a problem at all if"
+  },
+  {
+   "t": 288.32,
+   "d": 1.76,
+   "text": "interacting with systems in this"
+  },
+  {
+   "t": 290.08,
+   "d": 2.0,
+   "text": "hypothetically optimal way"
+  },
+  {
+   "t": 292.08,
+   "d": 3.44,
+   "text": "is so tedious and unfun surely players"
+  },
+  {
+   "t": 295.52,
+   "d": 0.8,
+   "text": "can just"
+  },
+  {
+   "t": 296.32,
+   "d": 2.48,
+   "text": "not play that way it's a reasonable"
+  },
+  {
+   "t": 298.8,
+   "d": 0.8,
+   "text": "question"
+  },
+  {
+   "t": 299.6,
+   "d": 1.04,
+   "text": "and there are games for which"
+  },
+  {
+   "t": 300.64,
+   "d": 2.32,
+   "text": "hypothetically optimal play is not a"
+  },
+  {
+   "t": 302.96,
+   "d": 1.76,
+   "text": "relevant concept"
+  },
+  {
+   "t": 304.72,
+   "d": 2.56,
+   "text": "but for a game like crawl or game like a"
+  },
+  {
+   "t": 307.28,
+   "d": 1.68,
+   "text": "lot of roguelikes"
+  },
+  {
+   "t": 308.96,
+   "d": 2.56,
+   "text": "the existence of unfun hypothetically"
+  },
+  {
+   "t": 311.52,
+   "d": 1.84,
+   "text": "optimal play is a real problem"
+  },
+  {
+   "t": 313.36,
+   "d": 2.56,
+   "text": "even if players don't actually engage in"
+  },
+  {
+   "t": 315.92,
+   "d": 1.2,
+   "text": "that kind of play"
+  },
+  {
+   "t": 317.12,
+   "d": 2.0,
+   "text": "obviously if they do play that way as"
+  },
+  {
+   "t": 319.12,
+   "d": 1.68,
+   "text": "they did with victory dancing"
+  },
+  {
+   "t": 320.8,
+   "d": 5.04,
+   "text": "that's no fun but even if they don't"
+  },
+  {
+   "t": 325.92,
+   "d": 3.76,
+   "text": "players are going to die and crawl a lot"
+  },
+  {
+   "t": 329.68,
+   "d": 3.12,
+   "text": "it's a hard game and when they die"
+  },
+  {
+   "t": 332.8,
+   "d": 2.24,
+   "text": "after they finish cursing and swearing"
+  },
+  {
+   "t": 335.04,
+   "d": 1.36,
+   "text": "they're going to think"
+  },
+  {
+   "t": 336.4,
+   "d": 2.56,
+   "text": "why did i die sometimes they're going to"
+  },
+  {
+   "t": 338.96,
+   "d": 0.96,
+   "text": "think you know"
+  },
+  {
+   "t": 339.92,
+   "d": 1.92,
+   "text": "oh i should have started teleporting out"
+  },
+  {
+   "t": 341.84,
+   "d": 1.52,
+   "text": "of that fight as soon as i saw that"
+  },
+  {
+   "t": 343.36,
+   "d": 2.48,
+   "text": "dragon not five turns later"
+  },
+  {
+   "t": 345.84,
+   "d": 2.72,
+   "text": "or oh if i had a potion of haste i could"
+  },
+  {
+   "t": 348.56,
+   "d": 2.0,
+   "text": "have beaten sigmund"
+  },
+  {
+   "t": 350.56,
+   "d": 2.88,
+   "text": "uh next time and now they're already"
+  },
+  {
+   "t": 353.44,
+   "d": 1.68,
+   "text": "planning out their next game"
+  },
+  {
+   "t": 355.12,
+   "d": 3.12,
+   "text": "that's a fun way to die what's not"
+  },
+  {
+   "t": 358.24,
+   "d": 2.32,
+   "text": "fun is dying and having at the back of"
+  },
+  {
+   "t": 360.56,
+   "d": 1.28,
+   "text": "your mind the thought"
+  },
+  {
+   "t": 361.84,
+   "d": 2.32,
+   "text": "oh if only i'd sat in a corner for"
+  },
+  {
+   "t": 364.16,
+   "d": 1.92,
+   "text": "several hundred turns to train fire"
+  },
+  {
+   "t": 366.08,
+   "d": 2.4,
+   "text": "magic then i would have had won that"
+  },
+  {
+   "t": 368.48,
+   "d": 0.88,
+   "text": "fight"
+  },
+  {
+   "t": 369.36,
+   "d": 2.16,
+   "text": "i've had cast detect monsters every"
+  },
+  {
+   "t": 371.52,
+   "d": 0.96,
+   "text": "other step"
+  },
+  {
+   "t": 372.48,
+   "d": 1.76,
+   "text": "i'd never have had to fight that monster"
+  },
+  {
+   "t": 374.24,
+   "d": 3.52,
+   "text": "in the first place if only"
+  },
+  {
+   "t": 378.16,
+   "d": 2.8,
+   "text": "net hack has something comparable called"
+  },
+  {
+   "t": 380.96,
+   "d": 3.12,
+   "text": "pudding farming"
+  },
+  {
+   "t": 384.48,
+   "d": 2.08,
+   "text": "take the weakest weapon you can find hit"
+  },
+  {
+   "t": 386.56,
+   "d": 1.84,
+   "text": "a pudding monster to make it split in"
+  },
+  {
+   "t": 388.4,
+   "d": 0.4,
+   "text": "half"
+  },
+  {
+   "t": 388.8,
+   "d": 1.76,
+   "text": "and when you've gotten enough puddings"
+  },
+  {
+   "t": 390.56,
+   "d": 1.84,
+   "text": "kill them and cash in their corpses for"
+  },
+  {
+   "t": 392.4,
+   "d": 1.92,
+   "text": "a bevy of divine rewards"
+  },
+  {
+   "t": 394.32,
+   "d": 3.76,
+   "text": "extremely useful not fun many players"
+  },
+  {
+   "t": 398.08,
+   "d": 1.52,
+   "text": "ask the net actives to do"
+  },
+  {
+   "t": 399.6,
+   "d": 2.16,
+   "text": "something about the problem to which"
+  },
+  {
+   "t": 401.76,
+   "d": 1.12,
+   "text": "another player"
+  },
+  {
+   "t": 402.88,
+   "d": 3.12,
+   "text": "jove memorably replied the div team has"
+  },
+  {
+   "t": 406.0,
+   "d": 1.92,
+   "text": "arranged an automatic and savage"
+  },
+  {
+   "t": 407.92,
+   "d": 2.0,
+   "text": "punishment for pudding farming"
+  },
+  {
+   "t": 409.92,
+   "d": 2.91,
+   "text": "it is called pudding farming"
+  },
+  {
+   "t": 412.83,
+   "d": 3.01,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 415.84,
+   "d": 2.8,
+   "text": "it's a great line but it's a terrible"
+  },
+  {
+   "t": 418.64,
+   "d": 2.16,
+   "text": "damn philosophy"
+  },
+  {
+   "t": 420.8,
+   "d": 2.32,
+   "text": "a situation like pudding farming puts a"
+  },
+  {
+   "t": 423.12,
+   "d": 1.76,
+   "text": "game at war with itself"
+  },
+  {
+   "t": 424.88,
+   "d": 2.72,
+   "text": "puts the fun way to play in conflict"
+  },
+  {
+   "t": 427.6,
+   "d": 1.92,
+   "text": "with the way that makes you most likely"
+  },
+  {
+   "t": 429.52,
+   "d": 0.8,
+   "text": "to win"
+  },
+  {
+   "t": 430.32,
+   "d": 2.16,
+   "text": "it doesn't have to be that way and for"
+  },
+  {
+   "t": 432.48,
+   "d": 1.92,
+   "text": "what it's worth that knit hack devs seem"
+  },
+  {
+   "t": 434.4,
+   "d": 1.04,
+   "text": "to have agreed"
+  },
+  {
+   "t": 435.44,
+   "d": 2.48,
+   "text": "they removed pudding corpses in the last"
+  },
+  {
+   "t": 437.92,
+   "d": 2.64,
+   "text": "release the miraculous 3.6"
+  },
+  {
+   "t": 440.56,
+   "d": 1.76,
+   "text": "which seems to have more or less solved"
+  },
+  {
+   "t": 442.32,
+   "d": 2.48,
+   "text": "the problem"
+  },
+  {
+   "t": 444.96,
+   "d": 2.32,
+   "text": "one assumption that i'm making here is"
+  },
+  {
+   "t": 447.28,
+   "d": 1.28,
+   "text": "that all roguelikes"
+  },
+  {
+   "t": 448.56,
+   "d": 3.28,
+   "text": "are about the same things that crawl is"
+  },
+  {
+   "t": 451.84,
+   "d": 2.24,
+   "text": "giving players an interest a series of"
+  },
+  {
+   "t": 454.08,
+   "d": 1.2,
+   "text": "interesting choices"
+  },
+  {
+   "t": 455.28,
+   "d": 1.84,
+   "text": "a set of tactical and strategic"
+  },
+  {
+   "t": 457.12,
+   "d": 1.36,
+   "text": "challenges"
+  },
+  {
+   "t": 458.48,
+   "d": 2.96,
+   "text": "for some games this is less true for"
+  },
+  {
+   "t": 461.44,
+   "d": 0.72,
+   "text": "example"
+  },
+  {
+   "t": 462.16,
+   "d": 3.44,
+   "text": "ivan is essentially a cruel prank on the"
+  },
+  {
+   "t": 465.6,
+   "d": 1.68,
+   "text": "player"
+  },
+  {
+   "t": 467.28,
+   "d": 2.72,
+   "text": "dwarf fortress's adventurer mode is a"
+  },
+  {
+   "t": 470.0,
+   "d": 1.92,
+   "text": "story generating tool rather than a"
+  },
+  {
+   "t": 471.92,
+   "d": 1.6,
+   "text": "strategy game there's not even any way"
+  },
+  {
+   "t": 473.52,
+   "d": 2.0,
+   "text": "to win"
+  },
+  {
+   "t": 475.52,
+   "d": 2.24,
+   "text": "tactical and strategic choices are less"
+  },
+  {
+   "t": 477.76,
+   "d": 1.68,
+   "text": "core to those games"
+  },
+  {
+   "t": 479.44,
+   "d": 1.92,
+   "text": "and so to some extent they escape the"
+  },
+  {
+   "t": 481.36,
+   "d": 1.84,
+   "text": "need to worry about hypothetical optimal"
+  },
+  {
+   "t": 483.2,
+   "d": 0.88,
+   "text": "play"
+  },
+  {
+   "t": 484.08,
+   "d": 1.68,
+   "text": "if the fun of the game comes from the"
+  },
+  {
+   "t": 485.76,
+   "d": 2.32,
+   "text": "game cheating to beat you"
+  },
+  {
+   "t": 488.08,
+   "d": 2.08,
+   "text": "or if you can't win at all what does"
+  },
+  {
+   "t": 490.16,
+   "d": 1.76,
+   "text": "optimal play even mean what are you"
+  },
+  {
+   "t": 491.92,
+   "d": 1.76,
+   "text": "optimizing for"
+  },
+  {
+   "t": 493.68,
+   "d": 2.08,
+   "text": "there are ways to improve your character"
+  },
+  {
+   "t": 495.76,
+   "d": 1.44,
+   "text": "in dwarf fortress that are like an"
+  },
+  {
+   "t": 497.2,
+   "d": 2.32,
+   "text": "insane cross between victory dancing and"
+  },
+  {
+   "t": 499.52,
+   "d": 1.12,
+   "text": "pudding farming"
+  },
+  {
+   "t": 500.64,
+   "d": 2.16,
+   "text": "i've seen players suggest a training"
+  },
+  {
+   "t": 502.8,
+   "d": 1.84,
+   "text": "regimen that involves wrestling with a"
+  },
+  {
+   "t": 504.64,
+   "d": 1.36,
+   "text": "crab while arguing with"
+  },
+  {
+   "t": 506.0,
+   "d": 2.08,
+   "text": "a bard and then every time the crab"
+  },
+  {
+   "t": 508.08,
+   "d": 1.92,
+   "text": "collapses from exhaustion you take a"
+  },
+  {
+   "t": 510.0,
+   "d": 2.96,
+   "text": "break to dance"
+  },
+  {
+   "t": 514.8,
+   "d": 1.92,
+   "text": "and so there's hilarious but the thing"
+  },
+  {
+   "t": 516.72,
+   "d": 1.76,
+   "text": "is actually playing it isn't that great"
+  },
+  {
+   "t": 518.48,
+   "d": 1.92,
+   "text": "and you have to set up a bunch of macros"
+  },
+  {
+   "t": 520.4,
+   "d": 1.36,
+   "text": "you waste a bunch of time there's no"
+  },
+  {
+   "t": 521.76,
+   "d": 2.4,
+   "text": "actual like gameplay going on there"
+  },
+  {
+   "t": 524.16,
+   "d": 2.08,
+   "text": "but in the end you aren't you may be"
+  },
+  {
+   "t": 526.24,
+   "d": 1.76,
+   "text": "stronger but you're no closer to winning"
+  },
+  {
+   "t": 528.0,
+   "d": 2.72,
+   "text": "there's no winning what does it matter"
+  },
+  {
+   "t": 530.72,
+   "d": 3.12,
+   "text": "it's goofiness still though though"
+  },
+  {
+   "t": 533.84,
+   "d": 0.64,
+   "text": "there's no"
+  },
+  {
+   "t": 534.48,
+   "d": 2.32,
+   "text": "broad strategical end goal in something"
+  },
+  {
+   "t": 536.8,
+   "d": 1.28,
+   "text": "like dwarf fortress's"
+  },
+  {
+   "t": 538.08,
+   "d": 3.44,
+   "text": "adventurer mode there are still"
+  },
+  {
+   "t": 541.52,
+   "d": 2.0,
+   "text": "battles for example which have tactical"
+  },
+  {
+   "t": 543.52,
+   "d": 2.16,
+   "text": "goals and hypothetically optimal"
+  },
+  {
+   "t": 545.68,
+   "d": 2.64,
+   "text": "approaches to achieving those goals"
+  },
+  {
+   "t": 548.32,
+   "d": 2.72,
+   "text": "are those approaches fun as long as you"
+  },
+  {
+   "t": 551.04,
+   "d": 0.56,
+   "text": "have clear"
+  },
+  {
+   "t": 551.6,
+   "d": 1.84,
+   "text": "goals for the player to achieve"
+  },
+  {
+   "t": 553.44,
+   "d": 2.16,
+   "text": "hypothetically optimal play does remain"
+  },
+  {
+   "t": 555.6,
+   "d": 1.6,
+   "text": "a relevant concept even if it's not"
+  },
+  {
+   "t": 557.2,
+   "d": 1.76,
+   "text": "applicable to the whole game"
+  },
+  {
+   "t": 558.96,
+   "d": 4.08,
+   "text": "it still can be applicable to parts"
+  },
+  {
+   "t": 563.04,
+   "d": 3.28,
+   "text": "okay but why do some games like uh"
+  },
+  {
+   "t": 566.32,
+   "d": 1.68,
+   "text": "traditional roguelikes run into these"
+  },
+  {
+   "t": 568.0,
+   "d": 1.6,
+   "text": "sort of tr uh"
+  },
+  {
+   "t": 569.6,
+   "d": 1.92,
+   "text": "hypothetically optimal problems all the"
+  },
+  {
+   "t": 571.52,
+   "d": 1.28,
+   "text": "time but other"
+  },
+  {
+   "t": 572.8,
+   "d": 2.56,
+   "text": "types of games like still focused on"
+  },
+  {
+   "t": 575.36,
+   "d": 1.76,
+   "text": "clear goals on winning or whatever"
+  },
+  {
+   "t": 577.12,
+   "d": 3.2,
+   "text": "don't one key reason is a lack of time"
+  },
+  {
+   "t": 580.32,
+   "d": 2.08,
+   "text": "pressure"
+  },
+  {
+   "t": 582.4,
+   "d": 2.64,
+   "text": "in the game crypt of the necrodancer"
+  },
+  {
+   "t": 585.04,
+   "d": 1.84,
+   "text": "enemies have specific movement and"
+  },
+  {
+   "t": 586.88,
+   "d": 1.04,
+   "text": "attack patterns"
+  },
+  {
+   "t": 587.92,
+   "d": 2.24,
+   "text": "they're very most of them are completely"
+  },
+  {
+   "t": 590.16,
+   "d": 1.28,
+   "text": "deterministic"
+  },
+  {
+   "t": 591.44,
+   "d": 3.52,
+   "text": "for example red dragons move one tile"
+  },
+  {
+   "t": 594.96,
+   "d": 2.16,
+   "text": "towards you every other turn"
+  },
+  {
+   "t": 597.12,
+   "d": 2.24,
+   "text": "unless you move into the same row as"
+  },
+  {
+   "t": 599.36,
+   "d": 0.8,
+   "text": "them"
+  },
+  {
+   "t": 600.16,
+   "d": 1.92,
+   "text": "and then they take exactly one turn to"
+  },
+  {
+   "t": 602.08,
+   "d": 2.4,
+   "text": "breathe in and then breathe fire across"
+  },
+  {
+   "t": 604.48,
+   "d": 1.84,
+   "text": "the row on the turn after"
+  },
+  {
+   "t": 606.32,
+   "d": 1.52,
+   "text": "the result of this is that there are"
+  },
+  {
+   "t": 607.84,
+   "d": 2.56,
+   "text": "specific patterns sequences of repeated"
+  },
+  {
+   "t": 610.4,
+   "d": 1.44,
+   "text": "movements and actions"
+  },
+  {
+   "t": 611.84,
+   "d": 2.24,
+   "text": "that can let you defeat a dragon every"
+  },
+  {
+   "t": 614.08,
+   "d": 1.92,
+   "text": "time without taking damage without"
+  },
+  {
+   "t": 616.0,
+   "d": 3.2,
+   "text": "fail that's hypothetically optimal play"
+  },
+  {
+   "t": 619.2,
+   "d": 1.92,
+   "text": "and in more traditional roguelikes this"
+  },
+  {
+   "t": 621.12,
+   "d": 2.0,
+   "text": "would be pretty annoying"
+  },
+  {
+   "t": 623.12,
+   "d": 2.08,
+   "text": "imagine doing a little dance for every"
+  },
+  {
+   "t": 625.2,
+   "d": 1.68,
+   "text": "one of the dozens of dragons you fight"
+  },
+  {
+   "t": 626.88,
+   "d": 1.6,
+   "text": "in a game of dungeon crawler every one"
+  },
+  {
+   "t": 628.48,
+   "d": 1.44,
+   "text": "of the hundreds you fight in a game of"
+  },
+  {
+   "t": 629.92,
+   "d": 0.96,
+   "text": "hang bands"
+  },
+  {
+   "t": 630.88,
+   "d": 1.6,
+   "text": "there wouldn't be any challenge to it"
+  },
+  {
+   "t": 632.48,
+   "d": 1.52,
+   "text": "beyond the first few times just"
+  },
+  {
+   "t": 634.0,
+   "d": 3.36,
+   "text": "rote repetition the crypt of the"
+  },
+  {
+   "t": 637.36,
+   "d": 2.24,
+   "text": "necrodancer has time pressure"
+  },
+  {
+   "t": 639.6,
+   "d": 2.24,
+   "text": "you only have about a second to take"
+  },
+  {
+   "t": 641.84,
+   "d": 1.2,
+   "text": "each move"
+  },
+  {
+   "t": 643.04,
+   "d": 1.76,
+   "text": "that doesn't just add challenge to the"
+  },
+  {
+   "t": 644.8,
+   "d": 1.68,
+   "text": "actions involved it fundamentally"
+  },
+  {
+   "t": 646.48,
+   "d": 1.6,
+   "text": "transforms them"
+  },
+  {
+   "t": 648.08,
+   "d": 1.92,
+   "text": "do uh successfully executing the"
+  },
+  {
+   "t": 650.0,
+   "d": 2.16,
+   "text": "maneuvers needed the dragon slaying"
+  },
+  {
+   "t": 652.16,
+   "d": 1.84,
+   "text": "dance for the armadillo sidestep"
+  },
+  {
+   "t": 654.0,
+   "d": 2.4,
+   "text": "and so forth becomes satisfying in"
+  },
+  {
+   "t": 656.4,
+   "d": 0.88,
+   "text": "itself"
+  },
+  {
+   "t": 657.28,
+   "d": 2.08,
+   "text": "and that's very generally applicable in"
+  },
+  {
+   "t": 659.36,
+   "d": 2.88,
+   "text": "situations with real time constraints"
+  },
+  {
+   "t": 662.24,
+   "d": 2.8,
+   "text": "like in necrodancer multiplayer fpss or"
+  },
+  {
+   "t": 665.04,
+   "d": 1.68,
+   "text": "other popular games"
+  },
+  {
+   "t": 666.72,
+   "d": 1.6,
+   "text": "situations that would be annoying"
+  },
+  {
+   "t": 668.32,
+   "d": 1.92,
+   "text": "without time constraints become"
+  },
+  {
+   "t": 670.24,
+   "d": 3.36,
+   "text": "entertaining challenges in themselves"
+  },
+  {
+   "t": 673.6,
+   "d": 2.56,
+   "text": "rogue tag real-time mechanics are pretty"
+  },
+  {
+   "t": 676.16,
+   "d": 1.68,
+   "text": "heretical for a roguelike"
+  },
+  {
+   "t": 677.84,
+   "d": 1.6,
+   "text": "but you don't necessarily have to go"
+  },
+  {
+   "t": 679.44,
+   "d": 1.84,
+   "text": "that far the core"
+  },
+  {
+   "t": 681.28,
+   "d": 1.92,
+   "text": "problem the necrodancer solves is the"
+  },
+  {
+   "t": 683.2,
+   "d": 2.96,
+   "text": "existence of actions without a cost"
+  },
+  {
+   "t": 686.16,
+   "d": 2.08,
+   "text": "like actions like freely rearranging"
+  },
+  {
+   "t": 688.24,
+   "d": 2.0,
+   "text": "your tile workers and civilization"
+  },
+  {
+   "t": 690.24,
+   "d": 2.08,
+   "text": "and there are often other ways to solve"
+  },
+  {
+   "t": 692.32,
+   "d": 2.64,
+   "text": "that problem"
+  },
+  {
+   "t": 695.28,
+   "d": 1.92,
+   "text": "so in dungeon crawl going back to this"
+  },
+  {
+   "t": 697.2,
+   "d": 1.44,
+   "text": "game for a moment"
+  },
+  {
+   "t": 698.64,
+   "d": 2.96,
+   "text": "you can give your allies orders like go"
+  },
+  {
+   "t": 701.6,
+   "d": 0.8,
+   "text": "here"
+  },
+  {
+   "t": 702.4,
+   "d": 3.68,
+   "text": "attack that run away and if you were"
+  },
+  {
+   "t": 706.08,
+   "d": 2.32,
+   "text": "able to give those orders freely"
+  },
+  {
+   "t": 708.4,
+   "d": 2.8,
+   "text": "the game would bog down to a crawl any"
+  },
+  {
+   "t": 711.2,
+   "d": 0.64,
+   "text": "time you had"
+  },
+  {
+   "t": 711.84,
+   "d": 2.32,
+   "text": "allies imagine micromanaging each of a"
+  },
+  {
+   "t": 714.16,
+   "d": 2.56,
+   "text": "dozen orcish minions or more"
+  },
+  {
+   "t": 716.72,
+   "d": 2.4,
+   "text": "for every turn of every battle there are"
+  },
+  {
+   "t": 719.12,
+   "d": 2.24,
+   "text": "a lot of battles in crawl"
+  },
+  {
+   "t": 721.36,
+   "d": 3.2,
+   "text": "but crawl has a cost for giving orders"
+  },
+  {
+   "t": 724.56,
+   "d": 2.64,
+   "text": "each order takes a turn just like moving"
+  },
+  {
+   "t": 727.2,
+   "d": 1.52,
+   "text": "or attacking"
+  },
+  {
+   "t": 728.72,
+   "d": 2.24,
+   "text": "that turns unit management into a real"
+  },
+  {
+   "t": 730.96,
+   "d": 2.16,
+   "text": "tactical choice is it more important to"
+  },
+  {
+   "t": 733.12,
+   "d": 1.84,
+   "text": "order all of my orcs to focus fire on"
+  },
+  {
+   "t": 734.96,
+   "d": 0.88,
+   "text": "the wizard"
+  },
+  {
+   "t": 735.84,
+   "d": 2.72,
+   "text": "or should i attack him myself and it"
+  },
+  {
+   "t": 738.56,
+   "d": 0.72,
+   "text": "removes"
+  },
+  {
+   "t": 739.28,
+   "d": 3.76,
+   "text": "that hypothetically optimal problem"
+  },
+  {
+   "t": 743.12,
+   "d": 1.44,
+   "text": "there are times when fixing"
+  },
+  {
+   "t": 744.56,
+   "d": 1.84,
+   "text": "hypothetically optimal behavior"
+  },
+  {
+   "t": 746.4,
+   "d": 2.08,
+   "text": "that's kind of unreal involves harder"
+  },
+  {
+   "t": 748.48,
+   "d": 1.2,
+   "text": "trade-offs"
+  },
+  {
+   "t": 749.68,
+   "d": 2.48,
+   "text": "in older versions of crawl monsters were"
+  },
+  {
+   "t": 752.16,
+   "d": 2.16,
+   "text": "able to pick up items from the ground"
+  },
+  {
+   "t": 754.32,
+   "d": 2.0,
+   "text": "and use them against the player that"
+  },
+  {
+   "t": 756.32,
+   "d": 2.0,
+   "text": "could produce cool situations"
+  },
+  {
+   "t": 758.32,
+   "d": 1.6,
+   "text": "when you fought an orc that spawned with"
+  },
+  {
+   "t": 759.92,
+   "d": 1.84,
+   "text": "a scimitar of distortion"
+  },
+  {
+   "t": 761.76,
+   "d": 1.84,
+   "text": "you weren't just thinking about how to"
+  },
+  {
+   "t": 763.6,
+   "d": 1.92,
+   "text": "kill her and keep her from banishing you"
+  },
+  {
+   "t": 765.52,
+   "d": 1.12,
+   "text": "to the abyss"
+  },
+  {
+   "t": 766.64,
+   "d": 1.76,
+   "text": "you were also thinking about how to use"
+  },
+  {
+   "t": 768.4,
+   "d": 2.4,
+   "text": "maneuvering and positioning and tactics"
+  },
+  {
+   "t": 770.8,
+   "d": 1.68,
+   "text": "to keep her friends from just picking"
+  },
+  {
+   "t": 772.48,
+   "d": 1.36,
+   "text": "the scimitar right back up"
+  },
+  {
+   "t": 773.84,
+   "d": 3.6,
+   "text": "off her corpse you were uh more commonly"
+  },
+  {
+   "t": 777.44,
+   "d": 0.64,
+   "text": "though"
+  },
+  {
+   "t": 778.08,
+   "d": 2.56,
+   "text": "it also mechanic also produced"
+  },
+  {
+   "t": 780.64,
+   "d": 1.2,
+   "text": "annoyances"
+  },
+  {
+   "t": 781.84,
+   "d": 2.72,
+   "text": "after fights ended optimally what you"
+  },
+  {
+   "t": 784.56,
+   "d": 1.52,
+   "text": "would do is you would go around and pick"
+  },
+  {
+   "t": 786.08,
+   "d": 0.64,
+   "text": "up any"
+  },
+  {
+   "t": 786.72,
+   "d": 2.56,
+   "text": "potentially dangerous weapon and go toss"
+  },
+  {
+   "t": 789.28,
+   "d": 1.84,
+   "text": "it into some lava or toss it into a"
+  },
+  {
+   "t": 791.12,
+   "d": 1.44,
+   "text": "corner somewhere where monsters wouldn't"
+  },
+  {
+   "t": 792.56,
+   "d": 2.32,
+   "text": "pick it up and use it against you"
+  },
+  {
+   "t": 794.88,
+   "d": 2.56,
+   "text": "that got kind of tedious so how do you"
+  },
+  {
+   "t": 797.44,
+   "d": 1.6,
+   "text": "fix that"
+  },
+  {
+   "t": 799.04,
+   "d": 2.4,
+   "text": "our solution was more or less to remove"
+  },
+  {
+   "t": 801.44,
+   "d": 1.6,
+   "text": "the ability for monsters to pick up"
+  },
+  {
+   "t": 803.04,
+   "d": 1.6,
+   "text": "items"
+  },
+  {
+   "t": 804.64,
+   "d": 1.76,
+   "text": "probably that was the right call since"
+  },
+  {
+   "t": 806.4,
+   "d": 1.6,
+   "text": "it's really hard for any tactical"
+  },
+  {
+   "t": 808.0,
+   "d": 0.8,
+   "text": "mechanic"
+  },
+  {
+   "t": 808.8,
+   "d": 1.76,
+   "text": "to be interesting enough to justify"
+  },
+  {
+   "t": 810.56,
+   "d": 1.84,
+   "text": "common annoyances like that"
+  },
+  {
+   "t": 812.4,
+   "d": 2.16,
+   "text": "frequent annoyances but that did mean we"
+  },
+  {
+   "t": 814.56,
+   "d": 2.32,
+   "text": "lost those interesting tactical"
+  },
+  {
+   "t": 816.88,
+   "d": 2.24,
+   "text": "situations i described earlier net"
+  },
+  {
+   "t": 819.12,
+   "d": 1.84,
+   "text": "improvement but"
+  },
+  {
+   "t": 820.96,
+   "d": 2.96,
+   "text": "still some loss"
+  },
+  {
+   "t": 824.0,
+   "d": 2.32,
+   "text": "but it's useful to consider the root"
+  },
+  {
+   "t": 826.32,
+   "d": 1.92,
+   "text": "cause of this monster item pickup"
+  },
+  {
+   "t": 828.24,
+   "d": 0.88,
+   "text": "problem"
+  },
+  {
+   "t": 829.12,
+   "d": 2.32,
+   "text": "why was monsters picky up items"
+  },
+  {
+   "t": 831.44,
+   "d": 2.24,
+   "text": "interesting while fighting enemies"
+  },
+  {
+   "t": 833.68,
+   "d": 2.24,
+   "text": "but annoying afterwards why was it"
+  },
+  {
+   "t": 835.92,
+   "d": 0.8,
+   "text": "optimal"
+  },
+  {
+   "t": 836.72,
+   "d": 2.24,
+   "text": "to spend all that time hiding dangerous"
+  },
+  {
+   "t": 838.96,
+   "d": 1.6,
+   "text": "weapons away"
+  },
+  {
+   "t": 840.56,
+   "d": 2.24,
+   "text": "the deeper problem is what i'm going to"
+  },
+  {
+   "t": 842.8,
+   "d": 1.36,
+   "text": "call the great sin"
+  },
+  {
+   "t": 844.16,
+   "d": 2.4,
+   "text": "of crawl and of all the old school"
+  },
+  {
+   "t": 846.56,
+   "d": 0.88,
+   "text": "roguelikes"
+  },
+  {
+   "t": 847.44,
+   "d": 3.12,
+   "text": "these concepts of being in combat versus"
+  },
+  {
+   "t": 850.56,
+   "d": 2.24,
+   "text": "out of combat it's not a formal"
+  },
+  {
+   "t": 852.8,
+   "d": 1.28,
+   "text": "distinction it's not something in the"
+  },
+  {
+   "t": 854.08,
+   "d": 0.88,
+   "text": "game itself"
+  },
+  {
+   "t": 854.96,
+   "d": 2.24,
+   "text": "it's just an emergent property sometimes"
+  },
+  {
+   "t": 857.2,
+   "d": 1.36,
+   "text": "enemies are nearby"
+  },
+  {
+   "t": 858.56,
+   "d": 2.08,
+   "text": "and sometimes they aren't but when"
+  },
+  {
+   "t": 860.64,
+   "d": 2.32,
+   "text": "enemies are nearby every turn matters"
+  },
+  {
+   "t": 862.96,
+   "d": 1.44,
+   "text": "and when they aren't"
+  },
+  {
+   "t": 864.4,
+   "d": 3.36,
+   "text": "turns and actions become almost free"
+  },
+  {
+   "t": 867.76,
+   "d": 2.16,
+   "text": "the meaninglessness of out-of-combat"
+  },
+  {
+   "t": 869.92,
+   "d": 1.92,
+   "text": "costs out of combat time produces"
+  },
+  {
+   "t": 871.84,
+   "d": 0.48,
+   "text": "endless"
+  },
+  {
+   "t": 872.32,
+   "d": 3.12,
+   "text": "problems various effects like buffs that"
+  },
+  {
+   "t": 875.44,
+   "d": 1.92,
+   "text": "enhance the player's combat ability or"
+  },
+  {
+   "t": 877.36,
+   "d": 1.68,
+   "text": "summoning spells that create temporary"
+  },
+  {
+   "t": 879.04,
+   "d": 0.88,
+   "text": "allies"
+  },
+  {
+   "t": 879.92,
+   "d": 1.76,
+   "text": "become hypothetically optimal to"
+  },
+  {
+   "t": 881.68,
+   "d": 2.4,
+   "text": "constantly recast and refresh"
+  },
+  {
+   "t": 884.08,
+   "d": 1.84,
+   "text": "well outside of combat so they'll all"
+  },
+  {
+   "t": 885.92,
+   "d": 1.84,
+   "text": "already be active at the start of every"
+  },
+  {
+   "t": 887.76,
+   "d": 1.2,
+   "text": "fight you enter"
+  },
+  {
+   "t": 888.96,
+   "d": 1.92,
+   "text": "failure chances on abilities become"
+  },
+  {
+   "t": 890.88,
+   "d": 2.0,
+   "text": "irrelevant you can just retry them"
+  },
+  {
+   "t": 892.88,
+   "d": 2.96,
+   "text": "until they succeed and it's very hard to"
+  },
+  {
+   "t": 895.84,
+   "d": 0.96,
+   "text": "restrict"
+  },
+  {
+   "t": 896.8,
+   "d": 2.4,
+   "text": "or balanced systems for being in combat"
+  },
+  {
+   "t": 899.2,
+   "d": 1.68,
+   "text": "versus out of combat"
+  },
+  {
+   "t": 900.88,
+   "d": 1.76,
+   "text": "because there's no formal mechanical"
+  },
+  {
+   "t": 902.64,
+   "d": 1.92,
+   "text": "difference and there's a lot of blurry"
+  },
+  {
+   "t": 904.56,
+   "d": 1.52,
+   "text": "cases maybe there's an enemy right"
+  },
+  {
+   "t": 906.08,
+   "d": 1.12,
+   "text": "around the corner"
+  },
+  {
+   "t": 907.2,
+   "d": 1.68,
+   "text": "maybe he's about to wander into you"
+  },
+  {
+   "t": 908.88,
+   "d": 1.84,
+   "text": "maybe he's not where"
+  },
+  {
+   "t": 910.72,
+   "d": 3.04,
+   "text": "where do you set the line so one"
+  },
+  {
+   "t": 913.76,
+   "d": 1.52,
+   "text": "approach to fixing this"
+  },
+  {
+   "t": 915.28,
+   "d": 2.72,
+   "text": "is to say okay you can loiter around"
+  },
+  {
+   "t": 918.0,
+   "d": 1.6,
+   "text": "outside of combat all you want"
+  },
+  {
+   "t": 919.6,
+   "d": 2.64,
+   "text": "you just won't get anything for it games"
+  },
+  {
+   "t": 922.24,
+   "d": 1.36,
+   "text": "like do morel"
+  },
+  {
+   "t": 923.6,
+   "d": 3.12,
+   "text": "sprogywood and desktop dungeons"
+  },
+  {
+   "t": 926.72,
+   "d": 2.0,
+   "text": "solve the problem by removing health and"
+  },
+  {
+   "t": 928.72,
+   "d": 2.0,
+   "text": "magic regeneration over time"
+  },
+  {
+   "t": 930.72,
+   "d": 1.76,
+   "text": "and that approach avoids many of the"
+  },
+  {
+   "t": 932.48,
+   "d": 1.52,
+   "text": "problems i mentioned"
+  },
+  {
+   "t": 934.0,
+   "d": 3.92,
+   "text": "however turning hp in mp into strategic"
+  },
+  {
+   "t": 937.92,
+   "d": 2.88,
+   "text": "resources by doing this creates new"
+  },
+  {
+   "t": 940.8,
+   "d": 4.0,
+   "text": "challenges in sprogywood for example"
+  },
+  {
+   "t": 944.8,
+   "d": 2.0,
+   "text": "killing enemies gives the player stamina"
+  },
+  {
+   "t": 946.8,
+   "d": 1.44,
+   "text": "essentially mp"
+  },
+  {
+   "t": 948.24,
+   "d": 3.36,
+   "text": "and if they have a vampiric weapon hp"
+  },
+  {
+   "t": 951.6,
+   "d": 3.04,
+   "text": "in some levels spider pots"
+  },
+  {
+   "t": 954.64,
+   "d": 3.12,
+   "text": "continuously spawn weak spider enemies"
+  },
+  {
+   "t": 957.76,
+   "d": 2.56,
+   "text": "these enemies don't give the player xp"
+  },
+  {
+   "t": 960.32,
+   "d": 1.44,
+   "text": "but they do give stamina"
+  },
+  {
+   "t": 961.76,
+   "d": 2.72,
+   "text": "and if you have the vampiric weapon hp"
+  },
+  {
+   "t": 964.48,
+   "d": 1.52,
+   "text": "that means that sometimes it's a good"
+  },
+  {
+   "t": 966.0,
+   "d": 0.72,
+   "text": "idea to"
+  },
+  {
+   "t": 966.72,
+   "d": 2.4,
+   "text": "farm spiders until your resources are"
+  },
+  {
+   "t": 969.12,
+   "d": 1.6,
+   "text": "topped off"
+  },
+  {
+   "t": 970.72,
+   "d": 2.8,
+   "text": "which is kind of boring if you could"
+  },
+  {
+   "t": 973.52,
+   "d": 2.08,
+   "text": "just rest to regain hp of course"
+  },
+  {
+   "t": 975.6,
+   "d": 3.28,
+   "text": "there'd be no reason to do that"
+  },
+  {
+   "t": 978.88,
+   "d": 2.32,
+   "text": "similarly crawl has a race that doesn't"
+  },
+  {
+   "t": 981.2,
+   "d": 1.68,
+   "text": "regenerate hp over time"
+  },
+  {
+   "t": 982.88,
+   "d": 2.72,
+   "text": "the deep dwarf this race tends to be"
+  },
+  {
+   "t": 985.6,
+   "d": 2.56,
+   "text": "dependent on various vampiric effects to"
+  },
+  {
+   "t": 988.16,
+   "d": 0.72,
+   "text": "get its"
+  },
+  {
+   "t": 988.88,
+   "d": 2.88,
+   "text": "hp back and that's not a problem in"
+  },
+  {
+   "t": 991.76,
+   "d": 1.04,
+   "text": "itself"
+  },
+  {
+   "t": 992.8,
+   "d": 3.28,
+   "text": "it's possible however to leave weak"
+  },
+  {
+   "t": 996.08,
+   "d": 2.08,
+   "text": "enemies in an earlier level"
+  },
+  {
+   "t": 998.16,
+   "d": 2.48,
+   "text": "to create a sort of vampire farm"
+  },
+  {
+   "t": 1000.64,
+   "d": 1.84,
+   "text": "whenever you're badly injured"
+  },
+  {
+   "t": 1002.48,
+   "d": 3.12,
+   "text": "just go back suck some health out of"
+  },
+  {
+   "t": 1005.6,
+   "d": 1.52,
+   "text": "out of them and then go back to"
+  },
+  {
+   "t": 1007.12,
+   "d": 2.8,
+   "text": "adventuring while they regenerate"
+  },
+  {
+   "t": 1009.92,
+   "d": 1.84,
+   "text": "deep doors are a powerful enough race"
+  },
+  {
+   "t": 1011.76,
+   "d": 1.52,
+   "text": "that most players don't do this in"
+  },
+  {
+   "t": 1013.28,
+   "d": 1.2,
+   "text": "practice"
+  },
+  {
+   "t": 1014.48,
+   "d": 1.92,
+   "text": "they're kind of overpowered honestly but"
+  },
+  {
+   "t": 1016.4,
+   "d": 1.92,
+   "text": "it does speak to the difficulty of"
+  },
+  {
+   "t": 1018.32,
+   "d": 1.44,
+   "text": "retrofitting this"
+  },
+  {
+   "t": 1019.76,
+   "d": 3.36,
+   "text": "a new region over time design into a"
+  },
+  {
+   "t": 1023.12,
+   "d": 2.24,
+   "text": "traditional roguelike"
+  },
+  {
+   "t": 1025.36,
+   "d": 2.8,
+   "text": "in general removing health regeneration"
+  },
+  {
+   "t": 1028.16,
+   "d": 1.36,
+   "text": "from roguelikes makes them less"
+  },
+  {
+   "t": 1029.52,
+   "d": 1.2,
+   "text": "forgiving"
+  },
+  {
+   "t": 1030.72,
+   "d": 2.24,
+   "text": "without the reset that resting between"
+  },
+  {
+   "t": 1032.96,
+   "d": 1.36,
+   "text": "fights provides"
+  },
+  {
+   "t": 1034.32,
+   "d": 2.0,
+   "text": "it's much easier for bad play to"
+  },
+  {
+   "t": 1036.32,
+   "d": 2.16,
+   "text": "accumulate and for death to come"
+  },
+  {
+   "t": 1038.48,
+   "d": 1.92,
+   "text": "as a result of decisions made quite a"
+  },
+  {
+   "t": 1040.4,
+   "d": 1.68,
+   "text": "while beforehand"
+  },
+  {
+   "t": 1042.08,
+   "d": 1.6,
+   "text": "if and as that makes death feel"
+  },
+  {
+   "t": 1043.68,
+   "d": 1.52,
+   "text": "inevitable like your character is"
+  },
+  {
+   "t": 1045.2,
+   "d": 1.44,
+   "text": "already as good as dead"
+  },
+  {
+   "t": 1046.64,
+   "d": 1.04,
+   "text": "and you're just going through the"
+  },
+  {
+   "t": 1047.68,
+   "d": 2.48,
+   "text": "motions it's not very fun"
+  },
+  {
+   "t": 1050.16,
+   "d": 2.24,
+   "text": "this tends to especially be the case in"
+  },
+  {
+   "t": 1052.4,
+   "d": 2.0,
+   "text": "fuzzier game designs that assume the"
+  },
+  {
+   "t": 1054.4,
+   "d": 1.52,
+   "text": "player is going to take a bit of damage"
+  },
+  {
+   "t": 1055.92,
+   "d": 0.96,
+   "text": "in each fight"
+  },
+  {
+   "t": 1056.88,
+   "d": 2.96,
+   "text": "like in crawl or do morel unlike sprogy"
+  },
+  {
+   "t": 1059.84,
+   "d": 1.36,
+   "text": "wood or necrodancer"
+  },
+  {
+   "t": 1061.2,
+   "d": 1.84,
+   "text": "i personally quite like designs that"
+  },
+  {
+   "t": 1063.04,
+   "d": 1.76,
+   "text": "remove regeneration over time"
+  },
+  {
+   "t": 1064.8,
+   "d": 3.52,
+   "text": "but it's not a cure-all another approach"
+  },
+  {
+   "t": 1068.32,
+   "d": 2.48,
+   "text": "to fixing the in combat versus out of"
+  },
+  {
+   "t": 1070.8,
+   "d": 0.96,
+   "text": "combat"
+  },
+  {
+   "t": 1071.76,
+   "d": 2.16,
+   "text": "dichotomy is to try to make out of"
+  },
+  {
+   "t": 1073.92,
+   "d": 1.84,
+   "text": "combat time meaningful"
+  },
+  {
+   "t": 1075.76,
+   "d": 2.16,
+   "text": "by giving players a limited number of"
+  },
+  {
+   "t": 1077.92,
+   "d": 1.04,
+   "text": "turns"
+  },
+  {
+   "t": 1078.96,
+   "d": 2.08,
+   "text": "until the game ends the most"
+  },
+  {
+   "t": 1081.04,
+   "d": 1.44,
+   "text": "straightforward approach a"
+  },
+  {
+   "t": 1082.48,
+   "d": 2.48,
+   "text": "simple fixed time limit like 4 000 turns"
+  },
+  {
+   "t": 1084.96,
+   "d": 1.44,
+   "text": "until the game ends"
+  },
+  {
+   "t": 1086.4,
+   "d": 2.56,
+   "text": "when before then or die suffers very"
+  },
+  {
+   "t": 1088.96,
+   "d": 1.04,
+   "text": "badly from the"
+  },
+  {
+   "t": 1090.0,
+   "d": 1.84,
+   "text": "good is dead problem that i mentioned a"
+  },
+  {
+   "t": 1091.84,
+   "d": 1.2,
+   "text": "moment ago"
+  },
+  {
+   "t": 1093.04,
+   "d": 1.92,
+   "text": "especially for new players it's very"
+  },
+  {
+   "t": 1094.96,
+   "d": 1.6,
+   "text": "easy to end up in a situation where"
+  },
+  {
+   "t": 1096.56,
+   "d": 1.2,
+   "text": "you've actually lost"
+  },
+  {
+   "t": 1097.76,
+   "d": 2.16,
+   "text": "a long time ago but the game doesn't"
+  },
+  {
+   "t": 1099.92,
+   "d": 2.24,
+   "text": "have the dignity to end itself until"
+  },
+  {
+   "t": 1102.16,
+   "d": 2.72,
+   "text": "much later"
+  },
+  {
+   "t": 1105.44,
+   "d": 2.24,
+   "text": "this problem is obvious enough that i'm"
+  },
+  {
+   "t": 1107.68,
+   "d": 1.6,
+   "text": "not aware of any game that it's actually"
+  },
+  {
+   "t": 1109.28,
+   "d": 1.6,
+   "text": "stumbled into it"
+  },
+  {
+   "t": 1110.88,
+   "d": 3.52,
+   "text": "instead starting with the original rogue"
+  },
+  {
+   "t": 1114.4,
+   "d": 1.68,
+   "text": "most roguelikes have used a variant of"
+  },
+  {
+   "t": 1116.08,
+   "d": 2.0,
+   "text": "the idea called a food clock"
+  },
+  {
+   "t": 1118.08,
+   "d": 2.16,
+   "text": "you start with some amount of food which"
+  },
+  {
+   "t": 1120.24,
+   "d": 1.6,
+   "text": "lasts for such and such a number of"
+  },
+  {
+   "t": 1121.84,
+   "d": 0.88,
+   "text": "turns"
+  },
+  {
+   "t": 1122.72,
+   "d": 1.52,
+   "text": "you find more as you explore and you"
+  },
+  {
+   "t": 1124.24,
+   "d": 2.4,
+   "text": "play the game and you die if you run out"
+  },
+  {
+   "t": 1126.64,
+   "d": 1.84,
+   "text": "and this is basically like adding"
+  },
+  {
+   "t": 1128.48,
+   "d": 2.72,
+   "text": "checkpoints to a simple clock"
+  },
+  {
+   "t": 1131.2,
+   "d": 1.84,
+   "text": "you die if you spend more than a"
+  },
+  {
+   "t": 1133.04,
+   "d": 1.52,
+   "text": "thousand turns before"
+  },
+  {
+   "t": 1134.56,
+   "d": 2.24,
+   "text": "getting to dungeon level 2 or maybe 2000"
+  },
+  {
+   "t": 1136.8,
+   "d": 1.68,
+   "text": "by dungeon level 3 or"
+  },
+  {
+   "t": 1138.48,
+   "d": 3.6,
+   "text": "so on in rogue this works"
+  },
+  {
+   "t": 1142.08,
+   "d": 2.56,
+   "text": "out of combat time is meaningful because"
+  },
+  {
+   "t": 1144.64,
+   "d": 1.92,
+   "text": "every turn until you starve to death"
+  },
+  {
+   "t": 1146.56,
+   "d": 0.96,
+   "text": "counts"
+  },
+  {
+   "t": 1147.52,
+   "d": 1.76,
+   "text": "it's a simple game and the clock is"
+  },
+  {
+   "t": 1149.28,
+   "d": 2.08,
+   "text": "tuned to be quite harsh"
+  },
+  {
+   "t": 1151.36,
+   "d": 2.0,
+   "text": "but losing directly because of a food"
+  },
+  {
+   "t": 1153.36,
+   "d": 1.68,
+   "text": "clock isn't very fun"
+  },
+  {
+   "t": 1155.04,
+   "d": 2.08,
+   "text": "at least in part because even with the"
+  },
+  {
+   "t": 1157.12,
+   "d": 1.2,
+   "text": "checkpoints"
+  },
+  {
+   "t": 1158.32,
+   "d": 2.0,
+   "text": "you still tend to have been to end up in"
+  },
+  {
+   "t": 1160.32,
+   "d": 2.88,
+   "text": "those good as dead situations"
+  },
+  {
+   "t": 1163.2,
+   "d": 2.16,
+   "text": "and so most later roguelikes made the"
+  },
+  {
+   "t": 1165.36,
+   "d": 1.52,
+   "text": "food clock more lenient"
+  },
+  {
+   "t": 1166.88,
+   "d": 1.68,
+   "text": "so that players would run into those"
+  },
+  {
+   "t": 1168.56,
+   "d": 1.68,
+   "text": "situations less often"
+  },
+  {
+   "t": 1170.24,
+   "d": 2.16,
+   "text": "they also added other complexities what"
+  },
+  {
+   "t": 1172.4,
+   "d": 1.68,
+   "text": "if monsters could eat your food"
+  },
+  {
+   "t": 1174.08,
+   "d": 3.12,
+   "text": "what if you could eat monsters what uh"
+  },
+  {
+   "t": 1177.2,
+   "d": 2.4,
+   "text": "what if abilities like spell casting or"
+  },
+  {
+   "t": 1179.6,
+   "d": 3.44,
+   "text": "divine invocations use that food each"
+  },
+  {
+   "t": 1183.04,
+   "d": 2.72,
+   "text": "change made food harder to balance and"
+  },
+  {
+   "t": 1185.76,
+   "d": 0.8,
+   "text": "when in doubt"
+  },
+  {
+   "t": 1186.56,
+   "d": 2.0,
+   "text": "designers tended to air in the direction"
+  },
+  {
+   "t": 1188.56,
+   "d": 2.8,
+   "text": "of a lacks or clock"
+  },
+  {
+   "t": 1191.36,
+   "d": 2.16,
+   "text": "even without the changes that directly"
+  },
+  {
+   "t": 1193.52,
+   "d": 1.52,
+   "text": "interacted with food"
+  },
+  {
+   "t": 1195.04,
+   "d": 1.84,
+   "text": "the addition of different classes and"
+  },
+  {
+   "t": 1196.88,
+   "d": 1.2,
+   "text": "play styles"
+  },
+  {
+   "t": 1198.08,
+   "d": 2.48,
+   "text": "some of which required more resting time"
+  },
+  {
+   "t": 1200.56,
+   "d": 0.88,
+   "text": "or more"
+  },
+  {
+   "t": 1201.44,
+   "d": 2.64,
+   "text": "movement or whatever than others made it"
+  },
+  {
+   "t": 1204.08,
+   "d": 0.8,
+   "text": "impossible"
+  },
+  {
+   "t": 1204.88,
+   "d": 1.92,
+   "text": "to have a clock that was tight for the"
+  },
+  {
+   "t": 1206.8,
+   "d": 1.68,
+   "text": "fastest play styles"
+  },
+  {
+   "t": 1208.48,
+   "d": 2.16,
+   "text": "without being impossible for the slower"
+  },
+  {
+   "t": 1210.64,
+   "d": 0.88,
+   "text": "ones and"
+  },
+  {
+   "t": 1211.52,
+   "d": 2.08,
+   "text": "as a result of all this what you end up"
+  },
+  {
+   "t": 1213.6,
+   "d": 0.96,
+   "text": "with in"
+  },
+  {
+   "t": 1214.56,
+   "d": 3.12,
+   "text": "roguelikes like crawl is"
+  },
+  {
+   "t": 1217.68,
+   "d": 3.68,
+   "text": "food as a sort of a weird vestigial stub"
+  },
+  {
+   "t": 1221.36,
+   "d": 1.6,
+   "text": "capable of reigning in only the most"
+  },
+  {
+   "t": 1222.96,
+   "d": 4.24,
+   "text": "ridiculously time consuming strategies"
+  },
+  {
+   "t": 1228.08,
+   "d": 2.56,
+   "text": "when it comes to designing clocks to"
+  },
+  {
+   "t": 1230.64,
+   "d": 3.6,
+   "text": "making out of combat time meaningful"
+  },
+  {
+   "t": 1234.24,
+   "d": 2.24,
+   "text": "food clocks are far from the end of the"
+  },
+  {
+   "t": 1236.48,
+   "d": 1.36,
+   "text": "story"
+  },
+  {
+   "t": 1237.84,
+   "d": 2.4,
+   "text": "crawl actually has at least three"
+  },
+  {
+   "t": 1240.24,
+   "d": 1.76,
+   "text": "different kinds of clocks"
+  },
+  {
+   "t": 1242.0,
+   "d": 3.84,
+   "text": "food piety out of depth spawning and"
+  },
+  {
+   "t": 1245.84,
+   "d": 2.0,
+   "text": "more if depending how you count it but"
+  },
+  {
+   "t": 1247.84,
+   "d": 2.16,
+   "text": "they're all quite flawed"
+  },
+  {
+   "t": 1250.0,
+   "d": 2.48,
+   "text": "there's a deeper reason for that crawl"
+  },
+  {
+   "t": 1252.48,
+   "d": 0.88,
+   "text": "is simply"
+  },
+  {
+   "t": 1253.36,
+   "d": 3.04,
+   "text": "too big a winning game of crawl"
+  },
+  {
+   "t": 1256.4,
+   "d": 3.12,
+   "text": "covers many dozens of huge levels and"
+  },
+  {
+   "t": 1259.52,
+   "d": 1.2,
+   "text": "normal players use"
+  },
+  {
+   "t": 1260.72,
+   "d": 2.0,
+   "text": "built-in automation to deal with this"
+  },
+  {
+   "t": 1262.72,
+   "d": 1.84,
+   "text": "automatically exploring levels"
+  },
+  {
+   "t": 1264.56,
+   "d": 2.32,
+   "text": "picking up items traveling from place to"
+  },
+  {
+   "t": 1266.88,
+   "d": 1.36,
+   "text": "place"
+  },
+  {
+   "t": 1268.24,
+   "d": 2.32,
+   "text": "the automation wastes time compared to"
+  },
+  {
+   "t": 1270.56,
+   "d": 2.56,
+   "text": "an optimal human player"
+  },
+  {
+   "t": 1273.12,
+   "d": 1.68,
+   "text": "but since the clocks are weak this"
+  },
+  {
+   "t": 1274.8,
+   "d": 1.44,
+   "text": "doesn't matter"
+  },
+  {
+   "t": 1276.24,
+   "d": 2.4,
+   "text": "if time did matter though an optimal"
+  },
+  {
+   "t": 1278.64,
+   "d": 1.92,
+   "text": "player planning to maximize their chance"
+  },
+  {
+   "t": 1280.56,
+   "d": 0.88,
+   "text": "of winning"
+  },
+  {
+   "t": 1281.44,
+   "d": 1.52,
+   "text": "would be encouraged to turn off all the"
+  },
+  {
+   "t": 1282.96,
+   "d": 3.36,
+   "text": "automation and clear levels by hand"
+  },
+  {
+   "t": 1286.32,
+   "d": 2.32,
+   "text": "which in crawl once you've played it"
+  },
+  {
+   "t": 1288.64,
+   "d": 2.24,
+   "text": "once or twice that's not very fun"
+  },
+  {
+   "t": 1290.88,
+   "d": 2.0,
+   "text": "and so as a result to avoid this all of"
+  },
+  {
+   "t": 1292.88,
+   "d": 1.36,
+   "text": "our clocks are kept"
+  },
+  {
+   "t": 1294.24,
+   "d": 2.48,
+   "text": "weak and toothless essentially which"
+  },
+  {
+   "t": 1296.72,
+   "d": 0.56,
+   "text": "means"
+  },
+  {
+   "t": 1297.28,
+   "d": 1.68,
+   "text": "that out of combat time remains"
+  },
+  {
+   "t": 1298.96,
+   "d": 1.52,
+   "text": "practically free"
+  },
+  {
+   "t": 1300.48,
+   "d": 1.84,
+   "text": "which means we keep running into these"
+  },
+  {
+   "t": 1302.32,
+   "d": 2.96,
+   "text": "hypothetically optimal problems"
+  },
+  {
+   "t": 1305.28,
+   "d": 3.12,
+   "text": "over and over again"
+  },
+  {
+   "t": 1308.4,
+   "d": 1.84,
+   "text": "so in the end then this is something of"
+  },
+  {
+   "t": 1310.24,
+   "d": 1.68,
+   "text": "a cautionary tale"
+  },
+  {
+   "t": 1311.92,
+   "d": 1.92,
+   "text": "if you're building a roguelike or really"
+  },
+  {
+   "t": 1313.84,
+   "d": 2.0,
+   "text": "any game with a focus on strategic"
+  },
+  {
+   "t": 1315.84,
+   "d": 2.88,
+   "text": "and tactical decision making think about"
+  },
+  {
+   "t": 1318.72,
+   "d": 1.68,
+   "text": "hypothetically optimal play"
+  },
+  {
+   "t": 1320.4,
+   "d": 3.68,
+   "text": "as you do be wary of free actions"
+  },
+  {
+   "t": 1324.08,
+   "d": 2.24,
+   "text": "consider how the game will act in and"
+  },
+  {
+   "t": 1326.32,
+   "d": 2.08,
+   "text": "out of combat or whether you can avoid"
+  },
+  {
+   "t": 1328.4,
+   "d": 3.36,
+   "text": "an out of combat state entirely and if"
+  },
+  {
+   "t": 1331.76,
+   "d": 0.24,
+   "text": "you're"
+  },
+  {
+   "t": 1332.0,
+   "d": 3.12,
+   "text": "going to build a huge sprawling old"
+  },
+  {
+   "t": 1335.12,
+   "d": 2.0,
+   "text": "school roguelike light crawl"
+  },
+  {
+   "t": 1337.12,
+   "d": 2.56,
+   "text": "good luck"
+  },
+  {
+   "t": 1340.24,
+   "d": 7.6,
+   "text": "that's it"
+  },
+  {
+   "t": 1350.4,
+   "d": 5.04,
+   "text": "so we have time for some questions yeah"
+  },
+  {
+   "t": 1358.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1363.12,
+   "d": 3.36,
+   "text": "yeah okay okay so the question was do i"
+  },
+  {
+   "t": 1366.48,
+   "d": 2.4,
+   "text": "think the scoring mechanic in crawl"
+  },
+  {
+   "t": 1368.88,
+   "d": 1.76,
+   "text": "helps alleviate the problem with the"
+  },
+  {
+   "t": 1370.64,
+   "d": 2.0,
+   "text": "food mechanic and with the other clocks"
+  },
+  {
+   "t": 1372.64,
+   "d": 2.16,
+   "text": "and the way that scoring and crawl works"
+  },
+  {
+   "t": 1374.8,
+   "d": 1.2,
+   "text": "is that"
+  },
+  {
+   "t": 1376.0,
+   "d": 3.12,
+   "text": "it's um well there's sort of basically"
+  },
+  {
+   "t": 1379.12,
+   "d": 1.6,
+   "text": "two different ways it works unless until"
+  },
+  {
+   "t": 1380.72,
+   "d": 1.2,
+   "text": "you've beaten the game"
+  },
+  {
+   "t": 1381.92,
+   "d": 2.0,
+   "text": "then uh scoring is just basic based on"
+  },
+  {
+   "t": 1383.92,
+   "d": 1.92,
+   "text": "how far through it you've gotten"
+  },
+  {
+   "t": 1385.84,
+   "d": 4.4,
+   "text": "more or less but once you beat the game"
+  },
+  {
+   "t": 1390.24,
+   "d": 3.12,
+   "text": "scoring is goes exponentially higher"
+  },
+  {
+   "t": 1393.36,
+   "d": 1.84,
+   "text": "and it's based more or less on how fast"
+  },
+  {
+   "t": 1395.2,
+   "d": 1.84,
+   "text": "you beat the game in terms of in-game"
+  },
+  {
+   "t": 1397.04,
+   "d": 3.84,
+   "text": "turns not real time and so if you're"
+  },
+  {
+   "t": 1400.88,
+   "d": 1.12,
+   "text": "trying to optimize for that"
+  },
+  {
+   "t": 1402.0,
+   "d": 1.84,
+   "text": "then of course uh if you're trying to"
+  },
+  {
+   "t": 1403.84,
+   "d": 1.28,
+   "text": "get the highest scores"
+  },
+  {
+   "t": 1405.12,
+   "d": 1.36,
+   "text": "you want to minimize the number of turns"
+  },
+  {
+   "t": 1406.48,
+   "d": 2.24,
+   "text": "which means again out of combat time"
+  },
+  {
+   "t": 1408.72,
+   "d": 0.4,
+   "text": "does"
+  },
+  {
+   "t": 1409.12,
+   "d": 2.32,
+   "text": "uh count there is an implicit clock you"
+  },
+  {
+   "t": 1411.44,
+   "d": 2.16,
+   "text": "just instead of dying if you mess up you"
+  },
+  {
+   "t": 1413.6,
+   "d": 1.76,
+   "text": "just don't get a high score"
+  },
+  {
+   "t": 1415.36,
+   "d": 2.72,
+   "text": "um and so for the people who do speed"
+  },
+  {
+   "t": 1418.08,
+   "d": 0.48,
+   "text": "runs"
+  },
+  {
+   "t": 1418.56,
+   "d": 3.28,
+   "text": "of this um i really either real time or"
+  },
+  {
+   "t": 1421.84,
+   "d": 1.36,
+   "text": "turn based they're people who compete"
+  },
+  {
+   "t": 1423.2,
+   "d": 2.56,
+   "text": "for both um that does absolutely help"
+  },
+  {
+   "t": 1425.76,
+   "d": 2.08,
+   "text": "i've done it myself it's a lot of fun"
+  },
+  {
+   "t": 1427.84,
+   "d": 2.56,
+   "text": "but the vast majority of players aren't"
+  },
+  {
+   "t": 1430.4,
+   "d": 2.24,
+   "text": "doing this the vast majority of players"
+  },
+  {
+   "t": 1432.64,
+   "d": 1.36,
+   "text": "are just trying to win a game the vast"
+  },
+  {
+   "t": 1434.0,
+   "d": 1.68,
+   "text": "majority of players are just trying to"
+  },
+  {
+   "t": 1435.68,
+   "d": 1.84,
+   "text": "get their first rune or maybe to get to"
+  },
+  {
+   "t": 1437.52,
+   "d": 2.32,
+   "text": "the lair of beasts or whatever"
+  },
+  {
+   "t": 1439.84,
+   "d": 3.28,
+   "text": "um and for these players um"
+  },
+  {
+   "t": 1443.12,
+   "d": 3.76,
+   "text": "and so for this for this sort of play um"
+  },
+  {
+   "t": 1446.88,
+   "d": 1.6,
+   "text": "scoring doesn't help people who are"
+  },
+  {
+   "t": 1448.48,
+   "d": 1.6,
+   "text": "doing speed running people who"
+  },
+  {
+   "t": 1450.08,
+   "d": 1.68,
+   "text": "really care about scores is something"
+  },
+  {
+   "t": 1451.76,
+   "d": 1.52,
+   "text": "more than a way to just"
+  },
+  {
+   "t": 1453.28,
+   "d": 1.68,
+   "text": "track how far they've gotten through the"
+  },
+  {
+   "t": 1454.96,
+   "d": 1.6,
+   "text": "game um"
+  },
+  {
+   "t": 1456.56,
+   "d": 2.4,
+   "text": "they're always a very small minority and"
+  },
+  {
+   "t": 1458.96,
+   "d": 0.96,
+   "text": "it doesn't"
+  },
+  {
+   "t": 1459.92,
+   "d": 2.48,
+   "text": "really make sense to design the game for"
+  },
+  {
+   "t": 1462.4,
+   "d": 2.56,
+   "text": "them or to"
+  },
+  {
+   "t": 1465.52,
+   "d": 1.6,
+   "text": "really do anything of that kind which"
+  },
+  {
+   "t": 1467.12,
+   "d": 2.16,
+   "text": "does results in some i'm sorry"
+  },
+  {
+   "t": 1469.28,
+   "d": 1.92,
+   "text": "um it does result in some weird things"
+  },
+  {
+   "t": 1471.2,
+   "d": 1.68,
+   "text": "there are some hypothetically optimal"
+  },
+  {
+   "t": 1472.88,
+   "d": 1.36,
+   "text": "strategies"
+  },
+  {
+   "t": 1474.24,
+   "d": 1.44,
+   "text": "optimal play strategies for speed"
+  },
+  {
+   "t": 1475.68,
+   "d": 1.6,
+   "text": "running that are insane"
+  },
+  {
+   "t": 1477.28,
+   "d": 2.56,
+   "text": "because of the peculiarities of the way"
+  },
+  {
+   "t": 1479.84,
+   "d": 1.28,
+   "text": "scoring counts"
+  },
+  {
+   "t": 1481.12,
+   "d": 3.36,
+   "text": "it's per player action turns rather than"
+  },
+  {
+   "t": 1484.48,
+   "d": 1.76,
+   "text": "per actual in-game time which are"
+  },
+  {
+   "t": 1486.24,
+   "d": 1.76,
+   "text": "different things so you end up"
+  },
+  {
+   "t": 1488.0,
+   "d": 2.24,
+   "text": "trying to take actions that take a long"
+  },
+  {
+   "t": 1490.24,
+   "d": 1.92,
+   "text": "time while resting because that's fewer"
+  },
+  {
+   "t": 1492.16,
+   "d": 0.88,
+   "text": "turns"
+  },
+  {
+   "t": 1493.04,
+   "d": 1.6,
+   "text": "so if you want to rest as fast as"
+  },
+  {
+   "t": 1494.64,
+   "d": 1.84,
+   "text": "possible you wheel the loaf of bread and"
+  },
+  {
+   "t": 1496.48,
+   "d": 1.6,
+   "text": "swing it around because that takes half"
+  },
+  {
+   "t": 1498.08,
+   "d": 3.76,
+   "text": "again as long as"
+  },
+  {
+   "t": 1502.88,
+   "d": 3.04,
+   "text": "but yeah and so that would be a real"
+  },
+  {
+   "t": 1505.92,
+   "d": 2.08,
+   "text": "and so actually that would that would be"
+  },
+  {
+   "t": 1508.0,
+   "d": 2.96,
+   "text": "a real problem in its own way if um"
+  },
+  {
+   "t": 1510.96,
+   "d": 2.56,
+   "text": "if we if we were designing around speed"
+  },
+  {
+   "t": 1513.52,
+   "d": 0.48,
+   "text": "running"
+  },
+  {
+   "t": 1514.0,
+   "d": 2.08,
+   "text": "but again it's just such a small part of"
+  },
+  {
+   "t": 1516.08,
+   "d": 1.28,
+   "text": "the player base that it doesn't make"
+  },
+  {
+   "t": 1517.36,
+   "d": 0.88,
+   "text": "sense to"
+  },
+  {
+   "t": 1518.24,
+   "d": 2.96,
+   "text": "um make many assumptions about design"
+  },
+  {
+   "t": 1521.2,
+   "d": 1.6,
+   "text": "based on it"
+  },
+  {
+   "t": 1522.8,
+   "d": 2.88,
+   "text": "so oh um so you were talking about"
+  },
+  {
+   "t": 1525.68,
+   "d": 1.28,
+   "text": "checkpoints as food"
+  },
+  {
+   "t": 1526.96,
+   "d": 2.0,
+   "text": "yeah could you just do hard turn"
+  },
+  {
+   "t": 1528.96,
+   "d": 1.2,
+   "text": "checkpoints i know"
+  },
+  {
+   "t": 1530.16,
+   "d": 2.8,
+   "text": "still for instance does you have to"
+  },
+  {
+   "t": 1532.96,
+   "d": 0.72,
+   "text": "descend"
+  },
+  {
+   "t": 1533.68,
+   "d": 2.8,
+   "text": "before a certain point otherwise you"
+  },
+  {
+   "t": 1536.48,
+   "d": 2.56,
+   "text": "were just forced to descend every time"
+  },
+  {
+   "t": 1539.04,
+   "d": 1.76,
+   "text": "and then you know you eventually get to"
+  },
+  {
+   "t": 1540.8,
+   "d": 1.68,
+   "text": "420 and you either beat the game and you"
+  },
+  {
+   "t": 1542.48,
+   "d": 1.36,
+   "text": "get killed by workoff"
+  },
+  {
+   "t": 1543.84,
+   "d": 3.28,
+   "text": "um so the question was uh so"
+  },
+  {
+   "t": 1547.12,
+   "d": 1.52,
+   "text": "whether you could have a clock there"
+  },
+  {
+   "t": 1548.64,
+   "d": 1.52,
+   "text": "with just hard turns"
+  },
+  {
+   "t": 1550.16,
+   "d": 2.8,
+   "text": "uh checkpoints just get to floor this by"
+  },
+  {
+   "t": 1552.96,
+   "d": 2.32,
+   "text": "turn 500 flat out or you die or you lose"
+  },
+  {
+   "t": 1555.28,
+   "d": 1.2,
+   "text": "or whatever"
+  },
+  {
+   "t": 1556.48,
+   "d": 2.08,
+   "text": "oh that was was that still you said yeah"
+  },
+  {
+   "t": 1558.56,
+   "d": 0.96,
+   "text": "oh okay"
+  },
+  {
+   "t": 1559.52,
+   "d": 3.04,
+   "text": "um yeah sill doesn't"
+  },
+  {
+   "t": 1562.56,
+   "d": 1.68,
+   "text": "exactly work that way as i understand it"
+  },
+  {
+   "t": 1564.24,
+   "d": 1.52,
+   "text": "but it doesn't matter um"
+  },
+  {
+   "t": 1565.76,
+   "d": 3.44,
+   "text": "the um i would say the answer is in"
+  },
+  {
+   "t": 1569.2,
+   "d": 1.92,
+   "text": "principle yes but you would have it i"
+  },
+  {
+   "t": 1571.12,
+   "d": 1.52,
+   "text": "think that only really works"
+  },
+  {
+   "t": 1572.64,
+   "d": 3.12,
+   "text": "in a simpler game the idea of these so"
+  },
+  {
+   "t": 1575.76,
+   "d": 1.2,
+   "text": "first of all i think you need to have"
+  },
+  {
+   "t": 1576.96,
+   "d": 0.32,
+   "text": "the"
+  },
+  {
+   "t": 1577.28,
+   "d": 2.16,
+   "text": "checkpoints be very close together very"
+  },
+  {
+   "t": 1579.44,
+   "d": 1.2,
+   "text": "short because"
+  },
+  {
+   "t": 1580.64,
+   "d": 2.56,
+   "text": "if it's um if you realize you're moving"
+  },
+  {
+   "t": 1583.2,
+   "d": 2.56,
+   "text": "too slowly 200 turns into a 500 turn"
+  },
+  {
+   "t": 1585.76,
+   "d": 1.04,
+   "text": "checkpoint and"
+  },
+  {
+   "t": 1586.8,
+   "d": 4.88,
+   "text": "um you're uh um"
+  },
+  {
+   "t": 1592.16,
+   "d": 2.64,
+   "text": "i think it's uh again you have that uh"
+  },
+  {
+   "t": 1594.8,
+   "d": 1.92,
+   "text": "already dead problem potentially"
+  },
+  {
+   "t": 1596.72,
+   "d": 3.28,
+   "text": "i and the other thing is again you have"
+  },
+  {
+   "t": 1600.0,
+   "d": 2.08,
+   "text": "to have something where there's"
+  },
+  {
+   "t": 1602.08,
+   "d": 2.24,
+   "text": "where play style there are relatively"
+  },
+  {
+   "t": 1604.32,
+   "d": 2.48,
+   "text": "few similar play styles in terms of the"
+  },
+  {
+   "t": 1606.8,
+   "d": 1.76,
+   "text": "time they take you have to um"
+  },
+  {
+   "t": 1608.56,
+   "d": 1.76,
+   "text": "they would have to be very well balanced"
+  },
+  {
+   "t": 1610.32,
+   "d": 2.16,
+   "text": "because otherwise"
+  },
+  {
+   "t": 1612.48,
+   "d": 1.68,
+   "text": "again you end up with the situation"
+  },
+  {
+   "t": 1614.16,
+   "d": 2.16,
+   "text": "where either"
+  },
+  {
+   "t": 1616.32,
+   "d": 1.84,
+   "text": "some play styles aren't being"
+  },
+  {
+   "t": 1618.16,
+   "d": 2.16,
+   "text": "constrained by the clock at all really"
+  },
+  {
+   "t": 1620.32,
+   "d": 4.52,
+   "text": "or other play styles don't work and"
+  },
+  {
+   "t": 1624.84,
+   "d": 3.64,
+   "text": "um yeah okay"
+  },
+  {
+   "t": 1628.48,
+   "d": 13.36,
+   "text": "thank you"
+  },
+  {
+   "t": 1641.92,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

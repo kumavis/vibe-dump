@@ -1,0 +1,118 @@
+{
+  "id": "FnJxkId-1eE",
+  "title": "Dan Recht - Startup Lessons Learned From Roguelikes",
+  "speaker": "Dan Recht",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=FnJxkId-1eE",
+  "talk_type": "culture",
+  "summary": "Dan Recht, CEO of a hydrogen fuel tank startup, argues that roguelikes taught him to lead because their interacting systems force meaningful trade-offs and give fast, low-stakes feedback. He draws lessons from three games: Dream Quest (you can only shift probabilities, so draw more cards and stack the deck), Darkest Dungeon (stress management is a cost worth paying), and Sunless Sea (think in planned voyages with known speed and destination). The talk is mostly about leadership, but it describes what each game's mechanics communicate to the player.",
+  "games": [
+    "Dream Quest",
+    "Darkest Dungeon",
+    "Sunless Sea",
+    "Crypt of the NecroDancer"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "trade-offs",
+      "kind": "principle",
+      "claim": "Roguelikes make good learning tools because interacting systems produce trade-offs, and those trade-offs produce difficult, meaningful choices with strong feedback.",
+      "detail": "Recht says the player cannot be perfect at all systems at once, so the systems force choices with big in-world impact. The feedback from those choices initiates learning, and the player can simply try again if it goes wrong.",
+      "t": 266,
+      "quote": "they have this incredible set of interacting systems and those systems lead to trade-offs you can't always be perfect at all the systems all the time",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "replayability",
+      "kind": "principle",
+      "claim": "Because a roguelike run can be restarted, it offers repeated directed practice at hard choices where the stakes feel high but real harm is absent.",
+      "detail": "Recht describes the game as a sandbox: you see many examples of many kinds of trade-offs and can go back and do it again, so the stakes feel high without hurting anyone.",
+      "t": 310,
+      "quote": "you get to learn in a sandbox environment where you're not hurting anyone or ruining a business so the stakes feel high but in some sense they're not",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "deck as inventory",
+      "kind": "example",
+      "claim": "Dream Quest replaces the inventory with a deck of cards, so gaining equipment means adding cards and the player can only improve their odds in combat, not control outcomes directly.",
+      "detail": "Instead of fighting, combat is a card game; getting stronger means getting more cards. Recht notes this means he cannot directly influence winning a fight, only the probabilities in combat.",
+      "t": 339,
+      "quote": "instead of having an inventory you have a deck of cards and instead of fighting you play a card game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "example",
+      "claim": "Dream Quest's meta-progression is an achievement system whose rewards are new cards appearing in the game, so even between runs the player only manipulates probabilities.",
+      "detail": "Recht points out that the between-run system works the same way as in-run growth: unlocking adds cards to what can show up, changing what is possible and the odds of things.",
+      "t": 372,
+      "quote": "an achievement system where the rewards are just new cards that show up in the game and so again all you can do is the player is manipulate probabilities",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Dream Quest teaches that under uncertainty you can make luck by drawing more cards (making more attempts) and stacking the deck (improving what you draw from).",
+      "detail": "Recht says the first step is accepting uncertainty; the game offers two answers to it. He applies 'draw more cards' to negotiating with many partners and 'stack the deck' to hiring a strong team.",
+      "t": 499,
+      "quote": "dream quest gives us two answers the first is to draw more cards right we can make more attempts at succeeding",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "stress meter",
+      "kind": "example",
+      "claim": "Darkest Dungeon gives each character a stress meter: too much stress in one crawl causes an immediate affliction, and accumulated stress over time produces permanent quirks.",
+      "detail": "Recht describes stress rising as the party goes deeper; an affliction is like a mental breakdown (e.g. becoming hopeless), and quirks range from being too calm to falling in love to being a bad gambler or afraid of robots.",
+      "t": 633,
+      "quote": "if they get too stressed in one dungeon crawl they become afflicted something bad happens immediately it's like a mental breakdown",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "stress meter",
+      "kind": "principle",
+      "claim": "Darkest Dungeon's stress relief options (camping, the tavern) cost resources, which communicates to the player that managing stress is worth paying for but is never free.",
+      "detail": "Recht reads the designers' message as: it is worth making trade-offs to manage stress, and stress management is not free or easy. Mitigations include taking breaks in the dungeon or drinking and gambling at the tavern.",
+      "t": 740,
+      "quote": "it is worth making trade-offs to manage stress stress management isn't free and it isn't necessarily easy",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "travel speed",
+      "kind": "example",
+      "claim": "Sunless Sea deliberately keeps its ship slow on a huge procedurally shuffled map because speeding it up would reduce tension, the sense of distance and the menace of the dark.",
+      "detail": "Recht notes players complained about the slow boat, and quotes the creator's statement that it is a stately game and they resisted speeding up the ship to preserve tension and the sense of space. The map is procedurally shuffled rather than procedurally generated.",
+      "t": 902,
+      "quote": "we've resisted speeding up the ship because it would reduce the tension the sense of space and distance and the Menace of the dark",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource management",
+      "kind": "example",
+      "claim": "Sunless Sea frames play as long voyages where fuel, food and crew fear must be planned against a known destination, or the player runs out and limps home.",
+      "detail": "Recht cites the taglines 'lose your mind, eat your crew' and 'explore, take risks', and says without a planned destination you run out of things fast. He took from it thinking in voyages: know how fast you can go and where you are heading.",
+      "t": 1036,
+      "quote": "especially if you don't have a plan about where your destination is you're going to run out of things really fast and at best limp home",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "rhythm timing",
+      "kind": "example",
+      "claim": "Crypt of the NecroDancer embeds short-term risk management in timing, because the player must decide whether to act on this beat or wait for the next while everything else moves.",
+      "detail": "Answering an audience question about games that model risk rather than resources, Recht said NecroDancer's choice to act or pause on a beat is a way of approaching risk directly.",
+      "t": 1355,
+      "quote": "there's always the question of do I act on this beat or do I wait for the next beat because everybody's gonna act on this beat but me",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

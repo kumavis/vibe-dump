@@ -1,0 +1,1254 @@
+{
+ "id": "OwFrTY3IoQQ",
+ "url": "https://www.youtube.com/watch?v=OwFrTY3IoQQ",
+ "title": "David Brevik - Fireside Chat (The Making of Diablo)",
+ "speaker": "David Brevik",
+ "talk_title": "Fireside Chat (The Making of Diablo)",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-10-01",
+ "duration_s": 1800,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Host Alexei Pepers and David Brevik (President Skystone Games, VC Advisor, Creative Director, and former President of Blizzard North) will chat about the Roguelike roots of Diablo, and the development of Diablo and Diablo II.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Origins and influences"
+  },
+  {
+   "start": 145,
+   "title": "The shift to real-time"
+  },
+  {
+   "start": 564,
+   "title": "The power of prototyping"
+  },
+  {
+   "start": 862,
+   "title": "Reverse engineering Diablo"
+  },
+  {
+   "start": 1033,
+   "title": "Pacing and design evolution"
+  },
+  {
+   "start": 1275,
+   "title": "Class systems and builds"
+  },
+  {
+   "start": 1542,
+   "title": "Wisdom for developers"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4177,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.06,
+   "d": 8.16,
+   "text": "ALEXEI: OK. Well then, I am excited to just jump right into our first fireside chat with David"
+  },
+  {
+   "t": 11.22,
+   "d": 5.88,
+   "text": "Brevik. 32 year old veteran game developer best known for being president of Blizzard"
+  },
+  {
+   "t": 17.1,
+   "d": 7.5,
+   "text": "North creating groundbreaking games such as Diablo and Diablo II, hell gate London, marvel"
+  },
+  {
+   "t": 24.6,
+   "d": 8.76,
+   "text": "heroes and president of Skystone Games and being advisor and creative director. Welcome, David."
+  },
+  {
+   "t": 34.68,
+   "d": 7.44,
+   "text": "DAVID: Thanks for having me. ALEXEI: Yeah, it is really nice to have you"
+  },
+  {
+   "t": 43.14,
+   "d": 5.22,
+   "text": "at our little Roguelike conference. DAVID: It is fun."
+  },
+  {
+   "t": 49.2,
+   "d": 3.72,
+   "text": "ALEXEI: It is very nice for you to come and talk about the roguelikes"
+  },
+  {
+   "t": 54.3,
+   "d": 6.12,
+   "text": "and we are very interested in Diablo and the roguelike influence. I have heard we"
+  },
+  {
+   "t": 60.42,
+   "d": 5.88,
+   "text": "should call it -- DAVID: Yeah, maybe."
+  },
+  {
+   "t": 70.2,
+   "d": 12.18,
+   "text": "When Diablo first came out no one knew with what to call it. It was a little bit like chocolate and"
+  },
+  {
+   "t": 82.38,
+   "d": 12.54,
+   "text": "peanut butter. This is an RPG or action game? What is this? I don't even understand. Maybe"
+  },
+  {
+   "t": 95.88,
+   "d": 5.82,
+   "text": "Diablo is going to be an influence for a lot of other games. It has all become a miss mash now."
+  },
+  {
+   "t": 104.1,
+   "d": 5.1,
+   "text": "ALEXEI: At the time, how much was roguelike a term you could be throwing around in marketing"
+  },
+  {
+   "t": 109.2,
+   "d": 5.4,
+   "text": "and who would know what that was? DAVID: It wasn't. Some people knew"
+  },
+  {
+   "t": 114.6,
+   "d": 2.58,
+   "text": "what rogue was but I don't think the term"
+  },
+  {
+   "t": 117.18,
+   "d": 8.34,
+   "text": "roguelike even existed back then. ALEXEI: That's fascinating. I"
+  },
+  {
+   "t": 125.52,
+   "d": 2.76,
+   "text": "guess, getting right into it, I know sometimes we have very specific roguelike questions for this"
+  },
+  {
+   "t": 128.28,
+   "d": 5.82,
+   "text": "conference. I know one thing that comes up is it seems like Angband is a particularlinage. I know"
+  },
+  {
+   "t": 134.64,
+   "d": 9.12,
+   "text": "you played roguelikes in college. With Angband was there influences or just things out at the time?"
+  },
+  {
+   "t": 145.38,
+   "d": 8.16,
+   "text": "DAVID: That was definitely a huge influence on the design. When I started making Diablo,"
+  },
+  {
+   "t": 153.54,
+   "d": 6.54,
+   "text": "I started designing it in high school and started working on it. It was originally kind"
+  },
+  {
+   "t": 160.08,
+   "d": 8.64,
+   "text": "of a party-based game similar to the others at the time. You know, it started with wizardry and"
+  },
+  {
+   "t": 168.72,
+   "d": 11.22,
+   "text": "mark magic and barns tale and types of RPGs like that. When I went to college, I started playing a"
+  },
+  {
+   "t": 179.94,
+   "d": 11.1,
+   "text": "bunch of rogue and roguelike games and Moria and roguelike and others were really big influences"
+  },
+  {
+   "t": 191.04,
+   "d": 9.42,
+   "text": "on the design. I found myself in the community lab playing them hour after hour after hour. Then"
+  },
+  {
+   "t": 200.46,
+   "d": 6.78,
+   "text": "when the new Kamerun Moria came out I switched to that and that later became Angband and that"
+  },
+  {
+   "t": 207.24,
+   "d": 8.34,
+   "text": "was really a huge influence on what I want today do. When we left -- wanted to do. When I graduated"
+  },
+  {
+   "t": 215.58,
+   "d": 6.72,
+   "text": "from college the next thing was eventually I was going to make this Diablo game but it had"
+  },
+  {
+   "t": 222.3,
+   "d": 5.94,
+   "text": "radically shifted from this party-based thing to being like a roguelike kind of. But we wanted to"
+  },
+  {
+   "t": 228.24,
+   "d": 4.8,
+   "text": "do some other stuff but that was the big kind of theory about what we were going to make."
+  },
+  {
+   "t": 235.56,
+   "d": 8.28,
+   "text": "ALEXEI: I heard the first iteration of Diablo was -- there were things like turn base and"
+  },
+  {
+   "t": 243.84,
+   "d": 7.56,
+   "text": "permadeath. What was it like moving away from that and making the decisions of where to drop some of"
+  },
+  {
+   "t": 251.4,
+   "d": 4.02,
+   "text": "those and where to keep those roguelike elements because audible it worked out pretty well."
+  },
+  {
+   "t": 255.42,
+   "d": 12.72,
+   "text": "DAVID: [Laughter] yeah, it worked out just fine. But -- and in fact, I was really against"
+  },
+  {
+   "t": 268.14,
+   "d": 8.52,
+   "text": "the changes. Which we pitched Diablo, it was turn-based. In fact, you can find the original"
+  },
+  {
+   "t": 276.66,
+   "d": 7.98,
+   "text": "Diablo pitch document that we sent out and gave to people that shows and stuff. The original"
+  },
+  {
+   "t": 284.64,
+   "d": 7.86,
+   "text": "pitch document is on my gray beard games that's gray with an A. Graybeardgames.com and you can go"
+  },
+  {
+   "t": 292.5,
+   "d": 5.52,
+   "text": "there and download the PDF of the original Diablo pitch and it talks about it being turn-based and"
+  },
+  {
+   "t": 298.02,
+   "d": 9.84,
+   "text": "permadeath and things like that. We are started out really kind of wanting to make that turn-based"
+  },
+  {
+   "t": 307.86,
+   "d": 5.76,
+   "text": "game but it wasn't going to be kind of simple, my turn-your-turn kind of turn base. It was"
+  },
+  {
+   "t": 313.62,
+   "d": 6.9,
+   "text": "going to be turn-based with kind of like a points system so this particular move takes, you know,"
+  },
+  {
+   "t": 320.52,
+   "d": 7.56,
+   "text": "moving left, right or up and down is 10 points and diagonally moving takes 14 points so kind of like"
+  },
+  {
+   "t": 328.08,
+   "d": 8.04,
+   "text": "time segments so the order would constantly change. It wasn't just a my-turn/your-turn."
+  },
+  {
+   "t": 339.06,
+   "d": 5.22,
+   "text": "We started making that and that was the intent with Diablo and then about, oh, I don't know,"
+  },
+  {
+   "t": 345.18,
+   "d": 10.92,
+   "text": "about five or so months into development Blizzard was two separate, originally two separate"
+  },
+  {
+   "t": 356.1,
+   "d": 7.5,
+   "text": "independent developers. We were a development team called condore and the development team"
+  },
+  {
+   "t": 363.6,
+   "d": 6.6,
+   "text": "down south was in -- we are in northern California and they are in southern California and they were"
+  },
+  {
+   "t": 370.92,
+   "d": 6.78,
+   "text": "called silicon and synapse and got got and changed their name to Blizzard and we got bought and were"
+  },
+  {
+   "t": 377.7,
+   "d": 11.4,
+   "text": "called Blizzard North. We shared the Blizzard label and helped each out. Once acquired they"
+  },
+  {
+   "t": 389.1,
+   "d": 9.42,
+   "text": "did a tremendous amount of things for us and we more merged into one company. They called us up"
+  },
+  {
+   "t": 398.52,
+   "d": 5.04,
+   "text": "and said, what do you think about changing this to real-time instead of turn-based? I was like,"
+  },
+  {
+   "t": 403.56,
+   "d": 5.1,
+   "text": "God, no. No way do I want to do that. ALEXEI: Just a small suggestion."
+  },
+  {
+   "t": 408.66,
+   "d": 8.34,
+   "text": "DAVID: Exactly. I was just adamant there is no way I want to do that. It will ruin everything."
+  },
+  {
+   "t": 418.5,
+   "d": 11.46,
+   "text": "And for me, the turn-based and stuff was really the tension in a roguelike game. You know?"
+  },
+  {
+   "t": 430.86,
+   "d": 4.8,
+   "text": "You are going around and you are like kind of getting a little bit lazy because it"
+  },
+  {
+   "t": 435.66,
+   "d": 4.8,
+   "text": "gets a little easy and you come around the corner and all of a sudden get hit by -- oh,"
+  },
+  {
+   "t": 440.46,
+   "d": 5.88,
+   "text": "there is an ancient multi hue dragon that just came out of nowhere and I am really screwed now."
+  },
+  {
+   "t": 446.34,
+   "d": 4.08,
+   "text": "ALEXEI: Death my mortem. I vene the foolish mistakes. -- have seen."
+  },
+  {
+   "t": 453.24,
+   "d": 4.68,
+   "text": "DAVID: The palms are sweating and you are like I am going to lose this character and"
+  },
+  {
+   "t": 457.92,
+   "d": 8.46,
+   "text": "I have spent three weeks on this thing. What the hell is in my backpack? There has to be"
+  },
+  {
+   "t": 466.38,
+   "d": 5.58,
+   "text": "something to help me out here. How do I get out of this? So I was like I don't know want to lose"
+  },
+  {
+   "t": 471.96,
+   "d": 9.0,
+   "text": "that tension. That is really the key to making that game work. And they said well, about that,"
+  },
+  {
+   "t": 480.96,
+   "d": 11.46,
+   "text": "we don't want it permadeath either. I am like oh, my God. Oh, my God. No, that's ridiculous. So like"
+  },
+  {
+   "t": 494.52,
+   "d": 4.8,
+   "text": "I hung up the phone and went around the office and I started talking about this with a few"
+  },
+  {
+   "t": 499.32,
+   "d": 6.36,
+   "text": "people or whatever. Can you believe the outrage of them wanting to turn this thing into real-time"
+  },
+  {
+   "t": 505.68,
+   "d": 7.08,
+   "text": "or whatever? And then like a couple days go by and approach me and are like we want to"
+  },
+  {
+   "t": 512.76,
+   "d": 9.78,
+   "text": "turn it to real-time and we don't want it to be turn-based ask I am like oh, man. I held out and"
+  },
+  {
+   "t": 522.54,
+   "d": 7.26,
+   "text": "it eventually came down to a vote. There was about 15-17 people around that in the company at the"
+  },
+  {
+   "t": 529.8,
+   "d": 6.36,
+   "text": "time. We all gathered together in the kitchen and we had a vote and about four of us wanted to keep"
+  },
+  {
+   "t": 536.16,
+   "d": 5.76,
+   "text": "it turned base and everyone else wanted to switch to real-time. We ended up giving it a try and the"
+  },
+  {
+   "t": 541.92,
+   "d": 7.8,
+   "text": "moment I tried it I knew it was the right decision for the game, for the market at the time, and"
+  },
+  {
+   "t": 549.72,
+   "d": 7.44,
+   "text": "things like that. It was like this is obviously something new and really great. Though it wasn't"
+  },
+  {
+   "t": 557.16,
+   "d": 6.06,
+   "text": "a decision I didn't like and take lightly, in the end, I was really glad we did it."
+  },
+  {
+   "t": 564.78,
+   "d": 6.24,
+   "text": "ALEXEI: Do you think that's still a design sensibility to move forward with in your"
+  },
+  {
+   "t": 571.02,
+   "d": 5.28,
+   "text": "career of if you are not sure -- like getting that prototype and kind of feeling it and seeing it?"
+  },
+  {
+   "t": 576.3,
+   "d": 9.84,
+   "text": "DAVID: Absolutely. I am very into prototypes. I still make tons of prototypes. I still program"
+  },
+  {
+   "t": 586.14,
+   "d": 7.5,
+   "text": "almost every day. I make prototypes of all sorts of different things. I will have ideas and I"
+  },
+  {
+   "t": 593.64,
+   "d": 5.52,
+   "text": "will prototype things and sometimes I will use them and sometimes I will just put them"
+  },
+  {
+   "t": 599.16,
+   "d": 6.54,
+   "text": "on the shelf but I am constantly prototyping stuff to see how it works. Even in products,"
+  },
+  {
+   "t": 606.72,
+   "d": 14.58,
+   "text": "we are big budget projects, we are prototyping stuff all of the time. Being the cool part about"
+  },
+  {
+   "t": 621.3,
+   "d": 6.18,
+   "text": "prototypes is you don't put a whole bunch of effort into it so if it is throw away it is like"
+  },
+  {
+   "t": 628.02,
+   "d": 6.3,
+   "text": "that didn't work but let's move on. That's how I felt about the prototype of turning the game"
+  },
+  {
+   "t": 634.32,
+   "d": 6.06,
+   "text": "Diablo from turn-based to real-time. When they suggested it I was like this is going to take so"
+  },
+  {
+   "t": 640.38,
+   "d": 8.52,
+   "text": "lon. We were the world worst businessman. We signed the deal to do Diablo for like"
+  },
+  {
+   "t": 650.58,
+   "d": 5.82,
+   "text": "$300,000 for the whole development of the game. The math doesn't even work out."
+  },
+  {
+   "t": 658.44,
+   "d": 7.92,
+   "text": "We were desperate for more money because we had totally blown it. I was like it is going to take"
+  },
+  {
+   "t": 666.36,
+   "d": 7.2,
+   "text": "an extra milestone and months to do this so they ended up giving us a little more"
+  },
+  {
+   "t": 676.26,
+   "d": 5.04,
+   "text": "and eventually acquired us so that all went away which was great. The stres of that situation."
+  },
+  {
+   "t": 687.6,
+   "d": 6.12,
+   "text": "I started on a Friday and sent everybody home for the weekend because nobody could do anything while"
+  },
+  {
+   "t": 693.72,
+   "d": 9.78,
+   "text": "I made this gigantic change to the program. I had it running that afternoon. Like 6-8 hours."
+  },
+  {
+   "t": 706.38,
+   "d": 7.62,
+   "text": "I had it running. You could still call it kind of prototype-y but it was obviously enough to"
+  },
+  {
+   "t": 714.0,
+   "d": 5.76,
+   "text": "know right away that this was something that you could play and you could feel what it was"
+  },
+  {
+   "t": 719.76,
+   "d": 5.04,
+   "text": "going to be like. Even if it had not worked out, it was not going to be a giant waste of time."
+  },
+  {
+   "t": 726.6,
+   "d": 5.16,
+   "text": "ALEXEI: Yeah, getting there quick. Liz Laser Walker asked in chat what"
+  },
+  {
+   "t": 731.76,
+   "d": 10.38,
+   "text": "kind of stuff are you still prototyping today? DAVID: I don't know if I can share all the stuff"
+  },
+  {
+   "t": 742.14,
+   "d": 8.58,
+   "text": "I prototype. The thing I have been prototyping the most lately is a different offering for me"
+  },
+  {
+   "t": 750.72,
+   "d": 4.8,
+   "text": "is a puzzle roguelike game. I have been doing a lot of prototyping with that."
+  },
+  {
+   "t": 755.52,
+   "d": 1.1,
+   "text": "ALEXEI: That is exciting and relevant with this audience. Talking about real-time and"
+  },
+  {
+   "t": 756.62,
+   "d": 1.48,
+   "text": "the prototyping, we had a submitted question about the transition of figuring out what's the"
+  },
+  {
+   "t": 772.26,
+   "d": 7.5,
+   "text": "minimal viable real set to get to real-time out of turn base and keeping some of that flexibility and"
+  },
+  {
+   "t": 779.76,
+   "d": 5.04,
+   "text": "how much, you know, you have to change the rules, if you can keep the rules flexible enough so you"
+  },
+  {
+   "t": 784.8,
+   "d": 6.12,
+   "text": "don't have to throw away the work so it applies to real-time or turn base. Do you have any thoughts"
+  },
+  {
+   "t": 790.92,
+   "d": 6.42,
+   "text": "there? How do you start bridging that gap? DAVID: For us, luckily, we had designed the"
+  },
+  {
+   "t": 797.34,
+   "d": 8.52,
+   "text": "thing so it was like, you know, this move takes 10 to move sideways and 14 diagonally and turned"
+  },
+  {
+   "t": 805.86,
+   "d": 6.9,
+   "text": "those into fractions of a second and said 1.4 second do is move diagonally and 1 second to"
+  },
+  {
+   "t": 812.76,
+   "d": 9.0,
+   "text": "move orthogonally and things like that were pretty easy to instantly, oh, I am going to run"
+  },
+  {
+   "t": 821.76,
+   "d": 5.64,
+   "text": "basically 10 turns a second or whatever, and see what that's like. It didn't take very long"
+  },
+  {
+   "t": 827.4,
+   "d": 4.62,
+   "text": "for me to kind of prototype that and then I could tweak the numbers and set it up so I could change"
+  },
+  {
+   "t": 832.02,
+   "d": 5.4,
+   "text": "them and things like that. I had the prototype running pretty quickly. I just took a bunch of"
+  },
+  {
+   "t": 837.42,
+   "d": 6.48,
+   "text": "turns a second and merged a lot of the data we had already setup to kind of run in real-time."
+  },
+  {
+   "t": 843.9,
+   "d": 4.68,
+   "text": "There were some changes that I need today do in terms of like -- need today do in terms of -- your"
+  },
+  {
+   "t": 848.58,
+   "d": 6.3,
+   "text": "turns and monster turn going through at the same time and it wasn't a massive mount of work."
+  },
+  {
+   "t": 854.88,
+   "d": 5.76,
+   "text": "A lot of data and things like that underneath were still applied and that helped a ton."
+  },
+  {
+   "t": 864.06,
+   "d": 2.34,
+   "text": "ALEXEI: I found it interesting looking under the"
+  },
+  {
+   "t": 866.4,
+   "d": 2.7,
+   "text": "hood because of the Open Source of things like Manhattan. They have an"
+  },
+  {
+   "t": 870.54,
+   "d": 5.58,
+   "text": "action cost system and that's how their turn base works. That's interesting"
+  },
+  {
+   "t": 876.96,
+   "d": 5.28,
+   "text": "the numbers let you convert that back and forth. DAVID: The source code for Diablo got reverse"
+  },
+  {
+   "t": 882.24,
+   "d": 12.96,
+   "text": "engineered. The story on that was pretty crazy. So the -- eventually somebody somehow cracked the"
+  },
+  {
+   "t": 895.2,
+   "d": 9.12,
+   "text": "encryption for PlayStation 1. So the PlayStation 1, we made Diablo for PlayStation 1 only we didn't"
+  },
+  {
+   "t": 904.32,
+   "d": 6.18,
+   "text": "make it. We had a separate developer made it. We just kind of oversaw it. We were working on Diablo"
+  },
+  {
+   "t": 910.5,
+   "d": 11.82,
+   "text": "II at the time. We hired somebody to port Diablo to the console. So they had like made it and,"
+  },
+  {
+   "t": 922.32,
+   "d": 9.48,
+   "text": "you know, came out but they had taken it and when they made the image for the CDR -- CD rom,"
+  },
+  {
+   "t": 935.16,
+   "d": 8.34,
+   "text": "they thought it was safe and put the symbol table for the things to be encrypted on to the disk."
+  },
+  {
+   "t": 943.5,
+   "d": 5.7,
+   "text": "When they hacked and cracked the PlayStation thing people looked at the disks and found the symbol"
+  },
+  {
+   "t": 949.2,
+   "d": 7.86,
+   "text": "table for Diablo and then reverse, you know, engineered the whole thing. You know disassembled"
+  },
+  {
+   "t": 958.92,
+   "d": 9.6,
+   "text": "and were able to reverse engineer the code. Diablo 1 source is out there in cracked form somewhere."
+  },
+  {
+   "t": 976.44,
+   "d": 2.49,
+   "text": "ALEXEI: That's good to know. I am sure no one here will do anything elicit to have a look at that."
+  },
+  {
+   "t": 978.93,
+   "d": 2.79,
+   "text": "DAVID: They so me I have it running on a phone. It is pretty crazy"
+  },
+  {
+   "t": 981.72,
+   "d": 4.56,
+   "text": "what they have done. ALEXEI: That's great."
+  },
+  {
+   "t": 986.28,
+   "d": 5.82,
+   "text": "Another question. So, you know, really specifically even the kind of walking speed,"
+  },
+  {
+   "t": 992.82,
+   "d": 5.4,
+   "text": "another point that comes up is the transition of, you know, the original Diablo quite a bit closer"
+  },
+  {
+   "t": 998.22,
+   "d": 6.36,
+   "text": "to roguelike, still is kind of a slower pace and then as they go on they get more action-y"
+  },
+  {
+   "t": 1004.58,
+   "d": 5.4,
+   "text": "and get further from that. You know, when did that come from? That decision of"
+  },
+  {
+   "t": 1009.98,
+   "d": 5.46,
+   "text": "start to speed it up and make it more actiony? How much was intentional choices and how much"
+  },
+  {
+   "t": 1017.42,
+   "d": 5.46,
+   "text": "when you were working on Diablo how far did you have to push it? At a certain point, would you"
+  },
+  {
+   "t": 1022.88,
+   "d": 8.94,
+   "text": "have wanted to make Diablo I as fast pace as Diablo II? Or did you do that intentionally?"
+  },
+  {
+   "t": 1031.82,
+   "d": 9.6,
+   "text": "DAVID: Right. I think that Diablo I was slow paced and I thought that it was right for the project."
+  },
+  {
+   "t": 1042.38,
+   "d": 13.5,
+   "text": "I liked how slow it was. But it was still kind of a large grid based project. It was very much like"
+  },
+  {
+   "t": 1057.44,
+   "d": 8.16,
+   "text": "making any ASCII road -- roguelike where it is like I generated the dudgeons by hand and came up"
+  },
+  {
+   "t": 1065.6,
+   "d": 11.7,
+   "text": "with different layout and converted the layouts like a door and floor using this complicated"
+  },
+  {
+   "t": 1077.3,
+   "d": 7.98,
+   "text": "system that would convert that stuff into the graphics for the level. It was all hand done"
+  },
+  {
+   "t": 1085.28,
+   "d": 6.3,
+   "text": "for each tileset. Each tileset had a different algorithm, conversion process, different tiles"
+  },
+  {
+   "t": 1091.58,
+   "d": 11.22,
+   "text": "that had to be substituted in. It was a total nightmare. Because of that it was on this big"
+  },
+  {
+   "t": 1102.8,
+   "d": 11.22,
+   "text": "grid that dictated the way the game was play. You couldn't stop. You had to move from tile to tile"
+  },
+  {
+   "t": 1115.46,
+   "d": 7.73,
+   "text": "and could only be surrounded by eight things. The limits were very very different. When we"
+  },
+  {
+   "t": 1123.19,
+   "d": 20.95,
+   "text": "decided to make Diablo -- Diablo II we went a 5X5 grid and then you have kind of different shapes"
+  },
+  {
+   "t": 1144.14,
+   "d": 7.86,
+   "text": "like small monsters could take up one square. You kind of took up like a little cross shape."
+  },
+  {
+   "t": 1152.84,
+   "d": 6.6,
+   "text": "Things like that. That allowed you to be surrounded by more things and have much more"
+  },
+  {
+   "t": 1159.44,
+   "d": 7.44,
+   "text": "flexibility in pathing and appear much smoother. We also went with 16 direction movement instead of"
+  },
+  {
+   "t": 1166.88,
+   "d": 8.4,
+   "text": "8. And animations and different visuals. There were a bunch of things we did to kind of like"
+  },
+  {
+   "t": 1175.28,
+   "d": 6.48,
+   "text": "change the fidelity of actual movement in the universe. That made a huge change in the pace."
+  },
+  {
+   "t": 1185.9,
+   "d": 8.88,
+   "text": "That combined with the number one complaint that we got was the walk when you are in town coming"
+  },
+  {
+   "t": 1194.78,
+   "d": 5.64,
+   "text": "out of the dudgeon out to the witch or whatever to get potions was like this long ass walk."
+  },
+  {
+   "t": 1203.12,
+   "d": 6.84,
+   "text": "It like took 30-40 seconds to get out there. We were like I wish this game had running and we"
+  },
+  {
+   "t": 1209.96,
+   "d": 7.38,
+   "text": "put that in and were like this is cool and fast and I like the running but we were like we can't"
+  },
+  {
+   "t": 1217.34,
+   "d": 4.2,
+   "text": "just have people running so we put in a stamina bar to make sure they can't run all of the time"
+  },
+  {
+   "t": 1221.54,
+   "d": 11.46,
+   "text": "which was a terrible decision. Long story long there it was kind of a bunch of micro decisions"
+  },
+  {
+   "t": 1233.0,
+   "d": 8.4,
+   "text": "that made movement a more fluid things and the possibilities of where you moved and stopped and"
+  },
+  {
+   "t": 1242.84,
+   "d": 6.66,
+   "text": "that stuff combined with speed and the fact you could run upped the game. Then when you"
+  },
+  {
+   "t": 1249.5,
+   "d": 7.2,
+   "text": "could run we had to have monsters that could run as fast so the whole thing escalated in"
+  },
+  {
+   "t": 1256.7,
+   "d": 8.1,
+   "text": "speed because of these micro decisions. ALEXEI: That's fascinating. It boils down to"
+  },
+  {
+   "t": 1264.8,
+   "d": 9.36,
+   "text": "it was annoying to spend 30 seconds walking across the cannel. Game development. That's"
+  },
+  {
+   "t": 1274.16,
+   "d": 7.08,
+   "text": "really cool. Continuing with these deep dive-y questions, another thing coming up is when it"
+  },
+  {
+   "t": 1281.24,
+   "d": 6.48,
+   "text": "comes to classes and item sets because original Diablo your starting class choice doesn't impact"
+  },
+  {
+   "t": 1287.72,
+   "d": 4.5,
+   "text": "a whole lot. Your initial attributes and things like that. But you can build a build as you can"
+  },
+  {
+   "t": 1292.22,
+   "d": 8.7,
+   "text": "and use different items. You can use skill trees and then item sets so you are not just looking"
+  },
+  {
+   "t": 1300.92,
+   "d": 4.98,
+   "text": "at mixing and matching everything individually. It was kind of like the thought about that shift"
+  },
+  {
+   "t": 1305.9,
+   "d": 7.44,
+   "text": "and how it impacted and closer to the idea of build being a focus of the Diablo series."
+  },
+  {
+   "t": 1313.34,
+   "d": 8.7,
+   "text": "DAVID: One of the things we wanted to do when we set out to make Diablo was to make the anti-RPG at"
+  },
+  {
+   "t": 1322.04,
+   "d": 11.16,
+   "text": "the time. It was like so many RPGs were like this is about elves, and dwarfs and dragons and we were"
+  },
+  {
+   "t": 1333.2,
+   "d": 4.68,
+   "text": "like we are not doing any of that. We are going to make a bunch of scary monsters and it is going to"
+  },
+  {
+   "t": 1337.88,
+   "d": 7.08,
+   "text": "be creepy as hell and it is going to be dark. So some of that stemmed to the logic of the classes."
+  },
+  {
+   "t": 1344.96,
+   "d": 6.36,
+   "text": "We have a few meta classes or whatever. But it doesn't make any sense that I am a person. Like I"
+  },
+  {
+   "t": 1351.32,
+   "d": 6.84,
+   "text": "can pick up a sword and swing it. I might suck at it and I am not as good as someone trained so if"
+  },
+  {
+   "t": 1358.16,
+   "d": 5.7,
+   "text": "you want to be trained at it you can be a warrior but if you aren't trained you can still do it you"
+  },
+  {
+   "t": 1363.86,
+   "d": 6.06,
+   "text": "just aren't very good at it. That was kind of the theory behind the character classes when we made"
+  },
+  {
+   "t": 1369.92,
+   "d": 7.68,
+   "text": "them in Diablo. Anyone can do anything. Whether you are good like casting animations might be"
+  },
+  {
+   "t": 1377.6,
+   "d": 8.64,
+   "text": "slower or faster depending on the class or attack animation so it balanced it out in theory. It"
+  },
+  {
+   "t": 1386.24,
+   "d": 5.88,
+   "text": "was supposed to be anybody can do anything but you were just bad at some stuff and better at"
+  },
+  {
+   "t": 1392.12,
+   "d": 5.28,
+   "text": "other things so it is best to focus on the good things. However what that made was just a giant"
+  },
+  {
+   "t": 1397.4,
+   "d": 2.52,
+   "text": "soup where nobody knew what to do. ALEXEI: Right. A criticism of some"
+  },
+  {
+   "t": 1402.2,
+   "d": 8.82,
+   "text": "roguelikes perhaps. DAVID: As the average consumer picking up"
+  },
+  {
+   "t": 1411.02,
+   "d": 5.22,
+   "text": "the game they didn't know what the hell they were supposed to be doing. They didn't quite understand"
+  },
+  {
+   "t": 1416.24,
+   "d": 7.26,
+   "text": "the direction they were going in. So in Diablo II we were like OK we have to guide people much"
+  },
+  {
+   "t": 1423.5,
+   "d": 6.66,
+   "text": "better and restrict people in many ways. It wasn't impossible to do some of the things but it was"
+  },
+  {
+   "t": 1430.16,
+   "d": 4.68,
+   "text": "like it is just going to be a lot easier to use a bow because you are going have the dexterity and"
+  },
+  {
+   "t": 1434.84,
+   "d": 6.3,
+   "text": "strength requires if you are playing the Amazon but if you are not you can still do it maybe"
+  },
+  {
+   "t": 1441.14,
+   "d": 6.48,
+   "text": "but it is not going to be as good but it is not really what you are supposed to be doing. Helping"
+  },
+  {
+   "t": 1447.62,
+   "d": 6.9,
+   "text": "them with better skill design and then making the choices of hey, I want to be in the Amazon"
+  },
+  {
+   "t": 1454.52,
+   "d": 6.48,
+   "text": "but look there is a bunch of different types of ways I can go with that. I can use bows, I can use"
+  },
+  {
+   "t": 1461.0,
+   "d": 6.72,
+   "text": "spears. It is like there is different ways to play that particular character class narrowed it down a"
+  },
+  {
+   "t": 1467.72,
+   "d": 5.4,
+   "text": "lot for people it made them focus on particular things in general. Then eventually things like"
+  },
+  {
+   "t": 1473.12,
+   "d": 7.5,
+   "text": "sets allowed us to incorporate new ideas and put twists on everything we had done so far"
+  },
+  {
+   "t": 1480.62,
+   "d": 6.6,
+   "text": "as a late-game experience where people were like oh we can get these particular items, craft it,"
+  },
+  {
+   "t": 1487.22,
+   "d": 7.2,
+   "text": "make this super powerful combination with these other skills was a lot of different combinations"
+  },
+  {
+   "t": 1494.42,
+   "d": 4.62,
+   "text": "could come out of that and we found that really exciting to twist the gameplay at the end."
+  },
+  {
+   "t": 1501.32,
+   "d": 5.76,
+   "text": "ALEXEI: That's really interesting how much comes partly from that, you know, marketability and then"
+  },
+  {
+   "t": 1507.08,
+   "d": 5.82,
+   "text": "just understandability of Diablo was reaching a bigger audience than a lot of roguelikes were,"
+  },
+  {
+   "t": 1512.9,
+   "d": 6.36,
+   "text": "and so, you know, that leads to needing to, you know, have some balance there. I think nowadays"
+  },
+  {
+   "t": 1519.26,
+   "d": 6.84,
+   "text": "modern games you see a lot of roguelike and roguelike elements coming into modern games"
+  },
+  {
+   "t": 1526.1,
+   "d": 6.06,
+   "text": "and see balances like meta progression. I am curious now looking at the different kind of"
+  },
+  {
+   "t": 1532.16,
+   "d": 5.22,
+   "text": "ways roguelikes have blended with the mainstream, are there any different paths you could see"
+  },
+  {
+   "t": 1537.38,
+   "d": 4.44,
+   "text": "yourself taking? Like if you were back at Diablo thinking about how to make it more approachable?"
+  },
+  {
+   "t": 1541.82,
+   "d": 7.68,
+   "text": "DAVID: Sure. Absolutely but hindsight is 20/20. Doing design has changed so much"
+  },
+  {
+   "t": 1549.5,
+   "d": 11.22,
+   "text": "in the almost 30 years since doing Diablo. We started working on Diablo in '94 so almost"
+  },
+  {
+   "t": 1560.72,
+   "d": 10.26,
+   "text": "exactly 30 years ago we started working on it. So it was -- you know, there is so many ways the"
+  },
+  {
+   "t": 1570.98,
+   "d": 7.02,
+   "text": "games have become much more sophisticated. And, you know, the internet was kind of brand new back"
+  },
+  {
+   "t": 1578.0,
+   "d": 6.06,
+   "text": "then and there is lots of things about it that are just so different. Right now you have like"
+  },
+  {
+   "t": 1584.06,
+   "d": 6.36,
+   "text": "streaming and with Twitch and YouTube and things like that you have communities and Discord with"
+  },
+  {
+   "t": 1590.42,
+   "d": 7.56,
+   "text": "real-time that. You have unprecedented access to the devs and stuff. It is really kind of a"
+  },
+  {
+   "t": 1597.98,
+   "d": 5.94,
+   "text": "great time in many ways, can be great but it can also be grueling and terrible especially if you"
+  },
+  {
+   "t": 1603.92,
+   "d": 7.38,
+   "text": "screw something up because you will definitely get an earfull but it vale kind of fun to have"
+  },
+  {
+   "t": 1611.3,
+   "d": 7.62,
+   "text": "a community that's really supportive and being able to do stuff together and whatnot. Kind of"
+  },
+  {
+   "t": 1618.92,
+   "d": 6.66,
+   "text": "creates new ways to kind of create products and stuff. And kind of make games better and better."
+  },
+  {
+   "t": 1625.58,
+   "d": 8.04,
+   "text": "Have wider audiences. Even making games, because of the gaming business so huge now,"
+  },
+  {
+   "t": 1633.62,
+   "d": 8.22,
+   "text": "and there is so many people playing games, you can even make niche games and it can still be"
+  },
+  {
+   "t": 1641.84,
+   "d": 8.04,
+   "text": "successful even though the audience isn't huge like it isn't like a triple A kind of product but"
+  },
+  {
+   "t": 1650.6,
+   "d": 5.64,
+   "text": "it can kind an audience because there are so many people dedicated to these micro parts of gaming."
+  },
+  {
+   "t": 1657.8,
+   "d": 6.06,
+   "text": "ALEXEI: That's really interesting. I was going to ask if you had words of advice to roguelike"
+  },
+  {
+   "t": 1663.86,
+   "d": 5.1,
+   "text": "developers now or designer in the space since you have been designing in it for a long time."
+  },
+  {
+   "t": 1670.94,
+   "d": 5.1,
+   "text": "Sounds like that was a lot of words of wisdom of leaning on that community and connectedness."
+  },
+  {
+   "t": 1676.04,
+   "d": 9.9,
+   "text": "DAVID: Absolutely. It so important -- I think some of the biggest things are like make sure that you"
+  },
+  {
+   "t": 1685.94,
+   "d": 6.66,
+   "text": "kind of have a vision for your product but don't be so ridged that you are going in there blindly,"
+  },
+  {
+   "t": 1692.6,
+   "d": 5.7,
+   "text": "you know, thinking this is the way it has to be. If you are getting a bunch of comments saying I"
+  },
+  {
+   "t": 1698.3,
+   "d": 4.02,
+   "text": "don't like this and you are like but that's the way it's got to be you have to be asking"
+  },
+  {
+   "t": 1702.32,
+   "d": 6.06,
+   "text": "yourself is it really the way that it's got to be? Things like that. It is the making sure that"
+  },
+  {
+   "t": 1708.38,
+   "d": 4.2,
+   "text": "you are getting the feedback, participating with people that you trust and understand,"
+  },
+  {
+   "t": 1712.58,
+   "d": 6.36,
+   "text": "and you believe can give you good advice. Involve them in the community and get some feedback on"
+  },
+  {
+   "t": 1718.94,
+   "d": 5.28,
+   "text": "what you are doing and make the product b better. I learned that lesson early. Changing the game"
+  },
+  {
+   "t": 1724.22,
+   "d": 7.44,
+   "text": "from turn base to real-time, I listened, gave it a try and sure enough it was the right decision."
+  },
+  {
+   "t": 1733.1,
+   "d": 6.78,
+   "text": "Never be afraid to make changes in what your grand vision was because almost always your end"
+  },
+  {
+   "t": 1739.88,
+   "d": 5.34,
+   "text": "product will not be exactly the way you imagined it whenever you started working on it. It will"
+  },
+  {
+   "t": 1745.22,
+   "d": 6.48,
+   "text": "almost always change and evolve over time. ALEXEI: I think that's great. There is a kind"
+  },
+  {
+   "t": 1751.7,
+   "d": 4.26,
+   "text": "of humility in it of being willing to be outvoted and see what happens."
+  },
+  {
+   "t": 1755.96,
+   "d": 4.74,
+   "text": "DAVID: Yeah, I don't have the all answers. The smartest person in the room isn't the"
+  },
+  {
+   "t": 1760.7,
+   "d": 2.4,
+   "text": "person with all of the answers. It is the person that listens to everybody."
+  },
+  {
+   "t": 1765.38,
+   "d": 9.03,
+   "text": "ALEXEI: I think that's good enough wisdom that we should end on that. Thank you for coming and being"
+  },
+  {
+   "t": 1774.41,
+   "d": 8.07,
+   "text": "a part of this. It is great. I think Diablo has an interesting role in the history of roguelikes even"
+  },
+  {
+   "t": 1782.48,
+   "d": 6.0,
+   "text": "if we don't call them Diablo-likes. DAVID: Thanks so much for having me."
+  },
+  {
+   "t": 1788.48,
+   "d": 5.64,
+   "text": "It was were -- super fun and a pleasure talking to you. Have a good celebration."
+  }
+ ]
+}

@@ -1,0 +1,2492 @@
+{
+ "id": "Ls9wksddN5c",
+ "url": "https://www.youtube.com/watch?v=Ls9wksddN5c",
+ "title": "Oliver Withington: The Right Variety: Understanding & Visualising Output Diversity of Your Generator",
+ "speaker": "Oliver Withington",
+ "talk_title": "The Right Variety: Understanding & Visualising Output Diversity of Your Generator",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 998,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Selecting and tuning generators for games is hard! There are typically many methods we could use to generate stuff for our Roguelikes, and many ways we can tweak the parameters of a chosen system. But when these systems can produce huge numbers of unique artefacts, working out what which one producing the best stuff for our game is very challenging. Luckily this has also been an important issue for academic researchers looking at PCG, and one there have been significant advances in over the past two decades. In this talk I'll be giving a practical overview of techniques that you can use to assess your generator, based on the work of myself and my peers from the world of PCG research.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 86,
+   "title": "Evaluating generative systems"
+  },
+  {
+   "start": 315,
+   "title": "SOF techniques"
+  },
+  {
+   "start": 816,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3457,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.56,
+   "d": 2.88,
+   "text": "flexible we have olly who is a games and"
+  },
+  {
+   "t": 5.44,
+   "d": 2.68,
+   "text": "AI researcher living in London in"
+  },
+  {
+   "t": 8.12,
+   "d": 3.2,
+   "text": "hopefully his last year of a PhD focused"
+  },
+  {
+   "t": 11.32,
+   "d": 1.96,
+   "text": "on development of techniques for"
+  },
+  {
+   "t": 13.28,
+   "d": 1.44,
+   "text": "assessing the diversity present in"
+  },
+  {
+   "t": 14.72,
+   "d": 2.12,
+   "text": "procedurally generated output in his"
+  },
+  {
+   "t": 16.84,
+   "d": 1.4,
+   "text": "spare time he's a keen game developer"
+  },
+  {
+   "t": 18.24,
+   "d": 2.52,
+   "text": "and 3D artist and getting to turn his"
+  },
+  {
+   "t": 20.76,
+   "d": 1.76,
+   "text": "love for games and pro gen into new"
+  },
+  {
+   "t": 22.52,
+   "d": 2.92,
+   "text": "research has been great experience and"
+  },
+  {
+   "t": 25.44,
+   "d": 4.84,
+   "text": "luckily uh is coming here to share his"
+  },
+  {
+   "t": 30.28,
+   "d": 2.76,
+   "text": "insights and techniques on visualizing"
+  },
+  {
+   "t": 33.04,
+   "d": 3.36,
+   "text": "generators with us today hello"
+  },
+  {
+   "t": 36.4,
+   "d": 2.64,
+   "text": "Oli H good evening thank you so much for"
+  },
+  {
+   "t": 39.04,
+   "d": 2.2,
+   "text": "having me on uh and yeah thank you for"
+  },
+  {
+   "t": 41.24,
+   "d": 1.96,
+   "text": "that lovely intro I hope you can all uh"
+  },
+  {
+   "t": 43.2,
+   "d": 1.72,
+   "text": "hear me clearly I'm not going to look at"
+  },
+  {
+   "t": 44.92,
+   "d": 3.56,
+   "text": "the chat just in case um well any advice"
+  },
+  {
+   "t": 48.48,
+   "d": 3.04,
+   "text": "not to to get thrown off so yes um I'm"
+  },
+  {
+   "t": 51.52,
+   "d": 2.32,
+   "text": "here with lightning talk looking at"
+  },
+  {
+   "t": 53.84,
+   "d": 3.36,
+   "text": "techniques that we can use for uh"
+  },
+  {
+   "t": 57.2,
+   "d": 1.56,
+   "text": "understanding and visualizing the output"
+  },
+  {
+   "t": 58.76,
+   "d": 2.32,
+   "text": "diversity of generative systems that you"
+  },
+  {
+   "t": 61.08,
+   "d": 2.16,
+   "text": "might be using when making your games so"
+  },
+  {
+   "t": 63.24,
+   "d": 1.16,
+   "text": "I can probably skip over lots of this"
+  },
+  {
+   "t": 64.4,
+   "d": 2.44,
+   "text": "after that lovely info but yeah I'm my"
+  },
+  {
+   "t": 66.84,
+   "d": 1.84,
+   "text": "name is olle based here in London which"
+  },
+  {
+   "t": 68.68,
+   "d": 2.72,
+   "text": "is why it's quite dark in my background"
+  },
+  {
+   "t": 71.4,
+   "d": 2.52,
+   "text": "and this is going to be quite a whippy"
+  },
+  {
+   "t": 73.92,
+   "d": 2.68,
+   "text": "lightning talk especially because I keep"
+  },
+  {
+   "t": 76.6,
+   "d": 1.52,
+   "text": "on overrunning in my practice runs of"
+  },
+  {
+   "t": 78.12,
+   "d": 1.96,
+   "text": "this talk so please feel free to reach"
+  },
+  {
+   "t": 80.08,
+   "d": 1.52,
+   "text": "out to me afterwards if you have any"
+  },
+  {
+   "t": 81.6,
+   "d": 2.56,
+   "text": "questions or any thoughts uh that i' bet"
+  },
+  {
+   "t": 84.16,
+   "d": 1.68,
+   "text": "I would love to hear from"
+  },
+  {
+   "t": 85.84,
+   "d": 3.6,
+   "text": "you so uh evaluating generative systems"
+  },
+  {
+   "t": 89.44,
+   "d": 2.44,
+   "text": "you know evaluating the performance of"
+  },
+  {
+   "t": 91.88,
+   "d": 2.64,
+   "text": "stuff systems that make stuff for games"
+  },
+  {
+   "t": 94.52,
+   "d": 2.56,
+   "text": "broadly speaking there two angles you"
+  },
+  {
+   "t": 97.08,
+   "d": 2.36,
+   "text": "can take you can look at the input side"
+  },
+  {
+   "t": 99.44,
+   "d": 3.2,
+   "text": "at the resources required in terms of"
+  },
+  {
+   "t": 102.64,
+   "d": 2.52,
+   "text": "human labor pre-made assets and so on or"
+  },
+  {
+   "t": 105.16,
+   "d": 1.76,
+   "text": "you can look at the qualities of the"
+  },
+  {
+   "t": 106.92,
+   "d": 1.64,
+   "text": "output you can look at the qualities of"
+  },
+  {
+   "t": 108.56,
+   "d": 1.48,
+   "text": "individual artifacts or the overall"
+  },
+  {
+   "t": 110.04,
+   "d": 2.2,
+   "text": "diversity and it's in this Messier"
+  },
+  {
+   "t": 112.24,
+   "d": 3.0,
+   "text": "latter camp that um I am more more"
+  },
+  {
+   "t": 115.24,
+   "d": 2.88,
+   "text": "interested and where we'll be focusing"
+  },
+  {
+   "t": 118.12,
+   "d": 3.92,
+   "text": "today so the two oh W it's none of my"
+  },
+  {
+   "t": 122.04,
+   "d": 1.72,
+   "text": "animations are going to show up that's"
+  },
+  {
+   "t": 123.76,
+   "d": 3.72,
+   "text": "fine um the two sort of terms I will be"
+  },
+  {
+   "t": 127.48,
+   "d": 2.48,
+   "text": "throwing around quite a lot in this uh"
+  },
+  {
+   "t": 129.96,
+   "d": 2.4,
+   "text": "this presentation are generative space"
+  },
+  {
+   "t": 132.36,
+   "d": 1.44,
+   "text": "and possibility space which I believe"
+  },
+  {
+   "t": 133.8,
+   "d": 1.96,
+   "text": "are not widely used outside of gaming"
+  },
+  {
+   "t": 135.76,
+   "d": 1.36,
+   "text": "resarch so I thought I'd start with a"
+  },
+  {
+   "t": 137.12,
+   "d": 2.84,
+   "text": "quick prime one those"
+  },
+  {
+   "t": 139.96,
+   "d": 5.12,
+   "text": "two so possibility space refers to the"
+  },
+  {
+   "t": 145.08,
+   "d": 2.24,
+   "text": "abstract conceptual volume that contains"
+  },
+  {
+   "t": 147.32,
+   "d": 1.8,
+   "text": "all of the content that is possible"
+  },
+  {
+   "t": 149.12,
+   "d": 1.6,
+   "text": "within a given coding system that you've"
+  },
+  {
+   "t": 150.72,
+   "d": 2.24,
+   "text": "decided upon whether that be a grammar"
+  },
+  {
+   "t": 152.96,
+   "d": 2.08,
+   "text": "or some kind of tiat based system"
+  },
+  {
+   "t": 155.04,
+   "d": 1.8,
+   "text": "anything that you can represent with"
+  },
+  {
+   "t": 156.84,
+   "d": 1.84,
+   "text": "that with is within the possibility"
+  },
+  {
+   "t": 158.68,
+   "d": 2.12,
+   "text": "space whereas the generative space"
+  },
+  {
+   "t": 160.8,
+   "d": 1.16,
+   "text": "refers to the volume of stuff that"
+  },
+  {
+   "t": 161.96,
+   "d": 1.84,
+   "text": "you're actually going to produce from"
+  },
+  {
+   "t": 163.8,
+   "d": 2.28,
+   "text": "your generator where where your like"
+  },
+  {
+   "t": 166.08,
+   "d": 1.96,
+   "text": "space within the possibility space your"
+  },
+  {
+   "t": 168.04,
+   "d": 3.32,
+   "text": "generator is occupying so to illustrate"
+  },
+  {
+   "t": 171.36,
+   "d": 1.8,
+   "text": "this with an example of a game that"
+  },
+  {
+   "t": 173.16,
+   "d": 2.64,
+   "text": "we're all likely familiar with Minecraft"
+  },
+  {
+   "t": 175.8,
+   "d": 3.2,
+   "text": "the generator space for Minecraft uh"
+  },
+  {
+   "t": 179.0,
+   "d": 1.76,
+   "text": "encompasses anything you could see when"
+  },
+  {
+   "t": 180.76,
+   "d": 1.84,
+   "text": "you first generate a new world in"
+  },
+  {
+   "t": 182.6,
+   "d": 1.36,
+   "text": "Minecraft anything that could be spat"
+  },
+  {
+   "t": 183.96,
+   "d": 1.76,
+   "text": "out by Minecraft's lovely terrain"
+  },
+  {
+   "t": 185.72,
+   "d": 2.44,
+   "text": "generator uh in the form of its lovely"
+  },
+  {
+   "t": 188.16,
+   "d": 2.48,
+   "text": "um QB voxal that is the generative space"
+  },
+  {
+   "t": 190.64,
+   "d": 3.0,
+   "text": "for Minecraft whereas anything outside"
+  },
+  {
+   "t": 193.64,
+   "d": 1.52,
+   "text": "of the possibility space could be"
+  },
+  {
+   "t": 195.16,
+   "d": 1.92,
+   "text": "something as closely related as"
+  },
+  {
+   "t": 197.08,
+   "d": 1.6,
+   "text": "something that requires a block type"
+  },
+  {
+   "t": 198.68,
+   "d": 1.96,
+   "text": "that doesn't exist in the base game but"
+  },
+  {
+   "t": 200.64,
+   "d": 1.8,
+   "text": "it also exists you know the entire rest"
+  },
+  {
+   "t": 202.44,
+   "d": 1.84,
+   "text": "of creation is outside the possibility"
+  },
+  {
+   "t": 204.28,
+   "d": 2.4,
+   "text": "space of Minecraft anything that cannot"
+  },
+  {
+   "t": 206.68,
+   "d": 3.28,
+   "text": "be represented with voxels is the"
+  },
+  {
+   "t": 209.96,
+   "d": 1.96,
+   "text": "possibility space but there is this"
+  },
+  {
+   "t": 211.92,
+   "d": 1.56,
+   "text": "interesting Hinterland in between the"
+  },
+  {
+   "t": 213.48,
+   "d": 2.04,
+   "text": "two stuff that you can technically"
+  },
+  {
+   "t": 215.52,
+   "d": 1.52,
+   "text": "produce in Minecraft but is never going"
+  },
+  {
+   "t": 217.04,
+   "d": 1.92,
+   "text": "to be produced by its terrain generator"
+  },
+  {
+   "t": 218.96,
+   "d": 2.6,
+   "text": "or at least we assume is not going to be"
+  },
+  {
+   "t": 221.56,
+   "d": 2.84,
+   "text": "possible now these two terms are quite"
+  },
+  {
+   "t": 224.4,
+   "d": 2.36,
+   "text": "useful for me when thinking about tuning"
+  },
+  {
+   "t": 226.76,
+   "d": 2.72,
+   "text": "and evaluating uh a generative system"
+  },
+  {
+   "t": 229.48,
+   "d": 2.32,
+   "text": "because we can think of tuning a"
+  },
+  {
+   "t": 231.8,
+   "d": 1.6,
+   "text": "generator to produce the best possible"
+  },
+  {
+   "t": 233.4,
+   "d": 2.52,
+   "text": "content as trying to localize a"
+  },
+  {
+   "t": 235.92,
+   "d": 2.48,
+   "text": "generative space optimally within the"
+  },
+  {
+   "t": 238.4,
+   "d": 1.4,
+   "text": "possibility space trying to get it"
+  },
+  {
+   "t": 239.8,
+   "d": 2.2,
+   "text": "overlap as much as possible with the the"
+  },
+  {
+   "t": 242.0,
+   "d": 2.16,
+   "text": "volume of content that we want all of"
+  },
+  {
+   "t": 244.16,
+   "d": 2.4,
+   "text": "the the good proen narratives the good"
+  },
+  {
+   "t": 246.56,
+   "d": 1.72,
+   "text": "levels the interesting weapons whatever"
+  },
+  {
+   "t": 248.28,
+   "d": 1.88,
+   "text": "it is regenerating we're trying to move"
+  },
+  {
+   "t": 250.16,
+   "d": 1.88,
+   "text": "our generous space so that it occupies"
+  },
+  {
+   "t": 252.04,
+   "d": 2.04,
+   "text": "as much of that desirable space as"
+  },
+  {
+   "t": 254.08,
+   "d": 3.2,
+   "text": "possible now in this S NA visualization"
+  },
+  {
+   "t": 257.28,
+   "d": 1.88,
+   "text": "you might you think like oh well that's"
+  },
+  {
+   "t": 259.16,
+   "d": 1.28,
+   "text": "super easy then we just get the green"
+  },
+  {
+   "t": 260.44,
+   "d": 1.88,
+   "text": "blob to overlap with the blue blob and"
+  },
+  {
+   "t": 262.32,
+   "d": 1.6,
+   "text": "we've got the perfect infinite content"
+  },
+  {
+   "t": 263.92,
+   "d": 2.0,
+   "text": "machine well I I probably don't have to"
+  },
+  {
+   "t": 265.92,
+   "d": 1.44,
+   "text": "tell this audience that it's nowhere"
+  },
+  {
+   "t": 267.36,
+   "d": 2.04,
+   "text": "near as simple as that for a bunch of"
+  },
+  {
+   "t": 269.4,
+   "d": 1.96,
+   "text": "reasons but the you know some of the big"
+  },
+  {
+   "t": 271.36,
+   "d": 1.84,
+   "text": "ones being the sheer number of artifact"
+  },
+  {
+   "t": 273.2,
+   "d": 1.92,
+   "text": "is possible to produce you know it's"
+  },
+  {
+   "t": 275.12,
+   "d": 1.56,
+   "text": "quite trivial to make a generator that"
+  },
+  {
+   "t": 276.68,
+   "d": 2.24,
+   "text": "has quintilian of unique artifacts"
+  },
+  {
+   "t": 278.92,
+   "d": 1.36,
+   "text": "within its generative space and we do"
+  },
+  {
+   "t": 280.28,
+   "d": 2.24,
+   "text": "not have time to look at them all and"
+  },
+  {
+   "t": 282.52,
+   "d": 1.84,
+   "text": "even if we did even"
+  },
+  {
+   "t": 284.36,
+   "d": 2.64,
+   "text": "individual um even individual artifacts"
+  },
+  {
+   "t": 287.0,
+   "d": 1.8,
+   "text": "within that space can take a huge amount"
+  },
+  {
+   "t": 288.8,
+   "d": 2.2,
+   "text": "of time to evaluate due to their size or"
+  },
+  {
+   "t": 291.0,
+   "d": 1.68,
+   "text": "the number of goals we have for them and"
+  },
+  {
+   "t": 292.68,
+   "d": 3.12,
+   "text": "so on uh and the quality of them can be"
+  },
+  {
+   "t": 295.8,
+   "d": 1.72,
+   "text": "hugely subjective even within a you know"
+  },
+  {
+   "t": 297.52,
+   "d": 1.56,
+   "text": "I've experienced this myself even in a"
+  },
+  {
+   "t": 299.08,
+   "d": 1.8,
+   "text": "two person Dev team you can get a huge"
+  },
+  {
+   "t": 300.88,
+   "d": 1.76,
+   "text": "amount of disagreement on whether or not"
+  },
+  {
+   "t": 302.64,
+   "d": 1.96,
+   "text": "a level is good so the idea there's"
+  },
+  {
+   "t": 304.6,
+   "d": 2.56,
+   "text": "going to be any sort of universality to"
+  },
+  {
+   "t": 307.16,
+   "d": 2.4,
+   "text": "working out where your s gen space is in"
+  },
+  {
+   "t": 309.56,
+   "d": 1.6,
+   "text": "relation to the desirable space of"
+  },
+  {
+   "t": 311.16,
+   "d": 2.16,
+   "text": "content is is yeah it's just not going"
+  },
+  {
+   "t": 313.32,
+   "d": 2.64,
+   "text": "to happen um but that doesn't mean we"
+  },
+  {
+   "t": 315.96,
+   "d": 1.16,
+   "text": "cannot try and does not mean there's"
+  },
+  {
+   "t": 317.12,
+   "d": 2.96,
+   "text": "necess not necessarily value in trying"
+  },
+  {
+   "t": 320.08,
+   "d": 1.6,
+   "text": "to understand where our generative space"
+  },
+  {
+   "t": 321.68,
+   "d": 2.92,
+   "text": "is so getting into some of the sof"
+  },
+  {
+   "t": 324.6,
+   "d": 1.88,
+   "text": "techniques we might want to look at and"
+  },
+  {
+   "t": 326.48,
+   "d": 2.4,
+   "text": "I just uh i' I've focused more on game"
+  },
+  {
+   "t": 328.88,
+   "d": 1.96,
+   "text": "levels in my research but in theory"
+  },
+  {
+   "t": 330.84,
+   "d": 1.48,
+   "text": "these techniques should be usable for"
+  },
+  {
+   "t": 332.32,
+   "d": 2.04,
+   "text": "any kind of game content and indeed all"
+  },
+  {
+   "t": 334.36,
+   "d": 2.6,
+   "text": "of these have been used for things as"
+  },
+  {
+   "t": 336.96,
+   "d": 2.84,
+   "text": "diverse as proty generation to um"
+  },
+  {
+   "t": 339.8,
+   "d": 1.92,
+   "text": "narrative generation so even though my"
+  },
+  {
+   "t": 341.72,
+   "d": 2.2,
+   "text": "examples will be quite game environment"
+  },
+  {
+   "t": 343.92,
+   "d": 2.68,
+   "text": "based um just bear in mind that no"
+  },
+  {
+   "t": 346.6,
+   "d": 0.92,
+   "text": "matter what you're generating these"
+  },
+  {
+   "t": 347.52,
+   "d": 1.96,
+   "text": "techniques might be useful for"
+  },
+  {
+   "t": 349.48,
+   "d": 3.52,
+   "text": "you so starting here with the technique"
+  },
+  {
+   "t": 353.0,
+   "d": 1.64,
+   "text": "that we'll all have used anytime we've"
+  },
+  {
+   "t": 354.64,
+   "d": 2.68,
+   "text": "made a generator for bug fixing and"
+  },
+  {
+   "t": 357.32,
+   "d": 3.16,
+   "text": "final testing"
+  },
+  {
+   "t": 360.48,
+   "d": 2.96,
+   "text": "um what I call content sampling but is"
+  },
+  {
+   "t": 363.44,
+   "d": 2.16,
+   "text": "simply the process of generating some"
+  },
+  {
+   "t": 365.6,
+   "d": 1.64,
+   "text": "things and looking at them seeing what"
+  },
+  {
+   "t": 367.24,
+   "d": 2.68,
+   "text": "we think um now obviously this will be"
+  },
+  {
+   "t": 369.92,
+   "d": 2.08,
+   "text": "done numerous times when making any kind"
+  },
+  {
+   "t": 372.0,
+   "d": 2.24,
+   "text": "of generator but it it is a valuable"
+  },
+  {
+   "t": 374.24,
+   "d": 1.2,
+   "text": "technique for trying to understand our"
+  },
+  {
+   "t": 375.44,
+   "d": 2.56,
+   "text": "generative space it yeah even looking at"
+  },
+  {
+   "t": 378.0,
+   "d": 2.0,
+   "text": "a small set of artifacts can tell you if"
+  },
+  {
+   "t": 380.0,
+   "d": 2.92,
+   "text": "you find a good artifact and that tells"
+  },
+  {
+   "t": 382.92,
+   "d": 1.08,
+   "text": "you there's good stuff in there if you"
+  },
+  {
+   "t": 384.0,
+   "d": 1.2,
+   "text": "find something broken that tells you"
+  },
+  {
+   "t": 385.2,
+   "d": 2.72,
+   "text": "there's broken stuff in there but it"
+  },
+  {
+   "t": 387.92,
+   "d": 2.28,
+   "text": "obviously can be quite misleading"
+  },
+  {
+   "t": 390.2,
+   "d": 1.24,
+   "text": "because if your generous space is"
+  },
+  {
+   "t": 391.44,
+   "d": 1.8,
+   "text": "extremely large you can sample a large"
+  },
+  {
+   "t": 393.24,
+   "d": 2.2,
+   "text": "amount of content from it and you might"
+  },
+  {
+   "t": 395.44,
+   "d": 1.64,
+   "text": "still be getting a quite sort of myopic"
+  },
+  {
+   "t": 397.08,
+   "d": 2.16,
+   "text": "view of the underlying generative"
+  },
+  {
+   "t": 399.24,
+   "d": 2.88,
+   "text": "space so this is going to be most useful"
+  },
+  {
+   "t": 402.12,
+   "d": 1.68,
+   "text": "when well especially if you're um time"
+  },
+  {
+   "t": 403.8,
+   "d": 1.48,
+   "text": "for doing anything more complicated"
+  },
+  {
+   "t": 405.28,
+   "d": 2.2,
+   "text": "isn't there but if your Genry space is"
+  },
+  {
+   "t": 407.48,
+   "d": 1.32,
+   "text": "quite tightly defined you're using a"
+  },
+  {
+   "t": 408.8,
+   "d": 1.96,
+   "text": "very constrained grammar say or you're"
+  },
+  {
+   "t": 410.76,
+   "d": 2.44,
+   "text": "using something like cellular autometer"
+  },
+  {
+   "t": 413.2,
+   "d": 1.92,
+   "text": "which tend to produce fairly of like"
+  },
+  {
+   "t": 415.12,
+   "d": 1.76,
+   "text": "homogenous looking output even if it's"
+  },
+  {
+   "t": 416.88,
+   "d": 0.84,
+   "text": "yeah there might technically be"
+  },
+  {
+   "t": 417.72,
+   "d": 2.36,
+   "text": "trillions of maps that can be reduced by"
+  },
+  {
+   "t": 420.08,
+   "d": 1.64,
+   "text": "to like a cellular autometer based"
+  },
+  {
+   "t": 421.72,
+   "d": 2.4,
+   "text": "generator but they have like oat effect"
+  },
+  {
+   "t": 424.12,
+   "d": 2.64,
+   "text": "of looking quite perceptually similar uh"
+  },
+  {
+   "t": 426.76,
+   "d": 1.32,
+   "text": "then content sampling might be all you"
+  },
+  {
+   "t": 428.08,
+   "d": 2.6,
+   "text": "need but there are options if you'd like"
+  },
+  {
+   "t": 430.68,
+   "d": 3.12,
+   "text": "to get a higher level View and I do"
+  },
+  {
+   "t": 433.8,
+   "d": 1.48,
+   "text": "apologize that all of this stuff should"
+  },
+  {
+   "t": 435.28,
+   "d": 1.56,
+   "text": "be animating in nicely so it's not such"
+  },
+  {
+   "t": 436.84,
+   "d": 2.56,
+   "text": "an immediate uh information overload for"
+  },
+  {
+   "t": 439.4,
+   "d": 3.76,
+   "text": "the slice so apologies for that but uh"
+  },
+  {
+   "t": 443.16,
+   "d": 1.56,
+   "text": "yeah option two I'd like to talk about"
+  },
+  {
+   "t": 444.72,
+   "d": 2.36,
+   "text": "is expressive range analysis or erra for"
+  },
+  {
+   "t": 447.08,
+   "d": 2.8,
+   "text": "short it's very common in my field of"
+  },
+  {
+   "t": 449.88,
+   "d": 1.96,
+   "text": "game research and by my understanding it"
+  },
+  {
+   "t": 451.84,
+   "d": 1.88,
+   "text": "is also quite widely used in industry"
+  },
+  {
+   "t": 453.72,
+   "d": 1.36,
+   "text": "just not necessarily by this name I"
+  },
+  {
+   "t": 455.08,
+   "d": 2.12,
+   "text": "think this term is quite clunky it makes"
+  },
+  {
+   "t": 457.2,
+   "d": 0.84,
+   "text": "it sound like you're doing something a"
+  },
+  {
+   "t": 458.04,
+   "d": 3.04,
+   "text": "lot fancier than you are doing um"
+  },
+  {
+   "t": 461.08,
+   "d": 2.56,
+   "text": "because to apply ra all we need to do is"
+  },
+  {
+   "t": 463.64,
+   "d": 1.68,
+   "text": "generate a large amount of content for"
+  },
+  {
+   "t": 465.32,
+   "d": 1.8,
+   "text": "my generator like as much as we have the"
+  },
+  {
+   "t": 467.12,
+   "d": 2.56,
+   "text": "compute available to to do and then we"
+  },
+  {
+   "t": 469.68,
+   "d": 2.0,
+   "text": "need to decide on some features or or"
+  },
+  {
+   "t": 471.68,
+   "d": 2.12,
+   "text": "metrics to calculate for each piece of"
+  },
+  {
+   "t": 473.8,
+   "d": 2.16,
+   "text": "content now these are intended to be"
+  },
+  {
+   "t": 475.96,
+   "d": 1.8,
+   "text": "sort of like yeah descriptive features"
+  },
+  {
+   "t": 477.76,
+   "d": 1.16,
+   "text": "that we think are interesting about"
+  },
+  {
+   "t": 478.92,
+   "d": 1.56,
+   "text": "whatever we may and especially things we"
+  },
+  {
+   "t": 480.48,
+   "d": 3.44,
+   "text": "want to find diversity in um so in this"
+  },
+  {
+   "t": 483.92,
+   "d": 1.32,
+   "text": "of Minecraft example maybe we'd be"
+  },
+  {
+   "t": 485.24,
+   "d": 1.12,
+   "text": "interested in the amount of tree"
+  },
+  {
+   "t": 486.36,
+   "d": 1.4,
+   "text": "coverage or the average Hye of the"
+  },
+  {
+   "t": 487.76,
+   "d": 1.56,
+   "text": "mountains and then once you've"
+  },
+  {
+   "t": 489.32,
+   "d": 1.16,
+   "text": "calculated these features for all of"
+  },
+  {
+   "t": 490.48,
+   "d": 2.44,
+   "text": "your content you can then plot them yeah"
+  },
+  {
+   "t": 492.92,
+   "d": 1.28,
+   "text": "often in a 2d plot but you could"
+  },
+  {
+   "t": 494.2,
+   "d": 3.0,
+   "text": "theoretically do it in 1D or 3D uh but"
+  },
+  {
+   "t": 497.2,
+   "d": 1.72,
+   "text": "what we effectively get then is a a"
+  },
+  {
+   "t": 498.92,
+   "d": 1.76,
+   "text": "visualization of our generative space in"
+  },
+  {
+   "t": 500.68,
+   "d": 1.68,
+   "text": "terms of these features you know based"
+  },
+  {
+   "t": 502.36,
+   "d": 3.28,
+   "text": "on if each point in this uh chart is a"
+  },
+  {
+   "t": 505.64,
+   "d": 1.68,
+   "text": "map you're kind of getting an idea of"
+  },
+  {
+   "t": 507.32,
+   "d": 0.96,
+   "text": "what the overall shape of your"
+  },
+  {
+   "t": 508.28,
+   "d": 1.8,
+   "text": "generative space is in term terms of"
+  },
+  {
+   "t": 510.08,
+   "d": 2.08,
+   "text": "these features now this is naturally"
+  },
+  {
+   "t": 512.16,
+   "d": 1.28,
+   "text": "most useful if you know exactly what"
+  },
+  {
+   "t": 513.44,
+   "d": 3.36,
+   "text": "kind of diversity you want to produce um"
+  },
+  {
+   "t": 516.8,
+   "d": 1.44,
+   "text": "if you've got like an idea for what say"
+  },
+  {
+   "t": 518.24,
+   "d": 1.64,
+   "text": "upper and lower bounds of you know tree"
+  },
+  {
+   "t": 519.88,
+   "d": 1.52,
+   "text": "coverage you want then this can tell you"
+  },
+  {
+   "t": 521.4,
+   "d": 2.12,
+   "text": "that you immediately at a glance but"
+  },
+  {
+   "t": 523.52,
+   "d": 0.84,
+   "text": "even if you don't know what good"
+  },
+  {
+   "t": 524.36,
+   "d": 2.12,
+   "text": "diversity you want this can still be"
+  },
+  {
+   "t": 526.48,
+   "d": 1.2,
+   "text": "quite informative it tells you what kind"
+  },
+  {
+   "t": 527.68,
+   "d": 1.64,
+   "text": "of content your system can't produce"
+  },
+  {
+   "t": 529.32,
+   "d": 1.8,
+   "text": "what it can produce and it can be used"
+  },
+  {
+   "t": 531.12,
+   "d": 2.08,
+   "text": "as a form of pseudo bug fixing even you"
+  },
+  {
+   "t": 533.2,
+   "d": 1.64,
+   "text": "know you might be quite surprised to see"
+  },
+  {
+   "t": 534.84,
+   "d": 2.96,
+   "text": "you know in the toy example 100% water"
+  },
+  {
+   "t": 537.8,
+   "d": 1.36,
+   "text": "coverage and a large number of three"
+  },
+  {
+   "t": 539.16,
+   "d": 0.92,
+   "text": "cover"
+  },
+  {
+   "t": 540.08,
+   "d": 1.08,
+   "text": "that might indicate these maps are"
+  },
+  {
+   "t": 541.16,
+   "d": 1.48,
+   "text": "actually broken you know something that"
+  },
+  {
+   "t": 542.64,
+   "d": 1.52,
+   "text": "would not you know a weakness of your"
+  },
+  {
+   "t": 544.16,
+   "d": 0.92,
+   "text": "generated that wouldn't have been"
+  },
+  {
+   "t": 545.08,
+   "d": 1.72,
+   "text": "exposed if you'd even sampled a large"
+  },
+  {
+   "t": 546.8,
+   "d": 1.2,
+   "text": "number of"
+  },
+  {
+   "t": 548.0,
+   "d": 3.2,
+   "text": "maps um also just this is where a lot of"
+  },
+  {
+   "t": 551.2,
+   "d": 1.32,
+   "text": "my research is focused so if you'd be"
+  },
+  {
+   "t": 552.52,
+   "d": 2.64,
+   "text": "interested in learning about how we can"
+  },
+  {
+   "t": 555.16,
+   "d": 1.64,
+   "text": "u in a more informed way select pairings"
+  },
+  {
+   "t": 556.8,
+   "d": 2.52,
+   "text": "of metrics to to visualize or use newal"
+  },
+  {
+   "t": 559.32,
+   "d": 1.32,
+   "text": "networks to start predicting these"
+  },
+  {
+   "t": 560.64,
+   "d": 2.04,
+   "text": "metrics than what that can do yeah feel"
+  },
+  {
+   "t": 562.68,
+   "d": 1.4,
+   "text": "free to check out my work and then ask"
+  },
+  {
+   "t": 564.08,
+   "d": 2.56,
+   "text": "me about it whenever you like I just to"
+  },
+  {
+   "t": 566.64,
+   "d": 2.24,
+   "text": "highlight um Abdul Raman gave A really"
+  },
+  {
+   "t": 568.88,
+   "d": 1.12,
+   "text": "lovely talk a couple of years ago at"
+  },
+  {
+   "t": 570.0,
+   "d": 1.96,
+   "text": "rogel where he used RA in the more"
+  },
+  {
+   "t": 571.96,
+   "d": 2.8,
+   "text": "specific context of his game scenario"
+  },
+  {
+   "t": 574.76,
+   "d": 1.28,
+   "text": "but he has time he had time to go into"
+  },
+  {
+   "t": 576.04,
+   "d": 1.36,
+   "text": "much more depth than I do today so I'd"
+  },
+  {
+   "t": 577.4,
+   "d": 1.52,
+   "text": "really back talk if you'd like to know"
+  },
+  {
+   "t": 578.92,
+   "d": 2.04,
+   "text": "more about"
+  },
+  {
+   "t": 580.96,
+   "d": 2.72,
+   "text": "ra but what if we aren't sure what kind"
+  },
+  {
+   "t": 583.68,
+   "d": 1.12,
+   "text": "of diversity we're interested in or"
+  },
+  {
+   "t": 584.8,
+   "d": 1.32,
+   "text": "think of diversity interest in can't"
+  },
+  {
+   "t": 586.12,
+   "d": 2.64,
+   "text": "really be calculated trivially there are"
+  },
+  {
+   "t": 588.76,
+   "d": 2.08,
+   "text": "still options we have available to us uh"
+  },
+  {
+   "t": 590.84,
+   "d": 1.64,
+   "text": "specifically I'm talking about"
+  },
+  {
+   "t": 592.48,
+   "d": 1.84,
+   "text": "dimensionality reduction algorithms or"
+  },
+  {
+   "t": 594.32,
+   "d": 2.32,
+   "text": "Dr algorithms for short now these"
+  },
+  {
+   "t": 596.64,
+   "d": 3.2,
+   "text": "algorithms are quite widely used in as"
+  },
+  {
+   "t": 599.84,
+   "d": 1.52,
+   "text": "like a pre-processing step when using"
+  },
+  {
+   "t": 601.36,
+   "d": 1.4,
+   "text": "machine learning or in sort of data"
+  },
+  {
+   "t": 602.76,
+   "d": 1.76,
+   "text": "predictive analysis and what they"
+  },
+  {
+   "t": 604.52,
+   "d": 1.2,
+   "text": "effectively let you do I we don't have"
+  },
+  {
+   "t": 605.72,
+   "d": 1.12,
+   "text": "time to go into any depth on how they"
+  },
+  {
+   "t": 606.84,
+   "d": 1.68,
+   "text": "work what they do is they let you for"
+  },
+  {
+   "t": 608.52,
+   "d": 2.28,
+   "text": "like a high dimensional data set with um"
+  },
+  {
+   "t": 610.8,
+   "d": 2.08,
+   "text": "hundreds or thousands of variables you"
+  },
+  {
+   "t": 612.88,
+   "d": 2.84,
+   "text": "can often compress these data sets down"
+  },
+  {
+   "t": 615.72,
+   "d": 1.92,
+   "text": "by producing new variables out of"
+  },
+  {
+   "t": 617.64,
+   "d": 1.8,
+   "text": "combinations of the original ones that"
+  },
+  {
+   "t": 619.44,
+   "d": 1.52,
+   "text": "still account for like a large amount of"
+  },
+  {
+   "t": 620.96,
+   "d": 2.76,
+   "text": "variance in the underlying data set so"
+  },
+  {
+   "t": 623.72,
+   "d": 1.44,
+   "text": "say in like yeah it's quite common in"
+  },
+  {
+   "t": 625.16,
+   "d": 1.32,
+   "text": "healthcare data sets where you might"
+  },
+  {
+   "t": 626.48,
+   "d": 1.8,
+   "text": "have like hundreds of variables for each"
+  },
+  {
+   "t": 628.28,
+   "d": 2.56,
+   "text": "patient but maybe you find in your"
+  },
+  {
+   "t": 630.84,
+   "d": 2.52,
+   "text": "analysis that load of those variables"
+  },
+  {
+   "t": 633.36,
+   "d": 1.36,
+   "text": "are strongly correlated with each other"
+  },
+  {
+   "t": 634.72,
+   "d": 1.24,
+   "text": "say height and weight are strongly"
+  },
+  {
+   "t": 635.96,
+   "d": 1.32,
+   "text": "correlated enough that you don't need to"
+  },
+  {
+   "t": 637.28,
+   "d": 1.68,
+   "text": "store both you can create a new variable"
+  },
+  {
+   "t": 638.96,
+   "d": 1.92,
+   "text": "that can combines the two and therefore"
+  },
+  {
+   "t": 640.88,
+   "d": 1.6,
+   "text": "reduce the dimensionality of your data"
+  },
+  {
+   "t": 642.48,
+   "d": 2.32,
+   "text": "set down to a view as a handful of"
+  },
+  {
+   "t": 644.8,
+   "d": 1.96,
+   "text": "variables it turns out that you can do"
+  },
+  {
+   "t": 646.76,
+   "d": 2.16,
+   "text": "this to encoded game data often when"
+  },
+  {
+   "t": 648.92,
+   "d": 2.16,
+   "text": "we're generating stuff for games we're"
+  },
+  {
+   "t": 651.08,
+   "d": 1.16,
+   "text": "generating them what we're effectively"
+  },
+  {
+   "t": 652.24,
+   "d": 2.48,
+   "text": "generating is a list of values a list of"
+  },
+  {
+   "t": 654.72,
+   "d": 2.0,
+   "text": "variables and you can compress these"
+  },
+  {
+   "t": 656.72,
+   "d": 2.04,
+   "text": "like any other so just like in ra we can"
+  },
+  {
+   "t": 658.76,
+   "d": 2.08,
+   "text": "generate l amount of content represent"
+  },
+  {
+   "t": 660.84,
+   "d": 1.48,
+   "text": "it in some kind of linear set of"
+  },
+  {
+   "t": 662.32,
+   "d": 2.4,
+   "text": "variable form you know push it through a"
+  },
+  {
+   "t": 664.72,
+   "d": 2.0,
+   "text": "dimensional ruction algorithm and get as"
+  },
+  {
+   "t": 666.72,
+   "d": 1.96,
+   "text": "few as two variables that hopefully"
+  },
+  {
+   "t": 668.68,
+   "d": 1.64,
+   "text": "still explain an amount of variant in"
+  },
+  {
+   "t": 670.32,
+   "d": 1.08,
+   "text": "the data we've"
+  },
+  {
+   "t": 671.4,
+   "d": 2.04,
+   "text": "created and then you can plot those just"
+  },
+  {
+   "t": 673.44,
+   "d": 2.12,
+   "text": "like in ER now this doesn't have the"
+  },
+  {
+   "t": 675.56,
+   "d": 1.76,
+   "text": "advantage that ra does where this is not"
+  },
+  {
+   "t": 677.32,
+   "d": 1.24,
+   "text": "producing diversity that we can"
+  },
+  {
+   "t": 678.56,
+   "d": 1.48,
+   "text": "understand we do not know what"
+  },
+  {
+   "t": 680.04,
+   "d": 1.76,
+   "text": "variability in these features means"
+  },
+  {
+   "t": 681.8,
+   "d": 2.44,
+   "text": "because they're going be very you know"
+  },
+  {
+   "t": 684.24,
+   "d": 2.28,
+   "text": "abstracted new variables but this can"
+  },
+  {
+   "t": 686.52,
+   "d": 1.0,
+   "text": "still be very useful especially if"
+  },
+  {
+   "t": 687.52,
+   "d": 1.0,
+   "text": "you're comparing two different"
+  },
+  {
+   "t": 688.52,
+   "d": 1.64,
+   "text": "generators or two different tunings of"
+  },
+  {
+   "t": 690.16,
+   "d": 1.84,
+   "text": "the same underlying generator it can at"
+  },
+  {
+   "t": 692.0,
+   "d": 2.48,
+   "text": "a glance tell you whether or not um a"
+  },
+  {
+   "t": 694.48,
+   "d": 1.12,
+   "text": "different tuning for generator is"
+  },
+  {
+   "t": 695.6,
+   "d": 1.56,
+   "text": "producing more diverse content or if"
+  },
+  {
+   "t": 697.16,
+   "d": 1.44,
+   "text": "it's producing content that another"
+  },
+  {
+   "t": 698.6,
+   "d": 1.16,
+   "text": "generator would really struggle to"
+  },
+  {
+   "t": 699.76,
+   "d": 1.68,
+   "text": "produce this toy example we can see the"
+  },
+  {
+   "t": 701.44,
+   "d": 1.64,
+   "text": "purple generator is producing stuff that"
+  },
+  {
+   "t": 703.08,
+   "d": 3.0,
+   "text": "the green generator never will um so"
+  },
+  {
+   "t": 706.08,
+   "d": 1.4,
+   "text": "this can be quite a useful family"
+  },
+  {
+   "t": 707.48,
+   "d": 1.6,
+   "text": "techniques to use when you aren't sure"
+  },
+  {
+   "t": 709.08,
+   "d": 3.16,
+   "text": "what of diversity you want um or what"
+  },
+  {
+   "t": 712.24,
+   "d": 1.64,
+   "text": "you do want yeah can't be can't be"
+  },
+  {
+   "t": 713.88,
+   "d": 2.16,
+   "text": "trivially calculated I would also say"
+  },
+  {
+   "t": 716.04,
+   "d": 1.6,
+   "text": "it's likely most useful if you're"
+  },
+  {
+   "t": 717.64,
+   "d": 1.24,
+   "text": "working with quite small content"
+  },
+  {
+   "t": 718.88,
+   "d": 1.8,
+   "text": "represent ations like Dr algorithms"
+  },
+  {
+   "t": 720.68,
+   "d": 1.4,
+   "text": "don't scale super well if you're dealing"
+  },
+  {
+   "t": 722.08,
+   "d": 1.32,
+   "text": "with you know thousands upon thousands"
+  },
+  {
+   "t": 723.4,
+   "d": 2.12,
+   "text": "of variables but if your content can be"
+  },
+  {
+   "t": 725.52,
+   "d": 1.68,
+   "text": "represented in you know hundreds of"
+  },
+  {
+   "t": 727.2,
+   "d": 2.32,
+   "text": "other thousands of variables this might"
+  },
+  {
+   "t": 729.52,
+   "d": 2.36,
+   "text": "be a technique that is quite useful for"
+  },
+  {
+   "t": 731.88,
+   "d": 2.12,
+   "text": "you but finally I just want to talk"
+  },
+  {
+   "t": 734.0,
+   "d": 1.76,
+   "text": "about an option for combining the"
+  },
+  {
+   "t": 735.76,
+   "d": 3.8,
+   "text": "benefits of um these previous techniques"
+  },
+  {
+   "t": 739.56,
+   "d": 1.64,
+   "text": "so it's often the case that you want as"
+  },
+  {
+   "t": 741.2,
+   "d": 2.56,
+   "text": "a designer to have on the ground look at"
+  },
+  {
+   "t": 743.76,
+   "d": 2.8,
+   "text": "your um at your data there's no metrics"
+  },
+  {
+   "t": 746.56,
+   "d": 1.2,
+   "text": "or hor istics that will tell you whether"
+  },
+  {
+   "t": 747.76,
+   "d": 1.96,
+   "text": "or not the stuff you're making is good"
+  },
+  {
+   "t": 749.72,
+   "d": 1.24,
+   "text": "but you'd still like to get an idea of"
+  },
+  {
+   "t": 750.96,
+   "d": 1.76,
+   "text": "what the overall shape of your gen space"
+  },
+  {
+   "t": 752.72,
+   "d": 2.52,
+   "text": "looks like well you can do this by kind"
+  },
+  {
+   "t": 755.24,
+   "d": 2.04,
+   "text": "of combining the approaches so first we"
+  },
+  {
+   "t": 757.28,
+   "d": 1.84,
+   "text": "can make a visualization of our our"
+  },
+  {
+   "t": 759.12,
+   "d": 2.08,
+   "text": "Genet space using one of the techniques"
+  },
+  {
+   "t": 761.2,
+   "d": 2.52,
+   "text": "we've looked at"
+  },
+  {
+   "t": 763.84,
+   "d": 2.36,
+   "text": "already but then rather than sampling"
+  },
+  {
+   "t": 766.2,
+   "d": 2.32,
+   "text": "randomly from it we can use this graph"
+  },
+  {
+   "t": 768.52,
+   "d": 2.0,
+   "text": "to inform what content we look at"
+  },
+  {
+   "t": 770.52,
+   "d": 1.48,
+   "text": "especially we we tend to be interested"
+  },
+  {
+   "t": 772.0,
+   "d": 3.04,
+   "text": "in the extreme outliers in this space or"
+  },
+  {
+   "t": 775.04,
+   "d": 1.68,
+   "text": "in could representatives of certain"
+  },
+  {
+   "t": 776.72,
+   "d": 2.16,
+   "text": "clusters so then we can yeah we can look"
+  },
+  {
+   "t": 778.88,
+   "d": 1.56,
+   "text": "at yeah quite a small amount of"
+  },
+  {
+   "t": 780.44,
+   "d": 3.32,
+   "text": "artifacts in our um yeah at a time but"
+  },
+  {
+   "t": 783.76,
+   "d": 1.24,
+   "text": "still get an idea of what the overall"
+  },
+  {
+   "t": 785.0,
+   "d": 1.96,
+   "text": "shape is by of our gen Space by looking"
+  },
+  {
+   "t": 786.96,
+   "d": 1.36,
+   "text": "at the extreme boundaries what is the"
+  },
+  {
+   "t": 788.32,
+   "d": 2.44,
+   "text": "most extreme case from our generator you"
+  },
+  {
+   "t": 790.76,
+   "d": 2.12,
+   "text": "know uh what what what does our"
+  },
+  {
+   "t": 792.88,
+   "d": 1.12,
+   "text": "generator produce when it does the"
+  },
+  {
+   "t": 794.0,
+   "d": 3.64,
+   "text": "equivalent of rolling 26s in a row um"
+  },
+  {
+   "t": 797.64,
+   "d": 1.6,
+   "text": "and that content can be sort of very"
+  },
+  {
+   "t": 799.24,
+   "d": 2.28,
+   "text": "informative is it broken or is it uh"
+  },
+  {
+   "t": 801.52,
+   "d": 1.12,
+   "text": "interesting in a way that we'd like to"
+  },
+  {
+   "t": 802.64,
+   "d": 1.96,
+   "text": "push generate more"
+  },
+  {
+   "t": 804.6,
+   "d": 2.64,
+   "text": "towards um so yeah if your if your needs"
+  },
+  {
+   "t": 807.24,
+   "d": 2.64,
+   "text": "are very sort of you know"
+  },
+  {
+   "t": 809.88,
+   "d": 1.72,
+   "text": "very specific and yeah can only be"
+  },
+  {
+   "t": 811.6,
+   "d": 1.96,
+   "text": "judged by a human this potentially can"
+  },
+  {
+   "t": 813.56,
+   "d": 2.0,
+   "text": "be a technique that is useful for"
+  },
+  {
+   "t": 815.56,
+   "d": 2.44,
+   "text": "you so with an eye on the time this is"
+  },
+  {
+   "t": 818.0,
+   "d": 2.12,
+   "text": "going to be that's the end of the"
+  },
+  {
+   "t": 820.12,
+   "d": 1.92,
+   "text": "technique section but just to wrap up I"
+  },
+  {
+   "t": 822.04,
+   "d": 1.48,
+   "text": "just wanted to highlight that only you"
+  },
+  {
+   "t": 823.52,
+   "d": 1.4,
+   "text": "know what your generator needs there is"
+  },
+  {
+   "t": 824.92,
+   "d": 1.88,
+   "text": "no like one siiz fits-all technique you"
+  },
+  {
+   "t": 826.8,
+   "d": 2.6,
+   "text": "need to bring your own wants and needs"
+  },
+  {
+   "t": 829.4,
+   "d": 1.68,
+   "text": "for your generator to these techniques"
+  },
+  {
+   "t": 831.08,
+   "d": 2.56,
+   "text": "and just illustrate this with um two"
+  },
+  {
+   "t": 833.64,
+   "d": 2.2,
+   "text": "nice examples Tom Francis gave a lovely"
+  },
+  {
+   "t": 835.84,
+   "d": 3.28,
+   "text": "talk last year Rik celebration on how he"
+  },
+  {
+   "t": 839.12,
+   "d": 1.76,
+   "text": "the process he went through to to end up"
+  },
+  {
+   "t": 840.88,
+   "d": 3.36,
+   "text": "making very simple boring levels for his"
+  },
+  {
+   "t": 844.24,
+   "d": 2.56,
+   "text": "Rog likee Heat Signature um and it"
+  },
+  {
+   "t": 846.8,
+   "d": 1.08,
+   "text": "turned out to be exactly the right"
+  },
+  {
+   "t": 847.88,
+   "d": 1.72,
+   "text": "decision for his game because there was"
+  },
+  {
+   "t": 849.6,
+   "d": 1.56,
+   "text": "enough diversity basically present in"
+  },
+  {
+   "t": 851.16,
+   "d": 2.72,
+   "text": "the other systems he was implementing so"
+  },
+  {
+   "t": 853.88,
+   "d": 1.56,
+   "text": "even though he ended up targeting a tiny"
+  },
+  {
+   "t": 855.44,
+   "d": 1.8,
+   "text": "portion of the possibility bace of of"
+  },
+  {
+   "t": 857.24,
+   "d": 1.64,
+   "text": "levels that was the right decision for"
+  },
+  {
+   "t": 858.88,
+   "d": 1.84,
+   "text": "this game and at the opp other end of"
+  },
+  {
+   "t": 860.72,
+   "d": 2.16,
+   "text": "the spectrum we have games like H Dwarf"
+  },
+  {
+   "t": 862.88,
+   "d": 2.2,
+   "text": "Fortress I love this Reddit threed from"
+  },
+  {
+   "t": 865.08,
+   "d": 2.0,
+   "text": "a year ago where someone found a map"
+  },
+  {
+   "t": 867.08,
+   "d": 1.4,
+   "text": "that immediately detonates as soon as"
+  },
+  {
+   "t": 868.48,
+   "d": 1.44,
+   "text": "you load up the game you know some"
+  },
+  {
+   "t": 869.92,
+   "d": 0.96,
+   "text": "something strange is happening"
+  },
+  {
+   "t": 870.88,
+   "d": 1.44,
+   "text": "geologically so as soon as you press"
+  },
+  {
+   "t": 872.32,
+   "d": 2.04,
+   "text": "play the map just implodes in on itself"
+  },
+  {
+   "t": 874.36,
+   "d": 2.24,
+   "text": "and all of your dwarfs immediately die"
+  },
+  {
+   "t": 876.6,
+   "d": 1.72,
+   "text": "now in any other game a map that"
+  },
+  {
+   "t": 878.32,
+   "d": 1.44,
+   "text": "immediately kills the player would never"
+  },
+  {
+   "t": 879.76,
+   "d": 1.68,
+   "text": "be something you wanted to find in your"
+  },
+  {
+   "t": 881.44,
+   "d": 2.24,
+   "text": "genous space but because of the losing"
+  },
+  {
+   "t": 883.68,
+   "d": 2.32,
+   "text": "is fun EOS of draw Fortress this is"
+  },
+  {
+   "t": 886.0,
+   "d": 1.52,
+   "text": "delightful it Delights players and I"
+  },
+  {
+   "t": 887.52,
+   "d": 2.0,
+   "text": "suspect Zack and tan Adams would be very"
+  },
+  {
+   "t": 889.52,
+   "d": 1.36,
+   "text": "happy that their game can produce this"
+  },
+  {
+   "t": 890.88,
+   "d": 2.72,
+   "text": "kind of experience um so yeah working"
+  },
+  {
+   "t": 893.6,
+   "d": 1.92,
+   "text": "out where you are on the heat signature"
+  },
+  {
+   "t": 895.52,
+   "d": 2.96,
+   "text": "to to dwar Fortress scale yeah a"
+  },
+  {
+   "t": 898.48,
+   "d": 1.76,
+   "text": "decision you have to make and you one"
+  },
+  {
+   "t": 900.24,
+   "d": 2.36,
+   "text": "that pH Techni can't make for"
+  },
+  {
+   "t": 902.6,
+   "d": 2.76,
+   "text": "you so with an eye on the time I I think"
+  },
+  {
+   "t": 905.36,
+   "d": 1.44,
+   "text": "I think I'm overrunning apologies but"
+  },
+  {
+   "t": 906.8,
+   "d": 1.68,
+   "text": "just some quick takeaways again content"
+  },
+  {
+   "t": 908.48,
+   "d": 1.56,
+   "text": "sampling is fine but you can probably do"
+  },
+  {
+   "t": 910.04,
+   "d": 2.12,
+   "text": "more with less work than you might think"
+  },
+  {
+   "t": 912.16,
+   "d": 1.44,
+   "text": "uh make your generator easier to test"
+  },
+  {
+   "t": 913.6,
+   "d": 1.24,
+   "text": "future you'll be very happy if you make"
+  },
+  {
+   "t": 914.84,
+   "d": 1.36,
+   "text": "things modular make it possible to"
+  },
+  {
+   "t": 916.2,
+   "d": 2.08,
+   "text": "generate encoded time without encoded"
+  },
+  {
+   "t": 918.28,
+   "d": 2.16,
+   "text": "content without um all of this OB"
+  },
+  {
+   "t": 920.44,
+   "d": 1.4,
+   "text": "dressing up yeah basically generating in"
+  },
+  {
+   "t": 921.84,
+   "d": 2.4,
+   "text": "the minimum form you need to evaluate it"
+  },
+  {
+   "t": 924.24,
+   "d": 1.4,
+   "text": "uh Er When you know what diversity you"
+  },
+  {
+   "t": 925.64,
+   "d": 2.52,
+   "text": "want Dr when you don't necessarily and"
+  },
+  {
+   "t": 928.16,
+   "d": 1.64,
+   "text": "just the personal note consider reaching"
+  },
+  {
+   "t": 929.8,
+   "d": 2.36,
+   "text": "out to game researchers I know rogell is"
+  },
+  {
+   "t": 932.16,
+   "d": 1.48,
+   "text": "great at bringing the two communities"
+  },
+  {
+   "t": 933.64,
+   "d": 1.28,
+   "text": "together but it would still be great if"
+  },
+  {
+   "t": 934.92,
+   "d": 1.68,
+   "text": "there was more collaboration between the"
+  },
+  {
+   "t": 936.6,
+   "d": 2.16,
+   "text": "two there's lots of very smart folks you"
+  },
+  {
+   "t": 938.76,
+   "d": 2.12,
+   "text": "know smarter than me in my field who"
+  },
+  {
+   "t": 940.88,
+   "d": 1.68,
+   "text": "would love to test their ideas in a more"
+  },
+  {
+   "t": 942.56,
+   "d": 1.68,
+   "text": "commercial context so yeah consider"
+  },
+  {
+   "t": 944.24,
+   "d": 1.32,
+   "text": "reaching out to other folks in the"
+  },
+  {
+   "t": 945.56,
+   "d": 1.88,
+   "text": "recommended reading here on this last"
+  },
+  {
+   "t": 947.44,
+   "d": 2.0,
+   "text": "slide or or Beyond if you're interested"
+  },
+  {
+   "t": 949.44,
+   "d": 1.6,
+   "text": "in doing sort more in depth valuation of"
+  },
+  {
+   "t": 951.04,
+   "d": 3.76,
+   "text": "your systems so that is it for me thank"
+  },
+  {
+   "t": 954.8,
+   "d": 1.24,
+   "text": "you so much for you and the audience"
+  },
+  {
+   "t": 956.04,
+   "d": 1.4,
+   "text": "thank you so much to the organizers it's"
+  },
+  {
+   "t": 957.44,
+   "d": 2.24,
+   "text": "been a real privilege to be here and I"
+  },
+  {
+   "t": 959.68,
+   "d": 3.04,
+   "text": "will finish it there thank you so much"
+  },
+  {
+   "t": 962.72,
+   "d": 2.28,
+   "text": "thank you yeah I I appreciate I think"
+  },
+  {
+   "t": 965.0,
+   "d": 2.32,
+   "text": "it's always hard to condense Big Field"
+  },
+  {
+   "t": 967.32,
+   "d": 2.88,
+   "text": "into a short talk but it's a useful"
+  },
+  {
+   "t": 970.2,
+   "d": 1.92,
+   "text": "overview I know yeah we sometimes have"
+  },
+  {
+   "t": 972.12,
+   "d": 1.08,
+   "text": "and I think even later today you know"
+  },
+  {
+   "t": 973.2,
+   "d": 1.56,
+   "text": "we'll have a deeper technical dive into"
+  },
+  {
+   "t": 974.76,
+   "d": 2.12,
+   "text": "very specific algorithms but it's nice"
+  },
+  {
+   "t": 976.88,
+   "d": 1.72,
+   "text": "to get that big picture for if you're"
+  },
+  {
+   "t": 978.6,
+   "d": 2.24,
+   "text": "starting out I know for me working on"
+  },
+  {
+   "t": 980.84,
+   "d": 3.24,
+   "text": "generators in AAA contexts it's like"
+  },
+  {
+   "t": 984.08,
+   "d": 1.6,
+   "text": "most stuff stops at the point of like"
+  },
+  {
+   "t": 985.68,
+   "d": 1.8,
+   "text": "you hit generate a bunch of times and"
+  },
+  {
+   "t": 987.48,
+   "d": 2.2,
+   "text": "you look at what you get so figuring out"
+  },
+  {
+   "t": 989.68,
+   "d": 2.08,
+   "text": "what's the what are the options to step"
+  },
+  {
+   "t": 991.76,
+   "d": 2.12,
+   "text": "a little closer to something more"
+  },
+  {
+   "t": 993.88,
+   "d": 5.8,
+   "text": "directly is is is great oh I'm glad cool"
+  }
+ ]
+}

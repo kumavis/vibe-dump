@@ -1,0 +1,106 @@
+{
+  "id": "oaDI0lWkedg",
+  "title": "Max Kreminski - Synthesizing Story Sifters",
+  "speaker": "Max Kreminski",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=oaDI0lWkedg",
+  "talk_type": "technical",
+  "summary": "A lightning talk on story sifting: automatically finding compelling micro-stories in the overwhelming event log of a simulation-driven game and surfacing them to players. Kreminski describes Felt, a Datalog-based domain-specific language for writing sifting patterns, and the difficulty of authoring those patterns by hand. He then presents Synthesifter, which uses inductive logic programming to synthesize a sifting pattern from player-selected positive and negative example event sequences, illustrated with baseball-simulation (Blaseball) stories.",
+  "games": [
+    "Dwarf Fortress",
+    "Blaseball"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Emergent player stories in roguelikes like Dwarf Fortress are compelling even though neither the player nor the game is trying to create a story.",
+      "detail": "Kreminski says what he loves about roguelikes are the player stories, singling out Dwarf Fortress. The player fumbles around and dies, and the result is a compelling story despite no one intending one.",
+      "t": 21,
+      "quote": "the end result makes for a compelling story even though you nor the game are trying to create one",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story sifting",
+      "kind": "open-question",
+      "claim": "Emergent stories in dense roguelike simulations are hard for novice players to find because so much information is happening in the UI and background.",
+      "detail": "Kreminski argues this kind of storytelling is often off limits to novices; the compelling story bits are buried. He proposes building systems that identify the most compelling narrative material and surface it for the player.",
+      "t": 30,
+      "quote": "it is hard to find the story in Roguelikes where there is so much going on and so much information in the UI",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story sifting",
+      "kind": "technique",
+      "claim": "Story sifting lets a simulation produce an overwhelming chronicle of events, then searches that chronicle for compelling sequences to surface to the player as micro-stories.",
+      "detail": "Example micro-story: character A starts a project and gives up, B comes along and talks about it, and A resumes work. The ideal is a large library of diverse sifting patterns so many different micro-stories can be pulled out of what happened.",
+      "t": 94,
+      "quote": "filter it down into a chronicle of game events we can search in to find compelling sequences and pull them out",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "logic programming",
+      "kind": "technique",
+      "claim": "The Felt language expresses story-sifting patterns as Datalog-style logic queries over event sequences, with clauses constraining event attributes, shared actors and character traits.",
+      "detail": "A sample pattern looks for two betrayal events perpetrated by the same character who has the trait impulsive, using a not-join clause to exclude certain intervening events. Patterns are the building blocks of micro-stories, so they should be as easy to author as possible.",
+      "t": 179,
+      "quote": "This saying we are looking for a sequence of two betrayals perpetrated by the same impulsive character",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "story sifting",
+      "kind": "warning",
+      "claim": "Hand-authoring sifting patterns is hard because authors must learn a non-intuitive query semantics, each simulation's concepts, and remember constraints that seem obvious to humans but that the computer cannot infer.",
+      "detail": "Felt behaves more like SQL than Python or JavaScript. Authors must also learn per-simulation event types (e.g. betrayal) and traits (e.g. impulsive), and it is easy to forget an important rule.",
+      "t": 249,
+      "quote": "It is easy to forget to include an important rule that is obvious to you as a human",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "program synthesis",
+      "kind": "technique",
+      "claim": "Inductive logic programming can synthesize a story-sifting pattern from positive and negative example event sequences, avoiding the unbounded search space of general program synthesis.",
+      "detail": "General program synthesis searches a huge, unbounded space of programs and it is hard to specify the desired behaviour. In inductive logic programming the computer finds a logic program (a Felt pattern) that classifies the difference between sequences you want to match and similar ones you don't.",
+      "t": 319,
+      "quote": "it helps when finding a logic program and classifies the difference between positive and negative",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "program synthesis",
+      "kind": "technique",
+      "claim": "Synthesifter extracts yes/no properties from each positive example and keeps only those shared by all positives, which translate directly into a sifting pattern.",
+      "detail": "Designers first define domain rules (e.g. a weak hitter is in the batting lineup with a rating of two stars or less; a moment is pivotal if there is a hit with a runner on the last base). Properties are questions like whether event three has the tag swing-and-miss or whether two events share a batter.",
+      "t": 436,
+      "quote": "you can widow down to just the properties that apply for all the positive examples you have defineded",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "authoring tools",
+      "kind": "technique",
+      "claim": "Synthesifter's interface pairs a filterable event log with lists of positive examples, a live synthesized pattern, candidate matches and negative examples so designers can iteratively refine a pattern.",
+      "detail": "Candidate matches found by the current synthesized pattern can be marked as positive or negative to refine it further. Kreminski values that the output is readable code designers can interpret or modify themselves.",
+      "t": 491,
+      "quote": "We have possible matches which are additional sequencing events that this synthesizing pattern needs and these can be added as positive or negative",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story sifting",
+      "kind": "technique",
+      "claim": "Story sifters can drive an artificial commentator that narrates interesting events in a simulation.",
+      "detail": "Kreminski says his group is using these tools to write an artificial commentator, still early days, and extending the work with tools for filtering and searching event logs.",
+      "t": 520,
+      "quote": "One thing we are doing is using these tools to write an artificial com commentator",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

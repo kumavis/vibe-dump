@@ -1,0 +1,70 @@
+Tom Francis - Generating boring levels for fresh experiences in Heat Signature
+Speaker: Tom Francis
+https://www.youtube.com/watch?v=3vSCncV5hkI
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:05] ALEXEI: Moving right along through our lightning talks. We next up have Tom Francis who you may know. Designer and writer and coder of Gunpoint, Heat Signature, and Tactical Breach Wizards, which is one of my favorite names for a game. Welcome to the stage, Tom. TOM: I am tom This is Heat Signature. It is a roguelike in space where you take jobs from clients to break into spaceships as they are flying around the galaxy. You are trying steal something, rescue somebody, kill somebody. That kind of thing. One of the first things I needed to think about is how are we going to generate the ships Random generation I want it to be fresh and endlessly and new experiences for all time. My ambitions with the level generation started actually a bit lower and went lower and lower and lower because my first thought was that -- first of all, I established they needed to actually feel like levels and shouldn't just feel like spaceships because it turns
+
+[0:01:08] out if you make something that feels like a place and not a level you don't really have game. Games kind of need levels. Of course I had to drill down into what do I mean by that? What is a level? What makes a level feel like game and what is the essential backbone of it?
+
+## Gates and keys
+
+[0:01:25] So, in the context of like spaceships, I reckoned the simplest structure I could have was for gates and keys. You can see how quickly my plans went awry. Basically the progression you make toward the objective is what makes it feel like a level. Make progression in chunks. Closer to the objective without immediately reaching it and without being completely stuck. My implementation for that for spaceships is it should be a series of gates and keys. In the place where you dock is where you start and this is a security wand zone. There is a level one key card and all the doors out of here are level one doors. Not all actually. That's part of why this system sucks. Once you have the level one key, you have to get to zone two and get level two key but it is quite complicated and that's why I did it this way.
+
+[0:02:28] I wanted it to be complicated and intricate and thought the next ship well tessellate differently and the ships will be more different and more interesting differences between the missions. And that sucked because the interesting differences there are not that interesting and actually they are kind of worse than boring. It is just annoying. You dock with a ship and just have to sit there puzzling out where do I need to go? I want to get to zone 8 but how do I get there because zone 4 isn't where I expect it to be. That's not interesting gameplay. That's a chore. They are not just boring but they are actively annoying. The other problem with it is the zone I am in is what I need to be worrying about and don't need to think about the whole ship. The zone I am in I do need to think about are that all of time. So I need to see it and need it on the screen. To see all interesting shape zones, whichever zone, you have to zoom out to keep it on screen and are viewing the screen like this.
+
+[0:03:29] Where I can't even tell which is the enemies and me. You can barely see there are people.
+
+## Security zones
+
+[0:03:37] I simplified drastically. Each zone is self contained and it is basically a rectangle so it fits on the screen. I can see it at this zoom level. In theory, if this wasn't a cropped larger screenshot these people would be visible and you can see John Robert's wonderful art and the whole thing looks very nice. That means keeping it very, very simple. There is a key, guards and a locked door. That's it. That one zone and a cropped version of another shot. This is the full shot with the zones labeled on it. Level three is branching and objective is 3-5. What I want you to notice is it an absolutely miserable boring and there is nothing interesting about this. It is just nuts and bolts and does its job. It is structure. I needed structure. Now there is structure. Great. The problem is this structure is very boring and the individual segments are also very
+
+[0:04:41] boring. We have a boring tapestry of smaller boring elements. It solves all my design problems but we are left with not that much breathing room to generate interesting differences in the levels themselves. The level generate, bless its heart, was doing its best but I restricted it a lot. The question on my mind is how we do make the game fresh when the differences between the levels are this trivial nonsense?
+
+## Examples
+
+[0:05:14] So, yeah. Let me just illustrate what kind of differences I am talking about. This is in practice mode and it will generate one zone and you can play a short no stake game. I am tap through a bunch so you can see how one ship differs from the next. Rooms and corridors in different orders and layouts and guards. Thinking about how do we turn that into a fresh experience?
+
+## Make more interesting cards
+
+[0:05:43] If you can't make the shuffle interesting, make more interesting cards. This level generator I have taken its legs out from under it all it can do is shuffle walls around and it got me thinking about shuffling cards. You make those games interesting not by doing more interesting shuffles and more intelligently placing the king just where you want it in the deck. You do it my making the cards mean more interesting things. And if you aren't playing with a regular deck you make the cards interesting with new rules. Then we have to think about what are the cards.
+
+## What are cards
+
+[0:06:25] Flying through space and boarding spaceships. It is stealth and emergent as well. I think the three kinds of cards in that context are player tools, enemy traits, and global filters in Heat Signature in.. -- the tools are the ability and all things the player can do. Things like shields, armor, various ways the enemy might be able to push back or avoid or detect you. And global filter I won't explain what a filter is just yet. For tools, what is a shuffle friendly player tool?
+
+## What are tools
+
+[0:07:05] What tools are good if you put them into a shuffled environment? Obviously between different tools you want to vary what effect they have. I can that's where it all starts. I can we also want to look at the constraints and freedoms. I think in terms of, you know, a teleporter is a device that has a freedom you don't normally. You can teleport through walls and get to somewhere you couldn't normally get to. Range is the obvious one. All the gadgets are constrained by range to some extent or another. A teleporter without constraint and freedom is quite boring because those two things, sure, relate to the layout of the level but they don't really interact with it. It doesn't matter how the level is laid ow out to drill down into what I mean my constraints and freedoms teleport is a good example. There are three kinds of teleport in Heat Signature and none do what I said.
+
+## Teleporters
+
+[0:08:03] The first is a sidewinder. You can teleport there. There are three guards. I can go past all those. They won't see me or hit me. It is instantaneous. Sort as if the atoms are contained along the path. That one you need a path. But needs time and detection and a bunch of other things like line of sight. The swapper can take you through paths. It is constrained by guard positions and matters where the people are. That is going to change and where you is a dynamic thing. By-passes pathing and line of sight. The last one is the visitor. Visitor doesn't need pathing or guards.
+
+[0:09:05] It really does just take you to exactly where you click and its own constraint is time. After three seconds of moving it you are teleported back to where you come from. It is dependent on where you are teleporting to. In this example, I am safe and no one is going to see me. For my visit to be useful, I haven't gone into the high security zone. I am not there. I would need to get the key card guy in the bottom right where my cursor is. I need to steal his key but he is covered boy other people. It is not a great spot for a visitor. I would have three seconds to find a way to get the key but if I had a key cloner which is a device that can clone keys at short range through walls. It bypasses collision and it is constrained by range. That would be perfect. I could visit, grab the key and teleport back and now I have the key to the zone so I can get in there.
+
+## Enemy Traits
+
+[0:10:05] So for enemy traits, really the same philosophy, bypasses and constraints. Some enemies have heat sensors that bypasses the line of sight. With the heat censor they can know you are there. But it has a shorter vision range. If they want to see you through a wall they have to be close. Glitch dash is a trait the gods can have meaning as soon as they hear a suspicious sound they will teleport to it. In terms of the glitch dash they can teleport as far and instantaneous as they like. It might not sound too wild but when you play anyone who has played and encountered this it is always surprising no matter how ready you think you are. Five Gods teleporting to the second you make a noise is this instant oh fuck situation. They need to know you are there and to have a reason to teleport in.
+
+[0:11:07] And we have an enemy type called the tracker. It is walking through the whole ship so it is constrained by pathing and time. It doesn't even run. It is methodical. But bypasses detection. Doesn't need hear or see you. The pathing part of that is interesting because you get to see its path and you know where it will walk so you can Duke it, trick it and lay traps.
+
+## Filters
+
+[0:11:39] Filters I will explain that. I define a filter as a global change that warps the player's experience of the same content and in this case same level. What changes can we make that will make the same level play differently? We will never make you play the same level twice but --
+
+## Alarms
+
+[0:11:59] mission clause everything time you take a mission the highest paid ones have an extra clause. You only get full pay if you don't kill anyone or one is no witnesses so if anyone sees you have to kill them and the hardest is ghost. Don't let them see you and that is brutal and transforms the level. Even the least armored guard is just as bad of a threat as the nastiest boss because seeing is failure. Each ship has its own alarm type. When you trip the alarm something happens on different ships. The default is you have a time mission to get out of the. Adding a time constraint to a game that doesn't normally have it radically changes all considerations. All your plans go out the window. You have to start thinking about you still can't afford to go guns blazing usually. It becomes a speed stealth of how can I dot through this room and distract someone for
+
+[0:13:04] a second so I can get this done before I get caught. But if your mission is to rescue somebody or assassinate or capture somebody, you have a human target you are trying to get to, one of the types is the target will flee when the alarm is triggered so there is a teleporter pad on the ship and they will run to that and escape and once that happens the mission is failed. Where is the teleporter pad? I have had missions where it is closer than the target so if I can get there first I can lay a trap and get him and some don't have an alarm at all and that completely changes all of the stealth considerations. Being detected is still risky. People are going to shoot you and guards come running but there is no long term consequence. If you can manage the situation you can get away with it. And there is a tool you can use to lure people because there is no longer this heavy cost. And character traits we added them in an update. With you start a run you are always playing as someone new.
+
+[0:14:06] We randomly generate characters. Later we added these traits and that will filter the run. Glitch stick is any time you teleport you pass out so teleporting into a combat situation is no longer an option and it is a subtle tool about getting to somewhere, an empty room, and having time to recover before I do it. Technophobe means nothing recharges. The best ones are self-charging where the charge constantly generates. If you are a technophobe you don't know and all-times are equally trash. It is all garbage. You can use it but can't get the uses back so you have to vary tactics. And then shaky just means guns are not going to fire where you think they should.
+
+[0:15:09] You have to stick to gadgets. There is the inverse of that which means you aren't strong enough so you have to use guns and gadgets. This applies to all tactics. If you look down the list and figure out how those are combined you can see how they interface with each other because they interface with the shuffling levels and that's what we can vary cheaply. Yeah.
+
+## Summary
+
+[0:15:37] In summary, this is shuffle friendly game design and making elements that all you have to do is rearrange them and something interesting happens. Design tools with different constraints and freedoms that relate closely to what gets shuffled when a level is generated. And then yours can be boring just like mine. We have one extra slide from Tom which is extra links and credits. Thank you, Tom, for being understanding as we deal with these technical issues.

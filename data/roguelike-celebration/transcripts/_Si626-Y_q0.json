@@ -1,0 +1,4958 @@
+{
+ "id": "_Si626-Y_q0",
+ "url": "https://www.youtube.com/watch?v=_Si626-Y_q0",
+ "title": "Jim Shepard - Tone and Humor in Dungeonmans",
+ "speaker": "Jim Shepard",
+ "talk_title": "Tone and Humor in Dungeonmans",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1764,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nSurface-dusting Storytelling: Humor and Fiction in Dungeonmans. Roguelike players enjoy building their own fiction around the adventures of their hero, and this is usually encouraged by the ridiculous specifics and wild build customization available in most roguelikes. There's a spectrum between a blank canvas world where everything centers on the travels of your murderhobo, and a highly detailed world with concrete fiction such as Qud.\n\nJim will talk about how you can bring more of their setting's ideas to life without having to dive too deeply into a fiction, as well as how to apply humor with enough subtlety as to not beat players over the head with it.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Dungeon Mans"
+  },
+  {
+   "start": 104,
+   "title": "Establishing game tone"
+  },
+  {
+   "start": 357,
+   "title": "Design philosophy and goals"
+  },
+  {
+   "start": 550,
+   "title": "Practical implementation"
+  },
+  {
+   "start": 737,
+   "title": "Monsters and world building"
+  },
+  {
+   "start": 1042,
+   "title": "Humor danger zones"
+  },
+  {
+   "start": 1335,
+   "title": "Playing to your strengths"
+  },
+  {
+   "start": 1575,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6235,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 13.36,
+   "d": 0.88,
+   "text": "good afternoon"
+  },
+  {
+   "t": 14.24,
+   "d": 2.8,
+   "text": "and thank you for coming to the talk on"
+  },
+  {
+   "t": 17.04,
+   "d": 1.76,
+   "text": "tone and humor in dungeon man's"
+  },
+  {
+   "t": 18.8,
+   "d": 3.84,
+   "text": "which is this slide yeah okay so um"
+  },
+  {
+   "t": 22.64,
+   "d": 2.24,
+   "text": "this is not necessarily a humor talk if"
+  },
+  {
+   "t": 24.88,
+   "d": 0.88,
+   "text": "you want that"
+  },
+  {
+   "t": 25.76,
+   "d": 2.08,
+   "text": "uh you should just leave in youtube the"
+  },
+  {
+   "t": 27.84,
+   "d": 1.2,
+   "text": "talk that he gave earlier today on"
+  },
+  {
+   "t": 29.04,
+   "d": 1.04,
+   "text": "kingdom of loathing because it was"
+  },
+  {
+   "t": 30.08,
+   "d": 0.96,
+   "text": "amazing"
+  },
+  {
+   "t": 31.04,
+   "d": 1.28,
+   "text": "uh in all seriousness if you're"
+  },
+  {
+   "t": 32.32,
+   "d": 1.84,
+   "text": "interested in like how do i put funny"
+  },
+  {
+   "t": 34.16,
+   "d": 1.68,
+   "text": "into a game then you really do need to"
+  },
+  {
+   "t": 35.84,
+   "d": 2.16,
+   "text": "watch that because that is an excellent"
+  },
+  {
+   "t": 38.0,
+   "d": 2.56,
+   "text": "uh demonstration of that art which we're"
+  },
+  {
+   "t": 40.56,
+   "d": 1.76,
+   "text": "going to go over some of that here"
+  },
+  {
+   "t": 42.32,
+   "d": 2.72,
+   "text": "so what is dungeon mansion humai uh it"
+  },
+  {
+   "t": 45.04,
+   "d": 0.64,
+   "text": "is a game"
+  },
+  {
+   "t": 45.68,
+   "d": 3.04,
+   "text": "a roguelike that was released in"
+  },
+  {
+   "t": 48.72,
+   "d": 2.4,
+   "text": "well it was originally around in 2009 on"
+  },
+  {
+   "t": 51.12,
+   "d": 1.6,
+   "text": "some roguelike forums"
+  },
+  {
+   "t": 52.72,
+   "d": 3.36,
+   "text": "uh it came about as an indie project for"
+  },
+  {
+   "t": 56.08,
+   "d": 1.6,
+   "text": "myself when i left triple a"
+  },
+  {
+   "t": 57.68,
+   "d": 3.12,
+   "text": "in 2012 kickstarted in 2013 shipped in"
+  },
+  {
+   "t": 60.8,
+   "d": 1.12,
+   "text": "2014"
+  },
+  {
+   "t": 61.92,
+   "d": 2.16,
+   "text": "i try to patch it as much as i can and"
+  },
+  {
+   "t": 64.08,
+   "d": 1.52,
+   "text": "it's a pretty irreverent game about"
+  },
+  {
+   "t": 65.6,
+   "d": 1.76,
+   "text": "crushing monsters and taking their stuff"
+  },
+  {
+   "t": 67.36,
+   "d": 2.4,
+   "text": "it doesn't cling to some of the the real"
+  },
+  {
+   "t": 69.76,
+   "d": 2.64,
+   "text": "roguelike traditions of you know waxing"
+  },
+  {
+   "t": 72.4,
+   "d": 1.6,
+   "text": "things and eating things and covering"
+  },
+  {
+   "t": 74.0,
+   "d": 1.28,
+   "text": "your ears and stuff like"
+  },
+  {
+   "t": 75.28,
+   "d": 1.52,
+   "text": "it's people have called it almost a"
+  },
+  {
+   "t": 76.8,
+   "d": 1.84,
+   "text": "turn-based diablo which is"
+  },
+  {
+   "t": 78.64,
+   "d": 1.28,
+   "text": "kind of weird because diablo was a"
+  },
+  {
+   "t": 79.92,
+   "d": 2.0,
+   "text": "turn-based game to start but what we're"
+  },
+  {
+   "t": 81.92,
+   "d": 1.36,
+   "text": "going to do today"
+  },
+  {
+   "t": 83.28,
+   "d": 1.28,
+   "text": "is we're going to cover how dungeon"
+  },
+  {
+   "t": 84.56,
+   "d": 1.84,
+   "text": "man's established a tone"
+  },
+  {
+   "t": 86.4,
+   "d": 1.84,
+   "text": "for gameplay and story we're going to"
+  },
+  {
+   "t": 88.24,
+   "d": 2.16,
+   "text": "take that tone and humor and apply it to"
+  },
+  {
+   "t": 90.4,
+   "d": 1.2,
+   "text": "the game correctly"
+  },
+  {
+   "t": 91.6,
+   "d": 1.92,
+   "text": "i will explain some practical"
+  },
+  {
+   "t": 93.52,
+   "d": 2.0,
+   "text": "application in dungeon man's"
+  },
+  {
+   "t": 95.52,
+   "d": 1.36,
+   "text": "and then i will go over some humor"
+  },
+  {
+   "t": 96.88,
+   "d": 1.92,
+   "text": "danger zones which are things that"
+  },
+  {
+   "t": 98.8,
+   "d": 2.48,
+   "text": "i almost fell into at certain points and"
+  },
+  {
+   "t": 101.28,
+   "d": 1.68,
+   "text": "maybe i can share that"
+  },
+  {
+   "t": 102.96,
+   "d": 2.56,
+   "text": "with you guys so what's the story of"
+  },
+  {
+   "t": 105.52,
+   "d": 0.88,
+   "text": "dungeon man's"
+  },
+  {
+   "t": 106.4,
+   "d": 2.24,
+   "text": "right oh okay so i just beat down this"
+  },
+  {
+   "t": 108.64,
+   "d": 1.12,
+   "text": "big boss guy"
+  },
+  {
+   "t": 109.76,
+   "d": 1.76,
+   "text": "and he came out and then he's in a tower"
+  },
+  {
+   "t": 111.52,
+   "d": 1.84,
+   "text": "and i got these fallen stars and they're"
+  },
+  {
+   "t": 113.36,
+   "d": 1.12,
+   "text": "going to go in a thing and and"
+  },
+  {
+   "t": 114.48,
+   "d": 3.44,
+   "text": "well okay that's actually not the story"
+  },
+  {
+   "t": 117.92,
+   "d": 1.76,
+   "text": "that's the player narrative but when i"
+  },
+  {
+   "t": 119.68,
+   "d": 2.08,
+   "text": "ask people what's the story i get these"
+  },
+  {
+   "t": 121.76,
+   "d": 1.76,
+   "text": "things i get people talking about their"
+  },
+  {
+   "t": 123.52,
+   "d": 1.12,
+   "text": "player narrative which is very"
+  },
+  {
+   "t": 124.64,
+   "d": 0.72,
+   "text": "interesting"
+  },
+  {
+   "t": 125.36,
+   "d": 1.48,
+   "text": "because what is the story of dungeon"
+  },
+  {
+   "t": 126.84,
+   "d": 1.56,
+   "text": "man's"
+  },
+  {
+   "t": 128.4,
+   "d": 1.92,
+   "text": "right this is the story of dungeon man's"
+  },
+  {
+   "t": 130.32,
+   "d": 2.08,
+   "text": "you know there's legends and people were"
+  },
+  {
+   "t": 132.4,
+   "d": 2.48,
+   "text": "cool long ago and maybe you can be cool"
+  },
+  {
+   "t": 134.88,
+   "d": 3.12,
+   "text": "go do that um there isn't i mean there's"
+  },
+  {
+   "t": 138.0,
+   "d": 1.52,
+   "text": "a bad guy and there's"
+  },
+  {
+   "t": 139.52,
+   "d": 1.68,
+   "text": "there's he has a name but there's no"
+  },
+  {
+   "t": 141.2,
+   "d": 2.72,
+   "text": "real series of quests there's no grand"
+  },
+  {
+   "t": 143.92,
+   "d": 1.84,
+   "text": "plot arcs and such"
+  },
+  {
+   "t": 145.76,
+   "d": 2.48,
+   "text": "but i still wanted people to feel like"
+  },
+  {
+   "t": 148.24,
+   "d": 0.64,
+   "text": "they were in"
+  },
+  {
+   "t": 148.88,
+   "d": 2.64,
+   "text": "a story based experience and the"
+  },
+  {
+   "t": 151.52,
+   "d": 1.84,
+   "text": "challenge for myself is"
+  },
+  {
+   "t": 153.36,
+   "d": 1.84,
+   "text": "am i really a good enough writer to come"
+  },
+  {
+   "t": 155.2,
+   "d": 1.52,
+   "text": "up with this great story based"
+  },
+  {
+   "t": 156.72,
+   "d": 2.24,
+   "text": "experience and i've seen so many"
+  },
+  {
+   "t": 158.96,
+   "d": 2.16,
+   "text": "indie games that have trailers that are"
+  },
+  {
+   "t": 161.12,
+   "d": 2.48,
+   "text": "like in the world of jibba jar"
+  },
+  {
+   "t": 163.6,
+   "d": 2.64,
+   "text": "and oh the dark lord booty butts and"
+  },
+  {
+   "t": 166.24,
+   "d": 2.32,
+   "text": "it's really difficult to get into that"
+  },
+  {
+   "t": 168.56,
+   "d": 2.4,
+   "text": "and unless someone's a fantastic fiction"
+  },
+  {
+   "t": 170.96,
+   "d": 0.72,
+   "text": "writer"
+  },
+  {
+   "t": 171.68,
+   "d": 1.84,
+   "text": "i'm done like 10 seconds in and i know"
+  },
+  {
+   "t": 173.52,
+   "d": 2.72,
+   "text": "many people are too even if there's"
+  },
+  {
+   "t": 176.24,
+   "d": 1.6,
+   "text": "some pretty tight gameplay to be found"
+  },
+  {
+   "t": 177.84,
+   "d": 2.56,
+   "text": "it's hard to invest in stuff that isn't"
+  },
+  {
+   "t": 180.4,
+   "d": 3.52,
+   "text": "excellent so where did the player"
+  },
+  {
+   "t": 183.92,
+   "d": 1.6,
+   "text": "narrative actually come from"
+  },
+  {
+   "t": 185.52,
+   "d": 1.36,
+   "text": "the people talk about oh i did this and"
+  },
+  {
+   "t": 186.88,
+   "d": 2.72,
+   "text": "did this and this this story of dungeon"
+  },
+  {
+   "t": 189.6,
+   "d": 1.04,
+   "text": "man's"
+  },
+  {
+   "t": 190.64,
+   "d": 2.64,
+   "text": "legends and and dope people from history"
+  },
+  {
+   "t": 193.28,
+   "d": 1.68,
+   "text": "are part of the game's tone i'm going to"
+  },
+  {
+   "t": 194.96,
+   "d": 1.68,
+   "text": "say that word a lot"
+  },
+  {
+   "t": 196.64,
+   "d": 3.52,
+   "text": "tone is what helped create"
+  },
+  {
+   "t": 200.16,
+   "d": 1.68,
+   "text": "a feel for dungeon mans where players"
+  },
+  {
+   "t": 201.84,
+   "d": 1.76,
+   "text": "could do stuff and"
+  },
+  {
+   "t": 203.6,
+   "d": 2.24,
+   "text": "rise up on this cool trellis of gameplay"
+  },
+  {
+   "t": 205.84,
+   "d": 1.76,
+   "text": "and their stories grew off that based on"
+  },
+  {
+   "t": 207.6,
+   "d": 3.36,
+   "text": "what the tone of the game was"
+  },
+  {
+   "t": 210.96,
+   "d": 1.6,
+   "text": "so this is what i wanted right i'm like"
+  },
+  {
+   "t": 212.56,
+   "d": 1.68,
+   "text": "well if i'm gonna do this"
+  },
+  {
+   "t": 214.24,
+   "d": 1.76,
+   "text": "and go all the way live this is what i"
+  },
+  {
+   "t": 216.0,
+   "d": 2.0,
+   "text": "feel like a game by me has to be at"
+  },
+  {
+   "t": 218.0,
+   "d": 1.36,
+   "text": "least my my first one right that's"
+  },
+  {
+   "t": 219.36,
+   "d": 1.12,
+   "text": "that's big"
+  },
+  {
+   "t": 220.48,
+   "d": 1.84,
+   "text": "i wanted adventure and humor and it's"
+  },
+  {
+   "t": 222.32,
+   "d": 2.0,
+   "text": "heroic you know heroic means"
+  },
+  {
+   "t": 224.32,
+   "d": 2.56,
+   "text": "you don't die from starving you die like"
+  },
+  {
+   "t": 226.88,
+   "d": 1.44,
+   "text": "with a thousand pointy spears and you"
+  },
+  {
+   "t": 228.32,
+   "d": 2.0,
+   "text": "you know like boromir style and"
+  },
+  {
+   "t": 230.32,
+   "d": 2.0,
+   "text": "um there's adventure and exploration and"
+  },
+  {
+   "t": 232.32,
+   "d": 2.32,
+   "text": "i wanted to feel like a tabletop game"
+  },
+  {
+   "t": 234.64,
+   "d": 1.92,
+   "text": "that you play with me uh because i love"
+  },
+  {
+   "t": 236.56,
+   "d": 1.92,
+   "text": "roland dice and i love playing tabletop"
+  },
+  {
+   "t": 238.48,
+   "d": 2.4,
+   "text": "and i wanted to see if i could bring"
+  },
+  {
+   "t": 240.88,
+   "d": 1.04,
+   "text": "some of that feel"
+  },
+  {
+   "t": 241.92,
+   "d": 2.64,
+   "text": "into a game without making it like a"
+  },
+  {
+   "t": 244.56,
+   "d": 2.32,
+   "text": "serious business tabletop style rpg"
+  },
+  {
+   "t": 246.88,
+   "d": 2.24,
+   "text": "i wanted to be funny but i wasn't"
+  },
+  {
+   "t": 249.12,
+   "d": 1.84,
+   "text": "looking for whimsy goofball"
+  },
+  {
+   "t": 250.96,
+   "d": 2.96,
+   "text": "and that's a tough line to walk and i"
+  },
+  {
+   "t": 253.92,
+   "d": 0.96,
+   "text": "was like well how"
+  },
+  {
+   "t": 254.88,
+   "d": 1.68,
+   "text": "how am i going to do this right how do i"
+  },
+  {
+   "t": 256.56,
+   "d": 2.24,
+   "text": "actually figure out what this is"
+  },
+  {
+   "t": 258.8,
+   "d": 1.6,
+   "text": "so i stole right because that's what you"
+  },
+  {
+   "t": 260.4,
+   "d": 1.6,
+   "text": "do you steal from people who are better"
+  },
+  {
+   "t": 262.0,
+   "d": 1.12,
+   "text": "than you and you come up with something"
+  },
+  {
+   "t": 263.12,
+   "d": 0.72,
+   "text": "and you"
+  },
+  {
+   "t": 263.84,
+   "d": 1.6,
+   "text": "stand on the shoulders of giants while"
+  },
+  {
+   "t": 265.44,
+   "d": 1.2,
+   "text": "picking their pockets right that's"
+  },
+  {
+   "t": 266.64,
+   "d": 2.96,
+   "text": "that's the uh the goal for this so"
+  },
+  {
+   "t": 269.6,
+   "d": 2.56,
+   "text": "i decided to take other pieces of"
+  },
+  {
+   "t": 272.16,
+   "d": 0.64,
+   "text": "fiction"
+  },
+  {
+   "t": 272.8,
+   "d": 2.24,
+   "text": "and put them on effectively a graph like"
+  },
+  {
+   "t": 275.04,
+   "d": 1.6,
+   "text": "a two-axis line"
+  },
+  {
+   "t": 276.64,
+   "d": 2.24,
+   "text": "and the first axis is humor right the"
+  },
+  {
+   "t": 278.88,
+   "d": 1.68,
+   "text": "comedy quotient"
+  },
+  {
+   "t": 280.56,
+   "d": 2.4,
+   "text": "so i said well on the far left you've"
+  },
+  {
+   "t": 282.96,
+   "d": 1.04,
+   "text": "got these"
+  },
+  {
+   "t": 284.0,
+   "d": 3.44,
+   "text": "very you know not funny uh stories and"
+  },
+  {
+   "t": 287.44,
+   "d": 1.44,
+   "text": "there is humor occasionally in game of"
+  },
+  {
+   "t": 288.88,
+   "d": 1.44,
+   "text": "thrones but really it's it's terrible"
+  },
+  {
+   "t": 290.32,
+   "d": 1.04,
+   "text": "it's about"
+  },
+  {
+   "t": 291.36,
+   "d": 1.6,
+   "text": "rape and dragons and death and this is"
+  },
+  {
+   "t": 292.96,
+   "d": 1.6,
+   "text": "not a funny world and"
+  },
+  {
+   "t": 294.56,
+   "d": 2.08,
+   "text": "um warhammer underneath it is also"
+  },
+  {
+   "t": 296.64,
+   "d": 1.52,
+   "text": "serious business you know in the grim"
+  },
+  {
+   "t": 298.16,
+   "d": 1.44,
+   "text": "dark future there is only war"
+  },
+  {
+   "t": 299.6,
+   "d": 1.44,
+   "text": "and the emperor kills a thousand people"
+  },
+  {
+   "t": 301.04,
+   "d": 2.8,
+   "text": "a day and on the far side"
+  },
+  {
+   "t": 303.84,
+   "d": 1.84,
+   "text": "you have this really zany goofy stuff"
+  },
+  {
+   "t": 305.68,
+   "d": 1.92,
+   "text": "you've got uh you know uh"
+  },
+  {
+   "t": 307.6,
+   "d": 2.0,
+   "text": "you've got dreadmore with it's like"
+  },
+  {
+   "t": 309.6,
+   "d": 1.84,
+   "text": "vending machines that have food in them"
+  },
+  {
+   "t": 311.44,
+   "d": 1.28,
+   "text": "and you know your loot fisk"
+  },
+  {
+   "t": 312.72,
+   "d": 1.52,
+   "text": "gods and stuff that's really wild and"
+  },
+  {
+   "t": 314.24,
+   "d": 2.8,
+   "text": "monty python is the same sort of deal"
+  },
+  {
+   "t": 317.04,
+   "d": 1.84,
+   "text": "and the comedy quotient you could see"
+  },
+  {
+   "t": 318.88,
+   "d": 1.52,
+   "text": "where i landed i wanted to be kind of"
+  },
+  {
+   "t": 320.4,
+   "d": 2.64,
+   "text": "uh closer to funny but not quite zany"
+  },
+  {
+   "t": 323.04,
+   "d": 1.6,
+   "text": "but the arc in the bottom"
+  },
+  {
+   "t": 324.64,
+   "d": 1.44,
+   "text": "struck me as important too what's the"
+  },
+  {
+   "t": 326.08,
+   "d": 2.0,
+   "text": "value of heroism so"
+  },
+  {
+   "t": 328.08,
+   "d": 1.52,
+   "text": "on the far left it doesn't matter if"
+  },
+  {
+   "t": 329.6,
+   "d": 2.16,
+   "text": "you're a hero everything still sucks"
+  },
+  {
+   "t": 331.76,
+   "d": 2.56,
+   "text": "right you can you can sacrifice yourself"
+  },
+  {
+   "t": 334.32,
+   "d": 1.84,
+   "text": "you can you know you can beat the dragon"
+  },
+  {
+   "t": 336.16,
+   "d": 1.52,
+   "text": "and then someone just comes up and kills"
+  },
+  {
+   "t": 337.68,
+   "d": 0.96,
+   "text": "you and"
+  },
+  {
+   "t": 338.64,
+   "d": 1.6,
+   "text": "your family catches fire suddenly and"
+  },
+  {
+   "t": 340.24,
+   "d": 1.76,
+   "text": "it's just terrible"
+  },
+  {
+   "t": 342.0,
+   "d": 1.84,
+   "text": "but on the far side too like does"
+  },
+  {
+   "t": 343.84,
+   "d": 1.92,
+   "text": "heroism matter no because if you're"
+  },
+  {
+   "t": 345.76,
+   "d": 1.52,
+   "text": "brave and heroic a foot comes down from"
+  },
+  {
+   "t": 347.28,
+   "d": 1.76,
+   "text": "the sky and stomps the bad guys and then"
+  },
+  {
+   "t": 349.04,
+   "d": 1.2,
+   "text": "the movie ends and"
+  },
+  {
+   "t": 350.24,
+   "d": 2.72,
+   "text": "and nothing there has any weight to it"
+  },
+  {
+   "t": 352.96,
+   "d": 1.68,
+   "text": "so part of heroic adventure"
+  },
+  {
+   "t": 354.64,
+   "d": 2.64,
+   "text": "was getting myself some weight there so"
+  },
+  {
+   "t": 357.28,
+   "d": 1.44,
+   "text": "that's one axis"
+  },
+  {
+   "t": 358.72,
+   "d": 2.48,
+   "text": "the second is the value of lauren"
+  },
+  {
+   "t": 361.2,
+   "d": 2.08,
+   "text": "setting i want a story but how important"
+  },
+  {
+   "t": 363.28,
+   "d": 0.48,
+   "text": "is it"
+  },
+  {
+   "t": 363.76,
+   "d": 2.24,
+   "text": "so this isn't how much story we have i"
+  },
+  {
+   "t": 366.0,
+   "d": 1.6,
+   "text": "mean clearly there's nothing over here"
+  },
+  {
+   "t": 367.6,
+   "d": 1.68,
+   "text": "in the left uh you know they're pac-man"
+  },
+  {
+   "t": 369.28,
+   "d": 1.36,
+   "text": "space invaders right"
+  },
+  {
+   "t": 370.64,
+   "d": 1.76,
+   "text": "get the amulet and then go crush the"
+  },
+  {
+   "t": 372.4,
+   "d": 1.12,
+   "text": "thing like these are really simple"
+  },
+  {
+   "t": 373.52,
+   "d": 1.04,
+   "text": "things"
+  },
+  {
+   "t": 374.56,
+   "d": 2.64,
+   "text": "on the far right you have missed or if"
+  },
+  {
+   "t": 377.2,
+   "d": 1.12,
+   "text": "you don't pay attention to the story you"
+  },
+  {
+   "t": 378.32,
+   "d": 0.88,
+   "text": "can't win"
+  },
+  {
+   "t": 379.2,
+   "d": 2.56,
+   "text": "and so there's that's like super"
+  },
+  {
+   "t": 381.76,
+   "d": 1.76,
+   "text": "necessary story"
+  },
+  {
+   "t": 383.52,
+   "d": 2.24,
+   "text": "now skyrim you're thinking what the heck"
+  },
+  {
+   "t": 385.76,
+   "d": 1.44,
+   "text": "that's elder scrolls like there's like a"
+  },
+  {
+   "t": 387.2,
+   "d": 2.4,
+   "text": "million million miles of fiction for it"
+  },
+  {
+   "t": 389.6,
+   "d": 2.64,
+   "text": "but to play skyrim some people just want"
+  },
+  {
+   "t": 392.24,
+   "d": 0.88,
+   "text": "to run around"
+  },
+  {
+   "t": 393.12,
+   "d": 1.84,
+   "text": "in a wedding dress and shout at dragons"
+  },
+  {
+   "t": 394.96,
+   "d": 2.24,
+   "text": "right that's just that's the game"
+  },
+  {
+   "t": 397.2,
+   "d": 2.24,
+   "text": "yeah that's the game and they have a"
+  },
+  {
+   "t": 399.44,
+   "d": 1.52,
+   "text": "great time and the game's built for it"
+  },
+  {
+   "t": 400.96,
+   "d": 0.64,
+   "text": "so they don't"
+  },
+  {
+   "t": 401.6,
+   "d": 3.04,
+   "text": "need the story to succeed i mean it's"
+  },
+  {
+   "t": 404.64,
+   "d": 1.36,
+   "text": "cool and it makes the experience more"
+  },
+  {
+   "t": 406.0,
+   "d": 2.0,
+   "text": "fun but it's not necessary"
+  },
+  {
+   "t": 408.0,
+   "d": 2.8,
+   "text": "so i wanted to go to the left of that so"
+  },
+  {
+   "t": 410.8,
+   "d": 1.52,
+   "text": "now i've got these two axes and there we"
+  },
+  {
+   "t": 412.32,
+   "d": 1.12,
+   "text": "go we've got a target"
+  },
+  {
+   "t": 413.44,
+   "d": 3.12,
+   "text": "right when i put words into the game"
+  },
+  {
+   "t": 416.56,
+   "d": 1.92,
+   "text": "i almost always want to make sure"
+  },
+  {
+   "t": 418.48,
+   "d": 1.2,
+   "text": "they're as close to that target as"
+  },
+  {
+   "t": 419.68,
+   "d": 1.12,
+   "text": "possible"
+  },
+  {
+   "t": 420.8,
+   "d": 2.24,
+   "text": "and that for me became a razor of does"
+  },
+  {
+   "t": 423.04,
+   "d": 0.88,
+   "text": "this work in the game"
+  },
+  {
+   "t": 423.92,
+   "d": 1.68,
+   "text": "not necessarily is it funny but does it"
+  },
+  {
+   "t": 425.6,
+   "d": 1.44,
+   "text": "work in the game because"
+  },
+  {
+   "t": 427.04,
+   "d": 3.2,
+   "text": "not all the texts can be funny"
+  },
+  {
+   "t": 430.24,
+   "d": 1.2,
+   "text": "so here we go that's my tone"
+  },
+  {
+   "t": 431.44,
+   "d": 2.0,
+   "text": "lighthearted heroic adventure right"
+  },
+  {
+   "t": 433.44,
+   "d": 2.16,
+   "text": "it doesn't matter if your guy dies"
+  },
+  {
+   "t": 435.6,
+   "d": 1.6,
+   "text": "another one shows up from the academy"
+  },
+  {
+   "t": 437.2,
+   "d": 1.28,
+   "text": "and he's even stronger and"
+  },
+  {
+   "t": 438.48,
+   "d": 1.44,
+   "text": "eventually you're just going to throw"
+  },
+  {
+   "t": 439.92,
+   "d": 1.52,
+   "text": "yourself at evil enough until evil gets"
+  },
+  {
+   "t": 441.44,
+   "d": 1.12,
+   "text": "bored and you win"
+  },
+  {
+   "t": 442.56,
+   "d": 1.76,
+   "text": "and that's you know that's how people"
+  },
+  {
+   "t": 444.32,
+   "d": 1.36,
+   "text": "beat dungeon mans usually"
+  },
+  {
+   "t": 445.68,
+   "d": 1.6,
+   "text": "you're not a murder hobo you're not a"
+  },
+  {
+   "t": 447.28,
+   "d": 1.44,
+   "text": "bad guy you don't"
+  },
+  {
+   "t": 448.72,
+   "d": 2.08,
+   "text": "stab shopkeepers you don't set fire to"
+  },
+  {
+   "t": 450.8,
+   "d": 2.4,
+   "text": "villages that's just not what you do"
+  },
+  {
+   "t": 453.2,
+   "d": 3.76,
+   "text": "but i still wanted to have some of the"
+  },
+  {
+   "t": 456.96,
+   "d": 2.32,
+   "text": "pulp and and sometimes dark essence of"
+  },
+  {
+   "t": 459.28,
+   "d": 1.76,
+   "text": "robert e howard because i love his work"
+  },
+  {
+   "t": 461.04,
+   "d": 3.04,
+   "text": "i love colin conan and solomon kane and"
+  },
+  {
+   "t": 464.08,
+   "d": 1.6,
+   "text": "those worlds feel cool"
+  },
+  {
+   "t": 465.68,
+   "d": 2.56,
+   "text": "i think uh one of my favorite lines was"
+  },
+  {
+   "t": 468.24,
+   "d": 0.72,
+   "text": "like"
+  },
+  {
+   "t": 468.96,
+   "d": 1.44,
+   "text": "the the necromancer muttered an"
+  },
+  {
+   "t": 470.4,
+   "d": 2.0,
+   "text": "incantation that was old when atlantis"
+  },
+  {
+   "t": 472.4,
+   "d": 0.96,
+   "text": "sink and just"
+  },
+  {
+   "t": 473.36,
+   "d": 1.6,
+   "text": "wow i picture that and like i get chills"
+  },
+  {
+   "t": 474.96,
+   "d": 1.76,
+   "text": "just singing that out loud i love"
+  },
+  {
+   "t": 476.72,
+   "d": 1.6,
+   "text": "that concept so i wanted to see if i"
+  },
+  {
+   "t": 478.32,
+   "d": 2.4,
+   "text": "could bring some of that in"
+  },
+  {
+   "t": 480.72,
+   "d": 1.76,
+   "text": "some of that text is too serious so it"
+  },
+  {
+   "t": 482.48,
+   "d": 1.44,
+   "text": "wouldn't make the cut but some of it"
+  },
+  {
+   "t": 483.92,
+   "d": 0.88,
+   "text": "could still work"
+  },
+  {
+   "t": 484.8,
+   "d": 2.0,
+   "text": "in a relatively heroic and sometimes"
+  },
+  {
+   "t": 486.8,
+   "d": 2.8,
+   "text": "light-hearted fashion"
+  },
+  {
+   "t": 489.6,
+   "d": 2.64,
+   "text": "so what do we do right how do we bring"
+  },
+  {
+   "t": 492.24,
+   "d": 1.28,
+   "text": "tone and humor to the player"
+  },
+  {
+   "t": 493.52,
+   "d": 2.4,
+   "text": "and the worst possible way as indicated"
+  },
+  {
+   "t": 495.92,
+   "d": 1.28,
+   "text": "by the dumpster fire"
+  },
+  {
+   "t": 497.2,
+   "d": 2.0,
+   "text": "is to shove it in their faces right this"
+  },
+  {
+   "t": 499.2,
+   "d": 1.12,
+   "text": "game is funny and all"
+  },
+  {
+   "t": 500.32,
+   "d": 2.56,
+   "text": "like if you're really good at it do that"
+  },
+  {
+   "t": 502.88,
+   "d": 1.52,
+   "text": "but it doesn't work"
+  },
+  {
+   "t": 504.4,
+   "d": 2.8,
+   "text": "if you aren't trying to be totally zany"
+  },
+  {
+   "t": 507.2,
+   "d": 1.68,
+   "text": "off the wall so this did not work for me"
+  },
+  {
+   "t": 508.88,
+   "d": 1.28,
+   "text": "at all in dungeon men's"
+  },
+  {
+   "t": 510.16,
+   "d": 3.36,
+   "text": "um the second is say well okay you know"
+  },
+  {
+   "t": 513.52,
+   "d": 2.88,
+   "text": "put funny and put lori and and just"
+  },
+  {
+   "t": 516.4,
+   "d": 1.68,
+   "text": "leave it along the critical path so when"
+  },
+  {
+   "t": 518.08,
+   "d": 1.28,
+   "text": "you're doing stuff and you're"
+  },
+  {
+   "t": 519.36,
+   "d": 2.32,
+   "text": "you're finding things you naturally see"
+  },
+  {
+   "t": 521.68,
+   "d": 2.0,
+   "text": "the story it isn't forced on you but you"
+  },
+  {
+   "t": 523.68,
+   "d": 1.36,
+   "text": "just see it as you go along and that's"
+  },
+  {
+   "t": 525.04,
+   "d": 0.88,
+   "text": "pretty good"
+  },
+  {
+   "t": 525.92,
+   "d": 2.0,
+   "text": "and i think that works for a lot of"
+  },
+  {
+   "t": 527.92,
+   "d": 1.76,
+   "text": "games out there what i wanted to shoot"
+  },
+  {
+   "t": 529.68,
+   "d": 0.88,
+   "text": "for"
+  },
+  {
+   "t": 530.56,
+   "d": 2.48,
+   "text": "was taking all of that stuff the tone"
+  },
+  {
+   "t": 533.04,
+   "d": 1.28,
+   "text": "and the humor in it"
+  },
+  {
+   "t": 534.32,
+   "d": 1.44,
+   "text": "and sort of making it into something"
+  },
+  {
+   "t": 535.76,
+   "d": 1.52,
+   "text": "comfy and that picture works because the"
+  },
+  {
+   "t": 537.28,
+   "d": 1.28,
+   "text": "fire is actually in the background"
+  },
+  {
+   "t": 538.56,
+   "d": 1.28,
+   "text": "and what you really care about is the"
+  },
+  {
+   "t": 539.84,
+   "d": 2.48,
+   "text": "warm cup of gameplay tea the fire just"
+  },
+  {
+   "t": 542.32,
+   "d": 1.36,
+   "text": "keeps you warm and happy while you're"
+  },
+  {
+   "t": 543.68,
+   "d": 0.72,
+   "text": "sitting there"
+  },
+  {
+   "t": 544.4,
+   "d": 1.92,
+   "text": "on your barker lounger drinking"
+  },
+  {
+   "t": 546.32,
+   "d": 1.12,
+   "text": "permadeath right"
+  },
+  {
+   "t": 547.44,
+   "d": 2.4,
+   "text": "so"
+  },
+  {
+   "t": 550.64,
+   "d": 1.84,
+   "text": "how did i start to do this in the game"
+  },
+  {
+   "t": 552.48,
+   "d": 1.2,
+   "text": "so here's uh"
+  },
+  {
+   "t": 553.68,
+   "d": 1.84,
+   "text": "item naming and description and flavor"
+  },
+  {
+   "t": 555.52,
+   "d": 1.36,
+   "text": "these are the easiest ways to get your"
+  },
+  {
+   "t": 556.88,
+   "d": 1.6,
+   "text": "tone across players see items all the"
+  },
+  {
+   "t": 558.48,
+   "d": 0.64,
+   "text": "time"
+  },
+  {
+   "t": 559.12,
+   "d": 1.44,
+   "text": "they get excited about loot they look"
+  },
+  {
+   "t": 560.56,
+   "d": 1.2,
+   "text": "through their inventory they see what"
+  },
+  {
+   "t": 561.76,
+   "d": 1.6,
+   "text": "these things are"
+  },
+  {
+   "t": 563.36,
+   "d": 2.48,
+   "text": "now it's silly to think oh a thick plank"
+  },
+  {
+   "t": 565.84,
+   "d": 1.52,
+   "text": "with a bent nail like what and"
+  },
+  {
+   "t": 567.36,
+   "d": 1.2,
+   "text": "you know that's your starting two-handed"
+  },
+  {
+   "t": 568.56,
+   "d": 1.44,
+   "text": "weapon which sort of garbage is this"
+  },
+  {
+   "t": 570.0,
+   "d": 0.64,
+   "text": "well"
+  },
+  {
+   "t": 570.64,
+   "d": 1.36,
+   "text": "if you've played a lot of tabletop games"
+  },
+  {
+   "t": 572.0,
+   "d": 2.16,
+   "text": "you know that you can start from nothing"
+  },
+  {
+   "t": 574.16,
+   "d": 1.44,
+   "text": "and it's kind of cool to work your way"
+  },
+  {
+   "t": 575.6,
+   "d": 1.44,
+   "text": "up from that so there even though it's"
+  },
+  {
+   "t": 577.04,
+   "d": 2.08,
+   "text": "funny there is a level of heroism to say"
+  },
+  {
+   "t": 579.12,
+   "d": 1.68,
+   "text": "i started with this thing i found in the"
+  },
+  {
+   "t": 580.8,
+   "d": 2.16,
+   "text": "trash i ended up like"
+  },
+  {
+   "t": 582.96,
+   "d": 1.68,
+   "text": "covering in these giant bedazzled"
+  },
+  {
+   "t": 584.64,
+   "d": 1.68,
+   "text": "shoulders and like a five-handed sword"
+  },
+  {
+   "t": 586.32,
+   "d": 1.28,
+   "text": "and all this stuff like that's"
+  },
+  {
+   "t": 587.6,
+   "d": 2.4,
+   "text": "that's a heroic arc but what i didn't"
+  },
+  {
+   "t": 590.0,
+   "d": 0.88,
+   "text": "want to do"
+  },
+  {
+   "t": 590.88,
+   "d": 2.32,
+   "text": "for my game for the the tone i selected"
+  },
+  {
+   "t": 593.2,
+   "d": 1.84,
+   "text": "was go too crazy with zany so you could"
+  },
+  {
+   "t": 595.04,
+   "d": 1.36,
+   "text": "have started with like a wet noodle"
+  },
+  {
+   "t": 596.4,
+   "d": 1.52,
+   "text": "you could have started with a foam sword"
+  },
+  {
+   "t": 597.92,
+   "d": 1.28,
+   "text": "or one of those hammers that squeaks"
+  },
+  {
+   "t": 599.2,
+   "d": 1.6,
+   "text": "when you bop stuff like"
+  },
+  {
+   "t": 600.8,
+   "d": 2.48,
+   "text": "that's also a weak weapon but it's kind"
+  },
+  {
+   "t": 603.28,
+   "d": 0.8,
+   "text": "of goofy"
+  },
+  {
+   "t": 604.08,
+   "d": 1.44,
+   "text": "you can't really hurt somebody with that"
+  },
+  {
+   "t": 605.52,
+   "d": 1.36,
+   "text": "unless you like choke and put in their"
+  },
+  {
+   "t": 606.88,
+   "d": 2.0,
+   "text": "mouth like that's not going to work but"
+  },
+  {
+   "t": 608.88,
+   "d": 1.84,
+   "text": "a big thick plank it's a thick plank"
+  },
+  {
+   "t": 610.72,
+   "d": 1.52,
+   "text": "right so you can do a lot of things"
+  },
+  {
+   "t": 612.24,
+   "d": 3.04,
+   "text": "too bad people with a thick plank"
+  },
+  {
+   "t": 615.28,
+   "d": 2.88,
+   "text": "this is one of the things i'm most happy"
+  },
+  {
+   "t": 618.16,
+   "d": 1.04,
+   "text": "about"
+  },
+  {
+   "t": 619.2,
+   "d": 1.44,
+   "text": "if you are of sufficient level in"
+  },
+  {
+   "t": 620.64,
+   "d": 2.32,
+   "text": "dungeon mans and die you leave a little"
+  },
+  {
+   "t": 622.96,
+   "d": 2.16,
+   "text": "pyre behind with a sword and flames and"
+  },
+  {
+   "t": 625.12,
+   "d": 1.36,
+   "text": "it's totally ripped off from the game"
+  },
+  {
+   "t": 626.48,
+   "d": 1.12,
+   "text": "over screen from rastan"
+  },
+  {
+   "t": 627.6,
+   "d": 2.64,
+   "text": "if you know what that is you go to that"
+  },
+  {
+   "t": 630.24,
+   "d": 0.56,
+   "text": "and you may"
+  },
+  {
+   "t": 630.8,
+   "d": 1.76,
+   "text": "find a weapon your previous character"
+  },
+  {
+   "t": 632.56,
+   "d": 2.16,
+   "text": "dropped so legends are important is a"
+  },
+  {
+   "t": 634.72,
+   "d": 1.04,
+   "text": "big deal for me"
+  },
+  {
+   "t": 635.76,
+   "d": 1.76,
+   "text": "and now you're part of it the name of"
+  },
+  {
+   "t": 637.52,
+   "d": 1.68,
+   "text": "your previous hero is there"
+  },
+  {
+   "t": 639.2,
+   "d": 2.16,
+   "text": "and if you don't know in dungeon man's"
+  },
+  {
+   "t": 641.36,
+   "d": 2.0,
+   "text": "you can't use the same name twice"
+  },
+  {
+   "t": 643.36,
+   "d": 2.88,
+   "text": "when you name somebody that name uh they"
+  },
+  {
+   "t": 646.24,
+   "d": 0.96,
+   "text": "go when they're in"
+  },
+  {
+   "t": 647.2,
+   "d": 2.0,
+   "text": "and you have to name before you roll"
+  },
+  {
+   "t": 649.2,
+   "d": 1.2,
+   "text": "character stats"
+  },
+  {
+   "t": 650.4,
+   "d": 2.24,
+   "text": "so sometimes people name their character"
+  },
+  {
+   "t": 652.64,
+   "d": 1.44,
+   "text": "they roll dice they don't like what they"
+  },
+  {
+   "t": 654.08,
+   "d": 0.88,
+   "text": "see"
+  },
+  {
+   "t": 654.96,
+   "d": 1.44,
+   "text": "and there's no reroll option there's an"
+  },
+  {
+   "t": 656.4,
+   "d": 1.52,
+   "text": "option that says this person is no"
+  },
+  {
+   "t": 657.92,
+   "d": 0.8,
+   "text": "dungeon mans"
+  },
+  {
+   "t": 658.72,
+   "d": 3.04,
+   "text": "and if you tell them get gone that name"
+  },
+  {
+   "t": 661.76,
+   "d": 2.4,
+   "text": "actually gets stored to be an npc later"
+  },
+  {
+   "t": 664.16,
+   "d": 2.4,
+   "text": "he might be a shopkeeper he might be a"
+  },
+  {
+   "t": 666.56,
+   "d": 1.6,
+   "text": "bandit who runs one of the the"
+  },
+  {
+   "t": 668.16,
+   "d": 1.84,
+   "text": "blockades because he's like well i was"
+  },
+  {
+   "t": 670.0,
+   "d": 1.2,
+   "text": "almost a dungeon man but screw those"
+  },
+  {
+   "t": 671.2,
+   "d": 1.36,
+   "text": "guys"
+  },
+  {
+   "t": 672.56,
+   "d": 2.88,
+   "text": "he gets his revenge and then people will"
+  },
+  {
+   "t": 675.44,
+   "d": 0.64,
+   "text": "go to"
+  },
+  {
+   "t": 676.08,
+   "d": 1.68,
+   "text": "to name their next character the same"
+  },
+  {
+   "t": 677.76,
+   "d": 1.6,
+   "text": "guy like rodrigo and it's like"
+  },
+  {
+   "t": 679.36,
+   "d": 1.76,
+   "text": "you said rodrigo is no dungeon man like"
+  },
+  {
+   "t": 681.12,
+   "d": 2.88,
+   "text": "that's the error message"
+  },
+  {
+   "t": 684.4,
+   "d": 2.0,
+   "text": "that has generated a bit of angry mail"
+  },
+  {
+   "t": 686.4,
+   "d": 2.16,
+   "text": "there was one"
+  },
+  {
+   "t": 688.56,
+   "d": 1.6,
+   "text": "one of my favorite negative steam"
+  },
+  {
+   "t": 690.16,
+   "d": 2.72,
+   "text": "reviews was and you can't even name"
+  },
+  {
+   "t": 692.88,
+   "d": 2.4,
+   "text": "two heroes with the same name ridiculous"
+  },
+  {
+   "t": 695.28,
+   "d": 1.92,
+   "text": "and i just like saying ridiculous now to"
+  },
+  {
+   "t": 697.2,
+   "d": 1.44,
+   "text": "remind myself of that i am"
+  },
+  {
+   "t": 698.64,
+   "d": 1.2,
+   "text": "totally cool with him calling it"
+  },
+  {
+   "t": 699.84,
+   "d": 2.24,
+   "text": "ridiculous the game's not for him but"
+  },
+  {
+   "t": 702.08,
+   "d": 0.72,
+   "text": "here"
+  },
+  {
+   "t": 702.8,
+   "d": 2.24,
+   "text": "legends matter heroes are important so"
+  },
+  {
+   "t": 705.04,
+   "d": 1.28,
+   "text": "you've got this whole item there's some"
+  },
+  {
+   "t": 706.32,
+   "d": 1.76,
+   "text": "funny text at the bottom it's not"
+  },
+  {
+   "t": 708.08,
+   "d": 3.2,
+   "text": "too zany but it does kind of keep things"
+  },
+  {
+   "t": 711.28,
+   "d": 1.52,
+   "text": "lighthearted there's a star symbol in"
+  },
+  {
+   "t": 712.8,
+   "d": 1.76,
+   "text": "the right hand corner"
+  },
+  {
+   "t": 714.56,
+   "d": 1.68,
+   "text": "i don't really go over this in the talk"
+  },
+  {
+   "t": 716.24,
+   "d": 1.6,
+   "text": "but the further to the right that star"
+  },
+  {
+   "t": 717.84,
+   "d": 2.16,
+   "text": "list is the more powerful the weapon is"
+  },
+  {
+   "t": 720.0,
+   "d": 1.92,
+   "text": "the less goofy it is and the less kind"
+  },
+  {
+   "t": 721.92,
+   "d": 2.08,
+   "text": "of funny it is and sometimes the uh"
+  },
+  {
+   "t": 724.0,
+   "d": 1.44,
+   "text": "the really high tier stuff can almost"
+  },
+  {
+   "t": 725.44,
+   "d": 2.24,
+   "text": "feel maybe too serious i think and and"
+  },
+  {
+   "t": 727.68,
+   "d": 2.08,
+   "text": "jrpg style i guess the sword that came"
+  },
+  {
+   "t": 729.76,
+   "d": 1.04,
+   "text": "from a star and it"
+  },
+  {
+   "t": 730.8,
+   "d": 2.08,
+   "text": "cuts gods into sushi and whatever i mean"
+  },
+  {
+   "t": 732.88,
+   "d": 1.36,
+   "text": "that's that's cool though it's powerful"
+  },
+  {
+   "t": 734.24,
+   "d": 0.88,
+   "text": "and i want"
+  },
+  {
+   "t": 735.12,
+   "d": 3.36,
+   "text": "people to have that heroic arc wildlife"
+  },
+  {
+   "t": 738.48,
+   "d": 2.72,
+   "text": "right you have a tone for adventure"
+  },
+  {
+   "t": 741.2,
+   "d": 1.84,
+   "text": "heroic adventure that's kind of zany"
+  },
+  {
+   "t": 743.04,
+   "d": 2.0,
+   "text": "so you get this right it's funny but"
+  },
+  {
+   "t": 745.04,
+   "d": 1.04,
+   "text": "it's not like"
+  },
+  {
+   "t": 746.08,
+   "d": 2.88,
+   "text": "way goofball i mean the trigger maybe i"
+  },
+  {
+   "t": 748.96,
+   "d": 1.84,
+   "text": "don't know"
+  },
+  {
+   "t": 750.8,
+   "d": 2.4,
+   "text": "but like there's an ecology right like"
+  },
+  {
+   "t": 753.2,
+   "d": 1.28,
+   "text": "the top trigger"
+  },
+  {
+   "t": 754.48,
+   "d": 2.16,
+   "text": "the top one is the brains and you know"
+  },
+  {
+   "t": 756.64,
+   "d": 1.76,
+   "text": "he's the one who who kind of controls it"
+  },
+  {
+   "t": 758.4,
+   "d": 0.8,
+   "text": "the middle one"
+  },
+  {
+   "t": 759.2,
+   "d": 1.76,
+   "text": "is uh the cunning schemer and the bottom"
+  },
+  {
+   "t": 760.96,
+   "d": 1.6,
+   "text": "one is the brute and"
+  },
+  {
+   "t": 762.56,
+   "d": 2.24,
+   "text": "they these creatures i mean everyone's"
+  },
+  {
+   "t": 764.8,
+   "d": 1.6,
+   "text": "seen rats and dungeons and everyone's"
+  },
+  {
+   "t": 766.4,
+   "d": 1.68,
+   "text": "fought mud crabs so there's a crab rat"
+  },
+  {
+   "t": 768.08,
+   "d": 1.36,
+   "text": "why not and and"
+  },
+  {
+   "t": 769.44,
+   "d": 1.28,
+   "text": "sure that's not a real thing but you"
+  },
+  {
+   "t": 770.72,
+   "d": 2.08,
+   "text": "think about that showing up in a dungeon"
+  },
+  {
+   "t": 772.8,
+   "d": 1.68,
+   "text": "and you're gonna fight that right and if"
+  },
+  {
+   "t": 774.48,
+   "d": 1.84,
+   "text": "something's like a smiling blob of happy"
+  },
+  {
+   "t": 776.32,
+   "d": 0.48,
+   "text": "like"
+  },
+  {
+   "t": 776.8,
+   "d": 1.68,
+   "text": "dragon warrior rules but they're slimes"
+  },
+  {
+   "t": 778.48,
+   "d": 1.6,
+   "text": "or little balls of smiles"
+  },
+  {
+   "t": 780.08,
+   "d": 1.92,
+   "text": "and great for some games but not for"
+  },
+  {
+   "t": 782.0,
+   "d": 1.44,
+   "text": "mine"
+  },
+  {
+   "t": 783.44,
+   "d": 2.56,
+   "text": "i totally took a feel from hackmaster"
+  },
+  {
+   "t": 786.0,
+   "d": 1.12,
+   "text": "and knight to the dinner table some of"
+  },
+  {
+   "t": 787.12,
+   "d": 1.76,
+   "text": "my favorite fiction"
+  },
+  {
+   "t": 788.88,
+   "d": 2.56,
+   "text": "their stuff is always like regular d d"
+  },
+  {
+   "t": 791.44,
+   "d": 1.68,
+   "text": "but one notch higher so when they name"
+  },
+  {
+   "t": 793.12,
+   "d": 1.36,
+   "text": "their monsters it's like real field"
+  },
+  {
+   "t": 794.48,
+   "d": 1.76,
+   "text": "guides the viridian helmed pout spider"
+  },
+  {
+   "t": 796.24,
+   "d": 1.6,
+   "text": "we stalked him in the woods until one"
+  },
+  {
+   "t": 797.84,
+   "d": 1.6,
+   "text": "day he jumped behind me and i'm actually"
+  },
+  {
+   "t": 799.44,
+   "d": 1.76,
+   "text": "dead because he bit me in half like"
+  },
+  {
+   "t": 801.2,
+   "d": 2.4,
+   "text": "that's the sort of feel i wanted for"
+  },
+  {
+   "t": 803.6,
+   "d": 1.2,
+   "text": "these monsters so they all have names"
+  },
+  {
+   "t": 804.8,
+   "d": 0.64,
+   "text": "like that"
+  },
+  {
+   "t": 805.44,
+   "d": 3.28,
+   "text": "and they feel like beasts in the wild"
+  },
+  {
+   "t": 808.72,
+   "d": 3.28,
+   "text": "i wanted to make sure that the creature"
+  },
+  {
+   "t": 812.0,
+   "d": 2.16,
+   "text": "felt right and so that's there's the"
+  },
+  {
+   "t": 814.16,
+   "d": 1.04,
+   "text": "axis again like"
+  },
+  {
+   "t": 815.2,
+   "d": 1.76,
+   "text": "this is a cool bat actually it's it's"
+  },
+  {
+   "t": 816.96,
+   "d": 1.52,
+   "text": "prettier than i scaled it up to because"
+  },
+  {
+   "t": 818.48,
+   "d": 1.44,
+   "text": "i'm bad at slide but"
+  },
+  {
+   "t": 819.92,
+   "d": 1.52,
+   "text": "it's realistic you know that's that's"
+  },
+  {
+   "t": 821.44,
+   "d": 2.0,
+   "text": "like a real bat so okay"
+  },
+  {
+   "t": 823.44,
+   "d": 1.92,
+   "text": "but you know you've got the the venom"
+  },
+  {
+   "t": 825.36,
+   "d": 1.52,
+   "text": "tipped k flapper right"
+  },
+  {
+   "t": 826.88,
+   "d": 2.4,
+   "text": "and that guy i mean he can't actually"
+  },
+  {
+   "t": 829.28,
+   "d": 1.68,
+   "text": "fly right that tail would mean he can't"
+  },
+  {
+   "t": 830.96,
+   "d": 1.52,
+   "text": "fly his wings are too dumb and it's not"
+  },
+  {
+   "t": 832.48,
+   "d": 1.36,
+   "text": "going to happen but"
+  },
+  {
+   "t": 833.84,
+   "d": 1.52,
+   "text": "he's the bad guy in dungeon mansion on"
+  },
+  {
+   "t": 835.36,
+   "d": 2.16,
+   "text": "the far right you know i had a"
+  },
+  {
+   "t": 837.52,
+   "d": 1.44,
+   "text": "suggestion uh for a while like well your"
+  },
+  {
+   "t": 838.96,
+   "d": 1.04,
+   "text": "game is funny you should do funny"
+  },
+  {
+   "t": 840.0,
+   "d": 1.04,
+   "text": "monsters and"
+  },
+  {
+   "t": 841.04,
+   "d": 1.92,
+   "text": "it didn't feel right so again i had a"
+  },
+  {
+   "t": 842.96,
+   "d": 1.2,
+   "text": "tone i had a target and"
+  },
+  {
+   "t": 844.16,
+   "d": 3.44,
+   "text": "things get cut along that point"
+  },
+  {
+   "t": 847.6,
+   "d": 2.32,
+   "text": "now there's big bad guys and they can't"
+  },
+  {
+   "t": 849.92,
+   "d": 1.68,
+   "text": "be too silly right if you fight like"
+  },
+  {
+   "t": 851.6,
+   "d": 2.32,
+   "text": "clownicus the goofy"
+  },
+  {
+   "t": 853.92,
+   "d": 2.08,
+   "text": "some games that works great you know and"
+  },
+  {
+   "t": 856.0,
+   "d": 1.92,
+   "text": "and it just didn't feel right for me so"
+  },
+  {
+   "t": 857.92,
+   "d": 1.28,
+   "text": "i wanted to still have"
+  },
+  {
+   "t": 859.2,
+   "d": 1.44,
+   "text": "the heroic arc of you're fighting these"
+  },
+  {
+   "t": 860.64,
+   "d": 1.92,
+   "text": "big beefy dudes and you know they're"
+  },
+  {
+   "t": 862.56,
+   "d": 0.56,
+   "text": "just"
+  },
+  {
+   "t": 863.12,
+   "d": 1.44,
+   "text": "the whole thing is a setup like you've"
+  },
+  {
+   "t": 864.56,
+   "d": 1.04,
+   "text": "got the top of a tower and you're"
+  },
+  {
+   "t": 865.6,
+   "d": 1.12,
+   "text": "actually fighting on the roof of the"
+  },
+  {
+   "t": 866.72,
+   "d": 0.72,
+   "text": "tower and you"
+  },
+  {
+   "t": 867.44,
+   "d": 1.28,
+   "text": "can't knock him off the tower because"
+  },
+  {
+   "t": 868.72,
+   "d": 1.52,
+   "text": "that's cheap so i clipped the sides but"
+  },
+  {
+   "t": 870.24,
+   "d": 2.56,
+   "text": "like yeah it's a big deal"
+  },
+  {
+   "t": 872.8,
+   "d": 1.76,
+   "text": "but these creatures are actually kind of"
+  },
+  {
+   "t": 874.56,
+   "d": 1.44,
+   "text": "boosted from golden axe"
+  },
+  {
+   "t": 876.0,
+   "d": 3.68,
+   "text": "like i love that game and yeah like i"
+  },
+  {
+   "t": 879.68,
+   "d": 1.28,
+   "text": "i told my artist i'm like you know that"
+  },
+  {
+   "t": 880.96,
+   "d": 1.44,
+   "text": "guy over there can he be baller and have"
+  },
+  {
+   "t": 882.4,
+   "d": 0.96,
+   "text": "like two axes"
+  },
+  {
+   "t": 883.36,
+   "d": 3.12,
+   "text": "why not so we did this and to me saying"
+  },
+  {
+   "t": 886.48,
+   "d": 0.72,
+   "text": "you know"
+  },
+  {
+   "t": 887.2,
+   "d": 1.44,
+   "text": "the feeling of playing that game and how"
+  },
+  {
+   "t": 888.64,
+   "d": 1.52,
+   "text": "cool it felt to fight these big guys i"
+  },
+  {
+   "t": 890.16,
+   "d": 1.36,
+   "text": "want people to feel that and i want to"
+  },
+  {
+   "t": 891.52,
+   "d": 1.28,
+   "text": "pull from games of your"
+  },
+  {
+   "t": 892.8,
+   "d": 4.24,
+   "text": "so i did the names of locations"
+  },
+  {
+   "t": 897.04,
+   "d": 1.6,
+   "text": "especially if you're making procedurally"
+  },
+  {
+   "t": 898.64,
+   "d": 1.76,
+   "text": "generated worlds can really really"
+  },
+  {
+   "t": 900.4,
+   "d": 1.68,
+   "text": "really help you out"
+  },
+  {
+   "t": 902.08,
+   "d": 1.76,
+   "text": "now proc gen means you make a lot of"
+  },
+  {
+   "t": 903.84,
+   "d": 1.2,
+   "text": "stuff and it's different from game to"
+  },
+  {
+   "t": 905.04,
+   "d": 0.64,
+   "text": "game"
+  },
+  {
+   "t": 905.68,
+   "d": 2.08,
+   "text": "it won't often be memorable if you have"
+  },
+  {
+   "t": 907.76,
+   "d": 1.44,
+   "text": "like a solid over world that's the same"
+  },
+  {
+   "t": 909.2,
+   "d": 1.84,
+   "text": "every time static overworld"
+  },
+  {
+   "t": 911.04,
+   "d": 2.88,
+   "text": "sure but what i wanted to do was make"
+  },
+  {
+   "t": 913.92,
+   "d": 1.68,
+   "text": "places that felt a certain way"
+  },
+  {
+   "t": 915.6,
+   "d": 2.32,
+   "text": "so legends are important the places"
+  },
+  {
+   "t": 917.92,
+   "d": 1.2,
+   "text": "usually have"
+  },
+  {
+   "t": 919.12,
+   "d": 1.52,
+   "text": "a name in them and you see these names"
+  },
+  {
+   "t": 920.64,
+   "d": 2.32,
+   "text": "repeatedly and there's a list of like 30"
+  },
+  {
+   "t": 922.96,
+   "d": 2.8,
+   "text": "and they're great villains great heroes"
+  },
+  {
+   "t": 925.76,
+   "d": 1.92,
+   "text": "generals maybe they ascended to divinity"
+  },
+  {
+   "t": 927.68,
+   "d": 1.6,
+   "text": "who knows but they did things in the"
+  },
+  {
+   "t": 929.28,
+   "d": 0.88,
+   "text": "past"
+  },
+  {
+   "t": 930.16,
+   "d": 1.92,
+   "text": "and we hardly remember what they were"
+  },
+  {
+   "t": 932.08,
+   "d": 1.84,
+   "text": "but we know greatness happened here"
+  },
+  {
+   "t": 933.92,
+   "d": 2.56,
+   "text": "so that is the theme for regular dungeon"
+  },
+  {
+   "t": 936.48,
+   "d": 1.6,
+   "text": "names"
+  },
+  {
+   "t": 938.08,
+   "d": 2.4,
+   "text": "i also have different types there's"
+  },
+  {
+   "t": 940.48,
+   "d": 1.76,
+   "text": "bandit camps right and they have bandit"
+  },
+  {
+   "t": 942.24,
+   "d": 1.12,
+   "text": "camp names and they're hiding in the"
+  },
+  {
+   "t": 943.36,
+   "d": 1.2,
+   "text": "woods and then there's caves full of"
+  },
+  {
+   "t": 944.56,
+   "d": 1.44,
+   "text": "lizard men's right"
+  },
+  {
+   "t": 946.0,
+   "d": 1.44,
+   "text": "and they have these names and you're not"
+  },
+  {
+   "t": 947.44,
+   "d": 1.92,
+   "text": "going to remember like"
+  },
+  {
+   "t": 949.36,
+   "d": 1.84,
+   "text": "no one remembers that right but you get"
+  },
+  {
+   "t": 951.2,
+   "d": 2.08,
+   "text": "the concept and you see the name and you"
+  },
+  {
+   "t": 953.28,
+   "d": 1.44,
+   "text": "get the feeling like yes"
+  },
+  {
+   "t": 954.72,
+   "d": 1.92,
+   "text": "you know a dung waste right i mean"
+  },
+  {
+   "t": 956.64,
+   "d": 1.52,
+   "text": "that's terrible and who wants to be in a"
+  },
+  {
+   "t": 958.16,
+   "d": 1.52,
+   "text": "dung lace well these lizards do"
+  },
+  {
+   "t": 959.68,
+   "d": 3.36,
+   "text": "so they have to die right and that's"
+  },
+  {
+   "t": 963.04,
+   "d": 1.84,
+   "text": "they're just wrong and they live in poop"
+  },
+  {
+   "t": 964.88,
+   "d": 1.84,
+   "text": "and you want to save them from that"
+  },
+  {
+   "t": 966.72,
+   "d": 1.52,
+   "text": "so you get the feeling of what the"
+  },
+  {
+   "t": 968.24,
+   "d": 1.6,
+   "text": "locations evoke without having to"
+  },
+  {
+   "t": 969.84,
+   "d": 1.68,
+   "text": "remember the names uh the last two are"
+  },
+  {
+   "t": 971.52,
+   "d": 0.4,
+   "text": "also"
+  },
+  {
+   "t": 971.92,
+   "d": 2.32,
+   "text": "um bandits will block the road sometimes"
+  },
+  {
+   "t": 974.24,
+   "d": 1.28,
+   "text": "they'll make these road blocks and they"
+  },
+  {
+   "t": 975.52,
+   "d": 1.44,
+   "text": "have names like the battle of this and"
+  },
+  {
+   "t": 976.96,
+   "d": 0.8,
+   "text": "that and it's"
+  },
+  {
+   "t": 977.76,
+   "d": 1.68,
+   "text": "it's the music is epic you jump right in"
+  },
+  {
+   "t": 979.44,
+   "d": 1.52,
+   "text": "and you crush the guys down there's"
+  },
+  {
+   "t": 980.96,
+   "d": 0.96,
+   "text": "nothing to explore it's just a"
+  },
+  {
+   "t": 981.92,
+   "d": 1.12,
+   "text": "rip-roaring fight"
+  },
+  {
+   "t": 983.04,
+   "d": 2.32,
+   "text": "and i wanted the names to represent that"
+  },
+  {
+   "t": 985.36,
+   "d": 0.72,
+   "text": "now"
+  },
+  {
+   "t": 986.08,
+   "d": 1.36,
+   "text": "if you're really going to use weird"
+  },
+  {
+   "t": 987.44,
+   "d": 3.2,
+   "text": "words they have to mean something"
+  },
+  {
+   "t": 990.64,
+   "d": 1.84,
+   "text": "i played a lot of games lord of the"
+  },
+  {
+   "t": 992.48,
+   "d": 1.68,
+   "text": "rings online i love i haven't played in"
+  },
+  {
+   "t": 994.16,
+   "d": 1.92,
+   "text": "a while but it's one of my favorites"
+  },
+  {
+   "t": 996.08,
+   "d": 1.68,
+   "text": "and like ninety percent of the places"
+  },
+  {
+   "t": 997.76,
+   "d": 2.08,
+   "text": "are named like das"
+  },
+  {
+   "t": 999.84,
+   "d": 1.52,
+   "text": "and i they don't have i mean they have"
+  },
+  {
+   "t": 1001.36,
+   "d": 1.36,
+   "text": "rhyme or reason if you're a real token"
+  },
+  {
+   "t": 1002.72,
+   "d": 1.2,
+   "text": "guy but i guess i'm not"
+  },
+  {
+   "t": 1003.92,
+   "d": 1.84,
+   "text": "and i get lost and confused they don't"
+  },
+  {
+   "t": 1005.76,
+   "d": 1.44,
+   "text": "mean anything"
+  },
+  {
+   "t": 1007.2,
+   "d": 2.24,
+   "text": "so there's a worry that like well what"
+  },
+  {
+   "t": 1009.44,
+   "d": 1.68,
+   "text": "does all my not show the tower"
+  },
+  {
+   "t": 1011.12,
+   "d": 1.36,
+   "text": "unparalleled mean"
+  },
+  {
+   "t": 1012.48,
+   "d": 1.44,
+   "text": "well you know what the last words mean"
+  },
+  {
+   "t": 1013.92,
+   "d": 1.76,
+   "text": "and tower and paralleled"
+  },
+  {
+   "t": 1015.68,
+   "d": 3.76,
+   "text": "all the towers have these weird suffixes"
+  },
+  {
+   "t": 1019.44,
+   "d": 2.24,
+   "text": "and who built these towers like what"
+  },
+  {
+   "t": 1021.68,
+   "d": 0.88,
+   "text": "what happened like"
+  },
+  {
+   "t": 1022.56,
+   "d": 1.52,
+   "text": "who talks like this right there's"
+  },
+  {
+   "t": 1024.08,
+   "d": 1.92,
+   "text": "someone from history that we don't quite"
+  },
+  {
+   "t": 1026.0,
+   "d": 1.52,
+   "text": "understand created these things and"
+  },
+  {
+   "t": 1027.52,
+   "d": 2.72,
+   "text": "all we remember are the names they feel"
+  },
+  {
+   "t": 1030.24,
+   "d": 1.36,
+   "text": "different from regular dungeons they're"
+  },
+  {
+   "t": 1031.6,
+   "d": 1.44,
+   "text": "different to play and they have"
+  },
+  {
+   "t": 1033.04,
+   "d": 1.44,
+   "text": "different names and they want to evoke"
+  },
+  {
+   "t": 1034.48,
+   "d": 0.96,
+   "text": "something different"
+  },
+  {
+   "t": 1035.44,
+   "d": 1.6,
+   "text": "that sticks to the tone i've said that"
+  },
+  {
+   "t": 1037.04,
+   "d": 1.68,
+   "text": "30 thousand times already and i'm gonna"
+  },
+  {
+   "t": 1038.72,
+   "d": 1.28,
+   "text": "keep saying it because that's important"
+  },
+  {
+   "t": 1040.0,
+   "d": 0.64,
+   "text": "to this"
+  },
+  {
+   "t": 1040.64,
+   "d": 3.12,
+   "text": "to me so now i'm going to go over some"
+  },
+  {
+   "t": 1043.76,
+   "d": 0.56,
+   "text": "humor"
+  },
+  {
+   "t": 1044.32,
+   "d": 2.16,
+   "text": "actually they're just don'ts really"
+  },
+  {
+   "t": 1046.48,
+   "d": 1.28,
+   "text": "there's no do's here"
+  },
+  {
+   "t": 1047.76,
+   "d": 2.08,
+   "text": "and full disclosure to everybody in the"
+  },
+  {
+   "t": 1049.84,
+   "d": 2.16,
+   "text": "room i'm not a master humorist"
+  },
+  {
+   "t": 1052.0,
+   "d": 1.6,
+   "text": "and i'll explain that that i'm not and"
+  },
+  {
+   "t": 1053.6,
+   "d": 1.2,
+   "text": "you probably know i'm not if you played"
+  },
+  {
+   "t": 1054.8,
+   "d": 0.8,
+   "text": "the game"
+  },
+  {
+   "t": 1055.6,
+   "d": 2.8,
+   "text": "but there's there's things i found that"
+  },
+  {
+   "t": 1058.4,
+   "d": 0.96,
+   "text": "worked and didn't work for me and"
+  },
+  {
+   "t": 1059.36,
+   "d": 1.6,
+   "text": "there's traps i almost fell in and i"
+  },
+  {
+   "t": 1060.96,
+   "d": 1.28,
+   "text": "just want to share that and there are"
+  },
+  {
+   "t": 1062.24,
+   "d": 1.28,
+   "text": "people who make funny games that would"
+  },
+  {
+   "t": 1063.52,
+   "d": 1.44,
+   "text": "look at this and be like screw you like"
+  },
+  {
+   "t": 1064.96,
+   "d": 0.56,
+   "text": "this isn't"
+  },
+  {
+   "t": 1065.52,
+   "d": 2.8,
+   "text": "for us but for me it is and for people"
+  },
+  {
+   "t": 1068.32,
+   "d": 2.08,
+   "text": "who aren't fantastic writers"
+  },
+  {
+   "t": 1070.4,
+   "d": 3.12,
+   "text": "who want to try putting this stuff in"
+  },
+  {
+   "t": 1073.52,
+   "d": 0.8,
+   "text": "their game"
+  },
+  {
+   "t": 1074.32,
+   "d": 1.76,
+   "text": "i think these tips might help so the"
+  },
+  {
+   "t": 1076.08,
+   "d": 2.64,
+   "text": "first references shall be unnoticeable"
+  },
+  {
+   "t": 1078.72,
+   "d": 1.28,
+   "text": "if not recognized"
+  },
+  {
+   "t": 1080.0,
+   "d": 2.08,
+   "text": "man there's nothing worse than reading"
+  },
+  {
+   "t": 1082.08,
+   "d": 1.2,
+   "text": "something that's supposed to be funny"
+  },
+  {
+   "t": 1083.28,
+   "d": 1.44,
+   "text": "and being like i don't get it"
+  },
+  {
+   "t": 1084.72,
+   "d": 1.52,
+   "text": "i've never watched an episode of doctor"
+  },
+  {
+   "t": 1086.24,
+   "d": 2.24,
+   "text": "who in my life right i know"
+  },
+  {
+   "t": 1088.48,
+   "d": 1.68,
+   "text": "what a tardis is it's what you go into"
+  },
+  {
+   "t": 1090.16,
+   "d": 1.28,
+   "text": "and you come out of superman right i"
+  },
+  {
+   "t": 1091.44,
+   "d": 1.36,
+   "text": "know what one is"
+  },
+  {
+   "t": 1092.8,
+   "d": 2.8,
+   "text": "but i've i've never actually used one"
+  },
+  {
+   "t": 1095.6,
+   "d": 1.28,
+   "text": "you know and i don't haven't"
+  },
+  {
+   "t": 1096.88,
+   "d": 2.24,
+   "text": "been to a dragon con and used one so i"
+  },
+  {
+   "t": 1099.12,
+   "d": 1.6,
+   "text": "don't know how they'd work in game but"
+  },
+  {
+   "t": 1100.72,
+   "d": 1.76,
+   "text": "when i see something like that i'm like"
+  },
+  {
+   "t": 1102.48,
+   "d": 3.28,
+   "text": "oh it's a doctor who okay what's better"
+  },
+  {
+   "t": 1105.76,
+   "d": 1.52,
+   "text": "in my opinion is if you reference"
+  },
+  {
+   "t": 1107.28,
+   "d": 1.84,
+   "text": "something if you don't know what it is"
+  },
+  {
+   "t": 1109.12,
+   "d": 0.96,
+   "text": "you don't care"
+  },
+  {
+   "t": 1110.08,
+   "d": 1.2,
+   "text": "it just goes over your head and it's"
+  },
+  {
+   "t": 1111.28,
+   "d": 1.12,
+   "text": "fine and it doesn't disrupt your"
+  },
+  {
+   "t": 1112.4,
+   "d": 2.72,
+   "text": "experience so"
+  },
+  {
+   "t": 1115.68,
+   "d": 1.68,
+   "text": "a bad example from dungeon man's i think"
+  },
+  {
+   "t": 1117.36,
+   "d": 1.92,
+   "text": "if you played it how many bothens do we"
+  },
+  {
+   "t": 1119.28,
+   "d": 1.44,
+   "text": "have to slaughter to figure that out"
+  },
+  {
+   "t": 1120.72,
+   "d": 1.6,
+   "text": "right i didn't put that line in the game"
+  },
+  {
+   "t": 1122.32,
+   "d": 1.68,
+   "text": "and i wouldn't because if somebody"
+  },
+  {
+   "t": 1124.0,
+   "d": 1.28,
+   "text": "doesn't know what a bothan is and"
+  },
+  {
+   "t": 1125.28,
+   "d": 1.36,
+   "text": "there are people who've never seen star"
+  },
+  {
+   "t": 1126.64,
+   "d": 2.88,
+   "text": "wars that's like what's a bothan and"
+  },
+  {
+   "t": 1129.52,
+   "d": 2.4,
+   "text": "what this is weird and then now bothans"
+  },
+  {
+   "t": 1131.92,
+   "d": 1.36,
+   "text": "are in dungeon mans right because i said"
+  },
+  {
+   "t": 1133.28,
+   "d": 1.2,
+   "text": "they are and that's something i don't"
+  },
+  {
+   "t": 1134.48,
+   "d": 0.8,
+   "text": "want to do"
+  },
+  {
+   "t": 1135.28,
+   "d": 2.88,
+   "text": "so that kind of reference it calls back"
+  },
+  {
+   "t": 1138.16,
+   "d": 1.52,
+   "text": "to star wars and it's funny but"
+  },
+  {
+   "t": 1139.68,
+   "d": 2.24,
+   "text": "it it can miss and that applies to all"
+  },
+  {
+   "t": 1141.92,
+   "d": 1.2,
+   "text": "sorts of different types of humor you"
+  },
+  {
+   "t": 1143.12,
+   "d": 1.12,
+   "text": "want to call back something funny in the"
+  },
+  {
+   "t": 1144.24,
+   "d": 0.88,
+   "text": "real world"
+  },
+  {
+   "t": 1145.12,
+   "d": 2.08,
+   "text": "but if you have to know what it is you"
+  },
+  {
+   "t": 1147.2,
+   "d": 1.68,
+   "text": "miss so the good line is many scroll"
+  },
+  {
+   "t": 1148.88,
+   "d": 1.44,
+   "text": "bulls died to bring this information"
+  },
+  {
+   "t": 1150.32,
+   "d": 0.32,
+   "text": "right"
+  },
+  {
+   "t": 1150.64,
+   "d": 1.92,
+   "text": "scroll boards are in dungeon man's and"
+  },
+  {
+   "t": 1152.56,
+   "d": 1.04,
+   "text": "everyone knows what they are and if"
+  },
+  {
+   "t": 1153.6,
+   "d": 1.76,
+   "text": "you've never seen star wars"
+  },
+  {
+   "t": 1155.36,
+   "d": 1.52,
+   "text": "that's just a true thing right you just"
+  },
+  {
+   "t": 1156.88,
+   "d": 1.36,
+   "text": "oh well many scrolls died to bring us"
+  },
+  {
+   "t": 1158.24,
+   "d": 0.64,
+   "text": "information"
+  },
+  {
+   "t": 1158.88,
+   "d": 1.28,
+   "text": "but if you have seen star wars you're"
+  },
+  {
+   "t": 1160.16,
+   "d": 2.4,
+   "text": "like oh ha ha lol and you don't laugh"
+  },
+  {
+   "t": 1162.56,
+   "d": 0.72,
+   "text": "very hard"
+  },
+  {
+   "t": 1163.28,
+   "d": 2.24,
+   "text": "because it's not very funny well it's"
+  },
+  {
+   "t": 1165.52,
+   "d": 1.6,
+   "text": "not and that's actually something else"
+  },
+  {
+   "t": 1167.12,
+   "d": 1.36,
+   "text": "with references because"
+  },
+  {
+   "t": 1168.48,
+   "d": 1.92,
+   "text": "they're not supposed to be the punch"
+  },
+  {
+   "t": 1170.4,
+   "d": 1.36,
+   "text": "line the mega funny"
+  },
+  {
+   "t": 1171.76,
+   "d": 1.44,
+   "text": "you know kill streak this is the"
+  },
+  {
+   "t": 1173.2,
+   "d": 1.68,
+   "text": "funniest thing eat it like that's not"
+  },
+  {
+   "t": 1174.88,
+   "d": 1.2,
+   "text": "how these work"
+  },
+  {
+   "t": 1176.08,
+   "d": 1.28,
+   "text": "because your audience might just miss"
+  },
+  {
+   "t": 1177.36,
+   "d": 1.52,
+   "text": "them right so you can't have your"
+  },
+  {
+   "t": 1178.88,
+   "d": 1.36,
+   "text": "structure set up on them"
+  },
+  {
+   "t": 1180.24,
+   "d": 2.88,
+   "text": "uh the books in dungeon man's that you"
+  },
+  {
+   "t": 1183.12,
+   "d": 1.76,
+   "text": "use to gain skills i pulled from stuff"
+  },
+  {
+   "t": 1184.88,
+   "d": 1.44,
+   "text": "in the real world all the time so if"
+  },
+  {
+   "t": 1186.32,
+   "d": 1.52,
+   "text": "you've read pen and tiller's cool tricks"
+  },
+  {
+   "t": 1187.84,
+   "d": 1.28,
+   "text": "for dear friends"
+  },
+  {
+   "t": 1189.12,
+   "d": 1.92,
+   "text": "the trixonometry book is got a funny"
+  },
+  {
+   "t": 1191.04,
+   "d": 1.44,
+   "text": "name because it's about trixie magic and"
+  },
+  {
+   "t": 1192.48,
+   "d": 1.44,
+   "text": "so are these guys and oh that's great"
+  },
+  {
+   "t": 1193.92,
+   "d": 1.52,
+   "text": "and if you haven't then who cares it's"
+  },
+  {
+   "t": 1195.44,
+   "d": 1.36,
+   "text": "just a book and you don't feel like you"
+  },
+  {
+   "t": 1196.8,
+   "d": 1.36,
+   "text": "missed anything"
+  },
+  {
+   "t": 1198.16,
+   "d": 2.8,
+   "text": "again huge robert e howard fan it's"
+  },
+  {
+   "t": 1200.96,
+   "d": 1.28,
+   "text": "awesome by this actually rule like the"
+  },
+  {
+   "t": 1202.24,
+   "d": 1.52,
+   "text": "end of the story is like somebody"
+  },
+  {
+   "t": 1203.76,
+   "d": 1.76,
+   "text": "couldn't marry somebody they wanted to"
+  },
+  {
+   "t": 1205.52,
+   "d": 1.92,
+   "text": "and it was written in these stone laws"
+  },
+  {
+   "t": 1207.44,
+   "d": 1.6,
+   "text": "and what he decided to do he was just"
+  },
+  {
+   "t": 1209.04,
+   "d": 0.32,
+   "text": "like"
+  },
+  {
+   "t": 1209.36,
+   "d": 1.36,
+   "text": "all these laws he took his axe and he's"
+  },
+  {
+   "t": 1210.72,
+   "d": 2.16,
+   "text": "like brah and he crushes the stone table"
+  },
+  {
+   "t": 1212.88,
+   "d": 1.68,
+   "text": "by this sax i rule and people can do"
+  },
+  {
+   "t": 1214.56,
+   "d": 1.28,
+   "text": "what they want and"
+  },
+  {
+   "t": 1215.84,
+   "d": 2.64,
+   "text": "well that's awesome so by this accident"
+  },
+  {
+   "t": 1218.48,
+   "d": 1.12,
+   "text": "crush goes in and if you've never heard"
+  },
+  {
+   "t": 1219.6,
+   "d": 0.96,
+   "text": "of this it doesn't matter"
+  },
+  {
+   "t": 1220.56,
+   "d": 2.48,
+   "text": "it doesn't bother you another thing i"
+  },
+  {
+   "t": 1223.04,
+   "d": 1.28,
+   "text": "want to mention is"
+  },
+  {
+   "t": 1224.32,
+   "d": 2.64,
+   "text": "the flavor text for the magic book says"
+  },
+  {
+   "t": 1226.96,
+   "d": 1.92,
+   "text": "oh yeah the guy in the 3000 gold piece"
+  },
+  {
+   "t": 1228.88,
+   "d": 0.4,
+   "text": "caster"
+  },
+  {
+   "t": 1229.28,
+   "d": 1.28,
+   "text": "is going to get hit by use crumbs come"
+  },
+  {
+   "t": 1230.56,
+   "d": 1.76,
+   "text": "on and that"
+  },
+  {
+   "t": 1232.32,
+   "d": 1.6,
+   "text": "arrested development right like joe"
+  },
+  {
+   "t": 1233.92,
+   "d": 1.44,
+   "text": "bluth says that and maybe two of you"
+  },
+  {
+   "t": 1235.36,
+   "d": 1.84,
+   "text": "have seen that show"
+  },
+  {
+   "t": 1237.2,
+   "d": 1.6,
+   "text": "but if you don't know who joe bluth is"
+  },
+  {
+   "t": 1238.8,
+   "d": 1.2,
+   "text": "this goes over your head and it's fine"
+  },
+  {
+   "t": 1240.0,
+   "d": 1.2,
+   "text": "if you do know who it is you're like oh"
+  },
+  {
+   "t": 1241.2,
+   "d": 1.44,
+   "text": "that show is funny"
+  },
+  {
+   "t": 1242.64,
+   "d": 1.76,
+   "text": "what dungeons doesn't have is a magician"
+  },
+  {
+   "t": 1244.4,
+   "d": 1.84,
+   "text": "on a scooter showing up"
+  },
+  {
+   "t": 1246.24,
+   "d": 2.24,
+   "text": "and being like their illusions player"
+  },
+  {
+   "t": 1248.48,
+   "d": 1.52,
+   "text": "name and they're like"
+  },
+  {
+   "t": 1250.0,
+   "d": 1.36,
+   "text": "sure that's funny if you've seen it yeah"
+  },
+  {
+   "t": 1251.36,
+   "d": 1.92,
+   "text": "you left there good if you've seen a"
+  },
+  {
+   "t": 1253.28,
+   "d": 1.44,
+   "text": "rest development that's funny but the"
+  },
+  {
+   "t": 1254.72,
+   "d": 1.36,
+   "text": "rest you have and you're like what is"
+  },
+  {
+   "t": 1256.08,
+   "d": 0.64,
+   "text": "this and"
+  },
+  {
+   "t": 1256.72,
+   "d": 2.88,
+   "text": "it pulls you out of the game uh here's"
+  },
+  {
+   "t": 1259.6,
+   "d": 1.28,
+   "text": "something that isn't funny but still a"
+  },
+  {
+   "t": 1260.88,
+   "d": 1.84,
+   "text": "reference i was in martial arts in my"
+  },
+  {
+   "t": 1262.72,
+   "d": 1.04,
+   "text": "youth and then again in my early"
+  },
+  {
+   "t": 1263.76,
+   "d": 1.28,
+   "text": "twenties"
+  },
+  {
+   "t": 1265.04,
+   "d": 2.16,
+   "text": "the psychomancer is the monk class in"
+  },
+  {
+   "t": 1267.2,
+   "d": 2.16,
+   "text": "dungeon men's and it does the"
+  },
+  {
+   "t": 1269.36,
+   "d": 1.44,
+   "text": "like the kick jumpy stuff and it has"
+  },
+  {
+   "t": 1270.8,
+   "d": 2.4,
+   "text": "like the ego bending teleportation"
+  },
+  {
+   "t": 1273.2,
+   "d": 3.12,
+   "text": "and i took this stuff because it was"
+  },
+  {
+   "t": 1276.32,
+   "d": 1.12,
+   "text": "awesome to me"
+  },
+  {
+   "t": 1277.44,
+   "d": 1.68,
+   "text": "and i put it in the game and the reason"
+  },
+  {
+   "t": 1279.12,
+   "d": 1.6,
+   "text": "i mentioned it at all is because it had"
+  },
+  {
+   "t": 1280.72,
+   "d": 1.6,
+   "text": "a consistent tone and i was like well"
+  },
+  {
+   "t": 1282.32,
+   "d": 0.4,
+   "text": "yes"
+  },
+  {
+   "t": 1282.72,
+   "d": 1.84,
+   "text": "there's a structure here that i'm going"
+  },
+  {
+   "t": 1284.56,
+   "d": 1.44,
+   "text": "to lift and put into the game so those"
+  },
+  {
+   "t": 1286.0,
+   "d": 1.44,
+   "text": "are power names and they're based on"
+  },
+  {
+   "t": 1287.44,
+   "d": 1.52,
+   "text": "some of the virtues of the karate i just"
+  },
+  {
+   "t": 1288.96,
+   "d": 1.12,
+   "text": "took those"
+  },
+  {
+   "t": 1290.08,
+   "d": 1.52,
+   "text": "this text is probably too small to read"
+  },
+  {
+   "t": 1291.6,
+   "d": 2.16,
+   "text": "but the point being the karate dojo is"
+  },
+  {
+   "t": 1293.76,
+   "d": 1.36,
+   "text": "one of the books we had to read and half"
+  },
+  {
+   "t": 1295.12,
+   "d": 2.16,
+   "text": "of it was karate tall tales like think"
+  },
+  {
+   "t": 1297.28,
+   "d": 1.68,
+   "text": "paul bunyan but instead about like ninja"
+  },
+  {
+   "t": 1298.96,
+   "d": 1.6,
+   "text": "masters and such then"
+  },
+  {
+   "t": 1300.56,
+   "d": 2.48,
+   "text": "they were amazing so the flavor text for"
+  },
+  {
+   "t": 1303.04,
+   "d": 2.4,
+   "text": "the psychomancer powers right um"
+  },
+  {
+   "t": 1305.44,
+   "d": 1.44,
+   "text": "the one with nothing is impossible"
+  },
+  {
+   "t": 1306.88,
+   "d": 1.44,
+   "text": "teleports you somewhere else and so the"
+  },
+  {
+   "t": 1308.32,
+   "d": 1.28,
+   "text": "flavor text is"
+  },
+  {
+   "t": 1309.6,
+   "d": 1.52,
+   "text": "all her willed and resolved to exist"
+  },
+  {
+   "t": 1311.12,
+   "d": 1.28,
+   "text": "anew outside the very walls of the"
+  },
+  {
+   "t": 1312.4,
+   "d": 0.48,
+   "text": "palace"
+  },
+  {
+   "t": 1312.88,
+   "d": 1.84,
+   "text": "the emperor still entwined what he"
+  },
+  {
+   "t": 1314.72,
+   "d": 0.96,
+   "text": "believed to be his favorite new"
+  },
+  {
+   "t": 1315.68,
+   "d": 2.08,
+   "text": "coccupine soo found himself embracing a"
+  },
+  {
+   "t": 1317.76,
+   "d": 1.44,
+   "text": "pile of cold and feeling rice"
+  },
+  {
+   "t": 1319.2,
+   "d": 1.84,
+   "text": "so began the seasons of shameful grain"
+  },
+  {
+   "t": 1321.04,
+   "d": 2.08,
+   "text": "and it's like what"
+  },
+  {
+   "t": 1323.12,
+   "d": 3.28,
+   "text": "what you know it's silly but this this"
+  },
+  {
+   "t": 1326.4,
+   "d": 1.12,
+   "text": "one i like to read all but like they"
+  },
+  {
+   "t": 1327.52,
+   "d": 1.04,
+   "text": "have the same rhythm like a thing"
+  },
+  {
+   "t": 1328.56,
+   "d": 1.28,
+   "text": "happens a thing happens and there's a"
+  },
+  {
+   "t": 1329.84,
+   "d": 1.36,
+   "text": "twist at the end and like that's how all"
+  },
+  {
+   "t": 1331.2,
+   "d": 1.12,
+   "text": "those stories were"
+  },
+  {
+   "t": 1332.32,
+   "d": 1.6,
+   "text": "i grabbed it because it was consistent"
+  },
+  {
+   "t": 1333.92,
+   "d": 1.76,
+   "text": "and met the tone"
+  },
+  {
+   "t": 1335.68,
+   "d": 1.6,
+   "text": "we shall play to our strengths when"
+  },
+  {
+   "t": 1337.28,
+   "d": 1.92,
+   "text": "being funny"
+  },
+  {
+   "t": 1339.2,
+   "d": 2.48,
+   "text": "so i love making games i've done it for"
+  },
+  {
+   "t": 1341.68,
+   "d": 1.68,
+   "text": "a long time i want to do it until"
+  },
+  {
+   "t": 1343.36,
+   "d": 2.08,
+   "text": "my body falls apart and i want to take"
+  },
+  {
+   "t": 1345.44,
+   "d": 1.12,
+   "text": "risks or i want to"
+  },
+  {
+   "t": 1346.56,
+   "d": 1.76,
+   "text": "push the boundaries try stuff do stuff"
+  },
+  {
+   "t": 1348.32,
+   "d": 1.28,
+   "text": "and and put ourselves out there put"
+  },
+  {
+   "t": 1349.6,
+   "d": 2.0,
+   "text": "ourselves at risk right they're creative"
+  },
+  {
+   "t": 1351.6,
+   "d": 2.0,
+   "text": "well don't do it when you're being funny"
+  },
+  {
+   "t": 1353.6,
+   "d": 1.12,
+   "text": "because if someone says your game is"
+  },
+  {
+   "t": 1354.72,
+   "d": 1.12,
+   "text": "unfunny"
+  },
+  {
+   "t": 1355.84,
+   "d": 2.24,
+   "text": "that sucks it feels bad on the inside"
+  },
+  {
+   "t": 1358.08,
+   "d": 1.44,
+   "text": "and and that's something i mean anybody"
+  },
+  {
+   "t": 1359.52,
+   "d": 0.96,
+   "text": "who tries to be funny they're called"
+  },
+  {
+   "t": 1360.48,
+   "d": 1.6,
+   "text": "unfunny that's terrible so"
+  },
+  {
+   "t": 1362.08,
+   "d": 2.08,
+   "text": "do what you do best and i have strengths"
+  },
+  {
+   "t": 1364.16,
+   "d": 1.04,
+   "text": "and weaknesses"
+  },
+  {
+   "t": 1365.2,
+   "d": 1.68,
+   "text": "and i knew that my strengths okay i can"
+  },
+  {
+   "t": 1366.88,
+   "d": 1.68,
+   "text": "mississippi dialogue and describe things"
+  },
+  {
+   "t": 1368.56,
+   "d": 0.88,
+   "text": "in a funny way and"
+  },
+  {
+   "t": 1369.44,
+   "d": 2.08,
+   "text": "put these cool objects in the world but"
+  },
+  {
+   "t": 1371.52,
+   "d": 1.68,
+   "text": "i can't do long-form humor and there's"
+  },
+  {
+   "t": 1373.2,
+   "d": 1.76,
+   "text": "no like pratfall sketches that i mean"
+  },
+  {
+   "t": 1374.96,
+   "d": 1.44,
+   "text": "some people could do that in cut scenes"
+  },
+  {
+   "t": 1376.4,
+   "d": 1.44,
+   "text": "and make hilarious i can't"
+  },
+  {
+   "t": 1377.84,
+   "d": 1.52,
+   "text": "so i didn't right i knew these were"
+  },
+  {
+   "t": 1379.36,
+   "d": 1.2,
+   "text": "weaknesses and i didn't want to fall"
+  },
+  {
+   "t": 1380.56,
+   "d": 1.2,
+   "text": "flat there"
+  },
+  {
+   "t": 1381.76,
+   "d": 2.4,
+   "text": "again i'm encouraging people to push"
+  },
+  {
+   "t": 1384.16,
+   "d": 1.6,
+   "text": "themselves in every aspect"
+  },
+  {
+   "t": 1385.76,
+   "d": 1.2,
+   "text": "but humor because you have to be a"
+  },
+  {
+   "t": 1386.96,
+   "d": 2.4,
+   "text": "little more safe you will be safe and"
+  },
+  {
+   "t": 1389.36,
+   "d": 1.28,
+   "text": "not be an edgy edgelord"
+  },
+  {
+   "t": 1390.64,
+   "d": 2.56,
+   "text": "okay you can't do lamar jackson from"
+  },
+  {
+   "t": 1393.2,
+   "d": 1.28,
+   "text": "grand theft auto 5"
+  },
+  {
+   "t": 1394.48,
+   "d": 1.92,
+   "text": "you're not good enough and and people"
+  },
+  {
+   "t": 1396.4,
+   "d": 1.36,
+   "text": "still think he's problematic right i"
+  },
+  {
+   "t": 1397.76,
+   "d": 0.96,
+   "text": "mean he's he's"
+  },
+  {
+   "t": 1398.72,
+   "d": 1.68,
+   "text": "racist and terrible he says the worst"
+  },
+  {
+   "t": 1400.4,
+   "d": 1.52,
+   "text": "things all the time other people think"
+  },
+  {
+   "t": 1401.92,
+   "d": 1.76,
+   "text": "he's hilarious so they kind of like they"
+  },
+  {
+   "t": 1403.68,
+   "d": 1.6,
+   "text": "gotta pass because they're like"
+  },
+  {
+   "t": 1405.28,
+   "d": 2.08,
+   "text": "this guy's so well written but we just"
+  },
+  {
+   "t": 1407.36,
+   "d": 1.6,
+   "text": "shouldn't do that right that's this"
+  },
+  {
+   "t": 1408.96,
+   "d": 2.16,
+   "text": "it doesn't work it feels it's jarring"
+  },
+  {
+   "t": 1411.12,
+   "d": 1.52,
+   "text": "and awful and you alienate"
+  },
+  {
+   "t": 1412.64,
+   "d": 1.2,
+   "text": "very important people who are your"
+  },
+  {
+   "t": 1413.84,
+   "d": 2.64,
+   "text": "customers and don't right just just"
+  },
+  {
+   "t": 1416.48,
+   "d": 0.4,
+   "text": "don't"
+  },
+  {
+   "t": 1416.88,
+   "d": 2.56,
+   "text": "um the gaming audience is trending"
+  },
+  {
+   "t": 1419.44,
+   "d": 1.52,
+   "text": "toward inclusiveness it doesn't feel"
+  },
+  {
+   "t": 1420.96,
+   "d": 2.0,
+   "text": "like it right"
+  },
+  {
+   "t": 1422.96,
+   "d": 2.4,
+   "text": "but it is and and people are starting to"
+  },
+  {
+   "t": 1425.36,
+   "d": 1.36,
+   "text": "realize even if they're not on like the"
+  },
+  {
+   "t": 1426.72,
+   "d": 1.68,
+   "text": "far spectrum of social justice they're"
+  },
+  {
+   "t": 1428.4,
+   "d": 2.48,
+   "text": "starting to realize why am i excluding"
+  },
+  {
+   "t": 1430.88,
+   "d": 0.72,
+   "text": "these people"
+  },
+  {
+   "t": 1431.6,
+   "d": 2.16,
+   "text": "from my game why am i excluding from the"
+  },
+  {
+   "t": 1433.76,
+   "d": 1.2,
+   "text": "community this isn't right"
+  },
+  {
+   "t": 1434.96,
+   "d": 1.04,
+   "text": "and we have these moments where we're"
+  },
+  {
+   "t": 1436.0,
+   "d": 2.08,
+   "text": "like i can't believe i said that when i"
+  },
+  {
+   "t": 1438.08,
+   "d": 0.72,
+   "text": "was younger"
+  },
+  {
+   "t": 1438.8,
+   "d": 2.24,
+   "text": "well i'll never do it again and that's"
+  },
+  {
+   "t": 1441.04,
+   "d": 0.8,
+   "text": "happening"
+  },
+  {
+   "t": 1441.84,
+   "d": 1.28,
+   "text": "and the audience is trending in that"
+  },
+  {
+   "t": 1443.12,
+   "d": 2.24,
+   "text": "direction and it will continue to do so"
+  },
+  {
+   "t": 1445.36,
+   "d": 2.56,
+   "text": "i hope because edgy language doesn't"
+  },
+  {
+   "t": 1447.92,
+   "d": 0.64,
+   "text": "work"
+  },
+  {
+   "t": 1448.56,
+   "d": 1.76,
+   "text": "uh in long form so predator is an"
+  },
+  {
+   "t": 1450.32,
+   "d": 1.84,
+   "text": "awesome action movie right i love it"
+  },
+  {
+   "t": 1452.16,
+   "d": 2.08,
+   "text": "and jesse ventura is this big pile of"
+  },
+  {
+   "t": 1454.24,
+   "d": 1.36,
+   "text": "biceps and he's got"
+  },
+  {
+   "t": 1455.6,
+   "d": 1.44,
+   "text": "12 machine guns and he blows people"
+  },
+  {
+   "t": 1457.04,
+   "d": 1.76,
+   "text": "apart and then he"
+  },
+  {
+   "t": 1458.8,
+   "d": 3.68,
+   "text": "also uses these homophobic pejoratives"
+  },
+  {
+   "t": 1462.48,
+   "d": 2.0,
+   "text": "and it's how they talk back then he's"
+  },
+  {
+   "t": 1464.48,
+   "d": 1.36,
+   "text": "talking to his fellow soldiers and he's"
+  },
+  {
+   "t": 1465.84,
+   "d": 1.36,
+   "text": "calling this and that"
+  },
+  {
+   "t": 1467.2,
+   "d": 2.16,
+   "text": "watch it today and it's like when that"
+  },
+  {
+   "t": 1469.36,
+   "d": 1.44,
+   "text": "happens like oh you know"
+  },
+  {
+   "t": 1470.8,
+   "d": 1.76,
+   "text": "i read robert e howard's stuff and it"
+  },
+  {
+   "t": 1472.56,
+   "d": 1.52,
+   "text": "was written in the 20s"
+  },
+  {
+   "t": 1474.08,
+   "d": 2.16,
+   "text": "and there is some pretty awful stuff"
+  },
+  {
+   "t": 1476.24,
+   "d": 1.92,
+   "text": "like the noble savage blacks i'm like oh"
+  },
+  {
+   "t": 1478.16,
+   "d": 1.12,
+   "text": "god like it's just"
+  },
+  {
+   "t": 1479.28,
+   "d": 2.32,
+   "text": "it's doesn't hold up right so if you try"
+  },
+  {
+   "t": 1481.6,
+   "d": 0.72,
+   "text": "to do"
+  },
+  {
+   "t": 1482.32,
+   "d": 1.6,
+   "text": "edgy humor because my character has to"
+  },
+  {
+   "t": 1483.92,
+   "d": 2.24,
+   "text": "do it it's going to fall flat in a short"
+  },
+  {
+   "t": 1486.16,
+   "d": 0.72,
+   "text": "amount of time"
+  },
+  {
+   "t": 1486.88,
+   "d": 3.12,
+   "text": "so don't do it we shall veer off course"
+  },
+  {
+   "t": 1490.0,
+   "d": 1.04,
+   "text": "with great caution"
+  },
+  {
+   "t": 1491.04,
+   "d": 2.08,
+   "text": "you have a target you set it and you"
+  },
+  {
+   "t": 1493.12,
+   "d": 1.28,
+   "text": "want to say well i've got this funny"
+  },
+  {
+   "t": 1494.4,
+   "d": 2.0,
+   "text": "thing i'm going to make it"
+  },
+  {
+   "t": 1496.4,
+   "d": 2.16,
+   "text": "dark and the player is going to feel it"
+  },
+  {
+   "t": 1498.56,
+   "d": 1.2,
+   "text": "i don't think that's true"
+  },
+  {
+   "t": 1499.76,
+   "d": 1.2,
+   "text": "you have borderlands like this is a"
+  },
+  {
+   "t": 1500.96,
+   "d": 1.68,
+   "text": "funny clever game oh man this is really"
+  },
+  {
+   "t": 1502.64,
+   "d": 1.76,
+   "text": "great and suddenly oh"
+  },
+  {
+   "t": 1504.4,
+   "d": 1.76,
+   "text": "your favorite bird from borderlands 1 is"
+  },
+  {
+   "t": 1506.16,
+   "d": 2.0,
+   "text": "now radiated you have to kill it and"
+  },
+  {
+   "t": 1508.16,
+   "d": 1.6,
+   "text": "then the boss blows his head up right in"
+  },
+  {
+   "t": 1509.76,
+   "d": 1.12,
+   "text": "front of you and the person who owns the"
+  },
+  {
+   "t": 1510.88,
+   "d": 1.28,
+   "text": "bird has to watch him die"
+  },
+  {
+   "t": 1512.16,
+   "d": 2.48,
+   "text": "and what the hell is this and then"
+  },
+  {
+   "t": 1514.64,
+   "d": 1.28,
+   "text": "another character gets shot out of"
+  },
+  {
+   "t": 1515.92,
+   "d": 0.88,
+   "text": "nowhere and like"
+  },
+  {
+   "t": 1516.8,
+   "d": 1.6,
+   "text": "it kind of works for wash and firefly"
+  },
+  {
+   "t": 1518.4,
+   "d": 1.2,
+   "text": "but it didn't work here right it's just"
+  },
+  {
+   "t": 1519.6,
+   "d": 1.2,
+   "text": "and now oh"
+  },
+  {
+   "t": 1520.8,
+   "d": 2.24,
+   "text": "the boss and the the alien ai is"
+  },
+  {
+   "t": 1523.04,
+   "d": 1.12,
+   "text": "actually his daughter and everybody's"
+  },
+  {
+   "t": 1524.16,
+   "d": 1.92,
+   "text": "got the feels and"
+  },
+  {
+   "t": 1526.08,
+   "d": 2.8,
+   "text": "if your audience wants this great but if"
+  },
+  {
+   "t": 1528.88,
+   "d": 1.84,
+   "text": "they don't don't do it to them and if"
+  },
+  {
+   "t": 1530.72,
+   "d": 1.12,
+   "text": "you say well i'm going to just"
+  },
+  {
+   "t": 1531.84,
+   "d": 2.24,
+   "text": "make this a serious story you end up"
+  },
+  {
+   "t": 1534.08,
+   "d": 0.8,
+   "text": "missing uh"
+  },
+  {
+   "t": 1534.88,
+   "d": 1.68,
+   "text": "i think the the power you have for"
+  },
+  {
+   "t": 1536.56,
+   "d": 1.76,
+   "text": "making the target in the first place"
+  },
+  {
+   "t": 1538.32,
+   "d": 2.0,
+   "text": "so again this is the end this is the"
+  },
+  {
+   "t": 1540.32,
+   "d": 1.92,
+   "text": "narrative from before right"
+  },
+  {
+   "t": 1542.24,
+   "d": 1.12,
+   "text": "i beat the big boss and do the thing"
+  },
+  {
+   "t": 1543.36,
+   "d": 1.92,
+   "text": "that starts this isn't funny"
+  },
+  {
+   "t": 1545.28,
+   "d": 1.2,
+   "text": "i mean it's just not i said what's the"
+  },
+  {
+   "t": 1546.48,
+   "d": 1.84,
+   "text": "story dungeon man's players don't tell"
+  },
+  {
+   "t": 1548.32,
+   "d": 1.52,
+   "text": "me funny things"
+  },
+  {
+   "t": 1549.84,
+   "d": 2.08,
+   "text": "that's fine because the tone and humor"
+  },
+  {
+   "t": 1551.92,
+   "d": 1.68,
+   "text": "in the game created that fertile"
+  },
+  {
+   "t": 1553.6,
+   "d": 1.92,
+   "text": "environment for them to have a good time"
+  },
+  {
+   "t": 1555.52,
+   "d": 1.6,
+   "text": "to continue to play to feel the"
+  },
+  {
+   "t": 1557.12,
+   "d": 1.36,
+   "text": "adventure and to make the player"
+  },
+  {
+   "t": 1558.48,
+   "d": 0.88,
+   "text": "narrative"
+  },
+  {
+   "t": 1559.36,
+   "d": 2.96,
+   "text": "this way so that's what i got oh hey i'm"
+  },
+  {
+   "t": 1562.32,
+   "d": 0.96,
+   "text": "shipping a game"
+  },
+  {
+   "t": 1563.28,
+   "d": 2.72,
+   "text": "in like a week right the monday after"
+  },
+  {
+   "t": 1566.0,
+   "d": 0.32,
+   "text": "next"
+  },
+  {
+   "t": 1566.32,
+   "d": 1.6,
+   "text": "and maybe you guys could like tell your"
+  },
+  {
+   "t": 1567.92,
+   "d": 1.68,
+   "text": "friends or buy or just boost those steam"
+  },
+  {
+   "t": 1569.6,
+   "d": 1.36,
+   "text": "keys from the bottom right because i put"
+  },
+  {
+   "t": 1570.96,
+   "d": 1.68,
+   "text": "like six up there if you want to play it"
+  },
+  {
+   "t": 1572.64,
+   "d": 2.16,
+   "text": "right now in beta release uh but yeah"
+  },
+  {
+   "t": 1574.8,
+   "d": 1.36,
+   "text": "that's what i got that's tony human"
+  },
+  {
+   "t": 1576.16,
+   "d": 1.04,
+   "text": "dungeon man's thank you for your"
+  },
+  {
+   "t": 1577.2,
+   "d": 1.44,
+   "text": "attention"
+  },
+  {
+   "t": 1578.64,
+   "d": 4.32,
+   "text": "one question okay we have four minutes"
+  },
+  {
+   "t": 1582.96,
+   "d": 1.04,
+   "text": "for questions please ask"
+  },
+  {
+   "t": 1584.0,
+   "d": 2.88,
+   "text": "a three-minute question you sir um so"
+  },
+  {
+   "t": 1586.88,
+   "d": 2.64,
+   "text": "you said that"
+  },
+  {
+   "t": 1596.28,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1604.04,
+   "d": 2.76,
+   "text": "[Music]"
+  },
+  {
+   "t": 1606.8,
+   "d": 2.72,
+   "text": "okay so you asked um you know people"
+  },
+  {
+   "t": 1609.52,
+   "d": 1.76,
+   "text": "like to be edgy in their game reviews"
+  },
+  {
+   "t": 1611.28,
+   "d": 1.36,
+   "text": "and they come at you like that how do"
+  },
+  {
+   "t": 1612.64,
+   "d": 2.32,
+   "text": "you how do you create humor that isn't"
+  },
+  {
+   "t": 1614.96,
+   "d": 1.52,
+   "text": "unfunny to those people or to do you"
+  },
+  {
+   "t": 1616.48,
+   "d": 1.84,
+   "text": "pick a certain audience for that"
+  },
+  {
+   "t": 1618.32,
+   "d": 3.04,
+   "text": "my answer is i did have an audience and"
+  },
+  {
+   "t": 1621.36,
+   "d": 1.68,
+   "text": "i tried to know what they would want"
+  },
+  {
+   "t": 1623.04,
+   "d": 2.0,
+   "text": "and i also just use the humor i have"
+  },
+  {
+   "t": 1625.04,
+   "d": 1.6,
+   "text": "naturally which again is limited to a"
+  },
+  {
+   "t": 1626.64,
+   "d": 1.6,
+   "text": "subset of things based on"
+  },
+  {
+   "t": 1628.24,
+   "d": 1.28,
+   "text": "running tabletop games and telling"
+  },
+  {
+   "t": 1629.52,
+   "d": 2.16,
+   "text": "stories you're not immune to people"
+  },
+  {
+   "t": 1631.68,
+   "d": 1.28,
+   "text": "coming at you with bad reviews that's"
+  },
+  {
+   "t": 1632.96,
+   "d": 0.64,
+   "text": "going to happen"
+  },
+  {
+   "t": 1633.6,
+   "d": 2.56,
+   "text": "and like anything else you qa this stuff"
+  },
+  {
+   "t": 1636.16,
+   "d": 1.52,
+   "text": "you run it by friends like is this funny"
+  },
+  {
+   "t": 1637.68,
+   "d": 1.6,
+   "text": "does this work is this dumb and and"
+  },
+  {
+   "t": 1639.28,
+   "d": 1.68,
+   "text": "you'll get that back"
+  },
+  {
+   "t": 1640.96,
+   "d": 2.32,
+   "text": "um you have to study humor right watch"
+  },
+  {
+   "t": 1643.28,
+   "d": 1.68,
+   "text": "funny things play funny games read funny"
+  },
+  {
+   "t": 1644.96,
+   "d": 1.6,
+   "text": "stuff and say what works for me"
+  },
+  {
+   "t": 1646.56,
+   "d": 2.56,
+   "text": "and pick that and then again pick that"
+  },
+  {
+   "t": 1649.12,
+   "d": 1.68,
+   "text": "target right hone it down and say this"
+  },
+  {
+   "t": 1650.8,
+   "d": 1.04,
+   "text": "is what i'm gonna do"
+  },
+  {
+   "t": 1651.84,
+   "d": 2.0,
+   "text": "run it by friends if it doesn't work do"
+  },
+  {
+   "t": 1653.84,
+   "d": 1.44,
+   "text": "something else but if it does work great"
+  },
+  {
+   "t": 1655.28,
+   "d": 1.12,
+   "text": "you know you've got something"
+  },
+  {
+   "t": 1656.4,
+   "d": 4.32,
+   "text": "questions please anybody yes sir"
+  },
+  {
+   "t": 1662.0,
+   "d": 2.0,
+   "text": "happy to if there's no questions about"
+  },
+  {
+   "t": 1664.0,
+   "d": 1.36,
+   "text": "like the stuff i presented because maybe"
+  },
+  {
+   "t": 1665.36,
+   "d": 3.6,
+   "text": "somebody cares uh"
+  },
+  {
+   "t": 1668.96,
+   "d": 2.16,
+   "text": "maybe somebody cares to ask a question i"
+  },
+  {
+   "t": 1671.12,
+   "d": 3.44,
+   "text": "just i sometimes i don't finish saying"
+  },
+  {
+   "t": 1674.56,
+   "d": 2.4,
+   "text": "yes sir"
+  },
+  {
+   "t": 1679.28,
+   "d": 3.52,
+   "text": "uh did i why it's not even on screen"
+  },
+  {
+   "t": 1682.8,
+   "d": 0.8,
+   "text": "anymore so"
+  },
+  {
+   "t": 1683.6,
+   "d": 1.68,
+   "text": "why would you want to look at there's"
+  },
+  {
+   "t": 1685.28,
+   "d": 3.52,
+   "text": "nothing there oh wow"
+  },
+  {
+   "t": 1689.44,
+   "d": 2.08,
+   "text": "okay this is an arcade game about a"
+  },
+  {
+   "t": 1691.52,
+   "d": 1.44,
+   "text": "truck possessed by demon that drives out"
+  },
+  {
+   "t": 1692.96,
+   "d": 0.64,
+   "text": "of control"
+  },
+  {
+   "t": 1693.6,
+   "d": 1.6,
+   "text": "uh some would call it an endless runner"
+  },
+  {
+   "t": 1695.2,
+   "d": 1.6,
+   "text": "i call it an immortal trucker"
+  },
+  {
+   "t": 1696.8,
+   "d": 2.64,
+   "text": "and you have a ram button and a shoot"
+  },
+  {
+   "t": 1699.44,
+   "d": 0.8,
+   "text": "everything button"
+  },
+  {
+   "t": 1700.24,
+   "d": 2.64,
+   "text": "and you go real fast and uh the levels"
+  },
+  {
+   "t": 1702.88,
+   "d": 1.2,
+   "text": "are kind of randomized powerful"
+  },
+  {
+   "t": 1704.08,
+   "d": 0.96,
+   "text": "randomized"
+  },
+  {
+   "t": 1705.04,
+   "d": 2.24,
+   "text": "and if your pc could take quarters it'd"
+  },
+  {
+   "t": 1707.28,
+   "d": 1.28,
+   "text": "be a quarter muncher"
+  },
+  {
+   "t": 1708.56,
+   "d": 2.24,
+   "text": "but you can't so you can pay 4.99 for it"
+  },
+  {
+   "t": 1710.8,
+   "d": 1.44,
+   "text": "or you can reach the halloween sale and"
+  },
+  {
+   "t": 1712.24,
+   "d": 3.04,
+   "text": "pay 666 for it that's your choice"
+  },
+  {
+   "t": 1715.28,
+   "d": 4.32,
+   "text": "yeah cool are we good anyone else i mean"
+  },
+  {
+   "t": 1719.6,
+   "d": 3.92,
+   "text": "ask me anything don't yes sir"
+  },
+  {
+   "t": 1723.52,
+   "d": 2.08,
+   "text": "i have patch dungeon man's over the last"
+  },
+  {
+   "t": 1725.6,
+   "d": 2.0,
+   "text": "two years i put out new content"
+  },
+  {
+   "t": 1727.6,
+   "d": 1.6,
+   "text": "new classes the psychomanza was post"
+  },
+  {
+   "t": 1729.2,
+   "d": 2.16,
+   "text": "launch um and i have one more patch"
+  },
+  {
+   "t": 1731.36,
+   "d": 0.8,
+   "text": "coming up for"
+  },
+  {
+   "t": 1732.16,
+   "d": 1.44,
+   "text": "the end of october which is the wizard"
+  },
+  {
+   "t": 1733.6,
+   "d": 2.16,
+   "text": "man's revamp so wizardman's is the"
+  },
+  {
+   "t": 1735.76,
+   "d": 1.6,
+   "text": "oldest class and it's kind of crafty by"
+  },
+  {
+   "t": 1737.36,
+   "d": 1.36,
+   "text": "now and i'm going to do some stuff with"
+  },
+  {
+   "t": 1738.72,
+   "d": 1.44,
+   "text": "magic and put in some new monsters to"
+  },
+  {
+   "t": 1740.16,
+   "d": 1.2,
+   "text": "crush a new loot and"
+  },
+  {
+   "t": 1741.36,
+   "d": 1.36,
+   "text": "try to package it up real nice and all"
+  },
+  {
+   "t": 1742.72,
+   "d": 1.84,
+   "text": "the updates have been free this one will"
+  },
+  {
+   "t": 1744.56,
+   "d": 1.6,
+   "text": "be free as well"
+  },
+  {
+   "t": 1746.16,
+   "d": 7.68,
+   "text": "cool we're good thank you very much"
+  },
+  {
+   "t": 1764.08,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

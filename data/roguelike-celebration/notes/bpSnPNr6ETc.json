@@ -1,0 +1,96 @@
+{
+  "id": "bpSnPNr6ETc",
+  "title": "Leif Bloomquist - Dungeon of The Rogue Daemon: A multiplayer roguelike for retro + modern platforms",
+  "speaker": "Leif Bloomquist",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=bpSnPNr6ETc",
+  "talk_type": "postmortem",
+  "summary": "Leif Bloomquist gives an update on Dungeon of the Rogue Daemon, a stripped-down multiplayer roguelike designed for the Commodore 64 using modern networking hardware, now also playable via web browser, telnet and (partially) mobile in one shared world. He explains why the C64 (huge install base, bare-metal programming, active community), his goal of recapturing same-room multiplayer, and his sandbox approach of setting rules and seeing what players do. Mechanics such as a two-hands-only inventory nudge players to cooperate, as seen when 50 players jostled to pass a key at his previous live demo. He covers new avatars, items and monsters, Ultimate 64 FPGA support, plans for ranged weapons, better AI and a larger procedurally generated shared dungeon, and ends with a live play session.",
+  "games": [
+    "Dungeon of the Rogue Daemon",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "retro platforms",
+      "kind": "history",
+      "claim": "The Commodore 64 suits a modern roguelike project because of its huge historical install base and game library, well-documented bare-metal programming, an active community, and new networking hardware that puts it online.",
+      "detail": "Bloomquist cites about 17 million official sales (unofficially around 20 million) and 25,000 games, many of them roguelikes. In the last decade the community created networking hardware, which opens doors for multiplayer.",
+      "t": 181,
+      "quote": "the c64 is fun to program on it's bare metal machine language and it's very well documented after 30 some years of reverse engineering",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "multiplayer roguelikes",
+      "kind": "principle",
+      "claim": "Dungeon of the Rogue Daemon asks what happens if the other characters you meet in a roguelike dungeon are other players, so you can quest, fight, solve puzzles and share tools and clues together.",
+      "detail": "Bloomquist's goal is to recapture the feeling of same-room multiplayer games he grew up with, adding an online element for spread-out C64 fans.",
+      "t": 273,
+      "quote": "you're wandering around in the dungeon but you see other characters and what if those other characters were other players",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "sandbox design",
+      "kind": "example",
+      "claim": "Dungeon of the Rogue Daemon is designed as a sandbox with no prescribed strategy, and a 50-player live demo produced emergent cooperation as players pushed and passed a key to open the first door.",
+      "detail": "Bloomquist set rules and dropped players in to see what happens. At his previous Roguelike Celebration demo, about 50 people crowded the first key-and-door puzzle, passing the key along until the door opened with 10 seconds left in his talk.",
+      "t": 306,
+      "quote": "think of it as a sandbox i've created the game a set of rules drop players into it and see what happens",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory",
+      "kind": "technique",
+      "claim": "Dungeon of the Rogue Daemon limits each character to items in their left and right hands with no inventory, so carrying everything you need requires teaming up and sharing items.",
+      "detail": "You can double up swords or shields or hold one of each. If you need a sword, shield, magic item and the key to an important late room, you must get friends together. Bloomquist calls this a light nudge toward cooperation rather than a heavy hand.",
+      "t": 381,
+      "quote": "there's no inventory if you need to carry a sword and a shield and a magic item",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "cooperative puzzles",
+      "kind": "open-question",
+      "claim": "Bloomquist plans puzzles in his multiplayer roguelike that require several players to be in the right places at the right time.",
+      "detail": "He describes this as still developing.",
+      "t": 406,
+      "quote": "i want to eventually introduce puzzles where you know you have to be at the right place at the right time when something happens",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "cross-platform",
+      "kind": "principle",
+      "claim": "Dungeon of the Rogue Daemon runs one shared world across Commodore 64, web browser, telnet and mobile clients, each with its platform's flavour but a fair game between them.",
+      "detail": "Because few people have an internet-connected C64, Bloomquist reimplemented clients on other platforms. Shared play across all of them was a goal from the beginning; the server is written in JavaScript and the mobile interface is still rough.",
+      "t": 471,
+      "quote": "you get the uh the essence of each platform but still a unique and fair game between them all",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "shared dungeon",
+      "kind": "technique",
+      "claim": "In a multiplayer shared-instance roguelike, the dungeon would be procedurally generated once when the server is instantiated, and everyone enters that same dungeon.",
+      "detail": "Bloomquist lists a much larger procedurally generated dungeon among future work, along with ranged weapons, better monster AI and an improved mobile interface.",
+      "t": 591,
+      "quote": "because this is a multiplayer shared instance this would be procedurally generated you know at the beginning you know when the server is instantiated",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "technique",
+      "claim": "Being multiplayer, Dungeon of the Rogue Daemon is effectively real-time with 50 ms turns and boots idle players after five minutes.",
+      "detail": "Bloomquist says it needed a timeout mechanism; his own character timed out while he talked. 'You could say it's turn based except the turns are 50 milliseconds.'",
+      "t": 765,
+      "quote": "you could say it's turn based except the turns are 50 milliseconds",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

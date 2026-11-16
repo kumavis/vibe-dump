@@ -1,0 +1,157 @@
+{
+  "id": "qh9vyoMviJI",
+  "title": "Mark R Johnson - Speech Generation in a Procedurally Generated World",
+  "speaker": "Mark R Johnson",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=qh9vyoMviJI",
+  "talk_type": "design",
+  "summary": "Mark R Johnson, developer of Ultima Ratio Regum, presents the speech, dialect and language system he spent four years building for the game's procedurally generated NPCs. Rather than NPCs with a fixed pool of lines who only answer questions, he wants grounded people who greet, ask back, refer to their culture's history and vary their verbosity by culture, personality and attitude to the player. Each culture gets generated proper-noun syllables, name archetypes, a database of cultural reference points, and its own greetings, farewells, compliments and insults. Players learn cultures by observation instead of encyclopedias, can impersonate dialects to blend in, and are steered away from interrogating every NPC by boredom and fast-spreading suspicion within groups.",
+  "games": [
+    "Ultima Ratio Regum",
+    "Final Fantasy X",
+    "Mass Effect"
+  ],
+  "insights": [
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "dialogue systems",
+      "kind": "principle",
+      "claim": "Ultima Ratio Regum aims for NPCs that converse like real people, with greetings, farewells and questions back to the player, rather than question-answer kiosks with a fixed pool of lines.",
+      "detail": "Johnson contrasts his goal with NPCs who have a preset volume of things to say and only speak when questioned. Real conversations go back and forth, and an NPC's behaviour should depend on how the player answers their questions. He cites an old Q&A-style RPG he played as a child as the style he wanted to escape.",
+      "t": 562,
+      "quote": "In the real world, we have greetings, we have farewells, we have questions which go kind of back and forth as well",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "learning by observation",
+      "kind": "principle",
+      "claim": "Ultima Ratio Regum teaches its generated cultures through observable cues (clothing, architecture, movement, speech) rather than extra-diegetic messages or an in-game encyclopedia.",
+      "detail": "Each culture and religion has its own clothing style varying with wealth, and building types share features across cultures so a player can recognise a house, shop or church in a new city. Johnson wants the player to reason about the world simply by looking at it, instead of a message popping up saying which culture an NPC is from.",
+      "t": 438,
+      "quote": "the player should be able to learn a lot and reason a lot about the world simply by looking at it and making sense of it",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "crowd behaviour",
+      "kind": "example",
+      "claim": "In Ultima Ratio Regum even NPC movement is culturally determined, with some cultures grouping up and others keeping wider personal distance, so movement hints at origin.",
+      "detail": "Some cultures are more inclined to have people act collectively while others keep broader distance from each other. Johnson says that just by watching NPCs walk around the map the player should get a sense of where they hail from.",
+      "t": 478,
+      "quote": "Even how NPCs move are based on cultures. Some cultures are far more inclined to have people group up",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "disguise",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum lets players impersonate another culture's dialect, combined with clothing, movement and items, to deceive NPCs about their origin.",
+      "detail": "Learning other cultures' speech and dialects is a crucial part of the new release. Speaking accurately in someone else's way, together with how the player dresses, moves and what items they carry, all contribute to potentially deceiving an NPC about the player's culture.",
+      "t": 631,
+      "quote": "the player can try to blend in by doing a kind of accurate impersonation for lack of a superior word of someone else's form of speaking",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "constructed languages",
+      "kind": "warning",
+      "claim": "Generating a learnable in-game language tends to collapse into a substitution cipher for English, so Ultima Ratio Regum uses English as a trade language spoken in culture-specific dialects instead.",
+      "detail": "Johnson considered a learnable in-game language for a long time but found it very tricky, ending up with the Final Fantasy X model where a language is just a cipher. Instead all characters speak English, but with their own accents and ways of speaking.",
+      "t": 730,
+      "quote": "You basically wind up with the Final Fantasy 10 model where a different \"language\" is a substitution cipher for English",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum gives each culture a set of letters clumped into syllables, from which all of that culture's proper nouns are built, so names are similar within a culture and distinct across cultures.",
+      "detail": "Every name, place, town, city, artwork, surname and nickname is built from the culture's set of pieces. Johnson shows rows of generated names where each row is distinct from its neighbours but internally similar.",
+      "t": 773,
+      "quote": "creating sets of letters and then clumping those into sets of syllables and from those creating all these sorts of names",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum builds a procedurally chosen naming archetype per culture by stitching dozens of name-style pieces into pairs or triplets, and the archetypes themselves change every world.",
+      "detail": "When a world is created, name-style pieces combine into each culture's archetype, which can then generate thousands of unique names. Styles range from Homeric-epithet-like to ones no real language uses, and a player can learn to guess an NPC's culture from the style of their name. Each new world reassigns the archetypes.",
+      "t": 1029,
+      "quote": "these pieces are stitched together in pairs or triplets and each set of archetype piece then constructs the overall name archetype of that culture",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "cultural references",
+      "kind": "technique",
+      "claim": "At the end of culture generation, Ultima Ratio Regum creates a database of culture-specific reference points per domain (war, family, love, death, religion) that NPCs draw on in speech.",
+      "detail": "Real speech references culture, the past, friends and foes, so each culture gets unique reference points and stories per domain. NPCs from one culture might all fixate on the same ancient battle they won, which both teaches the player the world and makes it feel lived in.",
+      "t": 876,
+      "quote": "it creates a database of points that people in that culture could talk about, when they want to talk about war, or family",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "dialogue generation",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum generates culture-specific greetings, farewells, compliments and insults based on what each culture prizes and hates, varying with the speaker's opinion of the player.",
+      "detail": "Compliments are only given when the player does something that merits praise within the speaker's culture; if the player is witty but the culture only respects artistic skill, no compliment. Statements also refer to other aspects of the world where they fit, following the aim of relating as many things to as many other things as possible.",
+      "t": 1212,
+      "quote": "NPCs only give compliments when the player has done something which merits praise within the speaker's culture",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interconnection",
+      "kind": "principle",
+      "claim": "Johnson's guiding rule for Ultima Ratio Regum's world is to make as many things relate to as many other things as possible.",
+      "detail": "Generated statements should reflect not just the speaker's culture or religion but, where it fits, refer back to other aspects of the game world to compare, insult or praise it.",
+      "t": 1252,
+      "quote": "the idea was that you should have as many things relate to as many other things as you can",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "verbosity",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum varies the length and detail of the same sentence based on cultural verbosity, speaker personality and the speaker's inclination toward the player.",
+      "detail": "A 'welcome to our country' can range from brusque to very lengthy. In an example, one NPC gives a friendly greeting and detailed directions and a description of the person sought, while someone from another culture says very little, which affects how useful information gathering is.",
+      "t": 1304,
+      "quote": "based both on cultural factors, but also the personality of the speaker, and the inclination of the speaker towards the player",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "dialogue interface",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum's ~500 dialogue questions are grouped by topic, filtered by NPC class, colour-coded by the player's fluency in the current dialect, and searchable by typing.",
+      "detail": "A few hundred questions apply to any NPC while others depend on class (you can ask an innkeeper what there is to drink but not a priest). Colours show how well you can ask in the dialect you're using. Typing words narrows the list, which matters for questions like 'what do you think of X' when you've met hundreds of people.",
+      "t": 1382,
+      "quote": "the color shows how well you can ask that question and the dialect you are currently using",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "dialogue systems",
+      "kind": "warning",
+      "claim": "When any of millions of NPCs might give valuable information, optimising players will ask every NPC every question, which is effective but boring.",
+      "detail": "Johnson calls this a significant unexpected issue of the system: with hundreds or thousands of questions and potentially useful answers, players who like optimal play will interrogate everyone.",
+      "t": 1614,
+      "quote": "Players who like to play in some kind of optimal play style are likely to basically ask every single NPC in the game world every question",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "dialogue systems",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum counters exhaustive questioning with NPC boredom and with knowledge of the player's questions spreading quickly through a cultural or religious group, making NPCs suspicious.",
+      "detail": "NPCs end conversations faster if asked things they don't care for, and talk longer on topics they like. To stop hopping between NPCs, word spreads that you have been asking about a topic, so others refuse. The goal is to force players to think about which questions to ask, to whom and how.",
+      "t": 1665,
+      "quote": "within a cultural religious group, knowledge of the questions you are asking spreads extremely quickly",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

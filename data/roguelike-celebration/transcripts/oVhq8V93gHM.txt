@@ -1,0 +1,58 @@
+Pierre Vigier: Room Generation using Constraint Satisfaction
+Speaker: Pierre Vigier
+https://www.youtube.com/watch?v=oVhq8V93gHM
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:16] is up next talking about room generation using constraint satisfaction. Let's let him get to it. PIERRE: Thank you. I am a game developer. In this story, I want to share with you the experience I got with this gale game on room generation. Before we dive in, I want to mention there is demo code on my GitHub account. It is in C++ but it is very simple. It is less than 1,000 lines of code. It is published under the MIT license so you can use it and do whatever you want with it.
+
+## What's a Room Generator?
+
+[0:01:05] First let's define what's a room generator. You have a structure, can be anything, like a dungeon or building, and you want to fit it objects. This is a monster or furniture or decorations. So it works very well for putting things but it also works for caves or for dungeons. Even outdoor structures like the swamp or the marketplace.
+
+## What's a Constraint Satisfaction Problem (CSP)?
+
+[0:01:42] My room generator is based on constraints satisfaction problem that I will abbreviate as CSP which is variables, domains and there is one domain for each position and a domain is a finite set of possible values. In room generation domain objects all the possible positions for this object. And then of course we have constraints which are constraints of variables. In room generation, we may want the object not or the room is connected or we may want to constrain an object like have the object in a wall or corner of the room. So we use CSP just
+
+[0:02:45] finding an assignment that are the constraints are also true. We notice two things. It is very intuitive. Like if we want the shower to be in the corner we just have to add a constraint to do so. And we have strong guarantees on the output which is a nice thing in procedural generation.
+
+## Basic Solver: Backtracking
+
+[0:03:15] Basic algorithm to CSP is called backtracking algorithm. It is refined brute force approach. Variables are all assigned one after the other. The only Specialty is each time we assign a variable we will check the constraints, if the constraints are satisfied we move to the next variable using if the constraints are not satisfied, or if it fails, we move the next value into the domain and if there is foe no value left we backtrack. It is a simple algorithm. It is less than 10 lines of code but it works very well and if there is a solution to the problem it will find it. The only issue is that as we always try values in
+
+[0:04:20] the same order the algorithm is domestic and we also return the same solution. Not ideal. But the fix is very simple. We just have to shuffle the domains before running the algorithm. If you are using external library make sure the selection process or values in the domains is random. We can also know the order we process the variables doesn't matter. It doesn't need to be random. And in fact, if you process first the variables with some smaller domains it can speed up significantly as they are more constrained and cause the minimum value heuristics.
+
+## Modeling the Room
+
+[0:05:15] Let's sue how to model the room. see. The room is a 2D or 3D grid. A 3D can be useful for games. In my game I use a 3D grid to place objects above others. The grid can be in three different states. It can be empty which is the black on the picture. It can be free and set receive an object. It can be in the margin state if the sale is free and we want to remain free. We want the connection to the other rooms to remain free so that they are reachable. Finally there is the full state which is which a cell is occupied by an object. We may want to add more data to the cell which is useful for adding constraints.
+
+## Modeling Objects
+
+[0:06:25] If the object can represent a grope of objects like a table with two chairs groups we could use several variables and constraints to make sure the objects are next to each other but it makes the CSP more difficult to solve. The box is the physical space occupied by the object and the free space that most remain free for the object is the margin box. We want to have space in front to make sure the players can access it. And I also added the support of optional Boolean masks to add to the box like I did with this.
+
+## More Randomness
+
+[0:07:27] I describe my room if a JSON file. You can see the description of the variable here. First you can observe for a given variable I will sample a list of objects. I want to place a painting in a room but I will choose among a list of them here. It helps the viability in the room. And then let's observe the variables in our problem the harder it will be to solve. But for some objects like decoration it isn't a big deal and the room stays valid. So I separated my objects into groups. If the room loses meaning I use the backtracking that I presented to be sure they are placed if the room. For the optional objects,
+
+[0:08:30] I will place them after the required objects and I will just write each value in the domains once and if a phase duplicates them I don't backtrack and just move to the next optional object. What is nice is as they are not required we can make them more random with probability of appearance or rhythm count and it help to add viability. Let's look at constraints first. Unary constraints. the suggest is to remove the values. If we want to place an object next to the four, we keep the position of the first row in the domain. If we want to place it in the corner we will just keep the four positions of the corners.
+
+[0:09:33] The two next constraints must be implemented efficiently. No overlap constraint I use as we get input and I update it after each assignment or backtracking and after an assignment I add the object and instead of backtracking where I remove it from the grid.
+
+## Connectivity Constraint
+
+[0:10:00] Then the connectivity constraint specify all free cells must be reachable. A simple DFS algorithm can check that. We have to run after each assignment which is expensive but heuristics can help. If you look at the free tiles connected in one piece you are sure the room is connected. But if two or more pieces you pay may have disconnected room and have to run the DFS. This can really help and speed it up by the one order of magnitude. So far so good but we have an issue. It has a name. It is a "10,000 bowls of oatmeal problem." If you don't know what it is it says we can generate lots of bowls of oatmeal by changing
+
+[0:11:05] the position of the oat in the bowl but different bowls look the same. We have the same issue here. The bowl is the room and the oatmeal is the object. If we use input we have the similar output but there is a very simple solution to this problem. It is just to generate different
+
+## Solution 1: Change the Bowl
+
+[0:11:33] bowls. Different colors of bowls. That way all of the bowls are different. I am kidding but there is an idea in this joke and that is that if we choose the context, we can play on the shape of it structure and the text area of the walls or the skins of the object to mitigate this issue. Texture we have to change the input to solve this problem. Don't overuse a template especially for rooms close to each other. Use a lot of alternative and optional objects to add viability to the room. Use a higher level generator to generate the input or inputs that convey a meaning. For example, let's say that you have to generate a house for a character
+
+[0:12:37] and you have already generated the hobbies for this character and he is fond of astronomy so we want to place an object in the house that would convey this information like a telescope and a nice and very simple way to achieve this is to use tags and triggers. Generators generate context
+
+## Tags and Triggers
+
+[0:13:07] and in the room description you will add a trigger to some object and this object will be added only if the trigger tag is in the context. Here we will at the telescope only if the tag astronomy is a context. What's nice with this approach is that also generators stay very loosely coupled. You can even make a more complex if you want. Yeah. That's all. I encourage you to use CSP in your generate because it easy to reason and itch implement and just be careful of the "10,000 bowls of oatmeal problem." Here are some links if you want to go deeper. KAWA: Thank you,
+
+[0:14:07] Pierre. I spent a lot of time in grad school doing things with gradient descent. It felt like a wonderful bring me back in time and using those techniques forward for things like room generation

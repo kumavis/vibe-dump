@@ -1,0 +1,5398 @@
+{
+ "id": "ftSC3Sn8O_s",
+ "url": "https://www.youtube.com/watch?v=ftSC3Sn8O_s",
+ "title": "Randy Lubin & Raph D'Amico - Dungeon Court",
+ "speaker": "Randy Lubin & Raph D'Amico",
+ "talk_title": "Dungeon Court",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-24",
+ "duration_s": 3269,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nRandy and Raph present Dungeon Court, a roguelike-themed improv court simulator. It's an adaptation of Ghost Court by Bully Pulpit Games: https://bullypulpitgames.com/games/ghost-court/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Dungeon court debut"
+  },
+  {
+   "start": 2104,
+   "title": "City of Mitsuko trials"
+  },
+  {
+   "start": 2815,
+   "title": "Town citizenship disputes"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 7668,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.79,
+   "text": "first off my name is Randy Lubin this is"
+  },
+  {
+   "t": 2.79,
+   "d": 2.91,
+   "text": "rap Tobago getting final bits set up we"
+  },
+  {
+   "t": 5.7,
+   "d": 1.98,
+   "text": "are amongst other things game designers"
+  },
+  {
+   "t": 7.68,
+   "d": 2.79,
+   "text": "mostly of in-person tabletop and the"
+  },
+  {
+   "t": 10.47,
+   "d": 0.66,
+   "text": "LARP"
+  },
+  {
+   "t": 11.13,
+   "d": 4.05,
+   "text": "this is gonna be a LARP adapted from the"
+  },
+  {
+   "t": 15.18,
+   "d": 2.1,
+   "text": "next page a wonderful wonderful game"
+  },
+  {
+   "t": 17.28,
+   "d": 2.45,
+   "text": "called ghost court by bully pulpit games"
+  },
+  {
+   "t": 19.73,
+   "d": 2.05,
+   "text": "great we're all good"
+  },
+  {
+   "t": 21.78,
+   "d": 2.46,
+   "text": "so ghost court is a phenomenal game by"
+  },
+  {
+   "t": 24.24,
+   "d": 1.95,
+   "text": "Jason Morningstar of bully pulpit games"
+  },
+  {
+   "t": 26.19,
+   "d": 2.94,
+   "text": "it is Judge Judy but with ghosts where"
+  },
+  {
+   "t": 29.13,
+   "d": 1.62,
+   "text": "you tell a series of very ridiculous"
+  },
+  {
+   "t": 30.75,
+   "d": 3.24,
+   "text": "cases between ghosts and humans and so"
+  },
+  {
+   "t": 33.99,
+   "d": 1.71,
+   "text": "we have adapted it for you all tonight"
+  },
+  {
+   "t": 35.7,
+   "d": 2.28,
+   "text": "this is the worldwide debut of dungeon"
+  },
+  {
+   "t": 37.98,
+   "d": 3.51,
+   "text": "court we're going to be telling some"
+  },
+  {
+   "t": 41.49,
+   "d": 2.55,
+   "text": "having some very ridiculous cases of"
+  },
+  {
+   "t": 44.04,
+   "d": 2.28,
+   "text": "monster V monster human v monster and"
+  },
+  {
+   "t": 46.32,
+   "d": 2.31,
+   "text": "human v human and and that we"
+  },
+  {
+   "t": 48.63,
+   "d": 2.1,
+   "text": "adjudicated live here in front of you"
+  },
+  {
+   "t": 50.73,
+   "d": 2.09,
+   "text": "and they'll also be starring you what's"
+  },
+  {
+   "t": 52.82,
+   "d": 1.96,
+   "text": "cool so yeah here's how it works we're"
+  },
+  {
+   "t": 54.78,
+   "d": 1.17,
+   "text": "gonna go through three different judges"
+  },
+  {
+   "t": 55.95,
+   "d": 1.23,
+   "text": "judges"
+  },
+  {
+   "t": 57.18,
+   "d": 3.33,
+   "text": "maybe not all before dinner and we're"
+  },
+  {
+   "t": 60.51,
+   "d": 1.38,
+   "text": "gonna start in the dungeon and then"
+  },
+  {
+   "t": 61.89,
+   "d": 1.41,
+   "text": "we're gonna go to a nearby city and"
+  },
+  {
+   "t": 63.3,
+   "d": 1.89,
+   "text": "finally we're gonna end at an ancient"
+  },
+  {
+   "t": 65.19,
+   "d": 2.58,
+   "text": "temple and we're gonna have set a few"
+  },
+  {
+   "t": 67.77,
+   "d": 2.58,
+   "text": "different cases in those locations those"
+  },
+  {
+   "t": 70.35,
+   "d": 1.53,
+   "text": "cases are gonna feature monsters and"
+  },
+  {
+   "t": 71.88,
+   "d": 2.46,
+   "text": "humans pleading for justice and we're"
+  },
+  {
+   "t": 74.34,
+   "d": 1.89,
+   "text": "gonna be randomly generating plaintiffs"
+  },
+  {
+   "t": 76.23,
+   "d": 1.47,
+   "text": "and defendants to be paired with those"
+  },
+  {
+   "t": 77.7,
+   "d": 2.52,
+   "text": "cases we have a a deck of monsters and"
+  },
+  {
+   "t": 80.22,
+   "d": 1.92,
+   "text": "heroes that we printed out just prior to"
+  },
+  {
+   "t": 82.14,
+   "d": 2.82,
+   "text": "coming here you all will play the role"
+  },
+  {
+   "t": 84.96,
+   "d": 1.44,
+   "text": "of the heroes and monsters and the way"
+  },
+  {
+   "t": 86.4,
+   "d": 1.44,
+   "text": "that's going to work is while the"
+  },
+  {
+   "t": 87.84,
+   "d": 3.66,
+   "text": "previous case is happening on stage the"
+  },
+  {
+   "t": 91.5,
+   "d": 1.65,
+   "text": "audience participants who want to jump"
+  },
+  {
+   "t": 93.15,
+   "d": 1.68,
+   "text": "into the next case will come over here"
+  },
+  {
+   "t": 94.83,
+   "d": 1.77,
+   "text": "to Raph and Raph will walk you through"
+  },
+  {
+   "t": 96.6,
+   "d": 1.68,
+   "text": "the creation of this case randomly"
+  },
+  {
+   "t": 98.28,
+   "d": 1.53,
+   "text": "drawing the monsters and heroes and"
+  },
+  {
+   "t": 99.81,
+   "d": 1.83,
+   "text": "helping to figure out what is the a"
+  },
+  {
+   "t": 101.64,
+   "d": 1.77,
+   "text": "little bit about the inciting incident"
+  },
+  {
+   "t": 103.41,
+   "d": 2.94,
+   "text": "of what's causing this case the case"
+  },
+  {
+   "t": 106.35,
+   "d": 1.83,
+   "text": "format itself is pretty straightforward"
+  },
+  {
+   "t": 108.18,
+   "d": 1.98,
+   "text": "the plaintiff is going to have one"
+  },
+  {
+   "t": 110.16,
+   "d": 2.37,
+   "text": "minute to state their case the defendant"
+  },
+  {
+   "t": 112.53,
+   "d": 1.8,
+   "text": "is then gonna have one minute to respond"
+  },
+  {
+   "t": 114.33,
+   "d": 2.34,
+   "text": "and say why they're innocent and then"
+  },
+  {
+   "t": 116.67,
+   "d": 2.34,
+   "text": "the judge will have about three minutes"
+  },
+  {
+   "t": 119.01,
+   "d": 2.7,
+   "text": "to ask some pointed questions render a"
+  },
+  {
+   "t": 121.71,
+   "d": 3.51,
+   "text": "verdict and issue any sentencing so"
+  },
+  {
+   "t": 125.22,
+   "d": 2.4,
+   "text": "fairly simple straightforward and again"
+  },
+  {
+   "t": 127.62,
+   "d": 2.34,
+   "text": "this is storing you so once we cut once"
+  },
+  {
+   "t": 129.96,
+   "d": 2.04,
+   "text": "we finish with the example case please"
+  },
+  {
+   "t": 132.0,
+   "d": 0.75,
+   "text": "come"
+  },
+  {
+   "t": 132.75,
+   "d": 2.73,
+   "text": "up talk to Rath and he'll get you all"
+  },
+  {
+   "t": 135.48,
+   "d": 3.06,
+   "text": "set up to come up on stage to appear in"
+  },
+  {
+   "t": 138.54,
+   "d": 2.19,
+   "text": "your own case cool"
+  },
+  {
+   "t": 140.73,
+   "d": 2.7,
+   "text": "so just prior to walking on stage we"
+  },
+  {
+   "t": 143.43,
+   "d": 3.24,
+   "text": "decide we're gonna use as gars fantasy"
+  },
+  {
+   "t": 146.67,
+   "d": 1.26,
+   "text": "map generator or they think this is very"
+  },
+  {
+   "t": 147.93,
+   "d": 1.38,
+   "text": "much in the spirit of roguelike"
+  },
+  {
+   "t": 149.31,
+   "d": 1.92,
+   "text": "celebration to figure out exactly where"
+  },
+  {
+   "t": 151.23,
+   "d": 2.79,
+   "text": "all these cases are taking place so we"
+  },
+  {
+   "t": 154.02,
+   "d": 3.18,
+   "text": "randomly generated a map and I don't"
+  },
+  {
+   "t": 157.2,
+   "d": 0.63,
+   "text": "know Raph"
+  },
+  {
+   "t": 157.83,
+   "d": 2.82,
+   "text": "the Czar's ardham of cheecha sounds like"
+  },
+  {
+   "t": 160.65,
+   "d": 1.08,
+   "text": "a terrible place so I don't think I"
+  },
+  {
+   "t": 161.73,
+   "d": 2.76,
+   "text": "should go there what do you think it may"
+  },
+  {
+   "t": 164.49,
+   "d": 4.29,
+   "text": "be the Julian Empire does its own that"
+  },
+  {
+   "t": 168.78,
+   "d": 1.83,
+   "text": "sounds solid alright let's let's zoom in"
+  },
+  {
+   "t": 170.61,
+   "d": 2.19,
+   "text": "okay you're torn Empire sounds nice I"
+  },
+  {
+   "t": 172.8,
+   "d": 1.74,
+   "text": "think this is probably gonna take place"
+  },
+  {
+   "t": 174.54,
+   "d": 1.71,
+   "text": "in the land maybe in the border region"
+  },
+  {
+   "t": 176.25,
+   "d": 2.04,
+   "text": "where where things are already pretty"
+  },
+  {
+   "t": 178.29,
+   "d": 2.49,
+   "text": "fraught maybe maybe a border with this"
+  },
+  {
+   "t": 180.78,
+   "d": 2.43,
+   "text": "ardham what's the city right here"
+  },
+  {
+   "t": 183.21,
+   "d": 2.79,
+   "text": "Lulu Jesco yes blue jays go let's uh"
+  },
+  {
+   "t": 186.0,
+   "d": 2.07,
+   "text": "let's set in the environs around the"
+  },
+  {
+   "t": 188.07,
+   "d": 2.7,
+   "text": "desk oh let's maybe zoom in once more so"
+  },
+  {
+   "t": 190.77,
+   "d": 1.17,
+   "text": "it sounds like you know these foothills"
+  },
+  {
+   "t": 191.94,
+   "d": 1.71,
+   "text": "and mountains might be home to many"
+  },
+  {
+   "t": 193.65,
+   "d": 3.39,
+   "text": "ancient dungeons and catacombs really a"
+  },
+  {
+   "t": 197.04,
+   "d": 2.33,
+   "text": "fertile destination to set our cases"
+  },
+  {
+   "t": 199.37,
+   "d": 2.95,
+   "text": "excellent so so we will be we will be"
+  },
+  {
+   "t": 202.32,
+   "d": 2.07,
+   "text": "playing in around this area so our our"
+  },
+  {
+   "t": 204.39,
+   "d": 2.31,
+   "text": "first location is the dungeon of"
+  },
+  {
+   "t": 206.7,
+   "d": 2.43,
+   "text": "infinite death depths some fun facts"
+  },
+  {
+   "t": 209.13,
+   "d": 2.4,
+   "text": "this dungeon actually only has 26 depths"
+  },
+  {
+   "t": 211.53,
+   "d": 3.56,
+   "text": "it's just more of an advertising thing"
+  },
+  {
+   "t": 215.3,
+   "d": 3.16,
+   "text": "it is home to the legendary orb of"
+  },
+  {
+   "t": 218.46,
+   "d": 4.08,
+   "text": "missiles and it is ruled over by the"
+  },
+  {
+   "t": 222.54,
+   "d": 3.27,
+   "text": "arch Lich crack and actually we have our"
+  },
+  {
+   "t": 225.81,
+   "d": 1.38,
+   "text": "arch list right here please come on"
+  },
+  {
+   "t": 227.19,
+   "d": 8.25,
+   "text": "stage come on stage you can definitely"
+  },
+  {
+   "t": 235.44,
+   "d": 6.24,
+   "text": "sit slam that goblet like a gavel our"
+  },
+  {
+   "t": 241.68,
+   "d": 2.01,
+   "text": "concession Court is about to be in"
+  },
+  {
+   "t": 243.69,
+   "d": 2.4,
+   "text": "session so our choice crackle you rule"
+  },
+  {
+   "t": 246.09,
+   "d": 1.8,
+   "text": "this dungeon and I having a good"
+  },
+  {
+   "t": 247.89,
+   "d": 1.95,
+   "text": "authority that your phylactery is a"
+  },
+  {
+   "t": 249.84,
+   "d": 3.63,
+   "text": "super adorable teddy bear yeah you have"
+  },
+  {
+   "t": 253.47,
+   "d": 2.75,
+   "text": "to use your imagination"
+  },
+  {
+   "t": 256.4,
+   "d": 2.11,
+   "text": "and I've heard that you don't like to"
+  },
+  {
+   "t": 258.51,
+   "d": 1.2,
+   "text": "micromanage you just like love"
+  },
+  {
+   "t": 259.71,
+   "d": 1.2,
+   "text": "delegating most of the running in the"
+  },
+  {
+   "t": 260.91,
+   "d": 0.42,
+   "text": "dungeon"
+  },
+  {
+   "t": 261.33,
+   "d": 1.56,
+   "text": "it sounds great your bailiff clerk"
+  },
+  {
+   "t": 262.89,
+   "d": 1.68,
+   "text": "person great that's perfect"
+  },
+  {
+   "t": 264.57,
+   "d": 1.53,
+   "text": "also and so we're gonna walk you through"
+  },
+  {
+   "t": 266.1,
+   "d": 2.19,
+   "text": "live the creation of the first case and"
+  },
+  {
+   "t": 268.29,
+   "d": 1.11,
+   "text": "then from then on the case will be"
+  },
+  {
+   "t": 269.4,
+   "d": 2.4,
+   "text": "happening in the background as the the"
+  },
+  {
+   "t": 271.8,
+   "d": 2.61,
+   "text": "next case is happening so I believe we"
+  },
+  {
+   "t": 274.41,
+   "d": 2.94,
+   "text": "have two pre-selected volunteers to be"
+  },
+  {
+   "t": 277.35,
+   "d": 2.79,
+   "text": "our first first people in the case if"
+  },
+  {
+   "t": 280.14,
+   "d": 3.63,
+   "text": "one and I lost my other volunteer so I'm"
+  },
+  {
+   "t": 283.77,
+   "d": 1.68,
+   "text": "gonna second Andrew Andrew you're gonna"
+  },
+  {
+   "t": 285.45,
+   "d": 9.65,
+   "text": "be in this case excellent so great my"
+  },
+  {
+   "t": 295.1,
+   "d": 2.56,
+   "text": "raps gonna walk you through the creation"
+  },
+  {
+   "t": 297.66,
+   "d": 4.23,
+   "text": "of a case all right do we have a"
+  },
+  {
+   "t": 301.89,
+   "d": 3.08,
+   "text": "plaintiff that wants to be the plaintiff"
+  },
+  {
+   "t": 304.97,
+   "d": 2.32,
+   "text": "who feels who feels more belligerent"
+  },
+  {
+   "t": 307.29,
+   "d": 4.8,
+   "text": "tonight so you will have a card that is"
+  },
+  {
+   "t": 312.09,
+   "d": 2.34,
+   "text": "your version of the case your side of it"
+  },
+  {
+   "t": 314.43,
+   "d": 2.43,
+   "text": "and Andrew will have the other side of"
+  },
+  {
+   "t": 316.86,
+   "d": 2.37,
+   "text": "this case known as the hazardous"
+  },
+  {
+   "t": 319.23,
+   "d": 3.96,
+   "text": "hallways both are play different our"
+  },
+  {
+   "t": 323.19,
+   "d": 1.86,
+   "text": "defendant or reading the short case"
+  },
+  {
+   "t": 325.05,
+   "d": 2.49,
+   "text": "description on the back and they will"
+  },
+  {
+   "t": 327.54,
+   "d": 3.21,
+   "text": "also be given characters run with it for"
+  },
+  {
+   "t": 330.75,
+   "d": 1.53,
+   "text": "the sake of this first one can you have"
+  },
+  {
+   "t": 332.28,
+   "d": 2.16,
+   "text": "them read it aloud that was a great idea"
+  },
+  {
+   "t": 334.44,
+   "d": 1.17,
+   "text": "of a sense we're giving you some"
+  },
+  {
+   "t": 335.61,
+   "d": 1.05,
+   "text": "scaffolding you're not coming to these"
+  },
+  {
+   "t": 336.66,
+   "d": 1.62,
+   "text": "cases blood would you like to read your"
+  },
+  {
+   "t": 338.28,
+   "d": 2.88,
+   "text": "case description all right I am a"
+  },
+  {
+   "t": 341.16,
+   "d": 2.88,
+   "text": "monster responsible for keeping many of"
+  },
+  {
+   "t": 344.04,
+   "d": 2.22,
+   "text": "the sconces torches and candelabras lit"
+  },
+  {
+   "t": 346.26,
+   "d": 2.13,
+   "text": "throughout the dungeon it's good pay but"
+  },
+  {
+   "t": 348.39,
+   "d": 1.92,
+   "text": "the traps lava pits and acid pools and"
+  },
+  {
+   "t": 350.31,
+   "d": 1.92,
+   "text": "bottomless chasms without guardrails"
+  },
+  {
+   "t": 352.23,
+   "d": 3.0,
+   "text": "make it hazardous to do my job the"
+  },
+  {
+   "t": 355.23,
+   "d": 2.4,
+   "text": "defendant must bring the dungeon up to"
+  },
+  {
+   "t": 357.63,
+   "d": 6.03,
+   "text": "code hello I am a monster I am also the"
+  },
+  {
+   "t": 363.66,
+   "d": 2.13,
+   "text": "dungeons award-winning architect and"
+  },
+  {
+   "t": 365.79,
+   "d": 2.13,
+   "text": "engineer the traps and environmental"
+  },
+  {
+   "t": 367.92,
+   "d": 1.68,
+   "text": "hazards are critical to the dungeons"
+  },
+  {
+   "t": 369.6,
+   "d": 2.25,
+   "text": "function and guardrails would ruin my"
+  },
+  {
+   "t": 371.85,
+   "d": 1.77,
+   "text": "carefully crafted aesthetic any"
+  },
+  {
+   "t": 373.62,
+   "d": 2.1,
+   "text": "modification would be an affront to my"
+  },
+  {
+   "t": 375.72,
+   "d": 2.73,
+   "text": "vision an insult to your profession and"
+  },
+  {
+   "t": 378.45,
+   "d": 1.98,
+   "text": "a violation of our kingdoms historical"
+  },
+  {
+   "t": 380.43,
+   "d": 5.43,
+   "text": "building protection codes thank you go"
+  },
+  {
+   "t": 385.86,
+   "d": 3.54,
+   "text": "all right and now we have to meet our"
+  },
+  {
+   "t": 389.4,
+   "d": 1.62,
+   "text": "plaintiffs or defendants who are they"
+  },
+  {
+   "t": 391.02,
+   "d": 1.8,
+   "text": "they will choose a character"
+  },
+  {
+   "t": 392.82,
+   "d": 4.47,
+   "text": "they're both monsters nomads um and they"
+  },
+  {
+   "t": 397.29,
+   "d": 2.37,
+   "text": "will be choosing from this deck so"
+  },
+  {
+   "t": 399.66,
+   "d": 8.64,
+   "text": "Andrew no would you introduce your I'm"
+  },
+  {
+   "t": 408.3,
+   "d": 8.21,
+   "text": "at miss blob really it's really tough to"
+  },
+  {
+   "t": 416.51,
+   "d": 4.72,
+   "text": "lift things I leave a trail of slime I'm"
+  },
+  {
+   "t": 421.23,
+   "d": 8.76,
+   "text": "smelly and gregarious I am Vaughn and"
+  },
+  {
+   "t": 429.99,
+   "d": 1.83,
+   "text": "Raph I am a swamp worm"
+  },
+  {
+   "t": 431.82,
+   "d": 3.36,
+   "text": "I am voracious Swift and miserly which"
+  },
+  {
+   "t": 435.18,
+   "d": 1.47,
+   "text": "is why I don't want to put make any"
+  },
+  {
+   "t": 436.65,
+   "d": 1.77,
+   "text": "modifications to my dungeon if I don't"
+  },
+  {
+   "t": 438.42,
+   "d": 6.63,
+   "text": "have to they cost a lot and I believe we"
+  },
+  {
+   "t": 445.05,
+   "d": 2.34,
+   "text": "are being able to begin the case now"
+  },
+  {
+   "t": 447.39,
+   "d": 3.27,
+   "text": "under a judge March like jackal the"
+  },
+  {
+   "t": 450.66,
+   "d": 2.58,
+   "text": "hazardous always a workplace safety"
+  },
+  {
+   "t": 453.24,
+   "d": 1.98,
+   "text": "complaint between a dungeon employee in"
+  },
+  {
+   "t": 455.22,
+   "d": 1.77,
+   "text": "the trap and environmental hazards"
+  },
+  {
+   "t": 456.99,
+   "d": 8.79,
+   "text": "designer dungeon corners and audio"
+  },
+  {
+   "t": 465.78,
+   "d": 8.82,
+   "text": "people back there alright Clark I'm not"
+  },
+  {
+   "t": 474.6,
+   "d": 2.52,
+   "text": "as familiar yet I don't I forget each"
+  },
+  {
+   "t": 477.12,
+   "d": 2.49,
+   "text": "case which which one goes first in"
+  },
+  {
+   "t": 479.61,
+   "d": 2.88,
+   "text": "dungeon Court is it dude the plaintiff"
+  },
+  {
+   "t": 482.49,
+   "d": 2.64,
+   "text": "places okay the plaintiff will have one"
+  },
+  {
+   "t": 485.13,
+   "d": 1.35,
+   "text": "minute the defender will have one minute"
+  },
+  {
+   "t": 486.48,
+   "d": 2.34,
+   "text": "and then it shall be you play just you"
+  },
+  {
+   "t": 488.82,
+   "d": 7.86,
+   "text": "may speak Oh am i starting yeah that was"
+  },
+  {
+   "t": 496.68,
+   "d": 4.26,
+   "text": "probably fifteen seconds so you know I"
+  },
+  {
+   "t": 500.94,
+   "d": 2.43,
+   "text": "took this job because I feel a sense of"
+  },
+  {
+   "t": 503.37,
+   "d": 2.88,
+   "text": "civic responsibility for the well-being"
+  },
+  {
+   "t": 506.25,
+   "d": 1.98,
+   "text": "of everyone in this dungeon a lot of"
+  },
+  {
+   "t": 508.23,
+   "d": 1.35,
+   "text": "people have difficulty seeing in the"
+  },
+  {
+   "t": 509.58,
+   "d": 3.48,
+   "text": "dark and it is my job to you know keep"
+  },
+  {
+   "t": 513.06,
+   "d": 2.94,
+   "text": "the lights on but every day I am a I'm a"
+  },
+  {
+   "t": 516.0,
+   "d": 4.02,
+   "text": "blob of slime and I get stuck in a pit"
+  },
+  {
+   "t": 520.02,
+   "d": 3.03,
+   "text": "and I have to slowly crawl crawl out and"
+  },
+  {
+   "t": 523.05,
+   "d": 1.95,
+   "text": "then people complain about the lights"
+  },
+  {
+   "t": 525.0,
+   "d": 1.41,
+   "text": "not being on but it's not my"
+  },
+  {
+   "t": 526.41,
+   "d": 1.62,
+   "text": "fault there's all of these hazards"
+  },
+  {
+   "t": 528.03,
+   "d": 2.91,
+   "text": "around and you could move some of the"
+  },
+  {
+   "t": 530.94,
+   "d": 2.79,
+   "text": "traps I mean can you put the traps like"
+  },
+  {
+   "t": 533.73,
+   "d": 2.43,
+   "text": "in we're in the center I don't have a"
+  },
+  {
+   "t": 536.16,
+   "d": 4.2,
+   "text": "clear pathway it's really difficult and"
+  },
+  {
+   "t": 540.36,
+   "d": 2.25,
+   "text": "I've complained many times and I feel"
+  },
+  {
+   "t": 542.61,
+   "d": 3.09,
+   "text": "like I am in danger my life is in danger"
+  },
+  {
+   "t": 545.7,
+   "d": 1.38,
+   "text": "all the time when I'm just trying to"
+  },
+  {
+   "t": 547.08,
+   "d": 3.86,
+   "text": "help just trying to help everyone see"
+  },
+  {
+   "t": 555.38,
+   "d": 4.84,
+   "text": "people of the dungeon I the great worm"
+  },
+  {
+   "t": 560.22,
+   "d": 2.34,
+   "text": "Vaadin Rath ask you to not aesthetics"
+  },
+  {
+   "t": 562.56,
+   "d": 3.42,
+   "text": "matter you spend all of your time"
+  },
+  {
+   "t": 565.98,
+   "d": 2.64,
+   "text": "arguing about our characters better than"
+  },
+  {
+   "t": 568.62,
+   "d": 2.16,
+   "text": "images what about different tile sets"
+  },
+  {
+   "t": 570.78,
+   "d": 1.95,
+   "text": "you know that they matter you know that"
+  },
+  {
+   "t": 572.73,
+   "d": 2.88,
+   "text": "the tiniest change to a dungeon that is"
+  },
+  {
+   "t": 575.61,
+   "d": 1.98,
+   "text": "not in the original intent of its"
+  },
+  {
+   "t": 577.59,
+   "d": 3.0,
+   "text": "creator can ruin it ruin it for player"
+  },
+  {
+   "t": 580.59,
+   "d": 2.37,
+   "text": "and inhabitants alike this is one of"
+  },
+  {
+   "t": 582.96,
+   "d": 2.13,
+   "text": "those cases think have you ever had this"
+  },
+  {
+   "t": 585.09,
+   "d": 1.89,
+   "text": "argument with yourself with a friend"
+  },
+  {
+   "t": 586.98,
+   "d": 1.92,
+   "text": "that you understand this sort of thing"
+  },
+  {
+   "t": 588.9,
+   "d": 5.76,
+   "text": "cannot be changed lightly bonad wrath"
+  },
+  {
+   "t": 594.66,
+   "d": 1.68,
+   "text": "I'm gonna take the time to remind you"
+  },
+  {
+   "t": 596.34,
+   "d": 1.5,
+   "text": "that this is not an audience interaction"
+  },
+  {
+   "t": 597.84,
+   "d": 4.41,
+   "text": "court I thank you are alleged just wrote"
+  },
+  {
+   "t": 602.25,
+   "d": 1.38,
+   "text": "further further for the record could you"
+  },
+  {
+   "t": 603.63,
+   "d": 3.45,
+   "text": "clarify the purpose of the dungeon what"
+  },
+  {
+   "t": 607.08,
+   "d": 1.41,
+   "text": "was what do you expect to have happen"
+  },
+  {
+   "t": 608.49,
+   "d": 1.83,
+   "text": "here so that I may better understand"
+  },
+  {
+   "t": 610.32,
+   "d": 2.28,
+   "text": "those issues"
+  },
+  {
+   "t": 612.6,
+   "d": 9.02,
+   "text": "it's the dungeon well"
+  },
+  {
+   "t": 622.62,
+   "d": 6.84,
+   "text": "I wouldn't call it a tax dodge I'll"
+  },
+  {
+   "t": 629.46,
+   "d": 2.18,
+   "text": "remind you that this is a court of law"
+  },
+  {
+   "t": 631.64,
+   "d": 8.83,
+   "text": "so I would call it a tax Oh text mod and"
+  },
+  {
+   "t": 640.47,
+   "d": 2.67,
+   "text": "would you describe your relationship is"
+  },
+  {
+   "t": 643.14,
+   "d": 1.98,
+   "text": "a working relationship are you an"
+  },
+  {
+   "t": 645.12,
+   "d": 4.25,
+   "text": "employer are you contract is this a gig"
+  },
+  {
+   "t": 649.37,
+   "d": 4.9,
+   "text": "well I was born here I press"
+  },
+  {
+   "t": 654.27,
+   "d": 2.28,
+   "text": "clarification are you a slave or"
+  },
+  {
+   "t": 656.55,
+   "d": 3.39,
+   "text": "prisoner no I get I get paid I get paid"
+  },
+  {
+   "t": 659.94,
+   "d": 5.1,
+   "text": "a little bit I probably you know do this"
+  },
+  {
+   "t": 665.04,
+   "d": 2.31,
+   "text": "job even if I wasn't paid I care the"
+  },
+  {
+   "t": 667.35,
+   "d": 6.29,
+   "text": "people are able to see in our space and"
+  },
+  {
+   "t": 673.64,
+   "d": 2.8,
+   "text": "yeah if you if there has to be work"
+  },
+  {
+   "t": 676.44,
+   "d": 4.2,
+   "text": "hazards around I would want to maybe be"
+  },
+  {
+   "t": 680.64,
+   "d": 3.0,
+   "text": "compensated in some way like to deal"
+  },
+  {
+   "t": 683.64,
+   "d": 6.0,
+   "text": "with you know going to medical to repair"
+  },
+  {
+   "t": 689.64,
+   "d": 3.84,
+   "text": "my slime cuts does bonnet wrath you do"
+  },
+  {
+   "t": 693.48,
+   "d": 2.1,
+   "text": "you currently offer a healthcare plan"
+  },
+  {
+   "t": 695.58,
+   "d": 6.15,
+   "text": "for your denizens is the repurposing of"
+  },
+  {
+   "t": 701.73,
+   "d": 3.74,
+   "text": "lost limbs and parts into new masters"
+  },
+  {
+   "t": 705.47,
+   "d": 2.5,
+   "text": "all right I just wanted to I wanted to"
+  },
+  {
+   "t": 707.97,
+   "d": 5.03,
+   "text": "clarify okay uh so uh girls could you um"
+  },
+  {
+   "t": 713.0,
+   "d": 1.87,
+   "text": "I'm gonna what I'm gonna do is I'm gonna"
+  },
+  {
+   "t": 714.87,
+   "d": 1.71,
+   "text": "mandate that Bona Rath makes a couple"
+  },
+  {
+   "t": 716.58,
+   "d": 4.02,
+   "text": "chain-like one specific change and then"
+  },
+  {
+   "t": 720.6,
+   "d": 1.8,
+   "text": "I think then you'll be free to go could"
+  },
+  {
+   "t": 722.4,
+   "d": 1.47,
+   "text": "I just get your suggestion for that"
+  },
+  {
+   "t": 723.87,
+   "d": 3.93,
+   "text": "change of the dungeon yes I would like"
+  },
+  {
+   "t": 727.8,
+   "d": 2.97,
+   "text": "to do a dungeon crawl with you that's"
+  },
+  {
+   "t": 730.77,
+   "d": 1.2,
+   "text": "than that timidly"
+  },
+  {
+   "t": 731.97,
+   "d": 3.9,
+   "text": "that is not a say make sure you and go"
+  },
+  {
+   "t": 735.87,
+   "d": 2.19,
+   "text": "I meant I meant a suite and go through"
+  },
+  {
+   "t": 738.06,
+   "d": 2.91,
+   "text": "and remove some of the hazards that"
+  },
+  {
+   "t": 740.97,
+   "d": 3.06,
+   "text": "affect my day-to-day I think there could"
+  },
+  {
+   "t": 744.03,
+   "d": 3.84,
+   "text": "be like 10% of the current hazards that"
+  },
+  {
+   "t": 747.87,
+   "d": 2.49,
+   "text": "we have all right the court mandates a"
+  },
+  {
+   "t": 750.36,
+   "d": 3.0,
+   "text": "hangout henceforth were called it called"
+  },
+  {
+   "t": 753.36,
+   "d": 0.66,
+   "text": "a dungeon"
+  },
+  {
+   "t": 754.02,
+   "d": 5.04,
+   "text": "crawl and some of the some of the some"
+  },
+  {
+   "t": 759.06,
+   "d": 3.36,
+   "text": "advisements will be taken under up to a"
+  },
+  {
+   "t": 762.42,
+   "d": 2.25,
+   "text": "maximum modification amount of let's say"
+  },
+  {
+   "t": 764.67,
+   "d": 2.9,
+   "text": "ten thousand gold pieces no more and a"
+  },
+  {
+   "t": 767.57,
+   "d": 4.0,
+   "text": "health care plan that was not in the"
+  },
+  {
+   "t": 771.57,
+   "d": 1.53,
+   "text": "judges state that was not in my say oh"
+  },
+  {
+   "t": 773.1,
+   "d": 2.45,
+   "text": "okay"
+  },
+  {
+   "t": 779.1,
+   "d": 6.33,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 786.5,
+   "d": 2.38,
+   "text": "thank you both so much and thank you"
+  },
+  {
+   "t": 788.88,
+   "d": 1.65,
+   "text": "arch Lich all right we have the next"
+  },
+  {
+   "t": 790.53,
+   "d": 3.3,
+   "text": "case about to be ready but I just come"
+  },
+  {
+   "t": 793.83,
+   "d": 2.04,
+   "text": "up pour a little wine in front of wrath"
+  },
+  {
+   "t": 795.87,
+   "d": 1.59,
+   "text": "and we'll just be processing the"
+  },
+  {
+   "t": 797.46,
+   "d": 3.62,
+   "text": "oncoming cases right before the"
+  },
+  {
+   "t": 801.68,
+   "d": 7.42,
+   "text": "just-just-just what just all right we"
+  },
+  {
+   "t": 809.1,
+   "d": 2.64,
+   "text": "have the next case ready to begin the"
+  },
+  {
+   "t": 811.74,
+   "d": 3.39,
+   "text": "next case is an employment dispute about"
+  },
+  {
+   "t": 815.13,
+   "d": 1.98,
+   "text": "a monster neglecting their dungeon"
+  },
+  {
+   "t": 817.11,
+   "d": 3.48,
+   "text": "defense duties featuring Kirk and its"
+  },
+  {
+   "t": 820.59,
+   "d": 9.48,
+   "text": "claves the ridiculous riddle plaintiff"
+  },
+  {
+   "t": 830.07,
+   "d": 1.86,
+   "text": "you may begin your statement Thank You"
+  },
+  {
+   "t": 831.93,
+   "d": 1.08,
+   "text": "hours Lich"
+  },
+  {
+   "t": 833.01,
+   "d": 2.91,
+   "text": "I am perchick floating eyeball as you"
+  },
+  {
+   "t": 835.92,
+   "d": 2.28,
+   "text": "know I managed the defense of the first"
+  },
+  {
+   "t": 838.2,
+   "d": 2.75,
+   "text": "levels of the dungeon the entry halls"
+  },
+  {
+   "t": 840.95,
+   "d": 2.68,
+   "text": "with the sconces they're always well"
+  },
+  {
+   "t": 843.63,
+   "d": 4.68,
+   "text": "tended I am focused knowledgeable all"
+  },
+  {
+   "t": 848.31,
+   "d": 4.2,
+   "text": "soon nearsighted I'm establishing I'm"
+  },
+  {
+   "t": 852.51,
+   "d": 4.73,
+   "text": "establishing my bona fides so I hired"
+  },
+  {
+   "t": 857.24,
+   "d": 3.01,
+   "text": "slave to defend the first levels of the"
+  },
+  {
+   "t": 860.25,
+   "d": 2.97,
+   "text": "dungeon very straightforward um to my"
+  },
+  {
+   "t": 863.22,
+   "d": 7.71,
+   "text": "dismay my contractor let's heroes simply"
+  },
+  {
+   "t": 870.93,
+   "d": 4.74,
+   "text": "pass through if they answer a riddle he"
+  },
+  {
+   "t": 875.67,
+   "d": 3.98,
+   "text": "was hired to kill them on sight instead"
+  },
+  {
+   "t": 879.65,
+   "d": 3.22,
+   "text": "riddle passed through this is my"
+  },
+  {
+   "t": 882.87,
+   "d": 2.43,
+   "text": "complain complain accepted defendant"
+  },
+  {
+   "t": 885.3,
+   "d": 2.84,
+   "text": "slave please go ahead"
+  },
+  {
+   "t": 888.14,
+   "d": 2.74,
+   "text": "I've been on an engineering manager at"
+  },
+  {
+   "t": 890.88,
+   "d": 3.24,
+   "text": "the organization and asking riddles for"
+  },
+  {
+   "t": 894.12,
+   "d": 1.62,
+   "text": "a very long time in order to allow"
+  },
+  {
+   "t": 895.74,
+   "d": 10.73,
+   "text": "people to enter or not enter and as as"
+  },
+  {
+   "t": 906.47,
+   "d": 2.59,
+   "text": "it's just so important that you know you"
+  },
+  {
+   "t": 909.06,
+   "d": 1.92,
+   "text": "have to ask the right riddles to let the"
+  },
+  {
+   "t": 910.98,
+   "d": 3.59,
+   "text": "right people in and under no other"
+  },
+  {
+   "t": 914.57,
+   "d": 1.99,
+   "text": "circumstances okay I can't just make"
+  },
+  {
+   "t": 916.56,
+   "d": 2.73,
+   "text": "exceptions for you it's just it's just"
+  },
+  {
+   "t": 919.29,
+   "d": 3.03,
+   "text": "how it works here but it's a"
+  },
+  {
+   "t": 922.32,
+   "d": 1.29,
+   "text": "clarification on this it sounds like"
+  },
+  {
+   "t": 923.61,
+   "d": 3.36,
+   "text": "slave you're your formal training is in"
+  },
+  {
+   "t": 926.97,
+   "d": 4.59,
+   "text": "riddle asking and chick has hired you as"
+  },
+  {
+   "t": 931.56,
+   "d": 2.37,
+   "text": "a straight-up murderer"
+  },
+  {
+   "t": 933.93,
+   "d": 3.63,
+   "text": "and so her check your complaint is"
+  },
+  {
+   "t": 937.56,
+   "d": 3.2,
+   "text": "you've hired for the murderer title and"
+  },
+  {
+   "t": 940.76,
+   "d": 2.44,
+   "text": "sclab is refusing to perform his duties"
+  },
+  {
+   "t": 943.2,
+   "d": 1.68,
+   "text": "is that is that correct that's correct"
+  },
+  {
+   "t": 944.88,
+   "d": 3.12,
+   "text": "and I'd like to clarify that the ad was"
+  },
+  {
+   "t": 948.0,
+   "d": 3.99,
+   "text": "for a entry-level murderer in our"
+  },
+  {
+   "t": 951.99,
+   "d": 1.98,
+   "text": "interview because it's the entry level"
+  },
+  {
+   "t": 953.97,
+   "d": 1.41,
+   "text": "of the dungeon that's right no that's"
+  },
+  {
+   "t": 955.38,
+   "d": 2.73,
+   "text": "right yeah yeah a mid-level mid-level"
+  },
+  {
+   "t": 958.11,
+   "d": 2.04,
+   "text": "murderer for the entry level of the"
+  },
+  {
+   "t": 960.15,
+   "d": 3.39,
+   "text": "dungeon in our interview slave did bring"
+  },
+  {
+   "t": 963.54,
+   "d": 2.55,
+   "text": "up the riddles and I did say it would be"
+  },
+  {
+   "t": 966.09,
+   "d": 3.75,
+   "text": "okay to ask a riddle and then murder the"
+  },
+  {
+   "t": 969.84,
+   "d": 2.43,
+   "text": "heroes oh there's our list the answer"
+  },
+  {
+   "t": 972.27,
+   "d": 4.71,
+   "text": "there's been no more good I slave could"
+  },
+  {
+   "t": 976.98,
+   "d": 2.6,
+   "text": "you clarify where you're not um"
+  },
+  {
+   "t": 979.58,
+   "d": 2.02,
+   "text": "consummating your work doing her chicken"
+  },
+  {
+   "t": 981.6,
+   "d": 2.67,
+   "text": "I've had multiple written communications"
+  },
+  {
+   "t": 984.27,
+   "d": 4.13,
+   "text": "about how fundamentally in suitable"
+  },
+  {
+   "t": 988.4,
+   "d": 2.53,
+   "text": "going directly to the murder phase"
+  },
+  {
+   "t": 990.93,
+   "d": 4.26,
+   "text": "without a proper puzzle riddle phase"
+  },
+  {
+   "t": 995.19,
+   "d": 3.93,
+   "text": "especially you know with the entry level"
+  },
+  {
+   "t": 999.12,
+   "d": 1.68,
+   "text": "of the dungeon most people don't have"
+  },
+  {
+   "t": 1000.8,
+   "d": 2.16,
+   "text": "experience fighting back murderers and"
+  },
+  {
+   "t": 1002.96,
+   "d": 2.7,
+   "text": "it's unfair to ask them about you know"
+  },
+  {
+   "t": 1005.66,
+   "d": 2.31,
+   "text": "what their favorite weapons are or you"
+  },
+  {
+   "t": 1007.97,
+   "d": 2.94,
+   "text": "know how do they like to get split in"
+  },
+  {
+   "t": 1010.91,
+   "d": 3.57,
+   "text": "half by my big chests spike I prefer"
+  },
+  {
+   "t": 1014.48,
+   "d": 5.08,
+   "text": "that I do a few brain teasers and see if"
+  },
+  {
+   "t": 1019.56,
+   "d": 3.57,
+   "text": "the court demands kerchak do you want to"
+  },
+  {
+   "t": 1023.13,
+   "d": 2.91,
+   "text": "fire sky or do you want him to mandate"
+  },
+  {
+   "t": 1026.04,
+   "d": 1.95,
+   "text": "he does his job differently oh I want"
+  },
+  {
+   "t": 1027.99,
+   "d": 2.85,
+   "text": "him to murder heroes you mandate"
+  },
+  {
+   "t": 1030.84,
+   "d": 4.74,
+   "text": "efficiently yeah um all right explain"
+  },
+  {
+   "t": 1035.58,
+   "d": 2.03,
+   "text": "here's what we're gonna do I'm going to"
+  },
+  {
+   "t": 1037.61,
+   "d": 3.55,
+   "text": "expect proof that you've killed ten"
+  },
+  {
+   "t": 1041.16,
+   "d": 1.59,
+   "text": "junjin years in the next month or we"
+  },
+  {
+   "t": 1042.75,
+   "d": 6.27,
+   "text": "will put you in jail for 30 days you can"
+  },
+  {
+   "t": 1049.02,
+   "d": 2.82,
+   "text": "ask riddles I'm not gonna ban that oh I"
+  },
+  {
+   "t": 1051.84,
+   "d": 2.64,
+   "text": "can still ask riddles damn that's not"
+  },
+  {
+   "t": 1054.48,
+   "d": 1.02,
+   "text": "part of the that's not part of the"
+  },
+  {
+   "t": 1055.5,
+   "d": 3.24,
+   "text": "problem just the murder okay great"
+  },
+  {
+   "t": 1058.74,
+   "d": 9.24,
+   "text": "the court has spoken the court"
+  },
+  {
+   "t": 1067.98,
+   "d": 3.27,
+   "text": "introduces the next case the commercial"
+  },
+  {
+   "t": 1071.25,
+   "d": 2.25,
+   "text": "zoning dispute between a monster and a"
+  },
+  {
+   "t": 1073.5,
+   "d": 2.97,
+   "text": "hero owned business if you would take"
+  },
+  {
+   "t": 1076.47,
+   "d": 3.17,
+   "text": "your seats plaintiff and defendant"
+  },
+  {
+   "t": 1084.62,
+   "d": 3.94,
+   "text": "plaintiff visits Kirkland captain Scott"
+  },
+  {
+   "t": 1088.56,
+   "d": 4.23,
+   "text": "versus Vader a human tourist hello you"
+  },
+  {
+   "t": 1092.79,
+   "d": 1.86,
+   "text": "guys could you just for the purposes of"
+  },
+  {
+   "t": 1094.65,
+   "d": 1.86,
+   "text": "the court could you switch your seats"
+  },
+  {
+   "t": 1096.51,
+   "d": 4.73,
+   "text": "so that you're under the for the records"
+  },
+  {
+   "t": 1101.24,
+   "d": 7.75,
+   "text": "skirt claw please speak your case I care"
+  },
+  {
+   "t": 1108.99,
+   "d": 3.08,
+   "text": "a lot about this dungeon"
+  },
+  {
+   "t": 1112.07,
+   "d": 3.82,
+   "text": "it is my experienced opinion that swords"
+  },
+  {
+   "t": 1115.89,
+   "d": 3.0,
+   "text": "and some such other items of powerful"
+  },
+  {
+   "t": 1118.89,
+   "d": 2.01,
+   "text": "hurting are very painful"
+  },
+  {
+   "t": 1120.9,
+   "d": 2.73,
+   "text": "I would prefer they're less of them"
+  },
+  {
+   "t": 1123.63,
+   "d": 3.87,
+   "text": "around the dungeon poking at me and my"
+  },
+  {
+   "t": 1127.5,
+   "d": 5.67,
+   "text": "fellow comrades in preventing the heroes"
+  },
+  {
+   "t": 1133.17,
+   "d": 3.21,
+   "text": "from proceeding further I understand"
+  },
+  {
+   "t": 1136.38,
+   "d": 2.67,
+   "text": "that this shop may have some importance"
+  },
+  {
+   "t": 1139.05,
+   "d": 2.85,
+   "text": "to our local economy however I think"
+  },
+  {
+   "t": 1141.9,
+   "d": 6.75,
+   "text": "that the damages exceed any taxes we are"
+  },
+  {
+   "t": 1148.65,
+   "d": 1.92,
+   "text": "receiving from it at the moment"
+  },
+  {
+   "t": 1150.57,
+   "d": 3.39,
+   "text": "and I think that it would be proper if"
+  },
+  {
+   "t": 1153.96,
+   "d": 4.44,
+   "text": "the shop was moved elsewhere where it is"
+  },
+  {
+   "t": 1158.4,
+   "d": 2.52,
+   "text": "not as much of a threat perhaps to one"
+  },
+  {
+   "t": 1160.92,
+   "d": 2.31,
+   "text": "of the lower levels Thank You circle Oh"
+  },
+  {
+   "t": 1163.23,
+   "d": 2.46,
+   "text": "better let's say you the defendant let's"
+  },
+  {
+   "t": 1165.69,
+   "d": 4.59,
+   "text": "hear your case my wife and I honeymooned"
+  },
+  {
+   "t": 1170.28,
+   "d": 6.54,
+   "text": "in the dungeon and she died but you ever"
+  },
+  {
+   "t": 1176.82,
+   "d": 2.1,
+   "text": "just fall in love with a place that has"
+  },
+  {
+   "t": 1178.92,
+   "d": 1.86,
+   "text": "an emotional significance so I decided"
+  },
+  {
+   "t": 1180.78,
+   "d": 4.62,
+   "text": "to stay and stay and make it make away"
+  },
+  {
+   "t": 1185.4,
+   "d": 3.69,
+   "text": "amongst the simple simple but noble"
+  },
+  {
+   "t": 1189.09,
+   "d": 2.64,
+   "text": "people of the dungeon and so I've opened"
+  },
+  {
+   "t": 1191.73,
+   "d": 4.88,
+   "text": "a store selling assorted keepsakes in"
+  },
+  {
+   "t": 1196.61,
+   "d": 4.24,
+   "text": "stabbing things and swords and I feel"
+  },
+  {
+   "t": 1200.85,
+   "d": 2.13,
+   "text": "that people come and they they learn a"
+  },
+  {
+   "t": 1202.98,
+   "d": 2.22,
+   "text": "little bit more about the culture of the"
+  },
+  {
+   "t": 1205.2,
+   "d": 3.87,
+   "text": "dungeon and then they go and kill the"
+  },
+  {
+   "t": 1209.07,
+   "d": 1.74,
+   "text": "people there and I just feel like that's"
+  },
+  {
+   "t": 1210.81,
+   "d": 2.91,
+   "text": "part of part of what what you know the"
+  },
+  {
+   "t": 1213.72,
+   "d": 1.89,
+   "text": "humans can bring to this space and I"
+  },
+  {
+   "t": 1215.61,
+   "d": 3.24,
+   "text": "just and the money the money is fine the"
+  },
+  {
+   "t": 1218.85,
+   "d": 1.92,
+   "text": "money is better than we've expected and"
+  },
+  {
+   "t": 1220.77,
+   "d": 1.11,
+   "text": "we're doing alright we're looking to"
+  },
+  {
+   "t": 1221.88,
+   "d": 3.54,
+   "text": "expand down and down eternally 26 times"
+  },
+  {
+   "t": 1225.42,
+   "d": 3.6,
+   "text": "but yeah I just I just feel like it's"
+  },
+  {
+   "t": 1229.02,
+   "d": 3.66,
+   "text": "it's been such a big big part of this"
+  },
+  {
+   "t": 1232.68,
+   "d": 3.27,
+   "text": "community for the past three months to"
+  },
+  {
+   "t": 1235.95,
+   "d": 2.76,
+   "text": "have this shop and it's been a big you"
+  },
+  {
+   "t": 1238.71,
+   "d": 1.83,
+   "text": "know personal journey for me and I wish"
+  },
+  {
+   "t": 1240.54,
+   "d": 3.57,
+   "text": "you would honor that so if I understand"
+  },
+  {
+   "t": 1244.11,
+   "d": 1.53,
+   "text": "correctly circle your complaint is that"
+  },
+  {
+   "t": 1245.64,
+   "d": 2.67,
+   "text": "you feel the shop is unsafe and you want"
+  },
+  {
+   "t": 1248.31,
+   "d": 1.01,
+   "text": "it gone"
+  },
+  {
+   "t": 1249.32,
+   "d": 2.71,
+   "text": "not necessarily gone this is more a"
+  },
+  {
+   "t": 1252.03,
+   "d": 2.46,
+   "text": "matter of this is on one of the higher"
+  },
+  {
+   "t": 1254.49,
+   "d": 4.17,
+   "text": "levels the the recruits available to me"
+  },
+  {
+   "t": 1258.66,
+   "d": 2.31,
+   "text": "they're not exactly equipped themselves"
+  },
+  {
+   "t": 1260.97,
+   "d": 3.72,
+   "text": "to deal with challenges yes"
+  },
+  {
+   "t": 1264.69,
+   "d": 2.4,
+   "text": "um and we do have a mandate in this"
+  },
+  {
+   "t": 1267.09,
+   "d": 1.38,
+   "text": "dungeon zoning as such that we do have"
+  },
+  {
+   "t": 1268.47,
+   "d": 2.49,
+   "text": "randomly one shot per level so"
+  },
+  {
+   "t": 1270.96,
+   "d": 1.89,
+   "text": "unfortunately we do need a shop on this"
+  },
+  {
+   "t": 1272.85,
+   "d": 1.62,
+   "text": "level what does it need to be so"
+  },
+  {
+   "t": 1274.47,
+   "d": 3.14,
+   "text": "powerful the items sold in this shop"
+  },
+  {
+   "t": 1277.61,
+   "d": 3.04,
+   "text": "renner III and before I pass judgment I"
+  },
+  {
+   "t": 1280.65,
+   "d": 1.29,
+   "text": "do want to attempt"
+  },
+  {
+   "t": 1281.94,
+   "d": 2.46,
+   "text": "to alleviate your concerns or alleviate"
+  },
+  {
+   "t": 1284.4,
+   "d": 1.17,
+   "text": "your relationship could you perhaps"
+  },
+  {
+   "t": 1285.57,
+   "d": 2.79,
+   "text": "still safer objects would you consider"
+  },
+  {
+   "t": 1288.36,
+   "d": 3.54,
+   "text": "that um you know my wife suggested that"
+  },
+  {
+   "t": 1291.9,
+   "d": 1.86,
+   "text": "maybe I could sell just the keepsakes"
+  },
+  {
+   "t": 1293.76,
+   "d": 3.06,
+   "text": "and then she was she was murdered by the"
+  },
+  {
+   "t": 1296.82,
+   "d": 2.55,
+   "text": "monsters in the dungeon and so I've"
+  },
+  {
+   "t": 1299.37,
+   "d": 2.22,
+   "text": "decided you know maybe to honor her I"
+  },
+  {
+   "t": 1301.59,
+   "d": 1.94,
+   "text": "would sell the the sharp stabby bits"
+  },
+  {
+   "t": 1303.53,
+   "d": 5.08,
+   "text": "that make sense um that totally makes"
+  },
+  {
+   "t": 1308.61,
+   "d": 2.93,
+   "text": "sense I've been there"
+  },
+  {
+   "t": 1311.54,
+   "d": 2.32,
+   "text": "CERCLA do you have any specific"
+  },
+  {
+   "t": 1313.86,
+   "d": 4.5,
+   "text": "complaints of malfeasance or unsafety or"
+  },
+  {
+   "t": 1318.36,
+   "d": 2.37,
+   "text": "just general anti pointing pointing us"
+  },
+  {
+   "t": 1320.73,
+   "d": 3.24,
+   "text": "like this is this a no point to this in"
+  },
+  {
+   "t": 1323.97,
+   "d": 5.22,
+   "text": "my backyard problem the fire also there"
+  },
+  {
+   "t": 1329.19,
+   "d": 1.62,
+   "text": "there seemed to be a number of fire"
+  },
+  {
+   "t": 1330.81,
+   "d": 3.21,
+   "text": "staves which I believe this shop is the"
+  },
+  {
+   "t": 1334.02,
+   "d": 4.77,
+   "text": "source of you believe there's been"
+  },
+  {
+   "t": 1338.79,
+   "d": 2.07,
+   "text": "numerous incinerations directly outside"
+  },
+  {
+   "t": 1340.86,
+   "d": 7.65,
+   "text": "of the shop can you make claim but well"
+  },
+  {
+   "t": 1348.51,
+   "d": 2.55,
+   "text": "there are charred bodies yeah no I"
+  },
+  {
+   "t": 1351.06,
+   "d": 2.4,
+   "text": "accept that I do you I don't need to say"
+  },
+  {
+   "t": 1353.46,
+   "d": 0.99,
+   "text": "to that"
+  },
+  {
+   "t": 1354.45,
+   "d": 3.15,
+   "text": "torches don't burn monsters fire burns"
+  },
+  {
+   "t": 1357.6,
+   "d": 1.89,
+   "text": "monsters"
+  },
+  {
+   "t": 1359.49,
+   "d": 9.31,
+   "text": "there are fire states I don't think you"
+  },
+  {
+   "t": 1368.8,
+   "d": 1.7,
+   "text": "said anything at all in that statement"
+  },
+  {
+   "t": 1370.5,
+   "d": 2.65,
+   "text": "if it would please the Lich I may offer"
+  },
+  {
+   "t": 1373.15,
+   "d": 6.06,
+   "text": "just a just a quote from my wife she was"
+  },
+  {
+   "t": 1379.21,
+   "d": 2.7,
+   "text": "and I think that's why you know I want"
+  },
+  {
+   "t": 1381.91,
+   "d": 1.92,
+   "text": "to keep her candle alight with the"
+  },
+  {
+   "t": 1383.83,
+   "d": 2.94,
+   "text": "torches and she she said to me when the"
+  },
+  {
+   "t": 1386.77,
+   "d": 3.26,
+   "text": "last thing she said to me was"
+  },
+  {
+   "t": 1391.25,
+   "d": 3.82,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1395.07,
+   "d": 4.71,
+   "text": "may I ask a question to the defense yes"
+  },
+  {
+   "t": 1399.78,
+   "d": 3.76,
+   "text": "what was your wife also a monster no no"
+  },
+  {
+   "t": 1403.54,
+   "d": 3.78,
+   "text": "no no look at me what I date wood I did"
+  },
+  {
+   "t": 1407.32,
+   "d": 3.57,
+   "text": "a monster and with that the court is"
+  },
+  {
+   "t": 1410.89,
+   "d": 2.91,
+   "text": "gonna render judgment on in this case"
+  },
+  {
+   "t": 1413.8,
+   "d": 1.95,
+   "text": "the shot may stay right or I'm gonna"
+  },
+  {
+   "t": 1415.75,
+   "d": 2.13,
+   "text": "require that you have a minimum age to"
+  },
+  {
+   "t": 1417.88,
+   "d": 0.81,
+   "text": "enter your shop"
+  },
+  {
+   "t": 1418.69,
+   "d": 2.55,
+   "text": "I'm guessing 19 will be fine and a"
+  },
+  {
+   "t": 1421.24,
+   "d": 2.67,
+   "text": "poster warning against dangerous uses of"
+  },
+  {
+   "t": 1423.91,
+   "d": 2.82,
+   "text": "swords and fire especially for lung"
+  },
+  {
+   "t": 1426.73,
+   "d": 5.7,
+   "text": "cancer and bleeding I will also remind"
+  },
+  {
+   "t": 1432.43,
+   "d": 3.18,
+   "text": "you that I offer on the side necromancy"
+  },
+  {
+   "t": 1435.61,
+   "d": 2.49,
+   "text": "services we can talk later leave your"
+  },
+  {
+   "t": 1438.1,
+   "d": 4.64,
+   "text": "information with the clerk thank you"
+  },
+  {
+   "t": 1444.72,
+   "d": 4.62,
+   "text": "the next case will be a labor dispute in"
+  },
+  {
+   "t": 1449.34,
+   "d": 8.16,
+   "text": "the dungeon mines featuring zebra nerve"
+  },
+  {
+   "t": 1457.5,
+   "d": 1.86,
+   "text": "the sophisticated basilisk is the"
+  },
+  {
+   "t": 1459.36,
+   "d": 2.75,
+   "text": "plaintiff and felix the decaying"
+  },
+  {
+   "t": 1462.11,
+   "d": 4.24,
+   "text": "necromancer center you may speak your"
+  },
+  {
+   "t": 1466.35,
+   "d": 8.13,
+   "text": "case brag about my duties I'm just"
+  },
+  {
+   "t": 1474.48,
+   "d": 3.27,
+   "text": "another Joe working at the entry level"
+  },
+  {
+   "t": 1477.75,
+   "d": 5.85,
+   "text": "of the dungeon entryway and I work long"
+  },
+  {
+   "t": 1483.6,
+   "d": 4.08,
+   "text": "hours I work I'm just I'm just asking"
+  },
+  {
+   "t": 1487.68,
+   "d": 2.34,
+   "text": "for basically a living wage just enough"
+  },
+  {
+   "t": 1490.02,
+   "d": 2.43,
+   "text": "cool pieces to afford a healing potion"
+  },
+  {
+   "t": 1492.45,
+   "d": 5.88,
+   "text": "when I'm sick maybe a 80 hour work week"
+  },
+  {
+   "t": 1498.33,
+   "d": 3.39,
+   "text": "would be really nice so I can get a few"
+  },
+  {
+   "t": 1501.72,
+   "d": 4.35,
+   "text": "minutes of shut-eye and my line manager"
+  },
+  {
+   "t": 1506.07,
+   "d": 2.49,
+   "text": "here thigh Lex has been you know"
+  },
+  {
+   "t": 1508.56,
+   "d": 3.18,
+   "text": "stopping me every every step of the way"
+  },
+  {
+   "t": 1511.74,
+   "d": 3.15,
+   "text": "I just just trying to chat with my my"
+  },
+  {
+   "t": 1514.89,
+   "d": 2.73,
+   "text": "fellow guards about better working"
+  },
+  {
+   "t": 1517.62,
+   "d": 4.2,
+   "text": "conditions and he shuts us down most of"
+  },
+  {
+   "t": 1521.82,
+   "d": 1.38,
+   "text": "my friends have been murdered just for"
+  },
+  {
+   "t": 1523.2,
+   "d": 4.34,
+   "text": "talking about you know the you word so I"
+  },
+  {
+   "t": 1527.54,
+   "d": 4.42,
+   "text": "just want to be treated fairly defendant"
+  },
+  {
+   "t": 1531.96,
+   "d": 3.42,
+   "text": "I have something I work long enough to"
+  },
+  {
+   "t": 1535.38,
+   "d": 3.66,
+   "text": "but we have quotas and the real problem"
+  },
+  {
+   "t": 1539.04,
+   "d": 1.95,
+   "text": "is these heroes they they come through"
+  },
+  {
+   "t": 1540.99,
+   "d": 1.38,
+   "text": "they murder your friends your colleagues"
+  },
+  {
+   "t": 1542.37,
+   "d": 2.49,
+   "text": "my colleagues my friends stealing our"
+  },
+  {
+   "t": 1544.86,
+   "d": 4.98,
+   "text": "gems stick-on if you do your job this"
+  },
+  {
+   "t": 1549.84,
+   "d": 3.69,
+   "text": "wouldn't happen how many times do I have"
+  },
+  {
+   "t": 1553.53,
+   "d": 2.61,
+   "text": "to tell you that Lex we we are on the"
+  },
+  {
+   "t": 1556.14,
+   "d": 2.49,
+   "text": "same team here okay I want to run a good"
+  },
+  {
+   "t": 1558.63,
+   "d": 1.47,
+   "text": "dungeon you want to run a good dungeon"
+  },
+  {
+   "t": 1560.1,
+   "d": 2.73,
+   "text": "but maybe the reason that the the heroes"
+  },
+  {
+   "t": 1562.83,
+   "d": 2.34,
+   "text": "keep slipping through is because you got"
+  },
+  {
+   "t": 1565.17,
+   "d": 2.73,
+   "text": "us never catch in a minute of sleep you"
+  },
+  {
+   "t": 1567.9,
+   "d": 2.04,
+   "text": "got us working around the clock when"
+  },
+  {
+   "t": 1569.94,
+   "d": 2.67,
+   "text": "we're sick we got slime and putrescence"
+  },
+  {
+   "t": 1572.61,
+   "d": 2.64,
+   "text": "calling from our noses and yeah you"
+  },
+  {
+   "t": 1575.25,
+   "d": 2.34,
+   "text": "sneeze they sneak right"
+  },
+  {
+   "t": 1577.59,
+   "d": 2.25,
+   "text": "you know it's just better working"
+  },
+  {
+   "t": 1579.84,
+   "d": 1.47,
+   "text": "conditions we could have a more"
+  },
+  {
+   "t": 1581.31,
+   "d": 1.86,
+   "text": "efficient dungeon that works for"
+  },
+  {
+   "t": 1583.17,
+   "d": 2.28,
+   "text": "everyone except the here and Silex is"
+  },
+  {
+   "t": 1585.45,
+   "d": 2.19,
+   "text": "your is your statement finished the job"
+  },
+  {
+   "t": 1587.64,
+   "d": 1.74,
+   "text": "is simple the heroes come in you kill"
+  },
+  {
+   "t": 1589.38,
+   "d": 1.64,
+   "text": "them"
+  },
+  {
+   "t": 1591.02,
+   "d": 2.77,
+   "text": "you make it sound simple when you set up"
+  },
+  {
+   "t": 1593.79,
+   "d": 2.31,
+   "text": "in your dungeon tower they're rolling"
+  },
+  {
+   "t": 1596.1,
+   "d": 3.81,
+   "text": "dice telling us what to do pouring us"
+  },
+  {
+   "t": 1599.91,
+   "d": 1.65,
+   "text": "around yeah that sounds pretty simple"
+  },
+  {
+   "t": 1601.56,
+   "d": 3.15,
+   "text": "why you want to trade oh I have to"
+  },
+  {
+   "t": 1604.71,
+   "d": 2.64,
+   "text": "follow questions I guess one this is the"
+  },
+  {
+   "t": 1607.35,
+   "d": 1.26,
+   "text": "first one's a statement I just want to"
+  },
+  {
+   "t": 1608.61,
+   "d": 1.35,
+   "text": "remind you save an effort to respect the"
+  },
+  {
+   "t": 1609.96,
+   "d": 2.19,
+   "text": "necromancer you might want to say undead"
+  },
+  {
+   "t": 1612.15,
+   "d": 5.76,
+   "text": "wage not living wage do you have a"
+  },
+  {
+   "t": 1617.91,
+   "d": 1.74,
+   "text": "specific complaint like do you want the"
+  },
+  {
+   "t": 1619.65,
+   "d": 1.41,
+   "text": "option to unionize do you want it"
+  },
+  {
+   "t": 1621.06,
+   "d": 2.85,
+   "text": "different hey this is not a court of"
+  },
+  {
+   "t": 1623.91,
+   "d": 2.28,
+   "text": "complaints we we action ibly move things"
+  },
+  {
+   "t": 1626.19,
+   "d": 3.18,
+   "text": "we we want our union recognized"
+  },
+  {
+   "t": 1629.37,
+   "d": 3.99,
+   "text": "immediately and you know immortal people"
+  },
+  {
+   "t": 1633.36,
+   "d": 1.53,
+   "text": "like him don't have to worry about a"
+  },
+  {
+   "t": 1634.89,
+   "d": 2.15,
+   "text": "lack of health benefits interesting yeah"
+  },
+  {
+   "t": 1637.04,
+   "d": 2.47,
+   "text": "so I don't think he I don't think he"
+  },
+  {
+   "t": 1639.51,
+   "d": 2.97,
+   "text": "gets it and what I want is a dungeon"
+  },
+  {
+   "t": 1642.48,
+   "d": 2.37,
+   "text": "workers union now as far as I'm"
+  },
+  {
+   "t": 1644.85,
+   "d": 2.43,
+   "text": "concerned unions are legal at this level"
+  },
+  {
+   "t": 1647.28,
+   "d": 2.85,
+   "text": "of the dungeon not level 8 but other"
+  },
+  {
+   "t": 1650.13,
+   "d": 3.09,
+   "text": "levels yes sorry Lex have you been"
+  },
+  {
+   "t": 1653.22,
+   "d": 8.19,
+   "text": "suppressing union activity maybe I may"
+  },
+  {
+   "t": 1661.41,
+   "d": 2.76,
+   "text": "have killed a few people but mostly the"
+  },
+  {
+   "t": 1664.17,
+   "d": 4.86,
+   "text": "heroes did that mostly the heroes I just"
+  },
+  {
+   "t": 1669.03,
+   "d": 1.92,
+   "text": "gotta say this level aid stuff this"
+  },
+  {
+   "t": 1670.95,
+   "d": 1.65,
+   "text": "stuff where barbarians got traded one"
+  },
+  {
+   "t": 1672.6,
+   "d": 1.74,
+   "text": "way and may just get treated another way"
+  },
+  {
+   "t": 1674.34,
+   "d": 3.27,
+   "text": "it's just purely classist well"
+  },
+  {
+   "t": 1677.61,
+   "d": 2.12,
+   "text": "unfortunately classism isn't illegal"
+  },
+  {
+   "t": 1679.73,
+   "d": 1.75,
+   "text": "except on level 12"
+  },
+  {
+   "t": 1681.48,
+   "d": 2.73,
+   "text": "alright so Silex i'm going to imprison"
+  },
+  {
+   "t": 1684.21,
+   "d": 3.27,
+   "text": "you for a short period and allow them to"
+  },
+  {
+   "t": 1687.48,
+   "d": 1.38,
+   "text": "form the union and then you may return"
+  },
+  {
+   "t": 1688.86,
+   "d": 3.36,
+   "text": "to management at the dungeon for someone"
+  },
+  {
+   "t": 1692.22,
+   "d": 1.17,
+   "text": "who's immortal let me just check the"
+  },
+  {
+   "t": 1693.39,
+   "d": 1.92,
+   "text": "tables oh they'll be twelve hundred"
+  },
+  {
+   "t": 1695.31,
+   "d": 1.31,
+   "text": "years for it to be roughly equivalent"
+  },
+  {
+   "t": 1696.62,
+   "d": 2.05,
+   "text": "but then you can come back and resume"
+  },
+  {
+   "t": 1698.67,
+   "d": 2.48,
+   "text": "your old job"
+  },
+  {
+   "t": 1701.81,
+   "d": 2.31,
+   "text": "I would remember this I'm immortal I"
+  },
+  {
+   "t": 1704.12,
+   "d": 1.91,
+   "text": "will find you"
+  },
+  {
+   "t": 1706.03,
+   "d": 10.51,
+   "text": "all right next case our next case is an"
+  },
+  {
+   "t": 1716.54,
+   "d": 1.83,
+   "text": "employment dispute about a monster"
+  },
+  {
+   "t": 1718.37,
+   "d": 2.04,
+   "text": "causing collateral damage in the"
+  },
+  {
+   "t": 1720.41,
+   "d": 4.11,
+   "text": "forbidden archive plaintiff is McGurk"
+  },
+  {
+   "t": 1724.52,
+   "d": 2.73,
+   "text": "Egon fifth tier demon and the defendant"
+  },
+  {
+   "t": 1727.25,
+   "d": 5.97,
+   "text": "is Simon okay"
+  },
+  {
+   "t": 1733.22,
+   "d": 3.3,
+   "text": "my gurgaon you may speak yes thank you"
+  },
+  {
+   "t": 1736.52,
+   "d": 2.85,
+   "text": "um I you know look it's the forbidden"
+  },
+  {
+   "t": 1739.37,
+   "d": 2.73,
+   "text": "archive it's no one's supposed to be"
+  },
+  {
+   "t": 1742.1,
+   "d": 2.76,
+   "text": "there and we we have travellers we have"
+  },
+  {
+   "t": 1744.86,
+   "d": 3.17,
+   "text": "heroes coming in all the time it's like"
+  },
+  {
+   "t": 1748.03,
+   "d": 2.38,
+   "text": "it's a public library or something I"
+  },
+  {
+   "t": 1750.41,
+   "d": 3.93,
+   "text": "hired someone to sort of keep guard to"
+  },
+  {
+   "t": 1754.34,
+   "d": 3.93,
+   "text": "defend it and you know he ended up"
+  },
+  {
+   "t": 1758.27,
+   "d": 3.57,
+   "text": "destroying half the books he's just too"
+  },
+  {
+   "t": 1761.84,
+   "d": 3.89,
+   "text": "chaotic you know I'm in debt now to"
+  },
+  {
+   "t": 1765.73,
+   "d": 4.84,
+   "text": "several very powerful wizards and I need"
+  },
+  {
+   "t": 1770.57,
+   "d": 2.79,
+   "text": "him to just like tone it down kill the"
+  },
+  {
+   "t": 1773.36,
+   "d": 2.79,
+   "text": "adventurers don't destroy the precious"
+  },
+  {
+   "t": 1776.15,
+   "d": 3.51,
+   "text": "books so your your complaint is that you"
+  },
+  {
+   "t": 1779.66,
+   "d": 2.55,
+   "text": "want to keep this employee and to have"
+  },
+  {
+   "t": 1782.21,
+   "d": 2.01,
+   "text": "that in this employees behavior be toned"
+  },
+  {
+   "t": 1784.22,
+   "d": 2.31,
+   "text": "down let me clarify he's excellent at"
+  },
+  {
+   "t": 1786.53,
+   "d": 4.89,
+   "text": "killing really really masterful he's"
+  },
+  {
+   "t": 1791.42,
+   "d": 2.7,
+   "text": "like it's kind of was what it was born"
+  },
+  {
+   "t": 1794.12,
+   "d": 3.81,
+   "text": "for to do I would say you know so yeah I"
+  },
+  {
+   "t": 1797.93,
+   "d": 2.7,
+   "text": "mean other than that I'm really happy"
+  },
+  {
+   "t": 1800.63,
+   "d": 2.21,
+   "text": "with this performance to be honest okay"
+  },
+  {
+   "t": 1802.84,
+   "d": 2.02,
+   "text": "not sure why this is in front of the"
+  },
+  {
+   "t": 1804.86,
+   "d": 3.27,
+   "text": "court but we'll hear um defendant Simon"
+  },
+  {
+   "t": 1808.13,
+   "d": 2.37,
+   "text": "go ahead sure did you want me to slice"
+  },
+  {
+   "t": 1810.5,
+   "d": 1.83,
+   "text": "anything up while I answered or not"
+  },
+  {
+   "t": 1812.33,
+   "d": 4.32,
+   "text": "perhaps the plaintiffs arguments yeah"
+  },
+  {
+   "t": 1816.65,
+   "d": 4.92,
+   "text": "well the forbidden archives yeah well as"
+  },
+  {
+   "t": 1821.57,
+   "d": 3.75,
+   "text": "you as you know i'm dancing-- weapon I"
+  },
+  {
+   "t": 1825.32,
+   "d": 5.49,
+   "text": "could see that Laureus and I merely use"
+  },
+  {
+   "t": 1830.81,
+   "d": 1.77,
+   "text": "my talents to horribly"
+  },
+  {
+   "t": 1832.58,
+   "d": 1.59,
+   "text": "murder all of the monsters that come"
+  },
+  {
+   "t": 1834.17,
+   "d": 1.59,
+   "text": "into the forbidden archive this is what"
+  },
+  {
+   "t": 1835.76,
+   "d": 7.1,
+   "text": "I was created for after all and what"
+  },
+  {
+   "t": 1842.86,
+   "d": 2.8,
+   "text": "what is this stuff in the forbidden art"
+  },
+  {
+   "t": 1845.66,
+   "d": 5.04,
+   "text": "books I my job to know it's my job to"
+  },
+  {
+   "t": 1850.7,
+   "d": 2.82,
+   "text": "slice up adventurers that come into the"
+  },
+  {
+   "t": 1853.52,
+   "d": 5.73,
+   "text": "archive if some books get destroyed in a"
+  },
+  {
+   "t": 1859.25,
+   "d": 2.28,
+   "text": "whirlwind dance of beautiful gleaming"
+  },
+  {
+   "t": 1861.53,
+   "d": 2.76,
+   "text": "silver scimitar II metal well then"
+  },
+  {
+   "t": 1864.29,
+   "d": 3.12,
+   "text": "that's that's their problem not not mine"
+  },
+  {
+   "t": 1867.41,
+   "d": 5.66,
+   "text": "blame it on the adventurers gurgaon I"
+  },
+  {
+   "t": 1873.07,
+   "d": 2.05,
+   "text": "gotta be honest I feel like you've miss"
+  },
+  {
+   "t": 1875.12,
+   "d": 9.06,
+   "text": "hired you've found a raw metal whirlwind"
+  },
+  {
+   "t": 1884.18,
+   "d": 2.1,
+   "text": "of destruction and you put it in a"
+  },
+  {
+   "t": 1886.28,
+   "d": 12.69,
+   "text": "really unsafe area for it well you know"
+  },
+  {
+   "t": 1898.97,
+   "d": 3.81,
+   "text": "let me let's back up sure a few thousand"
+  },
+  {
+   "t": 1902.78,
+   "d": 4.74,
+   "text": "years okay okay let's fast-forward know"
+  },
+  {
+   "t": 1907.52,
+   "d": 2.1,
+   "text": "things the court is still with you we've"
+  },
+  {
+   "t": 1909.62,
+   "d": 1.5,
+   "text": "got that okay the stenographer Scott"
+  },
+  {
+   "t": 1911.12,
+   "d": 5.97,
+   "text": "okay good um the thing is the killing"
+  },
+  {
+   "t": 1917.09,
+   "d": 4.38,
+   "text": "the death the blood great just keep it"
+  },
+  {
+   "t": 1921.47,
+   "d": 4.32,
+   "text": "to like the the Fourier the research"
+  },
+  {
+   "t": 1925.79,
+   "d": 4.08,
+   "text": "area it's you know just that's where we"
+  },
+  {
+   "t": 1929.87,
+   "d": 2.81,
+   "text": "want to protect people we don't want to"
+  },
+  {
+   "t": 1932.68,
+   "d": 1.48,
+   "text": "destroy anything"
+  },
+  {
+   "t": 1934.16,
+   "d": 2.37,
+   "text": "have you considered attaching a leash to"
+  },
+  {
+   "t": 1936.53,
+   "d": 5.19,
+   "text": "syphon of a fixed-length I did you come"
+  },
+  {
+   "t": 1941.72,
+   "d": 1.86,
+   "text": "right through it"
+  },
+  {
+   "t": 1943.58,
+   "d": 7.38,
+   "text": "I can cut through anything I just got to"
+  },
+  {
+   "t": 1950.96,
+   "d": 1.5,
+   "text": "be honest I've seen a few cases and I"
+  },
+  {
+   "t": 1952.46,
+   "d": 1.53,
+   "text": "think this is you created your own"
+  },
+  {
+   "t": 1953.99,
+   "d": 5.94,
+   "text": "problem nonetheless we're here okay"
+  },
+  {
+   "t": 1959.93,
+   "d": 1.65,
+   "text": "unfortunately we are and this is a"
+  },
+  {
+   "t": 1961.58,
+   "d": 2.61,
+   "text": "public service so Simon could you"
+  },
+  {
+   "t": 1964.19,
+   "d": 2.19,
+   "text": "consider containing your destruction to"
+  },
+  {
+   "t": 1966.38,
+   "d": 2.4,
+   "text": "a certain area if we if your employer"
+  },
+  {
+   "t": 1968.78,
+   "d": 4.71,
+   "text": "drew a line in the ground ceilings walls"
+  },
+  {
+   "t": 1973.49,
+   "d": 1.98,
+   "text": "would you agree not to cross it are you"
+  },
+  {
+   "t": 1975.47,
+   "d": 2.34,
+   "text": "trying to tell me that he's gonna this"
+  },
+  {
+   "t": 1977.81,
+   "d": 5.06,
+   "text": "demon is gonna teach me how to dance"
+  },
+  {
+   "t": 1983.65,
+   "d": 4.78,
+   "text": "declare a dance floor and other areas"
+  },
+  {
+   "t": 1988.43,
+   "d": 2.15,
+   "text": "will not be dance dance floor"
+  },
+  {
+   "t": 1990.58,
+   "d": 4.78,
+   "text": "interesting I could I could try a dance"
+  },
+  {
+   "t": 1995.36,
+   "d": 4.4,
+   "text": "floor yes that might work and perhaps I"
+  },
+  {
+   "t": 1999.76,
+   "d": 2.2,
+   "text": "don't know why I'm a judge for this case"
+  },
+  {
+   "t": 2001.96,
+   "d": 1.94,
+   "text": "in McGurk on perhaps you could have a"
+  },
+  {
+   "t": 2003.9,
+   "d": 3.3,
+   "text": "music playing and turn it off when you"
+  },
+  {
+   "t": 2007.2,
+   "d": 4.08,
+   "text": "siphons behaviour getting out of hands"
+  },
+  {
+   "t": 2014.58,
+   "d": 6.46,
+   "text": "that's not gonna work for me that's a"
+  },
+  {
+   "t": 2021.04,
+   "d": 2.16,
+   "text": "valid point I again I don't know what's"
+  },
+  {
+   "t": 2023.2,
+   "d": 4.64,
+   "text": "in the forbidden archives of course yeah"
+  },
+  {
+   "t": 2029.57,
+   "d": 3.41,
+   "text": "alright the the court has mandated a"
+  },
+  {
+   "t": 2032.98,
+   "d": 2.65,
+   "text": "declaration of a dance floor in the"
+  },
+  {
+   "t": 2035.63,
+   "d": 2.6,
+   "text": "forbidden archives"
+  },
+  {
+   "t": 2038.23,
+   "d": 5.05,
+   "text": "judge run I have spoken thank you so"
+  },
+  {
+   "t": 2043.28,
+   "d": 0.48,
+   "text": "much"
+  },
+  {
+   "t": 2043.76,
+   "d": 1.98,
+   "text": "No No thank you so much our such you've"
+  },
+  {
+   "t": 2045.74,
+   "d": 1.77,
+   "text": "done a fantastic job but now we are"
+  },
+  {
+   "t": 2047.51,
+   "d": 2.04,
+   "text": "gonna turn our attention to the fair"
+  },
+  {
+   "t": 2049.55,
+   "d": 4.02,
+   "text": "city of I've already yes of Mitsuko this"
+  },
+  {
+   "t": 2053.57,
+   "d": 2.31,
+   "text": "gecko in the heart of the ger trillion"
+  },
+  {
+   "t": 2055.88,
+   "d": 2.94,
+   "text": "empire really lovely place population of"
+  },
+  {
+   "t": 2058.82,
+   "d": 2.16,
+   "text": "about five thousand age expectancy of"
+  },
+  {
+   "t": 2060.98,
+   "d": 2.73,
+   "text": "about twenty six great place to watch"
+  },
+  {
+   "t": 2063.71,
+   "d": 2.91,
+   "text": "out your honeymoon from and our next"
+  },
+  {
+   "t": 2066.62,
+   "d": 4.02,
+   "text": "judge is going to be Magister magistrate"
+  },
+  {
+   "t": 2070.64,
+   "d": 1.95,
+   "text": "oak leaves magistrate oak leaves is a"
+  },
+  {
+   "t": 2072.59,
+   "d": 2.4,
+   "text": "representative of the Queen and ultimate"
+  },
+  {
+   "t": 2074.99,
+   "d": 2.01,
+   "text": "arbiter in all disagreements in the land"
+  },
+  {
+   "t": 2077.0,
+   "d": 3.66,
+   "text": "oak leaves is deeply well respected and"
+  },
+  {
+   "t": 2080.66,
+   "d": 2.61,
+   "text": "very susceptible to flattery please"
+  },
+  {
+   "t": 2083.27,
+   "d": 11.34,
+   "text": "register oak leaves the first case will"
+  },
+  {
+   "t": 2094.61,
+   "d": 2.19,
+   "text": "be a civil dispute about the negligent"
+  },
+  {
+   "t": 2096.8,
+   "d": 3.2,
+   "text": "distribution of untested substances"
+  },
+  {
+   "t": 2100.0,
+   "d": 4.75,
+   "text": "between al helm human druid and riffin"
+  },
+  {
+   "t": 2104.75,
+   "d": 3.11,
+   "text": "human wizard"
+  },
+  {
+   "t": 2108.73,
+   "d": 2.11,
+   "text": "excellent excellent please have a seat"
+  },
+  {
+   "t": 2110.84,
+   "d": 2.7,
+   "text": "have a seat in the courtroom get"
+  },
+  {
+   "t": 2113.54,
+   "d": 2.07,
+   "text": "comfortable and get ready to tell us"
+  },
+  {
+   "t": 2115.61,
+   "d": 3.99,
+   "text": "what vex is you all tell human druid"
+  },
+  {
+   "t": 2119.6,
+   "d": 3.18,
+   "text": "please plaintiff tell us tell us what is"
+  },
+  {
+   "t": 2122.78,
+   "d": 4.44,
+   "text": "bothering you let me set the scene so"
+  },
+  {
+   "t": 2127.22,
+   "d": 2.94,
+   "text": "we're in this dungeon for a while and we"
+  },
+  {
+   "t": 2130.16,
+   "d": 3.54,
+   "text": "kind of get that tingling sense of this"
+  },
+  {
+   "t": 2133.7,
+   "d": 2.66,
+   "text": "is gonna be the boss room I just know it"
+  },
+  {
+   "t": 2136.36,
+   "d": 4.09,
+   "text": "so I leaned over to riff in here and I"
+  },
+  {
+   "t": 2140.45,
+   "d": 3.72,
+   "text": "say okay I'm really tired and we gotta"
+  },
+  {
+   "t": 2144.17,
+   "d": 0.69,
+   "text": "do this now"
+  },
+  {
+   "t": 2144.86,
+   "d": 3.9,
+   "text": "so let's go but I I've used all this"
+  },
+  {
+   "t": 2148.76,
+   "d": 3.08,
+   "text": "stuff like all the consumables in my bag"
+  },
+  {
+   "t": 2151.84,
+   "d": 2.46,
+   "text": "do you have anything else I can use like"
+  },
+  {
+   "t": 2154.3,
+   "d": 3.54,
+   "text": "just give me that edge"
+  },
+  {
+   "t": 2159.34,
+   "d": 7.75,
+   "text": "so I was a rat for two weeks and when"
+  },
+  {
+   "t": 2167.09,
+   "d": 1.59,
+   "text": "you're a rat you can't carry all of your"
+  },
+  {
+   "t": 2168.68,
+   "d": 1.71,
+   "text": "treasure from all the other levels of"
+  },
+  {
+   "t": 2170.39,
+   "d": 1.98,
+   "text": "the dungeon and it just kind of drops on"
+  },
+  {
+   "t": 2172.37,
+   "d": 2.16,
+   "text": "the ground and you just got a high deal"
+  },
+  {
+   "t": 2174.53,
+   "d": 2.64,
+   "text": "it out of there otherwise you get eaten"
+  },
+  {
+   "t": 2177.17,
+   "d": 1.5,
+   "text": "by whatever's in the boss room or"
+  },
+  {
+   "t": 2178.67,
+   "d": 1.62,
+   "text": "everything else because it's bigger than"
+  },
+  {
+   "t": 2180.29,
+   "d": 5.79,
+   "text": "you so I'm broke and I don't know what"
+  },
+  {
+   "t": 2186.08,
+   "d": 3.63,
+   "text": "you did but she is wearing some pretty"
+  },
+  {
+   "t": 2189.71,
+   "d": 4.5,
+   "text": "nice outfit sleeping riffin would you"
+  },
+  {
+   "t": 2194.21,
+   "d": 2.07,
+   "text": "like to explain your side of the story"
+  },
+  {
+   "t": 2196.28,
+   "d": 5.37,
+   "text": "of course now as a you know wonderful"
+  },
+  {
+   "t": 2201.65,
+   "d": 2.13,
+   "text": "wizard and just generally kind of great"
+  },
+  {
+   "t": 2203.78,
+   "d": 2.58,
+   "text": "person to go dungeon hang with I always"
+  },
+  {
+   "t": 2206.36,
+   "d": 2.46,
+   "text": "think of helping out heal my fellow"
+  },
+  {
+   "t": 2208.82,
+   "d": 2.37,
+   "text": "adventurers and I'm willing to offer any"
+  },
+  {
+   "t": 2211.19,
+   "d": 3.69,
+   "text": "unidentified items on my person - you"
+  },
+  {
+   "t": 2214.88,
+   "d": 2.55,
+   "text": "know whoever's looking for it and so"
+  },
+  {
+   "t": 2217.43,
+   "d": 3.6,
+   "text": "when you know my good dear friend out"
+  },
+  {
+   "t": 2221.03,
+   "d": 1.83,
+   "text": "him was in need"
+  },
+  {
+   "t": 2222.86,
+   "d": 2.67,
+   "text": "I looked in my bag and you know I sifted"
+  },
+  {
+   "t": 2225.53,
+   "d": 1.38,
+   "text": "through all the stuff that I knew what"
+  },
+  {
+   "t": 2226.91,
+   "d": 3.57,
+   "text": "it was because that was mine and there"
+  },
+  {
+   "t": 2230.48,
+   "d": 1.53,
+   "text": "was this potion and you know I knew that"
+  },
+  {
+   "t": 2232.01,
+   "d": 1.8,
+   "text": "outcome had been you know looking for"
+  },
+  {
+   "t": 2233.81,
+   "d": 1.77,
+   "text": "some stuff I thought it could be a good"
+  },
+  {
+   "t": 2235.58,
+   "d": 2.97,
+   "text": "potion we've been talking about trying"
+  },
+  {
+   "t": 2238.55,
+   "d": 1.92,
+   "text": "to do a polymorph kind of thing because"
+  },
+  {
+   "t": 2240.47,
+   "d": 2.46,
+   "text": "we get confused with each other a lot"
+  },
+  {
+   "t": 2242.93,
+   "d": 2.55,
+   "text": "and you know I've got a reputation to"
+  },
+  {
+   "t": 2245.48,
+   "d": 1.98,
+   "text": "maintain it's very important that people"
+  },
+  {
+   "t": 2247.46,
+   "d": 2.19,
+   "text": "know who I am and I thought it might be"
+  },
+  {
+   "t": 2249.65,
+   "d": 1.71,
+   "text": "in something useful and you know I've"
+  },
+  {
+   "t": 2251.36,
+   "d": 2.3,
+   "text": "been busy with the altars I'd found"
+  },
+  {
+   "t": 2253.66,
+   "d": 2.05,
+   "text": "sacrificing monsters trying to get"
+  },
+  {
+   "t": 2255.71,
+   "d": 2.49,
+   "text": "better weapons of course so that we"
+  },
+  {
+   "t": 2258.2,
+   "d": 1.83,
+   "text": "could both succeed and I think that it"
+  },
+  {
+   "t": 2260.03,
+   "d": 2.01,
+   "text": "was totally reasonable of me to pass"
+  },
+  {
+   "t": 2262.04,
+   "d": 4.47,
+   "text": "over an unidentified potion that could"
+  },
+  {
+   "t": 2266.51,
+   "d": 1.47,
+   "text": "well have been useful and you know you"
+  },
+  {
+   "t": 2267.98,
+   "d": 1.29,
+   "text": "were looking for a potion of polymorph"
+  },
+  {
+   "t": 2269.27,
+   "d": 3.17,
+   "text": "innocence it was a potion to polymorph"
+  },
+  {
+   "t": 2272.44,
+   "d": 2.62,
+   "text": "and that's er you know you were able to"
+  },
+  {
+   "t": 2275.06,
+   "d": 2.73,
+   "text": "get out of that dungeon safely and I"
+  },
+  {
+   "t": 2277.79,
+   "d": 3.33,
+   "text": "helped carry out the treasure so I think"
+  },
+  {
+   "t": 2281.12,
+   "d": 1.37,
+   "text": "in the end"
+  },
+  {
+   "t": 2282.49,
+   "d": 2.06,
+   "text": "I don't see what the problem is at all"
+  },
+  {
+   "t": 2284.55,
+   "d": 4.39,
+   "text": "what I was are you kidding guys go are"
+  },
+  {
+   "t": 2288.94,
+   "d": 1.68,
+   "text": "you totally with Ripon before the"
+  },
+  {
+   "t": 2290.62,
+   "d": 5.58,
+   "text": "adventure yes but that was before the"
+  },
+  {
+   "t": 2296.2,
+   "d": 3.81,
+   "text": "adventure I mean you can talk about like"
+  },
+  {
+   "t": 2300.01,
+   "d": 2.16,
+   "text": "huh one day I want to bake a cake for my"
+  },
+  {
+   "t": 2302.17,
+   "d": 1.32,
+   "text": "birthday and it's gonna be awesome"
+  },
+  {
+   "t": 2303.49,
+   "d": 2.16,
+   "text": "but you don't do that in a dungeon like"
+  },
+  {
+   "t": 2305.65,
+   "d": 2.31,
+   "text": "one day I want to make over you don't do"
+  },
+  {
+   "t": 2307.96,
+   "d": 1.68,
+   "text": "that in a dungeon Griffin did you know"
+  },
+  {
+   "t": 2309.64,
+   "d": 2.43,
+   "text": "that the potion would turn her into a"
+  },
+  {
+   "t": 2312.07,
+   "d": 3.93,
+   "text": "rat no I didn't know what it was going"
+  },
+  {
+   "t": 2316.0,
+   "d": 4.31,
+   "text": "to do in the slightest you know"
+  },
+  {
+   "t": 2320.31,
+   "d": 2.29,
+   "text": "fulfilling dreams and if there was a"
+  },
+  {
+   "t": 2322.6,
+   "d": 1.86,
+   "text": "chance of fulfilling my good friend"
+  },
+  {
+   "t": 2324.46,
+   "d": 1.83,
+   "text": "outcomes dream then of course I was"
+  },
+  {
+   "t": 2326.29,
+   "d": 1.53,
+   "text": "going rippen where did you receive your"
+  },
+  {
+   "t": 2327.82,
+   "d": 2.21,
+   "text": "training as a wizard"
+  },
+  {
+   "t": 2330.03,
+   "d": 3.73,
+   "text": "you would never heard of it did you read"
+  },
+  {
+   "t": 2333.76,
+   "d": 2.1,
+   "text": "a wiki did you learn did you learn how"
+  },
+  {
+   "t": 2335.86,
+   "d": 5.01,
+   "text": "to be on the pan am i required but did"
+  },
+  {
+   "t": 2340.87,
+   "d": 1.92,
+   "text": "you know that it's possible to know what"
+  },
+  {
+   "t": 2342.79,
+   "d": 3.36,
+   "text": "a potion does before it is drunk I I"
+  },
+  {
+   "t": 2346.15,
+   "d": 4.59,
+   "text": "mean it was puce I knew that you gave me"
+  },
+  {
+   "t": 2350.74,
+   "d": 2.4,
+   "text": "how did I not notice this was a peace"
+  },
+  {
+   "t": 2353.14,
+   "d": 4.65,
+   "text": "potion yeah it's not my fault if my"
+  },
+  {
+   "t": 2357.79,
+   "d": 2.58,
+   "text": "dungeon associate is not paying"
+  },
+  {
+   "t": 2360.37,
+   "d": 1.92,
+   "text": "attention to the things that I hand her"
+  },
+  {
+   "t": 2362.29,
+   "d": 2.58,
+   "text": "then I don't see how I'm total Riven"
+  },
+  {
+   "t": 2364.87,
+   "d": 1.77,
+   "text": "have you been with any previous parties"
+  },
+  {
+   "t": 2366.64,
+   "d": 1.44,
+   "text": "where you had given someone a potion"
+  },
+  {
+   "t": 2368.08,
+   "d": 3.03,
+   "text": "where you did not know what it did yes"
+  },
+  {
+   "t": 2371.11,
+   "d": 2.64,
+   "text": "hey would you like to tell us just you"
+  },
+  {
+   "t": 2373.75,
+   "d": 2.28,
+   "text": "know one of those you know what any of"
+  },
+  {
+   "t": 2376.03,
+   "d": 1.79,
+   "text": "those stories and how they turned out"
+  },
+  {
+   "t": 2377.82,
+   "d": 4.21,
+   "text": "well there was the potion of levitation"
+  },
+  {
+   "t": 2382.03,
+   "d": 1.47,
+   "text": "in the room with all of the spikes on"
+  },
+  {
+   "t": 2383.5,
+   "d": 4.77,
+   "text": "the ceiling this is what I'm dealing"
+  },
+  {
+   "t": 2388.27,
+   "d": 3.27,
+   "text": "with this is what I'm dealing with the"
+  },
+  {
+   "t": 2391.54,
+   "d": 1.01,
+   "text": "whole way down"
+  },
+  {
+   "t": 2392.55,
+   "d": 2.89,
+   "text": "listen if people want to adventure with"
+  },
+  {
+   "t": 2395.44,
+   "d": 2.49,
+   "text": "me and go on adventures they know the"
+  },
+  {
+   "t": 2397.93,
+   "d": 0.63,
+   "text": "risks"
+  },
+  {
+   "t": 2398.56,
+   "d": 2.73,
+   "text": "I mostly helped of course now I have to"
+  },
+  {
+   "t": 2401.29,
+   "d": 1.98,
+   "text": "has old helm did you were you aware that"
+  },
+  {
+   "t": 2403.27,
+   "d": 1.41,
+   "text": "there could be negative consequence to"
+  },
+  {
+   "t": 2404.68,
+   "d": 3.06,
+   "text": "drinking an unidentified potion I didn't"
+  },
+  {
+   "t": 2407.74,
+   "d": 0.69,
+   "text": "know it was"
+  },
+  {
+   "t": 2408.43,
+   "d": 2.88,
+   "text": "identified I asked her for a potion to"
+  },
+  {
+   "t": 2411.31,
+   "d": 3.54,
+   "text": "help me and I thought it has a good"
+  },
+  {
+   "t": 2414.85,
+   "d": 2.67,
+   "text": "chance of helping I didn't know it was"
+  },
+  {
+   "t": 2417.52,
+   "d": 2.19,
+   "text": "going to hurt were you in combat at the"
+  },
+  {
+   "t": 2419.71,
+   "d": 2.67,
+   "text": "time it was right before we went into"
+  },
+  {
+   "t": 2422.38,
+   "d": 3.33,
+   "text": "the room so no all right the court has"
+  },
+  {
+   "t": 2425.71,
+   "d": 3.12,
+   "text": "rendered its judgment from now on for"
+  },
+  {
+   "t": 2428.83,
+   "d": 1.65,
+   "text": "the next five times and the two of you"
+  },
+  {
+   "t": 2430.48,
+   "d": 1.86,
+   "text": "encounter a potion of a dungeon you must"
+  },
+  {
+   "t": 2432.34,
+   "d": 2.13,
+   "text": "split it equally into two bottles and"
+  },
+  {
+   "t": 2434.47,
+   "d": 1.92,
+   "text": "each drink it and then you will both"
+  },
+  {
+   "t": 2436.39,
+   "d": 3.15,
+   "text": "discover the bad effects of drinking"
+  },
+  {
+   "t": 2439.54,
+   "d": 4.17,
+   "text": "potions that are not identified now"
+  },
+  {
+   "t": 2443.71,
+   "d": 1.44,
+   "text": "we're just gonna both look like rats and"
+  },
+  {
+   "t": 2445.15,
+   "d": 2.1,
+   "text": "people will be even more confused you"
+  },
+  {
+   "t": 2447.25,
+   "d": 1.5,
+   "text": "already made the point that great things"
+  },
+  {
+   "t": 2448.75,
+   "d": 3.8,
+   "text": "might happen you just don't know"
+  },
+  {
+   "t": 2455.3,
+   "d": 2.88,
+   "text": "that's it please your next case will be"
+  },
+  {
+   "t": 2458.18,
+   "d": 3.39,
+   "text": "a civil dispute between two heroes over"
+  },
+  {
+   "t": 2461.57,
+   "d": 4.64,
+   "text": "dungeon access right sound lovely the"
+  },
+  {
+   "t": 2466.21,
+   "d": 3.73,
+   "text": "plaintiff plaintiff plaintiff and Eris"
+  },
+  {
+   "t": 2469.94,
+   "d": 1.98,
+   "text": "Dragonborn cleric please take your seat"
+  },
+  {
+   "t": 2471.92,
+   "d": 11.25,
+   "text": "and the defendant aims human bard Paris"
+  },
+  {
+   "t": 2483.17,
+   "d": 1.47,
+   "text": "would you like as the plaintiff to start"
+  },
+  {
+   "t": 2484.64,
+   "d": 3.56,
+   "text": "by telling us your side of the dispute"
+  },
+  {
+   "t": 2496.81,
+   "d": 5.26,
+   "text": "amplify beg you all right so I play I"
+  },
+  {
+   "t": 2502.07,
+   "d": 3.12,
+   "text": "paid a tidy sum for a dungeon"
+  },
+  {
+   "t": 2505.19,
+   "d": 2.82,
+   "text": "exclusivity permit this dungeon"
+  },
+  {
+   "t": 2508.01,
+   "d": 2.31,
+   "text": "specifically was of interest to me"
+  },
+  {
+   "t": 2510.32,
+   "d": 2.01,
+   "text": "because of you know the orbits as allot"
+  },
+  {
+   "t": 2512.33,
+   "d": 2.04,
+   "text": "is quite meaningful in the Dragonborn"
+  },
+  {
+   "t": 2514.37,
+   "d": 3.36,
+   "text": "religion if you know what I mean and so"
+  },
+  {
+   "t": 2517.73,
+   "d": 2.01,
+   "text": "I paid quite a tidy sum of sum of money"
+  },
+  {
+   "t": 2519.74,
+   "d": 2.61,
+   "text": "I thought I was supposed to be alone in"
+  },
+  {
+   "t": 2522.35,
+   "d": 2.61,
+   "text": "this dungeon and Here I am you know I'm"
+  },
+  {
+   "t": 2524.96,
+   "d": 3.0,
+   "text": "I'm picking a lock I'd do a bit of multi"
+  },
+  {
+   "t": 2527.96,
+   "d": 3.69,
+   "text": "classing you know and and here here in"
+  },
+  {
+   "t": 2531.65,
+   "d": 4.38,
+   "text": "comes a mystic bard and and he's he's"
+  },
+  {
+   "t": 2536.03,
+   "d": 1.56,
+   "text": "singing and I'm trying to concentrate"
+  },
+  {
+   "t": 2537.59,
+   "d": 3.12,
+   "text": "you know and and I you know later I was"
+  },
+  {
+   "t": 2540.71,
+   "d": 3.09,
+   "text": "I was attempting to cast a a healing"
+  },
+  {
+   "t": 2543.8,
+   "d": 3.18,
+   "text": "spell on myself and he's coming and he's"
+  },
+  {
+   "t": 2546.98,
+   "d": 2.88,
+   "text": "singing I can't concentrate and we were"
+  },
+  {
+   "t": 2549.86,
+   "d": 1.95,
+   "text": "taken down by a Minotaur it's quite"
+  },
+  {
+   "t": 2551.81,
+   "d": 3.66,
+   "text": "terrible Eames would you like to tell"
+  },
+  {
+   "t": 2555.47,
+   "d": 1.22,
+   "text": "your side of the story"
+  },
+  {
+   "t": 2556.69,
+   "d": 2.71,
+   "text": "thank you your honor and I say you're"
+  },
+  {
+   "t": 2559.4,
+   "d": 1.38,
+   "text": "looking really good today"
+  },
+  {
+   "t": 2560.78,
+   "d": 5.73,
+   "text": "Oh so I don't know if you've heard of"
+  },
+  {
+   "t": 2566.51,
+   "d": 3.14,
+   "text": "the terrible dragon haze but he's"
+  },
+  {
+   "t": 2569.65,
+   "d": 2.39,
+   "text": "rampaging throughout the kingdom"
+  },
+  {
+   "t": 2572.04,
+   "d": 2.85,
+   "text": "quite a nasty character and you know if"
+  },
+  {
+   "t": 2574.89,
+   "d": 2.85,
+   "text": "orb it's going to put in the end of that"
+  },
+  {
+   "t": 2577.74,
+   "d": 1.68,
+   "text": "kind of reign of terror then I really"
+  },
+  {
+   "t": 2579.42,
+   "d": 2.97,
+   "text": "feel like next to maybe my next benefit"
+  },
+  {
+   "t": 2582.39,
+   "d": 1.95,
+   "text": "concert then it's really gonna be the"
+  },
+  {
+   "t": 2584.34,
+   "d": 2.94,
+   "text": "best thing I can do to get that and you"
+  },
+  {
+   "t": 2587.28,
+   "d": 2.31,
+   "text": "know I look at the paperwork the forms"
+  },
+  {
+   "t": 2589.59,
+   "d": 2.88,
+   "text": "for your dungeon permits I just think"
+  },
+  {
+   "t": 2592.47,
+   "d": 4.07,
+   "text": "about all the burning children I just I"
+  },
+  {
+   "t": 2596.54,
+   "d": 3.94,
+   "text": "had to go for it you know just feel deep"
+  },
+  {
+   "t": 2600.48,
+   "d": 1.92,
+   "text": "in your heart they just have to go for"
+  },
+  {
+   "t": 2602.4,
+   "d": 2.7,
+   "text": "that orb and consequences be damned"
+  },
+  {
+   "t": 2605.1,
+   "d": 1.89,
+   "text": "because there's just so many burning"
+  },
+  {
+   "t": 2606.99,
+   "d": 4.53,
+   "text": "children or okay got it"
+  },
+  {
+   "t": 2611.52,
+   "d": 3.09,
+   "text": "uh heiress who issued you this permit"
+  },
+  {
+   "t": 2614.61,
+   "d": 3.29,
+   "text": "for exclusive access to the dungeon"
+  },
+  {
+   "t": 2617.9,
+   "d": 7.18,
+   "text": "mysterious old man he was in a tavern"
+  },
+  {
+   "t": 2625.08,
+   "d": 3.69,
+   "text": "and I just sort of was like oh hello he"
+  },
+  {
+   "t": 2628.77,
+   "d": 2.85,
+   "text": "came up to me and he was offering quests"
+  },
+  {
+   "t": 2631.62,
+   "d": 2.91,
+   "text": "and I was like well certainly you know"
+  },
+  {
+   "t": 2634.53,
+   "d": 4.38,
+   "text": "I'd like to you know fetch the orbs as a"
+  },
+  {
+   "t": 2638.91,
+   "d": 4.98,
+   "text": "lot and and you know he told me he"
+  },
+  {
+   "t": 2643.89,
+   "d": 2.64,
+   "text": "needed you know quite quite a few gold"
+  },
+  {
+   "t": 2646.53,
+   "d": 1.83,
+   "text": "coins I think was around five five"
+  },
+  {
+   "t": 2648.36,
+   "d": 3.35,
+   "text": "thousand gold coins and I was able to"
+  },
+  {
+   "t": 2651.71,
+   "d": 4.27,
+   "text": "come up with it Oh money for him did he"
+  },
+  {
+   "t": 2655.98,
+   "d": 2.22,
+   "text": "explain to you how he had exclusive"
+  },
+  {
+   "t": 2658.2,
+   "d": 2.09,
+   "text": "title to this dungeon to sell to you"
+  },
+  {
+   "t": 2660.29,
+   "d": 7.78,
+   "text": "know Eames you please explain burning"
+  },
+  {
+   "t": 2668.07,
+   "d": 3.21,
+   "text": "children I mean there's a terrible"
+  },
+  {
+   "t": 2671.28,
+   "d": 2.91,
+   "text": "dragon and there's so villages full of"
+  },
+  {
+   "t": 2674.19,
+   "d": 1.83,
+   "text": "children that he likes to burn me it's"
+  },
+  {
+   "t": 2676.02,
+   "d": 2.13,
+   "text": "really horrible so when you entered this"
+  },
+  {
+   "t": 2678.15,
+   "d": 1.65,
+   "text": "dungeon to save the burning children was"
+  },
+  {
+   "t": 2679.8,
+   "d": 2.25,
+   "text": "there anything posted indicating that"
+  },
+  {
+   "t": 2682.05,
+   "d": 2.46,
+   "text": "this dungeon was the exclusive right of"
+  },
+  {
+   "t": 2684.51,
+   "d": 2.1,
+   "text": "one person as opposed to like most"
+  },
+  {
+   "t": 2686.61,
+   "d": 1.86,
+   "text": "dungeons the right of whoever wants to"
+  },
+  {
+   "t": 2688.47,
+   "d": 3.24,
+   "text": "wander in and get killed and have the"
+  },
+  {
+   "t": 2691.71,
+   "d": 1.26,
+   "text": "next adventure pick up all their"
+  },
+  {
+   "t": 2692.97,
+   "d": 4.08,
+   "text": "equipment you know when I get into kind"
+  },
+  {
+   "t": 2697.05,
+   "d": 2.01,
+   "text": "of the heroic mode and start kicking"
+  },
+  {
+   "t": 2699.06,
+   "d": 2.36,
+   "text": "down doors while strumming my lute"
+  },
+  {
+   "t": 2701.42,
+   "d": 5.88,
+   "text": "notice so Eris had you posted anything I"
+  },
+  {
+   "t": 2707.3,
+   "d": 2.25,
+   "text": "had the permit I had it in my hand I"
+  },
+  {
+   "t": 2709.55,
+   "d": 6.24,
+   "text": "showed it to him and were killed by a"
+  },
+  {
+   "t": 2715.79,
+   "d": 5.58,
+   "text": "Minotaur yes so did the two of you enjoy"
+  },
+  {
+   "t": 2721.37,
+   "d": 1.89,
+   "text": "your time adventuring together before"
+  },
+  {
+   "t": 2723.26,
+   "d": 3.65,
+   "text": "you were killed by a Minotaur yeah"
+  },
+  {
+   "t": 2726.91,
+   "d": 5.35,
+   "text": "Eames yeah it was a bit of a motley"
+  },
+  {
+   "t": 2732.26,
+   "d": 7.02,
+   "text": "journey about multiplayer experience the"
+  },
+  {
+   "t": 2739.28,
+   "d": 3.09,
+   "text": "rules that the two of you have to go on"
+  },
+  {
+   "t": 2742.37,
+   "d": 3.09,
+   "text": "a journey together as shades through the"
+  },
+  {
+   "t": 2745.46,
+   "d": 2.64,
+   "text": "afterlife and discover that you were"
+  },
+  {
+   "t": 2748.1,
+   "d": 1.91,
+   "text": "each other's best friends all along"
+  },
+  {
+   "t": 2750.01,
+   "d": 2.5,
+   "text": "re-enter the world through one of the"
+  },
+  {
+   "t": 2752.51,
+   "d": 2.1,
+   "text": "portals from the underworld to our"
+  },
+  {
+   "t": 2754.61,
+   "d": 2.34,
+   "text": "middle world and then re-enter the"
+  },
+  {
+   "t": 2756.95,
+   "d": 4.29,
+   "text": "dungeon to fee pays the dragon and save"
+  },
+  {
+   "t": 2761.24,
+   "d": 1.74,
+   "text": "the burning children together can you do"
+  },
+  {
+   "t": 2762.98,
+   "d": 1.62,
+   "text": "that does that sound acceptable only if"
+  },
+  {
+   "t": 2764.6,
+   "d": 1.89,
+   "text": "it's the afterlife of the Dragonborn"
+  },
+  {
+   "t": 2766.49,
+   "d": 4.1,
+   "text": "religion the soaring peaks of gigantea"
+  },
+  {
+   "t": 2770.59,
+   "d": 2.17,
+   "text": "aims do you have any objection to doing"
+  },
+  {
+   "t": 2772.76,
+   "d": 1.17,
+   "text": "it in this afterlife er do you have a"
+  },
+  {
+   "t": 2773.93,
+   "d": 2.16,
+   "text": "preferred afterlife of your own as long"
+  },
+  {
+   "t": 2776.09,
+   "d": 2.73,
+   "text": "as I get the saga right I think I'm okay"
+  },
+  {
+   "t": 2778.82,
+   "d": 2.97,
+   "text": "uh Eris do you well first I'd advise you"
+  },
+  {
+   "t": 2781.79,
+   "d": 1.53,
+   "text": "to only sell mechanical and not"
+  },
+  {
+   "t": 2783.32,
+   "d": 3.81,
+   "text": "performance right so the saga Eris would"
+  },
+  {
+   "t": 2787.13,
+   "d": 2.4,
+   "text": "you be willing to sell rights only to"
+  },
+  {
+   "t": 2789.53,
+   "d": 2.7,
+   "text": "any crystal recordings or crystal"
+  },
+  {
+   "t": 2792.23,
+   "d": 4.29,
+   "text": "psychic recordings of this tale and what"
+  },
+  {
+   "t": 2796.52,
+   "d": 2.91,
+   "text": "about dream dream recordings we can"
+  },
+  {
+   "t": 2799.43,
+   "d": 1.47,
+   "text": "throw in dream projection rights as well"
+  },
+  {
+   "t": 2800.9,
+   "d": 2.13,
+   "text": "okay that'd be great all right sounds"
+  },
+  {
+   "t": 2803.03,
+   "d": 1.65,
+   "text": "like we have a deal the Court declares"
+  },
+  {
+   "t": 2804.68,
+   "d": 1.95,
+   "text": "the two of these are on a buddy journey"
+  },
+  {
+   "t": 2806.63,
+   "d": 2.75,
+   "text": "through the afterlife"
+  },
+  {
+   "t": 2809.53,
+   "d": 4.33,
+   "text": "magistrate movies and also good folk of"
+  },
+  {
+   "t": 2813.86,
+   "d": 2.31,
+   "text": "the realm we will do one more case"
+  },
+  {
+   "t": 2816.17,
+   "d": 3.03,
+   "text": "before all breaking for supper the next"
+  },
+  {
+   "t": 2819.2,
+   "d": 3.51,
+   "text": "case is a town citizenship dispute about"
+  },
+  {
+   "t": 2822.71,
+   "d": 4.65,
+   "text": "monstre here or relationships and it"
+  },
+  {
+   "t": 2827.36,
+   "d": 8.76,
+   "text": "will be featuring bailiffs signs as if"
+  },
+  {
+   "t": 2836.12,
+   "d": 3.84,
+   "text": "it were Finn monk and as defendant Khufu"
+  },
+  {
+   "t": 2839.96,
+   "d": 3.78,
+   "text": "the undying mummy all right so I"
+  },
+  {
+   "t": 2843.74,
+   "d": 1.26,
+   "text": "understand the two of you live in the"
+  },
+  {
+   "t": 2845.0,
+   "d": 1.89,
+   "text": "same town is that correct that's correct"
+  },
+  {
+   "t": 2846.89,
+   "d": 2.31,
+   "text": "your honor what is the name of this town"
+  },
+  {
+   "t": 2849.2,
+   "d": 11.61,
+   "text": "it's it's Stonehaven explain how the"
+  },
+  {
+   "t": 2860.81,
+   "d": 2.75,
+   "text": "tomb you came to a place of disagreement"
+  },
+  {
+   "t": 2863.56,
+   "d": 3.03,
+   "text": "I've been an adventurer for many years"
+  },
+  {
+   "t": 2866.59,
+   "d": 3.73,
+   "text": "I've rendered many undead in dungeons"
+  },
+  {
+   "t": 2870.32,
+   "d": 6.81,
+   "text": "further dead and to my surprise we found"
+  },
+  {
+   "t": 2877.13,
+   "d": 2.28,
+   "text": "an undead moving into our neighborhood"
+  },
+  {
+   "t": 2879.41,
+   "d": 4.08,
+   "text": "and you know I've encountered a lot of"
+  },
+  {
+   "t": 2883.49,
+   "d": 2.16,
+   "text": "undead over the years I've never found"
+  },
+  {
+   "t": 2885.65,
+   "d": 1.44,
+   "text": "one that was a good neighbor"
+  },
+  {
+   "t": 2887.09,
+   "d": 2.76,
+   "text": "the children are terrified little dwarf"
+  },
+  {
+   "t": 2889.85,
+   "d": 1.71,
+   "text": "and children running around screaming"
+  },
+  {
+   "t": 2891.56,
+   "d": 3.39,
+   "text": "all day all night with good cause I"
+  },
+  {
+   "t": 2894.95,
+   "d": 3.51,
+   "text": "think because mummies are evil it's in"
+  },
+  {
+   "t": 2898.46,
+   "d": 2.34,
+   "text": "their character sheet it's in the lore"
+  },
+  {
+   "t": 2900.8,
+   "d": 3.42,
+   "text": "there's never been a non evil mummy so"
+  },
+  {
+   "t": 2904.22,
+   "d": 1.5,
+   "text": "it's only a matter of time until he"
+  },
+  {
+   "t": 2905.72,
+   "d": 2.43,
+   "text": "starts eating children so I believe he"
+  },
+  {
+   "t": 2908.15,
+   "d": 2.54,
+   "text": "should be run out of town and or burned"
+  },
+  {
+   "t": 2910.69,
+   "d": 1.72,
+   "text": "I'm good with either"
+  },
+  {
+   "t": 2912.41,
+   "d": 3.12,
+   "text": "I prefer burn but obtain this point all"
+  },
+  {
+   "t": 2915.53,
+   "d": 2.79,
+   "text": "right they're old they're dry burning I"
+  },
+  {
+   "t": 2918.32,
+   "d": 2.61,
+   "text": "can see that Khufu would you like to"
+  },
+  {
+   "t": 2920.93,
+   "d": 3.09,
+   "text": "tell your side of what's going on if I"
+  },
+  {
+   "t": 2924.02,
+   "d": 3.93,
+   "text": "may in my 8,000 years I have never seen"
+  },
+  {
+   "t": 2927.95,
+   "d": 4.71,
+   "text": "a better dress oh that's not going to"
+  },
+  {
+   "t": 2932.66,
+   "d": 1.14,
+   "text": "make me rule in your favor but I'll take"
+  },
+  {
+   "t": 2933.8,
+   "d": 1.86,
+   "text": "the compliment please but now now tell"
+  },
+  {
+   "t": 2935.66,
+   "d": 2.7,
+   "text": "me tell me about your story about moving"
+  },
+  {
+   "t": 2938.36,
+   "d": 1.02,
+   "text": "into this neighborhood why did you"
+  },
+  {
+   "t": 2939.38,
+   "d": 1.04,
+   "text": "decide to move there"
+  },
+  {
+   "t": 2940.42,
+   "d": 2.34,
+   "text": "what what's happened since then has"
+  },
+  {
+   "t": 2942.76,
+   "d": 2.1,
+   "text": "there been any anything other than just"
+  },
+  {
+   "t": 2944.86,
+   "d": 2.97,
+   "text": "you know verbal remarks overheard has"
+  },
+  {
+   "t": 2947.83,
+   "d": 1.26,
+   "text": "there been any direct acts against you"
+  },
+  {
+   "t": 2949.09,
+   "d": 1.35,
+   "text": "and your family please tell us the whole"
+  },
+  {
+   "t": 2950.44,
+   "d": 0.74,
+   "text": "story"
+  },
+  {
+   "t": 2951.18,
+   "d": 4.6,
+   "text": "whoa it all started about 6,000 years"
+  },
+  {
+   "t": 2955.78,
+   "d": 2.22,
+   "text": "ago when I moved into a wonderful"
+  },
+  {
+   "t": 2958.0,
+   "d": 2.67,
+   "text": "pyramid it was a wonderful pyramid only"
+  },
+  {
+   "t": 2960.67,
+   "d": 3.42,
+   "text": "populated by mummies like me and you see"
+  },
+  {
+   "t": 2964.09,
+   "d": 1.95,
+   "text": "over the years over the centuries and"
+  },
+  {
+   "t": 2966.04,
+   "d": 3.12,
+   "text": "millennia the problem with pyramid cysts"
+  },
+  {
+   "t": 2969.16,
+   "d": 4.35,
+   "text": "that they're just very hospitable and"
+  },
+  {
+   "t": 2973.51,
+   "d": 3.81,
+   "text": "over time they start to gentrify and so"
+  },
+  {
+   "t": 2977.32,
+   "d": 4.11,
+   "text": "I was driven to the lower and lower in"
+  },
+  {
+   "t": 2981.43,
+   "d": 3.42,
+   "text": "the bottoms of the pyramid after my"
+  },
+  {
+   "t": 2984.85,
+   "d": 3.6,
+   "text": "great great great grandfather had helped"
+  },
+  {
+   "t": 2988.45,
+   "d": 3.06,
+   "text": "put it together and it's probably best"
+  },
+  {
+   "t": 2991.51,
+   "d": 1.29,
+   "text": "us to skip ahead to the part where you"
+  },
+  {
+   "t": 2992.8,
+   "d": 2.52,
+   "text": "remember still you see the bottom level"
+  },
+  {
+   "t": 2995.32,
+   "d": 2.34,
+   "text": "of the pyramid has a humidity problem"
+  },
+  {
+   "t": 2997.66,
+   "d": 3.09,
+   "text": "and do you know what humidity does do"
+  },
+  {
+   "t": 3000.75,
+   "d": 7.02,
+   "text": "these wrappings it's not good I still"
+  },
+  {
+   "t": 3007.77,
+   "d": 2.79,
+   "text": "have a gout problem that I only have had"
+  },
+  {
+   "t": 3010.56,
+   "d": 3.0,
+   "text": "for the past two 400 years and that's"
+  },
+  {
+   "t": 3013.56,
+   "d": 4.23,
+   "text": "all because now this man came to not a"
+  },
+  {
+   "t": 3017.79,
+   "d": 5.78,
+   "text": "man I'm a dwarf this living creature"
+  },
+  {
+   "t": 3023.57,
+   "d": 4.36,
+   "text": "came to my pyramid and suddenly it did"
+  },
+  {
+   "t": 3027.93,
+   "d": 2.16,
+   "text": "not seem like home anymore so I helped"
+  },
+  {
+   "t": 3030.09,
+   "d": 3.6,
+   "text": "him and his party to rob my lord"
+  },
+  {
+   "t": 3033.69,
+   "d": 2.37,
+   "text": "Emmet uphill I had served for five"
+  },
+  {
+   "t": 3036.06,
+   "d": 3.06,
+   "text": "thousand years with a honourable record"
+  },
+  {
+   "t": 3039.12,
+   "d": 2.97,
+   "text": "but how he did not help me when I had to"
+  },
+  {
+   "t": 3042.09,
+   "d": 6.18,
+   "text": "move to the lower level of the home your"
+  },
+  {
+   "t": 3048.27,
+   "d": 2.91,
+   "text": "neighborhood yes and he promised no one"
+  },
+  {
+   "t": 3051.18,
+   "d": 2.76,
+   "text": "go ahead after I help them and I did I"
+  },
+  {
+   "t": 3053.94,
+   "d": 3.93,
+   "text": "would be able to go to a dry cool place"
+  },
+  {
+   "t": 3057.87,
+   "d": 3.36,
+   "text": "where I might store myself for the rest"
+  },
+  {
+   "t": 3061.23,
+   "d": 2.97,
+   "text": "of my long slumber but he did not say"
+  },
+  {
+   "t": 3064.2,
+   "d": 2.57,
+   "text": "that the children would throw eggs at me"
+  },
+  {
+   "t": 3066.77,
+   "d": 1.44,
+   "text": "which sciences this troop did you"
+  },
+  {
+   "t": 3068.21,
+   "d": 2.46,
+   "text": "promise a place of refuge to Khufu while"
+  },
+  {
+   "t": 3070.67,
+   "d": 1.71,
+   "text": "adventuring in his pyramid that is a"
+  },
+  {
+   "t": 3072.38,
+   "d": 6.0,
+   "text": "complete misrepresentation our party"
+  },
+  {
+   "t": 3078.38,
+   "d": 5.94,
+   "text": "cleric caste control undead and Cooper"
+  },
+  {
+   "t": 3084.32,
+   "d": 2.93,
+   "text": "was in fact forced to do our bidding the"
+  },
+  {
+   "t": 3087.25,
+   "d": 4.75,
+   "text": "remainders the dungeon crawls later on"
+  },
+  {
+   "t": 3092.0,
+   "d": 4.23,
+   "text": "like what do they remember i'm"
+  },
+  {
+   "t": 3096.23,
+   "d": 2.31,
+   "text": "unfortunately not as familiar with that"
+  },
+  {
+   "t": 3098.54,
+   "d": 3.9,
+   "text": "aspect of divine divine magic as I"
+  },
+  {
+   "t": 3102.44,
+   "d": 1.34,
+   "text": "should be"
+  },
+  {
+   "t": 3103.78,
+   "d": 8.44,
+   "text": "so I were you do you remember helping"
+  },
+  {
+   "t": 3112.22,
+   "d": 2.3,
+   "text": "the party willingly or unwillingly I"
+  },
+  {
+   "t": 3114.52,
+   "d": 3.88,
+   "text": "remember what I did and I have evidence"
+  },
+  {
+   "t": 3118.4,
+   "d": 1.56,
+   "text": "to present to this court that there was"
+  },
+  {
+   "t": 3119.96,
+   "d": 3.06,
+   "text": "a contract in writing if I make this"
+  },
+  {
+   "t": 3123.02,
+   "d": 6.27,
+   "text": "might take a moment but I do have this"
+  },
+  {
+   "t": 3129.29,
+   "d": 3.63,
+   "text": "rather long narrow papyrus describing"
+  },
+  {
+   "t": 3132.92,
+   "d": 3.39,
+   "text": "here the terms of our agreement under"
+  },
+  {
+   "t": 3136.31,
+   "d": 2.64,
+   "text": "these together whichever one of you"
+  },
+  {
+   "t": 3138.95,
+   "d": 1.62,
+   "text": "wants to jump in to read each part can"
+  },
+  {
+   "t": 3140.57,
+   "d": 1.65,
+   "text": "you please read the terms of this"
+  },
+  {
+   "t": 3142.22,
+   "d": 6.6,
+   "text": "contract to the court I Symes huge"
+  },
+  {
+   "t": 3148.82,
+   "d": 2.55,
+   "text": "humanoid I believe that said that it was"
+  },
+  {
+   "t": 3151.37,
+   "d": 1.59,
+   "text": "written in my language so that's the"
+  },
+  {
+   "t": 3152.96,
+   "d": 2.97,
+   "text": "most closest translation short humanoid"
+  },
+  {
+   "t": 3155.93,
+   "d": 3.66,
+   "text": "together with my party do hereby trade"
+  },
+  {
+   "t": 3159.59,
+   "d": 4.65,
+   "text": "the services and information from said"
+  },
+  {
+   "t": 3164.24,
+   "d": 3.96,
+   "text": "mummy in exchange for a cool and dry"
+  },
+  {
+   "t": 3168.2,
+   "d": 4.5,
+   "text": "place cool and dry place where he may"
+  },
+  {
+   "t": 3172.7,
+   "d": 2.04,
+   "text": "carried out the rest of his years in"
+  },
+  {
+   "t": 3174.74,
+   "d": 1.92,
+   "text": "peace and there is no peace when"
+  },
+  {
+   "t": 3176.66,
+   "d": 2.82,
+   "text": "children are throwing water and eggs at"
+  },
+  {
+   "t": 3179.48,
+   "d": 2.73,
+   "text": "you and it is not dry I I wouldn't I"
+  },
+  {
+   "t": 3182.21,
+   "d": 2.52,
+   "text": "would note that nowhere in this contract"
+  },
+  {
+   "t": 3184.73,
+   "d": 3.15,
+   "text": "does it specify that Khufu gets to move"
+  },
+  {
+   "t": 3187.88,
+   "d": 3.27,
+   "text": "into our dwarven neighborhood has anyone"
+  },
+  {
+   "t": 3191.15,
+   "d": 2.16,
+   "text": "in your party ever claimed that they"
+  },
+  {
+   "t": 3193.31,
+   "d": 2.58,
+   "text": "were casting a spell and actually just"
+  },
+  {
+   "t": 3195.89,
+   "d": 2.06,
+   "text": "negotiated a contract with someone I"
+  },
+  {
+   "t": 3197.95,
+   "d": 1.3,
+   "text": "can't"
+  },
+  {
+   "t": 3199.25,
+   "d": 2.7,
+   "text": "with any of my compatriots would stoop"
+  },
+  {
+   "t": 3201.95,
+   "d": 3.99,
+   "text": "to such a low and base face method it"
+  },
+  {
+   "t": 3205.94,
+   "d": 2.55,
+   "text": "was a young fellow with a lute who did"
+  },
+  {
+   "t": 3208.49,
+   "d": 12.81,
+   "text": "say that this was a contract player"
+  },
+  {
+   "t": 3221.3,
+   "d": 3.54,
+   "text": "still an option you're good at building"
+  },
+  {
+   "t": 3224.84,
+   "d": 1.98,
+   "text": "things with stone right of course"
+  },
+  {
+   "t": 3226.82,
+   "d": 2.82,
+   "text": "cuckoo are pyramids made of stone yes"
+  },
+  {
+   "t": 3229.64,
+   "d": 1.44,
+   "text": "all right the court has made its"
+  },
+  {
+   "t": 3231.08,
+   "d": 2.19,
+   "text": "judgment signs you and the dwarves of"
+  },
+  {
+   "t": 3233.27,
+   "d": 2.78,
+   "text": "your village must build another pyramid"
+  },
+  {
+   "t": 3236.05,
+   "d": 2.74,
+   "text": "conveniently close to your village but"
+  },
+  {
+   "t": 3238.79,
+   "d": 2.94,
+   "text": "able to hold Khufu and his family and"
+  },
+  {
+   "t": 3241.73,
+   "d": 1.44,
+   "text": "then Khufu could live there and it could"
+  },
+  {
+   "t": 3243.17,
+   "d": 1.32,
+   "text": "be as far away as you want but you still"
+  },
+  {
+   "t": 3244.49,
+   "d": 3.57,
+   "text": "have to build a pyramid yes the court"
+  },
+  {
+   "t": 3248.06,
+   "d": 2.14,
+   "text": "has rendered its judgement thank you"
+  },
+  {
+   "t": 3250.2,
+   "d": 1.57,
+   "text": "[Applause]"
+  },
+  {
+   "t": 3251.77,
+   "d": 2.17,
+   "text": "thank you so much thank you to all of"
+  },
+  {
+   "t": 3253.94,
+   "d": 1.38,
+   "text": "our heroes and monsters thank you to our"
+  },
+  {
+   "t": 3255.32,
+   "d": 2.4,
+   "text": "judges as well we are now breaking for"
+  },
+  {
+   "t": 3257.72,
+   "d": 2.16,
+   "text": "dinner but we will be back you will have"
+  },
+  {
+   "t": 3259.88,
+   "d": 1.2,
+   "text": "a chance to be the judge you will have"
+  },
+  {
+   "t": 3261.08,
+   "d": 1.65,
+   "text": "chance to be heroes and monsters so keep"
+  },
+  {
+   "t": 3262.73,
+   "d": 1.5,
+   "text": "your ears out for when we will be"
+  },
+  {
+   "t": 3264.23,
+   "d": 2.82,
+   "text": "returning for another round of cases"
+  },
+  {
+   "t": 3267.05,
+   "d": 3.77,
+   "text": "later this evening enjoy your meal"
+  }
+ ]
+}

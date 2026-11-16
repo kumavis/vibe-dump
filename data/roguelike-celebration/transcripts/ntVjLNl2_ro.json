@@ -1,0 +1,2681 @@
+{
+ "id": "ntVjLNl2_ro",
+ "url": "https://www.youtube.com/watch?v=ntVjLNl2_ro",
+ "title": "Leonard Richardson - Robot Finds Kitten",
+ "speaker": "Leonard Richardson",
+ "talk_title": "Robot Finds Kitten",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1108,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Leonard Richardson relates twenty years of robotfindskitten history.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to a folk game"
+  },
+  {
+   "start": 174,
+   "title": "Inspirations from DOS Rogue"
+  },
+  {
+   "start": 382,
+   "title": "Influence of Nethack rumors"
+  },
+  {
+   "start": 560,
+   "title": "A simple tool for learning"
+  },
+  {
+   "start": 780,
+   "title": "Audience Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3214,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.72,
+   "d": 2.12,
+   "text": "Okay, hello everyone."
+  },
+  {
+   "t": 2.84,
+   "d": 0.76,
+   "text": "Um"
+  },
+  {
+   "t": 3.6,
+   "d": 1.84,
+   "text": "good evening from New York."
+  },
+  {
+   "t": 5.44,
+   "d": 2.6,
+   "text": "Um I'm flying a little bit blind because"
+  },
+  {
+   "t": 8.04,
+   "d": 2.24,
+   "text": "I not totally certain that what you're"
+  },
+  {
+   "t": 10.28,
+   "d": 4.24,
+   "text": "seeing is what I'm seeing. Uh this is"
+  },
+  {
+   "t": 14.92,
+   "d": 2.28,
+   "text": "Um my name is Leonard."
+  },
+  {
+   "t": 17.2,
+   "d": 1.84,
+   "text": "I'm a programmer and a science fiction"
+  },
+  {
+   "t": 19.04,
+   "d": 1.64,
+   "text": "writer. On the left I put a picture of"
+  },
+  {
+   "t": 20.68,
+   "d": 1.52,
+   "text": "what I look like now. So even though we"
+  },
+  {
+   "t": 22.2,
+   "d": 1.56,
+   "text": "don't have video, you can visualize the"
+  },
+  {
+   "t": 23.76,
+   "d": 1.6,
+   "text": "guy who's talking to you."
+  },
+  {
+   "t": 25.36,
+   "d": 2.16,
+   "text": "And on the right is what I looked like"
+  },
+  {
+   "t": 27.52,
+   "d": 1.84,
+   "text": "20 years ago. So you can visualize the"
+  },
+  {
+   "t": 29.36,
+   "d": 3.12,
+   "text": "guy who wrote RobotFindsKitten."
+  },
+  {
+   "t": 32.48,
+   "d": 1.6,
+   "text": "Uh for those who are not familiar,"
+  },
+  {
+   "t": 34.08,
+   "d": 1.6,
+   "text": "RobotFindsKitten is a very simple"
+  },
+  {
+   "t": 35.68,
+   "d": 1.44,
+   "text": "roguelike game"
+  },
+  {
+   "t": 37.12,
+   "d": 1.92,
+   "text": "uh where you are a robot represented by"
+  },
+  {
+   "t": 39.04,
+   "d": 2.44,
+   "text": "a gray hash mark on the left and you're"
+  },
+  {
+   "t": 41.48,
+   "d": 2.04,
+   "text": "trying to find kitten represented by a"
+  },
+  {
+   "t": 43.52,
+   "d": 1.32,
+   "text": "mystery character somewhere on the"
+  },
+  {
+   "t": 44.84,
+   "d": 2.08,
+   "text": "board. Uh the game takes place in a"
+  },
+  {
+   "t": 46.92,
+   "d": 1.44,
+   "text": "featureless field full of mystery"
+  },
+  {
+   "t": 48.36,
+   "d": 1.72,
+   "text": "characters, most of which are not"
+  },
+  {
+   "t": 50.08,
+   "d": 1.64,
+   "text": "kittens seen on the bottom right and"
+  },
+  {
+   "t": 51.72,
+   "d": 2.76,
+   "text": "everywhere on this screenshot. Um you"
+  },
+  {
+   "t": 54.48,
+   "d": 1.6,
+   "text": "play the game by moving robot around in"
+  },
+  {
+   "t": 56.08,
+   "d": 2.36,
+   "text": "roguelike style, bumping into things. Uh"
+  },
+  {
+   "t": 58.44,
+   "d": 1.76,
+   "text": "bumping into something that's not kitten"
+  },
+  {
+   "t": 60.2,
+   "d": 1.56,
+   "text": "will get you some kind of weird message"
+  },
+  {
+   "t": 61.76,
+   "d": 1.24,
+   "text": "like"
+  },
+  {
+   "t": 63.0,
+   "d": 1.56,
+   "text": "uh it's a prosthetic wheel bent out of"
+  },
+  {
+   "t": 64.56,
+   "d": 3.4,
+   "text": "shape or 100,000 carpet fibers."
+  },
+  {
+   "t": 67.96,
+   "d": 2.44,
+   "text": "But when you bump into kitten, it says"
+  },
+  {
+   "t": 70.4,
+   "d": 2.6,
+   "text": "you found kitten. Way to go, robot. You"
+  },
+  {
+   "t": 73.0,
+   "d": 2.08,
+   "text": "get a cute animation with the hash mark"
+  },
+  {
+   "t": 75.08,
+   "d": 1.52,
+   "text": "and the mystery character and you've won"
+  },
+  {
+   "t": 76.6,
+   "d": 1.56,
+   "text": "the game."
+  },
+  {
+   "t": 78.16,
+   "d": 1.04,
+   "text": "Now"
+  },
+  {
+   "t": 79.2,
+   "d": 1.88,
+   "text": "um today uh"
+  },
+  {
+   "t": 81.08,
+   "d": 1.4,
+   "text": "I am"
+  },
+  {
+   "t": 82.48,
+   "d": 1.32,
+   "text": "proud to say I'm pretty good at computer"
+  },
+  {
+   "t": 83.8,
+   "d": 2.68,
+   "text": "programming. But 20 years ago I was not"
+  },
+  {
+   "t": 86.48,
+   "d": 2.0,
+   "text": "so good. I had about 1 year of real"
+  },
+  {
+   "t": 88.48,
+   "d": 2.12,
+   "text": "experience mostly in the form of college"
+  },
+  {
+   "t": 90.6,
+   "d": 1.4,
+   "text": "courses."
+  },
+  {
+   "t": 92.0,
+   "d": 2.2,
+   "text": "And uh today"
+  },
+  {
+   "t": 94.2,
+   "d": 2.64,
+   "text": "I would say I am not good at game design"
+  },
+  {
+   "t": 96.84,
+   "d": 2.36,
+   "text": "and in 1997 I was even worse at game"
+  },
+  {
+   "t": 99.2,
+   "d": 1.28,
+   "text": "design."
+  },
+  {
+   "t": 100.48,
+   "d": 2.52,
+   "text": "And on top of that uh 1997 I wrote"
+  },
+  {
+   "t": 103.0,
+   "d": 2.24,
+   "text": "RobotFindsKitten in about 3 days to meet"
+  },
+  {
+   "t": 105.24,
+   "d": 3.04,
+   "text": "a contest deadline."
+  },
+  {
+   "t": 108.28,
+   "d": 2.08,
+   "text": "Now despite this inauspicious beginning,"
+  },
+  {
+   "t": 110.36,
+   "d": 1.84,
+   "text": "RobotFindsKitten is a very successful"
+  },
+  {
+   "t": 112.2,
+   "d": 2.52,
+   "text": "game. There's over 50 ports to different"
+  },
+  {
+   "t": 114.72,
+   "d": 1.72,
+   "text": "programming languages and platforms."
+  },
+  {
+   "t": 116.44,
+   "d": 2.44,
+   "text": "It's become a kind of folk game like"
+  },
+  {
+   "t": 118.88,
+   "d": 2.56,
+   "text": "Snake or Conway's Life."
+  },
+  {
+   "t": 121.44,
+   "d": 1.76,
+   "text": "And perhaps it's a tribute to my own"
+  },
+  {
+   "t": 123.2,
+   "d": 2.48,
+   "text": "healthy self-regard that until I started"
+  },
+  {
+   "t": 125.68,
+   "d": 1.64,
+   "text": "researching this talk, I never asked the"
+  },
+  {
+   "t": 127.32,
+   "d": 3.0,
+   "text": "question that has become the topic."
+  },
+  {
+   "t": 130.32,
+   "d": 2.24,
+   "text": "How did someone who's bad at game design"
+  },
+  {
+   "t": 132.56,
+   "d": 1.8,
+   "text": "and bad at computer programming make a"
+  },
+  {
+   "t": 134.36,
+   "d": 3.04,
+   "text": "computer game that's really good?"
+  },
+  {
+   "t": 137.4,
+   "d": 2.08,
+   "text": "I'm comfortable saying The Robot Finds"
+  },
+  {
+   "t": 139.48,
+   "d": 1.8,
+   "text": "Kitten is a really good game."
+  },
+  {
+   "t": 141.28,
+   "d": 2.24,
+   "text": "And if you're not a game designer, I'm"
+  },
+  {
+   "t": 143.52,
+   "d": 1.36,
+   "text": "here. I'm living proof that you can"
+  },
+  {
+   "t": 144.88,
+   "d": 1.72,
+   "text": "create a fun game without being a game"
+  },
+  {
+   "t": 146.6,
+   "d": 2.16,
+   "text": "designer. And after thinking about this"
+  },
+  {
+   "t": 148.76,
+   "d": 2.44,
+   "text": "question on the screen, I have an answer"
+  },
+  {
+   "t": 151.2,
+   "d": 1.48,
+   "text": "which might interest the people here who"
+  },
+  {
+   "t": 152.68,
+   "d": 2.2,
+   "text": "are game designers."
+  },
+  {
+   "t": 154.88,
+   "d": 2.6,
+   "text": "The short answer is that I made a game"
+  },
+  {
+   "t": 157.48,
+   "d": 2.12,
+   "text": "about parts of our early roguelikes that"
+  },
+  {
+   "t": 159.6,
+   "d": 1.64,
+   "text": "are often regarded as misfeatures or"
+  },
+  {
+   "t": 161.24,
+   "d": 1.52,
+   "text": "missteps."
+  },
+  {
+   "t": 162.76,
+   "d": 1.84,
+   "text": "I stole ideas from these early"
+  },
+  {
+   "t": 164.6,
+   "d": 2.08,
+   "text": "roguelikes that quote real designers"
+  },
+  {
+   "t": 166.68,
+   "d": 2.32,
+   "text": "generally don't steal."
+  },
+  {
+   "t": 169.0,
+   "d": 2.04,
+   "text": "The rest of this talk is a longer answer"
+  },
+  {
+   "t": 171.04,
+   "d": 3.84,
+   "text": "to that question in three parts."
+  },
+  {
+   "t": 174.88,
+   "d": 3.28,
+   "text": "Thus begins part one."
+  },
+  {
+   "t": 178.16,
+   "d": 2.08,
+   "text": "I don't have any money riding on this or"
+  },
+  {
+   "t": 180.24,
+   "d": 1.64,
+   "text": "anything, but I think The Robot Finds"
+  },
+  {
+   "t": 181.88,
+   "d": 1.96,
+   "text": "Kitten might be the simplest interesting"
+  },
+  {
+   "t": 183.84,
+   "d": 2.32,
+   "text": "roguelike game. It has a lot of the"
+  },
+  {
+   "t": 186.16,
+   "d": 1.4,
+   "text": "features you find in traditional"
+  },
+  {
+   "t": 187.56,
+   "d": 1.6,
+   "text": "roguelikes, but the one that's important"
+  },
+  {
+   "t": 189.16,
+   "d": 2.32,
+   "text": "to this talk is that it was directly"
+  },
+  {
+   "t": 191.48,
+   "d": 2.44,
+   "text": "inspired by Rogue."
+  },
+  {
+   "t": 193.92,
+   "d": 2.92,
+   "text": "Let's go back to 1987, 10 years before"
+  },
+  {
+   "t": 196.84,
+   "d": 1.68,
+   "text": "The Robot Finds Kitten."
+  },
+  {
+   "t": 198.52,
+   "d": 2.4,
+   "text": "Uh my dad brings an IBM PC home for his"
+  },
+  {
+   "t": 200.92,
+   "d": 2.2,
+   "text": "work, and he also brings a bunch of"
+  },
+  {
+   "t": 203.12,
+   "d": 2.12,
+   "text": "pirated games for me to play. These are"
+  },
+  {
+   "t": 205.24,
+   "d": 2.0,
+   "text": "not really the games that people were"
+  },
+  {
+   "t": 207.24,
+   "d": 2.76,
+   "text": "pirating in 1987 cuz our PC didn't have"
+  },
+  {
+   "t": 210.0,
+   "d": 1.84,
+   "text": "uh graphics card."
+  },
+  {
+   "t": 211.84,
+   "d": 2.24,
+   "text": "Um and so most of the pirated games are"
+  },
+  {
+   "t": 214.08,
+   "d": 1.72,
+   "text": "pretty bad, but two of them are really"
+  },
+  {
+   "t": 215.8,
+   "d": 2.88,
+   "text": "really good. Infocom's Planetfall text"
+  },
+  {
+   "t": 218.68,
+   "d": 2.76,
+   "text": "adventure and John Lane's DOS version of"
+  },
+  {
+   "t": 221.44,
+   "d": 2.16,
+   "text": "Rogue."
+  },
+  {
+   "t": 223.6,
+   "d": 1.92,
+   "text": "Uh the first version of The Robot Finds"
+  },
+  {
+   "t": 225.52,
+   "d": 1.8,
+   "text": "Kitten was written for MS-DOS, and as"
+  },
+  {
+   "t": 227.32,
+   "d": 1.8,
+   "text": "you can see I subconsciously designed it"
+  },
+  {
+   "t": 229.12,
+   "d": 2.76,
+   "text": "to resemble Rogue for MS-DOS. In fact, I"
+  },
+  {
+   "t": 231.88,
+   "d": 1.8,
+   "text": "designed it to capture a specific thing"
+  },
+  {
+   "t": 233.68,
+   "d": 2.2,
+   "text": "I loved about the DOS version of Rogue."
+  },
+  {
+   "t": 235.88,
+   "d": 3.08,
+   "text": "It's something that may seem silly now."
+  },
+  {
+   "t": 238.96,
+   "d": 1.84,
+   "text": "Here's a detail from a DOS Rogue"
+  },
+  {
+   "t": 240.8,
+   "d": 1.84,
+   "text": "screenshot. There are three bits of the"
+  },
+  {
+   "t": 242.64,
+   "d": 2.16,
+   "text": "screenshot, three individual characters"
+  },
+  {
+   "t": 244.8,
+   "d": 2.04,
+   "text": "I want to draw your attention to. The"
+  },
+  {
+   "t": 246.84,
+   "d": 2.44,
+   "text": "first one is the capital H."
+  },
+  {
+   "t": 249.28,
+   "d": 1.88,
+   "text": "Now, most Roguelike fans know the magic"
+  },
+  {
+   "t": 251.16,
+   "d": 2.48,
+   "text": "of the H at the top of the screen. An H"
+  },
+  {
+   "t": 253.64,
+   "d": 2.36,
+   "text": "is a letter in a in a word like hello."
+  },
+  {
+   "t": 256.0,
+   "d": 1.88,
+   "text": "It's part of a status message. But, in"
+  },
+  {
+   "t": 257.88,
+   "d": 2.28,
+   "text": "the middle of the screen, that H becomes"
+  },
+  {
+   "t": 260.16,
+   "d": 2.96,
+   "text": "a monster, a deadly hobgoblin."
+  },
+  {
+   "t": 263.12,
+   "d": 1.2,
+   "text": "There's a school of thought that says"
+  },
+  {
+   "t": 264.32,
+   "d": 1.8,
+   "text": "this H is a relic of the past, that you"
+  },
+  {
+   "t": 266.12,
+   "d": 2.0,
+   "text": "should replace it with a realistic tile"
+  },
+  {
+   "t": 268.12,
+   "d": 2.16,
+   "text": "depicting a hobgoblin, whatever a"
+  },
+  {
+   "t": 270.28,
+   "d": 2.28,
+   "text": "realistic hobgoblin looks like. But,"
+  },
+  {
+   "t": 272.56,
+   "d": 1.88,
+   "text": "when I was a kid, I loved this. I was so"
+  },
+  {
+   "t": 274.44,
+   "d": 2.44,
+   "text": "happy every time I got far enough into"
+  },
+  {
+   "t": 276.88,
+   "d": 1.72,
+   "text": "Rogue that I could see a new letter,"
+  },
+  {
+   "t": 278.6,
+   "d": 2.68,
+   "text": "which would immediately kill me."
+  },
+  {
+   "t": 281.28,
+   "d": 3.08,
+   "text": "I recognized H equals hobgoblin. It was"
+  },
+  {
+   "t": 284.36,
+   "d": 1.76,
+   "text": "the same kind of imaginary play where"
+  },
+  {
+   "t": 286.12,
+   "d": 1.72,
+   "text": "I'd imagine that my bedroom was a"
+  },
+  {
+   "t": 287.84,
+   "d": 2.2,
+   "text": "spaceship."
+  },
+  {
+   "t": 290.04,
+   "d": 2.56,
+   "text": "Second item, the happy face, DOS Rogue's"
+  },
+  {
+   "t": 292.6,
+   "d": 2.24,
+   "text": "equivalent of the at sign."
+  },
+  {
+   "t": 294.84,
+   "d": 1.8,
+   "text": "We all know what a happy face is, but"
+  },
+  {
+   "t": 296.64,
+   "d": 2.32,
+   "text": "it's not a letter of the alphabet. The"
+  },
+  {
+   "t": 298.96,
+   "d": 2.56,
+   "text": "IBM PC can't draw a realistic hobgoblin"
+  },
+  {
+   "t": 301.52,
+   "d": 1.76,
+   "text": "the way an arcade machine could, but it"
+  },
+  {
+   "t": 303.28,
+   "d": 2.68,
+   "text": "can draw a happy face. That's a little"
+  },
+  {
+   "t": 305.96,
+   "d": 3.4,
+   "text": "weird. What else can this thing draw?"
+  },
+  {
+   "t": 309.36,
+   "d": 2.2,
+   "text": "Well, this is how DOS Rogue represents a"
+  },
+  {
+   "t": 311.56,
+   "d": 1.36,
+   "text": "doorway."
+  },
+  {
+   "t": 312.92,
+   "d": 2.4,
+   "text": "What even is this thing? In 1993, this"
+  },
+  {
+   "t": 315.32,
+   "d": 2.08,
+   "text": "character was added to Unicode, and they"
+  },
+  {
+   "t": 317.4,
+   "d": 2.24,
+   "text": "called it box drawings double vertical"
+  },
+  {
+   "t": 319.64,
+   "d": 1.48,
+   "text": "and horizontal."
+  },
+  {
+   "t": 321.12,
+   "d": 2.04,
+   "text": "I can't find an earlier name for it."
+  },
+  {
+   "t": 323.16,
+   "d": 2.32,
+   "text": "It's this nameless symbol that they"
+  },
+  {
+   "t": 325.48,
+   "d": 2.2,
+   "text": "added to MS-DOS so a computer program"
+  },
+  {
+   "t": 327.68,
+   "d": 1.72,
+   "text": "could draw it next to the letter H and"
+  },
+  {
+   "t": 329.4,
+   "d": 1.72,
+   "text": "the happy face."
+  },
+  {
+   "t": 331.12,
+   "d": 1.12,
+   "text": "And this is the space that"
+  },
+  {
+   "t": 332.24,
+   "d": 2.08,
+   "text": "Robotfindskitten plays in. The thrill of"
+  },
+  {
+   "t": 334.32,
+   "d": 2.24,
+   "text": "playing a Roguelike for the first time"
+  },
+  {
+   "t": 336.56,
+   "d": 2.4,
+   "text": "and touching things to find out what the"
+  },
+  {
+   "t": 338.96,
+   "d": 2.2,
+   "text": "character is. And the thrill of playing"
+  },
+  {
+   "t": 341.16,
+   "d": 1.48,
+   "text": "MS-DOS game for the first time and"
+  },
+  {
+   "t": 342.64,
+   "d": 1.48,
+   "text": "learning about this secret alphabet"
+  },
+  {
+   "t": 344.12,
+   "d": 2.08,
+   "text": "hidden within the beige box of an IBM"
+  },
+  {
+   "t": 346.2,
+   "d": 2.08,
+   "text": "PC."
+  },
+  {
+   "t": 348.28,
+   "d": 1.12,
+   "text": "Now,"
+  },
+  {
+   "t": 349.4,
+   "d": 1.8,
+   "text": "I I know that it's often a pain to have"
+  },
+  {
+   "t": 351.2,
+   "d": 1.8,
+   "text": "to remember whether a lowercase c is a"
+  },
+  {
+   "t": 353.0,
+   "d": 2.56,
+   "text": "cockatrice or a cat or a cranberry. It's"
+  },
+  {
+   "t": 355.56,
+   "d": 1.84,
+   "text": "not not really thought of as a desirable"
+  },
+  {
+   "t": 357.4,
+   "d": 1.72,
+   "text": "feature of roguelikes. I'm not even"
+  },
+  {
+   "t": 359.12,
+   "d": 2.6,
+   "text": "saying I like this ambiguity. But, Robot"
+  },
+  {
+   "t": 361.72,
+   "d": 1.44,
+   "text": "Finds Kitten is a game that's based"
+  },
+  {
+   "t": 363.16,
+   "d": 1.76,
+   "text": "around finding the fun in a type of"
+  },
+  {
+   "t": 364.92,
+   "d": 4.36,
+   "text": "mystery that is exclusive to roguelikes."
+  },
+  {
+   "t": 369.44,
+   "d": 2.32,
+   "text": "By the way, uh before we go to part two,"
+  },
+  {
+   "t": 371.76,
+   "d": 1.48,
+   "text": "Robot Finds Kitten also contains"
+  },
+  {
+   "t": 373.24,
+   "d": 1.4,
+   "text": "something from Planetfall, the other"
+  },
+  {
+   "t": 374.64,
+   "d": 1.56,
+   "text": "game that made a huge childhood"
+  },
+  {
+   "t": 376.2,
+   "d": 1.84,
+   "text": "impression on me. I wanted to make a"
+  },
+  {
+   "t": 378.04,
+   "d": 1.8,
+   "text": "game with a curious robot who doesn't"
+  },
+  {
+   "t": 379.84,
+   "d": 2.44,
+   "text": "die."
+  },
+  {
+   "t": 382.56,
+   "d": 2.8,
+   "text": "Let's move on. Fast forward through my"
+  },
+  {
+   "t": 385.36,
+   "d": 4.08,
+   "text": "childhood and get here to 1991"
+  },
+  {
+   "t": 389.44,
+   "d": 2.0,
+   "text": "where I bought a freeware floppy disk"
+  },
+  {
+   "t": 391.44,
+   "d": 3.0,
+   "text": "that had NetHack 3.0.0 on it."
+  },
+  {
+   "t": 394.44,
+   "d": 1.56,
+   "text": "I don't think I knew what I was getting."
+  },
+  {
+   "t": 396.0,
+   "d": 2.6,
+   "text": "I think I just liked those two words,"
+  },
+  {
+   "t": 398.6,
+   "d": 1.96,
+   "text": "Net and Hack, and"
+  },
+  {
+   "t": 400.56,
+   "d": 1.68,
+   "text": "having them next to each other made it"
+  },
+  {
+   "t": 402.24,
+   "d": 1.36,
+   "text": "irresistible."
+  },
+  {
+   "t": 403.6,
+   "d": 1.56,
+   "text": "Once I had it, it was like a message to"
+  },
+  {
+   "t": 405.16,
+   "d": 2.28,
+   "text": "me from the grown-up world. Somebody"
+  },
+  {
+   "t": 407.44,
+   "d": 2.04,
+   "text": "else had played Rogue, had loved it as"
+  },
+  {
+   "t": 409.48,
+   "d": 2.16,
+   "text": "much as I had, so much that they'd made"
+  },
+  {
+   "t": 411.64,
+   "d": 1.76,
+   "text": "their own game that was just like Rogue"
+  },
+  {
+   "t": 413.4,
+   "d": 2.6,
+   "text": "but had more stuff."
+  },
+  {
+   "t": 416.0,
+   "d": 1.76,
+   "text": "I spent the years leading up to Robot"
+  },
+  {
+   "t": 417.76,
+   "d": 2.48,
+   "text": "Finds Kitten with NetHack. DOS Rogue had"
+  },
+  {
+   "t": 420.24,
+   "d": 1.64,
+   "text": "a few mysterious things hidden in the"
+  },
+  {
+   "t": 421.88,
+   "d": 2.08,
+   "text": "corners, but NetHack seemed to be all"
+  },
+  {
+   "t": 423.96,
+   "d": 3.56,
+   "text": "corners, all hidden things."
+  },
+  {
+   "t": 427.52,
+   "d": 1.64,
+   "text": "Most importantly for purposes of this"
+  },
+  {
+   "t": 429.16,
+   "d": 2.12,
+   "text": "talk are the rumor messages, short"
+  },
+  {
+   "t": 431.28,
+   "d": 2.16,
+   "text": "pieces of advice that you find inside"
+  },
+  {
+   "t": 433.44,
+   "d": 2.0,
+   "text": "fortune cookies. These rumors and the"
+  },
+  {
+   "t": 435.44,
+   "d": 1.64,
+   "text": "style they were written in dramatically"
+  },
+  {
+   "t": 437.08,
+   "d": 1.96,
+   "text": "expanded my vision of what could go into"
+  },
+  {
+   "t": 439.04,
+   "d": 2.88,
+   "text": "a computer game."
+  },
+  {
+   "t": 442.8,
+   "d": 1.24,
+   "text": "That's because"
+  },
+  {
+   "t": 444.04,
+   "d": 2.12,
+   "text": "some of the rumors are false, completely"
+  },
+  {
+   "t": 446.16,
+   "d": 1.76,
+   "text": "made up, having nothing to do with the"
+  },
+  {
+   "t": 447.92,
+   "d": 2.28,
+   "text": "real"
+  },
+  {
+   "t": 450.84,
+   "d": 1.28,
+   "text": "about rumors, not knowing they were"
+  },
+  {
+   "t": 452.12,
+   "d": 2.04,
+   "text": "false. I loved speculating about what"
+  },
+  {
+   "t": 454.16,
+   "d": 1.12,
+   "text": "they might mean, and now that I know"
+  },
+  {
+   "t": 455.28,
+   "d": 1.84,
+   "text": "they're false, I love them more than the"
+  },
+  {
+   "t": 457.12,
+   "d": 1.36,
+   "text": "real rumors."
+  },
+  {
+   "t": 458.48,
+   "d": 1.88,
+   "text": "False rumors dramatically expand the"
+  },
+  {
+   "t": 460.36,
+   "d": 2.08,
+   "text": "possibilities of what might be going on"
+  },
+  {
+   "t": 462.44,
+   "d": 2.12,
+   "text": "in NetHack. They fire the imagination"
+  },
+  {
+   "t": 464.56,
+   "d": 1.52,
+   "text": "and create more opportunities for"
+  },
+  {
+   "t": 466.08,
+   "d": 2.04,
+   "text": "imaginative play."
+  },
+  {
+   "t": 468.12,
+   "d": 1.36,
+   "text": "There's one fortune cookie that says,"
+  },
+  {
+   "t": 469.48,
+   "d": 2.24,
+   "text": "\"Ever tried enchanting a rope?\" Oh, you"
+  },
+  {
+   "t": 471.72,
+   "d": 1.16,
+   "text": "haven't tried enchanting a rope in"
+  },
+  {
+   "t": 472.88,
+   "d": 1.6,
+   "text": "NetHack cuz there are no ropes."
+  },
+  {
+   "t": 474.48,
+   "d": 1.48,
+   "text": "Implementing a rope would be a huge"
+  },
+  {
+   "t": 475.96,
+   "d": 2.36,
+   "text": "pain, but adding one line of text is"
+  },
+  {
+   "t": 478.32,
+   "d": 1.96,
+   "text": "free, and it gives the player a little"
+  },
+  {
+   "t": 480.28,
+   "d": 2.0,
+   "text": "thrill to imagine what a rope would be"
+  },
+  {
+   "t": 482.28,
+   "d": 1.96,
+   "text": "like in NetHack."
+  },
+  {
+   "t": 484.24,
+   "d": 2.48,
+   "text": "These rumors, especially the false ones,"
+  },
+  {
+   "t": 486.72,
+   "d": 1.88,
+   "text": "are the second big inspiration for"
+  },
+  {
+   "t": 488.6,
+   "d": 2.04,
+   "text": "RobotFindsKitten. That's where I got the"
+  },
+  {
+   "t": 490.64,
+   "d": 2.64,
+   "text": "idea of a big list of short weird pieces"
+  },
+  {
+   "t": 493.28,
+   "d": 3.84,
+   "text": "of text shown at the top of the screen."
+  },
+  {
+   "t": 497.2,
+   "d": 1.6,
+   "text": "The other feature of NetHack that stuck"
+  },
+  {
+   "t": 498.8,
+   "d": 1.8,
+   "text": "with me is the list of monsters you only"
+  },
+  {
+   "t": 500.6,
+   "d": 2.24,
+   "text": "see when you're hallucinating. A boring"
+  },
+  {
+   "t": 502.84,
+   "d": 2.04,
+   "text": "monster like a rat might appear as a"
+  },
+  {
+   "t": 504.88,
+   "d": 2.08,
+   "text": "ravenous bug blader beast or a Venus"
+  },
+  {
+   "t": 506.96,
+   "d": 2.28,
+   "text": "flytrap or Godzilla. You look at a"
+  },
+  {
+   "t": 509.24,
+   "d": 1.72,
+   "text": "monster and see something just totally"
+  },
+  {
+   "t": 510.96,
+   "d": 1.04,
+   "text": "random. You don't know what you're"
+  },
+  {
+   "t": 512.0,
+   "d": 1.28,
+   "text": "fighting."
+  },
+  {
+   "t": 513.28,
+   "d": 1.68,
+   "text": "When I was stricken with hallucination"
+  },
+  {
+   "t": 514.96,
+   "d": 1.6,
+   "text": "in NetHack, I would look at the same"
+  },
+  {
+   "t": 516.56,
+   "d": 2.16,
+   "text": "monster over and over again, enjoying"
+  },
+  {
+   "t": 518.72,
+   "d": 3.08,
+   "text": "all the things that a capital H isn't."
+  },
+  {
+   "t": 521.8,
+   "d": 1.64,
+   "text": "One of my favorite RobotFindsKitten"
+  },
+  {
+   "t": 523.44,
+   "d": 1.8,
+   "text": "tributes is that kitten prospecting"
+  },
+  {
+   "t": 525.24,
+   "d": 1.96,
+   "text": "robot is now one of the official NetHack"
+  },
+  {
+   "t": 527.2,
+   "d": 3.36,
+   "text": "hallucination monsters."
+  },
+  {
+   "t": 530.72,
+   "d": 2.24,
+   "text": "Now, you competent game designers in the"
+  },
+  {
+   "t": 532.96,
+   "d": 1.64,
+   "text": "audience may think that huge lists of"
+  },
+  {
+   "t": 534.6,
+   "d": 2.2,
+   "text": "fake spoilers and non-existent monsters"
+  },
+  {
+   "t": 536.8,
+   "d": 1.72,
+   "text": "are what makes NetHack bloated, and you"
+  },
+  {
+   "t": 538.52,
+   "d": 2.24,
+   "text": "are probably right. Maybe these are not"
+  },
+  {
+   "t": 540.76,
+   "d": 2.92,
+   "text": "desirable features in normal games, but"
+  },
+  {
+   "t": 543.68,
+   "d": 1.52,
+   "text": "I love this stuff, and the fact that"
+  },
+  {
+   "t": 545.2,
+   "d": 1.56,
+   "text": "other people like RobotFindsKitten"
+  },
+  {
+   "t": 546.76,
+   "d": 1.44,
+   "text": "indicates there's a whole other type of"
+  },
+  {
+   "t": 548.2,
+   "d": 1.6,
+   "text": "game that's not made very often, where"
+  },
+  {
+   "t": 549.8,
+   "d": 2.0,
+   "text": "this kind of thing isn't bloated at all,"
+  },
+  {
+   "t": 551.8,
+   "d": 1.6,
+   "text": "where this is the main point of a game"
+  },
+  {
+   "t": 553.4,
+   "d": 2.08,
+   "text": "that gives you glimpses into a variety"
+  },
+  {
+   "t": 555.48,
+   "d": 2.8,
+   "text": "of different worlds."
+  },
+  {
+   "t": 558.28,
+   "d": 1.76,
+   "text": "I'll fast forward again."
+  },
+  {
+   "t": 560.04,
+   "d": 3.12,
+   "text": "All the way to 2011, let me introduce"
+  },
+  {
+   "t": 563.16,
+   "d": 1.88,
+   "text": "Mel Chua, a friend of mine who's a"
+  },
+  {
+   "t": 565.04,
+   "d": 2.72,
+   "text": "scholar of engineering education."
+  },
+  {
+   "t": 567.76,
+   "d": 3.08,
+   "text": "Um I was talking to her in 2011, and I"
+  },
+  {
+   "t": 570.84,
+   "d": 2.0,
+   "text": "randomly learned that Mel got into"
+  },
+  {
+   "t": 572.84,
+   "d": 1.2,
+   "text": "computer programming through"
+  },
+  {
+   "t": 574.04,
+   "d": 1.8,
+   "text": "RobotFindsKitten."
+  },
+  {
+   "t": 575.84,
+   "d": 1.84,
+   "text": "Uh unlike me, Mel didn't really"
+  },
+  {
+   "t": 577.68,
+   "d": 2.0,
+   "text": "encounter until she entered high school"
+  },
+  {
+   "t": 579.68,
+   "d": 2.44,
+   "text": "around the year 2000. Her school had a"
+  },
+  {
+   "t": 582.12,
+   "d": 1.84,
+   "text": "couple of Red Hat Linux terminals that"
+  },
+  {
+   "t": 583.96,
+   "d": 1.88,
+   "text": "happened to have my Linux version of"
+  },
+  {
+   "t": 585.84,
+   "d": 2.0,
+   "text": "Robot Finds Kitten installed."
+  },
+  {
+   "t": 587.84,
+   "d": 1.44,
+   "text": "She and her friends started playing it"
+  },
+  {
+   "t": 589.28,
+   "d": 2.24,
+   "text": "and it became the basis for in-jokes."
+  },
+  {
+   "t": 591.52,
+   "d": 1.2,
+   "text": "When someone accomplished something"
+  },
+  {
+   "t": 592.72,
+   "d": 1.84,
+   "text": "cool, they'd say, \"You found kitten. Way"
+  },
+  {
+   "t": 594.56,
+   "d": 1.84,
+   "text": "to go, robot.\" Like in the game end"
+  },
+  {
+   "t": 596.4,
+   "d": 1.84,
+   "text": "animation."
+  },
+  {
+   "t": 598.24,
+   "d": 1.36,
+   "text": "A couple months later, some older"
+  },
+  {
+   "t": 599.6,
+   "d": 1.68,
+   "text": "students introduced Mel to computer"
+  },
+  {
+   "t": 601.28,
+   "d": 2.12,
+   "text": "programming. And when she was told that"
+  },
+  {
+   "t": 603.4,
+   "d": 1.68,
+   "text": "Robot Finds Kitten was open source"
+  },
+  {
+   "t": 605.08,
+   "d": 2.36,
+   "text": "software, she got really excited. It was"
+  },
+  {
+   "t": 607.44,
+   "d": 1.8,
+   "text": "one of the first program she read and"
+  },
+  {
+   "t": 609.24,
+   "d": 2.24,
+   "text": "the first one she modified. She'd change"
+  },
+  {
+   "t": 611.48,
+   "d": 2.08,
+   "text": "the source to add in-jokes, recompile,"
+  },
+  {
+   "t": 613.56,
+   "d": 1.32,
+   "text": "and then go off to find a friend and"
+  },
+  {
+   "t": 614.88,
+   "d": 2.12,
+   "text": "make them play her new version. Exactly"
+  },
+  {
+   "t": 617.0,
+   "d": 1.8,
+   "text": "the sort of thing I'd done when I was"
+  },
+  {
+   "t": 618.8,
+   "d": 3.88,
+   "text": "writing Robot Finds Kitten originally."
+  },
+  {
+   "t": 622.68,
+   "d": 1.24,
+   "text": "I'm just going to read this quote from"
+  },
+  {
+   "t": 623.92,
+   "d": 1.08,
+   "text": "her."
+  },
+  {
+   "t": 625.0,
+   "d": 1.52,
+   "text": "\"Robot Finds Kitten was part of my"
+  },
+  {
+   "t": 626.52,
+   "d": 1.92,
+   "text": "computers are cool and, oh hey,"
+  },
+  {
+   "t": 628.44,
+   "d": 1.68,
+   "text": "programming, I can do that formation"
+  },
+  {
+   "t": 630.12,
+   "d": 1.16,
+   "text": "story.\""
+  },
+  {
+   "t": 631.28,
+   "d": 1.8,
+   "text": "\"Seeing that thrill of, hey, I can make"
+  },
+  {
+   "t": 633.08,
+   "d": 1.56,
+   "text": "things that make other people have these"
+  },
+  {
+   "t": 634.64,
+   "d": 2.16,
+   "text": "experiences, get other people to laugh."
+  },
+  {
+   "t": 636.8,
+   "d": 2.92,
+   "text": "That was pretty big.\""
+  },
+  {
+   "t": 639.72,
+   "d": 1.68,
+   "text": "End quote."
+  },
+  {
+   "t": 641.4,
+   "d": 1.84,
+   "text": "Mel was able to use Robot Finds Kitten"
+  },
+  {
+   "t": 643.24,
+   "d": 1.68,
+   "text": "as a jumping off point because it's a"
+  },
+  {
+   "t": 644.92,
+   "d": 1.48,
+   "text": "really simple program that does"
+  },
+  {
+   "t": 646.4,
+   "d": 2.12,
+   "text": "something non-trivial but fun. The"
+  },
+  {
+   "t": 648.52,
+   "d": 1.88,
+   "text": "reason it's really simple is that I was"
+  },
+  {
+   "t": 650.4,
+   "d": 1.56,
+   "text": "a beginning programmer when I wrote it."
+  },
+  {
+   "t": 651.96,
+   "d": 1.4,
+   "text": "I wasn't capable of anything more"
+  },
+  {
+   "t": 653.36,
+   "d": 1.76,
+   "text": "complicated."
+  },
+  {
+   "t": 655.12,
+   "d": 1.92,
+   "text": "I think this is shows why there are so"
+  },
+  {
+   "t": 657.04,
+   "d": 1.96,
+   "text": "many Robot Finds Kitten implementations."
+  },
+  {
+   "t": 659.0,
+   "d": 2.28,
+   "text": "Even an experienced programmer goes into"
+  },
+  {
+   "t": 661.28,
+   "d": 1.6,
+   "text": "a beginner state when learning a new"
+  },
+  {
+   "t": 662.88,
+   "d": 2.08,
+   "text": "platform or a new programming language."
+  },
+  {
+   "t": 664.96,
+   "d": 1.92,
+   "text": "Robot Finds Kitten is a good first real"
+  },
+  {
+   "t": 666.88,
+   "d": 2.56,
+   "text": "program to write. It's generally easier"
+  },
+  {
+   "t": 669.44,
+   "d": 1.68,
+   "text": "to write a new version of Robot Finds"
+  },
+  {
+   "t": 671.12,
+   "d": 1.36,
+   "text": "Kitten than to port someone else's"
+  },
+  {
+   "t": 672.48,
+   "d": 2.28,
+   "text": "version to another platform. In fact, I"
+  },
+  {
+   "t": 674.76,
+   "d": 2.0,
+   "text": "think the fullest way to enjoy Robot"
+  },
+  {
+   "t": 676.76,
+   "d": 1.16,
+   "text": "Finds Kitten is to write your own"
+  },
+  {
+   "t": 677.92,
+   "d": 2.6,
+   "text": "version of it."
+  },
+  {
+   "t": 680.52,
+   "d": 1.88,
+   "text": "Unfortunately, there are not a lot of"
+  },
+  {
+   "t": 682.4,
+   "d": 2.28,
+   "text": "games from quote real game designers"
+  },
+  {
+   "t": 684.68,
+   "d": 2.04,
+   "text": "that expand upon the ideas I used in"
+  },
+  {
+   "t": 686.72,
+   "d": 2.76,
+   "text": "Robot Finds Kitten. These 50 ports"
+  },
+  {
+   "t": 689.48,
+   "d": 1.44,
+   "text": "I'm very proud of them, but they're all"
+  },
+  {
+   "t": 690.92,
+   "d": 1.84,
+   "text": "more or less"
+  },
+  {
+   "t": 692.76,
+   "d": 1.64,
+   "text": "traditionally. Now, these aren't my"
+  },
+  {
+   "t": 694.4,
+   "d": 1.76,
+   "text": "ideas. I stole them from Rogue and"
+  },
+  {
+   "t": 696.16,
+   "d": 1.92,
+   "text": "Nethack. But, the trend in Roguelikes"
+  },
+  {
+   "t": 698.08,
+   "d": 1.68,
+   "text": "has been to move away from those parts"
+  },
+  {
+   "t": 699.76,
+   "d": 1.84,
+   "text": "of Rogue and Nethack and to emphasize"
+  },
+  {
+   "t": 701.6,
+   "d": 3.24,
+   "text": "other aspects instead."
+  },
+  {
+   "t": 705.44,
+   "d": 2.6,
+   "text": "This is my plea to all of you here. I"
+  },
+  {
+   "t": 708.04,
+   "d": 2.0,
+   "text": "really enjoy games where fun comes from"
+  },
+  {
+   "t": 710.04,
+   "d": 2.12,
+   "text": "experiencing a variety of content rather"
+  },
+  {
+   "t": 712.16,
+   "d": 1.76,
+   "text": "than only engaging with the game world"
+  },
+  {
+   "t": 713.92,
+   "d": 2.48,
+   "text": "on a tactical level. Of the items in my"
+  },
+  {
+   "t": 716.4,
+   "d": 1.52,
+   "text": "wish list, this is the most common, but"
+  },
+  {
+   "t": 717.92,
+   "d": 2.36,
+   "text": "I'd always like to see more of this."
+  },
+  {
+   "t": 720.28,
+   "d": 1.2,
+   "text": "The idea that a game can be"
+  },
+  {
+   "t": 721.48,
+   "d": 1.72,
+   "text": "intertextual, that it can refer to the"
+  },
+  {
+   "t": 723.2,
+   "d": 1.92,
+   "text": "texts of other games and to real-world"
+  },
+  {
+   "t": 725.12,
+   "d": 2.04,
+   "text": "knowledge in ways that include or that"
+  },
+  {
+   "t": 727.16,
+   "d": 1.8,
+   "text": "are not limited to in-jokes. This really"
+  },
+  {
+   "t": 728.96,
+   "d": 1.64,
+   "text": "appeals to me."
+  },
+  {
+   "t": 730.6,
+   "d": 1.56,
+   "text": "So, does the idea that a game can create"
+  },
+  {
+   "t": 732.16,
+   "d": 2.0,
+   "text": "mystery by misleading the player about"
+  },
+  {
+   "t": 734.16,
+   "d": 1.68,
+   "text": "its mechanisms, either by keeping"
+  },
+  {
+   "t": 735.84,
+   "d": 1.56,
+   "text": "certain things secret or by an"
+  },
+  {
+   "t": 737.4,
+   "d": 1.76,
+   "text": "unreliable narrator implying the"
+  },
+  {
+   "t": 739.16,
+   "d": 1.92,
+   "text": "existence of mechanisms that aren't"
+  },
+  {
+   "t": 741.08,
+   "d": 2.36,
+   "text": "there, like the Rogue and Nethack."
+  },
+  {
+   "t": 743.44,
+   "d": 1.88,
+   "text": "I'm not a game designer, like I said, so"
+  },
+  {
+   "t": 745.32,
+   "d": 1.48,
+   "text": "I don't have the vocabulary to convince"
+  },
+  {
+   "t": 746.8,
+   "d": 1.4,
+   "text": "you that these are good ideas or that"
+  },
+  {
+   "t": 748.2,
+   "d": 1.44,
+   "text": "you should try them even if they turn"
+  },
+  {
+   "t": 749.64,
+   "d": 1.92,
+   "text": "out to be bad. I just want to put the"
+  },
+  {
+   "t": 751.56,
+   "d": 1.72,
+   "text": "ideas in your head, ask you to go back"
+  },
+  {
+   "t": 753.28,
+   "d": 2.2,
+   "text": "and find the fun in concepts that have"
+  },
+  {
+   "t": 755.48,
+   "d": 1.6,
+   "text": "been neglected, even if it turns out"
+  },
+  {
+   "t": 757.08,
+   "d": 3.72,
+   "text": "they've been neglected for good reason."
+  },
+  {
+   "t": 761.24,
+   "d": 1.76,
+   "text": "I'll close by pointing out that Robot"
+  },
+  {
+   "t": 763.0,
+   "d": 1.52,
+   "text": "Finds Kitten isn't the only game that"
+  },
+  {
+   "t": 764.52,
+   "d": 2.52,
+   "text": "has pulled this off. Back in 2009, Derek"
+  },
+  {
+   "t": 767.04,
+   "d": 1.68,
+   "text": "Yu made a hit by incorporating two of"
+  },
+  {
+   "t": 768.72,
+   "d": 1.48,
+   "text": "the least popular features of"
+  },
+  {
+   "t": 770.2,
+   "d": 1.92,
+   "text": "Roguelikes, permadeath and extreme"
+  },
+  {
+   "t": 772.12,
+   "d": 2.8,
+   "text": "randomness, into a genre that was then"
+  },
+  {
+   "t": 774.92,
+   "d": 2.0,
+   "text": "unpopular. I'd like to see this happen"
+  },
+  {
+   "t": 776.92,
+   "d": 1.64,
+   "text": "again, and I don't think there's any"
+  },
+  {
+   "t": 778.56,
+   "d": 2.04,
+   "text": "reason it can't."
+  },
+  {
+   "t": 780.6,
+   "d": 2.36,
+   "text": "Thanks for your time. I've put up last"
+  },
+  {
+   "t": 782.96,
+   "d": 2.68,
+   "text": "slide with some useful links, and I'll"
+  },
+  {
+   "t": 785.64,
+   "d": 1.64,
+   "text": "be putting up a transcript to this talk"
+  },
+  {
+   "t": 787.28,
+   "d": 3.12,
+   "text": "later. Thank you."
+  },
+  {
+   "t": 796.16,
+   "d": 2.04,
+   "text": "Thanks, Leonard. Um"
+  },
+  {
+   "t": 798.2,
+   "d": 1.36,
+   "text": "we're going to take a few questions if"
+  },
+  {
+   "t": 799.56,
+   "d": 1.24,
+   "text": "you want to answer them. So, that's all"
+  },
+  {
+   "t": 800.8,
+   "d": 0.32,
+   "text": "good?"
+  },
+  {
+   "t": 801.12,
+   "d": 1.16,
+   "text": "absolutely."
+  },
+  {
+   "t": 802.28,
+   "d": 1.24,
+   "text": "Great."
+  },
+  {
+   "t": 803.52,
+   "d": 2.8,
+   "text": "Questions?"
+  },
+  {
+   "t": 808.2,
+   "d": 2.52,
+   "text": "Uh"
+  },
+  {
+   "t": 812.12,
+   "d": 2.4,
+   "text": "Yeah."
+  },
+  {
+   "t": 817.08,
+   "d": 2.28,
+   "text": "Uh to follow on I guess sort of the"
+  },
+  {
+   "t": 819.36,
+   "d": 1.52,
+   "text": "general thrust of your talk, what are"
+  },
+  {
+   "t": 820.88,
+   "d": 1.32,
+   "text": "the"
+  },
+  {
+   "t": 822.2,
+   "d": 2.68,
+   "text": "sort of least popular aspects of current"
+  },
+  {
+   "t": 824.88,
+   "d": 2.08,
+   "text": "games that you feel might be rich and"
+  },
+  {
+   "t": 826.96,
+   "d": 1.8,
+   "text": "untapped source of joy for future"
+  },
+  {
+   "t": 828.76,
+   "d": 2.08,
+   "text": "gamers?"
+  },
+  {
+   "t": 830.84,
+   "d": 1.08,
+   "text": "Um"
+  },
+  {
+   "t": 831.92,
+   "d": 1.8,
+   "text": "Can you repeat the question? There was"
+  },
+  {
+   "t": 833.72,
+   "d": 1.92,
+   "text": "some noise in here."
+  },
+  {
+   "t": 835.64,
+   "d": 1.72,
+   "text": "Are you talking about the least popular"
+  },
+  {
+   "t": 837.36,
+   "d": 1.84,
+   "text": "aspects of current games?"
+  },
+  {
+   "t": 839.2,
+   "d": 2.44,
+   "text": "Yeah. Yeah, that you think are actually"
+  },
+  {
+   "t": 841.64,
+   "d": 4.04,
+   "text": "fertile source of future rich gaming."
+  },
+  {
+   "t": 845.68,
+   "d": 1.0,
+   "text": "Um"
+  },
+  {
+   "t": 846.68,
+   "d": 3.96,
+   "text": "One thing that I really dislike in"
+  },
+  {
+   "t": 850.64,
+   "d": 1.92,
+   "text": "current games is"
+  },
+  {
+   "t": 852.56,
+   "d": 4.0,
+   "text": "grinding and completionism, but"
+  },
+  {
+   "t": 856.56,
+   "d": 2.48,
+   "text": "I think because I dislike it so much, I"
+  },
+  {
+   "t": 859.04,
+   "d": 1.84,
+   "text": "think there's there's a rich vein to be"
+  },
+  {
+   "t": 860.88,
+   "d": 1.92,
+   "text": "mined there in"
+  },
+  {
+   "t": 862.8,
+   "d": 1.88,
+   "text": "either finding different angles on it or"
+  },
+  {
+   "t": 864.68,
+   "d": 2.2,
+   "text": "subverting it in different ways. Um and"
+  },
+  {
+   "t": 866.88,
+   "d": 1.64,
+   "text": "by completionism, I maybe there's a"
+  },
+  {
+   "t": 868.52,
+   "d": 1.36,
+   "text": "technical term for this, but like the"
+  },
+  {
+   "t": 869.88,
+   "d": 2.32,
+   "text": "idea that you need to get all 64,000"
+  },
+  {
+   "t": 872.2,
+   "d": 1.16,
+   "text": "bananas"
+  },
+  {
+   "t": 873.36,
+   "d": 4.8,
+   "text": "um to get a achievement or something."
+  },
+  {
+   "t": 879.96,
+   "d": 2.32,
+   "text": "Among the non-kitten items in Robot"
+  },
+  {
+   "t": 882.28,
+   "d": 1.68,
+   "text": "Finds Kitten, are there any that you"
+  },
+  {
+   "t": 883.96,
+   "d": 1.72,
+   "text": "have a particular affection for or that"
+  },
+  {
+   "t": 885.68,
+   "d": 1.32,
+   "text": "have a story behind them that might not"
+  },
+  {
+   "t": 887.0,
+   "d": 2.12,
+   "text": "be obvious?"
+  },
+  {
+   "t": 889.12,
+   "d": 2.48,
+   "text": "Um yeah."
+  },
+  {
+   "t": 891.6,
+   "d": 1.72,
+   "text": "I was"
+  },
+  {
+   "t": 893.32,
+   "d": 1.88,
+   "text": "expecting this question, but I did not"
+  },
+  {
+   "t": 895.2,
+   "d": 2.28,
+   "text": "prepare for it, unfortunately."
+  },
+  {
+   "t": 897.48,
+   "d": 0.8,
+   "text": "Um"
+  },
+  {
+   "t": 898.28,
+   "d": 1.32,
+   "text": "If you if"
+  },
+  {
+   "t": 899.6,
+   "d": 1.2,
+   "text": "if I can"
+  },
+  {
+   "t": 900.8,
+   "d": 1.44,
+   "text": "in the background answer a different"
+  },
+  {
+   "t": 902.24,
+   "d": 2.28,
+   "text": "question and then just grab a list"
+  },
+  {
+   "t": 904.52,
+   "d": 1.92,
+   "text": "really quick, I can answer your question"
+  },
+  {
+   "t": 906.44,
+   "d": 0.84,
+   "text": "in just a minute."
+  },
+  {
+   "t": 907.28,
+   "d": 1.2,
+   "text": "Sure."
+  },
+  {
+   "t": 908.48,
+   "d": 2.24,
+   "text": "I have a question, which is"
+  },
+  {
+   "t": 910.72,
+   "d": 1.0,
+   "text": "um"
+  },
+  {
+   "t": 911.72,
+   "d": 2.4,
+   "text": "Robot Finds Kitten is about sort of the"
+  },
+  {
+   "t": 914.12,
+   "d": 2.16,
+   "text": "surprising things you found while"
+  },
+  {
+   "t": 916.28,
+   "d": 1.32,
+   "text": "playing other people's games. I'm"
+  },
+  {
+   "t": 917.6,
+   "d": 2.72,
+   "text": "wondering if you were ever then"
+  },
+  {
+   "t": 920.32,
+   "d": 2.32,
+   "text": "surprised by someone's reinterpretation"
+  },
+  {
+   "t": 922.64,
+   "d": 2.04,
+   "text": "of it or their port of it. Like, did you"
+  },
+  {
+   "t": 924.68,
+   "d": 1.68,
+   "text": "eventually find surprising things in"
+  },
+  {
+   "t": 926.36,
+   "d": 1.88,
+   "text": "your own game?"
+  },
+  {
+   "t": 928.24,
+   "d": 1.24,
+   "text": "Um"
+  },
+  {
+   "t": 929.48,
+   "d": 2.76,
+   "text": "I'm I was surprised by the variety of"
+  },
+  {
+   "t": 932.24,
+   "d": 2.72,
+   "text": "platforms that could support this. Um I"
+  },
+  {
+   "t": 934.96,
+   "d": 1.6,
+   "text": "remember there was a conversation on the"
+  },
+  {
+   "t": 936.56,
+   "d": 1.64,
+   "text": "mailing list at one point where we"
+  },
+  {
+   "t": 938.2,
+   "d": 3.76,
+   "text": "decided that an Atari 2600 port was"
+  },
+  {
+   "t": 941.96,
+   "d": 2.28,
+   "text": "impossible because of the memory"
+  },
+  {
+   "t": 944.24,
+   "d": 2.04,
+   "text": "limitations, but uh somebody was able to"
+  },
+  {
+   "t": 946.28,
+   "d": 2.36,
+   "text": "do it. Um"
+  },
+  {
+   "t": 948.64,
+   "d": 2.12,
+   "text": "that was I I was surprised about that. I"
+  },
+  {
+   "t": 950.76,
+   "d": 1.76,
+   "text": "was convinced you couldn't"
+  },
+  {
+   "t": 952.52,
+   "d": 1.44,
+   "text": "you couldn't do it, but I was mainly"
+  },
+  {
+   "t": 953.96,
+   "d": 1.84,
+   "text": "convinced by listening to someone else's"
+  },
+  {
+   "t": 955.8,
+   "d": 1.48,
+   "text": "argument."
+  },
+  {
+   "t": 957.28,
+   "d": 1.48,
+   "text": "Uh I didn't come up with the argument"
+  },
+  {
+   "t": 958.76,
+   "d": 2.68,
+   "text": "myself."
+  },
+  {
+   "t": 962.36,
+   "d": 1.52,
+   "text": "Um should we take another question or do"
+  },
+  {
+   "t": 963.88,
+   "d": 2.48,
+   "text": "you want to answer the previous one?"
+  },
+  {
+   "t": 966.36,
+   "d": 3.4,
+   "text": "Um I am looking at uh I'm looking at the"
+  },
+  {
+   "t": 969.76,
+   "d": 5.36,
+   "text": "original non-kit items. Um"
+  },
+  {
+   "t": 977.4,
+   "d": 3.08,
+   "text": "That's it. Uh"
+  },
+  {
+   "t": 981.64,
+   "d": 4.24,
+   "text": "There's there's one original"
+  },
+  {
+   "t": 985.88,
+   "d": 2.24,
+   "text": "Yeah, there's one original one. It says"
+  },
+  {
+   "t": 988.12,
+   "d": 1.76,
+   "text": "uh it's called uh daily hunger"
+  },
+  {
+   "t": 989.88,
+   "d": 3.0,
+   "text": "conditioner from Australasia."
+  },
+  {
+   "t": 992.88,
+   "d": 1.96,
+   "text": "And"
+  },
+  {
+   "t": 994.84,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 996.04,
+   "d": 1.6,
+   "text": "I know where that came from. I don't"
+  },
+  {
+   "t": 997.64,
+   "d": 2.08,
+   "text": "know how it got to quote daily hunger"
+  },
+  {
+   "t": 999.72,
+   "d": 1.36,
+   "text": "conditioner from Australasia, but it"
+  },
+  {
+   "t": 1001.08,
+   "d": 2.32,
+   "text": "came from a a bottle of hair conditioner"
+  },
+  {
+   "t": 1003.4,
+   "d": 3.12,
+   "text": "that I saw on the in the shower. Um and"
+  },
+  {
+   "t": 1006.52,
+   "d": 2.6,
+   "text": "I just took that idea of hair"
+  },
+  {
+   "t": 1009.12,
+   "d": 2.24,
+   "text": "conditioner and and changed words until"
+  },
+  {
+   "t": 1011.36,
+   "d": 1.88,
+   "text": "it looked weird. Um I think the hair"
+  },
+  {
+   "t": 1013.24,
+   "d": 1.8,
+   "text": "conditioner was from Australia. It had a"
+  },
+  {
+   "t": 1015.04,
+   "d": 2.36,
+   "text": "kangaroo on it."
+  },
+  {
+   "t": 1017.4,
+   "d": 2.48,
+   "text": "Um Most I mean, most of them either"
+  },
+  {
+   "t": 1019.88,
+   "d": 2.56,
+   "text": "there is no there is no story. It's just"
+  },
+  {
+   "t": 1022.44,
+   "d": 1.92,
+   "text": "a a random thing that I or someone else"
+  },
+  {
+   "t": 1024.36,
+   "d": 2.32,
+   "text": "came up with or the story is is pretty"
+  },
+  {
+   "t": 1026.68,
+   "d": 1.72,
+   "text": "obvious cuz it's a Monty Python"
+  },
+  {
+   "t": 1028.4,
+   "d": 2.16,
+   "text": "reference or something."
+  },
+  {
+   "t": 1030.56,
+   "d": 2.44,
+   "text": "Um"
+  },
+  {
+   "t": 1033.32,
+   "d": 1.8,
+   "text": "The uh Oh, actually, I'll tell I'll I'll"
+  },
+  {
+   "t": 1035.12,
+   "d": 1.88,
+   "text": "a I'll tell a story."
+  },
+  {
+   "t": 1037.0,
+   "d": 2.56,
+   "text": "Um, 100,000 carpet fibers."
+  },
+  {
+   "t": 1039.56,
+   "d": 2.36,
+   "text": "Um, that's a reference to the"
+  },
+  {
+   "t": 1041.92,
+   "d": 3.64,
+   "text": "novelization of The Goonies, um, which I"
+  },
+  {
+   "t": 1045.56,
+   "d": 2.6,
+   "text": "read when I was a kid. And there's this"
+  },
+  {
+   "t": 1048.16,
+   "d": 1.4,
+   "text": "there's this"
+  },
+  {
+   "t": 1049.56,
+   "d": 2.08,
+   "text": "as it often happens in novelizations of"
+  },
+  {
+   "t": 1051.64,
+   "d": 1.72,
+   "text": "movies, um,"
+  },
+  {
+   "t": 1053.36,
+   "d": 2.36,
+   "text": "the person doing the novelization has to"
+  },
+  {
+   "t": 1055.72,
+   "d": 2.2,
+   "text": "put in all sorts of weird backstory"
+  },
+  {
+   "t": 1057.92,
+   "d": 2.96,
+   "text": "that's not in the movie. And there's a a"
+  },
+  {
+   "t": 1060.88,
+   "d": 2.12,
+   "text": "backstory for one of the one of the"
+  },
+  {
+   "t": 1063.0,
+   "d": 1.76,
+   "text": "Goonies, I guess,"
+  },
+  {
+   "t": 1064.76,
+   "d": 2.8,
+   "text": "um, that involves the phrase 100,000"
+  },
+  {
+   "t": 1067.56,
+   "d": 1.24,
+   "text": "toothpicks."
+  },
+  {
+   "t": 1068.8,
+   "d": 1.08,
+   "text": "Um,"
+  },
+  {
+   "t": 1069.88,
+   "d": 2.52,
+   "text": "and I was just thinking of that phrase,"
+  },
+  {
+   "t": 1072.4,
+   "d": 4.44,
+   "text": "and in the pure the purest, um,"
+  },
+  {
+   "t": 1076.84,
+   "d": 2.88,
+   "text": "lazy creative person move, I looked"
+  },
+  {
+   "t": 1079.72,
+   "d": 1.96,
+   "text": "around the room and thought, \"Well, what"
+  },
+  {
+   "t": 1081.68,
+   "d": 2.56,
+   "text": "is there 100,000 of there of in here?\""
+  },
+  {
+   "t": 1084.24,
+   "d": 1.72,
+   "text": "And the answer was carpet fibers. So,"
+  },
+  {
+   "t": 1085.96,
+   "d": 2.04,
+   "text": "that's where 100,000 carpet fibers came"
+  },
+  {
+   "t": 1088.0,
+   "d": 1.68,
+   "text": "from. It was me sort of filing this"
+  },
+  {
+   "t": 1089.68,
+   "d": 2.12,
+   "text": "serial numbers off this off this joke in"
+  },
+  {
+   "t": 1091.8,
+   "d": 3.72,
+   "text": "the novelization of The Goonies."
+  },
+  {
+   "t": 1095.52,
+   "d": 2.96,
+   "text": "Awesome. Thank you so much, Leonard."
+  },
+  {
+   "t": 1098.48,
+   "d": 1.6,
+   "text": "Oh, it's my pleasure. Thanks, everybody."
+  },
+  {
+   "t": 1100.08,
+   "d": 1.64,
+   "text": "I hope you're enjoying the the"
+  },
+  {
+   "t": 1101.72,
+   "d": 2.72,
+   "text": "celebration."
+  }
+ ]
+}

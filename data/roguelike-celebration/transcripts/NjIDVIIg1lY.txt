@@ -1,0 +1,86 @@
+Jasmine Otto - Cyclic Plot Generation in a Narrative Instrument
+Speaker: Jasmine Otto
+https://www.youtube.com/watch?v=NjIDVIIg1lY
+Year: 2021   Kind: talk   Captions: auto (en)
+
+## Intro
+
+[0:00:03] And so, um, moving along, a little bit early, but nothing wrong with that. Next up, we are going to have Jasmine Otto, who is talking about cyclic plot generation in a mixed initiative narrative instrument. Um, very exciting. Jasmine creates and studies software instruments, which I find a really, um, just evocative phrase. So, without getting too into it, I think I'll just let you take the floor. Uh-oh, we got some issues with your mic quality there. I don't know if there's like jiggle the connectors. One moment. You sound really cool. You sound like a really cool robot, but it's, uh, not an understandable robot, unfortunately. I have switched to my default mic. There you go. You sound great. All right. All right. Hello, and I'm really excited to be going on after
+
+[0:01:04] uh, Brenda's amazing talks, uh, because I'm really interested, uh, in sort of exposing these social worlds and taking the interface, what I'm calling the narrative instrument, as your, uh, point of contact with the player, as a way to, sort of, uh, suggest as much as you can, uh, without having to do do all the heavy lifting back in this, uh, behind the scenes. I'll get into what that means. Uh, I'm Jasmine. I'm Jasmine.com on Twitter. Uh, doot.
+
+## Druid Game
+
+[0:01:46] Uh, and the game I've been making, it's actually a series of prototypes. It's called Druid game. Uh, this is, uh, a social simulation that I've been trying several different backends for uh to make these faction games happen without necessarily using a trait system. We'll talk about uh how I'm mounting the story lets. Uh
+
+## Social World
+
+[0:02:17] I'm going to go through the background a little fast here. Uh So, the social world most of that there's always the danger that all the things your characters are doing to each other and maybe there's hundreds of characters, you can't put that all on the screen at once and have the player be expected to follow it. You really have to carefully uh pick where the where attention is. Uh
+
+## Sim Rival
+
+[0:02:45] you're going to give them an interface that allows them to very cleverly point their attention at different parts of the simulation that are relevant to them because say they're playing a specific Sim and that Sim has a particular rival and now they're going to go over and check out what the rival is doing and 80 other Sims are just going about their day. Uh
+
+## Game Studio
+
+[0:03:09] So, I'm I do not have the resources of Maxis uh of game studio. It's just me. So, I'm building for these prose games uh I started thinking this would be a parser game. Then I was thinking, oh, it's in the browser. It's an idle game. And now I'm all the way around to thinking this is really a a bunch of decks of cards that have some narrative instruments that I don't that I'm still trying to figure out what kind of genre it is. Uh
+
+## Genre
+
+[0:03:45] I'm presenting this using a lot of inspiration from tarot. Uh so that's a uh way to uh uh experience the uh the story of the world from more than
+
+## The Current
+
+[0:04:04] one perspective, specifically that of the querent and that of the reader, uh as the querent, I'm playing the game in sort of the traditional way, uh but as the reader, I am uh cons- I am taking the deck that's all the story elements that exist in the game and manipulating those, uh and sort of stacking the deck in certain ways, the uh to lead myself as the querent through the narrativization of these cards, which don't have any artificial intelligence, there's no way there can be bugs in there, but funny surprises happen any midway, and that's great. Uh Most of the surprises come from the card having
+
+[0:05:05] uh many many features I could latch onto and only a few that I'm actually going to latch onto in the moment, and I really want to I've done this with illustration, but now I really want to try and see if Prose has the same polysemous quality, uh
+
+## Generic Story
+
+[0:05:29] so this works less well in generic story worlds, uh this is sort of an early attempt where I'm really focused on getting the plot to out getting the beats to out of the source of uh randomness activity and dropping it to into a context uh, that is going to show uh, exactly what happened in this world of three characters. Uh, it just prints it out to the screen. I don't like that. Give me another telling of this story. Or make a new story and tell me that one. Uh, and that lets me have the conversation with the deck that gives me the sense of whether it's it's making principal decisions or it's starting to contradict itself. Uh, so I want to get into some of the other
+
+[0:06:31] prototypes uh, before I get into the cues uh,
+
+## Other Prototypes
+
+[0:06:36] and the main decision here is that all of these are connected by the idea that all your agents in these are druids. Uh, they're magic, they're uh, really mean to each other. There's lots of drama. Uh,
+
+## Early Prototypes
+
+[0:06:55] so I one of my early prototypes was this idea that people will play Sims 3 in a wolf run. They'll let the Sims uh, do their thing for tens of generations without laying a hand on the simulation. And that's going to ideally produce these interesting family trees that you can then go into your Sims panel and look at that. So I put together just that module and I decided to make it a little more interesting uh, that you have long-lived vampires in town who can cause other uh, characters in town to become long-lived vampires. And it makes these really fun trees that you can tab around using the panel of all the characters here, but it's not that fun to just sit down with it and watch it go for a little bit. This is really something I would be coming into the artifact at the end and trying to piece it together. This wasn't a prose
+
+[0:07:56] game. Uh
+
+## Learning from Other Characters
+
+[0:07:59] So, I took another shot at uh characters learning from other characters. Uh They're Now they've got these text descriptions, and the text descriptions keep getting longer because they go to other characters and gain aspects from them, and a few of these are special characters who can invent new aspects. Uh And I have another file uh here that that just contains the text tree of all the aspects that each of these characters can have, and then I let them bounce off of each other and figure out what descriptions they end up having with this really story-full history. This was fun. I I'm rolling this back into the game, but since it's forward simulation, they have no idea how to stop. They just accumulate more description text forever.
+
+## Murders
+
+[0:08:54] So, I decided to allow murders to happen because eventually uh most of the characters will be murdered, and I can say, "Okay, this is a new start condition. Reset." Uh I wanted them to be able to reason about who had murdered each other in kind of a clumsy way. Uh So, now there's a system where all of them belong to this faction, and the faction is allowed to attack the other faction uh and they're allowed to accuse each other, but I was having a a really bad time debugging it to figure out, "Okay, I want this event ultimately to fire where somebody is dramatically accused of doing a murder, uh and it's There's just so many people uh going tit-for-tat or tap-tap-tap in this case. Uh that it's it's really interesting, but the
+
+[0:09:55] game uh isn't giving me the leverage I need here. Uh So, this is how I came to this idea of cyclic uh story uh generation. And that's the very much the idea of cyclic dungeon
+
+## Cyclic Generation
+
+[0:10:13] generation that we know from level design, uh from the games like Unexplored. Uh But now, instead of trying to guarantee there's a key and a door, we're guaranteeing I when I set up a plot element, it will pay off. So, I'm going to stick with the social graph abstraction, but I'm going to make this coloring on it, and I'm going to read off the coloring in a certain way. Uh So, in this case, that's red character uh is that heir uh who has this who has generated this verb uh and with respect to that uh target who's the yellow character. We also have have a helper in this one. Uh who can also uh fire a verb, and that has a certain storylet
+
+[0:11:13] which uh is the prose gloss. And we have I'm trying to find the boundary between the verb which has which might have this stateful consequence in the world and the storylet which doesn't have any consequences in the world of the game, but only in the mind of the reader, which is where we want to create uh the sense of interaction in the end anyway.
+
+## Pacing
+
+[0:11:43] So, the some of the tricks that one more trick here uh to do the pacing so that characters aren't paying off each other in random order, we're actually going to we're not going to select edges at random. We're going to walk this edge. Now, both of those characters are in in the scene. We're going to walk the next edge. Now, maybe a third character entered the scene, or maybe we started a new scene with two characters. And that's a cut, and the cuts start to create the feeling that maybe this is a chapter of prose rather than the a raw event trace. They're acting like they're separating out the floors of the this game. Uh and that kind of chunking is going to support a lot more complexity uh in the prose hopefully. Uh we're not allowed to uh
+
+[0:12:45] remove characters uh completely because it's cyclic generation. We They They might have actions they still have to do, but we can stack their deck and change it so that if they got killed, now they're a ghost, and people are appropriately uh distressed when they are interacting with this ghost. That's a fun thing to uh be able to author for.
+
+## Multiscale
+
+[0:13:15] And this has extensions uh to more faction-based games. Uh there's a lot of potential if you multi-scale it if I can get this cyclic library to be nice and modular so that you can have the faction game that's triggering these uh peer-to-peer interactions and then zooms back out to the larger picture.
+
+## Conclusion
+
+[0:13:40] Uh so that's my goal. These are my tricks. Uh and
+
+## Outro
+
+[0:13:48] yeah, I'm really excited to uh just talk about things we want to make with these kinds of affordances. Uh ask me anything about the tech stack or libraries or other work in like some story sifting. That's uh I'll ask without the scope of this talk, but it's really exciting stuff. Yeah, thank you. That's a lot to fit into 15 minutes, so thank you for cramming so much knowledge in. Uh everyone, I think yeah, really enjoyed it. Looks like people got some cool ideas for some work themselves. So

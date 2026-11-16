@@ -1,0 +1,95 @@
+{
+  "id": "VzoruhRyvqQ",
+  "title": "Ada Null - Dyke sex and ennui: Generating unending narrative in 'Kiss Garden'",
+  "speaker": "Ada Null",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=VzoruhRyvqQ",
+  "talk_type": "design",
+  "summary": "Ada Null analyses Kiss Garden, a generative installation in which a receipt printer endlessly prints two interleaved streams of procedurally generated text: a dyke's short-lived relationships and sexual encounters, and a contemptuous narrator wandering an overgrown garden. Using Kate Compton's distinction between perceptual differentiation and perceptual uniqueness, she argues the piece deliberately achieves differentiation but falls short of uniqueness to evoke ennui, the feeling of endlessly more of the same. She keeps the bland text engaging through layering and rapid change at the event level, adds small textural exceptions, and stresses that the material form (a long, disposable receipt) carries much of the aesthetic weight.",
+  "games": [
+    "Kiss Garden"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "perceptual differentiation",
+      "kind": "principle",
+      "claim": "Kate Compton's framework distinguishes three levels of generator output: oatmeal (unique but perceived as identical), perceptual differentiation (clearly different but not memorable), and perceptual uniqueness (characterfully distinct).",
+      "detail": "Ada Null illustrates the levels with gardens: a topiary garden of identically clipped trees is oatmeal, a forest of wild trees of one species is perceptually differentiated, and Bosch's Garden of Earthly Delights is perceptually unique. Uniqueness is what most generators aim for, the kind of output players discuss as a one-in-a-million run.",
+      "t": 272,
+      "quote": "there's a lower bar that a procedural generator can clip, which Compton calls perceptual differentiation",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "perceptual differentiation",
+      "kind": "principle",
+      "claim": "Kiss Garden deliberately aims for perceptual differentiation while falling short of perceptual uniqueness, because that sweet spot produces a feeling of ennui rather than shallow boredom.",
+      "detail": "Walking through a forest of differentiated trees you know you are making progress and not walking in circles, but it is all the same 'blah', producing a deep ennui. The design goal was to capture the sense of endlessly more of the same, an aesthetic aim most generators avoid.",
+      "t": 336,
+      "quote": "the goal for Kiss Garden's approach to procedural generation is to achieve perceptual differentiation, but to intentionally fall short of perceptual uniqueness",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text grammars",
+      "kind": "technique",
+      "claim": "Kiss Garden's stanzas use a simple grammar with limited variation and no rare paths or tonal divergence, which is enough to reach differentiation without uniqueness.",
+      "detail": "Breakup events, sexual encounters (randomly choosing whose place and who tops) and garden stanzas are repetitive fill-in-the-blank grammars. The speaker calls this the default, the 'B minus student's' generator; the disaffected word choice of the narrator helps the text blur together.",
+      "t": 378,
+      "quote": "We just use a simple grammar. Give it some variation, but not too much. No special rare paths",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative momentum",
+      "kind": "technique",
+      "claim": "Kiss Garden keeps intentionally bland generated text engaging through two event-level techniques: layering several things at once and rapid change.",
+      "detail": "Two narratives play simultaneously, and the dating narrator usually sees two or three people at once. The output switches narratives every stanza, relationships last only a few dates between meeting and breakup, and the garden narrator shifts between wandering, pondering and obsessing over a plant.",
+      "t": 446,
+      "quote": "two clear techniques for maintaining a sense of narrative momentum which are both implemented at the wider level of event generation. Layering and rapid change",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme",
+      "kind": "principle",
+      "claim": "Social-media-feed pacing techniques in Kiss Garden reinforce rather than undercut its theme, creating chaos and overwhelm while going nowhere.",
+      "detail": "The speaker acknowledges layering and rapid change sound like techniques for 'iPad babies', but argues they keep the piece engaging without weakening the thematic intention of stagnation, matching her memory of that period of her life.",
+      "t": 519,
+      "quote": "They create this sense of of chaos and being overwhelmed while still going nowhere at all",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "rare variation",
+      "kind": "technique",
+      "claim": "Kiss Garden adds texture with subtle variants (relationship types that shift tone) and rare surreal moments that act as pointed exceptions to the general sameness.",
+      "detail": "Each relationship is a hookup, friends-with-benefits or romantic entanglement with slightly different prose. When the garden narrator obsesses over a plant, the prose strings active phrases with random conjunctions into surreal logic, a 'rare special tree'. These exceptions reinforce the overall failure of uniqueness and give something compelling in a sea of blah.",
+      "t": 564,
+      "quote": "the moments of garden lyricism as like a rare special tree, a pointed moment of perceptual uniqueness",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "materiality",
+      "kind": "principle",
+      "claim": "How viewers physically encounter generated output is an under-considered part of procedural generation; Kiss Garden's endless, disposable receipt carries much of its meaning.",
+      "detail": "The long receipt immediately communicates endlessness, small text draws viewers close and exaggerates scale, and viewers can rip or tread on it because there will always be more, signalling that the content is unimportant.",
+      "t": 583,
+      "quote": "I think this is one of those really easily underconsidered elements of procedural generation. How does the viewer encounter your generated artifacts?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "example-first design",
+      "kind": "technique",
+      "claim": "Kiss Garden was built by first writing out by hand what a desired output should look like, then building simple event generators to reach it.",
+      "detail": "In Q&A, the speaker explains that transitions simply alternate one event from each narrative and that the whole piece is quite simple; starting from a hand-written target output made it not hard to get there. The host notes this bears fruit for many generators.",
+      "t": 718,
+      "quote": "I started making the piece by just writing out what I wanted an output to look like and then it turns out it wasn't that hard",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

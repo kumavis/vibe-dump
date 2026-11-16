@@ -1,0 +1,460 @@
+{
+ "id": "qogCwa12jEg",
+ "url": "https://www.youtube.com/watch?v=qogCwa12jEg",
+ "title": "Eiríkr Åsheim: Uxn: Permacomputing & Roguelikes",
+ "speaker": "Eiríkr Åsheim",
+ "talk_title": "Uxn: Permacomputing & Roguelikes",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 721,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Will your favorite roguelikes still be playable in 20 years? How about 50? The Uxn/Varvara ecosystem is a radically simple, portable, and personal approach to computing. Learn how to produce games that fit in 64-kilobyte ROMs and which run on 25-year-old hardware as easily as on modern computers or web browsers. Embrace limits to fuel your creativity!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 50,
+   "title": "About Me"
+  },
+  {
+   "start": 91,
+   "title": "About Uxn"
+  },
+  {
+   "start": 115,
+   "title": "Uxn Ecosystem"
+  },
+  {
+   "start": 185,
+   "title": "Uxn Limitations"
+  },
+  {
+   "start": 213,
+   "title": "Examples"
+  },
+  {
+   "start": 273,
+   "title": "Permacomputing"
+  },
+  {
+   "start": 370,
+   "title": "Roguelike"
+  },
+  {
+   "start": 447,
+   "title": "Varvara"
+  },
+  {
+   "start": 526,
+   "title": "Why Uxn"
+  },
+  {
+   "start": 622,
+   "title": "Goal"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1280,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.24,
+   "d": 1.2,
+   "text": "ALEXIE: We are going to be continuing on from here. Running I think six minutes ahead of"
+  },
+  {
+   "t": 4.44,
+   "d": 1.11,
+   "text": "the normal schedule. Going to go to Eiríkr's talk and then after Brian's we will do attempt"
+  },
+  {
+   "t": 5.55,
+   "d": 1.53,
+   "text": "number two at Robin's talk. Thanks, everyone, for being flexible. Eiríkr is a programmer,"
+  },
+  {
+   "t": 7.08,
+   "d": 3.74,
+   "text": "musician, and artist. Years ago he helped maintain Angband; more recently he has been"
+  },
+  {
+   "t": 10.82,
+   "d": 0.67,
+   "text": "building tools and libraries for the Uxn/Varvara ecosystem. He's drawn to esoteric knowledge"
+  },
+  {
+   "t": 11.49,
+   "d": 6.62,
+   "text": "and cryptic systems. and was at Roguelike Celebration 2016. You came to my talk even"
+  },
+  {
+   "t": 18.12,
+   "d": 7.12,
+   "text": "though the developers of Rogue were speaking in the other room. I have fond memories."
+  },
+  {
+   "t": 25.24,
+   "d": 17.44,
+   "text": ">> Welcome to my lightning talk \"Uxn: Permacomputing & Roguelikes.\" I will"
+  },
+  {
+   "t": 42.68,
+   "d": 9.68,
+   "text": "explain what Uxn is and why I find it interesting. First a bit about myself. I have been programming"
+  },
+  {
+   "t": 52.36,
+   "d": 7.2,
+   "text": "for a little over 20 years as a hobby and professionally. I help maintain Angband but"
+  },
+  {
+   "t": 59.56,
+   "d": 8.84,
+   "text": "it is more of a Matrious developer. I have worked with C, Python, and others. However,"
+  },
+  {
+   "t": 68.4,
+   "d": 3.24,
+   "text": "I have never worked in the game industry or sold games professionally to make a living."
+  },
+  {
+   "t": 73.44,
+   "d": 5.56,
+   "text": "About three years ago, I discovered the Uxn ecosystem and started targeting all hobby"
+  },
+  {
+   "t": 79.0,
+   "d": 11.04,
+   "text": "programming toward Uxn. I have implemented many programs and libraries. It basically captured"
+  },
+  {
+   "t": 90.04,
+   "d": 6.84,
+   "text": "my imagination. It wascreted by Devon and the hundreds rabidity rabbit collective. Their"
+  },
+  {
+   "t": 96.88,
+   "d": 17.36,
+   "text": "decision to become full time nomads living board a sailboat. I definitely encourage you to look"
+  },
+  {
+   "t": 114.24,
+   "d": 8.0,
+   "text": "them up after this talk. Uxn describes a small mostly self-contained ecosystem consisting of Uxn"
+  },
+  {
+   "t": 122.24,
+   "d": 6.36,
+   "text": "assembly language, virtual machine specification, emulators for various platforms, and ROMs"
+  },
+  {
+   "t": 128.6,
+   "d": 15.08,
+   "text": "implementing programs and games like NES ROMS. There are 64 kilobytes of memory. It is documented"
+  },
+  {
+   "t": 143.68,
+   "d": 7.2,
+   "text": "how to do I/O, play to the screen, sounds. There are emulators for many platforms. Such as SDL,"
+  },
+  {
+   "t": 150.88,
+   "d": 13.48,
+   "text": "X11 Nintendo handheld and a bunch more. Really exciting. ROMs implementing in games are pretty"
+  },
+  {
+   "t": 164.36,
+   "d": 20.04,
+   "text": "simple. A 45 Fe here are examples. 3450 bytes Mandel and so on. Here are additional limitations"
+  },
+  {
+   "t": 184.4,
+   "d": 6.89,
+   "text": "I haven't mentioned yet. Built in data types are 8-16 bit integers. The VM is mostly single"
+  },
+  {
+   "t": 191.29,
+   "d": 10.71,
+   "text": "threaded. Sandbox to the directory only. Four figure display. These limitations are constraining"
+  },
+  {
+   "t": 202.68,
+   "d": 8.72,
+   "text": "but can be free constraining but can be freeing. This represents a significant upgrade over the"
+  },
+  {
+   "t": 211.4,
+   "d": 6.68,
+   "text": "original roguelike. Here are some examples of what UXN programs can look like. Really quickly."
+  },
+  {
+   "t": 218.08,
+   "d": 10.84,
+   "text": "Here is that mandebrot set. They are creating the rainbow colors. You can see this animating. I have"
+  },
+  {
+   "t": 228.92,
+   "d": 14.8,
+   "text": "it running and here is the total emulator. Just to prove this is handling all the control characters."
+  },
+  {
+   "t": 248.64,
+   "d": 6.24,
+   "text": "And finally, here is the solitaire game. I am not going to make you watch me play solitaire. I will"
+  },
+  {
+   "t": 254.88,
+   "d": 15.08,
+   "text": "show you what exists and you can move the card around and so on. Some of you may be wondering"
+  },
+  {
+   "t": 269.96,
+   "d": 12.8,
+   "text": "what that is or what it has to do with Uxn. This is coined in 1978 to sustain agricultural. There"
+  },
+  {
+   "t": 282.76,
+   "d": 5.76,
+   "text": "is not a simple definition of permacomputing. I will give you directives to give you a sense of"
+  },
+  {
+   "t": 288.52,
+   "d": 7.76,
+   "text": "what permacomputing is. It is designed to keep older devices as useful as possible. It lets you"
+  },
+  {
+   "t": 299.96,
+   "d": 10.04,
+   "text": "do more with less and do less with less. Conserve energy materials. Hopefully this give a broad"
+  },
+  {
+   "t": 310.0,
+   "d": 6.92,
+   "text": "sense of permacomputing and reduce software and hardware and maximize the relative usefulness to"
+  },
+  {
+   "t": 316.92,
+   "d": 7.0,
+   "text": "us. Let's consider these in the context of what I said about Uxn. Uxn runs on 20 year old handheld"
+  },
+  {
+   "t": 323.92,
+   "d": 6.36,
+   "text": "devices and 30-year old computers as well as modern browsers. It should be possible to use on"
+  },
+  {
+   "t": 330.28,
+   "d": 10.84,
+   "text": "any system used today. Rom should continue to work as long as emulators are used. Nothing is certain."
+  },
+  {
+   "t": 341.12,
+   "d": 10.32,
+   "text": "But if people want to run Uxn in the future and have the spec they probably can. I am curious"
+  },
+  {
+   "t": 351.44,
+   "d": 9.56,
+   "text": "whether we can achieve the goals. Hopefully it is pretty self-explanatory and finally minimizing"
+  },
+  {
+   "t": 361.0,
+   "d": 11.92,
+   "text": "complexity. A simple one is easier to test. What about roguelikes? What do they have do"
+  },
+  {
+   "t": 372.92,
+   "d": 4.84,
+   "text": "with permacomputing? Dennis Ritchie once said rogue was the biggest waste of CPU cycles in"
+  },
+  {
+   "t": 377.76,
+   "d": 12.8,
+   "text": "history. Was rogue wasteful? I would argue they targeted the system and hardware didn't need to"
+  },
+  {
+   "t": 390.56,
+   "d": 9.92,
+   "text": "be created. 40 years later we are still torque talking about Rogue and descendants. It used"
+  },
+  {
+   "t": 400.48,
+   "d": 5.84,
+   "text": "procedural generation to minimize assets and could be played over a phone line in the early '80s."
+  },
+  {
+   "t": 406.32,
+   "d": 6.32,
+   "text": "Conserve energy materials. It was just one or a handful of people working on it to do this. It"
+  },
+  {
+   "t": 412.64,
+   "d": 3.6,
+   "text": "didn't make a lot of work. Minimizing complexity. Rogue was updated, ported, and remixed. It was"
+  },
+  {
+   "t": 419.76,
+   "d": 5.24,
+   "text": "influential because of the preciseness. This isn't the only way to look at video games from"
+  },
+  {
+   "t": 425.0,
+   "d": 13.12,
+   "text": "a permacomputing angle. It is just an interests interesting one for us to continue. Uxn is a good"
+  },
+  {
+   "t": 438.12,
+   "d": 4.96,
+   "text": "fit for roguelikes because it is aligned with many things that made rogue and roguelikes successful."
+  },
+  {
+   "t": 447.72,
+   "d": 5.08,
+   "text": "At this in the talk, I have been hoping to show off my own roguelike demo but unfortunately life"
+  },
+  {
+   "t": 452.8,
+   "d": 4.12,
+   "text": "got in the way and I don't have much to show yet. Instead I will take a moment to walk through how"
+  },
+  {
+   "t": 456.92,
+   "d": 14.24,
+   "text": "Varvara works. Program counter which is 16 bit value to the next instruction to decode and run."
+  },
+  {
+   "t": 471.16,
+   "d": 5.76,
+   "text": "Two stacks for passing and working with values. 64 kilobytes of main memory. That's where you put"
+  },
+  {
+   "t": 476.92,
+   "d": 5.04,
+   "text": "everything in the program and data. And device ports for reading and writing and interacting"
+  },
+  {
+   "t": 481.96,
+   "d": 4.24,
+   "text": "with the actual emulator and drawing and playing sounds. That's it. That's all you have to care"
+  },
+  {
+   "t": 486.2,
+   "d": 22.12,
+   "text": "about. This is called reset since it happens when the VM starts the reset. They will run"
+  },
+  {
+   "t": 508.32,
+   "d": 8.76,
+   "text": "other codes. The console vector runs when text is on standard input. Audio runs when a sound"
+  },
+  {
+   "t": 517.08,
+   "d": 33.68,
+   "text": "finishes playing. And the mouse and controller run on respective input. Which console you"
+  },
+  {
+   "t": 550.76,
+   "d": 10.2,
+   "text": "use might come down to what you value. Uxn and all the language you tend to work is much simpler"
+  },
+  {
+   "t": 560.96,
+   "d": 13.16,
+   "text": "than Python or Java. Similarly, while there are independent implementations of popular console,"
+  },
+  {
+   "t": 575.04,
+   "d": 6.64,
+   "text": "the effort seems larger and sometimes involves reverse engineering. I love creating games that"
+  },
+  {
+   "t": 581.68,
+   "d": 6.6,
+   "text": "people play on web browser or handheld device as they already have got. Here is my talk running on"
+  },
+  {
+   "t": 588.28,
+   "d": 5.68,
+   "text": "my 3DS. You can see going through the slides. Maybe if I had more courage I would have done"
+  },
+  {
+   "t": 593.96,
+   "d": 8.28,
+   "text": "the talk this way. Not quite that courageous. It is possible that I will eventually find some"
+  },
+  {
+   "t": 602.24,
+   "d": 3.84,
+   "text": "of the constraints limiting. In that case, I am confident I will be able to create a new"
+  },
+  {
+   "t": 607.08,
+   "d": 6.16,
+   "text": "one and port over. Devon has said they hope this inspires more people to create their own"
+  },
+  {
+   "t": 613.96,
+   "d": 4.84,
+   "text": "computing systems. Regardless, the goal of my talk isn't to convince you the Roguelike"
+  },
+  {
+   "t": 618.8,
+   "d": 6.36,
+   "text": "Celebration to drop everything and start using Uxn only. Instead, my goal is to help encourage"
+  },
+  {
+   "t": 625.16,
+   "d": 22.8,
+   "text": "you or help you consider whether a smaller, simpler, and cozier environment is adequate."
+  },
+  {
+   "t": 648.52,
+   "d": 12.8,
+   "text": "ALEXEI: This is making me think. I recently bought a bunch of Zachtronic games. I miss programming"
+  },
+  {
+   "t": 661.32,
+   "d": 10.28,
+   "text": "and assembly when there were 10 things I could do. There is a longing for the simplicity of that"
+  },
+  {
+   "t": 671.6,
+   "d": 4.56,
+   "text": "type of puzzling. It is interesting to me that like that's compelling enough to be a game that"
+  },
+  {
+   "t": 676.16,
+   "d": 5.88,
+   "text": "people want to have artificial constraints that make them program things in a limited feature"
+  },
+  {
+   "t": 682.04,
+   "d": 6.84,
+   "text": "set. You know, you could be doing it. >> I love those games. Maybe I am just"
+  },
+  {
+   "t": 688.88,
+   "d": 16.04,
+   "text": "drawn to this stuff. We should get someone to help us run the mud."
+  },
+  {
+   "t": 704.92,
+   "d": 8.56,
+   "text": ">> I would love to help you do that. ALEXEI: Fantastic. Yes. Hopefully people will"
+  },
+  {
+   "t": 713.48,
+   "d": 5.76,
+   "text": "be able to follow up with you afterwards in Whip Show. Thank you very much. Great to have you back."
+  }
+ ]
+}

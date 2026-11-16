@@ -1,0 +1,119 @@
+{
+  "id": "_vf3HO3wn20",
+  "title": "Brenda Romero - Dynamic Relationships and Traits in Empire of Sin",
+  "speaker": "Brenda Romero",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=_vf3HO3wn20",
+  "talk_type": "design",
+  "summary": "Brenda Romero traces her interest in dynamic character relationships from Wizardry and tabletop D&D through Jagged Alliance's mercenary likes and dislikes to Empire of Sin. She describes Empire of Sin's gangster traits, divided into historical, life lesson, physical attribute and personality categories, each affecting only one or two things, and her rule that players should never be stuck with a bad trait. Her design process starts by listing the setting's systems and their intersections rather than characters. She closes with emergent relationship bugs and, in Q&A, the opportunity to change characters while they are away from player control.",
+  "games": [
+    "Empire of Sin",
+    "Wizardry: Proving Grounds of the Mad Overlord",
+    "Jagged Alliance",
+    "Crusader Kings",
+    "Dungeons & Dragons"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player imagination",
+      "kind": "history",
+      "claim": "Even games with no relationship simulation, like the first Wizardry, invite players to invent dynamic relationships among their party in their heads.",
+      "detail": "Romero says Wizardry's six-character party did not develop relationships at all, but she took their personalities and interactions far beyond what the game intended; tabletop D&D showed her relationships forming among characters and players.",
+      "t": 187,
+      "quote": "the characters actually did not develop dynamic relationships at all however in my head they did",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "relationships",
+      "kind": "example",
+      "claim": "Jagged Alliance stood out among tactical games because its mercenaries had a web of likes, dislikes and hatreds that determined who would work with whom and evolved dynamically.",
+      "detail": "Some relationship types overrode others: the game tracked your death rate and reputation, and mercenaries would quit if a buddy died due to poor management. This web gave characters depth as they reacted to the player's actions.",
+      "t": 287,
+      "quote": "the mercenaries had basically a web of likes and dislikes and hatreds obviously hatreds means there's no way they're going to work with them",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits",
+      "kind": "principle",
+      "claim": "In Empire of Sin, each trait individually triggers only one or two effects, because traits that did too much became a spider web players could not understand.",
+      "detail": "Traits can collectively affect many things in the game, but limiting each one keeps the system legible.",
+      "t": 426,
+      "quote": "if they ended up doing too many it ended up just being way too complicated and it was a spider web for players to get their head around",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits",
+      "kind": "technique",
+      "claim": "Empire of Sin divides gangster traits into fixed historical traits, life lesson traits, physical attribute traits and the most malleable personality traits earned during play.",
+      "detail": "Historical traits (e.g. immigrant, fell on hard times) cannot change. Life lessons fill out personality and are absent in very young gangsters. Physical traits like Hair Trigger (a player favorite) can be gained in play. Personality traits interact with each other and affect the game positively and negatively.",
+      "t": 436,
+      "quote": "we divided traits into several categories uh the first of which was the historical traits",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits",
+      "kind": "principle",
+      "claim": "A character trait system should never leave the player stuck with a bad trait; there must always be a way around it or nobody will choose that character.",
+      "detail": "Romero says this was critical, and characters needed to evolve with gameplay, otherwise play would be the same every time.",
+      "t": 519,
+      "quote": "i wanted to make sure that the player never felt stuck with a bad trait there should always be a way around the situation",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character growth",
+      "kind": "technique",
+      "claim": "Empire of Sin ties trait malleability to age: older gangsters like Grover arrive with settled traits, while younger ones can be shaped more by the player.",
+      "detail": "Grover is near the end of his career and is who he is; the younger and more malleable a gangster, the more the player affects their growth.",
+      "t": 559,
+      "quote": "the younger and the more malleable a gangster was the more the player could affect their growth",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systems-first design",
+      "kind": "technique",
+      "claim": "Romero designs dynamic traits by first listing all the setting's systems (alcohol, bosses, crew, businesses, clients, citizens, police, feds) and studying their intersections and collisions.",
+      "detail": "She starts with systems rather than characters because traits must work dynamically within them. Knowing the systems shows how a trait like a boss being a cheapskate ripples through many systems and how powerful or underpowered it might be.",
+      "t": 621,
+      "quote": "i'm really thinking about the intersections of these things all the items they have how they move around the collisions in the conflict",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systems-first design",
+      "kind": "principle",
+      "claim": "Choosing which system to emphasize and prioritize changes the whole nature of a game and the balance of its dynamic elements.",
+      "detail": "A combat-forward game is very different from a pure empire-building one; mapping systems reveals the possibility space and new opportunities for dynamic play.",
+      "t": 713,
+      "quote": "it allows me to emphasize one system over another and give it priority thus changing the whole nature of the game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent bugs",
+      "kind": "example",
+      "claim": "Empire of Sin's relationship system produced bugs such as a narcissist who fell in love with himself and killed anyone else who loved him, and a mother whose children became jealous and killed each other.",
+      "detail": "Romero calls such bugs probably the best thing about dynamic systems. The Cleaner, a loner and narcissist, treated admirers as threats; Mama Dunbar's platonic love for her children caused 'the great Dunbar family feud'. Both were fixed before launch.",
+      "t": 752,
+      "quote": "it turns out he fell in love with himself and so that when anybody else fell in love with him he got jealous",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits",
+      "kind": "technique",
+      "claim": "When characters leave player control (hospitalized, on a mole mission, employed elsewhere), the designer can freely give them new traits on return because the player never saw what happened.",
+      "detail": "In Empire of Sin many traits surface from combat outcomes like hospital stays. Romero calls off-screen absence a great opportunity to do anything, e.g. returning with a fear of plants.",
+      "t": 871,
+      "quote": "when the characters go away from player control you can do so much cool stuff",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

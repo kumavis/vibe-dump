@@ -1,0 +1,1004 @@
+{
+ "id": "mXRKvbRi9qc",
+ "url": "https://www.youtube.com/watch?v=mXRKvbRi9qc",
+ "title": "Dustin Freeman - Live Action Roguelike Performance",
+ "speaker": "Dustin Freeman",
+ "talk_title": "Live Action Roguelike Performance",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1895,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "A Live Mixed Reality Full-Motion Video Performance, as presented based on audience suggestion during Roguelike Celebration 2023.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 95,
+   "title": "The first quest attempt"
+  },
+  {
+   "start": 309,
+   "title": "Starting anew as a janitor"
+  },
+  {
+   "start": 529,
+   "title": "Dungeon exploration"
+  },
+  {
+   "start": 936,
+   "title": "Mage quest and dragon egg"
+  },
+  {
+   "start": 1288,
+   "title": "Battling puddings"
+  },
+  {
+   "start": 1585,
+   "title": "Final descent and victory"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3457,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 8.0,
+   "d": 8.03,
+   "text": "ALEXEI: The next slot performance is from friend of the show Dustin Freeman."
+  },
+  {
+   "t": 16.03,
+   "d": 2.77,
+   "text": "Dustin is a Canadian who lives in NYC. His background is in"
+  },
+  {
+   "t": 18.8,
+   "d": 3.08,
+   "text": "building novel input techniques for creative, embodied"
+  },
+  {
+   "t": 21.88,
+   "d": 4.68,
+   "text": "expression. His PhD work was on gestural control (via Kinect) of"
+  },
+  {
+   "t": 26.56,
+   "d": 3.48,
+   "text": "real-time holograms during improvised theatre. Later, he"
+  },
+  {
+   "t": 30.04,
+   "d": 3.48,
+   "text": "worked on telepresence LARP platforms, and as a research"
+  },
+  {
+   "t": 33.52,
+   "d": 3.16,
+   "text": "scientist for neuromotor input at Meta."
+  },
+  {
+   "t": 36.68,
+   "d": 2.44,
+   "text": "Now, he is doing a sabbatical on various topics."
+  },
+  {
+   "t": 39.12,
+   "d": 8.12,
+   "text": "And is here to present a live action roguelike. Let's get this thing running."
+  },
+  {
+   "t": 47.24,
+   "d": 2.96,
+   "text": "DUSTIN: Hello. I want to make sure you can hear me, Alexei."
+  },
+  {
+   "t": 52.32,
+   "d": 10.68,
+   "text": "ALEXEI: I can hear you. DUSTIN: I don't need to hear you. It would just be"
+  },
+  {
+   "t": 63.0,
+   "d": 7.24,
+   "text": "nice. Let me introduce what we are doing. This is a live Action Roguelike and performed live. This"
+  },
+  {
+   "t": 70.24,
+   "d": 10.92,
+   "text": "is going to involve myself and another performer here looking at the chat as we make a roguelike in"
+  },
+  {
+   "t": 81.16,
+   "d": 10.28,
+   "text": "real-time with you. Everything is real. It is all real. Let's get going. I will be asking sometimes"
+  },
+  {
+   "t": 91.44,
+   "d": 8.12,
+   "text": "questions of the audience but we are going to be going. You wake up as the player. Go ahead and"
+  },
+  {
+   "t": 99.56,
+   "d": 10.24,
+   "text": "player, wake up. And player, you know that you are on a quest, you are on the surface right now. Your"
+  },
+  {
+   "t": 109.8,
+   "d": 7.72,
+   "text": "goal is to ascend. You become self-aware. Your goal is to ascend to the bottom of the dungeon"
+  },
+  {
+   "t": 117.52,
+   "d": 11.08,
+   "text": "and find the amulet and then return. What do you do first? You want to do a spin around? Let's try"
+  },
+  {
+   "t": 128.6,
+   "d": 9.6,
+   "text": "to avoid breaking the fourth wall here. There is just a stone wall behind you and otherwise you are"
+  },
+  {
+   "t": 138.2,
+   "d": 6.6,
+   "text": "surrounded by grass and rocks. You are looking in the distance. You don't quite see anything there."
+  },
+  {
+   "t": 144.8,
+   "d": 5.72,
+   "text": "Somewhere on here is the entrance to the dungeon. There is questions to check your inventory. Do you"
+  },
+  {
+   "t": 150.52,
+   "d": 7.26,
+   "text": "have anything in your pockets? Yes, now I recall. We decided you start as one of three classes. You"
+  },
+  {
+   "t": 159.08,
+   "d": 6.6,
+   "text": "either a monk, a Mage, or a janitor. What's it going to be? OK. We are going to chose monk. We"
+  },
+  {
+   "t": 165.68,
+   "d": 13.44,
+   "text": "chose a quarter staff. Let's wander forward into the environment. There is janitor. Don't worry."
+  },
+  {
+   "t": 179.12,
+   "d": 9.04,
+   "text": "We will dilate and restart as janitor. OK. You've walked forward. What? You hold up? Oh, you see the"
+  },
+  {
+   "t": 188.16,
+   "d": 8.84,
+   "text": "coin there. You go towards the coin but you hear some light cracking noises and in fact there is"
+  },
+  {
+   "t": 197.0,
+   "d": 11.32,
+   "text": "a duck that stands over the coin. What do you do? Oh, you pet the duck. The duck is very relaxed and"
+  },
+  {
+   "t": 208.32,
+   "d": 13.68,
+   "text": "in fact falls into a deep sleep leaving the coins for your taking. And you take them. You are six"
+  },
+  {
+   "t": 222.0,
+   "d": 4.68,
+   "text": "cents richer. There is a lot of suggestions to kiss the duck or pet the duck but it is in fact"
+  },
+  {
+   "t": 226.68,
+   "d": 5.52,
+   "text": "sleeping and we are going to just let it be there and for graphical resources we are going to remove"
+  },
+  {
+   "t": 232.2,
+   "d": 9.4,
+   "text": "the duck. OK. You see something to your left. What is that? This appears to be the passage going"
+  },
+  {
+   "t": 241.6,
+   "d": 7.08,
+   "text": "downwards but you wouldn't go there right away. There is like other things to do. Surely on this"
+  },
+  {
+   "t": 248.68,
+   "d": 7.56,
+   "text": "level. We wouldn't just rush ahead. Oh, you are going to go to the left? What's this? Some sort of"
+  },
+  {
+   "t": 256.24,
+   "d": 7.08,
+   "text": "object on the ground. It looks like it is a pile of stuff. You want to get closer to it? Let's get"
+  },
+  {
+   "t": 263.32,
+   "d": 14.2,
+   "text": "closer to the stuff. OK. You looped the pile and you find a pink potion that is not identified."
+  },
+  {
+   "t": 278.56,
+   "d": 6.0,
+   "text": "People are asking how to -- do you identify stuff? Not yet. Lots of suggestions to drink the potion."
+  },
+  {
+   "t": 288.08,
+   "d": 10.76,
+   "text": "You drink the potion and immediately you turn into a tree. You feel your consciousness going away as"
+  },
+  {
+   "t": 298.84,
+   "d": 9.6,
+   "text": "you become one with the earth. You are just a plant man. That's it. That's your life now. And"
+  },
+  {
+   "t": 308.44,
+   "d": 13.12,
+   "text": "we have to restart again because you've died. This time around we ask ourselves are we a monk?"
+  },
+  {
+   "t": 321.56,
+   "d": 16.04,
+   "text": "A Mage? Or a janitor? Getting a lot of excitement for janitor. OK. We have chosen janitor. The game"
+  },
+  {
+   "t": 337.6,
+   "d": 12.32,
+   "text": "begins again. Now what? Which way do you want to go? The left? We are going to sweep our way"
+  },
+  {
+   "t": 349.92,
+   "d": 9.84,
+   "text": "left. You see something in the distance there. We will get closer to that. Jump"
+  },
+  {
+   "t": 359.76,
+   "d": 8.32,
+   "text": "over some terrain. Appears to be a bones pile here. Some sort of dead body. On the ground,"
+  },
+  {
+   "t": 368.08,
+   "d": 5.08,
+   "text": "there appears to be -- I want to get closer so you can see it. There appears to be a sword. What are"
+  },
+  {
+   "t": 373.16,
+   "d": 13.04,
+   "text": "you going to do? You are going to grab the sword? All right. You grab the sword. You've got a broom"
+  },
+  {
+   "t": 386.2,
+   "d": 7.88,
+   "text": "and a sword simultaneously. Really unusual class choice. Seeing a lot of people suggesting that you"
+  },
+  {
+   "t": 394.08,
+   "d": 9.0,
+   "text": "clean the sword with the broom. I guess as the DM I have to let you know that succeeds and the"
+  },
+  {
+   "t": 403.08,
+   "d": 12.36,
+   "text": "sword is now a plus one sword which I think is what the game is going to be now, I guess. You"
+  },
+  {
+   "t": 415.44,
+   "d": 8.48,
+   "text": "have successfully cleaned the sword. Now what? You want to go left or right? Which way are we"
+  },
+  {
+   "t": 423.92,
+   "d": 12.74,
+   "text": "going? Go to the left. Turn here. You see another pile of mysterious stuff. It is just a pile. You"
+  },
+  {
+   "t": 436.66,
+   "d": 10.34,
+   "text": "are going to sweep the pile. OK. Digging through the pile, cleaning it up, you find one ring here."
+  },
+  {
+   "t": 447.0,
+   "d": 8.48,
+   "text": "What will you do with this ring? You are going to clean the ring. Well, it is a plus one ring now"
+  },
+  {
+   "t": 455.48,
+   "d": 5.6,
+   "text": "I guess if we are going to stick to convention. A lot of people suggesting you wear the ring or"
+  },
+  {
+   "t": 461.08,
+   "d": 12.28,
+   "text": "look at the ring. You want to look at it? Or you want to -- [Laughter] OK. It looks like we are"
+  },
+  {
+   "t": 473.36,
+   "d": 6.02,
+   "text": "just going to hold on to the ring. We dropped the ring but maybe we can find it on the ground. We"
+  },
+  {
+   "t": 479.38,
+   "d": 8.38,
+   "text": "are sweeping the ring up. There is shenanigans happening over here. We found the ring. OK. We"
+  },
+  {
+   "t": 488.92,
+   "d": 7.72,
+   "text": "are putting it on. You put the ring on and that means the world is inverted, unfortunately, which"
+  },
+  {
+   "t": 496.64,
+   "d": 8.8,
+   "text": "is going to be very confusing for you. But we are still fine. You are walking on your head right"
+  },
+  {
+   "t": 505.44,
+   "d": 11.4,
+   "text": "now. It is frankly kind of just a minor downside. Which way are you going to go now? This way? Cool."
+  },
+  {
+   "t": 516.84,
+   "d": 11.2,
+   "text": "Walk over here. And here is the passage going down. I want to check that out. OK. Cool. And"
+  },
+  {
+   "t": 528.04,
+   "d": 7.8,
+   "text": "you head down a level. While we are heading down a level in the real-time procedural generation runs,"
+  },
+  {
+   "t": 536.4,
+   "d": 4.72,
+   "text": "maybe you should review your inventory for the audience. While the real-time procedurally"
+  },
+  {
+   "t": 541.12,
+   "d": 17.24,
+   "text": "generation happens. Real-time. OK. We got for some reason we've got a goblet. Mysterious goblet."
+  },
+  {
+   "t": 558.36,
+   "d": 13.56,
+   "text": "We've got six American cents for some reason. We've got a red potion which, you know, did bad"
+  },
+  {
+   "t": 571.92,
+   "d": 14.4,
+   "text": "stuff last time but this time might be OK. And we have a single dart. A single dart which is surely"
+  },
+  {
+   "t": 586.32,
+   "d": 10.72,
+   "text": "very dangerous. And the elevator ends. You find yourself one level lower once the breaking the"
+  },
+  {
+   "t": 597.04,
+   "d": 13.8,
+   "text": "fourth wall elements are removed. It is a level of fluffiness. Fluffy. A charming level if you may"
+  },
+  {
+   "t": 610.84,
+   "d": 12.0,
+   "text": "say. What will you do down here? OK. You are going to sweep the floor. And in the sound of sweeping,"
+  },
+  {
+   "t": 622.84,
+   "d": 10.33,
+   "text": "you make an incredibly large noise and out pops -- OK. Out pops a little lion who hears you. You"
+  },
+  {
+   "t": 633.17,
+   "d": 9.17,
+   "text": "are choosing the -- you are telling the lion to go away. You put the ring on which means we"
+  },
+  {
+   "t": 642.34,
+   "d": 8.7,
+   "text": "are going to have to invert you. Are you going to take the ring off? It is stuck? Yeah. Sorry. It's"
+  },
+  {
+   "t": 651.04,
+   "d": 7.72,
+   "text": "stuck. The lion is trying to get along with you and it chooses to go upside down itself so it can"
+  },
+  {
+   "t": 658.76,
+   "d": 14.12,
+   "text": "understand your reality. OK. You have a potion. You are going to drink the potion or are you going"
+  },
+  {
+   "t": 672.88,
+   "d": 18.84,
+   "text": "to give it to the lion. The lion definitely takes the potion and then bursts into flame. And the"
+  },
+  {
+   "t": 691.72,
+   "d": 6.28,
+   "text": "level is now lion-free. But you are still stuck upside down. We are going to do something about"
+  },
+  {
+   "t": 698.0,
+   "d": 10.6,
+   "text": "the upside down ring situation. Maybe walk around the level. Oh, you got it off. You managed to just"
+  },
+  {
+   "t": 708.6,
+   "d": 12.64,
+   "text": "shake it off. People have suggested you should check the lion's ashes and in fact you do and"
+  },
+  {
+   "t": 725.36,
+   "d": 13.84,
+   "text": "you find a hand that is disembodied but holding an orb. Very plot relevant. If you pull the orb away"
+  },
+  {
+   "t": 739.2,
+   "d": 10.64,
+   "text": "from the hand, you just fully get it. So you have some sort of magic orb now. OK. I said orb. Magic"
+  },
+  {
+   "t": 749.84,
+   "d": 14.32,
+   "text": "was a spoiler. You've got an orb. You are doing tricks. Your dexterity has been exercised. OK. Oh,"
+  },
+  {
+   "t": 764.16,
+   "d": 10.47,
+   "text": "you feel the orb getting cold. You feel the orb getting cold if you keep doing that. You"
+  },
+  {
+   "t": 774.63,
+   "d": 3.61,
+   "text": "have discovered that if you keep rubbing the orb in that way it is some sort of"
+  },
+  {
+   "t": 778.24,
+   "d": 10.24,
+   "text": "magic freezing orb and then a jet of frozen ice shoots out in front of you. You get the"
+  },
+  {
+   "t": 788.48,
+   "d": 11.16,
+   "text": "sense that you can't do this a ton because I only have so much ready-whip. But that's"
+  },
+  {
+   "t": 799.64,
+   "d": 8.48,
+   "text": "an option. Let me just clean up some of this Ready-whip here. I will deal with that later."
+  },
+  {
+   "t": 811.16,
+   "d": 8.72,
+   "text": "OK. Tell me what you are doing on this level. We need to move forward. Oh,"
+  },
+  {
+   "t": 819.88,
+   "d": 10.64,
+   "text": "shoot. Keep going. OK. You are going to walk forward. You continue walking forward. It is very"
+  },
+  {
+   "t": 830.52,
+   "d": 11.08,
+   "text": "slippery down here with the Ready whip. Someone has built a wooden area down here. There appears"
+  },
+  {
+   "t": 841.6,
+   "d": 14.28,
+   "text": "to be some sort of resonance. As you get closer, there is a -- some sort of mysterious creature,"
+  },
+  {
+   "t": 855.88,
+   "d": 7.28,
+   "text": "in fact a unicorn man pops up and he is like this is my house and I am defending this. You better"
+  },
+  {
+   "t": 863.16,
+   "d": 8.68,
+   "text": "not be the tax man again. You know, I feel very threatened by you. I am going to punch you. Fight"
+  },
+  {
+   "t": 871.84,
+   "d": 19.36,
+   "text": "me. And the unicorn man dies. But on the unicorn man you find a dagger which is yet another item"
+  },
+  {
+   "t": 891.2,
+   "d": 8.28,
+   "text": "that you can take on your journey. And now what do you do? OK. You are going to hold it in a cool"
+  },
+  {
+   "t": 899.48,
+   "d": 8.68,
+   "text": "way. God, you have so much stuff at this point. Let's have you go around the corner here. Oh,"
+  },
+  {
+   "t": 908.16,
+   "d": 13.0,
+   "text": "and there is a door going down. Someone has noted that the dagger reads Spirit Halloween on it. OK."
+  },
+  {
+   "t": 921.16,
+   "d": 7.44,
+   "text": "Let's go towards the door. And let's put our hand on the doorknob and as you do, unfortunately,"
+  },
+  {
+   "t": 929.12,
+   "d": 7.72,
+   "text": "because the doorknob was trapped, you instantly die from poisoning. Which means we start back at"
+  },
+  {
+   "t": 936.84,
+   "d": 12.88,
+   "text": "the beginning. If you just give me a second for some real-time procedural generation -- let's"
+  },
+  {
+   "t": 949.72,
+   "d": 6.56,
+   "text": "review the inventory you had on your body when you died. Hold up each item for the camera. So we"
+  },
+  {
+   "t": 956.28,
+   "d": 15.04,
+   "text": "had one orb. What other stuff did you have? You had a couple coins. Great. Real-time procedural"
+  },
+  {
+   "t": 971.32,
+   "d": 5.6,
+   "text": "generation is happening. We had a red potion which might not have been the same red potion as last"
+  },
+  {
+   "t": 976.92,
+   "d": 14.6,
+   "text": "time. It could have randomly regenerated. And we are back. Back at the start of the game. OK."
+  },
+  {
+   "t": 991.52,
+   "d": 9.16,
+   "text": "Same choice as before. Are we monk, Mage or what was the other one? Janitor. People are suggesting"
+  },
+  {
+   "t": 1000.68,
+   "d": 11.84,
+   "text": "Mage. Let's try Mage. We got this sick wand and so the game begins. And you know what? There is some"
+  },
+  {
+   "t": 1012.52,
+   "d": 7.28,
+   "text": "procedural generation that the engine forgot to do so it is just going to do it kind of live in these"
+  },
+  {
+   "t": 1019.8,
+   "d": 8.84,
+   "text": "areas here. This is what it really looks like to actually do real-time procedural generation. OK."
+  },
+  {
+   "t": 1028.64,
+   "d": 7.32,
+   "text": "You are going to reach for this object. What could this be? This is some sort of umbrella"
+  },
+  {
+   "t": 1035.96,
+   "d": 8.6,
+   "text": "thing that you are picking up. You have it in your hand now. We are taking -- we are inspecting the"
+  },
+  {
+   "t": 1044.56,
+   "d": 10.68,
+   "text": "umbrella. It is sort of like an umbrella like object. The suggestion is to open it. You now"
+  },
+  {
+   "t": 1055.24,
+   "d": 11.44,
+   "text": "have a very ginger umbrella that's possibly very damaged. Just procedurally generating"
+  },
+  {
+   "t": 1066.68,
+   "d": 10.2,
+   "text": "the exit here. Disregard me. Now what? We are going to move forward. Very slippery passage"
+  },
+  {
+   "t": 1076.88,
+   "d": 8.2,
+   "text": "here with an egg on the other side. I am seeing suggestions to attach the umbrella to the wand."
+  },
+  {
+   "t": 1085.08,
+   "d": 9.28,
+   "text": "Not really sure what that would accomplish. Maybe through manipulating the wand -- we got like a"
+  },
+  {
+   "t": 1094.36,
+   "d": 7.28,
+   "text": "wand umbrella thing. Now there is an egg through here but the passage is far too -- it is really"
+  },
+  {
+   "t": 1101.64,
+   "d": 5.76,
+   "text": "small. You can try to get through it but it is really hard. People are suggesting you zap the"
+  },
+  {
+   "t": 1107.4,
+   "d": 19.2,
+   "text": "egg. OK. Let's do this dramatically. Three, two, one. And the egg flies off into the distance. Hold"
+  },
+  {
+   "t": 1126.6,
+   "d": 8.84,
+   "text": "on. This will -- hatching a tiny little dragon whose already been injured a little bit because"
+  },
+  {
+   "t": 1135.44,
+   "d": 8.08,
+   "text": "you zapped him. But you can't get through this passage here. It is a just a little too narrow."
+  },
+  {
+   "t": 1143.52,
+   "d": 8.36,
+   "text": "Maybe if you had items on you that can help you get through the passage. Check what sort of things"
+  },
+  {
+   "t": 1151.88,
+   "d": 10.52,
+   "text": "a Mage would have in his pocket. We have an orb. We got a coin. The orb last time was an ice orb."
+  },
+  {
+   "t": 1162.4,
+   "d": 8.96,
+   "text": "You got another potion. What could the potion be? All right? You want to drink the potion?"
+  },
+  {
+   "t": 1174.4,
+   "d": 10.64,
+   "text": "It turns out it is a potion of levitation. So you are able to hover over these walls,"
+  },
+  {
+   "t": 1185.04,
+   "d": 8.6,
+   "text": "a couple bone files here. You get closer to this like sort of hurt pet dragon. Oh, you are going to"
+  },
+  {
+   "t": 1193.64,
+   "d": 12.96,
+   "text": "pet it. Ow. We don't know how dragon physiology works so we will say this dragon retreats its"
+  },
+  {
+   "t": 1206.6,
+   "d": 7.84,
+   "text": "head inside and then you can carry it in your pocket for future use. People are suggesting"
+  },
+  {
+   "t": 1214.44,
+   "d": 9.12,
+   "text": "we heal the dragon. I don't know if any of your items do that just yet. Maybe that's something we"
+  },
+  {
+   "t": 1223.56,
+   "d": 4.96,
+   "text": "will pay attention to for the future. All right. Here we are on this level."
+  },
+  {
+   "t": 1228.52,
+   "d": 8.32,
+   "text": "Now what? Out there that's the forth wall. We don't go beyond that. To your left is a huge pile"
+  },
+  {
+   "t": 1236.84,
+   "d": 13.16,
+   "text": "of coins left by someone haphazardly generating the level. Let's just say you can just get those."
+  },
+  {
+   "t": 1252.04,
+   "d": 5.52,
+   "text": "And you can keep going, people suggested you feed the dragon the coins. I guess we can find out what"
+  },
+  {
+   "t": 1257.56,
+   "d": 20.4,
+   "text": "happens if you do that. OK. We got the dragon. We are going to feed it the coins. This is going"
+  },
+  {
+   "t": 1277.96,
+   "d": 7.28,
+   "text": "to be -- we are going but you know what? We have a little bit of time to figure it out. You find your"
+  },
+  {
+   "t": 1285.24,
+   "d": 9.92,
+   "text": "way to the elevator here going down to the first level. So let's say that we do. Now the real-time"
+  },
+  {
+   "t": 1295.16,
+   "d": 8.4,
+   "text": "procedural generation will happen. Just a second. The floor is very slippery because it is covered"
+  },
+  {
+   "t": 1303.56,
+   "d": 10.12,
+   "text": "in ready whip. We are moving down to the second level. Let's review what we have in our pockets."
+  },
+  {
+   "t": 1313.68,
+   "d": 13.68,
+   "text": "You got a dart. Oh, you are smoking it. I see. OK. Real-time procedural generation. OK. OK. OK."
+  },
+  {
+   "t": 1327.36,
+   "d": 32.68,
+   "text": "OK. OK. And you find yourself down again at this weird blobby level. You find yourself approaching"
+  },
+  {
+   "t": 1360.04,
+   "d": 11.2,
+   "text": "a mysterious cube. You pet the cube and as you pet the cube, it summons its familiars which"
+  },
+  {
+   "t": 1371.24,
+   "d": 13.12,
+   "text": "are puddings, summons multiple puddings which obviously need to be battled in a difficult way."
+  },
+  {
+   "t": 1384.36,
+   "d": 8.64,
+   "text": "The cube sends its pudding minions after you. OK. You cast your wand. We don't know what the wand"
+  },
+  {
+   "t": 1393.0,
+   "d": 9.68,
+   "text": "does yet, do we? Has the wand done something yet? Let's give that wand a zap. Were you using it like"
+  },
+  {
+   "t": 1402.68,
+   "d": 10.12,
+   "text": "a pool ball? We give the wand a zap and it is a wand of crushing. That just fully takes out the"
+  },
+  {
+   "t": 1412.8,
+   "d": 13.24,
+   "text": "first pudding horrifically frankly. And these two puddings run off fleeing in horror. The cube kind"
+  },
+  {
+   "t": 1426.04,
+   "d": 9.84,
+   "text": "of just teleports spare else. Oh, God. Ack. There is a pudding corpse there. You reach your hand"
+  },
+  {
+   "t": 1435.88,
+   "d": 8.32,
+   "text": "into the pudding corpse to see if you can find anything. Stick your hand out. And now it is just"
+  },
+  {
+   "t": 1444.2,
+   "d": 11.6,
+   "text": "kind of messy. There is no -- delicious. There is nothing in the pudding corpse. There you go."
+  },
+  {
+   "t": 1455.8,
+   "d": 7.76,
+   "text": "So you keep looking around at this level. You look to the right. You wipe your hands off."
+  },
+  {
+   "t": 1464.76,
+   "d": 3.96,
+   "text": "There is a regular door right down there but you know you aren't the kind of person that"
+  },
+  {
+   "t": 1468.72,
+   "d": 11.2,
+   "text": "just goes right for the door. Over here there is this suspicious alter. Just suspiciously there."
+  },
+  {
+   "t": 1479.92,
+   "d": 6.68,
+   "text": "OK. You have -- what will you doat the alter? We are seeing some suggestions to put the dragon on"
+  },
+  {
+   "t": 1486.6,
+   "d": 7.6,
+   "text": "the alter. Not really sure what we are going to do with that. You are going to reach out,"
+  },
+  {
+   "t": 1494.2,
+   "d": 9.16,
+   "text": "approach the alter and place the dragon egg on it. Then you do and the alter starts spinning"
+  },
+  {
+   "t": 1503.36,
+   "d": 8.44,
+   "text": "and spinning and spinning and flies off somewhere. We are really hoping that that"
+  },
+  {
+   "t": 1511.8,
+   "d": 9.92,
+   "text": "doesn't go anywhere but for now that's it. OK. Maybe it moved on to a better place."
+  },
+  {
+   "t": 1521.72,
+   "d": 9.0,
+   "text": "Now what should we do? Go to the right? Wipe your hands-on the wall. They are"
+  },
+  {
+   "t": 1530.72,
+   "d": 7.32,
+   "text": "still covered in pudding. OK. Cool. Now we have the door down here."
+  },
+  {
+   "t": 1538.04,
+   "d": 3.2,
+   "text": "Someone is suggesting cast a spell on the giant person if the background but that would be"
+  },
+  {
+   "t": 1541.24,
+   "d": 7.08,
+   "text": "breaking the fourth wall thing so we aren't going do that. We are seeing some suggestions to throw"
+  },
+  {
+   "t": 1548.32,
+   "d": 6.32,
+   "text": "the potion at the door because this door when you touched it, it caused a problem last time,"
+  },
+  {
+   "t": 1554.64,
+   "d": 11.32,
+   "text": "so are we going to splash the potion at the door? You go and splash the potion at the door. You just"
+  },
+  {
+   "t": 1565.96,
+   "d": 13.72,
+   "text": "smeared the potion on the door which is happening in real-time. And the door sort of breaks down."
+  },
+  {
+   "t": 1580.36,
+   "d": 7.6,
+   "text": "It just dissolves away and you are able to get through and go down one level. While the real-time"
+  },
+  {
+   "t": 1587.96,
+   "d": 10.76,
+   "text": "procedural generation happens, please, review your inventory. We have a wand that we know does some"
+  },
+  {
+   "t": 1598.72,
+   "d": 6.8,
+   "text": "sort of crushing thing. We've got an orb -- do we know what the orb does yet? I don't know if we"
+  },
+  {
+   "t": 1605.52,
+   "d": 10.92,
+   "text": "got that yet. We got an umbrella which again we are not entirely sure what that does. We've got"
+  },
+  {
+   "t": 1616.44,
+   "d": 10.36,
+   "text": "coins. That's good. It is a good thing. We have maybe a cigarette or maybe a dart. It is a dart"
+  },
+  {
+   "t": 1626.8,
+   "d": 6.28,
+   "text": "you are holding like a cigarette. And we've got a single goblet that we have not used. So many items"
+  },
+  {
+   "t": 1633.08,
+   "d": 10.88,
+   "text": "we have not used or identified. This is highly unusual now. You get down to the lower most level"
+  },
+  {
+   "t": 1643.96,
+   "d": 10.36,
+   "text": "and it is really dark down there. It is just so dark. You are reaching around on the ground and"
+  },
+  {
+   "t": 1654.32,
+   "d": 12.4,
+   "text": "you manage to find a torch and you are holding the torch up and you are holding the torch up"
+  },
+  {
+   "t": 1666.72,
+   "d": 7.2,
+   "text": "and by holding the torch you can see around here. Swing the torch to the left. Swing the torch to"
+  },
+  {
+   "t": 1673.92,
+   "d": 12.24,
+   "text": "the right. Real-time graphics. Real-time graphics. This is the lowest level of the dungeon. And yeah."
+  },
+  {
+   "t": 1686.16,
+   "d": 6.84,
+   "text": "You can put the torch down and you can assume it is hanging somewhere. All right. Yeah, it's messy."
+  },
+  {
+   "t": 1694.48,
+   "d": 9.72,
+   "text": "Where do we go now? Oh, up ahead. It appears to be some sort of dead body. Some sort of dead"
+  },
+  {
+   "t": 1704.2,
+   "d": 9.84,
+   "text": "body. This is what happens with dungeonering. What are you going to do? [Laughter] We are going"
+  },
+  {
+   "t": 1714.04,
+   "d": 14.96,
+   "text": "to put the coins over the eyes of the dead body and allowing the soul to come to rest,"
+  },
+  {
+   "t": 1729.0,
+   "d": 6.36,
+   "text": "out of the body comes the amulet that you have been looking for and you receive the amulet in"
+  },
+  {
+   "t": 1735.36,
+   "d": 10.88,
+   "text": "your hands. How lucky is that? This means you can safely return to the surface, however, though,"
+  },
+  {
+   "t": 1746.24,
+   "d": 13.56,
+   "text": "you look around and as far as you can tell you can't see the way back. It's just a featureless"
+  },
+  {
+   "t": 1759.8,
+   "d": 8.76,
+   "text": "room. You are not sure how you are going to get out of here. What could we do? OK. We have got"
+  },
+  {
+   "t": 1768.56,
+   "d": 7.4,
+   "text": "an orb. The orb is like an ice orb. Someone is suggesting we call the dragon for help."
+  },
+  {
+   "t": 1775.96,
+   "d": 6.04,
+   "text": ">> Hey, dragon! >> This is called"
+  },
+  {
+   "t": 1782.0,
+   "d": 15.0,
+   "text": "Chekhov’s gun. This will be really rewarding when it works out. You are running up on time."
+  },
+  {
+   "t": 1797.0,
+   "d": 10.24,
+   "text": "DUSTIN: That's the correct thing to say. And then you feel a flopping of wings. And out of the"
+  },
+  {
+   "t": 1807.24,
+   "d": 3.96,
+   "text": "like darkness comes to the dragon who I am just showing you have in front of the camera and then"
+  },
+  {
+   "t": 1811.2,
+   "d": 10.28,
+   "text": "the dragon will have to disappear for contractual reasons and then you get on the dragon's back and"
+  },
+  {
+   "t": 1821.48,
+   "d": 12.68,
+   "text": "you are able to ride your way out of here. And then back up to the light. Up to the ring lamp"
+  },
+  {
+   "t": 1834.16,
+   "d": 14.96,
+   "text": "actually. And that brings us out to the surface world where you have the amulet. We got the amulet"
+  },
+  {
+   "t": 1849.12,
+   "d": 8.08,
+   "text": "here and we have managed to successfully exit this dungeon. That is the live action roguelike,"
+  },
+  {
+   "t": 1857.2,
+   "d": 9.12,
+   "text": "everyone. Thank you for participating, chat. ALEXEI: Thank you, Dustin."
+  }
+ ]
+}

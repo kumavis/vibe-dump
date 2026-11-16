@@ -1,0 +1,160 @@
+{
+  "id": "R8DSq8qSJ44@5367",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 5367,
+    "end": 7316
+  },
+  "title": "Localizing Caves of Qud",
+  "speaker": "Brian Bucklew and Corey Frang",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=5367s",
+  "talk_type": "technical",
+  "summary": "Brian Bucklew (Freehold Games co-founder) and Corey Frang (localization team lead) explain how they made Caves of Qud, with hundreds of thousands of often procedurally composited words, localizable after its 1.0 release. They trace the text system from string concatenation to a name-matched, attribute-tagged replacer system, then describe the localization framework: rich template arguments, gettext-style _t/_s wrappers with translator context, a placeholder syntax with chainable post-processors, attribute-based unit tests that double as documentation, and Roslyn-based string extraction. A Turkish translation, about 70% done, served as the proving ground, with language packages as mods that replace replacers and new processors for agglutination and pronoun-dropping. They conclude that every language needs its own technical work, and that authoring procedural templates remains hard and needs tooling.",
+  "games": [
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "localization",
+      "kind": "history",
+      "claim": "Localizing Caves of Qud looked infeasible because its hundreds of thousands of handwritten words are often procedurally composited, yet players demanded translations as soon as 1.0 shipped.",
+      "detail": "Bucklew says the game was developed for 16 or 17 years and hit 1.0 at the end of 2024, after which players persistently asked for Chinese, Brazilian Portuguese, Turkish and Russian versions. The team thought a game this dense was rarely if ever localized, but it enjoys impossible problems and started picking away at the edges.",
+      "t": 5430,
+      "quote": "hundreds of thousands of of beautiful words from the writing team. Um, often procedurally composited and this presents a real challenge",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text templates",
+      "kind": "example",
+      "claim": "Caves of Qud's procedural messages started as plain string concatenation, which breaks immediately for proper names ('the Mehmet closes the door'), so it moved to simple templates that drop the article for objects tagged as having a proper name.",
+      "detail": "Messages like 'the snapjaw closes the door' or 'X takes five damage' are common to any game. Within the first couple of years the game had a simple template along the lines of 'subject.the subject.name closes the door', and a simple tag marking Mehmet as having a proper name lets the system drop 'the'.",
+      "t": 5555,
+      "quote": "this works great for the snap jaw closes the door and like almost immediately out of the gate doesn't work great for the memit closes the door",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "text replacement",
+      "kind": "technique",
+      "claim": "Caves of Qud replaced a giant loop of string replacements with 'replacers', functions matched by name through a C# attribute, which gives constant-time lookup and lets modders add replacers easily.",
+      "detail": "The original system literally ran text.Replace for every possible slug: fine with about 20 replacers, worse with 200, quite poor with a thousand. In the new system a placeholder such as subject.direction calls the function named Direction that carries the VariableReplacer attribute; one huge function with a thousand replace calls was not mod-friendly.",
+      "t": 5630,
+      "quote": "It works great when you have about 20 replacers. it works a little less great when you have like 200 replacers",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "localization",
+      "kind": "technique",
+      "claim": "To serve localization, Caves of Qud's template replacers were extended to take many kinds of rich arguments (factions, numbers, calendars, historic entities, lists, booleans) as typed method parameters instead of only game objects.",
+      "detail": "Frank says that at 1.0 the templating system was used reliably only in conversations and object descriptions, with inconsistent grammar helpers elsewhere. Arguments moved into the method definitions, and argument types are detected at runtime to pick the right replacer; in 'the gnu sees a snapjaw to its north and stops grazing' versus 'you see a snapjaw to the north and stop grazing', both conjugation and articles change.",
+      "t": 5813,
+      "quote": "we'd also need to support things like factions, numbers, calendars, historic entities, lists, booleans, and a lot of other types of rich data",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "localization",
+      "kind": "technique",
+      "claim": "Caves of Qud wraps every translatable string in a gettext-style call (_S for static strings, _T for templates) whose first argument is a human-readable context that tells translators where and how the string is used.",
+      "detail": "The pattern comes from GNU gettext, where strings wrapped in a global function can be extracted to a table and swapped for localized text. The context (e.g. 'inventory take from direction') is exported to the translators' file but never shown in game, which helps because the templates themselves are hard to read. _T returns a chainable builder for setting arguments, including some not used in English but useful to localizers.",
+      "t": 6011,
+      "quote": "It acts sort of like a comment to the translators to let them know where and how the string is being used.",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text templates",
+      "kind": "technique",
+      "claim": "In Caves of Qud's template syntax, a parameter given after a colon comes from the template text rather than the code, so a translation can swap the verb while the replacer still handles articles, plurality and conjugation.",
+      "detail": "Placeholders are wrapped in equals signs because the other good control characters were already used. A period separates the argument alias from the replacer name, a colon passes a literal like 'take' to the 'does' replacer (yielding 'the watervine farmer takes' or 'you take'), and a hash refers to an argument passed to the _T call, such as a direction resolving to 'from her northeast'.",
+      "t": 6196,
+      "quote": "Here a colon indicates a parameter to the replacer that is provided by the template text.",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text templates",
+      "kind": "technique",
+      "claim": "Chainable post-processors, which pass the output of one replacer into the next with a pipe, turned out to be essential for localizing Caves of Qud.",
+      "detail": "Frank's example takes an object's name ('iron long sword'), pluralizes it, then title-cases it as a book title. One Englishism is built in: replacers that support it capitalize their output if the placeholder's first letter is capitalized, because many templates were piping to 'capitalize' at the start of sentences.",
+      "t": 6297,
+      "quote": "it takes the output from one replacer and passes it as the input to the next replacer. Turns out this is uh super important for localization",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "testing",
+      "kind": "technique",
+      "claim": "Caves of Qud attaches example input/output pairs to each replacer as C# attributes, which run as unit tests and also generate reference documentation, so old pre-1.0 helper methods cannot silently drift.",
+      "detail": "For example, passing the frogs faction should give 'frogs'. Running the suite produces an XML file of every replacer and its examples, with errors listed first. The team hopes to turn it into an IDE plugin or template editor that shows examples while editing.",
+      "t": 6363,
+      "quote": "we provide metadata that acts as unit tests for the replacers. uh they end up being extremely powerful because they help generate documentation",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "string extraction",
+      "kind": "technique",
+      "claim": "Caves of Qud extracts translatable strings by parsing its C# source with Microsoft's Roslyn analyzers and collecting every _T or _S invocation, with its context, file and line, into a strings XML table.",
+      "detail": "The table holds about 6,000 extracted lines, with perhaps another thousand to go. A small trick proved unexpectedly useful: exported example files prefix every value with a right-pointing triangle, which marks what still needs translating. XML game data is exported through the modding framework's merge and overwrite support, with C# attributes marking fields that hold display text.",
+      "t": 6455,
+      "quote": "Microsoft's uh, Roslin code analysis tools are perfect for this job",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "technique",
+      "claim": "Caves of Qud language packages are mods that replace existing replacer functions one for one, such as number-to-word conversion and date display, with versions for the target language.",
+      "detail": "Bucklew says number-to-text has to be procedural because a lookup table would need infinite entries, and Turkish writes 'May 5' rather than 'May 5th', so the Turkish package just supplies its own replacer. Turkish was chosen as the first, exemplary language partly because it is so different from English, and because a friend who is a translator, bilingual sci-fi author, Qud fan and developer could do it.",
+      "t": 6723,
+      "quote": "because each of these Turkish or each of these localization packages are mods um they're able to one for one replace functions",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "agglutinative languages",
+      "kind": "technique",
+      "claim": "Caves of Qud builds Turkish agglutinative words, where an English phrase like 'with his hands' becomes one word, by passing a noun through a chain of processors such as possessive and then instrumental.",
+      "detail": "The team was stymied at first, but the localization team found an approach that is hard to discover yet works cleanly. Turkish also reverses word order (verb last) and is pro-drop, so the team created a 'maybe subject' replacer that does not exist in English to drop pronouns where appropriate.",
+      "t": 6834,
+      "quote": "this takes hands puts it through the possessive um the the possessive processor and then again through the instrumental processor",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "localization",
+      "kind": "history",
+      "claim": "The Turkish localization of Caves of Qud covers over 20,000 strings and about 150,000 words and is about 70% complete, with community translations to other languages appearing on a public experimental branch.",
+      "detail": "Players can try the 'lang' experimental branch on Steam; Workshop mods already exist for Simplified and Traditional Chinese, Korean and others, and translators are invited into a localization work group on Discord. The team says it did not research extensively whether similar systems exist and would like to hear of any.",
+      "t": 6910,
+      "quote": "what happens when you do this over 20,000 strings for like 150,000 words, you get Caves of Cuds sitting in Jopa with no English at all",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "localization",
+      "kind": "warning",
+      "claim": "Localizing a procedural game requires not just translators but a strong technical team for each language, because each language needs its own custom processors that mostly won't carry over to the next.",
+      "detail": "Bucklew's conclusions: it is extremely hard; authorship is also highly technical (the translator and the English writers spend a lot of time in raw text editors), and making procedural templates easy to author is a big open research problem for them. In Q&A he adds that new DLC strings arriving while the base game is 70% translated in one language is a huge production challenge for a part-time team of six to a dozen.",
+      "t": 6982,
+      "quote": "procedural systems in general not only need a very complex and powerful translation. They need a very complex and powerful technical team",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "authoring tools",
+      "kind": "open-question",
+      "claim": "Caves of Qud's translators still work mostly in raw XML with no in-game view of strings in context; building that tooling is the next step and would also help English authors write procedural templates.",
+      "detail": "Answering an audience question, the team says they have only simple testers for things like history generation, that they have just finished proving the framework works, and that they hope to open-source some or all of it.",
+      "t": 7194,
+      "quote": "we do have some very simple testers for things like our history generation but I think tooling is one of the big incomplete unknowns for us",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

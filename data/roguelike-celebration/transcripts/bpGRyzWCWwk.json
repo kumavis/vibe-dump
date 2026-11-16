@@ -1,0 +1,698 @@
+{
+ "id": "bpGRyzWCWwk",
+ "url": "https://www.youtube.com/watch?v=bpGRyzWCWwk",
+ "title": "John Bond: Doors or no Doors: How Roguelike games take you places",
+ "speaker": "John Bond",
+ "talk_title": "Doors or no Doors: How Roguelike games take you places",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 980,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Having trouble getting people from one place to another? This is a small study of categorizing and identifying the ways of moving players in a constantly shifting game. We will explore a few genre of map systems and highlight why these were chosen, and I’ll share a few insights I’ve had in the last couple years of working on generative maps. The goal is to help game designers make decisions regarding how to improve map systems in roguelikes, and maybe even inspire a couple new takes on the current standard. Overall, I hope this talk is inspiring for viscerally immersive game design.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 110,
+   "title": "Defining doors in games"
+  },
+  {
+   "start": 157,
+   "title": "The role of pacing and breath"
+  },
+  {
+   "start": 229,
+   "title": "Player autonomy and control"
+  },
+  {
+   "start": 283,
+   "title": "Iconography and signaling"
+  },
+  {
+   "start": 380,
+   "title": "Design variables for doors"
+  },
+  {
+   "start": 490,
+   "title": "Linear and classic systems"
+  },
+  {
+   "start": 588,
+   "title": "Dungeon door styles"
+  },
+  {
+   "start": 671,
+   "title": "Chosen doors and decision-making"
+  },
+  {
+   "start": 717,
+   "title": "Branching map mechanics"
+  },
+  {
+   "start": 793,
+   "title": "Open world door design"
+  },
+  {
+   "start": 863,
+   "title": "Conclusion and Q&A"
+  },
+  {
+   "start": 906,
+   "title": "Closing thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2245,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.76,
+   "d": 9.84,
+   "text": "ALEXIE: Next up we will have John Bond who is based in Seattle and a piano teacher who"
+  },
+  {
+   "t": 17.6,
+   "d": 5.72,
+   "text": "was a pixel artist and leaned into designing and programming. Also the"
+  },
+  {
+   "t": 23.32,
+   "d": 11.78,
+   "text": "owner of a wonderful frog hat. You have the headphones over the hat. Amazing."
+  },
+  {
+   "t": 35.1,
+   "d": 9.7,
+   "text": "JOHN: I have the complete the entire ensemble. ALEXEI: You like making fun games and obsessing"
+  },
+  {
+   "t": 44.8,
+   "d": 4.52,
+   "text": "over making action based stories that are accessible to all and are"
+  },
+  {
+   "t": 49.32,
+   "d": 9.12,
+   "text": "here to talk about doors which we love. JOHN: Thank you. Everyone is so kind to me."
+  },
+  {
+   "t": 58.44,
+   "d": 8.44,
+   "text": "I have caused nothing but issues and everyone has been so great. My name is John Bond. Indie"
+  },
+  {
+   "t": 66.88,
+   "d": 9.16,
+   "text": "game developer. Today you can call me the door master, lord of doors, because I am here to talk"
+  },
+  {
+   "t": 76.04,
+   "d": 4.6,
+   "text": "to you about \"Doors or no Doors: How Roguelike games take you places\" or whatever is linking"
+  },
+  {
+   "t": 80.64,
+   "d": 8.6,
+   "text": "randomization together in roguelikes. For this talk, for this fast little thing, I am just"
+  },
+  {
+   "t": 89.24,
+   "d": 6.68,
+   "text": "going to micro to macro regarding doors. I will define what I am talking about when I say doors,"
+  },
+  {
+   "t": 95.92,
+   "d": 7.0,
+   "text": "talk about how they work within game design and player feel, and finally talking of a separate"
+  },
+  {
+   "t": 102.92,
+   "d": 11.2,
+   "text": "genre of door systems across the vastness of roguelikes. So, yeah, what even are doors? Are"
+  },
+  {
+   "t": 114.12,
+   "d": 6.68,
+   "text": "these doors? The answer is already there. No, they are not. It says doors. Don't believe this"
+  },
+  {
+   "t": 120.8,
+   "d": 6.8,
+   "text": "game. Doors are any sort of object that when interacted with or crossed will bring apart"
+  },
+  {
+   "t": 127.6,
+   "d": 7.04,
+   "text": "the next randomize area in a notable way to the designer and player. Despite how there may be"
+  },
+  {
+   "t": 135.2,
+   "d": 9.4,
+   "text": "smaller randomized sections of a map but a player is less likely to realize this. If you have a map"
+  },
+  {
+   "t": 144.6,
+   "d": 5.56,
+   "text": "generated with a bunch of tile smaller maps within it that's not quite what I mean. To a player"
+  },
+  {
+   "t": 150.16,
+   "d": 7.8,
+   "text": "the whole map is one big random area not just a series of smaller random ones. What I am really"
+  },
+  {
+   "t": 157.96,
+   "d": 8.88,
+   "text": "talking about is what is sort of a large and icon graphic way to separate one feel of a full random"
+  },
+  {
+   "t": 166.84,
+   "d": 8.84,
+   "text": "area to the player from another full random area. This may be a door you are seeing right here. But"
+  },
+  {
+   "t": 175.68,
+   "d": 7.48,
+   "text": "aside from a door, it might be a whole, a bunch of staircases, a rope, whatever. The symbolic is"
+  },
+  {
+   "t": 183.16,
+   "d": 13.16,
+   "text": "a lot for a player because you lose a lot in terms of pacing and design. That's a door. Once upon a"
+  },
+  {
+   "t": 196.32,
+   "d": 8.48,
+   "text": "time, doors were just sort of a needed because of loading. This isn't animated. For those in"
+  },
+  {
+   "t": 204.8,
+   "d": 9.0,
+   "text": "the know, this is the resident evil 1 door used hugely to sneakly put in loadding. We don't need"
+  },
+  {
+   "t": 213.8,
+   "d": 10.72,
+   "text": "loading time now but they worked well back then. Players are not a machine usually so what I am"
+  },
+  {
+   "t": 224.52,
+   "d": 8.88,
+   "text": "talking about is breath. Breathe for a moment. Breath in games looks very different depending on"
+  },
+  {
+   "t": 233.4,
+   "d": 6.48,
+   "text": "the game. Generally speaking it is a moment that allows a player potentially infinite time to do"
+  },
+  {
+   "t": 239.88,
+   "d": 4.08,
+   "text": "whatever they want before they have to lock in again. This isn't just for action games. Players"
+  },
+  {
+   "t": 243.96,
+   "d": 5.88,
+   "text": "need moments where they have complete control as they do in the game and still stopped asking them"
+  },
+  {
+   "t": 249.84,
+   "d": 7.76,
+   "text": "to perform. The game has stopped asking them. We need the player to stop trying so hard for a bit"
+  },
+  {
+   "t": 257.6,
+   "d": 7.28,
+   "text": "but the player also needs to have a reason to stop trying so hard for a bit. That sort of shakeup is"
+  },
+  {
+   "t": 264.88,
+   "d": 8.04,
+   "text": "where doors shine. Pausing doesn't really count as a breath. Pausing is just a necessity. That's"
+  },
+  {
+   "t": 272.92,
+   "d": 7.04,
+   "text": "not how people play. People won't pause to take a break. Designers have to hand hold people to take"
+  },
+  {
+   "t": 279.96,
+   "d": 6.48,
+   "text": "a break. The thing I want you to think about or notice is did you ever notice when you as a player"
+  },
+  {
+   "t": 286.44,
+   "d": 4.92,
+   "text": "find a door that leads to the next area things change in the way you are playing. You have to"
+  },
+  {
+   "t": 291.36,
+   "d": 6.92,
+   "text": "make a decision to do something other than look for or gain access to the next area. All games"
+  },
+  {
+   "t": 298.28,
+   "d": 6.16,
+   "text": "treat this differently. Some make sure you go through every nook and cranny looking for things."
+  },
+  {
+   "t": 304.44,
+   "d": 5.64,
+   "text": "Some other games, if you see the next door it is a saving light and way to get out of a stressful"
+  },
+  {
+   "t": 310.08,
+   "d": 9.4,
+   "text": "situation. You want to have a big purpose for this moment. Small exploration is great as breath even"
+  },
+  {
+   "t": 319.48,
+   "d": 4.76,
+   "text": "if it just collecting loot or finding a shop or fishing. Two you couldn't -- don't want to take"
+  },
+  {
+   "t": 324.24,
+   "d": 10.28,
+   "text": "control away from the player because it always feels bad. Players can be in here infinitely with"
+  },
+  {
+   "t": 334.52,
+   "d": 5.96,
+   "text": "no issues and never feel that they are missing out on the game because they have full control of when"
+  },
+  {
+   "t": 340.48,
+   "d": 6.16,
+   "text": "they continue on. If a game doesn't have this, you feel it. If there is a timer or pulls you into"
+  },
+  {
+   "t": 346.64,
+   "d": 8.84,
+   "text": "a separate way of engaging. When games require constant pressure, sometimes timers are necessary"
+  },
+  {
+   "t": 356.6,
+   "d": 7.32,
+   "text": "but you find unless you are playing a player competitive game, this is usually avoided. That's"
+  },
+  {
+   "t": 363.92,
+   "d": 6.6,
+   "text": "the breath side of doors. That's breathing. We are done breathing. No more breathing. It is a symbol"
+  },
+  {
+   "t": 370.52,
+   "d": 5.84,
+   "text": "of pacing structure. Players often recognize it very early on. The more noticeable thing I want"
+  },
+  {
+   "t": 376.36,
+   "d": 8.64,
+   "text": "to show about doors just to define what I am talking about is iconography. This is beyond"
+  },
+  {
+   "t": 385.0,
+   "d": 10.08,
+   "text": "an area of breath but it is a type of information. Types of doors are used to give information to the"
+  },
+  {
+   "t": 395.08,
+   "d": 7.0,
+   "text": "player about what is about to happen. There are icons that signify what going through this door"
+  },
+  {
+   "t": 402.08,
+   "d": 7.77,
+   "text": "means. This player can absorb information during this breath period and that's important as they"
+  },
+  {
+   "t": 409.85,
+   "d": 6.19,
+   "text": "are taking in another level of information. Often a level of information of long-term strategy as"
+  },
+  {
+   "t": 416.04,
+   "d": 7.84,
+   "text": "opposed to short term decisions. Hades gives icons which makes it easy to parse most information in"
+  },
+  {
+   "t": 423.88,
+   "d": 5.48,
+   "text": "the fastest time but you also get a lot from even the art and size and style of the door"
+  },
+  {
+   "t": 429.36,
+   "d": 10.2,
+   "text": "that indicate change is coming up. This is still iconography but it is the whole art. Designers"
+  },
+  {
+   "t": 439.56,
+   "d": 6.6,
+   "text": "don't usually want to surprise players. We want to give tons of information that their decision is"
+  },
+  {
+   "t": 446.16,
+   "d": 5.52,
+   "text": "going to cause something to happen. Even when that decision is completely linear. Like you can only"
+  },
+  {
+   "t": 451.68,
+   "d": 5.24,
+   "text": "go into this big hellish portal but you are warned that it is going to be big and hellish in there."
+  },
+  {
+   "t": 456.92,
+   "d": 4.0,
+   "text": "That's important because it makes the situation where a player is wasting their time until they"
+  },
+  {
+   "t": 460.92,
+   "d": 7.56,
+   "text": "enter this door but it feels interesting and they still have full warning in knowledge. Now it can"
+  },
+  {
+   "t": 468.48,
+   "d": 6.56,
+   "text": "be hard to make decisions on the type of door or map system you are going to put in game and that's"
+  },
+  {
+   "t": 475.04,
+   "d": 4.4,
+   "text": "more than what I need to go into. The game's genre, goals, and features all make a difference."
+  },
+  {
+   "t": 480.4,
+   "d": 7.44,
+   "text": "We will take time to talk about all the types of roguelike door systems there are."
+  },
+  {
+   "t": 487.84,
+   "d": 14.56,
+   "text": "Here we go. Wait there is variables. There is a few metrics. There is the run length and how"
+  },
+  {
+   "t": 502.4,
+   "d": 5.32,
+   "text": "long it takes to get through the run. Most games roguelike games it is like, you know,"
+  },
+  {
+   "t": 507.72,
+   "d": 6.48,
+   "text": "20-ish minutes, some 40 minutes and some can be in the 20 hours range depending on what you want"
+  },
+  {
+   "t": 514.2,
+   "d": 12.6,
+   "text": "to define as roguelike. Game pacing is the second one. Their dialogue and how engaged it is. Is it a"
+  },
+  {
+   "t": 526.8,
+   "d": 11.12,
+   "text": "passive game? How do you avoid speed whiplash? And the next one is major mechanics. Convoluted and a"
+  },
+  {
+   "t": 537.92,
+   "d": 6.24,
+   "text": "lot of way do is play this game. Does ask you to do mini games and side thing or whatever else."
+  },
+  {
+   "t": 544.16,
+   "d": 8.48,
+   "text": "And lastly, is polish, it is kind of the luck variable because it affects everything. The more"
+  },
+  {
+   "t": 552.64,
+   "d": 9.6,
+   "text": "polish you have the less everything else matters. Players will accept a lot if polish is good. Like"
+  },
+  {
+   "t": 562.24,
+   "d": 7.24,
+   "text": "I have an example here the persona five menus. This is an awful menu in terms of time it takes to"
+  },
+  {
+   "t": 569.48,
+   "d": 6.16,
+   "text": "get anything done in that game. People don't tend to complain about this because even if they have"
+  },
+  {
+   "t": 575.64,
+   "d": 7.0,
+   "text": "to wait a lot the polish is incredible on it so you love them. In general people love them."
+  },
+  {
+   "t": 584.96,
+   "d": 10.6,
+   "text": "With these in mind, now the genres. Linear, classic roguelike. This is rogue but this is"
+  },
+  {
+   "t": 595.56,
+   "d": 6.08,
+   "text": "also stuff like dungeon and dread more. I think I put tangled deep also in here. There is a lot of"
+  },
+  {
+   "t": 602.96,
+   "d": 4.12,
+   "text": "classic roguelikes which is like this is a rogue game. It plays like Rogue. Another one I want"
+  },
+  {
+   "t": 607.08,
+   "d": 13.12,
+   "text": "to bring up is Balatro. You can only go forward in this game. It gives you a menu asking do you"
+  },
+  {
+   "t": 620.2,
+   "d": 6.64,
+   "text": "want to go forward or more forward. The doors here are literally just the buttons that say,"
+  },
+  {
+   "t": 626.84,
+   "d": 7.68,
+   "text": "you know, next, press the -- I don't want to talk about these games but it is just a button, a door,"
+  },
+  {
+   "t": 634.52,
+   "d": 7.72,
+   "text": "you press it and go forward. The nice thing about a game that is all menus is it fulfills everything"
+  },
+  {
+   "t": 642.24,
+   "d": 7.28,
+   "text": "about what makes a good door. Clicking on buttons and menus is already how you were playing the"
+  },
+  {
+   "t": 649.52,
+   "d": 8.28,
+   "text": "game. It is just the button. But that's how you were playing. Linear is basic in many ways but"
+  },
+  {
+   "t": 657.8,
+   "d": 8.44,
+   "text": "works well games with a shorter run length and fewer major mechanics. You don't find Rogue to"
+  },
+  {
+   "t": 666.24,
+   "d": 14.0,
+   "text": "be as complex as other things I am going to talk about. The next is dungeon doors and the rogue"
+  },
+  {
+   "t": 680.24,
+   "d": 11.12,
+   "text": "action part of cult of the lamb. They are more exploratory. What is behind the next door is"
+  },
+  {
+   "t": 691.36,
+   "d": 7.04,
+   "text": "the same as the previous area in terms of how it plays or what treasures lie within. In the game"
+  },
+  {
+   "t": 698.4,
+   "d": 7.08,
+   "text": "there could be alternate endings and biomes but gameplay doesn't change. Dungeon doors are good"
+  },
+  {
+   "t": 705.48,
+   "d": 6.36,
+   "text": "for games that focus on constant pressure but allow for an element of exploration. It can not"
+  },
+  {
+   "t": 711.84,
+   "d": 7.96,
+   "text": "have way too many mechanics. Next one is chosen doors. For a while a lot of roguelikes trended"
+  },
+  {
+   "t": 719.8,
+   "d": 7.48,
+   "text": "here. You think stuff like dead cell and Hades. You often get choices that can change where you"
+  },
+  {
+   "t": 727.28,
+   "d": 8.88,
+   "text": "ultimately end up and dramatic change where things play temporarily. This becomes more important for"
+  },
+  {
+   "t": 736.16,
+   "d": 8.48,
+   "text": "games with more major mechanics because doors separate play styles. Going back to Hades,"
+  },
+  {
+   "t": 746.12,
+   "d": 9.68,
+   "text": "doors are integral, and you can only go forward. These rooms can be different from the previous"
+  },
+  {
+   "t": 755.8,
+   "d": 6.4,
+   "text": "room. Changing and pacing in game ploy allow for a longer runtime usually. For those chosen doors"
+  },
+  {
+   "t": 762.2,
+   "d": 9.4,
+   "text": "to work, game pacing becomes more essential. You can't have a fast pace game go a long time before"
+  },
+  {
+   "t": 771.6,
+   "d": 7.6,
+   "text": "coming to a stop for a long time with dialogue and major choices. Since there is dozens of"
+  },
+  {
+   "t": 779.2,
+   "d": 5.2,
+   "text": "doors usually, you will find doors are not just a button or a simple transition. You usually find in"
+  },
+  {
+   "t": 784.4,
+   "d": 5.76,
+   "text": "this system, doors tend to have more polish with animation and iconography because they are so much"
+  },
+  {
+   "t": 790.16,
+   "d": 8.92,
+   "text": "more important. The next system is the branching map style and this is stuff like Slay the Spire"
+  },
+  {
+   "t": 799.6,
+   "d": 7.17,
+   "text": "which is important. Stuff like into the breach and to note that the map itself isn't a door. It"
+  },
+  {
+   "t": 806.77,
+   "d": 5.91,
+   "text": "is the icons that are on the map that are doors. Iconography. This is more important for games with"
+  },
+  {
+   "t": 812.68,
+   "d": 7.4,
+   "text": "lots of mechanics and gameplay styles because it is hard to get that amount of info across with"
+  },
+  {
+   "t": 820.08,
+   "d": 6.0,
+   "text": "just door iconography but you don't want tons of menus popping up in the normal gameplay session."
+  },
+  {
+   "t": 826.08,
+   "d": 8.48,
+   "text": "Map systems have less exploration despite being a map. This makes for a worse system and action game"
+  },
+  {
+   "t": 834.56,
+   "d": 12.78,
+   "text": "oftentimes due to the pacing but it still works the between doors is small. There might be tabs or"
+  },
+  {
+   "t": 847.34,
+   "d": 6.78,
+   "text": "grids. Rogue labyrinth my game uses a rogue map. In all cases, the player is funneled forward with"
+  },
+  {
+   "t": 854.12,
+   "d": 8.0,
+   "text": "no chance of getting lost. And yeah, it usually last for a little bit longer of game runs. For"
+  },
+  {
+   "t": 862.12,
+   "d": 7.28,
+   "text": "the very last one I want to go over is the open world. This is stuff where more like dead ends"
+  },
+  {
+   "t": 869.4,
+   "d": 7.0,
+   "text": "and ways to get lost and you lack the end goal or point location sometimes. This is less to do with"
+  },
+  {
+   "t": 876.4,
+   "d": 7.44,
+   "text": "the doors but there are still doors here just like going between biomes. This works for slower and"
+  },
+  {
+   "t": 883.84,
+   "d": 9.68,
+   "text": "long runs and it be much more overwhelming. Things tend to be in a slow medium pace because you can't"
+  },
+  {
+   "t": 893.52,
+   "d": 5.72,
+   "text": "have it be turned base. That's a little too slow for the experience. I want to skip ahead to the"
+  },
+  {
+   "t": 899.24,
+   "d": 10.88,
+   "text": "end. That was pretty much the end but I could talk about this for forever but yeah. Bye. I hope this"
+  },
+  {
+   "t": 910.12,
+   "d": 7.36,
+   "text": "makes sense. People have a few things to think about doors. I thought about doors a whole lot"
+  },
+  {
+   "t": 917.48,
+   "d": 11.52,
+   "text": "in my own rogue game. Rogue labyrinth. Keep giving control to your player. Put in that polish. Just"
+  },
+  {
+   "t": 929.0,
+   "d": 9.16,
+   "text": "feel good about the decisions you make. Hello. ALEXEI: Wonderful. Love it. Seems"
+  },
+  {
+   "t": 938.16,
+   "d": 3.08,
+   "text": "like stairs are doors. JOHN: Stairs are definitely doors"
+  },
+  {
+   "t": 941.24,
+   "d": 7.64,
+   "text": "as long as it leads to another major location and you have shown it that way to the player. You have"
+  },
+  {
+   "t": 948.88,
+   "d": 9.08,
+   "text": "the choice to go down. Love it. Makes sense. Thank you to the door master, lord of Doors. People are"
+  },
+  {
+   "t": 957.96,
+   "d": 9.48,
+   "text": "talking about hot pockets as ravioli. We are off the wall in this debate. A hot pocket is a door."
+  },
+  {
+   "t": 967.44,
+   "d": 7.32,
+   "text": "ALEXEI: It is a path to something. Wonderful. If you want to discuss more about what is and isn't"
+  },
+  {
+   "t": 974.76,
+   "d": 5.67,
+   "text": "a door they can do so in the Goblin Singers after the last talk. Thank you, door master."
+  }
+ ]
+}

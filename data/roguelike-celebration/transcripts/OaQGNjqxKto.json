@@ -1,0 +1,2802 @@
+{
+ "id": "OaQGNjqxKto",
+ "url": "https://www.youtube.com/watch?v=OaQGNjqxKto",
+ "title": "Ben McGraw - Building an Engaging Character Creator",
+ "speaker": "Ben McGraw",
+ "talk_title": "Building an Engaging Character Creator",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1498,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Ben McGraw talks about how character build systems make for engaging game choices.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 149,
+   "title": "Assumptions"
+  },
+  {
+   "start": 260,
+   "title": "Reasons to Stay"
+  },
+  {
+   "start": 357,
+   "title": "Making Death Meaningful"
+  },
+  {
+   "start": 588,
+   "title": "Roguelikes"
+  },
+  {
+   "start": 1117,
+   "title": "The Math"
+  },
+  {
+   "start": 1170,
+   "title": "How to Balance"
+  },
+  {
+   "start": 1288,
+   "title": "Broken Things"
+  },
+  {
+   "start": 1442,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3871,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.73,
+   "text": "effect so Rouge mics are they read"
+  },
+  {
+   "t": 2.73,
+   "d": 8.01,
+   "text": "enough oh yeah oh they're also Rouge now"
+  },
+  {
+   "t": 10.74,
+   "d": 4.14,
+   "text": "okay that's not it I the talk here is"
+  },
+  {
+   "t": 14.88,
+   "d": 2.46,
+   "text": "pick a winner it is roughly about"
+  },
+  {
+   "t": 17.34,
+   "d": 4.02,
+   "text": "character creation processes and the"
+  },
+  {
+   "t": 21.36,
+   "d": 1.62,
+   "text": "subtitle why is been talking about four"
+  },
+  {
+   "t": 22.98,
+   "d": 2.28,
+   "text": "X's from the 90s for so long"
+  },
+  {
+   "t": 25.26,
+   "d": 1.83,
+   "text": "trust me when I was putting this"
+  },
+  {
+   "t": 27.09,
+   "d": 1.89,
+   "text": "together I was a little worried about"
+  },
+  {
+   "t": 28.98,
+   "d": 2.55,
+   "text": "all these three 20 by 200 recipes and"
+  },
+  {
+   "t": 31.53,
+   "d": 1.53,
+   "text": "screenshots I thought you would be very"
+  },
+  {
+   "t": 33.06,
+   "d": 2.16,
+   "text": "bored by them and then I realized the"
+  },
+  {
+   "t": 35.22,
+   "d": 3.78,
+   "text": "audience and then I realized you're all"
+  },
+  {
+   "t": 39.0,
+   "d": 3.78,
+   "text": "gonna think I'm putting on airs so I'm"
+  },
+  {
+   "t": 42.78,
+   "d": 1.74,
+   "text": "Ben McGraw and I'm the founder of bread"
+  },
+  {
+   "t": 44.52,
+   "d": 2.43,
+   "text": "brothers games we do have an unannounced"
+  },
+  {
+   "t": 46.95,
+   "d": 1.38,
+   "text": "rogue like that we've been working on"
+  },
+  {
+   "t": 48.33,
+   "d": 1.05,
+   "text": "for a while but we're currently"
+  },
+  {
+   "t": 49.38,
+   "d": 2.91,
+   "text": "finishing up a comedic JRPG we've also"
+  },
+  {
+   "t": 52.29,
+   "d": 3.39,
+   "text": "been working on for quite a while five"
+  },
+  {
+   "t": 55.68,
+   "d": 3.0,
+   "text": "years at this point I was also the"
+  },
+  {
+   "t": 58.68,
+   "d": 2.04,
+   "text": "executive producer of the 2011 roguelike"
+  },
+  {
+   "t": 60.72,
+   "d": 6.66,
+   "text": "Dungeons of Dredmor the team thanks to"
+  },
+  {
+   "t": 67.38,
+   "d": 2.58,
+   "text": "you I did officially like what a"
+  },
+  {
+   "t": 69.96,
+   "d": 4.92,
+   "text": "executive producer does is not much I"
+  },
+  {
+   "t": 74.88,
+   "d": 3.84,
+   "text": "like to say I did less than 1% but more"
+  },
+  {
+   "t": 78.72,
+   "d": 4.2,
+   "text": "than zero I I've personally been making"
+  },
+  {
+   "t": 82.92,
+   "d": 3.24,
+   "text": "indie games since about 1997 it was so"
+  },
+  {
+   "t": 86.16,
+   "d": 1.83,
+   "text": "long ago that we just called her selves"
+  },
+  {
+   "t": 87.99,
+   "d": 1.59,
+   "text": "amateur game makers back then because"
+  },
+  {
+   "t": 89.58,
+   "d": 2.61,
+   "text": "indie wasn't a thing yet also that was"
+  },
+  {
+   "t": 92.19,
+   "d": 3.3,
+   "text": "20 years ago does anyone actually know"
+  },
+  {
+   "t": 95.49,
+   "d": 4.17,
+   "text": "about verge RPG um no okay that's how"
+  },
+  {
+   "t": 99.66,
+   "d": 3.54,
+   "text": "old it was so this is what I usually"
+  },
+  {
+   "t": 103.2,
+   "d": 1.89,
+   "text": "look like my barber did something"
+  },
+  {
+   "t": 105.09,
+   "d": 3.21,
+   "text": "interesting to me today so this is why I"
+  },
+  {
+   "t": 108.3,
+   "d": 2.4,
+   "text": "usually look like and and people come up"
+  },
+  {
+   "t": 110.7,
+   "d": 1.23,
+   "text": "to me all the time and tell me that I"
+  },
+  {
+   "t": 111.93,
+   "d": 3.33,
+   "text": "look like Seth Rogen and usually they"
+  },
+  {
+   "t": 115.26,
+   "d": 2.13,
+   "text": "just say did you know you look like Seth"
+  },
+  {
+   "t": 117.39,
+   "d": 1.98,
+   "text": "Rogen I'm like yes I've been informed"
+  },
+  {
+   "t": 119.37,
+   "d": 3.44,
+   "text": "multiple times multiple times today even"
+  },
+  {
+   "t": 122.81,
+   "d": 2.29,
+   "text": "but I prefer to think myself is a"
+  },
+  {
+   "t": 125.1,
+   "d": 1.88,
+   "text": "happier Jonathan Coulton"
+  },
+  {
+   "t": 126.98,
+   "d": 3.31,
+   "text": "or at least less sad one"
+  },
+  {
+   "t": 130.29,
+   "d": 2.25,
+   "text": "or if we're going fully delusional"
+  },
+  {
+   "t": 132.54,
+   "d": 2.48,
+   "text": "a temporarily embarrassed George Clooney"
+  },
+  {
+   "t": 135.02,
+   "d": 2.65,
+   "text": "but I'm here today to talk to you about"
+  },
+  {
+   "t": 137.67,
+   "d": 3.42,
+   "text": "the first few minutes of your game that"
+  },
+  {
+   "t": 141.09,
+   "d": 2.28,
+   "text": "first five or so minutes it's such an"
+  },
+  {
+   "t": 143.37,
+   "d": 2.64,
+   "text": "important time in a young players life"
+  },
+  {
+   "t": 146.01,
+   "d": 3.63,
+   "text": "so full of wonder and possibility now"
+  },
+  {
+   "t": 149.64,
+   "d": 1.2,
+   "text": "I'm gonna make a few assumptions here"
+  },
+  {
+   "t": 150.84,
+   "d": 1.62,
+   "text": "because you know it's a talk and we can"
+  },
+  {
+   "t": 152.46,
+   "d": 3.09,
+   "text": "you know come narrow I'm gonna assume"
+  },
+  {
+   "t": 155.55,
+   "d": 2.01,
+   "text": "that you have some sort of character"
+  },
+  {
+   "t": 157.56,
+   "d": 2.46,
+   "text": "build process in your game and if you"
+  },
+  {
+   "t": 160.02,
+   "d": 1.05,
+   "text": "don't it's fine it's just"
+  },
+  {
+   "t": 161.07,
+   "d": 4.14,
+   "text": "no enjoy the acting and I'm gonna assume"
+  },
+  {
+   "t": 165.21,
+   "d": 0.99,
+   "text": "that you're making a roguelike"
+  },
+  {
+   "t": 166.2,
+   "d": 2.94,
+   "text": "because you're here and assuming those"
+  },
+  {
+   "t": 169.14,
+   "d": 3.0,
+   "text": "things this is how I see the baby"
+  },
+  {
+   "t": 172.14,
+   "d": 1.71,
+   "text": "player's life going in those first few"
+  },
+  {
+   "t": 173.85,
+   "d": 3.12,
+   "text": "minutes you look through all the pretty"
+  },
+  {
+   "t": 176.97,
+   "d": 2.25,
+   "text": "options and you decide on a build and"
+  },
+  {
+   "t": 179.22,
+   "d": 5.43,
+   "text": "then you run out into the world and then"
+  },
+  {
+   "t": 184.65,
+   "d": 5.1,
+   "text": "you die because this is roguelike so you"
+  },
+  {
+   "t": 189.75,
+   "d": 2.94,
+   "text": "roll a new character and then you try"
+  },
+  {
+   "t": 192.69,
+   "d": 4.62,
+   "text": "again and you die again because this is"
+  },
+  {
+   "t": 197.31,
+   "d": 9.72,
+   "text": "a roguelike and so on and so on and now"
+  },
+  {
+   "t": 207.03,
+   "d": 3.68,
+   "text": "you're like five minutes into the game"
+  },
+  {
+   "t": 210.71,
+   "d": 3.7,
+   "text": "and you've died several times and you"
+  },
+  {
+   "t": 214.41,
+   "d": 3.42,
+   "text": "the player are kind of grouchy even"
+  },
+  {
+   "t": 217.83,
+   "d": 1.86,
+   "text": "experienced road bike players might be"
+  },
+  {
+   "t": 219.69,
+   "d": 2.25,
+   "text": "feeling miffed and dissatisfied at this"
+  },
+  {
+   "t": 221.94,
+   "d": 2.25,
+   "text": "point I mean you've died all of the"
+  },
+  {
+   "t": 224.19,
+   "d": 2.03,
+   "text": "deaths before in all the other games"
+  },
+  {
+   "t": 226.22,
+   "d": 2.38,
+   "text": "what's this game bringing to the table"
+  },
+  {
+   "t": 228.6,
+   "d": 1.83,
+   "text": "to the table that's gonna excite you are"
+  },
+  {
+   "t": 230.43,
+   "d": 2.04,
+   "text": "you going to have to play 40 hours to"
+  },
+  {
+   "t": 232.47,
+   "d": 4.74,
+   "text": "find out that there's nothing new and"
+  },
+  {
+   "t": 237.21,
+   "d": 2.28,
+   "text": "what about the completely new people"
+  },
+  {
+   "t": 239.49,
+   "d": 1.95,
+   "text": "that you want to buy your game assuming"
+  },
+  {
+   "t": 241.44,
+   "d": 3.36,
+   "text": "that you're in it for the money people"
+  },
+  {
+   "t": 244.8,
+   "d": 1.98,
+   "text": "who aren't into roguelikes yet or aren't"
+  },
+  {
+   "t": 246.78,
+   "d": 1.98,
+   "text": "familiar with the lethality of our"
+  },
+  {
+   "t": 248.76,
+   "d": 3.51,
+   "text": "tropes they've died like four times in"
+  },
+  {
+   "t": 252.27,
+   "d": 1.52,
+   "text": "five minutes and they don't see the fun"
+  },
+  {
+   "t": 253.79,
+   "d": 2.95,
+   "text": "minute five they were killed again"
+  },
+  {
+   "t": 256.74,
+   "d": 2.13,
+   "text": "minute six they're heading straight to"
+  },
+  {
+   "t": 258.87,
+   "d": 4.08,
+   "text": "this page oh gosh we gotta give them a"
+  },
+  {
+   "t": 262.95,
+   "d": 5.01,
+   "text": "reason to stay there's a few ways you"
+  },
+  {
+   "t": 267.96,
+   "d": 2.55,
+   "text": "can you can keep people with and make"
+  },
+  {
+   "t": 270.51,
+   "d": 2.4,
+   "text": "death funny you can try humor and that"
+  },
+  {
+   "t": 272.91,
+   "d": 1.98,
+   "text": "goes a pretty long way but it may not be"
+  },
+  {
+   "t": 274.89,
+   "d": 2.52,
+   "text": "theme appropriate for your game Dredmor"
+  },
+  {
+   "t": 277.41,
+   "d": 1.95,
+   "text": "was a funny game so there was a long"
+  },
+  {
+   "t": 279.36,
+   "d": 1.35,
+   "text": "array of things that kept people"
+  },
+  {
+   "t": 280.71,
+   "d": 1.8,
+   "text": "entertained when they died from hitting"
+  },
+  {
+   "t": 282.51,
+   "d": 1.02,
+   "text": "them over the head with this"
+  },
+  {
+   "t": 283.53,
+   "d": 1.95,
+   "text": "congratulations screen every time it"
+  },
+  {
+   "t": 285.48,
+   "d": 1.68,
+   "text": "happens having clever achieve"
+  },
+  {
+   "t": 287.16,
+   "d": 1.95,
+   "text": "interactions you'd immediately encounter"
+  },
+  {
+   "t": 289.11,
+   "d": 1.62,
+   "text": "in the first few minutes there's like"
+  },
+  {
+   "t": 290.73,
+   "d": 2.91,
+   "text": "several about very common deaths in the"
+  },
+  {
+   "t": 293.64,
+   "d": 2.91,
+   "text": "first few minutes that like oh I'm dead"
+  },
+  {
+   "t": 296.55,
+   "d": 2.79,
+   "text": "oh I got an achievement you know so that"
+  },
+  {
+   "t": 299.34,
+   "d": 2.76,
+   "text": "kept them white like my favorite one was"
+  },
+  {
+   "t": 302.1,
+   "d": 1.59,
+   "text": "if you if you died by kicking down a"
+  },
+  {
+   "t": 303.69,
+   "d": 7.77,
+   "text": "door that was humor can get you pretty"
+  },
+  {
+   "t": 311.46,
+   "d": 1.95,
+   "text": "far but it's not without its own perils"
+  },
+  {
+   "t": 313.41,
+   "d": 2.13,
+   "text": "it's pretty hard to write well paced"
+  },
+  {
+   "t": 315.54,
+   "d": 2.67,
+   "text": "humor and as I said before it may not be"
+  },
+  {
+   "t": 318.21,
+   "d": 2.67,
+   "text": "a theme appropriate for your game also"
+  },
+  {
+   "t": 320.88,
+   "d": 2.43,
+   "text": "reusing the same gag can get really old"
+  },
+  {
+   "t": 323.31,
+   "d": 6.39,
+   "text": "really fast no penalty it's another way"
+  },
+  {
+   "t": 329.7,
+   "d": 3.15,
+   "text": "to you can you can make people not mind"
+  },
+  {
+   "t": 332.85,
+   "d": 2.64,
+   "text": "death so much there's a metric ton of"
+  },
+  {
+   "t": 335.49,
+   "d": 1.77,
+   "text": "things spunky gets right about one of"
+  },
+  {
+   "t": 337.26,
+   "d": 1.47,
+   "text": "the best things it gets right for that"
+  },
+  {
+   "t": 338.73,
+   "d": 2.04,
+   "text": "beginning of game experience in my"
+  },
+  {
+   "t": 340.77,
+   "d": 2.97,
+   "text": "opinion is the incredibly low penalty to"
+  },
+  {
+   "t": 343.74,
+   "d": 2.52,
+   "text": "death like you are you're just jumping"
+  },
+  {
+   "t": 346.26,
+   "d": 1.83,
+   "text": "back into the game immediately in"
+  },
+  {
+   "t": 348.09,
+   "d": 2.34,
+   "text": "spelunky if you die this is an"
+  },
+  {
+   "t": 350.43,
+   "d": 1.89,
+   "text": "affordance games without character build"
+  },
+  {
+   "t": 352.32,
+   "d": 2.07,
+   "text": "systems should absolutely leverage but"
+  },
+  {
+   "t": 354.39,
+   "d": 1.86,
+   "text": "it's kind of not appropriate for this"
+  },
+  {
+   "t": 356.25,
+   "d": 5.07,
+   "text": "dog you can also give the the the the"
+  },
+  {
+   "t": 361.32,
+   "d": 1.86,
+   "text": "many deaths a sense of accomplishment to"
+  },
+  {
+   "t": 363.18,
+   "d": 3.2,
+   "text": "the player like the does themselves and"
+  },
+  {
+   "t": 366.38,
+   "d": 2.26,
+   "text": "I think Super Meat Boy does an"
+  },
+  {
+   "t": 368.64,
+   "d": 2.4,
+   "text": "incredible job of this and if the the"
+  },
+  {
+   "t": 371.04,
+   "d": 1.32,
+   "text": "subtitle of the talk of the beginning"
+  },
+  {
+   "t": 372.36,
+   "d": 1.32,
+   "text": "didn't give it away I'm gonna go all"
+  },
+  {
+   "t": 373.68,
+   "d": 2.22,
+   "text": "over the place John or a wise for for"
+  },
+  {
+   "t": 375.9,
+   "d": 3.63,
+   "text": "inspiration here so in Super Meat Boy"
+  },
+  {
+   "t": 379.53,
+   "d": 2.31,
+   "text": "like if you can make each death"
+  },
+  {
+   "t": 381.84,
+   "d": 2.79,
+   "text": "meaningful in some way so when I player"
+  },
+  {
+   "t": 384.63,
+   "d": 2.34,
+   "text": "gets it it doesn't feel like a penalty"
+  },
+  {
+   "t": 386.97,
+   "d": 1.8,
+   "text": "you've won them back from that I'm angry"
+  },
+  {
+   "t": 388.77,
+   "d": 1.2,
+   "text": "spot"
+  },
+  {
+   "t": 389.97,
+   "d": 2.73,
+   "text": "and if you're not familiar with with"
+  },
+  {
+   "t": 392.7,
+   "d": 3.03,
+   "text": "Super Meat Boy like you you run through"
+  },
+  {
+   "t": 395.73,
+   "d": 2.58,
+   "text": "these incredibly lethal levels and like"
+  },
+  {
+   "t": 398.31,
+   "d": 2.4,
+   "text": "this is a screen shot after you beat the"
+  },
+  {
+   "t": 400.71,
+   "d": 2.16,
+   "text": "level and each one of those little red"
+  },
+  {
+   "t": 402.87,
+   "d": 2.85,
+   "text": "boxes is one of you one of your runs all"
+  },
+  {
+   "t": 405.72,
+   "d": 1.41,
+   "text": "of your runs are recorded and they're"
+  },
+  {
+   "t": 407.13,
+   "d": 1.89,
+   "text": "played back simultaneously so it's"
+  },
+  {
+   "t": 409.02,
+   "d": 2.67,
+   "text": "making its making death feel rewarding"
+  },
+  {
+   "t": 411.69,
+   "d": 1.32,
+   "text": "because once you've once you've made"
+  },
+  {
+   "t": 413.01,
+   "d": 2.1,
+   "text": "this association that like I get to see"
+  },
+  {
+   "t": 415.11,
+   "d": 3.12,
+   "text": "like this explosion of meat boys it"
+  },
+  {
+   "t": 418.23,
+   "d": 1.56,
+   "text": "feels better and um"
+  },
+  {
+   "t": 419.79,
+   "d": 2.01,
+   "text": "this makes the player feel badass"
+  },
+  {
+   "t": 421.8,
+   "d": 1.8,
+   "text": "instead of discouraged the first time"
+  },
+  {
+   "t": 423.6,
+   "d": 2.31,
+   "text": "that you see one of these the rest of"
+  },
+  {
+   "t": 425.91,
+   "d": 1.29,
+   "text": "the deaths don't matter so much anymore"
+  },
+  {
+   "t": 427.2,
+   "d": 1.86,
+   "text": "so that's another way you can go about"
+  },
+  {
+   "t": 429.06,
+   "d": 3.78,
+   "text": "this you can get gifts from previous"
+  },
+  {
+   "t": 432.84,
+   "d": 2.13,
+   "text": "runs so I've been it really into the"
+  },
+  {
+   "t": 434.97,
+   "d": 2.28,
+   "text": "really cool windows 3-1 themed roguelike"
+  },
+  {
+   "t": 437.25,
+   "d": 2.49,
+   "text": "Kingsway lately it's really fun it's on"
+  },
+  {
+   "t": 439.74,
+   "d": 3.54,
+   "text": "Steam I'm not affiliated they'd also do"
+  },
+  {
+   "t": 443.28,
+   "d": 3.6,
+   "text": "the humor thing but like they do a thing"
+  },
+  {
+   "t": 446.88,
+   "d": 2.61,
+   "text": "that that a lot of roguelikes do as you"
+  },
+  {
+   "t": 449.49,
+   "d": 2.4,
+   "text": "die you you accumulate a currency and"
+  },
+  {
+   "t": 451.89,
+   "d": 1.59,
+   "text": "you could spit on mocking new starting"
+  },
+  {
+   "t": 453.48,
+   "d": 3.6,
+   "text": "items for new for for next runs or when"
+  },
+  {
+   "t": 457.08,
+   "d": 1.53,
+   "text": "a character dies you can have them"
+  },
+  {
+   "t": 458.61,
+   "d": 2.49,
+   "text": "bequeath a specific item the bat"
+  },
+  {
+   "t": 461.1,
+   "d": 2.04,
+   "text": "character had as a one-time gift to a"
+  },
+  {
+   "t": 463.14,
+   "d": 1.41,
+   "text": "future new character and that's pretty"
+  },
+  {
+   "t": 464.55,
+   "d": 1.95,
+   "text": "good you know it's like my death wasn't"
+  },
+  {
+   "t": 466.5,
+   "d": 3.71,
+   "text": "in vain have a curvy dagger you know"
+  },
+  {
+   "t": 470.21,
+   "d": 2.71,
+   "text": "anyway all these these are good ways to"
+  },
+  {
+   "t": 472.92,
+   "d": 3.42,
+   "text": "make deaths not suck you know that a"
+  },
+  {
+   "t": 476.34,
+   "d": 2.67,
+   "text": "constant treadmill of death not suck and"
+  },
+  {
+   "t": 479.01,
+   "d": 1.29,
+   "text": "they're all worth their own talk I'm"
+  },
+  {
+   "t": 480.3,
+   "d": 3.93,
+   "text": "sure but it's not my talk see I kind of"
+  },
+  {
+   "t": 484.23,
+   "d": 2.31,
+   "text": "lied in that little animation maybe"
+  },
+  {
+   "t": 486.54,
+   "d": 1.76,
+   "text": "should show it a few minutes ago"
+  },
+  {
+   "t": 488.3,
+   "d": 4.96,
+   "text": "remember this that's not representative"
+  },
+  {
+   "t": 493.26,
+   "d": 3.65,
+   "text": "of the game this is"
+  },
+  {
+   "t": 505.79,
+   "d": 3.58,
+   "text": "so yeah like we're talking depending on"
+  },
+  {
+   "t": 509.37,
+   "d": 1.98,
+   "text": "the complexity of your of your build"
+  },
+  {
+   "t": 511.35,
+   "d": 3.15,
+   "text": "screen the the user could be spending a"
+  },
+  {
+   "t": 514.5,
+   "d": 1.53,
+   "text": "lot of time in that first five minutes"
+  },
+  {
+   "t": 516.03,
+   "d": 2.22,
+   "text": "in that bill is green this is dread"
+  },
+  {
+   "t": 518.25,
+   "d": 1.59,
+   "text": "warriors beginning skill tree selection"
+  },
+  {
+   "t": 519.84,
+   "d": 4.23,
+   "text": "screen there's 55 skills there depending"
+  },
+  {
+   "t": 524.07,
+   "d": 2.25,
+   "text": "on how complicated your build process is"
+  },
+  {
+   "t": 526.32,
+   "d": 3.18,
+   "text": "a large portion of those vital first"
+  },
+  {
+   "t": 529.5,
+   "d": 3.12,
+   "text": "minutes are in that menu and the"
+  },
+  {
+   "t": 532.62,
+   "d": 2.01,
+   "text": "possibilities in that many of themselves"
+  },
+  {
+   "t": 534.63,
+   "d": 2.1,
+   "text": "need to sell the game far in advance to"
+  },
+  {
+   "t": 536.73,
+   "d": 3.45,
+   "text": "the gameplay this is like the premise"
+  },
+  {
+   "t": 540.18,
+   "d": 3.21,
+   "text": "I'm going with here it's fully in in a"
+  },
+  {
+   "t": 543.39,
+   "d": 1.59,
+   "text": "game like this and not all not all"
+  },
+  {
+   "t": 544.98,
+   "d": 1.35,
+   "text": "roguelikes are like this but in a game"
+  },
+  {
+   "t": 546.33,
+   "d": 2.31,
+   "text": "like this you need to make this really"
+  },
+  {
+   "t": 548.64,
+   "d": 4.95,
+   "text": "sell it with what's going on so things"
+  },
+  {
+   "t": 553.59,
+   "d": 1.95,
+   "text": "I'm not talking about first I'm not"
+  },
+  {
+   "t": 555.54,
+   "d": 1.89,
+   "text": "talking about customization screens for"
+  },
+  {
+   "t": 557.43,
+   "d": 3.33,
+   "text": "character appearance they have their"
+  },
+  {
+   "t": 560.76,
+   "d": 3.78,
+   "text": "merits and all but I think like it's"
+  },
+  {
+   "t": 564.54,
+   "d": 2.19,
+   "text": "usually a one and done experience unless"
+  },
+  {
+   "t": 566.73,
+   "d": 3.81,
+   "text": "you're got some sort of agenda you know"
+  },
+  {
+   "t": 570.54,
+   "d": 1.86,
+   "text": "if you're familiar with the people"
+  },
+  {
+   "t": 572.4,
+   "d": 2.63,
+   "text": "making like the ugliest faces they can"
+  },
+  {
+   "t": 575.03,
+   "d": 1.84,
+   "text": "and they usually don't say anything"
+  },
+  {
+   "t": 576.87,
+   "d": 3.48,
+   "text": "about the gameplay I'm also not talking"
+  },
+  {
+   "t": 580.35,
+   "d": 3.87,
+   "text": "about stat stat allocation screens these"
+  },
+  {
+   "t": 584.22,
+   "d": 1.83,
+   "text": "tend to be simple and you jump through"
+  },
+  {
+   "t": 586.05,
+   "d": 5.52,
+   "text": "them pretty quickly um so let's look at"
+  },
+  {
+   "t": 591.57,
+   "d": 3.41,
+   "text": "some Forex games for the nineties"
+  },
+  {
+   "t": 599.54,
+   "d": 2.62,
+   "text": "roguelikes aren't the own row that's"
+  },
+  {
+   "t": 602.16,
+   "d": 2.1,
+   "text": "known for brick wall learning curbs and"
+  },
+  {
+   "t": 604.26,
+   "d": 2.43,
+   "text": "rapid death in the late 90s I became"
+  },
+  {
+   "t": 606.69,
+   "d": 2.7,
+   "text": "obsessed with these two games I uh"
+  },
+  {
+   "t": 609.39,
+   "d": 2.88,
+   "text": "Master of Orion and Master of Magic Mesh"
+  },
+  {
+   "t": 612.27,
+   "d": 1.89,
+   "text": "ran two specifically I hope I don't"
+  },
+  {
+   "t": 614.16,
+   "d": 3.3,
+   "text": "offend anyone new ones fine but just not"
+  },
+  {
+   "t": 617.46,
+   "d": 4.35,
+   "text": "mine and uh and I just became obsessed"
+  },
+  {
+   "t": 621.81,
+   "d": 3.27,
+   "text": "with these and like really really"
+  },
+  {
+   "t": 625.08,
+   "d": 2.16,
+   "text": "obsessed with them I'm gonna focus on"
+  },
+  {
+   "t": 627.24,
+   "d": 2.52,
+   "text": "master of magic specifically but but"
+  },
+  {
+   "t": 629.76,
+   "d": 2.04,
+   "text": "both both of these have the same"
+  },
+  {
+   "t": 631.8,
+   "d": 3.18,
+   "text": "properties I'm going to talk about so"
+  },
+  {
+   "t": 634.98,
+   "d": 2.37,
+   "text": "master of magic was a brutally hard game"
+  },
+  {
+   "t": 637.35,
+   "d": 1.62,
+   "text": "and if you're unfamiliar it was like"
+  },
+  {
+   "t": 638.97,
+   "d": 2.67,
+   "text": "sieve one mixed up with Magic the"
+  },
+  {
+   "t": 641.64,
+   "d": 2.94,
+   "text": "Gathering and I don't know what has"
+  },
+  {
+   "t": 644.58,
+   "d": 2.01,
+   "text": "isometric squad based combat the"
+  },
+  {
+   "t": 646.59,
+   "d": 2.52,
+   "text": "original XCOM it was it was like a grab"
+  },
+  {
+   "t": 649.11,
+   "d": 3.93,
+   "text": "bag of a bunch of stuff and it's hard I"
+  },
+  {
+   "t": 653.04,
+   "d": 3.48,
+   "text": "I would almost say it's impossible to"
+  },
+  {
+   "t": 656.52,
+   "d": 2.04,
+   "text": "properly learn without some facts you"
+  },
+  {
+   "t": 658.56,
+   "d": 2.85,
+   "text": "frequently like 99% of the time"
+  },
+  {
+   "t": 661.41,
+   "d": 1.77,
+   "text": "frequently run into challenges that"
+  },
+  {
+   "t": 663.18,
+   "d": 2.43,
+   "text": "outclass you from the get-go and there's"
+  },
+  {
+   "t": 665.61,
+   "d": 1.89,
+   "text": "no threat estimating feature in the way"
+  },
+  {
+   "t": 667.5,
+   "d": 1.65,
+   "text": "of disc encounter looks really tough"
+  },
+  {
+   "t": 669.15,
+   "d": 2.34,
+   "text": "before you enter a combat it's just it's"
+  },
+  {
+   "t": 671.49,
+   "d": 1.38,
+   "text": "just trial and error and it is"
+  },
+  {
+   "t": 672.87,
+   "d": 2.99,
+   "text": "incredibly incredibly lethal and"
+  },
+  {
+   "t": 675.86,
+   "d": 2.41,
+   "text": "frustrating lethal the bad kind of death"
+  },
+  {
+   "t": 678.27,
+   "d": 3.27,
+   "text": "weasel and this was in 1995 as well"
+  },
+  {
+   "t": 681.54,
+   "d": 2.82,
+   "text": "there wasn't gamefaqs calm there were"
+  },
+  {
+   "t": 684.36,
+   "d": 2.4,
+   "text": "crappy isp webpages at best and most"
+  },
+  {
+   "t": 686.76,
+   "d": 1.98,
+   "text": "people didn't have any net yet you had"
+  },
+  {
+   "t": 688.74,
+   "d": 4.26,
+   "text": "to go buy guides out of paper and you"
+  },
+  {
+   "t": 693.0,
+   "d": 2.72,
+   "text": "didn't know that the paper existed"
+  },
+  {
+   "t": 695.72,
+   "d": 2.41,
+   "text": "anyway i neither had the internet at"
+  },
+  {
+   "t": 698.13,
+   "d": 2.04,
+   "text": "that time nor knowledge of the strategy"
+  },
+  {
+   "t": 700.17,
+   "d": 2.31,
+   "text": "a guide at the time or even money to buy"
+  },
+  {
+   "t": 702.48,
+   "d": 1.56,
+   "text": "it at the time because you know i was a"
+  },
+  {
+   "t": 704.04,
+   "d": 1.35,
+   "text": "teenager"
+  },
+  {
+   "t": 705.39,
+   "d": 1.68,
+   "text": "so i kept throwing myself this"
+  },
+  {
+   "t": 707.07,
+   "d": 1.83,
+   "text": "impossible game over and over and over"
+  },
+  {
+   "t": 708.9,
+   "d": 2.31,
+   "text": "and over again and i would rage quit and"
+  },
+  {
+   "t": 711.21,
+   "d": 1.88,
+   "text": "i would leave it alone for a few months"
+  },
+  {
+   "t": 713.09,
+   "d": 4.18,
+   "text": "but inexorably i would come back i I"
+  },
+  {
+   "t": 717.27,
+   "d": 2.73,
+   "text": "eventually got good and I still played"
+  },
+  {
+   "t": 720.0,
+   "d": 1.47,
+   "text": "to this day it's one it's one of those"
+  },
+  {
+   "t": 721.47,
+   "d": 1.53,
+   "text": "things that's in my permanent playing"
+  },
+  {
+   "t": 723.0,
+   "d": 4.23,
+   "text": "queue later when I started designing"
+  },
+  {
+   "t": 727.23,
+   "d": 4.08,
+   "text": "games that weren't JRPGs my mind kept"
+  },
+  {
+   "t": 731.31,
+   "d": 2.58,
+   "text": "coming back to this specific experience"
+  },
+  {
+   "t": 733.89,
+   "d": 1.98,
+   "text": "the specific addictive experience why"
+  },
+  {
+   "t": 735.87,
+   "d": 3.63,
+   "text": "did I love these games that were for me"
+  },
+  {
+   "t": 739.5,
+   "d": 2.46,
+   "text": "or could they were cruel why did I keep"
+  },
+  {
+   "t": 741.96,
+   "d": 1.5,
+   "text": "coming back was I some sort of game"
+  },
+  {
+   "t": 743.46,
+   "d": 2.94,
+   "text": "masochist they both were named a master"
+  },
+  {
+   "t": 746.4,
+   "d": 4.67,
+   "text": "after all was it just Stockholm Syndrome"
+  },
+  {
+   "t": 751.07,
+   "d": 4.03,
+   "text": "but any revelation hit me and it was"
+  },
+  {
+   "t": 755.1,
+   "d": 4.13,
+   "text": "about the character build system here is"
+  },
+  {
+   "t": 759.23,
+   "d": 2.59,
+   "text": "the master of magic character select"
+  },
+  {
+   "t": 761.82,
+   "d": 2.82,
+   "text": "screen and we are currently looking at"
+  },
+  {
+   "t": 764.64,
+   "d": 3.51,
+   "text": "one of the pre-built characters but gets"
+  },
+  {
+   "t": 768.15,
+   "d": 2.1,
+   "text": "a lot Atal a lock here under his"
+  },
+  {
+   "t": 770.25,
+   "d": 0.97,
+   "text": "portrait you can see"
+  },
+  {
+   "t": 771.22,
+   "d": 4.35,
+   "text": "he's got four books of nature magic five"
+  },
+  {
+   "t": 775.57,
+   "d": 3.06,
+   "text": "books of death magic and a scale called"
+  },
+  {
+   "t": 778.63,
+   "d": 4.01,
+   "text": "reward he also has a sweet headdress and"
+  },
+  {
+   "t": 782.64,
+   "d": 1.6,
+   "text": "here's Jafar"
+  },
+  {
+   "t": 784.24,
+   "d": 3.09,
+   "text": "he's got mono blue sorcery in the game"
+  },
+  {
+   "t": 787.33,
+   "d": 4.1,
+   "text": "and and he is an alchemist state yeah"
+  },
+  {
+   "t": 791.43,
+   "d": 3.06,
+   "text": "these are totally pre-built characters"
+  },
+  {
+   "t": 794.49,
+   "d": 2.65,
+   "text": "but what if I click on that custom"
+  },
+  {
+   "t": 797.14,
+   "d": 4.68,
+   "text": "button down there oh yeah a build screen"
+  },
+  {
+   "t": 801.82,
+   "d": 4.37,
+   "text": "and I've got eleven picks right here I"
+  },
+  {
+   "t": 806.79,
+   "d": 3.16,
+   "text": "sweet delicious build points so let's"
+  },
+  {
+   "t": 809.95,
+   "d": 1.56,
+   "text": "just let's just try something we'll put"
+  },
+  {
+   "t": 811.51,
+   "d": 2.64,
+   "text": "four into life magic I will start"
+  },
+  {
+   "t": 814.15,
+   "d": 1.71,
+   "text": "looking at the skills"
+  },
+  {
+   "t": 815.86,
+   "d": 2.51,
+   "text": "Hey look at this alchemy skill it"
+  },
+  {
+   "t": 818.37,
+   "d": 2.32,
+   "text": "changes fundamental rules of the game"
+  },
+  {
+   "t": 820.69,
+   "d": 2.01,
+   "text": "that's that's all you need to get out of"
+  },
+  {
+   "t": 822.7,
+   "d": 3.45,
+   "text": "that so it is artifice er it changes"
+  },
+  {
+   "t": 826.15,
+   "d": 1.56,
+   "text": "fundamental rules of the game important"
+  },
+  {
+   "t": 827.71,
+   "d": 1.65,
+   "text": "rules of the game and it starts me with"
+  },
+  {
+   "t": 829.36,
+   "d": 1.62,
+   "text": "two free spells that aren't available"
+  },
+  {
+   "t": 830.98,
+   "d": 3.18,
+   "text": "until mid game that's really cool this"
+  },
+  {
+   "t": 834.16,
+   "d": 2.01,
+   "text": "warlord one is so good it costs to fix"
+  },
+  {
+   "t": 836.17,
+   "d": 2.07,
+   "text": "so oh there's there's things that"
+  },
+  {
+   "t": 838.24,
+   "d": 2.88,
+   "text": "there's like a variant scale and in this"
+  },
+  {
+   "t": 841.12,
+   "d": 3.09,
+   "text": "pricing so let's just hypothetically"
+  },
+  {
+   "t": 844.21,
+   "d": 1.92,
+   "text": "take that word skill and put the rest"
+  },
+  {
+   "t": 846.13,
+   "d": 2.52,
+   "text": "into chaos magic you know because buddy"
+  },
+  {
+   "t": 848.65,
+   "d": 1.68,
+   "text": "the lizard man looks like he's the life"
+  },
+  {
+   "t": 850.33,
+   "d": 5.13,
+   "text": "of the party type oh it looks like the"
+  },
+  {
+   "t": 855.46,
+   "d": 3.27,
+   "text": "number of books I put into a into a into"
+  },
+  {
+   "t": 858.73,
+   "d": 3.15,
+   "text": "a school of magic let me choose that"
+  },
+  {
+   "t": 861.88,
+   "d": 2.49,
+   "text": "many -1 spells specifics fellows from"
+  },
+  {
+   "t": 864.37,
+   "d": 1.26,
+   "text": "there the common spells of that"
+  },
+  {
+   "t": 865.63,
+   "d": 2.94,
+   "text": "quick quick quick done let's play oh"
+  },
+  {
+   "t": 868.57,
+   "d": 3.27,
+   "text": "I'm dead again this is really"
+  },
+  {
+   "t": 871.84,
+   "d": 3.33,
+   "text": "becoming a theme of this talk oh if at"
+  },
+  {
+   "t": 875.17,
+   "d": 1.68,
+   "text": "first you don't succeed let's try"
+  },
+  {
+   "t": 876.85,
+   "d": 4.19,
+   "text": "another custom wizard hi Merlin hi Tony"
+  },
+  {
+   "t": 881.04,
+   "d": 2.77,
+   "text": "let's put one book into each school of"
+  },
+  {
+   "t": 883.81,
+   "d": 4.02,
+   "text": "magic diversify that portfolio wow"
+  },
+  {
+   "t": 887.83,
+   "d": 0.75,
+   "text": "that's interesting"
+  },
+  {
+   "t": 888.58,
+   "d": 2.66,
+   "text": "I can't have both a life and death magic"
+  },
+  {
+   "t": 891.24,
+   "d": 2.59,
+   "text": "I've learned a design constraint and"
+  },
+  {
+   "t": 893.83,
+   "d": 1.59,
+   "text": "something about morality from the"
+  },
+  {
+   "t": 895.42,
+   "d": 2.36,
+   "text": "authors"
+  },
+  {
+   "t": 898.21,
+   "d": 2.38,
+   "text": "whatever let's just load up on a bunch"
+  },
+  {
+   "t": 900.59,
+   "d": 3.66,
+   "text": "of skills to Tony the warlord shell or a"
+  },
+  {
+   "t": 904.25,
+   "d": 1.71,
+   "text": "conjurer artifice or Alchemist it rolls"
+  },
+  {
+   "t": 905.96,
+   "d": 2.79,
+   "text": "right off the tongue Oh didn't work"
+  },
+  {
+   "t": 908.75,
+   "d": 2.49,
+   "text": "Tony had no focus he's some sort of jerk"
+  },
+  {
+   "t": 911.24,
+   "d": 4.04,
+   "text": "of all trades now let's put 10 books of"
+  },
+  {
+   "t": 915.28,
+   "d": 3.01,
+   "text": "10 books into sorcery books and take the"
+  },
+  {
+   "t": 918.29,
+   "d": 2.16,
+   "text": "sorcery mastery skill Tony jr. is gonna"
+  },
+  {
+   "t": 920.45,
+   "d": 3.36,
+   "text": "specialize besides I get almost all of"
+  },
+  {
+   "t": 923.81,
+   "d": 1.77,
+   "text": "the common spells this way and phantom"
+  },
+  {
+   "t": 925.58,
+   "d": 2.82,
+   "text": "warriors are really sweet and we got"
+  },
+  {
+   "t": 928.4,
+   "d": 2.13,
+   "text": "farther that time let's say screw it"
+  },
+  {
+   "t": 930.53,
+   "d": 1.95,
+   "text": "Tony the third is gonna put all 11 picks"
+  },
+  {
+   "t": 932.48,
+   "d": 1.29,
+   "text": "just in a sorcery we're gonna get that"
+  },
+  {
+   "t": 933.77,
+   "d": 3.42,
+   "text": "sorcery PhD Oh a crap I didn't know I"
+  },
+  {
+   "t": 937.19,
+   "d": 1.89,
+   "text": "could do this I can start with uncommon"
+  },
+  {
+   "t": 939.08,
+   "d": 1.95,
+   "text": "and rare spells if I just straight"
+  },
+  {
+   "t": 941.03,
+   "d": 2.94,
+   "text": "invest in magic screw phantom warriors"
+  },
+  {
+   "t": 943.97,
+   "d": 1.89,
+   "text": "emitting phantom beasts they're way"
+  },
+  {
+   "t": 945.86,
+   "d": 5.55,
+   "text": "cooler so yeah that's just an example of"
+  },
+  {
+   "t": 951.41,
+   "d": 1.77,
+   "text": "some of the discoveries I was making"
+  },
+  {
+   "t": 953.18,
+   "d": 2.22,
+   "text": "while playing this over and over and"
+  },
+  {
+   "t": 955.4,
+   "d": 3.21,
+   "text": "over and over again and when I reflected"
+  },
+  {
+   "t": 958.61,
+   "d": 1.92,
+   "text": "upon it the big thing that really kept"
+  },
+  {
+   "t": 960.53,
+   "d": 1.38,
+   "text": "me coming back to this incredibly"
+  },
+  {
+   "t": 961.91,
+   "d": 2.01,
+   "text": "heart-broken game in those early stages"
+  },
+  {
+   "t": 963.92,
+   "d": 3.3,
+   "text": "was this entire process it was partly"
+  },
+  {
+   "t": 967.22,
+   "d": 2.4,
+   "text": "the joy of discovering new interactions"
+  },
+  {
+   "t": 969.62,
+   "d": 2.85,
+   "text": "between skills in the build screen there"
+  },
+  {
+   "t": 972.47,
+   "d": 1.74,
+   "text": "was the joy of finding new interactions"
+  },
+  {
+   "t": 974.21,
+   "d": 2.04,
+   "text": "between spells and my spell book that I"
+  },
+  {
+   "t": 976.25,
+   "d": 1.74,
+   "text": "picked on that build screen or that I"
+  },
+  {
+   "t": 977.99,
+   "d": 1.23,
+   "text": "picked in the build screen and acquired"
+  },
+  {
+   "t": 979.22,
+   "d": 2.76,
+   "text": "later it was sometimes discovering"
+  },
+  {
+   "t": 981.98,
+   "d": 1.53,
+   "text": "things about the build process itself"
+  },
+  {
+   "t": 983.51,
+   "d": 1.62,
+   "text": "occasionally all of it hinting at a"
+  },
+  {
+   "t": 985.13,
+   "d": 3.48,
+   "text": "depth of design that promised more the"
+  },
+  {
+   "t": 988.61,
+   "d": 1.95,
+   "text": "pain and annoyance of the many deaths"
+  },
+  {
+   "t": 990.56,
+   "d": 2.97,
+   "text": "was lessened for me by the idea that"
+  },
+  {
+   "t": 993.53,
+   "d": 2.88,
+   "text": "maybe I could build my way out of it the"
+  },
+  {
+   "t": 996.41,
+   "d": 1.74,
+   "text": "first time I visited that customized"
+  },
+  {
+   "t": 998.15,
+   "d": 1.65,
+   "text": "screen just reading through everything"
+  },
+  {
+   "t": 999.8,
+   "d": 2.13,
+   "text": "started the gears in my head churning"
+  },
+  {
+   "t": 1001.93,
+   "d": 2.4,
+   "text": "with ideas and I there's so many builds"
+  },
+  {
+   "t": 1004.33,
+   "d": 2.1,
+   "text": "I wanted to make and in the time it took"
+  },
+  {
+   "t": 1006.43,
+   "d": 2.67,
+   "text": "to get through them all I'd learned"
+  },
+  {
+   "t": 1009.1,
+   "d": 1.65,
+   "text": "enough about the game that there were"
+  },
+  {
+   "t": 1010.75,
+   "d": 3.18,
+   "text": "more builds I wanted to make now and as"
+  },
+  {
+   "t": 1013.93,
+   "d": 1.8,
+   "text": "an aside all the while that was"
+  },
+  {
+   "t": 1015.73,
+   "d": 1.59,
+   "text": "happening I was learning how to navigate"
+  },
+  {
+   "t": 1017.32,
+   "d": 3.98,
+   "text": "the rest of the game too and got good"
+  },
+  {
+   "t": 1026.29,
+   "d": 2.85,
+   "text": "this isn't a non-sequitur I promise"
+  },
+  {
+   "t": 1029.14,
+   "d": 2.44,
+   "text": "which is the coast makes a little card"
+  },
+  {
+   "t": 1031.58,
+   "d": 2.43,
+   "text": "game called Magic the Gathering they've"
+  },
+  {
+   "t": 1034.01,
+   "d": 2.43,
+   "text": "been making supplements and Bank for 25"
+  },
+  {
+   "t": 1036.44,
+   "d": 3.42,
+   "text": "years now and part of their success is"
+  },
+  {
+   "t": 1039.86,
+   "d": 3.03,
+   "text": "in their fantastic research and design"
+  },
+  {
+   "t": 1042.89,
+   "d": 3.15,
+   "text": "process I highly recommend reading some"
+  },
+  {
+   "t": 1046.04,
+   "d": 1.65,
+   "text": "of their design articles if you have any"
+  },
+  {
+   "t": 1047.69,
+   "d": 2.04,
+   "text": "if you're interested in any aspect of"
+  },
+  {
+   "t": 1049.73,
+   "d": 2.04,
+   "text": "game design they have loads to share and"
+  },
+  {
+   "t": 1051.77,
+   "d": 2.55,
+   "text": "like the amount that is applicable to"
+  },
+  {
+   "t": 1054.32,
+   "d": 4.08,
+   "text": "video games like it's just Legion anyway"
+  },
+  {
+   "t": 1058.4,
+   "d": 2.55,
+   "text": "I'm gonna focus on just one narrow thing"
+  },
+  {
+   "t": 1060.95,
+   "d": 2.61,
+   "text": "they talked about Wizards the coast has"
+  },
+  {
+   "t": 1063.56,
+   "d": 1.98,
+   "text": "identified three main psychographics"
+  },
+  {
+   "t": 1065.54,
+   "d": 2.1,
+   "text": "that is three main player archetypes"
+  },
+  {
+   "t": 1067.64,
+   "d": 1.98,
+   "text": "that develop define their player base"
+  },
+  {
+   "t": 1069.62,
+   "d": 2.79,
+   "text": "and out of one of them they they they"
+  },
+  {
+   "t": 1072.41,
+   "d": 2.82,
+   "text": "dubbed that one Johnny who is defined by"
+  },
+  {
+   "t": 1075.23,
+   "d": 2.7,
+   "text": "and I think Janie is the it's Johnny"
+  },
+  {
+   "t": 1077.93,
+   "d": 2.85,
+   "text": "Janie I think who is defined by among"
+  },
+  {
+   "t": 1080.78,
+   "d": 2.49,
+   "text": "other things a craving to find combos"
+  },
+  {
+   "t": 1083.27,
+   "d": 4.38,
+   "text": "and discover new interactions so yeah"
+  },
+  {
+   "t": 1087.65,
+   "d": 2.25,
+   "text": "we're back to the Dungeons of Dredmor"
+  },
+  {
+   "t": 1089.9,
+   "d": 3.33,
+   "text": "build screen here this is a the build"
+  },
+  {
+   "t": 1093.23,
+   "d": 1.8,
+   "text": "screen in the final iteration with all"
+  },
+  {
+   "t": 1095.03,
+   "d": 3.21,
+   "text": "the decks packs and you know there's 55"
+  },
+  {
+   "t": 1098.24,
+   "d": 2.97,
+   "text": "skills that you can pick and you pick"
+  },
+  {
+   "t": 1101.21,
+   "d": 2.43,
+   "text": "seven of them they're all flat cost it's"
+  },
+  {
+   "t": 1103.64,
+   "d": 2.97,
+   "text": "ago they all cost one slot but you have"
+  },
+  {
+   "t": 1106.61,
+   "d": 9.27,
+   "text": "seven out of 55 you know yep okay we're"
+  },
+  {
+   "t": 1115.88,
+   "d": 1.02,
+   "text": "not going to be able to show every"
+  },
+  {
+   "t": 1116.9,
+   "d": 3.84,
+   "text": "combination this is how you describe the"
+  },
+  {
+   "t": 1120.74,
+   "d": 2.16,
+   "text": "math behind the number of possibilities"
+  },
+  {
+   "t": 1122.9,
+   "d": 1.89,
+   "text": "that play here and you know it's"
+  },
+  {
+   "t": 1124.79,
+   "d": 1.26,
+   "text": "actually one of the more succinct"
+  },
+  {
+   "t": 1126.05,
+   "d": 4.46,
+   "text": "mathematical statements 55 to 7 right"
+  },
+  {
+   "t": 1130.51,
+   "d": 2.89,
+   "text": "this is the evaluation of that and"
+  },
+  {
+   "t": 1133.4,
+   "d": 1.83,
+   "text": "that's how many unique builds there are"
+  },
+  {
+   "t": 1135.23,
+   "d": 2.43,
+   "text": "in Dungeons of Dredmor it wouldn't be a"
+  },
+  {
+   "t": 1137.66,
+   "d": 2.33,
+   "text": "roguelike talk without large numbers"
+  },
+  {
+   "t": 1139.99,
+   "d": 4.3,
+   "text": "this is the entire design space that"
+  },
+  {
+   "t": 1144.29,
+   "d": 2.37,
+   "text": "your players get to build in it's huge"
+  },
+  {
+   "t": 1146.66,
+   "d": 2.49,
+   "text": "and players with Johnny tendencies will"
+  },
+  {
+   "t": 1149.15,
+   "d": 2.69,
+   "text": "eat this up"
+  },
+  {
+   "t": 1153.33,
+   "d": 4.83,
+   "text": "but you can't really plan for everything"
+  },
+  {
+   "t": 1158.16,
+   "d": 3.48,
+   "text": "you you don't get to balance everything"
+  },
+  {
+   "t": 1161.64,
+   "d": 4.14,
+   "text": "easily with a with that many with that"
+  },
+  {
+   "t": 1165.78,
+   "d": 4.26,
+   "text": "many decisions to make so how do you"
+  },
+  {
+   "t": 1170.04,
+   "d": 4.52,
+   "text": "approach this how do you how do you"
+  },
+  {
+   "t": 1174.56,
+   "d": 2.95,
+   "text": "allow this very interesting rules"
+  },
+  {
+   "t": 1177.51,
+   "d": 2.28,
+   "text": "breaking rules changing type of"
+  },
+  {
+   "t": 1179.79,
+   "d": 4.23,
+   "text": "character development process and make a"
+  },
+  {
+   "t": 1184.02,
+   "d": 4.68,
+   "text": "game that works so these are just a few"
+  },
+  {
+   "t": 1188.7,
+   "d": 1.92,
+   "text": "of the games that came out top to the"
+  },
+  {
+   "t": 1190.62,
+   "d": 1.74,
+   "text": "top of my head when I think about"
+  },
+  {
+   "t": 1192.36,
+   "d": 2.82,
+   "text": "continuous development in games each of"
+  },
+  {
+   "t": 1195.18,
+   "d": 3.45,
+   "text": "these games has or had large active"
+  },
+  {
+   "t": 1198.63,
+   "d": 2.07,
+   "text": "communities that were seeking out"
+  },
+  {
+   "t": 1200.7,
+   "d": 2.19,
+   "text": "interesting combinations of skills each"
+  },
+  {
+   "t": 1202.89,
+   "d": 3.0,
+   "text": "of these development teams in a response"
+  },
+  {
+   "t": 1205.89,
+   "d": 1.89,
+   "text": "because these development teams wanted"
+  },
+  {
+   "t": 1207.78,
+   "d": 4.68,
+   "text": "to make a balanced game they would patch"
+  },
+  {
+   "t": 1212.46,
+   "d": 2.94,
+   "text": "and patch and patch in response to the"
+  },
+  {
+   "t": 1215.4,
+   "d": 3.51,
+   "text": "the players probing at their game space"
+  },
+  {
+   "t": 1218.91,
+   "d": 3.69,
+   "text": "this large combinatoric game space nerf"
+  },
+  {
+   "t": 1222.6,
+   "d": 4.55,
+   "text": "this tweak that restrict this band that"
+  },
+  {
+   "t": 1227.15,
+   "d": 2.68,
+   "text": "create new counter bound skills over"
+  },
+  {
+   "t": 1229.83,
+   "d": 2.73,
+   "text": "there if you're going to make a game"
+  },
+  {
+   "t": 1232.56,
+   "d": 3.27,
+   "text": "with interactive effects and massive"
+  },
+  {
+   "t": 1235.83,
+   "d": 2.52,
+   "text": "combinatorics and you want balance you"
+  },
+  {
+   "t": 1238.35,
+   "d": 3.96,
+   "text": "are in for a long slog sure you could"
+  },
+  {
+   "t": 1242.31,
+   "d": 1.79,
+   "text": "start with some sort of mathematical"
+  },
+  {
+   "t": 1244.1,
+   "d": 2.71,
+   "text": "equivalent equivalency base for all the"
+  },
+  {
+   "t": 1246.81,
+   "d": 2.04,
+   "text": "skills where like one of these is equal"
+  },
+  {
+   "t": 1248.85,
+   "d": 1.95,
+   "text": "to one of those and the power level of"
+  },
+  {
+   "t": 1250.8,
+   "d": 2.16,
+   "text": "the skill is you know the average skill"
+  },
+  {
+   "t": 1252.96,
+   "d": 3.78,
+   "text": "is five power and that means you can do"
+  },
+  {
+   "t": 1256.74,
+   "d": 2.1,
+   "text": "ten damage for one point of that you"
+  },
+  {
+   "t": 1258.84,
+   "d": 1.11,
+   "text": "know something like that you could do"
+  },
+  {
+   "t": 1259.95,
+   "d": 1.32,
+   "text": "like try and set an exchange rate"
+  },
+  {
+   "t": 1261.27,
+   "d": 3.69,
+   "text": "between the aspects of your skills but"
+  },
+  {
+   "t": 1264.96,
+   "d": 1.74,
+   "text": "you're almost certainly going to miss"
+  },
+  {
+   "t": 1266.7,
+   "d": 2.24,
+   "text": "something after all"
+  },
+  {
+   "t": 1268.94,
+   "d": 2.68,
+   "text": "the holy one didn't figure this out into"
+  },
+  {
+   "t": 1271.62,
+   "d": 5.13,
+   "text": "his third time a try so you can try to"
+  },
+  {
+   "t": 1276.75,
+   "d": 1.59,
+   "text": "quirk balance through a great deal of"
+  },
+  {
+   "t": 1278.34,
+   "d": 3.24,
+   "text": "effort and maybe get there but there is"
+  },
+  {
+   "t": 1281.58,
+   "d": 6.68,
+   "text": "another path you cannot balance"
+  },
+  {
+   "t": 1289.47,
+   "d": 3.94,
+   "text": "broken things can be fun it's fun to"
+  },
+  {
+   "t": 1293.41,
+   "d": 1.95,
+   "text": "break system it's fun to discover"
+  },
+  {
+   "t": 1295.36,
+   "d": 2.91,
+   "text": "exploits it makes you feel good and to"
+  },
+  {
+   "t": 1298.27,
+   "d": 1.86,
+   "text": "find things like this it makes you feel"
+  },
+  {
+   "t": 1300.13,
+   "d": 2.1,
+   "text": "that makes the players feel powerful and"
+  },
+  {
+   "t": 1302.23,
+   "d": 2.19,
+   "text": "badass it makes communities happen"
+  },
+  {
+   "t": 1304.42,
+   "d": 2.4,
+   "text": "actually in the early in the early days"
+  },
+  {
+   "t": 1306.82,
+   "d": 1.89,
+   "text": "of Dredmor the those were the most"
+  },
+  {
+   "t": 1308.71,
+   "d": 1.65,
+   "text": "active community days and like the"
+  },
+  {
+   "t": 1310.36,
+   "d": 1.86,
+   "text": "forums are all about discovery of these"
+  },
+  {
+   "t": 1312.22,
+   "d": 2.16,
+   "text": "things and then the team would respond"
+  },
+  {
+   "t": 1314.38,
+   "d": 1.92,
+   "text": "to them and like fix them and patch them"
+  },
+  {
+   "t": 1316.3,
+   "d": 3.87,
+   "text": "and all uh and you know like it just"
+  },
+  {
+   "t": 1320.17,
+   "d": 1.89,
+   "text": "creates it creates things to talk about"
+  },
+  {
+   "t": 1322.06,
+   "d": 3.33,
+   "text": "early on and continuing on if you uh if"
+  },
+  {
+   "t": 1325.39,
+   "d": 1.5,
+   "text": "you keep them there now I'm not saying"
+  },
+  {
+   "t": 1326.89,
+   "d": 2.91,
+   "text": "there aren't destructive ways that these"
+  },
+  {
+   "t": 1329.8,
+   "d": 2.67,
+   "text": "are these powerful like combination"
+  },
+  {
+   "t": 1332.47,
+   "d": 4.23,
+   "text": "moves couldn't interact and like there"
+  },
+  {
+   "t": 1336.7,
+   "d": 2.4,
+   "text": "are reasons to nerf certain things but"
+  },
+  {
+   "t": 1339.1,
+   "d": 2.43,
+   "text": "like hey let them have fun more and I'm"
+  },
+  {
+   "t": 1341.53,
+   "d": 1.86,
+   "text": "not saying you have you have to have no"
+  },
+  {
+   "t": 1343.39,
+   "d": 1.98,
+   "text": "structure and no balance at all mind you"
+  },
+  {
+   "t": 1345.37,
+   "d": 1.59,
+   "text": "you should provide structure and balance"
+  },
+  {
+   "t": 1346.96,
+   "d": 2.61,
+   "text": "early on but if those later level higher"
+  },
+  {
+   "t": 1349.57,
+   "d": 1.59,
+   "text": "powered interactions suddenly yield"
+  },
+  {
+   "t": 1351.16,
+   "d": 2.34,
+   "text": "totally broken in a fun way effects"
+  },
+  {
+   "t": 1353.5,
+   "d": 1.08,
+   "text": "don't sweat it"
+  },
+  {
+   "t": 1354.58,
+   "d": 3.78,
+   "text": "I talked at length about how interesting"
+  },
+  {
+   "t": 1358.36,
+   "d": 1.41,
+   "text": "possibilities kept me interested in"
+  },
+  {
+   "t": 1359.77,
+   "d": 1.92,
+   "text": "master of magic long enough for me to"
+  },
+  {
+   "t": 1361.69,
+   "d": 2.64,
+   "text": "understand the rest of the game but once"
+  },
+  {
+   "t": 1364.33,
+   "d": 2.64,
+   "text": "you get past that learning wall it was"
+  },
+  {
+   "t": 1366.97,
+   "d": 1.8,
+   "text": "the busted interactions at the later"
+  },
+  {
+   "t": 1368.77,
+   "d": 1.74,
+   "text": "levels that still makes it incredibly"
+  },
+  {
+   "t": 1370.51,
+   "d": 0.99,
+   "text": "fun for me"
+  },
+  {
+   "t": 1371.5,
+   "d": 1.98,
+   "text": "busted interactions fueled by the"
+  },
+  {
+   "t": 1373.48,
+   "d": 2.04,
+   "text": "various interactions of all it spells"
+  },
+  {
+   "t": 1375.52,
+   "d": 4.02,
+   "text": "and abilities and whatnot single-player"
+  },
+  {
+   "t": 1379.54,
+   "d": 3.48,
+   "text": "games especially can get away with this"
+  },
+  {
+   "t": 1383.02,
+   "d": 2.25,
+   "text": "broken by design methodology because"
+  },
+  {
+   "t": 1385.27,
+   "d": 1.62,
+   "text": "you're not ruining someone else's day in"
+  },
+  {
+   "t": 1386.89,
+   "d": 1.98,
+   "text": "a competitive fashion this whole"
+  },
+  {
+   "t": 1388.87,
+   "d": 2.88,
+   "text": "balanced at low levels broken by design"
+  },
+  {
+   "t": 1391.75,
+   "d": 2.52,
+   "text": "at higher levels concept I call the"
+  },
+  {
+   "t": 1394.27,
+   "d": 6.11,
+   "text": "Disgaea effect that's a real screenshot"
+  },
+  {
+   "t": 1401.13,
+   "d": 3.43,
+   "text": "the the Cliff Notes version of Disgaea"
+  },
+  {
+   "t": 1404.56,
+   "d": 2.31,
+   "text": "if you're not familiar is that it's a"
+  },
+  {
+   "t": 1406.87,
+   "d": 3.48,
+   "text": "tactical RPG and in the normal story"
+  },
+  {
+   "t": 1410.35,
+   "d": 3.42,
+   "text": "mode you can beat it at around level 60"
+  },
+  {
+   "t": 1413.77,
+   "d": 2.28,
+   "text": "or so and it's a perfectly well-balanced"
+  },
+  {
+   "t": 1416.05,
+   "d": 2.73,
+   "text": "game in a reasonable game and the extra"
+  },
+  {
+   "t": 1418.78,
+   "d": 1.53,
+   "text": "content gets up to"
+  },
+  {
+   "t": 1420.31,
+   "d": 4.11,
+   "text": "level 900 9999 for each potential"
+  },
+  {
+   "t": 1424.42,
+   "d": 2.16,
+   "text": "character and that's just the tip of"
+  },
+  {
+   "t": 1426.58,
+   "d": 4.62,
+   "text": "like its grind its grinding like surface"
+  },
+  {
+   "t": 1431.2,
+   "d": 2.4,
+   "text": "it's it's actually got a lot a lot in"
+  },
+  {
+   "t": 1433.6,
+   "d": 2.64,
+   "text": "common with roguelikes in a lot of"
+  },
+  {
+   "t": 1436.24,
+   "d": 1.68,
+   "text": "interesting ways but it's a different"
+  },
+  {
+   "t": 1437.92,
+   "d": 5.57,
+   "text": "talk so yeah you can brace the chaos G's"
+  },
+  {
+   "t": 1443.55,
+   "d": 2.95,
+   "text": "or not it's just an opinion it's just an"
+  },
+  {
+   "t": 1446.5,
+   "d": 3.03,
+   "text": "option but if you choose to engage your"
+  },
+  {
+   "t": 1449.53,
+   "d": 2.16,
+   "text": "players early on with many game-changing"
+  },
+  {
+   "t": 1451.69,
+   "d": 2.67,
+   "text": "choices during character builds you're"
+  },
+  {
+   "t": 1454.36,
+   "d": 2.46,
+   "text": "accepting a combinatoric lee complex"
+  },
+  {
+   "t": 1456.82,
+   "d": 3.18,
+   "text": "Road the benefit is that you're going to"
+  },
+  {
+   "t": 1460.0,
+   "d": 2.1,
+   "text": "be interesting to the johnnies to the"
+  },
+  {
+   "t": 1462.1,
+   "d": 2.34,
+   "text": "players who see possibility and crave"
+  },
+  {
+   "t": 1464.44,
+   "d": 3.03,
+   "text": "making combos the downside is that"
+  },
+  {
+   "t": 1467.47,
+   "d": 2.22,
+   "text": "you've created too much possibility to"
+  },
+  {
+   "t": 1469.69,
+   "d": 3.21,
+   "text": "humanly deal with before release no"
+  },
+  {
+   "t": 1472.9,
+   "d": 2.22,
+   "text": "matter how well you you've thought about"
+  },
+  {
+   "t": 1475.12,
+   "d": 0.33,
+   "text": "it"
+  },
+  {
+   "t": 1475.45,
+   "d": 2.25,
+   "text": "and will either have to tweak a lot as"
+  },
+  {
+   "t": 1477.7,
+   "d": 1.89,
+   "text": "the players discover things about your"
+  },
+  {
+   "t": 1479.59,
+   "d": 1.8,
+   "text": "game you didn't know existed or just"
+  },
+  {
+   "t": 1481.39,
+   "d": 5.07,
+   "text": "accept it but whichever way you go I'll"
+  },
+  {
+   "t": 1486.46,
+   "d": 6.11,
+   "text": "probably play it I'm addicted after all"
+  },
+  {
+   "t": 1495.76,
+   "d": 3.61,
+   "text": "[Applause]"
+  }
+ ]
+}

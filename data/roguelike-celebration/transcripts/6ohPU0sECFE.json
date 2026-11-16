@@ -1,0 +1,1816 @@
+{
+ "id": "6ohPU0sECFE",
+ "url": "https://www.youtube.com/watch?v=6ohPU0sECFE",
+ "title": "Tabitha Sable - Curses! A Story of UNIX Interface Hardware and Software Co-Evolution",
+ "speaker": "Tabitha Sable",
+ "talk_title": "Curses! A Story of UNIX Interface Hardware and Software Co-Evolution",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1869,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html \n\nTabitha Sable has been a hacker and cross-platform sysadmin since the turn of the century. Her first exposure to rogue was under OpenBSD/mac68k 2.3 on the trusty Quadra 800, which soon led to commissioning a 386 server and offering shell and games service to her fellow students. Today, she can usually be found teaching adversarial techniques to other engineers, sharing systems engineering viewpoints with security folx, bicycling, and saying \"I wonder what happens if we...\".\n\nIn this talk, she presents on the the co-evolution of the hardware and software used to access UNIX - from pre-computer teletypes to curses, ncurses, and rogue. At each stage, the software and hardware grew from what came before: embracing and extending, but never fully replacing, the previous generation. We'll examine the wheel-ruts in modern UNIX to learn one of her favorite lessons: \"How did we get here from where we started?\"\n\nFollow Tabitha on Twitter: https://twitter.com/tabbysable",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 200,
+   "title": "Paper Teletypes"
+  },
+  {
+   "start": 320,
+   "title": "Multix"
+  },
+  {
+   "start": 410,
+   "title": "UNIX"
+  },
+  {
+   "start": 552,
+   "title": "Terminal Handling"
+  },
+  {
+   "start": 734,
+   "title": "Video Terminals"
+  },
+  {
+   "start": 1168,
+   "title": "Bell Labs"
+  },
+  {
+   "start": 1269,
+   "title": "microcomputers"
+  },
+  {
+   "start": 1332,
+   "title": "Modern open source"
+  },
+  {
+   "start": 1444,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1522,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4050,
+ "trimmed": {
+  "segments": 25,
+  "words": 305
+ },
+ "segments": [
+  {
+   "t": 0.07,
+   "d": 1.98,
+   "text": "MODERATOR: All right."
+  },
+  {
+   "t": 2.05,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 3.05,
+   "d": 1.0,
+   "text": "New speaker."
+  },
+  {
+   "t": 4.05,
+   "d": 1.0,
+   "text": "Hello!"
+  },
+  {
+   "t": 5.05,
+   "d": 1.62,
+   "text": "TABITHA SABLE: Hello!"
+  },
+  {
+   "t": 6.67,
+   "d": 5.03,
+   "text": "MODERATOR: Do you want to introduce yourself?"
+  },
+  {
+   "t": 11.7,
+   "d": 1.83,
+   "text": "This is Tabitha Sable."
+  },
+  {
+   "t": 13.53,
+   "d": 4.62,
+   "text": "She has been a hacker and cross-platform cis admin since the turn of the century."
+  },
+  {
+   "t": 18.15,
+   "d": 9.77,
+   "text": "Her first exposure was on the trustry quadry 800 which is just words to me which led to"
+  },
+  {
+   "t": 27.92,
+   "d": 6.57,
+   "text": "commission a 386 server and offering shell and game services to her fellow students."
+  },
+  {
+   "t": 34.49,
+   "d": 8.66,
+   "text": "Today she can usually be found teaching adversarial techniques, bicycling and saying I wonder"
+  },
+  {
+   "t": 43.15,
+   "d": 8.44,
+   "text": "what happens if we.... and yeah, you are here to talk to us about curses which is very exciting."
+  },
+  {
+   "t": 51.59,
+   "d": 1.13,
+   "text": "TABITHA SABLE: Yeah."
+  },
+  {
+   "t": 52.72,
+   "d": 4.0,
+   "text": "That's absolutely the case."
+  },
+  {
+   "t": 56.72,
+   "d": 2.05,
+   "text": "Thank you."
+  },
+  {
+   "t": 58.77,
+   "d": 1.03,
+   "text": "Hey."
+  },
+  {
+   "t": 59.8,
+   "d": 2.05,
+   "text": "Good morning!"
+  },
+  {
+   "t": 61.85,
+   "d": 2.15,
+   "text": ". I am Tabitha Sable like she said."
+  },
+  {
+   "t": 64.0,
+   "d": 8.08,
+   "text": "I got exposed to Rogue and Roguelike in around the same way that I got exposed to a lot of"
+  },
+  {
+   "t": 72.08,
+   "d": 5.92,
+   "text": "these other things to information security concepts and being a cis admin and reserving"
+  },
+  {
+   "t": 78.0,
+   "d": 7.46,
+   "text": "servers for people all sort of at the same time because it was just a really good situation"
+  },
+  {
+   "t": 85.46,
+   "d": 1.0,
+   "text": "at school."
+  },
+  {
+   "t": 86.46,
+   "d": 4.37,
+   "text": "So I was playing with Rogue around the same time I was learning a lot of these professional"
+  },
+  {
+   "t": 90.83,
+   "d": 5.87,
+   "text": "things and to me, like thinking about Rogue, ends up being tied into the whole story of"
+  },
+  {
+   "t": 96.7,
+   "d": 6.82,
+   "text": "the evolution of UNIX and software needed to support being able to use UNIX and the"
+  },
+  {
+   "t": 103.52,
+   "d": 5.07,
+   "text": "applications that you run on it like games."
+  },
+  {
+   "t": 108.59,
+   "d": 2.03,
+   "text": "That's what I am here to share with you this morning."
+  },
+  {
+   "t": 110.62,
+   "d": 1.17,
+   "text": "One of my favorite things."
+  },
+  {
+   "t": 111.79,
+   "d": 7.15,
+   "text": "A story of why things are how they are or how the path that we took influenced where"
+  },
+  {
+   "t": 118.94,
+   "d": 1.0,
+   "text": "we ended up."
+  },
+  {
+   "t": 119.94,
+   "d": 5.38,
+   "text": "So, along the way, we end up hitting some fun questions like why did bell labs give"
+  },
+  {
+   "t": 125.32,
+   "d": 3.88,
+   "text": "us the ad etter while Berkeley give us VI?"
+  },
+  {
+   "t": 129.2,
+   "d": 7.61,
+   "text": "Why doesn't adventure repeat the room descriptions on subsequent times you enter the room?"
+  },
+  {
+   "t": 136.81,
+   "d": 7.96,
+   "text": "If you are used to using a graphical interface on Linux or BSD or commercial Linux machine"
+  },
+  {
+   "t": 144.77,
+   "d": 1.54,
+   "text": "you have used X Windows."
+  },
+  {
+   "t": 146.31,
+   "d": 2.13,
+   "text": "Why is it called X Windows?"
+  },
+  {
+   "t": 148.44,
+   "d": 3.96,
+   "text": "Where did Rogue get its great graphics from?"
+  },
+  {
+   "t": 152.4,
+   "d": 5.24,
+   "text": "All these questions are tied up in that story of what the hardware and software that we"
+  },
+  {
+   "t": 157.64,
+   "d": 2.9,
+   "text": "interface with UNIX looked like."
+  },
+  {
+   "t": 160.54,
+   "d": 3.49,
+   "text": "In that story there are three major eras."
+  },
+  {
+   "t": 164.03,
+   "d": 7.34,
+   "text": "There is the earliest time of paper teletypes research UNIX from Bell Labs and moves into"
+  },
+  {
+   "t": 171.37,
+   "d": 7.81,
+   "text": "a middle period of glass teletypes or video display terminals or the term at the time"
+  },
+  {
+   "t": 179.18,
+   "d": 10.39,
+   "text": "was dumb terminal and BSD Linux and move into workstations with bitmap displays and the"
+  },
+  {
+   "t": 189.57,
+   "d": 6.3,
+   "text": "so-called UNIX wars with a lot of commercial vendors selling UNIX-based operating systems"
+  },
+  {
+   "t": 195.87,
+   "d": 3.66,
+   "text": "and the starting of modern open source."
+  },
+  {
+   "t": 199.53,
+   "d": 6.09,
+   "text": "We will begin at the beginning with paper teletypes and research UNIX from the late"
+  },
+  {
+   "t": 205.62,
+   "d": 4.54,
+   "text": "60s in the mid-70s."
+  },
+  {
+   "t": 210.16,
+   "d": 9.07,
+   "text": "The story starts way before then like in the early and moving into the late 1800s."
+  },
+  {
+   "t": 219.23,
+   "d": 4.56,
+   "text": "In the 1800s the telegraph was invented."
+  },
+  {
+   "t": 223.79,
+   "d": 3.36,
+   "text": "Of course, to use the telegraph you had to learn Morris code and that requires a lot"
+  },
+  {
+   "t": 227.15,
+   "d": 2.37,
+   "text": "of skill."
+  },
+  {
+   "t": 229.52,
+   "d": 4.7,
+   "text": "It was a limiting factor for, you know, how many telegraph lines you could run."
+  },
+  {
+   "t": 234.22,
+   "d": 3.15,
+   "text": "You had to have skilled telegraph operators."
+  },
+  {
+   "t": 237.37,
+   "d": 4.37,
+   "text": "There was a desire to reduce that amount of skill that you needed."
+  },
+  {
+   "t": 241.74,
+   "d": 6.77,
+   "text": "That desire led to the creation of a lot of teleprinters."
+  },
+  {
+   "t": 248.51,
+   "d": 6.77,
+   "text": "You see an example of a very, very early one here with this piano-like keyboard and not"
+  },
+  {
+   "t": 255.28,
+   "d": 4.66,
+   "text": "super practical but slightly easier to use than learning Morris code."
+  },
+  {
+   "t": 259.94,
+   "d": 7.38,
+   "text": "By the 20th century they evolved into more practical machines like this one from 1908."
+  },
+  {
+   "t": 267.32,
+   "d": 8.01,
+   "text": "It is essentially an electrical typewriter connected to a telegraph line or a serial"
+  },
+  {
+   "t": 275.33,
+   "d": 4.34,
+   "text": "link or some other thing like that with another one on the other side."
+  },
+  {
+   "t": 279.67,
+   "d": 4.02,
+   "text": "You type on the keyboard here and it encodes the data, shoots it down the wire, and makes"
+  },
+  {
+   "t": 283.69,
+   "d": 4.23,
+   "text": "the printer move on the other side and vice versa."
+  },
+  {
+   "t": 287.92,
+   "d": 7.45,
+   "text": "This was easier to learn and find people to do and let news move across the country in"
+  },
+  {
+   "t": 295.37,
+   "d": 7.23,
+   "text": "the United States and around the world in a much faster and easier way."
+  },
+  {
+   "t": 302.6,
+   "d": 10.02,
+   "text": "The 5-bit binary code was the standard that the teletypes communicated with each other"
+  },
+  {
+   "t": 312.62,
+   "d": 6.51,
+   "text": "over and that's why your serial port speed and modem speed are called baud rate today."
+  },
+  {
+   "t": 319.13,
+   "d": 7.14,
+   "text": "We are done with the turn of the century and we will flash forward into the early to mid"
+  },
+  {
+   "t": 326.27,
+   "d": 6.69,
+   "text": "'60s and the computing industry is in the beginning of the shift from batch oriented"
+  },
+  {
+   "t": 332.96,
+   "d": 7.01,
+   "text": "machines that use card punches for input into shared multi-user interactive systems."
+  },
+  {
+   "t": 339.97,
+   "d": 6.96,
+   "text": "MIT and general electric and bell labs were working together on a project called multix"
+  },
+  {
+   "t": 346.93,
+   "d": 10.29,
+   "text": "where there would be a big computer in a central office and if you had programs you want to"
+  },
+  {
+   "t": 357.22,
+   "d": 7.4,
+   "text": "run you could run them on this big computer you could subscribe to and then everything"
+  },
+  {
+   "t": 364.62,
+   "d": 1.0,
+   "text": "would be great."
+  },
+  {
+   "t": 365.62,
+   "d": 5.29,
+   "text": "This system had to be very robust because it had to be everything to everybody."
+  },
+  {
+   "t": 370.91,
+   "d": 5.17,
+   "text": "The mulltics operating system was originally designed to run on a huge mainframe system"
+  },
+  {
+   "t": 376.08,
+   "d": 3.95,
+   "text": "from GE, the 645."
+  },
+  {
+   "t": 380.03,
+   "d": 5.77,
+   "text": "It had about two and a quarter megabytes of ram which was a tremendous amount of ram in"
+  },
+  {
+   "t": 385.8,
+   "d": 2.04,
+   "text": "the 1960s."
+  },
+  {
+   "t": 387.84,
+   "d": 7.8,
+   "text": "The teletype was an obvious choice for interacting with these."
+  },
+  {
+   "t": 395.64,
+   "d": 4.3,
+   "text": "The bell system owned the teletype corporation since 1930."
+  },
+  {
+   "t": 399.94,
+   "d": 8.12,
+   "text": "So the folks at Belllabs had teletype tty 37 terminals which were fancy and had upper"
+  },
+  {
+   "t": 408.06,
+   "d": 3.08,
+   "text": "and lowercase."
+  },
+  {
+   "t": 411.14,
+   "d": 3.62,
+   "text": "1969, the beginning of UNIX."
+  },
+  {
+   "t": 414.76,
+   "d": 10.33,
+   "text": "We see a later picture of pdp11 like what UNIX kind of blossoms on to in the early '70s"
+  },
+  {
+   "t": 425.09,
+   "d": 1.83,
+   "text": "at AT&T in Bell Labs."
+  },
+  {
+   "t": 426.92,
+   "d": 5.31,
+   "text": "In 1969, Bell pulled out of the project and management wouldn't let any engineers buy"
+  },
+  {
+   "t": 432.23,
+   "d": 5.1,
+   "text": "a large computer because they were afraid that the people who had been working on multics"
+  },
+  {
+   "t": 437.33,
+   "d": 4.03,
+   "text": "were disappointed and if they had a big computer they would just start building something like"
+  },
+  {
+   "t": 441.36,
+   "d": 3.32,
+   "text": "mulltics again."
+  },
+  {
+   "t": 444.68,
+   "d": 6.31,
+   "text": "Some of these folks, Ken Thompson and Dennis Ritchie, they wanted a nice system to use"
+  },
+  {
+   "t": 450.99,
+   "d": 2.18,
+   "text": "but couldn't buy a computer."
+  },
+  {
+   "t": 453.17,
+   "d": 7.02,
+   "text": "They tried and kept getting denied but they found in department 13, local area switching,"
+  },
+  {
+   "t": 460.19,
+   "d": 4.35,
+   "text": "a disused -- it was a tiny machine."
+  },
+  {
+   "t": 464.54,
+   "d": 10.76,
+   "text": "It was there and it was a computer and it was"
+  },
+  {
+   "t": 475.3,
+   "d": 4.59,
+   "text": "free at a time when even a tiny computer was wicked expensive."
+  },
+  {
+   "t": 479.89,
+   "d": 4.65,
+   "text": "They took it and they wrote a tiny timesharing operating system for."
+  },
+  {
+   "t": 484.54,
+   "d": 4.5,
+   "text": "Eventually they pulled it was practical and they bought a bigger tiny computer."
+  },
+  {
+   "t": 489.04,
+   "d": 6.0,
+   "text": "They got a pdp11 with 24 kilobytes of core memory and that one was big enough that UNIX"
+  },
+  {
+   "t": 495.04,
+   "d": 3.08,
+   "text": "would be useful and self-hosting on it."
+  },
+  {
+   "t": 498.12,
+   "d": 4.03,
+   "text": "Of course, they kept their tty 37s they had."
+  },
+  {
+   "t": 502.15,
+   "d": 6.3,
+   "text": "At this time, logging into a UNIX system was by a local serial connection or dial-up modem"
+  },
+  {
+   "t": 508.45,
+   "d": 1.78,
+   "text": "only."
+  },
+  {
+   "t": 510.23,
+   "d": 5.47,
+   "text": "The device notes because in UNIX everything is a file and the device nodes were named"
+  },
+  {
+   "t": 515.7,
+   "d": 7.07,
+   "text": "slash dev tty and a number because it was which number teletype it was."
+  },
+  {
+   "t": 522.77,
+   "d": 7.24,
+   "text": "If you have worked with any Linux commands that deal with sending serial data through"
+  },
+  {
+   "t": 530.01,
+   "d": 5.54,
+   "text": "devices you may have occasionally received the error message not a typewriter and this"
+  },
+  {
+   "t": 535.55,
+   "d": 8.37,
+   "text": "is why because the tty device that we are running data through had a control issue to"
+  },
+  {
+   "t": 543.92,
+   "d": 3.45,
+   "text": "it that only made sense if it was really a tty."
+  },
+  {
+   "t": 547.37,
+   "d": 4.78,
+   "text": "And these names still show up on the names of serial ports on the modern Linux system"
+  },
+  {
+   "t": 552.15,
+   "d": 1.0,
+   "text": "today."
+  },
+  {
+   "t": 553.15,
+   "d": 2.27,
+   "text": "Terminal handle was complicated from the beginning."
+  },
+  {
+   "t": 555.42,
+   "d": 2.79,
+   "text": "I just absolutely love this quote."
+  },
+  {
+   "t": 558.21,
+   "d": 2.06,
+   "text": "Ioctl is a closet full of skeletons."
+  },
+  {
+   "t": 560.27,
+   "d": 9.61,
+   "text": "Ioctl was designed in UNIX as a system call for configuring the I/O, input output properties,"
+  },
+  {
+   "t": 569.88,
+   "d": 2.13,
+   "text": "of a teletype."
+  },
+  {
+   "t": 572.01,
+   "d": 5.93,
+   "text": "In the first UNIX manual from 1971 there is a place where it says UNIX has a heavy predisposition"
+  },
+  {
+   "t": 577.94,
+   "d": 8.14,
+   "text": "toward model 37 teletype terminals and the init program did magic automatic detection"
+  },
+  {
+   "t": 586.08,
+   "d": 7.66,
+   "text": "between a tty 37 and a different terminal which was a little more expensive."
+  },
+  {
+   "t": 593.74,
+   "d": 7.47,
+   "text": "Next year they added support for another terminal and the stty command appeared in the manual."
+  },
+  {
+   "t": 601.21,
+   "d": 3.12,
+   "text": "That was to tune the settings of your tty."
+  },
+  {
+   "t": 604.33,
+   "d": 3.93,
+   "text": "Even in 1972, the manual said this call should be used with care."
+  },
+  {
+   "t": 608.26,
+   "d": 4.38,
+   "text": "It is all too easy to turn off the typewriter."
+  },
+  {
+   "t": 612.64,
+   "d": 8.76,
+   "text": "By the sixth addition UNIX in 1975, stty started acknowledging this is a huge problem by including"
+  },
+  {
+   "t": 621.4,
+   "d": 5.5,
+   "text": "packages instead of specifying the different settings like the baud rate and number of"
+  },
+  {
+   "t": 626.9,
+   "d": 6.7,
+   "text": "bits per word if you have a popular terminal you could just apply the package."
+  },
+  {
+   "t": 633.6,
+   "d": 5.72,
+   "text": "Even in the early days with teletypes there was a lot of complexity in the software."
+  },
+  {
+   "t": 639.32,
+   "d": 8.7,
+   "text": "We made it into the middle period of video display terminals and they were unimpressive"
+  },
+  {
+   "t": 648.02,
+   "d": 2.08,
+   "text": "at first but improved."
+  },
+  {
+   "t": 650.1,
+   "d": 9.34,
+   "text": "This is the very first video display terminal coming out in 1969."
+  },
+  {
+   "t": 659.44,
+   "d": 7.85,
+   "text": "They were wicked expensive and didn't support as many fancy features as the high end teletypes"
+  },
+  {
+   "t": 667.29,
+   "d": 6.43,
+   "text": "but it was quiet, self-contained and didn't take up a lot of space and you know, paved"
+  },
+  {
+   "t": 673.72,
+   "d": 2.8,
+   "text": "the way for what was going to come for."
+  },
+  {
+   "t": 676.52,
+   "d": 6.61,
+   "text": "By the time we get to the late '70s, here is a digital equipment corporation, vt100"
+  },
+  {
+   "t": 683.13,
+   "d": 5.18,
+   "text": "which was sort of the de facto standard terminal."
+  },
+  {
+   "t": 688.31,
+   "d": 3.66,
+   "text": "It was the terminal that everybody else wanted to be."
+  },
+  {
+   "t": 691.97,
+   "d": 5.58,
+   "text": "You know, by the time we get to the late '70s, you had a machine with a lot of features."
+  },
+  {
+   "t": 697.55,
+   "d": 5.85,
+   "text": "It could do upper and lowercase, blank the whole screen, move the cursor around, a lot"
+  },
+  {
+   "t": 703.4,
+   "d": 2.05,
+   "text": "of fancy things."
+  },
+  {
+   "t": 705.45,
+   "d": 6.06,
+   "text": "This particular terminal is also the one that introduced today's standard of 80 by 24 characters"
+  },
+  {
+   "t": 711.51,
+   "d": 4.89,
+   "text": "so in almost every terminal emulator today when you first open it up today the most basic"
+  },
+  {
+   "t": 716.4,
+   "d": 10.52,
+   "text": "default is 80X24 and this is why so by the early 80s here is a VT220 which took over"
+  },
+  {
+   "t": 726.92,
+   "d": 6.78,
+   "text": "as the most popular and it was smaller, cheaper and fancier."
+  },
+  {
+   "t": 733.7,
+   "d": 3.81,
+   "text": "Two things were ham happening."
+  },
+  {
+   "t": 737.51,
+   "d": 3.79,
+   "text": "Bell labs was slow to give up the paper teletypes."
+  },
+  {
+   "t": 741.3,
+   "d": 9.57,
+   "text": "They got some storage terminals but they were very slow to redraw."
+  },
+  {
+   "t": 750.87,
+   "d": 2.05,
+   "text": "It is not a bitmap or character display."
+  },
+  {
+   "t": 752.92,
+   "d": 4.67,
+   "text": "It is a vector display."
+  },
+  {
+   "t": 757.59,
+   "d": 5.25,
+   "text": "Storage tube, vector drawing and you would send commands like draw a line from this coordinate"
+  },
+  {
+   "t": 762.84,
+   "d": 1.37,
+   "text": "to that coordinate."
+  },
+  {
+   "t": 764.21,
+   "d": 12.95,
+   "text": "It had a character cell mode but the mode was implemented by logic inside the terminal."
+  },
+  {
+   "t": 777.16,
+   "d": 7.86,
+   "text": "Because it is a storage display tube you have to erase the whole screen at once."
+  },
+  {
+   "t": 785.02,
+   "d": 5.71,
+   "text": "It is not paper but it is slow and clucky and not suited the interactive use we would"
+  },
+  {
+   "t": 790.73,
+   "d": 1.36,
+   "text": "see later."
+  },
+  {
+   "t": 792.09,
+   "d": 7.96,
+   "text": "The university ouch California Berkeley was really quick to adopt glass ttys."
+  },
+  {
+   "t": 800.05,
+   "d": 6.31,
+   "text": "What you see is an adm3 DOM terminal which was especially famous for being the first"
+  },
+  {
+   "t": 806.36,
+   "d": 4.99,
+   "text": "video display terminal that cost less than $1,000."
+  },
+  {
+   "t": 811.35,
+   "d": 6.89,
+   "text": "These are what were installed in a lot of computer labs at the University of California"
+  },
+  {
+   "t": 818.24,
+   "d": 5.13,
+   "text": "around the time when Berkeley software distribution UNIX started up."
+  },
+  {
+   "t": 823.37,
+   "d": 7.48,
+   "text": "If you look at the pictures you can see there are no arrow keys on the keyboard but h, j,"
+  },
+  {
+   "t": 830.85,
+   "d": 11.88,
+   "text": "k, and l have aroh -- arrows printed on them and those are the characters you use to this"
+  },
+  {
+   "t": 842.73,
+   "d": 5.87,
+   "text": "day to move around."
+  },
+  {
+   "t": 848.6,
+   "d": 6.38,
+   "text": "Bold, flashing, underline, clear the screen, move the cursor around were allowed and the"
+  },
+  {
+   "t": 854.98,
+   "d": 4.57,
+   "text": "greater diversity."
+  },
+  {
+   "t": 859.55,
+   "d": 6.76,
+   "text": "There were many, many manufactures and oftentimes they were mutual incompatible."
+  },
+  {
+   "t": 866.31,
+   "d": 10.44,
+   "text": "That when we get into the story of the VI editor, cursor library and eventually Roguelikes"
+  },
+  {
+   "t": 876.75,
+   "d": 1.07,
+   "text": "likes."
+  },
+  {
+   "t": 877.82,
+   "d": 9.55,
+   "text": "This is a line editor designed to be used on a paper teletype and honestly, I think"
+  },
+  {
+   "t": 887.37,
+   "d": 8.57,
+   "text": "it is really well designed and the easiest to use editor if you input is a keyboard and"
+  },
+  {
+   "t": 895.94,
+   "d": 4.28,
+   "text": "output is a typewriter but it is notoriously hard to use."
+  },
+  {
+   "t": 900.22,
+   "d": 4.83,
+   "text": "I will share with you one of my favorite entries from the UNIX fortune cookie program."
+  },
+  {
+   "t": 905.05,
+   "d": 13.36,
+   "text": "Ken Thompson has an automobile and no speedommeter or lights rather if the driver makes a mistake,"
+  },
+  {
+   "t": 918.41,
+   "d": 6.17,
+   "text": "a giant question mark lights up in the center of the dashboard and the experienced driver"
+  },
+  {
+   "t": 924.58,
+   "d": 3.02,
+   "text": "will usually know what's wrong."
+  },
+  {
+   "t": 927.6,
+   "d": 3.51,
+   "text": "In the mid '70s."
+  },
+  {
+   "t": 931.11,
+   "d": 6.88,
+   "text": "1976, George L wrote M, the editor for mortals based on ed with additional features to make"
+  },
+  {
+   "t": 937.99,
+   "d": 2.07,
+   "text": "it more user-friendly."
+  },
+  {
+   "t": 940.06,
+   "d": 9.74,
+   "text": "He came and was visiting or a student at UC Berkeley and showed it to Bill Joy and friends"
+  },
+  {
+   "t": 949.8,
+   "d": 8.9,
+   "text": "and they picked it up and ran with it and started incrementing the name."
+  },
+  {
+   "t": 958.7,
+   "d": 5.44,
+   "text": "Eventually, they did get EX."
+  },
+  {
+   "t": 964.14,
+   "d": 10.12,
+   "text": "In 1978, the first software Berkeley distribution shipped with X and the library called termcap"
+  },
+  {
+   "t": 974.26,
+   "d": 1.84,
+   "text": "that powered it."
+  },
+  {
+   "t": 976.1,
+   "d": 3.57,
+   "text": "One of the most popular features of X was visual mode."
+  },
+  {
+   "t": 979.67,
+   "d": 5.84,
+   "text": "You could type visual in the command line and then instead of doing this like paper"
+  },
+  {
+   "t": 985.51,
+   "d": 4.39,
+   "text": "teletype inspired line oriented editing where you had to remember what your file looked"
+  },
+  {
+   "t": 989.9,
+   "d": 5.94,
+   "text": "like and you could only see the execute you were working on instead if you have a nice"
+  },
+  {
+   "t": 995.84,
+   "d": 5.67,
+   "text": "glass tty it would take over the whole screen and show you what you were woking on as you"
+  },
+  {
+   "t": 1001.51,
+   "d": 5.87,
+   "text": "were working on it which was new and revolutionary at the time."
+  },
+  {
+   "t": 1007.38,
+   "d": 8.2,
+   "text": "In order to support that, there was code in there for redrawing the screen and rather"
+  },
+  {
+   "t": 1015.58,
+   "d": 14.12,
+   "text": "than having the various idocc -- it was put out into the a file like a database file."
+  },
+  {
+   "t": 1029.7,
+   "d": 2.28,
+   "text": "This is what it looked like."
+  },
+  {
+   "t": 1031.98,
+   "d": 9.45,
+   "text": "This was difficult to read and right because a major improvement."
+  },
+  {
+   "t": 1041.43,
+   "d": 7.14,
+   "text": "The termcap library that can parse the descriptions of terminals and use them to know how to do"
+  },
+  {
+   "t": 1048.57,
+   "d": 6.8,
+   "text": "the things that the visual mode needed in a way that was device independent was very"
+  },
+  {
+   "t": 1055.37,
+   "d": 2.07,
+   "text": "important and popular."
+  },
+  {
+   "t": 1057.44,
+   "d": 8.99,
+   "text": "In 2BSD the executable got a hard linked call VI and if you call it as VI it would start"
+  },
+  {
+   "t": 1066.43,
+   "d": 2.4,
+   "text": "up directly in visual mode."
+  },
+  {
+   "t": 1068.83,
+   "d": 7.63,
+   "text": "In 1979, the maintenance of VI was handed over to a new hacker Mary Ann horton and that"
+  },
+  {
+   "t": 1076.46,
+   "d": 3.1,
+   "text": "will come in important later."
+  },
+  {
+   "t": 1079.56,
+   "d": 7.63,
+   "text": "By 1980, the fourth edition shipped and included a library called curses."
+  },
+  {
+   "t": 1087.19,
+   "d": 9.32,
+   "text": "Ken Arnold took the code, lifted it out of VI and wrapped it up in a nice library wrapper"
+  },
+  {
+   "t": 1096.51,
+   "d": 7.97,
+   "text": "so you could write an application that described what you wanted a character cell graphic display"
+  },
+  {
+   "t": 1104.48,
+   "d": 7.35,
+   "text": "to look like and curses would take care of implementing the minimum number of cursor"
+  },
+  {
+   "t": 1111.83,
+   "d": 5.5,
+   "text": "movements and redraws and things like that necessary to update the screen to look like"
+  },
+  {
+   "t": 1117.33,
+   "d": 2.52,
+   "text": "what you just asked it to look like."
+  },
+  {
+   "t": 1119.85,
+   "d": 2.86,
+   "text": "Now you can build really fancy stuff."
+  },
+  {
+   "t": 1122.71,
+   "d": 2.26,
+   "text": "Rogue is the canonical curses application."
+  },
+  {
+   "t": 1124.97,
+   "d": 1.93,
+   "text": "Here is a picture of Rogue."
+  },
+  {
+   "t": 1126.9,
+   "d": 4.86,
+   "text": "It is not actually the first curses application."
+  },
+  {
+   "t": 1131.76,
+   "d": 9.2,
+   "text": "In fact, at the first Roguelike celebration, Ken was here and in a panel he told us he"
+  },
+  {
+   "t": 1140.96,
+   "d": 7.33,
+   "text": "was writing applications for his own use like to display which of his friends and those"
+  },
+  {
+   "t": 1148.29,
+   "d": 4.93,
+   "text": "were the first curses applications but Rogue was certainly a killer app."
+  },
+  {
+   "t": 1153.22,
+   "d": 9.53,
+   "text": "We are getting to the end of the period of video display terminals when we get to workstations,"
+  },
+  {
+   "t": 1162.75,
+   "d": 8.67,
+   "text": "microcomputers and modern Open Source."
+  },
+  {
+   "t": 1171.42,
+   "d": 3.59,
+   "text": "Bell labs was doing really advanced stuff at this time."
+  },
+  {
+   "t": 1175.01,
+   "d": 5.06,
+   "text": "Here is a picture of their blit graphical terminal for UNIX."
+  },
+  {
+   "t": 1180.07,
+   "d": 5.55,
+   "text": "Didn't have a local disk and ran a tiny OS from ROM."
+  },
+  {
+   "t": 1185.62,
+   "d": 6.19,
+   "text": "It was very advanced."
+  },
+  {
+   "t": 1191.81,
+   "d": 2.82,
+   "text": "But it was stuck within Bell Labs."
+  },
+  {
+   "t": 1194.63,
+   "d": 10.3,
+   "text": "In summer, 1982 Mary ann horton presented a paper called new curses and term info showing"
+  },
+  {
+   "t": 1204.93,
+   "d": 7.02,
+   "text": "the curses library had been reimplemented to be more optimized, easier to use, easier"
+  },
+  {
+   "t": 1211.95,
+   "d": 8.42,
+   "text": "to read the code, and the termcap library which had performance problems, the database"
+  },
+  {
+   "t": 1220.37,
+   "d": 7.24,
+   "text": "four had been updated into a more performant library into a library with a database that"
+  },
+  {
+   "t": 1227.61,
+   "d": 6.53,
+   "text": "had human readable descriptions that got compiled into byte code to be read in more rapidly"
+  },
+  {
+   "t": 1234.14,
+   "d": 2.54,
+   "text": "at program startup."
+  },
+  {
+   "t": 1236.68,
+   "d": 5.43,
+   "text": "Those cool things happening at Bell Labs didn't filter out to the rest of the market."
+  },
+  {
+   "t": 1242.11,
+   "d": 10.25,
+   "text": "In 1984 Bill Joy did a wonderful interview with, I believe -- I don't remember the name"
+  },
+  {
+   "t": 1252.36,
+   "d": 9.29,
+   "text": "of the magazine but said the fundamental tension in UNIX is everyone will have a bitmap."
+  },
+  {
+   "t": 1261.65,
+   "d": 4.74,
+   "text": "AT&T had a bitmap but people were not aware of that."
+  },
+  {
+   "t": 1266.39,
+   "d": 2.97,
+   "text": "It continued to evolve but didn't influence the market."
+  },
+  {
+   "t": 1269.36,
+   "d": 7.12,
+   "text": "But did influence the market is people were getting into microcomputers."
+  },
+  {
+   "t": 1276.48,
+   "d": 7.21,
+   "text": "The Windows logo is a little too new for this era but in 1986 the tell mack came out for"
+  },
+  {
+   "t": 1283.69,
+   "d": 6.32,
+   "text": "the MAC and PC and had an internal IP stack because nobody had networking stack built"
+  },
+  {
+   "t": 1290.01,
+   "d": 13.39,
+   "text": "in but you could use a DOS PC or MAC because it added tcip to UNIX back then."
+  },
+  {
+   "t": 1303.4,
+   "d": 6.9,
+   "text": "Also, around that same time period, at MIT a research window system called the W system"
+  },
+  {
+   "t": 1310.3,
+   "d": 7.98,
+   "text": "got improved and so since we increment names in order to improve something, X window was"
+  },
+  {
+   "t": 1318.28,
+   "d": 3.13,
+   "text": "born in 1984."
+  },
+  {
+   "t": 1321.41,
+   "d": 5.88,
+   "text": "The X window system version was released in 1987 under the MIT license and it is still"
+  },
+  {
+   "t": 1327.29,
+   "d": 1.21,
+   "text": "in used to."
+  },
+  {
+   "t": 1328.5,
+   "d": 5.61,
+   "text": "Because of the openness of the license it became immediately popular."
+  },
+  {
+   "t": 1334.11,
+   "d": 5.61,
+   "text": "Now we get into the licensing concerns, microcomputers, and these things lead into the start of the"
+  },
+  {
+   "t": 1339.72,
+   "d": 3.37,
+   "text": "open source movement."
+  },
+  {
+   "t": 1343.09,
+   "d": 9.14,
+   "text": "Pavel Curtis in 1982 was commissioned by Mary Ann to clone the new curses library in a clean"
+  },
+  {
+   "t": 1352.23,
+   "d": 6.69,
+   "text": "room way so that outside of Bell Labs folks could appreciate the improvement to curses."
+  },
+  {
+   "t": 1358.92,
+   "d": 7.11,
+   "text": "In 1984, work began on the project to make a free UNIX clone that didn't have any licensing"
+  },
+  {
+   "t": 1366.03,
+   "d": 3.99,
+   "text": "inconferences from AT&T and bell labs."
+  },
+  {
+   "t": 1370.02,
+   "d": 9.18,
+   "text": "In 1986, 4.6bsd came out which was the last one to have AT&T code and copyright in it."
+  },
+  {
+   "t": 1379.2,
+   "d": 7.65,
+   "text": "Commercial UNIX rolled on through the '80s and in '91 we saw the first release of the"
+  },
+  {
+   "t": 1386.85,
+   "d": 13.36,
+   "text": "Linux kernels and a bsd release that had a lot of AT&T code removed from it."
+  },
+  {
+   "t": 1400.21,
+   "d": 5.57,
+   "text": "P curses kind of languised with the last release in 1986."
+  },
+  {
+   "t": 1405.78,
+   "d": 9.41,
+   "text": "In 1993 it was picked up and released as M curses and this is the last we saw of these."
+  },
+  {
+   "t": 1415.19,
+   "d": 7.37,
+   "text": "1993 was a big year for open source because it was the clear where we saw Slack Linux"
+  },
+  {
+   "t": 1422.56,
+   "d": 2.24,
+   "text": "and net bsd come out."
+  },
+  {
+   "t": 1424.8,
+   "d": 5.72,
+   "text": "Starting from the mid-'90s we had a lot of what turned into the modern open source movement."
+  },
+  {
+   "t": 1430.52,
+   "d": 8.08,
+   "text": "We had gotten away from the AT&T research UNIX and moved into a more, you know, a time"
+  },
+  {
+   "t": 1438.6,
+   "d": 7.81,
+   "text": "of paying more attention to whether lysis -- licensing concerns."
+  },
+  {
+   "t": 1446.41,
+   "d": 8.97,
+   "text": "We are now 50 years into the VI but I am guessing most of you know how to exit vim."
+  },
+  {
+   "t": 1455.38,
+   "d": 10.18,
+   "text": "Your UNIX shell still talks to a teletype like it did on the pdp7 at bell labs in 1979."
+  },
+  {
+   "t": 1465.56,
+   "d": 1.49,
+   "text": "I love this quote."
+  },
+  {
+   "t": 1467.05,
+   "d": 7.46,
+   "text": "If 10 years a long time but 50 is incredible."
+  },
+  {
+   "t": 1474.51,
+   "d": 9.6,
+   "text": "The ideas are advancing but they are sticky and influence the next-generation of software."
+  },
+  {
+   "t": 1484.11,
+   "d": 8.81,
+   "text": "Visual studio code is arguably more advanced than VIM but still influenced by the fact"
+  },
+  {
+   "t": 1492.92,
+   "d": 9.15,
+   "text": "that ADM 3s didn't have arrow keys and you can still turn on VI key bindings in visual"
+  },
+  {
+   "t": 1502.07,
+   "d": 6.28,
+   "text": "studio code because the software that we are used to using influences what we want in the"
+  },
+  {
+   "t": 1508.35,
+   "d": 6.63,
+   "text": "next-generation of software and so even when we advance ideas they stick around."
+  },
+  {
+   "t": 1514.98,
+   "d": 1.0,
+   "text": "Thank you very much."
+  },
+  {
+   "t": 1515.98,
+   "d": 2.75,
+   "text": "I am always happy to share things like this."
+  },
+  {
+   "t": 1518.73,
+   "d": 12.87,
+   "text": "MODERATOR: The is fun to watch in class how many people have fond and less than fond memories"
+  },
+  {
+   "t": 1531.6,
+   "d": 2.73,
+   "text": "of the technology you are talking about."
+  },
+  {
+   "t": 1534.33,
+   "d": 1.0,
+   "text": "TABITHA SABLE: Absolutely."
+  },
+  {
+   "t": 1535.33,
+   "d": 1.7,
+   "text": "Me too."
+  },
+  {
+   "t": 1537.03,
+   "d": 1.01,
+   "text": "Do we have a couple questions?"
+  },
+  {
+   "t": 1538.04,
+   "d": 3.57,
+   "text": "MODERATOR: We have one that's a comment of how cool the rainbow terminal is."
+  },
+  {
+   "t": 1541.61,
+   "d": 3.77,
+   "text": "TABITHA SABLE: It is called lull Cat."
+  },
+  {
+   "t": 1545.38,
+   "d": 4.12,
+   "text": "I installed it last night and it took 31 megabytes to do install."
+  },
+  {
+   "t": 1549.5,
+   "d": 4.76,
+   "text": "It as a big Ruby thing and pulls in a lot of libraries."
+  },
+  {
+   "t": 1554.26,
+   "d": 9.55,
+   "text": "I went and looked at how big install sets for open bsd that got me started were and"
+  },
+  {
+   "t": 1563.81,
+   "d": 2.35,
+   "text": "they were about 20-ish megabytes."
+  },
+  {
+   "t": 1566.16,
+   "d": 6.85,
+   "text": "So this entire UNIX system was smaller than the modern program I use to make the pretty"
+  },
+  {
+   "t": 1573.01,
+   "d": 2.77,
+   "text": "pictures but it is called lull Cat and I highly recommend it."
+  },
+  {
+   "t": 1575.78,
+   "d": 4.67,
+   "text": "TABITHA SABLE: I think people in the chat correctly called that out."
+  },
+  {
+   "t": 1580.45,
+   "d": 2.68,
+   "text": "One MODERATOR: I would like to hear more about"
+  },
+  {
+   "t": 1583.13,
+   "d": 5.05,
+   "text": "UNIX and Unicode and why it is associated with the asterisk block."
+  },
+  {
+   "t": 1588.18,
+   "d": 12.99,
+   "text": "TABITHA SABLE: That is a great question and I am not a real deep expert on this but for"
+  },
+  {
+   "t": 1601.17,
+   "d": 10.26,
+   "text": "a long time UNIX was very highly dependent on ASCII in particular with ASCII being hard"
+  },
+  {
+   "t": 1611.43,
+   "d": 3.4,
+   "text": "coded and just assumed all throughout."
+  },
+  {
+   "t": 1614.83,
+   "d": 11.38,
+   "text": "Through the '80s and '90s any sort of non-ASCII text representation was a real struggle."
+  },
+  {
+   "t": 1626.21,
+   "d": 4.75,
+   "text": "You know, obviously, text representations were a real struggle at that time to, you"
+  },
+  {
+   "t": 1630.96,
+   "d": 6.97,
+   "text": "know, you have got 3-4 different competing standards for encoding Japanese, you know,"
+  },
+  {
+   "t": 1637.93,
+   "d": 2.09,
+   "text": "all of these things."
+  },
+  {
+   "t": 1640.02,
+   "d": 6.48,
+   "text": "And so during that time the code was all very ad hoc and so like if you wanted to be able"
+  },
+  {
+   "t": 1646.5,
+   "d": 7.42,
+   "text": "to type in, you know, Chinese, Japanese, or Korean on an X 11 system you had to be an"
+  },
+  {
+   "t": 1653.92,
+   "d": 2.83,
+   "text": "expert to get it to work at all."
+  },
+  {
+   "t": 1656.75,
+   "d": 7.75,
+   "text": "I think part of it is these things were developed in the United States by this group of people"
+  },
+  {
+   "t": 1664.5,
+   "d": 5.14,
+   "text": "who were, for the most part, all similar to each other and, you know, all speaking English"
+  },
+  {
+   "t": 1669.64,
+   "d": 1.77,
+   "text": "to each other."
+  },
+  {
+   "t": 1671.41,
+   "d": 9.38,
+   "text": "So when Unicode started getting developed, it was really slow to get uptake in part because"
+  },
+  {
+   "t": 1680.79,
+   "d": 6.7,
+   "text": "the software ecosystem that Unicode was trying to get into was such a mess and, you know,"
+  },
+  {
+   "t": 1687.49,
+   "d": 6.23,
+   "text": "my only slightly informed opinion on this, like as somebody who was learning Japanese"
+  },
+  {
+   "t": 1693.72,
+   "d": 4.27,
+   "text": "around the turn of the century and struggling with how to type it on computers in those"
+  },
+  {
+   "t": 1697.99,
+   "d": 10.34,
+   "text": "days, is that there is a bit of -- everybody had either given up on it or fought so hard"
+  },
+  {
+   "t": 1708.33,
+   "d": 8.2,
+   "text": "to get the existing bad implementations to work that there was a lot of sunk cost involved"
+  },
+  {
+   "t": 1716.53,
+   "d": 1.29,
+   "text": "there."
+  },
+  {
+   "t": 1717.82,
+   "d": 6.94,
+   "text": "Like my personal slightly informed opinion is that Unicode take-up was really delayed"
+  },
+  {
+   "t": 1724.76,
+   "d": 5.8,
+   "text": "by the fact that everybody had either given up or had so much invested in what was already"
+  },
+  {
+   "t": 1730.56,
+   "d": 7.73,
+   "text": "there that nobody wanted to switch but the advantages are obvious so given 20 extra years"
+  },
+  {
+   "t": 1738.29,
+   "d": 7.24,
+   "text": "now we have pretty decent Unicode support everywhere like in, you know, in the terminals"
+  },
+  {
+   "t": 1745.53,
+   "d": 4.36,
+   "text": "that I am talking to right now but it took a long time and I think it is mostly just"
+  },
+  {
+   "t": 1749.89,
+   "d": 4.06,
+   "text": "because of trying to get rid of all the old bad software."
+  },
+  {
+   "t": 1753.95,
+   "d": 3.56,
+   "text": "MODERATOR: That makes a lot of sense."
+  },
+  {
+   "t": 1757.51,
+   "d": 2.23,
+   "text": "One probably last quick question."
+  },
+  {
+   "t": 1759.74,
+   "d": 1.57,
+   "text": "Do you have a favorite old terminal?"
+  },
+  {
+   "t": 1761.31,
+   "d": 2.9,
+   "text": "TABITHA SABLE: Do I have a favorite old terminal?"
+  },
+  {
+   "t": 1764.21,
+   "d": 1.0,
+   "text": "You know, yeah."
+  },
+  {
+   "t": 1765.21,
+   "d": 2.02,
+   "text": "I am going to say, yeah."
+  },
+  {
+   "t": 1767.23,
+   "d": 9.03,
+   "text": "I am actually a big fan of the VT220 in part because of a mistake that got me into being"
+  },
+  {
+   "t": 1776.26,
+   "d": 3.14,
+   "text": "a cis admin."
+  },
+  {
+   "t": 1779.4,
+   "d": 9.4,
+   "text": "We had a computing club in school in the late '90s like '99."
+  },
+  {
+   "t": 1788.8,
+   "d": 5.46,
+   "text": "We had UNIX machines that were 10 years old at that time."
+  },
+  {
+   "t": 1794.26,
+   "d": 4.25,
+   "text": "We had a sun three server are a serial console."
+  },
+  {
+   "t": 1798.51,
+   "d": 7.97,
+   "text": "It had a VT220 sitting on top of the server on a desk in a computer lab and it had horrible"
+  },
+  {
+   "t": 1806.48,
+   "d": 4.15,
+   "text": "screen burn in because it was always sitting there at a login prompt."
+  },
+  {
+   "t": 1810.63,
+   "d": 11.77,
+   "text": "I saw it and felt bad and pushed the power button on the front of the VT220 and somebody"
+  },
+  {
+   "t": 1822.4,
+   "d": 2.06,
+   "text": "ran over don't do that."
+  },
+  {
+   "t": 1824.46,
+   "d": 4.52,
+   "text": "Well, why not inbecause it had like a 25pin serial connection."
+  },
+  {
+   "t": 1828.98,
+   "d": 5.7,
+   "text": "It had the hang up line and dial tone detect and all the lines were wired in so if you"
+  },
+  {
+   "t": 1834.68,
+   "d": 5.19,
+   "text": "powered off the terminal, the server base span detected that and powered the server"
+  },
+  {
+   "t": 1839.87,
+   "d": 1.23,
+   "text": "off too."
+  },
+  {
+   "t": 1841.1,
+   "d": 4.93,
+   "text": "I turned off the terminal because I felt bad for it being screen burned in and it shutdown"
+  },
+  {
+   "t": 1846.03,
+   "d": 1.98,
+   "text": "the server."
+  },
+  {
+   "t": 1848.01,
+   "d": 2.31,
+   "text": "We powered is back up and checked the file systems and apologized."
+  },
+  {
+   "t": 1850.32,
+   "d": 1.0,
+   "text": "MODERATOR: That's amazing."
+  },
+  {
+   "t": 1851.32,
+   "d": 1.0,
+   "text": "Empathy for the terminal."
+  },
+  {
+   "t": 1852.32,
+   "d": 1.0,
+   "text": "Good computer, pat, pat."
+  },
+  {
+   "t": 1853.32,
+   "d": 1.0,
+   "text": "Well, beautiful."
+  },
+  {
+   "t": 1854.32,
+   "d": 1.0,
+   "text": "Thank you so much, Tabitha."
+  },
+  {
+   "t": 1855.32,
+   "d": 1.0,
+   "text": "TABITHA SABLE: Thank you, everyone."
+  },
+  {
+   "t": 1856.32,
+   "d": 1.0,
+   "text": "I will be hanging around in the chat."
+  },
+  {
+   "t": 1857.32,
+   "d": 1.0,
+   "text": "MODERATOR: All right."
+  },
+  {
+   "t": 1858.32,
+   "d": 1.0,
+   "text": "Take care."
+  },
+  {
+   "t": 1859.32,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 1860.32,
+   "d": 1.0,
+   "text": "Well, wonderful times and thank you for your questions and taking part."
+  },
+  {
+   "t": 1861.32,
+   "d": 1.0,
+   "text": "We are heading into our first unconferencing block when you might wonder what that means."
+  },
+  {
+   "t": 1862.32,
+   "d": 1.0,
+   "text": "Let me explain it."
+  },
+  {
+   "t": 1863.32,
+   "d": 1.0,
+   "text": "Find my notes."
+  },
+  {
+   "t": 1864.32,
+   "d": 1.0,
+   "text": "Here they are."
+  },
+  {
+   "t": 1865.32,
+   "d": 1.0,
+   "text": "How to unconference."
+  },
+  {
+   "t": 1866.32,
+   "d": 1.0,
+   "text": "We have an unconference lobbying and hall which you can find on the map."
+  },
+  {
+   "t": 1867.32,
+   "d": 1.0,
+   "text": "When you go there, there is a special note board where you can suggest unconferencing"
+  },
+  {
+   "t": 1868.32,
+   "d": 1.0,
+   "text": "topics."
+  }
+ ],
+ "note": "manual track runs past the end of the video and there is no English auto-generated (en-orig) track to align it with; cut at the video's duration only, so text squeezed in just before the end is unchecked"
+}

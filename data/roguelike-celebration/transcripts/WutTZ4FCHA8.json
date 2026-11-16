@@ -1,0 +1,4195 @@
+{
+ "id": "WutTZ4FCHA8",
+ "url": "https://www.youtube.com/watch?v=WutTZ4FCHA8",
+ "title": "Kristen Yu: Video Game Quest Theory for Improved Procedural Content Generation",
+ "speaker": "Kristen Yu",
+ "talk_title": "Video Game Quest Theory for Improved Procedural Content Generation",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1612,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "will present my work on general video game quest theory. Specifically, I want to have an in depth discussion of my proposed definition of a quest, as well as a new paradigm for classifying quests which can replace the old side/main quest model.\n\nI believe this is relevant to the rogue-like community and in particular those who are interested in procedural quest generation because my quest definition is the first technical definition of a quest in academic literature. A technical definition like mine better supports technical applications of quests, and adoption of the definition in the PCG community could foster better collaboration within the community. The new paradigm that I would like to introduce allows for more flexibility in characterizing the constraints of the quest and purpose of the quest within the design space. I believe those interested in procedural quest generation can leverage this paradigm to better specify the kinds of generation they are aiming for. This is useful because it can help set the expectations of the system more appropriately, rather than a system producing main or side quests that do not fully meet the expectations of the user due to the baggage that the main/side quest terminology carries.\n\nAdditionally, this work is already being used in my company at improbable to better design quests and understand the design space we are working in, and has already proved useful in the practical development of our game.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 3,
+   "title": "Speaker background"
+  },
+  {
+   "start": 100,
+   "title": "Developing a quest theory"
+  },
+  {
+   "start": 147,
+   "title": "Defining quests technically"
+  },
+  {
+   "start": 198,
+   "title": "Academic and industry inputs"
+  },
+  {
+   "start": 258,
+   "title": "Breaking down quest components"
+  },
+  {
+   "start": 372,
+   "title": "Animal Crossing case study"
+  },
+  {
+   "start": 478,
+   "title": "Production benefits"
+  },
+  {
+   "start": 585,
+   "title": "The CP Paradigm"
+  },
+  {
+   "start": 684,
+   "title": "Understanding the paradigm"
+  },
+  {
+   "start": 743,
+   "title": "CP Paradigm case study"
+  },
+  {
+   "start": 874,
+   "title": "Applications of the paradigm"
+  },
+  {
+   "start": 960,
+   "title": "Procedural quest generation"
+  },
+  {
+   "start": 1050,
+   "title": "Defining content types"
+  },
+  {
+   "start": 1166,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1203,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5360,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.7,
+   "d": 3.3,
+   "text": "In this next block, we have three"
+  },
+  {
+   "t": 7.0,
+   "d": 2.5,
+   "text": "full talks coming at you."
+  },
+  {
+   "t": 9.5,
+   "d": 2.6,
+   "text": "Uh, the first one"
+  },
+  {
+   "t": 12.1,
+   "d": 4.5,
+   "text": "is from Kristen Yu. And she is uh, gosh,"
+  },
+  {
+   "t": 16.6,
+   "d": 2.3,
+   "text": "I'm so jealous of these life choices."
+  },
+  {
+   "t": 18.9,
+   "d": 2.8,
+   "text": "She is a PhD student in computer science"
+  },
+  {
+   "t": 21.7,
+   "d": 2.1,
+   "text": "at the University of Alberta doing"
+  },
+  {
+   "t": 23.8,
+   "d": 3.0,
+   "text": "research around quests and video games."
+  },
+  {
+   "t": 26.8,
+   "d": 2.6,
+   "text": "Uh, and she is here to share some of"
+  },
+  {
+   "t": 29.4,
+   "d": 2.2,
+   "text": "that research with us today."
+  },
+  {
+   "t": 31.6,
+   "d": 2.1,
+   "text": "Uh, Kristen, are you ready?"
+  },
+  {
+   "t": 33.7,
+   "d": 1.5,
+   "text": "Yeah, I am. Thanks so much for"
+  },
+  {
+   "t": 35.2,
+   "d": 1.4,
+   "text": "introducing me."
+  },
+  {
+   "t": 36.6,
+   "d": 1.8,
+   "text": "Um, as you mentioned, I'm Kristen Yu,"
+  },
+  {
+   "t": 38.4,
+   "d": 1.9,
+   "text": "and I'm presenting video game quest"
+  },
+  {
+   "t": 40.3,
+   "d": 2.6,
+   "text": "theory for improved PCG."
+  },
+  {
+   "t": 42.9,
+   "d": 2.6,
+   "text": "Um, really quick about me. Uh, I am a"
+  },
+  {
+   "t": 45.5,
+   "d": 1.9,
+   "text": "PhD student at the University of of"
+  },
+  {
+   "t": 47.4,
+   "d": 2.4,
+   "text": "Alberta, and I'm also a part-time game"
+  },
+  {
+   "t": 49.8,
+   "d": 2.6,
+   "text": "designer at Improbable. I design quests"
+  },
+  {
+   "t": 52.4,
+   "d": 2.5,
+   "text": "and narratives, and the focus of my PhD"
+  },
+  {
+   "t": 54.9,
+   "d": 1.8,
+   "text": "and a lot of things that I work on is"
+  },
+  {
+   "t": 56.7,
+   "d": 1.8,
+   "text": "quests."
+  },
+  {
+   "t": 58.5,
+   "d": 1.8,
+   "text": "A quick overview for this talk. I want"
+  },
+  {
+   "t": 60.3,
+   "d": 2.4,
+   "text": "to talk to you guys about general quest"
+  },
+  {
+   "t": 62.7,
+   "d": 1.6,
+   "text": "theory, and I want to talk about two"
+  },
+  {
+   "t": 64.3,
+   "d": 2.1,
+   "text": "things specifically. The first is the"
+  },
+  {
+   "t": 66.4,
+   "d": 1.5,
+   "text": "concept of this general quest"
+  },
+  {
+   "t": 67.9,
+   "d": 1.3,
+   "text": "definition. So this is something that"
+  },
+  {
+   "t": 69.2,
+   "d": 1.5,
+   "text": "I've been working on, and it's a"
+  },
+  {
+   "t": 70.7,
+   "d": 3.2,
+   "text": "combination of academic work as well as"
+  },
+  {
+   "t": 73.9,
+   "d": 1.9,
+   "text": "my own personal experiences of actually"
+  },
+  {
+   "t": 75.8,
+   "d": 1.7,
+   "text": "being in a real-life development"
+  },
+  {
+   "t": 77.5,
+   "d": 2.1,
+   "text": "environment. And then I also want to"
+  },
+  {
+   "t": 79.6,
+   "d": 1.4,
+   "text": "introduce to you guys the definition and"
+  },
+  {
+   "t": 81.0,
+   "d": 1.9,
+   "text": "context purpose paradigm. So this is"
+  },
+  {
+   "t": 82.9,
+   "d": 2.1,
+   "text": "actually something that I learned from"
+  },
+  {
+   "t": 85.0,
+   "d": 1.8,
+   "text": "developers. Um, I was lucky enough to be"
+  },
+  {
+   "t": 86.8,
+   "d": 1.3,
+   "text": "able to talk to a few of them, and I"
+  },
+  {
+   "t": 88.1,
+   "d": 1.9,
+   "text": "kind of distilled all of their wisdom"
+  },
+  {
+   "t": 90.0,
+   "d": 2.4,
+   "text": "and knowledge into this new paradigm."
+  },
+  {
+   "t": 92.4,
+   "d": 1.9,
+   "text": "And I'd like to contextualize these new"
+  },
+  {
+   "t": 94.3,
+   "d": 2.9,
+   "text": "pieces of theory with some practical uh,"
+  },
+  {
+   "t": 97.2,
+   "d": 1.4,
+   "text": "development lessons from actually"
+  },
+  {
+   "t": 98.6,
+   "d": 2.6,
+   "text": "working at Improbable."
+  },
+  {
+   "t": 101.2,
+   "d": 1.8,
+   "text": "This kind of all started with the"
+  },
+  {
+   "t": 103.0,
+   "d": 2.4,
+   "text": "question, what is a quest? I wanted to"
+  },
+  {
+   "t": 105.4,
+   "d": 2.3,
+   "text": "know, and so I went and I asked a bunch"
+  },
+  {
+   "t": 107.7,
+   "d": 2.1,
+   "text": "of my coworkers at Improbable, and they"
+  },
+  {
+   "t": 109.8,
+   "d": 3.4,
+   "text": "all told me different things. And I also"
+  },
+  {
+   "t": 113.2,
+   "d": 1.9,
+   "text": "asked this to the lead world designer,"
+  },
+  {
+   "t": 115.1,
+   "d": 1.6,
+   "text": "and he said that he'd actually never"
+  },
+  {
+   "t": 116.7,
+   "d": 1.5,
+   "text": "been asked this question before, and"
+  },
+  {
+   "t": 118.2,
+   "d": 1.5,
+   "text": "he's been in the industry for over 15"
+  },
+  {
+   "t": 119.7,
+   "d": 1.39,
+   "text": "years. So thought that was a really"
+  },
+  {
+   "t": 121.09,
+   "d": 1.3,
+   "text": "interesting kind of thing where, you"
+  },
+  {
+   "t": 122.39,
+   "d": 2.1,
+   "text": "know, maybe developers have a really"
+  },
+  {
+   "t": 124.49,
+   "d": 1.5,
+   "text": "good intuition for what a quest is, but"
+  },
+  {
+   "t": 125.99,
+   "d": 1.8,
+   "text": "they couldn't necessarily always always"
+  },
+  {
+   "t": 127.79,
+   "d": 2.2,
+   "text": "tell you what it was."
+  },
+  {
+   "t": 129.99,
+   "d": 2.1,
+   "text": "I then went and looked at academics and"
+  },
+  {
+   "t": 132.09,
+   "d": 2.7,
+   "text": "say what were they saying a quest is?"
+  },
+  {
+   "t": 134.79,
+   "d": 2.1,
+   "text": "And it was the same kind of story where"
+  },
+  {
+   "t": 136.89,
+   "d": 1.4,
+   "text": "they were all kind of saying different"
+  },
+  {
+   "t": 138.29,
+   "d": 1.6,
+   "text": "things depending on what school you were"
+  },
+  {
+   "t": 139.89,
+   "d": 2.3,
+   "text": "at and who your old professors were, etc"
+  },
+  {
+   "t": 142.19,
+   "d": 2.7,
+   "text": "etc. So this kind of led me to the idea"
+  },
+  {
+   "t": 144.89,
+   "d": 2.0,
+   "text": "of creating a general technical quest"
+  },
+  {
+   "t": 146.89,
+   "d": 1.6,
+   "text": "definition."
+  },
+  {
+   "t": 148.49,
+   "d": 1.5,
+   "text": "A general quest definition should be"
+  },
+  {
+   "t": 149.99,
+   "d": 1.8,
+   "text": "able to provide us a couple of things."
+  },
+  {
+   "t": 151.79,
+   "d": 1.5,
+   "text": "It should hopefully be able to help"
+  },
+  {
+   "t": 153.29,
+   "d": 2.1,
+   "text": "establish a common language when talking"
+  },
+  {
+   "t": 155.39,
+   "d": 2.4,
+   "text": "about quest. Um this can help reduce"
+  },
+  {
+   "t": 157.79,
+   "d": 1.4,
+   "text": "confusion when you're talking to"
+  },
+  {
+   "t": 159.19,
+   "d": 2.1,
+   "text": "somebody else about quest cuz sometimes"
+  },
+  {
+   "t": 161.29,
+   "d": 1.4,
+   "text": "you're talking about the same thing but"
+  },
+  {
+   "t": 162.69,
+   "d": 1.6,
+   "text": "you're using different words. So it can"
+  },
+  {
+   "t": 164.29,
+   "d": 1.6,
+   "text": "be a little bit tricky to navigate that"
+  },
+  {
+   "t": 165.89,
+   "d": 1.5,
+   "text": "thing until you guys get onto the same"
+  },
+  {
+   "t": 167.39,
+   "d": 1.7,
+   "text": "page."
+  },
+  {
+   "t": 169.09,
+   "d": 1.6,
+   "text": "And it should also be applicable across"
+  },
+  {
+   "t": 170.69,
+   "d": 2.7,
+   "text": "games and genres. So the intent here is"
+  },
+  {
+   "t": 173.39,
+   "d": 1.4,
+   "text": "that you don't want to actually have a"
+  },
+  {
+   "t": 174.79,
+   "d": 2.2,
+   "text": "quest definition for every single game."
+  },
+  {
+   "t": 176.99,
+   "d": 1.1,
+   "text": "Uh there's a lot of games that already"
+  },
+  {
+   "t": 178.09,
+   "d": 2.3,
+   "text": "exist. There is many more that will"
+  },
+  {
+   "t": 180.39,
+   "d": 2.2,
+   "text": "exist. So that's just like honestly a"
+  },
+  {
+   "t": 182.59,
+   "d": 1.8,
+   "text": "lot of different definitions and trying"
+  },
+  {
+   "t": 184.39,
+   "d": 1.4,
+   "text": "to go through evaluate and think"
+  },
+  {
+   "t": 185.79,
+   "d": 1.3,
+   "text": "critically about every single one of"
+  },
+  {
+   "t": 187.09,
+   "d": 3.6,
+   "text": "those is kind of a lot. Um and so"
+  },
+  {
+   "t": 190.69,
+   "d": 1.8,
+   "text": "to make it easier for myself or maybe"
+  },
+  {
+   "t": 192.49,
+   "d": 2.3,
+   "text": "harder, um I didn't want this definition"
+  },
+  {
+   "t": 194.79,
+   "d": 1.9,
+   "text": "to actually have to be tied to every"
+  },
+  {
+   "t": 196.69,
+   "d": 2.3,
+   "text": "single game."
+  },
+  {
+   "t": 198.99,
+   "d": 2.1,
+   "text": "Uh technical quest definition also gives"
+  },
+  {
+   "t": 201.09,
+   "d": 1.5,
+   "text": "us a couple of things. The first is that"
+  },
+  {
+   "t": 202.59,
+   "d": 1.5,
+   "text": "it lends itself to technical"
+  },
+  {
+   "t": 204.09,
+   "d": 2.1,
+   "text": "applications of quest such as procedural"
+  },
+  {
+   "t": 206.19,
+   "d": 2.9,
+   "text": "content generation. Um it also allows us"
+  },
+  {
+   "t": 209.09,
+   "d": 2.0,
+   "text": "to have more precise discussion when"
+  },
+  {
+   "t": 211.09,
+   "d": 1.6,
+   "text": "we're actually talking about quest. So"
+  },
+  {
+   "t": 212.69,
+   "d": 3.4,
+   "text": "this is basically the concept that um"
+  },
+  {
+   "t": 216.09,
+   "d": 2.5,
+   "text": "you can more precisely talk about things"
+  },
+  {
+   "t": 218.59,
+   "d": 1.8,
+   "text": "really specifically when you have a"
+  },
+  {
+   "t": 220.39,
+   "d": 2.3,
+   "text": "agreed upon technical definition rather"
+  },
+  {
+   "t": 222.69,
+   "d": 1.9,
+   "text": "than having to talk about things in more"
+  },
+  {
+   "t": 224.59,
+   "d": 1.9,
+   "text": "fuzzy like English language kinds of"
+  },
+  {
+   "t": 226.49,
+   "d": 1.7,
+   "text": "things."
+  },
+  {
+   "t": 228.19,
+   "d": 2.5,
+   "text": "So to actually develop this definition,"
+  },
+  {
+   "t": 230.69,
+   "d": 2.7,
+   "text": "I went and I read 16 different papers"
+  },
+  {
+   "t": 233.39,
+   "d": 1.3,
+   "text": "and they were actually focused on"
+  },
+  {
+   "t": 234.69,
+   "d": 1.9,
+   "text": "procedurally generating quest and they"
+  },
+  {
+   "t": 236.59,
+   "d": 2.4,
+   "text": "had 16 different definitions of a quest."
+  },
+  {
+   "t": 238.99,
+   "d": 1.7,
+   "text": "So I synthesized all of the common"
+  },
+  {
+   "t": 240.69,
+   "d": 1.9,
+   "text": "elements and then I also added in some"
+  },
+  {
+   "t": 242.59,
+   "d": 1.9,
+   "text": "practical developer experience that I"
+  },
+  {
+   "t": 244.49,
+   "d": 2.0,
+   "text": "got from working at Improbable. And that"
+  },
+  {
+   "t": 246.49,
+   "d": 2.7,
+   "text": "created this thing here at the bottom."
+  },
+  {
+   "t": 249.19,
+   "d": 1.7,
+   "text": "Um, this is the full technical version."
+  },
+  {
+   "t": 250.89,
+   "d": 1.2,
+   "text": "I'm not actually going to be covering"
+  },
+  {
+   "t": 252.09,
+   "d": 1.0,
+   "text": "the math in this talk. So if you're"
+  },
+  {
+   "t": 253.09,
+   "d": 1.8,
+   "text": "interested, I will post a link in one of"
+  },
+  {
+   "t": 254.89,
+   "d": 2.2,
+   "text": "the social spaces, but this monstrosity"
+  },
+  {
+   "t": 257.09,
+   "d": 3.3,
+   "text": "is kind of what came out of that."
+  },
+  {
+   "t": 260.89,
+   "d": 1.0,
+   "text": "What I'd like to do now though is"
+  },
+  {
+   "t": 261.89,
+   "d": 1.6,
+   "text": "actually walk you through the quest"
+  },
+  {
+   "t": 263.49,
+   "d": 3.2,
+   "text": "definition. So a quest is a set of tasks"
+  },
+  {
+   "t": 266.69,
+   "d": 1.7,
+   "text": "the player must complete in order to get"
+  },
+  {
+   "t": 268.39,
+   "d": 2.4,
+   "text": "one or more rewards. I also want to more"
+  },
+  {
+   "t": 270.79,
+   "d": 1.5,
+   "text": "fully define what I mean by reward"
+  },
+  {
+   "t": 272.29,
+   "d": 2.0,
+   "text": "because reward is similarly one of those"
+  },
+  {
+   "t": 274.29,
+   "d": 2.5,
+   "text": "words that is a little bit um fuzzy"
+  },
+  {
+   "t": 276.79,
+   "d": 2.4,
+   "text": "depending on who you ask."
+  },
+  {
+   "t": 279.19,
+   "d": 2.3,
+   "text": "So under this definition, a reward is"
+  },
+  {
+   "t": 281.49,
+   "d": 1.0,
+   "text": "in-game items. So those are your"
+  },
+  {
+   "t": 282.49,
+   "d": 1.5,
+   "text": "standard currencies or other kinds of"
+  },
+  {
+   "t": 283.99,
+   "d": 1.7,
+   "text": "items that players might pick up. There"
+  },
+  {
+   "t": 285.69,
+   "d": 1.8,
+   "text": "are also narrative elements such as"
+  },
+  {
+   "t": 287.49,
+   "d": 2.3,
+   "text": "dialogue that an NPC says or an cut"
+  },
+  {
+   "t": 289.79,
+   "d": 1.6,
+   "text": "scene that might play after the player"
+  },
+  {
+   "t": 291.39,
+   "d": 1.5,
+   "text": "completes the quest. And they can also"
+  },
+  {
+   "t": 292.89,
+   "d": 1.4,
+   "text": "be progression elements and those are"
+  },
+  {
+   "t": 294.29,
+   "d": 1.8,
+   "text": "your standard kind of XP points, skill"
+  },
+  {
+   "t": 296.09,
+   "d": 2.4,
+   "text": "tree points as well as also unlocking"
+  },
+  {
+   "t": 298.49,
+   "d": 3.1,
+   "text": "the next area of a map."
+  },
+  {
+   "t": 301.89,
+   "d": 1.4,
+   "text": "The next thing I want to do is actually"
+  },
+  {
+   "t": 303.29,
+   "d": 2.2,
+   "text": "more formally define what a task is. So"
+  },
+  {
+   "t": 305.49,
+   "d": 1.4,
+   "text": "the task is going to be made up of"
+  },
+  {
+   "t": 306.89,
+   "d": 1.7,
+   "text": "several things. The first is that the"
+  },
+  {
+   "t": 308.59,
+   "d": 1.9,
+   "text": "players can that can actually complete"
+  },
+  {
+   "t": 310.49,
+   "d": 1.8,
+   "text": "that particular task and that's to"
+  },
+  {
+   "t": 312.29,
+   "d": 2.8,
+   "text": "account for multiplayer games."
+  },
+  {
+   "t": 315.09,
+   "d": 1.3,
+   "text": "The second part is the objective that"
+  },
+  {
+   "t": 316.39,
+   "d": 1.8,
+   "text": "the player has to do."
+  },
+  {
+   "t": 318.19,
+   "d": 1.5,
+   "text": "The third is going to be the system that"
+  },
+  {
+   "t": 319.69,
+   "d": 2.2,
+   "text": "actually monitors the game of whether"
+  },
+  {
+   "t": 321.89,
+   "d": 2.1,
+   "text": "the player actually completed that task"
+  },
+  {
+   "t": 323.99,
+   "d": 1.5,
+   "text": "or not. And this is something that's"
+  },
+  {
+   "t": 325.49,
+   "d": 1.9,
+   "text": "actually often ignored by academics, but"
+  },
+  {
+   "t": 327.39,
+   "d": 1.3,
+   "text": "everyone who's ever developed a game"
+  },
+  {
+   "t": 328.69,
+   "d": 1.3,
+   "text": "knows that this is really critically"
+  },
+  {
+   "t": 329.99,
+   "d": 2.2,
+   "text": "important."
+  },
+  {
+   "t": 332.19,
+   "d": 1.4,
+   "text": "The next part is actually going to be"
+  },
+  {
+   "t": 333.59,
+   "d": 1.5,
+   "text": "the presentation of a task and that's"
+  },
+  {
+   "t": 335.09,
+   "d": 1.6,
+   "text": "everything that you show to the player"
+  },
+  {
+   "t": 336.69,
+   "d": 1.3,
+   "text": "to help them understand like what"
+  },
+  {
+   "t": 337.99,
+   "d": 2.2,
+   "text": "they're supposed to do to actually"
+  },
+  {
+   "t": 340.19,
+   "d": 2.0,
+   "text": "complete the task. And this is something"
+  },
+  {
+   "t": 342.19,
+   "d": 2.8,
+   "text": "else that's also really often ignored by"
+  },
+  {
+   "t": 344.99,
+   "d": 1.2,
+   "text": "academics even though it's really"
+  },
+  {
+   "t": 346.19,
+   "d": 1.7,
+   "text": "crucial to be able to actually, you"
+  },
+  {
+   "t": 347.89,
+   "d": 1.8,
+   "text": "know, get that extra step of"
+  },
+  {
+   "t": 349.69,
+   "d": 1.5,
+   "text": "understanding from the player so that"
+  },
+  {
+   "t": 351.19,
+   "d": 1.4,
+   "text": "they can actually complete the"
+  },
+  {
+   "t": 352.59,
+   "d": 1.5,
+   "text": "particular task you've put in front of"
+  },
+  {
+   "t": 354.09,
+   "d": 1.2,
+   "text": "them."
+  },
+  {
+   "t": 355.29,
+   "d": 1.2,
+   "text": "And the last is going to be the rewards"
+  },
+  {
+   "t": 356.49,
+   "d": 1.9,
+   "text": "for the task and I include the rewards"
+  },
+  {
+   "t": 358.39,
+   "d": 2.3,
+   "text": "of the task at the task level as well as"
+  },
+  {
+   "t": 360.69,
+   "d": 1.8,
+   "text": "at the quest level so that you can"
+  },
+  {
+   "t": 362.49,
+   "d": 1.8,
+   "text": "include for an idea of a reward schedule"
+  },
+  {
+   "t": 364.29,
+   "d": 1.5,
+   "text": "so the player might getting small little"
+  },
+  {
+   "t": 365.8,
+   "d": 1.5,
+   "text": "things as they're completing each task"
+  },
+  {
+   "t": 367.3,
+   "d": 2.2,
+   "text": "in your request."
+  },
+  {
+   "t": 369.5,
+   "d": 1.5,
+   "text": "I'd like to walk through now an example"
+  },
+  {
+   "t": 371.0,
+   "d": 2.2,
+   "text": "with Animal Crossing New Horizons. I'd"
+  },
+  {
+   "t": 373.19,
+   "d": 1.2,
+   "text": "like to talk about the Nook Miles"
+  },
+  {
+   "t": 374.39,
+   "d": 1.6,
+   "text": "system, and I'd also like to"
+  },
+  {
+   "t": 376.0,
+   "d": 1.7,
+   "text": "specifically talk about the fishing"
+  },
+  {
+   "t": 377.69,
+   "d": 2.2,
+   "text": "quest, angling for perfection. This is"
+  },
+  {
+   "t": 379.89,
+   "d": 1.6,
+   "text": "the catch a lot of fish quest. Um,"
+  },
+  {
+   "t": 381.5,
+   "d": 1.4,
+   "text": "there's five things you need to do. The"
+  },
+  {
+   "t": 382.89,
+   "d": 1.8,
+   "text": "first is to catch 10 fish, catch 100"
+  },
+  {
+   "t": 384.69,
+   "d": 2.3,
+   "text": "fish, catch 500 fish, catch 1,000 fish,"
+  },
+  {
+   "t": 387.0,
+   "d": 2.0,
+   "text": "and catch 3,000 fish."
+  },
+  {
+   "t": 389.0,
+   "d": 1.5,
+   "text": "When you get to do that, the rewards are"
+  },
+  {
+   "t": 390.5,
+   "d": 1.2,
+   "text": "going to be the Nook Miles tickets,"
+  },
+  {
+   "t": 391.69,
+   "d": 1.5,
+   "text": "which is the premium in-game currency,"
+  },
+  {
+   "t": 393.19,
+   "d": 1.8,
+   "text": "as well as these passport titles, which"
+  },
+  {
+   "t": 395.0,
+   "d": 1.7,
+   "text": "allow for the player an extra level of"
+  },
+  {
+   "t": 396.69,
+   "d": 2.5,
+   "text": "self-expression."
+  },
+  {
+   "t": 399.19,
+   "d": 1.4,
+   "text": "Now we need to actually apply this quest"
+  },
+  {
+   "t": 400.6,
+   "d": 1.9,
+   "text": "definition to this quest."
+  },
+  {
+   "t": 402.5,
+   "d": 1.9,
+   "text": "Um,"
+  },
+  {
+   "t": 404.39,
+   "d": 1.9,
+   "text": "the first thing you need to do is define"
+  },
+  {
+   "t": 406.3,
+   "d": 1.5,
+   "text": "your set of tasks, and that's just"
+  },
+  {
+   "t": 407.8,
+   "d": 1.3,
+   "text": "basically like the simple"
+  },
+  {
+   "t": 409.1,
+   "d": 1.4,
+   "text": "straightforward way of actually chunking"
+  },
+  {
+   "t": 410.5,
+   "d": 1.6,
+   "text": "the thing that the player needs to do,"
+  },
+  {
+   "t": 412.1,
+   "d": 1.5,
+   "text": "and those are already very easily"
+  },
+  {
+   "t": 413.6,
+   "d": 1.6,
+   "text": "chunked for us in the different things"
+  },
+  {
+   "t": 415.19,
+   "d": 1.6,
+   "text": "that I listed out earlier."
+  },
+  {
+   "t": 416.8,
+   "d": 1.2,
+   "text": "The next thing you want to do is say"
+  },
+  {
+   "t": 418.0,
+   "d": 0.9,
+   "text": "like these are all the rewards that you"
+  },
+  {
+   "t": 418.89,
+   "d": 1.0,
+   "text": "can get, these are all the different"
+  },
+  {
+   "t": 419.89,
+   "d": 1.7,
+   "text": "kinds of Nook Miles tickets, as well as"
+  },
+  {
+   "t": 421.6,
+   "d": 2.9,
+   "text": "the different titles you can get."
+  },
+  {
+   "t": 424.89,
+   "d": 1.4,
+   "text": "The next thing we need to do is actually"
+  },
+  {
+   "t": 426.3,
+   "d": 1.3,
+   "text": "define each of the tasks that we"
+  },
+  {
+   "t": 427.6,
+   "d": 1.6,
+   "text": "identified earlier. There's actually a"
+  },
+  {
+   "t": 429.19,
+   "d": 1.8,
+   "text": "lot of commonality between all the"
+  },
+  {
+   "t": 431.0,
+   "d": 1.1,
+   "text": "tasks, so I'm just going to kind of like"
+  },
+  {
+   "t": 432.1,
+   "d": 1.8,
+   "text": "walk through all of them generally. The"
+  },
+  {
+   "t": 433.89,
+   "d": 1.2,
+   "text": "first part is the player, and that's"
+  },
+  {
+   "t": 435.1,
+   "d": 1.2,
+   "text": "just going to be the single player of"
+  },
+  {
+   "t": 436.3,
+   "d": 1.3,
+   "text": "the game because Animal Crossing is"
+  },
+  {
+   "t": 437.6,
+   "d": 2.1,
+   "text": "mostly single player. The objective is"
+  },
+  {
+   "t": 439.69,
+   "d": 1.7,
+   "text": "catch x number of fish, so for the first"
+  },
+  {
+   "t": 441.39,
+   "d": 2.1,
+   "text": "task, catch 10 fish."
+  },
+  {
+   "t": 443.5,
+   "d": 1.4,
+   "text": "The monitoring system is just a system"
+  },
+  {
+   "t": 444.89,
+   "d": 1.3,
+   "text": "that checks whether the player has"
+  },
+  {
+   "t": 446.19,
+   "d": 1.9,
+   "text": "caught fish."
+  },
+  {
+   "t": 448.1,
+   "d": 1.3,
+   "text": "And then the presentation is actually"
+  },
+  {
+   "t": 449.39,
+   "d": 2.2,
+   "text": "fully included in this stamp card here,"
+  },
+  {
+   "t": 451.6,
+   "d": 1.7,
+   "text": "and so there's a couple of like"
+  },
+  {
+   "t": 453.3,
+   "d": 1.4,
+   "text": "different presentation elements that are"
+  },
+  {
+   "t": 454.69,
+   "d": 1.6,
+   "text": "important, but I'm just going to point"
+  },
+  {
+   "t": 456.3,
+   "d": 1.4,
+   "text": "out a couple of them. So the first one"
+  },
+  {
+   "t": 457.69,
+   "d": 1.3,
+   "text": "might be that there are stamps that"
+  },
+  {
+   "t": 459.0,
+   "d": 1.2,
+   "text": "shows the player how many tasks they've"
+  },
+  {
+   "t": 460.19,
+   "d": 1.7,
+   "text": "already completed in the task, as well"
+  },
+  {
+   "t": 461.89,
+   "d": 1.4,
+   "text": "as this little bubble in the middle that"
+  },
+  {
+   "t": 463.3,
+   "d": 1.4,
+   "text": "shows the player how far along they are"
+  },
+  {
+   "t": 464.69,
+   "d": 3.0,
+   "text": "in completing their current task."
+  },
+  {
+   "t": 467.69,
+   "d": 1.5,
+   "text": "And the last part's the reward, so this"
+  },
+  {
+   "t": 469.19,
+   "d": 0.8,
+   "text": "is actually going to be different"
+  },
+  {
+   "t": 470.0,
+   "d": 1.9,
+   "text": "between each of the tasks because each"
+  },
+  {
+   "t": 471.89,
+   "d": 1.7,
+   "text": "of them get a different amount of reward"
+  },
+  {
+   "t": 473.6,
+   "d": 1.5,
+   "text": "for the player to completing them, so"
+  },
+  {
+   "t": 475.1,
+   "d": 1.5,
+   "text": "left to right, they're just going to be"
+  },
+  {
+   "t": 476.6,
+   "d": 2.9,
+   "text": "shown across the bottom here."
+  },
+  {
+   "t": 479.5,
+   "d": 1.3,
+   "text": "Now I'd like to talk through a couple of"
+  },
+  {
+   "t": 480.8,
+   "d": 1.7,
+   "text": "production benefits we got from actually"
+  },
+  {
+   "t": 482.5,
+   "d": 1.6,
+   "text": "using this quest definition in practice"
+  },
+  {
+   "t": 484.1,
+   "d": 1.4,
+   "text": "at Improbable."
+  },
+  {
+   "t": 485.5,
+   "d": 1.2,
+   "text": "The first is that we're all on the same"
+  },
+  {
+   "t": 486.7,
+   "d": 2.4,
+   "text": "page with terminology. So, not only did"
+  },
+  {
+   "t": 489.1,
+   "d": 2.7,
+   "text": "we onboard the um entire quest design"
+  },
+  {
+   "t": 491.8,
+   "d": 1.4,
+   "text": "team, but I actually onboarded our"
+  },
+  {
+   "t": 493.2,
+   "d": 1.5,
+   "text": "programming team. And that's been really"
+  },
+  {
+   "t": 494.7,
+   "d": 1.9,
+   "text": "useful so that if design says the task"
+  },
+  {
+   "t": 496.6,
+   "d": 1.0,
+   "text": "is going to be this, then the"
+  },
+  {
+   "t": 497.6,
+   "d": 1.3,
+   "text": "programming knows exactly what they're"
+  },
+  {
+   "t": 498.9,
+   "d": 2.6,
+   "text": "talking about."
+  },
+  {
+   "t": 505.3,
+   "d": 1.2,
+   "text": "for like programmers when they say,"
+  },
+  {
+   "t": 506.5,
+   "d": 1.1,
+   "text": "okay,"
+  },
+  {
+   "t": 507.6,
+   "d": 1.8,
+   "text": "I need to somehow create something that"
+  },
+  {
+   "t": 509.4,
+   "d": 1.8,
+   "text": "will do what this design is supposed to"
+  },
+  {
+   "t": 511.2,
+   "d": 1.5,
+   "text": "do. And so one of the things we were"
+  },
+  {
+   "t": 512.7,
+   "d": 2.8,
+   "text": "able to do is actually um put together a"
+  },
+  {
+   "t": 515.5,
+   "d": 2.2,
+   "text": "list of all of the kinds of objectives"
+  },
+  {
+   "t": 517.7,
+   "d": 2.0,
+   "text": "that we wanted to be quests in the game."
+  },
+  {
+   "t": 519.7,
+   "d": 1.2,
+   "text": "And we gave that to programming and"
+  },
+  {
+   "t": 520.9,
+   "d": 1.4,
+   "text": "said, this is everything we wanted to be"
+  },
+  {
+   "t": 522.3,
+   "d": 1.6,
+   "text": "able to do. Like even like our long"
+  },
+  {
+   "t": 523.9,
+   "d": 1.9,
+   "text": "shot, like far reach goals. This is what"
+  },
+  {
+   "t": 525.8,
+   "d": 1.5,
+   "text": "we want to be able to have our quest"
+  },
+  {
+   "t": 527.3,
+   "d": 1.6,
+   "text": "system handle. So they can look at that"
+  },
+  {
+   "t": 528.9,
+   "d": 1.2,
+   "text": "list and say, yes, I will build you"
+  },
+  {
+   "t": 530.1,
+   "d": 1.3,
+   "text": "something that can do all of that ahead"
+  },
+  {
+   "t": 531.4,
+   "d": 1.6,
+   "text": "of time. Instead of having come some"
+  },
+  {
+   "t": 533.0,
+   "d": 1.4,
+   "text": "cases where designers might come back"
+  },
+  {
+   "t": 534.4,
+   "d": 1.7,
+   "text": "and say, oh, maybe could what if we did"
+  },
+  {
+   "t": 536.1,
+   "d": 1.8,
+   "text": "this and that might accidentally break"
+  },
+  {
+   "t": 537.9,
+   "d": 3.0,
+   "text": "the system you already have built."
+  },
+  {
+   "t": 540.9,
+   "d": 1.2,
+   "text": "I'd also like to tell you a quick"
+  },
+  {
+   "t": 542.1,
+   "d": 2.1,
+   "text": "developer story. So in our game, we have"
+  },
+  {
+   "t": 544.2,
+   "d": 1.5,
+   "text": "things that are explicitly called quests"
+  },
+  {
+   "t": 545.7,
+   "d": 1.4,
+   "text": "and that's actually like labeled as"
+  },
+  {
+   "t": 547.1,
+   "d": 1.8,
+   "text": "quest in the development environment."
+  },
+  {
+   "t": 548.9,
+   "d": 1.0,
+   "text": "And we also have these things that are"
+  },
+  {
+   "t": 549.9,
+   "d": 2.3,
+   "text": "quest like objects. So they look like"
+  },
+  {
+   "t": 552.2,
+   "d": 1.4,
+   "text": "quest, but we don't specifically call"
+  },
+  {
+   "t": 553.6,
+   "d": 2.5,
+   "text": "them quests in our game."
+  },
+  {
+   "t": 556.1,
+   "d": 2.0,
+   "text": "However, using this general definition,"
+  },
+  {
+   "t": 558.1,
+   "d": 2.0,
+   "text": "the quest like objects can actually just"
+  },
+  {
+   "t": 560.1,
+   "d": 1.7,
+   "text": "be considered quests. And what we were"
+  },
+  {
+   "t": 561.8,
+   "d": 1.6,
+   "text": "able to do then was actually use the"
+  },
+  {
+   "t": 563.4,
+   "d": 1.5,
+   "text": "quest system that we had already built"
+  },
+  {
+   "t": 564.9,
+   "d": 2.1,
+   "text": "to actually provide the quest like"
+  },
+  {
+   "t": 567.0,
+   "d": 2.0,
+   "text": "objects content to the player. So this"
+  },
+  {
+   "t": 569.0,
+   "d": 1.5,
+   "text": "obviously saves a lot of time because"
+  },
+  {
+   "t": 570.5,
+   "d": 1.6,
+   "text": "now you don't have to build up an entire"
+  },
+  {
+   "t": 572.1,
+   "d": 1.7,
+   "text": "another system to"
+  },
+  {
+   "t": 573.8,
+   "d": 1.5,
+   "text": "to actually provide that content to the"
+  },
+  {
+   "t": 575.3,
+   "d": 2.4,
+   "text": "player um rather than what you might"
+  },
+  {
+   "t": 577.7,
+   "d": 1.5,
+   "text": "have done if you weren't necessarily"
+  },
+  {
+   "t": 579.2,
+   "d": 1.5,
+   "text": "thinking about this critically where you"
+  },
+  {
+   "t": 580.7,
+   "d": 2.4,
+   "text": "just naively build another system to"
+  },
+  {
+   "t": 583.1,
+   "d": 3.7,
+   "text": "provide the quest like content system."
+  },
+  {
+   "t": 586.8,
+   "d": 1.3,
+   "text": "So this gives us our general quest"
+  },
+  {
+   "t": 588.1,
+   "d": 2.0,
+   "text": "definition, but to me it always kind of"
+  },
+  {
+   "t": 590.1,
+   "d": 2.1,
+   "text": "felt like only a piece of the puzzle."
+  },
+  {
+   "t": 592.2,
+   "d": 2.2,
+   "text": "Specifically at work we I was having"
+  },
+  {
+   "t": 594.4,
+   "d": 2.1,
+   "text": "problems actually fully discussing like"
+  },
+  {
+   "t": 596.5,
+   "d": 2.1,
+   "text": "everything about a quest. And the most"
+  },
+  {
+   "t": 598.6,
+   "d": 1.7,
+   "text": "obvious place was actually the design of"
+  },
+  {
+   "t": 600.3,
+   "d": 1.9,
+   "text": "a quest."
+  },
+  {
+   "t": 602.2,
+   "d": 2.2,
+   "text": "So what I did is I went and I talked to"
+  },
+  {
+   "t": 604.4,
+   "d": 2.4,
+   "text": "developers. Um I talked to 15 different"
+  },
+  {
+   "t": 606.8,
+   "d": 2.5,
+   "text": "developers around the industry. And from"
+  },
+  {
+   "t": 609.3,
+   "d": 1.9,
+   "text": "that I have over 13 hours of recording"
+  },
+  {
+   "t": 611.2,
+   "d": 2.6,
+   "text": "of this them talking to me about quests."
+  },
+  {
+   "t": 613.8,
+   "d": 1.2,
+   "text": "And this is something that's actually"
+  },
+  {
+   "t": 615.0,
+   "d": 1.7,
+   "text": "really unique among the academic"
+  },
+  {
+   "t": 616.7,
+   "d": 3.0,
+   "text": "community. So, normally academics are"
+  },
+  {
+   "t": 619.7,
+   "d": 2.4,
+   "text": "not necessarily going out and talking to"
+  },
+  {
+   "t": 622.1,
+   "d": 1.7,
+   "text": "developers and interviewing them to try"
+  },
+  {
+   "t": 623.8,
+   "d": 2.2,
+   "text": "and gain their knowledge. They're rather"
+  },
+  {
+   "t": 626.0,
+   "d": 2.4,
+   "text": "doing literature reviews of like what"
+  },
+  {
+   "t": 628.4,
+   "d": 1.7,
+   "text": "are other academics saying. So, this is"
+  },
+  {
+   "t": 630.1,
+   "d": 3.9,
+   "text": "interesting work for even academics."
+  },
+  {
+   "t": 634.0,
+   "d": 1.0,
+   "text": "I'd like to talk to you a little bit"
+  },
+  {
+   "t": 635.0,
+   "d": 1.6,
+   "text": "about the kinds of developers that I was"
+  },
+  {
+   "t": 636.6,
+   "d": 2.0,
+   "text": "able to interview. The first thing I did"
+  },
+  {
+   "t": 638.6,
+   "d": 1.5,
+   "text": "was I asked them what kind of studio"
+  },
+  {
+   "t": 640.1,
+   "d": 1.5,
+   "text": "they worked at. So, six said that they"
+  },
+  {
+   "t": 641.6,
+   "d": 1.4,
+   "text": "were indie developers, seven said they"
+  },
+  {
+   "t": 643.0,
+   "d": 1.3,
+   "text": "were not, and two said they experienced"
+  },
+  {
+   "t": 644.3,
+   "d": 2.0,
+   "text": "at both. I also asked them what kind of"
+  },
+  {
+   "t": 646.3,
+   "d": 2.3,
+   "text": "roles they actually play inside of their"
+  },
+  {
+   "t": 648.6,
+   "d": 2.5,
+   "text": "studio. And a majority of the developers"
+  },
+  {
+   "t": 651.1,
+   "d": 1.5,
+   "text": "I interviewed are questionnaire to"
+  },
+  {
+   "t": 652.6,
+   "d": 2.2,
+   "text": "designers, but there's also going to be"
+  },
+  {
+   "t": 654.8,
+   "d": 1.4,
+   "text": "some people who have experience from"
+  },
+  {
+   "t": 656.2,
+   "d": 2.3,
+   "text": "systems and programming."
+  },
+  {
+   "t": 658.5,
+   "d": 1.3,
+   "text": "The last thing I asked them was how many"
+  },
+  {
+   "t": 659.8,
+   "d": 1.4,
+   "text": "years of experience they have in the"
+  },
+  {
+   "t": 661.2,
+   "d": 2.1,
+   "text": "industry. So, the minimum number of"
+  },
+  {
+   "t": 663.3,
+   "d": 1.4,
+   "text": "years that were reported was three and"
+  },
+  {
+   "t": 664.7,
+   "d": 2.9,
+   "text": "the maximum was 30."
+  },
+  {
+   "t": 667.6,
+   "d": 2.1,
+   "text": "We then conducted thematic analysis on"
+  },
+  {
+   "t": 669.7,
+   "d": 1.4,
+   "text": "all the interviews, and that's basically"
+  },
+  {
+   "t": 671.1,
+   "d": 2.1,
+   "text": "just adding a tag where everything is"
+  },
+  {
+   "t": 673.2,
+   "d": 2.4,
+   "text": "going to be under the same kind of idea"
+  },
+  {
+   "t": 675.6,
+   "d": 2.5,
+   "text": "or concept. So, using this, we were able"
+  },
+  {
+   "t": 678.1,
+   "d": 2.0,
+   "text": "to generate 21 different tags that can"
+  },
+  {
+   "t": 680.1,
+   "d": 2.3,
+   "text": "be roughly grouped into six categories."
+  },
+  {
+   "t": 682.4,
+   "d": 1.4,
+   "text": "So, it's critical thinking,"
+  },
+  {
+   "t": 683.8,
+   "d": 2.1,
+   "text": "presentation, player experience,"
+  },
+  {
+   "t": 685.9,
+   "d": 2.6,
+   "text": "technical details, goals, and rewards."
+  },
+  {
+   "t": 688.5,
+   "d": 2.4,
+   "text": "So, this slide represents the full space"
+  },
+  {
+   "t": 690.9,
+   "d": 1.2,
+   "text": "of everything that the developers I"
+  },
+  {
+   "t": 692.1,
+   "d": 2.1,
+   "text": "talked to wanted to talk to me about"
+  },
+  {
+   "t": 694.2,
+   "d": 2.5,
+   "text": "quests."
+  },
+  {
+   "t": 696.8,
+   "d": 1.6,
+   "text": "What I was able to do was take all of"
+  },
+  {
+   "t": 698.4,
+   "d": 2.1,
+   "text": "that information that they told me and"
+  },
+  {
+   "t": 700.5,
+   "d": 2.7,
+   "text": "kind of like organize it into this new"
+  },
+  {
+   "t": 703.2,
+   "d": 1.9,
+   "text": "paradigm, the definition context purpose"
+  },
+  {
+   "t": 705.1,
+   "d": 1.2,
+   "text": "paradigm."
+  },
+  {
+   "t": 706.3,
+   "d": 1.6,
+   "text": "This paradigm starts with the definition"
+  },
+  {
+   "t": 707.9,
+   "d": 1.6,
+   "text": "which defines the state space of all"
+  },
+  {
+   "t": 709.5,
+   "d": 2.2,
+   "text": "possible quests in games."
+  },
+  {
+   "t": 711.7,
+   "d": 1.3,
+   "text": "Then there's the context. So, that's"
+  },
+  {
+   "t": 713.0,
+   "d": 1.3,
+   "text": "going to be the set of creative or"
+  },
+  {
+   "t": 714.3,
+   "d": 1.2,
+   "text": "production constraints the developers"
+  },
+  {
+   "t": 715.5,
+   "d": 1.6,
+   "text": "actually place on the quest."
+  },
+  {
+   "t": 717.1,
+   "d": 1.6,
+   "text": "And the last part is the purpose, which"
+  },
+  {
+   "t": 718.7,
+   "d": 1.6,
+   "text": "is the reason or reasons that the quest"
+  },
+  {
+   "t": 720.3,
+   "d": 1.4,
+   "text": "is in the game."
+  },
+  {
+   "t": 721.7,
+   "d": 1.6,
+   "text": "As you can kind of see from the picture,"
+  },
+  {
+   "t": 723.3,
+   "d": 2.0,
+   "text": "the context and the purpose act as a"
+  },
+  {
+   "t": 725.3,
+   "d": 1.7,
+   "text": "funnel where they take the state space"
+  },
+  {
+   "t": 727.0,
+   "d": 2.0,
+   "text": "of all possible quests and they narrow"
+  },
+  {
+   "t": 729.0,
+   "d": 2.0,
+   "text": "it into the set of quests that are"
+  },
+  {
+   "t": 731.0,
+   "d": 3.1,
+   "text": "actually usable for a particular game."
+  },
+  {
+   "t": 734.1,
+   "d": 1.2,
+   "text": "Though not shown in the picture for"
+  },
+  {
+   "t": 735.3,
+   "d": 1.8,
+   "text": "clarity, a game can have multiple"
+  },
+  {
+   "t": 737.1,
+   "d": 2.1,
+   "text": "contexts and multiple purposes, and they"
+  },
+  {
+   "t": 739.2,
+   "d": 2.0,
+   "text": "can overlap as needed in order to more"
+  },
+  {
+   "t": 741.2,
+   "d": 3.0,
+   "text": "fully explain the design."
+  },
+  {
+   "t": 744.5,
+   "d": 1.4,
+   "text": "I'd like to walk through another example"
+  },
+  {
+   "t": 745.9,
+   "d": 1.5,
+   "text": "using this paradigm, and I'd like to use"
+  },
+  {
+   "t": 747.4,
+   "d": 1.9,
+   "text": "Animal Crossing New Horizons again. I"
+  },
+  {
+   "t": 749.3,
+   "d": 1.6,
+   "text": "want to talk about their regular Nook"
+  },
+  {
+   "t": 750.9,
+   "d": 1.6,
+   "text": "Miles quests as well as the Nook Miles"
+  },
+  {
+   "t": 752.5,
+   "d": 2.1,
+   "text": "Plus quests."
+  },
+  {
+   "t": 754.6,
+   "d": 1.6,
+   "text": "So for definition, I'm just going to use"
+  },
+  {
+   "t": 756.2,
+   "d": 1.3,
+   "text": "the general quest definition that I"
+  },
+  {
+   "t": 757.5,
+   "d": 2.6,
+   "text": "talked about earlier in the talk."
+  },
+  {
+   "t": 760.1,
+   "d": 1.2,
+   "text": "Now we need to talk about context."
+  },
+  {
+   "t": 761.3,
+   "d": 1.5,
+   "text": "There's two contexts for Animal"
+  },
+  {
+   "t": 762.8,
+   "d": 1.8,
+   "text": "Crossing. One is the Nook Miles, and the"
+  },
+  {
+   "t": 764.6,
+   "d": 2.3,
+   "text": "other is the Nook Miles Plus context."
+  },
+  {
+   "t": 766.9,
+   "d": 2.1,
+   "text": "For the Nook Miles context, we have this"
+  },
+  {
+   "t": 769.0,
+   "d": 2.3,
+   "text": "stamp card appearance in the game. Each"
+  },
+  {
+   "t": 771.3,
+   "d": 1.2,
+   "text": "of these quests is going to have one,"
+  },
+  {
+   "t": 772.5,
+   "d": 1.8,
+   "text": "three, or five amounts of tasks, and"
+  },
+  {
+   "t": 774.3,
+   "d": 1.0,
+   "text": "each of these tasks are going to take"
+  },
+  {
+   "t": 775.3,
+   "d": 1.8,
+   "text": "varying lengths of time. They're also"
+  },
+  {
+   "t": 777.1,
+   "d": 1.4,
+   "text": "going to be rewarding the player with"
+  },
+  {
+   "t": 778.5,
+   "d": 3.1,
+   "text": "usually large amounts of reward."
+  },
+  {
+   "t": 781.6,
+   "d": 1.9,
+   "text": "And then this content is going to be"
+  },
+  {
+   "t": 783.5,
+   "d": 1.4,
+   "text": "exhausted by the player, so that means"
+  },
+  {
+   "t": 784.9,
+   "d": 1.5,
+   "text": "that once they've completed it, they"
+  },
+  {
+   "t": 786.4,
+   "d": 2.0,
+   "text": "can't do it again."
+  },
+  {
+   "t": 788.4,
+   "d": 1.4,
+   "text": "By contrast, we have the Nook Miles Plus"
+  },
+  {
+   "t": 789.8,
+   "d": 1.6,
+   "text": "context. So it has this bubble"
+  },
+  {
+   "t": 791.4,
+   "d": 1.1,
+   "text": "appearance in the game, and it always"
+  },
+  {
+   "t": 792.5,
+   "d": 1.5,
+   "text": "has one task."
+  },
+  {
+   "t": 794.0,
+   "d": 2.1,
+   "text": "These these tasks should be easy to"
+  },
+  {
+   "t": 796.1,
+   "d": 1.8,
+   "text": "complete as well as it will give the"
+  },
+  {
+   "t": 797.9,
+   "d": 1.4,
+   "text": "player a small amount of reward for"
+  },
+  {
+   "t": 799.3,
+   "d": 1.6,
+   "text": "completing those tasks."
+  },
+  {
+   "t": 800.9,
+   "d": 2.0,
+   "text": "This content is shown to the player as"
+  },
+  {
+   "t": 802.9,
+   "d": 1.7,
+   "text": "the five circles as you see here on on"
+  },
+  {
+   "t": 804.6,
+   "d": 1.6,
+   "text": "the screen. And when the player actually"
+  },
+  {
+   "t": 806.2,
+   "d": 2.4,
+   "text": "completes one of those quests, the new"
+  },
+  {
+   "t": 808.6,
+   "d": 1.8,
+   "text": "one will come into its place. So this"
+  },
+  {
+   "t": 810.4,
+   "d": 3.4,
+   "text": "content is functionally infinite."
+  },
+  {
+   "t": 814.1,
+   "d": 1.3,
+   "text": "Now I'd like to talk about the purpose,"
+  },
+  {
+   "t": 815.4,
+   "d": 1.0,
+   "text": "and I'd actually like to just take a"
+  },
+  {
+   "t": 816.4,
+   "d": 1.7,
+   "text": "step back and talk about the purpose of"
+  },
+  {
+   "t": 818.1,
+   "d": 2.1,
+   "text": "quests in Animal Crossing in general,"
+  },
+  {
+   "t": 820.2,
+   "d": 1.3,
+   "text": "and that's to provide the player with"
+  },
+  {
+   "t": 821.5,
+   "d": 1.8,
+   "text": "in-game goals to achieve. When you have"
+  },
+  {
+   "t": 823.3,
+   "d": 1.5,
+   "text": "a game like Animal Crossing, when there"
+  },
+  {
+   "t": 824.8,
+   "d": 3.0,
+   "text": "is a high amount of player agency, they"
+  },
+  {
+   "t": 827.8,
+   "d": 1.4,
+   "text": "can sometimes feel lost and don't really"
+  },
+  {
+   "t": 829.2,
+   "d": 1.4,
+   "text": "know what to do. So this allows the"
+  },
+  {
+   "t": 830.6,
+   "d": 1.7,
+   "text": "player to have some directed goals that"
+  },
+  {
+   "t": 832.3,
+   "d": 1.7,
+   "text": "get them to interact with systems until"
+  },
+  {
+   "t": 834.0,
+   "d": 2.4,
+   "text": "they can self-regulate and say, oh okay,"
+  },
+  {
+   "t": 836.4,
+   "d": 1.1,
+   "text": "actually I really want to do this"
+  },
+  {
+   "t": 837.5,
+   "d": 1.4,
+   "text": "because I did a quest that was using"
+  },
+  {
+   "t": 838.9,
+   "d": 2.6,
+   "text": "this system earlier."
+  },
+  {
+   "t": 841.5,
+   "d": 1.9,
+   "text": "For the regular Nook Miles purpose, it's"
+  },
+  {
+   "t": 843.4,
+   "d": 2.0,
+   "text": "to provide the player with more"
+  },
+  {
+   "t": 845.4,
+   "d": 2.0,
+   "text": "challenging content as well as reward"
+  },
+  {
+   "t": 847.4,
+   "d": 2.7,
+   "text": "that player with a proportionally high"
+  },
+  {
+   "t": 850.1,
+   "d": 1.3,
+   "text": "reward for actually completing that"
+  },
+  {
+   "t": 851.4,
+   "d": 2.2,
+   "text": "content. And the Nook Miles Plus purpose"
+  },
+  {
+   "t": 853.6,
+   "d": 3.0,
+   "text": "is to have small easy challenges for the"
+  },
+  {
+   "t": 856.6,
+   "d": 2.1,
+   "text": "player to complete on a daily basis and"
+  },
+  {
+   "t": 858.7,
+   "d": 1.4,
+   "text": "reward the player with small amounts of"
+  },
+  {
+   "t": 860.1,
+   "d": 1.5,
+   "text": "reward."
+  },
+  {
+   "t": 861.6,
+   "d": 1.6,
+   "text": "The purposes for the regular Nook Miles"
+  },
+  {
+   "t": 863.2,
+   "d": 1.5,
+   "text": "and the Nook Miles Plus are"
+  },
+  {
+   "t": 864.7,
+   "d": 1.9,
+   "text": "complementary to each other and provide"
+  },
+  {
+   "t": 866.6,
+   "d": 1.8,
+   "text": "a satisfying pacing experience where you"
+  },
+  {
+   "t": 868.4,
+   "d": 1.9,
+   "text": "have large amounts of rewards from the"
+  },
+  {
+   "t": 870.3,
+   "d": 1.8,
+   "text": "regular Nook Miles system interspersed"
+  },
+  {
+   "t": 872.1,
+   "d": 1.6,
+   "text": "with small rewards from the Nook Miles"
+  },
+  {
+   "t": 873.7,
+   "d": 2.3,
+   "text": "Plus."
+  },
+  {
+   "t": 876.0,
+   "d": 1.2,
+   "text": "Now I'd like to talk about a couple of"
+  },
+  {
+   "t": 877.2,
+   "d": 1.5,
+   "text": "applications for the definition of"
+  },
+  {
+   "t": 878.7,
+   "d": 1.9,
+   "text": "context purpose paradigm. However, I"
+  },
+  {
+   "t": 880.6,
+   "d": 1.5,
+   "text": "would love to talk to anybody if they"
+  },
+  {
+   "t": 882.1,
+   "d": 2.1,
+   "text": "have any other ideas of how to actually"
+  },
+  {
+   "t": 884.2,
+   "d": 1.7,
+   "text": "apply this paradigm."
+  },
+  {
+   "t": 885.9,
+   "d": 1.3,
+   "text": "The first is to compare and contrast"
+  },
+  {
+   "t": 887.2,
+   "d": 1.4,
+   "text": "like we did with the Animal Crossing"
+  },
+  {
+   "t": 888.6,
+   "d": 1.4,
+   "text": "example."
+  },
+  {
+   "t": 890.0,
+   "d": 1.6,
+   "text": "The next is to actually do procedural"
+  },
+  {
+   "t": 891.6,
+   "d": 1.8,
+   "text": "content generation for quests, and I'd"
+  },
+  {
+   "t": 893.4,
+   "d": 1.0,
+   "text": "like to talk about this a little bit"
+  },
+  {
+   "t": 894.4,
+   "d": 1.9,
+   "text": "more in the following example, as well"
+  },
+  {
+   "t": 896.3,
+   "d": 1.7,
+   "text": "as to actually evaluate quests in the"
+  },
+  {
+   "t": 898.0,
+   "d": 1.7,
+   "text": "appropriate design space, which I'm also"
+  },
+  {
+   "t": 899.7,
+   "d": 3.4,
+   "text": "going to cover in the next example."
+  },
+  {
+   "t": 903.9,
+   "d": 1.6,
+   "text": "I'm going to do a PCG example now"
+  },
+  {
+   "t": 905.5,
+   "d": 2.2,
+   "text": "because we are at Roguelike Celebration,"
+  },
+  {
+   "t": 907.7,
+   "d": 1.6,
+   "text": "and let's just say we're going to create"
+  },
+  {
+   "t": 909.3,
+   "d": 1.7,
+   "text": "a quest generator, and this generator is"
+  },
+  {
+   "t": 911.0,
+   "d": 1.6,
+   "text": "going to narratively link quests"
+  },
+  {
+   "t": 912.6,
+   "d": 1.7,
+   "text": "together to tell a secondary story in"
+  },
+  {
+   "t": 914.3,
+   "d": 1.2,
+   "text": "the game."
+  },
+  {
+   "t": 915.5,
+   "d": 1.4,
+   "text": "Using this paradigm, we can define the"
+  },
+  {
+   "t": 916.9,
+   "d": 2.1,
+   "text": "context, and we can specify things like"
+  },
+  {
+   "t": 919.0,
+   "d": 1.1,
+   "text": "the kind of tasks that will be"
+  },
+  {
+   "t": 920.1,
+   "d": 1.7,
+   "text": "generated, the types of rewards that"
+  },
+  {
+   "t": 921.8,
+   "d": 2.4,
+   "text": "will be given by this quest generator,"
+  },
+  {
+   "t": 924.2,
+   "d": 2.5,
+   "text": "the presentation of the quest generator."
+  },
+  {
+   "t": 926.7,
+   "d": 1.6,
+   "text": "Um you don't have to do this, but"
+  },
+  {
+   "t": 928.3,
+   "d": 1.0,
+   "text": "sometimes you might want to"
+  },
+  {
+   "t": 929.3,
+   "d": 1.6,
+   "text": "differentiate between handcrafted"
+  },
+  {
+   "t": 930.9,
+   "d": 2.8,
+   "text": "content and content that is generated,"
+  },
+  {
+   "t": 933.7,
+   "d": 1.5,
+   "text": "as well as uh set developer"
+  },
+  {
+   "t": 935.2,
+   "d": 1.9,
+   "text": "expectations."
+  },
+  {
+   "t": 937.1,
+   "d": 2.7,
+   "text": "So when you have a quest generator, you"
+  },
+  {
+   "t": 939.8,
+   "d": 1.1,
+   "text": "need to be able to communicate"
+  },
+  {
+   "t": 940.9,
+   "d": 2.1,
+   "text": "effectively to other developers that"
+  },
+  {
+   "t": 943.0,
+   "d": 2.2,
+   "text": "might be using this generator. And as I"
+  },
+  {
+   "t": 945.2,
+   "d": 1.5,
+   "text": "already mentioned, a lot of people have"
+  },
+  {
+   "t": 946.7,
+   "d": 1.7,
+   "text": "their own biases and ideas about what a"
+  },
+  {
+   "t": 948.4,
+   "d": 2.5,
+   "text": "quest is. So if you specifically lay lay"
+  },
+  {
+   "t": 950.9,
+   "d": 1.5,
+   "text": "out this is the context and this is the"
+  },
+  {
+   "t": 952.4,
+   "d": 1.2,
+   "text": "purpose of these quests they're going to"
+  },
+  {
+   "t": 953.6,
+   "d": 1.2,
+   "text": "come out of it, they're going to have"
+  },
+  {
+   "t": 954.8,
+   "d": 1.6,
+   "text": "appropriate expectations and maybe not"
+  },
+  {
+   "t": 956.4,
+   "d": 1.6,
+   "text": "be disappointed because they had their"
+  },
+  {
+   "t": 958.0,
+   "d": 3.4,
+   "text": "own biases about what a quest is."
+  },
+  {
+   "t": 961.4,
+   "d": 0.9,
+   "text": "Now we're going to actually try and"
+  },
+  {
+   "t": 962.3,
+   "d": 1.6,
+   "text": "build out an entire game. So we're going"
+  },
+  {
+   "t": 963.9,
+   "d": 1.5,
+   "text": "to fill out our content with a bunch of"
+  },
+  {
+   "t": 965.4,
+   "d": 1.3,
+   "text": "fast quests because they're easy to"
+  },
+  {
+   "t": 966.7,
+   "d": 1.1,
+   "text": "write, and we can write those in like an"
+  },
+  {
+   "t": 967.8,
+   "d": 1.8,
+   "text": "hour. And then we're also going to"
+  },
+  {
+   "t": 969.6,
+   "d": 2.5,
+   "text": "create a bunch of handcrafted main"
+  },
+  {
+   "t": 972.1,
+   "d": 1.8,
+   "text": "quests things so we can have this really"
+  },
+  {
+   "t": 973.9,
+   "d": 1.9,
+   "text": "nice narrative for the player to engage"
+  },
+  {
+   "t": 975.8,
+   "d": 1.4,
+   "text": "with."
+  },
+  {
+   "t": 977.2,
+   "d": 1.4,
+   "text": "The question then becomes what kind of"
+  },
+  {
+   "t": 978.6,
+   "d": 1.9,
+   "text": "content do I actually have in my game?"
+  },
+  {
+   "t": 980.5,
+   "d": 2.2,
+   "text": "And usually we would think of the side"
+  },
+  {
+   "t": 982.7,
+   "d": 2.2,
+   "text": "and main kind of thing that we've been"
+  },
+  {
+   "t": 984.9,
+   "d": 2.1,
+   "text": "using for a very long time. So obviously"
+  },
+  {
+   "t": 987.0,
+   "d": 2.1,
+   "text": "we want to assign the side quest to a"
+  },
+  {
+   "t": 989.1,
+   "d": 1.9,
+   "text": "bunch of fetch quests. And obviously the"
+  },
+  {
+   "t": 991.0,
+   "d": 1.7,
+   "text": "main quest story is going to be our main"
+  },
+  {
+   "t": 992.7,
+   "d": 2.6,
+   "text": "quest. But we have this quest generator."
+  },
+  {
+   "t": 995.3,
+   "d": 1.3,
+   "text": "We might want to say it's side quests"
+  },
+  {
+   "t": 996.6,
+   "d": 1.8,
+   "text": "because they're not our handcrafted main"
+  },
+  {
+   "t": 998.4,
+   "d": 2.6,
+   "text": "quests, but it also kind of feels weird"
+  },
+  {
+   "t": 1001.0,
+   "d": 1.6,
+   "text": "to call them side quests because they"
+  },
+  {
+   "t": 1002.6,
+   "d": 1.4,
+   "text": "have like a high amount of narrative in"
+  },
+  {
+   "t": 1004.0,
+   "d": 1.1,
+   "text": "it cuz they're telling secondary"
+  },
+  {
+   "t": 1005.1,
+   "d": 2.6,
+   "text": "stories."
+  },
+  {
+   "t": 1007.7,
+   "d": 1.5,
+   "text": "Now instead we can use the definition"
+  },
+  {
+   "t": 1009.2,
+   "d": 1.8,
+   "text": "context purpose paradigm to more fully"
+  },
+  {
+   "t": 1011.0,
+   "d": 2.2,
+   "text": "classify the different types of content."
+  },
+  {
+   "t": 1013.2,
+   "d": 1.9,
+   "text": "We can use the definition to be the same"
+  },
+  {
+   "t": 1015.1,
+   "d": 1.3,
+   "text": "across all three of the different"
+  },
+  {
+   "t": 1016.4,
+   "d": 1.1,
+   "text": "contents."
+  },
+  {
+   "t": 1017.5,
+   "d": 1.4,
+   "text": "For context for the first two we can say"
+  },
+  {
+   "t": 1018.9,
+   "d": 1.6,
+   "text": "that those quests have exactly one task"
+  },
+  {
+   "t": 1020.5,
+   "d": 2.1,
+   "text": "and by contrast the main story has"
+  },
+  {
+   "t": 1022.6,
+   "d": 2.1,
+   "text": "multiple tasks."
+  },
+  {
+   "t": 1024.7,
+   "d": 1.2,
+   "text": "The purpose for a bunch of fetch quests"
+  },
+  {
+   "t": 1025.9,
+   "d": 1.3,
+   "text": "is going to be to encourage the player"
+  },
+  {
+   "t": 1027.2,
+   "d": 1.3,
+   "text": "to explore around because they have to"
+  },
+  {
+   "t": 1028.5,
+   "d": 1.1,
+   "text": "run around the map in order to actually"
+  },
+  {
+   "t": 1029.6,
+   "d": 1.5,
+   "text": "complete those quests."
+  },
+  {
+   "t": 1031.1,
+   "d": 1.4,
+   "text": "And the purpose for the other kinds of"
+  },
+  {
+   "t": 1032.5,
+   "d": 1.3,
+   "text": "content we have is to tell the player's"
+  },
+  {
+   "t": 1033.8,
+   "d": 2.2,
+   "text": "story. So using this we can more fully"
+  },
+  {
+   "t": 1036.0,
+   "d": 2.2,
+   "text": "define like the kinds of content we're"
+  },
+  {
+   "t": 1038.2,
+   "d": 1.5,
+   "text": "going to have in our game and it's more"
+  },
+  {
+   "t": 1039.7,
+   "d": 2.4,
+   "text": "flexible than the old way of saying side"
+  },
+  {
+   "t": 1042.1,
+   "d": 1.8,
+   "text": "and main quests because you're able to"
+  },
+  {
+   "t": 1043.9,
+   "d": 2.6,
+   "text": "have as many kinds of silos or kinds of"
+  },
+  {
+   "t": 1046.5,
+   "d": 2.8,
+   "text": "content you have more explicitly"
+  },
+  {
+   "t": 1049.3,
+   "d": 2.4,
+   "text": "defined."
+  },
+  {
+   "t": 1051.7,
+   "d": 1.4,
+   "text": "Now I'd like to talk about a couple of"
+  },
+  {
+   "t": 1053.1,
+   "d": 2.0,
+   "text": "production benefits. The first is that"
+  },
+  {
+   "t": 1055.1,
+   "d": 1.7,
+   "text": "it clearly defines our types of content"
+  },
+  {
+   "t": 1056.8,
+   "d": 2.2,
+   "text": "like I just explained with the previous"
+  },
+  {
+   "t": 1059.0,
+   "d": 1.5,
+   "text": "example."
+  },
+  {
+   "t": 1060.5,
+   "d": 1.7,
+   "text": "The second that it allows us to evaluate"
+  },
+  {
+   "t": 1062.2,
+   "d": 1.2,
+   "text": "our content based on whether they're"
+  },
+  {
+   "t": 1063.4,
+   "d": 1.6,
+   "text": "fulfilling their purpose. And so this"
+  },
+  {
+   "t": 1065.0,
+   "d": 2.1,
+   "text": "comes back from the"
+  },
+  {
+   "t": 1067.1,
+   "d": 1.7,
+   "text": "third application that I gave you guys"
+  },
+  {
+   "t": 1068.8,
+   "d": 3.2,
+   "text": "which was actually to evaluate content"
+  },
+  {
+   "t": 1072.0,
+   "d": 2.1,
+   "text": "based on their design space. So the idea"
+  },
+  {
+   "t": 1074.1,
+   "d": 1.6,
+   "text": "here is that we can actually take a"
+  },
+  {
+   "t": 1075.7,
+   "d": 2.2,
+   "text": "piece of quest content and say is this"
+  },
+  {
+   "t": 1077.9,
+   "d": 1.9,
+   "text": "content actually fulfilling its purpose?"
+  },
+  {
+   "t": 1079.8,
+   "d": 2.3,
+   "text": "If it's not we either tweak it, get rid"
+  },
+  {
+   "t": 1082.1,
+   "d": 1.4,
+   "text": "of it, or move it to a different content"
+  },
+  {
+   "t": 1083.5,
+   "d": 3.1,
+   "text": "bucket because it's just not working."
+  },
+  {
+   "t": 1086.6,
+   "d": 2.3,
+   "text": "And then the last part is actually"
+  },
+  {
+   "t": 1088.9,
+   "d": 3.0,
+   "text": "to give design production constraints."
+  },
+  {
+   "t": 1091.9,
+   "d": 2.7,
+   "text": "So the context cannot only be used to"
+  },
+  {
+   "t": 1094.6,
+   "d": 1.6,
+   "text": "say things like oh well this kind of has"
+  },
+  {
+   "t": 1096.2,
+   "d": 2.3,
+   "text": "only has two quests, but it can also be"
+  },
+  {
+   "t": 1098.5,
+   "d": 1.6,
+   "text": "actual really practical design or"
+  },
+  {
+   "t": 1100.1,
+   "d": 1.9,
+   "text": "production things such as"
+  },
+  {
+   "t": 1102.0,
+   "d": 1.8,
+   "text": "don' make a cut scene. Um I know cut"
+  },
+  {
+   "t": 1103.8,
+   "d": 1.4,
+   "text": "scenes are really expensive, so you don'"
+  },
+  {
+   "t": 1105.2,
+   "d": 1.6,
+   "text": "want design to be getting too ahead of"
+  },
+  {
+   "t": 1106.8,
+   "d": 1.5,
+   "text": "themselves and designing a bunch of cut"
+  },
+  {
+   "t": 1108.3,
+   "d": 2.2,
+   "text": "scenes. So you can add those kinds of"
+  },
+  {
+   "t": 1110.5,
+   "d": 1.9,
+   "text": "things to your content uh to your"
+  },
+  {
+   "t": 1112.4,
+   "d": 2.2,
+   "text": "context so that design doesn't sometimes"
+  },
+  {
+   "t": 1114.6,
+   "d": 1.1,
+   "text": "get a little bit carried away when"
+  },
+  {
+   "t": 1115.7,
+   "d": 1.3,
+   "text": "they're creating content. I know"
+  },
+  {
+   "t": 1117.0,
+   "d": 1.9,
+   "text": "personally I appreciate these kinds of"
+  },
+  {
+   "t": 1118.9,
+   "d": 1.5,
+   "text": "constraints because constraints breed"
+  },
+  {
+   "t": 1120.4,
+   "d": 2.6,
+   "text": "creativity."
+  },
+  {
+   "t": 1123.0,
+   "d": 1.6,
+   "text": "I like to now tell you guys another"
+  },
+  {
+   "t": 1124.6,
+   "d": 2.5,
+   "text": "quick developer story. Um in our game we"
+  },
+  {
+   "t": 1127.1,
+   "d": 1.7,
+   "text": "have multiplayer quests and we also have"
+  },
+  {
+   "t": 1128.8,
+   "d": 1.7,
+   "text": "single player quests. And because of the"
+  },
+  {
+   "t": 1130.5,
+   "d": 1.8,
+   "text": "culture at our studio anybody can"
+  },
+  {
+   "t": 1132.3,
+   "d": 2.9,
+   "text": "actually come up and suggest ideas for"
+  },
+  {
+   "t": 1135.2,
+   "d": 1.8,
+   "text": "quests. So somebody came to our quest"
+  },
+  {
+   "t": 1137.0,
+   "d": 1.6,
+   "text": "team and said I have an idea for a"
+  },
+  {
+   "t": 1138.6,
+   "d": 1.5,
+   "text": "multiplayer quest and they told us it."
+  },
+  {
+   "t": 1140.1,
+   "d": 1.2,
+   "text": "And when we actually thought about it"
+  },
+  {
+   "t": 1141.3,
+   "d": 1.7,
+   "text": "it's actually a single player quest"
+  },
+  {
+   "t": 1143.0,
+   "d": 2.3,
+   "text": "idea. And we know this because we fully"
+  },
+  {
+   "t": 1145.3,
+   "d": 1.8,
+   "text": "defined the kinds of content we have in"
+  },
+  {
+   "t": 1147.1,
+   "d": 1.9,
+   "text": "our game with both the context and"
+  },
+  {
+   "t": 1149.0,
+   "d": 1.8,
+   "text": "purpose for the multiplayer quest as"
+  },
+  {
+   "t": 1150.8,
+   "d": 1.3,
+   "text": "well as the context and purpose for the"
+  },
+  {
+   "t": 1152.1,
+   "d": 1.7,
+   "text": "single player quest. So we can take this"
+  },
+  {
+   "t": 1153.8,
+   "d": 2.1,
+   "text": "new idea and say does this match the"
+  },
+  {
+   "t": 1155.9,
+   "d": 1.6,
+   "text": "purpose for multiplayer or does this"
+  },
+  {
+   "t": 1157.5,
+   "d": 2.3,
+   "text": "match the purpose for single player? And"
+  },
+  {
+   "t": 1159.8,
+   "d": 1.8,
+   "text": "it better match the purpose for single"
+  },
+  {
+   "t": 1161.6,
+   "d": 1.5,
+   "text": "player. So that's how we decided this"
+  },
+  {
+   "t": 1163.1,
+   "d": 1.4,
+   "text": "new piece of content would be part of"
+  },
+  {
+   "t": 1164.5,
+   "d": 2.8,
+   "text": "the single player quest."
+  },
+  {
+   "t": 1167.3,
+   "d": 2.2,
+   "text": "So in conclusion I wanted to talk to you"
+  },
+  {
+   "t": 1169.5,
+   "d": 2.0,
+   "text": "guys about this general quest definition"
+  },
+  {
+   "t": 1171.5,
+   "d": 1.6,
+   "text": "that I have been working on which is a"
+  },
+  {
+   "t": 1173.1,
+   "d": 2.1,
+   "text": "combination of academic work as well as"
+  },
+  {
+   "t": 1175.2,
+   "d": 2.2,
+   "text": "practical development experience."
+  },
+  {
+   "t": 1177.4,
+   "d": 1.7,
+   "text": "And then I also wanted to introduce to"
+  },
+  {
+   "t": 1179.1,
+   "d": 1.4,
+   "text": "you guys the definition context purpose"
+  },
+  {
+   "t": 1180.5,
+   "d": 1.7,
+   "text": "paradigm, which is something that I got"
+  },
+  {
+   "t": 1182.2,
+   "d": 2.5,
+   "text": "from other developers. I just organized"
+  },
+  {
+   "t": 1184.7,
+   "d": 2.0,
+   "text": "their thoughts and ideas into a way that"
+  },
+  {
+   "t": 1186.7,
+   "d": 1.9,
+   "text": "made sense. I did not necessarily come"
+  },
+  {
+   "t": 1188.6,
+   "d": 2.3,
+   "text": "up with these things myself. Um but I"
+  },
+  {
+   "t": 1190.9,
+   "d": 2.1,
+   "text": "look forward to your questions and if"
+  },
+  {
+   "t": 1193.0,
+   "d": 3.3,
+   "text": "you need something you can email me."
+  },
+  {
+   "t": 1200.3,
+   "d": 2.8,
+   "text": "All right."
+  },
+  {
+   "t": 1203.3,
+   "d": 3.2,
+   "text": "Uh thanks so much for that. That was um"
+  },
+  {
+   "t": 1206.5,
+   "d": 2.7,
+   "text": "you blew a lot of minds just now."
+  },
+  {
+   "t": 1209.2,
+   "d": 3.3,
+   "text": "Chat was super excited about"
+  },
+  {
+   "t": 1212.5,
+   "d": 1.2,
+   "text": "everything you had to say. Lots of"
+  },
+  {
+   "t": 1213.7,
+   "d": 3.7,
+   "text": "screenshotting every slide."
+  },
+  {
+   "t": 1217.8,
+   "d": 2.2,
+   "text": "Um we were we were collectively"
+  },
+  {
+   "t": 1220.0,
+   "d": 1.6,
+   "text": "surprised that the definition involved"
+  },
+  {
+   "t": 1221.6,
+   "d": 4.4,
+   "text": "so much math, but surprised and excited."
+  },
+  {
+   "t": 1226.01,
+   "d": 1.8,
+   "text": "I think that the math is not as scary as"
+  },
+  {
+   "t": 1227.81,
+   "d": 2.1,
+   "text": "it looks, but I know that it can take a"
+  },
+  {
+   "t": 1229.9,
+   "d": 2.3,
+   "text": "little bit to digest, so."
+  },
+  {
+   "t": 1232.2,
+   "d": 1.7,
+   "text": "Fact that there's math without numbers"
+  },
+  {
+   "t": 1233.9,
+   "d": 2.9,
+   "text": "always gives me hesitation."
+  },
+  {
+   "t": 1236.81,
+   "d": 1.3,
+   "text": "Wait."
+  },
+  {
+   "t": 1238.11,
+   "d": 3.6,
+   "text": "So we've got some time for questions."
+  },
+  {
+   "t": 1241.7,
+   "d": 1.9,
+   "text": "I'm going to start because I've got the"
+  },
+  {
+   "t": 1243.61,
+   "d": 2.2,
+   "text": "microphone."
+  },
+  {
+   "t": 1245.81,
+   "d": 2.3,
+   "text": "In doing your research,"
+  },
+  {
+   "t": 1248.11,
+   "d": 2.4,
+   "text": "was there anything in all of this, you"
+  },
+  {
+   "t": 1250.51,
+   "d": 2.8,
+   "text": "know, talking with developers"
+  },
+  {
+   "t": 1253.31,
+   "d": 3.1,
+   "text": "that surprised you?"
+  },
+  {
+   "t": 1257.2,
+   "d": 4.4,
+   "text": "So specifically with the"
+  },
+  {
+   "t": 1261.61,
+   "d": 3.1,
+   "text": "with the developer interviews, I was"
+  },
+  {
+   "t": 1264.7,
+   "d": 2.6,
+   "text": "honestly surprised at the amount of"
+  },
+  {
+   "t": 1267.31,
+   "d": 1.7,
+   "text": "variation of like the things that they"
+  },
+  {
+   "t": 1269.01,
+   "d": 2.2,
+   "text": "wanted to tell me about Quest. I know"
+  },
+  {
+   "t": 1271.2,
+   "d": 1.6,
+   "text": "not everyone I talked to was like"
+  },
+  {
+   "t": 1272.81,
+   "d": 1.4,
+   "text": "specifically a Quest or narrative"
+  },
+  {
+   "t": 1274.2,
+   "d": 2.4,
+   "text": "designer, but like even among like the"
+  },
+  {
+   "t": 1276.61,
+   "d": 1.4,
+   "text": "designers, it wasn't really like a"
+  },
+  {
+   "t": 1278.01,
+   "d": 1.5,
+   "text": "consensus of like"
+  },
+  {
+   "t": 1279.51,
+   "d": 1.7,
+   "text": "yeah, this is a Quest. It's kind of like"
+  },
+  {
+   "t": 1281.2,
+   "d": 1.6,
+   "text": "you have"
+  },
+  {
+   "t": 1282.81,
+   "d": 1.3,
+   "text": "like there's an elephant in the room and"
+  },
+  {
+   "t": 1284.11,
+   "d": 1.0,
+   "text": "then everyone's staring at like a"
+  },
+  {
+   "t": 1285.11,
+   "d": 1.4,
+   "text": "different part of the elephant. So like"
+  },
+  {
+   "t": 1286.51,
+   "d": 1.6,
+   "text": "all these developers are talking about"
+  },
+  {
+   "t": 1288.11,
+   "d": 1.1,
+   "text": "the same thing, but they're telling me"
+  },
+  {
+   "t": 1289.2,
+   "d": 1.5,
+   "text": "different parts of it. So that's kind of"
+  },
+  {
+   "t": 1290.7,
+   "d": 1.8,
+   "text": "how I was able to like cobble together"
+  },
+  {
+   "t": 1292.51,
+   "d": 1.6,
+   "text": "this paradigm of like oh, this person"
+  },
+  {
+   "t": 1294.11,
+   "d": 1.3,
+   "text": "was talking about this part and this"
+  },
+  {
+   "t": 1295.4,
+   "d": 3.9,
+   "text": "person's this part. So yeah."
+  },
+  {
+   "t": 1300.11,
+   "d": 1.8,
+   "text": "Right on."
+  },
+  {
+   "t": 1301.9,
+   "d": 3.6,
+   "text": "So looking at our note wall,"
+  },
+  {
+   "t": 1305.51,
+   "d": 2.1,
+   "text": "can people find the paper with more"
+  },
+  {
+   "t": 1307.61,
+   "d": 2.2,
+   "text": "details somewhere yet?"
+  },
+  {
+   "t": 1309.81,
+   "d": 1.7,
+   "text": "Yes, there are"
+  },
+  {
+   "t": 1311.51,
+   "d": 1.9,
+   "text": "there are free copies of all the papers"
+  },
+  {
+   "t": 1313.4,
+   "d": 2.2,
+   "text": "that this is. I will post the link in"
+  },
+  {
+   "t": 1315.61,
+   "d": 3.2,
+   "text": "the social space after I'm done here."
+  },
+  {
+   "t": 1318.81,
+   "d": 2.6,
+   "text": "Fabulous."
+  },
+  {
+   "t": 1322.31,
+   "d": 3.5,
+   "text": "It's some some clarification on"
+  },
+  {
+   "t": 1325.81,
+   "d": 1.6,
+   "text": "what is the difference between a"
+  },
+  {
+   "t": 1327.4,
+   "d": 4.3,
+   "text": "quest-like object and a quest proper?"
+  },
+  {
+   "t": 1331.7,
+   "d": 2.7,
+   "text": "So I kind of just did that to be"
+  },
+  {
+   "t": 1334.4,
+   "d": 1.9,
+   "text": "pedantic. It kind of like ruins the"
+  },
+  {
+   "t": 1336.31,
+   "d": 1.8,
+   "text": "story if you know it's a quest"
+  },
+  {
+   "t": 1338.11,
+   "d": 2.6,
+   "text": "beforehand, right?"
+  },
+  {
+   "t": 1340.7,
+   "d": 2.3,
+   "text": "Essentially the difference within like"
+  },
+  {
+   "t": 1343.01,
+   "d": 2.1,
+   "text": "the actual company was like these things"
+  },
+  {
+   "t": 1345.11,
+   "d": 2.3,
+   "text": "were called quests and were like"
+  },
+  {
+   "t": 1347.41,
+   "d": 2.6,
+   "text": "development quests, but like these other"
+  },
+  {
+   "t": 1350.01,
+   "d": 2.3,
+   "text": "things were um"
+  },
+  {
+   "t": 1352.31,
+   "d": 2.6,
+   "text": "not called quests basically. And I think"
+  },
+  {
+   "t": 1354.91,
+   "d": 1.5,
+   "text": "one of the things that is a little bit"
+  },
+  {
+   "t": 1356.41,
+   "d": 2.1,
+   "text": "surprising about my definition and I"
+  },
+  {
+   "t": 1358.51,
+   "d": 1.4,
+   "text": "think might be a little bit radical to"
+  },
+  {
+   "t": 1359.91,
+   "d": 2.3,
+   "text": "some people is like I actually would"
+  },
+  {
+   "t": 1362.21,
+   "d": 3.7,
+   "text": "consider like a level to be a quest. So"
+  },
+  {
+   "t": 1365.91,
+   "d": 3.0,
+   "text": "like Mario 1-1 is a quest, which is kind"
+  },
+  {
+   "t": 1368.91,
+   "d": 1.4,
+   "text": "of weird to think about, but if you"
+  },
+  {
+   "t": 1370.31,
+   "d": 1.7,
+   "text": "apply the definition it like it works"
+  },
+  {
+   "t": 1372.01,
+   "d": 1.6,
+   "text": "out. Like it it has everything you need"
+  },
+  {
+   "t": 1373.61,
+   "d": 3.1,
+   "text": "in it. So um I think that it's just the"
+  },
+  {
+   "t": 1376.71,
+   "d": 2.2,
+   "text": "matter of like saying it's not"
+  },
+  {
+   "t": 1378.91,
+   "d": 3.2,
+   "text": "necessarily useful to call levels quests"
+  },
+  {
+   "t": 1382.11,
+   "d": 2.0,
+   "text": "in a game. It's more useful for like"
+  },
+  {
+   "t": 1384.11,
+   "d": 1.7,
+   "text": "practical development purposes to call"
+  },
+  {
+   "t": 1385.81,
+   "d": 1.7,
+   "text": "it a level. And so for us it was more"
+  },
+  {
+   "t": 1387.51,
+   "d": 2.6,
+   "text": "useful to call it something else, but it"
+  },
+  {
+   "t": 1390.11,
+   "d": 1.4,
+   "text": "happened to be advantageous for us to"
+  },
+  {
+   "t": 1391.51,
+   "d": 1.9,
+   "text": "actually just use the quest system we"
+  },
+  {
+   "t": 1393.41,
+   "d": 1.9,
+   "text": "already had."
+  },
+  {
+   "t": 1395.31,
+   "d": 3.5,
+   "text": "Yeah, that makes a lot of sense."
+  },
+  {
+   "t": 1398.91,
+   "d": 4.6,
+   "text": "Cool. Let's see what else we got. Um"
+  },
+  {
+   "t": 1403.61,
+   "d": 2.1,
+   "text": "how have you found that differences"
+  },
+  {
+   "t": 1405.71,
+   "d": 3.3,
+   "text": "among games and monitoring systems"
+  },
+  {
+   "t": 1409.01,
+   "d": 1.5,
+   "text": "affect either the theorist or the"
+  },
+  {
+   "t": 1410.51,
+   "d": 2.2,
+   "text": "practitioner? Why not leave it out of"
+  },
+  {
+   "t": 1412.71,
+   "d": 3.4,
+   "text": "the framework for simplicity?"
+  },
+  {
+   "t": 1416.51,
+   "d": 4.1,
+   "text": "I think that honestly being able to"
+  },
+  {
+   "t": 1420.61,
+   "d": 2.5,
+   "text": "evaluate"
+  },
+  {
+   "t": 1423.11,
+   "d": 1.8,
+   "text": "evaluate quests independent of games is"
+  },
+  {
+   "t": 1424.91,
+   "d": 1.8,
+   "text": "really important because quests are not"
+  },
+  {
+   "t": 1426.71,
+   "d": 2.2,
+   "text": "just like relegated to RPGs anymore,"
+  },
+  {
+   "t": 1428.91,
+   "d": 1.4,
+   "text": "right? You know, quests are showing up"
+  },
+  {
+   "t": 1430.31,
+   "d": 2.0,
+   "text": "in all sorts of places, especially with"
+  },
+  {
+   "t": 1432.31,
+   "d": 1.6,
+   "text": "season passes being really popular."
+  },
+  {
+   "t": 1433.91,
+   "d": 1.7,
+   "text": "Every single season pass is a quest,"
+  },
+  {
+   "t": 1435.61,
+   "d": 1.2,
+   "text": "right? They have little quests in them,"
+  },
+  {
+   "t": 1436.81,
+   "d": 2.3,
+   "text": "right? So I think that like being able"
+  },
+  {
+   "t": 1439.11,
+   "d": 2.9,
+   "text": "to strip down like games and genres cuz"
+  },
+  {
+   "t": 1442.01,
+   "d": 2.8,
+   "text": "genre is fuzzy and you never know what"
+  },
+  {
+   "t": 1444.81,
+   "d": 2.6,
+   "text": "kind of what genres games really are."
+  },
+  {
+   "t": 1447.41,
+   "d": 2.0,
+   "text": "They're kind of like loosely labeled"
+  },
+  {
+   "t": 1449.41,
+   "d": 2.9,
+   "text": "things. Um I guess with regards to the"
+  },
+  {
+   "t": 1452.31,
+   "d": 1.8,
+   "text": "monitoring system, I wanted to include"
+  },
+  {
+   "t": 1454.11,
+   "d": 1.7,
+   "text": "it because there's a really"
+  },
+  {
+   "t": 1455.81,
+   "d": 3.0,
+   "text": "practical uh technical"
+  },
+  {
+   "t": 1458.81,
+   "d": 2.0,
+   "text": "implementation details of quests. Like"
+  },
+  {
+   "t": 1460.81,
+   "d": 2.5,
+   "text": "they need code to run it and monitor it"
+  },
+  {
+   "t": 1463.31,
+   "d": 1.9,
+   "text": "and do all these other things. And it's"
+  },
+  {
+   "t": 1465.21,
+   "d": 1.8,
+   "text": "one of those things where from an"
+  },
+  {
+   "t": 1467.01,
+   "d": 2.7,
+   "text": "academic perspective um it could be"
+  },
+  {
+   "t": 1469.71,
+   "d": 3.0,
+   "text": "useful to know whether a quest is"
+  },
+  {
+   "t": 1472.71,
+   "d": 1.2,
+   "text": "finished or not, so that you could"
+  },
+  {
+   "t": 1473.91,
+   "d": 1.8,
+   "text": "generate the next step or something like"
+  },
+  {
+   "t": 1475.71,
+   "d": 1.8,
+   "text": "that. Or you want to know like which"
+  },
+  {
+   "t": 1477.51,
+   "d": 1.4,
+   "text": "path they took down your branching"
+  },
+  {
+   "t": 1478.91,
+   "d": 3.6,
+   "text": "narrative. So having the ability to"
+  },
+  {
+   "t": 1482.51,
+   "d": 2.2,
+   "text": "technically include that and to have it"
+  },
+  {
+   "t": 1484.71,
+   "d": 1.9,
+   "text": "be there for the technical application"
+  },
+  {
+   "t": 1486.61,
+   "d": 1.8,
+   "text": "where it's useful, whereas you know, if"
+  },
+  {
+   "t": 1488.41,
+   "d": 1.9,
+   "text": "it's not useful for you, if you're"
+  },
+  {
+   "t": 1490.31,
+   "d": 1.9,
+   "text": "designing a quest, like"
+  },
+  {
+   "t": 1492.21,
+   "d": 1.9,
+   "text": "drop it, ignore it. That's fine. Like"
+  },
+  {
+   "t": 1494.11,
+   "d": 1.2,
+   "text": "I'm I'm not going to be offended if you"
+  },
+  {
+   "t": 1495.31,
+   "d": 1.8,
+   "text": "don't use every single little part of"
+  },
+  {
+   "t": 1497.11,
+   "d": 3.0,
+   "text": "the quest definition."
+  },
+  {
+   "t": 1501.21,
+   "d": 2.7,
+   "text": "Excellent."
+  },
+  {
+   "t": 1504.01,
+   "d": 5.8,
+   "text": "Uh, okay. That covers the note wall. Um,"
+  },
+  {
+   "t": 1509.81,
+   "d": 2.2,
+   "text": "uh, someone wants to know uh, if you're"
+  },
+  {
+   "t": 1512.01,
+   "d": 2.1,
+   "text": "going to put your slides up."
+  },
+  {
+   "t": 1514.11,
+   "d": 1.8,
+   "text": "I can put my slides up if that would be"
+  },
+  {
+   "t": 1515.91,
+   "d": 1.2,
+   "text": "useful to everybody."
+  },
+  {
+   "t": 1517.11,
+   "d": 2.4,
+   "text": "We would love that. Yeah."
+  },
+  {
+   "t": 1519.51,
+   "d": 3.0,
+   "text": "Um, drop a link in the space hanger."
+  },
+  {
+   "t": 1522.51,
+   "d": 0.7,
+   "text": "Yeah, I can do that."
+  },
+  {
+   "t": 1523.21,
+   "d": 1.1,
+   "text": "and if you"
+  },
+  {
+   "t": 1524.31,
+   "d": 1.2,
+   "text": "if you tweet it, we'll retweet it. I"
+  },
+  {
+   "t": 1525.51,
+   "d": 1.6,
+   "text": "don't remember if you have a Twitter."
+  },
+  {
+   "t": 1527.11,
+   "d": 1.7,
+   "text": "Um, I don't have a Twitter."
+  },
+  {
+   "t": 1528.81,
+   "d": 1.3,
+   "text": "But if you"
+  },
+  {
+   "t": 1530.11,
+   "d": 2.6,
+   "text": "send us the link, I can retweet it."
+  },
+  {
+   "t": 1532.71,
+   "d": 2.5,
+   "text": "Okay, that would be great."
+  },
+  {
+   "t": 1535.21,
+   "d": 1.5,
+   "text": "Somebody gave me the keys to the Twitter"
+  },
+  {
+   "t": 1536.71,
+   "d": 2.9,
+   "text": "account this year."
+  },
+  {
+   "t": 1540.51,
+   "d": 2.6,
+   "text": "All right. Um,"
+  },
+  {
+   "t": 1543.11,
+   "d": 1.4,
+   "text": "cool."
+  },
+  {
+   "t": 1544.51,
+   "d": 3.1,
+   "text": "Any uh, any parting thoughts?"
+  },
+  {
+   "t": 1547.61,
+   "d": 2.7,
+   "text": "Um, I I don't know. Honestly, I'm really"
+  },
+  {
+   "t": 1550.31,
+   "d": 1.9,
+   "text": "excited to hear from you guys any"
+  },
+  {
+   "t": 1552.21,
+   "d": 2.4,
+   "text": "feedback that you have for me. The"
+  },
+  {
+   "t": 1554.61,
+   "d": 2.1,
+   "text": "definition context purpose paradigm was"
+  },
+  {
+   "t": 1556.71,
+   "d": 2.5,
+   "text": "not run past any developers until now."
+  },
+  {
+   "t": 1559.21,
+   "d": 1.7,
+   "text": "So like this is literally like the Well,"
+  },
+  {
+   "t": 1560.91,
+   "d": 1.0,
+   "text": "I mean,"
+  },
+  {
+   "t": 1561.91,
+   "d": 1.6,
+   "text": "my coworkers have the sneak peek, but"
+  },
+  {
+   "t": 1563.51,
+   "d": 2.8,
+   "text": "like this is the largest, you know, um,"
+  },
+  {
+   "t": 1566.31,
+   "d": 2.6,
+   "text": "I guess audience that is not academic."
+  },
+  {
+   "t": 1568.91,
+   "d": 2.5,
+   "text": "And I think like what the development"
+  },
+  {
+   "t": 1571.41,
+   "d": 2.0,
+   "text": "community thinks of it is really really"
+  },
+  {
+   "t": 1573.41,
+   "d": 2.5,
+   "text": "important. So if you have any thoughts"
+  },
+  {
+   "t": 1575.91,
+   "d": 1.5,
+   "text": "on like any kinds of applications, what"
+  },
+  {
+   "t": 1577.41,
+   "d": 1.7,
+   "text": "might be interesting to do with it, or"
+  },
+  {
+   "t": 1579.11,
+   "d": 2.2,
+   "text": "maybe if you find it doesn't quite make"
+  },
+  {
+   "t": 1581.31,
+   "d": 2.1,
+   "text": "sense in some ways, like I would love to"
+  },
+  {
+   "t": 1583.41,
+   "d": 2.1,
+   "text": "talk about it."
+  },
+  {
+   "t": 1585.51,
+   "d": 2.0,
+   "text": "Great. And if you're going to stick"
+  },
+  {
+   "t": 1587.51,
+   "d": 1.9,
+   "text": "around,"
+  },
+  {
+   "t": 1589.41,
+   "d": 2.5,
+   "text": "we will be having you in the breakout"
+  },
+  {
+   "t": 1591.91,
+   "d": 4.6,
+   "text": "room uh mage at 5:00 Pacific. So"
+  },
+  {
+   "t": 1596.51,
+   "d": 1.9,
+   "text": "if if y'all have thoughts that you want"
+  },
+  {
+   "t": 1598.41,
+   "d": 1.9,
+   "text": "to share or just more questions you want"
+  },
+  {
+   "t": 1600.31,
+   "d": 2.5,
+   "text": "to ask uh that is the time and place to"
+  },
+  {
+   "t": 1602.81,
+   "d": 1.5,
+   "text": "do it."
+  },
+  {
+   "t": 1604.31,
+   "d": 2.4,
+   "text": "Uh Kristen, thank you so much. This has"
+  },
+  {
+   "t": 1606.71,
+   "d": 1.7,
+   "text": "been like I said you you blew all our"
+  },
+  {
+   "t": 1608.41,
+   "d": 2.5,
+   "text": "minds."
+  }
+ ]
+}

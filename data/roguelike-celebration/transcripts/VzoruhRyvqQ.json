@@ -1,0 +1,1912 @@
+{
+ "id": "VzoruhRyvqQ",
+ "url": "https://www.youtube.com/watch?v=VzoruhRyvqQ",
+ "title": "Ada Null - Dyke sex and ennui: Generating unending narrative in 'Kiss Garden'",
+ "speaker": "Ada Null",
+ "talk_title": "Dyke sex and ennui: Generating unending narrative in 'Kiss Garden'",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-02-15",
+ "duration_s": 795,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "What if it just never damn ends? We typically design procedural generators with aspirations of unique, emergent outcomes, but perhaps there's a value to the sludge. I explore the development of my receipt printer artwork 'Kiss Garden', and how it generates an endless narrative of failing relationships while maintaining a forward momentum.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 105,
+   "title": "Concept of Kiss Garden"
+  },
+  {
+   "start": 143,
+   "title": "Procedural generation theory"
+  },
+  {
+   "start": 283,
+   "title": "Design philosophy"
+  },
+  {
+   "start": 353,
+   "title": "Narrative structure"
+  },
+  {
+   "start": 465,
+   "title": "Engagement techniques"
+  },
+  {
+   "start": 534,
+   "title": "Adding texture"
+  },
+  {
+   "start": 580,
+   "title": "Materiality and scale"
+  },
+  {
+   "start": 625,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2367,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.76,
+   "d": 2.08,
+   "text": "and getting settled because now we're"
+  },
+  {
+   "t": 9.84,
+   "d": 2.4,
+   "text": "going to be hearing from Ada Null about"
+  },
+  {
+   "t": 12.24,
+   "d": 2.32,
+   "text": "dyke sex and onwei generating unending"
+  },
+  {
+   "t": 14.56,
+   "d": 2.72,
+   "text": "narrative in Kiss Garden. Ada is an"
+  },
+  {
+   "t": 17.28,
+   "d": 2.08,
+   "text": "artist, writer, and maker working in"
+  },
+  {
+   "t": 19.36,
+   "d": 2.56,
+   "text": "London, UK. She tells stories of broken"
+  },
+  {
+   "t": 21.92,
+   "d": 2.08,
+   "text": "past and uncertain futures, fractured"
+  },
+  {
+   "t": 24.0,
+   "d": 2.0,
+   "text": "yet forever longing. Her work has been"
+  },
+  {
+   "t": 26.0,
+   "d": 1.36,
+   "text": "featured in publications such as The"
+  },
+  {
+   "t": 27.36,
+   "d": 2.0,
+   "text": "White Pew and Art Monthly. And Ada"
+  },
+  {
+   "t": 29.36,
+   "d": 1.76,
+   "text": "thinks Rogikkes are very cool, though"
+  },
+  {
+   "t": 31.12,
+   "d": 1.6,
+   "text": "she still can't make it past the bit in"
+  },
+  {
+   "t": 32.72,
+   "d": 2.08,
+   "text": "Caves of Cud where you get Iron Shank."
+  },
+  {
+   "t": 34.8,
+   "d": 2.56,
+   "text": "Uh, frankly, Ada, I also have not gotten"
+  },
+  {
+   "t": 37.36,
+   "d": 1.12,
+   "text": "past that. I don't even think I've"
+  },
+  {
+   "t": 38.48,
+   "d": 1.68,
+   "text": "gotten that far. So, you are in good"
+  },
+  {
+   "t": 40.16,
+   "d": 2.32,
+   "text": "company."
+  },
+  {
+   "t": 42.48,
+   "d": 2.16,
+   "text": ">> Awesome. Take it away,"
+  },
+  {
+   "t": 44.64,
+   "d": 2.88,
+   "text": ">> gorgeous. Hello, Rogike Celebration. I"
+  },
+  {
+   "t": 47.52,
+   "d": 2.72,
+   "text": "am Aiden Null. I'm an artist, a writer,"
+  },
+  {
+   "t": 50.24,
+   "d": 1.92,
+   "text": "and a game maker, and it's an absolute"
+  },
+  {
+   "t": 52.16,
+   "d": 2.24,
+   "text": "pleasure to be here today. Today I'll be"
+  },
+  {
+   "t": 54.4,
+   "d": 2.16,
+   "text": "discussing Kiss Garden, a work of mine"
+  },
+  {
+   "t": 56.56,
+   "d": 1.92,
+   "text": "that I think I have just enough distance"
+  },
+  {
+   "t": 58.48,
+   "d": 2.32,
+   "text": "from creating to meaningfully analyze."
+  },
+  {
+   "t": 60.8,
+   "d": 1.44,
+   "text": "I'll explore how the work uses"
+  },
+  {
+   "t": 62.24,
+   "d": 2.24,
+   "text": "procedural generation and materiality to"
+  },
+  {
+   "t": 64.48,
+   "d": 1.76,
+   "text": "express a feeling of discontent with the"
+  },
+  {
+   "t": 66.24,
+   "d": 2.4,
+   "text": "present and lost faith in meaningfully"
+  },
+  {
+   "t": 68.64,
+   "d": 3.76,
+   "text": "new futures. In a word, on"
+  },
+  {
+   "t": 72.4,
+   "d": 1.68,
+   "text": "Just a note, the work contains sexual"
+  },
+  {
+   "t": 74.08,
+   "d": 1.76,
+   "text": "themes, but the generated textual"
+  },
+  {
+   "t": 75.84,
+   "d": 2.24,
+   "text": "descriptions of sex will be censored."
+  },
+  {
+   "t": 78.08,
+   "d": 1.76,
+   "text": "You can scan this QR code for the"
+  },
+  {
+   "t": 79.84,
+   "d": 2.72,
+   "text": "uncensored samples."
+  },
+  {
+   "t": 82.56,
+   "d": 2.56,
+   "text": "A year ago, with art school finished and"
+  },
+  {
+   "t": 85.12,
+   "d": 2.32,
+   "text": "after a rough breakup, I was in what"
+  },
+  {
+   "t": 87.44,
+   "d": 3.04,
+   "text": "could only be described as my mess era."
+  },
+  {
+   "t": 90.48,
+   "d": 1.68,
+   "text": "This looked like a lot of ambiguous,"
+  },
+  {
+   "t": 92.16,
+   "d": 2.0,
+   "text": "half-hearted sexual entanglements with"
+  },
+  {
+   "t": 94.16,
+   "d": 2.16,
+   "text": "an absurdity only someone in her early"
+  },
+  {
+   "t": 96.32,
+   "d": 3.2,
+   "text": "20s could have. I felt wrongly that this"
+  },
+  {
+   "t": 99.52,
+   "d": 1.2,
+   "text": "was just what life was going to be"
+  },
+  {
+   "t": 100.72,
+   "d": 2.48,
+   "text": "forever now. And during this time, I"
+  },
+  {
+   "t": 103.2,
+   "d": 3.12,
+   "text": "made Kiss Garden. Kiss Garden is a"
+  },
+  {
+   "t": 106.32,
+   "d": 2.64,
+   "text": "generative installation artwork. So,"
+  },
+  {
+   "t": 108.96,
+   "d": 1.52,
+   "text": "this audience can picture it as like a"
+  },
+  {
+   "t": 110.48,
+   "d": 2.56,
+   "text": "rogike but with no controls. A receipt"
+  },
+  {
+   "t": 113.04,
+   "d": 1.84,
+   "text": "printer is hung up high, endlessly"
+  },
+  {
+   "t": 114.88,
+   "d": 2.32,
+   "text": "printing a single long receipt. The"
+  },
+  {
+   "t": 117.2,
+   "d": 1.84,
+   "text": "receipt alternates between two streams"
+  },
+  {
+   "t": 119.04,
+   "d": 2.72,
+   "text": "of procedurally generated text. In one,"
+  },
+  {
+   "t": 121.76,
+   "d": 1.92,
+   "text": "we hear the narrated beats of a dyke's"
+  },
+  {
+   "t": 123.68,
+   "d": 2.0,
+   "text": "overlapping short-lived relationships,"
+  },
+  {
+   "t": 125.68,
+   "d": 1.92,
+   "text": "her meetings, dates, breakups, and her"
+  },
+  {
+   "t": 127.6,
+   "d": 2.48,
+   "text": "many, many sexual encounters. In the"
+  },
+  {
+   "t": 130.08,
+   "d": 2.08,
+   "text": "other, an overgrown garden is described"
+  },
+  {
+   "t": 132.16,
+   "d": 1.84,
+   "text": "by a wandering narrator who obsesses"
+  },
+  {
+   "t": 134.0,
+   "d": 2.24,
+   "text": "over plants at random and lyricizes"
+  },
+  {
+   "t": 136.24,
+   "d": 2.4,
+   "text": "about the garden with an open contempt."
+  },
+  {
+   "t": 138.64,
+   "d": 1.36,
+   "text": "As the receipt gathers on the floor,"
+  },
+  {
+   "t": 140.0,
+   "d": 1.6,
+   "text": "viewers will often rip off sections to"
+  },
+  {
+   "t": 141.6,
+   "d": 2.56,
+   "text": "take away from the piece."
+  },
+  {
+   "t": 144.16,
+   "d": 1.52,
+   "text": "Before analyzing Kiss Garden's"
+  },
+  {
+   "t": 145.68,
+   "d": 2.24,
+   "text": "procedural text generation, I want us to"
+  },
+  {
+   "t": 147.92,
+   "d": 2.0,
+   "text": "look at Kate Compton's conception of"
+  },
+  {
+   "t": 149.92,
+   "d": 2.48,
+   "text": "perential perceptual differentiation"
+  },
+  {
+   "t": 152.4,
+   "d": 2.48,
+   "text": "versus perceptual uniqueness. But we'll"
+  },
+  {
+   "t": 154.88,
+   "d": 1.92,
+   "text": "start with a 10,000 bowls of oatmeal"
+  },
+  {
+   "t": 156.8,
+   "d": 1.52,
+   "text": "problem, which I'm sure many of you are"
+  },
+  {
+   "t": 158.32,
+   "d": 2.24,
+   "text": "already familiar with. Imagine a"
+  },
+  {
+   "t": 160.56,
+   "d": 1.52,
+   "text": "procedural generator that generates"
+  },
+  {
+   "t": 162.08,
+   "d": 2.08,
+   "text": "plain bowls of oatmeal. Maybe it uses a"
+  },
+  {
+   "t": 164.16,
+   "d": 1.84,
+   "text": "fancy physics simulation to place each"
+  },
+  {
+   "t": 166.0,
+   "d": 1.76,
+   "text": "oat with a chaotic, physically accurate"
+  },
+  {
+   "t": 167.76,
+   "d": 2.16,
+   "text": "position and rotation. Every one of"
+  },
+  {
+   "t": 169.92,
+   "d": 2.4,
+   "text": "these bowls is strictly speaking a"
+  },
+  {
+   "t": 172.32,
+   "d": 2.32,
+   "text": "completely unique permutation."
+  },
+  {
+   "t": 174.64,
+   "d": 2.32,
+   "text": "But to a glancing viewer, they just look"
+  },
+  {
+   "t": 176.96,
+   "d": 2.56,
+   "text": "like identical plain bowls of oatmeal."
+  },
+  {
+   "t": 179.52,
+   "d": 1.52,
+   "text": "If this were a garden, it would be a"
+  },
+  {
+   "t": 181.04,
+   "d": 1.6,
+   "text": "topiary garden with the trees all"
+  },
+  {
+   "t": 182.64,
+   "d": 2.08,
+   "text": "clipped to the exact same specification."
+  },
+  {
+   "t": 184.72,
+   "d": 1.44,
+   "text": "They may all have their own unique,"
+  },
+  {
+   "t": 186.16,
+   "d": 1.76,
+   "text": "wildly complex structure of branches and"
+  },
+  {
+   "t": 187.92,
+   "d": 2.48,
+   "text": "foliage, but perceived holistically,"
+  },
+  {
+   "t": 190.4,
+   "d": 2.8,
+   "text": "it's the same damn tree every time. I"
+  },
+  {
+   "t": 193.2,
+   "d": 1.92,
+   "text": "hope this doesn't too much offend the"
+  },
+  {
+   "t": 195.12,
+   "d": 1.84,
+   "text": "topiary garden enjoyers in the audience"
+  },
+  {
+   "t": 196.96,
+   "d": 2.4,
+   "text": "today. But I find these trees really"
+  },
+  {
+   "t": 199.36,
+   "d": 2.64,
+   "text": "boring, but it's a shallow kind of bored"
+  },
+  {
+   "t": 202.0,
+   "d": 1.76,
+   "text": "that I'm feeling. It's just one dull"
+  },
+  {
+   "t": 203.76,
+   "d": 1.76,
+   "text": "tree copied a bunch of times over."
+  },
+  {
+   "t": 205.52,
+   "d": 1.6,
+   "text": "Whatever."
+  },
+  {
+   "t": 207.12,
+   "d": 2.08,
+   "text": "Let's move on from our oatmeal garden."
+  },
+  {
+   "t": 209.2,
+   "d": 2.4,
+   "text": "In a hugely influential article, So you"
+  },
+  {
+   "t": 211.6,
+   "d": 2.0,
+   "text": "want to build a generator, Compton"
+  },
+  {
+   "t": 213.6,
+   "d": 1.92,
+   "text": "describes two classes of generated"
+  },
+  {
+   "t": 215.52,
+   "d": 1.6,
+   "text": "artifact distinction beyond just"
+  },
+  {
+   "t": 217.12,
+   "d": 2.4,
+   "text": "indistinguishable oatmeal. At the far"
+  },
+  {
+   "t": 219.52,
+   "d": 1.68,
+   "text": "end of the spectrum, we have what she"
+  },
+  {
+   "t": 221.2,
+   "d": 2.64,
+   "text": "calls perceptual uniqueness."
+  },
+  {
+   "t": 223.84,
+   "d": 1.84,
+   "text": "Now we're in a garden more akin to"
+  },
+  {
+   "t": 225.68,
+   "d": 1.76,
+   "text": "Herrenous Bosch's Garden of Earthly"
+  },
+  {
+   "t": 227.44,
+   "d": 2.32,
+   "text": "Delights. Look at this crazy garden."
+  },
+  {
+   "t": 229.76,
+   "d": 1.52,
+   "text": "Hanging out with any one of these weird"
+  },
+  {
+   "t": 231.28,
+   "d": 1.84,
+   "text": "animals must be like a completely unique"
+  },
+  {
+   "t": 233.12,
+   "d": 2.4,
+   "text": "experience from all the others. This is"
+  },
+  {
+   "t": 235.52,
+   "d": 1.52,
+   "text": "surely the target for nearly all"
+  },
+  {
+   "t": 237.04,
+   "d": 2.08,
+   "text": "procedural generators, right? I bet"
+  },
+  {
+   "t": 239.12,
+   "d": 1.52,
+   "text": "money these paintings were on a design"
+  },
+  {
+   "t": 240.64,
+   "d": 2.16,
+   "text": "dock for Spore somewhere. All these"
+  },
+  {
+   "t": 242.8,
+   "d": 1.52,
+   "text": "strange scenes are perceived as"
+  },
+  {
+   "t": 244.32,
+   "d": 1.92,
+   "text": "completely distinct from each other."
+  },
+  {
+   "t": 246.24,
+   "d": 1.6,
+   "text": "This is what Compton describes as"
+  },
+  {
+   "t": 247.84,
+   "d": 2.08,
+   "text": "characterful. It's hard to define"
+  },
+  {
+   "t": 249.92,
+   "d": 1.92,
+   "text": "exactly what creates this perception,"
+  },
+  {
+   "t": 251.84,
+   "d": 1.6,
+   "text": "but you just know all the people in"
+  },
+  {
+   "t": 253.44,
+   "d": 1.12,
+   "text": "these paintings are going to be on"
+  },
+  {
+   "t": 254.56,
+   "d": 2.0,
+   "text": "Reddit after this talking about that one"
+  },
+  {
+   "t": 256.56,
+   "d": 1.52,
+   "text": "in a million run they just had with like"
+  },
+  {
+   "t": 258.08,
+   "d": 3.2,
+   "text": "a bird in ice skates. So, we've seen the"
+  },
+  {
+   "t": 261.28,
+   "d": 2.0,
+   "text": "floor, which is oatmeal, where the"
+  },
+  {
+   "t": 263.28,
+   "d": 1.68,
+   "text": "artifacts produced by a procedural"
+  },
+  {
+   "t": 264.96,
+   "d": 2.08,
+   "text": "generator are perceived as essentially"
+  },
+  {
+   "t": 267.04,
+   "d": 1.76,
+   "text": "identical. And then we've seen the high"
+  },
+  {
+   "t": 268.8,
+   "d": 2.08,
+   "text": "bar of perceptual uniqueness, where the"
+  },
+  {
+   "t": 270.88,
+   "d": 1.76,
+   "text": "artifacts are perceived as charactfully"
+  },
+  {
+   "t": 272.64,
+   "d": 2.24,
+   "text": "distinct from each other. But there's a"
+  },
+  {
+   "t": 274.88,
+   "d": 1.84,
+   "text": "lower bar that a procedural generator"
+  },
+  {
+   "t": 276.72,
+   "d": 2.4,
+   "text": "can clip, which Compton calls perceptual"
+  },
+  {
+   "t": 279.12,
+   "d": 2.8,
+   "text": "differentiation. And this, I think, is"
+  },
+  {
+   "t": 281.92,
+   "d": 2.96,
+   "text": "where Kiss Garden lives."
+  },
+  {
+   "t": 284.88,
+   "d": 2.24,
+   "text": "Picture a garden full of wild trees of"
+  },
+  {
+   "t": 287.12,
+   "d": 2.56,
+   "text": "the same species. If you compare any two"
+  },
+  {
+   "t": 289.68,
+   "d": 1.44,
+   "text": "trees, you can clearly tell they're"
+  },
+  {
+   "t": 291.12,
+   "d": 1.36,
+   "text": "different trees that have grown in their"
+  },
+  {
+   "t": 292.48,
+   "d": 2.08,
+   "text": "own way. But you'd be hardressed if the"
+  },
+  {
+   "t": 294.56,
+   "d": 2.0,
+   "text": "next day I asked you to describe exactly"
+  },
+  {
+   "t": 296.56,
+   "d": 2.48,
+   "text": "how they were different. They're just,"
+  },
+  {
+   "t": 299.04,
+   "d": 1.6,
+   "text": "you know, they're different trees. They"
+  },
+  {
+   "t": 300.64,
+   "d": 1.28,
+   "text": "they branch differently. They're"
+  },
+  {
+   "t": 301.92,
+   "d": 2.08,
+   "text": "slightly different heights. These trees"
+  },
+  {
+   "t": 304.0,
+   "d": 1.6,
+   "text": "aren't characterful, at least not"
+  },
+  {
+   "t": 305.6,
+   "d": 1.44,
+   "text": "relative to each other. So, they aren't"
+  },
+  {
+   "t": 307.04,
+   "d": 2.24,
+   "text": "perceptually unique, but they are"
+  },
+  {
+   "t": 309.28,
+   "d": 2.32,
+   "text": "perceptually differentiated. Once more,"
+  },
+  {
+   "t": 311.6,
+   "d": 2.16,
+   "text": "this garden's kind of boring, but it's a"
+  },
+  {
+   "t": 313.76,
+   "d": 1.2,
+   "text": "different kind of boring from our"
+  },
+  {
+   "t": 314.96,
+   "d": 2.08,
+   "text": "topiary garden. I feel like we could"
+  },
+  {
+   "t": 317.04,
+   "d": 1.52,
+   "text": "walk through this garden forever and"
+  },
+  {
+   "t": 318.56,
+   "d": 1.76,
+   "text": "ever and we'd know we're making progress"
+  },
+  {
+   "t": 320.32,
+   "d": 1.36,
+   "text": "through it and not just walking in"
+  },
+  {
+   "t": 321.68,
+   "d": 2.16,
+   "text": "circles cuz these trees are actually"
+  },
+  {
+   "t": 323.84,
+   "d": 4.32,
+   "text": "different, but it's all just blah. It's"
+  },
+  {
+   "t": 328.16,
+   "d": 1.68,
+   "text": "not really a garden anymore, more an"
+  },
+  {
+   "t": 329.84,
+   "d": 2.24,
+   "text": "endless forest. And what we find here"
+  },
+  {
+   "t": 332.08,
+   "d": 1.68,
+   "text": "perhaps isn't just a shallow boredom,"
+  },
+  {
+   "t": 333.76,
+   "d": 2.8,
+   "text": "but a deep sense of onwe."
+  },
+  {
+   "t": 336.56,
+   "d": 1.6,
+   "text": "So the goal for Kiss Garden's approach"
+  },
+  {
+   "t": 338.16,
+   "d": 2.08,
+   "text": "to procedural generation is to achieve"
+  },
+  {
+   "t": 340.24,
+   "d": 2.16,
+   "text": "perceptual differentiation, but to"
+  },
+  {
+   "t": 342.4,
+   "d": 2.16,
+   "text": "intentionally fall short of perceptual"
+  },
+  {
+   "t": 344.56,
+   "d": 2.08,
+   "text": "uniqueness in order to capture the sense"
+  },
+  {
+   "t": 346.64,
+   "d": 2.8,
+   "text": "of endlessly more of the same. I wasn't"
+  },
+  {
+   "t": 349.44,
+   "d": 1.68,
+   "text": "aware of these terms at the time, but"
+  },
+  {
+   "t": 351.12,
+   "d": 1.52,
+   "text": "looking back, I do think this was a"
+  },
+  {
+   "t": 352.64,
+   "d": 2.08,
+   "text": "clear design intention."
+  },
+  {
+   "t": 354.72,
+   "d": 1.6,
+   "text": "As already described, Kiss Garden"
+  },
+  {
+   "t": 356.32,
+   "d": 1.44,
+   "text": "interlaces these two separate"
+  },
+  {
+   "t": 357.76,
+   "d": 2.16,
+   "text": "narratives, the dyke dating story and"
+  },
+  {
+   "t": 359.92,
+   "d": 1.92,
+   "text": "the person walking through the garden."
+  },
+  {
+   "t": 361.84,
+   "d": 1.92,
+   "text": "Goes back and forth generating a stanza"
+  },
+  {
+   "t": 363.76,
+   "d": 2.4,
+   "text": "for a single narrative event each time."
+  },
+  {
+   "t": 366.16,
+   "d": 1.36,
+   "text": "We'll start by analyzing these"
+  },
+  {
+   "t": 367.52,
+   "d": 1.68,
+   "text": "individual stanzas and then look at the"
+  },
+  {
+   "t": 369.2,
+   "d": 2.32,
+   "text": "broader event structure."
+  },
+  {
+   "t": 371.52,
+   "d": 2.48,
+   "text": "So, how do we make the stanzas distinct"
+  },
+  {
+   "t": 374.0,
+   "d": 2.8,
+   "text": "but blur together on mass? Well, to be"
+  },
+  {
+   "t": 376.8,
+   "d": 1.2,
+   "text": "honest, you've probably already figured"
+  },
+  {
+   "t": 378.0,
+   "d": 2.0,
+   "text": "it out. We just use a simple grammar."
+  },
+  {
+   "t": 380.0,
+   "d": 1.52,
+   "text": "Give it some variation, but not too"
+  },
+  {
+   "t": 381.52,
+   "d": 2.4,
+   "text": "much. No special rare paths, no content"
+  },
+  {
+   "t": 383.92,
+   "d": 1.84,
+   "text": "that diverges too much thematically or"
+  },
+  {
+   "t": 385.76,
+   "d": 2.16,
+   "text": "tonally. Take a look at these breakup"
+  },
+  {
+   "t": 387.92,
+   "d": 2.32,
+   "text": "events from the dating narrative."
+  },
+  {
+   "t": 390.24,
+   "d": 2.32,
+   "text": "There's really no magic here at the"
+  },
+  {
+   "t": 392.56,
+   "d": 1.6,
+   "text": "standard level. A perceptual"
+  },
+  {
+   "t": 394.16,
+   "d": 2.48,
+   "text": "differentiation without uniqueness is"
+  },
+  {
+   "t": 396.64,
+   "d": 2.32,
+   "text": "kind of just the default. It's the B"
+  },
+  {
+   "t": 398.96,
+   "d": 2.8,
+   "text": "minus students procedural generator."
+  },
+  {
+   "t": 401.76,
+   "d": 2.8,
+   "text": "See these generated sexual encounters."
+  },
+  {
+   "t": 404.56,
+   "d": 1.6,
+   "text": "There's some more semantic variation"
+  },
+  {
+   "t": 406.16,
+   "d": 2.48,
+   "text": "here, but not much. Whose place they go"
+  },
+  {
+   "t": 408.64,
+   "d": 1.68,
+   "text": "to and who tops are randomly selected"
+  },
+  {
+   "t": 410.32,
+   "d": 1.84,
+   "text": "each time. I suppose there's something"
+  },
+  {
+   "t": 412.16,
+   "d": 2.0,
+   "text": "to be said for the word choice. The kind"
+  },
+  {
+   "t": 414.16,
+   "d": 1.92,
+   "text": "of disaffected energy given by the"
+  },
+  {
+   "t": 416.08,
+   "d": 2.08,
+   "text": "protagonist perhaps helps the text blur"
+  },
+  {
+   "t": 418.16,
+   "d": 2.64,
+   "text": "together somewhat. Um, these stanzas"
+  },
+  {
+   "t": 420.8,
+   "d": 1.44,
+   "text": "from the garden narrative are the same"
+  },
+  {
+   "t": 422.24,
+   "d": 1.76,
+   "text": "kind of deal. They're these repetitive"
+  },
+  {
+   "t": 424.0,
+   "d": 1.36,
+   "text": "fill-in-the-blank grammarss. The"
+  },
+  {
+   "t": 425.36,
+   "d": 1.44,
+   "text": "narrator is not really doing much to"
+  },
+  {
+   "t": 426.8,
+   "d": 2.88,
+   "text": "inject life in them either. So, I think"
+  },
+  {
+   "t": 429.68,
+   "d": 2.0,
+   "text": "these stanzas are doing pretty well for"
+  },
+  {
+   "t": 431.68,
+   "d": 1.92,
+   "text": "perceptual differentiation sands"
+  },
+  {
+   "t": 433.6,
+   "d": 2.08,
+   "text": "perceptual uniqueness. It turns out"
+  },
+  {
+   "t": 435.68,
+   "d": 2.32,
+   "text": "that's not the hard part. Here's a more"
+  },
+  {
+   "t": 438.0,
+   "d": 3.2,
+   "text": "pressing question. How do we fall flat"
+  },
+  {
+   "t": 441.2,
+   "d": 2.48,
+   "text": "before perceptual uniqueness while still"
+  },
+  {
+   "t": 443.68,
+   "d": 2.4,
+   "text": "keeping the output engaging? Well, I"
+  },
+  {
+   "t": 446.08,
+   "d": 1.84,
+   "text": "think I found two clear techniques for"
+  },
+  {
+   "t": 447.92,
+   "d": 1.36,
+   "text": "maintaining a sense of narrative"
+  },
+  {
+   "t": 449.28,
+   "d": 2.24,
+   "text": "momentum which are both implemented at"
+  },
+  {
+   "t": 451.52,
+   "d": 2.4,
+   "text": "the wider level of event generation."
+  },
+  {
+   "t": 453.92,
+   "d": 2.88,
+   "text": "Layering and rapid change. There's never"
+  },
+  {
+   "t": 456.8,
+   "d": 2.08,
+   "text": "just one thing going on in Kiss Garden"
+  },
+  {
+   "t": 458.88,
+   "d": 1.52,
+   "text": "and what's happening is constantly"
+  },
+  {
+   "t": 460.4,
+   "d": 2.88,
+   "text": "shifting. Uh the event generation uses"
+  },
+  {
+   "t": 463.28,
+   "d": 3.04,
+   "text": "layering in two places. So firstly, both"
+  },
+  {
+   "t": 466.32,
+   "d": 1.44,
+   "text": "narratives are playing out at the same"
+  },
+  {
+   "t": 467.76,
+   "d": 1.84,
+   "text": "time. And secondly, in the dating"
+  },
+  {
+   "t": 469.6,
+   "d": 1.76,
+   "text": "narrative, the narrators are usually"
+  },
+  {
+   "t": 471.36,
+   "d": 2.8,
+   "text": "dating two or three people at once. Then"
+  },
+  {
+   "t": 474.16,
+   "d": 1.76,
+   "text": "we bring in rapid change. We keep"
+  },
+  {
+   "t": 475.92,
+   "d": 1.68,
+   "text": "switching between the two narratives"
+  },
+  {
+   "t": 477.6,
+   "d": 1.84,
+   "text": "every stanza. And the narratives use"
+  },
+  {
+   "t": 479.44,
+   "d": 3.04,
+   "text": "these fastmoving event loops. Uh the"
+  },
+  {
+   "t": 482.48,
+   "d": 1.52,
+   "text": "relationships in the dating narrative"
+  },
+  {
+   "t": 484.0,
+   "d": 2.24,
+   "text": "really don't last very long. Maybe a few"
+  },
+  {
+   "t": 486.24,
+   "d": 1.6,
+   "text": "stanzas of dates in between the meeting"
+  },
+  {
+   "t": 487.84,
+   "d": 2.08,
+   "text": "and the breakup events at most."
+  },
+  {
+   "t": 489.92,
+   "d": 2.88,
+   "text": "Meanwhile, the garden narrative um"
+  },
+  {
+   "t": 492.8,
+   "d": 1.44,
+   "text": "shifts between the protagonist"
+  },
+  {
+   "t": 494.24,
+   "d": 1.92,
+   "text": "wandering, pondering a particular plant,"
+  },
+  {
+   "t": 496.16,
+   "d": 1.76,
+   "text": "and sometimes full on obsessing over"
+  },
+  {
+   "t": 497.92,
+   "d": 1.84,
+   "text": "said plant."
+  },
+  {
+   "t": 499.76,
+   "d": 2.0,
+   "text": "Now, I'm aware I'm describing these"
+  },
+  {
+   "t": 501.76,
+   "d": 2.16,
+   "text": "techniques as if they're for like an"
+  },
+  {
+   "t": 503.92,
+   "d": 2.72,
+   "text": "audience of iPad babies, but remember,"
+  },
+  {
+   "t": 506.64,
+   "d": 2.16,
+   "text": "we're fighting an uphill battle here."
+  },
+  {
+   "t": 508.8,
+   "d": 2.4,
+   "text": "The text itself is intentionally kind of"
+  },
+  {
+   "t": 511.2,
+   "d": 2.4,
+   "text": "bland. So, the sort of social media feed"
+  },
+  {
+   "t": 513.6,
+   "d": 1.6,
+   "text": "techniques being used here keep the work"
+  },
+  {
+   "t": 515.2,
+   "d": 2.0,
+   "text": "engaging without weakening the thematic"
+  },
+  {
+   "t": 517.2,
+   "d": 2.56,
+   "text": "intentions. In fact, I'd argue they work"
+  },
+  {
+   "t": 519.76,
+   "d": 1.92,
+   "text": "in favor of those intentions. They"
+  },
+  {
+   "t": 521.68,
+   "d": 1.84,
+   "text": "create this sense of of chaos and being"
+  },
+  {
+   "t": 523.52,
+   "d": 2.16,
+   "text": "overwhelmed while still going nowhere at"
+  },
+  {
+   "t": 525.68,
+   "d": 3.52,
+   "text": "all. And these feelings I remember well."
+  },
+  {
+   "t": 529.2,
+   "d": 1.76,
+   "text": "And it's worth mentioning that both"
+  },
+  {
+   "t": 530.96,
+   "d": 1.6,
+   "text": "narrative streams are given a little bit"
+  },
+  {
+   "t": 532.56,
+   "d": 2.48,
+   "text": "of texture as a treat. In the dating"
+  },
+  {
+   "t": 535.04,
+   "d": 1.6,
+   "text": "narrative, every relationship is"
+  },
+  {
+   "t": 536.64,
+   "d": 2.0,
+   "text": "generated as either a hookup, a friends"
+  },
+  {
+   "t": 538.64,
+   "d": 2.24,
+   "text": "with benefit situation, or a romantic"
+  },
+  {
+   "t": 540.88,
+   "d": 1.92,
+   "text": "entanglement, and the pros takes on"
+  },
+  {
+   "t": 542.8,
+   "d": 1.6,
+   "text": "subtly different tones depending on"
+  },
+  {
+   "t": 544.4,
+   "d": 2.0,
+   "text": "which. Meanwhile, in the garden"
+  },
+  {
+   "t": 546.4,
+   "d": 1.84,
+   "text": "narrative, whenever the protagonist gets"
+  },
+  {
+   "t": 548.24,
+   "d": 1.84,
+   "text": "occasionally obsessed with a particular"
+  },
+  {
+   "t": 550.08,
+   "d": 2.08,
+   "text": "plant, the pros is allowed to go off the"
+  },
+  {
+   "t": 552.16,
+   "d": 1.92,
+   "text": "rails a bit, stringing together more"
+  },
+  {
+   "t": 554.08,
+   "d": 1.44,
+   "text": "active phrases with these random"
+  },
+  {
+   "t": 555.52,
+   "d": 2.16,
+   "text": "conjunctions to produce kind of surreal"
+  },
+  {
+   "t": 557.68,
+   "d": 2.56,
+   "text": "logics. In our forest metaphor, we could"
+  },
+  {
+   "t": 560.24,
+   "d": 1.28,
+   "text": "think of the different relationship"
+  },
+  {
+   "t": 561.52,
+   "d": 2.48,
+   "text": "types as subtly different tree variants"
+  },
+  {
+   "t": 564.0,
+   "d": 1.92,
+   "text": "and the moments of garden lyricism as"
+  },
+  {
+   "t": 565.92,
+   "d": 2.32,
+   "text": "like a rare special tree, a pointed"
+  },
+  {
+   "t": 568.24,
+   "d": 2.4,
+   "text": "moment of perceptual uniqueness. I'd"
+  },
+  {
+   "t": 570.64,
+   "d": 1.68,
+   "text": "consider these textural elements to"
+  },
+  {
+   "t": 572.32,
+   "d": 2.08,
+   "text": "reinforce the overwhelming failure of"
+  },
+  {
+   "t": 574.4,
+   "d": 2.16,
+   "text": "perceptual uniqueness uh by being these"
+  },
+  {
+   "t": 576.56,
+   "d": 2.16,
+   "text": "exceptions to the rule. And again, it's"
+  },
+  {
+   "t": 578.72,
+   "d": 2.72,
+   "text": "something compelling in a sea of blah."
+  },
+  {
+   "t": 581.44,
+   "d": 1.84,
+   "text": "We need to talk a bit about materiality"
+  },
+  {
+   "t": 583.28,
+   "d": 1.52,
+   "text": "as well. I think this is one of those"
+  },
+  {
+   "t": 584.8,
+   "d": 1.76,
+   "text": "really easily underconsidered elements"
+  },
+  {
+   "t": 586.56,
+   "d": 2.16,
+   "text": "of procedural generation. How does the"
+  },
+  {
+   "t": 588.72,
+   "d": 1.44,
+   "text": "viewer encounter your generated"
+  },
+  {
+   "t": 590.16,
+   "d": 2.48,
+   "text": "artifacts? Because while all this"
+  },
+  {
+   "t": 592.64,
+   "d": 2.0,
+   "text": "minutiae of text generation is really"
+  },
+  {
+   "t": 594.64,
+   "d": 2.24,
+   "text": "sexy and academic, the first thing"
+  },
+  {
+   "t": 596.88,
+   "d": 2.08,
+   "text": "anyone sees in the work is just a very"
+  },
+  {
+   "t": 598.96,
+   "d": 2.08,
+   "text": "long receipt. And that carries huge"
+  },
+  {
+   "t": 601.04,
+   "d": 2.0,
+   "text": "aesthetic weight. The length of the"
+  },
+  {
+   "t": 603.04,
+   "d": 1.92,
+   "text": "receipt immediately communicates a sense"
+  },
+  {
+   "t": 604.96,
+   "d": 2.16,
+   "text": "of endlessness, as is the fact there's"
+  },
+  {
+   "t": 607.12,
+   "d": 1.6,
+   "text": "endlessly more of it getting printed"
+  },
+  {
+   "t": 608.72,
+   "d": 2.24,
+   "text": "out. The text is small, so it demands"
+  },
+  {
+   "t": 610.96,
+   "d": 1.76,
+   "text": "you to get up close, at which point the"
+  },
+  {
+   "t": 612.72,
+   "d": 2.48,
+   "text": "scale of the work is exaggerated."
+  },
+  {
+   "t": 615.2,
+   "d": 1.76,
+   "text": "What really does it for me is its"
+  },
+  {
+   "t": 616.96,
+   "d": 2.4,
+   "text": "disposable nature. You can rip it, tread"
+  },
+  {
+   "t": 619.36,
+   "d": 2.24,
+   "text": "on it. I don't care. There'll always be"
+  },
+  {
+   "t": 621.6,
+   "d": 3.04,
+   "text": "more of it. It screams, \"This is not"
+  },
+  {
+   "t": 624.64,
+   "d": 3.12,
+   "text": "important to me.\""
+  },
+  {
+   "t": 627.76,
+   "d": 3.12,
+   "text": "So, yeah, in summary, I got some sy but"
+  },
+  {
+   "t": 630.88,
+   "d": 2.96,
+   "text": "not too sy of text, mixed them all up"
+  },
+  {
+   "t": 633.84,
+   "d": 2.16,
+   "text": "into a busy and fastmoving narrative,"
+  },
+  {
+   "t": 636.0,
+   "d": 2.4,
+   "text": "and put them on a long bit of paper. And"
+  },
+  {
+   "t": 638.4,
+   "d": 1.12,
+   "text": "that's what it's like being a sad"
+  },
+  {
+   "t": 639.52,
+   "d": 2.56,
+   "text": "lesbian. I hope this allowed you to"
+  },
+  {
+   "t": 642.08,
+   "d": 2.24,
+   "text": "consider alternative aesthetic modes of"
+  },
+  {
+   "t": 644.32,
+   "d": 2.64,
+   "text": "procedural generation. And I suppose if"
+  },
+  {
+   "t": 646.96,
+   "d": 2.48,
+   "text": "you're not going for onwe, then much as"
+  },
+  {
+   "t": 649.44,
+   "d": 1.76,
+   "text": "Shawn Murray once did, you can take this"
+  },
+  {
+   "t": 651.2,
+   "d": 2.8,
+   "text": "all as a lesson in what not to do. Thank"
+  },
+  {
+   "t": 654.0,
+   "d": 1.68,
+   "text": "you again, Leo Fox, for the"
+  },
+  {
+   "t": 655.68,
+   "d": 1.6,
+   "text": "illustrations. And thank you again,"
+  },
+  {
+   "t": 657.28,
+   "d": 2.4,
+   "text": "Rogike Celebration. I hope you all have"
+  },
+  {
+   "t": 659.68,
+   "d": 2.96,
+   "text": "a wonderful Sunday."
+  },
+  {
+   "t": 662.64,
+   "d": 2.64,
+   "text": ">> Awesome. Thank you so much, Ada. Uh,"
+  },
+  {
+   "t": 665.28,
+   "d": 2.56,
+   "text": "that was fantastic. And I think everyone"
+  },
+  {
+   "t": 667.84,
+   "d": 2.24,
+   "text": "should give Being a Sad Lesbian a try,"
+  },
+  {
+   "t": 670.08,
+   "d": 1.2,
+   "text": "at least for a little bit of their"
+  },
+  {
+   "t": 671.28,
+   "d": 2.4,
+   "text": "lives. It's a it's an experience for"
+  },
+  {
+   "t": 673.68,
+   "d": 2.16,
+   "text": "sure. Um, some of that kind of reminded"
+  },
+  {
+   "t": 675.84,
+   "d": 3.12,
+   "text": "me of uh what the architect Christopher"
+  },
+  {
+   "t": 678.96,
+   "d": 1.44,
+   "text": "Alexander wrote about and like the"
+  },
+  {
+   "t": 680.4,
+   "d": 2.56,
+   "text": "physical embodiment of sadness in a"
+  },
+  {
+   "t": 682.96,
+   "d": 3.12,
+   "text": "space is like a trait of that space, not"
+  },
+  {
+   "t": 686.08,
+   "d": 3.44,
+   "text": "just a psychological reaction to it. Um,"
+  },
+  {
+   "t": 689.52,
+   "d": 1.6,
+   "text": ">> but something like inherent to that"
+  },
+  {
+   "t": 691.12,
+   "d": 1.84,
+   "text": "physical being. But I had a question"
+  },
+  {
+   "t": 692.96,
+   "d": 4.16,
+   "text": "about how did you transition between the"
+  },
+  {
+   "t": 697.12,
+   "d": 1.76,
+   "text": "garden narrative and the dating"
+  },
+  {
+   "t": 698.88,
+   "d": 2.8,
+   "text": "narrative and like what was the logic"
+  },
+  {
+   "t": 701.68,
+   "d": 4.64,
+   "text": "between like where and how often and um"
+  },
+  {
+   "t": 706.32,
+   "d": 1.92,
+   "text": "how you did those transitions."
+  },
+  {
+   "t": 708.24,
+   "d": 2.48,
+   "text": ">> It is really simple. It just gets an"
+  },
+  {
+   "t": 710.72,
+   "d": 1.44,
+   "text": "event from one then an event from the"
+  },
+  {
+   "t": 712.16,
+   "d": 1.92,
+   "text": "other. A lot of the piece is really"
+  },
+  {
+   "t": 714.08,
+   "d": 2.32,
+   "text": "quite simple. It just throws the events"
+  },
+  {
+   "t": 716.4,
+   "d": 2.0,
+   "text": "together. The events are really simple."
+  },
+  {
+   "t": 718.4,
+   "d": 3.12,
+   "text": "it I I started making the piece by just"
+  },
+  {
+   "t": 721.52,
+   "d": 2.48,
+   "text": "writing out what I wanted an output to"
+  },
+  {
+   "t": 724.0,
+   "d": 1.04,
+   "text": "look like and then it turns out it"
+  },
+  {
+   "t": 725.04,
+   "d": 2.48,
+   "text": "wasn't that hard to get there."
+  },
+  {
+   "t": 727.52,
+   "d": 2.08,
+   "text": ">> Yeah, I think that's a uh a technique"
+  },
+  {
+   "t": 729.6,
+   "d": 2.72,
+   "text": "that bears fruit for a lot of uh"
+  },
+  {
+   "t": 732.32,
+   "d": 2.88,
+   "text": "generators and also maybe we don't need"
+  },
+  {
+   "t": 735.2,
+   "d": 2.16,
+   "text": "to make things as complicated as we"
+  },
+  {
+   "t": 737.36,
+   "d": 2.48,
+   "text": "maybe dream of. We do have a question"
+  },
+  {
+   "t": 739.84,
+   "d": 2.88,
+   "text": "from Leo. Um what's specifically lesbian"
+  },
+  {
+   "t": 742.72,
+   "d": 2.48,
+   "text": "about infinity and boredom? Uh, like"
+  },
+  {
+   "t": 745.2,
+   "d": 1.84,
+   "text": "they mentioned the concept of doomed"
+  },
+  {
+   "t": 747.04,
+   "d": 2.88,
+   "text": "fury."
+  },
+  {
+   "t": 749.92,
+   "d": 1.76,
+   "text": "That's a hard one. Thanks, Leo."
+  },
+  {
+   "t": 751.68,
+   "d": 4.0,
+   "text": ">> It's a big question. Yes."
+  },
+  {
+   "t": 755.68,
+   "d": 2.32,
+   "text": ">> I don't know. There's a sort of quiet"
+  },
+  {
+   "t": 758.0,
+   "d": 2.56,
+   "text": "beyond timeness of it. Maybe if we talk"
+  },
+  {
+   "t": 760.56,
+   "d": 3.12,
+   "text": "about queer time, it kind of exists."
+  },
+  {
+   "t": 763.68,
+   "d": 2.16,
+   "text": ">> I just think about lazy mornings and and"
+  },
+  {
+   "t": 765.84,
+   "d": 2.72,
+   "text": "sort of existing outside of more"
+  },
+  {
+   "t": 768.56,
+   "d": 3.12,
+   "text": "prescribed structures of time."
+  },
+  {
+   "t": 771.68,
+   "d": 1.84,
+   "text": ">> Yeah, I think that makes sense to me."
+  },
+  {
+   "t": 773.52,
+   "d": 2.24,
+   "text": "And that's a great thing that people can"
+  },
+  {
+   "t": 775.76,
+   "d": 1.92,
+   "text": "talk more about in the breakout rooms as"
+  },
+  {
+   "t": 777.68,
+   "d": 1.84,
+   "text": "well. Um have more of a discussion about"
+  },
+  {
+   "t": 779.52,
+   "d": 2.64,
+   "text": "that. And the breakout room for uh to"
+  },
+  {
+   "t": 782.16,
+   "d": 2.0,
+   "text": "talk about dykex and oni will be the"
+  },
+  {
+   "t": 784.16,
+   "d": 1.76,
+   "text": "dressing room. So after this block of"
+  },
+  {
+   "t": 785.92,
+   "d": 2.0,
+   "text": "talks, you'll be able to talk more um"
+  },
+  {
+   "t": 787.92,
+   "d": 2.08,
+   "text": "with Ada about that there. Thank you so"
+  },
+  {
+   "t": 790.0,
+   "d": 1.84,
+   "text": "much uh for coming and speaking at"
+  },
+  {
+   "t": 791.84,
+   "d": 1.68,
+   "text": "Rogike Celebration. That was awesome."
+  },
+  {
+   "t": 793.52,
+   "d": 3.2,
+   "text": ">> Thank you so much."
+  }
+ ]
+}

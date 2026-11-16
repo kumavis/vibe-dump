@@ -1,0 +1,100 @@
+{
+  "id": "avVsu4VLhes",
+  "title": "Crashtroid - Preventing Ear Fatigue with Roguelike Music",
+  "speaker": "Crashtroid (Adam)",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=avVsu4VLhes",
+  "talk_type": "design",
+  "summary": "Crashtroid, composer for Peglin, offers anecdotal strategies to keep roguelike players, who hear the same tracks across many runs, from developing ear fatigue. His three main points are unique segmentation within a loop so it feels like it progresses (illustrated with The Binding of Isaac's 'Repentant' and Peglin's final-stage theme), pacing music to the gameplay rather than only the aesthetic (contrasting Roboquest and Risk of Rain 2), and smooth transitions and flow using ambient/combat variants, shared motifs and stingers (with a flowchart of Hades' stage music). He closes with a test: if you can't listen to a track for 15 minutes outside the game, it won't work inside it.",
+  "games": [
+    "Peglin",
+    "The Binding of Isaac",
+    "Roboquest",
+    "Risk of Rain 2",
+    "Hades",
+    "Borderlands"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ear fatigue",
+      "kind": "warning",
+      "claim": "Because roguelikes are replayed many times, their music is especially prone to causing ear fatigue, where repeated listening blurs sounds together and tires the player.",
+      "detail": "Crashtroid defines ear fatigue as hearing something so often or so loud that frequencies blur and become hard to distinguish, as composers experience when looping a section while mixing. He wants players to stay engaged with the art across runs, like not being worn out by a shop theme heard a million times.",
+      "t": 176,
+      "quote": "A roguelike is a game someone will play over and over, ear fatigue is libel to occur to them and you don't really want that to happen",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music segmentation",
+      "kind": "technique",
+      "claim": "Roguelike music loops should contain distinctly segmented sections so the player feels progress through the loop rather than having it meld into the background.",
+      "detail": "Sections can be classic intro/chorus structure or even swapping songs midway with a radio system. In The Binding of Isaac's 'Repentant', four sections add chords, then vocals, then a piano ending that lifts to a major chord suggesting a chance to survive.",
+      "t": 226,
+      "quote": "the player upon hearing this loop is feeling like there is progress being made rather than having it meld into the background",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music segmentation",
+      "kind": "example",
+      "claim": "Peglin's final-stage theme uses subtle segmentation by changing the solo instrument and drum line between sections.",
+      "detail": "Crashtroid notes key changes or any other variation can also distinguish sections; Peglin's are more subtle than Isaac's.",
+      "t": 397,
+      "quote": "the different changes I have made were changing the solo instrument, changes in the drum line",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "pacing music",
+      "kind": "principle",
+      "claim": "Roguelike music should be paced to the moment-to-moment gameplay, not only the game's aesthetic, ideally informed by the composer playing a prototype.",
+      "detail": "The main thing players do is play, and their actions shape how they perceive audio. Knowing how the game feels helps write music that fits it.",
+      "t": 499,
+      "quote": "the main thing the player is doing with your game is playing it. The actions they take every moment of their journey through your game",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "pacing music",
+      "kind": "example",
+      "claim": "Roboquest's fast arena-shooter music lines up with bunny hopping and gun fire rates (the speaker doesn't know if by coincidence), while Risk of Rain 2's music emphasises exploration and discovery on a sprawling alien planet.",
+      "detail": "Both are combat shooter roguelikes, yet their composers made very different music to match how each plays: Roboquest's prespawned arenas versus Risk of Rain 2's searching for enemies and loot.",
+      "t": 648,
+      "quote": "the guns fire rates really line up with the beats per minute of a lot of the songs in the game",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music transitions",
+      "kind": "technique",
+      "claim": "Avoiding jarring music cuts across long or repeated runs helps maintain flow, using fading alternate versions of tracks (ambient/combat) and shared motifs across an area.",
+      "detail": "Crashtroid cites speedrunners and three-hour runs. Borderlands is an example of combat and ambient variants; map areas can share a melody in a cut-down passive version for cohesion.",
+      "t": 720,
+      "quote": "Not having that jarring transition between songs is really helpful to maintain that sense of flow",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "adaptive music",
+      "kind": "example",
+      "claim": "Hades' stage music fades between ambient and combat versions, then uses stingers and silence before new tracks to quietly signal progress through a floor.",
+      "detail": "As Crashtroid perceives it, a stinger concludes the song, silence follows until the next room where a new song signals the 33% mark; the pattern repeats after the miniboss and boss. He recommends flowcharting music like this to find gaps that break immersion.",
+      "t": 823,
+      "quote": "It is a quiet way of telling the player they are making progress",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "listening test",
+      "kind": "technique",
+      "claim": "A practical test for roguelike music: if you can't listen to a track for 15 minutes outside the game, it probably won't work in the game.",
+      "detail": "Crashtroid's closing advice after restating segmentation, pacing and flow.",
+      "t": 901,
+      "quote": "If you can't listen to the song more than 15 minutes at a time outside the game it probably won't work inside the game",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

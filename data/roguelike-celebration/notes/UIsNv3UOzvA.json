@@ -1,0 +1,189 @@
+{
+  "id": "UIsNv3UOzvA",
+  "title": "Joel Ryan: A Small Clump of Pixels: Creating the Sil Q Tileset",
+  "speaker": "Joel Ryan (Microchasm)",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=UIsNv3UOzvA",
+  "talk_type": "design",
+  "summary": "Joel Ryan (Microchasm) describes creating the tileset for Sil-Q, a variant of the Tolkien-themed roguelike Sil whose inherited Angband tile code was broken. He covers reworking Angband-style data files for tile assignment, porting ASCII-only information (monster awareness, rage, slay-weapon glow, damage numbers) to tiles, mapping 89 weapon combinations onto 16 tiles, and how a forced 256-color palette made the set more coherent. He then gives general tile-design ideas: classification, association versus differentiation, silhouette, size as a signal of threat, color for monster classes, serving the game over personal taste, consistent outlines, detail frequency against backgrounds, and strong 'major forms' that act almost like ASCII glyphs. He ends with lessons on iterating creative work over five years.",
+  "games": [
+    "Sil-Q",
+    "Sil",
+    "Angband",
+    "NPP Angband",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "variants",
+      "kind": "history",
+      "claim": "Sil-Q is a variant of Sil, a Tolkien-based roguelike about reaching the bottom of Angband, that focuses on making every item and ability useful, making the player harder to kill and rebalancing the game.",
+      "detail": "Ryan praises Sil's deep character building, positional combat and intelligent monsters. Sil was first released on Tolkien's birthday, 3 January 2012; Sil-Q followed in 2017, with Sil-Q 1.5 on 3 January 2022.",
+      "t": 118,
+      "quote": "Sil Q focuses on remaining true and making sure all times and abilities are useful and making harder to kill and rebalancing the game",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tilesets",
+      "kind": "example",
+      "claim": "Sil inherited broken legacy tile code from NPP Angband, so turning graphics on showed wrong tiles (tanglethorns as humans, an orc as a bag), and many monsters had no tile assignment at all.",
+      "detail": "Ryan started playing Sil when ASCII was hard for him to interface with, found the graphics option broken, and began drawing his own tiles over the existing set as a side project; Sil-Q's developer then offered to ship them if he finished.",
+      "t": 246,
+      "quote": "When you turn it on it appears to work but you find those humans in the middle of the screen are tangle thorns and that bag is an orc",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tilesets",
+      "kind": "technique",
+      "claim": "Ryan designed Sil-Q's tiles to sit halfway between tiles and ASCII, studying what ASCII glyphs do well and carrying that into the art, such as a diamond player symbol and a spider shaped like an M.",
+      "detail": "Not every monster could look like its letter, but the idea of looking to ASCII and borrowing its strengths stayed with him throughout the project and returns as his 'major forms' principle.",
+      "t": 345,
+      "quote": "the idea of looking to the ASCII and thinking about what the ASCII does well and bringing that in stuck with pea",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "example",
+      "claim": "Angband-family games store monster and item attributes, placement, names and tile assignments in text data files, letting a non-programmer like Ryan do all of Sil-Q's tile assignment himself.",
+      "detail": "The inherited file was 4,600 lines because Angband is huge; most entries were unused, some monsters lacked IDs and others had stale Angband names. The final files were about 1,400 lines.",
+      "t": 521,
+      "quote": "can be modified just by modifying text files so you don't need to know how to program so I was able to do all the tile assignment on my own",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii vs tiles",
+      "kind": "technique",
+      "claim": "Information that Sil conveyed in ASCII through brightness and tinting had to be re-encoded for tiles: an exclamation mark for monster awareness, swapped floor and wall tiles for rage, layered tiles for slay-weapon glow, and overlay tiles for damage numbers.",
+      "detail": "Sil was not made with tiles in mind. In ASCII unaware monsters are drawn brighter; tiles could not be tinted, so Ryan and the Sil-Q developer used a three-layer system (floor, glow, weapon) for weapons that glow blue near monsters they slay.",
+      "t": 536,
+      "quote": "There were a lot of features at ASCII that needed to be ported over. Sill wasn't originally created with tiles in mind",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tilesets",
+      "kind": "example",
+      "claim": "Showing the player's wielded weapon in Sil-Q meant mapping 89 weapon combinations onto only 16 available character tile slots per race, using deliberately ambiguous tiles.",
+      "detail": "Ryan had anticipated far fewer combinations than turned up.",
+      "t": 652,
+      "quote": "I had to draw 16 tiles that are ambiguous and try to map all 89 combinations to those 16 tiles",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "color palette",
+      "kind": "example",
+      "claim": "Sil-Q crashing on Linux unless the tileset was a 256-color bitmap forced a custom shared color table, which made the tileset more coherent and consistent.",
+      "detail": "Ryan had been using far more colors; the restriction made him share colors across tiles and attend to every pixel value, since some colors looked identical side by side but differed by a few values.",
+      "t": 680,
+      "quote": "This is one of those situations where adding a restriction really improved the tileset",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii vs tiles",
+      "kind": "principle",
+      "claim": "ASCII glyphs classify monsters (a T tells you something about any troll-class monster) and are easy to differentiate but hard to associate with new monsters; tiles are the reverse, so tile artists should spend effort on differentiation.",
+      "detail": "Every new roguelike requires learning new glyph-to-monster mappings, but letters of one's own language are about as easy to tell apart as symbols get. With tiles you know a red dragon is a red dragon, but telling tiles apart is harder. Ryan credits the association/differentiation idea to an article and points to Roguelike Radio episodes and a Mark Johnson paper.",
+      "t": 837,
+      "quote": "In tiles it is kind of the opposite. Association is easy. If you see a red dragon you know it is a red dragon but differentiation is more difficult",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "silhouette",
+      "kind": "technique",
+      "claim": "Strong, unique monster silhouettes let players classify an unfamiliar monster at a glance mid-battle, such as spiny legs meaning a poisonous spider or a hulking thick-armed figure meaning a knockback troll.",
+      "detail": "Ryan notes he usually dies pressing keys too quickly when a new monster appears in a screen corner; silhouette is where tiles can do classification like ASCII does.",
+      "t": 908,
+      "quote": "You might be able to quickly know something about this monster even if you have never seen them because you can classify them based on their silhouette",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tile size",
+      "kind": "principle",
+      "claim": "The more pixels a monster tile uses, the more dangerous players perceive it, so tile size should be reserved to signal threat, either growing over the game or marking difficulty spikes.",
+      "detail": "Ryan's first Crebain filled the whole tile, making it hard to recognize as a bird and overrepresenting a minor monster; his first orc used all vertical pixels, leaving no room for later orcs to be bigger, and forum players noted First Age orcs should be smaller.",
+      "t": 958,
+      "quote": "The more pixels you use to draw the monsters the more difficult that monster is as perceived by the player",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tilesets",
+      "kind": "principle",
+      "claim": "Tile artists must draw what serves the player and the game rather than what they feel like drawing, checking monsters against the game's lore and actual mechanics.",
+      "detail": "Ryan redrew Sil's werewolves as giant wolves possessed by spirits, per Tolkien, after initially drawing humanoids; he also redrew cat assassins with bows after realising in play that they don't use daggers.",
+      "t": 1095,
+      "quote": "instead of drawing the tiles you feel like drawing you have to draw the tiles that will serve the player and game",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "color coding",
+      "kind": "technique",
+      "claim": "The Sil-Q tileset uses color to classify monster abilities: blue for ice, red for fire-branded, purple for draining attacks, and shared purples to group a set of nebulous horrors.",
+      "detail": "Ryan wanted the demon-type uniques to have varied flavors (smoke, ice, stone, fire, darkness), but most are fire-branded, so he drew them to serve the game.",
+      "t": 1141,
+      "quote": "Here the purple in the second row represents draining attacks. I am using color as well for classification",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tile outlines",
+      "kind": "warning",
+      "claim": "Decide on tileset-wide conventions like a black outline around every tile from the start, since Ryan had to go back and redraw tiles that filled their space and left no room for it.",
+      "detail": "The outline helps pull a tile out from the background and nearby tiles; he kept it on every side except the bottom.",
+      "t": 1293,
+      "quote": "keep in mind from the beginning instead of having to go back and redesign tiles later the way I did",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "detail frequency",
+      "kind": "principle",
+      "claim": "Tiles blend into the background when both share the same level of detail frequency, so contrasting low-detail flat-color tiles with a finely patterned background keeps monsters readable.",
+      "detail": "Ryan demonstrates a dragon tile: on a noisy background it stands out mainly due to its black outline when noise is added to the tile, and blends in entirely once the outline is removed.",
+      "t": 1372,
+      "quote": "If your tiles and your backgrounds have the same level of detail frequency then they can blend together",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "major forms",
+      "kind": "technique",
+      "claim": "Giving each tile a few strong 'major forms' (solid areas and lines of color) lets experienced players read tiles almost like ASCII symbols, while pixel-noisy tiles look muddy and blend together.",
+      "detail": "Ryan shows a tile's progression from pixel details where nearly every pixel differs from its neighbor to strong forms across chest, head, weapon and leg, which he draws as pen strokes to illustrate.",
+      "t": 1442,
+      "quote": "my tiles could have major forms where if you played the game enough you would start to see these forms almost like symbols",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iteration",
+      "kind": "principle",
+      "claim": "Stepping away from a side project for days or months erodes accumulated creative resistance, making it easier to throw away work that isn't succeeding; redesigning tiles almost always improved them.",
+      "detail": "The tileset took about five years. Ryan had to discard all his laboured early werewolf work. He likens throwing away work to dying in a roguelike: you are making yourself into the person who can make the thing.",
+      "t": 1576,
+      "quote": "even if you just let it go for a few days or a week, a lot of those resistances erode and you can come back in with new perspective",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iteration",
+      "kind": "warning",
+      "claim": "Too many small 'noodle' changes can slowly degrade creative work, so keep backups and compare against older versions, sometimes merging the best parts of old and new.",
+      "detail": "Ryan compares it to over-working clay on a pottery wheel, which weakens the form. Sometimes an old tile, color scheme or limb (a 'hell of a left leg') is better and gets pulled into the new version.",
+      "t": 1684,
+      "quote": "if you spend too long making little changes, I like to call them little noodle changes, you can nudge the work in the wrong direction",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,573 @@
+{
+ "id": "jvZb9WoIHxo",
+ "url": "https://www.youtube.com/watch?v=jvZb9WoIHxo",
+ "title": "Linas Gabrielaitis - Fictions of Infinity in Geological Finitudes",
+ "speaker": "Linas Gabrielaitis",
+ "talk_title": "Fictions of Infinity in Geological Finitudes",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 879,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "In his fictions, Jorge Luis Borges describes the Infinite Library, an infinitely large space which contains all possible books that have ever been, and might ever be written. Procedural generation makes infinite spaces like this possible, while Roguelike game mechanics make infinite spaces like this navigable, explorable and playable. Geological conceptions of oil and plastic problematise these spaces of infinite possibilities and infinitely large time-scales. While the available time of organic beings is finite, sometimes, organic matter returns as oil or plastic- as something that is unable to die and perpetually return into our bodies as microplastics. Can roguelike game mechanics such as meta-progression, permadeath or procedurality inform new conceptions for geology, petrofictions, and nonhumans?",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 60,
+   "title": "Defining fictions of infinity"
+  },
+  {
+   "start": 150,
+   "title": "Death and depth in gaming"
+  },
+  {
+   "start": 243,
+   "title": "Geological time and science"
+  },
+  {
+   "start": 390,
+   "title": "Literary explorations of depth"
+  },
+  {
+   "start": 509,
+   "title": "Procedurality and infinities"
+  },
+  {
+   "start": 657,
+   "title": "Folding as game mechanics"
+  },
+  {
+   "start": 776,
+   "title": "Q&A and closing remarks"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1710,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 9.8,
+   "d": 6.36,
+   "text": "We are going to head into a couple lightning talks to wrap up this morning's clot which is exciting."
+  },
+  {
+   "t": 16.16,
+   "d": 7.0,
+   "text": "These interactive speakers are going to try to go fast. You don't have to go super fast. Get through"
+  },
+  {
+   "t": 23.16,
+   "d": 10.8,
+   "text": "some exciting ideas. Our first lightning speaker is Linas who is starting a PhD at the intersection"
+  },
+  {
+   "t": 33.96,
+   "d": 6.88,
+   "text": "of game studies and literature exploring the geological perspectives within game mechanics"
+  },
+  {
+   "t": 40.84,
+   "d": 3.44,
+   "text": "which is very interesting. I want to give you time to"
+  },
+  {
+   "t": 44.28,
+   "d": 5.32,
+   "text": "get right into your talk, Linas. LINAS: Hello. Thank you. Hopefully"
+  },
+  {
+   "t": 49.6,
+   "d": 6.04,
+   "text": "everything is OK with my microphone. My name is Linas. I am doing a PhD at the"
+  },
+  {
+   "t": 55.64,
+   "d": 8.04,
+   "text": "gamification group in Finland. The title of my talk is Fictions of Infinity in Geological"
+  },
+  {
+   "t": 63.68,
+   "d": 9.32,
+   "text": "Finitudes which is a complicated title. In the talk I will explain what I mean by the title and"
+  },
+  {
+   "t": 73.0,
+   "d": 8.8,
+   "text": "what the concepts are implied in it so hopefully I can inspire maybe new ideas and game mechanics."
+  },
+  {
+   "t": 81.8,
+   "d": 3.88,
+   "text": "First of all, what do I mean by finesses of if -- fictions of infinity? I am talking about"
+  },
+  {
+   "t": 85.68,
+   "d": 14.32,
+   "text": "roguelikes. They make use of procedurality for emergent content and also death is an inevitable"
+  },
+  {
+   "t": 100.0,
+   "d": 6.12,
+   "text": "and central part of the experience. So I see a lot of similarities and that's what I am going to be"
+  },
+  {
+   "t": 106.12,
+   "d": 5.24,
+   "text": "doing in the presentation and going back and forth between roguelikes and geology and geological"
+  },
+  {
+   "t": 111.36,
+   "d": 11.96,
+   "text": "layers are working with logic and death is also central in geology. Some levels are made up of"
+  },
+  {
+   "t": 123.88,
+   "d": 11.12,
+   "text": "death or previously alive matter, sedimentary rock is made up of skeletons and shells that have"
+  },
+  {
+   "t": 135.0,
+   "d": 9.16,
+   "text": "been squeezed and formed into a rock. So besides death, I will also be talking a lot about depth"
+  },
+  {
+   "t": 144.16,
+   "d": 8.36,
+   "text": "which is also present in roguelikes as I hope to show. Let's get into the deaths and the depths."
+  },
+  {
+   "t": 154.0,
+   "d": 7.12,
+   "text": "This is a diagram of how a roguelike game might look like. We have a town where you"
+  },
+  {
+   "t": 161.12,
+   "d": 6.04,
+   "text": "do your upgrades, shopping and then you dive deep into the dungeon where with each layer you kind"
+  },
+  {
+   "t": 167.16,
+   "d": 8.72,
+   "text": "of get progressively more complicated. This diagram is from the Diablo Pitch in"
+  },
+  {
+   "t": 175.88,
+   "d": 7.88,
+   "text": "1994 where they first proposed how a Diablo game could look like in the roguelike format."
+  },
+  {
+   "t": 183.76,
+   "d": 5.24,
+   "text": "Something interesting is we were talking already about death and how to position"
+  },
+  {
+   "t": 189.0,
+   "d": 7.92,
+   "text": "death in roguelike-ness. I am going to read the sentence. If one of the errors kill the fighter,"
+  },
+  {
+   "t": 196.92,
+   "d": 6.28,
+   "text": "the character will be completely e raced from the hard drive and the player must start from scratch."
+  },
+  {
+   "t": 203.88,
+   "d": 11.0,
+   "text": "Besides death, something I am picking apart is the deepness and depth. Deeper levels will"
+  },
+  {
+   "t": 214.88,
+   "d": 6.28,
+   "text": "contain progressively more difficult creatures and hazards. A character's quest ends with locating"
+  },
+  {
+   "t": 221.16,
+   "d": 8.56,
+   "text": "Diablo deep in the dungeon. Now I annotated the dungeon with a death and brings you back to the"
+  },
+  {
+   "t": 229.72,
+   "d": 8.32,
+   "text": "depth which you progressively dive deeper. This is how a dungeon might look like after. After"
+  },
+  {
+   "t": 238.04,
+   "d": 7.2,
+   "text": "you complete it, you then dive deeper. Here I am going to get into the start of"
+  },
+  {
+   "t": 245.24,
+   "d": 15.44,
+   "text": "geology or what we now call geology. This is the first geologist. He was digging around and noticed"
+  },
+  {
+   "t": 261.36,
+   "d": 7.4,
+   "text": "the deepening you go the older everything gets so that cause kind of the first spatialization"
+  },
+  {
+   "t": 268.76,
+   "d": 10.72,
+   "text": "of time and vertical diagraming of time. And that also kind of kicked off a whole"
+  },
+  {
+   "t": 279.48,
+   "d": 7.28,
+   "text": "other branch of I guess deep sciences or deep sciences of depth. So for example,"
+  },
+  {
+   "t": 286.76,
+   "d": 8.52,
+   "text": "before psychology became psychology there was depth psychology so for example the"
+  },
+  {
+   "t": 295.28,
+   "d": 6.44,
+   "text": "deeper you go to someone the more traumatic things are and interpersonal relationships,"
+  },
+  {
+   "t": 301.72,
+   "d": 9.96,
+   "text": "the longer you stay with someone, the deeper you go into them. Depth is time related."
+  },
+  {
+   "t": 312.56,
+   "d": 9.04,
+   "text": "And of course, dwarfs in Dwarf Fortress are great. Deep sciences of the depth. They use"
+  },
+  {
+   "t": 321.6,
+   "d": 8.88,
+   "text": "mines which are vertically constructed. Something that's similar to mines is oil"
+  },
+  {
+   "t": 330.48,
+   "d": 8.64,
+   "text": "wells. They are also very vertical structures. So it is interesting that oil has also natural"
+  },
+  {
+   "t": 339.12,
+   "d": 7.4,
+   "text": "tendency to move upwards. So it seeps through layers that have tiny holes but then gets trapped"
+  },
+  {
+   "t": 346.52,
+   "d": 10.48,
+   "text": "by this kind of layer of rock which it cannot pass. So it I guess here I am seeing roguelikeness"
+  },
+  {
+   "t": 357.0,
+   "d": 8.4,
+   "text": "in the way oil is working in the sense it always tries to go up. It is also roguelikeness a little"
+  },
+  {
+   "t": 365.4,
+   "d": 5.68,
+   "text": "bit because oil is something that has -- it used to be organic. It used to be alive but now it is"
+  },
+  {
+   "t": 371.08,
+   "d": 7.84,
+   "text": "kind of undead organic matter which FWHAUTZ was not allowed to die or fossilize properly"
+  },
+  {
+   "t": 378.92,
+   "d": 10.48,
+   "text": "so it is a kind of a trapped bundle of energy which we are now helping bring vertically up."
+  },
+  {
+   "t": 390.44,
+   "d": 8.2,
+   "text": "Another vertical science is the study of holes and this book has no offer and no"
+  },
+  {
+   "t": 398.64,
+   "d": 7.68,
+   "text": "dates. It is just a collection of holes. Don DeLillo wrote about holes. Holes are"
+  },
+  {
+   "t": 406.32,
+   "d": 5.92,
+   "text": "interesting. There are books about holes. Now I am going to dive deeper into another"
+  },
+  {
+   "t": 412.24,
+   "d": 10.8,
+   "text": "story called Ratner star. There they explore or predict this great hole which is kind of"
+  },
+  {
+   "t": 423.04,
+   "d": 9.24,
+   "text": "described as a descent to a geological driver or maybe a geological fetish. This need to go"
+  },
+  {
+   "t": 432.28,
+   "d": 7.84,
+   "text": "deeper. At a certain depth, they discover that ancient artifacts actually begin to grow more"
+  },
+  {
+   "t": 440.12,
+   "d": 12.12,
+   "text": "complex which is interesting because well, real geology works the opposite way. Things"
+  },
+  {
+   "t": 452.24,
+   "d": 11.52,
+   "text": "get more primitive the deeper you go. Here are some diagrams or some quotes to"
+  },
+  {
+   "t": 463.76,
+   "d": 5.08,
+   "text": "illustrate this. Humans are more advanced the deeper we dig. We could say the larvae are"
+  },
+  {
+   "t": 468.84,
+   "d": 11.28,
+   "text": "tastier the deeper I dig. And the deeper we went -- I am reminded of the way progression works"
+  },
+  {
+   "t": 480.12,
+   "d": 8.44,
+   "text": "in roguelikes where the deeper you go, the more complex everything is, the more you progress."
+  },
+  {
+   "t": 488.56,
+   "d": 8.56,
+   "text": "Now going back to the story, it ends, the story ends with an event where they find out they have"
+  },
+  {
+   "t": 497.12,
+   "d": 5.96,
+   "text": "been receiving these messages which they thought came from space but later find out it came from"
+  },
+  {
+   "t": 503.08,
+   "d": 8.8,
+   "text": "deep time below. Here is another inversion of space. At the time it was the space race"
+  },
+  {
+   "t": 511.88,
+   "d": 8.12,
+   "text": "where everyone was obsessed with the verticality upward of the space. But then DeLillo was writing"
+  },
+  {
+   "t": 520.0,
+   "d": 11.2,
+   "text": "about the downwards verticality’s. I have been using this friction or comparison between there"
+  },
+  {
+   "t": 531.2,
+   "d": 6.12,
+   "text": "two concepts -- the two. I think it is a bad example to do this comparison but I think it"
+  },
+  {
+   "t": 537.32,
+   "d": 6.32,
+   "text": "also illustrates something about the way star bound for example was using procedurality to"
+  },
+  {
+   "t": 543.64,
+   "d": 6.84,
+   "text": "also kind of promise an infinite amount of stars or Infinite amount of planets to"
+  },
+  {
+   "t": 550.48,
+   "d": 6.16,
+   "text": "explore. While there was a contradicted and constrained and you know there is an"
+  },
+  {
+   "t": 556.64,
+   "d": 9.48,
+   "text": "ocean on the left and lava at the bottom. Of course, no man's sky had this road on the"
+  },
+  {
+   "t": 566.12,
+   "d": 7.64,
+   "text": "promise of procedural generation to generate that the deep infinity. I think someone calculated you"
+  },
+  {
+   "t": 573.76,
+   "d": 10.16,
+   "text": "need 600,000 real life years to explore all the planets so, of course, nobody has time for that."
+  },
+  {
+   "t": 583.92,
+   "d": 8.12,
+   "text": "This reminds me of another story by Borges this time. He wrote about the library of babel. It is"
+  },
+  {
+   "t": 592.68,
+   "d": 5.96,
+   "text": "a library that has every conceivable book that can be written. Not only books that"
+  },
+  {
+   "t": 598.64,
+   "d": 7.36,
+   "text": "have been written but books that can be possibly written. So it is an infinitely deep library."
+  },
+  {
+   "t": 606.76,
+   "d": 4.68,
+   "text": "I am going to read out the quote. The universe which others call the library is composed of an"
+  },
+  {
+   "t": 611.44,
+   "d": 4.44,
+   "text": "indefinite and perhaps infinite number of hexagonal galleries vast airshafts."
+  },
+  {
+   "t": 621.12,
+   "d": 20.12,
+   "text": "And they talk about the books being unique. Here is a quote. And then kind of the story"
+  },
+  {
+   "t": 641.24,
+   "d": 7.92,
+   "text": "goes that actually the characters are lost in this infinity. They continuously talk about"
+  },
+  {
+   "t": 649.16,
+   "d": 8.28,
+   "text": "this lack of meaning in the end results of people jumping down these railings."
+  },
+  {
+   "t": 657.44,
+   "d": 6.28,
+   "text": "Now that I am getting to this deep space promises some sort of infinite procedurality"
+  },
+  {
+   "t": 667.56,
+   "d": 9.28,
+   "text": "with a question mark. What is then the deep time of procedurality? Here I am kind of well"
+  },
+  {
+   "t": 676.84,
+   "d": 10.72,
+   "text": "provoking in some way. I am trying to look for these deep procedurality. And so I am going to"
+  },
+  {
+   "t": 687.56,
+   "d": 7.08,
+   "text": "draw from like is the science of how mountains are moving and in some way they are not moving"
+  },
+  {
+   "t": 694.64,
+   "d": 7.56,
+   "text": "but then they are moving in place. So they are not moving but actually moving in on"
+  },
+  {
+   "t": 702.2,
+   "d": 14.52,
+   "text": "themselves or turning over themselves. So that's a mechanism of folding. My provocation here, I guess"
+  },
+  {
+   "t": 716.72,
+   "d": 9.88,
+   "text": "I am trying to propose folding as a mechanism of how maybe a deep procedurality could look like."
+  },
+  {
+   "t": 727.92,
+   "d": 10.6,
+   "text": "But then it is proposing with a question mark could even procedural layers look like that?"
+  },
+  {
+   "t": 738.52,
+   "d": 5.0,
+   "text": "Also because of folding you have these mountains that kind of get cut off in"
+  },
+  {
+   "t": 743.52,
+   "d": 22.68,
+   "text": "the middle. So, yeah, folding. Folding for roguelikes or for deep roguelikes."
+  },
+  {
+   "t": 766.2,
+   "d": 8.08,
+   "text": "And yeah, so Thank you. Thank you very much. Thank you for organizing and, hopefully, you enjoyed."
+  },
+  {
+   "t": 774.28,
+   "d": 5.88,
+   "text": "ALEXEI: Thank you. No, that was great. Yeah, people really enjoyed it. You had a lot of"
+  },
+  {
+   "t": 780.68,
+   "d": 6.92,
+   "text": "quotable like what do you mean oil goes up? Like we had to think about the concept of depth. Yeah,"
+  },
+  {
+   "t": 787.6,
+   "d": 5.04,
+   "text": "I think that that's really interesting. I loved to see -- we talk a lot about map generation"
+  },
+  {
+   "t": 792.64,
+   "d": 5.8,
+   "text": "but I have never seen the idea of map generation taking inspiration from layers and thinking about"
+  },
+  {
+   "t": 798.44,
+   "d": 8.8,
+   "text": "those in a geological and dime related sense -- time. That is really interesting. We might"
+  },
+  {
+   "t": 807.24,
+   "d": 7.12,
+   "text": "have time for one like one question if anyone wants to get one up there. We do. It is kind of"
+  },
+  {
+   "t": 814.36,
+   "d": 5.76,
+   "text": "a comment but I think it is interesting. There is a sense in which NetHack's bones levels are kind"
+  },
+  {
+   "t": 820.12,
+   "d": 9.84,
+   "text": "of a proto folding. You get previous experiences kind of folded into future games. I know bones is"
+  },
+  {
+   "t": 829.96,
+   "d": 7.24,
+   "text": "another concept you considered getting into it. LINAS: Yeah, I would like to see a diagram of"
+  },
+  {
+   "t": 837.2,
+   "d": 9.0,
+   "text": "how that folding works in NetHack I think most of this works on a diagram level and"
+  },
+  {
+   "t": 846.2,
+   "d": 10.6,
+   "text": "sketching is an important part of making games so I would like to see a drawing."
+  },
+  {
+   "t": 857.32,
+   "d": 7.96,
+   "text": "ALEXEI: I know with NetHack there is not a lot of thought of where in the layers it should fit."
+  },
+  {
+   "t": 865.28,
+   "d": 11.76,
+   "text": "It is just the extra piece. Cool. Thank you. I think I will let you go since I want to make sure"
+  },
+  {
+   "t": 877.04,
+   "d": 1.49,
+   "text": "we get to the next lightning talk but we will have breakout discussion. All these talks are recorded."
+  },
+  {
+   "t": 878.52,
+   "d": 3.65,
+   "text": "A few people have asked about that so you can preference them in the future. Excellent."
+  }
+ ]
+}

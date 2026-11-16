@@ -1,0 +1,3305 @@
+{
+ "id": "JxI3Eu5DPwE",
+ "url": "https://www.youtube.com/watch?v=JxI3Eu5DPwE",
+ "title": "Bob Nystrom - Is There More to Game Architecture than ECS?",
+ "speaker": "Bob Nystrom",
+ "talk_title": "Is There More to Game Architecture than ECS?",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-09",
+ "duration_s": 1386,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 97,
+   "title": "Classic ECS explained"
+  },
+  {
+   "start": 208,
+   "title": "Components and systems"
+  },
+  {
+   "start": 292,
+   "title": "Performance benefits"
+  },
+  {
+   "start": 393,
+   "title": "ECS in roguelikes"
+  },
+  {
+   "start": 548,
+   "title": "Roguelike challenges"
+  },
+  {
+   "start": 627,
+   "title": "Capability components"
+  },
+  {
+   "start": 765,
+   "title": "Type object pattern"
+  },
+  {
+   "start": 906,
+   "title": "Command pattern for actions"
+  },
+  {
+   "start": 1083,
+   "title": "Advantages of actions"
+  },
+  {
+   "start": 1261,
+   "title": "Summary and conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4749,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.21,
+   "text": "hi everybody y'all excited about talking"
+  },
+  {
+   "t": 3.21,
+   "d": 3.48,
+   "text": "about software architecture oh wow that"
+  },
+  {
+   "t": 6.69,
+   "d": 1.23,
+   "text": "works better way better than I thought"
+  },
+  {
+   "t": 7.92,
+   "d": 2.91,
+   "text": "that's like the saddest hype statement"
+  },
+  {
+   "t": 10.83,
+   "d": 3.36,
+   "text": "ever yeah so uh I'm gonna talk about"
+  },
+  {
+   "t": 14.19,
+   "d": 2.64,
+   "text": "software architecture um I don't know"
+  },
+  {
+   "t": 16.83,
+   "d": 1.17,
+   "text": "there's any intro stuff I need to say"
+  },
+  {
+   "t": 18.0,
+   "d": 4.11,
+   "text": "nope let's get going so my name is Bob"
+  },
+  {
+   "t": 22.11,
+   "d": 3.03,
+   "text": "Nystrom I when I was a teenager my"
+  },
+  {
+   "t": 25.14,
+   "d": 1.68,
+   "text": "brother and I spent a lot of time"
+  },
+  {
+   "t": 26.82,
+   "d": 2.31,
+   "text": "working on a tabletop role-playing game"
+  },
+  {
+   "t": 29.13,
+   "d": 2.72,
+   "text": "and at some point I found myself"
+  },
+  {
+   "t": 31.85,
+   "d": 2.89,
+   "text": "starting to hack on my own roguelike and"
+  },
+  {
+   "t": 34.74,
+   "d": 2.67,
+   "text": "I've been tinkering on it ever since"
+  },
+  {
+   "t": 37.41,
+   "d": 3.9,
+   "text": "that was 20 years ago it's nowhere close"
+  },
+  {
+   "t": 41.31,
+   "d": 2.43,
+   "text": "to being done so I have poor resource"
+  },
+  {
+   "t": 43.74,
+   "d": 3.15,
+   "text": "management skills apparently during that"
+  },
+  {
+   "t": 46.89,
+   "d": 2.97,
+   "text": "time I worked for EA for eight years so"
+  },
+  {
+   "t": 49.86,
+   "d": 1.47,
+   "text": "I have experience being trapped in"
+  },
+  {
+   "t": 51.33,
+   "d": 4.74,
+   "text": "dungeons for a long time as part of my"
+  },
+  {
+   "t": 56.07,
+   "d": 2.19,
+   "text": "escape plan I wrote this book on"
+  },
+  {
+   "t": 58.26,
+   "d": 1.2,
+   "text": "software architecture called game"
+  },
+  {
+   "t": 59.46,
+   "d": 4.1,
+   "text": "programming patterns it's a real book"
+  },
+  {
+   "t": 63.56,
+   "d": 2.38,
+   "text": "but you can also read the entire thing"
+  },
+  {
+   "t": 65.94,
+   "d": 2.76,
+   "text": "online on the web at that kind of hard"
+  },
+  {
+   "t": 68.7,
+   "d": 2.4,
+   "text": "to read URL right there right now I'm in"
+  },
+  {
+   "t": 71.1,
+   "d": 1.29,
+   "text": "the middle of writing another book on"
+  },
+  {
+   "t": 72.39,
+   "d": 1.86,
+   "text": "programming languages you can't read the"
+  },
+  {
+   "t": 74.25,
+   "d": 1.41,
+   "text": "entire thing online because it's not"
+  },
+  {
+   "t": 75.66,
+   "d": 1.74,
+   "text": "done but the stuff that is done you can"
+  },
+  {
+   "t": 77.4,
+   "d": 3.96,
+   "text": "read online but the accomplishment that"
+  },
+  {
+   "t": 81.36,
+   "d": 2.82,
+   "text": "I'm most proud of in life above and"
+  },
+  {
+   "t": 84.18,
+   "d": 1.71,
+   "text": "beyond even having children is that I"
+  },
+  {
+   "t": 85.89,
+   "d": 4.05,
+   "text": "beat egg band never been in front of an"
+  },
+  {
+   "t": 89.94,
+   "d": 2.22,
+   "text": "audience that would appreciate that this"
+  },
+  {
+   "t": 92.16,
+   "d": 2.16,
+   "text": "is a high elf mage this is around two"
+  },
+  {
+   "t": 94.32,
+   "d": 1.44,
+   "text": "point nine point three very proud of"
+  },
+  {
+   "t": 95.76,
+   "d": 5.28,
+   "text": "myself okay so this talk is a there's"
+  },
+  {
+   "t": 101.04,
+   "d": 1.89,
+   "text": "bullet points oh I should point out that"
+  },
+  {
+   "t": 102.93,
+   "d": 2.43,
+   "text": "I wrote a custom program from my"
+  },
+  {
+   "t": 105.36,
+   "d": 1.74,
+   "text": "presentation using the same engine as my"
+  },
+  {
+   "t": 107.1,
+   "d": 1.89,
+   "text": "game because I wanted to just go full"
+  },
+  {
+   "t": 108.99,
+   "d": 4.11,
+   "text": "nerd so I'm gonna talk a little bit"
+  },
+  {
+   "t": 113.1,
+   "d": 2.46,
+   "text": "about what the the ECS pattern is or at"
+  },
+  {
+   "t": 115.56,
+   "d": 1.68,
+   "text": "least sort of you know my understanding"
+  },
+  {
+   "t": 117.24,
+   "d": 2.25,
+   "text": "of the classical conception of it I'm"
+  },
+  {
+   "t": 119.49,
+   "d": 1.32,
+   "text": "gonna talk about why I don't use it in"
+  },
+  {
+   "t": 120.81,
+   "d": 3.54,
+   "text": "my roguelike and stuff architectural"
+  },
+  {
+   "t": 124.35,
+   "d": 1.44,
+   "text": "patterns that I do use instead that I"
+  },
+  {
+   "t": 125.79,
+   "d": 5.06,
+   "text": "think are super cool so let's talk about"
+  },
+  {
+   "t": 132.3,
+   "d": 3.51,
+   "text": "let's talk about EC s stands for entity"
+  },
+  {
+   "t": 135.81,
+   "d": 2.7,
+   "text": "component system if you don't know some"
+  },
+  {
+   "t": 138.51,
+   "d": 1.44,
+   "text": "of those are pluralized but I'm never"
+  },
+  {
+   "t": 139.95,
+   "d": 1.05,
+   "text": "sure which ones are supposed to be"
+  },
+  {
+   "t": 141.0,
+   "d": 3.02,
+   "text": "plural so I didn't pluralize any of them"
+  },
+  {
+   "t": 144.02,
+   "d": 3.07,
+   "text": "so we'll start with entities so imagine"
+  },
+  {
+   "t": 147.09,
+   "d": 3.03,
+   "text": "you're you know back in the day maybe"
+  },
+  {
+   "t": 150.12,
+   "d": 1.32,
+   "text": "not back in the day writing a Triple A"
+  },
+  {
+   "t": 151.44,
+   "d": 3.27,
+   "text": "game and you are implementing you know a"
+  },
+  {
+   "t": 154.71,
+   "d": 1.83,
+   "text": "character in the game right so the"
+  },
+  {
+   "t": 156.54,
+   "d": 1.56,
+   "text": "entity is the the class that represents"
+  },
+  {
+   "t": 158.1,
+   "d": 4.11,
+   "text": "that character they might call it entity"
+  },
+  {
+   "t": 162.21,
+   "d": 1.38,
+   "text": "you might call a game object something"
+  },
+  {
+   "t": 163.59,
+   "d": 2.61,
+   "text": "like that and in a sort of modern real"
+  },
+  {
+   "t": 166.2,
+   "d": 1.32,
+   "text": "time interactive game there's a there's"
+  },
+  {
+   "t": 167.52,
+   "d": 1.65,
+   "text": "a lot of stuff in there across a lot of"
+  },
+  {
+   "t": 169.17,
+   "d": 1.26,
+   "text": "domains right so like you know you've"
+  },
+  {
+   "t": 170.43,
+   "d": 2.13,
+   "text": "got AI doing like pathfinding and like"
+  },
+  {
+   "t": 172.56,
+   "d": 1.17,
+   "text": "playing scripted events there's like"
+  },
+  {
+   "t": 173.73,
+   "d": 1.4,
+   "text": "physics interacting with the world"
+  },
+  {
+   "t": 175.13,
+   "d": 2.14,
+   "text": "there's this whole animation system"
+  },
+  {
+   "t": 177.27,
+   "d": 1.08,
+   "text": "that's driving your skeletal animation"
+  },
+  {
+   "t": 178.35,
+   "d": 1.8,
+   "text": "and then there's a rendering layer on"
+  },
+  {
+   "t": 180.15,
+   "d": 1.59,
+   "text": "top of that and all these domains"
+  },
+  {
+   "t": 181.74,
+   "d": 1.71,
+   "text": "interact with each other right so like"
+  },
+  {
+   "t": 183.45,
+   "d": 2.52,
+   "text": "the you know the the eye cave or foot"
+  },
+  {
+   "t": 185.97,
+   "d": 1.62,
+   "text": "planting in your animation needs to take"
+  },
+  {
+   "t": 187.59,
+   "d": 1.32,
+   "text": "into account the surrounding physics"
+  },
+  {
+   "t": 188.91,
+   "d": 2.7,
+   "text": "volumes and it's this big ball of stuff"
+  },
+  {
+   "t": 191.61,
+   "d": 3.45,
+   "text": "right so you could imagine just jamming"
+  },
+  {
+   "t": 195.06,
+   "d": 1.47,
+   "text": "it all in one class which is what they"
+  },
+  {
+   "t": 196.53,
+   "d": 2.4,
+   "text": "did in the 90s and you know you if you"
+  },
+  {
+   "t": 198.93,
+   "d": 1.41,
+   "text": "talk to old game developers you'll hear"
+  },
+  {
+   "t": 200.34,
+   "d": 1.59,
+   "text": "horror stories of like a game object"
+  },
+  {
+   "t": 201.93,
+   "d": 2.19,
+   "text": "class that was like 20,000 lines of code"
+  },
+  {
+   "t": 204.12,
+   "d": 4.35,
+   "text": "so that's that's that's bad"
+  },
+  {
+   "t": 208.47,
+   "d": 2.04,
+   "text": "so problem number one is complexity"
+  },
+  {
+   "t": 210.51,
+   "d": 2.31,
+   "text": "right so you have this one entity class"
+  },
+  {
+   "t": 212.82,
+   "d": 1.5,
+   "text": "that touches a lot of domains in it sort"
+  },
+  {
+   "t": 214.32,
+   "d": 3.54,
+   "text": "of everything is jammed together so the"
+  },
+  {
+   "t": 217.86,
+   "d": 2.73,
+   "text": "solution they came up with is components"
+  },
+  {
+   "t": 220.59,
+   "d": 2.73,
+   "text": "so basically what you do is you look at"
+  },
+  {
+   "t": 223.32,
+   "d": 1.23,
+   "text": "that entity class and you take each"
+  },
+  {
+   "t": 224.55,
+   "d": 1.92,
+   "text": "domain sort of you know you can imagine"
+  },
+  {
+   "t": 226.47,
+   "d": 1.68,
+   "text": "each specialization in game development"
+  },
+  {
+   "t": 228.15,
+   "d": 2.52,
+   "text": "and you pull the the data and the code"
+  },
+  {
+   "t": 230.67,
+   "d": 1.8,
+   "text": "for that out into a separate class so"
+  },
+  {
+   "t": 232.47,
+   "d": 1.47,
+   "text": "you have an AI component of physics"
+  },
+  {
+   "t": 233.94,
+   "d": 2.91,
+   "text": "component animation graphics you know"
+  },
+  {
+   "t": 236.85,
+   "d": 2.66,
+   "text": "maybe some sound maybe other stuff and"
+  },
+  {
+   "t": 239.51,
+   "d": 2.41,
+   "text": "then your your entity class becomes"
+  },
+  {
+   "t": 241.92,
+   "d": 2.55,
+   "text": "basically just a bag of components right"
+  },
+  {
+   "t": 244.47,
+   "d": 1.47,
+   "text": "so we get a lot smaller a lot simpler"
+  },
+  {
+   "t": 245.94,
+   "d": 3.18,
+   "text": "and each domain is encapsulated in"
+  },
+  {
+   "t": 249.12,
+   "d": 1.17,
+   "text": "separate code which is nice because a"
+  },
+  {
+   "t": 250.29,
+   "d": 1.02,
+   "text": "lot of times these are maintained by"
+  },
+  {
+   "t": 251.31,
+   "d": 4.92,
+   "text": "different people too so the next thing"
+  },
+  {
+   "t": 256.23,
+   "d": 2.52,
+   "text": "it does is okay so this is a this is a"
+  },
+  {
+   "t": 258.75,
+   "d": 0.96,
+   "text": "game loop right so you're running"
+  },
+  {
+   "t": 259.71,
+   "d": 0.93,
+   "text": "through your energies in your update"
+  },
+  {
+   "t": 260.64,
+   "d": 1.92,
+   "text": "updating them and you tell each entity"
+  },
+  {
+   "t": 262.56,
+   "d": 1.5,
+   "text": "to update it and it doesn't stop it's"
+  },
+  {
+   "t": 264.06,
+   "d": 2.16,
+   "text": "supposed to do except the this is"
+  },
+  {
+   "t": 266.22,
+   "d": 2.97,
+   "text": "not a correct game loop the way your"
+  },
+  {
+   "t": 269.19,
+   "d": 1.2,
+   "text": "game loop is supposed to work is that"
+  },
+  {
+   "t": 270.39,
+   "d": 2.91,
+   "text": "the each domain runs in a separate face"
+  },
+  {
+   "t": 273.3,
+   "d": 1.89,
+   "text": "you all the AI for every actor then you"
+  },
+  {
+   "t": 275.19,
+   "d": 2.96,
+   "text": "do all the animation and all the physics"
+  },
+  {
+   "t": 278.15,
+   "d": 3.52,
+   "text": "so let's see what what is my next slider"
+  },
+  {
+   "t": 281.67,
+   "d": 2.58,
+   "text": "so that the bad thing about this is if"
+  },
+  {
+   "t": 284.25,
+   "d": 1.59,
+   "text": "you do it this way where all of your"
+  },
+  {
+   "t": 285.84,
+   "d": 2.37,
+   "text": "entities are jammed into the same class"
+  },
+  {
+   "t": 288.21,
+   "d": 1.5,
+   "text": "all the domains are jammed into the same"
+  },
+  {
+   "t": 289.71,
+   "d": 2.64,
+   "text": "class it's slow so there's this"
+  },
+  {
+   "t": 292.35,
+   "d": 1.68,
+   "text": "performance problem so how many of you"
+  },
+  {
+   "t": 294.03,
+   "d": 2.55,
+   "text": "know anything about CPU caching so if I"
+  },
+  {
+   "t": 296.58,
+   "d": 1.29,
+   "text": "ask you like about cache misses and"
+  },
+  {
+   "t": 297.87,
+   "d": 2.37,
+   "text": "misses and stuff okay so a couple of you"
+  },
+  {
+   "t": 300.24,
+   "d": 3.27,
+   "text": "which is good so you know you know about"
+  },
+  {
+   "t": 303.51,
+   "d": 1.53,
+   "text": "Moore's Law right CPUs have been getting"
+  },
+  {
+   "t": 305.04,
+   "d": 2.61,
+   "text": "twice as fast every 18 months which is"
+  },
+  {
+   "t": 307.65,
+   "d": 2.13,
+   "text": "like awesome as you know we software"
+  },
+  {
+   "t": 309.78,
+   "d": 1.23,
+   "text": "users because it means we get to be"
+  },
+  {
+   "t": 311.01,
+   "d": 1.65,
+   "text": "twice as lazy every 18 months every"
+  },
+  {
+   "t": 312.66,
+   "d": 3.24,
+   "text": "developers unfortunately Ram didn't keep"
+  },
+  {
+   "t": 315.9,
+   "d": 2.19,
+   "text": "up right so Ram has not gotten faster"
+  },
+  {
+   "t": 318.09,
+   "d": 1.38,
+   "text": "like that and it turns out having a"
+  },
+  {
+   "t": 319.47,
+   "d": 2.22,
+   "text": "super fast CPUs not very useful if you"
+  },
+  {
+   "t": 321.69,
+   "d": 1.8,
+   "text": "can't actually get data onto it fast"
+  },
+  {
+   "t": 323.49,
+   "d": 0.32,
+   "text": "enough"
+  },
+  {
+   "t": 323.81,
+   "d": 3.19,
+   "text": "so what CPUs do is they have caching on"
+  },
+  {
+   "t": 327.0,
+   "d": 3.15,
+   "text": "the chip and when you read from Ram they"
+  },
+  {
+   "t": 330.15,
+   "d": 2.76,
+   "text": "speculatively pull in nearby memory onto"
+  },
+  {
+   "t": 332.91,
+   "d": 1.65,
+   "text": "the cache and that way it can be"
+  },
+  {
+   "t": 334.56,
+   "d": 1.8,
+   "text": "accessed faster and that's based on the"
+  },
+  {
+   "t": 336.36,
+   "d": 2.16,
+   "text": "assumption that if you access byte here"
+  },
+  {
+   "t": 338.52,
+   "d": 1.38,
+   "text": "the next thing you're gonna need is the"
+  },
+  {
+   "t": 339.9,
+   "d": 2.34,
+   "text": "byte next to it right so if you if you"
+  },
+  {
+   "t": 342.24,
+   "d": 1.8,
+   "text": "access them that way it's super fast and"
+  },
+  {
+   "t": 344.04,
+   "d": 1.89,
+   "text": "if it's not it's way slower and by way"
+  },
+  {
+   "t": 345.93,
+   "d": 1.47,
+   "text": "slower I mean like two orders of"
+  },
+  {
+   "t": 347.4,
+   "d": 1.29,
+   "text": "magnitude slower so the donors routine"
+  },
+  {
+   "t": 348.69,
+   "d": 1.26,
+   "text": "like a 60 frames per second game and"
+  },
+  {
+   "t": 349.95,
+   "d": 4.35,
+   "text": "like a 1 frame per second game so let's"
+  },
+  {
+   "t": 354.3,
+   "d": 2.46,
+   "text": "see you fight yeah so are when you have"
+  },
+  {
+   "t": 356.76,
+   "d": 3.09,
+   "text": "a monolithic entity class with all of"
+  },
+  {
+   "t": 359.85,
+   "d": 2.25,
+   "text": "the state for each domain you know mix"
+  },
+  {
+   "t": 362.1,
+   "d": 1.71,
+   "text": "together then you have an array of those"
+  },
+  {
+   "t": 363.81,
+   "d": 2.16,
+   "text": "in memory as you're skipping through"
+  },
+  {
+   "t": 365.97,
+   "d": 1.41,
+   "text": "updating the animation so if you're"
+  },
+  {
+   "t": 367.38,
+   "d": 1.56,
+   "text": "skipping over the physics and the other"
+  },
+  {
+   "t": 368.94,
+   "d": 1.2,
+   "text": "domains and you're just blowing your"
+  },
+  {
+   "t": 370.14,
+   "d": 1.29,
+   "text": "cache every time right so it's super"
+  },
+  {
+   "t": 371.43,
+   "d": 1.74,
+   "text": "slow when you pull this stuff out into"
+  },
+  {
+   "t": 373.17,
+   "d": 1.26,
+   "text": "components that means you can make these"
+  },
+  {
+   "t": 374.43,
+   "d": 2.04,
+   "text": "these homogeneous arrays of each"
+  },
+  {
+   "t": 376.47,
+   "d": 1.23,
+   "text": "component so when you're updating the"
+  },
+  {
+   "t": 377.7,
+   "d": 1.26,
+   "text": "physics you're just like stepping"
+  },
+  {
+   "t": 378.96,
+   "d": 1.92,
+   "text": "through you know memory and not skipping"
+  },
+  {
+   "t": 380.88,
+   "d": 1.23,
+   "text": "over anything so this makes a big"
+  },
+  {
+   "t": 382.11,
+   "d": 1.86,
+   "text": "difference for perf this is like if you"
+  },
+  {
+   "t": 383.97,
+   "d": 2.52,
+   "text": "are like I'm you know a modern like you"
+  },
+  {
+   "t": 386.49,
+   "d": 1.26,
+   "text": "know sort of triple-a real-time game"
+  },
+  {
+   "t": 387.75,
+   "d": 2.57,
+   "text": "developer like this stuff is your life"
+  },
+  {
+   "t": 390.32,
+   "d": 4.3,
+   "text": "for better or worse so this system is"
+  },
+  {
+   "t": 394.62,
+   "d": 1.11,
+   "text": "part of this is like a little bit vague"
+  },
+  {
+   "t": 395.73,
+   "d": 1.86,
+   "text": "but basically if you imagine the code"
+  },
+  {
+   "t": 397.59,
+   "d": 1.29,
+   "text": "that is sort of stepping through that"
+  },
+  {
+   "t": 398.88,
+   "d": 1.08,
+   "text": "domain that's kind of what is"
+  },
+  {
+   "t": 399.96,
+   "d": 1.83,
+   "text": "and some people pull that out of the"
+  },
+  {
+   "t": 401.79,
+   "d": 5.85,
+   "text": "component and some people don't so sorry"
+  },
+  {
+   "t": 407.64,
+   "d": 2.16,
+   "text": "this is an example of a system here so"
+  },
+  {
+   "t": 409.8,
+   "d": 1.29,
+   "text": "you can see it's just walking to AI"
+  },
+  {
+   "t": 411.09,
+   "d": 2.19,
+   "text": "components and that the the useful thing"
+  },
+  {
+   "t": 413.28,
+   "d": 1.56,
+   "text": "is that it is not mentioning the entity"
+  },
+  {
+   "t": 414.84,
+   "d": 1.08,
+   "text": "at all right it just goes straight to"
+  },
+  {
+   "t": 415.92,
+   "d": 1.38,
+   "text": "the components it's not skipping around"
+  },
+  {
+   "t": 417.3,
+   "d": 1.53,
+   "text": "in memory and that's what's kind of"
+  },
+  {
+   "t": 418.83,
+   "d": 3.78,
+   "text": "making your CPU happy okay so how does"
+  },
+  {
+   "t": 422.61,
+   "d": 3.27,
+   "text": "this apply to the world's best game"
+  },
+  {
+   "t": 425.88,
+   "d": 3.57,
+   "text": "genre so problem number one complexity"
+  },
+  {
+   "t": 429.45,
+   "d": 2.91,
+   "text": "so let's think about you know take a you"
+  },
+  {
+   "t": 432.36,
+   "d": 2.04,
+   "text": "know your your monster class in your in"
+  },
+  {
+   "t": 434.4,
+   "d": 1.79,
+   "text": "your robot I can think about the domains"
+  },
+  {
+   "t": 436.19,
+   "d": 6.81,
+   "text": "the physics is not super complicated you"
+  },
+  {
+   "t": 444.92,
+   "d": 5.2,
+   "text": "graphics fidelity is maybe not you know"
+  },
+  {
+   "t": 450.12,
+   "d": 2.25,
+   "text": "that's more or less equivalent to the"
+  },
+  {
+   "t": 452.37,
+   "d": 2.19,
+   "text": "complexity of like you know bones skin"
+  },
+  {
+   "t": 454.56,
+   "d": 3.96,
+   "text": "mesh animation right a is interesting"
+  },
+  {
+   "t": 458.52,
+   "d": 0.93,
+   "text": "though right like there is actually"
+  },
+  {
+   "t": 459.45,
+   "d": 1.44,
+   "text": "quite a bit of stuff in AI right like"
+  },
+  {
+   "t": 460.89,
+   "d": 1.23,
+   "text": "monsters can do lots of different stuff"
+  },
+  {
+   "t": 462.12,
+   "d": 2.34,
+   "text": "there's path finding these things"
+  },
+  {
+   "t": 464.46,
+   "d": 1.95,
+   "text": "interact with each other so maybe you"
+  },
+  {
+   "t": 466.41,
+   "d": 1.5,
+   "text": "know you have a monster that's afraid"
+  },
+  {
+   "t": 467.91,
+   "d": 1.53,
+   "text": "and it has a teleport special move"
+  },
+  {
+   "t": 469.44,
+   "d": 1.47,
+   "text": "doesn't know to use teleport to get away"
+  },
+  {
+   "t": 470.91,
+   "d": 1.71,
+   "text": "stuff like that so so this domain is"
+  },
+  {
+   "t": 472.62,
+   "d": 1.82,
+   "text": "kind of interesting"
+  },
+  {
+   "t": 474.44,
+   "d": 2.53,
+   "text": "so I'm gonna hit too far so if you"
+  },
+  {
+   "t": 476.97,
+   "d": 2.34,
+   "text": "imagine taking your entity class in your"
+  },
+  {
+   "t": 479.31,
+   "d": 1.53,
+   "text": "roguelike and splitting it along domains"
+  },
+  {
+   "t": 480.84,
+   "d": 1.68,
+   "text": "you get the super lopsided thing where"
+  },
+  {
+   "t": 482.52,
+   "d": 2.19,
+   "text": "you're you know your animation component"
+  },
+  {
+   "t": 484.71,
+   "d": 1.23,
+   "text": "and your physics component are useless"
+  },
+  {
+   "t": 485.94,
+   "d": 1.65,
+   "text": "and then like the AI component is all"
+  },
+  {
+   "t": 487.59,
+   "d": 1.59,
+   "text": "the things right so it's not super"
+  },
+  {
+   "t": 489.18,
+   "d": 2.1,
+   "text": "helpful for kind of you know breaking"
+  },
+  {
+   "t": 491.28,
+   "d": 1.61,
+   "text": "down your code and organizing it and"
+  },
+  {
+   "t": 492.89,
+   "d": 3.22,
+   "text": "then we can talk about performance so so"
+  },
+  {
+   "t": 496.11,
+   "d": 2.97,
+   "text": "of those of you who know what CPU"
+  },
+  {
+   "t": 499.08,
+   "d": 1.83,
+   "text": "caching is how many of you have"
+  },
+  {
+   "t": 500.91,
+   "d": 2.42,
+   "text": "performance problems in your roguelike"
+  },
+  {
+   "t": 503.33,
+   "d": 3.25,
+   "text": "you how many of you oh wait sorry was"
+  },
+  {
+   "t": 506.58,
+   "d": 2.52,
+   "text": "there another one I see three three of"
+  },
+  {
+   "t": 509.1,
+   "d": 1.8,
+   "text": "you how many of you know that it's"
+  },
+  {
+   "t": 510.9,
+   "d": 4.17,
+   "text": "because of CPU cache misses this is"
+  },
+  {
+   "t": 515.07,
+   "d": 3.84,
+   "text": "still three okay so the rest of you this"
+  },
+  {
+   "t": 518.91,
+   "d": 2.31,
+   "text": "pattern is not helpful for you right so"
+  },
+  {
+   "t": 521.22,
+   "d": 2.28,
+   "text": "uh which is kind of weird because you"
+  },
+  {
+   "t": 523.5,
+   "d": 1.83,
+   "text": "see a lot of people online saying like"
+  },
+  {
+   "t": 525.33,
+   "d": 1.23,
+   "text": "you know we're got my robe like and I"
+  },
+  {
+   "t": 526.56,
+   "d": 1.71,
+   "text": "want to use ECS and it's like okay well"
+  },
+  {
+   "t": 528.27,
+   "d": 1.5,
+   "text": "do you do you have these problems I sort"
+  },
+  {
+   "t": 529.77,
+   "d": 1.77,
+   "text": "of think of it as like going into the"
+  },
+  {
+   "t": 531.54,
+   "d": 1.05,
+   "text": "doctor and being like yeah I hear really"
+  },
+  {
+   "t": 532.59,
+   "d": 0.35,
+   "text": "good"
+  },
+  {
+   "t": 532.94,
+   "d": 1.56,
+   "text": "about c-sections can I have one it's"
+  },
+  {
+   "t": 534.5,
+   "d": 5.73,
+   "text": "like a are you pregnant no so at least"
+  },
+  {
+   "t": 540.23,
+   "d": 1.83,
+   "text": "in the classic incarnation of like"
+  },
+  {
+   "t": 542.06,
+   "d": 1.29,
+   "text": "splitting along domain boundaries I"
+  },
+  {
+   "t": 543.35,
+   "d": 2.76,
+   "text": "don't think it's a super good fit but"
+  },
+  {
+   "t": 546.11,
+   "d": 1.53,
+   "text": "that does not mean that rope legs do not"
+  },
+  {
+   "t": 547.64,
+   "d": 2.43,
+   "text": "have problems at least organizationally"
+  },
+  {
+   "t": 550.07,
+   "d": 1.32,
+   "text": "so how many of you actually are working"
+  },
+  {
+   "t": 551.39,
+   "d": 2.94,
+   "text": "on your own roguelike right now okay"
+  },
+  {
+   "t": 554.33,
+   "d": 1.65,
+   "text": "lots of hands it'd be weird if like none"
+  },
+  {
+   "t": 555.98,
+   "d": 1.47,
+   "text": "of you raise your hands why would you be"
+  },
+  {
+   "t": 557.45,
+   "d": 1.29,
+   "text": "listening to me talk about this would be"
+  },
+  {
+   "t": 558.74,
+   "d": 2.7,
+   "text": "strange so how many of you feel like you"
+  },
+  {
+   "t": 561.44,
+   "d": 1.41,
+   "text": "struggle with software architecture"
+  },
+  {
+   "t": 562.85,
+   "d": 2.4,
+   "text": "issues organizational issues you know"
+  },
+  {
+   "t": 565.25,
+   "d": 2.94,
+   "text": "your yeah I do I run into stuff like"
+  },
+  {
+   "t": 568.19,
+   "d": 1.05,
+   "text": "this all the time where it's like I know"
+  },
+  {
+   "t": 569.24,
+   "d": 1.56,
+   "text": "what I want the code to do but I have"
+  },
+  {
+   "t": 570.8,
+   "d": 1.41,
+   "text": "trouble figuring out how to organize it"
+  },
+  {
+   "t": 572.21,
+   "d": 3.26,
+   "text": "right so I'll go through a couple of"
+  },
+  {
+   "t": 575.47,
+   "d": 3.01,
+   "text": "problems that you know that I run into a"
+  },
+  {
+   "t": 578.48,
+   "d": 1.53,
+   "text": "lot so one thing this is something I"
+  },
+  {
+   "t": 580.01,
+   "d": 2.58,
+   "text": "really like about roblox is there's a"
+  },
+  {
+   "t": 582.59,
+   "d": 2.25,
+   "text": "lot of behavioral complexity right"
+  },
+  {
+   "t": 584.84,
+   "d": 1.05,
+   "text": "there's a lot just a lot of different"
+  },
+  {
+   "t": 585.89,
+   "d": 1.89,
+   "text": "stuff that entities in the game can do"
+  },
+  {
+   "t": 587.78,
+   "d": 1.62,
+   "text": "so this is it's my game right now just"
+  },
+  {
+   "t": 589.4,
+   "d": 1.5,
+   "text": "the different things that like monsters"
+  },
+  {
+   "t": 590.9,
+   "d": 0.99,
+   "text": "in the hero can do right like there's"
+  },
+  {
+   "t": 591.89,
+   "d": 1.74,
+   "text": "like I had a management there's like all"
+  },
+  {
+   "t": 593.63,
+   "d": 2.04,
+   "text": "things like special effects so you have"
+  },
+  {
+   "t": 595.67,
+   "d": 2.12,
+   "text": "a lot of a lot of behavioral richness"
+  },
+  {
+   "t": 597.79,
+   "d": 3.52,
+   "text": "and then there's a wider breadth of"
+  },
+  {
+   "t": 601.31,
+   "d": 2.94,
+   "text": "content so Fortnight not that there's"
+  },
+  {
+   "t": 604.25,
+   "d": 1.05,
+   "text": "like two kinds I don't know anything"
+  },
+  {
+   "t": 605.3,
+   "d": 1.08,
+   "text": "about four and I don't know how this"
+  },
+  {
+   "t": 606.38,
+   "d": 1.38,
+   "text": "works but like four and it has like"
+  },
+  {
+   "t": 607.76,
+   "d": 1.68,
+   "text": "sixteen different kinds of monsters I"
+  },
+  {
+   "t": 609.44,
+   "d": 1.23,
+   "text": "think they're basically all different"
+  },
+  {
+   "t": 610.67,
+   "d": 3.63,
+   "text": "zombies which is not like super much um"
+  },
+  {
+   "t": 614.3,
+   "d": 3.8,
+   "text": "but a Dom has according to the wiki like"
+  },
+  {
+   "t": 618.1,
+   "d": 2.83,
+   "text": "317 something monsters so like your"
+  },
+  {
+   "t": 620.93,
+   "d": 1.38,
+   "text": "typical roguelike just has like a lot"
+  },
+  {
+   "t": 622.31,
+   "d": 2.85,
+   "text": "more breadth of content right and that"
+  },
+  {
+   "t": 625.16,
+   "d": 3.2,
+   "text": "is an organizational challenge right so"
+  },
+  {
+   "t": 628.36,
+   "d": 2.2,
+   "text": "the I'm gonna go through a couple of"
+  },
+  {
+   "t": 630.56,
+   "d": 1.47,
+   "text": "patterns and these are patterns that I"
+  },
+  {
+   "t": 632.03,
+   "d": 1.38,
+   "text": "think have worked well for kind of"
+  },
+  {
+   "t": 633.41,
+   "d": 2.16,
+   "text": "helping me tame these issues whether or"
+  },
+  {
+   "t": 635.57,
+   "d": 2.01,
+   "text": "not they will help you I don't make any"
+  },
+  {
+   "t": 637.58,
+   "d": 3.59,
+   "text": "promises okay so let's talk about items"
+  },
+  {
+   "t": 641.17,
+   "d": 1.87,
+   "text": "items are awesome you know a lot of"
+  },
+  {
+   "t": 643.04,
+   "d": 1.56,
+   "text": "games roguelikes were very equipment"
+  },
+  {
+   "t": 644.6,
+   "d": 1.35,
+   "text": "based a lot of the capabilities of your"
+  },
+  {
+   "t": 645.95,
+   "d": 1.77,
+   "text": "players based on equipment what that"
+  },
+  {
+   "t": 647.72,
+   "d": 2.1,
+   "text": "means is there's just a lot of stuff"
+  },
+  {
+   "t": 649.82,
+   "d": 1.68,
+   "text": "that items can do right so like weapons"
+  },
+  {
+   "t": 651.5,
+   "d": 1.98,
+   "text": "can be used for melee attacks or ranged"
+  },
+  {
+   "t": 653.48,
+   "d": 1.62,
+   "text": "attacks maybe you've got armors maybe"
+  },
+  {
+   "t": 655.1,
+   "d": 1.41,
+   "text": "shields increase your ability to dodge"
+  },
+  {
+   "t": 656.51,
+   "d": 2.28,
+   "text": "their stuff you can consume things you"
+  },
+  {
+   "t": 658.79,
+   "d": 1.95,
+   "text": "can activate and reuse sometimes stuff"
+  },
+  {
+   "t": 660.74,
+   "d": 1.98,
+   "text": "has passive effects just a lot of just"
+  },
+  {
+   "t": 662.72,
+   "d": 2.35,
+   "text": "stuff an item can do right"
+  },
+  {
+   "t": 665.07,
+   "d": 3.03,
+   "text": "and jam all of that in one class it's is"
+  },
+  {
+   "t": 668.1,
+   "d": 2.58,
+   "text": "not super awesome right so the the"
+  },
+  {
+   "t": 670.68,
+   "d": 1.68,
+   "text": "classic solution was like okay we'll use"
+  },
+  {
+   "t": 672.36,
+   "d": 1.41,
+   "text": "inheritance cuz inheritance will solve"
+  },
+  {
+   "t": 673.77,
+   "d": 2.58,
+   "text": "all the problems and you make subclasses"
+  },
+  {
+   "t": 676.35,
+   "d": 1.62,
+   "text": "for all the different kinds of of items"
+  },
+  {
+   "t": 677.97,
+   "d": 1.08,
+   "text": "you know where this is going really this"
+  },
+  {
+   "t": 679.05,
+   "d": 1.41,
+   "text": "is a talk in like nineteen ninety five"
+  },
+  {
+   "t": 680.46,
+   "d": 1.5,
+   "text": "you guys didn't like yeah so classic is"
+  },
+  {
+   "t": 681.96,
+   "d": 3.21,
+   "text": "awesome but now we have learned so the"
+  },
+  {
+   "t": 685.17,
+   "d": 1.65,
+   "text": "problem is like eventually you end up in"
+  },
+  {
+   "t": 686.82,
+   "d": 2.1,
+   "text": "a situation where like I want to have a"
+  },
+  {
+   "t": 688.92,
+   "d": 2.25,
+   "text": "sword that shoots a fireball and it's"
+  },
+  {
+   "t": 691.17,
+   "d": 1.26,
+   "text": "like okay well I don't want to deal with"
+  },
+  {
+   "t": 692.43,
+   "d": 1.77,
+   "text": "like multiple inheritance and stuff like"
+  },
+  {
+   "t": 694.2,
+   "d": 3.93,
+   "text": "that and it falls apart right so that's"
+  },
+  {
+   "t": 698.13,
+   "d": 6.36,
+   "text": "bad so instead what I do is I split out"
+  },
+  {
+   "t": 704.49,
+   "d": 2.31,
+   "text": "each capability that an item has into a"
+  },
+  {
+   "t": 706.8,
+   "d": 2.42,
+   "text": "separate class in a separate field so"
+  },
+  {
+   "t": 709.22,
+   "d": 4.75,
+   "text": "there is there's a capability for being"
+  },
+  {
+   "t": 713.97,
+   "d": 2.19,
+   "text": "able to given it do an attack there is a"
+  },
+  {
+   "t": 716.16,
+   "d": 1.71,
+   "text": "capability for being able to provide"
+  },
+  {
+   "t": 717.87,
+   "d": 3.09,
+   "text": "defense then there's capabilities for"
+  },
+  {
+   "t": 720.96,
+   "d": 2.58,
+   "text": "being able to use it and that's kind of"
+  },
+  {
+   "t": 723.54,
+   "d": 1.8,
+   "text": "polymorphic right so there is a base use"
+  },
+  {
+   "t": 725.34,
+   "d": 0.9,
+   "text": "class and then there are these"
+  },
+  {
+   "t": 726.24,
+   "d": 1.17,
+   "text": "subclasses for each of the different"
+  },
+  {
+   "t": 727.41,
+   "d": 2.07,
+   "text": "ways you can use it and this is a case"
+  },
+  {
+   "t": 729.48,
+   "d": 1.35,
+   "text": "where I think actually inheritance works"
+  },
+  {
+   "t": 730.83,
+   "d": 1.23,
+   "text": "really well where you have a hierarchy"
+  },
+  {
+   "t": 732.06,
+   "d": 1.71,
+   "text": "that's not very deep but it's really it"
+  },
+  {
+   "t": 733.77,
+   "d": 5.19,
+   "text": "really wide and then then the item"
+  },
+  {
+   "t": 738.96,
+   "d": 1.62,
+   "text": "itself is just a combination of these"
+  },
+  {
+   "t": 740.58,
+   "d": 1.89,
+   "text": "capabilities right and you can sort of"
+  },
+  {
+   "t": 742.47,
+   "d": 1.68,
+   "text": "freely mix and match so you want to make"
+  },
+  {
+   "t": 744.15,
+   "d": 1.35,
+   "text": "a sword that's just an item that has"
+  },
+  {
+   "t": 745.5,
+   "d": 1.35,
+   "text": "some happens to have a melee attack"
+  },
+  {
+   "t": 746.85,
+   "d": 2.4,
+   "text": "right you want to make a shield that's"
+  },
+  {
+   "t": 749.25,
+   "d": 1.89,
+   "text": "uh you know it turns out you can also"
+  },
+  {
+   "t": 751.14,
+   "d": 1.44,
+   "text": "have a melee attack because maybe you"
+  },
+  {
+   "t": 752.58,
+   "d": 2.31,
+   "text": "could shield bash with it right um so it"
+  },
+  {
+   "t": 754.89,
+   "d": 1.35,
+   "text": "works nicely too if you want to be able"
+  },
+  {
+   "t": 756.24,
+   "d": 2.91,
+   "text": "to you know define kinds of content in"
+  },
+  {
+   "t": 759.15,
+   "d": 1.41,
+   "text": "data files right because then you can"
+  },
+  {
+   "t": 760.56,
+   "d": 1.17,
+   "text": "read these from data and then you're"
+  },
+  {
+   "t": 761.73,
+   "d": 2.27,
+   "text": "constructing kinds of items procedurally"
+  },
+  {
+   "t": 764.0,
+   "d": 5.14,
+   "text": "so this is pretty nice so the whether or"
+  },
+  {
+   "t": 769.14,
+   "d": 1.53,
+   "text": "not you call it component is kind of an"
+  },
+  {
+   "t": 770.67,
+   "d": 2.37,
+   "text": "interesting question but I think of this"
+  },
+  {
+   "t": 773.04,
+   "d": 1.29,
+   "text": "as you know using components to"
+  },
+  {
+   "t": 774.33,
+   "d": 1.62,
+   "text": "represent capabilities instead of"
+  },
+  {
+   "t": 775.95,
+   "d": 1.92,
+   "text": "domains or a sort of more general way to"
+  },
+  {
+   "t": 777.87,
+   "d": 1.44,
+   "text": "say this is this is just the the old"
+  },
+  {
+   "t": 779.31,
+   "d": 2.61,
+   "text": "principle of preferring you know"
+  },
+  {
+   "t": 781.92,
+   "d": 2.52,
+   "text": "composition over inheritance I think"
+  },
+  {
+   "t": 784.44,
+   "d": 1.23,
+   "text": "this works pretty well I use it in a"
+  },
+  {
+   "t": 785.67,
+   "d": 1.86,
+   "text": "couple of different places so monsters"
+  },
+  {
+   "t": 787.53,
+   "d": 1.23,
+   "text": "have special moves and those are"
+  },
+  {
+   "t": 788.76,
+   "d": 3.96,
+   "text": "basically capability objects to speaking"
+  },
+  {
+   "t": 792.72,
+   "d": 2.13,
+   "text": "of monsters let's talk about monsters"
+  },
+  {
+   "t": 794.85,
+   "d": 4.35,
+   "text": "monsters are awesome so imagine your"
+  },
+  {
+   "t": 799.2,
+   "d": 1.65,
+   "text": "heroes in the dungeon right he's hanging"
+  },
+  {
+   "t": 800.85,
+   "d": 1.62,
+   "text": "out he's surrounded by 20 goblins and"
+  },
+  {
+   "t": 802.47,
+   "d": 1.62,
+   "text": "you know goblins have lots of"
+  },
+  {
+   "t": 804.09,
+   "d": 1.26,
+   "text": "interesting stuff about them you know"
+  },
+  {
+   "t": 805.35,
+   "d": 1.74,
+   "text": "position health how close to death they"
+  },
+  {
+   "t": 807.09,
+   "d": 1.5,
+   "text": "are things like that but there's a lot"
+  },
+  {
+   "t": 808.59,
+   "d": 1.14,
+   "text": "of stuff that they have in common right"
+  },
+  {
+   "t": 809.73,
+   "d": 2.46,
+   "text": "because they're they're all goblins and"
+  },
+  {
+   "t": 812.19,
+   "d": 1.59,
+   "text": "if you kind of stuff all that into the"
+  },
+  {
+   "t": 813.78,
+   "d": 1.8,
+   "text": "monster class it gets sort of you know"
+  },
+  {
+   "t": 815.58,
+   "d": 1.38,
+   "text": "is a lot of extra state it's kind of"
+  },
+  {
+   "t": 816.96,
+   "d": 3.75,
+   "text": "messy so the solution that I have is"
+  },
+  {
+   "t": 820.71,
+   "d": 2.85,
+   "text": "this is not super rocket science I know"
+  },
+  {
+   "t": 823.56,
+   "d": 1.47,
+   "text": "this is not like galaxies brain right"
+  },
+  {
+   "t": 825.03,
+   "d": 3.18,
+   "text": "here is to define a separate class that"
+  },
+  {
+   "t": 828.21,
+   "d": 1.83,
+   "text": "represents a kind of monster right so"
+  },
+  {
+   "t": 830.04,
+   "d": 1.65,
+   "text": "there is there's one instance of this"
+  },
+  {
+   "t": 831.69,
+   "d": 1.92,
+   "text": "breed class for a goblin and then every"
+  },
+  {
+   "t": 833.61,
+   "d": 1.77,
+   "text": "monster every Goblin just has a breed"
+  },
+  {
+   "t": 835.38,
+   "d": 3.21,
+   "text": "that points to that this is a an old"
+  },
+  {
+   "t": 838.59,
+   "d": 1.35,
+   "text": "pattern it's called the type object"
+  },
+  {
+   "t": 839.94,
+   "d": 2.16,
+   "text": "pattern you you are probably using this"
+  },
+  {
+   "t": 842.1,
+   "d": 2.76,
+   "text": "already you've probably reinvented it it"
+  },
+  {
+   "t": 844.86,
+   "d": 1.65,
+   "text": "is but it is super useful it's nice to"
+  },
+  {
+   "t": 846.51,
+   "d": 1.98,
+   "text": "think about one of the things I think is"
+  },
+  {
+   "t": 848.49,
+   "d": 1.68,
+   "text": "kind of interesting about it is you know"
+  },
+  {
+   "t": 850.17,
+   "d": 1.92,
+   "text": "so you're implementing your game"
+  },
+  {
+   "t": 852.09,
+   "d": 1.2,
+   "text": "probably in an object-oriented language"
+  },
+  {
+   "t": 853.29,
+   "d": 3.0,
+   "text": "and then you're basically reinventing an"
+  },
+  {
+   "t": 856.29,
+   "d": 1.98,
+   "text": "object orientation at the application"
+  },
+  {
+   "t": 858.27,
+   "d": 1.64,
+   "text": "level right so this breed class is a"
+  },
+  {
+   "t": 859.91,
+   "d": 2.65,
+   "text": "class that sort of represents a class"
+  },
+  {
+   "t": 862.56,
+   "d": 1.86,
+   "text": "right so breed itself is kind of a meta"
+  },
+  {
+   "t": 864.42,
+   "d": 1.59,
+   "text": "class in each instance of breed as a"
+  },
+  {
+   "t": 866.01,
+   "d": 2.55,
+   "text": "class and that you know gives you some"
+  },
+  {
+   "t": 868.56,
+   "d": 2.19,
+   "text": "interesting opportunities to pick"
+  },
+  {
+   "t": 870.75,
+   "d": 1.56,
+   "text": "object-oriented features and"
+  },
+  {
+   "t": 872.31,
+   "d": 1.44,
+   "text": "reemployment themselves if you're useful"
+  },
+  {
+   "t": 873.75,
+   "d": 1.26,
+   "text": "if they're useful like you know we could"
+  },
+  {
+   "t": 875.01,
+   "d": 2.88,
+   "text": "give breed a pointer to another breed"
+  },
+  {
+   "t": 877.89,
+   "d": 1.47,
+   "text": "that was its parent breed that it"
+  },
+  {
+   "t": 879.36,
+   "d": 1.47,
+   "text": "inherits from and we could define our"
+  },
+  {
+   "t": 880.83,
+   "d": 1.23,
+   "text": "own inheritance semantics about"
+  },
+  {
+   "t": 882.06,
+   "d": 2.4,
+   "text": "something that's useful for us so that's"
+  },
+  {
+   "t": 884.46,
+   "d": 1.85,
+   "text": "kind of cool I use the same thing for"
+  },
+  {
+   "t": 886.31,
+   "d": 2.65,
+   "text": "types of titles in the world for types"
+  },
+  {
+   "t": 888.96,
+   "d": 5.19,
+   "text": "of items special modifiers on items so"
+  },
+  {
+   "t": 894.15,
+   "d": 3.18,
+   "text": "the basic idea is defining a class that"
+  },
+  {
+   "t": 897.33,
+   "d": 1.92,
+   "text": "represents a type where each instance of"
+  },
+  {
+   "t": 899.25,
+   "d": 3.99,
+   "text": "that class is a new kind of type sounds"
+  },
+  {
+   "t": 903.24,
+   "d": 1.32,
+   "text": "a little weird and meta when I say like"
+  },
+  {
+   "t": 904.56,
+   "d": 4.31,
+   "text": "that okay so let's talk about actions"
+  },
+  {
+   "t": 908.87,
+   "d": 4.57,
+   "text": "which are awesome so my I don't call"
+  },
+  {
+   "t": 913.44,
+   "d": 1.35,
+   "text": "them entities I call them actors this is"
+  },
+  {
+   "t": 914.79,
+   "d": 1.62,
+   "text": "kind of the main class hierarchy for"
+  },
+  {
+   "t": 916.41,
+   "d": 2.85,
+   "text": "living the stuff in the the dungeon so"
+  },
+  {
+   "t": 919.26,
+   "d": 1.62,
+   "text": "there's there's a base actor class that"
+  },
+  {
+   "t": 920.88,
+   "d": 1.29,
+   "text": "has the the things that heroes and"
+  },
+  {
+   "t": 922.17,
+   "d": 1.8,
+   "text": "monsters have in common position health"
+  },
+  {
+   "t": 923.97,
+   "d": 1.47,
+   "text": "things like that and then there's a so"
+  },
+  {
+   "t": 925.44,
+   "d": 1.11,
+   "text": "class we're here in a sub class for"
+  },
+  {
+   "t": 926.55,
+   "d": 1.14,
+   "text": "monster which is just the stuff that's"
+  },
+  {
+   "t": 927.69,
+   "d": 0.72,
+   "text": "you know the heroes"
+  },
+  {
+   "t": 928.41,
+   "d": 1.37,
+   "text": "always a little bit special in the game"
+  },
+  {
+   "t": 929.78,
+   "d": 3.01,
+   "text": "and that's kind of the extent of the"
+  },
+  {
+   "t": 932.79,
+   "d": 3.06,
+   "text": "hierarchy and before you know I talked"
+  },
+  {
+   "t": 935.85,
+   "d": 0.96,
+   "text": "about all the different stuff that"
+  },
+  {
+   "t": 936.81,
+   "d": 1.86,
+   "text": "entities in the game can do right"
+  },
+  {
+   "t": 938.67,
+   "d": 1.14,
+   "text": "there's like a lot of behavioral"
+  },
+  {
+   "t": 939.81,
+   "d": 1.62,
+   "text": "richness there's like kind of management"
+  },
+  {
+   "t": 941.43,
+   "d": 1.29,
+   "text": "they're special effects walking around"
+  },
+  {
+   "t": 942.72,
+   "d": 2.94,
+   "text": "the dungeon combat that behavioral code"
+  },
+  {
+   "t": 945.66,
+   "d": 1.98,
+   "text": "needs to live somewhere right so if you"
+  },
+  {
+   "t": 947.64,
+   "d": 2.19,
+   "text": "stuff all of that in the main actor"
+  },
+  {
+   "t": 949.83,
+   "d": 1.95,
+   "text": "class you know you're right back to the"
+  },
+  {
+   "t": 951.78,
+   "d": 2.13,
+   "text": "sort of the original 90s ten thousand"
+  },
+  {
+   "t": 953.91,
+   "d": 1.74,
+   "text": "lines of code game object class where"
+  },
+  {
+   "t": 955.65,
+   "d": 1.98,
+   "text": "it's just like the whole game is inside"
+  },
+  {
+   "t": 957.63,
+   "d": 2.34,
+   "text": "there right and you hate your life and"
+  },
+  {
+   "t": 959.97,
+   "d": 5.63,
+   "text": "no longer want to live so that's bad"
+  },
+  {
+   "t": 965.69,
+   "d": 2.68,
+   "text": "there's kind of a related problem too so"
+  },
+  {
+   "t": 968.37,
+   "d": 2.7,
+   "text": "so and for those of you that have your"
+  },
+  {
+   "t": 971.07,
+   "d": 1.46,
+   "text": "own roguelikes how many of you have a"
+  },
+  {
+   "t": 972.53,
+   "d": 2.47,
+   "text": "speed system or an energy system we're"
+  },
+  {
+   "t": 975.0,
+   "d": 1.86,
+   "text": "different you know actors and monsters"
+  },
+  {
+   "t": 976.86,
+   "d": 2.52,
+   "text": "can move at different speeds it's a"
+  },
+  {
+   "t": 979.38,
+   "d": 1.98,
+   "text": "decent number of you so so this doesn't"
+  },
+  {
+   "t": 981.36,
+   "d": 1.35,
+   "text": "really work for your game loop right you"
+  },
+  {
+   "t": 982.71,
+   "d": 1.38,
+   "text": "can't just be like okay let the hero do"
+  },
+  {
+   "t": 984.09,
+   "d": 0.93,
+   "text": "their thing and then like run through"
+  },
+  {
+   "t": 985.02,
+   "d": 1.62,
+   "text": "the monsters and then repeat right"
+  },
+  {
+   "t": 986.64,
+   "d": 2.04,
+   "text": "because if the hero's slower that means"
+  },
+  {
+   "t": 988.68,
+   "d": 1.35,
+   "text": "more monsters need to get processed if"
+  },
+  {
+   "t": 990.03,
+   "d": 1.47,
+   "text": "the hero's faster the hero may need to"
+  },
+  {
+   "t": 991.5,
+   "d": 1.77,
+   "text": "take more turns so you need a way to be"
+  },
+  {
+   "t": 993.27,
+   "d": 2.37,
+   "text": "able to kind of interleave the way"
+  },
+  {
+   "t": 995.64,
+   "d": 2.01,
+   "text": "heroes and monsters are being processed"
+  },
+  {
+   "t": 997.65,
+   "d": 4.14,
+   "text": "by the game loop so that doesn't work my"
+  },
+  {
+   "t": 1001.79,
+   "d": 3.63,
+   "text": "solution is a the game before the Gang"
+  },
+  {
+   "t": 1005.42,
+   "d": 1.2,
+   "text": "of Four pattern is called the command"
+  },
+  {
+   "t": 1006.62,
+   "d": 2.28,
+   "text": "pattern I'm calling it action here so"
+  },
+  {
+   "t": 1008.9,
+   "d": 2.58,
+   "text": "it's the command pattern and what that"
+  },
+  {
+   "t": 1011.48,
+   "d": 3.0,
+   "text": "is is it's basically an object that"
+  },
+  {
+   "t": 1014.48,
+   "d": 2.64,
+   "text": "represents an operation back in the day"
+  },
+  {
+   "t": 1017.12,
+   "d": 1.44,
+   "text": "this was like maybe a revolutionary"
+  },
+  {
+   "t": 1018.56,
+   "d": 2.28,
+   "text": "concept most of us today are used to"
+  },
+  {
+   "t": 1020.84,
+   "d": 1.02,
+   "text": "programming languages that have"
+  },
+  {
+   "t": 1021.86,
+   "d": 2.85,
+   "text": "first-class functions so it's basically"
+  },
+  {
+   "t": 1024.71,
+   "d": 1.95,
+   "text": "just a closure it's just an object that"
+  },
+  {
+   "t": 1026.66,
+   "d": 1.44,
+   "text": "represents the thing that you can invoke"
+  },
+  {
+   "t": 1028.1,
+   "d": 3.15,
+   "text": "in practice you can't use just a raw"
+  },
+  {
+   "t": 1031.25,
+   "d": 1.53,
+   "text": "function for this - and practice it is"
+  },
+  {
+   "t": 1032.78,
+   "d": 1.29,
+   "text": "kind of nice to define a class because"
+  },
+  {
+   "t": 1034.07,
+   "d": 1.29,
+   "text": "you end up getting some other"
+  },
+  {
+   "t": 1035.36,
+   "d": 2.79,
+   "text": "functionality and stuff in there so in"
+  },
+  {
+   "t": 1038.15,
+   "d": 2.76,
+   "text": "my game this action class and an action"
+  },
+  {
+   "t": 1040.91,
+   "d": 2.61,
+   "text": "is a you can think of it as a first"
+  },
+  {
+   "t": 1043.52,
+   "d": 3.0,
+   "text": "class turn it represents a single step"
+  },
+  {
+   "t": 1046.52,
+   "d": 2.51,
+   "text": "in the game that an actor can perform"
+  },
+  {
+   "t": 1049.03,
+   "d": 3.76,
+   "text": "and the way that works then in the game"
+  },
+  {
+   "t": 1052.79,
+   "d": 2.28,
+   "text": "loop is the game loop up here is doing"
+  },
+  {
+   "t": 1055.07,
+   "d": 1.71,
+   "text": "kind of the you know the energy speed"
+  },
+  {
+   "t": 1056.78,
+   "d": 1.77,
+   "text": "stuff where it's you know giving actors"
+  },
+  {
+   "t": 1058.55,
+   "d": 1.68,
+   "text": "some energy based on how fast they move"
+  },
+  {
+   "t": 1060.23,
+   "d": 1.65,
+   "text": "and when they cross a certain threshold"
+  },
+  {
+   "t": 1061.88,
+   "d": 1.44,
+   "text": "they're allowed to take a turn and the"
+  },
+  {
+   "t": 1063.32,
+   "d": 1.53,
+   "text": "way they take the turn is the game loop"
+  },
+  {
+   "t": 1064.85,
+   "d": 1.56,
+   "text": "asks the actor just like give me your"
+  },
+  {
+   "t": 1066.41,
+   "d": 1.77,
+   "text": "action and then the game loop performs"
+  },
+  {
+   "t": 1068.18,
+   "d": 1.95,
+   "text": "the action this is super simplified in"
+  },
+  {
+   "t": 1070.13,
+   "d": 1.68,
+   "text": "my game because there's like animated"
+  },
+  {
+   "t": 1071.81,
+   "d": 1.8,
+   "text": "effects and stuff this performing the"
+  },
+  {
+   "t": 1073.61,
+   "d": 2.1,
+   "text": "action is also this iterative process as"
+  },
+  {
+   "t": 1075.71,
+   "d": 1.14,
+   "text": "you sort of percolate through the"
+  },
+  {
+   "t": 1076.85,
+   "d": 3.51,
+   "text": "consequences of the action that so"
+  },
+  {
+   "t": 1080.36,
+   "d": 1.17,
+   "text": "splitting things up like this does a"
+  },
+  {
+   "t": 1081.53,
+   "d": 2.94,
+   "text": "couple of nice things for us so for"
+  },
+  {
+   "t": 1084.47,
+   "d": 1.32,
+   "text": "example here's the here's the action"
+  },
+  {
+   "t": 1085.79,
+   "d": 2.01,
+   "text": "class for taking a step it's kind of"
+  },
+  {
+   "t": 1087.8,
+   "d": 1.17,
+   "text": "simplified down but there's a lot of"
+  },
+  {
+   "t": 1088.97,
+   "d": 1.05,
+   "text": "stuff in here right like you walk into a"
+  },
+  {
+   "t": 1090.02,
+   "d": 2.07,
+   "text": "door we want to open the door if you"
+  },
+  {
+   "t": 1092.09,
+   "d": 1.5,
+   "text": "walk into another you know monster you"
+  },
+  {
+   "t": 1093.59,
+   "d": 2.64,
+   "text": "try to hit it the actual details of this"
+  },
+  {
+   "t": 1096.23,
+   "d": 0.93,
+   "text": "don't matter though I'm not gonna give"
+  },
+  {
+   "t": 1097.16,
+   "d": 1.38,
+   "text": "you like a test on this code that'd be"
+  },
+  {
+   "t": 1098.54,
+   "d": 2.07,
+   "text": "weird the important parts like it is a"
+  },
+  {
+   "t": 1100.61,
+   "d": 1.65,
+   "text": "lot of code though right and now it's a"
+  },
+  {
+   "t": 1102.26,
+   "d": 1.89,
+   "text": "lot of code that's not inside actor so"
+  },
+  {
+   "t": 1104.15,
+   "d": 2.61,
+   "text": "it pulls all that stuff out and when you"
+  },
+  {
+   "t": 1106.76,
+   "d": 1.38,
+   "text": "think about the scale of like the"
+  },
+  {
+   "t": 1108.14,
+   "d": 1.86,
+   "text": "behavioral richness so these are the is"
+  },
+  {
+   "t": 1110.0,
+   "d": 1.41,
+   "text": "the action classes in my game right now"
+  },
+  {
+   "t": 1111.41,
+   "d": 2.61,
+   "text": "this is a lot of different stuff right"
+  },
+  {
+   "t": 1114.02,
+   "d": 1.26,
+   "text": "it's a lot of code and all this gets"
+  },
+  {
+   "t": 1115.28,
+   "d": 2.13,
+   "text": "pulled out of actor an actor basically"
+  },
+  {
+   "t": 1117.41,
+   "d": 2.34,
+   "text": "it becomes kind of a just sort of a data"
+  },
+  {
+   "t": 1119.75,
+   "d": 1.47,
+   "text": "structure and maybe a little bit of code"
+  },
+  {
+   "t": 1121.22,
+   "d": 1.62,
+   "text": "to sort of maintain invariants like yeah"
+  },
+  {
+   "t": 1122.84,
+   "d": 1.14,
+   "text": "your health is not allowed to go"
+  },
+  {
+   "t": 1123.98,
+   "d": 2.73,
+   "text": "negative the really nice thing about"
+  },
+  {
+   "t": 1126.71,
+   "d": 2.43,
+   "text": "this model is what I love about"
+  },
+  {
+   "t": 1129.14,
+   "d": 2.43,
+   "text": "roguelikes is that you can do a lot of"
+  },
+  {
+   "t": 1131.57,
+   "d": 1.47,
+   "text": "stuff so it makes the world feel more"
+  },
+  {
+   "t": 1133.04,
+   "d": 3.12,
+   "text": "real and this model makes it easy for me"
+  },
+  {
+   "t": 1136.16,
+   "d": 2.16,
+   "text": "to add new behaviors without feeling"
+  },
+  {
+   "t": 1138.32,
+   "d": 3.18,
+   "text": "like the sort of quadratic complexity of"
+  },
+  {
+   "t": 1141.5,
+   "d": 1.98,
+   "text": "the code base is getting worse right"
+  },
+  {
+   "t": 1143.48,
+   "d": 1.32,
+   "text": "because these things are fairly"
+  },
+  {
+   "t": 1144.8,
+   "d": 1.68,
+   "text": "decoupled from each other it's not like"
+  },
+  {
+   "t": 1146.48,
+   "d": 2.07,
+   "text": "I'm pouring more code into a class"
+  },
+  {
+   "t": 1148.55,
+   "d": 1.32,
+   "text": "that's getting bigger and bigger and"
+  },
+  {
+   "t": 1149.87,
+   "d": 1.98,
+   "text": "uglier and uglier so it makes it feel"
+  },
+  {
+   "t": 1151.85,
+   "d": 1.59,
+   "text": "like I can kind of just scale up the fun"
+  },
+  {
+   "t": 1153.44,
+   "d": 2.13,
+   "text": "of my game without increasing the"
+  },
+  {
+   "t": 1155.57,
+   "d": 1.56,
+   "text": "cognitive load of me trying to maintain"
+  },
+  {
+   "t": 1157.13,
+   "d": 4.47,
+   "text": "that code uh-huh the other thing it does"
+  },
+  {
+   "t": 1161.6,
+   "d": 2.37,
+   "text": "for us is it gives us an abstraction"
+  },
+  {
+   "t": 1163.97,
+   "d": 1.65,
+   "text": "layer so one of the main differences"
+  },
+  {
+   "t": 1165.62,
+   "d": 2.76,
+   "text": "between the hero and monsters is the"
+  },
+  {
+   "t": 1168.38,
+   "d": 1.82,
+   "text": "hero is driven by the player and"
+  },
+  {
+   "t": 1170.2,
+   "d": 1.87,
+   "text": "monsters are not so the hero is driven"
+  },
+  {
+   "t": 1172.07,
+   "d": 2.4,
+   "text": "by user input and the way this works is"
+  },
+  {
+   "t": 1174.47,
+   "d": 1.8,
+   "text": "when we ask the hero like what what turn"
+  },
+  {
+   "t": 1176.27,
+   "d": 1.74,
+   "text": "do you want to do it uses user input and"
+  },
+  {
+   "t": 1178.01,
+   "d": 2.52,
+   "text": "it produces an action and then when we"
+  },
+  {
+   "t": 1180.53,
+   "d": 2.64,
+   "text": "ask monster what to do it runs the AI"
+  },
+  {
+   "t": 1183.17,
+   "d": 2.04,
+   "text": "and the ai's job is also just just"
+  },
+  {
+   "t": 1185.21,
+   "d": 1.92,
+   "text": "producing a in action so what's nice"
+  },
+  {
+   "t": 1187.13,
+   "d": 2.49,
+   "text": "about that is if if the monster AI and"
+  },
+  {
+   "t": 1189.62,
+   "d": 3.08,
+   "text": "the you know the the player driven code"
+  },
+  {
+   "t": 1192.7,
+   "d": 2.35,
+   "text": "was sort of procedurally just driving"
+  },
+  {
+   "t": 1195.05,
+   "d": 0.63,
+   "text": "behavior"
+  },
+  {
+   "t": 1195.68,
+   "d": 2.22,
+   "text": "it gets harder to share behavior between"
+  },
+  {
+   "t": 1197.9,
+   "d": 1.14,
+   "text": "those two things the end of just sort of"
+  },
+  {
+   "t": 1199.04,
+   "d": 1.56,
+   "text": "doing the things directly and you you"
+  },
+  {
+   "t": 1200.6,
+   "d": 1.23,
+   "text": "would end up with two implementations of"
+  },
+  {
+   "t": 1201.83,
+   "d": 1.59,
+   "text": "here's how to take a step here's how to"
+  },
+  {
+   "t": 1203.42,
+   "d": 1.71,
+   "text": "open a door here's how to do a mail a"
+  },
+  {
+   "t": 1205.13,
+   "d": 3.09,
+   "text": "hit actions give us a nice abstraction"
+  },
+  {
+   "t": 1208.22,
+   "d": 2.7,
+   "text": "layer for that so the a eyes job is just"
+  },
+  {
+   "t": 1210.92,
+   "d": 1.53,
+   "text": "to construct an action object and yield"
+  },
+  {
+   "t": 1212.45,
+   "d": 2.04,
+   "text": "it and then the rest of the game engine"
+  },
+  {
+   "t": 1214.49,
+   "d": 1.44,
+   "text": "the game loop just kind of drives that"
+  },
+  {
+   "t": 1215.93,
+   "d": 1.5,
+   "text": "and then we get to share all of the same"
+  },
+  {
+   "t": 1217.43,
+   "d": 2.85,
+   "text": "behavioral code between AI controlled"
+  },
+  {
+   "t": 1220.28,
+   "d": 1.62,
+   "text": "and player controlled characters makes"
+  },
+  {
+   "t": 1221.9,
+   "d": 1.44,
+   "text": "it easy to you know share things like"
+  },
+  {
+   "t": 1223.34,
+   "d": 2.42,
+   "text": "spell effects and stuff like that that"
+  },
+  {
+   "t": 1225.76,
+   "d": 3.16,
+   "text": "makes me happy so uh the sort of the way"
+  },
+  {
+   "t": 1228.92,
+   "d": 2.97,
+   "text": "I generalized this is if you find"
+  },
+  {
+   "t": 1231.89,
+   "d": 2.97,
+   "text": "yourself getting stuck in your code and"
+  },
+  {
+   "t": 1234.86,
+   "d": 2.25,
+   "text": "it feels like there's there's a missing"
+  },
+  {
+   "t": 1237.11,
+   "d": 1.86,
+   "text": "set of flexibility one of the techniques"
+  },
+  {
+   "t": 1238.97,
+   "d": 1.59,
+   "text": "has always worked really well for me is"
+  },
+  {
+   "t": 1240.56,
+   "d": 2.49,
+   "text": "take some some verb that's in the"
+  },
+  {
+   "t": 1243.05,
+   "d": 1.2,
+   "text": "program some of the thing that's being"
+  },
+  {
+   "t": 1244.25,
+   "d": 2.85,
+   "text": "done and turn it into a noun create an"
+  },
+  {
+   "t": 1247.1,
+   "d": 1.41,
+   "text": "actual object that represents that"
+  },
+  {
+   "t": 1248.51,
+   "d": 2.94,
+   "text": "because that that gives you a way to you"
+  },
+  {
+   "t": 1251.45,
+   "d": 1.5,
+   "text": "know it makes it first-class you can"
+  },
+  {
+   "t": 1252.95,
+   "d": 2.1,
+   "text": "create it in one place use it in another"
+  },
+  {
+   "t": 1255.05,
+   "d": 2.28,
+   "text": "place you can give you can start giving"
+  },
+  {
+   "t": 1257.33,
+   "d": 3.09,
+   "text": "additional properties to it um it seems"
+  },
+  {
+   "t": 1260.42,
+   "d": 2.63,
+   "text": "to generally be a nice technique and"
+  },
+  {
+   "t": 1263.05,
+   "d": 4.78,
+   "text": "that's that's basically it there was a"
+  },
+  {
+   "t": 1267.83,
+   "d": 2.49,
+   "text": "lot of code I apologize for the quantity"
+  },
+  {
+   "t": 1270.32,
+   "d": 1.56,
+   "text": "of code especially right before lunch I"
+  },
+  {
+   "t": 1271.88,
+   "d": 2.82,
+   "text": "realize that's a lot to take in so the"
+  },
+  {
+   "t": 1274.7,
+   "d": 2.64,
+   "text": "super-sized summary is uh I don't use"
+  },
+  {
+   "t": 1277.34,
+   "d": 1.65,
+   "text": "the the classic sort of split along"
+  },
+  {
+   "t": 1278.99,
+   "d": 1.11,
+   "text": "domain boundaries"
+  },
+  {
+   "t": 1280.1,
+   "d": 1.89,
+   "text": "ECS pattern and i don't think it's"
+  },
+  {
+   "t": 1281.99,
+   "d": 1.56,
+   "text": "generally a good fit for any roguelike"
+  },
+  {
+   "t": 1283.55,
+   "d": 1.92,
+   "text": "that is not super graphically rich or"
+  },
+  {
+   "t": 1285.47,
+   "d": 1.35,
+   "text": "physically Richard you know if you're"
+  },
+  {
+   "t": 1286.82,
+   "d": 1.62,
+   "text": "turn-based in tile based I don't think"
+  },
+  {
+   "t": 1288.44,
+   "d": 2.49,
+   "text": "it's doing much for you but I do like"
+  },
+  {
+   "t": 1290.93,
+   "d": 1.26,
+   "text": "using components in a sense that you"
+  },
+  {
+   "t": 1292.19,
+   "d": 2.37,
+   "text": "split them along capabilities"
+  },
+  {
+   "t": 1294.56,
+   "d": 1.8,
+   "text": "I think type objects even though it's a"
+  },
+  {
+   "t": 1296.36,
+   "d": 3.48,
+   "text": "really just dead simple pattern is super"
+  },
+  {
+   "t": 1299.84,
+   "d": 2.7,
+   "text": "useful I use it all the time and then"
+  },
+  {
+   "t": 1302.54,
+   "d": 1.68,
+   "text": "the command pattern which isn't as"
+  },
+  {
+   "t": 1304.22,
+   "d": 2.43,
+   "text": "well-known as a lot of the other design"
+  },
+  {
+   "t": 1306.65,
+   "d": 2.34,
+   "text": "patterns that are out there it's not"
+  },
+  {
+   "t": 1308.99,
+   "d": 1.5,
+   "text": "something you use all the time but when"
+  },
+  {
+   "t": 1310.49,
+   "d": 1.59,
+   "text": "it when I run into situations where I do"
+  },
+  {
+   "t": 1312.08,
+   "d": 2.37,
+   "text": "need it it's incredibly powerful if"
+  },
+  {
+   "t": 1314.45,
+   "d": 1.44,
+   "text": "you've ever tried to like I don't know"
+  },
+  {
+   "t": 1315.89,
+   "d": 1.38,
+   "text": "if any of you ever built like a level"
+  },
+  {
+   "t": 1317.27,
+   "d": 2.31,
+   "text": "editor or something if you need to end"
+  },
+  {
+   "t": 1319.58,
+   "d": 2.91,
+   "text": "implement undo in an editor if you use"
+  },
+  {
+   "t": 1322.49,
+   "d": 1.44,
+   "text": "the command pattern it just works right"
+  },
+  {
+   "t": 1323.93,
+   "d": 1.74,
+   "text": "so like each command also supports the"
+  },
+  {
+   "t": 1325.67,
+   "d": 1.65,
+   "text": "ability to undo itself and then your"
+  },
+  {
+   "t": 1327.32,
+   "d": 1.5,
+   "text": "undo system is just maintain a list of"
+  },
+  {
+   "t": 1328.82,
+   "d": 0.55,
+   "text": "historical"
+  },
+  {
+   "t": 1329.37,
+   "d": 1.17,
+   "text": "commands and you rewind them and it's"
+  },
+  {
+   "t": 1330.54,
+   "d": 1.62,
+   "text": "great if you don't use the command"
+  },
+  {
+   "t": 1332.16,
+   "d": 1.5,
+   "text": "pattern and you try to implement undo"
+  },
+  {
+   "t": 1333.66,
+   "d": 3.15,
+   "text": "you basically just never want to be a"
+  },
+  {
+   "t": 1336.81,
+   "d": 3.72,
+   "text": "software engineer again not that I'm"
+  },
+  {
+   "t": 1340.53,
+   "d": 4.44,
+   "text": "trying to oversell it and that's what I"
+  },
+  {
+   "t": 1344.97,
+   "d": 2.46,
+   "text": "got so this is actually the level"
+  },
+  {
+   "t": 1347.43,
+   "d": 2.19,
+   "text": "generator for my game running live right"
+  },
+  {
+   "t": 1349.62,
+   "d": 1.53,
+   "text": "now in the middle of a presentation"
+  },
+  {
+   "t": 1351.15,
+   "d": 1.8,
+   "text": "which is probably not the smartest idea"
+  },
+  {
+   "t": 1352.95,
+   "d": 1.61,
+   "text": "I've ever had but it looks kind of cool"
+  },
+  {
+   "t": 1354.56,
+   "d": 4.69,
+   "text": "anyway thank you if you want to see you"
+  },
+  {
+   "t": 1359.25,
+   "d": 1.35,
+   "text": "know learn more about my books I have a"
+  },
+  {
+   "t": 1360.6,
+   "d": 1.83,
+   "text": "blog that's kind of the main URL that"
+  },
+  {
+   "t": 1362.43,
+   "d": 1.68,
+   "text": "gets to all the other stuff I brought a"
+  },
+  {
+   "t": 1364.11,
+   "d": 1.44,
+   "text": "couple of copies of my book that I've"
+  },
+  {
+   "t": 1365.55,
+   "d": 1.62,
+   "text": "been schlepping around the Bay Area for"
+  },
+  {
+   "t": 1367.17,
+   "d": 1.44,
+   "text": "the past couple of days and I totally"
+  },
+  {
+   "t": 1368.61,
+   "d": 1.32,
+   "text": "don't want to schlep them around any"
+  },
+  {
+   "t": 1369.93,
+   "d": 1.41,
+   "text": "more so if you would like a free copy of"
+  },
+  {
+   "t": 1371.34,
+   "d": 1.98,
+   "text": "the book come up and say hi we don't"
+  },
+  {
+   "t": 1373.32,
+   "d": 1.44,
+   "text": "have to interact I understand I'm"
+  },
+  {
+   "t": 1374.76,
+   "d": 1.8,
+   "text": "introverted you're introverted we can we"
+  },
+  {
+   "t": 1376.56,
+   "d": 1.77,
+   "text": "can you have to make eye contact you can"
+  },
+  {
+   "t": 1378.33,
+   "d": 2.79,
+   "text": "kind of just take one it's okay"
+  },
+  {
+   "t": 1381.12,
+   "d": 3.98,
+   "text": "and thanks enjoy your lunch I guess"
+  },
+  {
+   "t": 1385.1,
+   "d": 2.61,
+   "text": "[Applause]"
+  }
+ ]
+}

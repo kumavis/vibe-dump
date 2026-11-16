@@ -1,0 +1,115 @@
+{
+  "id": "0ydWz1EvMJs",
+  "title": "Atty Vohra - Automating D&D Combat Prep with Roguelike Principles",
+  "speaker": "Atty Vohra",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=0ydWz1EvMJs",
+  "talk_type": "design",
+  "summary": "Atty Vohra, a game designer and long-time D&D dungeon master, presents a Python combat generator that produces abstract monster stat blocks for a given party level and difficulty. Inverting Matt Colville's action-oriented approach, the generator outputs numbers and abstract mechanic descriptors first, and the DM then invents a monster and story that justify them. Vohra argues that generators work as an improv partner during otherwise lonely prep, should automate the parts of DMing you find tedious, and can feed generated encounters back into the campaign narrative. Vohra ends by asking what else in tabletop RPGs could be generated.",
+  "games": [
+    "Dungeons & Dragons 5th Edition"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop generators",
+      "kind": "technique",
+      "claim": "A D&D 5e combat generator can take only party level and difficulty and output a full abstract stat block with hit points, armor class, DCs, stats, actions, special actions and desperation actions.",
+      "detail": "Vohra's Python script was a half-baked tool that saved a session when they had only 30 minutes of prep; the generated encounter needed only five to ten minutes of polish.",
+      "t": 122,
+      "quote": "it has like hit points armor class dc's stats actions special actions desperation actions",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monster generation",
+      "kind": "principle",
+      "claim": "A generator's design starts from defining what kind of output leads to interesting results for players, not just from modeling the existing rules.",
+      "detail": "5e rules made it easy to model output on Monster Manual stat blocks, but the real design question was what outputs produce interesting combat encounters for the table.",
+      "t": 234,
+      "quote": "what kinds of output lead to interesting combat encounters for my players that was an interesting question design question for me to solve",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "encounter design",
+      "kind": "principle",
+      "claim": "Engaging combat tells an evolving story: design monsters by thinking about their themes and how they act under certain conditions, then build mechanics around those situations.",
+      "detail": "Vohra relays Matt Colville's action-oriented combat philosophy, e.g. a cornered goblin boss yelling at subordinates to attack all at once, so the monster feels like it reacts and has tactics.",
+      "t": 268,
+      "quote": "the monster should feel like it's reacting and has tactics the party for the party to experience",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monster generation",
+      "kind": "technique",
+      "claim": "Vohra's generator inverts Colville's approach: it generates numbers and mechanics first, and the designer invents a monster and fiction that justify them.",
+      "detail": "The generator handles the tedious numbers; the human only has to explain why things are the way they are, which Vohra finds easier and faster.",
+      "t": 283,
+      "quote": "i would generate the numbers and mechanics first and then i would use those as constraints to create a monster instead",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "abstract descriptors",
+      "kind": "technique",
+      "claim": "Describing generated mechanics as abstract adjective-verb pairs (e.g. 'drain resource') within a limited mechanical subspace constrains and inspires the human designer's creativity.",
+      "detail": "'Drain' could mean hit points or spell slots. Reading a drain/gain pattern, necromancy spells, 45 move speed, high charisma and a paradoxical resistance-and-vulnerability to piercing, Vohra built a haunted princess ghost who drains spell slots to flicker between planes, explaining the resistance.",
+      "t": 331,
+      "quote": "the purpose is to inspire my creativity by offering constraints for me to work with",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "A monster's backstory invented to justify generated stats can seed a new campaign quest line, weaving random encounters into the overarching narrative.",
+      "detail": "The generated ghost princess, tormented by a patriarchal sultanate, could make curious players take up a quest to avenge her and topple the sultanate; Vohra says this has led to more dynamic arcs at their table.",
+      "t": 437,
+      "quote": "i can pepper in these generated combats and weave the outcome of the story of the combat into the overarching narrative later",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop generators",
+      "kind": "principle",
+      "claim": "Decide which parts of game-mastering you most want to focus on, and automate the parts you find tedious with generators.",
+      "detail": "If you care more about roleplay than about perfect combat, automate combat and focus on roleplay.",
+      "t": 463,
+      "quote": "this may reveal what parts of dming feel tedious to you and what things you might want to automate",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "co-creativity",
+      "kind": "principle",
+      "claim": "A generator can serve as a 'yes, and' improv partner during solitary design work.",
+      "detail": "Prep behind the DM screen is lonely; a generator saying a giant monster spawns minions when desperate can be yes-anded into the minions being specters of the characters' loved ones, which creates a story.",
+      "t": 493,
+      "quote": "a generator could be that improv partner to help make session prep more creative and fun",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation",
+      "kind": "technique",
+      "claim": "When a generated output cannot be justified, the human curator can simply discard that element and build on the rest.",
+      "detail": "Asked whether outputs ever stump them, Vohra said sometimes an element like the piercing resistance/vulnerability is a wall, so they drop it and use other parts as inspiration; the host summarized that the generator is a teammate you can also say no to.",
+      "t": 688,
+      "quote": "sometimes it's just like a stump and a wall so i'll just get rid of it ignore it and focus on other parts of the generation",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop generators",
+      "kind": "open-question",
+      "claim": "Beyond combat, tabletop RPGs might automate NPC dialogue, faction wars, villain plots, dungeons, skill challenges or even simulate the campaign world between sessions.",
+      "detail": "Vohra lists these possibilities while cautioning that they would not recommend simulating an entire world, but encourage anyone up for the challenge.",
+      "t": 587,
+      "quote": "can we simulate the entire world of your dnd campaign between sessions so that it feels like it's being lived in",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

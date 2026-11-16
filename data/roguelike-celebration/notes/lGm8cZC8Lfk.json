@@ -1,0 +1,286 @@
+{
+  "id": "lGm8cZC8Lfk",
+  "title": "Gavin Verhey - Fireside chat with Principal Magic Designer, Wizards of the Coast",
+  "speaker": "Gavin Verhey",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=lGm8cZC8Lfk",
+  "talk_type": "design",
+  "summary": "A pre-recorded fireside chat in which Magic: The Gathering principal designer Gavin Verhey argues that Magic draft is essentially a multiplayer roguelike run. He explains how Wizards makes draft formats approachable (rarity controls complexity, gold-card signposts) yet deep over 30+ drafts (build-around uncommons, mana fixing, interactions at common), how shared card pools self-balance color strength, and why PvP design must respect 'net fun' in ways PvE roguelikes need not. He covers variance ('bingo-rolly' effects), best-of-one vs best-of-three, how digital play and public win-rate data change card design, format speed as a lever on strategic diversity, and Bloomburrow's animal-typed signposting as an approachability/depth trade-off. He closes by framing all of Magic as a roguelike with many branching formats and calling for more co-op/multiplayer roguelikes.",
+  "games": [
+    "Magic: The Gathering",
+    "Magic: The Gathering Arena",
+    "Magic: The Gathering Online",
+    "Shandalar",
+    "Slay the Spire",
+    "Balatro",
+    "Hades",
+    "Meteorfall",
+    "Teamfight Tactics",
+    "XCOM",
+    "Tactical Breach Wizards",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "card roguelikes",
+      "kind": "history",
+      "claim": "The 1997 Magic: The Gathering MicroProse game (Shandalar) was an early card-based roguelike: you start with a bad deck, roam a map, and win cards from fights until ready for a final boss.",
+      "detail": "Verhey calls it one of the first early roguelikes and says he keeps pushing for Wizards to do something like it again.",
+      "t": 99,
+      "quote": "you start with a very bad deck and you walk around on a map and you fight against people",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "drafting",
+      "kind": "principle",
+      "claim": "Magic draft works like a multiplayer roguelike run: a choice-making stage with a different card stream every time, shaped by what seven other players take, followed by seeing how far your deck goes.",
+      "detail": "Players open packs, pick one card, pass the rest, repeat through three packs to get 42 cards, then build and play. Verhey compares it to an autobattler 'except without the auto' and says players even call their drafts 'runs' and race for fastest 3-0s.",
+      "t": 229,
+      "quote": "every single time you draft it's different it changes it changes every time and it the people around you all the seven players you're drafting with",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "complexity control",
+      "kind": "technique",
+      "claim": "Magic uses rarity to control reading load in draft: commons are simpler and dominate each pack, so players process mostly simple cards and learn the complex rares as they see them pass.",
+      "detail": "Because every pack has many commons and one rare, complexity is metered as you draft. By the time you play, you know what the rares in your and your opponent's decks do, having taken them or seen them go around the table.",
+      "t": 278,
+      "quote": "the common cards are simpler than the rare cards and every pack has a lot of Commons and only one rare",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "signposting",
+      "kind": "technique",
+      "claim": "Magic signposts draft archetypes with two-color gold uncommons, which both suggest a strategy and signal that no one else upstream is taking those colors.",
+      "detail": "A player half-committed to red who sees a strong red-green card come around learns red-green is open, so it is a safe direction. This lets newer players 'hop on rails' and have a good first or second draft.",
+      "t": 350,
+      "quote": "it's a signpost in the direction of red green because it's an interactive game with these other seven people",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build variety",
+      "kind": "warning",
+      "claim": "Signposts that are too strong make a draft format shallow, because the best play becomes grabbing a gold card early and forcing those colors with no further decisions.",
+      "detail": "Verhey cites past sets where gold signposts and obvious common strategies meant players stopped making choices. Wizards wants the 30th draft to be as good as the first three.",
+      "t": 405,
+      "quote": "the best thing to do is to take a gold card right away and then just force those two colors and make no more decisions and that's bad",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build-around items",
+      "kind": "technique",
+      "claim": "To keep repeated drafts fresh, Magic includes strange build-around uncommons, enough mana fixing for splashes or five-color decks, and many interactions among simple commons.",
+      "detail": "A weird uncommon that only shows up sometimes creates a 'build my weird deck around it' moment. Mana fixing allows an '11th option' like five-color decks, and common-level interactions keep players discovering things on their 30th draft. Verhey says these are likely the same methods roguelike designers use.",
+      "t": 422,
+      "quote": "making sure there are uncommons that are strange that you can build around oh man there's this really weird uncommon it only shows up every now and then",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance",
+      "kind": "principle",
+      "claim": "A shared, contested resource pool self-balances: if one Magic color is overpowered in draft, more players fight over it and get weaker decks, while the lone drafter of a weak color gets all of it.",
+      "detail": "Because a paper card game cannot be patched, Verhey calls draft's self-balancing a huge fail-safe. If four players at the table go white, white cards are split four ways, and the single blue drafter ends up with a strong deck.",
+      "t": 609,
+      "quote": "that means that all the good White cards are going to get distributed amongst those four players",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "net fun",
+      "kind": "principle",
+      "claim": "In PvP design every effect must be weighed for 'net fun' (fun gained versus fun taken from the opponent), whereas PvE roguelikes can let the player crush the computer freely.",
+      "detail": "Verhey notes a computer doesn't care if you strip all its action points; in PvE the concern is only what the AI does to the player. In Magic, with a shared card pool, the same cards hit humans, so Wizards keeps the net fun roughly balanced.",
+      "t": 668,
+      "quote": "when you're making a digital PVE game for example it who cares that computer's having fun it doesn't matter right you could take away all their action points",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "net fun",
+      "kind": "example",
+      "claim": "Magic largely removed aggressively priced land destruction because it knocks the victim out of the game while the attacker barely registers the impact.",
+      "detail": "Losing two lands can leave a player unable to cast anything, while the opponent just played one card, and the reason it hurts is hidden in the victim's hand. Conversely, Wizards promotes strategies that are fun to play and don't detract from the opponent, even if not the strongest.",
+      "t": 749,
+      "quote": "that's a great example of an imbalance of net fund because the player that got their lands destroyed they literally feel like they're out of the game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "variance",
+      "kind": "principle",
+      "claim": "Magic deliberately avoids being chess-like: some variance and a few strong early rares should give a newer player a chance against a better one, but not a guaranteed win.",
+      "detail": "Land draws and mana problems provide built-in variance, and a strong early rare can let a newcomer upset a veteran. It must not always work, since the experienced player has invested a lot and shouldn't be beaten by one card every time.",
+      "t": 910,
+      "quote": "we never want it to be like if because I'm better than you I will always defeat you a 100 games out of a 100",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "variance",
+      "kind": "warning",
+      "claim": "Overt, face-up luck effects like strong coin-flip cards create 'bingo' variance that feels bad in PvP, though it may be more fun in PvE.",
+      "detail": "Verhey says Wizards avoids making a coin-flip card very strong because the randomness is so in-your-face, and that extra card draw also adds variance. In PvP the loser rages that the opponent 'hit', so they keep face-up bingo effects limited.",
+      "t": 954,
+      "quote": "we don't want a card that flips a coin to be a really strong card you're playing with because that variance is very in yourr face",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curve",
+      "kind": "example",
+      "claim": "Paper Magic's eight-player draft pairs winners with winners, creating a natural difficulty ramp like a PvE run where the final match is against the theoretically strongest deck.",
+      "detail": "After the first match, winners face other winners, so by the end two players who have won all their matches meet. Verhey likens this to starting with a random encounter and ending against the strongest opponent.",
+      "t": 1055,
+      "quote": "it has this kind of very interesting natural difficulty scaling much like how you would build in a PVE experience",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run structure",
+      "kind": "example",
+      "claim": "MTG Arena defaults to best-of-one because most players prefer facing many varied opponents, like varied roguelike encounters, even though best-of-three rewards skill and allows sideboarding.",
+      "detail": "Best-of-one lets you smash a weak deck and feel like a genius, or shrug off a loss to a bomb-rare deck and move on. Competitive players prefer best-of-three because more games advantage the better player and sideboarding adds a strategic axis.",
+      "t": 1137,
+      "quote": "they have a lot more fun playing against the different varied amount of opponents on average and having more experiences",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "session length",
+      "kind": "example",
+      "claim": "Magic Online's pod drafts could take 50 minutes to three hours with forced downtime, so Arena traded the shared-pod experience for play-anytime convenience.",
+      "detail": "On Magic Online you had to stay for the whole pod, idling for 40 minutes if your match ended early. Arena pairs you against anyone from a large pool so you can draft at 2 a.m. and play later, which Verhey considers well worth losing some of the in-person feel.",
+      "t": 1370,
+      "quote": "it could take between 50 minutes and three hours and I have to stay there the entire time I can't leave in between",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "modal cards",
+      "kind": "technique",
+      "claim": "Because best-of-one removes sideboarding, Magic now folds situational answers into main-deckable cards, such as creatures with hate effects or modal 'draw two or bounce a green creature' cards.",
+      "detail": "If you aren't facing green, worst case you still have a creature or can draw two. Verhey notes color hate is a risky example, so this is applied more to answers for artifacts, enchantments or expensive cards.",
+      "t": 1439,
+      "quote": "putting a lot of cards that would traditionally be sideboard cards and finding ways to make them get into your main deck",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers and data",
+      "kind": "principle",
+      "claim": "Public win-rate data (e.g. 17Lands) is useful directionally but card strength is contextual, so drafting purely by the numbers yields incoherent decks.",
+      "detail": "Wizards' play design team checks 17Lands about three days after release. A card that buffs all creatures has a high win rate but is weak in a non-creature deck. Verhey says both data-driven newer players and intuition-driven veterans succeed.",
+      "t": 1680,
+      "quote": "they're great directionally like looking at them will give you a really good idea of directional information about the format",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance",
+      "kind": "warning",
+      "claim": "With fast data sharing, any flaw in a format is found and exploited within days, so designers should include answers at common for everything that might prove too strong.",
+      "detail": "Players want every edge, even a 3% color advantage. Wizards tries to reduce the odds of anything out of whack and includes common answers to artifacts, enchantments and fast or slow strategies so players have options if something is overtuned.",
+      "t": 1747,
+      "quote": "if there is a flaw in your format it's going to be discovered and exploited very quickly because within a you know 24 hours a couple days",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "format speed",
+      "kind": "principle",
+      "claim": "Magic balances format speed across all colors as much as color balance, ensuring both aggressive and controlling strategies are viable, e.g. by including team-pump cards that always enable an alpha-strike archetype.",
+      "detail": "If only aggressive cards are good the format is fast; if only control cards are good it is slow. A '+2 power to all creatures' instant is safe at common or uncommon and guarantees an aggro option even in slow formats; narrow archetype cards go at uncommon since only one drafter wants them.",
+      "t": 1809,
+      "quote": "if the only good cards I take are aggressive cards the whole format will be very fast if the only good cards to take our our control cards",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "class balance",
+      "kind": "principle",
+      "claim": "PvE roguelikes can ship harder classes as challenges players choose for fun, but in PvP players gravitate to the strongest strategy, so imbalance matters more and unpatchable games can't fix it.",
+      "detail": "Verhey notes many roguelikes order classes from easy to harder and more technical. In Magic most people won't pick the weaker option for challenge, and unlike a roguelike that can buff a weak wizard in a patch, Magic must wait for the next set.",
+      "t": 1964,
+      "quote": "it's PVE so a lot of players will just enjoy playing the harder class because they want the challenge right",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "signposting",
+      "kind": "example",
+      "claim": "Bloomburrow gave each two-color pair its own animal type so theme alone signposts a mechanically coherent strategy, exploiting how creature-type decks are among Magic's most popular handholds.",
+      "detail": "Draft archetypes with loud two-color signpost cards began around 2012-2013. In Bloomburrow, seeing an otter or lizard tells you the colors, and otters share a non-creature-spells through-line, intertwining creative and mechanics. Wizards' data shows creature-type-focused decks are hugely popular because they are easy handholds.",
+      "t": 2187,
+      "quote": "an even easier way to signpost is what if every two-color combination has an animal",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build variety",
+      "kind": "warning",
+      "claim": "Bloomburrow's strong synergy signposting made it easy to onboard but felt shallow to players drafting 30-40 times, and its fast synergistic decks crowded out offbeat strategies.",
+      "detail": "If the dominant move is to pick two colors and dive in, the tenth draft feels repetitive. Bloomburrow added sideways build-around uncommons but fewer than other sets; its decks ran fast, leaving little room for unique builds. Verhey frames it as a deliberate pendulum swing set to set.",
+      "t": 2280,
+      "quote": "your first few drafts are cool but your 10th draft feels very repetitive",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "pacing",
+      "kind": "principle",
+      "claim": "Game pace determines how much strategic variety survives: very fast formats punish multicolor decks and slow build-around side quests, while glacially slow ones make maximal greed always correct.",
+      "detail": "In a 30-turn format you always find all your lands, so five colors and every build-around is optimal and games feel samey. In a very fast format you never want more than two colors and build-around enchantments never get going. The sweet spot is the middle where aggro and control are both viable.",
+      "t": 2482,
+      "quote": "if a format is faster it chokes out some of the innovation of those three four even five five color decks",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "meta progression",
+      "kind": "principle",
+      "claim": "Verhey frames all of Magic as one big roguelike with branching paths: kitchen-table play as tutorial, game stores and tournaments as later levels, each loss prompting a deck rebuild.",
+      "detail": "Players buy cards, play, upgrade, lose at the local store and redesign. Formats such as Commander become different 'endstate' runs; Commander optimizes for social fun and wild swings, so in contrast to limited, variance is embraced, even whole coin-flip decks.",
+      "t": 2827,
+      "quote": "I really view all of magic as like one big Rog likee with a million branching paths and you get to find your own Rog likee inside of there",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "variance",
+      "kind": "principle",
+      "claim": "How much variance a design should embrace depends on the audience's goal: Magic's Commander players want big swings and wacky outcomes, while competitive limited is tuned for moderate variance.",
+      "detail": "Verhey says in Commander 'variance is the name of the game' since the emphasis is on having fun and smiling rather than winning, so the design optimizes for different things than limited.",
+      "t": 2894,
+      "quote": "in Commander variance is the name of the game people love big swing effects they love wild things that happen",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "card roguelikes",
+      "kind": "example",
+      "claim": "Meteorfall is a card roguelike using a 'Tinder method' where each card drawn is a swipe-left or swipe-right play decision, shallower than Slay the Spire but robust.",
+      "detail": "Verhey calls it cleverly designed and his airplane game, played on a phone in landscape, drawing cards one at a time and choosing to play or not.",
+      "t": 3024,
+      "quote": "the designer calls it the um the Tinder method of gameplay where every decision is a swipe left or swipe right",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "multiplayer roguelikes",
+      "kind": "open-question",
+      "claim": "Verhey wants more co-op and multiplayer roguelikes but notes the tension that the genre's endless replay makes a single-player mode critical.",
+      "detail": "Asked what Magic idea he'd like roguelikes to try, he names multiplayer; the host adds that in-person drafting's social experience has a lot to draw from.",
+      "t": 3153,
+      "quote": "it's a tough genre for that because you want to keep playing it over and over and over again so a single player mode is critical",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

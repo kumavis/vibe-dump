@@ -1,0 +1,2125 @@
+{
+ "id": "oipNr8RE5bA",
+ "url": "https://www.youtube.com/watch?v=oipNr8RE5bA",
+ "title": "David Dunham - Totally Not a Roguelike Deckbuilder",
+ "speaker": "David Dunham",
+ "talk_title": "Totally Not a Roguelike Deckbuilder",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1078,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "I originally designed Thousand Hells as a roguelike narrative card game, but a potential publisher was concerned that it looked like all the roguelike deckbuilders. It wouldn’t stand out in the market, and worse, wouldn’t satisfy players who would think they were buying a deckbuilder. My first thought was that it would be really hard to turn it into something else, but it turned out to be simpler than I’d feared.\n\nI’ll discuss why the game was a roguelike card game in the first place, the specifics of revamping it, and the impact on the design and player experience.\n\nThe talk should especially interest designers who are concerned about making their game stand out (whether or not it’s for sale), but also cover why a roguelike had cards in the first place.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2796,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.2,
+   "d": 2.32,
+   "text": "Good to be aware of that. Now, jumping"
+  },
+  {
+   "t": 5.52,
+   "d": 2.8,
+   "text": "right into the next talk, we'll be"
+  },
+  {
+   "t": 8.32,
+   "d": 4.24,
+   "text": "having David Dun. Uh David"
+  },
+  {
+   "t": 12.56,
+   "d": 2.72,
+   "text": "is the designer of King of Dragon Pass."
+  },
+  {
+   "t": 15.28,
+   "d": 2.72,
+   "text": "Came out in 1999, among other things. Uh"
+  },
+  {
+   "t": 18.0,
+   "d": 2.64,
+   "text": "he has been designing programming games"
+  },
+  {
+   "t": 20.64,
+   "d": 2.8,
+   "text": "since about 1971 and has been employed"
+  },
+  {
+   "t": 23.44,
+   "d": 2.0,
+   "text": "in small studios for about 10 years"
+  },
+  {
+   "t": 25.44,
+   "d": 3.04,
+   "text": "total, mostly in indie. Uh David, I'm"
+  },
+  {
+   "t": 28.48,
+   "d": 4.08,
+   "text": "very excited. um for your talk."
+  },
+  {
+   "t": 32.56,
+   "d": 5.28,
+   "text": ">> Hi, I'm finally here on the side."
+  },
+  {
+   "t": 37.84,
+   "d": 3.6,
+   "text": ">> Oh, um I think we're having some audio"
+  },
+  {
+   "t": 41.44,
+   "d": 2.24,
+   "text": "issues. Could you try speaking again?"
+  },
+  {
+   "t": 43.68,
+   "d": 2.16,
+   "text": ">> So, hi, I'm David. Are you able to hear"
+  },
+  {
+   "t": 45.84,
+   "d": 0.72,
+   "text": "me?"
+  },
+  {
+   "t": 46.56,
+   "d": 1.36,
+   "text": ">> Oh, yes, that's better. We're just going"
+  },
+  {
+   "t": 47.92,
+   "d": 2.08,
+   "text": "to raise your volume, but thank you."
+  },
+  {
+   "t": 50.0,
+   "d": 4.12,
+   "text": "We'll let you uh take it away."
+  },
+  {
+   "t": 55.52,
+   "d": 2.8,
+   "text": ">> I am David. I did make the game King of"
+  },
+  {
+   "t": 58.32,
+   "d": 1.84,
+   "text": "Dragon House, which is probably what I'm"
+  },
+  {
+   "t": 60.16,
+   "d": 2.24,
+   "text": "most well known for. That was back in"
+  },
+  {
+   "t": 62.4,
+   "d": 4.0,
+   "text": "1999. And sort of the design space of"
+  },
+  {
+   "t": 66.4,
+   "d": 2.0,
+   "text": "procedural narrative has continue to"
+  },
+  {
+   "t": 68.4,
+   "d": 2.32,
+   "text": "intrigue me."
+  },
+  {
+   "t": 70.72,
+   "d": 2.08,
+   "text": "So today I'm going to talk about my"
+  },
+  {
+   "t": 72.8,
+   "d": 2.32,
+   "text": "latest game, Thousand Hells, and why it"
+  },
+  {
+   "t": 75.12,
+   "d": 4.24,
+   "text": "is totally not a rogike deck builder."
+  },
+  {
+   "t": 79.36,
+   "d": 2.32,
+   "text": "So um what is the game if you haven't"
+  },
+  {
+   "t": 81.68,
+   "d": 2.16,
+   "text": "played it yet? It's sort of a cross"
+  },
+  {
+   "t": 83.84,
+   "d": 3.92,
+   "text": "between Orpheus and 111. The game"
+  },
+  {
+   "t": 87.76,
+   "d": 1.92,
+   "text": "assembles quests from 10 different"
+  },
+  {
+   "t": 89.68,
+   "d": 2.56,
+   "text": "missions, four hells, and a couple dozen"
+  },
+  {
+   "t": 92.24,
+   "d": 2.72,
+   "text": "side quests. You have a procedurally"
+  },
+  {
+   "t": 94.96,
+   "d": 1.92,
+   "text": "generated team that goes with you into"
+  },
+  {
+   "t": 96.88,
+   "d": 3.84,
+   "text": "one of the hells and does the job. And"
+  },
+  {
+   "t": 100.72,
+   "d": 3.44,
+   "text": "um it has a tactical narrative"
+  },
+  {
+   "t": 104.16,
+   "d": 2.56,
+   "text": "resolution system which I'm you know"
+  },
+  {
+   "t": 106.72,
+   "d": 1.68,
+   "text": "kind of made up that name for marketing"
+  },
+  {
+   "t": 108.4,
+   "d": 2.24,
+   "text": "reasons but it means the resolution"
+  },
+  {
+   "t": 110.64,
+   "d": 2.56,
+   "text": "system is driven by narrative just raw"
+  },
+  {
+   "t": 113.2,
+   "d": 3.0,
+   "text": "numbers."
+  },
+  {
+   "t": 116.32,
+   "d": 2.96,
+   "text": "So um why did I decide to make this a"
+  },
+  {
+   "t": 119.28,
+   "d": 3.76,
+   "text": "rogike game? Um, I'm probably misusing"
+  },
+  {
+   "t": 123.04,
+   "d": 1.84,
+   "text": "the definition and I'm also probably"
+  },
+  {
+   "t": 124.88,
+   "d": 2.08,
+   "text": "preaching to the choir here, but the"
+  },
+  {
+   "t": 126.96,
+   "d": 1.84,
+   "text": "idea was it would be a procedural"
+  },
+  {
+   "t": 128.8,
+   "d": 4.0,
+   "text": "narrative game. It would have a short"
+  },
+  {
+   "t": 132.8,
+   "d": 2.56,
+   "text": "run as a design goal. In other words,"
+  },
+  {
+   "t": 135.36,
+   "d": 2.16,
+   "text": "it's more like watching a movie and not"
+  },
+  {
+   "t": 137.52,
+   "d": 4.08,
+   "text": "watching like a whole TV series"
+  },
+  {
+   "t": 141.6,
+   "d": 2.32,
+   "text": "or something that's shorter than a novel"
+  },
+  {
+   "t": 143.92,
+   "d": 3.76,
+   "text": "or looking at it in text form."
+  },
+  {
+   "t": 147.68,
+   "d": 2.08,
+   "text": "The game was sort of intended to have"
+  },
+  {
+   "t": 149.76,
+   "d": 2.0,
+   "text": "perma death. Yeah."
+  },
+  {
+   "t": 151.76,
+   "d": 1.6,
+   "text": ">> Could you just quickly check your audio"
+  },
+  {
+   "t": 153.36,
+   "d": 2.32,
+   "text": "source? We're getting a lot of uh like"
+  },
+  {
+   "t": 155.68,
+   "d": 1.52,
+   "text": "scratchiness and background audio."
+  },
+  {
+   "t": 157.2,
+   "d": 3.52,
+   "text": ">> I am on AirPods with hopefully noise"
+  },
+  {
+   "t": 160.72,
+   "d": 2.0,
+   "text": "reduction, but if I can switch to a"
+  },
+  {
+   "t": 162.72,
+   "d": 3.04,
+   "text": "different one, might get noisier."
+  },
+  {
+   "t": 165.76,
+   "d": 3.44,
+   "text": ">> Yeah, that might be worth a shot."
+  },
+  {
+   "t": 169.2,
+   "d": 4.36,
+   "text": "Oops, that's not what I wanted to hit."
+  },
+  {
+   "t": 177.28,
+   "d": 2.4,
+   "text": "Hold"
+  },
+  {
+   "t": 179.68,
+   "d": 3.0,
+   "text": "on."
+  },
+  {
+   "t": 182.8,
+   "d": 2.16,
+   "text": "Let me just take probably do something"
+  },
+  {
+   "t": 184.96,
+   "d": 2.48,
+   "text": "right. Is this um"
+  },
+  {
+   "t": 187.44,
+   "d": 2.48,
+   "text": "is this actually better?"
+  },
+  {
+   "t": 189.92,
+   "d": 2.4,
+   "text": ">> Uh this that is the same so far."
+  },
+  {
+   "t": 192.32,
+   "d": 2.08,
+   "text": ">> I can't hear you. So this is good. Let's"
+  },
+  {
+   "t": 194.4,
+   "d": 0.88,
+   "text": "see."
+  },
+  {
+   "t": 195.28,
+   "d": 3.68,
+   "text": ">> Yeah. Is it maybe"
+  },
+  {
+   "t": 198.96,
+   "d": 3.12,
+   "text": "does this work?"
+  },
+  {
+   "t": 202.08,
+   "d": 2.56,
+   "text": ">> Uh it is not different from my end."
+  },
+  {
+   "t": 204.64,
+   "d": 4.08,
+   "text": ">> It's not even letting me switch inputs."
+  },
+  {
+   "t": 209.36,
+   "d": 2.16,
+   "text": "Is it maybe Can you hear me? Is it maybe"
+  },
+  {
+   "t": 211.52,
+   "d": 3.84,
+   "text": "using your AirPods as input?"
+  },
+  {
+   "t": 215.36,
+   "d": 2.56,
+   "text": ">> I was using them, I thought, as input."
+  },
+  {
+   "t": 217.92,
+   "d": 1.84,
+   "text": ">> Uh, or do you have your phone in your"
+  },
+  {
+   "t": 219.76,
+   "d": 2.4,
+   "text": "pocket? Possibly."
+  },
+  {
+   "t": 222.16,
+   "d": 1.84,
+   "text": ">> Yeah, I'm showing it. I thought on the"
+  },
+  {
+   "t": 224.0,
+   "d": 3.72,
+   "text": "Mac, but um"
+  },
+  {
+   "t": 229.12,
+   "d": 3.76,
+   "text": "was the inputs from the uh"
+  },
+  {
+   "t": 232.88,
+   "d": 3.0,
+   "text": "Oops."
+  },
+  {
+   "t": 236.4,
+   "d": 2.56,
+   "text": "I get to change. Sorry everyone. I"
+  },
+  {
+   "t": 238.96,
+   "d": 2.64,
+   "text": "thought we had done this in in preview,"
+  },
+  {
+   "t": 241.6,
+   "d": 2.8,
+   "text": "but um apparently"
+  },
+  {
+   "t": 244.4,
+   "d": 1.36,
+   "text": ">> it seems like there's input when you"
+  },
+  {
+   "t": 245.76,
+   "d": 1.36,
+   "text": "shift."
+  },
+  {
+   "t": 247.12,
+   "d": 4.36,
+   "text": ">> So this microphone."
+  },
+  {
+   "t": 254.88,
+   "d": 2.08,
+   "text": ">> Sorry. Yeah, it's still there."
+  },
+  {
+   "t": 256.96,
+   "d": 1.36,
+   "text": ">> That's the worst."
+  },
+  {
+   "t": 258.32,
+   "d": 0.72,
+   "text": ">> Yeah."
+  },
+  {
+   "t": 259.04,
+   "d": 3.76,
+   "text": ">> If you could uh try changing the audio"
+  },
+  {
+   "t": 262.8,
+   "d": 3.36,
+   "text": "source. If you go to the gear icon in"
+  },
+  {
+   "t": 266.16,
+   "d": 3.84,
+   "text": "the bottom in StreamYard and in audio uh"
+  },
+  {
+   "t": 270.0,
+   "d": 4.6,
+   "text": "and changing the mic,"
+  },
+  {
+   "t": 279.84,
+   "d": 1.04,
+   "text": ">> thank you all for your patience,"
+  },
+  {
+   "t": 280.88,
+   "d": 0.88,
+   "text": "everyone."
+  },
+  {
+   "t": 281.76,
+   "d": 2.8,
+   "text": ">> Is this going It's showing the AirPods"
+  },
+  {
+   "t": 284.56,
+   "d": 1.68,
+   "text": "now. Is that correct?"
+  },
+  {
+   "t": 286.24,
+   "d": 2.32,
+   "text": ">> Yes, that's much better. Okay."
+  },
+  {
+   "t": 288.56,
+   "d": 3.12,
+   "text": ">> Should I start over or um"
+  },
+  {
+   "t": 291.68,
+   "d": 2.08,
+   "text": ">> Let's start over. And we have actually"
+  },
+  {
+   "t": 293.76,
+   "d": 2.08,
+   "text": "yeah um we've got a long break after"
+  },
+  {
+   "t": 295.84,
+   "d": 1.68,
+   "text": "this one so we have some time some"
+  },
+  {
+   "t": 297.52,
+   "d": 1.6,
+   "text": "buffer time."
+  },
+  {
+   "t": 299.12,
+   "d": 1.76,
+   "text": ">> So you already heard it was King Dragon"
+  },
+  {
+   "t": 300.88,
+   "d": 2.4,
+   "text": "Pass and this is a talk about ocean uh"
+  },
+  {
+   "t": 303.28,
+   "d": 2.0,
+   "text": "not Oceans 11 Thousand Hills which is a"
+  },
+  {
+   "t": 305.28,
+   "d": 3.84,
+   "text": "cross between Oceans 11 and Orpheus. Uh"
+  },
+  {
+   "t": 309.12,
+   "d": 2.32,
+   "text": "you assemble quests from 10 missions,"
+  },
+  {
+   "t": 311.44,
+   "d": 2.08,
+   "text": "four different hells and a couple dozen"
+  },
+  {
+   "t": 313.52,
+   "d": 2.48,
+   "text": "side quests. And you have a procedurally"
+  },
+  {
+   "t": 316.0,
+   "d": 1.52,
+   "text": "generated team that you bring up to"
+  },
+  {
+   "t": 317.52,
+   "d": 2.56,
+   "text": "hell. When you get there you face"
+  },
+  {
+   "t": 320.08,
+   "d": 2.24,
+   "text": "various challenges. And so I came up"
+  },
+  {
+   "t": 322.32,
+   "d": 1.76,
+   "text": "with a marketing term of a tactical"
+  },
+  {
+   "t": 324.08,
+   "d": 2.4,
+   "text": "narrative game, which is the resolution"
+  },
+  {
+   "t": 326.48,
+   "d": 1.6,
+   "text": "system it uses to see whether you"
+  },
+  {
+   "t": 328.08,
+   "d": 2.24,
+   "text": "succeed at one of these challenges. And"
+  },
+  {
+   "t": 330.32,
+   "d": 1.84,
+   "text": "it's a resolution system that's driven"
+  },
+  {
+   "t": 332.16,
+   "d": 4.16,
+   "text": "by narrative and not raw numbers."
+  },
+  {
+   "t": 336.32,
+   "d": 1.92,
+   "text": "So I'm going to set the stage for what"
+  },
+  {
+   "t": 338.24,
+   "d": 2.56,
+   "text": "happens later. Uh why was it a rogike"
+  },
+  {
+   "t": 340.8,
+   "d": 2.08,
+   "text": "card game in the first place? Well, I'm"
+  },
+  {
+   "t": 342.88,
+   "d": 2.64,
+   "text": "probably misusing the term rogike, but"
+  },
+  {
+   "t": 345.52,
+   "d": 1.68,
+   "text": "I'm not from Berlin, so let's not worry"
+  },
+  {
+   "t": 347.2,
+   "d": 1.36,
+   "text": "about that. And I'm also probably"
+  },
+  {
+   "t": 348.56,
+   "d": 1.6,
+   "text": "preaching to the choir with this group"
+  },
+  {
+   "t": 350.16,
+   "d": 2.48,
+   "text": "as to why you would want to do a rogike."
+  },
+  {
+   "t": 352.64,
+   "d": 1.92,
+   "text": "But like I said, I'm interested in"
+  },
+  {
+   "t": 354.56,
+   "d": 2.48,
+   "text": "procedural narrative. And for this game,"
+  },
+  {
+   "t": 357.04,
+   "d": 3.6,
+   "text": "I wanted a short run as a design goal."
+  },
+  {
+   "t": 360.64,
+   "d": 2.08,
+   "text": "Something that would be closer to a"
+  },
+  {
+   "t": 362.72,
+   "d": 1.52,
+   "text": "movie length, like an hour, an hour and"
+  },
+  {
+   "t": 364.24,
+   "d": 2.72,
+   "text": "a half, and not like a whole, you know,"
+  },
+  {
+   "t": 366.96,
+   "d": 3.84,
+   "text": "longrunning TV series or something."
+  },
+  {
+   "t": 370.8,
+   "d": 2.0,
+   "text": "Not just, you know, a giant novel"
+  },
+  {
+   "t": 372.8,
+   "d": 2.48,
+   "text": "trilogy, but something closer to a short"
+  },
+  {
+   "t": 375.28,
+   "d": 3.36,
+   "text": "story. Certainly, Peradeth and lethality"
+  },
+  {
+   "t": 378.64,
+   "d": 4.24,
+   "text": "fits the theme of a run into hell. And I"
+  },
+  {
+   "t": 382.88,
+   "d": 2.72,
+   "text": "figured also it was easier to be selling"
+  },
+  {
+   "t": 385.6,
+   "d": 2.8,
+   "text": "a replayable game on the market. And the"
+  },
+  {
+   "t": 388.4,
+   "d": 2.08,
+   "text": "fact that I wanted to sell the game and"
+  },
+  {
+   "t": 390.48,
+   "d": 2.24,
+   "text": "make my development cost back is partly"
+  },
+  {
+   "t": 392.72,
+   "d": 3.76,
+   "text": "why this whole talk exists."
+  },
+  {
+   "t": 396.48,
+   "d": 2.72,
+   "text": "So why did it have cards in the first"
+  },
+  {
+   "t": 399.2,
+   "d": 1.44,
+   "text": "place?"
+  },
+  {
+   "t": 400.64,
+   "d": 2.4,
+   "text": "I wanted a way for the characters in the"
+  },
+  {
+   "t": 403.04,
+   "d": 2.0,
+   "text": "game to try and fail to do the things"
+  },
+  {
+   "t": 405.04,
+   "d": 2.16,
+   "text": "you've asked them to do. And the card"
+  },
+  {
+   "t": 407.2,
+   "d": 2.08,
+   "text": "game was a pretty obvious way to handle"
+  },
+  {
+   "t": 409.28,
+   "d": 2.32,
+   "text": "this. The characters would be feeding"
+  },
+  {
+   "t": 411.6,
+   "d": 3.36,
+   "text": "into the deck with their abilities."
+  },
+  {
+   "t": 414.96,
+   "d": 2.72,
+   "text": "I chose a card game to be less opaque"
+  },
+  {
+   "t": 417.68,
+   "d": 2.32,
+   "text": "than King of Dragon Pass or Six Ages,"
+  },
+  {
+   "t": 420.0,
+   "d": 2.32,
+   "text": "which often people complain because they"
+  },
+  {
+   "t": 422.32,
+   "d": 1.68,
+   "text": "didn't know what was going on. Figured"
+  },
+  {
+   "t": 424.0,
+   "d": 2.64,
+   "text": "you could at least see the cards."
+  },
+  {
+   "t": 426.64,
+   "d": 2.32,
+   "text": "And it's a switch from King of Dragon"
+  },
+  {
+   "t": 428.96,
+   "d": 1.76,
+   "text": "Passes output randomness, in other"
+  },
+  {
+   "t": 430.72,
+   "d": 2.16,
+   "text": "words, there's a dice roll, to input"
+  },
+  {
+   "t": 432.88,
+   "d": 1.6,
+   "text": "randomness, in other words, you're"
+  },
+  {
+   "t": 434.48,
+   "d": 2.4,
+   "text": "shuffling a deck of cards to get the"
+  },
+  {
+   "t": 436.88,
+   "d": 3.2,
+   "text": "random elements that you're faced with."
+  },
+  {
+   "t": 440.08,
+   "d": 2.08,
+   "text": "As a side note, uh the game I was a"
+  },
+  {
+   "t": 442.16,
+   "d": 2.4,
+   "text": "Teenage ExoColonist is another story"
+  },
+  {
+   "t": 444.56,
+   "d": 1.68,
+   "text": "ccentric game that used a card"
+  },
+  {
+   "t": 446.24,
+   "d": 2.72,
+   "text": "resolution system as opposed to a lot of"
+  },
+  {
+   "t": 448.96,
+   "d": 2.24,
+   "text": "card games have sort of stories that try"
+  },
+  {
+   "t": 451.2,
+   "d": 4.0,
+   "text": "to wrap around the resolution system."
+  },
+  {
+   "t": 455.2,
+   "d": 1.68,
+   "text": "And and overall, I think cards are"
+  },
+  {
+   "t": 456.88,
+   "d": 2.08,
+   "text": "really easy for players to understand."
+  },
+  {
+   "t": 458.96,
+   "d": 1.36,
+   "text": "There's they're in so many different"
+  },
+  {
+   "t": 460.32,
+   "d": 3.68,
+   "text": "games. You've played physical cards, and"
+  },
+  {
+   "t": 464.0,
+   "d": 1.52,
+   "text": "that was a way to make things much more"
+  },
+  {
+   "t": 465.52,
+   "d": 3.28,
+   "text": "tangible. So, um, but it really actually"
+  },
+  {
+   "t": 468.8,
+   "d": 2.32,
+   "text": "never was a deck builder, which is a"
+  },
+  {
+   "t": 471.12,
+   "d": 2.24,
+   "text": "pretty common term for assembling a deck"
+  },
+  {
+   "t": 473.36,
+   "d": 3.36,
+   "text": "during the game play. I had no idea what"
+  },
+  {
+   "t": 476.72,
+   "d": 1.76,
+   "text": "deck building would represent in the"
+  },
+  {
+   "t": 478.48,
+   "d": 3.2,
+   "text": "context of a story. In this game, we're"
+  },
+  {
+   "t": 481.68,
+   "d": 2.96,
+   "text": "basically portraying iconic heroes who"
+  },
+  {
+   "t": 484.64,
+   "d": 1.52,
+   "text": "don't change over the course of the"
+  },
+  {
+   "t": 486.16,
+   "d": 2.8,
+   "text": "story as opposed to dramatic heroes who"
+  },
+  {
+   "t": 488.96,
+   "d": 2.56,
+   "text": "have a character arc. The the story"
+  },
+  {
+   "t": 491.52,
+   "d": 1.36,
+   "text": "they're going through is only a few"
+  },
+  {
+   "t": 492.88,
+   "d": 2.48,
+   "text": "weeks long in their lives. So,"
+  },
+  {
+   "t": 495.36,
+   "d": 1.84,
+   "text": "advancement doesn't make a whole lot of"
+  },
+  {
+   "t": 497.2,
+   "d": 2.96,
+   "text": "sense. Um, unlike like I was a teenage"
+  },
+  {
+   "t": 500.16,
+   "d": 2.0,
+   "text": "exoc colonist where you're going through"
+  },
+  {
+   "t": 502.16,
+   "d": 1.76,
+   "text": "the protagonist's life over many years"
+  },
+  {
+   "t": 503.92,
+   "d": 3.6,
+   "text": "as she's growing up."
+  },
+  {
+   "t": 507.52,
+   "d": 2.24,
+   "text": "So, I went through a ton of different"
+  },
+  {
+   "t": 509.76,
+   "d": 3.2,
+   "text": "card-based resolution systems. Um, my"
+  },
+  {
+   "t": 512.96,
+   "d": 2.0,
+   "text": "paper prototypes were using cards partly"
+  },
+  {
+   "t": 514.96,
+   "d": 2.72,
+   "text": "because I intended there would be a card"
+  },
+  {
+   "t": 517.68,
+   "d": 2.32,
+   "text": "presentation at the end, but also it was"
+  },
+  {
+   "t": 520.0,
+   "d": 3.2,
+   "text": "really easy to paper prototype. Um, as a"
+  },
+  {
+   "t": 523.2,
+   "d": 4.0,
+   "text": "tip, I'm using uh plastic sleeves and I"
+  },
+  {
+   "t": 527.2,
+   "d": 1.68,
+   "text": "bought bulk Magic cards to have"
+  },
+  {
+   "t": 528.88,
+   "d": 1.52,
+   "text": "stiffeners and then I can insert"
+  },
+  {
+   "t": 530.4,
+   "d": 3.52,
+   "text": "whatever pieces of paper I want."
+  },
+  {
+   "t": 533.92,
+   "d": 1.84,
+   "text": "But none of these card games really"
+  },
+  {
+   "t": 535.76,
+   "d": 3.12,
+   "text": "seemed to work. And um I approached"
+  },
+  {
+   "t": 538.88,
+   "d": 2.48,
+   "text": "Robin Law, who is my co-designer on"
+  },
+  {
+   "t": 541.36,
+   "d": 2.08,
+   "text": "Kingdom Dragon Pass and the Six Ages"
+  },
+  {
+   "t": 543.44,
+   "d": 3.2,
+   "text": "games, and he came up with a new system"
+  },
+  {
+   "t": 546.64,
+   "d": 2.32,
+   "text": "that essentially added output randomness"
+  },
+  {
+   "t": 548.96,
+   "d": 2.24,
+   "text": "to the card game. And that's why there's"
+  },
+  {
+   "t": 551.2,
+   "d": 2.4,
+   "text": "some dice over there on the the paper"
+  },
+  {
+   "t": 553.6,
+   "d": 2.08,
+   "text": "prototype."
+  },
+  {
+   "t": 555.68,
+   "d": 1.76,
+   "text": "This one actually worked. It was"
+  },
+  {
+   "t": 557.44,
+   "d": 2.56,
+   "text": "basically an exception-based card game,"
+  },
+  {
+   "t": 560.0,
+   "d": 3.6,
+   "text": "which is also a pretty familiar concept."
+  },
+  {
+   "t": 563.6,
+   "d": 2.96,
+   "text": "The cards are representing character"
+  },
+  {
+   "t": 566.56,
+   "d": 1.84,
+   "text": "traits. Robin came up with a way to use"
+  },
+  {
+   "t": 568.4,
+   "d": 2.32,
+   "text": "all of the character traits, not just um"
+  },
+  {
+   "t": 570.72,
+   "d": 3.28,
+   "text": "the specialized ones that I had."
+  },
+  {
+   "t": 574.0,
+   "d": 2.08,
+   "text": "It basically means that the game's verbs"
+  },
+  {
+   "t": 576.08,
+   "d": 3.28,
+   "text": "are adjectives like athletic and poetic."
+  },
+  {
+   "t": 579.36,
+   "d": 2.8,
+   "text": "So, the the verbs you're playing."
+  },
+  {
+   "t": 582.16,
+   "d": 2.16,
+   "text": "And we came up with things that you can"
+  },
+  {
+   "t": 584.32,
+   "d": 1.92,
+   "text": "do digitally that are really hard with"
+  },
+  {
+   "t": 586.24,
+   "d": 3.12,
+   "text": "physical cards. like the occurred"
+  },
+  {
+   "t": 589.36,
+   "d": 1.52,
+   "text": "difficulty could depend on how many"
+  },
+  {
+   "t": 590.88,
+   "d": 3.52,
+   "text": "rounds it was out and uh the"
+  },
+  {
+   "t": 594.4,
+   "d": 3.2,
+   "text": "exceptionbased system was handled with"
+  },
+  {
+   "t": 597.6,
+   "d": 2.64,
+   "text": "scripts behind the scenes. So we had"
+  },
+  {
+   "t": 600.24,
+   "d": 3.04,
+   "text": "this really powerful and flexible"
+  },
+  {
+   "t": 603.28,
+   "d": 2.4,
+   "text": "system. That's what it looked like when"
+  },
+  {
+   "t": 605.68,
+   "d": 4.88,
+   "text": "I turned it into a digital form."
+  },
+  {
+   "t": 610.56,
+   "d": 2.16,
+   "text": "And then this is some of the uh the"
+  },
+  {
+   "t": 612.72,
+   "d": 2.0,
+   "text": "stuff that's going on behind the scenes"
+  },
+  {
+   "t": 614.72,
+   "d": 2.72,
+   "text": "coming up with bonuses and different"
+  },
+  {
+   "t": 617.44,
+   "d": 2.32,
+   "text": "things that happen depending on whether"
+  },
+  {
+   "t": 619.76,
+   "d": 4.56,
+   "text": "you win or lose the eventual dice roll."
+  },
+  {
+   "t": 624.32,
+   "d": 3.36,
+   "text": "And um we have a great system that works"
+  },
+  {
+   "t": 627.68,
+   "d": 2.56,
+   "text": "and we started developing putting it"
+  },
+  {
+   "t": 630.24,
+   "d": 2.96,
+   "text": "into production and it came time to find"
+  },
+  {
+   "t": 633.2,
+   "d": 1.84,
+   "text": "a publisher to start worrying about"
+  },
+  {
+   "t": 635.04,
+   "d": 2.88,
+   "text": "selling it."
+  },
+  {
+   "t": 637.92,
+   "d": 2.4,
+   "text": "So, I went to KidFox, who had published"
+  },
+  {
+   "t": 640.32,
+   "d": 2.8,
+   "text": "Six Ages for me, and they looked at the"
+  },
+  {
+   "t": 643.12,
+   "d": 3.2,
+   "text": "game and wondered if it could be changed"
+  },
+  {
+   "t": 646.32,
+   "d": 3.84,
+   "text": "from a card game to something else."
+  },
+  {
+   "t": 650.16,
+   "d": 3.84,
+   "text": "Maybe show character traits as runes."
+  },
+  {
+   "t": 654.0,
+   "d": 1.28,
+   "text": "And my [snorts] first reaction was,"
+  },
+  {
+   "t": 655.28,
+   "d": 2.08,
+   "text": "\"What? There's there's 75 runes. This"
+  },
+  {
+   "t": 657.36,
+   "d": 3.2,
+   "text": "this can't possibly work.\""
+  },
+  {
+   "t": 661.44,
+   "d": 1.92,
+   "text": "They pointed out that the real problem"
+  },
+  {
+   "t": 663.36,
+   "d": 3.68,
+   "text": "with having a game that had cards in its"
+  },
+  {
+   "t": 667.04,
+   "d": 3.6,
+   "text": "resolution system is that it's going to"
+  },
+  {
+   "t": 670.64,
+   "d": 2.0,
+   "text": "look like a rogike deck builder, but it"
+  },
+  {
+   "t": 672.64,
+   "d": 2.0,
+   "text": "won't meet the actual expectations of"
+  },
+  {
+   "t": 674.64,
+   "d": 2.48,
+   "text": "deck builder fans."
+  },
+  {
+   "t": 677.12,
+   "d": 2.88,
+   "text": "And it would alienate people who are"
+  },
+  {
+   "t": 680.0,
+   "d": 1.68,
+   "text": "really fatigued by the abundance of"
+  },
+  {
+   "t": 681.68,
+   "d": 3.52,
+   "text": "card-based deck builder indie games. Uh,"
+  },
+  {
+   "t": 685.2,
+   "d": 1.52,
+   "text": "well, they're certainly right about"
+  },
+  {
+   "t": 686.72,
+   "d": 2.72,
+   "text": "abundance. I looked a few days ago and"
+  },
+  {
+   "t": 689.44,
+   "d": 3.92,
+   "text": "on Steam DB the Rogike deck builder tag"
+  },
+  {
+   "t": 693.36,
+   "d": 1.92,
+   "text": "had 2554"
+  },
+  {
+   "t": 695.28,
+   "d": 2.48,
+   "text": "games on it. And actually that's up from"
+  },
+  {
+   "t": 697.76,
+   "d": 2.48,
+   "text": "the last time I did the research when I"
+  },
+  {
+   "t": 700.24,
+   "d": 1.84,
+   "text": "I think proposed the talk. It's gone up"
+  },
+  {
+   "t": 702.08,
+   "d": 3.04,
+   "text": "by like 700 games or something. In other"
+  },
+  {
+   "t": 705.12,
+   "d": 2.24,
+   "text": "words, uh if you see cards in a"
+  },
+  {
+   "t": 707.36,
+   "d": 2.08,
+   "text": "screenshot, you'll expect a deck"
+  },
+  {
+   "t": 709.44,
+   "d": 1.6,
+   "text": "builder. You probably expect a card"
+  },
+  {
+   "t": 711.04,
+   "d": 2.32,
+   "text": "battler. And this is certainly not a"
+  },
+  {
+   "t": 713.36,
+   "d": 3.72,
+   "text": "card battler either."
+  },
+  {
+   "t": 717.2,
+   "d": 4.16,
+   "text": "So, um, on the 15th of April, we had"
+  },
+  {
+   "t": 721.36,
+   "d": 3.12,
+   "text": "that call with Kitfox and I keep a diary"
+  },
+  {
+   "t": 724.48,
+   "d": 2.48,
+   "text": "and the next day I said, \"Making it not"
+  },
+  {
+   "t": 726.96,
+   "d": 2.4,
+   "text": "cards is going to be tricky. At the"
+  },
+  {
+   "t": 729.36,
+   "d": 2.56,
+   "text": "moment, I'm thinking of slips of paper.\""
+  },
+  {
+   "t": 731.92,
+   "d": 1.76,
+   "text": "The following day was, I like the idea"
+  },
+  {
+   "t": 733.68,
+   "d": 4.0,
+   "text": "of glazed tiles. And then the screenshot"
+  },
+  {
+   "t": 737.68,
+   "d": 2.4,
+   "text": "you see at the bottom there uh was"
+  },
+  {
+   "t": 740.08,
+   "d": 2.16,
+   "text": "basically two weeks after that call that"
+  },
+  {
+   "t": 742.24,
+   "d": 2.0,
+   "text": "said let's not make a rogike deck"
+  },
+  {
+   "t": 744.24,
+   "d": 3.0,
+   "text": "builder."
+  },
+  {
+   "t": 747.28,
+   "d": 1.52,
+   "text": "So"
+  },
+  {
+   "t": 748.8,
+   "d": 2.32,
+   "text": "it supposedly took me two weeks to do."
+  },
+  {
+   "t": 751.12,
+   "d": 1.6,
+   "text": "But what were the challenges along the"
+  },
+  {
+   "t": 752.72,
+   "d": 2.8,
+   "text": "way? Um it was really a big paradigm"
+  },
+  {
+   "t": 755.52,
+   "d": 3.28,
+   "text": "shift. I had been developing this game"
+  },
+  {
+   "t": 758.8,
+   "d": 2.16,
+   "text": "in some form for five years and it had"
+  },
+  {
+   "t": 760.96,
+   "d": 2.48,
+   "text": "cards and just had to sort of wrap my"
+  },
+  {
+   "t": 763.44,
+   "d": 2.08,
+   "text": "brain around this new idea that it's not"
+  },
+  {
+   "t": 765.52,
+   "d": 3.12,
+   "text": "cards anymore."
+  },
+  {
+   "t": 768.64,
+   "d": 2.24,
+   "text": "Um, and they're not cards. So, what are"
+  },
+  {
+   "t": 770.88,
+   "d": 2.64,
+   "text": "they? Um, are they tiles? Are they"
+  },
+  {
+   "t": 773.52,
+   "d": 2.8,
+   "text": "something else? And there's two"
+  },
+  {
+   "t": 776.32,
+   "d": 2.96,
+   "text": "different things. So,"
+  },
+  {
+   "t": 779.28,
+   "d": 3.04,
+   "text": "had to had to figure out what that was."
+  },
+  {
+   "t": 782.32,
+   "d": 1.76,
+   "text": "Um,"
+  },
+  {
+   "t": 784.08,
+   "d": 2.72,
+   "text": "I no longer had access to my first user"
+  },
+  {
+   "t": 786.8,
+   "d": 2.0,
+   "text": "interface designer"
+  },
+  {
+   "t": 788.8,
+   "d": 3.12,
+   "text": "and um,"
+  },
+  {
+   "t": 791.92,
+   "d": 2.48,
+   "text": "that this is not a design problem. It's"
+  },
+  {
+   "t": 794.4,
+   "d": 3.68,
+   "text": "really a a production problem,"
+  },
+  {
+   "t": 798.08,
+   "d": 1.84,
+   "text": "but it was still something I had to deal"
+  },
+  {
+   "t": 799.92,
+   "d": 2.48,
+   "text": "with. And uh, on the on the plus side, I"
+  },
+  {
+   "t": 802.4,
+   "d": 2.64,
+   "text": "hadn't come up with any sound effects or"
+  },
+  {
+   "t": 805.04,
+   "d": 2.08,
+   "text": "other special effects really for the"
+  },
+  {
+   "t": 807.12,
+   "d": 2.0,
+   "text": "cards. So, um, I was spared having to"
+  },
+  {
+   "t": 809.12,
+   "d": 2.16,
+   "text": "throw out a whole lot of of gamey"
+  },
+  {
+   "t": 811.28,
+   "d": 2.24,
+   "text": "related stuff."
+  },
+  {
+   "t": 813.52,
+   "d": 2.48,
+   "text": "Um, but, you know, just cuz I could do"
+  },
+  {
+   "t": 816.0,
+   "d": 2.16,
+   "text": "it doesn't mean it was all a great idea."
+  },
+  {
+   "t": 818.16,
+   "d": 1.68,
+   "text": "Um,"
+  },
+  {
+   "t": 819.84,
+   "d": 2.88,
+   "text": "the how many cards are in the deck was"
+  },
+  {
+   "t": 822.72,
+   "d": 1.36,
+   "text": "it's pretty obvious when you're dealing"
+  },
+  {
+   "t": 824.08,
+   "d": 3.2,
+   "text": "with actual cards, but it's hard to tell"
+  },
+  {
+   "t": 827.28,
+   "d": 2.64,
+   "text": "how many tiles are in a bag yet that you"
+  },
+  {
+   "t": 829.92,
+   "d": 2.08,
+   "text": "haven't drawn yet."
+  },
+  {
+   "t": 832.0,
+   "d": 2.88,
+   "text": "had a few complaints about how the user"
+  },
+  {
+   "t": 834.88,
+   "d": 2.56,
+   "text": "interface was no longer a perfect match."
+  },
+  {
+   "t": 837.44,
+   "d": 3.12,
+   "text": "We had these solid tiles and the rest of"
+  },
+  {
+   "t": 840.56,
+   "d": 1.76,
+   "text": "the interface was flat. And I want to"
+  },
+  {
+   "t": 842.32,
+   "d": 1.6,
+   "text": "point out this is totally not my"
+  },
+  {
+   "t": 843.92,
+   "d": 2.0,
+   "text": "designer's fault. He was doing a"
+  },
+  {
+   "t": 845.92,
+   "d": 3.36,
+   "text": "redesign of the the cards in isolation."
+  },
+  {
+   "t": 849.28,
+   "d": 3.04,
+   "text": "But maybe if we had a not card game to"
+  },
+  {
+   "t": 852.32,
+   "d": 1.92,
+   "text": "start with, the user interface would"
+  },
+  {
+   "t": 854.24,
+   "d": 3.2,
+   "text": "have been more coherent."
+  },
+  {
+   "t": 857.44,
+   "d": 1.52,
+   "text": "And I do think, you know, I came up with"
+  },
+  {
+   "t": 858.96,
+   "d": 1.68,
+   "text": "the name tactical narrative, but I don't"
+  },
+  {
+   "t": 860.64,
+   "d": 3.36,
+   "text": "think it's as clean as card game if"
+  },
+  {
+   "t": 864.0,
+   "d": 1.84,
+   "text": "people are just hearing it. And it may"
+  },
+  {
+   "t": 865.84,
+   "d": 3.36,
+   "text": "have its own um ideas that give you"
+  },
+  {
+   "t": 869.2,
+   "d": 1.44,
+   "text": "gives you the wrong idea of a different"
+  },
+  {
+   "t": 870.64,
+   "d": 2.96,
+   "text": "kind of a tactical game."
+  },
+  {
+   "t": 873.6,
+   "d": 1.6,
+   "text": "On the other hand, uh there are some"
+  },
+  {
+   "t": 875.2,
+   "d": 2.16,
+   "text": "some nice things that came out of this."
+  },
+  {
+   "t": 877.36,
+   "d": 2.48,
+   "text": "the situations on the the top of the"
+  },
+  {
+   "t": 879.84,
+   "d": 4.48,
+   "text": "screen had a lot more room as horizontal"
+  },
+  {
+   "t": 884.32,
+   "d": 2.16,
+   "text": "bits of of text as opposed to trying to"
+  },
+  {
+   "t": 886.48,
+   "d": 3.68,
+   "text": "squeeze into a a vertical card."
+  },
+  {
+   "t": 890.16,
+   "d": 1.68,
+   "text": "So, we could have better explanations"
+  },
+  {
+   "t": 891.84,
+   "d": 2.32,
+   "text": "for some of the exceptions or even the"
+  },
+  {
+   "t": 894.16,
+   "d": 2.08,
+   "text": "the flavor text."
+  },
+  {
+   "t": 896.24,
+   "d": 1.6,
+   "text": "It certainly does give the game a"
+  },
+  {
+   "t": 897.84,
+   "d": 1.68,
+   "text": "distinctive look. If you see a"
+  },
+  {
+   "t": 899.52,
+   "d": 1.6,
+   "text": "screenshot, it's not going to look like"
+  },
+  {
+   "t": 901.12,
+   "d": 1.84,
+   "text": "all the other card games out there. I"
+  },
+  {
+   "t": 902.96,
+   "d": 1.6,
+   "text": "don't think anything else is is quite"
+  },
+  {
+   "t": 904.56,
+   "d": 2.8,
+   "text": "the same."
+  },
+  {
+   "t": 907.36,
+   "d": 2.32,
+   "text": "And uh yeah, it's totally not a rogike"
+  },
+  {
+   "t": 909.68,
+   "d": 2.4,
+   "text": "deck builder now, so the market is"
+  },
+  {
+   "t": 912.08,
+   "d": 3.12,
+   "text": "surely not going to get confused."
+  },
+  {
+   "t": 915.2,
+   "d": 2.96,
+   "text": "Well, did this work?"
+  },
+  {
+   "t": 918.16,
+   "d": 2.56,
+   "text": "I think so. I've seen one Discord"
+  },
+  {
+   "t": 920.72,
+   "d": 2.96,
+   "text": "message where the the person wrote card,"
+  },
+  {
+   "t": 923.68,
+   "d": 1.44,
+   "text": "but they'd been in the process of"
+  },
+  {
+   "t": 925.12,
+   "d": 2.72,
+   "text": "reverse engineering the game, so they"
+  },
+  {
+   "t": 927.84,
+   "d": 2.0,
+   "text": "probably saw comments about cards in"
+  },
+  {
+   "t": 929.84,
+   "d": 4.24,
+   "text": "left over in the script files. And"
+  },
+  {
+   "t": 934.08,
+   "d": 1.36,
+   "text": "it worked from my point of view that"
+  },
+  {
+   "t": 935.44,
+   "d": 2.32,
+   "text": "there really no design changes at all."
+  },
+  {
+   "t": 937.76,
+   "d": 2.56,
+   "text": "Play is exactly the same. It's just a"
+  },
+  {
+   "t": 940.32,
+   "d": 2.0,
+   "text": "totally reskinning that makes it no"
+  },
+  {
+   "t": 942.32,
+   "d": 3.68,
+   "text": "longer a rogike deck builder."
+  },
+  {
+   "t": 946.0,
+   "d": 2.32,
+   "text": "Okay, it worked for me. But should you"
+  },
+  {
+   "t": 948.32,
+   "d": 1.44,
+   "text": "be doing this if you're working on a"
+  },
+  {
+   "t": 949.76,
+   "d": 3.04,
+   "text": "card game? As usual, the answer is it"
+  },
+  {
+   "t": 952.8,
+   "d": 2.0,
+   "text": "depends. Um, I think for marketing"
+  },
+  {
+   "t": 954.8,
+   "d": 2.88,
+   "text": "reasons it may be a good idea if you"
+  },
+  {
+   "t": 957.68,
+   "d": 3.6,
+   "text": "want to stand out, except sometimes, um,"
+  },
+  {
+   "t": 961.28,
+   "d": 1.76,
+   "text": "you want to look like a specific card"
+  },
+  {
+   "t": 963.04,
+   "d": 3.44,
+   "text": "game subgenre like Cultus Simulator. And"
+  },
+  {
+   "t": 966.48,
+   "d": 1.92,
+   "text": "cards are really familiar, and that's"
+  },
+  {
+   "t": 968.4,
+   "d": 2.08,
+   "text": "certainly an advantage."
+  },
+  {
+   "t": 970.48,
+   "d": 2.96,
+   "text": "Also, cards are much easier to look good"
+  },
+  {
+   "t": 973.44,
+   "d": 1.84,
+   "text": "if you don't have a lot of graphic"
+  },
+  {
+   "t": 975.28,
+   "d": 2.56,
+   "text": "skills of your own."
+  },
+  {
+   "t": 977.84,
+   "d": 1.44,
+   "text": "you know, you could probably design"
+  },
+  {
+   "t": 979.28,
+   "d": 2.8,
+   "text": "totally decent cards as opposed to"
+  },
+  {
+   "t": 982.08,
+   "d": 1.68,
+   "text": "coming up with those tiles was kind of"
+  },
+  {
+   "t": 983.76,
+   "d": 3.48,
+   "text": "tricky for me."
+  },
+  {
+   "t": 987.36,
+   "d": 3.2,
+   "text": "But overall, I am really glad that Kitf"
+  },
+  {
+   "t": 990.56,
+   "d": 2.96,
+   "text": "Fox did raise the issue. It makes the"
+  },
+  {
+   "t": 993.52,
+   "d": 1.76,
+   "text": "game easier to market. Uh, the"
+  },
+  {
+   "t": 995.28,
+   "d": 2.0,
+   "text": "presentation's now different, but really"
+  },
+  {
+   "t": 997.28,
+   "d": 2.88,
+   "text": "nothing changed under the hood. I may be"
+  },
+  {
+   "t": 1000.16,
+   "d": 1.84,
+   "text": "confusing players, but it's for entirely"
+  },
+  {
+   "t": 1002.0,
+   "d": 1.52,
+   "text": "different reasons and not because they"
+  },
+  {
+   "t": 1003.52,
+   "d": 1.76,
+   "text": "think the game is entirely different"
+  },
+  {
+   "t": 1005.28,
+   "d": 2.4,
+   "text": "than what it looks like. It is totally"
+  },
+  {
+   "t": 1007.68,
+   "d": 3.68,
+   "text": "not a rog light deck builder."
+  },
+  {
+   "t": 1011.36,
+   "d": 2.16,
+   "text": "And if you want to know a little bit"
+  },
+  {
+   "t": 1013.52,
+   "d": 2.72,
+   "text": "more about the game, I've"
+  },
+  {
+   "t": 1016.24,
+   "d": 3.44,
+   "text": "have a few posts on our development blog"
+  },
+  {
+   "t": 1019.68,
+   "d": 2.32,
+   "text": "on the Steam page."
+  },
+  {
+   "t": 1022.0,
+   "d": 2.16,
+   "text": "I have a chapter in the game narrative"
+  },
+  {
+   "t": 1024.16,
+   "d": 2.32,
+   "text": "kaleidoscope book about procedural"
+  },
+  {
+   "t": 1026.48,
+   "d": 1.68,
+   "text": "people. It's not about the card system,"
+  },
+  {
+   "t": 1028.16,
+   "d": 2.0,
+   "text": "but it's about how the personalities"
+  },
+  {
+   "t": 1030.16,
+   "d": 2.0,
+   "text": "work behind the scenes."
+  },
+  {
+   "t": 1032.16,
+   "d": 2.56,
+   "text": "They didn't ask me anything on Reddit"
+  },
+  {
+   "t": 1034.72,
+   "d": 4.4,
+   "text": "and you can contact me on social media."
+  },
+  {
+   "t": 1039.12,
+   "d": 2.48,
+   "text": "I don't know if after the audio mixup"
+  },
+  {
+   "t": 1041.6,
+   "d": 3.84,
+   "text": "there's any time for questions, but"
+  },
+  {
+   "t": 1045.44,
+   "d": 4.04,
+   "text": "if there is, I'll thank them."
+  },
+  {
+   "t": 1049.6,
+   "d": 4.4,
+   "text": "Great. Uh, thank you so much, David. Um,"
+  },
+  {
+   "t": 1054.0,
+   "d": 2.56,
+   "text": "yeah, we I think probably don't have"
+  },
+  {
+   "t": 1056.56,
+   "d": 2.16,
+   "text": "time for questions, but if anyone does"
+  },
+  {
+   "t": 1058.72,
+   "d": 3.6,
+   "text": "have questions, then they can ask you in"
+  },
+  {
+   "t": 1062.32,
+   "d": 3.28,
+   "text": "the dugout in uh in between talks."
+  },
+  {
+   "t": 1065.6,
+   "d": 0.32,
+   "text": "Great."
+  },
+  {
+   "t": 1065.92,
+   "d": 1.52,
+   "text": ">> But thank you so much. That was super"
+  },
+  {
+   "t": 1067.44,
+   "d": 2.16,
+   "text": "cool. Um, I'm really looking forward to"
+  },
+  {
+   "t": 1069.6,
+   "d": 1.92,
+   "text": "playing this game and it was uh great to"
+  },
+  {
+   "t": 1071.52,
+   "d": 1.68,
+   "text": "learn more about the development."
+  },
+  {
+   "t": 1073.2,
+   "d": 0.56,
+   "text": "Awesome."
+  },
+  {
+   "t": 1073.76,
+   "d": 0.32,
+   "text": ">> Thanks."
+  },
+  {
+   "t": 1074.08,
+   "d": 0.96,
+   "text": ">> And thank you for rolling with the"
+  },
+  {
+   "t": 1075.04,
+   "d": 4.24,
+   "text": "punches, David. Really appreciate that."
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+droqen - The roguelike spirit without procedural generation
+Speaker: droqen
+https://www.youtube.com/watch?v=6Whz8bvjAKo
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] Our next speaker is droqen. Take it away. >> Should I just start talking? Hi, I am droqen and this is my talk. Through the writing of this talk, I started to come up with an alternate name.
+
+## Berlin interpretation
+
+[0:00:30] If you are familiar with the Berlin interpretation is it a collection of factors kind of used to try and define what a Roguelike is. In a fit of creative rebellion I was thinking what if I took what is assumed to be the core of the Roguelike, which is procedural generation, and here in my slides, random environment generation and permadeath, what remains about a Roguelike that's beautiful without these things? And just for simplicities take I will cut it down to the six low value factors and they tend to be just in the name. Low value. They are presumed to be less important. And the way I am going to talk about these is I am just going to pair them off and each pair is going to make a concept.
+
+## Simulation and embodiment
+
+[0:01:25] The first concept I want to talk about is the feeling of simulation and embodiment I get out of having a single character player and the monsters be similar to the players. What this does is in a game like the sims where I am not really individual in the world, I can't feel like I am a part of the world and when I am treated as special as a player in the eyes of the world, again, it is not like I am part of the world. It is like I am above it in some way. A game I really like that's not a Roguelike that I think does this is ernog unlimited. In this game it isn't so much the monsters are similar as much as the entities are similar. There is a teleporter that will transport anything that lands on top of it into the save room and the save room is a hub.
+
+[0:02:28] The save room is this very important hub and so you can drop a block down there. There is gems and stuff. Monsters are similar to blocks in this game and you can drop them into the save room and when you go in it is all kinds of trouble because there is monsters in your save room that is presumed to be the safe place. Similar the way you go to the save room is you are just like the monsters and blocks and you are a physical block. It teleports you to the saver room in the same way when you land on it. I love how this simple interaction of treating everything the same way is such a core concede of this game. This idea of a pure, real simulation where everything is mechanically simulated. There is no fake walls or doors. It is all the rules of the game. This is something although I see in other games and it is something I look for a lot,
+
+[0:03:28] I first noticed it in traditional Roguelikes. I like looking at the Berlin interpretation because traditional Roguelikes feel like this pure expression of a world made up of its mechanics.
+
+## Monolithic challenge
+
+[0:03:45] Second, I want to talk about the monolithic challenge. It is ex -- in NetHack for me. It has been awhile since I played. You know, all definitions of Roguelikes are you are going to start at the beginning every time and you as an individual are going to conquer this singular challenge. It is a whole thing. It is not an episodic game you play chapter by chapter. When you load up an episodic game you don't have to worry about the beginning of the game in the middle of the game but when you Roguelike when you come to it you are always starting
+
+[0:04:45] from the beginning and it feels like a whole thing that you are trying to master. I want to talk about Below because I think it is a game that to me aesthetically is an example of this monolithic challenge. There is a gigantic mountant with a doorway and every time you die you come to the same mountain. It a distinct feeling of this the challenge and you are beginning and at some point there is going to be an end and it is just you in the challenge. I want to talk about dark souls because while procedurely generated there is a way to get this monolithic feeling in other games. There is arcade games where you always start from the beginning and jow to get through
+
+[0:05:46] them with a certain number of lives. A lot of old games have this monolithic feeling and as that faded away Roguelikes carried the torch. I think there is glimmers of this here. The unforgiving nature of a run where you start and there is however many enemies laid out before you and it is just a singular task that you get to repeat and master until you have solved it and although it is not a procedurely generated monolithic challenge in a way an entire Roguelike is it still gets at the heart of the aesthetics. My third concept is this focus and I think all these tie into each other but this one ties especially strong into the simulation, ASCII display and numbers are a way to boil
+
+[0:06:52] down the presentation of a game so that as a developer and also as a player of this type of game, you are free to focus more on just the mechanics and what they say. This is a game called signal pals it is extremely Roguelike similar as far as I can tell. You can see that the player character has three out of five bubbles of health underneath. This is something that is not a digit that's displayed on a screen but it is still -- it has me as the player thinking in the language of numbers. I am thinking I have 3 out of a 5 health. The numbers and data are apparent. I like the ASCII display. You can see a frog and lizard enemy.
+
+[0:07:54] These enemies are not different in the way a frog or a lizard are different in real life. They are purely iconic. The frog is just an icon. It stands in for the enemy with three health points and the lizard is just the enemy with two health points and other things about them but nothing about them is frog or lizard like. I really have a fondness for pixel art. Really low resolution pixel art is appealing to me in much the same way that ASCII art is because of the way -- it is something you interpret. It shows you only what's necessary. And in a Roguelike, a G might be a goblin so you interpret that G and learn the language of the game. That is the game telling me a lot of fluff doesn't matter. It doesn't matter how tall or short the goblin is.
+
+[0:09:01] The at symbol representing the player is to me just this perfect example of boiling away everything that doesn't matter to the experience. The at symbol doesn't give me the player an idea of what my Avatar looks like or where it comes from. What matters is what I am capable of and what I do.
+
+## Conclusion
+
+[0:09:30] That's pretty much the end of the talk. I went over these concepts and I want to push the idea and I want to make it clear I am not saying these things are the only concepts that are beautiful about traditional Roguelikes but it was a really fun mental exercise to look at the Roguelikes and something from traditional Roguelike fans and everything agrees the procedural generation is at the heart of what a Roguelike is but I think there is a lot of fascinating combinitorials that come out of the Berlin interpretation. I am in the theater holding the Berlin interpretation object. I put up a GIF of a game I am work on which is absolutely not a Roguelike but I loved calling it a low-value Roguelike because it captured the essence of what a Roguelike is
+
+[0:10:33] and what I really love about Roguelikes. It is called hand made death labyrinth. I made it with my friend who is in the audience. If you are curious, I will be hanging out at the @ statue sign. EMCEE: That was awesome. Cool.

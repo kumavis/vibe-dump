@@ -1,0 +1,46 @@
+Ray - Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data
+Speaker: Ray
+https://www.youtube.com/watch?v=n6mKigS_71Y
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Introduction to Caves of Qud
+
+[0:00:00] QRISTY: Let's see is there anything else important to note? Eh. No. You are not here to hear me talk. You are here to hear our first talk in the block is from Ray who will be telling us about "Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data files." Ray studies math and computer science. When not dreaming about Caves of Qud, they might be found playing it instead. Goals truly. Ray, welcome to the celebration. RAY: Hi. Thank you for coming my talk. As Qristy said this is "Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data files." Well, you if you haven't heard of Caves of Qud, it is a possibility, it is a science fantasy and roguelike epic that is finally releasing in 2024. There is a lot I could say about it but what I am specifically going to be talking about is how
+
+[0:01:04] it presents a broadly inspectable and extensible engine. Manipulating the game comes at about three
+
+## Data-driven game architecture
+
+[0:01:13] different aspects depending on how you count. There is data files, C# scripting that sort of conforms to the interface the game provides and for the precise things you need to do, the game allows you to directly patch over but I am focusing on the data files specifically. The data files in Caves of Qud are primarily XML. I would provide an example but if you have seen Mike Cook's talk yesterday it had an example of what you might see here. There is a little bit of JSON but that doesn't come with the same functionality. But the data files generally end up being like lists of like defining specific items such as like objects, et cetera, and the
+
+[0:02:21] important part is that items sort of can inherit -- there is an inheritance tree of properties and aspects. You can also mix in things for objects. I am not going to touch on that but the really important part for modding is that you can merge your part that you define over -- you can sort of overlay it and sort of specifically rewrite precise parts of the data tree. And another important aspect of the system is that there are escape patches to scripting for functionality. It is mostly considered parts but you can attach these sort of -- you can attach these parts to
+
+[0:03:25] specific objects and then they provide that action or whatever the part does. There is a lot that's defined in data files in Caves of Qud including game objects so items and creatures, conversations, quests, population tables which are like what the game uses to pick randomly for like picking random items and such. Or even like factions, books, precise things such as player presets and options to define your own custom genders and pronouns which I find pretty fun.
+
+## Wiki pipeline and remapping
+
+[0:04:10] What does this get us? Specifically as a moder and someone that works on the wiki, I argue the system provides a strong capacity for reinterpretations which I am defining as the ability for players to parse, reuse and transform a game's data. For the wiki that's like taking the game's data files and moving that data to the wiki. So the specific pipeline is that we take the data files, it goes through a program called Hugades, not sure how to pronounce it, but to parse out specifically the game objects and upload them to the wiki through a program called the cud blueprint explorer. This makes keeping the game content on the wiki -- updated
+
+[0:05:20] much more -- it makes it much more easy to keep it updated. The program will like find where like objects need to be updated and you can just upload them from there. Also because we sort of transform it through this process, on the wiki we use media wiki which is the wiki software a feature called cargo tables which let's us use the data on the wiki in sort of like a database style which allows searching and filtering and relating items together in ways that are not static. A complication for this process is what is convenient for a game ontology,
+
+[0:06:26] what a game considers each individual item, is not necessarily how it works for -- like for a wiki. Like there are three different doors that need different keys to unlock in the progression of the game, does it make sense for us to make each of these a separate page? There is also, like, an entire sheet of here are the overrides that we do which -- it is very convenient and it ameliorates a lot of the work but it still all requires work. Having an effective wiki requires work on behalf of the wiki team which in the Cud community are called the trash mugs. Writing a user presented prose and making sure all of the things we can't upload through the process are updated still
+
+[0:07:32] requires work. It is very convenient. Still like it is not a -- it doesn't completely remove the user's -- like the gameplayer's involvement with the system. For modding, I would argue that this
+
+## Modding and design tradeoffs
+
+[0:07:58] framework is very useful for modding because it is significantly more robust towards interface and game changes than a strictly scripting. It also allows for small changes to be only a couple lines of code. For instance, like, my favorite example of a short mod is one that makes -- there is an item in the game called trans kinetic cuffs that make trans kinetic the translate colors. That's like three lines more like four lines of code or XML to override that specific property. It also allows for modders to repurpose the parts I mentioned earlier. You can sort of take little bits and reuse them in your own way. If you recall Mike Cook's talk yesterday we sort of talked about
+
+[0:09:04] that too. However, like for modding that's not always the easiest because like sometimes the way that parts are conceptualized doesn't work for the changes you are trying to do. The biggest example, the first example that comes to my mind is that there are rocket powered boots in the game and the functionality that lets you jump with them and like it leaves a trail of fire behind. That is considered one whole part. If you want to split it up, then you have to dip into C# which isn't the end of the world but it is less convenient. I think ultimately there is tension between power and comprehensibility for this system. How much do you want to make it like a programming language before like it is like a programming language? I will argue it is a programming language but it is
+
+[0:10:10] much simpler than C#. But if you want to like do actions based on like what other mods there are, the state of the game, and so on, like, those can be more complicated to do than I think is like hypothetically possible. If you are interested in learning more about the system, all of these
+
+## Resources and Q&A
+
+[0:10:43] links are listed in the read me for the code for these slides. Specifically, I would check out the snap jaw mages wiki tutorial. It does a great job of walking through the specific data manipulation required to sort of create your own weapons. And the other thing I would want to point out is this next weekend we, the Discord community for Caves of Qud, me and one of the other community members, Lou, we are running a modding jam for Halloween if that's the kickstart that you need to get started. Yeah, Thank you for coming to my talk. QRISTY: Cool. Thank you so much. This is -- gosh,
+
+[0:11:46] it sounds like so much fun. Monster jam. If you had told me two days ago, I would be excited about XML. You would have surprised me but now I am like oh, man, that sounds really cool. RAY: XML is not the easiest to write but I think it is useful in this context. QRISTY: Totally. We have one question. Which is can you explain more about what you mean by ontology? RAY: My ontology I am using it as sort of a broad word to mean how the game understands what is a thing so like in the example, like, each of the different doors is its own object defined in the game. The game refers to them
+
+[0:12:48] as blueprints but is that necessarily what we want when presenting it as a concept to the user who might sort of conceptualize those as these are the three different doors -- you go through them in sequence. Basically I am talking about like how does the game conceptualize itself in like what is considered object, what even like possible categories of things there are, so like that list that I list of all the things defined in data, like defining those, all of that. I am not sure if that makes sense. QRISTY: So you would be like I want to modify the fire that comes off the rocket boots. I actually want to modify the rocket boots because that is the one thing all together. RAY: Yeah, basically. What the game considers
+
+[0:13:49] discreet versus like the same thing. QRISTY: Cool. All right. Thanks, again. If you want to stick around until the end of this block we will have you in breakout room one, I Was a Teenage Gelatinous Cube. We have three other talks so don't go anywhere.

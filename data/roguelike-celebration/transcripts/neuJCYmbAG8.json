@@ -1,0 +1,1702 @@
+{
+ "id": "neuJCYmbAG8",
+ "url": "https://www.youtube.com/watch?v=neuJCYmbAG8",
+ "title": "Tyriq Plummer - YASDery Loves Company: Multiplayer in Traditional Roguelikes",
+ "speaker": "Tyriq Plummer",
+ "talk_title": "YASDery Loves Company: Multiplayer in Traditional Roguelikes",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1827,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nTyriq is a game developer who has been working on the roguelike platformer Catacomb Kids for ten or six years, depending on how you count. He has also worked on several games as an artist and animator - including Thor DS, Epic Mickey: Power of Illusion, and Cadence of Hyrule - and has created a couple roguelikes for 7drl that he's pretty chuffed with: H.V.N.T.R.S. and Atgtha in Absurdia. He really likes roguelikes, worldbuilding, and cats.\n\nIn this talk he asks - multiplayer in traditional roguelikes: can it be done (well)??? What doors does it open? What concessions must be made? He explores the history and current state of multiplayer elements in turn-based roguelikes, as well as present some possible approaches that he has prototyped. Ultimately, he hopes to encourage the exploration of human-human cooperation and antagonism in more roguelikes going forward.\n\nFind him on Twitter: https://twitter.com/fourbitfriday\nCatacomb Kids: https://store.steampowered.com/app/315840/Catacomb_Kids/\nTyriq at Roguelike Celebration 2017 talking about Roguelikes and Platformers: https://www.youtube.com/watch?v=OVSi3NzA0KM",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 60,
+   "title": "The case for multiplayer"
+  },
+  {
+   "start": 140,
+   "title": "Rethinking roguelike tropes"
+  },
+  {
+   "start": 283,
+   "title": "Benefits of co-op roguelikes"
+  },
+  {
+   "start": 474,
+   "title": "Historical context"
+  },
+  {
+   "start": 625,
+   "title": "Hunters and turn-based design"
+  },
+  {
+   "start": 1047,
+   "title": "Clean Sweep development"
+  },
+  {
+   "start": 1515,
+   "title": "Experimental Twitch features"
+  },
+  {
+   "start": 1756,
+   "title": "Closing and Q&A"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3923,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.23,
+   "d": 8.47,
+   "text": "Welcome, Tyriq our next speaker."
+  },
+  {
+   "t": 8.7,
+   "d": 5.67,
+   "text": "The lovely creation of our Roguelike Celebration shirts."
+  },
+  {
+   "t": 14.37,
+   "d": 7.72,
+   "text": "Everyone should get those as well as enjoying."
+  },
+  {
+   "t": 22.09,
+   "d": 7.58,
+   "text": "Tyriq, a game developer who has been working on the Roguelikes platform catacomb kids and"
+  },
+  {
+   "t": 29.67,
+   "d": 7.77,
+   "text": "worked an several games as an artist and aminator including Thor, epic mickey and cadence of"
+  },
+  {
+   "t": 37.44,
+   "d": 14.27,
+   "text": "high rule and has created a couple Roguelikes."
+  },
+  {
+   "t": 51.71,
+   "d": 11.01,
+   "text": ">> OK."
+  },
+  {
+   "t": 62.72,
+   "d": 10.61,
+   "text": "I am going to talk about creating a turn base game experience."
+  },
+  {
+   "t": 73.33,
+   "d": 2.31,
+   "text": "A little background."
+  },
+  {
+   "t": 75.64,
+   "d": 1.6,
+   "text": "I am Tyriq."
+  },
+  {
+   "t": 77.24,
+   "d": 5.62,
+   "text": "Pixel artist, game designer, fan of Rogue paradigms and also a fan of the things I make"
+  },
+  {
+   "t": 82.86,
+   "d": 2.72,
+   "text": "which is why I make them."
+  },
+  {
+   "t": 85.58,
+   "d": 8.56,
+   "text": "These are my current Rogue credentials."
+  },
+  {
+   "t": 94.14,
+   "d": 1.89,
+   "text": "I am going to be talking about these two."
+  },
+  {
+   "t": 96.03,
+   "d": 3.61,
+   "text": "Hunters which I made for seven day Roguelikes in 2018 and clean sweep which I have been"
+  },
+  {
+   "t": 99.64,
+   "d": 5.31,
+   "text": "working on specifically as a proof of concept for the talk."
+  },
+  {
+   "t": 104.95,
+   "d": 5.0,
+   "text": "They are both multi-player range of motion that employ different methods of turn base"
+  },
+  {
+   "t": 109.95,
+   "d": 1.12,
+   "text": "and player activity."
+  },
+  {
+   "t": 111.07,
+   "d": 6.0,
+   "text": "And in a bit I will talk about how I approached each and the things I learned along the way."
+  },
+  {
+   "t": 117.07,
+   "d": 4.1,
+   "text": "First, before we get to any of my own personal endeavors let's take a step back and examine"
+  },
+  {
+   "t": 121.17,
+   "d": 5.88,
+   "text": "the existing landscape that has led me down the path of year's long fascination."
+  },
+  {
+   "t": 127.05,
+   "d": 1.67,
+   "text": "Roguelikes."
+  },
+  {
+   "t": 128.72,
+   "d": 5.02,
+   "text": "We know what they are and we celebrate them and they have been defined multiple times"
+  },
+  {
+   "t": 133.74,
+   "d": 3.77,
+   "text": "that this event and nowadays there are a great many kinds of Roguelikes."
+  },
+  {
+   "t": 137.51,
+   "d": 8.9,
+   "text": "Roguelikes from the beginning have been primarily focused on the single player experience which"
+  },
+  {
+   "t": 146.41,
+   "d": 5.59,
+   "text": "is a curious thing to me given the era and inspiration behind many of the staples games"
+  },
+  {
+   "t": 152.0,
+   "d": 2.15,
+   "text": "as a genre."
+  },
+  {
+   "t": 154.15,
+   "d": 6.37,
+   "text": "Rogue took much inspiration from dudgeons and dragons and other pen and paper RPGs trying"
+  },
+  {
+   "t": 160.52,
+   "d": 4.35,
+   "text": "to capture the feeling of going on an adventure that is different every time and letting you"
+  },
+  {
+   "t": 164.87,
+   "d": 7.79,
+   "text": "craft your hero but without the ownerous requirement of needing another player."
+  },
+  {
+   "t": 172.66,
+   "d": 15.37,
+   "text": "A large part of those inspirations, pen and paper RPGs have a strong team work and provide"
+  },
+  {
+   "t": 188.03,
+   "d": 4.06,
+   "text": "stories of intrigue, betrayal and the pitfalls of human relationships."
+  },
+  {
+   "t": 192.09,
+   "d": 5.32,
+   "text": "They all have the element of humans interacting with each other in ways that reflect their"
+  },
+  {
+   "t": 197.41,
+   "d": 5.38,
+   "text": "individuality and unique ability in the context of a group."
+  },
+  {
+   "t": 202.79,
+   "d": 5.97,
+   "text": "There are plenty of exceptions but a single individual delving alone into treacherous"
+  },
+  {
+   "t": 208.76,
+   "d": 6.15,
+   "text": "traps is like a super vilian."
+  },
+  {
+   "t": 214.91,
+   "d": 6.66,
+   "text": "Heroes, generally, have friends and heroes also don't generally lust for God-like power."
+  },
+  {
+   "t": 221.57,
+   "d": 5.15,
+   "text": "This team work aspect of the fantasy genre managed to make its way into other computer"
+  },
+  {
+   "t": 226.72,
+   "d": 9.9,
+   "text": "games seated from the same inspirations like JRPGs which became a convention of the entire"
+  },
+  {
+   "t": 236.62,
+   "d": 7.83,
+   "text": "genre or first-person dozen crawl as you create several characters and go into the dudgeons"
+  },
+  {
+   "t": 244.45,
+   "d": 1.07,
+   "text": "depth."
+  },
+  {
+   "t": 245.52,
+   "d": 7.43,
+   "text": "These game aren't multiplayer but found ways to retain aspirations of team work and parties"
+  },
+  {
+   "t": 252.95,
+   "d": 18.27,
+   "text": "of adventures but Roguelikes don't seem to have the team work which I think is a shame."
+  },
+  {
+   "t": 271.22,
+   "d": 5.03,
+   "text": "Given the nature of traditional Roguelikes and their ability to generate stories, I feel"
+  },
+  {
+   "t": 276.25,
+   "d": 5.6,
+   "text": "like party based Roguelike is an under explored space yearning to be more investigated."
+  },
+  {
+   "t": 281.85,
+   "d": 11.46,
+   "text": "I am here to talk about just not just a fellowship of multi players but a coalition of human"
+  },
+  {
+   "t": 293.31,
+   "d": 6.99,
+   "text": "minds exploring together the procedural spaces and unkindness of traditional Roguelikes."
+  },
+  {
+   "t": 300.3,
+   "d": 4.08,
+   "text": "Why is this specifically something worth striving for?"
+  },
+  {
+   "t": 304.38,
+   "d": 7.35,
+   "text": "I think the first and most obvious reason is to generate more stories, more fun and"
+  },
+  {
+   "t": 311.73,
+   "d": 6.4,
+   "text": "not just tales of yet another stupid death but yet another stupid extension post where"
+  },
+  {
+   "t": 318.13,
+   "d": 4.92,
+   "text": "we had to leave behind our companion as they bravely defeated a checkpoint and we barely"
+  },
+  {
+   "t": 323.05,
+   "d": 1.0,
+   "text": "escaped."
+  },
+  {
+   "t": 324.05,
+   "d": 8.07,
+   "text": "Multi players provides stories of betrayal as your companion steals a vital potion and"
+  },
+  {
+   "t": 332.12,
+   "d": 5.02,
+   "text": "leaves you to your fate."
+  },
+  {
+   "t": 337.14,
+   "d": 8.8,
+   "text": "Stories of revenge as you survive and hunt them down and stories of tragedy as you both"
+  },
+  {
+   "t": 345.94,
+   "d": 4.24,
+   "text": "end up cornered and outnumbered."
+  },
+  {
+   "t": 350.18,
+   "d": 7.8,
+   "text": "Jim Shepard did a talk at Roguelikes in 2019 about stimulating relationships in Roguelikes"
+  },
+  {
+   "t": 357.98,
+   "d": 5.17,
+   "text": "which I thought was cool and compelling but maybe you could save yourself code if you"
+  },
+  {
+   "t": 363.15,
+   "d": 5.23,
+   "text": "replaced that simulation with an actual human."
+  },
+  {
+   "t": 368.38,
+   "d": 7.71,
+   "text": "Another benefit is that it can help ease people who are new to genre."
+  },
+  {
+   "t": 376.09,
+   "d": 7.52,
+   "text": "Imagine it relying on WikiPedia pages to tell you the best strategy instead you had someone"
+  },
+  {
+   "t": 383.61,
+   "d": 10.8,
+   "text": "who could fight alongside you or teach you the mechanics of the game in a hands-on fashion."
+  },
+  {
+   "t": 394.41,
+   "d": 6.49,
+   "text": "Something I learned from catacomb kids is people are more tolerant of failure and difficulty"
+  },
+  {
+   "t": 400.9,
+   "d": 3.82,
+   "text": "if they have something to fail along with them and they are much more inclined to keep"
+  },
+  {
+   "t": 404.72,
+   "d": 4.85,
+   "text": "trying if they have a companion to guide them through frustrations."
+  },
+  {
+   "t": 409.57,
+   "d": 8.33,
+   "text": "Lastly, multiplayer Roguelike has a specific example over AI base allowing for the full"
+  },
+  {
+   "t": 417.9,
+   "d": 5.54,
+   "text": "gamut of the complexities of the games system to be engaged with in a meaningful way by"
+  },
+  {
+   "t": 423.44,
+   "d": 1.5,
+   "text": "each party member."
+  },
+  {
+   "t": 424.94,
+   "d": 5.12,
+   "text": "The complexities allowed for my human engagement go beyond social interactions with multiple"
+  },
+  {
+   "t": 430.06,
+   "d": 4.46,
+   "text": "humans behind multiple characters you can really dig into the meat of certain systems"
+  },
+  {
+   "t": 434.52,
+   "d": 6.41,
+   "text": "in ways that would be inconceivable with AI-based allies or time consuming to execute with only"
+  },
+  {
+   "t": 440.93,
+   "d": 3.59,
+   "text": "a single player controlling multiple units."
+  },
+  {
+   "t": 444.52,
+   "d": 6.04,
+   "text": "Think of all the buck wild character builds available for caves of cud, a perfectly rational"
+  },
+  {
+   "t": 450.56,
+   "d": 5.74,
+   "text": "level-headed game and now imagine another character as complex as intelligently built"
+  },
+  {
+   "t": 456.3,
+   "d": 12.85,
+   "text": "and operated to support"
+  },
+  {
+   "t": 469.15,
+   "d": 7.92,
+   "text": "and sinnerize."
+  },
+  {
+   "t": 477.07,
+   "d": 7.04,
+   "text": "I definitely want to acknowledge there are precedents and the earliest attempts are man"
+  },
+  {
+   "t": 484.11,
+   "d": 9.2,
+   "text": "bang and its child which got me thinking about this in the first place."
+  },
+  {
+   "t": 493.31,
+   "d": 7.65,
+   "text": "As you might infer from the name it is a multiplayer and this is a derivation."
+  },
+  {
+   "t": 500.96,
+   "d": 8.66,
+   "text": "Both games pick a server to join and can interact with anyone else on the server and both games"
+  },
+  {
+   "t": 509.62,
+   "d": 7.94,
+   "text": "make concessions by being real-time but to alleviate the burden of doing quick mental"
+  },
+  {
+   "t": 517.56,
+   "d": 6.27,
+   "text": "acrobatics to assess with the shift to real-time the game let's you assign input macros that"
+  },
+  {
+   "t": 523.83,
+   "d": 3.71,
+   "text": "can let you execute commands at the press of a button."
+  },
+  {
+   "t": 527.54,
+   "d": 5.34,
+   "text": "Indeed, I do believe these macros are invalable at higher levels."
+  },
+  {
+   "t": 532.88,
+   "d": 4.15,
+   "text": "The depth and commentplexity -- complexity is not diminished."
+  },
+  {
+   "t": 537.03,
+   "d": 7.74,
+   "text": "They are old school Roguelikes up to and including binding a different function to every function"
+  },
+  {
+   "t": 544.77,
+   "d": 1.2,
+   "text": "on the keyboard."
+  },
+  {
+   "t": 545.97,
+   "d": 5.81,
+   "text": "Both games are available and playable and at least somewhat active from what I can tell."
+  },
+  {
+   "t": 551.78,
+   "d": 3.0,
+   "text": "There is also dungeon of the road demon by Leif Bloomquist."
+  },
+  {
+   "t": 554.78,
+   "d": 11.02,
+   "text": "This is the opposite and very stripped down for complexities and easy to jump into."
+  },
+  {
+   "t": 565.8,
+   "d": 5.28,
+   "text": "I won't talk about it much because it might be redundant seeming how the next talk is"
+  },
+  {
+   "t": 571.08,
+   "d": 3.93,
+   "text": "about it but I think it is neat and look forward to hearing about it from the man himself but"
+  },
+  {
+   "t": 575.01,
+   "d": 5.68,
+   "text": "I want to bring it up and acknowledge it exists."
+  },
+  {
+   "t": 580.69,
+   "d": 3.29,
+   "text": "We have the hopes, dreams and context there."
+  },
+  {
+   "t": 583.98,
+   "d": 1.5,
+   "text": "At last, we get to me."
+  },
+  {
+   "t": 585.48,
+   "d": 5.59,
+   "text": "What have I done and learned in doing so and for what do I hope?"
+  },
+  {
+   "t": 591.07,
+   "d": 8.29,
+   "text": "The games I mentioned so far are all online and allow for potentially large groups of"
+  },
+  {
+   "t": 599.36,
+   "d": 5.36,
+   "text": "players to be interacting at once coming and going as they please but my desire for multiplayer"
+  },
+  {
+   "t": 604.72,
+   "d": 8.47,
+   "text": "Roguelikess are closer to the party of adventures and their fate is intertwined."
+  },
+  {
+   "t": 613.19,
+   "d": 3.06,
+   "text": "I don't know how to code net code."
+  },
+  {
+   "t": 616.25,
+   "d": 8.57,
+   "text": "All my endeavors are focused on the multiplayer experience of 2-4 players and a single screen."
+  },
+  {
+   "t": 624.82,
+   "d": 3.4,
+   "text": "With that said, let's talk about hunters."
+  },
+  {
+   "t": 628.22,
+   "d": 12.07,
+   "text": "Hunters, or -- the title is an acronym that stands for hell beast"
+  },
+  {
+   "t": 640.29,
+   "d": 3.67,
+   "text": "and vampire neutralization and tactical removal squad."
+  },
+  {
+   "t": 643.96,
+   "d": 5.44,
+   "text": "The premise is you and up to three friends are members of a vampire hunting tasked with"
+  },
+  {
+   "t": 649.4,
+   "d": 7.26,
+   "text": "eliminating hell beasts after the world has been taken over in an apocalypse."
+  },
+  {
+   "t": 656.66,
+   "d": 8.8,
+   "text": "I wanted to stimulate a monster killing party and fighting through cleverness rather than"
+  },
+  {
+   "t": 665.46,
+   "d": 6.5,
+   "text": "direct confrontation but that is not exactly what I ended up making."
+  },
+  {
+   "t": 671.96,
+   "d": 5.3,
+   "text": "Of all game jams I have done this is the one I am most eager to revisit and turn into a"
+  },
+  {
+   "t": 677.26,
+   "d": 1.22,
+   "text": "full fledge game."
+  },
+  {
+   "t": 678.48,
+   "d": 2.87,
+   "text": "How does it work?"
+  },
+  {
+   "t": 681.35,
+   "d": 5.5,
+   "text": "Well, it was important for me that three things be true for the game going in."
+  },
+  {
+   "t": 686.85,
+   "d": 4.61,
+   "text": "You should be able to take your time as deciding on a course of action."
+  },
+  {
+   "t": 691.46,
+   "d": 4.96,
+   "text": "I most specifically didn't want there to be turn time or real-time elements that put pressure"
+  },
+  {
+   "t": 696.42,
+   "d": 3.72,
+   "text": "on players beyond making the best choice they can."
+  },
+  {
+   "t": 700.14,
+   "d": 3.41,
+   "text": "And two turns shouldn't make other players wait for ages."
+  },
+  {
+   "t": 703.55,
+   "d": 5.75,
+   "text": "This might seem contradictory but it means I want to limit the decision space enough"
+  },
+  {
+   "t": 709.3,
+   "d": 4.79,
+   "text": "to determine the possible courses of action could be done quickly and once an action is"
+  },
+  {
+   "t": 714.09,
+   "d": 4.64,
+   "text": "decided upon it should be easy to input and execute."
+  },
+  {
+   "t": 718.73,
+   "d": 2.46,
+   "text": "And lastly, multiplayer should matter."
+  },
+  {
+   "t": 721.19,
+   "d": 3.05,
+   "text": "I didn't want this to be a game where you could be single player who happens to have"
+  },
+  {
+   "t": 724.24,
+   "d": 1.29,
+   "text": "other single players around."
+  },
+  {
+   "t": 725.53,
+   "d": 5.54,
+   "text": "I want to encourage collaborating and risk taking on behalf of others."
+  },
+  {
+   "t": 731.07,
+   "d": 3.95,
+   "text": "How did I attain the action?"
+  },
+  {
+   "t": 735.02,
+   "d": 8.01,
+   "text": "Cued actions, streamline gameplay and overlapping areas that make it hard to ignore one another."
+  },
+  {
+   "t": 743.03,
+   "d": 6.61,
+   "text": "To handle turns, I wanted something that would not be obtrusive but would still allow for"
+  },
+  {
+   "t": 749.64,
+   "d": 1.8,
+   "text": "space to think things through necessary."
+  },
+  {
+   "t": 751.44,
+   "d": 5.73,
+   "text": "What I came up with is having each player input action to cue it up for execution and"
+  },
+  {
+   "t": 757.17,
+   "d": 3.77,
+   "text": "as soon as every player has decided on the action the turn resolves."
+  },
+  {
+   "t": 760.94,
+   "d": 6.35,
+   "text": "It is easy and straightforward and easy to coordinate actions with others."
+  },
+  {
+   "t": 767.29,
+   "d": 5.23,
+   "text": "The fact it is easy to coordinate with others is an important part of what makes it work"
+  },
+  {
+   "t": 772.52,
+   "d": 6.06,
+   "text": "well for keeping turns short allowing players an easy mean and helps keep everyone engaged"
+  },
+  {
+   "t": 778.58,
+   "d": 6.5,
+   "text": "even when they decided on their own course of action and having multiple brains mull"
+  },
+  {
+   "t": 785.08,
+   "d": 5.77,
+   "text": "over the best way forward helps narrow down one's option and speed things along."
+  },
+  {
+   "t": 790.85,
+   "d": 3.52,
+   "text": "Of course, this way of handling turns isn't without drawbacks."
+  },
+  {
+   "t": 794.37,
+   "d": 6.53,
+   "text": "For one thing, turn order does still matter and it can be difficult to sus out the results"
+  },
+  {
+   "t": 800.9,
+   "d": 4.98,
+   "text": "like two players moving into the same tile at the same time or does a player move before"
+  },
+  {
+   "t": 805.88,
+   "d": 4.48,
+   "text": "or after being shield bashed by another player?"
+  },
+  {
+   "t": 810.36,
+   "d": 5.48,
+   "text": "It helps to have clear and consistent rules for how these sorts of interactions are resolved"
+  },
+  {
+   "t": 815.84,
+   "d": 5.25,
+   "text": "or a means of checking which players have action priority over others and that is to"
+  },
+  {
+   "t": 821.09,
+   "d": 5.95,
+   "text": "say who is going to act first."
+  },
+  {
+   "t": 827.04,
+   "d": 7.69,
+   "text": "And having even a brief wait for all the cued inputs to register can get irritating in lower"
+  },
+  {
+   "t": 834.73,
+   "d": 5.86,
+   "text": "stake situations like back tracking through an empty dudgeon and cued actions are row"
+  },
+  {
+   "t": 840.59,
+   "d": 6.11,
+   "text": "lying on the best of the games in a way to be maintaining the for everyone."
+  },
+  {
+   "t": 846.7,
+   "d": 6.49,
+   "text": "You don't want to get bogged down by one player waiting to allocate skills while everyone"
+  },
+  {
+   "t": 853.19,
+   "d": 8.29,
+   "text": "sits around or having to navigate several menus to equip with a weapon."
+  },
+  {
+   "t": 861.48,
+   "d": 7.21,
+   "text": "Having it streamlined and straightforward was important to support the turn key system"
+  },
+  {
+   "t": 868.69,
+   "d": 6.88,
+   "text": "and to make the game easy to grasp and welcoming to new players which I think is important"
+  },
+  {
+   "t": 875.57,
+   "d": 2.46,
+   "text": "for a multi-player game."
+  },
+  {
+   "t": 878.03,
+   "d": 5.7,
+   "text": "To this end, the combat is determnistic with no dice rolls or chance."
+  },
+  {
+   "t": 883.73,
+   "d": 12.59,
+   "text": "The enemy has simple AIs and inventory just a matter of pressing the button and no action"
+  },
+  {
+   "t": 896.32,
+   "d": 3.12,
+   "text": "in the game is further than two button presses away."
+  },
+  {
+   "t": 899.44,
+   "d": 7.9,
+   "text": "You never have to navigate a menu or read anything and all you need to know to assess"
+  },
+  {
+   "t": 907.34,
+   "d": 3.19,
+   "text": "a situation is to look at the screen and see what's happening."
+  },
+  {
+   "t": 910.53,
+   "d": 3.79,
+   "text": "There is no hidden information anywhere."
+  },
+  {
+   "t": 914.32,
+   "d": 6.17,
+   "text": "Lastly, there are the mechanics about which I hope to encourage team work and collaboration"
+  },
+  {
+   "t": 920.49,
+   "d": 5.39,
+   "text": "like being able to hurt each other which might seem like the thing that would determ team"
+  },
+  {
+   "t": 925.88,
+   "d": 1.0,
+   "text": "work."
+  },
+  {
+   "t": 926.88,
+   "d": 6.44,
+   "text": "My goal is to encourage communication with one another."
+  },
+  {
+   "t": 933.32,
+   "d": 4.15,
+   "text": "Several of the weapons in the game strike multiple tiles like the ax and sphere and"
+  },
+  {
+   "t": 937.47,
+   "d": 5.07,
+   "text": "if you are standing in the wrong place it can be easy to find yourself on the receiving"
+  },
+  {
+   "t": 942.54,
+   "d": 2.51,
+   "text": "end of a blow."
+  },
+  {
+   "t": 945.05,
+   "d": 7.16,
+   "text": "I am definitely concede that friendly fire might actually just suck in practice especially"
+  },
+  {
+   "t": 952.21,
+   "d": 4.28,
+   "text": "in a game that's already dang tough in a genre that's known for being tough it might be a"
+  },
+  {
+   "t": 956.49,
+   "d": 5.23,
+   "text": "little bit overkill but it is in the game and my intentions were noble so let's say"
+  },
+  {
+   "t": 961.72,
+   "d": 4.13,
+   "text": "a lesson was learned."
+  },
+  {
+   "t": 965.85,
+   "d": 3.58,
+   "text": "Sorry."
+  },
+  {
+   "t": 969.43,
+   "d": 4.25,
+   "text": "More actually helpful to the end of encouraging team work are probably items that beget setup"
+  },
+  {
+   "t": 973.68,
+   "d": 2.38,
+   "text": "and pay off."
+  },
+  {
+   "t": 976.06,
+   "d": 4.92,
+   "text": "These are the items that enable players to think ahead and act as a solo adventure would"
+  },
+  {
+   "t": 980.98,
+   "d": 4.52,
+   "text": "be minimal use but as a member of the team become valuable tools."
+  },
+  {
+   "t": 985.5,
+   "d": 6.12,
+   "text": "Things that let you manipulate the positions of allies and actions you wouldn't want to"
+  },
+  {
+   "t": 991.62,
+   "d": 6.57,
+   "text": "take but become interesting and unique when used in the context of team play."
+  },
+  {
+   "t": 998.19,
+   "d": 5.41,
+   "text": "There is a lot of fun possibilities here and I feel like hunters pairly scratches the surface"
+  },
+  {
+   "t": 1003.6,
+   "d": 3.62,
+   "text": "but I feel -- barely -- it is a space exploring."
+  },
+  {
+   "t": 1007.22,
+   "d": 14.24,
+   "text": "It also features a bleed out time."
+  },
+  {
+   "t": 1021.46,
+   "d": 3.92,
+   "text": "H.V.N.T.R.S."
+  },
+  {
+   "t": 1025.38,
+   "d": 13.55,
+   "text": "so that's H.V.N.T.R.S but before we get ahead of ourselves there is a more recent endeavor"
+  },
+  {
+   "t": 1038.93,
+   "d": 8.93,
+   "text": "I have been chewing on that's a bit more unconventional but just as educational."
+  },
+  {
+   "t": 1047.86,
+   "d": 5.72,
+   "text": "Clean sweep is experiment I have been working on since late June based on a thought I had"
+  },
+  {
+   "t": 1053.58,
+   "d": 3.06,
+   "text": "about how to handle multiplayer and Roguelikes."
+  },
+  {
+   "t": 1056.64,
+   "d": 5.06,
+   "text": "You play an elite squad of cleaning agents who are tasked with eliminating the nasty"
+  },
+  {
+   "t": 1061.7,
+   "d": 4.11,
+   "text": "on the floor and reducing the grime to an acceptable level."
+  },
+  {
+   "t": 1065.81,
+   "d": 9.98,
+   "text": "My goals were similar which is no time limited term or real-time actions but it shouldn't"
+  },
+  {
+   "t": 1075.79,
+   "d": 5.78,
+   "text": "make other players wait forever but also the multiplayer needs to matter but also also"
+  },
+  {
+   "t": 1081.57,
+   "d": 5.07,
+   "text": "I had the additional goal of trying to ease back in some of the complexities found in"
+  },
+  {
+   "t": 1086.64,
+   "d": 6.36,
+   "text": "larger scope Roguelikes or at police -- at least allow for the possibility of them."
+  },
+  {
+   "t": 1093.0,
+   "d": 5.64,
+   "text": "I didn't want to shy away from the idea of having a larger inventory or interactions"
+  },
+  {
+   "t": 1098.64,
+   "d": 2.15,
+   "text": "that require a bit more scrutiny."
+  },
+  {
+   "t": 1100.79,
+   "d": 6.86,
+   "text": "I dug up this thought I had from a few years ago."
+  },
+  {
+   "t": 1107.65,
+   "d": 4.12,
+   "text": "What if creatures only care about the turns of the player the most relevant to them."
+  },
+  {
+   "t": 1111.77,
+   "d": 1.68,
+   "text": "There is a Cat."
+  },
+  {
+   "t": 1113.45,
+   "d": 3.87,
+   "text": "I am sorry if you can hear that."
+  },
+  {
+   "t": 1117.32,
+   "d": 3.67,
+   "text": "That's how I came up with the parallel asynchronous schedule."
+  },
+  {
+   "t": 1120.99,
+   "d": 4.33,
+   "text": "I am going to call it that because it sounds fancy and I am allowed to make fancy terms"
+  },
+  {
+   "t": 1125.32,
+   "d": 5.52,
+   "text": "up."
+  },
+  {
+   "t": 1130.84,
+   "d": 8.49,
+   "text": "Creatures don't need to care about whose turn it is on a global scale just whose turn it"
+  },
+  {
+   "t": 1139.33,
+   "d": 2.92,
+   "text": "is on the most relevant scale."
+  },
+  {
+   "t": 1142.25,
+   "d": 5.04,
+   "text": "The most relevant term is that of the most nearest player."
+  },
+  {
+   "t": 1147.29,
+   "d": 4.34,
+   "text": "Creatures can get away with not moving when any player moves but only advancing the term"
+  },
+  {
+   "t": 1151.63,
+   "d": 8.86,
+   "text": "when the most relevant player moves."
+  },
+  {
+   "t": 1160.49,
+   "d": 4.21,
+   "text": "Of course, the interesting and challenging aspect is determining what it means for a"
+  },
+  {
+   "t": 1164.7,
+   "d": 7.13,
+   "text": "player to be most relevant but if you can manage to sus this out the result is a system"
+  },
+  {
+   "t": 1171.83,
+   "d": 7.38,
+   "text": "where enemies align themselves to a specific player and each player takes their turn whenever"
+  },
+  {
+   "t": 1179.21,
+   "d": 5.59,
+   "text": "they want without pressure and slowing down the game for other players."
+  },
+  {
+   "t": 1184.8,
+   "d": 4.16,
+   "text": "Parallel because creatures are operating on essentially separate turn schedules while"
+  },
+  {
+   "t": 1188.96,
+   "d": 5.18,
+   "text": "still existing in the same space and asynchronous because players don't have to move in unity"
+  },
+  {
+   "t": 1194.14,
+   "d": 4.83,
+   "text": "and can take as much or little time as you want with a situation and schedule because"
+  },
+  {
+   "t": 1198.97,
+   "d": 3.76,
+   "text": "that's the word for organizing units of time."
+  },
+  {
+   "t": 1202.73,
+   "d": 1.64,
+   "text": "That's what I did in clean sweep."
+  },
+  {
+   "t": 1204.37,
+   "d": 2.35,
+   "text": "It worked pretty great."
+  },
+  {
+   "t": 1206.72,
+   "d": 5.4,
+   "text": "You can see in this clip that there are two cleaning agents wondering around and facing"
+  },
+  {
+   "t": 1212.12,
+   "d": 12.94,
+   "text": "off and managing inventory without infringing on others or without having to wait or rush"
+  },
+  {
+   "t": 1225.06,
+   "d": 1.82,
+   "text": "anything."
+  },
+  {
+   "t": 1226.88,
+   "d": 5.04,
+   "text": "Each enemy after spotting a player sinks itself so it only moves in time with that player's"
+  },
+  {
+   "t": 1231.92,
+   "d": 1.0,
+   "text": "action."
+  },
+  {
+   "t": 1232.92,
+   "d": 6.02,
+   "text": "It works well for when the players are far from one another, or separated by walls, but"
+  },
+  {
+   "t": 1238.94,
+   "d": 1.7,
+   "text": "that's not a huge surprise."
+  },
+  {
+   "t": 1240.64,
+   "d": 3.34,
+   "text": "The question is what happens when players aren't so far apart?"
+  },
+  {
+   "t": 1243.98,
+   "d": 6.19,
+   "text": "Well, the matter of which players most relevant in that case becomes a lot fuzzier but we"
+  },
+  {
+   "t": 1250.17,
+   "d": 2.81,
+   "text": "can establish clear guidelines."
+  },
+  {
+   "t": 1252.98,
+   "d": 2.63,
+   "text": "First and most obvious is who can I see."
+  },
+  {
+   "t": 1255.61,
+   "d": 9.06,
+   "text": "If you break line of sight the creature starts targeting you and frees itself up to -- oh."
+  },
+  {
+   "t": 1264.67,
+   "d": 4.48,
+   "text": "Sorry."
+  },
+  {
+   "t": 1269.15,
+   "d": 18.66,
+   "text": "I just got the comment."
+  },
+  {
+   "t": 1287.81,
+   "d": 3.92,
+   "text": "If you break the line of sight the creature will stop targeting you and free itself up"
+  },
+  {
+   "t": 1291.73,
+   "d": 3.29,
+   "text": "and target someone else."
+  },
+  {
+   "t": 1295.02,
+   "d": 5.96,
+   "text": "It becomes unsynced and moves."
+  },
+  {
+   "t": 1300.98,
+   "d": 1.98,
+   "text": "Proximity and who is closest."
+  },
+  {
+   "t": 1302.96,
+   "d": 6.81,
+   "text": "If a player steps adjacent to the player it becomes the target and the closer the player"
+  },
+  {
+   "t": 1309.77,
+   "d": 10.15,
+   "text": "is the more likely to draw the attention away from whoever it is targeting."
+  },
+  {
+   "t": 1319.92,
+   "d": 2.79,
+   "text": "And lastly, activity."
+  },
+  {
+   "t": 1322.71,
+   "d": 7.95,
+   "text": "Which player that I can see and is a certain range has taken a number of actions greater"
+  },
+  {
+   "t": 1330.66,
+   "d": 2.56,
+   "text": "than that of my current target."
+  },
+  {
+   "t": 1333.22,
+   "d": 5.74,
+   "text": "That's a really complicated way to say if one player is sitting still for ages while"
+  },
+  {
+   "t": 1338.96,
+   "d": 5.7,
+   "text": "another is nearby moving around and using items and doing stuff, go after the player"
+  },
+  {
+   "t": 1344.66,
+   "d": 3.2,
+   "text": "that's actually doing stuff."
+  },
+  {
+   "t": 1347.86,
+   "d": 6.11,
+   "text": "That's about it for the rules that determine what chooses to target."
+  },
+  {
+   "t": 1353.97,
+   "d": 17.23,
+   "text": "And here is an example of the rules in play does"
+  },
+  {
+   "t": 1371.2,
+   "d": 12.74,
+   "text": "the"
+  },
+  {
+   "t": 1383.94,
+   "d": 10.53,
+   "text": "idea of forcing target to change their attention seem exploitable?"
+  },
+  {
+   "t": 1394.47,
+   "d": 3.12,
+   "text": "It probably it is."
+  },
+  {
+   "t": 1397.59,
+   "d": 2.09,
+   "text": "It depends on the game you are making."
+  },
+  {
+   "t": 1399.68,
+   "d": 6.19,
+   "text": "If you are using the system it goes you would design the game around exploits and maybe"
+  },
+  {
+   "t": 1405.87,
+   "d": 2.63,
+   "text": "instead of exploits you could call them tactics."
+  },
+  {
+   "t": 1408.5,
+   "d": 4.43,
+   "text": "I don't know if you would be able to drop this system into an already established Roguelike"
+  },
+  {
+   "t": 1412.93,
+   "d": 3.93,
+   "text": "and expect great results but I wouldn't mine someone trying it."
+  },
+  {
+   "t": 1416.86,
+   "d": 8.53,
+   "text": "The promise is the potential for further exploration down the road."
+  },
+  {
+   "t": 1425.39,
+   "d": 3.77,
+   "text": "That's parallel asynchronous schedule but not all that's going on in clean sweep."
+  },
+  {
+   "t": 1429.16,
+   "d": 3.68,
+   "text": "I have been working on it for the past few months and it has become a dumping ground"
+  },
+  {
+   "t": 1432.84,
+   "d": 6.17,
+   "text": "for all my experimental Roguelike ideas."
+  },
+  {
+   "t": 1439.01,
+   "d": 5.8,
+   "text": "You can modify any action so instead of happening instantly it is cued up to be executed simultaneously"
+  },
+  {
+   "t": 1444.81,
+   "d": 3.42,
+   "text": "with the next player who takes action."
+  },
+  {
+   "t": 1448.23,
+   "d": 3.47,
+   "text": "I stuffed hunters system into this one."
+  },
+  {
+   "t": 1451.7,
+   "d": 4.92,
+   "text": "This let's you get an attack bonus if you and another player strike an enemy at the"
+  },
+  {
+   "t": 1456.62,
+   "d": 4.65,
+   "text": "same time or get a speed boost if another player pushes you in a direction you are already"
+  },
+  {
+   "t": 1461.27,
+   "d": 7.02,
+   "text": "moving or if you cue up an action and stand still you will catch any item any player throws"
+  },
+  {
+   "t": 1468.29,
+   "d": 8.86,
+   "text": "at you which is a fun way to switch items versus dropping them on the ground or trading"
+  },
+  {
+   "t": 1477.15,
+   "d": 2.78,
+   "text": "via a menu."
+  },
+  {
+   "t": 1479.93,
+   "d": 4.68,
+   "text": "There was a cool moment when I was playing with a friend and surrounded by enemies and"
+  },
+  {
+   "t": 1484.61,
+   "d": 14.17,
+   "text": "near death and he tossed me a healing item and I used it and made a glorious comeback."
+  },
+  {
+   "t": 1498.78,
+   "d": 6.82,
+   "text": "There is also like split inspired territory where you have to clean up the level and monsters"
+  },
+  {
+   "t": 1505.6,
+   "d": 1.32,
+   "text": "can dirty it up."
+  },
+  {
+   "t": 1506.92,
+   "d": 4.6,
+   "text": "You are graded based on how clean you made it."
+  },
+  {
+   "t": 1511.52,
+   "d": 3.75,
+   "text": "There is a bunch of stuff going on."
+  },
+  {
+   "t": 1515.27,
+   "d": 5.05,
+   "text": "So far, I have been talking about multi-player in the context of cooperation and friendly"
+  },
+  {
+   "t": 1520.32,
+   "d": 1.83,
+   "text": "partly base."
+  },
+  {
+   "t": 1522.15,
+   "d": 4.87,
+   "text": "There also exist the potential in Roguelikes for less player friendy interactions."
+  },
+  {
+   "t": 1527.02,
+   "d": 3.47,
+   "text": "Strap in because this isn't going where you think."
+  },
+  {
+   "t": 1530.49,
+   "d": 5.18,
+   "text": "I mentioned clean sweep is a dumping ground for all my Roguelike ideas and that included"
+  },
+  {
+   "t": 1535.67,
+   "d": 7.62,
+   "text": "the idea I hoped to originally be the bases but quickly abandoned."
+  },
+  {
+   "t": 1543.29,
+   "d": 4.93,
+   "text": "It never got out of my head so when I got to clean sweep, I thought why don't I try"
+  },
+  {
+   "t": 1548.22,
+   "d": 2.5,
+   "text": "to stuff it in here?"
+  },
+  {
+   "t": 1550.72,
+   "d": 4.93,
+   "text": "That idea was Twitch chat interactions which is still technically a form of multiplayer."
+  },
+  {
+   "t": 1555.65,
+   "d": 6.81,
+   "text": "I got this idea from Joshua skeleton who quite awhile ago streamed work on a Twitch chat"
+  },
+  {
+   "t": 1562.46,
+   "d": 8.46,
+   "text": "Roguelike arena and players could use north, north, east and control characters by cuing"
+  },
+  {
+   "t": 1570.92,
+   "d": 5.74,
+   "text": "up a string of directional movements that executed over several terms."
+  },
+  {
+   "t": 1576.66,
+   "d": 4.83,
+   "text": "I love that idea and I was like I am just going to steal that."
+  },
+  {
+   "t": 1581.49,
+   "d": 4.31,
+   "text": "The initial thought was hey, if I am working on multiplayer stuff, I wonder if there is"
+  },
+  {
+   "t": 1585.8,
+   "d": 5.27,
+   "text": "a way to expand that to include people beyond the small party of characters but without"
+  },
+  {
+   "t": 1591.07,
+   "d": 2.9,
+   "text": "betraying that idea of the small party being the main focus?"
+  },
+  {
+   "t": 1593.97,
+   "d": 6.01,
+   "text": "Then it was hey, there is a whole website of crowd sourceable antagonists who have proven"
+  },
+  {
+   "t": 1599.98,
+   "d": 5.54,
+   "text": "willing and enable to engage in games with surprisingly complex and skill full ways and"
+  },
+  {
+   "t": 1605.52,
+   "d": 2.1,
+   "text": "limited input methods."
+  },
+  {
+   "t": 1607.62,
+   "d": 11.46,
+   "text": "Now you can join clean sweep from chat and give commands."
+  },
+  {
+   "t": 1619.08,
+   "d": 5.64,
+   "text": "I am not going to go into depth on the specifics of the Twitch integration because I think"
+  },
+  {
+   "t": 1624.72,
+   "d": 4.63,
+   "text": "it is the least fun part and probably the biggest failure of the game but I want to"
+  },
+  {
+   "t": 1629.35,
+   "d": 3.65,
+   "text": "bring it up because I learned a few things and I feel like there is promise there if"
+  },
+  {
+   "t": 1633.0,
+   "d": 3.87,
+   "text": "someone wants to explore it in the future."
+  },
+  {
+   "t": 1636.87,
+   "d": 4.68,
+   "text": "The main things I have to say are these."
+  },
+  {
+   "t": 1641.55,
+   "d": 3.66,
+   "text": "Visuals are more important when you have random people popping into chat with no idea what"
+  },
+  {
+   "t": 1645.21,
+   "d": 7.04,
+   "text": "they are looking at and aren't well versed in the traditional language of Roguelikes."
+  },
+  {
+   "t": 1652.25,
+   "d": 8.45,
+   "text": "Parsing information from visuals alone is extremely important."
+  },
+  {
+   "t": 1660.7,
+   "d": 4.47,
+   "text": "Being able to give the chat and players different views of the game would probably be most ideal."
+  },
+  {
+   "t": 1665.17,
+   "d": 4.15,
+   "text": "It is hard for chat controlled characters to do smart things to surprise the player"
+  },
+  {
+   "t": 1669.32,
+   "d": 5.54,
+   "text": "if they can't see themselves or are always in view of the player."
+  },
+  {
+   "t": 1674.86,
+   "d": 4.41,
+   "text": "I wish I could have given the chat players a more holistic view of the game so they could"
+  },
+  {
+   "t": 1679.27,
+   "d": 5.2,
+   "text": "use their human brains to the fullest and set-up scenario unbeknownst to the player."
+  },
+  {
+   "t": 1684.47,
+   "d": 6.23,
+   "text": "And lastly, the minimal viable fun may not be minimal."
+  },
+  {
+   "t": 1690.7,
+   "d": 10.85,
+   "text": "You need to do interesting and useful things than just chasing and hurting the player but"
+  },
+  {
+   "t": 1701.55,
+   "d": 4.27,
+   "text": "to my mind that means having a lot of systems in place for them to play with from the get-go."
+  },
+  {
+   "t": 1705.82,
+   "d": 5.74,
+   "text": "The promise of this idea is monsters can have minds but what good is an actual mind behind"
+  },
+  {
+   "t": 1711.56,
+   "d": 6.8,
+   "text": "the monster if the only minds available are make the players HP go down."
+  },
+  {
+   "t": 1718.36,
+   "d": 4.05,
+   "text": "For this to be an interesting thing to pursue, there needs to be more at stake than just"
+  },
+  {
+   "t": 1722.41,
+   "d": 3.49,
+   "text": "players end and a number of ways to make that happen."
+  },
+  {
+   "t": 1725.9,
+   "d": 2.77,
+   "text": "There you have it."
+  },
+  {
+   "t": 1728.67,
+   "d": 4.57,
+   "text": "That's had things I have to say about multiplayer Roguelikes."
+  },
+  {
+   "t": 1733.24,
+   "d": 3.95,
+   "text": "I don't know if there will ever be a standard system for handling multiplayer in Roguelikes"
+  },
+  {
+   "t": 1737.19,
+   "d": 6.57,
+   "text": "or ever be enough multiplayer Roguelikes to warrant a standard system but I hope this"
+  },
+  {
+   "t": 1743.76,
+   "d": 4.8,
+   "text": "talk has at least encouraged others to prod at the edges of our assumptions and see what"
+  },
+  {
+   "t": 1748.56,
+   "d": 4.86,
+   "text": "sorts of ridiculous new stories we can make with Roguelikes and friends together."
+  },
+  {
+   "t": 1753.42,
+   "d": 2.83,
+   "text": "MODERATOR: Absolutely beautiful."
+  },
+  {
+   "t": 1756.25,
+   "d": 5.74,
+   "text": "Thank you so much, Tyriq."
+  },
+  {
+   "t": 1761.99,
+   "d": 2.4,
+   "text": "People are very excited."
+  },
+  {
+   "t": 1764.39,
+   "d": 1.04,
+   "text": "Lots of ideas."
+  },
+  {
+   "t": 1765.43,
+   "d": 2.5,
+   "text": "I think someone mentioned their brain was throbbing."
+  },
+  {
+   "t": 1767.93,
+   "d": 2.43,
+   "text": "I think you ask see a doctor."
+  },
+  {
+   "t": 1770.36,
+   "d": 8.93,
+   "text": "We have a ton of question but only one minute so probably can't actually dig into them."
+  },
+  {
+   "t": 1779.29,
+   "d": 5.4,
+   "text": "I think the only question inside here we have time to answer is what is your Cat's name?"
+  },
+  {
+   "t": 1784.69,
+   "d": 5.47,
+   "text": ">> Well, the one meowing is named Jesus but my Cat's name is pixel."
+  },
+  {
+   "t": 1790.16,
+   "d": 7.73,
+   "text": "There is also a Scotty around me."
+  },
+  {
+   "t": 1797.89,
+   "d": 7.88,
+   "text": "MODERATOR: Everyone loves the cats."
+  },
+  {
+   "t": 1805.77,
+   "d": 1.37,
+   "text": "Standard of all online communication."
+  },
+  {
+   "t": 1807.14,
+   "d": 4.49,
+   "text": "Yeah, I'm going to take a screenshot of all these great questions and, hopefully, people"
+  },
+  {
+   "t": 1811.63,
+   "d": 3.56,
+   "text": "can try to find you in a room later."
+  },
+  {
+   "t": 1815.19,
+   "d": 3.96,
+   "text": "Hangout at the bar or something because, yeah, excellent."
+  },
+  {
+   "t": 1819.15,
+   "d": 1.26,
+   "text": "Tons of questions."
+  },
+  {
+   "t": 1820.41,
+   "d": 6.48,
+   "text": "Wish we had more time but it was so packed full of information."
+  }
+ ]
+}

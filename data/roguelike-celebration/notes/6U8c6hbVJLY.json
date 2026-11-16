@@ -1,0 +1,157 @@
+{
+  "id": "6U8c6hbVJLY",
+  "title": "Sergio Garces: Procedural 3D environments on a budget",
+  "speaker": "Sergio Garces",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=6U8c6hbVJLY",
+  "talk_type": "technical",
+  "summary": "Solo developer Sergio Garces explains how he produced varied procedural 3D environments for his turn-based tactics roguelike Mekanical Armada without a big budget. Rather than generating geometry from triangle math, he kitbashes purchased store assets (about $2,000 worth), stressing art-style coherence, quality, PBR shading, replacing materials, and performance work (texture size, texture packing, LODs, debug views) that asset flips skip. For placement he combines hand-dressed static backgrounds, randomly chosen hand-made gameplay layouts, rule-based prefab selection (multi-tile combinations, repetition limits, environment-matched pools), wave function collapse for roads, per-instance prefab mutation and instanced foliage, and a simple dynamic sun light. In Q&A he discusses when to shop for assets and learning from others' shaders.",
+  "games": [
+    "Mekanical Armada",
+    "No Man's Sky",
+    "Carcassonne"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "kitbashing",
+      "kind": "principle",
+      "claim": "For a solo developer on a budget, procedural 3D environments are better built by kitbashing pre-made pieces like LEGO than by growing geometry from triangle math, noise and fractals.",
+      "detail": "Garces says generating models from Perlin noise and fractals is possible but would take years; he wasn't trying to make No Man's Sky as a first game. Kitbashing is a common technique 3D artists use even outside procedural work.",
+      "t": 124,
+      "quote": "Kitbashing is a very common technique that 3D artists use, even when they're not doing anything procedural",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "asset store assets",
+      "kind": "principle",
+      "claim": "Making 3D assets (concept, modelling, multiple PBR textures) is very expensive, so starting from existing store assets is a legitimate choice, like using a third-party engine or casting an actor rather than inventing one.",
+      "detail": "Garces compares the stigma of store assets to the old stigma of not writing your own engine. Environments in particular are quite doable with existing assets; he spent just over $2,000 on assets for Mekanical Armada. Sources include the Unreal Marketplace, Unity Asset Store, CGTrader, TurboSquid, Sketchfab, ArtStation and free Quixel Megascans photogrammetry.",
+      "t": 242,
+      "quote": "for environments in particular, it's is is quite doable. And I I I tend to think about it almost like casting an actor",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "art style coherence",
+      "kind": "warning",
+      "claim": "Art-style coherence across purchased assets is critical; asset flips fail by slapping together whatever is available, so match colour, polygon density and style, for example by buying from one vendor or committing to photogrammetry-based realism.",
+      "detail": "Garces shows three castles in different styles. Synty's Polygon series offers many assets in one style; he chose realism for Mekanical Armada so photogrammetry assets look consistent. Watch for quality variance too, and prefer FBX format and PBR shading.",
+      "t": 390,
+      "quote": "The The consistency the coherence of the art style is critical",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "materials",
+      "kind": "technique",
+      "claim": "Expect to replace the materials on purchased 3D assets with your own, both to achieve a cohesive look and for technical reasons.",
+      "detail": "Materials control surface colour, response to light and even vertex positions via shaders, so they have a huge influence on the final look.",
+      "t": 522,
+      "quote": "you're almost certainly going to have to replace those materials with your own",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "texture optimization",
+      "kind": "technique",
+      "claim": "Reduce memory by shrinking texture sizes (often invisible at play distance) and packing ambient occlusion, roughness and metallic maps into the RGB channels of a single texture.",
+      "detail": "Garces says poor performance is a main failing of asset flips and texture size is the main memory cost. Colour and normal maps need all channels and can't be packed, but PBR maps can.",
+      "t": 590,
+      "quote": "Texture packing is when you get a single texture, and you get three different three different um channels",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "level of detail",
+      "kind": "technique",
+      "claim": "Add level-of-detail (LOD) meshes to purchased assets that lack them and trim excess triangles even at the highest LOD, then use debug views like shader complexity and texture density to find expensive or oversized assets.",
+      "detail": "Store assets often have more detail than needed. In texture-density views, white is ideal, yellow/red needs more resolution, and green means textures are too big, which matters if the camera can't get closer. Free tools like Blender suffice.",
+      "t": 659,
+      "quote": "it's actually very possible that the asset that you bought has more detail than you actually need",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "hand-made backgrounds",
+      "kind": "technique",
+      "claim": "Mekanical Armada places its small 7x9 tactical arena within hand-dressed static themed background corridors, because hand-placed scenery beats procedural output unless you invest heavily in the algorithm.",
+      "detail": "The background doesn't affect play and just provides colour; the arena can be placed anywhere along the corridor, chosen randomly or in sequence, with a flat space in the middle for the play area.",
+      "t": 848,
+      "quote": "you're always going to get better results with something that is hand-placed than with with something that is procedurally generated",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "layout selection",
+      "kind": "technique",
+      "claim": "Instead of fully random map generation, Garces built a simple level editor, authored about a hundred gameplay layouts in minutes each, and picks one at random, then procedurally dresses it with 3D art.",
+      "detail": "Tiles can be blocked, slow or fast. The layout determines gameplay; visuals don't affect it at all, and the game would be playable with icons.",
+      "t": 1059,
+      "quote": "the layout is what determines the gameplay. The the visuals are are important, but they they don't affect the gameplay at all",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "prefab placement rules",
+      "kind": "technique",
+      "claim": "Dress layouts with simple rules on top of random prefab choice: sometimes use 2x1 or 2x2 prefabs where multiple blocked tiles are adjacent, cap repeats of the same model on screen, and draw only from prefab pools matching the surrounding environment.",
+      "detail": "Larger prefabs break up grid regularity; the repetition cap avoids a screen full of school buses; matching pools keep, for example, pipes only in pipe-themed environments. Little rules like these yield a lot of variety.",
+      "t": 1114,
+      "quote": "a limitation on how many of the same models I'm going to have on one screen",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Garces explains wave function collapse as playing Carcassonne where you may choose any tile but must respect edge-matching rules, and used it in Mekanical Armada to lay out roads coherently.",
+      "detail": "Pick a random piece, place it, update constraints around it, repeat. Roads couldn't just be random tiles and still make sense.",
+      "t": 1212,
+      "quote": "So, I I used this to to populate my roads because with roads, I couldn't just place random random tiles",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "prefab mutation",
+      "kind": "technique",
+      "claim": "Vary each placed prefab internally (rotation and offset where allowed, alternative models, colour, open or closed doors) so the same object placed six times still looks varied.",
+      "detail": "Garces's car prefab has small car, sedan and pickup variants plus colour and door options; techniques stack to multiply variety.",
+      "t": 1254,
+      "quote": "all of these objects are the same object internally. They're just They're just a simple car",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "instanced foliage",
+      "kind": "technique",
+      "claim": "Scatter small repeated objects (grass, bricks, distant buildings) as foliage with varied position, rotation and size, and render them as instanced meshes so a thousand copies cost one draw call.",
+      "detail": "Too many draw calls are the main performance problem in 3D. Garces wrote a tool to sprinkle foliage into prefabs and then adjust it by hand, getting rich detail from simple geometry.",
+      "t": 989,
+      "quote": "if you place a thousand blades of grass, that's going to be a thousand draw calls and it's going to be very very slow",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "lighting",
+      "kind": "warning",
+      "claim": "Procedural 3D scenes need dynamic lighting because pre-baked light maps can't be computed for generated layouts; a single dynamic sun light worked for Mekanical Armada, but games with many static lights like torch-lit dungeons should plan their lighting early.",
+      "detail": "Each dynamic light adds per-pixel cost. Unreal Engine 5's Lumen offers real-time global illumination; Mekanical Armada used UE4 with one directional light and partly dynamic shadows, which performed well.",
+      "t": 1323,
+      "quote": "a number of years ago, it would have been very difficult to have a fully procedural 3D game because lighting is very expensive to calculate",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "asset sourcing",
+      "kind": "technique",
+      "claim": "Start buying cheap store assets early to prototype with something better than boxes, then shop for specific needs while bookmarking interesting finds, and expect to modify every asset, which requires at least some technical-art skill.",
+      "detail": "If you can't find what you need you may have to change plans or make something custom. Garces also opens purchased shaders (e.g. a hologram effect) to learn how they work and recombine pieces.",
+      "t": 1582,
+      "quote": "it's very good for prototyping your game, getting a bunch of store assets for cheap, and then you you put something together that is better than just boxes",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

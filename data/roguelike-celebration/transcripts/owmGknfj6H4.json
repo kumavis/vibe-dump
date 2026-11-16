@@ -1,0 +1,6101 @@
+{
+ "id": "owmGknfj6H4",
+ "url": "https://www.youtube.com/watch?v=owmGknfj6H4",
+ "title": "Caves of Qud - Live Playthrough with Developer Commentary",
+ "speaker": "Caves of Qud",
+ "talk_title": "Live Playthrough with Developer Commentary",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-12",
+ "duration_s": 3366,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Live audience directed playthrough of Caves of Qud from the Roguelike Celebration 2018.\nFeaturing Caves of Qud developers Jason Grinblat and Brian Bucklew commentating and played by Nick DeCapua.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 154,
+   "title": "Character creation"
+  },
+  {
+   "start": 670,
+   "title": "Village exploration"
+  },
+  {
+   "start": 846,
+   "title": "Interacting with locals"
+  },
+  {
+   "start": 1131,
+   "title": "Quest initiation"
+  },
+  {
+   "start": 1603,
+   "title": "Overworld travel"
+  },
+  {
+   "start": 1812,
+   "title": "Legendary fish encounter"
+  },
+  {
+   "start": 2160,
+   "title": "Combat and survival"
+  },
+  {
+   "start": 2615,
+   "title": "Ruins and artifacts"
+  },
+  {
+   "start": 3068,
+   "title": "Final reward and exit"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 8696,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 6.09,
+   "text": "oh can you hear me alright so what we're"
+  },
+  {
+   "t": 6.12,
+   "d": 2.37,
+   "text": "gonna do today is a live playthrough of"
+  },
+  {
+   "t": 8.49,
+   "d": 2.31,
+   "text": "caves of HUD with some audience"
+  },
+  {
+   "t": 10.8,
+   "d": 1.02,
+   "text": "participation"
+  },
+  {
+   "t": 11.82,
+   "d": 2.76,
+   "text": "so first let's introduce ourselves I'm"
+  },
+  {
+   "t": 14.58,
+   "d": 1.2,
+   "text": "Jason grim Blatt I'm one of the"
+  },
+  {
+   "t": 15.78,
+   "d": 3.45,
+   "text": "co-creators of caves of God I'm Brian"
+  },
+  {
+   "t": 19.23,
+   "d": 2.13,
+   "text": "Barlow I'm also a co-creator of kids of"
+  },
+  {
+   "t": 21.36,
+   "d": 1.26,
+   "text": "cut is that working"
+  },
+  {
+   "t": 22.62,
+   "d": 4.77,
+   "text": "can I hear Brian I'm Nicky Capua I was"
+  },
+  {
+   "t": 27.39,
+   "d": 1.89,
+   "text": "one of the first I was the first play"
+  },
+  {
+   "t": 29.28,
+   "d": 3.11,
+   "text": "tester of caves Academy"
+  },
+  {
+   "t": 32.54,
+   "d": 3.7,
+   "text": "yeah so first let me just if you're not"
+  },
+  {
+   "t": 36.24,
+   "d": 1.65,
+   "text": "familiar with caves I've cut some caves"
+  },
+  {
+   "t": 37.89,
+   "d": 2.34,
+   "text": "up cut is an open world science fantasy"
+  },
+  {
+   "t": 40.23,
+   "d": 2.52,
+   "text": "roguelike it has a bunch of deep"
+  },
+  {
+   "t": 42.75,
+   "d": 3.09,
+   "text": "physical social historical simulation it"
+  },
+  {
+   "t": 45.84,
+   "d": 3.18,
+   "text": "is inspired by many things some of which"
+  },
+  {
+   "t": 49.02,
+   "d": 2.34,
+   "text": "are like New Wave science fiction weird"
+  },
+  {
+   "t": 51.36,
+   "d": 2.76,
+   "text": "fiction there are mutations there were"
+  },
+  {
+   "t": 54.12,
+   "d": 1.92,
+   "text": "robots there are sentient plants and"
+  },
+  {
+   "t": 56.04,
+   "d": 2.01,
+   "text": "animals all the good stuff"
+  },
+  {
+   "t": 58.05,
+   "d": 5.07,
+   "text": "am I missing anything okay so what we're"
+  },
+  {
+   "t": 63.12,
+   "d": 2.19,
+   "text": "gonna do it's lines up really well so"
+  },
+  {
+   "t": 65.31,
+   "d": 2.16,
+   "text": "just somewhat recently released this"
+  },
+  {
+   "t": 67.47,
+   "d": 2.52,
+   "text": "huge patch which made it so that you"
+  },
+  {
+   "t": 69.99,
+   "d": 2.27,
+   "text": "could previously start it at this like"
+  },
+  {
+   "t": 72.26,
+   "d": 2.53,
+   "text": "handcrafted starting village now we have"
+  },
+  {
+   "t": 74.79,
+   "d": 2.4,
+   "text": "totally procedural visit villages with"
+  },
+  {
+   "t": 77.19,
+   "d": 1.65,
+   "text": "procedural quest for cedral NPCs"
+  },
+  {
+   "t": 78.84,
+   "d": 2.85,
+   "text": "procedural like village proverbs we're"
+  },
+  {
+   "t": 81.69,
+   "d": 2.1,
+   "text": "gonna start in one of those and we're"
+  },
+  {
+   "t": 83.79,
+   "d": 1.71,
+   "text": "just going to we're gonna take some"
+  },
+  {
+   "t": 85.5,
+   "d": 1.47,
+   "text": "input for character creation and you're"
+  },
+  {
+   "t": 86.97,
+   "d": 1.32,
+   "text": "gonna help us out to create a weird"
+  },
+  {
+   "t": 88.29,
+   "d": 2.61,
+   "text": "character and we're gonna go yeah and"
+  },
+  {
+   "t": 90.9,
+   "d": 1.32,
+   "text": "then we're gonna explore the world and"
+  },
+  {
+   "t": 92.22,
+   "d": 2.19,
+   "text": "Nick is gonna make as an expert the"
+  },
+  {
+   "t": 94.41,
+   "d": 3.09,
+   "text": "first player of caves of cut he will"
+  },
+  {
+   "t": 97.5,
+   "d": 2.34,
+   "text": "take some suggestions for the audience"
+  },
+  {
+   "t": 99.84,
+   "d": 2.46,
+   "text": "some of you who may be experts some of"
+  },
+  {
+   "t": 102.3,
+   "d": 2.76,
+   "text": "you who may not be and we'll see how we"
+  },
+  {
+   "t": 105.06,
+   "d": 1.65,
+   "text": "do if we die like really early maybe"
+  },
+  {
+   "t": 106.71,
+   "d": 1.44,
+   "text": "we'll just do another character really"
+  },
+  {
+   "t": 108.15,
+   "d": 1.23,
+   "text": "quickly because cuts somewhat"
+  },
+  {
+   "t": 109.38,
+   "d": 2.67,
+   "text": "unpredictable we might die but if we die"
+  },
+  {
+   "t": 112.05,
+   "d": 1.97,
+   "text": "later we'll just maybe call it but um"
+  },
+  {
+   "t": 114.02,
+   "d": 2.2,
+   "text": "first yeah so we're at worth three"
+  },
+  {
+   "t": 116.22,
+   "d": 1.65,
+   "text": "friends we all grew up together we grew"
+  },
+  {
+   "t": 117.87,
+   "d": 1.89,
+   "text": "up playing games together like tabletop"
+  },
+  {
+   "t": 119.76,
+   "d": 1.83,
+   "text": "games a big one we played was Gamma"
+  },
+  {
+   "t": 121.59,
+   "d": 2.55,
+   "text": "world which is like this cool pulpy"
+  },
+  {
+   "t": 124.14,
+   "d": 4.26,
+   "text": "sci-fi derivative of D&D we also know"
+  },
+  {
+   "t": 128.4,
+   "d": 2.7,
+   "text": "like around 2006 2007 we were playing a"
+  },
+  {
+   "t": 131.1,
+   "d": 0.92,
+   "text": "lot of Adam"
+  },
+  {
+   "t": 132.02,
+   "d": 1.95,
+   "text": "playing a lot of dwarf fortress we had"
+  },
+  {
+   "t": 133.97,
+   "d": 1.56,
+   "text": "the idea to make this weird sci-fi"
+  },
+  {
+   "t": 135.53,
+   "d": 3.27,
+   "text": "roguelike and for several years the only"
+  },
+  {
+   "t": 138.8,
+   "d": 1.44,
+   "text": "people who played the game were on this"
+  },
+  {
+   "t": 140.24,
+   "d": 2.49,
+   "text": "stage so we've reunited here to try to"
+  },
+  {
+   "t": 142.73,
+   "d": 3.63,
+   "text": "reproduce that experience to share that"
+  },
+  {
+   "t": 146.36,
+   "d": 1.11,
+   "text": "experience with you"
+  },
+  {
+   "t": 147.47,
+   "d": 3.99,
+   "text": "so anyway should we get started okay"
+  },
+  {
+   "t": 151.46,
+   "d": 2.84,
+   "text": "let's play games again"
+  },
+  {
+   "t": 154.66,
+   "d": 3.64,
+   "text": "so character creation is a mess"
+  },
+  {
+   "t": 158.3,
+   "d": 2.25,
+   "text": "we're okay the first decision here we're"
+  },
+  {
+   "t": 160.55,
+   "d": 1.2,
+   "text": "just gonna we're gonna speed this along"
+  },
+  {
+   "t": 161.75,
+   "d": 1.56,
+   "text": "kind of because last year we spent 20"
+  },
+  {
+   "t": 163.31,
+   "d": 2.67,
+   "text": "minutes on character creation so the"
+  },
+  {
+   "t": 165.98,
+   "d": 1.8,
+   "text": "first choice which is pretty fast for"
+  },
+  {
+   "t": 167.78,
+   "d": 2.07,
+   "text": "kids that's pretty good yeah so we're"
+  },
+  {
+   "t": 169.85,
+   "d": 1.17,
+   "text": "gonna see if we could beat that though"
+  },
+  {
+   "t": 171.02,
+   "d": 2.85,
+   "text": "the first choice you can play either a"
+  },
+  {
+   "t": 173.87,
+   "d": 2.64,
+   "text": "true kin who is this sort of like pure"
+  },
+  {
+   "t": 176.51,
+   "d": 3.15,
+   "text": "strain descendant of the old inhabitants"
+  },
+  {
+   "t": 179.66,
+   "d": 2.31,
+   "text": "of these ancient arcologies whose"
+  },
+  {
+   "t": 181.97,
+   "d": 2.67,
+   "text": "genomes have remained sort of stable or"
+  },
+  {
+   "t": 184.64,
+   "d": 2.88,
+   "text": "a mutated human who can get all sorts of"
+  },
+  {
+   "t": 187.52,
+   "d": 2.19,
+   "text": "weird mutations so the advantage of the"
+  },
+  {
+   "t": 189.71,
+   "d": 1.47,
+   "text": "true kin is that you can't get mutations"
+  },
+  {
+   "t": 191.18,
+   "d": 1.53,
+   "text": "but you keep installed cybernetic"
+  },
+  {
+   "t": 192.71,
+   "d": 1.98,
+   "text": "implants the advantage of the mutant is"
+  },
+  {
+   "t": 194.69,
+   "d": 1.26,
+   "text": "that you have all sort of strange"
+  },
+  {
+   "t": 195.95,
+   "d": 2.1,
+   "text": "mutations which we'll get into so if you"
+  },
+  {
+   "t": 198.05,
+   "d": 3.21,
+   "text": "want to see a mutant raise your hand"
+  },
+  {
+   "t": 201.26,
+   "d": 6.57,
+   "text": "okay if you want to see a true king"
+  },
+  {
+   "t": 207.83,
+   "d": 2.97,
+   "text": "raise your hand it's large and I thought"
+  },
+  {
+   "t": 210.8,
+   "d": 3.09,
+   "text": "but I mean Union tends to win so we were"
+  },
+  {
+   "t": 213.89,
+   "d": 1.47,
+   "text": "going with me neither yeah"
+  },
+  {
+   "t": 215.36,
+   "d": 4.97,
+   "text": "okay here's it was rigged"
+  },
+  {
+   "t": 220.51,
+   "d": 2.53,
+   "text": "next we drop you into ass that's good"
+  },
+  {
+   "t": 223.04,
+   "d": 1.95,
+   "text": "yeah all right so Nick is gonna"
+  },
+  {
+   "t": 224.99,
+   "d": 1.8,
+   "text": "distribute some stats so while that's"
+  },
+  {
+   "t": 226.79,
+   "d": 2.79,
+   "text": "happening I think the way because it's"
+  },
+  {
+   "t": 229.58,
+   "d": 2.04,
+   "text": "not actually that and like interesting"
+  },
+  {
+   "t": 231.62,
+   "d": 1.86,
+   "text": "the way we're gonna do this is that"
+  },
+  {
+   "t": 233.48,
+   "d": 1.68,
+   "text": "we're gonna just like take some ideas"
+  },
+  {
+   "t": 235.16,
+   "d": 3.18,
+   "text": "for mutations so if you have played"
+  },
+  {
+   "t": 238.34,
+   "d": 1.77,
+   "text": "caves cut or even better if you haven't"
+  },
+  {
+   "t": 240.11,
+   "d": 1.83,
+   "text": "played caves of God think of like a"
+  },
+  {
+   "t": 241.94,
+   "d": 2.7,
+   "text": "mental or physical mutation you might"
+  },
+  {
+   "t": 244.64,
+   "d": 2.31,
+   "text": "want your like a character to have"
+  },
+  {
+   "t": 246.95,
+   "d": 1.62,
+   "text": "another way to think of it is just like"
+  },
+  {
+   "t": 248.57,
+   "d": 2.78,
+   "text": "think of a weird character idea or"
+  },
+  {
+   "t": 251.35,
+   "d": 2.38,
+   "text": "archetype that you that we can try to"
+  },
+  {
+   "t": 253.73,
+   "d": 2.25,
+   "text": "replicate through mutations and usually"
+  },
+  {
+   "t": 255.98,
+   "d": 2.07,
+   "text": "we have enough mutations that you can do"
+  },
+  {
+   "t": 258.05,
+   "d": 1.95,
+   "text": "pretty well like animals or superheroes"
+  },
+  {
+   "t": 260.0,
+   "d": 2.79,
+   "text": "or you know animals superheroes just"
+  },
+  {
+   "t": 262.79,
+   "d": 1.92,
+   "text": "whatever so someone raise your hand and"
+  },
+  {
+   "t": 264.71,
+   "d": 3.66,
+   "text": "do that someone way back there oh do we"
+  },
+  {
+   "t": 268.37,
+   "d": 2.25,
+   "text": "have a mic runner is that possible if"
+  },
+  {
+   "t": 270.62,
+   "d": 5.55,
+   "text": "not you can Gale you yell lovely wait"
+  },
+  {
+   "t": 276.17,
+   "d": 2.4,
+   "text": "what a slider"
+  },
+  {
+   "t": 278.57,
+   "d": 4.05,
+   "text": "okay so spider person would you prefer"
+  },
+  {
+   "t": 282.62,
+   "d": 3.15,
+   "text": "like the multiple legs angle or would"
+  },
+  {
+   "t": 285.77,
+   "d": 4.52,
+   "text": "you prefer like the ability to spin webs"
+  },
+  {
+   "t": 290.41,
+   "d": 3.01,
+   "text": "we can we can't I think you only get one"
+  },
+  {
+   "t": 293.42,
+   "d": 3.57,
+   "text": "pick / well I don't know do PR do people"
+  },
+  {
+   "t": 296.99,
+   "d": 2.46,
+   "text": "want to see spider spider person is this"
+  },
+  {
+   "t": 299.45,
+   "d": 2.42,
+   "text": "for sure it's spider-man spider"
+  },
+  {
+   "t": 301.87,
+   "d": 3.67,
+   "text": "okay so we have a bunch of mutation so"
+  },
+  {
+   "t": 305.54,
+   "d": 2.4,
+   "text": "we're gonna pick multiple legs right"
+  },
+  {
+   "t": 307.94,
+   "d": 3.3,
+   "text": "because the spiders spiders spinnerets"
+  },
+  {
+   "t": 311.24,
+   "d": 6.12,
+   "text": "spiders multiple legs spiders pretty"
+  },
+  {
+   "t": 317.36,
+   "d": 2.52,
+   "text": "easy to replicate yeah spider is well"
+  },
+  {
+   "t": 319.88,
+   "d": 2.04,
+   "text": "supported as a player type in case yeah"
+  },
+  {
+   "t": 321.92,
+   "d": 1.71,
+   "text": "yeah it's a first-order member of the"
+  },
+  {
+   "t": 323.63,
+   "d": 1.95,
+   "text": "case of got character family but we're"
+  },
+  {
+   "t": 325.58,
+   "d": 1.32,
+   "text": "actually have some mutation points left"
+  },
+  {
+   "t": 326.9,
+   "d": 1.77,
+   "text": "over so does anyone else have another"
+  },
+  {
+   "t": 328.67,
+   "d": 10.08,
+   "text": "yes oh right you can see four of the"
+  },
+  {
+   "t": 338.75,
+   "d": 1.44,
+   "text": "cones or whatever right that sort of"
+  },
+  {
+   "t": 340.19,
+   "d": 1.38,
+   "text": "yeah oh that's central government yeah"
+  },
+  {
+   "t": 341.57,
+   "d": 2.34,
+   "text": "that's a defect to be able to see better"
+  },
+  {
+   "t": 343.91,
+   "d": 2.54,
+   "text": "than me that's a fact"
+  },
+  {
+   "t": 346.45,
+   "d": 2.26,
+   "text": "mmm do we have that do we have anything"
+  },
+  {
+   "t": 348.71,
+   "d": 2.46,
+   "text": "the best thing that we have is probably"
+  },
+  {
+   "t": 351.17,
+   "d": 6.6,
+   "text": "like heightened hearing sense okay like"
+  },
+  {
+   "t": 357.77,
+   "d": 3.69,
+   "text": "who knows our game better than us thank"
+  },
+  {
+   "t": 361.46,
+   "d": 0.51,
+   "text": "you"
+  },
+  {
+   "t": 361.97,
+   "d": 3.12,
+   "text": "midnight actually is please okay how"
+  },
+  {
+   "t": 365.09,
+   "d": 2.16,
+   "text": "many mutation points available three we"
+  },
+  {
+   "t": 367.25,
+   "d": 2.49,
+   "text": "have three lives I'm not for yes one"
+  },
+  {
+   "t": 369.74,
+   "d": 11.31,
+   "text": "more okay okay"
+  },
+  {
+   "t": 381.05,
+   "d": 1.74,
+   "text": "we have various forms of deaths"
+  },
+  {
+   "t": 382.79,
+   "d": 1.29,
+   "text": "generated but yeah you're actually"
+  },
+  {
+   "t": 384.08,
+   "d": 1.77,
+   "text": "immune to your own gas I believe well"
+  },
+  {
+   "t": 385.85,
+   "d": 1.41,
+   "text": "but I mean it's still harmful because"
+  },
+  {
+   "t": 387.26,
+   "d": 2.04,
+   "text": "you can like melt your equipment and"
+  },
+  {
+   "t": 389.3,
+   "d": 0.39,
+   "text": "your"
+  },
+  {
+   "t": 389.69,
+   "d": 2.22,
+   "text": "and like right yeah you can relate your"
+  },
+  {
+   "t": 391.91,
+   "d": 3.03,
+   "text": "buddies yeah so okay well so what what"
+  },
+  {
+   "t": 394.94,
+   "d": 2.73,
+   "text": "type of so we have a corrosive gas is"
+  },
+  {
+   "t": 397.67,
+   "d": 1.92,
+   "text": "probably the most harmful to spiders"
+  },
+  {
+   "t": 399.59,
+   "d": 3.38,
+   "text": "they're like a thematic spider guys"
+  },
+  {
+   "t": 403.36,
+   "d": 5.17,
+   "text": "sleep yes right like seems obvious to me"
+  },
+  {
+   "t": 408.53,
+   "d": 1.73,
+   "text": "I don't know"
+  },
+  {
+   "t": 410.26,
+   "d": 3.94,
+   "text": "okay sure Oh sleep sleep gas what are"
+  },
+  {
+   "t": 414.2,
+   "d": 3.65,
+   "text": "you okay sleep gas raise your hand"
+  },
+  {
+   "t": 417.85,
+   "d": 6.39,
+   "text": "corrosive gas I'm always wrong yeah well"
+  },
+  {
+   "t": 424.24,
+   "d": 3.49,
+   "text": "okay so we'll do corrosive gas okay now"
+  },
+  {
+   "t": 427.73,
+   "d": 1.83,
+   "text": "we also have the option to make a defect"
+  },
+  {
+   "t": 429.56,
+   "d": 3.99,
+   "text": "to get a few more mutation point so"
+  },
+  {
+   "t": 433.55,
+   "d": 1.98,
+   "text": "defects or like mutations but they're"
+  },
+  {
+   "t": 435.53,
+   "d": 1.89,
+   "text": "generally negative or you have to work"
+  },
+  {
+   "t": 437.42,
+   "d": 8.3,
+   "text": "around them in some way yes we have okay"
+  },
+  {
+   "t": 447.22,
+   "d": 2.08,
+   "text": "so the request was for a completely"
+  },
+  {
+   "t": 449.3,
+   "d": 2.28,
+   "text": "irrational fear of something relatively"
+  },
+  {
+   "t": 451.58,
+   "d": 3.69,
+   "text": "behind well what what have you feared"
+  },
+  {
+   "t": 455.27,
+   "d": 3.24,
+   "text": "yourself because that's always a great"
+  },
+  {
+   "t": 458.51,
+   "d": 1.95,
+   "text": "defect to pick so we have a defect that"
+  },
+  {
+   "t": 460.46,
+   "d": 3.83,
+   "text": "was I never white a winner last year"
+  },
+  {
+   "t": 465.7,
+   "d": 1.96,
+   "text": "sort of like so we're gonna make the"
+  },
+  {
+   "t": 467.66,
+   "d": 3.99,
+   "text": "evil twin defect are we gonna we can"
+  },
+  {
+   "t": 471.65,
+   "d": 2.25,
+   "text": "only pick one defect unfortunately so we"
+  },
+  {
+   "t": 473.9,
+   "d": 7.17,
+   "text": "could take so long always every time our"
+  },
+  {
+   "t": 481.07,
+   "d": 4.53,
+   "text": "expert know um okay so we're gonna pick"
+  },
+  {
+   "t": 485.6,
+   "d": 2.01,
+   "text": "right multiple legs dark vision"
+  },
+  {
+   "t": 487.61,
+   "d": 5.34,
+   "text": "night-vision spinnerets corrosive casts"
+  },
+  {
+   "t": 492.95,
+   "d": 3.3,
+   "text": "and evil twin and then we're gonna have"
+  },
+  {
+   "t": 496.25,
+   "d": 3.03,
+   "text": "room for one more night vision okay"
+  },
+  {
+   "t": 499.28,
+   "d": 1.77,
+   "text": "we're gonna because we got the mutation"
+  },
+  {
+   "t": 501.05,
+   "d": 1.71,
+   "text": "points from corrosive gas one more"
+  },
+  {
+   "t": 502.76,
+   "d": 2.48,
+   "text": "mutation"
+  },
+  {
+   "t": 507.18,
+   "d": 2.43,
+   "text": "alright let's pick a mental now cam what"
+  },
+  {
+   "t": 509.61,
+   "d": 2.22,
+   "text": "type of mental behaviors might Horne's"
+  },
+  {
+   "t": 511.83,
+   "d": 2.88,
+   "text": "mind coordinates of mind horns sounds"
+  },
+  {
+   "t": 514.71,
+   "d": 5.04,
+   "text": "good it's that disintegration yeah I"
+  },
+  {
+   "t": 519.75,
+   "d": 3.66,
+   "text": "don't know what a mind that the siphon"
+  },
+  {
+   "t": 523.41,
+   "d": 2.55,
+   "text": "beam is very okay psychics bit or siphon"
+  },
+  {
+   "t": 525.96,
+   "d": 2.52,
+   "text": "vim yes that's the matter which is like"
+  },
+  {
+   "t": 528.48,
+   "d": 2.55,
+   "text": "a light drain ability like a mental like"
+  },
+  {
+   "t": 531.03,
+   "d": 1.77,
+   "text": "light sort of life drain okay let's pick"
+  },
+  {
+   "t": 532.8,
+   "d": 2.73,
+   "text": "this that's that sounds good one more"
+  },
+  {
+   "t": 535.53,
+   "d": 1.65,
+   "text": "option one more decision we have to make"
+  },
+  {
+   "t": 537.18,
+   "d": 1.77,
+   "text": "which is like what are we in the world"
+  },
+  {
+   "t": 538.95,
+   "d": 2.04,
+   "text": "like a Rhian apostle are we we can think"
+  },
+  {
+   "t": 540.99,
+   "d": 1.47,
+   "text": "of this so much it's like a character"
+  },
+  {
+   "t": 542.46,
+   "d": 2.67,
+   "text": "class like are we kind of like a brutish"
+  },
+  {
+   "t": 545.13,
+   "d": 1.71,
+   "text": "spider person or we more of like an"
+  },
+  {
+   "t": 546.84,
+   "d": 2.31,
+   "text": "eloquent spider person scholarly spider"
+  },
+  {
+   "t": 549.15,
+   "d": 3.63,
+   "text": "or scholarly spider person great that's"
+  },
+  {
+   "t": 552.78,
+   "d": 3.84,
+   "text": "just an elderly spider spider with like"
+  },
+  {
+   "t": 556.62,
+   "d": 2.22,
+   "text": "a like flowing gray beard which is"
+  },
+  {
+   "t": 558.84,
+   "d": 3.12,
+   "text": "that's like me in real life okay so it's"
+  },
+  {
+   "t": 561.96,
+   "d": 3.99,
+   "text": "it's Brian alright sure let's pick great"
+  },
+  {
+   "t": 565.95,
+   "d": 3.72,
+   "text": "yeah okay and now like we so we can"
+  },
+  {
+   "t": 569.67,
+   "d": 2.39,
+   "text": "either randomize name we can have a name"
+  },
+  {
+   "t": 572.06,
+   "d": 2.74,
+   "text": "design suggestion for someone yeah"
+  },
+  {
+   "t": 574.8,
+   "d": 4.79,
+   "text": "someone had spider-man what was the name"
+  },
+  {
+   "t": 579.59,
+   "d": 10.54,
+   "text": "Bruce Banner Oh Charlotte okay old"
+  },
+  {
+   "t": 590.13,
+   "d": 2.76,
+   "text": "spiders Charlotte is an old spider okay"
+  },
+  {
+   "t": 592.89,
+   "d": 1.83,
+   "text": "why don't we go with spiders you always"
+  },
+  {
+   "t": 594.72,
+   "d": 1.41,
+   "text": "wondered about having a Charlotte like"
+  },
+  {
+   "t": 596.13,
+   "d": 3.78,
+   "text": "after she went away Oh your parents now"
+  },
+  {
+   "t": 599.91,
+   "d": 5.67,
+   "text": "you'll know okay all right we have"
+  },
+  {
+   "t": 605.58,
+   "d": 1.89,
+   "text": "Charlotte let's let's let's get started"
+  },
+  {
+   "t": 607.47,
+   "d": 1.47,
+   "text": "we're gonna enter a world seat here oh"
+  },
+  {
+   "t": 608.94,
+   "d": 1.74,
+   "text": "yeah so this is a thing we're gonna do"
+  },
+  {
+   "t": 610.68,
+   "d": 3.12,
+   "text": "so you can enter a world seed and what"
+  },
+  {
+   "t": 613.8,
+   "d": 1.47,
+   "text": "we'll do is we'll just do the rule t"
+  },
+  {
+   "t": 615.27,
+   "d": 2.37,
+   "text": "like rogue like cell 2018 and if you're"
+  },
+  {
+   "t": 617.64,
+   "d": 2.34,
+   "text": "watching on stream you can enter this"
+  },
+  {
+   "t": 619.98,
+   "d": 1.65,
+   "text": "world see it as well and play in the"
+  },
+  {
+   "t": 621.63,
+   "d": 2.25,
+   "text": "same world as us so that's something"
+  },
+  {
+   "t": 623.88,
+   "d": 2.46,
+   "text": "that you could do it sort of works most"
+  },
+  {
+   "t": 626.34,
+   "d": 1.92,
+   "text": "of most of the stuff is the same we're"
+  },
+  {
+   "t": 628.26,
+   "d": 1.56,
+   "text": "gonna give it a one you'll have an 11"
+  },
+  {
+   "t": 629.82,
+   "d": 1.91,
+   "text": "experience"
+  },
+  {
+   "t": 631.73,
+   "d": 2.62,
+   "text": "that might be similar to ours and that"
+  },
+  {
+   "t": 634.35,
+   "d": 1.41,
+   "text": "you're playing the same well y'all"
+  },
+  {
+   "t": 635.76,
+   "d": 1.41,
+   "text": "police entered the same world see"
+  },
+  {
+   "t": 637.17,
+   "d": 2.76,
+   "text": "dissolves that itself is a type of"
+  },
+  {
+   "t": 639.93,
+   "d": 4.08,
+   "text": "shared experience okay so let's let's do"
+  },
+  {
+   "t": 644.01,
+   "d": 7.29,
+   "text": "it what we're gonna be redoing the"
+  },
+  {
+   "t": 651.3,
+   "d": 0.81,
+   "text": "character creation"
+  },
+  {
+   "t": 652.11,
+   "d": 1.92,
+   "text": "okay no no but we have to restart anyway"
+  },
+  {
+   "t": 654.03,
+   "d": 3.45,
+   "text": "cuz you picked open in you okay it's"
+  },
+  {
+   "t": 657.48,
+   "d": 3.54,
+   "text": "alright we're gonna do it here we go one"
+  },
+  {
+   "t": 661.02,
+   "d": 2.24,
+   "text": "more time"
+  },
+  {
+   "t": 664.67,
+   "d": 4.63,
+   "text": "we died permanent last so last character"
+  },
+  {
+   "t": 669.3,
+   "d": 1.92,
+   "text": "should work at this point okay so here"
+  },
+  {
+   "t": 671.22,
+   "d": 3.84,
+   "text": "we go Charlotte wait let's enter the"
+  },
+  {
+   "t": 675.06,
+   "d": 1.98,
+   "text": "seed first it's not a thing if you got"
+  },
+  {
+   "t": 677.04,
+   "d": 12.29,
+   "text": "an applause okay okay now there is yes"
+  },
+  {
+   "t": 689.33,
+   "d": 2.77,
+   "text": "nope okay one less decision so"
+  },
+  {
+   "t": 692.1,
+   "d": 1.56,
+   "text": "previously you could only start in the"
+  },
+  {
+   "t": 693.66,
+   "d": 2.16,
+   "text": "static starting village of Joppa now we"
+  },
+  {
+   "t": 695.82,
+   "d": 2.52,
+   "text": "have four options we can see a marquee"
+  },
+  {
+   "t": 698.34,
+   "d": 2.88,
+   "text": "spider we can be a desert spider we"
+  },
+  {
+   "t": 701.22,
+   "d": 1.83,
+   "text": "could be a spider that is in the desert"
+  },
+  {
+   "t": 703.05,
+   "d": 2.13,
+   "text": "canyons or one that's in the hills and"
+  },
+  {
+   "t": 705.18,
+   "d": 2.61,
+   "text": "there's have various like okay so like"
+  },
+  {
+   "t": 707.79,
+   "d": 2.61,
+   "text": "us if we start in the marsh we get bonus"
+  },
+  {
+   "t": 710.4,
+   "d": 2.25,
+   "text": "reputation with insects and fish what a"
+  },
+  {
+   "t": 712.65,
+   "d": 2.19,
+   "text": "spider I don't know know if a spider"
+  },
+  {
+   "t": 714.84,
+   "d": 3.71,
+   "text": "would be well liked by insects"
+  },
+  {
+   "t": 721.93,
+   "d": 2.23,
+   "text": "someone come up with a justification for"
+  },
+  {
+   "t": 724.16,
+   "d": 2.97,
+   "text": "picking one of me all right"
+  },
+  {
+   "t": 727.13,
+   "d": 3.39,
+   "text": "Oh Crocs are with starfish pins but then"
+  },
+  {
+   "t": 730.52,
+   "d": 1.23,
+   "text": "we're gonna be friendly with insects all"
+  },
+  {
+   "t": 731.75,
+   "d": 2.01,
+   "text": "right well we're we're diplomatic spider"
+  },
+  {
+   "t": 733.76,
+   "d": 8.01,
+   "text": "I suppose yes yeah right"
+  },
+  {
+   "t": 741.77,
+   "d": 2.94,
+   "text": "keep exactly so ease we did this all"
+  },
+  {
+   "t": 744.71,
+   "d": 3.72,
+   "text": "mosh okay so um boy I can't read that so"
+  },
+  {
+   "t": 748.43,
+   "d": 1.11,
+   "text": "you're gonna have to do most of the"
+  },
+  {
+   "t": 749.54,
+   "d": 2.67,
+   "text": "reading here well not series not working"
+  },
+  {
+   "t": 752.21,
+   "d": 3.15,
+   "text": "and I carry this on the 22nd of a show"
+  },
+  {
+   "t": 755.36,
+   "d": 2.01,
+   "text": "an ox you arrive at the village of Earl"
+  },
+  {
+   "t": 757.37,
+   "d": 2.7,
+   "text": "up you made it easy for me on the rise"
+  },
+  {
+   "t": 760.07,
+   "d": 2.19,
+   "text": "and cuts chimp jungles strangles crew"
+  },
+  {
+   "t": 762.26,
+   "d": 1.59,
+   "text": "steeples rusted archways of the earth"
+  },
+  {
+   "t": 763.85,
+   "d": 2.28,
+   "text": "farther and beyond the field spindle"
+  },
+  {
+   "t": 766.13,
+   "d": 2.1,
+   "text": "rises above the fray he pierces the claw"
+  },
+  {
+   "t": 768.23,
+   "d": 3.75,
+   "text": "driven sky okay so we are let's do it"
+  },
+  {
+   "t": 771.98,
+   "d": 3.84,
+   "text": "let's zoom in so we have a and this new"
+  },
+  {
+   "t": 775.82,
+   "d": 5.4,
+   "text": "UI you can pinch to zoom and we are in a"
+  },
+  {
+   "t": 781.22,
+   "d": 2.55,
+   "text": "totally so this is let's zoom in a"
+  },
+  {
+   "t": 783.77,
+   "d": 2.96,
+   "text": "little more have we zoomed in yet oh"
+  },
+  {
+   "t": 786.73,
+   "d": 3.7,
+   "text": "yeah maybe even a little more so I can"
+  },
+  {
+   "t": 790.43,
+   "d": 2.76,
+   "text": "see okay"
+  },
+  {
+   "t": 793.19,
+   "d": 2.46,
+   "text": "that's good so okay so we've just"
+  },
+  {
+   "t": 795.65,
+   "d": 1.8,
+   "text": "recently released this patch which is"
+  },
+  {
+   "t": 797.45,
+   "d": 2.07,
+   "text": "kind of like an amalgam of all on"
+  },
+  {
+   "t": 799.52,
+   "d": 2.49,
+   "text": "procedural systems too so now we have"
+  },
+  {
+   "t": 802.01,
+   "d": 2.01,
+   "text": "these procedural villages they're driven"
+  },
+  {
+   "t": 804.02,
+   "d": 1.11,
+   "text": "they're each driven by their own"
+  },
+  {
+   "t": 805.13,
+   "d": 2.04,
+   "text": "procedural histories they have like"
+  },
+  {
+   "t": 807.17,
+   "d": 2.31,
+   "text": "these cool procedural architecture"
+  },
+  {
+   "t": 809.48,
+   "d": 2.67,
+   "text": "styles procedural culture procedural"
+  },
+  {
+   "t": 812.15,
+   "d": 2.25,
+   "text": "quests so this village immediately you"
+  },
+  {
+   "t": 814.4,
+   "d": 4.41,
+   "text": "might notice it's populated by snap jaws"
+  },
+  {
+   "t": 818.81,
+   "d": 2.82,
+   "text": "who are like sort of these hyena people"
+  },
+  {
+   "t": 821.63,
+   "d": 1.56,
+   "text": "who are generally some of the early game"
+  },
+  {
+   "t": 823.19,
+   "d": 3.12,
+   "text": "enemies but these snap jaws have settled"
+  },
+  {
+   "t": 826.31,
+   "d": 2.01,
+   "text": "down and started this village and we're"
+  },
+  {
+   "t": 828.32,
+   "d": 3.24,
+   "text": "sort of walking among them now I also"
+  },
+  {
+   "t": 831.56,
+   "d": 1.92,
+   "text": "didn't explain I don't think they could"
+  },
+  {
+   "t": 833.48,
+   "d": 1.62,
+   "text": "see here that Brian are gonna be like"
+  },
+  {
+   "t": 835.1,
+   "d": 1.98,
+   "text": "commentating well well big plays right"
+  },
+  {
+   "t": 837.08,
+   "d": 5.1,
+   "text": "is that obvious no okay so yeah we're"
+  },
+  {
+   "t": 842.18,
+   "d": 1.2,
+   "text": "gonna we're gonna walk around this"
+  },
+  {
+   "t": 843.38,
+   "d": 1.44,
+   "text": "village to try to find something"
+  },
+  {
+   "t": 844.82,
+   "d": 1.89,
+   "text": "interesting in it okay"
+  },
+  {
+   "t": 846.71,
+   "d": 2.4,
+   "text": "okay well so first of all there's a crab"
+  },
+  {
+   "t": 849.11,
+   "d": 3.06,
+   "text": "out here okay well that's just it's just"
+  },
+  {
+   "t": 852.17,
+   "d": 1.44,
+   "text": "a crab it's just a crab"
+  },
+  {
+   "t": 853.61,
+   "d": 7.29,
+   "text": "so we can talk to it oh that's that's"
+  },
+  {
+   "t": 860.9,
+   "d": 3.09,
+   "text": "just a regular crab well wait we can ask"
+  },
+  {
+   "t": 863.99,
+   "d": 2.67,
+   "text": "it is there work around here"
+  },
+  {
+   "t": 866.66,
+   "d": 3.78,
+   "text": "Oh kind of raises his quad points over"
+  },
+  {
+   "t": 870.44,
+   "d": 2.28,
+   "text": "that way all right thank you I have more"
+  },
+  {
+   "t": 872.72,
+   "d": 2.46,
+   "text": "to ask ya live a drink but wait what did"
+  },
+  {
+   "t": 875.18,
+   "d": 2.58,
+   "text": "he actually said something there well"
+  },
+  {
+   "t": 877.76,
+   "d": 3.21,
+   "text": "you told us he told us we want to look"
+  },
+  {
+   "t": 880.97,
+   "d": 4.8,
+   "text": "for coal cheapo Putin and the Sun bathe"
+  },
+  {
+   "t": 885.77,
+   "d": 3.3,
+   "text": "or ATIS okay cool see potent the"
+  },
+  {
+   "t": 889.07,
+   "d": 3.87,
+   "text": "sunbathe or so I assume we'll find him"
+  },
+  {
+   "t": 892.94,
+   "d": 2.03,
+   "text": "like sunning on a bear"
+  },
+  {
+   "t": 894.97,
+   "d": 3.55,
+   "text": "okay all right so what's I mean I guess"
+  },
+  {
+   "t": 898.52,
+   "d": 1.8,
+   "text": "it could be ironic he's very pale right"
+  },
+  {
+   "t": 900.32,
+   "d": 3.87,
+   "text": "Rayo could be this do we want to look at"
+  },
+  {
+   "t": 904.19,
+   "d": 1.65,
+   "text": "some of those so we just passed some"
+  },
+  {
+   "t": 905.84,
+   "d": 3.09,
+   "text": "like strange sculptures we noticed so"
+  },
+  {
+   "t": 908.93,
+   "d": 2.15,
+   "text": "this is one feature of the villages"
+  },
+  {
+   "t": 911.08,
+   "d": 2.29,
+   "text": "they're filled with their ceramic"
+  },
+  {
+   "t": 913.37,
+   "d": 2.48,
+   "text": "amphoras they're so filled with slime as"
+  },
+  {
+   "t": 915.85,
+   "d": 1.98,
+   "text": "you okay"
+  },
+  {
+   "t": 917.83,
+   "d": 3.01,
+   "text": "Brian can I read that the bellies of the"
+  },
+  {
+   "t": 920.84,
+   "d": 2.25,
+   "text": "vessel or secret they both carry the bit"
+  },
+  {
+   "t": 923.09,
+   "d": 1.77,
+   "text": "waters of life and project the fluid"
+  },
+  {
+   "t": 924.86,
+   "d": 2.31,
+   "text": "past it passed on to the convex"
+  },
+  {
+   "t": 927.17,
+   "d": 3.48,
+   "text": "president so okay I guess this adds"
+  },
+  {
+   "t": 930.65,
+   "d": 1.62,
+   "text": "slime spitting effects to cook meal so"
+  },
+  {
+   "t": 932.27,
+   "d": 1.47,
+   "text": "if you I take this stuff and pour it"
+  },
+  {
+   "t": 933.74,
+   "d": 2.34,
+   "text": "into your soup right you get slime"
+  },
+  {
+   "t": 936.08,
+   "d": 3.06,
+   "text": "spitting effects and this object is also"
+  },
+  {
+   "t": 939.14,
+   "d": 2.7,
+   "text": "a monument to a scene from the history"
+  },
+  {
+   "t": 941.84,
+   "d": 1.8,
+   "text": "of this village so they they've gone in"
+  },
+  {
+   "t": 943.64,
+   "d": 1.95,
+   "text": "here and they've painted this this"
+  },
+  {
+   "t": 945.59,
+   "d": 1.38,
+   "text": "vessel with something that happened in"
+  },
+  {
+   "t": 946.97,
+   "d": 1.86,
+   "text": "the history which is the prudence of the"
+  },
+  {
+   "t": 948.83,
+   "d": 2.31,
+   "text": "Vermillion light bulb was real to the"
+  },
+  {
+   "t": 951.14,
+   "d": 1.59,
+   "text": "people of Earle up through the"
+  },
+  {
+   "t": 952.73,
+   "d": 3.65,
+   "text": "contemplation of gelatin"
+  },
+  {
+   "t": 956.52,
+   "d": 6.34,
+   "text": "okay so like like I kind of know what"
+  },
+  {
+   "t": 962.86,
+   "d": 1.5,
+   "text": "it's like like sometimes you're cooking"
+  },
+  {
+   "t": 964.36,
+   "d": 1.47,
+   "text": "and you're trying to come up with a good"
+  },
+  {
+   "t": 965.83,
+   "d": 1.86,
+   "text": "recipe and you just sort of need to like"
+  },
+  {
+   "t": 967.69,
+   "d": 3.23,
+   "text": "meditate on slime and slime enos yeah"
+  },
+  {
+   "t": 970.92,
+   "d": 3.19,
+   "text": "yeah well so I'm certain refractive"
+  },
+  {
+   "t": 974.11,
+   "d": 1.35,
+   "text": "properties so you're probably just like"
+  },
+  {
+   "t": 975.46,
+   "d": 1.62,
+   "text": "sort of contemplating this thing and"
+  },
+  {
+   "t": 977.08,
+   "d": 2.85,
+   "text": "then you get the light from the the"
+  },
+  {
+   "t": 979.93,
+   "d": 2.43,
+   "text": "light bulb refracted through it with a"
+  },
+  {
+   "t": 982.36,
+   "d": 1.95,
+   "text": "certain Beauty right like that sort of"
+  },
+  {
+   "t": 984.31,
+   "d": 1.98,
+   "text": "shimmering gelatinous Wow"
+  },
+  {
+   "t": 986.29,
+   "d": 2.1,
+   "text": "beauty and every day obviously worship"
+  },
+  {
+   "t": 988.39,
+   "d": 1.26,
+   "text": "gelatin because these things are filled"
+  },
+  {
+   "t": 989.65,
+   "d": 1.67,
+   "text": "with something that's sure they're right"
+  },
+  {
+   "t": 991.32,
+   "d": 2.59,
+   "text": "you might think I'm joking but I mean"
+  },
+  {
+   "t": 993.91,
+   "d": 1.29,
+   "text": "there's all sort of clear that they've"
+  },
+  {
+   "t": 995.2,
+   "d": 1.35,
+   "text": "got they're building up to some like"
+  },
+  {
+   "t": 996.55,
+   "d": 2.91,
+   "text": "religious worship of slime okay and we"
+  },
+  {
+   "t": 999.46,
+   "d": 3.15,
+   "text": "could drink this line yeah go for it"
+  },
+  {
+   "t": 1002.61,
+   "d": 2.55,
+   "text": "sure they might not like well let's see"
+  },
+  {
+   "t": 1005.16,
+   "d": 4.41,
+   "text": "I mean not only by you make them angry"
+  },
+  {
+   "t": 1009.57,
+   "d": 2.1,
+   "text": "worship like drinking their holy of"
+  },
+  {
+   "t": 1011.67,
+   "d": 1.44,
+   "text": "course you walk into the village the"
+  },
+  {
+   "t": 1013.11,
+   "d": 1.2,
+   "text": "first thing you think to do is drink"
+  },
+  {
+   "t": 1014.31,
+   "d": 3.63,
+   "text": "their slime but wait there's another one"
+  },
+  {
+   "t": 1017.94,
+   "d": 1.95,
+   "text": "too right so they have this this sort of"
+  },
+  {
+   "t": 1019.89,
+   "d": 2.1,
+   "text": "monument to their history we were kind"
+  },
+  {
+   "t": 1021.99,
+   "d": 1.17,
+   "text": "of we don't know what the Vermillion"
+  },
+  {
+   "t": 1023.16,
+   "d": 2.28,
+   "text": "light bulb is that's a generated piece"
+  },
+  {
+   "t": 1025.44,
+   "d": 1.98,
+   "text": "of history that I who knows what that is"
+  },
+  {
+   "t": 1027.42,
+   "d": 2.82,
+   "text": "okay okay so this is a similar in for"
+  },
+  {
+   "t": 1030.24,
+   "d": 1.86,
+   "text": "but it's painted with a different scene"
+  },
+  {
+   "t": 1032.1,
+   "d": 3.48,
+   "text": "it says pay heed manipulators of light"
+  },
+  {
+   "t": 1035.58,
+   "d": 5.82,
+   "text": "come together here they made this or may"
+  },
+  {
+   "t": 1041.4,
+   "d": 3.33,
+   "text": "the silver aspirant take you okay so"
+  },
+  {
+   "t": 1044.73,
+   "d": 2.76,
+   "text": "yeah manipulate a so what this I guess"
+  },
+  {
+   "t": 1047.49,
+   "d": 2.1,
+   "text": "we could do some so what this means is"
+  },
+  {
+   "t": 1049.59,
+   "d": 1.89,
+   "text": "that people everyone in this village has"
+  },
+  {
+   "t": 1051.48,
+   "d": 1.83,
+   "text": "a mutation light manipulation they've"
+  },
+  {
+   "t": 1053.31,
+   "d": 1.38,
+   "text": "all like if you if you can manipulate"
+  },
+  {
+   "t": 1054.69,
+   "d": 3.39,
+   "text": "light and if you like slime you've come"
+  },
+  {
+   "t": 1058.08,
+   "d": 5.16,
+   "text": "to this village and your whole thing"
+  },
+  {
+   "t": 1063.24,
+   "d": 2.09,
+   "text": "with refracting light telling you wow"
+  },
+  {
+   "t": 1065.33,
+   "d": 2.33,
+   "text": "that was very impressive"
+  },
+  {
+   "t": 1067.66,
+   "d": 2.16,
+   "text": "here I'm gonna drink their slime they'll"
+  },
+  {
+   "t": 1069.82,
+   "d": 1.29,
+   "text": "all get them out of you and they'll kill"
+  },
+  {
+   "t": 1071.11,
+   "d": 2.34,
+   "text": "you with their mindless yes let's do"
+  },
+  {
+   "t": 1073.45,
+   "d": 2.03,
+   "text": "that"
+  },
+  {
+   "t": 1075.48,
+   "d": 4.81,
+   "text": "okay so we're looking for a test or the"
+  },
+  {
+   "t": 1080.29,
+   "d": 1.82,
+   "text": "other one right right"
+  },
+  {
+   "t": 1082.11,
+   "d": 3.37,
+   "text": "okay this is we don't have to oh well"
+  },
+  {
+   "t": 1085.48,
+   "d": 1.8,
+   "text": "yeah that's fine let's just this is the"
+  },
+  {
+   "t": 1087.28,
+   "d": 1.74,
+   "text": "warden of the village who's also a snap"
+  },
+  {
+   "t": 1089.02,
+   "d": 5.75,
+   "text": "jaw so we suppose let's find the quiz"
+  },
+  {
+   "t": 1094.77,
+   "d": 3.88,
+   "text": "yeah let's find see if one of these one"
+  },
+  {
+   "t": 1098.65,
+   "d": 2.88,
+   "text": "of those line name don't receive has a"
+  },
+  {
+   "t": 1101.53,
+   "d": 2.43,
+   "text": "quest for us we don't know how much"
+  },
+  {
+   "t": 1103.96,
+   "d": 1.11,
+   "text": "combat we'll be getting into you"
+  },
+  {
+   "t": 1105.07,
+   "d": 2.07,
+   "text": "probably some but a lot of this village"
+  },
+  {
+   "t": 1107.14,
+   "d": 2.22,
+   "text": "pass has made it so that you can just"
+  },
+  {
+   "t": 1109.36,
+   "d": 2.4,
+   "text": "wander around the world and kind of"
+  },
+  {
+   "t": 1111.76,
+   "d": 1.83,
+   "text": "interact with the weird cultures and"
+  },
+  {
+   "t": 1113.59,
+   "d": 3.24,
+   "text": "histories of your generated world now"
+  },
+  {
+   "t": 1116.83,
+   "d": 1.77,
+   "text": "these apostles are always quest givers"
+  },
+  {
+   "t": 1118.6,
+   "d": 2.94,
+   "text": "so and they are one of the things that"
+  },
+  {
+   "t": 1121.54,
+   "d": 1.5,
+   "text": "appears in all of the starting villages"
+  },
+  {
+   "t": 1123.04,
+   "d": 1.83,
+   "text": "so I'm gonna get this quest to go to a"
+  },
+  {
+   "t": 1124.87,
+   "d": 2.94,
+   "text": "city called the six days stilt yeah well"
+  },
+  {
+   "t": 1127.81,
+   "d": 1.77,
+   "text": "skip reading this one I think is it's"
+  },
+  {
+   "t": 1129.58,
+   "d": 5.27,
+   "text": "not it's not generated so whatever oh"
+  },
+  {
+   "t": 1134.85,
+   "d": 3.07,
+   "text": "look it's a statue oh there's a fence"
+  },
+  {
+   "t": 1137.92,
+   "d": 2.04,
+   "text": "blocking the way yeah and so we will try"
+  },
+  {
+   "t": 1139.96,
+   "d": 3.09,
+   "text": "to get over that statue this is a pretty"
+  },
+  {
+   "t": 1143.05,
+   "d": 5.07,
+   "text": "pretty tight village yeah like in here"
+  },
+  {
+   "t": 1148.12,
+   "d": 2.73,
+   "text": "these are like well wait I think their"
+  },
+  {
+   "t": 1150.85,
+   "d": 4.47,
+   "text": "mayor might be a fish it's here yeah"
+  },
+  {
+   "t": 1155.32,
+   "d": 1.59,
+   "text": "there we go with their sadness right"
+  },
+  {
+   "t": 1156.91,
+   "d": 2.49,
+   "text": "like hey this is a fish he is just a"
+  },
+  {
+   "t": 1159.4,
+   "d": 2.01,
+   "text": "regular fish but he's he's gotten"
+  },
+  {
+   "t": 1161.41,
+   "d": 3.57,
+   "text": "ghostly flames about them yes which it"
+  },
+  {
+   "t": 1164.98,
+   "d": 1.5,
+   "text": "which is normally a mutation that you"
+  },
+  {
+   "t": 1166.48,
+   "d": 2.61,
+   "text": "get on your hand so that begs some"
+  },
+  {
+   "t": 1169.09,
+   "d": 4.34,
+   "text": "questions yes is flaming flaming"
+  },
+  {
+   "t": 1178.27,
+   "d": 3.04,
+   "text": "so so you may have heard like keys of"
+  },
+  {
+   "t": 1181.31,
+   "d": 7.4,
+   "text": "cut is known for its writing okay so"
+  },
+  {
+   "t": 1188.71,
+   "d": 4.6,
+   "text": "what's a fish if it has anywhere fish"
+  },
+  {
+   "t": 1193.31,
+   "d": 2.52,
+   "text": "looking for work alright I can read this"
+  },
+  {
+   "t": 1195.83,
+   "d": 1.59,
+   "text": "cuz I get to read so friend we've been"
+  },
+  {
+   "t": 1197.42,
+   "d": 1.71,
+   "text": "sharing stories with each other and we"
+  },
+  {
+   "t": 1199.13,
+   "d": 1.65,
+   "text": "learned about a nearby forgotten"
+  },
+  {
+   "t": 1200.78,
+   "d": 2.67,
+   "text": "location forgotten to our people xx he"
+  },
+  {
+   "t": 1203.45,
+   "d": 2.28,
+   "text": "mu what treasure might this place"
+  },
+  {
+   "t": 1205.73,
+   "d": 2.67,
+   "text": "contain sunken treasure pools of water a"
+  },
+  {
+   "t": 1208.4,
+   "d": 1.92,
+   "text": "shrine to the Vermillion light bulb"
+  },
+  {
+   "t": 1210.32,
+   "d": 1.56,
+   "text": "these are things fish are interested in"
+  },
+  {
+   "t": 1211.88,
+   "d": 2.88,
+   "text": "right we must know if you locate it for"
+  },
+  {
+   "t": 1214.76,
+   "d": 2.31,
+   "text": "us we will pay for your labor pay for"
+  },
+  {
+   "t": 1217.07,
+   "d": 2.37,
+   "text": "your labor what say you we hear it's"
+  },
+  {
+   "t": 1219.44,
+   "d": 1.74,
+   "text": "located somewhere between two and six"
+  },
+  {
+   "t": 1221.18,
+   "d": 3.84,
+   "text": "para sings north of 27th pentacle kaze"
+  },
+  {
+   "t": 1225.02,
+   "d": 2.28,
+   "text": "or so this is so the fish mayor who's"
+  },
+  {
+   "t": 1227.3,
+   "d": 2.19,
+   "text": "sitting in the only pool of water in the"
+  },
+  {
+   "t": 1229.49,
+   "d": 2.64,
+   "text": "entire village is like dude I've heard"
+  },
+  {
+   "t": 1232.13,
+   "d": 1.68,
+   "text": "of this place that has other pools of"
+  },
+  {
+   "t": 1233.81,
+   "d": 1.65,
+   "text": "water could you go check this out for a"
+  },
+  {
+   "t": 1235.46,
+   "d": 1.59,
+   "text": "because that would be awesome"
+  },
+  {
+   "t": 1237.05,
+   "d": 1.61,
+   "text": "well how could we say no really yeah"
+  },
+  {
+   "t": 1238.66,
+   "d": 4.33,
+   "text": "yeah here's here's the here's some bad"
+  },
+  {
+   "t": 1242.99,
+   "d": 1.38,
+   "text": "news for you maybe this isn't a mayor"
+  },
+  {
+   "t": 1244.37,
+   "d": 2.85,
+   "text": "actually this is just a villager oh this"
+  },
+  {
+   "t": 1247.22,
+   "d": 9.84,
+   "text": "is just some fish okay but wait we have"
+  },
+  {
+   "t": 1257.06,
+   "d": 1.83,
+   "text": "a request to talk to the tonight ATIS"
+  },
+  {
+   "t": 1258.89,
+   "d": 2.6,
+   "text": "the fish again"
+  },
+  {
+   "t": 1265.28,
+   "d": 3.46,
+   "text": "okay oh wait this there was a statue"
+  },
+  {
+   "t": 1268.74,
+   "d": 1.44,
+   "text": "down here oh there's okay there's a"
+  },
+  {
+   "t": 1270.18,
+   "d": 1.97,
+   "text": "sentiment to the door"
+  },
+  {
+   "t": 1272.15,
+   "d": 2.41,
+   "text": "yeah paid you bit the minute this looks"
+  },
+  {
+   "t": 1274.56,
+   "d": 1.89,
+   "text": "why don't you walk around that door so"
+  },
+  {
+   "t": 1276.45,
+   "d": 3.0,
+   "text": "we can see it a little I can't see"
+  },
+  {
+   "t": 1279.45,
+   "d": 4.31,
+   "text": "anything oh you will okay here we go"
+  },
+  {
+   "t": 1283.97,
+   "d": 3.81,
+   "text": "all right so this is a shrine to"
+  },
+  {
+   "t": 1287.78,
+   "d": 2.8,
+   "text": "Schaffer shear the okay the Vermillion"
+  },
+  {
+   "t": 1290.58,
+   "d": 1.71,
+   "text": "light bulb so the Vermillion light bulb"
+  },
+  {
+   "t": 1292.29,
+   "d": 1.71,
+   "text": "so this wasn't a light bulb so the the"
+  },
+  {
+   "t": 1294.0,
+   "d": 2.82,
+   "text": "idea of a prevailing light bulb was sort"
+  },
+  {
+   "t": 1296.82,
+   "d": 3.39,
+   "text": "of a euphemism for the sultan of cut who"
+  },
+  {
+   "t": 1300.21,
+   "d": 4.53,
+   "text": "had who had gotten the the moniker yeah"
+  },
+  {
+   "t": 1304.74,
+   "d": 1.56,
+   "text": "and like so the context here is that the"
+  },
+  {
+   "t": 1306.3,
+   "d": 1.77,
+   "text": "Sultan's are these ancient rulers that"
+  },
+  {
+   "t": 1308.07,
+   "d": 2.48,
+   "text": "we generate each game that lived in some"
+  },
+  {
+   "t": 1310.55,
+   "d": 5.77,
+   "text": "sort of long ago period of the history"
+  },
+  {
+   "t": 1316.32,
+   "d": 1.83,
+   "text": "of COD most of which is generated so"
+  },
+  {
+   "t": 1318.15,
+   "d": 1.92,
+   "text": "there's a little shrine depicts a"
+  },
+  {
+   "t": 1320.07,
+   "d": 1.53,
+   "text": "significant event for the life of the"
+  },
+  {
+   "t": 1321.6,
+   "d": 3.03,
+   "text": "Sultan at the Battle of CLEP Doon sat"
+  },
+  {
+   "t": 1324.63,
+   "d": 1.11,
+   "text": "through sheer fought as a mercenary"
+  },
+  {
+   "t": 1325.74,
+   "d": 2.76,
+   "text": "Sultan to liberate Vines he willed it a"
+  },
+  {
+   "t": 1328.5,
+   "d": 2.04,
+   "text": "colossal axe with such agility that it"
+  },
+  {
+   "t": 1330.54,
+   "d": 2.79,
+   "text": "became forever known as Classica the"
+  },
+  {
+   "t": 1333.33,
+   "d": 9.09,
+   "text": "friend of Mines yeah I mean if you're"
+  },
+  {
+   "t": 1342.42,
+   "d": 1.56,
+   "text": "just like chopping vines and you're"
+  },
+  {
+   "t": 1343.98,
+   "d": 8.4,
+   "text": "liberating so when it references here"
+  },
+  {
+   "t": 1352.38,
+   "d": 1.47,
+   "text": "the fact that he is a friend of Mines"
+  },
+  {
+   "t": 1353.85,
+   "d": 2.43,
+   "text": "like there are over 60 factions of the"
+  },
+  {
+   "t": 1356.28,
+   "d": 2.34,
+   "text": "game many of which are strange sentient"
+  },
+  {
+   "t": 1358.62,
+   "d": 2.1,
+   "text": "animals and plants vines are one of them"
+  },
+  {
+   "t": 1360.72,
+   "d": 5.22,
+   "text": "so in theory this ancient ruler of cut"
+  },
+  {
+   "t": 1365.94,
+   "d": 1.77,
+   "text": "was friendly to vines and that has"
+  },
+  {
+   "t": 1367.71,
+   "d": 1.68,
+   "text": "implications later in the game when we"
+  },
+  {
+   "t": 1369.39,
+   "d": 3.12,
+   "text": "if we meet vines if we are able to like"
+  },
+  {
+   "t": 1372.51,
+   "d": 1.92,
+   "text": "learn more about his history or like"
+  },
+  {
+   "t": 1374.43,
+   "d": 1.11,
+   "text": "sometimes they're even cults that"
+  },
+  {
+   "t": 1375.54,
+   "d": 1.65,
+   "text": "worshipped these Sultan's to see what"
+  },
+  {
+   "t": 1377.19,
+   "d": 2.1,
+   "text": "the village meal is oh yes so there's"
+  },
+  {
+   "t": 1379.29,
+   "d": 1.53,
+   "text": "also we ate out of this cooking system"
+  },
+  {
+   "t": 1380.82,
+   "d": 2.58,
+   "text": "recently each village has its own"
+  },
+  {
+   "t": 1383.4,
+   "d": 2.01,
+   "text": "procedurally generated signature dish"
+  },
+  {
+   "t": 1385.41,
+   "d": 4.14,
+   "text": "this village has meat apple baklava it's"
+  },
+  {
+   "t": 1389.55,
+   "d": 2.58,
+   "text": "not bad you can eat it you eat the meal"
+  },
+  {
+   "t": 1392.13,
+   "d": 4.62,
+   "text": "oh if I mix well with slime and"
+  },
+  {
+   "t": 1396.75,
+   "d": 1.83,
+   "text": "it has okay yeah that's fine like it it"
+  },
+  {
+   "t": 1398.58,
+   "d": 1.71,
+   "text": "actually has this procedurally generated"
+  },
+  {
+   "t": 1400.29,
+   "d": 3.42,
+   "text": "status effect that we get from it so"
+  },
+  {
+   "t": 1403.71,
+   "d": 1.41,
+   "text": "what do we have going on here so far"
+  },
+  {
+   "t": 1405.12,
+   "d": 4.26,
+   "text": "snap jaws slime vermilion light bulb"
+  },
+  {
+   "t": 1409.38,
+   "d": 2.37,
+   "text": "worship their own light oh okay the Val"
+  },
+  {
+   "t": 1411.75,
+   "d": 1.92,
+   "text": "million light bulb right now hopeless"
+  },
+  {
+   "t": 1413.67,
+   "d": 4.8,
+   "text": "situation but it's interesting that they"
+  },
+  {
+   "t": 1418.47,
+   "d": 1.56,
+   "text": "mean it makes sense that they would"
+  },
+  {
+   "t": 1420.03,
+   "d": 2.07,
+   "text": "worship a sultan named the vermilion"
+  },
+  {
+   "t": 1422.1,
+   "d": 2.75,
+   "text": "light bulb since they're all light"
+  },
+  {
+   "t": 1424.85,
+   "d": 5.26,
+   "text": "shooters with their mind okay so why"
+  },
+  {
+   "t": 1430.11,
+   "d": 2.94,
+   "text": "don't we just go try to help the fish no"
+  },
+  {
+   "t": 1433.05,
+   "d": 3.33,
+   "text": "mayor huh that's it's theirs there's a"
+  },
+  {
+   "t": 1436.38,
+   "d": 1.29,
+   "text": "couple place you have any sport is just"
+  },
+  {
+   "t": 1437.67,
+   "d": 3.15,
+   "text": "a pretty torturous this is quite a bit"
+  },
+  {
+   "t": 1440.82,
+   "d": 1.44,
+   "text": "much Leia so these all these village"
+  },
+  {
+   "t": 1442.26,
+   "d": 2.64,
+   "text": "builders are there's a lot of techniques"
+  },
+  {
+   "t": 1444.9,
+   "d": 2.31,
+   "text": "we use to generate these village layouts"
+  },
+  {
+   "t": 1447.21,
+   "d": 1.41,
+   "text": "and this one is like particularly"
+  },
+  {
+   "t": 1448.62,
+   "d": 2.4,
+   "text": "circuitous and a bunch of this smelling"
+  },
+  {
+   "t": 1451.02,
+   "d": 2.67,
+   "text": "it looks like is that is that it's that"
+  },
+  {
+   "t": 1453.69,
+   "d": 4.2,
+   "text": "might be the mayor no no no the mayor"
+  },
+  {
+   "t": 1457.89,
+   "d": 10.17,
+   "text": "should be read do we tend to okay oh"
+  },
+  {
+   "t": 1468.06,
+   "d": 4.86,
+   "text": "it's a croc of course we should have"
+  },
+  {
+   "t": 1472.92,
+   "d": 6.74,
+   "text": "known as a crocodile right friend well"
+  },
+  {
+   "t": 1479.66,
+   "d": 3.46,
+   "text": "laughs where people who are Nix leaders"
+  },
+  {
+   "t": 1483.12,
+   "d": 2.37,
+   "text": "of light and scorn blasphemy towards the"
+  },
+  {
+   "t": 1485.49,
+   "d": 2.16,
+   "text": "Vermillion light ball come what may you"
+  },
+  {
+   "t": 1487.65,
+   "d": 1.68,
+   "text": "may drink of our fresh water and quench"
+  },
+  {
+   "t": 1489.33,
+   "d": 2.13,
+   "text": "your thirst they don't let me into the"
+  },
+  {
+   "t": 1491.46,
+   "d": 2.85,
+   "text": "room with the fish welcome strangers"
+  },
+  {
+   "t": 1494.31,
+   "d": 3.66,
+   "text": "sleeping in our better bowls and sitting"
+  },
+  {
+   "t": 1497.97,
+   "d": 2.91,
+   "text": "in our chairs but teach them obscenity"
+  },
+  {
+   "t": 1500.88,
+   "d": 1.47,
+   "text": "of bless me towards the Vermillion"
+  },
+  {
+   "t": 1502.35,
+   "d": 3.08,
+   "text": "lightbulb and that's actually their"
+  },
+  {
+   "t": 1505.43,
+   "d": 3.7,
+   "text": "that's their proper yeah welcome"
+  },
+  {
+   "t": 1509.13,
+   "d": 1.68,
+   "text": "strangers sleeping in our bed rolls and"
+  },
+  {
+   "t": 1510.81,
+   "d": 1.77,
+   "text": "sitting in our chairs eccentrics that"
+  },
+  {
+   "t": 1512.58,
+   "d": 3.63,
+   "text": "are okay so let's see what work well my"
+  },
+  {
+   "t": 1516.21,
+   "d": 1.53,
+   "text": "services are available if you have work"
+  },
+  {
+   "t": 1517.74,
+   "d": 3.12,
+   "text": "to offer friend my kids folk would be"
+  },
+  {
+   "t": 1520.86,
+   "d": 2.73,
+   "text": "reclining on warm rocks all day but"
+  },
+  {
+   "t": 1523.59,
+   "d": 1.23,
+   "text": "after becoming acquainted with the"
+  },
+  {
+   "t": 1524.82,
+   "d": 2.29,
+   "text": "goodness manipulators of light"
+  },
+  {
+   "t": 1527.11,
+   "d": 2.07,
+   "text": "changed our culture and consecrated new"
+  },
+  {
+   "t": 1529.18,
+   "d": 3.18,
+   "text": "rituals sadly the way the Moose Appeals"
+  },
+  {
+   "t": 1532.36,
+   "d": 2.85,
+   "text": "have separated us from this shadow"
+  },
+  {
+   "t": 1535.21,
+   "d": 2.19,
+   "text": "turistic farmers token would you be"
+  },
+  {
+   "t": 1537.4,
+   "d": 1.56,
+   "text": "willing to recover it for us I hear it's"
+  },
+  {
+   "t": 1538.96,
+   "d": 1.77,
+   "text": "been taken to a secluded stareable form"
+  },
+  {
+   "t": 1540.73,
+   "d": 2.37,
+   "text": "we will compensate you for your work so"
+  },
+  {
+   "t": 1543.1,
+   "d": 1.05,
+   "text": "I mean this makes sense I mean if you're"
+  },
+  {
+   "t": 1544.15,
+   "d": 0.69,
+   "text": "a crocodile"
+  },
+  {
+   "t": 1544.84,
+   "d": 2.46,
+   "text": "you'd be like oh these dudes can make"
+  },
+  {
+   "t": 1547.3,
+   "d": 2.64,
+   "text": "light all day and all night"
+  },
+  {
+   "t": 1549.94,
+   "d": 2.16,
+   "text": "that's sweet let's like start a religion"
+  },
+  {
+   "t": 1552.1,
+   "d": 4.71,
+   "text": "about these people yeah okay that is"
+  },
+  {
+   "t": 1556.81,
+   "d": 1.44,
+   "text": "interesting that the mayor of the"
+  },
+  {
+   "t": 1558.25,
+   "d": 2.82,
+   "text": "village of light of like light Wizards"
+  },
+  {
+   "t": 1561.07,
+   "d": 3.03,
+   "text": "who worship a sultan cult of a million"
+  },
+  {
+   "t": 1564.1,
+   "d": 5.87,
+   "text": "light bulb is a that is not that is"
+  },
+  {
+   "t": 1569.97,
+   "d": 5.95,
+   "text": "emergent sure I'll find that farmers"
+  },
+  {
+   "t": 1575.92,
+   "d": 2.04,
+   "text": "thing you were talking about sure okay"
+  },
+  {
+   "t": 1577.96,
+   "d": 1.92,
+   "text": "so we have two quests so each of these"
+  },
+  {
+   "t": 1579.88,
+   "d": 2.46,
+   "text": "starting villages has usually two"
+  },
+  {
+   "t": 1582.34,
+   "d": 2.46,
+   "text": "different procedurally generated quests"
+  },
+  {
+   "t": 1584.8,
+   "d": 1.95,
+   "text": "that will lead you out to locations in"
+  },
+  {
+   "t": 1586.75,
+   "d": 1.79,
+   "text": "the world that they link up to"
+  },
+  {
+   "t": 1588.54,
+   "d": 2.95,
+   "text": "procedurally so okay so Nick's gonna do"
+  },
+  {
+   "t": 1591.49,
+   "d": 2.31,
+   "text": "some I'm just gonna buy she's gonna buy"
+  },
+  {
+   "t": 1593.8,
+   "d": 2.34,
+   "text": "some bandages because if we run into"
+  },
+  {
+   "t": 1596.14,
+   "d": 2.1,
+   "text": "something that makes us bleed do we have"
+  },
+  {
+   "t": 1598.24,
+   "d": 1.17,
+   "text": "anything interesting to say in the"
+  },
+  {
+   "t": 1599.41,
+   "d": 6.39,
+   "text": "meantime okay the villages are cool"
+  },
+  {
+   "t": 1605.8,
+   "d": 2.82,
+   "text": "because some okay so now I guess we so"
+  },
+  {
+   "t": 1608.62,
+   "d": 2.37,
+   "text": "what has happened is these quests has"
+  },
+  {
+   "t": 1610.99,
+   "d": 1.92,
+   "text": "have marked two lows so this is a world"
+  },
+  {
+   "t": 1612.91,
+   "d": 4.62,
+   "text": "map maybe you could zoom out here this"
+  },
+  {
+   "t": 1617.53,
+   "d": 2.94,
+   "text": "is the world map so we have a static"
+  },
+  {
+   "t": 1620.47,
+   "d": 3.03,
+   "text": "world map here where each of these world"
+  },
+  {
+   "t": 1623.5,
+   "d": 2.28,
+   "text": "map tiles you can like sort of zoom into"
+  },
+  {
+   "t": 1625.78,
+   "d": 1.77,
+   "text": "and then you're on a procedurally"
+  },
+  {
+   "t": 1627.55,
+   "d": 3.66,
+   "text": "generated like 3x3 and like many levels"
+  },
+  {
+   "t": 1631.21,
+   "d": 4.19,
+   "text": "deep zone of like procedural terrain and"
+  },
+  {
+   "t": 1635.4,
+   "d": 3.01,
+   "text": "these locations that they gave us for to"
+  },
+  {
+   "t": 1638.41,
+   "d": 1.95,
+   "text": "go explore this quest"
+  },
+  {
+   "t": 1640.36,
+   "d": 1.92,
+   "text": "if we hit Q we could see we can see our"
+  },
+  {
+   "t": 1642.28,
+   "d": 2.97,
+   "text": "quest lock if we go to Q and yeah okay"
+  },
+  {
+   "t": 1645.25,
+   "d": 2.76,
+   "text": "so we have this first quest to go find"
+  },
+  {
+   "t": 1648.01,
+   "d": 2.85,
+   "text": "the 60 still that is actually a static"
+  },
+  {
+   "t": 1650.86,
+   "d": 1.38,
+   "text": "quest that appears in Everett of every"
+  },
+  {
+   "t": 1652.24,
+   "d": 1.83,
+   "text": "village but then we have like this quest"
+  },
+  {
+   "t": 1654.07,
+   "d": 2.82,
+   "text": "called the 20th camo which is go locate"
+  },
+  {
+   "t": 1656.89,
+   "d": 1.15,
+   "text": "it"
+  },
+  {
+   "t": 1658.04,
+   "d": 4.08,
+   "text": "you know that's right and return to 888"
+  },
+  {
+   "t": 1662.12,
+   "d": 3.66,
+   "text": "is the fish we have the the chatter"
+  },
+  {
+   "t": 1665.78,
+   "d": 1.62,
+   "text": "istic farmers Tokyo we're supposed to"
+  },
+  {
+   "t": 1667.4,
+   "d": 2.07,
+   "text": "find this particular farmers token"
+  },
+  {
+   "t": 1669.47,
+   "d": 2.13,
+   "text": "that's associated with the Sultan so we"
+  },
+  {
+   "t": 1671.6,
+   "d": 1.86,
+   "text": "can go we can do either one of these so"
+  },
+  {
+   "t": 1673.46,
+   "d": 2.25,
+   "text": "do we want to go to this star Apple farm"
+  },
+  {
+   "t": 1675.71,
+   "d": 2.52,
+   "text": "or to the other place which is going to"
+  },
+  {
+   "t": 1678.23,
+   "d": 4.14,
+   "text": "be like a ruined do you want to help the"
+  },
+  {
+   "t": 1682.37,
+   "d": 4.74,
+   "text": "fish of the crocodile Wow okay yeah fish"
+  },
+  {
+   "t": 1687.11,
+   "d": 1.95,
+   "text": "support here well we'll help the fish so"
+  },
+  {
+   "t": 1689.06,
+   "d": 5.16,
+   "text": "which so yeah and if you go into your"
+  },
+  {
+   "t": 1694.22,
+   "d": 4.95,
+   "text": "journal we can so another semi I mean"
+  },
+  {
+   "t": 1699.17,
+   "d": 3.21,
+   "text": "it's not that it like so these locations"
+  },
+  {
+   "t": 1702.38,
+   "d": 1.74,
+   "text": "have been revealed to us so we can"
+  },
+  {
+   "t": 1704.12,
+   "d": 2.19,
+   "text": "actually mark this location there are"
+  },
+  {
+   "t": 1706.31,
+   "d": 1.26,
+   "text": "all these procedurally generated"
+  },
+  {
+   "t": 1707.57,
+   "d": 2.31,
+   "text": "locations in the world and you you get"
+  },
+  {
+   "t": 1709.88,
+   "d": 1.47,
+   "text": "them inscribed as your journal so we"
+  },
+  {
+   "t": 1711.35,
+   "d": 2.4,
+   "text": "have settlements so we have this star"
+  },
+  {
+   "t": 1713.75,
+   "d": 2.64,
+   "text": "apple farm we have this ruin and if you"
+  },
+  {
+   "t": 1716.39,
+   "d": 2.28,
+   "text": "you can highlight it to mark it on your"
+  },
+  {
+   "t": 1718.67,
+   "d": 2.76,
+   "text": "map to that did you do that 20 it's not"
+  },
+  {
+   "t": 1721.43,
+   "d": 1.38,
+   "text": "going to show the 20th he mo because"
+  },
+  {
+   "t": 1722.81,
+   "d": 1.62,
+   "text": "it's relative to someone look at the"
+  },
+  {
+   "t": 1724.43,
+   "d": 2.13,
+   "text": "quest log but if you just mark that if"
+  },
+  {
+   "t": 1726.56,
+   "d": 4.05,
+   "text": "you it's it's north of the 27th pinnacle"
+  },
+  {
+   "t": 1730.61,
+   "d": 1.59,
+   "text": "so you want to mark the 27th kind of"
+  },
+  {
+   "t": 1732.2,
+   "d": 5.07,
+   "text": "goal yes right and so okay so we see"
+  },
+  {
+   "t": 1737.27,
+   "d": 1.62,
+   "text": "where that is now and we can walk over"
+  },
+  {
+   "t": 1738.89,
+   "d": 1.83,
+   "text": "we could maybe zoom in again and walk"
+  },
+  {
+   "t": 1740.72,
+   "d": 3.36,
+   "text": "over there so you could okay well so"
+  },
+  {
+   "t": 1744.08,
+   "d": 1.92,
+   "text": "we're lost so this is part of the danger"
+  },
+  {
+   "t": 1746.0,
+   "d": 1.65,
+   "text": "of traveling on the world map of cut so"
+  },
+  {
+   "t": 1747.65,
+   "d": 2.37,
+   "text": "now we have or is pulled down into"
+  },
+  {
+   "t": 1750.02,
+   "d": 2.52,
+   "text": "procedurally generated zone it's a water"
+  },
+  {
+   "t": 1752.54,
+   "d": 3.54,
+   "text": "find Marsh I'm sure we'll be okay and we"
+  },
+  {
+   "t": 1756.08,
+   "d": 1.83,
+   "text": "have to we have to hurry that we have to"
+  },
+  {
+   "t": 1757.91,
+   "d": 3.24,
+   "text": "explore a bit for a while in order to"
+  },
+  {
+   "t": 1761.15,
+   "d": 2.49,
+   "text": "find our bearings or if we find an NPC"
+  },
+  {
+   "t": 1763.64,
+   "d": 1.8,
+   "text": "sometimes there are pcs that are living"
+  },
+  {
+   "t": 1765.44,
+   "d": 1.71,
+   "text": "out here in various settlements we can"
+  },
+  {
+   "t": 1767.15,
+   "d": 1.41,
+   "text": "talk to one of them and they'll tell us"
+  },
+  {
+   "t": 1768.56,
+   "d": 3.63,
+   "text": "well they'll give us directions so we'll"
+  },
+  {
+   "t": 1772.19,
+   "d": 1.11,
+   "text": "do that for a while now while that's"
+  },
+  {
+   "t": 1773.3,
+   "d": 2.3,
+   "text": "happening whoa"
+  },
+  {
+   "t": 1775.6,
+   "d": 3.16,
+   "text": "well so okay yeah okay we found our"
+  },
+  {
+   "t": 1778.76,
+   "d": 2.07,
+   "text": "Barrett well okay so we continue our"
+  },
+  {
+   "t": 1780.83,
+   "d": 3.69,
+   "text": "journey towards the 27th Oh No oh boy"
+  },
+  {
+   "t": 1784.52,
+   "d": 2.37,
+   "text": "this happened last time we stream we say"
+  },
+  {
+   "t": 1786.89,
+   "d": 1.17,
+   "text": "we got a weekend wait I mean you got"
+  },
+  {
+   "t": 1788.06,
+   "d": 2.13,
+   "text": "lost a lot it's a sort of exact same"
+  },
+  {
+   "t": 1790.19,
+   "d": 2.63,
+   "text": "it's a wild and"
+  },
+  {
+   "t": 1792.82,
+   "d": 3.46,
+   "text": "vine SWOT the world and sometimes you"
+  },
+  {
+   "t": 1796.28,
+   "d": 1.83,
+   "text": "can't see past a vine or some friend of"
+  },
+  {
+   "t": 1798.11,
+   "d": 3.93,
+   "text": "vines that could write guide us way we"
+  },
+  {
+   "t": 1802.04,
+   "d": 2.31,
+   "text": "discovered something what is that we"
+  },
+  {
+   "t": 1804.35,
+   "d": 2.49,
+   "text": "just give this location of civil civil"
+  },
+  {
+   "t": 1806.84,
+   "d": 3.89,
+   "text": "sudras legendary glofish so another fish"
+  },
+  {
+   "t": 1810.73,
+   "d": 3.31,
+   "text": "and we regained our bangs okay so now we"
+  },
+  {
+   "t": 1814.04,
+   "d": 1.59,
+   "text": "have a decision point right so we see"
+  },
+  {
+   "t": 1815.63,
+   "d": 1.71,
+   "text": "some fish here so this is a lair of a"
+  },
+  {
+   "t": 1817.34,
+   "d": 2.25,
+   "text": "legendary fish so we have to we'll ask"
+  },
+  {
+   "t": 1819.59,
+   "d": 2.28,
+   "text": "now if do we want to try to like find"
+  },
+  {
+   "t": 1821.87,
+   "d": 1.59,
+   "text": "this legendary fish that we just found"
+  },
+  {
+   "t": 1823.46,
+   "d": 1.8,
+   "text": "or do we want to move on and help the"
+  },
+  {
+   "t": 1825.26,
+   "d": 1.95,
+   "text": "first fish that were we're trying to"
+  },
+  {
+   "t": 1827.21,
+   "d": 2.16,
+   "text": "we're trying to help so if you want to"
+  },
+  {
+   "t": 1829.37,
+   "d": 2.37,
+   "text": "if you want to deal with this fish that"
+  },
+  {
+   "t": 1831.74,
+   "d": 5.01,
+   "text": "we just found raise your hands okay and"
+  },
+  {
+   "t": 1836.75,
+   "d": 2.28,
+   "text": "if you want to help us the first fish"
+  },
+  {
+   "t": 1839.03,
+   "d": 2.25,
+   "text": "wow that's very close I think that I"
+  },
+  {
+   "t": 1841.28,
+   "d": 1.65,
+   "text": "think though the Explorer this one"
+  },
+  {
+   "t": 1842.93,
+   "d": 3.93,
+   "text": "slightly run was my sure okay so let's"
+  },
+  {
+   "t": 1846.86,
+   "d": 3.33,
+   "text": "see how fish live in this world there"
+  },
+  {
+   "t": 1850.19,
+   "d": 1.47,
+   "text": "were problems in the past where we"
+  },
+  {
+   "t": 1851.66,
+   "d": 1.65,
+   "text": "generate these fish dungeons but we"
+  },
+  {
+   "t": 1853.31,
+   "d": 1.65,
+   "text": "don't give them enough water it doesn't"
+  },
+  {
+   "t": 1854.96,
+   "d": 4.19,
+   "text": "happen anymore they have water now okay"
+  },
+  {
+   "t": 1859.15,
+   "d": 3.82,
+   "text": "okay so now we actually we're in combat"
+  },
+  {
+   "t": 1862.97,
+   "d": 2.55,
+   "text": "we it's a good idea to look at your so"
+  },
+  {
+   "t": 1865.52,
+   "d": 2.19,
+   "text": "each of your mutations bestows you with"
+  },
+  {
+   "t": 1867.71,
+   "d": 1.29,
+   "text": "some amount of passive or active"
+  },
+  {
+   "t": 1869.0,
+   "d": 2.64,
+   "text": "abilities we have spinnerets so we can"
+  },
+  {
+   "t": 1871.64,
+   "d": 2.61,
+   "text": "spin webs we have gas generation the"
+  },
+  {
+   "t": 1874.25,
+   "d": 2.22,
+   "text": "corrosive gas generation so we can emit"
+  },
+  {
+   "t": 1876.47,
+   "d": 3.0,
+   "text": "curse of jet gas we have Life Drain so"
+  },
+  {
+   "t": 1879.47,
+   "d": 1.47,
+   "text": "this is where I mean you have a you have"
+  },
+  {
+   "t": 1880.94,
+   "d": 2.73,
+   "text": "kind of this huge procedural to tool box"
+  },
+  {
+   "t": 1883.67,
+   "d": 2.79,
+   "text": "so I'm gonna life drain this life drain"
+  },
+  {
+   "t": 1886.46,
+   "d": 2.07,
+   "text": "the Senate yeah and then we're gonna"
+  },
+  {
+   "t": 1888.53,
+   "d": 3.51,
+   "text": "start running because we're we're"
+  },
+  {
+   "t": 1892.04,
+   "d": 2.25,
+   "text": "Charlotte and we're a frail elderly"
+  },
+  {
+   "t": 1894.29,
+   "d": 2.37,
+   "text": "spider right we're so it's it's best to"
+  },
+  {
+   "t": 1896.66,
+   "d": 2.13,
+   "text": "just not not even try but we will leave"
+  },
+  {
+   "t": 1898.79,
+   "d": 2.93,
+   "text": "some webs in our way"
+  },
+  {
+   "t": 1905.56,
+   "d": 2.77,
+   "text": "right okay there we go so add a little"
+  },
+  {
+   "t": 1908.33,
+   "d": 2.93,
+   "text": "choke point there we left some webs and"
+  },
+  {
+   "t": 1911.26,
+   "d": 2.83,
+   "text": "we chopped the centipedes and our three"
+  },
+  {
+   "t": 1914.09,
+   "d": 2.43,
+   "text": "of them so that's good so spider"
+  },
+  {
+   "t": 1916.52,
+   "d": 1.62,
+   "text": "trapping insects and webs you should get"
+  },
+  {
+   "t": 1918.14,
+   "d": 2.04,
+   "text": "like some xp for that right that's like"
+  },
+  {
+   "t": 1920.18,
+   "d": 3.09,
+   "text": "your whole reason to exist yeah I think"
+  },
+  {
+   "t": 1923.27,
+   "d": 2.04,
+   "text": "that that would be reasonable but you"
+  },
+  {
+   "t": 1925.31,
+   "d": 2.97,
+   "text": "know so if we're looking for this fish"
+  },
+  {
+   "t": 1928.28,
+   "d": 1.77,
+   "text": "we're looking for a down staircase"
+  },
+  {
+   "t": 1930.05,
+   "d": 2.67,
+   "text": "yeah these layers generally are these"
+  },
+  {
+   "t": 1932.72,
+   "d": 2.7,
+   "text": "sort of like natural caverns that are"
+  },
+  {
+   "t": 1935.42,
+   "d": 2.79,
+   "text": "sort of done Dungeness yeah I mean it"
+  },
+  {
+   "t": 1938.21,
+   "d": 1.23,
+   "text": "depends on the area and it depends on"
+  },
+  {
+   "t": 1939.44,
+   "d": 1.71,
+   "text": "the riser right it depends on if they're"
+  },
+  {
+   "t": 1941.15,
+   "d": 2.1,
+   "text": "smarter what faction they are right like"
+  },
+  {
+   "t": 1943.25,
+   "d": 1.44,
+   "text": "you can get a lot of outcomes for the"
+  },
+  {
+   "t": 1944.69,
+   "d": 1.79,
+   "text": "way these thunders are generated yeah"
+  },
+  {
+   "t": 1946.48,
+   "d": 2.47,
+   "text": "this looks like you've got a more"
+  },
+  {
+   "t": 1948.95,
+   "d": 2.07,
+   "text": "naturalistic fish and the less civilized"
+  },
+  {
+   "t": 1951.02,
+   "d": 2.07,
+   "text": "fish well yeah because I mean fish tend"
+  },
+  {
+   "t": 1953.09,
+   "d": 1.89,
+   "text": "to live underground if if given the"
+  },
+  {
+   "t": 1954.98,
+   "d": 2.57,
+   "text": "opportunity I'd write countless tears"
+  },
+  {
+   "t": 1957.55,
+   "d": 2.95,
+   "text": "yes question which if you feel feel free"
+  },
+  {
+   "t": 1960.5,
+   "d": 1.8,
+   "text": "to chime in with questions if you have"
+  },
+  {
+   "t": 1962.3,
+   "d": 2.15,
+   "text": "them"
+  },
+  {
+   "t": 1976.88,
+   "d": 3.04,
+   "text": "so the question is do the levels we're"
+  },
+  {
+   "t": 1979.92,
+   "d": 1.68,
+   "text": "stepping in to exist from the start of"
+  },
+  {
+   "t": 1981.6,
+   "d": 1.32,
+   "text": "the game or are they generated when you"
+  },
+  {
+   "t": 1982.92,
+   "d": 2.04,
+   "text": "step into them and the answer is that"
+  },
+  {
+   "t": 1984.96,
+   "d": 1.53,
+   "text": "all of these zones are fabricated at the"
+  },
+  {
+   "t": 1986.49,
+   "d": 1.41,
+   "text": "moment you step into them based on"
+  },
+  {
+   "t": 1987.9,
+   "d": 1.5,
+   "text": "constraints that have been generated as"
+  },
+  {
+   "t": 1989.4,
+   "d": 2.58,
+   "text": "you travel and so there's a little"
+  },
+  {
+   "t": 1991.98,
+   "d": 1.89,
+   "text": "give-and-take with the seating in that"
+  },
+  {
+   "t": 1993.87,
+   "d": 1.35,
+   "text": "way so that if you approach something"
+  },
+  {
+   "t": 1995.22,
+   "d": 1.65,
+   "text": "from one direction or something from"
+  },
+  {
+   "t": 1996.87,
+   "d": 1.62,
+   "text": "another and you've like manipulated the"
+  },
+  {
+   "t": 1998.49,
+   "d": 2.19,
+   "text": "environment the seating because some"
+  },
+  {
+   "t": 2000.68,
+   "d": 1.26,
+   "text": "different outcomes but you'll largely"
+  },
+  {
+   "t": 2001.94,
+   "d": 3.45,
+   "text": "get the same physical structures and so"
+  },
+  {
+   "t": 2005.39,
+   "d": 3.0,
+   "text": "the world is infinitely big right so you"
+  },
+  {
+   "t": 2008.39,
+   "d": 2.0,
+   "text": "can go down as far as you want forever"
+  },
+  {
+   "t": 2010.39,
+   "d": 2.77,
+   "text": "and you could in principle go off in"
+  },
+  {
+   "t": 2013.16,
+   "d": 1.26,
+   "text": "every direction forever well we've"
+  },
+  {
+   "t": 2014.42,
+   "d": 2.52,
+   "text": "constrained it to an 80 by 25 map for"
+  },
+  {
+   "t": 2016.94,
+   "d": 1.23,
+   "text": "sanity I mean I don't know if that's"
+  },
+  {
+   "t": 2018.17,
+   "d": 3.39,
+   "text": "that same but if we try to generate that"
+  },
+  {
+   "t": 2021.56,
+   "d": 2.82,
+   "text": "all up front you would just never start"
+  },
+  {
+   "t": 2024.38,
+   "d": 2.1,
+   "text": "the game and so instead we just"
+  },
+  {
+   "t": 2026.48,
+   "d": 2.49,
+   "text": "fabricate it on the fly but so like an"
+  },
+  {
+   "t": 2028.97,
+   "d": 1.38,
+   "text": "important thing too there was like the"
+  },
+  {
+   "t": 2030.35,
+   "d": 1.98,
+   "text": "the fact that we had this legendary fish"
+  },
+  {
+   "t": 2032.33,
+   "d": 1.74,
+   "text": "here was generated at world generation"
+  },
+  {
+   "t": 2034.07,
+   "d": 1.95,
+   "text": "yeah I guess is yeah like the the"
+  },
+  {
+   "t": 2036.02,
+   "d": 2.19,
+   "text": "physical maps are fabricated on the fly"
+  },
+  {
+   "t": 2038.21,
+   "d": 3.36,
+   "text": "but we generate a big we generate a"
+  },
+  {
+   "t": 2041.57,
+   "d": 2.55,
+   "text": "procedural history we generate a"
+  },
+  {
+   "t": 2044.12,
+   "d": 2.13,
+   "text": "framework like where roads connect and"
+  },
+  {
+   "t": 2046.25,
+   "d": 1.92,
+   "text": "what villages exist and what the history"
+  },
+  {
+   "t": 2048.17,
+   "d": 3.51,
+   "text": "of those villages and what you know like"
+  },
+  {
+   "t": 2051.68,
+   "d": 2.28,
+   "text": "what which layers you're gonna find and"
+  },
+  {
+   "t": 2053.96,
+   "d": 1.08,
+   "text": "we're and we're like the hidden"
+  },
+  {
+   "t": 2055.04,
+   "d": 1.71,
+   "text": "monasteries are and all of those things"
+  },
+  {
+   "t": 2056.75,
+   "d": 1.56,
+   "text": "and we build like a high level"
+  },
+  {
+   "t": 2058.31,
+   "d": 2.46,
+   "text": "connectivity map of all the canyons but"
+  },
+  {
+   "t": 2060.77,
+   "d": 1.68,
+   "text": "none of those get fabricated into these"
+  },
+  {
+   "t": 2062.45,
+   "d": 1.89,
+   "text": "actual world zones so when they're when"
+  },
+  {
+   "t": 2064.34,
+   "d": 1.08,
+   "text": "they're fabricated we take those"
+  },
+  {
+   "t": 2065.42,
+   "d": 1.68,
+   "text": "high-level constraints and we fabricate"
+  },
+  {
+   "t": 2067.1,
+   "d": 3.09,
+   "text": "a per like the actual zone map that"
+  },
+  {
+   "t": 2070.19,
+   "d": 1.74,
+   "text": "you're traveling on so you've got a"
+  },
+  {
+   "t": 2071.93,
+   "d": 2.45,
+   "text": "high-level structure that informs that"
+  },
+  {
+   "t": 2074.38,
+   "d": 2.35,
+   "text": "all right well we found this legendary"
+  },
+  {
+   "t": 2076.73,
+   "d": 2.75,
+   "text": "fish so okay good job"
+  },
+  {
+   "t": 2079.48,
+   "d": 3.79,
+   "text": "he's just a fish he's loved my fish so"
+  },
+  {
+   "t": 2083.27,
+   "d": 3.39,
+   "text": "he's hated by roots he's hated by roots"
+  },
+  {
+   "t": 2086.66,
+   "d": 2.49,
+   "text": "for repeatedly beating them at dice so"
+  },
+  {
+   "t": 2089.15,
+   "d": 1.95,
+   "text": "he like owns potatoes pretty hard at"
+  },
+  {
+   "t": 2091.1,
+   "d": 2.88,
+   "text": "dice games which like potatoes fish"
+  },
+  {
+   "t": 2093.98,
+   "d": 2.13,
+   "text": "feels like the right hierarchy of dice"
+  },
+  {
+   "t": 2096.11,
+   "d": 2.64,
+   "text": "difficulty yeah and he's disliked by the"
+  },
+  {
+   "t": 2098.75,
+   "d": 1.65,
+   "text": "children of Mammon for casting doubt on"
+  },
+  {
+   "t": 2100.4,
+   "d": 1.5,
+   "text": "their beliefs oh that's interesting"
+  },
+  {
+   "t": 2101.9,
+   "d": 1.35,
+   "text": "because the children are mannered ma'am"
+  },
+  {
+   "t": 2103.25,
+   "d": 2.37,
+   "text": "this pretty destructive cult we believe"
+  },
+  {
+   "t": 2105.62,
+   "d": 7.65,
+   "text": "roots can't play dice it's not so here's"
+  },
+  {
+   "t": 2113.27,
+   "d": 2.22,
+   "text": "the thing that you could do so we part"
+  },
+  {
+   "t": 2115.49,
+   "d": 1.29,
+   "text": "of what you can do and cut as you're"
+  },
+  {
+   "t": 2116.78,
+   "d": 2.21,
+   "text": "traveling and meeting these sentient"
+  },
+  {
+   "t": 2118.99,
+   "d": 2.59,
+   "text": "plants or animals or human humanoid"
+  },
+  {
+   "t": 2121.58,
+   "d": 2.22,
+   "text": "creatures you can engage in this in this"
+  },
+  {
+   "t": 2123.8,
+   "d": 1.59,
+   "text": "what's called the water ritual like so"
+  },
+  {
+   "t": 2125.39,
+   "d": 3.39,
+   "text": "water not only is it like we inherit"
+  },
+  {
+   "t": 2128.78,
+   "d": 1.44,
+   "text": "from a lot of roguelikes we have like a"
+  },
+  {
+   "t": 2130.22,
+   "d": 2.13,
+   "text": "thirst mechanic that's sort of like a"
+  },
+  {
+   "t": 2132.35,
+   "d": 2.37,
+   "text": "hunger clock but not totally but it's"
+  },
+  {
+   "t": 2134.72,
+   "d": 1.35,
+   "text": "also the currency of the world so"
+  },
+  {
+   "t": 2136.07,
+   "d": 2.79,
+   "text": "freshwater is is semi rare and so what"
+  },
+  {
+   "t": 2138.86,
+   "d": 1.59,
+   "text": "you could do is like you can talk to an"
+  },
+  {
+   "t": 2140.45,
+   "d": 3.17,
+   "text": "NPC and if they have significant"
+  },
+  {
+   "t": 2143.62,
+   "d": 2.56,
+   "text": "reputation with their faction you can"
+  },
+  {
+   "t": 2146.18,
+   "d": 2.22,
+   "text": "engage in this process of sharing your"
+  },
+  {
+   "t": 2148.4,
+   "d": 1.65,
+   "text": "precious water with them and that"
+  },
+  {
+   "t": 2150.05,
+   "d": 1.77,
+   "text": "endears you to them and then you have"
+  },
+  {
+   "t": 2151.82,
+   "d": 2.67,
+   "text": "these extra dialogue options so should"
+  },
+  {
+   "t": 2154.49,
+   "d": 7.98,
+   "text": "we do that I don't know we can show its"
+  },
+  {
+   "t": 2162.47,
+   "d": 2.76,
+   "text": "Fretwell this I mean I think that the"
+  },
+  {
+   "t": 2165.23,
+   "d": 1.68,
+   "text": "pool of water that this fish is living"
+  },
+  {
+   "t": 2166.91,
+   "d": 3.3,
+   "text": "in is briny we have fresh water we have"
+  },
+  {
+   "t": 2170.21,
+   "d": 4.47,
+   "text": "it's better water so we share okay so"
+  },
+  {
+   "t": 2174.68,
+   "d": 2.88,
+   "text": "now when you are reputation with fish"
+  },
+  {
+   "t": 2177.56,
+   "d": 1.92,
+   "text": "changed by a hundred so when we do this"
+  },
+  {
+   "t": 2179.48,
+   "d": 3.9,
+   "text": "the word gets out and we're we're we're"
+  },
+  {
+   "t": 2183.38,
+   "d": 2.37,
+   "text": "more respected and admired among fish"
+  },
+  {
+   "t": 2185.75,
+   "d": 2.28,
+   "text": "but we get these modifiers for"
+  },
+  {
+   "t": 2188.03,
+   "d": 1.98,
+   "text": "reputation bait with these other"
+  },
+  {
+   "t": 2190.01,
+   "d": 2.91,
+   "text": "factions based on the backstory of this"
+  },
+  {
+   "t": 2192.92,
+   "d": 1.77,
+   "text": "particular fish so this fish was hated"
+  },
+  {
+   "t": 2194.69,
+   "d": 2.13,
+   "text": "by roots now roots like us a little less"
+  },
+  {
+   "t": 2196.82,
+   "d": 1.92,
+   "text": "because we shared water with this fish"
+  },
+  {
+   "t": 2198.74,
+   "d": 2.76,
+   "text": "and this is sort of like the basic unit"
+  },
+  {
+   "t": 2201.5,
+   "d": 3.18,
+   "text": "of cultural exchange in the game here so"
+  },
+  {
+   "t": 2204.68,
+   "d": 4.47,
+   "text": "so we don't unfortunately really fond of"
+  },
+  {
+   "t": 2209.15,
+   "d": 2.73,
+   "text": "us know we have negative 250 reputation"
+  },
+  {
+   "t": 2211.88,
+   "d": 2.07,
+   "text": "with fish so we can't actually if we had"
+  },
+  {
+   "t": 2213.95,
+   "d": 2.13,
+   "text": "positive reputation we could spend some"
+  },
+  {
+   "t": 2216.08,
+   "d": 1.5,
+   "text": "of it together like doing enough for the"
+  },
+  {
+   "t": 2217.58,
+   "d": 1.95,
+   "text": "fish everyone right yeah I'm working on"
+  },
+  {
+   "t": 2219.53,
+   "d": 1.44,
+   "text": "that right like that we are working on"
+  },
+  {
+   "t": 2220.97,
+   "d": 5.25,
+   "text": "trying we're trying fish so the fish can"
+  },
+  {
+   "t": 2226.22,
+   "d": 3.24,
+   "text": "teach you swimming which is a skill if"
+  },
+  {
+   "t": 2229.46,
+   "d": 2.4,
+   "text": "we if you spend enough reputation a fish"
+  },
+  {
+   "t": 2231.86,
+   "d": 2.22,
+   "text": "can share secret secret with you and"
+  },
+  {
+   "t": 2234.08,
+   "d": 3.39,
+   "text": "it's a secret that a fish would know"
+  },
+  {
+   "t": 2237.47,
+   "d": 2.62,
+   "text": "which is like the like they know like"
+  },
+  {
+   "t": 2240.09,
+   "d": 1.98,
+   "text": "we're pools of fresh water they know"
+  },
+  {
+   "t": 2242.07,
+   "d": 1.92,
+   "text": "we're pools of water are they know where"
+  },
+  {
+   "t": 2243.99,
+   "d": 1.59,
+   "text": "which will then let you get more water"
+  },
+  {
+   "t": 2245.58,
+   "d": 1.5,
+   "text": "and share with more fish right this"
+  },
+  {
+   "t": 2247.08,
+   "d": 3.17,
+   "text": "virtuous cycle of fish love yeah yeah"
+  },
+  {
+   "t": 2250.25,
+   "d": 5.05,
+   "text": "but unfortunately we friend so our other"
+  },
+  {
+   "t": 2255.3,
+   "d": 2.18,
+   "text": "option is to kill the fish but I mean"
+  },
+  {
+   "t": 2257.48,
+   "d": 2.2,
+   "text": "well I mean we should let I mean what"
+  },
+  {
+   "t": 2259.68,
+   "d": 0.48,
+   "text": "should we"
+  },
+  {
+   "t": 2260.16,
+   "d": 3.2,
+   "text": "oh yeah we could trade with the fish"
+  },
+  {
+   "t": 2263.36,
+   "d": 6.16,
+   "text": "he's a fish Jimmy doesn't - yeah could"
+  },
+  {
+   "t": 2269.52,
+   "d": 2.16,
+   "text": "be reasonable please living drink aqua"
+  },
+  {
+   "t": 2271.68,
+   "d": 2.01,
+   "text": "friend okay so we're gonna say bye to"
+  },
+  {
+   "t": 2273.69,
+   "d": 3.45,
+   "text": "the fish then there I don't think might"
+  },
+  {
+   "t": 2277.14,
+   "d": 3.03,
+   "text": "make him I mean if what I want to but"
+  },
+  {
+   "t": 2280.17,
+   "d": 3.81,
+   "text": "III were we're kind of week at least in"
+  },
+  {
+   "t": 2283.98,
+   "d": 4.14,
+   "text": "terms of offensive mutations yeah let's"
+  },
+  {
+   "t": 2288.12,
+   "d": 2.82,
+   "text": "look that would be my vote to well okay"
+  },
+  {
+   "t": 2290.94,
+   "d": 1.23,
+   "text": "so let's take a quick verse because"
+  },
+  {
+   "t": 2292.17,
+   "d": 2.58,
+   "text": "people are so so do we want to be"
+  },
+  {
+   "t": 2294.75,
+   "d": 4.02,
+   "text": "hostile to this fish breeze no one loves"
+  },
+  {
+   "t": 2298.77,
+   "d": 4.35,
+   "text": "just fish or friends okay and in fact if"
+  },
+  {
+   "t": 2303.12,
+   "d": 1.62,
+   "text": "we betrayed him we would have violated"
+  },
+  {
+   "t": 2304.74,
+   "d": 3.9,
+   "text": "the water ritual that's oh yes okay once"
+  },
+  {
+   "t": 2308.64,
+   "d": 1.85,
+   "text": "you've read a ritual with someone"
+  },
+  {
+   "t": 2310.49,
+   "d": 3.4,
+   "text": "attacking them later is a grievous"
+  },
+  {
+   "t": 2313.89,
+   "d": 2.52,
+   "text": "breach of cuds etiquette yes and"
+  },
+  {
+   "t": 2316.41,
+   "d": 2.4,
+   "text": "everyone hates you it was we were trying"
+  },
+  {
+   "t": 2318.81,
+   "d": 1.8,
+   "text": "to lure you into it and you you made the"
+  },
+  {
+   "t": 2320.61,
+   "d": 3.15,
+   "text": "right decision which other so we're"
+  },
+  {
+   "t": 2323.76,
+   "d": 3.9,
+   "text": "gonna go back the same maybe probably"
+  },
+  {
+   "t": 2327.66,
+   "d": 4.62,
+   "text": "not so we just would well just say yes"
+  },
+  {
+   "t": 2332.28,
+   "d": 1.86,
+   "text": "and then if we would if it's the same"
+  },
+  {
+   "t": 2334.14,
+   "d": 2.46,
+   "text": "layer but no it's a different okay so"
+  },
+  {
+   "t": 2336.6,
+   "d": 2.88,
+   "text": "look there's the world this sometime has"
+  },
+  {
+   "t": 2339.48,
+   "d": 2.16,
+   "text": "a lot of solvent quite right it has oh"
+  },
+  {
+   "t": 2341.64,
+   "d": 7.5,
+   "text": "we gained a level okay good job everyone"
+  },
+  {
+   "t": 2349.14,
+   "d": 1.35,
+   "text": "so my gosh"
+  },
+  {
+   "t": 2350.49,
+   "d": 6.0,
+   "text": "oh this is okay this might be oh it no I"
+  },
+  {
+   "t": 2356.49,
+   "d": 3.66,
+   "text": "don't think it it's no it just says I"
+  },
+  {
+   "t": 2360.15,
+   "d": 3.06,
+   "text": "don't think it is a village I think"
+  },
+  {
+   "t": 2363.21,
+   "d": 2.68,
+   "text": "I wonder if those are friendly with the"
+  },
+  {
+   "t": 2365.89,
+   "d": 1.5,
+   "text": "snapshots or not and there's like"
+  },
+  {
+   "t": 2367.39,
+   "d": 3.11,
+   "text": "Hendron there's a lot going on so"
+  },
+  {
+   "t": 2370.5,
+   "d": 1.93,
+   "text": "exploring the overworld can be quite"
+  },
+  {
+   "t": 2372.43,
+   "d": 3.39,
+   "text": "dangerous so we this is a layer of a"
+  },
+  {
+   "t": 2375.82,
+   "d": 2.94,
+   "text": "what was a layer of a snapshot hunter Oh"
+  },
+  {
+   "t": 2378.76,
+   "d": 2.4,
+   "text": "a snapchat hunter so more likely to pop"
+  },
+  {
+   "t": 2381.16,
+   "d": 2.33,
+   "text": "like humanoids are more likely to"
+  },
+  {
+   "t": 2383.49,
+   "d": 2.59,
+   "text": "populate this location and so it's a"
+  },
+  {
+   "t": 2386.08,
+   "d": 1.95,
+   "text": "bunch of snap jaw but it's also a scribe"
+  },
+  {
+   "t": 2388.03,
+   "d": 5.55,
+   "text": "did you say I don't know what's going on"
+  },
+  {
+   "t": 2393.58,
+   "d": 4.07,
+   "text": "here this is nuts"
+  },
+  {
+   "t": 2397.92,
+   "d": 2.29,
+   "text": "what a [ __ ] we're being referred to"
+  },
+  {
+   "t": 2400.21,
+   "d": 1.64,
+   "text": "the Jim Jim Connor"
+  },
+  {
+   "t": 2401.85,
+   "d": 2.68,
+   "text": "she's an Iggy clone of sad Elvis so"
+  },
+  {
+   "t": 2404.53,
+   "d": 1.83,
+   "text": "that's a that's a well it's a carving"
+  },
+  {
+   "t": 2406.36,
+   "d": 2.73,
+   "text": "it's of a clone of salad office that's"
+  },
+  {
+   "t": 2409.09,
+   "d": 1.68,
+   "text": "not she's not like wielding a clone who"
+  },
+  {
+   "t": 2410.77,
+   "d": 2.13,
+   "text": "saw Thomas so a little action figure of"
+  },
+  {
+   "t": 2412.9,
+   "d": 2.97,
+   "text": "this legendary ancient sir she not only"
+  },
+  {
+   "t": 2415.87,
+   "d": 4.5,
+   "text": "has a figurine of saw Thomas carved and"
+  },
+  {
+   "t": 2420.37,
+   "d": 2.4,
+   "text": "a gate but she has a figurine of the sky"
+  },
+  {
+   "t": 2422.77,
+   "d": 2.37,
+   "text": "bear like the original one so she's like"
+  },
+  {
+   "t": 2425.14,
+   "d": 3.57,
+   "text": "a super collector of the sky bear well I"
+  },
+  {
+   "t": 2428.71,
+   "d": 2.07,
+   "text": "think that's just what cuz I get cloned"
+  },
+  {
+   "t": 2430.78,
+   "d": 3.75,
+   "text": "yeah oh okay I see so there okay there's"
+  },
+  {
+   "t": 2434.53,
+   "d": 4.29,
+   "text": "a lot to unpack there but she's she's a"
+  },
+  {
+   "t": 2438.82,
+   "d": 2.52,
+   "text": "gem cutter she has some jagged figurines"
+  },
+  {
+   "t": 2441.34,
+   "d": 4.05,
+   "text": "there's okay this is a shrine to zut sir"
+  },
+  {
+   "t": 2445.39,
+   "d": 3.81,
+   "text": "docked the Berchem terror in 1:36 sir"
+  },
+  {
+   "t": 2449.2,
+   "d": 1.86,
+   "text": "knocked won a decisive victory against"
+  },
+  {
+   "t": 2451.06,
+   "d": 2.01,
+   "text": "the combined forces of b bar roost at"
+  },
+  {
+   "t": 2453.07,
+   "d": 3.09,
+   "text": "the bloody Battle of Kim rapport as a"
+  },
+  {
+   "t": 2456.16,
+   "d": 2.1,
+   "text": "result of the battle kimber perspire was"
+  },
+  {
+   "t": 2458.26,
+   "d": 2.4,
+   "text": "so rife with electric arcs that it was"
+  },
+  {
+   "t": 2460.66,
+   "d": 1.98,
+   "text": "renamed the logical wreck right that's"
+  },
+  {
+   "t": 2462.64,
+   "d": 6.57,
+   "text": "my nickname okay now I think I think in"
+  },
+  {
+   "t": 2469.21,
+   "d": 1.32,
+   "text": "the interest of time we should make a"
+  },
+  {
+   "t": 2470.53,
+   "d": 1.92,
+   "text": "decision about whether we're gonna try"
+  },
+  {
+   "t": 2472.45,
+   "d": 1.77,
+   "text": "to deal with the craziness happening"
+  },
+  {
+   "t": 2474.22,
+   "d": 2.1,
+   "text": "here or move on and help the fish can"
+  },
+  {
+   "t": 2476.32,
+   "d": 3.69,
+   "text": "you even flee the hostiles will flee"
+  },
+  {
+   "t": 2480.01,
+   "d": 3.45,
+   "text": "alright well there's power Fisher"
+  },
+  {
+   "t": 2483.46,
+   "d": 2.15,
+   "text": "friends there's powerful a powerful"
+  },
+  {
+   "t": 2485.61,
+   "d": 3.35,
+   "text": "audience call to help the fish so what's"
+  },
+  {
+   "t": 2488.96,
+   "d": 2.04,
+   "text": "okay I'm just gonna level up real quick"
+  },
+  {
+   "t": 2491.0,
+   "d": 2.73,
+   "text": "let's level up which mutation do we want"
+  },
+  {
+   "t": 2493.73,
+   "d": 4.76,
+   "text": "a level up any any suggestion guys think"
+  },
+  {
+   "t": 2498.49,
+   "d": 4.9,
+   "text": "more legs faster legs good choice"
+  },
+  {
+   "t": 2503.39,
+   "d": 4.53,
+   "text": "so leveling up your mutations enhances"
+  },
+  {
+   "t": 2507.92,
+   "d": 2.31,
+   "text": "them so with legs unfortunately what we"
+  },
+  {
+   "t": 2510.23,
+   "d": 1.8,
+   "text": "learned last time we did this is that it"
+  },
+  {
+   "t": 2512.03,
+   "d": 2.52,
+   "text": "doesn't give you more legs it makes your"
+  },
+  {
+   "t": 2514.55,
+   "d": 2.94,
+   "text": "legs better so you get faster as you"
+  },
+  {
+   "t": 2517.49,
+   "d": 3.24,
+   "text": "because you already got a movement bonus"
+  },
+  {
+   "t": 2520.73,
+   "d": 2.94,
+   "text": "when you have multiple legs so we're"
+  },
+  {
+   "t": 2523.67,
+   "d": 1.8,
+   "text": "better what can't go back to the world"
+  },
+  {
+   "t": 2525.47,
+   "d": 1.68,
+   "text": "map because there were hostels nearby so"
+  },
+  {
+   "t": 2527.15,
+   "d": 1.53,
+   "text": "we're gonna have to try to outrun all of"
+  },
+  {
+   "t": 2528.68,
+   "d": 1.77,
+   "text": "this craziness that's happening so this"
+  },
+  {
+   "t": 2530.45,
+   "d": 2.25,
+   "text": "this is a pretty dangerous situation so"
+  },
+  {
+   "t": 2532.7,
+   "d": 2.64,
+   "text": "we're gonna try to maneuver our way"
+  },
+  {
+   "t": 2535.34,
+   "d": 3.48,
+   "text": "outside of this snap drawing camp meant"
+  },
+  {
+   "t": 2538.82,
+   "d": 6.72,
+   "text": "here there are the stairs they're"
+  },
+  {
+   "t": 2545.54,
+   "d": 0.87,
+   "text": "fighting each other"
+  },
+  {
+   "t": 2546.41,
+   "d": 1.86,
+   "text": "yeah who's fighting who arrived in the"
+  },
+  {
+   "t": 2548.27,
+   "d": 3.9,
+   "text": "middle of like a ascribe averse snapshot"
+  },
+  {
+   "t": 2552.17,
+   "d": 1.71,
+   "text": "disagreement about like action figures"
+  },
+  {
+   "t": 2553.88,
+   "d": 8.01,
+   "text": "or something yeah it's like a collector"
+  },
+  {
+   "t": 2561.89,
+   "d": 2.01,
+   "text": "this is like a collectors calling a"
+  },
+  {
+   "t": 2563.9,
+   "d": 9.09,
+   "text": "convention Oh wrong okay so luckily so"
+  },
+  {
+   "t": 2572.99,
+   "d": 2.52,
+   "text": "spin webs is a good defensive mutation"
+  },
+  {
+   "t": 2575.51,
+   "d": 2.37,
+   "text": "because it lets you flee fairly well you"
+  },
+  {
+   "t": 2577.88,
+   "d": 1.74,
+   "text": "leave the webs in your wake in it and"
+  },
+  {
+   "t": 2579.62,
+   "d": 2.22,
+   "text": "things that pass over webs get caught in"
+  },
+  {
+   "t": 2581.84,
+   "d": 1.26,
+   "text": "them unless they're proficient at"
+  },
+  {
+   "t": 2583.1,
+   "d": 2.79,
+   "text": "walking over webs so we've seem to have"
+  },
+  {
+   "t": 2585.89,
+   "d": 2.13,
+   "text": "why don't you kill that guy okay let's"
+  },
+  {
+   "t": 2588.02,
+   "d": 1.8,
+   "text": "take care of them oh there's one snap to"
+  },
+  {
+   "t": 2589.82,
+   "d": 7.68,
+   "text": "left there we go and basically you can't"
+  },
+  {
+   "t": 2597.5,
+   "d": 2.49,
+   "text": "exit to the world map until you're out"
+  },
+  {
+   "t": 2599.99,
+   "d": 4.05,
+   "text": "of combat and we're lost again"
+  },
+  {
+   "t": 2604.04,
+   "d": 2.37,
+   "text": "having a we're having a rough trip we"
+  },
+  {
+   "t": 2606.41,
+   "d": 4.44,
+   "text": "regained our bearings okay wait a second"
+  },
+  {
+   "t": 2610.85,
+   "d": 3.24,
+   "text": "um so just some cerebro ruins rise out"
+  },
+  {
+   "t": 2614.09,
+   "d": 2.7,
+   "text": "of the desert no no we're gonna go help"
+  },
+  {
+   "t": 2616.79,
+   "d": 2.73,
+   "text": "the fish friend okay we were right"
+  },
+  {
+   "t": 2619.52,
+   "d": 3.02,
+   "text": "finally we've arrived at the 27th"
+  },
+  {
+   "t": 2622.54,
+   "d": 3.94,
+   "text": "pinnacle North oh right right right"
+  },
+  {
+   "t": 2626.48,
+   "d": 2.91,
+   "text": "because the quest is to go to to six"
+  },
+  {
+   "t": 2629.39,
+   "d": 3.57,
+   "text": "parasites so a pair of saying is a unit"
+  },
+  {
+   "t": 2632.96,
+   "d": 1.59,
+   "text": "of measurement that's like one world map"
+  },
+  {
+   "t": 2634.55,
+   "d": 3.66,
+   "text": "tile ooh that's not good so there's a"
+  },
+  {
+   "t": 2638.21,
+   "d": 2.94,
+   "text": "there's a there's a puma after us oh"
+  },
+  {
+   "t": 2641.15,
+   "d": 1.8,
+   "text": "yeah that's pretty that's not great"
+  },
+  {
+   "t": 2642.95,
+   "d": 2.61,
+   "text": "that's a pretty out of depth monsters"
+  },
+  {
+   "t": 2645.56,
+   "d": 2.76,
+   "text": "the chitinous puma oh this is not good"
+  },
+  {
+   "t": 2648.32,
+   "d": 3.45,
+   "text": "oh it's a dong fighter oh that's water"
+  },
+  {
+   "t": 2651.77,
+   "d": 1.89,
+   "text": "that's pretty badge is like a little"
+  },
+  {
+   "t": 2653.66,
+   "d": 1.77,
+   "text": "dragon breathing fire at us so that's"
+  },
+  {
+   "t": 2655.43,
+   "d": 7.32,
+   "text": "also not good and it's like nighttime"
+  },
+  {
+   "t": 2662.75,
+   "d": 2.25,
+   "text": "that's nighttime so they can't see us"
+  },
+  {
+   "t": 2665.0,
+   "d": 6.57,
+   "text": "quite as well we beat the flames out so"
+  },
+  {
+   "t": 2671.57,
+   "d": 1.59,
+   "text": "we were we were on fire but if you spend"
+  },
+  {
+   "t": 2673.16,
+   "d": 2.07,
+   "text": "a turn if you spend a certain passing"
+  },
+  {
+   "t": 2675.23,
+   "d": 2.01,
+   "text": "you beat the flames out and you lower"
+  },
+  {
+   "t": 2677.24,
+   "d": 1.98,
+   "text": "your temperature so now we're kind of"
+  },
+  {
+   "t": 2679.22,
+   "d": 1.47,
+   "text": "lost in this salt desert I guess we're"
+  },
+  {
+   "t": 2680.69,
+   "d": 3.45,
+   "text": "not we're not dead yet we're not"
+  },
+  {
+   "t": 2684.14,
+   "d": 2.07,
+   "text": "necessarily I really want to stop and"
+  },
+  {
+   "t": 2686.21,
+   "d": 1.56,
+   "text": "rest but I think we're probably still"
+  },
+  {
+   "t": 2687.77,
+   "d": 4.25,
+   "text": "being chased so hard to tell at night"
+  },
+  {
+   "t": 2694.7,
+   "d": 3.09,
+   "text": "yeah so we're wandering through the salt"
+  },
+  {
+   "t": 2697.79,
+   "d": 3.24,
+   "text": "desert here so now we're just wandering"
+  },
+  {
+   "t": 2701.03,
+   "d": 3.9,
+   "text": "north and hoping to encounter are we"
+  },
+  {
+   "t": 2704.93,
+   "d": 1.74,
+   "text": "cool that was maybe a little misguided"
+  },
+  {
+   "t": 2706.67,
+   "d": 2.73,
+   "text": "to look for water in the desert but you"
+  },
+  {
+   "t": 2709.4,
+   "d": 2.51,
+   "text": "know he's what does he know he's a fish"
+  },
+  {
+   "t": 2711.91,
+   "d": 5.34,
+   "text": "I'm sorry I'm sorry yeah that was rough"
+  },
+  {
+   "t": 2720.43,
+   "d": 5.29,
+   "text": "it's probably gonna what yeah it's 2 to"
+  },
+  {
+   "t": 2725.72,
+   "d": 2.28,
+   "text": "6 world squared it's shoot us right so"
+  },
+  {
+   "t": 2728.0,
+   "d": 3.0,
+   "text": "it's and each one of those is three so"
+  },
+  {
+   "t": 2731.0,
+   "d": 1.17,
+   "text": "it could be a bit of a trip so luckily"
+  },
+  {
+   "t": 2732.17,
+   "d": 6.33,
+   "text": "the desert did you did you like we"
+  },
+  {
+   "t": 2738.5,
+   "d": 1.62,
+   "text": "should run into it here so luckily the"
+  },
+  {
+   "t": 2740.12,
+   "d": 2.78,
+   "text": "desert is is somewhat easy to traverse"
+  },
+  {
+   "t": 2742.9,
+   "d": 2.17,
+   "text": "geographically but we also are like"
+  },
+  {
+   "t": 2745.07,
+   "d": 3.72,
+   "text": "thirst is is stressed more quickly in"
+  },
+  {
+   "t": 2748.79,
+   "d": 6.51,
+   "text": "the desert actually ok so we have this"
+  },
+  {
+   "t": 2755.3,
+   "d": 2.7,
+   "text": "new food system here so you can kind of"
+  },
+  {
+   "t": 2758.0,
+   "d": 2.58,
+   "text": "just eat a normal meal by default you"
+  },
+  {
+   "t": 2760.58,
+   "d": 2.01,
+   "text": "can normally a normal meal let's see"
+  },
+  {
+   "t": 2762.59,
+   "d": 2.25,
+   "text": "what a normal meal is so you whip"
+  },
+  {
+   "t": 2764.84,
+   "d": 1.77,
+   "text": "something up you gather whatever you can"
+  },
+  {
+   "t": 2766.61,
+   "d": 2.43,
+   "text": "find for your meal some free cinnamon a"
+  },
+  {
+   "t": 2769.04,
+   "d": 3.63,
+   "text": "sprinkle of Venerable salt and a smidgen"
+  },
+  {
+   "t": 2772.67,
+   "d": 2.4,
+   "text": "of berries well that is like by cuts"
+  },
+  {
+   "t": 2775.07,
+   "d": 1.5,
+   "text": "standards that's delicious yeah there"
+  },
+  {
+   "t": 2776.57,
+   "d": 5.28,
+   "text": "were no feet or anything okay so our"
+  },
+  {
+   "t": 2781.85,
+   "d": 3.15,
+   "text": "hunger is sated wait oh there we go"
+  },
+  {
+   "t": 2785.0,
+   "d": 3.06,
+   "text": "so we located xx hammer and we leveled"
+  },
+  {
+   "t": 2788.06,
+   "d": 8.25,
+   "text": "we gained level very nice so here so"
+  },
+  {
+   "t": 2796.31,
+   "d": 1.77,
+   "text": "this so the fish just ate is just wanted"
+  },
+  {
+   "t": 2798.08,
+   "d": 1.74,
+   "text": "the location of this room so we found it"
+  },
+  {
+   "t": 2799.82,
+   "d": 3.12,
+   "text": "so we could return to Innes or we can"
+  },
+  {
+   "t": 2802.94,
+   "d": 3.9,
+   "text": "explore this room that we found and see"
+  },
+  {
+   "t": 2806.84,
+   "d": 1.05,
+   "text": "we'll see what's there"
+  },
+  {
+   "t": 2807.89,
+   "d": 2.61,
+   "text": "the caveat there is that it's the ruins"
+  },
+  {
+   "t": 2810.5,
+   "d": 2.82,
+   "text": "tend to be populated with more difficult"
+  },
+  {
+   "t": 2813.32,
+   "d": 2.49,
+   "text": "creatures our creatures who are tend to"
+  },
+  {
+   "t": 2815.81,
+   "d": 3.45,
+   "text": "be hostile or just it's we might die is"
+  },
+  {
+   "t": 2819.26,
+   "d": 3.24,
+   "text": "the upshot of that so go back to anus or"
+  },
+  {
+   "t": 2822.5,
+   "d": 3.06,
+   "text": "explore the ruins I mean like okay"
+  },
+  {
+   "t": 2825.56,
+   "d": 2.04,
+   "text": "explore we they want to explore the"
+  },
+  {
+   "t": 2827.6,
+   "d": 0.54,
+   "text": "ruins"
+  },
+  {
+   "t": 2828.14,
+   "d": 3.03,
+   "text": "the fit we want to help the fish but we"
+  },
+  {
+   "t": 2831.17,
+   "d": 1.68,
+   "text": "have our limit so this place is like a"
+  },
+  {
+   "t": 2832.85,
+   "d": 2.91,
+   "text": "huge tower sunken the sunken assault"
+  },
+  {
+   "t": 2835.76,
+   "d": 1.53,
+   "text": "yeah the way these root these do you"
+  },
+  {
+   "t": 2837.29,
+   "d": 1.17,
+   "text": "want to talk about the ruin generation a"
+  },
+  {
+   "t": 2838.46,
+   "d": 1.89,
+   "text": "little bit because it's pretty cool so"
+  },
+  {
+   "t": 2840.35,
+   "d": 1.8,
+   "text": "this is like I was talking a little bit"
+  },
+  {
+   "t": 2842.15,
+   "d": 3.32,
+   "text": "to Brian earlier that these these use"
+  },
+  {
+   "t": 2845.47,
+   "d": 3.01,
+   "text": "WFC primarily which is a technique which"
+  },
+  {
+   "t": 2848.48,
+   "d": 3.63,
+   "text": "was introduced pretty recently within"
+  },
+  {
+   "t": 2852.11,
+   "d": 2.28,
+   "text": "the last year or two to generate the"
+  },
+  {
+   "t": 2854.39,
+   "d": 3.39,
+   "text": "interiors but WFC generates these"
+  },
+  {
+   "t": 2857.78,
+   "d": 2.76,
+   "text": "isomorphic sort of interiors that are"
+  },
+  {
+   "t": 2860.54,
+   "d": 1.8,
+   "text": "the same in every direction and so in"
+  },
+  {
+   "t": 2862.34,
+   "d": 1.8,
+   "text": "order to give them some texture we"
+  },
+  {
+   "t": 2864.14,
+   "d": 2.07,
+   "text": "create a higher level structure which"
+  },
+  {
+   "t": 2866.21,
+   "d": 1.77,
+   "text": "can be one of a bunch of varieties and"
+  },
+  {
+   "t": 2867.98,
+   "d": 1.32,
+   "text": "so this is a higher level structure"
+  },
+  {
+   "t": 2869.3,
+   "d": 4.56,
+   "text": "that's built around a circular Tower"
+  },
+  {
+   "t": 2873.86,
+   "d": 1.53,
+   "text": "well the interiors gonna be filled with"
+  },
+  {
+   "t": 2875.39,
+   "d": 4.95,
+   "text": "WSC based structures but we I'm sorry"
+  },
+  {
+   "t": 2880.34,
+   "d": 2.97,
+   "text": "interrupt you there but it's good to"
+  },
+  {
+   "t": 2883.31,
+   "d": 1.47,
+   "text": "explanation but we just found a relic"
+  },
+  {
+   "t": 2884.78,
+   "d": 2.22,
+   "text": "which is actually really rare so there"
+  },
+  {
+   "t": 2887.0,
+   "d": 1.44,
+   "text": "are these like ancient relics in the"
+  },
+  {
+   "t": 2888.44,
+   "d": 2.19,
+   "text": "world that usually live in these"
+  },
+  {
+   "t": 2890.63,
+   "d": 2.7,
+   "text": "historic sites but occasionally are just"
+  },
+  {
+   "t": 2893.33,
+   "d": 2.55,
+   "text": "in various over world locations which we"
+  },
+  {
+   "t": 2895.88,
+   "d": 1.92,
+   "text": "found so this one's just called new"
+  },
+  {
+   "t": 2897.8,
+   "d": 2.61,
+   "text": "hamish I think that name generator' is"
+  },
+  {
+   "t": 2900.41,
+   "d": 1.68,
+   "text": "actually broken because I think that's a"
+  },
+  {
+   "t": 2902.09,
+   "d": 2.64,
+   "text": "reagent like that's supposed to be a bit"
+  },
+  {
+   "t": 2904.73,
+   "d": 2.1,
+   "text": "like a regional name not an item name"
+  },
+  {
+   "t": 2906.83,
+   "d": 3.24,
+   "text": "but sure so masks we can read the masks"
+  },
+  {
+   "t": 2910.07,
+   "d": 1.92,
+   "text": "maintain their sacred status and the"
+  },
+  {
+   "t": 2911.99,
+   "d": 2.25,
+   "text": "lives of the eaters even as they lost"
+  },
+  {
+   "t": 2914.24,
+   "d": 1.56,
+   "text": "the capacity to stitch them into their"
+  },
+  {
+   "t": 2915.8,
+   "d": 2.52,
+   "text": "own faces this one is no different it's"
+  },
+  {
+   "t": 2918.32,
+   "d": 4.07,
+   "text": "carved with fanciful depictions of boots"
+  },
+  {
+   "t": 2925.12,
+   "d": 3.55,
+   "text": "alright and it gives +2 strength which"
+  },
+  {
+   "t": 2928.67,
+   "d": 3.12,
+   "text": "is actually really great so it's a mass"
+  },
+  {
+   "t": 2931.79,
+   "d": 3.12,
+   "text": "so that it equips your face slot but it"
+  },
+  {
+   "t": 2934.91,
+   "d": 1.98,
+   "text": "gives you and it's as fanciful"
+  },
+  {
+   "t": 2936.89,
+   "d": 1.89,
+   "text": "depictions of boots but again it gives"
+  },
+  {
+   "t": 2938.78,
+   "d": 3.0,
+   "text": "us strength it's actually quite a find"
+  },
+  {
+   "t": 2941.78,
+   "d": 3.54,
+   "text": "but sure and there's a statue here shall"
+  },
+  {
+   "t": 2945.32,
+   "d": 3.2,
+   "text": "we oh yeah I mean"
+  },
+  {
+   "t": 2950.46,
+   "d": 3.85,
+   "text": "I'm gonna go ahead and desecrate it okay"
+  },
+  {
+   "t": 2954.31,
+   "d": 1.53,
+   "text": "right so this shrine depicts a"
+  },
+  {
+   "t": 2955.84,
+   "d": 1.29,
+   "text": "significant event from the life of the"
+  },
+  {
+   "t": 2957.13,
+   "d": 1.62,
+   "text": "ancient Sultan mirror [ __ ] while"
+  },
+  {
+   "t": 2958.75,
+   "d": 3.42,
+   "text": "traveling through Sain aperio Mara [ __ ]"
+  },
+  {
+   "t": 2962.17,
+   "d": 2.37,
+   "text": "stopped at a market in Cuba tuned at an"
+  },
+  {
+   "t": 2964.54,
+   "d": 1.8,
+   "text": "obscure shop he purchased a strange"
+  },
+  {
+   "t": 2966.34,
+   "d": 1.98,
+   "text": "floating wormed it named it strange a"
+  },
+  {
+   "t": 2968.32,
+   "d": 2.21,
+   "text": "kiss"
+  },
+  {
+   "t": 2970.71,
+   "d": 2.86,
+   "text": "mistress [ __ ] friend then he went to a"
+  },
+  {
+   "t": 2973.57,
+   "d": 1.65,
+   "text": "nearby tavern and lost range against"
+  },
+  {
+   "t": 2975.22,
+   "d": 1.56,
+   "text": "mystery fan to a local pig market he"
+  },
+  {
+   "t": 2976.78,
+   "d": 2.82,
+   "text": "cursed the tavern and left Cuba - and"
+  },
+  {
+   "t": 2979.6,
+   "d": 3.71,
+   "text": "this moment of his life was immortalized"
+  },
+  {
+   "t": 2984.93,
+   "d": 3.1,
+   "text": "so basically we generate these histories"
+  },
+  {
+   "t": 2988.03,
+   "d": 1.77,
+   "text": "for the Sultan's they become like"
+  },
+  {
+   "t": 2989.8,
+   "d": 1.68,
+   "text": "inscribed in the historical record and"
+  },
+  {
+   "t": 2991.48,
+   "d": 2.01,
+   "text": "then they can those scenes can appear on"
+  },
+  {
+   "t": 2993.49,
+   "d": 2.76,
+   "text": "various artifacts or its historical"
+  },
+  {
+   "t": 2996.25,
+   "d": 0.96,
+   "text": "snippets throughout the world"
+  },
+  {
+   "t": 2997.21,
+   "d": 1.62,
+   "text": "so surely this is something that it's"
+  },
+  {
+   "t": 2998.83,
+   "d": 1.98,
+   "text": "somewhat recently so we wanted the"
+  },
+  {
+   "t": 3000.81,
+   "d": 3.54,
+   "text": "option to just let you sort of like with"
+  },
+  {
+   "t": 3004.35,
+   "d": 1.38,
+   "text": "no real mechanical impact there all"
+  },
+  {
+   "t": 3005.73,
+   "d": 1.44,
+   "text": "these shrines and like sort of nice"
+  },
+  {
+   "t": 3007.17,
+   "d": 1.38,
+   "text": "quiet places through the world and we"
+  },
+  {
+   "t": 3008.55,
+   "d": 1.8,
+   "text": "wanted the option to let you like pray"
+  },
+  {
+   "t": 3010.35,
+   "d": 3.57,
+   "text": "at them it also came up in sort of our"
+  },
+  {
+   "t": 3013.92,
+   "d": 1.8,
+   "text": "procedural quest design that there's"
+  },
+  {
+   "t": 3015.72,
+   "d": 3.63,
+   "text": "there's reason at times to desecrate"
+  },
+  {
+   "t": 3019.35,
+   "d": 2.93,
+   "text": "them because sometimes if you are"
+  },
+  {
+   "t": 3022.28,
+   "d": 3.04,
+   "text": "worshiping roots and I hate roots and I"
+  },
+  {
+   "t": 3025.32,
+   "d": 7.2,
+   "text": "have a vendetta versio etc so I mean all"
+  },
+  {
+   "t": 3032.52,
+   "d": 1.71,
+   "text": "the reason you would desig normally"
+  },
+  {
+   "t": 3034.23,
+   "d": 3.99,
+   "text": "desecrate a statuary so does anyone want"
+  },
+  {
+   "t": 3038.22,
+   "d": 1.92,
+   "text": "to pray or and/or desecrate the snipe"
+  },
+  {
+   "t": 3040.14,
+   "d": 8.31,
+   "text": "this statue no okay let's take a vote"
+  },
+  {
+   "t": 3048.45,
+   "d": 3.42,
+   "text": "here because so well there's three"
+  },
+  {
+   "t": 3051.87,
+   "d": 4.61,
+   "text": "options pray desecrate nothing for pray"
+  },
+  {
+   "t": 3059.21,
+   "d": 3.0,
+   "text": "desecrate"
+  },
+  {
+   "t": 3063.69,
+   "d": 11.67,
+   "text": "ah nothing nothing okay over here"
+  },
+  {
+   "t": 3075.36,
+   "d": 2.01,
+   "text": "[Music]"
+  },
+  {
+   "t": 3077.37,
+   "d": 3.91,
+   "text": "because well but it's not if that was"
+  },
+  {
+   "t": 3081.28,
+   "d": 2.64,
+   "text": "just an overworld relic so it might not"
+  },
+  {
+   "t": 3083.92,
+   "d": 1.35,
+   "text": "even have stairs down it's not"
+  },
+  {
+   "t": 3085.27,
+   "d": 2.91,
+   "text": "necessarily a dungeon it's just an"
+  },
+  {
+   "t": 3088.18,
+   "d": 5.64,
+   "text": "interesting place all right so let's"
+  },
+  {
+   "t": 3093.82,
+   "d": 2.46,
+   "text": "return to return yeah and how are we"
+  },
+  {
+   "t": 3096.28,
+   "d": 2.94,
+   "text": "what how we doing on time here huh cuz I"
+  },
+  {
+   "t": 3099.22,
+   "d": 3.54,
+   "text": "don't have any way to tell four minutes"
+  },
+  {
+   "t": 3102.76,
+   "d": 2.79,
+   "text": "okay let's return so babe maybe we'll"
+  },
+  {
+   "t": 3105.55,
+   "d": 2.22,
+   "text": "win if we return to the or maybe we'll"
+  },
+  {
+   "t": 3107.77,
+   "d": 1.62,
+   "text": "do something very dangerous afterward"
+  },
+  {
+   "t": 3109.39,
+   "d": 3.6,
+   "text": "and guarantee death but um so let's go"
+  },
+  {
+   "t": 3112.99,
+   "d": 1.56,
+   "text": "back to the okay we almost got to the"
+  },
+  {
+   "t": 3114.55,
+   "d": 1.68,
+   "text": "village we got lost"
+  },
+  {
+   "t": 3116.23,
+   "d": 3.48,
+   "text": "I'm sure this will be recognized okay"
+  },
+  {
+   "t": 3119.71,
+   "d": 3.45,
+   "text": "right this way where there are hostiles"
+  },
+  {
+   "t": 3123.16,
+   "d": 1.88,
+   "text": "now so we have to flee from that croc"
+  },
+  {
+   "t": 3125.04,
+   "d": 3.72,
+   "text": "who's chasing us"
+  },
+  {
+   "t": 3130.62,
+   "d": 4.77,
+   "text": "sometimes the crocodiles not a mare"
+  },
+  {
+   "t": 3135.46,
+   "d": 18.9,
+   "text": "I like to say all right so thank you for"
+  },
+  {
+   "t": 3154.36,
+   "d": 2.37,
+   "text": "your service drifter our village owes"
+  },
+  {
+   "t": 3156.73,
+   "d": 1.5,
+   "text": "you a debt for now please choose a"
+  },
+  {
+   "t": 3158.23,
+   "d": 1.98,
+   "text": "reward from our stockpile as payment for"
+  },
+  {
+   "t": 3160.21,
+   "d": 2.42,
+   "text": "your service"
+  },
+  {
+   "t": 3162.63,
+   "d": 7.54,
+   "text": "so we gained another level we get XP so"
+  },
+  {
+   "t": 3170.17,
+   "d": 1.8,
+   "text": "now we choose the procedurally generated"
+  },
+  {
+   "t": 3171.97,
+   "d": 4.68,
+   "text": "reward yes your skin slippers magnetized"
+  },
+  {
+   "t": 3176.65,
+   "d": 3.51,
+   "text": "boots or emergency service a security"
+  },
+  {
+   "t": 3180.16,
+   "d": 2.37,
+   "text": "card at a chrome key I will point out"
+  },
+  {
+   "t": 3182.53,
+   "d": 1.98,
+   "text": "that our character's motivation was"
+  },
+  {
+   "t": 3184.51,
+   "d": 2.88,
+   "text": "shoes shoes shoes bass exactly yeah"
+  },
+  {
+   "t": 3187.39,
+   "d": 2.01,
+   "text": "somebody we're wearing we are now"
+  },
+  {
+   "t": 3189.4,
+   "d": 3.24,
+   "text": "wearing the beautiful associations with"
+  },
+  {
+   "t": 3192.64,
+   "d": 3.0,
+   "text": "pictures depictions fanciful depictions"
+  },
+  {
+   "t": 3195.64,
+   "d": 3.42,
+   "text": "of shoes on a boot specific way so that"
+  },
+  {
+   "t": 3199.06,
+   "d": 2.64,
+   "text": "was a sign clearly so I think it's"
+  },
+  {
+   "t": 3201.7,
+   "d": 2.34,
+   "text": "pretty obviously well but that's our"
+  },
+  {
+   "t": 3204.04,
+   "d": 3.09,
+   "text": "that's our opinion that's my so okay do"
+  },
+  {
+   "t": 3207.13,
+   "d": 1.26,
+   "text": "we want the slippers I think they give"
+  },
+  {
+   "t": 3208.39,
+   "d": 2.67,
+   "text": "you plus movement speed do you want the"
+  },
+  {
+   "t": 3211.06,
+   "d": 1.98,
+   "text": "boots"
+  },
+  {
+   "t": 3213.04,
+   "d": 4.89,
+   "text": "let's just go with the boots boots win"
+  },
+  {
+   "t": 3220.27,
+   "d": 3.7,
+   "text": "all right and that is okay so like do we"
+  },
+  {
+   "t": 3223.97,
+   "d": 3.32,
+   "text": "want to do something to just want like"
+  },
+  {
+   "t": 3227.29,
+   "d": 2.74,
+   "text": "it feels bad to end with the character"
+  },
+  {
+   "t": 3230.03,
+   "d": 2.73,
+   "text": "do you want to drink this let's take the"
+  },
+  {
+   "t": 3232.76,
+   "d": 3.09,
+   "text": "perfect way to end yeah the capstone"
+  },
+  {
+   "t": 3235.85,
+   "d": 3.54,
+   "text": "caves of cut experience lets 326 dreams"
+  },
+  {
+   "t": 3239.39,
+   "d": 7.74,
+   "text": "of long if you drink enough slime you"
+  },
+  {
+   "t": 3247.13,
+   "d": 2.15,
+   "text": "will vomit I believe it goes over East"
+  },
+  {
+   "t": 3249.28,
+   "d": 1.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 3250.42,
+   "d": 2.35,
+   "text": "somewhat should we recap here we're"
+  },
+  {
+   "t": 3252.77,
+   "d": 1.71,
+   "text": "about to drink the sacred slime of a"
+  },
+  {
+   "t": 3254.48,
+   "d": 3.87,
+   "text": "village of light light worshipping slash"
+  },
+  {
+   "t": 3258.35,
+   "d": 5.25,
+   "text": "light laser shooting snap jaws in fish"
+  },
+  {
+   "t": 3263.6,
+   "d": 2.97,
+   "text": "in crocodiles is they put see no one's"
+  },
+  {
+   "t": 3266.57,
+   "d": 2.04,
+   "text": "even watching us so it might actually we"
+  },
+  {
+   "t": 3268.61,
+   "d": 3.93,
+   "text": "might get away with it well if that's"
+  },
+  {
+   "t": 3272.54,
+   "d": 1.32,
+   "text": "the case then we could just pour it all"
+  },
+  {
+   "t": 3273.86,
+   "d": 6.24,
+   "text": "over ourselves okay yes it's"
+  },
+  {
+   "t": 3280.1,
+   "d": 2.01,
+   "text": "disgustingly slimy"
+  },
+  {
+   "t": 3282.11,
+   "d": 3.43,
+   "text": "[Applause]"
+  },
+  {
+   "t": 3285.54,
+   "d": 4.39,
+   "text": "all right and way now we're confused and"
+  },
+  {
+   "t": 3289.93,
+   "d": 6.24,
+   "text": "messed us up we are drunk on Salam yeah"
+  },
+  {
+   "t": 3296.17,
+   "d": 5.64,
+   "text": "that's interesting but oh the way"
+  },
+  {
+   "t": 3301.81,
+   "d": 2.49,
+   "text": "they're with their light manipulation"
+  },
+  {
+   "t": 3304.3,
+   "d": 2.49,
+   "text": "powers yeah it takes em damage"
+  },
+  {
+   "t": 3306.79,
+   "d": 1.8,
+   "text": "you'll notice this names all scrambled"
+  },
+  {
+   "t": 3308.59,
+   "d": 1.77,
+   "text": "that's cuz we're can you were drunk on"
+  },
+  {
+   "t": 3310.36,
+   "d": 2.64,
+   "text": "slime we're being shot out with with"
+  },
+  {
+   "t": 3313.0,
+   "d": 2.55,
+   "text": "mental lasers I'm gonna try to escape"
+  },
+  {
+   "t": 3315.55,
+   "d": 1.62,
+   "text": "the village I don't know where the door"
+  },
+  {
+   "t": 3317.17,
+   "d": 3.09,
+   "text": "is but yes the gas could let us melt the"
+  },
+  {
+   "t": 3320.26,
+   "d": 1.89,
+   "text": "wall and run so maybe you should just"
+  },
+  {
+   "t": 3322.15,
+   "d": 3.62,
+   "text": "hit the gas warden sees us though yeah"
+  },
+  {
+   "t": 3325.77,
+   "d": 3.85,
+   "text": "okay hit the gas and let's see let's see"
+  },
+  {
+   "t": 3329.62,
+   "d": 4.26,
+   "text": "what happens okay okay we're being"
+  },
+  {
+   "t": 3333.88,
+   "d": 2.58,
+   "text": "pelted with lasers and we actually Wow"
+  },
+  {
+   "t": 3336.46,
+   "d": 4.95,
+   "text": "we made so we tried I mean we drank the"
+  },
+  {
+   "t": 3341.41,
+   "d": 1.47,
+   "text": "slime and everything I mean drank the"
+  },
+  {
+   "t": 3342.88,
+   "d": 1.98,
+   "text": "slime and we lived to tell about it he"
+  },
+  {
+   "t": 3344.86,
+   "d": 1.92,
+   "text": "just booked out of that village all"
+  },
+  {
+   "t": 3346.78,
+   "d": 3.5,
+   "text": "right I think I think that's a victory"
+  },
+  {
+   "t": 3350.58,
+   "d": 4.63,
+   "text": "thank you so much for participating in"
+  },
+  {
+   "t": 3355.21,
+   "d": 2.43,
+   "text": "that wipe clean through kids are cut"
+  },
+  {
+   "t": 3357.64,
+   "d": 3.2,
+   "text": "with us thank you"
+  },
+  {
+   "t": 3363.8,
+   "d": 0.25,
+   "text": "[Applause]"
+  },
+  {
+   "t": 3364.05,
+   "d": 3.07,
+   "text": "[Music]"
+  }
+ ]
+}

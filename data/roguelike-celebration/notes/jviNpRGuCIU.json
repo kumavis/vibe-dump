@@ -1,0 +1,238 @@
+{
+  "id": "jviNpRGuCIU",
+  "title": "Josh Ge - How to Make a Roguelike",
+  "speaker": "Josh Ge",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=jviNpRGuCIU",
+  "talk_type": "design",
+  "summary": "Josh Ge (Kyzrati, developer of Cogmind and moderator of r/roguelikedev) gives general advice on starting a roguelike rather than a tutorial. He argues for starting small, prototyping a single fun core mechanic first, and building roguelikes piecemeal by tacking on systems. He surveys 7DRL games as examples of strong core mechanics, recommends Python with libtcod and community resources (the subreddit, its tutorial event, FAQ Fridays, RogueBasin, Roguelike Radio), and argues that a distinctive non-fantasy theme or an existing IP (\"xRL\") is a powerful hook. He closes with long-run tips: release early and often, share progress weekly, keep a blog, and invest in accessibility such as mouse support and tilesets.",
+  "games": [
+    "Cogmind",
+    "Ultima Ratio Regum",
+    "Temple of Torment",
+    "Knight",
+    "Seven Day Band",
+    "Broken Bottle",
+    "Drakefire Chasm",
+    "Golden Krone Hotel",
+    "Polybot-7",
+    "Mage Guild",
+    "Demon",
+    "The Ground Gives Way",
+    "Xenomarine",
+    "NetHack",
+    "Brogue",
+    "MakaiRL",
+    "Skies of Bloody April",
+    "Lone Spelunker",
+    "Armoured Commander",
+    "DoomRL",
+    "AliensRL",
+    "DiabloRL",
+    "XCOMRL",
+    "Jupiter Hell"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "warning",
+      "claim": "First-time roguelike developers who chase every tempting feature instead of beelining for a fun playable core risk years of wasted effort and abandoning the project.",
+      "detail": "Ge pictures development as a dungeon: wandering toward every system you think you need may get you to the goal at great cost, or leave you stuck in a corner, demoralized. Instead make a beeline to a fun playable game with a basic plan, then expand outward.",
+      "t": 83,
+      "quote": "you'll quite possibly develop yourself into a difficult corner then get stuck demoralized and quit what you need to do is make a beeline for your target",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "language choice",
+      "kind": "principle",
+      "claim": "The programming language matters little for making a roguelike; use one you know, and if starting fresh, Python is the easiest recommendation.",
+      "detail": "Ge says language is a means to an end and roguelikes have been made in nearly every language. Python is simple and has many roguelikes (Ultima Ratio Regum, Temple of Torment); C/C++ have resources but he does not recommend them to beginners who want to make a game rather than debug.",
+      "t": 137,
+      "quote": "the short answer is it doesn't really matter a whole lot if you've already got experience with some language then that's great go ahead and use it",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "start small",
+      "kind": "principle",
+      "claim": "Build a small complete roguelike before your dream project, because you learn by going through the whole development process and you're more likely to fail if you aim big right away.",
+      "detail": "The focus of development changes from beginning to end, so Ge recommends going through the entire process once or twice first. Keeping scope small ensures a finished game that can also serve as a stable foundation for later expansion.",
+      "t": 256,
+      "quote": "it's best to go through the entire process at least once or twice before starting larger serious projects keeping your scope small first",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "piecemeal development",
+      "kind": "technique",
+      "claim": "Roguelikes can be built piecemeal because they are a conglomeration of systems that can be added one at a time and iterated with player feedback.",
+      "detail": "Ge notes that a roguelike project as a whole seems daunting, but you can tack systems on when they support the game, then repeatedly expand and iterate. All you need is a plan and perseverance.",
+      "t": 308,
+      "quote": "you can build roguelikes piecemeal they're basically a conglomeration of systems that can be tacked on if you think they'll support the game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "core mechanic",
+      "kind": "principle",
+      "claim": "A roguelike should start from a core mechanic explainable in one sentence, prototyped first with only enough surrounding systems to test whether the minute-to-minute play is fun.",
+      "detail": "Ge asks: what is this game's unique take, and if it only had this mechanic would it be fun? If the repeated minute-to-minute process isn't fun, nothing built on top of it will matter, so the initial proto-game implements only the outer elements needed to bring out the core mechanic.",
+      "t": 350,
+      "quote": "it should be explainable in a single sentence and this is what you want prototype first go straight for the fun",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "principle",
+      "claim": "The Seven Day Roguelike challenge is a good way to prototype and prove a core mechanic, but is better attempted once you have some experience rather than as a first game.",
+      "detail": "Over a hundred 7DRLs appear each year; finishing guarantees some players and feedback. Ge says a deadline helps once you know the technical aspects, and 7DRLs naturally make good, often experimental prototypes to start small and expand after confirming the mechanic works.",
+      "t": 438,
+      "quote": "I wouldn't recommend doing a 70 RL as your first game you don't need that kind of pressure so early",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "momentum movement",
+      "kind": "example",
+      "claim": "The 7DRL Knight builds its whole game around momentum: mounted on a horse, the player can only accelerate, turn or slow down gradually and must plan to line up sword attacks on moving foes.",
+      "detail": "Ge shows the single reachable square each turn, which is where the player ends up next turn, so attacks are made by passing enemies. He uses it as an example of a 7DRL built entirely around one core mechanic.",
+      "t": 492,
+      "quote": "you can only accelerate turn and slow down so quickly meaning that you'll have to plan in order to line up your attacks on moving foes",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "player-authored content",
+      "kind": "example",
+      "claim": "In the 7DRL Seven Day Band the player creates the roguelike while playing, naming unknown enemies and objects and setting their abilities when first encountered or when they start to matter.",
+      "detail": "Ge describes it as occasionally popping a menu asking what a value should be, rather than presenting many menus up front; the name refers to making your own Angband-like.",
+      "t": 537,
+      "quote": "you're faced with unknown enemies and objects and have to set their names and abilities as you encounter them for the first time",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "itemless progression",
+      "kind": "example",
+      "claim": "Drakefire Chasm has no items at all: the player, a young dragon, progresses only by upgrading dragon abilities and eating foes to grow larger.",
+      "detail": "Ge lists it among 7DRLs with clear core mechanics; it still receives occasional updates. He also mentions Golden Krone Hotel's vampire/human forms interacting with dynamic light, which later became a commercial game.",
+      "t": 576,
+      "quote": "there are no items at all you just upgrade your dragon abilities and eat your foes in order to grow larger",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "part-based building",
+      "kind": "example",
+      "claim": "Cogmind's 7DRL proved its core mechanic: a robot builds itself from parts found or taken from other robots, with rampant item destruction forcing frequent rebuilding.",
+      "detail": "Ge says the original 7DRL looked very different from the commercial game, but participating was perfect for proving the core mechanic was fun before it became his full-time project.",
+      "t": 605,
+      "quote": "you're a robot building yourself from scratch using parts found or taken from other robots and there's rampant item destruction so you're forced to rebuild",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "core mechanic change",
+      "kind": "example",
+      "claim": "Polybot-7 shows that changing one core mechanic changes the whole game's feel: unlike Cogmind, nearby parts automatically fly over and attach to the player and can only be removed by being destroyed.",
+      "detail": "Ge originally planned a scaled-down Cogmind for his 2018 7DRL but felt it wasn't worth making without a truly unique hook. Removing player choice over attachments made it play extremely differently.",
+      "t": 660,
+      "quote": "just change the core mechanic and the entire game feeling changed",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "core mechanic",
+      "kind": "example",
+      "claim": "Large roguelikes still revolve around identifiable core mechanics, such as Mage Guild's mix-any-two-items alchemy, and NetHack's is that if something seems like it should be possible, it probably is.",
+      "detail": "Ge also cites Demon (recruiting and training autonomous follower demons), The Ground Gives Way (item-based progression) and Xenomarine (ranged combat and directional facing). A NetHack dev told him NetHack's core mechanic is the do-anything principle, which Ge calls almost an anti-core mechanic.",
+      "t": 718,
+      "quote": "net hax core mechanic is if it seems like it should be possible to do something then you probably can",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "asking for help",
+      "kind": "warning",
+      "claim": "Solo roguelike developers should actively ask the community for help, because others can steer you around your specific pitfalls only if you reach out.",
+      "detail": "Ge says his own early progress was slow because he never reached out. He points to r/roguelikedev, its sidebar of tutorials, its summer code-along following the libtcod tutorial, FAQ Fridays, a Discord, RogueBasin and Roguelike Radio.",
+      "t": 752,
+      "quote": "others can step in with an advice when you need it but you have to ask it took me way too long to learn that",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "libtcod",
+      "kind": "technique",
+      "claim": "libtcod gives a beginner Python roguelike both general game-library features and roguelike-specific heavy lifting such as map generation, field of view and pathfinding, each of which can be replaced later.",
+      "detail": "Ge notes Ultima Ratio Regum and Temple of Torment both began from the game made in the libtcod tutorial; Armoured Commander's developer went from limited programming experience to a finished, press-covered game in a year using it.",
+      "t": 816,
+      "quote": "it also does a lot of the roguelike specific heavy lifting like map generation FOV pathfinding it does a lot of the work for you",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii",
+      "kind": "principle",
+      "claim": "ASCII is a strong asset choice for roguelikes because it makes adding new content easy, and with good foreground and background colour combinations it can look beautiful.",
+      "detail": "Ge flips through ASCII games including Brogue to show the breadth of unique styles. He also suggests tilesets, even as placeholders, both to attract players and because a tile can spark design ideas.",
+      "t": 1025,
+      "quote": "ASCII is wonderful in so many ways and it makes it so easy to add new content",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme",
+      "kind": "principle",
+      "claim": "A unique non-fantasy theme is an underused hook that makes the whole roguelike experience distinctive and naturally generates new mechanics.",
+      "detail": "Ge says there are many fantasy dungeon crawlers; historical and mythological themes offer large bodies of material, and sci-fi is in demand. Examples: MakaiRL (Japanese mythology), Skies of Bloody April (dogfighting), Lone Spelunker; pirates and superheroes are commonly requested but unmet.",
+      "t": 1215,
+      "quote": "having a unique theme normally makes the entire experience unique it also gives you a source from which to readily draw brand-new mechanics",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "definitions",
+      "kind": "principle",
+      "claim": "Developers should not worry whether their game strictly counts as a roguelike; internal consistency with your own plan matters more than genre definitions.",
+      "detail": "Ge says people often fret about whether everyone agrees an idea is a roguelike, but there are as many definitions as players. He jokes the subreddit will keep providing weekly arguments about it.",
+      "t": 1376,
+      "quote": "it doesn't really matter because there are as many definitions as there are players as long as it's internally consistent and follows your own plan",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "existing ip",
+      "kind": "technique",
+      "claim": "Making an \"xRL\" based on an existing IP saves much design effort and brings instant fans, making it a good first project, though litigious IP holders are a risk.",
+      "detail": "Most design questions are already answered, so the developer only adapts the IP to roguelike formulas and can focus on implementation. Examples: DoomRL (renamed DRL after a cease and desist), AliensRL, DiabloRL, and Ge's own XCOMRL; Ge advises against an explicitly Pokemon roguelike.",
+      "t": 1398,
+      "quote": "these are based on existing IPs and save you much of the planning and design effort that goes into making a game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "release early",
+      "kind": "technique",
+      "claim": "Release early and often, post in weekly sharing threads, and keep a public dev blog to get feedback, stay accountable and stay motivated over a long roguelike project.",
+      "detail": "Ge calls release early and often the roguelike dev mantra; Sharing Saturday on r/roguelikedev works as accountability and community even when you got little done. A blog concentrates development info in one public place.",
+      "t": 1515,
+      "quote": "release early and often is the aerobic def mantra is good to quickly get everything into a minimally playable state",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "mouse and tiles",
+      "kind": "principle",
+      "claim": "Accessibility features like documentation, a tutorial, full mouse support and a tileset greatly widen a roguelike's audience, as Cogmind's player stats on mouse and tile usage show, though a first game can be ASCII and keyboard only.",
+      "detail": "Ge says accessibility was traditionally neglected in roguelikes, but Cogmind's stats show heavy mouse and tile use. Some accessibility features should be considered in the design from the very beginning.",
+      "t": 1591,
+      "quote": "nowadays you have an opportunity to reach so many more players if you're willing to put in that effort",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

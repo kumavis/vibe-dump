@@ -1,0 +1,1329 @@
+{
+ "id": "E5-3Ui7oO8U",
+ "url": "https://www.youtube.com/watch?v=E5-3Ui7oO8U",
+ "title": "Kate Compton- Polite Programming Languages: Designing a Generative Language without a PL Degree",
+ "speaker": "Kate Compton",
+ "talk_title": "Polite Programming Languages: Designing a Generative Language without a PL Degree",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1814,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nDr Kate Compton (galaxykate) is a long-time generative artist, inventor, and programmer.  She wrote the first paper on procedural platformer levels, generated the planets for Spore, created the language Tracery, and invented an early phone-based AR system. She currently works as an open-source researcher developing the next directions for Tracery and creative chatbots. Her mission is to design artificial intelligence to augment human creativity, and to create tools that brings AI into the hands of poets, artists, kids, and weirdos.\n\nTracery has been a favorite tool in the Roguelike and generative communities, but it's mostly used for generating text strings.  What if the same principles used to make Tracery were applied to a language for finite state machines? In this talk, Kate describes the common features that her languages share. She also demos an AI agent developed with Nordic ambient musicians as part of their LARP/album, and what it takes to make an agent that can be scripted by musicians and not programmers.\n\nFind her on Twitter: https://twitter.com/galaxykate\nLink to Kate's slides: https://docs.google.com/presentation/d/1JR3i82kJSRT1VsAcKcjJ86OULMTu2QVysixsJ99N1NM/edit\n^ Including where you can print your very own Certificate from Dr. Galaxy Kate!\nTracery: http://www.tracery.io/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 209,
+   "title": "Unlocking the Clubhouse"
+  },
+  {
+   "start": 319,
+   "title": "The Weirdest Programming Languages"
+  },
+  {
+   "start": 444,
+   "title": "Domain Specific Language Making"
+  },
+  {
+   "start": 639,
+   "title": "What Is What Is a Programming Language"
+  },
+  {
+   "start": 734,
+   "title": "Graphical Programming Languages"
+  },
+  {
+   "start": 746,
+   "title": "Scratch"
+  },
+  {
+   "start": 768,
+   "title": "A Parser"
+  },
+  {
+   "start": 1116,
+   "title": "Languages Have Formal Properties"
+  },
+  {
+   "start": 1169,
+   "title": "The Counting Completeness Theorem"
+  },
+  {
+   "start": 1217,
+   "title": "Properties of Polite Ecosystems"
+  },
+  {
+   "start": 1233,
+   "title": "Scaffolding"
+  },
+  {
+   "start": 1265,
+   "title": "Structure Editors"
+  },
+  {
+   "start": 1442,
+   "title": "Journey to Modularity"
+  },
+  {
+   "start": 1495,
+   "title": "Railroad Diagrams"
+  },
+  {
+   "start": 1527,
+   "title": "Specification-Based Parser"
+  },
+  {
+   "start": 1590,
+   "title": "Artbot Club"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4054,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 11.45,
+   "d": 7.79,
+   "text": "Moving along. Our next talk is from probably a familiar face. It is Dr. Kate Compton AKA"
+  },
+  {
+   "t": 19.24,
+   "d": 7.45,
+   "text": "galaxy Kate. KATE COMPTON: My shirt has cats on it."
+  },
+  {
+   "t": 26.69,
+   "d": 8.86,
+   "text": "EMCEE: I would normally yell let's see the Cat but we can see this. Long time inventor"
+  },
+  {
+   "t": 35.55,
+   "d": 5.98,
+   "text": "and programming and artist. She wrote the first paper on procedural platforms levels,"
+  },
+  {
+   "t": 41.53,
+   "d": 4.27,
+   "text": "generateded the plan for spore and created the language tracery and invented an early"
+  },
+  {
+   "t": 45.8,
+   "d": 9.81,
+   "text": "phone base AR system and currently works as an Open Source researcher. Her mission is"
+  },
+  {
+   "t": 55.61,
+   "d": 5.06,
+   "text": "to design artificial intelligence to augment human creativity and create tools that bring"
+  },
+  {
+   "t": 60.67,
+   "d": 5.13,
+   "text": "AI into the hands of poets, artists, kids and weirdoes which I think is so in line with"
+  },
+  {
+   "t": 65.8,
+   "d": 9.17,
+   "text": "what Roguelike Celebration is all about. Cannot wait for you to share this talk with us."
+  },
+  {
+   "t": 74.97,
+   "d": 11.75,
+   "text": "KATE COMPTON: Today -- if you like the slides for this, there are a lot of cat pictures"
+  },
+  {
+   "t": 86.72,
+   "d": 1.6,
+   "text": "-- EMCEE: We don't have slide yet."
+  },
+  {
+   "t": 88.32,
+   "d": 7.17,
+   "text": "KATE COMPTON: Sharing the screen is important. EMCEE: It is important to share the screen."
+  },
+  {
+   "t": 95.49,
+   "d": 5.71,
+   "text": "We like sharing here. There you go. There is a kitten. Take it away."
+  },
+  {
+   "t": 101.2,
+   "d": 6.86,
+   "text": "KATE COMPTON: There is a kitten and a tiny URL and I would like to call out a thanks"
+  },
+  {
+   "t": 108.06,
+   "d": 5.19,
+   "text": "for the center for research and Open Source software which funded me for the last year"
+  },
+  {
+   "t": 113.25,
+   "d": 5.86,
+   "text": "and a half on the stuff I will be presenting today or the second half of the stuff I will"
+  },
+  {
+   "t": 119.11,
+   "d": 6.92,
+   "text": "present today. The first half is about programming languages in general. I am Kate Compton. I"
+  },
+  {
+   "t": 126.03,
+   "d": 16.46,
+   "text": "made the planets on Spore and tracery.js which runs a bunch of Twitter bots and stuff at"
+  },
+  {
+   "t": 142.49,
+   "d": 6.95,
+   "text": "this conference. I do a lot of outreach and creative computing. If this were a normal"
+  },
+  {
+   "t": 149.44,
+   "d": 7.14,
+   "text": "conference I would have a bunch of stickers and shoving them at people. And I recently"
+  },
+  {
+   "t": 156.58,
+   "d": 9.27,
+   "text": "got my PhD from UC Santa Cruz and actually the bio I gave Alexei is slightly out of date."
+  },
+  {
+   "t": 165.85,
+   "d": 4.8,
+   "text": "I am now an assistant professor of instruction at northwestern university where I am going"
+  },
+  {
+   "t": 170.65,
+   "d": 4.53,
+   "text": "to teach a lot of students how to make weird generative things and they are not going to"
+  },
+  {
+   "t": 175.18,
+   "d": 6.6,
+   "text": "know that's weird. I know there are a couple of them in the audience so hi. There is my"
+  },
+  {
+   "t": 181.78,
+   "d": 6.7,
+   "text": "website and GitHub if you want to folk around in those. Kind of my Speciality is I have"
+  },
+  {
+   "t": 188.48,
+   "d": 4.46,
+   "text": "been thinking about this a lot. I have a motto. I think everybody should have a motto and"
+  },
+  {
+   "t": 192.94,
+   "d": 6.19,
+   "text": "I have workshoped mine and it is bringing AI to the people that AI doesn't deserve which"
+  },
+  {
+   "t": 199.13,
+   "d": 6.61,
+   "text": "is very important to me. One thing about it is I am not bringing people to AI. I am not"
+  },
+  {
+   "t": 205.74,
+   "d": 5.58,
+   "text": "demanding people come and learn AI. There is a book called unlocking the club house"
+  },
+  {
+   "t": 211.32,
+   "d": 5.28,
+   "text": "which is all about how computer science has often locked people out. That suggests that"
+  },
+  {
+   "t": 216.6,
+   "d": 4.17,
+   "text": "the right thing to do unlock the club house and bring everybody in but a lot of people"
+  },
+  {
+   "t": 220.77,
+   "d": 5.8,
+   "text": "are actually perfectly happy where they are so I am trying to progress the takeout model"
+  },
+  {
+   "t": 226.57,
+   "d": 5.14,
+   "text": "of AI and computer science where people come to AI and computer science, grab what they"
+  },
+  {
+   "t": 231.71,
+   "d": 5.59,
+   "text": "want and go back to their daily lives. And people that AI doesn't deserve, I just think"
+  },
+  {
+   "t": 237.3,
+   "d": 4.66,
+   "text": "that people are awesome and AI is somewhat a bit of a trash field so really trying to"
+  },
+  {
+   "t": 241.96,
+   "d": 5.88,
+   "text": "do that work. My Speciality seems like figuring out the 95% of the fun you can do with only"
+  },
+  {
+   "t": 247.84,
+   "d": 5.32,
+   "text": "5% of the required knowledge. Knowledge is fractle and there is too much of it to learn."
+  },
+  {
+   "t": 253.16,
+   "d": 6.95,
+   "text": "If you can get a lot of fun without taking seven years of a PhD that's pretty good. I"
+  },
+  {
+   "t": 260.11,
+   "d": 6.11,
+   "text": "have given lots of talks on things like how to do practical low effort PCG. I was at the"
+  },
+  {
+   "t": 266.22,
+   "d": 5.47,
+   "text": "Roguelike Celebration four years ago and was like how do you do a lot of setup stuff without"
+  },
+  {
+   "t": 271.69,
+   "d": 12.76,
+   "text": "trying too hard? How do you do triple A content generation? I did a talk on muppets and ballroom"
+  },
+  {
+   "t": 284.45,
+   "d": 6.34,
+   "text": "dance and I know this much about muppets and this much about ballroom dance. I gave a talk"
+  },
+  {
+   "t": 290.79,
+   "d": 9.13,
+   "text": "on Thursday about sociology and how hanging out online is making us become more creative"
+  },
+  {
+   "t": 299.92,
+   "d": 8.56,
+   "text": "together. My talk today is about to get you to 95% of the fun programming languages with"
+  },
+  {
+   "t": 308.48,
+   "d": 8.53,
+   "text": "only 5% of the knowledge. These are super weird programming languages people have come"
+  },
+  {
+   "t": 317.01,
+   "d": 6.57,
+   "text": "up with. If you Google what are the weirdest programming languages there are a lot of stuffy"
+  },
+  {
+   "t": 323.58,
+   "d": 10.51,
+   "text": "one. There is cat speak one and one that is programmed entirely in colored pixels. One"
+  },
+  {
+   "t": 334.09,
+   "d": 6.66,
+   "text": "that is just different amounts of the word chicken. And there is things like if you want"
+  },
+  {
+   "t": 340.75,
+   "d": 7.8,
+   "text": "to really see somebody at the top of their game, Martin Clapet gave a wonderful talk"
+  },
+  {
+   "t": 348.55,
+   "d": 11.88,
+   "text": "at JS Conf Iceland a few years ago. Those are symmetrical programs and he talks about"
+  },
+  {
+   "t": 360.43,
+   "d": 7.12,
+   "text": "how he made them. There are a lot of languages you have been exposed to and why would you"
+  },
+  {
+   "t": 367.55,
+   "d": 13.75,
+   "text": "write more? We have Java, JavaScript, C++ and you write a four loop and does the world"
+  },
+  {
+   "t": 381.3,
+   "d": 8.16,
+   "text": "really need another four loop? The nice thing about programming languages is not all of"
+  },
+  {
+   "t": 389.46,
+   "d": 5.39,
+   "text": "them have to have four loops. Languages don't have to all be trying to do the same thing."
+  },
+  {
+   "t": 394.85,
+   "d": 5.69,
+   "text": "On the right is an example of a program and you can argue about whether or not this was"
+  },
+  {
+   "t": 400.54,
+   "d": 5.61,
+   "text": "a program. The gist of this talk is this is a program and this is a program -- I can't"
+  },
+  {
+   "t": 406.15,
+   "d": 8.49,
+   "text": "read this but I think this is a program for some amount of sims hacking. It turns out"
+  },
+  {
+   "t": 414.64,
+   "d": 6.51,
+   "text": "the Sims had a bunch of their UI and a bunch of their AI stored in external files or files"
+  },
+  {
+   "t": 421.15,
+   "d": 5.6,
+   "text": "you could get access to. Even from the Sims 1 people were able to take these programs,"
+  },
+  {
+   "t": 426.75,
+   "d": 7.96,
+   "text": "which they were, hack them, edit the programs and reupload theme the Sims. This got people"
+  },
+  {
+   "t": 434.71,
+   "d": 5.98,
+   "text": "hacking tiny programlets which was great because otherwise -- especially back in 2000 it was"
+  },
+  {
+   "t": 440.69,
+   "d": 7.84,
+   "text": "very difficult to edit a program on the fly. Domain specific language making, the point"
+  },
+  {
+   "t": 448.53,
+   "d": 4.76,
+   "text": "there is you can do languages to make four loops but you can also just make a language"
+  },
+  {
+   "t": 453.29,
+   "d": 7.82,
+   "text": "that expresses how Sims object work. The Sim language object had a whole thing about what"
+  },
+  {
+   "t": 461.11,
+   "d": 5.05,
+   "text": "it was advertising versus what it would provide. There was a cigarette table somebody made"
+  },
+  {
+   "t": 466.16,
+   "d": 4.03,
+   "text": "that would advertise to you that it would make you less lonely but it didn't actually"
+  },
+  {
+   "t": 470.19,
+   "d": 7.49,
+   "text": "do it. People would go smoke forever at the cigarette table. But domain specific language"
+  },
+  {
+   "t": 477.68,
+   "d": 5.51,
+   "text": "making is kind of addictive. I have made or ammaking tracery, tracery 2. Chancery which"
+  },
+  {
+   "t": 483.19,
+   "d": 8.94,
+   "text": "is fairly well developed in greenery which is mostly a glimmer in my eye and speculative"
+  },
+  {
+   "t": 492.13,
+   "d": 6.39,
+   "text": "syntax stuff. All these languages are a way to think deeply about a subject. When I I"
+  },
+  {
+   "t": 498.52,
+   "d": 5.87,
+   "text": "am working on greenery I am thinking about what is an idle game and what word do I need"
+  },
+  {
+   "t": 504.39,
+   "d": 8.1,
+   "text": "to represent and what are the unit operations of an idle game or a Roguelike that I can't"
+  },
+  {
+   "t": 512.49,
+   "d": 7.6,
+   "text": "express in Python? Like what are the things that should be first-class words in my language?"
+  },
+  {
+   "t": 520.09,
+   "d": 4.46,
+   "text": "These are all under instruction because every time where get close to finishing a language"
+  },
+  {
+   "t": 524.55,
+   "d": 6.91,
+   "text": "I start a new language. You may already be writing a programming language. If you have"
+  },
+  {
+   "t": 531.46,
+   "d": 9.86,
+   "text": "written Roguelikes you have probably written the following things. If a computer uses a"
+  },
+  {
+   "t": 541.32,
+   "d": 4.62,
+   "text": "file to control program flow that file is a programming language. If you have come up"
+  },
+  {
+   "t": 545.94,
+   "d": 5.87,
+   "text": "with your own weird safe file format you have constructed a programming language. It might"
+  },
+  {
+   "t": 551.81,
+   "d": 5.68,
+   "text": "be a special programming language that only represents things in your weird game like"
+  },
+  {
+   "t": 557.49,
+   "d": 5.38,
+   "text": "this is a programming language with the first class function for the number of eggs you"
+  },
+  {
+   "t": 562.87,
+   "d": 8.05,
+   "text": "have or certain macros that make things easier but that programming language is a meditation"
+  },
+  {
+   "t": 570.92,
+   "d": 8.28,
+   "text": "on what your game needs and what your game is about. So you have decided to make a programming"
+  },
+  {
+   "t": 579.2,
+   "d": 5.86,
+   "text": "language or realize you are making one. The sensible person would ask a trained programming"
+  },
+  {
+   "t": 585.06,
+   "d": 7.27,
+   "text": "language person. I tried this. They are nase nice people and mostly talk to other experts."
+  },
+  {
+   "t": 592.33,
+   "d": 6.5,
+   "text": "When you say I am working on a programming language what should I do? They will info"
+  },
+  {
+   "t": 598.83,
+   "d": 4.24,
+   "text": "dump on you with a lot of terms that don't actually represent the hard thing you are"
+  },
+  {
+   "t": 603.07,
+   "d": 5.99,
+   "text": "dealing with. This talk is really a delataunt teaches delataunts about programming languages."
+  },
+  {
+   "t": 609.06,
+   "d": 10.77,
+   "text": "It is hard to find non-ableist word for people who have a lot of other stuff going on but"
+  },
+  {
+   "t": 619.83,
+   "d": 5.38,
+   "text": "you still want to talk about a programming language. Welcome to the five minute very"
+  },
+  {
+   "t": 625.21,
+   "d": 11.72,
+   "text": "raw certificate course. By the end of this you will have your very own certificate. What's"
+  },
+  {
+   "t": 636.93,
+   "d": 9.46,
+   "text": "in a language? What is a programming language? If I say JavaScript what is that? There are"
+  },
+  {
+   "t": 646.39,
+   "d": 3.92,
+   "text": "things like programs. You have programs in this language. It is code although we can"
+  },
+  {
+   "t": 650.31,
+   "d": 4.83,
+   "text": "talk about what code is and we all know what code looks like. It looks like that except"
+  },
+  {
+   "t": 655.14,
+   "d": 6.27,
+   "text": "a lot of times it looks like this. This is JavaScript from the U.S. tracery. It can also"
+  },
+  {
+   "t": 661.41,
+   "d": 4.86,
+   "text": "look like this. This is actually a tracery program or what we would call a grammar. This"
+  },
+  {
+   "t": 666.27,
+   "d": 4.56,
+   "text": "is a program. It is not what's called a turing complete program for a turing complete programming"
+  },
+  {
+   "t": 670.83,
+   "d": 5.74,
+   "text": "language but it controls the computer in some ways so it the program. More specifically"
+  },
+  {
+   "t": 676.57,
+   "d": 3.48,
+   "text": "it is the kind of program that controls how things are expanded which is what I want a"
+  },
+  {
+   "t": 680.05,
+   "d": 9.06,
+   "text": "tracer to do. Here is a program. This is the HTML for the Roguelike celebration. HTML is"
+  },
+  {
+   "t": 689.11,
+   "d": 6.37,
+   "text": "also a program. It is technically turing complete but nobody cares. It is still a programming"
+  },
+  {
+   "t": 695.48,
+   "d": 6.96,
+   "text": "language. I would normally ask you to raise your hand if you recognize this. This is star"
+  },
+  {
+   "t": 702.44,
+   "d": 9.9,
+   "text": "view value configuration files. This is how you get custom content in your star view value."
+  },
+  {
+   "t": 712.34,
+   "d": 8.09,
+   "text": "These are also programs. And sometimes it can be XML, JSON, or custom weird text formats"
+  },
+  {
+   "t": 720.43,
+   "d": 12.15,
+   "text": "or they could even be binary code. There are things like Alan Key's grail and Max MSP and"
+  },
+  {
+   "t": 732.58,
+   "d": 7.95,
+   "text": "twine. These are also graphical or visual programming languages. These have been going"
+  },
+  {
+   "t": 740.53,
+   "d": 6.88,
+   "text": "on since I believe 1968. You can write programs in these weird formats. You may have played"
+  },
+  {
+   "t": 747.41,
+   "d": 5.82,
+   "text": "with Scratch which was another visual programming language. When you go to save these, some"
+  },
+  {
+   "t": 753.23,
+   "d": 9.09,
+   "text": "you can't download from the original program and if you download it looks like the thing"
+  },
+  {
+   "t": 762.32,
+   "d": 17.06,
+   "text": "on the back and it is meaningless garble. A parser is another one. It will chalk that"
+  },
+  {
+   "t": 779.38,
+   "d": 8.58,
+   "text": "up and turn it into basically a tree of structure. This is very similar to like having a sentence"
+  },
+  {
+   "t": 787.96,
+   "d": 7.67,
+   "text": "diagram. And you often have to deal with trees of nested syntax. Like the lower line X plus"
+  },
+  {
+   "t": 795.63,
+   "d": 6.7,
+   "text": "F hashtag test foois a nested tracery syntax that I am currently dealing with having to"
+  },
+  {
+   "t": 802.33,
+   "d": 8.36,
+   "text": "parse that and turn that into a tree. It is like an expression with a string inside which"
+  },
+  {
+   "t": 810.69,
+   "d": 6.23,
+   "text": "contains some hashtag syntax for tracery which contains another expression. There are things"
+  },
+  {
+   "t": 816.92,
+   "d": 5.92,
+   "text": "like compilers and interpreterss and these turn the parse tree into something else. What"
+  },
+  {
+   "t": 822.84,
+   "d": 6.03,
+   "text": "else we don't know. It might be another language or something digestible or runable by a lower"
+  },
+  {
+   "t": 828.87,
+   "d": 4.52,
+   "text": "level system. You might have thing like you can run all these new programs in your web"
+  },
+  {
+   "t": 833.39,
+   "d": 6.26,
+   "text": "browser. Something called enscripten takes these older programs and translates them into"
+  },
+  {
+   "t": 839.65,
+   "d": 9.45,
+   "text": "what is you JavaScript and you can run it in the browser. I forget if that is a compiler"
+  },
+  {
+   "t": 849.1,
+   "d": 7.47,
+   "text": "or what but we are taking code and digesting it. And engine. You need to do the thing."
+  },
+  {
+   "t": 856.57,
+   "d": 8.63,
+   "text": "Flash player has an engine. If you have a web page each major browser has a possibly"
+  },
+  {
+   "t": 865.2,
+   "d": 6.18,
+   "text": "couple engines it uses for rendering. V8 is what Chrome uses to render JavaScript and"
+  },
+  {
+   "t": 871.38,
+   "d": 7.45,
+   "text": "it is considered very good. You will have an IDE which isn't considered part of the"
+  },
+  {
+   "t": 878.83,
+   "d": 3.42,
+   "text": "language but this is where people write the program. You can have things like processing"
+  },
+  {
+   "t": 882.25,
+   "d": 5.84,
+   "text": "where people are writing the program in the same place they run the program. This is an"
+  },
+  {
+   "t": 888.09,
+   "d": 8.64,
+   "text": "IDE and engine alltogether. Often IDEs have a bunch of cool functions. They have linting"
+  },
+  {
+   "t": 896.73,
+   "d": 6.6,
+   "text": "which is like checking for errors dynamically, autocompletion, code coloring, modern IDs"
+  },
+  {
+   "t": 903.33,
+   "d": 5.38,
+   "text": "may have things like if you rename a variable it will go through the code and rename the"
+  },
+  {
+   "t": 908.71,
+   "d": 8.16,
+   "text": "variables out or more. There are a bunch of other cool things IDEs do we don't notice."
+  },
+  {
+   "t": 916.87,
+   "d": 7.5,
+   "text": "Things like social sharing. Cat Manning, I have been teaching her coding on glitch and"
+  },
+  {
+   "t": 924.37,
+   "d": 5.63,
+   "text": "we are having a lot of fun but this is an IDE we can edit the code at the same time"
+  },
+  {
+   "t": 930.0,
+   "d": 8.76,
+   "text": "and share the code and look at other people's code. GitHub is an IDE speak of fight me."
+  },
+  {
+   "t": 938.76,
+   "d": 9.76,
+   "text": "We deal with the Unicode standard commonly. This is a specification of what emoji are"
+  },
+  {
+   "t": 948.52,
+   "d": 9.28,
+   "text": "there and how do we construct new emojis out of old emojis. There are talks about getting"
+  },
+  {
+   "t": 957.8,
+   "d": 5.49,
+   "text": "a dumpling emoji into the process. How do you find the room with the guys on the right"
+  },
+  {
+   "t": 963.29,
+   "d": 5.88,
+   "text": "and tell them yes, we need a dumpling emoji. And tools. You can host tools anywhere. They"
+  },
+  {
+   "t": 969.17,
+   "d": 7.42,
+   "text": "might be code, might not be, might be tutorials. There are APIs. There are tool integrations."
+  },
+  {
+   "t": 976.59,
+   "d": 10.66,
+   "text": "So the bottom right is a spreadsheet bot I created on art.club and it loads a Google"
+  },
+  {
+   "t": 987.25,
+   "d": 7.34,
+   "text": "spreadsheet from a JSON end point and slurps that up into my website and parses it out"
+  },
+  {
+   "t": 994.59,
+   "d": 10.08,
+   "text": "and uses that to create the grammar. Here is the stuff in a language. Depending on your"
+  },
+  {
+   "t": 1004.67,
+   "d": 10.8,
+   "text": "language different parts might fall into different parts and different programs. If we are talking"
+  },
+  {
+   "t": 1015.47,
+   "d": 7.93,
+   "text": "about HTML, I might edit and it might be a text editor. The specification is controlled"
+  },
+  {
+   "t": 1023.4,
+   "d": 8.25,
+   "text": "by the W3C and my engine and parser and compiler are all in Chrome. There might also be other"
+  },
+  {
+   "t": 1031.65,
+   "d": 5.89,
+   "text": "parts of this ecosystem. I might edit things in dream weaver which compiles whatever the"
+  },
+  {
+   "t": 1037.54,
+   "d": 7.86,
+   "text": "dream weaver format into an HTML page and my engine might be new at this. I might feed"
+  },
+  {
+   "t": 1045.4,
+   "d": 7.03,
+   "text": "them into neo pets web page. Things like processing you have specifications. Controlled by processing"
+  },
+  {
+   "t": 1052.43,
+   "d": 4.57,
+   "text": "and the processing IDE and the processing engine. This is all controlled by one group"
+  },
+  {
+   "t": 1057.0,
+   "d": 5.57,
+   "text": "even though they are open standards and things like regular expressions which are a very"
+  },
+  {
+   "t": 1062.57,
+   "d": 6.21,
+   "text": "small language. Sorry, I am running behind so I am going to scoot through this fast."
+  },
+  {
+   "t": 1068.78,
+   "d": 3.39,
+   "text": "Yeah. Like there are different places that regular expressions are and in fact because"
+  },
+  {
+   "t": 1072.17,
+   "d": 4.96,
+   "text": "regular expressions are so common people have made engines in every other language. Every"
+  },
+  {
+   "t": 1077.13,
+   "d": 9.21,
+   "text": "other language embeds a tiny engine for regular expressions. What's a language? There is a"
+  },
+  {
+   "t": 1086.34,
+   "d": 5.62,
+   "text": "bunch of stuff. Who is in control of this? Maybe the original source author, corporations,"
+  },
+  {
+   "t": 1091.96,
+   "d": 10.07,
+   "text": "volunteers, it is made out of a bunch of stuff because it is an ecosystem of connected components."
+  },
+  {
+   "t": 1102.03,
+   "d": 9.55,
+   "text": "A language is all this stuff. You have had my five minute raw certificate course. Now"
+  },
+  {
+   "t": 1111.58,
+   "d": 8.21,
+   "text": "we will talk about how to make all that polite. Languages have formal properties. This is"
+  },
+  {
+   "t": 1119.79,
+   "d": 4.83,
+   "text": "something if you ask a programming language person they will get excited to tell you the"
+  },
+  {
+   "t": 1124.62,
+   "d": 6.2,
+   "text": "formal properties of languages. Most of it is important but it is not important so much"
+  },
+  {
+   "t": 1130.82,
+   "d": 5.37,
+   "text": "we do it now. They have a lot of informal properties like is this a good language? Do"
+  },
+  {
+   "t": 1136.19,
+   "d": 4.74,
+   "text": "I like this language? Does this language play well with others? It is hard to prove things"
+  },
+  {
+   "t": 1140.93,
+   "d": 5.29,
+   "text": "about that. Things you might want to say are like this language is easy to write. I remember"
+  },
+  {
+   "t": 1146.22,
+   "d": 6.35,
+   "text": "what my program does after I have written it. I can use the language in strange places."
+  },
+  {
+   "t": 1152.57,
+   "d": 6.82,
+   "text": "If you learn Lua it was originally made for Brazilian power plants but it is also in roadblocks"
+  },
+  {
+   "t": 1159.39,
+   "d": 5.36,
+   "text": "so you can use it in a lot of places. This language can run on my machine. That may seem"
+  },
+  {
+   "t": 1164.75,
+   "d": 9.15,
+   "text": "obvious but if you only have a bad cellphone that may not be true. Here is the Compton"
+  },
+  {
+   "t": 1173.9,
+   "d": 4.97,
+   "text": "completeness theory. You can construct in an hour using device"
+  },
+  {
+   "t": 1178.87,
+   "d": 9.51,
+   "text": "you had on hand and connect oo a platform with meaning. Tracery is not complete. However,"
+  },
+  {
+   "t": 1188.38,
+   "d": 7.6,
+   "text": "tracery with artbot.club or the spiral editor and with Twitter and with cheap bots done"
+  },
+  {
+   "t": 1195.98,
+   "d": 8.41,
+   "text": "quick all those help complete the ecosystem. There are programming languages and the way"
+  },
+  {
+   "t": 1204.39,
+   "d": 8.52,
+   "text": "we write programs. We always have to consider the environment. Yeah, a programming language"
+  },
+  {
+   "t": 1212.91,
+   "d": 4.28,
+   "text": "and importantly its ecosystem can be more or less polite. I am going to quickly tell"
+  },
+  {
+   "t": 1217.19,
+   "d": 6.66,
+   "text": "you a couple properties of polite ecosystems and things to get you toward Compton completeness"
+  },
+  {
+   "t": 1223.85,
+   "d": 6.19,
+   "text": "or to have the language people pick up. The first one is and there is lots more about"
+  },
+  {
+   "t": 1230.04,
+   "d": 4.42,
+   "text": "this in my dissertation if you like to read lots of stuff. The first one is scaffolding."
+  },
+  {
+   "t": 1234.46,
+   "d": 6.33,
+   "text": "What does mean to have a scaffolding language? Often if you start a language you might open"
+  },
+  {
+   "t": 1240.79,
+   "d": 8.25,
+   "text": "up, say, the vy editor and nothing is telling you what to do. You don't know what you are"
+  },
+  {
+   "t": 1249.04,
+   "d": 7.41,
+   "text": "supposed to do or if you are doing something wrong. Scaffolding can be showing you all"
+  },
+  {
+   "t": 1256.45,
+   "d": 5.24,
+   "text": "of the parts and code completion or code coloring. You have typed a line and it auto indents"
+  },
+  {
+   "t": 1261.69,
+   "d": 6.07,
+   "text": "so you know that line was actually right. There are things called structure editors"
+  },
+  {
+   "t": 1267.76,
+   "d": 4.61,
+   "text": "which are really interesting and these are things that are so scaffolded like scratch"
+  },
+  {
+   "t": 1272.37,
+   "d": 5.58,
+   "text": "that you literally can't get an error. You cannot in fact make a scratch that doesn't"
+  },
+  {
+   "t": 1277.95,
+   "d": 5.19,
+   "text": "compile because not only do you only have access to the pieces that will work those"
+  },
+  {
+   "t": 1283.14,
+   "d": 4.48,
+   "text": "only snap together in ways that will work so it is a really great entry level for people"
+  },
+  {
+   "t": 1287.62,
+   "d": 3.71,
+   "text": "who don't want to deal with errors right now. Maybe scratch programmers will deal with errors"
+  },
+  {
+   "t": 1291.33,
+   "d": 6.63,
+   "text": "later. That's not the problem now. They will make princess elsa do a cool snowflake thing."
+  },
+  {
+   "t": 1297.96,
+   "d": 7.6,
+   "text": "Tracery. I have made a bunch of tracery editors but I also want to move on to unfoldables."
+  },
+  {
+   "t": 1305.56,
+   "d": 8.96,
+   "text": "An unfoldable language you might recognize as in HTML you can type plaintext and say"
+  },
+  {
+   "t": 1314.52,
+   "d": 10.55,
+   "text": "this is my web page or bold web href page. If you imagine each unfolding takes 5 minutes"
+  },
+  {
+   "t": 1325.07,
+   "d": 5.3,
+   "text": "to learn or years to learn. By the time you get to the one at the bottom you might be"
+  },
+  {
+   "t": 1330.37,
+   "d": 17.25,
+   "text": "getting fairly involved with HTML. Tracery works like this where"
+  },
+  {
+   "t": 1347.62,
+   "d": 7.59,
+   "text": "a lot of people write hash tags but I am getting complicated syntax. This is how you see in"
+  },
+  {
+   "t": 1355.21,
+   "d": 8.46,
+   "text": "a lot of idle games. Caves of Qud is not currently very unfolded. Little languages can squish"
+  },
+  {
+   "t": 1363.67,
+   "d": 25.2,
+   "text": "in anywhere. If you have a spot this language can squeak in there. We have used the base"
+  },
+  {
+   "t": 1388.87,
+   "d": 12.68,
+   "text": "version of tracery as a thing students can learn to port to C which is an awful language"
+  },
+  {
+   "t": 1401.55,
+   "d": 12.73,
+   "text": "as an introduction assignment. Can you call it asynchronously? Can you run user provided"
+  },
+  {
+   "t": 1414.28,
+   "d": 7.07,
+   "text": "code safely? Tracery is mostly safe. Cheap bots done quick relies on that. This is something"
+  },
+  {
+   "t": 1421.35,
+   "d": 8.23,
+   "text": "someone made where SVG code and if you have a bot you can get it to load exciting stuff"
+  },
+  {
+   "t": 1429.58,
+   "d": 19.5,
+   "text": "from the internet. I want to go over tracery journey to modularity in the last 10 minutes."
+  },
+  {
+   "t": 1449.08,
+   "d": 8.95,
+   "text": "It starts off on JavaScript and moved to a section of tracery that parsed stuff. It parsed"
+  },
+  {
+   "t": 1458.03,
+   "d": 8.23,
+   "text": "the syntax. The code was a JSON file which was great. I gave a talk on how much I liked"
+  },
+  {
+   "t": 1466.26,
+   "d": 4.24,
+   "text": "JSON. I broke things out into an engine. George buckingham could use it to make cheap bots"
+  },
+  {
+   "t": 1470.5,
+   "d": 9.18,
+   "text": "done quick. You run the tracery grammar and get grammar stuff. I made a bunch of tools."
+  },
+  {
+   "t": 1479.68,
+   "d": 7.38,
+   "text": "Some needed a compiling step and some didn't. Most of those were never that useful but I"
+  },
+  {
+   "t": 1487.06,
+   "d": 5.13,
+   "text": "got good papers published out of them. I did a whole bunch more parsing and I wrote these"
+  },
+  {
+   "t": 1492.19,
+   "d": 3.52,
+   "text": "things at the bottom which are called and I don't know if you can see my mouse but these"
+  },
+  {
+   "t": 1495.71,
+   "d": 6.27,
+   "text": "are called railroad diagrams and they are ways to explicitly model what your program"
+  },
+  {
+   "t": 1501.98,
+   "d": 9.26,
+   "text": "syntax is. This is like getting towards a tracery specification and completely not done"
+  },
+  {
+   "t": 1511.24,
+   "d": 4.67,
+   "text": "that because I keep iterating on the overly complicated diagrams. I did a bunch of cool"
+  },
+  {
+   "t": 1515.91,
+   "d": 7.83,
+   "text": "parsing up in this corner. I did cool compiler visualizations of when the tracery grammar"
+  },
+  {
+   "t": 1523.74,
+   "d": 6.21,
+   "text": "is compiling and running and this is what's going on. I tried to write the parser and"
+  },
+  {
+   "t": 1529.95,
+   "d": 7.86,
+   "text": "that took a long time but you can feed it in what your tracery like language is. Why"
+  },
+  {
+   "t": 1537.81,
+   "d": 7.71,
+   "text": "should I write a tool for tracer which I could write a tool for all theoretical tracer like"
+  },
+  {
+   "t": 1545.52,
+   "d": 11.51,
+   "text": "languages. This outputs generative data. Generating programs in a recently generated language"
+  },
+  {
+   "t": 1557.03,
+   "d": 8.58,
+   "text": "which I can automatically create an editor for. This was way overly complicated and probably"
+  },
+  {
+   "t": 1565.61,
+   "d": 6.66,
+   "text": "not that useful until I changed directions after this. Then I deducted a bunch more parsing"
+  },
+  {
+   "t": 1572.27,
+   "d": 6.03,
+   "text": "and some more parsing and really, I just did too much parsing because parsing visualizations"
+  },
+  {
+   "t": 1578.3,
+   "d": 5.43,
+   "text": "are really -- like I have gotten to a place where I am happy and need to start writing"
+  },
+  {
+   "t": 1583.73,
+   "d": 8.23,
+   "text": "more parsers. You can combine all these things into one web page. These are art bot club"
+  },
+  {
+   "t": 1591.96,
+   "d": 5.98,
+   "text": "which is the tight -- site I am working on to make a nice non-Twitter hosting place for"
+  },
+  {
+   "t": 1597.94,
+   "d": 15.86,
+   "text": "bots. I have my parser in the middle and an IDE on either side. It has browsing tools"
+  },
+  {
+   "t": 1613.8,
+   "d": 4.25,
+   "text": "so you can browse other's people stuff and edit examples. It has a lot of pretty cool"
+  },
+  {
+   "t": 1618.05,
+   "d": 5.31,
+   "text": "stuff going on. And chancery is something I have been working on recently which is a"
+  },
+  {
+   "t": 1623.36,
+   "d": 5.26,
+   "text": "chatbot making language. You can see the IDE I published at Google. It was open source"
+  },
+  {
+   "t": 1628.62,
+   "d": 7.88,
+   "text": "by Google while I was working for the Google Assistant. It has a simulator and a diagram"
+  },
+  {
+   "t": 1636.5,
+   "d": 7.06,
+   "text": "of the state map and it has got some other interesting visualization stuff. This is again"
+  },
+  {
+   "t": 1643.56,
+   "d": 8.1,
+   "text": "a language IDE all smashed together. It was too smashed for anybody to pull anything out"
+  },
+  {
+   "t": 1651.66,
+   "d": 7.62,
+   "text": "saying I just want the simulator and now I have broken it into further sections that"
+  },
+  {
+   "t": 1659.28,
+   "d": 4.43,
+   "text": "now you can get the engine where it stimulates a chat. There are cool things you can plug"
+  },
+  {
+   "t": 1663.71,
+   "d": 11.03,
+   "text": "in. Again, this is all talk to me after the chat because like a lot of the stuff is free"
+  },
+  {
+   "t": 1674.74,
+   "d": 7.28,
+   "text": "as in mattress. Free as in beer, free as in mattress and yes, you can download and play"
+  },
+  {
+   "t": 1682.02,
+   "d": 7.09,
+   "text": "with it. This is all documented inside my head. You can write things that have attachments"
+  },
+  {
+   "t": 1689.11,
+   "d": 8.55,
+   "text": "to somebody chatting and posting images. And yeah, just as a final last thing. There is"
+  },
+  {
+   "t": 1697.66,
+   "d": 7.31,
+   "text": "a case study and I also use this to do a contract gig for a Swedish ambient album where there"
+  },
+  {
+   "t": 1704.97,
+   "d": 9.52,
+   "text": "is a mid century poem that some Swedish ambient musicians wrote about and made a character"
+  },
+  {
+   "t": 1714.49,
+   "d": 4.68,
+   "text": "and I made a virtual character that hooks into chancery. I will talk about how it does"
+  },
+  {
+   "t": 1719.17,
+   "d": 9.53,
+   "text": "that in just a moment. You can go here and go to this website. This is a virtual character"
+  },
+  {
+   "t": 1728.7,
+   "d": 9.5,
+   "text": "using chancery which also uses tracery to generate text. Why does this work? Because"
+  },
+  {
+   "t": 1738.2,
+   "d": 5.21,
+   "text": "Blackboards which are a concept of AI which mean a space that every program can read from"
+  },
+  {
+   "t": 1743.41,
+   "d": 6.11,
+   "text": "and write to in their own way. EMCEE: Just because we are running short on"
+  },
+  {
+   "t": 1749.52,
+   "d": 8.14,
+   "text": "time. So sorry, Kate. KATE COMPTON: You can also hook up your MIDI"
+  },
+  {
+   "t": 1757.66,
+   "d": 8.69,
+   "text": "controller to a Blackboard and have that control the puppet who is being controlled by chancery."
+  },
+  {
+   "t": 1766.35,
+   "d": 9.97,
+   "text": "That is my slide. Sorry for running a little long. You can go artbot.club and I am giving"
+  },
+  {
+   "t": 1776.32,
+   "d": 8.3,
+   "text": "an exercise next Tuesday where we will program a bot together. If you want to join that,"
+  },
+  {
+   "t": 1784.62,
+   "d": 4.06,
+   "text": "please do. EMCEE: Thank you so much and yeah, I hope"
+  },
+  {
+   "t": 1788.68,
+   "d": 6.55,
+   "text": "that we can get a bunch of those links and tweet them out because that's a lot of great"
+  },
+  {
+   "t": 1795.23,
+   "d": 11.72,
+   "text": "stuff. Just wonderful as always. There is quite a few questions and no time to get in"
+  },
+  {
+   "t": 1806.95,
+   "d": 6.77,
+   "text": "there. >> I will be in chat."
+  }
+ ]
+}

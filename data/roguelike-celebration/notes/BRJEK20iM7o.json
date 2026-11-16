@@ -1,0 +1,138 @@
+{
+  "id": "BRJEK20iM7o",
+  "title": "Courtney Liessen: Cheating the System (By Design!) for Epic Combos",
+  "speaker": "Courtney Liessen",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=BRJEK20iM7o",
+  "talk_type": "design",
+  "summary": "Courtney Liessen argues for designing upgrades that let players feel they are 'cheating' — circumventing apparent rules using the game's systems as intended, to gain what seem like benefits the developer never meant. Her examples include upgrades that change stat-conversion multipliers, multipliers on ability radius that break assumptions about fixed art content (Hades, Vampire Survivors), and a Monster Train run where shrinking and cloning a giant minion broke the floor-capacity tradeoff. Her game Reality Break builds this into a 'rewrite' mechanic that lets players edit item requirements, mission timers, cooldowns and even dialogue. She argues roguelikes suit this because broken runs are temporary, but warns meta-progression must avoid locking in permanently broken states.",
+  "games": [
+    "Reality Break",
+    "Monster Train",
+    "Hades",
+    "Vampire Survivors"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "rule-breaking combos",
+      "kind": "principle",
+      "claim": "Roguelikes should let players feel they are 'cheating' by combining systems as intended to obtain benefits they perceive the developer never intended, which creates delight and a sense of mastery.",
+      "detail": "Liessen distinguishes this from literal cheating (editing save files, exploits), simply overpowering enemies, or cheesing a system out of existence like finding a spot pathfinding can't reach. The feeling is thrilling, like a secret you get away with, and makes players feel smart.",
+      "t": 174,
+      "quote": "something that feels more or less like you're using some combination of the games systems as intended to obtain what you perceive to be uned benefits",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "stat multipliers",
+      "kind": "technique",
+      "claim": "Letting upgrades modify the conversion equation itself — e.g. strength-to-damage multipliers, then upgrades to all multipliers — creates indirection that makes items feel potentially worth far more than their face value.",
+      "detail": "With 10 strength, +1 strength gives +1 damage, but +1 to the conversion multiplier gives +10. This combines independent concepts into something that feels a little unfair, and players start wondering whether all multipliers could be raised.",
+      "t": 219,
+      "quote": "a simple on-ramp to making players feel like they're cheating the system is to allow them to change the equation",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "subverting expectations",
+      "kind": "principle",
+      "claim": "Genre and franchise tropes create assumptions about what rules are fixed, and revealing that a 'fixed' rule can be changed delights players and makes them wonder what else they can make their own.",
+      "detail": "Liessen says changing an action RPG's damage conversion equation is not something players assume possible, so discovering it reveals the game's hidden potential as it unfolds.",
+      "t": 293,
+      "quote": "the core idea of subverting player expectation in ways that surprise them with a game's hidden potential as it unfolds",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "scaling effects",
+      "kind": "example",
+      "claim": "Upgrades that multiply ability radius without limit break players' assumption that expensive art and effects come in a few fixed tiers, as Hades and Vampire Survivors do with heavily scaling visual effects.",
+      "detail": "Ability upgrades are usually quantized (+20% radius) with custom FX for the upgraded version. A 2x radius multiplier that stacks with multiplier upgrades raises the question of whether an ability could blanket the whole screen.",
+      "t": 420,
+      "quote": "This possibility violates the expectation that art content variety is constrained in specific ways",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "breaking tradeoffs",
+      "kind": "example",
+      "claim": "In a Monster Train run, an upgrade that shrank a giant minion without reducing its stats, plus clone upgrades, broke the apparent fixed tradeoff between minion size and floor capacity.",
+      "detail": "Growing a minion 3x boosted its stats but used more floor budget — a typical tradeoff. Shrinking it to minimum size kept the stats, and duplicating it repeatedly (a hidden multiplier) created 'easy mode'. Liessen still remembers the run years later.",
+      "t": 512,
+      "quote": "giving players a way to ignore what appeared to be important balancing points in a game is a fantastic way to make them feel they are cheating",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "rewrite mechanic",
+      "kind": "example",
+      "claim": "Reality Break's core 'rewrite' mechanic marks editable game elements with a lightning bolt, escalating from item stats to equipment-class requirements, mission time limits, hazards, cooldowns, level caps and treasure crates.",
+      "detail": "Warship-sized items dropped by big ships can have their class requirement rewritten to fighter, visibly shrinking them in the inventory, against the trope that you need a bigger ship first.",
+      "t": 575,
+      "quote": "anytime you see a special lightning bolt uh next to a game element it indicates that you can rewrite it",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "teaching mechanics",
+      "kind": "warning",
+      "claim": "Genre assumptions can be so ingrained that even experienced Reality Break players don't realize they can shrink a too-big item instead of getting a bigger ship, so rule-breaking options need clear communication.",
+      "detail": "Players see the lightning bolt next to the warship class requirement and still don't realize it is editable; Liessen says more work is needed to communicate it.",
+      "t": 644,
+      "quote": "they see the lightning bolt next to it and still don't realize that instead of getting a bigger ship to equip this item they can just shrink it",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "broken runs",
+      "kind": "principle",
+      "claim": "Roguelikes suit game-breaking combos because the benefit lasts only until the run ends, and players see runs as transient, so an overpowered combo doesn't trivialize the game or kill flow for long.",
+      "detail": "Breaking out of designed guardrails for too long leads to trivialization and boredom, but an OP combo simply speeds up a run that it feels natural to end and restart.",
+      "t": 706,
+      "quote": "if you create a combo that breaks the game's design intent you only have until the end of that run to benefit from it",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "warning",
+      "claim": "Roguelite meta-progression unlocks should be doled out carefully so a permanently broken state doesn't get locked in, unless power escalation is designed as a path to victory.",
+      "detail": "Liessen draws this as an implication of embracing rule-breaking combos: the run reset protects the game only if permanent unlocks don't carry the broken state forward.",
+      "t": 753,
+      "quote": "The Meta game unlocks should be dled out more judiciously and carefully",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "soft boundaries",
+      "kind": "principle",
+      "claim": "Designers can twist player expectations about genre and franchise rules into soft boundaries rather than hard walls, and games with many interacting systems produce more surprising balance breaks, even ones the developer never intended.",
+      "detail": "Liessen's conclusion: as a developer she is thrilled to see players discover breaks she never designed.",
+      "t": 804,
+      "quote": "you can purposely twist them around so that they represent soft boundaries rather rather than hard walls",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "signposting",
+      "kind": "open-question",
+      "claim": "Explicitly marking what players may edit makes rule-breaking accessible to less dedicated players but trades away some of the roguelike pleasure of finding the unexpected yourself.",
+      "detail": "Asked in Q&A whether calling out editable elements loses something, Liessen agreed there is a tradeoff: it brings such stories to players who wouldn't spend 100 hours learning to exploit systems.",
+      "t": 888,
+      "quote": "you are expected in especially in the Rog light genre to you're expected to find the unexpected",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "rewritable dialogue",
+      "kind": "open-question",
+      "claim": "Reality Break experiments with letting players rewrite what NPCs say, with the change rippling into reality — like conversation trees where you choose the other person's line.",
+      "detail": "In Q&A, Liessen says a generic rewrite system made a first version easy, but fully realizing it could be its own game; it also raises philosophical questions about rewriting what someone said just to get a better item.",
+      "t": 1055,
+      "quote": "it's like conversation trees except you're not choosing what you say you're choosing what somebody else says",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

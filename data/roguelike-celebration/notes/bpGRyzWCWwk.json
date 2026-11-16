@@ -1,0 +1,146 @@
+{
+  "id": "bpGRyzWCWwk",
+  "title": "John Bond: Doors or no Doors: How Roguelike games take you places",
+  "speaker": "John Bond",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=bpGRyzWCWwk",
+  "talk_type": "design",
+  "summary": "Indie developer John Bond (Rogue Labyrinth) examines 'doors': any object or transition that signals to the player that they are moving to a new randomized area. He argues doors provide 'breath', a pause where the player has full control, and carry iconography that informs longer-term strategic decisions. He identifies variables for choosing a door system (run length, pacing, major mechanics, polish) and surveys five roguelike door systems: linear/classic, dungeon doors, chosen doors, branching maps and open world.",
+  "games": [
+    "Rogue",
+    "Hades",
+    "Dead Cells",
+    "Slay the Spire",
+    "Into the Breach",
+    "Balatro",
+    "Cult of the Lamb",
+    "Resident Evil",
+    "Persona 5",
+    "Tangledeep",
+    "DungeonmansDread",
+    "Rogue Labyrinth"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "area transitions",
+      "kind": "principle",
+      "claim": "A 'door' in a roguelike is any object or crossing (door, staircase, rope, portal) that clearly signals to the player a move from one whole random area to the next, not internal seams between generated chunks.",
+      "detail": "Bond says a map built from many smaller generated tiles is, to the player, one big random area. A door is a large, iconographic way to separate the feel of one full area from another, and that symbolism matters for pacing.",
+      "t": 120,
+      "quote": "Doors are any sort of object that when interacted with or crossed will bring apart the next randomize area in a notable way to the designer and player",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "loading screens",
+      "kind": "history",
+      "claim": "Door transitions originally existed to hide loading, as in Resident Evil's door animation, but remain valuable for pacing even though loading is no longer an issue.",
+      "detail": "Bond notes the Resident Evil 1 door was used to sneak in loading. Loading times are no longer needed, but because players are not machines, doors are still needed for breath.",
+      "t": 204,
+      "quote": "this is the resident evil 1 door used hugely to sneakly put in loadding",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "pacing",
+      "kind": "principle",
+      "claim": "Roguelikes need 'breath' moments where the game stops asking the player to perform while leaving them full control for as long as they want, and doors are where this works best.",
+      "detail": "Bond says pausing does not count because players will not pause to take a break; designers must give them a reason to stop trying so hard. Small exploration such as collecting loot, finding a shop or fishing works as breath.",
+      "t": 239,
+      "quote": "Players need moments where they have complete control as they do in the game and still stopped asking them to perform",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "player control",
+      "kind": "warning",
+      "claim": "Taking control away from the player during a breath moment, for example with a timer, always feels bad and is usually avoided outside player-versus-player competitive games.",
+      "detail": "Bond says players should be able to stay in a breath space indefinitely without feeling they miss out, because they control when to continue. If a game lacks this, players feel it.",
+      "t": 319,
+      "quote": "don't want to take control away from the player because it always feels bad",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "door iconography",
+      "kind": "principle",
+      "claim": "Door iconography, like Hades' room reward icons and the art and size of a door, tells players what lies beyond so they can make long-term strategic decisions during the breath period.",
+      "detail": "Bond says designers usually do not want to surprise players; they want to give lots of information about what a decision will cause. Even a forced linear choice, like a big hellish portal, should warn the player it will be hellish.",
+      "t": 385,
+      "quote": "Types of doors are used to give information to the player about what is about to happen",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "door system variables",
+      "kind": "technique",
+      "claim": "Choosing a roguelike door or map system depends on four variables: run length, game pacing, the number of major mechanics, and polish.",
+      "detail": "Bond notes run lengths range from about 20 minutes to 20 hours. Pacing covers dialogue and avoiding speed whiplash; major mechanics covers mini-games and side activities; polish affects everything.",
+      "t": 487,
+      "quote": "There is the run length and how long it takes to get through the run",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "polish",
+      "kind": "principle",
+      "claim": "Polish compensates for other weaknesses: players accept slow interfaces like Persona 5's menus because they are so well polished.",
+      "detail": "Bond calls polish the luck variable because it affects everything. Persona 5's menus are slow to get anything done in, but players tend not to complain because the polish is incredible.",
+      "t": 544,
+      "quote": "The more polish you have the less everything else matters. Players will accept a lot if polish is good",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "linear progression",
+      "kind": "example",
+      "claim": "Linear door systems, as in classic Rogue-style games and Balatro's 'go forward' menu, suit games with shorter runs and fewer major mechanics.",
+      "detail": "In Balatro the door is just a button that moves you forward. Bond says an all-menu game fulfils what makes a good door because clicking menus is already how you play.",
+      "t": 634,
+      "quote": "The nice thing about a game that is all menus is it fulfills everything about what makes a good door",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "dungeon doors",
+      "kind": "example",
+      "claim": "'Dungeon doors', as in Cult of the Lamb's roguelike section, lead to areas that play the same as the previous one, suiting games built on constant pressure with some exploration and few mechanics.",
+      "detail": "Bond says what is behind the next door is the same in play and treasure as before, though there may be alternate endings and biomes.",
+      "t": 698,
+      "quote": "Dungeon doors are good for games that focus on constant pressure but allow for an element of exploration",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "chosen doors",
+      "kind": "example",
+      "claim": "'Chosen doors', as in Hades and Dead Cells, let players pick between rooms that can play differently, which suits games with many major mechanics and longer runs but demands careful pacing and more door polish.",
+      "detail": "Bond says doors separate play styles; a fast game cannot stop for long dialogue and major choices. Because there are dozens of doors, they get more animation and iconography.",
+      "t": 727,
+      "quote": "This becomes more important for games with more major mechanics because doors separate play styles",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "branching map",
+      "kind": "example",
+      "claim": "Branching map systems like Slay the Spire and Into the Breach use map icons as doors, conveying information for mechanic-heavy games without menus and funnelling players forward so they cannot get lost.",
+      "detail": "Bond notes the map itself is not a door; its icons are. Maps involve less exploration, so they often suit action games poorly, though they work when the space between doors is small. His Rogue Labyrinth uses a map.",
+      "t": 799,
+      "quote": "It is the icons that are on the map that are doors. Iconography",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "open world",
+      "kind": "example",
+      "claim": "Open-world roguelike structures, with dead ends, ways to get lost and sometimes no fixed goal, suit slower, longer runs but can be overwhelming.",
+      "detail": "Bond says doors still exist here, such as between biomes. He closes by urging designers to keep giving control to the player and to put in polish.",
+      "t": 876,
+      "quote": "This works for slower and long runs and it be much more overwhelming",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

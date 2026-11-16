@@ -1,0 +1,529 @@
+{
+ "id": "SjttI9N9KSM",
+ "url": "https://www.youtube.com/watch?v=SjttI9N9KSM",
+ "title": "Xalavier Nelson Jr - Procedural Generation for Dogs",
+ "speaker": "Xalavier Nelson Jr",
+ "talk_title": "Procedural Generation for Dogs",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 734,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nXalavier Nelson Jr. is an award-winning narrative director and writer who has held leading roles on titles including Hypnospace Outlaw, Can Androids Pray, SkateBIRD, We Are The Caretakers, and many, many more. His current project is an absurdist first-person open world comedy adventure game called An Airport for Aliens Currently Run by Dogs, for a variety of reasons we can no longer remember.\n\nIn this talk he admits being incredibly intimidated by the idea of procedural generation and scary words like 'corpus', which kept him from exploring proc gen techniques as a creator. However, he explains how in the context of Dog Airport Game he eased into this design space, and how he's now using modular content principles in a very simple way to build an ever-changing world of stock photo dogs.\n\nFind him on Twitter: https://twitter.com/WritNelson\nCheck out his Patreon! https://www.patreon.com/StrangeScaffold\nAn Airport For Aliens Currently Run By Dogs: https://store.steampowered.com/app/1246250/An_Airport_for_Aliens_Currently_Run_by_Dogs/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 92,
+   "title": "Defining procedural generation"
+  },
+  {
+   "start": 160,
+   "title": "Demystifying the design process"
+  },
+  {
+   "start": 267,
+   "title": "Modular design and lists"
+  },
+  {
+   "start": 427,
+   "title": "The 'Pedogram' system"
+  },
+  {
+   "start": 567,
+   "title": "Injecting meaning and closure"
+  },
+  {
+   "start": 658,
+   "title": "Closing thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1509,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 1.11,
+   "text": "MODERATOR: We are going to go quick and high energy because we are starting with"
+  },
+  {
+   "t": 1.11,
+   "d": 3.61,
+   "text": "lightning talks. Xalavier Nelson, Jr. our first lightning talk of the day."
+  },
+  {
+   "t": 4.72,
+   "d": 4.4,
+   "text": ">> Hi, everyone. It is an honor to be here. Thanks."
+  },
+  {
+   "t": 9.84,
+   "d": 4.72,
+   "text": "MODERATOR: I think since it is lightning talks and fast I will let you introduce yourself."
+  },
+  {
+   "t": 17.76,
+   "d": 7.12,
+   "text": "I am looking forward to seeing some dogs. >> I have got so many good dog pictures. Hello,"
+  },
+  {
+   "t": 24.88,
+   "d": 7.12,
+   "text": "everyone. My name is Xalavier Nelson and I am a narrative director, writer and I have done so"
+  },
+  {
+   "t": 32.0,
+   "d": 6.08,
+   "text": "many things. You might know me from my work on an airport for alien currently run by dogs. I"
+  },
+  {
+   "t": 43.2,
+   "d": 8.56,
+   "text": "worked on Hypnospace outlaw and we are the caretakers and just a whole bunch of games over"
+  },
+  {
+   "t": 53.12,
+   "d": 8.72,
+   "text": "four dozen? Over 40? It has been a lot. I was a journalist for awhile. Wrote for every outlet you"
+  },
+  {
+   "t": 61.84,
+   "d": 5.6,
+   "text": "can think of. Wrote in print as a columnist, contributed to table top stuff, made an RPG"
+  },
+  {
+   "t": 67.44,
+   "d": 6.8,
+   "text": "system, and I have make comics that people like and I would go around the world to play"
+  },
+  {
+   "t": 77.44,
+   "d": 9.6,
+   "text": "in games and give talks and give panels and now I get to be at Roguelike Celebration. Polymorphic."
+  },
+  {
+   "t": 87.04,
+   "d": 11.04,
+   "text": "This is the next evolution. This talk is titled Procedural Generation for Dogs. That is"
+  },
+  {
+   "t": 101.52,
+   "d": 8.08,
+   "text": "from airport run by killer dogs. We are talking about procedural generation for dogs because"
+  },
+  {
+   "t": 109.6,
+   "d": 7.36,
+   "text": "in the airport game it uses a lot of procedural generations. Airports are fascinating because they"
+  },
+  {
+   "t": 118.88,
+   "d": 7.44,
+   "text": "have so much standardized and unique aspects to them that you cannot care about if it doesn't"
+  },
+  {
+   "t": 127.12,
+   "d": 7.68,
+   "text": "align with personal goals. If your gate is at B6 you can't care about terminal A or C."
+  },
+  {
+   "t": 134.8,
+   "d": 12.8,
+   "text": "You go past them and you can say you are belining. Making spaces that have a sense of unique content"
+  },
+  {
+   "t": 147.6,
+   "d": 5.04,
+   "text": "and cool stuff with presentation that is randomized and different for every"
+  },
+  {
+   "t": 152.64,
+   "d": 4.56,
+   "text": "player especially because their own journey through the game defines what they encounter"
+  },
+  {
+   "t": 157.76,
+   "d": 5.52,
+   "text": "is at the heart of what it is. It means procedural generation is a fantastic tool"
+  },
+  {
+   "t": 164.72,
+   "d": 5.04,
+   "text": "but you might not expect me to be the person doing a deeply procedurally generated game"
+  },
+  {
+   "t": 169.76,
+   "d": 8.96,
+   "text": "because the concept terrifies me. I believe it should terrify anyone reasonably speaking why?"
+  },
+  {
+   "t": 179.44,
+   "d": 7.28,
+   "text": "Mainly because of the speakers and exhibitors of Roguelike Celebration present"
+  },
+  {
+   "t": 186.72,
+   "d": 6.16,
+   "text": "and past. So many people are doing such incredible, complicated mind blowing work in"
+  },
+  {
+   "t": 192.88,
+   "d": 6.4,
+   "text": "this space. For a long time I totally discarded the concept that procedural generation was for"
+  },
+  {
+   "t": 199.28,
+   "d": 9.84,
+   "text": "people like me. I would hear them talking about making universes and people and poetry from scraps"
+  },
+  {
+   "t": 209.12,
+   "d": 6.88,
+   "text": "of words and language and grammar simulated on deep level and I go yeah, I know what games are."
+  },
+  {
+   "t": 219.36,
+   "d": 8.56,
+   "text": "I know what games are. I promise. But then I realize that from the term procedural generation"
+  },
+  {
+   "t": 227.92,
+   "d": 6.8,
+   "text": "even we see a couple different routes to pursue a fundamental design concept."
+  },
+  {
+   "t": 235.68,
+   "d": 5.44,
+   "text": "You can simulate entire civilizations and you can create conin -- continents worth"
+  },
+  {
+   "t": 242.72,
+   "d": 11.92,
+   "text": "unique and emotionally varying content from black magic composed of words and numbers or"
+  },
+  {
+   "t": 256.48,
+   "d": 3.04,
+   "text": "look at the two words; procedural and generation. Procedure meaning"
+  },
+  {
+   "t": 260.64,
+   "d": 5.12,
+   "text": "according to a set of rules and procedure. Generation meaning making stuff. Making"
+  },
+  {
+   "t": 265.76,
+   "d": 5.04,
+   "text": "stuff according to a set of rules that could be all of that or it could be"
+  },
+  {
+   "t": 271.68,
+   "d": 5.92,
+   "text": "picking stuff from a list. I understand lists. They speak to me on a deep and spiritual level"
+  },
+  {
+   "t": 279.2,
+   "d": 6.56,
+   "text": "and I am starting to understand that lists are just as valid an approach to the eternal"
+  },
+  {
+   "t": 285.76,
+   "d": 4.88,
+   "text": "question of let's make a whole bunch of really cool weird stuff with procedural generation"
+  },
+  {
+   "t": 291.2,
+   "d": 7.6,
+   "text": "as these much more complicated, deeply impressive examples that we see in games super often."
+  },
+  {
+   "t": 300.32,
+   "d": 6.72,
+   "text": "And the key to understanding the difference in design to use procedural generation which is a"
+  },
+  {
+   "t": 307.04,
+   "d": 9.04,
+   "text": "fundamental design tool for any game creator is understanding how it differs from the typical"
+  },
+  {
+   "t": 316.08,
+   "d": 6.4,
+   "text": "development approach. When you are looking at something like a dwarf fortress and you see the"
+  },
+  {
+   "t": 323.04,
+   "d": 3.92,
+   "text": "utter scope of that world you think wow, procedural generation isn't for me"
+  },
+  {
+   "t": 327.84,
+   "d": 7.12,
+   "text": "until you realize that it is isn't making an entire civilization from day one. That's"
+  },
+  {
+   "t": 334.96,
+   "d": 6.4,
+   "text": "terrifying. Most people haven't managed to do it. People who have you could argue probably shouldn't"
+  },
+  {
+   "t": 341.36,
+   "d": 6.77,
+   "text": "have done that. Making civilization in a single day is a foolhardy act built from hubris. You were"
+  },
+  {
+   "t": 348.13,
+   "d": 5.47,
+   "text": "not building a house from scratch in a single day. What you are doing is making the pieces of the"
+  },
+  {
+   "t": 353.6,
+   "d": 8.4,
+   "text": "house. You are making the Windows, the doors, and the garage and you could make increasingly complex"
+  },
+  {
+   "t": 363.12,
+   "d": 6.35,
+   "text": "versions of these and make sure all of the pieces match when you generate them, for example. There"
+  },
+  {
+   "t": 369.47,
+   "d": 8.85,
+   "text": "is escalating degrees for procedural generation or design or you could have a list. Just a whole"
+  },
+  {
+   "t": 378.32,
+   "d": 5.36,
+   "text": "bunch of boxes and you just throw them in a box and everything is cool. This dog thinks"
+  },
+  {
+   "t": 383.68,
+   "d": 4.96,
+   "text": "that pieces of houses are cool. Also thinks that houses are cool. Also thinks everybody should have"
+  },
+  {
+   "t": 388.64,
+   "d": 5.2,
+   "text": "a place to live. This dog is a bit of a radical. I believe in him, love him and I hope y'all do too."
+  },
+  {
+   "t": 396.32,
+   "d": 7.52,
+   "text": "I realized that procedural generation comes not from having to deal with this giant"
+  },
+  {
+   "t": 405.12,
+   "d": 8.96,
+   "text": "content burden from the auth but instead relied on thinking of design in modular pieces. How do all"
+  },
+  {
+   "t": 414.08,
+   "d": 6.0,
+   "text": "these elements come together to create a greater whole? It changed the way I see game development"
+  },
+  {
+   "t": 420.08,
+   "d": 6.16,
+   "text": "utterly. It made me believe I could be a game designer because that's the way my brain works."
+  },
+  {
+   "t": 428.72,
+   "d": 10.08,
+   "text": "You end up with things like the pedostrian system. It is used in airports currently run by dogs. I am"
+  },
+  {
+   "t": 438.8,
+   "d": 8.08,
+   "text": "very proud of it. It looks like I am creating bioorganic abominations on a daily basis but I"
+  },
+  {
+   "t": 446.88,
+   "d": 10.4,
+   "text": "promise I am not. The pedostrian system comes from the principle that airports are built on"
+  },
+  {
+   "t": 457.28,
+   "d": 7.52,
+   "text": "unique aspects presented in strange and evolving ways based on your own journey and priorities."
+  },
+  {
+   "t": 466.96,
+   "d": 6.16,
+   "text": "I know the airports would be filled with creatures and figures and characters. The way we"
+  },
+  {
+   "t": 473.92,
+   "d": 23.12,
+   "text": "filled the airports was with pedogstrians. Get it? You have elves, and you have pinostrian who have"
+  },
+  {
+   "t": 497.6,
+   "d": 10.96,
+   "text": "gray scale models and cool hats. You have super buff ones who are existentially terrifying."
+  },
+  {
+   "t": 508.56,
+   "d": 5.68,
+   "text": "You have want to consider a dog with giant buff arms saying they love you. And"
+  },
+  {
+   "t": 516.32,
+   "d": 6.88,
+   "text": "then you have emptystrians which create an empty object and nothing is spawned and we can"
+  },
+  {
+   "t": 524.48,
+   "d": 6.0,
+   "text": "in a basic way simulate the flow of population in an airport. Coming to an airport and finding"
+  },
+  {
+   "t": 530.48,
+   "d": 6.56,
+   "text": "it empty very early in the morning is something possible through this system. When we take these"
+  },
+  {
+   "t": 537.04,
+   "d": 8.48,
+   "text": "things, again, built in theses, and all we are really doing is picking an object from a list"
+  },
+  {
+   "t": 546.56,
+   "d": 6.72,
+   "text": "and then that object is picking two more things from two different lists. The line that they say"
+  },
+  {
+   "t": 553.28,
+   "d": 5.44,
+   "text": "and the thing that says that line. It can be a gray scale picture of a dog. It can be"
+  },
+  {
+   "t": 558.72,
+   "d": 6.64,
+   "text": "a really enthusiastic picture of a dog. We don't know. Again, going off of how modular"
+  },
+  {
+   "t": 565.36,
+   "d": 5.68,
+   "text": "and procedural design works it is the combination of things that produce things like this beautiful"
+  },
+  {
+   "t": 571.04,
+   "d": 6.72,
+   "text": "body who says every time I lift weights I think about my folks and the weights they lifted to"
+  },
+  {
+   "t": 577.76,
+   "d": 7.84,
+   "text": "get me here. Important stuff. It does that at the moment you press play across the airport"
+  },
+  {
+   "t": 585.6,
+   "d": 8.32,
+   "text": "for as long as you play. Potentially infinite variety but infinite situations and context to"
+  },
+  {
+   "t": 593.92,
+   "d": 8.0,
+   "text": "inject meaning into. Procedural generation isn't just about building universes or building houses."
+  },
+  {
+   "t": 601.92,
+   "d": 8.24,
+   "text": "It is about creating context, endless amount of context for people to find their own meaning in."
+  },
+  {
+   "t": 613.12,
+   "d": 4.72,
+   "text": "Even if you don't believe that procedural generation is for you it is a fundamental tool."
+  },
+  {
+   "t": 618.4,
+   "d": 12.32,
+   "text": "It is actually really simple and it is indeed for you. This dog believes in you and so do I. And"
+  },
+  {
+   "t": 631.36,
+   "d": 6.24,
+   "text": "that's how I am using procedural generation for dogs because dogs are the essence of"
+  },
+  {
+   "t": 638.72,
+   "d": 4.08,
+   "text": "optimism and enthusiasm projected into a complicated world."
+  },
+  {
+   "t": 645.2,
+   "d": 6.96,
+   "text": "What encapsulates that more brilliantly than procedural generation itself?"
+  },
+  {
+   "t": 653.52,
+   "d": 6.72,
+   "text": "It turns out all dogs are procedurally generated. Thank you for watching and"
+  },
+  {
+   "t": 660.24,
+   "d": 4.8,
+   "text": "attending Roguelike Celebration and it is an honor to kickoff. I am Xalavier Nelson, Jr."
+  },
+  {
+   "t": 666.16,
+   "d": 10.96,
+   "text": "talking about dogs and procedural generation. MODERATOR: Thank you so much. That's just wow."
+  },
+  {
+   "t": 679.68,
+   "d": 4.32,
+   "text": "I can't decide if I should be clapping or crying or laughing."
+  },
+  {
+   "t": 685.28,
+   "d": 2.8,
+   "text": "It is too many emotions first thing in the morning, Xavier."
+  },
+  {
+   "t": 688.08,
+   "d": 3.12,
+   "text": ">> Procedurally generated emotions are hard to take in."
+  },
+  {
+   "t": 692.32,
+   "d": 11.44,
+   "text": "MODERATOR: I am just getting a lot of feelings quickly. Thank you so much. I think that we will"
+  },
+  {
+   "t": 703.76,
+   "d": 5.36,
+   "text": "move on just because, you know, lightning talks go fast but that was excellent. Thank you so much"
+  },
+  {
+   "t": 709.12,
+   "d": 6.0,
+   "text": "for joining us and I hope people can find you in the space and take confidence. I feel much better"
+  },
+  {
+   "t": 715.12,
+   "d": 6.24,
+   "text": "about myself knowing that dog believes in me. >> Dogs believe in you in general. They are"
+  },
+  {
+   "t": 721.36,
+   "d": 8.48,
+   "text": "fantastic animals. It is so great to participate in everything that Roguelike Celebration is."
+  },
+  {
+   "t": 731.28,
+   "d": 2.56,
+   "text": "Such an honor. Thank you. MODERATOR: Thank you."
+  }
+ ]
+}

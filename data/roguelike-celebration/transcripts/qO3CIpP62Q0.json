@@ -1,0 +1,4877 @@
+{
+ "id": "qO3CIpP62Q0",
+ "url": "https://www.youtube.com/watch?v=qO3CIpP62Q0",
+ "title": "Brian Cronin - Off The Rails: Lessons from Monster Train Development",
+ "speaker": "Brian Cronin",
+ "talk_title": "Off The Rails: Lessons from Monster Train Development",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1832,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Monster Train is a strategic roguelike deck building game with a twist. The game is Shiny Shoe’s first card game and largest roguelike-style game by far. While the game has enjoyed a lot of success, we made many mistakes along the way!\n\nThis talk is about the architecture of Monster Train and what we would do differently if we were starting again. While engineers will get the most out of this talk, designers with an interest in how a game is structured will also enjoy it. And while we used Unity to develop the game, the concepts discussed will apply to any engine.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 82,
+   "title": "What is Monster Train"
+  },
+  {
+   "start": 242,
+   "title": "Prototype to Product"
+  },
+  {
+   "start": 523,
+   "title": "Cards are Programming Language"
+  },
+  {
+   "start": 903,
+   "title": "Change Cards"
+  },
+  {
+   "start": 940,
+   "title": "Feedback"
+  },
+  {
+   "start": 1099,
+   "title": "Mixing Gameplay and Presentation"
+  },
+  {
+   "start": 1242,
+   "title": "Spaghetti"
+  },
+  {
+   "start": 1443,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6604,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.52,
+   "d": 2.72,
+   "text": "and so next up we have brian cronin"
+  },
+  {
+   "t": 6.24,
+   "d": 1.2,
+   "text": "welcome"
+  },
+  {
+   "t": 7.44,
+   "d": 2.32,
+   "text": "thank you for having me yeah you're here"
+  },
+  {
+   "t": 9.76,
+   "d": 3.12,
+   "text": "to talk about monster train which very"
+  },
+  {
+   "t": 12.88,
+   "d": 1.2,
+   "text": "exciting"
+  },
+  {
+   "t": 14.08,
+   "d": 2.32,
+   "text": "yeah yeah and i also hope to take part"
+  },
+  {
+   "t": 16.4,
+   "d": 1.84,
+   "text": "in a boon storm someday i think that's"
+  },
+  {
+   "t": 18.24,
+   "d": 1.28,
+   "text": "something we'll have to institute at"
+  },
+  {
+   "t": 19.52,
+   "d": 2.24,
+   "text": "chinese shoe i like that all right take"
+  },
+  {
+   "t": 21.76,
+   "d": 2.72,
+   "text": "it away brian all right welcome to"
+  },
+  {
+   "t": 24.48,
+   "d": 1.76,
+   "text": "monster train off the rails lessons"
+  },
+  {
+   "t": 26.24,
+   "d": 1.92,
+   "text": "learned from monster train development"
+  },
+  {
+   "t": 28.16,
+   "d": 2.72,
+   "text": "um just a heads up i am an engineer this"
+  },
+  {
+   "t": 30.88,
+   "d": 2.32,
+   "text": "talk is more on the engineer side rather"
+  },
+  {
+   "t": 33.2,
+   "d": 2.08,
+   "text": "than the design side but as anybody who"
+  },
+  {
+   "t": 35.28,
+   "d": 1.52,
+   "text": "works in video games knows they're often"
+  },
+  {
+   "t": 36.8,
+   "d": 2.0,
+   "text": "very much dependent on each other so i"
+  },
+  {
+   "t": 38.8,
+   "d": 1.6,
+   "text": "just want to put that out there i first"
+  },
+  {
+   "t": 40.4,
+   "d": 1.92,
+   "text": "want to thank the conference organizers"
+  },
+  {
+   "t": 42.32,
+   "d": 1.84,
+   "text": "and really the whole roguelike"
+  },
+  {
+   "t": 44.16,
+   "d": 2.24,
+   "text": "celebration community i think most train"
+  },
+  {
+   "t": 46.4,
+   "d": 1.52,
+   "text": "wouldn't have turned out to be the game"
+  },
+  {
+   "t": 47.92,
+   "d": 1.76,
+   "text": "it was without this conference we"
+  },
+  {
+   "t": 49.68,
+   "d": 2.0,
+   "text": "benefited in a lot of indirect ways i'm"
+  },
+  {
+   "t": 51.68,
+   "d": 1.12,
+   "text": "sure"
+  },
+  {
+   "t": 52.8,
+   "d": 2.88,
+   "text": "and i'm also grateful to contribute"
+  },
+  {
+   "t": 55.68,
+   "d": 2.4,
+   "text": "so my name is brian cronin i've been"
+  },
+  {
+   "t": 58.08,
+   "d": 2.16,
+   "text": "working in games for about 16 years i"
+  },
+  {
+   "t": 60.24,
+   "d": 1.44,
+   "text": "was one of the game play engineers on"
+  },
+  {
+   "t": 61.68,
+   "d": 2.64,
+   "text": "monster train i also did the original"
+  },
+  {
+   "t": 64.32,
+   "d": 1.92,
+   "text": "architecture on the prototype that"
+  },
+  {
+   "t": 66.24,
+   "d": 2.24,
+   "text": "turned into what we shipped so i'm to"
+  },
+  {
+   "t": 68.48,
+   "d": 2.56,
+   "text": "blame for a lot of the mistakes we made"
+  },
+  {
+   "t": 71.04,
+   "d": 2.64,
+   "text": "i've also contributed uh to some of the"
+  },
+  {
+   "t": 73.68,
+   "d": 1.68,
+   "text": "design of a lot of the cards and"
+  },
+  {
+   "t": 75.36,
+   "d": 2.32,
+   "text": "artifacts of the few of the clans"
+  },
+  {
+   "t": 77.68,
+   "d": 1.52,
+   "text": "and here's just a selection of some of"
+  },
+  {
+   "t": 79.2,
+   "d": 1.44,
+   "text": "the other games i've worked on over the"
+  },
+  {
+   "t": 80.64,
+   "d": 2.0,
+   "text": "years"
+  },
+  {
+   "t": 82.64,
+   "d": 1.52,
+   "text": "so for anybody who might not know i'm"
+  },
+  {
+   "t": 84.16,
+   "d": 1.68,
+   "text": "just going to briefly explain what"
+  },
+  {
+   "t": 85.84,
+   "d": 1.84,
+   "text": "monster train is all about"
+  },
+  {
+   "t": 87.68,
+   "d": 2.08,
+   "text": "so it's a card based deck builder you"
+  },
+  {
+   "t": 89.76,
+   "d": 1.92,
+   "text": "start off with a bunch of kind of junky"
+  },
+  {
+   "t": 91.68,
+   "d": 1.84,
+   "text": "cards and then you play through battles"
+  },
+  {
+   "t": 93.52,
+   "d": 1.6,
+   "text": "you get new cards that are better you"
+  },
+  {
+   "t": 95.12,
+   "d": 1.44,
+   "text": "upgrade your cards get rid of the old"
+  },
+  {
+   "t": 96.56,
+   "d": 4.08,
+   "text": "cards it's that sort of dynamic"
+  },
+  {
+   "t": 100.64,
+   "d": 3.12,
+   "text": "it has a roguelike run structure i i i'm"
+  },
+  {
+   "t": 103.76,
+   "d": 1.12,
+   "text": "not totally clear on the difference"
+  },
+  {
+   "t": 104.88,
+   "d": 1.92,
+   "text": "between a rogue light and a rogue-like"
+  },
+  {
+   "t": 106.8,
+   "d": 1.2,
+   "text": "but i would guess this is more on the"
+  },
+  {
+   "t": 108.0,
+   "d": 3.44,
+   "text": "rogue light side of the aisle um it's uh"
+  },
+  {
+   "t": 111.44,
+   "d": 1.44,
+   "text": "you know so you you go through these"
+  },
+  {
+   "t": 112.88,
+   "d": 2.16,
+   "text": "battles with your deck uh improving it"
+  },
+  {
+   "t": 115.04,
+   "d": 2.4,
+   "text": "between up getting upgrades new getting"
+  },
+  {
+   "t": 117.44,
+   "d": 2.16,
+   "text": "more gold um all sorts of things you can"
+  },
+  {
+   "t": 119.6,
+   "d": 2.16,
+   "text": "do between the battles and you know you"
+  },
+  {
+   "t": 121.76,
+   "d": 2.48,
+   "text": "you go through a run if you lose then"
+  },
+  {
+   "t": 124.24,
+   "d": 1.52,
+   "text": "you're you have to restart the whole run"
+  },
+  {
+   "t": 125.76,
+   "d": 2.56,
+   "text": "so it's that sort of structure it has a"
+  },
+  {
+   "t": 128.32,
+   "d": 2.32,
+   "text": "very expansive meta progression systems"
+  },
+  {
+   "t": 130.64,
+   "d": 1.36,
+   "text": "that's something that players really"
+  },
+  {
+   "t": 132.0,
+   "d": 1.92,
+   "text": "enjoy about the game this is the log"
+  },
+  {
+   "t": 133.92,
+   "d": 1.84,
+   "text": "book and it tracks what cards you've"
+  },
+  {
+   "t": 135.76,
+   "d": 2.08,
+   "text": "unlocked where you are on the covenant"
+  },
+  {
+   "t": 137.84,
+   "d": 1.2,
+   "text": "rank which is kind of a challenge"
+  },
+  {
+   "t": 139.04,
+   "d": 2.72,
+   "text": "increasing increasing challenge system"
+  },
+  {
+   "t": 141.76,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 142.8,
+   "d": 1.12,
+   "text": "there's all sorts of things you can"
+  },
+  {
+   "t": 143.92,
+   "d": 1.76,
+   "text": "unlock and progress on this so this is"
+  },
+  {
+   "t": 145.68,
+   "d": 1.44,
+   "text": "something that players really enjoy"
+  },
+  {
+   "t": 147.12,
+   "d": 1.68,
+   "text": "about the game"
+  },
+  {
+   "t": 148.8,
+   "d": 1.76,
+   "text": "and i'd also say something special about"
+  },
+  {
+   "t": 150.56,
+   "d": 1.92,
+   "text": "monster train it has a pretty wild power"
+  },
+  {
+   "t": 152.48,
+   "d": 2.08,
+   "text": "curve so on the top here you can see"
+  },
+  {
+   "t": 154.56,
+   "d": 1.52,
+   "text": "cards from the first deck builder called"
+  },
+  {
+   "t": 156.08,
+   "d": 2.64,
+   "text": "dominion and it's kind of a you know you"
+  },
+  {
+   "t": 158.72,
+   "d": 2.4,
+   "text": "you basic card you get one gold and then"
+  },
+  {
+   "t": 161.12,
+   "d": 2.4,
+   "text": "an upgraded version of that for three"
+  },
+  {
+   "t": 163.52,
+   "d": 2.0,
+   "text": "money you get two gold with the wood"
+  },
+  {
+   "t": 165.52,
+   "d": 2.48,
+   "text": "cutter there in monster train bottom"
+  },
+  {
+   "t": 168.0,
+   "d": 1.84,
+   "text": "left torch is kind of our basic damage"
+  },
+  {
+   "t": 169.84,
+   "d": 2.0,
+   "text": "card for one what we call ember it's"
+  },
+  {
+   "t": 171.84,
+   "d": 1.92,
+   "text": "kind of like manor energy for one ember"
+  },
+  {
+   "t": 173.76,
+   "d": 1.76,
+   "text": "you deal two damage to a target of your"
+  },
+  {
+   "t": 175.52,
+   "d": 2.8,
+   "text": "choice or for three ember you could deal"
+  },
+  {
+   "t": 178.32,
+   "d": 2.72,
+   "text": "100 piercing damage to all friendly and"
+  },
+  {
+   "t": 181.04,
+   "d": 2.64,
+   "text": "enemy units so we really play with the"
+  },
+  {
+   "t": 183.68,
+   "d": 1.92,
+   "text": "the power scales is just you know a"
+  },
+  {
+   "t": 185.6,
+   "d": 1.2,
+   "text": "little bit wild in the game and"
+  },
+  {
+   "t": 186.8,
+   "d": 3.52,
+   "text": "something that also players really enjoy"
+  },
+  {
+   "t": 190.32,
+   "d": 1.68,
+   "text": "and we also have a pretty extensive"
+  },
+  {
+   "t": 192.0,
+   "d": 1.44,
+   "text": "upgrade system"
+  },
+  {
+   "t": 193.44,
+   "d": 2.0,
+   "text": "so uh throughout the run players can"
+  },
+  {
+   "t": 195.44,
+   "d": 1.92,
+   "text": "apply all sorts of upgrades to their"
+  },
+  {
+   "t": 197.36,
+   "d": 2.0,
+   "text": "units and their spells to just make them"
+  },
+  {
+   "t": 199.36,
+   "d": 1.92,
+   "text": "better make them do different things in"
+  },
+  {
+   "t": 201.28,
+   "d": 1.92,
+   "text": "this example you know they greatly"
+  },
+  {
+   "t": 203.2,
+   "d": 2.0,
+   "text": "decreased the cost of this unit"
+  },
+  {
+   "t": 205.2,
+   "d": 2.24,
+   "text": "um they made it smaller they increased"
+  },
+  {
+   "t": 207.44,
+   "d": 1.76,
+   "text": "the damage output all sorts of things"
+  },
+  {
+   "t": 209.2,
+   "d": 1.68,
+   "text": "that people are able to do through the"
+  },
+  {
+   "t": 210.88,
+   "d": 2.0,
+   "text": "upgrade system to really customize their"
+  },
+  {
+   "t": 212.88,
+   "d": 1.6,
+   "text": "run"
+  },
+  {
+   "t": 214.48,
+   "d": 2.24,
+   "text": "and while we built monster train using"
+  },
+  {
+   "t": 216.72,
+   "d": 2.32,
+   "text": "unity this talk uh does not focus on"
+  },
+  {
+   "t": 219.04,
+   "d": 2.08,
+   "text": "unity in particular the principles apply"
+  },
+  {
+   "t": 221.12,
+   "d": 2.08,
+   "text": "to any game engine but i will be there"
+  },
+  {
+   "t": 223.2,
+   "d": 1.52,
+   "text": "will be some screenshots of unity so"
+  },
+  {
+   "t": 224.72,
+   "d": 1.76,
+   "text": "just a heads up"
+  },
+  {
+   "t": 226.48,
+   "d": 2.4,
+   "text": "and it was released by shiny issue and"
+  },
+  {
+   "t": 228.88,
+   "d": 1.76,
+   "text": "good shepherd entertainment in may of"
+  },
+  {
+   "t": 230.64,
+   "d": 2.8,
+   "text": "2020 with a switch release in august of"
+  },
+  {
+   "t": 233.44,
+   "d": 1.6,
+   "text": "this year"
+  },
+  {
+   "t": 235.04,
+   "d": 1.36,
+   "text": "so these are the lessons i'm not going"
+  },
+  {
+   "t": 236.4,
+   "d": 1.2,
+   "text": "to go through all of them now but just"
+  },
+  {
+   "t": 237.6,
+   "d": 1.92,
+   "text": "to give you if you want some spoilers"
+  },
+  {
+   "t": 239.52,
+   "d": 1.44,
+   "text": "there's four lessons i'm going to cover"
+  },
+  {
+   "t": 240.96,
+   "d": 1.44,
+   "text": "here"
+  },
+  {
+   "t": 242.4,
+   "d": 1.76,
+   "text": "the first is that the prototype will"
+  },
+  {
+   "t": 244.16,
+   "d": 1.6,
+   "text": "become the product"
+  },
+  {
+   "t": 245.76,
+   "d": 1.52,
+   "text": "so i think we've all heard this in our"
+  },
+  {
+   "t": 247.28,
+   "d": 1.52,
+   "text": "career we've told ourselves this many"
+  },
+  {
+   "t": 248.8,
+   "d": 1.6,
+   "text": "times it is just a prototype we're"
+  },
+  {
+   "t": 250.4,
+   "d": 1.44,
+   "text": "definitely going to throw this out don't"
+  },
+  {
+   "t": 251.84,
+   "d": 1.28,
+   "text": "worry we're going to hack things we're"
+  },
+  {
+   "t": 253.12,
+   "d": 1.68,
+   "text": "just gonna it's gonna make it work and"
+  },
+  {
+   "t": 254.8,
+   "d": 2.32,
+   "text": "iterate quickly and everyone knows this"
+  },
+  {
+   "t": 257.12,
+   "d": 2.16,
+   "text": "is a big lie it's all lies"
+  },
+  {
+   "t": 259.28,
+   "d": 2.08,
+   "text": "and that was also the case with monster"
+  },
+  {
+   "t": 261.36,
+   "d": 0.88,
+   "text": "train"
+  },
+  {
+   "t": 262.24,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 263.04,
+   "d": 1.28,
+   "text": "so this is the original version of"
+  },
+  {
+   "t": 264.32,
+   "d": 1.52,
+   "text": "monster train for people that have"
+  },
+  {
+   "t": 265.84,
+   "d": 1.44,
+   "text": "played the game you're gonna notice some"
+  },
+  {
+   "t": 267.28,
+   "d": 2.08,
+   "text": "similarities"
+  },
+  {
+   "t": 269.36,
+   "d": 2.32,
+   "text": "there's three kind of lanes or rooms of"
+  },
+  {
+   "t": 271.68,
+   "d": 2.48,
+   "text": "combat that happen at the same time you"
+  },
+  {
+   "t": 274.16,
+   "d": 1.52,
+   "text": "have cards that in this case are"
+  },
+  {
+   "t": 275.68,
+   "d": 1.44,
+   "text": "monsters you play down on the right side"
+  },
+  {
+   "t": 277.12,
+   "d": 1.2,
+   "text": "of the screen"
+  },
+  {
+   "t": 278.32,
+   "d": 2.16,
+   "text": "there's also spells the big difference"
+  },
+  {
+   "t": 280.48,
+   "d": 1.84,
+   "text": "here is that this version was real time"
+  },
+  {
+   "t": 282.32,
+   "d": 1.36,
+   "text": "when we first were thinking of monster"
+  },
+  {
+   "t": 283.68,
+   "d": 1.44,
+   "text": "train we were thinking of it as a real"
+  },
+  {
+   "t": 285.12,
+   "d": 2.24,
+   "text": "time game these graphics were all just"
+  },
+  {
+   "t": 287.36,
+   "d": 1.68,
+   "text": "temporary obviously this is uh all"
+  },
+  {
+   "t": 289.04,
+   "d": 1.68,
+   "text": "prototyping"
+  },
+  {
+   "t": 290.72,
+   "d": 1.44,
+   "text": "so the energy kind of ticks up at a"
+  },
+  {
+   "t": 292.16,
+   "d": 2.56,
+   "text": "fixed rate enemies spawn combat happens"
+  },
+  {
+   "t": 294.72,
+   "d": 1.92,
+   "text": "at a fixed rate uh that was how we"
+  },
+  {
+   "t": 296.64,
+   "d": 1.6,
+   "text": "originally thought about the game"
+  },
+  {
+   "t": 298.24,
+   "d": 1.52,
+   "text": "eventually we moved off of that and this"
+  },
+  {
+   "t": 299.76,
+   "d": 1.28,
+   "text": "is kind of the final version of the game"
+  },
+  {
+   "t": 301.04,
+   "d": 1.76,
+   "text": "here which is a turn-based kind of more"
+  },
+  {
+   "t": 302.8,
+   "d": 2.32,
+   "text": "traditional card game"
+  },
+  {
+   "t": 305.12,
+   "d": 2.4,
+   "text": "um but a lot of the code that drives"
+  },
+  {
+   "t": 307.52,
+   "d": 2.4,
+   "text": "this prototype exists in the final"
+  },
+  {
+   "t": 309.92,
+   "d": 1.28,
+   "text": "version"
+  },
+  {
+   "t": 311.2,
+   "d": 1.76,
+   "text": "so we just kept building on top of what"
+  },
+  {
+   "t": 312.96,
+   "d": 1.12,
+   "text": "we created"
+  },
+  {
+   "t": 314.08,
+   "d": 1.2,
+   "text": "that led to a lot of interesting"
+  },
+  {
+   "t": 315.28,
+   "d": 2.64,
+   "text": "problems as my sort of generic google"
+  },
+  {
+   "t": 317.92,
+   "d": 3.6,
+   "text": "image search for problems here indicates"
+  },
+  {
+   "t": 321.52,
+   "d": 1.84,
+   "text": "so one problem we had and again sorry"
+  },
+  {
+   "t": 323.36,
+   "d": 1.92,
+   "text": "this is more engineer focused there are"
+  },
+  {
+   "t": 325.28,
+   "d": 1.2,
+   "text": "a lot of things in the talk that are not"
+  },
+  {
+   "t": 326.48,
+   "d": 2.08,
+   "text": "but i am an engineer so"
+  },
+  {
+   "t": 328.56,
+   "d": 2.88,
+   "text": "uh we took advantage of co-routines and"
+  },
+  {
+   "t": 331.44,
+   "d": 1.6,
+   "text": "so for folks who might not be aware a"
+  },
+  {
+   "t": 333.04,
+   "d": 2.16,
+   "text": "co-routine basically lets you"
+  },
+  {
+   "t": 335.2,
+   "d": 2.72,
+   "text": "express code that would happen over time"
+  },
+  {
+   "t": 337.92,
+   "d": 2.16,
+   "text": "inside of one kind of sequence or one"
+  },
+  {
+   "t": 340.08,
+   "d": 1.28,
+   "text": "function"
+  },
+  {
+   "t": 341.36,
+   "d": 1.92,
+   "text": "so in this example a unit is taking"
+  },
+  {
+   "t": 343.28,
+   "d": 1.92,
+   "text": "damage this i shouldn't mention this"
+  },
+  {
+   "t": 345.2,
+   "d": 1.52,
+   "text": "isn't real monstering code i just kind"
+  },
+  {
+   "t": 346.72,
+   "d": 1.68,
+   "text": "of put up a simple example"
+  },
+  {
+   "t": 348.4,
+   "d": 1.92,
+   "text": "uh units taking damage we're going to"
+  },
+  {
+   "t": 350.32,
+   "d": 1.36,
+   "text": "play an animation then we're going to"
+  },
+  {
+   "t": 351.68,
+   "d": 2.48,
+   "text": "pause for 0.8 seconds if they die we're"
+  },
+  {
+   "t": 354.16,
+   "d": 1.44,
+   "text": "going to resolve a trigger maybe they"
+  },
+  {
+   "t": 355.6,
+   "d": 1.92,
+   "text": "explode and we're going to do another"
+  },
+  {
+   "t": 357.52,
+   "d": 2.88,
+   "text": "animation so in in total this whole you"
+  },
+  {
+   "t": 360.4,
+   "d": 2.32,
+   "text": "know sequence took two seconds and we"
+  },
+  {
+   "t": 362.72,
+   "d": 1.84,
+   "text": "expressed it all in one place which is"
+  },
+  {
+   "t": 364.56,
+   "d": 2.24,
+   "text": "really handy because it's you know it's"
+  },
+  {
+   "t": 366.8,
+   "d": 1.76,
+   "text": "very easy to track what's happening it's"
+  },
+  {
+   "t": 368.56,
+   "d": 2.48,
+   "text": "like a lego instructions one two three"
+  },
+  {
+   "t": 371.04,
+   "d": 2.4,
+   "text": "four it's all in one place on one page"
+  },
+  {
+   "t": 373.44,
+   "d": 2.64,
+   "text": "the logic is very easy to track"
+  },
+  {
+   "t": 376.08,
+   "d": 2.08,
+   "text": "um you know you have other"
+  },
+  {
+   "t": 378.16,
+   "d": 1.6,
+   "text": "ways to express this sort of logic you"
+  },
+  {
+   "t": 379.76,
+   "d": 1.76,
+   "text": "might have an event system and that has"
+  },
+  {
+   "t": 381.52,
+   "d": 1.44,
+   "text": "its own advantages but one of the"
+  },
+  {
+   "t": 382.96,
+   "d": 2.4,
+   "text": "biggest disadvantages of that is if"
+  },
+  {
+   "t": 385.36,
+   "d": 1.76,
+   "text": "logic is all split out all over the"
+  },
+  {
+   "t": 387.12,
+   "d": 1.44,
+   "text": "place so you you don't have it all kind"
+  },
+  {
+   "t": 388.56,
+   "d": 3.04,
+   "text": "of expressed in one handy location so"
+  },
+  {
+   "t": 391.6,
+   "d": 2.32,
+   "text": "for prototyping co-routines make a lot"
+  },
+  {
+   "t": 393.92,
+   "d": 1.44,
+   "text": "of sense and cover teams have their"
+  },
+  {
+   "t": 395.36,
+   "d": 1.92,
+   "text": "place in other areas too but we"
+  },
+  {
+   "t": 397.28,
+   "d": 1.28,
+   "text": "definitely were a little overzealous"
+  },
+  {
+   "t": 398.56,
+   "d": 1.28,
+   "text": "with them"
+  },
+  {
+   "t": 399.84,
+   "d": 1.44,
+   "text": "so the big disadvantage is there's no"
+  },
+  {
+   "t": 401.28,
+   "d": 2.88,
+   "text": "separation of concern all of your ui and"
+  },
+  {
+   "t": 404.16,
+   "d": 1.92,
+   "text": "input and sound effects and game logic"
+  },
+  {
+   "t": 406.08,
+   "d": 3.12,
+   "text": "are all bundled together in one place"
+  },
+  {
+   "t": 409.2,
+   "d": 2.4,
+   "text": "this led to a few problems"
+  },
+  {
+   "t": 411.6,
+   "d": 1.68,
+   "text": "the primary problem led to was how we"
+  },
+  {
+   "t": 413.28,
+   "d": 1.84,
+   "text": "did damage previews so this was really"
+  },
+  {
+   "t": 415.12,
+   "d": 2.08,
+   "text": "important for our game um the combat"
+  },
+  {
+   "t": 417.2,
+   "d": 1.52,
+   "text": "rules are pretty simple but when you"
+  },
+  {
+   "t": 418.72,
+   "d": 1.84,
+   "text": "start adding a lot of units and a lot of"
+  },
+  {
+   "t": 420.56,
+   "d": 2.96,
+   "text": "status effects a lot of artifacts into a"
+  },
+  {
+   "t": 423.52,
+   "d": 1.04,
+   "text": "into play"
+  },
+  {
+   "t": 424.56,
+   "d": 1.6,
+   "text": "uh it could be confusing to figure out"
+  },
+  {
+   "t": 426.16,
+   "d": 1.76,
+   "text": "how it's gonna resolve so we implemented"
+  },
+  {
+   "t": 427.92,
+   "d": 1.6,
+   "text": "damage previews which is that little red"
+  },
+  {
+   "t": 429.52,
+   "d": 3.2,
+   "text": "x there i'm mousing over and when you uh"
+  },
+  {
+   "t": 432.72,
+   "d": 1.28,
+   "text": "you know it shows you the x shows you"
+  },
+  {
+   "t": 434.0,
+   "d": 1.92,
+   "text": "the unit's gonna die and but if i play a"
+  },
+  {
+   "t": 435.92,
+   "d": 2.0,
+   "text": "spell to kill one of the enemies here it"
+  },
+  {
+   "t": 437.92,
+   "d": 2.24,
+   "text": "changes the equation and now now my unit"
+  },
+  {
+   "t": 440.16,
+   "d": 1.84,
+   "text": "on the left is going to take 15 damage"
+  },
+  {
+   "t": 442.0,
+   "d": 1.36,
+   "text": "while i'm going to kill one of the units"
+  },
+  {
+   "t": 443.36,
+   "d": 1.04,
+   "text": "on the right"
+  },
+  {
+   "t": 444.4,
+   "d": 1.68,
+   "text": "so this is a very handy thing this is"
+  },
+  {
+   "t": 446.08,
+   "d": 1.52,
+   "text": "basically necessary for us to ship the"
+  },
+  {
+   "t": 447.6,
+   "d": 1.6,
+   "text": "game something players really enjoy"
+  },
+  {
+   "t": 449.2,
+   "d": 1.76,
+   "text": "about monster train especially as you"
+  },
+  {
+   "t": 450.96,
+   "d": 1.52,
+   "text": "start getting more and more complicated"
+  },
+  {
+   "t": 452.48,
+   "d": 2.4,
+   "text": "cards and units"
+  },
+  {
+   "t": 454.88,
+   "d": 1.84,
+   "text": "and to implement this ideally you would"
+  },
+  {
+   "t": 456.72,
+   "d": 2.48,
+   "text": "have a very deterministic simulation so"
+  },
+  {
+   "t": 459.2,
+   "d": 1.52,
+   "text": "for folks who might not have heard that"
+  },
+  {
+   "t": 460.72,
+   "d": 1.6,
+   "text": "word in this context the idea is you"
+  },
+  {
+   "t": 462.32,
+   "d": 2.48,
+   "text": "know if i have this red domino here at"
+  },
+  {
+   "t": 464.8,
+   "d": 1.92,
+   "text": "the top and i knock it over eventually"
+  },
+  {
+   "t": 466.72,
+   "d": 1.6,
+   "text": "the green domino on the far right is"
+  },
+  {
+   "t": 468.32,
+   "d": 1.2,
+   "text": "going to fall down and that's going to"
+  },
+  {
+   "t": 469.52,
+   "d": 2.0,
+   "text": "happen every single time i push the red"
+  },
+  {
+   "t": 471.52,
+   "d": 2.48,
+   "text": "domino over"
+  },
+  {
+   "t": 474.0,
+   "d": 1.28,
+   "text": "there's a lot of reasons why you might"
+  },
+  {
+   "t": 475.28,
+   "d": 2.48,
+   "text": "not have a deterministic simulation"
+  },
+  {
+   "t": 477.76,
+   "d": 2.08,
+   "text": "you might have random number generation"
+  },
+  {
+   "t": 479.84,
+   "d": 1.28,
+   "text": "in there you might be using floating"
+  },
+  {
+   "t": 481.12,
+   "d": 2.0,
+   "text": "point values that compute differently on"
+  },
+  {
+   "t": 483.12,
+   "d": 1.68,
+   "text": "different platforms"
+  },
+  {
+   "t": 484.8,
+   "d": 1.76,
+   "text": "there's all sorts of other reasons and"
+  },
+  {
+   "t": 486.56,
+   "d": 1.44,
+   "text": "this is something to get right you kind"
+  },
+  {
+   "t": 488.0,
+   "d": 1.68,
+   "text": "of need to at the start you need to"
+  },
+  {
+   "t": 489.68,
+   "d": 2.16,
+   "text": "intentionally shoot for a deterministic"
+  },
+  {
+   "t": 491.84,
+   "d": 3.84,
+   "text": "simulation and we didn't really do that"
+  },
+  {
+   "t": 496.16,
+   "d": 2.32,
+   "text": "so as a result we"
+  },
+  {
+   "t": 498.48,
+   "d": 1.84,
+   "text": "kind of just ran our entire game loop"
+  },
+  {
+   "t": 500.32,
+   "d": 2.8,
+   "text": "was run on kind of a giant co-routine"
+  },
+  {
+   "t": 503.12,
+   "d": 2.16,
+   "text": "and we had a lot of exceptions in that"
+  },
+  {
+   "t": 505.28,
+   "d": 1.76,
+   "text": "um this code's all over the place here"
+  },
+  {
+   "t": 507.04,
+   "d": 1.44,
+   "text": "but you know if we're doing a sound"
+  },
+  {
+   "t": 508.48,
+   "d": 1.12,
+   "text": "effect you don't want to do that in"
+  },
+  {
+   "t": 509.6,
+   "d": 1.84,
+   "text": "preview mode you don't want to show a"
+  },
+  {
+   "t": 511.44,
+   "d": 1.68,
+   "text": "warning message on the screen in preview"
+  },
+  {
+   "t": 513.12,
+   "d": 1.84,
+   "text": "mode so we had a lot of exceptions this"
+  },
+  {
+   "t": 514.96,
+   "d": 1.44,
+   "text": "took a lot of time to get working"
+  },
+  {
+   "t": 516.4,
+   "d": 1.6,
+   "text": "correctly we eventually did but it was a"
+  },
+  {
+   "t": 518.0,
+   "d": 2.08,
+   "text": "lot of work"
+  },
+  {
+   "t": 520.08,
+   "d": 1.44,
+   "text": "another problem is just how do we"
+  },
+  {
+   "t": 521.52,
+   "d": 1.92,
+   "text": "represent cards and that leads me to"
+  },
+  {
+   "t": 523.44,
+   "d": 1.68,
+   "text": "then my next lesson is that cards are"
+  },
+  {
+   "t": 525.12,
+   "d": 3.2,
+   "text": "basically their own programming language"
+  },
+  {
+   "t": 528.32,
+   "d": 2.16,
+   "text": "so i love cards cards are awesome i"
+  },
+  {
+   "t": 530.48,
+   "d": 1.84,
+   "text": "think anybody who has played card games"
+  },
+  {
+   "t": 532.32,
+   "d": 1.68,
+   "text": "loves card games you see a binder full"
+  },
+  {
+   "t": 534.0,
+   "d": 1.84,
+   "text": "of cards and it it just gets the wheel"
+  },
+  {
+   "t": 535.84,
+   "d": 1.36,
+   "text": "spinning you just get really excited to"
+  },
+  {
+   "t": 537.2,
+   "d": 1.36,
+   "text": "think about all the synergies"
+  },
+  {
+   "t": 538.56,
+   "d": 2.88,
+   "text": "interaction points um cards are awesome"
+  },
+  {
+   "t": 541.44,
+   "d": 1.36,
+   "text": "and i fell in love with cards with this"
+  },
+  {
+   "t": 542.8,
+   "d": 1.6,
+   "text": "game called netrunner which released in"
+  },
+  {
+   "t": 544.4,
+   "d": 1.76,
+   "text": "2012 i'm sure there's some fans out in"
+  },
+  {
+   "t": 546.16,
+   "d": 1.68,
+   "text": "the audience who are getting those"
+  },
+  {
+   "t": 547.84,
+   "d": 1.44,
+   "text": "feelings looking at these cards i know i"
+  },
+  {
+   "t": 549.28,
+   "d": 1.12,
+   "text": "do"
+  },
+  {
+   "t": 550.4,
+   "d": 1.12,
+   "text": "but this was going to be my first"
+  },
+  {
+   "t": 551.52,
+   "d": 1.76,
+   "text": "digital card game at least my big my"
+  },
+  {
+   "t": 553.28,
+   "d": 2.24,
+   "text": "first big digital card game so you know"
+  },
+  {
+   "t": 555.52,
+   "d": 2.16,
+   "text": "i was going into this with the prototype"
+  },
+  {
+   "t": 557.68,
+   "d": 1.76,
+   "text": "of how do i architect a card game how do"
+  },
+  {
+   "t": 559.44,
+   "d": 2.08,
+   "text": "i represent a card in a way that a"
+  },
+  {
+   "t": 561.52,
+   "d": 2.32,
+   "text": "designer can manipulate and i'm speaking"
+  },
+  {
+   "t": 563.84,
+   "d": 1.36,
+   "text": "mostly of kind of technical"
+  },
+  {
+   "t": 565.2,
+   "d": 2.0,
+   "text": "representation here not necessarily the"
+  },
+  {
+   "t": 567.2,
+   "d": 2.08,
+   "text": "design of the cards themselves so i"
+  },
+  {
+   "t": 569.28,
+   "d": 1.28,
+   "text": "didn't know how to do that and i was"
+  },
+  {
+   "t": 570.56,
+   "d": 1.6,
+   "text": "looking online i tried to figure out you"
+  },
+  {
+   "t": 572.16,
+   "d": 1.2,
+   "text": "know how does hearthstone do it or how"
+  },
+  {
+   "t": 573.36,
+   "d": 1.44,
+   "text": "does how do other games represent their"
+  },
+  {
+   "t": 574.8,
+   "d": 1.92,
+   "text": "cards and there's surprisingly little"
+  },
+  {
+   "t": 576.72,
+   "d": 1.52,
+   "text": "information out there"
+  },
+  {
+   "t": 578.24,
+   "d": 3.04,
+   "text": "so i wanted to kind of show how we do it"
+  },
+  {
+   "t": 581.28,
+   "d": 1.28,
+   "text": "talk about what i think is good about"
+  },
+  {
+   "t": 582.56,
+   "d": 1.84,
+   "text": "this and what we got wrong"
+  },
+  {
+   "t": 584.4,
+   "d": 1.76,
+   "text": "and help spread some knowledge of how"
+  },
+  {
+   "t": 586.16,
+   "d": 2.0,
+   "text": "you might build a card game"
+  },
+  {
+   "t": 588.16,
+   "d": 1.92,
+   "text": "so this is i want to break down a card"
+  },
+  {
+   "t": 590.08,
+   "d": 1.68,
+   "text": "to show you how it works in our game so"
+  },
+  {
+   "t": 591.76,
+   "d": 1.84,
+   "text": "this is torch you know talked about"
+  },
+  {
+   "t": 593.6,
+   "d": 2.4,
+   "text": "before it costs one energy to play one"
+  },
+  {
+   "t": 596.0,
+   "d": 1.52,
+   "text": "embers we call it and deals two damage"
+  },
+  {
+   "t": 597.52,
+   "d": 2.24,
+   "text": "to a target of your choice"
+  },
+  {
+   "t": 599.76,
+   "d": 2.8,
+   "text": "so here we go uh some basic information"
+  },
+  {
+   "t": 602.56,
+   "d": 1.52,
+   "text": "here the name of the card we have"
+  },
+  {
+   "t": 604.08,
+   "d": 1.36,
+   "text": "description we have kind of a handy"
+  },
+  {
+   "t": 605.44,
+   "d": 1.84,
+   "text": "system where we could kind of hook into"
+  },
+  {
+   "t": 607.28,
+   "d": 2.0,
+   "text": "the effects so in this case it deals two"
+  },
+  {
+   "t": 609.28,
+   "d": 2.0,
+   "text": "damage if we change the number to three"
+  },
+  {
+   "t": 611.28,
+   "d": 2.4,
+   "text": "or one later all the card text will just"
+  },
+  {
+   "t": 613.68,
+   "d": 1.68,
+   "text": "dynamically update which is really handy"
+  },
+  {
+   "t": 615.36,
+   "d": 1.28,
+   "text": "because we shipped the game in a number"
+  },
+  {
+   "t": 616.64,
+   "d": 1.92,
+   "text": "of different languages so we don't have"
+  },
+  {
+   "t": 618.56,
+   "d": 1.84,
+   "text": "to re-translate just by changing numbers"
+  },
+  {
+   "t": 620.4,
+   "d": 1.76,
+   "text": "which change all the time you have some"
+  },
+  {
+   "t": 622.16,
+   "d": 1.6,
+   "text": "kind of other meta information here what"
+  },
+  {
+   "t": 623.76,
+   "d": 2.88,
+   "text": "type of card it is etc"
+  },
+  {
+   "t": 626.64,
+   "d": 1.36,
+   "text": "this is the bulk of what i want to talk"
+  },
+  {
+   "t": 628.0,
+   "d": 2.32,
+   "text": "about and this is the card effect what"
+  },
+  {
+   "t": 630.32,
+   "d": 1.52,
+   "text": "the card's doing and there's a lot of"
+  },
+  {
+   "t": 631.84,
+   "d": 1.28,
+   "text": "information here and a lot of these"
+  },
+  {
+   "t": 633.12,
+   "d": 1.28,
+   "text": "parameters are not actually used for"
+  },
+  {
+   "t": 634.4,
+   "d": 1.68,
+   "text": "this effect so i'm going to trim it down"
+  },
+  {
+   "t": 636.08,
+   "d": 2.24,
+   "text": "to what's necessary here so card effect"
+  },
+  {
+   "t": 638.32,
+   "d": 1.44,
+   "text": "damage this is what the card's doing"
+  },
+  {
+   "t": 639.76,
+   "d": 2.0,
+   "text": "it's doing damage card we use card for"
+  },
+  {
+   "t": 641.76,
+   "d": 1.6,
+   "text": "damage all over the place this is"
+  },
+  {
+   "t": 643.36,
+   "d": 2.0,
+   "text": "basically a c sharp file card effect"
+  },
+  {
+   "t": 645.36,
+   "d": 2.8,
+   "text": "damage dot cs it's just a script"
+  },
+  {
+   "t": 648.16,
+   "d": 1.36,
+   "text": "target mode there's all sorts of target"
+  },
+  {
+   "t": 649.52,
+   "d": 1.84,
+   "text": "modes in the game this one is just what"
+  },
+  {
+   "t": 651.36,
+   "d": 1.92,
+   "text": "character you drop the card on"
+  },
+  {
+   "t": 653.28,
+   "d": 1.28,
+   "text": "should test i'm not going to worry about"
+  },
+  {
+   "t": 654.56,
+   "d": 2.08,
+   "text": "that for right now um in pram and well"
+  },
+  {
+   "t": 656.64,
+   "d": 1.84,
+   "text": "i'm going to do two damage so the pram"
+  },
+  {
+   "t": 658.48,
+   "d": 2.24,
+   "text": "anto is very contextual to the card"
+  },
+  {
+   "t": 660.72,
+   "d": 1.28,
+   "text": "effect"
+  },
+  {
+   "t": 662.0,
+   "d": 1.12,
+   "text": "and then at the bottom there's some"
+  },
+  {
+   "t": 663.12,
+   "d": 1.6,
+   "text": "other kind of meta information of what"
+  },
+  {
+   "t": 664.72,
+   "d": 3.84,
+   "text": "class it's a part of when it unlocks etc"
+  },
+  {
+   "t": 668.56,
+   "d": 2.16,
+   "text": "so at a very high level this is sort of"
+  },
+  {
+   "t": 670.72,
+   "d": 1.52,
+   "text": "how the logic is"
+  },
+  {
+   "t": 672.24,
+   "d": 1.76,
+   "text": "all right we have ui code that"
+  },
+  {
+   "t": 674.0,
+   "d": 1.52,
+   "text": "represents your hand of cards when we"
+  },
+  {
+   "t": 675.52,
+   "d": 2.0,
+   "text": "detect that the players drop in that on"
+  },
+  {
+   "t": 677.52,
+   "d": 1.6,
+   "text": "a unit"
+  },
+  {
+   "t": 679.12,
+   "d": 1.68,
+   "text": "we try and play the card in our card"
+  },
+  {
+   "t": 680.8,
+   "d": 1.04,
+   "text": "manager"
+  },
+  {
+   "t": 681.84,
+   "d": 1.68,
+   "text": "from there we remove energy from the"
+  },
+  {
+   "t": 683.52,
+   "d": 1.52,
+   "text": "player manager"
+  },
+  {
+   "t": 685.04,
+   "d": 1.44,
+   "text": "if they don't have the energy they can't"
+  },
+  {
+   "t": 686.48,
+   "d": 2.0,
+   "text": "play the card and then we just in order"
+  },
+  {
+   "t": 688.48,
+   "d": 2.08,
+   "text": "just down the list resolve the card"
+  },
+  {
+   "t": 690.56,
+   "d": 2.16,
+   "text": "effects"
+  },
+  {
+   "t": 692.72,
+   "d": 1.84,
+   "text": "so there's a lot of code here um we're"
+  },
+  {
+   "t": 694.56,
+   "d": 0.96,
+   "text": "mostly just going to focus on the"
+  },
+  {
+   "t": 695.52,
+   "d": 1.6,
+   "text": "highlighted bit at the top we're"
+  },
+  {
+   "t": 697.12,
+   "d": 1.76,
+   "text": "computing the damage which in this case"
+  },
+  {
+   "t": 698.88,
+   "d": 1.84,
+   "text": "is just going to be two but as you can"
+  },
+  {
+   "t": 700.72,
+   "d": 1.2,
+   "text": "imagine we have a lot of different ways"
+  },
+  {
+   "t": 701.92,
+   "d": 1.6,
+   "text": "to compute damage"
+  },
+  {
+   "t": 703.52,
+   "d": 1.36,
+   "text": "there's some sound effect code and then"
+  },
+  {
+   "t": 704.88,
+   "d": 1.44,
+   "text": "ultimately we're going to iterate over"
+  },
+  {
+   "t": 706.32,
+   "d": 1.6,
+   "text": "the targets in this example there's just"
+  },
+  {
+   "t": 707.92,
+   "d": 1.28,
+   "text": "going to be one target but there are"
+  },
+  {
+   "t": 709.2,
+   "d": 2.64,
+   "text": "cards that target multiple units"
+  },
+  {
+   "t": 711.84,
+   "d": 1.12,
+   "text": "and we're going to apply damage to that"
+  },
+  {
+   "t": 712.96,
+   "d": 3.04,
+   "text": "target through our combat manager"
+  },
+  {
+   "t": 716.0,
+   "d": 1.76,
+   "text": "so this this"
+  },
+  {
+   "t": 717.76,
+   "d": 1.6,
+   "text": "overall architecture worked fine for a"
+  },
+  {
+   "t": 719.36,
+   "d": 1.44,
+   "text": "long time we had a lot of cards that"
+  },
+  {
+   "t": 720.8,
+   "d": 2.0,
+   "text": "just sort of did unrelated linear things"
+  },
+  {
+   "t": 722.8,
+   "d": 2.96,
+   "text": "you know deal damage draw a card do this"
+  },
+  {
+   "t": 725.76,
+   "d": 1.84,
+   "text": "but it really broke down on effects were"
+  },
+  {
+   "t": 727.6,
+   "d": 1.36,
+   "text": "dependent on each other and when they"
+  },
+  {
+   "t": 728.96,
+   "d": 1.44,
+   "text": "were non-linear so when they were"
+  },
+  {
+   "t": 730.4,
+   "d": 1.68,
+   "text": "scaling involved"
+  },
+  {
+   "t": 732.08,
+   "d": 1.76,
+   "text": "so as an example of that i'll break down"
+  },
+  {
+   "t": 733.84,
+   "d": 2.64,
+   "text": "this card vent so this is an x cost card"
+  },
+  {
+   "t": 736.48,
+   "d": 1.6,
+   "text": "what that means is it's going to spend"
+  },
+  {
+   "t": 738.08,
+   "d": 1.92,
+   "text": "all your remaining ember in the turn and"
+  },
+  {
+   "t": 740.0,
+   "d": 1.68,
+   "text": "it's going to scale the effect so deal"
+  },
+  {
+   "t": 741.68,
+   "d": 1.76,
+   "text": "2x damage to enemy units if you have"
+  },
+  {
+   "t": 743.44,
+   "d": 4.4,
+   "text": "three amber deal six damage enemy units"
+  },
+  {
+   "t": 747.92,
+   "d": 1.52,
+   "text": "so the way we do this is we have"
+  },
+  {
+   "t": 749.44,
+   "d": 1.68,
+   "text": "something called card traits and there's"
+  },
+  {
+   "t": 751.12,
+   "d": 1.44,
+   "text": "a lot of cartridges in the game some of"
+  },
+  {
+   "t": 752.56,
+   "d": 1.76,
+   "text": "them were visible like do piercing"
+  },
+  {
+   "t": 754.32,
+   "d": 2.24,
+   "text": "damage would ignore armor this cartridge"
+  },
+  {
+   "t": 756.56,
+   "d": 1.04,
+   "text": "was invisible and it was just"
+  },
+  {
+   "t": 757.6,
+   "d": 2.72,
+   "text": "responsible for hooking up this x with"
+  },
+  {
+   "t": 760.32,
+   "d": 1.76,
+   "text": "the effect"
+  },
+  {
+   "t": 762.08,
+   "d": 1.92,
+   "text": "uh so this is saying"
+  },
+  {
+   "t": 764.0,
+   "d": 2.64,
+   "text": "uh do two times the played cost of this"
+  },
+  {
+   "t": 766.64,
+   "d": 1.84,
+   "text": "card this turn which is kind of how it's"
+  },
+  {
+   "t": 768.48,
+   "d": 1.6,
+   "text": "hooked up"
+  },
+  {
+   "t": 770.08,
+   "d": 2.08,
+   "text": "but going into that um card trait"
+  },
+  {
+   "t": 772.16,
+   "d": 1.92,
+   "text": "scaling ad damage"
+  },
+  {
+   "t": 774.08,
+   "d": 2.16,
+   "text": "um there's a computation to get that"
+  },
+  {
+   "t": 776.24,
+   "d": 2.88,
+   "text": "bonus damage that extra damage uh not"
+  },
+  {
+   "t": 779.12,
+   "d": 1.36,
+   "text": "gonna go into that but they it just had"
+  },
+  {
+   "t": 780.48,
+   "d": 2.32,
+   "text": "a way to kind of query those parameters"
+  },
+  {
+   "t": 782.8,
+   "d": 2.48,
+   "text": "and determine your extra damage"
+  },
+  {
+   "t": 785.28,
+   "d": 1.76,
+   "text": "and the way this worked is there was"
+  },
+  {
+   "t": 787.04,
+   "d": 2.16,
+   "text": "this function in our character class"
+  },
+  {
+   "t": 789.2,
+   "d": 2.88,
+   "text": "calculate bonus damage and if there was"
+  },
+  {
+   "t": 792.08,
+   "d": 2.0,
+   "text": "a card responsible for doing this damage"
+  },
+  {
+   "t": 794.08,
+   "d": 2.16,
+   "text": "we would iterate through its traits and"
+  },
+  {
+   "t": 796.24,
+   "d": 1.76,
+   "text": "we would allow those traits to modify"
+  },
+  {
+   "t": 798.0,
+   "d": 1.44,
+   "text": "the damage"
+  },
+  {
+   "t": 799.44,
+   "d": 2.0,
+   "text": "so this is how it worked and the big"
+  },
+  {
+   "t": 801.44,
+   "d": 1.6,
+   "text": "problem here in my opinion is that the"
+  },
+  {
+   "t": 803.04,
+   "d": 2.64,
+   "text": "behavior was very implicit in code so"
+  },
+  {
+   "t": 805.68,
+   "d": 1.2,
+   "text": "the designer didn't have a lot of"
+  },
+  {
+   "t": 806.88,
+   "d": 1.52,
+   "text": "control over things"
+  },
+  {
+   "t": 808.4,
+   "d": 2.08,
+   "text": "and as a result we had to kind of custom"
+  },
+  {
+   "t": 810.48,
+   "d": 2.4,
+   "text": "write a lot of card traits a lot of card"
+  },
+  {
+   "t": 812.88,
+   "d": 2.4,
+   "text": "effects even in some cases for very"
+  },
+  {
+   "t": 815.28,
+   "d": 1.52,
+   "text": "specific cards we had some cards where"
+  },
+  {
+   "t": 816.8,
+   "d": 1.6,
+   "text": "basically i was me or one of the other"
+  },
+  {
+   "t": 818.4,
+   "d": 2.32,
+   "text": "engineers was writing custom code to"
+  },
+  {
+   "t": 820.72,
+   "d": 1.44,
+   "text": "support that card"
+  },
+  {
+   "t": 822.16,
+   "d": 2.0,
+   "text": "and that wasn't great"
+  },
+  {
+   "t": 824.16,
+   "d": 1.6,
+   "text": "so in my mind the solution or i"
+  },
+  {
+   "t": 825.76,
+   "d": 1.04,
+   "text": "shouldn't say social maybe an"
+  },
+  {
+   "t": 826.8,
+   "d": 2.32,
+   "text": "improvement would be to use the idea of"
+  },
+  {
+   "t": 829.12,
+   "d": 2.88,
+   "text": "a kind of domain specific action graph"
+  },
+  {
+   "t": 832.0,
+   "d": 2.4,
+   "text": "so this is not for uh monster train but"
+  },
+  {
+   "t": 834.4,
+   "d": 2.24,
+   "text": "this is one way it might look"
+  },
+  {
+   "t": 836.64,
+   "d": 1.84,
+   "text": "and i wanted to kind of go into depth on"
+  },
+  {
+   "t": 838.48,
+   "d": 1.36,
+   "text": "a little bit through this example so"
+  },
+  {
+   "t": 839.84,
+   "d": 2.0,
+   "text": "this is another monstring card called a"
+  },
+  {
+   "t": 841.84,
+   "d": 1.76,
+   "text": "woken's rail spike each of the clans"
+  },
+  {
+   "t": 843.6,
+   "d": 1.76,
+   "text": "have their own rail spike"
+  },
+  {
+   "t": 845.36,
+   "d": 1.36,
+   "text": "it's a train game"
+  },
+  {
+   "t": 846.72,
+   "d": 2.32,
+   "text": "it's x cost it has consumed so it can"
+  },
+  {
+   "t": 849.04,
+   "d": 2.0,
+   "text": "only be played once per battle"
+  },
+  {
+   "t": 851.04,
+   "d": 1.76,
+   "text": "and it draws x cards and applies"
+  },
+  {
+   "t": 852.8,
+   "d": 1.76,
+   "text": "negative one cost to those cards so a"
+  },
+  {
+   "t": 854.56,
+   "d": 1.2,
+   "text": "few different things going on here i"
+  },
+  {
+   "t": 855.76,
+   "d": 1.52,
+   "text": "wanted to see how we might represent"
+  },
+  {
+   "t": 857.28,
+   "d": 2.64,
+   "text": "this in a graph"
+  },
+  {
+   "t": 859.92,
+   "d": 2.8,
+   "text": "so the green nodes here represent"
+  },
+  {
+   "t": 862.72,
+   "d": 2.72,
+   "text": "control flow"
+  },
+  {
+   "t": 866.0,
+   "d": 1.36,
+   "text": "so we're going to start the entry we're"
+  },
+  {
+   "t": 867.36,
+   "d": 1.52,
+   "text": "going to draw cards upgrade them and"
+  },
+  {
+   "t": 868.88,
+   "d": 2.4,
+   "text": "consume so in draw cards how many cards"
+  },
+  {
+   "t": 871.28,
+   "d": 1.2,
+   "text": "we're going to draw well it's going to"
+  },
+  {
+   "t": 872.48,
+   "d": 1.6,
+   "text": "be based off the energy spent these"
+  },
+  {
+   "t": 874.08,
+   "d": 1.52,
+   "text": "would be parameters that would be either"
+  },
+  {
+   "t": 875.6,
+   "d": 1.84,
+   "text": "dynamically determined such as energy"
+  },
+  {
+   "t": 877.44,
+   "d": 2.8,
+   "text": "spent or designer determined such as"
+  },
+  {
+   "t": 880.24,
+   "d": 1.84,
+   "text": "upgrade data so we're going to draw"
+  },
+  {
+   "t": 882.08,
+   "d": 2.4,
+   "text": "energy spent cards uh what cards we're"
+  },
+  {
+   "t": 884.48,
+   "d": 1.6,
+   "text": "going to upgrade well we're going to"
+  },
+  {
+   "t": 886.08,
+   "d": 1.36,
+   "text": "upgrade the cards that we drew and what"
+  },
+  {
+   "t": 887.44,
+   "d": 1.36,
+   "text": "are we going to upgrade them with we're"
+  },
+  {
+   "t": 888.8,
+   "d": 1.36,
+   "text": "going to upgrade them with a piece of"
+  },
+  {
+   "t": 890.16,
+   "d": 2.96,
+   "text": "data that the designer has hooked up"
+  },
+  {
+   "t": 893.12,
+   "d": 1.28,
+   "text": "and then we're going to consume cards"
+  },
+  {
+   "t": 894.4,
+   "d": 1.76,
+   "text": "and what cards are we going to consume"
+  },
+  {
+   "t": 896.16,
+   "d": 1.6,
+   "text": "we're going to consume the card that was"
+  },
+  {
+   "t": 897.76,
+   "d": 2.32,
+   "text": "played but this also could consume any"
+  },
+  {
+   "t": 900.08,
+   "d": 1.84,
+   "text": "other cards that we have this card list"
+  },
+  {
+   "t": 901.92,
+   "d": 1.36,
+   "text": "idea"
+  },
+  {
+   "t": 903.28,
+   "d": 1.28,
+   "text": "so what if we wanted to change this so"
+  },
+  {
+   "t": 904.56,
+   "d": 2.4,
+   "text": "that we draw one card for every card in"
+  },
+  {
+   "t": 906.96,
+   "d": 2.88,
+   "text": "the discard pile"
+  },
+  {
+   "t": 910.08,
+   "d": 1.76,
+   "text": "it's a very simple change so instead of"
+  },
+  {
+   "t": 911.84,
+   "d": 2.72,
+   "text": "drawing energy spent we draw the discard"
+  },
+  {
+   "t": 914.56,
+   "d": 1.92,
+   "text": "pile size so we might have deck info"
+  },
+  {
+   "t": 916.48,
+   "d": 1.36,
+   "text": "which has all sorts of info we might"
+  },
+  {
+   "t": 917.84,
+   "d": 2.4,
+   "text": "have the size of the draw pile number of"
+  },
+  {
+   "t": 920.24,
+   "d": 1.76,
+   "text": "cards in hand whatever and if we wanted"
+  },
+  {
+   "t": 922.0,
+   "d": 1.68,
+   "text": "to scale we could also do something like"
+  },
+  {
+   "t": 923.68,
+   "d": 2.24,
+   "text": "put a 2x multiplier between these two"
+  },
+  {
+   "t": 925.92,
+   "d": 2.16,
+   "text": "nodes so now we're drawn two times the"
+  },
+  {
+   "t": 928.08,
+   "d": 2.4,
+   "text": "size your discard pile so this gives the"
+  },
+  {
+   "t": 930.48,
+   "d": 1.92,
+   "text": "designer a lot more"
+  },
+  {
+   "t": 932.4,
+   "d": 2.48,
+   "text": "leverage over how these effects resolve"
+  },
+  {
+   "t": 934.88,
+   "d": 2.4,
+   "text": "and allows the programmers to write more"
+  },
+  {
+   "t": 937.28,
+   "d": 3.68,
+   "text": "specific simple nodes"
+  },
+  {
+   "t": 940.96,
+   "d": 1.76,
+   "text": "so lesson three is that feedback and"
+  },
+  {
+   "t": 942.72,
+   "d": 2.32,
+   "text": "iteration are everything super important"
+  },
+  {
+   "t": 945.04,
+   "d": 2.56,
+   "text": "we took advantage of a system i want to"
+  },
+  {
+   "t": 947.6,
+   "d": 1.6,
+   "text": "talk about"
+  },
+  {
+   "t": 949.2,
+   "d": 2.0,
+   "text": "so in monster train we have the system"
+  },
+  {
+   "t": 951.2,
+   "d": 2.08,
+   "text": "it's here at the bottom left in black"
+  },
+  {
+   "t": 953.28,
+   "d": 2.72,
+   "text": "beta press f8 to give feedback so this"
+  },
+  {
+   "t": 956.0,
+   "d": 1.6,
+   "text": "was visible throughout the whole beta"
+  },
+  {
+   "t": 957.6,
+   "d": 1.68,
+   "text": "this system is actually still in the"
+  },
+  {
+   "t": 959.28,
+   "d": 2.0,
+   "text": "version of the game that is on steam so"
+  },
+  {
+   "t": 961.28,
+   "d": 2.16,
+   "text": "people could press f8 this little box is"
+  },
+  {
+   "t": 963.44,
+   "d": 1.52,
+   "text": "not visible but it still works and we"
+  },
+  {
+   "t": 964.96,
+   "d": 2.56,
+   "text": "still collect feedback to this day"
+  },
+  {
+   "t": 967.52,
+   "d": 2.88,
+   "text": "uh so i'll show you how this looked"
+  },
+  {
+   "t": 970.4,
+   "d": 2.16,
+   "text": "see if the video works"
+  },
+  {
+   "t": 972.56,
+   "d": 1.52,
+   "text": "so you might like this card it looks"
+  },
+  {
+   "t": 974.08,
+   "d": 1.44,
+   "text": "like cool card you want to give some"
+  },
+  {
+   "t": 975.52,
+   "d": 2.24,
+   "text": "feedback you just tell us it's a card"
+  },
+  {
+   "t": 977.76,
+   "d": 1.6,
+   "text": "looks good we like this type type of"
+  },
+  {
+   "t": 979.36,
+   "d": 2.64,
+   "text": "feedback too and you hit submit and"
+  },
+  {
+   "t": 982.0,
+   "d": 2.08,
+   "text": "that's it so from player perspective"
+  },
+  {
+   "t": 984.08,
+   "d": 1.52,
+   "text": "it's that simple"
+  },
+  {
+   "t": 985.6,
+   "d": 1.52,
+   "text": "so what's great about this is just no"
+  },
+  {
+   "t": 987.12,
+   "d": 1.44,
+   "text": "friction they don't have to put in a"
+  },
+  {
+   "t": 988.56,
+   "d": 2.8,
+   "text": "username password there's no alt tabbing"
+  },
+  {
+   "t": 991.36,
+   "d": 2.4,
+   "text": "to a website it's just all right in the"
+  },
+  {
+   "t": 993.76,
+   "d": 1.84,
+   "text": "game very simple very simple to give"
+  },
+  {
+   "t": 995.6,
+   "d": 1.76,
+   "text": "feedback"
+  },
+  {
+   "t": 997.36,
+   "d": 1.92,
+   "text": "from our point of view we have a slack"
+  },
+  {
+   "t": 999.28,
+   "d": 1.84,
+   "text": "channel where all this feedback goes and"
+  },
+  {
+   "t": 1001.12,
+   "d": 2.24,
+   "text": "so you know the post is some meta"
+  },
+  {
+   "t": 1003.36,
+   "d": 2.08,
+   "text": "information about who sent it maybe what"
+  },
+  {
+   "t": 1005.44,
+   "d": 1.76,
+   "text": "run they were in some high level"
+  },
+  {
+   "t": 1007.2,
+   "d": 2.08,
+   "text": "information and then the comment then in"
+  },
+  {
+   "t": 1009.28,
+   "d": 3.12,
+   "text": "a thread we have the log file which is"
+  },
+  {
+   "t": 1012.4,
+   "d": 1.68,
+   "text": "awesome might have some error messages"
+  },
+  {
+   "t": 1014.08,
+   "d": 1.36,
+   "text": "in there they might be out of memory all"
+  },
+  {
+   "t": 1015.44,
+   "d": 1.2,
+   "text": "sorts of things we could determine just"
+  },
+  {
+   "t": 1016.64,
+   "d": 1.6,
+   "text": "by looking at the log file we also have"
+  },
+  {
+   "t": 1018.24,
+   "d": 1.36,
+   "text": "the save file"
+  },
+  {
+   "t": 1019.6,
+   "d": 1.92,
+   "text": "so while we didn't have deterministic"
+  },
+  {
+   "t": 1021.52,
+   "d": 1.44,
+   "text": "battles the game itself was"
+  },
+  {
+   "t": 1022.96,
+   "d": 2.4,
+   "text": "deterministic between battles well the"
+  },
+  {
+   "t": 1025.36,
+   "d": 1.28,
+   "text": "battle itself was deterministic but we"
+  },
+  {
+   "t": 1026.64,
+   "d": 1.36,
+   "text": "couldn't like go into the middle of"
+  },
+  {
+   "t": 1028.0,
+   "d": 1.84,
+   "text": "battle i should say but the safe hall"
+  },
+  {
+   "t": 1029.84,
+   "d": 1.12,
+   "text": "would let us go to the start of the"
+  },
+  {
+   "t": 1030.96,
+   "d": 1.76,
+   "text": "battle which was great to help try and"
+  },
+  {
+   "t": 1032.72,
+   "d": 1.6,
+   "text": "reproduce bugs in a lot of cases they"
+  },
+  {
+   "t": 1034.32,
+   "d": 1.2,
+   "text": "would kind of tell us what happened and"
+  },
+  {
+   "t": 1035.52,
+   "d": 2.0,
+   "text": "we'd be able to through the log and"
+  },
+  {
+   "t": 1037.52,
+   "d": 1.44,
+   "text": "through the save file reproduce it"
+  },
+  {
+   "t": 1038.96,
+   "d": 1.76,
+   "text": "oftentimes very easily"
+  },
+  {
+   "t": 1040.72,
+   "d": 1.52,
+   "text": "we also get a screenshot of what they"
+  },
+  {
+   "t": 1042.24,
+   "d": 1.84,
+   "text": "you know so we could see the context to"
+  },
+  {
+   "t": 1044.08,
+   "d": 1.44,
+   "text": "what their feedback is"
+  },
+  {
+   "t": 1045.52,
+   "d": 2.24,
+   "text": "so this is super awesome super useful"
+  },
+  {
+   "t": 1047.76,
+   "d": 1.52,
+   "text": "it's something we're doing on other"
+  },
+  {
+   "t": 1049.28,
+   "d": 2.0,
+   "text": "games we make it's just a extremely"
+  },
+  {
+   "t": 1051.28,
+   "d": 2.0,
+   "text": "useful system"
+  },
+  {
+   "t": 1053.28,
+   "d": 1.92,
+   "text": "so if phase one is collect valuable"
+  },
+  {
+   "t": 1055.2,
+   "d": 1.52,
+   "text": "player feedback and phase three is"
+  },
+  {
+   "t": 1056.72,
+   "d": 2.24,
+   "text": "profit phase two is the most important"
+  },
+  {
+   "t": 1058.96,
+   "d": 2.56,
+   "text": "which is taking consistent action so it"
+  },
+  {
+   "t": 1061.52,
+   "d": 1.68,
+   "text": "sounds boring but someone's gotta go in"
+  },
+  {
+   "t": 1063.2,
+   "d": 2.4,
+   "text": "there and read every piece of feedback"
+  },
+  {
+   "t": 1065.6,
+   "d": 1.76,
+   "text": "and take action on it so we actually had"
+  },
+  {
+   "t": 1067.36,
+   "d": 2.0,
+   "text": "little reactions and slack little emoji"
+  },
+  {
+   "t": 1069.36,
+   "d": 1.68,
+   "text": "reactions where we could say oh it's"
+  },
+  {
+   "t": 1071.04,
+   "d": 3.36,
+   "text": "already filed in our in jira or uh this"
+  },
+  {
+   "t": 1074.4,
+   "d": 1.28,
+   "text": "is not actually a bug you know we had"
+  },
+  {
+   "t": 1075.68,
+   "d": 2.16,
+   "text": "little kind of ways we could tag it to"
+  },
+  {
+   "t": 1077.84,
+   "d": 2.0,
+   "text": "just communicate between us"
+  },
+  {
+   "t": 1079.84,
+   "d": 1.6,
+   "text": "but we had our producer would go and"
+  },
+  {
+   "t": 1081.44,
+   "d": 2.4,
+   "text": "just go through the feedback every day"
+  },
+  {
+   "t": 1083.84,
+   "d": 2.48,
+   "text": "and file it to someone in a jira or we'd"
+  },
+  {
+   "t": 1086.32,
+   "d": 1.84,
+   "text": "at least evaluate all the feedback every"
+  },
+  {
+   "t": 1088.16,
+   "d": 1.6,
+   "text": "piece of feedback we got"
+  },
+  {
+   "t": 1089.76,
+   "d": 1.6,
+   "text": "so it's a lot of work but it made a"
+  },
+  {
+   "t": 1091.36,
+   "d": 1.28,
+   "text": "monster train the game it is i think"
+  },
+  {
+   "t": 1092.64,
+   "d": 2.08,
+   "text": "this tool more than anything was"
+  },
+  {
+   "t": 1094.72,
+   "d": 1.84,
+   "text": "the reason for our success and at least"
+  },
+  {
+   "t": 1096.56,
+   "d": 2.56,
+   "text": "any particular tool i should say"
+  },
+  {
+   "t": 1099.12,
+   "d": 2.56,
+   "text": "so the lesson is uh collect and take"
+  },
+  {
+   "t": 1101.68,
+   "d": 3.52,
+   "text": "action on all feedback it's super good"
+  },
+  {
+   "t": 1105.2,
+   "d": 1.92,
+   "text": "and final lesson mixing gameplay logic"
+  },
+  {
+   "t": 1107.12,
+   "d": 2.56,
+   "text": "with presentation is fun until it's not"
+  },
+  {
+   "t": 1109.68,
+   "d": 1.92,
+   "text": "this is probably uh the bulk of what i'm"
+  },
+  {
+   "t": 1111.6,
+   "d": 2.32,
+   "text": "interested in as an engineer and"
+  },
+  {
+   "t": 1113.92,
+   "d": 1.2,
+   "text": "a combination a lot of things i've been"
+  },
+  {
+   "t": 1115.12,
+   "d": 2.08,
+   "text": "talking about in this talk"
+  },
+  {
+   "t": 1117.2,
+   "d": 2.16,
+   "text": "so here's an example of what a card"
+  },
+  {
+   "t": 1119.36,
+   "d": 1.44,
+   "text": "might look like in code again this is"
+  },
+  {
+   "t": 1120.8,
+   "d": 1.52,
+   "text": "not naturally monitoring but this isn't"
+  },
+  {
+   "t": 1122.32,
+   "d": 1.44,
+   "text": "far off it's sort of a simplified"
+  },
+  {
+   "t": 1123.76,
+   "d": 1.44,
+   "text": "representation"
+  },
+  {
+   "t": 1125.2,
+   "d": 1.92,
+   "text": "so here we have a list of effects things"
+  },
+  {
+   "t": 1127.12,
+   "d": 2.16,
+   "text": "like draw a card do damage all right"
+  },
+  {
+   "t": 1129.28,
+   "d": 1.84,
+   "text": "here's a callback so ui code might tell"
+  },
+  {
+   "t": 1131.12,
+   "d": 1.44,
+   "text": "us to play the card"
+  },
+  {
+   "t": 1132.56,
+   "d": 2.24,
+   "text": "on play we're gonna do a sound effect"
+  },
+  {
+   "t": 1134.8,
+   "d": 1.44,
+   "text": "we're going to iterate over the effects"
+  },
+  {
+   "t": 1136.24,
+   "d": 1.68,
+   "text": "and resolve them through our game effect"
+  },
+  {
+   "t": 1137.92,
+   "d": 1.04,
+   "text": "manager"
+  },
+  {
+   "t": 1138.96,
+   "d": 1.04,
+   "text": "and then we're going to start an"
+  },
+  {
+   "t": 1140.0,
+   "d": 1.84,
+   "text": "animation to discard the card and when"
+  },
+  {
+   "t": 1141.84,
+   "d": 1.84,
+   "text": "that animation completes we'll discard"
+  },
+  {
+   "t": 1143.68,
+   "d": 1.68,
+   "text": "it logically and then we'll play a sound"
+  },
+  {
+   "t": 1145.36,
+   "d": 1.92,
+   "text": "effect"
+  },
+  {
+   "t": 1147.28,
+   "d": 1.52,
+   "text": "so let's go dig into this and see what"
+  },
+  {
+   "t": 1148.8,
+   "d": 2.64,
+   "text": "this does this just has uh maintains"
+  },
+  {
+   "t": 1151.44,
+   "d": 2.32,
+   "text": "lists of the piles so the hand pile the"
+  },
+  {
+   "t": 1153.76,
+   "d": 1.28,
+   "text": "discard pile we'd probably also want to"
+  },
+  {
+   "t": 1155.04,
+   "d": 2.16,
+   "text": "draw a pile here and a discard is"
+  },
+  {
+   "t": 1157.2,
+   "d": 1.52,
+   "text": "removing it from hand and put it into"
+  },
+  {
+   "t": 1158.72,
+   "d": 2.0,
+   "text": "the discard so pretty simple"
+  },
+  {
+   "t": 1160.72,
+   "d": 1.6,
+   "text": "now what happens if eventually you want"
+  },
+  {
+   "t": 1162.32,
+   "d": 1.36,
+   "text": "to have some card effects that do"
+  },
+  {
+   "t": 1163.68,
+   "d": 1.52,
+   "text": "something special when the card is"
+  },
+  {
+   "t": 1165.2,
+   "d": 2.4,
+   "text": "discarded uh you can imagine a card that"
+  },
+  {
+   "t": 1167.6,
+   "d": 2.72,
+   "text": "does damage when it's discarded"
+  },
+  {
+   "t": 1170.32,
+   "d": 2.0,
+   "text": "so we're going to go and discard we're"
+  },
+  {
+   "t": 1172.32,
+   "d": 1.36,
+   "text": "going to go and do a call back on the"
+  },
+  {
+   "t": 1173.68,
+   "d": 2.08,
+   "text": "cards tell it's been discarded and we"
+  },
+  {
+   "t": 1175.76,
+   "d": 0.88,
+   "text": "might want to do this because there"
+  },
+  {
+   "t": 1176.64,
+   "d": 1.28,
+   "text": "might be a lot of different ways a card"
+  },
+  {
+   "t": 1177.92,
+   "d": 1.44,
+   "text": "can ultimately get discarded so we need"
+  },
+  {
+   "t": 1179.36,
+   "d": 2.8,
+   "text": "to put it here just so it it gets caught"
+  },
+  {
+   "t": 1182.16,
+   "d": 2.24,
+   "text": "so here we have a list of discard"
+  },
+  {
+   "t": 1184.4,
+   "d": 1.44,
+   "text": "effects that the designer could hook up"
+  },
+  {
+   "t": 1185.84,
+   "d": 1.44,
+   "text": "these are special effects when the card"
+  },
+  {
+   "t": 1187.28,
+   "d": 1.52,
+   "text": "is discarded many cards won't have"
+  },
+  {
+   "t": 1188.8,
+   "d": 1.84,
+   "text": "anything this card does something and"
+  },
+  {
+   "t": 1190.64,
+   "d": 2.16,
+   "text": "we're going to resolve those effects"
+  },
+  {
+   "t": 1192.8,
+   "d": 1.36,
+   "text": "now the thing about this that i'm trying"
+  },
+  {
+   "t": 1194.16,
+   "d": 1.52,
+   "text": "to demonstrate is"
+  },
+  {
+   "t": 1195.68,
+   "d": 1.84,
+   "text": "there's a a lot of callbacks calling"
+  },
+  {
+   "t": 1197.52,
+   "d": 2.0,
+   "text": "back it from managers into"
+  },
+  {
+   "t": 1199.52,
+   "d": 2.08,
+   "text": "objects back into managers it's a lot of"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.8,
+   "text": "sort of like global access and"
+  },
+  {
+   "t": 1204.4,
+   "d": 1.52,
+   "text": "in a lot of ways this is what the"
+  },
+  {
+   "t": 1205.92,
+   "d": 1.52,
+   "text": "monitoring code base looks like and this"
+  },
+  {
+   "t": 1207.44,
+   "d": 2.48,
+   "text": "is what a lot of games code bases look"
+  },
+  {
+   "t": 1209.92,
+   "d": 1.28,
+   "text": "like pretty much every game i've worked"
+  },
+  {
+   "t": 1211.2,
+   "d": 1.52,
+   "text": "on ultimately"
+  },
+  {
+   "t": 1212.72,
+   "d": 2.48,
+   "text": "kind of devolves into this sort of thing"
+  },
+  {
+   "t": 1215.2,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1216.16,
+   "d": 2.16,
+   "text": "so i'm just proposing a sort of"
+  },
+  {
+   "t": 1218.32,
+   "d": 1.44,
+   "text": "alternative to this"
+  },
+  {
+   "t": 1219.76,
+   "d": 1.36,
+   "text": "because this uh when you work on the"
+  },
+  {
+   "t": 1221.12,
+   "d": 1.68,
+   "text": "game long enough it kind of starts"
+  },
+  {
+   "t": 1222.8,
+   "d": 1.28,
+   "text": "feeling like this"
+  },
+  {
+   "t": 1224.08,
+   "d": 1.84,
+   "text": "and i love this one do not touch any of"
+  },
+  {
+   "t": 1225.92,
+   "d": 1.76,
+   "text": "these wires i think you know toward the"
+  },
+  {
+   "t": 1227.68,
+   "d": 1.76,
+   "text": "end of monster in development i started"
+  },
+  {
+   "t": 1229.44,
+   "d": 1.52,
+   "text": "to feel that way and you know the"
+  },
+  {
+   "t": 1230.96,
+   "d": 1.92,
+   "text": "designer wanted to make some change and"
+  },
+  {
+   "t": 1232.88,
+   "d": 1.52,
+   "text": "you know it'd be kind of like a not"
+  },
+  {
+   "t": 1234.4,
+   "d": 2.48,
+   "text": "great moment in some ways"
+  },
+  {
+   "t": 1236.88,
+   "d": 1.84,
+   "text": "and you know it just it it drives you"
+  },
+  {
+   "t": 1238.72,
+   "d": 1.2,
+   "text": "wacky you know you just start going"
+  },
+  {
+   "t": 1239.92,
+   "d": 1.04,
+   "text": "wacky trying to figure out how"
+  },
+  {
+   "t": 1240.96,
+   "d": 1.6,
+   "text": "everything's connected"
+  },
+  {
+   "t": 1242.56,
+   "d": 2.0,
+   "text": "so how do you make spaghetti well it's"
+  },
+  {
+   "t": 1244.56,
+   "d": 1.52,
+   "text": "in my opinion it's the folly of mixing"
+  },
+  {
+   "t": 1246.08,
+   "d": 2.32,
+   "text": "gameplay logic with animation input and"
+  },
+  {
+   "t": 1248.4,
+   "d": 1.12,
+   "text": "ui"
+  },
+  {
+   "t": 1249.52,
+   "d": 2.24,
+   "text": "i love this shift"
+  },
+  {
+   "t": 1251.76,
+   "d": 1.28,
+   "text": "so it's important note that a lot of"
+  },
+  {
+   "t": 1253.04,
+   "d": 1.52,
+   "text": "game engines kind of lead us down this"
+  },
+  {
+   "t": 1254.56,
+   "d": 2.32,
+   "text": "road they take our hand gently down the"
+  },
+  {
+   "t": 1256.88,
+   "d": 2.32,
+   "text": "road as we as we walk with them so uh"
+  },
+  {
+   "t": 1259.2,
+   "d": 2.0,
+   "text": "this is a game object in unity other"
+  },
+  {
+   "t": 1261.2,
+   "d": 1.52,
+   "text": "game engines are responsible for this"
+  },
+  {
+   "t": 1262.72,
+   "d": 0.96,
+   "text": "too"
+  },
+  {
+   "t": 1263.68,
+   "d": 1.92,
+   "text": "and your idea is like logically yeah the"
+  },
+  {
+   "t": 1265.6,
+   "d": 1.76,
+   "text": "game object is going to have a light on"
+  },
+  {
+   "t": 1267.36,
+   "d": 1.44,
+   "text": "it it's going to have a model that's"
+  },
+  {
+   "t": 1268.8,
+   "d": 1.44,
+   "text": "going to have like this movement logic"
+  },
+  {
+   "t": 1270.24,
+   "d": 1.12,
+   "text": "and you're just going to cram all that"
+  },
+  {
+   "t": 1271.36,
+   "d": 2.0,
+   "text": "into one game object"
+  },
+  {
+   "t": 1273.36,
+   "d": 1.92,
+   "text": "which feels like the way you want to"
+  },
+  {
+   "t": 1275.28,
+   "d": 1.68,
+   "text": "represent things it makes a lot of sense"
+  },
+  {
+   "t": 1276.96,
+   "d": 2.88,
+   "text": "but it also leads to some bad patterns i"
+  },
+  {
+   "t": 1279.84,
+   "d": 1.12,
+   "text": "feel"
+  },
+  {
+   "t": 1280.96,
+   "d": 2.0,
+   "text": "so this is what i i've been moving"
+  },
+  {
+   "t": 1282.96,
+   "d": 2.72,
+   "text": "towards um in some of our other projects"
+  },
+  {
+   "t": 1285.68,
+   "d": 1.84,
+   "text": "a project i'm doing on the side this is"
+  },
+  {
+   "t": 1287.52,
+   "d": 2.32,
+   "text": "kind of the structure so the idea is you"
+  },
+  {
+   "t": 1289.84,
+   "d": 2.0,
+   "text": "silo off the gameplay logic is"
+  },
+  {
+   "t": 1291.84,
+   "d": 2.48,
+   "text": "completely separate um"
+  },
+  {
+   "t": 1294.32,
+   "d": 2.0,
+   "text": "so in this example you have world state"
+  },
+  {
+   "t": 1296.32,
+   "d": 1.92,
+   "text": "which would represent just the data of"
+  },
+  {
+   "t": 1298.24,
+   "d": 1.68,
+   "text": "maybe where units are what status"
+  },
+  {
+   "t": 1299.92,
+   "d": 1.84,
+   "text": "effects they have where props are in"
+  },
+  {
+   "t": 1301.76,
+   "d": 2.32,
+   "text": "your world any information about the the"
+  },
+  {
+   "t": 1304.08,
+   "d": 1.76,
+   "text": "state of the world and how it's changing"
+  },
+  {
+   "t": 1305.84,
+   "d": 1.84,
+   "text": "is in this world state and this doesn't"
+  },
+  {
+   "t": 1307.68,
+   "d": 1.44,
+   "text": "have a whole lot of logic there's just"
+  },
+  {
+   "t": 1309.12,
+   "d": 2.8,
+   "text": "some basic logic to query the state"
+  },
+  {
+   "t": 1311.92,
+   "d": 1.68,
+   "text": "and then the world engine itself is"
+  },
+  {
+   "t": 1313.6,
+   "d": 2.16,
+   "text": "responsible for modifying that state and"
+  },
+  {
+   "t": 1315.76,
+   "d": 2.96,
+   "text": "it does that through commands so often"
+  },
+  {
+   "t": 1318.72,
+   "d": 1.28,
+   "text": "player input are going to drive these"
+  },
+  {
+   "t": 1320.0,
+   "d": 2.72,
+   "text": "commands so a move move unit command"
+  },
+  {
+   "t": 1322.72,
+   "d": 1.76,
+   "text": "play a card command"
+  },
+  {
+   "t": 1324.48,
+   "d": 2.72,
+   "text": "world command damage do damage to a unit"
+  },
+  {
+   "t": 1327.2,
+   "d": 1.84,
+   "text": "so the world engine is going to process"
+  },
+  {
+   "t": 1329.04,
+   "d": 1.92,
+   "text": "these commands and apply changes to the"
+  },
+  {
+   "t": 1330.96,
+   "d": 2.24,
+   "text": "world state and the output of that is"
+  },
+  {
+   "t": 1333.2,
+   "d": 1.52,
+   "text": "world state changes so this is going to"
+  },
+  {
+   "t": 1334.72,
+   "d": 1.76,
+   "text": "tell us that a unit moved that a card"
+  },
+  {
+   "t": 1336.48,
+   "d": 2.4,
+   "text": "played that unit died and it's it's"
+  },
+  {
+   "t": 1338.88,
+   "d": 1.28,
+   "text": "important to know these are not one to"
+  },
+  {
+   "t": 1340.16,
+   "d": 2.16,
+   "text": "one so damage may or may not result in a"
+  },
+  {
+   "t": 1342.32,
+   "d": 2.0,
+   "text": "unit death so a world command may not"
+  },
+  {
+   "t": 1344.32,
+   "d": 1.36,
+   "text": "actually result in any world state"
+  },
+  {
+   "t": 1345.68,
+   "d": 3.84,
+   "text": "changes or it might result in dozens"
+  },
+  {
+   "t": 1349.68,
+   "d": 1.68,
+   "text": "other you might have heard this as model"
+  },
+  {
+   "t": 1351.36,
+   "d": 2.96,
+   "text": "view controller and under that model"
+  },
+  {
+   "t": 1354.32,
+   "d": 2.4,
+   "text": "a model world state would be the model"
+  },
+  {
+   "t": 1356.72,
+   "d": 1.52,
+   "text": "world engine would be the controller"
+  },
+  {
+   "t": 1358.24,
+   "d": 1.68,
+   "text": "that's manipulating the model and the"
+  },
+  {
+   "t": 1359.92,
+   "d": 1.36,
+   "text": "view of that are these world state"
+  },
+  {
+   "t": 1361.28,
+   "d": 2.32,
+   "text": "changes"
+  },
+  {
+   "t": 1363.6,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 1364.4,
+   "d": 2.08,
+   "text": "the way this would work is you would uh"
+  },
+  {
+   "t": 1366.48,
+   "d": 1.6,
+   "text": "you know generate world commands from"
+  },
+  {
+   "t": 1368.08,
+   "d": 1.12,
+   "text": "input"
+  },
+  {
+   "t": 1369.2,
+   "d": 1.84,
+   "text": "the world's state changes would then"
+  },
+  {
+   "t": 1371.04,
+   "d": 1.52,
+   "text": "drive your"
+  },
+  {
+   "t": 1372.56,
+   "d": 2.08,
+   "text": "you know visuals and sound effects so"
+  },
+  {
+   "t": 1374.64,
+   "d": 1.92,
+   "text": "unit moving might result in footstep"
+  },
+  {
+   "t": 1376.56,
+   "d": 2.32,
+   "text": "sounds through the sound system"
+  },
+  {
+   "t": 1378.88,
+   "d": 2.08,
+   "text": "a card played might do sound effects"
+  },
+  {
+   "t": 1380.96,
+   "d": 1.36,
+   "text": "there might be an achievement system so"
+  },
+  {
+   "t": 1382.32,
+   "d": 1.76,
+   "text": "we know if it's your 50th spell you've"
+  },
+  {
+   "t": 1384.08,
+   "d": 1.76,
+   "text": "played we could unlock an achievement"
+  },
+  {
+   "t": 1385.84,
+   "d": 1.76,
+   "text": "and a unit dined sound effects"
+  },
+  {
+   "t": 1387.6,
+   "d": 2.32,
+   "text": "achievements there's probably animation"
+  },
+  {
+   "t": 1389.92,
+   "d": 1.84,
+   "text": "so these systems can tune into"
+  },
+  {
+   "t": 1391.76,
+   "d": 1.6,
+   "text": "particular world state changes while"
+  },
+  {
+   "t": 1393.36,
+   "d": 2.8,
+   "text": "ignoring others"
+  },
+  {
+   "t": 1396.16,
+   "d": 1.92,
+   "text": "and it's also uh"
+  },
+  {
+   "t": 1398.08,
+   "d": 2.32,
+   "text": "affords other opportunities so it is"
+  },
+  {
+   "t": 1400.4,
+   "d": 2.08,
+   "text": "relatively well i should say it's easier"
+  },
+  {
+   "t": 1402.48,
+   "d": 2.32,
+   "text": "not trivial it's relatively easier to"
+  },
+  {
+   "t": 1404.8,
+   "d": 2.4,
+   "text": "serialize the state so you can output"
+  },
+  {
+   "t": 1407.2,
+   "d": 2.88,
+   "text": "this to a save file to json it's also it"
+  },
+  {
+   "t": 1410.08,
+   "d": 2.0,
+   "text": "makes a lot easier to do networking you"
+  },
+  {
+   "t": 1412.08,
+   "d": 1.92,
+   "text": "can serialize this over the network it's"
+  },
+  {
+   "t": 1414.0,
+   "d": 3.44,
+   "text": "it's isolated from all your like uh"
+  },
+  {
+   "t": 1417.44,
+   "d": 2.88,
+   "text": "visuals sound effects um"
+  },
+  {
+   "t": 1420.32,
+   "d": 2.08,
+   "text": "so in the unity example you know all of"
+  },
+  {
+   "t": 1422.4,
+   "d": 1.52,
+   "text": "the game objects and all that would just"
+  },
+  {
+   "t": 1423.92,
+   "d": 1.04,
+   "text": "be"
+  },
+  {
+   "t": 1424.96,
+   "d": 1.76,
+   "text": "a view into this world state so the"
+  },
+  {
+   "t": 1426.72,
+   "d": 1.44,
+   "text": "world state itself would be completely"
+  },
+  {
+   "t": 1428.16,
+   "d": 2.8,
+   "text": "isolated from unity in that example you"
+  },
+  {
+   "t": 1430.96,
+   "d": 1.6,
+   "text": "might not even need to use unity code at"
+  },
+  {
+   "t": 1432.56,
+   "d": 2.0,
+   "text": "all"
+  },
+  {
+   "t": 1434.56,
+   "d": 2.24,
+   "text": "so a lot of great advantages and i'm"
+  },
+  {
+   "t": 1436.8,
+   "d": 1.84,
+   "text": "i've been using this for a little over a"
+  },
+  {
+   "t": 1438.64,
+   "d": 2.64,
+   "text": "year and i'm very happy with how this uh"
+  },
+  {
+   "t": 1441.28,
+   "d": 2.8,
+   "text": "with the benefits that this has"
+  },
+  {
+   "t": 1444.08,
+   "d": 1.44,
+   "text": "so that's all i have for now i think i"
+  },
+  {
+   "t": 1445.52,
+   "d": 1.92,
+   "text": "talked a little bit too fast"
+  },
+  {
+   "t": 1447.44,
+   "d": 2.16,
+   "text": "this is my social on the bottom left so"
+  },
+  {
+   "t": 1449.6,
+   "d": 2.56,
+   "text": "twitter brian g cronin and if you want"
+  },
+  {
+   "t": 1452.16,
+   "d": 1.44,
+   "text": "to email me"
+  },
+  {
+   "t": 1453.6,
+   "d": 2.0,
+   "text": "if you have any questions comments"
+  },
+  {
+   "t": 1455.6,
+   "d": 2.08,
+   "text": "nitpicks whatever you could reach out in"
+  },
+  {
+   "t": 1457.68,
+   "d": 1.2,
+   "text": "either of those channels and i'm happy"
+  },
+  {
+   "t": 1458.88,
+   "d": 2.08,
+   "text": "to chat more about it um thank you for"
+  },
+  {
+   "t": 1460.96,
+   "d": 1.36,
+   "text": "your time"
+  },
+  {
+   "t": 1462.32,
+   "d": 2.48,
+   "text": "yeah thank you i mean it didn't talk too"
+  },
+  {
+   "t": 1464.8,
+   "d": 1.28,
+   "text": "fast because it just means we actually"
+  },
+  {
+   "t": 1466.08,
+   "d": 1.76,
+   "text": "have time for a couple questions which"
+  },
+  {
+   "t": 1467.84,
+   "d": 1.92,
+   "text": "is great good because we have a few"
+  },
+  {
+   "t": 1469.76,
+   "d": 2.32,
+   "text": "people definitely are very into this uh"
+  },
+  {
+   "t": 1472.08,
+   "d": 1.76,
+   "text": "yeah and someone mark ritter called the"
+  },
+  {
+   "t": 1473.84,
+   "d": 1.84,
+   "text": "model view controller like one slide"
+  },
+  {
+   "t": 1475.68,
+   "d": 1.6,
+   "text": "earlier oh yeah i knew someone would i"
+  },
+  {
+   "t": 1477.28,
+   "d": 2.88,
+   "text": "knew someone would yeah yeah um cool so"
+  },
+  {
+   "t": 1480.16,
+   "d": 1.76,
+   "text": "yeah top question here from fox tell"
+  },
+  {
+   "t": 1481.92,
+   "d": 2.24,
+   "text": "david did you ever have to do any major"
+  },
+  {
+   "t": 1484.16,
+   "d": 2.16,
+   "text": "code refactors due to a card effect not"
+  },
+  {
+   "t": 1486.32,
+   "d": 3.12,
+   "text": "being possible in the current system"
+  },
+  {
+   "t": 1489.44,
+   "d": 2.08,
+   "text": "um"
+  },
+  {
+   "t": 1491.52,
+   "d": 1.84,
+   "text": "nothing that i remember not like a major"
+  },
+  {
+   "t": 1493.36,
+   "d": 1.92,
+   "text": "refactor i mean there was a lot of"
+  },
+  {
+   "t": 1495.28,
+   "d": 3.04,
+   "text": "little refactors all the time"
+  },
+  {
+   "t": 1498.32,
+   "d": 1.92,
+   "text": "but you know we were sort of on a"
+  },
+  {
+   "t": 1500.24,
+   "d": 2.56,
+   "text": "schedule that at some point didn't allow"
+  },
+  {
+   "t": 1502.8,
+   "d": 1.92,
+   "text": "for big refactors so we sort of just"
+  },
+  {
+   "t": 1504.72,
+   "d": 1.76,
+   "text": "moved forward and"
+  },
+  {
+   "t": 1506.48,
+   "d": 1.52,
+   "text": "made it work as best as we could we"
+  },
+  {
+   "t": 1508.0,
+   "d": 1.36,
+   "text": "probably did limit some of the cards we"
+  },
+  {
+   "t": 1509.36,
+   "d": 2.16,
+   "text": "wanted to make because of technical"
+  },
+  {
+   "t": 1511.52,
+   "d": 1.36,
+   "text": "limitations which is always going to"
+  },
+  {
+   "t": 1512.88,
+   "d": 1.28,
+   "text": "happen and sometimes you have to make"
+  },
+  {
+   "t": 1514.16,
+   "d": 1.36,
+   "text": "that trade off"
+  },
+  {
+   "t": 1515.52,
+   "d": 2.48,
+   "text": "yeah okay cool um people have been kind"
+  },
+  {
+   "t": 1518.0,
+   "d": 1.68,
+   "text": "enough to update one of my questions"
+  },
+  {
+   "t": 1519.68,
+   "d": 1.92,
+   "text": "enough i don't feel as bad about asking"
+  },
+  {
+   "t": 1521.6,
+   "d": 1.2,
+   "text": "it"
+  },
+  {
+   "t": 1522.8,
+   "d": 1.44,
+   "text": "i've found working sometimes with"
+  },
+  {
+   "t": 1524.24,
+   "d": 1.76,
+   "text": "callbacks that they're trickier to debug"
+  },
+  {
+   "t": 1526.0,
+   "d": 2.08,
+   "text": "and follow versus like direct calls so"
+  },
+  {
+   "t": 1528.08,
+   "d": 2.24,
+   "text": "did you have any techniques for dealing"
+  },
+  {
+   "t": 1530.32,
+   "d": 1.76,
+   "text": "with the the debug and kind of"
+  },
+  {
+   "t": 1532.08,
+   "d": 1.44,
+   "text": "readability problems of a bunch of"
+  },
+  {
+   "t": 1533.52,
+   "d": 1.92,
+   "text": "callbacks"
+  },
+  {
+   "t": 1535.44,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1536.64,
+   "d": 1.92,
+   "text": "we definitely had those problems i'm"
+  },
+  {
+   "t": 1538.56,
+   "d": 0.96,
+   "text": "trying to think if we had any"
+  },
+  {
+   "t": 1539.52,
+   "d": 1.84,
+   "text": "interesting techniques specifically with"
+  },
+  {
+   "t": 1541.36,
+   "d": 2.32,
+   "text": "that we did we did take advantage of"
+  },
+  {
+   "t": 1543.68,
+   "d": 1.84,
+   "text": "extensive logging so the company is"
+  },
+  {
+   "t": 1545.52,
+   "d": 2.64,
+   "text": "really big on login in general um so you"
+  },
+  {
+   "t": 1548.16,
+   "d": 1.36,
+   "text": "know we have a lot we have log"
+  },
+  {
+   "t": 1549.52,
+   "d": 1.92,
+   "text": "categories so you can kind of filter for"
+  },
+  {
+   "t": 1551.44,
+   "d": 2.56,
+   "text": "game play stuff versus audio stuff"
+  },
+  {
+   "t": 1554.0,
+   "d": 3.12,
+   "text": "um so a lot of the bugs that i would fix"
+  },
+  {
+   "t": 1557.12,
+   "d": 2.56,
+   "text": "uh the logging was really useful and"
+  },
+  {
+   "t": 1559.68,
+   "d": 1.12,
+   "text": "then it was just the sort of thing when"
+  },
+  {
+   "t": 1560.8,
+   "d": 2.16,
+   "text": "you're working on a code base for around"
+  },
+  {
+   "t": 1562.96,
+   "d": 1.92,
+   "text": "two years you kind of get"
+  },
+  {
+   "t": 1564.88,
+   "d": 1.76,
+   "text": "you start to get intuition about it and"
+  },
+  {
+   "t": 1566.64,
+   "d": 1.6,
+   "text": "it can track those callbacks a lot"
+  },
+  {
+   "t": 1568.24,
+   "d": 2.08,
+   "text": "faster but yeah i'm an advocate for not"
+  },
+  {
+   "t": 1570.32,
+   "d": 2.08,
+   "text": "doing callbacks now at all"
+  },
+  {
+   "t": 1572.4,
+   "d": 1.84,
+   "text": "all right"
+  },
+  {
+   "t": 1574.24,
+   "d": 2.56,
+   "text": "um taco berry has a good question what's"
+  },
+  {
+   "t": 1576.8,
+   "d": 1.68,
+   "text": "your favorite entry-level deck building"
+  },
+  {
+   "t": 1578.48,
+   "d": 1.36,
+   "text": "game"
+  },
+  {
+   "t": 1579.84,
+   "d": 2.0,
+   "text": "oh well i think dominion is great if"
+  },
+  {
+   "t": 1581.84,
+   "d": 1.92,
+   "text": "you're if you're open to board games"
+  },
+  {
+   "t": 1583.76,
+   "d": 2.72,
+   "text": "dominion was the first as far as i know"
+  },
+  {
+   "t": 1586.48,
+   "d": 1.28,
+   "text": "and um"
+  },
+  {
+   "t": 1587.76,
+   "d": 2.4,
+   "text": "you know other than that um i i couldn't"
+  },
+  {
+   "t": 1590.16,
+   "d": 1.52,
+   "text": "help but mention slay the spire in terms"
+  },
+  {
+   "t": 1591.68,
+   "d": 1.84,
+   "text": "of a digital card game i think slate"
+  },
+  {
+   "t": 1593.52,
+   "d": 2.0,
+   "text": "aspire is really great uh definitely the"
+  },
+  {
+   "t": 1595.52,
+   "d": 2.64,
+   "text": "earlier stages make it easier to jump"
+  },
+  {
+   "t": 1598.16,
+   "d": 2.72,
+   "text": "into but um yeah actually i feel like"
+  },
+  {
+   "t": 1600.88,
+   "d": 1.76,
+   "text": "you're not allowed to say it but i think"
+  },
+  {
+   "t": 1602.64,
+   "d": 1.44,
+   "text": "that monster train is actually a really"
+  },
+  {
+   "t": 1604.08,
+   "d": 2.4,
+   "text": "good entry the entry level"
+  },
+  {
+   "t": 1606.48,
+   "d": 1.76,
+   "text": "i i think it's very understandable and"
+  },
+  {
+   "t": 1608.24,
+   "d": 1.52,
+   "text": "it ramps you up nicely with the"
+  },
+  {
+   "t": 1609.76,
+   "d": 1.6,
+   "text": "different clans oh that's good here yeah"
+  },
+  {
+   "t": 1611.36,
+   "d": 1.36,
+   "text": "i most of my experience with the game is"
+  },
+  {
+   "t": 1612.72,
+   "d": 1.92,
+   "text": "debugging late game stuff so i'm used to"
+  },
+  {
+   "t": 1614.64,
+   "d": 1.92,
+   "text": "very complicated board states and you"
+  },
+  {
+   "t": 1616.56,
+   "d": 2.56,
+   "text": "know yeah no i think it's pretty good"
+  },
+  {
+   "t": 1619.12,
+   "d": 2.8,
+   "text": "in terms of early accessibility um"
+  },
+  {
+   "t": 1621.92,
+   "d": 2.4,
+   "text": "yeah here's maybe one question from"
+  },
+  {
+   "t": 1624.32,
+   "d": 2.16,
+   "text": "oliver oof that i'm interested in is"
+  },
+  {
+   "t": 1626.48,
+   "d": 2.24,
+   "text": "there a reason you modify one state"
+  },
+  {
+   "t": 1628.72,
+   "d": 3.12,
+   "text": "instead of a series of states um which"
+  },
+  {
+   "t": 1631.84,
+   "d": 1.68,
+   "text": "you know if it was a series of states"
+  },
+  {
+   "t": 1633.52,
+   "d": 1.52,
+   "text": "maybe would that plug nicely into your"
+  },
+  {
+   "t": 1635.04,
+   "d": 1.6,
+   "text": "feedback system or is there a reason why"
+  },
+  {
+   "t": 1636.64,
+   "d": 2.08,
+   "text": "just having one is simpler oh i see kind"
+  },
+  {
+   "t": 1638.72,
+   "d": 1.52,
+   "text": "of toward the end of the talk about the"
+  },
+  {
+   "t": 1640.24,
+   "d": 3.2,
+   "text": "world states yeah um so i mean you could"
+  },
+  {
+   "t": 1643.44,
+   "d": 2.24,
+   "text": "do it however you want the the games"
+  },
+  {
+   "t": 1645.68,
+   "d": 1.44,
+   "text": "i've been working recently they're kind"
+  },
+  {
+   "t": 1647.12,
+   "d": 1.76,
+   "text": "of you know you have a"
+  },
+  {
+   "t": 1648.88,
+   "d": 1.92,
+   "text": "world you're in and then once that"
+  },
+  {
+   "t": 1650.8,
+   "d": 2.32,
+   "text": "world's complete like a run you dispose"
+  },
+  {
+   "t": 1653.12,
+   "d": 2.24,
+   "text": "of it and so if you were doing a game"
+  },
+  {
+   "t": 1655.36,
+   "d": 1.6,
+   "text": "that was um"
+  },
+  {
+   "t": 1656.96,
+   "d": 2.08,
+   "text": "i don't know like uh you're going"
+  },
+  {
+   "t": 1659.04,
+   "d": 1.36,
+   "text": "between different buildings you might"
+  },
+  {
+   "t": 1660.4,
+   "d": 2.0,
+   "text": "have a world state per building perhaps"
+  },
+  {
+   "t": 1662.4,
+   "d": 1.52,
+   "text": "um you could structure it however you"
+  },
+  {
+   "t": 1663.92,
+   "d": 1.6,
+   "text": "want but the games i've been doing it"
+  },
+  {
+   "t": 1665.52,
+   "d": 2.16,
+   "text": "made sense to just have a single world"
+  },
+  {
+   "t": 1667.68,
+   "d": 2.0,
+   "text": "state right and i guess would it have"
+  },
+  {
+   "t": 1669.68,
+   "d": 1.68,
+   "text": "made sense on something like monster"
+  },
+  {
+   "t": 1671.36,
+   "d": 1.44,
+   "text": "train to try and break up like here's"
+  },
+  {
+   "t": 1672.8,
+   "d": 2.24,
+   "text": "the state of the monsters versus you"
+  },
+  {
+   "t": 1675.04,
+   "d": 1.76,
+   "text": "know what's in the hand versus what the"
+  },
+  {
+   "t": 1676.8,
+   "d": 2.32,
+   "text": "upgrades are or something like that uh i"
+  },
+  {
+   "t": 1679.12,
+   "d": 1.52,
+   "text": "haven't thought about it but i mean it"
+  },
+  {
+   "t": 1680.64,
+   "d": 1.12,
+   "text": "it would have been a huge improvement"
+  },
+  {
+   "t": 1681.76,
+   "d": 1.6,
+   "text": "for monster train to have that concept"
+  },
+  {
+   "t": 1683.36,
+   "d": 1.44,
+   "text": "of a world state i mean there were so"
+  },
+  {
+   "t": 1684.8,
+   "d": 0.96,
+   "text": "many"
+  },
+  {
+   "t": 1685.76,
+   "d": 1.36,
+   "text": "things we could have done with that in"
+  },
+  {
+   "t": 1687.12,
+   "d": 2.24,
+   "text": "hindsight um you know we always wanted"
+  },
+  {
+   "t": 1689.36,
+   "d": 2.08,
+   "text": "to be able to like verify runs on the"
+  },
+  {
+   "t": 1691.44,
+   "d": 2.56,
+   "text": "server side so uh that was something we"
+  },
+  {
+   "t": 1694.0,
+   "d": 1.92,
+   "text": "could never really do so just to you"
+  },
+  {
+   "t": 1695.92,
+   "d": 2.24,
+   "text": "know find sheets and whatnot that's one"
+  },
+  {
+   "t": 1698.16,
+   "d": 1.44,
+   "text": "example and then also just to be able to"
+  },
+  {
+   "t": 1699.6,
+   "d": 1.68,
+   "text": "we wanted to be able to save the battle"
+  },
+  {
+   "t": 1701.28,
+   "d": 2.0,
+   "text": "in the middle of a battle and that was"
+  },
+  {
+   "t": 1703.28,
+   "d": 1.84,
+   "text": "something we could have done it but it"
+  },
+  {
+   "t": 1705.12,
+   "d": 2.0,
+   "text": "would have been a lot of work without"
+  },
+  {
+   "t": 1707.12,
+   "d": 1.6,
+   "text": "kind of this mechanism"
+  },
+  {
+   "t": 1708.72,
+   "d": 2.16,
+   "text": "right cool and yeah maybe one one more"
+  },
+  {
+   "t": 1710.88,
+   "d": 2.4,
+   "text": "question from hyper gardens uh how did"
+  },
+  {
+   "t": 1713.28,
+   "d": 1.92,
+   "text": "you decide on the data format for those"
+  },
+  {
+   "t": 1715.2,
+   "d": 2.32,
+   "text": "game entities because it feels like this"
+  },
+  {
+   "t": 1717.52,
+   "d": 1.68,
+   "text": "infinite possibility space there that's"
+  },
+  {
+   "t": 1719.2,
+   "d": 1.6,
+   "text": "hard to navigate of how do you actually"
+  },
+  {
+   "t": 1720.8,
+   "d": 1.84,
+   "text": "like turn that into a nice packet"
+  },
+  {
+   "t": 1722.64,
+   "d": 1.12,
+   "text": "especially with it sounds like you"
+  },
+  {
+   "t": 1723.76,
+   "d": 1.12,
+   "text": "didn't have to do a whole lot of"
+  },
+  {
+   "t": 1724.88,
+   "d": 2.08,
+   "text": "refactoring of like oops we forgot"
+  },
+  {
+   "t": 1726.96,
+   "d": 1.44,
+   "text": "something in that"
+  },
+  {
+   "t": 1728.4,
+   "d": 1.36,
+   "text": "i said so probably talking about how the"
+  },
+  {
+   "t": 1729.76,
+   "d": 1.36,
+   "text": "cards restructured yeah i think like the"
+  },
+  {
+   "t": 1731.12,
+   "d": 1.92,
+   "text": "card assets yeah that day before yeah"
+  },
+  {
+   "t": 1733.04,
+   "d": 1.92,
+   "text": "originally to be honest it was you know"
+  },
+  {
+   "t": 1734.96,
+   "d": 2.4,
+   "text": "we're doing this prototype and so i'm"
+  },
+  {
+   "t": 1737.36,
+   "d": 2.0,
+   "text": "just going to do kind of something i've"
+  },
+  {
+   "t": 1739.36,
+   "d": 1.68,
+   "text": "done before like i had worked on a card"
+  },
+  {
+   "t": 1741.04,
+   "d": 2.0,
+   "text": "game before it was much smaller"
+  },
+  {
+   "t": 1743.04,
+   "d": 1.92,
+   "text": "so i'm going to do that i liked the idea"
+  },
+  {
+   "t": 1744.96,
+   "d": 1.76,
+   "text": "of the data pointing directly to the"
+  },
+  {
+   "t": 1746.72,
+   "d": 1.68,
+   "text": "script that was going to resolve the"
+  },
+  {
+   "t": 1748.4,
+   "d": 2.32,
+   "text": "game effect so that seemed nice to me so"
+  },
+  {
+   "t": 1750.72,
+   "d": 2.24,
+   "text": "i did that so there wasn't a lot of"
+  },
+  {
+   "t": 1752.96,
+   "d": 1.36,
+   "text": "consideration ahead of time because i"
+  },
+  {
+   "t": 1754.32,
+   "d": 1.68,
+   "text": "was at the time i wasn't that worried"
+  },
+  {
+   "t": 1756.0,
+   "d": 1.76,
+   "text": "about this rolling into production but"
+  },
+  {
+   "t": 1757.76,
+   "d": 1.92,
+   "text": "that did happen"
+  },
+  {
+   "t": 1759.68,
+   "d": 1.52,
+   "text": "right oh and actually i'll just quickly"
+  },
+  {
+   "t": 1761.2,
+   "d": 1.84,
+   "text": "clarify because i see oliver"
+  },
+  {
+   "t": 1763.04,
+   "d": 1.44,
+   "text": "put it in chat when i'm talking about"
+  },
+  {
+   "t": 1764.48,
+   "d": 1.68,
+   "text": "the world states it was actually a"
+  },
+  {
+   "t": 1766.16,
+   "d": 2.32,
+   "text": "question of instead of having um like a"
+  },
+  {
+   "t": 1768.48,
+   "d": 1.52,
+   "text": "single world state that's modified over"
+  },
+  {
+   "t": 1770.0,
+   "d": 2.16,
+   "text": "and over again and you you read storing"
+  },
+  {
+   "t": 1772.16,
+   "d": 2.72,
+   "text": "like snapshots of the world state as it"
+  },
+  {
+   "t": 1774.88,
+   "d": 1.28,
+   "text": "goes so that you could look at kind of"
+  },
+  {
+   "t": 1776.16,
+   "d": 0.96,
+   "text": "what was the state of the world"
+  },
+  {
+   "t": 1777.12,
+   "d": 1.6,
+   "text": "throughout a whole room"
+  },
+  {
+   "t": 1778.72,
+   "d": 1.68,
+   "text": "oh yeah that sort of thing is totally"
+  },
+  {
+   "t": 1780.4,
+   "d": 2.4,
+   "text": "possible with this method um there's a"
+  },
+  {
+   "t": 1782.8,
+   "d": 1.36,
+   "text": "lot of things you could do in terms of"
+  },
+  {
+   "t": 1784.16,
+   "d": 1.68,
+   "text": "networking where you need to roll back"
+  },
+  {
+   "t": 1785.84,
+   "d": 1.76,
+   "text": "or whatever that um"
+  },
+  {
+   "t": 1787.6,
+   "d": 2.4,
+   "text": "you know you could have copies of it so"
+  },
+  {
+   "t": 1790.0,
+   "d": 2.24,
+   "text": "yeah this mechanism i think allows for a"
+  },
+  {
+   "t": 1792.24,
+   "d": 1.84,
+   "text": "lot of those things it would just depend"
+  },
+  {
+   "t": 1794.08,
+   "d": 1.68,
+   "text": "on your use case what you wanted to do"
+  },
+  {
+   "t": 1795.76,
+   "d": 1.6,
+   "text": "in particular yeah i think we just found"
+  },
+  {
+   "t": 1797.36,
+   "d": 2.0,
+   "text": "the forbidden possibility of uh saves"
+  },
+  {
+   "t": 1799.36,
+   "d": 2.56,
+   "text": "coming a deck building game"
+  },
+  {
+   "t": 1801.92,
+   "d": 1.52,
+   "text": "oh no people do that in monster train"
+  },
+  {
+   "t": 1803.44,
+   "d": 1.36,
+   "text": "all the time and it's like it's it's"
+  },
+  {
+   "t": 1804.8,
+   "d": 1.44,
+   "text": "there's a mod that like makes it"
+  },
+  {
+   "t": 1806.24,
+   "d": 1.28,
+   "text": "official in a way where you could kind"
+  },
+  {
+   "t": 1807.52,
+   "d": 2.48,
+   "text": "of restart a battle to yeah"
+  },
+  {
+   "t": 1810.0,
+   "d": 2.32,
+   "text": "that's cool all right well thank you so"
+  },
+  {
+   "t": 1812.32,
+   "d": 2.8,
+   "text": "much um really good questions and uh"
+  },
+  {
+   "t": 1815.12,
+   "d": 1.52,
+   "text": "yeah awesome to have you thank you so"
+  },
+  {
+   "t": 1816.64,
+   "d": 1.6,
+   "text": "much i think that there was some"
+  },
+  {
+   "t": 1818.24,
+   "d": 1.2,
+   "text": "conversation in chat this is going to be"
+  },
+  {
+   "t": 1819.44,
+   "d": 1.36,
+   "text": "a talk i think a lot of people come back"
+  },
+  {
+   "t": 1820.8,
+   "d": 2.4,
+   "text": "and reference very practically helpful"
+  },
+  {
+   "t": 1823.2,
+   "d": 1.92,
+   "text": "and enjoyable yeah i like practical"
+  },
+  {
+   "t": 1825.12,
+   "d": 1.44,
+   "text": "stuff and you're happy to talk and if"
+  },
+  {
+   "t": 1826.56,
+   "d": 1.12,
+   "text": "especially people have more thoughts on"
+  },
+  {
+   "t": 1827.68,
+   "d": 1.04,
+   "text": "this side this is stuff i'm still"
+  },
+  {
+   "t": 1828.72,
+   "d": 1.76,
+   "text": "learning myself and exploring so happy"
+  },
+  {
+   "t": 1830.48,
+   "d": 3.36,
+   "text": "to talk to other folks yeah"
+  }
+ ]
+}

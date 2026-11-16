@@ -1,0 +1,1860 @@
+{
+ "id": "ZtXGg6ECwQ8",
+ "url": "https://www.youtube.com/watch?v=ZtXGg6ECwQ8",
+ "title": "Robin Mendoza: The Use of Knowledge in the Labyrinth: The price mechanism as a storytelling device",
+ "speaker": "Robin Mendoza",
+ "talk_title": "The Use of Knowledge in the Labyrinth: The price mechanism as a storytelling device",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 897,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "By featuring markets with prices that fluctuate in response to changing conditions, games can succinctly express information about the state of the game-world — the relative scarcity of resources, the concerns & appetites of NPCs, even the repercussions of the player's own actions — all without saying a word. In this talk, I will explore the use of prices for storytelling and look at some of the ways roguelikes and other games could (and do) make use of this device, as well as some reasons why scenario-sensitive prices may not be appropriate for certain games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Price Signaling"
+  },
+  {
+   "start": 96,
+   "title": "Prices as Information Tools"
+  },
+  {
+   "start": 294,
+   "title": "Case Study: Pathologic"
+  },
+  {
+   "start": 370,
+   "title": "Economic Systems in Games"
+  },
+  {
+   "start": 533,
+   "title": "Design Challenges and Caveats"
+  },
+  {
+   "start": 712,
+   "title": "Q&A and Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2498,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.76,
+   "d": 1.52,
+   "text": "up I'm going to Welcome to the stage"
+  },
+  {
+   "t": 4.28,
+   "d": 2.24,
+   "text": "Robin Mendoza a game designer and writer"
+  },
+  {
+   "t": 6.52,
+   "d": 1.84,
+   "text": "living in New York he's written on"
+  },
+  {
+   "t": 8.36,
+   "d": 1.84,
+   "text": "narrative design Loi culture and"
+  },
+  {
+   "t": 10.2,
+   "d": 2.28,
+   "text": "experimental multiplayer games co-hosted"
+  },
+  {
+   "t": 12.48,
+   "d": 2.64,
+   "text": "the 7-Day brogue like game Jam in"
+  },
+  {
+   "t": 15.12,
+   "d": 1.24,
+   "text": "tribute to previous Rog likee"
+  },
+  {
+   "t": 16.36,
+   "d": 2.08,
+   "text": "celebration speaker Michael brogue and"
+  },
+  {
+   "t": 18.44,
+   "d": 1.28,
+   "text": "is currently writing an interactive"
+  },
+  {
+   "t": 19.72,
+   "d": 3.6,
+   "text": "fiction about postural hypertension"
+  },
+  {
+   "t": 23.32,
+   "d": 2.32,
+   "text": "hypotension very interesting um his"
+  },
+  {
+   "t": 25.64,
+   "d": 1.44,
+   "text": "favorite genres are coffee break Rog"
+  },
+  {
+   "t": 27.08,
+   "d": 2.44,
+   "text": "likes and manic Shooters and topics of"
+  },
+  {
+   "t": 29.52,
+   "d": 1.56,
+   "text": "special interest for him are Logistics"
+  },
+  {
+   "t": 31.08,
+   "d": 1.56,
+   "text": "compression"
+  },
+  {
+   "t": 32.64,
+   "d": 2.64,
+   "text": "irreversibility anisotropy and symmetry"
+  },
+  {
+   "t": 35.28,
+   "d": 3.88,
+   "text": "breaking did I say all those words"
+  },
+  {
+   "t": 39.64,
+   "d": 2.64,
+   "text": "correctly hopefully I"
+  },
+  {
+   "t": 42.28,
+   "d": 2.36,
+   "text": "did yeah so um this is the use of"
+  },
+  {
+   "t": 44.64,
+   "d": 1.72,
+   "text": "knowledge in The Labyrinth the price"
+  },
+  {
+   "t": 46.36,
+   "d": 3.44,
+   "text": "mechanism as a storytelling device so uh"
+  },
+  {
+   "t": 49.8,
+   "d": 1.2,
+   "text": "you know imagine you come out of the"
+  },
+  {
+   "t": 51.0,
+   "d": 2.44,
+   "text": "dungeon there's a merchant parked just"
+  },
+  {
+   "t": 53.44,
+   "d": 2.76,
+   "text": "outside you see on their sign board that"
+  },
+  {
+   "t": 56.2,
+   "d": 2.84,
+   "text": "tarsu amulets are now fetching double"
+  },
+  {
+   "t": 59.04,
+   "d": 1.56,
+   "text": "the usual asking price"
+  },
+  {
+   "t": 60.6,
+   "d": 2.44,
+   "text": "so what could this mean um is it growing"
+  },
+  {
+   "t": 63.04,
+   "d": 2.6,
+   "text": "Superstition among the locals was the"
+  },
+  {
+   "t": 65.64,
+   "d": 2.92,
+   "text": "princess spotted wearing one um is the"
+  },
+  {
+   "t": 68.56,
+   "d": 2.28,
+   "text": "government subsidizing you know hunting"
+  },
+  {
+   "t": 70.84,
+   "d": 2.08,
+   "text": "Tarsiers there's an infestation and"
+  },
+  {
+   "t": 72.92,
+   "d": 3.12,
+   "text": "they're um you know subsidizing"
+  },
+  {
+   "t": 76.04,
+   "d": 2.84,
+   "text": "collecting their eyeballs um or maybe"
+  },
+  {
+   "t": 78.88,
+   "d": 1.76,
+   "text": "when you were lost in the jungle hacking"
+  },
+  {
+   "t": 80.64,
+   "d": 3.24,
+   "text": "your way through you deforested it um"
+  },
+  {
+   "t": 83.88,
+   "d": 2.88,
+   "text": "put them on the endangered species list"
+  },
+  {
+   "t": 86.76,
+   "d": 3.48,
+   "text": "um or maybe there actually is some evil"
+  },
+  {
+   "t": 90.24,
+   "d": 2.6,
+   "text": "nasty thing out there um and it's not"
+  },
+  {
+   "t": 92.84,
+   "d": 1.52,
+   "text": "just Superstition maybe you should get"
+  },
+  {
+   "t": 94.36,
+   "d": 1.04,
+   "text": "some"
+  },
+  {
+   "t": 95.4,
+   "d": 1.84,
+   "text": "insurance um so I'm going to talk about"
+  },
+  {
+   "t": 97.24,
+   "d": 2.24,
+   "text": "price signaling so the name of this talk"
+  },
+  {
+   "t": 99.48,
+   "d": 2.76,
+   "text": "is a play on a famous economics paper um"
+  },
+  {
+   "t": 102.24,
+   "d": 2.2,
+   "text": "published in 1945 called the use of"
+  },
+  {
+   "t": 104.44,
+   "d": 3.2,
+   "text": "knowledge in society um so it's sort of"
+  },
+  {
+   "t": 107.64,
+   "d": 3.08,
+   "text": "talking about uh the function of prices"
+  },
+  {
+   "t": 110.72,
+   "d": 3.64,
+   "text": "um and how prices high at calls these"
+  },
+  {
+   "t": 114.36,
+   "d": 3.28,
+   "text": "quantitative indices that are able to"
+  },
+  {
+   "t": 117.64,
+   "d": 1.72,
+   "text": "compress and transmit complex"
+  },
+  {
+   "t": 119.36,
+   "d": 1.24,
+   "text": "information"
+  },
+  {
+   "t": 120.6,
+   "d": 1.96,
+   "text": "um and have it move across large"
+  },
+  {
+   "t": 122.56,
+   "d": 3.04,
+   "text": "networks efficiently um so the way that"
+  },
+  {
+   "t": 125.6,
+   "d": 1.56,
+   "text": "this functions you could almost think of"
+  },
+  {
+   "t": 127.16,
+   "d": 2.68,
+   "text": "as cybernetic and that local low context"
+  },
+  {
+   "t": 129.84,
+   "d": 4.12,
+   "text": "adjustments um evolve equilibria um and"
+  },
+  {
+   "t": 133.96,
+   "d": 1.92,
+   "text": "haek like it who's an Austrian School"
+  },
+  {
+   "t": 135.88,
+   "d": 1.4,
+   "text": "Economist kind of libertarian he thought"
+  },
+  {
+   "t": 137.28,
+   "d": 1.84,
+   "text": "that individuals would be incentivized"
+  },
+  {
+   "t": 139.12,
+   "d": 2.12,
+   "text": "to leverage their specific"
+  },
+  {
+   "t": 141.24,
+   "d": 1.64,
+   "text": "knowledges so there's a lot of"
+  },
+  {
+   "t": 142.88,
+   "d": 2.68,
+   "text": "inferences you can from uh motions of"
+  },
+  {
+   "t": 145.56,
+   "d": 2.28,
+   "text": "prices in a market um you could think of"
+  },
+  {
+   "t": 147.84,
+   "d": 2.52,
+   "text": "uh prices as a kind of anible or faster"
+  },
+  {
+   "t": 150.36,
+   "d": 3.24,
+   "text": "than light telecommunications device um"
+  },
+  {
+   "t": 153.6,
+   "d": 2.24,
+   "text": "and you could also think of them maybe"
+  },
+  {
+   "t": 155.84,
+   "d": 2.2,
+   "text": "as a kind of cryptographic hash where"
+  },
+  {
+   "t": 158.04,
+   "d": 2.16,
+   "text": "you know any change in the underlying"
+  },
+  {
+   "t": 160.2,
+   "d": 1.8,
+   "text": "data the conditions and facts of the"
+  },
+  {
+   "t": 162.0,
+   "d": 3.88,
+   "text": "world uh reduces uh results in a um"
+  },
+  {
+   "t": 165.88,
+   "d": 1.96,
+   "text": "significant change in kind of the cipher"
+  },
+  {
+   "t": 167.84,
+   "d": 1.72,
+   "text": "which would be the the numbers that are"
+  },
+  {
+   "t": 169.56,
+   "d": 2.64,
+   "text": "the prices um and prices kind of spare"
+  },
+  {
+   "t": 172.2,
+   "d": 2.08,
+   "text": "the details you know they're uh you're"
+  },
+  {
+   "t": 174.28,
+   "d": 1.84,
+   "text": "not sure if a change in a price was due"
+  },
+  {
+   "t": 176.12,
+   "d": 2.28,
+   "text": "to a change in Supply a change in demand"
+  },
+  {
+   "t": 178.4,
+   "d": 1.2,
+   "text": "um but it still gives you enough"
+  },
+  {
+   "t": 179.6,
+   "d": 2.0,
+   "text": "information information to maybe act on"
+  },
+  {
+   "t": 181.6,
+   "d": 2.28,
+   "text": "um so some of the information that"
+  },
+  {
+   "t": 183.88,
+   "d": 2.92,
+   "text": "prices can encode which is a lot um it's"
+  },
+  {
+   "t": 186.8,
+   "d": 1.64,
+   "text": "like resource distribution you know in a"
+  },
+  {
+   "t": 188.44,
+   "d": 3.24,
+   "text": "Rog like uh maybe the uh scarcity of"
+  },
+  {
+   "t": 191.68,
+   "d": 2.48,
+   "text": "different resources um you know changes"
+  },
+  {
+   "t": 194.16,
+   "d": 1.72,
+   "text": "from game games so you could infer"
+  },
+  {
+   "t": 195.88,
+   "d": 2.32,
+   "text": "something about that uh the beliefs of"
+  },
+  {
+   "t": 198.2,
+   "d": 0.88,
+   "text": "different"
+  },
+  {
+   "t": 199.08,
+   "d": 2.04,
+   "text": "communities um you know maybe somebody"
+  },
+  {
+   "t": 201.12,
+   "d": 1.64,
+   "text": "marking up or discounting a price for"
+  },
+  {
+   "t": 202.76,
+   "d": 2.68,
+   "text": "you based on your class or race um the"
+  },
+  {
+   "t": 205.44,
+   "d": 3.12,
+   "text": "political situation which Industries are"
+  },
+  {
+   "t": 208.56,
+   "d": 2.44,
+   "text": "subsidized um maybe collusion you know"
+  },
+  {
+   "t": 211.0,
+   "d": 1.96,
+   "text": "people have cornered a market on a"
+  },
+  {
+   "t": 212.96,
+   "d": 2.48,
+   "text": "commodity or an industry and of course"
+  },
+  {
+   "t": 215.44,
+   "d": 1.8,
+   "text": "the repercussions of the players on"
+  },
+  {
+   "t": 217.24,
+   "d": 3.04,
+   "text": "actions um so you could also use prices"
+  },
+  {
+   "t": 220.28,
+   "d": 3.16,
+   "text": "as um a kind of quest hook uh a sort of"
+  },
+  {
+   "t": 223.44,
+   "d": 2.04,
+   "text": "passet quest hook where um instead of"
+  },
+  {
+   "t": 225.48,
+   "d": 1.44,
+   "text": "somebody coming up to you at the tavern"
+  },
+  {
+   "t": 226.92,
+   "d": 1.6,
+   "text": "and telling you about something they"
+  },
+  {
+   "t": 228.52,
+   "d": 1.8,
+   "text": "want you to take care of some trolls you"
+  },
+  {
+   "t": 230.32,
+   "d": 2.24,
+   "text": "know hold up in a cave or whatever um"
+  },
+  {
+   "t": 232.56,
+   "d": 2.84,
+   "text": "you can make inferences from uh from"
+  },
+  {
+   "t": 235.4,
+   "d": 2.76,
+   "text": "Price motions to uh try and see what's"
+  },
+  {
+   "t": 238.16,
+   "d": 2.76,
+   "text": "going on in the world and and intercede"
+  },
+  {
+   "t": 240.92,
+   "d": 1.68,
+   "text": "so you could think of the adventurer in"
+  },
+  {
+   "t": 242.6,
+   "d": 3.16,
+   "text": "this more kind of oldfashioned way as"
+  },
+  {
+   "t": 245.76,
+   "d": 2.48,
+   "text": "like an amoral opportunist uh you know"
+  },
+  {
+   "t": 248.24,
+   "d": 3.08,
+   "text": "who travels around and uh gets involved"
+  },
+  {
+   "t": 251.32,
+   "d": 4.2,
+   "text": "in Affairs they maybe shouldn't um it"
+  },
+  {
+   "t": 255.52,
+   "d": 1.96,
+   "text": "gives the player kind of window to act"
+  },
+  {
+   "t": 257.48,
+   "d": 1.76,
+   "text": "um before all the facts are established"
+  },
+  {
+   "t": 259.24,
+   "d": 1.52,
+   "text": "so there's this kind of natural risk"
+  },
+  {
+   "t": 260.76,
+   "d": 3.28,
+   "text": "reward um if their punches you know"
+  },
+  {
+   "t": 264.04,
+   "d": 3.64,
+   "text": "prove uh fruitful or not um player could"
+  },
+  {
+   "t": 267.68,
+   "d": 2.56,
+   "text": "buy or sell tips prices could could"
+  },
+  {
+   "t": 270.24,
+   "d": 3.04,
+   "text": "indicate Secrets um or the activities of"
+  },
+  {
+   "t": 273.28,
+   "d": 4.04,
+   "text": "different uh NPCs or factions um and it"
+  },
+  {
+   "t": 277.32,
+   "d": 2.32,
+   "text": "could also feed into the traditional Rog"
+  },
+  {
+   "t": 279.64,
+   "d": 1.88,
+   "text": "like item identification miname you know"
+  },
+  {
+   "t": 281.52,
+   "d": 1.36,
+   "text": "where you could maybe verify the"
+  },
+  {
+   "t": 282.88,
+   "d": 3.24,
+   "text": "provence of an item um so and so is you"
+  },
+  {
+   "t": 286.12,
+   "d": 3.16,
+   "text": "know legendary scabard whatever um or"
+  },
+  {
+   "t": 289.28,
+   "d": 2.16,
+   "text": "maybe an item is cursed somebody's"
+  },
+  {
+   "t": 291.44,
+   "d": 1.44,
+   "text": "trying to get rid of it for"
+  },
+  {
+   "t": 292.88,
+   "d": 2.76,
+   "text": "cheap um so I want to talk about"
+  },
+  {
+   "t": 295.64,
+   "d": 2.76,
+   "text": "pathologic pathologic is an RPG that"
+  },
+  {
+   "t": 298.4,
+   "d": 1.88,
+   "text": "takes place in one town"
+  },
+  {
+   "t": 300.28,
+   "d": 2.64,
+   "text": "um and the player is a Healer who comes"
+  },
+  {
+   "t": 302.92,
+   "d": 1.52,
+   "text": "to the town right before a plague breaks"
+  },
+  {
+   "t": 304.44,
+   "d": 2.44,
+   "text": "out and after the first day news of the"
+  },
+  {
+   "t": 306.88,
+   "d": 3.84,
+   "text": "plague has spread prices Skyrocket"
+  },
+  {
+   "t": 310.72,
+   "d": 1.96,
+   "text": "people are panicking and and scalping"
+  },
+  {
+   "t": 312.68,
+   "d": 2.28,
+   "text": "things and uh you might actually tell"
+  },
+  {
+   "t": 314.96,
+   "d": 2.72,
+   "text": "that the news of the plague has spread"
+  },
+  {
+   "t": 317.68,
+   "d": 2.8,
+   "text": "around um just because of these now"
+  },
+  {
+   "t": 320.48,
+   "d": 2.16,
+   "text": "ridiculously high prices that anybody"
+  },
+  {
+   "t": 322.64,
+   "d": 3.28,
+   "text": "actually saying um so directly to you um"
+  },
+  {
+   "t": 325.92,
+   "d": 2.72,
+   "text": "and so these uh these now really almost"
+  },
+  {
+   "t": 328.64,
+   "d": 2.88,
+   "text": "unaffordable items um kind of funnel the"
+  },
+  {
+   "t": 331.52,
+   "d": 2.12,
+   "text": "player into pathologic bartering miname"
+  },
+  {
+   "t": 333.64,
+   "d": 1.28,
+   "text": "where they have to make trades with"
+  },
+  {
+   "t": 334.92,
+   "d": 2.8,
+   "text": "these different sectors of society women"
+  },
+  {
+   "t": 337.72,
+   "d": 2.64,
+   "text": "men children who all have and want"
+  },
+  {
+   "t": 340.36,
+   "d": 1.84,
+   "text": "different things um and it kind of works"
+  },
+  {
+   "t": 342.2,
+   "d": 3.48,
+   "text": "in this almost intransitive Loop um the"
+  },
+  {
+   "t": 345.68,
+   "d": 1.64,
+   "text": "player has a reputation per District"
+  },
+  {
+   "t": 347.32,
+   "d": 2.72,
+   "text": "that can vary um and having higher"
+  },
+  {
+   "t": 350.04,
+   "d": 1.72,
+   "text": "reputation in a district can lead to"
+  },
+  {
+   "t": 351.76,
+   "d": 1.92,
+   "text": "discounts so this all kind of affects"
+  },
+  {
+   "t": 353.68,
+   "d": 3.04,
+   "text": "how the player um plans their route uh"
+  },
+  {
+   "t": 356.72,
+   "d": 1.48,
+   "text": "through the town on a given day their"
+  },
+  {
+   "t": 358.2,
+   "d": 2.32,
+   "text": "itinerary you know um when they have"
+  },
+  {
+   "t": 360.52,
+   "d": 1.76,
+   "text": "these other errands to run people to"
+  },
+  {
+   "t": 362.28,
+   "d": 2.52,
+   "text": "meet might want to you know stop off at"
+  },
+  {
+   "t": 364.8,
+   "d": 3.48,
+   "text": "the playground to trade sewing needle to"
+  },
+  {
+   "t": 368.28,
+   "d": 1.4,
+   "text": "a kid for some"
+  },
+  {
+   "t": 369.68,
+   "d": 2.8,
+   "text": "medicine so there are multiplayer uh"
+  },
+  {
+   "t": 372.48,
+   "d": 1.92,
+   "text": "games that um some of which are these"
+  },
+  {
+   "t": 374.4,
+   "d": 1.88,
+   "text": "kind of free market simulators like"
+  },
+  {
+   "t": 376.28,
+   "d": 4.0,
+   "text": "offeral Trading Company and mule um that"
+  },
+  {
+   "t": 380.28,
+   "d": 2.96,
+   "text": "kind of tell their stories through the"
+  },
+  {
+   "t": 383.24,
+   "d": 2.52,
+   "text": "movements and prices in a in a free"
+  },
+  {
+   "t": 385.76,
+   "d": 1.64,
+   "text": "market and where these Commodities are"
+  },
+  {
+   "t": 387.4,
+   "d": 3.72,
+   "text": "being traded um and the 18xx series of"
+  },
+  {
+   "t": 391.12,
+   "d": 2.92,
+   "text": "train games um and their descendants"
+  },
+  {
+   "t": 394.04,
+   "d": 4.0,
+   "text": "like the PS series um and splotter games"
+  },
+  {
+   "t": 398.04,
+   "d": 1.84,
+   "text": "like Indonesia or food chain"
+  },
+  {
+   "t": 399.88,
+   "d": 3.08,
+   "text": "magnate um so these games have stock"
+  },
+  {
+   "t": 402.96,
+   "d": 3.24,
+   "text": "markets um they have all these Financial"
+  },
+  {
+   "t": 406.2,
+   "d": 3.48,
+   "text": "options ways to screw over other players"
+  },
+  {
+   "t": 409.68,
+   "d": 2.0,
+   "text": "um and uh since Whoever has the most"
+  },
+  {
+   "t": 411.68,
+   "d": 2.16,
+   "text": "money at the end wins there's the"
+  },
+  {
+   "t": 413.84,
+   "d": 1.88,
+   "text": "question of do you reinvest or pocket"
+  },
+  {
+   "t": 415.72,
+   "d": 4.0,
+   "text": "your profits um there's also some kind"
+  },
+  {
+   "t": 419.72,
+   "d": 2.52,
+   "text": "of single player multiplayer games um"
+  },
+  {
+   "t": 422.24,
+   "d": 2.2,
+   "text": "that have come out out more recently uh"
+  },
+  {
+   "t": 424.44,
+   "d": 1.76,
+   "text": "like the so-called looter"
+  },
+  {
+   "t": 426.2,
+   "d": 3.28,
+   "text": "Shooters um or extraction games a cruel"
+  },
+  {
+   "t": 429.48,
+   "d": 3.68,
+   "text": "world you could think of um the like"
+  },
+  {
+   "t": 433.16,
+   "d": 2.2,
+   "text": "these terminals that uh allow you to do"
+  },
+  {
+   "t": 435.36,
+   "d": 1.56,
+   "text": "things like sa your Dame and they get"
+  },
+  {
+   "t": 436.92,
+   "d": 1.68,
+   "text": "harder to use as more players play so"
+  },
+  {
+   "t": 438.6,
+   "d": 1.64,
+   "text": "it's this kind of congestion almost like"
+  },
+  {
+   "t": 440.24,
+   "d": 2.6,
+   "text": "an anti- infrastructure or"
+  },
+  {
+   "t": 442.84,
+   "d": 2.28,
+   "text": "inflation um at root there's the"
+  },
+  {
+   "t": 445.12,
+   "d": 2.64,
+   "text": "Vagabond who's kind of uh profiting from"
+  },
+  {
+   "t": 447.76,
+   "d": 1.84,
+   "text": "uh these other Waring factions doing"
+  },
+  {
+   "t": 449.6,
+   "d": 5.8,
+   "text": "this kind of item trading game um so 868"
+  },
+  {
+   "t": 455.4,
+   "d": 2.6,
+   "text": "hack Michael Bros roke like 868 hack has"
+  },
+  {
+   "t": 458.0,
+   "d": 3.32,
+   "text": "uh two currencies credits and energy and"
+  },
+  {
+   "t": 461.32,
+   "d": 3.0,
+   "text": "so uh when you use a program like a"
+  },
+  {
+   "t": 464.32,
+   "d": 2.92,
+   "text": "spell in the game uh you're spending"
+  },
+  {
+   "t": 467.24,
+   "d": 2.2,
+   "text": "credits Andor energy and so that makes"
+  },
+  {
+   "t": 469.44,
+   "d": 2.72,
+   "text": "the costs complex um just a lot fuzzier"
+  },
+  {
+   "t": 472.16,
+   "d": 2.76,
+   "text": "a lot harder to kind of minmax and"
+  },
+  {
+   "t": 474.92,
+   "d": 1.88,
+   "text": "optimize uh becomes a sort of"
+  },
+  {
+   "t": 476.8,
+   "d": 3.12,
+   "text": "multi-objective optimization problem um"
+  },
+  {
+   "t": 479.92,
+   "d": 1.56,
+   "text": "and you know going for a high score like"
+  },
+  {
+   "t": 481.48,
+   "d": 3.44,
+   "text": "you do in that game um just a note about"
+  },
+  {
+   "t": 484.92,
+   "d": 1.88,
+   "text": "you know thinking about score as maybe"
+  },
+  {
+   "t": 486.8,
+   "d": 2.52,
+   "text": "you know the points as representing"
+  },
+  {
+   "t": 489.32,
+   "d": 1.4,
+   "text": "intrinsic value as opposed to"
+  },
+  {
+   "t": 490.72,
+   "d": 3.72,
+   "text": "instrumental value um and uh another"
+  },
+  {
+   "t": 494.44,
+   "d": 2.96,
+   "text": "hacking themed game Netrunner um has"
+  },
+  {
+   "t": 497.4,
+   "d": 3.76,
+   "text": "this card magnumopus where uh it says"
+  },
+  {
+   "t": 501.16,
+   "d": 2.4,
+   "text": "essentially that you can spend one click"
+  },
+  {
+   "t": 503.56,
+   "d": 3.36,
+   "text": "or one action resource for a credit so"
+  },
+  {
+   "t": 506.92,
+   "d": 2.32,
+   "text": "that kind of establishes this fact that"
+  },
+  {
+   "t": 509.24,
+   "d": 3.04,
+   "text": "uh one click is worth on average about"
+  },
+  {
+   "t": 512.28,
+   "d": 2.16,
+   "text": "two credits um I don't know if I said"
+  },
+  {
+   "t": 514.44,
+   "d": 2.48,
+   "text": "that right before one click two credits"
+  },
+  {
+   "t": 516.92,
+   "d": 3.72,
+   "text": "um so that kind of accsess this uh"
+  },
+  {
+   "t": 520.64,
+   "d": 1.76,
+   "text": "valuation heris that you can use for the"
+  },
+  {
+   "t": 522.4,
+   "d": 1.72,
+   "text": "rest of the game like the relative value"
+  },
+  {
+   "t": 524.12,
+   "d": 1.8,
+   "text": "of chess pieces you know so it might be"
+  },
+  {
+   "t": 525.92,
+   "d": 1.24,
+   "text": "good to think about having these kinds"
+  },
+  {
+   "t": 527.16,
+   "d": 2.4,
+   "text": "of things that sort of establish um"
+  },
+  {
+   "t": 529.56,
+   "d": 1.44,
+   "text": "these frames of reference for cost"
+  },
+  {
+   "t": 531.0,
+   "d": 0.88,
+   "text": "benefit"
+  },
+  {
+   "t": 531.88,
+   "d": 3.32,
+   "text": "analysis um so some caveats uh prices"
+  },
+  {
+   "t": 535.2,
+   "d": 2.12,
+   "text": "can be very volatile um they can be"
+  },
+  {
+   "t": 537.32,
+   "d": 2.36,
+   "text": "chaotic um they can definitely start"
+  },
+  {
+   "t": 539.68,
+   "d": 2.56,
+   "text": "game balance you might uh want to just"
+  },
+  {
+   "t": 542.24,
+   "d": 3.12,
+   "text": "set prices for items um by Fiat you know"
+  },
+  {
+   "t": 545.36,
+   "d": 3.56,
+   "text": "as the designer um not have them be too"
+  },
+  {
+   "t": 548.92,
+   "d": 3.28,
+   "text": "too organically you know variable um"
+  },
+  {
+   "t": 552.2,
+   "d": 1.52,
+   "text": "especially if the player can find"
+  },
+  {
+   "t": 553.72,
+   "d": 4.84,
+   "text": "exploits um the player uh you know might"
+  },
+  {
+   "t": 558.56,
+   "d": 1.64,
+   "text": "be hard to get them to think in terms of"
+  },
+  {
+   "t": 560.2,
+   "d": 2.88,
+   "text": "quotients and rates um you know when"
+  },
+  {
+   "t": 563.08,
+   "d": 2.48,
+   "text": "looking at these like absolute numbers"
+  },
+  {
+   "t": 565.56,
+   "d": 3.0,
+   "text": "um uh that are the prices um so you"
+  },
+  {
+   "t": 568.56,
+   "d": 2.08,
+   "text": "might need some other tools or Aids to"
+  },
+  {
+   "t": 570.64,
+   "d": 3.68,
+   "text": "help them think like that um and uh"
+  },
+  {
+   "t": 574.32,
+   "d": 1.84,
+   "text": "there are you know some counter examples"
+  },
+  {
+   "t": 576.16,
+   "d": 3.12,
+   "text": "of games like go where um you know it's"
+  },
+  {
+   "t": 579.28,
+   "d": 2.48,
+   "text": "just the sort of primordial territorial"
+  },
+  {
+   "t": 581.76,
+   "d": 2.0,
+   "text": "auction um where players are competing"
+  },
+  {
+   "t": 583.76,
+   "d": 2.2,
+   "text": "over space and it's just about"
+  },
+  {
+   "t": 585.96,
+   "d": 2.08,
+   "text": "positioning and shape and there's no"
+  },
+  {
+   "t": 588.04,
+   "d": 2.6,
+   "text": "money to help do things more"
+  },
+  {
+   "t": 590.64,
+   "d": 3.32,
+   "text": "efficiently um and uh so it might be"
+  },
+  {
+   "t": 593.96,
+   "d": 1.96,
+   "text": "more intuitive sometimes to think you"
+  },
+  {
+   "t": 595.92,
+   "d": 2.48,
+   "text": "know kind of spatially um and in terms"
+  },
+  {
+   "t": 598.4,
+   "d": 3.0,
+   "text": "of situations puzzles um then in terms"
+  },
+  {
+   "t": 601.4,
+   "d": 2.56,
+   "text": "of these sort of fluctuating parameters"
+  },
+  {
+   "t": 603.96,
+   "d": 1.52,
+   "text": "um so you might not want the player to"
+  },
+  {
+   "t": 605.48,
+   "d": 1.6,
+   "text": "get out the advocus and you know do this"
+  },
+  {
+   "t": 607.08,
+   "d": 2.28,
+   "text": "kind of objective function calculus uh"
+  },
+  {
+   "t": 609.36,
+   "d": 1.68,
+   "text": "you might want to focus on this more"
+  },
+  {
+   "t": 611.04,
+   "d": 3.08,
+   "text": "kind of concrete um combinatorial"
+  },
+  {
+   "t": 614.12,
+   "d": 2.6,
+   "text": "situations um so you know games are able"
+  },
+  {
+   "t": 616.72,
+   "d": 2.28,
+   "text": "to communicate really interesting things"
+  },
+  {
+   "t": 619.0,
+   "d": 2.96,
+   "text": "through dynamical systems um but they"
+  },
+  {
+   "t": 621.96,
+   "d": 2.08,
+   "text": "have the benefit of kind of wrapping"
+  },
+  {
+   "t": 624.04,
+   "d": 3.4,
+   "text": "these economic Concepts and discussions"
+  },
+  {
+   "t": 627.44,
+   "d": 3.56,
+   "text": "um in these kind of yeah like puzzle"
+  },
+  {
+   "t": 631.0,
+   "d": 2.32,
+   "text": "situations uh these sort of"
+  },
+  {
+   "t": 633.32,
+   "d": 2.32,
+   "text": "firstperson um you know stories that the"
+  },
+  {
+   "t": 635.64,
+   "d": 3.84,
+   "text": "player can insert themselves into um and"
+  },
+  {
+   "t": 639.48,
+   "d": 1.56,
+   "text": "you know introducing things like"
+  },
+  {
+   "t": 641.04,
+   "d": 3.76,
+   "text": "fluctuating prices in a market um could"
+  },
+  {
+   "t": 644.8,
+   "d": 4.24,
+   "text": "possibly uh lead away from that kind of"
+  },
+  {
+   "t": 649.04,
+   "d": 3.72,
+   "text": "uh presence you know in a um a"
+  },
+  {
+   "t": 652.76,
+   "d": 2.92,
+   "text": "situation um you know prices can be very"
+  },
+  {
+   "t": 655.68,
+   "d": 3.12,
+   "text": "powerful tools for uh tacitly doing"
+  },
+  {
+   "t": 658.8,
+   "d": 2.32,
+   "text": "story ing um you know communicating"
+  },
+  {
+   "t": 661.12,
+   "d": 2.68,
+   "text": "things about the goings on in the world"
+  },
+  {
+   "t": 663.8,
+   "d": 2.08,
+   "text": "um but they kind of algebraic"
+  },
+  {
+   "t": 665.88,
+   "d": 2.32,
+   "text": "abstraction uh can actually make it kind"
+  },
+  {
+   "t": 668.2,
+   "d": 2.76,
+   "text": "of problematic to compare apples to"
+  },
+  {
+   "t": 670.96,
+   "d": 2.2,
+   "text": "oranges um you could also think of"
+  },
+  {
+   "t": 673.16,
+   "d": 2.6,
+   "text": "prices as uh you know a kind of shortcut"
+  },
+  {
+   "t": 675.76,
+   "d": 3.36,
+   "text": "that collapses SpaceTime um and there"
+  },
+  {
+   "t": 679.12,
+   "d": 1.8,
+   "text": "are other things that can function like"
+  },
+  {
+   "t": 680.92,
+   "d": 2.12,
+   "text": "that um it could be markets but it could"
+  },
+  {
+   "t": 683.04,
+   "d": 3.24,
+   "text": "be cyberspace like in Netrunner sort of"
+  },
+  {
+   "t": 686.28,
+   "d": 2.28,
+   "text": "what lets a loan you know individual"
+  },
+  {
+   "t": 688.56,
+   "d": 2.6,
+   "text": "hacker interact with a giant mega"
+  },
+  {
+   "t": 691.16,
+   "d": 2.8,
+   "text": "Corporation um or could be magic which a"
+  },
+  {
+   "t": 693.96,
+   "d": 2.96,
+   "text": "lot of the times it is um that kind of a"
+  },
+  {
+   "t": 696.92,
+   "d": 1.84,
+   "text": "you know does that collapsing of"
+  },
+  {
+   "t": 698.76,
+   "d": 2.0,
+   "text": "SpaceTime and uh so you might want to"
+  },
+  {
+   "t": 700.76,
+   "d": 1.28,
+   "text": "think about whether it would be"
+  },
+  {
+   "t": 702.04,
+   "d": 3.52,
+   "text": "redundant to have um you know prices in"
+  },
+  {
+   "t": 705.56,
+   "d": 2.2,
+   "text": "a market on top of a magic system or"
+  },
+  {
+   "t": 707.76,
+   "d": 2.4,
+   "text": "what maybe there's other things too um"
+  },
+  {
+   "t": 710.16,
+   "d": 1.96,
+   "text": "that could function in this way so worth"
+  },
+  {
+   "t": 712.12,
+   "d": 1.88,
+   "text": "thinking about here's some other just"
+  },
+  {
+   "t": 714.0,
+   "d": 1.92,
+   "text": "kind of miscellaneous Notions if you're"
+  },
+  {
+   "t": 715.92,
+   "d": 3.6,
+   "text": "thinking about markets prices economics"
+  },
+  {
+   "t": 719.52,
+   "d": 1.6,
+   "text": "um some different kind of shops you"
+  },
+  {
+   "t": 721.12,
+   "d": 1.4,
+   "text": "could"
+  },
+  {
+   "t": 722.52,
+   "d": 3.04,
+   "text": "have and uh some other games to look at"
+  },
+  {
+   "t": 725.56,
+   "d": 2.36,
+   "text": "digital"
+  },
+  {
+   "t": 727.92,
+   "d": 3.0,
+   "text": "and"
+  },
+  {
+   "t": 731.24,
+   "d": 1.96,
+   "text": "tabletop definitely recommend checking"
+  },
+  {
+   "t": 733.2,
+   "d": 1.6,
+   "text": "out a lot of tabletop games out there"
+  },
+  {
+   "t": 734.8,
+   "d": 1.84,
+   "text": "they are you know really good resource"
+  },
+  {
+   "t": 736.64,
+   "d": 3.32,
+   "text": "for exploring economic ideas in game"
+  },
+  {
+   "t": 739.96,
+   "d": 3.76,
+   "text": "form and that's my to"
+  },
+  {
+   "t": 744.32,
+   "d": 3.72,
+   "text": "thanks thank you I'm so glad we did it"
+  },
+  {
+   "t": 748.04,
+   "d": 4.48,
+   "text": "you were that time no hitches uh I'm I'm"
+  },
+  {
+   "t": 752.52,
+   "d": 1.32,
+   "text": "super glad that we made that work CU"
+  },
+  {
+   "t": 753.84,
+   "d": 2.08,
+   "text": "that was really interesting and really"
+  },
+  {
+   "t": 755.92,
+   "d": 1.56,
+   "text": "cool cuz like people were talking about"
+  },
+  {
+   "t": 757.48,
+   "d": 3.48,
+   "text": "you know price as a hint is part of old"
+  },
+  {
+   "t": 760.96,
+   "d": 1.96,
+   "text": "Rog leges because of the identification"
+  },
+  {
+   "t": 762.92,
+   "d": 2.68,
+   "text": "of like this is 30 gold therefore it's"
+  },
+  {
+   "t": 765.6,
+   "d": 3.08,
+   "text": "potentially a scroll of identify but"
+  },
+  {
+   "t": 768.68,
+   "d": 2.52,
+   "text": "that is not telling you about the world"
+  },
+  {
+   "t": 771.2,
+   "d": 2.4,
+   "text": "as much as it's a an extra little puzzle"
+  },
+  {
+   "t": 773.6,
+   "d": 1.36,
+   "text": "solving technique so I think taking that"
+  },
+  {
+   "t": 774.96,
+   "d": 1.6,
+   "text": "a step further is interesting it reminds"
+  },
+  {
+   "t": 776.56,
+   "d": 1.68,
+   "text": "me of something that came up in the"
+  },
+  {
+   "t": 778.24,
+   "d": 2.4,
+   "text": "preview talk and yesterday as well about"
+  },
+  {
+   "t": 780.64,
+   "d": 2.96,
+   "text": "how some games have started to"
+  },
+  {
+   "t": 783.6,
+   "d": 2.04,
+   "text": "narrativize elements of the mechanics"
+  },
+  {
+   "t": 785.64,
+   "d": 1.76,
+   "text": "that have been around for purely"
+  },
+  {
+   "t": 787.4,
+   "d": 1.88,
+   "text": "mechanical reasons but not commented on"
+  },
+  {
+   "t": 789.28,
+   "d": 2.68,
+   "text": "so much like the repetitive death and so"
+  },
+  {
+   "t": 791.96,
+   "d": 2.52,
+   "text": "interesting to be able to comment on"
+  },
+  {
+   "t": 794.48,
+   "d": 2.28,
+   "text": "basically like balancing issues or like"
+  },
+  {
+   "t": 796.76,
+   "d": 1.76,
+   "text": "balancing techniques potentially within"
+  },
+  {
+   "t": 798.52,
+   "d": 3.72,
+   "text": "The Narrative of your game yeah yeah um"
+  },
+  {
+   "t": 802.24,
+   "d": 1.76,
+   "text": "I do think it's it's could be"
+  },
+  {
+   "t": 804.0,
+   "d": 1.8,
+   "text": "interesting to look at you know what if"
+  },
+  {
+   "t": 805.8,
+   "d": 1.92,
+   "text": "you just had prices to communicate some"
+  },
+  {
+   "t": 807.72,
+   "d": 1.92,
+   "text": "of these things don't have to like maybe"
+  },
+  {
+   "t": 809.64,
+   "d": 2.36,
+   "text": "put on top all these other kinds of"
+  },
+  {
+   "t": 812.0,
+   "d": 4.4,
+   "text": "systems that aren't as uh natural"
+  },
+  {
+   "t": 816.4,
+   "d": 3.2,
+   "text": "to like how how normally Rog likes are"
+  },
+  {
+   "t": 819.6,
+   "d": 2.24,
+   "text": "normally you know kind of programmed or"
+  },
+  {
+   "t": 821.84,
+   "d": 4.68,
+   "text": "architected um but uh yeah and I think"
+  },
+  {
+   "t": 826.52,
+   "d": 2.92,
+   "text": "it also maybe sort of indicates um a"
+  },
+  {
+   "t": 829.44,
+   "d": 2.8,
+   "text": "more kind of social uh like world you"
+  },
+  {
+   "t": 832.24,
+   "d": 2.08,
+   "text": "know more agents who are interacting and"
+  },
+  {
+   "t": 834.32,
+   "d": 3.72,
+   "text": "kind of um you know having inputs into a"
+  },
+  {
+   "t": 838.04,
+   "d": 2.48,
+   "text": "uh like a shared you know kind of"
+  },
+  {
+   "t": 840.52,
+   "d": 2.56,
+   "text": "infrastructural thing right right step"
+  },
+  {
+   "t": 843.08,
+   "d": 1.96,
+   "text": "one of thinking about the pricing of a"
+  },
+  {
+   "t": 845.04,
+   "d": 1.88,
+   "text": "dungeon be thinking about why there is a"
+  },
+  {
+   "t": 846.92,
+   "d": 2.6,
+   "text": "shopkeeper on level six of the death"
+  },
+  {
+   "t": 849.52,
+   "d": 2.88,
+   "text": "dungeon which is a string that if you"
+  },
+  {
+   "t": 852.4,
+   "d": 3.32,
+   "text": "start to unravel it like you better"
+  },
+  {
+   "t": 855.72,
+   "d": 3.28,
+   "text": "commit to a bunch of World building yeah"
+  },
+  {
+   "t": 859.0,
+   "d": 2.28,
+   "text": "yeah it could definitely get like yeah"
+  },
+  {
+   "t": 861.28,
+   "d": 3.0,
+   "text": "where does it stop like yeah yeah maybe"
+  },
+  {
+   "t": 864.28,
+   "d": 1.44,
+   "text": "could make the players a little more"
+  },
+  {
+   "t": 865.72,
+   "d": 2.56,
+   "text": "paranoid then yeah which someone"
+  },
+  {
+   "t": 868.28,
+   "d": 1.52,
+   "text": "mentioned delicious and dungeon which I"
+  },
+  {
+   "t": 869.8,
+   "d": 1.6,
+   "text": "think is is is playing with some of"
+  },
+  {
+   "t": 871.4,
+   "d": 1.52,
+   "text": "these ideas of thinking about what that"
+  },
+  {
+   "t": 872.92,
+   "d": 2.6,
+   "text": "means and like the supply chain problems"
+  },
+  {
+   "t": 875.52,
+   "d": 2.56,
+   "text": "um yeah excellent well thank you so much"
+  },
+  {
+   "t": 878.08,
+   "d": 1.52,
+   "text": "Robin I'm so glad thanks for being"
+  },
+  {
+   "t": 879.6,
+   "d": 1.56,
+   "text": "really patient waiting through all the"
+  },
+  {
+   "t": 881.16,
+   "d": 1.72,
+   "text": "other talks to be able to give this a"
+  },
+  {
+   "t": 882.88,
+   "d": 3.84,
+   "text": "second try um but yeah really glad that"
+  },
+  {
+   "t": 886.72,
+   "d": 4.24,
+   "text": "we got that talk and uh thank you for"
+  },
+  {
+   "t": 890.96,
+   "d": 2.12,
+   "text": "joining us yeah thanks so much for"
+  },
+  {
+   "t": 893.08,
+   "d": 2.8,
+   "text": "letting me go again um GL it worked out"
+  },
+  {
+   "t": 895.88,
+   "d": 3.2,
+   "text": "yeah excellent"
+  }
+ ]
+}

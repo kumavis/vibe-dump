@@ -1,0 +1,3835 @@
+{
+ "id": "jviNpRGuCIU",
+ "url": "https://www.youtube.com/watch?v=jviNpRGuCIU",
+ "title": "Josh Ge - How to Make a Roguelike",
+ "speaker": "Josh Ge",
+ "talk_title": "How to Make a Roguelike",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-09",
+ "duration_s": 1641,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and journey"
+  },
+  {
+   "start": 58,
+   "title": "Getting started pitfalls"
+  },
+  {
+   "start": 124,
+   "title": "Choosing your tools"
+  },
+  {
+   "start": 238,
+   "title": "Start small first"
+  },
+  {
+   "start": 344,
+   "title": "Core mechanics explained"
+  },
+  {
+   "start": 401,
+   "title": "The 7DRL challenge"
+  },
+  {
+   "start": 505,
+   "title": "7DRL game examples"
+  },
+  {
+   "start": 628,
+   "title": "Complex roguelikes"
+  },
+  {
+   "start": 730,
+   "title": "Community resources"
+  },
+  {
+   "start": 794,
+   "title": "Technical support"
+  },
+  {
+   "start": 909,
+   "title": "Advanced learning"
+  },
+  {
+   "start": 1015,
+   "title": "Visuals and tools"
+  },
+  {
+   "start": 1146,
+   "title": "Theme and hook"
+  },
+  {
+   "start": 1392,
+   "title": "Using existing IPs"
+  },
+  {
+   "start": 1515,
+   "title": "Tips for long-run"
+  },
+  {
+   "start": 1603,
+   "title": "Final thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5195,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.23,
+   "d": 3.7,
+   "text": "so hello everybody it's working right"
+  },
+  {
+   "t": 3.93,
+   "d": 0.36,
+   "text": "okay"
+  },
+  {
+   "t": 4.29,
+   "d": 2.28,
+   "text": "um really excited to be here today I had"
+  },
+  {
+   "t": 6.57,
+   "d": 1.62,
+   "text": "to miss last year because of a serious"
+  },
+  {
+   "t": 8.19,
+   "d": 1.5,
+   "text": "concussion but it's great to see so many"
+  },
+  {
+   "t": 9.69,
+   "d": 2.88,
+   "text": "familiar faces again my name is Josh but"
+  },
+  {
+   "t": 12.57,
+   "d": 1.68,
+   "text": "most people know me as kid rowdy online"
+  },
+  {
+   "t": 14.25,
+   "d": 2.37,
+   "text": "we're on the moderator of the roguelike"
+  },
+  {
+   "t": 16.62,
+   "d": 2.61,
+   "text": "developers subreddit calm and I made"
+  },
+  {
+   "t": 19.23,
+   "d": 2.58,
+   "text": "several roguelikes of my own most"
+  },
+  {
+   "t": 21.81,
+   "d": 2.55,
+   "text": "notably cog mind no that's my Ben my"
+  },
+  {
+   "t": 24.36,
+   "d": 2.0,
+   "text": "full-time job for the past five years"
+  },
+  {
+   "t": 26.36,
+   "d": 1.9,
+   "text": "special thanks to all of you who made"
+  },
+  {
+   "t": 28.26,
+   "d": 1.83,
+   "text": "that possible and we have a bunch of you"
+  },
+  {
+   "t": 30.09,
+   "d": 3.33,
+   "text": "in the audience so a couple years ago at"
+  },
+  {
+   "t": 33.42,
+   "d": 1.5,
+   "text": "the first row of like celebration I did"
+  },
+  {
+   "t": 34.92,
+   "d": 1.76,
+   "text": "to talk about how I became a developer"
+  },
+  {
+   "t": 36.68,
+   "d": 2.98,
+   "text": "this time I'm talking about how you can"
+  },
+  {
+   "t": 39.66,
+   "d": 3.03,
+   "text": "build your own roguelike - it's pretty"
+  },
+  {
+   "t": 42.69,
+   "d": 1.56,
+   "text": "common for roguelike players to at least"
+  },
+  {
+   "t": 44.25,
+   "d": 2.01,
+   "text": "dabble in development we're inspired by"
+  },
+  {
+   "t": 46.26,
+   "d": 1.71,
+   "text": "the games we play and want to make"
+  },
+  {
+   "t": 47.97,
+   "d": 1.89,
+   "text": "something better something different or"
+  },
+  {
+   "t": 49.86,
+   "d": 2.01,
+   "text": "just something of our own so my talk"
+  },
+  {
+   "t": 51.87,
+   "d": 2.73,
+   "text": "today definitely isn't a tutorial it's"
+  },
+  {
+   "t": 54.6,
+   "d": 1.26,
+   "text": "more about how to get started and"
+  },
+  {
+   "t": 55.86,
+   "d": 2.69,
+   "text": "general advice to help you along the way"
+  },
+  {
+   "t": 58.55,
+   "d": 2.23,
+   "text": "so making a roguelike can be pretty"
+  },
+  {
+   "t": 60.78,
+   "d": 2.13,
+   "text": "tough not unlike journeying through a"
+  },
+  {
+   "t": 62.91,
+   "d": 2.58,
+   "text": "dungeon full of obstacles here's you at"
+  },
+  {
+   "t": 65.49,
+   "d": 1.55,
+   "text": "the bottom starting out your journey and"
+  },
+  {
+   "t": 67.04,
+   "d": 2.65,
+   "text": "there's your target a fun playable game"
+  },
+  {
+   "t": 69.69,
+   "d": 2.19,
+   "text": "it's very easy for your path to end up"
+  },
+  {
+   "t": 71.88,
+   "d": 2.58,
+   "text": "like this oh I need that feature over"
+  },
+  {
+   "t": 74.46,
+   "d": 2.28,
+   "text": "there no what about that one I need all"
+  },
+  {
+   "t": 76.74,
+   "d": 2.82,
+   "text": "the systems you might finish and barely"
+  },
+  {
+   "t": 79.56,
+   "d": 1.89,
+   "text": "make it to your goal but at what cost"
+  },
+  {
+   "t": 81.45,
+   "d": 2.43,
+   "text": "maybe years of wasted effort and all of"
+  },
+  {
+   "t": 83.88,
+   "d": 3.57,
+   "text": "your head you'll quite possibly develop"
+  },
+  {
+   "t": 87.45,
+   "d": 1.32,
+   "text": "yourself into a difficult corner then"
+  },
+  {
+   "t": 88.77,
+   "d": 2.91,
+   "text": "get stuck demoralized and quit what you"
+  },
+  {
+   "t": 91.68,
+   "d": 1.92,
+   "text": "need to do is make a beeline for your"
+  },
+  {
+   "t": 93.6,
+   "d": 1.77,
+   "text": "target with a basic plan and"
+  },
+  {
+   "t": 95.37,
+   "d": 2.01,
+   "text": "understanding where to go you can start"
+  },
+  {
+   "t": 97.38,
+   "d": 1.86,
+   "text": "with strong fundamentals and then when"
+  },
+  {
+   "t": 99.24,
+   "d": 2.25,
+   "text": "you have that fun game expand out of all"
+  },
+  {
+   "t": 101.49,
+   "d": 3.59,
+   "text": "you want I'll mostly be covering those"
+  },
+  {
+   "t": 105.08,
+   "d": 2.14,
+   "text": "fundamentals how to travel through this"
+  },
+  {
+   "t": 107.22,
+   "d": 1.16,
+   "text": "dungeon with a greater chance of success"
+  },
+  {
+   "t": 108.38,
+   "d": 2.14,
+   "text": "especially when you're just starting out"
+  },
+  {
+   "t": 110.52,
+   "d": 1.95,
+   "text": "and full of enthusiasm but also aren't"
+  },
+  {
+   "t": 112.47,
+   "d": 2.22,
+   "text": "sure how to proceed so note that"
+  },
+  {
+   "t": 114.69,
+   "d": 1.65,
+   "text": "although this is an intro on how to"
+  },
+  {
+   "t": 116.34,
+   "d": 2.01,
+   "text": "start making a roguelike it does not"
+  },
+  {
+   "t": 118.35,
+   "d": 1.35,
+   "text": "include how to stop making that robe"
+  },
+  {
+   "t": 119.7,
+   "d": 2.64,
+   "text": "like I'm the wrong person to ask about"
+  },
+  {
+   "t": 122.34,
+   "d": 3.57,
+   "text": "that you're on your own there yeah so"
+  },
+  {
+   "t": 125.91,
+   "d": 1.26,
+   "text": "let's get the first and most common"
+  },
+  {
+   "t": 127.17,
+   "d": 1.89,
+   "text": "question out of the way what language to"
+  },
+  {
+   "t": 129.06,
+   "d": 3.61,
+   "text": "use the answer is really easy"
+  },
+  {
+   "t": 132.67,
+   "d": 2.86,
+   "text": "I'm sorry but a NY is not some amazing"
+  },
+  {
+   "t": 135.53,
+   "d": 2.18,
+   "text": "new programming language that says any"
+  },
+  {
+   "t": 137.71,
+   "d": 1.99,
+   "text": "because the short answer is it doesn't"
+  },
+  {
+   "t": 139.7,
+   "d": 1.59,
+   "text": "really matter a whole lot if you've"
+  },
+  {
+   "t": 141.29,
+   "d": 1.32,
+   "text": "already got experience with some"
+  },
+  {
+   "t": 142.61,
+   "d": 1.83,
+   "text": "language then that's great go ahead and"
+  },
+  {
+   "t": 144.44,
+   "d": 0.33,
+   "text": "use it"
+  },
+  {
+   "t": 144.77,
+   "d": 2.31,
+   "text": "language is a means to an end when it"
+  },
+  {
+   "t": 147.08,
+   "d": 1.47,
+   "text": "comes to public development and people"
+  },
+  {
+   "t": 148.55,
+   "d": 2.37,
+   "text": "have used just about every language to"
+  },
+  {
+   "t": 150.92,
+   "d": 2.52,
+   "text": "create a roguelike before now that's not"
+  },
+  {
+   "t": 153.44,
+   "d": 1.41,
+   "text": "to say there aren't some easier options"
+  },
+  {
+   "t": 154.85,
+   "d": 3.39,
+   "text": "if you're just starting out so I'll help"
+  },
+  {
+   "t": 158.24,
+   "d": 2.49,
+   "text": "you with a suggestion here and that's"
+  },
+  {
+   "t": 160.73,
+   "d": 2.13,
+   "text": "Python Python is often recommended for"
+  },
+  {
+   "t": 162.86,
+   "d": 1.56,
+   "text": "first-time devs because it's pretty"
+  },
+  {
+   "t": 164.42,
+   "d": 1.68,
+   "text": "simple and straightforward to work with"
+  },
+  {
+   "t": 166.1,
+   "d": 2.31,
+   "text": "just look at that code there wait"
+  },
+  {
+   "t": 168.41,
+   "d": 1.92,
+   "text": "there's something it looks different"
+  },
+  {
+   "t": 170.33,
+   "d": 2.37,
+   "text": "okay just look at that code there and"
+  },
+  {
+   "t": 172.7,
+   "d": 2.22,
+   "text": "that's clear um not a whole lot of weird"
+  },
+  {
+   "t": 174.92,
+   "d": 2.22,
+   "text": "syntax and if you don't even know"
+  },
+  {
+   "t": 177.14,
+   "d": 1.53,
+   "text": "programming or Python you can probably"
+  },
+  {
+   "t": 178.67,
+   "d": 1.32,
+   "text": "still figure out most of what's going on"
+  },
+  {
+   "t": 179.99,
+   "d": 2.19,
+   "text": "there but don't worry about simple being"
+  },
+  {
+   "t": 182.18,
+   "d": 2.07,
+   "text": "a limiting factor you can still do great"
+  },
+  {
+   "t": 184.25,
+   "d": 2.67,
+   "text": "things with Python might have heard of"
+  },
+  {
+   "t": 186.92,
+   "d": 1.83,
+   "text": "Ultima ratio Rehim it's written in"
+  },
+  {
+   "t": 188.75,
+   "d": 1.86,
+   "text": "Python and it's a beautiful and massive"
+  },
+  {
+   "t": 190.61,
+   "d": 2.43,
+   "text": "open world project it's not complete but"
+  },
+  {
+   "t": 193.04,
+   "d": 1.61,
+   "text": "nonetheless already an incredibly"
+  },
+  {
+   "t": 194.65,
+   "d": 3.79,
+   "text": "impressive project temple of torment is"
+  },
+  {
+   "t": 198.44,
+   "d": 2.04,
+   "text": "another expansive and complete fantasy"
+  },
+  {
+   "t": 200.48,
+   "d": 2.07,
+   "text": "roguelike written in Python now there"
+  },
+  {
+   "t": 202.55,
+   "d": 1.26,
+   "text": "are literally hundreds of Python"
+  },
+  {
+   "t": 203.81,
+   "d": 2.13,
+   "text": "roguelikes out there oh and all you'll"
+  },
+  {
+   "t": 205.94,
+   "d": 1.29,
+   "text": "have a smoother ride if you start with"
+  },
+  {
+   "t": 207.23,
+   "d": 1.86,
+   "text": "Python and we'll come back to how to get"
+  },
+  {
+   "t": 209.09,
+   "d": 2.94,
+   "text": "started with it later on more complex"
+  },
+  {
+   "t": 212.03,
+   "d": 2.67,
+   "text": "languages like C and C++ are good in"
+  },
+  {
+   "t": 214.7,
+   "d": 1.8,
+   "text": "that they've been popular for ages in"
+  },
+  {
+   "t": 216.5,
+   "d": 1.14,
+   "text": "game development meaning you'll find"
+  },
+  {
+   "t": 217.64,
+   "d": 1.47,
+   "text": "lots of relevant resources and"
+  },
+  {
+   "t": 219.11,
+   "d": 2.46,
+   "text": "references out there C++ is what I use"
+  },
+  {
+   "t": 221.57,
+   "d": 1.56,
+   "text": "but that's only because I was familiar"
+  },
+  {
+   "t": 223.13,
+   "d": 2.04,
+   "text": "with it to begin with I wouldn't"
+  },
+  {
+   "t": 225.17,
+   "d": 2.73,
+   "text": "recommend it for beginners especially if"
+  },
+  {
+   "t": 227.9,
+   "d": 1.38,
+   "text": "your goal is to make it roguelike rather"
+  },
+  {
+   "t": 229.28,
+   "d": 2.04,
+   "text": "than spend all your time debugging yeah"
+  },
+  {
+   "t": 231.32,
+   "d": 2.43,
+   "text": "you will find a lot of other devs using"
+  },
+  {
+   "t": 233.75,
+   "d": 1.83,
+   "text": "Python anyway and so you'll have access"
+  },
+  {
+   "t": 235.58,
+   "d": 3.45,
+   "text": "to a good number of resources alright"
+  },
+  {
+   "t": 239.03,
+   "d": 1.86,
+   "text": "we've all got a dream roguelike but"
+  },
+  {
+   "t": 240.89,
+   "d": 4.56,
+   "text": "should that be where you start no at"
+  },
+  {
+   "t": 245.45,
+   "d": 2.49,
+   "text": "first you'll be learning a lot and"
+  },
+  {
+   "t": 247.94,
+   "d": 1.38,
+   "text": "making mistakes you don't even realize"
+  },
+  {
+   "t": 249.32,
+   "d": 1.38,
+   "text": "yet so it's best to build up some"
+  },
+  {
+   "t": 250.7,
+   "d": 3.3,
+   "text": "experience first more importantly the"
+  },
+  {
+   "t": 254.0,
+   "d": 2.34,
+   "text": "focus of game development really changes"
+  },
+  {
+   "t": 256.34,
+   "d": 2.73,
+   "text": "from beginning to end so it's best to go"
+  },
+  {
+   "t": 259.07,
+   "d": 1.56,
+   "text": "through the entire process at least once"
+  },
+  {
+   "t": 260.63,
+   "d": 2.4,
+   "text": "or twice before starting larger serious"
+  },
+  {
+   "t": 263.03,
+   "d": 3.33,
+   "text": "projects keeping your scope small"
+  },
+  {
+   "t": 266.36,
+   "d": 1.92,
+   "text": "first is the best way to ensure you'll"
+  },
+  {
+   "t": 268.28,
+   "d": 1.77,
+   "text": "actually have a complete something to"
+  },
+  {
+   "t": 270.05,
+   "d": 2.85,
+   "text": "show for your efforts at the end so"
+  },
+  {
+   "t": 272.9,
+   "d": 2.37,
+   "text": "taking our dev map from earlier that"
+  },
+  {
+   "t": 275.27,
+   "d": 1.82,
+   "text": "main path is what you need to focus on"
+  },
+  {
+   "t": 277.09,
+   "d": 4.66,
+   "text": "now it can be both a complete game and a"
+  },
+  {
+   "t": 281.75,
+   "d": 1.47,
+   "text": "stable foundation on which you can build"
+  },
+  {
+   "t": 283.22,
+   "d": 2.64,
+   "text": "more all those other areas out there to"
+  },
+  {
+   "t": 285.86,
+   "d": 1.86,
+   "text": "explore are very tempting but try not to"
+  },
+  {
+   "t": 287.72,
+   "d": 1.29,
+   "text": "get drawn too far away from the main"
+  },
+  {
+   "t": 289.01,
+   "d": 1.86,
+   "text": "path early on it's like playing a"
+  },
+  {
+   "t": 290.87,
+   "d": 1.92,
+   "text": "roguelike if you start by blindly"
+  },
+  {
+   "t": 292.79,
+   "d": 1.32,
+   "text": "running around and the unknown doing"
+  },
+  {
+   "t": 294.11,
+   "d": 2.25,
+   "text": "only what you feel like doing rather"
+  },
+  {
+   "t": 296.36,
+   "d": 1.23,
+   "text": "than what you probably should be doing"
+  },
+  {
+   "t": 297.59,
+   "d": 2.25,
+   "text": "unless the RNG is totally on your side"
+  },
+  {
+   "t": 299.84,
+   "d": 0.9,
+   "text": "you're probably gonna die out there"
+  },
+  {
+   "t": 300.74,
+   "d": 2.61,
+   "text": "somewhere repeatedly so this can be a"
+  },
+  {
+   "t": 303.35,
+   "d": 1.5,
+   "text": "fun way to play roguelikes but building"
+  },
+  {
+   "t": 304.85,
+   "d": 1.41,
+   "text": "a roguelike is a different story and a"
+  },
+  {
+   "t": 306.26,
+   "d": 1.83,
+   "text": "bigger investment of time so try to stay"
+  },
+  {
+   "t": 308.09,
+   "d": 4.29,
+   "text": "focused the cool thing is you can build"
+  },
+  {
+   "t": 312.38,
+   "d": 2.1,
+   "text": "roguelikes piecemeal they're basically a"
+  },
+  {
+   "t": 314.48,
+   "d": 2.1,
+   "text": "conglomeration of systems that can be"
+  },
+  {
+   "t": 316.58,
+   "d": 1.29,
+   "text": "tacked on if you think they'll support"
+  },
+  {
+   "t": 317.87,
+   "d": 2.7,
+   "text": "the game after that you can just"
+  },
+  {
+   "t": 320.57,
+   "d": 2.1,
+   "text": "repeatedly expand and iterate hopefully"
+  },
+  {
+   "t": 322.67,
+   "d": 3.27,
+   "text": "would player feedback in the end you've"
+  },
+  {
+   "t": 325.94,
+   "d": 1.32,
+   "text": "got so much stuff tacked on that you"
+  },
+  {
+   "t": 327.26,
+   "d": 1.08,
+   "text": "have no idea where the last ten years"
+  },
+  {
+   "t": 328.34,
+   "d": 4.08,
+   "text": "when looking at a roguelike project as a"
+  },
+  {
+   "t": 332.42,
+   "d": 2.7,
+   "text": "whole it can seem really daunting but"
+  },
+  {
+   "t": 335.12,
+   "d": 1.53,
+   "text": "all you really need is a plan and"
+  },
+  {
+   "t": 336.65,
+   "d": 1.89,
+   "text": "perseverance starting small is important"
+  },
+  {
+   "t": 338.54,
+   "d": 0.9,
+   "text": "because you're going to make those"
+  },
+  {
+   "t": 339.44,
+   "d": 1.83,
+   "text": "mistakes and you're much more likely to"
+  },
+  {
+   "t": 341.27,
+   "d": 4.29,
+   "text": "fail if you aim big right away so what"
+  },
+  {
+   "t": 345.56,
+   "d": 1.95,
+   "text": "does a small roguelike really need a"
+  },
+  {
+   "t": 347.51,
+   "d": 2.76,
+   "text": "core mechanic this is where the"
+  },
+  {
+   "t": 350.27,
+   "d": 1.62,
+   "text": "experience starts it should be"
+  },
+  {
+   "t": 351.89,
+   "d": 1.47,
+   "text": "explainable in a single sentence and"
+  },
+  {
+   "t": 353.36,
+   "d": 2.34,
+   "text": "this is what you want prototype first go"
+  },
+  {
+   "t": 355.7,
+   "d": 0.78,
+   "text": "straight for the fun"
+  },
+  {
+   "t": 356.48,
+   "d": 2.01,
+   "text": "what's this game's unique take on rogue"
+  },
+  {
+   "t": 358.49,
+   "d": 1.92,
+   "text": "liking if your game only has this"
+  },
+  {
+   "t": 360.41,
+   "d": 2.28,
+   "text": "mechanic is it fun if you're thinking a"
+  },
+  {
+   "t": 362.69,
+   "d": 1.65,
+   "text": "little bigger could this mechanic serve"
+  },
+  {
+   "t": 364.34,
+   "d": 1.74,
+   "text": "as a core for the rest of the game to"
+  },
+  {
+   "t": 366.08,
+   "d": 2.64,
+   "text": "sit on think about what the player is"
+  },
+  {
+   "t": 368.72,
+   "d": 2.07,
+   "text": "doing from minute to minute which"
+  },
+  {
+   "t": 370.79,
+   "d": 1.77,
+   "text": "presumably has something to do with this"
+  },
+  {
+   "t": 372.56,
+   "d": 3.69,
+   "text": "core mechanic weird so if that repeated"
+  },
+  {
+   "t": 376.25,
+   "d": 1.71,
+   "text": "process isn't fun it's not going to"
+  },
+  {
+   "t": 377.96,
+   "d": 2.25,
+   "text": "matter what you build on top of it so"
+  },
+  {
+   "t": 380.21,
+   "d": 2.55,
+   "text": "this initial proto game for that you"
+  },
+  {
+   "t": 382.76,
+   "d": 1.29,
+   "text": "only want to implement as many of the"
+  },
+  {
+   "t": 384.05,
+   "d": 1.53,
+   "text": "outer elements as necessary just to"
+  },
+  {
+   "t": 385.58,
+   "d": 1.22,
+   "text": "bring out and test the core mechanic"
+  },
+  {
+   "t": 386.8,
+   "d": 1.99,
+   "text": "again this visualization and its"
+  },
+  {
+   "t": 388.79,
+   "d": 2.64,
+   "text": "branches may look daunting but it's just"
+  },
+  {
+   "t": 391.43,
+   "d": 1.41,
+   "text": "a sample of what's possible roguelikes"
+  },
+  {
+   "t": 392.84,
+   "d": 1.8,
+   "text": "can be really simple and yet really fun"
+  },
+  {
+   "t": 394.64,
+   "d": 3.87,
+   "text": "oh wait"
+  },
+  {
+   "t": 398.51,
+   "d": 3.52,
+   "text": "yeah oh yeah oh yeah okay so next time"
+  },
+  {
+   "t": 402.03,
+   "d": 1.41,
+   "text": "to explore the core mechanics a little"
+  },
+  {
+   "t": 403.44,
+   "d": 1.17,
+   "text": "bit more I wanted to take a look at"
+  },
+  {
+   "t": 404.61,
+   "d": 3.09,
+   "text": "seven of URLs so a seven DRL is a"
+  },
+  {
+   "t": 407.7,
+   "d": 3.18,
+   "text": "roguelike made in seven days every March"
+  },
+  {
+   "t": 410.88,
+   "d": 1.56,
+   "text": "or so there's an event where lots of"
+  },
+  {
+   "t": 412.44,
+   "d": 2.16,
+   "text": "devs make their own seven DRL it's"
+  },
+  {
+   "t": 414.6,
+   "d": 2.76,
+   "text": "already going on 14 years now it's great"
+  },
+  {
+   "t": 417.36,
+   "d": 1.86,
+   "text": "because as long as you finish you'll"
+  },
+  {
+   "t": 419.22,
+   "d": 1.8,
+   "text": "definitely get at least a few people to"
+  },
+  {
+   "t": 421.02,
+   "d": 3.66,
+   "text": "play it and leave feedback judges also"
+  },
+  {
+   "t": 424.68,
+   "d": 1.92,
+   "text": "score them in different areas the most"
+  },
+  {
+   "t": 426.6,
+   "d": 1.86,
+   "text": "everyone treats 270 row like a personal"
+  },
+  {
+   "t": 428.46,
+   "d": 1.14,
+   "text": "challenge it's not supposed to be a"
+  },
+  {
+   "t": 429.6,
+   "d": 3.15,
+   "text": "competition that's more for yourself so"
+  },
+  {
+   "t": 432.75,
+   "d": 1.89,
+   "text": "over a hundred new roguelikes come out"
+  },
+  {
+   "t": 434.64,
+   "d": 1.98,
+   "text": "of this event each year it's a whole lot"
+  },
+  {
+   "t": 436.62,
+   "d": 1.74,
+   "text": "of fun and as you can see it gets more"
+  },
+  {
+   "t": 438.36,
+   "d": 3.45,
+   "text": "and more popular now I wouldn't"
+  },
+  {
+   "t": 441.81,
+   "d": 2.19,
+   "text": "recommend doing a 70 RL as your first"
+  },
+  {
+   "t": 444.0,
+   "d": 1.59,
+   "text": "game you don't need that kind of"
+  },
+  {
+   "t": 445.59,
+   "d": 1.59,
+   "text": "pressure so early but it's a good idea"
+  },
+  {
+   "t": 447.18,
+   "d": 1.98,
+   "text": "once you at least have some experience"
+  },
+  {
+   "t": 449.16,
+   "d": 1.62,
+   "text": "and know what goes into a roguelike"
+  },
+  {
+   "t": 450.78,
+   "d": 2.04,
+   "text": "especially the technical aspects because"
+  },
+  {
+   "t": 452.82,
+   "d": 1.83,
+   "text": "having a deadline really does help once"
+  },
+  {
+   "t": 454.65,
+   "d": 1.95,
+   "text": "you have that fun one so that you have"
+  },
+  {
+   "t": 456.6,
+   "d": 3.6,
+   "text": "those basic abilities so 70 rels are"
+  },
+  {
+   "t": 460.2,
+   "d": 2.37,
+   "text": "great examples of start small and expand"
+  },
+  {
+   "t": 462.57,
+   "d": 2.22,
+   "text": "is necessary after you've confirmed that"
+  },
+  {
+   "t": 464.79,
+   "d": 1.53,
+   "text": "your core mechanic works and is a good"
+  },
+  {
+   "t": 466.32,
+   "d": 3.18,
+   "text": "idea so 70 are ELLs naturally make good"
+  },
+  {
+   "t": 469.5,
+   "d": 2.01,
+   "text": "prototypes and many are experimental in"
+  },
+  {
+   "t": 471.51,
+   "d": 1.92,
+   "text": "nature we see a lot of cool ideas every"
+  },
+  {
+   "t": 473.43,
+   "d": 1.17,
+   "text": "year so let's take a look at a few"
+  },
+  {
+   "t": 474.6,
+   "d": 0.95,
+   "text": "examples"
+  },
+  {
+   "t": 475.55,
+   "d": 2.95,
+   "text": "there's night which is all about"
+  },
+  {
+   "t": 478.5,
+   "d": 3.15,
+   "text": "controlling your momentum you're mounted"
+  },
+  {
+   "t": 481.65,
+   "d": 1.59,
+   "text": "on a horse most of the time and that"
+  },
+  {
+   "t": 483.24,
+   "d": 2.07,
+   "text": "little blue block you see in the middle"
+  },
+  {
+   "t": 485.31,
+   "d": 1.89,
+   "text": "there so to the north east of the"
+  },
+  {
+   "t": 487.2,
+   "d": 2.52,
+   "text": "character that's all you can move and"
+  },
+  {
+   "t": 489.72,
+   "d": 1.11,
+   "text": "you can only move at one space per turn"
+  },
+  {
+   "t": 490.83,
+   "d": 1.62,
+   "text": "and that's where you will end up Nick's"
+  },
+  {
+   "t": 492.45,
+   "d": 2.34,
+   "text": "turn so you can only accelerate turn and"
+  },
+  {
+   "t": 494.79,
+   "d": 1.74,
+   "text": "slow down so quickly meaning that you'll"
+  },
+  {
+   "t": 496.53,
+   "d": 1.74,
+   "text": "have to plan in order to line up your"
+  },
+  {
+   "t": 498.27,
+   "d": 2.04,
+   "text": "attacks on moving foes in order to"
+  },
+  {
+   "t": 500.31,
+   "d": 2.0,
+   "text": "behead them when your sword as you pass"
+  },
+  {
+   "t": 502.31,
+   "d": 2.05,
+   "text": "so it's all based around that mechanic"
+  },
+  {
+   "t": 504.36,
+   "d": 3.0,
+   "text": "this 7d RL is great it's got its core"
+  },
+  {
+   "t": 507.36,
+   "d": 2.19,
+   "text": "mechanic right in the name you're a ship"
+  },
+  {
+   "t": 509.55,
+   "d": 2.13,
+   "text": "in space and although you automatically"
+  },
+  {
+   "t": 511.68,
+   "d": 2.43,
+   "text": "attack enemies within range enemy fired"
+  },
+  {
+   "t": 514.11,
+   "d": 2.64,
+   "text": "projectiles move more slowly and you can"
+  },
+  {
+   "t": 516.75,
+   "d": 2.4,
+   "text": "see their projected paths for the next"
+  },
+  {
+   "t": 519.15,
+   "d": 1.38,
+   "text": "turn and need to maneuver so that you"
+  },
+  {
+   "t": 520.53,
+   "d": 1.71,
+   "text": "can both continue attacking and avoid"
+  },
+  {
+   "t": 522.24,
+   "d": 3.21,
+   "text": "being hit Travis made that he's back"
+  },
+  {
+   "t": 525.45,
+   "d": 3.06,
+   "text": "there I always it's a great game I love"
+  },
+  {
+   "t": 528.51,
+   "d": 2.78,
+   "text": "the core idea and"
+  },
+  {
+   "t": 531.29,
+   "d": 3.45,
+   "text": "was nice to meet the dev so in seven day"
+  },
+  {
+   "t": 534.74,
+   "d": 2.49,
+   "text": "band you create your own roguelike as"
+  },
+  {
+   "t": 537.23,
+   "d": 2.25,
+   "text": "you play it wandering around you're"
+  },
+  {
+   "t": 539.48,
+   "d": 1.86,
+   "text": "faced with unknown enemies and objects"
+  },
+  {
+   "t": 541.34,
+   "d": 1.44,
+   "text": "and have to set their names and"
+  },
+  {
+   "t": 542.78,
+   "d": 1.56,
+   "text": "abilities as you encounter them for the"
+  },
+  {
+   "t": 544.34,
+   "d": 2.04,
+   "text": "first time or when they start to matter"
+  },
+  {
+   "t": 546.38,
+   "d": 1.62,
+   "text": "it's not like a bunch of menus right"
+  },
+  {
+   "t": 548.0,
+   "d": 2.13,
+   "text": "away it'll occasionally pop a menu you"
+  },
+  {
+   "t": 550.13,
+   "d": 1.11,
+   "text": "know what do you want this value to be"
+  },
+  {
+   "t": 551.24,
+   "d": 1.23,
+   "text": "you really want that one so band here"
+  },
+  {
+   "t": 552.47,
+   "d": 1.89,
+   "text": "refers to making an egg band like of"
+  },
+  {
+   "t": 554.36,
+   "d": 3.71,
+   "text": "your own in broken bottle you play an"
+  },
+  {
+   "t": 558.07,
+   "d": 1.84,
+   "text": "alcoholic in a post-apocalyptic world"
+  },
+  {
+   "t": 559.91,
+   "d": 2.31,
+   "text": "where alcohol consumption ties into most"
+  },
+  {
+   "t": 562.22,
+   "d": 1.44,
+   "text": "of the experience for better or worse"
+  },
+  {
+   "t": 563.66,
+   "d": 1.53,
+   "text": "depending on your choices it's a pretty"
+  },
+  {
+   "t": 565.19,
+   "d": 3.33,
+   "text": "story focused 70 euro Drake fire chasm"
+  },
+  {
+   "t": 568.52,
+   "d": 3.14,
+   "text": "has you building playing a young dragon"
+  },
+  {
+   "t": 571.66,
+   "d": 2.71,
+   "text": "fighting through caverns full of"
+  },
+  {
+   "t": 574.37,
+   "d": 1.77,
+   "text": "monsters adventurers and other dragons"
+  },
+  {
+   "t": 576.14,
+   "d": 2.13,
+   "text": "but there are no items at all you just"
+  },
+  {
+   "t": 578.27,
+   "d": 1.53,
+   "text": "upgrade your dragon abilities and eat"
+  },
+  {
+   "t": 579.8,
+   "d": 1.95,
+   "text": "your foes in order to grow larger and"
+  },
+  {
+   "t": 581.75,
+   "d": 1.8,
+   "text": "advance to the next floor now this one"
+  },
+  {
+   "t": 583.55,
+   "d": 2.76,
+   "text": "still gets occasional updates in golden"
+  },
+  {
+   "t": 586.31,
+   "d": 1.95,
+   "text": "Crone hotel you take advantage of the"
+  },
+  {
+   "t": 588.26,
+   "d": 2.1,
+   "text": "differing abilities of your vampire and"
+  },
+  {
+   "t": 590.36,
+   "d": 2.19,
+   "text": "human forms including their interaction"
+  },
+  {
+   "t": 592.55,
+   "d": 1.65,
+   "text": "with dynamic light this one eventually"
+  },
+  {
+   "t": 594.2,
+   "d": 1.29,
+   "text": "turned into a bigger commercial"
+  },
+  {
+   "t": 595.49,
+   "d": 1.14,
+   "text": "roguelike and is done pretty well on"
+  },
+  {
+   "t": 596.63,
+   "d": 3.42,
+   "text": "Steam since releasing a year ago here's"
+  },
+  {
+   "t": 600.05,
+   "d": 3.24,
+   "text": "my original cog mine 7d RL looks a lot"
+  },
+  {
+   "t": 603.29,
+   "d": 2.52,
+   "text": "different from the new one but here"
+  },
+  {
+   "t": 605.81,
+   "d": 1.35,
+   "text": "you're a robot building yourself from"
+  },
+  {
+   "t": 607.16,
+   "d": 1.68,
+   "text": "scratch using parts found or taken from"
+  },
+  {
+   "t": 608.84,
+   "d": 1.68,
+   "text": "other robots and there's rampant item"
+  },
+  {
+   "t": 610.52,
+   "d": 1.47,
+   "text": "destruction so you're forced to rebuild"
+  },
+  {
+   "t": 611.99,
+   "d": 2.07,
+   "text": "pretty often obviously this also became"
+  },
+  {
+   "t": 614.06,
+   "d": 2.01,
+   "text": "a much bigger commercial project later"
+  },
+  {
+   "t": 616.07,
+   "d": 2.04,
+   "text": "on I never expected my little 7d or L"
+  },
+  {
+   "t": 618.11,
+   "d": 1.71,
+   "text": "detour six years ago would turn into my"
+  },
+  {
+   "t": 619.82,
+   "d": 2.97,
+   "text": "job but I'm really happy that I"
+  },
+  {
+   "t": 622.79,
+   "d": 1.95,
+   "text": "participated because that was perfect"
+  },
+  {
+   "t": 624.74,
+   "d": 3.35,
+   "text": "for proving the core mechanic was fun"
+  },
+  {
+   "t": 628.09,
+   "d": 3.49,
+   "text": "this year for the 7d RL I did poly bot 7"
+  },
+  {
+   "t": 631.58,
+   "d": 2.13,
+   "text": "which is kind of like cog mind but plays"
+  },
+  {
+   "t": 633.71,
+   "d": 1.95,
+   "text": "extremely differently because there was"
+  },
+  {
+   "t": 635.66,
+   "d": 1.56,
+   "text": "a significant change to the core"
+  },
+  {
+   "t": 637.22,
+   "d": 2.16,
+   "text": "mechanic instead of a player choosing"
+  },
+  {
+   "t": 639.38,
+   "d": 1.89,
+   "text": "what items to attach nearby items just"
+  },
+  {
+   "t": 641.27,
+   "d": 1.23,
+   "text": "automatically fly over and attach"
+  },
+  {
+   "t": 642.5,
+   "d": 2.22,
+   "text": "themselves to you from over you can't"
+  },
+  {
+   "t": 644.72,
+   "d": 2.04,
+   "text": "even remove them the only way to remove"
+  },
+  {
+   "t": 646.76,
+   "d": 2.46,
+   "text": "parts is if they're destroyed so I"
+  },
+  {
+   "t": 649.22,
+   "d": 1.41,
+   "text": "originally planned for this game to be"
+  },
+  {
+   "t": 650.63,
+   "d": 1.83,
+   "text": "kind of a scaled-down COK mind but as"
+  },
+  {
+   "t": 652.46,
+   "d": 1.62,
+   "text": "the 7000 got closer I kept feeling that"
+  },
+  {
+   "t": 654.08,
+   "d": 1.83,
+   "text": "wasn't really a game worth making it"
+  },
+  {
+   "t": 655.91,
+   "d": 0.96,
+   "text": "needed to be something with a truly"
+  },
+  {
+   "t": 656.87,
+   "d": 2.43,
+   "text": "unique hooked to it a completely new"
+  },
+  {
+   "t": 659.3,
+   "d": 1.65,
+   "text": "core mechanic so it turned out pretty"
+  },
+  {
+   "t": 660.95,
+   "d": 1.32,
+   "text": "fun just change the core mechanic and"
+  },
+  {
+   "t": 662.27,
+   "d": 2.37,
+   "text": "the entire game feeling changed"
+  },
+  {
+   "t": 664.64,
+   "d": 1.53,
+   "text": "so while these games all these games I"
+  },
+  {
+   "t": 666.17,
+   "d": 1.14,
+   "text": "just mentioned may have more than one"
+  },
+  {
+   "t": 667.31,
+   "d": 1.83,
+   "text": "system it's pretty clear where their"
+  },
+  {
+   "t": 669.14,
+   "d": 1.62,
+   "text": "core mechanic lies and like many other"
+  },
+  {
+   "t": 670.76,
+   "d": 2.6,
+   "text": "seven TRL's they really stand out for it"
+  },
+  {
+   "t": 673.36,
+   "d": 1.93,
+   "text": "but well rat it let's take a look at a"
+  },
+  {
+   "t": 675.29,
+   "d": 2.16,
+   "text": "few non 7tl examples as well these games"
+  },
+  {
+   "t": 677.45,
+   "d": 1.68,
+   "text": "took years to make and certainly include"
+  },
+  {
+   "t": 679.13,
+   "d": 2.61,
+   "text": "a ton of systems and content but you can"
+  },
+  {
+   "t": 681.74,
+   "d": 1.26,
+   "text": "still see how they revolve around their"
+  },
+  {
+   "t": 683.0,
+   "d": 0.75,
+   "text": "core mechanics"
+  },
+  {
+   "t": 683.75,
+   "d": 2.79,
+   "text": "now there's mage guild which has the"
+  },
+  {
+   "t": 686.54,
+   "d": 1.77,
+   "text": "greatest alchemy system that lets you"
+  },
+  {
+   "t": 688.31,
+   "d": 1.98,
+   "text": "mix any two items I think it'll all be"
+  },
+  {
+   "t": 690.29,
+   "d": 2.46,
+   "text": "that potions monster remains anything"
+  },
+  {
+   "t": 692.75,
+   "d": 2.1,
+   "text": "and you get all kinds of new items and"
+  },
+  {
+   "t": 694.85,
+   "d": 1.68,
+   "text": "effects when you mix them logical"
+  },
+  {
+   "t": 696.53,
+   "d": 2.7,
+   "text": "results is pretty fun now there's demon"
+  },
+  {
+   "t": 699.23,
+   "d": 1.56,
+   "text": "where you recruit a wide variety of"
+  },
+  {
+   "t": 700.79,
+   "d": 1.5,
+   "text": "autonomous follower demons and train"
+  },
+  {
+   "t": 702.29,
+   "d": 3.71,
+   "text": "them the ground gives way with it's"
+  },
+  {
+   "t": 706.0,
+   "d": 3.12,
+   "text": "completely item based progression and"
+  },
+  {
+   "t": 709.12,
+   "d": 2.08,
+   "text": "there's Xena marine which is built"
+  },
+  {
+   "t": 711.2,
+   "d": 1.5,
+   "text": "around ranged combat and directional"
+  },
+  {
+   "t": 712.7,
+   "d": 1.59,
+   "text": "facing and that's something you see in"
+  },
+  {
+   "t": 714.29,
+   "d": 3.81,
+   "text": "many roguelikes one of the nethack devs"
+  },
+  {
+   "t": 718.1,
+   "d": 3.36,
+   "text": "once told me net hax core mechanic is if"
+  },
+  {
+   "t": 721.46,
+   "d": 1.53,
+   "text": "it seems like it should be possible to"
+  },
+  {
+   "t": 722.99,
+   "d": 2.73,
+   "text": "do something then you probably can this"
+  },
+  {
+   "t": 725.72,
+   "d": 1.74,
+   "text": "almost seems like an anti core mechanic"
+  },
+  {
+   "t": 727.46,
+   "d": 5.04,
+   "text": "but yeah so one of the most important"
+  },
+  {
+   "t": 732.5,
+   "d": 1.44,
+   "text": "things you'll need access to is"
+  },
+  {
+   "t": 733.94,
+   "d": 2.34,
+   "text": "information that includes living the"
+  },
+  {
+   "t": 736.28,
+   "d": 1.59,
+   "text": "basics getting answers to questions"
+  },
+  {
+   "t": 737.87,
+   "d": 1.47,
+   "text": "getting into more advanced topics later"
+  },
+  {
+   "t": 739.34,
+   "d": 2.49,
+   "text": "or just food for thought your specific"
+  },
+  {
+   "t": 741.83,
+   "d": 1.08,
+   "text": "pitfalls will be different for other"
+  },
+  {
+   "t": 742.91,
+   "d": 1.32,
+   "text": "devs because everyone's got a somewhat"
+  },
+  {
+   "t": 744.23,
+   "d": 2.28,
+   "text": "different skillset and personality but"
+  },
+  {
+   "t": 746.51,
+   "d": 2.25,
+   "text": "you can use online resources and friends"
+  },
+  {
+   "t": 748.76,
+   "d": 1.83,
+   "text": "to get around those pitfalls well you"
+  },
+  {
+   "t": 750.59,
+   "d": 1.71,
+   "text": "probably don't have anyone working with"
+  },
+  {
+   "t": 752.3,
+   "d": 2.25,
+   "text": "you on your project others can step in"
+  },
+  {
+   "t": 754.55,
+   "d": 2.19,
+   "text": "with an advice when you need it but you"
+  },
+  {
+   "t": 756.74,
+   "d": 2.37,
+   "text": "have to ask it took me way too long to"
+  },
+  {
+   "t": 759.11,
+   "d": 1.92,
+   "text": "learn that my early progress or the"
+  },
+  {
+   "t": 761.03,
+   "d": 2.55,
+   "text": "progress was pretty slow because I never"
+  },
+  {
+   "t": 763.58,
+   "d": 1.92,
+   "text": "reached out to people so I'm here to"
+  },
+  {
+   "t": 765.5,
+   "d": 1.74,
+   "text": "tell you there's tons of help just"
+  },
+  {
+   "t": 767.24,
+   "d": 2.34,
+   "text": "waiting out there so let's look at some"
+  },
+  {
+   "t": 769.58,
+   "d": 2.46,
+   "text": "of the most useful resources here's the"
+  },
+  {
+   "t": 772.04,
+   "d": 2.19,
+   "text": "roguelike dev subreddit the largest"
+  },
+  {
+   "t": 774.23,
+   "d": 2.01,
+   "text": "group of active roguelike developers in"
+  },
+  {
+   "t": 776.24,
+   "d": 2.31,
+   "text": "the universe in addition to our"
+  },
+  {
+   "t": 778.55,
+   "d": 1.74,
+   "text": "welcoming and helpful community we also"
+  },
+  {
+   "t": 780.29,
+   "d": 1.92,
+   "text": "have a wire well organised sidebar that"
+  },
+  {
+   "t": 782.21,
+   "d": 1.35,
+   "text": "will point you to a wide variety of"
+  },
+  {
+   "t": 783.56,
+   "d": 1.62,
+   "text": "useful resources this includes tutorials"
+  },
+  {
+   "t": 785.18,
+   "d": 1.83,
+   "text": "in various languages and libraries and"
+  },
+  {
+   "t": 787.01,
+   "d": 1.98,
+   "text": "we have members who have used them"
+  },
+  {
+   "t": 788.99,
+   "d": 1.29,
+   "text": "before and can help answer your"
+  },
+  {
+   "t": 790.28,
+   "d": 1.29,
+   "text": "questions this information has been"
+  },
+  {
+   "t": 791.57,
+   "d": 1.41,
+   "text": "brought to you by the completely"
+  },
+  {
+   "t": 792.98,
+   "d": 3.15,
+   "text": "unbiased moderator okay so"
+  },
+  {
+   "t": 796.13,
+   "d": 1.92,
+   "text": "earlier I mentioned starting out with"
+  },
+  {
+   "t": 798.05,
+   "d": 2.04,
+   "text": "Python and the easiest way to do that is"
+  },
+  {
+   "t": 800.09,
+   "d": 1.53,
+   "text": "with the library known as Liberty Cod"
+  },
+  {
+   "t": 801.62,
+   "d": 2.85,
+   "text": "for which we have a tutorial more than"
+  },
+  {
+   "t": 804.47,
+   "d": 2.73,
+   "text": "one even like most game libraries lib"
+  },
+  {
+   "t": 807.2,
+   "d": 1.86,
+   "text": "ducat handles basic features like a"
+  },
+  {
+   "t": 809.06,
+   "d": 3.0,
+   "text": "window like your window your mouse and"
+  },
+  {
+   "t": 812.06,
+   "d": 2.67,
+   "text": "keyboard support bitmap fonts palette"
+  },
+  {
+   "t": 814.73,
+   "d": 1.37,
+   "text": "and color manipulation all those things"
+  },
+  {
+   "t": 816.1,
+   "d": 2.71,
+   "text": "but it also does a lot of the roguelike"
+  },
+  {
+   "t": 818.81,
+   "d": 1.59,
+   "text": "specific heavy lifting like map"
+  },
+  {
+   "t": 820.4,
+   "d": 1.68,
+   "text": "generation FOV pathfinding it does a lot"
+  },
+  {
+   "t": 822.08,
+   "d": 1.23,
+   "text": "of the work for you and you can replace"
+  },
+  {
+   "t": 823.31,
+   "d": 1.77,
+   "text": "these parts if you need to but it's a"
+  },
+  {
+   "t": 825.08,
+   "d": 2.46,
+   "text": "great place to start ultimate round here"
+  },
+  {
+   "t": 827.54,
+   "d": 1.74,
+   "text": "eekum and temple of torment 2 roguelikes"
+  },
+  {
+   "t": 829.28,
+   "d": 1.86,
+   "text": "i mentioned earlier both of the"
+  },
+  {
+   "t": 831.14,
+   "d": 2.07,
+   "text": "multi-year huge projects both started"
+  },
+  {
+   "t": 833.21,
+   "d": 0.96,
+   "text": "with the game they created in this"
+  },
+  {
+   "t": 834.17,
+   "d": 1.62,
+   "text": "tutorial and eventually just grew into"
+  },
+  {
+   "t": 835.79,
+   "d": 2.19,
+   "text": "their own things so lifty got is pretty"
+  },
+  {
+   "t": 837.98,
+   "d": 1.44,
+   "text": "great and it's beginning updates for 10"
+  },
+  {
+   "t": 839.42,
+   "d": 3.57,
+   "text": "years now another way to get started is"
+  },
+  {
+   "t": 842.99,
+   "d": 3.21,
+   "text": "to join our summer coda long event again"
+  },
+  {
+   "t": 846.2,
+   "d": 1.56,
+   "text": "this is the robe like to have subreddit"
+  },
+  {
+   "t": 847.76,
+   "d": 2.16,
+   "text": "this follows the lip t-cog tutorial"
+  },
+  {
+   "t": 849.92,
+   "d": 2.25,
+   "text": "alongside other developers if you need"
+  },
+  {
+   "t": 852.17,
+   "d": 1.8,
+   "text": "the extra motivation and pacing handle"
+  },
+  {
+   "t": 853.97,
+   "d": 2.52,
+   "text": "for you we've done the tutorial for a"
+  },
+  {
+   "t": 856.49,
+   "d": 1.17,
+   "text": "couple years so far an interest has"
+  },
+  {
+   "t": 857.66,
+   "d": 1.89,
+   "text": "always been really high we've got like a"
+  },
+  {
+   "t": 859.55,
+   "d": 1.38,
+   "text": "hundred people each year who participate"
+  },
+  {
+   "t": 860.93,
+   "d": 1.74,
+   "text": "in this and you don't even have to use"
+  },
+  {
+   "t": 862.67,
+   "d": 1.59,
+   "text": "them to cut or python to participate how"
+  },
+  {
+   "t": 864.26,
+   "d": 1.32,
+   "text": "many people use other languages and"
+  },
+  {
+   "t": 865.58,
+   "d": 2.49,
+   "text": "follow along with their own roguelike or"
+  },
+  {
+   "t": 868.07,
+   "d": 3.93,
+   "text": "similar tutorials in any case at the end"
+  },
+  {
+   "t": 872.0,
+   "d": 1.74,
+   "text": "of two months you'll have your own"
+  },
+  {
+   "t": 873.74,
+   "d": 2.16,
+   "text": "playable roguelike here are some of the"
+  },
+  {
+   "t": 875.9,
+   "d": 1.92,
+   "text": "games that came out of our event the"
+  },
+  {
+   "t": 877.82,
+   "d": 1.86,
+   "text": "past couple years it's a really nice"
+  },
+  {
+   "t": 879.68,
+   "d": 1.35,
+   "text": "walk through you can just tack on to or"
+  },
+  {
+   "t": 881.03,
+   "d": 1.95,
+   "text": "add features as you see fit and just"
+  },
+  {
+   "t": 882.98,
+   "d": 1.86,
+   "text": "keep going with it these are these are"
+  },
+  {
+   "t": 884.84,
+   "d": 2.01,
+   "text": "the things that people ended with though"
+  },
+  {
+   "t": 886.85,
+   "d": 1.29,
+   "text": "at the end of two months now that"
+  },
+  {
+   "t": 888.14,
+   "d": 0.99,
+   "text": "basically gives you the required"
+  },
+  {
+   "t": 889.13,
+   "d": 2.19,
+   "text": "technical background for a functioning"
+  },
+  {
+   "t": 891.32,
+   "d": 1.83,
+   "text": "roguelike then you do the part where you"
+  },
+  {
+   "t": 893.15,
+   "d": 3.21,
+   "text": "let your imagination run wild so later"
+  },
+  {
+   "t": 896.36,
+   "d": 1.8,
+   "text": "on in your roguelike dev travels we have"
+  },
+  {
+   "t": 898.16,
+   "d": 3.18,
+   "text": "facts again on our subreddit that"
+  },
+  {
+   "t": 901.34,
+   "d": 1.92,
+   "text": "covered different aspects of development"
+  },
+  {
+   "t": 903.26,
+   "d": 1.53,
+   "text": "in order to get you thinking about how"
+  },
+  {
+   "t": 904.79,
+   "d": 2.55,
+   "text": "to approach various topics we've done a"
+  },
+  {
+   "t": 907.34,
+   "d": 3.78,
+   "text": "handful so far yeah he's been doing it"
+  },
+  {
+   "t": 911.12,
+   "d": 2.25,
+   "text": "for about you know over three years now"
+  },
+  {
+   "t": 913.37,
+   "d": 2.58,
+   "text": "so these topics and these include like"
+  },
+  {
+   "t": 915.95,
+   "d": 1.53,
+   "text": "meta topics you've got planning and"
+  },
+  {
+   "t": 917.48,
+   "d": 1.98,
+   "text": "motivation and also details like common"
+  },
+  {
+   "t": 919.46,
+   "d": 1.62,
+   "text": "systems design just all sorts of stuff"
+  },
+  {
+   "t": 921.08,
+   "d": 1.35,
+   "text": "you can see this list there it's"
+  },
+  {
+   "t": 922.43,
+   "d": 2.52,
+   "text": "everything we've got over the years"
+  },
+  {
+   "t": 924.95,
+   "d": 1.56,
+   "text": "we've had quite a few devs contributing"
+  },
+  {
+   "t": 926.51,
+   "d": 2.88,
+   "text": "to these community facts including"
+  },
+  {
+   "t": 929.39,
+   "d": 2.7,
+   "text": "Rowland roguelikes honestly we've got"
+  },
+  {
+   "t": 932.09,
+   "d": 1.35,
+   "text": "tons of developers hanging out in the"
+  },
+  {
+   "t": 933.44,
+   "d": 1.89,
+   "text": "subreddit in general many with long term"
+  },
+  {
+   "t": 935.33,
+   "d": 2.16,
+   "text": "hobby projects and who are knowledgeable"
+  },
+  {
+   "t": 937.49,
+   "d": 2.13,
+   "text": "and happy to help we also have a discord"
+  },
+  {
+   "t": 939.62,
+   "d": 2.31,
+   "text": "for real-time help and discussion you"
+  },
+  {
+   "t": 941.93,
+   "d": 1.52,
+   "text": "can find the link to that in our sidebar"
+  },
+  {
+   "t": 943.45,
+   "d": 3.01,
+   "text": "we share that server with the roguelikes"
+  },
+  {
+   "t": 946.46,
+   "d": 1.86,
+   "text": "subreddit so you'll also find lots of"
+  },
+  {
+   "t": 948.32,
+   "d": 1.5,
+   "text": "other people playing and discussing all"
+  },
+  {
+   "t": 949.82,
+   "d": 2.57,
+   "text": "sorts of roguelikes and other channels"
+  },
+  {
+   "t": 952.39,
+   "d": 3.64,
+   "text": "outside our subreddit Santiago has got"
+  },
+  {
+   "t": 956.03,
+   "d": 1.05,
+   "text": "this great site you may have heard of"
+  },
+  {
+   "t": 957.08,
+   "d": 2.64,
+   "text": "called rogue Basin you'll find a whole"
+  },
+  {
+   "t": 959.72,
+   "d": 2.4,
+   "text": "section of articles that there is just a"
+  },
+  {
+   "t": 962.12,
+   "d": 2.4,
+   "text": "list of the general table of contents a"
+  },
+  {
+   "t": 964.52,
+   "d": 2.25,
+   "text": "lot of the content is a little older but"
+  },
+  {
+   "t": 966.77,
+   "d": 1.83,
+   "text": "I mean it's rogue elective most of the"
+  },
+  {
+   "t": 968.6,
+   "d": 2.46,
+   "text": "articles are just as relevant today and"
+  },
+  {
+   "t": 971.06,
+   "d": 1.32,
+   "text": "this is where I got started years ago"
+  },
+  {
+   "t": 972.38,
+   "d": 3.54,
+   "text": "Thank You Santiago and I found the"
+  },
+  {
+   "t": 975.92,
+   "d": 2.01,
+   "text": "articles both inspiring and enlightening"
+  },
+  {
+   "t": 977.93,
+   "d": 3.18,
+   "text": "well maybe a little scary at first but"
+  },
+  {
+   "t": 981.11,
+   "d": 1.86,
+   "text": "remember a piecemeal that's how you want"
+  },
+  {
+   "t": 982.97,
+   "d": 1.5,
+   "text": "to build a robot piecemeal so it's a lot"
+  },
+  {
+   "t": 984.47,
+   "d": 2.57,
+   "text": "of stuff but take it a step at a time"
+  },
+  {
+   "t": 987.04,
+   "d": 2.86,
+   "text": "Darren gray Andrew dual Mark Johnson and"
+  },
+  {
+   "t": 989.9,
+   "d": 2.13,
+   "text": "others host a podcast called roguelike"
+  },
+  {
+   "t": 992.03,
+   "d": 2.64,
+   "text": "radio check out all these topics that"
+  },
+  {
+   "t": 994.67,
+   "d": 2.28,
+   "text": "they've done these include interviews"
+  },
+  {
+   "t": 996.95,
+   "d": 2.58,
+   "text": "with a wide range of roguelike devs I'm"
+  },
+  {
+   "t": 999.53,
+   "d": 1.47,
+   "text": "even in two or three of them including"
+  },
+  {
+   "t": 1001.0,
+   "d": 1.92,
+   "text": "one where I say cog mind might be done"
+  },
+  {
+   "t": 1002.92,
+   "d": 3.18,
+   "text": "in 2016 or something like that the new"
+  },
+  {
+   "t": 1006.1,
+   "d": 1.73,
+   "text": "year is 2019"
+  },
+  {
+   "t": 1007.83,
+   "d": 2.14,
+   "text": "he'll doesn't say that a number of them"
+  },
+  {
+   "t": 1009.97,
+   "d": 2.13,
+   "text": "cover the 7-day roguelike challenges"
+  },
+  {
+   "t": 1012.1,
+   "d": 1.83,
+   "text": "which are a pretty big thing in the"
+  },
+  {
+   "t": 1013.93,
+   "d": 0.92,
+   "text": "community"
+  },
+  {
+   "t": 1014.85,
+   "d": 2.71,
+   "text": "so that's knowledge covered but another"
+  },
+  {
+   "t": 1017.56,
+   "d": 1.74,
+   "text": "really big consideration when it comes"
+  },
+  {
+   "t": 1019.3,
+   "d": 2.04,
+   "text": "to game development general with assets"
+  },
+  {
+   "t": 1021.34,
+   "d": 4.44,
+   "text": "here are our assets seriously though"
+  },
+  {
+   "t": 1025.78,
+   "d": 2.97,
+   "text": "ASCII is wonderful in so many ways and"
+  },
+  {
+   "t": 1028.75,
+   "d": 2.0,
+   "text": "it makes it so easy to add new content"
+  },
+  {
+   "t": 1030.75,
+   "d": 3.67,
+   "text": "so and with the right combination of"
+  },
+  {
+   "t": 1034.42,
+   "d": 1.59,
+   "text": "foreground and background colors you can"
+  },
+  {
+   "t": 1036.01,
+   "d": 2.19,
+   "text": "create some really pretty games you"
+  },
+  {
+   "t": 1038.2,
+   "d": 2.04,
+   "text": "probably recognize brogue but I'll just"
+  },
+  {
+   "t": 1040.24,
+   "d": 2.13,
+   "text": "flip through some more images here to"
+  },
+  {
+   "t": 1042.37,
+   "d": 1.62,
+   "text": "sample the breadth of the possibilities"
+  },
+  {
+   "t": 1043.99,
+   "d": 2.31,
+   "text": "all of which look great there's just so"
+  },
+  {
+   "t": 1046.3,
+   "d": 3.41,
+   "text": "much room for unique styles"
+  },
+  {
+   "t": 1089.91,
+   "d": 4.32,
+   "text": "the variety is just amazing yeah you can"
+  },
+  {
+   "t": 1094.23,
+   "d": 2.58,
+   "text": "also use my editor vex paint for"
+  },
+  {
+   "t": 1096.81,
+   "d": 1.98,
+   "text": "interface design mapping art and a whole"
+  },
+  {
+   "t": 1098.79,
+   "d": 1.47,
+   "text": "bunch of other stuff it integrates with"
+  },
+  {
+   "t": 1100.26,
+   "d": 2.49,
+   "text": "lip decode so bonus for me it's become a"
+  },
+  {
+   "t": 1102.75,
+   "d": 1.74,
+   "text": "totally indispensable tool and quite a"
+  },
+  {
+   "t": 1104.49,
+   "d": 1.32,
+   "text": "few other roguelike devs rely on it now"
+  },
+  {
+   "t": 1105.81,
+   "d": 3.9,
+   "text": "to of course if you want more people to"
+  },
+  {
+   "t": 1109.71,
+   "d": 2.22,
+   "text": "actually play your game or if it'll help"
+  },
+  {
+   "t": 1111.93,
+   "d": 2.94,
+   "text": "you get into your project there are also"
+  },
+  {
+   "t": 1114.87,
+   "d": 2.58,
+   "text": "some nice title sets you can use even if"
+  },
+  {
+   "t": 1117.45,
+   "d": 1.89,
+   "text": "they're just a placeholder many of these"
+  },
+  {
+   "t": 1119.34,
+   "d": 2.04,
+   "text": "are free and many more as well"
+  },
+  {
+   "t": 1121.38,
+   "d": 1.62,
+   "text": "or at least available at a reasonable"
+  },
+  {
+   "t": 1123.0,
+   "d": 2.28,
+   "text": "price you can find links to a bunch of"
+  },
+  {
+   "t": 1125.28,
+   "d": 3.27,
+   "text": "tile sets in our subreddit sidebar for"
+  },
+  {
+   "t": 1128.55,
+   "d": 1.35,
+   "text": "some people tile sets had the advantage"
+  },
+  {
+   "t": 1129.9,
+   "d": 1.95,
+   "text": "of sparking your imagination if you need"
+  },
+  {
+   "t": 1131.85,
+   "d": 2.1,
+   "text": "that to help with development like you"
+  },
+  {
+   "t": 1133.95,
+   "d": 1.98,
+   "text": "see this cool cool character and you"
+  },
+  {
+   "t": 1135.93,
+   "d": 1.14,
+   "text": "just oh I need I know what that'll be"
+  },
+  {
+   "t": 1137.07,
+   "d": 2.55,
+   "text": "that that's perfect for my game or it"
+  },
+  {
+   "t": 1139.62,
+   "d": 1.86,
+   "text": "gives you a new idea so you may have"
+  },
+  {
+   "t": 1141.48,
+   "d": 2.01,
+   "text": "seen some of these tiles and other"
+  },
+  {
+   "t": 1143.49,
+   "d": 3.69,
+   "text": "roadblocks before alright so for this"
+  },
+  {
+   "t": 1147.18,
+   "d": 2.01,
+   "text": "last segment I wanted to take a look at"
+  },
+  {
+   "t": 1149.19,
+   "d": 1.62,
+   "text": "where to start your real design process"
+  },
+  {
+   "t": 1150.81,
+   "d": 2.34,
+   "text": "now what you want to focus on I mean you"
+  },
+  {
+   "t": 1153.15,
+   "d": 1.26,
+   "text": "might be satisfied with just moving a"
+  },
+  {
+   "t": 1154.41,
+   "d": 1.32,
+   "text": "little at across the screen smashing"
+  },
+  {
+   "t": 1155.73,
+   "d": 2.76,
+   "text": "into letters or you might want to go a"
+  },
+  {
+   "t": 1158.49,
+   "d": 1.29,
+   "text": "bit further than that and hope that"
+  },
+  {
+   "t": 1159.78,
+   "d": 1.32,
+   "text": "others enjoy it as much as you do"
+  },
+  {
+   "t": 1161.1,
+   "d": 1.65,
+   "text": "of course you'll want some kind of hook"
+  },
+  {
+   "t": 1162.75,
+   "d": 1.86,
+   "text": "to get people interested in the first"
+  },
+  {
+   "t": 1164.61,
+   "d": 1.53,
+   "text": "place but this hook can take a number of"
+  },
+  {
+   "t": 1166.14,
+   "d": 4.77,
+   "text": "forms we already talked about having a"
+  },
+  {
+   "t": 1170.91,
+   "d": 2.28,
+   "text": "core mechanic which is one of the easier"
+  },
+  {
+   "t": 1173.19,
+   "d": 1.86,
+   "text": "hooks since it ties most directly into"
+  },
+  {
+   "t": 1175.05,
+   "d": 2.04,
+   "text": "the gameplay itself and roguelikes first"
+  },
+  {
+   "t": 1177.09,
+   "d": 2.46,
+   "text": "and foremost are all about game play all"
+  },
+  {
+   "t": 1179.55,
+   "d": 1.14,
+   "text": "those permit deaths aren't going to be"
+  },
+  {
+   "t": 1180.69,
+   "d": 3.17,
+   "text": "worth it if there's no replayability"
+  },
+  {
+   "t": 1183.86,
+   "d": 2.71,
+   "text": "amazing audio visual features aren't"
+  },
+  {
+   "t": 1186.57,
+   "d": 1.74,
+   "text": "traditionally as common although we're"
+  },
+  {
+   "t": 1188.31,
+   "d": 1.17,
+   "text": "seeing more roguelikes headed in that"
+  },
+  {
+   "t": 1189.48,
+   "d": 2.07,
+   "text": "direction which is great because it"
+  },
+  {
+   "t": 1191.55,
+   "d": 2.16,
+   "text": "attracts more players to the genre but"
+  },
+  {
+   "t": 1193.71,
+   "d": 2.69,
+   "text": "the one I want to emphasize now is beam"
+  },
+  {
+   "t": 1196.4,
+   "d": 2.71,
+   "text": "which is an excellent hook but not"
+  },
+  {
+   "t": 1199.11,
+   "d": 3.42,
+   "text": "taking advantage of nearly enough we"
+  },
+  {
+   "t": 1202.53,
+   "d": 1.83,
+   "text": "have lots and lots of fantasy dungeon"
+  },
+  {
+   "t": 1204.36,
+   "d": 2.01,
+   "text": "crawlers so naturally if you want to"
+  },
+  {
+   "t": 1206.37,
+   "d": 1.44,
+   "text": "really distinguish your project and go"
+  },
+  {
+   "t": 1207.81,
+   "d": 1.44,
+   "text": "for any unique theme that's not a"
+  },
+  {
+   "t": 1209.25,
+   "d": 4.59,
+   "text": "fantasy dungeon crawler roguelikes are"
+  },
+  {
+   "t": 1213.84,
+   "d": 1.56,
+   "text": "generally based on good interesting"
+  },
+  {
+   "t": 1215.4,
+   "d": 2.69,
+   "text": "gameplay but having a unique theme"
+  },
+  {
+   "t": 1218.09,
+   "d": 2.2,
+   "text": "normally makes the entire experience"
+  },
+  {
+   "t": 1220.29,
+   "d": 2.16,
+   "text": "unique it also gives you a source from"
+  },
+  {
+   "t": 1222.45,
+   "d": 1.11,
+   "text": "which to readily draw"
+  },
+  {
+   "t": 1223.56,
+   "d": 1.56,
+   "text": "brand-new mechanics it almost forces you"
+  },
+  {
+   "t": 1225.12,
+   "d": 4.02,
+   "text": "to do this in particular historical and"
+  },
+  {
+   "t": 1229.14,
+   "d": 2.64,
+   "text": "mythological themes offer a huge range"
+  },
+  {
+   "t": 1231.78,
+   "d": 1.68,
+   "text": "of established material to explore and"
+  },
+  {
+   "t": 1233.46,
+   "d": 2.73,
+   "text": "expand on people also always seem to"
+  },
+  {
+   "t": 1236.19,
+   "d": 1.32,
+   "text": "want more sci-fi aerobics than we"
+  },
+  {
+   "t": 1237.51,
+   "d": 2.96,
+   "text": "already have so that's another idea"
+  },
+  {
+   "t": 1240.47,
+   "d": 2.17,
+   "text": "we've seen some really unique themes in"
+  },
+  {
+   "t": 1242.64,
+   "d": 2.58,
+   "text": "recent years makai RL for example is"
+  },
+  {
+   "t": 1245.22,
+   "d": 2.79,
+   "text": "it's a neat concept steeped in Japanese"
+  },
+  {
+   "t": 1248.01,
+   "d": 2.4,
+   "text": "mythology and historical fantasy I want"
+  },
+  {
+   "t": 1250.41,
+   "d": 5.22,
+   "text": "to play that skies of bloody April is a"
+  },
+  {
+   "t": 1255.63,
+   "d": 2.4,
+   "text": "well-run dogfighting work like these"
+  },
+  {
+   "t": 1258.03,
+   "d": 1.89,
+   "text": "there's these are the kinds of things"
+  },
+  {
+   "t": 1259.92,
+   "d": 2.16,
+   "text": "that like really turn heads especially"
+  },
+  {
+   "t": 1262.08,
+   "d": 0.96,
+   "text": "of course once they reach a fully"
+  },
+  {
+   "t": 1263.04,
+   "d": 3.27,
+   "text": "playable state now one that is a very"
+  },
+  {
+   "t": 1266.31,
+   "d": 2.25,
+   "text": "complete game is lone spelunker where"
+  },
+  {
+   "t": 1268.56,
+   "d": 1.56,
+   "text": "you explore natural and sometimes"
+  },
+  {
+   "t": 1270.12,
+   "d": 2.48,
+   "text": "dangerous wonders of subterranean caves"
+  },
+  {
+   "t": 1272.6,
+   "d": 2.8,
+   "text": "and as for some other ideas that come up"
+  },
+  {
+   "t": 1275.4,
+   "d": 1.59,
+   "text": "pretty commonly in the roguelike"
+  },
+  {
+   "t": 1276.99,
+   "d": 1.62,
+   "text": "community but haven't been satisfied yet"
+  },
+  {
+   "t": 1278.61,
+   "d": 4.17,
+   "text": "pirates come up pretty often we did have"
+  },
+  {
+   "t": 1282.78,
+   "d": 1.83,
+   "text": "one game pop up called pirate rogue"
+  },
+  {
+   "t": 1284.61,
+   "d": 2.46,
+   "text": "which is among the highest ever voted"
+  },
+  {
+   "t": 1287.07,
+   "d": 2.13,
+   "text": "threads in the red and the roguelike"
+  },
+  {
+   "t": 1289.2,
+   "d": 3.24,
+   "text": "subreddit but it was just a concept and"
+  },
+  {
+   "t": 1292.44,
+   "d": 1.5,
+   "text": "they were that they were prototyping and"
+  },
+  {
+   "t": 1293.94,
+   "d": 2.76,
+   "text": "the dev what it on hold since they"
+  },
+  {
+   "t": 1296.7,
+   "d": 1.53,
+   "text": "realized their dream game was a bit"
+  },
+  {
+   "t": 1298.23,
+   "d": 1.47,
+   "text": "beyond their experience level but the"
+  },
+  {
+   "t": 1299.7,
+   "d": 1.74,
+   "text": "demand is clearly there though it's come"
+  },
+  {
+   "t": 1301.44,
+   "d": 3.18,
+   "text": "up many times Super Heroes is another"
+  },
+  {
+   "t": 1304.62,
+   "d": 1.5,
+   "text": "one that comes up all the time someone"
+  },
+  {
+   "t": 1306.12,
+   "d": 3.36,
+   "text": "do it alright so there have been a lot"
+  },
+  {
+   "t": 1309.48,
+   "d": 1.17,
+   "text": "of great stories coming out of the"
+  },
+  {
+   "t": 1310.65,
+   "d": 2.1,
+   "text": "roguelike dev subreddit so many awesome"
+  },
+  {
+   "t": 1312.75,
+   "d": 1.83,
+   "text": "projects in there both new and long-term"
+  },
+  {
+   "t": 1314.58,
+   "d": 2.01,
+   "text": "but I wanted to share one in particular"
+  },
+  {
+   "t": 1316.59,
+   "d": 1.41,
+   "text": "which I consider a pretty inspiring"
+  },
+  {
+   "t": 1318.0,
+   "d": 3.24,
+   "text": "story and that's armored commander so in"
+  },
+  {
+   "t": 1321.24,
+   "d": 1.47,
+   "text": "our mind commander you're in control of"
+  },
+  {
+   "t": 1322.71,
+   "d": 2.16,
+   "text": "a single World War 2 tank within which"
+  },
+  {
+   "t": 1324.87,
+   "d": 1.17,
+   "text": "you lead multiple crew members in"
+  },
+  {
+   "t": 1326.04,
+   "d": 2.22,
+   "text": "Overland campaigns Gregory Scott"
+  },
+  {
+   "t": 1328.26,
+   "d": 1.5,
+   "text": "developers started this project with"
+  },
+  {
+   "t": 1329.76,
+   "d": 1.56,
+   "text": "only limited programming experience and"
+  },
+  {
+   "t": 1331.32,
+   "d": 1.86,
+   "text": "just went at it with the libtech gut"
+  },
+  {
+   "t": 1333.18,
+   "d": 2.55,
+   "text": "python tutorial one year later it was"
+  },
+  {
+   "t": 1335.73,
+   "d": 2.13,
+   "text": "finished and featured in Rock Paper"
+  },
+  {
+   "t": 1337.86,
+   "d": 1.92,
+   "text": "Shotgun so that's from no game dev"
+  },
+  {
+   "t": 1339.78,
+   "d": 1.8,
+   "text": "experience to a complete game featured"
+  },
+  {
+   "t": 1341.58,
+   "d": 1.68,
+   "text": "in a top PC gaming opinion site in one"
+  },
+  {
+   "t": 1343.26,
+   "d": 0.36,
+   "text": "year"
+  },
+  {
+   "t": 1343.62,
+   "d": 2.55,
+   "text": "show these luck involved in this sort of"
+  },
+  {
+   "t": 1346.17,
+   "d": 2.0,
+   "text": "thing but having a unique theme and"
+  },
+  {
+   "t": 1348.17,
+   "d": 2.41,
+   "text": "sharing it around guarantees that more"
+  },
+  {
+   "t": 1350.58,
+   "d": 1.98,
+   "text": "people are gonna take notice so pick a"
+  },
+  {
+   "t": 1352.56,
+   "d": 2.52,
+   "text": "unique theme and own it this gets more"
+  },
+  {
+   "t": 1355.08,
+   "d": 1.62,
+   "text": "people interested and in turn that will"
+  },
+  {
+   "t": 1356.7,
+   "d": 0.57,
+   "text": "help keep you"
+  },
+  {
+   "t": 1357.27,
+   "d": 3.45,
+   "text": "motivated gregory's now working on a"
+  },
+  {
+   "t": 1360.72,
+   "d": 3.57,
+   "text": "sequel this is arm con 2 so remember"
+  },
+  {
+   "t": 1364.29,
+   "d": 1.02,
+   "text": "that your game doesn't have to be a"
+  },
+  {
+   "t": 1365.31,
+   "d": 1.95,
+   "text": "strict roguelike I'm gonna be a little"
+  },
+  {
+   "t": 1367.26,
+   "d": 1.98,
+   "text": "blasphemous here and say it's not worth"
+  },
+  {
+   "t": 1369.24,
+   "d": 2.1,
+   "text": "getting caught up in definitions we"
+  },
+  {
+   "t": 1371.34,
+   "d": 1.2,
+   "text": "often see people come up with a game"
+  },
+  {
+   "t": 1372.54,
+   "d": 2.31,
+   "text": "idea they'd like to make but then worry"
+  },
+  {
+   "t": 1374.85,
+   "d": 1.08,
+   "text": "about whether or not everyone agrees"
+  },
+  {
+   "t": 1375.93,
+   "d": 0.51,
+   "text": "it's a roguelike"
+  },
+  {
+   "t": 1376.44,
+   "d": 2.49,
+   "text": "it doesn't really matter because there"
+  },
+  {
+   "t": 1378.93,
+   "d": 1.35,
+   "text": "are as many definitions as there are"
+  },
+  {
+   "t": 1380.28,
+   "d": 2.28,
+   "text": "players as long as it's internally"
+  },
+  {
+   "t": 1382.56,
+   "d": 1.89,
+   "text": "consistent and follows your own plan"
+  },
+  {
+   "t": 1384.45,
+   "d": 1.92,
+   "text": "you're all set you know but don't worry"
+  },
+  {
+   "t": 1386.37,
+   "d": 1.59,
+   "text": "be roguelike subreddit will continue to"
+  },
+  {
+   "t": 1387.96,
+   "d": 0.93,
+   "text": "bring your weekly arguments about"
+  },
+  {
+   "t": 1388.89,
+   "d": 3.2,
+   "text": "whether or not something is a roguelike"
+  },
+  {
+   "t": 1392.18,
+   "d": 3.25,
+   "text": "and now to do a total 180 there's"
+  },
+  {
+   "t": 1395.43,
+   "d": 1.59,
+   "text": "another approach you can try which has"
+  },
+  {
+   "t": 1397.02,
+   "d": 1.71,
+   "text": "its own advantages it's the so called"
+  },
+  {
+   "t": 1398.73,
+   "d": 3.99,
+   "text": "xrl these are based on existing IPs and"
+  },
+  {
+   "t": 1402.72,
+   "d": 1.8,
+   "text": "save you much of the planning and design"
+  },
+  {
+   "t": 1404.52,
+   "d": 2.31,
+   "text": "effort that goes into making a game as"
+  },
+  {
+   "t": 1406.83,
+   "d": 1.29,
+   "text": "most of those questions will already be"
+  },
+  {
+   "t": 1408.12,
+   "d": 1.86,
+   "text": "answered for you most you have to come"
+  },
+  {
+   "t": 1409.98,
+   "d": 1.68,
+   "text": "up with how to adapt it to roguelike"
+  },
+  {
+   "t": 1411.66,
+   "d": 3.09,
+   "text": "formulas so within xrl you can focus on"
+  },
+  {
+   "t": 1414.75,
+   "d": 1.74,
+   "text": "the implementation and other"
+  },
+  {
+   "t": 1416.49,
+   "d": 1.23,
+   "text": "fundamentals while you get your feet wet"
+  },
+  {
+   "t": 1417.72,
+   "d": 3.93,
+   "text": "as a new developer but lots of devs do"
+  },
+  {
+   "t": 1421.65,
+   "d": 2.52,
+   "text": "this a while back I made this list of"
+  },
+  {
+   "t": 1424.17,
+   "d": 2.22,
+   "text": "examples on brook basin all these games"
+  },
+  {
+   "t": 1426.39,
+   "d": 2.91,
+   "text": "here based on existing IPs personally I"
+  },
+  {
+   "t": 1429.3,
+   "d": 1.65,
+   "text": "think this is a good way to start out"
+  },
+  {
+   "t": 1430.95,
+   "d": 3.12,
+   "text": "your early development efforts when"
+  },
+  {
+   "t": 1434.07,
+   "d": 2.79,
+   "text": "perhaps the most famous is doom RL it's"
+  },
+  {
+   "t": 1436.86,
+   "d": 1.83,
+   "text": "officially now just called DRL after"
+  },
+  {
+   "t": 1438.69,
+   "d": 2.0,
+   "text": "they were hit by a C and D from ZeniMax"
+  },
+  {
+   "t": 1440.69,
+   "d": 2.41,
+   "text": "luckily wasn't any worse than that but"
+  },
+  {
+   "t": 1443.1,
+   "d": 1.14,
+   "text": "that's a reminder you do have to be"
+  },
+  {
+   "t": 1444.24,
+   "d": 2.22,
+   "text": "careful of particularly litigious"
+  },
+  {
+   "t": 1446.46,
+   "d": 2.25,
+   "text": "companies like Nintendo for example I'd"
+  },
+  {
+   "t": 1448.71,
+   "d": 1.44,
+   "text": "advise against doing an explicitly"
+  },
+  {
+   "t": 1450.15,
+   "d": 4.29,
+   "text": "Pokemon robe like cornell childish"
+  },
+  {
+   "t": 1454.44,
+   "d": 1.89,
+   "text": "couldn't be here today because he's too"
+  },
+  {
+   "t": 1456.33,
+   "d": 1.86,
+   "text": "busy working on the doom RL successor"
+  },
+  {
+   "t": 1458.19,
+   "d": 2.22,
+   "text": "Jupiter hell but in his early years he"
+  },
+  {
+   "t": 1460.41,
+   "d": 2.01,
+   "text": "also made aliens RL one of the first"
+  },
+  {
+   "t": 1462.42,
+   "d": 3.65,
+   "text": "roblox I ever played and Diablo RL"
+  },
+  {
+   "t": 1466.07,
+   "d": 2.77,
+   "text": "Santiago again is here with us today and"
+  },
+  {
+   "t": 1468.84,
+   "d": 1.35,
+   "text": "he's made roguelikes based on"
+  },
+  {
+   "t": 1470.19,
+   "d": 1.86,
+   "text": "castlevania metroid zelda Star Wars"
+  },
+  {
+   "t": 1472.05,
+   "d": 1.59,
+   "text": "Megaman and probably like 10 others he"
+  },
+  {
+   "t": 1473.64,
+   "d": 3.9,
+   "text": "hasn't told us about now even my own"
+  },
+  {
+   "t": 1477.54,
+   "d": 1.95,
+   "text": "first semi roguelike project XCOM RL"
+  },
+  {
+   "t": 1479.49,
+   "d": 1.8,
+   "text": "belongs in this category"
+  },
+  {
+   "t": 1481.29,
+   "d": 3.09,
+   "text": "it started from an IP that with"
+  },
+  {
+   "t": 1484.38,
+   "d": 1.17,
+   "text": "mechanics I was already really familiar"
+  },
+  {
+   "t": 1485.55,
+   "d": 3.69,
+   "text": "with and I loved that helped a lot from"
+  },
+  {
+   "t": 1489.24,
+   "d": 1.44,
+   "text": "there I was able to branch out and"
+  },
+  {
+   "t": 1490.68,
+   "d": 1.53,
+   "text": "a lot of my own mechanics and content"
+  },
+  {
+   "t": 1492.21,
+   "d": 1.92,
+   "text": "doing experience on top of an already"
+  },
+  {
+   "t": 1494.13,
+   "d": 2.31,
+   "text": "solid foundation so another major"
+  },
+  {
+   "t": 1496.44,
+   "d": 1.5,
+   "text": "advantage that I wanted to bring up to"
+  },
+  {
+   "t": 1497.94,
+   "d": 2.79,
+   "text": "to about XR ELLs is that um you have"
+  },
+  {
+   "t": 1500.73,
+   "d": 1.98,
+   "text": "instant fans all the other people who"
+  },
+  {
+   "t": 1502.71,
+   "d": 1.68,
+   "text": "enjoy both roguelikes and that same ip"
+  },
+  {
+   "t": 1504.39,
+   "d": 1.92,
+   "text": "this is great for motivation since"
+  },
+  {
+   "t": 1506.31,
+   "d": 1.26,
+   "text": "you'll always have people cheering you"
+  },
+  {
+   "t": 1507.57,
+   "d": 2.31,
+   "text": "on this helped me a lot in the early"
+  },
+  {
+   "t": 1509.88,
+   "d": 5.33,
+   "text": "years so some tips for the long-run"
+  },
+  {
+   "t": 1515.33,
+   "d": 2.8,
+   "text": "release early and often is the aerobic"
+  },
+  {
+   "t": 1518.13,
+   "d": 2.46,
+   "text": "def mantra is good to quickly get"
+  },
+  {
+   "t": 1520.59,
+   "d": 1.53,
+   "text": "everything into a minimally playable"
+  },
+  {
+   "t": 1522.12,
+   "d": 2.31,
+   "text": "state again a prototype and it'll"
+  },
+  {
+   "t": 1524.43,
+   "d": 0.93,
+   "text": "probably net you some good feedback"
+  },
+  {
+   "t": 1525.36,
+   "d": 3.38,
+   "text": "which is valuable for the long-term"
+  },
+  {
+   "t": 1528.74,
+   "d": 2.62,
+   "text": "sharing Saturday but even before your"
+  },
+  {
+   "t": 1531.36,
+   "d": 1.71,
+   "text": "first release even with just a concept"
+  },
+  {
+   "t": 1533.07,
+   "d": 2.58,
+   "text": "and long after that try participating in"
+  },
+  {
+   "t": 1535.65,
+   "d": 1.71,
+   "text": "our weekly sharing threads in the"
+  },
+  {
+   "t": 1537.36,
+   "d": 2.01,
+   "text": "roguelike dev subreddit for some this is"
+  },
+  {
+   "t": 1539.37,
+   "d": 1.02,
+   "text": "a way to stay accountable to yourself"
+  },
+  {
+   "t": 1540.39,
+   "d": 1.89,
+   "text": "and it's a nice way to review what you"
+  },
+  {
+   "t": 1542.28,
+   "d": 2.91,
+   "text": "have or have not been up to you can"
+  },
+  {
+   "t": 1545.19,
+   "d": 1.77,
+   "text": "literally post about how your week was"
+  },
+  {
+   "t": 1546.96,
+   "d": 1.35,
+   "text": "hell at work and you barely got anything"
+  },
+  {
+   "t": 1548.31,
+   "d": 2.16,
+   "text": "done and in the process you can make"
+  },
+  {
+   "t": 1550.47,
+   "d": 0.99,
+   "text": "friends with others who are in the same"
+  },
+  {
+   "t": 1551.46,
+   "d": 1.92,
+   "text": "boat now or you can talk about the cool"
+  },
+  {
+   "t": 1553.38,
+   "d": 2.1,
+   "text": "new feature that you added or thinking"
+  },
+  {
+   "t": 1555.48,
+   "d": 2.22,
+   "text": "about you can share funny bugs anything"
+  },
+  {
+   "t": 1557.7,
+   "d": 3.06,
+   "text": "really it's a great community keep a"
+  },
+  {
+   "t": 1560.76,
+   "d": 2.55,
+   "text": "blog besides sharing Saturday it's also"
+  },
+  {
+   "t": 1563.31,
+   "d": 1.59,
+   "text": "nice to concentrate all the info about"
+  },
+  {
+   "t": 1564.9,
+   "d": 2.28,
+   "text": "your development in one place a public"
+  },
+  {
+   "t": 1567.18,
+   "d": 2.07,
+   "text": "place blogging actually has a bunch of"
+  },
+  {
+   "t": 1569.25,
+   "d": 2.01,
+   "text": "advantages at the bottom there is just a"
+  },
+  {
+   "t": 1571.26,
+   "d": 1.61,
+   "text": "quick list of some of the major ones"
+  },
+  {
+   "t": 1572.87,
+   "d": 2.56,
+   "text": "I've got and the other stuff there is"
+  },
+  {
+   "t": 1575.43,
+   "d": 2.04,
+   "text": "those are articles I've written over the"
+  },
+  {
+   "t": 1577.47,
+   "d": 1.62,
+   "text": "years just on my blog I have like a"
+  },
+  {
+   "t": 1579.09,
+   "d": 2.52,
+   "text": "hundred or so that appear elsewhere so"
+  },
+  {
+   "t": 1581.61,
+   "d": 1.98,
+   "text": "check out the grits age blog and you'll"
+  },
+  {
+   "t": 1583.59,
+   "d": 1.5,
+   "text": "probably find a fair bit of useful info"
+  },
+  {
+   "t": 1585.09,
+   "d": 4.71,
+   "text": "there accessibility is important now"
+  },
+  {
+   "t": 1589.8,
+   "d": 2.1,
+   "text": "traditionally this wasn't the case with"
+  },
+  {
+   "t": 1591.9,
+   "d": 1.8,
+   "text": "roguelikes but nowadays you have an"
+  },
+  {
+   "t": 1593.7,
+   "d": 1.2,
+   "text": "opportunity to reach so many more"
+  },
+  {
+   "t": 1594.9,
+   "d": 1.74,
+   "text": "players if you're willing to put in that"
+  },
+  {
+   "t": 1596.64,
+   "d": 1.35,
+   "text": "effort now this means sufficient"
+  },
+  {
+   "t": 1597.99,
+   "d": 2.28,
+   "text": "documentation a tutorial full mouth"
+  },
+  {
+   "t": 1600.27,
+   "d": 4.02,
+   "text": "support a tile set etc so to demonstrate"
+  },
+  {
+   "t": 1604.29,
+   "d": 2.19,
+   "text": "how valuable Mouse support and the tile"
+  },
+  {
+   "t": 1606.48,
+   "d": 2.07,
+   "text": "set can be check out these player stats"
+  },
+  {
+   "t": 1608.55,
+   "d": 2.22,
+   "text": "from cog mind that's a whole lot of mice"
+  },
+  {
+   "t": 1610.77,
+   "d": 3.78,
+   "text": "and tiles note that some accessibility"
+  },
+  {
+   "t": 1614.55,
+   "d": 1.38,
+   "text": "features are important to consider your"
+  },
+  {
+   "t": 1615.93,
+   "d": 1.56,
+   "text": "new giant design from the very beginning"
+  },
+  {
+   "t": 1617.49,
+   "d": 2.25,
+   "text": "but don't worry about all this stuff in"
+  },
+  {
+   "t": 1619.74,
+   "d": 1.5,
+   "text": "your first work life starting with an"
+  },
+  {
+   "t": 1621.24,
+   "d": 1.89,
+   "text": "asking keyboard only roguelike is just"
+  },
+  {
+   "t": 1623.13,
+   "d": 2.15,
+   "text": "fine"
+  },
+  {
+   "t": 1625.65,
+   "d": 1.98,
+   "text": "so this is the end of my talk and the"
+  },
+  {
+   "t": 1627.63,
+   "d": 1.41,
+   "text": "beginning of your great new verb like"
+  },
+  {
+   "t": 1629.04,
+   "d": 0.72,
+   "text": "get to it"
+  },
+  {
+   "t": 1629.76,
+   "d": 2.13,
+   "text": "but first let's listen to all the other"
+  },
+  {
+   "t": 1631.89,
+   "d": 3.27,
+   "text": "great talks this weekend you can start"
+  },
+  {
+   "t": 1635.16,
+   "d": 1.51,
+   "text": "on Monday"
+  },
+  {
+   "t": 1636.67,
+   "d": 1.93,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1638.6,
+   "d": 4.52,
+   "text": "[Laughter]"
+  }
+ ]
+}

@@ -1,0 +1,4149 @@
+{
+ "id": "BJ_84d7v3K4",
+ "url": "https://www.youtube.com/watch?v=BJ_84d7v3K4",
+ "title": "Younès Rabii - We Are Maxwell's Demons: The Thermodynamics of Procedural Generators",
+ "speaker": "Younès Rabii",
+ "talk_title": "We Are Maxwell's Demons: The Thermodynamics of Procedural Generators",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-02-15",
+ "duration_s": 2006,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Younès will compare the work a PCG designer does to the tiny Demon in Maxwell's thought experiment. They will show how it's possible to make a mathematical analogy between the behaviour of procedural generators on our computers and how gas behaves in the real world. That bridge opens up fascinating possibilities, like classifying generators as being liquid, solid and gaseous, likening the design process of a generator to a thermodynamic cycle or even comparing the new wave of GenAI systems to internal combustion engines.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and framing"
+  },
+  {
+   "start": 136,
+   "title": "The problem with GenAI"
+  },
+  {
+   "start": 455,
+   "title": "Thermodynamics of generators"
+  },
+  {
+   "start": 1498,
+   "title": "Material metaphors"
+  },
+  {
+   "start": 1586,
+   "title": "Case study in game design"
+  },
+  {
+   "start": 1625,
+   "title": "Maxwell's demon and labor"
+  },
+  {
+   "start": 1947,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5791,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.0,
+   "text": "Awesome."
+  },
+  {
+   "t": 8.56,
+   "d": 2.24,
+   "text": "Uh now I'm going to introduce our next"
+  },
+  {
+   "t": 10.8,
+   "d": 1.76,
+   "text": "speaker who is probably going to be"
+  },
+  {
+   "t": 12.56,
+   "d": 1.76,
+   "text": "familiar to many people who have been to"
+  },
+  {
+   "t": 14.32,
+   "d": 3.12,
+   "text": "previous rogike celebrations. uh Ununes"
+  },
+  {
+   "t": 17.44,
+   "d": 3.6,
+   "text": "Robbie uh has spoken at previous rogue"
+  },
+  {
+   "t": 21.04,
+   "d": 1.92,
+   "text": "celebrations many times and always has"
+  },
+  {
+   "t": 22.96,
+   "d": 2.16,
+   "text": "fantastic talks and this week is going"
+  },
+  {
+   "t": 25.12,
+   "d": 2.48,
+   "text": "to be telling us about Maxwell's demons"
+  },
+  {
+   "t": 27.6,
+   "d": 2.08,
+   "text": "the thermodynamics of procedural"
+  },
+  {
+   "t": 29.68,
+   "d": 2.56,
+   "text": "generators uh unice is a French Arab"
+  },
+  {
+   "t": 32.24,
+   "d": 2.96,
+   "text": "game researcher designer and performer"
+  },
+  {
+   "t": 35.2,
+   "d": 3.92,
+   "text": "um and is going to be uh explaining how"
+  },
+  {
+   "t": 39.12,
+   "d": 4.88,
+   "text": "Maxwell Stevens uh the dynamics are"
+  },
+  {
+   "t": 44.0,
+   "d": 2.08,
+   "text": "apply to uh procedural generators Thank"
+  },
+  {
+   "t": 46.08,
+   "d": 2.39,
+   "text": "you so much for joining us Unas."
+  },
+  {
+   "t": 48.47,
+   "d": 0.01,
+   "text": "[sighs]"
+  },
+  {
+   "t": 48.48,
+   "d": 2.8,
+   "text": ">> Uh it's really my pleasure. Um I want to"
+  },
+  {
+   "t": 51.28,
+   "d": 1.92,
+   "text": "take a time before starting my talk to"
+  },
+  {
+   "t": 53.2,
+   "d": 3.28,
+   "text": "really thank the uh Royalation the whole"
+  },
+  {
+   "t": 56.48,
+   "d": 4.64,
+   "text": "team. This event is very special. Um and"
+  },
+  {
+   "t": 61.12,
+   "d": 1.84,
+   "text": "yeah, I wanted to take a one minute to"
+  },
+  {
+   "t": 62.96,
+   "d": 1.36,
+   "text": "to thank you all. Thank you so much for"
+  },
+  {
+   "t": 64.32,
+   "d": 2.72,
+   "text": "hosting me once again. Um welcome"
+  },
+  {
+   "t": 67.04,
+   "d": 2.08,
+   "text": "everyone. Thank you for coming to my"
+  },
+  {
+   "t": 69.12,
+   "d": 3.12,
+   "text": "talk. We are Maxwell's demons for"
+  },
+  {
+   "t": 72.24,
+   "d": 3.2,
+   "text": "thermogenics of procedal generators."
+  },
+  {
+   "t": 75.44,
+   "d": 3.44,
+   "text": "Um, let's start by talking about me. Uh,"
+  },
+  {
+   "t": 78.88,
+   "d": 2.4,
+   "text": "which is a thing I absolutely hate. Uh,"
+  },
+  {
+   "t": 81.28,
+   "d": 2.56,
+   "text": "this time I chose to not spend time"
+  },
+  {
+   "t": 83.84,
+   "d": 1.68,
+   "text": "making my presentation slide because I"
+  },
+  {
+   "t": 85.52,
+   "d": 3.68,
+   "text": "want to I want to not be defined by the"
+  },
+  {
+   "t": 89.2,
+   "d": 2.5,
+   "text": "things I used to put here anyh before."
+  },
+  {
+   "t": 91.7,
+   "d": 1.98,
+   "text": "[snorts] Um, I used to put there that I"
+  },
+  {
+   "t": 93.68,
+   "d": 2.72,
+   "text": "was an engineer uh but I was a indie"
+  },
+  {
+   "t": 96.4,
+   "d": 3.12,
+   "text": "game dev for a bit more than 10 years."
+  },
+  {
+   "t": 99.52,
+   "d": 2.64,
+   "text": "But right now I'm doing a PhD uh in"
+  },
+  {
+   "t": 102.16,
+   "d": 2.16,
+   "text": "generative"
+  },
+  {
+   "t": 104.32,
+   "d": 2.72,
+   "text": "uh AI let's say what's the worst way to"
+  },
+  {
+   "t": 107.04,
+   "d": 2.72,
+   "text": "put it I think um at Queen Mary's"
+  },
+  {
+   "t": 109.76,
+   "d": 3.44,
+   "text": "University of London but you know given"
+  },
+  {
+   "t": 113.2,
+   "d": 3.12,
+   "text": "the state of the game industry and my"
+  },
+  {
+   "t": 116.32,
+   "d": 2.0,
+   "text": "academic burnout I don't want to be"
+  },
+  {
+   "t": 118.32,
+   "d": 2.16,
+   "text": "defined by these things anymore I just"
+  },
+  {
+   "t": 120.48,
+   "d": 3.76,
+   "text": "want to talk to you today about my"
+  },
+  {
+   "t": 124.24,
+   "d": 3.68,
+   "text": "feelings I am not my feelings but here"
+  },
+  {
+   "t": 127.92,
+   "d": 1.92,
+   "text": "is what I"
+  },
+  {
+   "t": 129.84,
+   "d": 2.88,
+   "text": "Um, I don't know about you guys, but I"
+  },
+  {
+   "t": 132.72,
+   "d": 4.0,
+   "text": "hate it here. In when I started my PhD"
+  },
+  {
+   "t": 136.72,
+   "d": 1.76,
+   "text": "in 2020,"
+  },
+  {
+   "t": 138.48,
+   "d": 4.0,
+   "text": "nobody knew what I was doing. Uh, I had"
+  },
+  {
+   "t": 142.48,
+   "d": 2.88,
+   "text": "a hard time explaining just the concept"
+  },
+  {
+   "t": 145.36,
+   "d": 2.88,
+   "text": "of process generation to my family, to"
+  },
+  {
+   "t": 148.24,
+   "d": 4.4,
+   "text": "my friends, to my teachers even. And now"
+  },
+  {
+   "t": 152.64,
+   "d": 3.28,
+   "text": "5 years later, um it's all everybody"
+  },
+  {
+   "t": 155.92,
+   "d": 2.24,
+   "text": "talks about and it's the worst way"
+  },
+  {
+   "t": 158.16,
+   "d": 1.44,
+   "text": "possible. It really feels like somebody"
+  },
+  {
+   "t": 159.6,
+   "d": 1.6,
+   "text": "made a wish and it got twisted"
+  },
+  {
+   "t": 161.2,
+   "d": 2.96,
+   "text": "somewhere. Um let me pull out my notes"
+  },
+  {
+   "t": 164.16,
+   "d": 1.2,
+   "text": "for this section. That's the only"
+  },
+  {
+   "t": 165.36,
+   "d": 2.24,
+   "text": "section I really wrote."
+  },
+  {
+   "t": 167.6,
+   "d": 3.36,
+   "text": "So in in the last years"
+  },
+  {
+   "t": 170.96,
+   "d": 2.72,
+   "text": "[snorts] more than the last five years"
+  },
+  {
+   "t": 173.68,
+   "d": 2.88,
+   "text": "we've seen claims by the game industry"
+  },
+  {
+   "t": 176.56,
+   "d": 2.24,
+   "text": "uh that PCG techniques can speed up"
+  },
+  {
+   "t": 178.8,
+   "d": 2.56,
+   "text": "development time for little cost. We"
+  },
+  {
+   "t": 181.36,
+   "d": 3.52,
+   "text": "have some claims um that has been have"
+  },
+  {
+   "t": 184.88,
+   "d": 2.32,
+   "text": "been even intensified with the advent of"
+  },
+  {
+   "t": 187.2,
+   "d": 2.16,
+   "text": "big commercial deepling models and the"
+  },
+  {
+   "t": 189.36,
+   "d": 2.32,
+   "text": "wild of these claims probably done by"
+  },
+  {
+   "t": 191.68,
+   "d": 4.56,
+   "text": "one of our during uh prize nominee Yan"
+  },
+  {
+   "t": 196.24,
+   "d": 2.24,
+   "text": "Lukan who claims that this model"
+  },
+  {
+   "t": 198.48,
+   "d": 1.76,
+   "text": "actually spend much less energy than"
+  },
+  {
+   "t": 200.24,
+   "d": 2.72,
+   "text": "actual human beings doing the work. Um"
+  },
+  {
+   "t": 202.96,
+   "d": 1.84,
+   "text": "but at the same time we do have news"
+  },
+  {
+   "t": 204.8,
+   "d": 2.8,
+   "text": "reports that the energy costs of geni"
+  },
+  {
+   "t": 207.6,
+   "d": 4.0,
+   "text": "are soaring. Um and the marketing model"
+  },
+  {
+   "t": 211.6,
+   "d": 2.4,
+   "text": "advertises little costs but behind the"
+  },
+  {
+   "t": 214.0,
+   "d": 2.4,
+   "text": "scenes they do seem to rely on a col"
+  },
+  {
+   "t": 216.4,
+   "d": 2.56,
+   "text": "colossal corpus of work. This corpus of"
+  },
+  {
+   "t": 218.96,
+   "d": 2.08,
+   "text": "work is created by artists by voice"
+  },
+  {
+   "t": 221.04,
+   "d": 2.72,
+   "text": "actors by game writers by by fiction"
+  },
+  {
+   "t": 223.76,
+   "d": 3.6,
+   "text": "writers. All this work is often stolen"
+  },
+  {
+   "t": 227.36,
+   "d": 2.24,
+   "text": "and in the way they present it they make"
+  },
+  {
+   "t": 229.6,
+   "d": 2.0,
+   "text": "the necessary cost in human labor"
+  },
+  {
+   "t": 231.6,
+   "d": 3.04,
+   "text": "artificially hidden."
+  },
+  {
+   "t": 234.64,
+   "d": 2.32,
+   "text": "Some some of the time they do this by"
+  },
+  {
+   "t": 236.96,
+   "d": 1.52,
+   "text": "taking profits of the precarious"
+  },
+  {
+   "t": 238.48,
+   "d": 2.08,
+   "text": "economic conditions of the global south."
+  },
+  {
+   "t": 240.56,
+   "d": 1.76,
+   "text": "We're speaking about the indep workers"
+  },
+  {
+   "t": 242.32,
+   "d": 3.28,
+   "text": "who have done filtering work uh for for"
+  },
+  {
+   "t": 245.6,
+   "d": 2.32,
+   "text": "example tragicity. uh we we can talk"
+  },
+  {
+   "t": 247.92,
+   "d": 1.76,
+   "text": "about the exploitive working conditions,"
+  },
+  {
+   "t": 249.68,
+   "d": 1.6,
+   "text": "the repetitiveness of the work, the"
+  },
+  {
+   "t": 251.28,
+   "d": 3.2,
+   "text": "psychological uh consequences of that"
+  },
+  {
+   "t": 254.48,
+   "d": 3.36,
+   "text": "work and all these all these claims uh"
+  },
+  {
+   "t": 257.84,
+   "d": 2.96,
+   "text": "made by the multiples industries here"
+  },
+  {
+   "t": 260.8,
+   "d": 3.36,
+   "text": "they go against what the PC designers"
+  },
+  {
+   "t": 264.16,
+   "d": 2.48,
+   "text": "actually say about the work. Uh we have"
+  },
+  {
+   "t": 266.64,
+   "d": 2.56,
+   "text": "for example this this very funny tweet"
+  },
+  {
+   "t": 269.2,
+   "d": 3.04,
+   "text": "by 42 that says thanks to personal"
+  },
+  {
+   "t": 272.24,
+   "d": 1.36,
+   "text": "generation I can produce twice the"
+  },
+  {
+   "t": 273.6,
+   "d": 2.8,
+   "text": "content in the world of time twists on a"
+  },
+  {
+   "t": 276.4,
+   "d": 2.64,
+   "text": "phrase that that comes often or we have"
+  },
+  {
+   "t": 279.04,
+   "d": 4.96,
+   "text": "more seriously um uh from back in GDC"
+  },
+  {
+   "t": 284.0,
+   "d": 1.6,
+   "text": "2007"
+  },
+  {
+   "t": 285.6,
+   "d": 2.08,
+   "text": "uh from chain gold there's a trade-off"
+  },
+  {
+   "t": 287.68,
+   "d": 1.04,
+   "text": "between the breath of content you can"
+  },
+  {
+   "t": 288.72,
+   "d": 1.36,
+   "text": "make in one of these tools and the depth"
+  },
+  {
+   "t": 290.08,
+   "d": 1.68,
+   "text": "and the quality of that content so"
+  },
+  {
+   "t": 291.76,
+   "d": 2.08,
+   "text": "procedure designers do have a notion in"
+  },
+  {
+   "t": 293.84,
+   "d": 2.24,
+   "text": "mind about costs"
+  },
+  {
+   "t": 296.08,
+   "d": 2.88,
+   "text": "uh what it takes to do to do this work."
+  },
+  {
+   "t": 298.96,
+   "d": 4.08,
+   "text": "Uh and this all all this knowledge about"
+  },
+  {
+   "t": 303.04,
+   "d": 1.52,
+   "text": "what it actually takes to do this work"
+  },
+  {
+   "t": 304.56,
+   "d": 1.68,
+   "text": "is completely absent from the"
+  },
+  {
+   "t": 306.24,
+   "d": 2.56,
+   "text": "conversation about geni."
+  },
+  {
+   "t": 308.8,
+   "d": 2.48,
+   "text": "Um as time goes on, the lines between"
+  },
+  {
+   "t": 311.28,
+   "d": 3.2,
+   "text": "which models are so-called geni and"
+  },
+  {
+   "t": 314.48,
+   "d": 2.72,
+   "text": "which ones are old school PCG, they get"
+  },
+  {
+   "t": 317.2,
+   "d": 2.4,
+   "text": "blurry. It feels like the audiences to"
+  },
+  {
+   "t": 319.6,
+   "d": 2.72,
+   "text": "this work, not the experts, i.e. us in"
+  },
+  {
+   "t": 322.32,
+   "d": 2.48,
+   "text": "the room but the audiences they they"
+  },
+  {
+   "t": 324.8,
+   "d": 1.12,
+   "text": "don't really feel like they don't have a"
+  },
+  {
+   "t": 325.92,
+   "d": 1.68,
+   "text": "vocal to express their fears and"
+  },
+  {
+   "t": 327.6,
+   "d": 4.32,
+   "text": "frustrations in accurate terms. Um how"
+  },
+  {
+   "t": 331.92,
+   "d": 2.08,
+   "text": "to explain them that they favorite"
+  },
+  {
+   "t": 334.0,
+   "d": 3.76,
+   "text": "Minecraft uh generator is not that"
+  },
+  {
+   "t": 337.76,
+   "d": 2.56,
+   "text": "different from GPT in its conceptuality"
+  },
+  {
+   "t": 340.32,
+   "d": 3.04,
+   "text": "but but the differences in scale and all"
+  },
+  {
+   "t": 343.36,
+   "d": 3.04,
+   "text": "and all it impacts are much bigger. How"
+  },
+  {
+   "t": 346.4,
+   "d": 2.24,
+   "text": "to how to co how to make them coincided"
+  },
+  {
+   "t": 348.64,
+   "d": 3.04,
+   "text": "within the same framework. Um all these"
+  },
+  {
+   "t": 351.68,
+   "d": 2.88,
+   "text": "issues they in the last years shown to"
+  },
+  {
+   "t": 354.56,
+   "d": 2.32,
+   "text": "me the growing need for more formal"
+  },
+  {
+   "t": 356.88,
+   "d": 2.48,
+   "text": "tools, more framework, a more"
+  },
+  {
+   "t": 359.36,
+   "d": 2.72,
+   "text": "fundamental engineerators in that"
+  },
+  {
+   "t": 362.08,
+   "d": 1.52,
+   "text": "hopefully could lead to a better"
+  },
+  {
+   "t": 363.6,
+   "d": 1.44,
+   "text": "understanding of their cost in human"
+  },
+  {
+   "t": 365.04,
+   "d": 2.08,
+   "text": "labor of characteristics and all the"
+  },
+  {
+   "t": 367.12,
+   "d": 2.8,
+   "text": "tradeoffs that as a designer you you"
+  },
+  {
+   "t": 369.92,
+   "d": 2.88,
+   "text": "have to navigate when you develop one of"
+  },
+  {
+   "t": 372.8,
+   "d": 2.08,
+   "text": "these and how to navigate around all"
+  },
+  {
+   "t": 374.88,
+   "d": 2.16,
+   "text": "these programs holds this issue like the"
+  },
+  {
+   "t": 377.04,
+   "d": 2.72,
+   "text": "well-known automill pro 10,000 bowl of"
+  },
+  {
+   "t": 379.76,
+   "d": 2.32,
+   "text": "ultimate problems. So, I'm going to"
+  },
+  {
+   "t": 382.08,
+   "d": 1.52,
+   "text": "present you a work that I've been doing"
+  },
+  {
+   "t": 383.6,
+   "d": 3.6,
+   "text": "in uh in the last years. Um"
+  },
+  {
+   "t": 387.2,
+   "d": 1.84,
+   "text": "some of this have been published before,"
+  },
+  {
+   "t": 389.04,
+   "d": 3.52,
+   "text": "some of this is fully new and it was"
+  },
+  {
+   "t": 392.56,
+   "d": 1.36,
+   "text": "supposed to be paper that I was supposed"
+  },
+  {
+   "t": 393.92,
+   "d": 3.2,
+   "text": "to write for for my physics and it's"
+  },
+  {
+   "t": 397.12,
+   "d": 3.04,
+   "text": "really hard to write these days and the"
+  },
+  {
+   "t": 400.16,
+   "d": 1.68,
+   "text": "celebration felt like the right place to"
+  },
+  {
+   "t": 401.84,
+   "d": 2.0,
+   "text": "do this for the first time. So, I'm"
+  },
+  {
+   "t": 403.84,
+   "d": 2.88,
+   "text": "going to skip over some some details."
+  },
+  {
+   "t": 406.72,
+   "d": 2.16,
+   "text": "There's some nuances that we'll have to"
+  },
+  {
+   "t": 408.88,
+   "d": 2.32,
+   "text": "to skim because we simply don't have the"
+  },
+  {
+   "t": 411.2,
+   "d": 3.04,
+   "text": "time to go through all of them. Um, but"
+  },
+  {
+   "t": 414.24,
+   "d": 1.84,
+   "text": "the goal of this work is to be a"
+  },
+  {
+   "t": 416.08,
+   "d": 2.64,
+   "text": "stepping stone hopefully to to offer the"
+  },
+  {
+   "t": 418.72,
+   "d": 2.24,
+   "text": "first steps of a formalism to study"
+  },
+  {
+   "t": 420.96,
+   "d": 2.72,
+   "text": "these issues on a more grounded formal"
+  },
+  {
+   "t": 423.68,
+   "d": 2.08,
+   "text": "mathematical level. Um, and my"
+  },
+  {
+   "t": 425.76,
+   "d": 2.0,
+   "text": "inspiration was thermodynamics."
+  },
+  {
+   "t": 427.76,
+   "d": 2.64,
+   "text": "Thermodynamics is a field of physics has"
+  },
+  {
+   "t": 430.4,
+   "d": 3.2,
+   "text": "had to to handle this before. uh at the"
+  },
+  {
+   "t": 433.6,
+   "d": 2.72,
+   "text": "time of Carno uh in the 19th century"
+  },
+  {
+   "t": 436.32,
+   "d": 2.96,
+   "text": "there was this craze around um uh"
+  },
+  {
+   "t": 439.28,
+   "d": 2.88,
+   "text": "thermal engines but we had to study"
+  },
+  {
+   "t": 442.16,
+   "d": 2.24,
+   "text": "really what are the costs of using this"
+  },
+  {
+   "t": 444.4,
+   "d": 2.24,
+   "text": "these engines and was this the the"
+  },
+  {
+   "t": 446.64,
+   "d": 1.68,
+   "text": "impacts in the many fields of safety"
+  },
+  {
+   "t": 448.32,
+   "d": 4.16,
+   "text": "afterwards and it feels like to me we"
+  },
+  {
+   "t": 452.48,
+   "d": 3.68,
+   "text": "need some of these tools to understand"
+  },
+  {
+   "t": 456.16,
+   "d": 2.32,
+   "text": "better what we're doing so I'm going to"
+  },
+  {
+   "t": 458.48,
+   "d": 1.68,
+   "text": "start by putting up some definitions"
+  },
+  {
+   "t": 460.16,
+   "d": 2.64,
+   "text": "here you're going to see some some math"
+  },
+  {
+   "t": 462.8,
+   "d": 1.92,
+   "text": "Please don't be afraid. As soon as this"
+  },
+  {
+   "t": 464.72,
+   "d": 1.44,
+   "text": "section is over, we're going to talk"
+  },
+  {
+   "t": 466.16,
+   "d": 3.12,
+   "text": "more about uh in a in a more design"
+  },
+  {
+   "t": 469.28,
+   "d": 1.76,
+   "text": "language what we can do with all of this"
+  },
+  {
+   "t": 471.04,
+   "d": 2.64,
+   "text": "and what it is useful for. And I'm going"
+  },
+  {
+   "t": 473.68,
+   "d": 2.72,
+   "text": "to start with a simple model inspired by"
+  },
+  {
+   "t": 476.4,
+   "d": 1.36,
+   "text": "physics. I'm going each time to take"
+  },
+  {
+   "t": 477.76,
+   "d": 2.72,
+   "text": "something from from uh from physics, a"
+  },
+  {
+   "t": 480.48,
+   "d": 1.6,
+   "text": "simple model and show you how we can"
+  },
+  {
+   "t": 482.08,
+   "d": 1.52,
+   "text": "make a link between that thing in"
+  },
+  {
+   "t": 483.6,
+   "d": 2.48,
+   "text": "physics and how we can uh have an"
+  },
+  {
+   "t": 486.08,
+   "d": 2.8,
+   "text": "analogy for generators."
+  },
+  {
+   "t": 488.88,
+   "d": 3.92,
+   "text": "First thing is the uh model for a gas. A"
+  },
+  {
+   "t": 492.8,
+   "d": 2.4,
+   "text": "gas is for example a cloud of smoke is a"
+  },
+  {
+   "t": 495.2,
+   "d": 4.48,
+   "text": "gas or um boiled water when when you get"
+  },
+  {
+   "t": 499.68,
+   "d": 3.2,
+   "text": "steam is a gas. We have a simple model"
+  },
+  {
+   "t": 502.88,
+   "d": 3.36,
+   "text": "in in thermodynamical physics to talk"
+  },
+  {
+   "t": 506.24,
+   "d": 2.96,
+   "text": "about it. Um it's the ideal gas model."
+  },
+  {
+   "t": 509.2,
+   "d": 2.64,
+   "text": "You see a gas has a simple collection of"
+  },
+  {
+   "t": 511.84,
+   "d": 2.88,
+   "text": "molecules. There's an amount of it"
+  },
+  {
+   "t": 514.72,
+   "d": 2.0,
+   "text": "particles. It's called end. the amount"
+  },
+  {
+   "t": 516.72,
+   "d": 3.44,
+   "text": "of substance. Um, this gas takes a"
+  },
+  {
+   "t": 520.16,
+   "d": 1.84,
+   "text": "specific space, a specific volume, it's"
+  },
+  {
+   "t": 522.0,
+   "d": 2.08,
+   "text": "called V. It has a specific temperature"
+  },
+  {
+   "t": 524.08,
+   "d": 2.16,
+   "text": "which is related to the speed of the"
+  },
+  {
+   "t": 526.24,
+   "d": 2.32,
+   "text": "particles. It's called T. And the gas"
+  },
+  {
+   "t": 528.56,
+   "d": 2.0,
+   "text": "when you compress it, uh, it kind of"
+  },
+  {
+   "t": 530.56,
+   "d": 2.0,
+   "text": "like has this kind of internal force"
+  },
+  {
+   "t": 532.56,
+   "d": 2.56,
+   "text": "that is called pressure. It's called P."
+  },
+  {
+   "t": 535.12,
+   "d": 1.6,
+   "text": "And the fun thing is that in a gas, all"
+  },
+  {
+   "t": 536.72,
+   "d": 1.44,
+   "text": "these things are related to each other."
+  },
+  {
+   "t": 538.16,
+   "d": 5.76,
+   "text": "We have this ideal gas law P * V= N * R"
+  },
+  {
+   "t": 543.92,
+   "d": 4.64,
+   "text": "* T. R being here a constant uh that"
+  },
+  {
+   "t": 548.56,
+   "d": 2.32,
+   "text": "that is always the same. It's very much"
+  },
+  {
+   "t": 550.88,
+   "d": 2.08,
+   "text": "like a um a proportionality between all"
+  },
+  {
+   "t": 552.96,
+   "d": 2.96,
+   "text": "these quantities. And here I want to"
+  },
+  {
+   "t": 555.92,
+   "d": 2.16,
+   "text": "kind of like create these variables for"
+  },
+  {
+   "t": 558.08,
+   "d": 2.0,
+   "text": "generators. I want to create the idea of"
+  },
+  {
+   "t": 560.08,
+   "d": 2.72,
+   "text": "a of the pressure of a generator, the"
+  },
+  {
+   "t": 562.8,
+   "d": 1.2,
+   "text": "temperature of a generator, the volume"
+  },
+  {
+   "t": 564.0,
+   "d": 1.76,
+   "text": "of a generator, the amount of substance"
+  },
+  {
+   "t": 565.76,
+   "d": 2.08,
+   "text": "of a generator. And this will hopefully"
+  },
+  {
+   "t": 567.84,
+   "d": 2.64,
+   "text": "help us uh understand some things about"
+  },
+  {
+   "t": 570.48,
+   "d": 2.56,
+   "text": "generators that we do have intuition for"
+  },
+  {
+   "t": 573.04,
+   "d": 1.6,
+   "text": "hopefully can find also mathematical"
+  },
+  {
+   "t": 574.64,
+   "d": 2.08,
+   "text": "grounding for."
+  },
+  {
+   "t": 576.72,
+   "d": 3.6,
+   "text": "Um so in our context what's a generator?"
+  },
+  {
+   "t": 580.32,
+   "d": 2.8,
+   "text": "The generator here is a deterministic"
+  },
+  {
+   "t": 583.12,
+   "d": 2.08,
+   "text": "algorithm. It is written in a given"
+  },
+  {
+   "t": 585.2,
+   "d": 2.56,
+   "text": "programming language and for this"
+  },
+  {
+   "t": 587.76,
+   "d": 1.84,
+   "text": "specific formalism the size of its"
+  },
+  {
+   "t": 589.6,
+   "d": 2.96,
+   "text": "inputs and outputs is always the same."
+  },
+  {
+   "t": 592.56,
+   "d": 3.04,
+   "text": "um an input is often called a seed for a"
+  },
+  {
+   "t": 595.6,
+   "d": 1.68,
+   "text": "generator and the output is often called"
+  },
+  {
+   "t": 597.28,
+   "d": 1.84,
+   "text": "an artifact. And what's interesting is"
+  },
+  {
+   "t": 599.12,
+   "d": 2.16,
+   "text": "that on in a computer all of this can be"
+  },
+  {
+   "t": 601.28,
+   "d": 2.8,
+   "text": "represented by a simple binary string."
+  },
+  {
+   "t": 604.08,
+   "d": 1.76,
+   "text": "You can have an an algorithm that"
+  },
+  {
+   "t": 605.84,
+   "d": 2.0,
+   "text": "outputs pictures that output text but"
+  },
+  {
+   "t": 607.84,
+   "d": 1.36,
+   "text": "all of this at the end of the day is"
+  },
+  {
+   "t": 609.2,
+   "d": 2.08,
+   "text": "stored in a binary format. So we're only"
+  },
+  {
+   "t": 611.28,
+   "d": 2.16,
+   "text": "speaking like in very abstract terms"
+  },
+  {
+   "t": 613.44,
+   "d": 2.16,
+   "text": "about like these strings of binary"
+  },
+  {
+   "t": 615.6,
+   "d": 2.48,
+   "text": "binary numbers. So the unit we're"
+  },
+  {
+   "t": 618.08,
+   "d": 1.68,
+   "text": "working with here is the bit. Everything"
+  },
+  {
+   "t": 619.76,
+   "d": 3.12,
+   "text": "is counted in bits or maybe bytes. Uh"
+  },
+  {
+   "t": 622.88,
+   "d": 1.92,
+   "text": "when we talk about the size of inputs,"
+  },
+  {
+   "t": 624.8,
+   "d": 2.16,
+   "text": "we're speaking about how many bits uh"
+  },
+  {
+   "t": 626.96,
+   "d": 2.48,
+   "text": "there is we there is to describe seeds,"
+  },
+  {
+   "t": 629.44,
+   "d": 2.24,
+   "text": "how many bits artifacts take and how"
+  },
+  {
+   "t": 631.68,
+   "d": 2.48,
+   "text": "many bits and bytes the algorithm that"
+  },
+  {
+   "t": 634.16,
+   "d": 2.64,
+   "text": "is visitor takes. Um in in this"
+  },
+  {
+   "t": 636.8,
+   "d": 1.92,
+   "text": "formalism"
+  },
+  {
+   "t": 638.72,
+   "d": 2.88,
+   "text": "or generator has many components in"
+  },
+  {
+   "t": 641.6,
+   "d": 2.0,
+   "text": "them, many things we can study. There's"
+  },
+  {
+   "t": 643.6,
+   "d": 1.68,
+   "text": "for example the possibility space of a"
+  },
+  {
+   "t": 645.28,
+   "d": 2.08,
+   "text": "generator which is a simple set that"
+  },
+  {
+   "t": 647.36,
+   "d": 1.92,
+   "text": "contains all the generator outputs. For"
+  },
+  {
+   "t": 649.28,
+   "d": 1.6,
+   "text": "example, you have a generator that"
+  },
+  {
+   "t": 650.88,
+   "d": 3.84,
+   "text": "emulates uh a single disc"
+  },
+  {
+   "t": 654.72,
+   "d": 3.12,
+   "text": "um then all the outputs are simply the"
+  },
+  {
+   "t": 657.84,
+   "d": 3.44,
+   "text": "numbers from 1 to six. If you have a"
+  },
+  {
+   "t": 661.28,
+   "d": 1.84,
+   "text": "generator that emulates the behavior of"
+  },
+  {
+   "t": 663.12,
+   "d": 3.92,
+   "text": "of a 2d6 rule then you have uh in in"
+  },
+  {
+   "t": 667.04,
+   "d": 2.88,
+   "text": "that um facility space number from 2 to"
+  },
+  {
+   "t": 669.92,
+   "d": 3.2,
+   "text": "12. And here the kind of like measure"
+  },
+  {
+   "t": 673.12,
+   "d": 1.52,
+   "text": "we're going to put on the possibility"
+  },
+  {
+   "t": 674.64,
+   "d": 2.8,
+   "text": "space. We're going to call it the scale."
+  },
+  {
+   "t": 677.44,
+   "d": 1.84,
+   "text": "We're going to use the same variables as"
+  },
+  {
+   "t": 679.28,
+   "d": 3.6,
+   "text": "for uh for gases. Uh we're going to call"
+  },
+  {
+   "t": 682.88,
+   "d": 1.92,
+   "text": "it n. And basically it's simple measure"
+  },
+  {
+   "t": 684.8,
+   "d": 1.6,
+   "text": "of how many elements there is in the"
+  },
+  {
+   "t": 686.4,
+   "d": 2.24,
+   "text": "possibility space."
+  },
+  {
+   "t": 688.64,
+   "d": 1.6,
+   "text": "There's another interesting thing about"
+  },
+  {
+   "t": 690.24,
+   "d": 1.68,
+   "text": "generators we can study which is a"
+  },
+  {
+   "t": 691.92,
+   "d": 2.0,
+   "text": "probability distribution. Again, if we"
+  },
+  {
+   "t": 693.92,
+   "d": 2.56,
+   "text": "take the same uh examples, if we take"
+  },
+  {
+   "t": 696.48,
+   "d": 2.88,
+   "text": "1d6, all the outputs have an equally"
+  },
+  {
+   "t": 699.36,
+   "d": 2.48,
+   "text": "likely uh chance to appear when you use"
+  },
+  {
+   "t": 701.84,
+   "d": 2.32,
+   "text": "visual meter. But if you if you simulate"
+  },
+  {
+   "t": 704.16,
+   "d": 2.8,
+   "text": "a 2d6 rule, then as you probably know,"
+  },
+  {
+   "t": 706.96,
+   "d": 2.72,
+   "text": "there's only one way to have twos uh if"
+  },
+  {
+   "t": 709.68,
+   "d": 2.24,
+   "text": "it's if you roll two ones, but there's"
+  },
+  {
+   "t": 711.92,
+   "d": 1.92,
+   "text": "many way to have sevens. You can have"
+  },
+  {
+   "t": 713.84,
+   "d": 2.16,
+   "text": "two and five, three and four, etc. So,"
+  },
+  {
+   "t": 716.0,
+   "d": 1.76,
+   "text": "the odds are not are not the same"
+  },
+  {
+   "t": 717.76,
+   "d": 3.28,
+   "text": "everywhere. and and all of this"
+  },
+  {
+   "t": 721.04,
+   "d": 1.76,
+   "text": "information is stored in an object we"
+  },
+  {
+   "t": 722.8,
+   "d": 3.04,
+   "text": "can call the probability distribution."
+  },
+  {
+   "t": 725.84,
+   "d": 2.16,
+   "text": "How likely it is that we're going to"
+  },
+  {
+   "t": 728.0,
+   "d": 3.52,
+   "text": "have this given art this artifact."
+  },
+  {
+   "t": 731.52,
+   "d": 1.6,
+   "text": "And then there's the one that's the"
+  },
+  {
+   "t": 733.12,
+   "d": 3.04,
+   "text": "scariest um but please bear with me. We"
+  },
+  {
+   "t": 736.16,
+   "d": 2.0,
+   "text": "begin to talk about cosmograph"
+  },
+  {
+   "t": 738.16,
+   "d": 2.56,
+   "text": "complexity. Scary name but very simple"
+  },
+  {
+   "t": 740.72,
+   "d": 2.16,
+   "text": "concept. It's basically the answer to"
+  },
+  {
+   "t": 742.88,
+   "d": 2.4,
+   "text": "this question. How much information do"
+  },
+  {
+   "t": 745.28,
+   "d": 2.24,
+   "text": "you really need to describe a given"
+  },
+  {
+   "t": 747.52,
+   "d": 1.6,
+   "text": "artifact?"
+  },
+  {
+   "t": 749.12,
+   "d": 4.24,
+   "text": "So here I have taken three simple pixel"
+  },
+  {
+   "t": 753.36,
+   "d": 2.64,
+   "text": "pictures. They are 6x6 pixels. So each"
+  },
+  {
+   "t": 756.0,
+   "d": 3.44,
+   "text": "of them has have 36 pixels. And what you"
+  },
+  {
+   "t": 759.44,
+   "d": 2.4,
+   "text": "can do to describe these pictures, you"
+  },
+  {
+   "t": 761.84,
+   "d": 1.76,
+   "text": "can basically just read pixels if you"
+  },
+  {
+   "t": 763.6,
+   "d": 2.08,
+   "text": "want to check. You can just say that"
+  },
+  {
+   "t": 765.68,
+   "d": 1.44,
+   "text": "there's a black pixel, then a white"
+  },
+  {
+   "t": 767.12,
+   "d": 1.36,
+   "text": "pixel, then a black pixel, then white"
+  },
+  {
+   "t": 768.48,
+   "d": 2.96,
+   "text": "pixel, etc. Same thing for um it's kind"
+  },
+  {
+   "t": 771.44,
+   "d": 2.32,
+   "text": "of like flower pattern. And for that"
+  },
+  {
+   "t": 773.76,
+   "d": 3.2,
+   "text": "very noisy colorful pattern um at the"
+  },
+  {
+   "t": 776.96,
+   "d": 2.16,
+   "text": "bottom you can say it has a blue pixel"
+  },
+  {
+   "t": 779.12,
+   "d": 1.52,
+   "text": "then a green pixel then a yellow pixel"
+  },
+  {
+   "t": 780.64,
+   "d": 3.68,
+   "text": "etc etc. [snorts] But if you want to"
+  },
+  {
+   "t": 784.32,
+   "d": 1.36,
+   "text": "describe these artifacts you want to"
+  },
+  {
+   "t": 785.68,
+   "d": 2.4,
+   "text": "tell somebody hey can you draw me this"
+  },
+  {
+   "t": 788.08,
+   "d": 2.48,
+   "text": "you don't have to exactly repeat each"
+  },
+  {
+   "t": 790.56,
+   "d": 2.88,
+   "text": "pixel one by one. You can describe them"
+  },
+  {
+   "t": 793.44,
+   "d": 2.56,
+   "text": "in a in a different way. For example for"
+  },
+  {
+   "t": 796.0,
+   "d": 2.48,
+   "text": "the pattern you can describe it in a"
+  },
+  {
+   "t": 798.48,
+   "d": 1.76,
+   "text": "very simple way. You can just tell your"
+  },
+  {
+   "t": 800.24,
+   "d": 1.84,
+   "text": "program to just alternate between black"
+  },
+  {
+   "t": 802.08,
+   "d": 2.24,
+   "text": "and white pixels. For that flower"
+  },
+  {
+   "t": 804.32,
+   "d": 3.36,
+   "text": "pattern, you can smartly cut it into uh"
+  },
+  {
+   "t": 807.68,
+   "d": 2.24,
+   "text": "three rectangles, two red rectangles,"
+  },
+  {
+   "t": 809.92,
+   "d": 2.32,
+   "text": "and a white square in the middle. But"
+  },
+  {
+   "t": 812.24,
+   "d": 1.44,
+   "text": "you can't really do that for the noisy"
+  },
+  {
+   "t": 813.68,
+   "d": 2.4,
+   "text": "pattern. You don't see any pattern that"
+  },
+  {
+   "t": 816.08,
+   "d": 2.0,
+   "text": "are that can exploit. You can can kind"
+  },
+  {
+   "t": 818.08,
+   "d": 3.84,
+   "text": "of have to reuse the the description of"
+  },
+  {
+   "t": 821.92,
+   "d": 1.76,
+   "text": "X pixels."
+  },
+  {
+   "t": 823.68,
+   "d": 2.32,
+   "text": "That description you can also do it in"
+  },
+  {
+   "t": 826.0,
+   "d": 2.4,
+   "text": "code form. You can write a code that"
+  },
+  {
+   "t": 828.4,
+   "d": 1.84,
+   "text": "gives you generated that's very specific"
+  },
+  {
+   "t": 830.24,
+   "d": 3.76,
+   "text": "artifact and just a translation of what"
+  },
+  {
+   "t": 834.0,
+   "d": 1.92,
+   "text": "we said using natural language. We're"
+  },
+  {
+   "t": 835.92,
+   "d": 3.44,
+   "text": "just writing it here in Lua for Pico 8."
+  },
+  {
+   "t": 839.36,
+   "d": 2.96,
+   "text": "Um the checkable pattern is very is not"
+  },
+  {
+   "t": 842.32,
+   "d": 2.48,
+   "text": "complex. It only takes 30 bytes to to"
+  },
+  {
+   "t": 844.8,
+   "d": 2.88,
+   "text": "write. Um the flower takes a bit more"
+  },
+  {
+   "t": 847.68,
+   "d": 1.76,
+   "text": "information. We need 60 bytes to write"
+  },
+  {
+   "t": 849.44,
+   "d": 3.04,
+   "text": "it. And the very noisy I haven't written"
+  },
+  {
+   "t": 852.48,
+   "d": 2.32,
+   "text": "I haven't written written it in its"
+  },
+  {
+   "t": 854.8,
+   "d": 2.24,
+   "text": "entirety. It takes much more information"
+  },
+  {
+   "t": 857.04,
+   "d": 2.24,
+   "text": "to to describe because there's no budget"
+  },
+  {
+   "t": 859.28,
+   "d": 2.0,
+   "text": "we can exploit. We really have much"
+  },
+  {
+   "t": 861.28,
+   "d": 2.64,
+   "text": "choice but just outputs the list of all"
+  },
+  {
+   "t": 863.92,
+   "d": 2.88,
+   "text": "these pixels. That's measure of how we"
+  },
+  {
+   "t": 866.8,
+   "d": 1.6,
+   "text": "can how much you can compress the"
+  },
+  {
+   "t": 868.4,
+   "d": 1.92,
+   "text": "description of something. That's"
+  },
+  {
+   "t": 870.32,
+   "d": 3.28,
+   "text": "colograph complexity. Um, as a side"
+  },
+  {
+   "t": 873.6,
+   "d": 3.52,
+   "text": "note, we h it's hard, it's almost"
+  },
+  {
+   "t": 877.12,
+   "d": 2.4,
+   "text": "impossible to calculate its value"
+  },
+  {
+   "t": 879.52,
+   "d": 2.32,
+   "text": "exactly, but we can have ways to have"
+  },
+  {
+   "t": 881.84,
+   "d": 2.8,
+   "text": "estimations of what is the values of a"
+  },
+  {
+   "t": 884.64,
+   "d": 2.64,
+   "text": "given artifact can be."
+  },
+  {
+   "t": 887.28,
+   "d": 3.92,
+   "text": "Um, what's interesting with complexity"
+  },
+  {
+   "t": 891.2,
+   "d": 3.04,
+   "text": "is that it is a hint about the patterns"
+  },
+  {
+   "t": 894.24,
+   "d": 3.36,
+   "text": "in a in a given uh artifact. With a"
+  },
+  {
+   "t": 897.6,
+   "d": 2.32,
+   "text": "lower lower K complexity you have"
+  },
+  {
+   "t": 899.92,
+   "d": 2.8,
+   "text": "repetitive structures uh easy to spot"
+  },
+  {
+   "t": 902.72,
+   "d": 2.24,
+   "text": "patterns. With a high K complexity you"
+  },
+  {
+   "t": 904.96,
+   "d": 3.52,
+   "text": "have noisy patterns uh and that are not"
+  },
+  {
+   "t": 908.48,
+   "d": 2.8,
+   "text": "really sorry you have noisiness and not"
+  },
+  {
+   "t": 911.28,
+   "d": 1.84,
+   "text": "really spotable patterns and you have of"
+  },
+  {
+   "t": 913.12,
+   "d": 2.48,
+   "text": "course the in between that is often very"
+  },
+  {
+   "t": 915.6,
+   "d": 1.92,
+   "text": "interesting."
+  },
+  {
+   "t": 917.52,
+   "d": 3.44,
+   "text": "Um going back to this idea of describing"
+  },
+  {
+   "t": 920.96,
+   "d": 2.64,
+   "text": "generators with volume and pressure, we"
+  },
+  {
+   "t": 923.6,
+   "d": 2.8,
+   "text": "can use this idea of compressibility to"
+  },
+  {
+   "t": 926.4,
+   "d": 2.4,
+   "text": "describe generators. Here you have two"
+  },
+  {
+   "t": 928.8,
+   "d": 2.4,
+   "text": "generators that have the exact same"
+  },
+  {
+   "t": 931.2,
+   "d": 2.48,
+   "text": "output. They even have kind of the same"
+  },
+  {
+   "t": 933.68,
+   "d": 3.76,
+   "text": "code except that one is very is easy to"
+  },
+  {
+   "t": 937.44,
+   "d": 2.48,
+   "text": "read. It has clear variables and the"
+  },
+  {
+   "t": 939.92,
+   "d": 1.84,
+   "text": "other is very compressed. It's made to"
+  },
+  {
+   "t": 941.76,
+   "d": 3.12,
+   "text": "take less less space. um we're calling"
+  },
+  {
+   "t": 944.88,
+   "d": 1.84,
+   "text": "the space"
+  },
+  {
+   "t": 946.72,
+   "d": 3.28,
+   "text": "in bytes that the that the generator's"
+  },
+  {
+   "t": 950.0,
+   "d": 2.64,
+   "text": "code is taking its volume. On on the"
+  },
+  {
+   "t": 952.64,
+   "d": 1.68,
+   "text": "left you have a source code that is"
+  },
+  {
+   "t": 954.32,
+   "d": 2.24,
+   "text": "taking 26 bytes and the right we can"
+  },
+  {
+   "t": 956.56,
+   "d": 2.88,
+   "text": "reduce it to 140 bytes and kind of have"
+  },
+  {
+   "t": 959.44,
+   "d": 2.4,
+   "text": "want to have this notion that there's"
+  },
+  {
+   "t": 961.84,
+   "d": 1.36,
+   "text": "there's a proportionality between the"
+  },
+  {
+   "t": 963.2,
+   "d": 2.16,
+   "text": "two. There's this idea of compression."
+  },
+  {
+   "t": 965.36,
+   "d": 2.08,
+   "text": "One is is comp is super compressed and"
+  },
+  {
+   "t": 967.44,
+   "d": 2.32,
+   "text": "the other is not compressed. And you can"
+  },
+  {
+   "t": 969.76,
+   "d": 2.08,
+   "text": "create these very simple variables P and"
+  },
+  {
+   "t": 971.84,
+   "d": 1.76,
+   "text": "V and the simple ratio between the two"
+  },
+  {
+   "t": 973.6,
+   "d": 3.12,
+   "text": "and say that they always have this ratio"
+  },
+  {
+   "t": 976.72,
+   "d": 2.08,
+   "text": "that P * V is a constant when you"
+  },
+  {
+   "t": 978.8,
+   "d": 4.16,
+   "text": "compress the same generator. Um but in"
+  },
+  {
+   "t": 982.96,
+   "d": 1.6,
+   "text": "one case you have a high volume low"
+  },
+  {
+   "t": 984.56,
+   "d": 1.84,
+   "text": "pressure low compression and in the"
+  },
+  {
+   "t": 986.4,
+   "d": 2.0,
+   "text": "other case you have low volume and a"
+  },
+  {
+   "t": 988.4,
+   "d": 4.4,
+   "text": "bigger uh pressure bigger compression."
+  },
+  {
+   "t": 992.8,
+   "d": 2.4,
+   "text": "So with this idea of compression and"
+  },
+  {
+   "t": 995.2,
+   "d": 3.04,
+   "text": "comoraph complexity, we're going to"
+  },
+  {
+   "t": 998.24,
+   "d": 1.84,
+   "text": "think about"
+  },
+  {
+   "t": 1000.08,
+   "d": 2.64,
+   "text": "the minimum space a given generator can"
+  },
+  {
+   "t": 1002.72,
+   "d": 2.88,
+   "text": "take its comograph complexity and we're"
+  },
+  {
+   "t": 1005.6,
+   "d": 1.6,
+   "text": "going to take that as a measure of how"
+  },
+  {
+   "t": 1007.2,
+   "d": 1.52,
+   "text": "much information it does actually"
+  },
+  {
+   "t": 1008.72,
+   "d": 2.0,
+   "text": "contain. We can always inflate the"
+  },
+  {
+   "t": 1010.72,
+   "d": 1.76,
+   "text": "volume of a generator. We can add blank"
+  },
+  {
+   "t": 1012.48,
+   "d": 1.92,
+   "text": "statements. You can write longer"
+  },
+  {
+   "t": 1014.4,
+   "d": 1.76,
+   "text": "variable names. You can add structures"
+  },
+  {
+   "t": 1016.16,
+   "d": 1.44,
+   "text": "that aren't going to be used. But to"
+  },
+  {
+   "t": 1017.6,
+   "d": 2.96,
+   "text": "compress it in its various form you you"
+  },
+  {
+   "t": 1020.56,
+   "d": 2.16,
+   "text": "you only leave the most crucial amount"
+  },
+  {
+   "t": 1022.72,
+   "d": 2.8,
+   "text": "of information. And for me that variable"
+  },
+  {
+   "t": 1025.52,
+   "d": 3.36,
+   "text": "is very interesting uh because this is"
+  },
+  {
+   "t": 1028.88,
+   "d": 2.72,
+   "text": "in in my in my view where the designer's"
+  },
+  {
+   "t": 1031.6,
+   "d": 2.0,
+   "text": "knowledge is stored. It is the"
+  },
+  {
+   "t": 1033.6,
+   "d": 1.68,
+   "text": "designer's knowledge uncoded in an"
+  },
+  {
+   "t": 1035.28,
+   "d": 2.4,
+   "text": "algorithm. And this uncoding process is"
+  },
+  {
+   "t": 1037.68,
+   "d": 1.52,
+   "text": "costly because first you need to gather"
+  },
+  {
+   "t": 1039.2,
+   "d": 1.84,
+   "text": "that knowledge yourself of course but"
+  },
+  {
+   "t": 1041.04,
+   "d": 1.68,
+   "text": "also you need to spend time writing in"
+  },
+  {
+   "t": 1042.72,
+   "d": 2.8,
+   "text": "code to specify it, outline it, test it"
+  },
+  {
+   "t": 1045.52,
+   "d": 2.88,
+   "text": "and debug it. So this this measure v"
+  },
+  {
+   "t": 1048.4,
+   "d": 1.84,
+   "text": "star the minimum information volume for"
+  },
+  {
+   "t": 1050.24,
+   "d": 3.28,
+   "text": "me represents um how costly it is to"
+  },
+  {
+   "t": 1053.52,
+   "d": 2.08,
+   "text": "make a generator in study in"
+  },
+  {
+   "t": 1055.6,
+   "d": 2.16,
+   "text": "implementation in testing and all of"
+  },
+  {
+   "t": 1057.76,
+   "d": 2.08,
+   "text": "this"
+  },
+  {
+   "t": 1059.84,
+   "d": 3.2,
+   "text": "and that's of course the the the space"
+  },
+  {
+   "t": 1063.04,
+   "d": 2.16,
+   "text": "you take if compress generator to the"
+  },
+  {
+   "t": 1065.2,
+   "d": 1.52,
+   "text": "maximum."
+  },
+  {
+   "t": 1066.72,
+   "d": 1.84,
+   "text": "Now I'm going to look at the time. All"
+  },
+  {
+   "t": 1068.56,
+   "d": 1.52,
+   "text": "right might need to speed up a little"
+  },
+  {
+   "t": 1070.08,
+   "d": 3.84,
+   "text": "bit. Um and the final variable we're"
+  },
+  {
+   "t": 1073.92,
+   "d": 1.76,
+   "text": "going to to be introducing here we're"
+  },
+  {
+   "t": 1075.68,
+   "d": 2.48,
+   "text": "going to call it temperature. Um it's"
+  },
+  {
+   "t": 1078.16,
+   "d": 2.72,
+   "text": "also related to to K complexity and it's"
+  },
+  {
+   "t": 1080.88,
+   "d": 2.56,
+   "text": "the answer to the question how complex"
+  },
+  {
+   "t": 1083.44,
+   "d": 2.16,
+   "text": "are the outputs on average. If a"
+  },
+  {
+   "t": 1085.6,
+   "d": 1.92,
+   "text": "generator has a low temperature in"
+  },
+  {
+   "t": 1087.52,
+   "d": 3.68,
+   "text": "average usually its artifacts are have a"
+  },
+  {
+   "t": 1091.2,
+   "d": 2.8,
+   "text": "low complexity uh it is very structured"
+  },
+  {
+   "t": 1094.0,
+   "d": 1.92,
+   "text": "high temperature it's very noisy and"
+  },
+  {
+   "t": 1095.92,
+   "d": 2.16,
+   "text": "very in between but can have interesting"
+  },
+  {
+   "t": 1098.08,
+   "d": 1.92,
+   "text": "patterns."
+  },
+  {
+   "t": 1100.0,
+   "d": 4.96,
+   "text": "Um if we do this if we do this in use"
+  },
+  {
+   "t": 1104.96,
+   "d": 2.0,
+   "text": "these variables in a smart way we can"
+  },
+  {
+   "t": 1106.96,
+   "d": 1.92,
+   "text": "create relationship between all of them."
+  },
+  {
+   "t": 1108.88,
+   "d": 3.04,
+   "text": "We can for example notice that a simple"
+  },
+  {
+   "t": 1111.92,
+   "d": 2.64,
+   "text": "library of artifacts is a generator"
+  },
+  {
+   "t": 1114.56,
+   "d": 2.72,
+   "text": "right we can simply have a generator"
+  },
+  {
+   "t": 1117.28,
+   "d": 2.56,
+   "text": "that has all our artifacts lined up from"
+  },
+  {
+   "t": 1119.84,
+   "d": 5.12,
+   "text": "one to uh to 100 if artifacts and simply"
+  },
+  {
+   "t": 1124.96,
+   "d": 2.08,
+   "text": "give one of them at random uh"
+  },
+  {
+   "t": 1127.04,
+   "d": 2.16,
+   "text": "informally."
+  },
+  {
+   "t": 1129.2,
+   "d": 1.52,
+   "text": "If you have that, you have written a"
+  },
+  {
+   "t": 1130.72,
+   "d": 2.08,
+   "text": "generator. It's not very smart. It's not"
+  },
+  {
+   "t": 1132.8,
+   "d": 2.48,
+   "text": "very compressed, but it is a generator."
+  },
+  {
+   "t": 1135.28,
+   "d": 2.72,
+   "text": "And that generator takes has a has a"
+  },
+  {
+   "t": 1138.0,
+   "d": 2.4,
+   "text": "size we can actually compute based on"
+  },
+  {
+   "t": 1140.4,
+   "d": 2.96,
+   "text": "the other variables. We know that it has"
+  },
+  {
+   "t": 1143.36,
+   "d": 3.44,
+   "text": "n * t um"
+  },
+  {
+   "t": 1146.8,
+   "d": 2.24,
+   "text": "uh bits if you want to describe it this"
+  },
+  {
+   "t": 1149.04,
+   "d": 1.68,
+   "text": "way."
+  },
+  {
+   "t": 1150.72,
+   "d": 2.88,
+   "text": "And because this is natur * v is a"
+  },
+  {
+   "t": 1153.6,
+   "d": 1.6,
+   "text": "constant. So at the end of the day, we"
+  },
+  {
+   "t": 1155.2,
+   "d": 2.48,
+   "text": "have this very interesting formulation."
+  },
+  {
+   "t": 1157.68,
+   "d": 3.28,
+   "text": "P * V= N * T which is very similar to"
+  },
+  {
+   "t": 1160.96,
+   "d": 2.16,
+   "text": "the ideal gas law that we had for gas in"
+  },
+  {
+   "t": 1163.12,
+   "d": 4.64,
+   "text": "in um in physics. Um so we do have this"
+  },
+  {
+   "t": 1167.76,
+   "d": 1.28,
+   "text": "we do have these variables that have"
+  },
+  {
+   "t": 1169.04,
+   "d": 2.08,
+   "text": "these relationships between them. And"
+  },
+  {
+   "t": 1171.12,
+   "d": 2.48,
+   "text": "now I'm going to present uh a result"
+  },
+  {
+   "t": 1173.6,
+   "d": 2.48,
+   "text": "please don't be afraid uh a result that"
+  },
+  {
+   "t": 1176.08,
+   "d": 4.0,
+   "text": "is um what I what I got after working"
+  },
+  {
+   "t": 1180.08,
+   "d": 1.84,
+   "text": "with variables in that framework which"
+  },
+  {
+   "t": 1181.92,
+   "d": 2.56,
+   "text": "is a relationship between all of them a"
+  },
+  {
+   "t": 1184.48,
+   "d": 4.0,
+   "text": "way specifically to give lower and and"
+  },
+  {
+   "t": 1188.48,
+   "d": 3.04,
+   "text": "uh upper bounds uh on var based on the"
+  },
+  {
+   "t": 1191.52,
+   "d": 2.24,
+   "text": "other variables. So it leaves hideous of"
+  },
+  {
+   "t": 1193.76,
+   "d": 2.08,
+   "text": "course uh and that's that's the most"
+  },
+  {
+   "t": 1195.84,
+   "d": 3.12,
+   "text": "complex um case with like all variables"
+  },
+  {
+   "t": 1198.96,
+   "d": 1.52,
+   "text": "part of that work has been published"
+  },
+  {
+   "t": 1200.48,
+   "d": 2.32,
+   "text": "before in the previous paper uh with a"
+  },
+  {
+   "t": 1202.8,
+   "d": 2.24,
+   "text": "small demo and more explanations if you"
+  },
+  {
+   "t": 1205.04,
+   "d": 1.6,
+   "text": "want to see it. We're going to simplify"
+  },
+  {
+   "t": 1206.64,
+   "d": 2.0,
+   "text": "it right away. We're going to take a"
+  },
+  {
+   "t": 1208.64,
+   "d": 1.92,
+   "text": "simple case"
+  },
+  {
+   "t": 1210.56,
+   "d": 4.0,
+   "text": "um where all the outputs in our system"
+  },
+  {
+   "t": 1214.56,
+   "d": 3.44,
+   "text": "are equally likely meaning the"
+  },
+  {
+   "t": 1218.0,
+   "d": 3.52,
+   "text": "probability fun distribution is simply"
+  },
+  {
+   "t": 1221.52,
+   "d": 3.12,
+   "text": "constant. Uh if we do this we get a much"
+  },
+  {
+   "t": 1224.64,
+   "d": 2.88,
+   "text": "simpler set of equations. It might not"
+  },
+  {
+   "t": 1227.52,
+   "d": 1.76,
+   "text": "look much simpler but the cool thing is"
+  },
+  {
+   "t": 1229.28,
+   "d": 2.16,
+   "text": "that all of these we can plot them and"
+  },
+  {
+   "t": 1231.44,
+   "d": 2.24,
+   "text": "then we can start studying this visually"
+  },
+  {
+   "t": 1233.68,
+   "d": 3.2,
+   "text": "instead of mathematically."
+  },
+  {
+   "t": 1236.88,
+   "d": 2.72,
+   "text": "Um, so let's do that. I'm going to to"
+  },
+  {
+   "t": 1239.6,
+   "d": 2.96,
+   "text": "plot all of these in equations"
+  },
+  {
+   "t": 1242.56,
+   "d": 3.6,
+   "text": "uh on uh on this on this graph. On the"
+  },
+  {
+   "t": 1246.16,
+   "d": 1.68,
+   "text": "x-axis"
+  },
+  {
+   "t": 1247.84,
+   "d": 2.48,
+   "text": "you have uh a variable representing the"
+  },
+  {
+   "t": 1250.32,
+   "d": 2.4,
+   "text": "scale of the possibility space,"
+  },
+  {
+   "t": 1252.72,
+   "d": 2.24,
+   "text": "how much artifacts there is inside it."
+  },
+  {
+   "t": 1254.96,
+   "d": 4.48,
+   "text": "On the y-axis you have um how much uh"
+  },
+  {
+   "t": 1259.44,
+   "d": 2.4,
+   "text": "information minimum information there is"
+  },
+  {
+   "t": 1261.84,
+   "d": 2.96,
+   "text": "in uh in the uh in the generator. And"
+  },
+  {
+   "t": 1264.8,
+   "d": 2.88,
+   "text": "then you get this shape in the middle uh"
+  },
+  {
+   "t": 1267.68,
+   "d": 2.16,
+   "text": "for a given temperature. If you lower"
+  },
+  {
+   "t": 1269.84,
+   "d": 1.28,
+   "text": "the temperature, we'll get a smaller"
+  },
+  {
+   "t": 1271.12,
+   "d": 1.68,
+   "text": "shape. If you increase the temperature,"
+  },
+  {
+   "t": 1272.8,
+   "d": 2.32,
+   "text": "you might get a bigger shape. Uh with"
+  },
+  {
+   "t": 1275.12,
+   "d": 2.16,
+   "text": "some nuances here and there, but I'm not"
+  },
+  {
+   "t": 1277.28,
+   "d": 2.8,
+   "text": "going to zoom in. Uh there's a few"
+  },
+  {
+   "t": 1280.08,
+   "d": 2.4,
+   "text": "interesting uh generators that you can"
+  },
+  {
+   "t": 1282.48,
+   "d": 1.92,
+   "text": "put in that space. So each point in that"
+  },
+  {
+   "t": 1284.4,
+   "d": 1.28,
+   "text": "domain, that region is a different"
+  },
+  {
+   "t": 1285.68,
+   "d": 2.0,
+   "text": "generator, but has a different scale,"
+  },
+  {
+   "t": 1287.68,
+   "d": 2.08,
+   "text": "different volume. And in here, they all"
+  },
+  {
+   "t": 1289.76,
+   "d": 1.52,
+   "text": "have the same temperature. But if you"
+  },
+  {
+   "t": 1291.28,
+   "d": 1.84,
+   "text": "can move along the temperature axis that"
+  },
+  {
+   "t": 1293.12,
+   "d": 1.83,
+   "text": "could also plot different temperatures"
+  },
+  {
+   "t": 1294.95,
+   "d": 1.05,
+   "text": "[snorts] and you have this kind of like"
+  },
+  {
+   "t": 1296.0,
+   "d": 2.0,
+   "text": "extreme points that are extreme"
+  },
+  {
+   "t": 1298.0,
+   "d": 3.68,
+   "text": "generators. Bottom right you have a"
+  },
+  {
+   "t": 1301.68,
+   "d": 3.28,
+   "text": "white nose generator. Um it take it has"
+  },
+  {
+   "t": 1304.96,
+   "d": 2.08,
+   "text": "very few information in it. It can"
+  },
+  {
+   "t": 1307.04,
+   "d": 3.36,
+   "text": "output all of the artifacts uh possible."
+  },
+  {
+   "t": 1310.4,
+   "d": 1.52,
+   "text": "Um"
+  },
+  {
+   "t": 1311.92,
+   "d": 3.28,
+   "text": "and it's it's very very noisy. On the"
+  },
+  {
+   "t": 1315.2,
+   "d": 4.16,
+   "text": "bottom left we have a very among a few"
+  },
+  {
+   "t": 1319.36,
+   "d": 2.08,
+   "text": "amount of of artifacts. We have only one"
+  },
+  {
+   "t": 1321.44,
+   "d": 2.16,
+   "text": "artifact that is super compressed."
+  },
+  {
+   "t": 1323.6,
+   "d": 3.2,
+   "text": "That's a single u archive a simple zip"
+  },
+  {
+   "t": 1326.8,
+   "d": 1.84,
+   "text": "archive of a single artifact that is"
+  },
+  {
+   "t": 1328.64,
+   "d": 3.2,
+   "text": "here. And on the very very top um"
+  },
+  {
+   "t": 1331.84,
+   "d": 3.28,
+   "text": "highest point of the vstar axis uh you"
+  },
+  {
+   "t": 1335.12,
+   "d": 3.76,
+   "text": "have the generator that has that cuts"
+  },
+  {
+   "t": 1338.88,
+   "d": 2.32,
+   "text": "the possibility space into that filters"
+  },
+  {
+   "t": 1341.2,
+   "d": 1.6,
+   "text": "between the artifacts it does want and"
+  },
+  {
+   "t": 1342.8,
+   "d": 1.68,
+   "text": "the actual part it doesn't want in this"
+  },
+  {
+   "t": 1344.48,
+   "d": 2.72,
+   "text": "possibility space. Um and it it does"
+  },
+  {
+   "t": 1347.2,
+   "d": 4.4,
+   "text": "this with a very complex procedure."
+  },
+  {
+   "t": 1351.6,
+   "d": 2.4,
+   "text": "So all the generators we we have in in"
+  },
+  {
+   "t": 1354.0,
+   "d": 1.92,
+   "text": "that domain can we have can be plotted"
+  },
+  {
+   "t": 1355.92,
+   "d": 1.6,
+   "text": "in that domain and we can start doing"
+  },
+  {
+   "t": 1357.52,
+   "d": 2.56,
+   "text": "some observations. I'm going to skip"
+  },
+  {
+   "t": 1360.08,
+   "d": 3.52,
+   "text": "that one because of time. Um this one is"
+  },
+  {
+   "t": 1363.6,
+   "d": 2.24,
+   "text": "called ultimately is cheap. Um it"
+  },
+  {
+   "t": 1365.84,
+   "d": 1.12,
+   "text": "describes how we can show that"
+  },
+  {
+   "t": 1366.96,
+   "d": 2.24,
+   "text": "mathematically speaking if you write a"
+  },
+  {
+   "t": 1369.2,
+   "d": 1.68,
+   "text": "generator and if you want to increase"
+  },
+  {
+   "t": 1370.88,
+   "d": 2.64,
+   "text": "its scale put more artifacts or have"
+  },
+  {
+   "t": 1373.52,
+   "d": 2.0,
+   "text": "more complex artifacts if you don't"
+  },
+  {
+   "t": 1375.52,
+   "d": 2.64,
+   "text": "invest if you don't put more knowledge"
+  },
+  {
+   "t": 1378.16,
+   "d": 3.12,
+   "text": "into the system then you will more"
+  },
+  {
+   "t": 1381.28,
+   "d": 2.08,
+   "text": "you're more likely to end up with a"
+  },
+  {
+   "t": 1383.36,
+   "d": 2.48,
+   "text": "generator that is very close to the"
+  },
+  {
+   "t": 1385.84,
+   "d": 2.4,
+   "text": "white noise generator and therefore get"
+  },
+  {
+   "t": 1388.24,
+   "d": 2.64,
+   "text": "oatmeal. Uh that's one of the thing of"
+  },
+  {
+   "t": 1390.88,
+   "d": 1.36,
+   "text": "the previous paper I showed. So if"
+  },
+  {
+   "t": 1392.24,
+   "d": 1.52,
+   "text": "you're interested into this observation,"
+  },
+  {
+   "t": 1393.76,
+   "d": 3.36,
+   "text": "please read the paper. Um what we can do"
+  },
+  {
+   "t": 1397.12,
+   "d": 1.6,
+   "text": "also is that because we're doing this"
+  },
+  {
+   "t": 1398.72,
+   "d": 2.08,
+   "text": "analogy with physics and the states of"
+  },
+  {
+   "t": 1400.8,
+   "d": 2.32,
+   "text": "of gases, we can maybe speak we can"
+  },
+  {
+   "t": 1403.12,
+   "d": 3.28,
+   "text": "maybe uh reuse this plots and think"
+  },
+  {
+   "t": 1406.4,
+   "d": 2.24,
+   "text": "about what it means for a substance to"
+  },
+  {
+   "t": 1408.64,
+   "d": 4.0,
+   "text": "be very hot and very compressible uh or"
+  },
+  {
+   "t": 1412.64,
+   "d": 3.2,
+   "text": "and or for a substance to be very cold"
+  },
+  {
+   "t": 1415.84,
+   "d": 2.32,
+   "text": "and also have like a very small volume."
+  },
+  {
+   "t": 1418.16,
+   "d": 2.0,
+   "text": "All of these we can link them to the"
+  },
+  {
+   "t": 1420.16,
+   "d": 2.8,
+   "text": "classic three states of matter solid,"
+  },
+  {
+   "t": 1422.96,
+   "d": 2.8,
+   "text": "liquid and and gaseous"
+  },
+  {
+   "t": 1425.76,
+   "d": 1.44,
+   "text": "and they all have different properties"
+  },
+  {
+   "t": 1427.2,
+   "d": 2.08,
+   "text": "that are interesting. On the top row we"
+  },
+  {
+   "t": 1429.28,
+   "d": 1.44,
+   "text": "have the same properties has their"
+  },
+  {
+   "t": 1430.72,
+   "d": 1.84,
+   "text": "physical equivalent. For example, a"
+  },
+  {
+   "t": 1432.56,
+   "d": 2.72,
+   "text": "liquid has a mid temperature has a mid"
+  },
+  {
+   "t": 1435.28,
+   "d": 4.56,
+   "text": "has a minimum of substance. um uh it is"
+  },
+  {
+   "t": 1439.84,
+   "d": 2.0,
+   "text": "not very easily compressible where a"
+  },
+  {
+   "t": 1441.84,
+   "d": 2.0,
+   "text": "solid doesn't take much space and and a"
+  },
+  {
+   "t": 1443.84,
+   "d": 2.8,
+   "text": "gas is very highly compressible and can"
+  },
+  {
+   "t": 1446.64,
+   "d": 1.6,
+   "text": "take very little space if compressed"
+  },
+  {
+   "t": 1448.24,
+   "d": 2.08,
+   "text": "correctly. Um and then we have have"
+  },
+  {
+   "t": 1450.32,
+   "d": 2.64,
+   "text": "different affordances as a designer,"
+  },
+  {
+   "t": 1452.96,
+   "d": 2.32,
+   "text": "right? So a solid generator would be"
+  },
+  {
+   "t": 1455.28,
+   "d": 1.68,
+   "text": "would have like a more rigid structure"
+  },
+  {
+   "t": 1456.96,
+   "d": 1.84,
+   "text": "which is adapted to 100 content. It"
+  },
+  {
+   "t": 1458.8,
+   "d": 1.76,
+   "text": "would be more reliable but also"
+  },
+  {
+   "t": 1460.56,
+   "d": 1.68,
+   "text": "repetitive but also have lower"
+  },
+  {
+   "t": 1462.24,
+   "d": 2.56,
+   "text": "implementation costs. A gaseous one"
+  },
+  {
+   "t": 1464.8,
+   "d": 1.68,
+   "text": "would be much more unpredictable. It"
+  },
+  {
+   "t": 1466.48,
+   "d": 1.6,
+   "text": "will always look different but might not"
+  },
+  {
+   "t": 1468.08,
+   "d": 2.16,
+   "text": "feel different right like oatmeal it"
+  },
+  {
+   "t": 1470.24,
+   "d": 1.68,
+   "text": "also have low limitation costs for"
+  },
+  {
+   "t": 1471.92,
+   "d": 2.16,
+   "text": "example it uses a lot of random"
+  },
+  {
+   "t": 1474.08,
+   "d": 1.92,
+   "text": "functions in it and then you have in"
+  },
+  {
+   "t": 1476.0,
+   "d": 3.44,
+   "text": "between uh a liquid generator but itself"
+  },
+  {
+   "t": 1479.44,
+   "d": 2.16,
+   "text": "contains lots of lots of knowledge is"
+  },
+  {
+   "t": 1481.6,
+   "d": 2.72,
+   "text": "highly adaptive adapt adaptative highly"
+  },
+  {
+   "t": 1484.32,
+   "d": 1.52,
+   "text": "flexible it can take distinctively"
+  },
+  {
+   "t": 1485.84,
+   "d": 1.92,
+   "text": "different shapes idea like that water"
+  },
+  {
+   "t": 1487.76,
+   "d": 2.24,
+   "text": "can be can take the shape of whatever it"
+  },
+  {
+   "t": 1490.0,
+   "d": 2.48,
+   "text": "contains uh these generators can often"
+  },
+  {
+   "t": 1492.48,
+   "d": 2.48,
+   "text": "be how often parameters that can tune"
+  },
+  {
+   "t": 1494.96,
+   "d": 1.6,
+   "text": "for specific situation"
+  },
+  {
+   "t": 1496.56,
+   "d": 3.12,
+   "text": "and and and be like this. Um I'm going"
+  },
+  {
+   "t": 1499.68,
+   "d": 2.72,
+   "text": "to give an example of those free states"
+  },
+  {
+   "t": 1502.4,
+   "d": 2.24,
+   "text": "in a single game in slave spire. For"
+  },
+  {
+   "t": 1504.64,
+   "d": 1.92,
+   "text": "example, slave spire is very interesting"
+  },
+  {
+   "t": 1506.56,
+   "d": 2.64,
+   "text": "because there's so many subg generators"
+  },
+  {
+   "t": 1509.2,
+   "d": 2.32,
+   "text": "in it and so many sub games in slave"
+  },
+  {
+   "t": 1511.52,
+   "d": 3.04,
+   "text": "spire. Uh there's of course the classic"
+  },
+  {
+   "t": 1514.56,
+   "d": 3.28,
+   "text": "modes. Uh but here I put it has being"
+  },
+  {
+   "t": 1517.84,
+   "d": 3.28,
+   "text": "akin to solid. It has been it has been"
+  },
+  {
+   "t": 1521.12,
+   "d": 2.72,
+   "text": "uh like an ice statue. It has been"
+  },
+  {
+   "t": 1523.84,
+   "d": 2.32,
+   "text": "sculpted. uh it has it has been"
+  },
+  {
+   "t": 1526.16,
+   "d": 4.48,
+   "text": "fine-tuned by hand um and it is it has a"
+  },
+  {
+   "t": 1530.64,
+   "d": 2.08,
+   "text": "lower possibility space than the other"
+  },
+  {
+   "t": 1532.72,
+   "d": 1.84,
+   "text": "modes than for example the daily"
+  },
+  {
+   "t": 1534.56,
+   "d": 1.6,
+   "text": "challenge. The daily challenge it's a"
+  },
+  {
+   "t": 1536.16,
+   "d": 1.76,
+   "text": "mode where you play the random character"
+  },
+  {
+   "t": 1537.92,
+   "d": 3.76,
+   "text": "random modifiers. The game is much more"
+  },
+  {
+   "t": 1541.68,
+   "d": 4.08,
+   "text": "uh anthropic much more uh chaotic. Uh"
+  },
+  {
+   "t": 1545.76,
+   "d": 1.52,
+   "text": "you can see much more in that game. It"
+  },
+  {
+   "t": 1547.28,
+   "d": 2.16,
+   "text": "also feels much less pruned, much less"
+  },
+  {
+   "t": 1549.44,
+   "d": 1.62,
+   "text": "balanced sometimes. And then you"
+  },
+  {
+   "t": 1551.06,
+   "d": 1.34,
+   "text": "[snorts] have the structure in between"
+  },
+  {
+   "t": 1552.4,
+   "d": 5.12,
+   "text": "in between that is uh the um the the"
+  },
+  {
+   "t": 1557.52,
+   "d": 2.08,
+   "text": "custom custom mode where you can choose"
+  },
+  {
+   "t": 1559.6,
+   "d": 1.68,
+   "text": "exactly which things you want to to"
+  },
+  {
+   "t": 1561.28,
+   "d": 1.68,
+   "text": "trigger or not. And what's interesting"
+  },
+  {
+   "t": 1562.96,
+   "d": 3.12,
+   "text": "is that both the solid and gazous"
+  },
+  {
+   "t": 1566.08,
+   "d": 3.2,
+   "text": "version of these games can be you can"
+  },
+  {
+   "t": 1569.28,
+   "d": 1.44,
+   "text": "get them from the liquid version. The"
+  },
+  {
+   "t": 1570.72,
+   "d": 1.84,
+   "text": "liquid version can easily take a solid"
+  },
+  {
+   "t": 1572.56,
+   "d": 1.44,
+   "text": "shape or gasous shape if you take the"
+  },
+  {
+   "t": 1574.0,
+   "d": 2.8,
+   "text": "time to uh configure it correctly. And"
+  },
+  {
+   "t": 1576.8,
+   "d": 3.36,
+   "text": "the liquid one has most probably using"
+  },
+  {
+   "t": 1580.16,
+   "d": 2.48,
+   "text": "the is the most complex here but also"
+  },
+  {
+   "t": 1582.64,
+   "d": 1.52,
+   "text": "the one that can be most adaptative to"
+  },
+  {
+   "t": 1584.16,
+   "d": 1.84,
+   "text": "to your to what you want to play"
+  },
+  {
+   "t": 1586.0,
+   "d": 1.6,
+   "text": "actually."
+  },
+  {
+   "t": 1587.6,
+   "d": 3.92,
+   "text": "Um another example to why uh there is"
+  },
+  {
+   "t": 1591.52,
+   "d": 2.32,
+   "text": "this afordance that can be interesting."
+  },
+  {
+   "t": 1593.84,
+   "d": 2.24,
+   "text": "We can it can give material metaphors"
+  },
+  {
+   "t": 1596.08,
+   "d": 3.2,
+   "text": "for uh phenomenons we can see in"
+  },
+  {
+   "t": 1599.28,
+   "d": 2.24,
+   "text": "geometric games. For example in caves of"
+  },
+  {
+   "t": 1601.52,
+   "d": 2.64,
+   "text": "code you have this item called the fall"
+  },
+  {
+   "t": 1604.16,
+   "d": 2.08,
+   "text": "of house hastner. uh if you want to find"
+  },
+  {
+   "t": 1606.24,
+   "d": 1.84,
+   "text": "it you need information that is hidden"
+  },
+  {
+   "t": 1608.08,
+   "d": 2.0,
+   "text": "in books but some books in case of CD"
+  },
+  {
+   "t": 1610.08,
+   "d": 2.4,
+   "text": "most books actually are generated by"
+  },
+  {
+   "t": 1612.48,
+   "d": 2.72,
+   "text": "markup chain they are readable but they"
+  },
+  {
+   "t": 1615.2,
+   "d": 1.84,
+   "text": "are nonsense but here and there you have"
+  },
+  {
+   "t": 1617.04,
+   "d": 2.32,
+   "text": "sparkles of actually handwritten"
+  },
+  {
+   "t": 1619.36,
+   "d": 2.08,
+   "text": "information that is very interesting and"
+  },
+  {
+   "t": 1621.44,
+   "d": 2.48,
+   "text": "can give you uh can you with interesting"
+  },
+  {
+   "t": 1623.92,
+   "d": 2.64,
+   "text": "objects here's materials metaphor for"
+  },
+  {
+   "t": 1626.56,
+   "d": 2.88,
+   "text": "that for that phenomenon we are the mark"
+  },
+  {
+   "t": 1629.44,
+   "d": 2.88,
+   "text": "of chains here are very entropic they"
+  },
+  {
+   "t": 1632.32,
+   "d": 1.76,
+   "text": "are like a cloud of smoke they're gio"
+  },
+  {
+   "t": 1634.08,
+   "d": 1.92,
+   "text": "state but the handwritten bits are"
+  },
+  {
+   "t": 1636.0,
+   "d": 2.08,
+   "text": "crystal and have been put here here and"
+  },
+  {
+   "t": 1638.08,
+   "d": 1.68,
+   "text": "there and at the end of the day what you"
+  },
+  {
+   "t": 1639.76,
+   "d": 2.4,
+   "text": "have is a sort of cloud of smoke where"
+  },
+  {
+   "t": 1642.16,
+   "d": 2.4,
+   "text": "you can you can get lost in but you can"
+  },
+  {
+   "t": 1644.56,
+   "d": 2.08,
+   "text": "it can reord your exploration there's"
+  },
+  {
+   "t": 1646.64,
+   "d": 1.84,
+   "text": "this kind of like crystallin bits that"
+  },
+  {
+   "t": 1648.48,
+   "d": 1.44,
+   "text": "have been handput there to be"
+  },
+  {
+   "t": 1649.92,
+   "d": 2.48,
+   "text": "interesting for you the player"
+  },
+  {
+   "t": 1652.4,
+   "d": 4.24,
+   "text": "so that's one what's one of the uh"
+  },
+  {
+   "t": 1656.64,
+   "d": 2.72,
+   "text": "usefulness of this to to end this talk"
+  },
+  {
+   "t": 1659.36,
+   "d": 2.4,
+   "text": "I'm going to use my last analogy physics"
+  },
+  {
+   "t": 1661.76,
+   "d": 2.08,
+   "text": "technology to speak about Maxwell's"
+  },
+  {
+   "t": 1663.84,
+   "d": 3.12,
+   "text": "demon Um it is a fold experiment. I'm"
+  },
+  {
+   "t": 1666.96,
+   "d": 2.32,
+   "text": "not going to go heavily into details"
+  },
+  {
+   "t": 1669.28,
+   "d": 2.24,
+   "text": "here. Uh but you can easily find more"
+  },
+  {
+   "t": 1671.52,
+   "d": 2.24,
+   "text": "information about it. So Maxwell's demon"
+  },
+  {
+   "t": 1673.76,
+   "d": 3.28,
+   "text": "is a setup where you have two chambers"
+  },
+  {
+   "t": 1677.04,
+   "d": 2.08,
+   "text": "with a valve in the middle operated by a"
+  },
+  {
+   "t": 1679.12,
+   "d": 2.32,
+   "text": "small demon. And in each chamber you"
+  },
+  {
+   "t": 1681.44,
+   "d": 2.88,
+   "text": "have particles that can be either"
+  },
+  {
+   "t": 1684.32,
+   "d": 2.08,
+   "text": "excited, they can go fast or can be"
+  },
+  {
+   "t": 1686.4,
+   "d": 4.24,
+   "text": "slow. And the idea here is that you can"
+  },
+  {
+   "t": 1690.64,
+   "d": 4.56,
+   "text": "sort these particles to put all the um"
+  },
+  {
+   "t": 1695.2,
+   "d": 2.4,
+   "text": "the fast one in the left chamber and all"
+  },
+  {
+   "t": 1697.6,
+   "d": 2.32,
+   "text": "the the slow ones in the right chamber."
+  },
+  {
+   "t": 1699.92,
+   "d": 2.56,
+   "text": "And then you will get you will get sorry"
+  },
+  {
+   "t": 1702.48,
+   "d": 2.56,
+   "text": "uh a hot gas on the left and a cold gas"
+  },
+  {
+   "t": 1705.04,
+   "d": 2.16,
+   "text": "on the right. All we have to do to do"
+  },
+  {
+   "t": 1707.2,
+   "d": 1.76,
+   "text": "this is to have a small demon that is"
+  },
+  {
+   "t": 1708.96,
+   "d": 2.72,
+   "text": "here, a small system, anything that can"
+  },
+  {
+   "t": 1711.68,
+   "d": 1.44,
+   "text": "look at the particles that is that are"
+  },
+  {
+   "t": 1713.12,
+   "d": 2.24,
+   "text": "moving its way. And if it's fast, they"
+  },
+  {
+   "t": 1715.36,
+   "d": 1.52,
+   "text": "let it go to the left. And if it's slow,"
+  },
+  {
+   "t": 1716.88,
+   "d": 1.52,
+   "text": "they let it go to the right. Otherwise,"
+  },
+  {
+   "t": 1718.4,
+   "d": 2.56,
+   "text": "they block it. If you do this, you're"
+  },
+  {
+   "t": 1720.96,
+   "d": 1.84,
+   "text": "going to to reduce the entropy of the"
+  },
+  {
+   "t": 1722.8,
+   "d": 1.2,
+   "text": "system. You're going to create a delta"
+  },
+  {
+   "t": 1724.0,
+   "d": 2.32,
+   "text": "in temperature, which in in uh in"
+  },
+  {
+   "t": 1726.32,
+   "d": 2.72,
+   "text": "physics is a way to gather more energy"
+  },
+  {
+   "t": 1729.04,
+   "d": 2.48,
+   "text": "or to lower entropy. And all you have to"
+  },
+  {
+   "t": 1731.52,
+   "d": 1.6,
+   "text": "do is look at these particles and do"
+  },
+  {
+   "t": 1733.12,
+   "d": 1.2,
+   "text": "this operation this kind of like"
+  },
+  {
+   "t": 1734.32,
+   "d": 3.44,
+   "text": "sorting. Uh it it might sound like it's"
+  },
+  {
+   "t": 1737.76,
+   "d": 3.44,
+   "text": "it's balanced. You do spend the the"
+  },
+  {
+   "t": 1741.2,
+   "d": 2.16,
+   "text": "energy to close and open the valve. But"
+  },
+  {
+   "t": 1743.36,
+   "d": 2.4,
+   "text": "actually if you do the math uh this is"
+  },
+  {
+   "t": 1745.76,
+   "d": 2.08,
+   "text": "very very cheap compared to what to to"
+  },
+  {
+   "t": 1747.84,
+   "d": 2.32,
+   "text": "what you what you obtain and that was a"
+  },
+  {
+   "t": 1750.16,
+   "d": 1.76,
+   "text": "huge paradox for many years. Physicists"
+  },
+  {
+   "t": 1751.92,
+   "d": 1.68,
+   "text": "didn't know how to fix that."
+  },
+  {
+   "t": 1753.6,
+   "d": 2.24,
+   "text": "It was violating the second principle of"
+  },
+  {
+   "t": 1755.84,
+   "d": 2.16,
+   "text": "thermodynamics that you can't have in a"
+  },
+  {
+   "t": 1758.0,
+   "d": 3.12,
+   "text": "closed system uh reduce entropy without"
+  },
+  {
+   "t": 1761.12,
+   "d": 2.56,
+   "text": "exchanging energy. It was basically a"
+  },
+  {
+   "t": 1763.68,
+   "d": 1.57,
+   "text": "way to get free energy and"
+  },
+  {
+   "t": 1765.24,
+   "d": 1.55,
+   "text": "[clears throat] that was an issue of"
+  },
+  {
+   "t": 1766.8,
+   "d": 3.76,
+   "text": "course until they realized uh if you"
+  },
+  {
+   "t": 1770.56,
+   "d": 1.6,
+   "text": "think more about it this the work that"
+  },
+  {
+   "t": 1772.16,
+   "d": 1.76,
+   "text": "the demon has to do there is a hidden"
+  },
+  {
+   "t": 1773.92,
+   "d": 2.0,
+   "text": "cost here. the intellectual work that"
+  },
+  {
+   "t": 1775.92,
+   "d": 2.48,
+   "text": "demon has to do. It has to take into"
+  },
+  {
+   "t": 1778.4,
+   "d": 1.68,
+   "text": "account the positions of each of each"
+  },
+  {
+   "t": 1780.08,
+   "d": 2.64,
+   "text": "particles and remember them and this act"
+  },
+  {
+   "t": 1782.72,
+   "d": 3.2,
+   "text": "of reme remembering and actually sorting"
+  },
+  {
+   "t": 1785.92,
+   "d": 2.0,
+   "text": "those spend energy because there's a"
+  },
+  {
+   "t": 1787.92,
+   "d": 1.76,
+   "text": "fixed li there's this idea of a fixed"
+  },
+  {
+   "t": 1789.68,
+   "d": 1.92,
+   "text": "memory and you need to erase some"
+  },
+  {
+   "t": 1791.6,
+   "d": 2.08,
+   "text": "information and rewrite them again and"
+  },
+  {
+   "t": 1793.68,
+   "d": 2.56,
+   "text": "again uh to do this. So at the end of"
+  },
+  {
+   "t": 1796.24,
+   "d": 4.48,
+   "text": "the day the math uh the equation is um"
+  },
+  {
+   "t": 1800.72,
+   "d": 2.0,
+   "text": "is verified and we do have a"
+  },
+  {
+   "t": 1802.72,
+   "d": 2.48,
+   "text": "conservation of energy and the second"
+  },
+  {
+   "t": 1805.2,
+   "d": 1.6,
+   "text": "principle thermodynamics is still"
+  },
+  {
+   "t": 1806.8,
+   "d": 3.12,
+   "text": "verified. I want here to talk about an"
+  },
+  {
+   "t": 1809.92,
+   "d": 1.36,
+   "text": "to do with analogy with process"
+  },
+  {
+   "t": 1811.28,
+   "d": 2.4,
+   "text": "generators. Instead of Maxwell's demon I"
+  },
+  {
+   "t": 1813.68,
+   "d": 3.2,
+   "text": "want to talk about u a thing a small"
+  },
+  {
+   "t": 1816.88,
+   "d": 3.12,
+   "text": "creature I call unice's little guy. So"
+  },
+  {
+   "t": 1820.0,
+   "d": 4.64,
+   "text": "this little guy uh is a small creature"
+  },
+  {
+   "t": 1824.64,
+   "d": 2.24,
+   "text": "that that sorts all the artifacts that"
+  },
+  {
+   "t": 1826.88,
+   "d": 3.68,
+   "text": "exist in in a given space into"
+  },
+  {
+   "t": 1830.56,
+   "d": 2.0,
+   "text": "desirable artifacts in possibility space"
+  },
+  {
+   "t": 1832.56,
+   "d": 1.76,
+   "text": "and artifacts we don't want to we don't"
+  },
+  {
+   "t": 1834.32,
+   "d": 1.76,
+   "text": "want to see that we don't like in the"
+  },
+  {
+   "t": 1836.08,
+   "d": 2.96,
+   "text": "impossibility space. Here you can you"
+  },
+  {
+   "t": 1839.04,
+   "d": 2.72,
+   "text": "can imagine that um this work has"
+  },
+  {
+   "t": 1841.76,
+   "d": 1.84,
+   "text": "already been done right and you can"
+  },
+  {
+   "t": 1843.6,
+   "d": 1.6,
+   "text": "easily find them. You can find data sets"
+  },
+  {
+   "t": 1845.2,
+   "d": 2.16,
+   "text": "on the internet. Uh you can find for"
+  },
+  {
+   "t": 1847.36,
+   "d": 3.92,
+   "text": "example uh full you can scrap scrape the"
+  },
+  {
+   "t": 1851.28,
+   "d": 2.56,
+   "text": "internet for uh what you deem to be good"
+  },
+  {
+   "t": 1853.84,
+   "d": 1.92,
+   "text": "art art created by artists and these"
+  },
+  {
+   "t": 1855.76,
+   "d": 1.36,
+   "text": "would be example of things you want in"
+  },
+  {
+   "t": 1857.12,
+   "d": 1.6,
+   "text": "possibility space if you want to create"
+  },
+  {
+   "t": 1858.72,
+   "d": 3.36,
+   "text": "for example um an art generator a"
+  },
+  {
+   "t": 1862.08,
+   "d": 1.6,
+   "text": "generator that creates interesting"
+  },
+  {
+   "t": 1863.68,
+   "d": 2.64,
+   "text": "pictures and if you're for example tech"
+  },
+  {
+   "t": 1866.32,
+   "d": 2.32,
+   "text": "bro you'll be like oh all we have to do"
+  },
+  {
+   "t": 1868.64,
+   "d": 2.08,
+   "text": "is find a cheap way to identify these"
+  },
+  {
+   "t": 1870.72,
+   "d": 1.92,
+   "text": "artifacts we do want for example"
+  },
+  {
+   "t": 1872.64,
+   "d": 2.56,
+   "text": "download a data set or underpay somebody"
+  },
+  {
+   "t": 1875.2,
+   "d": 2.56,
+   "text": "to to label of them. Then we just have"
+  },
+  {
+   "t": 1877.76,
+   "d": 2.32,
+   "text": "like we've seen before to compress all"
+  },
+  {
+   "t": 1880.08,
+   "d": 3.12,
+   "text": "these artifacts uh with a training train"
+  },
+  {
+   "t": 1883.2,
+   "d": 2.72,
+   "text": "model to get one code one piece of code"
+  },
+  {
+   "t": 1885.92,
+   "d": 3.2,
+   "text": "that is going to be or generator and if"
+  },
+  {
+   "t": 1889.12,
+   "d": 1.2,
+   "text": "you look at it this way you have this"
+  },
+  {
+   "t": 1890.32,
+   "d": 1.92,
+   "text": "magical creature that does this work for"
+  },
+  {
+   "t": 1892.24,
+   "d": 2.96,
+   "text": "free for you and then there's you don't"
+  },
+  {
+   "t": 1895.2,
+   "d": 1.92,
+   "text": "you don't actually spend the cost but"
+  },
+  {
+   "t": 1897.12,
+   "d": 1.92,
+   "text": "like in Maxwell's demon what you do here"
+  },
+  {
+   "t": 1899.04,
+   "d": 3.28,
+   "text": "is that you're forgetting about the work"
+  },
+  {
+   "t": 1902.32,
+   "d": 2.0,
+   "text": "of a little guy here. This little guy"
+  },
+  {
+   "t": 1904.32,
+   "d": 2.0,
+   "text": "here is encoding its knowledge of what"
+  },
+  {
+   "t": 1906.32,
+   "d": 1.84,
+   "text": "is a good artifact and what is not a"
+  },
+  {
+   "t": 1908.16,
+   "d": 1.76,
+   "text": "good artifact here. And this knowledge"
+  },
+  {
+   "t": 1909.92,
+   "d": 1.76,
+   "text": "has to be built. It has to be encoded."
+  },
+  {
+   "t": 1911.68,
+   "d": 2.0,
+   "text": "It has the little girl has to rest. It"
+  },
+  {
+   "t": 1913.68,
+   "d": 1.76,
+   "text": "has to drink tea. It has to dream. It"
+  },
+  {
+   "t": 1915.44,
+   "d": 3.28,
+   "text": "has to sleep. And here in in that"
+  },
+  {
+   "t": 1918.72,
+   "d": 1.52,
+   "text": "formalism"
+  },
+  {
+   "t": 1920.24,
+   "d": 3.2,
+   "text": "we here people like celebration we are"
+  },
+  {
+   "t": 1923.44,
+   "d": 2.72,
+   "text": "Maxwell Stevens. We are the little guys."
+  },
+  {
+   "t": 1926.16,
+   "d": 1.52,
+   "text": "We are the creators. We are the"
+  },
+  {
+   "t": 1927.68,
+   "d": 1.28,
+   "text": "creators, the gardeners and the"
+  },
+  {
+   "t": 1928.96,
+   "d": 2.0,
+   "text": "sculptors. We encode our knowledge in"
+  },
+  {
+   "t": 1930.96,
+   "d": 2.72,
+   "text": "our data sets and or generators and we"
+  },
+  {
+   "t": 1933.68,
+   "d": 2.24,
+   "text": "know it isn't cheap. We know the work it"
+  },
+  {
+   "t": 1935.92,
+   "d": 3.44,
+   "text": "takes to do this. Uh an outside observer"
+  },
+  {
+   "t": 1939.36,
+   "d": 2.8,
+   "text": "can think it is cheap only if it negates"
+  },
+  {
+   "t": 1942.16,
+   "d": 2.16,
+   "text": "the work we do only if it steals from"
+  },
+  {
+   "t": 1944.32,
+   "d": 1.6,
+   "text": "us."
+  },
+  {
+   "t": 1945.92,
+   "d": 2.16,
+   "text": "Um there's much more I'd like to talk"
+  },
+  {
+   "t": 1948.08,
+   "d": 2.16,
+   "text": "about of course on this topic. I'm going"
+  },
+  {
+   "t": 1950.24,
+   "d": 1.68,
+   "text": "to of course skip right away to the"
+  },
+  {
+   "t": 1951.92,
+   "d": 2.8,
+   "text": "conclusion. Uh we can for example"
+  },
+  {
+   "t": 1954.72,
+   "d": 2.16,
+   "text": "continuous analogy of other things with"
+  },
+  {
+   "t": 1956.88,
+   "d": 2.88,
+   "text": "cycles. We can look at other works uh in"
+  },
+  {
+   "t": 1959.76,
+   "d": 3.2,
+   "text": "the literature um for example prevent"
+  },
+  {
+   "t": 1962.96,
+   "d": 2.88,
+   "text": "generation games by a carf uh and and do"
+  },
+  {
+   "t": 1965.84,
+   "d": 1.6,
+   "text": "analogies. There's much more to explore"
+  },
+  {
+   "t": 1967.44,
+   "d": 2.16,
+   "text": "and here that's only the the the first"
+  },
+  {
+   "t": 1969.6,
+   "d": 2.64,
+   "text": "steps in in that formalism hopefully."
+  },
+  {
+   "t": 1972.24,
+   "d": 1.6,
+   "text": "And if you have ideas on how to expand"
+  },
+  {
+   "t": 1973.84,
+   "d": 1.6,
+   "text": "it if you want to have more details feel"
+  },
+  {
+   "t": 1975.44,
+   "d": 2.32,
+   "text": "free to contact me or you can wait for"
+  },
+  {
+   "t": 1977.76,
+   "d": 2.56,
+   "text": "when I finally write this paper. I want"
+  },
+  {
+   "t": 1980.32,
+   "d": 2.32,
+   "text": "to thank you all for my celebration. Um"
+  },
+  {
+   "t": 1982.64,
+   "d": 2.56,
+   "text": "it was as always a pleasure to to share"
+  },
+  {
+   "t": 1985.2,
+   "d": 2.0,
+   "text": "this work with you. Thank you so much."
+  },
+  {
+   "t": 1987.2,
+   "d": 1.2,
+   "text": ">> It's always a pleasure to have you,"
+  },
+  {
+   "t": 1988.4,
+   "d": 2.0,
+   "text": "Unas. Thank you so much. Uh I know that"
+  },
+  {
+   "t": 1990.4,
+   "d": 2.32,
+   "text": "a lot of the sentiments you shared are"
+  },
+  {
+   "t": 1992.72,
+   "d": 3.04,
+   "text": "uh shared by many of us. Um and I'll"
+  },
+  {
+   "t": 1995.76,
+   "d": 1.6,
+   "text": "just be going over to my LinkedIn after"
+  },
+  {
+   "t": 1997.36,
+   "d": 2.0,
+   "text": "this and changing my job title to Ununas"
+  },
+  {
+   "t": 1999.36,
+   "d": 2.88,
+   "text": "is a little guy. Uh who needs narrative"
+  },
+  {
+   "t": 2002.24,
+   "d": 1.52,
+   "text": "designers? We've just got little guys"
+  },
+  {
+   "t": 2003.76,
+   "d": 3.76,
+   "text": "now. Um, well, thank"
+  }
+ ]
+}

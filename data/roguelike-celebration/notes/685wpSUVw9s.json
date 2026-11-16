@@ -1,0 +1,65 @@
+{
+  "id": "685wpSUVw9s",
+  "title": "Jamie Brew - Robot Karaoke Goes Electric",
+  "speaker": "Jamie Brew",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=685wpSUVw9s",
+  "talk_type": "performance",
+  "summary": "A pre-recorded backup of Jamie Brew's comedic live show Robot Karaoke, which generates never-before-sung karaoke by replacing a song's lyrics with lines from found text. Brew frames it as 'karaoke safety research' to make karaoke harder, explains the simple algorithm (match syllable count, rank by phonetic similarity to the original line), and parodies the Berlin Interpretation to ask whether it counts as karaoke. Most of the runtime is sung demos (Craigslist vehicle ads to Yesterday, tax form 1040 to Dreams, Balatro card names to Changes, fraudulent emails, early-internet banner ads), followed by a brief tour of data sources. Design content is light.",
+  "games": [
+    "Balatro"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "lyric replacement",
+      "kind": "technique",
+      "claim": "Robot Karaoke rewrites songs by picking found-text lines with the same syllable count as each original line and scoring them by phonetic similarity before a performer sings them on the spot.",
+      "detail": "Brew models lyrics as words with syllable lengths, stress patterns (1 for stressed, 0 for unstressed) and vowel sounds. He frames this as reversing Paul McCartney's 'Scrambled Eggs' placeholder process, going from good words to worse words that are harder to sing.",
+      "t": 363,
+      "quote": "start by finding lines with the same syllable count as the song that we want to rewrite. Then score those lines by phonetic similarity",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "berlin interpretation",
+      "kind": "example",
+      "claim": "Brew parodies the Berlin Interpretation with a 'Brooklyn interpretation' of karaoke, concluding that procedurally regenerated karaoke fails the 'can be practised' criterion because it is different every time.",
+      "detail": "His criteria are well-known songs, lyrics on screen, technology assistance, and something you can practise and improve at across sessions. Since the system is adversarial and changes every show, he dubs it a 'roguelike karaoke style flavored beverage'.",
+      "t": 668,
+      "quote": "is it possible to practice? Not really. Uh, this is a version of karaoke that it's going to be different every time",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "seeds",
+      "kind": "example",
+      "claim": "Robot Karaoke runs on a seed, so a recorded performance can be replayed identically while live shows produce a new song each time.",
+      "detail": "After the tax-form song Brew notes viewers can rewind the video to sing exactly that version on that seed, whereas live it would differ every time.",
+      "t": 1045,
+      "quote": "if you want to sing exactly that version on this seed, you can rewind to the beginning of this video and it will be the same song again",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden information",
+      "kind": "example",
+      "claim": "Robot Karaoke's flashcard mode hides each Balatro card name until after it should be sung, forcing the singer to recall it from memory as an added difficulty layer.",
+      "detail": "Brew demonstrates it with Changes by David Bowie and Balatro card names, missing a few and joking that is why you keep coming back.",
+      "t": 1085,
+      "quote": "we don't get to see the names of the cards until they appear, until they've already been sung",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "found text corpora",
+      "kind": "technique",
+      "claim": "Robot Karaoke draws its replacement text from found corpora, including Craigslist ads, Yelp reviews, tax forms, fraudulent emails, archived early-internet banner ads and audience-submitted data like crowdsourced fears.",
+      "detail": "Brew credits the maintainers of Banner Depot 2000 for banner ads and lists possible future sources such as bulletin boards, FOIA requests, radio scanners and focus groups.",
+      "t": 1692,
+      "quote": "we also sometimes collect data from audience members",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

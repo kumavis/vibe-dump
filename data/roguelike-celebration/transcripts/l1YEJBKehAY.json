@@ -1,0 +1,4047 @@
+{
+ "id": "l1YEJBKehAY",
+ "url": "https://www.youtube.com/watch?v=l1YEJBKehAY",
+ "title": "Pippin Barr + Jonathan Lessard: Chess + Rogue = Chogue",
+ "speaker": "Pippin Barr + Jonathan Lessard",
+ "talk_title": "Chess + Rogue = Chogue",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1916,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introducing Choke"
+  },
+  {
+   "start": 153,
+   "title": "Meet the Developers"
+  },
+  {
+   "start": 357,
+   "title": "Methodology and Design"
+  },
+  {
+   "start": 552,
+   "title": "Translating Movement"
+  },
+  {
+   "start": 761,
+   "title": "Combat and Turn Structure"
+  },
+  {
+   "start": 965,
+   "title": "Visibility and Progression"
+  },
+  {
+   "start": 1162,
+   "title": "Ending the Game"
+  },
+  {
+   "start": 1446,
+   "title": "Future Projects"
+  },
+  {
+   "start": 1603,
+   "title": "Q&A Session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5827,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 4.56,
+   "text": "all right thank you yeah so thanks for"
+  },
+  {
+   "t": 4.56,
+   "d": 2.43,
+   "text": "having us and we're presenting choke"
+  },
+  {
+   "t": 6.99,
+   "d": 3.66,
+   "text": "which has a very simple premise and that"
+  },
+  {
+   "t": 10.65,
+   "d": 2.79,
+   "text": "is if chess and the original rogue had a"
+  },
+  {
+   "t": 13.44,
+   "d": 3.81,
+   "text": "child what would it look like so I made"
+  },
+  {
+   "t": 17.25,
+   "d": 1.62,
+   "text": "this game with Pippin bar who couldn't"
+  },
+  {
+   "t": 18.87,
+   "d": 2.13,
+   "text": "come here but he's there on the side bar"
+  },
+  {
+   "t": 21.0,
+   "d": 3.39,
+   "text": "and and might comment if it feels that"
+  },
+  {
+   "t": 24.39,
+   "d": 2.61,
+   "text": "I'm not rendering this correctly so"
+  },
+  {
+   "t": 27.0,
+   "d": 1.38,
+   "text": "before moving on"
+  },
+  {
+   "t": 28.38,
+   "d": 3.57,
+   "text": "what is choke I mean what is the kid"
+  },
+  {
+   "t": 31.95,
+   "d": 2.13,
+   "text": "with a child of chess and rogue it's"
+  },
+  {
+   "t": 34.08,
+   "d": 2.1,
+   "text": "joke it's there I can show it to you and"
+  },
+  {
+   "t": 36.18,
+   "d": 2.07,
+   "text": "you'll see how it works so you're"
+  },
+  {
+   "t": 38.25,
+   "d": 2.97,
+   "text": "presented with the a basic chess board"
+  },
+  {
+   "t": 41.22,
+   "d": 2.85,
+   "text": "and so if you know how to play chess you"
+  },
+  {
+   "t": 44.07,
+   "d": 2.37,
+   "text": "probably have some already great opening"
+  },
+  {
+   "t": 46.44,
+   "d": 2.61,
+   "text": "prepared and so you can just just move"
+  },
+  {
+   "t": 49.05,
+   "d": 2.01,
+   "text": "forward and do your opening that's not a"
+  },
+  {
+   "t": 51.06,
+   "d": 1.23,
+   "text": "standard word but I'm planning for"
+  },
+  {
+   "t": 52.29,
+   "d": 3.2,
+   "text": "something Oh what happened what happened"
+  },
+  {
+   "t": 55.49,
+   "d": 2.17,
+   "text": "you might have not have noticed but the"
+  },
+  {
+   "t": 57.66,
+   "d": 5.7,
+   "text": "black King left but what's a chess game"
+  },
+  {
+   "t": 63.36,
+   "d": 1.35,
+   "text": "without the black King what am I"
+  },
+  {
+   "t": 64.71,
+   "d": 1.38,
+   "text": "supposed to do while I'm supposed to"
+  },
+  {
+   "t": 66.09,
+   "d": 2.88,
+   "text": "checkmate him so we're quite happy with"
+  },
+  {
+   "t": 68.97,
+   "d": 1.92,
+   "text": "our splash screen because we need no"
+  },
+  {
+   "t": 70.89,
+   "d": 1.38,
+   "text": "exposition there's no text no"
+  },
+  {
+   "t": 72.27,
+   "d": 0.9,
+   "text": "explanation"
+  },
+  {
+   "t": 73.17,
+   "d": 2.1,
+   "text": "it's chess but there's already a mystery"
+  },
+  {
+   "t": 75.27,
+   "d": 1.86,
+   "text": "where's the black King we need to find"
+  },
+  {
+   "t": 77.13,
+   "d": 2.82,
+   "text": "the black King so I suppose you probably"
+  },
+  {
+   "t": 79.95,
+   "d": 2.7,
+   "text": "are seduced into may be looking at those"
+  },
+  {
+   "t": 82.65,
+   "d": 2.4,
+   "text": "stairs there and getting there this is"
+  },
+  {
+   "t": 85.05,
+   "d": 1.56,
+   "text": "why I got my knight because we have our"
+  },
+  {
+   "t": 86.61,
+   "d": 2.49,
+   "text": "little routine to go there without any"
+  },
+  {
+   "t": 89.1,
+   "d": 3.39,
+   "text": "fighting but you can actually play that"
+  },
+  {
+   "t": 92.49,
+   "d": 1.68,
+   "text": "game and feel very good because the AI"
+  },
+  {
+   "t": 94.17,
+   "d": 6.09,
+   "text": "is is quite poor but so here but now"
+  },
+  {
+   "t": 100.26,
+   "d": 2.46,
+   "text": "things are changing quite a lot this is"
+  },
+  {
+   "t": 102.72,
+   "d": 1.32,
+   "text": "that doesn't look like chess"
+  },
+  {
+   "t": 104.04,
+   "d": 2.58,
+   "text": "much more these are actually my pieces"
+  },
+  {
+   "t": 106.62,
+   "d": 1.68,
+   "text": "that have been carried over to some"
+  },
+  {
+   "t": 108.3,
+   "d": 1.62,
+   "text": "other little mini chessboard"
+  },
+  {
+   "t": 109.92,
+   "d": 2.31,
+   "text": "I accept that I have two Queens now"
+  },
+  {
+   "t": 112.23,
+   "d": 2.43,
+   "text": "because as the pawns have reached the"
+  },
+  {
+   "t": 114.66,
+   "d": 2.07,
+   "text": "end of that room they became Queens I'm"
+  },
+  {
+   "t": 116.73,
+   "d": 2.9,
+   "text": "quite back there so I'll try to move out"
+  },
+  {
+   "t": 119.63,
+   "d": 4.72,
+   "text": "and okay so I this is a queen and as you"
+  },
+  {
+   "t": 124.35,
+   "d": 1.77,
+   "text": "can see now the Queen can venture into"
+  },
+  {
+   "t": 126.12,
+   "d": 2.58,
+   "text": "her possible moves outside the visible"
+  },
+  {
+   "t": 128.7,
+   "d": 3.21,
+   "text": "zone which is maybe scary but I need to"
+  },
+  {
+   "t": 131.91,
+   "d": 1.0,
+   "text": "go somewhere"
+  },
+  {
+   "t": 132.91,
+   "d": 2.25,
+   "text": "so let's see what happens as I move"
+  },
+  {
+   "t": 135.16,
+   "d": 3.96,
+   "text": "there ah did you see that there was a"
+  },
+  {
+   "t": 139.12,
+   "d": 2.46,
+   "text": "black bishop just lurking in the dark"
+  },
+  {
+   "t": 141.58,
+   "d": 2.82,
+   "text": "and as I moved into a dark room it just"
+  },
+  {
+   "t": 144.4,
+   "d": 3.38,
+   "text": "ate me and that's the end of my queen"
+  },
+  {
+   "t": 147.78,
+   "d": 2.32,
+   "text": "that's that's this is the essence of"
+  },
+  {
+   "t": 150.1,
+   "d": 9.99,
+   "text": "choke so I'll go back to - chokes so"
+  },
+  {
+   "t": 160.09,
+   "d": 2.31,
+   "text": "this is choke this is the hybrid between"
+  },
+  {
+   "t": 162.4,
+   "d": 2.13,
+   "text": "chess and a rogue and so it's cool it's"
+  },
+  {
+   "t": 164.53,
+   "d": 1.47,
+   "text": "we got it that that's it"
+  },
+  {
+   "t": 166.0,
+   "d": 1.95,
+   "text": "however if you start thinking there"
+  },
+  {
+   "t": 167.95,
+   "d": 1.95,
+   "text": "might be many other kinds of chokes out"
+  },
+  {
+   "t": 169.9,
+   "d": 2.01,
+   "text": "there that would be valid"
+  },
+  {
+   "t": 171.91,
+   "d": 2.4,
+   "text": "chokes both valid hybrids between those"
+  },
+  {
+   "t": 174.31,
+   "d": 2.55,
+   "text": "two games so there are these two games"
+  },
+  {
+   "t": 176.86,
+   "d": 1.71,
+   "text": "can have multiple very different"
+  },
+  {
+   "t": 178.57,
+   "d": 2.28,
+   "text": "children and so this talk is how why did"
+  },
+  {
+   "t": 180.85,
+   "d": 3.36,
+   "text": "we white white this one so just quick"
+  },
+  {
+   "t": 184.21,
+   "d": 1.86,
+   "text": "presentations because we're new to the"
+  },
+  {
+   "t": 186.07,
+   "d": 3.57,
+   "text": "roguelike scene so i'm natali saw at la"
+  },
+  {
+   "t": 189.64,
+   "d": 4.14,
+   "text": "jolla so on twitter i'm in early indie"
+  },
+  {
+   "t": 193.78,
+   "d": 2.94,
+   "text": "dev i suppose my first bigger game was"
+  },
+  {
+   "t": 196.72,
+   "d": 3.36,
+   "text": "in 2002 already mostly adventure games"
+  },
+  {
+   "t": 200.08,
+   "d": 2.61,
+   "text": "by then and that's before Steam so I had"
+  },
+  {
+   "t": 202.69,
+   "d": 1.65,
+   "text": "actually to print the CDs and send them"
+  },
+  {
+   "t": 204.34,
+   "d": 2.19,
+   "text": "by mail if you can imagine the ordeal"
+  },
+  {
+   "t": 206.53,
+   "d": 3.3,
+   "text": "however in between I made it I did a PhD"
+  },
+  {
+   "t": 209.83,
+   "d": 2.01,
+   "text": "on adventure games as this was the only"
+  },
+  {
+   "t": 211.84,
+   "d": 2.85,
+   "text": "thing I knew and now I'm a game design"
+  },
+  {
+   "t": 214.69,
+   "d": 3.21,
+   "text": "professor at Concordia University in"
+  },
+  {
+   "t": 217.9,
+   "d": 2.97,
+   "text": "Montreal and so I still do games but"
+  },
+  {
+   "t": 220.87,
+   "d": 1.5,
+   "text": "there are more of an experimental or"
+  },
+  {
+   "t": 222.37,
+   "d": 2.04,
+   "text": "research nature so for example I have a"
+  },
+  {
+   "t": 224.41,
+   "d": 2.91,
+   "text": "lab that's called the lab lab lab that"
+  },
+  {
+   "t": 227.32,
+   "d": 2.04,
+   "text": "deals with that inquires into"
+  },
+  {
+   "t": 229.36,
+   "d": 2.76,
+   "text": "interactive conversations with NPCs so"
+  },
+  {
+   "t": 232.12,
+   "d": 2.82,
+   "text": "we have a series of of natural language"
+  },
+  {
+   "t": 234.94,
+   "d": 3.0,
+   "text": "games for example this one is I like is"
+  },
+  {
+   "t": 237.94,
+   "d": 2.04,
+   "text": "you need to convince this guy through"
+  },
+  {
+   "t": 239.98,
+   "d": 1.41,
+   "text": "natural language to convert to your"
+  },
+  {
+   "t": 241.39,
+   "d": 1.38,
+   "text": "religion however you have to make up"
+  },
+  {
+   "t": 242.77,
+   "d": 1.56,
+   "text": "that religion as you go"
+  },
+  {
+   "t": 244.33,
+   "d": 2.16,
+   "text": "so kind of things I'm doing right now"
+  },
+  {
+   "t": 246.49,
+   "d": 3.3,
+   "text": "people maybe needs less presentation he"
+  },
+  {
+   "t": 249.79,
+   "d": 1.83,
+   "text": "did it the other way as me he started"
+  },
+  {
+   "t": 251.62,
+   "d": 2.91,
+   "text": "with a PhD and then proceeded to make"
+  },
+  {
+   "t": 254.53,
+   "d": 2.4,
+   "text": "some very interesting artistic"
+  },
+  {
+   "t": 256.93,
+   "d": 2.52,
+   "text": "conceptual games one of the first one"
+  },
+  {
+   "t": 259.45,
+   "d": 2.73,
+   "text": "was a an adaptation of Marina Abramovic"
+  },
+  {
+   "t": 262.18,
+   "d": 2.88,
+   "text": "his famous performance the artist is"
+  },
+  {
+   "t": 265.06,
+   "d": 1.11,
+   "text": "present"
+  },
+  {
+   "t": 266.17,
+   "d": 2.31,
+   "text": "in a more less adventure game kind of"
+  },
+  {
+   "t": 268.48,
+   "d": 2.94,
+   "text": "form and more recently he's doing"
+  },
+  {
+   "t": 271.42,
+   "d": 1.98,
+   "text": "speculative games amongst other things"
+  },
+  {
+   "t": 273.4,
+   "d": 1.44,
+   "text": "you should all check them out"
+  },
+  {
+   "t": 274.84,
+   "d": 2.88,
+   "text": "this was is a game for the future in"
+  },
+  {
+   "t": 277.72,
+   "d": 1.83,
+   "text": "which there is no more work to do in the"
+  },
+  {
+   "t": 279.55,
+   "d": 2.49,
+   "text": "post-war future however some humans"
+  },
+  {
+   "t": 282.04,
+   "d": 1.74,
+   "text": "might feel they don't have anything to"
+  },
+  {
+   "t": 283.78,
+   "d": 2.07,
+   "text": "do so this is an app to get you working"
+  },
+  {
+   "t": 285.85,
+   "d": 3.21,
+   "text": "all day and so you have tasks to do it's"
+  },
+  {
+   "t": 289.06,
+   "d": 1.89,
+   "text": "quite depressing well at the same time"
+  },
+  {
+   "t": 290.95,
+   "d": 2.82,
+   "text": "quite funny so anyways he's also game"
+  },
+  {
+   "t": 293.77,
+   "d": 1.62,
+   "text": "design professor at the same university"
+  },
+  {
+   "t": 295.39,
+   "d": 2.43,
+   "text": "Concordia University in Montreal and"
+  },
+  {
+   "t": 297.82,
+   "d": 2.37,
+   "text": "work colleagues and we decided to be"
+  },
+  {
+   "t": 300.19,
+   "d": 2.19,
+   "text": "nice to make games together and our"
+  },
+  {
+   "t": 302.38,
+   "d": 2.52,
+   "text": "first game was game studies two years"
+  },
+  {
+   "t": 304.9,
+   "d": 2.1,
+   "text": "ago since we're game professors we made"
+  },
+  {
+   "t": 307.0,
+   "d": 2.4,
+   "text": "a game about some major concepts of game"
+  },
+  {
+   "t": 309.4,
+   "d": 2.7,
+   "text": "studies and poked fun a bit on them this"
+  },
+  {
+   "t": 312.1,
+   "d": 2.34,
+   "text": "this tableau is about immersion and all"
+  },
+  {
+   "t": 314.44,
+   "d": 1.56,
+   "text": "that you find out how we portray"
+  },
+  {
+   "t": 316.0,
+   "d": 3.27,
+   "text": "immersion in that game so we were"
+  },
+  {
+   "t": 319.27,
+   "d": 3.18,
+   "text": "looking for another game to do and we"
+  },
+  {
+   "t": 322.45,
+   "d": 1.53,
+   "text": "had chess on our mind because we had"
+  },
+  {
+   "t": 323.98,
+   "d": 2.01,
+   "text": "been obsessively playing chess for for a"
+  },
+  {
+   "t": 325.99,
+   "d": 3.3,
+   "text": "summer and pippin bar beat me every"
+  },
+  {
+   "t": 329.29,
+   "d": 3.0,
+   "text": "single game I have to admit but and then"
+  },
+  {
+   "t": 332.29,
+   "d": 2.31,
+   "text": "we also have rogue in likes in our mind"
+  },
+  {
+   "t": 334.6,
+   "d": 1.29,
+   "text": "because we're looking at procedural"
+  },
+  {
+   "t": 335.89,
+   "d": 2.46,
+   "text": "generation maybe and and maybe narrative"
+  },
+  {
+   "t": 338.35,
+   "d": 1.83,
+   "text": "generation so at some point we stumble"
+  },
+  {
+   "t": 340.18,
+   "d": 1.73,
+   "text": "upon that idea"
+  },
+  {
+   "t": 341.91,
+   "d": 4.27,
+   "text": "Roach's so but there wasn't totally we"
+  },
+  {
+   "t": 346.18,
+   "d": 1.83,
+   "text": "found something like an amazing idea but"
+  },
+  {
+   "t": 348.01,
+   "d": 1.65,
+   "text": "we wanted to find another angle to it"
+  },
+  {
+   "t": 349.66,
+   "d": 1.77,
+   "text": "just so that there might be some kind of"
+  },
+  {
+   "t": 351.43,
+   "d": 7.61,
+   "text": "concept or research to it and so we"
+  },
+  {
+   "t": 359.04,
+   "d": 2.62,
+   "text": "we're also trying to corner a kind of a"
+  },
+  {
+   "t": 361.66,
+   "d": 1.53,
+   "text": "more rigorous methodology for the"
+  },
+  {
+   "t": 363.19,
+   "d": 2.13,
+   "text": "research creation approach which is you"
+  },
+  {
+   "t": 365.32,
+   "d": 1.53,
+   "text": "have a question about game design or"
+  },
+  {
+   "t": 366.85,
+   "d": 2.79,
+   "text": "some theory and you see how it goes by"
+  },
+  {
+   "t": 369.64,
+   "d": 2.61,
+   "text": "making an actual game of it but if you"
+  },
+  {
+   "t": 372.25,
+   "d": 1.41,
+   "text": "want to learn about design looking only"
+  },
+  {
+   "t": 373.66,
+   "d": 2.34,
+   "text": "at the end result is insufficient"
+  },
+  {
+   "t": 376.0,
+   "d": 1.47,
+   "text": "because the end result is only part of"
+  },
+  {
+   "t": 377.47,
+   "d": 3.0,
+   "text": "the story and all the steps that led you"
+  },
+  {
+   "t": 380.47,
+   "d": 2.04,
+   "text": "there is usually the actual story and"
+  },
+  {
+   "t": 382.51,
+   "d": 1.5,
+   "text": "were there where the knowledge was"
+  },
+  {
+   "t": 384.01,
+   "d": 1.92,
+   "text": "actually built so we came up with the"
+  },
+  {
+   "t": 385.93,
+   "d": 2.37,
+   "text": "MDMA model with our other colleague rila"
+  },
+  {
+   "t": 388.3,
+   "d": 2.13,
+   "text": "Khalid and we don't exactly know what it"
+  },
+  {
+   "t": 390.43,
+   "d": 2.07,
+   "text": "stands for but it's method for design"
+  },
+  {
+   "t": 392.5,
+   "d": 2.43,
+   "text": "materialization analysis or mapping"
+  },
+  {
+   "t": 394.93,
+   "d": 2.19,
+   "text": "design moves approach and with the whole"
+  },
+  {
+   "t": 397.12,
+   "d": 0.5,
+   "text": "point is"
+  },
+  {
+   "t": 397.62,
+   "d": 1.92,
+   "text": "see to document every single step as you"
+  },
+  {
+   "t": 399.54,
+   "d": 4.8,
+   "text": "go forward and for example and your your"
+  },
+  {
+   "t": 404.34,
+   "d": 2.19,
+   "text": "sponsor will be happy because choke is"
+  },
+  {
+   "t": 406.53,
+   "d": 2.88,
+   "text": "on github and you have for example our"
+  },
+  {
+   "t": 409.41,
+   "d": 1.65,
+   "text": "whole correspondence so all the emails"
+  },
+  {
+   "t": 411.06,
+   "d": 1.53,
+   "text": "we sent back and forth as we're"
+  },
+  {
+   "t": 412.59,
+   "d": 1.53,
+   "text": "discussing that game and developing it"
+  },
+  {
+   "t": 414.12,
+   "d": 2.52,
+   "text": "the design journal but also all the code"
+  },
+  {
+   "t": 416.64,
+   "d": 1.98,
+   "text": "obviously which is great because if you"
+  },
+  {
+   "t": 418.62,
+   "d": 1.68,
+   "text": "want to know why did we make that"
+  },
+  {
+   "t": 420.3,
+   "d": 1.65,
+   "text": "decision I can look at the design"
+  },
+  {
+   "t": 421.95,
+   "d": 1.74,
+   "text": "journal but I can of course also pull"
+  },
+  {
+   "t": 423.69,
+   "d": 1.92,
+   "text": "out how the prototype was looking like"
+  },
+  {
+   "t": 425.61,
+   "d": 1.89,
+   "text": "at that moment and sort of informed that"
+  },
+  {
+   "t": 427.5,
+   "d": 1.68,
+   "text": "decision at that specific moment"
+  },
+  {
+   "t": 429.18,
+   "d": 2.07,
+   "text": "I mean choke is an unimportant game but"
+  },
+  {
+   "t": 431.25,
+   "d": 1.59,
+   "text": "imagine if we had this four nethack"
+  },
+  {
+   "t": 432.84,
+   "d": 5.75,
+   "text": "apparently for example oops wrong window"
+  },
+  {
+   "t": 438.59,
+   "d": 2.14,
+   "text": "sorry for showing you an academic paper"
+  },
+  {
+   "t": 440.73,
+   "d": 2.67,
+   "text": "you can close your eyes if that makes"
+  },
+  {
+   "t": 443.4,
+   "d": 3.36,
+   "text": "you nauseous but I wanted to the what I"
+  },
+  {
+   "t": 446.76,
+   "d": 2.64,
+   "text": "like here is the the title because we"
+  },
+  {
+   "t": 449.4,
+   "d": 2.07,
+   "text": "see making a game especially with a"
+  },
+  {
+   "t": 451.47,
+   "d": 2.22,
+   "text": "research game as a trajectory in design"
+  },
+  {
+   "t": 453.69,
+   "d": 2.55,
+   "text": "space that you want a document and the"
+  },
+  {
+   "t": 456.24,
+   "d": 1.59,
+   "text": "problem with most games is that the"
+  },
+  {
+   "t": 457.83,
+   "d": 2.49,
+   "text": "design space is almost infinite at every"
+  },
+  {
+   "t": 460.32,
+   "d": 1.41,
+   "text": "given point there are so many options"
+  },
+  {
+   "t": 461.73,
+   "d": 1.83,
+   "text": "you can draw from that it's quite a"
+  },
+  {
+   "t": 463.56,
+   "d": 2.16,
+   "text": "messy space too if you want to map it"
+  },
+  {
+   "t": 465.72,
+   "d": 2.55,
+   "text": "out but with chalk we decided to a more"
+  },
+  {
+   "t": 468.27,
+   "d": 2.22,
+   "text": "constrained experiment it's not that"
+  },
+  {
+   "t": 470.49,
+   "d": 1.71,
+   "text": "we're gonna do a hybrid that pulls from"
+  },
+  {
+   "t": 472.2,
+   "d": 1.98,
+   "text": "this one and the other and freely we can"
+  },
+  {
+   "t": 474.18,
+   "d": 1.8,
+   "text": "do whatever we want we set ourselves"
+  },
+  {
+   "t": 475.98,
+   "d": 3.18,
+   "text": "that any design aspect of chalk had to"
+  },
+  {
+   "t": 479.16,
+   "d": 2.52,
+   "text": "come either from chess or from rogue and"
+  },
+  {
+   "t": 481.68,
+   "d": 2.49,
+   "text": "from nothing else outside of this so"
+  },
+  {
+   "t": 484.17,
+   "d": 1.53,
+   "text": "this is a design space that can actually"
+  },
+  {
+   "t": 485.7,
+   "d": 2.69,
+   "text": "be mapped out which is interesting so"
+  },
+  {
+   "t": 488.39,
+   "d": 3.67,
+   "text": "this is what we came up with what we can"
+  },
+  {
+   "t": 492.06,
+   "d": 1.68,
+   "text": "moral has since synthesize this at the"
+  },
+  {
+   "t": 493.74,
+   "d": 2.55,
+   "text": "end but these are the relevant items of"
+  },
+  {
+   "t": 496.29,
+   "d": 2.04,
+   "text": "design in that game and for each one of"
+  },
+  {
+   "t": 498.33,
+   "d": 1.62,
+   "text": "them we had to make a decision will we"
+  },
+  {
+   "t": 499.95,
+   "d": 1.89,
+   "text": "pull from chess or will we pull from"
+  },
+  {
+   "t": 501.84,
+   "d": 2.64,
+   "text": "rogue and also there are rooms for some"
+  },
+  {
+   "t": 504.48,
+   "d": 1.89,
+   "text": "kind of spectrum in between because as"
+  },
+  {
+   "t": 506.37,
+   "d": 3.66,
+   "text": "you'll see some decision decisions are"
+  },
+  {
+   "t": 510.03,
+   "d": 3.39,
+   "text": "quite difficult so the result is at"
+  },
+  {
+   "t": 513.42,
+   "d": 1.41,
+   "text": "least for us the game is surprisingly"
+  },
+  {
+   "t": 514.83,
+   "d": 1.65,
+   "text": "fun but mostly in ways that are very"
+  },
+  {
+   "t": 516.48,
+   "d": 2.43,
+   "text": "different from the models it's and it's"
+  },
+  {
+   "t": 518.91,
+   "d": 1.77,
+   "text": "also different from what we expected it"
+  },
+  {
+   "t": 520.68,
+   "d": 1.74,
+   "text": "to work like and also we find it's an"
+  },
+  {
+   "t": 522.42,
+   "d": 1.41,
+   "text": "interesting game design case study"
+  },
+  {
+   "t": 523.83,
+   "d": 1.83,
+   "text": "because it's like a miniature where you"
+  },
+  {
+   "t": 525.66,
+   "d": 1.8,
+   "text": "have big systems it's hard to find out"
+  },
+  {
+   "t": 527.46,
+   "d": 2.29,
+   "text": "what really contributes to what earnest"
+  },
+  {
+   "t": 529.75,
+   "d": 1.95,
+   "text": "but in this case every single thing is"
+  },
+  {
+   "t": 531.7,
+   "d": 2.91,
+   "text": "important and sort of shows the dynamic"
+  },
+  {
+   "t": 534.61,
+   "d": 1.68,
+   "text": "that worked in chess and how it worked"
+  },
+  {
+   "t": 536.29,
+   "d": 2.64,
+   "text": "in brogue and when you pull something"
+  },
+  {
+   "t": 538.93,
+   "d": 2.61,
+   "text": "out how everything crumbles and when you"
+  },
+  {
+   "t": 541.54,
+   "d": 2.43,
+   "text": "reassemble in some new way it works in"
+  },
+  {
+   "t": 543.97,
+   "d": 1.47,
+   "text": "very new dynamics anyways it's like a"
+  },
+  {
+   "t": 545.44,
+   "d": 2.19,
+   "text": "miniature interesting game studies which"
+  },
+  {
+   "t": 547.63,
+   "d": 1.53,
+   "text": "forced us to better understand both the"
+  },
+  {
+   "t": 549.16,
+   "d": 1.8,
+   "text": "design of chess in a frog as we're doing"
+  },
+  {
+   "t": 550.96,
+   "d": 2.13,
+   "text": "this so the rest of this talk is looking"
+  },
+  {
+   "t": 553.09,
+   "d": 2.61,
+   "text": "at little points of contention in the"
+  },
+  {
+   "t": 555.7,
+   "d": 3.03,
+   "text": "merging of those two things so our main"
+  },
+  {
+   "t": 558.73,
+   "d": 2.1,
+   "text": "premise was that we would take the chess"
+  },
+  {
+   "t": 560.83,
+   "d": 1.98,
+   "text": "units and bring him into the road world"
+  },
+  {
+   "t": 562.81,
+   "d": 2.43,
+   "text": "that was our point of departure but we"
+  },
+  {
+   "t": 565.24,
+   "d": 1.89,
+   "text": "could have we could have done the exact"
+  },
+  {
+   "t": 567.13,
+   "d": 1.65,
+   "text": "opposite for examples or there is a"
+  },
+  {
+   "t": 568.78,
+   "d": 2.4,
+   "text": "totally valid roguelike at the totally"
+  },
+  {
+   "t": 571.18,
+   "d": 2.64,
+   "text": "valid choke in which you play in a chess"
+  },
+  {
+   "t": 573.82,
+   "d": 2.94,
+   "text": "board but with the rope pieces there and"
+  },
+  {
+   "t": 576.76,
+   "d": 2.31,
+   "text": "who knows what would happen and we could"
+  },
+  {
+   "t": 579.07,
+   "d": 0.99,
+   "text": "have a discussion as to whether a"
+  },
+  {
+   "t": 580.06,
+   "d": 2.19,
+   "text": "Kestrel is a pawn or what would be the"
+  },
+  {
+   "t": 582.25,
+   "d": 3.54,
+   "text": "perfect match for that so we chose the"
+  },
+  {
+   "t": 585.79,
+   "d": 2.1,
+   "text": "rogue world which led us to some"
+  },
+  {
+   "t": 587.89,
+   "d": 2.7,
+   "text": "immediately some design problem because"
+  },
+  {
+   "t": 590.59,
+   "d": 3.66,
+   "text": "Rogue has one tile large corridors but"
+  },
+  {
+   "t": 594.25,
+   "d": 1.8,
+   "text": "how can have bishop navigate that"
+  },
+  {
+   "t": 596.05,
+   "d": 3.18,
+   "text": "corridor and how many nights as well so"
+  },
+  {
+   "t": 599.23,
+   "d": 1.47,
+   "text": "that that meant knights and bishops"
+  },
+  {
+   "t": 600.7,
+   "d": 1.74,
+   "text": "would just be stuck in the first room"
+  },
+  {
+   "t": 602.44,
+   "d": 1.74,
+   "text": "and as we're discussing we laughed a lot"
+  },
+  {
+   "t": 604.18,
+   "d": 2.28,
+   "text": "about that possibility but in the end"
+  },
+  {
+   "t": 606.46,
+   "d": 0.78,
+   "text": "that wouldn't make for a very"
+  },
+  {
+   "t": 607.24,
+   "d": 1.83,
+   "text": "interesting game if half your pieces"
+  },
+  {
+   "t": 609.07,
+   "d": 2.34,
+   "text": "will always be stuck there so we have to"
+  },
+  {
+   "t": 611.41,
+   "d": 3.08,
+   "text": "make this little compromise where the"
+  },
+  {
+   "t": 614.49,
+   "d": 2.65,
+   "text": "sorry the corridors are at least two"
+  },
+  {
+   "t": 617.14,
+   "d": 2.1,
+   "text": "they're always two cells wide so that"
+  },
+  {
+   "t": 619.24,
+   "d": 3.36,
+   "text": "your bishop can stupidly zigzag its way"
+  },
+  {
+   "t": 622.6,
+   "d": 2.16,
+   "text": "through it and when you go into the"
+  },
+  {
+   "t": 624.76,
+   "d": 1.74,
+   "text": "later levels and a bishop is all you"
+  },
+  {
+   "t": 626.5,
+   "d": 2.01,
+   "text": "have left that you actually have to do"
+  },
+  {
+   "t": 628.51,
+   "d": 5.16,
+   "text": "that also it's it was a bit hard to read"
+  },
+  {
+   "t": 633.67,
+   "d": 1.23,
+   "text": "when you were using the actual"
+  },
+  {
+   "t": 634.9,
+   "d": 2.7,
+   "text": "resolution the number of tiles so we"
+  },
+  {
+   "t": 637.6,
+   "d": 2.88,
+   "text": "also ended up diminishing the number of"
+  },
+  {
+   "t": 640.48,
+   "d": 2.04,
+   "text": "tiles once again a hybrid between the"
+  },
+  {
+   "t": 642.52,
+   "d": 1.59,
+   "text": "two models we could have used we're"
+  },
+  {
+   "t": 644.11,
+   "d": 1.23,
+   "text": "thinking of using a camera that you"
+  },
+  {
+   "t": 645.34,
+   "d": 1.47,
+   "text": "could translate but then we didn't have"
+  },
+  {
+   "t": 646.81,
+   "d": 1.71,
+   "text": "that precedent in neither of the model"
+  },
+  {
+   "t": 648.52,
+   "d": 4.05,
+   "text": "so we decided to leave it away as for"
+  },
+  {
+   "t": 652.57,
+   "d": 2.31,
+   "text": "unit moves as advertised we use the"
+  },
+  {
+   "t": 654.88,
+   "d": 1.32,
+   "text": "chess move patterns"
+  },
+  {
+   "t": 656.2,
+   "d": 1.71,
+   "text": "whereas rogue would have been just one"
+  },
+  {
+   "t": 657.91,
+   "d": 2.58,
+   "text": "tile per turn which led to an"
+  },
+  {
+   "t": 660.49,
+   "d": 1.55,
+   "text": "interesting problem that of"
+  },
+  {
+   "t": 662.04,
+   "d": 2.46,
+   "text": "night because the night can technically"
+  },
+  {
+   "t": 664.5,
+   "d": 3.78,
+   "text": "go over units in chess however can a"
+  },
+  {
+   "t": 668.28,
+   "d": 2.49,
+   "text": "chess go over a wall it can a night go"
+  },
+  {
+   "t": 670.77,
+   "d": 1.53,
+   "text": "over a wall it's kind of a metaphysical"
+  },
+  {
+   "t": 672.3,
+   "d": 2.34,
+   "text": "question because we either have to"
+  },
+  {
+   "t": 674.64,
+   "d": 3.99,
+   "text": "interpret that chess nights do they"
+  },
+  {
+   "t": 678.63,
+   "d": 2.25,
+   "text": "wiggle their way because they're agile"
+  },
+  {
+   "t": 680.88,
+   "d": 3.54,
+   "text": "between pawns or do they teleport in"
+  },
+  {
+   "t": 684.42,
+   "d": 2.79,
+   "text": "some way so we have these little gems of"
+  },
+  {
+   "t": 687.21,
+   "d": 2.46,
+   "text": "conversation for this is Pippin when you"
+  },
+  {
+   "t": 689.67,
+   "d": 2.22,
+   "text": "lift a piece from the board and place it"
+  },
+  {
+   "t": 691.89,
+   "d": 2.82,
+   "text": "in a new location how is that perceived"
+  },
+  {
+   "t": 694.71,
+   "d": 2.49,
+   "text": "by the other pieces so to speak do they"
+  },
+  {
+   "t": 697.2,
+   "d": 1.89,
+   "text": "live in a 2d world in which case lifting"
+  },
+  {
+   "t": 699.09,
+   "d": 1.32,
+   "text": "and placing the only piece is a form of"
+  },
+  {
+   "t": 700.41,
+   "d": 2.37,
+   "text": "teleportation so you have to solve these"
+  },
+  {
+   "t": 702.78,
+   "d": 3.51,
+   "text": "very hard problems in doing this but uh"
+  },
+  {
+   "t": 706.29,
+   "d": 1.83,
+   "text": "so it shows that the yes they do"
+  },
+  {
+   "t": 708.12,
+   "d": 2.16,
+   "text": "teleport which made sense with the way"
+  },
+  {
+   "t": 710.28,
+   "d": 2.61,
+   "text": "we had implemented the valid moves for"
+  },
+  {
+   "t": 712.89,
+   "d": 2.76,
+   "text": "chess pieces because we didn't exactly"
+  },
+  {
+   "t": 715.65,
+   "d": 1.44,
+   "text": "know how to approach that problem with"
+  },
+  {
+   "t": 717.09,
+   "d": 3.09,
+   "text": "an arbitrary randomly generated space so"
+  },
+  {
+   "t": 720.18,
+   "d": 1.92,
+   "text": "we thought were quite clever by since"
+  },
+  {
+   "t": 722.1,
+   "d": 2.1,
+   "text": "this was done in unity by attaching"
+  },
+  {
+   "t": 724.2,
+   "d": 3.3,
+   "text": "colliders for possible moves for all the"
+  },
+  {
+   "t": 727.5,
+   "d": 1.89,
+   "text": "different pieces and so as you can see"
+  },
+  {
+   "t": 729.39,
+   "d": 1.68,
+   "text": "the night there has these little"
+  },
+  {
+   "t": 731.07,
+   "d": 1.62,
+   "text": "floating colliders around which means"
+  },
+  {
+   "t": 732.69,
+   "d": 1.83,
+   "text": "that it will just disregard walls"
+  },
+  {
+   "t": 734.52,
+   "d": 1.68,
+   "text": "anyways so by the way I thought this was"
+  },
+  {
+   "t": 736.2,
+   "d": 2.52,
+   "text": "a pretty clever thing and as I did it I"
+  },
+  {
+   "t": 738.72,
+   "d": 1.41,
+   "text": "was happy because it was implemented"
+  },
+  {
+   "t": 740.13,
+   "d": 2.4,
+   "text": "very quickly but at some point I was"
+  },
+  {
+   "t": 742.53,
+   "d": 1.77,
+   "text": "wondering why the game was running at 2"
+  },
+  {
+   "t": 744.3,
+   "d": 5.85,
+   "text": "fps and this is why the Queens have huge"
+  },
+  {
+   "t": 750.15,
+   "d": 1.86,
+   "text": "colliders and there are many Queens up"
+  },
+  {
+   "t": 752.01,
+   "d": 2.19,
+   "text": "you can have up to 50 units and you have"
+  },
+  {
+   "t": 754.2,
+   "d": 1.47,
+   "text": "all these cells that all have their own"
+  },
+  {
+   "t": 755.67,
+   "d": 3.09,
+   "text": "colliders so yeah I didn't think that"
+  },
+  {
+   "t": 758.76,
+   "d": 0.63,
+   "text": "far ahead"
+  },
+  {
+   "t": 759.39,
+   "d": 2.37,
+   "text": "so there is that some optimization makes"
+  },
+  {
+   "t": 761.76,
+   "d": 4.08,
+   "text": "it work no combat so once again we use"
+  },
+  {
+   "t": 765.84,
+   "d": 2.58,
+   "text": "the chess so that's a big one well you"
+  },
+  {
+   "t": 768.42,
+   "d": 2.13,
+   "text": "use the chess pattern where you die on a"
+  },
+  {
+   "t": 770.55,
+   "d": 1.77,
+   "text": "single hit whereas rope would be you"
+  },
+  {
+   "t": 772.32,
+   "d": 2.52,
+   "text": "chip away at the HP until until it's"
+  },
+  {
+   "t": 774.84,
+   "d": 2.31,
+   "text": "dead and that's a pivotal point and"
+  },
+  {
+   "t": 777.15,
+   "d": 2.0,
+   "text": "we're actually working on a sequel"
+  },
+  {
+   "t": 779.15,
+   "d": 2.68,
+   "text": "cherry choke in which we just reverse"
+  },
+  {
+   "t": 781.83,
+   "d": 1.62,
+   "text": "those two things in which the unit's"
+  },
+  {
+   "t": 783.45,
+   "d": 2.1,
+   "text": "actually have HP and can chip away at"
+  },
+  {
+   "t": 785.55,
+   "d": 1.65,
+   "text": "each other and it changes everything"
+  },
+  {
+   "t": 787.2,
+   "d": 2.22,
+   "text": "and then turn-taking is also an"
+  },
+  {
+   "t": 789.42,
+   "d": 1.59,
+   "text": "interesting one because you would assume"
+  },
+  {
+   "t": 791.01,
+   "d": 1.95,
+   "text": "that both games are turn-based and so"
+  },
+  {
+   "t": 792.96,
+   "d": 2.58,
+   "text": "there's perfect perfect"
+  },
+  {
+   "t": 795.54,
+   "d": 1.98,
+   "text": "let's say compatibility between both but"
+  },
+  {
+   "t": 797.52,
+   "d": 1.56,
+   "text": "as you look at it in details there are"
+  },
+  {
+   "t": 799.08,
+   "d": 1.71,
+   "text": "actually many flavors of turn-based in"
+  },
+  {
+   "t": 800.79,
+   "d": 2.73,
+   "text": "chess yes you each one have a turn but"
+  },
+  {
+   "t": 803.52,
+   "d": 2.31,
+   "text": "not all units have a turn you choose"
+  },
+  {
+   "t": 805.83,
+   "d": 1.89,
+   "text": "which of the unit have a turn and then"
+  },
+  {
+   "t": 807.72,
+   "d": 2.85,
+   "text": "move it however in a rogue each player"
+  },
+  {
+   "t": 810.57,
+   "d": 2.67,
+   "text": "alternately plays all its pieces I mean"
+  },
+  {
+   "t": 813.24,
+   "d": 1.89,
+   "text": "for the player that's you don't really"
+  },
+  {
+   "t": 815.13,
+   "d": 1.23,
+   "text": "know this because you have just one"
+  },
+  {
+   "t": 816.36,
+   "d": 1.65,
+   "text": "piece but you do technically play all"
+  },
+  {
+   "t": 818.01,
+   "d": 2.58,
+   "text": "your pieces but but the enemies"
+  },
+  {
+   "t": 820.59,
+   "d": 1.89,
+   "text": "definitely they play all their pieces at"
+  },
+  {
+   "t": 822.48,
+   "d": 2.94,
+   "text": "once and we thought that was interesting"
+  },
+  {
+   "t": 825.42,
+   "d": 2.34,
+   "text": "that's the first version that we tried"
+  },
+  {
+   "t": 827.76,
+   "d": 2.01,
+   "text": "out and the interesting thing of having"
+  },
+  {
+   "t": 829.77,
+   "d": 1.83,
+   "text": "all this on source control is that I can"
+  },
+  {
+   "t": 831.6,
+   "d": 2.43,
+   "text": "look back at how this looked like at the"
+  },
+  {
+   "t": 834.03,
+   "d": 3.0,
+   "text": "time and yeah it's actually makes"
+  },
+  {
+   "t": 837.03,
+   "d": 1.64,
+   "text": "everything different if you imagine"
+  },
+  {
+   "t": 838.67,
+   "d": 4.21,
+   "text": "chess this way imagine first player can"
+  },
+  {
+   "t": 842.88,
+   "d": 2.01,
+   "text": "just move all its pieces and then second"
+  },
+  {
+   "t": 844.89,
+   "d": 2.28,
+   "text": "player moves all its pieces so once"
+  },
+  {
+   "t": 847.17,
+   "d": 2.76,
+   "text": "again changes everything whoops my my"
+  },
+  {
+   "t": 849.93,
+   "d": 1.95,
+   "text": "only unit is they're on a little island"
+  },
+  {
+   "t": 851.88,
+   "d": 1.92,
+   "text": "as you can see the the early generation"
+  },
+  {
+   "t": 853.8,
+   "d": 5.25,
+   "text": "was very different here so it's actually"
+  },
+  {
+   "t": 859.05,
+   "d": 3.12,
+   "text": "super scary to see all those black I had"
+  },
+  {
+   "t": 862.17,
+   "d": 2.55,
+   "text": "those black units move one by one and it"
+  },
+  {
+   "t": 864.72,
+   "d": 1.56,
+   "text": "changes your chest thinking really"
+  },
+  {
+   "t": 866.28,
+   "d": 2.04,
+   "text": "because you're trying to plan where they"
+  },
+  {
+   "t": 868.32,
+   "d": 2.96,
+   "text": "will be on the next turn so that's not a"
+  },
+  {
+   "t": 871.28,
+   "d": 2.92,
+   "text": "that's not an easy one it's also with"
+  },
+  {
+   "t": 874.2,
+   "d": 1.47,
+   "text": "then there was these little questions as"
+  },
+  {
+   "t": 875.67,
+   "d": 1.59,
+   "text": "if you have to move all your pieces and"
+  },
+  {
+   "t": 877.26,
+   "d": 2.4,
+   "text": "you move all of them across all the time"
+  },
+  {
+   "t": 879.66,
+   "d": 1.77,
+   "text": "wouldn't that be kind of tedious and"
+  },
+  {
+   "t": 881.43,
+   "d": 2.07,
+   "text": "what's the order do you have to cycle"
+  },
+  {
+   "t": 883.5,
+   "d": 1.59,
+   "text": "through all of them in which order do"
+  },
+  {
+   "t": 885.09,
+   "d": 1.41,
+   "text": "you arbitrarily choose and then we need"
+  },
+  {
+   "t": 886.5,
+   "d": 1.59,
+   "text": "to tell the player yes this one has"
+  },
+  {
+   "t": 888.09,
+   "d": 2.76,
+   "text": "already moved and all that so anyways it"
+  },
+  {
+   "t": 890.85,
+   "d": 2.01,
+   "text": "felt like it was it was a bit too"
+  },
+  {
+   "t": 892.86,
+   "d": 3.09,
+   "text": "complicated so we reverted back to just"
+  },
+  {
+   "t": 895.95,
+   "d": 2.25,
+   "text": "chess chess move you choose which one"
+  },
+  {
+   "t": 898.2,
+   "d": 3.06,
+   "text": "they choose which one and and that's how"
+  },
+  {
+   "t": 901.26,
+   "d": 2.94,
+   "text": "we move forward then there's the"
+  },
+  {
+   "t": 904.2,
+   "d": 4.53,
+   "text": "question of question of unit states in"
+  },
+  {
+   "t": 908.73,
+   "d": 2.25,
+   "text": "rogue that's a big thing you have HP you"
+  },
+  {
+   "t": 910.98,
+   "d": 1.23,
+   "text": "have armor you have weapons you have"
+  },
+  {
+   "t": 912.21,
+   "d": 1.59,
+   "text": "spells you have items and all that"
+  },
+  {
+   "t": 913.8,
+   "d": 2.52,
+   "text": "that's a lot of things to implement and"
+  },
+  {
+   "t": 916.32,
+   "d": 1.89,
+   "text": "so once again we kept with chess units"
+  },
+  {
+   "t": 918.21,
+   "d": 5.61,
+   "text": "where the only state changes pawns make"
+  },
+  {
+   "t": 923.82,
+   "d": 2.49,
+   "text": "a change to a queen and then that this"
+  },
+  {
+   "t": 926.31,
+   "d": 1.8,
+   "text": "led to another kind of metaphysical"
+  },
+  {
+   "t": 928.11,
+   "d": 0.72,
+   "text": "question"
+  },
+  {
+   "t": 928.83,
+   "d": 2.16,
+   "text": "which since there is no walls in chess"
+  },
+  {
+   "t": 930.99,
+   "d": 1.98,
+   "text": "what's the spirit of that role is it"
+  },
+  {
+   "t": 932.97,
+   "d": 2.55,
+   "text": "that pawns are rewarded for crossing the"
+  },
+  {
+   "t": 935.52,
+   "d": 2.22,
+   "text": "whole board or is it that the one's the"
+  },
+  {
+   "t": 937.74,
+   "d": 2.88,
+   "text": "meat of wall they can change but if we"
+  },
+  {
+   "t": 940.62,
+   "d": 1.83,
+   "text": "go with the first interpretation what's"
+  },
+  {
+   "t": 942.45,
+   "d": 3.48,
+   "text": "the end of the board in rogue is that"
+  },
+  {
+   "t": 945.93,
+   "d": 2.79,
+   "text": "the top of the screen but considering"
+  },
+  {
+   "t": 948.72,
+   "d": 1.65,
+   "text": "the generation sometimes you never reach"
+  },
+  {
+   "t": 950.37,
+   "d": 2.61,
+   "text": "the top of the screen so anyways we just"
+  },
+  {
+   "t": 952.98,
+   "d": 2.25,
+   "text": "left it with walls and that allows you"
+  },
+  {
+   "t": 955.23,
+   "d": 1.5,
+   "text": "to essentially convert all your pawns"
+  },
+  {
+   "t": 956.73,
+   "d": 1.98,
+   "text": "immediately and that's fine because"
+  },
+  {
+   "t": 958.71,
+   "d": 2.01,
+   "text": "you're really happy with Queens in that"
+  },
+  {
+   "t": 960.72,
+   "d": 1.5,
+   "text": "world because they move much faster"
+  },
+  {
+   "t": 962.22,
+   "d": 1.77,
+   "text": "obviously pawns are kind of stupid"
+  },
+  {
+   "t": 963.99,
+   "d": 3.63,
+   "text": "for any turning we can just go forward"
+  },
+  {
+   "t": 967.62,
+   "d": 4.35,
+   "text": "right another huge one is visibility so"
+  },
+  {
+   "t": 971.97,
+   "d": 2.19,
+   "text": "chess is the hallmark of chess is that"
+  },
+  {
+   "t": 974.16,
+   "d": 4.11,
+   "text": "it's a full information game okay is"
+  },
+  {
+   "t": 978.27,
+   "d": 1.74,
+   "text": "that full information game was wrong of"
+  },
+  {
+   "t": 980.01,
+   "d": 1.77,
+   "text": "course makes sense because there's a fog"
+  },
+  {
+   "t": 981.78,
+   "d": 1.89,
+   "text": "of war and you explore things that"
+  },
+  {
+   "t": 983.67,
+   "d": 1.89,
+   "text": "you've never explored so to us that was"
+  },
+  {
+   "t": 985.56,
+   "d": 1.83,
+   "text": "the the meaningful thing to do"
+  },
+  {
+   "t": 987.39,
+   "d": 2.46,
+   "text": "but the more I implemented those rules"
+  },
+  {
+   "t": 989.85,
+   "d": 2.16,
+   "text": "it immediately occurred to me that the"
+  },
+  {
+   "t": 992.01,
+   "d": 1.83,
+   "text": "combination of all our design decisions"
+  },
+  {
+   "t": 993.84,
+   "d": 2.55,
+   "text": "before that sort of congealed over that"
+  },
+  {
+   "t": 996.39,
+   "d": 2.82,
+   "text": "thing and when you have the wrong world"
+  },
+  {
+   "t": 999.21,
+   "d": 2.28,
+   "text": "with chess moves and chess attacks where"
+  },
+  {
+   "t": 1001.49,
+   "d": 2.04,
+   "text": "you can get wiped out in just one hit"
+  },
+  {
+   "t": 1003.53,
+   "d": 2.34,
+   "text": "and rogue visit with the ability you"
+  },
+  {
+   "t": 1005.87,
+   "d": 1.8,
+   "text": "essentially turn chess into a survival"
+  },
+  {
+   "t": 1007.67,
+   "d": 3.24,
+   "text": "horror when this is my email the moment"
+  },
+  {
+   "t": 1010.91,
+   "d": 1.98,
+   "text": "I implemented this is you'll notice that"
+  },
+  {
+   "t": 1012.89,
+   "d": 1.56,
+   "text": "the pieces still play while in the dark"
+  },
+  {
+   "t": 1014.45,
+   "d": 1.29,
+   "text": "there's something to it"
+  },
+  {
+   "t": 1015.74,
+   "d": 1.77,
+   "text": "it feels horrible to venture in the dark"
+  },
+  {
+   "t": 1017.51,
+   "d": 1.86,
+   "text": "and then see your queen edinburg who's"
+  },
+  {
+   "t": 1019.37,
+   "d": 2.43,
+   "text": "just lurking there in the shadows and"
+  },
+  {
+   "t": 1021.8,
+   "d": 2.22,
+   "text": "that really changed the outlook of rogue"
+  },
+  {
+   "t": 1024.02,
+   "d": 3.66,
+   "text": "of choke but at first I had implemented"
+  },
+  {
+   "t": 1027.68,
+   "d": 2.76,
+   "text": "the exact rules of rogue which means"
+  },
+  {
+   "t": 1030.44,
+   "d": 2.76,
+   "text": "that when once you've come out of the"
+  },
+  {
+   "t": 1033.2,
+   "d": 1.59,
+   "text": "room you still see the outlines of the"
+  },
+  {
+   "t": 1034.79,
+   "d": 1.56,
+   "text": "room but you don't see the units in"
+  },
+  {
+   "t": 1036.35,
+   "d": 3.08,
+   "text": "there which led to some very hardcore"
+  },
+  {
+   "t": 1039.43,
+   "d": 3.28,
+   "text": "patterns so this is people responding so"
+  },
+  {
+   "t": 1042.71,
+   "d": 2.73,
+   "text": "it really does feel too unfair the joke"
+  },
+  {
+   "t": 1045.44,
+   "d": 1.44,
+   "text": "of being captured out of the dark is"
+  },
+  {
+   "t": 1046.88,
+   "d": 2.01,
+   "text": "funny but there's something not good"
+  },
+  {
+   "t": 1048.89,
+   "d": 1.83,
+   "text": "about repeatedly getting into a new room"
+  },
+  {
+   "t": 1050.72,
+   "d": 2.61,
+   "text": "then instantly being captured leaving it"
+  },
+  {
+   "t": 1053.33,
+   "d": 2.22,
+   "text": "dark again so you don't if a queen was"
+  },
+  {
+   "t": 1055.55,
+   "d": 1.95,
+   "text": "in there you don't see it anymore you"
+  },
+  {
+   "t": 1057.5,
+   "d": 1.17,
+   "text": "just know that it's in there and it"
+  },
+  {
+   "t": 1058.67,
+   "d": 2.81,
+   "text": "might be moving leaving it dark again"
+  },
+  {
+   "t": 1061.48,
+   "d": 2.25,
+   "text": "you go into it again get captured again"
+  },
+  {
+   "t": 1063.73,
+   "d": 1.77,
+   "text": "so there was these moments where you"
+  },
+  {
+   "t": 1065.5,
+   "d": 2.43,
+   "text": "could just drain your whole party trying"
+  },
+  {
+   "t": 1067.93,
+   "d": 2.61,
+   "text": "to cross one room with a roaming Queen"
+  },
+  {
+   "t": 1070.54,
+   "d": 2.97,
+   "text": "in there so we ended up you know there"
+  },
+  {
+   "t": 1073.51,
+   "d": 1.59,
+   "text": "was some fun well at least I'm surprised"
+  },
+  {
+   "t": 1075.1,
+   "d": 1.26,
+   "text": "to it but we ended up doing some"
+  },
+  {
+   "t": 1076.36,
+   "d": 2.55,
+   "text": "compromise where once you've opened the"
+  },
+  {
+   "t": 1078.91,
+   "d": 1.71,
+   "text": "room visible made a room visible it"
+  },
+  {
+   "t": 1080.62,
+   "d": 2.55,
+   "text": "remains visible chests like so once"
+  },
+  {
+   "t": 1083.17,
+   "d": 4.23,
+   "text": "again there is some compromise there and"
+  },
+  {
+   "t": 1087.4,
+   "d": 2.19,
+   "text": "that's become like a hallmark of choke"
+  },
+  {
+   "t": 1089.59,
+   "d": 2.07,
+   "text": "now at that moment the capture in the"
+  },
+  {
+   "t": 1091.66,
+   "d": 2.58,
+   "text": "dark thing world progression so chest as"
+  },
+  {
+   "t": 1094.24,
+   "d": 1.68,
+   "text": "a single world nothing to be said there"
+  },
+  {
+   "t": 1095.92,
+   "d": 1.56,
+   "text": "and roguettes excessive level so"
+  },
+  {
+   "t": 1097.48,
+   "d": 2.28,
+   "text": "definitely there was our or our target"
+  },
+  {
+   "t": 1099.76,
+   "d": 2.79,
+   "text": "however and game designers out there you"
+  },
+  {
+   "t": 1102.55,
+   "d": 1.59,
+   "text": "know how this happens that you make a"
+  },
+  {
+   "t": 1104.14,
+   "d": 2.37,
+   "text": "seemingly obvious decision and the slew"
+  },
+  {
+   "t": 1106.51,
+   "d": 3.0,
+   "text": "of my mini problems come out of this so"
+  },
+  {
+   "t": 1109.51,
+   "d": 2.16,
+   "text": "for example then what do we choose does"
+  },
+  {
+   "t": 1111.67,
+   "d": 2.79,
+   "text": "a single as it okay that a single I unit"
+  },
+  {
+   "t": 1114.46,
+   "d": 1.95,
+   "text": "goes there and then you move forward or"
+  },
+  {
+   "t": 1116.41,
+   "d": 1.98,
+   "text": "do you need to bring all your units to"
+  },
+  {
+   "t": 1118.39,
+   "d": 2.13,
+   "text": "the stairs and if this is the case what"
+  },
+  {
+   "t": 1120.52,
+   "d": 1.95,
+   "text": "about the stupid bishops because it's"
+  },
+  {
+   "t": 1122.47,
+   "d": 2.16,
+   "text": "likely that some of them won't ever go"
+  },
+  {
+   "t": 1124.63,
+   "d": 1.35,
+   "text": "to the stairs because they're not on the"
+  },
+  {
+   "t": 1125.98,
+   "d": 3.12,
+   "text": "right color and then what what then you"
+  },
+  {
+   "t": 1129.1,
+   "d": 1.5,
+   "text": "still move on so then we need to know"
+  },
+  {
+   "t": 1130.6,
+   "d": 1.86,
+   "text": "whether some bishops are still there but"
+  },
+  {
+   "t": 1132.46,
+   "d": 2.43,
+   "text": "won't ever be able to go there so we"
+  },
+  {
+   "t": 1134.89,
+   "d": 1.98,
+   "text": "decided to just go get one there also"
+  },
+  {
+   "t": 1136.87,
+   "d": 1.77,
+   "text": "because of the tedium of moving all the"
+  },
+  {
+   "t": 1138.64,
+   "d": 3.0,
+   "text": "pieces but then how do they come out do"
+  },
+  {
+   "t": 1141.64,
+   "d": 2.34,
+   "text": "they come out one by one and then you"
+  },
+  {
+   "t": 1143.98,
+   "d": 1.53,
+   "text": "have to move them and make space for the"
+  },
+  {
+   "t": 1145.51,
+   "d": 2.07,
+   "text": "other one and move them or two they all"
+  },
+  {
+   "t": 1147.58,
+   "d": 2.28,
+   "text": "pop out all at once but then where do"
+  },
+  {
+   "t": 1149.86,
+   "d": 1.77,
+   "text": "you put them will there be enough space"
+  },
+  {
+   "t": 1151.63,
+   "d": 3.39,
+   "text": "for them anyways that's the the the"
+  },
+  {
+   "t": 1155.02,
+   "d": 3.0,
+   "text": "daily job of game design and once again"
+  },
+  {
+   "t": 1158.02,
+   "d": 1.92,
+   "text": "these as we move forward we discover"
+  },
+  {
+   "t": 1159.94,
+   "d": 1.95,
+   "text": "these new features of how these"
+  },
+  {
+   "t": 1161.89,
+   "d": 1.08,
+   "text": "mechanics work together"
+  },
+  {
+   "t": 1162.97,
+   "d": 1.98,
+   "text": "for example we discovered the Cowardly"
+  },
+  {
+   "t": 1164.95,
+   "d": 2.91,
+   "text": "King dynamic whereas since we had a"
+  },
+  {
+   "t": 1167.86,
+   "d": 1.68,
+   "text": "chess victory you need to capture the"
+  },
+  {
+   "t": 1169.54,
+   "d": 2.25,
+   "text": "black King but a rogue world progression"
+  },
+  {
+   "t": 1171.79,
+   "d": 1.86,
+   "text": "where there are multiple levels I"
+  },
+  {
+   "t": 1173.65,
+   "d": 1.98,
+   "text": "discovered at some point that the kitten"
+  },
+  {
+   "t": 1175.63,
+   "d": 2.91,
+   "text": "would flee so the King this is me"
+  },
+  {
+   "t": 1178.54,
+   "d": 1.44,
+   "text": "writing the King now wants to avoid"
+  },
+  {
+   "t": 1179.98,
+   "d": 2.07,
+   "text": "being eaten at all cost and I had a"
+  },
+  {
+   "t": 1182.05,
+   "d": 1.23,
+   "text": "great moment where I was trying to"
+  },
+  {
+   "t": 1183.28,
+   "d": 3.12,
+   "text": "corner him and he fled by the stairs so"
+  },
+  {
+   "t": 1186.4,
+   "d": 1.98,
+   "text": "this is both hilarious and super"
+  },
+  {
+   "t": 1188.38,
+   "d": 2.58,
+   "text": "frustrating because the King appears in"
+  },
+  {
+   "t": 1190.96,
+   "d": 1.77,
+   "text": "a very late level so you've really"
+  },
+  {
+   "t": 1192.73,
+   "d": 1.47,
+   "text": "worked hard to get there so"
+  },
+  {
+   "t": 1194.2,
+   "d": 2.4,
+   "text": "finally see him and you try to corner"
+  },
+  {
+   "t": 1196.6,
+   "d": 2.58,
+   "text": "him but boom he flees by the stairs and"
+  },
+  {
+   "t": 1199.18,
+   "d": 1.98,
+   "text": "you got to do yet another level to find"
+  },
+  {
+   "t": 1201.16,
+   "d": 5.25,
+   "text": "him all right so the Cowardly King is"
+  },
+  {
+   "t": 1206.41,
+   "d": 1.86,
+   "text": "with a surprise and then there's the"
+  },
+  {
+   "t": 1208.27,
+   "d": 2.43,
+   "text": "problem of general progression so as the"
+  },
+  {
+   "t": 1210.7,
+   "d": 2.46,
+   "text": "game piece put together we can look at"
+  },
+  {
+   "t": 1213.16,
+   "d": 2.34,
+   "text": "how it works on the long-term and on"
+  },
+  {
+   "t": 1215.5,
+   "d": 2.43,
+   "text": "chess the long-term is entropy on both"
+  },
+  {
+   "t": 1217.93,
+   "d": 0.54,
+   "text": "sides"
+  },
+  {
+   "t": 1218.47,
+   "d": 1.92,
+   "text": "everybody lose pieces and at some point"
+  },
+  {
+   "t": 1220.39,
+   "d": 2.19,
+   "text": "there is resolution and in rock there's"
+  },
+  {
+   "t": 1222.58,
+   "d": 2.01,
+   "text": "growth on both sides your character gets"
+  },
+  {
+   "t": 1224.59,
+   "d": 2.28,
+   "text": "stronger the enemies get stronger and"
+  },
+  {
+   "t": 1226.87,
+   "d": 1.8,
+   "text": "also there is some kind of resolution at"
+  },
+  {
+   "t": 1228.67,
+   "d": 1.83,
+   "text": "some point but at this point in choke"
+  },
+  {
+   "t": 1230.5,
+   "d": 2.52,
+   "text": "you had this asymmetry where for the"
+  },
+  {
+   "t": 1233.02,
+   "d": 0.45,
+   "text": "player"
+  },
+  {
+   "t": 1233.47,
+   "d": 2.46,
+   "text": "it was entropy you just lose pieces and"
+  },
+  {
+   "t": 1235.93,
+   "d": 2.43,
+   "text": "for the enemies they just get more"
+  },
+  {
+   "t": 1238.36,
+   "d": 2.67,
+   "text": "numerous and obviously that's a dead end"
+  },
+  {
+   "t": 1241.03,
+   "d": 2.64,
+   "text": "it'll just sure death awaits at some"
+  },
+  {
+   "t": 1243.67,
+   "d": 1.86,
+   "text": "point so we thought it would be good to"
+  },
+  {
+   "t": 1245.53,
+   "d": 3.54,
+   "text": "maybe bring some point some possibility"
+  },
+  {
+   "t": 1249.07,
+   "d": 2.34,
+   "text": "to replenish just like in a rogue and so"
+  },
+  {
+   "t": 1251.41,
+   "d": 2.52,
+   "text": "we're thinking okay so there's no HP for"
+  },
+  {
+   "t": 1253.93,
+   "d": 2.13,
+   "text": "our unit so what does it mean to may be"
+  },
+  {
+   "t": 1256.06,
+   "d": 2.55,
+   "text": "replenish your HP and so we brought back"
+  },
+  {
+   "t": 1258.61,
+   "d": 2.34,
+   "text": "the notion of items from rogue but in"
+  },
+  {
+   "t": 1260.95,
+   "d": 2.04,
+   "text": "this case you don't replenish HP but you"
+  },
+  {
+   "t": 1262.99,
+   "d": 2.25,
+   "text": "get new party members and so the"
+  },
+  {
+   "t": 1265.24,
+   "d": 2.31,
+   "text": "metaphor is that party members are the"
+  },
+  {
+   "t": 1267.55,
+   "d": 2.46,
+   "text": "equivalent of HP in rogue and the more"
+  },
+  {
+   "t": 1270.01,
+   "d": 1.56,
+   "text": "you have the more you can move forward"
+  },
+  {
+   "t": 1271.57,
+   "d": 2.04,
+   "text": "however that led to the problem there in"
+  },
+  {
+   "t": 1273.61,
+   "d": 1.56,
+   "text": "the starting room you might have too"
+  },
+  {
+   "t": 1275.17,
+   "d": 3.18,
+   "text": "many people so we capped at 16 which"
+  },
+  {
+   "t": 1278.35,
+   "d": 2.25,
+   "text": "made sense which was our max minimum"
+  },
+  {
+   "t": 1280.6,
+   "d": 2.07,
+   "text": "size room and that made sense with the"
+  },
+  {
+   "t": 1282.67,
+   "d": 2.73,
+   "text": "way with the chess rules of having 16"
+  },
+  {
+   "t": 1285.4,
+   "d": 3.39,
+   "text": "pieces alright so then there's the"
+  },
+  {
+   "t": 1288.79,
+   "d": 2.37,
+   "text": "victory condition in chess it's"
+  },
+  {
+   "t": 1291.16,
+   "d": 3.57,
+   "text": "checkmate in row and choke there is sort"
+  },
+  {
+   "t": 1294.73,
+   "d": 1.71,
+   "text": "of that spirit you need to capture the"
+  },
+  {
+   "t": 1296.44,
+   "d": 1.38,
+   "text": "black King although it's not technically"
+  },
+  {
+   "t": 1297.82,
+   "d": 2.19,
+   "text": "checkmated to capture in chess we never"
+  },
+  {
+   "t": 1300.01,
+   "d": 2.34,
+   "text": "actually capture you just checkmate and"
+  },
+  {
+   "t": 1302.35,
+   "d": 3.0,
+   "text": "in rogue if we were uneducated I guess"
+  },
+  {
+   "t": 1305.35,
+   "d": 0.96,
+   "text": "even though I played it have been"
+  },
+  {
+   "t": 1306.31,
+   "d": 4.2,
+   "text": "playing rogue for since the 80s I always"
+  },
+  {
+   "t": 1310.51,
+   "d": 2.67,
+   "text": "assumed it was infinite levels so we"
+  },
+  {
+   "t": 1313.18,
+   "d": 1.98,
+   "text": "thought that was what we were bouncing"
+  },
+  {
+   "t": 1315.16,
+   "d": 2.58,
+   "text": "off against and so but we had decided to"
+  },
+  {
+   "t": 1317.74,
+   "d": 1.5,
+   "text": "put the black King at some point and you"
+  },
+  {
+   "t": 1319.24,
+   "d": 1.83,
+   "text": "could capture him and that was the end"
+  },
+  {
+   "t": 1321.07,
+   "d": 2.01,
+   "text": "however some of our testers resisted"
+  },
+  {
+   "t": 1323.08,
+   "d": 2.28,
+   "text": "that because they do when you're playing"
+  },
+  {
+   "t": 1325.36,
+   "d": 1.56,
+   "text": "something that looks like a rogue lie"
+  },
+  {
+   "t": 1326.92,
+   "d": 1.98,
+   "text": "if you're doing a good run you don't"
+  },
+  {
+   "t": 1328.9,
+   "d": 2.07,
+   "text": "want to stop there and so they were"
+  },
+  {
+   "t": 1330.97,
+   "d": 1.44,
+   "text": "frustrated by the fact that there would"
+  },
+  {
+   "t": 1332.41,
+   "d": 2.31,
+   "text": "be an end at some point well they still"
+  },
+  {
+   "t": 1334.72,
+   "d": 3.47,
+   "text": "felt it could go some more levels so we"
+  },
+  {
+   "t": 1338.19,
+   "d": 3.94,
+   "text": "tested this in-between place where you"
+  },
+  {
+   "t": 1342.13,
+   "d": 1.95,
+   "text": "would win but you could continue"
+  },
+  {
+   "t": 1344.08,
+   "d": 1.83,
+   "text": "exploring if the player would decide"
+  },
+  {
+   "t": 1345.91,
+   "d": 2.4,
+   "text": "that they were more roguelike in their"
+  },
+  {
+   "t": 1348.31,
+   "d": 3.27,
+   "text": "intentions and we're about to release"
+  },
+  {
+   "t": 1351.58,
+   "d": 3.66,
+   "text": "actually wear when Pippin came to the"
+  },
+  {
+   "t": 1355.24,
+   "d": 2.54,
+   "text": "meeting saying Jonathan you know what"
+  },
+  {
+   "t": 1357.78,
+   "d": 3.94,
+   "text": "Rogue has an ending and you all maybe"
+  },
+  {
+   "t": 1361.72,
+   "d": 1.77,
+   "text": "know this but to us it was like all"
+  },
+  {
+   "t": 1363.49,
+   "d": 0.93,
+   "text": "right really"
+  },
+  {
+   "t": 1364.42,
+   "d": 2.46,
+   "text": "and for those maybe a handful who don't"
+  },
+  {
+   "t": 1366.88,
+   "d": 3.48,
+   "text": "know the ending of Rogue is at level 26"
+  },
+  {
+   "t": 1370.36,
+   "d": 3.09,
+   "text": "the amulet of Y Endor spawned and if you"
+  },
+  {
+   "t": 1373.45,
+   "d": 1.59,
+   "text": "take it then you can start backtracking"
+  },
+  {
+   "t": 1375.04,
+   "d": 2.39,
+   "text": "to level 0 where you get this really"
+  },
+  {
+   "t": 1377.43,
+   "d": 4.03,
+   "text": "underwhelming victory where because it"
+  },
+  {
+   "t": 1381.46,
+   "d": 1.47,
+   "text": "will take years and years and years to"
+  },
+  {
+   "t": 1382.93,
+   "d": 2.67,
+   "text": "do this and apparently your whole point"
+  },
+  {
+   "t": 1385.6,
+   "d": 3.06,
+   "text": "was to sell your loot at great profit so"
+  },
+  {
+   "t": 1388.66,
+   "d": 3.09,
+   "text": "that's it so we had it all solved for us"
+  },
+  {
+   "t": 1391.75,
+   "d": 2.28,
+   "text": "now because the point would be to go out"
+  },
+  {
+   "t": 1394.03,
+   "d": 1.98,
+   "text": "and capture the king which immediately"
+  },
+  {
+   "t": 1396.01,
+   "d": 2.25,
+   "text": "became the king of Yin door of to our"
+  },
+  {
+   "t": 1398.26,
+   "d": 2.64,
+   "text": "drink merriment and once you captured"
+  },
+  {
+   "t": 1400.9,
+   "d": 1.56,
+   "text": "him you will have to go back to the"
+  },
+  {
+   "t": 1402.46,
+   "d": 2.19,
+   "text": "surface so adding many many other levels"
+  },
+  {
+   "t": 1404.65,
+   "d": 2.67,
+   "text": "to to the game and you would surface"
+  },
+  {
+   "t": 1407.32,
+   "d": 2.13,
+   "text": "back to the original level with whatever"
+  },
+  {
+   "t": 1409.45,
+   "d": 2.94,
+   "text": "kind of party that was left with you and"
+  },
+  {
+   "t": 1412.39,
+   "d": 4.17,
+   "text": "you would have the the flavor text"
+  },
+  {
+   "t": 1416.56,
+   "d": 1.95,
+   "text": "that's the exact same one as a rogue"
+  },
+  {
+   "t": 1418.51,
+   "d": 2.61,
+   "text": "you've captured the king of Yin door you"
+  },
+  {
+   "t": 1421.12,
+   "d": 1.38,
+   "text": "journey home and sell all your old at a"
+  },
+  {
+   "t": 1422.5,
+   "d": 1.89,
+   "text": "great profit and are admitted to the"
+  },
+  {
+   "t": 1424.39,
+   "d": 1.47,
+   "text": "Grand Master's gaol so this is a"
+  },
+  {
+   "t": 1425.86,
+   "d": 1.59,
+   "text": "screenshot of the only player we know"
+  },
+  {
+   "t": 1427.45,
+   "d": 2.34,
+   "text": "that has actually finished the game so"
+  },
+  {
+   "t": 1429.79,
+   "d": 1.68,
+   "text": "if you will go out and do finish it"
+  },
+  {
+   "t": 1431.47,
+   "d": 1.95,
+   "text": "please please tell us where we'd be"
+  },
+  {
+   "t": 1433.42,
+   "d": 2.01,
+   "text": "curious the only one other that I know"
+  },
+  {
+   "t": 1435.43,
+   "d": 3.12,
+   "text": "is Pippin I never made it but that makes"
+  },
+  {
+   "t": 1438.55,
+   "d": 1.32,
+   "text": "sense because he's the better chess"
+  },
+  {
+   "t": 1439.87,
+   "d": 3.39,
+   "text": "player obviously so many ways this is we"
+  },
+  {
+   "t": 1443.26,
+   "d": 2.34,
+   "text": "had our ending cornered we're happy this"
+  },
+  {
+   "t": 1445.6,
+   "d": 3.47,
+   "text": "is choked so we have our little"
+  },
+  {
+   "t": 1449.07,
+   "d": 3.82,
+   "text": "trajectory or a little design matrix and"
+  },
+  {
+   "t": 1452.89,
+   "d": 1.74,
+   "text": "we've checked the boxes and this is one"
+  },
+  {
+   "t": 1454.63,
+   "d": 2.19,
+   "text": "of the possible chokes the one it's now"
+  },
+  {
+   "t": 1456.82,
+   "d": 1.68,
+   "text": "called classic choke and we're happy"
+  },
+  {
+   "t": 1458.5,
+   "d": 0.83,
+   "text": "with it"
+  },
+  {
+   "t": 1459.33,
+   "d": 2.55,
+   "text": "but there are other possible jokes so it"
+  },
+  {
+   "t": 1461.88,
+   "d": 3.3,
+   "text": "sort of hints at us they're begging to"
+  },
+  {
+   "t": 1465.18,
+   "d": 2.61,
+   "text": "be born you know and so we're working"
+  },
+  {
+   "t": 1467.79,
+   "d": 4.23,
+   "text": "now on cherry choke which is much 'roger"
+  },
+  {
+   "t": 1472.02,
+   "d": 2.46,
+   "text": "where that's what I was hinting at a bit"
+  },
+  {
+   "t": 1474.48,
+   "d": 1.83,
+   "text": "earlier on so we might at some point"
+  },
+  {
+   "t": 1476.31,
+   "d": 3.57,
+   "text": "release that one so cherry Cho we just"
+  },
+  {
+   "t": 1479.88,
+   "d": 2.55,
+   "text": "switch out some of the little boxes and"
+  },
+  {
+   "t": 1482.43,
+   "d": 2.22,
+   "text": "and and it changes things quite"
+  },
+  {
+   "t": 1484.65,
+   "d": 2.28,
+   "text": "dramatically so I can maybe show a"
+  },
+  {
+   "t": 1486.93,
+   "d": 3.12,
+   "text": "little example of an earlier build so"
+  },
+  {
+   "t": 1490.05,
+   "d": 3.48,
+   "text": "for example here I'm I have I can try in"
+  },
+  {
+   "t": 1493.53,
+   "d": 2.94,
+   "text": "this case the units have hit points that"
+  },
+  {
+   "t": 1496.47,
+   "d": 2.22,
+   "text": "are equivalent to their value in chess"
+  },
+  {
+   "t": 1498.69,
+   "d": 4.35,
+   "text": "for example a a rook has five points if"
+  },
+  {
+   "t": 1503.04,
+   "d": 3.42,
+   "text": "I try to eat this pawn okay so and it's"
+  },
+  {
+   "t": 1506.46,
+   "d": 2.13,
+   "text": "an opportunity for me to show or our"
+  },
+  {
+   "t": 1508.59,
+   "d": 2.34,
+   "text": "superb chess notations or choke"
+  },
+  {
+   "t": 1510.93,
+   "d": 3.24,
+   "text": "notations we had to make up to extend"
+  },
+  {
+   "t": 1514.17,
+   "d": 2.22,
+   "text": "the algebraic notation so that it could"
+  },
+  {
+   "t": 1516.39,
+   "d": 1.53,
+   "text": "reflect everything that can happen in"
+  },
+  {
+   "t": 1517.92,
+   "d": 4.59,
+   "text": "choke and also and we merged it with the"
+  },
+  {
+   "t": 1522.51,
+   "d": 3.0,
+   "text": "messages that are generated in Rogue so"
+  },
+  {
+   "t": 1525.51,
+   "d": 1.26,
+   "text": "we have both of them at the same time"
+  },
+  {
+   "t": 1526.77,
+   "d": 2.82,
+   "text": "and in this case I'll try to eat that"
+  },
+  {
+   "t": 1529.59,
+   "d": 2.1,
+   "text": "rook there and it's likely that I might"
+  },
+  {
+   "t": 1531.69,
+   "d": 2.49,
+   "text": "not make it up you see I just chipped"
+  },
+  {
+   "t": 1534.18,
+   "d": 2.22,
+   "text": "away at it and I can see these messages"
+  },
+  {
+   "t": 1536.4,
+   "d": 1.89,
+   "text": "your rook swings and hits the rook and"
+  },
+  {
+   "t": 1538.29,
+   "d": 2.13,
+   "text": "the rook swings and hits your knight"
+  },
+  {
+   "t": 1540.42,
+   "d": 2.1,
+   "text": "so the it changes things because it's"
+  },
+  {
+   "t": 1542.52,
+   "d": 1.65,
+   "text": "not you don't have the immediate capture"
+  },
+  {
+   "t": 1544.17,
+   "d": 3.72,
+   "text": "thing anyway so that's that's part of"
+  },
+  {
+   "t": 1547.89,
+   "d": 2.7,
+   "text": "cherry choke right now and maybe to"
+  },
+  {
+   "t": 1550.59,
+   "d": 2.01,
+   "text": "finish a little subtleties so yes"
+  },
+  {
+   "t": 1552.6,
+   "d": 1.53,
+   "text": "there's the choke notation for example"
+  },
+  {
+   "t": 1554.13,
+   "d": 2.22,
+   "text": "we had to invent a new a new way to"
+  },
+  {
+   "t": 1556.35,
+   "d": 2.1,
+   "text": "signify that there you've hit at"
+  },
+  {
+   "t": 1558.45,
+   "d": 2.16,
+   "text": "something but you haven't captured it it"
+  },
+  {
+   "t": 1560.61,
+   "d": 1.59,
+   "text": "seems like a very subtle thing but we're"
+  },
+  {
+   "t": 1562.2,
+   "d": 2.25,
+   "text": "happy to have come up with a consistent"
+  },
+  {
+   "t": 1564.45,
+   "d": 3.54,
+   "text": "choke notation to to be able to express"
+  },
+  {
+   "t": 1567.99,
+   "d": 3.0,
+   "text": "what a game looked like and finally some"
+  },
+  {
+   "t": 1570.99,
+   "d": 1.8,
+   "text": "notes on visual design so this is where"
+  },
+  {
+   "t": 1572.79,
+   "d": 2.37,
+   "text": "we maybe were more freer and our in our"
+  },
+  {
+   "t": 1575.16,
+   "d": 2.79,
+   "text": "interpretation because chess doesn't"
+  },
+  {
+   "t": 1577.95,
+   "d": 2.46,
+   "text": "have a specification for representation"
+  },
+  {
+   "t": 1580.41,
+   "d": 1.44,
+   "text": "so I felt I could do whatever I wanted"
+  },
+  {
+   "t": 1581.85,
+   "d": 2.01,
+   "text": "with this but I still wanted to hint"
+  },
+  {
+   "t": 1583.86,
+   "d": 2.58,
+   "text": "that rogue and this is why everything in"
+  },
+  {
+   "t": 1586.44,
+   "d": 1.71,
+   "text": "there is just Unicode characters it's"
+  },
+  {
+   "t": 1588.15,
+   "d": 2.25,
+   "text": "not the it's not the ASCII characters"
+  },
+  {
+   "t": 1590.4,
+   "d": 0.91,
+   "text": "but there"
+  },
+  {
+   "t": 1591.31,
+   "d": 2.67,
+   "text": "unicode characters and the CGA palette"
+  },
+  {
+   "t": 1593.98,
+   "d": 3.57,
+   "text": "which evokes at least to some extent and"
+  },
+  {
+   "t": 1597.55,
+   "d": 3.84,
+   "text": "then the early style computing so yeah"
+  },
+  {
+   "t": 1601.39,
+   "d": 10.29,
+   "text": "that's it thank you awesome we have time"
+  },
+  {
+   "t": 1611.68,
+   "d": 4.53,
+   "text": "for some questions anyone have any"
+  },
+  {
+   "t": 1616.21,
+   "d": 2.24,
+   "text": "questions"
+  },
+  {
+   "t": 1626.29,
+   "d": 6.82,
+   "text": "to the enemy do the enemy pieces also"
+  },
+  {
+   "t": 1633.11,
+   "d": 2.94,
+   "text": "have the same disability roles the"
+  },
+  {
+   "t": 1636.05,
+   "d": 2.01,
+   "text": "enemy's have these same visibility roles"
+  },
+  {
+   "t": 1638.06,
+   "d": 4.38,
+   "text": "no they don't so the so we choke was tax"
+  },
+  {
+   "t": 1642.44,
+   "d": 4.53,
+   "text": "to be unfair because of this our own get"
+  },
+  {
+   "t": 1646.97,
+   "d": 2.61,
+   "text": "away with this question is that you"
+  },
+  {
+   "t": 1649.58,
+   "d": 2.88,
+   "text": "yourself can also eat something that's"
+  },
+  {
+   "t": 1652.46,
+   "d": 2.25,
+   "text": "in the darkness meaning that since you"
+  },
+  {
+   "t": 1654.71,
+   "d": 1.71,
+   "text": "always have the possibility to go as far"
+  },
+  {
+   "t": 1656.42,
+   "d": 1.59,
+   "text": "as for example your rocker your queen"
+  },
+  {
+   "t": 1658.01,
+   "d": 3.12,
+   "text": "goes if that end point is actually"
+  },
+  {
+   "t": 1661.13,
+   "d": 1.74,
+   "text": "another piece you will eat it even"
+  },
+  {
+   "t": 1662.87,
+   "d": 2.79,
+   "text": "though you didn't see it so our own kind"
+  },
+  {
+   "t": 1665.66,
+   "d": 1.8,
+   "text": "of personal explanation is that that's"
+  },
+  {
+   "t": 1667.46,
+   "d": 2.91,
+   "text": "what the AI is doing it's just going"
+  },
+  {
+   "t": 1670.37,
+   "d": 1.71,
+   "text": "towards to its maximum possibility but"
+  },
+  {
+   "t": 1672.08,
+   "d": 2.19,
+   "text": "of course that's that's fake because the"
+  },
+  {
+   "t": 1674.27,
+   "d": 1.5,
+   "text": "AI doesn't know where you are and we'll"
+  },
+  {
+   "t": 1675.77,
+   "d": 2.58,
+   "text": "just hit target you so yes it's a bit a"
+  },
+  {
+   "t": 1678.35,
+   "d": 7.71,
+   "text": "bit unfair why did you go with the name"
+  },
+  {
+   "t": 1686.06,
+   "d": 2.52,
+   "text": "cherry choke why does not appear either"
+  },
+  {
+   "t": 1688.58,
+   "d": 4.59,
+   "text": "in rogue or chess as an answer for this"
+  },
+  {
+   "t": 1693.17,
+   "d": 1.29,
+   "text": "he came up with it I guess it's because"
+  },
+  {
+   "t": 1694.46,
+   "d": 3.9,
+   "text": "Cho folks coke and you have cherry coke"
+  },
+  {
+   "t": 1698.36,
+   "d": 2.16,
+   "text": "which is maybe the softer version of"
+  },
+  {
+   "t": 1700.52,
+   "d": 3.57,
+   "text": "coke and cherry choke is somewhat a bit"
+  },
+  {
+   "t": 1704.09,
+   "d": 3.36,
+   "text": "more it's a bit easier because it's not"
+  },
+  {
+   "t": 1707.45,
+   "d": 3.12,
+   "text": "as drastic you get killed on one shot so"
+  },
+  {
+   "t": 1710.57,
+   "d": 1.89,
+   "text": "I guess we're happy though it's not from"
+  },
+  {
+   "t": 1712.46,
+   "d": 1.98,
+   "text": "either of them I guess it could be we"
+  },
+  {
+   "t": 1714.44,
+   "d": 1.83,
+   "text": "could pull away maybe the Kestrel choke"
+  },
+  {
+   "t": 1716.27,
+   "d": 4.56,
+   "text": "or whatever so did you consider in in"
+  },
+  {
+   "t": 1720.83,
+   "d": 2.52,
+   "text": "rogue you can pause like like and go and"
+  },
+  {
+   "t": 1723.35,
+   "d": 5.13,
+   "text": "move is not mandatory so I didn't know"
+  },
+  {
+   "t": 1728.48,
+   "d": 2.16,
+   "text": "you could pause in rogue but I'm happy"
+  },
+  {
+   "t": 1730.64,
+   "d": 1.68,
+   "text": "to know that because when the AI doesn't"
+  },
+  {
+   "t": 1732.32,
+   "d": 2.4,
+   "text": "find a method move it actually doesn't"
+  },
+  {
+   "t": 1734.72,
+   "d": 1.85,
+   "text": "move and I always thought that was"
+  },
+  {
+   "t": 1736.57,
+   "d": 2.23,
+   "text": "inelegant and I hope nobody would ever"
+  },
+  {
+   "t": 1738.8,
+   "d": 2.67,
+   "text": "notice but now I can just say the enemy"
+  },
+  {
+   "t": 1741.47,
+   "d": 3.12,
+   "text": "passes so by the player can't well"
+  },
+  {
+   "t": 1744.59,
+   "d": 1.5,
+   "text": "though you can resign that was a big"
+  },
+  {
+   "t": 1746.09,
+   "d": 1.89,
+   "text": "thing for Pippin because he says in"
+  },
+  {
+   "t": 1747.98,
+   "d": 1.95,
+   "text": "chess when you know you're not gonna get"
+  },
+  {
+   "t": 1749.93,
+   "d": 2.25,
+   "text": "anywhere you resigned that's what chess"
+  },
+  {
+   "t": 1752.18,
+   "d": 2.55,
+   "text": "players do so when you it's a bit hidden"
+  },
+  {
+   "t": 1754.73,
+   "d": 2.1,
+   "text": "but when you select your King you can"
+  },
+  {
+   "t": 1756.83,
+   "d": 1.8,
+   "text": "resign and they will just"
+  },
+  {
+   "t": 1758.63,
+   "d": 1.71,
+   "text": "we start if you feel that you won't ever"
+  },
+  {
+   "t": 1760.34,
+   "d": 2.73,
+   "text": "go anywhere we're accused by the way by"
+  },
+  {
+   "t": 1763.07,
+   "d": 2.37,
+   "text": "the chess player so we have to let's say"
+  },
+  {
+   "t": 1765.44,
+   "d": 1.56,
+   "text": "communities are talking to the wrong"
+  },
+  {
+   "t": 1767.0,
+   "d": 3.45,
+   "text": "light lovers and the chess lovers and"
+  },
+  {
+   "t": 1770.45,
+   "d": 2.22,
+   "text": "chess lover is some of them we didn't"
+  },
+  {
+   "t": 1772.67,
+   "d": 1.95,
+   "text": "have too many feedback but some of them"
+  },
+  {
+   "t": 1774.62,
+   "d": 2.04,
+   "text": "had very hard well some were injured"
+  },
+  {
+   "t": 1776.66,
+   "d": 1.08,
+   "text": "most of them were interested but they"
+  },
+  {
+   "t": 1777.74,
+   "d": 1.59,
+   "text": "have very harsh feedback with us not"
+  },
+  {
+   "t": 1779.33,
+   "d": 2.58,
+   "text": "implementing all the rules so for"
+  },
+  {
+   "t": 1781.91,
+   "d": 2.58,
+   "text": "example castling doesn't exist mostly"
+  },
+  {
+   "t": 1784.49,
+   "d": 2.49,
+   "text": "because of laziness and the one that I"
+  },
+  {
+   "t": 1786.98,
+   "d": 1.89,
+   "text": "had never even thought about is um"
+  },
+  {
+   "t": 1788.87,
+   "d": 3.39,
+   "text": "Poisson rule which is a very edge rule"
+  },
+  {
+   "t": 1792.26,
+   "d": 2.13,
+   "text": "if you're just an amateur chess player"
+  },
+  {
+   "t": 1794.39,
+   "d": 1.8,
+   "text": "you probably don't know about it but we"
+  },
+  {
+   "t": 1796.19,
+   "d": 2.19,
+   "text": "had two chess players tell us wait a"
+  },
+  {
+   "t": 1798.38,
+   "d": 3.35,
+   "text": "minute I can't do all Poisson rules"
+  },
+  {
+   "t": 1801.73,
+   "d": 2.56,
+   "text": "really so maybe in Cherry Cho will"
+  },
+  {
+   "t": 1804.29,
+   "d": 11.73,
+   "text": "implement up as long hello this is a"
+  },
+  {
+   "t": 1816.02,
+   "d": 2.73,
+   "text": "question when will you create an editor"
+  },
+  {
+   "t": 1818.75,
+   "d": 1.65,
+   "text": "so we can make chess dungeons and put"
+  },
+  {
+   "t": 1820.4,
+   "d": 3.12,
+   "text": "our friends through them yeah guys we"
+  },
+  {
+   "t": 1823.52,
+   "d": 1.5,
+   "text": "can make chess dungeons and say here"
+  },
+  {
+   "t": 1825.02,
+   "d": 2.19,
+   "text": "buddy solve this oh yeah so clear"
+  },
+  {
+   "t": 1827.21,
+   "d": 2.43,
+   "text": "generated chess dungeons so that's"
+  },
+  {
+   "t": 1829.64,
+   "d": 0.9,
+   "text": "interesting because at the beginning"
+  },
+  {
+   "t": 1830.54,
+   "d": 1.41,
+   "text": "what we thought this game would be about"
+  },
+  {
+   "t": 1831.95,
+   "d": 2.88,
+   "text": "is generated chess problems you know"
+  },
+  {
+   "t": 1834.83,
+   "d": 1.89,
+   "text": "there is interesting set up that was"
+  },
+  {
+   "t": 1836.72,
+   "d": 1.38,
+   "text": "generated and you need to go through it"
+  },
+  {
+   "t": 1838.1,
+   "d": 1.77,
+   "text": "with an arbitrary space now that and it"
+  },
+  {
+   "t": 1839.87,
+   "d": 2.16,
+   "text": "turns out in the later levels some rooms"
+  },
+  {
+   "t": 1842.03,
+   "d": 1.74,
+   "text": "are real chess problems because you only"
+  },
+  {
+   "t": 1843.77,
+   "d": 1.8,
+   "text": "have maybe two pieces left you need to"
+  },
+  {
+   "t": 1845.57,
+   "d": 1.56,
+   "text": "go through that room and there are three"
+  },
+  {
+   "t": 1847.13,
+   "d": 2.28,
+   "text": "queens and two rooks and you know that's"
+  },
+  {
+   "t": 1849.41,
+   "d": 2.19,
+   "text": "there these moments are super hard so"
+  },
+  {
+   "t": 1851.6,
+   "d": 2.94,
+   "text": "and for further work we were interested"
+  },
+  {
+   "t": 1854.54,
+   "d": 2.31,
+   "text": "in just pushing that further but still"
+  },
+  {
+   "t": 1856.85,
+   "d": 1.32,
+   "text": "we're looking at procedural generation"
+  },
+  {
+   "t": 1858.17,
+   "d": 2.97,
+   "text": "but maybe user generation would be much"
+  },
+  {
+   "t": 1861.14,
+   "d": 3.15,
+   "text": "better probably but then we fall into"
+  },
+  {
+   "t": 1864.29,
+   "d": 2.76,
+   "text": "chess problems and that's a that's a"
+  },
+  {
+   "t": 1867.05,
+   "d": 3.45,
+   "text": "whole field are there any other board"
+  },
+  {
+   "t": 1870.5,
+   "d": 1.56,
+   "text": "game URLs that you're really curious how"
+  },
+  {
+   "t": 1872.06,
+   "d": 3.12,
+   "text": "they'd work any other one board game are"
+  },
+  {
+   "t": 1875.18,
+   "d": 2.04,
+   "text": "ELLs so I can get game other than chess"
+  },
+  {
+   "t": 1877.22,
+   "d": 1.65,
+   "text": "cross my throat yeah I don't know are"
+  },
+  {
+   "t": 1878.87,
+   "d": 5.94,
+   "text": "there well I assume there must be chess"
+  },
+  {
+   "t": 1884.81,
+   "d": 1.71,
+   "text": "rogue yeah ice we always thought that"
+  },
+  {
+   "t": 1886.52,
+   "d": 1.71,
+   "text": "there would be probably some kind of"
+  },
+  {
+   "t": 1888.23,
+   "d": 2.7,
+   "text": "precedents somewhere but definitely it"
+  },
+  {
+   "t": 1890.93,
+   "d": 0.92,
+   "text": "opens a whole"
+  },
+  {
+   "t": 1891.85,
+   "d": 2.73,
+   "text": "char of chest legs were thinking of chip"
+  },
+  {
+   "t": 1894.58,
+   "d": 3.33,
+   "text": "the chess civilization and or chest the"
+  },
+  {
+   "t": 1897.91,
+   "d": 2.22,
+   "text": "chest missed where you have to solve"
+  },
+  {
+   "t": 1900.13,
+   "d": 0.75,
+   "text": "these problems"
+  },
+  {
+   "t": 1900.88,
+   "d": 2.28,
+   "text": "so Pippin and I were like hey maybe we"
+  },
+  {
+   "t": 1903.16,
+   "d": 1.86,
+   "text": "have our whole end of carrier figured"
+  },
+  {
+   "t": 1905.02,
+   "d": 1.38,
+   "text": "out that we're just gonna do these chest"
+  },
+  {
+   "t": 1906.4,
+   "d": 4.71,
+   "text": "lights forever okay thank you so much"
+  },
+  {
+   "t": 1911.11,
+   "d": 1.32,
+   "text": "all right thank you"
+  },
+  {
+   "t": 1912.43,
+   "d": 3.14,
+   "text": "[Applause]"
+  }
+ ]
+}

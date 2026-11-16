@@ -1,0 +1,1311 @@
+{
+ "id": "wPN5bPxWXm8",
+ "url": "https://www.youtube.com/watch?v=wPN5bPxWXm8",
+ "title": "Michael Langford - For the Squishies: Making Roguelikes Accessible to Children and their Parents",
+ "speaker": "Michael Langford",
+ "talk_title": "For the Squishies: Making Roguelikes Accessible to Children and their Parents",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1011,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "The \"year\" of March 2020 has made parents experts in finding any source of reliable entertainment that doesn't drive themselves batty, yet keeps the kids engaged and learning something.\n\nRoguelikes are an excellent solution to these problems with a few accessibility nods that make the games better for all players.\n\nParents have run up against a host of software largely made for an older player base.\n\nThis talk presents a few parenting-simulations you can conduct while playing your game to judge its suitability for parents. A few examples of failures and low-cost fixes are shown.\n\nBefore your cringe breaks make you hit the abort button, I'm *not* talking about theme/blood/and other items which are far more noticeable to you.\n\nThis is about issues like small hands vs big controllers, difficulties seeing and reading text, load screen post-confirm buttons, the realities of children and embarrassing information, and pause buttons that work for parents.\n\nAddressing these issues can also broaden your game's audience to folks with issues with visual acuity, dyslexia, color vision deficiency, and more.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 303,
+   "title": "Smol Hands Testing"
+  },
+  {
+   "start": 368,
+   "title": "Smol Hands Unlocked"
+  },
+  {
+   "start": 438,
+   "title": "Cheese Strategies"
+  },
+  {
+   "start": 484,
+   "title": "Cheese- Playthru"
+  },
+  {
+   "start": 510,
+   "title": "Cheese Unlocked"
+  },
+  {
+   "start": 545,
+   "title": "Chaos: Random Input"
+  },
+  {
+   "start": 570,
+   "title": "Order to Chaos"
+  },
+  {
+   "start": 607,
+   "title": "Vision: Important Text, Preliterate Eyes"
+  },
+  {
+   "start": 649,
+   "title": "Vision: Tiny Text, Old Eyes"
+  },
+  {
+   "start": 667,
+   "title": "Attention Test + Fixes"
+  },
+  {
+   "start": 715,
+   "title": "Shame is a hack for content barriers"
+  },
+  {
+   "start": 757,
+   "title": "Shame Testing"
+  },
+  {
+   "start": 780,
+   "title": "Fixing Context Accessibility"
+  },
+  {
+   "start": 830,
+   "title": "Smol Hands Reference"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2607,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.81,
+   "d": 1.0,
+   "text": "There we go."
+  },
+  {
+   "t": 4.81,
+   "d": 1.0,
+   "text": "Hi."
+  },
+  {
+   "t": 5.81,
+   "d": 1.0,
+   "text": "Michael: Hi, there."
+  },
+  {
+   "t": 6.81,
+   "d": 1.0,
+   "text": "How is it going?"
+  },
+  {
+   "t": 7.81,
+   "d": 1.0,
+   "text": "EMCEE: Great."
+  },
+  {
+   "t": 8.81,
+   "d": 1.0,
+   "text": "Wonderful."
+  },
+  {
+   "t": 9.81,
+   "d": 1.0,
+   "text": "Thank you for starting early."
+  },
+  {
+   "t": 10.81,
+   "d": 1.0,
+   "text": "I only have so much patter in me to get through the whole day."
+  },
+  {
+   "t": 11.81,
+   "d": 5.59,
+   "text": "With no further ado, I will kickoff our lightning talks and we are starting with Michael Langford,"
+  },
+  {
+   "t": 17.4,
+   "d": 1.25,
+   "text": "an iOS developer making accessible software for adults, youth and children."
+  },
+  {
+   "t": 18.65,
+   "d": 3.93,
+   "text": "Listen, I haven't drank all of my coffee yet."
+  },
+  {
+   "t": 22.58,
+   "d": 10.67,
+   "text": "You will be talking about For the squishies which is a delightful title."
+  },
+  {
+   "t": 33.25,
+   "d": 3.31,
+   "text": "Michael: Thank you very much."
+  },
+  {
+   "t": 36.56,
+   "d": 2.71,
+   "text": "I have to say, childrens actually works."
+  },
+  {
+   "t": 39.27,
+   "d": 4.11,
+   "text": "One of the clients I have works for children's medical hospital."
+  },
+  {
+   "t": 43.38,
+   "d": 2.08,
+   "text": "That works."
+  },
+  {
+   "t": 45.46,
+   "d": 1.0,
+   "text": "I am Michael Langford."
+  },
+  {
+   "t": 46.46,
+   "d": 3.23,
+   "text": "I have been enjoying the Roguelike Celebration a ton."
+  },
+  {
+   "t": 49.69,
+   "d": 2.63,
+   "text": "It has been some great stuff."
+  },
+  {
+   "t": 52.32,
+   "d": 3.81,
+   "text": "I wanted to talk to you all, though, as if you had a Roguelike game."
+  },
+  {
+   "t": 56.13,
+   "d": 6.04,
+   "text": "I know a lot of you are going to go and eventually finish one even if you are just currently"
+  },
+  {
+   "t": 62.17,
+   "d": 5.41,
+   "text": "a player and some of you make really cool Roguelikes aural -- already."
+  },
+  {
+   "t": 67.58,
+   "d": 5.59,
+   "text": "This presentation is about making games work for young children."
+  },
+  {
+   "t": 73.17,
+   "d": 7.36,
+   "text": "Some of this is console-specific but you could remap to a keyboard for PC."
+  },
+  {
+   "t": 80.53,
+   "d": 1.75,
+   "text": "No problem."
+  },
+  {
+   "t": 82.28,
+   "d": 4.23,
+   "text": "And this focuses on stuff that's cost-effective because you know we only have a limited amount"
+  },
+  {
+   "t": 86.51,
+   "d": 5.44,
+   "text": "of time in the world and I want everyone to be able to do the changes they need easily."
+  },
+  {
+   "t": 91.95,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 92.95,
+   "d": 2.49,
+   "text": "Let's get going."
+  },
+  {
+   "t": 95.44,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 96.44,
+   "d": 3.32,
+   "text": "This presentation shows you to beat the appetite of children."
+  },
+  {
+   "t": 99.76,
+   "d": 7.63,
+   "text": "It is about making small changes to the game you don't even care much about."
+  },
+  {
+   "t": 107.39,
+   "d": 7.48,
+   "text": "This greatly raises sales figures especially when you go to platforms other than PC."
+  },
+  {
+   "t": 114.87,
+   "d": 5.35,
+   "text": "Children have a lot more of everything but PCs."
+  },
+  {
+   "t": 120.22,
+   "d": 3.47,
+   "text": "Childhood is a massive force spending for every parent."
+  },
+  {
+   "t": 123.69,
+   "d": 4.12,
+   "text": "Parents by enrichment and fun opportunities for the children and you want to be part of"
+  },
+  {
+   "t": 127.81,
+   "d": 2.35,
+   "text": "that spending."
+  },
+  {
+   "t": 130.16,
+   "d": 5.12,
+   "text": "Roguelikes also happen to hit this cool sweet spot because there is a lot of content available"
+  },
+  {
+   "t": 135.28,
+   "d": 4.86,
+   "text": "at a particular skill level which isn't the same for 'one and done' traditional games."
+  },
+  {
+   "t": 140.14,
+   "d": 5.27,
+   "text": "A kid can play a Roguelike many times at a level appropriate for them far more than something"
+  },
+  {
+   "t": 145.41,
+   "d": 5.22,
+   "text": "like a Mario Brothers Game."
+  },
+  {
+   "t": 150.63,
+   "d": 4.13,
+   "text": "Every piece of software, not just games, come with an introductory difficulty level that's"
+  },
+  {
+   "t": 154.76,
+   "d": 2.86,
+   "text": "really hard for some people."
+  },
+  {
+   "t": 157.62,
+   "d": 1.53,
+   "text": "You imposed it accidentally."
+  },
+  {
+   "t": 159.15,
+   "d": 6.59,
+   "text": "It is on newest players, players with different attention spans, or they can only read certain"
+  },
+  {
+   "t": 165.74,
+   "d": 2.53,
+   "text": "things or their hands are different sizes."
+  },
+  {
+   "t": 168.27,
+   "d": 4.18,
+   "text": "Since they are only slightly different though you can serve them with a little nudge and"
+  },
+  {
+   "t": 172.45,
+   "d": 3.45,
+   "text": "a little change."
+  },
+  {
+   "t": 175.9,
+   "d": 1.44,
+   "text": "Here is how you get there."
+  },
+  {
+   "t": 177.34,
+   "d": 1.82,
+   "text": "You rel don't have to do every step on the path."
+  },
+  {
+   "t": 179.16,
+   "d": 5.1,
+   "text": "Doing any of them will get you closer, more sales and serve people better."
+  },
+  {
+   "t": 184.26,
+   "d": 5.21,
+   "text": "This is going to say do this role-playing exercise and I heard yesterday a lot of you"
+  },
+  {
+   "t": 189.47,
+   "d": 5.73,
+   "text": "know how to do that and try to think as the people in the test are instructed to think"
+  },
+  {
+   "t": 195.2,
+   "d": 2.18,
+   "text": "and act as they are."
+  },
+  {
+   "t": 197.38,
+   "d": 5.13,
+   "text": "These tests sometimes will require people with small hands or less proficiency at the"
+  },
+  {
+   "t": 202.51,
+   "d": 1.97,
+   "text": "game."
+  },
+  {
+   "t": 204.48,
+   "d": 3.49,
+   "text": "Every time you hear me mention a kid STHA they are not present or could be substituted"
+  },
+  {
+   "t": 207.97,
+   "d": 4.17,
+   "text": "with a small-hand adult."
+  },
+  {
+   "t": 212.14,
+   "d": 6.51,
+   "text": "There is a ladder of games every some."
+  },
+  {
+   "t": 218.65,
+   "d": 4.34,
+   "text": "Every game in this presentation I recommend adults go play."
+  },
+  {
+   "t": 222.99,
+   "d": 4.18,
+   "text": "Some aren't suitable for children and you will understand why."
+  },
+  {
+   "t": 227.17,
+   "d": 4.83,
+   "text": "But I am just saying they are all good games but that doesn't mean they are accessible"
+  },
+  {
+   "t": 232.0,
+   "d": 4.92,
+   "text": "and don't take that as I hate the thing you like, please hate you."
+  },
+  {
+   "t": 236.92,
+   "d": 1.0,
+   "text": "OK?"
+  },
+  {
+   "t": 237.92,
+   "d": 5.62,
+   "text": "And first off, kids' hands are small."
+  },
+  {
+   "t": 243.54,
+   "d": 5.17,
+   "text": "On the left hand side there that's my daughter's hands near the beginning of the pandemic and"
+  },
+  {
+   "t": 248.71,
+   "d": 2.37,
+   "text": "on the right is my hands."
+  },
+  {
+   "t": 251.08,
+   "d": 2.47,
+   "text": "That orange one on the right would work."
+  },
+  {
+   "t": 253.55,
+   "d": 3.63,
+   "text": "That's an iOS control SKWR -- controller and not available on the Switch."
+  },
+  {
+   "t": 257.18,
+   "d": 2.4,
+   "text": "I have like 20 Switch controllers."
+  },
+  {
+   "t": 259.58,
+   "d": 5.65,
+   "text": "These are just a few good examples."
+  },
+  {
+   "t": 265.23,
+   "d": 5.08,
+   "text": "Can a person with small hands do the motion your game requires without injury and discomfort?"
+  },
+  {
+   "t": 270.31,
+   "d": 5.44,
+   "text": "You can do this with keyboard and mouse with small hands."
+  },
+  {
+   "t": 275.75,
+   "d": 6.9,
+   "text": "You buy a big controller and you give it to a person with small hands."
+  },
+  {
+   "t": 282.65,
+   "d": 2.39,
+   "text": "You should try it with other controllers if you have time."
+  },
+  {
+   "t": 285.04,
+   "d": 7.57,
+   "text": "For this and all of these test procedures they are written out in the slides and the"
+  },
+  {
+   "t": 292.61,
+   "d": 5.28,
+   "text": "slides are downloadable afterwards so you can do these on your game."
+  },
+  {
+   "t": 297.89,
+   "d": 5.32,
+   "text": "Just record the kids arm, hands, and the game while it is going."
+  },
+  {
+   "t": 303.21,
+   "d": 1.0,
+   "text": "Now watch."
+  },
+  {
+   "t": 304.21,
+   "d": 5.5,
+   "text": "You will see the kids climb up the controller to play some games including yours."
+  },
+  {
+   "t": 309.71,
+   "d": 3.22,
+   "text": "You will see sometimes they are flicking a bunch trying to deal with the dead zone and"
+  },
+  {
+   "t": 312.93,
+   "d": 2.15,
+   "text": "things like that."
+  },
+  {
+   "t": 315.08,
+   "d": 4.91,
+   "text": "In particular, if they have reach problems, go to the in-game controller remapping if"
+  },
+  {
+   "t": 319.99,
+   "d": 3.65,
+   "text": "you have that, and if you don't, use the system remapping right in the middle of the test"
+  },
+  {
+   "t": 323.64,
+   "d": 6.14,
+   "text": "session and move the flipper buttons down so they can finish that part of the game and"
+  },
+  {
+   "t": 329.78,
+   "d": 2.14,
+   "text": "get used to those modes."
+  },
+  {
+   "t": 331.92,
+   "d": 4.9,
+   "text": "One huge problem that will almost always trip up kids is look for issues with corded-held"
+  },
+  {
+   "t": 336.82,
+   "d": 1.06,
+   "text": "modes."
+  },
+  {
+   "t": 337.88,
+   "d": 6.31,
+   "text": "By corded I mean Chord where you take your hands and play at the time time."
+  },
+  {
+   "t": 344.19,
+   "d": 10.88,
+   "text": "On a controller it is hard for kids but on a computer if you hit command c or control"
+  },
+  {
+   "t": 355.07,
+   "d": 5.27,
+   "text": "C on your keyboard that does some damage to your hands and wrist especially if you are"
+  },
+  {
+   "t": 360.34,
+   "d": 1.0,
+   "text": "bending the wrist."
+  },
+  {
+   "t": 361.34,
+   "d": 6.56,
+   "text": "This is an injury accessibility thing for adults and for kids it is -- they can't control"
+  },
+  {
+   "t": 367.9,
+   "d": 1.84,
+   "text": "it necessarily."
+  },
+  {
+   "t": 369.74,
+   "d": 2.21,
+   "text": "You don't have to rework your control scheme."
+  },
+  {
+   "t": 371.95,
+   "d": 4.45,
+   "text": "You can just make it so the people who need it can fix it."
+  },
+  {
+   "t": 376.4,
+   "d": 7.93,
+   "text": "You can add a button fixing map and that will address almost 100% of parent issues."
+  },
+  {
+   "t": 384.33,
+   "d": 7.42,
+   "text": "You might take efforts to support system but they are cumbersome and don't work for multiple"
+  },
+  {
+   "t": 391.75,
+   "d": 3.89,
+   "text": "controllers."
+  },
+  {
+   "t": 395.64,
+   "d": 4.82,
+   "text": "Consider changing game modes to being more like an item is what does this and you swap"
+  },
+  {
+   "t": 400.46,
+   "d": 4.85,
+   "text": "to that item and then instead of something where you hold the button down to do this."
+  },
+  {
+   "t": 405.31,
+   "d": 4.21,
+   "text": "Higher rated games spend a lot of time where you equip an item and you get special abilities"
+  },
+  {
+   "t": 409.52,
+   "d": 9.99,
+   "text": "and mode and you can swap between itemwise -- items with a toger."
+  },
+  {
+   "t": 419.51,
+   "d": 7.73,
+   "text": "The new metroid -- came out and a kid is going to have a problem for a number of years playing"
+  },
+  {
+   "t": 427.24,
+   "d": 3.12,
+   "text": "a game like that."
+  },
+  {
+   "t": 430.36,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 431.36,
+   "d": 4.41,
+   "text": "Now the rest of these are a lot shorter and less deeper commentary because that one is"
+  },
+  {
+   "t": 435.77,
+   "d": 1.0,
+   "text": "a little rough."
+  },
+  {
+   "t": 436.77,
+   "d": 2.35,
+   "text": "Let's see how kids survive a multi-player."
+  },
+  {
+   "t": 439.12,
+   "d": 4.66,
+   "text": "They do it by using cheesy strategies."
+  },
+  {
+   "t": 443.78,
+   "d": 6.71,
+   "text": "Think about it like walk in a circle and shoot left and then a proficient player plays with"
+  },
+  {
+   "t": 450.49,
+   "d": 6.65,
+   "text": "the child, the child plays along and does the stupid AI you tell them to do."
+  },
+  {
+   "t": 457.14,
+   "d": 5.65,
+   "text": "You will want to write down more than one but think of monster things or there is a"
+  },
+  {
+   "t": 462.79,
+   "d": 4.0,
+   "text": "Tom 7 video linked there about stupid chess AI."
+  },
+  {
+   "t": 466.79,
+   "d": 2.21,
+   "text": "I am not calling kids stupid."
+  },
+  {
+   "t": 469.0,
+   "d": 3.64,
+   "text": "I am saying these AIs are intentionally not very good."
+  },
+  {
+   "t": 472.64,
+   "d": 4.64,
+   "text": "If they let the kid survive multi-player the kid able to play with their parent."
+  },
+  {
+   "t": 477.28,
+   "d": 2.18,
+   "text": "They don't have to get a high score."
+  },
+  {
+   "t": 479.46,
+   "d": 6.54,
+   "text": "They just need to be there along with mom or dad going boom, boom, boom through everything."
+  },
+  {
+   "t": 486.0,
+   "d": 4.87,
+   "text": "Note what items and characters enable their strategy."
+  },
+  {
+   "t": 490.87,
+   "d": 5.78,
+   "text": "Also notice where in the game strategies cause and understand you might want to fight cheese"
+  },
+  {
+   "t": 496.65,
+   "d": 7.89,
+   "text": "strategy in single player but in multiplayer you want to flip the incentive so cheese can"
+  },
+  {
+   "t": 504.54,
+   "d": 7.85,
+   "text": "get past or doesn't overly tax resources."
+  },
+  {
+   "t": 512.39,
+   "d": 5.43,
+   "text": "Once you get to the point where you finished recording the cheese strategy runs, figure"
+  },
+  {
+   "t": 517.82,
+   "d": 7.26,
+   "text": "out if you have characters that are the good ones for cheese and they are not of a gender"
+  },
+  {
+   "t": 525.08,
+   "d": 2.13,
+   "text": "that some kid Nate -- may not want to play."
+  },
+  {
+   "t": 527.21,
+   "d": 7.49,
+   "text": "You don't have to it make it a boy and girl the youngest kids want to play and at that"
+  },
+  {
+   "t": 534.7,
+   "d": 5.4,
+   "text": "age there is rear zero gender difference."
+  },
+  {
+   "t": 540.1,
+   "d": 4.88,
+   "text": "They will want to play the one like their gender if you don't fix that."
+  },
+  {
+   "t": 544.98,
+   "d": 10.07,
+   "text": "Kids eat a lot of snacks, wiggle, get up all of the time and bump every part of the controller."
+  },
+  {
+   "t": 555.05,
+   "d": 5.88,
+   "text": "This test is taking the game controller, sticking it in a blanket and shaking it around."
+  },
+  {
+   "t": 560.93,
+   "d": 8.47,
+   "text": "I mean don't do this in the action part but the pause menu, the load menu in particular."
+  },
+  {
+   "t": 569.4,
+   "d": 6.24,
+   "text": "The real question is did you delete player profile that took 80 hours to make?"
+  },
+  {
+   "t": 575.64,
+   "d": 4.43,
+   "text": "Clearly you need some more conformation if you need that because adults will do that"
+  },
+  {
+   "t": 580.07,
+   "d": 2.11,
+   "text": "too accidentally."
+  },
+  {
+   "t": 582.18,
+   "d": 5.49,
+   "text": "Does a person end a run when they are on a pause menu and do this throw around?"
+  },
+  {
+   "t": 587.67,
+   "d": 2.92,
+   "text": "Did you accidentally use all the ultra rare super bombs?"
+  },
+  {
+   "t": 590.59,
+   "d": 10.16,
+   "text": "A quick fix is a more complicated confirm screen or maybe a map gate if that's easier."
+  },
+  {
+   "t": 600.75,
+   "d": 3.64,
+   "text": "We are move along through the levels."
+  },
+  {
+   "t": 604.39,
+   "d": 2.49,
+   "text": "Next up, two quick vision tests."
+  },
+  {
+   "t": 606.88,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 607.88,
+   "d": 1.0,
+   "text": "There is two scenario here."
+  },
+  {
+   "t": 608.88,
+   "d": 7.61,
+   "text": "One it is making itself kids' eyes which are hooked up to kids pre-literate brains."
+  },
+  {
+   "t": 616.49,
+   "d": 3.78,
+   "text": "The fix is turn on another localization."
+  },
+  {
+   "t": 620.27,
+   "d": 2.75,
+   "text": "Wait a second, I don't have my game localized."
+  },
+  {
+   "t": 623.02,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 624.02,
+   "d": 5.37,
+   "text": "Go to your font, hack all the characters to be similar size characters but different,"
+  },
+  {
+   "t": 629.39,
+   "d": 3.73,
+   "text": "and play there game that way and congratulations you just made a new language."
+  },
+  {
+   "t": 633.12,
+   "d": 4.83,
+   "text": "Now, if a person who isn't you can get through your game then a kid can probably get you"
+  },
+  {
+   "t": 637.95,
+   "d": 3.67,
+   "text": "through your game."
+  },
+  {
+   "t": 641.62,
+   "d": 6.86,
+   "text": "The general fix for this by there way is to add more GIFs like a heart or Bullseye for"
+  },
+  {
+   "t": 648.48,
+   "d": 1.64,
+   "text": "archery."
+  },
+  {
+   "t": 650.12,
+   "d": 4.64,
+   "text": "For parents, you are going to be adding more and cutting down the text on the screen and"
+  },
+  {
+   "t": 654.76,
+   "d": 3.44,
+   "text": "make the text on the screen bigger."
+  },
+  {
+   "t": 658.2,
+   "d": 5.13,
+   "text": "Sit one and a half times as far as normal from your screen or television and play the"
+  },
+  {
+   "t": 663.33,
+   "d": 1.0,
+   "text": "game."
+  },
+  {
+   "t": 664.33,
+   "d": 3.87,
+   "text": "We are almost done."
+  },
+  {
+   "t": 668.2,
+   "d": 1.0,
+   "text": "Attention."
+  },
+  {
+   "t": 669.2,
+   "d": 1.36,
+   "text": "This is an easy test."
+  },
+  {
+   "t": 670.56,
+   "d": 5.27,
+   "text": "You get a slow system or a slow PC and by slow PC I mean spinning hard disk, put your"
+  },
+  {
+   "t": 675.83,
+   "d": 6.68,
+   "text": "game on it, run your game and watch the kid play or the young adult or anyone else."
+  },
+  {
+   "t": 682.51,
+   "d": 4.34,
+   "text": "Any time they die right after a load screen, that's what you got to fix."
+  },
+  {
+   "t": 686.85,
+   "d": 2.21,
+   "text": "Don't go fix your load screen performance."
+  },
+  {
+   "t": 689.06,
+   "d": 1.45,
+   "text": "That takes a lot of work."
+  },
+  {
+   "t": 690.51,
+   "d": 5.94,
+   "text": "Instead add a conformation screen that partially obscures the action and you solve the problem"
+  },
+  {
+   "t": 696.45,
+   "d": 2.47,
+   "text": "and don't have to show it on fast loading systems."
+  },
+  {
+   "t": 698.92,
+   "d": 3.97,
+   "text": "Or just add transit hubs."
+  },
+  {
+   "t": 702.89,
+   "d": 7.86,
+   "text": "The game is great but the screens kill my kid in this game."
+  },
+  {
+   "t": 710.75,
+   "d": 5.73,
+   "text": "Next up is shame and it isn't really about shame."
+  },
+  {
+   "t": 716.48,
+   "d": 4.51,
+   "text": "Writing these things are really kind of hard because they have to work for a lot of different"
+  },
+  {
+   "t": 720.99,
+   "d": 1.0,
+   "text": "games and testers."
+  },
+  {
+   "t": 721.99,
+   "d": 4.79,
+   "text": "I am going to go through this and you can ask questions later if you want to know why"
+  },
+  {
+   "t": 726.78,
+   "d": 1.0,
+   "text": "it is setup like this."
+  },
+  {
+   "t": 727.78,
+   "d": 2.6,
+   "text": "Stage a zoom call with a friend."
+  },
+  {
+   "t": 730.38,
+   "d": 1.35,
+   "text": "You call them."
+  },
+  {
+   "t": 731.73,
+   "d": 1.54,
+   "text": "You are doing some work."
+  },
+  {
+   "t": 733.27,
+   "d": 1.1,
+   "text": "Your game is on."
+  },
+  {
+   "t": 734.37,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 735.37,
+   "d": 1.6,
+   "text": "They go wait a sec."
+  },
+  {
+   "t": 736.97,
+   "d": 4.94,
+   "text": "That's my husband's boss and they leave the room and Zoom call is still on."
+  },
+  {
+   "t": 741.91,
+   "d": 5.67,
+   "text": "You sit your phone behind you and you hear that the boss' kid, that her husband's boss'"
+  },
+  {
+   "t": 747.58,
+   "d": 2.55,
+   "text": "kid got left in the room with the Zoom meeting."
+  },
+  {
+   "t": 750.13,
+   "d": 4.28,
+   "text": "This is a person you don't have a relationship with and you could easily embarrass."
+  },
+  {
+   "t": 754.41,
+   "d": 5.11,
+   "text": "You are going to play your game, any time you feel anxiety you may embarrass your friend,"
+  },
+  {
+   "t": 759.52,
+   "d": 1.03,
+   "text": "pick a screenshot."
+  },
+  {
+   "t": 760.55,
+   "d": 13.8,
+   "text": "Any time you may want to turn the sound on because of a gross sound take a screenshot."
+  },
+  {
+   "t": 774.35,
+   "d": 3.76,
+   "text": "Any time you want to offer misinformation or mischaracterization to deceive the child"
+  },
+  {
+   "t": 778.11,
+   "d": 2.19,
+   "text": "take a screenshot."
+  },
+  {
+   "t": 780.3,
+   "d": 6.73,
+   "text": "If that's behind modes where they can turn off a lot of that, a lot of that, then the"
+  },
+  {
+   "t": 787.03,
+   "d": 2.4,
+   "text": "game is playable to children."
+  },
+  {
+   "t": 789.43,
+   "d": 4.54,
+   "text": "However, if you can't even play your game all in the same system a kid may occasionally"
+  },
+  {
+   "t": 793.97,
+   "d": 6.28,
+   "text": "turn on like games with graphic store art which is great for adults and sales but not"
+  },
+  {
+   "t": 800.25,
+   "d": 5.45,
+   "text": "so great for parents because the kid will come up Scheie someone ripping their eye off"
+  },
+  {
+   "t": 805.7,
+   "d": 6.63,
+   "text": "you may have more adjustments so you can sell it."
+  },
+  {
+   "t": 812.33,
+   "d": 2.53,
+   "text": "Art should always express the full range of emotions."
+  },
+  {
+   "t": 814.86,
+   "d": 6.49,
+   "text": "This is about just about commercial art to sell more and make games workable for parents."
+  },
+  {
+   "t": 821.35,
+   "d": 11.51,
+   "text": "If you have comments, or happen to need references on the games, or any of these controller references,"
+  },
+  {
+   "t": 832.86,
+   "d": 9.56,
+   "text": "feel free to use them and have a good day."
+  },
+  {
+   "t": 842.42,
+   "d": 2.69,
+   "text": "EMCEE: Thank you, Michael."
+  },
+  {
+   "t": 845.11,
+   "d": 4.94,
+   "text": "Every point to do with children at least someone in chat was like that would help me."
+  },
+  {
+   "t": 850.05,
+   "d": 5.3,
+   "text": "I have ADHD-brain and the attention point is so valid."
+  },
+  {
+   "t": 855.35,
+   "d": 6.98,
+   "text": "A game loses me if I have to sit and stare at nothing for a ridiculously small number"
+  },
+  {
+   "t": 862.33,
+   "d": 1.0,
+   "text": "of seconds."
+  },
+  {
+   "t": 863.33,
+   "d": 4.83,
+   "text": "Michael: I feel that too."
+  },
+  {
+   "t": 868.16,
+   "d": 2.7,
+   "text": "Swords of Ditto has gotten me a couple times with those load screens."
+  },
+  {
+   "t": 870.86,
+   "d": 5.46,
+   "text": "EMCEE: I think we have time for one question which is an interesting Roguelike specific"
+  },
+  {
+   "t": 876.32,
+   "d": 1.0,
+   "text": "one."
+  },
+  {
+   "t": 877.32,
+   "d": 5.23,
+   "text": "Would you consider removing or lightning up the effects of permadeath for accessibility"
+  },
+  {
+   "t": 882.55,
+   "d": 1.47,
+   "text": "for children?"
+  },
+  {
+   "t": 884.02,
+   "d": 1.08,
+   "text": "Or would that reason the Roguelikes?"
+  },
+  {
+   "t": 885.1,
+   "d": 6.88,
+   "text": "Do you have thoughts on is that something that's discouraging to kids?"
+  },
+  {
+   "t": 891.98,
+   "d": 6.04,
+   "text": "Michael: One game you will see rated higher than every triple A game is Son of a Witch"
+  },
+  {
+   "t": 898.02,
+   "d": 8.59,
+   "text": "and the default answer here is other than, you know, it just go do what they did."
+  },
+  {
+   "t": 906.61,
+   "d": 5.12,
+   "text": "There is a paper in the references section I have where he writes about how we dealt"
+  },
+  {
+   "t": 911.73,
+   "d": 2.31,
+   "text": "with permadeath and made it lighter."
+  },
+  {
+   "t": 914.04,
+   "d": 4.52,
+   "text": "They added extra modes to make it where permadeath is removed."
+  },
+  {
+   "t": 918.56,
+   "d": 6.56,
+   "text": "Permadeath is useful for keeping the game at the level of the kid but you may also want"
+  },
+  {
+   "t": 925.12,
+   "d": 2.88,
+   "text": "to give them a chance to not have permadeath so they can experience the rest of the game"
+  },
+  {
+   "t": 928.0,
+   "d": 6.32,
+   "text": "if they are lower proficiency or a mode where it exists but the game is easy so they are"
+  },
+  {
+   "t": 934.32,
+   "d": 1.36,
+   "text": "less likely to encounter it."
+  },
+  {
+   "t": 935.68,
+   "d": 5.8,
+   "text": "EMCEE: Thank you caves of Qud for adding a mode that doesn't improve proper permadeath"
+  },
+  {
+   "t": 941.48,
+   "d": 6.06,
+   "text": "because games are hard even for adults."
+  },
+  {
+   "t": 947.54,
+   "d": 4.56,
+   "text": "If you could name a couple games that do child friendliness really well and I guess part"
+  },
+  {
+   "t": 952.1,
+   "d": 5.6,
+   "text": "of the answer is look at the things in your talk and the ones rated highly."
+  },
+  {
+   "t": 957.7,
+   "d": 6.82,
+   "text": "Michael: Son of a Witch, Raymond legends if they can do platforms."
+  },
+  {
+   "t": 964.52,
+   "d": 3.71,
+   "text": "Start del you can get them into but the economic focuses."
+  },
+  {
+   "t": 968.23,
+   "d": 4.69,
+   "text": "Sort of ditto is playable other than the load screen issues."
+  },
+  {
+   "t": 972.92,
+   "d": 2.57,
+   "text": "Cat quest 2 usually is pretty fine."
+  },
+  {
+   "t": 975.49,
+   "d": 3.06,
+   "text": "There is a couple challenging ones."
+  },
+  {
+   "t": 978.55,
+   "d": 4.01,
+   "text": "And the other one I was going to point out -- oh."
+  },
+  {
+   "t": 982.56,
+   "d": 2.74,
+   "text": "I don't have it any more."
+  },
+  {
+   "t": 985.3,
+   "d": 5.02,
+   "text": "I mean, you can get through basic levels of a lot of games and as long as you as a person"
+  },
+  {
+   "t": 990.32,
+   "d": 2.2,
+   "text": "are OK with that that will work well."
+  },
+  {
+   "t": 992.52,
+   "d": 4.93,
+   "text": "But anyhow, if you ping me on Twitter, I have a list of a billion games."
+  },
+  {
+   "t": 997.45,
+   "d": 3.22,
+   "text": "I mean literally I buy and go nope, this isn't going to work."
+  },
+  {
+   "t": 1000.67,
+   "d": 1.0,
+   "text": "We finally found one that works."
+  },
+  {
+   "t": 1001.67,
+   "d": 1.0,
+   "text": "EMCEE: Cool."
+  },
+  {
+   "t": 1002.67,
+   "d": 1.0,
+   "text": "Thank you so much, Michael."
+  },
+  {
+   "t": 1003.67,
+   "d": 1.0,
+   "text": "That was a fantastic talk."
+  },
+  {
+   "t": 1004.67,
+   "d": 1.0,
+   "text": "Awesome."
+  },
+  {
+   "t": 1005.67,
+   "d": 1.0,
+   "text": "We will move on."
+  },
+  {
+   "t": 1006.67,
+   "d": 1.0,
+   "text": "I think I will announce the speaker breakouts at the end so it is a little bit clearer to"
+  },
+  {
+   "t": 1007.67,
+   "d": 1.0,
+   "text": "people what it is."
+  },
+  {
+   "t": 1008.67,
+   "d": 1.0,
+   "text": "Yeah, that you can thank you so much and, hopefully, people can see you around."
+  },
+  {
+   "t": 1009.67,
+   "d": 0.94,
+   "text": "All right."
+  }
+ ]
+}

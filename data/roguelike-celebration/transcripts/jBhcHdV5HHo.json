@@ -1,0 +1,5240 @@
+{
+ "id": "jBhcHdV5HHo",
+ "url": "https://www.youtube.com/watch?v=jBhcHdV5HHo",
+ "title": "Liza Knipscher - The Form and Function of Weird Li'l Guys",
+ "speaker": "Liza Knipscher",
+ "talk_title": "The Form and Function of Weird Li'l Guys",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 2044,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "The Form and Function of Weird Li'l Guys: Procedural Organism Generation in a Simulated Ecosystem\n\nThis talk includes a technical description of my processes for randomly generating organisms and facilitating their evolution over generations. I also discuss strategies for optimizing performance in a complex simulated ecosystem. Finally, I talk about various challenges, pitfalls, and surprises I've experienced while developing an evolution-based game. Expect to see adorable critters, unsettling beasts, and lots of things in between.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6754,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.68,
+   "d": 2.16,
+   "text": "Last talk of the day. Oh, no."
+  },
+  {
+   "t": 9.84,
+   "d": 1.4,
+   "text": "I always hate saying that cuz that what"
+  },
+  {
+   "t": 11.24,
+   "d": 2.4,
+   "text": "makes me feel better is what a fun talk"
+  },
+  {
+   "t": 13.64,
+   "d": 2.76,
+   "text": "it's going to be. We've talked a lot"
+  },
+  {
+   "t": 16.4,
+   "d": 2.28,
+   "text": "this weekend about weird little guys"
+  },
+  {
+   "t": 18.68,
+   "d": 1.92,
+   "text": "because we love weird little guys, but"
+  },
+  {
+   "t": 20.6,
+   "d": 2.52,
+   "text": "we are about to have an expert on weird"
+  },
+  {
+   "t": 23.12,
+   "d": 3.88,
+   "text": "little guys. Uh Liza who has a master's"
+  },
+  {
+   "t": 27.0,
+   "d": 2.48,
+   "text": "degree in biomedical visualization from"
+  },
+  {
+   "t": 29.48,
+   "d": 4.16,
+   "text": "UIC. She currently runs Meep Engine, a"
+  },
+  {
+   "t": 33.64,
+   "d": 2.16,
+   "text": "small studio that makes video games"
+  },
+  {
+   "t": 35.8,
+   "d": 1.28,
+   "text": "featuring strange creatures and"
+  },
+  {
+   "t": 37.08,
+   "d": 2.28,
+   "text": "unreasonable biology. Previously, she's"
+  },
+  {
+   "t": 39.36,
+   "d": 1.88,
+   "text": "worked developing neurosurgical"
+  },
+  {
+   "t": 41.24,
+   "d": 2.56,
+   "text": "educational applications at a hospital"
+  },
+  {
+   "t": 43.8,
+   "d": 2.28,
+   "text": "and is part of the Unity dev team doing"
+  },
+  {
+   "t": 46.08,
+   "d": 2.32,
+   "text": "VR hardware startup. In her free time,"
+  },
+  {
+   "t": 48.4,
+   "d": 2.08,
+   "text": "she provides emotional support to a pair"
+  },
+  {
+   "t": 50.48,
+   "d": 3.23,
+   "text": "of melodramatic greyhounds. [laughter]"
+  },
+  {
+   "t": 53.71,
+   "d": 0.69,
+   "text": ">> [snorts]"
+  },
+  {
+   "t": 54.4,
+   "d": 2.0,
+   "text": ">> And uh the greyhounds are in the room"
+  },
+  {
+   "t": 56.4,
+   "d": 1.48,
+   "text": "with me at the time, just so everyone"
+  },
+  {
+   "t": 57.88,
+   "d": 1.2,
+   "text": "knows. I don't know if you can see them,"
+  },
+  {
+   "t": 59.08,
+   "d": 1.04,
+   "text": "but they're they're here."
+  },
+  {
+   "t": 60.12,
+   "d": 1.92,
+   "text": ">> Greyhound. We We do want People are"
+  },
+  {
+   "t": 62.04,
+   "d": 1.28,
+   "text": "going to ask to see the greyhounds as"
+  },
+  {
+   "t": 63.32,
+   "d": 1.52,
+   "text": "well."
+  },
+  {
+   "t": 64.84,
+   "d": 0.16,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 65.0,
+   "d": 1.56,
+   "text": ">> They don't want to Okay, classic."
+  },
+  {
+   "t": 66.56,
+   "d": 2.0,
+   "text": ">> Yeah, they're they're they're they're on"
+  },
+  {
+   "t": 68.56,
+   "d": 1.4,
+   "text": "the ground. They're lying down. They're"
+  },
+  {
+   "t": 69.96,
+   "d": 0.28,
+   "text": "here."
+  },
+  {
+   "t": 70.24,
+   "d": 1.64,
+   "text": ">> they're melodramatic. Of course, they"
+  },
+  {
+   "t": 71.88,
+   "d": 1.32,
+   "text": "don't want to come by on their own."
+  },
+  {
+   "t": 73.2,
+   "d": 1.47,
+   "text": ">> They don't want to do anything."
+  },
+  {
+   "t": 74.67,
+   "d": 0.41,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 75.08,
+   "d": 1.4,
+   "text": ">> But if I leave if I put them out of the"
+  },
+  {
+   "t": 76.48,
+   "d": 1.08,
+   "text": "room, they'll just scream until they're"
+  },
+  {
+   "t": 77.56,
+   "d": 1.69,
+   "text": "back in. So, uh"
+  },
+  {
+   "t": 79.25,
+   "d": 0.75,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 80.0,
+   "d": 1.2,
+   "text": ">> We know they're there. That's what"
+  },
+  {
+   "t": 81.2,
+   "d": 1.48,
+   "text": "matters. All right."
+  },
+  {
+   "t": 82.68,
+   "d": 1.28,
+   "text": ">> to me that you know they're there. All"
+  },
+  {
+   "t": 83.96,
+   "d": 2.04,
+   "text": "right. So, yep. Um"
+  },
+  {
+   "t": 86.0,
+   "d": 2.4,
+   "text": "my name is Liza Nipscher and my talk is"
+  },
+  {
+   "t": 88.4,
+   "d": 1.76,
+   "text": "The Form and Function of Weird Little"
+  },
+  {
+   "t": 90.16,
+   "d": 2.12,
+   "text": "Guys, Procedural Organism Generation in"
+  },
+  {
+   "t": 92.28,
+   "d": 2.2,
+   "text": "a Simulated Ecosystem. So, I'm Liza"
+  },
+  {
+   "t": 94.48,
+   "d": 1.92,
+   "text": "Nipscher. Uh this is my first Roguelike"
+  },
+  {
+   "t": 96.4,
+   "d": 1.56,
+   "text": "Celebration. I'm really excited to be"
+  },
+  {
+   "t": 97.96,
+   "d": 2.64,
+   "text": "here. Um and so yes, I have a master's"
+  },
+  {
+   "t": 100.6,
+   "d": 2.24,
+   "text": "degree in biomedical visualization. That"
+  },
+  {
+   "t": 102.84,
+   "d": 1.92,
+   "text": "means I'm a medical illustrator. And"
+  },
+  {
+   "t": 104.76,
+   "d": 1.68,
+   "text": "then I got into Unity development almost"
+  },
+  {
+   "t": 106.44,
+   "d": 1.8,
+   "text": "a decade ago and went more in that more"
+  },
+  {
+   "t": 108.24,
+   "d": 2.2,
+   "text": "in that direction after school."
+  },
+  {
+   "t": 110.44,
+   "d": 2.96,
+   "text": "Um I I started my studio Meep Engine a"
+  },
+  {
+   "t": 113.4,
+   "d": 1.8,
+   "text": "couple years ago and since then I've"
+  },
+  {
+   "t": 115.2,
+   "d": 1.56,
+   "text": "been making various games and apps like"
+  },
+  {
+   "t": 116.76,
+   "d": 2.0,
+   "text": "Cookie Gardening and Cuttlefish."
+  },
+  {
+   "t": 118.76,
+   "d": 2.76,
+   "text": "Um mostly in VR for the for those two."
+  },
+  {
+   "t": 121.52,
+   "d": 1.96,
+   "text": "Uh I work either solo or on very small"
+  },
+  {
+   "t": 123.48,
+   "d": 1.96,
+   "text": "teams and most of my games do feature"
+  },
+  {
+   "t": 125.44,
+   "d": 2.16,
+   "text": "cute little guys. Uh lately, I've been"
+  },
+  {
+   "t": 127.6,
+   "d": 1.48,
+   "text": "working on something different though"
+  },
+  {
+   "t": 129.08,
+   "d": 1.92,
+   "text": "and not VR and that's what I'm going to"
+  },
+  {
+   "t": 131.0,
+   "d": 2.52,
+   "text": "talk about today."
+  },
+  {
+   "t": 133.52,
+   "d": 2.28,
+   "text": "So, uh first I'm going to go over a very"
+  },
+  {
+   "t": 135.8,
+   "d": 1.92,
+   "text": "brief non-exhaustive list of games in"
+  },
+  {
+   "t": 137.72,
+   "d": 2.08,
+   "text": "this category. Specifically, I'm looking"
+  },
+  {
+   "t": 139.8,
+   "d": 1.8,
+   "text": "at artificial life simulations where"
+  },
+  {
+   "t": 141.6,
+   "d": 1.92,
+   "text": "creatures reproduce, mutate, and evolve"
+  },
+  {
+   "t": 143.52,
+   "d": 2.72,
+   "text": "from generation to generation."
+  },
+  {
+   "t": 146.24,
+   "d": 1.56,
+   "text": "So, we're going to start with Creatures."
+  },
+  {
+   "t": 147.8,
+   "d": 1.76,
+   "text": "Uh Creatures uh came out when I was a"
+  },
+  {
+   "t": 149.56,
+   "d": 2.08,
+   "text": "kid and it was very formative, uh maybe"
+  },
+  {
+   "t": 151.64,
+   "d": 2.52,
+   "text": "for a lot of us. So, it's a cute game"
+  },
+  {
+   "t": 154.16,
+   "d": 1.88,
+   "text": "with extremely complicated systems under"
+  },
+  {
+   "t": 156.04,
+   "d": 2.28,
+   "text": "the hood. It released in the 1990s and"
+  },
+  {
+   "t": 158.32,
+   "d": 1.48,
+   "text": "used neural networks to allow these"
+  },
+  {
+   "t": 159.8,
+   "d": 1.44,
+   "text": "little free critters. You can see one in"
+  },
+  {
+   "t": 161.24,
+   "d": 1.76,
+   "text": "the kind of top left and one kind of in"
+  },
+  {
+   "t": 163.0,
+   "d": 1.84,
+   "text": "the middle, um to learn from their"
+  },
+  {
+   "t": 164.84,
+   "d": 1.8,
+   "text": "experiences. Alan Zucconi actually has a"
+  },
+  {
+   "t": 166.64,
+   "d": 1.84,
+   "text": "great mini documentary about the AI in"
+  },
+  {
+   "t": 168.48,
+   "d": 1.36,
+   "text": "Creatures, which I'll link on the"
+  },
+  {
+   "t": 169.84,
+   "d": 2.32,
+   "text": "Obelisk. So, they would breed and mutate"
+  },
+  {
+   "t": 172.16,
+   "d": 1.92,
+   "text": "over generations, sometimes in bizarre"
+  },
+  {
+   "t": 174.08,
+   "d": 1.88,
+   "text": "ways as they had systems dedicated to"
+  },
+  {
+   "t": 175.96,
+   "d": 1.44,
+   "text": "many different aspects of their health"
+  },
+  {
+   "t": 177.4,
+   "d": 1.76,
+   "text": "and functionality that could be altered"
+  },
+  {
+   "t": 179.16,
+   "d": 1.68,
+   "text": "by genetic differences. And there's"
+  },
+  {
+   "t": 180.84,
+   "d": 1.88,
+   "text": "still a dedicated community today of"
+  },
+  {
+   "t": 182.72,
+   "d": 1.68,
+   "text": "passionate modders and enthusiasts who"
+  },
+  {
+   "t": 184.4,
+   "d": 1.24,
+   "text": "continue to play with them and push them"
+  },
+  {
+   "t": 185.64,
+   "d": 1.64,
+   "text": "forward. They have a Discord. I found"
+  },
+  {
+   "t": 187.28,
+   "d": 2.36,
+   "text": "it. It's active. It's great."
+  },
+  {
+   "t": 189.64,
+   "d": 1.72,
+   "text": "And you can't talk about games in this"
+  },
+  {
+   "t": 191.36,
+   "d": 2.24,
+   "text": "category without bringing up Spore. Um"
+  },
+  {
+   "t": 193.6,
+   "d": 2.8,
+   "text": "Spore released in September of 2008."
+  },
+  {
+   "t": 196.4,
+   "d": 2.08,
+   "text": "Again, a very formative time for me. Um"
+  },
+  {
+   "t": 198.48,
+   "d": 1.76,
+   "text": "and the creature stage especially is my"
+  },
+  {
+   "t": 200.24,
+   "d": 1.76,
+   "text": "favorite. It allowed for a lot of user"
+  },
+  {
+   "t": 202.0,
+   "d": 1.84,
+   "text": "creativity and inspired a lot of players"
+  },
+  {
+   "t": 203.84,
+   "d": 1.8,
+   "text": "to make bizarre animals that were then"
+  },
+  {
+   "t": 205.64,
+   "d": 2.48,
+   "text": "animated and playable within the game."
+  },
+  {
+   "t": 208.12,
+   "d": 1.72,
+   "text": "And so, a lot of people who were young"
+  },
+  {
+   "t": 209.84,
+   "d": 1.72,
+   "text": "at the time seemed to have played Spore"
+  },
+  {
+   "t": 211.56,
+   "d": 1.64,
+   "text": "and been like, \"Oh, this is so cool, but"
+  },
+  {
+   "t": 213.2,
+   "d": 2.36,
+   "text": "I wish it had something something more,"
+  },
+  {
+   "t": 215.56,
+   "d": 1.56,
+   "text": "you know?\" And that something more is"
+  },
+  {
+   "t": 217.12,
+   "d": 1.08,
+   "text": "probably different from person to"
+  },
+  {
+   "t": 218.2,
+   "d": 2.28,
+   "text": "person. Uh but I think a lot of those"
+  },
+  {
+   "t": 220.48,
+   "d": 1.76,
+   "text": "people who played Spore wanted something"
+  },
+  {
+   "t": 222.24,
+   "d": 2.04,
+   "text": "more and grew up are now game developers"
+  },
+  {
+   "t": 224.28,
+   "d": 1.4,
+   "text": "and making their own games in this"
+  },
+  {
+   "t": 225.68,
+   "d": 2.36,
+   "text": "niche. And so, here are a few of them."
+  },
+  {
+   "t": 228.04,
+   "d": 1.36,
+   "text": "These are games with a lot of the same"
+  },
+  {
+   "t": 229.4,
+   "d": 1.48,
+   "text": "genre conventions as Creatures and"
+  },
+  {
+   "t": 230.88,
+   "d": 1.92,
+   "text": "Spore, especially creature generation,"
+  },
+  {
+   "t": 232.8,
+   "d": 1.8,
+   "text": "editing by users, and mutation over"
+  },
+  {
+   "t": 234.6,
+   "d": 2.52,
+   "text": "time. Uh each of them is individually"
+  },
+  {
+   "t": 237.12,
+   "d": 2.16,
+   "text": "fascinating in its own right. Uh I"
+  },
+  {
+   "t": 239.28,
+   "d": 3.2,
+   "text": "highly recommend um looking at them. I I"
+  },
+  {
+   "t": 242.48,
+   "d": 2.84,
+   "text": "will link them also on the Obelisk."
+  },
+  {
+   "t": 245.32,
+   "d": 1.44,
+   "text": "Um they take varying approaches to"
+  },
+  {
+   "t": 246.76,
+   "d": 1.44,
+   "text": "creature design and together they"
+  },
+  {
+   "t": 248.2,
+   "d": 1.76,
+   "text": "demonstrate how many ways there are to"
+  },
+  {
+   "t": 249.96,
+   "d": 2.08,
+   "text": "tackle the various problems of art"
+  },
+  {
+   "t": 252.04,
+   "d": 2.6,
+   "text": "direction, creature behavior, mutation,"
+  },
+  {
+   "t": 254.64,
+   "d": 2.36,
+   "text": "user editing of organisms, and so on. I"
+  },
+  {
+   "t": 257.0,
+   "d": 1.2,
+   "text": "recommend checking them out if you're"
+  },
+  {
+   "t": 258.2,
+   "d": 2.04,
+   "text": "interested in this topic."
+  },
+  {
+   "t": 260.24,
+   "d": 1.36,
+   "text": "They're really cool."
+  },
+  {
+   "t": 261.6,
+   "d": 1.52,
+   "text": "And a lot of them do have demos"
+  },
+  {
+   "t": 263.12,
+   "d": 1.96,
+   "text": "available or are in early access on"
+  },
+  {
+   "t": 265.08,
+   "d": 1.56,
+   "text": "Steam."
+  },
+  {
+   "t": 266.64,
+   "d": 1.84,
+   "text": "Uh so, this is the space I'm working in"
+  },
+  {
+   "t": 268.48,
+   "d": 1.04,
+   "text": "and I'm going to discuss my"
+  },
+  {
+   "t": 269.52,
+   "d": 2.08,
+   "text": "in-development game Bioloom. Bioloom"
+  },
+  {
+   "t": 271.6,
+   "d": 2.0,
+   "text": "draws inspirations from similar places"
+  },
+  {
+   "t": 273.6,
+   "d": 1.4,
+   "text": "and it's also got some differences. For"
+  },
+  {
+   "t": 275.0,
+   "d": 1.56,
+   "text": "example, there's more narrative than a"
+  },
+  {
+   "t": 276.56,
+   "d": 2.0,
+   "text": "lot of the other ones. Uh you play as a"
+  },
+  {
+   "t": 278.56,
+   "d": 2.2,
+   "text": "robot cultivating ecosystems on a series"
+  },
+  {
+   "t": 280.76,
+   "d": 2.04,
+   "text": "of small moons starting the process over"
+  },
+  {
+   "t": 282.8,
+   "d": 1.64,
+   "text": "each time you move from moon to moon"
+  },
+  {
+   "t": 284.44,
+   "d": 1.44,
+   "text": "while the forests you left behind you"
+  },
+  {
+   "t": 285.88,
+   "d": 1.84,
+   "text": "keep growing. Uh you make friends with"
+  },
+  {
+   "t": 287.72,
+   "d": 1.68,
+   "text": "other robots and you learn about living"
+  },
+  {
+   "t": 289.4,
+   "d": 2.08,
+   "text": "things. It's a little bit of"
+  },
+  {
+   "t": 291.48,
+   "d": 3.08,
+   "text": "a life sim on top of an A-life sim. So,"
+  },
+  {
+   "t": 294.56,
+   "d": 1.44,
+   "text": "I'm going to go over ecosystem"
+  },
+  {
+   "t": 296.0,
+   "d": 1.6,
+   "text": "generation and evolution, especially"
+  },
+  {
+   "t": 297.6,
+   "d": 2.36,
+   "text": "little guys, uh specific challenges I've"
+  },
+  {
+   "t": 299.96,
+   "d": 1.56,
+   "text": "personally run into while developing the"
+  },
+  {
+   "t": 301.52,
+   "d": 2.0,
+   "text": "game, and some strategies I've come up"
+  },
+  {
+   "t": 303.52,
+   "d": 3.08,
+   "text": "with to face those challenges."
+  },
+  {
+   "t": 306.6,
+   "d": 1.76,
+   "text": "So, in general, the purpose of the art"
+  },
+  {
+   "t": 308.36,
+   "d": 1.36,
+   "text": "direction in this game is to give the"
+  },
+  {
+   "t": 309.72,
+   "d": 1.84,
+   "text": "user the clearest possible picture of"
+  },
+  {
+   "t": 311.56,
+   "d": 1.4,
+   "text": "the underlying data that makes up the"
+  },
+  {
+   "t": 312.96,
+   "d": 2.0,
+   "text": "simulation. So, when creatures are"
+  },
+  {
+   "t": 314.96,
+   "d": 1.96,
+   "text": "young, old, sick, starving, or dead,"
+  },
+  {
+   "t": 316.92,
+   "d": 1.6,
+   "text": "that should be visible to players. Same"
+  },
+  {
+   "t": 318.52,
+   "d": 1.24,
+   "text": "if there's a patch of wet or snowy"
+  },
+  {
+   "t": 319.76,
+   "d": 2.12,
+   "text": "ground, the atmosphere has gases in it,"
+  },
+  {
+   "t": 321.88,
+   "d": 2.0,
+   "text": "or if something's on fire. And the other"
+  },
+  {
+   "t": 323.88,
+   "d": 1.68,
+   "text": "goal is to create a cohesive stylized"
+  },
+  {
+   "t": 325.56,
+   "d": 1.84,
+   "text": "look and hide the seams where objects in"
+  },
+  {
+   "t": 327.4,
+   "d": 1.84,
+   "text": "the simulation have been put together."
+  },
+  {
+   "t": 329.24,
+   "d": 1.6,
+   "text": "Um it's a balance between showing"
+  },
+  {
+   "t": 330.84,
+   "d": 1.6,
+   "text": "exactly what's happening versus showing"
+  },
+  {
+   "t": 332.44,
+   "d": 1.28,
+   "text": "what players might expect something to"
+  },
+  {
+   "t": 333.72,
+   "d": 1.76,
+   "text": "look like and ideally keeping it"
+  },
+  {
+   "t": 335.48,
+   "d": 2.36,
+   "text": "visually appealing feeling as well. Um"
+  },
+  {
+   "t": 337.84,
+   "d": 1.96,
+   "text": "I'm using Unity, so some of the concepts"
+  },
+  {
+   "t": 339.8,
+   "d": 2.52,
+   "text": "and terms here will be Unity specific."
+  },
+  {
+   "t": 342.32,
+   "d": 2.48,
+   "text": "And so, speaking of seams, uh this is"
+  },
+  {
+   "t": 344.8,
+   "d": 1.72,
+   "text": "what the moon would look like with just"
+  },
+  {
+   "t": 346.52,
+   "d": 1.56,
+   "text": "the default lit shaders, with none of my"
+  },
+  {
+   "t": 348.08,
+   "d": 2.32,
+   "text": "fancy shaders. Let me go back and forth."
+  },
+  {
+   "t": 350.4,
+   "d": 1.72,
+   "text": "Yeah."
+  },
+  {
+   "t": 352.12,
+   "d": 2.36,
+   "text": "Um you can see everything's kind of put"
+  },
+  {
+   "t": 354.48,
+   "d": 1.12,
+   "text": "together and I'm going to go into more"
+  },
+  {
+   "t": 355.6,
+   "d": 2.52,
+   "text": "detail here. Here's a little pink snake"
+  },
+  {
+   "t": 358.12,
+   "d": 1.64,
+   "text": "{slash} worm."
+  },
+  {
+   "t": 359.76,
+   "d": 1.44,
+   "text": "Um and here it is with default lit"
+  },
+  {
+   "t": 361.2,
+   "d": 1.56,
+   "text": "shaders. Again, I'm taking kind of"
+  },
+  {
+   "t": 362.76,
+   "d": 1.6,
+   "text": "primitive shapes and squishing them"
+  },
+  {
+   "t": 364.36,
+   "d": 1.24,
+   "text": "together."
+  },
+  {
+   "t": 365.6,
+   "d": 4.28,
+   "text": "Uh here's a shrugging rabbit."
+  },
+  {
+   "t": 370.16,
+   "d": 2.08,
+   "text": "And same thing here with this dog and"
+  },
+  {
+   "t": 372.24,
+   "d": 3.32,
+   "text": "the robot in the background."
+  },
+  {
+   "t": 375.8,
+   "d": 1.36,
+   "text": "Creatures can be generated fully"
+  },
+  {
+   "t": 377.16,
+   "d": 2.72,
+   "text": "randomly, um like just just spawned from"
+  },
+  {
+   "t": 379.88,
+   "d": 2.08,
+   "text": "nothing, or they can be generated by"
+  },
+  {
+   "t": 381.96,
+   "d": 2.2,
+   "text": "reproduction between parent creatures."
+  },
+  {
+   "t": 384.16,
+   "d": 1.68,
+   "text": "Either way, they're made of small parts"
+  },
+  {
+   "t": 385.84,
+   "d": 1.4,
+   "text": "snapped together and procedurally"
+  },
+  {
+   "t": 387.24,
+   "d": 1.64,
+   "text": "animated. Uh here are just a few"
+  },
+  {
+   "t": 388.88,
+   "d": 2.08,
+   "text": "examples of possible body parts. They"
+  },
+  {
+   "t": 390.96,
+   "d": 1.76,
+   "text": "can be arbitrarily large or small,"
+  },
+  {
+   "t": 392.72,
+   "d": 2.36,
+   "text": "simple or complicated. I try to keep"
+  },
+  {
+   "t": 395.08,
+   "d": 1.4,
+   "text": "them on the simpler end so they can be"
+  },
+  {
+   "t": 396.48,
+   "d": 2.16,
+   "text": "combined in stranger and more unexpected"
+  },
+  {
+   "t": 398.64,
+   "d": 1.44,
+   "text": "ways."
+  },
+  {
+   "t": 400.08,
+   "d": 1.68,
+   "text": "Uh everything's modeled in Blender and I"
+  },
+  {
+   "t": 401.76,
+   "d": 2.24,
+   "text": "set up the UVs such that every body part"
+  },
+  {
+   "t": 404.0,
+   "d": 2.0,
+   "text": "plays more or less nicely with seamless"
+  },
+  {
+   "t": 406.0,
+   "d": 2.04,
+   "text": "tiling textures. Huge fan of seamless"
+  },
+  {
+   "t": 408.04,
+   "d": 2.24,
+   "text": "tiling textures. Speaking of, uh the"
+  },
+  {
+   "t": 410.28,
+   "d": 1.76,
+   "text": "textures themselves are made in Krita,"
+  },
+  {
+   "t": 412.04,
+   "d": 1.64,
+   "text": "which is great for illustrating tiling"
+  },
+  {
+   "t": 413.68,
+   "d": 2.36,
+   "text": "textures quickly and easily. Uh the hot"
+  },
+  {
+   "t": 416.04,
+   "d": 2.0,
+   "text": "key to go into seamless tiling mode is"
+  },
+  {
+   "t": 418.04,
+   "d": 2.8,
+   "text": "shift W. Uh and then it does this and"
+  },
+  {
+   "t": 420.84,
+   "d": 1.2,
+   "text": "you can just draw on the whole thing."
+  },
+  {
+   "t": 422.04,
+   "d": 2.56,
+   "text": "So, uh if people didn't know about that,"
+  },
+  {
+   "t": 424.6,
+   "d": 1.96,
+   "text": "that's my favorite thing."
+  },
+  {
+   "t": 426.56,
+   "d": 2.24,
+   "text": "Uh and so, these are just a few of the"
+  },
+  {
+   "t": 428.8,
+   "d": 2.12,
+   "text": "textures I have and then in a shader for"
+  },
+  {
+   "t": 430.92,
+   "d": 2.32,
+   "text": "creature colors, uh I'll just kind of"
+  },
+  {
+   "t": 433.24,
+   "d": 2.08,
+   "text": "lerp between two two tints that are"
+  },
+  {
+   "t": 435.32,
+   "d": 2.84,
+   "text": "defined in the creature's genes."
+  },
+  {
+   "t": 438.16,
+   "d": 1.84,
+   "text": "Each body part prefab has a number of"
+  },
+  {
+   "t": 440.0,
+   "d": 1.96,
+   "text": "empty child objects that represent the"
+  },
+  {
+   "t": 441.96,
+   "d": 1.6,
+   "text": "position, rotation, and scale where"
+  },
+  {
+   "t": 443.56,
+   "d": 1.4,
+   "text": "another body part could be added onto"
+  },
+  {
+   "t": 444.96,
+   "d": 3.64,
+   "text": "it. So, for example, this is a head."
+  },
+  {
+   "t": 449.32,
+   "d": 3.72,
+   "text": "We got eyes and ears and horns."
+  },
+  {
+   "t": 453.04,
+   "d": 1.44,
+   "text": "And so, I can set up these empty"
+  },
+  {
+   "t": 454.48,
+   "d": 2.68,
+   "text": "containers for body parts in the prefab."
+  },
+  {
+   "t": 457.16,
+   "d": 0.8,
+   "text": "Uh [clears throat] I call the containers"
+  },
+  {
+   "t": 457.96,
+   "d": 2.2,
+   "text": "sockets and then I manually assign each"
+  },
+  {
+   "t": 460.16,
+   "d": 1.92,
+   "text": "socket an ID number. Because I'm"
+  },
+  {
+   "t": 462.08,
+   "d": 1.8,
+   "text": "assigning these manually, I can set it"
+  },
+  {
+   "t": 463.88,
+   "d": 2.08,
+   "text": "so that certain socket"
+  },
+  {
+   "t": 465.96,
+   "d": 1.84,
+   "text": "certain sockets on a body part all have"
+  },
+  {
+   "t": 467.8,
+   "d": 2.48,
+   "text": "the same ID. So, if for example, I want"
+  },
+  {
+   "t": 470.28,
+   "d": 1.76,
+   "text": "to ensure that eyes, wings, or legs"
+  },
+  {
+   "t": 472.04,
+   "d": 3.56,
+   "text": "spawn in symmetrically, I can do so."
+  },
+  {
+   "t": 475.6,
+   "d": 2.4,
+   "text": "I also assign odds to each socket for"
+  },
+  {
+   "t": 478.0,
+   "d": 1.6,
+   "text": "what type of body part will spawn. So,"
+  },
+  {
+   "t": 479.6,
+   "d": 1.72,
+   "text": "the body parts generated are roughly"
+  },
+  {
+   "t": 481.32,
+   "d": 2.12,
+   "text": "what you'd expect. Uh torso has a good"
+  },
+  {
+   "t": 483.44,
+   "d": 2.08,
+   "text": "chance of getting a head or neck or eyes"
+  },
+  {
+   "t": 485.52,
+   "d": 1.76,
+   "text": "at the front, a tail at the back, legs"
+  },
+  {
+   "t": 487.28,
+   "d": 1.56,
+   "text": "on the sides, and horns going down the"
+  },
+  {
+   "t": 488.84,
+   "d": 2.32,
+   "text": "spine, for example. Uh the crab here"
+  },
+  {
+   "t": 491.16,
+   "d": 2.52,
+   "text": "basically looks like a crab. It's It's"
+  },
+  {
+   "t": 493.68,
+   "d": 3.28,
+   "text": "convincingly a crab. This big lizard is"
+  },
+  {
+   "t": 496.96,
+   "d": 1.84,
+   "text": "I'll admit, it's weird and alien-looking"
+  },
+  {
+   "t": 498.8,
+   "d": 2.2,
+   "text": "because it has a lot of eyes, but it's"
+  },
+  {
+   "t": 501.0,
+   "d": 2.4,
+   "text": "still got a head, legs, eyes, nostrils,"
+  },
+  {
+   "t": 503.4,
+   "d": 1.72,
+   "text": "and even a little fluffy blue tail where"
+  },
+  {
+   "t": 505.12,
+   "d": 1.8,
+   "text": "you'd expect it to be, even if there are"
+  },
+  {
+   "t": 506.92,
+   "d": 1.88,
+   "text": "more eyes and more fluff than you'd"
+  },
+  {
+   "t": 508.8,
+   "d": 2.32,
+   "text": "usually see on a lizard."
+  },
+  {
+   "t": 511.12,
+   "d": 1.36,
+   "text": "Uh but to keep things from getting too"
+  },
+  {
+   "t": 512.48,
+   "d": 1.64,
+   "text": "monotonous, almost every socket has a"
+  },
+  {
+   "t": 514.12,
+   "d": 1.64,
+   "text": "small random chance to generate almost"
+  },
+  {
+   "t": 515.76,
+   "d": 1.96,
+   "text": "any body part, which is how you can get,"
+  },
+  {
+   "t": 517.72,
+   "d": 1.8,
+   "text": "for example, this guy who has a giant"
+  },
+  {
+   "t": 519.52,
+   "d": 1.4,
+   "text": "hand sticking out of his face instead of"
+  },
+  {
+   "t": 520.92,
+   "d": 2.64,
+   "text": "a nose, uh or this guy with a tree"
+  },
+  {
+   "t": 523.56,
+   "d": 1.96,
+   "text": "growing out of where his mouth would be."
+  },
+  {
+   "t": 525.52,
+   "d": 1.76,
+   "text": "Uh this is just a grub with horse heads"
+  },
+  {
+   "t": 527.28,
+   "d": 1.92,
+   "text": "for legs. This is a valid creature. I"
+  },
+  {
+   "t": 529.2,
+   "d": 1.64,
+   "text": "had to see it, so now you have to see"
+  },
+  {
+   "t": 530.84,
+   "d": 1.2,
+   "text": "it, too."
+  },
+  {
+   "t": 532.04,
+   "d": 2.12,
+   "text": "Uh this animal, instead of spawning a"
+  },
+  {
+   "t": 534.16,
+   "d": 2.04,
+   "text": "mouth, spawned a full other animal"
+  },
+  {
+   "t": 536.2,
+   "d": 2.12,
+   "text": "torso, which also grew a neck and a"
+  },
+  {
+   "t": 538.32,
+   "d": 2.68,
+   "text": "head, uh spiral shells on its neck, five"
+  },
+  {
+   "t": 541.0,
+   "d": 1.6,
+   "text": "sets of wings, and shrubberies on its"
+  },
+  {
+   "t": 542.6,
+   "d": 1.52,
+   "text": "back."
+  },
+  {
+   "t": 544.12,
+   "d": 2.76,
+   "text": "And this animal has hands for antlers."
+  },
+  {
+   "t": 546.88,
+   "d": 1.56,
+   "text": "Antlers."
+  },
+  {
+   "t": 548.44,
+   "d": 1.68,
+   "text": "When creatures are generated layer by"
+  },
+  {
+   "t": 550.12,
+   "d": 1.72,
+   "text": "layer, it looks like this. There's a"
+  },
+  {
+   "t": 551.84,
+   "d": 2.36,
+   "text": "neck, wings, legs, tail,"
+  },
+  {
+   "t": 554.2,
+   "d": 1.96,
+   "text": "uh head, shrubs because the tail's a"
+  },
+  {
+   "t": 556.16,
+   "d": 2.44,
+   "text": "tree, uh facial features, more tree"
+  },
+  {
+   "t": 558.6,
+   "d": 1.96,
+   "text": "branches and leaves,"
+  },
+  {
+   "t": 560.56,
+   "d": 2.44,
+   "text": "and a little more."
+  },
+  {
+   "t": 563.0,
+   "d": 2.24,
+   "text": "And so on until you run out of new body"
+  },
+  {
+   "t": 565.24,
+   "d": 1.56,
+   "text": "parts to spawn. For example, if there's"
+  },
+  {
+   "t": 566.8,
+   "d": 1.92,
+   "text": "no more sockets at the end of the body"
+  },
+  {
+   "t": 568.72,
+   "d": 1.96,
+   "text": "parts that are in the most recent layer,"
+  },
+  {
+   "t": 570.68,
+   "d": 1.8,
+   "text": "or you can hit a an arbitrary limit"
+  },
+  {
+   "t": 572.48,
+   "d": 2.08,
+   "text": "defined in code. Uh after about four"
+  },
+  {
+   "t": 574.56,
+   "d": 1.56,
+   "text": "layers, things tend to be much less"
+  },
+  {
+   "t": 576.12,
+   "d": 2.72,
+   "text": "interest- interesting."
+  },
+  {
+   "t": 578.84,
+   "d": 1.88,
+   "text": "This process isn't specific to animals,"
+  },
+  {
+   "t": 580.72,
+   "d": 2.04,
+   "text": "either. It's possible to make trees or"
+  },
+  {
+   "t": 582.76,
+   "d": 1.88,
+   "text": "fungi the same way. Early on in"
+  },
+  {
+   "t": 584.64,
+   "d": 2.04,
+   "text": "development, I was generating plants and"
+  },
+  {
+   "t": 586.68,
+   "d": 2.6,
+   "text": "animals with separate methods and uh at"
+  },
+  {
+   "t": 589.28,
+   "d": 1.6,
+   "text": "at a certain point, I looked at the code"
+  },
+  {
+   "t": 590.88,
+   "d": 1.48,
+   "text": "and I was like, \"Oh, there's really no"
+  },
+  {
+   "t": 592.36,
+   "d": 1.96,
+   "text": "reason I couldn't just adapt my creature"
+  },
+  {
+   "t": 594.32,
+   "d": 3.6,
+   "text": "generator uh to make trees.\" And that"
+  },
+  {
+   "t": 597.92,
+   "d": 3.0,
+   "text": "made things easier and more fun. Grass"
+  },
+  {
+   "t": 600.92,
+   "d": 2.12,
+   "text": "is is generated the same way. It's just"
+  },
+  {
+   "t": 603.04,
+   "d": 2.44,
+   "text": "rendered differently, but every tile of"
+  },
+  {
+   "t": 605.48,
+   "d": 1.96,
+   "text": "grass on the ground is an organism with"
+  },
+  {
+   "t": 607.44,
+   "d": 2.48,
+   "text": "a lifespan, uh a metabolism, and"
+  },
+  {
+   "t": 609.92,
+   "d": 2.2,
+   "text": "presumably thoughts and dreams."
+  },
+  {
+   "t": 612.12,
+   "d": 1.44,
+   "text": "Though no brain."
+  },
+  {
+   "t": 613.56,
+   "d": 1.64,
+   "text": "Uh generating plants and animals the"
+  },
+  {
+   "t": 615.2,
+   "d": 2.32,
+   "text": "same way also allows for plant-animal"
+  },
+  {
+   "t": 617.52,
+   "d": 2.52,
+   "text": "hybrids, which are a lot of fun. Uh as"
+  },
+  {
+   "t": 620.04,
+   "d": 1.84,
+   "text": "another example, here's a perfectly"
+  },
+  {
+   "t": 621.88,
+   "d": 1.4,
+   "text": "normal giraffe."
+  },
+  {
+   "t": 623.28,
+   "d": 3.4,
+   "text": "Or is it? Let's zoom in on its neck."
+  },
+  {
+   "t": 626.68,
+   "d": 2.72,
+   "text": "As you can see, its neck has two trees"
+  },
+  {
+   "t": 629.4,
+   "d": 1.64,
+   "text": "and a little mushroom."
+  },
+  {
+   "t": 631.04,
+   "d": 3.08,
+   "text": "And if we zoom in further,"
+  },
+  {
+   "t": 634.12,
+   "d": 0.76,
+   "text": "Oop."
+  },
+  {
+   "t": 634.88,
+   "d": 2.04,
+   "text": "The mushroom has eyes on it. So, we've"
+  },
+  {
+   "t": 636.92,
+   "d": 3.16,
+   "text": "gone from animal to fungus back to"
+  },
+  {
+   "t": 640.08,
+   "d": 1.32,
+   "text": "animal."
+  },
+  {
+   "t": 641.4,
+   "d": 3.16,
+   "text": "Which is is fun. It's a fun journey."
+  },
+  {
+   "t": 644.56,
+   "d": 1.92,
+   "text": "Even though creatures are all, you know,"
+  },
+  {
+   "t": 646.48,
+   "d": 2.0,
+   "text": "creatures and animals and plants are all"
+  },
+  {
+   "t": 648.48,
+   "d": 1.32,
+   "text": "generated in the same way, they"
+  },
+  {
+   "t": 649.8,
+   "d": 1.8,
+   "text": "shouldn't behave the same way. So, I add"
+  },
+  {
+   "t": 651.6,
+   "d": 1.64,
+   "text": "functionality to each organism based on"
+  },
+  {
+   "t": 653.24,
+   "d": 1.88,
+   "text": "what body parts it was spawned with."
+  },
+  {
+   "t": 655.12,
+   "d": 1.4,
+   "text": "Certain body parts come with certain"
+  },
+  {
+   "t": 656.52,
+   "d": 1.92,
+   "text": "attached components that define organism"
+  },
+  {
+   "t": 658.44,
+   "d": 1.88,
+   "text": "behavior. For example, if the first body"
+  },
+  {
+   "t": 660.32,
+   "d": 1.48,
+   "text": "part is a tree trunk or a patch of"
+  },
+  {
+   "t": 661.8,
+   "d": 2.36,
+   "text": "grass, I keep it stationary. Uh if the"
+  },
+  {
+   "t": 664.16,
+   "d": 2.0,
+   "text": "first body part is a torso, it can be"
+  },
+  {
+   "t": 666.16,
+   "d": 2.16,
+   "text": "moved around. Creatures with legs can"
+  },
+  {
+   "t": 668.32,
+   "d": 1.96,
+   "text": "move under their own power, but the legs"
+  },
+  {
+   "t": 670.28,
+   "d": 1.32,
+   "text": "need to be able to reach the ground so"
+  },
+  {
+   "t": 671.6,
+   "d": 1.56,
+   "text": "they can be more or less useful to an"
+  },
+  {
+   "t": 673.16,
+   "d": 1.44,
+   "text": "animal depending on where they spawn and"
+  },
+  {
+   "t": 674.6,
+   "d": 2.52,
+   "text": "how large. If they have a teeny tiny leg"
+  },
+  {
+   "t": 677.12,
+   "d": 2.16,
+   "text": "coming out of the top of their head,"
+  },
+  {
+   "t": 679.28,
+   "d": 1.32,
+   "text": "it's not going to help them move,"
+  },
+  {
+   "t": 680.6,
+   "d": 1.4,
+   "text": "probably."
+  },
+  {
+   "t": 682.0,
+   "d": 1.4,
+   "text": "Uh organisms with leaves can"
+  },
+  {
+   "t": 683.4,
+   "d": 2.52,
+   "text": "photosynthesize. Uh creatures without"
+  },
+  {
+   "t": 685.92,
+   "d": 1.8,
+   "text": "eyes, mouths, or heads are assumed in"
+  },
+  {
+   "t": 687.72,
+   "d": 1.76,
+   "text": "the system to have no brains, so they"
+  },
+  {
+   "t": 689.48,
+   "d": 2.08,
+   "text": "just sort of sea cucumber around until"
+  },
+  {
+   "t": 691.56,
+   "d": 1.96,
+   "text": "something kills them. Uh I have seen"
+  },
+  {
+   "t": 693.52,
+   "d": 1.4,
+   "text": "creatures like this thrive and"
+  },
+  {
+   "t": 694.92,
+   "d": 1.96,
+   "text": "outcompete creatures with heads. Uh more"
+  },
+  {
+   "t": 696.88,
+   "d": 1.36,
+   "text": "on that later."
+  },
+  {
+   "t": 698.24,
+   "d": 1.96,
+   "text": "And most creatures are born with noses,"
+  },
+  {
+   "t": 700.2,
+   "d": 2.08,
+   "text": "mouths, or nostrils. Uh and if something"
+  },
+  {
+   "t": 702.28,
+   "d": 1.56,
+   "text": "doesn't have those things and it can't"
+  },
+  {
+   "t": 703.84,
+   "d": 1.48,
+   "text": "breathe through its skin, uh it'll"
+  },
+  {
+   "t": 705.32,
+   "d": 2.16,
+   "text": "suffocate shortly after it's born. This"
+  },
+  {
+   "t": 707.48,
+   "d": 2.24,
+   "text": "has not worked for anything so far as an"
+  },
+  {
+   "t": 709.72,
+   "d": 2.48,
+   "text": "evolutionary strategy."
+  },
+  {
+   "t": 712.2,
+   "d": 1.68,
+   "text": "I also want to be able to I I want"
+  },
+  {
+   "t": 713.88,
+   "d": 1.84,
+   "text": "players to be able to determine how old"
+  },
+  {
+   "t": 715.72,
+   "d": 2.04,
+   "text": "an animal is just by looking at it. So,"
+  },
+  {
+   "t": 717.76,
+   "d": 2.04,
+   "text": "each body part is scaled independently"
+  },
+  {
+   "t": 719.8,
+   "d": 1.8,
+   "text": "relative to the body as the creature"
+  },
+  {
+   "t": 721.6,
+   "d": 2.36,
+   "text": "ages. So, for example, I set the heads"
+  },
+  {
+   "t": 723.96,
+   "d": 1.96,
+   "text": "and eyes to start large and end small,"
+  },
+  {
+   "t": 725.92,
+   "d": 1.8,
+   "text": "whereas things like horns and shells and"
+  },
+  {
+   "t": 727.72,
+   "d": 1.92,
+   "text": "branches tend to start very small and"
+  },
+  {
+   "t": 729.64,
+   "d": 2.16,
+   "text": "end up large. So, you start with a baby"
+  },
+  {
+   "t": 731.8,
+   "d": 1.48,
+   "text": "that has a big head and big eyes, and"
+  },
+  {
+   "t": 733.28,
+   "d": 2.16,
+   "text": "you end up with an animal that has um"
+  },
+  {
+   "t": 735.44,
+   "d": 1.76,
+   "text": "that has grown horns over the course of"
+  },
+  {
+   "t": 737.2,
+   "d": 2.32,
+   "text": "its life and now looks like an adult."
+  },
+  {
+   "t": 739.52,
+   "d": 1.64,
+   "text": "Here's an example. It's a young"
+  },
+  {
+   "t": 741.16,
+   "d": 3.2,
+   "text": "aardvark. It looks like a baby aardvark."
+  },
+  {
+   "t": 744.36,
+   "d": 2.0,
+   "text": "And here's the same aardvark grown up."
+  },
+  {
+   "t": 746.36,
+   "d": 1.52,
+   "text": "You can see the head and eyes aren't"
+  },
+  {
+   "t": 747.88,
+   "d": 1.52,
+   "text": "quite as large relative to the rest of"
+  },
+  {
+   "t": 749.4,
+   "d": 1.92,
+   "text": "it, and also it grew a tree out of its"
+  },
+  {
+   "t": 751.32,
+   "d": 1.28,
+   "text": "back."
+  },
+  {
+   "t": 752.6,
+   "d": 2.72,
+   "text": "Here they are side by side."
+  },
+  {
+   "t": 755.32,
+   "d": 2.36,
+   "text": "Here's a baby mouse."
+  },
+  {
+   "t": 757.68,
+   "d": 2.0,
+   "text": "And here's the adult mouse. Uh when I"
+  },
+  {
+   "t": 759.68,
+   "d": 1.8,
+   "text": "was trying to get good examples of this,"
+  },
+  {
+   "t": 761.48,
+   "d": 1.6,
+   "text": "I did keep getting little guys who were"
+  },
+  {
+   "t": 763.08,
+   "d": 1.44,
+   "text": "growing trees out of their bodies. It's"
+  },
+  {
+   "t": 764.52,
+   "d": 1.84,
+   "text": "just something that happens."
+  },
+  {
+   "t": 766.36,
+   "d": 2.84,
+   "text": "Uh here's a little pink baby snail."
+  },
+  {
+   "t": 769.2,
+   "d": 1.36,
+   "text": "And here's the grown-up version with a"
+  },
+  {
+   "t": 770.56,
+   "d": 2.92,
+   "text": "big spiral snail shell."
+  },
+  {
+   "t": 773.48,
+   "d": 1.44,
+   "text": "The same thing applies to trees. So,"
+  },
+  {
+   "t": 774.92,
+   "d": 3.2,
+   "text": "we've got a baby tree and a mature tree."
+  },
+  {
+   "t": 778.12,
+   "d": 2.04,
+   "text": "Uh so, moving on,"
+  },
+  {
+   "t": 780.16,
+   "d": 1.8,
+   "text": "uh we also have death as a possible"
+  },
+  {
+   "t": 781.96,
+   "d": 1.88,
+   "text": "state for an animal. So, lots of body"
+  },
+  {
+   "t": 783.84,
+   "d": 3.16,
+   "text": "part prefabs contain visible bones, and"
+  },
+  {
+   "t": 787.0,
+   "d": 1.24,
+   "text": "you can't see them when the creature is"
+  },
+  {
+   "t": 788.24,
+   "d": 2.12,
+   "text": "alive, but as the creature dies, I just"
+  },
+  {
+   "t": 790.36,
+   "d": 1.72,
+   "text": "shrink the skin away while leaving the"
+  },
+  {
+   "t": 792.08,
+   "d": 1.84,
+   "text": "bones, so everything gradually appears"
+  },
+  {
+   "t": 793.92,
+   "d": 1.96,
+   "text": "to decay from an animal into a skeleton"
+  },
+  {
+   "t": 795.88,
+   "d": 1.52,
+   "text": "with the same shape."
+  },
+  {
+   "t": 797.4,
+   "d": 2.32,
+   "text": "I do think the blue robot at the bottom"
+  },
+  {
+   "t": 799.72,
+   "d": 2.2,
+   "text": "of this image killed these animals, and"
+  },
+  {
+   "t": 801.92,
+   "d": 3.08,
+   "text": "I do think he regrets it."
+  },
+  {
+   "t": 805.0,
+   "d": 2.04,
+   "text": "Uh creatures reproduce generally by"
+  },
+  {
+   "t": 807.04,
+   "d": 2.36,
+   "text": "finding a mate and laying one egg, at"
+  },
+  {
+   "t": 809.4,
+   "d": 1.32,
+   "text": "which point the game generates a new"
+  },
+  {
+   "t": 810.72,
+   "d": 1.96,
+   "text": "chromosome based on the parents. The"
+  },
+  {
+   "t": 812.68,
+   "d": 1.76,
+   "text": "chromosome system is is fairly simple"
+  },
+  {
+   "t": 814.44,
+   "d": 1.52,
+   "text": "right now. A chromosome just contains"
+  },
+  {
+   "t": 815.96,
+   "d": 2.04,
+   "text": "data about which body parts to generate,"
+  },
+  {
+   "t": 818.0,
+   "d": 1.64,
+   "text": "where each body part goes, and some"
+  },
+  {
+   "t": 819.64,
+   "d": 1.52,
+   "text": "additional information about things like"
+  },
+  {
+   "t": 821.16,
+   "d": 2.32,
+   "text": "creature size and colors. Initially, I"
+  },
+  {
+   "t": 823.48,
+   "d": 2.04,
+   "text": "was just uh selecting random parts,"
+  },
+  {
+   "t": 825.52,
+   "d": 1.4,
+   "text": "random body parts from each parent"
+  },
+  {
+   "t": 826.92,
+   "d": 1.68,
+   "text": "chromosome, and combining them in"
+  },
+  {
+   "t": 828.6,
+   "d": 1.32,
+   "text": "roughly the same order they'd been in"
+  },
+  {
+   "t": 829.92,
+   "d": 1.76,
+   "text": "originally, but that led to some"
+  },
+  {
+   "t": 831.68,
+   "d": 2.24,
+   "text": "spectacularly awful creatures because"
+  },
+  {
+   "t": 833.92,
+   "d": 1.68,
+   "text": "things would happen like instead of a"
+  },
+  {
+   "t": 835.6,
+   "d": 1.68,
+   "text": "neck out of its torso, a creature would"
+  },
+  {
+   "t": 837.28,
+   "d": 1.68,
+   "text": "spawn a horn, and then there wouldn't be"
+  },
+  {
+   "t": 838.96,
+   "d": 1.76,
+   "text": "a socket at the end of the horn for the"
+  },
+  {
+   "t": 840.72,
+   "d": 1.68,
+   "text": "eyes head and eyes to spawn, so they"
+  },
+  {
+   "t": 842.4,
+   "d": 1.52,
+   "text": "would show up at random spots on the"
+  },
+  {
+   "t": 843.92,
+   "d": 2.24,
+   "text": "body or not at all."
+  },
+  {
+   "t": 846.16,
+   "d": 3.16,
+   "text": "I have an example. Uh here's the kind of"
+  },
+  {
+   "t": 849.32,
+   "d": 1.96,
+   "text": "cool animal you might see with this"
+  },
+  {
+   "t": 851.28,
+   "d": 2.36,
+   "text": "approach to combining chromosomes. It's"
+  },
+  {
+   "t": 853.64,
+   "d": 2.52,
+   "text": "a shrub with a leg, and it rolls around"
+  },
+  {
+   "t": 856.16,
+   "d": 2.08,
+   "text": "until it dies."
+  },
+  {
+   "t": 858.24,
+   "d": 2.16,
+   "text": "And then I changed the system, so now"
+  },
+  {
+   "t": 860.4,
+   "d": 1.56,
+   "text": "when two chromosomes combine, the"
+  },
+  {
+   "t": 861.96,
+   "d": 2.12,
+   "text": "resulting offspring is generated using"
+  },
+  {
+   "t": 864.08,
+   "d": 1.8,
+   "text": "the same body type probabilities that I"
+  },
+  {
+   "t": 865.88,
+   "d": 2.96,
+   "text": "had set on the initial prefabs, but uh"
+  },
+  {
+   "t": 868.84,
+   "d": 2.12,
+   "text": "the types allowed are mostly constrained"
+  },
+  {
+   "t": 870.96,
+   "d": 1.56,
+   "text": "to body parts that are present on at"
+  },
+  {
+   "t": 872.52,
+   "d": 1.76,
+   "text": "least one of the parents. So, you can"
+  },
+  {
+   "t": 874.28,
+   "d": 1.68,
+   "text": "see in these cases the child in the"
+  },
+  {
+   "t": 875.96,
+   "d": 3.04,
+   "text": "middle and the parents on either side."
+  },
+  {
+   "t": 879.0,
+   "d": 2.36,
+   "text": "The results of this look pretty good,"
+  },
+  {
+   "t": 881.36,
+   "d": 2.48,
+   "text": "um but some of the weirder animals won't"
+  },
+  {
+   "t": 883.84,
+   "d": 2.04,
+   "text": "have their shapes preserved, like the"
+  },
+  {
+   "t": 885.88,
+   "d": 2.0,
+   "text": "little guy with the antlers and the"
+  },
+  {
+   "t": 887.88,
+   "d": 1.56,
+   "text": "animals with horse heads for legs. They"
+  },
+  {
+   "t": 889.44,
+   "d": 1.72,
+   "text": "won't pass on those particular traits to"
+  },
+  {
+   "t": 891.16,
+   "d": 1.2,
+   "text": "their offspring. They'll pass on the"
+  },
+  {
+   "t": 892.36,
+   "d": 1.56,
+   "text": "horse heads, but they won't pass on"
+  },
+  {
+   "t": 893.92,
+   "d": 1.44,
+   "text": "where they are. That's something I'd"
+  },
+  {
+   "t": 895.36,
+   "d": 2.16,
+   "text": "like to change versions of this to"
+  },
+  {
+   "t": 897.52,
+   "d": 1.48,
+   "text": "preserve that bizarreness over"
+  },
+  {
+   "t": 899.0,
+   "d": 1.52,
+   "text": "generations if it turns out to be"
+  },
+  {
+   "t": 900.52,
+   "d": 2.28,
+   "text": "evolutionarily advantageous, or at least"
+  },
+  {
+   "t": 902.8,
+   "d": 3.2,
+   "text": "not disadvantageous."
+  },
+  {
+   "t": 906.24,
+   "d": 1.96,
+   "text": "In this one, this example, a rare"
+  },
+  {
+   "t": 908.2,
+   "d": 1.52,
+   "text": "mutation happened that caused the"
+  },
+  {
+   "t": 909.72,
+   "d": 2.52,
+   "text": "offspring to grow heads instead of eyes."
+  },
+  {
+   "t": 912.24,
+   "d": 2.2,
+   "text": "Uh see, it has the same sort of torso"
+  },
+  {
+   "t": 914.44,
+   "d": 3.16,
+   "text": "shape as its parent on the right, um but"
+  },
+  {
+   "t": 917.6,
+   "d": 1.88,
+   "text": "heads instead. And I want that kind of"
+  },
+  {
+   "t": 919.48,
+   "d": 2.0,
+   "text": "trait to be passed on to offspring. In"
+  },
+  {
+   "t": 921.48,
+   "d": 2.56,
+   "text": "the current system, it wouldn't be."
+  },
+  {
+   "t": 924.04,
+   "d": 2.2,
+   "text": "Moving on to the moon. Uh the moon's"
+  },
+  {
+   "t": 926.24,
+   "d": 2.08,
+   "text": "also procedurally generated. I spawn in"
+  },
+  {
+   "t": 928.32,
+   "d": 1.8,
+   "text": "a moon at a random scale between two"
+  },
+  {
+   "t": 930.12,
+   "d": 2.6,
+   "text": "constants, and then spawn in hills,"
+  },
+  {
+   "t": 932.72,
+   "d": 1.8,
+   "text": "which are also prefabs, and peaks at"
+  },
+  {
+   "t": 934.52,
+   "d": 1.6,
+   "text": "random positions on the surface to give"
+  },
+  {
+   "t": 936.12,
+   "d": 2.24,
+   "text": "the shape of the moon some variation."
+  },
+  {
+   "t": 938.36,
+   "d": 2.12,
+   "text": "Uh all of the most of the light is done"
+  },
+  {
+   "t": 940.48,
+   "d": 2.16,
+   "text": "custom in a shader. The shadows are done"
+  },
+  {
+   "t": 942.64,
+   "d": 2.24,
+   "text": "using Unity's lighting system."
+  },
+  {
+   "t": 944.88,
+   "d": 1.64,
+   "text": "But that's also part of how to hide"
+  },
+  {
+   "t": 946.52,
+   "d": 2.2,
+   "text": "those seams."
+  },
+  {
+   "t": 948.72,
+   "d": 1.76,
+   "text": "Uh after after I've spawned everything"
+  },
+  {
+   "t": 950.48,
+   "d": 1.84,
+   "text": "in, I put all the world space vertex"
+  },
+  {
+   "t": 952.32,
+   "d": 3.16,
+   "text": "positions of all the meshes into a list,"
+  },
+  {
+   "t": 955.48,
+   "d": 1.96,
+   "text": "and each of those vertex positions is"
+  },
+  {
+   "t": 957.44,
+   "d": 1.32,
+   "text": "associated with a list of all the"
+  },
+  {
+   "t": 958.76,
+   "d": 1.48,
+   "text": "vertices within a certain distance"
+  },
+  {
+   "t": 960.24,
+   "d": 2.52,
+   "text": "threshold of them, and that allows for"
+  },
+  {
+   "t": 962.76,
+   "d": 1.56,
+   "text": "things like water spreading over the"
+  },
+  {
+   "t": 964.32,
+   "d": 1.8,
+   "text": "surface of the moon or grass or fire"
+  },
+  {
+   "t": 966.12,
+   "d": 2.64,
+   "text": "moving to adjacent tiles. So, here's"
+  },
+  {
+   "t": 968.76,
+   "d": 1.56,
+   "text": "water spreading. That's the little"
+  },
+  {
+   "t": 970.32,
+   "d": 2.4,
+   "text": "robot. He spreads water."
+  },
+  {
+   "t": 972.72,
+   "d": 2.0,
+   "text": "Uh here's some grass. It'll spread to"
+  },
+  {
+   "t": 974.72,
+   "d": 2.24,
+   "text": "where there's water along the ground."
+  },
+  {
+   "t": 976.96,
+   "d": 3.12,
+   "text": "And then there's fire"
+  },
+  {
+   "t": 980.08,
+   "d": 2.36,
+   "text": "to burn the grass with."
+  },
+  {
+   "t": 982.44,
+   "d": 2.04,
+   "text": "Uh I'm using vertex colors for a lot of"
+  },
+  {
+   "t": 984.48,
+   "d": 2.0,
+   "text": "the surface conditions of the moon. Uh I"
+  },
+  {
+   "t": 986.48,
+   "d": 1.68,
+   "text": "love vertex colors."
+  },
+  {
+   "t": 988.16,
+   "d": 1.76,
+   "text": "And then using a shader to render them"
+  },
+  {
+   "t": 989.92,
+   "d": 1.96,
+   "text": "visually. So, here's the moon surface"
+  },
+  {
+   "t": 991.88,
+   "d": 2.2,
+   "text": "with water and oil in it on it with that"
+  },
+  {
+   "t": 994.08,
+   "d": 0.76,
+   "text": "that"
+  },
+  {
+   "t": 994.84,
+   "d": 3.44,
+   "text": "uh the shader is rendering. And here's"
+  },
+  {
+   "t": 998.28,
+   "d": 3.56,
+   "text": "what the vertex colors look like there."
+  },
+  {
+   "t": 1002.4,
+   "d": 2.12,
+   "text": "So, moving on to some of the challenges"
+  },
+  {
+   "t": 1004.52,
+   "d": 2.64,
+   "text": "of building an ecosystem sim, uh"
+  },
+  {
+   "t": 1007.16,
+   "d": 2.36,
+   "text": "there there are so many, and probably a"
+  },
+  {
+   "t": 1009.52,
+   "d": 2.12,
+   "text": "lot that other developers have run into"
+  },
+  {
+   "t": 1011.64,
+   "d": 1.68,
+   "text": "that I have not yet."
+  },
+  {
+   "t": 1013.32,
+   "d": 1.92,
+   "text": "Um but uh I'm just going to highlight"
+  },
+  {
+   "t": 1015.24,
+   "d": 1.88,
+   "text": "these three. So, performance and"
+  },
+  {
+   "t": 1017.12,
+   "d": 2.08,
+   "text": "optimization, uh function needing to"
+  },
+  {
+   "t": 1019.2,
+   "d": 2.68,
+   "text": "follow form, and the 10,000 bowls of"
+  },
+  {
+   "t": 1021.88,
+   "d": 1.48,
+   "text": "oatmeal problem."
+  },
+  {
+   "t": 1023.36,
+   "d": 2.2,
+   "text": "So, performance. Uh keeping the frame"
+  },
+  {
+   "t": 1025.56,
+   "d": 1.28,
+   "text": "rate high is a big challenge when"
+  },
+  {
+   "t": 1026.84,
+   "d": 1.52,
+   "text": "building a sim like this, especially"
+  },
+  {
+   "t": 1028.36,
+   "d": 2.32,
+   "text": "because I have found that more organisms"
+  },
+  {
+   "t": 1030.68,
+   "d": 2.96,
+   "text": "is more fun. Um 10 10 little guys is"
+  },
+  {
+   "t": 1033.64,
+   "d": 2.88,
+   "text": "great. 100 little guys is amazing. 1,000"
+  },
+  {
+   "t": 1036.52,
+   "d": 2.4,
+   "text": "little guys, that's the dream. But uh"
+  },
+  {
+   "t": 1038.92,
+   "d": 2.24,
+   "text": "interactions between organisms uh can"
+  },
+  {
+   "t": 1041.16,
+   "d": 2.08,
+   "text": "scale quadratically, like perceiving"
+  },
+  {
+   "t": 1043.24,
+   "d": 2.8,
+   "text": "each other. Um so, let's say you have a"
+  },
+  {
+   "t": 1046.04,
+   "d": 2.76,
+   "text": "Spider-Man. Uh he can see people in the"
+  },
+  {
+   "t": 1048.8,
+   "d": 1.36,
+   "text": "world around him and point to them. Your"
+  },
+  {
+   "t": 1050.16,
+   "d": 1.4,
+   "text": "frame rate's fine."
+  },
+  {
+   "t": 1051.56,
+   "d": 1.16,
+   "text": "You can see where this is going. What if"
+  },
+  {
+   "t": 1052.72,
+   "d": 1.88,
+   "text": "you had a second Spider-Man? Two"
+  },
+  {
+   "t": 1054.6,
+   "d": 2.08,
+   "text": "Spider-Men perceiving the other. Now you"
+  },
+  {
+   "t": 1056.68,
+   "d": 2.24,
+   "text": "have three Spider-Men, which is fine."
+  },
+  {
+   "t": 1058.92,
+   "d": 1.84,
+   "text": "Now you have six Spider-Men. And what if"
+  },
+  {
+   "t": 1060.76,
+   "d": 1.84,
+   "text": "you want 50 Spider-Men? This is you're"
+  },
+  {
+   "t": 1062.6,
+   "d": 1.24,
+   "text": "get you're getting into too many"
+  },
+  {
+   "t": 1063.84,
+   "d": 2.24,
+   "text": "Spider-Men territory. So, if you're"
+  },
+  {
+   "t": 1066.08,
+   "d": 1.28,
+   "text": "running a little bit of code for each of"
+  },
+  {
+   "t": 1067.36,
+   "d": 1.8,
+   "text": "these red arrows, uh performance runs"
+  },
+  {
+   "t": 1069.16,
+   "d": 1.32,
+   "text": "into trouble quickly as you have more"
+  },
+  {
+   "t": 1070.48,
+   "d": 2.24,
+   "text": "creatures. I personally found things got"
+  },
+  {
+   "t": 1072.72,
+   "d": 1.64,
+   "text": "rough when I had about 50 little guys"
+  },
+  {
+   "t": 1074.36,
+   "d": 1.2,
+   "text": "running around, which is not that little"
+  },
+  {
+   "t": 1075.56,
+   "d": 1.08,
+   "text": "of guys."
+  },
+  {
+   "t": 1076.64,
+   "d": 2.04,
+   "text": "So, you can optimize something like this"
+  },
+  {
+   "t": 1078.68,
+   "d": 1.8,
+   "text": "with a data structure like an octree,"
+  },
+  {
+   "t": 1080.48,
+   "d": 3.4,
+   "text": "which is what I did eventually, uh but I"
+  },
+  {
+   "t": 1083.88,
+   "d": 1.6,
+   "text": "found myself frequently running into"
+  },
+  {
+   "t": 1085.48,
+   "d": 2.0,
+   "text": "similar issues with varying solutions."
+  },
+  {
+   "t": 1087.48,
+   "d": 2.6,
+   "text": "So, spoiler, I just switched to uh to"
+  },
+  {
+   "t": 1090.08,
+   "d": 2.16,
+   "text": "DOTS, to Unity's data-oriented tech"
+  },
+  {
+   "t": 1092.24,
+   "d": 2.12,
+   "text": "stack. Um this comes up a lot when"
+  },
+  {
+   "t": 1094.36,
+   "d": 0.96,
+   "text": "you're trying to research how to"
+  },
+  {
+   "t": 1095.32,
+   "d": 2.04,
+   "text": "optimize a complex simulation in Unity."
+  },
+  {
+   "t": 1097.36,
+   "d": 2.08,
+   "text": "It worked pretty well for me. Uh it was"
+  },
+  {
+   "t": 1099.44,
+   "d": 1.76,
+   "text": "challenging and time-consuming to set"
+  },
+  {
+   "t": 1101.2,
+   "d": 1.8,
+   "text": "up. There was a big learning curve, but"
+  },
+  {
+   "t": 1103.0,
+   "d": 1.92,
+   "text": "it did improve performance noticeably."
+  },
+  {
+   "t": 1104.92,
+   "d": 1.24,
+   "text": "And instead of feeling like I'm"
+  },
+  {
+   "t": 1106.16,
+   "d": 1.8,
+   "text": "constantly optimizing and hitting walls"
+  },
+  {
+   "t": 1107.96,
+   "d": 1.8,
+   "text": "while I'm trying to get um game playing"
+  },
+  {
+   "t": 1109.76,
+   "d": 2.48,
+   "text": "systems in, uh I can just develop the"
+  },
+  {
+   "t": 1112.24,
+   "d": 1.72,
+   "text": "game and know that there is now a lot of"
+  },
+  {
+   "t": 1113.96,
+   "d": 2.08,
+   "text": "room to optimize later as needed."
+  },
+  {
+   "t": 1116.04,
+   "d": 1.92,
+   "text": "My ultimate goal is to be able to have"
+  },
+  {
+   "t": 1117.96,
+   "d": 1.48,
+   "text": "several hundred to a thousand creatures"
+  },
+  {
+   "t": 1119.44,
+   "d": 2.12,
+   "text": "running out around at a time on on"
+  },
+  {
+   "t": 1121.56,
+   "d": 3.16,
+   "text": "varying hardware uh devices. Um and this"
+  },
+  {
+   "t": 1124.72,
+   "d": 1.8,
+   "text": "has been very helpful."
+  },
+  {
+   "t": 1126.52,
+   "d": 1.76,
+   "text": "So, if you're making a big simulation"
+  },
+  {
+   "t": 1128.28,
+   "d": 1.44,
+   "text": "and you don't want to worry as much"
+  },
+  {
+   "t": 1129.72,
+   "d": 2.28,
+   "text": "about performance, I would recommend ECS"
+  },
+  {
+   "t": 1132.0,
+   "d": 2.48,
+   "text": "with caveats. Um and also keep in mind"
+  },
+  {
+   "t": 1134.48,
+   "d": 1.68,
+   "text": "that you can use burst and jobs without"
+  },
+  {
+   "t": 1136.16,
+   "d": 1.56,
+   "text": "having to commit to the full ECS"
+  },
+  {
+   "t": 1137.72,
+   "d": 2.28,
+   "text": "workflow, which might be easier for a"
+  },
+  {
+   "t": 1140.0,
+   "d": 1.88,
+   "text": "lot of teams while also keeping a lot of"
+  },
+  {
+   "t": 1141.88,
+   "d": 2.96,
+   "text": "the performance benefits."
+  },
+  {
+   "t": 1144.84,
+   "d": 2.52,
+   "text": "Uh another challenge is ensuring that"
+  },
+  {
+   "t": 1147.36,
+   "d": 1.92,
+   "text": "what a creature does is related to how"
+  },
+  {
+   "t": 1149.28,
+   "d": 1.88,
+   "text": "it looks. So, it's nice to have visually"
+  },
+  {
+   "t": 1151.16,
+   "d": 1.24,
+   "text": "interesting creatures for their own"
+  },
+  {
+   "t": 1152.4,
+   "d": 1.92,
+   "text": "sake, but it's a lot more satisfying in"
+  },
+  {
+   "t": 1154.32,
+   "d": 1.44,
+   "text": "a game like this when an organism's"
+  },
+  {
+   "t": 1155.76,
+   "d": 1.72,
+   "text": "physical appearance matters to how it"
+  },
+  {
+   "t": 1157.48,
+   "d": 1.6,
+   "text": "functions."
+  },
+  {
+   "t": 1159.08,
+   "d": 2.08,
+   "text": "Wobble Dogs is an excellent example of"
+  },
+  {
+   "t": 1161.16,
+   "d": 2.32,
+   "text": "this. The dogs are physically simulated,"
+  },
+  {
+   "t": 1163.48,
+   "d": 1.6,
+   "text": "and the shape of their body directly"
+  },
+  {
+   "t": 1165.08,
+   "d": 2.32,
+   "text": "impacts their ability to move around in"
+  },
+  {
+   "t": 1167.4,
+   "d": 1.88,
+   "text": "a way that you can see very easily and"
+  },
+  {
+   "t": 1169.28,
+   "d": 1.12,
+   "text": "is cute."
+  },
+  {
+   "t": 1170.4,
+   "d": 1.24,
+   "text": "Uh a dog with a normal"
+  },
+  {
+   "t": 1171.64,
+   "d": 1.76,
+   "text": "rectangular-shaped dog body and four"
+  },
+  {
+   "t": 1173.4,
+   "d": 2.24,
+   "text": "legs will have a fairly easy time."
+  },
+  {
+   "t": 1175.64,
+   "d": 3.28,
+   "text": "Uh drink of water pause."
+  },
+  {
+   "t": 1180.64,
+   "d": 1.84,
+   "text": "But the dog with one leg in the front"
+  },
+  {
+   "t": 1182.48,
+   "d": 1.2,
+   "text": "and one in the back will have some"
+  },
+  {
+   "t": 1183.68,
+   "d": 2.2,
+   "text": "trouble as you might expect, even though"
+  },
+  {
+   "t": 1185.88,
+   "d": 2.56,
+   "text": "it is still extremely cute and good. So,"
+  },
+  {
+   "t": 1188.44,
+   "d": 1.32,
+   "text": "that's something to keep in mind when"
+  },
+  {
+   "t": 1189.76,
+   "d": 1.64,
+   "text": "building creatures. If they have"
+  },
+  {
+   "t": 1191.4,
+   "d": 1.52,
+   "text": "antlers, can they use them to defend"
+  },
+  {
+   "t": 1192.92,
+   "d": 2.0,
+   "text": "themselves? If the fur is the same color"
+  },
+  {
+   "t": 1194.92,
+   "d": 1.24,
+   "text": "as the local foliage, can they"
+  },
+  {
+   "t": 1196.16,
+   "d": 1.92,
+   "text": "camouflage themselves? If their legs"
+  },
+  {
+   "t": 1198.08,
+   "d": 1.64,
+   "text": "can't touch the ground, are they unable"
+  },
+  {
+   "t": 1199.72,
+   "d": 1.88,
+   "text": "to move? These kinds of things can make"
+  },
+  {
+   "t": 1201.6,
+   "d": 1.28,
+   "text": "evolution really satisfying and"
+  },
+  {
+   "t": 1202.88,
+   "d": 1.64,
+   "text": "meaningful."
+  },
+  {
+   "t": 1204.52,
+   "d": 0.72,
+   "text": "Uh"
+  },
+  {
+   "t": 1205.24,
+   "d": 1.92,
+   "text": "so, Kate Compton has a really excellent"
+  },
+  {
+   "t": 1207.16,
+   "d": 2.32,
+   "text": "article about procedural generation um"
+  },
+  {
+   "t": 1209.48,
+   "d": 1.04,
+   "text": "that a lot of people are probably"
+  },
+  {
+   "t": 1210.52,
+   "d": 1.32,
+   "text": "familiar with, and I'll also link it on"
+  },
+  {
+   "t": 1211.84,
+   "d": 1.68,
+   "text": "the Obelisk. And she described this"
+  },
+  {
+   "t": 1213.52,
+   "d": 2.44,
+   "text": "problem. If you procedurally generate"
+  },
+  {
+   "t": 1215.96,
+   "d": 2.56,
+   "text": "10,000 bowls of oatmeal, uh they may all"
+  },
+  {
+   "t": 1218.52,
+   "d": 1.24,
+   "text": "be mathematically distinct from the"
+  },
+  {
+   "t": 1219.76,
+   "d": 1.28,
+   "text": "others, um"
+  },
+  {
+   "t": 1221.04,
+   "d": 1.28,
+   "text": "the oats are all in different places,"
+  },
+  {
+   "t": 1222.32,
+   "d": 1.84,
+   "text": "etc. But to someone looking at them all"
+  },
+  {
+   "t": 1224.16,
+   "d": 1.32,
+   "text": "together, they're not meaningfully"
+  },
+  {
+   "t": 1225.48,
+   "d": 1.16,
+   "text": "different, they're just a lot of"
+  },
+  {
+   "t": 1226.64,
+   "d": 2.16,
+   "text": "oatmeal."
+  },
+  {
+   "t": 1228.8,
+   "d": 1.64,
+   "text": "Uh I experienced this pretty early in"
+  },
+  {
+   "t": 1230.44,
+   "d": 2.76,
+   "text": "Biolum, um and I was really excited that"
+  },
+  {
+   "t": 1233.2,
+   "d": 1.96,
+   "text": "I found a name for it."
+  },
+  {
+   "t": 1235.16,
+   "d": 1.48,
+   "text": "Does this picture look like a bunch of"
+  },
+  {
+   "t": 1236.64,
+   "d": 1.72,
+   "text": "interesting, distinctive creatures, or"
+  },
+  {
+   "t": 1238.36,
+   "d": 1.84,
+   "text": "does your brain categorize it more as"
+  },
+  {
+   "t": 1240.2,
+   "d": 2.12,
+   "text": "one big group of weird space animals?"
+  },
+  {
+   "t": 1242.32,
+   "d": 1.12,
+   "text": "Maybe somewhere in the middle, maybe"
+  },
+  {
+   "t": 1243.44,
+   "d": 1.2,
+   "text": "some of them look interesting, maybe it"
+  },
+  {
+   "t": 1244.64,
+   "d": 2.28,
+   "text": "looks like a pile."
+  },
+  {
+   "t": 1246.92,
+   "d": 2.04,
+   "text": "These two animals here, uh"
+  },
+  {
+   "t": 1248.96,
+   "d": 1.84,
+   "text": "the large pink and orange"
+  },
+  {
+   "t": 1250.8,
+   "d": 2.16,
+   "text": "rabbits, um they're very different from"
+  },
+  {
+   "t": 1252.96,
+   "d": 1.28,
+   "text": "each other genetically. They have"
+  },
+  {
+   "t": 1254.24,
+   "d": 1.52,
+   "text": "different body parts, head shapes,"
+  },
+  {
+   "t": 1255.76,
+   "d": 1.92,
+   "text": "mouths, and one has trees growing out of"
+  },
+  {
+   "t": 1257.68,
+   "d": 1.92,
+   "text": "its head. Uh but when I look at them, I"
+  },
+  {
+   "t": 1259.6,
+   "d": 3.32,
+   "text": "kind of see two fairly similar animals."
+  },
+  {
+   "t": 1262.92,
+   "d": 1.96,
+   "text": "Uh one thing that I found made plants"
+  },
+  {
+   "t": 1264.88,
+   "d": 1.24,
+   "text": "and animals feel immediately more"
+  },
+  {
+   "t": 1266.12,
+   "d": 1.32,
+   "text": "distinct from each other is just putting"
+  },
+  {
+   "t": 1267.44,
+   "d": 2.48,
+   "text": "them in herds. So, here for example, I"
+  },
+  {
+   "t": 1269.92,
+   "d": 2.04,
+   "text": "do see four distinct species of animal,"
+  },
+  {
+   "t": 1271.96,
+   "d": 1.52,
+   "text": "even though the species are fairly"
+  },
+  {
+   "t": 1273.48,
+   "d": 2.92,
+   "text": "similar, similar body shapes."
+  },
+  {
+   "t": 1276.4,
+   "d": 2.0,
+   "text": "Uh having a wide range of scales can"
+  },
+  {
+   "t": 1278.4,
+   "d": 1.52,
+   "text": "also make them more obviously different"
+  },
+  {
+   "t": 1279.92,
+   "d": 2.04,
+   "text": "from each other. The little pink rat in"
+  },
+  {
+   "t": 1281.96,
+   "d": 1.6,
+   "text": "the middle does not feel anything like"
+  },
+  {
+   "t": 1283.56,
+   "d": 1.56,
+   "text": "the large yellow dinosaur or the big"
+  },
+  {
+   "t": 1285.12,
+   "d": 1.56,
+   "text": "pink triceratops"
+  },
+  {
+   "t": 1286.68,
+   "d": 2.36,
+   "text": "or whatever the rest of those guys are."
+  },
+  {
+   "t": 1289.04,
+   "d": 3.16,
+   "text": "And then pushing the possible shapes in"
+  },
+  {
+   "t": 1292.2,
+   "d": 1.84,
+   "text": "very strange directions has helped a"
+  },
+  {
+   "t": 1294.04,
+   "d": 2.4,
+   "text": "lot. It's hard to get animals mixed up"
+  },
+  {
+   "t": 1296.44,
+   "d": 2.16,
+   "text": "when one has a torso, legs, and a head,"
+  },
+  {
+   "t": 1298.6,
+   "d": 1.84,
+   "text": "and one is an eight-legged radial"
+  },
+  {
+   "t": 1300.44,
+   "d": 2.28,
+   "text": "radially symmetrical inner tube, even if"
+  },
+  {
+   "t": 1302.72,
+   "d": 2.2,
+   "text": "they're both pink."
+  },
+  {
+   "t": 1304.92,
+   "d": 1.68,
+   "text": "At you can draw a lot of inspiration"
+  },
+  {
+   "t": 1306.6,
+   "d": 1.28,
+   "text": "from nature on this, too. There's a lot"
+  },
+  {
+   "t": 1307.88,
+   "d": 2.76,
+   "text": "of weird weird animals out there."
+  },
+  {
+   "t": 1310.64,
+   "d": 1.96,
+   "text": "Uh we have more radially symmetrical"
+  },
+  {
+   "t": 1312.6,
+   "d": 2.04,
+   "text": "weirdos here that were generated with"
+  },
+  {
+   "t": 1314.64,
+   "d": 2.52,
+   "text": "heads, frills, and leaves. These are the"
+  },
+  {
+   "t": 1317.16,
+   "d": 2.24,
+   "text": "same species as each other, and they're"
+  },
+  {
+   "t": 1319.4,
+   "d": 1.44,
+   "text": "different from most other creatures in"
+  },
+  {
+   "t": 1320.84,
+   "d": 1.0,
+   "text": "the sim."
+  },
+  {
+   "t": 1321.84,
+   "d": 1.52,
+   "text": "A friend of mine told me they remind her"
+  },
+  {
+   "t": 1323.36,
+   "d": 1.76,
+   "text": "of prickly pears, but they also have"
+  },
+  {
+   "t": 1325.12,
+   "d": 2.48,
+   "text": "eight legs and are carnivorous. So, just"
+  },
+  {
+   "t": 1327.6,
+   "d": 2.08,
+   "text": "imagine being hunted by a cactus, and"
+  },
+  {
+   "t": 1329.68,
+   "d": 3.32,
+   "text": "that's basically these guys' vibe."
+  },
+  {
+   "t": 1333.04,
+   "d": 1.92,
+   "text": "One additional challenge is that the"
+  },
+  {
+   "t": 1334.96,
+   "d": 1.6,
+   "text": "most successful organisms in your"
+  },
+  {
+   "t": 1336.56,
+   "d": 1.84,
+   "text": "ecosystem might be the ones who are able"
+  },
+  {
+   "t": 1338.4,
+   "d": 1.72,
+   "text": "to work around the limits you defined"
+  },
+  {
+   "t": 1340.12,
+   "d": 1.8,
+   "text": "for them in your code."
+  },
+  {
+   "t": 1341.92,
+   "d": 2.08,
+   "text": "So, I'm going to tell a story."
+  },
+  {
+   "t": 1344.0,
+   "d": 2.88,
+   "text": "I'm going to drink some water."
+  },
+  {
+   "t": 1348.84,
+   "d": 1.6,
+   "text": "Letting suspense build."
+  },
+  {
+   "t": 1350.44,
+   "d": 1.88,
+   "text": "So, sometime last summer, I realized"
+  },
+  {
+   "t": 1352.32,
+   "d": 1.6,
+   "text": "that if I left the simulation to run"
+  },
+  {
+   "t": 1353.92,
+   "d": 2.36,
+   "text": "overnight for testing, sometimes, not"
+  },
+  {
+   "t": 1356.28,
+   "d": 2.04,
+   "text": "always, but enough that it was weird, I"
+  },
+  {
+   "t": 1358.32,
+   "d": 1.48,
+   "text": "would end up with animals that looked"
+  },
+  {
+   "t": 1359.8,
+   "d": 2.32,
+   "text": "like flying purple triceratopses. And"
+  },
+  {
+   "t": 1362.12,
+   "d": 1.48,
+   "text": "here are the conditions under which this"
+  },
+  {
+   "t": 1363.6,
+   "d": 1.76,
+   "text": "tended to happen."
+  },
+  {
+   "t": 1365.36,
+   "d": 1.44,
+   "text": "Uh I had an arbitrary limit to the"
+  },
+  {
+   "t": 1366.8,
+   "d": 1.16,
+   "text": "amount of creatures that could be on the"
+  },
+  {
+   "t": 1367.96,
+   "d": 3.28,
+   "text": "moon at a time, uh about 100 to 200."
+  },
+  {
+   "t": 1371.24,
+   "d": 1.76,
+   "text": "Um mating with another creature and"
+  },
+  {
+   "t": 1373.0,
+   "d": 1.76,
+   "text": "laying an egg took multiple steps, had"
+  },
+  {
+   "t": 1374.76,
+   "d": 1.52,
+   "text": "an energy cost, and produced one"
+  },
+  {
+   "t": 1376.28,
+   "d": 2.48,
+   "text": "offspring. Growing fruit did not have an"
+  },
+  {
+   "t": 1378.76,
+   "d": 1.96,
+   "text": "energy cost. Like I mentioned, I used to"
+  },
+  {
+   "t": 1380.72,
+   "d": 1.64,
+   "text": "have uh plants and animals growing in"
+  },
+  {
+   "t": 1382.36,
+   "d": 2.16,
+   "text": "different ways, and so I implemented"
+  },
+  {
+   "t": 1384.52,
+   "d": 1.84,
+   "text": "tree reproduction in a simplified way so"
+  },
+  {
+   "t": 1386.36,
+   "d": 1.48,
+   "text": "trees could spread more easily across"
+  },
+  {
+   "t": 1387.84,
+   "d": 1.64,
+   "text": "the moon."
+  },
+  {
+   "t": 1389.48,
+   "d": 1.32,
+   "text": "But you might remember that creatures"
+  },
+  {
+   "t": 1390.8,
+   "d": 2.76,
+   "text": "can grow plant body parts. So, when this"
+  },
+  {
+   "t": 1393.56,
+   "d": 1.8,
+   "text": "guy drops fruit on wet ground, that"
+  },
+  {
+   "t": 1395.36,
+   "d": 1.48,
+   "text": "fruit will immediately just turn into a"
+  },
+  {
+   "t": 1396.84,
+   "d": 2.04,
+   "text": "baby version of this creature. So,"
+  },
+  {
+   "t": 1398.88,
+   "d": 1.96,
+   "text": "creatures who grow leaves and fruit are"
+  },
+  {
+   "t": 1400.84,
+   "d": 2.04,
+   "text": "able to clone themselves infinitely for"
+  },
+  {
+   "t": 1402.88,
+   "d": 2.28,
+   "text": "free."
+  },
+  {
+   "t": 1405.16,
+   "d": 2.2,
+   "text": "I also had it set so that eggs and seeds"
+  },
+  {
+   "t": 1407.36,
+   "d": 1.68,
+   "text": "had to be a certain distance away from"
+  },
+  {
+   "t": 1409.04,
+   "d": 1.92,
+   "text": "each other or from sorry, from any live"
+  },
+  {
+   "t": 1410.96,
+   "d": 2.24,
+   "text": "organism to hatch or germinate. And this"
+  },
+  {
+   "t": 1413.2,
+   "d": 1.88,
+   "text": "was like a clever workaround that made"
+  },
+  {
+   "t": 1415.08,
+   "d": 2.32,
+   "text": "it so animals rarely died out fully on"
+  },
+  {
+   "t": 1417.4,
+   "d": 1.52,
+   "text": "the moon if I let it run for a long"
+  },
+  {
+   "t": 1418.92,
+   "d": 1.84,
+   "text": "time, cuz eggs could last last"
+  },
+  {
+   "t": 1420.76,
+   "d": 1.96,
+   "text": "indefinitely, and if everything around"
+  },
+  {
+   "t": 1422.72,
+   "d": 1.56,
+   "text": "them died, they would just immediately"
+  },
+  {
+   "t": 1424.28,
+   "d": 2.48,
+   "text": "hatch. And I'd have animals again, which"
+  },
+  {
+   "t": 1426.76,
+   "d": 1.84,
+   "text": "is what I want. Plus, eggs would only"
+  },
+  {
+   "t": 1428.6,
+   "d": 1.96,
+   "text": "hatch if the max organism count hadn't"
+  },
+  {
+   "t": 1430.56,
+   "d": 1.6,
+   "text": "been reached on the moon. So, you could"
+  },
+  {
+   "t": 1432.16,
+   "d": 1.64,
+   "text": "have a constant stream of eggs hatching"
+  },
+  {
+   "t": 1433.8,
+   "d": 2.0,
+   "text": "as creatures died."
+  },
+  {
+   "t": 1435.8,
+   "d": 1.84,
+   "text": "And these same conditions applied to"
+  },
+  {
+   "t": 1437.64,
+   "d": 2.76,
+   "text": "fruit and seeds."
+  },
+  {
+   "t": 1440.4,
+   "d": 2.08,
+   "text": "Now, fast creatures are able to spread"
+  },
+  {
+   "t": 1442.48,
+   "d": 1.8,
+   "text": "fruit across more of the map, farther"
+  },
+  {
+   "t": 1444.28,
+   "d": 1.2,
+   "text": "from other creatures, across more of the"
+  },
+  {
+   "t": 1445.48,
+   "d": 1.36,
+   "text": "moon."
+  },
+  {
+   "t": 1446.84,
+   "d": 1.48,
+   "text": "Creatures with wings were among the"
+  },
+  {
+   "t": 1448.32,
+   "d": 1.56,
+   "text": "fastest."
+  },
+  {
+   "t": 1449.88,
+   "d": 2.24,
+   "text": "Uh just regarding color, the way I was"
+  },
+  {
+   "t": 1452.12,
+   "d": 1.56,
+   "text": "just combining parent colors in the"
+  },
+  {
+   "t": 1453.68,
+   "d": 1.96,
+   "text": "offspring's chromosome, I was trying to"
+  },
+  {
+   "t": 1455.64,
+   "d": 2.04,
+   "text": "get it so that it wouldn't gray too much"
+  },
+  {
+   "t": 1457.68,
+   "d": 1.96,
+   "text": "over time, but"
+  },
+  {
+   "t": 1459.64,
+   "d": 1.76,
+   "text": "they do still kind of tend to average"
+  },
+  {
+   "t": 1461.4,
+   "d": 2.84,
+   "text": "out into a purplish gray. So, I ended up"
+  },
+  {
+   "t": 1464.24,
+   "d": 1.56,
+   "text": "frequently with these purply gray"
+  },
+  {
+   "t": 1465.8,
+   "d": 2.12,
+   "text": "dinosaurs. There's another mutation from"
+  },
+  {
+   "t": 1467.92,
+   "d": 1.76,
+   "text": "here that didn't always show up, but if"
+  },
+  {
+   "t": 1469.68,
+   "d": 1.32,
+   "text": "it did, it would take over completely"
+  },
+  {
+   "t": 1471.0,
+   "d": 1.68,
+   "text": "most of the time."
+  },
+  {
+   "t": 1472.68,
+   "d": 1.52,
+   "text": "One of the body part prefabs that's"
+  },
+  {
+   "t": 1474.2,
+   "d": 1.84,
+   "text": "allowed is a sort of triceratops-like"
+  },
+  {
+   "t": 1476.04,
+   "d": 1.84,
+   "text": "frill. It has five sockets along the"
+  },
+  {
+   "t": 1477.88,
+   "d": 2.92,
+   "text": "top. So, you can see this guy has five"
+  },
+  {
+   "t": 1480.8,
+   "d": 3.32,
+   "text": "spikes along each uh frill. He has"
+  },
+  {
+   "t": 1484.12,
+   "d": 3.24,
+   "text": "something like eight to 10 frills, and"
+  },
+  {
+   "t": 1487.36,
+   "d": 2.12,
+   "text": "uh"
+  },
+  {
+   "t": 1489.48,
+   "d": 1.8,
+   "text": "instead of spikes, it's possible for"
+  },
+  {
+   "t": 1491.28,
+   "d": 2.12,
+   "text": "these guys to grow little leafy shrubs"
+  },
+  {
+   "t": 1493.4,
+   "d": 1.76,
+   "text": "that have fruit in them."
+  },
+  {
+   "t": 1495.16,
+   "d": 3.0,
+   "text": "And so, animals shaped like this grew"
+  },
+  {
+   "t": 1498.16,
+   "d": 3.2,
+   "text": "and dropped tons of fruit. And only 100"
+  },
+  {
+   "t": 1501.36,
+   "d": 1.32,
+   "text": "living things could be on the moon at a"
+  },
+  {
+   "t": 1502.68,
+   "d": 2.16,
+   "text": "time, so only a certain amount of fruit"
+  },
+  {
+   "t": 1504.84,
+   "d": 1.92,
+   "text": "could grow into animals, and the species"
+  },
+  {
+   "t": 1506.76,
+   "d": 1.44,
+   "text": "that was able to spread the most fruit"
+  },
+  {
+   "t": 1508.2,
+   "d": 3.28,
+   "text": "farthest around would usually win."
+  },
+  {
+   "t": 1511.48,
+   "d": 1.6,
+   "text": "And that brings us back to the flying"
+  },
+  {
+   "t": 1513.08,
+   "d": 2.44,
+   "text": "purple triceratopses."
+  },
+  {
+   "t": 1515.52,
+   "d": 2.0,
+   "text": "Uh it it was a reminder that the clever"
+  },
+  {
+   "t": 1517.52,
+   "d": 1.8,
+   "text": "little things I could do to to balance"
+  },
+  {
+   "t": 1519.32,
+   "d": 1.32,
+   "text": "the game or make it perform better or"
+  },
+  {
+   "t": 1520.64,
+   "d": 2.2,
+   "text": "make things look nicer, all impact the"
+  },
+  {
+   "t": 1522.84,
+   "d": 1.96,
+   "text": "simulation. So, you can do clever"
+  },
+  {
+   "t": 1524.8,
+   "d": 1.52,
+   "text": "workarounds in some places when you're"
+  },
+  {
+   "t": 1526.32,
+   "d": 1.68,
+   "text": "working with this kind of thing, but not"
+  },
+  {
+   "t": 1528.0,
+   "d": 2.16,
+   "text": "in the basic energy economy or behavior"
+  },
+  {
+   "t": 1530.16,
+   "d": 1.64,
+   "text": "of your sim."
+  },
+  {
+   "t": 1531.8,
+   "d": 0.72,
+   "text": "Uh"
+  },
+  {
+   "t": 1532.52,
+   "d": 1.08,
+   "text": "there was another thing that tended to"
+  },
+  {
+   "t": 1533.6,
+   "d": 1.72,
+   "text": "happen a lot. Um"
+  },
+  {
+   "t": 1535.32,
+   "d": 2.6,
+   "text": "they ended up headless very frequently,"
+  },
+  {
+   "t": 1537.92,
+   "d": 1.56,
+   "text": "headless and legless."
+  },
+  {
+   "t": 1539.48,
+   "d": 0.84,
+   "text": "Uh"
+  },
+  {
+   "t": 1540.32,
+   "d": 1.8,
+   "text": "so, I think why that was happening was"
+  },
+  {
+   "t": 1542.12,
+   "d": 2.04,
+   "text": "that creatures with heads uh were"
+  },
+  {
+   "t": 1544.16,
+   "d": 2.12,
+   "text": "assumed by the system to have brains and"
+  },
+  {
+   "t": 1546.28,
+   "d": 1.64,
+   "text": "were able to find other creatures and"
+  },
+  {
+   "t": 1547.92,
+   "d": 1.76,
+   "text": "mate and lay eggs and produce slightly"
+  },
+  {
+   "t": 1549.68,
+   "d": 1.88,
+   "text": "mutated offspring. For example,"
+  },
+  {
+   "t": 1551.56,
+   "d": 2.08,
+   "text": "offspring with no heads. Creatures"
+  },
+  {
+   "t": 1553.64,
+   "d": 2.4,
+   "text": "without heads can only reproduce by"
+  },
+  {
+   "t": 1556.04,
+   "d": 2.2,
+   "text": "cloning themselves by dropping fruit."
+  },
+  {
+   "t": 1558.24,
+   "d": 2.96,
+   "text": "So, normal purple flying triceratopses"
+  },
+  {
+   "t": 1561.2,
+   "d": 2.24,
+   "text": "can uh have a small chance to produce"
+  },
+  {
+   "t": 1563.44,
+   "d": 2.16,
+   "text": "the headless ones, and the headless ones"
+  },
+  {
+   "t": 1565.6,
+   "d": 3.0,
+   "text": "can only clone themselves. So, you will"
+  },
+  {
+   "t": 1568.6,
+   "d": 2.08,
+   "text": "often end up with"
+  },
+  {
+   "t": 1570.68,
+   "d": 2.84,
+   "text": "headless purple triceratopses."
+  },
+  {
+   "t": 1573.52,
+   "d": 1.44,
+   "text": "They're not really triceratopses anymore"
+  },
+  {
+   "t": 1574.96,
+   "d": 0.92,
+   "text": "if they're headless, but you know what I"
+  },
+  {
+   "t": 1575.88,
+   "d": 1.12,
+   "text": "mean."
+  },
+  {
+   "t": 1577.0,
+   "d": 2.0,
+   "text": "Uh so, fun fact, I was kind of wondering"
+  },
+  {
+   "t": 1579.0,
+   "d": 1.84,
+   "text": "if there were any animals in real life"
+  },
+  {
+   "t": 1580.84,
+   "d": 1.28,
+   "text": "that have a similar reproductive"
+  },
+  {
+   "t": 1582.12,
+   "d": 2.2,
+   "text": "strategy as both the headless and"
+  },
+  {
+   "t": 1584.32,
+   "d": 2.24,
+   "text": "non-headless, you know, flying purple"
+  },
+  {
+   "t": 1586.56,
+   "d": 2.16,
+   "text": "triceratopses uh producing tons of"
+  },
+  {
+   "t": 1588.72,
+   "d": 2.12,
+   "text": "offspring basically and not needing to"
+  },
+  {
+   "t": 1590.84,
+   "d": 1.08,
+   "text": "worry too much about everything else"
+  },
+  {
+   "t": 1591.92,
+   "d": 2.88,
+   "text": "they were doing. Uh ocean sunfish. The"
+  },
+  {
+   "t": 1594.8,
+   "d": 1.92,
+   "text": "females can lay 300 million eggs at a"
+  },
+  {
+   "t": 1596.72,
+   "d": 1.8,
+   "text": "time. They don't have tails, they're"
+  },
+  {
+   "t": 1598.52,
+   "d": 2.04,
+   "text": "terrible fish, but they're reasonably"
+  },
+  {
+   "t": 1600.56,
+   "d": 1.76,
+   "text": "successful just because they're able to"
+  },
+  {
+   "t": 1602.32,
+   "d": 1.72,
+   "text": "produce so much offspring. So, that was"
+  },
+  {
+   "t": 1604.04,
+   "d": 2.52,
+   "text": "a fun fun thing I found out."
+  },
+  {
+   "t": 1606.56,
+   "d": 1.52,
+   "text": "Uh and also, it's not always"
+  },
+  {
+   "t": 1608.08,
+   "d": 2.16,
+   "text": "triceratopses, sometimes it's bouncing"
+  },
+  {
+   "t": 1610.24,
+   "d": 3.16,
+   "text": "purple octopuses for the same reasons"
+  },
+  {
+   "t": 1613.4,
+   "d": 2.44,
+   "text": "or similar reasons."
+  },
+  {
+   "t": 1615.84,
+   "d": 2.28,
+   "text": "So, my kind of overall takeaways uh"
+  },
+  {
+   "t": 1618.12,
+   "d": 2.36,
+   "text": "developing this ecosystem sim, uh a"
+  },
+  {
+   "t": 1620.48,
+   "d": 1.16,
+   "text": "video game like this is really"
+  },
+  {
+   "t": 1621.64,
+   "d": 2.0,
+   "text": "complicated and difficult to balance,"
+  },
+  {
+   "t": 1623.64,
+   "d": 1.8,
+   "text": "and I'm I'm still relatively early on"
+  },
+  {
+   "t": 1625.44,
+   "d": 3.24,
+   "text": "it, too, and it's it's hard."
+  },
+  {
+   "t": 1628.68,
+   "d": 2.12,
+   "text": "But it's still an extremely simplified"
+  },
+  {
+   "t": 1630.8,
+   "d": 2.6,
+   "text": "model of the natural world. Uh there are"
+  },
+  {
+   "t": 1633.4,
+   "d": 1.76,
+   "text": "animals living in my eyebrows that are"
+  },
+  {
+   "t": 1635.16,
+   "d": 1.8,
+   "text": "more complicated than anything I'll ever"
+  },
+  {
+   "t": 1636.96,
+   "d": 1.76,
+   "text": "be able to make in a video game. And"
+  },
+  {
+   "t": 1638.72,
+   "d": 1.36,
+   "text": "it's not just my eyebrows, I don't have"
+  },
+  {
+   "t": 1640.08,
+   "d": 1.4,
+   "text": "like good animal eyebrows, it's"
+  },
+  {
+   "t": 1641.48,
+   "d": 1.28,
+   "text": "everyone's eyebrows, and now you know"
+  },
+  {
+   "t": 1642.76,
+   "d": 2.64,
+   "text": "that if you didn't already. Uh so,"
+  },
+  {
+   "t": 1645.4,
+   "d": 1.8,
+   "text": "as I develop this, I do find myself"
+  },
+  {
+   "t": 1647.2,
+   "d": 1.6,
+   "text": "seeing the world in a slightly different"
+  },
+  {
+   "t": 1648.8,
+   "d": 2.2,
+   "text": "way, trying to learn everything I can"
+  },
+  {
+   "t": 1651.0,
+   "d": 1.6,
+   "text": "about how things grow and spread and"
+  },
+  {
+   "t": 1652.6,
+   "d": 1.6,
+   "text": "thrive."
+  },
+  {
+   "t": 1654.2,
+   "d": 2.68,
+   "text": "I have filled my house with with plants."
+  },
+  {
+   "t": 1656.88,
+   "d": 2.2,
+   "text": "I look at trees when I walk past them,"
+  },
+  {
+   "t": 1659.08,
+   "d": 1.92,
+   "text": "and I'm astonished by how perfect their"
+  },
+  {
+   "t": 1661.0,
+   "d": 1.8,
+   "text": "leaves are, and how hard they must have"
+  },
+  {
+   "t": 1662.8,
+   "d": 3.08,
+   "text": "been to render. Um and uh I've been"
+  },
+  {
+   "t": 1665.88,
+   "d": 1.68,
+   "text": "observing my greyhounds' behavior more,"
+  },
+  {
+   "t": 1667.56,
+   "d": 2.24,
+   "text": "but mostly what they do is sniff things"
+  },
+  {
+   "t": 1669.8,
+   "d": 2.36,
+   "text": "and then look at me accusingly, so"
+  },
+  {
+   "t": 1672.16,
+   "d": 0.73,
+   "text": "I don't know."
+  },
+  {
+   "t": 1672.89,
+   "d": 1.99,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1674.88,
+   "d": 0.56,
+   "text": ">> Uh"
+  },
+  {
+   "t": 1675.44,
+   "d": 2.16,
+   "text": "so, the world and its ecosystems are"
+  },
+  {
+   "t": 1677.6,
+   "d": 2.24,
+   "text": "beautiful, intricate, and fragile, and I"
+  },
+  {
+   "t": 1679.84,
+   "d": 1.88,
+   "text": "care about them and want to draw more"
+  },
+  {
+   "t": 1681.72,
+   "d": 1.36,
+   "text": "attention to them, even if just a"
+  },
+  {
+   "t": 1683.08,
+   "d": 2.16,
+   "text": "little. So, that's"
+  },
+  {
+   "t": 1685.24,
+   "d": 1.96,
+   "text": "that's my ecosystem sim."
+  },
+  {
+   "t": 1687.2,
+   "d": 1.76,
+   "text": "Um if you want to get in touch with me"
+  },
+  {
+   "t": 1688.96,
+   "d": 1.84,
+   "text": "and that's my talk. Um if you want to"
+  },
+  {
+   "t": 1690.8,
+   "d": 1.76,
+   "text": "get in touch with me, uh I've"
+  },
+  {
+   "t": 1692.56,
+   "d": 2.28,
+   "text": "mebenjin.com, I got an email address, I"
+  },
+  {
+   "t": 1694.84,
+   "d": 1.84,
+   "text": "got a Blue Sky, I have an Instagram that"
+  },
+  {
+   "t": 1696.68,
+   "d": 3.88,
+   "text": "I technically check, um and uh Biolum is"
+  },
+  {
+   "t": 1700.56,
+   "d": 1.88,
+   "text": "it's coming soon on Steam, and you can"
+  },
+  {
+   "t": 1702.44,
+   "d": 2.52,
+   "text": "wishlist it if you like. Uh so, thanks"
+  },
+  {
+   "t": 1704.96,
+   "d": 2.12,
+   "text": "everyone, and I can answer questions"
+  },
+  {
+   "t": 1707.08,
+   "d": 2.04,
+   "text": "now."
+  },
+  {
+   "t": 1709.12,
+   "d": 1.76,
+   "text": "Excellent, thank you. What a wonderful"
+  },
+  {
+   "t": 1710.88,
+   "d": 1.92,
+   "text": "talk. It's impressive that even at the"
+  },
+  {
+   "t": 1712.8,
+   "d": 2.48,
+   "text": "end of the day for the energy to be"
+  },
+  {
+   "t": 1715.28,
+   "d": 2.88,
+   "text": "so strong in chat as people are reacting"
+  },
+  {
+   "t": 1718.16,
+   "d": 4.92,
+   "text": "to such a roller coaster and extremely"
+  },
+  {
+   "t": 1723.08,
+   "d": 3.6,
+   "text": "funny talk, but also, I'm thinking about"
+  },
+  {
+   "t": 1726.68,
+   "d": 1.6,
+   "text": "the creatures in my eyebrows, and I"
+  },
+  {
+   "t": 1728.28,
+   "d": 1.2,
+   "text": "don't like it. Please don't"
+  },
+  {
+   "t": 1729.48,
+   "d": 1.32,
+   "text": ">> Don't Google that. Don't like it."
+  },
+  {
+   "t": 1730.8,
+   "d": 1.72,
+   "text": ">> You don't want to know."
+  },
+  {
+   "t": 1732.52,
+   "d": 1.4,
+   "text": "I think I think they're cool, but don't"
+  },
+  {
+   "t": 1733.92,
+   "d": 1.2,
+   "text": "Google this."
+  },
+  {
+   "t": 1735.12,
+   "d": 2.76,
+   "text": "No. Um people, of course, were asking to"
+  },
+  {
+   "t": 1737.88,
+   "d": 1.44,
+   "text": "see the dogs, though in this conference,"
+  },
+  {
+   "t": 1739.32,
+   "d": 1.96,
+   "text": "we don't believe in forcing dogs who"
+  },
+  {
+   "t": 1741.28,
+   "d": 1.56,
+   "text": "don't want to be on camera, so they can"
+  },
+  {
+   "t": 1742.84,
+   "d": 1.24,
+   "text": "keep being cute."
+  },
+  {
+   "t": 1744.08,
+   "d": 2.28,
+   "text": ">> try to webcam them to you. Let's Let's"
+  },
+  {
+   "t": 1746.36,
+   "d": 1.6,
+   "text": "see if this works."
+  },
+  {
+   "t": 1747.96,
+   "d": 2.36,
+   "text": "Yeah, they're really good. Um there they"
+  },
+  {
+   "t": 1750.32,
+   "d": 0.88,
+   "text": "are."
+  },
+  {
+   "t": 1751.2,
+   "d": 1.28,
+   "text": "Oh, they're best friends with each"
+  },
+  {
+   "t": 1752.48,
+   "d": 1.64,
+   "text": "other, yeah."
+  },
+  {
+   "t": 1754.12,
+   "d": 1.36,
+   "text": "Yeah. Okay, I'm glad we did that."
+  },
+  {
+   "t": 1755.48,
+   "d": 2.16,
+   "text": "Thanks. They're extremely good dogs. I"
+  },
+  {
+   "t": 1757.64,
+   "d": 1.64,
+   "text": "love them very much."
+  },
+  {
+   "t": 1759.28,
+   "d": 1.92,
+   "text": "Wonderful. They have not a lot of facial"
+  },
+  {
+   "t": 1761.2,
+   "d": 2.4,
+   "text": "expressions. Accusingly is one."
+  },
+  {
+   "t": 1763.6,
+   "d": 1.8,
+   "text": "Greyhounds are always accusatory. I"
+  },
+  {
+   "t": 1765.4,
+   "d": 2.52,
+   "text": "don't get it, but whatever. The only"
+  },
+  {
+   "t": 1767.92,
+   "d": 2.2,
+   "text": "emotion that they need. Uh"
+  },
+  {
+   "t": 1770.12,
+   "d": 1.08,
+   "text": "it probably gets them what they want"
+  },
+  {
+   "t": 1771.2,
+   "d": 1.9,
+   "text": "pretty often. Yeah."
+  },
+  {
+   "t": 1773.11,
+   "d": 0.01,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1773.12,
+   "d": 1.92,
+   "text": ">> Uh"
+  },
+  {
+   "t": 1775.04,
+   "d": 1.64,
+   "text": "thank you. Um"
+  },
+  {
+   "t": 1776.68,
+   "d": 2.48,
+   "text": "Mr. Dr. Professor asks, and I think you"
+  },
+  {
+   "t": 1779.16,
+   "d": 1.12,
+   "text": "you talked about this a little bit, and"
+  },
+  {
+   "t": 1780.28,
+   "d": 1.0,
+   "text": "you talked about it a bit in Wobble"
+  },
+  {
+   "t": 1781.28,
+   "d": 2.16,
+   "text": "Dogs, but um in terms of procedural"
+  },
+  {
+   "t": 1783.44,
+   "d": 2.36,
+   "text": "movement for the creatures, is it just"
+  },
+  {
+   "t": 1785.8,
+   "d": 2.28,
+   "text": "kind of like an inverse kinematics thing"
+  },
+  {
+   "t": 1788.08,
+   "d": 2.24,
+   "text": "or do you have any kind of clever way of"
+  },
+  {
+   "t": 1790.32,
+   "d": 1.92,
+   "text": "fudging it or interesting way of fudging"
+  },
+  {
+   "t": 1792.24,
+   "d": 1.32,
+   "text": "it? Uh"
+  },
+  {
+   "t": 1793.56,
+   "d": 1.64,
+   "text": "it's a rabbit hole I go down every"
+  },
+  {
+   "t": 1795.2,
+   "d": 1.24,
+   "text": "couple months. I'm like, I wonder if I"
+  },
+  {
+   "t": 1796.44,
+   "d": 1.56,
+   "text": "can improve the walking."
+  },
+  {
+   "t": 1798.0,
+   "d": 2.24,
+   "text": "Um so I've done a few different things."
+  },
+  {
+   "t": 1800.24,
+   "d": 3.08,
+   "text": "Uh the legs are the the legs you see are"
+  },
+  {
+   "t": 1803.32,
+   "d": 2.6,
+   "text": "purely visual and using kind of a"
+  },
+  {
+   "t": 1805.92,
+   "d": 2.48,
+   "text": "an an asset that does IK. But they also"
+  },
+  {
+   "t": 1808.4,
+   "d": 1.8,
+   "text": "have kind of data representations of"
+  },
+  {
+   "t": 1810.2,
+   "d": 1.52,
+   "text": "legs that involve ray casting and"
+  },
+  {
+   "t": 1811.72,
+   "d": 1.64,
+   "text": "physics. Everything is is driven with"
+  },
+  {
+   "t": 1813.36,
+   "d": 1.96,
+   "text": "physics and it's ECS physics too. So"
+  },
+  {
+   "t": 1815.32,
+   "d": 1.76,
+   "text": "it's not not quite the same as like the"
+  },
+  {
+   "t": 1817.08,
+   "d": 1.68,
+   "text": "default Unity physics, which has been"
+  },
+  {
+   "t": 1818.76,
+   "d": 1.52,
+   "text": "fun to learn."
+  },
+  {
+   "t": 1820.28,
+   "d": 0.64,
+   "text": "Um"
+  },
+  {
+   "t": 1820.92,
+   "d": 0.72,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1821.64,
+   "d": 1.84,
+   "text": ">> So they have a representation of their"
+  },
+  {
+   "t": 1823.48,
+   "d": 2.04,
+   "text": "legs that involves like a foot position"
+  },
+  {
+   "t": 1825.52,
+   "d": 1.28,
+   "text": "and you know, the position where it"
+  },
+  {
+   "t": 1826.8,
+   "d": 2.24,
+   "text": "attaches to the body. Uh for a while I"
+  },
+  {
+   "t": 1829.04,
+   "d": 2.04,
+   "text": "was using kind of a spring damper thing."
+  },
+  {
+   "t": 1831.08,
+   "d": 2.64,
+   "text": "So a lot of things were bouncing around"
+  },
+  {
+   "t": 1833.72,
+   "d": 1.84,
+   "text": "wildly because that's challenging to"
+  },
+  {
+   "t": 1835.56,
+   "d": 2.8,
+   "text": "tune. Um so I have I have a lot of gifs"
+  },
+  {
+   "t": 1838.36,
+   "d": 2.21,
+   "text": "gifs Sorry."
+  },
+  {
+   "t": 1840.57,
+   "d": 0.07,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1840.64,
+   "d": 1.0,
+   "text": ">> Both."
+  },
+  {
+   "t": 1841.64,
+   "d": 0.72,
+   "text": "Um"
+  },
+  {
+   "t": 1842.36,
+   "d": 2.32,
+   "text": "of uh there's like a crowd that has"
+  },
+  {
+   "t": 1844.68,
+   "d": 2.44,
+   "text": "opinions on how you say gif. Um"
+  },
+  {
+   "t": 1847.12,
+   "d": 2.02,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1849.16,
+   "d": 1.92,
+   "text": ">> So uh for I have a lot of gifs of them"
+  },
+  {
+   "t": 1851.08,
+   "d": 2.68,
+   "text": "just bouncing around wildly."
+  },
+  {
+   "t": 1853.76,
+   "d": 1.92,
+   "text": "Um and then I've simplified it since"
+  },
+  {
+   "t": 1855.68,
+   "d": 1.76,
+   "text": "then. So at this point they mostly try"
+  },
+  {
+   "t": 1857.44,
+   "d": 2.04,
+   "text": "to stay to sort of a constant distance"
+  },
+  {
+   "t": 1859.48,
+   "d": 2.24,
+   "text": "off the ground um while at the same time"
+  },
+  {
+   "t": 1861.72,
+   "d": 2.12,
+   "text": "capping their maximum velocity that they"
+  },
+  {
+   "t": 1863.84,
+   "d": 1.44,
+   "text": "can apply to themselves at a time so you"
+  },
+  {
+   "t": 1865.28,
+   "d": 2.24,
+   "text": "can still push them around. Uh"
+  },
+  {
+   "t": 1867.52,
+   "d": 1.04,
+   "text": "there's"
+  },
+  {
+   "t": 1868.56,
+   "d": 1.84,
+   "text": "it's it's big rabbit hole"
+  },
+  {
+   "t": 1870.4,
+   "d": 1.4,
+   "text": "um but that was that's been a lot of fun"
+  },
+  {
+   "t": 1871.8,
+   "d": 1.4,
+   "text": "to work on."
+  },
+  {
+   "t": 1873.2,
+   "d": 1.32,
+   "text": "It sounds like a lot of fun and I and I"
+  },
+  {
+   "t": 1874.52,
+   "d": 2.28,
+   "text": "like that really what I what I heard is"
+  },
+  {
+   "t": 1876.8,
+   "d": 1.64,
+   "text": "that if you want all of your creatures"
+  },
+  {
+   "t": 1878.44,
+   "d": 2.08,
+   "text": "to kind of be like kangaroos"
+  },
+  {
+   "t": 1880.52,
+   "d": 0.4,
+   "text": "Yeah."
+  },
+  {
+   "t": 1880.92,
+   "d": 1.8,
+   "text": ">> then you should use spring dampening as"
+  },
+  {
+   "t": 1882.72,
+   "d": 1.8,
+   "text": "a way to do the legs because that's"
+  },
+  {
+   "t": 1884.52,
+   "d": 1.48,
+   "text": "delightful. Maybe you want that. That"
+  },
+  {
+   "t": 1886.0,
+   "d": 1.84,
+   "text": "sounds like characterful. I think it's"
+  },
+  {
+   "t": 1887.84,
+   "d": 1.56,
+   "text": "going to come back at some point. Right"
+  },
+  {
+   "t": 1889.4,
+   "d": 1.8,
+   "text": "now I'm keeping I'm keeping"
+  },
+  {
+   "t": 1891.2,
+   "d": 2.08,
+   "text": "systems relatively simple as I fit in"
+  },
+  {
+   "t": 1893.28,
+   "d": 1.4,
+   "text": "more of them to see how they work with"
+  },
+  {
+   "t": 1894.68,
+   "d": 1.2,
+   "text": "each other."
+  },
+  {
+   "t": 1895.88,
+   "d": 1.52,
+   "text": "Um and then later down the line I can be"
+  },
+  {
+   "t": 1897.4,
+   "d": 1.2,
+   "text": "like, how kangaroo do you want this"
+  },
+  {
+   "t": 1898.6,
+   "d": 1.72,
+   "text": "thing to be? Maximum kangaroo?"
+  },
+  {
+   "t": 1900.32,
+   "d": 2.16,
+   "text": ">> I think I think just go all the way of"
+  },
+  {
+   "t": 1902.48,
+   "d": 1.6,
+   "text": "like part of the genetics is like opt"
+  },
+  {
+   "t": 1904.08,
+   "d": 1.8,
+   "text": "into like which physics system does this"
+  },
+  {
+   "t": 1905.88,
+   "d": 1.8,
+   "text": "creature use? Like what part of reality"
+  },
+  {
+   "t": 1907.68,
+   "d": 1.72,
+   "text": "does it tap into? It's like, no no,"
+  },
+  {
+   "t": 1909.4,
+   "d": 1.56,
+   "text": "these guys are living on the spring"
+  },
+  {
+   "t": 1910.96,
+   "d": 1.0,
+   "text": "constant like"
+  },
+  {
+   "t": 1911.96,
+   "d": 0.66,
+   "text": ">> Yeah."
+  },
+  {
+   "t": 1912.62,
+   "d": 0.18,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1912.8,
+   "d": 1.96,
+   "text": ">> simulation of reality. These guys just"
+  },
+  {
+   "t": 1914.76,
+   "d": 1.68,
+   "text": "have really bouncy legs."
+  },
+  {
+   "t": 1916.44,
+   "d": 0.28,
+   "text": "Yeah."
+  },
+  {
+   "t": 1916.72,
+   "d": 2.2,
+   "text": ">> Yeah. Um also delightful. I think that"
+  },
+  {
+   "t": 1918.92,
+   "d": 1.8,
+   "text": "pulling out there that like you you"
+  },
+  {
+   "t": 1920.72,
+   "d": 2.12,
+   "text": "know, the the thing driving the physics"
+  },
+  {
+   "t": 1922.84,
+   "d": 1.36,
+   "text": "and the things driving the visuals do"
+  },
+  {
+   "t": 1924.2,
+   "d": 1.88,
+   "text": "not need to be the same. That is just"
+  },
+  {
+   "t": 1926.08,
+   "d": 2.72,
+   "text": "like a great general lesson. Yeah,"
+  },
+  {
+   "t": 1928.8,
+   "d": 3.2,
+   "text": "definitely. Is good to to mention."
+  },
+  {
+   "t": 1932.0,
+   "d": 3.0,
+   "text": "Um I think one more one last question"
+  },
+  {
+   "t": 1935.0,
+   "d": 2.64,
+   "text": "from Lauren Schmidt. Uh I really like"
+  },
+  {
+   "t": 1937.64,
+   "d": 2.48,
+   "text": "how you deliberately or how deliberately"
+  },
+  {
+   "t": 1940.12,
+   "d": 2.04,
+   "text": "you've dodged a lot of complexity rabbit"
+  },
+  {
+   "t": 1942.16,
+   "d": 2.28,
+   "text": "holes. Uh could you say a little more"
+  },
+  {
+   "t": 1944.44,
+   "d": 4.2,
+   "text": "about the genes involved in this? Yeah."
+  },
+  {
+   "t": 1948.64,
+   "d": 2.48,
+   "text": "Uh so part of part of why it's simple"
+  },
+  {
+   "t": 1951.12,
+   "d": 1.76,
+   "text": "right now is just again cuz I'm keeping"
+  },
+  {
+   "t": 1952.88,
+   "d": 1.6,
+   "text": "things relatively simple and then I can"
+  },
+  {
+   "t": 1954.48,
+   "d": 0.96,
+   "text": "scale them up and make them more"
+  },
+  {
+   "t": 1955.44,
+   "d": 2.32,
+   "text": "complicated later. Uh again, the genes"
+  },
+  {
+   "t": 1957.76,
+   "d": 2.32,
+   "text": "are are relatively simple."
+  },
+  {
+   "t": 1960.08,
+   "d": 2.28,
+   "text": "Uh I used to have them as like uh kind"
+  },
+  {
+   "t": 1962.36,
+   "d": 2.64,
+   "text": "of a a tree structure like a hierarchy"
+  },
+  {
+   "t": 1965.0,
+   "d": 2.04,
+   "text": "um and then found like like recursive"
+  },
+  {
+   "t": 1967.04,
+   "d": 1.12,
+   "text": "and then I was like, this is just"
+  },
+  {
+   "t": 1968.16,
+   "d": 1.44,
+   "text": "impossible to work with. So now it's the"
+  },
+  {
+   "t": 1969.6,
+   "d": 1.84,
+   "text": "body parts are like a flattened out tree"
+  },
+  {
+   "t": 1971.44,
+   "d": 2.76,
+   "text": "structure or a just just a list. Um each"
+  },
+  {
+   "t": 1974.2,
+   "d": 2.44,
+   "text": "body part has kind of a list of socket"
+  },
+  {
+   "t": 1976.64,
+   "d": 2.92,
+   "text": "IDs that it goes to. Um so for example,"
+  },
+  {
+   "t": 1979.56,
+   "d": 1.84,
+   "text": "if something is on the torso, the socket"
+  },
+  {
+   "t": 1981.4,
+   "d": 2.12,
+   "text": "ID might just be zero cuz it's from the"
+  },
+  {
+   "t": 1983.52,
+   "d": 2.32,
+   "text": "the zero section of the tor- the zero ID"
+  },
+  {
+   "t": 1985.84,
+   "d": 2.08,
+   "text": "socket of the torso. And then like an"
+  },
+  {
+   "t": 1987.92,
+   "d": 2.8,
+   "text": "eye, the ID might be zero and then zero"
+  },
+  {
+   "t": 1990.72,
+   "d": 2.08,
+   "text": "and then like one because it's the"
+  },
+  {
+   "t": 1992.8,
+   "d": 3.44,
+   "text": "second uh position on the head. Um legs"
+  },
+  {
+   "t": 1996.24,
+   "d": 3.0,
+   "text": "might all have like an ID of like one"
+  },
+  {
+   "t": 1999.24,
+   "d": 1.76,
+   "text": "because I've given the same socket ID to"
+  },
+  {
+   "t": 2001.0,
+   "d": 2.68,
+   "text": "all the leg sockets on the torso."
+  },
+  {
+   "t": 2003.68,
+   "d": 1.36,
+   "text": "Um and then on top of that, I just put"
+  },
+  {
+   "t": 2005.04,
+   "d": 1.92,
+   "text": "in kind of whatever information I want"
+  },
+  {
+   "t": 2006.96,
+   "d": 2.76,
+   "text": "to be genetic in the creature. Um like"
+  },
+  {
+   "t": 2009.72,
+   "d": 2.92,
+   "text": "for example, uh just color, size, things"
+  },
+  {
+   "t": 2012.64,
+   "d": 1.24,
+   "text": "like that."
+  },
+  {
+   "t": 2013.88,
+   "d": 2.0,
+   "text": "Okay. Excellent. Well, thank you so"
+  },
+  {
+   "t": 2015.88,
+   "d": 2.4,
+   "text": "much. Wonderful. This was a perfect talk"
+  },
+  {
+   "t": 2018.28,
+   "d": 1.96,
+   "text": "to end the conference on. Uh"
+  },
+  {
+   "t": 2020.24,
+   "d": 1.0,
+   "text": "I'm happy to have [laughter] you back. I"
+  },
+  {
+   "t": 2021.24,
+   "d": 2.24,
+   "text": "hope check out like I'm I'm this was"
+  },
+  {
+   "t": 2023.48,
+   "d": 1.72,
+   "text": "wonderful. So thank you so much. I can't"
+  },
+  {
+   "t": 2025.2,
+   "d": 0.84,
+   "text": "believe it's your first Roguelike"
+  },
+  {
+   "t": 2026.04,
+   "d": 1.21,
+   "text": "Celebration."
+  },
+  {
+   "t": 2027.25,
+   "d": 1.07,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 2028.32,
+   "d": 1.72,
+   "text": ">> You're a natural [snorts] fit. I was I"
+  },
+  {
+   "t": 2030.04,
+   "d": 1.72,
+   "text": "was so nervous. Okay."
+  },
+  {
+   "t": 2031.76,
+   "d": 2.12,
+   "text": "No, you knocked it out of the park. So"
+  },
+  {
+   "t": 2033.88,
+   "d": 3.88,
+   "text": "thank you so much. All right."
+  },
+  {
+   "t": 2037.96,
+   "d": 3.88,
+   "text": "Okay. Well, yes. Little guys. Little"
+  },
+  {
+   "t": 2041.84,
+   "d": 3.76,
+   "text": "guys. We love it."
+  }
+ ]
+}

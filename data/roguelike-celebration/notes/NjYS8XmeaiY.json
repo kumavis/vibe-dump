@@ -1,0 +1,127 @@
+{
+  "id": "NjYS8XmeaiY",
+  "title": "Leigh Alexander - McMansions of Hell: Roguelikes and Reality TV",
+  "speaker": "Leigh Alexander",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=NjYS8XmeaiY",
+  "talk_type": "design",
+  "summary": "Leigh Alexander presents McMansion, an experimental generative celebrity murder game made with Brian Bucklew, inspired by Y2K-era celebrity reality shows confined to a mansion. She demos the game, in which a random set of celebrities roams a fixed-layout mansion, one is secretly the murderer, and the player watches their generated interactions and makes accusations. She argues that reality shows and social media are 'constructed realities' whose rules generate social narrative, much like roguelikes. Under the hood she shows the spreadsheet-driven content, explaining her trick of organising large content volumes with an arbitrary matrix (the Pokemon type table) and stressing that zero-latency, plain-language content tooling is essential for writers working generatively.",
+  "games": [
+    "McMansion",
+    "Reigns: Her Majesty",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "constructed reality",
+      "kind": "principle",
+      "claim": "Reality TV shows like Y2K celebrity mansion shows are 'constructed realities': contained spaces with rules designed to make social narrative emerge, which makes them a natural roguelike dungeon setting.",
+      "detail": "Alexander describes contestants confined to a mansion with objectives, displaying extreme behaviours. She calls these 'McMansion hells' the perfect roguelike dungeon setting and defines constructed reality as contained simulations of spaces with systems and rules to encourage social narrative.",
+      "t": 1011,
+      "quote": "they are rules of some kind implemented to encourage social narrative to emerge",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "social simulation",
+      "kind": "example",
+      "claim": "Reality shows such as Love Island function as generative systems: producers inject challenges and revelations designed to disrupt existing social bonds, generating drama.",
+      "detail": "Alexander describes contestants isolated from devices, focused on pairing up, with weekly challenges disruptive to social bonds and producers revealing fan tweets or past details to mess with perceptions. She notes the caveat that people are not simply content generation engines and there are ethical issues.",
+      "t": 1131,
+      "quote": "Every week they do challenges that are designed to be disruptive to the social bonds they already have",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "social simulation",
+      "kind": "example",
+      "claim": "McMansion generates a murder mystery by placing a random set of celebrities in a fixed-layout mansion, secretly assigning one as murderer who kills anyone left alone with them, while the player observes behaviours and accuses.",
+      "detail": "The map is the same every time but room images are randomly generated and the celebrity set changes. The murderer kills another celebrity if they are left alone together, so opportunity is the main clue; items like a knife or pool noodle are tied to murder method.",
+      "t": 611,
+      "quote": "one of the celebrities is assigned to be the murderer every turn. And they will kill another celebrity as long as we leave them alone together",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player role",
+      "kind": "example",
+      "claim": "While prototyping McMansion, the designers shifted from the player solving murders toward the player committing them, because simulated celebrity behaviour felt so unhinged that murder was a small step.",
+      "detail": "Later in the demo Alexander says it would be fun if the player could interact with items and potentially kill celebrities themselves, rather than only watching and accusing.",
+      "t": 406,
+      "quote": "have increasingly started shifting toward the realization the player is doing the murders",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural images",
+      "kind": "technique",
+      "claim": "McMansion generates room images by querying a search API with per-room search strings and post-processing results client-side into monochrome dithering for a unified vintage Macintosh look.",
+      "detail": "Rooms in the spreadsheet list search strings (e.g. dark 1990s mansion bathroom). Alexander cautions that API costs would be high at scale and images are pulled without considering provenance, which they would need to change.",
+      "t": 1336,
+      "quote": "The raw images are then post processed on the client side in plain JavaScript using simple monochrome",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content matrix",
+      "kind": "technique",
+      "claim": "When writing a large volume of generative content, assign each entity a combination of categories from an existing, even arbitrary, scheme (such as Pokemon elemental types) to guide behaviours and spark ideas.",
+      "detail": "Alexander gave each celebrity two Pokemon types and wrote behaviours per element, e.g. Steve Harvey as poison/grass. She found it much easier than generating hundreds of unique lines from a blank page, and the type table's affinities and oppositions suited a game about relationships.",
+      "t": 1464,
+      "quote": "one of my weird tricks for labor saving with you have to create a large volume of content is to create some kind of category for yourself",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content coverage",
+      "kind": "technique",
+      "claim": "Define the organisational matrix for spreadsheet content up front so content types are evenly distributed and coverage of needed tags is ensured from the start.",
+      "detail": "In McMansion each element needs a quote, a question, two- and three-person interactions, and positive and negative variants. Alexander hand-wrote and hand-tweaked every line, which she says is why generated combinations work well together.",
+      "t": 1720,
+      "quote": "you should come up with the organizational matrix beforehand even if it is totally arbitrarily because that can help you ensure coverage",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "generative writing",
+      "kind": "principle",
+      "claim": "Writing for a generative system is not labour-saving; componentising content so it recombines well can be harder than writing linear text, and the reason to do it is that it's fun.",
+      "detail": "Alexander contrasts this with social-media claims that generative tech is bad for writers; for her it gives a componentised relationship to her own work.",
+      "t": 1661,
+      "quote": "working in a generative mode is not actually labor saving and in fact it might be more difficult and complex",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "content tooling",
+      "kind": "principle",
+      "claim": "Content tools for generative writing must have near-zero latency: plain-language spreadsheets whose edits appear immediately in a running instance, without full builds or code.",
+      "detail": "Alexander says you can't tell how content performs from a spreadsheet alone, so moving between input and instance quickly is vital. She credits Reigns: Her Majesty's writing awards to a toolset that let her, a non-technical designer, work this way.",
+      "t": 1789,
+      "quote": "If you want to do anything good from a content standpoint with spreadsheets and generative tech you need to prioritize minimizing the latency",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "collaboration",
+      "kind": "principle",
+      "claim": "Cross-discipline collaboration, such as a narrative designer pairing with a generative coder, lets each learn skills they lack.",
+      "detail": "Alexander describes asking Brian Bucklew to teach her spreadsheets as a back-end generative tool, and suggests generative coders find a writer obsessed with some story domain they know nothing about.",
+      "t": 1954,
+      "quote": "If you are a crunchy generative coder maybe find a writer to work when who is obsessed with some kind of storyteller",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content matrix",
+      "kind": "technique",
+      "claim": "To build categorisation schemes for content, borrow how other games organise information, choosing one whose structure (e.g. affinities and oppositions) fits your theme.",
+      "detail": "In text Q&A Alexander says the Pokemon table was chosen because it is a sophisticated type system with affinities and oppositions relevant to celebrity relationships; her advice is to translate your content body into such a context.",
+      "t": 2130,
+      "quote": "think of other games you play and how they organize information and kind a way to translate your content body into that context",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

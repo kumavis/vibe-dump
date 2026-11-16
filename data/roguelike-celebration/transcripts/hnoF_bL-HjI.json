@@ -1,0 +1,2291 @@
+{
+ "id": "hnoF_bL-HjI",
+ "url": "https://www.youtube.com/watch?v=hnoF_bL-HjI",
+ "title": "Thomas Biskup - Thoughts about modern roguelike user interfaces",
+ "speaker": "Thomas Biskup",
+ "talk_title": "Thoughts about modern roguelike user interfaces",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1984,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nThomas is the developer and maintainer of ADOM (Ancient Domains Of Mystery), Ultimate ADOM (its sequel and our attempt at creating the ultimate fantasy roguelike) and in real life one of three CEOs of QuinScape GmbH.",
+ "chapters": [],
+ "caption_source": "whisper",
+ "caption_lang": "en",
+ "word_count": 5992,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 9.18,
+   "text": "I would like to talk a little bit about roguelike user interface, specifically about one controversial thought I had a couple of months ago."
+  },
+  {
+   "t": 9.62,
+   "d": 6.42,
+   "text": "This is moving. I think it's an important thought and I would like to get into some discussion about it."
+  },
+  {
+   "t": 17.4,
+   "d": 5.88,
+   "text": "That's my main appeal. I was already introduced, so I can skip this. I did ADOM for many years, I still do it."
+  },
+  {
+   "t": 23.28,
+   "d": 2.08,
+   "text": "and I'm working on Ultimate ADOM."
+  },
+  {
+   "t": 25.98,
+   "d": 5.86,
+   "text": "But let's come to the topic of this talk."
+  },
+  {
+   "t": 32.52,
+   "d": 2.36,
+   "text": "Why do I want to talk about user interfaces?"
+  },
+  {
+   "t": 35.52,
+   "d": 5.34,
+   "text": "There was one rude moment that caused me to think more about this,"
+  },
+  {
+   "t": 41.1,
+   "d": 3.02,
+   "text": "but it was a kind of, let's say, strange start."
+  },
+  {
+   "t": 44.22,
+   "d": 0.66,
+   "text": "I got a postcard."
+  },
+  {
+   "t": 45.06,
+   "d": 4.2,
+   "text": "As some of you might know, in those days I asked for postcards"
+  },
+  {
+   "t": 49.74,
+   "d": 3.12,
+   "text": "from people who play ADOM, and I still get them once every while."
+  },
+  {
+   "t": 52.86,
+   "d": 5.52,
+   "text": "and recently I got one and it said Roguelikes are too rare nowadays."
+  },
+  {
+   "t": 59.14,
+   "d": 6.32,
+   "text": "And I was like okay, because I get to hear this quite often and I hear this on Facebook,"
+  },
+  {
+   "t": 65.7,
+   "d": 6.2,
+   "text": "on Twitter, via mail from all kinds of people that contact me related to ADOM and obviously"
+  },
+  {
+   "t": 71.9,
+   "d": 3.9,
+   "text": "for me it doesn't feel as if Roguelikes are too rare nowadays because for example when"
+  },
+  {
+   "t": 75.8,
+   "d": 4.78,
+   "text": "I look at RogueBasin.com or something like that there are more Roguelikes than ever,"
+  },
+  {
+   "t": 80.58,
+   "d": 3.86,
+   "text": "at least in my perception. And if you look at Steam, there are roguelike categories and many"
+  },
+  {
+   "t": 84.44,
+   "d": 4.4,
+   "text": "things happening. So I was somewhat surprised about these repeating statements that say"
+  },
+  {
+   "t": 89.52,
+   "d": 4.66,
+   "text": "roguelikes are so rare nowadays. And I thought like, wow, I wish they had been that rare like 20"
+  },
+  {
+   "t": 94.18,
+   "d": 8.64,
+   "text": "years ago. So I really was wondering, what does this mean? What is going on there? And then"
+  },
+  {
+   "t": 103.32,
+   "d": 6.68,
+   "text": "And then I think it's kind of obvious in a certain way because these messages come to"
+  },
+  {
+   "t": 110.0,
+   "d": 1.1,
+   "text": "me from all kinds of channels."
+  },
+  {
+   "t": 111.4,
+   "d": 3.64,
+   "text": "So I can't say that it's just the people who write postcards and maybe live in some"
+  },
+  {
+   "t": 115.04,
+   "d": 3.4,
+   "text": "backwards areas or so who maybe don't know that there are roguelikes."
+  },
+  {
+   "t": 118.5,
+   "d": 2.18,
+   "text": "I get that on Facebook, I get that on Twitter, I get that via mail."
+  },
+  {
+   "t": 121.0,
+   "d": 3.46,
+   "text": "It seems to be a somewhat common conception out there."
+  },
+  {
+   "t": 126.24,
+   "d": 4.76,
+   "text": "I think the ugly truth is that traditional roguelikes are not very successful."
+  },
+  {
+   "t": 131.0,
+   "d": 8.56,
+   "text": "and that's why they're also not very available or present in the mind of people, at least in the mainstream."
+  },
+  {
+   "t": 140.06,
+   "d": 2.46,
+   "text": "That's maybe one point there."
+  },
+  {
+   "t": 142.74,
+   "d": 6.3,
+   "text": "I think that's really a problem of Roguelikes because it's an awesome genre which can be valid for awesome puzzle games,"
+  },
+  {
+   "t": 149.24,
+   "d": 1.54,
+   "text": "for awesome role-playing games, for whatever."
+  },
+  {
+   "t": 151.26,
+   "d": 4.12,
+   "text": "Roguelikes cover many niches with the types of games they represent"
+  },
+  {
+   "t": 155.38,
+   "d": 3.32,
+   "text": "and still for some reason they are not very successful in the mainstream"
+  },
+  {
+   "t": 158.7,
+   "d": 4.78,
+   "text": "and that's something that keeps bothering me because I would like them to be much more present in the mainstream"
+  },
+  {
+   "t": 163.48,
+   "d": 2.88,
+   "text": "and much more successful there because I think the genre deserves it."
+  },
+  {
+   "t": 167.52,
+   "d": 3.8,
+   "text": "And still it leaves the question about why talk about user interfaces then."
+  },
+  {
+   "t": 173.32,
+   "d": 5.66,
+   "text": "Because I think that some games prove that they can be successful in the mainstream"
+  },
+  {
+   "t": 178.98,
+   "d": 4.18,
+   "text": "and these games usually have also, among other things, pretty good user interfaces,"
+  },
+  {
+   "t": 183.76,
+   "d": 3.6,
+   "text": "be it graphical, be it from the whole user experience part."
+  },
+  {
+   "t": 188.3,
+   "d": 5.6,
+   "text": "and if you look, in my opinion, at what makes games successful, there's three things."
+  },
+  {
+   "t": 195.16,
+   "d": 4.4,
+   "text": "Obviously, you need a somewhat great game design because if your game is not good,"
+  },
+  {
+   "t": 199.66,
+   "d": 1.32,
+   "text": "it probably won't be successful."
+  },
+  {
+   "t": 201.54,
+   "d": 4.46,
+   "text": "You have lots of money and can trick people into believing your game is good for a short while,"
+  },
+  {
+   "t": 206.08,
+   "d": 4.44,
+   "text": "but that's not the standard case, I would say, except with AAA Studios, maybe."
+  },
+  {
+   "t": 212.02,
+   "d": 3.16,
+   "text": "I think you really need a great user interface to have a wide audience"
+  },
+  {
+   "t": 215.18,
+   "d": 4.88,
+   "text": "because if people can't get your game you will have problems reaching a wide audience and only"
+  },
+  {
+   "t": 220.06,
+   "d": 5.1,
+   "text": "hardcore fans will like to play your game. I think you need either a great and or a large community"
+  },
+  {
+   "t": 225.16,
+   "d": 6.82,
+   "text": "to be successful. If you look at these three factors, I think the game design part takes the"
+  },
+  {
+   "t": 231.98,
+   "d": 3.7,
+   "text": "least money because it's most about genius and inspiration. So if you have a great idea, okay,"
+  },
+  {
+   "t": 235.84,
+   "d": 7.28,
+   "text": "you are set and can write a game and try to push it into the mainstream. User interface design is"
+  },
+  {
+   "t": 243.12,
+   "d": 3.88,
+   "text": "a bit harder, it costs more money because it needs more experience, it probably involves"
+  },
+  {
+   "t": 247.0,
+   "d": 5.2,
+   "text": "graphics and that means more work and so it's somewhat costly and thus somewhat difficult."
+  },
+  {
+   "t": 252.56,
+   "d": 5.38,
+   "text": "And it also needs quite a bit of brains because creating simple user interfaces, good user"
+  },
+  {
+   "t": 257.94,
+   "d": 4.38,
+   "text": "interfaces is a very hard thing, it's not something you just do on the run, but you"
+  },
+  {
+   "t": 262.32,
+   "d": 1.02,
+   "text": "really have to think about that."
+  },
+  {
+   "t": 264.06,
+   "d": 5.12,
+   "text": "The last factor, large communities, okay, usually can create them by spending lots of"
+  },
+  {
+   "t": 269.18,
+   "d": 4.88,
+   "text": "money into marketing and just creating awareness. You still need a good game and probably also"
+  },
+  {
+   "t": 274.06,
+   "d": 4.7,
+   "text": "a good interface to be successful with that. But at least it requires the least brains because"
+  },
+  {
+   "t": 278.76,
+   "d": 4.06,
+   "text": "it's a pretty standardised marketing process where you just shell out money and do something."
+  },
+  {
+   "t": 283.56,
+   "d": 4.42,
+   "text": "The other variety is the underground process where communities are being created because"
+  },
+  {
+   "t": 287.98,
+   "d": 3.6,
+   "text": "the game is so ingenious that it just works in itself like Minecraft or something like"
+  },
+  {
+   "t": 291.58,
+   "d": 6.42,
+   "text": "that. So great game design is something I can't really talk about because for me it's"
+  },
+  {
+   "t": 298.0,
+   "d": 7.7,
+   "text": "still this ingenious magic thing stuff. Community creation feels like very hard work for me"
+  },
+  {
+   "t": 305.7,
+   "d": 4.46,
+   "text": "and I wouldn't have any smart messages there, but I think the user interface part deserves"
+  },
+  {
+   "t": 310.16,
+   "d": 4.68,
+   "text": "some more attention because I got one special idea there and I would like to share that."
+  },
+  {
+   "t": 315.06,
+   "d": 5.3,
+   "text": "But before I get to that, there is one other thing that is very important related to that."
+  },
+  {
+   "t": 320.82,
+   "d": 5.48,
+   "text": "In my opinion, this community building part feels like the hardest of the three because"
+  },
+  {
+   "t": 326.3,
+   "d": 5.26,
+   "text": "it's I think most different from what you otherwise do because if you love creating games,"
+  },
+  {
+   "t": 331.66,
+   "d": 5.86,
+   "text": "game design comes very natural to you. You probably at least think about user interfaces and if you"
+  },
+  {
+   "t": 337.52,
+   "d": 4.12,
+   "text": "have a certain talent for that it's also very natural for you but community building is something"
+  },
+  {
+   "t": 341.64,
+   "d": 6.3,
+   "text": "very very different. It's marketing, it's talking to people, going out, having other messages than"
+  },
+  {
+   "t": 347.94,
+   "d": 5.72,
+   "text": "just some code and some stuff like that and so I think of these three factors it feels like the"
+  },
+  {
+   "t": 353.66,
+   "d": 3.9,
+   "text": "the very hardest part of what you have to do to make your game more widely accepted."
+  },
+  {
+   "t": 358.54,
+   "d": 4.66,
+   "text": "I think that's also the reason why we are rightfully very proud about the communities we all build with our games"
+  },
+  {
+   "t": 363.2,
+   "d": 5.6,
+   "text": "and are very proud about having them and cherish them and value them very highly because it's so hard to do that."
+  },
+  {
+   "t": 371.38,
+   "d": 5.76,
+   "text": "If you look at roguelike communities, I think they are very special and more special than many other communities in the games."
+  },
+  {
+   "t": 378.42,
+   "d": 3.66,
+   "text": "because besides them being great, I think they are very, very loyal."
+  },
+  {
+   "t": 382.96,
+   "d": 2.62,
+   "text": "I mean, I'm always surprised when I meet people that say,"
+  },
+  {
+   "t": 385.66,
+   "d": 2.48,
+   "text": "hey, I played your game for like 18 years, I still haven't won,"
+  },
+  {
+   "t": 388.24,
+   "d": 3.84,
+   "text": "and it's like, wow, okay, 18 years, that's a while."
+  },
+  {
+   "t": 394.54,
+   "d": 2.52,
+   "text": "Usually many people in the Roguelike community are very creative."
+  },
+  {
+   "t": 397.3,
+   "d": 1.76,
+   "text": "When I look at all the feedback we get, ideas,"
+  },
+  {
+   "t": 399.58,
+   "d": 5.2,
+   "text": "it's amazing, it's really a pool of ideas brimming with creativity."
+  },
+  {
+   "t": 405.3,
+   "d": 3.62,
+   "text": "They usually are very smart, not all the time, but most of them."
+  },
+  {
+   "t": 409.66,
+   "d": 5.84,
+   "text": "Very supportive, so I've seen so much support from the community of people who really do a lot to support their game,"
+  },
+  {
+   "t": 415.66,
+   "d": 2.36,
+   "text": "do something for the game, write tutorials, do videos, whatever."
+  },
+  {
+   "t": 419.0,
+   "d": 3.5,
+   "text": "And they're usually also very generous and very available."
+  },
+  {
+   "t": 422.78,
+   "d": 3.76,
+   "text": "So I think that's really factors that make local communities truly great."
+  },
+  {
+   "t": 427.44,
+   "d": 3.6,
+   "text": "But I think if you look at that, you are missing something important."
+  },
+  {
+   "t": 431.04,
+   "d": 6.34,
+   "text": "if you are thinking about how to make your game more widely recognizable and accepted."
+  },
+  {
+   "t": 439.16,
+   "d": 4.86,
+   "text": "That's now the key theory of this presentation I would like to discuss. It's somewhat controversial,"
+  },
+  {
+   "t": 444.66,
+   "d": 5.72,
+   "text": "but I think it's important. Because I think that while roguelike communities are truly great,"
+  },
+  {
+   "t": 451.0,
+   "d": 5.62,
+   "text": "they probably are our biggest enemy in creating great mainstream user interfaces."
+  },
+  {
+   "t": 457.7,
+   "d": 13.04,
+   "text": "And I mean this really seriously. I think that's a really serious threat and problem. If you want your roguelike to be successful in the mainstream, I think your community is your enemy in that, usually. At least that's my experience."
+  },
+  {
+   "t": 470.96,
+   "d": 11.88,
+   "text": "And I would like to explain that a little bit. I never noticed it. I only noticed it when ADOM went to Steam, because usually feedback for ADOM was like, wow, what a slick interface, wow, it's so optimized, wow, that's so cool."
+  },
+  {
+   "t": 482.84,
+   "d": 4.96,
+   "text": "Then we went to Steam and it was like, wow, what's that shit? I can't play it."
+  },
+  {
+   "t": 488.16,
+   "d": 6.24,
+   "text": "And that was after, let's say, almost 20 years of getting rather positive feedback."
+  },
+  {
+   "t": 494.58,
+   "d": 8.56,
+   "text": "Quite a surprise because I was in a certain bubble and was not really prepared for the extent of the feedback."
+  },
+  {
+   "t": 503.26,
+   "d": 3.66,
+   "text": "Let's put it like that. And got me thinking a lot."
+  },
+  {
+   "t": 507.14,
+   "d": 4.7,
+   "text": "And I think the problem not only lies with me, that's also part of the problem,"
+  },
+  {
+   "t": 511.84,
+   "d": 4.56,
+   "text": "because I'm the designer, I'm responsible for that, but because I allowed myself to become caught in that bubble"
+  },
+  {
+   "t": 516.4,
+   "d": 3.14,
+   "text": "and the bubble fed some things that are not good for the game."
+  },
+  {
+   "t": 520.3,
+   "d": 2.0,
+   "text": "And I would like to explain that a little more."
+  },
+  {
+   "t": 523.24,
+   "d": 2.02,
+   "text": "What is it about roguelike communities?"
+  },
+  {
+   "t": 525.44,
+   "d": 3.34,
+   "text": "I think, first of all, you meet a lot of power users there."
+  },
+  {
+   "t": 529.0,
+   "d": 5.56,
+   "text": "People who are really into roguelike games and play them very, very extensively over long periods of time."
+  },
+  {
+   "t": 535.36,
+   "d": 2.52,
+   "text": "And they are a little bit like Olympic athletes."
+  },
+  {
+   "t": 537.88,
+   "d": 5.44,
+   "text": "They are really trying to get the most out of the game, be very efficient, play many games very quickly."
+  },
+  {
+   "t": 544.68,
+   "d": 5.14,
+   "text": "They suffer from every little bit of inefficiency or perceived inefficiency in your user interface."
+  },
+  {
+   "t": 550.16,
+   "d": 4.1,
+   "text": "They really need highly optimized tools to be able to play their style of game."
+  },
+  {
+   "t": 554.92,
+   "d": 4.82,
+   "text": "That's, I think, one challenge because it's something that works for Olympic athletes,"
+  },
+  {
+   "t": 560.08,
+   "d": 5.3,
+   "text": "but not for the casual, sportive person that just tries to run around a little bit or something like that."
+  },
+  {
+   "t": 565.38,
+   "d": 5.12,
+   "text": "I'll get to it. Then I think many people in the Roguelike community really, really, really,"
+  },
+  {
+   "t": 570.5,
+   "d": 5.64,
+   "text": "really like options. More options, more options, more options. Usually it's fun to comply to yet"
+  },
+  {
+   "t": 576.14,
+   "d": 4.5,
+   "text": "another option to configure the color of your bird depending on your gender or whatever."
+  },
+  {
+   "t": 581.78,
+   "d": 6.7,
+   "text": "But more options lead to more complexity in a game and might make this also more problematic for"
+  },
+  {
+   "t": 588.48,
+   "d": 9.26,
+   "text": "more casual users to digest. Then roguelike fans really crave complex games with lots of detail."
+  },
+  {
+   "t": 597.88,
+   "d": 5.8,
+   "text": "I think that's a good thing. That's not something I'm complaining about but it puts a very high"
+  },
+  {
+   "t": 603.68,
+   "d": 7.08,
+   "text": "pressure on you as a designer to make this complexity again both fun and digestible. You"
+  },
+  {
+   "t": 610.76,
+   "d": 4.56,
+   "text": "really have to think about that and not get lost in complexity for complexity's sake because just"
+  },
+  {
+   "t": 615.32,
+   "d": 4.12,
+   "text": "someone has a great idea and says, hey, can I have critical hit zones for your fingernails"
+  },
+  {
+   "t": 619.44,
+   "d": 6.38,
+   "text": "or something like that. And I think if you just look at the bubble of your community,"
+  },
+  {
+   "t": 626.08,
+   "d": 4.96,
+   "text": "it's usually a very outspoken, opinionated and extrovert community in this bubble. And"
+  },
+  {
+   "t": 631.04,
+   "d": 5.48,
+   "text": "so you will get feedback, you will get strong feedback, you will get very good arguments"
+  },
+  {
+   "t": 636.52,
+   "d": 6.02,
+   "text": "for that feedback usually. And you can fall for the impression that it's a very valid"
+  },
+  {
+   "t": 642.54,
+   "d": 7.48,
+   "text": "and very, very universally true feedback, which is part of the danger, I think, in just listening only to your community."
+  },
+  {
+   "t": 651.74,
+   "d": 7.86,
+   "text": "So in the end, I think what works for certain power users is not necessarily what works for more casual or more mainstream gamers."
+  },
+  {
+   "t": 660.18,
+   "d": 6.94,
+   "text": "That's part of the true problem you have when you try to spread the knowledge about your game and the fame of your game."
+  },
+  {
+   "t": 668.64,
+   "d": 1.6,
+   "text": "And what can we do about that?"
+  },
+  {
+   "t": 671.02,
+   "d": 4.4,
+   "text": "I have some ideas, I'm not sure if they are the only ones, but that's why I wanted to talk about this here"
+  },
+  {
+   "t": 675.42,
+   "d": 3.24,
+   "text": "and maybe get later on feedback from others what I think about it, because I think"
+  },
+  {
+   "t": 678.66,
+   "d": 4.48,
+   "text": "it's a very important topic. So power users."
+  },
+  {
+   "t": 684.02,
+   "d": 3.1,
+   "text": "Olympic athletes, they use highly optimized tools"
+  },
+  {
+   "t": 687.12,
+   "d": 2.86,
+   "text": "which usually means shortcuts for everything, because if you"
+  },
+  {
+   "t": 691.2,
+   "d": 4.18,
+   "text": "usually play a game by keyboard as a power user and do something"
+  },
+  {
+   "t": 695.38,
+   "d": 5.86,
+   "text": "like 30, 40, 50,000 key presses before the game is over, every extra key press is painful."
+  },
+  {
+   "t": 701.76,
+   "d": 2.24,
+   "text": "So you need optimized shortcuts, for example."
+  },
+  {
+   "t": 705.0,
+   "d": 4.7,
+   "text": "The big problem is if your game is only playable with all these shortcuts, you need to know"
+  },
+  {
+   "t": 709.7,
+   "d": 1.86,
+   "text": "them, that's not really good."
+  },
+  {
+   "t": 712.0,
+   "d": 4.9,
+   "text": "I just yesterday evening met an Adam fan who told me that it took him years to understand"
+  },
+  {
+   "t": 716.9,
+   "d": 1.76,
+   "text": "that he can drink potions in Adam."
+  },
+  {
+   "t": 719.18,
+   "d": 1.3,
+   "text": "I was really like, oh, okay."
+  },
+  {
+   "t": 720.48,
+   "d": 6.24,
+   "text": "and he explained that I thought I pressed D for drink but D is drop. It never came to my mind"
+  },
+  {
+   "t": 726.72,
+   "d": 3.42,
+   "text": "to press shift D for drink and so I thought maybe I can sell them, that's useful."
+  },
+  {
+   "t": 731.64,
+   "d": 5.96,
+   "text": "That was someone who was I think quite well-worsed in playing games. Strange things happen if you have"
+  },
+  {
+   "t": 737.6,
+   "d": 4.28,
+   "text": "too many shortcuts in your game for example and it's too optimized for the power players because"
+  },
+  {
+   "t": 741.88,
+   "d": 4.92,
+   "text": "yes they memorize that but a more casual person tries something and it doesn't work and gone they are."
+  },
+  {
+   "t": 746.8,
+   "d": 5.84,
+   "text": "they forget about even trying this concept again. Options probably should be introduced"
+  },
+  {
+   "t": 752.64,
+   "d": 4.18,
+   "text": "very gracefully if at all the power users will find them, the casual ones don't need"
+  },
+  {
+   "t": 756.82,
+   "d": 4.84,
+   "text": "them probably if the game has a good default configuration. So that's also something to"
+  },
+  {
+   "t": 761.66,
+   "d": 5.18,
+   "text": "be careful about, not just throw into the face of players for example. Just the example"
+  },
+  {
+   "t": 766.84,
+   "d": 5.32,
+   "text": "from ADOM, ADOM has more than 100 keyboard commands, configuration options spread over"
+  },
+  {
+   "t": 772.16,
+   "d": 3.98,
+   "text": "over several files you need to edit, which is also not that user friendly,"
+  },
+  {
+   "t": 776.32,
+   "d": 2.9,
+   "text": "rudimentary mouse support that costs 20 years to get into the game."
+  },
+  {
+   "t": 779.52,
+   "d": 5.44,
+   "text": "So for Ultimate AIDEM we are trying to get by with seven keys."
+  },
+  {
+   "t": 785.42,
+   "d": 4.62,
+   "text": "So that's all you need to play, the classical WASDEF in a space."
+  },
+  {
+   "t": 790.36,
+   "d": 2.98,
+   "text": "With that you can play the game and you can play it quite nicely,"
+  },
+  {
+   "t": 793.48,
+   "d": 4.78,
+   "text": "especially if you're not a power user who takes like 50,000 turns."
+  },
+  {
+   "t": 798.26,
+   "d": 5.54,
+   "text": "is because if I look at my players, about 90% of them probably play for like 3,000 turns"
+  },
+  {
+   "t": 803.8,
+   "d": 0.66,
+   "text": "and then they are dead."
+  },
+  {
+   "t": 804.82,
+   "d": 4.56,
+   "text": "So if you just play for 3,000 turns, they should be enjoyable and fun"
+  },
+  {
+   "t": 809.38,
+   "d": 2.34,
+   "text": "and you don't need all those power commands"
+  },
+  {
+   "t": 811.72,
+   "d": 2.3,
+   "text": "because you never get to the spot where that is important."
+  },
+  {
+   "t": 814.5,
+   "d": 3.1,
+   "text": "So the user interface really should be nice for them and very convenient"
+  },
+  {
+   "t": 817.6,
+   "d": 3.06,
+   "text": "and understandable without any explanations, for example."
+  },
+  {
+   "t": 821.36,
+   "d": 1.84,
+   "text": "That's not possible with 100 commands."
+  },
+  {
+   "t": 823.92,
+   "d": 3.1,
+   "text": "Yeah, naturally we look at things like keyboard, mouse, gamepad and the mix thereof."
+  },
+  {
+   "t": 829.06,
+   "d": 3.98,
+   "text": "options, same thing. Keep them to a minimum. I think if the game is well designed, it doesn't"
+  },
+  {
+   "t": 833.04,
+   "d": 5.62,
+   "text": "need 1,000 options. If you want to add them, keep them in a place where people expect them,"
+  },
+  {
+   "t": 838.8,
+   "d": 5.06,
+   "text": "not hidden in files or cryptic submenus or mixed between menus, files and commands."
+  },
+  {
+   "t": 844.36,
+   "d": 5.28,
+   "text": "That's all just not very good. And always with every option, think about the price you pay,"
+  },
+  {
+   "t": 849.78,
+   "d": 5.04,
+   "text": "because if it's an option that's visible to everyone, it will create complexity for everyone,"
+  },
+  {
+   "t": 854.82,
+   "d": 3.26,
+   "text": "because people see the option, need to understand what does it do, is it important for me or not,"
+  },
+  {
+   "t": 858.22,
+   "d": 4.02,
+   "text": "do I need it or not, is the default good or not, and that's something that happens in the brain of people,"
+  },
+  {
+   "t": 862.4,
+   "d": 4.72,
+   "text": "and if you have like a page of 60 of such options, wow, what a fucking complicated game,"
+  },
+  {
+   "t": 867.22,
+   "d": 5.26,
+   "text": "I will not touch it, at least not for configuring, so you already get, create a negative impression there,"
+  },
+  {
+   "t": 873.7,
+   "d": 4.0,
+   "text": "so you should be very careful, so for example for ADEM Ultimate, ADEM again, we said,"
+  },
+  {
+   "t": 878.2,
+   "d": 5.14,
+   "text": "we start out only with the very, very essential options, like sound configuration, screen resolution,"
+  },
+  {
+   "t": 883.92,
+   "d": 5.44,
+   "text": "very few of those things, keyboard customizability, and that's about it. We make it menu based,"
+  },
+  {
+   "t": 889.56,
+   "d": 4.08,
+   "text": "we make it easily accessible from all places where it's important in a very structured and clear way."
+  },
+  {
+   "t": 893.92,
+   "d": 6.36,
+   "text": "For now we don't do any other options. We'll see if they really become necessary, just to make it very minimal, for example."
+  },
+  {
+   "t": 902.18,
+   "d": 5.2,
+   "text": "It makes them appear a little more like options in other games, I would say, in normal games you can buy, mainstream games."
+  },
+  {
+   "t": 909.18,
+   "d": 3.88,
+   "text": "For the complexity of games, I think that's totally okay and it's the strength of the"
+  },
+  {
+   "t": 913.06,
+   "d": 0.26,
+   "text": "genre."
+  },
+  {
+   "t": 913.6,
+   "d": 5.04,
+   "text": "They have lots of detail and can be very complex, but I think you always have to keep in mind"
+  },
+  {
+   "t": 918.64,
+   "d": 1.78,
+   "text": "that you should design for fun, not for complexity."
+  },
+  {
+   "t": 921.26,
+   "d": 4.56,
+   "text": "Having many intricate things in a game, being able to combine things in surprising ways,"
+  },
+  {
+   "t": 925.92,
+   "d": 8.42,
+   "text": "it's fantastic, but don't clutter the interface, don't over-text the user with what you need"
+  },
+  {
+   "t": 934.34,
+   "d": 5.0,
+   "text": "to do to be able to do some of the cool things. It should be easy. Hide the complexity on"
+  },
+  {
+   "t": 939.34,
+   "d": 4.8,
+   "text": "the UI side. Have it in the game logic that's wonderful but not in the user interface. So"
+  },
+  {
+   "t": 944.14,
+   "d": 4.96,
+   "text": "if it takes 10 key presses to do something wonderful probably one in a thousand of your"
+  },
+  {
+   "t": 949.1,
+   "d": 4.34,
+   "text": "players ever will do it so you could basically save the time to implement it, make it better."
+  },
+  {
+   "t": 955.06,
+   "d": 4.24,
+   "text": "Design should be logical so that you can deduce them from observations, not something arcane"
+  },
+  {
+   "t": 959.3,
+   "d": 4.6,
+   "text": "you need to look up in FAQ or in some spoilers. That's also not really good design. It's just"
+  },
+  {
+   "t": 963.9,
+   "d": 5.76,
+   "text": "lazy design and I'm very guilty of that too, I guess, in ADOM."
+  },
+  {
+   "t": 971.08,
+   "d": 4.24,
+   "text": "And I think it's really worth, although many people criticize road lights for being light,"
+  },
+  {
+   "t": 975.78,
+   "d": 4.52,
+   "text": "to really look at the way they try to tackle certain design issues by really focusing on"
+  },
+  {
+   "t": 980.3,
+   "d": 5.02,
+   "text": "what makes one aspect essentially great and then trying to cut away everything that is"
+  },
+  {
+   "t": 985.32,
+   "d": 4.68,
+   "text": "too complex. You don't need to focus on just one thing, but I think you should, whenever"
+  },
+  {
+   "t": 990.0,
+   "d": 4.8,
+   "text": "Whenever you focus on something, make it as pure, as straightforward, as easily usable"
+  },
+  {
+   "t": 994.8,
+   "d": 4.72,
+   "text": "as possible and only then add more stuff once each individual part of what you think is"
+  },
+  {
+   "t": 999.52,
+   "d": 1.3,
+   "text": "important really works well."
+  },
+  {
+   "t": 1002.6,
+   "d": 2.84,
+   "text": "And I think for mainstream, you really need graphics."
+  },
+  {
+   "t": 1005.7,
+   "d": 0.56,
+   "text": "It doesn't help."
+  },
+  {
+   "t": 1007.52,
+   "d": 0.96,
+   "text": "ASCII is wonderful."
+  },
+  {
+   "t": 1008.7,
+   "d": 5.08,
+   "text": "I still can't draw anything but characters, but I think mainstream users just don't really"
+  },
+  {
+   "t": 1013.78,
+   "d": 0.56,
+   "text": "get it."
+  },
+  {
+   "t": 1014.56,
+   "d": 3.56,
+   "text": "So if you ever want to be in the mainstream, sorry, you need graphics, or you shouldn't"
+  },
+  {
+   "t": 1018.12,
+   "d": 1.04,
+   "text": "consider going to the mainstream."
+  },
+  {
+   "t": 1019.16,
+   "d": 1.84,
+   "text": "They won't want to have it."
+  },
+  {
+   "t": 1023.36,
+   "d": 6.84,
+   "text": "Just some examples, for example, that's actually things where we did test groups and sometimes"
+  },
+  {
+   "t": 1030.2,
+   "d": 1.42,
+   "text": "were surprised by the reactions."
+  },
+  {
+   "t": 1032.34,
+   "d": 4.7,
+   "text": "Identification game, deadly hunger system, these complex statistical notations there."
+  },
+  {
+   "t": 1037.94,
+   "d": 6.44,
+   "text": "We really learned even role players often don't understand that stuff, like this 4 die"
+  },
+  {
+   "t": 1044.38,
+   "d": 0.8,
+   "text": "3 plus 2."
+  },
+  {
+   "t": 1045.42,
+   "d": 2.08,
+   "text": "I thought every role player in the world can read that."
+  },
+  {
+   "t": 1048.22,
+   "d": 2.0,
+   "text": "more than half of our roleplayers couldn't read it."
+  },
+  {
+   "t": 1050.3,
+   "d": 2.16,
+   "text": "They were like, what's the strange combination of things there?"
+  },
+  {
+   "t": 1052.68,
+   "d": 2.24,
+   "text": "When we asked them, they didn't tell us, but they were like,"
+  },
+  {
+   "t": 1055.0,
+   "d": 1.82,
+   "text": "okay, I have no idea what it is, but I thought it was important,"
+  },
+  {
+   "t": 1056.98,
+   "d": 1.3,
+   "text": "so I ignored it."
+  },
+  {
+   "t": 1061.58,
+   "d": 3.02,
+   "text": "So we, for example, decided in Ultimate Atom we will have no"
+  },
+  {
+   "t": 1064.6,
+   "d": 3.52,
+   "text": "identification game because we wanted people to use the items"
+  },
+  {
+   "t": 1068.12,
+   "d": 3.54,
+   "text": "when they find them, not just die with unused items in their"
+  },
+  {
+   "t": 1071.66,
+   "d": 1.82,
+   "text": "backpack because they didn't know what they could do."
+  },
+  {
+   "t": 1073.76,
+   "d": 3.04,
+   "text": "That's not fun for casual gamers, so we did away with that."
+  },
+  {
+   "t": 1076.8,
+   "d": 5.34,
+   "text": "hunger will not kill you anymore because being killed due to some clock is not that fun."
+  },
+  {
+   "t": 1082.32,
+   "d": 1.9,
+   "text": "It just will make you weaker, for example."
+  },
+  {
+   "t": 1084.52,
+   "d": 3.68,
+   "text": "And we are really trying to think about different levels of displaying statistics"
+  },
+  {
+   "t": 1088.2,
+   "d": 4.3,
+   "text": "from, let's say, very, very simple, that might be one number for a weapon"
+  },
+  {
+   "t": 1092.5,
+   "d": 3.3,
+   "text": "that says something about its strength, just as an abstraction,"
+  },
+  {
+   "t": 1096.54,
+   "d": 3.74,
+   "text": "to maybe something like this here where you see the numbers 6 to 14 for damage,"
+  },
+  {
+   "t": 1100.76,
+   "d": 5.1,
+   "text": "which is a very different information from roll four three-sided dice and add two"
+  },
+  {
+   "t": 1105.86,
+   "d": 5.32,
+   "text": "because the one on the slide to the left tells you something about the statistical distribution"
+  },
+  {
+   "t": 1111.18,
+   "d": 4.92,
+   "text": "which can be important, while 6 to 14 doesn't say anything about the statistical distribution."
+  },
+  {
+   "t": 1116.92,
+   "d": 3.6,
+   "text": "But casual players don't care. That's the sad truth of that. They don't care."
+  },
+  {
+   "t": 1120.88,
+   "d": 3.72,
+   "text": "So for some players you just can do away with that. It just doesn't matter."
+  },
+  {
+   "t": 1128.96,
+   "d": 6.08,
+   "text": "Also one thing I'm really feeling guilty about, it took me more than 20 years to really test my game"
+  },
+  {
+   "t": 1135.04,
+   "d": 7.08,
+   "text": "with other types of gamers. That was a huge mistake and I'm not sure why it took me more than 20 years to understand that."
+  },
+  {
+   "t": 1142.32,
+   "d": 7.48,
+   "text": "But once we started testing the game in live tests with people from very different test groups,"
+  },
+  {
+   "t": 1149.86,
+   "d": 3.98,
+   "text": "we learned so many things within an hour that we didn't learn in 20 years."
+  },
+  {
+   "t": 1153.98,
+   "d": 4.4,
+   "text": "That was an amazing experience. I really can recommend it. It's quite shocking often."
+  },
+  {
+   "t": 1158.72,
+   "d": 4.0,
+   "text": "I really recommend doing them in the way where you have someone sitting in front of your notebook,"
+  },
+  {
+   "t": 1162.72,
+   "d": 3.7,
+   "text": "don't explain anything, let them start the game, just observe and take notes."
+  },
+  {
+   "t": 1166.68,
+   "d": 6.88,
+   "text": "And on my very first test game I had like 20 pages of notes and like 147 or something"
+  },
+  {
+   "t": 1173.56,
+   "d": 4.6,
+   "text": "like bug reports and feature requests I could just glean from one hour of playing and I was like,"
+  },
+  {
+   "t": 1178.58,
+   "d": 5.68,
+   "text": "wow, what a shamefully bad game. It was really embarrassing, but it helped a lot."
+  },
+  {
+   "t": 1184.5,
+   "d": 6.62,
+   "text": "And we repeated that and iterated and it helped make the game better. So what we are doing now"
+  },
+  {
+   "t": 1191.12,
+   "d": 3.7,
+   "text": "is really trying to have different test groups. They must not be huge. I mean, we are not"
+  },
+  {
+   "t": 1194.82,
+   "d": 3.7,
+   "text": "huge corporations here. But have a couple of people who are not even gamers. But let"
+  },
+  {
+   "t": 1198.52,
+   "d": 3.4,
+   "text": "them start the game and see what they do. If they find the right menu button to even"
+  },
+  {
+   "t": 1201.92,
+   "d": 6.24,
+   "text": "start the game. Even that is sometimes a challenge. Have some casual gamers who usually play simple"
+  },
+  {
+   "t": 1208.16,
+   "d": 4.58,
+   "text": "games. Have some role-playing gamers who play role-playing games. Have some rogueligers"
+  },
+  {
+   "t": 1212.74,
+   "d": 4.46,
+   "text": "from other roguelike games and try to see how they react to your game when exposed to"
+  },
+  {
+   "t": 1217.2,
+   "d": 5.64,
+   "text": "without any help in anything else. Just see what happens and be very vigilant and try to learn from"
+  },
+  {
+   "t": 1222.84,
+   "d": 5.38,
+   "text": "that. It's very, very helpful. The final problem that you have different target audiences,"
+  },
+  {
+   "t": 1228.94,
+   "d": 5.7,
+   "text": "the answer is also somewhat easy to that. Think about your main audience. Do you want to make a"
+  },
+  {
+   "t": 1234.64,
+   "d": 4.16,
+   "text": "roguelike hit in the roguelike community? Then you probably can go for all the things that have been"
+  },
+  {
+   "t": 1238.8,
+   "d": 6.16,
+   "text": "well known for like 30 years. If you want to have a game that is more acceptable to a wider audience,"
+  },
+  {
+   "t": 1244.96,
+   "d": 3.96,
+   "text": "you probably should forget all the assumptions you have learned about Roguelike games,"
+  },
+  {
+   "t": 1249.0,
+   "d": 2.66,
+   "text": "get away with them and try to rethink everything and do it differently."
+  },
+  {
+   "t": 1251.98,
+   "d": 2.7,
+   "text": "And then see how you can accommodate your existing community"
+  },
+  {
+   "t": 1254.68,
+   "d": 2.02,
+   "text": "and find something that's also fun for them."
+  },
+  {
+   "t": 1257.18,
+   "d": 2.42,
+   "text": "But it takes some bravery to do that."
+  },
+  {
+   "t": 1260.1,
+   "d": 6.14,
+   "text": "So for example, for our case, again we decided we will have configurable as an option,"
+  },
+  {
+   "t": 1266.56,
+   "d": 3.6,
+   "text": "levels of details, where you can say the default mode is a simple mode"
+  },
+  {
+   "t": 1270.16,
+   "d": 3.18,
+   "text": "where you just have some health bars and PowerPoint bars and that's it."
+  },
+  {
+   "t": 1273.74,
+   "d": 7.18,
+   "text": "On medium level you maybe see some numbers, and on high level you get all the statistics with all the modifiers and all the internals of the engines"
+  },
+  {
+   "t": 1280.92,
+   "d": 4.32,
+   "text": "so that as a power user you really can get down to the gist of everything."
+  },
+  {
+   "t": 1285.64,
+   "d": 2.88,
+   "text": "But that's possible if you design your game for that and plan it from the beginning."
+  },
+  {
+   "t": 1288.84,
+   "d": 8.48,
+   "text": "If you try to check in on afterwards, it's not really possible. Like in ADOM, there's one level of detail in the DNA,"
+  },
+  {
+   "t": 1297.5,
+   "d": 4.56,
+   "text": "and to change that probably would require rewriting so many places. It's not fun to do."
+  },
+  {
+   "t": 1302.06,
+   "d": 1.72,
+   "text": "for Ultimate ADOM we try to do better."
+  },
+  {
+   "t": 1303.96,
+   "d": 2.44,
+   "text": "We also try to unify things like in ADOM we have skills,"
+  },
+  {
+   "t": 1306.66,
+   "d": 1.1,
+   "text": "we have weapon skills, we have talents,"
+  },
+  {
+   "t": 1307.92,
+   "d": 0.76,
+   "text": "they all work differently."
+  },
+  {
+   "t": 1309.18,
+   "d": 2.18,
+   "text": "We now try to have one unified skill system"
+  },
+  {
+   "t": 1311.36,
+   "d": 2.36,
+   "text": "that more looks like skill systems in other games"
+  },
+  {
+   "t": 1313.72,
+   "d": 2.1,
+   "text": "out there from the structure so that people immediately"
+  },
+  {
+   "t": 1315.82,
+   "d": 1.1,
+   "text": "understand how they work."
+  },
+  {
+   "t": 1317.14,
+   "d": 4.46,
+   "text": "So it's just not being exotic for the sake of being exotic,"
+  },
+  {
+   "t": 1321.9,
+   "d": 2.54,
+   "text": "but rather trying to be mainstream."
+  },
+  {
+   "t": 1325.42,
+   "d": 5.92,
+   "text": "So in summary, I really think it makes sense to be careful"
+  },
+  {
+   "t": 1331.34,
+   "d": 1.92,
+   "text": "about your existing community for your game,"
+  },
+  {
+   "t": 1333.4,
+   "d": 1.82,
+   "text": "because they love your game and they are usually"
+  },
+  {
+   "t": 1335.22,
+   "d": 1.66,
+   "text": "power player fans."
+  },
+  {
+   "t": 1337.28,
+   "d": 2.0,
+   "text": "That has the dangers I explained."
+  },
+  {
+   "t": 1339.6,
+   "d": 2.34,
+   "text": "If you want to reach wider adoption,"
+  },
+  {
+   "t": 1342.42,
+   "d": 1.86,
+   "text": "you probably need to think outside the box"
+  },
+  {
+   "t": 1344.28,
+   "d": 2.5,
+   "text": "and get other input and also risk sometimes"
+  },
+  {
+   "t": 1346.78,
+   "d": 2.28,
+   "text": "doing things your community doesn't like at first."
+  },
+  {
+   "t": 1349.64,
+   "d": 2.82,
+   "text": "One example, for example, I was very happy to see yesterday,"
+  },
+  {
+   "t": 1352.76,
+   "d": 3.16,
+   "text": "is Ultimate Atom doesn't have any diagonal movement right now,"
+  },
+  {
+   "t": 1356.46,
+   "d": 2.42,
+   "text": "because we couldn't find a good way to map it to the keyboard,"
+  },
+  {
+   "t": 1358.88,
+   "d": 3.0,
+   "text": "because no, Wim keys are not user friendly."
+  },
+  {
+   "t": 1363.16,
+   "d": 0.62,
+   "text": "That's a rumor."
+  },
+  {
+   "t": 1364.16,
+   "d": 1.42,
+   "text": "They just don't work for normal users."
+  },
+  {
+   "t": 1366.08,
+   "d": 1.24,
+   "text": "So we couldn't find a good way."
+  },
+  {
+   "t": 1367.5,
+   "d": 0.82,
+   "text": "So at some point we said,"
+  },
+  {
+   "t": 1368.4,
+   "d": 1.3,
+   "text": "okay, let's start with four directions"
+  },
+  {
+   "t": 1369.7,
+   "d": 0.8,
+   "text": "and see what happens."
+  },
+  {
+   "t": 1370.98,
+   "d": 1.54,
+   "text": "And the interesting thing is that even people"
+  },
+  {
+   "t": 1372.52,
+   "d": 2.44,
+   "text": "who beforehand say, ah, that can't work,"
+  },
+  {
+   "t": 1375.14,
+   "d": 1.22,
+   "text": "they play it and they have fun."
+  },
+  {
+   "t": 1376.48,
+   "d": 0.58,
+   "text": "They don't notice."
+  },
+  {
+   "t": 1377.28,
+   "d": 0.64,
+   "text": "They don't even comment."
+  },
+  {
+   "t": 1378.1,
+   "d": 2.64,
+   "text": "So that's kind of interesting to see."
+  },
+  {
+   "t": 1380.88,
+   "d": 1.98,
+   "text": "So it makes sense to challenge assumptions of,"
+  },
+  {
+   "t": 1382.98,
+   "d": 0.9,
+   "text": "I need to have those features."
+  },
+  {
+   "t": 1384.02,
+   "d": 0.62,
+   "text": "No, you don't probably."
+  },
+  {
+   "t": 1384.96,
+   "d": 2.22,
+   "text": "Just try something else and try to see if it works"
+  },
+  {
+   "t": 1387.18,
+   "d": 0.66,
+   "text": "and make it interesting."
+  },
+  {
+   "t": 1387.84,
+   "d": 5.24,
+   "text": "For example, to make it interesting, in Ultimate ADOM we said missile weapons can be directed"
+  },
+  {
+   "t": 1393.08,
+   "d": 4.9,
+   "text": "in any direction, melee is only in the four directions, the targeting system naturally"
+  },
+  {
+   "t": 1397.98,
+   "d": 1.18,
+   "text": "doesn't use movement keys."
+  },
+  {
+   "t": 1400.36,
+   "d": 3.7,
+   "text": "That's very nice actually because suddenly missile combat has a new strategic option"
+  },
+  {
+   "t": 1404.06,
+   "d": 4.82,
+   "text": "because you can reach points you can't reach in melee and that's actually nice and it makes"
+  },
+  {
+   "t": 1408.88,
+   "d": 0.78,
+   "text": "the interface better."
+  },
+  {
+   "t": 1410.04,
+   "d": 1.62,
+   "text": "So right now we are very happy with that."
+  },
+  {
+   "t": 1412.04,
+   "d": 1.16,
+   "text": "That's just one example."
+  },
+  {
+   "t": 1414.94,
+   "d": 10.94,
+   "text": "Bubbles are dangerous, so always check for yourself. Am I working in a bubble? Is this bubble large enough to encompass the audience I want to reach or is it something else?"
+  },
+  {
+   "t": 1426.26,
+   "d": 7.92,
+   "text": "If it's too small, avoid it. Finally, I would be very happy if there is some truth to my thoughts and you can agree with that."
+  },
+  {
+   "t": 1434.18,
+   "d": 6.92,
+   "text": "and we all can work on making roguelikes more widely accepted, accessible, and visible,"
+  },
+  {
+   "t": 1441.38,
+   "d": 3.62,
+   "text": "because I think they really deserve it. That's it. Thank you very much."
+  },
+  {
+   "t": 1453.86,
+   "d": 0.82,
+   "text": "Any questions?"
+  },
+  {
+   "t": 1459.1,
+   "d": 3.54,
+   "text": "I noticed that you changed the hunger clock to be debilitating instead of fatal."
+  },
+  {
+   "t": 1463.82,
+   "d": 5.44,
+   "text": "What are you doing to prevent players from having the most optimal gameplay also be the"
+  },
+  {
+   "t": 1469.26,
+   "d": 3.84,
+   "text": "most boring, where they clear everything out very slowly, which is what I understand the"
+  },
+  {
+   "t": 1473.1,
+   "d": 1.2,
+   "text": "main purpose of Hunger Clock to be?"
+  },
+  {
+   "t": 1476.24,
+   "d": 4.06,
+   "text": "First of all, I think that's one of those problems that's not really a problem with"
+  },
+  {
+   "t": 1480.88,
+   "d": 0.66,
+   "text": "mainstream gamers."
+  },
+  {
+   "t": 1481.98,
+   "d": 4.42,
+   "text": "Most of them just play for a short while and try to get enjoyment out of this."
+  },
+  {
+   "t": 1487.3,
+   "d": 4.8,
+   "text": "People who start to optimize, they are already getting into the range of power players and"
+  },
+  {
+   "t": 1492.1,
+   "d": 1.6,
+   "text": "and they have a deep connection to the game."
+  },
+  {
+   "t": 1494.22,
+   "d": 2.74,
+   "text": "Usually people when they start out, they just try to have casual fun."
+  },
+  {
+   "t": 1497.18,
+   "d": 3.5,
+   "text": "So first of all, I think it's not a general problem,"
+  },
+  {
+   "t": 1500.98,
+   "d": 6.2,
+   "text": "but naturally we can provide other effects to make people, let's say, motivated to move around."
+  },
+  {
+   "t": 1507.58,
+   "d": 2.96,
+   "text": "For example, you could stop generating more treasures on the level,"
+  },
+  {
+   "t": 1510.68,
+   "d": 2.3,
+   "text": "but just create monsters that provide less and less experience,"
+  },
+  {
+   "t": 1513.28,
+   "d": 3.2,
+   "text": "so the level becomes more dangerous, but you can't win much from it."
+  },
+  {
+   "t": 1516.78,
+   "d": 3.62,
+   "text": "So it's more of a, let's say, not automated death clock,"
+  },
+  {
+   "t": 1520.4,
+   "d": 4.74,
+   "text": "but rather a mechanism that tries to motivate you to move onwards and do new things."
+  },
+  {
+   "t": 1525.66,
+   "d": 5.94,
+   "text": "You can do things like, for example, only allowing natural healing of your character"
+  },
+  {
+   "t": 1533.06,
+   "d": 2.1,
+   "text": "if you leave the level after a certain time."
+  },
+  {
+   "t": 1535.32,
+   "d": 4.64,
+   "text": "It's just a gamey mechanic, but it can help to get people moving, for example."
+  },
+  {
+   "t": 1540.14,
+   "d": 2.76,
+   "text": "So there are many ways to do it and you have to find out what's the right way for your game."
+  },
+  {
+   "t": 1543.2,
+   "d": 2.98,
+   "text": "But I just think having some kind of mechanism that in the end kills your character"
+  },
+  {
+   "t": 1546.18,
+   "d": 0.88,
+   "text": "is not a very fun one."
+  },
+  {
+   "t": 1547.06,
+   "d": 0.9,
+   "text": "and make it smarter."
+  },
+  {
+   "t": 1548.26,
+   "d": 2.04,
+   "text": "And I can't give a general answer to that,"
+  },
+  {
+   "t": 1550.38,
+   "d": 1.76,
+   "text": "but I think there are many possible general answers"
+  },
+  {
+   "t": 1552.14,
+   "d": 1.38,
+   "text": "suitable for the theme of your game,"
+  },
+  {
+   "t": 1553.64,
+   "d": 1.94,
+   "text": "and that's something, it's a design challenge."
+  },
+  {
+   "t": 1559.86,
+   "d": 1.86,
+   "text": "How much more traction are you seeing"
+  },
+  {
+   "t": 1561.72,
+   "d": 1.86,
+   "text": "with Ultimate ADOM versus ADOM?"
+  },
+  {
+   "t": 1564.98,
+   "d": 1.8,
+   "text": "Not yet much, because we aren't out,"
+  },
+  {
+   "t": 1566.88,
+   "d": 1.06,
+   "text": "we are only announcing things."
+  },
+  {
+   "t": 1570.08,
+   "d": 3.42,
+   "text": "The honest answer is we get very positive feedback"
+  },
+  {
+   "t": 1573.5,
+   "d": 2.08,
+   "text": "when we try small test groups,"
+  },
+  {
+   "t": 1575.58,
+   "d": 2.84,
+   "text": "but we don't have enough to do more than small test groups right now."
+  },
+  {
+   "t": 1578.68,
+   "d": 4.6,
+   "text": "We hope this will change with next year and then I will be in the position to either prove"
+  },
+  {
+   "t": 1583.28,
+   "d": 1.12,
+   "text": "or disprove my arguments."
+  },
+  {
+   "t": 1584.7,
+   "d": 1.46,
+   "text": "We'll see if that works, to be honest."
+  },
+  {
+   "t": 1589.44,
+   "d": 4.62,
+   "text": "Have you found yourself making any mistakes by over-optimizing to novice users?"
+  },
+  {
+   "t": 1596.12,
+   "d": 0.72,
+   "text": "Probably yes."
+  },
+  {
+   "t": 1597.2,
+   "d": 5.24,
+   "text": "I mean, that's why I think iterating is so important and having those test groups because"
+  },
+  {
+   "t": 1602.44,
+   "d": 9.08,
+   "text": "Because we really right now try to, when we have an idea that we think is quite revolutionary for our game, so to speak,"
+  },
+  {
+   "t": 1612.06,
+   "d": 3.26,
+   "text": "we really try to test it as early on and if it doesn't work we do away with it."
+  },
+  {
+   "t": 1615.42,
+   "d": 6.36,
+   "text": "It's also one of the reasons why we do not yet have anything to ship because we, for example, rework the user interface at least three times by now"
+  },
+  {
+   "t": 1621.78,
+   "d": 3.16,
+   "text": "and are still working on fine-tuning it."
+  },
+  {
+   "t": 1624.94,
+   "d": 7.12,
+   "text": "And yes, you always lean either to one side or the other side quite often too strongly."
+  },
+  {
+   "t": 1632.28,
+   "d": 1.4,
+   "text": "That's a natural risk, I think."
+  },
+  {
+   "t": 1633.86,
+   "d": 2.64,
+   "text": "And testing is the one thing that helps and getting feedback early on."
+  },
+  {
+   "t": 1636.98,
+   "d": 3.62,
+   "text": "That's why we also now really want to get to the point where we can have a much larger test base"
+  },
+  {
+   "t": 1640.6,
+   "d": 2.38,
+   "text": "because these small test groups naturally again are kind of bubble."
+  },
+  {
+   "t": 1643.32,
+   "d": 1.18,
+   "text": "So it has a certain danger."
+  },
+  {
+   "t": 1644.64,
+   "d": 1.6,
+   "text": "But we hope to change that by January."
+  },
+  {
+   "t": 1650.0,
+   "d": 0.62,
+   "text": "Hey, man."
+  },
+  {
+   "t": 1650.8,
+   "d": 0.48,
+   "text": "Good talk."
+  },
+  {
+   "t": 1651.28,
+   "d": 5.2,
+   "text": "So you mentioned that dying of hunger is not heroic and feels boring."
+  },
+  {
+   "t": 1656.8,
+   "d": 4.32,
+   "text": "So how does it feel to be completely 100% correct and right about that?"
+  },
+  {
+   "t": 1670.56,
+   "d": 2.68,
+   "text": "I have no response to the question."
+  },
+  {
+   "t": 1680.26,
+   "d": 1.06,
+   "text": "Other questions?"
+  },
+  {
+   "t": 1688.78,
+   "d": 6.06,
+   "text": "You mentioned trying to target the more casual players and something that most people that"
+  },
+  {
+   "t": 1694.84,
+   "d": 5.56,
+   "text": "I know of that category hate is non-interactive gameplay death, things like traps that kill"
+  },
+  {
+   "t": 1700.4,
+   "d": 0.96,
+   "text": "you instantly and so on."
+  },
+  {
+   "t": 1701.36,
+   "d": 3.92,
+   "text": "Is that something that also is planning to be either removed or mitigated in Ultimate ADOM?"
+  },
+  {
+   "t": 1705.56,
+   "d": 3.5,
+   "text": "Yes, absolutely. Because, I mean, death by stone traps and stuff like that"
+  },
+  {
+   "t": 1709.06,
+   "d": 4.32,
+   "text": "have become nice cliches of ADOM, but they are not good for the gameplay."
+  },
+  {
+   "t": 1713.82,
+   "d": 2.88,
+   "text": "So there will be various ways to handle this. For example,"
+  },
+  {
+   "t": 1719.2,
+   "d": 4.64,
+   "text": "we have thought a long while about how do we do searching for things."
+  },
+  {
+   "t": 1724.2,
+   "d": 2.88,
+   "text": "Be that traps or secret doors, for example, too."
+  },
+  {
+   "t": 1727.08,
+   "d": 6.36,
+   "text": "and while we saw the tests, I had one player who was a Roguelike player who really went to every wall in the game"
+  },
+  {
+   "t": 1733.44,
+   "d": 5.38,
+   "text": "and always pressed the S key to search for secret doors at the wall, sometimes several times because she thought,"
+  },
+  {
+   "t": 1738.9,
+   "d": 3.44,
+   "text": "okay, there might be a secret door, and to watch this was really painful."
+  },
+  {
+   "t": 1742.96,
+   "d": 5.56,
+   "text": "So we decided for secret doors, for example, when you move close to a secret door, it's automatically discovered,"
+  },
+  {
+   "t": 1748.78,
+   "d": 6.52,
+   "text": "and it works great. It's fantastic because you still need to move to relevant areas on the map,"
+  },
+  {
+   "t": 1755.3,
+   "d": 2.62,
+   "text": "but you no longer need to rely on the chance to discover them."
+  },
+  {
+   "t": 1758.16,
+   "d": 2.44,
+   "text": "We probably will do similar things with traps for example."
+  },
+  {
+   "t": 1760.88,
+   "d": 3.8,
+   "text": "We also will have kind of cheat mechanisms in the game"
+  },
+  {
+   "t": 1764.68,
+   "d": 1.54,
+   "text": "that will prevent unfair deaths"
+  },
+  {
+   "t": 1766.22,
+   "d": 2.2,
+   "text": "because unfair deaths just don't make much sense."
+  },
+  {
+   "t": 1768.94,
+   "d": 3.02,
+   "text": "If you are rather healthy and get hit by the trap, you won't die."
+  },
+  {
+   "t": 1772.58,
+   "d": 2.74,
+   "text": "Full stop. I never said that because it ruins your fun."
+  },
+  {
+   "t": 1777.3,
+   "d": 4.14,
+   "text": "When people don't know it and the trap just reduces you to very low hit points,"
+  },
+  {
+   "t": 1781.46,
+   "d": 3.2,
+   "text": "you're still very much in danger and it feels like a critical situation."
+  },
+  {
+   "t": 1784.66,
+   "d": 1.92,
+   "text": "but it's much better than killing, for example."
+  },
+  {
+   "t": 1786.86,
+   "d": 5.36,
+   "text": "If you just have one hit point, okay, then maybe it's a stupid idea to just move around"
+  },
+  {
+   "t": 1792.22,
+   "d": 1.92,
+   "text": "and try dangerous new areas."
+  },
+  {
+   "t": 1794.54,
+   "d": 7.16,
+   "text": "We try several of these approaches to lessen the risk of unfair deaths and allow for fair"
+  },
+  {
+   "t": 1801.7,
+   "d": 0.8,
+   "text": "dying so to speak."
+  },
+  {
+   "t": 1804.38,
+   "d": 1.24,
+   "text": "Because I think it's really important."
+  },
+  {
+   "t": 1806.3,
+   "d": 0.66,
+   "text": "Hi, Thomas."
+  },
+  {
+   "t": 1807.22,
+   "d": 4.3,
+   "text": "I completely agree that diagonal movement is very clumsy on a keyboard."
+  },
+  {
+   "t": 1811.68,
+   "d": 0.98,
+   "text": "There's no good answer there."
+  },
+  {
+   "t": 1812.66,
+   "d": 6.64,
+   "text": "But switching to sort of four directional movement, I guess the thing that always made me hesitate to do that in my games"
+  },
+  {
+   "t": 1819.3,
+   "d": 7.08,
+   "text": "is that you end up with sort of a situation where two characters in a room can dodge around each other."
+  },
+  {
+   "t": 1826.5,
+   "d": 5.04,
+   "text": "There's no way for one to corner the other, even in a two by two space. How do you fix that?"
+  },
+  {
+   "t": 1833.5,
+   "d": 1.26,
+   "text": "Not yet, to be honest."
+  },
+  {
+   "t": 1838.66,
+   "d": 5.7,
+   "text": "Usually, the current approach, and hopefully it's already working well enough, is that"
+  },
+  {
+   "t": 1844.36,
+   "d": 4.66,
+   "text": "the monster AI doesn't always forcefully try to move to the next optimal position, but"
+  },
+  {
+   "t": 1849.02,
+   "d": 0.92,
+   "text": "sometimes hesitates."
+  },
+  {
+   "t": 1850.64,
+   "d": 5.56,
+   "text": "So either side at some point has to move, and right now this feels good enough, but"
+  },
+  {
+   "t": 1856.2,
+   "d": 3.62,
+   "text": "we are still too early to really say if this is the final solution or not."
+  },
+  {
+   "t": 1860.28,
+   "d": 3.82,
+   "text": "But sometimes in these situations, you can discover them pretty easily, just let the"
+  },
+  {
+   "t": 1864.1,
+   "d": 2.14,
+   "text": "the monster hesitate for a moment and wait for the player to do."
+  },
+  {
+   "t": 1866.38,
+   "d": 0.96,
+   "text": "That sometimes helps."
+  },
+  {
+   "t": 1869.6,
+   "d": 3.78,
+   "text": "I have no final answer to that, but at least it feels quite good right now."
+  },
+  {
+   "t": 1875.72,
+   "d": 7.74,
+   "text": "So you mentioned how your target audience, or the more casual players, will tend to not"
+  },
+  {
+   "t": 1883.46,
+   "d": 2.22,
+   "text": "play the game fully through."
+  },
+  {
+   "t": 1885.8,
+   "d": 3.66,
+   "text": "They get a few thousand turns in and then will die or they'll get bored and go somewhere"
+  },
+  {
+   "t": 1889.46,
+   "d": 0.22,
+   "text": "else."
+  },
+  {
+   "t": 1889.68,
+   "d": 6.8,
+   "text": "So how do you handle balancing and designing the later parts of the game?"
+  },
+  {
+   "t": 1897.48,
+   "d": 4.2,
+   "text": "Do you then say, okay, I'm going to turn to the power gamers for the rest of it"
+  },
+  {
+   "t": 1901.68,
+   "d": 2.14,
+   "text": "and just assume that they'll burn through the early part?"
+  },
+  {
+   "t": 1903.96,
+   "d": 2.62,
+   "text": "Or do you still turn to outside test?"
+  },
+  {
+   "t": 1906.68,
+   "d": 0.74,
+   "text": "How do you handle that?"
+  },
+  {
+   "t": 1909.58,
+   "d": 6.12,
+   "text": "Specifically for ADOM, we have the luxury of being able to rely on the experiences with the old games."
+  },
+  {
+   "t": 1915.7,
+   "d": 5.86,
+   "text": "So because we are reusing parts of the rules mechanics, of the hit point balancing and stuff,"
+  },
+  {
+   "t": 1922.2,
+   "d": 5.44,
+   "text": "there is a certain experience in what will work at earlier levels, what will work at later levels, and what won't work."
+  },
+  {
+   "t": 1928.14,
+   "d": 2.74,
+   "text": "So I guess we are in a kind of blessed situation there."
+  },
+  {
+   "t": 1932.2,
+   "d": 9.32,
+   "text": "But to be honest, because we are not having a large team, yes, for later phases we also will heavily rely on the core community of power players,"
+  },
+  {
+   "t": 1941.58,
+   "d": 1.38,
+   "text": "because we have no other means."
+  },
+  {
+   "t": 1942.96,
+   "d": 5.14,
+   "text": "We can play a little bit for ourselves, but it would be foolish to assume that we can test all the variety in things."
+  },
+  {
+   "t": 1949.04,
+   "d": 3.88,
+   "text": "Also, that will be an iterative process where feedback from the community will shape the later game."
+  },
+  {
+   "t": 1953.08,
+   "d": 5.2,
+   "text": "But I guess the later game mostly will only be seen by the power players, and then the feedback also is good,"
+  },
+  {
+   "t": 1958.36,
+   "d": 4.1,
+   "text": "because you need to be experienced to get there. You can rely on that feedback you get,"
+  },
+  {
+   "t": 1962.54,
+   "d": 4.56,
+   "text": "because it's from the people who are skilled enough, good enough to get there, and that's then good feedback."
+  },
+  {
+   "t": 1967.1,
+   "d": 3.6,
+   "text": "and you just must make sure that they don't influence the early stages too much"
+  },
+  {
+   "t": 1970.7,
+   "d": 2.98,
+   "text": "and destroy them again by some kind of premature optimization"
+  },
+  {
+   "t": 1973.68,
+   "d": 2.82,
+   "text": "because things are too easy. That's always dangerous."
+  },
+  {
+   "t": 1979.26,
+   "d": 1.08,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1980.64,
+   "d": 0.74,
+   "text": "Thank you very much."
+  }
+ ],
+ "note": "Transcript made locally with speech-to-text (Whisper large-v3-turbo, language forced to English) because YouTube's only caption track for this video is a mis-detected German track."
+}

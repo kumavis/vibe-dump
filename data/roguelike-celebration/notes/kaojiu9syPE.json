@@ -1,0 +1,170 @@
+{
+  "id": "kaojiu9syPE",
+  "title": "Evan Debenham: Smoothing the Sharp Edges of RNG",
+  "speaker": "Evan Debenham",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=kaojiu9syPE",
+  "talk_type": "design",
+  "summary": "Evan Debenham, developer of Shattered Pixel Dungeon, presents tools for reducing the extreme outcomes of randomness in roguelikes while keeping them exciting. He covers non-uniform numerical distributions (pyramid, bell, half-pyramid), deck systems that guarantee outcomes over a short sequence, forced averaging and pity systems, and adding mechanics that give the player control over randomness. Examples come from Shattered Pixel Dungeon's armor, enemy and loot generation and surprise attacks, and from Darkest Dungeon 2's token system. He concludes that sharp RNG is fine too; these are optional tools.",
+  "games": [
+    "Shattered Pixel Dungeon",
+    "Dicey Dungeons",
+    "Slay the Spire",
+    "Path of Exile",
+    "Darkest Dungeon",
+    "Darkest Dungeon 2"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Randomness makes roguelikes replayable, but rare extreme outcomes (streaks of misses, max-damage hits, useless or duplicate items, overtuned encounters) make players feel success depends on luck rather than skill.",
+      "detail": "Debenham lists the 'sharp edges' of RNG: constant missing, minimum damage, enemies always hitting for maximum, items that do not suit the build, the same item type over and over, and stronger enemies arriving together. At worst players feel at the mercy of the RNG.",
+      "t": 85,
+      "quote": "this can make players feel like they are at the mercy of the RNG and the success is or determined by the randomness than their own skill",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Smoothing RNG means cutting extreme outcomes while keeping enough randomness that the game stays exciting and the player still feels in control.",
+      "detail": "Debenham defines the goal as more consistency without significantly reducing the excitement that unpredictability brings.",
+      "t": 99,
+      "quote": "We want more consistency and the player to feel like they are in control but enough randomness to make the game exciting",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "perception of randomness",
+      "kind": "warning",
+      "claim": "Uniform random number ranges are hard to strategize around and clash with player intuition, leading players to see patterns that are not there.",
+      "detail": "With a uniform distribution a max or min roll feels special but is no rarer than any other value; two maximum rolls in a row feel exceptional. Over time players come to believe the game is working for or against them when it is not, and big ranges make high variance worse.",
+      "t": 194,
+      "quote": "Over time this leads players to think there is a pattern working for or against them when there actually isn't",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "number distributions",
+      "kind": "technique",
+      "claim": "Replacing uniform rolls with pyramid (average of two rolls), bell (average of three) or half-pyramid distributions makes average results more likely and extremes rarer, so outcomes feel fairer and easier to plan around.",
+      "detail": "Debenham describes the half-pyramid as two thirds of one uniform roll plus a third of another, uniform in the middle and pyramid at the edges. The common trait is making the average more likely and the max and min less likely, increasing perceived consistency.",
+      "t": 243,
+      "quote": "The common trait here is make the average more likely and maximum and minimum less likely increasing the perceived consistency and making it feel more fair",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "armor",
+      "kind": "example",
+      "claim": "Shattered Pixel Dungeon switched armor rolls from uniform to pyramid because uniform armor so often blocked almost nothing that players ignored armor and dumped all upgrades into weapons.",
+      "detail": "Under uniform rolls armor would frequently overblock or block almost no damage, so it wasn't worth the risk. With a pyramid distribution armor became consistent at protecting the player while low rolls remained possible, balancing offense and defense so weapon upgrades are no longer the only effective strategy.",
+      "t": 273,
+      "quote": "The players would ignore armor because it wasn't worth the Rick it might roll low. Switching to pyramid, armor became more consistent",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "deck systems",
+      "kind": "principle",
+      "claim": "Roguelikes suffer most from probability's extreme cases because a single run is too short for outcomes to converge to the average, while players play many runs and so see the outliers.",
+      "detail": "With a 1-in-10 chance there is a 1-in-100 chance it happens twice in a row, and rare cases where it takes 40+ tries. Some runs end up very lucky or very unlucky as a result.",
+      "t": 347,
+      "quote": "in an average roguelike run, you are not going to experience enough probability it will converge to the average but you will play a lot of individual runs",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "deck systems",
+      "kind": "technique",
+      "claim": "Drawing outcomes from a shuffled deck instead of rolling independent chances eliminates extreme streaks, as long as the last card of one shuffle is not allowed to be the first of the next.",
+      "detail": "A 1-in-10 event becomes one card in a 10-card deck: no repeats, and never more than 10 tries. Decks can be stored as counts per card (weighting) to reduce tracked data, and can be reshuffled when empty or reset in the same order.",
+      "t": 364,
+      "quote": "No chance for repeats as long as you are careful to avoid shuffling and putting the last as the first card in the second shuffle",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "enemy spawning",
+      "kind": "example",
+      "claim": "Shattered Pixel Dungeon uses a per-floor enemy deck so players rarely meet several of the same strong early enemy at once, removing unfair early encounters without changing each enemy's spawn probability.",
+      "detail": "Under the old pure-chance system a player could meet three sewer crabs at once and immediately lose. With decks, on that floor players almost always meet one crab at a time even though the chance of any given enemy being a crab is unchanged.",
+      "t": 443,
+      "quote": "Now on this floor you will rarely encounter two crabs but almost always just one at a time even tow the probability of each enemy being a crab hasn't changed",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "loot generation",
+      "kind": "technique",
+      "claim": "Shattered Pixel Dungeon's loot rooms draw from interwoven shuffled decks, with occasional extra draws for unpredictability, to keep loot consistent across a run and prevent piles of one item type.",
+      "detail": "Regular items still use weighting, but loot rooms use two shuffled decks interwoven together; drawn cards go back rather than reshuffling, and sometimes a second or third card is drawn. This prevents cases like an early player finding four of the same armor type, where only the first is useful.",
+      "t": 490,
+      "quote": "This ensures consistency of loot over a run and eliminates a whole bunch of one loot type",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "forced averaging",
+      "kind": "technique",
+      "claim": "Forced averaging adjusts the chance of an event algorithmically based on past results, which Path of Exile uses for evasion so evasion builds are as reliable as tanking builds.",
+      "detail": "Debenham notes forced averaging is used in competitive games so competitive integrity isn't overly affected by luck.",
+      "t": 549,
+      "quote": "It is used in path of exile for evasion chance so builds based around evading attacks can be just as effective as ones bill around tanking them",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "pity systems",
+      "kind": "technique",
+      "claim": "Pity systems guarantee a positive outcome after a number of failures; though used manipulatively in loot boxes, they can spare players from grinding forever for a drop.",
+      "detail": "Debenham contrasts the loot-box use, meant to make players buy more, with a kinder use: guaranteeing a drop after so many tries.",
+      "t": 567,
+      "quote": "you can use it for nicer things like guaranteeing a drop after so many tries so a player does haven't to grind for something forever",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "surprise attacks",
+      "kind": "example",
+      "claim": "Shattered Pixel Dungeon keeps base hit chance a little low but lets players guarantee hits with surprise attacks from stealth or using the environment, giving players a skill-based way to fight back against RNG.",
+      "detail": "A surprise attack is an attack from stealth or one that uses the environment, such as hitting an enemy as it moves into a doorway. It encourages positioning and environmental interaction, lets players counter enemies without specific items, and rewards smart play early when the player has few other mechanics.",
+      "t": 615,
+      "quote": "players can surprise attack enemies to guarantee a hit. A surprise attack is any attack from stealth or an attack that uses the environment against an enemy",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "player control over rng",
+      "kind": "principle",
+      "claim": "Players are less frustrated by randomness when they have control over it, so adding mechanics that manipulate odds can change how RNG feels without changing the underlying mechanics much.",
+      "detail": "Debenham frames this section as being about how RNG feels, using Darkest Dungeon 2 as the lead example.",
+      "t": 594,
+      "quote": "Can we make changes to the feel of RNG without changing the actual mechanics so much? Players feel less frustrated if control",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "tokens",
+      "kind": "example",
+      "claim": "Darkest Dungeon 2 replaced many numeric stats and buffs from the first game with combat tokens that abilities grant or interact with, making randomness feel more interactive and player-driven.",
+      "detail": "Hit chance is normally 100% but reduced by 50% when the attacker has a blind token or the target has a dodge-style token. The Leper in the first game had low damage and high miss chance so players boosted accuracy; in DD2 he has high damage and blinds himself, so the strategy is to clear the tokens. Tokens feel more impactful and engaging even though the player does much the same thing.",
+      "t": 738,
+      "quote": "Tokens end up feeling way more impactful and gamy and interactive even though had the player is doing the same thing",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Whether to smooth or keep RNG sharp is a design choice: Shattered Pixel Dungeon prizes consistency, but a game may prefer more randomness, and these are just tools.",
+      "detail": "Debenham closes by saying it is fine to keep RNG sharp; the talk offers more tools in the toolbox to pick from.",
+      "t": 791,
+      "quote": "It is fine to RNG sharp. The purpose of this talk is to give you a few more tools in the toolbox",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

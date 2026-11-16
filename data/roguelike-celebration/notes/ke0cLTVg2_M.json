@@ -1,0 +1,158 @@
+{
+  "id": "ke0cLTVg2_M",
+  "title": "Dylan Gedig: Perfect Synergy: How Roguelike Developers and Streamers Form the Perfect Ecosystem",
+  "speaker": "Dylan Gedig",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=ke0cLTVg2_M",
+  "talk_type": "postmortem",
+  "summary": "Dylan Gedig of Red Nexus Games describes how Peglin, a pachinko-style roguelike deckbuilder, launched with 75,000 Steam wishlists and sold twice that within three weeks, largely thanks to streamers and YouTubers. He explains what developers gain from streamers (exposure, live balance and bug observation with clips, motivation, and audience members who mod, localize and build wikis) and why roguelikes suit streamers (replayability, frequent updates, easy game-hopping). He recounts zero-budget marketing through online festivals, Steam Next Fest and streamer emails that include a key, and closes with design advice: unpredictability, difficulty options and room for spectacular, self-destructive builds.",
+  "games": [
+    "Peglin",
+    "Slay the Spire",
+    "Roundguard",
+    "Backpack Hero"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "streamers",
+      "kind": "example",
+      "claim": "Peglin launched with 75,000 Steam wishlists and sold twice that many copies in three weeks, far above the expected 10% of wishlists, mostly due to streamers and the Steam algorithm.",
+      "detail": "Gedig says the community that formed, largely from roguelike streamers' audiences, was healthy and engaged. Ongoing sales come heavily from YouTube, whose big videos drive visits for months, with spikes from Twitch.",
+      "t": 216,
+      "quote": "We ended up selling twice that many copies within three weeks largely due to streamers and the Steam algorithm",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "demo design",
+      "kind": "example",
+      "claim": "Peglin's demo was one 20-minute act of a three-act structure tuned so genre-experienced players would win on their second or third try, and it proved highly replayable, with over 30,000 players playing it for over three hours.",
+      "detail": "Gedig expected players to beat the demo once and wait; instead they kept replaying it. The first try is for figuring out the physics, later ones for learning nuance. It also drew more casual players than anticipated.",
+      "t": 442,
+      "quote": "We designed it so most players or gamers that had a little experience with the genre could beat it on their second or third try",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "marketing",
+      "kind": "example",
+      "claim": "For Peglin, Twitter mostly reached other developers and Reddit barely moved the needle; online events and streamers were the only things that drove success.",
+      "detail": "Gedig notes passing about 8,000 Steam wishlists gets a game into popular upcoming. The game won an award from the Taipei Game Show's digital event.",
+      "t": 545,
+      "quote": "Digital events were the biggest thing",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "watching streams",
+      "kind": "technique",
+      "claim": "Watching streamers play live shows whether balance is working, since players rarely take the designer's optimal path, and clips of bugs show the full loadout needed to reproduce interactions in a huge possibility space.",
+      "detail": "Gedig lurks on Twitch while working. With about 100 relics and 30 orbs in Peglin, the permutations are enormous, so a clip beats a text bug report he could not reproduce.",
+      "t": 649,
+      "quote": "balancing and bug hunting is made easier when people are streaming the game live",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding and localization",
+      "kind": "example",
+      "claim": "Streamers' audiences supplied Peglin with volunteers who modded the game, offered localization and built a wiki, even though the game was not built to be modded.",
+      "detail": "For example a German streamer played in English and viewers offered to localize. Mods fed back more content for streamers than two developers could produce.",
+      "t": 794,
+      "quote": "We did not build the game to be mod and our modders are mind blowing",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "streamers",
+      "kind": "principle",
+      "claim": "Roguelikes suit streamers because they are endlessly replayable, update frequently, and are easy to hop between, so variety streamers can rotate several roguelikes with external challenges layered on top.",
+      "detail": "Gedig mentions streamers spinning a wheel to pick a roguelike, and a 'pyramid' challenge deck with constraints like winning Peglin while only taking a basic relic. Peglin ships small updates every one to two weeks, first to an experimental branch.",
+      "t": 911,
+      "quote": "when you are playing 3-4 different roguelikes and they are all updating in that cadence that's an awesome content to make video about",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "streamers",
+      "kind": "principle",
+      "claim": "Development updates, streams, feedback, word of mouth and sales form a flywheel: updates create content and moments for streams, which bring feedback and income that fund more development.",
+      "detail": "Gedig calls this the synergy of the title: by launch you are earning money that lets you work on the game full time, making it better and feeding more streaming.",
+      "t": 1010,
+      "quote": "It a Flywheel that just builds and builds",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "example",
+      "claim": "Peglin was scoped as a six-month, one-area project and only expanded to a full three-act game once it gained traction; adding content to a roguelike enriches areas players replay constantly.",
+      "detail": "Gedig says roguelikes allow continual iteration: new orbs build out the space and make runs feel more unique. The demo long lacked a way to view the full map, which only player feedback made them prioritise.",
+      "t": 1137,
+      "quote": "The original plan for Peglin was to be a six-month project and just the first area scoped low",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "festivals",
+      "kind": "technique",
+      "claim": "Small developers should enter every online festival they can and Steam Next Fest with a demo, because streamers watch these festivals looking for the next roguelike.",
+      "detail": "Gedig says most festivals have no entry fee and are worth it for early playtesting too; you can only enter the Next Fest closest to release.",
+      "t": 1249,
+      "quote": "So many of these streamers have their eye on the festival and are digging for the next cool roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "streamer outreach",
+      "kind": "technique",
+      "claim": "Include a Steam key and a GIF in your first email to a streamer, and skip strict embargoes, because many streamers who never reply will still play on launch day.",
+      "detail": "Gedig heard back from few streamers, yet every major streamer on his wishlist played or posted on Peglin's launch day to catch the release surge. Some streamers, like one he names, will not stream a game until it seems ready. This was all zero-dollar marketing.",
+      "t": 1332,
+      "quote": "Definitely include a Steam key and GIF of your game in the first email",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "unpredictability",
+      "kind": "example",
+      "claim": "Peglin ties map navigation to its pachinko aiming, so a flubbed shot can send a streamer down an unplanned route, which costs agency but creates memorable adapt-on-the-fly moments.",
+      "detail": "Gedig admits players and reviews criticise the lack of agency, but says the unpredictability keeps things spicier; the map nodes themselves are static and learnable.",
+      "t": 1503,
+      "quote": "There is a lack of agency and negative things our players could say about this",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty options",
+      "kind": "principle",
+      "claim": "Difficulty options widen a roguelike's reach to streamers of every skill level; Peglin's easy/hard modes and later Cruciball levels greatly expanded its audience.",
+      "detail": "Gedig says Peglin attracted more casual players and streamers than expected, and they see streamers playing at all levels.",
+      "t": 1533,
+      "quote": "important if you are trying to get in front of a wide range of streamers",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "spectacle",
+      "kind": "principle",
+      "claim": "Leave room for builds to combine in crazy ways, including ones that backfire on the player, because these spectacular moments are what gets shared most.",
+      "detail": "Gedig describes streamers whose builds hurt themselves, laughing that they flew too close to the sun before retrying.",
+      "t": 1588,
+      "quote": "Make room for the builds to come together in crazy ways. This is one of the things we see shared more than anything else",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "component content",
+      "kind": "technique",
+      "claim": "Peglin builds each orb or relic in Unity from reusable components, which made adding and experimenting with content fast, though not easy for external modders.",
+      "detail": "In Q&A Gedig says with hindsight he would have set the game up for modding from the start.",
+      "t": 1699,
+      "quote": "an orb or relic is a selection of components so reusable content and really quick to experiment",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

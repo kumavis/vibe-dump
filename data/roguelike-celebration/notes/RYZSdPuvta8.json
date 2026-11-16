@@ -1,0 +1,148 @@
+{
+  "id": "RYZSdPuvta8",
+  "title": "Dustin Freeman: Simulating History as You’re Living Through It",
+  "speaker": "Dustin Freeman",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=RYZSdPuvta8",
+  "talk_type": "design",
+  "summary": "Dustin Freeman presents Concerns, the AI subsystem of his long-running immersive sim roguelike Spirit of the Ages, in which the player lives through successive ages of a world where earlier generations' actions affect later ones. Every entity is a bag of generic concerns (wander, physical safety, collect gems) that each propose a specific intention when relevant; one is chosen by weighted random choice with weights loosely following Maslow's hierarchy. The design borrows from the Internal Family Systems therapy model: concerns that go unchosen grow in priority, and inherited 'legacy' concerns propagate through birth and groups. He argues for impoverished stimuli and a player with no special status, contrasts playable history with passive world-generation phases, and ends with open problems about unburdening and how learned concerns should spread through a species.",
+  "games": [
+    "Spirit of the Ages",
+    "Dwarf Fortress",
+    "Small World",
+    "Thousand Year Old Vampire"
+  ],
+  "insights": [
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "utility ai",
+      "kind": "technique",
+      "claim": "In Spirit of the Ages each entity holds a set of generic concerns; every relevant concern produces a specific intention, and one intention is chosen by weighted random selection to control the entity until it is done.",
+      "detail": "A deer has concerns like fear of snakes and homesickness that lie dormant when irrelevant. A generic concern like wander produces a specific intention such as pathfinding with A* to a chosen grid coordinate.",
+      "t": 312,
+      "quote": "Every concern checks to see if it is relevant and if it is it produces an intention. From the intentions produced one is chosen randomly",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "utility ai",
+      "kind": "technique",
+      "claim": "Spirit of the Ages weights concern selection by priority buckets modelled on Maslow's hierarchy, but as probabilities rather than a strict stack, so a creature with pressing physical needs may still follow a strange mood.",
+      "detail": "In the demo a bear only starts fearing a deer after being attacked repeatedly; the newly relevant safety concern is more likely to win but not guaranteed. Freeman notes a strange mood sits in the self-actualization bucket and can still be picked over physiological needs.",
+      "t": 1347,
+      "quote": "instead of a hierarchy or a stack how a concern is based on the probability",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "impoverished stimuli",
+      "kind": "principle",
+      "claim": "Because the most interesting things happen inside the player's head, a simulation should present bare events without added explanation or story, which would take away the player's own interpretation.",
+      "detail": "Freeman cites Grotowski-era 'poor theatre' and reads a Spirit of the Ages message log: a bear eats a frog, gains HP, stops being angry and feels social toward you because of a strange mood. Adding explicit story would remove the fun.",
+      "t": 653,
+      "quote": "If I attempted to add explicit story or explanation it would take the fun away from the impoverished set of stuff that happened",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player as peer",
+      "kind": "principle",
+      "claim": "The player character should have no special status relative to other simulated entities; combined with bare-bones presentation, this leads players to read rich inner lives into the entities.",
+      "detail": "Freeman calls this peership: not difficulty balancing, but the player being the protagonist only because they control a character. In later ages of Spirit of the Ages the player can be a random entity such as a branch.",
+      "t": 721,
+      "quote": "If the player can see the bare bones and doesn't think of themselves as different they interpret rich inner worlds",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "playable history",
+      "kind": "warning",
+      "claim": "World-history generation phases in games like Dwarf Fortress, Minecraft or SimEarth are passive scenery, like an opening cutscene, rather than something the player plays through.",
+      "detail": "Freeman says players only interact with generated history by stopping out of curiosity to pull on a thread like an item's lore. He wants small effects that grow and reactions that persist outside their original context.",
+      "t": 758,
+      "quote": "these experiences are pretty passive. It is like the opening bits in a movie or open cut scene",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "multi-age world",
+      "kind": "technique",
+      "claim": "Spirit of the Ages is played over successive ages on the same world, with the map growing denser and entity count rising each age, and a summary screen between ages that turns events into changed traits.",
+      "detail": "Freeman credits the board game Small World, where civilizations rise and leave ruins on one map, as an unblocking reference. After age 1, the most populous frogs become friendly and the scarce deer become solitary; a 'dire' god spawns dire copies whose trait makes animals violent and solitary.",
+      "t": 812,
+      "quote": "You play several eras or ages on the same map and previous civilizations come and go and leave behind ruins",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "interactive worldbuilding",
+      "kind": "example",
+      "claim": "In Spirit of the Ages the player uplifts creatures or objects into new peoples (a crocodile into dwarves, sand into sand golems) by choosing likes, dislikes and a destiny, all of which become concerns.",
+      "detail": "Freeman demos uplifting a crocodile into a dwarf that likes mushrooms, dislikes deer and is destined to settle the wetlands, and sand into anxious sand golems that then populate an area. He wants concerns that persist outside their context so he does not have to anticipate everything.",
+      "t": 965,
+      "quote": "This is likes, dislike and their destiny will all become concerns",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "internal family systems",
+      "kind": "technique",
+      "claim": "The Internal Family Systems model, which treats a mind as simple parts with their own needs and relationships, is a usable template for AI behaviour, since parts behave like one-note sitcom characters that are easy to imagine.",
+      "detail": "Freeman, disclaiming he is not a therapist, describes IFS parts and 'legacy burdens' inherited from family or culture (e.g. Depression-era frugality). Burdens look irrational from outside but have internal reasons, which inspired concerns producing specific intentions. He notes IFS roles of managers, exiles and firefighters.",
+      "t": 1064,
+      "quote": "Each part is fairly simple like a one off sitcom character with a basic stick",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "utility ai",
+      "kind": "technique",
+      "claim": "Concerns that stay relevant but unchosen gradually rise in priority, so normally rational parts can become obsessive, like an entity that ignores all physiological and safety needs once it sees its destined homeland.",
+      "detail": "Freeman calls the inherited destiny concern a cognitive land mine. A fish that randomly wants to live in the desert grows increasingly frustrated, and he imagines it eventually acquiring a suit and dominating the desert.",
+      "t": 1384,
+      "quote": "had concerns that are relevant but not chosen for a long time gradually increase priority",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "single ai mechanism",
+      "kind": "principle",
+      "claim": "Spirit of the Ages forces all AI to be expressed as concerns with no meta-controller; a concern that wants control must raise its own probability, which may provoke reactions from other concerns.",
+      "detail": "Freeman says each entity is a bag of concerns, with only a minor exception for healing. Concerns can see which concern was in charge when a positive or negative event happened, letting them rate each other.",
+      "t": 1483,
+      "quote": "there is no AI other than concerns. Everything I force myself to express is a concern and each entity is a bag of them",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "inherited behaviour",
+      "kind": "technique",
+      "claim": "Concerns spread by inheritance at birth and from close groups, and new concerns form from context, such as positive feelings toward whoever pats you and reinforcement of whatever concern was active at the time.",
+      "detail": "Freeman's example: if you were feeling homesick and got a head pat, the homesickness concern is reinforced and becomes more common.",
+      "t": 1523,
+      "quote": "at birth you inherit from whoever spawned you and in groups and you get them from groups are close with",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent grudges",
+      "kind": "example",
+      "claim": "In Spirit of the Ages a gem-collecting troll kept dropping gems in a dire crocodile's territory until the crocodile accumulated enough negative concerns to attack any troll on sight, a grudge outliving its cause.",
+      "detail": "Dire crocodiles expel non-dire entities from their territory. Freeman also recounts a bug where a deer imprinted on a sun god and started relaying the god's errands to the player.",
+      "t": 1675,
+      "quote": "the crocodile develops enough negative concerns to the troll it will start attacking any troll on site",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "inherited behaviour",
+      "kind": "open-question",
+      "claim": "Freeman has not solved how unburdening should work or how a concern learned by one creature (a penguin learning to fear seals) should spread to its species, nearby kin or a new subspecies.",
+      "detail": "Options he considers for unburdening: convincing the creature it is safe, redirecting a fear to its real cause (the monkey, not the wetlands), or reassuring it. He also asks how two escalating concerns should resolve, perhaps via a finite 'moral fortitude' resource, and finds threshold or single-instance propagation rules both unsatisfying.",
+      "t": 1785,
+      "quote": "Let's say a penguin learns to fear seals, should it update all the other penguins? Or the ones nearby?",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

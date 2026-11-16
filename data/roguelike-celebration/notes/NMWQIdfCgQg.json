@@ -1,0 +1,221 @@
+{
+  "id": "NMWQIdfCgQg",
+  "title": "Evan Debenham- Community-Driven Roguelike Development",
+  "speaker": "Evan Debenham",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=NMWQIdfCgQg",
+  "talk_type": "postmortem",
+  "summary": "Evan Debenham describes how Shattered Pixel Dungeon grew from a balance mod of the open-sourced Pixel Dungeon into a full-time career, and how community shaped it at every stage. He explains his iterative two-to-three-month update cadence, how he combines anonymous gameplay analytics with player feedback (and their pitfalls), and his use of public betas. On design he stresses interaction-driven content over passive bonuses and a layered-complexity model that keeps Pixel Dungeon's core tap gameplay intact. He closes with how he monetised without disrupting a challenging roguelike: cosmetic supporter purchases, a Patreon blog, and finally selling the game on iOS, and Q&A covers change resistance and 'balanced but unfun' passive items.",
+  "games": [
+    "Shattered Pixel Dungeon",
+    "Pixel Dungeon",
+    "Brogue",
+    "Remixed Dungeon",
+    "Yet Another Pixel Dungeon",
+    "Undertale",
+    "Diablo"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "pixel dungeon",
+      "kind": "history",
+      "claim": "Pixel Dungeon, by Oleg Dolya (Watabou), is an approachable Brogue-inspired coffee-break roguelike with pixel art and a tap-based interface, and after it went open source it spawned hundreds of variants including Shattered Pixel Dungeon.",
+      "detail": "Debenham says Pixel Dungeon has less up-front complexity than many roguelikes but plenty of engagement, and has over five million Google Play downloads. Watabou open-sourced it after an AMA on the subreddit; Shattered began as a balance mod and after seven years has overhauled almost all of the original content.",
+      "t": 66,
+      "quote": "it has less up front complexity than many roguelikes but it's still got a lot of stuff that can be engaging it's very much a coffee break roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "existing audience",
+      "kind": "example",
+      "claim": "Shattered Pixel Dungeon escaped the obscurity problem because the existing Pixel Dungeon community's enthusiasm pushed it up Google Play's rankings, exposing it to a far larger audience.",
+      "detail": "The first release, posted only to the Pixel Dungeon subreddit, got such a positive response that Debenham shipped to Google Play early; version 0.2.0 got over 100,000 downloads in a month. He notes the community itself was only the smaller early growth; the big spike came from store ranking driven by that attention.",
+      "t": 261,
+      "quote": "the attention from the pixel dungeon communities caused the game to rank well on google play's listings which exposed it to a greater audience",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "variants and forks",
+      "kind": "history",
+      "claim": "Hundreds of open-source Pixel Dungeon variants, from tiny tweaks to full overhauls, have kept the game and its community alive for years after its final update in 2015.",
+      "detail": "Debenham names Remixed Dungeon, Yet Another Pixel Dungeon, Skillful, Sprouted, Moonshine and Soft Pixel Dungeon among the popular versions. Some are developed sporadically, but there is always something new for players who want a version that isn't Shattered.",
+      "t": 347,
+      "quote": "shattered and these various versions have kept pixel dungeon and its community alive for years after pixel dungeon's final update in 2015",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iterative updates",
+      "kind": "technique",
+      "claim": "Shattered Pixel Dungeon ships an update every two to three months with one primary focus, which limits feature creep and balances long-term goals against keeping players engaged.",
+      "detail": "Major updates used to take six months or more; Debenham now splits even big overarching work into two-to-three-month deliverables. The cadence is big enough to work toward something larger but small enough that returning players always find something new; he credits it for players who have stayed since 2014.",
+      "t": 414,
+      "quote": "iterative updates are easier to plan and design and help limit feature creep",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iterative updates",
+      "kind": "principle",
+      "claim": "Short update cycles make experimentation cheap: if an update doesn't work, the worst case is losing about two months of work, and the next update can revisit and correct it.",
+      "detail": "Debenham says the more important benefit is that he can always go back and revise an update, which frequently happens in the update that follows.",
+      "t": 454,
+      "quote": "if you want to try something and the update doesn't quite work the absolute worst case scenario is that you lose two months of work",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "changelog",
+      "kind": "technique",
+      "claim": "Shattered Pixel Dungeon presents its changelog as a grid of clickable icons rather than a wall of text, so full detail fits a phone screen without overwhelming players.",
+      "detail": "After seven years the changes list would be huge; each icon opens details of what changed for that specific item, character or enemy in the update.",
+      "t": 518,
+      "quote": "every single one of those icons can be clicked to show more details about what that specific thing has changed in this update",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "gameplay analytics",
+      "kind": "technique",
+      "claim": "Anonymous gameplay analytics, such as how often players invest upgrades into a new item and how often those runs win, give a somewhat objective measure of an item's power.",
+      "detail": "Shattered uses Google Firebase for crash reports, engagement and gameplay data, collecting no personal information and not used for advertising, so players help development just by playing. Debenham compares a new item's investment rate against others in its class and the win rate of runs that invest in it.",
+      "t": 594,
+      "quote": "i can then see of the runs that have invested in that item how often do they win using this i can come up with a somewhat objective evaluation",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "gameplay analytics",
+      "kind": "warning",
+      "claim": "Win-rate analytics can mislead by confusing correlation with causation: Shattered Pixel Dungeon's top-tier weapons show very high win rates mainly because players only invest in them late in a run.",
+      "detail": "Debenham also cautions that even if all mechanics are numerically viable, equal numbers don't mean the game is fun, which is why player feedback is his second source.",
+      "t": 613,
+      "quote": "the very high tier weapons in the game have really high win rates but not because they're massively stronger but because players tend to only invest in them",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Player feedback's main value is perspective: it keeps a solo developer from becoming an echo chamber building only what they personally like, though dedicated players can be the most biased.",
+      "detail": "Debenham gathers feedback from email, community channels and app store reviews. He says biased feedback is not worthless; you need to recognise the bias and account for it.",
+      "t": 658,
+      "quote": "when you're working on your own game it's really easy to become your own echo chamber and end up working only on things that you want and that you like",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "technique",
+      "claim": "Don't take players' specific suggestions at face value; work out the desire behind them and address that instead.",
+      "detail": "Debenham's example: players have repeatedly, seriously suggested adding Sans from Undertale as a Shattered Pixel Dungeon boss. The ridiculous surface request reflects a real desire for more interesting and engaging boss fights, which he can deliver.",
+      "t": 702,
+      "quote": "don't take their suggestion at face value but instead try to understand the desire behind the suggestion and try to address that",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "public beta",
+      "kind": "technique",
+      "claim": "For a small independent developer, an open public beta of at least a week for every update is a fair, symbiotic deal: players get content early in exchange for helping find bugs and shape it.",
+      "detail": "During Shattered's betas Debenham fixes critical issues (usually stable after a day), finishes outstanding content, makes feedback-driven tweaks, and gives community translators time to translate. He acknowledges the 'players shouldn't be your QA' complaint applies to big studios, but says it works for indies if they are honest about it, and saves him repetitive testing time.",
+      "t": 780,
+      "quote": "for smaller independent developers as long as we're honest about it i think it's a really really great symbiotic relationship to offer your players content",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "active vs passive effects",
+      "kind": "principle",
+      "claim": "Active effects that change the player's decision making are generally much more fun than passive bonuses like +1 damage, though some simple passives are still needed because too much complexity confuses.",
+      "detail": "Debenham contextualises every addition to Shattered in terms of how the player interacts with the game (hero mechanics, items) and how the game interacts with the player (environment, obstacles, enemies), aiming to create new kinds of interaction.",
+      "t": 849,
+      "quote": "active engaging effects that impact player decision making are way more fun generally than passive ones giving players say a plus one to damage for example isn't that interesting",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "layered complexity",
+      "kind": "principle",
+      "claim": "Shattered Pixel Dungeon builds depth from layers that are each simple (core tap gameplay, consumables and equipment, hero and enemy abilities, level structure and hazards) but interact to create a deep experience.",
+      "detail": "Debenham says leaving the core layers mostly untouched is why Shattered still feels like Pixel Dungeon. Early on the player just taps a simple enemy; late game they use items like a staff of fireblast against a boss with its own mechanics, but the tap-to-act core remains.",
+      "t": 898,
+      "quote": "each of these layers is not that complicated in and of itself but all the layers interact with each other to create a really deep interesting experience",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "talent system",
+      "kind": "example",
+      "claim": "Shattered Pixel Dungeon added a talent system, giving points on each level-up to spend on abilities that can change decision making, in response to players finding level-ups uninteresting.",
+      "detail": "Debenham presents this as an example of plans mixing his own design with community sentiment, alongside an overhaul of all enemies and bosses to increase interaction. Some initiatives, like the translation project, are almost entirely community driven.",
+      "t": 996,
+      "quote": "many players told me that hero leveling up wasn't very interesting either through suggestions or other types of feedback and so in response to that i created a system",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "development blog",
+      "kind": "technique",
+      "claim": "Sharing long-term plans publicly, through about twelve blog posts a year, excites players, forces the developer to make ideas concrete, and gathers feedback on content before it ships.",
+      "detail": "Debenham writes on shatteredpixel.com, which also feeds news into the game and links back to the wider Pixel Dungeon communities.",
+      "t": 1069,
+      "quote": "it gets players talking about the things i'm planning which means that i can gather feedback on upcoming content before i've even released it",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "monetization",
+      "kind": "warning",
+      "claim": "Ads and pay-for-advantage microtransactions don't suit a challenging roguelike: ads take screen space and raise privacy concerns, microtransactions cheapen the challenge, and an open-source game's community could simply fork it if the developer sold out.",
+      "detail": "Pixel Dungeon set a precedent of a fully offline game with only a tiny donate button. Because Shattered is open source, anyone could take the code and compete, so any monetisation has to be non-disruptive.",
+      "t": 1188,
+      "quote": "microtransactions can cheapen the gameplay which is especially problematic for a roguelike that's supposed to be challenging",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "monetization",
+      "kind": "technique",
+      "claim": "Shattered Pixel Dungeon's supporter purchases are cosmetic and mild-convenience extras (custom gravestone epitaphs, renaming heroes and items, extra rankings screens, UI recolours) designed neither to cheapen the game nor make non-buyers feel they miss out.",
+      "detail": "Added in 2015. In 2019 Debenham added a Patreon with weekly mini-blogs, content polls and an exclusive Discord, which needs constant upkeep but gives dedicated players a community.",
+      "t": 1256,
+      "quote": "they're focused on small fun little extras that don't detract from the gameplay experience by cheapening the game if you buy them",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "monetization",
+      "kind": "principle",
+      "claim": "Debenham's three revenue sources built on each other: cosmetics earned well only while updates kept quality up, Patreon needed enough members, and selling the game outright on iOS looks most sustainable but only became possible once the game was worth buying.",
+      "detail": "Shattered launched on iOS for $5 in 2021 with seven years of content; Pixel Dungeon already cost $3 there, Apple fees are higher, and Apple users buy up front more readily. He says he could not have started selling the game seven years earlier, and plans a PC release that first needs proper keyboard and controller support.",
+      "t": 1388,
+      "quote": "the hardest to set up the game has to be worth buying in the first place i could definitely not have started selling the game seven years ago",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "change resistance",
+      "kind": "technique",
+      "claim": "When veterans object to a change, distinguish reflexive change resistance from genuine dislike by checking whether they give actionable reasons or just ask for it to be changed back.",
+      "detail": "Answering Darren Grey's Q&A question, Debenham cites remaking Shattered's decade-old music tracks rather than mixing styles. He says some 'change it back' reaction is unavoidable and must be accepted, but there is a noticeable difference between that and the community genuinely not liking something.",
+      "t": 1644,
+      "quote": "are they giving you actionable reasons why they dislike the new thing",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "passive power",
+      "kind": "warning",
+      "claim": "A big mismatch between analytics and player sentiment, such as an item with very low usage but very high win rate, often signals invisible passive power like faster health regeneration that players don't notice but that strongly affects winning.",
+      "detail": "Answering a question about balanced-but-unfun content, Debenham says such disagreements always have a reason that must be identified. He concludes the most surefire way to make something fun is for it to change how the player wants to interact with things.",
+      "t": 1671,
+      "quote": "an item with very very low usage but very very high win rate because that means there's something that's preventing the players from using that item frequently",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

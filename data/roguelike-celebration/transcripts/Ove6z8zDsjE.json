@@ -1,0 +1,2178 @@
+{
+ "id": "Ove6z8zDsjE",
+ "url": "https://www.youtube.com/watch?v=Ove6z8zDsjE",
+ "title": "Younès Rabii - Pokemon Glitch - Story of A Roguelike With No Author",
+ "speaker": "Younès Rabii",
+ "talk_title": "Pokemon Glitch - Story of A Roguelike With No Author",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 861,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "In this lightning talk, Younès will tell you about the unique experience of making and playing a Pokemon game that has been randomly corrupted. They will guide you through the world of \"Pokemon Glitch\" by giving you a tour of its never-seen-before creatures, its haunted places, its unique game mechanics and emerging story-telling. Come discover a roguelike that nobody has played before and, even more bizarre, a roguelike that nobody designed.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 30,
+   "title": "What is DNA"
+  },
+  {
+   "start": 80,
+   "title": "What is Pokemon Gold"
+  },
+  {
+   "start": 162,
+   "title": "The Shadow"
+  },
+  {
+   "start": 205,
+   "title": "Reactions"
+  },
+  {
+   "start": 249,
+   "title": "Dangers"
+  },
+  {
+   "start": 276,
+   "title": "Running gags"
+  },
+  {
+   "start": 305,
+   "title": "Obstacles"
+  },
+  {
+   "start": 334,
+   "title": "The Best Tower"
+  },
+  {
+   "start": 377,
+   "title": "The Monk"
+  },
+  {
+   "start": 478,
+   "title": "Evolution"
+  },
+  {
+   "start": 555,
+   "title": "The Game"
+  },
+  {
+   "start": 604,
+   "title": "Red Red"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2689,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 3.92,
+   "text": "uh we now have uh jonas robbie who i'm"
+  },
+  {
+   "t": 7.52,
+   "d": 2.48,
+   "text": "very excited to have hello"
+  },
+  {
+   "t": 10.0,
+   "d": 2.8,
+   "text": "hey um"
+  },
+  {
+   "t": 13.36,
+   "d": 1.76,
+   "text": "i'm just gonna let you get into it uh"
+  },
+  {
+   "t": 15.12,
+   "d": 2.72,
+   "text": "pokemon glitch games for nine years you"
+  },
+  {
+   "t": 17.84,
+   "d": 1.92,
+   "text": "know cool person let's hear about"
+  },
+  {
+   "t": 19.76,
+   "d": 1.6,
+   "text": "pokemon"
+  },
+  {
+   "t": 21.36,
+   "d": 1.76,
+   "text": "all right let's go uh thank you for"
+  },
+  {
+   "t": 23.12,
+   "d": 2.0,
+   "text": "coming to my talk pokemon glitch story"
+  },
+  {
+   "t": 25.12,
+   "d": 1.6,
+   "text": "if i would like you to have her i mean"
+  },
+  {
+   "t": 26.72,
+   "d": 2.16,
+   "text": "it's ravi and let's just let's just go"
+  },
+  {
+   "t": 28.88,
+   "d": 2.24,
+   "text": "with it let's go so uh you might have"
+  },
+  {
+   "t": 31.12,
+   "d": 2.56,
+   "text": "heard of the over over specification but"
+  },
+  {
+   "t": 33.68,
+   "d": 1.92,
+   "text": "dna is like source code for living"
+  },
+  {
+   "t": 35.6,
+   "d": 2.4,
+   "text": "beings well squad rats today we're going"
+  },
+  {
+   "t": 38.0,
+   "d": 2.24,
+   "text": "to do source code is like the dna of"
+  },
+  {
+   "t": 40.24,
+   "d": 1.76,
+   "text": "games what's cool if you think about it"
+  },
+  {
+   "t": 42.0,
+   "d": 1.92,
+   "text": "this way is that you can take a game"
+  },
+  {
+   "t": 43.92,
+   "d": 1.6,
+   "text": "take it source codes"
+  },
+  {
+   "t": 45.52,
+   "d": 3.04,
+   "text": "mutate it change the bits in it randomly"
+  },
+  {
+   "t": 48.56,
+   "d": 1.6,
+   "text": "and then get a new game at the end and"
+  },
+  {
+   "t": 50.16,
+   "d": 2.32,
+   "text": "have a new meditated game"
+  },
+  {
+   "t": 52.48,
+   "d": 1.68,
+   "text": "and explore it the game i choose to do"
+  },
+  {
+   "t": 54.16,
+   "d": 3.04,
+   "text": "to do that with is pokemon gold why"
+  },
+  {
+   "t": 57.2,
+   "d": 2.32,
+   "text": "three reasons uh one it's easy to mute"
+  },
+  {
+   "t": 59.52,
+   "d": 1.6,
+   "text": "it won't have a run file it's easy to"
+  },
+  {
+   "t": 61.12,
+   "d": 1.12,
+   "text": "just run"
+  },
+  {
+   "t": 62.24,
+   "d": 2.16,
+   "text": "some bits in it two there's a very good"
+  },
+  {
+   "t": 64.4,
+   "d": 1.6,
+   "text": "chance that it worked actually but"
+  },
+  {
+   "t": 66.0,
+   "d": 1.36,
+   "text": "because of the way pokemon games were"
+  },
+  {
+   "t": 67.36,
+   "d": 1.84,
+   "text": "made if you change some some bits"
+  },
+  {
+   "t": 69.2,
+   "d": 1.2,
+   "text": "there's a good chance but it's still a"
+  },
+  {
+   "t": 70.4,
+   "d": 2.64,
+   "text": "valid game to play and also i'm a huge"
+  },
+  {
+   "t": 73.04,
+   "d": 1.44,
+   "text": "nerd i know this game by heart if"
+  },
+  {
+   "t": 74.48,
+   "d": 1.36,
+   "text": "something has changed i'll be able to"
+  },
+  {
+   "t": 75.84,
+   "d": 1.6,
+   "text": "see it i'll be able to guide you through"
+  },
+  {
+   "t": 77.44,
+   "d": 2.48,
+   "text": "it so i took pokemon gold let's do a"
+  },
+  {
+   "t": 79.92,
+   "d": 1.92,
+   "text": "quick recap of what's pokemon gold for"
+  },
+  {
+   "t": 81.84,
+   "d": 2.32,
+   "text": "those of us who don't know what it what"
+  },
+  {
+   "t": 84.16,
+   "d": 2.8,
+   "text": "it is so pokemon gold is like um"
+  },
+  {
+   "t": 86.96,
+   "d": 2.72,
+   "text": "a gameboy color game uh where you wonder"
+  },
+  {
+   "t": 89.68,
+   "d": 1.92,
+   "text": "a world inhibited by strange creatures"
+  },
+  {
+   "t": 91.6,
+   "d": 1.92,
+   "text": "and pokemons which have like elemental"
+  },
+  {
+   "t": 93.52,
+   "d": 1.44,
+   "text": "aspects to them"
+  },
+  {
+   "t": 94.96,
+   "d": 1.36,
+   "text": "you're supposed to capture them to"
+  },
+  {
+   "t": 96.32,
+   "d": 1.68,
+   "text": "between them to train them and to battle"
+  },
+  {
+   "t": 98.0,
+   "d": 1.92,
+   "text": "with them the goal is to defeat all of"
+  },
+  {
+   "t": 99.92,
+   "d": 1.36,
+   "text": "your team leaders"
+  },
+  {
+   "t": 101.28,
+   "d": 1.92,
+   "text": "in each major city to then beat the"
+  },
+  {
+   "t": 103.2,
+   "d": 1.52,
+   "text": "elite four which is like the best of the"
+  },
+  {
+   "t": 104.72,
+   "d": 1.84,
+   "text": "best ever trainers to become like the"
+  },
+  {
+   "t": 106.56,
+   "d": 2.32,
+   "text": "best pokemon trainer in the whole world"
+  },
+  {
+   "t": 108.88,
+   "d": 1.84,
+   "text": "along the way you will be able to help"
+  },
+  {
+   "t": 110.72,
+   "d": 1.84,
+   "text": "communities to save the world from a"
+  },
+  {
+   "t": 112.56,
+   "d": 2.16,
+   "text": "killer organization and to explore"
+  },
+  {
+   "t": 114.72,
+   "d": 2.08,
+   "text": "relationships between nature folklore"
+  },
+  {
+   "t": 116.8,
+   "d": 1.92,
+   "text": "and the humans who are slowly colonizing"
+  },
+  {
+   "t": 118.72,
+   "d": 1.04,
+   "text": "this space"
+  },
+  {
+   "t": 119.76,
+   "d": 2.96,
+   "text": "yes there's obvious to him is pokemon"
+  },
+  {
+   "t": 122.72,
+   "d": 2.08,
+   "text": "um so we're going to do but we're going"
+  },
+  {
+   "t": 124.8,
+   "d": 2.48,
+   "text": "to [ __ ] it up by imitating pokemon gold"
+  },
+  {
+   "t": 127.28,
+   "d": 2.24,
+   "text": "thing is i did that and it just didn't"
+  },
+  {
+   "t": 129.52,
+   "d": 3.36,
+   "text": "work why um because it's hard it took me"
+  },
+  {
+   "t": 132.88,
+   "d": 1.6,
+   "text": "a lot of time a lot of price to actually"
+  },
+  {
+   "t": 134.48,
+   "d": 1.36,
+   "text": "get something that worked at the end at"
+  },
+  {
+   "t": 135.84,
+   "d": 1.44,
+   "text": "first i had something that just didn't"
+  },
+  {
+   "t": 137.28,
+   "d": 2.4,
+   "text": "boot at all like the game volume later i"
+  },
+  {
+   "t": 139.68,
+   "d": 2.4,
+   "text": "used just crashed so i had to tweak the"
+  },
+  {
+   "t": 142.08,
+   "d": 2.0,
+   "text": "parameters tweak the locations in the"
+  },
+  {
+   "t": 144.08,
+   "d": 3.04,
+   "text": "source code that i wanted to to to get"
+  },
+  {
+   "t": 147.12,
+   "d": 2.08,
+   "text": "and slowly and slowly i got a game that"
+  },
+  {
+   "t": 149.2,
+   "d": 2.4,
+   "text": "could pass the title screen then enter"
+  },
+  {
+   "t": 151.6,
+   "d": 1.92,
+   "text": "your name then crash and then i got like"
+  },
+  {
+   "t": 153.52,
+   "d": 1.44,
+   "text": "a game where you can enter your name"
+  },
+  {
+   "t": 154.96,
+   "d": 2.24,
+   "text": "leave the first room and it took me"
+  },
+  {
+   "t": 157.2,
+   "d": 2.32,
+   "text": "about 200 tries to get there"
+  },
+  {
+   "t": 159.52,
+   "d": 1.68,
+   "text": "the game i got at the end is something i"
+  },
+  {
+   "t": 161.2,
+   "d": 1.52,
+   "text": "call pokemon glitch and i'd like to"
+  },
+  {
+   "t": 162.72,
+   "d": 1.6,
+   "text": "explore tv today"
+  },
+  {
+   "t": 164.32,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 165.28,
+   "d": 2.88,
+   "text": "immediately if you know the pokemon gold"
+  },
+  {
+   "t": 168.16,
+   "d": 1.2,
+   "text": "that you order in the game you know that"
+  },
+  {
+   "t": 169.36,
+   "d": 1.76,
+   "text": "something is not right right there on"
+  },
+  {
+   "t": 171.12,
+   "d": 2.32,
+   "text": "the title screen it's supposed to be the"
+  },
+  {
+   "t": 173.44,
+   "d": 2.96,
+   "text": "shadow of a legendary pokemon but there"
+  },
+  {
+   "t": 176.4,
+   "d": 2.08,
+   "text": "you can see that this shadow has"
+  },
+  {
+   "t": 178.48,
+   "d": 1.6,
+   "text": "radioactive green"
+  },
+  {
+   "t": 180.08,
+   "d": 1.76,
+   "text": "fevers you know that something has"
+  },
+  {
+   "t": 181.84,
+   "d": 2.24,
+   "text": "changed there and your suspicion is only"
+  },
+  {
+   "t": 184.08,
+   "d": 1.76,
+   "text": "going to be confirmed by what's right"
+  },
+  {
+   "t": 185.84,
+   "d": 1.92,
+   "text": "after you are greeted by the glitz"
+  },
+  {
+   "t": 187.76,
+   "d": 1.84,
+   "text": "sprite of a professor pokemon who says"
+  },
+  {
+   "t": 189.6,
+   "d": 1.2,
+   "text": "hey welcome to this cold world of"
+  },
+  {
+   "t": 190.8,
+   "d": 2.72,
+   "text": "[ __ ] going to an adventure together"
+  },
+  {
+   "t": 193.52,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 194.48,
+   "d": 1.44,
+   "text": "you finally get to your room and you can"
+  },
+  {
+   "t": 195.92,
+   "d": 1.44,
+   "text": "see that bits"
+  },
+  {
+   "t": 197.36,
+   "d": 2.0,
+   "text": "of a tattoo screen is still attached to"
+  },
+  {
+   "t": 199.36,
+   "d": 1.52,
+   "text": "furnitures"
+  },
+  {
+   "t": 200.88,
+   "d": 2.48,
+   "text": "and the colors are messed up"
+  },
+  {
+   "t": 203.36,
+   "d": 1.68,
+   "text": "in the whole thing"
+  },
+  {
+   "t": 205.04,
+   "d": 2.32,
+   "text": "this glitch is will be there for the"
+  },
+  {
+   "t": 207.36,
+   "d": 2.96,
+   "text": "whole game it's not just superficial"
+  },
+  {
+   "t": 210.32,
+   "d": 2.16,
+   "text": "it's very embedded in the game because"
+  },
+  {
+   "t": 212.48,
+   "d": 1.92,
+   "text": "sometimes you can react to actions you"
+  },
+  {
+   "t": 214.4,
+   "d": 2.56,
+   "text": "can see for instance on the bottom left"
+  },
+  {
+   "t": 216.96,
+   "d": 2.24,
+   "text": "um that's when you interact the items"
+  },
+  {
+   "t": 219.2,
+   "d": 3.28,
+   "text": "the wall just reacts organically by its"
+  },
+  {
+   "t": 222.48,
+   "d": 2.56,
+   "text": "color changing the way it is displayed"
+  },
+  {
+   "t": 225.04,
+   "d": 1.68,
+   "text": "it gives like a whole new vibe to forest"
+  },
+  {
+   "t": 226.72,
+   "d": 2.56,
+   "text": "which are now extra creepy and it gives"
+  },
+  {
+   "t": 229.28,
+   "d": 1.36,
+   "text": "a new"
+  },
+  {
+   "t": 230.64,
+   "d": 1.68,
+   "text": "uh parallel walls"
+  },
+  {
+   "t": 232.32,
+   "d": 2.64,
+   "text": "thing where if you turn in a road at the"
+  },
+  {
+   "t": 234.96,
+   "d": 2.08,
+   "text": "wrong corner you will find yourself into"
+  },
+  {
+   "t": 237.04,
+   "d": 1.8,
+   "text": "a dimension field with infinite"
+  },
+  {
+   "t": 238.84,
+   "d": 2.36,
+   "text": "staircases or you can like just easily"
+  },
+  {
+   "t": 241.2,
+   "d": 2.8,
+   "text": "come up a clone a clone of yourself and"
+  },
+  {
+   "t": 244.0,
+   "d": 2.48,
+   "text": "be able to chat with him that's that's"
+  },
+  {
+   "t": 246.48,
+   "d": 2.16,
+   "text": "pokemon glitch for you"
+  },
+  {
+   "t": 248.64,
+   "d": 2.8,
+   "text": "visit aesthetic is there it's not only"
+  },
+  {
+   "t": 251.44,
+   "d": 2.0,
+   "text": "pretty it's also dangerous"
+  },
+  {
+   "t": 253.44,
+   "d": 2.08,
+   "text": "um if i stand in the beginning of the"
+  },
+  {
+   "t": 255.52,
+   "d": 0.88,
+   "text": "game"
+  },
+  {
+   "t": 256.4,
+   "d": 1.68,
+   "text": "you can speak with your rival who's just"
+  },
+  {
+   "t": 258.08,
+   "d": 1.6,
+   "text": "spying on your neighbor"
+  },
+  {
+   "t": 259.68,
+   "d": 2.16,
+   "text": "and when you speak to him he's supposed"
+  },
+  {
+   "t": 261.84,
+   "d": 2.32,
+   "text": "to push you away and that's it but in"
+  },
+  {
+   "t": 264.16,
+   "d": 2.08,
+   "text": "this game if you speak to him the game"
+  },
+  {
+   "t": 266.24,
+   "d": 1.44,
+   "text": "will just crash"
+  },
+  {
+   "t": 267.68,
+   "d": 2.4,
+   "text": "and if you haven't saved you have lost"
+  },
+  {
+   "t": 270.08,
+   "d": 1.36,
+   "text": "all your progress"
+  },
+  {
+   "t": 271.44,
+   "d": 2.32,
+   "text": "people can kill you in pokemon glitch"
+  },
+  {
+   "t": 273.76,
+   "d": 1.6,
+   "text": "that's not usual"
+  },
+  {
+   "t": 275.36,
+   "d": 1.92,
+   "text": "and if you're a light like me on healing"
+  },
+  {
+   "t": 277.28,
+   "d": 2.24,
+   "text": "your pokemon often well you'll be happy"
+  },
+  {
+   "t": 279.52,
+   "d": 1.84,
+   "text": "to know that in this game"
+  },
+  {
+   "t": 281.36,
+   "d": 1.36,
+   "text": "there's like a running gag that makes"
+  },
+  {
+   "t": 282.72,
+   "d": 2.32,
+   "text": "every pokemon center almost even usable"
+  },
+  {
+   "t": 285.04,
+   "d": 1.92,
+   "text": "sometimes it's very straightforward like"
+  },
+  {
+   "t": 286.96,
+   "d": 2.08,
+   "text": "hey there's no door it's just a radio"
+  },
+  {
+   "t": 289.04,
+   "d": 2.8,
+   "text": "tower and sometimes it's very insidious"
+  },
+  {
+   "t": 291.84,
+   "d": 2.16,
+   "text": "like you will enter the pokemon center"
+  },
+  {
+   "t": 294.0,
+   "d": 2.32,
+   "text": "you will hate your pokemon but you won't"
+  },
+  {
+   "t": 296.32,
+   "d": 2.0,
+   "text": "be able to come out and if you have"
+  },
+  {
+   "t": 298.32,
+   "d": 2.0,
+   "text": "saved right after you are [ __ ] you"
+  },
+  {
+   "t": 300.32,
+   "d": 2.4,
+   "text": "have to restart the whole game again"
+  },
+  {
+   "t": 302.72,
+   "d": 2.64,
+   "text": "there's permadeath now in pokemon glitch"
+  },
+  {
+   "t": 305.36,
+   "d": 2.48,
+   "text": "sometimes there's even added obstacles"
+  },
+  {
+   "t": 307.84,
+   "d": 1.76,
+   "text": "um because the tiles can be randomly"
+  },
+  {
+   "t": 309.6,
+   "d": 1.84,
+   "text": "moved uh sometimes there's like walls"
+  },
+  {
+   "t": 311.44,
+   "d": 1.52,
+   "text": "appearing sometimes like shortcuts"
+  },
+  {
+   "t": 312.96,
+   "d": 2.24,
+   "text": "appearing too uh which it also means"
+  },
+  {
+   "t": 315.2,
+   "d": 3.12,
+   "text": "that um sometimes it can it can make"
+  },
+  {
+   "t": 318.32,
+   "d": 2.48,
+   "text": "whole areas of the game inaccessible so"
+  },
+  {
+   "t": 320.8,
+   "d": 1.92,
+   "text": "what i did is that i accepted that i had"
+  },
+  {
+   "t": 322.72,
+   "d": 2.08,
+   "text": "to use cheat codes only in this specific"
+  },
+  {
+   "t": 324.8,
+   "d": 1.76,
+   "text": "occasions where a major portion of a"
+  },
+  {
+   "t": 326.56,
+   "d": 2.88,
+   "text": "game that is important is not accessible"
+  },
+  {
+   "t": 329.44,
+   "d": 1.2,
+   "text": "and that's the only time i just cheat"
+  },
+  {
+   "t": 330.64,
+   "d": 1.92,
+   "text": "codes during my play force but you kind"
+  },
+  {
+   "t": 332.56,
+   "d": 2.72,
+   "text": "of have to do it"
+  },
+  {
+   "t": 336.32,
+   "d": 1.84,
+   "text": "there's like so many cool stories to"
+  },
+  {
+   "t": 338.16,
+   "d": 1.52,
+   "text": "tell about pokemon deletion like today"
+  },
+  {
+   "t": 339.68,
+   "d": 2.16,
+   "text": "you just just one and how to explain you"
+  },
+  {
+   "t": 341.84,
+   "d": 2.96,
+   "text": "how the weirdness of it uh can can"
+  },
+  {
+   "t": 344.8,
+   "d": 2.0,
+   "text": "actually make sense sometimes so for"
+  },
+  {
+   "t": 346.8,
+   "d": 1.68,
+   "text": "instance was like this dungeon in in"
+  },
+  {
+   "t": 348.48,
+   "d": 2.0,
+   "text": "pokemon glitch in pokemon gold sorry"
+  },
+  {
+   "t": 350.48,
+   "d": 2.88,
+   "text": "that's named the best tower and when you"
+  },
+  {
+   "t": 353.36,
+   "d": 2.24,
+   "text": "go on turrets and you speak to an old"
+  },
+  {
+   "t": 355.6,
+   "d": 1.76,
+   "text": "lady who tells you hey"
+  },
+  {
+   "t": 357.36,
+   "d": 1.92,
+   "text": "the legend says that the tower used to"
+  },
+  {
+   "t": 359.28,
+   "d": 2.72,
+   "text": "be a 100 feet tall bell sprouts which is"
+  },
+  {
+   "t": 362.0,
+   "d": 1.6,
+   "text": "a plant type pokemon that is on the"
+  },
+  {
+   "t": 363.6,
+   "d": 1.04,
+   "text": "right there"
+  },
+  {
+   "t": 364.64,
+   "d": 2.0,
+   "text": "and in version like yeah okay thank you"
+  },
+  {
+   "t": 366.64,
+   "d": 2.24,
+   "text": "but story i'm just going to wreck this"
+  },
+  {
+   "t": 368.88,
+   "d": 2.48,
+   "text": "dungeon and because it's early game it's"
+  },
+  {
+   "t": 371.36,
+   "d": 3.04,
+   "text": "easy to beat but in pokemon glitch when"
+  },
+  {
+   "t": 374.4,
+   "d": 2.16,
+   "text": "you go upstairs you will find yourself"
+  },
+  {
+   "t": 376.56,
+   "d": 2.8,
+   "text": "against a monk who has bell spreads and"
+  },
+  {
+   "t": 379.36,
+   "d": 1.6,
+   "text": "instead of having level 3 bat support he"
+  },
+  {
+   "t": 380.96,
+   "d": 0.72,
+   "text": "has"
+  },
+  {
+   "t": 381.68,
+   "d": 5.16,
+   "text": "one wondrous boot with a level 131"
+  },
+  {
+   "t": 386.88,
+   "d": 1.52,
+   "text": "and at this point your neurons might"
+  },
+  {
+   "t": 388.4,
+   "d": 1.28,
+   "text": "connect"
+  },
+  {
+   "t": 389.68,
+   "d": 2.88,
+   "text": "this tower is supposed to be a big ass"
+  },
+  {
+   "t": 392.56,
+   "d": 2.56,
+   "text": "pokemon and i'm battling a pokemon that"
+  },
+  {
+   "t": 395.12,
+   "d": 2.48,
+   "text": "is that has a level that is not even"
+  },
+  {
+   "t": 397.6,
+   "d": 1.44,
+   "text": "legal in this game"
+  },
+  {
+   "t": 399.04,
+   "d": 2.32,
+   "text": "am i actually fighting the tower right"
+  },
+  {
+   "t": 401.36,
+   "d": 1.52,
+   "text": "now in"
+  },
+  {
+   "t": 402.88,
+   "d": 2.16,
+   "text": "in the early game i can't do that this"
+  },
+  {
+   "t": 405.04,
+   "d": 1.52,
+   "text": "is just impossible this pokemon will"
+  },
+  {
+   "t": 406.56,
+   "d": 3.52,
+   "text": "just wreck you and sometimes you will be"
+  },
+  {
+   "t": 410.08,
+   "d": 1.2,
+   "text": "facing your vision like in pokemon"
+  },
+  {
+   "t": 411.28,
+   "d": 1.52,
+   "text": "glitch with pokemon that are clearly"
+  },
+  {
+   "t": 412.8,
+   "d": 1.68,
+   "text": "overpowered not only for your level"
+  },
+  {
+   "t": 414.48,
+   "d": 2.08,
+   "text": "skill but for the whole game itself so"
+  },
+  {
+   "t": 416.56,
+   "d": 1.6,
+   "text": "you have to use your knowledge of the"
+  },
+  {
+   "t": 418.16,
+   "d": 1.92,
+   "text": "game and your creativity to get yourself"
+  },
+  {
+   "t": 420.08,
+   "d": 1.84,
+   "text": "out of situations here's one solution i"
+  },
+  {
+   "t": 421.92,
+   "d": 2.8,
+   "text": "found so in this tower if you wander it"
+  },
+  {
+   "t": 424.72,
+   "d": 2.48,
+   "text": "at night you might encounter a ghost"
+  },
+  {
+   "t": 427.2,
+   "d": 1.44,
+   "text": "pokemon"
+  },
+  {
+   "t": 428.64,
+   "d": 1.44,
+   "text": "you catch it"
+  },
+  {
+   "t": 430.08,
+   "d": 0.88,
+   "text": "you"
+  },
+  {
+   "t": 430.96,
+   "d": 2.24,
+   "text": "train it to level 16 and it learns an"
+  },
+  {
+   "t": 433.2,
+   "d": 2.24,
+   "text": "attack versus name curse but funnily"
+  },
+  {
+   "t": 435.44,
+   "d": 3.84,
+   "text": "enough is his glitch has cubs with a b"
+  },
+  {
+   "t": 439.28,
+   "d": 1.12,
+   "text": "in the game"
+  },
+  {
+   "t": 440.4,
+   "d": 1.76,
+   "text": "and what's called this attack is that he"
+  },
+  {
+   "t": 442.16,
+   "d": 1.76,
+   "text": "doesn't deal absolute damage which is"
+  },
+  {
+   "t": 443.92,
+   "d": 2.32,
+   "text": "useless against an opponent which has so"
+  },
+  {
+   "t": 446.24,
+   "d": 2.96,
+   "text": "many hp's but it is relative damage"
+  },
+  {
+   "t": 449.2,
+   "d": 2.4,
+   "text": "meaning that's every turn the bell split"
+  },
+  {
+   "t": 451.6,
+   "d": 3.2,
+   "text": "will lose 1 8th of its hp so you just"
+  },
+  {
+   "t": 454.8,
+   "d": 2.4,
+   "text": "have to last a turn which is already"
+  },
+  {
+   "t": 457.2,
+   "d": 2.08,
+   "text": "very hard honestly like you have to be"
+  },
+  {
+   "t": 459.28,
+   "d": 1.28,
+   "text": "lucky to"
+  },
+  {
+   "t": 460.56,
+   "d": 1.84,
+   "text": "to be able to make it sleep to make it"
+  },
+  {
+   "t": 462.4,
+   "d": 2.16,
+   "text": "sleep at the right time and at the same"
+  },
+  {
+   "t": 464.56,
+   "d": 2.8,
+   "text": "time survive using um other pokemons"
+  },
+  {
+   "t": 467.36,
+   "d": 1.52,
+   "text": "that you will sacrifice to build best"
+  },
+  {
+   "t": 468.88,
+   "d": 1.52,
+   "text": "words"
+  },
+  {
+   "t": 470.4,
+   "d": 1.2,
+   "text": "and that's the only solution i found"
+  },
+  {
+   "t": 471.6,
+   "d": 2.08,
+   "text": "honestly it's it's it is very very hard"
+  },
+  {
+   "t": 473.68,
+   "d": 2.16,
+   "text": "but i you you can get it on words it's"
+  },
+  {
+   "t": 475.84,
+   "d": 1.52,
+   "text": "not impossible you have to be lucky and"
+  },
+  {
+   "t": 477.36,
+   "d": 1.2,
+   "text": "creative"
+  },
+  {
+   "t": 478.56,
+   "d": 1.6,
+   "text": "and this whole idea of we're just"
+  },
+  {
+   "t": 480.16,
+   "d": 1.6,
+   "text": "covering a game you already knew will"
+  },
+  {
+   "t": 481.76,
+   "d": 1.76,
+   "text": "always be very in this game which is"
+  },
+  {
+   "t": 483.52,
+   "d": 2.08,
+   "text": "which which which is what makes it"
+  },
+  {
+   "t": 485.6,
+   "d": 2.8,
+   "text": "exciting interesting to explore um an"
+  },
+  {
+   "t": 488.4,
+   "d": 2.72,
+   "text": "example if you take the original"
+  },
+  {
+   "t": 491.12,
+   "d": 2.24,
+   "text": "evolution line of your starter pokemon"
+  },
+  {
+   "t": 493.36,
+   "d": 1.76,
+   "text": "in this case i choose cinder quilt which"
+  },
+  {
+   "t": 495.12,
+   "d": 1.84,
+   "text": "is a cute shy"
+  },
+  {
+   "t": 496.96,
+   "d": 2.24,
+   "text": "fire hedgehog which evolves when you"
+  },
+  {
+   "t": 499.2,
+   "d": 2.48,
+   "text": "train it into a bigger hedgehog and then"
+  },
+  {
+   "t": 501.68,
+   "d": 3.04,
+   "text": "into a big big hedgehog"
+  },
+  {
+   "t": 504.72,
+   "d": 1.84,
+   "text": "that's it it's just freight forward"
+  },
+  {
+   "t": 506.56,
+   "d": 3.44,
+   "text": "simple fire power let's go in this game"
+  },
+  {
+   "t": 510.0,
+   "d": 1.52,
+   "text": "at the very first six"
+  },
+  {
+   "t": 511.52,
+   "d": 3.2,
+   "text": "my fire hedgehog evolved into a cute"
+  },
+  {
+   "t": 514.72,
+   "d": 2.16,
+   "text": "little plant's pokemon and envy and"
+  },
+  {
+   "t": 516.88,
+   "d": 2.08,
+   "text": "evolved into a big-ass plant pokemon"
+  },
+  {
+   "t": 518.96,
+   "d": 1.44,
+   "text": "this kind of evolution"
+  },
+  {
+   "t": 520.4,
+   "d": 1.92,
+   "text": "has never been seen in pokemon game"
+  },
+  {
+   "t": 522.32,
+   "d": 3.04,
+   "text": "before first there's like five steps uh"
+  },
+  {
+   "t": 525.36,
+   "d": 1.6,
+   "text": "we never seen that"
+  },
+  {
+   "t": 526.96,
+   "d": 2.08,
+   "text": "and it switches from a fire type to"
+  },
+  {
+   "t": 529.04,
+   "d": 1.52,
+   "text": "plant type so again you have a plant"
+  },
+  {
+   "t": 530.56,
+   "d": 2.96,
+   "text": "type pokemon who knows fire moves it's"
+  },
+  {
+   "t": 533.52,
+   "d": 2.72,
+   "text": "incredibly useful sometimes"
+  },
+  {
+   "t": 536.24,
+   "d": 2.16,
+   "text": "and you can even try to make up a story"
+  },
+  {
+   "t": 538.4,
+   "d": 1.84,
+   "text": "about it like hey it doesn't make sense"
+  },
+  {
+   "t": 540.24,
+   "d": 1.84,
+   "text": "to have a plan that goes from from from"
+  },
+  {
+   "t": 542.08,
+   "d": 1.84,
+   "text": "fire but actually it's like this plant"
+  },
+  {
+   "t": 543.92,
+   "d": 2.0,
+   "text": "is named sequoia that can grow from the"
+  },
+  {
+   "t": 545.92,
+   "d": 3.2,
+   "text": "ashes of"
+  },
+  {
+   "t": 549.28,
+   "d": 2.96,
+   "text": "forest fire and i don't know it can make"
+  },
+  {
+   "t": 552.24,
+   "d": 2.08,
+   "text": "like cool little head canon stories for"
+  },
+  {
+   "t": 554.32,
+   "d": 1.44,
+   "text": "you"
+  },
+  {
+   "t": 555.76,
+   "d": 2.96,
+   "text": "the game is full of stuff like that it's"
+  },
+  {
+   "t": 558.72,
+   "d": 2.88,
+   "text": "a it's a broken mysterious world it is"
+  },
+  {
+   "t": 561.6,
+   "d": 2.24,
+   "text": "also hostile towards you where the story"
+  },
+  {
+   "t": 563.84,
+   "d": 1.52,
+   "text": "lines are broken and reconnected in"
+  },
+  {
+   "t": 565.36,
+   "d": 1.92,
+   "text": "strange ways it's a world that you can"
+  },
+  {
+   "t": 567.28,
+   "d": 0.88,
+   "text": "save"
+  },
+  {
+   "t": 568.16,
+   "d": 2.16,
+   "text": "team rockets rules this world you can't"
+  },
+  {
+   "t": 570.32,
+   "d": 1.84,
+   "text": "hail pokemons that are important in this"
+  },
+  {
+   "t": 572.16,
+   "d": 1.92,
+   "text": "game um"
+  },
+  {
+   "t": 574.08,
+   "d": 1.44,
+   "text": "it is"
+  },
+  {
+   "t": 575.52,
+   "d": 2.08,
+   "text": "it will wreck you it doesn't have any"
+  },
+  {
+   "t": 577.6,
+   "d": 1.52,
+   "text": "chill it doesn't have any respect"
+  },
+  {
+   "t": 579.12,
+   "d": 1.92,
+   "text": "towards you a player this game will"
+  },
+  {
+   "t": 581.04,
+   "d": 2.16,
+   "text": "break you it will make you save right"
+  },
+  {
+   "t": 583.2,
+   "d": 1.84,
+   "text": "before a glitch so you have to restart"
+  },
+  {
+   "t": 585.04,
+   "d": 1.68,
+   "text": "the whole thing again and again it wants"
+  },
+  {
+   "t": 586.72,
+   "d": 2.16,
+   "text": "to push you away but you will continue"
+  },
+  {
+   "t": 588.88,
+   "d": 3.04,
+   "text": "going in it to explore it to the end and"
+  },
+  {
+   "t": 591.92,
+   "d": 2.0,
+   "text": "get the end of it"
+  },
+  {
+   "t": 593.92,
+   "d": 3.2,
+   "text": "um the only way to to beat the legends"
+  },
+  {
+   "t": 597.12,
+   "d": 1.76,
+   "text": "that are not supposed to be in there is"
+  },
+  {
+   "t": 598.88,
+   "d": 2.0,
+   "text": "to curse them along the way and that's"
+  },
+  {
+   "t": 600.88,
+   "d": 1.76,
+   "text": "what's very interesting and this leads"
+  },
+  {
+   "t": 602.64,
+   "d": 0.72,
+   "text": "to"
+  },
+  {
+   "t": 603.36,
+   "d": 2.4,
+   "text": "um another story that i want to tell you"
+  },
+  {
+   "t": 605.76,
+   "d": 0.88,
+   "text": "but i"
+  },
+  {
+   "t": 606.64,
+   "d": 1.6,
+   "text": "will consider a spoiler for pokemon"
+  },
+  {
+   "t": 608.24,
+   "d": 1.44,
+   "text": "glitch so if you don't want to know the"
+  },
+  {
+   "t": 609.68,
+   "d": 1.84,
+   "text": "end of pokemon glitch please come back"
+  },
+  {
+   "t": 611.52,
+   "d": 1.68,
+   "text": "for next talk if you want to know about"
+  },
+  {
+   "t": 613.2,
+   "d": 2.16,
+   "text": "it please stay because i think this is"
+  },
+  {
+   "t": 615.36,
+   "d": 1.68,
+   "text": "what makes this talk very interesting"
+  },
+  {
+   "t": 617.04,
+   "d": 1.36,
+   "text": "let's go"
+  },
+  {
+   "t": 618.4,
+   "d": 1.36,
+   "text": "so"
+  },
+  {
+   "t": 619.76,
+   "d": 2.64,
+   "text": "the final boss of pokemon gold"
+  },
+  {
+   "t": 622.4,
+   "d": 1.12,
+   "text": "is red"
+  },
+  {
+   "t": 623.52,
+   "d": 1.76,
+   "text": "red the protagonist from the first"
+  },
+  {
+   "t": 625.28,
+   "d": 2.88,
+   "text": "original pokemon red"
+  },
+  {
+   "t": 628.16,
+   "d": 2.08,
+   "text": "his appearance in the game is is very"
+  },
+  {
+   "t": 630.24,
+   "d": 3.2,
+   "text": "mysterious like when you meet him he"
+  },
+  {
+   "t": 633.44,
+   "d": 1.52,
+   "text": "says absolutely nothing he's not even"
+  },
+  {
+   "t": 634.96,
+   "d": 1.2,
+   "text": "supposed to be there you don't know he's"
+  },
+  {
+   "t": 636.16,
+   "d": 1.84,
+   "text": "there but when you meet him he says"
+  },
+  {
+   "t": 638.0,
+   "d": 1.52,
+   "text": "absolutely nothing"
+  },
+  {
+   "t": 639.52,
+   "d": 3.44,
+   "text": "he rolls over your pokemon team"
+  },
+  {
+   "t": 642.96,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 643.76,
+   "d": 1.84,
+   "text": "that's it so you come again you must"
+  },
+  {
+   "t": 645.6,
+   "d": 2.16,
+   "text": "have a strange to beat him and when you"
+  },
+  {
+   "t": 647.76,
+   "d": 2.16,
+   "text": "do that he says nothing absolutely"
+  },
+  {
+   "t": 649.92,
+   "d": 2.96,
+   "text": "nothing just the the dot and then he"
+  },
+  {
+   "t": 652.88,
+   "d": 1.36,
+   "text": "disappears"
+  },
+  {
+   "t": 654.24,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 655.36,
+   "d": 2.32,
+   "text": "the fun the community is like crazy"
+  },
+  {
+   "t": 657.68,
+   "d": 2.4,
+   "text": "about what about this stuff like why is"
+  },
+  {
+   "t": 660.08,
+   "d": 1.12,
+   "text": "red ver"
+  },
+  {
+   "t": 661.2,
+   "d": 1.84,
+   "text": "why is he saying any nothing when he"
+  },
+  {
+   "t": 663.04,
+   "d": 1.36,
+   "text": "beats us and when he disappears right"
+  },
+  {
+   "t": 664.4,
+   "d": 2.32,
+   "text": "after but nobody knows and i wanted to"
+  },
+  {
+   "t": 666.72,
+   "d": 2.16,
+   "text": "know if in pokemon glitch"
+  },
+  {
+   "t": 668.88,
+   "d": 1.52,
+   "text": "if there's more if there's more to it"
+  },
+  {
+   "t": 670.4,
+   "d": 1.68,
+   "text": "and i'm very glad to tell you but yes"
+  },
+  {
+   "t": 672.08,
+   "d": 1.28,
+   "text": "there's more to it"
+  },
+  {
+   "t": 673.36,
+   "d": 2.0,
+   "text": "when you meet red"
+  },
+  {
+   "t": 675.36,
+   "d": 0.88,
+   "text": "first"
+  },
+  {
+   "t": 676.24,
+   "d": 1.12,
+   "text": "his name"
+  },
+  {
+   "t": 677.36,
+   "d": 3.12,
+   "text": "doesn't appears as trainer red as usual"
+  },
+  {
+   "t": 680.48,
+   "d": 1.36,
+   "text": "his name is"
+  },
+  {
+   "t": 681.84,
+   "d": 3.44,
+   "text": "rocket red rockets like the evil bad"
+  },
+  {
+   "t": 685.28,
+   "d": 1.56,
+   "text": "guys in this"
+  },
+  {
+   "t": 686.84,
+   "d": 2.52,
+   "text": "game also he will wreck you like it's"
+  },
+  {
+   "t": 689.36,
+   "d": 2.08,
+   "text": "it's reds he has other power pokemon too"
+  },
+  {
+   "t": 691.44,
+   "d": 1.2,
+   "text": "he will wakes you but at this point you"
+  },
+  {
+   "t": 692.64,
+   "d": 2.32,
+   "text": "might remember we have a pokemon that"
+  },
+  {
+   "t": 694.96,
+   "d": 2.64,
+   "text": "can curse him and this is what i did i"
+  },
+  {
+   "t": 697.6,
+   "d": 2.4,
+   "text": "freaking cursed reds to the end of his"
+  },
+  {
+   "t": 700.0,
+   "d": 2.08,
+   "text": "to the end so i can finally evade him"
+  },
+  {
+   "t": 702.08,
+   "d": 2.16,
+   "text": "and i expected him to just say nothing"
+  },
+  {
+   "t": 704.24,
+   "d": 2.56,
+   "text": "in his appearance or have a fun thing"
+  },
+  {
+   "t": 706.8,
+   "d": 2.56,
+   "text": "and this is what happened when you beat"
+  },
+  {
+   "t": 709.36,
+   "d": 1.92,
+   "text": "him"
+  },
+  {
+   "t": 711.28,
+   "d": 1.36,
+   "text": "red doesn't"
+  },
+  {
+   "t": 712.64,
+   "d": 2.0,
+   "text": "does not say nothing"
+  },
+  {
+   "t": 714.64,
+   "d": 1.92,
+   "text": "he actually says something"
+  },
+  {
+   "t": 716.56,
+   "d": 3.36,
+   "text": "he speaks in gibberish he makes between"
+  },
+  {
+   "t": 719.92,
+   "d": 2.8,
+   "text": "random glitch letters in english and he"
+  },
+  {
+   "t": 722.72,
+   "d": 1.6,
+   "text": "asks you a question he wants you to"
+  },
+  {
+   "t": 724.32,
+   "d": 2.16,
+   "text": "choose one of your pokemon and like what"
+  },
+  {
+   "t": 726.48,
+   "d": 1.6,
+   "text": "what do you want i can't understand what"
+  },
+  {
+   "t": 728.08,
+   "d": 1.6,
+   "text": "you're saying so i choose the signature"
+  },
+  {
+   "t": 729.68,
+   "d": 2.24,
+   "text": "pokemon of israel which is a ghost type"
+  },
+  {
+   "t": 731.92,
+   "d": 2.56,
+   "text": "pokemon which which knows curse right"
+  },
+  {
+   "t": 734.48,
+   "d": 2.56,
+   "text": "and then he asks me to choose one attack"
+  },
+  {
+   "t": 737.04,
+   "d": 2.16,
+   "text": "of the pokemon so"
+  },
+  {
+   "t": 739.2,
+   "d": 2.96,
+   "text": "i choose cups like the cursed cursed"
+  },
+  {
+   "t": 742.16,
+   "d": 1.44,
+   "text": "attack"
+  },
+  {
+   "t": 743.6,
+   "d": 1.52,
+   "text": "and"
+  },
+  {
+   "t": 745.12,
+   "d": 2.08,
+   "text": "he takes the pokemon he takes the attack"
+  },
+  {
+   "t": 747.2,
+   "d": 1.44,
+   "text": "and he says"
+  },
+  {
+   "t": 748.64,
+   "d": 2.08,
+   "text": "the curse is erased and then he"
+  },
+  {
+   "t": 750.72,
+   "d": 1.6,
+   "text": "disappears"
+  },
+  {
+   "t": 752.32,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 753.28,
+   "d": 2.56,
+   "text": "at this point you're like"
+  },
+  {
+   "t": 755.84,
+   "d": 1.68,
+   "text": "why did i just play"
+  },
+  {
+   "t": 757.52,
+   "d": 1.28,
+   "text": "i played"
+  },
+  {
+   "t": 758.8,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 759.68,
+   "d": 1.12,
+   "text": "a game"
+  },
+  {
+   "t": 760.8,
+   "d": 2.08,
+   "text": "that puts me into a broken world which"
+  },
+  {
+   "t": 762.88,
+   "d": 1.68,
+   "text": "is very hostile and"
+  },
+  {
+   "t": 764.56,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 765.52,
+   "d": 1.76,
+   "text": "pushed me away every time with strange"
+  },
+  {
+   "t": 767.28,
+   "d": 2.4,
+   "text": "glitches and i push it to the end"
+  },
+  {
+   "t": 769.68,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 770.4,
+   "d": 2.08,
+   "text": "finally i meet like a protagonist from"
+  },
+  {
+   "t": 772.48,
+   "d": 2.4,
+   "text": "first game who just erase the curse and"
+  },
+  {
+   "t": 774.88,
+   "d": 1.68,
+   "text": "disappears"
+  },
+  {
+   "t": 776.56,
+   "d": 1.84,
+   "text": "wow you just played a roguelike from a"
+  },
+  {
+   "t": 778.4,
+   "d": 2.16,
+   "text": "halfer a roguelike because there's like"
+  },
+  {
+   "t": 780.56,
+   "d": 1.92,
+   "text": "so much uncertainty in the game and you"
+  },
+  {
+   "t": 782.48,
+   "d": 1.52,
+   "text": "have so much rediscovery when you play"
+  },
+  {
+   "t": 784.0,
+   "d": 1.28,
+   "text": "when you play it even if you know the"
+  },
+  {
+   "t": 785.28,
+   "d": 1.52,
+   "text": "version of the game also i could like it"
+  },
+  {
+   "t": 786.8,
+   "d": 1.84,
+   "text": "because it has a lot of permadeath in in"
+  },
+  {
+   "t": 788.64,
+   "d": 1.68,
+   "text": "likely places"
+  },
+  {
+   "t": 790.32,
+   "d": 2.8,
+   "text": "but also i would say it has no offer"
+  },
+  {
+   "t": 793.12,
+   "d": 2.16,
+   "text": "some of the mechanics we've seen nobody"
+  },
+  {
+   "t": 795.28,
+   "d": 1.68,
+   "text": "consciously designed them"
+  },
+  {
+   "t": 796.96,
+   "d": 2.4,
+   "text": "they just appeared not nintendo not me"
+  },
+  {
+   "t": 799.36,
+   "d": 2.48,
+   "text": "not my program it just appeared from the"
+  },
+  {
+   "t": 801.84,
+   "d": 2.16,
+   "text": "randomness and the mixing of it all"
+  },
+  {
+   "t": 804.0,
+   "d": 2.88,
+   "text": "something for a story nobody wrote it"
+  },
+  {
+   "t": 806.88,
+   "d": 2.72,
+   "text": "it's a mix not even though not me not my"
+  },
+  {
+   "t": 809.6,
+   "d": 2.08,
+   "text": "program it's a mix of everything we've"
+  },
+  {
+   "t": 811.68,
+   "d": 1.68,
+   "text": "seen everything we've processed together"
+  },
+  {
+   "t": 813.36,
+   "d": 2.0,
+   "text": "everything we pissed up"
+  },
+  {
+   "t": 815.36,
+   "d": 1.6,
+   "text": "there just was the right ingredients"
+  },
+  {
+   "t": 816.96,
+   "d": 2.72,
+   "text": "there to paint a cool story into the"
+  },
+  {
+   "t": 819.68,
+   "d": 2.32,
+   "text": "players and knew the audience"
+  },
+  {
+   "t": 822.0,
+   "d": 1.84,
+   "text": "mind"
+  },
+  {
+   "t": 823.84,
+   "d": 1.2,
+   "text": "that's it"
+  },
+  {
+   "t": 825.04,
+   "d": 2.64,
+   "text": "thank you for coming to pokemon glitch a"
+  },
+  {
+   "t": 827.68,
+   "d": 1.84,
+   "text": "story that i want to tell you for years"
+  },
+  {
+   "t": 829.52,
+   "d": 2.48,
+   "text": "uh by myself unisrabi if you want to"
+  },
+  {
+   "t": 832.0,
+   "d": 1.6,
+   "text": "know more about it if you want to see"
+  },
+  {
+   "t": 833.6,
+   "d": 1.6,
+   "text": "more of this stuff if you want to play"
+  },
+  {
+   "t": 835.2,
+   "d": 2.56,
+   "text": "this game drop me a line at piratefox on"
+  },
+  {
+   "t": 837.76,
+   "d": 3.48,
+   "text": "twitter thank you"
+  },
+  {
+   "t": 846.16,
+   "d": 1.04,
+   "text": "wow"
+  },
+  {
+   "t": 847.2,
+   "d": 1.2,
+   "text": "that was"
+  },
+  {
+   "t": 848.4,
+   "d": 2.96,
+   "text": "something else um what a mic drop at the"
+  },
+  {
+   "t": 851.36,
+   "d": 0.88,
+   "text": "end"
+  },
+  {
+   "t": 852.24,
+   "d": 2.16,
+   "text": "no time particularly for questions which"
+  },
+  {
+   "t": 854.4,
+   "d": 2.08,
+   "text": "also i don't know what people would have"
+  },
+  {
+   "t": 856.48,
+   "d": 1.2,
+   "text": "uh"
+  },
+  {
+   "t": 857.68,
+   "d": 4.8,
+   "text": "coherent questions beyond just wow"
+  }
+ ]
+}

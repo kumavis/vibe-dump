@@ -1,0 +1,115 @@
+{
+  "id": "mtSjgxS-QS4",
+  "title": "Mark Gritter - Sol LeWitt, Combinatorial Enumeration, and Rogue",
+  "speaker": "Mark Gritter",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=mtSjgxS-QS4",
+  "talk_type": "technical",
+  "summary": "Mark Gritter connects Sol LeWitt's wall drawings and 'serial art', which exhaustively enumerates every consequence of a rule, to procedural content generation. He surveys conceptual and modern enumeration projects, then treats Rogue's level generator as serial art: although the abstract room space has around 10^30 configurations, Rogue's 32-bit seed limits it to about 4 billion levels, which he enumerated in roughly 11 minutes of CPU time. He shows visualizations of the results, notes that a few room configurations suffice to reconstruct a seed, and argues that 32-bit-seed generators can be fully explored, including checking that nothing bad ever happens.",
+  "games": [
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "generative art",
+      "kind": "history",
+      "claim": "Sol LeWitt's wall drawings are generative art: they are specified as instructions to carry out rather than images to copy, which lets them be installed in varied spaces.",
+      "detail": "Gritter presents this as the first connection between LeWitt and roguelikes. The drawings often explore all variations of a theme, such as lines in all orthogonal and diagonal directions, or highlighting the architectural features of the wall.",
+      "t": 95,
+      "quote": "Wall drawings are generative art. They're given as instructions to carry out rather than an image to be",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "serial art",
+      "kind": "principle",
+      "claim": "Serial art starts from a rule or set of axioms and produces every artifact satisfying it, presented together, and the work is finished only when no possibilities remain.",
+      "detail": "Gritter cites LeWitt's 122 incomplete open cubes and 28 photos of a sphere under lighting combinations, and Mel Bochner's characterization: a predetermined process, sequence over virtuosity, and self-exhausting work.",
+      "t": 144,
+      "quote": "Serial art starts with a law or set of axioms or a condition, and produces all the figures or artifacts that satisfy that premise",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "committing to an algorithm",
+      "kind": "principle",
+      "claim": "LeWitt's maxim 'the idea becomes a machine that makes the art' links serial art to procgen: the artist doesn't give up control but commits to all consequences of an algorithm.",
+      "detail": "Gritter defines the core of serial art as the intersection of minimalism, repetition and procedurality. Modern computer-enumerated examples include a polyomino labyrinth up to eight squares, all melodies up to 10 notes (enumerated to copyright them), all ~25 million 5x5 nonograms, and an encyclopedia of small categories.",
+      "t": 251,
+      "quote": "The artist is not necessarily giving up control, but they are committing themselves to the all the consequences of a particular idea or algorithm",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "rogue room layout",
+      "kind": "example",
+      "claim": "Rogue's level generator divides the screen into a 3x3 grid, leaves up to three cells empty, and picks a random room width, height and position fitting within each remaining cell.",
+      "detail": "Counting the abstract possibilities gives about 253 width/x-position options and six or ten height/y options per room, roughly 2^100 or 10^30 room configurations before corridors, gold or monsters.",
+      "t": 374,
+      "quote": "We divide the screen into nine grid elements. Up to three of these rectangles can be left empty",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "seed space",
+      "kind": "principle",
+      "claim": "Because Rogue uses a 32-bit seed, it can only ever produce about 4 billion layouts per dungeon level, so virtually every room configuration you could write down is unreachable.",
+      "detail": "Against a ~10^30 abstract space, the seed limits outputs to 2^32. Gritter notes you'd have better odds winning the lottery than randomly picking a valid set of Rogue rooms.",
+      "t": 452,
+      "quote": "virtually every room configuration you could write down is actually impossible to achieve in Rogue",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "exhaustive enumeration",
+      "kind": "technique",
+      "claim": "Enumerating every output of a 32-bit-seed generator is cheap: simply compiling Rogue's generator code ran through all 4 billion seeds in about 11 minutes of CPU time.",
+      "detail": "Gritter expected to need parallelization or a GPU implementation but found plain compiled code sufficient. The result is an artifact he considers serial art even though no human could flip through it.",
+      "t": 476,
+      "quote": "basically just compiling the code gives a good enough solution. We can blow through all the possibilities in about 11 minutes of CPU time",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator visualization",
+      "kind": "technique",
+      "claim": "Gritter analyzed the enumerated Rogue levels by post-selecting on fixed features, such as a smallest upper-left room, and plotting room-occupancy heatmaps and extremes of total room area.",
+      "detail": "Fixing one room's size showed no gross anomalies. Fixing two exact 4x4 rooms (only 209 seeds) leaves most other configurations impossible, meaning a seed can be reconstructed from as few as three room configurations.",
+      "t": 561,
+      "quote": "we can reconstruct the seed that was used from as few as three room configurations",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "rng artifacts",
+      "kind": "open-question",
+      "claim": "Actual Rogue produces fewer very small levels than abstract probability predicts, and Gritter is unsure whether this is an artifact of its linear congruential RNG or just a random walk.",
+      "detail": "The deficit persists across sizes until catching up at 100%. He wants to find an artifact attributable to the LCG that vanishes with a better RNG, and better ways to plot 4 billion points in a 36-dimensional space; dimensionality reduction found nothing yet. His bet is that it's just random.",
+      "t": 595,
+      "quote": "There seems to be a substantial deficit with actual Rogue compared to the abstract probabilities of Rogue. There are fewer very small levels",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "exhaustive testing",
+      "kind": "principle",
+      "claim": "Generators with 32-bit seeds can be fully explored, so a developer could check that nothing bad ever happens across every possible seed.",
+      "detail": "Gritter frames this as part science project, part serial art. He also asks whether games with only hundreds to millions of seeds exist, which would be humanly explorable.",
+      "t": 671,
+      "quote": "generators that use 32-bit seeds can be fully explored",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue generation order",
+      "kind": "history",
+      "claim": "In Rogue, monsters and items are generated inside the same loop over rooms rather than after room placement, while corridors are done after the rooms.",
+      "detail": "Gritter admits in Q&A that because of this he actually enumerated a variant he calls Rogue Star, where monsters and items are placed sensibly after the rooms. He suggests looking at possible item and monster distributions as future work.",
+      "t": 802,
+      "quote": "the monsters and the items the monsters are covering are both done in that initial loop over rooms",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

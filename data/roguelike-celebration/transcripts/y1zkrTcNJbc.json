@@ -1,0 +1,1535 @@
+{
+ "id": "y1zkrTcNJbc",
+ "url": "https://www.youtube.com/watch?v=y1zkrTcNJbc",
+ "title": "Albert Ford - Vision Visualized",
+ "speaker": "Albert Ford",
+ "talk_title": "Vision Visualized",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 570,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAlbert has been working on a roguelike, drawn by the idea of procedural worlds that can surprise their original creators. He has yet to finish, as he's been exploring wonderful worlds others have made.\n\nIn this lightning talk he presents shadowcasting field of view, based on a short article he wrote (albertford.com/shadowcasting). He aims to make programming these sorts of algorithms more approachable for new devs, and show off some cool applications of field of view (in general, not specific to this algorithm) to inspire people to find creative ways to use it.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 11,
+   "title": "Defining the problem"
+  },
+  {
+   "start": 34,
+   "title": "Algorithm goals"
+  },
+  {
+   "start": 35,
+   "title": "Raycasting and shadowcasting"
+  },
+  {
+   "start": 438,
+   "title": "Advanced applications"
+  },
+  {
+   "start": 558,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1736,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.24,
+   "d": 2.96,
+   "text": "so awesome moving"
+  },
+  {
+   "t": 3.2,
+   "d": 4.32,
+   "text": "right along next up we have"
+  },
+  {
+   "t": 7.52,
+   "d": 2.96,
+   "text": "consulting my notes oh man my notes are"
+  },
+  {
+   "t": 10.48,
+   "d": 0.64,
+   "text": "messed up"
+  },
+  {
+   "t": 11.12,
+   "d": 4.0,
+   "text": "it's fine it's albert ford hello hello"
+  },
+  {
+   "t": 15.12,
+   "d": 1.76,
+   "text": "uh so you're working on a roguelike"
+  },
+  {
+   "t": 16.88,
+   "d": 2.16,
+   "text": "drawn by the idea of procedural worlds"
+  },
+  {
+   "t": 19.04,
+   "d": 1.28,
+   "text": "that can surprise their original"
+  },
+  {
+   "t": 20.32,
+   "d": 1.84,
+   "text": "creators you have yet to finish"
+  },
+  {
+   "t": 22.16,
+   "d": 1.44,
+   "text": "but you've been exploring wonderful"
+  },
+  {
+   "t": 23.6,
+   "d": 2.72,
+   "text": "worlds that other people have made"
+  },
+  {
+   "t": 26.32,
+   "d": 3.92,
+   "text": "yeah exactly so uh the previous talk"
+  },
+  {
+   "t": 30.24,
+   "d": 1.76,
+   "text": "uh warning in advance this is a bit of a"
+  },
+  {
+   "t": 32.0,
+   "d": 1.84,
+   "text": "programming talk it's about"
+  },
+  {
+   "t": 33.84,
+   "d": 2.8,
+   "text": "vision and procedure sorry about field"
+  },
+  {
+   "t": 36.64,
+   "d": 2.16,
+   "text": "of view in traditional roguelikes"
+  },
+  {
+   "t": 38.8,
+   "d": 3.28,
+   "text": "so this talk is meant to answer"
+  },
+  {
+   "t": 42.08,
+   "d": 1.44,
+   "text": "three questions one what makes for a"
+  },
+  {
+   "t": 43.52,
+   "d": 1.6,
+   "text": "good field of view algorithm"
+  },
+  {
+   "t": 45.12,
+   "d": 1.76,
+   "text": "two what do those things look like under"
+  },
+  {
+   "t": 46.88,
+   "d": 1.6,
+   "text": "the hood you know how do they operate"
+  },
+  {
+   "t": 48.48,
+   "d": 1.68,
+   "text": "and three what can we use them for and"
+  },
+  {
+   "t": 50.16,
+   "d": 1.6,
+   "text": "for three of course the obvious answer"
+  },
+  {
+   "t": 51.76,
+   "d": 0.96,
+   "text": "is you use field to"
+  },
+  {
+   "t": 52.72,
+   "d": 1.6,
+   "text": "use your view for vision right that's"
+  },
+  {
+   "t": 54.32,
+   "d": 1.76,
+   "text": "what it's meant for but i do have a"
+  },
+  {
+   "t": 56.08,
+   "d": 1.36,
+   "text": "couple of ideas i'd like to share at the"
+  },
+  {
+   "t": 57.44,
+   "d": 0.64,
+   "text": "end"
+  },
+  {
+   "t": 58.08,
+   "d": 2.56,
+   "text": "of sort of out-of-the-box problems that"
+  },
+  {
+   "t": 60.64,
+   "d": 1.12,
+   "text": "could"
+  },
+  {
+   "t": 61.76,
+   "d": 2.72,
+   "text": "have solutions in in terms of field of"
+  },
+  {
+   "t": 64.48,
+   "d": 1.12,
+   "text": "view"
+  },
+  {
+   "t": 65.6,
+   "d": 2.4,
+   "text": "so our dream in terms of vision is"
+  },
+  {
+   "t": 68.0,
+   "d": 0.96,
+   "text": "something that's efficient"
+  },
+  {
+   "t": 68.96,
+   "d": 2.64,
+   "text": "consistent and symmetric efficiency you"
+  },
+  {
+   "t": 71.6,
+   "d": 1.36,
+   "text": "know just meaning going fast and"
+  },
+  {
+   "t": 72.96,
+   "d": 0.8,
+   "text": "consistency"
+  },
+  {
+   "t": 73.76,
+   "d": 1.44,
+   "text": "meaning you want field issues to play"
+  },
+  {
+   "t": 75.2,
+   "d": 1.92,
+   "text": "nicely with your other systems"
+  },
+  {
+   "t": 77.12,
+   "d": 1.68,
+   "text": "if you have ranged combat in your"
+  },
+  {
+   "t": 78.8,
+   "d": 2.0,
+   "text": "roguelike you want to avoid situations"
+  },
+  {
+   "t": 80.8,
+   "d": 1.12,
+   "text": "where you can see something and you"
+  },
+  {
+   "t": 81.92,
+   "d": 0.96,
+   "text": "can't target it"
+  },
+  {
+   "t": 82.88,
+   "d": 1.28,
+   "text": "or you can target something that you"
+  },
+  {
+   "t": 84.16,
+   "d": 1.84,
+   "text": "can't see or worst of all"
+  },
+  {
+   "t": 86.0,
+   "d": 1.44,
+   "text": "if it's something that you can't see and"
+  },
+  {
+   "t": 87.44,
+   "d": 1.92,
+   "text": "it can target you then"
+  },
+  {
+   "t": 89.36,
+   "d": 1.92,
+   "text": "you're in danger and then last of all"
+  },
+  {
+   "t": 91.28,
+   "d": 1.36,
+   "text": "symmetry"
+  },
+  {
+   "t": 92.64,
+   "d": 1.84,
+   "text": "if i can see you you can see me and vice"
+  },
+  {
+   "t": 94.48,
+   "d": 1.6,
+   "text": "versa so"
+  },
+  {
+   "t": 96.08,
+   "d": 2.56,
+   "text": "for me a natural starting point with"
+  },
+  {
+   "t": 98.64,
+   "d": 1.52,
+   "text": "field of view is raycasting which is a"
+  },
+  {
+   "t": 100.16,
+   "d": 1.36,
+   "text": "simple algorithm"
+  },
+  {
+   "t": 101.52,
+   "d": 2.16,
+   "text": "that works very much how the real world"
+  },
+  {
+   "t": 103.68,
+   "d": 2.24,
+   "text": "works you cast a rate in every direction"
+  },
+  {
+   "t": 105.92,
+   "d": 2.08,
+   "text": "where you stop on the hit and obstacle"
+  },
+  {
+   "t": 108.0,
+   "d": 1.52,
+   "text": "and everything that the ray touches"
+  },
+  {
+   "t": 109.52,
+   "d": 2.32,
+   "text": "or passes through gets added to field of"
+  },
+  {
+   "t": 111.84,
+   "d": 2.16,
+   "text": "view so this is what this looks like"
+  },
+  {
+   "t": 114.0,
+   "d": 3.04,
+   "text": "in a real grid and you can notice"
+  },
+  {
+   "t": 117.04,
+   "d": 2.0,
+   "text": "how the tiles closer to the center"
+  },
+  {
+   "t": 119.04,
+   "d": 1.44,
+   "text": "closer to the at sign"
+  },
+  {
+   "t": 120.48,
+   "d": 1.28,
+   "text": "get a lot more attention from the"
+  },
+  {
+   "t": 121.76,
+   "d": 2.64,
+   "text": "algorithm and if we make a heat map"
+  },
+  {
+   "t": 124.4,
+   "d": 3.52,
+   "text": "of how often tiles get hit those tiles"
+  },
+  {
+   "t": 127.92,
+   "d": 1.44,
+   "text": "are getting a lot of"
+  },
+  {
+   "t": 129.36,
+   "d": 2.4,
+   "text": "extra energy put into them that's a lot"
+  },
+  {
+   "t": 131.76,
+   "d": 2.0,
+   "text": "of wasted effort from the algorithm and"
+  },
+  {
+   "t": 133.76,
+   "d": 1.04,
+   "text": "because of that reason"
+  },
+  {
+   "t": 134.8,
+   "d": 1.84,
+   "text": "raycasting isn't a very efficient"
+  },
+  {
+   "t": 136.64,
+   "d": 1.28,
+   "text": "algorithm"
+  },
+  {
+   "t": 137.92,
+   "d": 1.6,
+   "text": "but the upside though is we didn't get"
+  },
+  {
+   "t": 139.52,
+   "d": 1.68,
+   "text": "one out of three raycasting is very"
+  },
+  {
+   "t": 141.2,
+   "d": 1.52,
+   "text": "consistent algorithm it works very well"
+  },
+  {
+   "t": 142.72,
+   "d": 1.76,
+   "text": "with on the site precisely because it"
+  },
+  {
+   "t": 144.48,
+   "d": 2.0,
+   "text": "pretty much is line of sight"
+  },
+  {
+   "t": 146.48,
+   "d": 1.44,
+   "text": "just line of sight repeat over and over"
+  },
+  {
+   "t": 147.92,
+   "d": 1.92,
+   "text": "and over"
+  },
+  {
+   "t": 149.84,
+   "d": 2.16,
+   "text": "but in terms of efficiency if we want to"
+  },
+  {
+   "t": 152.0,
+   "d": 1.76,
+   "text": "solve that problem first we need to turn"
+  },
+  {
+   "t": 153.76,
+   "d": 1.6,
+   "text": "into a different approach"
+  },
+  {
+   "t": 155.36,
+   "d": 2.32,
+   "text": "so shadowcasting differs from raycasting"
+  },
+  {
+   "t": 157.68,
+   "d": 1.52,
+   "text": "in that instead of"
+  },
+  {
+   "t": 159.2,
+   "d": 2.32,
+   "text": "having radial lines moving outwards from"
+  },
+  {
+   "t": 161.52,
+   "d": 1.12,
+   "text": "your origin"
+  },
+  {
+   "t": 162.64,
+   "d": 1.68,
+   "text": "you move in concentric circles and what"
+  },
+  {
+   "t": 164.32,
+   "d": 1.52,
+   "text": "this does is"
+  },
+  {
+   "t": 165.84,
+   "d": 2.56,
+   "text": "it has a uniform density over the entire"
+  },
+  {
+   "t": 168.4,
+   "d": 0.64,
+   "text": "grid"
+  },
+  {
+   "t": 169.04,
+   "d": 1.76,
+   "text": "with raycasting the lines get denser"
+  },
+  {
+   "t": 170.8,
+   "d": 1.52,
+   "text": "towards the middle and more sparse"
+  },
+  {
+   "t": 172.32,
+   "d": 2.4,
+   "text": "outside and with shadow casting"
+  },
+  {
+   "t": 174.72,
+   "d": 1.6,
+   "text": "concentric circles will cover the same"
+  },
+  {
+   "t": 176.32,
+   "d": 1.76,
+   "text": "amount of area"
+  },
+  {
+   "t": 178.08,
+   "d": 2.32,
+   "text": "in terms of density and well i say"
+  },
+  {
+   "t": 180.4,
+   "d": 1.52,
+   "text": "circles but on a grid they're actually"
+  },
+  {
+   "t": 181.92,
+   "d": 0.72,
+   "text": "squares"
+  },
+  {
+   "t": 182.64,
+   "d": 1.68,
+   "text": "because that's how distance will work in"
+  },
+  {
+   "t": 184.32,
+   "d": 1.68,
+   "text": "eight directions and"
+  },
+  {
+   "t": 186.0,
+   "d": 2.0,
+   "text": "squares have corners which is kind of"
+  },
+  {
+   "t": 188.0,
+   "d": 1.12,
+   "text": "about it so"
+  },
+  {
+   "t": 189.12,
+   "d": 2.0,
+   "text": "when implementing shadow casting it's"
+  },
+  {
+   "t": 191.12,
+   "d": 1.68,
+   "text": "often helpful to split it up into"
+  },
+  {
+   "t": 192.8,
+   "d": 2.08,
+   "text": "four quadrants or eight octanes so here"
+  },
+  {
+   "t": 194.88,
+   "d": 1.76,
+   "text": "there's four quadrants of shadow casting"
+  },
+  {
+   "t": 196.64,
+   "d": 2.08,
+   "text": "and if you look at a heat map of this"
+  },
+  {
+   "t": 198.72,
+   "d": 1.2,
+   "text": "you can see"
+  },
+  {
+   "t": 199.92,
+   "d": 1.2,
+   "text": "we've done a much better job than"
+  },
+  {
+   "t": 201.12,
+   "d": 2.24,
+   "text": "recasting it being efficient every tile"
+  },
+  {
+   "t": 203.36,
+   "d": 1.84,
+   "text": "and vision is only visited once with the"
+  },
+  {
+   "t": 205.2,
+   "d": 1.28,
+   "text": "exception of"
+  },
+  {
+   "t": 206.48,
+   "d": 2.88,
+   "text": "on the edges between quadrants those"
+  },
+  {
+   "t": 209.36,
+   "d": 3.04,
+   "text": "seams are visited twice"
+  },
+  {
+   "t": 212.4,
+   "d": 3.2,
+   "text": "but still overall we've got well we"
+  },
+  {
+   "t": 215.6,
+   "d": 1.36,
+   "text": "actually lost the consistency we've"
+  },
+  {
+   "t": 216.96,
+   "d": 2.0,
+   "text": "gained efficiency but at the cost"
+  },
+  {
+   "t": 218.96,
+   "d": 3.6,
+   "text": "if you look at this example the white"
+  },
+  {
+   "t": 222.56,
+   "d": 2.96,
+   "text": "the white line represents a potential"
+  },
+  {
+   "t": 225.52,
+   "d": 0.48,
+   "text": "target"
+  },
+  {
+   "t": 226.0,
+   "d": 2.08,
+   "text": "that you could if you were you know"
+  },
+  {
+   "t": 228.08,
+   "d": 1.52,
+   "text": "engaged in ranged combat"
+  },
+  {
+   "t": 229.6,
+   "d": 2.08,
+   "text": "you could sort of shoot right next to"
+  },
+  {
+   "t": 231.68,
+   "d": 1.36,
+   "text": "the wall"
+  },
+  {
+   "t": 233.04,
+   "d": 2.16,
+   "text": "at a target to the top and to the right"
+  },
+  {
+   "t": 235.2,
+   "d": 1.6,
+   "text": "and with raycasting everything's all"
+  },
+  {
+   "t": 236.8,
+   "d": 0.48,
+   "text": "right"
+  },
+  {
+   "t": 237.28,
+   "d": 1.84,
+   "text": "you know you can see it you're happy"
+  },
+  {
+   "t": 239.12,
+   "d": 2.32,
+   "text": "they can see you but with shadow casting"
+  },
+  {
+   "t": 241.44,
+   "d": 1.68,
+   "text": "you're shooting in the dark and perhaps"
+  },
+  {
+   "t": 243.12,
+   "d": 2.32,
+   "text": "there's someone there aiming at you"
+  },
+  {
+   "t": 245.44,
+   "d": 2.08,
+   "text": "the reason why shadowcasting isn't"
+  },
+  {
+   "t": 247.52,
+   "d": 1.84,
+   "text": "consistent like this is if you look"
+  },
+  {
+   "t": 249.36,
+   "d": 1.6,
+   "text": "um on the left of the casting it might"
+  },
+  {
+   "t": 250.96,
+   "d": 2.24,
+   "text": "be kind of hard to see"
+  },
+  {
+   "t": 253.2,
+   "d": 2.4,
+   "text": "the line the pink line that represents"
+  },
+  {
+   "t": 255.6,
+   "d": 0.8,
+   "text": "the euclidean"
+  },
+  {
+   "t": 256.4,
+   "d": 1.92,
+   "text": "line of sight actually clips the wall"
+  },
+  {
+   "t": 258.32,
+   "d": 1.12,
+   "text": "slightly"
+  },
+  {
+   "t": 259.44,
+   "d": 1.36,
+   "text": "and shutter constantly oh no you can't"
+  },
+  {
+   "t": 260.8,
+   "d": 1.84,
+   "text": "do that you know i'm smarter than that"
+  },
+  {
+   "t": 262.64,
+   "d": 1.36,
+   "text": "you can't just look through walls"
+  },
+  {
+   "t": 264.0,
+   "d": 2.16,
+   "text": "so shadow casting limits you use a 45"
+  },
+  {
+   "t": 266.16,
+   "d": 0.96,
+   "text": "degree angle"
+  },
+  {
+   "t": 267.12,
+   "d": 1.68,
+   "text": "and really the problem is the corner is"
+  },
+  {
+   "t": 268.8,
+   "d": 1.84,
+   "text": "getting in the way"
+  },
+  {
+   "t": 270.64,
+   "d": 1.68,
+   "text": "so to deal with this we need to cut some"
+  },
+  {
+   "t": 272.32,
+   "d": 2.16,
+   "text": "corners and"
+  },
+  {
+   "t": 274.48,
+   "d": 1.28,
+   "text": "we get something like this where you"
+  },
+  {
+   "t": 275.76,
+   "d": 2.56,
+   "text": "have a diamond and now when your walls"
+  },
+  {
+   "t": 278.32,
+   "d": 2.4,
+   "text": "are beveled"
+  },
+  {
+   "t": 280.72,
+   "d": 2.08,
+   "text": "shutter casting will match recasting in"
+  },
+  {
+   "t": 282.8,
+   "d": 2.48,
+   "text": "being a consistent experience"
+  },
+  {
+   "t": 285.28,
+   "d": 2.0,
+   "text": "if you want to be able to see things and"
+  },
+  {
+   "t": 287.28,
+   "d": 1.44,
+   "text": "target them"
+  },
+  {
+   "t": 288.72,
+   "d": 3.28,
+   "text": "in unison so now"
+  },
+  {
+   "t": 292.0,
+   "d": 2.08,
+   "text": "we've reached an efficient a consistent"
+  },
+  {
+   "t": 294.08,
+   "d": 2.72,
+   "text": "and not quite symmetric solution"
+  },
+  {
+   "t": 296.8,
+   "d": 2.16,
+   "text": "and symmetry is pretty simple you"
+  },
+  {
+   "t": 298.96,
+   "d": 1.2,
+   "text": "basically i'll flip"
+  },
+  {
+   "t": 300.16,
+   "d": 3.44,
+   "text": "through flip across these a few times"
+  },
+  {
+   "t": 303.6,
+   "d": 2.72,
+   "text": "um shadow facing out of the box isn't"
+  },
+  {
+   "t": 306.32,
+   "d": 0.56,
+   "text": "symmetric"
+  },
+  {
+   "t": 306.88,
+   "d": 3.2,
+   "text": "because it reveals tiles as long as you"
+  },
+  {
+   "t": 310.08,
+   "d": 1.28,
+   "text": "can see any part of them"
+  },
+  {
+   "t": 311.36,
+   "d": 2.88,
+   "text": "the highlighted square or diamond i"
+  },
+  {
+   "t": 314.24,
+   "d": 0.72,
+   "text": "guess"
+  },
+  {
+   "t": 314.96,
+   "d": 1.84,
+   "text": "you can see the very top of it and"
+  },
+  {
+   "t": 316.8,
+   "d": 1.52,
+   "text": "because of that the algorithm"
+  },
+  {
+   "t": 318.32,
+   "d": 1.44,
+   "text": "highlights the entire thing it brings"
+  },
+  {
+   "t": 319.76,
+   "d": 1.2,
+   "text": "the whole thing into field of view but"
+  },
+  {
+   "t": 320.96,
+   "d": 1.44,
+   "text": "really what you want"
+  },
+  {
+   "t": 322.4,
+   "d": 2.4,
+   "text": "is to only reveal tiles where you can"
+  },
+  {
+   "t": 324.8,
+   "d": 1.04,
+   "text": "see the center"
+  },
+  {
+   "t": 325.84,
+   "d": 2.64,
+   "text": "and that um makes a lot more sense when"
+  },
+  {
+   "t": 328.48,
+   "d": 1.76,
+   "text": "you see it like this with with dots in"
+  },
+  {
+   "t": 330.24,
+   "d": 1.92,
+   "text": "the center of tiles instead of seeing"
+  },
+  {
+   "t": 332.16,
+   "d": 3.2,
+   "text": "tiles as squares so"
+  },
+  {
+   "t": 335.36,
+   "d": 1.68,
+   "text": "that's pretty much it and as fast as i"
+  },
+  {
+   "t": 337.04,
+   "d": 1.76,
+   "text": "can go it's efficient consistent and"
+  },
+  {
+   "t": 338.8,
+   "d": 2.4,
+   "text": "symmetric and it looks like this"
+  },
+  {
+   "t": 341.2,
+   "d": 3.28,
+   "text": "now also here's a bit more detailed look"
+  },
+  {
+   "t": 344.48,
+   "d": 1.84,
+   "text": "under the hood this is an interactive"
+  },
+  {
+   "t": 346.32,
+   "d": 0.96,
+   "text": "version"
+  },
+  {
+   "t": 347.28,
+   "d": 1.2,
+   "text": "alongside the code of course it's not"
+  },
+  {
+   "t": 348.48,
+   "d": 2.08,
+   "text": "interactive here but it is online if you"
+  },
+  {
+   "t": 350.56,
+   "d": 2.56,
+   "text": "like to play with it if you learn better"
+  },
+  {
+   "t": 353.12,
+   "d": 3.84,
+   "text": "with interactive media now i promised"
+  },
+  {
+   "t": 356.96,
+   "d": 2.24,
+   "text": "a couple of uses for field of view"
+  },
+  {
+   "t": 359.2,
+   "d": 1.6,
+   "text": "besides vision"
+  },
+  {
+   "t": 360.8,
+   "d": 2.08,
+   "text": "and this is really where the payoff"
+  },
+  {
+   "t": 362.88,
+   "d": 2.0,
+   "text": "comes"
+  },
+  {
+   "t": 364.88,
+   "d": 1.36,
+   "text": "the first one is the pathfinding"
+  },
+  {
+   "t": 366.24,
+   "d": 1.76,
+   "text": "something that i'm working on now"
+  },
+  {
+   "t": 368.0,
+   "d": 2.48,
+   "text": "on the left you can see regular"
+  },
+  {
+   "t": 370.48,
+   "d": 1.04,
+   "text": "pathfinding with"
+  },
+  {
+   "t": 371.52,
+   "d": 1.84,
+   "text": "the acer algorithm this is something"
+  },
+  {
+   "t": 373.36,
+   "d": 2.0,
+   "text": "that many games use and it results in"
+  },
+  {
+   "t": 375.36,
+   "d": 1.04,
+   "text": "paths that"
+  },
+  {
+   "t": 376.4,
+   "d": 1.68,
+   "text": "often take cardinal or intercardinal"
+  },
+  {
+   "t": 378.08,
+   "d": 1.52,
+   "text": "directions you can see it goes south and"
+  },
+  {
+   "t": 379.6,
+   "d": 2.16,
+   "text": "then southeast then south again"
+  },
+  {
+   "t": 381.76,
+   "d": 1.84,
+   "text": "whereas on the right you go south and"
+  },
+  {
+   "t": 383.6,
+   "d": 1.76,
+   "text": "then you take a diagonal straight to"
+  },
+  {
+   "t": 385.36,
+   "d": 2.4,
+   "text": "your target"
+  },
+  {
+   "t": 387.76,
+   "d": 2.96,
+   "text": "now you can easily move from the left"
+  },
+  {
+   "t": 390.72,
+   "d": 1.28,
+   "text": "version to the right version you can"
+  },
+  {
+   "t": 392.0,
+   "d": 1.04,
+   "text": "smooth out"
+  },
+  {
+   "t": 393.04,
+   "d": 2.24,
+   "text": "a path that takes unnecessary returns"
+  },
+  {
+   "t": 395.28,
+   "d": 1.28,
+   "text": "with something called the string pulling"
+  },
+  {
+   "t": 396.56,
+   "d": 1.04,
+   "text": "algorithm"
+  },
+  {
+   "t": 397.6,
+   "d": 1.76,
+   "text": "but string pulling is an extra step"
+  },
+  {
+   "t": 399.36,
+   "d": 2.72,
+   "text": "right you have to take more time"
+  },
+  {
+   "t": 402.08,
+   "d": 3.12,
+   "text": "more computational resources to get this"
+  },
+  {
+   "t": 405.2,
+   "d": 1.36,
+   "text": "effect which is mainly aesthetic"
+  },
+  {
+   "t": 406.56,
+   "d": 2.24,
+   "text": "honestly and it turns out there's an"
+  },
+  {
+   "t": 408.8,
+   "d": 1.04,
+   "text": "optimization"
+  },
+  {
+   "t": 409.84,
+   "d": 3.04,
+   "text": "for a star called jump point search and"
+  },
+  {
+   "t": 412.88,
+   "d": 1.68,
+   "text": "this optimization"
+  },
+  {
+   "t": 414.56,
+   "d": 2.56,
+   "text": "if you combine it with field of view you"
+  },
+  {
+   "t": 417.12,
+   "d": 2.32,
+   "text": "get the straight lines in field of view"
+  },
+  {
+   "t": 419.44,
+   "d": 2.96,
+   "text": "and you get the speed up from jump from"
+  },
+  {
+   "t": 422.4,
+   "d": 1.92,
+   "text": "jump point search so you end up"
+  },
+  {
+   "t": 424.32,
+   "d": 4.08,
+   "text": "with something on the left which is um"
+  },
+  {
+   "t": 428.4,
+   "d": 2.32,
+   "text": "left is that way i'm not sure um"
+  },
+  {
+   "t": 430.72,
+   "d": 0.72,
+   "text": "something that"
+  },
+  {
+   "t": 431.44,
+   "d": 3.28,
+   "text": "is faster than regular a store and"
+  },
+  {
+   "t": 434.72,
+   "d": 3.28,
+   "text": "give you straight paths right away and"
+  },
+  {
+   "t": 438.0,
+   "d": 2.56,
+   "text": "the second use case for film that you"
+  },
+  {
+   "t": 440.56,
+   "d": 0.88,
+   "text": "have besides vision"
+  },
+  {
+   "t": 441.44,
+   "d": 3.36,
+   "text": "is in procedural generation so this is a"
+  },
+  {
+   "t": 444.8,
+   "d": 2.56,
+   "text": "cave cave kind of system where the walls"
+  },
+  {
+   "t": 447.36,
+   "d": 1.2,
+   "text": "on the floor is"
+  },
+  {
+   "t": 448.56,
+   "d": 2.88,
+   "text": "kind of dappled in color they range from"
+  },
+  {
+   "t": 451.44,
+   "d": 0.4,
+   "text": "white"
+  },
+  {
+   "t": 451.84,
+   "d": 3.12,
+   "text": "to brown and the colors"
+  },
+  {
+   "t": 454.96,
+   "d": 3.44,
+   "text": "represent the openness so at each tile"
+  },
+  {
+   "t": 458.4,
+   "d": 2.16,
+   "text": "i run field of view and then count up"
+  },
+  {
+   "t": 460.56,
+   "d": 1.6,
+   "text": "how many tiles you can see"
+  },
+  {
+   "t": 462.16,
+   "d": 2.64,
+   "text": "and turn that into a color so first of"
+  },
+  {
+   "t": 464.8,
+   "d": 0.8,
+   "text": "all"
+  },
+  {
+   "t": 465.6,
+   "d": 1.6,
+   "text": "i made it because i think it looks cool"
+  },
+  {
+   "t": 467.2,
+   "d": 1.68,
+   "text": "but then"
+  },
+  {
+   "t": 468.88,
+   "d": 2.32,
+   "text": "um what could be useful about this is"
+  },
+  {
+   "t": 471.2,
+   "d": 1.2,
+   "text": "it's a"
+  },
+  {
+   "t": 472.4,
+   "d": 3.52,
+   "text": "gradual sort of"
+  },
+  {
+   "t": 475.92,
+   "d": 3.12,
+   "text": "it's a gradual measure of openness in"
+  },
+  {
+   "t": 479.04,
+   "d": 3.28,
+   "text": "a organic more organic environment so"
+  },
+  {
+   "t": 482.32,
+   "d": 2.48,
+   "text": "if you were in sort of classic road you"
+  },
+  {
+   "t": 484.8,
+   "d": 0.8,
+   "text": "know"
+  },
+  {
+   "t": 485.6,
+   "d": 1.28,
+   "text": "rooms and corridors and it's very"
+  },
+  {
+   "t": 486.88,
+   "d": 2.16,
+   "text": "obvious to you if you're in an open"
+  },
+  {
+   "t": 489.04,
+   "d": 1.44,
+   "text": "environment or a closed environment it's"
+  },
+  {
+   "t": 490.48,
+   "d": 1.76,
+   "text": "also obvious to"
+  },
+  {
+   "t": 492.24,
+   "d": 2.72,
+   "text": "the person making the game and what they"
+  },
+  {
+   "t": 494.96,
+   "d": 1.36,
+   "text": "want to put what parts of the level"
+  },
+  {
+   "t": 496.32,
+   "d": 1.52,
+   "text": "depending on you know how big is the"
+  },
+  {
+   "t": 497.84,
+   "d": 1.84,
+   "text": "room maybe big rooms have more enemies"
+  },
+  {
+   "t": 499.68,
+   "d": 2.72,
+   "text": "small rooms have less enemies and in an"
+  },
+  {
+   "t": 502.4,
+   "d": 1.76,
+   "text": "open environment"
+  },
+  {
+   "t": 504.16,
+   "d": 2.4,
+   "text": "where openness gradually opens and"
+  },
+  {
+   "t": 506.56,
+   "d": 1.44,
+   "text": "closes it can be"
+  },
+  {
+   "t": 508.0,
+   "d": 2.32,
+   "text": "a bit more tricky so that's one area"
+  },
+  {
+   "t": 510.32,
+   "d": 1.2,
+   "text": "where i feel that you might be able to"
+  },
+  {
+   "t": 511.52,
+   "d": 0.4,
+   "text": "help"
+  },
+  {
+   "t": 511.92,
+   "d": 3.04,
+   "text": "so those are my two ideas"
+  },
+  {
+   "t": 514.96,
+   "d": 1.44,
+   "text": "i hope this is hope this has been"
+  },
+  {
+   "t": 516.4,
+   "d": 2.32,
+   "text": "helpful if you're someone who's looking"
+  },
+  {
+   "t": 518.72,
+   "d": 1.76,
+   "text": "into implementing field of view yourself"
+  },
+  {
+   "t": 520.48,
+   "d": 1.92,
+   "text": "or show the view is"
+  },
+  {
+   "t": 522.4,
+   "d": 1.6,
+   "text": "one of the hammers in your tool pit and"
+  },
+  {
+   "t": 524.0,
+   "d": 2.24,
+   "text": "you're looking for some more nails"
+  },
+  {
+   "t": 526.24,
+   "d": 3.68,
+   "text": "thank you thank you so much"
+  },
+  {
+   "t": 529.92,
+   "d": 1.6,
+   "text": "that's really great one idea that came"
+  },
+  {
+   "t": 531.52,
+   "d": 1.44,
+   "text": "up in chat was using the"
+  },
+  {
+   "t": 532.96,
+   "d": 2.64,
+   "text": "same type of algorithm but using it to"
+  },
+  {
+   "t": 535.6,
+   "d": 1.84,
+   "text": "detect where you could hear things"
+  },
+  {
+   "t": 537.44,
+   "d": 2.32,
+   "text": "based on if they would be an audible"
+  },
+  {
+   "t": 539.76,
+   "d": 1.04,
+   "text": "range"
+  },
+  {
+   "t": 540.8,
+   "d": 1.92,
+   "text": "which is a very cool idea yeah i think"
+  },
+  {
+   "t": 542.72,
+   "d": 1.2,
+   "text": "that's um"
+  },
+  {
+   "t": 543.92,
+   "d": 2.72,
+   "text": "it's really like um it's what i really"
+  },
+  {
+   "t": 546.64,
+   "d": 1.36,
+   "text": "what i really enjoy about this is how"
+  },
+  {
+   "t": 548.0,
+   "d": 1.52,
+   "text": "all a lot of these algorithms kind of"
+  },
+  {
+   "t": 549.52,
+   "d": 2.16,
+   "text": "blend together um"
+  },
+  {
+   "t": 551.68,
+   "d": 1.28,
+   "text": "that makes you think of how the path"
+  },
+  {
+   "t": 552.96,
+   "d": 1.28,
+   "text": "finding out them is basically like a"
+  },
+  {
+   "t": 554.24,
+   "d": 1.04,
+   "text": "flood fill"
+  },
+  {
+   "t": 555.28,
+   "d": 1.76,
+   "text": "but directed and that's very much how"
+  },
+  {
+   "t": 557.04,
+   "d": 1.12,
+   "text": "hearing works too you know you hear"
+  },
+  {
+   "t": 558.16,
+   "d": 0.56,
+   "text": "things"
+  },
+  {
+   "t": 558.72,
+   "d": 2.16,
+   "text": "better if they're closer to you and more"
+  },
+  {
+   "t": 560.88,
+   "d": 1.36,
+   "text": "difficult farther away"
+  },
+  {
+   "t": 562.24,
+   "d": 1.12,
+   "text": "so yeah i think that's a really good"
+  },
+  {
+   "t": 563.36,
+   "d": 2.48,
+   "text": "idea yeah excellent well thank you so"
+  },
+  {
+   "t": 565.84,
+   "d": 0.56,
+   "text": "much"
+  },
+  {
+   "t": 566.4,
+   "d": 5.12,
+   "text": "and yeah"
+  }
+ ]
+}

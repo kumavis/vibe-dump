@@ -1,0 +1,165 @@
+{
+  "id": "5sFVVQcUWVE",
+  "title": "Gabriel Santos - ASCII Art Techniques & Animation",
+  "speaker": "Gabriel Santos",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=5sFVVQcUWVE",
+  "talk_type": "technical",
+  "summary": "Gabriel Santos, presenting entirely in ASCII, walks through six years of techniques for ASCII line art and animation developed for his game. He covers scene layering, a simple ASCII particle emitter, styles of text art (block, line, box drawing), font aspect ratios and multi-size fonts, glyph choice and avoiding alphanumerics, line angles and anti-aliasing, negative space, dithering, accidental shadows, and subtractive animation. He includes a live drawing demo to argue that ASCII art is fast to iterate on once glyph combinations are memorized.",
+  "games": [
+    "Cogmind"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii animation",
+      "kind": "technique",
+      "claim": "ASCII animated scenes can be built from separate layers: a static background plus independently animated characters and small details.",
+      "detail": "Santos decomposes his cultist scene into a background layer, an animation for each cultist, the victim, and small details like a chain and a one-glyph candle flame that animate separately.",
+      "t": 65,
+      "quote": "I want to show how this scene is decomposed. So there's a background layer, and here's the animation for the cultist.",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "particle effects",
+      "kind": "technique",
+      "claim": "A deliberately simple ASCII particle emitter, with only velocity and glyphs and emission points stored as metadata in the art, is enough for effective effects.",
+      "detail": "Santos's emitter has no particle interaction like smoke systems do; it just moves ASCII symbols with velocity and can fit two particles in one cell. He argues this is how projects should be: simple and getting the job done.",
+      "t": 148,
+      "quote": "It just has velocity and it shows the ASCII symbols. It's able to fit two particles within the same cell",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "unicode glyphs",
+      "kind": "principle",
+      "claim": "Modern ASCII art should use Unicode symbols where they help, but only ones that retain the established visual style.",
+      "detail": "Santos's art is not strictly traditional ASCII; he argues modern computers make Unicode available and you should leverage it while keeping style consistent.",
+      "t": 233,
+      "quote": "in modern computers, you should leverage that. But I wanted to stick to the style, so I used Unicode symbols that retained the style.",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "text art styles",
+      "kind": "technique",
+      "claim": "Text art has distinct styles: block art for filled shapes, line art for organic objects, and box drawing for geometric, mechanical things and UI.",
+      "detail": "Block art is what automatic video-to-ASCII conversion produces. Santos focuses on line art for organic forms; box drawing suits mechanical subjects, as in Cogmind, a game about robots, and UI elements like buttons and scroll windows.",
+      "t": 287,
+      "quote": "you get more organic characters and organic objects when you do line art, and you get more geometric, more mechanical things when you do box drawing",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "font aspect ratio",
+      "kind": "technique",
+      "claim": "A 1:1 font aspect ratio suits top-down ASCII games, while side or isometric views work better near 1:2.",
+      "detail": "After much experimentation Santos settled on 16:29 for his side-view game. His font is a spinoff of Courier.",
+      "t": 343,
+      "quote": "1:1 is really good for top-down games, but if you're going for an isometric perspective or side perspective, like I'm doing, 1:2 is better",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "font scaling",
+      "kind": "technique",
+      "claim": "Shipping many pixel-exact sizes of the same font lets an ASCII game stay pixel perfect at any window resolution by choosing the font dynamically.",
+      "detail": "Santos had over 20 sizes made, the smallest 3x5 pixels, and says the game still reads at that size.",
+      "t": 402,
+      "quote": "I wanted the game to be pixel perfect at any resolution. You're able to scale the window size and it picks the font dynamically.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "glyph choice",
+      "kind": "warning",
+      "claim": "Letters and digits placed inside ASCII art draw the eye first and get read as text, so they are usually an unwanted distraction.",
+      "detail": "Santos says alphanumerics affect a different part of the brain; use them only purposefully. Symbols like the inverted exclamation mark (for anti-aliasing) and the centre dot (for balance and negative space) fit the line-art style better.",
+      "t": 482,
+      "quote": "you need to be aware that that's where the eye's gonna be drawn to first",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "visual language",
+      "kind": "technique",
+      "claim": "Drawing the same line angle with different glyph combinations can encode materials such as metal, wood or rock, if used consistently.",
+      "detail": "Santos shows two glyph treatments of the same angle and says the reader will internalize a consistent mapping, letting you paint a bigger picture with that language.",
+      "t": 571,
+      "quote": "if you're consistent in that, the reader will internalize that, and you can then paint a bigger picture, using that language",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "anti-aliasing",
+      "kind": "technique",
+      "claim": "ASCII line art struggles with near-vertical lines because glyphs are horizontally aligned, which calls for anti-aliasing tricks using marks like exclamation points and quotes.",
+      "detail": "Horizontal-ish lines have many glyph gradations within a cell, but angles between 60 and 90 degrees do not; the naive result looks jagged, acceptable for rock or spiderweb but not smooth surfaces. Santos shows several anti-aliased versions of the same angle and curve.",
+      "t": 608,
+      "quote": "with the vertical lines, you don't, because all the glyphs are horizontally aligned. So you can't really do lines between 90 degrees and 60 degrees.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "iteration",
+      "kind": "principle",
+      "claim": "ASCII art is faster to iterate than other art media once common glyph combinations are memorized, so you can quickly try several variants and choose.",
+      "detail": "In a live demo Santos draws a jack-o-lantern and swaps three versions of the mouth in moments, arguing iteration and exploration are really important.",
+      "t": 787,
+      "quote": "iteration and exploration is really important, and with this example here, you can see how efficient it actually can be",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "negative space",
+      "kind": "technique",
+      "claim": "Inserting empty cells where overlapping ASCII shapes touch separates objects, adds depth and makes scenes read faster; colour shifts can do the same.",
+      "detail": "Santos shows overlapping circles and a robot guardian's shoulder and belt where gaps make foreground parts read as being on top; connecting them would make the arm unreadable. Shading one object light grey also adds depth.",
+      "t": 850,
+      "quote": "you can swap some of these glyphs and just add some empty space, and it gives it more depth and reads faster, separates the objects from each other",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "shadows",
+      "kind": "technique",
+      "claim": "In ASCII, characters with blank space below them read as shadows when walking over a patterned or textured floor.",
+      "detail": "Santos discovered this accidentally on a patterned temple floor and now adds shadows to everything. He also uses dithering, borrowed from pixel art, for lighting.",
+      "t": 939,
+      "quote": "So it works very effectively, if you have a pattern or a texture on the ground.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "animation process",
+      "kind": "technique",
+      "claim": "ASCII animation follows the same process as other animation: references, concepts, a key idle pose, and testing size and composition in context before spending hours animating.",
+      "detail": "Santos warns that skipping the in-context size test means redoing work or clipping the character's head, which happened to him.",
+      "t": 981,
+      "quote": "you need to test that within the context, to make sure you have the size correct and the composition correct, before you start animating",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "subtractive animation",
+      "kind": "technique",
+      "claim": "Build-up animations can be made subtractively: draw the finished image, remove a piece per frame, then play the frames in reverse.",
+      "detail": "Santos made a pyramid building brick by brick by drawing it complete and deleting a brick each frame, then reordering frames.",
+      "t": 1017,
+      "quote": "I first drew the pyramid completely, and then, for each frame, I removed a brick. So you do it the other way around.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "glyph choice",
+      "kind": "example",
+      "claim": "Small glyph swaps change perceived lighting and vertical centering in ASCII art, such as using a solid box-drawing line instead of hyphens.",
+      "detail": "In iterating his logo, Santos replaced hyphens (which leave gaps and change the lighting) with a box-drawing line, making it brighter at the top, darker at the bottom and better centred in the font.",
+      "t": 1114,
+      "quote": "if you use the hyphen here, you get these empty spaces in between, and that changes the lighting",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

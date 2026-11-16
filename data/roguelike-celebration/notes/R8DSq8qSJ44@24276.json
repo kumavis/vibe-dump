@@ -1,0 +1,147 @@
+{
+  "id": "R8DSq8qSJ44@24276",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 24276,
+    "end": 26221
+  },
+  "title": "Hack: The \"Lost Roguelike\"",
+  "speaker": "Dan Stormont and Michael Howk",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=24276s",
+  "talk_type": "history",
+  "summary": "A joint history talk on Jay Fenlason's original 1982 Hack, the long-lost ancestor of NetHack. Dan traces the roguelike family tree (arguing Beneath Apple Manor is not really a roguelike), explains how the closed Rogue source encouraged recreations, and describes how Fenlason, then a high-school student, wrote Hack from memory of playing Rogue, and how the code spread via Usenix tapes into Andries Brouwer's Hack and then NetHack. He tells how he recovered the original source through Brian Harvey, Fenlason's former teacher, during a Snap! conference talk. Howk then describes restoring both Brouwer's Hack 1.0.3 and Fenlason's Hack to run on modern machines, with a pristine-as-possible approach, and the differences they found, including a separate level-generation binary and the Amulet of Frobozz.",
+  "games": [
+    "Hack",
+    "NetHack",
+    "Rogue",
+    "Beneath Apple Manor",
+    "Telengard",
+    "Moria",
+    "Larn",
+    "Omega"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "first roguelike",
+      "kind": "history",
+      "claim": "Beneath Apple Manor, often put forward as a roguelike before Rogue, plays more like a text dungeon crawler such as Telengard, lacking much of what Rogue established, including meaningful permadeath.",
+      "detail": "Dan played Don Worth's Beneath Apple Manor for the first time the week before the talk. Death takes many runs to happen and players can save-scum around it, so in his view Rogue really set the standard that later roguelikes followed.",
+      "t": 24342,
+      "quote": "it's more like that. So, it kind of more feels like a textbased dungeon crawler that happens to have some graphics and a little bit of procgen",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "closed source",
+      "kind": "history",
+      "claim": "Part of why there are so many roguelikes is that Toy and Wichman never released Rogue's source, so people who wanted to remix or extend it had to write their own versions.",
+      "detail": "Rogue's executable was widely distributed with Unix systems, but its authors held back the code because they planned a commercial release, which happened through Epyx in 1985 and sold poorly; they released the source only later. In Q&A both speakers connect this to a wider 1980s culture of recreating games you couldn't get, such as a type-in Rogue for the Atari 800.",
+      "t": 24441,
+      "quote": "probably part of the reason we have so many rogue likes is because Toy and Wickman never released the source code",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "hack",
+      "kind": "history",
+      "claim": "Jay Fenlason wrote the original Hack in 1982 as a high-school junior at Lincoln-Sudbury, recreating Rogue from memory after playing it a few times at a Logo workshop in California.",
+      "detail": "He prototyped it in Logo at the workshop, then wrote Hack in K&R C for a PDP-11 within one semester, calling it his first-semester programming project. Dan stresses that Fenlason had no copy of Rogue to compare against while writing it.",
+      "t": 24580,
+      "quote": "when he got back to school in the fall he wrote hack in prians KN&NRC for a PDP11",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "lost source code",
+      "kind": "history",
+      "claim": "The original Hack source was believed lost because the late-1970s and early-1980s Usenix tapes degraded, which led to widespread confusion in print and online about when, how and in what language Hack was made.",
+      "detail": "Dan cites claims that Hack came out in 1984 (that was Brouwer's version) or was written in Logo for an Atari. Hack 1.21 is often called closest to the original, but he thinks it derives from early versions of Brouwer's Hack, perhaps crossed with Epyx Rogue, which it resembles; Fenlason has not answered whether he was involved.",
+      "t": 24605,
+      "quote": "all of the late '7s, early8s Usenix tapes have been lost, you know, just because they've degraded",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "nethack lineage",
+      "kind": "history",
+      "claim": "Hack spread worldwide on a Usenix tape, and university programmers fixed its many bugs and extended it, leading to Andries Brouwer's Hack 1.0 (1984) and then Mike Stephenson's NetHack (1987), a continuous line of development from 1982 to today.",
+      "detail": "Fenlason's version had bugs including a save function that didn't work. Brouwer released Hack 1.0 in 1984 and his last update, 1.0.3, in 1985; ports such as PDP-11 Hack and PC/IX Hack followed. Stephenson renamed it NetHack to show that many community developers, not one person, were contributing.",
+      "t": 24695,
+      "quote": "the save function didn't work. And so a lot of the people at universities who got copies of this source code started rewriting it",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "recovery",
+      "kind": "history",
+      "claim": "The original 1982 Hack source was recovered when Brian Harvey, who had run Fenlason's high-school computer club, heard Dan lament the missing code in a Snap! conference talk and said he still had the original distribution on his computer.",
+      "detail": "Dan, a contributor to the Snap! community (a Scratch fork co-created by Harvey and Jens Mönig), had wanted to port Hack to Snap! but couldn't find the source. He put the code on GitHub as received, minus object files, after checking with Fenlason, who chose a CC BY-NC-SA 4.0 licence as closest to his intent.",
+      "t": 25162,
+      "quote": "I have that original distribution from Lincoln Sudbury on my computer. I'll send you the the c the source code for hack",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "restoration",
+      "kind": "technique",
+      "claim": "Howk's restorations of early Hack versions try to stay as pristine as possible: original code is commented out rather than deleted, and modern adjustments are noted, so people can see how things were done then.",
+      "detail": "He taught himself C during downtime on a West Texas drilling rig by restoring Brouwer's Hack 1.0.3 (RestoHack), then found Dan's repository and converted Fenlason's Hack (ProtoHack) from K&R C to C99. Both have packaged releases and build instructions, and RestoHack can be played on the hardfought server.",
+      "t": 25598,
+      "quote": "the goal of my restorations are to keep them as pristine as possible. I I try not to delete source code",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "hack",
+      "kind": "example",
+      "claim": "Fenlason's original Hack plays much closer to Rogue than Brouwer's Hack: the goal is the Amulet of Frobozz rather than the Amulet of Yendor, and the pet is a displacer beast instead of a dog.",
+      "detail": "Howk notes that many of Fenlason's original monsters, with their stats, carried over into Brouwer's Hack. He doubts a displacer beast pet would get past litigious companies today.",
+      "t": 25429,
+      "quote": "it is much closer to probably Rogue than say Brower's hack",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "memory limits",
+      "kind": "history",
+      "claim": "The earliest Hack ran its procedural level generator as a separate binary because the whole game could not fit into PDP-11 memory; a later refactored iteration ran as one binary.",
+      "detail": "The recovered archive has two working directories: 'root', which Howk assumes is what went out on the Usenix tapes, and a later 'EXP1' with substantial refactoring by Fenlason.",
+      "t": 25697,
+      "quote": "the procedural generation actually had to have a separate binary be called because he couldn't fit it all into memory",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "restoration",
+      "kind": "warning",
+      "claim": "Much of the work of restoring 1980s roguelike code lies in finding the assumptions written in for the PDP-11 that do not hold on modern computers.",
+      "detail": "Howk says the restoration is not byte-for-byte but playable, and he aimed for maximum portability so it runs on Apple and Unix-based systems without hiccups.",
+      "t": 25720,
+      "quote": "trying to figure out what assumptions were written in the code to make kit run on a PDP11 that aren't going to work in today's computers",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monsters",
+      "kind": "history",
+      "claim": "Like Rogue, Fenlason's Hack took many monsters from Advanced Dungeons & Dragons, some with stat blocks copied verbatim from the Monster Manual, alongside a few odd originals such as the yellow light.",
+      "detail": "Dan says that at the time TSR might have sued had it noticed, and Wizards of the Coast would probably object today.",
+      "t": 25897,
+      "quote": "I actually looked at some of the stat blocks and they were like verbatim out of the monster manual",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "code comments",
+      "kind": "example",
+      "claim": "The original Hack source preserves its authors' banter, such as a level-generation comment blaming co-creator Kenny Woodland, and Howk deliberately preserved such details in the restoration.",
+      "detail": "Dan adds that the code, written by a high-school student in the 1980s, is full of 'foo' variables and functions and error messages unfit for polite company, which made it hard to understand what the author intended.",
+      "t": 26117,
+      "quote": "Jay uh, called out his co-creator uh, Kenny Woodland saying this is all Kenny's fault",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

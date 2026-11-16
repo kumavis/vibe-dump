@@ -1,0 +1,192 @@
+{
+  "id": "dJbUmDsyJRw",
+  "title": "Chris McCormick - Building Juicy Minimal Roguelikes in the Browser",
+  "speaker": "Chris McCormick",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=dJbUmDsyJRw",
+  "talk_type": "technical",
+  "summary": "Chris McCormick argues for 'juicy minimal' roguelikes: games with the barest essential roguelike mechanics but rich game feel (animation, screen shake, effects). He makes the case for the web browser as the runtime because it is ubiquitous, iterates fast and ships with fonts, SVG, CSS animation and a live object inspector. He live-builds a small roguelike by pasting together rot.js demo code, adds a tile map, overlays HTML text and divs on the canvas, and shows how his game Smallest Quest uses floating divs with CSS animations for juice and console-editable properties for real-time balancing. He closes on porting via Cordova and Electron, and Q&A covers responsive layouts, accessibility and the idea of a juiced-up classic roguelike.",
+  "games": [
+    "Rogue",
+    "NetHack",
+    "Asteroid",
+    "Smallest Quest",
+    "Chicken Sword",
+    "Patience Rogue",
+    "Dungeon Crawl Stone Soup",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "minimal roguelike",
+      "kind": "principle",
+      "claim": "A minimal roguelike keeps only the essentials: turn-based play, permadeath, entities with attributes, collecting things and fighting enemies, with interesting worlds arising from interacting attributes.",
+      "detail": "McCormick defines 'minimal' against modern roguelikes with deep immersion and complexity. In his definition you walk around collecting things and fighting baddies, mathematical attributes get updated, and interesting situations emerge from the interaction of those attributes.",
+      "t": 156,
+      "quote": "it means building a game with the barest essential gameplay elements they're turn-based they're permadeath entities in the game have various attributes",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player-authored narrative",
+      "kind": "principle",
+      "claim": "Rogue's minimalism is a strength because it has enough going on to stay interesting while leaving room for the player to invent their own narrative.",
+      "detail": "McCormick grew up on NetHack and found discovering the original Rogue afterwards refreshing. He calls Rogue 'minimalist perfection': not boring, but sparse enough that the player fills in the story.",
+      "t": 199,
+      "quote": "for me rogue represents minimalist perfection there's enough going on that doesn't get boring but it leaves plenty of space for the player to",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "minimal roguelike",
+      "kind": "warning",
+      "claim": "A game can be too minimal to count as a roguelike: a chase game where an X avoids an O is turn-based but lacks the essential elements.",
+      "detail": "McCormick's first game, written on an Apple IIe at age eight, was a turn-based game where the letter X avoids being caught by the letter O. He offers it as an example of going too minimal to really call the result a roguelike.",
+      "t": 222,
+      "quote": "this is basically an extremely minimal roguelike but i think it's a an example of going too minimal to really call it a roguelike",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juice",
+      "kind": "principle",
+      "claim": "'Juice' means game feel: the combination of sound and animation that responds to player input and makes a game feel alive, with screen shake as the classic example.",
+      "detail": "McCormick equates juice with game feel. He illustrates it with a demo called Chicken Sword by developer Oolong, where the screen shakes as the character lands.",
+      "t": 236,
+      "quote": "it's a combination of sound and animation that happens in response to some input that makes the game feel alive screen shake is an example of juice",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juice",
+      "kind": "example",
+      "claim": "The Chicken Sword demo layers about seven simultaneous juice effects (dust trail, moving grass, a lamp that reacts to bumps, muzzle flash, firing recoil, a visible shot and expiring smoke), which together add a lot of feel.",
+      "detail": "McCormick enumerates the effects visible at once in the demo: dust trail as the character moves, grass movement, the lamp swinging when the player bumps it, muzzle flash, pushback when firing, the yellow shot, and smoke as the shot expires. His point is that the stack of small reactions is what creates the feeling.",
+      "t": 276,
+      "quote": "so that's uh seven different elements of juice though that you can see at once all of this together adds a great deal of feeling to the game",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juice",
+      "kind": "example",
+      "claim": "McCormick's commercial game Asteroid is mechanically simpler than Rogue but graphically richer, using screen shake, monster ghosts, hit point indicators and items that pop off the top of the screen when collected.",
+      "detail": "In Asteroid the player explores a hollow asteroid of procedural mines, facilities, alien creatures and space loot. He describes it as smaller and simpler than Rogue but juicier, built in an intense one-and-a-half-month spurt in 2020 for the browser and ported to Android and Windows.",
+      "t": 320,
+      "quote": "in this gif you can see some of the juice i was talking about with screen shake monster ghost hit point indicator",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "items as cards",
+      "kind": "example",
+      "claim": "Smallest Quest is an even more minimal roguelike aimed at children, where items are collected as cards (inspired by Patience Rogue) and runs are structured around quests or missions.",
+      "detail": "McCormick noticed his kids loved turn-based play and wanted a game that appealed to them. Smallest Quest is short, gamepad-playable, uses hand-drawn sprites, and explores the idea of a roguelike with missions; his kids gave it a thumbs up.",
+      "t": 360,
+      "quote": "you collect the items as cards which is directly inspired by the game patient rogue in this game i wanted to explore the",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "browser runtime",
+      "kind": "principle",
+      "claim": "The web browser is a strong runtime for small roguelikes because it is everywhere, needs no compilation, supports live reloading, and has built-in images, SVG, WebGL, fonts, touch and mouse input, CSS animation and a live object inspector.",
+      "detail": "McCormick lists the 'batteries included' advantages: ubiquity, fast development without a compile step, multiple graphics types out of the box, easy typeface rendering, built-in input events, CSS animations, and the developer console for modifying data structures in real time. It also makes code highly portable and players easier to reach.",
+      "t": 395,
+      "quote": "developing for browsers is fast there's no compilation step but with modern live reloading technology you can see changes as soon as you make them",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "rot.js",
+      "kind": "technique",
+      "claim": "rot.js (Roguelike Toolkit in JavaScript, by Ondřej Žára) lets a developer get a basic browser roguelike running from a single script tag, since it handles rendering, RNG, pathfinding, field of view, map generation, input, tile maps and scheduling.",
+      "detail": "McCormick shows that about 200 lines of copy-pasted code produce a working base: he pastes the rot.js tutorial's JSFiddle result (about 100 lines, a hunt for a lost banana while avoiding a monster called Pedro) into an index.html, then swaps in a tile map (Kenney's Micro Roguelike tiles) in about 29 lines.",
+      "t": 489,
+      "quote": "it takes care of console rendering random number generator path finding field of view map generation keyboard input tile maps scheduling and has support for hex tiles",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "html ui overlay",
+      "kind": "technique",
+      "claim": "In a browser roguelike, UI text such as hit points can be laid over the game canvas as ordinary HTML elements styled with web fonts and absolute positioning, making UI iteration very fast.",
+      "detail": "McCormick adds a paragraph tag showing hit points, pulls a pixel font from Google Web Fonts, and moves it around with absolute positioning in seconds. He uses the same approach for the cards in Smallest Quest; rot.js can alternatively render fonts inside its console display.",
+      "t": 924,
+      "quote": "because it's the browser we can easily overlay text in whatever font we like on top of the game using just simply using an html tag",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juice",
+      "kind": "technique",
+      "claim": "Positioning HTML divs over the rot.js canvas and moving them with the entities they cover creates a sprite layer that can carry juice effects like sparkles, dust and bounce, and can receive click handlers.",
+      "detail": "By default rot.js draws everything into one canvas, which works like a giant image. McCormick adds a div box and updates its position in the player's draw function so it tracks the player; the box can then host effects, render the character itself so it moves independently, or respond to clicks.",
+      "t": 1226,
+      "quote": "we can add juice like sparkles or dust effects or bounce um we can actually even render this character straight into the box instead of onto the canvas",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "css animation",
+      "kind": "example",
+      "claim": "Smallest Quest draws backgrounds with rot.js but renders characters and items as floating divs whose juice (bobbing items, jumping players, sword-swipe combat overlays) is done with short declarative CSS animations.",
+      "detail": "McCormick explains that adding a class to each item and animating it with CSS is very short and declarative, so adding this kind of juice is quick.",
+      "t": 1303,
+      "quote": "i drew the characters and items inside floating divs on top of the on top of the game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "live balancing",
+      "kind": "technique",
+      "claim": "Attaching an event handler to each on-screen item and monster that logs the object to the developer console lets a designer edit its properties live and balance the game in real time.",
+      "detail": "In Smallest Quest, clicking an item dumps its properties to the console; McCormick changes a food item from 5 to 10 food and picks it up, then turns a bat's damage up to 20 and is killed in one hit. The point is game balancing without restarting.",
+      "t": 1455,
+      "quote": "what's cool about that is you can uh you can do game balance in real time",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "porting",
+      "kind": "technique",
+      "claim": "Browser roguelikes can be ported to native platforms by wrapping them in a web view, using Apache Cordova for Android and Electron for desktop, so debug and shipping code are identical.",
+      "detail": "McCormick says the Cordova Android build of Asteroid took about a day of work. Electron desktop ports of Asteroid and Smallest Quest also keep the developer console available for live tweaking.",
+      "t": 1479,
+      "quote": "basically all it does is wrap up a web view as a native app so the code i'm using in the browser for debugging is exactly the same",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "responsive layout",
+      "kind": "technique",
+      "claim": "To handle different browser sizes, McCormick centres the player character on screen with a CSS translate transform and shrinks the view on mobile, where players accept smaller interfaces.",
+      "detail": "Answering a Q&A question, he describes reading the character's position on the canvas and shifting the whole view so the character is in the middle; on mobile you fit less but make it smaller.",
+      "t": 1630,
+      "quote": "centering the character at the center of the screen and uh the way i did that was with a css translate um transform",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "keyboard navigation",
+      "kind": "open-question",
+      "claim": "HTML overlay elements in a browser roguelike can be reached with tab navigation, which risks letting players tamper with the game but could also be used for accessibility.",
+      "detail": "An audience member asked whether users can tab through the div elements; McCormick said you would need to disable that if you don't want people editing the game live. The host (Kate) noted tab navigation can be great for accessibility, and McCormick added the game can be made fully keyboard driven like any roguelike.",
+      "t": 1752,
+      "quote": "you would have to be careful if you want to not let people edit the game in real time you'd have to figure out a way of disenabling that",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "juice",
+      "kind": "open-question",
+      "claim": "Juice and depth need not trade off: McCormick would like to see a deep classic roguelike such as NetHack heavily juiced up, though his own time constraints keep his games minimal.",
+      "detail": "Asked about balancing juice against innovative gameplay, he says he is time constrained so he keeps games minimal, but a game with much more depth plus juice would be very interesting. Discussion follows about compiling NetHack to WebAssembly, or starting from DCSS or an Angband WASM build instead.",
+      "t": 1828,
+      "quote": "it'll be very interesting to see a game that has a lot more depth um with also some juice",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,127 @@
+{
+  "id": "Wi-OHFmW4Ew",
+  "title": "Marlowe Dobbe: A Swarm of Monsters is Hard To Build: Generating Visual Concepts for Enemies",
+  "speaker": "Marlowe Dobbe",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=Wi-OHFmW4Ew",
+  "talk_type": "design",
+  "summary": "Marlowe Dobbe, an artist on Dicey Dungeons and Floppy Knights and art director on Slay the Spire 2, explains how to generate visual concepts for the large enemy casts that replayable roguelikes need. She argues idea generation is a practicable skill rather than inspiration, and presents three techniques: the 'list of 10' word brainstorm, deriving visuals from an enemy's game mechanics, and combining multiple pieces of visual reference. She then live-draws an enemy from three reference images and closes by urging loose, rapid iteration toward a large pool of concepts to pick from.",
+  "games": [
+    "Dicey Dungeons",
+    "Floppy Knights",
+    "Slay the Spire 2"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "enemy variety",
+      "kind": "principle",
+      "claim": "Roguelikes need large casts of visually distinct enemies because their high replayability makes repeated enemy art feel stale quickly.",
+      "detail": "Dobbe shows the many monsters she designed for Dicey Dungeons and Floppy Knights and the growing cast for Slay the Spire 2. She argues that because roguelikes are replayed so often, players should not see the same three enemies over and over, and a 'swarm' of monster designs keeps repeated runs visually fresh.",
+      "t": 128,
+      "quote": "these games are highly replayable by Nature you really want to make sure that the art doesn't feel stale you're not seeing the same three enemies over and over",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "idea generation",
+      "kind": "principle",
+      "claim": "Generating ideas for character and enemy designs is a practicable skill, not something that appears magically, so artists should rely on repeatable techniques.",
+      "detail": "Dobbe notes that sitting down to come up with 50 monster designs from A to Z would be nearly impossible for most people. Professional creatives instead practice idea generation, and she presents three go-to techniques: the list of 10, referencing game mechanics, and visual reference.",
+      "t": 179,
+      "quote": "ideas aren't usually these magical things that just appear or materialize from thin air generating ideas is actually a skill that you can practice",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "list of 10",
+      "kind": "technique",
+      "claim": "The 'list of 10' technique has an artist write the first ten ideas that come to mind without filtering, then pick a few inspiring words to combine into an enemy design.",
+      "detail": "The point is a stream-of-consciousness list that unblocks the brain; quality does not matter, and a handful will usually be useful. Dobbe's list included weeds, clouds and galactic, which she combined into a dandelion-like floating godlike being with cloud collars and star-shaped eyes in about 20 minutes of drawing.",
+      "t": 251,
+      "quote": "the key to using the list of 10 technique is to not filter your ideas or think too much about them",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "mechanics-driven design",
+      "kind": "technique",
+      "claim": "An enemy's visual design can be derived directly from its known mechanics, lore or role, so that its look communicates how it behaves.",
+      "detail": "Often a team knows how an enemy must act before it has a look. Dobbe's example spec was a weak enemy doing small multi-hit poisonous attacks with a defensive state; she drew a sad-eyed, unintimidating creature with tentacles for four quick hits, poison goo spilling from an upside-down cauldron, and the ability to retreat into the cauldron as its defensive state.",
+      "t": 454,
+      "quote": "let's make a weak enemy encounter that does multi-hit attacks dealing small damage the attacks are poisonous and it has a defensive State when not attacking",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "visual reference",
+      "kind": "technique",
+      "claim": "Artists should build a personal library of visual reference from online images, art books and photos, keeping local copies because online sources disappear.",
+      "detail": "Dobbe keeps a private Discord channel of inspiring images, collects art books (suggesting libraries and archive.org when cost is a barrier), and uses photo reference not just for accuracy but for artistic inspiration such as poses, foreshortening and fashion. She advises keeping local versions because nothing online or in apps is permanent.",
+      "t": 574,
+      "quote": "I also would encourage you to keep a local version of these things because nothing is permanent online or in apps",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "visual reference",
+      "kind": "principle",
+      "claim": "Using reference material is not cheating; the line between inspiration and plagiarism is taking selected elements from many sources rather than copying one piece.",
+      "detail": "Dobbe's tips: select elements you like rather than the whole piece, draw from many sources and especially styles different from your own, use several references at once (often 3 to 15 per enemy), and never trace. She cites Gauguin and Van Gogh as friends who influenced each other while producing very different work.",
+      "t": 672,
+      "quote": "reference material is not cheating I think that there for artists and creatives there can be a lot of anxiety around the idea",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "visual reference",
+      "kind": "technique",
+      "claim": "When collecting reference for enemy design, look for specific extractable elements such as clothing, shapes and silhouettes, color palettes, body types, rendering style and poses.",
+      "detail": "Dobbe lists what she hunts for in references and stresses looking at parts rather than the whole. She finds reference in a style very different from her own most useful because it removes the urge to copy one-for-one; e.g. she might take only the off-white palette, fisheye angle or eye style from an image.",
+      "t": 843,
+      "quote": "character clothing and accessories shapes and Silhouettes meaning like what's the shape of the body what's the silhouette of the whole character color palettes",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "live concept drawing",
+      "kind": "example",
+      "claim": "Combining a castle shape, a big-headed character silhouette and a separate color palette produced a novel brick 'castle bruiser' enemy unlike any of its three references.",
+      "detail": "In a live drawing, Dobbe built the head from the castle tower, gave the body a door-like tummy drawer and crenellated shoulders, borrowed skinny-to-big-hands arms from an alien figure, and color-picked red, pink and green rim lighting from a third image. She notes that without the palette reference she would have made a castle gray or brown, and that the look already suggested mechanics like a heavy bruiser or giant.",
+      "t": 1245,
+      "quote": "I think we can all agree that this is a very different uh creature that has come out of this than what any of the reference materials might suggest",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "concept iteration",
+      "kind": "principle",
+      "claim": "Enemy concept sketches should be quick and rough enough to convey the vibe to the team for a yes/no decision, not finished game-ready art.",
+      "detail": "Dobbe says in her work the goal of this phase is something you can show the team so they understand the direction. She recommends spending little time per idea, rapidly iterating, and ending with a large swarm of designs from which to pick finalists or mash two together.",
+      "t": 1160,
+      "quote": "the end goal of this kind of stuff is not to like come out at the end of it with like a perfectly rendered ready to put in the game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "idea generation",
+      "kind": "principle",
+      "claim": "Ideation techniques can be mixed and matched, and keeping the generation phase playful and loose leads to more unique ideas.",
+      "detail": "Dobbe often combines a list of 10 with mechanics or reference material. She advises being kind to yourself, not chasing the perfect idea each time, and treating this as exploration that eventually leads to the right design.",
+      "t": 1508,
+      "quote": "you want to keep it playful and loose in the idea generation phase and it'll allow you to land on more unique ideas that you can take to final",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "art direction",
+      "kind": "technique",
+      "claim": "To choose an overall art direction for a game, collect references into a mood board and present it to the team to agree on the vibe, then iterate.",
+      "detail": "Answering an audience question, Dobbe says reference material is the closest of her techniques to setting a game's art direction: she builds large mood boards of painter styles and palettes, asks the team whether that is the vibe, and adds or removes elements from there.",
+      "t": 1641,
+      "quote": "one thing I tend to do a lot for deciding on an art direction for the game is mood boards",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

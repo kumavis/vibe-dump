@@ -1,0 +1,8557 @@
+{
+ "id": "lGm8cZC8Lfk",
+ "url": "https://www.youtube.com/watch?v=lGm8cZC8Lfk",
+ "title": "Gavin Verhey - Fireside chat with Principal Magic Designer, Wizards of the Coast",
+ "speaker": "Gavin Verhey",
+ "talk_title": "Fireside chat with Principal Magic Designer, Wizards of the Coast",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-09-26",
+ "duration_s": 3227,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Magic the Gathering may not be first game that comes to mind when you think 'roguelike', but with its long history of careful systemic design and the run-based nature of formats like drafting, there's more overlap than you'd think! In this fireside chat, Gavin Verhey sits down with Alexei Pepers to share his insights as Principle Magic Designer on topics such as designing for limited formats, signposting information to players, and the social elements of drafting.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and origins"
+  },
+  {
+   "start": 135,
+   "title": "Designing the draft format"
+  },
+  {
+   "start": 540,
+   "title": "Self-balancing and net fun"
+  },
+  {
+   "start": 886,
+   "title": "Variance and tournament design"
+  },
+  {
+   "start": 1286,
+   "title": "Digital vs. in-person play"
+  },
+  {
+   "start": 1627,
+   "title": "Data and player optimization"
+  },
+  {
+   "start": 2008,
+   "title": "Signposting and archetypes"
+  },
+  {
+   "start": 2424,
+   "title": "Format pacing and diversity"
+  },
+  {
+   "start": 2632,
+   "title": "Magic as a lifelong roguelike"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 12924,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.72,
+   "d": 2.44,
+   "text": "we're doing a special pre-recorded Rog"
+  },
+  {
+   "t": 6.16,
+   "d": 2.88,
+   "text": "like celebration preview event chat with"
+  },
+  {
+   "t": 9.04,
+   "d": 2.16,
+   "text": "Gavin who's kind enough to find the time"
+  },
+  {
+   "t": 11.2,
+   "d": 2.68,
+   "text": "to join us uh Gavin how about you start"
+  },
+  {
+   "t": 13.88,
+   "d": 2.44,
+   "text": "out by introducing yourself a little bit"
+  },
+  {
+   "t": 16.32,
+   "d": 1.64,
+   "text": "hey thanks for having me everybody so my"
+  },
+  {
+   "t": 17.96,
+   "d": 2.32,
+   "text": "name is Gavin Verge I'm a principal game"
+  },
+  {
+   "t": 20.28,
+   "d": 2.08,
+   "text": "designer on not an indie game although"
+  },
+  {
+   "t": 22.36,
+   "d": 1.88,
+   "text": "maybe at one point it was but a game"
+  },
+  {
+   "t": 24.24,
+   "d": 2.56,
+   "text": "called Magic the Gathering now it does"
+  },
+  {
+   "t": 26.8,
+   "d": 1.48,
+   "text": "this kind of innovative thing where it's"
+  },
+  {
+   "t": 28.28,
+   "d": 1.84,
+   "text": "a card game you don't play it uh you"
+  },
+  {
+   "t": 30.12,
+   "d": 1.28,
+   "text": "don't play it digitally although you can"
+  },
+  {
+   "t": 31.4,
+   "d": 1.6,
+   "text": "of course we have magic the Gathering"
+  },
+  {
+   "t": 33.0,
+   "d": 1.76,
+   "text": "Arena you can play but you know I"
+  },
+  {
+   "t": 34.76,
+   "d": 1.76,
+   "text": "operate mostly in the paper space so"
+  },
+  {
+   "t": 36.52,
+   "d": 2.12,
+   "text": "we're working with cards you Shuffle and"
+  },
+  {
+   "t": 38.64,
+   "d": 2.52,
+   "text": "put into a deck and um I've been working"
+  },
+  {
+   "t": 41.16,
+   "d": 2.16,
+   "text": "there for about 13 years now and in the"
+  },
+  {
+   "t": 43.32,
+   "d": 1.72,
+   "text": "decade before that I was a professional"
+  },
+  {
+   "t": 45.04,
+   "d": 2.0,
+   "text": "player so I've have a lot of experience"
+  },
+  {
+   "t": 47.04,
+   "d": 2.08,
+   "text": "um working on this stuff and um it's"
+  },
+  {
+   "t": 49.12,
+   "d": 1.4,
+   "text": "very near and dear to my heart and I"
+  },
+  {
+   "t": 50.52,
+   "d": 2.0,
+   "text": "love Rog likes and I think magic and Rog"
+  },
+  {
+   "t": 52.52,
+   "d": 2.0,
+   "text": "likes actually have a lot of overlap so"
+  },
+  {
+   "t": 54.52,
+   "d": 1.96,
+   "text": "a lot of fun to be talked about there"
+  },
+  {
+   "t": 56.48,
+   "d": 1.48,
+   "text": "yeah yeah and so we're going to do this"
+  },
+  {
+   "t": 57.96,
+   "d": 1.6,
+   "text": "fireside chat style we got some"
+  },
+  {
+   "t": 59.56,
+   "d": 2.2,
+   "text": "questions collected to get into and yeah"
+  },
+  {
+   "t": 61.76,
+   "d": 1.16,
+   "text": "it's really interesting because I think"
+  },
+  {
+   "t": 62.92,
+   "d": 1.52,
+   "text": "that the idea you know Magic the"
+  },
+  {
+   "t": 64.44,
+   "d": 1.48,
+   "text": "Gathering not the first thing you'd"
+  },
+  {
+   "t": 65.92,
+   "d": 2.84,
+   "text": "think of at Rog likee conference but a I"
+  },
+  {
+   "t": 68.76,
+   "d": 1.32,
+   "text": "know there's a lot of overlap between"
+  },
+  {
+   "t": 70.08,
+   "d": 2.48,
+   "text": "Magic fans and Rog likee fans and kind"
+  },
+  {
+   "t": 72.56,
+   "d": 2.64,
+   "text": "of our audience and I agree that there"
+  },
+  {
+   "t": 75.2,
+   "d": 1.76,
+   "text": "are especially in certain formats a lot"
+  },
+  {
+   "t": 76.96,
+   "d": 1.48,
+   "text": "of overlap and of course we know is slay"
+  },
+  {
+   "t": 78.44,
+   "d": 1.68,
+   "text": "the spire and everything card-based"
+  },
+  {
+   "t": 80.12,
+   "d": 3.0,
+   "text": "Rogue likes are uh in some ways the Rog"
+  },
+  {
+   "t": 83.12,
+   "d": 4.2,
+   "text": "like dour of the last few years so uh"
+  },
+  {
+   "t": 87.32,
+   "d": 1.4,
+   "text": "anyways I think of magic is almost the"
+  },
+  {
+   "t": 88.72,
+   "d": 1.76,
+   "text": "original card game Rob like like I don't"
+  },
+  {
+   "t": 90.48,
+   "d": 1.04,
+   "text": "know how many of you have ever played"
+  },
+  {
+   "t": 91.52,
+   "d": 1.68,
+   "text": "this game but if you go all the way back"
+  },
+  {
+   "t": 93.2,
+   "d": 2.36,
+   "text": "to 1997 there's a game called chandel"
+  },
+  {
+   "t": 95.56,
+   "d": 2.32,
+   "text": "are or simply called Magic the Gathering"
+  },
+  {
+   "t": 97.88,
+   "d": 1.96,
+   "text": "microp POS but we all call it chandel"
+  },
+  {
+   "t": 99.84,
+   "d": 1.16,
+   "text": "where you like walk around you start"
+  },
+  {
+   "t": 101.0,
+   "d": 1.84,
+   "text": "with a very bad deck and you walk around"
+  },
+  {
+   "t": 102.84,
+   "d": 1.64,
+   "text": "on a map and you fight against people"
+  },
+  {
+   "t": 104.48,
+   "d": 1.16,
+   "text": "and as you beat them you get cards to"
+  },
+  {
+   "t": 105.64,
+   "d": 1.8,
+   "text": "improve your deck and then as you go"
+  },
+  {
+   "t": 107.44,
+   "d": 1.12,
+   "text": "through the game your deck gets better"
+  },
+  {
+   "t": 108.56,
+   "d": 1.12,
+   "text": "and better and better until you're ready"
+  },
+  {
+   "t": 109.68,
+   "d": 2.28,
+   "text": "to fight the like final boss basically"
+  },
+  {
+   "t": 111.96,
+   "d": 1.96,
+   "text": "and in a way it was like the f one of"
+  },
+  {
+   "t": 113.92,
+   "d": 3.04,
+   "text": "the first early Rog likes in 1997 with"
+  },
+  {
+   "t": 116.96,
+   "d": 1.12,
+   "text": "magic so we were there at the very"
+  },
+  {
+   "t": 118.08,
+   "d": 1.56,
+   "text": "beginning uh and I keep saying we got to"
+  },
+  {
+   "t": 119.64,
+   "d": 1.24,
+   "text": "do something more like that by the way"
+  },
+  {
+   "t": 120.88,
+   "d": 1.64,
+   "text": "so I hope someday we can do a reprise"
+  },
+  {
+   "t": 122.52,
+   "d": 2.12,
+   "text": "with the Rogue like um but anyway for"
+  },
+  {
+   "t": 124.64,
+   "d": 1.28,
+   "text": "all of you people out there who want to"
+  },
+  {
+   "t": 125.92,
+   "d": 2.12,
+   "text": "give give that a try go search for a the"
+  },
+  {
+   "t": 128.04,
+   "d": 2.48,
+   "text": "chandela game it's a classic it's real"
+  },
+  {
+   "t": 130.52,
+   "d": 2.8,
+   "text": "classic sounds really great and I will"
+  },
+  {
+   "t": 133.32,
+   "d": 3.12,
+   "text": "have to check that out um yes so I think"
+  },
+  {
+   "t": 136.44,
+   "d": 1.44,
+   "text": "the first topic we wanted to get into"
+  },
+  {
+   "t": 137.88,
+   "d": 0.92,
+   "text": "actually does have to do with some"
+  },
+  {
+   "t": 138.8,
+   "d": 3.48,
+   "text": "different formats and kind of what feels"
+  },
+  {
+   "t": 142.28,
+   "d": 2.04,
+   "text": "Rog likey and almost kind of run-based"
+  },
+  {
+   "t": 144.32,
+   "d": 1.64,
+   "text": "which uh and you know some of our"
+  },
+  {
+   "t": 145.96,
+   "d": 1.2,
+   "text": "audience is going to be really familiar"
+  },
+  {
+   "t": 147.16,
+   "d": 2.8,
+   "text": "with magic some lesso so explain things"
+  },
+  {
+   "t": 149.96,
+   "d": 1.56,
+   "text": "as I talk about them but basically there"
+  },
+  {
+   "t": 151.52,
+   "d": 2.36,
+   "text": "are the limited formats like sealed and"
+  },
+  {
+   "t": 153.88,
+   "d": 2.08,
+   "text": "draft where it's kind of a run based"
+  },
+  {
+   "t": 155.96,
+   "d": 1.64,
+   "text": "structure You' got your choic making"
+  },
+  {
+   "t": 157.6,
+   "d": 1.68,
+   "text": "stage you're building your deck you're"
+  },
+  {
+   "t": 159.28,
+   "d": 1.64,
+   "text": "doing what you can then you're going to"
+  },
+  {
+   "t": 160.92,
+   "d": 1.8,
+   "text": "see how far you can take it when you're"
+  },
+  {
+   "t": 162.72,
+   "d": 2.2,
+   "text": "done you kind of like you're done you're"
+  },
+  {
+   "t": 164.92,
+   "d": 1.44,
+   "text": "going to repeat and do that choice"
+  },
+  {
+   "t": 166.36,
+   "d": 2.64,
+   "text": "making stage again that feels like in a"
+  },
+  {
+   "t": 169.0,
+   "d": 2.8,
+   "text": "lot of ways the most obvious Rogue likey"
+  },
+  {
+   "t": 171.8,
+   "d": 1.72,
+   "text": "format so it's just like starting there"
+  },
+  {
+   "t": 173.52,
+   "d": 2.28,
+   "text": "in terms of the role of limited within"
+  },
+  {
+   "t": 175.8,
+   "d": 2.76,
+   "text": "the bigger umbrella of magic like how do"
+  },
+  {
+   "t": 178.56,
+   "d": 1.4,
+   "text": "you think about that do you think that"
+  },
+  {
+   "t": 179.96,
+   "d": 2.92,
+   "text": "is kind of some of that Rog like element"
+  },
+  {
+   "t": 182.88,
+   "d": 1.88,
+   "text": "and how does that fit into the design"
+  },
+  {
+   "t": 184.76,
+   "d": 1.44,
+   "text": "because obviously you're using the same"
+  },
+  {
+   "t": 186.2,
+   "d": 2.56,
+   "text": "game pieces to support that kind of"
+  },
+  {
+   "t": 188.76,
+   "d": 4.0,
+   "text": "experience but also many other more"
+  },
+  {
+   "t": 192.76,
+   "d": 1.88,
+   "text": "traditional or non-traditional ways of"
+  },
+  {
+   "t": 194.64,
+   "d": 2.4,
+   "text": "playing uh a kind of competitive"
+  },
+  {
+   "t": 197.04,
+   "d": 2.6,
+   "text": "collectible card game yeah it's really"
+  },
+  {
+   "t": 199.64,
+   "d": 1.24,
+   "text": "fascinating in fact I think the reason"
+  },
+  {
+   "t": 200.88,
+   "d": 1.64,
+   "text": "I'm here at all is because I made some"
+  },
+  {
+   "t": 202.52,
+   "d": 2.08,
+   "text": "tweet last year talking about how you"
+  },
+  {
+   "t": 204.6,
+   "d": 1.92,
+   "text": "know drafting is like a rogue like and"
+  },
+  {
+   "t": 206.52,
+   "d": 1.52,
+   "text": "it really is to me because you know just"
+  },
+  {
+   "t": 208.04,
+   "d": 1.32,
+   "text": "to recap and you did a great job"
+  },
+  {
+   "t": 209.36,
+   "d": 1.96,
+   "text": "describing it when you draft you sit"
+  },
+  {
+   "t": 211.32,
+   "d": 2.08,
+   "text": "down you have three packs of magic cards"
+  },
+  {
+   "t": 213.4,
+   "d": 1.44,
+   "text": "in front of you you're going to open one"
+  },
+  {
+   "t": 214.84,
+   "d": 1.2,
+   "text": "of them up you're going to pick a card"
+  },
+  {
+   "t": 216.04,
+   "d": 1.28,
+   "text": "from it you're going to pass the rest of"
+  },
+  {
+   "t": 217.32,
+   "d": 1.52,
+   "text": "them to your left you're going to grab a"
+  },
+  {
+   "t": 218.84,
+   "d": 1.52,
+   "text": "bunch from your right you're GNA then"
+  },
+  {
+   "t": 220.36,
+   "d": 1.64,
+   "text": "look at those Pi a card from it and then"
+  },
+  {
+   "t": 222.0,
+   "d": 2.4,
+   "text": "repeat this process all the way down 15"
+  },
+  {
+   "t": 224.4,
+   "d": 1.4,
+   "text": "cards at a time with the three booster"
+  },
+  {
+   "t": 225.8,
+   "d": 1.72,
+   "text": "packs you have until you have a finished"
+  },
+  {
+   "t": 227.52,
+   "d": 2.08,
+   "text": "stack of 42 cards that you will then"
+  },
+  {
+   "t": 229.6,
+   "d": 1.84,
+   "text": "build a deck from so every single time"
+  },
+  {
+   "t": 231.44,
+   "d": 1.88,
+   "text": "you draft it's different it changes it"
+  },
+  {
+   "t": 233.32,
+   "d": 2.68,
+   "text": "changes every time and it the people"
+  },
+  {
+   "t": 236.0,
+   "d": 1.68,
+   "text": "around you all the seven players you're"
+  },
+  {
+   "t": 237.68,
+   "d": 1.28,
+   "text": "drafting with you sit in a table of"
+  },
+  {
+   "t": 238.96,
+   "d": 1.84,
+   "text": "eight when you do this they're all going"
+  },
+  {
+   "t": 240.8,
+   "d": 1.96,
+   "text": "to um what they take of course is going"
+  },
+  {
+   "t": 242.76,
+   "d": 2.36,
+   "text": "to impact your experience so in you know"
+  },
+  {
+   "t": 245.12,
+   "d": 1.48,
+   "text": "if I was a video game designer talking"
+  },
+  {
+   "t": 246.6,
+   "d": 2.32,
+   "text": "about this I would call it like a"
+  },
+  {
+   "t": 248.92,
+   "d": 2.56,
+   "text": "multiplayer um not Auto battler but like"
+  },
+  {
+   "t": 251.48,
+   "d": 2.64,
+   "text": "a multiplayer kind of um autobattler"
+  },
+  {
+   "t": 254.12,
+   "d": 2.12,
+   "text": "Vibe Rog like right where you're like"
+  },
+  {
+   "t": 256.24,
+   "d": 1.44,
+   "text": "like it's Auto Battle except without the"
+  },
+  {
+   "t": 257.68,
+   "d": 2.04,
+   "text": "auto you're the battler so you know you"
+  },
+  {
+   "t": 259.72,
+   "d": 1.6,
+   "text": "uh you're drafting then you get to play"
+  },
+  {
+   "t": 261.32,
+   "d": 1.2,
+   "text": "against people with the deck that you've"
+  },
+  {
+   "t": 262.52,
+   "d": 3.52,
+   "text": "drafted every time is different and we"
+  },
+  {
+   "t": 266.04,
+   "d": 2.08,
+   "text": "do a lot of design work to make sure"
+  },
+  {
+   "t": 268.12,
+   "d": 1.76,
+   "text": "that a few things are true with draft"
+  },
+  {
+   "t": 269.88,
+   "d": 1.76,
+   "text": "the first thing we want to do with draft"
+  },
+  {
+   "t": 271.64,
+   "d": 1.36,
+   "text": "is make sure that it's approachable"
+  },
+  {
+   "t": 273.0,
+   "d": 1.6,
+   "text": "right you're reading a bunch of cards"
+  },
+  {
+   "t": 274.6,
+   "d": 1.28,
+   "text": "all at once you have to read all the"
+  },
+  {
+   "t": 275.88,
+   "d": 1.32,
+   "text": "cards around the table as you're taking"
+  },
+  {
+   "t": 277.2,
+   "d": 1.64,
+   "text": "them so one of the ways we control that"
+  },
+  {
+   "t": 278.84,
+   "d": 1.92,
+   "text": "in Magic is with Rarity right the common"
+  },
+  {
+   "t": 280.76,
+   "d": 1.6,
+   "text": "cards are simpler than the rare cards"
+  },
+  {
+   "t": 282.36,
+   "d": 2.08,
+   "text": "and every pack has a lot of Commons and"
+  },
+  {
+   "t": 284.44,
+   "d": 2.36,
+   "text": "only one rare so you can kind of control"
+  },
+  {
+   "t": 286.8,
+   "d": 2.0,
+   "text": "how complex it is as you're seeing it"
+  },
+  {
+   "t": 288.8,
+   "d": 1.48,
+   "text": "and then by the time you get to the game"
+  },
+  {
+   "t": 290.28,
+   "d": 1.24,
+   "text": "maybe you have a number of rares in your"
+  },
+  {
+   "t": 291.52,
+   "d": 1.16,
+   "text": "deck and they have some rares in their"
+  },
+  {
+   "t": 292.68,
+   "d": 1.52,
+   "text": "deck but you know what those cards do at"
+  },
+  {
+   "t": 294.2,
+   "d": 1.28,
+   "text": "the your point at this point because you"
+  },
+  {
+   "t": 295.48,
+   "d": 1.36,
+   "text": "you've taken them and or even you might"
+  },
+  {
+   "t": 296.84,
+   "d": 1.64,
+   "text": "have seen them go around the table once"
+  },
+  {
+   "t": 298.48,
+   "d": 2.76,
+   "text": "or twice so we can control for um"
+  },
+  {
+   "t": 301.24,
+   "d": 1.76,
+   "text": "understandability with that we also do"
+  },
+  {
+   "t": 303.0,
+   "d": 3.24,
+   "text": "something we call sign posting so to um"
+  },
+  {
+   "t": 306.24,
+   "d": 1.48,
+   "text": "give you all of recap if you don't know"
+  },
+  {
+   "t": 307.72,
+   "d": 1.92,
+   "text": "magic magic has five colors right so"
+  },
+  {
+   "t": 309.64,
+   "d": 2.12,
+   "text": "there's white blue black red and green"
+  },
+  {
+   "t": 311.76,
+   "d": 1.4,
+   "text": "and those colors are the basis of your"
+  },
+  {
+   "t": 313.16,
+   "d": 2.24,
+   "text": "decks and you will usually not always"
+  },
+  {
+   "t": 315.4,
+   "d": 1.44,
+   "text": "let's just for the sake of example say"
+  },
+  {
+   "t": 316.84,
+   "d": 1.56,
+   "text": "you're G to play two colors usually so"
+  },
+  {
+   "t": 318.4,
+   "d": 1.48,
+   "text": "when you're drafting part of the"
+  },
+  {
+   "t": 319.88,
+   "d": 1.96,
+   "text": "experience is figuring out which two"
+  },
+  {
+   "t": 321.84,
+   "d": 1.92,
+   "text": "colors of magic you're going to play and"
+  },
+  {
+   "t": 323.76,
+   "d": 1.4,
+   "text": "which cards from um from those two"
+  },
+  {
+   "t": 325.16,
+   "d": 2.24,
+   "text": "colors are going to play one of the"
+  },
+  {
+   "t": 327.4,
+   "d": 2.64,
+   "text": "things we've done is make a bunch of um"
+  },
+  {
+   "t": 330.04,
+   "d": 1.72,
+   "text": "gold cards meaning cards that are two"
+  },
+  {
+   "t": 331.76,
+   "d": 2.32,
+   "text": "colors at once show up a little more"
+  },
+  {
+   "t": 334.08,
+   "d": 2.08,
+   "text": "often at at our uncommon Rarity so kind"
+  },
+  {
+   "t": 336.16,
+   "d": 1.8,
+   "text": "of our mid- Rarity because what that"
+  },
+  {
+   "t": 337.96,
+   "d": 1.52,
+   "text": "means is let's say that I'm taking a"
+  },
+  {
+   "t": 339.48,
+   "d": 1.88,
+   "text": "bunch of red cards and I'm like halfway"
+  },
+  {
+   "t": 341.36,
+   "d": 0.96,
+   "text": "through and I'm like ah I don't know"
+  },
+  {
+   "t": 342.32,
+   "d": 1.2,
+   "text": "what my second color is going to be it's"
+  },
+  {
+   "t": 343.52,
+   "d": 1.72,
+   "text": "a tough choice and then I see a red"
+  },
+  {
+   "t": 345.24,
+   "d": 3.08,
+   "text": "green card come around I'm like oh I'm"
+  },
+  {
+   "t": 348.32,
+   "d": 2.24,
+   "text": "already half red this red green card is"
+  },
+  {
+   "t": 350.56,
+   "d": 2.28,
+   "text": "really strong I'm GNA take this and it's"
+  },
+  {
+   "t": 352.84,
+   "d": 2.6,
+   "text": "a signpost in the direction of red green"
+  },
+  {
+   "t": 355.44,
+   "d": 1.32,
+   "text": "because it's an interactive game with"
+  },
+  {
+   "t": 356.76,
+   "d": 2.48,
+   "text": "these other seven people it tells you"
+  },
+  {
+   "t": 359.24,
+   "d": 1.84,
+   "text": "that no one else is taking the red green"
+  },
+  {
+   "t": 361.08,
+   "d": 1.56,
+   "text": "cards right no one else wants this red"
+  },
+  {
+   "t": 362.64,
+   "d": 1.8,
+   "text": "green card so it's a safe space for you"
+  },
+  {
+   "t": 364.44,
+   "d": 1.36,
+   "text": "to go in and you know you'll get some"
+  },
+  {
+   "t": 365.8,
+   "d": 2.32,
+   "text": "cards that go in that strategy so we do"
+  },
+  {
+   "t": 368.12,
+   "d": 2.56,
+   "text": "a lot there to help make sure that it's"
+  },
+  {
+   "t": 370.68,
+   "d": 1.68,
+   "text": "approachable you can kind of hop on"
+  },
+  {
+   "t": 372.36,
+   "d": 2.36,
+   "text": "Rails even if you're a newer player and"
+  },
+  {
+   "t": 374.72,
+   "d": 2.68,
+   "text": "um and uh that that you can you know do"
+  },
+  {
+   "t": 377.4,
+   "d": 1.36,
+   "text": "that on your first draft or second draft"
+  },
+  {
+   "t": 378.76,
+   "d": 2.28,
+   "text": "and have a good time now on the flip"
+  },
+  {
+   "t": 381.04,
+   "d": 1.52,
+   "text": "side of things another thing that's very"
+  },
+  {
+   "t": 382.56,
+   "d": 1.84,
+   "text": "true of Rogue likes is we want to make"
+  },
+  {
+   "t": 384.4,
+   "d": 1.84,
+   "text": "sure that it's deep and replayable right"
+  },
+  {
+   "t": 386.24,
+   "d": 2.72,
+   "text": "because if it's solved very quickly and"
+  },
+  {
+   "t": 388.96,
+   "d": 1.28,
+   "text": "you get into the"
+  },
+  {
+   "t": 390.24,
+   "d": 2.24,
+   "text": "experience and you're like okay here's"
+  },
+  {
+   "t": 392.48,
+   "d": 2.0,
+   "text": "for example there's a a couple sets this"
+  },
+  {
+   "t": 394.48,
+   "d": 2.44,
+   "text": "is true for where the the the gold sign"
+  },
+  {
+   "t": 396.92,
+   "d": 2.16,
+   "text": "posts were so strong and the strategies"
+  },
+  {
+   "t": 399.08,
+   "d": 2.32,
+   "text": "were so um Apparent from the cards"
+  },
+  {
+   "t": 401.4,
+   "d": 2.32,
+   "text": "Commons that you read that it lost a bit"
+  },
+  {
+   "t": 403.72,
+   "d": 1.72,
+   "text": "of that depth because you're like okay"
+  },
+  {
+   "t": 405.44,
+   "d": 1.36,
+   "text": "the best thing to do is to take a gold"
+  },
+  {
+   "t": 406.8,
+   "d": 2.64,
+   "text": "card right away and then just force"
+  },
+  {
+   "t": 409.44,
+   "d": 1.4,
+   "text": "those two colors and make no more"
+  },
+  {
+   "t": 410.84,
+   "d": 1.8,
+   "text": "decisions and that's bad right we don't"
+  },
+  {
+   "t": 412.64,
+   "d": 1.32,
+   "text": "want people doing that we want you have"
+  },
+  {
+   "t": 413.96,
+   "d": 1.88,
+   "text": "that that depth so we do a lot of things"
+  },
+  {
+   "t": 415.84,
+   "d": 1.36,
+   "text": "to make sure that your first three"
+  },
+  {
+   "t": 417.2,
+   "d": 3.08,
+   "text": "drafts are good but also you're uh 30th"
+  },
+  {
+   "t": 420.28,
+   "d": 2.56,
+   "text": "draft is also good and some ways we do"
+  },
+  {
+   "t": 422.84,
+   "d": 2.2,
+   "text": "that are making sure there are uncommons"
+  },
+  {
+   "t": 425.04,
+   "d": 1.2,
+   "text": "that are strange that you can build"
+  },
+  {
+   "t": 426.24,
+   "d": 1.84,
+   "text": "around oh man there's this really weird"
+  },
+  {
+   "t": 428.08,
+   "d": 1.6,
+   "text": "uncommon it only shows up every now and"
+  },
+  {
+   "t": 429.68,
+   "d": 1.56,
+   "text": "then but this time I opened it and this"
+  },
+  {
+   "t": 431.24,
+   "d": 0.96,
+   "text": "time I have to build my weird deck"
+  },
+  {
+   "t": 432.2,
+   "d": 1.4,
+   "text": "around it right like that that's a very"
+  },
+  {
+   "t": 433.6,
+   "d": 2.36,
+   "text": "cool moment um we like to make sure that"
+  },
+  {
+   "t": 435.96,
+   "d": 2.4,
+   "text": "there's enough Mana fixing like I said"
+  },
+  {
+   "t": 438.36,
+   "d": 1.56,
+   "text": "often You'll Play two colors in Magic"
+  },
+  {
+   "t": 439.92,
+   "d": 1.56,
+   "text": "but sometimes you can Splash and play a"
+  },
+  {
+   "t": 441.48,
+   "d": 2.36,
+   "text": "third color or something like that so we"
+  },
+  {
+   "t": 443.84,
+   "d": 1.68,
+   "text": "will um like to make sure that there's"
+  },
+  {
+   "t": 445.52,
+   "d": 1.64,
+   "text": "enough Mana fixing that allows you to"
+  },
+  {
+   "t": 447.16,
+   "d": 1.76,
+   "text": "play more colors if you want to so that"
+  },
+  {
+   "t": 448.92,
+   "d": 1.84,
+   "text": "you can dig into that if you want and"
+  },
+  {
+   "t": 450.76,
+   "d": 1.76,
+   "text": "sometimes even have a unique deck that"
+  },
+  {
+   "t": 452.52,
+   "d": 2.2,
+   "text": "is sort of like the 11th option where"
+  },
+  {
+   "t": 454.72,
+   "d": 1.76,
+   "text": "you play all five colors together and"
+  },
+  {
+   "t": 456.48,
+   "d": 1.76,
+   "text": "you and you like make your deck kind of"
+  },
+  {
+   "t": 458.24,
+   "d": 1.56,
+   "text": "work and you get to play some very"
+  },
+  {
+   "t": 459.8,
+   "d": 3.12,
+   "text": "strange cards and um also yeah just"
+  },
+  {
+   "t": 462.92,
+   "d": 2.24,
+   "text": "making sure that uh there's enough"
+  },
+  {
+   "t": 465.16,
+   "d": 2.12,
+   "text": "different interactions at common even"
+  },
+  {
+   "t": 467.28,
+   "d": 1.72,
+   "text": "with simple cards that you'll still be"
+  },
+  {
+   "t": 469.0,
+   "d": 1.0,
+   "text": "discovering things and discovering"
+  },
+  {
+   "t": 470.0,
+   "d": 2.28,
+   "text": "interactions on your 30th draft so we do"
+  },
+  {
+   "t": 472.28,
+   "d": 1.72,
+   "text": "work at the very bottom and all the way"
+  },
+  {
+   "t": 474.0,
+   "d": 1.56,
+   "text": "to the very top to make sure that it's"
+  },
+  {
+   "t": 475.56,
+   "d": 2.84,
+   "text": "both approachable and also replayable"
+  },
+  {
+   "t": 478.4,
+   "d": 1.52,
+   "text": "and um both those are things that I"
+  },
+  {
+   "t": 479.92,
+   "d": 1.44,
+   "text": "think are very true of Rog likes as well"
+  },
+  {
+   "t": 481.36,
+   "d": 1.4,
+   "text": "we use a lot of the same methods I would"
+  },
+  {
+   "t": 482.76,
+   "d": 1.56,
+   "text": "imagine that you all use when you're"
+  },
+  {
+   "t": 484.32,
+   "d": 2.28,
+   "text": "making your Rog likee games yeah that's"
+  },
+  {
+   "t": 486.6,
+   "d": 1.28,
+   "text": "really interesting and I I think you"
+  },
+  {
+   "t": 487.88,
+   "d": 2.36,
+   "text": "know there are some definitely"
+  },
+  {
+   "t": 490.24,
+   "d": 1.76,
+   "text": "especially card-based Rogue likes where"
+  },
+  {
+   "t": 492.0,
+   "d": 1.8,
+   "text": "it is running in a way that's kind of"
+  },
+  {
+   "t": 493.8,
+   "d": 3.48,
+   "text": "you're playing cards but the enemy like"
+  },
+  {
+   "t": 497.28,
+   "d": 2.44,
+   "text": "set of actions is also cards I think"
+  },
+  {
+   "t": 499.72,
+   "d": 2.56,
+   "text": "rarer that it's the same set of cards"
+  },
+  {
+   "t": 502.28,
+   "d": 2.12,
+   "text": "especially since in Rog leges you know"
+  },
+  {
+   "t": 504.4,
+   "d": 2.08,
+   "text": "more common a single player experience"
+  },
+  {
+   "t": 506.48,
+   "d": 1.56,
+   "text": "than multiplayer and so it's interesting"
+  },
+  {
+   "t": 508.04,
+   "d": 1.68,
+   "text": "to me too that it sounds like in some"
+  },
+  {
+   "t": 509.72,
+   "d": 1.76,
+   "text": "ways it's you know the same pieces are"
+  },
+  {
+   "t": 511.48,
+   "d": 2.2,
+   "text": "being used to think about like how am I"
+  },
+  {
+   "t": 513.68,
+   "d": 2.6,
+   "text": "building my deck my character my kind of"
+  },
+  {
+   "t": 516.28,
+   "d": 3.76,
+   "text": "build but also my challenges my dungeon"
+  },
+  {
+   "t": 520.04,
+   "d": 2.4,
+   "text": "design is also the same pieces but that"
+  },
+  {
+   "t": 522.44,
+   "d": 1.36,
+   "text": "the other people are picking and so"
+  },
+  {
+   "t": 523.8,
+   "d": 1.36,
+   "text": "there's some of that too of like well I"
+  },
+  {
+   "t": 525.16,
+   "d": 1.32,
+   "text": "want to make sure that when I sit down"
+  },
+  {
+   "t": 526.48,
+   "d": 2.72,
+   "text": "and play against six other people I'm"
+  },
+  {
+   "t": 529.2,
+   "d": 2.84,
+   "text": "not also seeing the same six decks"
+  },
+  {
+   "t": 532.04,
+   "d": 2.0,
+   "text": "against me every time and so that's very"
+  },
+  {
+   "t": 534.04,
+   "d": 1.12,
+   "text": "interesting if you have to use the same"
+  },
+  {
+   "t": 535.16,
+   "d": 3.4,
+   "text": "pieces to make both kind of parts of the"
+  },
+  {
+   "t": 538.56,
+   "d": 1.44,
+   "text": "experience"
+  },
+  {
+   "t": 540.0,
+   "d": 1.56,
+   "text": "it's got a lot of upsides and downsides"
+  },
+  {
+   "t": 541.56,
+   "d": 1.4,
+   "text": "to it you're absolutely right one of the"
+  },
+  {
+   "t": 542.96,
+   "d": 2.68,
+   "text": "great upsides of it is that because of"
+  },
+  {
+   "t": 545.64,
+   "d": 1.76,
+   "text": "the color system it's a little"
+  },
+  {
+   "t": 547.4,
+   "d": 2.08,
+   "text": "self-balancing let's say that we make a"
+  },
+  {
+   "t": 549.48,
+   "d": 1.2,
+   "text": "draft format one of the cool things"
+  },
+  {
+   "t": 550.68,
+   "d": 1.32,
+   "text": "about Magic by the way is every single"
+  },
+  {
+   "t": 552.0,
+   "d": 1.64,
+   "text": "new set has its own draft format and"
+  },
+  {
+   "t": 553.64,
+   "d": 1.76,
+   "text": "players talk about them because because"
+  },
+  {
+   "t": 555.4,
+   "d": 1.68,
+   "text": "it's all new cards right so when our"
+  },
+  {
+   "t": 557.08,
+   "d": 3.32,
+   "text": "newest set duskborn comes out okay well"
+  },
+  {
+   "t": 560.4,
+   "d": 1.08,
+   "text": "that that draft format is gonna be"
+  },
+  {
+   "t": 561.48,
+   "d": 1.28,
+   "text": "different from the bloom bro draft"
+  },
+  {
+   "t": 562.76,
+   "d": 2.0,
+   "text": "format which was a few months before so"
+  },
+  {
+   "t": 564.76,
+   "d": 1.36,
+   "text": "every single set gives you kind of a new"
+  },
+  {
+   "t": 566.12,
+   "d": 1.96,
+   "text": "a new game as it were to to play a new"
+  },
+  {
+   "t": 568.08,
+   "d": 1.68,
+   "text": "expansion or however you want to phrase"
+  },
+  {
+   "t": 569.76,
+   "d": 1.92,
+   "text": "it that you get to play with so let's"
+  },
+  {
+   "t": 571.68,
+   "d": 1.2,
+   "text": "say that the colors are a little out of"
+  },
+  {
+   "t": 572.88,
+   "d": 1.8,
+   "text": "whack though we try for color balance as"
+  },
+  {
+   "t": 574.68,
+   "d": 1.8,
+   "text": "best we can but you know you know how"
+  },
+  {
+   "t": 576.48,
+   "d": 1.68,
+   "text": "game design is it's never quite 100%"
+  },
+  {
+   "t": 578.16,
+   "d": 2.48,
+   "text": "perfect right but unlike a digital game"
+  },
+  {
+   "t": 580.64,
+   "d": 1.56,
+   "text": "we can't patch it I can't call everyone"
+  },
+  {
+   "t": 582.2,
+   "d": 1.64,
+   "text": "in the world and say hey can you like"
+  },
+  {
+   "t": 583.84,
+   "d": 1.96,
+   "text": "just write extra extra white Mana symbol"
+  },
+  {
+   "t": 585.8,
+   "d": 1.36,
+   "text": "in the top corner of this card or change"
+  },
+  {
+   "t": 587.16,
+   "d": 2.52,
+   "text": "that three to a two that doesn't work um"
+  },
+  {
+   "t": 589.68,
+   "d": 1.04,
+   "text": "but one of the great self-balancing"
+  },
+  {
+   "t": 590.72,
+   "d": 1.68,
+   "text": "things about draft is even if you're a"
+  },
+  {
+   "t": 592.4,
+   "d": 2.2,
+   "text": "little bit off because everyone has the"
+  },
+  {
+   "t": 594.6,
+   "d": 1.44,
+   "text": "same card pool and you're limited to"
+  },
+  {
+   "t": 596.04,
+   "d": 2.52,
+   "text": "certain colors it self balances so let's"
+  },
+  {
+   "t": 598.56,
+   "d": 1.88,
+   "text": "say that we make white too strong in a"
+  },
+  {
+   "t": 600.44,
+   "d": 1.44,
+   "text": "draft format white is a little better"
+  },
+  {
+   "t": 601.88,
+   "d": 2.04,
+   "text": "than everything else well okay everyone"
+  },
+  {
+   "t": 603.92,
+   "d": 1.2,
+   "text": "knows that so we all sit down at the"
+  },
+  {
+   "t": 605.12,
+   "d": 1.44,
+   "text": "table we're all going to the same shared"
+  },
+  {
+   "t": 606.56,
+   "d": 1.88,
+   "text": "pool of cards and four of the players"
+  },
+  {
+   "t": 608.44,
+   "d": 1.4,
+   "text": "are like I'm definitely going to try and"
+  },
+  {
+   "t": 609.84,
+   "d": 1.72,
+   "text": "play White well that means that all the"
+  },
+  {
+   "t": 611.56,
+   "d": 1.36,
+   "text": "good White cards are going to get"
+  },
+  {
+   "t": 612.92,
+   "d": 1.88,
+   "text": "distributed amongst those four players"
+  },
+  {
+   "t": 614.8,
+   "d": 0.92,
+   "text": "and they're gon to end up with weaker"
+  },
+  {
+   "t": 615.72,
+   "d": 2.16,
+   "text": "decks overall where maybe blue is a"
+  },
+  {
+   "t": 617.88,
+   "d": 1.68,
+   "text": "little bit weaker but because there's"
+  },
+  {
+   "t": 619.56,
+   "d": 1.84,
+   "text": "only one blue drafter at the table they"
+  },
+  {
+   "t": 621.4,
+   "d": 1.96,
+   "text": "soak up all the blue cards and then"
+  },
+  {
+   "t": 623.36,
+   "d": 2.24,
+   "text": "their deck is actually quite strong so"
+  },
+  {
+   "t": 625.6,
+   "d": 2.48,
+   "text": "it has this amazing self-balancing"
+  },
+  {
+   "t": 628.08,
+   "d": 2.36,
+   "text": "mechanism in draft that that um we talk"
+  },
+  {
+   "t": 630.44,
+   "d": 1.4,
+   "text": "about a lot it's honestly a huge fail"
+  },
+  {
+   "t": 631.84,
+   "d": 2.04,
+   "text": "safe we have because we know that we can"
+  },
+  {
+   "t": 633.88,
+   "d": 1.88,
+   "text": "um make sure that players are able to"
+  },
+  {
+   "t": 635.76,
+   "d": 1.72,
+   "text": "find the strategies that even aren't"
+  },
+  {
+   "t": 637.48,
+   "d": 1.44,
+   "text": "necessarily at the top it'll still be"
+  },
+  {
+   "t": 638.92,
+   "d": 3.4,
+   "text": "successful um so so that's really good"
+  },
+  {
+   "t": 642.32,
+   "d": 3.08,
+   "text": "the flip side of that um is that because"
+  },
+  {
+   "t": 645.4,
+   "d": 1.28,
+   "text": "everyone's using the same card as you"
+  },
+  {
+   "t": 646.68,
+   "d": 1.2,
+   "text": "said we can't make specialized things"
+  },
+  {
+   "t": 647.88,
+   "d": 1.52,
+   "text": "for our our bosses right every"
+  },
+  {
+   "t": 649.4,
+   "d": 1.88,
+   "text": "everything we make has to have this"
+  },
+  {
+   "t": 651.28,
+   "d": 2.16,
+   "text": "strong concept of net fun in mind if"
+  },
+  {
+   "t": 653.44,
+   "d": 1.4,
+   "text": "you're playing and you know I'm sure net"
+  },
+  {
+   "t": 654.84,
+   "d": 1.08,
+   "text": "fun is something that we're all familiar"
+  },
+  {
+   "t": 655.92,
+   "d": 2.2,
+   "text": "with but just just to to recap the idea"
+  },
+  {
+   "t": 658.12,
+   "d": 2.2,
+   "text": "of when you're playing a one-on-one game"
+  },
+  {
+   "t": 660.32,
+   "d": 1.76,
+   "text": "um if you do something that makes your"
+  },
+  {
+   "t": 662.08,
+   "d": 1.92,
+   "text": "opponent not have fun how much fun are"
+  },
+  {
+   "t": 664.0,
+   "d": 1.52,
+   "text": "you gaining from The Experience right"
+  },
+  {
+   "t": 665.52,
+   "d": 1.4,
+   "text": "and how negative that impact on your"
+  },
+  {
+   "t": 666.92,
+   "d": 1.84,
+   "text": "opponent versus what you're getting out"
+  },
+  {
+   "t": 668.76,
+   "d": 2.24,
+   "text": "of it when you're making a digital PVE"
+  },
+  {
+   "t": 671.0,
+   "d": 2.36,
+   "text": "game for example it who cares that"
+  },
+  {
+   "t": 673.36,
+   "d": 1.36,
+   "text": "computer's having fun it doesn't matter"
+  },
+  {
+   "t": 674.72,
+   "d": 0.92,
+   "text": "right you could take away all their"
+  },
+  {
+   "t": 675.64,
+   "d": 1.64,
+   "text": "action points and all their resources"
+  },
+  {
+   "t": 677.28,
+   "d": 1.08,
+   "text": "they're not going to cry you're just"
+  },
+  {
+   "t": 678.36,
+   "d": 1.0,
+   "text": "you're smashing them you're having a"
+  },
+  {
+   "t": 679.36,
+   "d": 2.2,
+   "text": "great time right um the thing that has"
+  },
+  {
+   "t": 681.56,
+   "d": 1.28,
+   "text": "to be considered the most is what the"
+  },
+  {
+   "t": 682.84,
+   "d": 1.56,
+   "text": "the computer do to the player to make"
+  },
+  {
+   "t": 684.4,
+   "d": 1.32,
+   "text": "sure that they're not doing something"
+  },
+  {
+   "t": 685.72,
+   "d": 1.2,
+   "text": "that will make the player feel really"
+  },
+  {
+   "t": 686.92,
+   "d": 2.04,
+   "text": "bad but in Magic because we're all using"
+  },
+  {
+   "t": 688.96,
+   "d": 1.68,
+   "text": "the same shared card pool we have to"
+  },
+  {
+   "t": 690.64,
+   "d": 1.72,
+   "text": "consider that across all interactions so"
+  },
+  {
+   "t": 692.36,
+   "d": 1.04,
+   "text": "we want to make sure that we're trying"
+  },
+  {
+   "t": 693.4,
+   "d": 2.32,
+   "text": "to keep the net fund pretty equivocal so"
+  },
+  {
+   "t": 695.72,
+   "d": 1.28,
+   "text": "that if I do something that really makes"
+  },
+  {
+   "t": 697.0,
+   "d": 1.48,
+   "text": "you know really hurts you it makes me"
+  },
+  {
+   "t": 698.48,
+   "d": 2.0,
+   "text": "gives me me this huge high it's not"
+  },
+  {
+   "t": 700.48,
+   "d": 3.16,
+   "text": "something that's um a bit of a mix or or"
+  },
+  {
+   "t": 703.64,
+   "d": 1.44,
+   "text": "not quite equivocal give I'll give you"
+  },
+  {
+   "t": 705.08,
+   "d": 2.12,
+   "text": "you great example so in Magic the way"
+  },
+  {
+   "t": 707.2,
+   "d": 2.76,
+   "text": "that you um kind of generate uh"
+  },
+  {
+   "t": 709.96,
+   "d": 2.04,
+   "text": "resources you can use is you play a land"
+  },
+  {
+   "t": 712.0,
+   "d": 1.68,
+   "text": "so every turn you get to play a new land"
+  },
+  {
+   "t": 713.68,
+   "d": 2.04,
+   "text": "down and then use your lands to get the"
+  },
+  {
+   "t": 715.72,
+   "d": 2.16,
+   "text": "Mana to cast your spells and so every"
+  },
+  {
+   "t": 717.88,
+   "d": 1.6,
+   "text": "turn you play a new land and as the game"
+  },
+  {
+   "t": 719.48,
+   "d": 1.68,
+   "text": "goes on and on and on you have more"
+  },
+  {
+   "t": 721.16,
+   "d": 1.84,
+   "text": "lands in play which can let you cast"
+  },
+  {
+   "t": 723.0,
+   "d": 2.4,
+   "text": "bigger and better spells in the very"
+  },
+  {
+   "t": 725.4,
+   "d": 1.44,
+   "text": "early days of magic there were a lot of"
+  },
+  {
+   "t": 726.84,
+   "d": 1.32,
+   "text": "cards that destroyed lands there were"
+  },
+  {
+   "t": 728.16,
+   "d": 1.56,
+   "text": "many cards that destroyed lands many"
+  },
+  {
+   "t": 729.72,
+   "d": 1.52,
+   "text": "people played with them but what we"
+  },
+  {
+   "t": 731.24,
+   "d": 2.4,
+   "text": "found is if you get your lands destroyed"
+  },
+  {
+   "t": 733.64,
+   "d": 1.32,
+   "text": "you might not be able to even play your"
+  },
+  {
+   "t": 734.96,
+   "d": 1.52,
+   "text": "deck right two of your lands get blown"
+  },
+  {
+   "t": 736.48,
+   "d": 1.8,
+   "text": "up and maybe you just can't cast cards"
+  },
+  {
+   "t": 738.28,
+   "d": 1.96,
+   "text": "anymore you're just out of the game now"
+  },
+  {
+   "t": 740.24,
+   "d": 1.4,
+   "text": "on the opponent's side of of the table"
+  },
+  {
+   "t": 741.64,
+   "d": 1.4,
+   "text": "they just like played some card put it"
+  },
+  {
+   "t": 743.04,
+   "d": 1.16,
+   "text": "down who knows you blew up one their"
+  },
+  {
+   "t": 744.2,
+   "d": 1.84,
+   "text": "lands it doesn't even impact the their"
+  },
+  {
+   "t": 746.04,
+   "d": 1.64,
+   "text": "creatures or anything that's in play you"
+  },
+  {
+   "t": 747.68,
+   "d": 1.76,
+   "text": "just destroy one of their resources and"
+  },
+  {
+   "t": 749.44,
+   "d": 1.6,
+   "text": "that's a great example of an imbalance"
+  },
+  {
+   "t": 751.04,
+   "d": 1.68,
+   "text": "of net fund because the player that got"
+  },
+  {
+   "t": 752.72,
+   "d": 1.4,
+   "text": "their lands destroyed they literally"
+  },
+  {
+   "t": 754.12,
+   "d": 1.12,
+   "text": "feel like they're out of the game they"
+  },
+  {
+   "t": 755.24,
+   "d": 1.6,
+   "text": "can't do anything but the player that"
+  },
+  {
+   "t": 756.84,
+   "d": 1.12,
+   "text": "was destroying their lands it was just"
+  },
+  {
+   "t": 757.96,
+   "d": 2.16,
+   "text": "some one random card they played that"
+  },
+  {
+   "t": 760.12,
+   "d": 1.12,
+   "text": "they might have not even noticed the"
+  },
+  {
+   "t": 761.24,
+   "d": 2.24,
+   "text": "immediate impact of um because also the"
+  },
+  {
+   "t": 763.48,
+   "d": 2.28,
+   "text": "information of why it is so uh impactful"
+  },
+  {
+   "t": 765.76,
+   "d": 1.44,
+   "text": "is often hidden in the other players"
+  },
+  {
+   "t": 767.2,
+   "d": 2.04,
+   "text": "hand so it's a very large net fund"
+  },
+  {
+   "t": 769.24,
+   "d": 2.16,
+   "text": "imbalance so as a result we've mostly"
+  },
+  {
+   "t": 771.4,
+   "d": 2.72,
+   "text": "gotten rid of at least um aggressively"
+  },
+  {
+   "t": 774.12,
+   "d": 2.4,
+   "text": "priced land destruction in our game and"
+  },
+  {
+   "t": 776.52,
+   "d": 1.16,
+   "text": "so those are the kind of things we look"
+  },
+  {
+   "t": 777.68,
+   "d": 1.64,
+   "text": "at as we building out strategies the"
+  },
+  {
+   "t": 779.32,
+   "d": 1.6,
+   "text": "flip side of that would be if there's a"
+  },
+  {
+   "t": 780.92,
+   "d": 1.6,
+   "text": "strategy that's immensely fun to play"
+  },
+  {
+   "t": 782.52,
+   "d": 1.32,
+   "text": "and doesn't necessarily detract from the"
+  },
+  {
+   "t": 783.84,
+   "d": 1.84,
+   "text": "opponent's experience we love promoting"
+  },
+  {
+   "t": 785.68,
+   "d": 1.96,
+   "text": "those right so we love making strategies"
+  },
+  {
+   "t": 787.64,
+   "d": 1.8,
+   "text": "that people just love to play even if"
+  },
+  {
+   "t": 789.44,
+   "d": 1.36,
+   "text": "they're not always the strongest or"
+  },
+  {
+   "t": 790.8,
+   "d": 1.04,
+   "text": "taking away from your opponent's"
+  },
+  {
+   "t": 791.84,
+   "d": 1.56,
+   "text": "resources because it will just means"
+  },
+  {
+   "t": 793.4,
+   "d": 1.24,
+   "text": "people will be happy playing them and it"
+  },
+  {
+   "t": 794.64,
+   "d": 1.76,
+   "text": "increases the net fun in the game"
+  },
+  {
+   "t": 796.4,
+   "d": 2.52,
+   "text": "overall um so yeah very different with a"
+  },
+  {
+   "t": 798.92,
+   "d": 1.72,
+   "text": "player versus player same card set"
+  },
+  {
+   "t": 800.64,
+   "d": 2.56,
+   "text": "environment as opposed to a PVE style"
+  },
+  {
+   "t": 803.2,
+   "d": 1.92,
+   "text": "environment yeah that's that's really"
+  },
+  {
+   "t": 805.12,
+   "d": 1.6,
+   "text": "interesting and it makes me think one of"
+  },
+  {
+   "t": 806.72,
+   "d": 2.52,
+   "text": "the things that I feel like a lot of the"
+  },
+  {
+   "t": 809.24,
+   "d": 1.48,
+   "text": "the well I remember reading this about"
+  },
+  {
+   "t": 810.72,
+   "d": 1.68,
+   "text": "slay the Spire which I think has been a"
+  },
+  {
+   "t": 812.4,
+   "d": 2.4,
+   "text": "big uh influence on the card-based Rogue"
+  },
+  {
+   "t": 814.8,
+   "d": 2.84,
+   "text": "leges of the last few years is having"
+  },
+  {
+   "t": 817.64,
+   "d": 1.76,
+   "text": "the freedom since it's a single player"
+  },
+  {
+   "t": 819.4,
+   "d": 2.24,
+   "text": "PVE to go really swingy of like you can"
+  },
+  {
+   "t": 821.64,
+   "d": 1.44,
+   "text": "make these combos that feel completely"
+  },
+  {
+   "t": 823.08,
+   "d": 2.4,
+   "text": "broken because well best case it lets"
+  },
+  {
+   "t": 825.48,
+   "d": 1.6,
+   "text": "you win that run really easily but you"
+  },
+  {
+   "t": 827.08,
+   "d": 1.12,
+   "text": "know it's going to be a full reset"
+  },
+  {
+   "t": 828.2,
+   "d": 2.0,
+   "text": "anyway but like you said the computer it"
+  },
+  {
+   "t": 830.2,
+   "d": 1.32,
+   "text": "doesn't matter that it just got"
+  },
+  {
+   "t": 831.52,
+   "d": 1.76,
+   "text": "annihilated and had no chance anymore"
+  },
+  {
+   "t": 833.28,
+   "d": 2.48,
+   "text": "which is different in a PVP but I think"
+  },
+  {
+   "t": 835.76,
+   "d": 2.96,
+   "text": "um there's still a lot of desire for the"
+  },
+  {
+   "t": 838.72,
+   "d": 2.04,
+   "text": "swing of the feeling of like the highs"
+  },
+  {
+   "t": 840.76,
+   "d": 2.76,
+   "text": "are highs and the lows are lows and so"
+  },
+  {
+   "t": 843.52,
+   "d": 2.44,
+   "text": "um I wonder like how you think about"
+  },
+  {
+   "t": 845.96,
+   "d": 2.16,
+   "text": "that in the context of drafting and we"
+  },
+  {
+   "t": 848.12,
+   "d": 2.24,
+   "text": "actually um one of the notes we had"
+  },
+  {
+   "t": 850.36,
+   "d": 1.6,
+   "text": "about that was thinking about how the"
+  },
+  {
+   "t": 851.96,
+   "d": 1.52,
+   "text": "matches are structured and how like the"
+  },
+  {
+   "t": 853.48,
+   "d": 2.4,
+   "text": "tournament is structured because um it's"
+  },
+  {
+   "t": 855.88,
+   "d": 2.64,
+   "text": "interesting that I guess the arena so"
+  },
+  {
+   "t": 858.52,
+   "d": 3.72,
+   "text": "the digital form the default draft is"
+  },
+  {
+   "t": 862.24,
+   "d": 2.56,
+   "text": "best of one matches until you get seven"
+  },
+  {
+   "t": 864.8,
+   "d": 2.0,
+   "text": "wins or three losses which is kind of"
+  },
+  {
+   "t": 866.8,
+   "d": 1.32,
+   "text": "risky like it's just kind of like a"
+  },
+  {
+   "t": 868.12,
+   "d": 2.84,
+   "text": "one-on-one versus uh apparently inperson"
+  },
+  {
+   "t": 870.96,
+   "d": 2.52,
+   "text": "drafting is usually best of three so a"
+  },
+  {
+   "t": 873.48,
+   "d": 1.76,
+   "text": "little bit more of a smoothing and so"
+  },
+  {
+   "t": 875.24,
+   "d": 1.2,
+   "text": "that was something we interested in of"
+  },
+  {
+   "t": 876.44,
+   "d": 2.52,
+   "text": "just that detail and like ways that you"
+  },
+  {
+   "t": 878.96,
+   "d": 3.08,
+   "text": "can play with how volatile or swingy"
+  },
+  {
+   "t": 882.04,
+   "d": 2.16,
+   "text": "that experience is while making sure"
+  },
+  {
+   "t": 884.2,
+   "d": 2.64,
+   "text": "that yeah the net fun is high yeah okay"
+  },
+  {
+   "t": 886.84,
+   "d": 0.96,
+   "text": "well first I'm want to tackle one of the"
+  },
+  {
+   "t": 887.8,
+   "d": 0.96,
+   "text": "first things you said just because I"
+  },
+  {
+   "t": 888.76,
+   "d": 0.96,
+   "text": "think it's pretty interesting and then"
+  },
+  {
+   "t": 889.72,
+   "d": 1.68,
+   "text": "I'll get into best of One Versus best of"
+  },
+  {
+   "t": 891.4,
+   "d": 3.0,
+   "text": "three so in terms of uh variance and"
+  },
+  {
+   "t": 894.4,
+   "d": 1.68,
+   "text": "like making sure that you have some of"
+  },
+  {
+   "t": 896.08,
+   "d": 1.92,
+   "text": "those High highs without un necessarily"
+  },
+  {
+   "t": 898.0,
+   "d": 2.12,
+   "text": "like taking that fun away from people um"
+  },
+  {
+   "t": 900.12,
+   "d": 1.12,
+   "text": "one of the things we really like for"
+  },
+  {
+   "t": 901.24,
+   "d": 1.6,
+   "text": "that are rares right we you can have"
+  },
+  {
+   "t": 902.84,
+   "d": 1.8,
+   "text": "some rares that are very strong or do"
+  },
+  {
+   "t": 904.64,
+   "d": 1.8,
+   "text": "very unique effects that create these"
+  },
+  {
+   "t": 906.44,
+   "d": 2.88,
+   "text": "big swingy moments um one thing that is"
+  },
+  {
+   "t": 909.32,
+   "d": 1.44,
+   "text": "very important to us is that magic does"
+  },
+  {
+   "t": 910.76,
+   "d": 1.68,
+   "text": "not become too Chessy right we never"
+  },
+  {
+   "t": 912.44,
+   "d": 1.76,
+   "text": "want it to be like if because I'm better"
+  },
+  {
+   "t": 914.2,
+   "d": 1.52,
+   "text": "than you I will always defeat you a 100"
+  },
+  {
+   "t": 915.72,
+   "d": 2.12,
+   "text": "games out of a 100 now magic has some"
+  },
+  {
+   "t": 917.84,
+   "d": 1.68,
+   "text": "built-in ways for that you you know you"
+  },
+  {
+   "t": 919.52,
+   "d": 1.48,
+   "text": "have to play your lands you draw them"
+  },
+  {
+   "t": 921.0,
+   "d": 1.32,
+   "text": "from your deck sometimes sometimes"
+  },
+  {
+   "t": 922.32,
+   "d": 1.72,
+   "text": "you'll have Mana problems one of the"
+  },
+  {
+   "t": 924.04,
+   "d": 1.04,
+   "text": "other things that we often like is"
+  },
+  {
+   "t": 925.08,
+   "d": 1.8,
+   "text": "making sure there's a rare or two in the"
+  },
+  {
+   "t": 926.88,
+   "d": 1.92,
+   "text": "set that are just really strong and can"
+  },
+  {
+   "t": 928.8,
+   "d": 1.84,
+   "text": "come down early and that can give a"
+  },
+  {
+   "t": 930.64,
+   "d": 1.96,
+   "text": "newer player a chance to De defeat a"
+  },
+  {
+   "t": 932.6,
+   "d": 1.44,
+   "text": "more experienced player now it should"
+  },
+  {
+   "t": 934.04,
+   "d": 1.6,
+   "text": "not always work it shouldn't be like oh"
+  },
+  {
+   "t": 935.64,
+   "d": 1.36,
+   "text": "no you play this card the game is over"
+  },
+  {
+   "t": 937.0,
+   "d": 1.28,
+   "text": "you're gonna beat me every single time"
+  },
+  {
+   "t": 938.28,
+   "d": 1.04,
+   "text": "that's a bad experience for the"
+  },
+  {
+   "t": 939.32,
+   "d": 1.72,
+   "text": "experienced player who also presumably"
+  },
+  {
+   "t": 941.04,
+   "d": 1.2,
+   "text": "has put a lot of time and energy into"
+  },
+  {
+   "t": 942.24,
+   "d": 1.48,
+   "text": "magic right we don't want them to be"
+  },
+  {
+   "t": 943.72,
+   "d": 1.68,
+   "text": "just defeated by that but we want"
+  },
+  {
+   "t": 945.4,
+   "d": 1.56,
+   "text": "something that gives the newer player a"
+  },
+  {
+   "t": 946.96,
+   "d": 2.32,
+   "text": "feel like they have a chance sometimes"
+  },
+  {
+   "t": 949.28,
+   "d": 1.96,
+   "text": "and so uh rares can do a lot in that"
+  },
+  {
+   "t": 951.24,
+   "d": 1.8,
+   "text": "space um and kind of finding the right"
+  },
+  {
+   "t": 953.04,
+   "d": 1.92,
+   "text": "amount of variance on our cards is"
+  },
+  {
+   "t": 954.96,
+   "d": 1.76,
+   "text": "really important um like we don't want a"
+  },
+  {
+   "t": 956.72,
+   "d": 1.56,
+   "text": "card that flips a coin to be a really"
+  },
+  {
+   "t": 958.28,
+   "d": 1.12,
+   "text": "strong card you're playing with because"
+  },
+  {
+   "t": 959.4,
+   "d": 1.76,
+   "text": "that variance is very in yourr face it's"
+  },
+  {
+   "t": 961.16,
+   "d": 2.64,
+   "text": "very what we call"
+  },
+  {
+   "t": 987.92,
+   "d": 1.8,
+   "text": "bingoyrolly every single turn based on"
+  },
+  {
+   "t": 989.72,
+   "d": 1.96,
+   "text": "what card you draw and just ways that"
+  },
+  {
+   "t": 991.68,
+   "d": 1.56,
+   "text": "let you draw more cards creates more"
+  },
+  {
+   "t": 993.24,
+   "d": 1.8,
+   "text": "variance in the game sometimes so anyway"
+  },
+  {
+   "t": 995.04,
+   "d": 1.12,
+   "text": "that kind of answers that first question"
+  },
+  {
+   "t": 996.16,
+   "d": 2.04,
+   "text": "Bingo variance and like the the Bingo"
+  },
+  {
+   "t": 998.2,
+   "d": 1.92,
+   "text": "feeling that's a terminology I think I'm"
+  },
+  {
+   "t": 1000.12,
+   "d": 2.24,
+   "text": "going to steal out of this so that like"
+  },
+  {
+   "t": 1002.36,
+   "d": 1.68,
+   "text": "no effort just to kind of like if I get"
+  },
+  {
+   "t": 1004.04,
+   "d": 1.72,
+   "text": "lucky and I get the line I win and how"
+  },
+  {
+   "t": 1005.76,
+   "d": 2.24,
+   "text": "that yeah it's a little not not always"
+  },
+  {
+   "t": 1008.0,
+   "d": 2.08,
+   "text": "the best kind of swingy right it's very"
+  },
+  {
+   "t": 1010.08,
+   "d": 2.08,
+   "text": "inyour face which can be fun maybe in a"
+  },
+  {
+   "t": 1012.16,
+   "d": 2.48,
+   "text": "PVE experience sometimes but for a PVP"
+  },
+  {
+   "t": 1014.64,
+   "d": 1.12,
+   "text": "experience on there's the other player"
+  },
+  {
+   "t": 1015.76,
+   "d": 1.76,
+   "text": "you feel like oh my gosh I can't believe"
+  },
+  {
+   "t": 1017.52,
+   "d": 1.52,
+   "text": "they hit that like I'm you know little I"
+  },
+  {
+   "t": 1019.04,
+   "d": 2.32,
+   "text": "rate about it um so we try and not do"
+  },
+  {
+   "t": 1021.36,
+   "d": 2.08,
+   "text": "too much Bingo especially if it's face"
+  },
+  {
+   "t": 1023.44,
+   "d": 2.0,
+   "text": "up in terms of best of One Versus best"
+  },
+  {
+   "t": 1025.44,
+   "d": 2.88,
+   "text": "of three right so in paper magic um"
+  },
+  {
+   "t": 1028.32,
+   "d": 1.52,
+   "text": "here's how a draft works I think this is"
+  },
+  {
+   "t": 1029.84,
+   "d": 3.08,
+   "text": "quite interesting um uh in terms of like"
+  },
+  {
+   "t": 1032.92,
+   "d": 1.64,
+   "text": "kind of U when you compare it to a PVE"
+  },
+  {
+   "t": 1034.56,
+   "d": 1.4,
+   "text": "environment so you have eight players"
+  },
+  {
+   "t": 1035.96,
+   "d": 2.48,
+   "text": "you sit down and you draft and you play"
+  },
+  {
+   "t": 1038.44,
+   "d": 1.52,
+   "text": "a match afterwards and it's best of"
+  },
+  {
+   "t": 1039.96,
+   "d": 2.88,
+   "text": "three games and if you win that match"
+  },
+  {
+   "t": 1042.84,
+   "d": 2.44,
+   "text": "you then go on to play a player that won"
+  },
+  {
+   "t": 1045.28,
+   "d": 1.96,
+   "text": "their match and if you win that match"
+  },
+  {
+   "t": 1047.24,
+   "d": 1.68,
+   "text": "then you go on to play the other player"
+  },
+  {
+   "t": 1048.92,
+   "d": 1.84,
+   "text": "who has um won both of their matches"
+  },
+  {
+   "t": 1050.76,
+   "d": 1.84,
+   "text": "right so at the end of the draft there's"
+  },
+  {
+   "t": 1052.6,
+   "d": 1.44,
+   "text": "two players playing against each other"
+  },
+  {
+   "t": 1054.04,
+   "d": 1.88,
+   "text": "who have both won both of your matches"
+  },
+  {
+   "t": 1055.92,
+   "d": 1.48,
+   "text": "and it has this kind of very interesting"
+  },
+  {
+   "t": 1057.4,
+   "d": 1.68,
+   "text": "natural difficulty scaling much like how"
+  },
+  {
+   "t": 1059.08,
+   "d": 2.04,
+   "text": "you would build in a PVE experience"
+  },
+  {
+   "t": 1061.12,
+   "d": 2.44,
+   "text": "where when you start you're playing some"
+  },
+  {
+   "t": 1063.56,
+   "d": 2.12,
+   "text": "random encounter but then you by the end"
+  },
+  {
+   "t": 1065.68,
+   "d": 1.56,
+   "text": "of the draft you're playing against the"
+  },
+  {
+   "t": 1067.24,
+   "d": 1.6,
+   "text": "strongest opponent theoretically in the"
+  },
+  {
+   "t": 1068.84,
+   "d": 1.8,
+   "text": "draft who has won both of their matches"
+  },
+  {
+   "t": 1070.64,
+   "d": 1.84,
+   "text": "which helps that difficulty scaling as"
+  },
+  {
+   "t": 1072.48,
+   "d": 1.88,
+   "text": "you go up and I think that's very a very"
+  },
+  {
+   "t": 1074.36,
+   "d": 1.28,
+   "text": "cool way to do it and makes a lot of"
+  },
+  {
+   "t": 1075.64,
+   "d": 3.36,
+   "text": "sense on Magic the Gathering Arena we"
+  },
+  {
+   "t": 1079.0,
+   "d": 1.28,
+   "text": "prioritize some different things and we"
+  },
+  {
+   "t": 1080.28,
+   "d": 1.92,
+   "text": "have more tools at our disposal so on"
+  },
+  {
+   "t": 1082.2,
+   "d": 1.96,
+   "text": "Arena it's best of one game because"
+  },
+  {
+   "t": 1084.16,
+   "d": 1.2,
+   "text": "people want to play against different"
+  },
+  {
+   "t": 1085.36,
+   "d": 1.12,
+   "text": "opponents right there's a lot of"
+  },
+  {
+   "t": 1086.48,
+   "d": 1.72,
+   "text": "excitement in like playing against more"
+  },
+  {
+   "t": 1088.2,
+   "d": 1.68,
+   "text": "people and unlike a draft where you have"
+  },
+  {
+   "t": 1089.88,
+   "d": 1.8,
+   "text": "to assemble eight people on Arena you"
+  },
+  {
+   "t": 1091.68,
+   "d": 1.32,
+   "text": "have thousands of players playing any"
+  },
+  {
+   "t": 1093.0,
+   "d": 1.8,
+   "text": "given one time so why not switch that up"
+  },
+  {
+   "t": 1094.8,
+   "d": 1.64,
+   "text": "a little more often the other thing we"
+  },
+  {
+   "t": 1096.44,
+   "d": 1.52,
+   "text": "do is we get better matchmaking her"
+  },
+  {
+   "t": 1097.96,
+   "d": 1.56,
+   "text": "istics we can do a lot of things as"
+  },
+  {
+   "t": 1099.52,
+   "d": 1.96,
+   "text": "we're looking at who to pair you against"
+  },
+  {
+   "t": 1101.48,
+   "d": 1.6,
+   "text": "that um you know use behind the scenes"
+  },
+  {
+   "t": 1103.08,
+   "d": 2.04,
+   "text": "information like how many games you won"
+  },
+  {
+   "t": 1105.12,
+   "d": 1.48,
+   "text": "um what other what other pieces of"
+  },
+  {
+   "t": 1106.6,
+   "d": 1.56,
+   "text": "matchmaking the system might have"
+  },
+  {
+   "t": 1108.16,
+   "d": 1.32,
+   "text": "available like you know you could"
+  },
+  {
+   "t": 1109.48,
+   "d": 1.64,
+   "text": "imagine things like MMR or things in"
+  },
+  {
+   "t": 1111.12,
+   "d": 1.96,
+   "text": "that space to help pair you to pair you"
+  },
+  {
+   "t": 1113.08,
+   "d": 1.52,
+   "text": "more accurately other than just how did"
+  },
+  {
+   "t": 1114.6,
+   "d": 3.76,
+   "text": "you do this draft right um so uh I'll"
+  },
+  {
+   "t": 1118.36,
+   "d": 1.76,
+   "text": "Adit I don't know the specifics of how I"
+  },
+  {
+   "t": 1120.12,
+   "d": 1.12,
+   "text": "work on the paper side so I don't know"
+  },
+  {
+   "t": 1121.24,
+   "d": 1.96,
+   "text": "the specifics as much of how Arena pairs"
+  },
+  {
+   "t": 1123.2,
+   "d": 1.92,
+   "text": "you but there's other tools that has it"
+  },
+  {
+   "t": 1125.12,
+   "d": 2.36,
+   "text": "has access to um you can play best of"
+  },
+  {
+   "t": 1127.48,
+   "d": 1.88,
+   "text": "two two of three drafts on Arena some"
+  },
+  {
+   "t": 1129.36,
+   "d": 2.48,
+   "text": "players do opt to do that but the by far"
+  },
+  {
+   "t": 1131.84,
+   "d": 2.8,
+   "text": "the most popular way is best of one and"
+  },
+  {
+   "t": 1134.64,
+   "d": 1.72,
+   "text": "uh it is I think just because we want to"
+  },
+  {
+   "t": 1136.36,
+   "d": 1.32,
+   "text": "play against different stuff right they"
+  },
+  {
+   "t": 1137.68,
+   "d": 0.92,
+   "text": "they have a lot more fun playing against"
+  },
+  {
+   "t": 1138.6,
+   "d": 1.64,
+   "text": "the different varied amount of opponents"
+  },
+  {
+   "t": 1140.24,
+   "d": 1.96,
+   "text": "on average and having more experiences"
+  },
+  {
+   "t": 1142.2,
+   "d": 1.52,
+   "text": "the same way that when you're making um"
+  },
+  {
+   "t": 1143.72,
+   "d": 1.64,
+   "text": "you know a rogue like you want to have a"
+  },
+  {
+   "t": 1145.36,
+   "d": 1.44,
+   "text": "bunch of different feeling encounters so"
+  },
+  {
+   "t": 1146.8,
+   "d": 1.28,
+   "text": "you get some very different feeling"
+  },
+  {
+   "t": 1148.08,
+   "d": 2.0,
+   "text": "things happening um over and over and"
+  },
+  {
+   "t": 1150.08,
+   "d": 1.28,
+   "text": "over again it also means that if you"
+  },
+  {
+   "t": 1151.36,
+   "d": 1.32,
+   "text": "play against a player who had a weak"
+  },
+  {
+   "t": 1152.68,
+   "d": 1.56,
+   "text": "deck great you smash them you feel like"
+  },
+  {
+   "t": 1154.24,
+   "d": 1.76,
+   "text": "a genius and you move on and if you play"
+  },
+  {
+   "t": 1156.0,
+   "d": 1.28,
+   "text": "against a player that has a bomb rare"
+  },
+  {
+   "t": 1157.28,
+   "d": 1.52,
+   "text": "Deck full of all the strongest cards"
+  },
+  {
+   "t": 1158.8,
+   "d": 1.2,
+   "text": "you're like well played my one game"
+  },
+  {
+   "t": 1160.0,
+   "d": 2.44,
+   "text": "against them I lost let's move on to the"
+  },
+  {
+   "t": 1162.44,
+   "d": 1.64,
+   "text": "to the next thing you know so it gives"
+  },
+  {
+   "t": 1164.08,
+   "d": 1.76,
+   "text": "you kind of kind of a pass there now"
+  },
+  {
+   "t": 1165.84,
+   "d": 1.8,
+   "text": "I'll call out that there is one big"
+  },
+  {
+   "t": 1167.64,
+   "d": 1.84,
+   "text": "strategic difference between between the"
+  },
+  {
+   "t": 1169.48,
+   "d": 2.84,
+   "text": "two when you draft the in Magic every"
+  },
+  {
+   "t": 1172.32,
+   "d": 1.76,
+   "text": "card you don't use in your deck goes"
+  },
+  {
+   "t": 1174.08,
+   "d": 1.96,
+   "text": "into into what's called your sideboard"
+  },
+  {
+   "t": 1176.04,
+   "d": 2.24,
+   "text": "and your sideboard sits off to the side"
+  },
+  {
+   "t": 1178.28,
+   "d": 2.68,
+   "text": "after the first game of a match you can"
+  },
+  {
+   "t": 1180.96,
+   "d": 2.12,
+   "text": "go to your sideboard and swap any cards"
+  },
+  {
+   "t": 1183.08,
+   "d": 1.52,
+   "text": "in from your sideboard that you want"
+  },
+  {
+   "t": 1184.6,
+   "d": 2.32,
+   "text": "into your deck so for example if I draft"
+  },
+  {
+   "t": 1186.92,
+   "d": 1.72,
+   "text": "a card that says destroy Target Green"
+  },
+  {
+   "t": 1188.64,
+   "d": 2.44,
+   "text": "creature for example I wouldn't want to"
+  },
+  {
+   "t": 1191.08,
+   "d": 1.44,
+   "text": "put that in my main deck a lot of the"
+  },
+  {
+   "t": 1192.52,
+   "d": 1.6,
+   "text": "time but if I'm playing as a green"
+  },
+  {
+   "t": 1194.12,
+   "d": 1.68,
+   "text": "opponent man that's like a card I really"
+  },
+  {
+   "t": 1195.8,
+   "d": 2.52,
+   "text": "want or just simply if my opponent has a"
+  },
+  {
+   "t": 1198.32,
+   "d": 1.6,
+   "text": "really strong rare and I'm like I have"
+  },
+  {
+   "t": 1199.92,
+   "d": 1.96,
+   "text": "to beat that rare I might go look at my"
+  },
+  {
+   "t": 1201.88,
+   "d": 1.76,
+   "text": "sideboard for a card that helps me deal"
+  },
+  {
+   "t": 1203.64,
+   "d": 2.56,
+   "text": "with that rare card so it it is a"
+  },
+  {
+   "t": 1206.2,
+   "d": 1.92,
+   "text": "strategic axis that you do lose out on"
+  },
+  {
+   "t": 1208.12,
+   "d": 2.08,
+   "text": "by playing best of one and many highly"
+  },
+  {
+   "t": 1210.2,
+   "d": 1.56,
+   "text": "competitive magic players or tournament"
+  },
+  {
+   "t": 1211.76,
+   "d": 1.8,
+   "text": "magic players prefer to play best of"
+  },
+  {
+   "t": 1213.56,
+   "d": 1.52,
+   "text": "three because a it means that if you"
+  },
+  {
+   "t": 1215.08,
+   "d": 1.52,
+   "text": "play more games the the player who's"
+  },
+  {
+   "t": 1216.6,
+   "d": 1.44,
+   "text": "better is advantaged and if you be VI"
+  },
+  {
+   "t": 1218.04,
+   "d": 1.2,
+   "text": "yourself as better you want to play more"
+  },
+  {
+   "t": 1219.24,
+   "d": 1.48,
+   "text": "games but also lets you kind of change"
+  },
+  {
+   "t": 1220.72,
+   "d": 2.08,
+   "text": "your deck on the fly to fight uh certain"
+  },
+  {
+   "t": 1222.8,
+   "d": 2.24,
+   "text": "problems um with that said the average"
+  },
+  {
+   "t": 1225.04,
+   "d": 1.64,
+   "text": "player Mo the vast majority of players"
+  },
+  {
+   "t": 1226.68,
+   "d": 1.52,
+   "text": "just enjoy the best of one play and not"
+  },
+  {
+   "t": 1228.2,
+   "d": 1.84,
+   "text": "worrying about sideboarding so it really"
+  },
+  {
+   "t": 1230.04,
+   "d": 2.08,
+   "text": "goes to show you the different um skill"
+  },
+  {
+   "t": 1232.12,
+   "d": 1.96,
+   "text": "levels of players it will show their"
+  },
+  {
+   "t": 1234.08,
+   "d": 1.6,
+   "text": "preference about what kind of experience"
+  },
+  {
+   "t": 1235.68,
+   "d": 2.28,
+   "text": "they want to play as well right yeah"
+  },
+  {
+   "t": 1237.96,
+   "d": 1.8,
+   "text": "that's really interesting and actually"
+  },
+  {
+   "t": 1239.76,
+   "d": 1.32,
+   "text": "that was something that I wanted to talk"
+  },
+  {
+   "t": 1241.08,
+   "d": 1.6,
+   "text": "about of that difference between some of"
+  },
+  {
+   "t": 1242.68,
+   "d": 2.24,
+   "text": "the inperson Magic versus in a mode like"
+  },
+  {
+   "t": 1244.92,
+   "d": 1.92,
+   "text": "Arena because when you're in that"
+  },
+  {
+   "t": 1246.84,
+   "d": 2.0,
+   "text": "drafting pod you"
+  },
+  {
+   "t": 1248.84,
+   "d": 2.96,
+   "text": "know what the other cards going around"
+  },
+  {
+   "t": 1251.8,
+   "d": 1.56,
+   "text": "are right like you're you're passing it"
+  },
+  {
+   "t": 1253.36,
+   "d": 1.36,
+   "text": "physically from person to person and"
+  },
+  {
+   "t": 1254.72,
+   "d": 1.92,
+   "text": "then those are going to be the Decks"
+  },
+  {
+   "t": 1256.64,
+   "d": 2.72,
+   "text": "that you're going against but in Arena"
+  },
+  {
+   "t": 1259.36,
+   "d": 1.32,
+   "text": "that's not the case is it you're in like"
+  },
+  {
+   "t": 1260.68,
+   "d": 1.76,
+   "text": "a big pool of like everybody who's"
+  },
+  {
+   "t": 1262.44,
+   "d": 2.96,
+   "text": "drafted so you know how does that play"
+  },
+  {
+   "t": 1265.4,
+   "d": 2.16,
+   "text": "out in terms of the social element it"
+  },
+  {
+   "t": 1267.56,
+   "d": 2.28,
+   "text": "seems like adds this you know extra"
+  },
+  {
+   "t": 1269.84,
+   "d": 1.84,
+   "text": "strategic layer to iners and these"
+  },
+  {
+   "t": 1271.68,
+   "d": 1.64,
+   "text": "different kind of you know you have a"
+  },
+  {
+   "t": 1273.32,
+   "d": 1.36,
+   "text": "different window of"
+  },
+  {
+   "t": 1274.68,
+   "d": 2.8,
+   "text": "information but then you know your pool"
+  },
+  {
+   "t": 1277.48,
+   "d": 1.6,
+   "text": "is smaller it feels like it it would be"
+  },
+  {
+   "t": 1279.08,
+   "d": 1.56,
+   "text": "a fairly different experience but then"
+  },
+  {
+   "t": 1280.64,
+   "d": 1.16,
+   "text": "obviously when you're designing the"
+  },
+  {
+   "t": 1281.8,
+   "d": 4.28,
+   "text": "cards it's the same cards in both yeah"
+  },
+  {
+   "t": 1286.08,
+   "d": 1.92,
+   "text": "for sure so a couple great great things"
+  },
+  {
+   "t": 1288.0,
+   "d": 1.6,
+   "text": "there you know one of the great things"
+  },
+  {
+   "t": 1289.6,
+   "d": 1.12,
+   "text": "about our digital game is you get to"
+  },
+  {
+   "t": 1290.72,
+   "d": 1.4,
+   "text": "play a game of magic whenever you want"
+  },
+  {
+   "t": 1292.12,
+   "d": 1.44,
+   "text": "right if you want to play a draft at 2:"
+  },
+  {
+   "t": 1293.56,
+   "d": 0.92,
+   "text": "in the morning and play through the"
+  },
+  {
+   "t": 1294.48,
+   "d": 1.88,
+   "text": "whole thing you'll have no problem doing"
+  },
+  {
+   "t": 1296.36,
+   "d": 2.16,
+   "text": "that and to be able to make that happen"
+  },
+  {
+   "t": 1298.52,
+   "d": 2.32,
+   "text": "and make it efficient and fast there's"
+  },
+  {
+   "t": 1300.84,
+   "d": 1.0,
+   "text": "just some trade-offs you have to"
+  },
+  {
+   "t": 1301.84,
+   "d": 2.08,
+   "text": "consider and one of them is hey to be"
+  },
+  {
+   "t": 1303.92,
+   "d": 1.72,
+   "text": "able to play at anytime and not worry"
+  },
+  {
+   "t": 1305.64,
+   "d": 1.72,
+   "text": "about sitting around for the whole time"
+  },
+  {
+   "t": 1307.36,
+   "d": 1.36,
+   "text": "let's let you play against anybody I'll"
+  },
+  {
+   "t": 1308.72,
+   "d": 1.36,
+   "text": "give you a great counter example so on"
+  },
+  {
+   "t": 1310.08,
+   "d": 2.2,
+   "text": "Magic the Gathering online you can still"
+  },
+  {
+   "t": 1312.28,
+   "d": 1.4,
+   "text": "do this and for many for a long time it"
+  },
+  {
+   "t": 1313.68,
+   "d": 1.6,
+   "text": "was true so we've got two digital games"
+  },
+  {
+   "t": 1315.28,
+   "d": 1.4,
+   "text": "not to be confusing there's magic Arena"
+  },
+  {
+   "t": 1316.68,
+   "d": 2.56,
+   "text": "and Magic Online magic Arena um is the"
+  },
+  {
+   "t": 1319.24,
+   "d": 2.0,
+   "text": "newer one and and the one that is i'"
+  },
+  {
+   "t": 1321.24,
+   "d": 2.64,
+   "text": "would say more of our like um Benchmark"
+  },
+  {
+   "t": 1323.88,
+   "d": 1.92,
+   "text": "or it's more of the like um what what"
+  },
+  {
+   "t": 1325.8,
+   "d": 1.16,
+   "text": "people what people see when they come to"
+  },
+  {
+   "t": 1326.96,
+   "d": 2.8,
+   "text": "Magic but Magic Online is maybe the"
+  },
+  {
+   "t": 1329.76,
+   "d": 1.4,
+   "text": "slightly more competitive one but also"
+  },
+  {
+   "t": 1331.16,
+   "d": 2.6,
+   "text": "the one that's been around longer um"
+  },
+  {
+   "t": 1333.76,
+   "d": 1.2,
+   "text": "they have different feelings to them I"
+  },
+  {
+   "t": 1334.96,
+   "d": 2.64,
+   "text": "would say and on Magic Online you know"
+  },
+  {
+   "t": 1337.6,
+   "d": 2.04,
+   "text": "Magic Online came out in 2001 so it was"
+  },
+  {
+   "t": 1339.64,
+   "d": 1.52,
+   "text": "one of the first games kind of like it"
+  },
+  {
+   "t": 1341.16,
+   "d": 2.16,
+   "text": "on the market anywhere and when you"
+  },
+  {
+   "t": 1343.32,
+   "d": 2.32,
+   "text": "wanted to draft on Magic Online you"
+  },
+  {
+   "t": 1345.64,
+   "d": 2.56,
+   "text": "would join a draft and you would play"
+  },
+  {
+   "t": 1348.2,
+   "d": 1.04,
+   "text": "against"
+  },
+  {
+   "t": 1349.24,
+   "d": 1.56,
+   "text": "you draft just like real life you play"
+  },
+  {
+   "t": 1350.8,
+   "d": 1.44,
+   "text": "against the other seven people that you"
+  },
+  {
+   "t": 1352.24,
+   "d": 2.0,
+   "text": "join you join your draft pod you'd fire"
+  },
+  {
+   "t": 1354.24,
+   "d": 1.44,
+   "text": "up you would play against people that"
+  },
+  {
+   "t": 1355.68,
+   "d": 1.8,
+   "text": "are in the same pod as you which is"
+  },
+  {
+   "t": 1357.48,
+   "d": 1.52,
+   "text": "which is in many ways a great experience"
+  },
+  {
+   "t": 1359.0,
+   "d": 0.96,
+   "text": "you can play with people that have all"
+  },
+  {
+   "t": 1359.96,
+   "d": 1.56,
+   "text": "seen the same cards you all pulled from"
+  },
+  {
+   "t": 1361.52,
+   "d": 2.6,
+   "text": "the same card pool it it's a great and I"
+  },
+  {
+   "t": 1364.12,
+   "d": 1.8,
+   "text": "love drafting that way the challenge"
+  },
+  {
+   "t": 1365.92,
+   "d": 1.2,
+   "text": "comes like this if I'm going to sit down"
+  },
+  {
+   "t": 1367.12,
+   "d": 1.48,
+   "text": "to draft in this draft bot on Magic"
+  },
+  {
+   "t": 1368.6,
+   "d": 1.84,
+   "text": "Online how long is it going to take well"
+  },
+  {
+   "t": 1370.44,
+   "d": 1.76,
+   "text": "it could take between 50 minutes and"
+  },
+  {
+   "t": 1372.2,
+   "d": 2.56,
+   "text": "three hours and I have to stay there the"
+  },
+  {
+   "t": 1374.76,
+   "d": 2.4,
+   "text": "entire time I can't leave in between and"
+  },
+  {
+   "t": 1377.16,
+   "d": 1.6,
+   "text": "it just makes for a really tough social"
+  },
+  {
+   "t": 1378.76,
+   "d": 1.36,
+   "text": "experience because I don't know how long"
+  },
+  {
+   "t": 1380.12,
+   "d": 2.84,
+   "text": "it's going to take I don't know um when"
+  },
+  {
+   "t": 1382.96,
+   "d": 1.8,
+   "text": "I'm going to be able to go and there's a"
+  },
+  {
+   "t": 1384.76,
+   "d": 2.12,
+   "text": "lot of downtime too if I finish my match"
+  },
+  {
+   "t": 1386.88,
+   "d": 2.24,
+   "text": "in 10 minutes and the next round they're"
+  },
+  {
+   "t": 1389.12,
+   "d": 1.24,
+   "text": "still playing and it's going to take"
+  },
+  {
+   "t": 1390.36,
+   "d": 1.88,
+   "text": "them 50 minutes I'm just sitting around"
+  },
+  {
+   "t": 1392.24,
+   "d": 1.6,
+   "text": "for 40 minutes but I can't really go"
+  },
+  {
+   "t": 1393.84,
+   "d": 1.8,
+   "text": "start up a new game because like what if"
+  },
+  {
+   "t": 1395.64,
+   "d": 1.96,
+   "text": "they finish so it's it's not a very"
+  },
+  {
+   "t": 1397.6,
+   "d": 1.56,
+   "text": "userfriendly experience for a digital"
+  },
+  {
+   "t": 1399.16,
+   "d": 1.4,
+   "text": "game or at least if you're in person at"
+  },
+  {
+   "t": 1400.56,
+   "d": 1.52,
+   "text": "a game store you can like go do"
+  },
+  {
+   "t": 1402.08,
+   "d": 1.24,
+   "text": "something else watch your friends match"
+  },
+  {
+   "t": 1403.32,
+   "d": 2.68,
+   "text": "like any number of things right um so"
+  },
+  {
+   "t": 1406.0,
+   "d": 2.56,
+   "text": "with Arena we kind of made the call that"
+  },
+  {
+   "t": 1408.56,
+   "d": 2.04,
+   "text": "okay yeah it's it's it's maybe not"
+  },
+  {
+   "t": 1410.6,
+   "d": 2.4,
+   "text": "exactly the in-person experience but it"
+  },
+  {
+   "t": 1413.0,
+   "d": 1.96,
+   "text": "lets you play games rapidly you can you"
+  },
+  {
+   "t": 1414.96,
+   "d": 1.92,
+   "text": "know you can draft any time and play at"
+  },
+  {
+   "t": 1416.88,
+   "d": 1.2,
+   "text": "any time and you don't have to worry"
+  },
+  {
+   "t": 1418.08,
+   "d": 1.12,
+   "text": "about sitting around for the whole time"
+  },
+  {
+   "t": 1419.2,
+   "d": 1.44,
+   "text": "if I want to draft and I gotta go"
+  },
+  {
+   "t": 1420.64,
+   "d": 1.16,
+   "text": "somewhere and I want to play my games"
+  },
+  {
+   "t": 1421.8,
+   "d": 3.28,
+   "text": "later I can totally do that which is um"
+  },
+  {
+   "t": 1425.08,
+   "d": 2.52,
+   "text": "which is well worth it um I think in"
+  },
+  {
+   "t": 1427.6,
+   "d": 2.0,
+   "text": "terms of the design elements though"
+  },
+  {
+   "t": 1429.6,
+   "d": 1.4,
+   "text": "there are some things we think about so"
+  },
+  {
+   "t": 1431.0,
+   "d": 2.0,
+   "text": "with arena being so wildly popular and"
+  },
+  {
+   "t": 1433.0,
+   "d": 1.76,
+   "text": "best of one being the main white people"
+  },
+  {
+   "t": 1434.76,
+   "d": 1.8,
+   "text": "people play on Arena we've started"
+  },
+  {
+   "t": 1436.56,
+   "d": 1.4,
+   "text": "changing our card design ever so"
+  },
+  {
+   "t": 1437.96,
+   "d": 1.72,
+   "text": "slightly so one of the things that we've"
+  },
+  {
+   "t": 1439.68,
+   "d": 2.08,
+   "text": "started doing is putting a lot of cards"
+  },
+  {
+   "t": 1441.76,
+   "d": 1.56,
+   "text": "that would traditionally be sideboard"
+  },
+  {
+   "t": 1443.32,
+   "d": 2.24,
+   "text": "cards and finding ways to make them get"
+  },
+  {
+   "t": 1445.56,
+   "d": 2.4,
+   "text": "into your main deck so for example a lot"
+  },
+  {
+   "t": 1447.96,
+   "d": 2.32,
+   "text": "more creatures that have them on there"
+  },
+  {
+   "t": 1450.28,
+   "d": 1.32,
+   "text": "as options so if you're not playing"
+  },
+  {
+   "t": 1451.6,
+   "d": 1.44,
+   "text": "against a green deck for example and you"
+  },
+  {
+   "t": 1453.04,
+   "d": 1.4,
+   "text": "have your creature that destroys a green"
+  },
+  {
+   "t": 1454.44,
+   "d": 1.48,
+   "text": "creature when it comes into play well"
+  },
+  {
+   "t": 1455.92,
+   "d": 0.88,
+   "text": "worst case you still just have a"
+  },
+  {
+   "t": 1456.8,
+   "d": 2.08,
+   "text": "creature you can put down and do stuff"
+  },
+  {
+   "t": 1458.88,
+   "d": 2.72,
+   "text": "right or um making modal cards cards"
+  },
+  {
+   "t": 1461.6,
+   "d": 1.36,
+   "text": "where you to make a choice between a few"
+  },
+  {
+   "t": 1462.96,
+   "d": 1.76,
+   "text": "different things for example you would"
+  },
+  {
+   "t": 1464.72,
+   "d": 2.24,
+   "text": "have a card that says draw two cards or"
+  },
+  {
+   "t": 1466.96,
+   "d": 1.16,
+   "text": "return a green creature to its owner's"
+  },
+  {
+   "t": 1468.12,
+   "d": 1.4,
+   "text": "hand well you can put that in your main"
+  },
+  {
+   "t": 1469.52,
+   "d": 1.68,
+   "text": "deck you can always just draw two cards"
+  },
+  {
+   "t": 1471.2,
+   "d": 1.04,
+   "text": "and if you're playing against Green you"
+  },
+  {
+   "t": 1472.24,
+   "d": 1.76,
+   "text": "get a little of that variety now color"
+  },
+  {
+   "t": 1474.0,
+   "d": 2.0,
+   "text": "ha is kind of exactly the wrong example"
+  },
+  {
+   "t": 1476.0,
+   "d": 1.56,
+   "text": "because I you don't want to accidentally"
+  },
+  {
+   "t": 1477.56,
+   "d": 2.16,
+   "text": "randomly make certain colors worse but"
+  },
+  {
+   "t": 1479.72,
+   "d": 2.08,
+   "text": "things like artifacts or enchantments or"
+  },
+  {
+   "t": 1481.8,
+   "d": 1.4,
+   "text": "cards that cost a lot of Mana that we"
+  },
+  {
+   "t": 1483.2,
+   "d": 1.88,
+   "text": "often put sideboard cards in our sets"
+  },
+  {
+   "t": 1485.08,
+   "d": 1.52,
+   "text": "that you can bring in fight against"
+  },
+  {
+   "t": 1486.6,
+   "d": 2.44,
+   "text": "those are cards you'll often see um get"
+  },
+  {
+   "t": 1489.04,
+   "d": 1.84,
+   "text": "get attacked by these kind of new wave"
+  },
+  {
+   "t": 1490.88,
+   "d": 2.32,
+   "text": "of of main decal um what would have"
+  },
+  {
+   "t": 1493.2,
+   "d": 1.76,
+   "text": "previously have been sideboard cards so"
+  },
+  {
+   "t": 1494.96,
+   "d": 1.12,
+   "text": "it is something we think about as we're"
+  },
+  {
+   "t": 1496.08,
+   "d": 1.36,
+   "text": "actively designing given the digital"
+  },
+  {
+   "t": 1497.44,
+   "d": 2.48,
+   "text": "version is so popular of the game yeah"
+  },
+  {
+   "t": 1499.92,
+   "d": 1.08,
+   "text": "that's really interesting because I"
+  },
+  {
+   "t": 1501.0,
+   "d": 2.52,
+   "text": "think that you know rug leges being more"
+  },
+  {
+   "t": 1503.52,
+   "d": 2.2,
+   "text": "commonly the instant gratification sit"
+  },
+  {
+   "t": 1505.72,
+   "d": 2.16,
+   "text": "down play a run whenever I want I don't"
+  },
+  {
+   "t": 1507.88,
+   "d": 1.52,
+   "text": "usually have to accumulate a bunch of"
+  },
+  {
+   "t": 1509.4,
+   "d": 1.92,
+   "text": "other people I I'd love the Rog like"
+  },
+  {
+   "t": 1511.32,
+   "d": 1.12,
+   "text": "that meant like eight of us sitting"
+  },
+  {
+   "t": 1512.44,
+   "d": 1.56,
+   "text": "around at table playing a rogue like"
+  },
+  {
+   "t": 1514.0,
+   "d": 2.0,
+   "text": "people keep trying physical uh games"
+  },
+  {
+   "t": 1516.0,
+   "d": 1.4,
+   "text": "this might at this point just be playing"
+  },
+  {
+   "t": 1517.4,
+   "d": 3.76,
+   "text": "board games but uh I think the idea the"
+  },
+  {
+   "t": 1521.16,
+   "d": 1.24,
+   "text": "idea of a rogue like they all play"
+  },
+  {
+   "t": 1522.4,
+   "d": 1.24,
+   "text": "together has a lot of charm to me right"
+  },
+  {
+   "t": 1523.64,
+   "d": 1.32,
+   "text": "you think about all the Battle Royale"
+  },
+  {
+   "t": 1524.96,
+   "d": 1.76,
+   "text": "style games or Auto battler style games"
+  },
+  {
+   "t": 1526.72,
+   "d": 1.84,
+   "text": "like there's a lot of fun just old old"
+  },
+  {
+   "t": 1528.56,
+   "d": 1.68,
+   "text": "style land parties you know a bunch of"
+  },
+  {
+   "t": 1530.24,
+   "d": 1.16,
+   "text": "fun to all playing the same game"
+  },
+  {
+   "t": 1531.4,
+   "d": 2.0,
+   "text": "together um and I think it's it's great"
+  },
+  {
+   "t": 1533.4,
+   "d": 1.48,
+   "text": "when games can let you build your own"
+  },
+  {
+   "t": 1534.88,
+   "d": 1.72,
+   "text": "lobbies right so if you want to all play"
+  },
+  {
+   "t": 1536.6,
+   "d": 2.0,
+   "text": "together you totally have the option to"
+  },
+  {
+   "t": 1538.6,
+   "d": 2.36,
+   "text": "but um ultimately yeah the ability to uh"
+  },
+  {
+   "t": 1540.96,
+   "d": 2.32,
+   "text": "in your you know sweats at 2 am fire off"
+  },
+  {
+   "t": 1543.28,
+   "d": 2.44,
+   "text": "a magic draft is pretty powerful yeah"
+  },
+  {
+   "t": 1545.72,
+   "d": 1.64,
+   "text": "yeah if I had to find 12 people to play"
+  },
+  {
+   "t": 1547.36,
+   "d": 4.08,
+   "text": "batro that would be a problem but so"
+  },
+  {
+   "t": 1551.44,
+   "d": 1.16,
+   "text": "it's interesting of the shift that"
+  },
+  {
+   "t": 1552.6,
+   "d": 1.8,
+   "text": "you're talking about because yeah that"
+  },
+  {
+   "t": 1554.4,
+   "d": 2.48,
+   "text": "um the way that people draft in Arena"
+  },
+  {
+   "t": 1556.88,
+   "d": 2.44,
+   "text": "feels a lot closer to what people often"
+  },
+  {
+   "t": 1559.32,
+   "d": 1.28,
+   "text": "are trying to get out of Rogue leg so"
+  },
+  {
+   "t": 1560.6,
+   "d": 1.12,
+   "text": "it's interesting the changes that have"
+  },
+  {
+   "t": 1561.72,
+   "d": 2.24,
+   "text": "been had to make um to the cars"
+  },
+  {
+   "t": 1563.96,
+   "d": 2.16,
+   "text": "themselves to accommodate that also"
+  },
+  {
+   "t": 1566.12,
+   "d": 2.8,
+   "text": "interesting um since Arena means you can"
+  },
+  {
+   "t": 1568.92,
+   "d": 2.2,
+   "text": "also just draft way more it's it's way"
+  },
+  {
+   "t": 1571.12,
+   "d": 1.72,
+   "text": "quicker I don't have to assemble a draft"
+  },
+  {
+   "t": 1572.84,
+   "d": 2.4,
+   "text": "pot I don't have to set aside that time"
+  },
+  {
+   "t": 1575.24,
+   "d": 2.2,
+   "text": "I don't have to go to an in-person event"
+  },
+  {
+   "t": 1577.44,
+   "d": 1.28,
+   "text": "that means there's a lot more drafting"
+  },
+  {
+   "t": 1578.72,
+   "d": 1.52,
+   "text": "happening that means there's a lot more"
+  },
+  {
+   "t": 1580.24,
+   "d": 2.4,
+   "text": "data and the players have ways to also"
+  },
+  {
+   "t": 1582.64,
+   "d": 2.36,
+   "text": "get access to that kind of quantitative"
+  },
+  {
+   "t": 1585.0,
+   "d": 2.28,
+   "text": "analysis um there's websites like I"
+  },
+  {
+   "t": 1587.28,
+   "d": 3.4,
+   "text": "guess 17 land that aggregate data pick"
+  },
+  {
+   "t": 1590.68,
+   "d": 2.72,
+   "text": "rates win rates and you know we've"
+  },
+  {
+   "t": 1593.4,
+   "d": 1.76,
+   "text": "talked sometimes at Rog like celebration"
+  },
+  {
+   "t": 1595.16,
+   "d": 2.08,
+   "text": "about how player awareness of optimal"
+  },
+  {
+   "t": 1597.24,
+   "d": 3.48,
+   "text": "play can impact everybody's experience"
+  },
+  {
+   "t": 1600.72,
+   "d": 2.8,
+   "text": "in the game uh and even whether or not"
+  },
+  {
+   "t": 1603.52,
+   "d": 1.92,
+   "text": "like that's an accurate depiction of"
+  },
+  {
+   "t": 1605.44,
+   "d": 2.8,
+   "text": "optimal play just having that in the air"
+  },
+  {
+   "t": 1608.24,
+   "d": 2.56,
+   "text": "can kind of sour some of the feelings uh"
+  },
+  {
+   "t": 1610.8,
+   "d": 2.08,
+   "text": "as you play or at least you know modify"
+  },
+  {
+   "t": 1612.88,
+   "d": 2.64,
+   "text": "how how it feels so I'm curious now that"
+  },
+  {
+   "t": 1615.52,
+   "d": 2.56,
+   "text": "that is also something that comes out of"
+  },
+  {
+   "t": 1618.08,
+   "d": 2.12,
+   "text": "this like rapid drafting Arena"
+  },
+  {
+   "t": 1620.2,
+   "d": 1.48,
+   "text": "environment if that's something you"
+  },
+  {
+   "t": 1621.68,
+   "d": 1.6,
+   "text": "think about and if that has any impact"
+  },
+  {
+   "t": 1623.28,
+   "d": 1.52,
+   "text": "on how you have to design the cards"
+  },
+  {
+   "t": 1624.8,
+   "d": 2.4,
+   "text": "knowing players have that in their hands"
+  },
+  {
+   "t": 1627.2,
+   "d": 1.28,
+   "text": "yeah I you know I would be lying if I"
+  },
+  {
+   "t": 1628.48,
+   "d": 1.48,
+   "text": "said that one of the first things our"
+  },
+  {
+   "t": 1629.96,
+   "d": 1.76,
+   "text": "development team does our play design"
+  },
+  {
+   "t": 1631.72,
+   "d": 1.44,
+   "text": "team which is kind of like the end end"
+  },
+  {
+   "t": 1633.16,
+   "d": 1.6,
+   "text": "stage development does when a new set"
+  },
+  {
+   "t": 1634.76,
+   "d": 1.28,
+   "text": "comes out it's about three days in they"
+  },
+  {
+   "t": 1636.04,
+   "d": 2.16,
+   "text": "start refreshing 17 lands to see okay"
+  },
+  {
+   "t": 1638.2,
+   "d": 2.0,
+   "text": "how how close are we how far off are we"
+  },
+  {
+   "t": 1640.2,
+   "d": 1.56,
+   "text": "what are the disparities looking like"
+  },
+  {
+   "t": 1641.76,
+   "d": 1.16,
+   "text": "and then how it changes over time right"
+  },
+  {
+   "t": 1642.92,
+   "d": 1.8,
+   "text": "because often it changes over time but"
+  },
+  {
+   "t": 1644.72,
+   "d": 1.88,
+   "text": "one of the great things about magic and"
+  },
+  {
+   "t": 1646.6,
+   "d": 1.76,
+   "text": "draft in particular as I mentioned ear"
+  },
+  {
+   "t": 1648.36,
+   "d": 1.76,
+   "text": "it is self-balancing so even if you are"
+  },
+  {
+   "t": 1650.12,
+   "d": 1.96,
+   "text": "a little off on a color there's a great"
+  },
+  {
+   "t": 1652.08,
+   "d": 2.04,
+   "text": "amount of self balancing that it does"
+  },
+  {
+   "t": 1654.12,
+   "d": 2.04,
+   "text": "and number two is it's very contextual"
+  },
+  {
+   "t": 1656.16,
+   "d": 2.12,
+   "text": "and I think this is is a huge asset we"
+  },
+  {
+   "t": 1658.28,
+   "d": 2.56,
+   "text": "have for us um you could see that a card"
+  },
+  {
+   "t": 1660.84,
+   "d": 1.92,
+   "text": "has a really high win rate but it"
+  },
+  {
+   "t": 1662.76,
+   "d": 0.88,
+   "text": "doesn't mean it's gonna have a higher"
+  },
+  {
+   "t": 1663.64,
+   "d": 1.6,
+   "text": "win rate in every single deck and that"
+  },
+  {
+   "t": 1665.24,
+   "d": 1.44,
+   "text": "you should always take it um you know"
+  },
+  {
+   "t": 1666.68,
+   "d": 1.64,
+   "text": "for example if you make a card that"
+  },
+  {
+   "t": 1668.32,
+   "d": 2.16,
+   "text": "gives Buffs all of your creatures well"
+  },
+  {
+   "t": 1670.48,
+   "d": 1.76,
+   "text": "if you don't have a creature heavy deck"
+  },
+  {
+   "t": 1672.24,
+   "d": 1.4,
+   "text": "it's not going to be that strong of a"
+  },
+  {
+   "t": 1673.64,
+   "d": 2.84,
+   "text": "card for you to actually play with um so"
+  },
+  {
+   "t": 1676.48,
+   "d": 2.36,
+   "text": "what I find with data sourc is like 17"
+  },
+  {
+   "t": 1678.84,
+   "d": 1.76,
+   "text": "lands which is one of the main ones is"
+  },
+  {
+   "t": 1680.6,
+   "d": 1.64,
+   "text": "they're great directionally like looking"
+  },
+  {
+   "t": 1682.24,
+   "d": 1.28,
+   "text": "at them will give you a really good idea"
+  },
+  {
+   "t": 1683.52,
+   "d": 1.28,
+   "text": "of directional information about the"
+  },
+  {
+   "t": 1684.8,
+   "d": 2.6,
+   "text": "format what colors are strong uh what"
+  },
+  {
+   "t": 1687.4,
+   "d": 1.88,
+   "text": "cards are generally strong but I think"
+  },
+  {
+   "t": 1689.28,
+   "d": 3.44,
+   "text": "if players try and use them to um inform"
+  },
+  {
+   "t": 1692.72,
+   "d": 1.24,
+   "text": "all of their decisions they'll end up"
+  },
+  {
+   "t": 1693.96,
+   "d": 0.84,
+   "text": "with something that doesn't really"
+  },
+  {
+   "t": 1694.8,
+   "d": 1.8,
+   "text": "necessarily coherently work together so"
+  },
+  {
+   "t": 1696.6,
+   "d": 2.0,
+   "text": "it requires good judgment plus knowing"
+  },
+  {
+   "t": 1698.6,
+   "d": 2.16,
+   "text": "the data that that that can be useful um"
+  },
+  {
+   "t": 1700.76,
+   "d": 1.52,
+   "text": "you know I know plenty of players that"
+  },
+  {
+   "t": 1702.28,
+   "d": 2.44,
+   "text": "are like yep I go to the site I sort by"
+  },
+  {
+   "t": 1704.72,
+   "d": 1.76,
+   "text": "highest picks I like choose those as I'm"
+  },
+  {
+   "t": 1706.48,
+   "d": 1.84,
+   "text": "picking my cards and I know plenty have"
+  },
+  {
+   "t": 1708.32,
+   "d": 1.4,
+   "text": "also successful other successful players"
+  },
+  {
+   "t": 1709.72,
+   "d": 1.76,
+   "text": "are like I never go there right I just I"
+  },
+  {
+   "t": 1711.48,
+   "d": 2.6,
+   "text": "pick pick the cards and um you know not"
+  },
+  {
+   "t": 1714.08,
+   "d": 1.64,
+   "text": "to make it like a generational divide"
+  },
+  {
+   "t": 1715.72,
+   "d": 1.76,
+   "text": "too much but someone on Twitter has"
+  },
+  {
+   "t": 1717.48,
+   "d": 1.04,
+   "text": "talked about how it's almost like a"
+  },
+  {
+   "t": 1718.52,
+   "d": 1.76,
+   "text": "Zoomer versus Boomer thing or a lot of"
+  },
+  {
+   "t": 1720.28,
+   "d": 1.28,
+   "text": "the old school magic players who are"
+  },
+  {
+   "t": 1721.56,
+   "d": 1.08,
+   "text": "just like haven't doing this for a long"
+  },
+  {
+   "t": 1722.64,
+   "d": 1.44,
+   "text": "time and are really good or whatever"
+  },
+  {
+   "t": 1724.08,
+   "d": 1.2,
+   "text": "they're like I don't I know I know how"
+  },
+  {
+   "t": 1725.28,
+   "d": 1.52,
+   "text": "to evaluate the good cards I don't need"
+  },
+  {
+   "t": 1726.8,
+   "d": 1.56,
+   "text": "this I'm fine right and then a lot of"
+  },
+  {
+   "t": 1728.36,
+   "d": 1.96,
+   "text": "the the newer generation is like no we"
+  },
+  {
+   "t": 1730.32,
+   "d": 1.16,
+   "text": "gota you gota look at the data and like"
+  },
+  {
+   "t": 1731.48,
+   "d": 1.2,
+   "text": "look at the rates and we take those"
+  },
+  {
+   "t": 1732.68,
+   "d": 2.16,
+   "text": "cards and neither one is wrong like both"
+  },
+  {
+   "t": 1734.84,
+   "d": 1.24,
+   "text": "older players who've been playing a long"
+  },
+  {
+   "t": 1736.08,
+   "d": 1.28,
+   "text": "time in our experience and newer players"
+  },
+  {
+   "t": 1737.36,
+   "d": 1.6,
+   "text": "coming in doing this other method have"
+  },
+  {
+   "t": 1738.96,
+   "d": 1.92,
+   "text": "had really good positive experiences and"
+  },
+  {
+   "t": 1740.88,
+   "d": 2.68,
+   "text": "can can do quite well um but this is a"
+  },
+  {
+   "t": 1743.56,
+   "d": 1.76,
+   "text": "thing we think about and basically what"
+  },
+  {
+   "t": 1745.32,
+   "d": 2.08,
+   "text": "it means is if the biggest thing that"
+  },
+  {
+   "t": 1747.4,
+   "d": 2.4,
+   "text": "means for us in design is that if there"
+  },
+  {
+   "t": 1749.8,
+   "d": 2.0,
+   "text": "is a flaw in your format it's going to"
+  },
+  {
+   "t": 1751.8,
+   "d": 2.16,
+   "text": "be discovered and exploited very quickly"
+  },
+  {
+   "t": 1753.96,
+   "d": 2.52,
+   "text": "because within a you know 24 hours a"
+  },
+  {
+   "t": 1756.48,
+   "d": 1.96,
+   "text": "couple days people will know which"
+  },
+  {
+   "t": 1758.44,
+   "d": 1.64,
+   "text": "colors are favored and you know people"
+  },
+  {
+   "t": 1760.08,
+   "d": 1.52,
+   "text": "want their edges right a color is better"
+  },
+  {
+   "t": 1761.6,
+   "d": 3.56,
+   "text": "by 3% that's 3% of an edge that you have"
+  },
+  {
+   "t": 1765.16,
+   "d": 1.32,
+   "text": "which means that we try and do things"
+  },
+  {
+   "t": 1766.48,
+   "d": 2.36,
+   "text": "that both bring down the odds there will"
+  },
+  {
+   "t": 1768.84,
+   "d": 2.36,
+   "text": "be something entirely out of whack and"
+  },
+  {
+   "t": 1771.2,
+   "d": 1.64,
+   "text": "um you know there are various processes"
+  },
+  {
+   "t": 1772.84,
+   "d": 0.88,
+   "text": "these we do and we're looking at the"
+  },
+  {
+   "t": 1773.72,
+   "d": 1.28,
+   "text": "power level of our cards feel like how"
+  },
+  {
+   "t": 1775.0,
+   "d": 1.64,
+   "text": "can we figure out the fringes and also"
+  },
+  {
+   "t": 1776.64,
+   "d": 2.88,
+   "text": "there uh answers to everything uh so"
+  },
+  {
+   "t": 1779.52,
+   "d": 2.08,
+   "text": "that we have cards at common for example"
+  },
+  {
+   "t": 1781.6,
+   "d": 1.6,
+   "text": "that can destroy artifacts or"
+  },
+  {
+   "t": 1783.2,
+   "d": 1.32,
+   "text": "enchantments or cards that can answer"
+  },
+  {
+   "t": 1784.52,
+   "d": 1.96,
+   "text": "fast or slow strategies so that if"
+  },
+  {
+   "t": 1786.48,
+   "d": 1.84,
+   "text": "something does turn out to be too strong"
+  },
+  {
+   "t": 1788.32,
+   "d": 1.56,
+   "text": "you have options you can play to fight"
+  },
+  {
+   "t": 1789.88,
+   "d": 2.08,
+   "text": "against it and hopefully create um a v"
+  },
+  {
+   "t": 1791.96,
+   "d": 2.16,
+   "text": "variety of experience I think we care we"
+  },
+  {
+   "t": 1794.12,
+   "d": 1.96,
+   "text": "care about color balance a lot but"
+  },
+  {
+   "t": 1796.08,
+   "d": 1.08,
+   "text": "ultimately we want to make sure there's"
+  },
+  {
+   "t": 1797.16,
+   "d": 0.88,
+   "text": "just a lot of different experience"
+  },
+  {
+   "t": 1798.04,
+   "d": 1.64,
+   "text": "experences you can have and and the self"
+  },
+  {
+   "t": 1799.68,
+   "d": 2.0,
+   "text": "balancing nature of draft kind of helps"
+  },
+  {
+   "t": 1801.68,
+   "d": 1.6,
+   "text": "the color balance issue already to some"
+  },
+  {
+   "t": 1803.28,
+   "d": 1.76,
+   "text": "degree but making sure that the format"
+  },
+  {
+   "t": 1805.04,
+   "d": 2.16,
+   "text": "is not too fast or too slow is something"
+  },
+  {
+   "t": 1807.2,
+   "d": 2.0,
+   "text": "that color balance will not help as much"
+  },
+  {
+   "t": 1809.2,
+   "d": 1.44,
+   "text": "because if the only good cards I take"
+  },
+  {
+   "t": 1810.64,
+   "d": 1.84,
+   "text": "are aggressive cards the whole format"
+  },
+  {
+   "t": 1812.48,
+   "d": 1.64,
+   "text": "will be very fast if the only good cards"
+  },
+  {
+   "t": 1814.12,
+   "d": 2.12,
+   "text": "to take our our control cards um then"
+  },
+  {
+   "t": 1816.24,
+   "d": 1.64,
+   "text": "the whole for will be very slow and we"
+  },
+  {
+   "t": 1817.88,
+   "d": 1.28,
+   "text": "want to make sure that both strategies"
+  },
+  {
+   "t": 1819.16,
+   "d": 2.6,
+   "text": "are very viable so that's one of the"
+  },
+  {
+   "t": 1821.76,
+   "d": 1.72,
+   "text": "things we actually look at um just as"
+  },
+  {
+   "t": 1823.48,
+   "d": 2.48,
+   "text": "much as as color balance as format speed"
+  },
+  {
+   "t": 1825.96,
+   "d": 2.44,
+   "text": "across all colors um so like that's an"
+  },
+  {
+   "t": 1828.4,
+   "d": 2.08,
+   "text": "area we can really mess up as in as well"
+  },
+  {
+   "t": 1830.48,
+   "d": 1.44,
+   "text": "so creating cards that can help slow"
+  },
+  {
+   "t": 1831.92,
+   "d": 2.84,
+   "text": "things down or speed things up um are"
+  },
+  {
+   "t": 1834.76,
+   "d": 1.0,
+   "text": "great I'll give you I'll give you a"
+  },
+  {
+   "t": 1835.76,
+   "d": 2.68,
+   "text": "wonderful example so um car there's a"
+  },
+  {
+   "t": 1838.44,
+   "d": 2.56,
+   "text": "kind of a class of cards that um they're"
+  },
+  {
+   "t": 1841.0,
+   "d": 2.04,
+   "text": "usually common or uncommon that give all"
+  },
+  {
+   "t": 1843.04,
+   "d": 1.56,
+   "text": "of your creatures plus two plus for a"
+  },
+  {
+   "t": 1844.6,
+   "d": 1.72,
+   "text": "turn okay just like an instant it gives"
+  },
+  {
+   "t": 1846.32,
+   "d": 1.44,
+   "text": "all your creatures plus two power in"
+  },
+  {
+   "t": 1847.76,
+   "d": 1.44,
+   "text": "Magic you have 20 life creatures deal"
+  },
+  {
+   "t": 1849.2,
+   "d": 1.68,
+   "text": "damage equal to their power so giving"
+  },
+  {
+   "t": 1850.88,
+   "d": 1.24,
+   "text": "all your creatures plus two power for a"
+  },
+  {
+   "t": 1852.12,
+   "d": 1.4,
+   "text": "turn means you can hit for a big swing"
+  },
+  {
+   "t": 1853.52,
+   "d": 2.88,
+   "text": "of damage it's a pretty safe thing to"
+  },
+  {
+   "t": 1856.4,
+   "d": 1.96,
+   "text": "include in any given set at common or"
+  },
+  {
+   "t": 1858.36,
+   "d": 1.68,
+   "text": "uncommon because usually it's not going"
+  },
+  {
+   "t": 1860.04,
+   "d": 2.4,
+   "text": "to be too strong but it means that"
+  },
+  {
+   "t": 1862.44,
+   "d": 1.72,
+   "text": "basically you'll have all you'll always"
+  },
+  {
+   "t": 1864.16,
+   "d": 1.16,
+   "text": "have this kind of play a bunch of"
+  },
+  {
+   "t": 1865.32,
+   "d": 1.6,
+   "text": "creatures attack play this and deal a"
+  },
+  {
+   "t": 1866.92,
+   "d": 1.48,
+   "text": "bunch of damage archetype available to"
+  },
+  {
+   "t": 1868.4,
+   "d": 2.96,
+   "text": "you so even if the format is really slow"
+  },
+  {
+   "t": 1871.36,
+   "d": 1.72,
+   "text": "someone could always draft this deck"
+  },
+  {
+   "t": 1873.08,
+   "d": 1.68,
+   "text": "usually like an uncommon a little more"
+  },
+  {
+   "t": 1874.76,
+   "d": 2.08,
+   "text": "now so it doesn't come up all the time"
+  },
+  {
+   "t": 1876.84,
+   "d": 1.28,
+   "text": "um one of the things we think about with"
+  },
+  {
+   "t": 1878.12,
+   "d": 1.4,
+   "text": "Rarity is how often these cards will"
+  },
+  {
+   "t": 1879.52,
+   "d": 1.96,
+   "text": "float around the table and a card like"
+  },
+  {
+   "t": 1881.48,
+   "d": 1.8,
+   "text": "that that is for a very specific kind of"
+  },
+  {
+   "t": 1883.28,
+   "d": 1.6,
+   "text": "deck you don't need eight copies in the"
+  },
+  {
+   "t": 1884.88,
+   "d": 1.4,
+   "text": "draft at a common or four copies in the"
+  },
+  {
+   "t": 1886.28,
+   "d": 1.2,
+   "text": "draft at a common because only one"
+  },
+  {
+   "t": 1887.48,
+   "d": 1.32,
+   "text": "player could ever possibly really want"
+  },
+  {
+   "t": 1888.8,
+   "d": 2.44,
+   "text": "them so often put that uncommon anyway"
+  },
+  {
+   "t": 1891.24,
+   "d": 2.4,
+   "text": "bit of bit of a tangent there but um we"
+  },
+  {
+   "t": 1893.64,
+   "d": 1.4,
+   "text": "think about this stuff a lot but so we"
+  },
+  {
+   "t": 1895.04,
+   "d": 1.32,
+   "text": "try and put in a few cards will help"
+  },
+  {
+   "t": 1896.36,
+   "d": 1.84,
+   "text": "create their own archetypes help create"
+  },
+  {
+   "t": 1898.2,
+   "d": 2.72,
+   "text": "variety of format speed as well um so"
+  },
+  {
+   "t": 1900.92,
+   "d": 1.16,
+   "text": "that's one of the ways we could tackle"
+  },
+  {
+   "t": 1902.08,
+   "d": 1.28,
+   "text": "knowing that all this data is out there"
+  },
+  {
+   "t": 1903.36,
+   "d": 1.12,
+   "text": "but ultimately you know the data is"
+  },
+  {
+   "t": 1904.48,
+   "d": 2.6,
+   "text": "gonna gonna get collected and um we're"
+  },
+  {
+   "t": 1907.08,
+   "d": 2.72,
+   "text": "eager to see it too yeah it makes me"
+  },
+  {
+   "t": 1909.8,
+   "d": 2.24,
+   "text": "think about you know those old discourse"
+  },
+  {
+   "t": 1912.04,
+   "d": 1.76,
+   "text": "about spoilers going back you know and"
+  },
+  {
+   "t": 1913.8,
+   "d": 1.2,
+   "text": "and talking about games like net hack"
+  },
+  {
+   "t": 1915.0,
+   "d": 1.44,
+   "text": "and the experience of playing Rog likes"
+  },
+  {
+   "t": 1916.44,
+   "d": 2.04,
+   "text": "with knowledge you'll be beyond what you"
+  },
+  {
+   "t": 1918.48,
+   "d": 1.96,
+   "text": "gather as a player or not and how that"
+  },
+  {
+   "t": 1920.44,
+   "d": 1.28,
+   "text": "expects your experience and I think at"
+  },
+  {
+   "t": 1921.72,
+   "d": 2.0,
+   "text": "the end of the day there's advantages to"
+  },
+  {
+   "t": 1923.72,
+   "d": 1.88,
+   "text": "both there's disadvantages to both and"
+  },
+  {
+   "t": 1925.6,
+   "d": 1.8,
+   "text": "um yeah it's really interesting and just"
+  },
+  {
+   "t": 1927.4,
+   "d": 2.24,
+   "text": "thinking about um you know drafting"
+  },
+  {
+   "t": 1929.64,
+   "d": 1.84,
+   "text": "obviously can really lean into all these"
+  },
+  {
+   "t": 1931.48,
+   "d": 2.72,
+   "text": "ideas about different sets and um I just"
+  },
+  {
+   "t": 1934.2,
+   "d": 1.08,
+   "text": "think it's interesting of you know Rog"
+  },
+  {
+   "t": 1935.28,
+   "d": 1.4,
+   "text": "likees at least have the opportunity to"
+  },
+  {
+   "t": 1936.68,
+   "d": 1.72,
+   "text": "often split that into things like"
+  },
+  {
+   "t": 1938.4,
+   "d": 1.48,
+   "text": "different areas or different levels or"
+  },
+  {
+   "t": 1939.88,
+   "d": 2.04,
+   "text": "different character classes and so yeah"
+  },
+  {
+   "t": 1941.92,
+   "d": 2.2,
+   "text": "it's just um cool how that translates"
+  },
+  {
+   "t": 1944.12,
+   "d": 1.52,
+   "text": "and I feel like if I was a Rog likee"
+  },
+  {
+   "t": 1945.64,
+   "d": 2.04,
+   "text": "designer taking inspiration from Magic"
+  },
+  {
+   "t": 1947.68,
+   "d": 1.56,
+   "text": "then that's kind of the breaking it down"
+  },
+  {
+   "t": 1949.24,
+   "d": 1.32,
+   "text": "of looking at set to set and that's"
+  },
+  {
+   "t": 1950.56,
+   "d": 1.32,
+   "text": "almost kind of what you want in a rogue"
+  },
+  {
+   "t": 1951.88,
+   "d": 3.72,
+   "text": "like from area to area or class to class"
+  },
+  {
+   "t": 1955.6,
+   "d": 2.48,
+   "text": "um and and yeah one of the things uh"
+  },
+  {
+   "t": 1958.08,
+   "d": 1.2,
+   "text": "that's quite interesting there again is"
+  },
+  {
+   "t": 1959.28,
+   "d": 2.04,
+   "text": "when you're making a rogue like and"
+  },
+  {
+   "t": 1961.32,
+   "d": 0.96,
+   "text": "let's say that the classes are"
+  },
+  {
+   "t": 1962.28,
+   "d": 1.24,
+   "text": "imbalanced right there's one that's very"
+  },
+  {
+   "t": 1963.52,
+   "d": 1.04,
+   "text": "easy to win with the one that's very"
+  },
+  {
+   "t": 1964.56,
+   "d": 2.44,
+   "text": "hard to win with well it's PVE so a lot"
+  },
+  {
+   "t": 1967.0,
+   "d": 1.24,
+   "text": "of players will just enjoy playing the"
+  },
+  {
+   "t": 1968.24,
+   "d": 1.08,
+   "text": "harder class because they want the"
+  },
+  {
+   "t": 1969.32,
+   "d": 1.52,
+   "text": "challenge right and in fact many Rogue"
+  },
+  {
+   "t": 1970.84,
+   "d": 1.52,
+   "text": "likes do this where they have the easy"
+  },
+  {
+   "t": 1972.36,
+   "d": 1.56,
+   "text": "to win with class that is like maybe a"
+  },
+  {
+   "t": 1973.92,
+   "d": 1.52,
+   "text": "little more straightforward and then the"
+  },
+  {
+   "t": 1975.44,
+   "d": 1.48,
+   "text": "classes get harder and more technical as"
+  },
+  {
+   "t": 1976.92,
+   "d": 2.28,
+   "text": "you go down but because magic is a PVP"
+  },
+  {
+   "t": 1979.2,
+   "d": 1.56,
+   "text": "game the best thing to do is always just"
+  },
+  {
+   "t": 1980.76,
+   "d": 1.56,
+   "text": "play the best strategy and so you don't"
+  },
+  {
+   "t": 1982.32,
+   "d": 1.56,
+   "text": "get the like oh I'm gonna do the hard"
+  },
+  {
+   "t": 1983.88,
+   "d": 1.64,
+   "text": "thing or maybe some players do but the"
+  },
+  {
+   "t": 1985.52,
+   "d": 1.68,
+   "text": "most people are are not doing the I'm"
+  },
+  {
+   "t": 1987.2,
+   "d": 1.32,
+   "text": "gonna do the hard thing even though it's"
+  },
+  {
+   "t": 1988.52,
+   "d": 2.6,
+   "text": "worse um thing so we have to be pretty"
+  },
+  {
+   "t": 1991.12,
+   "d": 1.76,
+   "text": "careful about that and once again we"
+  },
+  {
+   "t": 1992.88,
+   "d": 1.6,
+   "text": "can't patch our game right that's one of"
+  },
+  {
+   "t": 1994.48,
+   "d": 2.08,
+   "text": "the huge differences as opposed to Rog"
+  },
+  {
+   "t": 1996.56,
+   "d": 2.24,
+   "text": "Le oh you're building a Rog Le and The"
+  },
+  {
+   "t": 1998.8,
+   "d": 1.2,
+   "text": "Wizard is a little too weak well no"
+  },
+  {
+   "t": 2000.0,
+   "d": 2.24,
+   "text": "problem we'll put in a patch uh in Magic"
+  },
+  {
+   "t": 2002.24,
+   "d": 1.64,
+   "text": "we can't just buff blue uh it's like"
+  },
+  {
+   "t": 2003.88,
+   "d": 2.2,
+   "text": "better better luck next set you know so"
+  },
+  {
+   "t": 2006.08,
+   "d": 2.28,
+   "text": "um it becomes tricky yeah"
+  },
+  {
+   "t": 2008.36,
+   "d": 2.36,
+   "text": "um I'm curious to to Circle back it's"
+  },
+  {
+   "t": 2010.72,
+   "d": 1.72,
+   "text": "funny you mentioned something way near"
+  },
+  {
+   "t": 2012.44,
+   "d": 1.24,
+   "text": "the start that was a topic we also"
+  },
+  {
+   "t": 2013.68,
+   "d": 1.36,
+   "text": "wanted to get into which was that sign"
+  },
+  {
+   "t": 2015.04,
+   "d": 3.28,
+   "text": "posting that um increasing prevalence of"
+  },
+  {
+   "t": 2018.32,
+   "d": 2.24,
+   "text": "being able to have these cards that uh"
+  },
+  {
+   "t": 2020.56,
+   "d": 1.6,
+   "text": "don't just tell you here's a set of"
+  },
+  {
+   "t": 2022.16,
+   "d": 1.92,
+   "text": "colors that you might want to play but"
+  },
+  {
+   "t": 2024.08,
+   "d": 2.2,
+   "text": "also they often give you some hints"
+  },
+  {
+   "t": 2026.28,
+   "d": 1.84,
+   "text": "about the intended play style because"
+  },
+  {
+   "t": 2028.12,
+   "d": 2.2,
+   "text": "within all of those combinations the"
+  },
+  {
+   "t": 2030.32,
+   "d": 2.32,
+   "text": "draft archetypes there's often kind of a"
+  },
+  {
+   "t": 2032.64,
+   "d": 2.12,
+   "text": "A vibe of like here's the type of"
+  },
+  {
+   "t": 2034.76,
+   "d": 2.32,
+   "text": "strategy that kind of in mind for this"
+  },
+  {
+   "t": 2037.08,
+   "d": 1.44,
+   "text": "uh combination"
+  },
+  {
+   "t": 2038.52,
+   "d": 2.24,
+   "text": "and interesting thing is that in bloomo"
+  },
+  {
+   "t": 2040.76,
+   "d": 3.28,
+   "text": "one of the later latest sets um there's"
+  },
+  {
+   "t": 2044.04,
+   "d": 2.28,
+   "text": "also each two-color pair gets its own"
+  },
+  {
+   "t": 2046.32,
+   "d": 2.88,
+   "text": "animal type correct so it's even clearer"
+  },
+  {
+   "t": 2049.2,
+   "d": 1.44,
+   "text": "in this way of like if you get all the"
+  },
+  {
+   "t": 2050.64,
+   "d": 2.48,
+   "text": "frogs because you like frogs like I do"
+  },
+  {
+   "t": 2053.12,
+   "d": 1.6,
+   "text": "you're going to end up with a kind of"
+  },
+  {
+   "t": 2054.72,
+   "d": 3.4,
+   "text": "strategically coherent um blue green"
+  },
+  {
+   "t": 2058.12,
+   "d": 2.16,
+   "text": "deck there's still some subtlety there's"
+  },
+  {
+   "t": 2060.28,
+   "d": 2.64,
+   "text": "still like supportive cards but it is"
+  },
+  {
+   "t": 2062.92,
+   "d": 2.64,
+   "text": "even further into this kind of like I'm"
+  },
+  {
+   "t": 2065.56,
+   "d": 1.92,
+   "text": "getting this information as I'm drafting"
+  },
+  {
+   "t": 2067.48,
+   "d": 1.44,
+   "text": "that it's kind of building me towards"
+  },
+  {
+   "t": 2068.92,
+   "d": 1.64,
+   "text": "something strategically coherent which"
+  },
+  {
+   "t": 2070.56,
+   "d": 1.28,
+   "text": "is really interesting because Rog like's"
+  },
+  {
+   "t": 2071.84,
+   "d": 2.04,
+   "text": "often also trying to convey a lot of"
+  },
+  {
+   "t": 2073.88,
+   "d": 1.88,
+   "text": "information to players on the fly the"
+  },
+  {
+   "t": 2075.76,
+   "d": 1.36,
+   "text": "first time they're seeing something give"
+  },
+  {
+   "t": 2077.12,
+   "d": 1.8,
+   "text": "them the info they need to read it and"
+  },
+  {
+   "t": 2078.92,
+   "d": 2.04,
+   "text": "even thinking about synergies um and"
+  },
+  {
+   "t": 2080.96,
+   "d": 2.08,
+   "text": "also shout out to like Amelia and Ro the"
+  },
+  {
+   "t": 2083.04,
+   "d": 1.88,
+   "text": "volunteers who worked on these questions"
+  },
+  {
+   "t": 2084.92,
+   "d": 1.8,
+   "text": "because they're good questions um but"
+  },
+  {
+   "t": 2086.72,
+   "d": 2.12,
+   "text": "like Hades for example you have all"
+  },
+  {
+   "t": 2088.84,
+   "d": 2.12,
+   "text": "these different gods with uh upgrades to"
+  },
+  {
+   "t": 2090.96,
+   "d": 3.08,
+   "text": "pick there are complimentary upgrades in"
+  },
+  {
+   "t": 2094.04,
+   "d": 2.48,
+   "text": "pairs of gods which also kind of"
+  },
+  {
+   "t": 2096.52,
+   "d": 1.56,
+   "text": "thematically makes sense with some of"
+  },
+  {
+   "t": 2098.08,
+   "d": 1.24,
+   "text": "who those gods are and and their"
+  },
+  {
+   "t": 2099.32,
+   "d": 2.68,
+   "text": "relationships in mythology and so yeah"
+  },
+  {
+   "t": 2102.0,
+   "d": 2.72,
+   "text": "curious to talk about that of like the"
+  },
+  {
+   "t": 2104.72,
+   "d": 1.96,
+   "text": "combination of how hard to go in terms"
+  },
+  {
+   "t": 2106.68,
+   "d": 1.52,
+   "text": "of that kind of sign posting and how"
+  },
+  {
+   "t": 2108.2,
+   "d": 1.84,
+   "text": "hard to go on those synergies and"
+  },
+  {
+   "t": 2110.04,
+   "d": 3.32,
+   "text": "archetypes and really defining a a"
+  },
+  {
+   "t": 2113.36,
+   "d": 2.64,
+   "text": "strategy for something like a two-color"
+  },
+  {
+   "t": 2116.0,
+   "d": 2.12,
+   "text": "combination yeah I mean w what a great"
+  },
+  {
+   "t": 2118.12,
+   "d": 1.24,
+   "text": "question so I'll just kind of tell a bit"
+  },
+  {
+   "t": 2119.36,
+   "d": 1.4,
+   "text": "of the history and backstory here"
+  },
+  {
+   "t": 2120.76,
+   "d": 1.24,
+   "text": "because I think it's it's all very"
+  },
+  {
+   "t": 2122.0,
+   "d": 3.28,
+   "text": "interesting um okay so you know mad's"
+  },
+  {
+   "t": 2125.28,
+   "d": 1.68,
+   "text": "been around for over 30 years and"
+  },
+  {
+   "t": 2126.96,
+   "d": 3.04,
+   "text": "drafting came out about oh three years"
+  },
+  {
+   "t": 2130.0,
+   "d": 3.88,
+   "text": "or so into its life cycle and even now"
+  },
+  {
+   "t": 2133.88,
+   "d": 2.04,
+   "text": "over 30 years later we're still finding"
+  },
+  {
+   "t": 2135.92,
+   "d": 2.24,
+   "text": "new ways to innovate on draft for a long"
+  },
+  {
+   "t": 2138.16,
+   "d": 1.56,
+   "text": "time draft was just like I don't know we"
+  },
+  {
+   "t": 2139.72,
+   "d": 3.12,
+   "text": "make the cards draft them have fun right"
+  },
+  {
+   "t": 2142.84,
+   "d": 2.32,
+   "text": "and um you know then over time we"
+  },
+  {
+   "t": 2145.16,
+   "d": 1.56,
+   "text": "started figuring out some more nuanced"
+  },
+  {
+   "t": 2146.72,
+   "d": 1.92,
+   "text": "things to do and one of the big things"
+  },
+  {
+   "t": 2148.64,
+   "d": 2.16,
+   "text": "we came up with kind of starting in 2012"
+  },
+  {
+   "t": 2150.8,
+   "d": 2.64,
+   "text": "2013 was this idea of draft archetypes"
+  },
+  {
+   "t": 2153.44,
+   "d": 1.64,
+   "text": "where it's exactly what you said where"
+  },
+  {
+   "t": 2155.08,
+   "d": 2.0,
+   "text": "kind of every two-color pairing has a"
+  },
+  {
+   "t": 2157.08,
+   "d": 1.6,
+   "text": "thing it's trying to to do in the draft"
+  },
+  {
+   "t": 2158.68,
+   "d": 2.88,
+   "text": "format and then you have these two color"
+  },
+  {
+   "t": 2161.56,
+   "d": 3.08,
+   "text": "um sign postcards that are really loud"
+  },
+  {
+   "t": 2164.64,
+   "d": 2.12,
+   "text": "about what that pairing is so oh red"
+  },
+  {
+   "t": 2166.76,
+   "d": 1.56,
+   "text": "black is about minotaurs well hey this"
+  },
+  {
+   "t": 2168.32,
+   "d": 1.48,
+   "text": "is a minitar and it's got a cool minitar"
+  },
+  {
+   "t": 2169.8,
+   "d": 1.6,
+   "text": "matters ability green white is about"
+  },
+  {
+   "t": 2171.4,
+   "d": 1.08,
+   "text": "enchantments well here's a green white"
+  },
+  {
+   "t": 2172.48,
+   "d": 1.24,
+   "text": "card that cares about enchantments right"
+  },
+  {
+   "t": 2173.72,
+   "d": 1.8,
+   "text": "so you can kind of walk in that"
+  },
+  {
+   "t": 2175.52,
+   "d": 2.08,
+   "text": "direction and there's a lot of ways you"
+  },
+  {
+   "t": 2177.6,
+   "d": 1.68,
+   "text": "can signpost and coming all the way up"
+  },
+  {
+   "t": 2179.28,
+   "d": 1.72,
+   "text": "to where we are now with bloomo it's"
+  },
+  {
+   "t": 2181.0,
+   "d": 1.96,
+   "text": "exactly as you said I mean it's funny I"
+  },
+  {
+   "t": 2182.96,
+   "d": 1.12,
+   "text": "had a point I was going to make that was"
+  },
+  {
+   "t": 2184.08,
+   "d": 1.88,
+   "text": "basically just exactly what you said but"
+  },
+  {
+   "t": 2185.96,
+   "d": 1.8,
+   "text": "um it's like yeah we we were like okay"
+  },
+  {
+   "t": 2187.76,
+   "d": 1.6,
+   "text": "well an even easier way to signpost is"
+  },
+  {
+   "t": 2189.36,
+   "d": 1.6,
+   "text": "what if every two-color combination has"
+  },
+  {
+   "t": 2190.96,
+   "d": 2.16,
+   "text": "an animal and if you see a lizard or an"
+  },
+  {
+   "t": 2193.12,
+   "d": 2.56,
+   "text": "otter you know that's for black red or"
+  },
+  {
+   "t": 2195.68,
+   "d": 2.6,
+   "text": "red blue respectively so there's you"
+  },
+  {
+   "t": 2198.28,
+   "d": 2.24,
+   "text": "know we think a lot about creative in"
+  },
+  {
+   "t": 2200.52,
+   "d": 2.32,
+   "text": "Magic and one thing I love here is this"
+  },
+  {
+   "t": 2202.84,
+   "d": 1.88,
+   "text": "is a place where creative and mechanics"
+  },
+  {
+   "t": 2204.72,
+   "d": 2.28,
+   "text": "really intertwined with each other"
+  },
+  {
+   "t": 2207.0,
+   "d": 1.96,
+   "text": "because otter is a totally creative"
+  },
+  {
+   "t": 2208.96,
+   "d": 1.92,
+   "text": "thing for the most part but the fact"
+  },
+  {
+   "t": 2210.88,
+   "d": 1.68,
+   "text": "that it can mean something mechanically"
+  },
+  {
+   "t": 2212.56,
+   "d": 2.92,
+   "text": "hey play all these together and um they"
+  },
+  {
+   "t": 2215.48,
+   "d": 1.4,
+   "text": "all have a similar mechanical through"
+  },
+  {
+   "t": 2216.88,
+   "d": 1.44,
+   "text": "line for example OT all like"
+  },
+  {
+   "t": 2218.32,
+   "d": 2.6,
+   "text": "non-creature spells it tells you to go"
+  },
+  {
+   "t": 2220.92,
+   "d": 2.0,
+   "text": "in that direction and that kind of sign"
+  },
+  {
+   "t": 2222.92,
+   "d": 1.68,
+   "text": "posting is just really powerful and"
+  },
+  {
+   "t": 2224.6,
+   "d": 1.84,
+   "text": "Bloom is a huge it for us and so many"
+  },
+  {
+   "t": 2226.44,
+   "d": 1.72,
+   "text": "players love being able to Dive Right In"
+  },
+  {
+   "t": 2228.16,
+   "d": 2.12,
+   "text": "and immediately know all the mice done"
+  },
+  {
+   "t": 2230.28,
+   "d": 1.2,
+   "text": "I'll put all the mice in one deck"
+  },
+  {
+   "t": 2231.48,
+   "d": 2.28,
+   "text": "together in fact a lot of our um data"
+  },
+  {
+   "t": 2233.76,
+   "d": 2.0,
+   "text": "shows that one of the most popular"
+  },
+  {
+   "t": 2235.76,
+   "d": 1.92,
+   "text": "things in all of magic just magic the"
+  },
+  {
+   "t": 2237.68,
+   "d": 2.56,
+   "text": "Gathering period are creature type Focus"
+  },
+  {
+   "t": 2240.24,
+   "d": 1.96,
+   "text": "decks because they're very easy to find"
+  },
+  {
+   "t": 2242.2,
+   "d": 2.8,
+   "text": "handholds to play with you just go look"
+  },
+  {
+   "t": 2245.0,
+   "d": 1.48,
+   "text": "for you're like I want to build an elf"
+  },
+  {
+   "t": 2246.48,
+   "d": 2.72,
+   "text": "deck great search for Elf put elf in"
+  },
+  {
+   "t": 2249.2,
+   "d": 2.72,
+   "text": "deck boom I've done it right and so"
+  },
+  {
+   "t": 2251.92,
+   "d": 2.36,
+   "text": "having those handholds are very very"
+  },
+  {
+   "t": 2254.28,
+   "d": 2.76,
+   "text": "powerful and bloomo being about 10"
+  },
+  {
+   "t": 2257.04,
+   "d": 1.96,
+   "text": "animal types each for the two color"
+  },
+  {
+   "t": 2259.0,
+   "d": 1.68,
+   "text": "pairs basically gave you those handholds"
+  },
+  {
+   "t": 2260.68,
+   "d": 3.16,
+   "text": "to latch on to now one of the dangers"
+  },
+  {
+   "t": 2263.84,
+   "d": 1.72,
+   "text": "there and we actually saw it a little"
+  },
+  {
+   "t": 2265.56,
+   "d": 1.32,
+   "text": "bit In Bloom BR although although I"
+  },
+  {
+   "t": 2266.88,
+   "d": 1.96,
+   "text": "think we mostly avoided it was that it"
+  },
+  {
+   "t": 2268.84,
+   "d": 1.4,
+   "text": "can once again as I mentioned as a"
+  },
+  {
+   "t": 2270.24,
+   "d": 2.0,
+   "text": "danger earlier take away that agency"
+  },
+  {
+   "t": 2272.24,
+   "d": 1.88,
+   "text": "from the experienced drafter if you feel"
+  },
+  {
+   "t": 2274.12,
+   "d": 1.84,
+   "text": "like the thing you always have to do is"
+  },
+  {
+   "t": 2275.96,
+   "d": 2.2,
+   "text": "pick two colors and Di on in on those"
+  },
+  {
+   "t": 2278.16,
+   "d": 2.52,
+   "text": "colors and and play all the things that"
+  },
+  {
+   "t": 2280.68,
+   "d": 1.64,
+   "text": "means that your first few drafts are"
+  },
+  {
+   "t": 2282.32,
+   "d": 2.28,
+   "text": "cool but your 10th draft feels very"
+  },
+  {
+   "t": 2284.6,
+   "d": 2.32,
+   "text": "repetitive in bloomo we tried to make a"
+  },
+  {
+   "t": 2286.92,
+   "d": 1.64,
+   "text": "bunch of um uncommons that were like a"
+  },
+  {
+   "t": 2288.56,
+   "d": 1.92,
+   "text": "little more sideways build Roundy things"
+  },
+  {
+   "t": 2290.48,
+   "d": 1.84,
+   "text": "we tried to put in some some other stuff"
+  },
+  {
+   "t": 2292.32,
+   "d": 1.92,
+   "text": "like that but ultimately it had a little"
+  },
+  {
+   "t": 2294.24,
+   "d": 1.36,
+   "text": "less than some of the other sets and so"
+  },
+  {
+   "t": 2295.6,
+   "d": 1.4,
+   "text": "some of our very experienced players"
+  },
+  {
+   "t": 2297.0,
+   "d": 2.72,
+   "text": "that are drafting 30 40 times are like"
+  },
+  {
+   "t": 2299.72,
+   "d": 1.52,
+   "text": "this set's too shallow for me right"
+  },
+  {
+   "t": 2301.24,
+   "d": 1.16,
+   "text": "there there's not not enough different"
+  },
+  {
+   "t": 2302.4,
+   "d": 1.8,
+   "text": "stuff to do and that is one of the"
+  },
+  {
+   "t": 2304.2,
+   "d": 1.72,
+   "text": "trade-offs you make you now I'm very PL"
+  },
+  {
+   "t": 2305.92,
+   "d": 1.8,
+   "text": "proud of Bloom barau it's one of our"
+  },
+  {
+   "t": 2307.72,
+   "d": 3.08,
+   "text": "most popular sets like people love this"
+  },
+  {
+   "t": 2310.8,
+   "d": 4.92,
+   "text": "set um but I uh I respect that um you"
+  },
+  {
+   "t": 2315.72,
+   "d": 1.8,
+   "text": "know make sure there's enough there at"
+  },
+  {
+   "t": 2317.52,
+   "d": 1.36,
+   "text": "uncommon to make you feel like you get a"
+  },
+  {
+   "t": 2318.88,
+   "d": 1.88,
+   "text": "variety of draft is really important for"
+  },
+  {
+   "t": 2320.76,
+   "d": 2.16,
+   "text": "our experienced drafters um one other"
+  },
+  {
+   "t": 2322.92,
+   "d": 1.32,
+   "text": "thing about it too is because it's very"
+  },
+  {
+   "t": 2324.24,
+   "d": 1.92,
+   "text": "synergistic set and people end up on"
+  },
+  {
+   "t": 2326.16,
+   "d": 1.88,
+   "text": "these kind of directional paths very"
+  },
+  {
+   "t": 2328.04,
+   "d": 4.32,
+   "text": "quickly drafting say frogs go frogs um"
+  },
+  {
+   "t": 2332.36,
+   "d": 1.96,
+   "text": "is your decks often end up quite strong"
+  },
+  {
+   "t": 2334.32,
+   "d": 2.44,
+   "text": "and quite fast and because the decks are"
+  },
+  {
+   "t": 2336.76,
+   "d": 1.6,
+   "text": "quite fast it means that that there's"
+  },
+  {
+   "t": 2338.36,
+   "d": 1.52,
+   "text": "less room for the more unique more"
+  },
+  {
+   "t": 2339.88,
+   "d": 2.4,
+   "text": "offbeat stuff to thrive which is one of"
+  },
+  {
+   "t": 2342.28,
+   "d": 1.04,
+   "text": "those problems I was talking about"
+  },
+  {
+   "t": 2343.32,
+   "d": 1.2,
+   "text": "earlier to kind of connect everything"
+  },
+  {
+   "t": 2344.52,
+   "d": 2.48,
+   "text": "together where if the format generally"
+  },
+  {
+   "t": 2347.0,
+   "d": 2.12,
+   "text": "tends to be too fast which this one"
+  },
+  {
+   "t": 2349.12,
+   "d": 1.84,
+   "text": "definitely tends on the faster side you"
+  },
+  {
+   "t": 2350.96,
+   "d": 1.8,
+   "text": "don't have that variety of speed which"
+  },
+  {
+   "t": 2352.76,
+   "d": 1.48,
+   "text": "can choke out certain kinds of"
+  },
+  {
+   "t": 2354.24,
+   "d": 1.6,
+   "text": "strategies so that's the thing we try"
+  },
+  {
+   "t": 2355.84,
+   "d": 1.76,
+   "text": "and be really careful with and maybe"
+  },
+  {
+   "t": 2357.6,
+   "d": 2.76,
+   "text": "bloomo was was maybe very slightly Off"
+  },
+  {
+   "t": 2360.36,
+   "d": 1.6,
+   "text": "the Mark it's still a good for format"
+  },
+  {
+   "t": 2361.96,
+   "d": 1.64,
+   "text": "players are still really enjoying it but"
+  },
+  {
+   "t": 2363.6,
+   "d": 1.76,
+   "text": "from the very top level of experienced"
+  },
+  {
+   "t": 2365.36,
+   "d": 1.16,
+   "text": "players that's some of the feedback that"
+  },
+  {
+   "t": 2366.52,
+   "d": 2.08,
+   "text": "we've heard so um as you can tell"
+  },
+  {
+   "t": 2368.6,
+   "d": 1.68,
+   "text": "everything has a balance counterbalance"
+  },
+  {
+   "t": 2370.28,
+   "d": 1.76,
+   "text": "right Bloom is way easier to onboard"
+  },
+  {
+   "t": 2372.04,
+   "d": 2.84,
+   "text": "into um but you have this kind of other"
+  },
+  {
+   "t": 2374.88,
+   "d": 1.48,
+   "text": "side of things of it's I think a little"
+  },
+  {
+   "t": 2376.36,
+   "d": 1.88,
+   "text": "less deep for it now it's the right set"
+  },
+  {
+   "t": 2378.24,
+   "d": 1.48,
+   "text": "to do that for it's very approachable"
+  },
+  {
+   "t": 2379.72,
+   "d": 1.28,
+   "text": "it's a bunch of cute animals it should"
+  },
+  {
+   "t": 2381.0,
+   "d": 1.56,
+   "text": "be approachable but just means that in"
+  },
+  {
+   "t": 2382.56,
+   "d": 1.28,
+   "text": "other places we'll make that trade-off"
+  },
+  {
+   "t": 2383.84,
+   "d": 1.68,
+   "text": "somewhere else right we like to have a a"
+  },
+  {
+   "t": 2385.52,
+   "d": 1.96,
+   "text": "kind of swinging pendulum with magic so"
+  },
+  {
+   "t": 2387.48,
+   "d": 1.48,
+   "text": "different sets have different feelings"
+  },
+  {
+   "t": 2388.96,
+   "d": 1.52,
+   "text": "and um hopefully the new set that's"
+  },
+  {
+   "t": 2390.48,
+   "d": 1.4,
+   "text": "about to come out DUS more will have a"
+  },
+  {
+   "t": 2391.88,
+   "d": 2.4,
+   "text": "bit of a different feeling yet so yeah"
+  },
+  {
+   "t": 2394.28,
+   "d": 1.32,
+   "text": "that that's really interesting and I I"
+  },
+  {
+   "t": 2395.6,
+   "d": 2.4,
+   "text": "want to dig in it sounded like like um"
+  },
+  {
+   "t": 2398.0,
+   "d": 1.88,
+   "text": "there was maybe a relationship there you"
+  },
+  {
+   "t": 2399.88,
+   "d": 2.4,
+   "text": "were mentioning where when the pace is"
+  },
+  {
+   "t": 2402.28,
+   "d": 1.28,
+   "text": "slower when things are a bit less"
+  },
+  {
+   "t": 2403.56,
+   "d": 2.56,
+   "text": "aggressive that kind of leaves more room"
+  },
+  {
+   "t": 2406.12,
+   "d": 2.68,
+   "text": "for hitting some of these um you know"
+  },
+  {
+   "t": 2408.8,
+   "d": 2.48,
+   "text": "uncommons or more open cards like is"
+  },
+  {
+   "t": 2411.28,
+   "d": 1.8,
+   "text": "that something that you found of like"
+  },
+  {
+   "t": 2413.08,
+   "d": 1.84,
+   "text": "the the slower the pacing the more there"
+  },
+  {
+   "t": 2414.92,
+   "d": 2.52,
+   "text": "is room for the that kind of variety"
+  },
+  {
+   "t": 2417.44,
+   "d": 1.64,
+   "text": "versus if it's faster it's a lot more"
+  },
+  {
+   "t": 2419.08,
+   "d": 2.44,
+   "text": "tense to like I just I get within my"
+  },
+  {
+   "t": 2421.52,
+   "d": 2.64,
+   "text": "lane and I just that's all I play yeah"
+  },
+  {
+   "t": 2424.16,
+   "d": 1.56,
+   "text": "for sure I'll give you a great example"
+  },
+  {
+   "t": 2425.72,
+   "d": 3.36,
+   "text": "and a pretty straightforward one so um"
+  },
+  {
+   "t": 2429.08,
+   "d": 1.84,
+   "text": "if if you can imagine the most glacially"
+  },
+  {
+   "t": 2430.92,
+   "d": 1.68,
+   "text": "slow magic draft format you could ever"
+  },
+  {
+   "t": 2432.6,
+   "d": 1.64,
+   "text": "ever imagine imagine it's like super"
+  },
+  {
+   "t": 2434.24,
+   "d": 1.92,
+   "text": "slow the games take 30 turns it's"
+  },
+  {
+   "t": 2436.16,
+   "d": 1.16,
+   "text": "ridiculous right imagine it's like"
+  },
+  {
+   "t": 2437.32,
+   "d": 2.6,
+   "text": "really really glit for slow format the"
+  },
+  {
+   "t": 2439.92,
+   "d": 1.2,
+   "text": "best thing you would want to do every"
+  },
+  {
+   "t": 2441.12,
+   "d": 3.0,
+   "text": "time is play five colors because your"
+  },
+  {
+   "t": 2444.12,
+   "d": 1.88,
+   "text": "game's G to go really long you're always"
+  },
+  {
+   "t": 2446.0,
+   "d": 2.48,
+   "text": "going to draw all five colors um because"
+  },
+  {
+   "t": 2448.48,
+   "d": 1.08,
+   "text": "normally you only play two because you"
+  },
+  {
+   "t": 2449.56,
+   "d": 1.32,
+   "text": "have to draw the right mix of lands but"
+  },
+  {
+   "t": 2450.88,
+   "d": 1.0,
+   "text": "if the game goes super long you're"
+  },
+  {
+   "t": 2451.88,
+   "d": 1.52,
+   "text": "always going to find all your lands so"
+  },
+  {
+   "t": 2453.4,
+   "d": 1.08,
+   "text": "the best thing to do is always play all"
+  },
+  {
+   "t": 2454.48,
+   "d": 2.32,
+   "text": "your colors if you have a really fast"
+  },
+  {
+   "t": 2456.8,
+   "d": 1.56,
+   "text": "format and imagine like one of the"
+  },
+  {
+   "t": 2458.36,
+   "d": 1.12,
+   "text": "fastest formats you could possibly"
+  },
+  {
+   "t": 2459.48,
+   "d": 1.84,
+   "text": "imagine you're you're really never going"
+  },
+  {
+   "t": 2461.32,
+   "d": 1.56,
+   "text": "to want to play more than two colors"
+  },
+  {
+   "t": 2462.88,
+   "d": 2.48,
+   "text": "because if you stumble and miss a color"
+  },
+  {
+   "t": 2465.36,
+   "d": 1.92,
+   "text": "your deck's not going to operate so one"
+  },
+  {
+   "t": 2467.28,
+   "d": 2.08,
+   "text": "of the things that happens is you get a"
+  },
+  {
+   "t": 2469.36,
+   "d": 1.8,
+   "text": "lot of variety out of allowing more"
+  },
+  {
+   "t": 2471.16,
+   "d": 1.68,
+   "text": "colors to be played in your format"
+  },
+  {
+   "t": 2472.84,
+   "d": 1.52,
+   "text": "because if you're get get to play Decks"
+  },
+  {
+   "t": 2474.36,
+   "d": 1.64,
+   "text": "that are sometimes three colors or even"
+  },
+  {
+   "t": 2476.0,
+   "d": 2.04,
+   "text": "more in in specific cases it means you"
+  },
+  {
+   "t": 2478.04,
+   "d": 1.76,
+   "text": "get to combine different cards together"
+  },
+  {
+   "t": 2479.8,
+   "d": 2.28,
+   "text": "you come up with new strategies and the"
+  },
+  {
+   "t": 2482.08,
+   "d": 2.52,
+   "text": "faster and if a format is faster it"
+  },
+  {
+   "t": 2484.6,
+   "d": 1.4,
+   "text": "chokes out some of the innovation of"
+  },
+  {
+   "t": 2486.0,
+   "d": 1.76,
+   "text": "those three four even five five color"
+  },
+  {
+   "t": 2487.76,
+   "d": 1.8,
+   "text": "decks you can sometimes draft so that's"
+  },
+  {
+   "t": 2489.56,
+   "d": 1.84,
+   "text": "one of the Min ways having a fast format"
+  },
+  {
+   "t": 2491.4,
+   "d": 1.96,
+   "text": "can prevent that but also we do a lot of"
+  },
+  {
+   "t": 2493.36,
+   "d": 2.32,
+   "text": "like um what we call like build around"
+  },
+  {
+   "t": 2495.68,
+   "d": 1.56,
+   "text": "enchantments which you're like hey I'm"
+  },
+  {
+   "t": 2497.24,
+   "d": 1.36,
+   "text": "an enchantment that sits on the table"
+  },
+  {
+   "t": 2498.6,
+   "d": 1.64,
+   "text": "and asks you to do some kind of wacky"
+  },
+  {
+   "t": 2500.24,
+   "d": 1.72,
+   "text": "side quest and if you do it you get a"
+  },
+  {
+   "t": 2501.96,
+   "d": 2.36,
+   "text": "bonus well if decks are really fast you"
+  },
+  {
+   "t": 2504.32,
+   "d": 1.52,
+   "text": "just don't have time to to get your"
+  },
+  {
+   "t": 2505.84,
+   "d": 3.48,
+   "text": "weird funky side quest going um and so"
+  },
+  {
+   "t": 2509.32,
+   "d": 1.44,
+   "text": "that's one of the the downsides of being"
+  },
+  {
+   "t": 2510.76,
+   "d": 1.88,
+   "text": "fast but on the flip side like just just"
+  },
+  {
+   "t": 2512.64,
+   "d": 1.8,
+   "text": "a counter example if you do have that"
+  },
+  {
+   "t": 2514.44,
+   "d": 1.84,
+   "text": "really glacially slow format then the"
+  },
+  {
+   "t": 2516.28,
+   "d": 1.2,
+   "text": "best thing to do is going to be play"
+  },
+  {
+   "t": 2517.48,
+   "d": 1.48,
+   "text": "five colors and to play these Builder"
+  },
+  {
+   "t": 2518.96,
+   "d": 1.12,
+   "text": "rounds you're always going to get to"
+  },
+  {
+   "t": 2520.08,
+   "d": 1.44,
+   "text": "them and you're never going to be"
+  },
+  {
+   "t": 2521.52,
+   "d": 1.56,
+   "text": "punished for doing so and all the games"
+  },
+  {
+   "t": 2523.08,
+   "d": 2.48,
+   "text": "will start to feel syy that way so"
+  },
+  {
+   "t": 2525.56,
+   "d": 1.2,
+   "text": "really trying to find that sweet spot in"
+  },
+  {
+   "t": 2526.76,
+   "d": 1.68,
+   "text": "the Middle where both aggressive and"
+  },
+  {
+   "t": 2528.44,
+   "d": 1.4,
+   "text": "controlling strategies can both be"
+  },
+  {
+   "t": 2529.84,
+   "d": 2.56,
+   "text": "viable really goes a long way um to"
+  },
+  {
+   "t": 2532.4,
+   "d": 2.0,
+   "text": "toward helping out there yeah that"
+  },
+  {
+   "t": 2534.4,
+   "d": 1.08,
+   "text": "that's really interesting and I'm sure"
+  },
+  {
+   "t": 2535.48,
+   "d": 1.6,
+   "text": "you know game designers and the audience"
+  },
+  {
+   "t": 2537.08,
+   "d": 1.56,
+   "text": "are seeing the connections but it makes"
+  },
+  {
+   "t": 2538.64,
+   "d": 1.56,
+   "text": "me think you I've been playing a lot of"
+  },
+  {
+   "t": 2540.2,
+   "d": 1.64,
+   "text": "tactical breach Wizards which I wouldn't"
+  },
+  {
+   "t": 2541.84,
+   "d": 1.12,
+   "text": "necessarily call I wouldn't call it a"
+  },
+  {
+   "t": 2542.96,
+   "d": 2.12,
+   "text": "rogue like but you know tactics there's"
+  },
+  {
+   "t": 2545.08,
+   "d": 1.8,
+   "text": "also some overlap there and um it makes"
+  },
+  {
+   "t": 2546.88,
+   "d": 1.48,
+   "text": "me think think you know when you play a"
+  },
+  {
+   "t": 2548.36,
+   "d": 2.08,
+   "text": "game like an XCOM you get a lot more"
+  },
+  {
+   "t": 2550.44,
+   "d": 3.28,
+   "text": "turns like different tactical RPGs have"
+  },
+  {
+   "t": 2553.72,
+   "d": 1.48,
+   "text": "a lot of variance in terms of like is"
+  },
+  {
+   "t": 2555.2,
+   "d": 0.84,
+   "text": "this something where you're trying to"
+  },
+  {
+   "t": 2556.04,
+   "d": 2.28,
+   "text": "end the combat in two turns or are you"
+  },
+  {
+   "t": 2558.32,
+   "d": 1.92,
+   "text": "trying to end the combat in 20 turns and"
+  },
+  {
+   "t": 2560.24,
+   "d": 1.04,
+   "text": "I think that that gives a lot of"
+  },
+  {
+   "t": 2561.28,
+   "d": 2.12,
+   "text": "different space for different types of"
+  },
+  {
+   "t": 2563.4,
+   "d": 1.4,
+   "text": "variation and how much you know you're"
+  },
+  {
+   "t": 2564.8,
+   "d": 1.92,
+   "text": "willing to be as a player kind of risky"
+  },
+  {
+   "t": 2566.72,
+   "d": 1.2,
+   "text": "in terms of having that thing that can"
+  },
+  {
+   "t": 2567.92,
+   "d": 1.64,
+   "text": "take a while to pay off but if it does"
+  },
+  {
+   "t": 2569.56,
+   "d": 1.8,
+   "text": "that's exciting so interesting that I"
+  },
+  {
+   "t": 2571.36,
+   "d": 2.6,
+   "text": "think that can apply to many game design"
+  },
+  {
+   "t": 2573.96,
+   "d": 2.76,
+   "text": "problems outside of the strict card"
+  },
+  {
+   "t": 2576.72,
+   "d": 1.04,
+   "text": "based"
+  },
+  {
+   "t": 2577.76,
+   "d": 2.16,
+   "text": "space yeah I mean a lot of the stuff we"
+  },
+  {
+   "t": 2579.92,
+   "d": 1.64,
+   "text": "do with draft really applies not just to"
+  },
+  {
+   "t": 2581.56,
+   "d": 1.4,
+   "text": "game design but also especially Rogue"
+  },
+  {
+   "t": 2582.96,
+   "d": 1.08,
+   "text": "likes which is why I kind of wanted to"
+  },
+  {
+   "t": 2584.04,
+   "d": 1.12,
+   "text": "do this in the first place right it"
+  },
+  {
+   "t": 2585.16,
+   "d": 1.32,
+   "text": "really really makes sense to me and it"
+  },
+  {
+   "t": 2586.48,
+   "d": 1.92,
+   "text": "really does tie in it is it is an"
+  },
+  {
+   "t": 2588.4,
+   "d": 1.2,
+   "text": "experience you will play over and over"
+  },
+  {
+   "t": 2589.6,
+   "d": 1.8,
+   "text": "and over again and people even call them"
+  },
+  {
+   "t": 2591.4,
+   "d": 2.56,
+   "text": "their runs right I'm going for my run on"
+  },
+  {
+   "t": 2593.96,
+   "d": 3.0,
+   "text": "Arena um some people even do like um"
+  },
+  {
+   "t": 2596.96,
+   "d": 1.92,
+   "text": "best times like what is the fastest I"
+  },
+  {
+   "t": 2598.88,
+   "d": 1.92,
+   "text": "can three a draft you know so there's a"
+  },
+  {
+   "t": 2600.8,
+   "d": 2.84,
+   "text": "lot of fun there to be had as well yeah"
+  },
+  {
+   "t": 2603.64,
+   "d": 2.04,
+   "text": "and I guess uh since I think we could do"
+  },
+  {
+   "t": 2605.68,
+   "d": 1.6,
+   "text": "this all night but I I want to make make"
+  },
+  {
+   "t": 2607.28,
+   "d": 1.64,
+   "text": "sure you don't go too late I want to do"
+  },
+  {
+   "t": 2608.92,
+   "d": 2.44,
+   "text": "some just open-ended of like you know"
+  },
+  {
+   "t": 2611.36,
+   "d": 1.4,
+   "text": "you've mentioned you like Rog likes"
+  },
+  {
+   "t": 2612.76,
+   "d": 2.12,
+   "text": "obviously you love magic um do you have"
+  },
+  {
+   "t": 2614.88,
+   "d": 1.56,
+   "text": "just open-ended thoughts in terms of"
+  },
+  {
+   "t": 2616.44,
+   "d": 2.04,
+   "text": "some of the overlap there and you know"
+  },
+  {
+   "t": 2618.48,
+   "d": 2.28,
+   "text": "if you were to sit down and make a rogue"
+  },
+  {
+   "t": 2620.76,
+   "d": 1.12,
+   "text": "like I don't know if you've ever done"
+  },
+  {
+   "t": 2621.88,
+   "d": 1.44,
+   "text": "that in your spare time or if you think"
+  },
+  {
+   "t": 2623.32,
+   "d": 1.36,
+   "text": "about magic as a rogue like like where"
+  },
+  {
+   "t": 2624.68,
+   "d": 2.52,
+   "text": "do you see some connections in terms of"
+  },
+  {
+   "t": 2627.2,
+   "d": 2.8,
+   "text": "um the design problems that we Face"
+  },
+  {
+   "t": 2630.0,
+   "d": 2.76,
+   "text": "across our related but different for"
+  },
+  {
+   "t": 2632.76,
+   "d": 1.4,
+   "text": "sure yeah I mean I do think of magic as"
+  },
+  {
+   "t": 2634.16,
+   "d": 1.84,
+   "text": "a rogue like and Magic I me know I've"
+  },
+  {
+   "t": 2636.0,
+   "d": 1.72,
+   "text": "tinkered with other games in my spare"
+  },
+  {
+   "t": 2637.72,
+   "d": 2.8,
+   "text": "time but um but magic really takes my my"
+  },
+  {
+   "t": 2640.52,
+   "d": 3.64,
+   "text": "my focus um and"
+  },
+  {
+   "t": 2644.16,
+   "d": 2.96,
+   "text": "I view just magic in general like let's"
+  },
+  {
+   "t": 2647.12,
+   "d": 1.4,
+   "text": "step away from draft for a second that's"
+  },
+  {
+   "t": 2648.52,
+   "d": 1.0,
+   "text": "what we've been talking about this whole"
+  },
+  {
+   "t": 2649.52,
+   "d": 2.56,
+   "text": "time I just view magic in general as a"
+  },
+  {
+   "t": 2652.08,
+   "d": 2.52,
+   "text": "Rog like experience and our whole game"
+  },
+  {
+   "t": 2654.6,
+   "d": 1.16,
+   "text": "is imagine you're a new player you're"
+  },
+  {
+   "t": 2655.76,
+   "d": 1.04,
+   "text": "coming in you've never touched a magic"
+  },
+  {
+   "t": 2656.8,
+   "d": 1.92,
+   "text": "card in your life you buy a few boosters"
+  },
+  {
+   "t": 2658.72,
+   "d": 1.68,
+   "text": "on your starter set or whatever you play"
+  },
+  {
+   "t": 2660.4,
+   "d": 1.44,
+   "text": "a game or two against your brother or"
+  },
+  {
+   "t": 2661.84,
+   "d": 0.8,
+   "text": "your"
+  },
+  {
+   "t": 2662.64,
+   "d": 3.6,
+   "text": "sister and you finish and you're like"
+  },
+  {
+   "t": 2666.24,
+   "d": 1.64,
+   "text": "okay time for more cards and you go to"
+  },
+  {
+   "t": 2667.88,
+   "d": 1.32,
+   "text": "the store you grab some more cards you"
+  },
+  {
+   "t": 2669.2,
+   "d": 2.08,
+   "text": "upgrade your deck you sit down you play"
+  },
+  {
+   "t": 2671.28,
+   "d": 1.76,
+   "text": "again and you repeat this process and"
+  },
+  {
+   "t": 2673.04,
+   "d": 2.04,
+   "text": "maybe what we'll call the tutorial or"
+  },
+  {
+   "t": 2675.08,
+   "d": 1.88,
+   "text": "training mode a bunch of times and then"
+  },
+  {
+   "t": 2676.96,
+   "d": 1.72,
+   "text": "eventually you're like all right now I'm"
+  },
+  {
+   "t": 2678.68,
+   "d": 1.16,
+   "text": "good enough to go on the next level and"
+  },
+  {
+   "t": 2679.84,
+   "d": 1.72,
+   "text": "you go to your local game store which is"
+  },
+  {
+   "t": 2681.56,
+   "d": 1.28,
+   "text": "the next level up right and you're"
+  },
+  {
+   "t": 2682.84,
+   "d": 1.96,
+   "text": "playing against people there and they're"
+  },
+  {
+   "t": 2684.8,
+   "d": 1.52,
+   "text": "teaching you new tactics you never had"
+  },
+  {
+   "t": 2686.32,
+   "d": 1.16,
+   "text": "you're probably gonna lose a lot you're"
+  },
+  {
+   "t": 2687.48,
+   "d": 1.2,
+   "text": "probably going to go back and want to"
+  },
+  {
+   "t": 2688.68,
+   "d": 2.08,
+   "text": "redesign your whole deck but that's okay"
+  },
+  {
+   "t": 2690.76,
+   "d": 1.12,
+   "text": "and you go back and you come with"
+  },
+  {
+   "t": 2691.88,
+   "d": 1.76,
+   "text": "something new every single time and then"
+  },
+  {
+   "t": 2693.64,
+   "d": 1.32,
+   "text": "eventually you do that for long enough"
+  },
+  {
+   "t": 2694.96,
+   "d": 0.96,
+   "text": "and maybe you're leveling up the"
+  },
+  {
+   "t": 2695.92,
+   "d": 1.36,
+   "text": "tournament play now you're going off the"
+  },
+  {
+   "t": 2697.28,
+   "d": 1.08,
+   "text": "tournaments you're playing with a whole"
+  },
+  {
+   "t": 2698.36,
+   "d": 3.44,
+   "text": "new crowd right um and so I just view"
+  },
+  {
+   "t": 2701.8,
+   "d": 2.12,
+   "text": "the whole game itself as a Rog like and"
+  },
+  {
+   "t": 2703.92,
+   "d": 1.88,
+   "text": "one of the cool things about it is it is"
+  },
+  {
+   "t": 2705.8,
+   "d": 2.36,
+   "text": "not only a Rog leg in exactly the path"
+  },
+  {
+   "t": 2708.16,
+   "d": 1.88,
+   "text": "that I just described but it's a Rog"
+  },
+  {
+   "t": 2710.04,
+   "d": 1.76,
+   "text": "like with a hundred different game modes"
+  },
+  {
+   "t": 2711.8,
+   "d": 1.36,
+   "text": "because there are so many ways to play"
+  },
+  {
+   "t": 2713.16,
+   "d": 2.2,
+   "text": "magic people will do that exact process"
+  },
+  {
+   "t": 2715.36,
+   "d": 1.64,
+   "text": "but go into very different paths I'll"
+  },
+  {
+   "t": 2717.0,
+   "d": 2.72,
+   "text": "give you an example so um for a long"
+  },
+  {
+   "t": 2719.72,
+   "d": 1.12,
+   "text": "time when you think of magic you think"
+  },
+  {
+   "t": 2720.84,
+   "d": 1.6,
+   "text": "of like competitive magic or maybe you"
+  },
+  {
+   "t": 2722.44,
+   "d": 1.08,
+   "text": "know playing in a game store against"
+  },
+  {
+   "t": 2723.52,
+   "d": 2.36,
+   "text": "other people whatever one of the big"
+  },
+  {
+   "t": 2725.88,
+   "d": 1.4,
+   "text": "things that's changed in magic in the"
+  },
+  {
+   "t": 2727.28,
+   "d": 2.28,
+   "text": "past decade is the rise of this format"
+  },
+  {
+   "t": 2729.56,
+   "d": 2.28,
+   "text": "called Commander now Commander is a"
+  },
+  {
+   "t": 2731.84,
+   "d": 2.4,
+   "text": "four-player multiplayer format it's got"
+  },
+  {
+   "t": 2734.24,
+   "d": 1.8,
+   "text": "bigger decks they 100 card decks no more"
+  },
+  {
+   "t": 2736.04,
+   "d": 1.92,
+   "text": "than one copy of every card you have"
+  },
+  {
+   "t": 2737.96,
+   "d": 2.24,
+   "text": "like a a commander who is the legend who"
+  },
+  {
+   "t": 2740.2,
+   "d": 2.28,
+   "text": "is leading your deck and all four of you"
+  },
+  {
+   "t": 2742.48,
+   "d": 1.52,
+   "text": "play a free forall game against each"
+  },
+  {
+   "t": 2744.0,
+   "d": 1.96,
+   "text": "other with 40 life a piece it's quite a"
+  },
+  {
+   "t": 2745.96,
+   "d": 1.88,
+   "text": "bit different from normal magic and it"
+  },
+  {
+   "t": 2747.84,
+   "d": 2.4,
+   "text": "it has become over the past decade the"
+  },
+  {
+   "t": 2750.24,
+   "d": 1.56,
+   "text": "the most popular way to play Magic in"
+  },
+  {
+   "t": 2751.8,
+   "d": 4.6,
+   "text": "the world period um and so um at least"
+  },
+  {
+   "t": 2756.4,
+   "d": 1.72,
+   "text": "paper Magic uh it's always I to know"
+  },
+  {
+   "t": 2758.12,
+   "d": 1.04,
+   "text": "with digital numbers because so many"
+  },
+  {
+   "t": 2759.16,
+   "d": 1.64,
+   "text": "more games are played digitally the ease"
+  },
+  {
+   "t": 2760.8,
+   "d": 1.44,
+   "text": "is so much easier but anyway regardless"
+  },
+  {
+   "t": 2762.24,
+   "d": 1.28,
+   "text": "it's incredibly incredibly incredibly"
+  },
+  {
+   "t": 2763.52,
+   "d": 1.72,
+   "text": "popular and"
+  },
+  {
+   "t": 2765.24,
+   "d": 2.48,
+   "text": "so um a lot of people will like start"
+  },
+  {
+   "t": 2767.72,
+   "d": 1.2,
+   "text": "that Rog like experience and going to"
+  },
+  {
+   "t": 2768.92,
+   "d": 1.4,
+   "text": "the tutorial what tutorial mode where"
+  },
+  {
+   "t": 2770.32,
+   "d": 0.84,
+   "text": "they're playing against their some H"
+  },
+  {
+   "t": 2771.16,
+   "d": 1.12,
+   "text": "homeo Bunch whatever they they get"
+  },
+  {
+   "t": 2772.28,
+   "d": 1.36,
+   "text": "better maybe they're playing on Arena"
+  },
+  {
+   "t": 2773.64,
+   "d": 1.24,
+   "text": "and getting better whatever and"
+  },
+  {
+   "t": 2774.88,
+   "d": 1.28,
+   "text": "eventually they'll end up as a commander"
+  },
+  {
+   "t": 2776.16,
+   "d": 1.96,
+   "text": "player which is which is this very"
+  },
+  {
+   "t": 2778.12,
+   "d": 2.04,
+   "text": "different way of playing Magic but they"
+  },
+  {
+   "t": 2780.16,
+   "d": 3.0,
+   "text": "found as their um kind of endstate Rog"
+  },
+  {
+   "t": 2783.16,
+   "d": 2.76,
+   "text": "like experience and Commander has a very"
+  },
+  {
+   "t": 2785.92,
+   "d": 1.28,
+   "text": "different set of things you you want to"
+  },
+  {
+   "t": 2787.2,
+   "d": 2.0,
+   "text": "improve Commander is a much more social"
+  },
+  {
+   "t": 2789.2,
+   "d": 1.8,
+   "text": "game it's not even about winning or"
+  },
+  {
+   "t": 2791.0,
+   "d": 1.44,
+   "text": "losing it's about making some sweet"
+  },
+  {
+   "t": 2792.44,
+   "d": 2.08,
+   "text": "plays so as opposed to competitive magic"
+  },
+  {
+   "t": 2794.52,
+   "d": 1.76,
+   "text": "where you might play your Rog likee run"
+  },
+  {
+   "t": 2796.28,
+   "d": 1.4,
+   "text": "let's say and you come back and want to"
+  },
+  {
+   "t": 2797.68,
+   "d": 1.92,
+   "text": "change your deck or change a card or two"
+  },
+  {
+   "t": 2799.6,
+   "d": 1.64,
+   "text": "in Commander you might finish and be"
+  },
+  {
+   "t": 2801.24,
+   "d": 1.68,
+   "text": "like okay I have a whole new idea for a"
+  },
+  {
+   "t": 2802.92,
+   "d": 1.28,
+   "text": "new deck I want to build now based on"
+  },
+  {
+   "t": 2804.2,
+   "d": 1.92,
+   "text": "something my opponent did or man this"
+  },
+  {
+   "t": 2806.12,
+   "d": 1.68,
+   "text": "card in my deck wasn't very fun I want"
+  },
+  {
+   "t": 2807.8,
+   "d": 1.56,
+   "text": "to take it out right and those are the"
+  },
+  {
+   "t": 2809.36,
+   "d": 1.6,
+   "text": "kind of different questions you ask"
+  },
+  {
+   "t": 2810.96,
+   "d": 1.48,
+   "text": "because you're optimizing for a very"
+  },
+  {
+   "t": 2812.44,
+   "d": 2.52,
+   "text": "different experience and there's tons of"
+  },
+  {
+   "t": 2814.96,
+   "d": 2.16,
+   "text": "magic formats I mean there's so many we"
+  },
+  {
+   "t": 2817.12,
+   "d": 1.8,
+   "text": "support and so many even more that fans"
+  },
+  {
+   "t": 2818.92,
+   "d": 2.68,
+   "text": "have created that they love playing and"
+  },
+  {
+   "t": 2821.6,
+   "d": 2.16,
+   "text": "um you know every one of those is an"
+  },
+  {
+   "t": 2823.76,
+   "d": 3.4,
+   "text": "entry point to someone's um to to a Rog"
+  },
+  {
+   "t": 2827.16,
+   "d": 3.28,
+   "text": "likee style uh gameplay so I um I really"
+  },
+  {
+   "t": 2830.44,
+   "d": 2.16,
+   "text": "view all of magic as like one big Rog"
+  },
+  {
+   "t": 2832.6,
+   "d": 1.84,
+   "text": "likee with a million branching paths and"
+  },
+  {
+   "t": 2834.44,
+   "d": 1.64,
+   "text": "you get to find your own Rog likee"
+  },
+  {
+   "t": 2836.08,
+   "d": 2.36,
+   "text": "inside of there for you to play with um"
+  },
+  {
+   "t": 2838.44,
+   "d": 2.24,
+   "text": "which is kind of beautiful to me yeah I"
+  },
+  {
+   "t": 2840.68,
+   "d": 1.12,
+   "text": "think that's great and I think you know"
+  },
+  {
+   "t": 2841.8,
+   "d": 2.48,
+   "text": "it's rare to have a game and again Rog"
+  },
+  {
+   "t": 2844.28,
+   "d": 1.52,
+   "text": "leg sometimes manages but it's rare to"
+  },
+  {
+   "t": 2845.8,
+   "d": 2.64,
+   "text": "have as much history uh accumulated as"
+  },
+  {
+   "t": 2848.44,
+   "d": 2.28,
+   "text": "magic the Gathering and you know I think"
+  },
+  {
+   "t": 2850.72,
+   "d": 1.6,
+   "text": "yeah Commander came up it was one of the"
+  },
+  {
+   "t": 2852.32,
+   "d": 1.68,
+   "text": "things a question that we didn't have as"
+  },
+  {
+   "t": 2854.0,
+   "d": 2.04,
+   "text": "much time to dig into but you know we"
+  },
+  {
+   "t": 2856.04,
+   "d": 1.44,
+   "text": "kind of described it as it's almost like"
+  },
+  {
+   "t": 2857.48,
+   "d": 2.16,
+   "text": "a kitchen sink style Rog like because"
+  },
+  {
+   "t": 2859.64,
+   "d": 2.28,
+   "text": "it's got such a big pool and you've got"
+  },
+  {
+   "t": 2861.92,
+   "d": 1.6,
+   "text": "so many cards and you got so many people"
+  },
+  {
+   "t": 2863.52,
+   "d": 1.96,
+   "text": "playing and like it does kind of feel"
+  },
+  {
+   "t": 2865.48,
+   "d": 2.6,
+   "text": "wacky and a lot more out there in a way"
+  },
+  {
+   "t": 2868.08,
+   "d": 2.96,
+   "text": "that is again like within Rog Li it"
+  },
+  {
+   "t": 2871.04,
+   "d": 1.92,
+   "text": "feels more like those very kitchen sink"
+  },
+  {
+   "t": 2872.96,
+   "d": 1.88,
+   "text": "like anything can happen like your your"
+  },
+  {
+   "t": 2874.84,
+   "d": 4.4,
+   "text": "ncky kind of um more content Rogue likes"
+  },
+  {
+   "t": 2879.24,
+   "d": 1.68,
+   "text": "versus the ones that are maybe really"
+  },
+  {
+   "t": 2880.92,
+   "d": 2.08,
+   "text": "tight and well balanced and like a very"
+  },
+  {
+   "t": 2883.0,
+   "d": 1.52,
+   "text": "strategic thinking game in the way that"
+  },
+  {
+   "t": 2884.52,
+   "d": 2.24,
+   "text": "maybe something like a more limited"
+  },
+  {
+   "t": 2886.76,
+   "d": 1.76,
+   "text": "format gives you and it's it's really"
+  },
+  {
+   "t": 2888.52,
+   "d": 1.52,
+   "text": "cool you can get both of those inside of"
+  },
+  {
+   "t": 2890.04,
+   "d": 2.24,
+   "text": "the same game right and and you know for"
+  },
+  {
+   "t": 2892.28,
+   "d": 1.24,
+   "text": "context right talked about how we want"
+  },
+  {
+   "t": 2893.52,
+   "d": 1.4,
+   "text": "to make sure the variance hits about"
+  },
+  {
+   "t": 2894.92,
+   "d": 2.2,
+   "text": "right in limited by contrast in"
+  },
+  {
+   "t": 2897.12,
+   "d": 1.28,
+   "text": "Commander variance is the name of the"
+  },
+  {
+   "t": 2898.4,
+   "d": 1.68,
+   "text": "game people love big swing effects they"
+  },
+  {
+   "t": 2900.08,
+   "d": 1.84,
+   "text": "love wild things that happen the coin"
+  },
+  {
+   "t": 2901.92,
+   "d": 1.6,
+   "text": "flip to see who wins we made a whole"
+  },
+  {
+   "t": 2903.52,
+   "d": 2.0,
+   "text": "decku will bot based off coin flips"
+  },
+  {
+   "t": 2905.52,
+   "d": 2.8,
+   "text": "right so um it's it's a very different"
+  },
+  {
+   "t": 2908.32,
+   "d": 1.4,
+   "text": "world and depending on the format we're"
+  },
+  {
+   "t": 2909.72,
+   "d": 1.6,
+   "text": "optimizing for will optimize for"
+  },
+  {
+   "t": 2911.32,
+   "d": 1.0,
+   "text": "different things because Commander"
+  },
+  {
+   "t": 2912.32,
+   "d": 1.52,
+   "text": "players you put the emphasis Less on"
+  },
+  {
+   "t": 2913.84,
+   "d": 1.64,
+   "text": "winning or losing and it's about having"
+  },
+  {
+   "t": 2915.48,
+   "d": 1.44,
+   "text": "fun and smiling and wacky things"
+  },
+  {
+   "t": 2916.92,
+   "d": 1.84,
+   "text": "happening well suddenly you optimize for"
+  },
+  {
+   "t": 2918.76,
+   "d": 1.36,
+   "text": "a very different kind of thing in your"
+  },
+  {
+   "t": 2920.12,
+   "d": 2.24,
+   "text": "game design um of of your Rog likee as"
+  },
+  {
+   "t": 2922.36,
+   "d": 2.28,
+   "text": "it were yeah which must be a lot of fun"
+  },
+  {
+   "t": 2924.64,
+   "d": 1.4,
+   "text": "as a designer when you can kind of"
+  },
+  {
+   "t": 2926.04,
+   "d": 1.68,
+   "text": "switch between which one of those you're"
+  },
+  {
+   "t": 2927.72,
+   "d": 1.56,
+   "text": "targeting and you can do it all within"
+  },
+  {
+   "t": 2929.28,
+   "d": 2.28,
+   "text": "this this big shared space yeah"
+  },
+  {
+   "t": 2931.56,
+   "d": 1.28,
+   "text": "sometimes people wonder or you know I've"
+  },
+  {
+   "t": 2932.84,
+   "d": 1.72,
+   "text": "been asked like does it ever get boring"
+  },
+  {
+   "t": 2934.56,
+   "d": 1.68,
+   "text": "working on Magic you know just one game"
+  },
+  {
+   "t": 2936.24,
+   "d": 1.28,
+   "text": "and I've been there for 13 years been"
+  },
+  {
+   "t": 2937.52,
+   "d": 2.0,
+   "text": "here for 13 years working on Magic but"
+  },
+  {
+   "t": 2939.52,
+   "d": 1.8,
+   "text": "really the thing is it's not one game"
+  },
+  {
+   "t": 2941.32,
+   "d": 1.68,
+   "text": "right every set is essentially a new"
+  },
+  {
+   "t": 2943.0,
+   "d": 3.04,
+   "text": "game every format is its own game so I"
+  },
+  {
+   "t": 2946.04,
+   "d": 1.08,
+   "text": "love it because it's so different all"
+  },
+  {
+   "t": 2947.12,
+   "d": 1.32,
+   "text": "the time it might only seem like one"
+  },
+  {
+   "t": 2948.44,
+   "d": 1.92,
+   "text": "game but man every single time I'm"
+  },
+  {
+   "t": 2950.36,
+   "d": 1.56,
+   "text": "working on something it's brand new and"
+  },
+  {
+   "t": 2951.92,
+   "d": 1.28,
+   "text": "different and there's new challenges to"
+  },
+  {
+   "t": 2953.2,
+   "d": 2.2,
+   "text": "face so um you know there's endless"
+  },
+  {
+   "t": 2955.4,
+   "d": 1.76,
+   "text": "content to make and as you mentioned"
+  },
+  {
+   "t": 2957.16,
+   "d": 1.32,
+   "text": "that 30 years of History gives you so"
+  },
+  {
+   "t": 2958.48,
+   "d": 2.04,
+   "text": "much to dive back into and strange old"
+  },
+  {
+   "t": 2960.52,
+   "d": 3.0,
+   "text": "things to resurface um back on up so I"
+  },
+  {
+   "t": 2963.52,
+   "d": 2.28,
+   "text": "find there's always tons to do are there"
+  },
+  {
+   "t": 2965.8,
+   "d": 2.52,
+   "text": "any specific leges that you really love"
+  },
+  {
+   "t": 2968.32,
+   "d": 1.76,
+   "text": "and take any inspiration from as a"
+  },
+  {
+   "t": 2970.08,
+   "d": 1.48,
+   "text": "designer whether or not it applies"
+  },
+  {
+   "t": 2971.56,
+   "d": 2.16,
+   "text": "directly to magic or is it just a"
+  },
+  {
+   "t": 2973.72,
+   "d": 2.36,
+   "text": "holistic love of Rog leges just put you"
+  },
+  {
+   "t": 2976.08,
+   "d": 2.2,
+   "text": "on the spot well I mean just when it you"
+  },
+  {
+   "t": 2978.28,
+   "d": 1.44,
+   "text": "know I'd be lying if I said card game"
+  },
+  {
+   "t": 2979.72,
+   "d": 1.2,
+   "text": "Rogue likes weren't totally in my"
+  },
+  {
+   "t": 2980.92,
+   "d": 1.84,
+   "text": "wheelhouse right I mean of course as a"
+  },
+  {
+   "t": 2982.76,
+   "d": 1.56,
+   "text": "card gamer I love it I'm sure you all"
+  },
+  {
+   "t": 2984.32,
+   "d": 1.8,
+   "text": "know there's me that you mentioned in in"
+  },
+  {
+   "t": 2986.12,
+   "d": 2.8,
+   "text": "this talk right slay the Spire balatro"
+  },
+  {
+   "t": 2988.92,
+   "d": 5.0,
+   "text": "um but a uh a game that is um lesser"
+  },
+  {
+   "t": 2993.92,
+   "d": 2.24,
+   "text": "known and I really like it's very much"
+  },
+  {
+   "t": 2996.16,
+   "d": 2.92,
+   "text": "in the same I think is um really really"
+  },
+  {
+   "t": 2999.08,
+   "d": 4.2,
+   "text": "cleverly designed is um oh my gosh I'm"
+  },
+  {
+   "t": 3003.28,
+   "d": 1.12,
+   "text": "stalling for time because I'm trying to"
+  },
+  {
+   "t": 3004.4,
+   "d": 1.24,
+   "text": "remember I have I have it on my phone I"
+  },
+  {
+   "t": 3005.64,
+   "d": 2.96,
+   "text": "play it all the time it's called you can"
+  },
+  {
+   "t": 3008.6,
+   "d": 1.88,
+   "text": "cut this part out hold on a second yeah"
+  },
+  {
+   "t": 3010.48,
+   "d": 1.84,
+   "text": "um I'm gonna pull up the name because I"
+  },
+  {
+   "t": 3012.32,
+   "d": 1.08,
+   "text": "I should know this I play it all the"
+  },
+  {
+   "t": 3013.4,
+   "d": 1.64,
+   "text": "time I'm just blanking on the spot right"
+  },
+  {
+   "t": 3015.04,
+   "d": 4.52,
+   "text": "now um it's called meteor fall and what"
+  },
+  {
+   "t": 3019.56,
+   "d": 2.32,
+   "text": "meteor fall is is it's a it's a it's a"
+  },
+  {
+   "t": 3021.88,
+   "d": 2.24,
+   "text": "card game Rog likee which I really love"
+  },
+  {
+   "t": 3024.12,
+   "d": 2.2,
+   "text": "um but it uses the designer calls it the"
+  },
+  {
+   "t": 3026.32,
+   "d": 2.44,
+   "text": "um the Tinder method of gameplay where"
+  },
+  {
+   "t": 3028.76,
+   "d": 1.76,
+   "text": "every decision is a swipe left or swipe"
+  },
+  {
+   "t": 3030.52,
+   "d": 0.88,
+   "text": "right so you actually play it on your"
+  },
+  {
+   "t": 3031.4,
+   "d": 2.16,
+   "text": "phone in landscape mode and you like"
+  },
+  {
+   "t": 3033.56,
+   "d": 1.64,
+   "text": "draw a card you draw cards from your"
+  },
+  {
+   "t": 3035.2,
+   "d": 1.68,
+   "text": "deck one card at a time you either play"
+  },
+  {
+   "t": 3036.88,
+   "d": 2.6,
+   "text": "it or choose not to play it right um and"
+  },
+  {
+   "t": 3039.48,
+   "d": 1.08,
+   "text": "I think it's really brilliant"
+  },
+  {
+   "t": 3040.56,
+   "d": 2.08,
+   "text": "brilliantly designed it's not as deep as"
+  },
+  {
+   "t": 3042.64,
+   "d": 2.08,
+   "text": "the Spire or something like that um but"
+  },
+  {
+   "t": 3044.72,
+   "d": 2.28,
+   "text": "it is um I think it's a really really"
+  },
+  {
+   "t": 3047.0,
+   "d": 4.32,
+   "text": "robust game experience um and uh yeah I"
+  },
+  {
+   "t": 3051.32,
+   "d": 0.88,
+   "text": "highly recommend you all check it it's"
+  },
+  {
+   "t": 3052.2,
+   "d": 1.16,
+   "text": "been out for many years and I but it's"
+  },
+  {
+   "t": 3053.36,
+   "d": 1.36,
+   "text": "like my airplane game I play it all the"
+  },
+  {
+   "t": 3054.72,
+   "d": 2.48,
+   "text": "time when when I'm on planes and then"
+  },
+  {
+   "t": 3057.2,
+   "d": 3.2,
+   "text": "I'll say outside of the rogu likee space"
+  },
+  {
+   "t": 3060.4,
+   "d": 2.0,
+   "text": "um but still technically to me maybe"
+  },
+  {
+   "t": 3062.4,
+   "d": 1.52,
+   "text": "it's more in the drafting space I don't"
+  },
+  {
+   "t": 3063.92,
+   "d": 2.24,
+   "text": "know I play a lot of Team fight tactics"
+  },
+  {
+   "t": 3066.16,
+   "d": 2.04,
+   "text": "which is a um I mean it's not a Rog"
+  },
+  {
+   "t": 3068.2,
+   "d": 1.24,
+   "text": "likee but sort of like a drafting game"
+  },
+  {
+   "t": 3069.44,
+   "d": 1.88,
+   "text": "it's an auto battler so it has some Rog"
+  },
+  {
+   "t": 3071.32,
+   "d": 2.16,
+   "text": "like elements to it um those are a few"
+  },
+  {
+   "t": 3073.48,
+   "d": 1.84,
+   "text": "things that that I touch and of course"
+  },
+  {
+   "t": 3075.32,
+   "d": 1.96,
+   "text": "yeah super Giants games they they've"
+  },
+  {
+   "t": 3077.28,
+   "d": 1.16,
+   "text": "made some some incredible Rogue likee"
+  },
+  {
+   "t": 3078.44,
+   "d": 1.04,
+   "text": "stuff who hasn't played through those"
+  },
+  {
+   "t": 3079.48,
+   "d": 1.36,
+   "text": "you know so"
+  },
+  {
+   "t": 3080.84,
+   "d": 3.68,
+   "text": "yeah yeah to go all the way back this is"
+  },
+  {
+   "t": 3084.52,
+   "d": 1.52,
+   "text": "a very long time ago but I remember when"
+  },
+  {
+   "t": 3086.04,
+   "d": 2.84,
+   "text": "I got like my very first uh very early"
+  },
+  {
+   "t": 3088.88,
+   "d": 2.88,
+   "text": "iPod Touch will'll say there was like a"
+  },
+  {
+   "t": 3091.76,
+   "d": 1.56,
+   "text": "game I downloaded it was like just a"
+  },
+  {
+   "t": 3093.32,
+   "d": 2.52,
+   "text": "basic tower defense game I played so"
+  },
+  {
+   "t": 3095.84,
+   "d": 1.48,
+   "text": "I've spent so many hours playing just"
+  },
+  {
+   "t": 3097.32,
+   "d": 1.8,
+   "text": "like totally basic Tower Defense games"
+  },
+  {
+   "t": 3099.12,
+   "d": 1.64,
+   "text": "which to me are like original Rogue"
+  },
+  {
+   "t": 3100.76,
+   "d": 2.08,
+   "text": "leges in my heart just like Yep this arm"
+  },
+  {
+   "t": 3102.84,
+   "d": 1.84,
+   "text": "is coming at you build your Tower run"
+  },
+  {
+   "t": 3104.68,
+   "d": 1.64,
+   "text": "the thing build your Tower again oh my"
+  },
+  {
+   "t": 3106.32,
+   "d": 1.8,
+   "text": "gosh like that's so my alley I love that"
+  },
+  {
+   "t": 3108.12,
+   "d": 2.08,
+   "text": "stuff so much I can see that I can see"
+  },
+  {
+   "t": 3110.2,
+   "d": 2.84,
+   "text": "that uh yeah I think you know maybe last"
+  },
+  {
+   "t": 3113.04,
+   "d": 1.6,
+   "text": "question to just like flip it around a"
+  },
+  {
+   "t": 3114.64,
+   "d": 2.24,
+   "text": "little bit are there any kind of"
+  },
+  {
+   "t": 3116.88,
+   "d": 1.48,
+   "text": "mechanics and like elements of all of"
+  },
+  {
+   "t": 3118.36,
+   "d": 1.6,
+   "text": "your experience working on Magic the"
+  },
+  {
+   "t": 3119.96,
+   "d": 1.72,
+   "text": "Gathering that you kind of wish someone"
+  },
+  {
+   "t": 3121.68,
+   "d": 1.76,
+   "text": "would take a swing at in the rugle space"
+  },
+  {
+   "t": 3123.44,
+   "d": 1.88,
+   "text": "like something that you feel like could"
+  },
+  {
+   "t": 3125.32,
+   "d": 2.2,
+   "text": "transfer over or that you you know"
+  },
+  {
+   "t": 3127.52,
+   "d": 1.32,
+   "text": "haven't quite seen yet and you're like"
+  },
+  {
+   "t": 3128.84,
+   "d": 1.8,
+   "text": "you know I think this worked really well"
+  },
+  {
+   "t": 3130.64,
+   "d": 1.64,
+   "text": "for us and it actually could transfer"
+  },
+  {
+   "t": 3132.28,
+   "d": 2.6,
+   "text": "over to L Rog leg I mean I am very"
+  },
+  {
+   "t": 3134.88,
+   "d": 2.8,
+   "text": "interested in multiplayer Rog legs I"
+  },
+  {
+   "t": 3137.68,
+   "d": 1.88,
+   "text": "think often Rog like is a solo"
+  },
+  {
+   "t": 3139.56,
+   "d": 1.28,
+   "text": "experience I'm sure there are good"
+  },
+  {
+   "t": 3140.84,
+   "d": 2.08,
+   "text": "examples out there but I'd love to see"
+  },
+  {
+   "t": 3142.92,
+   "d": 1.88,
+   "text": "more Co-op Rog licks I think I think"
+  },
+  {
+   "t": 3144.8,
+   "d": 1.12,
+   "text": "there are some out there that now have"
+  },
+  {
+   "t": 3145.92,
+   "d": 2.28,
+   "text": "this mode in there but Co-op Rogue legs"
+  },
+  {
+   "t": 3148.2,
+   "d": 1.44,
+   "text": "and other ways of do multiplayer it just"
+  },
+  {
+   "t": 3149.64,
+   "d": 3.8,
+   "text": "sounds super super fun um and uh I guess"
+  },
+  {
+   "t": 3153.44,
+   "d": 1.16,
+   "text": "it's a tough genre for that because you"
+  },
+  {
+   "t": 3154.6,
+   "d": 1.04,
+   "text": "want to keep playing it over and over"
+  },
+  {
+   "t": 3155.64,
+   "d": 1.52,
+   "text": "and over again so a single player mode"
+  },
+  {
+   "t": 3157.16,
+   "d": 2.76,
+   "text": "is critical but um look I look I love"
+  },
+  {
+   "t": 3159.92,
+   "d": 1.04,
+   "text": "playing with other people let's find a"
+  },
+  {
+   "t": 3160.96,
+   "d": 1.84,
+   "text": "way to make the that happen you know"
+  },
+  {
+   "t": 3162.8,
+   "d": 1.44,
+   "text": "yeah and I'm sure I'm sure someone right"
+  },
+  {
+   "t": 3164.24,
+   "d": 1.28,
+   "text": "now in the chat is like here are all the"
+  },
+  {
+   "t": 3165.52,
+   "d": 1.96,
+   "text": "good examples I know I know that's one"
+  },
+  {
+   "t": 3167.48,
+   "d": 0.88,
+   "text": "of the"
+  },
+  {
+   "t": 3168.36,
+   "d": 2.52,
+   "text": "downsides yeah no I'm looking forward to"
+  },
+  {
+   "t": 3170.88,
+   "d": 1.76,
+   "text": "uh yeah I we'll we'll send you the list"
+  },
+  {
+   "t": 3172.64,
+   "d": 2.08,
+   "text": "of all the things people in chat suggest"
+  },
+  {
+   "t": 3174.72,
+   "d": 1.8,
+   "text": "uh when they get to this part but uh"
+  },
+  {
+   "t": 3176.52,
+   "d": 1.04,
+   "text": "yeah I think that that's fantastic and"
+  },
+  {
+   "t": 3177.56,
+   "d": 1.16,
+   "text": "it makes a lot of sense and I think the"
+  },
+  {
+   "t": 3178.72,
+   "d": 2.2,
+   "text": "discussions we had about the special"
+  },
+  {
+   "t": 3180.92,
+   "d": 1.36,
+   "text": "experience of things like drafting in"
+  },
+  {
+   "t": 3182.28,
+   "d": 2.72,
+   "text": "person you know there's a lot there to"
+  },
+  {
+   "t": 3185.0,
+   "d": 1.24,
+   "text": "you know pull from and would be"
+  },
+  {
+   "t": 3186.24,
+   "d": 2.2,
+   "text": "interesting to see in a Rog like so uh"
+  },
+  {
+   "t": 3188.44,
+   "d": 1.56,
+   "text": "yeah well thank you so much for making"
+  },
+  {
+   "t": 3190.0,
+   "d": 1.48,
+   "text": "the time to come talk to us and making"
+  },
+  {
+   "t": 3191.48,
+   "d": 1.92,
+   "text": "the case for Magic the Gathering being"
+  },
+  {
+   "t": 3193.4,
+   "d": 2.84,
+   "text": "in the Rog likee Pantheon uh got to"
+  },
+  {
+   "t": 3196.24,
+   "d": 3.48,
+   "text": "reury the whole uh tree of of oldest Rog"
+  },
+  {
+   "t": 3199.72,
+   "d": 1.68,
+   "text": "likes to make room for magic gathering"
+  },
+  {
+   "t": 3201.4,
+   "d": 2.2,
+   "text": "in there yeah just it's a weird the"
+  },
+  {
+   "t": 3203.6,
+   "d": 1.68,
+   "text": "weird Uncle Branch off to the side but I"
+  },
+  {
+   "t": 3205.28,
+   "d": 2.0,
+   "text": "really think there is a connection there"
+  },
+  {
+   "t": 3207.28,
+   "d": 2.32,
+   "text": "and I know when I design a draft format"
+  },
+  {
+   "t": 3209.6,
+   "d": 1.16,
+   "text": "I think a lot about a lot of the same"
+  },
+  {
+   "t": 3210.76,
+   "d": 1.56,
+   "text": "things that you all think about when um"
+  },
+  {
+   "t": 3212.32,
+   "d": 1.96,
+   "text": "making Rog likes so let me know what you"
+  },
+  {
+   "t": 3214.28,
+   "d": 1.36,
+   "text": "think if you agree you disagree where"
+  },
+  {
+   "t": 3215.64,
+   "d": 2.04,
+   "text": "the connections are and uh I'll be"
+  },
+  {
+   "t": 3217.68,
+   "d": 1.24,
+   "text": "coming back to read the chat when this"
+  },
+  {
+   "t": 3218.92,
+   "d": 2.08,
+   "text": "video goes up for sure excellent all"
+  },
+  {
+   "t": 3221.0,
+   "d": 2.08,
+   "text": "right well thank you so much gevin oh"
+  },
+  {
+   "t": 3223.08,
+   "d": 2.2,
+   "text": "it's my pleasure thank you all and enjoy"
+  },
+  {
+   "t": 3225.28,
+   "d": 3.32,
+   "text": "Rog like celebration"
+  }
+ ]
+}

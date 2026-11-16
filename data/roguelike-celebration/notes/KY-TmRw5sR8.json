@@ -1,0 +1,189 @@
+{
+  "id": "KY-TmRw5sR8",
+  "title": "John Harris - Difficulty in random games",
+  "speaker": "John Harris",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=KY-TmRw5sR8",
+  "talk_type": "design",
+  "summary": "John Harris, author of the @Play roguelike column, gives a self-described meandering talk on the drawbacks and uses of randomness in roguelikes. He argues against grind, and against random dungeons whose layout is meaningless and whose play reduces to gambling, tracing the idea to Gygax's random dungeon tables and PLATO-era games, and contrasting them with the interconnected backstory of tabletop modules like The Temple of Elemental Evil. He proposes three kinds of player skill (knowledge, logic and 'wit', or intuition) and argues the core of roguelike play is learning what only experience can teach. He closes by describing his experiment Casino Dungeon, which uses playing cards so that the dungeon layout itself hints at its contents.",
+  "games": [
+    "NetHack",
+    "Rogue",
+    "Rog-O-Matic",
+    "Dungeon Crawl Stone Soup",
+    "Spelunky",
+    "HyperRogue",
+    "Brogue",
+    "Strange Adventures in Infinite Space",
+    "Dungeons of Dredmor",
+    "Rogue Legacy",
+    "The Binding of Isaac",
+    "World of Warcraft",
+    "dnd (PLATO)",
+    "Dwarf Fortress",
+    "Casino Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "finite depth",
+      "kind": "example",
+      "claim": "Despite NetHack's reputation for infinite depth, it is finite: after reading the NetHack wiki many times a player can learn everything in the game, which reduced Harris's interest.",
+      "detail": "Harris, a NetHack multi-ascender, says this is why he is drifting away from NetHack while still loving Rogue, and why he now focuses on newer games.",
+      "t": 271,
+      "quote": "it's still finite and after you've read through the netac wiki about 20 times like i have yeah you you do eventually learn everything that's in the game",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "equipment progression",
+      "kind": "example",
+      "claim": "Harris praises Brogue for removing experience points and tying character advancement entirely to equipment.",
+      "detail": "He offers it as one of several design choices in Brogue he greatly respects.",
+      "t": 322,
+      "quote": "taking out experience points uh just making tying player player uh advancement entirely to your equipment",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "example",
+      "claim": "Strange Adventures in Infinite Space is a 'coffee break' roguelike: a full game from beginning to end in about 20 minutes if you don't die.",
+      "detail": "Harris calls it one of his favorite games of all time and notes its developers, Digital Eel, only later began calling it a roguelike.",
+      "t": 354,
+      "quote": "it's a coffee break rug like it's a full game beginning to end it's about 20 minutes if you don't die",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "grind",
+      "kind": "warning",
+      "claim": "Designers should eliminate grind, repetitive play that only raises numbers without interesting decisions, as Dungeon Crawl Stone Soup's developers have worked hard to do.",
+      "detail": "Harris found Dungeons of Dredmor and Rogue Legacy to be mostly grind, and says much of free-to-play and most RPGs are heavily grind. He calls grind make-work, filler and mindless number increases.",
+      "t": 438,
+      "quote": "grind is just sort of make work play that's when you're just bapping away at monsters like world of warcraft just to gain experience points",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "random dungeon tables",
+      "kind": "history",
+      "claim": "The earliest random dungeon generation Harris found is Gary Gygax's dice-table article in the first issue of TSR's The Strategic Review, later expanded into an appendix of the first-edition AD&D Dungeon Master's Guide.",
+      "detail": "Harris finds the appendix laughably complete, rolling for corridor lengths and branches, yet producing only a layout of rooms that means nothing. He says some roguelikes feel the same way.",
+      "t": 581,
+      "quote": "gary gygax himself wrote an article about creating random dungeons just with thyroids",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "meaningful layout",
+      "kind": "warning",
+      "claim": "If a random dungeon's contents do not challenge the player, its layout is meaningless: there is no reason to choose one corridor over another, and you might as well not randomise it.",
+      "detail": "Harris describes a grid of rooms with unchallenging monsters, which reduces exploration to grinding numbers up for the next dungeon.",
+      "t": 680,
+      "quote": "if there isn't things that challenge you along these corridors there's no reason to go by on one corridor rather than another one",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "gambling",
+      "kind": "warning",
+      "claim": "A random dungeon with no meaningful structure reduces to gambling: the player faces encounters they barely control, and the only real choice is whether to keep pressing on or stop.",
+      "detail": "A Flash game based on the AD&D random dungeon appendix is essentially a gambling simulation about whether to keep exploring or bank your funds. In the PLATO game dnd, a first-level character has about a 50% chance of dying in each fight until finding a magic item, so the only choice is staying on a level or diving.",
+      "t": 843,
+      "quote": "you progress through a series of encounters the contents of which you have very limited control and you have to try your luck against them",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "terrain tactics",
+      "kind": "history",
+      "claim": "Rogue advanced the random dungeon by making its space matter tactically: monsters used the space too, several could attack at once, doorways were safe spots, and dark rooms left you open from any direction.",
+      "detail": "Earlier games were a sequence of spaces that might contain an encounter; Rogue made the dungeon itself a source of opportunities.",
+      "t": 937,
+      "quote": "the spaces mattered because the monsters could use them too",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "dungeon backstory",
+      "kind": "principle",
+      "claim": "What hand-made tabletop dungeons have and random dungeons lack is backstory explaining why everything is where it is, which makes the dungeon feel real and gives players things to exploit.",
+      "detail": "Harris cites The Temple of Elemental Evil, whose town has secretly evil merchants and whose sand pit hides a treasure hoard 60 feet down. In his goblin example, the lair has a trash dump and nursery; freeing the goblins' prisoners might gain allies, and the trash may hold gold the goblins discarded.",
+      "t": 1138,
+      "quote": "not only does it make the dungeon seem a lot more like a real place but also can be taken advantage of by the players it's not just window dressing",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "generated backstory",
+      "kind": "principle",
+      "claim": "Harris predicts roguelikes will move toward algorithmically generated behind-the-scenes stories that explain the dungeon and that a canny player can exploit, an approach he sees in Dwarf Fortress.",
+      "detail": "He says Dwarf Fortress started with Tarn Adams' brother writing stories and Tarn trying to build a game in which such stories could happen.",
+      "t": 1202,
+      "quote": "behind the scenes algorithmically generated stories that explain the dungeon and that a kenny player can take advantage of",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player skill types",
+      "kind": "principle",
+      "claim": "Harris divides game-playing skill into knowledge (facts you consciously know), logic (applying those rules to deduce the game state), and wit (intuition, or things you don't know you know).",
+      "detail": "Knowledge examples from NetHack include cockatrices turning you to stone and engrave-testing wands: write in the dust with your finger first, since some wand effects are only conclusive when text is already there. Wit is the ability of a friend who wins a new game on the first try.",
+      "t": 1265,
+      "quote": "trying to sort of codify the the types of game playing skill and this is what i've come up with knowledge logic and wit",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "No game can be made spoiler-proof; randomness only delays it, since players will document even the range of possibilities a generator can produce.",
+      "detail": "Harris calls randomisation a response to FAQs: a NetHack walkthrough cannot be like an Elder Scrolls one, yet NetHack still has FAQs listing all possible items. A game that invents its own items would get a FAQ on the limits of its range.",
+      "t": 1329,
+      "quote": "what ways can you write a game that's fact proof i ultimately came up with the conclusion that ultimately nothing uh but you can you can delay it",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "intuition",
+      "kind": "principle",
+      "claim": "Intuition ('wit') gradually turns into knowledge: hidden probabilities in a game first become a subconscious feeling, then a conscious rule as the player notices them.",
+      "detail": "Harris's example: one room yields treasure 70% of the time and a horrible monster 30%, while the other mirrors it. Playing enough, the player first subconsciously and then consciously learns which to choose, progressing from chance to wit to knowledge.",
+      "t": 1521,
+      "quote": "that's how it progresses from just chance to wit to knowledge",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "intuition",
+      "kind": "principle",
+      "claim": "Harris argues the core of roguelike play is finding things that only experience can teach, like the pattern sense of expert crossword or cryptogram solvers; he thinks fully achieving this is impossible but worth chasing.",
+      "detail": "Crossword solvers learn that rare letters like the X in 'xylophone' constrain crossing words; cryptogram solvers learn word shapes from length and letter frequency. Both have rules of thumb, but experience builds the real sense of possibilities.",
+      "t": 1671,
+      "quote": "it's finding things that are fact with the only experience can teach you",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and intuition",
+      "kind": "principle",
+      "claim": "An audience member framed the distinction: artful randomness creates problems players can build intuition for but never fully solve by logic, while poor randomness yields events no intuition can learn, which is gambling rather than a game.",
+      "detail": "The audience member compared Harris's three skills to Go, which has knowledge of rules, logic about the board, and intuition because no one can track all futures. Harris agreed this was a perfect example.",
+      "t": 1760,
+      "quote": "if that's done poorly you just have random events that there's no way to develop an intuition",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "layout as hint",
+      "kind": "technique",
+      "claim": "Harris's experiment Casino Dungeon replaces independent die rolls with a deck of playing cards laid out as a 7x7 grid that determines both encounters and the dungeon's shape, so the layout hints where treasure and danger are.",
+      "detail": "Because players get these hints, Harris raises the difficulty so some spaces can kill outright unless you're prepared, giving players an incentive to develop intuition. He calls it an experiment and praises 7DRLs as gameplay experiments.",
+      "t": 1825,
+      "quote": "the dungeon layout is itself a hint for where the good stuff are is and where the things that probably kill you will go",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

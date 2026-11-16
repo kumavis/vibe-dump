@@ -1,0 +1,107 @@
+{
+  "id": "Gxn_MA3-Vgo",
+  "title": "Andrew Cedotal - Life, Liberty and the Pursuit of Comboness",
+  "speaker": "Andrew Cedotal",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=Gxn_MA3-Vgo",
+  "talk_type": "design",
+  "summary": "Andrew Cedotal builds a formal definition of a 'combo' in upgrade-based games: a subset of upgrades whose value exceeds what picking on unconditional value alone would give, and whose synergy is non-obvious, with comboness a matter of degree. He then argues that modern life's expanding space of self-improvement makes success increasingly look like a combo, illustrated by biographies of Luca Galante (Vampire Survivors), Vera Wang and Julia Child. Turning back to games, he argues that games evoke and relieve anxieties the audience actually has, so upgrade systems should mirror life's structure: a 'drafting mullet' that is drafted (chance-limited) up front and constructed (player-controlled investment) behind, as in three-pick-one roguelike upgrades.",
+  "games": [
+    "Vampire Survivors",
+    "Ultima Online",
+    "Magic: The Gathering"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "combos",
+      "kind": "principle",
+      "claim": "A combo is a subset of upgrades whose value exceeds the best unconditional value of any same-sized subset, counting conditional effects — not merely a subset worth more than its parts.",
+      "detail": "Cedotal refines a first draft that left a loophole: if A alone is worth 10 and B+C together more than their parts but less than A-plus-something, nobody would choose B+C or call it a combo. The refined definition compares against the highest unconditional value of subsets of the same size.",
+      "t": 231,
+      "quote": "a combo is a subset of upgrades with a greater valuable than one that exceeds the highest unconditional value of all subsets of the same size",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "combos",
+      "kind": "principle",
+      "claim": "Players attribute more 'comboness' to synergies that are implicit and non-obvious — arising when effects pass through other game systems — than to synergies printed directly on the upgrades.",
+      "detail": "Common usage excludes explicit conditional text ('C is worth 3 if B present'); rewording the same math via tokens (B grants a foo token, C gains value per foo token) makes players call it a combo. He cites a Magic: The Gathering combo that took five minutes to explain as clearly high in comboness.",
+      "t": 304,
+      "quote": "The less obvious a combo is the more comboness players are likely to attribute to it",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "combos",
+      "kind": "principle",
+      "claim": "Comboness is a matter of degree, depending both on how much the conditional value exceeds the best unconditional pick and on how non-obvious that conditional value is.",
+      "detail": "His short definition: a combo is a subset of upgrades whose value is higher than picking purely on unconditional value, and non-obvious.",
+      "t": 336,
+      "quote": "It isn't a binary property but a matter of degree and that is dependent on the non-obviousness of the conditional value",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "careers as combos",
+      "kind": "example",
+      "claim": "Cedotal frames Luca Galante's creation of Vampire Survivors as a career combo of a taste for Ultima Online, digging through obscure mobile games and working on slot machines.",
+      "detail": "He argues Ultima Online's tradition of chaotic real-time 2D with low-res assets and hundreds of entities informed Vampire Survivors; crate-digging mobile games is an arbitrage for importing emerging genres across platforms; and casino game work is arbitrage because that industry gets little developer attention relative to its revenue.",
+      "t": 818,
+      "quote": "What we have here is a passion for retro games with really weird/bad graphics. Video game crate digging and an experience making slot machines",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "careers as combos",
+      "kind": "principle",
+      "claim": "Cedotal argues that as the space of self-improvement options grows, more success stories will come from acquiring apparently unrelated skills that only later combine, making life feel more about searching than struggling.",
+      "detail": "Using Vera Wang (ice skating, pharmaceutical distribution, fashion journalism) and Julia Child (intelligence archiving, shark-repellent R&D, French culinary circle) as examples, he says these underdogs succeeded through non-obvious skill combinations rather than grit, and that finding out whether they combine takes years of high-risk commitment.",
+      "t": 1329,
+      "quote": "more and more people are going to be feeling like the primary struggle of their life is searching rather than well struggling",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tension and relief",
+      "kind": "principle",
+      "claim": "Games create anxiety and then relieve it, and for that to land deeply the anxiety must match what the audience actually feels in their lives.",
+      "detail": "Cedotal uses examples: an 'F, come see me' paper triggers modern anxiety but would mean nothing to a hunter-gatherer, while a drought-stricken savannah might do the opposite. Relief is proportional to the irritant: 'a big pearl needs a big grain of sand'.",
+      "t": 1403,
+      "quote": "you want to be able to create anxiety and then take it away you need a structural understanding of your audience's anxieties",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "modern anxiety",
+      "kind": "principle",
+      "claim": "Traditional hero's-journey narratives dramatize resisting off-ramps on a single path, but Cedotal argues today's core anxiety is an overwhelming number of superficially viable options.",
+      "detail": "The hero's journey made sense when one accepted common virtues and worked hard at them. He says work that appeals to modern people should evoke and relieve the anxiety of choosing among many options.",
+      "t": 1513,
+      "quote": "This overwhelming tie of superficial viable options is the core anxiety source for people",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "upgrade drafting",
+      "kind": "warning",
+      "claim": "Neither purely constructed upgrades (perfect knowledge and choice) nor purely random upgrades sustain long-term engagement, because neither mirrors the structure of everyday anxiety.",
+      "detail": "Cedotal makes a Goldilocks argument: a purely constructed game is always there and the same, while fully random upgrades, like playing with truly random blind decks — something every team tries once — take decision responsibility away, making the game less.",
+      "t": 1588,
+      "quote": "By taking decision responsibility away, the game makes itself less",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "upgrade drafting",
+      "kind": "principle",
+      "claim": "Roguelike upgrade systems should use a 'drafting mullet' — chance limits which combos are on offer, but the player controls how much to invest in each — which three-pick-one upgrade choices achieve elegantly.",
+      "detail": "Drawing on Soren Johnson's pre- and post-luck, the open combos are those for which you are offered a component early enough to draw the rest; for those, you have freedom over how to dig in. He suggests further threads: methods of creating combo density, rarity systems, and how upgrades interact with simulation.",
+      "t": 1628,
+      "quote": "It is drafting in the front, constructed in the back",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

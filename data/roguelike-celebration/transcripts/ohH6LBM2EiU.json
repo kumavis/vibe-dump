@@ -1,0 +1,1060 @@
+{
+ "id": "ohH6LBM2EiU",
+ "url": "https://www.youtube.com/watch?v=ohH6LBM2EiU",
+ "title": "Dan Norder: Chase: The BASIC Language Proto-Roguelike",
+ "speaker": "Dan Norder",
+ "talk_title": "Chase: The BASIC Language Proto-Roguelike",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1869,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "In the early years of computing, a small turn-based game called Chase, built in the BASIC programming language, had players escaping robots and luring them into obstacles. It soon developed variations and enhancements as it spread to other computer systems. On the 60th anniversary of BASIC, we will examine these \"robotlike\" games and how the gameplay might be used in modern roguelikes.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3633,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.12,
+   "d": 10.12,
+   "text": "Our final talk is from Dan Norder. A computer hobbyist for more than 45 years, I got started"
+  },
+  {
+   "t": 15.24,
+   "d": 5.52,
+   "text": "with roguelike games in 1987 with one of the first versions of NetHack. In the '90s I focused"
+  },
+  {
+   "t": 20.76,
+   "d": 4.0,
+   "text": "on desktop publishing and then combined those skills and Internet experience into a professional"
+  },
+  {
+   "t": 24.76,
+   "d": 5.48,
+   "text": "career. I'm currently working on a retro 8-bit pixel art roguelike game project, Elflings. and"
+  },
+  {
+   "t": 30.24,
+   "d": 10.52,
+   "text": "Here celebrate the 50th anniversary of BASIC. DAN: Thank you for having me and staying up for"
+  },
+  {
+   "t": 40.76,
+   "d": 7.16,
+   "text": "the last presentation of the evening. This is all about chase which is the BASIC language"
+  },
+  {
+   "t": 47.92,
+   "d": 14.24,
+   "text": "proto-roguelike. I have my Mastodon address @elflings which was the game mentioned. What"
+  },
+  {
+   "t": 62.16,
+   "d": 12.84,
+   "text": "this presentation is going to be about basically is -- what's this doing? Robots, robots, robots."
+  },
+  {
+   "t": 75.8,
+   "d": 6.28,
+   "text": "We kind of already did an about me so I don't really need to go over this and I will use the"
+  },
+  {
+   "t": 82.08,
+   "d": 8.8,
+   "text": "time for the rest of the presentation. All right. When I talk about a proto-roguelike, how is chase"
+  },
+  {
+   "t": 90.88,
+   "d": 9.36,
+   "text": "like a primitive roguelike? Well, it is top-down, it is turn-based, and the GIFs here are a symbol"
+  },
+  {
+   "t": 100.24,
+   "d": 7.0,
+   "text": "of the location of items. It is not like a text description like you are in a wind of twisty"
+  },
+  {
+   "t": 107.24,
+   "d": 10.04,
+   "text": "passage ways. It is showing you a map actually. And the placement of objects are entirely random."
+  },
+  {
+   "t": 117.28,
+   "d": 8.64,
+   "text": "Of course, there is permadeath. Over on the right, I made a screen. The original would be one"
+  },
+  {
+   "t": 125.92,
+   "d": 8.0,
+   "text": "color. Black on white for paper for the very first version. I have colorized it to make it stand out"
+  },
+  {
+   "t": 134.44,
+   "d": 7.56,
+   "text": "more. You can see that the player is an asterisk which is in green. Robots are the enemy in red"
+  },
+  {
+   "t": 142.0,
+   "d": 12.76,
+   "text": "and the X sign. The obstacles are Xs -- plus sign. The player moves one to the right and the robots"
+  },
+  {
+   "t": 154.76,
+   "d": 6.8,
+   "text": "just follow after you. One of the five robots is already crashed into an obstacle and died. The"
+  },
+  {
+   "t": 161.56,
+   "d": 7.24,
+   "text": "rest are just kind of chasing after you which is where the name comes from. Chase, however, is not"
+  },
+  {
+   "t": 168.8,
+   "d": 7.2,
+   "text": "a real roguelike because it is extremely basic. This is just the player, the robots, and the"
+  },
+  {
+   "t": 176.0,
+   "d": 8.32,
+   "text": "walls. I explained the entire game. No inventory, skills, stats, no multiple ways to do things which"
+  },
+  {
+   "t": 184.32,
+   "d": 6.52,
+   "text": "is one of the coolest things of roguelikes. It is not technically even procedurally based"
+  },
+  {
+   "t": 190.84,
+   "d": 7.72,
+   "text": "because the randomness is too random. It just throws everything out there and it lands where"
+  },
+  {
+   "t": 198.56,
+   "d": 11.2,
+   "text": "it lands. And most unusual way is there is no real combat at least in the typical sense."
+  },
+  {
+   "t": 210.4,
+   "d": 8.12,
+   "text": "Then we move again here and the player hops up behind an obstacle and two more robots crash and"
+  },
+  {
+   "t": 218.52,
+   "d": 8.84,
+   "text": "the remaining two are following after you and they are going crash very soon now. All right. Chase,"
+  },
+  {
+   "t": 227.36,
+   "d": 6.72,
+   "text": "you runaway from the enemies, avoid the walls and robots. The walls are electrified fences is what"
+  },
+  {
+   "t": 234.08,
+   "d": 6.88,
+   "text": "they decided to call them. Another important thing is that the robots always follow the"
+  },
+  {
+   "t": 240.96,
+   "d": 7.6,
+   "text": "shortest passable route to chase you. You can predict exactly where they are going to go. And"
+  },
+  {
+   "t": 248.56,
+   "d": 5.92,
+   "text": "if you are lined up with them like you happen to be right now they will come closer. But if"
+  },
+  {
+   "t": 254.48,
+   "d": 8.16,
+   "text": "they are diagonal in any way they could take a diagonal route to get to you. All you do is you"
+  },
+  {
+   "t": 262.64,
+   "d": 7.08,
+   "text": "avoid getting killed and you want to get the robots to run into the obstacles. That's it."
+  },
+  {
+   "t": 270.76,
+   "d": 6.4,
+   "text": "All right. To understand how this was created, what sort of things are going on at the time,"
+  },
+  {
+   "t": 277.16,
+   "d": 7.36,
+   "text": "you also need a little short basic idea of where BASIC came from. BASIC was created at Dartmouth"
+  },
+  {
+   "t": 284.52,
+   "d": 7.76,
+   "text": "college by members of the math department, John Kemeny and Thomas Kurtz. John became"
+  },
+  {
+   "t": 292.28,
+   "d": 7.52,
+   "text": "the president later of the college. It stands for beginners all purpose symbolic instruction code."
+  },
+  {
+   "t": 299.8,
+   "d": 9.64,
+   "text": "The idea was to be easier than the existing languages at the time that only people into"
+  },
+  {
+   "t": 309.44,
+   "d": 8.76,
+   "text": "science and math could figure it out. They integrated it into the Dartmouth timesharing"
+  },
+  {
+   "t": 318.2,
+   "d": 16.28,
+   "text": "system. BASIC was created 60 years ago starting in May of 1964 slightly after midnight in fact."
+  },
+  {
+   "t": 334.48,
+   "d": 10.64,
+   "text": "This screen shows you a setup for how the first basic lab was run. Kurtz is in the middle from"
+  },
+  {
+   "t": 345.12,
+   "d": 14.96,
+   "text": "the main frame from general electric. Kemeny is on the right. The other photos are computer"
+  },
+  {
+   "t": 360.08,
+   "d": 7.04,
+   "text": "labs. BASIC was integrated into the whole college eventually. People in all sorts of"
+  },
+  {
+   "t": 367.12,
+   "d": 6.44,
+   "text": "classes were using it. They estimated up to 85% of the students were using it because it was"
+  },
+  {
+   "t": 373.56,
+   "d": 7.28,
+   "text": "integrated so well. If you look at the picture, you can see the first terminals were teletype"
+  },
+  {
+   "t": 380.84,
+   "d": 8.72,
+   "text": "machines and also one of them has an old phone attached to it. That's how they communicated."
+  },
+  {
+   "t": 392.08,
+   "d": 4.72,
+   "text": "Basically, what you do with the teletypes is you would submit your information in and get"
+  },
+  {
+   "t": 396.8,
+   "d": 6.04,
+   "text": "a printout back. Little different than how the screen would update because everything"
+  },
+  {
+   "t": 402.84,
+   "d": 7.4,
+   "text": "is printed out for you each time. All the students and professors could use it too would share their"
+  },
+  {
+   "t": 410.24,
+   "d": 10.44,
+   "text": "basic programs, adapt code, make improvements, things like that. And Kemeney was forward thinking"
+  },
+  {
+   "t": 420.68,
+   "d": 10.0,
+   "text": "believing the games would popularize the language. Of course they did. A lot of people were using it."
+  },
+  {
+   "t": 430.68,
+   "d": 6.16,
+   "text": "This is in contrast to other systems at the time where if they saw you were using up the university"
+  },
+  {
+   "t": 436.84,
+   "d": 6.16,
+   "text": "resources to have a game they would delete it. They lost a lot of really good games that way."
+  },
+  {
+   "t": 443.0,
+   "d": 7.48,
+   "text": "Chase was created on this system we believe but don't have a copy of the original so don't have"
+  },
+  {
+   "t": 450.48,
+   "d": 14.76,
+   "text": "exact proof. The first indication we can find that chase existed was in creative computing magazine"
+  },
+  {
+   "t": 465.24,
+   "d": 8.56,
+   "text": "in the first issue of 1976. You can see from the cover there robots are playing cards with nuts and"
+  },
+  {
+   "t": 473.8,
+   "d": 6.52,
+   "text": "bolts and you can see listed on the cover that chase is one of the games. On this version of"
+  },
+  {
+   "t": 480.32,
+   "d": 11.2,
+   "text": "Chase was done by Bill Cotter and David Ahl who was the creator of forward thinking. He tried to"
+  },
+  {
+   "t": 491.52,
+   "d": 9.52,
+   "text": "credit the original authors but it is listed as unknown here so that's no help. This was created"
+  },
+  {
+   "t": 501.04,
+   "d": 6.84,
+   "text": "on the honey well hardware by general electric which was the same hardware that DTSS used which"
+  },
+  {
+   "t": 507.88,
+   "d": 10.32,
+   "text": "means this must be close to the original code. In this version, the only choices you had were moving"
+  },
+  {
+   "t": 518.2,
+   "d": 6.48,
+   "text": "in one of the eight directions surrounding you. You couldn't teleport which is a major"
+  },
+  {
+   "t": 524.68,
+   "d": 6.56,
+   "text": "feature later. You couldn't even wait in place and have the robots chase after you where you"
+  },
+  {
+   "t": 531.24,
+   "d": 11.76,
+   "text": "are. You had to move which is a little strange. The next version of chase Herman DeMonstoy. This"
+  },
+  {
+   "t": 543.0,
+   "d": 9.92,
+   "text": "was almost the same the only thing was you could choose not to print out a map. The robots were"
+  },
+  {
+   "t": 552.92,
+   "d": 10.2,
+   "text": "predictable so you wouldn't necessarily have to print it out. As a comparison, Chase was ported"
+  },
+  {
+   "t": 563.12,
+   "d": 8.48,
+   "text": "to assembly language which is a little different than basic. Basic was easier. The code for that"
+  },
+  {
+   "t": 571.6,
+   "d": 7.24,
+   "text": "ran about half a page. The assembly language code ran about six pages. It was really hard to figure"
+  },
+  {
+   "t": 578.84,
+   "d": 7.32,
+   "text": "out. I don't like assembly. The major change they added was they added the first teleport"
+  },
+  {
+   "t": 586.16,
+   "d": 7.6,
+   "text": "already which was hitting the P button for panic. This screenshot is from sole 20 which was a very"
+  },
+  {
+   "t": 593.76,
+   "d": 7.84,
+   "text": "early computer. Little joy fish symbol there with the robots in other games. It was like the"
+  },
+  {
+   "t": 601.6,
+   "d": 11.96,
+   "text": "ghost and their version of Pacman or a lunar lander. That's in Dr. Dobbs journal in 1977."
+  },
+  {
+   "t": 613.56,
+   "d": 9.28,
+   "text": "1978 we have another example with graphics basic. It includes tub work because that's"
+  },
+  {
+   "t": 623.36,
+   "d": 6.28,
+   "text": "popular and add last stand option where you could choose not to move for the entire rest"
+  },
+  {
+   "t": 629.64,
+   "d": 20.28,
+   "text": "of the game and hope the robots crash themselves. Killerbot's from Rodger Olsen 1979. Killerbot. You"
+  },
+  {
+   "t": 649.92,
+   "d": 11.96,
+   "text": "could deactivate a nuclear bomb. Any way, next up is kind of the major iteration of Chase. It has"
+  },
+  {
+   "t": 661.88,
+   "d": 9.0,
+   "text": "all of the features we later know as basically things you could do in chase. It added the"
+  },
+  {
+   "t": 670.88,
+   "d": 7.96,
+   "text": "teleport option. It added the stay in place. Added the last stand. Basically it is the chase we know"
+  },
+  {
+   "t": 678.84,
+   "d": 11.8,
+   "text": "and love. This was again in creative computing. In 1975. I believe this game was created by Mac"
+  },
+  {
+   "t": 690.64,
+   "d": 9.64,
+   "text": "from the next slide. Bill Cotter and further improved by Arnold Leverage when we don't know"
+  },
+  {
+   "t": 703.44,
+   "d": 9.4,
+   "text": "is or did. Maybe he did that version of Chase on the previous slide. Everything else is still the"
+  },
+  {
+   "t": 712.84,
+   "d": 6.4,
+   "text": "same. That leads us into a very interesting question here. Did Oglesby write Chase?"
+  },
+  {
+   "t": 720.96,
+   "d": 8.4,
+   "text": "He wrote a lot of basic games on DTSS starting in 1974 when they loaned him a teletype machine"
+  },
+  {
+   "t": 729.36,
+   "d": 5.4,
+   "text": "and phone that connected to the network. He was grateful and decided to help them out and made a"
+  },
+  {
+   "t": 734.76,
+   "d": 8.84,
+   "text": "bunch of games. All became convinced that Oglesby created Chase and in a few years he directly"
+  },
+  {
+   "t": 743.6,
+   "d": 9.56,
+   "text": "called it his game. Case closed, right? Problem is Oglesby denied creating the game. Said he didn't"
+  },
+  {
+   "t": 753.16,
+   "d": 9.04,
+   "text": "create it or port it and just saw it at some point. This is all according to Maury Markowitz."
+  },
+  {
+   "t": 763.36,
+   "d": 7.8,
+   "text": "That's pretty big there. If it was his, he would probably said have he did it. More on this later."
+  },
+  {
+   "t": 773.16,
+   "d": 6.24,
+   "text": "Then we have a new version called Escape for the first time. It is by Jay Victor Nahigian and"
+  },
+  {
+   "t": 779.4,
+   "d": 9.84,
+   "text": "William Hodge which came out in 1979 and reprinted in 1980 and '81. This is probably the first"
+  },
+  {
+   "t": 789.24,
+   "d": 10.24,
+   "text": "version that didn't have a robot theme. It was based on military combat. It was a lot like chase."
+  },
+  {
+   "t": 802.36,
+   "d": 6.88,
+   "text": "You could only teleport twice. I don't know why. One really new thing is they changed it so that"
+  },
+  {
+   "t": 809.24,
+   "d": 5.68,
+   "text": "when the attackers collided they both randomly teleport which I can only imagine was really a"
+  },
+  {
+   "t": 814.92,
+   "d": 8.76,
+   "text": "pain. You just spent your time trying to get away and they jump on you or something. And then this"
+  },
+  {
+   "t": 823.68,
+   "d": 6.16,
+   "text": "is also important. When you teleport, probably should have mentioned it, teleport goes anywhere."
+  },
+  {
+   "t": 829.84,
+   "d": 6.56,
+   "text": "You could instantly land on one of the obstacles or a robot and die. It wasn't safe. It was just"
+  },
+  {
+   "t": 836.4,
+   "d": 11.96,
+   "text": "a last ditch move. And then escape also added a tank which destroyed everything it touched. All"
+  },
+  {
+   "t": 848.36,
+   "d": 9.56,
+   "text": "right. Next up, Hi-volts is an interesting one. Kind of like Chase, we don't have a copy of the"
+  },
+  {
+   "t": 857.92,
+   "d": 11.8,
+   "text": "original ones. It was created by Douglas Jones and I am guessing 1979, could be as early as 1974"
+  },
+  {
+   "t": 869.72,
+   "d": 8.88,
+   "text": "but I think later makes more sense. The mock up of the screen is based on how Jones' describes"
+  },
+  {
+   "t": 878.6,
+   "d": 23.2,
+   "text": "it. The logo is the one Jones made. The enemy is called mhos which is ohms backwards. He created"
+  },
+  {
+   "t": 901.8,
+   "d": 8.68,
+   "text": "this based on the memory of another game so it was a little different but originally came from Chase"
+  },
+  {
+   "t": 910.48,
+   "d": 9.44,
+   "text": "because it similar otherwise. Really like the orange and black. Going with the volt them next up"
+  },
+  {
+   "t": 919.92,
+   "d": 11.4,
+   "text": "is H-volt by Greg Rappa. Creative computing again this time in 1979. Lots of people updating these"
+  },
+  {
+   "t": 931.32,
+   "d": 6.08,
+   "text": "things all of the time. We have a bunch of version I never mentioned. This one, though, is really"
+  },
+  {
+   "t": 937.4,
+   "d": 7.24,
+   "text": "weird because it is like Chase but it is also like chess. I haven't fully figured it out myself"
+  },
+  {
+   "t": 944.64,
+   "d": 7.84,
+   "text": "but the idea was that the interceptor robots moved the exact same way you move. If you moved up, they"
+  },
+  {
+   "t": 952.48,
+   "d": 6.92,
+   "text": "moved up which means they could never actually kill you. What did kill you was other attackers"
+  },
+  {
+   "t": 959.4,
+   "d": 7.76,
+   "text": "and they moved like chess pieces I guess. I don't know. You can see a little bit of the basic code"
+  },
+  {
+   "t": 967.16,
+   "d": 6.28,
+   "text": "here. It has got print commands in the middle for printing something to the screen. It has got Rays"
+  },
+  {
+   "t": 973.44,
+   "d": 9.2,
+   "text": "at the bottom and so forth. Still never figured this one out. Then we have got escape with an"
+  },
+  {
+   "t": 982.64,
+   "d": 8.92,
+   "text": "exclamation mark created by sub-logic for the Apple 2. Big change was it was graphics instead"
+  },
+  {
+   "t": 991.56,
+   "d": 6.84,
+   "text": "of text. Played real-time and not on the grid. You can see from the graphic there some of the"
+  },
+  {
+   "t": 998.4,
+   "d": 10.08,
+   "text": "things are lining up. It is more arcade that way. The player also has a gone I think for the first"
+  },
+  {
+   "t": 1008.48,
+   "d": 10.36,
+   "text": "time. You can zap it only eight times and you could teleport which is very popular these days."
+  },
+  {
+   "t": 1020.16,
+   "d": 6.72,
+   "text": "All right. And in this one, it looks out of place here is it is totally different but there is a"
+  },
+  {
+   "t": 1026.88,
+   "d": 4.96,
+   "text": "bunch of games I haven't included because there was not enough light chase. I have included this"
+  },
+  {
+   "t": 1031.84,
+   "d": 10.08,
+   "text": "one because it was actually directly inspired by Chase and the developers of benedict. Williams"
+  },
+  {
+   "t": 1041.92,
+   "d": 10.6,
+   "text": "electronics created this arcade game in 1982. Robotron 2084. The first version only had enemies"
+  },
+  {
+   "t": 1052.52,
+   "d": 13.84,
+   "text": "that were grunts and electrodes. That was it. When they showed it to other people they really"
+  },
+  {
+   "t": 1066.36,
+   "d": 8.6,
+   "text": "liked it but what could we add? Well they add lot. They added the option to res can cue humans and a"
+  },
+  {
+   "t": 1074.96,
+   "d": 10.72,
+   "text": "bunch of new enemies. They had twin shootings so you could fire off a million it seemed like zaps"
+  },
+  {
+   "t": 1085.68,
+   "d": 11.0,
+   "text": "all around the board and just kill everything. It was a lot of fun. All right. Next up, Zombies and"
+  },
+  {
+   "t": 1096.68,
+   "d": 8.28,
+   "text": "pot holes by Julian tippet 1983 for the Jupiter ace. This wasn't the first version where they"
+  },
+  {
+   "t": 1104.96,
+   "d": 5.84,
+   "text": "had zombies. Just the first time I bothered to put it on screen. I think the earlier versions"
+  },
+  {
+   "t": 1110.8,
+   "d": 11.12,
+   "text": "were created by tippet or someone in the computer areas that saw or adapted it. You can kind of see"
+  },
+  {
+   "t": 1121.92,
+   "d": 7.2,
+   "text": "it there. One interesting thing about this is a review complained that you needed eight keys to"
+  },
+  {
+   "t": 1129.12,
+   "d": 9.6,
+   "text": "play. People only had five fingers. Oh, my gosh, how does that work? I don't understand. Weird."
+  },
+  {
+   "t": 1141.08,
+   "d": 5.92,
+   "text": "OK. Next one is a really important one mainly and this is kind of funny. This"
+  },
+  {
+   "t": 1147.0,
+   "d": 6.72,
+   "text": "is the one I learned how to play on. That's why I considered it important. It is hobbit"
+  },
+  {
+   "t": 1153.72,
+   "d": 10.28,
+   "text": "by David sweet for the TRS-80. Rainbow magazine is 1983. This is their adventure issue and he"
+  },
+  {
+   "t": 1164.0,
+   "d": 7.08,
+   "text": "made an adventure game. The player is supposed to be an invisible hobbit because you only see"
+  },
+  {
+   "t": 1171.08,
+   "d": 16.8,
+   "text": "the two eyes. The obstacles are like trees but look like mushrooms. The enemies are orcs. This"
+  },
+  {
+   "t": 1187.88,
+   "d": 5.92,
+   "text": "one didn't have teleportation. It was more like the original Chase. But you could hit new and"
+  },
+  {
+   "t": 1193.8,
+   "d": 7.44,
+   "text": "get a new screen if you didn't like the one you were in. There were three rounds here and you"
+  },
+  {
+   "t": 1201.24,
+   "d": 6.72,
+   "text": "got points based upon how many orcs you chose to play against but if you killed them all you got"
+  },
+  {
+   "t": 1207.96,
+   "d": 5.2,
+   "text": "bonus points and if you died you got negative points for the round. They added it all up at"
+  },
+  {
+   "t": 1213.16,
+   "d": 11.16,
+   "text": "the end. You wanted to face as many orcs as you think you could defeat. Which brings us"
+  },
+  {
+   "t": 1224.32,
+   "d": 9.96,
+   "text": "into another point here going back to who created Chase. I discovered David Sweet or"
+  },
+  {
+   "t": 1234.28,
+   "d": 9.16,
+   "text": "someone by the same name made a basic game back in Dartmouth college. It was about bull fighting."
+  },
+  {
+   "t": 1243.44,
+   "d": 9.12,
+   "text": "It was done sometime before 1974 because it was printed in a book of in January of 1974. Is this"
+  },
+  {
+   "t": 1252.56,
+   "d": 7.92,
+   "text": "the same David Sweet? I don't know. Another interesting point is both games give you more"
+  },
+  {
+   "t": 1260.48,
+   "d": 9.56,
+   "text": "points if you took more injurious actions. It is possible he played Chase while at Dartmouth and"
+  },
+  {
+   "t": 1270.04,
+   "d": 8.96,
+   "text": "decided they have an adventure issue coming out and I will adapt it and make my own. But"
+  },
+  {
+   "t": 1279.0,
+   "d": 5.6,
+   "text": "it is also possible he is the one who made the original version of Chase. We don't know that,"
+  },
+  {
+   "t": 1284.6,
+   "d": 9.8,
+   "text": "though. We don't know if it was the same guy. But maybe. Couple more quick robot mind field"
+  },
+  {
+   "t": 1294.4,
+   "d": 9.04,
+   "text": "1983 and the giant book of computer games by Tim Hartnell and Nathan Butcher. The player couldn't"
+  },
+  {
+   "t": 1303.44,
+   "d": 10.8,
+   "text": "move diagonally but the robot could which wasn't fair at all I think. When the robots collided they"
+  },
+  {
+   "t": 1314.24,
+   "d": 11.52,
+   "text": "didn't die. They merged which seems weird also. The next one is klopjacht on the Phillips P2000."
+  },
+  {
+   "t": 1330.72,
+   "d": 9.88,
+   "text": "I just like saying that word. It is Dutch for manhunt. Moving on to a really important version."
+  },
+  {
+   "t": 1340.6,
+   "d": 21.84,
+   "text": "Robots. Very influential by Allan Black in 1984 for UNIX. It is similar to the original Chase"
+  },
+  {
+   "t": 1362.44,
+   "d": 9.0,
+   "text": "or the 1979 version. It doesn't come pre-stalked with obstacles -- stocked. There are no electrical"
+  },
+  {
+   "t": 1371.44,
+   "d": 7.0,
+   "text": "fences. You don't get an obstacle until two or more of the robots crash and make a junk heap."
+  },
+  {
+   "t": 1379.76,
+   "d": 8.12,
+   "text": "Otherwise it plays exactly the same. Then this became so well known it really became"
+  },
+  {
+   "t": 1387.88,
+   "d": 11.12,
+   "text": "most people's idea of the game. Also that same here, Daleks came out for the Apple Mac 1984."
+  },
+  {
+   "t": 1399.0,
+   "d": 7.32,
+   "text": "Also had no obstacles to start until they crashed and made junk heaps. A bit of a new thing was the"
+  },
+  {
+   "t": 1406.32,
+   "d": 20.36,
+   "text": "sonic screwdriver. That and Daleks were part of the Doctor Who TV show. Because robots doesn't"
+  },
+  {
+   "t": 1426.68,
+   "d": 10.6,
+   "text": "have anything like that, I think Daleks waws was based on robots. After that, almost everything"
+  },
+  {
+   "t": 1437.28,
+   "d": 10.72,
+   "text": "is a an adaptation of robots or Daleks. It was a pretty good version of it so that's not so"
+  },
+  {
+   "t": 1448.0,
+   "d": 9.24,
+   "text": "bad but a lot are called robots or Daleks. There are other names. One slightly new one,"
+  },
+  {
+   "t": 1457.24,
+   "d": 23.32,
+   "text": "trolls by Bob Nystrom, and Mark Cenicola, for the Apple Macintosh. The elf could fire arrows. It"
+  },
+  {
+   "t": 1480.56,
+   "d": 9.52,
+   "text": "introduced blocks which prevented the enemies, the trolls, from moving. OK. Why would you create a"
+  },
+  {
+   "t": 1490.08,
+   "d": 8.44,
+   "text": "version of Chase these days? Well, until you play it it is hard to tell but it is very addictive."
+  },
+  {
+   "t": 1498.52,
+   "d": 8.88,
+   "text": "Something abouts the logic and basicness of it. It is fun and easy to play. It is easy to"
+  },
+  {
+   "t": 1507.4,
+   "d": 13.08,
+   "text": "make non-violent. Zombies and pot holes didn't kill them. It is a good entry-level programming"
+  },
+  {
+   "t": 1520.48,
+   "d": 7.44,
+   "text": "project. A lot of people will pull out their hair with roguelikes because there is so much to do."
+  },
+  {
+   "t": 1532.28,
+   "d": 5.16,
+   "text": "And anything you learn how to do when you make Chase can also be applied to a roguelike later so"
+  },
+  {
+   "t": 1537.44,
+   "d": 8.44,
+   "text": "that's cool. You could make all sorts of genres and make changes and adapt it. Perfect example"
+  },
+  {
+   "t": 1545.88,
+   "d": 8.96,
+   "text": "of that is seven seas by popcap in 2001 created a pirate theme with three different types of ships."
+  },
+  {
+   "t": 1554.84,
+   "d": 10.0,
+   "text": "Each worked differently. Whirlpools, treasure hunt, sea monster, all sorts of fun. Ways you"
+  },
+  {
+   "t": 1564.84,
+   "d": 7.28,
+   "text": "can adapt Chase mindset into a roguelike? Well, it adds variety to your games. Little different"
+  },
+  {
+   "t": 1572.12,
+   "d": 7.64,
+   "text": "than the normal way of handling a roguelike. The monsters could be all sorts of different things"
+  },
+  {
+   "t": 1579.76,
+   "d": 7.12,
+   "text": "instead of just robots. Now, I kind of at the top have the three main ones here. The robot,"
+  },
+  {
+   "t": 1586.88,
+   "d": 7.76,
+   "text": "the zombie, and the orc. But I have a bunch of other ideas there. The enemies wouldn't have to"
+  },
+  {
+   "t": 1594.64,
+   "d": 6.04,
+   "text": "be instantly fatal because that's not really a roguelike thing. They could do lots of damage or"
+  },
+  {
+   "t": 1600.68,
+   "d": 8.64,
+   "text": "infect with some sort of status effect. Something like that. The electrified fences could be fields,"
+  },
+  {
+   "t": 1609.32,
+   "d": 11.64,
+   "text": "traps, pools of lava pits. You want to use to do whatever inspires your creativity. That's actually"
+  },
+  {
+   "t": 1620.96,
+   "d": 9.0,
+   "text": "it for my presentation. I don't know how I am doing on time. Questions? Things like that?"
+  },
+  {
+   "t": 1629.96,
+   "d": 13.96,
+   "text": "ALEXEI: If people have questions, we have couple minutes. Thank you. That was a fun time. I started"
+  },
+  {
+   "t": 1643.92,
+   "d": 8.92,
+   "text": "with the BASIC variant and break out is the game I would make because it is simple. I think it is"
+  },
+  {
+   "t": 1652.84,
+   "d": 6.64,
+   "text": "interesting the way programs used to be shared through magazines and you would get and have to"
+  },
+  {
+   "t": 1659.48,
+   "d": 8.52,
+   "text": "type it in and tracing the lineages like that. DAN: It was nice when they were half a page"
+  },
+  {
+   "t": 1668.0,
+   "d": 7.2,
+   "text": "because you had less chance of screwing up. Hobbits, which I played, was two pages mostly for"
+  },
+  {
+   "t": 1675.2,
+   "d": 9.16,
+   "text": "the graphics, and you would have so many typos. ALEXEI: It is interesting in the way that is"
+  },
+  {
+   "t": 1684.36,
+   "d": 5.84,
+   "text": "still live now. Now is YouTube tutorials and I was mentioning seven day roguelike is a way"
+  },
+  {
+   "t": 1690.2,
+   "d": 6.48,
+   "text": "people jam on concepts. But I think it seems like we could do a Chase inspired game jam"
+  },
+  {
+   "t": 1696.68,
+   "d": 4.4,
+   "text": "and that would be a fun time. DAN: Definitely. You would be"
+  },
+  {
+   "t": 1701.08,
+   "d": 6.4,
+   "text": "surprised how fun it is. ALEXEI: Zee cliff asks how"
+  },
+  {
+   "t": 1707.48,
+   "d": 3.72,
+   "text": "you did your research and how you tracked down the books and magazines?"
+  },
+  {
+   "t": 1714.68,
+   "d": 13.04,
+   "text": "DAN: I looked at Wikipedia to get a general idea. Their timeline is a little screwy which is why"
+  },
+  {
+   "t": 1727.72,
+   "d": 5.56,
+   "text": "archive became important because you could see the originals. Some of these I talked about here"
+  },
+  {
+   "t": 1733.28,
+   "d": 9.16,
+   "text": "I had no idea existed. Zombies and pot holes was brand new. And I cross checked it with Moby games"
+  },
+  {
+   "t": 1742.44,
+   "d": 7.92,
+   "text": "because they have a category for Chase-like games. It was a way to try to find things."
+  },
+  {
+   "t": 1753.76,
+   "d": 5.72,
+   "text": "ALEXEI: Which Chase variant do you think is the most maximalist? Most features"
+  },
+  {
+   "t": 1759.48,
+   "d": 8.68,
+   "text": "and complexity? Tossed everything in? DAN: I didn't include things that were so"
+  },
+  {
+   "t": 1768.16,
+   "d": 9.6,
+   "text": "far field that it didn't feel like Chase any more. For the pure Chase-like experience,"
+  },
+  {
+   "t": 1777.76,
+   "d": 10.48,
+   "text": "I think the most recent one, seven seas has a lot of variety. Honestly, adding a bunch of stuff to"
+  },
+  {
+   "t": 1788.24,
+   "d": 7.36,
+   "text": "it somehow dilutes the purity of it which is part of why it is so addictive. I really liked"
+  },
+  {
+   "t": 1795.6,
+   "d": 6.76,
+   "text": "Daleks a lot. I spent way too many days playing that. I didn't play Hobbit that much honestly."
+  },
+  {
+   "t": 1802.36,
+   "d": 6.2,
+   "text": "It was a little too random for me. It kind of succeeded -- which sucks after typing that."
+  },
+  {
+   "t": 1812.48,
+   "d": 5.76,
+   "text": "ALEXEI: Makes sense. There is something to say -- I read a book on a bunch of physical"
+  },
+  {
+   "t": 1818.24,
+   "d": 5.6,
+   "text": "games like Chess and Go and checkers and there was a point about we have games that survive"
+  },
+  {
+   "t": 1823.84,
+   "d": 5.84,
+   "text": "for longer. Chess obviously longer than Chase but there is something to be said that hit on"
+  },
+  {
+   "t": 1829.68,
+   "d": 7.28,
+   "text": "something simple and compelling and understandable that just persists and it makes sense maybe it is"
+  },
+  {
+   "t": 1836.96,
+   "d": 6.72,
+   "text": "one of those things where if you add to much you lost the minimalist core that is what led it be"
+  },
+  {
+   "t": 1843.68,
+   "d": 5.08,
+   "text": "carried over so many generations. DAN: That is why I think Roboton is"
+  },
+  {
+   "t": 1849.36,
+   "d": 5.96,
+   "text": "great because they added so much it doesn't seem like Chase but it is."
+  },
+  {
+   "t": 1857.6,
+   "d": 11.44,
+   "text": "ALEXEI: Thank you, Dan, for holding out until the end and sharing this knowledge with me."
+  }
+ ]
+}

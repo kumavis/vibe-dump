@@ -1,0 +1,3047 @@
+{
+ "id": "LKCRim02opc",
+ "url": "https://www.youtube.com/watch?v=LKCRim02opc",
+ "title": "Jim Shepard - Blooming on the Battlefield: Relationships, Rivals, and Romance in Gameplay",
+ "speaker": "Jim Shepard",
+ "talk_title": "Blooming on the Battlefield: Relationships, Rivals, and Romance in Gameplay",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1805,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nJim's spent the last 15 years making games about crushing monsters and taking their stuff. He believes that roguelikes can be a powerful vessel for sharing adventures and telling stories without losing the crunch and focus that makes the genre what it is.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 14,
+   "title": "Blooming on the Battlefield"
+  },
+  {
+   "start": 86,
+   "title": "What New techniques for defining relationships with NPCs and the effects those relationships can have on the player."
+  },
+  {
+   "start": 111,
+   "title": "The Status Quo: Faction / Reputation / Renown"
+  },
+  {
+   "start": 163,
+   "title": "Relationship Values: Do They Like You?"
+  },
+  {
+   "start": 403,
+   "title": "Relationship Values: Do They Respect You?"
+  },
+  {
+   "start": 486,
+   "title": "Relationship Grid and Gameplay: Requesting Help"
+  },
+  {
+   "start": 685,
+   "title": "Example: Allies in the Dungeon"
+  },
+  {
+   "start": 1032,
+   "title": "YOU ASKED FOR THIS"
+  },
+  {
+   "start": 1046,
+   "title": "Can procedural roguelikes deliver romantic payoff? Typical video game romance rewards"
+  },
+  {
+   "start": 1062,
+   "title": "Romance rewards in Roguelike Adventure gameplay 1 Highest tier of side-by-side combat ally!"
+  },
+  {
+   "start": 1150,
+   "title": "Killing Romance by converting it to float value"
+  },
+  {
+   "start": 1208,
+   "title": "How NPCs build affection for the player"
+  },
+  {
+   "start": 1299,
+   "title": "What NPCs do with affection"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 5957,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.31,
+   "d": 6.18,
+   "text": "JIM SHEPARD: Hey, so earlier this month, to speakers I gave a tiny talk on talking and"
+  },
+  {
+   "t": 6.49,
+   "d": 4.35,
+   "text": "said make sure you end 10% early and I’m not gonna to do that."
+  },
+  {
+   "t": 10.84,
+   "d": 8.79,
+   "text": "Blooming on the Battlefield: Relationships, Rivals and Romance through Gameplay."
+  },
+  {
+   "t": 19.63,
+   "d": 3.47,
+   "text": "Who is this?"
+  },
+  {
+   "t": 23.1,
+   "d": 3.89,
+   "text": "I am Jim Shepard like the Commander, I make games about crushing monsters and taking their"
+  },
+  {
+   "t": 26.99,
+   "d": 1.0,
+   "text": "stuff."
+  },
+  {
+   "t": 27.99,
+   "d": 3.73,
+   "text": "I’ve been doing this for a long time, my pride and joy is this game Dungeonmans."
+  },
+  {
+   "t": 31.72,
+   "d": 3.98,
+   "text": "You all played it or you weren’t able to buy a ticket, Noah told me that was the case."
+  },
+  {
+   "t": 35.7,
+   "d": 4.0,
+   "text": "I’ve helped make Tangledeep, Andrew Aversa’s game, I also ported it to the Switch, and"
+  },
+  {
+   "t": 39.7,
+   "d": 3.78,
+   "text": "soon I will help my man Patrick over there working on Autofire, which is going to come"
+  },
+  {
+   "t": 43.48,
+   "d": 2.02,
+   "text": "to Kickstarter in January of next year."
+  },
+  {
+   "t": 45.5,
+   "d": 1.0,
+   "text": "Very exciting!"
+  },
+  {
+   "t": 46.5,
+   "d": 1.61,
+   "text": "That is a car RPG Roguelike."
+  },
+  {
+   "t": 48.11,
+   "d": 2.9,
+   "text": "Over here is my awesome fiance Allison."
+  },
+  {
+   "t": 51.01,
+   "d": 4.34,
+   "text": "Sometimes her and I go dancing and we also have a lot of Dungeons and Dragons parties"
+  },
+  {
+   "t": 55.35,
+   "d": 2.22,
+   "text": "hosted at my house."
+  },
+  {
+   "t": 57.57,
+   "d": 1.12,
+   "text": "That’s me."
+  },
+  {
+   "t": 58.69,
+   "d": 1.07,
+   "text": "And also this."
+  },
+  {
+   "t": 59.76,
+   "d": 5.82,
+   "text": "Now, thanks to the Pepers Procgen Practitioner Partitioning Pattern, look at me, I’m a"
+  },
+  {
+   "t": 65.58,
+   "d": 1.0,
+   "text": "sorcerer."
+  },
+  {
+   "t": 66.58,
+   "d": 1.0,
+   "text": "Great!"
+  },
+  {
+   "t": 67.58,
+   "d": 2.97,
+   "text": "I bend procedural generation by source of will but I’m also a Bannermans, I’m a"
+  },
+  {
+   "t": 70.55,
+   "d": 6.0,
+   "text": "champion of the cause, who flies the flag proudly and leads others to victory."
+  },
+  {
+   "t": 76.55,
+   "d": 1.0,
+   "text": "That's me."
+  },
+  {
+   "t": 77.55,
+   "d": 3.78,
+   "text": "[Applause] >> You should be clapping for Alexei because"
+  },
+  {
+   "t": 81.33,
+   "d": 3.77,
+   "text": "she lit his whole place on fire with the first talk, that was amazing."
+  },
+  {
+   "t": 85.1,
+   "d": 1.3,
+   "text": "Alright what’s going on?"
+  },
+  {
+   "t": 86.4,
+   "d": 1.51,
+   "text": "I’m here to show you guys some things."
+  },
+  {
+   "t": 87.91,
+   "d": 5.34,
+   "text": "We’re gonna talk about techniques to define relationships with NPCs and the effects of"
+  },
+  {
+   "t": 93.25,
+   "d": 1.07,
+   "text": "the relationships on the player."
+  },
+  {
+   "t": 94.32,
+   "d": 4.21,
+   "text": "I’ve got some examples and I’ve got some concrete concepts of course."
+  },
+  {
+   "t": 98.53,
+   "d": 4.41,
+   "text": "The reason for this is because it is really cool fuel for your procgen systems."
+  },
+  {
+   "t": 102.94,
+   "d": 1.61,
+   "text": "I believe that wholeheartedly."
+  },
+  {
+   "t": 104.55,
+   "d": 4.07,
+   "text": "I think this also lets us do things during gameplay rather than outside of it and I am"
+  },
+  {
+   "t": 108.62,
+   "d": 2.1,
+   "text": "a big proponent of that."
+  },
+  {
+   "t": 110.72,
+   "d": 3.05,
+   "text": "So here’s the status quo, right, it’s reputation, faction, renown."
+  },
+  {
+   "t": 113.77,
+   "d": 4.32,
+   "text": "You meet somebody or a group of somebodies and they don't know because your reputation"
+  },
+  {
+   "t": 118.09,
+   "d": 1.0,
+   "text": "is 0."
+  },
+  {
+   "t": 119.09,
+   "d": 1.0,
+   "text": "So you’re unknown."
+  },
+  {
+   "t": 120.09,
+   "d": 4.28,
+   "text": "And then you kill people they don't like, bring back pelts that they like, and you give"
+  },
+  {
+   "t": 124.37,
+   "d": 6.83,
+   "text": "them money and say things they like and all of a sudden you are exalted and you’re like"
+  },
+  {
+   "t": 131.2,
+   "d": 1.22,
+   "text": "their favorite person ever."
+  },
+  {
+   "t": 132.42,
+   "d": 4.02,
+   "text": "You went from somebody they couldn't care about to the best human alive."
+  },
+  {
+   "t": 136.44,
+   "d": 5.92,
+   "text": "That seems a little silly to me but makes sense when you think about games that have"
+  },
+  {
+   "t": 142.36,
+   "d": 4.07,
+   "text": "this, you need to keep it simple because they have dozens of these."
+  },
+  {
+   "t": 146.43,
+   "d": 2.18,
+   "text": "There is just so many."
+  },
+  {
+   "t": 148.61,
+   "d": 3.94,
+   "text": "You’ve got all these different reputations to keep track of."
+  },
+  {
+   "t": 152.55,
+   "d": 2.1,
+   "text": "You have a bunch of different numbers per thing."
+  },
+  {
+   "t": 154.65,
+   "d": 1.75,
+   "text": "That's going to be too much."
+  },
+  {
+   "t": 156.4,
+   "d": 4.93,
+   "text": "So typically these are straight lines, one exciting dimension of travel and it’s simple."
+  },
+  {
+   "t": 161.33,
+   "d": 3.45,
+   "text": "I do believe we can do a little bit better."
+  },
+  {
+   "t": 164.78,
+   "d": 1.47,
+   "text": "I want to ask about relationships."
+  },
+  {
+   "t": 166.25,
+   "d": 2.18,
+   "text": "The first part is do they like you?"
+  },
+  {
+   "t": 168.43,
+   "d": 1.92,
+   "text": "Do the person enjoy your company?"
+  },
+  {
+   "t": 170.35,
+   "d": 1.87,
+   "text": "Do they feel a kinship with you?"
+  },
+  {
+   "t": 172.22,
+   "d": 3.74,
+   "text": "Do they think you have been good or kind or fair to them?"
+  },
+  {
+   "t": 175.96,
+   "d": 3.03,
+   "text": "Now every NPC has different responses to the different questions."
+  },
+  {
+   "t": 178.99,
+   "d": 1.0,
+   "text": "Some matter more than others."
+  },
+  {
+   "t": 179.99,
+   "d": 1.0,
+   "text": "That's fine."
+  },
+  {
+   "t": 180.99,
+   "d": 1.0,
+   "text": "That's up to you."
+  },
+  {
+   "t": 181.99,
+   "d": 3.19,
+   "text": "This is something you’re already used to, it’s a straight line."
+  },
+  {
+   "t": 185.18,
+   "d": 3.67,
+   "text": "It starts in the middle where they don't know you and maybe they don't care, it can drop"
+  },
+  {
+   "t": 188.85,
+   "d": 3.88,
+   "text": "to bad, they don’t like you, it can go up you rule, they think you’re great."
+  },
+  {
+   "t": 192.73,
+   "d": 4.49,
+   "text": "This is something that’s not rocket surgery, but something a lot of games don't do I think"
+  },
+  {
+   "t": 197.22,
+   "d": 3.3,
+   "text": "we should do more often is apply this to our foes."
+  },
+  {
+   "t": 200.52,
+   "d": 1.71,
+   "text": "This could be something an enemy has."
+  },
+  {
+   "t": 202.23,
+   "d": 4.71,
+   "text": "Just because somebody has an opposite goal from you they can still like you."
+  },
+  {
+   "t": 206.94,
+   "d": 3.52,
+   "text": "Also your allies can think you are a jerk, that’s a thing that works as well."
+  },
+  {
+   "t": 210.46,
+   "d": 5.62,
+   "text": "I can give you an example for like-dislike for foes in gameplay with this, right here."
+  },
+  {
+   "t": 216.08,
+   "d": 1.0,
+   "text": "Who’s this here?"
+  },
+  {
+   "t": 217.08,
+   "d": 2.2,
+   "text": "This is Wesley the Dread Pirate Roberts, the man in black."
+  },
+  {
+   "t": 219.28,
+   "d": 2.44,
+   "text": "He has one goal to rescue the princess."
+  },
+  {
+   "t": 221.72,
+   "d": 4.17,
+   "text": "He shows up and he has three main points of opposition in the beginning of the story."
+  },
+  {
+   "t": 225.89,
+   "d": 7.49,
+   "text": "The first is - somebody say his name - and prepare to die."
+  },
+  {
+   "t": 233.38,
+   "d": 2.69,
+   "text": "Y’all if you don't know this movie, get off my lawn."
+  },
+  {
+   "t": 236.07,
+   "d": 4.35,
+   "text": "Maybe I’m too old now."
+  },
+  {
+   "t": 240.42,
+   "d": 3.31,
+   "text": "When Wesley meets Inigo Montoya, he’s climbing up a cliff and Inigo says “I swear on the"
+  },
+  {
+   "t": 243.73,
+   "d": 2.26,
+   "text": "soul of my dead father you’ll reach the top alive.”"
+  },
+  {
+   "t": 245.99,
+   "d": 4.59,
+   "text": "He climbs, they sit down, they start exchanging gear scores, they talk about the life of being"
+  },
+  {
+   "t": 250.58,
+   "d": 3.24,
+   "text": "a cool fighter guy and then they have a sword fight."
+  },
+  {
+   "t": 253.82,
+   "d": 2.29,
+   "text": "And they’re both so happy, they’re doing the thing, they’re playing with each other,"
+  },
+  {
+   "t": 256.11,
+   "d": 1.73,
+   "text": "“Ah, I’m not left handed!” it’s great."
+  },
+  {
+   "t": 257.84,
+   "d": 3.7,
+   "text": "When the fight goes on, you can tell they’re enjoying it."
+  },
+  {
+   "t": 261.54,
+   "d": 4.03,
+   "text": "Wesley wins and Inigo says “Kill me quickly” Wesley says “I’d sooner destroy a stained"
+  },
+  {
+   "t": 265.57,
+   "d": 2.41,
+   "text": "glass window than an artist such as yourself.”"
+  },
+  {
+   "t": 267.98,
+   "d": 1.17,
+   "text": "He likes this fellow."
+  },
+  {
+   "t": 269.15,
+   "d": 4.26,
+   "text": "So he pulled his punches, he showed mercy, and there was an opportunity for future positive"
+  },
+  {
+   "t": 273.41,
+   "d": 2.34,
+   "text": "encounters, but he still had to win, right?"
+  },
+  {
+   "t": 275.75,
+   "d": 4.59,
+   "text": "So the next fellow’s Fezzik, Andre the Giant, we’re gonna skip that and go to The Sicilian."
+  },
+  {
+   "t": 280.34,
+   "d": 4.54,
+   "text": "The Sicilianis somebody Wesley didn’t particularly care for or care about."
+  },
+  {
+   "t": 284.88,
+   "d": 3.35,
+   "text": "So he’s sitting there with the princess, and Wesley could’ve just like jumped over"
+  },
+  {
+   "t": 288.23,
+   "d": 2.56,
+   "text": "the stump and stabbed him to death, but he didn’t."
+  },
+  {
+   "t": 290.79,
+   "d": 3.15,
+   "text": "He instead decided to just kind of flex on him, “Oh we’re gonna have a game of wits”"
+  },
+  {
+   "t": 293.94,
+   "d": 3.79,
+   "text": "when the wits is don’t drink either but, but The Sicilian didn’t, he died."
+  },
+  {
+   "t": 297.73,
+   "d": 2.04,
+   "text": "This is kind of just average for Wesley, right."
+  },
+  {
+   "t": 299.77,
+   "d": 2.46,
+   "text": "This is somebody he didn’t - will I mean he kinda didn’t like him, I dunno, like"
+  },
+  {
+   "t": 302.23,
+   "d": 3.34,
+   "text": "he didn’t really think very highly of this person."
+  },
+  {
+   "t": 305.57,
+   "d": 2.98,
+   "text": "But also wasn't anything to make him lose his cool."
+  },
+  {
+   "t": 308.55,
+   "d": 3.86,
+   "text": "So then they go and he gets the princess and they go through the swamps of sadness and"
+  },
+  {
+   "t": 312.41,
+   "d": 4.76,
+   "text": "fight the womp rats and get to the next part, which is these guys, the toolbox brigade on"
+  },
+  {
+   "t": 317.17,
+   "d": 2.19,
+   "text": "horses, and he hates them, right."
+  },
+  {
+   "t": 319.36,
+   "d": 3.99,
+   "text": "Two nobles, ambushed, there’s like five crossbow dudes around them."
+  },
+  {
+   "t": 323.35,
+   "d": 5.01,
+   "text": "One dude’s got six fingers, he’s just totally not happy, and he loses his shit."
+  },
+  {
+   "t": 328.36,
+   "d": 1.6,
+   "text": "He yells “Death first!”"
+  },
+  {
+   "t": 329.96,
+   "d": 3.17,
+   "text": "He was so cool like a cucumber for the rest of this stuff now he’s ready to go into"
+  },
+  {
+   "t": 333.13,
+   "d": 3.15,
+   "text": "a fight where he lost initiative and it’s gonna be terrible."
+  },
+  {
+   "t": 336.28,
+   "d": 2.02,
+   "text": "The princess says, “No, no, no hold on."
+  },
+  {
+   "t": 338.3,
+   "d": 2.46,
+   "text": "We need a movie,” and lets herself get captured."
+  },
+  {
+   "t": 340.76,
+   "d": 5.2,
+   "text": "When your foe hates you there is a rational behavior and extra aggression."
+  },
+  {
+   "t": 345.96,
+   "d": 5.28,
+   "text": "All these are things the player can take advantage of and use to build success for them."
+  },
+  {
+   "t": 351.24,
+   "d": 4.41,
+   "text": "So how do you make a foe like or dislike you when you’re playing?"
+  },
+  {
+   "t": 355.65,
+   "d": 3.82,
+   "text": "During a conflict when you are fighting them the things you do in the fight, your style,"
+  },
+  {
+   "t": 359.47,
+   "d": 2.58,
+   "text": "your technique choices might impress them, might not."
+  },
+  {
+   "t": 362.05,
+   "d": 3.12,
+   "text": "If you have a chance to talk to them, throw taunts back and forth during a fight that"
+  },
+  {
+   "t": 365.17,
+   "d": 1.42,
+   "text": "can happen."
+  },
+  {
+   "t": 366.59,
+   "d": 5.05,
+   "text": "Critical decisions, if there’s a hostage to rescue or if there’s a timer happening"
+  },
+  {
+   "t": 371.64,
+   "d": 3.97,
+   "text": "or there’s a thing to grab off an altar or do you show mercy when they’re defeated,"
+  },
+  {
+   "t": 375.61,
+   "d": 1.05,
+   "text": "that’s important."
+  },
+  {
+   "t": 376.66,
+   "d": 1.41,
+   "text": "And also maybe what you’re wearing is cool."
+  },
+  {
+   "t": 378.07,
+   "d": 4.06,
+   "text": "If you show in the ostentatious armor, maybe they’re gonna dig it."
+  },
+  {
+   "t": 382.13,
+   "d": 4.9,
+   "text": "Outside of a fight, mainly that’s what they know of you, is what others know of you, your"
+  },
+  {
+   "t": 387.03,
+   "d": 2.33,
+   "text": "reputation with that will precede you."
+  },
+  {
+   "t": 389.36,
+   "d": 4.01,
+   "text": "If you are a tunnel snake and they hate tunnel snakes, right, then that’s not gonna work"
+  },
+  {
+   "t": 393.37,
+   "d": 2.18,
+   "text": "for them and they will dislike you from the start."
+  },
+  {
+   "t": 395.55,
+   "d": 3.17,
+   "text": "And maybe your cool-ass outfit will help."
+  },
+  {
+   "t": 398.72,
+   "d": 1.76,
+   "text": "So that’s fine."
+  },
+  {
+   "t": 400.48,
+   "d": 1.0,
+   "text": "Maybe they like you, maybe they don't."
+  },
+  {
+   "t": 401.48,
+   "d": 1.0,
+   "text": "Is that enough?"
+  },
+  {
+   "t": 402.48,
+   "d": 1.14,
+   "text": "Of course not."
+  },
+  {
+   "t": 403.62,
+   "d": 1.58,
+   "text": "Do they respect you?"
+  },
+  {
+   "t": 405.2,
+   "d": 2.85,
+   "text": "This is a different question, or different series of questions."
+  },
+  {
+   "t": 408.05,
+   "d": 2.11,
+   "text": "Do they think you are good at your job?"
+  },
+  {
+   "t": 410.16,
+   "d": 2.99,
+   "text": "Do they think that you handle difficulty well?"
+  },
+  {
+   "t": 413.15,
+   "d": 1.24,
+   "text": "Are you a survivor?"
+  },
+  {
+   "t": 414.39,
+   "d": 2.73,
+   "text": "Do they think your methods make sense?"
+  },
+  {
+   "t": 417.12,
+   "d": 1.89,
+   "text": "Again, every NPC is different."
+  },
+  {
+   "t": 419.01,
+   "d": 5.83,
+   "text": "This is something depending on more questions to answer this but do they respect you?"
+  },
+  {
+   "t": 424.84,
+   "d": 1.23,
+   "text": "Look, it’s another number line, right."
+  },
+  {
+   "t": 426.07,
+   "d": 2.78,
+   "text": "It starts in the middle where they don't know anything about you."
+  },
+  {
+   "t": 428.85,
+   "d": 5.42,
+   "text": "Now some people will say, “Well I have a default respect for everybody I don't know.”"
+  },
+  {
+   "t": 434.27,
+   "d": 3.06,
+   "text": "Other people like “Unless I have to respect you I won't.”"
+  },
+  {
+   "t": 437.33,
+   "d": 2.72,
+   "text": "That's based on the NPC's personality."
+  },
+  {
+   "t": 440.05,
+   "d": 1.24,
+   "text": "The end points matter too."
+  },
+  {
+   "t": 441.29,
+   "d": 2.98,
+   "text": "Are you someone that’s on their side or not on their side?"
+  },
+  {
+   "t": 444.27,
+   "d": 1.37,
+   "text": "Do they think they’re better than them already?"
+  },
+  {
+   "t": 445.64,
+   "d": 1.05,
+   "text": "Are you more junior?"
+  },
+  {
+   "t": 446.69,
+   "d": 7.35,
+   "text": "These two values can move alongside each other but we have to remember that they are two"
+  },
+  {
+   "t": 454.04,
+   "d": 2.67,
+   "text": "different distinct values that are not linked."
+  },
+  {
+   "t": 456.71,
+   "d": 3.19,
+   "text": "They also interact in some fashion and I am going to nail them to a cross."
+  },
+  {
+   "t": 459.9,
+   "d": 1.0,
+   "text": "Great."
+  },
+  {
+   "t": 460.9,
+   "d": 2.09,
+   "text": "Now we have a grid and everyone likes grids."
+  },
+  {
+   "t": 462.99,
+   "d": 3.74,
+   "text": "We have two exciting dimensions of reputation."
+  },
+  {
+   "t": 466.73,
+   "d": 2.84,
+   "text": "Every one of those points could be something, and I’m just gonna hit the end points."
+  },
+  {
+   "t": 469.57,
+   "d": 2.51,
+   "text": "I think these are worth discussing."
+  },
+  {
+   "t": 472.08,
+   "d": 2.33,
+   "text": "These are interesting things for actual gameplay."
+  },
+  {
+   "t": 474.41,
+   "d": 2.48,
+   "text": "You could go all over the board, it doesn’t matter."
+  },
+  {
+   "t": 476.89,
+   "d": 3.42,
+   "text": "I think actually the compass points matter too but that’s fine."
+  },
+  {
+   "t": 480.31,
+   "d": 2.76,
+   "text": "Why do they matter and how do they change?"
+  },
+  {
+   "t": 483.07,
+   "d": 2.66,
+   "text": "I think why do they matter is probably first."
+  },
+  {
+   "t": 485.73,
+   "d": 2.41,
+   "text": "Here we go."
+  },
+  {
+   "t": 488.14,
+   "d": 1.0,
+   "text": "You have a mission."
+  },
+  {
+   "t": 489.14,
+   "d": 2.72,
+   "text": "You have to sneak into castle blue and rescue the red prince, and you’re like aw snap,"
+  },
+  {
+   "t": 491.86,
+   "d": 1.11,
+   "text": "I’m gonna do it."
+  },
+  {
+   "t": 492.97,
+   "d": 2.18,
+   "text": "Lemme call on contacts for aid."
+  },
+  {
+   "t": 495.15,
+   "d": 3.23,
+   "text": "Friends and foes alike, people you have a relationship with."
+  },
+  {
+   "t": 498.38,
+   "d": 1.0,
+   "text": "Maybe they can help you."
+  },
+  {
+   "t": 499.38,
+   "d": 3.04,
+   "text": "So we’ll start with someone who likes you and doesn't respect you."
+  },
+  {
+   "t": 502.42,
+   "d": 2.36,
+   "text": "This person, well, you’re not going to win."
+  },
+  {
+   "t": 504.78,
+   "d": 4.78,
+   "text": "They think of you as like, who - they don't want you to die, they respect your positive"
+  },
+  {
+   "t": 509.56,
+   "d": 3.94,
+   "text": "attitude and they don't necessarily have malice against you but they know you’re not gonna"
+  },
+  {
+   "t": 513.5,
+   "d": 1.0,
+   "text": "do it."
+  },
+  {
+   "t": 514.5,
+   "d": 1.42,
+   "text": "So if you say, “Hey listen, can you give me some gold?”"
+  },
+  {
+   "t": 515.92,
+   "d": 1.0,
+   "text": "they’ll say “Sure.”"
+  },
+  {
+   "t": 516.92,
+   "d": 2.09,
+   "text": "“Hey can you gimme this plus one assault rifle?”"
+  },
+  {
+   "t": 519.01,
+   "d": 3.46,
+   "text": "They’re gonna think that’s just gonna end up in some enemy's inventory."
+  },
+  {
+   "t": 522.47,
+   "d": 3.03,
+   "text": "They know that it’s not worth it, so they’re not gonna do that."
+  },
+  {
+   "t": 525.5,
+   "d": 4.4,
+   "text": "And if you go to an enemy, who’s not on your side, a foe, and say “Hey listen can"
+  },
+  {
+   "t": 529.9,
+   "d": 3.8,
+   "text": "you put shit-yourself powder in the guard's soup tonight?”"
+  },
+  {
+   "t": 533.7,
+   "d": 3.48,
+   "text": "Why would they risk it ‘cuz they think you’re gonna die anyways, you’re gonna do a bad"
+  },
+  {
+   "t": 537.18,
+   "d": 1.0,
+   "text": "job."
+  },
+  {
+   "t": 538.18,
+   "d": 2.05,
+   "text": "But on the flip side if they really like you and know if they put shit-yourself powder"
+  },
+  {
+   "t": 540.23,
+   "d": 3.12,
+   "text": "in the guard’s soup, the guards won’t be as aggressive and maybe you’ll survive?"
+  },
+  {
+   "t": 543.35,
+   "d": 1.64,
+   "text": "And just get to run away?"
+  },
+  {
+   "t": 544.99,
+   "d": 2.31,
+   "text": "So that might be a decision they make."
+  },
+  {
+   "t": 547.3,
+   "d": 2.33,
+   "text": "Somebody likes you and respects you, though, this is awesome."
+  },
+  {
+   "t": 549.63,
+   "d": 4.5,
+   "text": "They think highly of you in all regards, they’re with you all the way, and if you need anything"
+  },
+  {
+   "t": 554.13,
+   "d": 2.52,
+   "text": "they’ll give it to you and if you want to go fight they’ll come with you and it’s"
+  },
+  {
+   "t": 556.65,
+   "d": 1.0,
+   "text": "the best."
+  },
+  {
+   "t": 557.65,
+   "d": 4.6,
+   "text": "If a foe likes you and respects you they may take risks to help you, and they know you’re"
+  },
+  {
+   "t": 562.25,
+   "d": 2.94,
+   "text": "a threat, right, they know you’re serious business."
+  },
+  {
+   "t": 565.19,
+   "d": 2.98,
+   "text": "So in this case, you know maybe they'll flip slides."
+  },
+  {
+   "t": 568.17,
+   "d": 3.63,
+   "text": "If they like you enough maybe this is where they turn on you or maybe this is where they"
+  },
+  {
+   "t": 571.8,
+   "d": 2.4,
+   "text": "prove they can beat you."
+  },
+  {
+   "t": 574.2,
+   "d": 3.69,
+   "text": "I’m really looking forward to this moment, ‘cuz if you build up a true rival as a foe"
+  },
+  {
+   "t": 577.89,
+   "d": 4.91,
+   "text": "who likes and respects you and great conflict on the mountain top somewhere, that's boss."
+  },
+  {
+   "t": 582.8,
+   "d": 1.79,
+   "text": "So I want that to happen."
+  },
+  {
+   "t": 584.59,
+   "d": 1.97,
+   "text": "Doesn't like you but respects you."
+  },
+  {
+   "t": 586.56,
+   "d": 1.22,
+   "text": "This is somebody who’s an adversary."
+  },
+  {
+   "t": 587.78,
+   "d": 4.33,
+   "text": "And you gotta think about this, you probably know this idea where you look at somebody"
+  },
+  {
+   "t": 592.11,
+   "d": 4.48,
+   "text": "and their work and you can't argue with their results but don't like their attitude or what"
+  },
+  {
+   "t": 596.59,
+   "d": 1.0,
+   "text": "they say or how they say it."
+  },
+  {
+   "t": 597.59,
+   "d": 4.88,
+   "text": "You can go “Well, gosh, it sold a bunch of copies, and it’s really pretty."
+  },
+  {
+   "t": 602.47,
+   "d": 3.25,
+   "text": "The Witness is a great game but...\""
+  },
+  {
+   "t": 605.72,
+   "d": 7.52,
+   "text": "So an ally here is supporting the mission, but not you."
+  },
+  {
+   "t": 613.24,
+   "d": 4.71,
+   "text": "If you fall down a hole and die, they don't care as long as the mission’s a success."
+  },
+  {
+   "t": 617.95,
+   "d": 3.96,
+   "text": "A foe, why would you talk to someone who’s not on your side and doesn't like you?"
+  },
+  {
+   "t": 621.91,
+   "d": 4.3,
+   "text": "They will do whatever they can to beat you ‘cuz they know you’re a threat unless"
+  },
+  {
+   "t": 626.21,
+   "d": 4.38,
+   "text": "you’re so strong against them they know they can't beat you, and then they’ll do"
+  },
+  {
+   "t": 630.59,
+   "d": 2.66,
+   "text": "what you ask them to do but they will hate you for it."
+  },
+  {
+   "t": 633.25,
+   "d": 3.7,
+   "text": "And if someone doesn't like or respect you why are you talking to them at all?"
+  },
+  {
+   "t": 636.95,
+   "d": 2.65,
+   "text": "You are beneath notice, you’re a joke."
+  },
+  {
+   "t": 639.6,
+   "d": 1.92,
+   "text": "They have no desire to help you."
+  },
+  {
+   "t": 641.52,
+   "d": 2.69,
+   "text": "They’ll probably try to stop you if you are an ally."
+  },
+  {
+   "t": 644.21,
+   "d": 1.56,
+   "text": "You have to rescue the prince?"
+  },
+  {
+   "t": 645.77,
+   "d": 4.18,
+   "text": "Let me do that instead because you're gonna do a terrible job and they don’t want you"
+  },
+  {
+   "t": 649.95,
+   "d": 1.0,
+   "text": "to go."
+  },
+  {
+   "t": 650.95,
+   "d": 5.34,
+   "text": "A foe who doesn't like or respect you wants to kill you on sight probably anyway but you’re"
+  },
+  {
+   "t": 656.29,
+   "d": 1.11,
+   "text": "beneath contempt to them."
+  },
+  {
+   "t": 657.4,
+   "d": 5.21,
+   "text": "They don't think you matter to their plans and maybe that's a good thing."
+  },
+  {
+   "t": 662.61,
+   "d": 3.67,
+   "text": "Maybe if you can convince a serious bad guy that you’re worthless and they don’t like"
+  },
+  {
+   "t": 666.28,
+   "d": 3.98,
+   "text": "you or respect you and then you surprise them when you’re not left handed that could work"
+  },
+  {
+   "t": 670.26,
+   "d": 1.18,
+   "text": "in your favor."
+  },
+  {
+   "t": 671.44,
+   "d": 4.38,
+   "text": "So, we have these like and respect values, and they determine two things."
+  },
+  {
+   "t": 675.82,
+   "d": 3.43,
+   "text": "The response to requests and behavior during critical events."
+  },
+  {
+   "t": 679.25,
+   "d": 4.62,
+   "text": "That's a cool thing but how do we get these values to move around?"
+  },
+  {
+   "t": 683.87,
+   "d": 2.13,
+   "text": "Here’s another example."
+  },
+  {
+   "t": 686.0,
+   "d": 1.0,
+   "text": "Let's build up a party."
+  },
+  {
+   "t": 687.0,
+   "d": 1.71,
+   "text": "We’re gonna have allies in the dungeon."
+  },
+  {
+   "t": 688.71,
+   "d": 4.73,
+   "text": "When people come with you every NPC views your actions, the gameplay events, through"
+  },
+  {
+   "t": 693.44,
+   "d": 3.59,
+   "text": "their own personality lens to create a unique opinion."
+  },
+  {
+   "t": 697.03,
+   "d": 1.83,
+   "text": "So let’s roll."
+  },
+  {
+   "t": 698.86,
+   "d": 2.23,
+   "text": "Who are we going to bring with us today?"
+  },
+  {
+   "t": 701.09,
+   "d": 1.74,
+   "text": "We are going to bring on this guy."
+  },
+  {
+   "t": 702.83,
+   "d": 3.56,
+   "text": "Yes, I want him and we’ll also bring on this guy."
+  },
+  {
+   "t": 706.39,
+   "d": 1.0,
+   "text": "Perfect."
+  },
+  {
+   "t": 707.39,
+   "d": 1.25,
+   "text": "The two people I wanted to talk about, great."
+  },
+  {
+   "t": 708.64,
+   "d": 2.79,
+   "text": "They’re gonna come along in the mission."
+  },
+  {
+   "t": 711.43,
+   "d": 2.9,
+   "text": "So we have two NPCs who are going to party with us."
+  },
+  {
+   "t": 714.33,
+   "d": 1.5,
+   "text": "There’s a paladin and a Rogue."
+  },
+  {
+   "t": 715.83,
+   "d": 1.77,
+   "text": "They’re pretty standard if you know the archetypes."
+  },
+  {
+   "t": 717.6,
+   "d": 3.05,
+   "text": "Both of them are on your side and friendly to you."
+  },
+  {
+   "t": 720.65,
+   "d": 3.38,
+   "text": "The Rogue is selfish but he wants to win, he wants the team to succeed."
+  },
+  {
+   "t": 724.03,
+   "d": 4.13,
+   "text": "The Paladin is tanky-spanky, might makes right, totally uptight, prideful to a fault."
+  },
+  {
+   "t": 728.16,
+   "d": 1.43,
+   "text": "Here they are."
+  },
+  {
+   "t": 729.59,
+   "d": 2.95,
+   "text": "They’re gonna roll with you and here’s the first example."
+  },
+  {
+   "t": 732.54,
+   "d": 3.3,
+   "text": "You’re in a dungeon and you’re fighting a terrible monster."
+  },
+  {
+   "t": 735.84,
+   "d": 2.61,
+   "text": "The paladin is tanking and the Rogue is shooting and you’re like, whoa you know I can get"
+  },
+  {
+   "t": 738.45,
+   "d": 2.56,
+   "text": "around there, you see it right, there’s an opportunity to go flank."
+  },
+  {
+   "t": 741.01,
+   "d": 3.09,
+   "text": "So you do that and whoa hey, there’s some gold here."
+  },
+  {
+   "t": 744.1,
+   "d": 1.19,
+   "text": "And they’re busy, right."
+  },
+  {
+   "t": 745.29,
+   "d": 2.12,
+   "text": "So all this treasure, you scoop up."
+  },
+  {
+   "t": 747.41,
+   "d": 2.59,
+   "text": "Of course you do because that's what you do when we play the games."
+  },
+  {
+   "t": 750.0,
+   "d": 3.29,
+   "text": "Do you split it with them when the fight’s over?"
+  },
+  {
+   "t": 753.29,
+   "d": 1.34,
+   "text": "Let's just say yes."
+  },
+  {
+   "t": 754.63,
+   "d": 2.57,
+   "text": "So when you do that, what does the party think?"
+  },
+  {
+   "t": 757.2,
+   "d": 2.35,
+   "text": "Well the paladin is happy to get paid and who isn’t?"
+  },
+  {
+   "t": 759.55,
+   "d": 3.13,
+   "text": "He’ll probably just pour it into the church's coffers but that's fine."
+  },
+  {
+   "t": 762.68,
+   "d": 2.79,
+   "text": "However he respects the idea that you are traditionalist."
+  },
+  {
+   "t": 765.47,
+   "d": 3.12,
+   "text": "Shared danger, shared reward, we are all in it together."
+  },
+  {
+   "t": 768.59,
+   "d": 3.75,
+   "text": "He’s from the old school and gosh, so are you, he claps you on the back and that’s"
+  },
+  {
+   "t": 772.34,
+   "d": 1.0,
+   "text": "great."
+  },
+  {
+   "t": 773.34,
+   "d": 1.57,
+   "text": "The Rogue loves getting paid, of course."
+  },
+  {
+   "t": 774.91,
+   "d": 4.46,
+   "text": "You give the Rogue gold, he’s very happy with you, he can spend it on all sorts of"
+  },
+  {
+   "t": 779.37,
+   "d": 2.24,
+   "text": "things, but he thinks you’re a sucker."
+  },
+  {
+   "t": 781.61,
+   "d": 4.93,
+   "text": "He found that money in the corner and he wouldn't have done it for you, right."
+  },
+  {
+   "t": 786.54,
+   "d": 2.02,
+   "text": "So he doesn't really think you’re really savvy."
+  },
+  {
+   "t": 788.56,
+   "d": 3.79,
+   "text": "It is not that he dislikes you, he’ll buy you a drink, but he thinks you’re kind of"
+  },
+  {
+   "t": 792.35,
+   "d": 1.88,
+   "text": "a sucker for that."
+  },
+  {
+   "t": 794.23,
+   "d": 1.0,
+   "text": "Something else in the dungeon."
+  },
+  {
+   "t": 795.23,
+   "d": 4.68,
+   "text": "Now, the Paladin takes a critical hit, and loses 20% health because he’s so tanky a"
+  },
+  {
+   "t": 799.91,
+   "d": 1.16,
+   "text": "critical hit doesn't matter."
+  },
+  {
+   "t": 801.07,
+   "d": 1.67,
+   "text": "We’re watching this happen."
+  },
+  {
+   "t": 802.74,
+   "d": 2.12,
+   "text": "Well now it’s the player's turn."
+  },
+  {
+   "t": 804.86,
+   "d": 1.2,
+   "text": "I got this."
+  },
+  {
+   "t": 806.06,
+   "d": 2.33,
+   "text": "You reach into your scroll bag and you heal him."
+  },
+  {
+   "t": 808.39,
+   "d": 1.99,
+   "text": "You super heal him, you way over heal him."
+  },
+  {
+   "t": 810.38,
+   "d": 5.4,
+   "text": "You use a very powerful consumable that would have taken him from 0 to 100 and he’s totally"
+  },
+  {
+   "t": 815.78,
+   "d": 1.15,
+   "text": "topped off."
+  },
+  {
+   "t": 816.93,
+   "d": 3.03,
+   "text": "What does the party think of that?"
+  },
+  {
+   "t": 819.96,
+   "d": 3.07,
+   "text": "The Paladin in terms of like is probably a little insulted, right."
+  },
+  {
+   "t": 823.03,
+   "d": 1.34,
+   "text": "Like, I'm at 80%?"
+  },
+  {
+   "t": 824.37,
+   "d": 1.0,
+   "text": "Come on."
+  },
+  {
+   "t": 825.37,
+   "d": 2.48,
+   "text": "I can just lay on hands and do this."
+  },
+  {
+   "t": 827.85,
+   "d": 2.03,
+   "text": "Why are you wasting a potion on me?"
+  },
+  {
+   "t": 829.88,
+   "d": 4.86,
+   "text": "But he’s really angry that you take a scroll that strong and you blow it on a tiny wound."
+  },
+  {
+   "t": 834.74,
+   "d": 2.99,
+   "text": "He’s gonna say give me the scrolls, I am in charge now of these, you don’t get to"
+  },
+  {
+   "t": 837.73,
+   "d": 3.72,
+   "text": "have them any more, and that’s gonna really make him upset."
+  },
+  {
+   "t": 841.45,
+   "d": 5.4,
+   "text": "The Rogue likes laughing at the angry Paladin,right, and he likes that you watch out for the group,"
+  },
+  {
+   "t": 846.85,
+   "d": 2.85,
+   "text": "but he respects survival first."
+  },
+  {
+   "t": 849.7,
+   "d": 2.9,
+   "text": "How many of us have died with huge bags full of consumables?"
+  },
+  {
+   "t": 852.6,
+   "d": 1.25,
+   "text": "You can't spend it when you’re dead."
+  },
+  {
+   "t": 853.85,
+   "d": 3.25,
+   "text": "He knows that and he thinks it’s fine that you did that."
+  },
+  {
+   "t": 857.1,
+   "d": 4.11,
+   "text": "He knows if he parties with you he’s more likely to come out alive, that is something"
+  },
+  {
+   "t": 861.21,
+   "d": 1.43,
+   "text": "he respects."
+  },
+  {
+   "t": 862.64,
+   "d": 3.72,
+   "text": "Alright, so personality flags on NPCs."
+  },
+  {
+   "t": 866.36,
+   "d": 3.37,
+   "text": "Respond to gameplay values to adjust like and respect values."
+  },
+  {
+   "t": 869.73,
+   "d": 5.2,
+   "text": "Like and respect values determine interaction responses and behavior during critical events."
+  },
+  {
+   "t": 874.93,
+   "d": 1.0,
+   "text": "Just some examples."
+  },
+  {
+   "t": 875.93,
+   "d": 1.41,
+   "text": "Write them all down in your copy book."
+  },
+  {
+   "t": 877.34,
+   "d": 4.89,
+   "text": "Here are some things that can be character flags and then here are some events that can"
+  },
+  {
+   "t": 882.23,
+   "d": 1.0,
+   "text": "happen."
+  },
+  {
+   "t": 883.23,
+   "d": 2.31,
+   "text": "They’re not 1:1 but they’re just things that exist out there, you can make a whole"
+  },
+  {
+   "t": 885.54,
+   "d": 1.24,
+   "text": "bunch of them."
+  },
+  {
+   "t": 886.78,
+   "d": 1.7,
+   "text": "And really, I mean, it is more than bit fields?"
+  },
+  {
+   "t": 888.48,
+   "d": 5.73,
+   "text": "A little bit kinda but this is just stuff that can respond to game events."
+  },
+  {
+   "t": 894.21,
+   "d": 2.41,
+   "text": "Because of that, cool stories can just happen."
+  },
+  {
+   "t": 896.62,
+   "d": 5.3,
+   "text": "Usually, when you think about neat game events, there are things we may end up scripting with"
+  },
+  {
+   "t": 901.92,
+   "d": 3.06,
+   "text": "maybe, you know, hard coded NPCs."
+  },
+  {
+   "t": 904.98,
+   "d": 1.31,
+   "text": "This stuff can be procedural."
+  },
+  {
+   "t": 906.29,
+   "d": 3.78,
+   "text": "You can have an Ally who tosses you a potion and abandons you when you’re wounded ‘cuz"
+  },
+  {
+   "t": 910.07,
+   "d": 1.41,
+   "text": "you’d just hold the mission back."
+  },
+  {
+   "t": 911.48,
+   "d": 3.41,
+   "text": "He likes you but doesn't respect you, you’ve got 15% health and you’re crawling to pick"
+  },
+  {
+   "t": 914.89,
+   "d": 6.42,
+   "text": "up another arm and he’s like here is a Band-Aid and I am out."
+  },
+  {
+   "t": 921.31,
+   "d": 2.04,
+   "text": "Enemies will respond in different ways if they like you."
+  },
+  {
+   "t": 923.35,
+   "d": 3.4,
+   "text": "Maybe someone knows you’re powerful enough to deal with, even though you’re kill-on-sight"
+  },
+  {
+   "t": 926.75,
+   "d": 1.15,
+   "text": "with that faction."
+  },
+  {
+   "t": 927.9,
+   "d": 2.71,
+   "text": "I like the one about the shopkeeper grumbling every time you show up."
+  },
+  {
+   "t": 930.61,
+   "d": 4.62,
+   "text": "Maybe you did something to his daughter, whatever, he doesn't like you, but he knows how strong"
+  },
+  {
+   "t": 935.23,
+   "d": 3.35,
+   "text": "you are, he knows you’ll do the campaign well, so he’ll sell you his best stuff for"
+  },
+  {
+   "t": 938.58,
+   "d": 1.55,
+   "text": "four times the price."
+  },
+  {
+   "t": 940.13,
+   "d": 3.37,
+   "text": "That is like and respect moving around with the blacksmith."
+  },
+  {
+   "t": 943.5,
+   "d": 3.64,
+   "text": "But this talk is titled relationship, rivals and romance."
+  },
+  {
+   "t": 947.14,
+   "d": 3.09,
+   "text": "So there’s a whole ‘nother aspect here."
+  },
+  {
+   "t": 950.23,
+   "d": 7.18,
+   "text": "This is perhaps the most challenging interaction with NPCs or maybe the easiest."
+  },
+  {
+   "t": 957.41,
+   "d": 2.53,
+   "text": "We have to define romance in terms of gameplay."
+  },
+  {
+   "t": 959.94,
+   "d": 2.7,
+   "text": "That’s hard to do but we’re gonna try it."
+  },
+  {
+   "t": 962.64,
+   "d": 1.47,
+   "text": "What is love?"
+  },
+  {
+   "t": 964.11,
+   "d": 4.73,
+   "text": "In the context of this talk, right here, just for this, this is my definition of it."
+  },
+  {
+   "t": 968.84,
+   "d": 5.48,
+   "text": "A desire for long term intimacy of any type that is paired with a need to feel desired"
+  },
+  {
+   "t": 974.32,
+   "d": 1.0,
+   "text": "in return."
+  },
+  {
+   "t": 975.32,
+   "d": 2.62,
+   "text": "It’s specific and generic at the same time."
+  },
+  {
+   "t": 977.94,
+   "d": 1.84,
+   "text": "Long term intimacy is important to me."
+  },
+  {
+   "t": 979.78,
+   "d": 3.68,
+   "text": "I know there’s a trend in games that any organism can hump any organism."
+  },
+  {
+   "t": 983.46,
+   "d": 1.45,
+   "text": "Awesome, right."
+  },
+  {
+   "t": 984.91,
+   "d": 2.09,
+   "text": "That's cool, that’s very easy."
+  },
+  {
+   "t": 987.0,
+   "d": 2.89,
+   "text": "You don't need to think about tracking love if things are just gonna hookup and bang all"
+  },
+  {
+   "t": 989.89,
+   "d": 1.0,
+   "text": "the time."
+  },
+  {
+   "t": 990.89,
+   "d": 1.06,
+   "text": "That’s simple to do."
+  },
+  {
+   "t": 991.95,
+   "d": 4.14,
+   "text": "I have, I don’t wanna make it a technical talk, I have the source for that."
+  },
+  {
+   "t": 996.09,
+   "d": 3.8,
+   "text": "You can take this."
+  },
+  {
+   "t": 999.89,
+   "d": 3.31,
+   "text": "If you want it, it’s yours."
+  },
+  {
+   "t": 1003.2,
+   "d": 1.7,
+   "text": "Go for it."
+  },
+  {
+   "t": 1004.9,
+   "d": 2.01,
+   "text": "Long term intimacy of any type."
+  },
+  {
+   "t": 1006.91,
+   "d": 5.33,
+   "text": "Again, this is something that brings real challenge, right, high rewards if you do it"
+  },
+  {
+   "t": 1012.24,
+   "d": 2.45,
+   "text": "right, but a player may not like this."
+  },
+  {
+   "t": 1014.69,
+   "d": 3.97,
+   "text": "A player may think man I don't need mushiness in my monster crushing game."
+  },
+  {
+   "t": 1018.66,
+   "d": 4.22,
+   "text": "And so this can be something that makes some people upset so you must ask first."
+  },
+  {
+   "t": 1022.88,
+   "d": 4.59,
+   "text": "I believe you should require players to opt-in checkbox “Do you want romance in your game?"
+  },
+  {
+   "t": 1027.47,
+   "d": 1.0,
+   "text": "Say yes.”"
+  },
+  {
+   "t": 1028.47,
+   "d": 3.75,
+   "text": "because they have to agree, ‘cuz bad things might happen and then you can remind them"
+  },
+  {
+   "t": 1032.22,
+   "d": 2.67,
+   "text": "you asked for this."
+  },
+  {
+   "t": 1034.89,
+   "d": 1.18,
+   "text": "You asked for this."
+  },
+  {
+   "t": 1036.07,
+   "d": 2.94,
+   "text": "When things go wrong it’s not your fault."
+  },
+  {
+   "t": 1039.01,
+   "d": 3.38,
+   "text": "Why though would they ask for this?"
+  },
+  {
+   "t": 1042.39,
+   "d": 2.31,
+   "text": "What's the carrot if the stick is misery in rain?"
+  },
+  {
+   "t": 1044.7,
+   "d": 2.11,
+   "text": "The carrot is what?"
+  },
+  {
+   "t": 1046.81,
+   "d": 3.91,
+   "text": "Typically a video game romance gives one of two rewards."
+  },
+  {
+   "t": 1050.72,
+   "d": 4.85,
+   "text": "There’s super scripted tender moments where the hero and lover finally meet or there is"
+  },
+  {
+   "t": 1055.57,
+   "d": 1.0,
+   "text": "animu boobies."
+  },
+  {
+   "t": 1056.57,
+   "d": 2.42,
+   "text": "Those are the two things."
+  },
+  {
+   "t": 1058.99,
+   "d": 3.43,
+   "text": "That's not us, that’s not what we’re gonna do in either capacity."
+  },
+  {
+   "t": 1062.42,
+   "d": 3.73,
+   "text": "We have the first thing which I think is probably the coolest, It’s the highest tier of side"
+  },
+  {
+   "t": 1066.15,
+   "d": 2.15,
+   "text": "by side combat ally."
+  },
+  {
+   "t": 1068.3,
+   "d": 6.38,
+   "text": "You find a deep romance with somebody, and the two of you are gonna be awesome together."
+  },
+  {
+   "t": 1074.68,
+   "d": 1.73,
+   "text": "That person can be just as powerful as you."
+  },
+  {
+   "t": 1076.41,
+   "d": 3.79,
+   "text": "It can be another player character level strength, side by side, you read each others’ minds,"
+  },
+  {
+   "t": 1080.2,
+   "d": 2.38,
+   "text": "you’re doing cool shit together, you’re conquering worlds."
+  },
+  {
+   "t": 1082.58,
+   "d": 1.09,
+   "text": "It’s awesome."
+  },
+  {
+   "t": 1083.67,
+   "d": 1.88,
+   "text": "That is a reward for high-level romance."
+  },
+  {
+   "t": 1085.55,
+   "d": 2.0,
+   "text": "That can inspire your party."
+  },
+  {
+   "t": 1087.55,
+   "d": 5.76,
+   "text": "If you have a guild, a town, an empire, they can see the great heroes falling in love,"
+  },
+  {
+   "t": 1093.31,
+   "d": 3.46,
+   "text": "and that virtue, and’re gonna say wow that’s really cool and that will inspire and maybe"
+  },
+  {
+   "t": 1096.77,
+   "d": 2.38,
+   "text": "make it’ll make some of them jealous."
+  },
+  {
+   "t": 1099.15,
+   "d": 2.46,
+   "text": "That could be fun if jealousy is fun."
+  },
+  {
+   "t": 1101.61,
+   "d": 2.4,
+   "text": "This also creates new moments for your procedural history."
+  },
+  {
+   "t": 1104.01,
+   "d": 4.02,
+   "text": "You’re building these libraries, typically one of the biggest things for players is oh"
+  },
+  {
+   "t": 1108.03,
+   "d": 4.51,
+   "text": "I conquered this guy or I killed this dragon and it gets etched on a pot somewhere."
+  },
+  {
+   "t": 1112.54,
+   "d": 4.12,
+   "text": "But now you can have a couple that does this, the romantic couple, the husband and wife,"
+  },
+  {
+   "t": 1116.66,
+   "d": 4.89,
+   "text": "or the husband and husband, or the slime and dog who got together and did whatever."
+  },
+  {
+   "t": 1121.55,
+   "d": 5.41,
+   "text": "And that’s the cool last part is, maybe one of the pair gets killed, and the other"
+  },
+  {
+   "t": 1126.96,
+   "d": 1.41,
+   "text": "one can pick up the pieces."
+  },
+  {
+   "t": 1128.37,
+   "d": 4.9,
+   "text": "If you start as player A and player A marries player B and player A gets run over player"
+  },
+  {
+   "t": 1133.27,
+   "d": 4.37,
+   "text": "B can still play and maybe marry somebody C. Maybe never get married again."
+  },
+  {
+   "t": 1137.64,
+   "d": 1.0,
+   "text": "The story can continue."
+  },
+  {
+   "t": 1138.64,
+   "d": 2.45,
+   "text": "I know that's not permadeath."
+  },
+  {
+   "t": 1141.09,
+   "d": 1.0,
+   "text": "Please boo me."
+  },
+  {
+   "t": 1142.09,
+   "d": 1.0,
+   "text": "Are you still here?"
+  },
+  {
+   "t": 1143.09,
+   "d": 1.72,
+   "text": "Did you go home?"
+  },
+  {
+   "t": 1144.81,
+   "d": 1.0,
+   "text": "AUDIENCE: Hi."
+  },
+  {
+   "t": 1145.81,
+   "d": 3.32,
+   "text": "JIM SHEPARD: All right fine, don't boo me."
+  },
+  {
+   "t": 1149.13,
+   "d": 1.1,
+   "text": "I’ll take it."
+  },
+  {
+   "t": 1150.23,
+   "d": 2.15,
+   "text": "So now let’s make romance miserable."
+  },
+  {
+   "t": 1152.38,
+   "d": 3.69,
+   "text": "Let's kill it by converting it to a float value."
+  },
+  {
+   "t": 1156.07,
+   "d": 4.89,
+   "text": "It’s just a number."
+  },
+  {
+   "t": 1160.96,
+   "d": 4.23,
+   "text": "It starts at no desire or attraction and ends at, like, maximum thirst."
+  },
+  {
+   "t": 1165.19,
+   "d": 6.0,
+   "text": "There’s a whole bunch of human-ish emotions that happen when you’re feeling this, but"
+  },
+  {
+   "t": 1171.19,
+   "d": 1.92,
+   "text": "we’re gonna try to keep it as an average."
+  },
+  {
+   "t": 1173.11,
+   "d": 3.78,
+   "text": "The excitement of somebody new, it’s like oh you’re so hype and oh my gosh and you’re"
+  },
+  {
+   "t": 1176.89,
+   "d": 3.59,
+   "text": "heart’s fluttering, but it’s only kind of new, and if it goes away it’s not the"
+  },
+  {
+   "t": 1180.48,
+   "d": 1.04,
+   "text": "end of the world."
+  },
+  {
+   "t": 1181.52,
+   "d": 1.3,
+   "text": "That’s lower on the scale."
+  },
+  {
+   "t": 1182.82,
+   "d": 3.03,
+   "text": "A long term relationship where you’re full of love and you’re still so happy to see"
+  },
+  {
+   "t": 1185.85,
+   "d": 3.4,
+   "text": "them but it’s not the same crazy go nuts energy."
+  },
+  {
+   "t": 1189.25,
+   "d": 3.29,
+   "text": "That still counts higher in this system than I’m talking about here."
+  },
+  {
+   "t": 1192.54,
+   "d": 1.46,
+   "text": "Does this have a third dimension?"
+  },
+  {
+   "t": 1194.0,
+   "d": 2.72,
+   "text": "I have a cube of romance and feelings."
+  },
+  {
+   "t": 1196.72,
+   "d": 1.0,
+   "text": "Maybe."
+  },
+  {
+   "t": 1197.72,
+   "d": 3.48,
+   "text": "It’s tough to think you’re gonna have real affection for someone you don't like"
+  },
+  {
+   "t": 1201.2,
+   "d": 1.0,
+   "text": "or respect."
+  },
+  {
+   "t": 1202.2,
+   "d": 3.32,
+   "text": "There are stories where you get super hot for someone you hate, that's fine, that’s"
+  },
+  {
+   "t": 1205.52,
+   "d": 3.69,
+   "text": "not really in the scope of this here."
+  },
+  {
+   "t": 1209.21,
+   "d": 1.79,
+   "text": "How do you have NPCs build affection?"
+  },
+  {
+   "t": 1211.0,
+   "d": 6.34,
+   "text": "The first step is, maybe you see them doing things and they see you doing things, and"
+  },
+  {
+   "t": 1217.34,
+   "d": 4.95,
+   "text": "if they are inclined to fall for you they might a little more every time they have an"
+  },
+  {
+   "t": 1222.29,
+   "d": 2.74,
+   "text": "opportunity to like you or respect you."
+  },
+  {
+   "t": 1225.03,
+   "d": 3.91,
+   "text": "When you’re doing stuff and they see it they’re like, hey, and that can matter and"
+  },
+  {
+   "t": 1228.94,
+   "d": 2.69,
+   "text": "if you pick up on that you can do it more."
+  },
+  {
+   "t": 1231.63,
+   "d": 2.58,
+   "text": "They’re judging you on how you interact with others."
+  },
+  {
+   "t": 1234.21,
+   "d": 2.53,
+   "text": "The same thing as taking out a date and being crappy to the waitress, like, you’re screwed,"
+  },
+  {
+   "t": 1236.74,
+   "d": 2.55,
+   "text": "or not screwed, like this is not gonna work."
+  },
+  {
+   "t": 1239.29,
+   "d": 3.3,
+   "text": "You have to be good to people, unless your date is mean."
+  },
+  {
+   "t": 1242.59,
+   "d": 3.21,
+   "text": "If your date is mean and terrible and you’re mean and terrible they’re gonna like that"
+  },
+  {
+   "t": 1245.8,
+   "d": 1.0,
+   "text": "too, I guess."
+  },
+  {
+   "t": 1246.8,
+   "d": 4.21,
+   "text": "So look at what the NPC is doing, look how they fight, look what they’re carrying,"
+  },
+  {
+   "t": 1251.01,
+   "d": 1.51,
+   "text": "look at the way they act."
+  },
+  {
+   "t": 1252.52,
+   "d": 2.95,
+   "text": "Because also, you can ask them out."
+  },
+  {
+   "t": 1255.47,
+   "d": 1.99,
+   "text": "Oh my gosh, that's terrifying, right."
+  },
+  {
+   "t": 1257.46,
+   "d": 3.06,
+   "text": "Show them you are interested and hope they are too."
+  },
+  {
+   "t": 1260.52,
+   "d": 3.99,
+   "text": "You gotta see their behaviors and you make choices and match the patterns."
+  },
+  {
+   "t": 1264.51,
+   "d": 4.27,
+   "text": "This is something where if we do this as developers, we have to make it very clear."
+  },
+  {
+   "t": 1268.78,
+   "d": 3.87,
+   "text": "It’s already frustrating enough in real life, and you go home and play a Roguelike"
+  },
+  {
+   "t": 1272.65,
+   "d": 2.19,
+   "text": "and you’re like does he want flowers?"
+  },
+  {
+   "t": 1274.84,
+   "d": 1.54,
+   "text": "Does he want this sword?"
+  },
+  {
+   "t": 1276.38,
+   "d": 1.75,
+   "text": "Does he want this trophy?"
+  },
+  {
+   "t": 1278.13,
+   "d": 1.63,
+   "text": "Ugh, he doesn't like anything."
+  },
+  {
+   "t": 1279.76,
+   "d": 2.53,
+   "text": "You have to make it clear what they are looking for."
+  },
+  {
+   "t": 1282.29,
+   "d": 2.96,
+   "text": "Guesswork is not gameplay and be careful when they fail."
+  },
+  {
+   "t": 1285.25,
+   "d": 2.96,
+   "text": "So if someone is like, well this person likes flowers and you give them flowers and they"
+  },
+  {
+   "t": 1288.21,
+   "d": 6.28,
+   "text": "are like nay, my mom died from floweritis and now that’s it, you’ve screwed your"
+  },
+  {
+   "t": 1294.49,
+   "d": 1.0,
+   "text": "opportunity there."
+  },
+  {
+   "t": 1295.49,
+   "d": 2.36,
+   "text": "I mean I guess that's permadeath but that's no fun."
+  },
+  {
+   "t": 1297.85,
+   "d": 2.15,
+   "text": "Let’s not do that to our players."
+  },
+  {
+   "t": 1300.0,
+   "d": 4.45,
+   "text": "So when NPCs have affection for you remember the definition is the need to feel desired"
+  },
+  {
+   "t": 1304.45,
+   "d": 1.66,
+   "text": "in return."
+  },
+  {
+   "t": 1306.11,
+   "d": 5.88,
+   "text": "Typically these games that have them, a whole bunch are ready and willing, and you pick"
+  },
+  {
+   "t": 1311.99,
+   "d": 3.83,
+   "text": "one and you have the cutscene and the rest go all right fine and they just deal with"
+  },
+  {
+   "t": 1315.82,
+   "d": 1.0,
+   "text": "it but that ain't life."
+  },
+  {
+   "t": 1316.82,
+   "d": 1.0,
+   "text": "That ain’t how it goes."
+  },
+  {
+   "t": 1317.82,
+   "d": 5.96,
+   "text": "If an NPC’s into you and you’re not returning it they may behave differently."
+  },
+  {
+   "t": 1323.78,
+   "d": 3.54,
+   "text": "This is on the battlefield, this is an interaction, this is wherever you are."
+  },
+  {
+   "t": 1327.32,
+   "d": 5.66,
+   "text": "They might do things that are weird and distracting and you have to decide well, am I into them"
+  },
+  {
+   "t": 1332.98,
+   "d": 1.0,
+   "text": "too?"
+  },
+  {
+   "t": 1333.98,
+   "d": 1.0,
+   "text": "Do I cut them from the group?"
+  },
+  {
+   "t": 1334.98,
+   "d": 1.41,
+   "text": "Do I hook them up with somebody else?"
+  },
+  {
+   "t": 1336.39,
+   "d": 2.99,
+   "text": "That’s something you might want to do to fix it."
+  },
+  {
+   "t": 1339.38,
+   "d": 7.47,
+   "text": "And also, when you are playing these games, all the NPCs are on parade for you."
+  },
+  {
+   "t": 1346.85,
+   "d": 1.0,
+   "text": "You pick one."
+  },
+  {
+   "t": 1347.85,
+   "d": 1.0,
+   "text": "They’re sitting in the window."
+  },
+  {
+   "t": 1348.85,
+   "d": 2.56,
+   "text": "Which NPC do I like the most, do I wanna see the cutscene with?"
+  },
+  {
+   "t": 1351.41,
+   "d": 4.17,
+   "text": "That's really cool but you know what that’s not our games because in our games this might"
+  },
+  {
+   "t": 1355.58,
+   "d": 1.0,
+   "text": "happen."
+  },
+  {
+   "t": 1356.58,
+   "d": 1.0,
+   "text": "Oh, no."
+  },
+  {
+   "t": 1357.58,
+   "d": 4.0,
+   "text": "You’ve met somebody and now your character has affection for someone."
+  },
+  {
+   "t": 1361.58,
+   "d": 2.3,
+   "text": "The player did not ask for this."
+  },
+  {
+   "t": 1363.88,
+   "d": 3.3,
+   "text": "They didn't say I want this to happen but it happened."
+  },
+  {
+   "t": 1367.18,
+   "d": 2.43,
+   "text": "Now the player has combat debuffs."
+  },
+  {
+   "t": 1369.61,
+   "d": 1.68,
+   "text": "Maybe sleepless nights."
+  },
+  {
+   "t": 1371.29,
+   "d": 3.61,
+   "text": "You want this person but do they like you too, you don't know and I just, shut up goblin."
+  },
+  {
+   "t": 1374.9,
+   "d": 2.71,
+   "text": "I’m thinking about serious things."
+  },
+  {
+   "t": 1377.61,
+   "d": 3.14,
+   "text": "Maybe you have difficulty communicating with them because you’re stuttering and can't"
+  },
+  {
+   "t": 1380.75,
+   "d": 2.99,
+   "text": "really get the words out which you wanna say."
+  },
+  {
+   "t": 1383.74,
+   "d": 5.93,
+   "text": "And so it’s difficult to keep the controller there and it is just yeah, that's a situation"
+  },
+  {
+   "t": 1389.67,
+   "d": 1.0,
+   "text": "that happens."
+  },
+  {
+   "t": 1390.67,
+   "d": 1.0,
+   "text": "You know what?"
+  },
+  {
+   "t": 1391.67,
+   "d": 1.0,
+   "text": "It’s not fair."
+  },
+  {
+   "t": 1392.67,
+   "d": 2.32,
+   "text": "I mean it’s all fair in love and war but it’s not."
+  },
+  {
+   "t": 1394.99,
+   "d": 4.25,
+   "text": "Highest highs, lowest lows, romance can bring you a whole bunch of things."
+  },
+  {
+   "t": 1399.24,
+   "d": 2.9,
+   "text": "Maybe player thinks I didn't want to have affection for somebody and now I do and now"
+  },
+  {
+   "t": 1402.14,
+   "d": 1.47,
+   "text": "I have to cut them from the group."
+  },
+  {
+   "t": 1403.61,
+   "d": 4.55,
+   "text": "You know what else sucks, is like, starving, and mistranslating a scroll and all this other"
+  },
+  {
+   "t": 1408.16,
+   "d": 1.0,
+   "text": "stuff."
+  },
+  {
+   "t": 1409.16,
+   "d": 3.64,
+   "text": "But you can remind the player with romance, you asked for this."
+  },
+  {
+   "t": 1412.8,
+   "d": 1.0,
+   "text": "Right?"
+  },
+  {
+   "t": 1413.8,
+   "d": 4.16,
+   "text": "[Laughter] JIM SHEPARD: That's it."
+  },
+  {
+   "t": 1417.96,
+   "d": 3.44,
+   "text": "That's all I got."
+  },
+  {
+   "t": 1421.4,
+   "d": 3.43,
+   "text": "Thank you very much."
+  },
+  {
+   "t": 1424.83,
+   "d": 5.16,
+   "text": "[Applause] JIM SHEPARD: We’re not over."
+  },
+  {
+   "t": 1429.99,
+   "d": 1.72,
+   "text": "Ask questions."
+  },
+  {
+   "t": 1431.71,
+   "d": 1.72,
+   "text": "Hit me."
+  },
+  {
+   "t": 1433.43,
+   "d": 5.38,
+   "text": "AUDIENCE: I was interested by your saying could it be a cube or could it not be a cube."
+  },
+  {
+   "t": 1438.81,
+   "d": 8.27,
+   "text": "Where my mind went is in certain games magic is used to charm people and make people feel"
+  },
+  {
+   "t": 1447.08,
+   "d": 6.22,
+   "text": "affection for you even though they are your enemy and conversely there are like succubi"
+  },
+  {
+   "t": 1453.3,
+   "d": 4.09,
+   "text": "in D&D who make you feel things you should not be feeling."
+  },
+  {
+   "t": 1457.39,
+   "d": 5.16,
+   "text": "JIM SHEPARD: Those values, like and respect and affection, they can be moved around by"
+  },
+  {
+   "t": 1462.55,
+   "d": 1.69,
+   "text": "magic, horrible, right."
+  },
+  {
+   "t": 1464.24,
+   "d": 4.5,
+   "text": "When it wears off, it swings in the other direction."
+  },
+  {
+   "t": 1468.74,
+   "d": 2.12,
+   "text": "That's tricky but it would work."
+  },
+  {
+   "t": 1470.86,
+   "d": 3.58,
+   "text": "If these mechanics are open to the game and they are part of the procedural engine, why"
+  },
+  {
+   "t": 1474.44,
+   "d": 1.0,
+   "text": "not?"
+  },
+  {
+   "t": 1475.44,
+   "d": 5.34,
+   "text": "AUDIENCE: I was wondering how much you have thought about the added dimension of having"
+  },
+  {
+   "t": 1480.78,
+   "d": 1.16,
+   "text": "these states."
+  },
+  {
+   "t": 1481.94,
+   "d": 3.87,
+   "text": "but how do you communicate those to the player or how do you hide them from the player?"
+  },
+  {
+   "t": 1485.81,
+   "d": 5.16,
+   "text": "You could have somebody who is icy cold and disdainful that is clearly crazy about you,"
+  },
+  {
+   "t": 1490.97,
+   "d": 4.96,
+   "text": "or the guy who’s like we are buds and you’re like I am going to kill the first - hi how’s"
+  },
+  {
+   "t": 1495.93,
+   "d": 1.15,
+   "text": "it going?"
+  },
+  {
+   "t": 1497.08,
+   "d": 4.86,
+   "text": "JIM SHEPARD: I believe in transparency and information because it makes the player choices"
+  },
+  {
+   "t": 1501.94,
+   "d": 1.0,
+   "text": "easier."
+  },
+  {
+   "t": 1502.94,
+   "d": 2.66,
+   "text": "When it comes to emotions and someone is like I really don’t respect you but I’m gonna"
+  },
+  {
+   "t": 1505.6,
+   "d": 3.93,
+   "text": "play nice, that is a thing you have to pick up on."
+  },
+  {
+   "t": 1509.53,
+   "d": 5.06,
+   "text": "That requires some clever work on the developer part that you get the impression that person"
+  },
+  {
+   "t": 1514.59,
+   "d": 1.67,
+   "text": "is sketchy anyway."
+  },
+  {
+   "t": 1516.26,
+   "d": 5.29,
+   "text": "If you have an NPC giving off sketchy traits or you have enough personality and charisma"
+  },
+  {
+   "t": 1521.55,
+   "d": 5.2,
+   "text": "to detect sketchy on their character sheet, maybe that would save you there."
+  },
+  {
+   "t": 1526.75,
+   "d": 2.0,
+   "text": "That's a good point."
+  },
+  {
+   "t": 1528.75,
+   "d": 6.28,
+   "text": "AUDIENCE: This sounds really great, all of it, but also it sounds like it would require"
+  },
+  {
+   "t": 1535.03,
+   "d": 5.94,
+   "text": "a lot of writing which is cool but like do you have any ideas for how you would carry"
+  },
+  {
+   "t": 1540.97,
+   "d": 6.71,
+   "text": "out these sorts of relationships, either romantic or non-romantic or respect and like sort of"
+  },
+  {
+   "t": 1547.68,
+   "d": 9.92,
+   "text": "thing, in a way that is more feasible to someone who isn't like writing a million words for"
+  },
+  {
+   "t": 1557.6,
+   "d": 1.7,
+   "text": "a game and that sort of thing?"
+  },
+  {
+   "t": 1559.3,
+   "d": 4.83,
+   "text": "In a more straightforward way that's more gameplay oriented but still clearly communicated."
+  },
+  {
+   "t": 1564.13,
+   "d": 3.59,
+   "text": "JIM SHEPARD: This isn't silly."
+  },
+  {
+   "t": 1567.72,
+   "d": 2.5,
+   "text": "You could do this with emoji."
+  },
+  {
+   "t": 1570.22,
+   "d": 1.13,
+   "text": "Hearts pop up."
+  },
+  {
+   "t": 1571.35,
+   "d": 1.22,
+   "text": "Question marks."
+  },
+  {
+   "t": 1572.57,
+   "d": 1.0,
+   "text": "Frowns."
+  },
+  {
+   "t": 1573.57,
+   "d": 1.0,
+   "text": "Angry."
+  },
+  {
+   "t": 1574.57,
+   "d": 2.88,
+   "text": "That’s all stuff the characters are giving you."
+  },
+  {
+   "t": 1577.45,
+   "d": 3.28,
+   "text": "Maybe somewhere else you could read what the definition of that is but that's all you need"
+  },
+  {
+   "t": 1580.73,
+   "d": 1.0,
+   "text": "to see."
+  },
+  {
+   "t": 1581.73,
+   "d": 3.96,
+   "text": "So two people with totally different dialects might say, like, thou art a scumbag, or like"
+  },
+  {
+   "t": 1585.69,
+   "d": 1.39,
+   "text": "ugh douche, why?"
+  },
+  {
+   "t": 1587.08,
+   "d": 4.95,
+   "text": "But if you are bringing in two emojis and they have a big frowny and a poop that's all"
+  },
+  {
+   "t": 1592.03,
+   "d": 1.7,
+   "text": "you need for that."
+  },
+  {
+   "t": 1593.73,
+   "d": 6.35,
+   "text": "AUDIENCE: You talked about in the romance section how you want it to be clear, and guesswork"
+  },
+  {
+   "t": 1600.08,
+   "d": 7.25,
+   "text": "isn't gameplay, it seemed like in your previous part with the example of the Paladin and Rogue"
+  },
+  {
+   "t": 1607.33,
+   "d": 4.88,
+   "text": "the granularity of the event they were reacting to was so low that in a single adventure you"
+  },
+  {
+   "t": 1612.21,
+   "d": 3.27,
+   "text": "would have thousands of these events."
+  },
+  {
+   "t": 1615.48,
+   "d": 5.0,
+   "text": "Was that something you intended or was it just to explain the types of things that could"
+  },
+  {
+   "t": 1620.48,
+   "d": 2.15,
+   "text": "cause the like-respect changes?"
+  },
+  {
+   "t": 1622.63,
+   "d": 1.64,
+   "text": "JIM SHEPARD: Very good point."
+  },
+  {
+   "t": 1624.27,
+   "d": 1.42,
+   "text": "It’s a possibility set."
+  },
+  {
+   "t": 1625.69,
+   "d": 4.16,
+   "text": "There’s a lot of things that could happen but if your game isn't something where splitting"
+  },
+  {
+   "t": 1629.85,
+   "d": 2.49,
+   "text": "treasure isn't an issue don't do it."
+  },
+  {
+   "t": 1632.34,
+   "d": 5.75,
+   "text": "I think there’s a really cool bit of science for personality flags to match with game events."
+  },
+  {
+   "t": 1638.09,
+   "d": 4.95,
+   "text": "It’s really up to you making something and refining it to say what events actually matter,"
+  },
+  {
+   "t": 1643.04,
+   "d": 2.03,
+   "text": "and what do players trip over often?"
+  },
+  {
+   "t": 1645.07,
+   "d": 2.91,
+   "text": "If there’s something a player does all the time that is always sending the numbers to"
+  },
+  {
+   "t": 1647.98,
+   "d": 4.59,
+   "text": "be screwy, you don't do that, you find a way around it."
+  },
+  {
+   "t": 1652.57,
+   "d": 5.98,
+   "text": "AUDIENCE: What do you think about the possibility of having emotional intelligence as an access"
+  },
+  {
+   "t": 1658.55,
+   "d": 1.0,
+   "text": "for this?"
+  },
+  {
+   "t": 1659.55,
+   "d": 2.08,
+   "text": "Maybe it could be something as simple as a boolean."
+  },
+  {
+   "t": 1661.63,
+   "d": 3.15,
+   "text": "You have a trait they select at the beginning of the game."
+  },
+  {
+   "t": 1664.78,
+   "d": 6.67,
+   "text": "You’re talking about having negative effects on your player as a consequence for having"
+  },
+  {
+   "t": 1671.45,
+   "d": 4.55,
+   "text": "unrequited love but it doesn't necessarily have to be a debuff like in real life."
+  },
+  {
+   "t": 1676.0,
+   "d": 5.85,
+   "text": "You could find being someone you care about as motivating or exhilarating or something"
+  },
+  {
+   "t": 1681.85,
+   "d": 1.0,
+   "text": "like that."
+  },
+  {
+   "t": 1682.85,
+   "d": 1.84,
+   "text": "JIM SHEPARD: I am with you on that."
+  },
+  {
+   "t": 1684.69,
+   "d": 4.84,
+   "text": "My personal red flag for that is you said access and sowe are in the W dimension of"
+  },
+  {
+   "t": 1689.53,
+   "d": 1.59,
+   "text": "four things to consider."
+  },
+  {
+   "t": 1691.12,
+   "d": 5.43,
+   "text": "But even the idea of I have the flag of stonehearted so if I’m hot for something and they don't"
+  },
+  {
+   "t": 1696.55,
+   "d": 1.0,
+   "text": "feel me, I don't care."
+  },
+  {
+   "t": 1697.55,
+   "d": 4.7,
+   "text": "You’re looking in the distance and the wind is blowing your hair."
+  },
+  {
+   "t": 1702.25,
+   "d": 2.36,
+   "text": "If that level of complexity fits the game, do it."
+  },
+  {
+   "t": 1704.61,
+   "d": 4.69,
+   "text": "I think again, in the beginning, when people do faction they do one number."
+  },
+  {
+   "t": 1709.3,
+   "d": 1.0,
+   "text": "We have three numbers now."
+  },
+  {
+   "t": 1710.3,
+   "d": 2.12,
+   "text": "We have like and respect and perhaps affection."
+  },
+  {
+   "t": 1712.42,
+   "d": 6.24,
+   "text": "That is three times as hard but not a matter of magnitude so it doesn’t even count in"
+  },
+  {
+   "t": 1718.66,
+   "d": 1.19,
+   "text": "the long run."
+  },
+  {
+   "t": 1719.85,
+   "d": 1.18,
+   "text": "That’s O(n), fine."
+  },
+  {
+   "t": 1721.03,
+   "d": 3.94,
+   "text": "AUDIENCE: I want to bring up one interesting one."
+  },
+  {
+   "t": 1724.97,
+   "d": 6.36,
+   "text": "The game doesn't have the depth of what you were talking about but Arcade Gannon in Fallout"
+  },
+  {
+   "t": 1731.33,
+   "d": 3.42,
+   "text": "New Vegas is an interesting one."
+  },
+  {
+   "t": 1734.75,
+   "d": 5.21,
+   "text": "The only way for him to have a positive future at the end of the game is to not let him help"
+  },
+  {
+   "t": 1739.96,
+   "d": 3.05,
+   "text": "you in the final battle of the game."
+  },
+  {
+   "t": 1743.01,
+   "d": 6.24,
+   "text": "So I think that - because he’s part of a faction that everybody hates."
+  },
+  {
+   "t": 1749.25,
+   "d": 4.22,
+   "text": "If you have him help you then everybody finds out and he generally gets killed."
+  },
+  {
+   "t": 1753.47,
+   "d": 7.42,
+   "text": "I thought that was an interesting sort of - you send him away and he survives but he"
+  },
+  {
+   "t": 1760.89,
+   "d": 2.07,
+   "text": "doesn't - he is not happy with you."
+  },
+  {
+   "t": 1762.96,
+   "d": 1.69,
+   "text": "JIM SHEPARD: Thank you."
+  },
+  {
+   "t": 1764.65,
+   "d": 1.0,
+   "text": "That's really cool."
+  },
+  {
+   "t": 1765.65,
+   "d": 1.79,
+   "text": "I haven't played through New Vegas."
+  },
+  {
+   "t": 1767.44,
+   "d": 4.38,
+   "text": "I do think though in places like that it is cool if the player can understand during gameplay"
+  },
+  {
+   "t": 1771.82,
+   "d": 3.9,
+   "text": "what they should do to make the happy ending, maybe they can’t, maybe they did a bad job."
+  },
+  {
+   "t": 1775.72,
+   "d": 6.03,
+   "text": "I know there is a game out there, Tyranny, which does love and then fear also."
+  },
+  {
+   "t": 1781.75,
+   "d": 4.03,
+   "text": "When you have somebody it is how much do they love you, how much do they fear you and they’re"
+  },
+  {
+   "t": 1785.78,
+   "d": 1.28,
+   "text": "not on a cross."
+  },
+  {
+   "t": 1787.06,
+   "d": 1.0,
+   "text": "It is in tandem."
+  },
+  {
+   "t": 1788.06,
+   "d": 2.11,
+   "text": "It’s a game of being the bad guy so you want them to love you the most and fear you"
+  },
+  {
+   "t": 1790.17,
+   "d": 2.11,
+   "text": "the most which is kind of weird but I guess that’s the game."
+  },
+  {
+   "t": 1792.28,
+   "d": 3.66,
+   "text": "I do want to point out though that they do have multiple axes of fields."
+  },
+  {
+   "t": 1795.94,
+   "d": 1.0,
+   "text": ">> Cool."
+  },
+  {
+   "t": 1796.94,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1797.94,
+   "d": 2.25,
+   "text": "JIM SHEPARD: Thank you all very much."
+  }
+ ]
+}

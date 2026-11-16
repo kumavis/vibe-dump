@@ -1,0 +1,4646 @@
+{
+ "id": "xSYVQc7cH-4",
+ "url": "https://www.youtube.com/watch?v=xSYVQc7cH-4",
+ "title": "Jeremiah Reid - Juice your Turns",
+ "speaker": "Jeremiah Reid",
+ "talk_title": "Juice your Turns",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1759,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "This talk is about \"juice\" and game feel within traditional roguelikes. Juice is all about adding polish, feedback, tiny details, and love to a game. The talk will include a survey of the best examples of juicy roguelikes in the wild, break down some very easy to use techniques for adding juice, and talk about my journey from ignoring to embracing such techniques. As is tradition in this kind of talk, we will step through a demo of taking a static roguelike and adding polish to it until the end result feels like a completely different game.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 37,
+   "title": "What is game juice?"
+  },
+  {
+   "start": 172,
+   "title": "Juice in roguelikes"
+  },
+  {
+   "start": 261,
+   "title": "Examples of juicy games"
+  },
+  {
+   "start": 375,
+   "title": "The myth of difficult juice"
+  },
+  {
+   "start": 508,
+   "title": "Techniques for cheap juice"
+  },
+  {
+   "start": 671,
+   "title": "Maintaining gameplay speed"
+  },
+  {
+   "start": 790,
+   "title": "Demonstrating juice techniques"
+  },
+  {
+   "start": 1406,
+   "title": "Over-the-top juice"
+  },
+  {
+   "start": 1509,
+   "title": "Q&A and conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6128,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 4.16,
+   "d": 2.8,
+   "text": "next up we are going to have jeremiah"
+  },
+  {
+   "t": 6.96,
+   "d": 2.08,
+   "text": "reed who's going to be talking juice"
+  },
+  {
+   "t": 9.04,
+   "d": 2.56,
+   "text": "your turns uh jeremiah you might know is"
+  },
+  {
+   "t": 11.6,
+   "d": 1.44,
+   "text": "a developer of a bunch of small"
+  },
+  {
+   "t": 13.04,
+   "d": 3.52,
+   "text": "roguelikes like golden crown hotel"
+  },
+  {
+   "t": 16.56,
+   "d": 2.4,
+   "text": "dead face and yeah really excited about"
+  },
+  {
+   "t": 18.96,
+   "d": 2.0,
+   "text": "this i think juiciness is something that"
+  },
+  {
+   "t": 20.96,
+   "d": 2.24,
+   "text": "is often uh not our first thing we think"
+  },
+  {
+   "t": 23.2,
+   "d": 2.0,
+   "text": "about with traditional roguelikes so"
+  },
+  {
+   "t": 25.2,
+   "d": 3.28,
+   "text": "really excited to have this all right"
+  },
+  {
+   "t": 28.48,
+   "d": 2.56,
+   "text": "welcome aboard"
+  },
+  {
+   "t": 31.04,
+   "d": 1.44,
+   "text": "hi can you hear me"
+  },
+  {
+   "t": 32.48,
+   "d": 4.0,
+   "text": "yes i can hear you so okay hand it off"
+  },
+  {
+   "t": 36.48,
+   "d": 3.84,
+   "text": "um yeah so this is a talk about juice"
+  },
+  {
+   "t": 40.32,
+   "d": 1.28,
+   "text": "it's not something we typically think"
+  },
+  {
+   "t": 41.6,
+   "d": 1.68,
+   "text": "about in traditional roguelikes but i"
+  },
+  {
+   "t": 43.28,
+   "d": 1.28,
+   "text": "want to convince you that like it's a"
+  },
+  {
+   "t": 44.56,
+   "d": 1.28,
+   "text": "good fit"
+  },
+  {
+   "t": 45.84,
+   "d": 2.68,
+   "text": "uh this presentation is playable at"
+  },
+  {
+   "t": 48.52,
+   "d": 1.88,
+   "text": "juicerterns.com if you want to follow"
+  },
+  {
+   "t": 50.4,
+   "d": 3.04,
+   "text": "along now or later"
+  },
+  {
+   "t": 53.44,
+   "d": 1.36,
+   "text": "and have to jump back and forth between"
+  },
+  {
+   "t": 54.8,
+   "d": 2.32,
+   "text": "these tabs to see the questions but i'm"
+  },
+  {
+   "t": 57.12,
+   "d": 1.28,
+   "text": "gonna go ahead and go"
+  },
+  {
+   "t": 58.4,
+   "d": 2.08,
+   "text": "so you might know me don't worry about"
+  },
+  {
+   "t": 60.48,
+   "d": 2.16,
+   "text": "chat questions i am on top of it so"
+  },
+  {
+   "t": 62.64,
+   "d": 1.6,
+   "text": "don't worry about distracting yourself"
+  },
+  {
+   "t": 64.24,
+   "d": 1.76,
+   "text": "we'll have questions at the end just a"
+  },
+  {
+   "t": 66.0,
+   "d": 2.24,
+   "text": "great point thank you okay um"
+  },
+  {
+   "t": 68.24,
+   "d": 1.76,
+   "text": "you might know me from some of my seven"
+  },
+  {
+   "t": 70.0,
+   "d": 2.24,
+   "text": "day roguelikes i made eight of them i"
+  },
+  {
+   "t": 72.24,
+   "d": 1.6,
+   "text": "expanded one into a larger project"
+  },
+  {
+   "t": 73.84,
+   "d": 1.36,
+   "text": "golden chrome hotel we'll talk a little"
+  },
+  {
+   "t": 75.2,
+   "d": 2.88,
+   "text": "bit about that today"
+  },
+  {
+   "t": 78.08,
+   "d": 1.12,
+   "text": "so"
+  },
+  {
+   "t": 79.2,
+   "d": 1.84,
+   "text": "juice is kind of a nebulous game dev"
+  },
+  {
+   "t": 81.04,
+   "d": 1.92,
+   "text": "concept and i think it helps to ground"
+  },
+  {
+   "t": 82.96,
+   "d": 1.68,
+   "text": "it in something that like we all know"
+  },
+  {
+   "t": 84.64,
+   "d": 2.32,
+   "text": "and love which is fruit juice right and"
+  },
+  {
+   "t": 86.96,
+   "d": 1.52,
+   "text": "if you think about fruit juice what do"
+  },
+  {
+   "t": 88.48,
+   "d": 1.76,
+   "text": "you typically think about it tastes good"
+  },
+  {
+   "t": 90.24,
+   "d": 1.92,
+   "text": "obviously it feels good it has a good"
+  },
+  {
+   "t": 92.16,
+   "d": 1.84,
+   "text": "mouth feel probably the most important"
+  },
+  {
+   "t": 94.0,
+   "d": 1.84,
+   "text": "part is it's responsive like when you"
+  },
+  {
+   "t": 95.84,
+   "d": 2.4,
+   "text": "bite into a piece of fruit like it kind"
+  },
+  {
+   "t": 98.24,
+   "d": 2.16,
+   "text": "of bites back you get a response you get"
+  },
+  {
+   "t": 100.4,
+   "d": 1.28,
+   "text": "interaction"
+  },
+  {
+   "t": 101.68,
+   "d": 1.04,
+   "text": "it tells you the thing you're"
+  },
+  {
+   "t": 102.72,
+   "d": 1.6,
+   "text": "interacting with is alive it doesn't"
+  },
+  {
+   "t": 104.32,
+   "d": 1.76,
+   "text": "feel inert or dead"
+  },
+  {
+   "t": 106.08,
+   "d": 3.6,
+   "text": "it's very fun and it is messy"
+  },
+  {
+   "t": 109.68,
+   "d": 1.2,
+   "text": "so this is one of the best quotes i"
+  },
+  {
+   "t": 110.88,
+   "d": 1.92,
+   "text": "found on this topic juicy things are"
+  },
+  {
+   "t": 112.8,
+   "d": 2.0,
+   "text": "things that wobble squirt bounce around"
+  },
+  {
+   "t": 114.8,
+   "d": 2.0,
+   "text": "and make cute little cute noises it's"
+  },
+  {
+   "t": 116.8,
+   "d": 1.44,
+   "text": "sort of a catch-all phrase for things"
+  },
+  {
+   "t": 118.24,
+   "d": 1.44,
+   "text": "that make a game more satisfying to"
+  },
+  {
+   "t": 119.68,
+   "d": 1.52,
+   "text": "interact with"
+  },
+  {
+   "t": 121.2,
+   "d": 1.92,
+   "text": "juice is typically auditory or visual"
+  },
+  {
+   "t": 123.12,
+   "d": 1.44,
+   "text": "but it doesn't really need to be it's"
+  },
+  {
+   "t": 124.56,
+   "d": 2.32,
+   "text": "about maximum output output for minimum"
+  },
+  {
+   "t": 126.88,
+   "d": 1.84,
+   "text": "input so"
+  },
+  {
+   "t": 128.72,
+   "d": 2.0,
+   "text": "two important points here one is that"
+  },
+  {
+   "t": 130.72,
+   "d": 2.56,
+   "text": "like yeah juice is typically graphics"
+  },
+  {
+   "t": 133.28,
+   "d": 1.28,
+   "text": "and i'm going to talk about graphical"
+  },
+  {
+   "t": 134.56,
+   "d": 1.68,
+   "text": "techniques mostly in this talk but it"
+  },
+  {
+   "t": 136.24,
+   "d": 1.52,
+   "text": "could also be mechanics it could be just"
+  },
+  {
+   "t": 137.76,
+   "d": 1.36,
+   "text": "feedback to the player it could be text"
+  },
+  {
+   "t": 139.12,
+   "d": 1.36,
+   "text": "it could be anything"
+  },
+  {
+   "t": 140.48,
+   "d": 2.16,
+   "text": "um and the second point is it's really"
+  },
+  {
+   "t": 142.64,
+   "d": 2.08,
+   "text": "about bang for your buck it's very much"
+  },
+  {
+   "t": 144.72,
+   "d": 2.48,
+   "text": "an economical thing"
+  },
+  {
+   "t": 147.2,
+   "d": 1.92,
+   "text": "another good quote juice amplifies"
+  },
+  {
+   "t": 149.12,
+   "d": 1.76,
+   "text": "interactivity by providing excessive"
+  },
+  {
+   "t": 150.88,
+   "d": 2.24,
+   "text": "amounts of feedback in relation to user"
+  },
+  {
+   "t": 153.12,
+   "d": 2.64,
+   "text": "input it is superfluous from a strictly"
+  },
+  {
+   "t": 155.76,
+   "d": 1.52,
+   "text": "mechanical perspective but turns"
+  },
+  {
+   "t": 157.28,
+   "d": 1.52,
+   "text": "interacting with the system into a more"
+  },
+  {
+   "t": 158.8,
+   "d": 1.52,
+   "text": "pleasurable experience"
+  },
+  {
+   "t": 160.32,
+   "d": 1.36,
+   "text": "i think that's good i would push back"
+  },
+  {
+   "t": 161.68,
+   "d": 2.96,
+   "text": "about uh superfluous because sometimes"
+  },
+  {
+   "t": 164.64,
+   "d": 2.24,
+   "text": "you can even have what i i would say"
+  },
+  {
+   "t": 166.88,
+   "d": 1.28,
+   "text": "that you could have mechanics that are"
+  },
+  {
+   "t": 168.16,
+   "d": 3.12,
+   "text": "juicy um but otherwise this is pretty"
+  },
+  {
+   "t": 171.28,
+   "d": 1.52,
+   "text": "good"
+  },
+  {
+   "t": 172.8,
+   "d": 1.6,
+   "text": "so let's take a look at a real juicy"
+  },
+  {
+   "t": 174.4,
+   "d": 1.2,
+   "text": "game right"
+  },
+  {
+   "t": 175.6,
+   "d": 2.4,
+   "text": "no this is not this is a golden chrome"
+  },
+  {
+   "t": 178.0,
+   "d": 1.68,
+   "text": "hotel the seven day roguelike version"
+  },
+  {
+   "t": 179.68,
+   "d": 2.96,
+   "text": "that i made in one week in 2014. i think"
+  },
+  {
+   "t": 182.64,
+   "d": 2.08,
+   "text": "you'd agree it has like no animation no"
+  },
+  {
+   "t": 184.72,
+   "d": 1.6,
+   "text": "juice no polish and that's okay because"
+  },
+  {
+   "t": 186.32,
+   "d": 2.08,
+   "text": "i made it in a week but like over the"
+  },
+  {
+   "t": 188.4,
+   "d": 1.68,
+   "text": "last seven years i've continued to work"
+  },
+  {
+   "t": 190.08,
+   "d": 1.6,
+   "text": "on this game and i think i've learned a"
+  },
+  {
+   "t": 191.68,
+   "d": 2.64,
+   "text": "few things about juice and animation i'm"
+  },
+  {
+   "t": 194.32,
+   "d": 1.28,
+   "text": "gonna kind of combine some of those"
+  },
+  {
+   "t": 195.6,
+   "d": 1.04,
+   "text": "topics together because some of the"
+  },
+  {
+   "t": 196.64,
+   "d": 1.12,
+   "text": "animation stuff is going to be like"
+  },
+  {
+   "t": 197.76,
+   "d": 3.6,
+   "text": "really low hanging fruit um so in this"
+  },
+  {
+   "t": 201.36,
+   "d": 2.16,
+   "text": "like this is by no means the juiciest"
+  },
+  {
+   "t": 203.52,
+   "d": 1.36,
+   "text": "game or even traditional roguelike"
+  },
+  {
+   "t": 204.88,
+   "d": 1.44,
+   "text": "you'll ever see but like there's a few"
+  },
+  {
+   "t": 206.32,
+   "d": 2.16,
+   "text": "techniques you might notice in this gif"
+  },
+  {
+   "t": 208.48,
+   "d": 1.6,
+   "text": "one like the characters move around"
+  },
+  {
+   "t": 210.08,
+   "d": 2.56,
+   "text": "smoothly they hop around there's a bump"
+  },
+  {
+   "t": 212.64,
+   "d": 1.76,
+   "text": "attack animation there's a slash"
+  },
+  {
+   "t": 214.4,
+   "d": 2.08,
+   "text": "animation there's damage numbers there's"
+  },
+  {
+   "t": 216.48,
+   "d": 2.08,
+   "text": "screen shake the enemies fade out to red"
+  },
+  {
+   "t": 218.56,
+   "d": 1.76,
+   "text": "so there's a few things going on but i"
+  },
+  {
+   "t": 220.32,
+   "d": 1.68,
+   "text": "have a little bit of regret looking back"
+  },
+  {
+   "t": 222.0,
+   "d": 1.92,
+   "text": "it's like why didn't i add some of these"
+  },
+  {
+   "t": 223.92,
+   "d": 2.08,
+   "text": "things like early on like in year one or"
+  },
+  {
+   "t": 226.0,
+   "d": 1.36,
+   "text": "two it would have drawn in a bigger"
+  },
+  {
+   "t": 227.36,
+   "d": 1.68,
+   "text": "audience i didn't add some of these"
+  },
+  {
+   "t": 229.04,
+   "d": 1.36,
+   "text": "things until later and i didn't even"
+  },
+  {
+   "t": 230.4,
+   "d": 1.36,
+   "text": "find out some of these techniques until"
+  },
+  {
+   "t": 231.76,
+   "d": 2.16,
+   "text": "like literally working on this talk and"
+  },
+  {
+   "t": 233.92,
+   "d": 2.16,
+   "text": "three reasons really one"
+  },
+  {
+   "t": 236.08,
+   "d": 1.2,
+   "text": "i didn't know some of these things"
+  },
+  {
+   "t": 237.28,
+   "d": 2.4,
+   "text": "existed i was kind of surprised to learn"
+  },
+  {
+   "t": 239.68,
+   "d": 2.48,
+   "text": "about them slowly in reference games two"
+  },
+  {
+   "t": 242.16,
+   "d": 0.96,
+   "text": "i thought they were going to be a lot"
+  },
+  {
+   "t": 243.12,
+   "d": 1.52,
+   "text": "harder than they they turned out to be"
+  },
+  {
+   "t": 244.64,
+   "d": 1.44,
+   "text": "they turned out to be pretty easy to"
+  },
+  {
+   "t": 246.08,
+   "d": 2.16,
+   "text": "implement and three like i i didn't"
+  },
+  {
+   "t": 248.24,
+   "d": 1.36,
+   "text": "think they were always a good fit for"
+  },
+  {
+   "t": 249.6,
+   "d": 1.76,
+   "text": "traditional roguelikes because"
+  },
+  {
+   "t": 251.36,
+   "d": 1.6,
+   "text": "juice is typically associated with"
+  },
+  {
+   "t": 252.96,
+   "d": 1.84,
+   "text": "action games so that's what i want to"
+  },
+  {
+   "t": 254.8,
+   "d": 1.36,
+   "text": "try to convince you of today that's why"
+  },
+  {
+   "t": 256.16,
+   "d": 2.0,
+   "text": "it's called juice returns it's a good"
+  },
+  {
+   "t": 258.16,
+   "d": 2.24,
+   "text": "fit it's easy and i want to show you"
+  },
+  {
+   "t": 260.4,
+   "d": 1.84,
+   "text": "some of the techniques so now i do want"
+  },
+  {
+   "t": 262.24,
+   "d": 1.44,
+   "text": "to look at some really good examples of"
+  },
+  {
+   "t": 263.68,
+   "d": 0.96,
+   "text": "juice"
+  },
+  {
+   "t": 264.64,
+   "d": 1.68,
+   "text": "the one that inspired me to do this talk"
+  },
+  {
+   "t": 266.32,
+   "d": 3.52,
+   "text": "actually is acatha in absurdia this was"
+  },
+  {
+   "t": 269.84,
+   "d": 2.08,
+   "text": "a seven day roguelike from last year and"
+  },
+  {
+   "t": 271.92,
+   "d": 1.6,
+   "text": "i was very impressed by it you can just"
+  },
+  {
+   "t": 273.52,
+   "d": 1.76,
+   "text": "take a look and it there's a lot going"
+  },
+  {
+   "t": 275.28,
+   "d": 1.76,
+   "text": "on there's a lot of bounciness and"
+  },
+  {
+   "t": 277.04,
+   "d": 2.4,
+   "text": "squishiness and it's just fun to like"
+  },
+  {
+   "t": 279.44,
+   "d": 1.4,
+   "text": "play and look at"
+  },
+  {
+   "t": 280.84,
+   "d": 3.32,
+   "text": "um i also like was inspired this year to"
+  },
+  {
+   "t": 284.16,
+   "d": 1.76,
+   "text": "add some juice techniques to my 7d rl"
+  },
+  {
+   "t": 285.92,
+   "d": 1.6,
+   "text": "that i never considered before but when"
+  },
+  {
+   "t": 287.52,
+   "d": 1.36,
+   "text": "i saw that this was done in a week it's"
+  },
+  {
+   "t": 288.88,
+   "d": 1.6,
+   "text": "like wow like if you can do this in a"
+  },
+  {
+   "t": 290.48,
+   "d": 0.96,
+   "text": "week like"
+  },
+  {
+   "t": 291.44,
+   "d": 3.12,
+   "text": "this is really achievable"
+  },
+  {
+   "t": 294.8,
+   "d": 1.6,
+   "text": "now i want to make a distinction for"
+  },
+  {
+   "t": 296.4,
+   "d": 2.08,
+   "text": "lack of a better term between on-grid"
+  },
+  {
+   "t": 298.48,
+   "d": 2.32,
+   "text": "roguelikes and off-grid roguelikes"
+  },
+  {
+   "t": 300.8,
+   "d": 1.44,
+   "text": "so if you go back"
+  },
+  {
+   "t": 302.24,
+   "d": 2.0,
+   "text": "like the earliest roguelikes were"
+  },
+  {
+   "t": 304.24,
+   "d": 2.48,
+   "text": "targeting terminals right so the only"
+  },
+  {
+   "t": 306.72,
+   "d": 1.28,
+   "text": "thing if you're doing that that you"
+  },
+  {
+   "t": 308.0,
+   "d": 1.92,
+   "text": "choose when you're making graphics is"
+  },
+  {
+   "t": 309.92,
+   "d": 1.6,
+   "text": "what character to show"
+  },
+  {
+   "t": 311.52,
+   "d": 1.76,
+   "text": "uh what color is the character and then"
+  },
+  {
+   "t": 313.28,
+   "d": 2.08,
+   "text": "what is the background color in a small"
+  },
+  {
+   "t": 315.36,
+   "d": 1.76,
+   "text": "rectangle behind the character so all"
+  },
+  {
+   "t": 317.12,
+   "d": 1.36,
+   "text": "you're doing is choosing those three"
+  },
+  {
+   "t": 318.48,
+   "d": 2.64,
+   "text": "things for a rectangular rectangular"
+  },
+  {
+   "t": 321.12,
+   "d": 2.0,
+   "text": "grid of characters that's it but the"
+  },
+  {
+   "t": 323.12,
+   "d": 1.44,
+   "text": "question is like can you make a really"
+  },
+  {
+   "t": 324.56,
+   "d": 1.6,
+   "text": "great looking game or a juicy game"
+  },
+  {
+   "t": 326.16,
+   "d": 1.92,
+   "text": "within those confines and i think brogue"
+  },
+  {
+   "t": 328.08,
+   "d": 1.6,
+   "text": "is an example that you really can like"
+  },
+  {
+   "t": 329.68,
+   "d": 1.76,
+   "text": "this is an amazing looking game even"
+  },
+  {
+   "t": 331.44,
+   "d": 1.84,
+   "text": "though it's an ascii it it's on a"
+  },
+  {
+   "t": 333.28,
+   "d": 3.28,
+   "text": "terminal it um the the water effects and"
+  },
+  {
+   "t": 336.56,
+   "d": 2.24,
+   "text": "like gas cloud effects are really cool"
+  },
+  {
+   "t": 338.8,
+   "d": 1.92,
+   "text": "another similar example this is ripped"
+  },
+  {
+   "t": 340.72,
+   "d": 1.36,
+   "text": "straight from this trailer so there's"
+  },
+  {
+   "t": 342.08,
+   "d": 1.44,
+   "text": "tiles in it but this is a one-to-one"
+  },
+  {
+   "t": 343.52,
+   "d": 3.28,
+   "text": "mapping with with the ascii i believe um"
+  },
+  {
+   "t": 346.8,
+   "d": 2.4,
+   "text": "the explosions in cog mine look great"
+  },
+  {
+   "t": 349.2,
+   "d": 2.0,
+   "text": "right and um"
+  },
+  {
+   "t": 351.2,
+   "d": 2.48,
+   "text": "that there's there's really like there's"
+  },
+  {
+   "t": 353.68,
+   "d": 0.96,
+   "text": "no"
+  },
+  {
+   "t": 354.64,
+   "d": 1.04,
+   "text": "compared to some of the examples we're"
+  },
+  {
+   "t": 355.68,
+   "d": 1.6,
+   "text": "gonna look at later there's no rotation"
+  },
+  {
+   "t": 357.28,
+   "d": 1.68,
+   "text": "there's no scale changes there's no"
+  },
+  {
+   "t": 358.96,
+   "d": 1.92,
+   "text": "offsets or anything it's all just like"
+  },
+  {
+   "t": 360.88,
+   "d": 1.76,
+   "text": "you show the sprites and that's it and"
+  },
+  {
+   "t": 362.64,
+   "d": 1.44,
+   "text": "but within that you can do like a lot of"
+  },
+  {
+   "t": 364.08,
+   "d": 1.92,
+   "text": "cool stuff"
+  },
+  {
+   "t": 366.0,
+   "d": 2.32,
+   "text": "uh fidel dungeon rescue this next couple"
+  },
+  {
+   "t": 368.32,
+   "d": 0.96,
+   "text": "examples are a little bit less"
+  },
+  {
+   "t": 369.28,
+   "d": 1.44,
+   "text": "traditional but i would highly recommend"
+  },
+  {
+   "t": 370.72,
+   "d": 2.48,
+   "text": "this game this three second gif is like"
+  },
+  {
+   "t": 373.2,
+   "d": 2.0,
+   "text": "a master class in adding juice to your"
+  },
+  {
+   "t": 375.2,
+   "d": 1.92,
+   "text": "game there's like just so much going on"
+  },
+  {
+   "t": 377.12,
+   "d": 2.32,
+   "text": "even you just study the words level up"
+  },
+  {
+   "t": 379.44,
+   "d": 1.68,
+   "text": "there's there's like 10 different things"
+  },
+  {
+   "t": 381.12,
+   "d": 1.52,
+   "text": "going on with the animation and even"
+  },
+  {
+   "t": 382.64,
+   "d": 1.76,
+   "text": "mechanically it feels good because when"
+  },
+  {
+   "t": 384.4,
+   "d": 1.36,
+   "text": "you level up you get all your health"
+  },
+  {
+   "t": 385.76,
+   "d": 2.08,
+   "text": "back you get an etch to heart so just"
+  },
+  {
+   "t": 387.84,
+   "d": 2.56,
+   "text": "study this and you'll learn like so much"
+  },
+  {
+   "t": 390.4,
+   "d": 1.6,
+   "text": "another slightly less traditional"
+  },
+  {
+   "t": 392.0,
+   "d": 2.08,
+   "text": "example crypt of the necrodancer but"
+  },
+  {
+   "t": 394.08,
+   "d": 1.52,
+   "text": "even though it's it's"
+  },
+  {
+   "t": 395.6,
+   "d": 1.84,
+   "text": "kind of a real-time game in a sense if"
+  },
+  {
+   "t": 397.44,
+   "d": 2.16,
+   "text": "you don't play the bard um"
+  },
+  {
+   "t": 399.6,
+   "d": 1.68,
+   "text": "graphically it looks exactly like a"
+  },
+  {
+   "t": 401.28,
+   "d": 2.32,
+   "text": "top-down uh turn-based grid-based"
+  },
+  {
+   "t": 403.6,
+   "d": 1.28,
+   "text": "traditional roguelike so any of the"
+  },
+  {
+   "t": 404.88,
+   "d": 1.12,
+   "text": "lessons you learned from this you can"
+  },
+  {
+   "t": 406.0,
+   "d": 2.08,
+   "text": "map it directly under your game i"
+  },
+  {
+   "t": 408.08,
+   "d": 1.92,
+   "text": "learned a lot from krypton necrodancer i"
+  },
+  {
+   "t": 410.0,
+   "d": 1.36,
+   "text": "kind of use it as a reference point"
+  },
+  {
+   "t": 411.36,
+   "d": 1.92,
+   "text": "because it's it's got just such great"
+  },
+  {
+   "t": 413.28,
+   "d": 1.44,
+   "text": "art and and there's so many things going"
+  },
+  {
+   "t": 414.72,
+   "d": 1.44,
+   "text": "on not shown here but like i would"
+  },
+  {
+   "t": 416.16,
+   "d": 1.52,
+   "text": "consider the shopkeeper to be a good"
+  },
+  {
+   "t": 417.68,
+   "d": 2.56,
+   "text": "example of juice"
+  },
+  {
+   "t": 420.24,
+   "d": 2.16,
+   "text": "now some more traditional examples"
+  },
+  {
+   "t": 422.4,
+   "d": 2.32,
+   "text": "dungeon man's very very juicy game"
+  },
+  {
+   "t": 424.72,
+   "d": 1.52,
+   "text": "there's and this isn't even like one of"
+  },
+  {
+   "t": 426.24,
+   "d": 0.96,
+   "text": "the best examples but there's"
+  },
+  {
+   "t": 427.2,
+   "d": 2.72,
+   "text": "projectiles there's blood there's uh"
+  },
+  {
+   "t": 429.92,
+   "d": 2.16,
+   "text": "damage numbers there's screen shake"
+  },
+  {
+   "t": 432.08,
+   "d": 1.12,
+   "text": "oh"
+  },
+  {
+   "t": 433.2,
+   "d": 3.68,
+   "text": "sprogy wood uh very cutesy bouncy juicy"
+  },
+  {
+   "t": 436.88,
+   "d": 2.64,
+   "text": "game this one has a interesting"
+  },
+  {
+   "t": 439.52,
+   "d": 1.44,
+   "text": "rotational screen shake if you look"
+  },
+  {
+   "t": 440.96,
+   "d": 1.44,
+   "text": "closely that i don't see in a lot of"
+  },
+  {
+   "t": 442.4,
+   "d": 2.64,
+   "text": "other games um"
+  },
+  {
+   "t": 445.04,
+   "d": 2.24,
+   "text": "jupiter hell got in this recently"
+  },
+  {
+   "t": 447.28,
+   "d": 2.24,
+   "text": "amazing game uh not even shown here my"
+  },
+  {
+   "t": 449.52,
+   "d": 1.52,
+   "text": "favorite like"
+  },
+  {
+   "t": 451.04,
+   "d": 2.48,
+   "text": "juicy mechanic is reloading your gun to"
+  },
+  {
+   "t": 453.52,
+   "d": 1.44,
+   "text": "me if you have like a shotgun or"
+  },
+  {
+   "t": 454.96,
+   "d": 1.2,
+   "text": "revolver you have to put the bullets"
+  },
+  {
+   "t": 456.16,
+   "d": 1.68,
+   "text": "back in like one by one and that"
+  },
+  {
+   "t": 457.84,
+   "d": 1.28,
+   "text": "something about that feels really great"
+  },
+  {
+   "t": 459.12,
+   "d": 2.16,
+   "text": "but in this gif you see explosions you"
+  },
+  {
+   "t": 461.28,
+   "d": 1.68,
+   "text": "see screen shake you see destructible"
+  },
+  {
+   "t": 462.96,
+   "d": 2.32,
+   "text": "physics it all comes together um to be"
+  },
+  {
+   "t": 465.28,
+   "d": 1.84,
+   "text": "very impressive if you notice the last"
+  },
+  {
+   "t": 467.12,
+   "d": 2.0,
+   "text": "five examples all use screen shake which"
+  },
+  {
+   "t": 469.12,
+   "d": 2.4,
+   "text": "is a core technique"
+  },
+  {
+   "t": 471.52,
+   "d": 1.44,
+   "text": "and here's an example that doesn't use"
+  },
+  {
+   "t": 472.96,
+   "d": 1.36,
+   "text": "screen shake but has a really cool"
+  },
+  {
+   "t": 474.32,
+   "d": 1.76,
+   "text": "aesthetic hack i like how when you"
+  },
+  {
+   "t": 476.08,
+   "d": 1.6,
+   "text": "attack the monster and kill it like the"
+  },
+  {
+   "t": 477.68,
+   "d": 2.72,
+   "text": "bones are flying everywhere"
+  },
+  {
+   "t": 480.4,
+   "d": 1.68,
+   "text": "okay so we've seen like some really"
+  },
+  {
+   "t": 482.08,
+   "d": 3.36,
+   "text": "great examples of of juice and and some"
+  },
+  {
+   "t": 485.44,
+   "d": 1.68,
+   "text": "really great looking games great artwork"
+  },
+  {
+   "t": 487.12,
+   "d": 1.52,
+   "text": "and so the first thing you may think if"
+  },
+  {
+   "t": 488.64,
+   "d": 2.16,
+   "text": "if you're developing a roguelike you're"
+  },
+  {
+   "t": 490.8,
+   "d": 1.76,
+   "text": "and most"
+  },
+  {
+   "t": 492.56,
+   "d": 2.16,
+   "text": "it might be fair to say um or my guess"
+  },
+  {
+   "t": 494.72,
+   "d": 1.76,
+   "text": "would be most roguelikes are made by"
+  },
+  {
+   "t": 496.48,
+   "d": 2.48,
+   "text": "single uh except for like the larger"
+  },
+  {
+   "t": 498.96,
+   "d": 1.44,
+   "text": "open source rooms are made by single"
+  },
+  {
+   "t": 500.4,
+   "d": 2.0,
+   "text": "developers single programmers and they"
+  },
+  {
+   "t": 502.4,
+   "d": 1.2,
+   "text": "may not all be artists and you're"
+  },
+  {
+   "t": 503.6,
+   "d": 1.92,
+   "text": "thinking i'm like all that amazing art i"
+  },
+  {
+   "t": 505.52,
+   "d": 2.0,
+   "text": "can't do that but that it's kind of myth"
+  },
+  {
+   "t": 507.52,
+   "d": 2.48,
+   "text": "that's not really what juice is about"
+  },
+  {
+   "t": 510.0,
+   "d": 2.16,
+   "text": "you might think back like even old games"
+  },
+  {
+   "t": 512.16,
+   "d": 1.92,
+   "text": "like um in simple games this is final"
+  },
+  {
+   "t": 514.08,
+   "d": 2.0,
+   "text": "fantasy one this is a sprite sheet of"
+  },
+  {
+   "t": 516.08,
+   "d": 1.6,
+   "text": "from final fantasy one and this was made"
+  },
+  {
+   "t": 517.68,
+   "d": 2.24,
+   "text": "34 years ago and it's like oh look at"
+  },
+  {
+   "t": 519.92,
+   "d": 1.28,
+   "text": "all that art i've got to make this is"
+  },
+  {
+   "t": 521.2,
+   "d": 2.24,
+   "text": "ridiculous i can't do that um but if"
+  },
+  {
+   "t": 523.44,
+   "d": 1.12,
+   "text": "you're a little clever about it you"
+  },
+  {
+   "t": 524.56,
+   "d": 1.44,
+   "text": "could do that you could do something"
+  },
+  {
+   "t": 526.0,
+   "d": 1.84,
+   "text": "much simpler like you would have one uh"
+  },
+  {
+   "t": 527.84,
+   "d": 1.68,
+   "text": "sprite for each character you could have"
+  },
+  {
+   "t": 529.52,
+   "d": 2.24,
+   "text": "it side facing like a necrodancer and"
+  },
+  {
+   "t": 531.76,
+   "d": 1.36,
+   "text": "flip it"
+  },
+  {
+   "t": 533.12,
+   "d": 1.6,
+   "text": "or you could just be more clever and do"
+  },
+  {
+   "t": 534.72,
+   "d": 1.44,
+   "text": "ascii and ascii can look really great"
+  },
+  {
+   "t": 536.16,
+   "d": 1.52,
+   "text": "like we've seen"
+  },
+  {
+   "t": 537.68,
+   "d": 1.36,
+   "text": "so this is like this is kind of"
+  },
+  {
+   "t": 539.04,
+   "d": 2.72,
+   "text": "analogous to the myth of the juicero"
+  },
+  {
+   "t": 541.76,
+   "d": 2.64,
+   "text": "right the juicero was initially a 700"
+  },
+  {
+   "t": 544.4,
+   "d": 2.16,
+   "text": "consumer device that cold pressed juice"
+  },
+  {
+   "t": 546.56,
+   "d": 2.32,
+   "text": "supposedly and you look at this and you"
+  },
+  {
+   "t": 548.88,
+   "d": 2.64,
+   "text": "think wow i can't really afford"
+  },
+  {
+   "t": 551.52,
+   "d": 1.76,
+   "text": "the delicious benefits of juice because"
+  },
+  {
+   "t": 553.28,
+   "d": 1.52,
+   "text": "this is so expensive this out of my"
+  },
+  {
+   "t": 554.8,
+   "d": 2.24,
+   "text": "price range um but of course that's"
+  },
+  {
+   "t": 557.04,
+   "d": 2.4,
+   "text": "that's bs because as it turned out like"
+  },
+  {
+   "t": 559.44,
+   "d": 1.68,
+   "text": "all all this thing was doing was"
+  },
+  {
+   "t": 561.12,
+   "d": 1.68,
+   "text": "emptying these packets which you could"
+  },
+  {
+   "t": 562.8,
+   "d": 2.88,
+   "text": "do by hand so the reality is that juice"
+  },
+  {
+   "t": 565.68,
+   "d": 2.72,
+   "text": "is cheap juice is coated in not drawn in"
+  },
+  {
+   "t": 568.4,
+   "d": 1.2,
+   "text": "it's really at the end of the day a"
+  },
+  {
+   "t": 569.6,
+   "d": 2.8,
+   "text": "programming technique"
+  },
+  {
+   "t": 572.4,
+   "d": 1.6,
+   "text": "if you can interpolate between two"
+  },
+  {
+   "t": 574.0,
+   "d": 1.6,
+   "text": "numbers you can juice"
+  },
+  {
+   "t": 575.6,
+   "d": 2.32,
+   "text": "so uh these are the kind of things you"
+  },
+  {
+   "t": 577.92,
+   "d": 1.76,
+   "text": "would interpolate the scale position"
+  },
+  {
+   "t": 579.68,
+   "d": 2.96,
+   "text": "rotation and color um so basically like"
+  },
+  {
+   "t": 582.64,
+   "d": 1.84,
+   "text": "juice is all about animation"
+  },
+  {
+   "t": 584.48,
+   "d": 2.08,
+   "text": "all about taking one value one property"
+  },
+  {
+   "t": 586.56,
+   "d": 2.32,
+   "text": "and changing the value to something else"
+  },
+  {
+   "t": 588.88,
+   "d": 2.72,
+   "text": "for the most part a little aside here"
+  },
+  {
+   "t": 591.6,
+   "d": 1.28,
+   "text": "like when i was"
+  },
+  {
+   "t": 592.88,
+   "d": 1.52,
+   "text": "i've been a web developer most my career"
+  },
+  {
+   "t": 594.4,
+   "d": 1.28,
+   "text": "and like many years ago there's a"
+  },
+  {
+   "t": 595.68,
+   "d": 2.56,
+   "text": "popular library called jquery and jquery"
+  },
+  {
+   "t": 598.24,
+   "d": 1.92,
+   "text": "could do all these amazing animations"
+  },
+  {
+   "t": 600.16,
+   "d": 1.52,
+   "text": "with like one function call could fade"
+  },
+  {
+   "t": 601.68,
+   "d": 1.6,
+   "text": "things out fade things in bounce things"
+  },
+  {
+   "t": 603.28,
+   "d": 2.0,
+   "text": "around change colors and i always"
+  },
+  {
+   "t": 605.28,
+   "d": 2.0,
+   "text": "thought that like wow that's a lot of"
+  },
+  {
+   "t": 607.28,
+   "d": 1.52,
+   "text": "code that has to be backing that because"
+  },
+  {
+   "t": 608.8,
+   "d": 1.92,
+   "text": "that's so complex and while doing this"
+  },
+  {
+   "t": 610.72,
+   "d": 1.28,
+   "text": "talk i realized"
+  },
+  {
+   "t": 612.0,
+   "d": 1.6,
+   "text": "um like if you're doing it especially in"
+  },
+  {
+   "t": 613.6,
+   "d": 2.08,
+   "text": "a dynamic language that's like 30 lines"
+  },
+  {
+   "t": 615.68,
+   "d": 1.84,
+   "text": "of code it's very very simple you just"
+  },
+  {
+   "t": 617.52,
+   "d": 2.32,
+   "text": "take a property on an object you look at"
+  },
+  {
+   "t": 619.84,
+   "d": 1.44,
+   "text": "a target you want to go to and you just"
+  },
+  {
+   "t": 621.28,
+   "d": 1.36,
+   "text": "slowly get to that target that's it"
+  },
+  {
+   "t": 622.64,
+   "d": 2.24,
+   "text": "that's animation and juice"
+  },
+  {
+   "t": 624.88,
+   "d": 2.32,
+   "text": "so that there's two uh there's lots of"
+  },
+  {
+   "t": 627.2,
+   "d": 2.56,
+   "text": "different types of animation uh easings"
+  },
+  {
+   "t": 629.76,
+   "d": 1.2,
+   "text": "that you can do that will get you"
+  },
+  {
+   "t": 630.96,
+   "d": 1.44,
+   "text": "between two values"
+  },
+  {
+   "t": 632.4,
+   "d": 2.56,
+   "text": "but the two i really like are linear and"
+  },
+  {
+   "t": 634.96,
+   "d": 2.48,
+   "text": "exponential so basically you just have"
+  },
+  {
+   "t": 637.44,
+   "d": 1.6,
+   "text": "some target you're trying to get to in"
+  },
+  {
+   "t": 639.04,
+   "d": 2.32,
+   "text": "some um starting position like let's say"
+  },
+  {
+   "t": 641.36,
+   "d": 1.92,
+   "text": "you're trying to move a character from"
+  },
+  {
+   "t": 643.28,
+   "d": 2.4,
+   "text": "tile a to tile b that's the delta of the"
+  },
+  {
+   "t": 645.68,
+   "d": 1.04,
+   "text": "distance between them and you're trying"
+  },
+  {
+   "t": 646.72,
+   "d": 1.76,
+   "text": "to get that down to zero and then over"
+  },
+  {
+   "t": 648.48,
+   "d": 1.04,
+   "text": "time you're just getting closer and"
+  },
+  {
+   "t": 649.52,
+   "d": 1.52,
+   "text": "closer and if it's linear you're going"
+  },
+  {
+   "t": 651.04,
+   "d": 2.08,
+   "text": "at a constant velocity and if it's"
+  },
+  {
+   "t": 653.12,
+   "d": 1.68,
+   "text": "exponential it looks more complicated"
+  },
+  {
+   "t": 654.8,
+   "d": 1.6,
+   "text": "but it's actually pretty easy to"
+  },
+  {
+   "t": 656.4,
+   "d": 1.76,
+   "text": "implement because all you do is like"
+  },
+  {
+   "t": 658.16,
+   "d": 1.84,
+   "text": "shave off percent of the delta every"
+  },
+  {
+   "t": 660.0,
+   "d": 2.4,
+   "text": "turn 10 10 or whatever value is"
+  },
+  {
+   "t": 662.4,
+   "d": 1.76,
+   "text": "appropriate and that turns out to look"
+  },
+  {
+   "t": 664.16,
+   "d": 1.28,
+   "text": "really pleasing to the eye because you"
+  },
+  {
+   "t": 665.44,
+   "d": 1.68,
+   "text": "go really fast towards the target"
+  },
+  {
+   "t": 667.12,
+   "d": 1.92,
+   "text": "initially and then you slow down as you"
+  },
+  {
+   "t": 669.04,
+   "d": 2.4,
+   "text": "get close"
+  },
+  {
+   "t": 671.44,
+   "d": 0.88,
+   "text": "so"
+  },
+  {
+   "t": 672.32,
+   "d": 2.8,
+   "text": "given all the information there's one uh"
+  },
+  {
+   "t": 675.12,
+   "d": 1.76,
+   "text": "caveat or one role that you absolutely"
+  },
+  {
+   "t": 676.88,
+   "d": 1.92,
+   "text": "must follow that is do not block the"
+  },
+  {
+   "t": 678.8,
+   "d": 2.48,
+   "text": "player from playing as fast as they want"
+  },
+  {
+   "t": 681.28,
+   "d": 2.96,
+   "text": "and when i was initially um discussing"
+  },
+  {
+   "t": 684.24,
+   "d": 0.88,
+   "text": "having"
+  },
+  {
+   "t": 685.12,
+   "d": 1.36,
+   "text": "this talk like i had a lot of people"
+  },
+  {
+   "t": 686.48,
+   "d": 1.84,
+   "text": "that thought like no no this is this is"
+  },
+  {
+   "t": 688.32,
+   "d": 1.92,
+   "text": "not a good idea or like i don't really"
+  },
+  {
+   "t": 690.24,
+   "d": 2.0,
+   "text": "like juice or whatever because in their"
+  },
+  {
+   "t": 692.24,
+   "d": 2.24,
+   "text": "mind and this is associated with juices"
+  },
+  {
+   "t": 694.48,
+   "d": 2.56,
+   "text": "is slow gameplay and i've heard that"
+  },
+  {
+   "t": 697.04,
+   "d": 1.44,
+   "text": "dungeons of dreadmore is one of the"
+  },
+  {
+   "t": 698.48,
+   "d": 1.36,
+   "text": "worst offenders although i did learn"
+  },
+  {
+   "t": 699.84,
+   "d": 1.36,
+   "text": "that you could speed up the animations"
+  },
+  {
+   "t": 701.2,
+   "d": 2.24,
+   "text": "quite a bit um it's like you press a"
+  },
+  {
+   "t": 703.44,
+   "d": 1.44,
+   "text": "button you wait for the animation press"
+  },
+  {
+   "t": 704.88,
+   "d": 1.28,
+   "text": "a button wait for the animation and the"
+  },
+  {
+   "t": 706.16,
+   "d": 1.52,
+   "text": "reason there's a lot of reasons for this"
+  },
+  {
+   "t": 707.68,
+   "d": 1.44,
+   "text": "but like none of them are really"
+  },
+  {
+   "t": 709.12,
+   "d": 2.4,
+   "text": "strictly necessary there's no reason"
+  },
+  {
+   "t": 711.52,
+   "d": 1.2,
+   "text": "at the end of the day that you should"
+  },
+  {
+   "t": 712.72,
+   "d": 2.32,
+   "text": "stop a traditional roguelike player from"
+  },
+  {
+   "t": 715.04,
+   "d": 1.76,
+   "text": "mashing the key and flying across the"
+  },
+  {
+   "t": 716.8,
+   "d": 1.2,
+   "text": "screen that's one of the coolest things"
+  },
+  {
+   "t": 718.0,
+   "d": 1.36,
+   "text": "that you can do and having that"
+  },
+  {
+   "t": 719.36,
+   "d": 1.84,
+   "text": "flexibility is is one of the staples of"
+  },
+  {
+   "t": 721.2,
+   "d": 2.4,
+   "text": "the genre so there's no need for that to"
+  },
+  {
+   "t": 723.6,
+   "d": 2.72,
+   "text": "block them from doing that"
+  },
+  {
+   "t": 726.32,
+   "d": 1.28,
+   "text": "there's one thing you should consider"
+  },
+  {
+   "t": 727.6,
+   "d": 1.44,
+   "text": "that will help with this when you're"
+  },
+  {
+   "t": 729.04,
+   "d": 1.92,
+   "text": "you're trying to do non-black blocking"
+  },
+  {
+   "t": 730.96,
+   "d": 1.84,
+   "text": "animations"
+  },
+  {
+   "t": 732.8,
+   "d": 3.12,
+   "text": "every animation should be um considerate"
+  },
+  {
+   "t": 735.92,
+   "d": 1.44,
+   "text": "of the time between frames and there's a"
+  },
+  {
+   "t": 737.36,
+   "d": 1.76,
+   "text": "lot of reasons for this one is just if"
+  },
+  {
+   "t": 739.12,
+   "d": 2.56,
+   "text": "you have a frame rate that's kind of"
+  },
+  {
+   "t": 741.68,
+   "d": 3.04,
+   "text": "choppy uh your animation will be choppy"
+  },
+  {
+   "t": 744.72,
+   "d": 2.0,
+   "text": "if you have like consistent animations"
+  },
+  {
+   "t": 746.72,
+   "d": 1.84,
+   "text": "that that always animate the same mount"
+  },
+  {
+   "t": 748.56,
+   "d": 1.44,
+   "text": "so if you if you animate a little bit"
+  },
+  {
+   "t": 750.0,
+   "d": 1.36,
+   "text": "more if it takes longer or a little bit"
+  },
+  {
+   "t": 751.36,
+   "d": 1.84,
+   "text": "less if it takes less time"
+  },
+  {
+   "t": 753.2,
+   "d": 1.36,
+   "text": "between frames that will be more"
+  },
+  {
+   "t": 754.56,
+   "d": 2.0,
+   "text": "appropriate so if you skip the frame"
+  },
+  {
+   "t": 756.56,
+   "d": 1.68,
+   "text": "your nets animation should basically"
+  },
+  {
+   "t": 758.24,
+   "d": 1.68,
+   "text": "animate twice as much as it normally"
+  },
+  {
+   "t": 759.92,
+   "d": 0.88,
+   "text": "would"
+  },
+  {
+   "t": 760.8,
+   "d": 1.6,
+   "text": "and the really cool thing and i don't"
+  },
+  {
+   "t": 762.4,
+   "d": 1.28,
+   "text": "think i've ever done this until this"
+  },
+  {
+   "t": 763.68,
+   "d": 1.76,
+   "text": "talk but it was it was amazing is that"
+  },
+  {
+   "t": 765.44,
+   "d": 2.08,
+   "text": "once you have all your animations uh"
+  },
+  {
+   "t": 767.52,
+   "d": 2.16,
+   "text": "using this time system you can control"
+  },
+  {
+   "t": 769.68,
+   "d": 2.32,
+   "text": "time and lie about it and you can either"
+  },
+  {
+   "t": 772.0,
+   "d": 1.68,
+   "text": "you can use that for debugging because a"
+  },
+  {
+   "t": 773.68,
+   "d": 0.96,
+   "text": "lot of times you'll look at these"
+  },
+  {
+   "t": 774.64,
+   "d": 1.2,
+   "text": "animations and they will look kind of"
+  },
+  {
+   "t": 775.84,
+   "d": 1.84,
+   "text": "off but you won't really know why so you"
+  },
+  {
+   "t": 777.68,
+   "d": 1.68,
+   "text": "can slow it down and really pinpoint"
+  },
+  {
+   "t": 779.36,
+   "d": 1.36,
+   "text": "what's going on or you can use it for"
+  },
+  {
+   "t": 780.72,
+   "d": 1.6,
+   "text": "dramatic effect"
+  },
+  {
+   "t": 782.32,
+   "d": 2.0,
+   "text": "or you can use it to speed up your"
+  },
+  {
+   "t": 784.32,
+   "d": 3.04,
+   "text": "animations for to not block the player"
+  },
+  {
+   "t": 787.36,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 788.16,
+   "d": 1.92,
+   "text": "with that the power of juice is yours"
+  },
+  {
+   "t": 790.08,
+   "d": 1.76,
+   "text": "the next thing i want to do is show a"
+  },
+  {
+   "t": 791.84,
+   "d": 2.8,
+   "text": "little demo uh i again this is playable"
+  },
+  {
+   "t": 794.64,
+   "d": 2.24,
+   "text": "at juicereturns.com i should say there"
+  },
+  {
+   "t": 796.88,
+   "d": 1.6,
+   "text": "is going to be sound and music at one"
+  },
+  {
+   "t": 798.48,
+   "d": 2.48,
+   "text": "point so um hopefully the"
+  },
+  {
+   "t": 800.96,
+   "d": 2.0,
+   "text": "the moderators can uh"
+  },
+  {
+   "t": 802.96,
+   "d": 2.24,
+   "text": "make that not super loud if it's super"
+  },
+  {
+   "t": 805.2,
+   "d": 1.92,
+   "text": "loud we'll we'll see when we get there"
+  },
+  {
+   "t": 807.12,
+   "d": 2.08,
+   "text": "um but anyway i've got a simple"
+  },
+  {
+   "t": 809.2,
+   "d": 2.08,
+   "text": "roguelike here a simple ascii roguelike"
+  },
+  {
+   "t": 811.28,
+   "d": 1.6,
+   "text": "and i want to"
+  },
+  {
+   "t": 812.88,
+   "d": 1.6,
+   "text": "see if i can juice it up a little bit so"
+  },
+  {
+   "t": 814.48,
+   "d": 2.32,
+   "text": "this game has like attack"
+  },
+  {
+   "t": 816.8,
+   "d": 2.08,
+   "text": "um it has projectiles even though"
+  },
+  {
+   "t": 818.88,
+   "d": 1.2,
+   "text": "they're not animated you don't really"
+  },
+  {
+   "t": 820.08,
+   "d": 2.16,
+   "text": "see what's going on doors you can walk"
+  },
+  {
+   "t": 822.24,
+   "d": 1.84,
+   "text": "around there's field of view it's based"
+  },
+  {
+   "t": 824.08,
+   "d": 1.28,
+   "text": "simple stuff right but like that's"
+  },
+  {
+   "t": 825.36,
+   "d": 2.56,
+   "text": "enough to make a small little game so"
+  },
+  {
+   "t": 827.92,
+   "d": 1.6,
+   "text": "the first thing that we want to do is"
+  },
+  {
+   "t": 829.52,
+   "d": 2.88,
+   "text": "that we want to"
+  },
+  {
+   "t": 832.4,
+   "d": 1.92,
+   "text": "these colors hopefully you're not"
+  },
+  {
+   "t": 834.32,
+   "d": 1.2,
+   "text": "agreeing with them they look kind of"
+  },
+  {
+   "t": 835.52,
+   "d": 2.4,
+   "text": "awful so we can just desaturate the"
+  },
+  {
+   "t": 837.92,
+   "d": 2.56,
+   "text": "colors and choose a better color palette"
+  },
+  {
+   "t": 840.48,
+   "d": 1.76,
+   "text": "so basically just take some time to"
+  },
+  {
+   "t": 842.24,
+   "d": 1.28,
+   "text": "think about your colors it'll look a lot"
+  },
+  {
+   "t": 843.52,
+   "d": 2.08,
+   "text": "nicer so a little comparison"
+  },
+  {
+   "t": 845.6,
+   "d": 2.0,
+   "text": "one and two i think that looks better"
+  },
+  {
+   "t": 847.6,
+   "d": 2.0,
+   "text": "very simple thing you can do it's just"
+  },
+  {
+   "t": 849.6,
+   "d": 1.52,
+   "text": "very subtle you can rotate the screen a"
+  },
+  {
+   "t": 851.12,
+   "d": 3.76,
+   "text": "little bit it makes it look less static"
+  },
+  {
+   "t": 855.2,
+   "d": 2.64,
+   "text": "you can um going back like this is what"
+  },
+  {
+   "t": 857.84,
+   "d": 2.4,
+   "text": "the like the this goblin here is attack"
+  },
+  {
+   "t": 860.24,
+   "d": 1.28,
+   "text": "is going to attack me and they walk"
+  },
+  {
+   "t": 861.52,
+   "d": 1.68,
+   "text": "towards me but they do it in a very"
+  },
+  {
+   "t": 863.2,
+   "d": 2.16,
+   "text": "jerky way because there's no animation"
+  },
+  {
+   "t": 865.36,
+   "d": 1.84,
+   "text": "so if you keep track of all the"
+  },
+  {
+   "t": 867.2,
+   "d": 1.68,
+   "text": "movements between tiles"
+  },
+  {
+   "t": 868.88,
+   "d": 2.32,
+   "text": "you can slowly animate toward each one"
+  },
+  {
+   "t": 871.2,
+   "d": 1.68,
+   "text": "of those and you want to keep track of"
+  },
+  {
+   "t": 872.88,
+   "d": 1.68,
+   "text": "them individually because if you do it"
+  },
+  {
+   "t": 874.56,
+   "d": 2.08,
+   "text": "all in one go and there's many movements"
+  },
+  {
+   "t": 876.64,
+   "d": 1.44,
+   "text": "and you animate all of them together"
+  },
+  {
+   "t": 878.08,
+   "d": 1.44,
+   "text": "like a monster going around a corner"
+  },
+  {
+   "t": 879.52,
+   "d": 2.24,
+   "text": "will go diagonally which you don't want"
+  },
+  {
+   "t": 881.76,
+   "d": 1.84,
+   "text": "but now this monster will just smoothly"
+  },
+  {
+   "t": 883.6,
+   "d": 2.32,
+   "text": "move towards me but there's one problem"
+  },
+  {
+   "t": 885.92,
+   "d": 2.8,
+   "text": "if i move around the camera is really"
+  },
+  {
+   "t": 888.72,
+   "d": 2.64,
+   "text": "jerky so we can fix that by considering"
+  },
+  {
+   "t": 891.36,
+   "d": 1.2,
+   "text": "the player's"
+  },
+  {
+   "t": 892.56,
+   "d": 1.44,
+   "text": "animation as well adding that to the"
+  },
+  {
+   "t": 894.0,
+   "d": 2.4,
+   "text": "camera and now the camera is smooth"
+  },
+  {
+   "t": 896.4,
+   "d": 1.68,
+   "text": "but there's one problem i have with that"
+  },
+  {
+   "t": 898.08,
+   "d": 1.92,
+   "text": "not a huge problem but it looks a little"
+  },
+  {
+   "t": 900.0,
+   "d": 2.8,
+   "text": "stiff so what we can do is we can slowly"
+  },
+  {
+   "t": 902.8,
+   "d": 1.76,
+   "text": "follow the camera as the player is"
+  },
+  {
+   "t": 904.56,
+   "d": 2.88,
+   "text": "moving around and it's very subtle but"
+  },
+  {
+   "t": 907.44,
+   "d": 4.04,
+   "text": "it doesn't feel quite as stiff"
+  },
+  {
+   "t": 912.24,
+   "d": 1.68,
+   "text": "this one's some of these techniques are"
+  },
+  {
+   "t": 913.92,
+   "d": 1.04,
+   "text": "not going to be appropriate for your"
+  },
+  {
+   "t": 914.96,
+   "d": 1.92,
+   "text": "game uh juice in general some of the"
+  },
+  {
+   "t": 916.88,
+   "d": 1.76,
+   "text": "techniques you may think oh they're this"
+  },
+  {
+   "t": 918.64,
+   "d": 1.68,
+   "text": "little too cartoony and too bouncy for"
+  },
+  {
+   "t": 920.32,
+   "d": 2.08,
+   "text": "my game if you're making a serious game"
+  },
+  {
+   "t": 922.4,
+   "d": 1.92,
+   "text": "and that's okay like take from this what"
+  },
+  {
+   "t": 924.32,
+   "d": 2.64,
+   "text": "you can uh in my game you literally"
+  },
+  {
+   "t": 926.96,
+   "d": 2.16,
+   "text": "drink blood off of the floor so it's a"
+  },
+  {
+   "t": 929.12,
+   "d": 1.76,
+   "text": "little bit um ridiculous and an"
+  },
+  {
+   "t": 930.88,
+   "d": 2.48,
+   "text": "appropriate fit for juice so in this you"
+  },
+  {
+   "t": 933.36,
+   "d": 2.16,
+   "text": "um when the character moves left or"
+  },
+  {
+   "t": 935.52,
+   "d": 2.0,
+   "text": "right they flip left or right and that"
+  },
+  {
+   "t": 937.52,
+   "d": 2.0,
+   "text": "might be uh not a good match for ascii"
+  },
+  {
+   "t": 939.52,
+   "d": 1.28,
+   "text": "that's up to you but like i think it"
+  },
+  {
+   "t": 940.8,
+   "d": 2.56,
+   "text": "would be a good match for ascii now if"
+  },
+  {
+   "t": 943.36,
+   "d": 1.6,
+   "text": "you want to make it go a little further"
+  },
+  {
+   "t": 944.96,
+   "d": 1.68,
+   "text": "you can animate it you're just this is"
+  },
+  {
+   "t": 946.64,
+   "d": 1.44,
+   "text": "just a scale thing changing the scale"
+  },
+  {
+   "t": 948.08,
+   "d": 2.32,
+   "text": "from one to negative one slowly uh at"
+  },
+  {
+   "t": 950.4,
+   "d": 1.52,
+   "text": "least in the library i used that's what"
+  },
+  {
+   "t": 951.92,
+   "d": 0.96,
+   "text": "it was"
+  },
+  {
+   "t": 952.88,
+   "d": 2.08,
+   "text": "kind of has a neat paper mario effect i"
+  },
+  {
+   "t": 954.96,
+   "d": 0.8,
+   "text": "think"
+  },
+  {
+   "t": 955.76,
+   "d": 2.8,
+   "text": "uh now this is really like one of the"
+  },
+  {
+   "t": 958.56,
+   "d": 1.52,
+   "text": "most important parts of the talk one of"
+  },
+  {
+   "t": 960.08,
+   "d": 2.0,
+   "text": "the things i got from absurdia is that"
+  },
+  {
+   "t": 962.08,
+   "d": 1.68,
+   "text": "like this is a very simple thing but if"
+  },
+  {
+   "t": 963.76,
+   "d": 1.52,
+   "text": "you just add a little bit of bouncing to"
+  },
+  {
+   "t": 965.28,
+   "d": 2.32,
+   "text": "the game uh it makes it feel really"
+  },
+  {
+   "t": 967.6,
+   "d": 2.08,
+   "text": "great so the character"
+  },
+  {
+   "t": 969.68,
+   "d": 1.68,
+   "text": "this is basically a"
+  },
+  {
+   "t": 971.36,
+   "d": 2.08,
+   "text": "principle a classic animation principle"
+  },
+  {
+   "t": 973.44,
+   "d": 2.4,
+   "text": "i i think there's it's called the 12 uh"
+  },
+  {
+   "t": 975.84,
+   "d": 1.6,
+   "text": "principles of animation from disney or"
+  },
+  {
+   "t": 977.44,
+   "d": 1.44,
+   "text": "whatever the first one is squash and"
+  },
+  {
+   "t": 978.88,
+   "d": 1.84,
+   "text": "stretch and and basically what that"
+  },
+  {
+   "t": 980.72,
+   "d": 1.12,
+   "text": "means is"
+  },
+  {
+   "t": 981.84,
+   "d": 1.52,
+   "text": "it's very exaggerated but when your"
+  },
+  {
+   "t": 983.36,
+   "d": 1.52,
+   "text": "character goes to jump the first thing"
+  },
+  {
+   "t": 984.88,
+   "d": 2.0,
+   "text": "they do is they crouch down so they get"
+  },
+  {
+   "t": 986.88,
+   "d": 2.32,
+   "text": "short and inversely they're going to get"
+  },
+  {
+   "t": 989.2,
+   "d": 2.48,
+   "text": "wide then they go to jump they get tall"
+  },
+  {
+   "t": 991.68,
+   "d": 2.48,
+   "text": "they get skinny and then it keeps going"
+  },
+  {
+   "t": 994.16,
+   "d": 2.08,
+   "text": "like that kind of in a loop and and what"
+  },
+  {
+   "t": 996.24,
+   "d": 1.6,
+   "text": "you can do is you can continue having"
+  },
+  {
+   "t": 997.84,
+   "d": 1.76,
+   "text": "them bounce even after"
+  },
+  {
+   "t": 999.6,
+   "d": 2.0,
+   "text": "even after they like land on the tile"
+  },
+  {
+   "t": 1001.6,
+   "d": 1.92,
+   "text": "well there's no hop there's no vertical"
+  },
+  {
+   "t": 1003.52,
+   "d": 1.76,
+   "text": "movement now but even without that i"
+  },
+  {
+   "t": 1005.28,
+   "d": 2.16,
+   "text": "think this still looks okay"
+  },
+  {
+   "t": 1007.44,
+   "d": 1.84,
+   "text": "now we can add a little hop"
+  },
+  {
+   "t": 1009.28,
+   "d": 2.56,
+   "text": "and it really comes together and we'll"
+  },
+  {
+   "t": 1011.84,
+   "d": 1.36,
+   "text": "slow that down i've got some time"
+  },
+  {
+   "t": 1013.2,
+   "d": 1.68,
+   "text": "controls on this so we'll look at it at"
+  },
+  {
+   "t": 1014.88,
+   "d": 1.84,
+   "text": "like 1 8 speed"
+  },
+  {
+   "t": 1016.72,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 1017.52,
+   "d": 1.68,
+   "text": "yeah maybe we'll slow it down even more"
+  },
+  {
+   "t": 1019.2,
+   "d": 1.6,
+   "text": "and do that again"
+  },
+  {
+   "t": 1020.8,
+   "d": 1.92,
+   "text": "but basically the character first you"
+  },
+  {
+   "t": 1022.72,
+   "d": 2.08,
+   "text": "look for them getting short then tall"
+  },
+  {
+   "t": 1024.8,
+   "d": 1.84,
+   "text": "and short then kind of bouncing over and"
+  },
+  {
+   "t": 1026.64,
+   "d": 2.64,
+   "text": "over again and and the the z position is"
+  },
+  {
+   "t": 1029.28,
+   "d": 1.92,
+   "text": "just handled by a parabola that's that's"
+  },
+  {
+   "t": 1031.2,
+   "d": 1.92,
+   "text": "very simple and i think this this these"
+  },
+  {
+   "t": 1033.12,
+   "d": 1.92,
+   "text": "two techniques together will do a lot"
+  },
+  {
+   "t": 1035.04,
+   "d": 2.08,
+   "text": "for your game"
+  },
+  {
+   "t": 1037.12,
+   "d": 1.76,
+   "text": "okay so"
+  },
+  {
+   "t": 1038.88,
+   "d": 2.16,
+   "text": "this one is also very subtle uh when"
+  },
+  {
+   "t": 1041.04,
+   "d": 2.08,
+   "text": "your character moves they there's a"
+  },
+  {
+   "t": 1043.12,
+   "d": 2.64,
+   "text": "slight lean to their movement uh let me"
+  },
+  {
+   "t": 1045.76,
+   "d": 1.2,
+   "text": "slow that down"
+  },
+  {
+   "t": 1046.96,
+   "d": 2.96,
+   "text": "uh and move once over but like instead"
+  },
+  {
+   "t": 1049.92,
+   "d": 1.76,
+   "text": "of just being flat they just lean in the"
+  },
+  {
+   "t": 1051.68,
+   "d": 1.68,
+   "text": "direction that they're moving"
+  },
+  {
+   "t": 1053.36,
+   "d": 1.52,
+   "text": "you can do it a little bit more dramatic"
+  },
+  {
+   "t": 1054.88,
+   "d": 1.68,
+   "text": "if you want"
+  },
+  {
+   "t": 1056.56,
+   "d": 2.0,
+   "text": "this one is interesting is is that if"
+  },
+  {
+   "t": 1058.56,
+   "d": 1.36,
+   "text": "you jump in real life you don't"
+  },
+  {
+   "t": 1059.92,
+   "d": 2.08,
+   "text": "instantly like go in the direction that"
+  },
+  {
+   "t": 1062.0,
+   "d": 1.6,
+   "text": "you want first you have to crouch down"
+  },
+  {
+   "t": 1063.6,
+   "d": 1.12,
+   "text": "you have to launch yourself through the"
+  },
+  {
+   "t": 1064.72,
+   "d": 1.36,
+   "text": "air so that's what this kind of"
+  },
+  {
+   "t": 1066.08,
+   "d": 1.6,
+   "text": "represents it's also a technique of"
+  },
+  {
+   "t": 1067.68,
+   "d": 2.4,
+   "text": "animation uh called anticipation i"
+  },
+  {
+   "t": 1070.08,
+   "d": 0.96,
+   "text": "believe"
+  },
+  {
+   "t": 1071.04,
+   "d": 1.76,
+   "text": "so in this case"
+  },
+  {
+   "t": 1072.8,
+   "d": 2.24,
+   "text": "the character before they actually move"
+  },
+  {
+   "t": 1075.04,
+   "d": 2.4,
+   "text": "to the next tile there's a small delay"
+  },
+  {
+   "t": 1077.44,
+   "d": 1.12,
+   "text": "and that"
+  },
+  {
+   "t": 1078.56,
+   "d": 1.2,
+   "text": "once i speed it up i think you'll kind"
+  },
+  {
+   "t": 1079.76,
+   "d": 1.36,
+   "text": "of notice it gives everything a very"
+  },
+  {
+   "t": 1081.12,
+   "d": 2.4,
+   "text": "like sticky like bounce really like"
+  },
+  {
+   "t": 1083.52,
+   "d": 2.16,
+   "text": "bouncy fill where things like pop"
+  },
+  {
+   "t": 1085.68,
+   "d": 2.16,
+   "text": "between tiles depending on how um how"
+  },
+  {
+   "t": 1087.84,
+   "d": 2.56,
+   "text": "high you make the the delay so look look"
+  },
+  {
+   "t": 1090.4,
+   "d": 4.04,
+   "text": "at that in in real time"
+  },
+  {
+   "t": 1095.04,
+   "d": 1.52,
+   "text": "a little subtle but it definitely makes"
+  },
+  {
+   "t": 1096.56,
+   "d": 2.08,
+   "text": "a big difference now here uh yeah going"
+  },
+  {
+   "t": 1098.64,
+   "d": 2.24,
+   "text": "back to the the previous uh slide"
+  },
+  {
+   "t": 1100.88,
+   "d": 1.36,
+   "text": "there's a problem with this this goes"
+  },
+  {
+   "t": 1102.24,
+   "d": 2.0,
+   "text": "back to the the blocking animation if i"
+  },
+  {
+   "t": 1104.24,
+   "d": 2.64,
+   "text": "hit right twice my character only moves"
+  },
+  {
+   "t": 1106.88,
+   "d": 2.32,
+   "text": "once and that the reason maybe i don't i"
+  },
+  {
+   "t": 1109.2,
+   "d": 1.28,
+   "text": "want to let my animation play out"
+  },
+  {
+   "t": 1110.48,
+   "d": 1.68,
+   "text": "because i made a beautiful animation"
+  },
+  {
+   "t": 1112.16,
+   "d": 1.44,
+   "text": "well i'm telling you not to do that"
+  },
+  {
+   "t": 1113.6,
+   "d": 1.44,
+   "text": "basically i i don't recommend doing that"
+  },
+  {
+   "t": 1115.04,
+   "d": 2.0,
+   "text": "let the player play as fast as they want"
+  },
+  {
+   "t": 1117.04,
+   "d": 2.4,
+   "text": "so basically if i hit left twice i move"
+  },
+  {
+   "t": 1119.44,
+   "d": 2.16,
+   "text": "left twice it's very simple right and"
+  },
+  {
+   "t": 1121.6,
+   "d": 3.36,
+   "text": "now um i can just run across the screen"
+  },
+  {
+   "t": 1124.96,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 1125.92,
+   "d": 2.56,
+   "text": "the rotation is a little silly um"
+  },
+  {
+   "t": 1128.48,
+   "d": 2.56,
+   "text": "wow it's very silly but"
+  },
+  {
+   "t": 1131.04,
+   "d": 1.44,
+   "text": "but i can run as fast as i want across"
+  },
+  {
+   "t": 1132.48,
+   "d": 1.12,
+   "text": "the screen the only problem is i have to"
+  },
+  {
+   "t": 1133.6,
+   "d": 1.6,
+   "text": "wait for the animation to catch up"
+  },
+  {
+   "t": 1135.2,
+   "d": 1.6,
+   "text": "because it's still playing at a constant"
+  },
+  {
+   "t": 1136.8,
+   "d": 2.88,
+   "text": "speed so what i do to solve that is i"
+  },
+  {
+   "t": 1139.68,
+   "d": 2.16,
+   "text": "just double for every outstanding"
+  },
+  {
+   "t": 1141.84,
+   "d": 2.24,
+   "text": "animation i double the speed and it gets"
+  },
+  {
+   "t": 1144.08,
+   "d": 2.88,
+   "text": "pretty ridiculously fast um but within"
+  },
+  {
+   "t": 1146.96,
+   "d": 1.44,
+   "text": "like about twice the time it would take"
+  },
+  {
+   "t": 1148.4,
+   "d": 2.32,
+   "text": "to normally move i can move a dozen"
+  },
+  {
+   "t": 1150.72,
+   "d": 1.52,
+   "text": "piles across the screen and play as fast"
+  },
+  {
+   "t": 1152.24,
+   "d": 2.16,
+   "text": "as i want"
+  },
+  {
+   "t": 1154.4,
+   "d": 2.4,
+   "text": "uh this is very just a little fun thing"
+  },
+  {
+   "t": 1156.8,
+   "d": 1.36,
+   "text": "where i go into this room and there's"
+  },
+  {
+   "t": 1158.16,
+   "d": 1.84,
+   "text": "some trees and they bounce around and"
+  },
+  {
+   "t": 1160.0,
+   "d": 3.28,
+   "text": "shake whenever i walk through them"
+  },
+  {
+   "t": 1163.28,
+   "d": 2.24,
+   "text": "now the combat so far has been very"
+  },
+  {
+   "t": 1165.52,
+   "d": 1.84,
+   "text": "static and ugly so what we're going to"
+  },
+  {
+   "t": 1167.36,
+   "d": 1.92,
+   "text": "do we're just going to add a little bump"
+  },
+  {
+   "t": 1169.28,
+   "d": 1.76,
+   "text": "attack where the characters appear to"
+  },
+  {
+   "t": 1171.04,
+   "d": 2.16,
+   "text": "move into each other's tile uh when they"
+  },
+  {
+   "t": 1173.2,
+   "d": 1.76,
+   "text": "attack and that's pretty effective i"
+  },
+  {
+   "t": 1174.96,
+   "d": 1.36,
+   "text": "think"
+  },
+  {
+   "t": 1176.32,
+   "d": 1.6,
+   "text": "now here's another like what i would"
+  },
+  {
+   "t": 1177.92,
+   "d": 0.96,
+   "text": "consider"
+  },
+  {
+   "t": 1178.88,
+   "d": 1.84,
+   "text": "core juice technique screen shake you"
+  },
+  {
+   "t": 1180.72,
+   "d": 1.68,
+   "text": "saw it in many of the examples it's"
+  },
+  {
+   "t": 1182.4,
+   "d": 2.0,
+   "text": "really important um"
+  },
+  {
+   "t": 1184.4,
+   "d": 2.16,
+   "text": "all you're doing is it's changing the x"
+  },
+  {
+   "t": 1186.56,
+   "d": 2.24,
+   "text": "y values randomly and"
+  },
+  {
+   "t": 1188.8,
+   "d": 1.36,
+   "text": "you might not always notice that if"
+  },
+  {
+   "t": 1190.16,
+   "d": 2.08,
+   "text": "you're playing a game but it's actually"
+  },
+  {
+   "t": 1192.24,
+   "d": 1.36,
+   "text": "like really"
+  },
+  {
+   "t": 1193.6,
+   "d": 2.24,
+   "text": "really makes the text feel much better"
+  },
+  {
+   "t": 1195.84,
+   "d": 1.36,
+   "text": "now here's another"
+  },
+  {
+   "t": 1197.2,
+   "d": 0.96,
+   "text": "i'm going to show you a few different"
+  },
+  {
+   "t": 1198.16,
+   "d": 2.56,
+   "text": "types of screen shake uh this one i was"
+  },
+  {
+   "t": 1200.72,
+   "d": 1.6,
+   "text": "inspired by a crypt of the necrodancer"
+  },
+  {
+   "t": 1202.32,
+   "d": 1.84,
+   "text": "because i was in golden chrome hotel i"
+  },
+  {
+   "t": 1204.16,
+   "d": 1.68,
+   "text": "thought my attacks didn't feel very"
+  },
+  {
+   "t": 1205.84,
+   "d": 2.48,
+   "text": "satisfying and i don't know if this is"
+  },
+  {
+   "t": 1208.32,
+   "d": 1.36,
+   "text": "actually implemented this way encrypted"
+  },
+  {
+   "t": 1209.68,
+   "d": 1.2,
+   "text": "the necrodancer i kind of it kind of"
+  },
+  {
+   "t": 1210.88,
+   "d": 1.68,
+   "text": "felt like it was but what i do is"
+  },
+  {
+   "t": 1212.56,
+   "d": 2.16,
+   "text": "instead of randomly moving uh"
+  },
+  {
+   "t": 1214.72,
+   "d": 2.24,
+   "text": "the camera all around i just move in one"
+  },
+  {
+   "t": 1216.96,
+   "d": 2.48,
+   "text": "given direction of the enemy and it kind"
+  },
+  {
+   "t": 1219.44,
+   "d": 2.0,
+   "text": "of feels like you're like you're leaning"
+  },
+  {
+   "t": 1221.44,
+   "d": 2.64,
+   "text": "into the attack and coming back um look"
+  },
+  {
+   "t": 1224.08,
+   "d": 1.44,
+   "text": "at that again"
+  },
+  {
+   "t": 1225.52,
+   "d": 2.08,
+   "text": "like this i think i think that feels"
+  },
+  {
+   "t": 1227.6,
+   "d": 1.68,
+   "text": "really good at least in my game um i'm"
+  },
+  {
+   "t": 1229.28,
+   "d": 2.0,
+   "text": "liking it here's kind of a funny thing i"
+  },
+  {
+   "t": 1231.28,
+   "d": 1.12,
+   "text": "don't know this has ever been"
+  },
+  {
+   "t": 1232.4,
+   "d": 2.24,
+   "text": "implemented anywhere but like uh"
+  },
+  {
+   "t": 1234.64,
+   "d": 1.52,
+   "text": "whenever the enemy attacks you the"
+  },
+  {
+   "t": 1236.16,
+   "d": 1.52,
+   "text": "camera rotates back and forth it's kind"
+  },
+  {
+   "t": 1237.68,
+   "d": 1.6,
+   "text": "of like you're getting slapped around so"
+  },
+  {
+   "t": 1239.28,
+   "d": 2.64,
+   "text": "that's that's kind of fun"
+  },
+  {
+   "t": 1241.92,
+   "d": 1.44,
+   "text": "and then we'll just add a little in"
+  },
+  {
+   "t": 1243.36,
+   "d": 1.6,
+   "text": "addition to that's why we'll actually"
+  },
+  {
+   "t": 1244.96,
+   "d": 1.52,
+   "text": "change the rotation and shake the"
+  },
+  {
+   "t": 1246.48,
+   "d": 3.36,
+   "text": "rotation whenever we get hit"
+  },
+  {
+   "t": 1250.96,
+   "d": 1.84,
+   "text": "now in addition classic video game trope"
+  },
+  {
+   "t": 1252.8,
+   "d": 1.6,
+   "text": "when your character gets hit they flash"
+  },
+  {
+   "t": 1254.4,
+   "d": 2.32,
+   "text": "white"
+  },
+  {
+   "t": 1256.88,
+   "d": 1.76,
+   "text": "and every game regardless of what you're"
+  },
+  {
+   "t": 1258.64,
+   "d": 1.36,
+   "text": "doing with juice you need to have damage"
+  },
+  {
+   "t": 1260.0,
+   "d": 2.72,
+   "text": "numbers so i come and attack enemies and"
+  },
+  {
+   "t": 1262.72,
+   "d": 1.6,
+   "text": "and one fun thing is to if there's a"
+  },
+  {
+   "t": 1264.32,
+   "d": 1.84,
+   "text": "crit i just like to double the size or"
+  },
+  {
+   "t": 1266.16,
+   "d": 3.04,
+   "text": "make it more prominent"
+  },
+  {
+   "t": 1269.44,
+   "d": 2.08,
+   "text": "here i'm using the same animation system"
+  },
+  {
+   "t": 1271.52,
+   "d": 1.6,
+   "text": "i use for the monsters moving around to"
+  },
+  {
+   "t": 1273.12,
+   "d": 2.48,
+   "text": "have a projectile move through the air"
+  },
+  {
+   "t": 1275.6,
+   "d": 2.16,
+   "text": "and get animated between two tiles and"
+  },
+  {
+   "t": 1277.76,
+   "d": 2.72,
+   "text": "then also um i'm like rotating it so it"
+  },
+  {
+   "t": 1280.48,
+   "d": 3.12,
+   "text": "goes in the direction of the enemy"
+  },
+  {
+   "t": 1283.6,
+   "d": 1.6,
+   "text": "now so i got this from another talk"
+  },
+  {
+   "t": 1285.2,
+   "d": 2.0,
+   "text": "which i'll link later but basically"
+  },
+  {
+   "t": 1287.2,
+   "d": 2.08,
+   "text": "one cool juice thing you can do is just"
+  },
+  {
+   "t": 1289.28,
+   "d": 2.56,
+   "text": "have the player's actions have more of"
+  },
+  {
+   "t": 1291.84,
+   "d": 1.76,
+   "text": "an impact on the world or be more"
+  },
+  {
+   "t": 1293.6,
+   "d": 2.0,
+   "text": "visibly present so i mean if the"
+  },
+  {
+   "t": 1295.6,
+   "d": 1.28,
+   "text": "character is running around this dungeon"
+  },
+  {
+   "t": 1296.88,
+   "d": 1.84,
+   "text": "and attacking everything like shouldn't"
+  },
+  {
+   "t": 1298.72,
+   "d": 1.44,
+   "text": "there be some evidence of what they're"
+  },
+  {
+   "t": 1300.16,
+   "d": 1.44,
+   "text": "doing so in this case i have i have"
+  },
+  {
+   "t": 1301.6,
+   "d": 1.68,
+   "text": "little corpses"
+  },
+  {
+   "t": 1303.28,
+   "d": 1.6,
+   "text": "oddly i've made it so you have to attack"
+  },
+  {
+   "t": 1304.88,
+   "d": 1.2,
+   "text": "the corpse to walk through it and then"
+  },
+  {
+   "t": 1306.08,
+   "d": 1.12,
+   "text": "it's kind of just in the background"
+  },
+  {
+   "t": 1307.2,
+   "d": 1.52,
+   "text": "don't know if that makes any sense but"
+  },
+  {
+   "t": 1308.72,
+   "d": 2.0,
+   "text": "it's kind of fun"
+  },
+  {
+   "t": 1310.72,
+   "d": 1.28,
+   "text": "now why don't we make it a little bit"
+  },
+  {
+   "t": 1312.0,
+   "d": 1.84,
+   "text": "more ridiculous and have enemies fly"
+  },
+  {
+   "t": 1313.84,
+   "d": 2.32,
+   "text": "through the air um whenever you attack"
+  },
+  {
+   "t": 1316.16,
+   "d": 2.32,
+   "text": "them so"
+  },
+  {
+   "t": 1318.48,
+   "d": 2.88,
+   "text": "all right one more time"
+  },
+  {
+   "t": 1322.0,
+   "d": 2.08,
+   "text": "yeah that's kind of fun right"
+  },
+  {
+   "t": 1324.08,
+   "d": 1.6,
+   "text": "all you have to do is have the animation"
+  },
+  {
+   "t": 1325.68,
+   "d": 1.92,
+   "text": "but add some rotation to that"
+  },
+  {
+   "t": 1327.6,
+   "d": 1.76,
+   "text": "now um here's where i'm going to have"
+  },
+  {
+   "t": 1329.36,
+   "d": 2.4,
+   "text": "some sound and i i have no idea how loud"
+  },
+  {
+   "t": 1331.76,
+   "d": 2.96,
+   "text": "it's going to um it's going to sound so"
+  },
+  {
+   "t": 1334.72,
+   "d": 2.24,
+   "text": "just let me know if that's ridiculously"
+  },
+  {
+   "t": 1336.96,
+   "d": 2.24,
+   "text": "quiet or loud and then i have some music"
+  },
+  {
+   "t": 1339.2,
+   "d": 2.24,
+   "text": "coming up also so i have sounds sounds"
+  },
+  {
+   "t": 1341.44,
+   "d": 2.8,
+   "text": "are a great juice thing because you know"
+  },
+  {
+   "t": 1344.24,
+   "d": 1.28,
+   "text": "they're not hard to make there's free"
+  },
+  {
+   "t": 1345.52,
+   "d": 2.32,
+   "text": "sounds everywhere you can use uh"
+  },
+  {
+   "t": 1347.84,
+   "d": 1.92,
+   "text": "a program called bfet sir"
+  },
+  {
+   "t": 1349.76,
+   "d": 1.6,
+   "text": "um to make your own"
+  },
+  {
+   "t": 1351.36,
+   "d": 2.24,
+   "text": "uh i added a little drip sound for the"
+  },
+  {
+   "t": 1353.6,
+   "d": 1.76,
+   "text": "movement which is kind of just funny for"
+  },
+  {
+   "t": 1355.36,
+   "d": 2.72,
+   "text": "a like a really bouncy game"
+  },
+  {
+   "t": 1358.08,
+   "d": 0.96,
+   "text": "oh"
+  },
+  {
+   "t": 1359.04,
+   "d": 1.92,
+   "text": "how can i forget uh you got to have some"
+  },
+  {
+   "t": 1360.96,
+   "d": 2.56,
+   "text": "qp sounds if you're going to"
+  },
+  {
+   "t": 1363.52,
+   "d": 2.72,
+   "text": "have a gun"
+  },
+  {
+   "t": 1366.24,
+   "d": 1.52,
+   "text": "there is uh here's a mechanic like i"
+  },
+  {
+   "t": 1367.76,
+   "d": 1.92,
+   "text": "mentioned i just stole this from jupiter"
+  },
+  {
+   "t": 1369.68,
+   "d": 1.12,
+   "text": "because i think it's the most amazing"
+  },
+  {
+   "t": 1370.8,
+   "d": 1.76,
+   "text": "thing and it's probably been around for"
+  },
+  {
+   "t": 1372.56,
+   "d": 1.84,
+   "text": "ages it was probably in doom rl as well"
+  },
+  {
+   "t": 1374.4,
+   "d": 2.32,
+   "text": "but you attack a monster and then you"
+  },
+  {
+   "t": 1376.72,
+   "d": 2.24,
+   "text": "have to individually reload your bullets"
+  },
+  {
+   "t": 1378.96,
+   "d": 2.16,
+   "text": "and it feels really satisfying so it's"
+  },
+  {
+   "t": 1381.12,
+   "d": 1.6,
+   "text": "just an example where a mechanic can be"
+  },
+  {
+   "t": 1382.72,
+   "d": 1.28,
+   "text": "juiced too"
+  },
+  {
+   "t": 1384.0,
+   "d": 1.92,
+   "text": "uh and then if something important"
+  },
+  {
+   "t": 1385.92,
+   "d": 1.6,
+   "text": "happens you want a little bit of drama"
+  },
+  {
+   "t": 1387.52,
+   "d": 1.84,
+   "text": "in your game so my character if they get"
+  },
+  {
+   "t": 1389.36,
+   "d": 1.52,
+   "text": "killed"
+  },
+  {
+   "t": 1390.88,
+   "d": 1.6,
+   "text": "like fly through the air and there's"
+  },
+  {
+   "t": 1392.48,
+   "d": 2.17,
+   "text": "some sad music and a game over screen"
+  },
+  {
+   "t": 1394.65,
+   "d": 1.75,
+   "text": "[Music]"
+  },
+  {
+   "t": 1396.4,
+   "d": 2.88,
+   "text": "uh now okay so going back real quick"
+  },
+  {
+   "t": 1399.28,
+   "d": 1.2,
+   "text": "at some point you're gonna have to make"
+  },
+  {
+   "t": 1400.48,
+   "d": 1.2,
+   "text": "a decision if you're adding juice to"
+  },
+  {
+   "t": 1401.68,
+   "d": 1.6,
+   "text": "your game like what's in good taste and"
+  },
+  {
+   "t": 1403.28,
+   "d": 1.12,
+   "text": "what's in bad taste and what's an"
+  },
+  {
+   "t": 1404.4,
+   "d": 2.0,
+   "text": "appropriate fit for my game"
+  },
+  {
+   "t": 1406.4,
+   "d": 2.16,
+   "text": "let's forget all that for now and go way"
+  },
+  {
+   "t": 1408.56,
+   "d": 2.24,
+   "text": "beyond bad taste and just continue"
+  },
+  {
+   "t": 1410.8,
+   "d": 2.16,
+   "text": "adding things because why not it's fun"
+  },
+  {
+   "t": 1412.96,
+   "d": 2.08,
+   "text": "it's a talk about juice so in this i'm"
+  },
+  {
+   "t": 1415.04,
+   "d": 1.36,
+   "text": "i've just done something ridiculous"
+  },
+  {
+   "t": 1416.4,
+   "d": 1.84,
+   "text": "where i'm like pushing the walls away"
+  },
+  {
+   "t": 1418.24,
+   "d": 2.72,
+   "text": "from the character and um"
+  },
+  {
+   "t": 1420.96,
+   "d": 1.76,
+   "text": "i don't know why i'm doing that but um"
+  },
+  {
+   "t": 1422.72,
+   "d": 2.56,
+   "text": "it looks it's just fun and when also"
+  },
+  {
+   "t": 1425.28,
+   "d": 2.0,
+   "text": "whenever you see new tiles they kind of"
+  },
+  {
+   "t": 1427.28,
+   "d": 1.6,
+   "text": "fly in from off screen and there's a"
+  },
+  {
+   "t": 1428.88,
+   "d": 1.2,
+   "text": "little bit of animation there and it"
+  },
+  {
+   "t": 1430.08,
+   "d": 2.56,
+   "text": "just makes it really fun to uh just go"
+  },
+  {
+   "t": 1432.64,
+   "d": 1.52,
+   "text": "around the level"
+  },
+  {
+   "t": 1434.16,
+   "d": 2.64,
+   "text": "and i'm pew pew pewing a little bit so"
+  },
+  {
+   "t": 1436.8,
+   "d": 1.04,
+   "text": "okay and"
+  },
+  {
+   "t": 1437.84,
+   "d": 1.52,
+   "text": "my favorite part about this is when you"
+  },
+  {
+   "t": 1439.36,
+   "d": 1.2,
+   "text": "walk through"
+  },
+  {
+   "t": 1440.56,
+   "d": 1.6,
+   "text": "uh a hallway it looks like you're like"
+  },
+  {
+   "t": 1442.16,
+   "d": 1.52,
+   "text": "climbing through the intestines of a"
+  },
+  {
+   "t": 1443.68,
+   "d": 1.6,
+   "text": "large beast and it's just a little"
+  },
+  {
+   "t": 1445.28,
+   "d": 1.76,
+   "text": "ridiculous okay"
+  },
+  {
+   "t": 1447.04,
+   "d": 1.76,
+   "text": "um we'll add some music again please"
+  },
+  {
+   "t": 1448.8,
+   "d": 2.0,
+   "text": "tell me this is too loud if you're doing"
+  },
+  {
+   "t": 1450.8,
+   "d": 1.28,
+   "text": "a roguelike you should probably have"
+  },
+  {
+   "t": 1452.08,
+   "d": 1.52,
+   "text": "slow music but the player can really"
+  },
+  {
+   "t": 1453.6,
+   "d": 1.52,
+   "text": "take their time and make decisions but"
+  },
+  {
+   "t": 1455.12,
+   "d": 1.68,
+   "text": "like you know you don't have to go that"
+  },
+  {
+   "t": 1456.8,
+   "d": 2.24,
+   "text": "way you can have a fast-paced game"
+  },
+  {
+   "t": 1459.04,
+   "d": 1.52,
+   "text": "so"
+  },
+  {
+   "t": 1460.56,
+   "d": 1.52,
+   "text": "add some you know let's have some juicy"
+  },
+  {
+   "t": 1462.08,
+   "d": 2.32,
+   "text": "music"
+  },
+  {
+   "t": 1464.48,
+   "d": 2.64,
+   "text": "uh now let's just get totally wild and"
+  },
+  {
+   "t": 1467.12,
+   "d": 1.68,
+   "text": "just start bouncing everything for no"
+  },
+  {
+   "t": 1468.8,
+   "d": 1.92,
+   "text": "reason even the even the corpses are"
+  },
+  {
+   "t": 1470.72,
+   "d": 1.52,
+   "text": "gonna bounce right this doesn't make"
+  },
+  {
+   "t": 1472.24,
+   "d": 2.72,
+   "text": "sense but like we're having fun"
+  },
+  {
+   "t": 1474.96,
+   "d": 1.6,
+   "text": "even the trees are bouncing around we're"
+  },
+  {
+   "t": 1476.56,
+   "d": 1.44,
+   "text": "all yeah like we're all having a good"
+  },
+  {
+   "t": 1478.0,
+   "d": 0.88,
+   "text": "time"
+  },
+  {
+   "t": 1478.88,
+   "d": 2.16,
+   "text": "uh one more slide and there's a warning"
+  },
+  {
+   "t": 1481.04,
+   "d": 2.48,
+   "text": "that this has uh some flashing colors"
+  },
+  {
+   "t": 1483.52,
+   "d": 1.44,
+   "text": "but we just want to go as wild as"
+  },
+  {
+   "t": 1484.96,
+   "d": 2.4,
+   "text": "possible uh and it may make you nauseous"
+  },
+  {
+   "t": 1487.36,
+   "d": 2.88,
+   "text": "if you get seasick easily or whatever um"
+  },
+  {
+   "t": 1490.24,
+   "d": 2.56,
+   "text": "so just a warning i'm gonna change now"
+  },
+  {
+   "t": 1492.8,
+   "d": 2.8,
+   "text": "uh yeah so now i've got like"
+  },
+  {
+   "t": 1495.6,
+   "d": 1.6,
+   "text": "the whole thing it's like pulsating and"
+  },
+  {
+   "t": 1497.2,
+   "d": 1.68,
+   "text": "there's colors and"
+  },
+  {
+   "t": 1498.88,
+   "d": 3.36,
+   "text": "um and"
+  },
+  {
+   "t": 1502.24,
+   "d": 1.6,
+   "text": "like yeah maybe this is too ridiculous"
+  },
+  {
+   "t": 1503.84,
+   "d": 2.16,
+   "text": "for your game but like i had fun making"
+  },
+  {
+   "t": 1506.0,
+   "d": 2.08,
+   "text": "this"
+  },
+  {
+   "t": 1508.08,
+   "d": 2.72,
+   "text": "okay that that's it that's all i have um"
+  },
+  {
+   "t": 1510.8,
+   "d": 1.52,
+   "text": "just a couple more slides for for"
+  },
+  {
+   "t": 1512.32,
+   "d": 2.0,
+   "text": "references but this is juice essentially"
+  },
+  {
+   "t": 1514.32,
+   "d": 1.12,
+   "text": "i hope you can"
+  },
+  {
+   "t": 1515.44,
+   "d": 1.2,
+   "text": "either if you're a developer that you"
+  },
+  {
+   "t": 1516.64,
+   "d": 1.68,
+   "text": "can use these techniques or if you're a"
+  },
+  {
+   "t": 1518.32,
+   "d": 1.36,
+   "text": "player maybe you can recognize some of"
+  },
+  {
+   "t": 1519.68,
+   "d": 1.12,
+   "text": "the techniques in the games that you"
+  },
+  {
+   "t": 1520.8,
+   "d": 1.76,
+   "text": "play"
+  },
+  {
+   "t": 1522.56,
+   "d": 2.24,
+   "text": "and yeah here's some references the"
+  },
+  {
+   "t": 1524.8,
+   "d": 2.64,
+   "text": "first three links are like kind of"
+  },
+  {
+   "t": 1527.44,
+   "d": 2.32,
+   "text": "landmark talks on this topic"
+  },
+  {
+   "t": 1529.76,
+   "d": 1.68,
+   "text": "they if you're going to do any of this i"
+  },
+  {
+   "t": 1531.44,
+   "d": 1.28,
+   "text": "really would recommend that you watch"
+  },
+  {
+   "t": 1532.72,
+   "d": 0.72,
+   "text": "them"
+  },
+  {
+   "t": 1533.44,
+   "d": 2.0,
+   "text": "uh art of the screen shake really solid"
+  },
+  {
+   "t": 1535.44,
+   "d": 2.32,
+   "text": "from vampire four-hour game design from"
+  },
+  {
+   "t": 1537.76,
+   "d": 1.76,
+   "text": "cactus that's not actually four hours"
+  },
+  {
+   "t": 1539.52,
+   "d": 2.08,
+   "text": "like 30 minutes and juice it or lose it"
+  },
+  {
+   "t": 1541.6,
+   "d": 2.8,
+   "text": "and the fourth link is a uh"
+  },
+  {
+   "t": 1544.4,
+   "d": 0.88,
+   "text": "like a"
+  },
+  {
+   "t": 1545.28,
+   "d": 2.16,
+   "text": "like a paper on"
+  },
+  {
+   "t": 1547.44,
+   "d": 2.16,
+   "text": "game fill and juice with over 200"
+  },
+  {
+   "t": 1549.6,
+   "d": 2.0,
+   "text": "sources so it's pretty solid if you want"
+  },
+  {
+   "t": 1551.6,
+   "d": 1.76,
+   "text": "to get a little academic one of the"
+  },
+  {
+   "t": 1553.36,
+   "d": 1.76,
+   "text": "authors of this i saw on twitter this"
+  },
+  {
+   "t": 1555.12,
+   "d": 2.64,
+   "text": "week um that they along with i believe"
+  },
+  {
+   "t": 1557.76,
+   "d": 2.16,
+   "text": "mike cook um"
+  },
+  {
+   "t": 1559.92,
+   "d": 2.8,
+   "text": "made some made some uh prototype project"
+  },
+  {
+   "t": 1562.72,
+   "d": 2.0,
+   "text": "which actually automatically adds use to"
+  },
+  {
+   "t": 1564.72,
+   "d": 3.2,
+   "text": "a game and that kind of blew my mind"
+  },
+  {
+   "t": 1567.92,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 1568.88,
+   "d": 3.92,
+   "text": "yeah um so time for questions"
+  },
+  {
+   "t": 1572.8,
+   "d": 3.76,
+   "text": "yeah um wow okay thank you so much i'm"
+  },
+  {
+   "t": 1576.56,
+   "d": 2.88,
+   "text": "so hyped uh but i think that the drama"
+  },
+  {
+   "t": 1579.44,
+   "d": 2.48,
+   "text": "ad was my personal favorite and i hope"
+  },
+  {
+   "t": 1581.92,
+   "d": 0.96,
+   "text": "that"
+  },
+  {
+   "t": 1582.88,
+   "d": 1.52,
+   "text": "a lot of people are going to be taking"
+  },
+  {
+   "t": 1584.4,
+   "d": 3.6,
+   "text": "that back to their own right likes um"
+  },
+  {
+   "t": 1588.0,
+   "d": 0.96,
+   "text": "cud"
+  },
+  {
+   "t": 1588.96,
+   "d": 1.52,
+   "text": "i i know that you're in there brian and"
+  },
+  {
+   "t": 1590.48,
+   "d": 2.4,
+   "text": "jason"
+  },
+  {
+   "t": 1592.96,
+   "d": 1.6,
+   "text": "add the drama but yes we have some"
+  },
+  {
+   "t": 1594.56,
+   "d": 2.0,
+   "text": "questions along with a lot of uh yelling"
+  },
+  {
+   "t": 1596.56,
+   "d": 3.44,
+   "text": "of pew pew and juice juice juice"
+  },
+  {
+   "t": 1600.0,
+   "d": 1.84,
+   "text": "have you ever seen a juicing technique"
+  },
+  {
+   "t": 1601.84,
+   "d": 2.56,
+   "text": "used inappropriately or gone horribly"
+  },
+  {
+   "t": 1604.4,
+   "d": 1.68,
+   "text": "wrong"
+  },
+  {
+   "t": 1606.08,
+   "d": 2.08,
+   "text": "uh so i mean the first i would go back"
+  },
+  {
+   "t": 1608.16,
+   "d": 2.16,
+   "text": "to the blocking animation because people"
+  },
+  {
+   "t": 1610.32,
+   "d": 2.16,
+   "text": "told me like uh dread more so i've not"
+  },
+  {
+   "t": 1612.48,
+   "d": 2.0,
+   "text": "actually played it but that that's one"
+  },
+  {
+   "t": 1614.48,
+   "d": 2.56,
+   "text": "thing to avoid um i think i heard people"
+  },
+  {
+   "t": 1617.04,
+   "d": 1.52,
+   "text": "say maybe like teleglitch was a little"
+  },
+  {
+   "t": 1618.56,
+   "d": 2.24,
+   "text": "bit too much for them but like"
+  },
+  {
+   "t": 1620.8,
+   "d": 2.56,
+   "text": "again if if it fits your game at it if"
+  },
+  {
+   "t": 1623.36,
+   "d": 1.44,
+   "text": "your game is cartoony it can be a little"
+  },
+  {
+   "t": 1624.8,
+   "d": 1.52,
+   "text": "bouncy if you're making like infra"
+  },
+  {
+   "t": 1626.32,
+   "d": 2.24,
+   "text": "arcana maybe these are not necessarily"
+  },
+  {
+   "t": 1628.56,
+   "d": 2.32,
+   "text": "good techniques to use"
+  },
+  {
+   "t": 1630.88,
+   "d": 2.4,
+   "text": "yeah limit the juice a little bit you"
+  },
+  {
+   "t": 1633.28,
+   "d": 1.84,
+   "text": "don't want to be juice bloated and super"
+  },
+  {
+   "t": 1635.12,
+   "d": 2.72,
+   "text": "slow uh another and that was a question"
+  },
+  {
+   "t": 1637.84,
+   "d": 3.12,
+   "text": "from travis from hyper gardens what's"
+  },
+  {
+   "t": 1640.96,
+   "d": 1.68,
+   "text": "the most challenging aspect of juice"
+  },
+  {
+   "t": 1642.64,
+   "d": 1.92,
+   "text": "from a programming perspective does it"
+  },
+  {
+   "t": 1644.56,
+   "d": 2.0,
+   "text": "ever come up that it interferes with the"
+  },
+  {
+   "t": 1646.56,
+   "d": 1.44,
+   "text": "game logic or kind of makes things"
+  },
+  {
+   "t": 1648.0,
+   "d": 1.52,
+   "text": "harder in that way"
+  },
+  {
+   "t": 1649.52,
+   "d": 2.16,
+   "text": "so okay one thing i didn't add to this"
+  },
+  {
+   "t": 1651.68,
+   "d": 1.28,
+   "text": "talk"
+  },
+  {
+   "t": 1652.96,
+   "d": 1.44,
+   "text": "this was all just prototype for this"
+  },
+  {
+   "t": 1654.4,
+   "d": 1.52,
+   "text": "talk one thing i didn't add because it"
+  },
+  {
+   "t": 1655.92,
+   "d": 1.44,
+   "text": "was too difficult is"
+  },
+  {
+   "t": 1657.36,
+   "d": 2.72,
+   "text": "having sep having basically like a"
+  },
+  {
+   "t": 1660.08,
+   "d": 2.08,
+   "text": "logical flow of the animations i i don't"
+  },
+  {
+   "t": 1662.16,
+   "d": 0.8,
+   "text": "know if i'm gonna be able to explain"
+  },
+  {
+   "t": 1662.96,
+   "d": 1.92,
+   "text": "this well but um you know in a rogue"
+  },
+  {
+   "t": 1664.88,
+   "d": 1.44,
+   "text": "like you attack and the monsters attack"
+  },
+  {
+   "t": 1666.32,
+   "d": 1.28,
+   "text": "you at the same time"
+  },
+  {
+   "t": 1667.6,
+   "d": 1.68,
+   "text": "but if you wanted to you can show you"
+  },
+  {
+   "t": 1669.28,
+   "d": 2.24,
+   "text": "attack and then the monsters attack you"
+  },
+  {
+   "t": 1671.52,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1672.32,
+   "d": 2.72,
+   "text": "or like if i if i shoot my projectile"
+  },
+  {
+   "t": 1675.04,
+   "d": 1.92,
+   "text": "like i fire like an era right and it"
+  },
+  {
+   "t": 1676.96,
+   "d": 2.0,
+   "text": "goes to the through the air and it lands"
+  },
+  {
+   "t": 1678.96,
+   "d": 1.84,
+   "text": "on a monster if you let the animations"
+  },
+  {
+   "t": 1680.8,
+   "d": 1.44,
+   "text": "play out but you don't synchronize as"
+  },
+  {
+   "t": 1682.24,
+   "d": 2.0,
+   "text": "well the monster can move away from the"
+  },
+  {
+   "t": 1684.24,
+   "d": 2.32,
+   "text": "arrow before it's actually landed that"
+  },
+  {
+   "t": 1686.56,
+   "d": 1.76,
+   "text": "looks kind of weird and i i will tell"
+  },
+  {
+   "t": 1688.32,
+   "d": 1.2,
+   "text": "you those things are present in golden"
+  },
+  {
+   "t": 1689.52,
+   "d": 1.68,
+   "text": "chrome hotel because they're just really"
+  },
+  {
+   "t": 1691.2,
+   "d": 1.04,
+   "text": "hard to work out because you have to"
+  },
+  {
+   "t": 1692.24,
+   "d": 1.52,
+   "text": "kind of schedule things"
+  },
+  {
+   "t": 1693.76,
+   "d": 1.92,
+   "text": "um and it's a lot of work and i just"
+  },
+  {
+   "t": 1695.68,
+   "d": 1.92,
+   "text": "never never tackled it right so that"
+  },
+  {
+   "t": 1697.6,
+   "d": 1.36,
+   "text": "kind of syncing up of things"
+  },
+  {
+   "t": 1698.96,
+   "d": 1.52,
+   "text": "independently doing stuff that would"
+  },
+  {
+   "t": 1700.48,
+   "d": 2.08,
+   "text": "have to kind of animate together"
+  },
+  {
+   "t": 1702.56,
+   "d": 3.28,
+   "text": "yeah exactly right okay um sapphic"
+  },
+  {
+   "t": 1705.84,
+   "d": 1.84,
+   "text": "linguine has the question how do you"
+  },
+  {
+   "t": 1707.68,
+   "d": 2.08,
+   "text": "feel about juice in more strategic"
+  },
+  {
+   "t": 1709.76,
+   "d": 2.48,
+   "text": "resource management games"
+  },
+  {
+   "t": 1712.24,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1713.68,
+   "d": 2.64,
+   "text": "i think it would like"
+  },
+  {
+   "t": 1716.32,
+   "d": 1.76,
+   "text": "even if like the things you have you've"
+  },
+  {
+   "t": 1718.08,
+   "d": 1.2,
+   "text": "seen me"
+  },
+  {
+   "t": 1719.28,
+   "d": 2.0,
+   "text": "might not work for you like the ui it"
+  },
+  {
+   "t": 1721.28,
+   "d": 2.48,
+   "text": "adds some feat some feedback to the ui"
+  },
+  {
+   "t": 1723.76,
+   "d": 2.88,
+   "text": "elements buttons um if there's like if"
+  },
+  {
+   "t": 1726.64,
+   "d": 1.68,
+   "text": "you unlock something you know it should"
+  },
+  {
+   "t": 1728.32,
+   "d": 1.44,
+   "text": "flash it should look good it should"
+  },
+  {
+   "t": 1729.76,
+   "d": 1.92,
+   "text": "basically this is about polish and i"
+  },
+  {
+   "t": 1731.68,
+   "d": 1.92,
+   "text": "don't think anyone can argue that their"
+  },
+  {
+   "t": 1733.6,
+   "d": 2.24,
+   "text": "game has enough polish"
+  },
+  {
+   "t": 1735.84,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 1736.64,
+   "d": 1.12,
+   "text": "i don't know if i play a lot of those"
+  },
+  {
+   "t": 1737.76,
+   "d": 1.68,
+   "text": "games but i don't see a reason why it"
+  },
+  {
+   "t": 1739.44,
+   "d": 1.76,
+   "text": "wouldn't fit"
+  },
+  {
+   "t": 1741.2,
+   "d": 0.8,
+   "text": "right"
+  },
+  {
+   "t": 1742.0,
+   "d": 1.84,
+   "text": "i think that uh last question also from"
+  },
+  {
+   "t": 1743.84,
+   "d": 1.6,
+   "text": "sapphiclady what's your favorite fruit"
+  },
+  {
+   "t": 1745.44,
+   "d": 1.84,
+   "text": "juice"
+  },
+  {
+   "t": 1747.28,
+   "d": 1.84,
+   "text": "oh uh"
+  },
+  {
+   "t": 1749.12,
+   "d": 2.0,
+   "text": "i guess that was an easy one i guess"
+  },
+  {
+   "t": 1751.12,
+   "d": 2.72,
+   "text": "i'll go with pineapple yeah okay okay"
+  },
+  {
+   "t": 1753.84,
+   "d": 1.68,
+   "text": "well choice i know you can get apple"
+  },
+  {
+   "t": 1755.52,
+   "d": 2.24,
+   "text": "juice in the social space so go find go"
+  },
+  {
+   "t": 1757.76,
+   "d": 2.96,
+   "text": "find your juice"
+  }
+ ]
+}

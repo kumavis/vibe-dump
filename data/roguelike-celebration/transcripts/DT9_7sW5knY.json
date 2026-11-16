@@ -1,0 +1,4169 @@
+{
+ "id": "DT9_7sW5knY",
+ "url": "https://www.youtube.com/watch?v=DT9_7sW5knY",
+ "title": "Benjamin Berman - Tips, Tricks and History for Card Game Roguelike Design",
+ "speaker": "Benjamin Berman",
+ "talk_title": "Tips, Tricks and History for Card Game Roguelike Design",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1976,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nCreator of Spellsource, a community authored card game, and MonsterMatch, a monster dating game. Former MIT Media Lab games researcher.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 19,
+   "title": "What is a card game roguelike?"
+  },
+  {
+   "start": 63,
+   "title": "Card Game Rougelike Tech Tree"
+  },
+  {
+   "start": 86,
+   "title": "Magic the Gathering draft formats (1995-6)"
+  },
+  {
+   "start": 152,
+   "title": "Heroes of Might and Magic (1996)"
+  },
+  {
+   "start": 196,
+   "title": "Munchkin (2001)"
+  },
+  {
+   "start": 253,
+   "title": "Mega Man Battle Chip Challenge (2003)"
+  },
+  {
+   "start": 355,
+   "title": "Pokemon Defense (2011)"
+  },
+  {
+   "start": 414,
+   "title": "Card Hunter (2013)"
+  },
+  {
+   "start": 459,
+   "title": "Dream Quest (2014-2015)"
+  },
+  {
+   "start": 534,
+   "title": "Guild of Dungeoneering (2015)"
+  },
+  {
+   "start": 570,
+   "title": "Slay the Spire (2017-2019)"
+  },
+  {
+   "start": 643,
+   "title": "Dicey Dungeons (2017-2019) Bringing back dio"
+  },
+  {
+   "start": 680,
+   "title": "History summary"
+  },
+  {
+   "start": 703,
+   "title": "Opinions on where to innovate"
+  },
+  {
+   "start": 735,
+   "title": "Hearthstone's battle format"
+  },
+  {
+   "start": 750,
+   "title": "Accessibility"
+  },
+  {
+   "start": 781,
+   "title": "Interactivity"
+  },
+  {
+   "start": 910,
+   "title": "Everything else"
+  },
+  {
+   "start": 1004,
+   "title": "Permadeath"
+  },
+  {
+   "start": 1099,
+   "title": "Mods"
+  },
+  {
+   "start": 1158,
+   "title": "Random cards"
+  },
+  {
+   "start": 1213,
+   "title": "Design summary"
+  },
+  {
+   "start": 1249,
+   "title": "Rules engine"
+  },
+  {
+   "start": 1295,
+   "title": "Game state"
+  },
+  {
+   "start": 1335,
+   "title": "Coding cards"
+  },
+  {
+   "start": 1409,
+   "title": "Engineering summary"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5640,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 2.46,
+   "text": "this is a talk on the tips tricks in"
+  },
+  {
+   "t": 2.49,
+   "d": 3.5,
+   "text": "history of card game relic design and"
+  },
+  {
+   "t": 5.99,
+   "d": 2.68,
+   "text": "I'm the director of a community authored"
+  },
+  {
+   "t": 8.67,
+   "d": 2.34,
+   "text": "card game called spell source and I've"
+  },
+  {
+   "t": 11.01,
+   "d": 1.71,
+   "text": "created games and media for Mozilla and"
+  },
+  {
+   "t": 12.72,
+   "d": 1.74,
+   "text": "Disney a New York Times architecture"
+  },
+  {
+   "t": 14.46,
+   "d": 2.25,
+   "text": "firm called Perkins and will and I'm"
+  },
+  {
+   "t": 16.71,
+   "d": 3.33,
+   "text": "here in San Francisco and I'm gonna talk"
+  },
+  {
+   "t": 20.04,
+   "d": 2.25,
+   "text": "about a specific kind of roguelike which"
+  },
+  {
+   "t": 22.29,
+   "d": 4.35,
+   "text": "is using card games as the metaphor for"
+  },
+  {
+   "t": 26.64,
+   "d": 4.11,
+   "text": "the stuff that you do inside an RPG the"
+  },
+  {
+   "t": 30.75,
+   "d": 1.74,
+   "text": "cards they're your player character"
+  },
+  {
+   "t": 32.49,
+   "d": 2.13,
+   "text": "spells they're the weapons equipment the"
+  },
+  {
+   "t": 34.62,
+   "d": 1.68,
+   "text": "meanings you conjure the encounters that"
+  },
+  {
+   "t": 36.3,
+   "d": 3.45,
+   "text": "you face and you're usually building the"
+  },
+  {
+   "t": 39.75,
+   "d": 1.89,
+   "text": "deck using these cards it's abstracting"
+  },
+  {
+   "t": 41.64,
+   "d": 1.71,
+   "text": "away stuff like experience points and"
+  },
+  {
+   "t": 43.35,
+   "d": 2.52,
+   "text": "equipment and leveling up so if you've"
+  },
+  {
+   "t": 45.87,
+   "d": 1.62,
+   "text": "ever played an RPG if you ever play"
+  },
+  {
+   "t": 47.49,
+   "d": 1.74,
+   "text": "magic you're gonna be familiar with what"
+  },
+  {
+   "t": 49.23,
+   "d": 2.28,
+   "text": "this looks like so I'm gonna talk a"
+  },
+  {
+   "t": 51.51,
+   "d": 1.53,
+   "text": "little bit about the history and they"
+  },
+  {
+   "t": 53.04,
+   "d": 1.98,
+   "text": "talk about design and engineering so you"
+  },
+  {
+   "t": 55.02,
+   "d": 4.92,
+   "text": "get a whole scope of this genre and to"
+  },
+  {
+   "t": 59.94,
+   "d": 1.62,
+   "text": "introduce a history I really want to"
+  },
+  {
+   "t": 61.56,
+   "d": 3.84,
+   "text": "show you a tech tree so there's actually"
+  },
+  {
+   "t": 65.4,
+   "d": 1.8,
+   "text": "a lot of different ingredients that go"
+  },
+  {
+   "t": 67.2,
+   "d": 2.58,
+   "text": "into what we think of as a modern card"
+  },
+  {
+   "t": 69.78,
+   "d": 1.44,
+   "text": "game roguelike that started a really"
+  },
+  {
+   "t": 71.22,
+   "d": 1.89,
+   "text": "long time ago and we're not going to"
+  },
+  {
+   "t": 73.11,
+   "d": 2.01,
+   "text": "talk about all these things all at once"
+  },
+  {
+   "t": 75.12,
+   "d": 2.13,
+   "text": "I just want to give you a big picture"
+  },
+  {
+   "t": 77.25,
+   "d": 1.92,
+   "text": "preview of how a bunch of different"
+  },
+  {
+   "t": 79.17,
+   "d": 1.8,
+   "text": "games contributed to the mechanics that"
+  },
+  {
+   "t": 80.97,
+   "d": 2.97,
+   "text": "you see and that sadly nothing is"
+  },
+  {
+   "t": 83.94,
+   "d": 4.23,
+   "text": "original so the first game I want to"
+  },
+  {
+   "t": 88.17,
+   "d": 1.35,
+   "text": "talk about is Magic the Gathering"
+  },
+  {
+   "t": 89.52,
+   "d": 2.31,
+   "text": "specifically it's draft formats people"
+  },
+  {
+   "t": 91.83,
+   "d": 1.86,
+   "text": "were already playing something that had"
+  },
+  {
+   "t": 93.69,
+   "d": 3.3,
+   "text": "a significant number of the ingredients"
+  },
+  {
+   "t": 96.99,
+   "d": 1.8,
+   "text": "that went into what we think of as a"
+  },
+  {
+   "t": 98.79,
+   "d": 2.19,
+   "text": "card game roguelike in the tournament"
+  },
+  {
+   "t": 100.98,
+   "d": 3.54,
+   "text": "system in magic 1995 that's using"
+  },
+  {
+   "t": 104.52,
+   "d": 2.46,
+   "text": "booster based draft it doesn't take a"
+  },
+  {
+   "t": 106.98,
+   "d": 2.85,
+   "text": "genius to see how drafting cards from"
+  },
+  {
+   "t": 109.83,
+   "d": 1.71,
+   "text": "booster ducks could be used for so many"
+  },
+  {
+   "t": 111.54,
+   "d": 2.55,
+   "text": "different exciting things but I think"
+  },
+  {
+   "t": 114.09,
+   "d": 2.04,
+   "text": "the most interesting part is the perma"
+  },
+  {
+   "t": 116.13,
+   "d": 2.13,
+   "text": "death in the tournament format like once"
+  },
+  {
+   "t": 118.26,
+   "d": 2.43,
+   "text": "you're out you're out right you you get"
+  },
+  {
+   "t": 120.69,
+   "d": 1.38,
+   "text": "to keep your deck you get to get the"
+  },
+  {
+   "t": 122.07,
+   "d": 3.06,
+   "text": "thing you bought but it's not like every"
+  },
+  {
+   "t": 125.13,
+   "d": 1.8,
+   "text": "other multiplayer game wants to get you"
+  },
+  {
+   "t": 126.93,
+   "d": 2.16,
+   "text": "back in playing over however again for"
+  },
+  {
+   "t": 129.09,
+   "d": 2.47,
+   "text": "those retention numbers you're at"
+  },
+  {
+   "t": 131.56,
+   "d": 3.15,
+   "text": "and that is a former permit that I think"
+  },
+  {
+   "t": 134.71,
+   "d": 2.4,
+   "text": "most people are little afraid of but it"
+  },
+  {
+   "t": 137.11,
+   "d": 2.1,
+   "text": "was there and there's all this other"
+  },
+  {
+   "t": 139.21,
+   "d": 2.76,
+   "text": "stuff that you saw in this really really"
+  },
+  {
+   "t": 141.97,
+   "d": 1.95,
+   "text": "smart game there's also spell fire which"
+  },
+  {
+   "t": 143.92,
+   "d": 1.41,
+   "text": "came out at the same time there was a"
+  },
+  {
+   "t": 145.33,
+   "d": 2.01,
+   "text": "very similar strategy card game and"
+  },
+  {
+   "t": 147.34,
+   "d": 2.25,
+   "text": "nobody has really heard about but is"
+  },
+  {
+   "t": 149.59,
+   "d": 2.46,
+   "text": "also very good an important part of that"
+  },
+  {
+   "t": 152.05,
+   "d": 3.42,
+   "text": "time simultaneously this isn't really a"
+  },
+  {
+   "t": 155.47,
+   "d": 2.82,
+   "text": "card game son really an RPG it's"
+  },
+  {
+   "t": 158.29,
+   "d": 2.7,
+   "text": "something all over and in between here's"
+  },
+  {
+   "t": 160.99,
+   "d": 3.33,
+   "text": "a mic magic figured out the UX for a lot"
+  },
+  {
+   "t": 164.32,
+   "d": 2.7,
+   "text": "of what we see in contemporary card game"
+  },
+  {
+   "t": 167.02,
+   "d": 1.47,
+   "text": "roguelikes do you see that battlefield"
+  },
+  {
+   "t": 168.49,
+   "d": 1.68,
+   "text": "it's playing on the video right now does"
+  },
+  {
+   "t": 170.17,
+   "d": 1.41,
+   "text": "that look familiar in a modern game"
+  },
+  {
+   "t": 171.58,
+   "d": 3.06,
+   "text": "people have figured out how to put the"
+  },
+  {
+   "t": 174.64,
+   "d": 2.31,
+   "text": "you know the friendly characters on the"
+  },
+  {
+   "t": 176.95,
+   "d": 1.5,
+   "text": "left and the enemy characters on the"
+  },
+  {
+   "t": 178.45,
+   "d": 1.89,
+   "text": "right that was done in JRPGs that was"
+  },
+  {
+   "t": 180.34,
+   "d": 1.95,
+   "text": "done earlier than Heroes of Might &"
+  },
+  {
+   "t": 182.29,
+   "d": 1.89,
+   "text": "Magic I just want to show you the big"
+  },
+  {
+   "t": 184.18,
+   "d": 2.13,
+   "text": "mainstream game had already been"
+  },
+  {
+   "t": 186.31,
+   "d": 1.95,
+   "text": "training people and a lot of stuff"
+  },
+  {
+   "t": 188.26,
+   "d": 1.56,
+   "text": "you've been doing it also had a little"
+  },
+  {
+   "t": 189.82,
+   "d": 2.58,
+   "text": "bit of nap map navigation which magic"
+  },
+  {
+   "t": 192.4,
+   "d": 2.04,
+   "text": "doesn't have and a lot of people were so"
+  },
+  {
+   "t": 194.44,
+   "d": 2.76,
+   "text": "figuring out how to do that a big"
+  },
+  {
+   "t": 197.2,
+   "d": 3.09,
+   "text": "straight-up RPG in card games as"
+  },
+  {
+   "t": 200.29,
+   "d": 1.86,
+   "text": "munchkin which you know I did a little"
+  },
+  {
+   "t": 202.15,
+   "d": 2.25,
+   "text": "poll to see like who likes munchkin and"
+  },
+  {
+   "t": 204.4,
+   "d": 2.76,
+   "text": "I get a lot of not the most positive"
+  },
+  {
+   "t": 207.16,
+   "d": 2.79,
+   "text": "feedback for what is generally pretty"
+  },
+  {
+   "t": 209.95,
+   "d": 3.66,
+   "text": "good game so I think what they"
+  },
+  {
+   "t": 213.61,
+   "d": 2.43,
+   "text": "introduced a lot of people did this in"
+  },
+  {
+   "t": 216.04,
+   "d": 1.5,
+   "text": "board games already it's not that"
+  },
+  {
+   "t": 217.54,
+   "d": 2.01,
+   "text": "original but in the context of a card"
+  },
+  {
+   "t": 219.55,
+   "d": 2.67,
+   "text": "game RPG the random encounter order"
+  },
+  {
+   "t": 222.22,
+   "d": 1.74,
+   "text": "where you're drawing cards from a deck"
+  },
+  {
+   "t": 223.96,
+   "d": 3.39,
+   "text": "this introduced that mechanic to a lot a"
+  },
+  {
+   "t": 227.35,
+   "d": 1.29,
+   "text": "lot of people they started getting"
+  },
+  {
+   "t": 228.64,
+   "d": 1.62,
+   "text": "familiar with what it was"
+  },
+  {
+   "t": 230.26,
+   "d": 1.89,
+   "text": "you still draft it you also thinned your"
+  },
+  {
+   "t": 232.15,
+   "d": 3.38,
+   "text": "hand so this had a lot of interesting"
+  },
+  {
+   "t": 235.53,
+   "d": 2.92,
+   "text": "kind of equipment management in your"
+  },
+  {
+   "t": 238.45,
+   "d": 2.22,
+   "text": "hand but otherwise it was it was so"
+  },
+  {
+   "t": 240.67,
+   "d": 2.07,
+   "text": "simple and straightforward and clear"
+  },
+  {
+   "t": 242.74,
+   "d": 1.86,
+   "text": "what you were supposed to do this kind"
+  },
+  {
+   "t": 244.6,
+   "d": 2.55,
+   "text": "of set the stage for okay I can deliver"
+  },
+  {
+   "t": 247.15,
+   "d": 2.19,
+   "text": "an RPG and a card game and people will"
+  },
+  {
+   "t": 249.34,
+   "d": 1.56,
+   "text": "really enjoy it until their friends to"
+  },
+  {
+   "t": 250.9,
+   "d": 3.33,
+   "text": "play and there's a weird game I want to"
+  },
+  {
+   "t": 254.23,
+   "d": 2.37,
+   "text": "show you Megaman battleship challenge"
+  },
+  {
+   "t": 256.6,
+   "d": 2.52,
+   "text": "this is a Nintendo DS game that probably"
+  },
+  {
+   "t": 259.12,
+   "d": 2.34,
+   "text": "not that many people played but what"
+  },
+  {
+   "t": 261.46,
+   "d": 1.8,
+   "text": "you're seeing in the video right now is"
+  },
+  {
+   "t": 263.26,
+   "d": 0.93,
+   "text": "something called the"
+  },
+  {
+   "t": 264.19,
+   "d": 2.46,
+   "text": "battleship system each of those little"
+  },
+  {
+   "t": 266.65,
+   "d": 2.88,
+   "text": "columns corresponds to like a little"
+  },
+  {
+   "t": 269.53,
+   "d": 2.79,
+   "text": "hand and you draw a card from that hand"
+  },
+  {
+   "t": 272.32,
+   "d": 1.68,
+   "text": "you can see all the different cards you"
+  },
+  {
+   "t": 274.0,
+   "d": 1.17,
+   "text": "know that's that's just what the"
+  },
+  {
+   "t": 275.17,
+   "d": 2.88,
+   "text": "metaphor is and you would play against"
+  },
+  {
+   "t": 278.05,
+   "d": 2.16,
+   "text": "another opponent that would have a"
+  },
+  {
+   "t": 280.21,
+   "d": 1.98,
+   "text": "similar like little battleship"
+  },
+  {
+   "t": 282.19,
+   "d": 2.46,
+   "text": "arrangement and the idea was that your"
+  },
+  {
+   "t": 284.65,
+   "d": 2.4,
+   "text": "opponent will choose randomly from these"
+  },
+  {
+   "t": 287.05,
+   "d": 2.49,
+   "text": "few things on this turn that you're"
+  },
+  {
+   "t": 289.54,
+   "d": 1.92,
+   "text": "gonna play against so you have a"
+  },
+  {
+   "t": 291.46,
+   "d": 2.31,
+   "text": "strategy you can put together based on"
+  },
+  {
+   "t": 293.77,
+   "d": 1.5,
+   "text": "the deck you build what you're gonna"
+  },
+  {
+   "t": 295.27,
+   "d": 2.46,
+   "text": "play against this was a really early"
+  },
+  {
+   "t": 297.73,
+   "d": 2.1,
+   "text": "example of a randomized to counter that"
+  },
+  {
+   "t": 299.83,
+   "d": 2.16,
+   "text": "I found when we get to the more modern"
+  },
+  {
+   "t": 301.99,
+   "d": 1.77,
+   "text": "version of this sort of game you're"
+  },
+  {
+   "t": 303.76,
+   "d": 3.56,
+   "text": "gonna see Wow okay where have I seen"
+  },
+  {
+   "t": 307.32,
+   "d": 3.37,
+   "text": "characters who choose from a small set"
+  },
+  {
+   "t": 310.69,
+   "d": 2.22,
+   "text": "of random options to play against me in"
+  },
+  {
+   "t": 312.91,
+   "d": 3.12,
+   "text": "the metaphor of cards and it was really"
+  },
+  {
+   "t": 316.03,
+   "d": 2.07,
+   "text": "surprising to find it here I think this"
+  },
+  {
+   "t": 318.1,
+   "d": 1.97,
+   "text": "is one of the earliest like mainstream"
+  },
+  {
+   "t": 320.07,
+   "d": 2.05,
+   "text": "examples people are playing and enjoying"
+  },
+  {
+   "t": 322.12,
+   "d": 4.35,
+   "text": "the game Dominion actually I don't think"
+  },
+  {
+   "t": 326.47,
+   "d": 2.13,
+   "text": "it's that influential for roguelikes if"
+  },
+  {
+   "t": 328.6,
+   "d": 2.82,
+   "text": "you talk to the folks who authored Slate"
+  },
+  {
+   "t": 331.42,
+   "d": 1.95,
+   "text": "aspire they they talk about it they"
+  },
+  {
+   "t": 333.37,
+   "d": 2.28,
+   "text": "really love the game but like I said"
+  },
+  {
+   "t": 335.65,
+   "d": 1.47,
+   "text": "there was deck thinning for a while"
+  },
+  {
+   "t": 337.12,
+   "d": 1.89,
+   "text": "we've had drafting for a while this"
+  },
+  {
+   "t": 339.01,
+   "d": 2.43,
+   "text": "isn't a fascinating strategy card game"
+  },
+  {
+   "t": 341.44,
+   "d": 1.83,
+   "text": "but they didn't necessarily change"
+  },
+  {
+   "t": 343.27,
+   "d": 3.03,
+   "text": "anything about modern designs of card"
+  },
+  {
+   "t": 346.3,
+   "d": 1.98,
+   "text": "game roguelikes and so I just want to"
+  },
+  {
+   "t": 348.28,
+   "d": 1.56,
+   "text": "put it out there it's a fantastic game"
+  },
+  {
+   "t": 349.84,
+   "d": 3.42,
+   "text": "but I couldn't really put together how"
+  },
+  {
+   "t": 353.26,
+   "d": 2.79,
+   "text": "its mechanics contributed to stuff I"
+  },
+  {
+   "t": 356.05,
+   "d": 1.5,
+   "text": "want to show you something else that was"
+  },
+  {
+   "t": 357.55,
+   "d": 2.82,
+   "text": "going on around that time this Pokemon"
+  },
+  {
+   "t": 360.37,
+   "d": 3.03,
+   "text": "defense 2011 also Don this auto chess I"
+  },
+  {
+   "t": 363.4,
+   "d": 2.42,
+   "text": "mean there are a lot of really great"
+  },
+  {
+   "t": 365.82,
+   "d": 3.64,
+   "text": "game scholars and critics go on the"
+  },
+  {
+   "t": 369.46,
+   "d": 1.59,
+   "text": "record saying Auto chess it's this big"
+  },
+  {
+   "t": 371.05,
+   "d": 3.33,
+   "text": "original thing and Pokemon defense it's"
+  },
+  {
+   "t": 374.38,
+   "d": 2.0,
+   "text": "like the most popular Warcraft 3"
+  },
+  {
+   "t": 376.38,
+   "d": 3.31,
+   "text": "scenario in existence so if you lived in"
+  },
+  {
+   "t": 379.69,
+   "d": 1.65,
+   "text": "China and played that game you would see"
+  },
+  {
+   "t": 381.34,
+   "d": 1.59,
+   "text": "Pokemon defense you'd know where this is"
+  },
+  {
+   "t": 382.93,
+   "d": 1.92,
+   "text": "from and I just want to show you if"
+  },
+  {
+   "t": 384.85,
+   "d": 1.83,
+   "text": "you're familiar with the mechanics of"
+  },
+  {
+   "t": 386.68,
+   "d": 1.95,
+   "text": "this game your drafting cards and"
+  },
+  {
+   "t": 388.63,
+   "d": 1.68,
+   "text": "building a little battlefield and"
+  },
+  {
+   "t": 390.31,
+   "d": 1.71,
+   "text": "there's like a little elimination you're"
+  },
+  {
+   "t": 392.02,
+   "d": 1.29,
+   "text": "playing against other people it's"
+  },
+  {
+   "t": 393.31,
+   "d": 2.01,
+   "text": "exactly like dota Auto chess it"
+  },
+  {
+   "t": 395.32,
+   "d": 2.79,
+   "text": "introduces a lot of stuff again"
+  },
+  {
+   "t": 398.11,
+   "d": 2.03,
+   "text": "in a different way this isn't card game"
+  },
+  {
+   "t": 400.14,
+   "d": 3.04,
+   "text": "battling but it's essentially picking"
+  },
+  {
+   "t": 403.18,
+   "d": 2.73,
+   "text": "cards and auto battling on on the field"
+  },
+  {
+   "t": 405.91,
+   "d": 2.04,
+   "text": "I just want to show if you were paying"
+  },
+  {
+   "t": 407.95,
+   "d": 2.73,
+   "text": "attention in 2011 you know people would"
+  },
+  {
+   "t": 410.68,
+   "d": 1.98,
+   "text": "find this appealing and that's a long"
+  },
+  {
+   "t": 412.66,
+   "d": 2.46,
+   "text": "time ago"
+  },
+  {
+   "t": 415.12,
+   "d": 3.57,
+   "text": "Carl hunter I think started really"
+  },
+  {
+   "t": 418.69,
+   "d": 1.53,
+   "text": "crystallized for people on digital"
+  },
+  {
+   "t": 420.22,
+   "d": 2.34,
+   "text": "platforms as compared to munchkin like"
+  },
+  {
+   "t": 422.56,
+   "d": 1.71,
+   "text": "you can do an RPG through a card game"
+  },
+  {
+   "t": 424.27,
+   "d": 3.3,
+   "text": "and this does a lot of the essentially"
+  },
+  {
+   "t": 427.57,
+   "d": 2.55,
+   "text": "D&D fourth edition rules in the game and"
+  },
+  {
+   "t": 430.12,
+   "d": 2.04,
+   "text": "they started to put grid combat out"
+  },
+  {
+   "t": 432.16,
+   "d": 1.8,
+   "text": "there where it was meaningful like where"
+  },
+  {
+   "t": 433.96,
+   "d": 2.82,
+   "text": "you were placing the cards to to have"
+  },
+  {
+   "t": 436.78,
+   "d": 1.98,
+   "text": "some kind of tactical significance also"
+  },
+  {
+   "t": 438.76,
+   "d": 2.04,
+   "text": "brought back dice which hadn't been"
+  },
+  {
+   "t": 440.8,
+   "d": 1.43,
+   "text": "around for a while"
+  },
+  {
+   "t": 442.23,
+   "d": 2.08,
+   "text": "dungeons of dragons has a lot of dice"
+  },
+  {
+   "t": 444.31,
+   "d": 2.34,
+   "text": "people think of RPGs having dice here"
+  },
+  {
+   "t": 446.65,
+   "d": 2.37,
+   "text": "they did a very elegant like dice to"
+  },
+  {
+   "t": 449.02,
+   "d": 2.25,
+   "text": "card you assign a die to a car kind of"
+  },
+  {
+   "t": 451.27,
+   "d": 1.53,
+   "text": "activate its abilities sort of thing"
+  },
+  {
+   "t": 452.8,
+   "d": 1.62,
+   "text": "that you're gonna see again in a later"
+  },
+  {
+   "t": 454.42,
+   "d": 2.37,
+   "text": "game but card hunter was doing a card"
+  },
+  {
+   "t": 456.79,
+   "d": 3.51,
+   "text": "hunter is you know it's a great game the"
+  },
+  {
+   "t": 460.3,
+   "d": 2.37,
+   "text": "game that people think of as really"
+  },
+  {
+   "t": 462.67,
+   "d": 3.27,
+   "text": "doing roguelike as a card game like very"
+  },
+  {
+   "t": 465.94,
+   "d": 3.15,
+   "text": "clearly dream quest the sky Peter Whalen"
+  },
+  {
+   "t": 469.09,
+   "d": 3.06,
+   "text": "who made this iPad game and I think what"
+  },
+  {
+   "t": 472.15,
+   "d": 1.62,
+   "text": "he brought back there was so important"
+  },
+  {
+   "t": 473.77,
+   "d": 2.91,
+   "text": "was perma death right you you go and you"
+  },
+  {
+   "t": 476.68,
+   "d": 2.04,
+   "text": "play your life out and you die and you"
+  },
+  {
+   "t": 478.72,
+   "d": 1.77,
+   "text": "start again there's a lot of the"
+  },
+  {
+   "t": 480.49,
+   "d": 1.59,
+   "text": "procedural generation and sort of"
+  },
+  {
+   "t": 482.08,
+   "d": 3.27,
+   "text": "important but card games they always had"
+  },
+  {
+   "t": 485.35,
+   "d": 4.44,
+   "text": "like the infinite activity generator"
+  },
+  {
+   "t": 489.79,
+   "d": 2.46,
+   "text": "thing going on perma death is really"
+  },
+  {
+   "t": 492.25,
+   "d": 1.65,
+   "text": "something special it was hard to bring"
+  },
+  {
+   "t": 493.9,
+   "d": 2.82,
+   "text": "back and Peter whaling he now works at"
+  },
+  {
+   "t": 496.72,
+   "d": 3.15,
+   "text": "Blizzard they developed a hearthstone"
+  },
+  {
+   "t": 499.87,
+   "d": 2.46,
+   "text": "you can see the image on cribbed here"
+  },
+  {
+   "t": 502.33,
+   "d": 2.73,
+   "text": "from another very interesting talk about"
+  },
+  {
+   "t": 505.06,
+   "d": 2.04,
+   "text": "card game roguelikes but you can see I'm"
+  },
+  {
+   "t": 507.1,
+   "d": 3.0,
+   "text": "you know gave new all kind of greedily"
+  },
+  {
+   "t": 510.1,
+   "d": 3.18,
+   "text": "touching bags of money there the"
+  },
+  {
+   "t": 513.28,
+   "d": 1.46,
+   "text": "Blizzard has been accumulating"
+  },
+  {
+   "t": 514.74,
+   "d": 2.94,
+   "text": "hearthstone they didn't have a roguelike"
+  },
+  {
+   "t": 517.68,
+   "d": 2.71,
+   "text": "formatting have an RPG format they had"
+  },
+  {
+   "t": 520.39,
+   "d": 2.31,
+   "text": "adventures but they didn't have a"
+  },
+  {
+   "t": 522.7,
+   "d": 2.43,
+   "text": "procedurally generated random encounter"
+  },
+  {
+   "t": 525.13,
+   "d": 3.12,
+   "text": "activity until 2017 the biggest"
+  },
+  {
+   "t": 528.25,
+   "d": 1.53,
+   "text": "contribution was just increasing the"
+  },
+  {
+   "t": 529.78,
+   "d": 1.05,
+   "text": "size of the audience"
+  },
+  {
+   "t": 530.83,
+   "d": 2.07,
+   "text": "and figuring out battle mechanics I'm"
+  },
+  {
+   "t": 532.9,
+   "d": 3.54,
+   "text": "going to talk about that later by 2015"
+  },
+  {
+   "t": 536.44,
+   "d": 1.8,
+   "text": "there were already polished versions of"
+  },
+  {
+   "t": 538.24,
+   "d": 2.67,
+   "text": "like what dream quest was doing we don't"
+  },
+  {
+   "t": 540.91,
+   "d": 2.07,
+   "text": "necessarily hear of them guild of"
+  },
+  {
+   "t": 542.98,
+   "d": 1.95,
+   "text": "dungeoneering is a successful steam game"
+  },
+  {
+   "t": 544.93,
+   "d": 3.45,
+   "text": "but it was already doing like oh I'm"
+  },
+  {
+   "t": 548.38,
+   "d": 1.71,
+   "text": "building out the map and put moving my"
+  },
+  {
+   "t": 550.09,
+   "d": 1.29,
+   "text": "character around in this really"
+  },
+  {
+   "t": 551.38,
+   "d": 2.09,
+   "text": "traditional Rogi format with cars"
+  },
+  {
+   "t": 553.47,
+   "d": 2.14,
+   "text": "including the like pick one of three"
+  },
+  {
+   "t": 555.61,
+   "d": 2.37,
+   "text": "sort of deal where you're you're putting"
+  },
+  {
+   "t": 557.98,
+   "d": 2.61,
+   "text": "down your equipment or your character by"
+  },
+  {
+   "t": 560.59,
+   "d": 2.61,
+   "text": "making choices from three this was"
+  },
+  {
+   "t": 563.2,
+   "d": 1.5,
+   "text": "something that guild of dungeoneering"
+  },
+  {
+   "t": 564.7,
+   "d": 3.6,
+   "text": "was doing so again anybody paying"
+  },
+  {
+   "t": 568.3,
+   "d": 1.08,
+   "text": "attention they're gonna see these"
+  },
+  {
+   "t": 569.38,
+   "d": 3.99,
+   "text": "ingredients come out sláinte aspire this"
+  },
+  {
+   "t": 573.37,
+   "d": 2.73,
+   "text": "what started out as a humble libgdx game"
+  },
+  {
+   "t": 576.1,
+   "d": 2.61,
+   "text": "and became this big phenomenon in truce"
+  },
+  {
+   "t": 578.71,
+   "d": 2.4,
+   "text": "introducing this genre to a lot a lot of"
+  },
+  {
+   "t": 581.11,
+   "d": 3.84,
+   "text": "people they did two things I think is"
+  },
+  {
+   "t": 584.95,
+   "d": 2.64,
+   "text": "really amazing they really really opened"
+  },
+  {
+   "t": 587.59,
+   "d": 2.34,
+   "text": "up their game development to the"
+  },
+  {
+   "t": 589.93,
+   "d": 2.43,
+   "text": "community the two years they spent in"
+  },
+  {
+   "t": 592.36,
+   "d": 1.77,
+   "text": "early access which involved a lot of"
+  },
+  {
+   "t": 594.13,
+   "d": 1.86,
+   "text": "releasing content you heard this from a"
+  },
+  {
+   "t": 595.99,
+   "d": 3.48,
+   "text": "time times different from how important"
+  },
+  {
+   "t": 599.47,
+   "d": 1.47,
+   "text": "it is to get feedback from your players"
+  },
+  {
+   "t": 600.94,
+   "d": 3.35,
+   "text": "in real time they were doing this too a"
+  },
+  {
+   "t": 604.29,
+   "d": 3.81,
+   "text": "way that really honed down the UX of"
+  },
+  {
+   "t": 608.1,
+   "d": 3.64,
+   "text": "card game roguelike got it back to a"
+  },
+  {
+   "t": 611.74,
+   "d": 3.48,
+   "text": "format we saw all the way from heroes of"
+  },
+  {
+   "t": 615.22,
+   "d": 1.59,
+   "text": "mine magic something that was this"
+  },
+  {
+   "t": 616.81,
+   "d": 2.97,
+   "text": "really fantastic UX and packaged it in"
+  },
+  {
+   "t": 619.78,
+   "d": 3.12,
+   "text": "such a nice and polished way and they"
+  },
+  {
+   "t": 622.9,
+   "d": 2.22,
+   "text": "also embraced mods people can edit their"
+  },
+  {
+   "t": 625.12,
+   "d": 2.28,
+   "text": "java game and put in new cards and this"
+  },
+  {
+   "t": 627.4,
+   "d": 1.62,
+   "text": "was a way that the players could take"
+  },
+  {
+   "t": 629.02,
+   "d": 2.1,
+   "text": "agent scene communicate back to them"
+  },
+  {
+   "t": 631.12,
+   "d": 1.2,
+   "text": "what they want to do without asking"
+  },
+  {
+   "t": 632.32,
+   "d": 1.89,
+   "text": "permission they also did graph"
+  },
+  {
+   "t": 634.21,
+   "d": 1.29,
+   "text": "navigation a lot of people talked about"
+  },
+  {
+   "t": 635.5,
+   "d": 1.74,
+   "text": "how you can choose your encounters on a"
+  },
+  {
+   "t": 637.24,
+   "d": 2.04,
+   "text": "on a map that's just represented by a"
+  },
+  {
+   "t": 639.28,
+   "d": 1.89,
+   "text": "graph instead of moving around and uh"
+  },
+  {
+   "t": 641.17,
+   "d": 4.5,
+   "text": "like a 2d grid dicey dungeons is another"
+  },
+  {
+   "t": 645.67,
+   "d": 3.24,
+   "text": "grade a very recent card game roguelike"
+  },
+  {
+   "t": 648.91,
+   "d": 1.65,
+   "text": "which again it's like we've seen dice"
+  },
+  {
+   "t": 650.56,
+   "d": 3.18,
+   "text": "from card hunter you can take the one"
+  },
+  {
+   "t": 653.74,
+   "d": 3.15,
+   "text": "mechanic from card hunter and run with"
+  },
+  {
+   "t": 656.89,
+   "d": 1.5,
+   "text": "it and you're gonna get this fantastic"
+  },
+  {
+   "t": 658.39,
+   "d": 3.69,
+   "text": "game and all the like little details of"
+  },
+  {
+   "t": 662.08,
+   "d": 1.71,
+   "text": "like oh you're gonna see later you're"
+  },
+  {
+   "t": 663.79,
+   "d": 1.86,
+   "text": "gonna move around on a on a graphical"
+  },
+  {
+   "t": 665.65,
+   "d": 2.73,
+   "text": "map and you have your your enemy on the"
+  },
+  {
+   "t": 668.38,
+   "d": 1.68,
+   "text": "ride you have your own stuff in the"
+  },
+  {
+   "t": 670.06,
+   "d": 1.89,
+   "text": "lower center like all these details are"
+  },
+  {
+   "t": 671.95,
+   "d": 1.59,
+   "text": "just figured out and at this point we've"
+  },
+  {
+   "t": 673.54,
+   "d": 2.61,
+   "text": "we've kind of honed in on the genre you"
+  },
+  {
+   "t": 676.15,
+   "d": 1.47,
+   "text": "acts and people are familiar with what"
+  },
+  {
+   "t": 677.62,
+   "d": 1.41,
+   "text": "they're doing you can do more"
+  },
+  {
+   "t": 679.03,
+   "d": 2.82,
+   "text": "interesting stuff so I guess the summary"
+  },
+  {
+   "t": 681.85,
+   "d": 1.95,
+   "text": "is it's been done so if you're paying"
+  },
+  {
+   "t": 683.8,
+   "d": 2.22,
+   "text": "attention you're gonna have something"
+  },
+  {
+   "t": 686.02,
+   "d": 1.65,
+   "text": "interesting you can take from and"
+  },
+  {
+   "t": 687.67,
+   "d": 2.61,
+   "text": "develop and brain into modern UX right"
+  },
+  {
+   "t": 690.28,
+   "d": 3.18,
+   "text": "that's kind of the stick here and just"
+  },
+  {
+   "t": 693.46,
+   "d": 1.98,
+   "text": "stick to the metaphors right cards and"
+  },
+  {
+   "t": 695.44,
+   "d": 1.65,
+   "text": "deck so the metaphors for a lot of the"
+  },
+  {
+   "t": 697.09,
+   "d": 1.23,
+   "text": "stuff and shuffling is your"
+  },
+  {
+   "t": 698.32,
+   "d": 2.55,
+   "text": "randomization so this brings us to"
+  },
+  {
+   "t": 700.87,
+   "d": 1.44,
+   "text": "design let's talk a little bit more"
+  },
+  {
+   "t": 702.31,
+   "d": 2.34,
+   "text": "concretely about it and I'm gonna give"
+  },
+  {
+   "t": 704.65,
+   "d": 3.15,
+   "text": "you some opinions okay on where you can"
+  },
+  {
+   "t": 707.8,
+   "d": 1.2,
+   "text": "innovate you want to write one of these"
+  },
+  {
+   "t": 709.0,
+   "d": 1.47,
+   "text": "games or maybe inform something you've"
+  },
+  {
+   "t": 710.47,
+   "d": 2.13,
+   "text": "been developing it's super hard to beat"
+  },
+  {
+   "t": 712.6,
+   "d": 2.07,
+   "text": "heart stones battle format like dicey"
+  },
+  {
+   "t": 714.67,
+   "d": 2.7,
+   "text": "dungeons is fascinating because it"
+  },
+  {
+   "t": 717.37,
+   "d": 3.0,
+   "text": "really does take on the like smashing"
+  },
+  {
+   "t": 720.37,
+   "d": 1.8,
+   "text": "three twos in two two threes thing that"
+  },
+  {
+   "t": 722.17,
+   "d": 1.43,
+   "text": "hearthstone does and it did a great job"
+  },
+  {
+   "t": 723.6,
+   "d": 2.44,
+   "text": "that is if you want to do that you're"
+  },
+  {
+   "t": 726.04,
+   "d": 2.34,
+   "text": "gonna spend your entire game development"
+  },
+  {
+   "t": 728.38,
+   "d": 2.16,
+   "text": "time just figuring out how to make a"
+  },
+  {
+   "t": 730.54,
+   "d": 1.5,
+   "text": "better battle format than hearthstone"
+  },
+  {
+   "t": 732.04,
+   "d": 1.8,
+   "text": "but personally I think everything else"
+  },
+  {
+   "t": 733.84,
+   "d": 2.7,
+   "text": "is up for grabs so let's talk about the"
+  },
+  {
+   "t": 736.54,
+   "d": 1.35,
+   "text": "battle format just so you understand"
+  },
+  {
+   "t": 737.89,
+   "d": 2.55,
+   "text": "this game was played hearts table was"
+  },
+  {
+   "t": 740.44,
+   "d": 2.1,
+   "text": "played magic a lot of people played"
+  },
+  {
+   "t": 742.54,
+   "d": 1.5,
+   "text": "magic in hearthstone so you'll see these"
+  },
+  {
+   "t": 744.04,
+   "d": 2.76,
+   "text": "contrasts I love this game because you"
+  },
+  {
+   "t": 746.8,
+   "d": 1.26,
+   "text": "can just talk about the cards you'll"
+  },
+  {
+   "t": 748.06,
+   "d": 2.94,
+   "text": "know what it's what's going on and the"
+  },
+  {
+   "t": 751.0,
+   "d": 2.01,
+   "text": "battle format really emphasizes like"
+  },
+  {
+   "t": 753.01,
+   "d": 1.74,
+   "text": "everything you need to know it's written"
+  },
+  {
+   "t": 754.75,
+   "d": 2.22,
+   "text": "on the card short decks small number"
+  },
+  {
+   "t": 756.97,
+   "d": 1.68,
+   "text": "arithmetic few key words I know if"
+  },
+  {
+   "t": 758.65,
+   "d": 2.52,
+   "text": "you've seen yugioh where there's two"
+  },
+  {
+   "t": 761.17,
+   "d": 2.7,
+   "text": "zeroes in front of every number that's"
+  },
+  {
+   "t": 763.87,
+   "d": 1.44,
+   "text": "written there but you know people like"
+  },
+  {
+   "t": 765.31,
+   "d": 2.25,
+   "text": "that I'm not saying it's bad thing but"
+  },
+  {
+   "t": 767.56,
+   "d": 2.49,
+   "text": "don't do that don't add more zeroes you"
+  },
+  {
+   "t": 770.05,
+   "d": 4.08,
+   "text": "don't need any more zeroes just just"
+  },
+  {
+   "t": 774.13,
+   "d": 4.94,
+   "text": "keep it like small integers bytes shorts"
+  },
+  {
+   "t": 779.07,
+   "d": 2.41,
+   "text": "interactivity we've heard this word said"
+  },
+  {
+   "t": 781.48,
+   "d": 2.49,
+   "text": "in questions which was so delightful I"
+  },
+  {
+   "t": 783.97,
+   "d": 2.43,
+   "text": "in hearthstone you're building you and"
+  },
+  {
+   "t": 786.4,
+   "d": 1.98,
+   "text": "your opponent's puzzle boards and you're"
+  },
+  {
+   "t": 788.38,
+   "d": 1.56,
+   "text": "solving each other's puzzle boards you"
+  },
+  {
+   "t": 789.94,
+   "d": 2.43,
+   "text": "can do this in the PvE setting it's very"
+  },
+  {
+   "t": 792.37,
+   "d": 2.16,
+   "text": "very fun this card to file from"
+  },
+  {
+   "t": 794.53,
+   "d": 1.21,
+   "text": "hearthstone it's"
+  },
+  {
+   "t": 795.74,
+   "d": 3.0,
+   "text": "really arithmetic a vCard where as soon"
+  },
+  {
+   "t": 798.74,
+   "d": 1.68,
+   "text": "as it was introduced to the game people"
+  },
+  {
+   "t": 800.42,
+   "d": 1.65,
+   "text": "played the puzzle building totally"
+  },
+  {
+   "t": 802.07,
+   "d": 1.68,
+   "text": "differently like they didn't want to put"
+  },
+  {
+   "t": 803.75,
+   "d": 3.42,
+   "text": "on the board numbers of how that went 1"
+  },
+  {
+   "t": 807.17,
+   "d": 2.34,
+   "text": "2 3 4 something so weird and so"
+  },
+  {
+   "t": 809.51,
+   "d": 1.53,
+   "text": "idiosyncratic anyone who's played this"
+  },
+  {
+   "t": 811.04,
+   "d": 1.86,
+   "text": "game was like yes I know exactly was"
+  },
+  {
+   "t": 812.9,
+   "d": 2.28,
+   "text": "talking about but more importantly you"
+  },
+  {
+   "t": 815.18,
+   "d": 1.23,
+   "text": "can just look at the card and you can"
+  },
+  {
+   "t": 816.41,
+   "d": 2.34,
+   "text": "tell there's something about the text"
+  },
+  {
+   "t": 818.75,
+   "d": 1.7,
+   "text": "where you can imagine how the"
+  },
+  {
+   "t": 820.45,
+   "d": 2.53,
+   "text": "interactivity how your opponent has to"
+  },
+  {
+   "t": 822.98,
+   "d": 1.5,
+   "text": "play around this card or how you're"
+  },
+  {
+   "t": 824.48,
+   "d": 2.13,
+   "text": "going to going to use it it's really"
+  },
+  {
+   "t": 826.61,
+   "d": 0.69,
+   "text": "interesting"
+  },
+  {
+   "t": 827.3,
+   "d": 3.51,
+   "text": "and finally digitization like what how"
+  },
+  {
+   "t": 830.81,
+   "d": 3.39,
+   "text": "do you force mechanics to work in a"
+  },
+  {
+   "t": 834.2,
+   "d": 3.54,
+   "text": "digital way counterspell such an"
+  },
+  {
+   "t": 837.74,
+   "d": 2.49,
+   "text": "important part of magic you're supposed"
+  },
+  {
+   "t": 840.23,
+   "d": 1.89,
+   "text": "to interrupt your opponent's turn"
+  },
+  {
+   "t": 842.12,
+   "d": 2.04,
+   "text": "playing counter spell right in"
+  },
+  {
+   "t": 844.16,
+   "d": 3.06,
+   "text": "hearthstone you play on your turn"
+  },
+  {
+   "t": 847.22,
+   "d": 2.46,
+   "text": "something called a counter spell that"
+  },
+  {
+   "t": 849.68,
+   "d": 3.12,
+   "text": "will counter whatever is the next spell"
+  },
+  {
+   "t": 852.8,
+   "d": 2.07,
+   "text": "your opponent plays during their turn so"
+  },
+  {
+   "t": 854.87,
+   "d": 1.89,
+   "text": "now you don't have to you don't have to"
+  },
+  {
+   "t": 856.76,
+   "d": 1.89,
+   "text": "a poser you don't have to interrupt"
+  },
+  {
+   "t": 858.65,
+   "d": 2.31,
+   "text": "their turn anymore but because there's"
+  },
+  {
+   "t": 860.96,
+   "d": 2.79,
+   "text": "other junk that's secret that you don't"
+  },
+  {
+   "t": 863.75,
+   "d": 2.1,
+   "text": "know you could have played a potion of"
+  },
+  {
+   "t": 865.85,
+   "d": 1.65,
+   "text": "polymorph your opponent doesn't know"
+  },
+  {
+   "t": 867.5,
+   "d": 1.95,
+   "text": "what the secret card is so they have to"
+  },
+  {
+   "t": 869.45,
+   "d": 2.7,
+   "text": "play around what it is that you played"
+  },
+  {
+   "t": 872.15,
+   "d": 1.26,
+   "text": "it might be counter spell might be"
+  },
+  {
+   "t": 873.41,
+   "d": 1.95,
+   "text": "potion poly more blah blah blah"
+  },
+  {
+   "t": 875.36,
+   "d": 3.06,
+   "text": "the point is counter spell yeah it's"
+  },
+  {
+   "t": 878.42,
+   "d": 1.77,
+   "text": "interactive in Magic the Gathering like"
+  },
+  {
+   "t": 880.19,
+   "d": 2.19,
+   "text": "they're what they're like seven or eight"
+  },
+  {
+   "t": 882.38,
+   "d": 2.91,
+   "text": "counter spells printed in that game and"
+  },
+  {
+   "t": 885.29,
+   "d": 2.4,
+   "text": "there's just one in hearthstone and like"
+  },
+  {
+   "t": 887.69,
+   "d": 1.77,
+   "text": "some magic formants you have to remember"
+  },
+  {
+   "t": 889.46,
+   "d": 2.01,
+   "text": "how many different counter spells there"
+  },
+  {
+   "t": 891.47,
+   "d": 2.1,
+   "text": "are and like is your opponent gonna have"
+  },
+  {
+   "t": 893.57,
+   "d": 1.98,
+   "text": "them that's a little bit more arcane"
+  },
+  {
+   "t": 895.55,
+   "d": 3.27,
+   "text": "than just well I played a minion and it"
+  },
+  {
+   "t": 898.82,
+   "d": 1.59,
+   "text": "didn't trigger potion a polymorph so"
+  },
+  {
+   "t": 900.41,
+   "d": 1.83,
+   "text": "must be counter spell like it's just"
+  },
+  {
+   "t": 902.24,
+   "d": 1.74,
+   "text": "simpler in it I think it made a more"
+  },
+  {
+   "t": 903.98,
+   "d": 2.64,
+   "text": "interesting game just embrace how you're"
+  },
+  {
+   "t": 906.62,
+   "d": 3.72,
+   "text": "the handcuffs of digitisation but so"
+  },
+  {
+   "t": 910.34,
+   "d": 1.44,
+   "text": "let's talk about everything else like"
+  },
+  {
+   "t": 911.78,
+   "d": 1.47,
+   "text": "you've got it okay R sounds great you"
+  },
+  {
+   "t": 913.25,
+   "d": 3.39,
+   "text": "don't need me to tell you that but"
+  },
+  {
+   "t": 916.64,
+   "d": 1.95,
+   "text": "there's all this other stuff and I put"
+  },
+  {
+   "t": 918.59,
+   "d": 2.37,
+   "text": "little hatch dotted lines around things"
+  },
+  {
+   "t": 920.96,
+   "d": 2.4,
+   "text": "that are sort of new nobody's really"
+  },
+  {
+   "t": 923.36,
+   "d": 2.79,
+   "text": "Danya out like persistent worlds in card"
+  },
+  {
+   "t": 926.15,
+   "d": 2.26,
+   "text": "game roguelikes I mean muds and and the"
+  },
+  {
+   "t": 928.41,
+   "d": 2.94,
+   "text": "the multi-user roguelikes have had"
+  },
+  {
+   "t": 931.35,
+   "d": 1.77,
+   "text": "persistence carrying around people's"
+  },
+  {
+   "t": 933.12,
+   "d": 1.65,
+   "text": "corpses and stuff from really long time"
+  },
+  {
+   "t": 934.77,
+   "d": 1.8,
+   "text": "you don't have that in card game"
+  },
+  {
+   "t": 936.57,
+   "d": 2.31,
+   "text": "roguelikes left navigating by quests"
+  },
+  {
+   "t": 938.88,
+   "d": 2.16,
+   "text": "completely randomly authored cards we're"
+  },
+  {
+   "t": 941.04,
+   "d": 1.89,
+   "text": "gonna hear stuff about procedural"
+  },
+  {
+   "t": 942.93,
+   "d": 2.46,
+   "text": "generation of spell like things later"
+  },
+  {
+   "t": 945.39,
+   "d": 1.89,
+   "text": "but I want to talk about some of those"
+  },
+  {
+   "t": 947.28,
+   "d": 1.55,
+   "text": "things"
+  },
+  {
+   "t": 948.83,
+   "d": 2.98,
+   "text": "navigation is something we look at slate"
+  },
+  {
+   "t": 951.81,
+   "d": 1.89,
+   "text": "aspire we're like okay graph navigation"
+  },
+  {
+   "t": 953.7,
+   "d": 1.41,
+   "text": "it's really great maybe there's"
+  },
+  {
+   "t": 955.11,
+   "d": 1.77,
+   "text": "something about the battle system you"
+  },
+  {
+   "t": 956.88,
+   "d": 1.92,
+   "text": "actually see screenshot the second one"
+  },
+  {
+   "t": 958.8,
+   "d": 2.19,
+   "text": "from the left that's what slate aspire"
+  },
+  {
+   "t": 960.99,
+   "d": 5.22,
+   "text": "looked like around 2017 my hint to you"
+  },
+  {
+   "t": 966.21,
+   "d": 1.89,
+   "text": "is it should all fit on one screen"
+  },
+  {
+   "t": 968.1,
+   "d": 1.89,
+   "text": "whatever you're doing fit in on one"
+  },
+  {
+   "t": 969.99,
+   "d": 1.62,
+   "text": "screen there are people who've tried to"
+  },
+  {
+   "t": 971.61,
+   "d": 2.55,
+   "text": "make card games where the gameplay takes"
+  },
+  {
+   "t": 974.16,
+   "d": 2.1,
+   "text": "place on three screens instead of one"
+  },
+  {
+   "t": 976.26,
+   "d": 2.49,
+   "text": "and it's really really challenging for"
+  },
+  {
+   "t": 978.75,
+   "d": 2.28,
+   "text": "people I think it's a smart design"
+  },
+  {
+   "t": 981.03,
+   "d": 2.82,
+   "text": "choice but try to just shove it in there"
+  },
+  {
+   "t": 983.85,
+   "d": 2.55,
+   "text": "and I'm gonna you're gonna have a hard"
+  },
+  {
+   "t": 986.4,
+   "d": 3.45,
+   "text": "time finding a like Apple Design"
+  },
+  {
+   "t": 989.85,
+   "d": 2.46,
+   "text": "award-winning mobile card game or like a"
+  },
+  {
+   "t": 992.31,
+   "d": 3.45,
+   "text": "really breakout hit strategy game"
+  },
+  {
+   "t": 995.76,
+   "d": 1.73,
+   "text": "nowadays unless you're making"
+  },
+  {
+   "t": 997.49,
+   "d": 2.35,
+   "text": "civilization or hearts of art it's gonna"
+  },
+  {
+   "t": 999.84,
+   "d": 2.55,
+   "text": "be tough to not fit it all on one screen"
+  },
+  {
+   "t": 1002.39,
+   "d": 2.84,
+   "text": "how people like it perma death which"
+  },
+  {
+   "t": 1005.23,
+   "d": 2.32,
+   "text": "Thomas we touched on this a little bit"
+  },
+  {
+   "t": 1007.55,
+   "d": 1.53,
+   "text": "when talking about a Dom I'm gonna give"
+  },
+  {
+   "t": 1009.08,
+   "d": 1.76,
+   "text": "you a slightly different point of view"
+  },
+  {
+   "t": 1010.84,
+   "d": 3.43,
+   "text": "so you do testing right or you collect"
+  },
+  {
+   "t": 1014.27,
+   "d": 1.71,
+   "text": "data on what people have been doing and"
+  },
+  {
+   "t": 1015.98,
+   "d": 2.13,
+   "text": "playing inside your game but people who"
+  },
+  {
+   "t": 1018.11,
+   "d": 1.56,
+   "text": "lose they just stop playing forget about"
+  },
+  {
+   "t": 1019.67,
+   "d": 1.65,
+   "text": "that so it's not gonna show up in your"
+  },
+  {
+   "t": 1021.32,
+   "d": 3.5,
+   "text": "data all right your data is already"
+  },
+  {
+   "t": 1024.82,
+   "d": 3.52,
+   "text": "massively biased and something I learned"
+  },
+  {
+   "t": 1028.34,
+   "d": 1.98,
+   "text": "from looking at the hearthstone data a"
+  },
+  {
+   "t": 1030.32,
+   "d": 3.06,
+   "text": "chess replay big popular like pro level"
+  },
+  {
+   "t": 1033.38,
+   "d": 1.88,
+   "text": "hearthstone replay data aggregator"
+  },
+  {
+   "t": 1035.26,
+   "d": 4.21,
+   "text": "that's the average player a skill okay"
+  },
+  {
+   "t": 1039.47,
+   "d": 3.0,
+   "text": "that's that little little normal curve"
+  },
+  {
+   "t": 1042.47,
+   "d": 2.01,
+   "text": "that's an HS replay user in the middle"
+  },
+  {
+   "t": 1044.48,
+   "d": 2.97,
+   "text": "that's all hearthstone users if you just"
+  },
+  {
+   "t": 1047.45,
+   "d": 2.25,
+   "text": "sample people at random which means"
+  },
+  {
+   "t": 1049.7,
+   "d": 1.8,
+   "text": "people who haven't play hearthstone yet"
+  },
+  {
+   "t": 1051.5,
+   "d": 2.01,
+   "text": "their skill is gonna be even worse than"
+  },
+  {
+   "t": 1053.51,
+   "d": 2.79,
+   "text": "a hearthstone player right so the thing"
+  },
+  {
+   "t": 1056.3,
+   "d": 2.82,
+   "text": "that your community will consist of HS"
+  },
+  {
+   "t": 1059.12,
+   "d": 2.18,
+   "text": "replay could be to standard deviation"
+  },
+  {
+   "t": 1061.3,
+   "d": 1.92,
+   "text": "it's better than a random person on the"
+  },
+  {
+   "t": 1063.22,
+   "d": 3.15,
+   "text": "street and my little trick to you is the"
+  },
+  {
+   "t": 1066.37,
+   "d": 1.65,
+   "text": "start of every life should be winnable"
+  },
+  {
+   "t": 1068.02,
+   "d": 2.07,
+   "text": "by playing randomly literally if you hit"
+  },
+  {
+   "t": 1070.09,
+   "d": 2.16,
+   "text": "random Keys and you moved into random"
+  },
+  {
+   "t": 1072.25,
+   "d": 1.92,
+   "text": "places and you did random stuff on the"
+  },
+  {
+   "t": 1074.17,
+   "d": 1.68,
+   "text": "screen if the player wins you have"
+  },
+  {
+   "t": 1075.85,
+   "d": 1.65,
+   "text": "succeeded and there's a really good"
+  },
+  {
+   "t": 1077.5,
+   "d": 2.28,
+   "text": "theoretical reason for that which is for"
+  },
+  {
+   "t": 1079.78,
+   "d": 1.32,
+   "text": "somebody who doesn't know anything at"
+  },
+  {
+   "t": 1081.1,
+   "d": 1.98,
+   "text": "all it's in this their behaviors"
+  },
+  {
+   "t": 1083.08,
+   "d": 2.4,
+   "text": "indistinguishable from playing random so"
+  },
+  {
+   "t": 1085.48,
+   "d": 2.01,
+   "text": "if you want to bring back perma death in"
+  },
+  {
+   "t": 1087.49,
+   "d": 3.06,
+   "text": "your game it you can say like oh is it"
+  },
+  {
+   "t": 1090.55,
+   "d": 1.95,
+   "text": "easier is it hard listen it's really"
+  },
+  {
+   "t": 1092.5,
+   "d": 1.68,
+   "text": "simple to evaluate just close your eyes"
+  },
+  {
+   "t": 1094.18,
+   "d": 2.7,
+   "text": "and do random stuff and if you're on"
+  },
+  {
+   "t": 1096.88,
+   "d": 4.08,
+   "text": "level 2 you succeeded in terms of"
+  },
+  {
+   "t": 1100.96,
+   "d": 2.55,
+   "text": "modding which I think slate aspire has a"
+  },
+  {
+   "t": 1103.51,
+   "d": 2.25,
+   "text": "lot of going on like just do what"
+  },
+  {
+   "t": 1105.76,
+   "d": 1.92,
+   "text": "exactly what your players are asking for"
+  },
+  {
+   "t": 1107.68,
+   "d": 1.83,
+   "text": "this is a github page for a game called"
+  },
+  {
+   "t": 1109.51,
+   "d": 2.25,
+   "text": "Pokemon showdown has anyone heard of"
+  },
+  {
+   "t": 1111.76,
+   "d": 2.67,
+   "text": "Pokemon showdown it has like 15,000"
+  },
+  {
+   "t": 1114.43,
+   "d": 3.99,
+   "text": "concurrent's and people play with a"
+  },
+  {
+   "t": 1118.42,
+   "d": 2.76,
+   "text": "community authored Pokemon in a in a"
+  },
+  {
+   "t": 1121.18,
+   "d": 1.41,
+   "text": "tournament format and a really"
+  },
+  {
+   "t": 1122.59,
+   "d": 2.46,
+   "text": "traditional like I'm I have my team of 5"
+  },
+  {
+   "t": 1125.05,
+   "d": 2.85,
+   "text": "Pokemon verse 6 versus your team of six"
+  },
+  {
+   "t": 1127.9,
+   "d": 2.79,
+   "text": "Pokemon okay and I tried playing it's"
+  },
+  {
+   "t": 1130.69,
+   "d": 1.83,
+   "text": "like playing real-life Wikipedia like"
+  },
+  {
+   "t": 1132.52,
+   "d": 2.49,
+   "text": "you just have to memorize all these like"
+  },
+  {
+   "t": 1135.01,
+   "d": 2.19,
+   "text": "little details about pokemons and I'm"
+  },
+  {
+   "t": 1137.2,
+   "d": 2.94,
+   "text": "like I don't know any of this stuff but"
+  },
+  {
+   "t": 1140.14,
+   "d": 1.86,
+   "text": "some a lot of people will find this"
+  },
+  {
+   "t": 1142.0,
+   "d": 1.74,
+   "text": "really really fun and not just because"
+  },
+  {
+   "t": 1143.74,
+   "d": 1.62,
+   "text": "it's the Pokemon property right it's"
+  },
+  {
+   "t": 1145.36,
+   "d": 1.83,
+   "text": "it's got all this community involvement"
+  },
+  {
+   "t": 1147.19,
+   "d": 3.48,
+   "text": "and they have a lot of ways 17,000"
+  },
+  {
+   "t": 1150.67,
+   "d": 1.59,
+   "text": "commits right a lot of ways that they're"
+  },
+  {
+   "t": 1152.26,
+   "d": 2.46,
+   "text": "going for getting people engaged with"
+  },
+  {
+   "t": 1154.72,
+   "d": 3.29,
+   "text": "contributing so do that it's that simple"
+  },
+  {
+   "t": 1158.01,
+   "d": 2.92,
+   "text": "if you want to do random cards and again"
+  },
+  {
+   "t": 1160.93,
+   "d": 1.77,
+   "text": "a people have touched on this and other"
+  },
+  {
+   "t": 1162.7,
+   "d": 2.82,
+   "text": "talks it's a huge engineering challenge"
+  },
+  {
+   "t": 1165.52,
+   "d": 2.43,
+   "text": "this is something I've tried to do it's"
+  },
+  {
+   "t": 1167.95,
+   "d": 1.77,
+   "text": "really difficult to create stuff that"
+  },
+  {
+   "t": 1169.72,
+   "d": 2.1,
+   "text": "looks in place good if you read like"
+  },
+  {
+   "t": 1171.82,
+   "d": 1.8,
+   "text": "slay the spire talking about a lot of"
+  },
+  {
+   "t": 1173.62,
+   "d": 1.65,
+   "text": "what they were testing was just showing"
+  },
+  {
+   "t": 1175.27,
+   "d": 1.56,
+   "text": "people three cards see which one they"
+  },
+  {
+   "t": 1176.83,
+   "d": 3.15,
+   "text": "picked and a more formal way of doing"
+  },
+  {
+   "t": 1179.98,
+   "d": 3.12,
+   "text": "that is when you're making content like"
+  },
+  {
+   "t": 1183.1,
+   "d": 2.7,
+   "text": "strategy card game content any strategy"
+  },
+  {
+   "t": 1185.8,
+   "d": 2.13,
+   "text": "game content in my opinion it's got to"
+  },
+  {
+   "t": 1187.93,
+   "d": 2.1,
+   "text": "look good and play good okay no one's"
+  },
+  {
+   "t": 1190.03,
+   "d": 1.68,
+   "text": "gonna pick a card that looks bad even if"
+  },
+  {
+   "t": 1191.71,
+   "d": 1.83,
+   "text": "it plays bad they're just not gonna stay"
+  },
+  {
+   "t": 1193.54,
+   "d": 1.47,
+   "text": "in your game long enough to get"
+  },
+  {
+   "t": 1195.01,
+   "d": 1.98,
+   "text": "Wiki to look at the guide and blah blah"
+  },
+  {
+   "t": 1196.99,
+   "d": 4.05,
+   "text": "blah so just if it doesn't fit in that"
+  },
+  {
+   "t": 1201.04,
+   "d": 3.3,
+   "text": "corner just cut it and it turns out"
+  },
+  {
+   "t": 1204.34,
+   "d": 1.68,
+   "text": "that's very difficult to do with random"
+  },
+  {
+   "t": 1206.02,
+   "d": 2.07,
+   "text": "content but with a model that can maybe"
+  },
+  {
+   "t": 1208.09,
+   "d": 2.91,
+   "text": "give that data feedback into the system"
+  },
+  {
+   "t": 1211.0,
+   "d": 3.03,
+   "text": "maybe maybe it'll work so there's a lot"
+  },
+  {
+   "t": 1214.03,
+   "d": 1.47,
+   "text": "that you can work with like there's"
+  },
+  {
+   "t": 1215.5,
+   "d": 2.79,
+   "text": "still there's still so much to do but"
+  },
+  {
+   "t": 1218.29,
+   "d": 2.31,
+   "text": "this is this is kind of my guideline to"
+  },
+  {
+   "t": 1220.6,
+   "d": 2.55,
+   "text": "you if you want to try doing this either"
+  },
+  {
+   "t": 1223.15,
+   "d": 1.92,
+   "text": "do something new with hearthstone combat"
+  },
+  {
+   "t": 1225.07,
+   "d": 2.01,
+   "text": "and only focus on that or just use it"
+  },
+  {
+   "t": 1227.08,
+   "d": 2.16,
+   "text": "and then look at all these other things"
+  },
+  {
+   "t": 1229.24,
+   "d": 2.67,
+   "text": "you can innovate in with these few and"
+  },
+  {
+   "t": 1231.91,
+   "d": 3.84,
+   "text": "simple constraints so just a touch on"
+  },
+  {
+   "t": 1235.75,
+   "d": 1.35,
+   "text": "engineering because there a lot of"
+  },
+  {
+   "t": 1237.1,
+   "d": 1.98,
+   "text": "Engineers in the room this is my"
+  },
+  {
+   "t": 1239.08,
+   "d": 2.49,
+   "text": "experience from working on a multiplayer"
+  },
+  {
+   "t": 1241.57,
+   "d": 1.8,
+   "text": "community authored card games got to"
+  },
+  {
+   "t": 1243.37,
+   "d": 1.32,
+   "text": "work for a lot of skill level it's got"
+  },
+  {
+   "t": 1244.69,
+   "d": 1.32,
+   "text": "to work for a lot of different content"
+  },
+  {
+   "t": 1246.01,
+   "d": 3.54,
+   "text": "for your clans unity I'm not gonna talk"
+  },
+  {
+   "t": 1249.55,
+   "d": 2.73,
+   "text": "about that too much for a rules engine a"
+  },
+  {
+   "t": 1252.28,
+   "d": 1.32,
+   "text": "lot of people write their own like"
+  },
+  {
+   "t": 1253.6,
+   "d": 1.71,
+   "text": "virtual machine how many like little"
+  },
+  {
+   "t": 1255.31,
+   "d": 2.61,
+   "text": "games have their own like little rule"
+  },
+  {
+   "t": 1257.92,
+   "d": 1.74,
+   "text": "system and their own like little"
+  },
+  {
+   "t": 1259.66,
+   "d": 3.24,
+   "text": "programming languages just use what is"
+  },
+  {
+   "t": 1262.9,
+   "d": 2.58,
+   "text": "given to you stuff that you're looking"
+  },
+  {
+   "t": 1265.48,
+   "d": 2.01,
+   "text": "for is your code stack you can see a"
+  },
+  {
+   "t": 1267.49,
+   "d": 1.74,
+   "text": "spell source code stack on the right"
+  },
+  {
+   "t": 1269.23,
+   "d": 2.01,
+   "text": "should look like your game call stack so"
+  },
+  {
+   "t": 1271.24,
+   "d": 2.07,
+   "text": "something receives damage eventually I"
+  },
+  {
+   "t": 1273.31,
+   "d": 1.92,
+   "text": "should see like a class or function"
+  },
+  {
+   "t": 1275.23,
+   "d": 1.62,
+   "text": "called receiving damage somewhere in the"
+  },
+  {
+   "t": 1276.85,
+   "d": 2.22,
+   "text": "stack this little difference it's gonna"
+  },
+  {
+   "t": 1279.07,
+   "d": 2.13,
+   "text": "make your life a lot easier and the"
+  },
+  {
+   "t": 1281.2,
+   "d": 1.92,
+   "text": "technology you're looking forward to let"
+  },
+  {
+   "t": 1283.12,
+   "d": 3.84,
+   "text": "you run a kind of rules based game like"
+  },
+  {
+   "t": 1286.96,
+   "d": 2.91,
+   "text": "this some languages it's called fibers"
+  },
+  {
+   "t": 1289.87,
+   "d": 1.98,
+   "text": "co-routines or async this sort of thing"
+  },
+  {
+   "t": 1291.85,
+   "d": 1.5,
+   "text": "you just want to look and see that it"
+  },
+  {
+   "t": 1293.35,
+   "d": 3.27,
+   "text": "checks the box for games stay everybody"
+  },
+  {
+   "t": 1296.62,
+   "d": 2.49,
+   "text": "reinvent something called an arena"
+  },
+  {
+   "t": 1299.11,
+   "d": 2.97,
+   "text": "allocator this is a really surprisingly"
+  },
+  {
+   "t": 1302.08,
+   "d": 1.77,
+   "text": "niche thing but if you've ever you"
+  },
+  {
+   "t": 1303.85,
+   "d": 2.55,
+   "text": "written the word entity in your codebase"
+  },
+  {
+   "t": 1306.4,
+   "d": 2.22,
+   "text": "you've already reinvented an arena"
+  },
+  {
+   "t": 1308.62,
+   "d": 2.55,
+   "text": "allocator okay that's that's what this"
+  },
+  {
+   "t": 1311.17,
+   "d": 2.57,
+   "text": "thing is and there is a cross-platform"
+  },
+  {
+   "t": 1313.74,
+   "d": 2.59,
+   "text": "strongly typed mutable arena allocator"
+  },
+  {
+   "t": 1316.33,
+   "d": 2.43,
+   "text": "written by guy who works for cloud fair"
+  },
+  {
+   "t": 1318.76,
+   "d": 1.89,
+   "text": "now called cap and proto and he was a"
+  },
+  {
+   "t": 1320.65,
+   "d": 2.58,
+   "text": "protobufs to author this is just a bunch"
+  },
+  {
+   "t": 1323.23,
+   "d": 1.86,
+   "text": "of mumbo jumbo but honest to god you'll"
+  },
+  {
+   "t": 1325.09,
+   "d": 1.44,
+   "text": "look at this you know like oh my god"
+  },
+  {
+   "t": 1326.53,
+   "d": 2.4,
+   "text": "this is this solves so many problem"
+  },
+  {
+   "t": 1328.93,
+   "d": 3.06,
+   "text": "and know you're gonna make a complicated"
+  },
+  {
+   "t": 1331.99,
+   "d": 1.62,
+   "text": "like rules engine you're gonna want to"
+  },
+  {
+   "t": 1333.61,
+   "d": 3.81,
+   "text": "use this thing for coding carts a lot of"
+  },
+  {
+   "t": 1337.42,
+   "d": 1.47,
+   "text": "people write their own language for"
+  },
+  {
+   "t": 1338.89,
+   "d": 1.89,
+   "text": "coding cards they write in Python or a"
+  },
+  {
+   "t": 1340.78,
+   "d": 2.13,
+   "text": "Java they write it as Java classes and"
+  },
+  {
+   "t": 1342.91,
+   "d": 1.92,
+   "text": "something like slate aspire they write"
+  },
+  {
+   "t": 1344.83,
+   "d": 2.58,
+   "text": "it directly as Lua code inside Hakes for"
+  },
+  {
+   "t": 1347.41,
+   "d": 2.73,
+   "text": "something like dicey dungeons just use a"
+  },
+  {
+   "t": 1350.14,
+   "d": 4.5,
+   "text": "data format because ultimately you can"
+  },
+  {
+   "t": 1354.64,
+   "d": 1.17,
+   "text": "read the slide I'm not gonna read it for"
+  },
+  {
+   "t": 1355.81,
+   "d": 3.0,
+   "text": "you ultimately when you get other people"
+  },
+  {
+   "t": 1358.81,
+   "d": 1.95,
+   "text": "to write the cards the first thing that"
+  },
+  {
+   "t": 1360.76,
+   "d": 1.5,
+   "text": "their body's telling them is I don't"
+  },
+  {
+   "t": 1362.26,
+   "d": 2.73,
+   "text": "want to write code and something that"
+  },
+  {
+   "t": 1364.99,
+   "d": 1.74,
+   "text": "doesn't look like code but is code"
+  },
+  {
+   "t": 1366.73,
+   "d": 2.25,
+   "text": "that's a-ok because at least they'll get"
+  },
+  {
+   "t": 1368.98,
+   "d": 3.15,
+   "text": "started writing but if you just show"
+  },
+  {
+   "t": 1372.13,
+   "d": 2.13,
+   "text": "them Python they're getting like oh man"
+  },
+  {
+   "t": 1374.26,
+   "d": 3.27,
+   "text": "like do I really want to do this so this"
+  },
+  {
+   "t": 1377.53,
+   "d": 2.55,
+   "text": "I think it worked a lot for me and it"
+  },
+  {
+   "t": 1380.08,
+   "d": 1.77,
+   "text": "works a lot for other games that use"
+  },
+  {
+   "t": 1381.85,
+   "d": 1.86,
+   "text": "structured data formats contribute"
+  },
+  {
+   "t": 1383.71,
+   "d": 1.65,
+   "text": "content that's true about a lot of"
+  },
+  {
+   "t": 1385.36,
+   "d": 1.8,
+   "text": "strategy games true about a lot of"
+  },
+  {
+   "t": 1387.16,
+   "d": 1.53,
+   "text": "modding if you look at especially"
+  },
+  {
+   "t": 1388.69,
+   "d": 3.27,
+   "text": "paradox games a lot of their earlier"
+  },
+  {
+   "t": 1391.96,
+   "d": 2.43,
+   "text": "model was achieved by big structured"
+  },
+  {
+   "t": 1394.39,
+   "d": 1.53,
+   "text": "data formats and that's what made you"
+  },
+  {
+   "t": 1395.92,
+   "d": 2.09,
+   "text": "robust so successful in hearts of iron"
+  },
+  {
+   "t": 1398.01,
+   "d": 2.44,
+   "text": "civilizations same thing they had Python"
+  },
+  {
+   "t": 1400.45,
+   "d": 1.8,
+   "text": "to do more complicated stuff but they"
+  },
+  {
+   "t": 1402.25,
+   "d": 2.25,
+   "text": "use this big complicated structured data"
+  },
+  {
+   "t": 1404.5,
+   "d": 1.92,
+   "text": "format for a lot of other Madhi and"
+  },
+  {
+   "t": 1406.42,
+   "d": 1.08,
+   "text": "super important for getting"
+  },
+  {
+   "t": 1407.5,
+   "d": 3.42,
+   "text": "contributions out so that's pretty much"
+  },
+  {
+   "t": 1410.92,
+   "d": 2.22,
+   "text": "it for just achieving some things with"
+  },
+  {
+   "t": 1413.14,
+   "d": 2.52,
+   "text": "engineering but I'd love to take some"
+  },
+  {
+   "t": 1415.66,
+   "d": 2.28,
+   "text": "questions and talk some more so thank"
+  },
+  {
+   "t": 1417.94,
+   "d": 2.45,
+   "text": "you so much"
+  },
+  {
+   "t": 1435.28,
+   "d": 3.0,
+   "text": "questions"
+  },
+  {
+   "t": 1450.03,
+   "d": 3.38,
+   "text": "great talk you talked a little bit about"
+  },
+  {
+   "t": 1453.41,
+   "d": 3.13,
+   "text": "random card generation and I also talked"
+  },
+  {
+   "t": 1456.54,
+   "d": 1.41,
+   "text": "a lot about hearthstone and I'm not sure"
+  },
+  {
+   "t": 1457.95,
+   "d": 2.04,
+   "text": "if you're familiar with some of the"
+  },
+  {
+   "t": 1459.99,
+   "d": 1.83,
+   "text": "random card generation efforts that"
+  },
+  {
+   "t": 1461.82,
+   "d": 1.62,
+   "text": "players have made for custom cards and"
+  },
+  {
+   "t": 1463.44,
+   "d": 1.55,
+   "text": "stone and kind of like the"
+  },
+  {
+   "t": 1464.99,
+   "d": 4.93,
+   "text": "hilarious results of those things do you"
+  },
+  {
+   "t": 1469.92,
+   "d": 2.7,
+   "text": "have any thoughts about employing those"
+  },
+  {
+   "t": 1472.62,
+   "d": 2.07,
+   "text": "kind of garbage results that they get"
+  },
+  {
+   "t": 1474.69,
+   "d": 1.05,
+   "text": "from random card generation"
+  },
+  {
+   "t": 1475.74,
+   "d": 2.76,
+   "text": "intentionally in a game structure it was"
+  },
+  {
+   "t": 1478.5,
+   "d": 3.36,
+   "text": "a big part of my research a few years"
+  },
+  {
+   "t": 1481.86,
+   "d": 4.2,
+   "text": "ago to essentially do procedurally"
+  },
+  {
+   "t": 1486.06,
+   "d": 2.13,
+   "text": "generated hearthstone cards spell"
+  },
+  {
+   "t": 1488.19,
+   "d": 2.55,
+   "text": "sources as a game engines essentially"
+  },
+  {
+   "t": 1490.74,
+   "d": 2.49,
+   "text": "hearthstone at its core with only a few"
+  },
+  {
+   "t": 1493.23,
+   "d": 3.57,
+   "text": "major changes and what I learned from"
+  },
+  {
+   "t": 1496.8,
+   "d": 2.25,
+   "text": "that experience is beside it kind of"
+  },
+  {
+   "t": 1499.05,
+   "d": 2.61,
+   "text": "creating garbage like you might have"
+  },
+  {
+   "t": 1501.66,
+   "d": 1.86,
+   "text": "this hypothesis that well there'll just"
+  },
+  {
+   "t": 1503.52,
+   "d": 2.43,
+   "text": "be google will release bert and now i"
+  },
+  {
+   "t": 1505.95,
+   "d": 2.22,
+   "text": "will try this new language model and i"
+  },
+  {
+   "t": 1508.17,
+   "d": 3.45,
+   "text": "will get something better and or maybe"
+  },
+  {
+   "t": 1511.62,
+   "d": 2.22,
+   "text": "there's a way that i can turn english"
+  },
+  {
+   "t": 1513.84,
+   "d": 2.37,
+   "text": "language text into code that the game"
+  },
+  {
+   "t": 1516.21,
+   "d": 1.92,
+   "text": "understands a game engine understands"
+  },
+  {
+   "t": 1518.13,
+   "d": 1.5,
+   "text": "and these are things that i've"
+  },
+  {
+   "t": 1519.63,
+   "d": 2.82,
+   "text": "experimented with and in my opinion"
+  },
+  {
+   "t": 1522.45,
+   "d": 4.74,
+   "text": "what's missing is a big data set and so"
+  },
+  {
+   "t": 1527.19,
+   "d": 2.94,
+   "text": "spell source in terms of its"
+  },
+  {
+   "t": 1530.13,
+   "d": 1.5,
+   "text": "contributions probably has the most"
+  },
+  {
+   "t": 1531.63,
+   "d": 5.52,
+   "text": "coded cards after in a structured data"
+  },
+  {
+   "t": 1537.15,
+   "d": 1.77,
+   "text": "format that these systems can work with"
+  },
+  {
+   "t": 1538.92,
+   "d": 2.61,
+   "text": "people have tried with ex mage the magic"
+  },
+  {
+   "t": 1541.53,
+   "d": 2.67,
+   "text": "simulator has like 14,000 coded cards"
+  },
+  {
+   "t": 1544.2,
+   "d": 2.1,
+   "text": "but that's in java it doesn't really"
+  },
+  {
+   "t": 1546.3,
+   "d": 3.84,
+   "text": "work so there's still a lot to work work"
+  },
+  {
+   "t": 1550.14,
+   "d": 2.85,
+   "text": "around the representation of a strategy"
+  },
+  {
+   "t": 1552.99,
+   "d": 1.56,
+   "text": "card game card and that's really the"
+  },
+  {
+   "t": 1554.55,
+   "d": 1.5,
+   "text": "obstacle someone's got to come up with"
+  },
+  {
+   "t": 1556.05,
+   "d": 2.04,
+   "text": "something clever with that if you follow"
+  },
+  {
+   "t": 1558.09,
+   "d": 3.12,
+   "text": "the rules i have for card authoring"
+  },
+  {
+   "t": 1561.21,
+   "d": 2.51,
+   "text": "you're gonna be a lot closer to"
+  },
+  {
+   "t": 1563.72,
+   "d": 2.8,
+   "text": "something that works with those card"
+  },
+  {
+   "t": 1566.52,
+   "d": 2.22,
+   "text": "generators than say just writing your"
+  },
+  {
+   "t": 1568.74,
+   "d": 3.8,
+   "text": "cards in in a programming language"
+  },
+  {
+   "t": 1576.47,
+   "d": 3.31,
+   "text": "this is a more of a statement or or"
+  },
+  {
+   "t": 1579.78,
+   "d": 3.03,
+   "text": "comment than a question and and maybe"
+  },
+  {
+   "t": 1582.81,
+   "d": 2.25,
+   "text": "you would have expected this but I kind"
+  },
+  {
+   "t": 1585.06,
+   "d": 1.83,
+   "text": "of had to bring it up where the end you"
+  },
+  {
+   "t": 1586.89,
+   "d": 2.42,
+   "text": "made a lot of very very opinionated"
+  },
+  {
+   "t": 1589.31,
+   "d": 6.1,
+   "text": "definitive technical selection decisions"
+  },
+  {
+   "t": 1595.41,
+   "d": 6.78,
+   "text": "and like why why unity versus unreal for"
+  },
+  {
+   "t": 1602.19,
+   "d": 1.86,
+   "text": "example why captain proto versus"
+  },
+  {
+   "t": 1604.05,
+   "d": 3.93,
+   "text": "flatbuffers or protocol buffers like"
+  },
+  {
+   "t": 1607.98,
+   "d": 2.7,
+   "text": "obviously there are trade-offs to these"
+  },
+  {
+   "t": 1610.68,
+   "d": 2.43,
+   "text": "things but depending on what your"
+  },
+  {
+   "t": 1613.11,
+   "d": 1.53,
+   "text": "background is and who you are or like"
+  },
+  {
+   "t": 1614.64,
+   "d": 4.05,
+   "text": "yeah basically my comment is that maybe"
+  },
+  {
+   "t": 1618.69,
+   "d": 3.12,
+   "text": "you should add like two options or some"
+  },
+  {
+   "t": 1621.81,
+   "d": 3.96,
+   "text": "alternate yeah I think you're right like"
+  },
+  {
+   "t": 1625.77,
+   "d": 2.01,
+   "text": "the market it gives you a lot of options"
+  },
+  {
+   "t": 1627.78,
+   "d": 3.42,
+   "text": "and I personally felt I'm less qualified"
+  },
+  {
+   "t": 1631.2,
+   "d": 1.98,
+   "text": "to comment on a lot of different game"
+  },
+  {
+   "t": 1633.18,
+   "d": 4.01,
+   "text": "engines especially with my experience"
+  },
+  {
+   "t": 1637.19,
+   "d": 4.45,
+   "text": "with authoring card games writing the at"
+  },
+  {
+   "t": 1641.64,
+   "d": 2.37,
+   "text": "the rules engine was a much bigger like"
+  },
+  {
+   "t": 1644.01,
+   "d": 2.22,
+   "text": "eye opening experience for me and that's"
+  },
+  {
+   "t": 1646.23,
+   "d": 1.65,
+   "text": "why I'm telling you about this kind of"
+  },
+  {
+   "t": 1647.88,
+   "d": 2.46,
+   "text": "obscure serialization format in ways you"
+  },
+  {
+   "t": 1650.34,
+   "d": 2.13,
+   "text": "can hack it into something useful I"
+  },
+  {
+   "t": 1652.47,
+   "d": 2.37,
+   "text": "think you're right like don't worry so"
+  },
+  {
+   "t": 1654.84,
+   "d": 2.43,
+   "text": "much about a tough choice for for a"
+  },
+  {
+   "t": 1657.27,
+   "d": 3.21,
+   "text": "client but look at cap and proto look at"
+  },
+  {
+   "t": 1660.48,
+   "d": 2.22,
+   "text": "what fibers are if you understand so"
+  },
+  {
+   "t": 1662.7,
+   "d": 1.56,
+   "text": "these technologies it'll be something"
+  },
+  {
+   "t": 1664.26,
+   "d": 3.66,
+   "text": "you can take back to every complicated"
+  },
+  {
+   "t": 1667.92,
+   "d": 1.53,
+   "text": "rules game you're authoring whether"
+  },
+  {
+   "t": 1669.45,
+   "d": 0.9,
+   "text": "that's a roguelike"
+  },
+  {
+   "t": 1670.35,
+   "d": 3.41,
+   "text": "or card game or whatever it is"
+  },
+  {
+   "t": 1677.99,
+   "d": 3.85,
+   "text": "what's an arena allocator what is an"
+  },
+  {
+   "t": 1681.84,
+   "d": 3.69,
+   "text": "arena alligator in brief it's I'm trying"
+  },
+  {
+   "t": 1685.53,
+   "d": 1.8,
+   "text": "to think of how to like not make"
+  },
+  {
+   "t": 1687.33,
+   "d": 4.65,
+   "text": "everybody fall asleep so the gist is you"
+  },
+  {
+   "t": 1691.98,
+   "d": 1.65,
+   "text": "want to make a networked multiplayer"
+  },
+  {
+   "t": 1693.63,
+   "d": 2.22,
+   "text": "game which is really hard right and"
+  },
+  {
+   "t": 1695.85,
+   "d": 1.83,
+   "text": "you're like horrible I've got my data"
+  },
+  {
+   "t": 1697.68,
+   "d": 3.0,
+   "text": "from point A to point B and you're gonna"
+  },
+  {
+   "t": 1700.68,
+   "d": 1.8,
+   "text": "read a bajillion different ways to do"
+  },
+  {
+   "t": 1702.48,
+   "d": 3.9,
+   "text": "this and you're gonna realize eventually"
+  },
+  {
+   "t": 1706.38,
+   "d": 3.54,
+   "text": "you just need to take a byte buffer and"
+  },
+  {
+   "t": 1709.92,
+   "d": 2.31,
+   "text": "send it from point A to point B and"
+  },
+  {
+   "t": 1712.23,
+   "d": 2.67,
+   "text": "you're like but my game doesn't store it"
+  },
+  {
+   "t": 1714.9,
+   "d": 2.61,
+   "text": "it's game state and byte buffers it"
+  },
+  {
+   "t": 1717.51,
+   "d": 2.16,
+   "text": "stores it in objects or in maps or in"
+  },
+  {
+   "t": 1719.67,
+   "d": 2.94,
+   "text": "functors or whatever you know and it"
+  },
+  {
+   "t": 1722.61,
+   "d": 2.46,
+   "text": "turns out that you would love to have"
+  },
+  {
+   "t": 1725.07,
+   "d": 1.5,
+   "text": "something that in your code looks like"
+  },
+  {
+   "t": 1726.57,
+   "d": 2.43,
+   "text": "variables and objects and classes and"
+  },
+  {
+   "t": 1729.0,
+   "d": 2.34,
+   "text": "really conventional stuff but which you"
+  },
+  {
+   "t": 1731.34,
+   "d": 2.55,
+   "text": "can eventually send to unity for example"
+  },
+  {
+   "t": 1733.89,
+   "d": 2.19,
+   "text": "as a byte buffer and then in unity it"
+  },
+  {
+   "t": 1736.08,
+   "d": 3.21,
+   "text": "turns back into objects and classes and"
+  },
+  {
+   "t": 1739.29,
+   "d": 2.99,
+   "text": "an arena allocator is a trick when"
+  },
+  {
+   "t": 1742.28,
+   "d": 2.65,
+   "text": "sometimes you want to add a new cards to"
+  },
+  {
+   "t": 1744.93,
+   "d": 1.68,
+   "text": "the game or maybe you want to add a new"
+  },
+  {
+   "t": 1746.61,
+   "d": 3.72,
+   "text": "effect or maybe you want to go from"
+  },
+  {
+   "t": 1750.33,
+   "d": 2.64,
+   "text": "having one of something to two stuff"
+  },
+  {
+   "t": 1752.97,
+   "d": 2.7,
+   "text": "that's really conventional and you want"
+  },
+  {
+   "t": 1755.67,
+   "d": 2.22,
+   "text": "a representation of that that works with"
+  },
+  {
+   "t": 1757.89,
+   "d": 1.8,
+   "text": "sending around byte buffers and that's"
+  },
+  {
+   "t": 1759.69,
+   "d": 1.98,
+   "text": "what an arena allocator does it says I"
+  },
+  {
+   "t": 1761.67,
+   "d": 3.45,
+   "text": "can add date our increased state in a"
+  },
+  {
+   "t": 1765.12,
+   "d": 1.92,
+   "text": "way where you're still able to go from"
+  },
+  {
+   "t": 1767.04,
+   "d": 2.64,
+   "text": "one index to another copy and and send"
+  },
+  {
+   "t": 1769.68,
+   "d": 1.68,
+   "text": "it somewhere else and then it is"
+  },
+  {
+   "t": 1771.36,
+   "d": 2.31,
+   "text": "interpreted exactly the same there's no"
+  },
+  {
+   "t": 1773.67,
+   "d": 2.94,
+   "text": "actual serialization this sort of detail"
+  },
+  {
+   "t": 1776.61,
+   "d": 3.93,
+   "text": "it's super important for the rules"
+  },
+  {
+   "t": 1780.54,
+   "d": 2.1,
+   "text": "engine because if you don't write that"
+  },
+  {
+   "t": 1782.64,
+   "d": 2.79,
+   "text": "way ahead of time you wind up with a"
+  },
+  {
+   "t": 1785.43,
+   "d": 1.74,
+   "text": "problem where I had where you're looking"
+  },
+  {
+   "t": 1787.17,
+   "d": 1.89,
+   "text": "at somebody's six-year-old card base and"
+  },
+  {
+   "t": 1789.06,
+   "d": 1.62,
+   "text": "you're like how am I gonna make off how"
+  },
+  {
+   "t": 1790.68,
+   "d": 1.53,
+   "text": "am I gonna make a multiplayer experience"
+  },
+  {
+   "t": 1792.21,
+   "d": 1.74,
+   "text": "out of this or how am I gonna make an AI"
+  },
+  {
+   "t": 1793.95,
+   "d": 2.85,
+   "text": "that runs fast because eyes need to copy"
+  },
+  {
+   "t": 1796.8,
+   "d": 1.38,
+   "text": "this stuff really quickly they need"
+  },
+  {
+   "t": 1798.18,
+   "d": 4.17,
+   "text": "point A to point B buffering but you"
+  },
+  {
+   "t": 1802.35,
+   "d": 1.92,
+   "text": "know your objects and functors game it"
+  },
+  {
+   "t": 1804.27,
+   "d": 1.5,
+   "text": "just doesn't do that you wind up"
+  },
+  {
+   "t": 1805.77,
+   "d": 3.1,
+   "text": "spending months rewriting something"
+  },
+  {
+   "t": 1808.87,
+   "d": 2.52,
+   "text": "it's in order to implement like an AI"
+  },
+  {
+   "t": 1811.39,
+   "d": 2.34,
+   "text": "that is straight out of a textbook right"
+  },
+  {
+   "t": 1813.73,
+   "d": 3.51,
+   "text": "so this is something that it's just I'm"
+  },
+  {
+   "t": 1817.24,
+   "d": 1.89,
+   "text": "giving a word for something actually a"
+  },
+  {
+   "t": 1819.13,
+   "d": 2.36,
+   "text": "lot a lot a lot of people already use"
+  },
+  {
+   "t": 1821.49,
+   "d": 2.14,
+   "text": "arena allocate if you punch that into"
+  },
+  {
+   "t": 1823.63,
+   "d": 1.74,
+   "text": "google it does exist this is a real"
+  },
+  {
+   "t": 1825.37,
+   "d": 3.9,
+   "text": "thing but that's the word that you're"
+  },
+  {
+   "t": 1829.27,
+   "d": 1.4,
+   "text": "looking for to describe something"
+  },
+  {
+   "t": 1830.67,
+   "d": 3.64,
+   "text": "usually you're already doing Patrick do"
+  },
+  {
+   "t": 1834.31,
+   "d": 1.26,
+   "text": "you understand sitting up your laptop"
+  },
+  {
+   "t": 1835.57,
+   "d": 6.33,
+   "text": "and I'll ask Ben one final question you"
+  },
+  {
+   "t": 1841.9,
+   "d": 3.77,
+   "text": "talked a lot about digital card games"
+  },
+  {
+   "t": 1845.67,
+   "d": 4.11,
+   "text": "but you didn't necessarily talk about"
+  },
+  {
+   "t": 1849.78,
+   "d": 3.49,
+   "text": "what makes digital card games different"
+  },
+  {
+   "t": 1853.27,
+   "d": 2.09,
+   "text": "from real ones and I'm curious you know"
+  },
+  {
+   "t": 1855.36,
+   "d": 3.37,
+   "text": "how you view this sort of things you can"
+  },
+  {
+   "t": 1858.73,
+   "d": 3.63,
+   "text": "do so like magic right it's a paper card"
+  },
+  {
+   "t": 1862.36,
+   "d": 2.25,
+   "text": "game you can do various things with it"
+  },
+  {
+   "t": 1864.61,
+   "d": 1.83,
+   "text": "but like in the magic Microprose game"
+  },
+  {
+   "t": 1866.44,
+   "d": 2.13,
+   "text": "thing it invented a bunch of cards that"
+  },
+  {
+   "t": 1868.57,
+   "d": 2.01,
+   "text": "like choose random creatures from your"
+  },
+  {
+   "t": 1870.58,
+   "d": 1.71,
+   "text": "opponent's deck they wouldn't have"
+  },
+  {
+   "t": 1872.29,
+   "d": 2.19,
+   "text": "knowledge over and hearthstone does this"
+  },
+  {
+   "t": 1874.48,
+   "d": 1.71,
+   "text": "a lot with like a lot of random effects"
+  },
+  {
+   "t": 1876.19,
+   "d": 2.88,
+   "text": "and then but then also there are now"
+  },
+  {
+   "t": 1879.07,
+   "d": 2.55,
+   "text": "paper card games made digitally like"
+  },
+  {
+   "t": 1881.62,
+   "d": 3.41,
+   "text": "keyboards which gets to invent random"
+  },
+  {
+   "t": 1885.03,
+   "d": 3.22,
+   "text": "synergies inside of the card game how do"
+  },
+  {
+   "t": 1888.25,
+   "d": 8.1,
+   "text": "you view that distinction yes so no he"
+  },
+  {
+   "t": 1896.35,
+   "d": 1.29,
+   "text": "brings up something really interesting"
+  },
+  {
+   "t": 1897.64,
+   "d": 3.36,
+   "text": "magic again even with its Microprose"
+  },
+  {
+   "t": 1901.0,
+   "d": 1.95,
+   "text": "product partnered game did a lot of this"
+  },
+  {
+   "t": 1902.95,
+   "d": 3.17,
+   "text": "stuff that was looked like a roguelike"
+  },
+  {
+   "t": 1906.12,
+   "d": 3.19,
+   "text": "the mechanics"
+  },
+  {
+   "t": 1909.31,
+   "d": 2.1,
+   "text": "he's describing something hearthstone"
+  },
+  {
+   "t": 1911.41,
+   "d": 1.92,
+   "text": "that's called a discover action which"
+  },
+  {
+   "t": 1913.33,
+   "d": 2.43,
+   "text": "they absolutely looked at the micro"
+  },
+  {
+   "t": 1915.76,
+   "d": 1.71,
+   "text": "Proust Magic the Gathering game from"
+  },
+  {
+   "t": 1917.47,
+   "d": 5.01,
+   "text": "from almost 20 years ago to come up with"
+  },
+  {
+   "t": 1922.48,
+   "d": 2.49,
+   "text": "something like that these things they"
+  },
+  {
+   "t": 1924.97,
+   "d": 4.11,
+   "text": "they are the shuffling and dice rolling"
+  },
+  {
+   "t": 1929.08,
+   "d": 2.58,
+   "text": "and random elements that really the"
+  },
+  {
+   "t": 1931.66,
+   "d": 1.89,
+   "text": "computer referee does a lot better you"
+  },
+  {
+   "t": 1933.55,
+   "d": 4.97,
+   "text": "could tediously do with cards I think"
+  },
+  {
+   "t": 1938.52,
+   "d": 2.47,
+   "text": "where we've seen it the most isn't"
+  },
+  {
+   "t": 1940.99,
+   "d": 1.5,
+   "text": "something like dicey dungeons"
+  },
+  {
+   "t": 1942.49,
+   "d": 2.16,
+   "text": "really rolling that many dice and moving"
+  },
+  {
+   "t": 1944.65,
+   "d": 2.46,
+   "text": "them around all the time would be soup"
+  },
+  {
+   "t": 1947.11,
+   "d": 3.15,
+   "text": "would be super big drag and so would"
+  },
+  {
+   "t": 1950.26,
+   "d": 2.88,
+   "text": "doing a lot of shuffling but if you"
+  },
+  {
+   "t": 1953.14,
+   "d": 1.83,
+   "text": "wanted a prototype something like that"
+  },
+  {
+   "t": 1954.97,
+   "d": 1.65,
+   "text": "in the card game don't be shy like in"
+  },
+  {
+   "t": 1956.62,
+   "d": 2.85,
+   "text": "the physical you can you can cheat you"
+  },
+  {
+   "t": 1959.47,
+   "d": 2.1,
+   "text": "can do all these effects physically"
+  },
+  {
+   "t": 1961.57,
+   "d": 2.13,
+   "text": "before you start programming them and I"
+  },
+  {
+   "t": 1963.7,
+   "d": 1.77,
+   "text": "I think know was right that that stuff"
+  },
+  {
+   "t": 1965.47,
+   "d": 1.35,
+   "text": "it's very important for making something"
+  },
+  {
+   "t": 1966.82,
+   "d": 5.84,
+   "text": "felt very new cool thank you so much"
+  },
+  {
+   "t": 1975.25,
+   "d": 2.78,
+   "text": "[Music]"
+  }
+ ]
+}

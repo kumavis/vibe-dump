@@ -1,0 +1,92 @@
+{
+  "id": "O78uYtUZKYs",
+  "title": "Everest Pipkin-The Fortunate Isles-Fragment Worlds, Walled Gardens & the games that are played there",
+  "speaker": "Everest Pipkin",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=O78uYtUZKYs",
+  "talk_type": "culture",
+  "summary": "Everest Pipkin gives an essayistic, art-historical talk using the enclosed garden (hortus conclusus), the Unicorn Tapestries, the Cloisters, Hearst Castle and utopian island architectures as lenses on game worlds. The talk examines three boundaries of play: the social boundary (the magic circle), the bounded edge of game worlds (islands, invisible walls, the battle royale wall), and the surface of the screen that hides the game's logic. Pipkin argues borders are never neutral, discusses out-of-bounds play, glitching and speedrunning as ways of breaking into a world's edges, and ends on working in the browser because its surface can be opened and read. Design content is mostly reflective rather than prescriptive.",
+  "games": [
+    "The Barnacle Goose Experiment",
+    "Fortnite",
+    "World of Warcraft",
+    "Minecraft",
+    "Red Dead Redemption Online",
+    "Pokemon",
+    "Skyrim",
+    "Soft Corruptor"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "world boundaries",
+      "kind": "principle",
+      "claim": "Islands and other enclosed settings suit game worlds because a natural edge gives the designer a controllable space where the rules can be different.",
+      "detail": "Pipkin notes games that use a floating city or island are beyond listing; such settings are ideologically dense, bordered so the rules can differ, and kind to a designer wrestling with where game space ends. The edge of the world is built first and a garden can then be built inside.",
+      "t": 807,
+      "quote": "a controllable space which is kind to a game designer who is",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "enclosed settings",
+      "kind": "example",
+      "claim": "In Pipkin's The Barnacle Goose Experiment, the player is a researcher sealed in a hermetic dome whose only raw material is their own body, making the enclosure central to the fiction and mechanics.",
+      "detail": "Pipkin offers their own work as an example of subject and restraint: to avoid contamination you are locked inside a dome, and what you grow out of your body becomes more than you within it.",
+      "t": 848,
+      "quote": "you are locked inside this hermetically sealed dome and the only raw material is that of your own buddy",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "battle royale",
+      "kind": "example",
+      "claim": "Battle royale games are built on an enclosed island whose closing wall of death forces players into ever more constrained space, making them garden-like enclosures.",
+      "detail": "Pipkin cites Robin Stone's piece on Fortnite's map being replaced after a two-day event with a softer, pastoral island, where dropping into an unknown island felt breathtaking. Pipkin also stresses that borders are violent disruptions, and the battle royale wall of death echoes real border violence.",
+      "t": 875,
+      "quote": "dropped on an island with edges closing in and forcing you into constraint spaces. It is pushed by the literal wall of death",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "out of bounds play",
+      "kind": "example",
+      "claim": "Out-of-bounds play such as clipping through the floor in World of Warcraft creates social spaces where players make their own rules beyond a world that doesn't hold them.",
+      "detail": "Pipkin recalls teenage online parties held beneath and beyond maps, reached by known routes, where social rules like 'there will not be fighting here' were layered on top. The rules change sometimes due to code errors, but often because of the social situation built on top of them.",
+      "t": 1273,
+      "quote": "The rules change sometimes due to errors and code but often the social situation built on top of them",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world edges",
+      "kind": "example",
+      "claim": "Minecraft's Far Lands show where the rules of a procedurally generated world falter, glitch and fail at its extremes, and players treat reaching them as a goal.",
+      "detail": "Pipkin mentions a Minecraft player dedicated to walking to the end of the world, who after 12 years of walking is 58% of the way there.",
+      "t": 1339,
+      "quote": "The far lands of Minecraft where the rules of a procgen world begin to falter a glitch and fail",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "speedrunning",
+      "kind": "principle",
+      "claim": "Speedrunners treat level architecture not as platforms and walls but as pockets of inside and outside, turning clipping and impossibilities into memorized routes.",
+      "detail": "Pipkin describes clipping and launching over geometry to shortcut stages, and tool-assisted runs as more material rearrangement of game data than dancing through game space; glitches like early Pokemon item overflow and Skyrim mods show the same impulse in casual play.",
+      "t": 1373,
+      "quote": "Speed runners engage with the architecture of game levels not so much as a series of platform or walls but pockets of outside inside",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "browser games",
+      "kind": "principle",
+      "claim": "Pipkin works in the browser because its surface is only skin deep: players can view source, making the game's logic transparent, readable and permissible to touch.",
+      "detail": "The third boundary is the screen surface, where code logic is obfuscated. Pipkin connects looking beneath the surface to seeing a work outside time, with all its potential folded inside, and says the browser's openness lets the bounding surface become readable.",
+      "t": 1524,
+      "quote": "This is why I work in the browser. It wears its own surface, only skin deep, you can view source",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

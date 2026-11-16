@@ -1,0 +1,171 @@
+{
+  "id": "X4be22WoVgg",
+  "title": "Michael Brough - Possibility of Roguelike Elements",
+  "speaker": "Michael Brough",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=X4be22WoVgg",
+  "talk_type": "design",
+  "summary": "Michael Brough examines a handful of elements of the original Rogue (bump-to-attack movement, the wand of cold versus the yeti, the scroll of teleportation, the wand of polymorph) as design concepts, and shows how he adapted each in his own games 868-HACK, Cinco Paus and others. He argues that Rogue is elegant and simple, that magic lives in one-off exceptions rather than coherent systems, that small numbers of enemy types make type-specific effects matter, and that random effects like teleport can be tamed by choosing among several outcomes, narrowing variance, or letting the player respond before consequences land. Effects that twist a situation rather than strictly improving it are his favourites.",
+  "games": [
+    "Rogue",
+    "868-HACK",
+    "Nightmare Cooperative",
+    "Cinco Paus",
+    "NetHack",
+    "Spacewar!",
+    "ADOM"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "bump to attack",
+      "kind": "principle",
+      "claim": "Rogue's use of the same direction keys to both move and attack is an elegant, simple foundation for a game that later games can vary.",
+      "detail": "Brough asks how big an idea this was before it was standard: you press a key, move if the space is empty and hit if something is there. He pushes back on the reputation of roguelikes as inelegant.",
+      "t": 168,
+      "quote": "You press a key and if there is nothing there you move, if there is something there you hit it.",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "bump to attack",
+      "kind": "example",
+      "claim": "Invisible enemies and blindness in Rogue mean a direction key's outcome becomes uncertain, which would sound unplayable in the abstract but feels natural once bump-to-attack is accepted.",
+      "detail": "Pressing toward an empty-looking space may attack an unseen phantom. Brough notes a game where the player chooses a direction but the game picks the action sounds absurd, yet within Rogue it works.",
+      "t": 252,
+      "quote": "becomes unclear what the outcome of a given direction key will be",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "bump to attack",
+      "kind": "example",
+      "claim": "868-HACK unifies ranged attacks with movement: pressing toward any enemy in line fires at it instead of moving, a twist justified by its cyberspace setting.",
+      "detail": "Rogue requires a separate throw command for ranged attacks. In 868-HACK swiping toward an enemy in a direction shoots and keeps you in place; Brough admits it makes no physical sense but fits the theme.",
+      "t": 393,
+      "quote": "if you swipe or press the direction key in a direction that there is an enemy",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "party control",
+      "kind": "example",
+      "claim": "Nightmare Cooperative moves a whole party with one set of direction keys, which only works because movement and combat share inputs.",
+      "detail": "Each character moves or attacks depending on what's in that direction, so one keypress can have one character attacking while another heads for the exit and another picks up treasure. With a separate attack command, the party would attack empty space.",
+      "t": 456,
+      "quote": "When you press left, all your characters on the screen do left and in the Rogue sense either they move left if there is an empty space or attack left",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "consumable items",
+      "kind": "principle",
+      "claim": "Because bump combat is largely decided by stats and rolls, roguelikes need limited-use items that let the player change a combat situation.",
+      "detail": "In Rogue you hit and they hit until stats decide; when losing you need an out. Running away sometimes works; usable items provide the alternative, and Brough considers such limited resources important to all roguelikes.",
+      "t": 660,
+      "quote": "to have a limited resource that you can use to make a variation to a combat situation",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "special case exceptions",
+      "kind": "principle",
+      "claim": "Magic lives in one-off exceptions like Rogue's wand of cold not harming the yeti; fully systematic, coherent magic systems feel like science.",
+      "detail": "Brough contrasts Rogue's single special case, whose cold-adapted-yeti narrative happens in the player's head, with modern elemental resistance percentages. Generalized systems are good software engineering, but designs needn't mirror how they are programmed.",
+      "t": 828,
+      "quote": "When you build a magic system for a game that is really logical, and coherent, and like systematic, it often isn't magic anymore.",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "special case exceptions",
+      "kind": "technique",
+      "claim": "The sweet spot for an exception is several things that follow a rule plus exactly one that breaks it; a second exception makes players infer a more general rule.",
+      "detail": "With a single exception, players can stop generalizing and accept it as special. Brough says our designs don't have to be limited by software engineering style.",
+      "t": 921,
+      "quote": "once you have more than one exception your mind automatically establishes a more general role",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "enemy type count",
+      "kind": "principle",
+      "claim": "Effects keyed to a specific enemy type matter only when there are few enemy types; with hundreds of types, systematic rules are the right choice.",
+      "detail": "Rogue has about one monster per letter, so a yeti exception comes up. Brough prefers small numbers and dense interactions: 868-HACK has four enemy types so an ability hitting all Virus enemies affects about a quarter of enemies, and Cinco Paus has five.",
+      "t": 1020,
+      "quote": "I like small numbers and dense interactions, so I have been able to have these types of effects be a larger part of the game.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input simplicity",
+      "kind": "example",
+      "claim": "Rogue's scroll of teleportation sends you to a random location rather than a chosen one, consistent with its design choice that items need no further input after activation.",
+      "detail": "Brough contrasts D&D's teleport, which is about travelling to a destination; a chosen-destination teleport would need an extra prompt. He compares it to Spacewar!'s hyperspace button.",
+      "t": 1210,
+      "quote": "They have chosen the effects of the items to not require any further input.",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "Random effects like teleport are neither intrinsically good nor bad but regress the situation toward the average, so they are worth using when things are worse than average.",
+      "detail": "Brough says the scroll of teleport mostly ends up good because once identified the player decides when to use it. Rogue's large 80x20 maps with few enemies make random teleporting usually safe; a crowded war level would make it risky.",
+      "t": 1315,
+      "quote": "if the situation is worse than average, randomizing it will put more likely, somewhere in the middle so probably better than it was",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "technique",
+      "claim": "Any random effect can be made more controllable by generating several outcomes and letting the player pick one, as in Brough's blink dagger that offers two, then three, then four destinations.",
+      "detail": "Small grids (4x4 to 8x8) make random teleporting dangerous. NetHack's ring of teleport control removes randomness entirely; Brough's partial control keeps risk. He likens it to drawing two cards and discarding one, or rolling two dice and taking the highest.",
+      "t": 1567,
+      "quote": "Any random effect can be made a little bit more controlled by having this idea of do it multiple times and pick one.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "technique",
+      "claim": "Random effects can also be tamed by narrowing their range (e.g. teleport within a room) or by giving the player a chance to respond before the outcome hurts them.",
+      "detail": "Narrowing variance gives more information for a wiser choice even if it excludes some good outcomes. Granting an extra turn after teleporting avoids Rogue's case of landing in a monster room and dying immediately.",
+      "t": 1616,
+      "quote": "give you a chance to respond to the random outcome before anything bad happens",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "teleport",
+      "kind": "example",
+      "claim": "868-HACK's warp teleports only onto an enemy-occupied space, kills that enemy, and doesn't end the turn, combining reduced variance, a bonus and a chance to respond.",
+      "detail": "Choosing among a few enemy spaces instead of hundreds of tiles makes it predictable; like all but one 868-HACK effect it is instantaneous, so the player can act again or warp again. Brough says any one of these fixes would make it OK, and all three make it strong.",
+      "t": 1669,
+      "quote": "Just a random teleport except it only picks a space occupied by an enemy.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "polymorph",
+      "kind": "principle",
+      "claim": "Effects like Rogue's wand of polymorph that twist a situation into a different one, rather than a strictly better or worse one, are especially valuable and combo with type-specific effects.",
+      "detail": "Polymorph tends to make weak enemies stronger and strong ones weaker. Facing a yeti with only a wand of cold, you can polymorph it first so the cold wand works. Brough builds whole games around such favourite elements so these combos happen often.",
+      "t": 1793,
+      "quote": "It will twist a situation into a different situation but not a strictly better or worse situation.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "polymorph",
+      "kind": "example",
+      "claim": "868-HACK's screen-wide polymorph is cheap because with only four comparable-strength enemy types it changes enemy abilities, not the overall strength of the situation.",
+      "detail": "Each enemy turns into one of the three other types, so the result is fairly predictable rather than chaotic.",
+      "t": 1913,
+      "quote": "It is only changing their abilities. It is not changing the strength of the situation.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

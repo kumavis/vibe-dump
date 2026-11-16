@@ -1,0 +1,66 @@
+{
+  "id": "IVDN5GDTIvY",
+  "title": "Noah Swartz - The Tombs of Atuan: The Original Roguelike?",
+  "speaker": "Noah Swartz",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=IVDN5GDTIvY",
+  "talk_type": "history",
+  "summary": "A lightning talk arguing that Ursula K. Le Guin's 1970 novel The Tombs of Atuan (second Earthsea book) embodies many roguelike tropes, compared mainly against NetHack's endgame: a lone high priestess guarding a temple, labyrinths beneath it, a quest for a mysterious amulet, a hunger clock, traps found by searching, and a confusing, pursued escape with the amulet after which the dungeon collapses. Swartz emailed Rogue co-creator Michael Toy, who said he had read the book several times and it probably subconsciously shaped his vision of Rogue, at least the amulet quest and the sense of real consequences and emotional rollercoaster.",
+  "games": [
+    "NetHack",
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue influences",
+      "kind": "history",
+      "claim": "Rogue co-creator Michael Toy said Le Guin's The Tombs of Atuan, which he read multiple times, probably subconsciously influenced his vision of Rogue, especially the amulet quest.",
+      "detail": "Swartz noted D&D and Tolkien are commonly cited as roguelike influences and emailed the Rogue developers to ask about this book. Toy replied that it likely affected his vision of what should go into Rogue: the quest for the amulet, and also the emotional rollercoaster and real consequences.",
+      "t": 653,
+      "quote": "he had read this book multiple times and probably subconsciously it did affect his uh vision of what should go into rogue",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Permadeath, the hunger clock and a difficult escape give roguelike runs like NetHack's a long emotional arc of elation and despair rooted in real consequences.",
+      "detail": "Swartz compares Ged's journey through hope, confidence, disheartenment and fear with his own 30-hour NetHack games, swinging between elation and despair as traps are escaped. He frames permadeath and the hunger clock as meaning you cannot wander forever: there are consequences.",
+      "t": 561,
+      "quote": "there's a hunger clock and of course permadeath um you know you can't just wander around forever there really are consequences to that",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "hunger clock",
+      "kind": "example",
+      "claim": "Being trapped in a room unable to find the exit while hunger progresses from sated to fainting is a classic NetHack death that Swartz finds mirrored in The Tombs of Atuan.",
+      "detail": "Ged is locked in the labyrinth and goes from sated to hungry to fainting, which Swartz likens to searching every wall of a NetHack room for an exit; he jokingly calls it the origin of the hunger clock.",
+      "t": 368,
+      "quote": "he goes from being sated to hungry to fainting a common form of death in in the roguelike genre",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "ascension run",
+      "kind": "example",
+      "claim": "In NetHack, obtaining the Amulet is only part of the game: the escape adds obstacles such as confusion, teleportation and pursuit by the Wizard of Yendor.",
+      "detail": "Swartz parallels Ged and Arha's confused, pursued flight from the tombs with NetHack's ascension run, where you get teleported around and chased by Rodney, and notes that once you leave, that dungeon is gone, like the collapsing tombs: a single run, a single seed.",
+      "t": 433,
+      "quote": "getting the amulet is only part of the game for those of you who have finished net hack you know you have to escape with the amulet too",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "mazes",
+      "kind": "example",
+      "claim": "Twisting maze levels in roguelikes exist to slow and befuddle the player, the same purpose as the labyrinth beneath the temple in The Tombs of Atuan.",
+      "detail": "Swartz compares the book's diagrams of the Undertomb and labyrinth, and of the hall and tombstones, with NetHack's mazes and its final temple-and-graveyard scene.",
+      "t": 256,
+      "quote": "these twisting mazes of confusing turns meant to slow you down and befuddle you",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

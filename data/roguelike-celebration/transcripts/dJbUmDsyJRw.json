@@ -1,0 +1,4839 @@
+{
+ "id": "dJbUmDsyJRw",
+ "url": "https://www.youtube.com/watch?v=dJbUmDsyJRw",
+ "title": "Chris McCormick - Building Juicy Minimal Roguelikes in the Browser",
+ "speaker": "Chris McCormick",
+ "talk_title": "Building Juicy Minimal Roguelikes in the Browser",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1925,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "In this talk I'll show you how to get started building roguelikes in the browser. I'll demonstrate some benefits of using the browser as your game's runtime, like CSS animations, fonts, live object inspection in the developer console, and fast dev iteration. I'll share battle-tested advice from my experience building Asterogue, Smallest Quest, and Roguelike Browser Boilerplate. This talk will also feature doodles, so many doodles.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Conference logistics"
+  },
+  {
+   "start": 102,
+   "title": "Defining juicy minimal games"
+  },
+  {
+   "start": 145,
+   "title": "Design philosophy"
+  },
+  {
+   "start": 305,
+   "title": "Showcasing browser games"
+  },
+  {
+   "start": 384,
+   "title": "Why use the browser"
+  },
+  {
+   "start": 457,
+   "title": "Building with Rot.js"
+  },
+  {
+   "start": 724,
+   "title": "Integrating tile maps"
+  },
+  {
+   "start": 914,
+   "title": "UI and font techniques"
+  },
+  {
+   "start": 1122,
+   "title": "Interactive overlays"
+  },
+  {
+   "start": 1286,
+   "title": "Real-time game balancing"
+  },
+  {
+   "start": 1461,
+   "title": "Porting and concluding"
+  },
+  {
+   "start": 1559,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5811,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 1.6,
+   "text": "yeah and we're going to have another"
+  },
+  {
+   "t": 5.2,
+   "d": 1.44,
+   "text": "great set of talks here we're going to"
+  },
+  {
+   "t": 6.64,
+   "d": 2.8,
+   "text": "have more juice the juice will flow"
+  },
+  {
+   "t": 9.44,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 10.64,
+   "d": 2.08,
+   "text": "it is going to be a good time reminder"
+  },
+  {
+   "t": 12.72,
+   "d": 3.12,
+   "text": "that we got this beaker"
+  },
+  {
+   "t": 15.84,
+   "d": 3.12,
+   "text": "kind of notes up in the theater"
+  },
+  {
+   "t": 18.96,
+   "d": 1.92,
+   "text": "we if you're watching this on twitch or"
+  },
+  {
+   "t": 20.88,
+   "d": 2.24,
+   "text": "youtube or anything like that you can"
+  },
+  {
+   "t": 23.12,
+   "d": 1.76,
+   "text": "still get a ticket on eventbrite for the"
+  },
+  {
+   "t": 24.88,
+   "d": 2.0,
+   "text": "very end of the conference and come to"
+  },
+  {
+   "t": 26.88,
+   "d": 1.52,
+   "text": "our social space"
+  },
+  {
+   "t": 28.4,
+   "d": 1.84,
+   "text": "and if you're running into problems"
+  },
+  {
+   "t": 30.24,
+   "d": 1.52,
+   "text": "remember you can always try refreshing"
+  },
+  {
+   "t": 31.76,
+   "d": 2.4,
+   "text": "the page this is custom made software"
+  },
+  {
+   "t": 34.16,
+   "d": 2.88,
+   "text": "ourselves and i'll also shout out steam"
+  },
+  {
+   "t": 37.04,
+   "d": 3.12,
+   "text": "sale ends on monday merch ends on the"
+  },
+  {
+   "t": 40.16,
+   "d": 2.48,
+   "text": "23rd get all of your stuff we are"
+  },
+  {
+   "t": 42.64,
+   "d": 2.4,
+   "text": "heading into the end of the weekend sad"
+  },
+  {
+   "t": 45.04,
+   "d": 2.72,
+   "text": "as that is so"
+  },
+  {
+   "t": 47.76,
+   "d": 1.84,
+   "text": "hitting you with those last minute"
+  },
+  {
+   "t": 49.6,
+   "d": 1.28,
+   "text": "reminders"
+  },
+  {
+   "t": 50.88,
+   "d": 2.32,
+   "text": "and if you have space feedback maybe try"
+  },
+  {
+   "t": 53.2,
+   "d": 1.44,
+   "text": "and take a moment to leave that in the"
+  },
+  {
+   "t": 54.64,
+   "d": 1.68,
+   "text": "central hall at some point today we"
+  },
+  {
+   "t": 56.32,
+   "d": 2.32,
+   "text": "really appreciate it it helps us build"
+  },
+  {
+   "t": 58.64,
+   "d": 3.04,
+   "text": "out a better kind of set of"
+  },
+  {
+   "t": 61.68,
+   "d": 1.6,
+   "text": "um"
+  },
+  {
+   "t": 63.28,
+   "d": 1.84,
+   "text": "social space choices for next year i"
+  },
+  {
+   "t": 65.12,
+   "d": 1.28,
+   "text": "know we've tried some new things like"
+  },
+  {
+   "t": 66.4,
+   "d": 2.08,
+   "text": "the breakout rooms we've tried some new"
+  },
+  {
+   "t": 68.48,
+   "d": 1.36,
+   "text": "things with the embedded video chat"
+  },
+  {
+   "t": 69.84,
+   "d": 1.68,
+   "text": "which we know has had some drawbacks but"
+  },
+  {
+   "t": 71.52,
+   "d": 0.88,
+   "text": "it would be"
+  },
+  {
+   "t": 72.4,
+   "d": 2.4,
+   "text": "great to know what people think of it so"
+  },
+  {
+   "t": 74.8,
+   "d": 2.08,
+   "text": "if you get a chance we really appreciate"
+  },
+  {
+   "t": 76.88,
+   "d": 2.64,
+   "text": "that helps us make the space even better"
+  },
+  {
+   "t": 79.52,
+   "d": 2.4,
+   "text": "and yeah all kinds of fun note walls too"
+  },
+  {
+   "t": 81.92,
+   "d": 1.52,
+   "text": "we'll be doing our best to share those"
+  },
+  {
+   "t": 83.44,
+   "d": 1.84,
+   "text": "in some form after the conference"
+  },
+  {
+   "t": 85.28,
+   "d": 2.08,
+   "text": "through uh twitter and our mailing list"
+  },
+  {
+   "t": 87.36,
+   "d": 2.56,
+   "text": "so just keep an eye for that along with"
+  },
+  {
+   "t": 89.92,
+   "d": 1.92,
+   "text": "all the notes in the space hanger lounge"
+  },
+  {
+   "t": 91.84,
+   "d": 1.68,
+   "text": "i know people are excited we've been"
+  },
+  {
+   "t": 93.52,
+   "d": 1.84,
+   "text": "retweeting stuff like slides from our"
+  },
+  {
+   "t": 95.36,
+   "d": 1.92,
+   "text": "speakers as it comes up but we will have"
+  },
+  {
+   "t": 97.28,
+   "d": 1.76,
+   "text": "a big dump of those at the end of the"
+  },
+  {
+   "t": 99.04,
+   "d": 1.84,
+   "text": "conference along with all of our videos"
+  },
+  {
+   "t": 100.88,
+   "d": 2.0,
+   "text": "on youtube so"
+  },
+  {
+   "t": 102.88,
+   "d": 2.8,
+   "text": "without further ado waiting so patiently"
+  },
+  {
+   "t": 105.68,
+   "d": 2.08,
+   "text": "i'd like to introduce chris mccormick"
+  },
+  {
+   "t": 107.76,
+   "d": 1.92,
+   "text": "who's here to talk about our favorite"
+  },
+  {
+   "t": 109.68,
+   "d": 2.64,
+   "text": "topic of roguelike celebration 2021"
+  },
+  {
+   "t": 112.32,
+   "d": 2.88,
+   "text": "juice"
+  },
+  {
+   "t": 115.2,
+   "d": 2.32,
+   "text": "hello"
+  },
+  {
+   "t": 117.52,
+   "d": 2.24,
+   "text": "excuse me sorry for the darkness of my"
+  },
+  {
+   "t": 119.76,
+   "d": 2.32,
+   "text": "camera i forgot that uh the sun would"
+  },
+  {
+   "t": 122.08,
+   "d": 1.36,
+   "text": "not be up yet"
+  },
+  {
+   "t": 123.44,
+   "d": 2.56,
+   "text": "and normally this room is lit by the sun"
+  },
+  {
+   "t": 126.0,
+   "d": 0.84,
+   "text": "so"
+  },
+  {
+   "t": 126.84,
+   "d": 2.6,
+   "text": "um it is a little bit dark sorry about"
+  },
+  {
+   "t": 129.44,
+   "d": 3.36,
+   "text": "that um yes i'm here to talk about uh"
+  },
+  {
+   "t": 132.8,
+   "d": 1.76,
+   "text": "building juicy minimal roguelikes in the"
+  },
+  {
+   "t": 134.56,
+   "d": 1.12,
+   "text": "browser"
+  },
+  {
+   "t": 135.68,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 136.88,
+   "d": 1.28,
+   "text": "by the end of this talk i hope you've"
+  },
+  {
+   "t": 138.16,
+   "d": 1.68,
+   "text": "equipped your mental inventory with"
+  },
+  {
+   "t": 139.84,
+   "d": 2.0,
+   "text": "tools to start your own browser-based"
+  },
+  {
+   "t": 141.84,
+   "d": 2.96,
+   "text": "roguelike development adventure"
+  },
+  {
+   "t": 144.8,
+   "d": 1.84,
+   "text": "um so what do i mean by juicy and what"
+  },
+  {
+   "t": 146.64,
+   "d": 1.6,
+   "text": "do i mean by minimal in the context of"
+  },
+  {
+   "t": 148.24,
+   "d": 2.16,
+   "text": "roguelike games"
+  },
+  {
+   "t": 150.4,
+   "d": 1.6,
+   "text": "um"
+  },
+  {
+   "t": 152.0,
+   "d": 1.84,
+   "text": "so let's talk about minimal roguelikes"
+  },
+  {
+   "t": 153.84,
+   "d": 2.4,
+   "text": "first what does it mean to be minimal"
+  },
+  {
+   "t": 156.24,
+   "d": 1.52,
+   "text": "for me it means building a game with the"
+  },
+  {
+   "t": 157.76,
+   "d": 1.92,
+   "text": "barest essential gameplay elements"
+  },
+  {
+   "t": 159.68,
+   "d": 2.16,
+   "text": "they're turn-based they're permadeath"
+  },
+  {
+   "t": 161.84,
+   "d": 1.44,
+   "text": "entities in the game have various"
+  },
+  {
+   "t": 163.28,
+   "d": 1.92,
+   "text": "attributes you walk around to collect"
+  },
+  {
+   "t": 165.2,
+   "d": 1.76,
+   "text": "things and you fight baddies"
+  },
+  {
+   "t": 166.96,
+   "d": 1.52,
+   "text": "as you use things and fight baddies"
+  },
+  {
+   "t": 168.48,
+   "d": 2.24,
+   "text": "mathematical attributes are updated"
+  },
+  {
+   "t": 170.72,
+   "d": 1.76,
+   "text": "interesting worlds arise as a result of"
+  },
+  {
+   "t": 172.48,
+   "d": 1.44,
+   "text": "the interaction of those various"
+  },
+  {
+   "t": 173.92,
+   "d": 1.92,
+   "text": "attributes so i mean that's pretty much"
+  },
+  {
+   "t": 175.84,
+   "d": 4.0,
+   "text": "a description of a minimal roguelike"
+  },
+  {
+   "t": 181.2,
+   "d": 1.76,
+   "text": "because roguelikes have become these"
+  },
+  {
+   "t": 182.96,
+   "d": 1.52,
+   "text": "deep games with lots of immersion"
+  },
+  {
+   "t": 184.48,
+   "d": 2.8,
+   "text": "complexity i'm sure you know of the uh"
+  },
+  {
+   "t": 187.28,
+   "d": 2.0,
+   "text": "many of the games that people playing"
+  },
+  {
+   "t": 189.28,
+   "d": 1.52,
+   "text": "these days with these high levels of"
+  },
+  {
+   "t": 190.8,
+   "d": 2.56,
+   "text": "complexity big complicated worlds um i"
+  },
+  {
+   "t": 193.36,
+   "d": 1.52,
+   "text": "grew up playing nethack and later the"
+  },
+  {
+   "t": 194.88,
+   "d": 1.44,
+   "text": "original rogue"
+  },
+  {
+   "t": 196.32,
+   "d": 1.84,
+   "text": "and i remember discovering rogue after"
+  },
+  {
+   "t": 198.16,
+   "d": 1.2,
+   "text": "net hack and finding it really"
+  },
+  {
+   "t": 199.36,
+   "d": 2.24,
+   "text": "refreshing for me rogue represents"
+  },
+  {
+   "t": 201.6,
+   "d": 1.84,
+   "text": "minimalist perfection there's enough"
+  },
+  {
+   "t": 203.44,
+   "d": 1.84,
+   "text": "going on that doesn't get boring but it"
+  },
+  {
+   "t": 205.28,
+   "d": 1.52,
+   "text": "leaves plenty of space for the player to"
+  },
+  {
+   "t": 206.8,
+   "d": 3.04,
+   "text": "make up their own narrative"
+  },
+  {
+   "t": 210.08,
+   "d": 1.92,
+   "text": "i wrote my first game on the apple 2e at"
+  },
+  {
+   "t": 212.0,
+   "d": 2.0,
+   "text": "8 years old it was a turn-based game"
+  },
+  {
+   "t": 214.0,
+   "d": 1.68,
+   "text": "where you control the letter x and try"
+  },
+  {
+   "t": 215.68,
+   "d": 1.76,
+   "text": "not to get caught by the letter o you"
+  },
+  {
+   "t": 217.44,
+   "d": 3.44,
+   "text": "can see that on the screen at the moment"
+  },
+  {
+   "t": 220.88,
+   "d": 1.44,
+   "text": "excuse me"
+  },
+  {
+   "t": 222.32,
+   "d": 1.52,
+   "text": "this is basically an extremely minimal"
+  },
+  {
+   "t": 223.84,
+   "d": 2.4,
+   "text": "roguelike but i think it's a an example"
+  },
+  {
+   "t": 226.24,
+   "d": 1.76,
+   "text": "of going too minimal to really call it a"
+  },
+  {
+   "t": 228.0,
+   "d": 1.6,
+   "text": "roguelike"
+  },
+  {
+   "t": 229.6,
+   "d": 2.4,
+   "text": "so that's what i mean by minimal here"
+  },
+  {
+   "t": 232.0,
+   "d": 1.84,
+   "text": "in the context of video games juicy"
+  },
+  {
+   "t": 233.84,
+   "d": 2.32,
+   "text": "means the same thing as game feel"
+  },
+  {
+   "t": 236.16,
+   "d": 1.44,
+   "text": "it's a combination of sound and"
+  },
+  {
+   "t": 237.6,
+   "d": 1.6,
+   "text": "animation that happens in response to"
+  },
+  {
+   "t": 239.2,
+   "d": 1.84,
+   "text": "some input that makes the game feel"
+  },
+  {
+   "t": 241.04,
+   "d": 2.4,
+   "text": "alive"
+  },
+  {
+   "t": 243.44,
+   "d": 2.4,
+   "text": "screen shake is an example of juice this"
+  },
+  {
+   "t": 245.84,
+   "d": 1.52,
+   "text": "is an example of screen shake from a"
+  },
+  {
+   "t": 247.36,
+   "d": 2.48,
+   "text": "demo called chicken sword"
+  },
+  {
+   "t": 249.84,
+   "d": 1.6,
+   "text": "notice how the screen literally shakes"
+  },
+  {
+   "t": 251.44,
+   "d": 4.04,
+   "text": "as the character lands on the ground"
+  },
+  {
+   "t": 256.64,
+   "d": 2.56,
+   "text": "this demo is by game developer oolong"
+  },
+  {
+   "t": 259.2,
+   "d": 1.68,
+   "text": "displays a ton of juice"
+  },
+  {
+   "t": 260.88,
+   "d": 1.68,
+   "text": "so notice the dust trail as the"
+  },
+  {
+   "t": 262.56,
+   "d": 1.68,
+   "text": "character moves the movement of the"
+  },
+  {
+   "t": 264.24,
+   "d": 2.16,
+   "text": "grass the movement of the lamp as the"
+  },
+  {
+   "t": 266.4,
+   "d": 2.88,
+   "text": "player donks against it the muzzle flash"
+  },
+  {
+   "t": 269.28,
+   "d": 1.44,
+   "text": "the way the character is pushed back"
+  },
+  {
+   "t": 270.72,
+   "d": 2.16,
+   "text": "when they're firing the yellow ball of"
+  },
+  {
+   "t": 272.88,
+   "d": 2.16,
+   "text": "the shot and the smoke which results as"
+  },
+  {
+   "t": 275.04,
+   "d": 1.52,
+   "text": "the shot expires"
+  },
+  {
+   "t": 276.56,
+   "d": 1.76,
+   "text": "so that's uh seven different elements of"
+  },
+  {
+   "t": 278.32,
+   "d": 2.0,
+   "text": "juice though that you can see at once"
+  },
+  {
+   "t": 280.32,
+   "d": 1.52,
+   "text": "all of this together adds a great deal"
+  },
+  {
+   "t": 281.84,
+   "d": 2.8,
+   "text": "of feeling to the game"
+  },
+  {
+   "t": 284.64,
+   "d": 2.0,
+   "text": "so that's what i mean by minimal juicy"
+  },
+  {
+   "t": 286.64,
+   "d": 1.2,
+   "text": "roguelikes"
+  },
+  {
+   "t": 287.84,
+   "d": 1.36,
+   "text": "the gameplay is minimal and they're"
+  },
+  {
+   "t": 289.2,
+   "d": 2.64,
+   "text": "graphically rich"
+  },
+  {
+   "t": 291.84,
+   "d": 1.76,
+   "text": "the web browser is a perfect environment"
+  },
+  {
+   "t": 293.6,
+   "d": 1.76,
+   "text": "for making these types of games because"
+  },
+  {
+   "t": 295.36,
+   "d": 2.16,
+   "text": "the web browser has batteries included"
+  },
+  {
+   "t": 297.52,
+   "d": 1.6,
+   "text": "i'm going to show you how you"
+  },
+  {
+   "t": 299.12,
+   "d": 1.52,
+   "text": "show you the games i've made with"
+  },
+  {
+   "t": 300.64,
+   "d": 2.32,
+   "text": "browser text to give you an idea of what"
+  },
+  {
+   "t": 302.96,
+   "d": 2.64,
+   "text": "what you can do"
+  },
+  {
+   "t": 305.68,
+   "d": 1.84,
+   "text": "asteroid was my first solo developed"
+  },
+  {
+   "t": 307.52,
+   "d": 1.92,
+   "text": "commercial game in it you discover a"
+  },
+  {
+   "t": 309.44,
+   "d": 1.76,
+   "text": "hollow asteroid filled with procedural"
+  },
+  {
+   "t": 311.2,
+   "d": 2.0,
+   "text": "mines facilities alien creatures and"
+  },
+  {
+   "t": 313.2,
+   "d": 2.4,
+   "text": "space loot the gameplay is minimal it's"
+  },
+  {
+   "t": 315.6,
+   "d": 1.92,
+   "text": "a smaller and simpler game even than"
+  },
+  {
+   "t": 317.52,
+   "d": 2.96,
+   "text": "rogue but it's graphically richer"
+  },
+  {
+   "t": 320.48,
+   "d": 1.28,
+   "text": "in this gif you can see some of the"
+  },
+  {
+   "t": 321.76,
+   "d": 1.36,
+   "text": "juice i was talking about with screen"
+  },
+  {
+   "t": 323.12,
+   "d": 3.2,
+   "text": "shake monster ghost hit point indicator"
+  },
+  {
+   "t": 326.32,
+   "d": 1.52,
+   "text": "and when you collect an item it pops off"
+  },
+  {
+   "t": 327.84,
+   "d": 1.76,
+   "text": "the top of the screen"
+  },
+  {
+   "t": 329.6,
+   "d": 2.32,
+   "text": "i made this in a high intensity one half"
+  },
+  {
+   "t": 331.92,
+   "d": 2.64,
+   "text": "month development spurt in 2020 i built"
+  },
+  {
+   "t": 334.56,
+   "d": 1.36,
+   "text": "it for the browser and ported it to"
+  },
+  {
+   "t": 335.92,
+   "d": 1.52,
+   "text": "android or windows"
+  },
+  {
+   "t": 337.44,
+   "d": 1.52,
+   "text": "this was basically as a result of having"
+  },
+  {
+   "t": 338.96,
+   "d": 1.2,
+   "text": "always wanted to make this game and"
+  },
+  {
+   "t": 340.16,
+   "d": 1.44,
+   "text": "finally saying if i don't do it now i"
+  },
+  {
+   "t": 341.6,
+   "d": 1.2,
+   "text": "never will"
+  },
+  {
+   "t": 342.8,
+   "d": 1.92,
+   "text": "i'm currently in the process of updating"
+  },
+  {
+   "t": 344.72,
+   "d": 3.76,
+   "text": "asteroid and porting it to apple devices"
+  },
+  {
+   "t": 348.64,
+   "d": 2.08,
+   "text": "my latest game is smallest quest the"
+  },
+  {
+   "t": 350.72,
+   "d": 1.44,
+   "text": "gameplay is even more minimal than"
+  },
+  {
+   "t": 352.16,
+   "d": 1.04,
+   "text": "asteroid"
+  },
+  {
+   "t": 353.2,
+   "d": 1.44,
+   "text": "i noticed my kids really loved"
+  },
+  {
+   "t": 354.64,
+   "d": 1.36,
+   "text": "turn-based play and i wanted to make a"
+  },
+  {
+   "t": 356.0,
+   "d": 2.4,
+   "text": "game that appeals to kids"
+  },
+  {
+   "t": 358.4,
+   "d": 1.92,
+   "text": "you collect items such as"
+  },
+  {
+   "t": 360.32,
+   "d": 1.92,
+   "text": "you collect the items as cards"
+  },
+  {
+   "t": 362.24,
+   "d": 1.44,
+   "text": "which is directly inspired by the game"
+  },
+  {
+   "t": 363.68,
+   "d": 1.6,
+   "text": "patient rogue"
+  },
+  {
+   "t": 365.28,
+   "d": 1.6,
+   "text": "in this game i wanted to explore the"
+  },
+  {
+   "t": 366.88,
+   "d": 1.92,
+   "text": "idea of quests or missions so the game"
+  },
+  {
+   "t": 368.8,
+   "d": 2.24,
+   "text": "plays roguelike with missions"
+  },
+  {
+   "t": 371.04,
+   "d": 1.68,
+   "text": "it's a short game with gamepad play and"
+  },
+  {
+   "t": 372.72,
+   "d": 2.16,
+   "text": "simple graphics i hand drew all of the"
+  },
+  {
+   "t": 374.88,
+   "d": 1.84,
+   "text": "sprites which was a lot of fun in the"
+  },
+  {
+   "t": 376.72,
+   "d": 1.36,
+   "text": "end my kids gave it a thumbs up so"
+  },
+  {
+   "t": 378.08,
+   "d": 2.08,
+   "text": "that's a win"
+  },
+  {
+   "t": 380.16,
+   "d": 2.56,
+   "text": "so that's enough about my games"
+  },
+  {
+   "t": 382.72,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 384.08,
+   "d": 1.76,
+   "text": "why use the browser as the runtime for"
+  },
+  {
+   "t": 385.84,
+   "d": 1.6,
+   "text": "your game"
+  },
+  {
+   "t": 387.44,
+   "d": 1.6,
+   "text": "so you can find a browser on pretty much"
+  },
+  {
+   "t": 389.04,
+   "d": 2.16,
+   "text": "every modern computer"
+  },
+  {
+   "t": 391.2,
+   "d": 1.44,
+   "text": "it's completely it's a completely"
+  },
+  {
+   "t": 392.64,
+   "d": 2.64,
+   "text": "ubiquitous runtime environment"
+  },
+  {
+   "t": 395.28,
+   "d": 1.92,
+   "text": "developing for browsers is fast there's"
+  },
+  {
+   "t": 397.2,
+   "d": 1.92,
+   "text": "no compilation step but with modern live"
+  },
+  {
+   "t": 399.12,
+   "d": 1.68,
+   "text": "reloading technology you can see changes"
+  },
+  {
+   "t": 400.8,
+   "d": 2.4,
+   "text": "as soon as you make them"
+  },
+  {
+   "t": 403.2,
+   "d": 1.44,
+   "text": "browsers support different types of"
+  },
+  {
+   "t": 404.64,
+   "d": 2.4,
+   "text": "graphics out of the box plain images"
+  },
+  {
+   "t": 407.04,
+   "d": 3.12,
+   "text": "svgs and even opengl 3d rendering"
+  },
+  {
+   "t": 410.16,
+   "d": 2.0,
+   "text": "through webgl"
+  },
+  {
+   "t": 412.16,
+   "d": 1.6,
+   "text": "browsers have excellent support for"
+  },
+  {
+   "t": 413.76,
+   "d": 2.72,
+   "text": "different typefaces rendering text is as"
+  },
+  {
+   "t": 416.48,
+   "d": 2.4,
+   "text": "easy as changing an html tag"
+  },
+  {
+   "t": 418.88,
+   "d": 2.32,
+   "text": "there is built-in support for"
+  },
+  {
+   "t": 421.2,
+   "d": 1.44,
+   "text": "touch um"
+  },
+  {
+   "t": 422.64,
+   "d": 2.08,
+   "text": "and mouse events if you need them"
+  },
+  {
+   "t": 424.72,
+   "d": 2.48,
+   "text": "uh css animations let you add all kinds"
+  },
+  {
+   "t": 427.2,
+   "d": 1.2,
+   "text": "of movement and that's what i'll be"
+  },
+  {
+   "t": 428.4,
+   "d": 1.52,
+   "text": "talking about in a minute"
+  },
+  {
+   "t": 429.92,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 430.96,
+   "d": 1.52,
+   "text": "live object inspection using the"
+  },
+  {
+   "t": 432.48,
+   "d": 1.92,
+   "text": "developer console means you can modify"
+  },
+  {
+   "t": 434.4,
+   "d": 2.8,
+   "text": "data structures in real time"
+  },
+  {
+   "t": 437.2,
+   "d": 2.96,
+   "text": "and finally developing"
+  },
+  {
+   "t": 440.96,
+   "d": 2.56,
+   "text": "excuse me sorry"
+  },
+  {
+   "t": 443.52,
+   "d": 1.52,
+   "text": "i seem to have a cold"
+  },
+  {
+   "t": 445.04,
+   "d": 1.76,
+   "text": "developing for the browser makes your"
+  },
+  {
+   "t": 446.8,
+   "d": 2.24,
+   "text": "code highly portable as long as there is"
+  },
+  {
+   "t": 449.04,
+   "d": 1.6,
+   "text": "a browser on a given platform your game"
+  },
+  {
+   "t": 450.64,
+   "d": 2.48,
+   "text": "will run there and uh it's also easier"
+  },
+  {
+   "t": 453.12,
+   "d": 1.76,
+   "text": "to reach players for that reason because"
+  },
+  {
+   "t": 454.88,
+   "d": 2.96,
+   "text": "everybody has a browser"
+  },
+  {
+   "t": 457.84,
+   "d": 1.04,
+   "text": "now i'm going to show you how you can"
+  },
+  {
+   "t": 458.88,
+   "d": 1.92,
+   "text": "copy and paste together about 200 lines"
+  },
+  {
+   "t": 460.8,
+   "d": 2.16,
+   "text": "of code to make a basic functioning"
+  },
+  {
+   "t": 462.96,
+   "d": 1.76,
+   "text": "browser-based roguelike"
+  },
+  {
+   "t": 464.72,
+   "d": 1.84,
+   "text": "it's not a complete game but it's enough"
+  },
+  {
+   "t": 466.56,
+   "d": 2.48,
+   "text": "for you to build something great off"
+  },
+  {
+   "t": 469.04,
+   "d": 1.44,
+   "text": "all you need is a web browser and"
+  },
+  {
+   "t": 470.48,
+   "d": 1.44,
+   "text": "internet access so you can get hold of"
+  },
+  {
+   "t": 471.92,
+   "d": 2.64,
+   "text": "rock.js"
+  },
+  {
+   "t": 474.8,
+   "d": 2.8,
+   "text": "rod.js short for roguelike toolkit in"
+  },
+  {
+   "t": 477.6,
+   "d": 1.68,
+   "text": "javascript is an excellent roguelike"
+  },
+  {
+   "t": 479.28,
+   "d": 2.96,
+   "text": "development library by andre zara"
+  },
+  {
+   "t": 482.24,
+   "d": 2.0,
+   "text": "i hope i pronounced his name right"
+  },
+  {
+   "t": 484.24,
+   "d": 2.08,
+   "text": "you can use roc.js with javascript"
+  },
+  {
+   "t": 486.32,
+   "d": 1.52,
+   "text": "typescript closurescript or any other"
+  },
+  {
+   "t": 487.84,
+   "d": 2.0,
+   "text": "front-end browser language"
+  },
+  {
+   "t": 489.84,
+   "d": 2.64,
+   "text": "it takes care of console rendering"
+  },
+  {
+   "t": 492.48,
+   "d": 2.64,
+   "text": "random number generator path finding"
+  },
+  {
+   "t": 495.12,
+   "d": 3.52,
+   "text": "field of view map generation"
+  },
+  {
+   "t": 498.8,
+   "d": 2.56,
+   "text": "keyboard input tile maps scheduling and"
+  },
+  {
+   "t": 501.36,
+   "d": 1.84,
+   "text": "has support for hex tiles"
+  },
+  {
+   "t": 503.2,
+   "d": 2.0,
+   "text": "so the only thing you need to do to"
+  },
+  {
+   "t": 505.2,
+   "d": 1.6,
+   "text": "start using it is put a single script"
+  },
+  {
+   "t": 506.8,
+   "d": 3.36,
+   "text": "tag into your html file"
+  },
+  {
+   "t": 512.0,
+   "d": 2.0,
+   "text": "andre has a great introductory tutorial"
+  },
+  {
+   "t": 514.0,
+   "d": 1.76,
+   "text": "on rogue basin and a couple of very"
+  },
+  {
+   "t": 515.76,
+   "d": 2.4,
+   "text": "useful jsfiddle demos"
+  },
+  {
+   "t": 518.16,
+   "d": 2.4,
+   "text": "i've made this uh github repository with"
+  },
+  {
+   "t": 520.56,
+   "d": 1.6,
+   "text": "links to all of that"
+  },
+  {
+   "t": 522.16,
+   "d": 1.52,
+   "text": "so that you can find it after my talk"
+  },
+  {
+   "t": 523.68,
+   "d": 2.8,
+   "text": "and i'll post that in the chat as well"
+  },
+  {
+   "t": 526.48,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 527.44,
+   "d": 2.8,
+   "text": "but basically it's at github.com and my"
+  },
+  {
+   "t": 530.24,
+   "d": 2.32,
+   "text": "username is chr15m"
+  },
+  {
+   "t": 532.56,
+   "d": 1.6,
+   "text": "and then the repository is called"
+  },
+  {
+   "t": 534.16,
+   "d": 3.84,
+   "text": "roguelike celebration 2021 with hyphens"
+  },
+  {
+   "t": 538.0,
+   "d": 2.72,
+   "text": "it also has uh an html script tag for"
+  },
+  {
+   "t": 540.72,
+   "d": 3.76,
+   "text": "loading the rod.js library right here"
+  },
+  {
+   "t": 546.32,
+   "d": 2.32,
+   "text": "so i said we only need a browser but"
+  },
+  {
+   "t": 548.64,
+   "d": 1.76,
+   "text": "usually you need a text editor to write"
+  },
+  {
+   "t": 550.4,
+   "d": 1.6,
+   "text": "code"
+  },
+  {
+   "t": 552.0,
+   "d": 2.08,
+   "text": "um"
+  },
+  {
+   "t": 554.08,
+   "d": 1.28,
+   "text": "luckily these days there are a number of"
+  },
+  {
+   "t": 555.36,
+   "d": 2.32,
+   "text": "ids that run inside the browser so you"
+  },
+  {
+   "t": 557.68,
+   "d": 1.84,
+   "text": "don't even need a text editor to get"
+  },
+  {
+   "t": 559.52,
+   "d": 1.36,
+   "text": "started"
+  },
+  {
+   "t": 560.88,
+   "d": 1.6,
+   "text": "i made a browser-based text editor"
+  },
+  {
+   "t": 562.48,
+   "d": 1.92,
+   "text": "myself uh specifically for making web"
+  },
+  {
+   "t": 564.4,
+   "d": 2.96,
+   "text": "apps which you can find at slingcode.net"
+  },
+  {
+   "t": 567.36,
+   "d": 1.92,
+   "text": "so i'm going to pull it up now"
+  },
+  {
+   "t": 569.28,
+   "d": 2.8,
+   "text": "to um whoops where did my"
+  },
+  {
+   "t": 572.08,
+   "d": 1.2,
+   "text": "i'm going to pull it up now and use it"
+  },
+  {
+   "t": 573.28,
+   "d": 1.52,
+   "text": "to create our first"
+  },
+  {
+   "t": 574.8,
+   "d": 1.68,
+   "text": "browser-based roguelike"
+  },
+  {
+   "t": 576.48,
+   "d": 2.0,
+   "text": "so all we're going to do is take andre's"
+  },
+  {
+   "t": 578.48,
+   "d": 2.64,
+   "text": "tutorial code from jsfiddle so here"
+  },
+  {
+   "t": 581.12,
+   "d": 1.76,
+   "text": "in in this repository that i've shared"
+  },
+  {
+   "t": 582.88,
+   "d": 1.76,
+   "text": "there's a few links here there's the"
+  },
+  {
+   "t": 584.64,
+   "d": 2.48,
+   "text": "rod.js tutorial on rogue basin which if"
+  },
+  {
+   "t": 587.12,
+   "d": 1.84,
+   "text": "you want to do it from scratch yourself"
+  },
+  {
+   "t": 588.96,
+   "d": 1.84,
+   "text": "that's a good place to start it's got"
+  },
+  {
+   "t": 590.8,
+   "d": 1.6,
+   "text": "three parts and you can do it quite"
+  },
+  {
+   "t": 592.4,
+   "d": 0.96,
+   "text": "quickly"
+  },
+  {
+   "t": 593.36,
+   "d": 2.32,
+   "text": "but there's also andre's made this js"
+  },
+  {
+   "t": 595.68,
+   "d": 2.72,
+   "text": "fiddle with the result of doing the"
+  },
+  {
+   "t": 598.4,
+   "d": 3.12,
+   "text": "tutorial so it's like the full demo game"
+  },
+  {
+   "t": 601.52,
+   "d": 1.68,
+   "text": "so"
+  },
+  {
+   "t": 603.2,
+   "d": 0.96,
+   "text": "i'm actually going to go in here and"
+  },
+  {
+   "t": 604.16,
+   "d": 2.16,
+   "text": "just copy that code"
+  },
+  {
+   "t": 606.32,
+   "d": 1.12,
+   "text": "and uh"
+  },
+  {
+   "t": 607.44,
+   "d": 2.0,
+   "text": "i'm going to in sling code i'm going to"
+  },
+  {
+   "t": 609.44,
+   "d": 1.28,
+   "text": "create a view"
+  },
+  {
+   "t": 610.72,
+   "d": 3.04,
+   "text": "so this is basically a online app editor"
+  },
+  {
+   "t": 613.76,
+   "d": 2.0,
+   "text": "and you just get this index.html file"
+  },
+  {
+   "t": 615.76,
+   "d": 3.04,
+   "text": "when you first start"
+  },
+  {
+   "t": 618.8,
+   "d": 1.84,
+   "text": "so i'm going to paste andre's code in"
+  },
+  {
+   "t": 620.64,
+   "d": 1.2,
+   "text": "here"
+  },
+  {
+   "t": 621.84,
+   "d": 2.48,
+   "text": "and um"
+  },
+  {
+   "t": 626.08,
+   "d": 0.96,
+   "text": "so it's"
+  },
+  {
+   "t": 627.04,
+   "d": 2.16,
+   "text": "it's only about 100 lines long"
+  },
+  {
+   "t": 629.2,
+   "d": 1.84,
+   "text": "and i've just pasted into the script"
+  },
+  {
+   "t": 631.04,
+   "d": 2.64,
+   "text": "portion of the index.html file so now"
+  },
+  {
+   "t": 633.68,
+   "d": 1.44,
+   "text": "the other thing i need is the actual"
+  },
+  {
+   "t": 635.12,
+   "d": 2.56,
+   "text": "script tag so that it loads roc.js from"
+  },
+  {
+   "t": 637.68,
+   "d": 2.16,
+   "text": "web so i'm going to go back to my github"
+  },
+  {
+   "t": 639.84,
+   "d": 2.72,
+   "text": "here and i'm going to copy that one"
+  },
+  {
+   "t": 642.56,
+   "d": 2.56,
+   "text": "and go in here and i'm going to say"
+  },
+  {
+   "t": 645.12,
+   "d": 1.76,
+   "text": "paste that one in"
+  },
+  {
+   "t": 646.88,
+   "d": 3.2,
+   "text": "so now when i save that and run it"
+  },
+  {
+   "t": 650.08,
+   "d": 3.68,
+   "text": "i should get andre's game"
+  },
+  {
+   "t": 654.0,
+   "d": 2.88,
+   "text": "in the tab here"
+  },
+  {
+   "t": 658.64,
+   "d": 3.12,
+   "text": "yeah so this is uh"
+  },
+  {
+   "t": 661.76,
+   "d": 2.16,
+   "text": "this is andre's nice little demo game um"
+  },
+  {
+   "t": 663.92,
+   "d": 1.28,
+   "text": "basically you run around looking for"
+  },
+  {
+   "t": 665.2,
+   "d": 2.16,
+   "text": "your lost banana and avoiding a monster"
+  },
+  {
+   "t": 667.36,
+   "d": 1.52,
+   "text": "character called pedro represented by"
+  },
+  {
+   "t": 668.88,
+   "d": 1.28,
+   "text": "the p character"
+  },
+  {
+   "t": 670.16,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 671.12,
+   "d": 2.16,
+   "text": "you can move and press enter and it has"
+  },
+  {
+   "t": 673.28,
+   "d": 2.24,
+   "text": "a pop-up which says if the box is empty"
+  },
+  {
+   "t": 675.52,
+   "d": 1.92,
+   "text": "or if you found the banana"
+  },
+  {
+   "t": 677.44,
+   "d": 3.6,
+   "text": "and oh i just won okay so"
+  },
+  {
+   "t": 681.04,
+   "d": 0.88,
+   "text": "yep"
+  },
+  {
+   "t": 681.92,
+   "d": 1.44,
+   "text": "and uh so it's quite simple but it"
+  },
+  {
+   "t": 683.36,
+   "d": 1.44,
+   "text": "features you know many of the things"
+  },
+  {
+   "t": 684.8,
+   "d": 2.04,
+   "text": "you'll need like keyboard input"
+  },
+  {
+   "t": 686.84,
+   "d": 2.92,
+   "text": "etc so i'm actually just going to"
+  },
+  {
+   "t": 689.76,
+   "d": 2.4,
+   "text": "remove this hello world tag here so that"
+  },
+  {
+   "t": 692.16,
+   "d": 1.52,
+   "text": "we just have the game so i've got an"
+  },
+  {
+   "t": 693.68,
+   "d": 2.72,
+   "text": "empty body tag and rod.js inserts itself"
+  },
+  {
+   "t": 696.4,
+   "d": 3.2,
+   "text": "into that empty body tag"
+  },
+  {
+   "t": 701.04,
+   "d": 2.32,
+   "text": "so this is a great start if you want a"
+  },
+  {
+   "t": 703.36,
+   "d": 2.08,
+   "text": "console game um you can dive right in"
+  },
+  {
+   "t": 705.44,
+   "d": 2.48,
+   "text": "and just start tweaking that um"
+  },
+  {
+   "t": 707.92,
+   "d": 1.92,
+   "text": "and as i said you can just use a simple"
+  },
+  {
+   "t": 709.84,
+   "d": 2.08,
+   "text": "text editor and load it up in your"
+  },
+  {
+   "t": 711.92,
+   "d": 1.2,
+   "text": "browser"
+  },
+  {
+   "t": 713.12,
+   "d": 1.36,
+   "text": "and you only need one file that's"
+  },
+  {
+   "t": 714.48,
+   "d": 1.92,
+   "text": "index.html with this code"
+  },
+  {
+   "t": 716.4,
+   "d": 2.48,
+   "text": "and you can start tinkering with the uh"
+  },
+  {
+   "t": 718.88,
+   "d": 1.68,
+   "text": "different properties of this little mini"
+  },
+  {
+   "t": 720.56,
+   "d": 1.44,
+   "text": "demo and start building out your own"
+  },
+  {
+   "t": 722.0,
+   "d": 1.76,
+   "text": "roguelike"
+  },
+  {
+   "t": 723.76,
+   "d": 2.08,
+   "text": "so in the github readme you'll also find"
+  },
+  {
+   "t": 725.84,
+   "d": 1.28,
+   "text": "another link"
+  },
+  {
+   "t": 727.12,
+   "d": 2.32,
+   "text": "to another demo by andre showing how to"
+  },
+  {
+   "t": 729.44,
+   "d": 3.28,
+   "text": "integrate tile map graphics um"
+  },
+  {
+   "t": 732.72,
+   "d": 1.92,
+   "text": "so that's the second link here roc.js"
+  },
+  {
+   "t": 734.64,
+   "d": 2.88,
+   "text": "tilemap example"
+  },
+  {
+   "t": 740.0,
+   "d": 2.08,
+   "text": "now this one is even shorter it's only"
+  },
+  {
+   "t": 742.08,
+   "d": 2.08,
+   "text": "29 lines and all that's happening here"
+  },
+  {
+   "t": 744.16,
+   "d": 3.84,
+   "text": "is he's creating a simple uh digger map"
+  },
+  {
+   "t": 748.0,
+   "d": 1.84,
+   "text": "and rendering it with these tile"
+  },
+  {
+   "t": 749.84,
+   "d": 2.32,
+   "text": "graphics"
+  },
+  {
+   "t": 752.16,
+   "d": 2.0,
+   "text": "with this nice little four"
+  },
+  {
+   "t": 754.16,
+   "d": 1.76,
+   "text": "four character tile set"
+  },
+  {
+   "t": 755.92,
+   "d": 2.16,
+   "text": "so i'm going to take that basically this"
+  },
+  {
+   "t": 758.08,
+   "d": 1.28,
+   "text": "exact code"
+  },
+  {
+   "t": 759.36,
+   "d": 1.52,
+   "text": "and paste it in"
+  },
+  {
+   "t": 760.88,
+   "d": 3.04,
+   "text": "but i'm actually going to use"
+  },
+  {
+   "t": 763.92,
+   "d": 2.16,
+   "text": "a different tile map um so i'm going to"
+  },
+  {
+   "t": 766.08,
+   "d": 1.92,
+   "text": "use the kenny.nl i don't know if you"
+  },
+  {
+   "t": 768.0,
+   "d": 2.08,
+   "text": "know if kenny.nl but he might have this"
+  },
+  {
+   "t": 770.08,
+   "d": 1.04,
+   "text": "great"
+  },
+  {
+   "t": 771.12,
+   "d": 2.08,
+   "text": "um"
+  },
+  {
+   "t": 773.2,
+   "d": 1.36,
+   "text": "this great"
+  },
+  {
+   "t": 774.56,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 775.44,
+   "d": 2.56,
+   "text": "tile map called micro rogue"
+  },
+  {
+   "t": 778.0,
+   "d": 2.32,
+   "text": "um and i've just enlarged it here to"
+  },
+  {
+   "t": 780.32,
+   "d": 2.0,
+   "text": "five pixels by five pixels"
+  },
+  {
+   "t": 782.32,
+   "d": 2.4,
+   "text": "um and so and i've"
+  },
+  {
+   "t": 784.72,
+   "d": 2.0,
+   "text": "indexed so with ro.js basically you"
+  },
+  {
+   "t": 786.72,
+   "d": 1.76,
+   "text": "index into the tilemap and you give each"
+  },
+  {
+   "t": 788.48,
+   "d": 1.52,
+   "text": "character a name so this is my main"
+  },
+  {
+   "t": 790.0,
+   "d": 1.6,
+   "text": "character i'm going to use here's a"
+  },
+  {
+   "t": 791.6,
+   "d": 1.44,
+   "text": "little chest"
+  },
+  {
+   "t": 793.04,
+   "d": 3.04,
+   "text": "this is a floor tile"
+  },
+  {
+   "t": 796.32,
+   "d": 1.36,
+   "text": "and i'm just going to grab this code"
+  },
+  {
+   "t": 797.68,
+   "d": 1.28,
+   "text": "from"
+  },
+  {
+   "t": 798.96,
+   "d": 2.8,
+   "text": "uh"
+  },
+  {
+   "t": 801.76,
+   "d": 1.2,
+   "text": "so i'm going to grab this code from the"
+  },
+  {
+   "t": 802.96,
+   "d": 1.04,
+   "text": "github"
+  },
+  {
+   "t": 804.0,
+   "d": 2.56,
+   "text": "which basically sets up the tile map i'm"
+  },
+  {
+   "t": 806.56,
+   "d": 2.8,
+   "text": "just going to paste that in as well"
+  },
+  {
+   "t": 809.36,
+   "d": 1.76,
+   "text": "so"
+  },
+  {
+   "t": 811.12,
+   "d": 1.44,
+   "text": "as you can see"
+  },
+  {
+   "t": 812.56,
+   "d": 1.44,
+   "text": "just a few lines of code there that's"
+  },
+  {
+   "t": 814.0,
+   "d": 2.72,
+   "text": "loading the tilemap.png this file here"
+  },
+  {
+   "t": 816.72,
+   "d": 1.76,
+   "text": "and then they've you've got the actual"
+  },
+  {
+   "t": 818.48,
+   "d": 1.52,
+   "text": "tile map so the add character is mapped"
+  },
+  {
+   "t": 820.0,
+   "d": 2.16,
+   "text": "to four comma zero the dot character is"
+  },
+  {
+   "t": 822.16,
+   "d": 2.64,
+   "text": "mapped to four comma four et cetera"
+  },
+  {
+   "t": 824.8,
+   "d": 1.28,
+   "text": "uh and then there's a couple of things i"
+  },
+  {
+   "t": 826.08,
+   "d": 1.6,
+   "text": "need to do to hook it up so"
+  },
+  {
+   "t": 827.68,
+   "d": 2.24,
+   "text": "this rod.display i need to pass it in"
+  },
+  {
+   "t": 829.92,
+   "d": 3.12,
+   "text": "there so rod.js sets up the display here"
+  },
+  {
+   "t": 833.04,
+   "d": 1.92,
+   "text": "and um i'm just going to tell it instead"
+  },
+  {
+   "t": 834.96,
+   "d": 2.24,
+   "text": "of using a console-based display i want"
+  },
+  {
+   "t": 837.2,
+   "d": 1.04,
+   "text": "you to use"
+  },
+  {
+   "t": 838.24,
+   "d": 2.24,
+   "text": "these options above here"
+  },
+  {
+   "t": 840.48,
+   "d": 3.12,
+   "text": "which is the tile map and then finally"
+  },
+  {
+   "t": 843.6,
+   "d": 1.44,
+   "text": "in the digger"
+  },
+  {
+   "t": 845.04,
+   "d": 2.16,
+   "text": "so the map the map generator itself i'm"
+  },
+  {
+   "t": 847.2,
+   "d": 1.12,
+   "text": "going to tell it to use the width and"
+  },
+  {
+   "t": 848.32,
+   "d": 1.6,
+   "text": "height of the"
+  },
+  {
+   "t": 849.92,
+   "d": 1.68,
+   "text": "uh"
+  },
+  {
+   "t": 851.6,
+   "d": 2.8,
+   "text": "the same as what i've specified"
+  },
+  {
+   "t": 854.4,
+   "d": 2.24,
+   "text": "in the options here"
+  },
+  {
+   "t": 856.64,
+   "d": 1.36,
+   "text": "um and"
+  },
+  {
+   "t": 858.0,
+   "d": 2.0,
+   "text": "finally i need to"
+  },
+  {
+   "t": 860.0,
+   "d": 2.8,
+   "text": "add this bit which is um saying"
+  },
+  {
+   "t": 862.8,
+   "d": 1.28,
+   "text": "when"
+  },
+  {
+   "t": 864.08,
+   "d": 2.24,
+   "text": "wait for the tile map to load before you"
+  },
+  {
+   "t": 866.32,
+   "d": 1.92,
+   "text": "actually trigger the initialization of"
+  },
+  {
+   "t": 868.24,
+   "d": 1.28,
+   "text": "the game so i'm going to replace this"
+  },
+  {
+   "t": 869.52,
+   "d": 2.32,
+   "text": "last line here game.init with"
+  },
+  {
+   "t": 871.84,
+   "d": 2.0,
+   "text": "waiting for the tile set to load"
+  },
+  {
+   "t": 873.84,
+   "d": 2.08,
+   "text": "and if i save that yeah so we get the"
+  },
+  {
+   "t": 875.92,
+   "d": 2.48,
+   "text": "same demo loader except now it has the"
+  },
+  {
+   "t": 878.4,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 879.44,
+   "d": 3.2,
+   "text": "the tile set integrated"
+  },
+  {
+   "t": 883.6,
+   "d": 2.24,
+   "text": "and again i can just move around"
+  },
+  {
+   "t": 885.84,
+   "d": 2.16,
+   "text": "pressing enter to check the boxes"
+  },
+  {
+   "t": 888.0,
+   "d": 1.84,
+   "text": "and pedro is now represented by this"
+  },
+  {
+   "t": 889.84,
+   "d": 1.6,
+   "text": "little zombie graphic"
+  },
+  {
+   "t": 891.44,
+   "d": 1.92,
+   "text": "um and yeah"
+  },
+  {
+   "t": 893.36,
+   "d": 1.84,
+   "text": "so it's the same basic game as before"
+  },
+  {
+   "t": 895.2,
+   "d": 5.36,
+   "text": "except it has tile tile map um"
+  },
+  {
+   "t": 900.88,
+   "d": 2.56,
+   "text": "yeah so"
+  },
+  {
+   "t": 903.44,
+   "d": 1.84,
+   "text": "uh okay"
+  },
+  {
+   "t": 905.28,
+   "d": 1.04,
+   "text": "so you can see straight away that"
+  },
+  {
+   "t": 906.32,
+   "d": 2.08,
+   "text": "getting a mini graphical roguelike going"
+  },
+  {
+   "t": 908.4,
+   "d": 2.32,
+   "text": "is fairly trivial in html and javascript"
+  },
+  {
+   "t": 910.72,
+   "d": 2.24,
+   "text": "single html file a few couple hundred"
+  },
+  {
+   "t": 912.96,
+   "d": 1.04,
+   "text": "lines long"
+  },
+  {
+   "t": 914.0,
+   "d": 1.12,
+   "text": "i'm going to show you some other cool"
+  },
+  {
+   "t": 915.12,
+   "d": 2.56,
+   "text": "features of using the web browser now"
+  },
+  {
+   "t": 917.68,
+   "d": 1.76,
+   "text": "the first one is fonts and text"
+  },
+  {
+   "t": 919.44,
+   "d": 1.52,
+   "text": "rendering in general"
+  },
+  {
+   "t": 920.96,
+   "d": 1.68,
+   "text": "so let's say we want to add some text"
+  },
+  {
+   "t": 922.64,
+   "d": 1.68,
+   "text": "based ui to our game and display the"
+  },
+  {
+   "t": 924.32,
+   "d": 2.32,
+   "text": "number of hit points we can because it's"
+  },
+  {
+   "t": 926.64,
+   "d": 2.0,
+   "text": "the browser we can easily overlay text"
+  },
+  {
+   "t": 928.64,
+   "d": 2.16,
+   "text": "in whatever font we like on top of the"
+  },
+  {
+   "t": 930.8,
+   "d": 0.96,
+   "text": "game"
+  },
+  {
+   "t": 931.76,
+   "d": 2.4,
+   "text": "using just simply using an html tag"
+  },
+  {
+   "t": 934.16,
+   "d": 2.24,
+   "text": "so we'll put a p tag"
+  },
+  {
+   "t": 936.4,
+   "d": 3.04,
+   "text": "which is a paragraph tag into this file"
+  },
+  {
+   "t": 939.44,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 940.72,
+   "d": 1.6,
+   "text": "i'll go in here because i've here's one"
+  },
+  {
+   "t": 942.32,
+   "d": 1.6,
+   "text": "i made earlier"
+  },
+  {
+   "t": 943.92,
+   "d": 1.6,
+   "text": "i'll copy that"
+  },
+  {
+   "t": 945.52,
+   "d": 3.52,
+   "text": "and paste that into the body here"
+  },
+  {
+   "t": 949.04,
+   "d": 1.76,
+   "text": "so what this will do it should add the"
+  },
+  {
+   "t": 950.8,
+   "d": 1.52,
+   "text": "text hit points five at the top of the"
+  },
+  {
+   "t": 952.32,
+   "d": 1.2,
+   "text": "screen here"
+  },
+  {
+   "t": 953.52,
+   "d": 2.56,
+   "text": "so i hit save"
+  },
+  {
+   "t": 956.08,
+   "d": 1.36,
+   "text": "and that's what i get i get hit points"
+  },
+  {
+   "t": 957.44,
+   "d": 2.0,
+   "text": "five at the top now you could change"
+  },
+  {
+   "t": 959.44,
+   "d": 2.4,
+   "text": "this uh body tag and change your code so"
+  },
+  {
+   "t": 961.84,
+   "d": 2.48,
+   "text": "that's updated in real time you know"
+  },
+  {
+   "t": 964.32,
+   "d": 2.08,
+   "text": "procedurally"
+  },
+  {
+   "t": 966.4,
+   "d": 1.36,
+   "text": "specifying the number and updating it"
+  },
+  {
+   "t": 967.76,
+   "d": 1.52,
+   "text": "when it changes but i'm just just for"
+  },
+  {
+   "t": 969.28,
+   "d": 1.28,
+   "text": "the sake of display i'm just going to"
+  },
+  {
+   "t": 970.56,
+   "d": 1.68,
+   "text": "keep it static"
+  },
+  {
+   "t": 972.24,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 974.48,
+   "d": 2.32,
+   "text": "and"
+  },
+  {
+   "t": 976.88,
+   "d": 2.56,
+   "text": "so the other thing we need to do is add"
+  },
+  {
+   "t": 979.44,
+   "d": 2.24,
+   "text": "so like basically at the moment this"
+  },
+  {
+   "t": 981.68,
+   "d": 2.08,
+   "text": "looks pretty terrible it's just a simple"
+  },
+  {
+   "t": 983.76,
+   "d": 1.68,
+   "text": "uh times new roman font"
+  },
+  {
+   "t": 985.44,
+   "d": 1.04,
+   "text": "um so"
+  },
+  {
+   "t": 986.48,
+   "d": 1.6,
+   "text": "what we can do is go over to google web"
+  },
+  {
+   "t": 988.08,
+   "d": 3.28,
+   "text": "fonts and find a better font and then"
+  },
+  {
+   "t": 991.36,
+   "d": 1.84,
+   "text": "when you select it here when you say i"
+  },
+  {
+   "t": 993.2,
+   "d": 2.08,
+   "text": "want to use this style you get the"
+  },
+  {
+   "t": 995.28,
+   "d": 2.32,
+   "text": "include here and then we can just dump"
+  },
+  {
+   "t": 997.6,
+   "d": 2.4,
+   "text": "that into our html to start using that"
+  },
+  {
+   "t": 1000.0,
+   "d": 2.56,
+   "text": "font so i'm going to do that"
+  },
+  {
+   "t": 1002.56,
+   "d": 1.76,
+   "text": "and then"
+  },
+  {
+   "t": 1004.32,
+   "d": 2.4,
+   "text": "the final thing you have to do is just"
+  },
+  {
+   "t": 1006.72,
+   "d": 2.08,
+   "text": "include"
+  },
+  {
+   "t": 1008.8,
+   "d": 3.76,
+   "text": "this stuff so in the body tag"
+  },
+  {
+   "t": 1012.8,
+   "d": 3.68,
+   "text": "so up in my css here i will add"
+  },
+  {
+   "t": 1016.48,
+   "d": 2.8,
+   "text": "that into the body tag"
+  },
+  {
+   "t": 1019.28,
+   "d": 2.16,
+   "text": "and if i save that i get this rendered"
+  },
+  {
+   "t": 1021.44,
+   "d": 2.4,
+   "text": "in the nice pixel font from"
+  },
+  {
+   "t": 1023.84,
+   "d": 1.68,
+   "text": "google web fonts so as you can see this"
+  },
+  {
+   "t": 1025.52,
+   "d": 1.92,
+   "text": "kind of iteration is very fast you know"
+  },
+  {
+   "t": 1027.44,
+   "d": 1.36,
+   "text": "i'm updating the fonts and things like"
+  },
+  {
+   "t": 1028.8,
+   "d": 1.2,
+   "text": "that"
+  },
+  {
+   "t": 1030.0,
+   "d": 1.2,
+   "text": "now"
+  },
+  {
+   "t": 1031.2,
+   "d": 2.16,
+   "text": "um"
+  },
+  {
+   "t": 1033.36,
+   "d": 1.84,
+   "text": "i can i can also put styles i'll just"
+  },
+  {
+   "t": 1035.2,
+   "d": 2.48,
+   "text": "add these styles quickly for"
+  },
+  {
+   "t": 1037.68,
+   "d": 2.16,
+   "text": "so"
+  },
+  {
+   "t": 1040.08,
+   "d": 2.16,
+   "text": "to lay it out a bit nicer so what that"
+  },
+  {
+   "t": 1042.24,
+   "d": 2.08,
+   "text": "does is it's saying put this absolutely"
+  },
+  {
+   "t": 1044.32,
+   "d": 1.76,
+   "text": "on the page so at the moment it's at top"
+  },
+  {
+   "t": 1046.08,
+   "d": 1.68,
+   "text": "36 pixels but i can move it to the"
+  },
+  {
+   "t": 1047.76,
+   "d": 2.96,
+   "text": "bottom quite easily"
+  },
+  {
+   "t": 1051.76,
+   "d": 1.44,
+   "text": "and that's gone down there down the"
+  },
+  {
+   "t": 1053.2,
+   "d": 2.24,
+   "text": "bottom"
+  },
+  {
+   "t": 1055.76,
+   "d": 1.04,
+   "text": "but that's"
+  },
+  {
+   "t": 1056.8,
+   "d": 1.36,
+   "text": "as you can see it makes laying it out"
+  },
+  {
+   "t": 1058.16,
+   "d": 1.6,
+   "text": "quite easily"
+  },
+  {
+   "t": 1059.76,
+   "d": 1.04,
+   "text": "quite easy"
+  },
+  {
+   "t": 1060.8,
+   "d": 1.68,
+   "text": "um and you can do that with any kinds of"
+  },
+  {
+   "t": 1062.48,
+   "d": 2.0,
+   "text": "overlaid stuff so the cards in smallest"
+  },
+  {
+   "t": 1064.48,
+   "d": 1.76,
+   "text": "quest the demo i showed you before i"
+  },
+  {
+   "t": 1066.24,
+   "d": 1.44,
+   "text": "don't like that"
+  },
+  {
+   "t": 1067.68,
+   "d": 1.92,
+   "text": "and uh rochas itself also has support"
+  },
+  {
+   "t": 1069.6,
+   "d": 1.36,
+   "text": "for different fonts when doing the"
+  },
+  {
+   "t": 1070.96,
+   "d": 1.36,
+   "text": "console based rendering that i showed"
+  },
+  {
+   "t": 1072.32,
+   "d": 1.28,
+   "text": "you in the first part so rather than"
+  },
+  {
+   "t": 1073.6,
+   "d": 2.72,
+   "text": "overlaying it does it uh inside it so"
+  },
+  {
+   "t": 1076.32,
+   "d": 1.28,
+   "text": "another thing i'm running out of time"
+  },
+  {
+   "t": 1077.6,
+   "d": 2.16,
+   "text": "but svgs are pretty cool i used svgs a"
+  },
+  {
+   "t": 1079.76,
+   "d": 2.0,
+   "text": "lot in asteroid"
+  },
+  {
+   "t": 1081.76,
+   "d": 2.32,
+   "text": "and they scale smoothly"
+  },
+  {
+   "t": 1084.08,
+   "d": 1.28,
+   "text": "and they're built into the browser as"
+  },
+  {
+   "t": 1085.36,
+   "d": 0.88,
+   "text": "well"
+  },
+  {
+   "t": 1086.24,
+   "d": 2.08,
+   "text": "so by default roc.js renders everything"
+  },
+  {
+   "t": 1088.32,
+   "d": 1.92,
+   "text": "into a single canvas element if i"
+  },
+  {
+   "t": 1090.24,
+   "d": 2.56,
+   "text": "inspect the element you can see this"
+  },
+  {
+   "t": 1092.8,
+   "d": 1.44,
+   "text": "pretty clearly so i'm going to say"
+  },
+  {
+   "t": 1094.24,
+   "d": 1.52,
+   "text": "inspect"
+  },
+  {
+   "t": 1095.76,
+   "d": 3.6,
+   "text": "and you can see here the canvas element"
+  },
+  {
+   "t": 1099.36,
+   "d": 1.92,
+   "text": "and there's my element i added before"
+  },
+  {
+   "t": 1101.28,
+   "d": 1.28,
+   "text": "they're two separate things but the"
+  },
+  {
+   "t": 1102.56,
+   "d": 1.6,
+   "text": "entire game is currently being rendered"
+  },
+  {
+   "t": 1104.16,
+   "d": 1.68,
+   "text": "into this one canvas which works kind of"
+  },
+  {
+   "t": 1105.84,
+   "d": 2.16,
+   "text": "like a giant image um if we want to use"
+  },
+  {
+   "t": 1108.0,
+   "d": 1.2,
+   "text": "some of the cool built-in features of"
+  },
+  {
+   "t": 1109.2,
+   "d": 1.84,
+   "text": "the web browser we need to overlay some"
+  },
+  {
+   "t": 1111.04,
+   "d": 2.24,
+   "text": "html elements onto our game so what i"
+  },
+  {
+   "t": 1113.28,
+   "d": 1.92,
+   "text": "want to do is build an overlay on top of"
+  },
+  {
+   "t": 1115.2,
+   "d": 2.8,
+   "text": "this character here so that i can um"
+  },
+  {
+   "t": 1118.0,
+   "d": 2.0,
+   "text": "so that i can see that you know so i can"
+  },
+  {
+   "t": 1120.0,
+   "d": 2.48,
+   "text": "make it interactive basically"
+  },
+  {
+   "t": 1122.48,
+   "d": 3.6,
+   "text": "so to do that what i'm going to do is"
+  },
+  {
+   "t": 1126.56,
+   "d": 1.76,
+   "text": "i've got some more code here in on the"
+  },
+  {
+   "t": 1128.32,
+   "d": 2.32,
+   "text": "github that can be copy pasted"
+  },
+  {
+   "t": 1130.64,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 1131.76,
+   "d": 1.36,
+   "text": "but so basically i'm just going to add a"
+  },
+  {
+   "t": 1133.12,
+   "d": 2.16,
+   "text": "box with a div tag"
+  },
+  {
+   "t": 1135.28,
+   "d": 1.12,
+   "text": "to my"
+  },
+  {
+   "t": 1136.4,
+   "d": 1.36,
+   "text": "demo here"
+  },
+  {
+   "t": 1137.76,
+   "d": 1.44,
+   "text": "so underneath the hit points i'm going"
+  },
+  {
+   "t": 1139.2,
+   "d": 2.48,
+   "text": "to add another box"
+  },
+  {
+   "t": 1141.68,
+   "d": 1.84,
+   "text": "and"
+  },
+  {
+   "t": 1143.52,
+   "d": 3.12,
+   "text": "i can place that box"
+  },
+  {
+   "t": 1146.64,
+   "d": 2.24,
+   "text": "on the screen"
+  },
+  {
+   "t": 1148.88,
+   "d": 3.84,
+   "text": "and now what i want to do is actually"
+  },
+  {
+   "t": 1154.08,
+   "d": 1.44,
+   "text": "so you won't be able to see the box when"
+  },
+  {
+   "t": 1155.52,
+   "d": 2.08,
+   "text": "i first save it but i'll add a little"
+  },
+  {
+   "t": 1157.6,
+   "d": 3.68,
+   "text": "size so with maybe 42 pixels"
+  },
+  {
+   "t": 1161.28,
+   "d": 2.4,
+   "text": "height 42 pixels"
+  },
+  {
+   "t": 1163.68,
+   "d": 1.76,
+   "text": "and now you can see that box right there"
+  },
+  {
+   "t": 1165.44,
+   "d": 1.52,
+   "text": "so the little red box but we actually"
+  },
+  {
+   "t": 1166.96,
+   "d": 1.52,
+   "text": "want this to overlay on top of the"
+  },
+  {
+   "t": 1168.48,
+   "d": 1.92,
+   "text": "player character so that it's useful"
+  },
+  {
+   "t": 1170.4,
+   "d": 2.0,
+   "text": "um and again on the github there's a"
+  },
+  {
+   "t": 1172.4,
+   "d": 2.0,
+   "text": "little bit of code here which does that"
+  },
+  {
+   "t": 1174.4,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 1175.12,
+   "d": 1.04,
+   "text": "i won't"
+  },
+  {
+   "t": 1176.16,
+   "d": 2.4,
+   "text": "explain all of it but basically in the"
+  },
+  {
+   "t": 1178.56,
+   "d": 2.0,
+   "text": "players on update function what we want"
+  },
+  {
+   "t": 1180.56,
+   "d": 1.6,
+   "text": "to do is move the box so that it"
+  },
+  {
+   "t": 1182.16,
+   "d": 2.16,
+   "text": "overlays on top of the canvas over the"
+  },
+  {
+   "t": 1184.32,
+   "d": 3.36,
+   "text": "player so we can then use that"
+  },
+  {
+   "t": 1187.68,
+   "d": 1.12,
+   "text": "so i'm going to take that bit of code"
+  },
+  {
+   "t": 1188.8,
+   "d": 2.0,
+   "text": "and i'm going to go down here to"
+  },
+  {
+   "t": 1190.8,
+   "d": 2.56,
+   "text": "player dot"
+  },
+  {
+   "t": 1193.36,
+   "d": 2.32,
+   "text": "draw so when it updates where the the"
+  },
+  {
+   "t": 1195.68,
+   "d": 1.44,
+   "text": "player's position is on the screen we"
+  },
+  {
+   "t": 1197.12,
+   "d": 2.24,
+   "text": "also want it to update the box"
+  },
+  {
+   "t": 1199.36,
+   "d": 2.56,
+   "text": "so paste that in here"
+  },
+  {
+   "t": 1201.92,
+   "d": 2.64,
+   "text": "and when i save that we now see that the"
+  },
+  {
+   "t": 1204.56,
+   "d": 2.32,
+   "text": "red box is overlaid on top of the player"
+  },
+  {
+   "t": 1206.88,
+   "d": 1.36,
+   "text": "so that's pretty cool as the player"
+  },
+  {
+   "t": 1208.24,
+   "d": 2.0,
+   "text": "moves around we've got this little and"
+  },
+  {
+   "t": 1210.24,
+   "d": 2.08,
+   "text": "if you inspect this in the browser in"
+  },
+  {
+   "t": 1212.32,
+   "d": 1.28,
+   "text": "the console you can see that it's"
+  },
+  {
+   "t": 1213.6,
+   "d": 1.52,
+   "text": "actually separate to the canvas so the"
+  },
+  {
+   "t": 1215.12,
+   "d": 2.0,
+   "text": "canvas is underneath and the div is on"
+  },
+  {
+   "t": 1217.12,
+   "d": 1.76,
+   "text": "top"
+  },
+  {
+   "t": 1218.88,
+   "d": 3.52,
+   "text": "um and"
+  },
+  {
+   "t": 1222.72,
+   "d": 1.92,
+   "text": "we can use that so"
+  },
+  {
+   "t": 1224.64,
+   "d": 1.52,
+   "text": "what what can we do with this box once"
+  },
+  {
+   "t": 1226.16,
+   "d": 2.24,
+   "text": "it's overlaid we can add juice like"
+  },
+  {
+   "t": 1228.4,
+   "d": 2.64,
+   "text": "sparkles or dust effects or bounce um we"
+  },
+  {
+   "t": 1231.04,
+   "d": 1.44,
+   "text": "can actually even render this character"
+  },
+  {
+   "t": 1232.48,
+   "d": 1.44,
+   "text": "straight into the box instead of onto"
+  },
+  {
+   "t": 1233.92,
+   "d": 2.32,
+   "text": "the canvas so we have a sprite layer as"
+  },
+  {
+   "t": 1236.24,
+   "d": 0.8,
+   "text": "well"
+  },
+  {
+   "t": 1237.04,
+   "d": 1.68,
+   "text": "and that means that you can so in"
+  },
+  {
+   "t": 1238.72,
+   "d": 2.16,
+   "text": "smallest quest i used that technique and"
+  },
+  {
+   "t": 1240.88,
+   "d": 1.2,
+   "text": "you could use move the character"
+  },
+  {
+   "t": 1242.08,
+   "d": 1.68,
+   "text": "independently"
+  },
+  {
+   "t": 1243.76,
+   "d": 0.88,
+   "text": "and then"
+  },
+  {
+   "t": 1244.64,
+   "d": 1.36,
+   "text": "let's try one more thing which is adding"
+  },
+  {
+   "t": 1246.0,
+   "d": 1.6,
+   "text": "a click handler so when you click on"
+  },
+  {
+   "t": 1247.6,
+   "d": 2.08,
+   "text": "this box or so anytime you click on the"
+  },
+  {
+   "t": 1249.68,
+   "d": 1.68,
+   "text": "character you'll see something"
+  },
+  {
+   "t": 1251.36,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 1252.24,
+   "d": 1.84,
+   "text": "that's a very simple little piece of"
+  },
+  {
+   "t": 1254.08,
+   "d": 2.64,
+   "text": "code here which is um"
+  },
+  {
+   "t": 1256.72,
+   "d": 2.16,
+   "text": "you just say box dot on draw"
+  },
+  {
+   "t": 1258.88,
+   "d": 1.36,
+   "text": "sorry"
+  },
+  {
+   "t": 1260.24,
+   "d": 1.68,
+   "text": "box dot on click so we've got this"
+  },
+  {
+   "t": 1261.92,
+   "d": 1.6,
+   "text": "little on click handler so box dot on"
+  },
+  {
+   "t": 1263.52,
+   "d": 1.44,
+   "text": "click equals function"
+  },
+  {
+   "t": 1264.96,
+   "d": 2.0,
+   "text": "and then we're just gonna alert"
+  },
+  {
+   "t": 1266.96,
+   "d": 2.08,
+   "text": "change that so that it says"
+  },
+  {
+   "t": 1269.04,
+   "d": 2.88,
+   "text": "i am the player"
+  },
+  {
+   "t": 1271.92,
+   "d": 2.32,
+   "text": "so now"
+  },
+  {
+   "t": 1274.24,
+   "d": 2.4,
+   "text": "if we move the player around when we"
+  },
+  {
+   "t": 1276.64,
+   "d": 1.12,
+   "text": "click on the player we should see an"
+  },
+  {
+   "t": 1277.76,
+   "d": 3.2,
+   "text": "alert that says i am the player"
+  },
+  {
+   "t": 1280.96,
+   "d": 2.08,
+   "text": "so yeah as you can see you can add"
+  },
+  {
+   "t": 1283.04,
+   "d": 3.04,
+   "text": "overlay elements quite easily"
+  },
+  {
+   "t": 1286.08,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1286.88,
+   "d": 1.68,
+   "text": "so in both of my games i used this trick"
+  },
+  {
+   "t": 1288.56,
+   "d": 1.76,
+   "text": "of placing html elements over the canvas"
+  },
+  {
+   "t": 1290.32,
+   "d": 1.6,
+   "text": "to accomplish various things i'm going"
+  },
+  {
+   "t": 1291.92,
+   "d": 1.36,
+   "text": "to bring up my latest game smallest"
+  },
+  {
+   "t": 1293.28,
+   "d": 1.52,
+   "text": "quest now so i could show you this i"
+  },
+  {
+   "t": 1294.8,
+   "d": 1.84,
+   "text": "took this idea one step further in"
+  },
+  {
+   "t": 1296.64,
+   "d": 2.16,
+   "text": "smallest quest i used rock.js to draw"
+  },
+  {
+   "t": 1298.8,
+   "d": 2.72,
+   "text": "the backgrounds"
+  },
+  {
+   "t": 1303.44,
+   "d": 1.92,
+   "text": "uh but i drew the characters and items"
+  },
+  {
+   "t": 1305.36,
+   "d": 2.56,
+   "text": "inside floating divs on top of the"
+  },
+  {
+   "t": 1307.92,
+   "d": 1.68,
+   "text": "on top of the game so the characters and"
+  },
+  {
+   "t": 1309.6,
+   "d": 1.12,
+   "text": "items here"
+  },
+  {
+   "t": 1310.72,
+   "d": 3.52,
+   "text": "are all um drawn as those floating divs"
+  },
+  {
+   "t": 1314.24,
+   "d": 2.16,
+   "text": "um so and all the juice you can see here"
+  },
+  {
+   "t": 1316.4,
+   "d": 2.96,
+   "text": "is uh done with stylesheet animation so"
+  },
+  {
+   "t": 1319.36,
+   "d": 1.52,
+   "text": "this bobbing item and the way the"
+  },
+  {
+   "t": 1320.88,
+   "d": 1.12,
+   "text": "players jump"
+  },
+  {
+   "t": 1322.0,
+   "d": 2.96,
+   "text": "and uh when you when during combat"
+  },
+  {
+   "t": 1324.96,
+   "d": 2.0,
+   "text": "you get these little overlays which show"
+  },
+  {
+   "t": 1326.96,
+   "d": 1.04,
+   "text": "that"
+  },
+  {
+   "t": 1328.0,
+   "d": 2.16,
+   "text": "so the sword swipe that's also done in"
+  },
+  {
+   "t": 1330.16,
+   "d": 3.04,
+   "text": "this with the same technique"
+  },
+  {
+   "t": 1333.2,
+   "d": 2.24,
+   "text": "and uh"
+  },
+  {
+   "t": 1335.44,
+   "d": 2.08,
+   "text": "one pretty cool thing um is you can"
+  },
+  {
+   "t": 1337.52,
+   "d": 2.24,
+   "text": "inspect this object in real time"
+  },
+  {
+   "t": 1339.76,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 1340.48,
+   "d": 2.4,
+   "text": "um if i bring that one up"
+  },
+  {
+   "t": 1342.88,
+   "d": 2.32,
+   "text": "you can see that it's bobbing there and"
+  },
+  {
+   "t": 1345.2,
+   "d": 2.24,
+   "text": "you can actually select the element"
+  },
+  {
+   "t": 1347.44,
+   "d": 4.0,
+   "text": "and finally i added this uh so yeah"
+  },
+  {
+   "t": 1351.44,
+   "d": 1.6,
+   "text": "i'll just quickly show you this is the"
+  },
+  {
+   "t": 1353.04,
+   "d": 2.56,
+   "text": "code for doing the css animation i'm"
+  },
+  {
+   "t": 1355.6,
+   "d": 1.36,
+   "text": "running out of time so i won't talk you"
+  },
+  {
+   "t": 1356.96,
+   "d": 1.68,
+   "text": "through this but basically"
+  },
+  {
+   "t": 1358.64,
+   "d": 2.24,
+   "text": "you just add a class to each item and"
+  },
+  {
+   "t": 1360.88,
+   "d": 2.16,
+   "text": "then you can animate it with a css"
+  },
+  {
+   "t": 1363.04,
+   "d": 1.36,
+   "text": "animation and you can see it's very"
+  },
+  {
+   "t": 1364.4,
+   "d": 2.0,
+   "text": "short and declarative"
+  },
+  {
+   "t": 1366.4,
+   "d": 3.76,
+   "text": "so it's very quick to add this type of"
+  },
+  {
+   "t": 1370.16,
+   "d": 0.96,
+   "text": "juice"
+  },
+  {
+   "t": 1371.12,
+   "d": 1.52,
+   "text": "so finally i want to show you a cool"
+  },
+  {
+   "t": 1372.64,
+   "d": 1.76,
+   "text": "trick that you can use um because you"
+  },
+  {
+   "t": 1374.4,
+   "d": 0.72,
+   "text": "can"
+  },
+  {
+   "t": 1375.12,
+   "d": 2.08,
+   "text": "define data and event handlers to"
+  },
+  {
+   "t": 1377.2,
+   "d": 1.36,
+   "text": "on-screen elements so you can do some"
+  },
+  {
+   "t": 1378.56,
+   "d": 1.92,
+   "text": "pretty nifty things uh in the smallest"
+  },
+  {
+   "t": 1380.48,
+   "d": 1.6,
+   "text": "quest code base i have an event handler"
+  },
+  {
+   "t": 1382.08,
+   "d": 2.0,
+   "text": "on each item and monster which logs the"
+  },
+  {
+   "t": 1384.08,
+   "d": 1.76,
+   "text": "property of the thing to the console so"
+  },
+  {
+   "t": 1385.84,
+   "d": 1.36,
+   "text": "what's cool about that is you can edit"
+  },
+  {
+   "t": 1387.2,
+   "d": 2.08,
+   "text": "it in real time so let's say this piece"
+  },
+  {
+   "t": 1389.28,
+   "d": 2.24,
+   "text": "of food here i'm doing some game balance"
+  },
+  {
+   "t": 1391.52,
+   "d": 1.28,
+   "text": "and i want to make it"
+  },
+  {
+   "t": 1392.8,
+   "d": 0.96,
+   "text": "oops"
+  },
+  {
+   "t": 1393.76,
+   "d": 1.76,
+   "text": "i ate it"
+  },
+  {
+   "t": 1395.52,
+   "d": 1.36,
+   "text": "i'll drop it again"
+  },
+  {
+   "t": 1396.88,
+   "d": 2.56,
+   "text": "so i'll click that one"
+  },
+  {
+   "t": 1399.44,
+   "d": 3.88,
+   "text": "and now if i go to the console"
+  },
+  {
+   "t": 1403.76,
+   "d": 1.68,
+   "text": "hopefully you can read this but you can"
+  },
+  {
+   "t": 1405.44,
+   "d": 1.44,
+   "text": "see here it's got item clicked and then"
+  },
+  {
+   "t": 1406.88,
+   "d": 1.6,
+   "text": "it's got the properties of the item"
+  },
+  {
+   "t": 1408.48,
+   "d": 1.12,
+   "text": "actually dumped"
+  },
+  {
+   "t": 1409.6,
+   "d": 1.44,
+   "text": "and what i can do is change the"
+  },
+  {
+   "t": 1411.04,
+   "d": 1.52,
+   "text": "properties of that item so this one's"
+  },
+  {
+   "t": 1412.56,
+   "d": 2.56,
+   "text": "got food of five"
+  },
+  {
+   "t": 1415.12,
+   "d": 2.24,
+   "text": "which i could change it so it's sort of"
+  },
+  {
+   "t": 1417.36,
+   "d": 2.88,
+   "text": "like food of"
+  },
+  {
+   "t": 1420.24,
+   "d": 0.8,
+   "text": "10"
+  },
+  {
+   "t": 1421.04,
+   "d": 2.08,
+   "text": "and then when i collect that item"
+  },
+  {
+   "t": 1423.12,
+   "d": 1.68,
+   "text": "you'll actually have 10 food"
+  },
+  {
+   "t": 1424.8,
+   "d": 1.68,
+   "text": "um it's more interesting if you do it"
+  },
+  {
+   "t": 1426.48,
+   "d": 2.56,
+   "text": "with a monster or a um"
+  },
+  {
+   "t": 1429.04,
+   "d": 1.44,
+   "text": "so i can make this"
+  },
+  {
+   "t": 1430.48,
+   "d": 2.32,
+   "text": "i'll chase this bat over here i can make"
+  },
+  {
+   "t": 1432.8,
+   "d": 2.24,
+   "text": "this bat into a super bad"
+  },
+  {
+   "t": 1435.04,
+   "d": 2.56,
+   "text": "um by"
+  },
+  {
+   "t": 1437.76,
+   "d": 2.24,
+   "text": "so here i should have a monster clicked"
+  },
+  {
+   "t": 1440.0,
+   "d": 1.6,
+   "text": "and i can go in here and i can change"
+  },
+  {
+   "t": 1441.6,
+   "d": 2.0,
+   "text": "his damage"
+  },
+  {
+   "t": 1443.6,
+   "d": 3.2,
+   "text": "to be 20 so now if this bat hits me"
+  },
+  {
+   "t": 1446.8,
+   "d": 3.12,
+   "text": "that's it i'm toast"
+  },
+  {
+   "t": 1452.0,
+   "d": 2.08,
+   "text": "yeah one hit and it got me"
+  },
+  {
+   "t": 1454.08,
+   "d": 1.68,
+   "text": "so as you can see um"
+  },
+  {
+   "t": 1455.76,
+   "d": 2.16,
+   "text": "what's cool about that is you can uh you"
+  },
+  {
+   "t": 1457.92,
+   "d": 3.04,
+   "text": "can do game balance in real time"
+  },
+  {
+   "t": 1460.96,
+   "d": 1.2,
+   "text": "so the final advantage i want to talk"
+  },
+  {
+   "t": 1462.16,
+   "d": 1.92,
+   "text": "about is portability first of all if you"
+  },
+  {
+   "t": 1464.08,
+   "d": 1.28,
+   "text": "target the browser anyone can run your"
+  },
+  {
+   "t": 1465.36,
+   "d": 1.84,
+   "text": "game but also there's a bunch of"
+  },
+  {
+   "t": 1467.2,
+   "d": 1.68,
+   "text": "projects which let you run web-based"
+  },
+  {
+   "t": 1468.88,
+   "d": 1.68,
+   "text": "things in weird places"
+  },
+  {
+   "t": 1470.56,
+   "d": 2.32,
+   "text": "so for asteroid i use the apache cordova"
+  },
+  {
+   "t": 1472.88,
+   "d": 1.92,
+   "text": "framework to make native android builds"
+  },
+  {
+   "t": 1474.8,
+   "d": 2.08,
+   "text": "of my game this was fairly trivial to"
+  },
+  {
+   "t": 1476.88,
+   "d": 2.64,
+   "text": "get working maybe one day of work um"
+  },
+  {
+   "t": 1479.52,
+   "d": 1.36,
+   "text": "basically all it does is wrap up a web"
+  },
+  {
+   "t": 1480.88,
+   "d": 1.76,
+   "text": "view as a native app so the code i'm"
+  },
+  {
+   "t": 1482.64,
+   "d": 1.76,
+   "text": "using in the browser for debugging is"
+  },
+  {
+   "t": 1484.4,
+   "d": 2.08,
+   "text": "exactly the same as the code i'm using"
+  },
+  {
+   "t": 1486.48,
+   "d": 1.92,
+   "text": "on the phone for the desktop ports of"
+  },
+  {
+   "t": 1488.4,
+   "d": 1.52,
+   "text": "both asteroid and small squares i use"
+  },
+  {
+   "t": 1489.92,
+   "d": 1.36,
+   "text": "electron"
+  },
+  {
+   "t": 1491.28,
+   "d": 1.52,
+   "text": "which also give you access to the"
+  },
+  {
+   "t": 1492.8,
+   "d": 2.24,
+   "text": "developer console and let you do live"
+  },
+  {
+   "t": 1495.04,
+   "d": 1.6,
+   "text": "tweaking"
+  },
+  {
+   "t": 1496.64,
+   "d": 2.56,
+   "text": "um yeah so that's my talk i hope it's"
+  },
+  {
+   "t": 1499.2,
+   "d": 1.36,
+   "text": "given you some ideas about how you can"
+  },
+  {
+   "t": 1500.56,
+   "d": 1.84,
+   "text": "use the web browser to make your next"
+  },
+  {
+   "t": 1502.4,
+   "d": 2.64,
+   "text": "roguelike game in javascript"
+  },
+  {
+   "t": 1505.04,
+   "d": 1.44,
+   "text": "by the way i'm releasing the graphical"
+  },
+  {
+   "t": 1506.48,
+   "d": 1.84,
+   "text": "tiles from smallest quest as a"
+  },
+  {
+   "t": 1508.32,
+   "d": 2.08,
+   "text": "standalone free tile set called doodle"
+  },
+  {
+   "t": 1510.4,
+   "d": 2.28,
+   "text": "rogue that should be up on"
+  },
+  {
+   "t": 1512.68,
+   "d": 2.36,
+   "text": "chr15m chr15m.itch.io which is my"
+  },
+  {
+   "t": 1515.04,
+   "d": 2.56,
+   "text": "personal itch page"
+  },
+  {
+   "t": 1517.6,
+   "d": 1.92,
+   "text": "and i'll also announce that um on the"
+  },
+  {
+   "t": 1519.52,
+   "d": 2.56,
+   "text": "roguelike dev credit when i uh when i"
+  },
+  {
+   "t": 1522.08,
+   "d": 2.64,
+   "text": "finally get that up"
+  },
+  {
+   "t": 1524.72,
+   "d": 1.52,
+   "text": "finally you can find me on twitter and"
+  },
+  {
+   "t": 1526.24,
+   "d": 2.4,
+   "text": "my personal site is mccormick.cx"
+  },
+  {
+   "t": 1528.64,
+   "d": 2.24,
+   "text": "uh the bottom link is punk collective"
+  },
+  {
+   "t": 1530.88,
+   "d": 1.68,
+   "text": "there um that's me and some other"
+  },
+  {
+   "t": 1532.56,
+   "d": 1.28,
+   "text": "friends who are releasing one game a"
+  },
+  {
+   "t": 1533.84,
+   "d": 1.68,
+   "text": "month if you're interested in finding"
+  },
+  {
+   "t": 1535.52,
+   "d": 1.6,
+   "text": "out about our releases there's an email"
+  },
+  {
+   "t": 1537.12,
+   "d": 0.8,
+   "text": "sign up at the bottom of"
+  },
+  {
+   "t": 1537.92,
+   "d": 1.68,
+   "text": "thepunkcollective.com"
+  },
+  {
+   "t": 1539.6,
+   "d": 2.0,
+   "text": "so thanks very much for having me it's a"
+  },
+  {
+   "t": 1541.6,
+   "d": 2.8,
+   "text": "real honor to talk at roblox celebration"
+  },
+  {
+   "t": 1544.4,
+   "d": 2.88,
+   "text": "and just quickly i will"
+  },
+  {
+   "t": 1547.28,
+   "d": 1.92,
+   "text": "post that link to the github with all of"
+  },
+  {
+   "t": 1549.2,
+   "d": 1.92,
+   "text": "these resources uh"
+  },
+  {
+   "t": 1551.12,
+   "d": 2.24,
+   "text": "into the chat afterwards i believe"
+  },
+  {
+   "t": 1553.36,
+   "d": 1.44,
+   "text": "there's a"
+  },
+  {
+   "t": 1554.8,
+   "d": 1.92,
+   "text": "room which i'll go to so if you have any"
+  },
+  {
+   "t": 1556.72,
+   "d": 2.56,
+   "text": "questions um hit me up"
+  },
+  {
+   "t": 1559.28,
+   "d": 2.16,
+   "text": "excellent thank you so much chris yeah"
+  },
+  {
+   "t": 1561.44,
+   "d": 1.6,
+   "text": "and we have time for a few questions and"
+  },
+  {
+   "t": 1563.04,
+   "d": 1.44,
+   "text": "we've been getting some poster the first"
+  },
+  {
+   "t": 1564.48,
+   "d": 1.76,
+   "text": "one i think pretty straightforward where"
+  },
+  {
+   "t": 1566.24,
+   "d": 2.6,
+   "text": "can we get the chicken sword"
+  },
+  {
+   "t": 1568.84,
+   "d": 3.32,
+   "text": "game i don't actually know uh it's i"
+  },
+  {
+   "t": 1572.16,
+   "d": 2.08,
+   "text": "just found a gif you know doing an image"
+  },
+  {
+   "t": 1574.24,
+   "d": 2.24,
+   "text": "search um but yeah that did look very"
+  },
+  {
+   "t": 1576.48,
+   "d": 2.0,
+   "text": "cool i think it's actually"
+  },
+  {
+   "t": 1578.48,
+   "d": 2.24,
+   "text": "someone will have to have something"
+  },
+  {
+   "t": 1580.72,
+   "d": 1.36,
+   "text": "okay okay"
+  },
+  {
+   "t": 1582.08,
+   "d": 2.72,
+   "text": "all right well bad news everyone"
+  },
+  {
+   "t": 1584.8,
+   "d": 1.36,
+   "text": "but"
+  },
+  {
+   "t": 1586.16,
+   "d": 2.0,
+   "text": "uh here's another i think a solid"
+  },
+  {
+   "t": 1588.16,
+   "d": 2.0,
+   "text": "question from foxtel david how do you"
+  },
+  {
+   "t": 1590.16,
+   "d": 2.48,
+   "text": "handle with i mean just generally like"
+  },
+  {
+   "t": 1592.64,
+   "d": 1.76,
+   "text": "these types of browser games making it"
+  },
+  {
+   "t": 1594.4,
+   "d": 3.84,
+   "text": "responsive at different browser sizes"
+  },
+  {
+   "t": 1598.24,
+   "d": 2.08,
+   "text": "yeah so i had to wrestle with that quite"
+  },
+  {
+   "t": 1600.32,
+   "d": 1.76,
+   "text": "a bit i have a project which is a"
+  },
+  {
+   "t": 1602.08,
+   "d": 2.16,
+   "text": "roguelike boilerplate for the browser"
+  },
+  {
+   "t": 1604.24,
+   "d": 2.08,
+   "text": "which is like pretty much this demo but"
+  },
+  {
+   "t": 1606.32,
+   "d": 2.32,
+   "text": "a bit more advanced and it does it does"
+  },
+  {
+   "t": 1608.64,
+   "d": 1.76,
+   "text": "that so basically my technique is just"
+  },
+  {
+   "t": 1610.4,
+   "d": 3.36,
+   "text": "center it on the screen um and"
+  },
+  {
+   "t": 1613.76,
+   "d": 1.84,
+   "text": "if you're on mobile shrink it down a"
+  },
+  {
+   "t": 1615.6,
+   "d": 1.28,
+   "text": "little bit because people are used to"
+  },
+  {
+   "t": 1616.88,
+   "d": 2.16,
+   "text": "seeing smaller interfaces"
+  },
+  {
+   "t": 1619.04,
+   "d": 2.08,
+   "text": "so you can fit so you can fit less on"
+  },
+  {
+   "t": 1621.12,
+   "d": 2.0,
+   "text": "the screen but you make it smaller"
+  },
+  {
+   "t": 1623.12,
+   "d": 2.0,
+   "text": "basically if that makes sense"
+  },
+  {
+   "t": 1625.12,
+   "d": 2.96,
+   "text": "um yeah so i would uh that's how i would"
+  },
+  {
+   "t": 1628.08,
+   "d": 2.16,
+   "text": "do it just centering on the screen"
+  },
+  {
+   "t": 1630.24,
+   "d": 1.2,
+   "text": "and by that i mean centering the"
+  },
+  {
+   "t": 1631.44,
+   "d": 2.0,
+   "text": "character at the center of the screen"
+  },
+  {
+   "t": 1633.44,
+   "d": 2.24,
+   "text": "and uh the way i did that was with a css"
+  },
+  {
+   "t": 1635.68,
+   "d": 1.2,
+   "text": "translate"
+  },
+  {
+   "t": 1636.88,
+   "d": 2.88,
+   "text": "um transform so you you can pick up the"
+  },
+  {
+   "t": 1639.76,
+   "d": 1.76,
+   "text": "character position of the canvas and"
+  },
+  {
+   "t": 1641.52,
+   "d": 2.16,
+   "text": "then just shift the whole thing on the"
+  },
+  {
+   "t": 1643.68,
+   "d": 1.6,
+   "text": "screen to the middle"
+  },
+  {
+   "t": 1645.28,
+   "d": 2.24,
+   "text": "right cool that's fun"
+  },
+  {
+   "t": 1647.52,
+   "d": 2.56,
+   "text": "uh another question from hypergardens"
+  },
+  {
+   "t": 1650.08,
+   "d": 2.0,
+   "text": "how would you advise someone host their"
+  },
+  {
+   "t": 1652.08,
+   "d": 2.56,
+   "text": "game on github pages or is there"
+  },
+  {
+   "t": 1654.64,
+   "d": 2.96,
+   "text": "something else particularly handy"
+  },
+  {
+   "t": 1657.6,
+   "d": 1.84,
+   "text": "yes i mean it depends what you what you"
+  },
+  {
+   "t": 1659.44,
+   "d": 1.76,
+   "text": "want to accomplish but"
+  },
+  {
+   "t": 1661.2,
+   "d": 2.8,
+   "text": "i know each dot io has a built-in html"
+  },
+  {
+   "t": 1664.0,
+   "d": 2.08,
+   "text": "hosting so you can just upload a zip"
+  },
+  {
+   "t": 1666.08,
+   "d": 2.32,
+   "text": "file with your index.html"
+  },
+  {
+   "t": 1668.4,
+   "d": 1.76,
+   "text": "and it'll unpack and people can play it"
+  },
+  {
+   "t": 1670.16,
+   "d": 1.28,
+   "text": "right on the page"
+  },
+  {
+   "t": 1671.44,
+   "d": 2.24,
+   "text": "um and"
+  },
+  {
+   "t": 1673.68,
+   "d": 1.76,
+   "text": "yeah so the other way would be github"
+  },
+  {
+   "t": 1675.44,
+   "d": 1.52,
+   "text": "static hosting and there are a ton of"
+  },
+  {
+   "t": 1676.96,
+   "d": 3.88,
+   "text": "other static hosts now like netlify and"
+  },
+  {
+   "t": 1680.84,
+   "d": 1.96,
+   "text": "um i can't remember any of the other"
+  },
+  {
+   "t": 1682.8,
+   "d": 1.52,
+   "text": "ones but yeah there's quite a lot of"
+  },
+  {
+   "t": 1684.32,
+   "d": 3.12,
+   "text": "different techniques my own my i host my"
+  },
+  {
+   "t": 1687.44,
+   "d": 1.44,
+   "text": "stuff on a vps"
+  },
+  {
+   "t": 1688.88,
+   "d": 2.0,
+   "text": "um using a deployment platform called"
+  },
+  {
+   "t": 1690.88,
+   "d": 2.08,
+   "text": "piku which is like a self-hosted"
+  },
+  {
+   "t": 1692.96,
+   "d": 2.16,
+   "text": "platform as a service"
+  },
+  {
+   "t": 1695.12,
+   "d": 2.88,
+   "text": "cool all right um another question from"
+  },
+  {
+   "t": 1698.0,
+   "d": 2.08,
+   "text": "hyper gardens can you do text effects"
+  },
+  {
+   "t": 1700.08,
+   "d": 2.64,
+   "text": "with a css animation"
+  },
+  {
+   "t": 1702.72,
+   "d": 1.68,
+   "text": "yes you can you can do some pretty cool"
+  },
+  {
+   "t": 1704.4,
+   "d": 2.96,
+   "text": "stuff um like a glow effect you could do"
+  },
+  {
+   "t": 1707.36,
+   "d": 0.88,
+   "text": "so"
+  },
+  {
+   "t": 1708.24,
+   "d": 0.72,
+   "text": "the"
+  },
+  {
+   "t": 1708.96,
+   "d": 2.08,
+   "text": "text has a drop shadow but you can make"
+  },
+  {
+   "t": 1711.04,
+   "d": 1.2,
+   "text": "it look like a glow and then you can"
+  },
+  {
+   "t": 1712.24,
+   "d": 2.08,
+   "text": "have it like kind of pulsating which is"
+  },
+  {
+   "t": 1714.32,
+   "d": 1.36,
+   "text": "uh pretty cool"
+  },
+  {
+   "t": 1715.68,
+   "d": 1.44,
+   "text": "um but yeah there's there's a lot of"
+  },
+  {
+   "t": 1717.12,
+   "d": 1.28,
+   "text": "different things you can experiment with"
+  },
+  {
+   "t": 1718.4,
+   "d": 2.0,
+   "text": "there"
+  },
+  {
+   "t": 1720.4,
+   "d": 2.16,
+   "text": "yeah no that's interesting um just"
+  },
+  {
+   "t": 1722.56,
+   "d": 1.44,
+   "text": "looking through some of the other"
+  },
+  {
+   "t": 1724.0,
+   "d": 2.4,
+   "text": "questions here"
+  },
+  {
+   "t": 1726.4,
+   "d": 1.76,
+   "text": "that's an interesting one from sardonic"
+  },
+  {
+   "t": 1728.16,
+   "d": 2.4,
+   "text": "um can't users cycle through div"
+  },
+  {
+   "t": 1730.56,
+   "d": 2.32,
+   "text": "elements using tab and is that a problem"
+  },
+  {
+   "t": 1732.88,
+   "d": 1.92,
+   "text": "for stuff like the i assume like the"
+  },
+  {
+   "t": 1734.8,
+   "d": 1.28,
+   "text": "clickable like the character div and"
+  },
+  {
+   "t": 1736.08,
+   "d": 1.2,
+   "text": "stuff like that or does it end up"
+  },
+  {
+   "t": 1737.28,
+   "d": 2.56,
+   "text": "working nicely"
+  },
+  {
+   "t": 1740.0,
+   "d": 2.56,
+   "text": "uh so it does not come up"
+  },
+  {
+   "t": 1742.56,
+   "d": 2.32,
+   "text": "yeah i think so just i think it means"
+  },
+  {
+   "t": 1744.88,
+   "d": 1.76,
+   "text": "when you press tab so on a form or"
+  },
+  {
+   "t": 1746.64,
+   "d": 0.88,
+   "text": "something like that you get the"
+  },
+  {
+   "t": 1747.52,
+   "d": 1.68,
+   "text": "different elements selected"
+  },
+  {
+   "t": 1749.2,
+   "d": 3.28,
+   "text": "uh i'm not sure how that would work and"
+  },
+  {
+   "t": 1752.48,
+   "d": 2.4,
+   "text": "yeah you would have to be careful if you"
+  },
+  {
+   "t": 1754.88,
+   "d": 2.32,
+   "text": "want to not let people edit the game in"
+  },
+  {
+   "t": 1757.2,
+   "d": 1.92,
+   "text": "real time you'd have to"
+  },
+  {
+   "t": 1759.12,
+   "d": 1.52,
+   "text": "figure out a way of"
+  },
+  {
+   "t": 1760.64,
+   "d": 1.92,
+   "text": "disenabling that"
+  },
+  {
+   "t": 1762.56,
+   "d": 2.16,
+   "text": "yeah"
+  },
+  {
+   "t": 1764.72,
+   "d": 3.76,
+   "text": "cool that's a good question um"
+  },
+  {
+   "t": 1768.48,
+   "d": 2.56,
+   "text": "yeah and i mean kate points out that tab"
+  },
+  {
+   "t": 1771.04,
+   "d": 1.6,
+   "text": "based navigation can be really great for"
+  },
+  {
+   "t": 1772.64,
+   "d": 1.36,
+   "text": "accessibility so there might be some"
+  },
+  {
+   "t": 1774.0,
+   "d": 1.44,
+   "text": "interesting stuff there if you already"
+  },
+  {
+   "t": 1775.44,
+   "d": 2.0,
+   "text": "have a div for something like a player"
+  },
+  {
+   "t": 1777.44,
+   "d": 1.92,
+   "text": "that normally would be a click then"
+  },
+  {
+   "t": 1779.36,
+   "d": 1.76,
+   "text": "being able to also support tab over and"
+  },
+  {
+   "t": 1781.12,
+   "d": 2.08,
+   "text": "hit enter"
+  },
+  {
+   "t": 1783.2,
+   "d": 0.96,
+   "text": "yep"
+  },
+  {
+   "t": 1784.16,
+   "d": 1.36,
+   "text": "and also i mean"
+  },
+  {
+   "t": 1785.52,
+   "d": 1.6,
+   "text": "yeah you can make it just completely"
+  },
+  {
+   "t": 1787.12,
+   "d": 1.68,
+   "text": "keyboard driven like like any other"
+  },
+  {
+   "t": 1788.8,
+   "d": 1.44,
+   "text": "roguelike so"
+  },
+  {
+   "t": 1790.24,
+   "d": 2.72,
+   "text": "um you know have i for the inventory and"
+  },
+  {
+   "t": 1792.96,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 1793.76,
+   "d": 2.56,
+   "text": "then buying keys to using things from"
+  },
+  {
+   "t": 1796.32,
+   "d": 2.0,
+   "text": "the inventory etc"
+  },
+  {
+   "t": 1798.32,
+   "d": 1.28,
+   "text": "right"
+  },
+  {
+   "t": 1799.6,
+   "d": 0.88,
+   "text": "cool"
+  },
+  {
+   "t": 1800.48,
+   "d": 2.96,
+   "text": "um one other question which is kind of"
+  },
+  {
+   "t": 1803.44,
+   "d": 2.16,
+   "text": "about the balance between juice and"
+  },
+  {
+   "t": 1805.6,
+   "d": 1.6,
+   "text": "innovative gameplay i mean i think we"
+  },
+  {
+   "t": 1807.2,
+   "d": 1.84,
+   "text": "want both but"
+  },
+  {
+   "t": 1809.04,
+   "d": 1.12,
+   "text": "yeah"
+  },
+  {
+   "t": 1810.16,
+   "d": 1.6,
+   "text": "kind of i guess if you have any tips or"
+  },
+  {
+   "t": 1811.76,
+   "d": 1.6,
+   "text": "how you feel about approaching some of"
+  },
+  {
+   "t": 1813.36,
+   "d": 1.68,
+   "text": "those balances of i guess time you put"
+  },
+  {
+   "t": 1815.04,
+   "d": 1.28,
+   "text": "in"
+  },
+  {
+   "t": 1816.32,
+   "d": 2.72,
+   "text": "yeah so i mean my thing is you know"
+  },
+  {
+   "t": 1819.04,
+   "d": 1.44,
+   "text": "like most people i'm very time"
+  },
+  {
+   "t": 1820.48,
+   "d": 1.84,
+   "text": "constrained so and i i have other"
+  },
+  {
+   "t": 1822.32,
+   "d": 2.56,
+   "text": "projects i want to work on so i try and"
+  },
+  {
+   "t": 1824.88,
+   "d": 1.6,
+   "text": "i'm constrained in making my games very"
+  },
+  {
+   "t": 1826.48,
+   "d": 1.52,
+   "text": "minimal but i think it would be cool"
+  },
+  {
+   "t": 1828.0,
+   "d": 1.52,
+   "text": "it'll be very interesting to see a game"
+  },
+  {
+   "t": 1829.52,
+   "d": 3.36,
+   "text": "that has a lot more depth um with also"
+  },
+  {
+   "t": 1832.88,
+   "d": 1.44,
+   "text": "some juice so"
+  },
+  {
+   "t": 1834.32,
+   "d": 2.16,
+   "text": "you know taking one of the classics"
+  },
+  {
+   "t": 1836.48,
+   "d": 1.76,
+   "text": "classic roguelikes we all know and love"
+  },
+  {
+   "t": 1838.24,
+   "d": 1.04,
+   "text": "and uh"
+  },
+  {
+   "t": 1839.28,
+   "d": 1.6,
+   "text": "you know really juicing it up and making"
+  },
+  {
+   "t": 1840.88,
+   "d": 0.8,
+   "text": "it"
+  },
+  {
+   "t": 1841.68,
+   "d": 1.76,
+   "text": "um"
+  },
+  {
+   "t": 1843.44,
+   "d": 1.52,
+   "text": "more exciting to"
+  },
+  {
+   "t": 1844.96,
+   "d": 1.2,
+   "text": "play"
+  },
+  {
+   "t": 1846.16,
+   "d": 1.68,
+   "text": "i like that i like the thought of we get"
+  },
+  {
+   "t": 1847.84,
+   "d": 3.76,
+   "text": "you know a juicy net hack fork"
+  },
+  {
+   "t": 1851.6,
+   "d": 2.0,
+   "text": "juice hack yeah that would be cool"
+  },
+  {
+   "t": 1853.6,
+   "d": 1.44,
+   "text": "i think that's something i would love to"
+  },
+  {
+   "t": 1855.04,
+   "d": 1.76,
+   "text": "see an extremely juicy version of net"
+  },
+  {
+   "t": 1856.8,
+   "d": 2.8,
+   "text": "hack it's open source you know fork it"
+  },
+  {
+   "t": 1859.6,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 1860.48,
+   "d": 1.44,
+   "text": "so i mean i thought about doing this a"
+  },
+  {
+   "t": 1861.92,
+   "d": 1.52,
+   "text": "while back but then i you know you'd"
+  },
+  {
+   "t": 1863.44,
+   "d": 2.24,
+   "text": "have to because net hackers see you'd"
+  },
+  {
+   "t": 1865.68,
+   "d": 1.36,
+   "text": "have to find a way to compile it with"
+  },
+  {
+   "t": 1867.04,
+   "d": 2.0,
+   "text": "wasm and there are ways to do that to"
+  },
+  {
+   "t": 1869.04,
+   "d": 1.92,
+   "text": "bring it into the browser otherwise you"
+  },
+  {
+   "t": 1870.96,
+   "d": 0.88,
+   "text": "could"
+  },
+  {
+   "t": 1871.84,
+   "d": 1.44,
+   "text": "you know do some kind of i think this"
+  },
+  {
+   "t": 1873.28,
+   "d": 2.8,
+   "text": "might be opengl renderers for nem hack"
+  },
+  {
+   "t": 1876.08,
+   "d": 1.28,
+   "text": "on the back end"
+  },
+  {
+   "t": 1877.36,
+   "d": 2.56,
+   "text": "doing it all client side but"
+  },
+  {
+   "t": 1879.92,
+   "d": 2.08,
+   "text": "that's kind of like not something that i"
+  },
+  {
+   "t": 1882.0,
+   "d": 1.84,
+   "text": "have tinkered with very much"
+  },
+  {
+   "t": 1883.84,
+   "d": 1.6,
+   "text": "but yeah that's a cool idea"
+  },
+  {
+   "t": 1885.44,
+   "d": 1.52,
+   "text": "yeah i wonder you might be better off"
+  },
+  {
+   "t": 1886.96,
+   "d": 1.76,
+   "text": "picking something like dcss that's"
+  },
+  {
+   "t": 1888.72,
+   "d": 2.16,
+   "text": "already got quite a lot of nice tile set"
+  },
+  {
+   "t": 1890.88,
+   "d": 2.72,
+   "text": "web-based things but"
+  },
+  {
+   "t": 1893.6,
+   "d": 1.92,
+   "text": "interesting yeah"
+  },
+  {
+   "t": 1895.52,
+   "d": 2.08,
+   "text": "yeah"
+  },
+  {
+   "t": 1897.6,
+   "d": 1.76,
+   "text": "at this point just footballing i'm just"
+  },
+  {
+   "t": 1899.36,
+   "d": 2.24,
+   "text": "excited oh and it looks like someone in"
+  },
+  {
+   "t": 1901.6,
+   "d": 3.24,
+   "text": "chats uh shared a link to get angband in"
+  },
+  {
+   "t": 1904.84,
+   "d": 2.04,
+   "text": "wasm so"
+  },
+  {
+   "t": 1906.88,
+   "d": 2.48,
+   "text": "yeah juicy egg band"
+  },
+  {
+   "t": 1909.36,
+   "d": 1.44,
+   "text": "yeah that would be super cool it's good"
+  },
+  {
+   "t": 1910.8,
+   "d": 2.24,
+   "text": "too i would love to see that"
+  },
+  {
+   "t": 1913.04,
+   "d": 1.6,
+   "text": "excellent well maybe we'll see it next"
+  },
+  {
+   "t": 1914.64,
+   "d": 3.04,
+   "text": "year um thank you so much chris for all"
+  },
+  {
+   "t": 1917.68,
+   "d": 1.36,
+   "text": "this i hope that we end up seeing some"
+  },
+  {
+   "t": 1919.04,
+   "d": 2.4,
+   "text": "more juicy games on the browser"
+  },
+  {
+   "t": 1921.44,
+   "d": 1.36,
+   "text": "yeah cool thanks so much for having me"
+  },
+  {
+   "t": 1922.8,
+   "d": 4.24,
+   "text": "it's a real pleasure yeah absolutely"
+  }
+ ]
+}

@@ -1,0 +1,1670 @@
+{
+ "id": "X4be22WoVgg",
+ "url": "https://www.youtube.com/watch?v=X4be22WoVgg",
+ "title": "Michael Brough - Possibility of Roguelike Elements",
+ "speaker": "Michael Brough",
+ "talk_title": "Possibility of Roguelike Elements",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1943,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I will discuss several typical Rogue spell/combat effects like bump-to-attack, Teleport, Polymorph, Poison, and sketch out some of the possibility space that different games can explore from these basic ideas, and the considerations of how they interact with other design elements, drawing some examples from my own games.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3633,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.94,
+   "d": 1.0,
+   "text": "All right, everybody."
+  },
+  {
+   "t": 6.94,
+   "d": 1.98,
+   "text": "Let's bring up our first guest of the day, Michael Brough."
+  },
+  {
+   "t": 8.92,
+   "d": 1.0,
+   "text": ">> Hello."
+  },
+  {
+   "t": 10.92,
+   "d": 3.48,
+   "text": "I think you are someone who a lot of people will be familiar with but if you don't know"
+  },
+  {
+   "t": 14.4,
+   "d": 12.49,
+   "text": "Michael is a self proclaimed wizard which I have to say"
+  },
+  {
+   "t": 26.89,
+   "d": 2.6,
+   "text": "you are embodying it right now."
+  },
+  {
+   "t": 29.49,
+   "d": 1.77,
+   "text": "Kicking it off with a real wizard."
+  },
+  {
+   "t": 31.26,
+   "d": 19.73,
+   "text": "I will hand it off to you to talk about - \"Possibility of Roguelike Elements\""
+  },
+  {
+   "t": 50.99,
+   "d": 3.16,
+   "text": ">> Is this working?"
+  },
+  {
+   "t": 54.15,
+   "d": 4.23,
+   "text": "Is this sharing?"
+  },
+  {
+   "t": 58.38,
+   "d": 2.82,
+   "text": "Everything OK?"
+  },
+  {
+   "t": 61.2,
+   "d": 1.83,
+   "text": "I am not hearing anything."
+  },
+  {
+   "t": 63.03,
+   "d": 4.25,
+   "text": "EMCEE: I will come on and tell you."
+  },
+  {
+   "t": 67.28,
+   "d": 1.67,
+   "text": "We are good."
+  },
+  {
+   "t": 70.61,
+   "d": 1.67,
+   "text": "Take it away."
+  },
+  {
+   "t": 72.28,
+   "d": 8.19,
+   "text": "MICHAEL: I am going to talk about some aspects of the game Rogue, a video game we all have"
+  },
+  {
+   "t": 80.47,
+   "d": 7.17,
+   "text": "some familiarity with, and then I will talk and lead with that about how I have adapted"
+  },
+  {
+   "t": 87.64,
+   "d": 9.6,
+   "text": "some ideas that are in Rogue into my own games, and yeah, that's my basic idea."
+  },
+  {
+   "t": 97.24,
+   "d": 7.54,
+   "text": "The basic, kind of the core mechanic of Rogue is you press direction keys, explore a dungeon,"
+  },
+  {
+   "t": 104.78,
+   "d": 4.43,
+   "text": "and fight monsters."
+  },
+  {
+   "t": 109.21,
+   "d": 11.93,
+   "text": "And what I think is a quite clever idea that -- like, I am looking at it from the modern"
+  },
+  {
+   "t": 121.14,
+   "d": 5.25,
+   "text": "perspective like this maybe seems obvious because we have played a hundred games that"
+  },
+  {
+   "t": 126.39,
+   "d": 9.4,
+   "text": "use this idea but coming at it from the other side, I like, back before I was born, I wonder"
+  },
+  {
+   "t": 135.79,
+   "d": 8.28,
+   "text": "how big an idea was it to have the same input keys both move and attack."
+  },
+  {
+   "t": 144.07,
+   "d": 2.42,
+   "text": "They are very different actions."
+  },
+  {
+   "t": 146.49,
+   "d": 10.07,
+   "text": "When you are thinking about how am I going to make this new thing a video game and incorporate"
+  },
+  {
+   "t": 156.56,
+   "d": 9.83,
+   "text": "a kind of fantasy adventure, yeah, I am not sure if this may be abstract but because it"
+  },
+  {
+   "t": 166.39,
+   "d": 1.28,
+   "text": "is so obvious."
+  },
+  {
+   "t": 167.67,
+   "d": 1.0,
+   "text": "What happens?"
+  },
+  {
+   "t": 168.67,
+   "d": 5.93,
+   "text": "You press a key and if there is nothing there you move, if there is something there you"
+  },
+  {
+   "t": 174.6,
+   "d": 1.0,
+   "text": "hit it."
+  },
+  {
+   "t": 175.6,
+   "d": 6.97,
+   "text": "Yeah, I just think this is a really nice, simple basis to build a game on."
+  },
+  {
+   "t": 182.57,
+   "d": 7.3,
+   "text": "I am really emphasizing how simple it because Roguelikes don't always have a reputation"
+  },
+  {
+   "t": 189.87,
+   "d": 3.7,
+   "text": "to being elegant and simple and I think that's wrong."
+  },
+  {
+   "t": 193.57,
+   "d": 6.71,
+   "text": "This basic, this is a really cute idea, and yeah, something that happens later in the"
+  },
+  {
+   "t": 200.28,
+   "d": 1.54,
+   "text": "game that quite cool."
+  },
+  {
+   "t": 201.82,
+   "d": 14.8,
+   "text": "You run into an enemy that you can't see and it appears to you as just an empty space so"
+  },
+  {
+   "t": 216.62,
+   "d": 13.72,
+   "text": "when you attempt to press the direction key towards that space instead of moving to that"
+  },
+  {
+   "t": 230.34,
+   "d": 3.56,
+   "text": "space you attack."
+  },
+  {
+   "t": 233.9,
+   "d": 9.89,
+   "text": "And I put in here also fandm enemy is invisible and also portion of blindness."
+  },
+  {
+   "t": 243.79,
+   "d": 8.26,
+   "text": "There is an exclusion between spaces with enemies and spaces without but this breaks"
+  },
+  {
+   "t": 252.05,
+   "d": 6.07,
+   "text": "that and becomes unclear what the outcome of a given direction key will be."
+  },
+  {
+   "t": 258.12,
+   "d": 2.79,
+   "text": "This is really weird."
+  },
+  {
+   "t": 260.91,
+   "d": 8.08,
+   "text": "If I told you in advance here is a video game in which you choose what direction to perform"
+  },
+  {
+   "t": 268.99,
+   "d": 6.13,
+   "text": "actions in but you don't get to chose what actions they are, the game decides for you,"
+  },
+  {
+   "t": 275.12,
+   "d": 9.18,
+   "text": "you feel like that was almost unplayable but how it actually is in the context of the game"
+  },
+  {
+   "t": 284.3,
+   "d": 6.5,
+   "text": "after you have already accepted the idea that moving and attacking are kind of equivalent"
+  },
+  {
+   "t": 290.8,
+   "d": 3.64,
+   "text": "because they are on the same key that just feels completely natural."
+  },
+  {
+   "t": 294.44,
+   "d": 9.28,
+   "text": "I just like to try and see this from the outside as though it was a weird thing and even though"
+  },
+  {
+   "t": 303.72,
+   "d": 3.98,
+   "text": "when you play it feels natural."
+  },
+  {
+   "t": 307.7,
+   "d": 4.62,
+   "text": "Audience says you should play it is fucking great."
+  },
+  {
+   "t": 312.32,
+   "d": 9.21,
+   "text": "This is my first time giving a video talk and I am trying to get my head wrapped around"
+  },
+  {
+   "t": 321.53,
+   "d": 2.27,
+   "text": "it."
+  },
+  {
+   "t": 323.8,
+   "d": 2.26,
+   "text": "OK."
+  },
+  {
+   "t": 326.06,
+   "d": 8.78,
+   "text": "So, yeah, I think that's a really nice twist that it has."
+  },
+  {
+   "t": 334.84,
+   "d": 1.0,
+   "text": "And yeah."
+  },
+  {
+   "t": 335.84,
+   "d": 7.62,
+   "text": "But basically the idea of moving and attacking as the same keys enables a bunch of possibilities"
+  },
+  {
+   "t": 343.46,
+   "d": 6.43,
+   "text": "and as a game designer whether I run into a cool -- when -- idea I try think what more"
+  },
+  {
+   "t": 349.89,
+   "d": 7.05,
+   "text": "can I do with this and here is a couple of variations on the idea."
+  },
+  {
+   "t": 356.94,
+   "d": 9.0,
+   "text": "My game 868-HACK, so, Rogue has arranged attacked and you can throw items at an enemy but you"
+  },
+  {
+   "t": 365.94,
+   "d": 4.79,
+   "text": "do that by pressing T to throw, selecting the direction, selecting the item."
+  },
+  {
+   "t": 370.73,
+   "d": 6.37,
+   "text": "That's instead of moving or attacking."
+  },
+  {
+   "t": 377.1,
+   "d": 8.97,
+   "text": "And my game 868-HACK, the attack unified with the movement controls is arranged attack."
+  },
+  {
+   "t": 386.07,
+   "d": 6.23,
+   "text": "So if you attempt to make a range attack and the direction that there is enemy -- in the"
+  },
+  {
+   "t": 392.3,
+   "d": 1.0,
+   "text": "direction."
+  },
+  {
+   "t": 393.3,
+   "d": 5.7,
+   "text": "Sorry, if you attempt -- well, if you swipe or press the direction key in a direction"
+  },
+  {
+   "t": 399.0,
+   "d": 6.88,
+   "text": "that there is an enemy, which you would naturally feel is moving in that direction, instead"
+  },
+  {
+   "t": 405.88,
+   "d": 7.12,
+   "text": "you make arranged attack and you stay in one spot, just as in Roguelike, when you are making"
+  },
+  {
+   "t": 413.0,
+   "d": 3.72,
+   "text": "an enemy attack."
+  },
+  {
+   "t": 416.72,
+   "d": 1.68,
+   "text": "This doesn't make physical sense."
+  },
+  {
+   "t": 418.4,
+   "d": 4.8,
+   "text": "There is a space there and you can't move into it because attempting to move into it"
+  },
+  {
+   "t": 423.2,
+   "d": 7.44,
+   "text": "instead attacks but the game is set in the sib space world so it is keeping with the"
+  },
+  {
+   "t": 430.64,
+   "d": 2.96,
+   "text": "team of the game that it doesn't make physical sense."
+  },
+  {
+   "t": 433.6,
+   "d": 1.58,
+   "text": "I am proud of that."
+  },
+  {
+   "t": 435.18,
+   "d": 8.34,
+   "text": "I feel like it is a nice twist on the original Rogue idea."
+  },
+  {
+   "t": 443.52,
+   "d": 9.25,
+   "text": "Another game that has a variation is Nightmare Cooperative in which one player controls multiple"
+  },
+  {
+   "t": 452.77,
+   "d": 4.09,
+   "text": "characters with one set of direction keys."
+  },
+  {
+   "t": 456.86,
+   "d": 8.59,
+   "text": "When you press left, all your characters on the screen do left and in the Rogue sense"
+  },
+  {
+   "t": 465.45,
+   "d": 5.92,
+   "text": "either they move left if there is an empty space or attack left if there is an enemy."
+  },
+  {
+   "t": 471.37,
+   "d": 7.33,
+   "text": "Again, this works because movement and combat are on the same set of controls."
+  },
+  {
+   "t": 478.7,
+   "d": 7.71,
+   "text": "If you had to press attack and choose a direction what would happen is party would be attacking"
+  },
+  {
+   "t": 486.41,
+   "d": 2.44,
+   "text": "empty space just to attack."
+  },
+  {
+   "t": 488.85,
+   "d": 7.7,
+   "text": "But instead you can have them synergistically doing different moves, different actions with"
+  },
+  {
+   "t": 496.55,
+   "d": 4.33,
+   "text": "the same inputs, one of them can be attacking while the other is moving towards the exit"
+  },
+  {
+   "t": 500.88,
+   "d": 6.2,
+   "text": "and the other one is picking up a treasure."
+  },
+  {
+   "t": 507.08,
+   "d": 1.0,
+   "text": "That's quite cute."
+  },
+  {
+   "t": 508.08,
+   "d": 3.24,
+   "text": "I like that game."
+  },
+  {
+   "t": 511.32,
+   "d": 2.36,
+   "text": "My game has a little bit of that has well."
+  },
+  {
+   "t": 513.68,
+   "d": 5.33,
+   "text": "There is one item that can control enemies but I have used as the example here because"
+  },
+  {
+   "t": 519.01,
+   "d": 5.7,
+   "text": "it is the whole game and that's quite cool."
+  },
+  {
+   "t": 524.71,
+   "d": 13.44,
+   "text": "I am pretty sure that, yeah, I am sure there are other variations we could invent and that"
+  },
+  {
+   "t": 538.15,
+   "d": 3.36,
+   "text": "would be one."
+  },
+  {
+   "t": 541.51,
+   "d": 6.67,
+   "text": "Also, there is obviously a lot we can do in Roguelikes with taking movement and layering"
+  },
+  {
+   "t": 548.18,
+   "d": 1.0,
+   "text": "other things on top."
+  },
+  {
+   "t": 549.18,
+   "d": 1.32,
+   "text": "And yeah."
+  },
+  {
+   "t": 550.5,
+   "d": 4.08,
+   "text": "Roguelikes are grit -- great."
+  },
+  {
+   "t": 554.58,
+   "d": 3.11,
+   "text": "What else does Rogue have?"
+  },
+  {
+   "t": 557.69,
+   "d": 8.51,
+   "text": "Rogue has items."
+  },
+  {
+   "t": 566.2,
+   "d": 9.73,
+   "text": "Compared to NetHack, ADOM, and the later big Roguelikes, I feel like this is fairly simple."
+  },
+  {
+   "t": 575.93,
+   "d": 4.9,
+   "text": "It just has moving, attacking and using items."
+  },
+  {
+   "t": 580.83,
+   "d": 8.61,
+   "text": "Your character progression is leveling up and getting more items."
+  },
+  {
+   "t": 589.44,
+   "d": 12.02,
+   "text": "Some items you are equipped for step bonuses and some items activated to change the combat"
+  },
+  {
+   "t": 601.46,
+   "d": 1.78,
+   "text": "situation."
+  },
+  {
+   "t": 603.24,
+   "d": 10.55,
+   "text": "Basically, if you -- because combat is just moved into an enemy space and attack, there"
+  },
+  {
+   "t": 613.79,
+   "d": 18.1,
+   "text": "is not a lot of -- I want to say there is not a lot of different -- the outcome is mostly"
+  },
+  {
+   "t": 631.89,
+   "d": 2.31,
+   "text": "determined by the roles that's what I want to say."
+  },
+  {
+   "t": 634.2,
+   "d": 1.82,
+   "text": "You hit, they hit, you hit."
+  },
+  {
+   "t": 636.02,
+   "d": 5.22,
+   "text": "If the roles go well, or your stats are stronger you are going to win, if their stats are stronger"
+  },
+  {
+   "t": 641.24,
+   "d": 5.43,
+   "text": "they might kill you and you need an out to do something different."
+  },
+  {
+   "t": 646.67,
+   "d": 1.28,
+   "text": "You can runaway."
+  },
+  {
+   "t": 647.95,
+   "d": 2.48,
+   "text": "That sometimes works, sometimes doesn't."
+  },
+  {
+   "t": 650.43,
+   "d": 9.75,
+   "text": "And usable items gives you an alternative and that's pretty important to all Roguelikes,"
+  },
+  {
+   "t": 660.18,
+   "d": 8.87,
+   "text": "I think, to have a limited resource that you can use to make a variation to a combat situation."
+  },
+  {
+   "t": 669.05,
+   "d": 7.07,
+   "text": "If you could do it all of the time -- well, some you can."
+  },
+  {
+   "t": 676.12,
+   "d": 2.28,
+   "text": "There is some possibility."
+  },
+  {
+   "t": 678.4,
+   "d": 1.0,
+   "text": "Right."
+  },
+  {
+   "t": 679.4,
+   "d": 1.27,
+   "text": "Stick with Rogue."
+  },
+  {
+   "t": 680.67,
+   "d": 8.11,
+   "text": "I am going to talk about a few very specific items in Rogue."
+  },
+  {
+   "t": 688.78,
+   "d": 2.14,
+   "text": "I am not really going to talk about the specific items."
+  },
+  {
+   "t": 690.92,
+   "d": 9.59,
+   "text": "What I am trying to get out is like sort of game design concepts but I am going to use"
+  },
+  {
+   "t": 700.51,
+   "d": 2.8,
+   "text": "as examples very specific ones."
+  },
+  {
+   "t": 703.31,
+   "d": 6.84,
+   "text": "The wand of cold is a wand."
+  },
+  {
+   "t": 710.15,
+   "d": 6.06,
+   "text": "Wands in Roguelike you activate them by pressing Z to zap them, choose a direction and how"
+  },
+  {
+   "t": 716.21,
+   "d": 4.97,
+   "text": "you will aim it and choose the item."
+  },
+  {
+   "t": 721.18,
+   "d": 2.11,
+   "text": "Point and fire."
+  },
+  {
+   "t": 723.29,
+   "d": 16.4,
+   "text": "It deals with damage to enemies in six spaces in a row unles they are Yeti."
+  },
+  {
+   "t": 739.69,
+   "d": 1.0,
+   "text": "I really like this."
+  },
+  {
+   "t": 740.69,
+   "d": 1.0,
+   "text": "It is flavorable and makes sense."
+  },
+  {
+   "t": 741.69,
+   "d": 7.94,
+   "text": "The Yeti originates from the -- it has adapted to the cold environment so the cold does -- wand"
+  },
+  {
+   "t": 749.63,
+   "d": 2.95,
+   "text": "of cold doesn't hurt it."
+  },
+  {
+   "t": 752.58,
+   "d": 15.02,
+   "text": "Like a lot of modern games use the style of having an elemental damage system where, a"
+  },
+  {
+   "t": 767.6,
+   "d": 12.04,
+   "text": "-- yeah, the wand does a frost attack and the yeti has 80% frost resistance."
+  },
+  {
+   "t": 779.64,
+   "d": 5.5,
+   "text": "That's absolutely a type of system you can get a lot of gameplay out of but I think it"
+  },
+  {
+   "t": 785.14,
+   "d": 5.43,
+   "text": "is really special how Rogue does it with one special case exception."
+  },
+  {
+   "t": 790.57,
+   "d": 7.76,
+   "text": "This wand doesn't hurt this Yeti and the whole narrative of because it is a cold attack and"
+  },
+  {
+   "t": 798.33,
+   "d": 4.15,
+   "text": "that happens in your head."
+  },
+  {
+   "t": 802.48,
+   "d": 17.54,
+   "text": "Like, this is Rogue's like unique design style to just have individual exceptions like this."
+  },
+  {
+   "t": 820.02,
+   "d": 8.84,
+   "text": "To me this feels like, this gives a character of magic."
+  },
+  {
+   "t": 828.86,
+   "d": 7.44,
+   "text": "When you build a magic system for a game that is really logical, and coherent, and like"
+  },
+  {
+   "t": 836.3,
+   "d": 4.5,
+   "text": "systematic, it often isn't magic anymore."
+  },
+  {
+   "t": 840.8,
+   "d": 4.57,
+   "text": "It is just a system and feels like a science."
+  },
+  {
+   "t": 845.37,
+   "d": 7.05,
+   "text": "And Rogue avoids that."
+  },
+  {
+   "t": 852.42,
+   "d": 7.01,
+   "text": "It just has a lot of one-off exceptions like this."
+  },
+  {
+   "t": 859.43,
+   "d": 12.55,
+   "text": "And I think part of why a lot of games use this, the like generalized magic system style"
+  },
+  {
+   "t": 871.98,
+   "d": 7.72,
+   "text": "is because that's what we are taught is a good style of software engineering to construct"
+  },
+  {
+   "t": 879.7,
+   "d": 1.92,
+   "text": "good extensible systems."
+  },
+  {
+   "t": 881.62,
+   "d": 10.69,
+   "text": "Not one-off exceptions."
+  },
+  {
+   "t": 892.31,
+   "d": 6.63,
+   "text": "That absolutely is a good software engineering advice but our game designs don't have to"
+  },
+  {
+   "t": 898.94,
+   "d": 4.3,
+   "text": "directly reflect how we program them."
+  },
+  {
+   "t": 903.24,
+   "d": 8.0,
+   "text": "Our designs don't have to be limited by your software engineering style."
+  },
+  {
+   "t": 911.24,
+   "d": 3.18,
+   "text": "Magic is in the exceptions."
+  },
+  {
+   "t": 914.42,
+   "d": 6.78,
+   "text": "Usually the sweet spot is that you need to have a few things that follow a role to establish"
+  },
+  {
+   "t": 921.2,
+   "d": 4.58,
+   "text": "a role and just one thing that's an exception to the rule and once you have more than one"
+  },
+  {
+   "t": 925.78,
+   "d": 12.67,
+   "text": "exception your mind automatically establishes a more general role."
+  },
+  {
+   "t": 938.45,
+   "d": 12.24,
+   "text": "And when there is just one exception often we can stop that rule establishing part of"
+  },
+  {
+   "t": 950.69,
+   "d": 5.67,
+   "text": "the from working and say, oh, yeah, it is special."
+  },
+  {
+   "t": 956.36,
+   "d": 11.41,
+   "text": "That's how I think about it."
+  },
+  {
+   "t": 967.77,
+   "d": 9.21,
+   "text": "Having these items that target a specific enemy type and works well Rogue because Rogue"
+  },
+  {
+   "t": 976.98,
+   "d": 2.73,
+   "text": "has relatively few enemy types."
+  },
+  {
+   "t": 979.71,
+   "d": 5.07,
+   "text": "There is one for each letter of the alphabet I believe."
+  },
+  {
+   "t": 984.78,
+   "d": 6.35,
+   "text": "And in a larger game where there is say several hundred enemy types a wand that just doesn't"
+  },
+  {
+   "t": 991.13,
+   "d": 7.08,
+   "text": "affect this enemy type would like -- like just wouldn't come up most of the time."
+  },
+  {
+   "t": 998.21,
+   "d": 5.11,
+   "text": "You wouldn't Evan -- evan -- even notice it."
+  },
+  {
+   "t": 1003.32,
+   "d": 10.51,
+   "text": "For larger games, a systematic structure is really the right choice."
+  },
+  {
+   "t": 1013.83,
+   "d": 6.34,
+   "text": "My own games I have mostly gone in the other direction and I have very few enemy types."
+  },
+  {
+   "t": 1020.17,
+   "d": 10.35,
+   "text": "I like small numbers and dense interactions, so I have been able to have these types of"
+  },
+  {
+   "t": 1030.52,
+   "d": 5.28,
+   "text": "effects be a larger part of the game."
+  },
+  {
+   "t": 1035.8,
+   "d": 8.95,
+   "text": "For example, 868-HACK has just 4 enemy types and this ability that damage all Virus enemies"
+  },
+  {
+   "t": 1044.75,
+   "d": 1.0,
+   "text": "on the screen."
+  },
+  {
+   "t": 1045.75,
+   "d": 4.16,
+   "text": "On average that's a quarter of all enemies."
+  },
+  {
+   "t": 1049.91,
+   "d": 5.98,
+   "text": "It can be even more."
+  },
+  {
+   "t": 1055.89,
+   "d": 4.77,
+   "text": "That's something that's a similar character to this one doesn't affect this type but a"
+  },
+  {
+   "t": 1060.66,
+   "d": 2.57,
+   "text": "more integral part of the game."
+  },
+  {
+   "t": 1063.23,
+   "d": 9.22,
+   "text": "Similarly, Cinco Paus has 5 enemies."
+  },
+  {
+   "t": 1072.45,
+   "d": 10.29,
+   "text": "In roguelike, maybe a dragon killing one would be great, a jaguar killing one, but like it"
+  },
+  {
+   "t": 1082.74,
+   "d": 3.08,
+   "text": "would be pretty niche."
+  },
+  {
+   "t": 1085.82,
+   "d": 2.98,
+   "text": "-- in Rogue."
+  },
+  {
+   "t": 1088.8,
+   "d": 1.49,
+   "text": "Yeah."
+  },
+  {
+   "t": 1090.29,
+   "d": 4.48,
+   "text": "So, let's see."
+  },
+  {
+   "t": 1094.77,
+   "d": 7.84,
+   "text": "I think that's all I had to say about this one."
+  },
+  {
+   "t": 1102.61,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 1103.61,
+   "d": 1.0,
+   "text": "Move on."
+  },
+  {
+   "t": 1104.61,
+   "d": 3.24,
+   "text": "The next item I want to talk about is the control of teleport."
+  },
+  {
+   "t": 1107.85,
+   "d": 14.41,
+   "text": "What this does is you read it, L to choose the scroll and it moves ayou to a random space"
+  },
+  {
+   "t": 1122.26,
+   "d": 10.09,
+   "text": "anywhere in the level not currently occupied by another creature and that's the end of"
+  },
+  {
+   "t": 1132.35,
+   "d": 1.3,
+   "text": "your turn."
+  },
+  {
+   "t": 1133.65,
+   "d": 8.69,
+   "text": "This is presumably inspired by the Teleport spell in Dungeons & Dragons but Dungeons & Dragons"
+  },
+  {
+   "t": 1142.34,
+   "d": 2.46,
+   "text": "Teleport is about travel."
+  },
+  {
+   "t": 1144.8,
+   "d": 6.62,
+   "text": "You set a destination and maybe there is dice roles -- rolls on the way to get there but"
+  },
+  {
+   "t": 1151.42,
+   "d": 7.75,
+   "text": "it is about going somewhere."
+  },
+  {
+   "t": 1159.17,
+   "d": 6.64,
+   "text": "For Rogue to have a teleport like that you would need an extra input prompt."
+  },
+  {
+   "t": 1165.81,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 1166.81,
+   "d": 6.77,
+   "text": "You are teleporting, select the space on the level where you want to go to."
+  },
+  {
+   "t": 1173.58,
+   "d": 9.71,
+   "text": "The designer's chose to keep the items relatively simple."
+  },
+  {
+   "t": 1183.29,
+   "d": 7.22,
+   "text": "Later Roguelikes sometimes have prompts like this but in Rogue all the items, once you"
+  },
+  {
+   "t": 1190.51,
+   "d": 11.05,
+   "text": "pick a direction and do their thing, scrolls and potions you just select to use the item"
+  },
+  {
+   "t": 1201.56,
+   "d": 3.62,
+   "text": "and it does its thing."
+  },
+  {
+   "t": 1205.18,
+   "d": 4.95,
+   "text": "So, it is again, like interface simplicity."
+  },
+  {
+   "t": 1210.13,
+   "d": 12.31,
+   "text": "They have chosen the effects of the items to not require any further input."
+  },
+  {
+   "t": 1222.44,
+   "d": 10.35,
+   "text": "Yeah, this essentially the same ability as the hyperspace but in Space War."
+  },
+  {
+   "t": 1232.79,
+   "d": 4.81,
+   "text": "Space War, if you don't know, is arguably the very first video game."
+  },
+  {
+   "t": 1237.6,
+   "d": 5.43,
+   "text": "You press the hyperspace button to pop out of the screen and pop into somewhere else"
+  },
+  {
+   "t": 1243.03,
+   "d": 1.06,
+   "text": "randomly."
+  },
+  {
+   "t": 1244.09,
+   "d": 2.12,
+   "text": "So, yeah."
+  },
+  {
+   "t": 1246.21,
+   "d": 13.03,
+   "text": "Random teleport feels like a very quintessentially video game-y effect."
+  },
+  {
+   "t": 1259.24,
+   "d": 8.55,
+   "text": "I really like it because it is not intrinsically beneficial or a harmful effect."
+  },
+  {
+   "t": 1267.79,
+   "d": 6.18,
+   "text": "Rogue has unidentified items and they are risky to try to figure out what they are because"
+  },
+  {
+   "t": 1273.97,
+   "d": 2.48,
+   "text": "mixed in with them some are bad."
+  },
+  {
+   "t": 1276.45,
+   "d": 4.67,
+   "text": "There is a scroll of fire that blows up in your face and hurts you."
+  },
+  {
+   "t": 1281.12,
+   "d": 9.47,
+   "text": "The scroll of teleport isn't intrinsically good or bad because it just moves you to a"
+  },
+  {
+   "t": 1290.59,
+   "d": 1.37,
+   "text": "different position."
+  },
+  {
+   "t": 1291.96,
+   "d": 9.29,
+   "text": "Some are bad, some are good, randomizing your position who knows."
+  },
+  {
+   "t": 1301.25,
+   "d": 7.17,
+   "text": "But in practice, it is usually a good item because you, once you identified making a"
+  },
+  {
+   "t": 1308.42,
+   "d": 7.1,
+   "text": "decision about how to use it, and with a lot of random effects there is a sense of regression"
+  },
+  {
+   "t": 1315.52,
+   "d": 8.48,
+   "text": "if the situation is worse than average, randomizing it will put more likely, somewhere in the"
+  },
+  {
+   "t": 1324.0,
+   "d": 2.01,
+   "text": "middle so probably better than it was."
+  },
+  {
+   "t": 1326.01,
+   "d": 4.79,
+   "text": "If your situation is better than average, randomizing it puts it on average somewhere"
+  },
+  {
+   "t": 1330.8,
+   "d": 6.31,
+   "text": "in the middle so you probably don't want do that."
+  },
+  {
+   "t": 1337.11,
+   "d": 7.03,
+   "text": "Yeah, so that suggests a strategy of using the scroll of teleport."
+  },
+  {
+   "t": 1344.14,
+   "d": 10.32,
+   "text": "If you are in a really bad situation you use it to get out otherwise... except Rogue has"
+  },
+  {
+   "t": 1354.46,
+   "d": 2.16,
+   "text": "fair larger maps."
+  },
+  {
+   "t": 1356.62,
+   "d": 2.21,
+   "text": "80 by 20 grid."
+  },
+  {
+   "t": 1358.83,
+   "d": 6.74,
+   "text": "It can not only have spaces but there is rooms with that but it adds up to hundreds of possible"
+  },
+  {
+   "t": 1365.57,
+   "d": 8.44,
+   "text": "tiles and there is only usually a few enemies on the level at once so most of the time teleporting"
+  },
+  {
+   "t": 1374.01,
+   "d": 5.19,
+   "text": "is actually a pretty safe choice."
+  },
+  {
+   "t": 1379.2,
+   "d": 3.03,
+   "text": "Some exceptions is sometimes there is a room of monsters."
+  },
+  {
+   "t": 1382.23,
+   "d": 1.1,
+   "text": "Sorry."
+  },
+  {
+   "t": 1383.33,
+   "d": 6.6,
+   "text": "Just looking at the chat!"
+  },
+  {
+   "t": 1389.93,
+   "d": 9.94,
+   "text": "Um... so if you had a game that was more -- OK."
+  },
+  {
+   "t": 1399.87,
+   "d": 9.59,
+   "text": "The limited number of enemies might be a technological limitation at the time -- I am not sure completely."
+  },
+  {
+   "t": 1409.46,
+   "d": 5.94,
+   "text": "But if you had a Roguelike that had a war happening and the whole level is filled with"
+  },
+  {
+   "t": 1415.4,
+   "d": 6.65,
+   "text": "hundreds of enemies then teleporting randomly to that is more likely to be bad than in a"
+  },
+  {
+   "t": 1422.05,
+   "d": 4.37,
+   "text": "sparse dungeon with few scattered enemies."
+  },
+  {
+   "t": 1426.42,
+   "d": 4.61,
+   "text": "In my own games, I tend to use quite small grid."
+  },
+  {
+   "t": 1431.03,
+   "d": 5.69,
+   "text": "6 by 6 and 8 by 8 and Evan 4 by 4."
+  },
+  {
+   "t": 1436.72,
+   "d": 8.11,
+   "text": "And so similarly to the large grid with a whole army, a small grid with a handful of"
+  },
+  {
+   "t": 1444.83,
+   "d": 1.32,
+   "text": "enemies is denser."
+  },
+  {
+   "t": 1446.15,
+   "d": 5.87,
+   "text": "There are fewer safe spaces teleporting randomly is more likely to be bad."
+  },
+  {
+   "t": 1452.02,
+   "d": 15.62,
+   "text": "I like to do different things to mitigate the randomness to have a teleport effect."
+  },
+  {
+   "t": 1467.64,
+   "d": 7.53,
+   "text": "-- not be as risky as it would be to randomly teleport in this small game's grid."
+  },
+  {
+   "t": 1475.17,
+   "d": 6.21,
+   "text": "One option is to just remove the Ronaldmization of the teleport."
+  },
+  {
+   "t": 1481.38,
+   "d": 1.0,
+   "text": "-- randomization."
+  },
+  {
+   "t": 1482.38,
+   "d": 9.81,
+   "text": "NetHack has a ring of teleport control which does this more or less."
+  },
+  {
+   "t": 1492.19,
+   "d": 11.62,
+   "text": "If you chose choose a space that happens to be in a war, you can change it."
+  },
+  {
+   "t": 1503.81,
+   "d": 12.03,
+   "text": "My game has a blink dagger that first teleports you and as it ends, it selects two and you"
+  },
+  {
+   "t": 1515.84,
+   "d": 2.46,
+   "text": "click the one you want to move to."
+  },
+  {
+   "t": 1518.3,
+   "d": 6.25,
+   "text": "It is not the full ring of teleport control but it is just partially random but partially"
+  },
+  {
+   "t": 1524.55,
+   "d": 1.1,
+   "text": "controlled."
+  },
+  {
+   "t": 1525.65,
+   "d": 13.81,
+   "text": "Yeah, it is kind of the -- I am like meaning to release it on PC but, you know, life."
+  },
+  {
+   "t": 1539.46,
+   "d": 5.27,
+   "text": "As it levels out it chooses three spaces and then four spaces so you get more and more"
+  },
+  {
+   "t": 1544.73,
+   "d": 1.59,
+   "text": "control but never full control."
+  },
+  {
+   "t": 1546.32,
+   "d": 3.57,
+   "text": "It can still be a risky action."
+  },
+  {
+   "t": 1549.89,
+   "d": 2.31,
+   "text": "Yeah."
+  },
+  {
+   "t": 1552.2,
+   "d": 5.86,
+   "text": "Given this is essentially the same thing as in a card game you can have an effect draw"
+  },
+  {
+   "t": 1558.06,
+   "d": 3.56,
+   "text": "card or draw two cards and discard one of them."
+  },
+  {
+   "t": 1561.62,
+   "d": 6.28,
+   "text": "In a dice game you can have the effect of roll two dice and pick the highest."
+  },
+  {
+   "t": 1567.9,
+   "d": 6.65,
+   "text": "Any random effect can be made a little bit more controlled by having this idea of do"
+  },
+  {
+   "t": 1574.55,
+   "d": 4.66,
+   "text": "it multiple times and pick one."
+  },
+  {
+   "t": 1579.21,
+   "d": 6.12,
+   "text": "Another possibility is just to reduce the random variance like rather than to talk about"
+  },
+  {
+   "t": 1585.33,
+   "d": 7.93,
+   "text": "a level you can talk about SGLUTS room or outside the room or just in a diagonal line"
+  },
+  {
+   "t": 1593.26,
+   "d": 3.52,
+   "text": "-- just this room."
+  },
+  {
+   "t": 1596.78,
+   "d": 6.09,
+   "text": "Not necessarily better because you might be ruling out some of the good spaces that you"
+  },
+  {
+   "t": 1602.87,
+   "d": 6.85,
+   "text": "want to possibly want to go to that make it more predictable so it is more likely to be"
+  },
+  {
+   "t": 1609.72,
+   "d": 1.58,
+   "text": "better when you choose to use that."
+  },
+  {
+   "t": 1611.3,
+   "d": 5.6,
+   "text": "It give use more information to make a wiser choice."
+  },
+  {
+   "t": 1616.9,
+   "d": 7.83,
+   "text": "Another possibility I quite like with this and any random effect is to give you a chance"
+  },
+  {
+   "t": 1624.73,
+   "d": 5.32,
+   "text": "to respond to the random outcome before anything bad happens."
+  },
+  {
+   "t": 1630.05,
+   "d": 7.49,
+   "text": "In the case of teleporting, teleport but give you another turn after teleporting so if you"
+  },
+  {
+   "t": 1637.54,
+   "d": 5.67,
+   "text": "teleport into a room of monsters you have a chance to act before they all hit you rather"
+  },
+  {
+   "t": 1643.21,
+   "d": 2.07,
+   "text": "than what could happen."
+  },
+  {
+   "t": 1645.28,
+   "d": 5.42,
+   "text": "I believe in Rogue if you teleport into a monster room you could just die the next time"
+  },
+  {
+   "t": 1650.7,
+   "d": 5.33,
+   "text": "as they all hit you."
+  },
+  {
+   "t": 1656.03,
+   "d": 7.47,
+   "text": "You can also simply improve it by adding say a heal or some other resource advantage."
+  },
+  {
+   "t": 1663.5,
+   "d": 6.33,
+   "text": "In my game, 868-HACK, there is an ability to warp which is just to teleport."
+  },
+  {
+   "t": 1669.83,
+   "d": 6.34,
+   "text": "Just a random teleport except it only picks a space occupied by an enemy."
+  },
+  {
+   "t": 1676.17,
+   "d": 10.34,
+   "text": "Instead of the full level, say 506, it is much more predictable so it is much safer"
+  },
+  {
+   "t": 1686.51,
+   "d": 6.27,
+   "text": "to make a decision about when to use it but it also kills that enemy which is obviously"
+  },
+  {
+   "t": 1692.78,
+   "d": 3.91,
+   "text": "makes it a little bit more advantageous."
+  },
+  {
+   "t": 1696.69,
+   "d": 12.09,
+   "text": "And like all effects in 868-HACK it is all instantaneous."
+  },
+  {
+   "t": 1708.78,
+   "d": 1.29,
+   "text": "All but one exception."
+  },
+  {
+   "t": 1710.07,
+   "d": 3.64,
+   "text": "It doesn't end your turn."
+  },
+  {
+   "t": 1713.71,
+   "d": 7.31,
+   "text": "You can look at where you teleported to and decide if you want to do something else there"
+  },
+  {
+   "t": 1721.02,
+   "d": 2.67,
+   "text": "or maybe teleport again."
+  },
+  {
+   "t": 1723.69,
+   "d": 4.49,
+   "text": "Yeah, it gives you a chance to respond to it."
+  },
+  {
+   "t": 1728.18,
+   "d": 5.4,
+   "text": "It has these freeways that improve above a random teleport."
+  },
+  {
+   "t": 1733.58,
+   "d": 3.26,
+   "text": "Any one of them would make it OK."
+  },
+  {
+   "t": 1736.84,
+   "d": 3.6,
+   "text": "All three make it quite a strong spell."
+  },
+  {
+   "t": 1740.44,
+   "d": 3.58,
+   "text": ">> Michael, I am just going to give you the heads up."
+  },
+  {
+   "t": 1744.02,
+   "d": 1.0,
+   "text": "You have three minutes."
+  },
+  {
+   "t": 1745.02,
+   "d": 3.66,
+   "text": "You can decide if you want to get into this or answer questions."
+  },
+  {
+   "t": 1748.68,
+   "d": 3.49,
+   "text": ">> I would like to talk about this."
+  },
+  {
+   "t": 1752.17,
+   "d": 1.86,
+   "text": ">> Use your three minutes."
+  },
+  {
+   "t": 1754.03,
+   "d": 4.12,
+   "text": "I will pop in when you are out of time but use what you got."
+  },
+  {
+   "t": 1758.15,
+   "d": 2.57,
+   "text": ">> The last slide want to talk about is the wand of Polymorph."
+  },
+  {
+   "t": 1760.72,
+   "d": 5.89,
+   "text": "You point it at an enemy and it randomly changes its type to another enemy."
+  },
+  {
+   "t": 1766.61,
+   "d": 10.85,
+   "text": "This similar to teleport in that it is a random effect that will tend to make a weak enemy"
+  },
+  {
+   "t": 1777.46,
+   "d": 3.54,
+   "text": "stronger and a strong enemy weaker."
+  },
+  {
+   "t": 1781.0,
+   "d": 2.88,
+   "text": "It is not always stronger or weaker."
+  },
+  {
+   "t": 1783.88,
+   "d": 8.09,
+   "text": "It just changes what about the enemy has and what's happening in the game."
+  },
+  {
+   "t": 1791.97,
+   "d": 1.54,
+   "text": "I love effects like this."
+  },
+  {
+   "t": 1793.51,
+   "d": 6.96,
+   "text": "It will twist a situation into a different situation but not a strictly better or worse"
+  },
+  {
+   "t": 1800.47,
+   "d": 1.78,
+   "text": "situation."
+  },
+  {
+   "t": 1802.25,
+   "d": 1.78,
+   "text": "Sometimes."
+  },
+  {
+   "t": 1804.03,
+   "d": 7.57,
+   "text": "Sometimes it makes it a better situation and that's great."
+  },
+  {
+   "t": 1811.6,
+   "d": 7.2,
+   "text": "I had something important to say."
+  },
+  {
+   "t": 1818.8,
+   "d": 4.8,
+   "text": "Probably not that important."
+  },
+  {
+   "t": 1823.6,
+   "d": 1.2,
+   "text": "Um."
+  },
+  {
+   "t": 1824.8,
+   "d": 5.85,
+   "text": "This interacts with anything that depends on the enemy type."
+  },
+  {
+   "t": 1830.65,
+   "d": 4.34,
+   "text": "If you are facing a Yeti and all you have is a wand of cold and wand of Polymorph you"
+  },
+  {
+   "t": 1834.99,
+   "d": 10.48,
+   "text": "can think your wand of cold won't do anything so hit it with the wand of Polymorph."
+  },
+  {
+   "t": 1845.47,
+   "d": 1.0,
+   "text": "This is a cool combo."
+  },
+  {
+   "t": 1846.47,
+   "d": 1.37,
+   "text": "I like these."
+  },
+  {
+   "t": 1847.84,
+   "d": 4.38,
+   "text": "In Rogue it is nice when they come up but they are kind of rare."
+  },
+  {
+   "t": 1852.22,
+   "d": 9.61,
+   "text": "So in my games, I like, I have kind of honed in on the elements of Rogue that I think are"
+  },
+  {
+   "t": 1861.83,
+   "d": 6.92,
+   "text": "my favorite parts and have them expand out more often and be the whole game."
+  },
+  {
+   "t": 1868.75,
+   "d": 6.45,
+   "text": "I have lots of Polymorph effects and lots of effects that care about what type of enemy"
+  },
+  {
+   "t": 1875.2,
+   "d": 1.27,
+   "text": "you have."
+  },
+  {
+   "t": 1876.47,
+   "d": 5.39,
+   "text": "This kind of situation can be more common."
+  },
+  {
+   "t": 1881.86,
+   "d": 10.51,
+   "text": "And the last thing is in 868-HACK there is a Polymorph ability that is much more powerful"
+  },
+  {
+   "t": 1892.37,
+   "d": 5.36,
+   "text": "than the one of Polymorph in Rogue because it hits everything on the screen but because"
+  },
+  {
+   "t": 1897.73,
+   "d": 7.88,
+   "text": "868-HACK only has 4 different enemy types it is not as crazy chaotic as that might seem"
+  },
+  {
+   "t": 1905.61,
+   "d": 2.27,
+   "text": "because it is fairly predictable."
+  },
+  {
+   "t": 1907.88,
+   "d": 5.52,
+   "text": "It turns into one of three other kinds and they are all relative strength."
+  },
+  {
+   "t": 1913.4,
+   "d": 2.14,
+   "text": "It is only changing their abilities."
+  },
+  {
+   "t": 1915.54,
+   "d": 5.25,
+   "text": "It is not changing the strength of the situation."
+  },
+  {
+   "t": 1920.79,
+   "d": 4.68,
+   "text": "Because this isn't so wild as it might seem it is able to be quite cheap in the game."
+  },
+  {
+   "t": 1925.47,
+   "d": 4.43,
+   "text": "EMCEE: Michael, so sorry to have to do this because it is wonderful."
+  },
+  {
+   "t": 1929.9,
+   "d": 3.2,
+   "text": "Thank you so much for kicking this off."
+  },
+  {
+   "t": 1933.1,
+   "d": 6.18,
+   "text": "Between the chat and the Twitter, I can see you are dropping quotable game design wisdom"
+  }
+ ]
+}

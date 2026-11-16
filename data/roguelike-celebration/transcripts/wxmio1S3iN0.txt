@@ -1,0 +1,66 @@
+Andrea Interguglielmi - Designing a turn based roguelike inside a real time simulated environment
+Speaker: Andrea Interguglielmi
+https://www.youtube.com/watch?v=wxmio1S3iN0
+Year: 2019   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:02] Hello! My name is Andrea Interguglielmi and today we'll be talking about my game Nauticrawl published by Armor Games Studios and the many headaches that went into designing these experiences which blends a real-time machine simulation with turn-based Roguelike elements. Nauticrawl.
+
+## What is Nauticrawl, it doesn't look like a roguelike!
+
+[0:00:24] You might notice during the slides that this game doesn't look like a standard Roguelike. In fact, at some point we decided to drop completely the Roguelike tag. We didn't want to go for Roguelite either, or or Roguelike-like or none of that craziness. I had to accept that this game is just unique on its own and it blends games that I love. Of course, I do happen to love Roguelikes a lot and that really shows, you will see
+
+## Dungeon Crawling, Escape Room, Cockpit Simulator, Narrative Experience
+
+[0:01:03] during the slides. Definitely one of the major influences is the one that you can see here. The usual suspect, Brogue, which is a brilliant Roguelike that influenced me growing up as a game designer. Some of the other elements I borrowed from other games are space cockpit simulations with X-wing which is game I loved growing up. A Dark Room also showed me how narrative can be seamlessly blended with a Roguelike experience. And The Room - I love this game because it has all these gizmos you can fiddle with, but there's no tutorial at all. All these influences sort of went into the crafting my own vision and that's what you are presented with when the game starts. You have no idea how these things work.
+
+[0:02:05] Nothing is going to be told to you if not a simple premise.
+
+## A simple premise
+
+[0:02:10] That premise is that you are stealing this machine to try and get away from a horrible situation but your kind is never allowed to ever touch this machine. You have no idea of how it works. You stole it and now you are going to have to put up with this situation and have to push every button, pull every lever and eventually, as you become familiar with the machine, it will fade into a dungeon crawl exploration experience and you will dungeon crawl your way to salvation.
+
+## Procedural world • Voronoi procedurally generated maps with fog of war
+
+[0:02:46] The game is set in a procedural world. It is not presented grid based but it does have fog of war; it is presented from the top inside a radar. It's all generated using Voronoi cells. I make procedural islands I can scale up and down depending on the need during the game. It is displayed inside the radar and you cannot see anything else outside. The descriptions of places you enter are handled through the interface. That is because the story goes the pressure on this planet is so massive that the only thing that can roam around the surface of this planet is these machines called the Nauticrawl. So there's not going to be this big porthole showing what's outside, only monitors. That is why I like to talk about - That is why I like to say is a Roguelike that has
+
+[0:03:48] been scattered around a machine simulation. Many elements of Roguelike are in these interfaces. There is a log of actions happening inside the machine and the world outside. There is a monitor just for that, there is a monitor just for inventory, there is a monitor just for the stats - and the stats actually map almost 1:1 to a traditional dungeon crawler. There is the hull integrity which is the HP of the player, fuel which is hunger, battery which is stamina, and components are parts you keep on the machine to augment what it does, weapons and improvements as such. All of that is presented through some sort of old terminal simulation and works like a terminal in that it displays tile-based two color graphics.
+
+[0:04:51] At some point, I figured, we have these old school interfaces, why don't we also display some old school text mode art with that?
+
+## Textmode art
+
+[0:05:00] I got in touch with these amazing artist, his name is Ben Jones, you can find him on Twitter by the name @polyducks. He loves to use REXPaint. I personally am a big fan of Playscii. We used to pipe all the data through Playscii for the final JSON output format.
+
+## User interface or escape room puzzler?
+
+[0:05:24] I mentioned that all of that is a big puzzle to solve but I also mentioned that all of these controls are also the user interface to a dungeon crawling sort of gameplay. Really which one is it? It is actually both. These panels are both -- they sort of blend together escape room puzzle elements with being a user experience to pilot these big house-sized crawling machines. The core gameplay loop is all about experimenting and eventually dying is part of the experience, but hopefully, you will learn and carry forward your meta experience on to the next run. There are rewards that try and sort of hook with curiosity you so that you don't give
+
+[0:06:26] up and there's scraps of lore that will be revealed to you eventually and more controls to fiddle with. You will be presented with even more buttons and even more levers to press and that will start the whole process again where you explore, gain new scraps of lore, die, repeat. Now, it is quite a mix. Of course, some of these elements at some point, it was only natural they start clashing one with the other. In fact, that happened. The real-time simulation part of the game at some point specifically got so big and predominant that it sort of killed the dungeon crawling experience. What happened was that by the time you start facing enemies, you have all these red blinking lights all over the place asking for attention, asking for some actions to be performed to
+
+[0:07:28] maintain the machine, but the enemy, meanwhile was still kicking your ass in real-time and that really was a mess. It was really hard to play. By the time we entered the first early beta of the game, general consensus was pressing all the buttons was fun but players were dying without even understanding why. Very few testers managed to get to the end of the game. I think like three or four. It was really time to go back to the drawing board once again.
+
+## Back to the drawing board
+
+[0:08:07] It was scary because we were right in the middle of the project and approaching the final deadline. Clearly, something went wrong along the way because in my mind the actual dungeon crawling part of the game was always meant to be turn-based. It was a slow experience about wonder and discovery. So what happened? What happened I guess is that it became sort of a natural design process to also make the world around you real-time just like the rest of the machine because I didn't want to take players out of the simulated, you know, atmospheric experience. If I was to at some point present the player with a big banner saying it is your turn, or it is the enemy's turn, now you can do this, now you can do that, blocking the player
+
+[0:09:09] during the experience, would have taken him out of the immersion and I didn't want that. The headache was how do I keep not blocking the player while still slowing down this experience in a way that simulates a turn-based dungeon crawling experience. And it turns out, the solution was in the story setting. This game is about a massive crushing atmosphere that forces you inside the only machine that can crawl around this planet. It is all about pressure. What if I use pressure as part of the simulation? What if I let the user pipe in pressure into the engine and I will make sure they take some time to actually build up the required pressure to move forward.
+
+[0:10:10] That will slow down the experience but it will also create some interesting side effects because the player, with some levers, will be able to also speed up the time that it takes to accumulate the pressure to move forward. When the engine is put under stress, it will start giving up, releasing heat and make more noise and the noise and heat will both impact the stealth device which in turn requires more power. Not only did I slow down the experience in a way that was unique but I made the turns part of the machine simulation, which was a side effect I didn't see coming.
+
+## Enemy's turn
+
+[0:11:03] What about the enemies' turn? The solution for that was also part of the story setting. We are talking about a place the game refers to as the "forbidden surface". It has been abandoned for generations. I made it so that naturally both creatures and technology developed this way of not wasting energy when nothing moves, because it's a place that's mostly deserted. I reprogrammed the AI so it only reacts when something makes a noise and moves. At this point, I have the player blocked and being able to experiment with all the different values of the machine and nothing moves until you commit to moving forward. So the game is becoming very strategic and the enemies are all there silently waiting
+
+[0:12:04] for you and the atmosphere is even creepier than before. In my mind it is all working and it is great. What happens when we give it back to the players? They don't realize there are turns at all. They come back to us saying, you know, I make a move and I am still chased by the enemy so I want to make the next move faster and I go fast and this heat coming out of the engine but I am just trying to be as fast as I can because the enemy is chasing me. It is still a big mess. This is not slow at all and I am like damn it. I basically need to teach the player past the initial stage of pressing every button, which is fine if nobody tells you anything. Then there is the dungeon crawling part which has rules and how do I teach the player about rules if there is no tutorial? Yet another headache. I am about to wrap this talk now because really this was what sort of unlocked us from this
+
+## Teaching players about turns...without a tutorial?
+
+[0:13:10] evil loop of obfuscation. We eventually came up with these ideas of trying to understand when the player is dying repeatedly -- at that point, after you start a run and turn on the machine, the machine enters a safety lock and it will present the player with a check to rebalance the machine. In that check, you might be asked to check on the battery, or the stealth device, or how much hull integrity is left and eventually even the turns. The turns is a bit of a bastard move that the game does on the player in that it will stone the creature next to you when the game starts. You hear the thing roaming around and it is creepy. A radio message will tell you that you have to stay still. The message is broadcasted to all the pilots in the area.
+
+[0:14:10] It is saying stay still, remember that nothing moves until you make a move. Just move very quietly and the creature will not notice you. If you die straight after that, fine, because the game restarts and it will teach you one more game mechanic. It does that one trick at a time. That really worked. It is quite a unique experience. There were many headaches involved.
+
+## Worth the development headaches!
+
+[0:14:42] We, of course, we were scared to release this thing in the wild and couldn't have been happier about the reception. The game has scored a very positive rate on Steam. We have like 60 plus positive reviews and counting. Nice comments on each as well. Please don't kill me because somebody said that the game looks like NetHack. We just hope the game is fun regardless if it is a standard Roguelike or not. We just hope people going to enjoy the experience. Yeah, it was a fun ride. I hope it was fun to hear about all this gameplay and game design challenges. If you want to hear more about me rambling about Nauticrawl, please get in touch with me on Twitter.

@@ -1,0 +1,103 @@
+{
+  "id": "XQKNwaCwD-I",
+  "title": "Sraëka-Lillian - Procedural Phonology: Generating Name Generators",
+  "speaker": "Sraëka-Lillian",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=XQKNwaCwD-I",
+  "talk_type": "technical",
+  "summary": "Sraëka-Lillian, a self-taught hobbyist, explains how to use phonology to generate random name generators, so each procedurally generated culture gets names with its own linguistic identity. Generators should produce varied, internally cohesive, externally distinctive and pronounceable names. The procedure has three components: a phonemic inventory (kept small and readable, chosen per language using cross-language frequency data), phonotactics (syllable structure, positional sound frequency, consonant cluster limits), and morphology (combining roots and suffixes, often resolving clashes by deleting a sound). The talk closes by urging humility about which outputs look 'wrong' and treating name generation as speculative art.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "principle",
+      "claim": "When procgen creates many cultures, generating a distinct name generator per culture ties characters to their culture and signals the distinction between cultures.",
+      "detail": "Names identifiably from the same language tie characters to a culture; for arbitrarily many generated worlds and cultures you need a way to generate the name generators themselves.",
+      "t": 97,
+      "quote": "When we give different characters and names that are identifiable as names that belong to the same language it ties them to culture",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "principle",
+      "claim": "A good name generator's output should be varied, internally cohesive, and externally distinctive from other generated languages.",
+      "detail": "A few similar names are fine (English has John, June, Jan) but mostly names should be distinct. Cohesion shows across many names as recurring sound patterns (Latin masculine names), and distinctiveness shows in comparison (Japanese vs Latin). Both together give a language a strong sense of identity.",
+      "t": 245,
+      "quote": "A language that is both internally cohesive and externally distinctive is likely to have a strong sense of identity",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "pronounceability",
+      "kind": "warning",
+      "claim": "Generated names should be pronounceable, because a name players can't find any way to say is hard to remember and degenerates into noise.",
+      "detail": "Names should feel intentionally formed with generation errors kept to a minimum; the pronunciation players settle on need not be 'correct'.",
+      "t": 281,
+      "quote": "If you can't come to any way to pronounce the name that's in front of you you will have a harder time sticking in memory",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "phonology",
+      "kind": "technique",
+      "claim": "A phonology-based name generator has three components: a phonemic inventory of sounds, rules for combining sounds into syllables, and techniques for smoothing combined syllables, roots and suffixes.",
+      "detail": "Phonology identifies the components of a language's sound system and the patterns that shape each, which gives the basic shape of a procedure for generating a language.",
+      "t": 371,
+      "quote": "Our basic strategy is built around three components. To start naming language has to know what sounds or phonames are",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "phonemic inventory",
+      "kind": "technique",
+      "claim": "Keep the master sound inventory small and mostly limited to sounds players already know how to pronounce, avoiding accent marks, while adding a few common non-English sounds for flavour.",
+      "detail": "Over 2,000 sounds exist across languages but English has 26 letters. Sraëka-Lillian avoids diacritics as visual noise to English readers, and uses non-English sounds that are spelled close to how they sound so they add flavour without confusion.",
+      "t": 449,
+      "quote": "there is a wisdom in keeping our master inventory small and mostly limiting it to sounds folks in the audience have prior intuition about",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "phonemic inventory",
+      "kind": "technique",
+      "claim": "Each generated language's sound set can be chosen by selecting phonemes independently, weighted by their real-world prevalence from online cross-language databases.",
+      "detail": "More sophisticated correlated selection may give more cohesive results, but in practice the difference is subtle, so independent selection is valid.",
+      "t": 543,
+      "quote": "It is perfectly valid to select phonames independently and not worry about how they work to each",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "phonotactics",
+      "kind": "technique",
+      "claim": "Phonotactics, meaning syllable structure (onset, nucleus, coda), positional sound frequency and consonant cluster limits, strongly shapes generated words; uncontrolled clusters produce 'consonant soup'.",
+      "detail": "Languages differ on whether onsets and codas can hold multiple consonants. Some sounds occur only in certain positions, as English 'h' appears in onsets but never codas. Most languages restrict which consonants may touch.",
+      "t": 642,
+      "quote": "Most languages are stricted and constants are allowed to touch so if we are not careful we can end up with contant soup",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "morphology",
+      "kind": "technique",
+      "claim": "Reusing recurring morphemes across names signals intentional structure, and when combined morphemes create clashing sounds, simply deleting one of the offending sounds solves many problems.",
+      "detail": "Multiple morphemes per name are not required, but recurring elements help names feel intentionally shaped. Real languages change sounds at morpheme boundaries in complex ways, but deletion is one of the most common results; the speaker wished they had known this sooner.",
+      "t": 708,
+      "quote": "one of the most common results of these changes is just to delete one of the offending sounds entirely",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "embracing weirdness",
+      "kind": "principle",
+      "claim": "When a generated name looks wrong, either change the strategy or add safeguards, or embrace its weirdness, being humble because our sense of 'normal' language is biased by limited exposure.",
+      "detail": "English speakers' exposure skews toward a handful of European and Asian languages; a weird name might be normal in a language we don't know, a dead language, or one yet to exist. The speaker frames name generation as an art that can be speculative rather than just reproducing real-world rules.",
+      "t": 747,
+      "quote": "we can try to embrace the weirdness of them",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

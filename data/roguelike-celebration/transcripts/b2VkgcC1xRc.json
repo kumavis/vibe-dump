@@ -1,0 +1,2778 @@
+{
+ "id": "b2VkgcC1xRc",
+ "url": "https://www.youtube.com/watch?v=b2VkgcC1xRc",
+ "title": "Ian Holmes - Cellular Automata for Emergent Dungeons",
+ "speaker": "Ian Holmes",
+ "talk_title": "Cellular Automata for Emergent Dungeons",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1160,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Ian Holmes talks about cellular automata for emergent dungeons.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 82,
+   "title": "Influential game design"
+  },
+  {
+   "start": 187,
+   "title": "Cellular automata mechanics"
+  },
+  {
+   "start": 358,
+   "title": "Prototypes and systems"
+  },
+  {
+   "start": 533,
+   "title": "Nematode development"
+  },
+  {
+   "start": 715,
+   "title": "Procedural grammars"
+  },
+  {
+   "start": 818,
+   "title": "Applying graph grammars"
+  },
+  {
+   "start": 969,
+   "title": "Q&A and concluding remarks"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3810,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.44,
+   "d": 3.0,
+   "text": "thank you that was a simply fantastic"
+  },
+  {
+   "t": 3.44,
+   "d": 4.17,
+   "text": "talk about slime molds I also am an"
+  },
+  {
+   "t": 7.61,
+   "d": 2.86,
+   "text": "academic biologist and I'm going to be"
+  },
+  {
+   "t": 10.47,
+   "d": 3.21,
+   "text": "talking about connections of that too to"
+  },
+  {
+   "t": 13.68,
+   "d": 3.24,
+   "text": "roguelikes somewhat more abstractly so I"
+  },
+  {
+   "t": 16.92,
+   "d": 3.6,
+   "text": "am before I was a scientist it was a"
+  },
+  {
+   "t": 20.52,
+   "d": 2.85,
+   "text": "game developer at one point developed a"
+  },
+  {
+   "t": 23.37,
+   "d": 2.04,
+   "text": "couple of games one of them my first one"
+  },
+  {
+   "t": 25.41,
+   "d": 2.67,
+   "text": "was called pipeline in the 80s and it's"
+  },
+  {
+   "t": 28.08,
+   "d": 2.91,
+   "text": "four-way scrolling RPG with puzzles and"
+  },
+  {
+   "t": 30.99,
+   "d": 3.15,
+   "text": "so on and it's tile based I wish I'd"
+  },
+  {
+   "t": 34.14,
+   "d": 1.65,
+   "text": "known a little bit more about cellular"
+  },
+  {
+   "t": 35.79,
+   "d": 1.14,
+   "text": "automata and some of the ideas I'm going"
+  },
+  {
+   "t": 36.93,
+   "d": 1.8,
+   "text": "to talk about and in in a lot of ways"
+  },
+  {
+   "t": 38.73,
+   "d": 2.04,
+   "text": "you know I'm just trying to come back to"
+  },
+  {
+   "t": 40.77,
+   "d": 1.29,
+   "text": "that game and do it better I think I"
+  },
+  {
+   "t": 42.06,
+   "d": 1.34,
+   "text": "also did a very sort of anemic"
+  },
+  {
+   "t": 43.4,
+   "d": 1.96,
+   "text": "first-person shooter that you can see up"
+  },
+  {
+   "t": 45.36,
+   "d": 3.15,
+   "text": "there before moving into science and and"
+  },
+  {
+   "t": 48.51,
+   "d": 3.08,
+   "text": "so I you know physicist"
+  },
+  {
+   "t": 51.59,
+   "d": 3.72,
+   "text": "simulations of various physical systems"
+  },
+  {
+   "t": 55.31,
+   "d": 2.38,
+   "text": "there are simulations various thank"
+  },
+  {
+   "t": 57.69,
+   "d": 2.58,
+   "text": "you.thank you know simulations of things"
+  },
+  {
+   "t": 60.27,
+   "d": 3.09,
+   "text": "like polymer dynamics and you know"
+  },
+  {
+   "t": 63.36,
+   "d": 1.74,
+   "text": "mostly nowadays I work in molecular"
+  },
+  {
+   "t": 65.1,
+   "d": 2.37,
+   "text": "evolution and I'm interested in in"
+  },
+  {
+   "t": 67.47,
+   "d": 2.22,
+   "text": "biopolymers in DNA and RNA and and in"
+  },
+  {
+   "t": 69.69,
+   "d": 2.04,
+   "text": "the origin of life reconstructing"
+  },
+  {
+   "t": 71.73,
+   "d": 1.59,
+   "text": "ancient viruses and all sorts of cool"
+  },
+  {
+   "t": 73.32,
+   "d": 1.62,
+   "text": "things like that and in fact you know"
+  },
+  {
+   "t": 74.94,
+   "d": 1.56,
+   "text": "some might the most influential games"
+  },
+  {
+   "t": 76.5,
+   "d": 2.94,
+   "text": "have have touched on this theme of"
+  },
+  {
+   "t": 79.44,
+   "d": 3.12,
+   "text": "artificial life very life influential to"
+  },
+  {
+   "t": 82.56,
+   "d": 2.82,
+   "text": "me so really the one that I hold up as"
+  },
+  {
+   "t": 85.38,
+   "d": 1.98,
+   "text": "the most influential game it's probably"
+  },
+  {
+   "t": 87.36,
+   "d": 1.38,
+   "text": "one that very few people have heard of"
+  },
+  {
+   "t": 88.74,
+   "d": 2.25,
+   "text": "if any it's a game called exile it's in"
+  },
+  {
+   "t": 90.99,
+   "d": 1.92,
+   "text": "what's known as the the metroidvania"
+  },
+  {
+   "t": 92.91,
+   "d": 2.88,
+   "text": "genre it's absolutely phenomenal game"
+  },
+  {
+   "t": 95.79,
+   "d": 1.86,
+   "text": "and I can't do justice to it in the time"
+  },
+  {
+   "t": 97.65,
+   "d": 1.47,
+   "text": "I have here but I would encourage you to"
+  },
+  {
+   "t": 99.12,
+   "d": 1.05,
+   "text": "check it out there's a whole sort of"
+  },
+  {
+   "t": 100.17,
+   "d": 2.13,
+   "text": "cult movement about it and I think"
+  },
+  {
+   "t": 102.3,
+   "d": 1.44,
+   "text": "relevantly for this conference"
+  },
+  {
+   "t": 103.74,
+   "d": 2.04,
+   "text": "it used procedural generation in a very"
+  },
+  {
+   "t": 105.78,
+   "d": 2.22,
+   "text": "interesting way to circumvent the 32k"
+  },
+  {
+   "t": 108.0,
+   "d": 2.07,
+   "text": "memory limit on the machines at the time"
+  },
+  {
+   "t": 110.07,
+   "d": 1.2,
+   "text": "so they basically actually used"
+  },
+  {
+   "t": 111.27,
+   "d": 3.06,
+   "text": "procedural content very heavily curate"
+  },
+  {
+   "t": 114.33,
+   "d": 3.0,
+   "text": "curated to generate a giant map and that"
+  },
+  {
+   "t": 117.33,
+   "d": 2.37,
+   "text": "in combination with sort of Newtonian"
+  },
+  {
+   "t": 119.7,
+   "d": 3.15,
+   "text": "physics and a very very rich ecosystem"
+  },
+  {
+   "t": 122.85,
+   "d": 2.22,
+   "text": "with lots of interactions between the"
+  },
+  {
+   "t": 125.07,
+   "d": 1.26,
+   "text": "different agents different kinds of"
+  },
+  {
+   "t": 126.33,
+   "d": 2.1,
+   "text": "animals and creatures and sokka so forth"
+  },
+  {
+   "t": 128.43,
+   "d": 2.16,
+   "text": "in this game and then all the physical"
+  },
+  {
+   "t": 130.59,
+   "d": 1.8,
+   "text": "properties like mass and viscosity and"
+  },
+  {
+   "t": 132.39,
+   "d": 0.54,
+   "text": "we"
+  },
+  {
+   "t": 132.93,
+   "d": 1.8,
+   "text": "and so on there's absolutely phenomenal"
+  },
+  {
+   "t": 134.73,
+   "d": 2.19,
+   "text": "game and I really encourage you can"
+  },
+  {
+   "t": 136.92,
+   "d": 1.62,
+   "text": "actually play it now in a web browser on"
+  },
+  {
+   "t": 138.54,
+   "d": 2.4,
+   "text": "an emulator and so that's sort of the"
+  },
+  {
+   "t": 140.94,
+   "d": 1.08,
+   "text": "you know the ecosystem and that"
+  },
+  {
+   "t": 142.02,
+   "d": 1.38,
+   "text": "influenced me a lot I really would like"
+  },
+  {
+   "t": 143.4,
+   "d": 1.26,
+   "text": "to build something like that at some"
+  },
+  {
+   "t": 144.66,
+   "d": 1.2,
+   "text": "point and sort of it and then a"
+  },
+  {
+   "t": 145.86,
+   "d": 2.43,
+   "text": "completely different kind of game or I"
+  },
+  {
+   "t": 148.29,
+   "d": 2.34,
+   "text": "guess it's a game is the programming"
+  },
+  {
+   "t": 150.63,
+   "d": 2.16,
+   "text": "game core how many people have heard of"
+  },
+  {
+   "t": 152.79,
+   "d": 3.72,
+   "text": "core yeah right fantastic game very much"
+  },
+  {
+   "t": 156.51,
+   "d": 1.59,
+   "text": "aimed at programmers though right it's"
+  },
+  {
+   "t": 158.1,
+   "d": 1.65,
+   "text": "sort of not really a very accessible"
+  },
+  {
+   "t": 159.75,
+   "d": 2.73,
+   "text": "game and it's if anywhere it's sort of"
+  },
+  {
+   "t": 162.48,
+   "d": 2.01,
+   "text": "gone off into the the academic community"
+  },
+  {
+   "t": 164.49,
+   "d": 1.62,
+   "text": "I would say the the offshoots of core"
+  },
+  {
+   "t": 166.11,
+   "d": 2.54,
+   "text": "include things like various a life"
+  },
+  {
+   "t": 168.65,
+   "d": 2.44,
+   "text": "simulations which try to evolve the"
+  },
+  {
+   "t": 171.09,
+   "d": 3.05,
+   "text": "programs in various different ways like"
+  },
+  {
+   "t": 174.14,
+   "d": 3.25,
+   "text": "Titus Brown's video and tiara and so on"
+  },
+  {
+   "t": 177.39,
+   "d": 3.33,
+   "text": "so you know one of on this note one"
+  },
+  {
+   "t": 180.72,
+   "d": 1.56,
+   "text": "system that's always really fascinated"
+  },
+  {
+   "t": 182.28,
+   "d": 2.67,
+   "text": "me and it's come up a few times in the"
+  },
+  {
+   "t": 184.95,
+   "d": 2.19,
+   "text": "course of this conference cellular"
+  },
+  {
+   "t": 187.14,
+   "d": 2.1,
+   "text": "automata so you know basic idea of"
+  },
+  {
+   "t": 189.24,
+   "d": 1.29,
+   "text": "cellular automata of course is you have"
+  },
+  {
+   "t": 190.53,
+   "d": 2.67,
+   "text": "something like a lattice system of tiles"
+  },
+  {
+   "t": 193.2,
+   "d": 1.89,
+   "text": "and you have a simple set of rules for"
+  },
+  {
+   "t": 195.09,
+   "d": 1.26,
+   "text": "how the tiles interact with their"
+  },
+  {
+   "t": 196.35,
+   "d": 2.58,
+   "text": "neighborhood and these you know I'm"
+  },
+  {
+   "t": 198.93,
+   "d": 1.68,
+   "text": "using solar at home during a very very"
+  },
+  {
+   "t": 200.61,
+   "d": 1.8,
+   "text": "broad sense here to include not just the"
+  },
+  {
+   "t": 202.41,
+   "d": 1.53,
+   "text": "sort of synchronous type of cellular"
+  },
+  {
+   "t": 203.94,
+   "d": 1.71,
+   "text": "automata that John Conway developed"
+  },
+  {
+   "t": 205.65,
+   "d": 1.53,
+   "text": "where you know you do a little"
+  },
+  {
+   "t": 207.18,
+   "d": 1.59,
+   "text": "arithmetic operation on your"
+  },
+  {
+   "t": 208.77,
+   "d": 1.32,
+   "text": "neighborhood count the number of cells a"
+  },
+  {
+   "t": 210.09,
+   "d": 1.68,
+   "text": "particular type and then switch based on"
+  },
+  {
+   "t": 211.77,
+   "d": 1.56,
+   "text": "that but also sort of more general"
+  },
+  {
+   "t": 213.33,
+   "d": 1.86,
+   "text": "lookup table driven things that counters"
+  },
+  {
+   "t": 215.19,
+   "d": 2.07,
+   "text": "reaction diffusion systems or just"
+  },
+  {
+   "t": 217.26,
+   "d": 1.83,
+   "text": "general simulations you can kind of I"
+  },
+  {
+   "t": 219.09,
+   "d": 1.59,
+   "text": "think of them as simulations of"
+  },
+  {
+   "t": 220.68,
+   "d": 1.89,
+   "text": "computational chemistry but in fact they"
+  },
+  {
+   "t": 222.57,
+   "d": 2.28,
+   "text": "can be all kinds of things you know"
+  },
+  {
+   "t": 224.85,
+   "d": 1.35,
+   "text": "where you're basically just looking at"
+  },
+  {
+   "t": 226.2,
+   "d": 1.98,
+   "text": "sort of random interactions between"
+  },
+  {
+   "t": 228.18,
+   "d": 2.67,
+   "text": "different types of cell and of course"
+  },
+  {
+   "t": 230.85,
+   "d": 1.68,
+   "text": "you can get sort of more elaborate and"
+  },
+  {
+   "t": 232.53,
+   "d": 1.83,
+   "text": "rarefied with how these interactions are"
+  },
+  {
+   "t": 234.36,
+   "d": 2.67,
+   "text": "organized you do things like the entity"
+  },
+  {
+   "t": 237.03,
+   "d": 2.16,
+   "text": "component kind of system sort of model"
+  },
+  {
+   "t": 239.19,
+   "d": 1.68,
+   "text": "that we've heard about earlier today to"
+  },
+  {
+   "t": 240.87,
+   "d": 1.56,
+   "text": "have them be more object oriented and"
+  },
+  {
+   "t": 242.43,
+   "d": 1.44,
+   "text": "respond to various messages and so on"
+  },
+  {
+   "t": 243.87,
+   "d": 1.95,
+   "text": "the basic idea is that you're talking"
+  },
+  {
+   "t": 245.82,
+   "d": 1.95,
+   "text": "about very localized interactions"
+  },
+  {
+   "t": 247.77,
+   "d": 1.89,
+   "text": "between a cell in its neighborhood that"
+  },
+  {
+   "t": 249.66,
+   "d": 1.92,
+   "text": "may or may not happen synchronously may"
+  },
+  {
+   "t": 251.58,
+   "d": 1.32,
+   "text": "or may not happen at the same speed you"
+  },
+  {
+   "t": 252.9,
+   "d": 1.5,
+   "text": "know faster or slower cells doing"
+  },
+  {
+   "t": 254.4,
+   "d": 1.59,
+   "text": "various different things and there's a"
+  },
+  {
+   "t": 255.99,
+   "d": 1.77,
+   "text": "very large variety of models in science"
+  },
+  {
+   "t": 257.76,
+   "d": 2.01,
+   "text": "that build on just this framework right"
+  },
+  {
+   "t": 259.77,
+   "d": 2.31,
+   "text": "from the earliest stuff that Alan Turing"
+  },
+  {
+   "t": 262.08,
+   "d": 2.22,
+   "text": "did describing why leopards get their"
+  },
+  {
+   "t": 264.3,
+   "d": 1.77,
+   "text": "spots in terms of various interacting"
+  },
+  {
+   "t": 266.07,
+   "d": 0.34,
+   "text": "chemical"
+  },
+  {
+   "t": 266.41,
+   "d": 1.59,
+   "text": "morphogens you can think of as a"
+  },
+  {
+   "t": 268.0,
+   "d": 2.22,
+   "text": "reaction to fusion system to things like"
+  },
+  {
+   "t": 270.22,
+   "d": 1.89,
+   "text": "models of fire models of diffusion"
+  },
+  {
+   "t": 272.11,
+   "d": 1.59,
+   "text": "limited aggregation for crystal growth"
+  },
+  {
+   "t": 273.7,
+   "d": 3.18,
+   "text": "lots of games have particulate fluids in"
+  },
+  {
+   "t": 276.88,
+   "d": 2.34,
+   "text": "them now models are for forest fires"
+  },
+  {
+   "t": 279.22,
+   "d": 2.1,
+   "text": "I've got Conway's life up there you know"
+  },
+  {
+   "t": 281.32,
+   "d": 1.95,
+   "text": "digging into the Conway's life literally"
+  },
+  {
+   "t": 283.27,
+   "d": 2.57,
+   "text": "you can find some wonderful examples of"
+  },
+  {
+   "t": 285.84,
+   "d": 2.38,
+   "text": "life being used to simulate other"
+  },
+  {
+   "t": 288.22,
+   "d": 1.86,
+   "text": "cellular automata or simulate life"
+  },
+  {
+   "t": 290.08,
+   "d": 2.52,
+   "text": "itself within live or simulate a Turing"
+  },
+  {
+   "t": 292.6,
+   "d": 2.82,
+   "text": "machine or recently someone simulated"
+  },
+  {
+   "t": 295.42,
+   "d": 3.65,
+   "text": "Tetris I believe in life sorry yeah so"
+  },
+  {
+   "t": 299.07,
+   "d": 3.27,
+   "text": "you know there is in fact a large"
+  },
+  {
+   "t": 302.34,
+   "d": 2.59,
+   "text": "similarly large range of cellular"
+  },
+  {
+   "t": 304.93,
+   "d": 1.4,
+   "text": "automata that have been used in games"
+  },
+  {
+   "t": 306.33,
+   "d": 2.89,
+   "text": "and you know a few of them I've put up"
+  },
+  {
+   "t": 309.22,
+   "d": 1.41,
+   "text": "here this is of an ever-growing set"
+  },
+  {
+   "t": 310.63,
+   "d": 1.41,
+   "text": "actually it's very difficult to keep"
+  },
+  {
+   "t": 312.04,
+   "d": 2.43,
+   "text": "current but I think that some deserve"
+  },
+  {
+   "t": 314.47,
+   "d": 3.18,
+   "text": "certain mentions SimCity I think is is"
+  },
+  {
+   "t": 317.65,
+   "d": 1.32,
+   "text": "really useful because it's been very"
+  },
+  {
+   "t": 318.97,
+   "d": 1.68,
+   "text": "well studied and if you read Hein"
+  },
+  {
+   "t": 320.65,
+   "d": 2.28,
+   "text": "Gingles PhD thesis which he did with"
+  },
+  {
+   "t": 322.93,
+   "d": 2.7,
+   "text": "Michael Mateus at UCSC talks a lot about"
+  },
+  {
+   "t": 325.63,
+   "d": 2.25,
+   "text": "the various different layers of cellular"
+  },
+  {
+   "t": 327.88,
+   "d": 2.13,
+   "text": "automata in SimCity and how they"
+  },
+  {
+   "t": 330.01,
+   "d": 2.43,
+   "text": "interact and then of course you know"
+  },
+  {
+   "t": 332.44,
+   "d": 1.47,
+   "text": "there are pure toys there are things"
+  },
+  {
+   "t": 333.91,
+   "d": 1.32,
+   "text": "like Galli which is a game of life"
+  },
+  {
+   "t": 335.23,
+   "d": 0.69,
+   "text": "simulator"
+  },
+  {
+   "t": 335.92,
+   "d": 2.49,
+   "text": "there's kapow which Rudy Rucker down San"
+  },
+  {
+   "t": 338.41,
+   "d": 1.71,
+   "text": "Jose State developed as continuous"
+  },
+  {
+   "t": 340.12,
+   "d": 2.28,
+   "text": "valued cellular automata there are lots"
+  },
+  {
+   "t": 342.4,
+   "d": 1.41,
+   "text": "of little minigames like the ones by"
+  },
+  {
+   "t": 343.81,
+   "d": 2.04,
+   "text": "Grant Robinson I put up there and then"
+  },
+  {
+   "t": 345.85,
+   "d": 1.23,
+   "text": "sort of bigger things like Dwarf"
+  },
+  {
+   "t": 347.08,
+   "d": 2.1,
+   "text": "Fortress and minecraft which you know"
+  },
+  {
+   "t": 349.18,
+   "d": 1.92,
+   "text": "more or less fit into the kind of"
+  },
+  {
+   "t": 351.1,
+   "d": 1.59,
+   "text": "framework that I'm talking about there"
+  },
+  {
+   "t": 352.69,
+   "d": 1.86,
+   "text": "tile-based and there's interactions"
+  },
+  {
+   "t": 354.55,
+   "d": 1.68,
+   "text": "between cells although there's a lot"
+  },
+  {
+   "t": 356.23,
+   "d": 1.68,
+   "text": "more of course going on in those games"
+  },
+  {
+   "t": 357.91,
+   "d": 2.07,
+   "text": "as well and you know I've got this once"
+  },
+  {
+   "t": 359.98,
+   "d": 3.47,
+   "text": "like talking about CAS in roguelikes"
+  },
+  {
+   "t": 363.45,
+   "d": 1.63,
+   "text": "unfortunately it was a little late for"
+  },
+  {
+   "t": 365.08,
+   "d": 1.95,
+   "text": "me to adapt these slides and include the"
+  },
+  {
+   "t": 367.03,
+   "d": 1.68,
+   "text": "many excellent examples that we've heard"
+  },
+  {
+   "t": 368.71,
+   "d": 1.35,
+   "text": "about you know I was really interested"
+  },
+  {
+   "t": 370.06,
+   "d": 2.79,
+   "text": "to hear about caves of card having a"
+  },
+  {
+   "t": 372.85,
+   "d": 2.22,
+   "text": "melting point for every wall for example"
+  },
+  {
+   "t": 375.07,
+   "d": 2.04,
+   "text": "you know and and there's been a lot of"
+  },
+  {
+   "t": 377.11,
+   "d": 1.92,
+   "text": "very cool things that have been said"
+  },
+  {
+   "t": 379.03,
+   "d": 1.68,
+   "text": "about cellular automata or an"
+  },
+  {
+   "t": 380.71,
+   "d": 2.16,
+   "text": "agent-based systems perhaps the classic"
+  },
+  {
+   "t": 382.87,
+   "d": 1.86,
+   "text": "example though is using a cellular"
+  },
+  {
+   "t": 384.73,
+   "d": 1.65,
+   "text": "automata to create a realistic-looking"
+  },
+  {
+   "t": 386.38,
+   "d": 2.31,
+   "text": "cavern and there's this example up on"
+  },
+  {
+   "t": 388.69,
+   "d": 2.82,
+   "text": "Road Basin of how to do this and so I've"
+  },
+  {
+   "t": 391.51,
+   "d": 1.59,
+   "text": "been using this at some of my games"
+  },
+  {
+   "t": 393.1,
+   "d": 3.57,
+   "text": "so I will switch now to talk about some"
+  },
+  {
+   "t": 396.67,
+   "d": 1.98,
+   "text": "of the things that I've done but really"
+  },
+  {
+   "t": 398.65,
+   "d": 0.93,
+   "text": "I kind of want"
+  },
+  {
+   "t": 399.58,
+   "d": 1.89,
+   "text": "talk about the principles that have come"
+  },
+  {
+   "t": 401.47,
+   "d": 1.67,
+   "text": "out of that that I think might be useful"
+  },
+  {
+   "t": 403.14,
+   "d": 2.92,
+   "text": "and before I talk about my games I"
+  },
+  {
+   "t": 406.06,
+   "d": 1.35,
+   "text": "shouldn't mention there's been some"
+  },
+  {
+   "t": 407.41,
+   "d": 2.61,
+   "text": "really good advice offered throughout"
+  },
+  {
+   "t": 410.02,
+   "d": 1.8,
+   "text": "this conference about the importance of"
+  },
+  {
+   "t": 411.82,
+   "d": 1.95,
+   "text": "rapidly producing stuff and getting"
+  },
+  {
+   "t": 413.77,
+   "d": 1.62,
+   "text": "stuff out the door Darius talks about"
+  },
+  {
+   "t": 415.39,
+   "d": 1.95,
+   "text": "you know how his stuff is is is"
+  },
+  {
+   "t": 417.34,
+   "d": 1.53,
+   "text": "brilliantly stupid I'm adding that"
+  },
+  {
+   "t": 418.87,
+   "d": 1.23,
+   "text": "brilliantly he said stupidest very"
+  },
+  {
+   "t": 420.1,
+   "d": 1.68,
+   "text": "self-deprecating is but his stuff is"
+  },
+  {
+   "t": 421.78,
+   "d": 1.65,
+   "text": "very quick you know and he makes a"
+  },
+  {
+   "t": 423.43,
+   "d": 1.56,
+   "text": "virtue of that and sort of bringing it"
+  },
+  {
+   "t": 424.99,
+   "d": 1.17,
+   "text": "out and we've had lots of other people"
+  },
+  {
+   "t": 426.16,
+   "d": 1.47,
+   "text": "talk about you know the importance of"
+  },
+  {
+   "t": 427.63,
+   "d": 2.13,
+   "text": "finishing stuff I agree with all of this"
+  },
+  {
+   "t": 429.76,
+   "d": 1.71,
+   "text": "but it's a case of do as I say not as I"
+  },
+  {
+   "t": 431.47,
+   "d": 0.21,
+   "text": "do"
+  },
+  {
+   "t": 431.68,
+   "d": 2.07,
+   "text": "I rarely finish things these days but"
+  },
+  {
+   "t": 433.75,
+   "d": 1.47,
+   "text": "I'm much more interested in developing"
+  },
+  {
+   "t": 435.22,
+   "d": 3.18,
+   "text": "prototypes and so these are a few of the"
+  },
+  {
+   "t": 438.4,
+   "d": 3.15,
+   "text": "prototypes that I have developed that"
+  },
+  {
+   "t": 441.55,
+   "d": 1.38,
+   "text": "really haven't really seen the light of"
+  },
+  {
+   "t": 442.93,
+   "d": 1.68,
+   "text": "day accepts or it talks like this but I"
+  },
+  {
+   "t": 444.61,
+   "d": 1.17,
+   "text": "talked a little bit about what I was"
+  },
+  {
+   "t": 445.78,
+   "d": 2.1,
+   "text": "trying to do with them the one up in the"
+  },
+  {
+   "t": 447.88,
+   "d": 2.16,
+   "text": "top left of the screen is all my first"
+  },
+  {
+   "t": 450.04,
+   "d": 1.92,
+   "text": "ones and that's it's just a sort of"
+  },
+  {
+   "t": 451.96,
+   "d": 1.26,
+   "text": "predator-prey system with a"
+  },
+  {
+   "t": 453.22,
+   "d": 1.74,
+   "text": "rock-paper-scissors ecology but it'syou"
+  },
+  {
+   "t": 454.96,
+   "d": 2.55,
+   "text": "can see it's kind of psychedelic and the"
+  },
+  {
+   "t": 457.51,
+   "d": 1.92,
+   "text": "game there such as it was was about sort"
+  },
+  {
+   "t": 459.43,
+   "d": 1.53,
+   "text": "of trying to balance the different"
+  },
+  {
+   "t": 460.96,
+   "d": 1.74,
+   "text": "populations and then if you get into it"
+  },
+  {
+   "t": 462.7,
+   "d": 1.44,
+   "text": "can kind of introduce different colors"
+  },
+  {
+   "t": 464.14,
+   "d": 1.92,
+   "text": "creating closures to sort of present"
+  },
+  {
+   "t": 466.06,
+   "d": 1.32,
+   "text": "them prevent them from killing each"
+  },
+  {
+   "t": 467.38,
+   "d": 1.74,
+   "text": "other and you're basically the idea very"
+  },
+  {
+   "t": 469.12,
+   "d": 1.92,
+   "text": "loosely was you're a zookeeper and"
+  },
+  {
+   "t": 471.04,
+   "d": 1.62,
+   "text": "you're trying to manage a zoo and then"
+  },
+  {
+   "t": 472.66,
+   "d": 2.07,
+   "text": "in the the version that's to the bottom"
+  },
+  {
+   "t": 474.73,
+   "d": 2.25,
+   "text": "left I elaborated on this a little bit"
+  },
+  {
+   "t": 476.98,
+   "d": 1.89,
+   "text": "slowed things down a bit and studied"
+  },
+  {
+   "t": 478.87,
+   "d": 1.5,
+   "text": "adding in more kinds of particles and"
+  },
+  {
+   "t": 480.37,
+   "d": 2.52,
+   "text": "agents permeable membranes fluids"
+  },
+  {
+   "t": 482.89,
+   "d": 3.0,
+   "text": "particulate fluids and various cells and"
+  },
+  {
+   "t": 485.89,
+   "d": 1.95,
+   "text": "enclosures and things with little"
+  },
+  {
+   "t": 487.84,
+   "d": 2.16,
+   "text": "programs and various things that would"
+  },
+  {
+   "t": 490.0,
+   "d": 2.49,
+   "text": "interact with each other and then the"
+  },
+  {
+   "t": 492.49,
+   "d": 1.83,
+   "text": "one on the bottom right is basically the"
+  },
+  {
+   "t": 494.32,
+   "d": 2.34,
+   "text": "same kind of thing but I rebuilt it all"
+  },
+  {
+   "t": 496.66,
+   "d": 1.8,
+   "text": "in a sea virtual machine to make it fast"
+  },
+  {
+   "t": 498.46,
+   "d": 2.19,
+   "text": "and you know that one of the themes that"
+  },
+  {
+   "t": 500.65,
+   "d": 1.47,
+   "text": "I was trying to go with here was sort of"
+  },
+  {
+   "t": 502.12,
+   "d": 2.34,
+   "text": "the emergent feel of kind of looking at"
+  },
+  {
+   "t": 504.46,
+   "d": 2.43,
+   "text": "a very fast evolving system like you"
+  },
+  {
+   "t": 506.89,
+   "d": 1.68,
+   "text": "might do you know if you look at a"
+  },
+  {
+   "t": 508.57,
+   "d": 3.15,
+   "text": "simulation of of a gas that's done in"
+  },
+  {
+   "t": 511.72,
+   "d": 1.47,
+   "text": "computational physics or something like"
+  },
+  {
+   "t": 513.19,
+   "d": 1.74,
+   "text": "that or a fluid you can see things"
+  },
+  {
+   "t": 514.93,
+   "d": 1.62,
+   "text": "moving around very very fast in sort of"
+  },
+  {
+   "t": 516.55,
+   "d": 2.37,
+   "text": "Brownian motions type starway not really"
+  },
+  {
+   "t": 518.92,
+   "d": 1.5,
+   "text": "going anywhere and yet so overall"
+  },
+  {
+   "t": 520.42,
+   "d": 2.01,
+   "text": "patterns can develop and that can kind"
+  },
+  {
+   "t": 522.43,
+   "d": 1.8,
+   "text": "of be what you build the gameplay around"
+  },
+  {
+   "t": 524.23,
+   "d": 2.1,
+   "text": "so I'll talk a little bit more about my"
+  },
+  {
+   "t": 526.33,
+   "d": 1.86,
+   "text": "latest version nematode and my latest"
+  },
+  {
+   "t": 528.19,
+   "d": 2.46,
+   "text": "game in this vein in a second but first"
+  },
+  {
+   "t": 530.65,
+   "d": 2.15,
+   "text": "you know being a professor I kind of"
+  },
+  {
+   "t": 532.8,
+   "d": 1.89,
+   "text": "resist putting together a curriculum"
+  },
+  {
+   "t": 534.69,
+   "d": 1.32,
+   "text": "when they do a talk like this so"
+  },
+  {
+   "t": 536.01,
+   "d": 2.64,
+   "text": "apologize for that I think that they're"
+  },
+  {
+   "t": 538.65,
+   "d": 2.28,
+   "text": "really the key concepts that come out"
+  },
+  {
+   "t": 540.93,
+   "d": 4.2,
+   "text": "for me really just models of gases to"
+  },
+  {
+   "t": 545.13,
+   "d": 1.85,
+   "text": "some extent polymers as well and"
+  },
+  {
+   "t": 546.98,
+   "d": 2.23,
+   "text": "populations but really gases in"
+  },
+  {
+   "t": 549.21,
+   "d": 1.35,
+   "text": "populations are kind of these two"
+  },
+  {
+   "t": 550.56,
+   "d": 2.04,
+   "text": "concepts there's a whole bunch of theory"
+  },
+  {
+   "t": 552.6,
+   "d": 2.01,
+   "text": "around simulating those on lattices that"
+  },
+  {
+   "t": 554.61,
+   "d": 3.0,
+   "text": "can really help and as one of the ways I"
+  },
+  {
+   "t": 557.61,
+   "d": 1.71,
+   "text": "think that it can help I would like to"
+  },
+  {
+   "t": 559.32,
+   "d": 1.77,
+   "text": "point to the problem of balancing right"
+  },
+  {
+   "t": 561.09,
+   "d": 1.44,
+   "text": "when you start having lots of lots of"
+  },
+  {
+   "t": 562.53,
+   "d": 1.17,
+   "text": "things that interact with each other"
+  },
+  {
+   "t": 563.7,
+   "d": 1.56,
+   "text": "especially things that can spawn and"
+  },
+  {
+   "t": 565.26,
+   "d": 2.19,
+   "text": "grow and create new things or or trigger"
+  },
+  {
+   "t": 567.45,
+   "d": 1.86,
+   "text": "catastrophic events like fires and so on"
+  },
+  {
+   "t": 569.31,
+   "d": 2.01,
+   "text": "you have to think a lot about how you're"
+  },
+  {
+   "t": 571.32,
+   "d": 1.71,
+   "text": "balancing your system and there are a"
+  },
+  {
+   "t": 573.03,
+   "d": 1.53,
+   "text": "lot of tools for doing this in the"
+  },
+  {
+   "t": 574.56,
+   "d": 1.68,
+   "text": "stochastic process modeling literature"
+  },
+  {
+   "t": 576.24,
+   "d": 1.62,
+   "text": "and in stochastic physics and chemistry"
+  },
+  {
+   "t": 577.86,
+   "d": 1.98,
+   "text": "and biology particularly the idea of"
+  },
+  {
+   "t": 579.84,
+   "d": 3.21,
+   "text": "detailed balance in a Markov chain these"
+  },
+  {
+   "t": 583.05,
+   "d": 1.47,
+   "text": "various simulation systems like"
+  },
+  {
+   "t": 584.52,
+   "d": 2.04,
+   "text": "metropolis Hastings algorithm and then"
+  },
+  {
+   "t": 586.56,
+   "d": 1.68,
+   "text": "there's a whole bunch of models for"
+  },
+  {
+   "t": 588.24,
+   "d": 2.25,
+   "text": "diffusion processes in physics starting"
+  },
+  {
+   "t": 590.49,
+   "d": 2.04,
+   "text": "with random walks and then going up to"
+  },
+  {
+   "t": 592.53,
+   "d": 2.25,
+   "text": "things like polymers and little cells"
+  },
+  {
+   "t": 594.78,
+   "d": 3.63,
+   "text": "and and the way that bacteria sort of do"
+  },
+  {
+   "t": 598.41,
+   "d": 2.58,
+   "text": "random walks and things like that so and"
+  },
+  {
+   "t": 600.99,
+   "d": 1.14,
+   "text": "then finally sort of a birth-death"
+  },
+  {
+   "t": 602.13,
+   "d": 2.88,
+   "text": "process is really a very key one to"
+  },
+  {
+   "t": 605.01,
+   "d": 1.14,
+   "text": "study if you're going to try and think"
+  },
+  {
+   "t": 606.15,
+   "d": 2.1,
+   "text": "about how to avoid spawning problems"
+  },
+  {
+   "t": 608.25,
+   "d": 2.13,
+   "text": "from taking over your whole map but"
+  },
+  {
+   "t": 610.38,
+   "d": 1.08,
+   "text": "there's sort of a whole bunch of stuff"
+  },
+  {
+   "t": 611.46,
+   "d": 1.53,
+   "text": "here that I've found somewhat useful and"
+  },
+  {
+   "t": 612.99,
+   "d": 1.41,
+   "text": "I keep coming back to in these"
+  },
+  {
+   "t": 614.4,
+   "d": 1.59,
+   "text": "prototypes and hopefully so you know"
+  },
+  {
+   "t": 615.99,
+   "d": 1.5,
+   "text": "finish one of these prototypes so this"
+  },
+  {
+   "t": 617.49,
+   "d": 2.46,
+   "text": "is an example of one that well this is"
+  },
+  {
+   "t": 619.95,
+   "d": 1.86,
+   "text": "my latest one it's a game called"
+  },
+  {
+   "t": 621.81,
+   "d": 2.28,
+   "text": "nematode you can see a very crude early"
+  },
+  {
+   "t": 624.09,
+   "d": 3.75,
+   "text": "demo at nematode de it's not at all"
+  },
+  {
+   "t": 627.84,
+   "d": 1.95,
+   "text": "really playable yet but I mean this is"
+  },
+  {
+   "t": 629.79,
+   "d": 1.41,
+   "text": "this is the demo being played but"
+  },
+  {
+   "t": 631.2,
+   "d": 2.37,
+   "text": "there's no sort of goal or or or much of"
+  },
+  {
+   "t": 633.57,
+   "d": 1.86,
+   "text": "a shell around it as you can see I mean"
+  },
+  {
+   "t": 635.43,
+   "d": 1.95,
+   "text": "you know I'm kind of messing with the"
+  },
+  {
+   "t": 637.38,
+   "d": 1.5,
+   "text": "mechanic a little bit it's taking a"
+  },
+  {
+   "t": 638.88,
+   "d": 1.89,
+   "text": "snake-like mechanic and putting it sort"
+  },
+  {
+   "t": 640.77,
+   "d": 1.77,
+   "text": "of in a roguelike kind of setting here"
+  },
+  {
+   "t": 642.54,
+   "d": 3.03,
+   "text": "with just some very very crude kind of"
+  },
+  {
+   "t": 645.57,
+   "d": 2.22,
+   "text": "graphics I mean in fact I made a point"
+  },
+  {
+   "t": 647.79,
+   "d": 1.74,
+   "text": "of trying to be minimalistic about the"
+  },
+  {
+   "t": 649.53,
+   "d": 1.59,
+   "text": "graphics at this point and not including"
+  },
+  {
+   "t": 651.12,
+   "d": 1.8,
+   "text": "sprites really although there's a couple"
+  },
+  {
+   "t": 652.92,
+   "d": 2.99,
+   "text": "of things what it does have is"
+  },
+  {
+   "t": 655.91,
+   "d": 3.31,
+   "text": "generative texts it has some some of the"
+  },
+  {
+   "t": 659.22,
+   "d": 1.56,
+   "text": "objects in the world have these sort of"
+  },
+  {
+   "t": 660.78,
+   "d": 2.76,
+   "text": "procedural texture descriptions the"
+  },
+  {
+   "t": 663.54,
+   "d": 1.44,
+   "text": "whole world itself is procedurally"
+  },
+  {
+   "t": 664.98,
+   "d": 1.17,
+   "text": "generated"
+  },
+  {
+   "t": 666.15,
+   "d": 2.22,
+   "text": "persistent its multiplayer in theory all"
+  },
+  {
+   "t": 668.37,
+   "d": 1.74,
+   "text": "the demo up there isn't multiplayer but"
+  },
+  {
+   "t": 670.11,
+   "d": 1.44,
+   "text": "there is a multiplayer server and you"
+  },
+  {
+   "t": 671.55,
+   "d": 1.53,
+   "text": "can kind of all join in the same world"
+  },
+  {
+   "t": 673.08,
+   "d": 1.83,
+   "text": "and it's basically the whole thing is"
+  },
+  {
+   "t": 674.91,
+   "d": 1.65,
+   "text": "implemented within a cellular automata"
+  },
+  {
+   "t": 676.56,
+   "d": 2.16,
+   "text": "with a few extension so it's got gases"
+  },
+  {
+   "t": 678.72,
+   "d": 2.88,
+   "text": "it's got polymers it's got things that"
+  },
+  {
+   "t": 681.6,
+   "d": 1.71,
+   "text": "move in directions various different"
+  },
+  {
+   "t": 683.31,
+   "d": 1.71,
+   "text": "ways got rigid bodies like that door"
+  },
+  {
+   "t": 685.02,
+   "d": 1.65,
+   "text": "that I just opened by pulling out of the"
+  },
+  {
+   "t": 686.67,
+   "d": 3.54,
+   "text": "way and yeah the multiplayer sort of"
+  },
+  {
+   "t": 690.21,
+   "d": 2.43,
+   "text": "works using Allen Kay's teto model which"
+  },
+  {
+   "t": 692.64,
+   "d": 2.16,
+   "text": "has developed from its open croquet work"
+  },
+  {
+   "t": 694.8,
+   "d": 2.13,
+   "text": "and and the whole thing is running in"
+  },
+  {
+   "t": 696.93,
+   "d": 2.04,
+   "text": "JavaScript with node on the back end so"
+  },
+  {
+   "t": 698.97,
+   "d": 2.13,
+   "text": "please please do take a look at that and"
+  },
+  {
+   "t": 701.1,
+   "d": 2.01,
+   "text": "grab me and I'd love to talk about that"
+  },
+  {
+   "t": 703.11,
+   "d": 2.16,
+   "text": "game and where it's going but"
+  },
+  {
+   "t": 705.27,
+   "d": 1.71,
+   "text": "essentially the basic idea is it's sort"
+  },
+  {
+   "t": 706.98,
+   "d": 1.17,
+   "text": "of knitting together some of these"
+  },
+  {
+   "t": 708.15,
+   "d": 1.26,
+   "text": "cellular automata things that I'm"
+  },
+  {
+   "t": 709.41,
+   "d": 3.21,
+   "text": "talking about with with roguelikes so I"
+  },
+  {
+   "t": 712.62,
+   "d": 1.59,
+   "text": "just want to switch tack for the last"
+  },
+  {
+   "t": 714.21,
+   "d": 2.13,
+   "text": "couple slides that I have here and talk"
+  },
+  {
+   "t": 716.34,
+   "d": 2.43,
+   "text": "about some of the technologies in here"
+  },
+  {
+   "t": 718.77,
+   "d": 3.78,
+   "text": "and so so there are three grammars in"
+  },
+  {
+   "t": 722.55,
+   "d": 1.65,
+   "text": "nematode that three types of grammar"
+  },
+  {
+   "t": 724.2,
+   "d": 2.88,
+   "text": "that I use extensively and and we've"
+  },
+  {
+   "t": 727.08,
+   "d": 2.58,
+   "text": "heard a lot about implicitly or"
+  },
+  {
+   "t": 729.66,
+   "d": 1.98,
+   "text": "explicitly about string based grammars"
+  },
+  {
+   "t": 731.64,
+   "d": 1.95,
+   "text": "for generating procedural text basically"
+  },
+  {
+   "t": 733.59,
+   "d": 1.44,
+   "text": "sort of templates that it kind of expand"
+  },
+  {
+   "t": 735.03,
+   "d": 2.34,
+   "text": "recursively I've talked about cellular"
+  },
+  {
+   "t": 737.37,
+   "d": 1.56,
+   "text": "automata and some of the principles of"
+  },
+  {
+   "t": 738.93,
+   "d": 2.7,
+   "text": "how I go about designing those you know"
+  },
+  {
+   "t": 741.63,
+   "d": 2.64,
+   "text": "based on stochastic physics the last"
+  },
+  {
+   "t": 744.27,
+   "d": 1.65,
+   "text": "thing I want to talk about is the so"
+  },
+  {
+   "t": 745.92,
+   "d": 2.01,
+   "text": "called graph grammar and this is a way"
+  },
+  {
+   "t": 747.93,
+   "d": 1.95,
+   "text": "of generating graph structures and this"
+  },
+  {
+   "t": 749.88,
+   "d": 1.74,
+   "text": "is what I use the minute to generate the"
+  },
+  {
+   "t": 751.62,
+   "d": 1.74,
+   "text": "level design for nematode and I think it"
+  },
+  {
+   "t": 753.36,
+   "d": 1.68,
+   "text": "could be useful a number of other"
+  },
+  {
+   "t": 755.04,
+   "d": 2.16,
+   "text": "concepts and so in fact I've released"
+  },
+  {
+   "t": 757.2,
+   "d": 2.16,
+   "text": "the code that I do that are used to do"
+  },
+  {
+   "t": 759.36,
+   "d": 2.04,
+   "text": "this as an open source project or rather"
+  },
+  {
+   "t": 761.4,
+   "d": 2.22,
+   "text": "I am releasing it now this is this is"
+  },
+  {
+   "t": 763.62,
+   "d": 1.83,
+   "text": "the release it's released so I will tell"
+  },
+  {
+   "t": 765.45,
+   "d": 2.88,
+   "text": "you now what it does and but before I do"
+  },
+  {
+   "t": 768.33,
+   "d": 4.62,
+   "text": "that I need to give a very strong nod to"
+  },
+  {
+   "t": 772.95,
+   "d": 0.9,
+   "text": "Joris Dorman's"
+  },
+  {
+   "t": 773.85,
+   "d": 2.82,
+   "text": "who basically pioneered using this kind"
+  },
+  {
+   "t": 776.67,
+   "d": 2.28,
+   "text": "of graphic grammar for his roguelike"
+  },
+  {
+   "t": 778.95,
+   "d": 2.4,
+   "text": "unexplored has a really nice talk on it"
+  },
+  {
+   "t": 781.35,
+   "d": 2.16,
+   "text": "on youtube i would encourage you to go"
+  },
+  {
+   "t": 783.51,
+   "d": 1.11,
+   "text": "to that I'm not trying to steal his"
+  },
+  {
+   "t": 784.62,
+   "d": 1.8,
+   "text": "thunder in any way but I have got an"
+  },
+  {
+   "t": 786.42,
+   "d": 1.53,
+   "text": "open source library that does some of"
+  },
+  {
+   "t": 787.95,
+   "d": 2.58,
+   "text": "this stuff so I guess piggybacking on"
+  },
+  {
+   "t": 790.53,
+   "d": 2.63,
+   "text": "what he's done and in a sense and really"
+  },
+  {
+   "t": 793.16,
+   "d": 3.94,
+   "text": "unexplored you know and and I wouldn't"
+  },
+  {
+   "t": 797.1,
+   "d": 1.77,
+   "text": "call myself like the top connoisseur of"
+  },
+  {
+   "t": 798.87,
+   "d": 0.72,
+   "text": "roguelikes"
+  },
+  {
+   "t": 799.59,
+   "d": 1.77,
+   "text": "I can get very much get the sense that"
+  },
+  {
+   "t": 801.36,
+   "d": 2.22,
+   "text": "one of the strengths of unexplored is"
+  },
+  {
+   "t": 803.58,
+   "d": 1.89,
+   "text": "that it has levels that seem to have a"
+  },
+  {
+   "t": 805.47,
+   "d": 2.82,
+   "text": "lot more cohesiveness and and sort of"
+  },
+  {
+   "t": 808.29,
+   "d": 2.28,
+   "text": "have this feel of being human designed"
+  },
+  {
+   "t": 810.57,
+   "d": 3.36,
+   "text": "in the sense that that Ben was talking"
+  },
+  {
+   "t": 813.93,
+   "d": 1.74,
+   "text": "about and so one of the ways that they"
+  },
+  {
+   "t": 815.67,
+   "d": 1.56,
+   "text": "achieved that is used by this use of"
+  },
+  {
+   "t": 817.23,
+   "d": 1.56,
+   "text": "graph grammars which I'll now try and"
+  },
+  {
+   "t": 818.79,
+   "d": 2.13,
+   "text": "summarize very quickly the idea of a"
+  },
+  {
+   "t": 820.92,
+   "d": 2.79,
+   "text": "graph grammar is at least in the case of"
+  },
+  {
+   "t": 823.71,
+   "d": 3.15,
+   "text": "of these levels for unexplored Infini"
+  },
+  {
+   "t": 826.86,
+   "d": 1.92,
+   "text": "mètode' is that you start basically with"
+  },
+  {
+   "t": 828.78,
+   "d": 2.46,
+   "text": "a lattice so representing your map so"
+  },
+  {
+   "t": 831.24,
+   "d": 2.04,
+   "text": "this is sort of a bit zoomed out from"
+  },
+  {
+   "t": 833.28,
+   "d": 1.41,
+   "text": "the individual tiles this is just the"
+  },
+  {
+   "t": 834.69,
+   "d": 1.95,
+   "text": "overall organization and then what you"
+  },
+  {
+   "t": 836.64,
+   "d": 1.77,
+   "text": "do is you know much much like with a"
+  },
+  {
+   "t": 838.41,
+   "d": 1.53,
+   "text": "string Rama where you apply a set of"
+  },
+  {
+   "t": 839.94,
+   "d": 2.07,
+   "text": "transformation rules to transform your"
+  },
+  {
+   "t": 842.01,
+   "d": 2.25,
+   "text": "string in a graph grammar you apply a"
+  },
+  {
+   "t": 844.26,
+   "d": 1.77,
+   "text": "set of transformation rules to transform"
+  },
+  {
+   "t": 846.03,
+   "d": 1.62,
+   "text": "this graph and the way that you"
+  },
+  {
+   "t": 847.65,
+   "d": 2.28,
+   "text": "transform it is by sir extending paths"
+  },
+  {
+   "t": 849.93,
+   "d": 2.7,
+   "text": "or introducing detours or introducing"
+  },
+  {
+   "t": 852.63,
+   "d": 2.58,
+   "text": "latke puzzles or shortcuts and so on but"
+  },
+  {
+   "t": 855.21,
+   "d": 1.83,
+   "text": "you do so in a way that kind of connects"
+  },
+  {
+   "t": 857.04,
+   "d": 1.47,
+   "text": "the thing so that for example you can"
+  },
+  {
+   "t": 858.51,
+   "d": 3.36,
+   "text": "set up it's very easy to set up a scheme"
+  },
+  {
+   "t": 861.87,
+   "d": 2.43,
+   "text": "where you you know you have for a path"
+  },
+  {
+   "t": 864.3,
+   "d": 2.1,
+   "text": "that goes off through some side quest in"
+  },
+  {
+   "t": 866.4,
+   "d": 2.19,
+   "text": "order to get a key which unlocks a door"
+  },
+  {
+   "t": 868.59,
+   "d": 1.68,
+   "text": "okay that sort of pretty standard in"
+  },
+  {
+   "t": 870.27,
+   "d": 2.01,
+   "text": "this sort of system but then to set it"
+  },
+  {
+   "t": 872.28,
+   "d": 1.17,
+   "text": "up in such a way that there's always a"
+  },
+  {
+   "t": 873.45,
+   "d": 2.61,
+   "text": "shortcut back from where the key is to"
+  },
+  {
+   "t": 876.06,
+   "d": 2.07,
+   "text": "where the door is and so you end up with"
+  },
+  {
+   "t": 878.13,
+   "d": 2.13,
+   "text": "these sorts of so called cyclic levels"
+  },
+  {
+   "t": 880.26,
+   "d": 2.25,
+   "text": "that basically have over all structures"
+  },
+  {
+   "t": 882.51,
+   "d": 2.31,
+   "text": "of long range structure as well as just"
+  },
+  {
+   "t": 884.82,
+   "d": 1.62,
+   "text": "the kind of short-range local structure"
+  },
+  {
+   "t": 886.44,
+   "d": 2.04,
+   "text": "that you get from a string grammar or"
+  },
+  {
+   "t": 888.48,
+   "d": 0.66,
+   "text": "something like that"
+  },
+  {
+   "t": 889.14,
+   "d": 1.86,
+   "text": "this is oom din this is what that level"
+  },
+  {
+   "t": 891.0,
+   "d": 1.89,
+   "text": "looks like and so you know there's sort"
+  },
+  {
+   "t": 892.89,
+   "d": 2.67,
+   "text": "of an overall structure to it I did put"
+  },
+  {
+   "t": 895.56,
+   "d": 1.95,
+   "text": "in a red herring at one end but"
+  },
+  {
+   "t": 897.51,
+   "d": 1.23,
+   "text": "otherwise there's sort of an overall"
+  },
+  {
+   "t": 898.74,
+   "d": 1.56,
+   "text": "structure which sir brings you back to"
+  },
+  {
+   "t": 900.3,
+   "d": 2.52,
+   "text": "the start and allows you to skip things"
+  },
+  {
+   "t": 902.82,
+   "d": 2.22,
+   "text": "and so on and this is just one kind of"
+  },
+  {
+   "t": 905.04,
+   "d": 1.29,
+   "text": "graph that you could generate using"
+  },
+  {
+   "t": 906.33,
+   "d": 1.68,
+   "text": "graph grammars the basic idea is just"
+  },
+  {
+   "t": 908.01,
+   "d": 1.11,
+   "text": "that you have a recipe of"
+  },
+  {
+   "t": 909.12,
+   "d": 1.77,
+   "text": "transformations that you can apply to a"
+  },
+  {
+   "t": 910.89,
+   "d": 2.61,
+   "text": "graph starting from one point and ending"
+  },
+  {
+   "t": 913.5,
+   "d": 1.59,
+   "text": "up with the kind of graph that you want"
+  },
+  {
+   "t": 915.09,
+   "d": 2.4,
+   "text": "to get so for example this actually"
+  },
+  {
+   "t": 917.49,
+   "d": 2.31,
+   "text": "wasn't the first graph that that I"
+  },
+  {
+   "t": 919.8,
+   "d": 1.32,
+   "text": "generate the first kind of grammar that"
+  },
+  {
+   "t": 921.12,
+   "d": 1.71,
+   "text": "I built using this system one that I did"
+  },
+  {
+   "t": 922.83,
+   "d": 1.83,
+   "text": "earlier was in the context of an"
+  },
+  {
+   "t": 924.66,
+   "d": 2.01,
+   "text": "automatically generated choose your own"
+  },
+  {
+   "t": 926.67,
+   "d": 2.25,
+   "text": "adventure story this is a graph that was"
+  },
+  {
+   "t": 928.92,
+   "d": 4.07,
+   "text": "generated by that grammar and again"
+  },
+  {
+   "t": 932.99,
+   "d": 1.77,
+   "text": "and see individual bits and basically"
+  },
+  {
+   "t": 934.76,
+   "d": 2.07,
+   "text": "this looks a bit more like a sort of a"
+  },
+  {
+   "t": 936.83,
+   "d": 2.25,
+   "text": "tree like structure but it still has"
+  },
+  {
+   "t": 939.08,
+   "d": 1.56,
+   "text": "these sort of local cycles that were"
+  },
+  {
+   "t": 940.64,
+   "d": 2.04,
+   "text": "generated as part of the graph grammar"
+  },
+  {
+   "t": 942.68,
+   "d": 2.34,
+   "text": "and so there's an ending where you see a"
+  },
+  {
+   "t": 945.02,
+   "d": 2.07,
+   "text": "boss and here's an ending where you die"
+  },
+  {
+   "t": 947.09,
+   "d": 2.55,
+   "text": "and so all of these sections are"
+  },
+  {
+   "t": 949.64,
+   "d": 1.65,
+   "text": "basically driven by this is the source"
+  },
+  {
+   "t": 951.29,
+   "d": 2.25,
+   "text": "for generating this driven by a very"
+  },
+  {
+   "t": 953.54,
+   "d": 2.43,
+   "text": "very small compact set of rules and that"
+  },
+  {
+   "t": 955.97,
+   "d": 2.64,
+   "text": "really is I think the appeal of a lot of"
+  },
+  {
+   "t": 958.61,
+   "d": 1.44,
+   "text": "these sorts of systems is that you can"
+  },
+  {
+   "t": 960.05,
+   "d": 2.73,
+   "text": "drive your program you know with a very"
+  },
+  {
+   "t": 962.78,
+   "d": 1.59,
+   "text": "small set of rules that are conceptually"
+  },
+  {
+   "t": 964.37,
+   "d": 2.91,
+   "text": "easy to understand and to analyze and to"
+  },
+  {
+   "t": 967.28,
+   "d": 3.21,
+   "text": "debug and maintain so ok so that's my"
+  },
+  {
+   "t": 970.49,
+   "d": 2.31,
+   "text": "talk I haven't talked at all about one"
+  },
+  {
+   "t": 972.8,
+   "d": 1.89,
+   "text": "of my other projects such as short slot"
+  },
+  {
+   "t": 974.69,
+   "d": 2.28,
+   "text": "but I think it is relevant so I mention"
+  },
+  {
+   "t": 976.97,
+   "d": 2.07,
+   "text": "it very briefly wiki mess dot me is a"
+  },
+  {
+   "t": 979.04,
+   "d": 3.0,
+   "text": "wiki messenger it's not released yet but"
+  },
+  {
+   "t": 982.04,
+   "d": 2.67,
+   "text": "I would like to get discussions kicked"
+  },
+  {
+   "t": 984.71,
+   "d": 1.89,
+   "text": "off its basically a procedural messenger"
+  },
+  {
+   "t": 986.6,
+   "d": 1.83,
+   "text": "where there that the messages are sort"
+  },
+  {
+   "t": 988.43,
+   "d": 2.27,
+   "text": "of generated from an underlying grammar"
+  },
+  {
+   "t": 990.7,
+   "d": 2.59,
+   "text": "and so it's kind of fun then there's"
+  },
+  {
+   "t": 993.29,
+   "d": 1.53,
+   "text": "nematodes you can check both of those"
+  },
+  {
+   "t": 994.82,
+   "d": 1.74,
+   "text": "out those demos online and then some of"
+  },
+  {
+   "t": 996.56,
+   "d": 1.47,
+   "text": "this is open source code in particular"
+  },
+  {
+   "t": 998.03,
+   "d": 2.19,
+   "text": "the graph grammar library show does"
+  },
+  {
+   "t": 1000.22,
+   "d": 2.54,
+   "text": "encourage you all to"
+  },
+  {
+   "t": 1006.56,
+   "d": 1.95,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1008.51,
+   "d": 3.03,
+   "text": "okay we have time for a few questions"
+  },
+  {
+   "t": 1011.54,
+   "d": 3.44,
+   "text": "any questions"
+  },
+  {
+   "t": 1021.05,
+   "d": 10.68,
+   "text": "hmm hmm some no yes okay it's hard I"
+  },
+  {
+   "t": 1031.73,
+   "d": 7.35,
+   "text": "can't see everyone from the stage so I"
+  },
+  {
+   "t": 1039.08,
+   "d": 1.86,
+   "text": "really love the Jarrah Stallman's talk"
+  },
+  {
+   "t": 1040.94,
+   "d": 2.01,
+   "text": "that you mentioned I've watched it and I"
+  },
+  {
+   "t": 1042.95,
+   "d": 1.8,
+   "text": "think it's he described some really"
+  },
+  {
+   "t": 1044.75,
+   "d": 1.86,
+   "text": "fantastic ideas one thing that I've been"
+  },
+  {
+   "t": 1046.61,
+   "d": 3.27,
+   "text": "thinking about recently is building maps"
+  },
+  {
+   "t": 1049.88,
+   "d": 3.48,
+   "text": "that look less organic and more kind of"
+  },
+  {
+   "t": 1053.36,
+   "d": 3.6,
+   "text": "designed or architectural and one really"
+  },
+  {
+   "t": 1056.96,
+   "d": 2.01,
+   "text": "common feature of that is symmetry so"
+  },
+  {
+   "t": 1058.97,
+   "d": 2.73,
+   "text": "have you come across anything in graph"
+  },
+  {
+   "t": 1061.7,
+   "d": 2.43,
+   "text": "grammars about generating symmetrical or"
+  },
+  {
+   "t": 1064.13,
+   "d": 1.83,
+   "text": "otherwise like intelligent looking"
+  },
+  {
+   "t": 1065.96,
+   "d": 4.28,
+   "text": "levels yeah I think I mean I think it's"
+  },
+  {
+   "t": 1070.24,
+   "d": 2.59,
+   "text": "absolutely symmetry is one of the things"
+  },
+  {
+   "t": 1072.83,
+   "d": 2.79,
+   "text": "we look for but it's hard to generate"
+  },
+  {
+   "t": 1075.62,
+   "d": 4.29,
+   "text": "with these sort of rule-based systems"
+  },
+  {
+   "t": 1079.91,
+   "d": 2.22,
+   "text": "that apply that work locally because"
+  },
+  {
+   "t": 1082.13,
+   "d": 2.25,
+   "text": "it's a global property I think that"
+  },
+  {
+   "t": 1084.38,
+   "d": 2.25,
+   "text": "there is a productive interaction"
+  },
+  {
+   "t": 1086.63,
+   "d": 1.62,
+   "text": "between these sorts of approaches and"
+  },
+  {
+   "t": 1088.25,
+   "d": 2.85,
+   "text": "the sort of MCMC based approaches that"
+  },
+  {
+   "t": 1091.1,
+   "d": 2.4,
+   "text": "we heard about earlier from from Benin"
+  },
+  {
+   "t": 1093.5,
+   "d": 1.74,
+   "text": "Cape Cod uses something like that as"
+  },
+  {
+   "t": 1095.24,
+   "d": 1.89,
+   "text": "well as it's a sequential Hamilton Monte"
+  },
+  {
+   "t": 1097.13,
+   "d": 1.5,
+   "text": "Carlo you know I think that there was"
+  },
+  {
+   "t": 1098.63,
+   "d": 1.44,
+   "text": "really nice paper a few years ago that"
+  },
+  {
+   "t": 1100.07,
+   "d": 1.8,
+   "text": "sort of kicked this off this idea of"
+  },
+  {
+   "t": 1101.87,
+   "d": 1.77,
+   "text": "procedural alibi generation that if you"
+  },
+  {
+   "t": 1103.64,
+   "d": 2.97,
+   "text": "encounter an npc in a game the sort of"
+  },
+  {
+   "t": 1106.61,
+   "d": 1.59,
+   "text": "this algorithm that can just on-demand"
+  },
+  {
+   "t": 1108.2,
+   "d": 1.71,
+   "text": "give you it's back story and it's a back"
+  },
+  {
+   "t": 1109.91,
+   "d": 1.35,
+   "text": "story that fits with everything else"
+  },
+  {
+   "t": 1111.26,
+   "d": 1.53,
+   "text": "that you've seen in the game all right"
+  },
+  {
+   "t": 1112.79,
+   "d": 1.65,
+   "text": "and it does this by so rapidly just"
+  },
+  {
+   "t": 1114.44,
+   "d": 2.79,
+   "text": "using MT mc2 stochastically explore the"
+  },
+  {
+   "t": 1117.23,
+   "d": 2.31,
+   "text": "space of backstories until gradually the"
+  },
+  {
+   "t": 1119.54,
+   "d": 1.56,
+   "text": "fit improves and improves and it gets"
+  },
+  {
+   "t": 1121.1,
+   "d": 1.47,
+   "text": "one that's better I think this is"
+  },
+  {
+   "t": 1122.57,
+   "d": 1.59,
+   "text": "something that you can apply throughout"
+  },
+  {
+   "t": 1124.16,
+   "d": 1.74,
+   "text": "games right I mean you can imagine that"
+  },
+  {
+   "t": 1125.9,
+   "d": 3.39,
+   "text": "a persistent MMO could have severe ears"
+  },
+  {
+   "t": 1129.29,
+   "d": 1.56,
+   "text": "where everyone starts off independently"
+  },
+  {
+   "t": 1130.85,
+   "d": 1.11,
+   "text": "and they all sort of start to knit"
+  },
+  {
+   "t": 1131.96,
+   "d": 1.14,
+   "text": "together and you could have a system"
+  },
+  {
+   "t": 1133.1,
+   "d": 1.89,
+   "text": "like this kind of combining everything"
+  },
+  {
+   "t": 1134.99,
+   "d": 3.36,
+   "text": "back stories histories you know lore so"
+  },
+  {
+   "t": 1138.35,
+   "d": 2.31,
+   "text": "yeah I think that anyway I think that"
+  },
+  {
+   "t": 1140.66,
+   "d": 1.5,
+   "text": "those that's the way to achieve these"
+  },
+  {
+   "t": 1142.16,
+   "d": 2.55,
+   "text": "sorts of global cost functions"
+  },
+  {
+   "t": 1144.71,
+   "d": 1.38,
+   "text": "and kind of integrate them with these"
+  },
+  {
+   "t": 1146.09,
+   "d": 1.86,
+   "text": "probabilistic grammars and things that"
+  },
+  {
+   "t": 1147.95,
+   "d": 10.02,
+   "text": "are anyone else okay thank you so much"
+  },
+  {
+   "t": 1157.97,
+   "d": 3.65,
+   "text": "[Applause]"
+  }
+ ]
+}

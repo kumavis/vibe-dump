@@ -1,0 +1,153 @@
+{
+  "id": "7h3T5NaFpcI",
+  "title": "Andrew Plotkin - Mazes: Are We Lost Yet?",
+  "speaker": "Andrew Plotkin",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=7h3T5NaFpcI",
+  "talk_type": "design",
+  "summary": "Andrew Plotkin gives a self-described philosophical rather than algorithmic talk on what makes something a maze, testing and discarding a series of definitions (a thing you must map, a thing with maze shape, a thing labeled a maze, a place you can get lost, a place intended to get you lost) against examples from Rogue-era generated mazes, Wizardry, Ultima, Zork, Colossal Cave, cathedral pavement labyrinths and hedge mazes. He lands on the idea that a maze is about disorientation plus the means to reorient yourself through effort, and that mazes are worth including because the experience is enjoyable even when not difficult. He then argues that in puzzle game design a maze must have a purpose or players will hunt for a nonexistent secret, and sketches purposes such as landmark sequences as clues, rule/logic mazes and rule discovery. Q&A covers escape vs. delve mazes and how to defeat the left-hand rule.",
+  "games": [
+    "Hunt",
+    "NetHack",
+    "Wizardry",
+    "Ultima",
+    "Zork",
+    "Colossal Cave Adventure",
+    "Blue Prince",
+    "The Witness",
+    "Zero Player"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "maze generation",
+      "kind": "technique",
+      "claim": "Simple grid maze algorithms, popular in roguelikes such as NetHack's Gnomish Mines, guarantee a path between any two points.",
+      "detail": "Plotkin shows the early Unix multiplayer game Hunt, set in a randomly generated maze, and notes the very simple algorithms that produce grid mazes. He says this property of full connectivity is why such algorithms are popular in roguelikes, though he declines to go into algorithms.",
+      "t": 125,
+      "quote": "the algorithm guarantees that there's a path from any point to any other point. Uh obviously this kind of algorithm is very popular in rog likes",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "mazes and mapping",
+      "kind": "example",
+      "claim": "Wizardry, Ultima and later automapping games share the maze experience because the player draws, or watches being drawn, a map that fills in as they explore.",
+      "detail": "Players of Wizardry or Ultima had to draw maps on graph paper that came out looking like classical mazes; modern games draw the map for you as you go, but incomplete automaps still give the experience of the map being drawn. Plotkin then rejects 'a maze is a thing you have to map' because some mazes give you the map and are still unsolved.",
+      "t": 250,
+      "quote": "these games are set up so that the maze draws itself as you go through it",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "maze definition",
+      "kind": "principle",
+      "claim": "A maze is defined less by its shape or graph structure than by the experience of navigating it: an arbitrary puzzle state graph is not a maze even though it can be drawn as one.",
+      "detail": "Plotkin notes that Zork's maze maps as a tangled 'hairball' graph and that any puzzle, such as a sliding block puzzle, has a state diagram, but most people would not call that a maze. Labels ('You are in a maze') are also unreliable since Zork's coal mine is a second, unlabeled maze.",
+      "t": 438,
+      "quote": "Does that mean it's a maze? Well, most people wouldn't say so. I'm going to say it's not. It doesn't feel maze-like to me. It's an abstract graph.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "maze definition",
+      "kind": "principle",
+      "claim": "What separates a maze from a merely confusing level is intention: a maze deliberately tries to get you lost.",
+      "detail": "Plotkin got lost in a doctor's office building, but if it were put into a game players would see it as a slightly confusing level rather than a maze. The natural cave that inspired Colossal Cave is confusing but was formed by water, not intent.",
+      "t": 546,
+      "quote": "Really, what we want to see is intention. It's not just that the maze gets you lost. It's that the maze like intentionally tries to get you lost.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "losing your place",
+      "kind": "example",
+      "claim": "Even a single-path labyrinth with no branches feels like a maze because following it takes work and you can lose your place, which is a form of getting lost.",
+      "detail": "Plotkin uses the Chartres cathedral floor labyrinth, a 'universal maze' with no choices, and argues against the maze/labyrinth distinction. Tracing it with a finger you can slip off or forget which wiggle you are on, an experience very similar to tracing a branching maze with few branches.",
+      "t": 757,
+      "quote": "you have made a mistake and losing your place is a synonym for getting lost",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "orientation",
+      "kind": "principle",
+      "claim": "A good maze does not just remove orientation but gives the player means to reorient themselves through effort; an empty void disorients but is not a maze.",
+      "detail": "Plotkin contrasts a featureless empty space, which disorients but offers nothing to work with, with Larry Evans' maze drawings that invite you to imagine being in a corridor wondering if you crossed that bridge before. He calls this sense of disorientation and working to orient yourself more critical than the maze's intent to get you lost.",
+      "t": 895,
+      "quote": "What the maze is really trying to do is allow you to find yourself. It's not just getting rid of your orientation",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "landmarks",
+      "kind": "example",
+      "claim": "Colossal Cave's and Zork's mazes force players to create their own landmarks by dropping items, and later mazes subvert that technique to make players think differently.",
+      "detail": "With no landmarks in Colossal Cave's maze, players drop items and record maps; its second maze has rooms that are all different but hard to remember. In Zork the thief deliberately picks up and moves items you dropped as landmarks, breaking the player's toolkit. Plotkin says every adventure game of that era tried a new way to mess with the player's head about its maze.",
+      "t": 993,
+      "quote": "your toolkit for solving the maze is actually deliberately being broken and you have to do a different kind of work to like come up with a different solution",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "mazes",
+      "kind": "principle",
+      "claim": "A maze can be enjoyable without being difficult, so the maze experience itself is a valid reason to include one.",
+      "detail": "Plotkin describes a waist-high hedge maze in Ferrara where you can always see where you are, yet walking it is still fun. Nobody forces visitors to walk a cathedral pavement maze; they engage because mazes are great.",
+      "t": 1139,
+      "quote": "Finding your way through this maze isn't difficult, but it's still fun. You're still having the maze experience.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "red herrings",
+      "kind": "warning",
+      "claim": "In a puzzle game, a purely decorative maze with no reward acts as a red herring and players will waste time hunting for a secret that is not there.",
+      "detail": "Plotkin values puzzle games where every element later turns out to have a purpose. If a maze has no obvious reward players search for an unobvious one; if it is purely artistic it must be clearly labelled as such or players get annoyed. A good experience is searching for something that is there and finding it.",
+      "t": 1233,
+      "quote": "if the maze is purely decorative and is there for only artistic purposes, then in the game design sense, it's a red herring",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "maze puzzles",
+      "kind": "technique",
+      "claim": "A maze can earn its place in a puzzle game by containing a sequence of landmarks along its path that becomes a clue later in the game.",
+      "detail": "Plotkin offers this as one of the simple answers to what purpose a maze can serve beyond decoration: following the path you encounter things in an order, and that order is relevant later.",
+      "t": 1283,
+      "quote": "as you follow the path through the decorative maze, you come across a sequence of things, the sequence is",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "logic mazes",
+      "kind": "technique",
+      "claim": "Logic or rule mazes add a constraint such as alternating colours or only turning left, making good puzzles at the cost of distancing the player from the feel of locating themselves in space.",
+      "detail": "Plotkin shows a colour alternation maze (red, blue, yellow) and a left-turn maze. Because the same square can be a different state depending on colour or facing, they are great puzzles but distract from the feeling of being in the world.",
+      "t": 1345,
+      "quote": "the rule kind of distances me from the experience of",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "rule discovery",
+      "kind": "technique",
+      "claim": "A rule maze can become a rule-discovery puzzle by withholding the rule, so the player must deduce from first principles which rule makes the maze a good puzzle.",
+      "detail": "Plotkin cites The Witness and Zero Player as rule-discovery games. Given a colour maze without its sequence, a player could reason that only red-blue-yellow makes it neither trivial nor too hard; the deduced sequence could then serve as a clue elsewhere. He admits a hidden right-turn rule might be too hard for most but some 'sicko' audience would solve it.",
+      "t": 1455,
+      "quote": "you can look at this and work out from first principles in some sense that red blue yellow is the sequence that you're supposed to use",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "maze solving",
+      "kind": "technique",
+      "claim": "Designers can stop players brute-forcing a maze with the left-hand rule by using spinners, bridges, loops or islands around a central goal, or locks and keys.",
+      "detail": "In Q&A, Plotkin cites Wizardry's spinners that silently rotate you 90 degrees, bridges as in corn mazes, and placing the goal in the centre so a circular path or island defeats wall-following. Locks and keys also work.",
+      "t": 1660,
+      "quote": "you can make an outside descender maze where the the left hand rule doesn't work because there's a circular path or an island",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

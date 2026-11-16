@@ -1,0 +1,216 @@
+{
+  "id": "nSJA2yVsTFM",
+  "title": "Nic Tringali- Abstract Space Exploration in The Banished Vault",
+  "speaker": "Nic Tringali",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=nSJA2yVsTFM",
+  "talk_type": "design",
+  "summary": "Nic Tringali explains how exploration works in The Banished Vault, a roguelike about crossing procedurally generated solar systems with a generation-ship monastery, managing resources on planet grids and rolling dice against hazards. The design aimed for emotions of size, hostility and unpredictability, carried by an abstract delta-v map backed by realistic rocket math and by resources that physically stay where they are gathered. The core argument is that the game shows players what they will get but not at what cost, so exploration becomes front-loaded planning: charting a route through chaotic but known information while managing the risk of unknown costs. Q&A covers board-game influences like High Frontier, the design origin in the delta-v efficiency puzzle, and tuning difficulty through heavy playtesting.",
+  "games": [
+    "The Banished Vault",
+    "High Frontier"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "abstract map",
+      "kind": "technique",
+      "claim": "The Banished Vault presents each solar system as a delta-v map, a tree of stable orbits with energy costs between nodes, instead of simulating orbiting bodies.",
+      "detail": "Rather than treating travel as a continuous problem of distance and timing, the player sees one or two numbers (energy or thrust) per hop between locations. This heavy abstraction makes a complex physical problem legible as a graph.",
+      "t": 182,
+      "quote": "As opposed to thinking through travel as like this kind of continuous problem of distance and timing and so on, the player just has one number or maybe two",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hazard dice",
+      "kind": "technique",
+      "claim": "Hazards in The Banished Vault are dice rolls that impose an unknown extra cost, such as lost faith, lost actions or lost resources, on travel or construction.",
+      "detail": "Moving between certain locations or building on certain grid spaces requires a roll. Tringali describes the roll as costing the player an additional resource that is unknown; failing resolves to an additional penalty.",
+      "t": 255,
+      "quote": "the dice roll essentially just cost the player an additional resource that is unknown",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emotional goals",
+      "kind": "principle",
+      "claim": "The Banished Vault was designed around three target emotions, size, hostility and unpredictability, which the player is meant to feel imposed on them and then overcome.",
+      "detail": "Space should feel huge and travel slow; the game should feel hostile; and unpredictability is the general concept of run-based games. Overcoming these imposing forces is the positive emotion the designers wanted the player to have.",
+      "t": 312,
+      "quote": "ultimately all three are wrapped up given to the player and we want the player to overcome those because they are imposing on the experience",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "resource scaling",
+      "kind": "technique",
+      "claim": "The Banished Vault conveys the vastness of space through how resource costs scale non-linearly with distance, counteracting its compact, abstract visual map.",
+      "detail": "The whole solar system can fit on one screen, so size is brought back through numbers: a landing that costs 10 energy might cost three times the fuel of one costing 5, not double. The values of resources playing together restore the sense of scale.",
+      "t": 393,
+      "quote": "the size becomes an important factor in how all the values of the resources play together to counteract the abstraction of the map",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "punishing mistakes",
+      "kind": "example",
+      "claim": "The Banished Vault expresses hostility by punishing player mistakes quickly and sharply, with knock-on effects across the player's whole state, a theme the team discovered and then leaned into.",
+      "detail": "Tringali notes hostility is not inherently positive and does not work for everyone. It emerged from other elements of the game; once recognised, the team leaned in with a gothic, harsh, austere aesthetic and sharp punishment of mistakes.",
+      "t": 437,
+      "quote": "the hostility is brought in in how the player's mistakes are punished which are very quickly and usually quite sharp",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "realistic math",
+      "kind": "principle",
+      "claim": "The Banished Vault uses near-realistic rocket-equation math under the hood so players can reason about why a destination twice as costly in energy needs far more fuel.",
+      "detail": "Based on the Tsiolkovsky rocket equation, the relationship between ship mass, fuel and energy lets players understand that a nearby planet needing twice the energy might need four times the fuel, impressing on them how far away everything is.",
+      "t": 502,
+      "quote": "we wanted the player to know that beneath the hood, right, there is an almost very realistic math going on",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "physical resources",
+      "kind": "technique",
+      "claim": "In The Banished Vault gathered resources physically stay on the planet where they were gathered, so moving them requires a ship, fuel, engine and navigator.",
+      "detail": "Unlike colony or city builders where resources vanish into an abstract pool or are ferried by agents, here logistics are explicit. Tringali says this imposition is where the game's hostility came from, and it spreads the player's goals apart, reinforcing the size theme.",
+      "t": 590,
+      "quote": "when you gather a resource on a planet it is on that planet. If you want to take it somewhere else, you need ship, fuel, engine, navigator",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "believability",
+      "kind": "principle",
+      "claim": "The Banished Vault's exploration is modelled on real space exploration: an unknown journey toward a relatively known goal, like knowing an oasis exists without knowing the way.",
+      "detail": "We know a lot about distant planets from spectrographic analysis, but reaching them is a long uncertain process and arrival differs from expectation. Tringali found this inversion of the usual unknown-destination exploration interesting to play with.",
+      "t": 718,
+      "quote": "it becomes an unknown journey with a relatively known goal",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "building placement",
+      "kind": "technique",
+      "claim": "Buildings in The Banished Vault cannot be moved or destroyed once built, making limited grid space a key resource the player must plan around.",
+      "detail": "Players need resources like iron, water and titanium and space to build structures that convert them into fuel or stasis. Because construction is permanent, players must work out where to build, on which planets, and how much space they really have.",
+      "t": 793,
+      "quote": "Building space is a very limited, you know, kind of resource that the player has because you can't move or destroy a building once it is constructed",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "known outcomes unknown costs",
+      "kind": "principle",
+      "claim": "The Banished Vault's exploration model is that the player knows what they will get but not at what cost: every resource location is shown, while hazards, grid layout and depth leave the cost uncertain.",
+      "detail": "On arrival the player sees all resources on the map, knows what they need and the exact fuel to reach anywhere. Unknowns are hazard results, the semi-randomised grid, mutually exclusive resource tiles (building on one precludes the other) and resource depth requiring excavators.",
+      "t": 1071,
+      "quote": "this creates a model that the exploration operates under which is the player knows what they will get but not at what cost",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "full information",
+      "kind": "example",
+      "claim": "The Banished Vault shows every resource on the map from the start, with no hidden or surprise resources.",
+      "detail": "Players can see exactly where everything is, know from the manual how much of each resource a building needs, and can calculate precisely how much fuel any trip costs. This is the known half of the exploration model.",
+      "t": 905,
+      "quote": "There is no secret or hidden resources, no surprise resources, everything is shown to you clearly on the map",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "mutually exclusive tiles",
+      "kind": "technique",
+      "claim": "The Banished Vault places resources on planet grids so that some are mutually exclusive, meaning the visible set of resources may resolve into only a subset on arrival.",
+      "detail": "Titanium and iron can sit where only one building fits, and since buildings cannot be moved or deleted, constructing one precludes the other. The grid itself is semi-randomised in size and fit.",
+      "t": 1033,
+      "quote": "while every potential resource is shown to the player on the map view, when you arrive at a planet it might actually resolve into only a subset of those",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "planning as exploration",
+      "kind": "principle",
+      "claim": "In The Banished Vault exploration is front-loaded planning: the player explores by choosing a route through chaotic but known information rather than by uncovering new information.",
+      "detail": "Players may spend 10 to 30 minutes on the map before making any move. The information is finite but so broad and chaotic it cannot be fully grasped, and this only works because the game tells players where their goals are.",
+      "t": 1249,
+      "quote": "The player explores by determining what route they want to take through this chaos",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "no single optimal path",
+      "kind": "principle",
+      "claim": "Tringali designs The Banished Vault to destabilise the player's search for an optimal route, ensuring there are always options, difficult routes or tradeoffs rather than one clear path.",
+      "detail": "Planning is the player searching for an optimal route through a multivariable problem. The designer's job is to make sure no single clear path to the goal exists.",
+      "t": 1157,
+      "quote": "I don't want there to be one clear path to their goal. I will always want there to be options or two difficult routes or tradeoffs",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "risk as resource",
+      "kind": "technique",
+      "claim": "In The Banished Vault the risk of unknown costs becomes a meta-resource players manage by bringing spare resources or extra exiles as buffers.",
+      "detail": "Players may carry extra resources for excavators they might need, or an additional exile in case a bad hazard roll costs a navigator their faith, which has knock-on effects. Risk becomes a broader category the player reasons about.",
+      "t": 1178,
+      "quote": "That risk almost becomes a sort of like meta resource that the player starts grappling",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden information",
+      "kind": "warning",
+      "claim": "Tringali argues that if The Banished Vault hid its resource locations, the game would become too hard and unfair, feeling like output randomness.",
+      "detail": "Given the time pressure and the physicality of resources, hiding goals would make the game feel unfair from the player's point of view, like output randomness even though it is not.",
+      "t": 1256,
+      "quote": "If the reverse were true about the game being hidden the game would be too hard",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "doubt and execution",
+      "kind": "principle",
+      "claim": "Tringali wants players' plans in The Banished Vault to be flawed, locating the truest uncertainty in the player's own doubt while planning and their mistakes while executing.",
+      "detail": "Planning is the player building a system to unravel the game, and he hopes it is a flawed one. The uncertainty comes from doubting whether every possibility was considered, and then from making a mistake when carrying out the plan.",
+      "t": 1292,
+      "quote": "the truest uncertainty and exploration is the player's doubt in thinking through every possibility to make that perfect plan to unravel the game",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "board game abstraction",
+      "kind": "example",
+      "claim": "The Banished Vault drew on space board games like High Frontier but cut planning time, since a digital player should travel between planets in minutes, not spend an hour planning.",
+      "detail": "Answering a Q&A question, Tringali said board games abstract exploration fascinatingly but carry different expectations about player time. In High Frontier a trip to Saturn might take an hour of real planning; for The Banished Vault a hop should take a couple of minutes.",
+      "t": 1472,
+      "quote": "For The Banished Vault we were like no, you should go from one planet to another in like",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "core prototype",
+      "kind": "history",
+      "claim": "The Banished Vault began as a prototype of the delta-v map and movement math, testing whether the fuel-efficiency puzzle was interesting before goals and theme were added.",
+      "detail": "Within weeks they had the math model and movement, then asked whether getting from one place to another using as little fuel as possible was interesting. Survival goals came after, and the gothic monastery theme came later.",
+      "t": 1581,
+      "quote": "is it interesting to figure out the kind of puzzle of get from one place to another using as little fuel as possible",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "tuning",
+      "kind": "history",
+      "claim": "The Banished Vault moved from deriving numbers from simulated planet physics to hand-tuned values, and late in development started players on the easiest difficulty after the team had played on the middle one.",
+      "detail": "Tringali initially planned to define each planet's physical characteristics and let numbers sprout from them, but gradually abandoned that. Tuning was mostly heavy testing, such as reducing resource gathering to free player brain space; the team even found the game hard and mentally taxing to play.",
+      "t": 1712,
+      "quote": "we played the game on the middle of the three difficulties, and then later on were like it is actually starting people on the easy version",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

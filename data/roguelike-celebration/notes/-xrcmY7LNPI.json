@@ -1,0 +1,86 @@
+{
+  "id": "-xrcmY7LNPI",
+  "title": "Chelsea Thompto - Spaces for Contemplation: Procedural Generation in Nonlinear Narrative in Art",
+  "speaker": "Chelsea Thompto",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=-xrcmY7LNPI",
+  "talk_type": "culture",
+  "summary": "New media artist Chelsea Thompto explains how she uses procedural generation and randomization to make 'spaces of contemplation' rather than linear narratives, letting her address her political and personal context as a trans woman without the work being reduced to a single message or consumed as trauma. She walks through Productive Bodies (a randomized layered video), a nodal non-linear book, The Fog (a three-act Three.js web piece rendered in ASCII with screen-reader-aware generated text, later turned into physical 'inverted fog lights'), and A Walk in the Dark (shuffled poems across shuffled spaces, inspired by tunnel books). She cites Vera Molnar, Sol LeWitt and roguelikes like ADOM and NetHack as influences. Design content is mostly about randomization as authorship and pacing of meaning rather than games.",
+  "games": [
+    "Ancient Domains of Mystery",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "generative art",
+      "kind": "principle",
+      "claim": "A small amount of randomization can be extremely powerful in a work; you do not need heavy random generation to create striking results.",
+      "detail": "Thompto credits fine artists Vera Molnar and Sol LeWitt, her first introductions to randomization and procedural generation, with teaching her this.",
+      "t": 154,
+      "quote": "a single drop of randomization can be extremely powerful in a work of art",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "non-linear narrative",
+      "kind": "principle",
+      "claim": "Procedural generation can create 'spaces of contemplation' with legible themes that resist a single linear narrative reading, which lets minoritized creators speak without their work being objectified or reduced to one message.",
+      "detail": "Thompto, a trans woman, creates systems populated with the texts, visual forms and feelings she wants viewers to confront, so the work has concrete themes but no simplistic message. She frames it as resisting the asymmetrical visibility that has harmed minoritized communities and avoiding 'trauma porn'.",
+      "t": 81,
+      "quote": "I create systems that resist linear narrative readings in favor of creating spaces of contemplation",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "designing relationships",
+      "kind": "technique",
+      "claim": "Productive Bodies guarantees which kinds of material a viewer sees but randomizes how they combine, so the artist designs relationships rather than a specific narrative.",
+      "detail": "The Processing-based video overlays footage of the Mississippi River, river maps and renderings of gender-affirming surgical techniques, posterized and tinted, drawing from over 50 media sources. A viewer always sees the river, a map and medical procedures, but what interacts with what is unpredictable.",
+      "t": 287,
+      "quote": "That's what I mean by a space of contemplation, a space where I am thinking about and designing relationships rather than a specific narrative.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "screen readers",
+      "kind": "technique",
+      "claim": "In The Fog, ARIA tags make screen readers skip the decorative generated symbol text and read only the legible text, extending procedural generation into accessibility.",
+      "detail": "Each refresh produces a new wall of fog text on the title card. Because the museum commission prioritized accessibility, Thompto used ARIA tagging so screen readers ignore the symbol characters.",
+      "t": 440,
+      "quote": "a screen reader would ignore all of the symbol text and only pull out um the physical the actual text that you can read",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii rendering",
+      "kind": "technique",
+      "claim": "Rendering Three.js 3D spaces live as ASCII characters makes the digital materiality of the space obvious and deliberately undercuts realistic immersion in favour of immersion in an idea.",
+      "detail": "Thompto says she does not want the myth of a perfect virtual world to take hold, so she tries to undercut verisimilitude and instead create immersion in a concept or set of relationships.",
+      "t": 499,
+      "quote": "trying to find ways to sort of undercut immersion in some way or um verisimilitude to reality in some way uh in favor of creating immersion of an idea",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authorship and randomness",
+      "kind": "technique",
+      "claim": "A Walk in the Dark balances authorship and randomness by fixing six authored six-line poems while randomly choosing the next poem and shuffling the spaces they are displayed in.",
+      "detail": "When one poem ends another is randomly chosen and the repeating spaces are shuffled and reordered. It is inspired by tunnel books, and Thompto is working on a physical procedurally generated tunnel book ordered by dice rolls.",
+      "t": 573,
+      "quote": "When one poem ends, the other is random another is randomly chosen, and the spaces are shuffled and reordered.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "meaning over time",
+      "kind": "principle",
+      "claim": "Procedural generation insists that audiences spend longer with a work, which Thompto sees as shared with roguelikes, where a work blossoms in the mind over repeated experience instead of being immediately clear.",
+      "detail": "She describes procedural generation as a way to flip the script on what we normally think of as narrative and connects this to what she loves about the roguelike genre.",
+      "t": 628,
+      "quote": "a work kind of blossoms and grows in one's mind over time and in over experiencing it",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

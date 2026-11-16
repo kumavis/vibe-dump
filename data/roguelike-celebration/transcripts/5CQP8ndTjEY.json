@@ -1,0 +1,2031 @@
+{
+ "id": "5CQP8ndTjEY",
+ "url": "https://www.youtube.com/watch?v=5CQP8ndTjEY",
+ "title": "Thomas Biskup - Experiences from crowdfunding ADOM",
+ "speaker": "Thomas Biskup",
+ "talk_title": "Experiences from crowdfunding ADOM",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1975,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Thomas Biskup talks about his experiences crowdfunding ADOMs, lessons learned, best practices and things to know before you do something potentially foolish.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [],
+ "caption_source": "whisper",
+ "caption_lang": "en",
+ "word_count": 6115,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.9,
+   "d": 19.46,
+   "text": "First of all, thanks for still being here that late in the day. I can promise for me it's much later because right now in Germany it's 1.30 in the morning and I'm still not out of jet lag so sorry if I'm a bit slow in certain points of the talk. It's quite hard staying awake and it's not due to the talks I found them really awesome so far."
+  },
+  {
+   "t": 21.0,
+   "d": 8.78,
+   "text": "So, what would I like to talk about? As the title says, I would like to talk a little bit about what we learned from trying to crowdfund ADOM."
+  },
+  {
+   "t": 31.04,
+   "d": 8.54,
+   "text": "I've subtitled it 1,960 days of learning because it was a very long journey and we basically learned every day something new."
+  },
+  {
+   "t": 40.02,
+   "d": 7.52,
+   "text": "I hope it will be somewhat helpful to people maybe also considering doing a crowdfunding campaign and trying to push their game in that way."
+  },
+  {
+   "t": 48.72,
+   "d": 6.42,
+   "text": "I basically have three parts in the talk. I will give you a very brief overview of what the campaign was, in case you don't know."
+  },
+  {
+   "t": 55.52,
+   "d": 4.32,
+   "text": "Then I talk a bit about statistics, sales, donations, all that."
+  },
+  {
+   "t": 60.18,
+   "d": 6.42,
+   "text": "And then I have a long list of lessons learned of things we have noted down in case we ever again do a crowdfunding campaign."
+  },
+  {
+   "t": 67.32,
+   "d": 2.04,
+   "text": "What we would do again and what we wouldn't do again."
+  },
+  {
+   "t": 71.68,
+   "d": 3.54,
+   "text": "Let's start. First of all, short campaign overview."
+  },
+  {
+   "t": 75.22,
+   "d": 8.24,
+   "text": "you. The ADOM crowdfunding campaign had the goal to resurrect ADOM development because"
+  },
+  {
+   "t": 83.46,
+   "d": 6.38,
+   "text": "in 2012 when we started thinking about it, ADOM was dormant for about 10 years and we"
+  },
+  {
+   "t": 89.84,
+   "d": 6.38,
+   "text": "said okay, should we pick up again coding ADOM or should we leave it behind us and a"
+  },
+  {
+   "t": 96.22,
+   "d": 6.1,
+   "text": "good thing in helping you to decide might be a crowdfunding campaign if there were enough"
+  },
+  {
+   "t": 102.32,
+   "d": 4.48,
+   "text": "people still seriously interested in ADOM, we should restart working on it."
+  },
+  {
+   "t": 107.12,
+   "d": 5.18,
+   "text": "If there aren't enough people, then okay, maybe it's too late and time has passed by."
+  },
+  {
+   "t": 112.56,
+   "d": 4.52,
+   "text": "So we decided to do the crowdfunding basically to judge interest in continued development"
+  },
+  {
+   "t": 117.08,
+   "d": 0.64,
+   "text": "on ADOM."
+  },
+  {
+   "t": 118.92,
+   "d": 4.56,
+   "text": "We went for Indiegogo because at that time Kickstarter wasn't available for people in"
+  },
+  {
+   "t": 123.48,
+   "d": 0.34,
+   "text": "Germany."
+  },
+  {
+   "t": 124.08,
+   "d": 3.7,
+   "text": "I would have preferred Kickstarter due to the much larger audience, but we had no choice."
+  },
+  {
+   "t": 127.78,
+   "d": 5.14,
+   "text": "so we went for Indiegogo and we decided to go for a 60-day campaign because we thought,"
+  },
+  {
+   "t": 133.1,
+   "d": 4.12,
+   "text": "okay 60 days take the maximum so that we have a maximum chance of collecting donations."
+  },
+  {
+   "t": 137.7,
+   "d": 7.12,
+   "text": "If that was a good decision or not I will come to later. And yeah we asked for 48 000 dollars"
+  },
+  {
+   "t": 144.82,
+   "d": 4.12,
+   "text": "because at that time we thought it might be a reasonable amount of money to get the things"
+  },
+  {
+   "t": 148.94,
+   "d": 6.62,
+   "text": "done we had planned. I'll also come back to the point if it was reasonable and how well that"
+  },
+  {
+   "t": 155.56,
+   "d": 5.1,
+   "text": "worked out and the end of the campaign was that we managed to raise more than"
+  },
+  {
+   "t": 160.66,
+   "d": 4.2,
+   "text": "$90,000 which was pretty amazing and gave us the push we needed to say okay"
+  },
+  {
+   "t": 164.86,
+   "d": 5.26,
+   "text": "let's start working on Atom once more with all the seriousness"
+  },
+  {
+   "t": 170.12,
+   "d": 4.32,
+   "text": "required so from our point of view it was a big success but as I said on the"
+  },
+  {
+   "t": 174.44,
+   "d": 5.86,
+   "text": "title screen it took us to 1960 days to finally complete our promises which is"
+  },
+  {
+   "t": 180.3,
+   "d": 5.66,
+   "text": "basically this weekend. I'll have some more words on that tomorrow morning in"
+  },
+  {
+   "t": 185.96,
+   "d": 6.58,
+   "text": "the first talk. So I hope to see you all again tomorrow morning at 10 a.m. for more details on that."
+  },
+  {
+   "t": 194.04,
+   "d": 5.4,
+   "text": "So that was how the campaign was run and what did we learn? First of all statistics."
+  },
+  {
+   "t": 203.44,
+   "d": 3.9,
+   "text": "That's one of the less interesting statistics. I just tried to see okay where did the relations"
+  },
+  {
+   "t": 207.34,
+   "d": 7.54,
+   "text": "come from because we couldn't influence it much. The basic message is okay United"
+  },
+  {
+   "t": 214.88,
+   "d": 4.2,
+   "text": "States are very important for ADOM. We have lots of donors now on Steam, lots of"
+  },
+  {
+   "t": 219.08,
+   "d": 4.12,
+   "text": "buyers who come from the United States. In the back of my mind I'm always"
+  },
+  {
+   "t": 223.84,
+   "d": 3.7,
+   "text": "asking myself would this be different if we were offering more languages with"
+  },
+  {
+   "t": 227.54,
+   "d": 4.46,
+   "text": "ADOM because it's a request we get pretty often but for various reasons we"
+  },
+  {
+   "t": 232.0,
+   "d": 3.26,
+   "text": "have decided no we can't do that with ADOM, it's not possible to do it with"
+  },
+  {
+   "t": 235.26,
+   "d": 5.38,
+   "text": "reasonable effort so we are just English and it's a little bit mirrored in those"
+  },
+  {
+   "t": 242.46,
+   "d": 4.86,
+   "text": "in the distribution of the countries because the first couple of countries the highest"
+  },
+  {
+   "t": 247.32,
+   "d": 5.14,
+   "text": "countries are mostly either English speaking or close to English speaking countries who are very"
+  },
+  {
+   "t": 252.46,
+   "d": 5.74,
+   "text": "accustomed to speaking English and then come our fans from East Europe of which we have quite a lot"
+  },
+  {
+   "t": 258.2,
+   "d": 5.58,
+   "text": "so Poland, Ukraine, Russia is also always very strong and basically that I would say"
+  },
+  {
+   "t": 264.5,
+   "d": 5.36,
+   "text": "the expected result from what I knew before from how our fan community is distributed"
+  },
+  {
+   "t": 269.86,
+   "d": 4.44,
+   "text": "across the globe so it was not that much of a surprise but it was very interesting to"
+  },
+  {
+   "t": 274.3,
+   "d": 3.98,
+   "text": "see that United States obviously were very important with almost one third of the donations"
+  },
+  {
+   "t": 278.28,
+   "d": 6.5,
+   "text": "we got and the second largest always was those 42 other countries that donated."
+  },
+  {
+   "t": 284.78,
+   "d": 8.88,
+   "text": "it. Yes, one interesting thing that we thought about a lot before starting the campaign was"
+  },
+  {
+   "t": 293.66,
+   "d": 4.94,
+   "text": "how do we raise awareness and how do we manage to get recommendations for our campaign, how"
+  },
+  {
+   "t": 298.6,
+   "d": 5.06,
+   "text": "do we win donors and what can we do for that. And I read before and a lot about how important"
+  },
+  {
+   "t": 303.66,
+   "d": 6.2,
+   "text": "it is to maybe be featured on the crowdfunding side, get whatever awareness and we tried"
+  },
+  {
+   "t": 309.86,
+   "d": 5.62,
+   "text": "various activities to achieve that which mostly did not work out and the interesting thing is"
+  },
+  {
+   "t": 315.48,
+   "d": 5.84,
+   "text": "this is the distribution of let's say single sources that brought in money as far as you can"
+  },
+  {
+   "t": 321.32,
+   "d": 6.46,
+   "text": "analyze it by the statistics you get after such a campaign and this top score is me so what you"
+  },
+  {
+   "t": 327.78,
+   "d": 6.92,
+   "text": "basically can learn from that is if you don't manage to acquire donors through your own visibility"
+  },
+  {
+   "t": 334.7,
+   "d": 4.06,
+   "text": "and your activities you probably won't get them that's at least what we learned because"
+  },
+  {
+   "t": 338.76,
+   "d": 2.9,
+   "text": "because I think the second one also is a human being,"
+  },
+  {
+   "t": 341.82,
+   "d": 1.0,
+   "text": "the third one I think also,"
+  },
+  {
+   "t": 343.0,
+   "d": 3.78,
+   "text": "and somewhere on those very low bars comes Indiegogo"
+  },
+  {
+   "t": 346.78,
+   "d": 3.34,
+   "text": "and our front page featuring, so it was not worth anything."
+  },
+  {
+   "t": 351.1,
+   "d": 3.34,
+   "text": "I think that's something you easily overestimate,"
+  },
+  {
+   "t": 354.54,
+   "d": 1.5,
+   "text": "where you think, wow, we need to get the front page"
+  },
+  {
+   "t": 356.04,
+   "d": 0.66,
+   "text": "and everything is good."
+  },
+  {
+   "t": 356.9,
+   "d": 1.62,
+   "text": "I think it's not true with crowdfunding"
+  },
+  {
+   "t": 358.52,
+   "d": 0.74,
+   "text": "from what I've learned."
+  },
+  {
+   "t": 359.44,
+   "d": 2.46,
+   "text": "It's only true for those very rare crowdfundings"
+  },
+  {
+   "t": 361.9,
+   "d": 2.24,
+   "text": "that raise millions, but that's for other reasons"
+  },
+  {
+   "t": 364.14,
+   "d": 1.54,
+   "text": "and not because they are featured on the front page."
+  },
+  {
+   "t": 368.06,
+   "d": 4.56,
+   "text": "Then, if you look at lots of numbers, let me first of all explain this."
+  },
+  {
+   "t": 373.36,
+   "d": 5.18,
+   "text": "The yellow mountain is the total we raced over the 60 days of the campaign."
+  },
+  {
+   "t": 379.56,
+   "d": 3.64,
+   "text": "The red bars are the individual donations per day."
+  },
+  {
+   "t": 384.14,
+   "d": 7.92,
+   "text": "So if you look at this, you can see that we had a pretty good start."
+  },
+  {
+   "t": 392.06,
+   "d": 4.4,
+   "text": "Once you announce the campaign, it's public, donations on the very..."
+  },
+  {
+   "t": 397.44,
+   "d": 0.52,
+   "text": "Oops..."
+  },
+  {
+   "t": 397.96,
+   "d": 6.0,
+   "text": "On the beginning were pretty good, more than $7,000 in the first 24 hours."
+  },
+  {
+   "t": 404.22,
+   "d": 3.6,
+   "text": "And after three days we already had something like 25% of our goal."
+  },
+  {
+   "t": 407.96,
+   "d": 1.98,
+   "text": "And we thought, wow, this is working very well."
+  },
+  {
+   "t": 411.14,
+   "d": 6.22,
+   "text": "But then things went downwards and they didn't really ever again come up for a long while."
+  },
+  {
+   "t": 417.36,
+   "d": 6.34,
+   "text": "So we tried various activities to get more attention. We got features featured on the front"
+  },
+  {
+   "t": 423.7,
+   "d": 7.36,
+   "text": "page of Indiegogo and if you look at the difference in the bar, yeah it's a very small peak then it's"
+  },
+  {
+   "t": 431.06,
+   "d": 4.98,
+   "text": "gone again so front page didn't account for anything. It was not important so then we started"
+  },
+  {
+   "t": 436.04,
+   "d": 7.86,
+   "text": "thinking about activities we could do to raise interest and get people excited and we started"
+  },
+  {
+   "t": 443.9,
+   "d": 3.76,
+   "text": "something we called power pledge drives where the idea was if a certain amount of money was"
+  },
+  {
+   "t": 447.66,
+   "d": 5.34,
+   "text": "donated in a certain amount of time we would add predefined content something like plus one"
+  },
+  {
+   "t": 453.0,
+   "d": 6.7,
+   "text": "corruption for every 300 dollar donated within five days for example you can see the first one"
+  },
+  {
+   "t": 459.7,
+   "d": 5.54,
+   "text": "yes it had a little effect there's again a very tiny spike but it remains a very tiny spike for"
+  },
+  {
+   "t": 465.24,
+   "d": 8.0,
+   "text": "a very brief amount of time and then afterwards for a long time yeah there is not very much to put"
+  },
+  {
+   "t": 473.24,
+   "d": 4.82,
+   "text": "carefully and I can tell you from an emotional point it's very bad for your"
+  },
+  {
+   "t": 478.06,
+   "d": 3.76,
+   "text": "campaign when you have a feeling in the first couple of days wow 25% gained"
+  },
+  {
+   "t": 481.82,
+   "d": 5.62,
+   "text": "within three days we have 57 more to go and suddenly there's nothing almost"
+  },
+  {
+   "t": 487.44,
+   "d": 4.82,
+   "text": "nothing like a hundred bucks a day or so and you see wow at that speed we are it"
+  },
+  {
+   "t": 492.26,
+   "d": 5.0,
+   "text": "will be Christmas before we maybe come over manage the funding that's not very"
+  },
+  {
+   "t": 497.26,
+   "d": 7.48,
+   "text": "good so we tried to repeat power pledge drivers. Second one also did not work very well because"
+  },
+  {
+   "t": 504.74,
+   "d": 3.66,
+   "text": "it went a couple of days longer. There was one small spike before the ending because"
+  },
+  {
+   "t": 508.4,
+   "d": 5.5,
+   "text": "people then finally seem to have decided okay before it's over I'll chip in now to get some"
+  },
+  {
+   "t": 513.9,
+   "d": 3.5,
+   "text": "more content than originally expected but again it was a tiny spike and not really worth"
+  },
+  {
+   "t": 517.4,
+   "d": 6.94,
+   "text": "the effort. And then we tried something different. We offered more physical stuff with the idea"
+  },
+  {
+   "t": 524.34,
+   "d": 4.4,
+   "text": "okay, maybe that could be interesting to pick up things that are limited, never again available."
+  },
+  {
+   "t": 530.34,
+   "d": 3.34,
+   "text": "Again, there was a very tiny spike on the day we announced it and afterwards it just"
+  },
+  {
+   "t": 533.68,
+   "d": 6.12,
+   "text": "trickled into nothingness. So it also was not very interesting. And we retried that with something"
+  },
+  {
+   "t": 539.8,
+   "d": 4.26,
+   "text": "cheaper because the boxes were very expensive. So we thought, okay, let's try a RPG book that's"
+  },
+  {
+   "t": 544.06,
+   "d": 6.14,
+   "text": "cheaper and maybe has a smaller hurdle to get into it. Again, the effect was not really there,"
+  },
+  {
+   "t": 550.2,
+   "d": 6.68,
+   "text": "to put it carefully. Then we tried one final power pledge drive with different things where"
+  },
+  {
+   "t": 556.88,
+   "d": 5.06,
+   "text": "we thought maybe that's more interesting. Again, not much happened. And then there came"
+  },
+  {
+   "t": 561.94,
+   "d": 6.08,
+   "text": "a very interesting point. That's shortly before the end, seven or eight days before the end"
+  },
+  {
+   "t": 568.02,
+   "d": 6.36,
+   "text": "of the campaign. We finally, after a very tiresome walk, managed to get funded. And"
+  },
+  {
+   "t": 574.38,
+   "d": 4.62,
+   "text": "that's when things changed. And in retrospective, I would say, wow, we have made a big mistake."
+  },
+  {
+   "t": 579.0,
+   "d": 1.64,
+   "text": "I'll come back later back to that."
+  },
+  {
+   "t": 581.46,
+   "d": 5.08,
+   "text": "Because after we were funded, you can see briefly before funding, we have a very high"
+  },
+  {
+   "t": 586.54,
+   "d": 5.24,
+   "text": "spike because suddenly people, wow, let's get, suddenly seem to have decided let's move"
+  },
+  {
+   "t": 591.78,
+   "d": 2.2,
+   "text": "over the funding point and now let's donate."
+  },
+  {
+   "t": 594.54,
+   "d": 2.92,
+   "text": "And suddenly we got within one day almost as much money as on the first day."
+  },
+  {
+   "t": 597.82,
+   "d": 5.74,
+   "text": "And afterwards we already were at a much higher level than during the 40 days before that,"
+  },
+  {
+   "t": 603.64,
+   "d": 1.02,
+   "text": "for each and every day."
+  },
+  {
+   "t": 604.66,
+   "d": 24.06,
+   "text": "so after funding there was more excitement because now there were additional patch levels and now you knew you were going to get the game and that really changed everything and it became kind of, yeah, okay, if you look at it in summary you see we had a very strong start, then what I call a value of desperation because it was nothing but desperation."
+  },
+  {
+   "t": 629.92,
+   "d": 5.3,
+   "text": "funding was very important and then it got crazy because on those last 24 hours"
+  },
+  {
+   "t": 636.14,
+   "d": 7.16,
+   "text": "and I think I slept for two hours in those 24 hours we managed to receive more money than on"
+  },
+  {
+   "t": 643.3,
+   "d": 5.26,
+   "text": "any other consecutive seven-day period during the whole campaign whatever period you take"
+  },
+  {
+   "t": 648.56,
+   "d": 7.5,
+   "text": "this last 24 hours brought in more than I think 22, 23,000 dollars once more and it was really"
+  },
+  {
+   "t": 656.06,
+   "d": 5.66,
+   "text": "like crazy because suddenly things started like yeah we were at I don't know 68 thousand dollars"
+  },
+  {
+   "t": 661.72,
+   "d": 6.34,
+   "text": "and suddenly some guy appeared and said emailed me and told me okay if the community gets this"
+  },
+  {
+   "t": 668.06,
+   "d": 5.76,
+   "text": "over 70,000 within the next hour I will ship in five thousand dollars I was like are you serious"
+  },
+  {
+   "t": 673.82,
+   "d": 6.12,
+   "text": "he said yeah absolutely and then I asked okay may I post about this he said yeah go on go on"
+  },
+  {
+   "t": 679.94,
+   "d": 5.86,
+   "text": "and then I did and yeah within like 30 minutes we were over 70,000 while this"
+  },
+  {
+   "t": 685.8,
+   "d": 4.08,
+   "text": "happened another guy contacted me and said okay if John is giving five"
+  },
+  {
+   "t": 689.88,
+   "d": 3.62,
+   "text": "thousand dollars I wouldn't add another five thousand dollars and that was like"
+  },
+  {
+   "t": 693.5,
+   "d": 4.08,
+   "text": "yeah what I meant by last 24 hours really were crazy and crazy things"
+  },
+  {
+   "t": 697.58,
+   "d": 6.08,
+   "text": "happened and they both did it and so we got this quite excessive spike at the"
+  },
+  {
+   "t": 703.66,
+   "d": 7.2,
+   "text": "end which was kind of fun. In retrospective I would say I'm not really"
+  },
+  {
+   "t": 710.86,
+   "d": 3.72,
+   "text": "sure if a long campaign helps because most of the time nothing is happening"
+  },
+  {
+   "t": 714.58,
+   "d": 3.46,
+   "text": "and it's not good for your psych to wait all the time and see that nothing is"
+  },
+  {
+   "t": 718.04,
+   "d": 3.98,
+   "text": "happening. I'm pretty sure that shorter campaigns also can work very very well"
+  },
+  {
+   "t": 722.62,
+   "d": 3.66,
+   "text": "and I will come later to that but I also think this funding point is a very"
+  },
+  {
+   "t": 726.28,
+   "d": 3.52,
+   "text": "important part of your crowdfunding strategy and if it's too far away you"
+  },
+  {
+   "t": 729.8,
+   "d": 5.28,
+   "text": "see that with many crowdfunding campaigns who ask a lot of money to get funded at all,"
+  },
+  {
+   "t": 735.32,
+   "d": 3.7,
+   "text": "you just don't get there. But if you manage to get funded early and then have interesting"
+  },
+  {
+   "t": 739.02,
+   "d": 3.64,
+   "text": "stretch levels and interesting progression, things can totally change. And that's something"
+  },
+  {
+   "t": 743.16,
+   "d": 3.52,
+   "text": "that we hadn't seen when we planned that. We thought, okay, let's take a realistic budget,"
+  },
+  {
+   "t": 746.92,
+   "d": 5.78,
+   "text": "let's be straightforward and honest and try to demand the minimum we need and stick with"
+  },
+  {
+   "t": 752.7,
+   "d": 3.74,
+   "text": "that. And I think from a strategy point, it was not very smart, but okay."
+  },
+  {
+   "t": 758.74,
+   "d": 3.74,
+   "text": "So, lessons learned, very many lessons learned during that time."
+  },
+  {
+   "t": 764.12,
+   "d": 5.92,
+   "text": "First of all, one thing that I think many people underestimate is build your community"
+  },
+  {
+   "t": 770.04,
+   "d": 0.54,
+   "text": "beforehand."
+  },
+  {
+   "t": 770.94,
+   "d": 4.56,
+   "text": "Of course, if you don't have a community, you probably will have nothing but a valley"
+  },
+  {
+   "t": 775.5,
+   "d": 4.08,
+   "text": "of desperation because communities usually don't get built while you are crowdfunding."
+  },
+  {
+   "t": 780.42,
+   "d": 5.18,
+   "text": "That's those lottery-like crowdfunding campaigns that you read about once in a while that raise"
+  },
+  {
+   "t": 785.6,
+   "d": 4.18,
+   "text": "millions but they do it usually because they're really a brilliant idea that's"
+  },
+  {
+   "t": 789.78,
+   "d": 4.1,
+   "text": "like lottery that's usually not going to happen and marketing is the most"
+  },
+  {
+   "t": 793.88,
+   "d": 4.48,
+   "text": "difficult and most problematic thing of the whole thing getting visibility so if"
+  },
+  {
+   "t": 798.36,
+   "d": 4.4,
+   "text": "you don't prepare for that and don't have a community and some means to raise"
+  },
+  {
+   "t": 802.76,
+   "d": 4.04,
+   "text": "visibility in a guaranteed way you probably won't get much money it won't"
+  },
+  {
+   "t": 806.8,
+   "d": 5.2,
+   "text": "change your let's say goals and your achieving aspirations as a developer so"
+  },
+  {
+   "t": 812.0,
+   "d": 4.48,
+   "text": "So, ADOM in that respect was somewhat blessed because we had this long history and enough"
+  },
+  {
+   "t": 816.48,
+   "d": 3.64,
+   "text": "community remaining despite the long time of hibernation."
+  },
+  {
+   "t": 820.38,
+   "d": 3.32,
+   "text": "So that worked quite well, but I think that's something you have to keep in mind."
+  },
+  {
+   "t": 823.98,
+   "d": 4.3,
+   "text": "If you don't know if you have a community, you probably shouldn't start crowdfunding"
+  },
+  {
+   "t": 828.28,
+   "d": 1.88,
+   "text": "because it won't change anything."
+  },
+  {
+   "t": 832.5,
+   "d": 1.8,
+   "text": "Yeah, then some technical stuff."
+  },
+  {
+   "t": 834.62,
+   "d": 1.68,
+   "text": "We have learned, yes, videos is everything."
+  },
+  {
+   "t": 836.56,
+   "d": 1.56,
+   "text": "You need to have an awesome video."
+  },
+  {
+   "t": 838.12,
+   "d": 5.62,
+   "text": "it's more important than anything so try to make a very short brief video that is as brilliant as"
+  },
+  {
+   "t": 843.74,
+   "d": 5.7,
+   "text": "you can I even would today recommend invest money and that if you can't do it yourself it's better"
+  },
+  {
+   "t": 849.44,
+   "d": 3.56,
+   "text": "to take a thousand or two thousand dollars to get a videographer to do a really awesome video than"
+  },
+  {
+   "t": 853.0,
+   "d": 5.62,
+   "text": "having a shitty video and then yeah it will fail people won't be interested in your campaign so"
+  },
+  {
+   "t": 858.62,
+   "d": 5.0,
+   "text": "that's one of the I think one of the very rare things was really important to maybe even invest"
+  },
+  {
+   "t": 863.62,
+   "d": 4.72,
+   "text": "money beforehand if you can do that. Or find people who are willing to do this out of,"
+  },
+  {
+   "t": 868.34,
+   "d": 4.92,
+   "text": "let's say, community sense, enthusiasm for your game. Make the video as awesome as possible."
+  },
+  {
+   "t": 873.46,
+   "d": 3.78,
+   "text": "That's really, really important. Make it short. No ten minute videos. Nobody is going to listen"
+  },
+  {
+   "t": 877.24,
+   "d": 5.32,
+   "text": "to that. Make it 90 seconds and make it exciting. If you have the most awesome video... Oh,"
+  },
+  {
+   "t": 883.06,
+   "d": 5.14,
+   "text": "the order is... Okay. Today I would say use Kickstarter if you can. Not Indiegogo, simply"
+  },
+  {
+   "t": 888.2,
+   "d": 5.92,
+   "text": "because of visibility. Kickstarter has a lot more people going to it and if every 1,000th"
+  },
+  {
+   "t": 894.12,
+   "d": 5.62,
+   "text": "visitor is interested in your game, you want to have as many as possible of them and sorry Indiegogo"
+  },
+  {
+   "t": 899.74,
+   "d": 5.66,
+   "text": "but Kickstarter is far ahead so I wouldn't go to Indiegogo personally anymore for another reason"
+  },
+  {
+   "t": 905.4,
+   "d": 6.02,
+   "text": "also that comes later. So use the platform that has the most visibility for you at least as a"
+  },
+  {
+   "t": 911.42,
+   "d": 7.28,
+   "text": "potential. That was the one I was expecting. If you have an awesome video, the next thing"
+  },
+  {
+   "t": 918.7,
+   "d": 3.76,
+   "text": "is to have awesome images, which can be kind of hard if you're doing an ASCII roguelike,"
+  },
+  {
+   "t": 922.58,
+   "d": 6.14,
+   "text": "but okay. ASCII art can be very, very amazing. I mean, you just have to look at Cockmine,"
+  },
+  {
+   "t": 928.8,
+   "d": 6.16,
+   "text": "for example, and what Josh has done. It's really awesome, although it's ASCII. So try"
+  },
+  {
+   "t": 934.96,
+   "d": 4.08,
+   "text": "to have a very visually appealing presentation because people first probably will look at"
+  },
+  {
+   "t": 939.04,
+   "d": 3.68,
+   "text": "the video then they will just get a general impression how professionally does this look"
+  },
+  {
+   "t": 942.72,
+   "d": 7.46,
+   "text": "is it somehow amazing to me and then you already have I would say two-thirds of a win and then the"
+  },
+  {
+   "t": 950.18,
+   "d": 7.5,
+   "text": "third part is okay now take care of your texts because that's something we also learned because"
+  },
+  {
+   "t": 957.68,
+   "d": 5.0,
+   "text": "I'm German my English is so-so I would say and we try to prepare the texts ourselves and I thought"
+  },
+  {
+   "t": 962.68,
+   "d": 3.92,
+   "text": "they were good and then I luckily got some feedback from the community from guys who were"
+  },
+  {
+   "t": 966.6,
+   "d": 6.34,
+   "text": "really good at writing text and they basically tore apart my text, threw it away and rewrote"
+  },
+  {
+   "t": 972.94,
+   "d": 3.38,
+   "text": "it completely and that was the best thing that could have happened to us because afterwards"
+  },
+  {
+   "t": 976.32,
+   "d": 4.9,
+   "text": "it read like a professional text. I think you can see this in other crowdfunding campaigns"
+  },
+  {
+   "t": 981.22,
+   "d": 4.6,
+   "text": "where maybe there are some decent images and an okay video but then if you start reading"
+  },
+  {
+   "t": 985.82,
+   "d": 4.74,
+   "text": "the text and it's like wow, one grammar mistake per sentence and he doesn't know how to spell,"
+  },
+  {
+   "t": 990.56,
+   "d": 7.28,
+   "text": "most people don't want to trust money to such, let's say, targets. So the third thing really"
+  },
+  {
+   "t": 997.84,
+   "d": 5.28,
+   "text": "is work on the text and make it great and have someone write or proofread it who understands"
+  },
+  {
+   "t": 1003.12,
+   "d": 7.06,
+   "text": "how to do great text. That's also very important. Yeah, then we have this campaign goal topic."
+  },
+  {
+   "t": 1010.42,
+   "d": 6.54,
+   "text": "I think we made a mistake by going to $48,000 and setting it so high because our idea at"
+  },
+  {
+   "t": 1016.96,
+   "d": 5.12,
+   "text": "that point was okay we have like I don't know ten things we want to do if we"
+  },
+  {
+   "t": 1022.08,
+   "d": 4.0,
+   "text": "restart working on atom so we want to have the money for all of that I think"
+  },
+  {
+   "t": 1026.08,
+   "d": 3.52,
+   "text": "it would have been much smarter to pick one or two of the most interesting"
+  },
+  {
+   "t": 1029.6,
+   "d": 3.64,
+   "text": "things say okay we want to have a minimum amount for that and then have a series"
+  },
+  {
+   "t": 1033.24,
+   "d": 3.18,
+   "text": "of stretch goals to add the other things and that's something we really botched"
+  },
+  {
+   "t": 1036.42,
+   "d": 5.0,
+   "text": "because 52 of the six let's say 50 of the 60 days were basically lost to"
+  },
+  {
+   "t": 1041.42,
+   "d": 4.34,
+   "text": "nothing because nothing happened and if we would have achieved funding goal"
+  },
+  {
+   "t": 1045.76,
+   "d": 4.72,
+   "text": "maybe like on day five or day ten, it could have been a very very different story probably."
+  },
+  {
+   "t": 1051.4,
+   "d": 8.06,
+   "text": "So try to take the minimum that is viable for what you want to achieve. Don't be too optimistic"
+  },
+  {
+   "t": 1060.0,
+   "d": 4.24,
+   "text": "because there are too many crowdfunding stories, especially in the software area where people"
+  },
+  {
+   "t": 1064.24,
+   "d": 4.06,
+   "text": "promise all kinds of things and afterwards don't deliver. I can still remember getting a lot of"
+  },
+  {
+   "t": 1068.3,
+   "d": 5.58,
+   "text": "flack at that time for wanting 48,000 dollars. Lots of people said hey you are stupid, you are"
+  },
+  {
+   "t": 1073.88,
+   "d": 5.22,
+   "text": "crazy, you are greedy. Why do you want so much money for this? And there are various other"
+  },
+  {
+   "t": 1079.56,
+   "d": 4.74,
+   "text": "Kickstarters who want much less money for much more features. And I was like, yeah, I'm curious"
+  },
+  {
+   "t": 1084.3,
+   "d": 3.72,
+   "text": "if they are going to deliver. And I think none of them delivered at that time because they all"
+  },
+  {
+   "t": 1088.02,
+   "d": 4.08,
+   "text": "learned afterwards you need some money to achieve something if you want to do it seriously. And"
+  },
+  {
+   "t": 1092.6,
+   "d": 4.68,
+   "text": "so that's a precarious balance, I would say. And it's an important balance. And well, I think you"
+  },
+  {
+   "t": 1097.28,
+   "d": 4.16,
+   "text": "can fail once with a crowdfunding campaign, but not a second time. So make this a very important"
+  },
+  {
+   "t": 1101.44,
+   "d": 7.14,
+   "text": "decision and think about it for a long while. Yeah, that's something I already said. It"
+  },
+  {
+   "t": 1108.58,
+   "d": 3.42,
+   "text": "should be barely enough to succeed in my opinion, then it should have interesting stretch goals"
+  },
+  {
+   "t": 1112.0,
+   "d": 7.42,
+   "text": "to proceed from there. One thing that was a surprise to many donors in our campaign"
+  },
+  {
+   "t": 1119.42,
+   "d": 4.82,
+   "text": "actually was that there are lots of extra costs when you raise money with crowdfunding."
+  },
+  {
+   "t": 1124.7,
+   "d": 3.88,
+   "text": "For example, I got several emails afterwards from people that told me, what, you are going"
+  },
+  {
+   "t": 1128.58,
+   "d": 5.42,
+   "text": "to pay taxes? I didn't give you my money to pay taxes for you. But yeah, in most countries"
+  },
+  {
+   "t": 1134.0,
+   "d": 5.54,
+   "text": "of the world there exists a concept like taxes and at least the German tax offices are very,"
+  },
+  {
+   "t": 1139.56,
+   "d": 8.34,
+   "text": "very, let's say, precise in their procedures. So yeah, in some countries you pay 40 to 50%"
+  },
+  {
+   "t": 1147.9,
+   "d": 3.46,
+   "text": "in taxes and if you forget to include that or don't have costs to charge against that,"
+  },
+  {
+   "t": 1151.52,
+   "d": 4.24,
+   "text": "then it can become an interesting issue with your campaign because suddenly you run out"
+  },
+  {
+   "t": 1155.76,
+   "d": 4.34,
+   "text": "of money without having done anything for it and so that's something to check beforehand and to see"
+  },
+  {
+   "t": 1160.1,
+   "d": 3.58,
+   "text": "how for example our problem was we did the crowdfunding campaign at the end of the year"
+  },
+  {
+   "t": 1163.68,
+   "d": 6.64,
+   "text": "end of the year's taxation time and naturally because we were finished two months before the"
+  },
+  {
+   "t": 1170.32,
+   "d": 4.68,
+   "text": "year ended we had not much time to create costs and suddenly the tax office said hey wow so much"
+  },
+  {
+   "t": 1175.0,
+   "d": 5.34,
+   "text": "money okay we want lots of taxes for that because you don't have any tax costs to to calculate"
+  },
+  {
+   "t": 1180.34,
+   "d": 5.28,
+   "text": "against that. We got that back later but it was a tense moment because we had quite some"
+  },
+  {
+   "t": 1185.62,
+   "d": 4.56,
+   "text": "argumentation about that. So timing also can be important. So think about taxes beforehand"
+  },
+  {
+   "t": 1190.18,
+   "d": 4.64,
+   "text": "and think about all the other things. The platform gets a small share, something like 5% to 10%"
+  },
+  {
+   "t": 1194.82,
+   "d": 5.1,
+   "text": "maybe. Think about if you do physical things, printing costs, shipping costs, you might have"
+  },
+  {
+   "t": 1199.92,
+   "d": 4.6,
+   "text": "legal costs depending on what you are doing. All that costs a lot of money and if you forget to"
+  },
+  {
+   "t": 1204.52,
+   "d": 4.78,
+   "text": "make a complete list of that you very likely will run out of whatever you have gained before you"
+  },
+  {
+   "t": 1209.3,
+   "d": 5.3,
+   "text": "actually can work on what you want to do. And I can't repeat it often enough,"
+  },
+  {
+   "t": 1214.72,
+   "d": 4.56,
+   "text": "remember taxes, that's really important. It's sadly a really important fact of life."
+  },
+  {
+   "t": 1221.38,
+   "d": 3.8,
+   "text": "Legal costs is another one of those because it might not apply to many"
+  },
+  {
+   "t": 1226.16,
+   "d": 4.56,
+   "text": "situations, but if you need contracts for something or maybe licenses or maybe a"
+  },
+  {
+   "t": 1230.72,
+   "d": 5.24,
+   "text": "brand name or whatever, well at least in Germany a typical lawyer takes something"
+  },
+  {
+   "t": 1235.96,
+   "d": 7.06,
+   "text": "like 1,800 to 2,400 euros per day for what he wants to do. It's a rare time when one"
+  },
+  {
+   "t": 1243.02,
+   "d": 4.04,
+   "text": "contract is done in a day. You should have an idea beforehand what you are trying to"
+  },
+  {
+   "t": 1247.06,
+   "d": 3.92,
+   "text": "do. Maybe you should talk to lawyers beforehand to get an estimate of the costs and all that."
+  },
+  {
+   "t": 1251.44,
+   "d": 4.86,
+   "text": "If you fail to do that, it can be a very nasty surprise again. I know as an enthusiastic"
+  },
+  {
+   "t": 1256.3,
+   "d": 4.74,
+   "text": "game programmer you don't like to think about these things, but it's really critical here"
+  },
+  {
+   "t": 1261.04,
+   "d": 0.6,
+   "text": "and really important."
+  },
+  {
+   "t": 1264.16,
+   "d": 4.98,
+   "text": "Yeah, then what was kind of surprising for me because we tried to prepare very well for"
+  },
+  {
+   "t": 1269.14,
+   "d": 4.56,
+   "text": "the campaign was that we had to spend an amazing amount of time during the campaign on messaging"
+  },
+  {
+   "t": 1273.7,
+   "d": 1.8,
+   "text": "to the community and talking to people."
+  },
+  {
+   "t": 1275.88,
+   "d": 4.02,
+   "text": "I really spent each and every day of those 60 days of the campaign, about three to five"
+  },
+  {
+   "t": 1279.9,
+   "d": 5.62,
+   "text": "hours per day, just working on communication, social channels, blogs, forums, whatever,"
+  },
+  {
+   "t": 1286.28,
+   "d": 3.72,
+   "text": "sending out the message to mailing lists and stuff, just trying to raise awareness."
+  },
+  {
+   "t": 1290.0,
+   "d": 3.42,
+   "text": "and I totally underestimated that because during the time I had my normal work days,"
+  },
+  {
+   "t": 1293.98,
+   "d": 2.82,
+   "text": "so 8 to 10 hours of work, a couple of hours of family life,"
+  },
+  {
+   "t": 1296.92,
+   "d": 2.46,
+   "text": "and then extra 3 to 5 hours of managing the campaign."
+  },
+  {
+   "t": 1299.68,
+   "d": 2.14,
+   "text": "And that's okay for a week, it's okay for two weeks,"
+  },
+  {
+   "t": 1301.94,
+   "d": 4.44,
+   "text": "but slowly after the 30th, 40th day it starts to get really tedious"
+  },
+  {
+   "t": 1307.16,
+   "d": 1.94,
+   "text": "and can take its toll on you."
+  },
+  {
+   "t": 1309.3,
+   "d": 4.42,
+   "text": "So prepare that very well beforehand to know how you are going to communicate,"
+  },
+  {
+   "t": 1314.08,
+   "d": 1.96,
+   "text": "to which channels you are going to communicate,"
+  },
+  {
+   "t": 1316.48,
+   "d": 1.52,
+   "text": "try to prepare messages, all that stuff."
+  },
+  {
+   "t": 1318.0,
+   "d": 2.48,
+   "text": "It takes a lot of time if you have not prepared for that."
+  },
+  {
+   "t": 1323.56,
+   "d": 3.66,
+   "text": "Then also you have to keep in mind that you need to get the message out constantly."
+  },
+  {
+   "t": 1329.06,
+   "d": 4.56,
+   "text": "There was a statistic from Indiegogo during preparation where they said you usually need"
+  },
+  {
+   "t": 1333.62,
+   "d": 2.66,
+   "text": "seven contacts per person to get that person to donate."
+  },
+  {
+   "t": 1336.96,
+   "d": 3.3,
+   "text": "From my feeling it's about right because I remember talking to many people again and"
+  },
+  {
+   "t": 1340.26,
+   "d": 3.66,
+   "text": "again sending out the message again and again and you get responses like, awesome your campaign,"
+  },
+  {
+   "t": 1343.92,
+   "d": 7.86,
+   "text": "I will donate at the weekend next week when the money comes in on it takes quite a while before they actually do it and"
+  },
+  {
+   "t": 1352.3,
+   "d": 6.64,
+   "text": "Depending on the size of your community that's naturally then very important to be persistent and remember remind them and at that time"
+  },
+  {
+   "t": 1358.94,
+   "d": 4.66,
+   "text": "We try to be to be quite let's say active on our blog on Facebook and stuff"
+  },
+  {
+   "t": 1363.6,
+   "d": 2.02,
+   "text": "And I really was thinking like okay"
+  },
+  {
+   "t": 1365.62,
+   "d": 5.36,
+   "text": "I'm posting almost every day about this everyone by now should know about the campaign and even on the 50th or"
+  },
+  {
+   "t": 1371.68,
+   "d": 4.54,
+   "text": "55th day, there were still people that said, wow, I'm checking your Facebook timeline every"
+  },
+  {
+   "t": 1376.22,
+   "d": 4.86,
+   "text": "day and didn't know about the campaign. Time to enter it. And I thought like, wow, there"
+  },
+  {
+   "t": 1381.08,
+   "d": 5.46,
+   "text": "were 50 postings during the last 50 days and you didn't notice. Amazing. Thanks Facebook"
+  },
+  {
+   "t": 1386.54,
+   "d": 4.82,
+   "text": "algorithm. I don't know. But it was also quite surprising for me how persistent you have to"
+  },
+  {
+   "t": 1391.36,
+   "d": 6.18,
+   "text": "be to really reach your audience, even if you have it. So that's not an easy feat. Yeah,"
+  },
+  {
+   "t": 1398.04,
+   "d": 3.28,
+   "text": "That's what I already said. Get the message out again and again and again and again and"
+  },
+  {
+   "t": 1401.32,
+   "d": 4.88,
+   "text": "all channels and again and don't be shy and ask again and post again and do it again."
+  },
+  {
+   "t": 1409.14,
+   "d": 3.14,
+   "text": "That's also something I already mentioned. Be prepared for everything you intend to do."
+  },
+  {
+   "t": 1412.5,
+   "d": 3.86,
+   "text": "If you're doing the campaign suddenly you have to devise new activities or anything,"
+  },
+  {
+   "t": 1416.5,
+   "d": 3.04,
+   "text": "you won't have the time, you won't have the energy and it will cost too much time. Have"
+  },
+  {
+   "t": 1419.54,
+   "d": 4.46,
+   "text": "a good plan of what you are going to do when during the campaign and try to look at successful"
+  },
+  {
+   "t": 1424.0,
+   "d": 5.3,
+   "text": "campaigns what they tried what they did and try to think how this could be something that you could"
+  },
+  {
+   "t": 1429.3,
+   "d": 6.54,
+   "text": "do or maybe also avoid so preparation really is everything and one other thing we learned"
+  },
+  {
+   "t": 1436.42,
+   "d": 5.44,
+   "text": "during this valley of desperation don't let things get out of hand because the more desperate we got"
+  },
+  {
+   "t": 1441.86,
+   "d": 5.14,
+   "text": "the more we thought about what else could we do to raise awareness and one of the things that for"
+  },
+  {
+   "t": 1447.0,
+   "d": 4.42,
+   "text": "example was something that really prevented us from spending more time on programming atom was"
+  },
+  {
+   "t": 1451.42,
+   "d": 4.5,
+   "text": "all this physical stuff we promised. So I'm happy that we now have an Atom RPG, that's"
+  },
+  {
+   "t": 1455.92,
+   "d": 4.76,
+   "text": "wonderful and I'm proud to have a check mark there, but it really took weeks and months"
+  },
+  {
+   "t": 1460.68,
+   "d": 4.02,
+   "text": "to prepare that stuff, to write it, to check it, to package it, to ship it. We still have"
+  },
+  {
+   "t": 1464.7,
+   "d": 5.7,
+   "text": "kinds of shipping special cases with countries like Korea or Eastern Russia or whatever and"
+  },
+  {
+   "t": 1470.4,
+   "d": 5.54,
+   "text": "that can really eat up a lot of time and so make sure you really know what you are going"
+  },
+  {
+   "t": 1475.94,
+   "d": 5.34,
+   "text": "to promise. There are some funny YouTube videos about people who crowdfunded board games and"
+  },
+  {
+   "t": 1481.28,
+   "d": 4.46,
+   "text": "and then got something like 10 truckloads of T-shirts in unsorted order that they had"
+  },
+  {
+   "t": 1485.74,
+   "d": 2.8,
+   "text": "to distribute among the 10,000 people who donated to their campaign."
+  },
+  {
+   "t": 1488.88,
+   "d": 2.58,
+   "text": "And this really can wreck your life, I mean, seriously."
+  },
+  {
+   "t": 1491.72,
+   "d": 3.66,
+   "text": "So think about what you are doing and if you can deliver afterwards and if it really serves"
+  },
+  {
+   "t": 1495.38,
+   "d": 0.9,
+   "text": "the purpose of your game."
+  },
+  {
+   "t": 1496.52,
+   "d": 4.1,
+   "text": "So for example, I would propose if you are doing a computer game, promise virtual rewards"
+  },
+  {
+   "t": 1500.62,
+   "d": 5.76,
+   "text": "within the game context, but don't start with T-shirts and buckles and I don't know"
+  },
+  {
+   "t": 1506.38,
+   "d": 0.2,
+   "text": "what."
+  },
+  {
+   "t": 1506.58,
+   "d": 8.98,
+   "text": "it just doesn't help your game. Yeah, that's something I already hinted at in this bar"
+  },
+  {
+   "t": 1515.56,
+   "d": 4.28,
+   "text": "chart. Don't expect the crowdfunding platform to help in a big way. From the statistics"
+  },
+  {
+   "t": 1519.84,
+   "d": 4.46,
+   "text": "I have, I can say that Indiegogo maybe was responsible for 1.5 to 2% of the donations"
+  },
+  {
+   "t": 1524.3,
+   "d": 6.22,
+   "text": "we got, so basically nothing, despite being featured on the front page. So, yeah, don't"
+  },
+  {
+   "t": 1530.52,
+   "d": 5.88,
+   "text": "expect any help there. Then something more for the post-processing. Be prepared to learn"
+  },
+  {
+   "t": 1536.4,
+   "d": 5.82,
+   "text": "new languages and alphabets and signs because well in 2012 there was not much support for"
+  },
+  {
+   "t": 1542.22,
+   "d": 5.96,
+   "text": "shipping or anything due to automated portals so we had to write our own delivery portal and"
+  },
+  {
+   "t": 1548.18,
+   "d": 5.74,
+   "text": "do these things and suddenly you get cryptic signs from other countries that are addresses"
+  },
+  {
+   "t": 1553.92,
+   "d": 4.7,
+   "text": "and you can't even read them and suddenly you learn a lot about utf-8 and exporting those"
+  },
+  {
+   "t": 1558.62,
+   "d": 5.3,
+   "text": "characters to let's say label printing programs or manually writing them which is not easy if it's"
+  },
+  {
+   "t": 1563.92,
+   "d": 5.12,
+   "text": "Korean characters and oh well. Lots of details that suddenly take up hours of time and really"
+  },
+  {
+   "t": 1569.58,
+   "d": 5.9,
+   "text": "lots of energy, lots more energy. So if you do it today, I really would check delivery portals"
+  },
+  {
+   "t": 1575.48,
+   "d": 4.14,
+   "text": "beforehand and see what they can do for you instead of having you do that. And that was"
+  },
+  {
+   "t": 1579.62,
+   "d": 7.58,
+   "text": "something we didn't have in 2012. Then we learned that pledge levels for crowdfunding campaigns"
+  },
+  {
+   "t": 1587.2,
+   "d": 5.32,
+   "text": "should be as easy as possible. We had one level that excluded all other levels and just said for"
+  },
+  {
+   "t": 1592.52,
+   "d": 4.74,
+   "text": "$40 you get something but all the other things are not included in it I probably had to explain it"
+  },
+  {
+   "t": 1597.26,
+   "d": 3.74,
+   "text": "a hundred times during the campaign and several hundred times after the campaign because people"
+  },
+  {
+   "t": 1601.0,
+   "d": 3.94,
+   "text": "constantly came to me and said whoa I donated those $40 shouldn't I get all those things from"
+  },
+  {
+   "t": 1604.94,
+   "d": 5.72,
+   "text": "the list and I told them no there were big capital letters see they're stating all the other things"
+  },
+  {
+   "t": 1610.66,
+   "d": 4.92,
+   "text": "are not included it's very very obvious nonetheless I had to explain it a hundred times and that also"
+  },
+  {
+   "t": 1615.58,
+   "d": 4.82,
+   "text": "gets tedious and after a while and so make your pledge levels very very straightforward very very"
+  },
+  {
+   "t": 1620.4,
+   "d": 4.52,
+   "text": "easy to understand and no special ideas in them. That's just causing work afterwards"
+  },
+  {
+   "t": 1624.92,
+   "d": 5.5,
+   "text": "and during the campaign. You don't want that. Don't trust the platform. I think some of"
+  },
+  {
+   "t": 1630.42,
+   "d": 4.54,
+   "text": "you might know the story from last year from Roguelike Celebration. We had one fun pledge"
+  },
+  {
+   "t": 1634.96,
+   "d": 8.32,
+   "text": "level that said if you donate $50,000 in one stroke, I will print out the whole source"
+  },
+  {
+   "t": 1643.28,
+   "d": 4.86,
+   "text": "code of Ardom in 13 leather bound books. I will fly to your location, hand it over,"
+  },
+  {
+   "t": 1648.88,
+   "d": 4.3,
+   "text": "stay with you and explain to you whatever you want to know about the source code. And"
+  },
+  {
+   "t": 1653.18,
+   "d": 5.46,
+   "text": "there was a kind of fun pledge level due to getting murder threats for not open sourcing"
+  },
+  {
+   "t": 1658.64,
+   "d": 5.32,
+   "text": "Adam and I thought okay now put your money where your mouth is and you can get it. The"
+  },
+  {
+   "t": 1663.96,
+   "d": 7.92,
+   "text": "interesting thing was we launched on 2nd of July at high noon. Three minutes after launching"
+  },
+  {
+   "t": 1671.88,
+   "d": 2.64,
+   "text": "I got an email that said, okay, I tried to donate the $50,000."
+  },
+  {
+   "t": 1674.74,
+   "d": 0.44,
+   "text": "It didn't work."
+  },
+  {
+   "t": 1677.96,
+   "d": 5.82,
+   "text": "I needed some oxygen after verifying that the email was a legible email."
+  },
+  {
+   "t": 1683.92,
+   "d": 0.7,
+   "text": "It was not a joke."
+  },
+  {
+   "t": 1686.0,
+   "d": 1.86,
+   "text": "And I think some know the story."
+  },
+  {
+   "t": 1688.08,
+   "d": 2.98,
+   "text": "It was not from Minecraft frame trying to donate the $50,000."
+  },
+  {
+   "t": 1691.68,
+   "d": 2.04,
+   "text": "And he was refused by Indiegogo."
+  },
+  {
+   "t": 1694.0,
+   "d": 7.4,
+   "text": "And it took us four days of intense communication with the support hotline of Indiegogo and various people there to find out that in the end,"
+  },
+  {
+   "t": 1701.4,
+   "d": 2.64,
+   "text": "their PayPal account couldn't accept more than $10,000."
+  },
+  {
+   "t": 1704.7,
+   "d": 2.08,
+   "text": "And then they wanted Notch to go to a bank"
+  },
+  {
+   "t": 1706.78,
+   "d": 2.2,
+   "text": "to legitimize himself with a passport"
+  },
+  {
+   "t": 1708.98,
+   "d": 2.54,
+   "text": "and do all kinds of crazy form-based stuff."
+  },
+  {
+   "t": 1711.6,
+   "d": 2.36,
+   "text": "And he said, oh, sorry, I don't have the time for that."
+  },
+  {
+   "t": 1714.36,
+   "d": 0.62,
+   "text": "Forget it."
+  },
+  {
+   "t": 1715.56,
+   "d": 2.96,
+   "text": "And yeah, well, don't trust the platform is all I can say."
+  },
+  {
+   "t": 1718.62,
+   "d": 1.12,
+   "text": "And that's also one of the reasons"
+  },
+  {
+   "t": 1719.74,
+   "d": 1.6,
+   "text": "why I never again would go to Indiegogo"
+  },
+  {
+   "t": 1721.34,
+   "d": 2.48,
+   "text": "because they did not just cost me $50,000"
+  },
+  {
+   "t": 1723.82,
+   "d": 2.28,
+   "text": "but probably much more visibility"
+  },
+  {
+   "t": 1726.1,
+   "d": 2.82,
+   "text": "due to the effect of Notch donating to an item campaign."
+  },
+  {
+   "t": 1729.08,
+   "d": 1.42,
+   "text": "And that's a lot more painful"
+  },
+  {
+   "t": 1730.5,
+   "d": 6.76,
+   "text": "because it's probably worth millions. So in the end I have a very nice story but some"
+  },
+  {
+   "t": 1737.26,
+   "d": 7.32,
+   "text": "trouble with Indiegogo. Sorry folks. Another thing, probably most people who have some"
+  },
+  {
+   "t": 1744.58,
+   "d": 3.52,
+   "text": "kind of community know it, you always will be hated for something no matter what you"
+  },
+  {
+   "t": 1748.1,
+   "d": 4.14,
+   "text": "do, there's always hate on the internet and we got a lot of hate for asking for money"
+  },
+  {
+   "t": 1752.24,
+   "d": 8.1,
+   "text": "because hey, game development should not involve money. Okay. I have a different opinion, we"
+  },
+  {
+   "t": 1760.34,
+   "d": 3.94,
+   "text": "We got a lot of hate for asking so much money because you don't need that much money to"
+  },
+  {
+   "t": 1764.28,
+   "d": 2.52,
+   "text": "develop a game with the ideas we had."
+  },
+  {
+   "t": 1767.1,
+   "d": 1.56,
+   "text": "It's much cheaper, sure."
+  },
+  {
+   "t": 1770.7,
+   "d": 2.1,
+   "text": "We got lots of insults and all that stuff."
+  },
+  {
+   "t": 1772.92,
+   "d": 1.08,
+   "text": "So expect that to happen."
+  },
+  {
+   "t": 1774.5,
+   "d": 3.68,
+   "text": "Learn to ignore it because it just costs energy and it makes no sense to argue with those"
+  },
+  {
+   "t": 1778.18,
+   "d": 2.74,
+   "text": "people because they just are there because they want to hate."
+  },
+  {
+   "t": 1782.26,
+   "d": 0.94,
+   "text": "It's part of the internet."
+  },
+  {
+   "t": 1785.52,
+   "d": 4.24,
+   "text": "Very important for us was to learn to separate haters from critics because there were some"
+  },
+  {
+   "t": 1789.76,
+   "d": 6.44,
+   "text": "people that in the beginning were quite, let's say, nasty in their comments, but they were"
+  },
+  {
+   "t": 1796.2,
+   "d": 4.18,
+   "text": "not haters. They were seriously interested in improving our ideas for the campaign and"
+  },
+  {
+   "t": 1800.38,
+   "d": 5.48,
+   "text": "they were just very straightforward, I would say. And it was very important for us to understand"
+  },
+  {
+   "t": 1805.86,
+   "d": 3.2,
+   "text": "the difference because we got some amazing feedback from those people after we started"
+  },
+  {
+   "t": 1809.06,
+   "d": 6.44,
+   "text": "a discussion with the relevant nasty commentators at first. And that was very good and really"
+  },
+  {
+   "t": 1815.5,
+   "d": 5.14,
+   "text": "helped us to improve the quality of the campaign quite a lot and if we had ignored them we"
+  },
+  {
+   "t": 1820.64,
+   "d": 5.22,
+   "text": "probably also would have failed. So yeah, that was something you always have to be awake"
+  },
+  {
+   "t": 1825.86,
+   "d": 4.04,
+   "text": "and aware and alert and think about what people are saying. Is it just hate or is it really"
+  },
+  {
+   "t": 1829.9,
+   "d": 7.9,
+   "text": "maybe valid criticism even if the message is all your texts are shit. And okay. Yeah,"
+  },
+  {
+   "t": 1839.86,
+   "d": 5.48,
+   "text": "Then the final point, don't be too optimistic in what you expect to be able to do with your"
+  },
+  {
+   "t": 1845.34,
+   "d": 6.24,
+   "text": "money because we thought $48,000 would be enough to achieve our goals that we have defined."
+  },
+  {
+   "t": 1852.62,
+   "d": 5.84,
+   "text": "I've never done a totally precise calculation but in the end I can say that we probably"
+  },
+  {
+   "t": 1858.46,
+   "d": 3.64,
+   "text": "have consumed more than three times the $90,000 we have received."
+  },
+  {
+   "t": 1862.32,
+   "d": 4.88,
+   "text": "So the end cost probably was higher than a quarter of a million that we invested in the"
+  },
+  {
+   "t": 1867.2,
+   "d": 3.78,
+   "text": "development over the past couple of years over the past five years because"
+  },
+  {
+   "t": 1870.98,
+   "d": 5.3,
+   "text": "actually we ran out of crowdfunding money by the beginning of 2015 which is"
+  },
+  {
+   "t": 1876.28,
+   "d": 5.46,
+   "text": "quite a while ago then ran on private finances money I put in and try to keep"
+  },
+  {
+   "t": 1881.74,
+   "d": 2.88,
+   "text": "this up because our goal was to get to steam to see if that would help and"
+  },
+  {
+   "t": 1884.62,
+   "d": 3.8,
+   "text": "basically steam saved us because we got a lot of money there and then could"
+  },
+  {
+   "t": 1888.42,
+   "d": 4.98,
+   "text": "continue at a normal pace so we really completely underestimated the efforts"
+  },
+  {
+   "t": 1893.4,
+   "d": 5.36,
+   "text": "required to do what we intended to do because our problem was after 10 years of pausing with"
+  },
+  {
+   "t": 1898.76,
+   "d": 6.56,
+   "text": "atom naturally we hadn't all the tricks and traps in mind that we might encounter we never had done"
+  },
+  {
+   "t": 1905.32,
+   "d": 3.96,
+   "text": "a graphical interface for an ascii game that was a pretty big challenge despite having not i for"
+  },
+  {
+   "t": 1909.28,
+   "d": 5.66,
+   "text": "example which helped immensely but we underestimated that we kind of underestimated the amount of"
+  },
+  {
+   "t": 1914.94,
+   "d": 5.62,
+   "text": "effort required to draw images for all those many items and monsters and adam and people always tell"
+  },
+  {
+   "t": 1920.56,
+   "d": 7.22,
+   "text": "you can do it in a week. I don't think so. So in the end it took us I would say at"
+  },
+  {
+   "t": 1927.78,
+   "d": 4.1,
+   "text": "least three and a half to four years of those five years we now spend. The other"
+  },
+  {
+   "t": 1931.88,
+   "d": 4.84,
+   "text": "time was lost to broken arms and other things but also these things happen and"
+  },
+  {
+   "t": 1936.72,
+   "d": 5.56,
+   "text": "if you have to pay people, you have to pay people. So try to be careful in your"
+  },
+  {
+   "t": 1942.28,
+   "d": 4.48,
+   "text": "estimates and try to be realistic and we didn't manage to pay the whole team"
+  },
+  {
+   "t": 1946.76,
+   "d": 6.08,
+   "text": "full-time despite most of them or at least major part of them working full-time. So yeah, that was"
+  },
+  {
+   "t": 1952.84,
+   "d": 5.7,
+   "text": "also a very interesting experience and something we learned there. And how that basically summarizes"
+  },
+  {
+   "t": 1958.54,
+   "d": 4.72,
+   "text": "is my wishes for all of you trying a crowdfunding. Good luck. You will need tons of it. It's not easy."
+  },
+  {
+   "t": 1963.5,
+   "d": 5.04,
+   "text": "The money comes not out of nothing, but it's nonetheless worthwhile if you have a good idea,"
+  },
+  {
+   "t": 1968.74,
+   "d": 2.92,
+   "text": "a good story and try it. Thank you."
+  }
+ ],
+ "note": "Transcript made locally with speech-to-text (Whisper large-v3-turbo, language forced to English) because YouTube's only caption track for this video is a mis-detected German track."
+}

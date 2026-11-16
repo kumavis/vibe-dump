@@ -1,0 +1,6955 @@
+{
+ "id": "XFFyN10o87I",
+ "url": "https://www.youtube.com/watch?v=XFFyN10o87I",
+ "title": "Roguelike Celebration 2016 - Bad News Live",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 4416,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nIn the words of the Bad News team: \"The third installation of Bad News was at the Roguelike Celebration in San Francisco. For the first time, we conducted a live playthrough in front of an audience. This was done in in the style of a radio play: gameplay still took place in an isolated room, but the audio was piped into an auditorium where the wizard also performed live, with his interface projected onto a large screen; additionally, the guide provided narration about behind-the-scenes activities. Trivia: Both Rogue and Bad News originated at the University of California, Santa Cruz.\"",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 7863,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 43.76,
+   "d": 3.2,
+   "text": "take it from here i guess uh yeah sure"
+  },
+  {
+   "t": 46.96,
+   "d": 3.2,
+   "text": "so how much have you explained about"
+  },
+  {
+   "t": 50.16,
+   "d": 1.12,
+   "text": "bad news like what they're going to be"
+  },
+  {
+   "t": 51.28,
+   "d": 2.32,
+   "text": "doing now sort of like the morphology of"
+  },
+  {
+   "t": 53.6,
+   "d": 1.2,
+   "text": "it there's this actor and so forth why"
+  },
+  {
+   "t": 54.8,
+   "d": 1.6,
+   "text": "don't you explain the premise"
+  },
+  {
+   "t": 56.4,
+   "d": 1.84,
+   "text": "uh of actual gameplay in the story and"
+  },
+  {
+   "t": 58.24,
+   "d": 1.28,
+   "text": "so forth okay"
+  },
+  {
+   "t": 59.52,
+   "d": 3.68,
+   "text": "so the game begins with the player being"
+  },
+  {
+   "t": 63.2,
+   "d": 3.04,
+   "text": "the mortician's assistant uh the actor"
+  },
+  {
+   "t": 66.24,
+   "d": 2.32,
+   "text": "will start out as the mortician they"
+  },
+  {
+   "t": 68.56,
+   "d": 1.28,
+   "text": "haven't discovered the body"
+  },
+  {
+   "t": 69.84,
+   "d": 2.64,
+   "text": "but they come their job as a part of the"
+  },
+  {
+   "t": 72.48,
+   "d": 1.6,
+   "text": "investigation into the death of this"
+  },
+  {
+   "t": 74.08,
+   "d": 0.56,
+   "text": "person"
+  },
+  {
+   "t": 74.64,
+   "d": 1.84,
+   "text": "so i forgot to say uh it all starts uh"
+  },
+  {
+   "t": 76.48,
+   "d": 1.84,
+   "text": "someone in the town has died"
+  },
+  {
+   "t": 78.32,
+   "d": 3.04,
+   "text": "and i cannot i'll let you get to the"
+  },
+  {
+   "t": 81.36,
+   "d": 0.72,
+   "text": "part where"
+  },
+  {
+   "t": 82.08,
+   "d": 2.88,
+   "text": "we talked about you uh so the premise of"
+  },
+  {
+   "t": 84.96,
+   "d": 1.2,
+   "text": "the game is that someone in the town has"
+  },
+  {
+   "t": 86.16,
+   "d": 0.48,
+   "text": "died"
+  },
+  {
+   "t": 86.64,
+   "d": 2.4,
+   "text": "after all this simulation right and the"
+  },
+  {
+   "t": 89.04,
+   "d": 2.0,
+   "text": "player is the mortician's assistant"
+  },
+  {
+   "t": 91.04,
+   "d": 2.08,
+   "text": "for the county and we're going to find"
+  },
+  {
+   "t": 93.12,
+   "d": 1.12,
+   "text": "out that the mortician who would"
+  },
+  {
+   "t": 94.24,
+   "d": 1.12,
+   "text": "typically handle this case"
+  },
+  {
+   "t": 95.36,
+   "d": 1.52,
+   "text": "uh has some other business in a"
+  },
+  {
+   "t": 96.88,
+   "d": 1.44,
+   "text": "different part of the county he can't"
+  },
+  {
+   "t": 98.32,
+   "d": 0.96,
+   "text": "take care of it"
+  },
+  {
+   "t": 99.28,
+   "d": 1.92,
+   "text": "uh and so it's the player's job as the"
+  },
+  {
+   "t": 101.2,
+   "d": 1.52,
+   "text": "mortician's assistant to"
+  },
+  {
+   "t": 102.72,
+   "d": 2.32,
+   "text": "identify this deceased person given only"
+  },
+  {
+   "t": 105.04,
+   "d": 1.36,
+   "text": "a physical description which we'll see"
+  },
+  {
+   "t": 106.4,
+   "d": 0.64,
+   "text": "soon"
+  },
+  {
+   "t": 107.04,
+   "d": 2.48,
+   "text": "uh to track down and figure out who the"
+  },
+  {
+   "t": 109.52,
+   "d": 1.36,
+   "text": "next of kin would be"
+  },
+  {
+   "t": 110.88,
+   "d": 2.8,
+   "text": "um given a specific notion of what next"
+  },
+  {
+   "t": 113.68,
+   "d": 1.68,
+   "text": "of kin means in this game"
+  },
+  {
+   "t": 115.36,
+   "d": 1.2,
+   "text": "it's essentially the closest living"
+  },
+  {
+   "t": 116.56,
+   "d": 1.84,
+   "text": "family member in the town and then track"
+  },
+  {
+   "t": 118.4,
+   "d": 1.04,
+   "text": "down that person figure out where"
+  },
+  {
+   "t": 119.44,
+   "d": 2.16,
+   "text": "they're at and notify them of the death"
+  },
+  {
+   "t": 121.6,
+   "d": 3.52,
+   "text": "so it's a game about death notification"
+  },
+  {
+   "t": 125.28,
+   "d": 4.16,
+   "text": "um at this point i think"
+  },
+  {
+   "t": 129.44,
+   "d": 3.2,
+   "text": "you can go back and why don't you wait"
+  },
+  {
+   "t": 132.64,
+   "d": 0.72,
+   "text": "here a little bit"
+  },
+  {
+   "t": 133.36,
+   "d": 1.6,
+   "text": "so what we're doing here is um giving"
+  },
+  {
+   "t": 134.96,
+   "d": 2.8,
+   "text": "you a very behind-the-scenes look sorry"
+  },
+  {
+   "t": 137.76,
+   "d": 1.36,
+   "text": "by the way we've never done this like as"
+  },
+  {
+   "t": 139.12,
+   "d": 1.68,
+   "text": "a public thing uh it's typically a"
+  },
+  {
+   "t": 140.8,
+   "d": 1.44,
+   "text": "two-person thing and i'm behind the"
+  },
+  {
+   "t": 142.24,
+   "d": 1.28,
+   "text": "scenes and he brings them in and so"
+  },
+  {
+   "t": 143.52,
+   "d": 0.8,
+   "text": "forth"
+  },
+  {
+   "t": 144.32,
+   "d": 2.96,
+   "text": "um so the player is actually not going"
+  },
+  {
+   "t": 147.28,
+   "d": 1.6,
+   "text": "to start playing for a few minutes"
+  },
+  {
+   "t": 148.88,
+   "d": 1.44,
+   "text": "uh what we typically do is generate the"
+  },
+  {
+   "t": 150.32,
+   "d": 1.6,
+   "text": "town and then i start talking to the"
+  },
+  {
+   "t": 151.92,
+   "d": 1.84,
+   "text": "actor about all the dramatic intrigue"
+  },
+  {
+   "t": 153.76,
+   "d": 0.88,
+   "text": "that's in this town"
+  },
+  {
+   "t": 154.64,
+   "d": 1.92,
+   "text": "so like there's this love triangle here"
+  },
+  {
+   "t": 156.56,
+   "d": 2.08,
+   "text": "uh the person works at this place"
+  },
+  {
+   "t": 158.64,
+   "d": 2.16,
+   "text": "uh the person's ancestor founded the"
+  },
+  {
+   "t": 160.8,
+   "d": 1.28,
+   "text": "town and they're like this major family"
+  },
+  {
+   "t": 162.08,
+   "d": 0.56,
+   "text": "in the town"
+  },
+  {
+   "t": 162.64,
+   "d": 1.6,
+   "text": "uh in a moment i'm gonna be live coding"
+  },
+  {
+   "t": 164.24,
+   "d": 1.52,
+   "text": "to find all that kind of material"
+  },
+  {
+   "t": 165.76,
+   "d": 1.76,
+   "text": "and i'm gonna give it over to the actor"
+  },
+  {
+   "t": 167.52,
+   "d": 1.68,
+   "text": "at uh various points the actor's gonna"
+  },
+  {
+   "t": 169.2,
+   "d": 1.2,
+   "text": "try to like hit these"
+  },
+  {
+   "t": 170.4,
+   "d": 2.16,
+   "text": "uh dramatic nuggets sort of bring them"
+  },
+  {
+   "t": 172.56,
+   "d": 3.36,
+   "text": "up naturally as conversations unfold"
+  },
+  {
+   "t": 175.92,
+   "d": 1.04,
+   "text": "um so what's going on now is it"
+  },
+  {
+   "t": 176.96,
+   "d": 1.36,
+   "text": "generated the town and now it's"
+  },
+  {
+   "t": 178.32,
+   "d": 1.76,
+   "text": "implanting uh the subjective beliefs"
+  },
+  {
+   "t": 180.08,
+   "d": 1.52,
+   "text": "that different characters will have"
+  },
+  {
+   "t": 181.6,
+   "d": 2.32,
+   "text": "and these beliefs can be very important"
+  },
+  {
+   "t": 183.92,
+   "d": 2.16,
+   "text": "during gameplay because the actor is"
+  },
+  {
+   "t": 186.08,
+   "d": 1.6,
+   "text": "has to adhere to the beliefs of the"
+  },
+  {
+   "t": 187.68,
+   "d": 1.36,
+   "text": "person that they're playing when they're"
+  },
+  {
+   "t": 189.04,
+   "d": 1.92,
+   "text": "acting"
+  },
+  {
+   "t": 190.96,
+   "d": 3.28,
+   "text": "so i think we might have had a fairly"
+  },
+  {
+   "t": 194.24,
+   "d": 1.36,
+   "text": "populist town because this is taking a"
+  },
+  {
+   "t": 195.6,
+   "d": 2.0,
+   "text": "little longer than it typically does"
+  },
+  {
+   "t": 197.6,
+   "d": 3.44,
+   "text": "um but let's kind of wait here"
+  },
+  {
+   "t": 201.04,
+   "d": 1.36,
+   "text": "yeah you want to explain what oh good"
+  },
+  {
+   "t": 202.4,
+   "d": 1.84,
+   "text": "call yep so uh we have a couple"
+  },
+  {
+   "t": 204.24,
+   "d": 0.88,
+   "text": "different screens here"
+  },
+  {
+   "t": 205.12,
+   "d": 2.32,
+   "text": "this is what i look at um i normally"
+  },
+  {
+   "t": 207.44,
+   "d": 0.72,
+   "text": "don't have a picture"
+  },
+  {
+   "t": 208.16,
+   "d": 1.52,
+   "text": "of myself here but everything else is"
+  },
+  {
+   "t": 209.68,
+   "d": 1.6,
+   "text": "what i look at as the wizard"
+  },
+  {
+   "t": 211.28,
+   "d": 1.84,
+   "text": "so this is the player interface there's"
+  },
+  {
+   "t": 213.12,
+   "d": 1.28,
+   "text": "an ipad in there"
+  },
+  {
+   "t": 214.4,
+   "d": 3.12,
+   "text": "there's also a model theater um"
+  },
+  {
+   "t": 217.52,
+   "d": 3.52,
+   "text": "so the setup is it's a small room"
+  },
+  {
+   "t": 221.04,
+   "d": 1.44,
+   "text": "there's like a puppet feeder a small"
+  },
+  {
+   "t": 222.48,
+   "d": 0.88,
+   "text": "model feeder"
+  },
+  {
+   "t": 223.36,
+   "d": 1.44,
+   "text": "players on one side of the actors on the"
+  },
+  {
+   "t": 224.8,
+   "d": 1.44,
+   "text": "other there's a curtain between them"
+  },
+  {
+   "t": 226.24,
+   "d": 1.52,
+   "text": "that gets pulled back whenever the actor"
+  },
+  {
+   "t": 227.76,
+   "d": 1.84,
+   "text": "is going to play someone live"
+  },
+  {
+   "t": 229.6,
+   "d": 2.32,
+   "text": "and on the player side of the model"
+  },
+  {
+   "t": 231.92,
+   "d": 1.68,
+   "text": "theater they have an ipad which displays"
+  },
+  {
+   "t": 233.6,
+   "d": 1.44,
+   "text": "this player interface which is right"
+  },
+  {
+   "t": 235.04,
+   "d": 0.88,
+   "text": "here"
+  },
+  {
+   "t": 235.92,
+   "d": 2.8,
+   "text": "on the actor side hidden is his own"
+  },
+  {
+   "t": 238.72,
+   "d": 1.28,
+   "text": "screen which displays the special"
+  },
+  {
+   "t": 240.0,
+   "d": 1.92,
+   "text": "actor interface and this is going to be"
+  },
+  {
+   "t": 241.92,
+   "d": 1.68,
+   "text": "uh switching out with different"
+  },
+  {
+   "t": 243.6,
+   "d": 0.72,
+   "text": "information"
+  },
+  {
+   "t": 244.32,
+   "d": 1.84,
+   "text": "according to who that person's playing"
+  },
+  {
+   "t": 246.16,
+   "d": 1.44,
+   "text": "uh who the actor is playing"
+  },
+  {
+   "t": 247.6,
+   "d": 2.0,
+   "text": "so when the actor is playing someone uh"
+  },
+  {
+   "t": 249.6,
+   "d": 1.76,
+   "text": "someone new their personality and all"
+  },
+  {
+   "t": 251.36,
+   "d": 0.96,
+   "text": "these different things about them are"
+  },
+  {
+   "t": 252.32,
+   "d": 0.48,
+   "text": "gonna pop"
+  },
+  {
+   "t": 252.8,
+   "d": 2.0,
+   "text": "up uh he'll take a moment to get into"
+  },
+  {
+   "t": 254.8,
+   "d": 1.12,
+   "text": "character and sort of"
+  },
+  {
+   "t": 255.92,
+   "d": 1.36,
+   "text": "figure out how would that personality"
+  },
+  {
+   "t": 257.28,
+   "d": 1.68,
+   "text": "act in this situation"
+  },
+  {
+   "t": 258.96,
+   "d": 2.16,
+   "text": "as the subject of conversation shifts as"
+  },
+  {
+   "t": 261.12,
+   "d": 1.44,
+   "text": "the player asks about different people"
+  },
+  {
+   "t": 262.56,
+   "d": 1.28,
+   "text": "and so forth"
+  },
+  {
+   "t": 263.84,
+   "d": 2.08,
+   "text": "the actors uh the character they're"
+  },
+  {
+   "t": 265.92,
+   "d": 1.04,
+   "text": "playing's beliefs"
+  },
+  {
+   "t": 266.96,
+   "d": 1.6,
+   "text": "about that person they're talking about"
+  },
+  {
+   "t": 268.56,
+   "d": 1.6,
+   "text": "is going to populate this subject of"
+  },
+  {
+   "t": 270.16,
+   "d": 1.28,
+   "text": "conversation area"
+  },
+  {
+   "t": 271.44,
+   "d": 1.36,
+   "text": "uh the whole while this is just a google"
+  },
+  {
+   "t": 272.8,
+   "d": 1.84,
+   "text": "chat i'll be talking with the actor"
+  },
+  {
+   "t": 274.64,
+   "d": 1.92,
+   "text": "trying to sort of deliver these"
+  },
+  {
+   "t": 276.56,
+   "d": 1.84,
+   "text": "narrative intrigue these narrative"
+  },
+  {
+   "t": 278.4,
+   "d": 5.44,
+   "text": "nuggets and so forth"
+  },
+  {
+   "t": 284.24,
+   "d": 3.04,
+   "text": "so i'm going to hand this over to you"
+  },
+  {
+   "t": 287.36,
+   "d": 4.72,
+   "text": "yeah it should there's no uh"
+  },
+  {
+   "t": 292.08,
+   "d": 3.6,
+   "text": "there's no well true lou no"
+  },
+  {
+   "t": 295.68,
+   "d": 1.2,
+   "text": "i think it does take up quite a bit of"
+  },
+  {
+   "t": 296.88,
+   "d": 1.2,
+   "text": "space though right it takes about like"
+  },
+  {
+   "t": 298.08,
+   "d": 0.88,
+   "text": "eight gigs of"
+  },
+  {
+   "t": 298.96,
+   "d": 1.36,
+   "text": "yeah these towns could be like several"
+  },
+  {
+   "t": 300.32,
+   "d": 1.76,
+   "text": "gigs uh it never takes this long i"
+  },
+  {
+   "t": 302.08,
+   "d": 1.28,
+   "text": "wonder if"
+  },
+  {
+   "t": 303.36,
+   "d": 2.0,
+   "text": "typing through could be could that slow"
+  },
+  {
+   "t": 305.36,
+   "d": 2.88,
+   "text": "things down or something"
+  },
+  {
+   "t": 308.48,
+   "d": 3.36,
+   "text": "let's give it um"
+  },
+  {
+   "t": 311.84,
+   "d": 1.44,
+   "text": "let's give it about 30 seconds and if"
+  },
+  {
+   "t": 313.28,
+   "d": 3.36,
+   "text": "not i'll try to generate a new town"
+  },
+  {
+   "t": 317.6,
+   "d": 1.84,
+   "text": "um does anyone have any questions before"
+  },
+  {
+   "t": 319.44,
+   "d": 1.6,
+   "text": "we begin well you still don't understand"
+  },
+  {
+   "t": 321.04,
+   "d": 0.88,
+   "text": "this because it's"
+  },
+  {
+   "t": 321.92,
+   "d": 3.44,
+   "text": "impossible to describe what looks like"
+  },
+  {
+   "t": 325.36,
+   "d": 3.2,
+   "text": "python yep it's a python ai framework"
+  },
+  {
+   "t": 328.56,
+   "d": 1.2,
+   "text": "so it's a simulation that i've been"
+  },
+  {
+   "t": 329.76,
+   "d": 3.28,
+   "text": "working on for a couple years now"
+  },
+  {
+   "t": 336.88,
+   "d": 2.08,
+   "text": "yeah so uh we're phd students at uc"
+  },
+  {
+   "t": 338.96,
+   "d": 2.0,
+   "text": "santa cruz students at uc santa cruz"
+  },
+  {
+   "t": 340.96,
+   "d": 2.56,
+   "text": "um and we're in an ai research lab kate"
+  },
+  {
+   "t": 343.52,
+   "d": 1.36,
+   "text": "compton's in our lab she was a speaker"
+  },
+  {
+   "t": 344.88,
+   "d": 1.28,
+   "text": "earlier today other people in this room"
+  },
+  {
+   "t": 346.16,
+   "d": 2.56,
+   "text": "are in our lab"
+  },
+  {
+   "t": 348.72,
+   "d": 3.2,
+   "text": "and so this began as a research project"
+  },
+  {
+   "t": 351.92,
+   "d": 1.36,
+   "text": "but then it was sort of like"
+  },
+  {
+   "t": 353.28,
+   "d": 1.6,
+   "text": "too cool to just be a research project"
+  },
+  {
+   "t": 354.88,
+   "d": 1.04,
+   "text": "and we started bringing it to other"
+  },
+  {
+   "t": 355.92,
+   "d": 1.2,
+   "text": "places"
+  },
+  {
+   "t": 357.12,
+   "d": 1.52,
+   "text": "this is an indicated official nominee we"
+  },
+  {
+   "t": 358.64,
+   "d": 2.08,
+   "text": "just found that out which was cool news"
+  },
+  {
+   "t": 360.72,
+   "d": 1.52,
+   "text": "um so we've kind of been performing it"
+  },
+  {
+   "t": 362.24,
+   "d": 1.44,
+   "text": "at different festivals it obviously has"
+  },
+  {
+   "t": 363.68,
+   "d": 2.0,
+   "text": "to be played"
+  },
+  {
+   "t": 365.68,
+   "d": 2.56,
+   "text": "there we go it has to be played live uh"
+  },
+  {
+   "t": 368.24,
+   "d": 1.76,
+   "text": "of course because we need this actor and"
+  },
+  {
+   "t": 370.0,
+   "d": 2.24,
+   "text": "uh being the wizard here is a very"
+  },
+  {
+   "t": 372.24,
+   "d": 1.04,
+   "text": "specialized job"
+  },
+  {
+   "t": 373.28,
+   "d": 2.4,
+   "text": "uh i know the code because i wrote the"
+  },
+  {
+   "t": 375.68,
+   "d": 1.44,
+   "text": "code i'll be live coding right with the"
+  },
+  {
+   "t": 377.12,
+   "d": 3.44,
+   "text": "framework the whole time"
+  },
+  {
+   "t": 380.56,
+   "d": 1.84,
+   "text": "you can't no you could like download the"
+  },
+  {
+   "t": 382.4,
+   "d": 2.24,
+   "text": "code and and try to do what we do and uh"
+  },
+  {
+   "t": 384.64,
+   "d": 1.92,
+   "text": "we've talked about a home version where"
+  },
+  {
+   "t": 386.56,
+   "d": 1.28,
+   "text": "there's essentially an interface that"
+  },
+  {
+   "t": 387.84,
+   "d": 2.0,
+   "text": "abstracts like so you don't deliver code"
+  },
+  {
+   "t": 389.84,
+   "d": 1.68,
+   "text": "you're actually using this interface"
+  },
+  {
+   "t": 391.52,
+   "d": 1.6,
+   "text": "but it looks like we can begin now so"
+  },
+  {
+   "t": 393.12,
+   "d": 1.36,
+   "text": "i'm going to hand it over to you okay"
+  },
+  {
+   "t": 394.48,
+   "d": 0.4,
+   "text": "and then"
+  },
+  {
+   "t": 394.88,
+   "d": 1.44,
+   "text": "i'm going to be popping into chat with"
+  },
+  {
+   "t": 396.32,
+   "d": 1.68,
+   "text": "the actor to be like here's the deal"
+  },
+  {
+   "t": 398.0,
+   "d": 2.08,
+   "text": "with this town here's what's going on"
+  },
+  {
+   "t": 400.08,
+   "d": 2.24,
+   "text": "uh i'm just should i just go and no"
+  },
+  {
+   "t": 402.32,
+   "d": 1.36,
+   "text": "because i need a couple minutes to do"
+  },
+  {
+   "t": 403.68,
+   "d": 1.52,
+   "text": "that we need a couple minutes"
+  },
+  {
+   "t": 405.2,
+   "d": 1.76,
+   "text": "just in case yeah cool thank you yeah"
+  },
+  {
+   "t": 406.96,
+   "d": 1.52,
+   "text": "thank you"
+  },
+  {
+   "t": 408.48,
+   "d": 1.92,
+   "text": "um so if you look down here can you guys"
+  },
+  {
+   "t": 410.4,
+   "d": 2.0,
+   "text": "even read the chat"
+  },
+  {
+   "t": 412.4,
+   "d": 2.88,
+   "text": "oh geez i don't even know if i can i"
+  },
+  {
+   "t": 415.28,
+   "d": 1.04,
+   "text": "think you should keep it"
+  },
+  {
+   "t": 416.32,
+   "d": 1.92,
+   "text": "going forward oh okay we're gonna run"
+  },
+  {
+   "t": 418.24,
+   "d": 4.16,
+   "text": "out of time before okay yep"
+  },
+  {
+   "t": 422.4,
+   "d": 2.24,
+   "text": "okay"
+  },
+  {
+   "t": 426.0,
+   "d": 1.6,
+   "text": "so the deceased person is this person"
+  },
+  {
+   "t": 427.6,
+   "d": 2.56,
+   "text": "jack kamik uh you can go from here um"
+  },
+  {
+   "t": 430.16,
+   "d": 1.2,
+   "text": "if you want to describe like what i'm"
+  },
+  {
+   "t": 431.36,
+   "d": 2.96,
+   "text": "doing here okay um"
+  },
+  {
+   "t": 434.32,
+   "d": 1.84,
+   "text": "so a lot of what james does in terminal"
+  },
+  {
+   "t": 436.16,
+   "d": 2.64,
+   "text": "uh is take out a lot of"
+  },
+  {
+   "t": 438.8,
+   "d": 1.76,
+   "text": "of the narrative elements that aren't"
+  },
+  {
+   "t": 440.56,
+   "d": 1.6,
+   "text": "explicitly coded in but then"
+  },
+  {
+   "t": 442.16,
+   "d": 2.08,
+   "text": "realizes through his human meat brain"
+  },
+  {
+   "t": 444.24,
+   "d": 1.04,
+   "text": "that they are"
+  },
+  {
+   "t": 445.28,
+   "d": 1.6,
+   "text": "really really narratively interesting"
+  },
+  {
+   "t": 446.88,
+   "d": 1.44,
+   "text": "they're all there they just need to be"
+  },
+  {
+   "t": 448.32,
+   "d": 1.2,
+   "text": "brought to the surface so he's setting"
+  },
+  {
+   "t": 449.52,
+   "d": 1.12,
+   "text": "some variables now like"
+  },
+  {
+   "t": 450.64,
+   "d": 3.36,
+   "text": "who the next of kin is um who the"
+  },
+  {
+   "t": 454.0,
+   "d": 1.44,
+   "text": "deceased person is he's finding out some"
+  },
+  {
+   "t": 455.44,
+   "d": 0.88,
+   "text": "information"
+  },
+  {
+   "t": 456.32,
+   "d": 1.76,
+   "text": "so like d every time you see d on the"
+  },
+  {
+   "t": 458.08,
+   "d": 1.52,
+   "text": "terminal that's the deceased person n"
+  },
+  {
+   "t": 459.6,
+   "d": 0.4,
+   "text": "okay"
+  },
+  {
+   "t": 460.0,
+   "d": 4.24,
+   "text": "next of kin um he's finding out"
+  },
+  {
+   "t": 464.24,
+   "d": 1.84,
+   "text": "starting from the deceased person like"
+  },
+  {
+   "t": 466.08,
+   "d": 1.44,
+   "text": "where they work"
+  },
+  {
+   "t": 467.52,
+   "d": 2.0,
+   "text": "uh seeing if he can't find out some more"
+  },
+  {
+   "t": 469.52,
+   "d": 2.08,
+   "text": "information about"
+  },
+  {
+   "t": 471.6,
+   "d": 2.0,
+   "text": "the deceased person's family life what's"
+  },
+  {
+   "t": 473.6,
+   "d": 4.4,
+   "text": "that like who his father is"
+  },
+  {
+   "t": 478.0,
+   "d": 1.2,
+   "text": "and then he's going to communicate a lot"
+  },
+  {
+   "t": 479.2,
+   "d": 1.2,
+   "text": "of that information with the actors so"
+  },
+  {
+   "t": 480.4,
+   "d": 1.84,
+   "text": "that they kind of start the game"
+  },
+  {
+   "t": 482.24,
+   "d": 2.0,
+   "text": "with i think between like three and five"
+  },
+  {
+   "t": 484.24,
+   "d": 1.76,
+   "text": "different kind of like"
+  },
+  {
+   "t": 486.0,
+   "d": 2.8,
+   "text": "like narrative high points that they can"
+  },
+  {
+   "t": 488.8,
+   "d": 1.04,
+   "text": "turn into an arc"
+  },
+  {
+   "t": 489.84,
+   "d": 2.72,
+   "text": "um while the player begins moving around"
+  },
+  {
+   "t": 492.56,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 493.28,
+   "d": 1.68,
+   "text": "sometimes that gets foiled by the player"
+  },
+  {
+   "t": 494.96,
+   "d": 1.36,
+   "text": "because the player is"
+  },
+  {
+   "t": 496.32,
+   "d": 1.36,
+   "text": "running around in a simulated world and"
+  },
+  {
+   "t": 497.68,
+   "d": 3.52,
+   "text": "so they may decide to go to weird places"
+  },
+  {
+   "t": 501.2,
+   "d": 3.28,
+   "text": "despite the clues that the actor may"
+  },
+  {
+   "t": 504.48,
+   "d": 2.96,
+   "text": "guide them in and at that point a lot of"
+  },
+  {
+   "t": 507.44,
+   "d": 2.08,
+   "text": "furious typing happens and they try to"
+  },
+  {
+   "t": 509.52,
+   "d": 1.52,
+   "text": "find out more narrative things like oh"
+  },
+  {
+   "t": 511.04,
+   "d": 2.16,
+   "text": "who now works here"
+  },
+  {
+   "t": 513.2,
+   "d": 2.8,
+   "text": "the size of the town i think is around"
+  },
+  {
+   "t": 516.0,
+   "d": 1.6,
+   "text": "maybe 150 to 300 people"
+  },
+  {
+   "t": 517.6,
+   "d": 2.72,
+   "text": "small american town in the 70s feel so"
+  },
+  {
+   "t": 520.32,
+   "d": 1.04,
+   "text": "often"
+  },
+  {
+   "t": 521.36,
+   "d": 2.0,
+   "text": "people know each other which is helpful"
+  },
+  {
+   "t": 523.36,
+   "d": 3.44,
+   "text": "for narrative elements"
+  },
+  {
+   "t": 528.16,
+   "d": 3.52,
+   "text": "mom i'm assuming is like the mama"
+  },
+  {
+   "t": 531.68,
+   "d": 2.56,
+   "text": "the deceased person seeing where they"
+  },
+  {
+   "t": 534.24,
+   "d": 0.48,
+   "text": "work"
+  },
+  {
+   "t": 534.72,
+   "d": 2.24,
+   "text": "the tiki freaky the random name"
+  },
+  {
+   "t": 536.96,
+   "d": 1.84,
+   "text": "generator is excellent"
+  },
+  {
+   "t": 538.8,
+   "d": 1.28,
+   "text": "i think it actually comes from a real"
+  },
+  {
+   "t": 540.08,
+   "d": 2.08,
+   "text": "corpus of like names of bars and"
+  },
+  {
+   "t": 542.16,
+   "d": 1.6,
+   "text": "names of hospitals we actually use like"
+  },
+  {
+   "t": 543.76,
+   "d": 2.96,
+   "text": "real corpuses"
+  },
+  {
+   "t": 546.88,
+   "d": 1.76,
+   "text": "so somewhere there's really is a bar"
+  },
+  {
+   "t": 548.64,
+   "d": 2.96,
+   "text": "named the tiki freaky"
+  },
+  {
+   "t": 554.96,
+   "d": 1.2,
+   "text": "so i'm trying to find different"
+  },
+  {
+   "t": 556.16,
+   "d": 1.84,
+   "text": "interesting dramatic things"
+  },
+  {
+   "t": 558.0,
+   "d": 2.88,
+   "text": "i'm going to look at like who the"
+  },
+  {
+   "t": 560.88,
+   "d": 2.08,
+   "text": "deceased person"
+  },
+  {
+   "t": 562.96,
+   "d": 1.52,
+   "text": "is romantically attracted to and so"
+  },
+  {
+   "t": 564.48,
+   "d": 1.2,
+   "text": "forth trying to find love triangles"
+  },
+  {
+   "t": 565.68,
+   "d": 1.04,
+   "text": "things like that"
+  },
+  {
+   "t": 566.72,
+   "d": 1.44,
+   "text": "i'm looking at their work situation"
+  },
+  {
+   "t": 568.16,
+   "d": 1.52,
+   "text": "seeing if there's like any rival"
+  },
+  {
+   "t": 569.68,
+   "d": 1.2,
+   "text": "businesses things that we can sort of"
+  },
+  {
+   "t": 570.88,
+   "d": 1.44,
+   "text": "play on"
+  },
+  {
+   "t": 572.32,
+   "d": 2.08,
+   "text": "um i think we've had enough now so you"
+  },
+  {
+   "t": 574.4,
+   "d": 2.32,
+   "text": "can go back and lead the player in"
+  },
+  {
+   "t": 576.72,
+   "d": 15.12,
+   "text": "okay i'll be back"
+  },
+  {
+   "t": 593.22,
+   "d": 3.09,
+   "text": "[Music]"
+  },
+  {
+   "t": 617.12,
+   "d": 2.48,
+   "text": "notes right when you learn about the uh"
+  },
+  {
+   "t": 619.6,
+   "d": 1.92,
+   "text": "what the disease person looks like"
+  },
+  {
+   "t": 621.52,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 624.64,
+   "d": 1.6,
+   "text": "when you're ready to begin when i leave"
+  },
+  {
+   "t": 626.24,
+   "d": 1.44,
+   "text": "this room you can just say out loud"
+  },
+  {
+   "t": 627.68,
+   "d": 2.8,
+   "text": "okay i'm ready to begin um the screen"
+  },
+  {
+   "t": 630.48,
+   "d": 0.72,
+   "text": "will update"
+  },
+  {
+   "t": 631.2,
+   "d": 1.52,
+   "text": "and you'll leave your boss location"
+  },
+  {
+   "t": 632.72,
+   "d": 15.12,
+   "text": "basically okay"
+  },
+  {
+   "t": 647.92,
+   "d": 1.52,
+   "text": "yep that's what the uh player is seeing"
+  },
+  {
+   "t": 649.44,
+   "d": 1.84,
+   "text": "on a ipad this is what the actor has"
+  },
+  {
+   "t": 651.28,
+   "d": 0.96,
+   "text": "seen"
+  },
+  {
+   "t": 652.24,
+   "d": 3.12,
+   "text": "uh this would be live coding"
+  },
+  {
+   "t": 656.72,
+   "d": 1.44,
+   "text": "and the chat yeah sorry the actor seeing"
+  },
+  {
+   "t": 658.16,
+   "d": 3.68,
+   "text": "two things they're interfacing"
+  },
+  {
+   "t": 668.4,
+   "d": 1.6,
+   "text": "and in a moment the mortician's going to"
+  },
+  {
+   "t": 670.0,
+   "d": 2.4,
+   "text": "pop in"
+  },
+  {
+   "t": 673.44,
+   "d": 1.44,
+   "text": "why don't i do this and you can use that"
+  },
+  {
+   "t": 674.88,
+   "d": 3.92,
+   "text": "because then i don't have the hands"
+  },
+  {
+   "t": 684.88,
+   "d": 2.08,
+   "text": "so in the top right you can kind of see"
+  },
+  {
+   "t": 686.96,
+   "d": 1.68,
+   "text": "hello"
+  },
+  {
+   "t": 688.64,
+   "d": 3.36,
+   "text": "oh thank goodness you're here i'm afraid"
+  },
+  {
+   "t": 692.0,
+   "d": 3.28,
+   "text": "i have a little bit of bad news for you"
+  },
+  {
+   "t": 695.28,
+   "d": 2.16,
+   "text": "i just received a call from the next"
+  },
+  {
+   "t": 697.44,
+   "d": 1.76,
+   "text": "town over they were"
+  },
+  {
+   "t": 699.2,
+   "d": 4.08,
+   "text": "frantic i didn't understand"
+  },
+  {
+   "t": 706.56,
+   "d": 0.88,
+   "text": "this person was in love with his"
+  },
+  {
+   "t": 707.44,
+   "d": 1.52,
+   "text": "brother's wife apparently you're going"
+  },
+  {
+   "t": 708.96,
+   "d": 1.28,
+   "text": "to have to handle this one all on your"
+  },
+  {
+   "t": 710.24,
+   "d": 0.72,
+   "text": "own"
+  },
+  {
+   "t": 710.96,
+   "d": 5.44,
+   "text": "okay you can do it"
+  },
+  {
+   "t": 716.4,
+   "d": 3.2,
+   "text": "very true um now although that is of"
+  },
+  {
+   "t": 719.6,
+   "d": 0.4,
+   "text": "course"
+  },
+  {
+   "t": 720.0,
+   "d": 1.92,
+   "text": "completely 100 percent true i have"
+  },
+  {
+   "t": 721.92,
+   "d": 1.2,
+   "text": "nothing to do"
+  },
+  {
+   "t": 723.12,
+   "d": 2.48,
+   "text": "with you um just to give me a little"
+  },
+  {
+   "t": 725.6,
+   "d": 1.44,
+   "text": "peace of mind could you let me know what"
+  },
+  {
+   "t": 727.04,
+   "d": 1.12,
+   "text": "it is exactly"
+  },
+  {
+   "t": 728.16,
+   "d": 3.2,
+   "text": "you're going to be doing sure"
+  },
+  {
+   "t": 731.36,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 736.4,
+   "d": 2.64,
+   "text": "all right so i'm going to be looking the"
+  },
+  {
+   "t": 739.04,
+   "d": 0.4,
+   "text": "next"
+  },
+  {
+   "t": 739.44,
+   "d": 3.04,
+   "text": "pin to this fellow right here"
+  },
+  {
+   "t": 742.48,
+   "d": 3.28,
+   "text": "yes okay yes"
+  },
+  {
+   "t": 745.76,
+   "d": 3.2,
+   "text": "and and i ask that you be as discreet"
+  },
+  {
+   "t": 748.96,
+   "d": 2.4,
+   "text": "as possible we don't want to raise any"
+  },
+  {
+   "t": 751.36,
+   "d": 0.96,
+   "text": "concern"
+  },
+  {
+   "t": 752.32,
+   "d": 1.6,
+   "text": "amongst the townsfolk especially"
+  },
+  {
+   "t": 753.92,
+   "d": 2.08,
+   "text": "considering the cause of death is so"
+  },
+  {
+   "t": 756.0,
+   "d": 2.96,
+   "text": "unknown figuring that out is not our job"
+  },
+  {
+   "t": 758.96,
+   "d": 2.16,
+   "text": "at least not right now"
+  },
+  {
+   "t": 761.12,
+   "d": 2.96,
+   "text": "um and so i ask you to be discreet and"
+  },
+  {
+   "t": 764.08,
+   "d": 1.2,
+   "text": "also"
+  },
+  {
+   "t": 765.28,
+   "d": 3.36,
+   "text": "to only inform the next to him to"
+  },
+  {
+   "t": 768.64,
+   "d": 2.72,
+   "text": "he's outside so respect the family to"
+  },
+  {
+   "t": 771.36,
+   "d": 1.44,
+   "text": "allow them to decide how they want to"
+  },
+  {
+   "t": 772.8,
+   "d": 3.36,
+   "text": "bring this news to everyone else"
+  },
+  {
+   "t": 777.44,
+   "d": 3.04,
+   "text": "has said considering that you'll be"
+  },
+  {
+   "t": 780.48,
+   "d": 2.24,
+   "text": "walking around town"
+  },
+  {
+   "t": 782.72,
+   "d": 2.16,
+   "text": "if you tell people that you're a"
+  },
+  {
+   "t": 784.88,
+   "d": 1.44,
+   "text": "immortation's assistance"
+  },
+  {
+   "t": 786.32,
+   "d": 3.12,
+   "text": "it might end up raising some of that"
+  },
+  {
+   "t": 789.44,
+   "d": 2.72,
+   "text": "very concern we're trying to avoid"
+  },
+  {
+   "t": 792.16,
+   "d": 3.04,
+   "text": "so it might be a good idea to come up"
+  },
+  {
+   "t": 795.2,
+   "d": 2.08,
+   "text": "with a uh"
+  },
+  {
+   "t": 797.28,
+   "d": 3.04,
+   "text": "a cover story exactly yes"
+  },
+  {
+   "t": 800.32,
+   "d": 3.04,
+   "text": "uh do you have any uh ideas as to what"
+  },
+  {
+   "t": 803.36,
+   "d": 1.36,
+   "text": "what you might want to be the player has"
+  },
+  {
+   "t": 804.72,
+   "d": 1.28,
+   "text": "been instructed that they will lose the"
+  },
+  {
+   "t": 806.0,
+   "d": 1.68,
+   "text": "game if they inform anyone other than"
+  },
+  {
+   "t": 807.68,
+   "d": 2.72,
+   "text": "the next of kin"
+  },
+  {
+   "t": 812.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 816.66,
+   "d": 2.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 818.8,
+   "d": 3.92,
+   "text": "as far as common jobs"
+  },
+  {
+   "t": 822.72,
+   "d": 5.52,
+   "text": "in the town um obviously i would be"
+  },
+  {
+   "t": 828.24,
+   "d": 2.16,
+   "text": "starting so is there anything you would"
+  },
+  {
+   "t": 830.4,
+   "d": 2.96,
+   "text": "recommend or"
+  },
+  {
+   "t": 834.4,
+   "d": 3.84,
+   "text": "you you might want to say you're a"
+  },
+  {
+   "t": 838.24,
+   "d": 3.12,
+   "text": "waitress or a bartender"
+  },
+  {
+   "t": 841.36,
+   "d": 4.56,
+   "text": "um i'm not particularly familiar with"
+  },
+  {
+   "t": 845.92,
+   "d": 1.84,
+   "text": "role field"
+  },
+  {
+   "t": 847.76,
+   "d": 2.24,
+   "text": "so so i i apologize for not being able"
+  },
+  {
+   "t": 850.0,
+   "d": 0.88,
+   "text": "to"
+  },
+  {
+   "t": 850.88,
+   "d": 1.2,
+   "text": "really be able to give you some"
+  },
+  {
+   "t": 852.08,
+   "d": 2.24,
+   "text": "specifics but uh"
+  },
+  {
+   "t": 854.32,
+   "d": 2.32,
+   "text": "the one concern that i have is that if"
+  },
+  {
+   "t": 856.64,
+   "d": 0.88,
+   "text": "you"
+  },
+  {
+   "t": 857.52,
+   "d": 2.48,
+   "text": "just come into the town saying that"
+  },
+  {
+   "t": 860.0,
+   "d": 1.68,
+   "text": "you're new to the town that you're"
+  },
+  {
+   "t": 861.68,
+   "d": 2.48,
+   "text": "have a new job there if you're asking"
+  },
+  {
+   "t": 864.16,
+   "d": 1.52,
+   "text": "questions about"
+  },
+  {
+   "t": 865.68,
+   "d": 3.28,
+   "text": "our unfortunate fellow uh"
+  },
+  {
+   "t": 868.96,
+   "d": 2.4,
+   "text": "people might not be inclined to give it"
+  },
+  {
+   "t": 871.36,
+   "d": 1.52,
+   "text": "to you people might"
+  },
+  {
+   "t": 872.88,
+   "d": 1.84,
+   "text": "ask why you're asking about this"
+  },
+  {
+   "t": 874.72,
+   "d": 3.36,
+   "text": "particular person"
+  },
+  {
+   "t": 882.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 893.76,
+   "d": 1.36,
+   "text": "so yeah we have about five and a half"
+  },
+  {
+   "t": 895.12,
+   "d": 4.0,
+   "text": "gigs of money just what is"
+  },
+  {
+   "t": 899.12,
+   "d": 2.4,
+   "text": "uh like a friend of a friend from out of"
+  },
+  {
+   "t": 901.52,
+   "d": 0.88,
+   "text": "town"
+  },
+  {
+   "t": 902.4,
+   "d": 3.36,
+   "text": "uh a an old friend"
+  },
+  {
+   "t": 905.76,
+   "d": 4.64,
+   "text": "from your elementary school days uh"
+  },
+  {
+   "t": 910.48,
+   "d": 2.88,
+   "text": "yeah yeah i'm trying to like i i i think"
+  },
+  {
+   "t": 913.36,
+   "d": 0.48,
+   "text": "the"
+  },
+  {
+   "t": 913.84,
+   "d": 2.48,
+   "text": "reconnect with a friend angles here is"
+  },
+  {
+   "t": 916.32,
+   "d": 1.52,
+   "text": "yeah but"
+  },
+  {
+   "t": 917.84,
+   "d": 3.28,
+   "text": "everyone in the town and their relation"
+  },
+  {
+   "t": 922.16,
+   "d": 2.24,
+   "text": "so kind of everyone knew him in some way"
+  },
+  {
+   "t": 924.4,
+   "d": 3.44,
+   "text": "a lot of friends"
+  },
+  {
+   "t": 932.09,
+   "d": 3.17,
+   "text": "[Music]"
+  },
+  {
+   "t": 938.48,
+   "d": 1.2,
+   "text": "yeah i stopped at some point because"
+  },
+  {
+   "t": 939.68,
+   "d": 2.24,
+   "text": "it's yeah yeah"
+  },
+  {
+   "t": 941.92,
+   "d": 1.2,
+   "text": "that's policy there's like 40"
+  },
+  {
+   "t": 943.12,
+   "d": 2.48,
+   "text": "relationships"
+  },
+  {
+   "t": 948.96,
+   "d": 2.96,
+   "text": "so i'm going to have to be taking off to"
+  },
+  {
+   "t": 951.92,
+   "d": 2.32,
+   "text": "take care of this emergency the cemetery"
+  },
+  {
+   "t": 954.24,
+   "d": 1.6,
+   "text": "is 257 plus which means"
+  },
+  {
+   "t": 955.84,
+   "d": 2.08,
+   "text": "257 people that did live in the town"
+  },
+  {
+   "t": 957.92,
+   "d": 1.36,
+   "text": "died at some point in the town or in the"
+  },
+  {
+   "t": 959.28,
+   "d": 1.68,
+   "text": "cemetery"
+  },
+  {
+   "t": 960.96,
+   "d": 1.28,
+   "text": "that actually looks kind of cool i have"
+  },
+  {
+   "t": 962.24,
+   "d": 1.44,
+   "text": "uh generated gravestones without the"
+  },
+  {
+   "t": 963.68,
+   "d": 1.12,
+   "text": "cops"
+  },
+  {
+   "t": 964.8,
+   "d": 3.36,
+   "text": "yes uh"
+  },
+  {
+   "t": 968.16,
+   "d": 2.08,
+   "text": "there have been stories just today where"
+  },
+  {
+   "t": 970.24,
+   "d": 1.52,
+   "text": "wonderful decease"
+  },
+  {
+   "t": 971.76,
+   "d": 3.12,
+   "text": "was related to the founders wonderful"
+  },
+  {
+   "t": 974.88,
+   "d": 4.16,
+   "text": "one last thing have a fun"
+  },
+  {
+   "t": 979.04,
+   "d": 4.8,
+   "text": "cover story"
+  },
+  {
+   "t": 990.64,
+   "d": 7.2,
+   "text": "yeah let's see um"
+  },
+  {
+   "t": 1006.08,
+   "d": 4.8,
+   "text": "yeah who was a miner a farmer"
+  },
+  {
+   "t": 1015.84,
+   "d": 1.52,
+   "text": "the jobs in the simulation do change"
+  },
+  {
+   "t": 1017.36,
+   "d": 1.12,
+   "text": "over time too so like if you were to"
+  },
+  {
+   "t": 1018.48,
+   "d": 1.68,
+   "text": "stop the simulation in 1890 you won't"
+  },
+  {
+   "t": 1020.16,
+   "d": 0.8,
+   "text": "find like"
+  },
+  {
+   "t": 1020.96,
+   "d": 2.8,
+   "text": "a bartender well"
+  },
+  {
+   "t": 1036.96,
+   "d": 2.4,
+   "text": "the the player understands that he is he"
+  },
+  {
+   "t": 1039.36,
+   "d": 1.44,
+   "text": "is something different is he closing the"
+  },
+  {
+   "t": 1040.8,
+   "d": 0.88,
+   "text": "curtain"
+  },
+  {
+   "t": 1041.68,
+   "d": 1.76,
+   "text": "so yes in between he closes the curtain"
+  },
+  {
+   "t": 1043.44,
+   "d": 1.2,
+   "text": "and he also has a light that he turns"
+  },
+  {
+   "t": 1044.64,
+   "d": 0.56,
+   "text": "off"
+  },
+  {
+   "t": 1045.2,
+   "d": 2.72,
+   "text": "so he's like done like close the curtain"
+  },
+  {
+   "t": 1047.92,
+   "d": 2.24,
+   "text": "click off the light"
+  },
+  {
+   "t": 1050.16,
+   "d": 1.84,
+   "text": "okay i do need to hear that could we get"
+  },
+  {
+   "t": 1052.0,
+   "d": 2.24,
+   "text": "that louder uh them in the room"
+  },
+  {
+   "t": 1054.24,
+   "d": 0.96,
+   "text": "so she just looked at the business"
+  },
+  {
+   "t": 1055.2,
+   "d": 2.08,
+   "text": "directory this is every business in the"
+  },
+  {
+   "t": 1057.28,
+   "d": 2.64,
+   "text": "town currently"
+  },
+  {
+   "t": 1061.36,
+   "d": 1.68,
+   "text": "they're all started by people so they"
+  },
+  {
+   "t": 1063.04,
+   "d": 1.92,
+   "text": "have to someone has to have that idea"
+  },
+  {
+   "t": 1064.96,
+   "d": 1.44,
+   "text": "then they do it"
+  },
+  {
+   "t": 1066.4,
+   "d": 2.24,
+   "text": "and they stick around or they close down"
+  },
+  {
+   "t": 1068.64,
+   "d": 2.96,
+   "text": "or they transfer ownership"
+  },
+  {
+   "t": 1077.52,
+   "d": 2.88,
+   "text": "yeah yeah totally"
+  },
+  {
+   "t": 1086.24,
+   "d": 1.92,
+   "text": "the actor that was original idea was"
+  },
+  {
+   "t": 1088.16,
+   "d": 1.6,
+   "text": "like we want to build this sort of game"
+  },
+  {
+   "t": 1089.76,
+   "d": 1.2,
+   "text": "like this what content"
+  },
+  {
+   "t": 1090.96,
+   "d": 1.6,
+   "text": "should we create we have an nlg system a"
+  },
+  {
+   "t": 1092.56,
+   "d": 2.56,
+   "text": "natural language"
+  },
+  {
+   "t": 1106.2,
+   "d": 2.04,
+   "text": "[Music]"
+  },
+  {
+   "t": 1108.24,
+   "d": 2.16,
+   "text": "okay people often begin by taking a lot"
+  },
+  {
+   "t": 1110.4,
+   "d": 1.68,
+   "text": "of notes"
+  },
+  {
+   "t": 1112.08,
+   "d": 1.28,
+   "text": "they have a notebook in front of them we"
+  },
+  {
+   "t": 1113.36,
+   "d": 2.08,
+   "text": "encourage that okay um"
+  },
+  {
+   "t": 1115.44,
+   "d": 4.88,
+   "text": "may i go to the 7th street diner"
+  },
+  {
+   "t": 1120.32,
+   "d": 1.76,
+   "text": "see what that adder is it's a pretty"
+  },
+  {
+   "t": 1122.08,
+   "d": 1.44,
+   "text": "common strategy without us telling"
+  },
+  {
+   "t": 1123.52,
+   "d": 1.6,
+   "text": "anyone to start at a bar or a diner"
+  },
+  {
+   "t": 1125.12,
+   "d": 1.28,
+   "text": "because it does feel awkward after"
+  },
+  {
+   "t": 1126.4,
+   "d": 1.2,
+   "text": "talking with the actor you're like"
+  },
+  {
+   "t": 1127.6,
+   "d": 1.2,
+   "text": "in the you're in the zone you know"
+  },
+  {
+   "t": 1128.8,
+   "d": 1.84,
+   "text": "you're role-playing pretty well"
+  },
+  {
+   "t": 1130.64,
+   "d": 1.6,
+   "text": "um and it feels awkward to like just"
+  },
+  {
+   "t": 1132.24,
+   "d": 1.36,
+   "text": "approach people at their house or like"
+  },
+  {
+   "t": 1133.6,
+   "d": 0.88,
+   "text": "in a business"
+  },
+  {
+   "t": 1134.48,
+   "d": 1.84,
+   "text": "so the natural thing is i don't know for"
+  },
+  {
+   "t": 1136.32,
+   "d": 3.36,
+   "text": "a lot of people a bar or diner"
+  },
+  {
+   "t": 1139.68,
+   "d": 1.77,
+   "text": "uh engine building"
+  },
+  {
+   "t": 1141.45,
+   "d": 3.36,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1145.04,
+   "d": 6.8,
+   "text": "at your building"
+  },
+  {
+   "t": 1153.17,
+   "d": 3.89,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1160.96,
+   "d": 1.92,
+   "text": "the people who are in the diner this is"
+  },
+  {
+   "t": 1162.88,
+   "d": 1.6,
+   "text": "a part of their daily routine perhaps or"
+  },
+  {
+   "t": 1164.48,
+   "d": 0.96,
+   "text": "they might be at work like the"
+  },
+  {
+   "t": 1165.44,
+   "d": 2.4,
+   "text": "dishwasher or the cook"
+  },
+  {
+   "t": 1167.84,
+   "d": 1.36,
+   "text": "uh some people that know the deceased"
+  },
+  {
+   "t": 1169.2,
+   "d": 1.84,
+   "text": "person are there we want the player to"
+  },
+  {
+   "t": 1171.04,
+   "d": 1.12,
+   "text": "talk to them"
+  },
+  {
+   "t": 1172.16,
+   "d": 1.2,
+   "text": "because that just gets things going"
+  },
+  {
+   "t": 1173.36,
+   "d": 1.04,
+   "text": "right away we want them to figure out"
+  },
+  {
+   "t": 1174.4,
+   "d": 1.12,
+   "text": "who the deceased person is"
+  },
+  {
+   "t": 1175.52,
+   "d": 1.44,
+   "text": "the real meat of it is figuring out who"
+  },
+  {
+   "t": 1176.96,
+   "d": 3.28,
+   "text": "the next opinions and finding them"
+  },
+  {
+   "t": 1181.68,
+   "d": 1.2,
+   "text": "a lot of times the way that happens is"
+  },
+  {
+   "t": 1182.88,
+   "d": 3.28,
+   "text": "through like the expertise of the actor"
+  },
+  {
+   "t": 1186.16,
+   "d": 1.92,
+   "text": "so we'll probably see ben pull some"
+  },
+  {
+   "t": 1188.08,
+   "d": 1.68,
+   "text": "pretty amazing moves"
+  },
+  {
+   "t": 1189.76,
+   "d": 1.92,
+   "text": "because the you know the person can talk"
+  },
+  {
+   "t": 1191.68,
+   "d": 1.52,
+   "text": "to anyone"
+  },
+  {
+   "t": 1193.2,
+   "d": 1.04,
+   "text": "and then we're gonna start to see his"
+  },
+  {
+   "t": 1194.24,
+   "d": 1.44,
+   "text": "actor interface uh fill up with"
+  },
+  {
+   "t": 1195.68,
+   "d": 0.8,
+   "text": "information"
+  },
+  {
+   "t": 1196.48,
+   "d": 1.44,
+   "text": "like a ridiculous amount that he somehow"
+  },
+  {
+   "t": 1197.92,
+   "d": 3.84,
+   "text": "parses brilliantly as he delivers stuff"
+  },
+  {
+   "t": 1204.72,
+   "d": 1.52,
+   "text": "let's see uh i'm gonna print that down"
+  },
+  {
+   "t": 1206.24,
+   "d": 3.84,
+   "text": "here uh that's horrible huh down there"
+  },
+  {
+   "t": 1214.32,
+   "d": 3.84,
+   "text": "can i speak with uh two"
+  },
+  {
+   "t": 1218.16,
+   "d": 4.08,
+   "text": "over here so she's approaching a waiter"
+  },
+  {
+   "t": 1222.24,
+   "d": 2.88,
+   "text": "let's see if this waiter knows sweeter"
+  },
+  {
+   "t": 1225.12,
+   "d": 1.12,
+   "text": "does not know the disease"
+  },
+  {
+   "t": 1226.24,
+   "d": 3.04,
+   "text": "so right away we want to get her to"
+  },
+  {
+   "t": 1229.28,
+   "d": 1.52,
+   "text": "someone that does"
+  },
+  {
+   "t": 1230.8,
+   "d": 1.84,
+   "text": "let's see and you can notice ben's"
+  },
+  {
+   "t": 1232.64,
+   "d": 1.76,
+   "text": "interface up here is updated with"
+  },
+  {
+   "t": 1234.4,
+   "d": 3.52,
+   "text": "ronnie williams hey hun"
+  },
+  {
+   "t": 1237.92,
+   "d": 2.64,
+   "text": "uh take a seat uh someone will be with"
+  },
+  {
+   "t": 1240.56,
+   "d": 1.28,
+   "text": "you in just a moment"
+  },
+  {
+   "t": 1241.84,
+   "d": 1.68,
+   "text": "can i get you a glass of water or"
+  },
+  {
+   "t": 1243.52,
+   "d": 2.96,
+   "text": "anything i'm sure uh if i could"
+  },
+  {
+   "t": 1246.48,
+   "d": 2.64,
+   "text": "get in glass"
+  },
+  {
+   "t": 1260.56,
+   "d": 3.12,
+   "text": "thank you very much um i was wondering"
+  },
+  {
+   "t": 1263.68,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1264.88,
+   "d": 1.6,
+   "text": "uh i moved nearby for family and a"
+  },
+  {
+   "t": 1266.48,
+   "d": 2.08,
+   "text": "friend of a friend told me"
+  },
+  {
+   "t": 1268.56,
+   "d": 1.76,
+   "text": "that there was someone i should uh"
+  },
+  {
+   "t": 1270.32,
+   "d": 1.68,
+   "text": "connect with"
+  },
+  {
+   "t": 1272.0,
+   "d": 4.32,
+   "text": "um kind of the trouble is um i"
+  },
+  {
+   "t": 1276.32,
+   "d": 4.16,
+   "text": "knew them um i guess my"
+  },
+  {
+   "t": 1280.48,
+   "d": 3.44,
+   "text": "description was like a pen pal thing oh"
+  },
+  {
+   "t": 1283.92,
+   "d": 0.32,
+   "text": "i"
+  },
+  {
+   "t": 1284.24,
+   "d": 5.92,
+   "text": "see yeah so um"
+  },
+  {
+   "t": 1290.16,
+   "d": 4.88,
+   "text": "someone around so um i suppose uh"
+  },
+  {
+   "t": 1295.04,
+   "d": 3.36,
+   "text": "it's um so so so you know"
+  },
+  {
+   "t": 1298.4,
+   "d": 4.08,
+   "text": "i'm relatively new here myself"
+  },
+  {
+   "t": 1302.48,
+   "d": 2.32,
+   "text": "um gosh actually i've been here for"
+  },
+  {
+   "t": 1304.8,
+   "d": 1.52,
+   "text": "about a decade now it still feels like"
+  },
+  {
+   "t": 1306.32,
+   "d": 0.96,
+   "text": "yesterday"
+  },
+  {
+   "t": 1307.28,
+   "d": 4.0,
+   "text": "but uh you see that gentleman over there"
+  },
+  {
+   "t": 1311.28,
+   "d": 2.0,
+   "text": "uh you can see his glasses so that was"
+  },
+  {
+   "t": 1313.28,
+   "d": 3.2,
+   "text": "right here"
+  },
+  {
+   "t": 1316.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1326.9,
+   "d": 3.06,
+   "text": "[Music]"
+  },
+  {
+   "t": 1330.08,
+   "d": 1.68,
+   "text": "you're very welcome i'll go get you that"
+  },
+  {
+   "t": 1331.76,
+   "d": 3.52,
+   "text": "water of course"
+  },
+  {
+   "t": 1339.12,
+   "d": 1.52,
+   "text": "so the big storyline we're going after"
+  },
+  {
+   "t": 1340.64,
+   "d": 1.6,
+   "text": "here is that the deceased person was in"
+  },
+  {
+   "t": 1342.24,
+   "d": 0.48,
+   "text": "love"
+  },
+  {
+   "t": 1342.72,
+   "d": 1.92,
+   "text": "with his brother's wife so that's just"
+  },
+  {
+   "t": 1344.64,
+   "d": 1.52,
+   "text": "dramatically interesting and they work"
+  },
+  {
+   "t": 1346.16,
+   "d": 1.52,
+   "text": "together as brewers"
+  },
+  {
+   "t": 1347.68,
+   "d": 2.0,
+   "text": "at the brewery their dad used to phone"
+  },
+  {
+   "t": 1349.68,
+   "d": 1.6,
+   "text": "and their dad is now deceased"
+  },
+  {
+   "t": 1351.28,
+   "d": 1.68,
+   "text": "another dad is sorry is alive and one of"
+  },
+  {
+   "t": 1352.96,
+   "d": 1.2,
+   "text": "the next of kins so there's just sort of"
+  },
+  {
+   "t": 1354.16,
+   "d": 0.4,
+   "text": "like"
+  },
+  {
+   "t": 1354.56,
+   "d": 2.64,
+   "text": "a lot of intrigue there and we'll see"
+  },
+  {
+   "t": 1357.2,
+   "d": 4.64,
+   "text": "ben try to work that in i think"
+  },
+  {
+   "t": 1367.2,
+   "d": 1.28,
+   "text": "yeah because you'll see it gets quite"
+  },
+  {
+   "t": 1368.48,
+   "d": 5.84,
+   "text": "emotional usually at the end"
+  },
+  {
+   "t": 1374.32,
+   "d": 2.08,
+   "text": "yeah yeah i just uh when they talk when"
+  },
+  {
+   "t": 1376.4,
+   "d": 1.28,
+   "text": "she talks i really need to know because"
+  },
+  {
+   "t": 1377.68,
+   "d": 0.96,
+   "text": "i'm of course"
+  },
+  {
+   "t": 1378.64,
+   "d": 3.36,
+   "text": "executing commands as you can see"
+  },
+  {
+   "t": 1385.6,
+   "d": 2.16,
+   "text": "let's see good call that's good thinking"
+  },
+  {
+   "t": 1387.76,
+   "d": 3.12,
+   "text": "let's let's see what we can find here"
+  },
+  {
+   "t": 1392.48,
+   "d": 2.8,
+   "text": "oh no way she worked at the brewery"
+  },
+  {
+   "t": 1395.28,
+   "d": 0.72,
+   "text": "until last"
+  },
+  {
+   "t": 1396.0,
+   "d": 2.0,
+   "text": "year she was a bottler there way before"
+  },
+  {
+   "t": 1398.0,
+   "d": 1.36,
+   "text": "she's been there since 58"
+  },
+  {
+   "t": 1399.36,
+   "d": 2.48,
+   "text": "so okay wow thank you i'm going to tell"
+  },
+  {
+   "t": 1401.84,
+   "d": 15.84,
+   "text": "the actor"
+  },
+  {
+   "t": 1417.68,
+   "d": 3.76,
+   "text": "uh you're not because there"
+  },
+  {
+   "t": 1429.76,
+   "d": 1.84,
+   "text": "i were see how the relationship started"
+  },
+  {
+   "t": 1431.6,
+   "d": 1.44,
+   "text": "just generally where they met"
+  },
+  {
+   "t": 1433.04,
+   "d": 2.32,
+   "text": "i'll look at that next that's good she"
+  },
+  {
+   "t": 1435.36,
+   "d": 2.88,
+   "text": "did not say anything right"
+  },
+  {
+   "t": 1439.6,
+   "d": 6.24,
+   "text": "i'll make sure"
+  },
+  {
+   "t": 1449.22,
+   "d": 3.09,
+   "text": "[Music]"
+  },
+  {
+   "t": 1468.96,
+   "d": 1.52,
+   "text": "this guy knows the deceased uh miss"
+  },
+  {
+   "t": 1470.48,
+   "d": 3.28,
+   "text": "bernard stein the second function"
+  },
+  {
+   "t": 1473.76,
+   "d": 2.08,
+   "text": "extra virgin hello this guy's gonna be"
+  },
+  {
+   "t": 1475.84,
+   "d": 1.76,
+   "text": "right out there"
+  },
+  {
+   "t": 1477.6,
+   "d": 4.56,
+   "text": "um so uh hi my name is uh"
+  },
+  {
+   "t": 1482.4,
+   "d": 3.84,
+   "text": "it is a pleasure to meet you liz smith"
+  },
+  {
+   "t": 1492.16,
+   "d": 1.2,
+   "text": "now that comes up here because he said"
+  },
+  {
+   "t": 1493.36,
+   "d": 3.12,
+   "text": "the name anytime he comes back"
+  },
+  {
+   "t": 1496.48,
+   "d": 5.36,
+   "text": "has as many names as myself"
+  },
+  {
+   "t": 1513.6,
+   "d": 2.08,
+   "text": "she um he hasn't been around for a long"
+  },
+  {
+   "t": 1515.68,
+   "d": 0.96,
+   "text": "time and recommended"
+  },
+  {
+   "t": 1516.64,
+   "d": 4.0,
+   "text": "that i would come talk to you um"
+  },
+  {
+   "t": 1520.64,
+   "d": 3.12,
+   "text": "so uh unfortunately because it was"
+  },
+  {
+   "t": 1523.76,
+   "d": 2.16,
+   "text": "um because i was afraid of friend i"
+  },
+  {
+   "t": 1525.92,
+   "d": 0.96,
+   "text": "don't have too"
+  },
+  {
+   "t": 1526.88,
+   "d": 3.12,
+   "text": "terribly much to go by um"
+  },
+  {
+   "t": 1530.0,
+   "d": 2.56,
+   "text": "you might be surprised by how"
+  },
+  {
+   "t": 1532.56,
+   "d": 1.52,
+   "text": "knowledgeable i am about the people of"
+  },
+  {
+   "t": 1534.08,
+   "d": 1.44,
+   "text": "this town"
+  },
+  {
+   "t": 1535.52,
+   "d": 1.12,
+   "text": "how long have you been here i've been"
+  },
+  {
+   "t": 1536.64,
+   "d": 3.36,
+   "text": "here all my life born and raised"
+  },
+  {
+   "t": 1540.0,
+   "d": 3.12,
+   "text": "i'm a north field folk"
+  },
+  {
+   "t": 1545.12,
+   "d": 3.04,
+   "text": "all right um so i"
+  },
+  {
+   "t": 1548.16,
+   "d": 1.36,
+   "text": "basically have like a physical"
+  },
+  {
+   "t": 1549.52,
+   "d": 1.68,
+   "text": "description which is uh"
+  },
+  {
+   "t": 1551.2,
+   "d": 3.36,
+   "text": "kind of short brown hair and uh"
+  },
+  {
+   "t": 1554.56,
+   "d": 4.08,
+   "text": "lighter skin um"
+  },
+  {
+   "t": 1560.16,
+   "d": 4.0,
+   "text": "wow that is not a lot to go off of"
+  },
+  {
+   "t": 1566.0,
+   "d": 2.08,
+   "text": "so you only have a physical description"
+  },
+  {
+   "t": 1568.08,
+   "d": 2.48,
+   "text": "okay okay challenge"
+  },
+  {
+   "t": 1570.56,
+   "d": 3.12,
+   "text": "uh any facial hair"
+  },
+  {
+   "t": 1573.68,
+   "d": 3.04,
+   "text": "um i don't believe so"
+  },
+  {
+   "t": 1576.72,
+   "d": 4.08,
+   "text": "okay okay any uh"
+  },
+  {
+   "t": 1580.8,
+   "d": 3.6,
+   "text": "blemishes uh scars or remarks"
+  },
+  {
+   "t": 1584.4,
+   "d": 3.52,
+   "text": "freckles not the freckles of course"
+  },
+  {
+   "t": 1587.92,
+   "d": 3.2,
+   "text": "of course um"
+  },
+  {
+   "t": 1594.64,
+   "d": 3.76,
+   "text": "hang on one second actually need to take"
+  },
+  {
+   "t": 1598.4,
+   "d": 2.16,
+   "text": "a phone call"
+  },
+  {
+   "t": 1600.56,
+   "d": 4.24,
+   "text": "oh sorry do you yeah"
+  },
+  {
+   "t": 1605.2,
+   "d": 1.36,
+   "text": "it's a little rude to do that in the"
+  },
+  {
+   "t": 1606.56,
+   "d": 7.28,
+   "text": "middle of our conversation"
+  },
+  {
+   "t": 1614.33,
+   "d": 4.55,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1618.88,
+   "d": 8.96,
+   "text": "i'll be right here"
+  },
+  {
+   "t": 1634.15,
+   "d": 8.29,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1652.4,
+   "d": 3.44,
+   "text": "let's see"
+  },
+  {
+   "t": 1661.92,
+   "d": 1.84,
+   "text": "here's all the people's homes uh in the"
+  },
+  {
+   "t": 1663.76,
+   "d": 2.0,
+   "text": "town"
+  },
+  {
+   "t": 1665.76,
+   "d": 1.6,
+   "text": "what's the uh last name again is it"
+  },
+  {
+   "t": 1667.36,
+   "d": 4.0,
+   "text": "carmen cammack okay"
+  },
+  {
+   "t": 1671.36,
+   "d": 3.28,
+   "text": "yeah a lot of camex in this town"
+  },
+  {
+   "t": 1675.76,
+   "d": 1.84,
+   "text": "a smart technique is to remember where"
+  },
+  {
+   "t": 1677.6,
+   "d": 1.84,
+   "text": "the deceased was the body was"
+  },
+  {
+   "t": 1679.44,
+   "d": 1.44,
+   "text": "look in the directory for that address"
+  },
+  {
+   "t": 1680.88,
+   "d": 2.48,
+   "text": "and now you at least know the last name"
+  },
+  {
+   "t": 1683.36,
+   "d": 2.88,
+   "text": "but it's not obvious"
+  },
+  {
+   "t": 1686.56,
+   "d": 3.12,
+   "text": "it might be what she's doing though"
+  },
+  {
+   "t": 1694.08,
+   "d": 3.76,
+   "text": "okay look at the business directory"
+  },
+  {
+   "t": 1705.84,
+   "d": 6.0,
+   "text": "how can i go to the actually departments"
+  },
+  {
+   "t": 1715.9,
+   "d": 6.58,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1723.76,
+   "d": 2.08,
+   "text": "she's now at the uh buzzer sort of an"
+  },
+  {
+   "t": 1725.84,
+   "d": 1.6,
+   "text": "idea"
+  },
+  {
+   "t": 1727.44,
+   "d": 1.76,
+   "text": "all right entrance of a apartment"
+  },
+  {
+   "t": 1729.2,
+   "d": 2.48,
+   "text": "complex huge one fifty three"
+  },
+  {
+   "t": 1731.68,
+   "d": 8.16,
+   "text": "geez looks like a scale wow"
+  },
+  {
+   "t": 1747.36,
+   "d": 2.72,
+   "text": "that's what we heard right"
+  },
+  {
+   "t": 1750.72,
+   "d": 1.28,
+   "text": "so in the buzz he doesn't deploy the"
+  },
+  {
+   "t": 1752.0,
+   "d": 2.56,
+   "text": "curtain doesn't open that"
+  },
+  {
+   "t": 1754.56,
+   "d": 3.04,
+   "text": "no don't answer it anyway so 16 was"
+  },
+  {
+   "t": 1757.6,
+   "d": 4.56,
+   "text": "yeah where he lived right"
+  },
+  {
+   "t": 1762.24,
+   "d": 1.36,
+   "text": "so she buzzed his unit and no one"
+  },
+  {
+   "t": 1763.6,
+   "d": 4.24,
+   "text": "answered because he died right"
+  },
+  {
+   "t": 1770.16,
+   "d": 2.32,
+   "text": "two people live there uh how do we know"
+  },
+  {
+   "t": 1772.48,
+   "d": 1.12,
+   "text": "that because"
+  },
+  {
+   "t": 1773.6,
+   "d": 2.0,
+   "text": "there were two cameras like that oh"
+  },
+  {
+   "t": 1775.6,
+   "d": 2.72,
+   "text": "right or right right"
+  },
+  {
+   "t": 1778.56,
+   "d": 1.52,
+   "text": "two different last names kamek yep but"
+  },
+  {
+   "t": 1780.08,
+   "d": 1.44,
+   "text": "that would be a smart one above that"
+  },
+  {
+   "t": 1781.52,
+   "d": 1.12,
+   "text": "because now she so she knows the last"
+  },
+  {
+   "t": 1782.64,
+   "d": 1.68,
+   "text": "name now we know that right"
+  },
+  {
+   "t": 1784.32,
+   "d": 2.56,
+   "text": "because we think she knows that if she"
+  },
+  {
+   "t": 1786.88,
+   "d": 1.04,
+   "text": "took down"
+  },
+  {
+   "t": 1787.92,
+   "d": 3.04,
+   "text": "the deceased address"
+  },
+  {
+   "t": 1792.64,
+   "d": 2.16,
+   "text": "yep just not home so uh the deceased is"
+  },
+  {
+   "t": 1794.8,
+   "d": 1.44,
+   "text": "always home alone at the time that they"
+  },
+  {
+   "t": 1796.24,
+   "d": 0.48,
+   "text": "die"
+  },
+  {
+   "t": 1796.72,
+   "d": 1.36,
+   "text": "because then it's over you know"
+  },
+  {
+   "t": 1798.08,
+   "d": 11.76,
+   "text": "mexican's there presumably"
+  },
+  {
+   "t": 1811.44,
+   "d": 2.56,
+   "text": "uh okay"
+  },
+  {
+   "t": 1816.16,
+   "d": 2.16,
+   "text": "oh can you give me my uh computer"
+  },
+  {
+   "t": 1818.32,
+   "d": 0.96,
+   "text": "charger um"
+  },
+  {
+   "t": 1819.28,
+   "d": 4.56,
+   "text": "unless this is"
+  },
+  {
+   "t": 1829.92,
+   "d": 2.32,
+   "text": "that's not what i need um my backpack's"
+  },
+  {
+   "t": 1832.24,
+   "d": 3.76,
+   "text": "where it was can you ungrab that"
+  },
+  {
+   "t": 1836.0,
+   "d": 3.44,
+   "text": "these towns can kill your battery too"
+  },
+  {
+   "t": 1843.12,
+   "d": 2.24,
+   "text": "yeah it is takes a lot of juice uh can i"
+  },
+  {
+   "t": 1845.36,
+   "d": 5.6,
+   "text": "see the business directory again"
+  },
+  {
+   "t": 1850.96,
+   "d": 2.24,
+   "text": "was it clear to people what was going on"
+  },
+  {
+   "t": 1853.2,
+   "d": 2.08,
+   "text": "when she was talking"
+  },
+  {
+   "t": 1855.28,
+   "d": 1.6,
+   "text": "this was all the beliefs about who they"
+  },
+  {
+   "t": 1856.88,
+   "d": 1.84,
+   "text": "were talking about and this is"
+  },
+  {
+   "t": 1858.72,
+   "d": 1.68,
+   "text": "the character that ben our actor is"
+  },
+  {
+   "t": 1860.4,
+   "d": 1.76,
+   "text": "playing so this is that character's"
+  },
+  {
+   "t": 1862.16,
+   "d": 0.8,
+   "text": "personality"
+  },
+  {
+   "t": 1862.96,
+   "d": 2.16,
+   "text": "this is everything about them and at one"
+  },
+  {
+   "t": 1865.12,
+   "d": 1.52,
+   "text": "point he said he had been there ten"
+  },
+  {
+   "t": 1866.64,
+   "d": 1.44,
+   "text": "years he actually had to look down here"
+  },
+  {
+   "t": 1868.08,
+   "d": 1.76,
+   "text": "to see when that character moved to town"
+  },
+  {
+   "t": 1869.84,
+   "d": 2.56,
+   "text": "he does it like completely discreetly on"
+  },
+  {
+   "t": 1872.4,
+   "d": 0.88,
+   "text": "the right side"
+  },
+  {
+   "t": 1873.28,
+   "d": 3.44,
+   "text": "well that's just the player's office"
+  },
+  {
+   "t": 1876.72,
+   "d": 2.32,
+   "text": "sugar"
+  },
+  {
+   "t": 1889.84,
+   "d": 2.08,
+   "text": "as the conversation shifts to saying"
+  },
+  {
+   "t": 1891.92,
+   "d": 1.28,
+   "text": "like do you know someone named john or"
+  },
+  {
+   "t": 1893.2,
+   "d": 0.96,
+   "text": "something"
+  },
+  {
+   "t": 1894.16,
+   "d": 3.12,
+   "text": "uh when we find a match for that query"
+  },
+  {
+   "t": 1897.28,
+   "d": 2.16,
+   "text": "in the mind of the person that the"
+  },
+  {
+   "t": 1899.44,
+   "d": 0.88,
+   "text": "actor's playing"
+  },
+  {
+   "t": 1900.32,
+   "d": 1.28,
+   "text": "that's going to update with all their"
+  },
+  {
+   "t": 1901.6,
+   "d": 2.24,
+   "text": "beliefs about that person and then ben"
+  },
+  {
+   "t": 1903.84,
+   "d": 1.44,
+   "text": "has to adhere to those"
+  },
+  {
+   "t": 1905.28,
+   "d": 1.2,
+   "text": "so if it's like you know where they work"
+  },
+  {
+   "t": 1906.48,
+   "d": 1.92,
+   "text": "he has to look to see what his belief is"
+  },
+  {
+   "t": 1908.4,
+   "d": 1.28,
+   "text": "about where they work and that belief"
+  },
+  {
+   "t": 1909.68,
+   "d": 2.88,
+   "text": "came from the simulation"
+  },
+  {
+   "t": 1915.6,
+   "d": 3.24,
+   "text": "uh simulational so so people propagate"
+  },
+  {
+   "t": 1918.84,
+   "d": 2.2,
+   "text": "knowledge"
+  },
+  {
+   "t": 1921.04,
+   "d": 3.68,
+   "text": "oh that's uh there's a comment"
+  },
+  {
+   "t": 1925.76,
+   "d": 1.44,
+   "text": "the more evidence they get by people"
+  },
+  {
+   "t": 1927.2,
+   "d": 1.6,
+   "text": "propagating telling them rumors and so"
+  },
+  {
+   "t": 1928.8,
+   "d": 2.0,
+   "text": "forth the better they feel about it"
+  },
+  {
+   "t": 1930.8,
+   "d": 5.04,
+   "text": "but people can misremember and stuff"
+  },
+  {
+   "t": 1935.84,
+   "d": 1.6,
+   "text": "yeah yeah we'll see that again we"
+  },
+  {
+   "t": 1937.44,
+   "d": 3.52,
+   "text": "haven't seen much conversation yet so"
+  },
+  {
+   "t": 1946.0,
+   "d": 3.84,
+   "text": "i have an old command i wanna do again"
+  },
+  {
+   "t": 1950.0,
+   "d": 2.8,
+   "text": "okay uh everyone here knows the deceased"
+  },
+  {
+   "t": 1952.8,
+   "d": 1.04,
+   "text": "so we're gonna have a"
+  },
+  {
+   "t": 1953.84,
+   "d": 8.32,
+   "text": "thank you let's tell ben that"
+  },
+  {
+   "t": 1962.16,
+   "d": 2.64,
+   "text": "see how they know"
+  },
+  {
+   "t": 1970.0,
+   "d": 1.68,
+   "text": "second cousin a neighbor sister's friend"
+  },
+  {
+   "t": 1971.68,
+   "d": 5.52,
+   "text": "another neighbor"
+  },
+  {
+   "t": 1977.2,
+   "d": 3.2,
+   "text": "sister's friend that can be"
+  },
+  {
+   "t": 1987.6,
+   "d": 3.12,
+   "text": "um so if i if i have like a question"
+  },
+  {
+   "t": 1990.72,
+   "d": 1.84,
+   "text": "can i like is there somebody that i"
+  },
+  {
+   "t": 1992.56,
+   "d": 2.24,
+   "text": "could talk to or am i"
+  },
+  {
+   "t": 1994.8,
+   "d": 3.44,
+   "text": "on my own in here i basically want to go"
+  },
+  {
+   "t": 1998.24,
+   "d": 1.2,
+   "text": "back and look at the body because"
+  },
+  {
+   "t": 1999.44,
+   "d": 1.44,
+   "text": "clearly i wasn't"
+  },
+  {
+   "t": 2000.88,
+   "d": 3.2,
+   "text": "okay thank you thank you"
+  },
+  {
+   "t": 2004.08,
+   "d": 2.32,
+   "text": "god"
+  },
+  {
+   "t": 2009.12,
+   "d": 1.97,
+   "text": "god has spoken"
+  },
+  {
+   "t": 2011.09,
+   "d": 1.23,
+   "text": "[Music]"
+  },
+  {
+   "t": 2012.32,
+   "d": 2.32,
+   "text": "uh it's locked so but hopefully she"
+  },
+  {
+   "t": 2014.64,
+   "d": 3.52,
+   "text": "knocks and the janitor comes out"
+  },
+  {
+   "t": 2018.16,
+   "d": 2.4,
+   "text": "it's hard for me to get her into an"
+  },
+  {
+   "t": 2020.56,
+   "d": 1.2,
+   "text": "apartment"
+  },
+  {
+   "t": 2021.76,
+   "d": 3.36,
+   "text": "when the outside is locked"
+  },
+  {
+   "t": 2027.68,
+   "d": 4.88,
+   "text": "like a little oops"
+  },
+  {
+   "t": 2032.56,
+   "d": 2.24,
+   "text": "we're gonna have the janitor just emerge"
+  },
+  {
+   "t": 2034.8,
+   "d": 2.32,
+   "text": "that is an explicit command we have we"
+  },
+  {
+   "t": 2037.12,
+   "d": 1.36,
+   "text": "have she has a little piece of paper of"
+  },
+  {
+   "t": 2038.48,
+   "d": 1.2,
+   "text": "all the actions she can take and one of"
+  },
+  {
+   "t": 2039.68,
+   "d": 1.84,
+   "text": "them is knock on the door like"
+  },
+  {
+   "t": 2041.52,
+   "d": 6.32,
+   "text": "ring okay i just sent the uh janitor up"
+  },
+  {
+   "t": 2058.4,
+   "d": 4.32,
+   "text": "you look a little lost yeah"
+  },
+  {
+   "t": 2062.72,
+   "d": 3.28,
+   "text": "hi my name is robert fenn you can call"
+  },
+  {
+   "t": 2066.0,
+   "d": 1.36,
+   "text": "me bobby"
+  },
+  {
+   "t": 2067.36,
+   "d": 3.2,
+   "text": "i'm the night janitor here hi"
+  },
+  {
+   "t": 2070.56,
+   "d": 3.44,
+   "text": "hi um yeah i was actually"
+  },
+  {
+   "t": 2074.0,
+   "d": 3.44,
+   "text": "um trying to deposit friends uh it's uh"
+  },
+  {
+   "t": 2077.44,
+   "d": 3.28,
+   "text": "even the last name is kamek um"
+  },
+  {
+   "t": 2080.72,
+   "d": 2.24,
+   "text": "16. i don't think they're around i was"
+  },
+  {
+   "t": 2082.96,
+   "d": 2.4,
+   "text": "told they're supposed to be here"
+  },
+  {
+   "t": 2085.36,
+   "d": 4.48,
+   "text": "yeah uh"
+  },
+  {
+   "t": 2101.12,
+   "d": 3.04,
+   "text": "know jack all right okay so he took that"
+  },
+  {
+   "t": 2104.16,
+   "d": 1.28,
+   "text": "liberty there"
+  },
+  {
+   "t": 2105.44,
+   "d": 1.52,
+   "text": "um this is too long to not know the"
+  },
+  {
+   "t": 2106.96,
+   "d": 1.76,
+   "text": "deceased from an experienced point"
+  },
+  {
+   "t": 2108.72,
+   "d": 2.24,
+   "text": "i suppose since since he's not answering"
+  },
+  {
+   "t": 2110.96,
+   "d": 2.96,
+   "text": "i can actually"
+  },
+  {
+   "t": 2114.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 2117.92,
+   "d": 1.6,
+   "text": "but yeah thank you very much oh you're"
+  },
+  {
+   "t": 2119.52,
+   "d": 2.08,
+   "text": "you're very welcome you you you look"
+  },
+  {
+   "t": 2121.6,
+   "d": 3.28,
+   "text": "new in towns they're very new yeah"
+  },
+  {
+   "t": 2124.88,
+   "d": 2.8,
+   "text": "so yeah trying to pick up a missed"
+  },
+  {
+   "t": 2127.68,
+   "d": 4.16,
+   "text": "connection at some point"
+  },
+  {
+   "t": 2139.92,
+   "d": 2.48,
+   "text": "i don't really know him very well do you"
+  },
+  {
+   "t": 2142.4,
+   "d": 0.72,
+   "text": "have a place"
+  },
+  {
+   "t": 2143.12,
+   "d": 3.28,
+   "text": "to stay there's the crocker hotel"
+  },
+  {
+   "t": 2146.4,
+   "d": 2.32,
+   "text": "uh if you're looking for that's where"
+  },
+  {
+   "t": 2148.72,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 2149.6,
+   "d": 2.24,
+   "text": "is i don't know if the brother is you"
+  },
+  {
+   "t": 2151.84,
+   "d": 1.12,
+   "text": "you again"
+  },
+  {
+   "t": 2152.96,
+   "d": 1.36,
+   "text": "forgive me if i'm overstepping your"
+  },
+  {
+   "t": 2154.32,
+   "d": 2.4,
+   "text": "bounds you you seemed"
+  },
+  {
+   "t": 2156.72,
+   "d": 3.2,
+   "text": "a little lost a little flustered uh"
+  },
+  {
+   "t": 2159.92,
+   "d": 2.64,
+   "text": "so if you've already got a place to stay"
+  },
+  {
+   "t": 2162.56,
+   "d": 1.44,
+   "text": "for me to make any recommendations for"
+  },
+  {
+   "t": 2164.0,
+   "d": 3.04,
+   "text": "that yeah i appreciate it yeah i'm"
+  },
+  {
+   "t": 2167.04,
+   "d": 3.36,
+   "text": "uh very doing a trying harder around"
+  },
+  {
+   "t": 2170.4,
+   "d": 2.32,
+   "text": "um but yeah that's thank you very much"
+  },
+  {
+   "t": 2172.72,
+   "d": 2.0,
+   "text": "it's also just a nice place for a drink"
+  },
+  {
+   "t": 2174.72,
+   "d": 4.48,
+   "text": "okay yeah no i'm not i'm not asking"
+  },
+  {
+   "t": 2185.36,
+   "d": 2.48,
+   "text": "you're very um"
+  },
+  {
+   "t": 2189.89,
+   "d": 3.04,
+   "text": "[Music]"
+  },
+  {
+   "t": 2204.16,
+   "d": 1.2,
+   "text": "it wasn't necessary at that point i"
+  },
+  {
+   "t": 2205.36,
+   "d": 2.0,
+   "text": "think can i go to the"
+  },
+  {
+   "t": 2207.36,
+   "d": 8.48,
+   "text": "cracker hotel cool"
+  },
+  {
+   "t": 2227.76,
+   "d": 1.28,
+   "text": "the wife of the brother and i know she's"
+  },
+  {
+   "t": 2229.04,
+   "d": 2.24,
+   "text": "there"
+  },
+  {
+   "t": 2231.44,
+   "d": 1.92,
+   "text": "go to texas argument a string that's the"
+  },
+  {
+   "t": 2233.36,
+   "d": 1.76,
+   "text": "address and however i can remember that"
+  },
+  {
+   "t": 2235.12,
+   "d": 1.28,
+   "text": "either"
+  },
+  {
+   "t": 2236.4,
+   "d": 3.04,
+   "text": "yeah i did yeah earlier on yep right"
+  },
+  {
+   "t": 2239.44,
+   "d": 1.12,
+   "text": "away i try to set"
+  },
+  {
+   "t": 2240.56,
+   "d": 1.36,
+   "text": "people that are going to be the current"
+  },
+  {
+   "t": 2241.92,
+   "d": 2.48,
+   "text": "characters"
+  },
+  {
+   "t": 2247.28,
+   "d": 2.16,
+   "text": "no no there's a day and night cycle uh"
+  },
+  {
+   "t": 2249.44,
+   "d": 1.52,
+   "text": "one affordance is you can wait"
+  },
+  {
+   "t": 2250.96,
+   "d": 1.92,
+   "text": "until night or day and then people move"
+  },
+  {
+   "t": 2252.88,
+   "d": 1.28,
+   "text": "between that so they have a daily"
+  },
+  {
+   "t": 2254.16,
+   "d": 1.36,
+   "text": "routine but they only have two"
+  },
+  {
+   "t": 2255.52,
+   "d": 3.68,
+   "text": "cycles yeah it's a command"
+  },
+  {
+   "t": 2259.2,
+   "d": 3.52,
+   "text": "yep does she oh she has a sheet of"
+  },
+  {
+   "t": 2262.72,
+   "d": 1.76,
+   "text": "commands that she should speak out loud"
+  },
+  {
+   "t": 2264.48,
+   "d": 2.24,
+   "text": "yeah"
+  },
+  {
+   "t": 2266.96,
+   "d": 1.52,
+   "text": "and it will come up often in game play"
+  },
+  {
+   "t": 2268.48,
+   "d": 1.92,
+   "text": "where you'll try to go to like"
+  },
+  {
+   "t": 2270.4,
+   "d": 2.64,
+   "text": "a bar in the daytime and it's only open"
+  },
+  {
+   "t": 2273.04,
+   "d": 0.64,
+   "text": "at night"
+  },
+  {
+   "t": 2273.68,
+   "d": 1.44,
+   "text": "and so it'll be like oh it's locked and"
+  },
+  {
+   "t": 2275.12,
+   "d": 1.68,
+   "text": "then they that's often when the weight"
+  },
+  {
+   "t": 2276.8,
+   "d": 9.04,
+   "text": "command comes out"
+  },
+  {
+   "t": 2288.96,
+   "d": 1.44,
+   "text": "okay there's not multiple people that"
+  },
+  {
+   "t": 2290.4,
+   "d": 1.76,
+   "text": "get that description"
+  },
+  {
+   "t": 2292.16,
+   "d": 2.32,
+   "text": "let's see this is bertha this is the"
+  },
+  {
+   "t": 2294.48,
+   "d": 0.88,
+   "text": "goal"
+  },
+  {
+   "t": 2295.36,
+   "d": 4.56,
+   "text": "uh ah whatever 11's bertha"
+  },
+  {
+   "t": 2299.92,
+   "d": 2.08,
+   "text": "most likely bertha because down here he"
+  },
+  {
+   "t": 2302.0,
+   "d": 1.36,
+   "text": "printed out a description of"
+  },
+  {
+   "t": 2303.36,
+   "d": 2.08,
+   "text": "what bertha looked like and that seems"
+  },
+  {
+   "t": 2305.44,
+   "d": 1.2,
+   "text": "to match i actually know it's bertha"
+  },
+  {
+   "t": 2306.64,
+   "d": 1.04,
+   "text": "because of this"
+  },
+  {
+   "t": 2307.68,
+   "d": 2.08,
+   "text": "temp address number which corresponds to"
+  },
+  {
+   "t": 2309.76,
+   "d": 0.96,
+   "text": "these"
+  },
+  {
+   "t": 2310.72,
+   "d": 1.52,
+   "text": "and that's the argument that you need"
+  },
+  {
+   "t": 2312.24,
+   "d": 3.12,
+   "text": "for a conversation to happen"
+  },
+  {
+   "t": 2315.36,
+   "d": 3.04,
+   "text": "so that's definitely birth though"
+  },
+  {
+   "t": 2320.32,
+   "d": 2.48,
+   "text": "i suppose i'll talk to the concierge"
+  },
+  {
+   "t": 2322.8,
+   "d": 5.04,
+   "text": "number zero"
+  },
+  {
+   "t": 2332.88,
+   "d": 3.2,
+   "text": "not very open either perfect"
+  },
+  {
+   "t": 2336.08,
+   "d": 5.76,
+   "text": "but very rule-biting"
+  },
+  {
+   "t": 2343.52,
+   "d": 2.88,
+   "text": "hello welcome to the crocker hotel how"
+  },
+  {
+   "t": 2346.4,
+   "d": 1.68,
+   "text": "may i assist you"
+  },
+  {
+   "t": 2348.08,
+   "d": 4.56,
+   "text": "hi um i'm actually looking to uh"
+  },
+  {
+   "t": 2352.64,
+   "d": 2.4,
+   "text": "it would be"
+  },
+  {
+   "t": 2361.76,
+   "d": 8.08,
+   "text": "i live to serve"
+  },
+  {
+   "t": 2372.24,
+   "d": 1.6,
+   "text": "sorry she said she's going to the bar"
+  },
+  {
+   "t": 2373.84,
+   "d": 1.68,
+   "text": "was that she wanted to"
+  },
+  {
+   "t": 2375.52,
+   "d": 8.32,
+   "text": "yeah okay"
+  },
+  {
+   "t": 2395.28,
+   "d": 1.12,
+   "text": "i have a special command where i can"
+  },
+  {
+   "t": 2396.4,
+   "d": 2.8,
+   "text": "just change that text up here"
+  },
+  {
+   "t": 2399.2,
+   "d": 3.28,
+   "text": "yeah so"
+  },
+  {
+   "t": 2402.48,
+   "d": 1.92,
+   "text": "arbitrary simulation fidelity when you"
+  },
+  {
+   "t": 2404.4,
+   "d": 6.56,
+   "text": "can just type in what's going on"
+  },
+  {
+   "t": 2410.96,
+   "d": 1.2,
+   "text": "yeah by the way the best natural"
+  },
+  {
+   "t": 2412.16,
+   "d": 1.28,
+   "text": "language understanding system the best"
+  },
+  {
+   "t": 2413.44,
+   "d": 2.0,
+   "text": "parser like of all time"
+  },
+  {
+   "t": 2415.44,
+   "d": 4.24,
+   "text": "characters on the fly yeah um"
+  },
+  {
+   "t": 2419.68,
+   "d": 1.6,
+   "text": "i could probably go back and stop being"
+  },
+  {
+   "t": 2421.28,
+   "d": 1.92,
+   "text": "rude to the uh the poor"
+  },
+  {
+   "t": 2423.2,
+   "d": 2.88,
+   "text": "that i left like back in the seventh"
+  },
+  {
+   "t": 2426.08,
+   "d": 1.28,
+   "text": "street diner"
+  },
+  {
+   "t": 2427.36,
+   "d": 3.36,
+   "text": "just ditched the hotel"
+  },
+  {
+   "t": 2433.68,
+   "d": 3.2,
+   "text": "sit in the bar stand up did she say she"
+  },
+  {
+   "t": 2436.88,
+   "d": 0.8,
+   "text": "was gonna go there"
+  },
+  {
+   "t": 2437.68,
+   "d": 3.04,
+   "text": "yeah okay that's unfortunate but"
+  },
+  {
+   "t": 2440.72,
+   "d": 2.72,
+   "text": "nothing we can do"
+  },
+  {
+   "t": 2448.24,
+   "d": 5.6,
+   "text": "what was that person's name ronnie okay"
+  },
+  {
+   "t": 2454.24,
+   "d": 3.52,
+   "text": "okay uh building"
+  },
+  {
+   "t": 2464.84,
+   "d": 3.0,
+   "text": "right"
+  },
+  {
+   "t": 2478.8,
+   "d": 4.56,
+   "text": "may i please speak to this fellow again"
+  },
+  {
+   "t": 2484.56,
+   "d": 2.96,
+   "text": "show your phone call"
+  },
+  {
+   "t": 2489.76,
+   "d": 4.96,
+   "text": "yeah oh i'm so sorry"
+  },
+  {
+   "t": 2494.72,
+   "d": 2.72,
+   "text": "yeah um but you know while while i was"
+  },
+  {
+   "t": 2497.44,
+   "d": 1.76,
+   "text": "uh walking around i did make a phone"
+  },
+  {
+   "t": 2499.2,
+   "d": 1.12,
+   "text": "call and actually get"
+  },
+  {
+   "t": 2500.32,
+   "d": 2.72,
+   "text": "like a bit more to go on so you don't"
+  },
+  {
+   "t": 2503.04,
+   "d": 0.88,
+   "text": "say"
+  },
+  {
+   "t": 2503.92,
+   "d": 4.09,
+   "text": "yes so uh rather than uh"
+  },
+  {
+   "t": 2508.01,
+   "d": 3.12,
+   "text": "[Music]"
+  },
+  {
+   "t": 2515.22,
+   "d": 2.62,
+   "text": "[Music]"
+  },
+  {
+   "t": 2517.84,
+   "d": 3.0,
+   "text": "well yes i am he's a very good friend of"
+  },
+  {
+   "t": 2520.84,
+   "d": 1.32,
+   "text": "mine"
+  },
+  {
+   "t": 2522.16,
+   "d": 2.88,
+   "text": "very high charge means friendliness"
+  },
+  {
+   "t": 2525.04,
+   "d": 0.8,
+   "text": "essentially"
+  },
+  {
+   "t": 2525.84,
+   "d": 2.24,
+   "text": "sparks romantic attraction uh are you"
+  },
+  {
+   "t": 2528.08,
+   "d": 1.28,
+   "text": "looking for him"
+  },
+  {
+   "t": 2529.36,
+   "d": 2.08,
+   "text": "yeah that would actually be great yeah"
+  },
+  {
+   "t": 2531.44,
+   "d": 2.72,
+   "text": "yeah uh"
+  },
+  {
+   "t": 2534.32,
+   "d": 1.28,
+   "text": "you know that he works over at the"
+  },
+  {
+   "t": 2535.6,
+   "d": 3.2,
+   "text": "brewery i know that's good to know"
+  },
+  {
+   "t": 2538.8,
+   "d": 1.92,
+   "text": "okay i actually got a win over in the"
+  },
+  {
+   "t": 2540.72,
+   "d": 1.44,
+   "text": "buzz but um"
+  },
+  {
+   "t": 2542.16,
+   "d": 2.32,
+   "text": "didn't get an answer but oh he wasn't in"
+  },
+  {
+   "t": 2544.48,
+   "d": 2.48,
+   "text": "his house"
+  },
+  {
+   "t": 2547.12,
+   "d": 4.72,
+   "text": "oh yeah"
+  },
+  {
+   "t": 2563.28,
+   "d": 3.12,
+   "text": "um uh do you know if anybody else would"
+  },
+  {
+   "t": 2566.4,
+   "d": 0.8,
+   "text": "be"
+  },
+  {
+   "t": 2567.2,
+   "d": 3.28,
+   "text": "home like if i were to knock um i was"
+  },
+  {
+   "t": 2570.48,
+   "d": 3.04,
+   "text": "kind of counting on like"
+  },
+  {
+   "t": 2576.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 2590.4,
+   "d": 3.6,
+   "text": "you might have luck finding his"
+  },
+  {
+   "t": 2594.0,
+   "d": 3.44,
+   "text": "brother possibly all right"
+  },
+  {
+   "t": 2597.44,
+   "d": 2.88,
+   "text": "does he you also listen uh he lives in"
+  },
+  {
+   "t": 2600.32,
+   "d": 2.24,
+   "text": "town yes"
+  },
+  {
+   "t": 2602.56,
+   "d": 4.32,
+   "text": "his name is mark okay uh do you"
+  },
+  {
+   "t": 2606.88,
+   "d": 1.6,
+   "text": "looks like you have pencil and paper on"
+  },
+  {
+   "t": 2608.48,
+   "d": 2.16,
+   "text": "you yeah"
+  },
+  {
+   "t": 2610.64,
+   "d": 3.84,
+   "text": "i'm going to give you his address 7"
+  },
+  {
+   "t": 2614.48,
+   "d": 4.36,
+   "text": "2 3 mclean"
+  },
+  {
+   "t": 2618.84,
+   "d": 3.0,
+   "text": "avenue"
+  },
+  {
+   "t": 2622.48,
+   "d": 2.64,
+   "text": "all right"
+  },
+  {
+   "t": 2626.4,
+   "d": 1.92,
+   "text": "all right uh yeah thank you very much i"
+  },
+  {
+   "t": 2628.32,
+   "d": 1.36,
+   "text": "really appreciate your patience i'm"
+  },
+  {
+   "t": 2629.68,
+   "d": 1.36,
+   "text": "sorry to run out in the middle of"
+  },
+  {
+   "t": 2631.04,
+   "d": 2.4,
+   "text": "you're very welcome i pretty much spent"
+  },
+  {
+   "t": 2633.44,
+   "d": 1.28,
+   "text": "all my evenings here anyway"
+  },
+  {
+   "t": 2634.72,
+   "d": 3.36,
+   "text": "so hardly a weight at all"
+  },
+  {
+   "t": 2638.08,
+   "d": 3.6,
+   "text": "um and if you need any other help"
+  },
+  {
+   "t": 2641.68,
+   "d": 1.76,
+   "text": "i don't know where to find me okay yeah"
+  },
+  {
+   "t": 2643.44,
+   "d": 3.4,
+   "text": "thank you thank you liz right"
+  },
+  {
+   "t": 2646.84,
+   "d": 3.0,
+   "text": "yes"
+  },
+  {
+   "t": 2658.56,
+   "d": 1.2,
+   "text": "one thing that's not in the simulation"
+  },
+  {
+   "t": 2659.76,
+   "d": 1.76,
+   "text": "is whether mark knows his brother's in"
+  },
+  {
+   "t": 2661.52,
+   "d": 0.8,
+   "text": "love with his"
+  },
+  {
+   "t": 2662.32,
+   "d": 3.2,
+   "text": "own wife so that's just uh we can take"
+  },
+  {
+   "t": 2665.52,
+   "d": 2.56,
+   "text": "that liberty"
+  },
+  {
+   "t": 2668.48,
+   "d": 2.56,
+   "text": "no uh just the parents and the parents"
+  },
+  {
+   "t": 2671.04,
+   "d": 0.8,
+   "text": "are just sitting at home"
+  },
+  {
+   "t": 2671.84,
+   "d": 2.56,
+   "text": "meanwhile what's up she wanted to go"
+  },
+  {
+   "t": 2674.4,
+   "d": 0.72,
+   "text": "back to"
+  },
+  {
+   "t": 2675.12,
+   "d": 1.76,
+   "text": "talk to bernard von stein in a second"
+  },
+  {
+   "t": 2676.88,
+   "d": 2.24,
+   "text": "again"
+  },
+  {
+   "t": 2684.64,
+   "d": 1.45,
+   "text": "i don't think so"
+  },
+  {
+   "t": 2686.09,
+   "d": 3.37,
+   "text": "[Music]"
+  },
+  {
+   "t": 2694.56,
+   "d": 2.08,
+   "text": "brewery is there's just a janitor it's"
+  },
+  {
+   "t": 2696.64,
+   "d": 2.8,
+   "text": "going to be locked"
+  },
+  {
+   "t": 2702.84,
+   "d": 3.0,
+   "text": "yep"
+  },
+  {
+   "t": 2716.84,
+   "d": 3.0,
+   "text": "uh"
+  },
+  {
+   "t": 2729.21,
+   "d": 2.07,
+   "text": "[Music]"
+  },
+  {
+   "t": 2731.28,
+   "d": 1.6,
+   "text": "and i'm and i'm literally wandering"
+  },
+  {
+   "t": 2732.88,
+   "d": 14.96,
+   "text": "around at night"
+  },
+  {
+   "t": 2751.19,
+   "d": 0.89,
+   "text": "[Music]"
+  },
+  {
+   "t": 2752.08,
+   "d": 4.79,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 2758.84,
+   "d": 1.64,
+   "text": "ugh"
+  },
+  {
+   "t": 2760.48,
+   "d": 15.36,
+   "text": "let's see"
+  },
+  {
+   "t": 2784.8,
+   "d": 1.28,
+   "text": "one thing that might be a little unclear"
+  },
+  {
+   "t": 2786.08,
+   "d": 2.32,
+   "text": "unless you've played before is that"
+  },
+  {
+   "t": 2788.4,
+   "d": 3.68,
+   "text": "um for the player um their general"
+  },
+  {
+   "t": 2792.08,
+   "d": 1.28,
+   "text": "adrenaline is really high and they're"
+  },
+  {
+   "t": 2793.36,
+   "d": 1.44,
+   "text": "trying to piece together exactly what"
+  },
+  {
+   "t": 2794.8,
+   "d": 0.88,
+   "text": "they're doing"
+  },
+  {
+   "t": 2795.68,
+   "d": 1.76,
+   "text": "and they have the sheet of commands so"
+  },
+  {
+   "t": 2797.44,
+   "d": 1.52,
+   "text": "my worries if i just"
+  },
+  {
+   "t": 2798.96,
+   "d": 4.88,
+   "text": "waltz up to the door and talk to uh"
+  },
+  {
+   "t": 2813.76,
+   "d": 1.28,
+   "text": "and she's also preparing to talk to"
+  },
+  {
+   "t": 2815.04,
+   "d": 1.12,
+   "text": "someone because it is when you are"
+  },
+  {
+   "t": 2816.16,
+   "d": 0.96,
+   "text": "talking to the actor and they're in"
+  },
+  {
+   "t": 2817.12,
+   "d": 1.04,
+   "text": "front of you"
+  },
+  {
+   "t": 2818.16,
+   "d": 1.52,
+   "text": "and he does give you pushback for like"
+  },
+  {
+   "t": 2819.68,
+   "d": 1.2,
+   "text": "leaving and to talk on your phone and"
+  },
+  {
+   "t": 2820.88,
+   "d": 0.48,
+   "text": "things"
+  },
+  {
+   "t": 2821.36,
+   "d": 1.76,
+   "text": "you do feel like you need to be prepared"
+  },
+  {
+   "t": 2823.12,
+   "d": 1.76,
+   "text": "and so like kind of amps up that like"
+  },
+  {
+   "t": 2824.88,
+   "d": 0.88,
+   "text": "adrenaline and"
+  },
+  {
+   "t": 2825.76,
+   "d": 2.08,
+   "text": "so players can sit in there and it won't"
+  },
+  {
+   "t": 2827.84,
+   "d": 1.44,
+   "text": "feel like any time at all but they'll"
+  },
+  {
+   "t": 2829.28,
+   "d": 1.36,
+   "text": "for us as the audience we're like"
+  },
+  {
+   "t": 2830.64,
+   "d": 3.04,
+   "text": "waiting for the next thing"
+  },
+  {
+   "t": 2839.28,
+   "d": 3.28,
+   "text": "okay yeah so we talked about it a little"
+  },
+  {
+   "t": 2842.56,
+   "d": 0.4,
+   "text": "bit"
+  },
+  {
+   "t": 2842.96,
+   "d": 4.32,
+   "text": "uh before we started so um"
+  },
+  {
+   "t": 2847.36,
+   "d": 1.2,
+   "text": "she starts out as a mortician's"
+  },
+  {
+   "t": 2848.56,
+   "d": 2.16,
+   "text": "assistant and she's with the mortician"
+  },
+  {
+   "t": 2850.72,
+   "d": 2.0,
+   "text": "and they've just found a body they"
+  },
+  {
+   "t": 2852.72,
+   "d": 1.36,
+   "text": "haven't found it there's like an"
+  },
+  {
+   "t": 2854.08,
+   "d": 1.2,
+   "text": "investigation going on but as the"
+  },
+  {
+   "t": 2855.28,
+   "d": 1.28,
+   "text": "mortician's assistant"
+  },
+  {
+   "t": 2856.56,
+   "d": 2.8,
+   "text": "she needs to deliver the notice to the"
+  },
+  {
+   "t": 2859.36,
+   "d": 1.04,
+   "text": "next of kin"
+  },
+  {
+   "t": 2860.4,
+   "d": 3.36,
+   "text": "so the way she wins is telling the next"
+  },
+  {
+   "t": 2863.76,
+   "d": 2.4,
+   "text": "of kin"
+  },
+  {
+   "t": 2872.32,
+   "d": 1.84,
+   "text": "oh bad news yes that is the bad news"
+  },
+  {
+   "t": 2874.16,
+   "d": 1.68,
+   "text": "digital rings yes"
+  },
+  {
+   "t": 2875.84,
+   "d": 2.24,
+   "text": "yes yes and the mortician"
+  },
+  {
+   "t": 2878.08,
+   "d": 1.68,
+   "text": "[Music]"
+  },
+  {
+   "t": 2879.76,
+   "d": 4.16,
+   "text": "what was that directory thank you"
+  },
+  {
+   "t": 2884.25,
+   "d": 1.35,
+   "text": "[Music]"
+  },
+  {
+   "t": 2885.6,
+   "d": 2.32,
+   "text": "um that's another part of the game"
+  },
+  {
+   "t": 2887.92,
+   "d": 0.96,
+   "text": "that's static to"
+  },
+  {
+   "t": 2888.88,
+   "d": 1.36,
+   "text": "um that we've kind of developed over"
+  },
+  {
+   "t": 2890.24,
+   "d": 1.68,
+   "text": "time was the mortician character"
+  },
+  {
+   "t": 2891.92,
+   "d": 1.92,
+   "text": "as someone who because i kind of act as"
+  },
+  {
+   "t": 2893.84,
+   "d": 2.24,
+   "text": "a guide"
+  },
+  {
+   "t": 2898.56,
+   "d": 2.64,
+   "text": "anyone hear that"
+  },
+  {
+   "t": 2902.0,
+   "d": 2.8,
+   "text": "someone could bring her water"
+  },
+  {
+   "t": 2905.76,
+   "d": 3.28,
+   "text": "i'll go get her water"
+  },
+  {
+   "t": 2911.28,
+   "d": 2.16,
+   "text": "oh oh yeah she might not need an actual"
+  },
+  {
+   "t": 2913.44,
+   "d": 3.12,
+   "text": "watershed i mean at the diner"
+  },
+  {
+   "t": 2916.72,
+   "d": 3.52,
+   "text": "she ordered water she was kind of low on"
+  },
+  {
+   "t": 2920.24,
+   "d": 2.88,
+   "text": "water when she went in there"
+  },
+  {
+   "t": 2926.24,
+   "d": 3.44,
+   "text": "i wanted i just wanna know what that is"
+  },
+  {
+   "t": 2929.68,
+   "d": 5.6,
+   "text": "yes i love it 530 sander avenue"
+  },
+  {
+   "t": 2935.28,
+   "d": 8.56,
+   "text": "i want to know too"
+  },
+  {
+   "t": 2949.13,
+   "d": 3.07,
+   "text": "[Music]"
+  },
+  {
+   "t": 2954.96,
+   "d": 2.88,
+   "text": "a lot of middle-aged men"
+  },
+  {
+   "t": 2961.84,
+   "d": 10.0,
+   "text": "i don't know what this is"
+  },
+  {
+   "t": 2973.62,
+   "d": 3.08,
+   "text": "[Music]"
+  },
+  {
+   "t": 2984.96,
+   "d": 2.56,
+   "text": "okay like everyone knows knows the"
+  },
+  {
+   "t": 2987.52,
+   "d": 2.64,
+   "text": "deceased yep"
+  },
+  {
+   "t": 2990.4,
+   "d": 2.4,
+   "text": "what's that"
+  },
+  {
+   "t": 2993.52,
+   "d": 2.16,
+   "text": "oh that's a class of people that come"
+  },
+  {
+   "t": 2995.68,
+   "d": 2.48,
+   "text": "from outside of the simulation um which"
+  },
+  {
+   "t": 2998.16,
+   "d": 1.36,
+   "text": "they need a different constructor"
+  },
+  {
+   "t": 2999.52,
+   "d": 2.48,
+   "text": "essentially"
+  },
+  {
+   "t": 3003.44,
+   "d": 1.92,
+   "text": "they usually come for a job and it means"
+  },
+  {
+   "t": 3005.36,
+   "d": 1.36,
+   "text": "they don't have parents essentially"
+  },
+  {
+   "t": 3006.72,
+   "d": 1.12,
+   "text": "that's like the definition so they"
+  },
+  {
+   "t": 3007.84,
+   "d": 1.28,
+   "text": "weren't born in the simulation"
+  },
+  {
+   "t": 3009.12,
+   "d": 2.16,
+   "text": "they came as a individual that wasn't"
+  },
+  {
+   "t": 3011.28,
+   "d": 1.6,
+   "text": "you know born in it"
+  },
+  {
+   "t": 3012.88,
+   "d": 1.2,
+   "text": "so they have kind of they need a"
+  },
+  {
+   "t": 3014.08,
+   "d": 1.28,
+   "text": "different constructor so it's that's"
+  },
+  {
+   "t": 3015.36,
+   "d": 1.12,
+   "text": "just a different class is what you're"
+  },
+  {
+   "t": 3016.48,
+   "d": 2.16,
+   "text": "saying"
+  },
+  {
+   "t": 3022.72,
+   "d": 2.4,
+   "text": "but yeah the mortician is another part"
+  },
+  {
+   "t": 3025.12,
+   "d": 1.76,
+   "text": "that we often introduce the game with"
+  },
+  {
+   "t": 3026.88,
+   "d": 1.36,
+   "text": "because it kind of helps the player"
+  },
+  {
+   "t": 3028.24,
+   "d": 1.04,
+   "text": "get used to like the role-playing"
+  },
+  {
+   "t": 3029.28,
+   "d": 1.44,
+   "text": "element so they can get their oh here"
+  },
+  {
+   "t": 3030.72,
+   "d": 11.12,
+   "text": "goes nothing number two"
+  },
+  {
+   "t": 3066.16,
+   "d": 4.8,
+   "text": "hi um i actually just have a question"
+  },
+  {
+   "t": 3070.96,
+   "d": 4.4,
+   "text": "um so is this about what you want to eat"
+  },
+  {
+   "t": 3076.16,
+   "d": 2.48,
+   "text": "low agreeableness yeah so the reason"
+  },
+  {
+   "t": 3078.64,
+   "d": 1.2,
+   "text": "ben's come back like that"
+  },
+  {
+   "t": 3079.84,
+   "d": 3.92,
+   "text": "very low okay we're in an interesting"
+  },
+  {
+   "t": 3083.76,
+   "d": 1.28,
+   "text": "place then but"
+  },
+  {
+   "t": 3085.04,
+   "d": 3.2,
+   "text": "please go on sure probably pretty mean"
+  },
+  {
+   "t": 3088.24,
+   "d": 1.68,
+   "text": "between these two things i am uh"
+  },
+  {
+   "t": 3089.92,
+   "d": 3.6,
+   "text": "actually looking around for uh"
+  },
+  {
+   "t": 3093.52,
+   "d": 4.56,
+   "text": "mark uh sorry jack hammock's right"
+  },
+  {
+   "t": 3098.88,
+   "d": 1.99,
+   "text": "oh okay"
+  },
+  {
+   "t": 3100.87,
+   "d": 2.17,
+   "text": "[Music]"
+  },
+  {
+   "t": 3103.04,
+   "d": 4.96,
+   "text": "basically i've never been married"
+  },
+  {
+   "t": 3108.0,
+   "d": 3.66,
+   "text": "so uh um"
+  },
+  {
+   "t": 3111.66,
+   "d": 1.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 3112.8,
+   "d": 3.2,
+   "text": "he's not married here we go okay"
+  },
+  {
+   "t": 3116.0,
+   "d": 3.04,
+   "text": "okay uh at least"
+  },
+  {
+   "t": 3119.04,
+   "d": 2.72,
+   "text": "not yet"
+  },
+  {
+   "t": 3123.44,
+   "d": 3.04,
+   "text": "all right um shoot i'm sorry"
+  },
+  {
+   "t": 3126.48,
+   "d": 2.0,
+   "text": "no no no no no no you're the best thing"
+  },
+  {
+   "t": 3128.48,
+   "d": 1.28,
+   "text": "that's happened all day"
+  },
+  {
+   "t": 3129.76,
+   "d": 2.8,
+   "text": "before you leave"
+  },
+  {
+   "t": 3133.36,
+   "d": 2.88,
+   "text": "so he's not married it's true but uh"
+  },
+  {
+   "t": 3136.24,
+   "d": 1.76,
+   "text": "that doesn't mean that he's"
+  },
+  {
+   "t": 3138.0,
+   "d": 3.04,
+   "text": "never been in love oh"
+  },
+  {
+   "t": 3141.04,
+   "d": 3.44,
+   "text": "let's see okay have you heard of the"
+  },
+  {
+   "t": 3144.48,
+   "d": 2.23,
+   "text": "story"
+  },
+  {
+   "t": 3146.71,
+   "d": 2.81,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 3149.52,
+   "d": 4.32,
+   "text": "her mom's friends with birthdays"
+  },
+  {
+   "t": 3156.64,
+   "d": 3.04,
+   "text": "jack is in love"
+  },
+  {
+   "t": 3159.68,
+   "d": 4.72,
+   "text": "with a very very lovely woman"
+  },
+  {
+   "t": 3164.4,
+   "d": 4.32,
+   "text": "oh yeah her name is bertha"
+  },
+  {
+   "t": 3168.72,
+   "d": 3.12,
+   "text": "bertha oh"
+  },
+  {
+   "t": 3171.84,
+   "d": 2.88,
+   "text": "what's that i hear you ask did you think"
+  },
+  {
+   "t": 3174.72,
+   "d": 2.48,
+   "text": "what an interesting last name"
+  },
+  {
+   "t": 3177.2,
+   "d": 3.12,
+   "text": "that's because it's none other than his"
+  },
+  {
+   "t": 3180.32,
+   "d": 3.76,
+   "text": "own brother's wife"
+  },
+  {
+   "t": 3189.2,
+   "d": 6.64,
+   "text": "oh my goodness"
+  },
+  {
+   "t": 3196.96,
+   "d": 3.28,
+   "text": "no please please do not true but"
+  },
+  {
+   "t": 3200.24,
+   "d": 2.0,
+   "text": "she thinks that earth is a mortician"
+  },
+  {
+   "t": 3202.24,
+   "d": 2.8,
+   "text": "which is kind of related"
+  },
+  {
+   "t": 3206.0,
+   "d": 2.08,
+   "text": "i don't know i don't really think he"
+  },
+  {
+   "t": 3208.08,
+   "d": 3.36,
+   "text": "might suspect something"
+  },
+  {
+   "t": 3213.92,
+   "d": 9.92,
+   "text": "hmm would hurt anybody"
+  },
+  {
+   "t": 3224.4,
+   "d": 3.44,
+   "text": "i don't actually"
+  },
+  {
+   "t": 3227.84,
+   "d": 4.96,
+   "text": "know for sure i i don't believe she has"
+  },
+  {
+   "t": 3232.8,
+   "d": 4.32,
+   "text": "children but uh but uh that's"
+  },
+  {
+   "t": 3237.12,
+   "d": 2.0,
+   "text": "i've already told you about as much as"
+  },
+  {
+   "t": 3239.12,
+   "d": 1.2,
+   "text": "the rumor mill has"
+  },
+  {
+   "t": 3240.32,
+   "d": 3.52,
+   "text": "uh given to me uh i i do"
+  },
+  {
+   "t": 3243.84,
+   "d": 2.4,
+   "text": "i do have one lead for you if you want"
+  },
+  {
+   "t": 3246.24,
+   "d": 0.72,
+   "text": "to know more"
+  },
+  {
+   "t": 3246.96,
+   "d": 3.84,
+   "text": "uh my uh my mom"
+  },
+  {
+   "t": 3250.8,
+   "d": 3.68,
+   "text": "is friends with bertha oh yeah"
+  },
+  {
+   "t": 3254.48,
+   "d": 2.24,
+   "text": "and then the other thing is that uh"
+  },
+  {
+   "t": 3256.72,
+   "d": 1.68,
+   "text": "their whole family"
+  },
+  {
+   "t": 3258.4,
+   "d": 3.04,
+   "text": "were all involved in the uh the brewery"
+  },
+  {
+   "t": 3261.44,
+   "d": 4.0,
+   "text": "in town all right they're all connected"
+  },
+  {
+   "t": 3265.44,
+   "d": 3.04,
+   "text": "uh they're uh their dad"
+  },
+  {
+   "t": 3268.48,
+   "d": 3.2,
+   "text": "was it uh mark and jack's father"
+  },
+  {
+   "t": 3271.68,
+   "d": 3.04,
+   "text": "okay fantastic all right"
+  },
+  {
+   "t": 3274.72,
+   "d": 5.12,
+   "text": "um obviously"
+  },
+  {
+   "t": 3290.88,
+   "d": 2.4,
+   "text": "hopefully"
+  },
+  {
+   "t": 3294.69,
+   "d": 2.27,
+   "text": "[Applause]"
+  },
+  {
+   "t": 3296.96,
+   "d": 2.96,
+   "text": "no no no i was i was rude to you at"
+  },
+  {
+   "t": 3299.92,
+   "d": 2.64,
+   "text": "first as well until i understood that"
+  },
+  {
+   "t": 3302.56,
+   "d": 1.28,
+   "text": "you didn't actually want to order"
+  },
+  {
+   "t": 3303.84,
+   "d": 2.24,
+   "text": "anything my name is uh"
+  },
+  {
+   "t": 3306.08,
+   "d": 4.32,
+   "text": "is evelyn i'm winning hill"
+  },
+  {
+   "t": 3313.12,
+   "d": 4.08,
+   "text": "what brings you in town liz so um"
+  },
+  {
+   "t": 3317.2,
+   "d": 4.32,
+   "text": "i'm actually i just moved here um"
+  },
+  {
+   "t": 3321.52,
+   "d": 2.88,
+   "text": "okay i've got that shine that new"
+  },
+  {
+   "t": 3324.4,
+   "d": 0.56,
+   "text": "resident"
+  },
+  {
+   "t": 3324.96,
+   "d": 3.92,
+   "text": "shine here um kind of trying to"
+  },
+  {
+   "t": 3328.88,
+   "d": 3.36,
+   "text": "you know gosh figure out where you know"
+  },
+  {
+   "t": 3332.24,
+   "d": 2.4,
+   "text": "where life's taken me um"
+  },
+  {
+   "t": 3334.64,
+   "d": 3.28,
+   "text": "uh and i had um you know"
+  },
+  {
+   "t": 3337.92,
+   "d": 1.6,
+   "text": "an old acquaintance was like hey you"
+  },
+  {
+   "t": 3339.52,
+   "d": 3.68,
+   "text": "should look out for"
+  },
+  {
+   "t": 3346.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 3354.64,
+   "d": 2.56,
+   "text": "[Music]"
+  },
+  {
+   "t": 3357.2,
+   "d": 5.2,
+   "text": "but you asked after his wife"
+  },
+  {
+   "t": 3362.4,
+   "d": 2.56,
+   "text": "why uh why would you inquire into the"
+  },
+  {
+   "t": 3364.96,
+   "d": 3.12,
+   "text": "existence of such an individual"
+  },
+  {
+   "t": 3368.08,
+   "d": 3.68,
+   "text": "well i don't know i should"
+  },
+  {
+   "t": 3371.76,
+   "d": 0.8,
+   "text": "keep my options"
+  },
+  {
+   "t": 3372.56,
+   "d": 2.4,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 3374.96,
+   "d": 3.12,
+   "text": "oh don't we all right um"
+  },
+  {
+   "t": 3378.08,
+   "d": 1.84,
+   "text": "and could you one more time you said"
+  },
+  {
+   "t": 3379.92,
+   "d": 1.76,
+   "text": "they were involved with the brewery and"
+  },
+  {
+   "t": 3381.68,
+   "d": 0.96,
+   "text": "it was the"
+  },
+  {
+   "t": 3382.64,
+   "d": 1.84,
+   "text": "their father was the owner of it"
+  },
+  {
+   "t": 3384.48,
+   "d": 1.44,
+   "text": "correctly correct and his father's the"
+  },
+  {
+   "t": 3385.92,
+   "d": 1.52,
+   "text": "mexican"
+  },
+  {
+   "t": 3387.44,
+   "d": 4.4,
+   "text": "oh uh harry harry all right"
+  },
+  {
+   "t": 3391.92,
+   "d": 3.44,
+   "text": "um yeah thank you very much i'll i've"
+  },
+  {
+   "t": 3395.36,
+   "d": 1.52,
+   "text": "actually have to come by and get coffee"
+  },
+  {
+   "t": 3396.88,
+   "d": 2.64,
+   "text": "sometimes i'd love to dish with you"
+  },
+  {
+   "t": 3399.52,
+   "d": 2.16,
+   "text": "somewhere i can let you know"
+  },
+  {
+   "t": 3401.68,
+   "d": 3.2,
+   "text": "so much about this town i would love to"
+  },
+  {
+   "t": 3404.88,
+   "d": 2.72,
+   "text": "make it great"
+  },
+  {
+   "t": 3408.08,
+   "d": 3.76,
+   "text": "you can't do much better than swingle"
+  },
+  {
+   "t": 3416.84,
+   "d": 2.2,
+   "text": "um"
+  },
+  {
+   "t": 3419.04,
+   "d": 1.28,
+   "text": "so i'm told in about five minutes so i"
+  },
+  {
+   "t": 3420.32,
+   "d": 1.36,
+   "text": "think we're going to try to wrap up soon"
+  },
+  {
+   "t": 3421.68,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 3422.64,
+   "d": 3.44,
+   "text": "she's very excited how do i get it"
+  },
+  {
+   "t": 3426.08,
+   "d": 4.4,
+   "text": "she just found out gary gamik's address"
+  },
+  {
+   "t": 3430.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 3440.24,
+   "d": 7.6,
+   "text": "wow that is their entire family"
+  },
+  {
+   "t": 3449.84,
+   "d": 3.36,
+   "text": "okay so it's not 723"
+  },
+  {
+   "t": 3453.2,
+   "d": 6.88,
+   "text": "for the third one for this one"
+  },
+  {
+   "t": 3460.08,
+   "d": 2.16,
+   "text": "actually like right down the block ah"
+  },
+  {
+   "t": 3462.24,
+   "d": 1.2,
+   "text": "that would have been good for me to say"
+  },
+  {
+   "t": 3463.44,
+   "d": 1.28,
+   "text": "yeah he lives the next block over and"
+  },
+  {
+   "t": 3464.72,
+   "d": 1.52,
+   "text": "then she went out to be doing this"
+  },
+  {
+   "t": 3466.24,
+   "d": 2.0,
+   "text": "but i didn't find that in time to tell"
+  },
+  {
+   "t": 3468.24,
+   "d": 2.32,
+   "text": "the actor"
+  },
+  {
+   "t": 3470.56,
+   "d": 1.6,
+   "text": "uh the parents live in case i wasn't"
+  },
+  {
+   "t": 3472.16,
+   "d": 1.52,
+   "text": "clear what i just said one block from"
+  },
+  {
+   "t": 3473.68,
+   "d": 3.04,
+   "text": "swingle where we're currently at"
+  },
+  {
+   "t": 3476.72,
+   "d": 5.12,
+   "text": "what is the probability the age"
+  },
+  {
+   "t": 3481.84,
+   "d": 8.0,
+   "text": "let's see"
+  },
+  {
+   "t": 3500.84,
+   "d": 3.0,
+   "text": "uh"
+  },
+  {
+   "t": 3508.16,
+   "d": 3.28,
+   "text": "yeah way behind the curtain like yep"
+  },
+  {
+   "t": 3511.44,
+   "d": 1.84,
+   "text": "it's not even clear there's a laptop she"
+  },
+  {
+   "t": 3513.28,
+   "d": 2.4,
+   "text": "might hear typing slightly"
+  },
+  {
+   "t": 3515.68,
+   "d": 3.28,
+   "text": "but it's totally blocked even when the"
+  },
+  {
+   "t": 3518.96,
+   "d": 1.52,
+   "text": "curtain opens there's like a"
+  },
+  {
+   "t": 3520.48,
+   "d": 2.0,
+   "text": "curtain that never opens which is the"
+  },
+  {
+   "t": 3522.48,
+   "d": 1.04,
+   "text": "height of the"
+  },
+  {
+   "t": 3523.52,
+   "d": 2.24,
+   "text": "computer um just making sure these are"
+  },
+  {
+   "t": 3525.76,
+   "d": 3.12,
+   "text": "in alphabetical order"
+  },
+  {
+   "t": 3529.36,
+   "d": 3.2,
+   "text": "what would that mean a first name"
+  },
+  {
+   "t": 3534.24,
+   "d": 4.72,
+   "text": "uh not the last names the first names"
+  },
+  {
+   "t": 3539.6,
+   "d": 6.24,
+   "text": "well it's not probably"
+  },
+  {
+   "t": 3556.84,
+   "d": 3.0,
+   "text": "is"
+  },
+  {
+   "t": 3560.88,
+   "d": 1.52,
+   "text": "if she just gets to anyone they can say"
+  },
+  {
+   "t": 3562.4,
+   "d": 2.48,
+   "text": "where it is"
+  },
+  {
+   "t": 3565.76,
+   "d": 7.28,
+   "text": "this is mildly painful though"
+  },
+  {
+   "t": 3573.04,
+   "d": 0.96,
+   "text": "what do you guys think what would you"
+  },
+  {
+   "t": 3574.0,
+   "d": 2.08,
+   "text": "guys do here to get her this address"
+  },
+  {
+   "t": 3576.08,
+   "d": 11.76,
+   "text": "just let her uh"
+  },
+  {
+   "t": 3598.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 3606.0,
+   "d": 4.48,
+   "text": "um okay so address"
+  },
+  {
+   "t": 3611.92,
+   "d": 3.28,
+   "text": "whatever her number was"
+  },
+  {
+   "t": 3615.2,
+   "d": 3.76,
+   "text": "okay evelyn's back"
+  },
+  {
+   "t": 3620.24,
+   "d": 9.6,
+   "text": "oh she didn't leave did she"
+  },
+  {
+   "t": 3632.24,
+   "d": 3.2,
+   "text": "hey liz uh evelyn again"
+  },
+  {
+   "t": 3635.44,
+   "d": 3.36,
+   "text": "uh so uh"
+  },
+  {
+   "t": 3638.8,
+   "d": 3.52,
+   "text": "i uh i i can't help but notice"
+  },
+  {
+   "t": 3642.32,
+   "d": 3.6,
+   "text": "and and you we're good friends now right"
+  },
+  {
+   "t": 3645.92,
+   "d": 1.6,
+   "text": "i can be honest with you i can be"
+  },
+  {
+   "t": 3647.52,
+   "d": 1.92,
+   "text": "forthcoming with you so"
+  },
+  {
+   "t": 3649.44,
+   "d": 3.52,
+   "text": "i don't know you're wonderful um"
+  },
+  {
+   "t": 3652.96,
+   "d": 2.88,
+   "text": "my uh my manager uh you notice that"
+  },
+  {
+   "t": 3655.84,
+   "d": 1.2,
+   "text": "you're just kind of"
+  },
+  {
+   "t": 3657.04,
+   "d": 2.16,
+   "text": "sitting at a table looking at a phone"
+  },
+  {
+   "t": 3659.2,
+   "d": 2.56,
+   "text": "book not ordering anything"
+  },
+  {
+   "t": 3661.76,
+   "d": 4.88,
+   "text": "um so uh i'm afraid i'm gonna have to"
+  },
+  {
+   "t": 3666.64,
+   "d": 4.48,
+   "text": "ask you do i either order something"
+  },
+  {
+   "t": 3671.12,
+   "d": 3.12,
+   "text": "leave the premises um"
+  },
+  {
+   "t": 3674.24,
+   "d": 3.6,
+   "text": "but you before you go do you need"
+  },
+  {
+   "t": 3677.84,
+   "d": 3.2,
+   "text": "help are you you're looking for the"
+  },
+  {
+   "t": 3681.04,
+   "d": 5.04,
+   "text": "family it sounds like yeah um"
+  },
+  {
+   "t": 3686.16,
+   "d": 4.0,
+   "text": "yeah um if i could just have any way"
+  },
+  {
+   "t": 3690.16,
+   "d": 1.76,
+   "text": "i guess if i was you know since i"
+  },
+  {
+   "t": 3691.92,
+   "d": 1.52,
+   "text": "couldn't get in touch with jack"
+  },
+  {
+   "t": 3693.44,
+   "d": 2.24,
+   "text": "i could possibly somehow get in touch"
+  },
+  {
+   "t": 3695.68,
+   "d": 1.12,
+   "text": "with uh"
+  },
+  {
+   "t": 3696.8,
+   "d": 2.4,
+   "text": "harry"
+  },
+  {
+   "t": 3702.16,
+   "d": 4.08,
+   "text": "not supposed to do this i'm violating"
+  },
+  {
+   "t": 3706.24,
+   "d": 7.6,
+   "text": "the oath of the waitress"
+  },
+  {
+   "t": 3716.4,
+   "d": 4.48,
+   "text": "i'll tell you where harry lives okay"
+  },
+  {
+   "t": 3720.88,
+   "d": 4.16,
+   "text": "615 zander"
+  },
+  {
+   "t": 3725.04,
+   "d": 4.48,
+   "text": "avenue it's just the next block over"
+  },
+  {
+   "t": 3729.52,
+   "d": 3.28,
+   "text": "okay we're so close gosh all right"
+  },
+  {
+   "t": 3732.8,
+   "d": 3.2,
+   "text": "you're so welcome i"
+  },
+  {
+   "t": 3736.48,
+   "d": 3.92,
+   "text": "uh just not trying to make you feel"
+  },
+  {
+   "t": 3740.4,
+   "d": 2.56,
+   "text": "self-conscious"
+  },
+  {
+   "t": 3745.44,
+   "d": 5.04,
+   "text": "young woman you look very lost"
+  },
+  {
+   "t": 3750.48,
+   "d": 2.24,
+   "text": "do you get that a lot yeah i hear that a"
+  },
+  {
+   "t": 3752.72,
+   "d": 1.84,
+   "text": "lot okay i think it's like"
+  },
+  {
+   "t": 3754.56,
+   "d": 3.28,
+   "text": "maybe it's a facial expression and"
+  },
+  {
+   "t": 3757.84,
+   "d": 2.96,
+   "text": "and you're new you're new in town but i"
+  },
+  {
+   "t": 3760.8,
+   "d": 1.12,
+   "text": "guess"
+  },
+  {
+   "t": 3761.92,
+   "d": 1.84,
+   "text": "what i'm trying to say is i know that"
+  },
+  {
+   "t": 3763.76,
+   "d": 1.84,
+   "text": "that came off a little harshly but what"
+  },
+  {
+   "t": 3765.6,
+   "d": 2.72,
+   "text": "i'm trying to say is"
+  },
+  {
+   "t": 3768.32,
+   "d": 2.32,
+   "text": "northfield even though it's a little"
+  },
+  {
+   "t": 3770.64,
+   "d": 1.12,
+   "text": "small"
+  },
+  {
+   "t": 3771.76,
+   "d": 3.6,
+   "text": "quiet a little boring it's full of good"
+  },
+  {
+   "t": 3775.36,
+   "d": 0.88,
+   "text": "people"
+  },
+  {
+   "t": 3776.24,
+   "d": 2.8,
+   "text": "and if you stand around or wander around"
+  },
+  {
+   "t": 3779.04,
+   "d": 1.44,
+   "text": "looking lost eventually"
+  },
+  {
+   "t": 3780.48,
+   "d": 1.76,
+   "text": "probably someone's going to come up and"
+  },
+  {
+   "t": 3782.24,
+   "d": 1.84,
+   "text": "talk to you and help you out"
+  },
+  {
+   "t": 3784.08,
+   "d": 4.08,
+   "text": "but don't be afraid to just"
+  },
+  {
+   "t": 3788.16,
+   "d": 3.36,
+   "text": "ask people for assistance"
+  },
+  {
+   "t": 3791.52,
+   "d": 3.32,
+   "text": "more than happy to help more often than"
+  },
+  {
+   "t": 3794.84,
+   "d": 2.36,
+   "text": "not"
+  },
+  {
+   "t": 3797.2,
+   "d": 2.16,
+   "text": "yeah yeah in fact if anything i'd say"
+  },
+  {
+   "t": 3799.36,
+   "d": 1.36,
+   "text": "that i'm probably one of the least"
+  },
+  {
+   "t": 3800.72,
+   "d": 1.04,
+   "text": "helpful people around"
+  },
+  {
+   "t": 3801.76,
+   "d": 2.56,
+   "text": "and you already won me over so it's"
+  },
+  {
+   "t": 3804.32,
+   "d": 1.84,
+   "text": "crazy"
+  },
+  {
+   "t": 3806.16,
+   "d": 3.76,
+   "text": "oh that's weird"
+  },
+  {
+   "t": 3809.92,
+   "d": 3.52,
+   "text": "to say um yeah so"
+  },
+  {
+   "t": 3813.44,
+   "d": 1.44,
+   "text": "i'll definitely stop having to get a"
+  },
+  {
+   "t": 3814.88,
+   "d": 3.52,
+   "text": "coffee first in the morning just uh"
+  },
+  {
+   "t": 3818.4,
+   "d": 3.28,
+   "text": "you know you also you don't have to say"
+  },
+  {
+   "t": 3821.68,
+   "d": 1.16,
+   "text": "that"
+  },
+  {
+   "t": 3822.84,
+   "d": 3.0,
+   "text": "sure"
+  },
+  {
+   "t": 3828.96,
+   "d": 2.56,
+   "text": "thank you very much you're very welcome"
+  },
+  {
+   "t": 3831.52,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 3832.4,
+   "d": 7.44,
+   "text": "good night"
+  },
+  {
+   "t": 3842.32,
+   "d": 3.12,
+   "text": "um okay uh let's look at the"
+  },
+  {
+   "t": 3845.44,
+   "d": 3.2,
+   "text": "residential directory again"
+  },
+  {
+   "t": 3849.52,
+   "d": 1.68,
+   "text": "oh yeah i'm leaving the building they"
+  },
+  {
+   "t": 3851.2,
+   "d": 2.55,
+   "text": "told me to leave please let me exit this"
+  },
+  {
+   "t": 3853.75,
+   "d": 4.6,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 3864.84,
+   "d": 3.0,
+   "text": "building"
+  },
+  {
+   "t": 3869.44,
+   "d": 2.4,
+   "text": "um"
+  },
+  {
+   "t": 3873.2,
+   "d": 3.52,
+   "text": "let's go to um 615"
+  },
+  {
+   "t": 3876.72,
+   "d": 5.12,
+   "text": "standard revenue sure"
+  },
+  {
+   "t": 3881.84,
+   "d": 2.24,
+   "text": "okay"
+  },
+  {
+   "t": 3885.04,
+   "d": 1.44,
+   "text": "here we go so this will be the"
+  },
+  {
+   "t": 3886.48,
+   "d": 3.52,
+   "text": "notification scene oh god"
+  },
+  {
+   "t": 3891.6,
+   "d": 2.0,
+   "text": "i don't have a cell phone this is before"
+  },
+  {
+   "t": 3893.6,
+   "d": 16.24,
+   "text": "cell phones"
+  },
+  {
+   "t": 3910.97,
+   "d": 3.2,
+   "text": "[Music]"
+  },
+  {
+   "t": 3921.12,
+   "d": 2.72,
+   "text": "part of the training"
+  },
+  {
+   "t": 3925.44,
+   "d": 3.12,
+   "text": "i don't want to go to the police"
+  },
+  {
+   "t": 3928.56,
+   "d": 4.72,
+   "text": "let's let's go take a peek inside"
+  },
+  {
+   "t": 3934.4,
+   "d": 2.56,
+   "text": "we're at"
+  },
+  {
+   "t": 3946.18,
+   "d": 11.26,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 3962.96,
+   "d": 1.12,
+   "text": "i could have someone like what are you"
+  },
+  {
+   "t": 3964.08,
+   "d": 2.24,
+   "text": "doing"
+  },
+  {
+   "t": 3969.2,
+   "d": 1.6,
+   "text": "there's nobody dead on the floor is"
+  },
+  {
+   "t": 3970.8,
+   "d": 2.24,
+   "text": "there"
+  },
+  {
+   "t": 3973.2,
+   "d": 3.64,
+   "text": "and now it's a mass murderer"
+  },
+  {
+   "t": 3976.84,
+   "d": 15.72,
+   "text": "yeah yeah good call wrong things"
+  },
+  {
+   "t": 3992.56,
+   "d": 2.8,
+   "text": "it's good to know"
+  },
+  {
+   "t": 3996.64,
+   "d": 3.04,
+   "text": "um okay he wants uh"
+  },
+  {
+   "t": 3999.68,
+   "d": 1.44,
+   "text": "i'm gonna act like she's not just to get"
+  },
+  {
+   "t": 4001.12,
+   "d": 6.72,
+   "text": "someone to the door harry hammock"
+  },
+  {
+   "t": 4008.49,
+   "d": 2.63,
+   "text": "[Music]"
+  },
+  {
+   "t": 4011.12,
+   "d": 3.68,
+   "text": "hey good evening hi um"
+  },
+  {
+   "t": 4014.8,
+   "d": 7.04,
+   "text": "notice your door was unlocked"
+  },
+  {
+   "t": 4027.68,
+   "d": 2.4,
+   "text": "crime rate is very low you're not from"
+  },
+  {
+   "t": 4030.08,
+   "d": 0.72,
+   "text": "around here"
+  },
+  {
+   "t": 4030.8,
+   "d": 1.68,
+   "text": "are you yeah yeah you're from the big"
+  },
+  {
+   "t": 4032.48,
+   "d": 3.84,
+   "text": "city yeah which one"
+  },
+  {
+   "t": 4037.92,
+   "d": 4.32,
+   "text": "that's all of them right exactly um"
+  },
+  {
+   "t": 4042.24,
+   "d": 3.1,
+   "text": "[Music]"
+  },
+  {
+   "t": 4047.04,
+   "d": 3.28,
+   "text": "yes yeah would you like to step inside"
+  },
+  {
+   "t": 4050.32,
+   "d": 2.48,
+   "text": "sure uh yeah please really interesting"
+  },
+  {
+   "t": 4052.8,
+   "d": 1.04,
+   "text": "personality here"
+  },
+  {
+   "t": 4053.84,
+   "d": 4.24,
+   "text": "uh please uh take take a seat uh"
+  },
+  {
+   "t": 4058.08,
+   "d": 3.84,
+   "text": "uh can i get you anything uh no it's"
+  },
+  {
+   "t": 4061.92,
+   "d": 1.12,
+   "text": "paranoid but willing to tell you"
+  },
+  {
+   "t": 4063.04,
+   "d": 1.36,
+   "text": "everything"
+  },
+  {
+   "t": 4064.4,
+   "d": 2.64,
+   "text": "i have uh"
+  },
+  {
+   "t": 4068.48,
+   "d": 2.88,
+   "text": "to uh give you a piece of uh"
+  },
+  {
+   "t": 4071.36,
+   "d": 2.16,
+   "text": "unfortunately"
+  },
+  {
+   "t": 4073.52,
+   "d": 3.12,
+   "text": "um yeah there uh"
+  },
+  {
+   "t": 4076.64,
+   "d": 3.52,
+   "text": "there has been a death in the family"
+  },
+  {
+   "t": 4080.16,
+   "d": 3.2,
+   "text": "uh panic"
+  },
+  {
+   "t": 4083.36,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 4103.2,
+   "d": 2.96,
+   "text": "he closes the curtain"
+  },
+  {
+   "t": 4110.32,
+   "d": 2.24,
+   "text": "that sounds like a curtain right okay"
+  },
+  {
+   "t": 4112.56,
+   "d": 2.72,
+   "text": "and then i do this"
+  },
+  {
+   "t": 4116.0,
+   "d": 3.84,
+   "text": "and then we kind of wait"
+  },
+  {
+   "t": 4121.21,
+   "d": 3.08,
+   "text": "[Music]"
+  },
+  {
+   "t": 4127.44,
+   "d": 2.08,
+   "text": "and then she'll be coming here and we"
+  },
+  {
+   "t": 4129.52,
+   "d": 1.6,
+   "text": "can give her a round of applause when"
+  },
+  {
+   "t": 4131.12,
+   "d": 1.2,
+   "text": "she does and ben will be coming to you"
+  },
+  {
+   "t": 4132.32,
+   "d": 1.2,
+   "text": "hey thanks for watching"
+  },
+  {
+   "t": 4133.52,
+   "d": 3.36,
+   "text": "that was awesome yeah that's exciting"
+  },
+  {
+   "t": 4136.88,
+   "d": 2.24,
+   "text": "huh"
+  },
+  {
+   "t": 4141.04,
+   "d": 1.52,
+   "text": "that's it you want to come back and meet"
+  },
+  {
+   "t": 4142.56,
+   "d": 2.28,
+   "text": "everyone and talk to the actor and"
+  },
+  {
+   "t": 4144.84,
+   "d": 3.32,
+   "text": "yeah can i get more water yeah yeah"
+  },
+  {
+   "t": 4148.16,
+   "d": 1.28,
+   "text": "yeah we heard the request we weren't"
+  },
+  {
+   "t": 4149.44,
+   "d": 2.08,
+   "text": "sure if that was like"
+  },
+  {
+   "t": 4151.52,
+   "d": 2.16,
+   "text": "one last thing is uh i can generate an"
+  },
+  {
+   "t": 4153.68,
+   "d": 1.52,
+   "text": "epilogue so i'm gonna simulate until"
+  },
+  {
+   "t": 4155.2,
+   "d": 2.08,
+   "text": "the year 2010 and i want to see what"
+  },
+  {
+   "t": 4157.28,
+   "d": 1.52,
+   "text": "happened to evelyn in particular"
+  },
+  {
+   "t": 4158.8,
+   "d": 1.44,
+   "text": "in the next 30 years of her life so"
+  },
+  {
+   "t": 4160.24,
+   "d": 2.8,
+   "text": "we're going to find that out"
+  },
+  {
+   "t": 4164.4,
+   "d": 1.36,
+   "text": "so typically i would come in here and we"
+  },
+  {
+   "t": 4165.76,
+   "d": 1.44,
+   "text": "totally debrief and i would do the"
+  },
+  {
+   "t": 4167.2,
+   "d": 1.36,
+   "text": "epilogue and sort of bring in what"
+  },
+  {
+   "t": 4168.56,
+   "d": 3.12,
+   "text": "happened in the next 30 years"
+  },
+  {
+   "t": 4173.28,
+   "d": 3.6,
+   "text": "um okay that's what we'll find out yeah"
+  },
+  {
+   "t": 4176.88,
+   "d": 3.36,
+   "text": "oh wreck is the love triangle that's"
+  },
+  {
+   "t": 4186.84,
+   "d": 3.0,
+   "text": "right"
+  },
+  {
+   "t": 4194.64,
+   "d": 1.76,
+   "text": "yeah it's not it's never a triangle it's"
+  },
+  {
+   "t": 4196.4,
+   "d": 2.96,
+   "text": "like a polygon thing that like"
+  },
+  {
+   "t": 4199.36,
+   "d": 3.68,
+   "text": "oh okay here we go"
+  },
+  {
+   "t": 4203.04,
+   "d": 1.76,
+   "text": "let's see what evelyn did evelyn left"
+  },
+  {
+   "t": 4204.8,
+   "d": 1.68,
+   "text": "the city in 2000"
+  },
+  {
+   "t": 4206.48,
+   "d": 3.28,
+   "text": "in the year 2000 she was a waiter until"
+  },
+  {
+   "t": 4209.76,
+   "d": 1.76,
+   "text": "1999"
+  },
+  {
+   "t": 4211.52,
+   "d": 3.04,
+   "text": "was an innkeeper for like a second"
+  },
+  {
+   "t": 4214.56,
+   "d": 3.12,
+   "text": "until uh she got hired on april 29 1999"
+  },
+  {
+   "t": 4217.68,
+   "d": 3.28,
+   "text": "and why did she leave she left"
+  },
+  {
+   "t": 4220.96,
+   "d": 3.6,
+   "text": "uh like almost a year later for her one"
+  },
+  {
+   "t": 4224.56,
+   "d": 1.04,
+   "text": "year anniversary"
+  },
+  {
+   "t": 4225.6,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 4228.88,
+   "d": 2.88,
+   "text": "never married um let's see who whenever"
+  },
+  {
+   "t": 4231.76,
+   "d": 1.6,
+   "text": "you knew about like her life um but"
+  },
+  {
+   "t": 4233.36,
+   "d": 1.12,
+   "text": "let's figure out about what happened to"
+  },
+  {
+   "t": 4234.48,
+   "d": 1.68,
+   "text": "that right so mark"
+  },
+  {
+   "t": 4236.16,
+   "d": 4.4,
+   "text": "mark is alive she actually"
+  },
+  {
+   "t": 4240.56,
+   "d": 2.16,
+   "text": "did need water but it was also part of"
+  },
+  {
+   "t": 4242.72,
+   "d": 0.88,
+   "text": "her character"
+  },
+  {
+   "t": 4243.6,
+   "d": 2.0,
+   "text": "to ask for water at that moment so she's"
+  },
+  {
+   "t": 4245.6,
+   "d": 2.0,
+   "text": "now grabbing water"
+  },
+  {
+   "t": 4247.6,
+   "d": 3.12,
+   "text": "the player will be back here no longer"
+  },
+  {
+   "t": 4250.72,
+   "d": 1.6,
+   "text": "you all can ask questions so mark's"
+  },
+  {
+   "t": 4252.32,
+   "d": 2.96,
+   "text": "still a brewer uh"
+  },
+  {
+   "t": 4255.28,
+   "d": 2.48,
+   "text": "dale owns the brewery it must be another"
+  },
+  {
+   "t": 4257.76,
+   "d": 1.68,
+   "text": "camec that we never saw"
+  },
+  {
+   "t": 4259.44,
+   "d": 1.52,
+   "text": "like a brother that wasn't involved in"
+  },
+  {
+   "t": 4260.96,
+   "d": 2.64,
+   "text": "that um"
+  },
+  {
+   "t": 4263.6,
+   "d": 4.4,
+   "text": "bertha right bertha's around"
+  },
+  {
+   "t": 4268.0,
+   "d": 4.08,
+   "text": "let's see"
+  },
+  {
+   "t": 4272.08,
+   "d": 2.72,
+   "text": "are still married and let's see uh their"
+  },
+  {
+   "t": 4274.8,
+   "d": 1.84,
+   "text": "affinities might have changed right like"
+  },
+  {
+   "t": 4276.64,
+   "d": 1.44,
+   "text": "let's see who mark's biggest love"
+  },
+  {
+   "t": 4278.08,
+   "d": 2.48,
+   "text": "interest is now"
+  },
+  {
+   "t": 4280.56,
+   "d": 3.68,
+   "text": "uh stillbirth uh or no birthday is his"
+  },
+  {
+   "t": 4284.24,
+   "d": 1.04,
+   "text": "wife"
+  },
+  {
+   "t": 4285.28,
+   "d": 1.28,
+   "text": "or no but it was sorry it was the other"
+  },
+  {
+   "t": 4286.56,
+   "d": 1.36,
+   "text": "way around oh right so nothing could"
+  },
+  {
+   "t": 4287.92,
+   "d": 1.44,
+   "text": "change here actually"
+  },
+  {
+   "t": 4289.36,
+   "d": 2.08,
+   "text": "bertha's is good call because that was"
+  },
+  {
+   "t": 4291.44,
+   "d": 2.4,
+   "text": "someone else"
+  },
+  {
+   "t": 4293.84,
+   "d": 6.64,
+   "text": "busy that's ah man and he's gone"
+  },
+  {
+   "t": 4300.48,
+   "d": 1.92,
+   "text": "i don't know if we oh he was a bottler"
+  },
+  {
+   "t": 4302.4,
+   "d": 2.64,
+   "text": "at the brewery"
+  },
+  {
+   "t": 4307.2,
+   "d": 1.52,
+   "text": "oh and a waiter let's see if that was"
+  },
+  {
+   "t": 4308.72,
+   "d": 2.08,
+   "text": "somewhere we know too no the bison wife"
+  },
+  {
+   "t": 4310.8,
+   "d": 5.04,
+   "text": "we never saw that back in the 60s"
+  },
+  {
+   "t": 4316.08,
+   "d": 2.88,
+   "text": "a good call earlier it like completely"
+  },
+  {
+   "t": 4318.96,
+   "d": 2.56,
+   "text": "reduced"
+  },
+  {
+   "t": 4321.52,
+   "d": 2.88,
+   "text": "slightly um it's a corpus that it"
+  },
+  {
+   "t": 4324.4,
+   "d": 2.24,
+   "text": "randomly selects yeah"
+  },
+  {
+   "t": 4326.64,
+   "d": 3.6,
+   "text": "the bar names no it's uh i type like bar"
+  },
+  {
+   "t": 4330.24,
+   "d": 1.44,
+   "text": "named corpus and it's something i want"
+  },
+  {
+   "t": 4331.68,
+   "d": 0.72,
+   "text": "to go back to"
+  },
+  {
+   "t": 4332.4,
+   "d": 2.2,
+   "text": "it's like early on and it's just a text"
+  },
+  {
+   "t": 4334.6,
+   "d": 6.21,
+   "text": "[Applause]"
+  },
+  {
+   "t": 4340.84,
+   "d": 1.48,
+   "text": "file"
+  },
+  {
+   "t": 4342.32,
+   "d": 2.08,
+   "text": "that was probably the most frustrating"
+  },
+  {
+   "t": 4344.4,
+   "d": 3.76,
+   "text": "thing any of you have ever sat through"
+  },
+  {
+   "t": 4351.76,
+   "d": 2.32,
+   "text": "cool so yeah welcome uh great no i don't"
+  },
+  {
+   "t": 4354.08,
+   "d": 2.16,
+   "text": "think that was frustrating at all um"
+  },
+  {
+   "t": 4356.24,
+   "d": 3.52,
+   "text": "i think it was yeah so the whole time"
+  },
+  {
+   "t": 4359.76,
+   "d": 1.12,
+   "text": "we're looking up stuff and"
+  },
+  {
+   "t": 4360.88,
+   "d": 2.08,
+   "text": "yeah do you take like a lot of notes uh"
+  },
+  {
+   "t": 4362.96,
+   "d": 1.92,
+   "text": "i got a i got a page"
+  },
+  {
+   "t": 4364.88,
+   "d": 3.28,
+   "text": "you can have this i have one hi"
+  },
+  {
+   "t": 4368.24,
+   "d": 1.68,
+   "text": "yeah i took a fair amount of notes i"
+  },
+  {
+   "t": 4369.92,
+   "d": 1.76,
+   "text": "guess it was more like"
+  },
+  {
+   "t": 4371.68,
+   "d": 1.84,
+   "text": "kind of the initial panic of i didn't"
+  },
+  {
+   "t": 4373.52,
+   "d": 2.4,
+   "text": "look close enough at the body"
+  },
+  {
+   "t": 4375.92,
+   "d": 1.6,
+   "text": "that's what i figured yeah so it's"
+  },
+  {
+   "t": 4377.52,
+   "d": 1.52,
+   "text": "really hard for me to get you back in a"
+  },
+  {
+   "t": 4379.04,
+   "d": 1.12,
+   "text": "locked apartment"
+  },
+  {
+   "t": 4380.16,
+   "d": 1.92,
+   "text": "complex if it was a house you could just"
+  },
+  {
+   "t": 4382.08,
+   "d": 1.6,
+   "text": "go back in because"
+  },
+  {
+   "t": 4383.68,
+   "d": 2.64,
+   "text": "you know i have one here yeah oh neat"
+  },
+  {
+   "t": 4386.32,
+   "d": 1.04,
+   "text": "all right"
+  },
+  {
+   "t": 4387.36,
+   "d": 2.72,
+   "text": "um i guess i don't does anyone have any"
+  },
+  {
+   "t": 4390.08,
+   "d": 0.8,
+   "text": "questions or anything"
+  },
+  {
+   "t": 4390.88,
+   "d": 2.64,
+   "text": "we're kind of done here but for maybe"
+  },
+  {
+   "t": 4393.52,
+   "d": 1.6,
+   "text": "the actor or the player"
+  },
+  {
+   "t": 4395.12,
+   "d": 4.72,
+   "text": "very interesting"
+  },
+  {
+   "t": 4402.88,
+   "d": 1.28,
+   "text": "so it's more like a lot of mental"
+  },
+  {
+   "t": 4404.16,
+   "d": 2.16,
+   "text": "note-taking but um"
+  },
+  {
+   "t": 4406.32,
+   "d": 3.6,
+   "text": "yeah it was pretty fun uh thanks for"
+  },
+  {
+   "t": 4411.6,
+   "d": 3.12,
+   "text": "no watching the streamers sorry"
+  },
+  {
+   "t": 4415.52,
+   "d": 2.48,
+   "text": "okay"
+  }
+ ]
+}

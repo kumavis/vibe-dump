@@ -1,0 +1,146 @@
+{
+  "id": "G5rq5ei2Lec",
+  "title": "Tim Keenan - Curated Narratives in ProcGen Games",
+  "speaker": "Tim Keenan",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=G5rq5ei2Lec",
+  "talk_type": "postmortem",
+  "summary": "Tim Keenan, creator of Duskers (piloting drones into derelict spaceships to learn why everyone is dead), argues that authored, curated narrative has a place in roguelikes if it is integrated cohesively with the procedural structure. He identifies three problems (repetition across deaths, a story that is not unique to each player, and narrative that constrains play) and shows Duskers' answers: persistent lore logs framed as the real player remembering, story objectives tied to procedurally placed elements, randomized log order exploiting apophenia, and multiple optional branching storylines. In Q&A he discusses players wanting a final resolution, embracing randomness in difficulty and story order, keeping story optional, and using logs rather than NPCs to preserve isolation and realism.",
+  "games": [
+    "Duskers",
+    "RimWorld"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "curated narrative",
+      "kind": "principle",
+      "claim": "Curated, authored narrative belongs in roguelikes for the same reason as in any game: it supplies mid- and long-term goals, mystery and a compelling question.",
+      "detail": "Keenan answers the objection that the player story is king. In Duskers the question 'why is everybody dead?' is meant to add to exploring derelicts, including for players who only start wondering about it 10 or 20 hours in.",
+      "t": 108,
+      "quote": "it gives you these like midterm and long-term goals it gives you mystery it gives you like this compelling question",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "cohesive design",
+      "kind": "principle",
+      "claim": "Curated story in roguelikes is disliked mainly because it is not integrated into the roguelike structure; story and mechanics must all push in the same direction.",
+      "detail": "Keenan uses the Finding Nemo image of fish all swimming one way to escape a net: a story pulling in random directions does not help the game, or actively works against it. He admits Duskers did not nail it.",
+      "t": 203,
+      "quote": "you want your story your curated story to be integrated in a very organic way into",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "repetition",
+      "kind": "warning",
+      "claim": "A roguelike's die-and-retry loop makes long intro cutscenes or story that replays every run a burden.",
+      "detail": "Keenan names repetition as the first problem curated narrative has in roguelikes, and says simply showing the intro once and pretending the character remembers was not far enough for him.",
+      "t": 224,
+      "quote": "if I have this long-winded intro cutscene and then you have to go through that every time you play that would obviously suck",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "persistent lore",
+      "kind": "example",
+      "claim": "Duskers keeps discovered logs across deaths and frames the protagonist as the actual player at the keyboard, so narrative knowledge persists while gameplay stays non-persistent.",
+      "detail": "Keenan dislikes gameplay persistence because he wants the challenge equal every run, but accepts persistence that has nothing to do with gameplay. Rather than claiming the character remembers, Duskers uses sci-fi multiverse framing and treats the person behind the command line as the player character.",
+      "t": 273,
+      "quote": "what we tried to do is make the narrative persistent in the game so when you find when you find logs",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural narrative",
+      "kind": "technique",
+      "claim": "Duskers ties story objectives to procedurally placed elements, so the same written story produces different experiences each run.",
+      "detail": "One theory of the disaster was a cosmic event, and the objective was to bring a very old derelict to a research station. One run you find the station first and hunt for an old ship; another you find the old ship first and must commandeer it and cruise around in a poorly suited vessel looking for a station.",
+      "t": 427,
+      "quote": "with the same exact story you're getting two different experiences",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "apophenia",
+      "kind": "technique",
+      "claim": "Presenting authored story fragments in random order exploits apophenia: the order players read them changes how they interpret events.",
+      "detail": "For Duskers' gray goo storyline, a scientist's log worried about a half-gelatinous dead rat near a replicator, and another log had operators mocking scientists who panic over replicators. A web survey showed the logs in random order; reading the worried scientist first made the rat seem more concerning. Keenan admits results got noisier with more respondents.",
+      "t": 528,
+      "quote": "by shifting around the order that you guys read things in the events and the order that they happen you can start to change their perception of it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "branching storylines",
+      "kind": "technique",
+      "claim": "Duskers avoids a constraining single story goal by offering multiple optional branching storylines, essentially achievements built into the story, each needing particular upgrades or conditions.",
+      "detail": "A lone objective makes players fixate on it despite a large world. Alongside the cosmic-event line, a pandemic storyline asks you to lure an alien creature into the docking bay and scan it; depending on what a run's systems contain, a different storyline becomes the lucky opportunity.",
+      "t": 614,
+      "quote": "I basically took like achievements and like built them into the story but that way you always feel like there's lots to do",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story resolution",
+      "kind": "warning",
+      "claim": "Duskers deliberately left its storylines without a unifying final resolution, but players strongly wanted a definitive ending, and Keenan would consider adding one next time.",
+      "detail": "Keenan felt bringing all storylines to one point would end the game and work against the roguelike structure, so he closed each line without wrapping them up. He stands by the artistic choice but says the community would have preferred resolution.",
+      "t": 734,
+      "quote": "they wanted to have that button on the end where they were like ah that was the thing that did it",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curve",
+      "kind": "principle",
+      "claim": "Keenan resisted a strictly ordered easy-to-hard progression in Duskers; embracing randomness occasionally upset players but produced better player stories.",
+      "detail": "Sometimes a hard system appears second, which is exciting after runs where the second system was easy; surviving with only two drones left is the kind of near-death story that he sees as roguelike brilliance.",
+      "t": 829,
+      "quote": "the more I embraced it the more that brings out better player stories",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "randomized story order",
+      "kind": "example",
+      "claim": "Keenan shuffled the pages of a linear backbone story in Duskers and found readers formed completely different interpretations, which he embraced.",
+      "detail": "He originally planned to dole out the secondary backbone story in order, but since everything else randomized was fun, he tested shuffled versions on people. Different theories about what happened, debated on forums, became part of the fun.",
+      "t": 886,
+      "quote": "I shuffled the papers and I gave it to one person and I did it and I gave it to another and they had completely different interpretations",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "optional story",
+      "kind": "principle",
+      "claim": "Story in a roguelike should be optional: Duskers lets players ignore logs, but those who engage can let story discoveries shape their strategy.",
+      "detail": "Keenan did not want to force anyone into his story. A player who finds a log about a military conspiracy might beeline for the next military ship they see.",
+      "t": 930,
+      "quote": "I didn't want to force anybody into my story if they didn't want to",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "isolation",
+      "kind": "principle",
+      "claim": "Duskers uses logs instead of NPCs because an emotional pillar was isolation and realism, and talking NPCs would reveal themselves as not real.",
+      "detail": "Asked about events happening in real time rather than in the past, Keenan says that design would mean actions have direct consequences, but NPC AI is not good enough to feel real. Having everything already happened was a huge benefit.",
+      "t": 998,
+      "quote": "if there was an NPC that was talking inherently you would know it wasn't real because our AI just isn't that good",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text templating",
+      "kind": "technique",
+      "claim": "Duskers' logs use a small markup language to insert procedurally generated ship names, so a log can point to a ship placed somewhere in the current world.",
+      "detail": "If a log mentions a doctor's research, the ship name is substituted and that ship is placed procedurally for the player to find. On a new run names are replaced, which confused some players looking for a ship from a previous run but was also fun.",
+      "t": 1028,
+      "quote": "we had in the logs built in like a little like markup language so that we could replace things",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

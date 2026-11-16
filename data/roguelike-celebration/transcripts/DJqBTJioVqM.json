@@ -1,0 +1,3915 @@
+{
+ "id": "DJqBTJioVqM",
+ "url": "https://www.youtube.com/watch?v=DJqBTJioVqM",
+ "title": "Paul Hembree - Found (Mathematical) Objects: Generative Beats Without AI/ML",
+ "speaker": "Paul Hembree",
+ "talk_title": "Found (Mathematical) Objects: Generative Beats Without AI/ML",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1829,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "We're going to gather disparate threads from Euclid, particle accelerator timing, Marcel Duchamp, music cognition, and minimalism, all in order to build a 100% ethical beat generator.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5225,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 6.48,
+   "d": 3.36,
+   "text": "Hello everyone. Welcome back. I hope you"
+  },
+  {
+   "t": 9.84,
+   "d": 2.96,
+   "text": "had a great time digging around in the"
+  },
+  {
+   "t": 12.8,
+   "d": 2.56,
+   "text": "social space. Uh I know there are lots"
+  },
+  {
+   "t": 15.36,
+   "d": 2.64,
+   "text": "of fun secrets this year. Um maybe they"
+  },
+  {
+   "t": 18.0,
+   "d": 1.2,
+   "text": "have to do with digging. Maybe they have"
+  },
+  {
+   "t": 19.2,
+   "d": 2.4,
+   "text": "to do with sports. You know as much as I"
+  },
+  {
+   "t": 21.6,
+   "d": 2.56,
+   "text": "do, but if you dig around the soda"
+  },
+  {
+   "t": 24.16,
+   "d": 1.92,
+   "text": "fountain, maybe you'll start to learn"
+  },
+  {
+   "t": 26.08,
+   "d": 1.92,
+   "text": "more. Um, and if you're watching on"
+  },
+  {
+   "t": 28.0,
+   "d": 2.0,
+   "text": "Twitch or YouTube and wondering what"
+  },
+  {
+   "t": 30.0,
+   "d": 2.4,
+   "text": "this chat social space that I keep"
+  },
+  {
+   "t": 32.4,
+   "d": 2.56,
+   "text": "mentioning is, um, get your ticket at"
+  },
+  {
+   "t": 34.96,
+   "d": 2.56,
+   "text": "rogllight.club and join us. The chat is"
+  },
+  {
+   "t": 37.52,
+   "d": 3.28,
+   "text": "very fun. Um, and if you aren't able to"
+  },
+  {
+   "t": 40.8,
+   "d": 2.72,
+   "text": "make the chat live, uh, or if you are"
+  },
+  {
+   "t": 43.52,
+   "d": 1.44,
+   "text": "here and you are posting links in the"
+  },
+  {
+   "t": 44.96,
+   "d": 1.92,
+   "text": "chat, I highly recommend you put them on"
+  },
+  {
+   "t": 46.88,
+   "d": 1.76,
+   "text": "the obelisk so we can enjoy all those"
+  },
+  {
+   "t": 48.64,
+   "d": 4.0,
+   "text": "links uh, live or all those links later."
+  },
+  {
+   "t": 52.64,
+   "d": 2.96,
+   "text": "Um because there's so much to focus on."
+  },
+  {
+   "t": 55.6,
+   "d": 1.76,
+   "text": "So many cool things I learn about every"
+  },
+  {
+   "t": 57.36,
+   "d": 3.44,
+   "text": "year at Rogike Celebration. Uh including"
+  },
+  {
+   "t": 60.8,
+   "d": 1.6,
+   "text": "we're going to be learning some really"
+  },
+  {
+   "t": 62.4,
+   "d": 2.64,
+   "text": "cool things from Paul Hembry uh right"
+  },
+  {
+   "t": 65.04,
+   "d": 2.16,
+   "text": "now in found mathematical objects"
+  },
+  {
+   "t": 67.2,
+   "d": 3.36,
+   "text": "generative beats without AI uh/machine"
+  },
+  {
+   "t": 70.56,
+   "d": 2.32,
+   "text": "learning. Paul Hery is a PhD in"
+  },
+  {
+   "t": 72.88,
+   "d": 2.08,
+   "text": "composition um supported by computer"
+  },
+  {
+   "t": 74.96,
+   "d": 2.88,
+   "text": "music research from UC San Diego. He's"
+  },
+  {
+   "t": 77.84,
+   "d": 2.8,
+   "text": "worked as a hybrid composer programmer"
+  },
+  {
+   "t": 80.64,
+   "d": 1.92,
+   "text": "on ethical procedural music generation"
+  },
+  {
+   "t": 82.56,
+   "d": 3.12,
+   "text": "and machine learning. Um, and his indie"
+  },
+  {
+   "t": 85.68,
+   "d": 2.72,
+   "text": "games include right of terra and wool"
+  },
+  {
+   "t": 88.4,
+   "d": 3.2,
+   "text": "gatherer featuring microonal orchestral"
+  },
+  {
+   "t": 91.6,
+   "d": 1.68,
+   "text": "music in non-standard equal"
+  },
+  {
+   "t": 93.28,
+   "d": 3.84,
+   "text": "temperaments. Uh, Paul are I'm so"
+  },
+  {
+   "t": 97.12,
+   "d": 2.48,
+   "text": "excited to uh learn more."
+  },
+  {
+   "t": 99.6,
+   "d": 2.24,
+   "text": ">> Hello. Yeah, thanks for the intro and"
+  },
+  {
+   "t": 101.84,
+   "d": 2.4,
+   "text": "yeah, thanks for having me."
+  },
+  {
+   "t": 104.24,
+   "d": 3.04,
+   "text": ">> Um, yeah, I should be ready to go."
+  },
+  {
+   "t": 107.28,
+   "d": 1.76,
+   "text": "Um, yep. There we go."
+  },
+  {
+   "t": 109.04,
+   "d": 1.04,
+   "text": ">> Hey, take it away."
+  },
+  {
+   "t": 110.08,
+   "d": 1.84,
+   "text": ">> Cool. So, I'll just launch straight in"
+  },
+  {
+   "t": 111.92,
+   "d": 2.72,
+   "text": "because it's uh it's pretty packed. So,"
+  },
+  {
+   "t": 114.64,
+   "d": 1.92,
+   "text": "so yeah, my name is Paul Hembrey. I'll"
+  },
+  {
+   "t": 116.56,
+   "d": 2.0,
+   "text": "be talking to you today about found"
+  },
+  {
+   "t": 118.56,
+   "d": 2.0,
+   "text": "mathematical objects, generative beats"
+  },
+  {
+   "t": 120.56,
+   "d": 2.72,
+   "text": "without AI or ML. And specifically, the"
+  },
+  {
+   "t": 123.28,
+   "d": 1.52,
+   "text": "technique we'll be talking about is"
+  },
+  {
+   "t": 124.8,
+   "d": 3.92,
+   "text": "using uklitian rhythms."
+  },
+  {
+   "t": 128.72,
+   "d": 1.52,
+   "text": "So, um, you heard some of this"
+  },
+  {
+   "t": 130.24,
+   "d": 1.76,
+   "text": "background already, but again, yeah, I"
+  },
+  {
+   "t": 132.0,
+   "d": 2.24,
+   "text": "have a PhD in composition supported by"
+  },
+  {
+   "t": 134.24,
+   "d": 2.24,
+   "text": "computer music from UC San Diego. And"
+  },
+  {
+   "t": 136.48,
+   "d": 1.52,
+   "text": "one thing that this community might be"
+  },
+  {
+   "t": 138.0,
+   "d": 1.76,
+   "text": "interested in is that my dissertation"
+  },
+  {
+   "t": 139.76,
+   "d": 2.48,
+   "text": "was on cellular automata and spatial"
+  },
+  {
+   "t": 142.24,
+   "d": 2.24,
+   "text": "perceptual models of pitch and then"
+  },
+  {
+   "t": 144.48,
+   "d": 1.84,
+   "text": "combining those things together to"
+  },
+  {
+   "t": 146.32,
+   "d": 2.64,
+   "text": "create um sort of like novel"
+  },
+  {
+   "t": 148.96,
+   "d": 3.12,
+   "text": "improvisation systems. Uh then um after"
+  },
+  {
+   "t": 152.08,
+   "d": 1.68,
+   "text": "graduating I taught electronic music and"
+  },
+  {
+   "t": 153.76,
+   "d": 2.0,
+   "text": "digital media for three years at um"
+  },
+  {
+   "t": 155.76,
+   "d": 2.0,
+   "text": "Skidmore and Bard Colleges in upstate"
+  },
+  {
+   "t": 157.76,
+   "d": 2.24,
+   "text": "New York. And around the same time in"
+  },
+  {
+   "t": 160.0,
+   "d": 1.92,
+   "text": "2017 I was lucky to work with Lauren"
+  },
+  {
+   "t": 161.92,
+   "d": 2.56,
+   "text": "Schmidt on Goodn Night Traffic City and"
+  },
+  {
+   "t": 164.48,
+   "d": 2.0,
+   "text": "then later worked on Write of Terra and"
+  },
+  {
+   "t": 166.48,
+   "d": 3.28,
+   "text": "Wool Gather as a duo with my uh brother"
+  },
+  {
+   "t": 169.76,
+   "d": 2.88,
+   "text": "and in 2023 I presented um at Rogike"
+  },
+  {
+   "t": 172.64,
+   "d": 1.92,
+   "text": "Celebration on the procedural harmony"
+  },
+  {
+   "t": 174.56,
+   "d": 3.52,
+   "text": "system in Write of Terra."
+  },
+  {
+   "t": 178.08,
+   "d": 2.0,
+   "text": "So after teaching I worked for seven"
+  },
+  {
+   "t": 180.08,
+   "d": 1.44,
+   "text": "years in a wall called non-evil"
+  },
+  {
+   "t": 181.52,
+   "d": 1.92,
+   "text": "procedurally generated music. Uh first"
+  },
+  {
+   "t": 183.44,
+   "d": 1.76,
+   "text": "at amper music uh and then we were"
+  },
+  {
+   "t": 185.2,
+   "d": 1.84,
+   "text": "acquired by shuttertock then I got to"
+  },
+  {
+   "t": 187.04,
+   "d": 1.44,
+   "text": "work with their premium beat folks a"
+  },
+  {
+   "t": 188.48,
+   "d": 1.6,
+   "text": "little bit as well and then I worked for"
+  },
+  {
+   "t": 190.08,
+   "d": 1.92,
+   "text": "three years at Band Lab. So what do I"
+  },
+  {
+   "t": 192.0,
+   "d": 2.4,
+   "text": "mean by non-evil? Uh we didn't do any"
+  },
+  {
+   "t": 194.4,
+   "d": 2.4,
+   "text": "scraping of the internet for um creative"
+  },
+  {
+   "t": 196.8,
+   "d": 1.84,
+   "text": "content and certainly no scraping of"
+  },
+  {
+   "t": 198.64,
+   "d": 1.6,
+   "text": "user content either. So all the music"
+  },
+  {
+   "t": 200.24,
+   "d": 2.08,
+   "text": "data was created by fairly compensated"
+  },
+  {
+   "t": 202.32,
+   "d": 1.92,
+   "text": "uh in-house experts, composers and"
+  },
+  {
+   "t": 204.24,
+   "d": 2.8,
+   "text": "producers in a wide variety of styles."
+  },
+  {
+   "t": 207.04,
+   "d": 1.44,
+   "text": "And we used a mixture of rulebased"
+  },
+  {
+   "t": 208.48,
+   "d": 2.16,
+   "text": "systems and and LML models at these"
+  },
+  {
+   "t": 210.64,
+   "d": 2.96,
+   "text": "places. Um for instance at premium beat"
+  },
+  {
+   "t": 213.6,
+   "d": 2.24,
+   "text": "um I helped create an embedding model"
+  },
+  {
+   "t": 215.84,
+   "d": 1.76,
+   "text": "and an embedding model for audio"
+  },
+  {
+   "t": 217.6,
+   "d": 2.48,
+   "text": "similarity search. Uh and then at band"
+  },
+  {
+   "t": 220.08,
+   "d": 2.48,
+   "text": "lab um got to create some a variety of"
+  },
+  {
+   "t": 222.56,
+   "d": 1.28,
+   "text": "statistical methods for melody"
+  },
+  {
+   "t": 223.84,
+   "d": 1.76,
+   "text": "generation including some marov chains"
+  },
+  {
+   "t": 225.6,
+   "d": 2.16,
+   "text": "and transformers."
+  },
+  {
+   "t": 227.76,
+   "d": 2.64,
+   "text": "Oh and one thing weird is that um I mean"
+  },
+  {
+   "t": 230.4,
+   "d": 1.84,
+   "text": "Shuttertock bought Amper many years ago"
+  },
+  {
+   "t": 232.24,
+   "d": 1.44,
+   "text": "but someone is now squatting on the"
+  },
+  {
+   "t": 233.68,
+   "d": 2.24,
+   "text": "Amper name. So you'll see that come up a"
+  },
+  {
+   "t": 235.92,
+   "d": 2.88,
+   "text": "bit and it's really no longer us. Um so"
+  },
+  {
+   "t": 238.8,
+   "d": 1.36,
+   "text": "what do I mean by generative beats"
+  },
+  {
+   "t": 240.16,
+   "d": 2.8,
+   "text": "without AI or ML? Um really what we're"
+  },
+  {
+   "t": 242.96,
+   "d": 2.72,
+   "text": "going to be talking about today is a"
+  },
+  {
+   "t": 245.68,
+   "d": 3.52,
+   "text": "form of classical AI. So um this"
+  },
+  {
+   "t": 249.2,
+   "d": 1.36,
+   "text": "shouldn't be that surprising to this"
+  },
+  {
+   "t": 250.56,
+   "d": 1.28,
+   "text": "audience but basically this is going to"
+  },
+  {
+   "t": 251.84,
+   "d": 1.36,
+   "text": "be an algorithmic and rule-based"
+  },
+  {
+   "t": 253.2,
+   "d": 2.32,
+   "text": "approach and it's centered on uklitian"
+  },
+  {
+   "t": 255.52,
+   "d": 1.68,
+   "text": "rhythms. So this is if you take anything"
+  },
+  {
+   "t": 257.2,
+   "d": 1.76,
+   "text": "away from this talk it's that uklidian"
+  },
+  {
+   "t": 258.96,
+   "d": 1.44,
+   "text": "rhythms are an efficient way of"
+  },
+  {
+   "t": 260.4,
+   "d": 1.84,
+   "text": "representing many possible syncopated"
+  },
+  {
+   "t": 262.24,
+   "d": 1.68,
+   "text": "rhythms."
+  },
+  {
+   "t": 263.92,
+   "d": 1.92,
+   "text": "Um, so and I'll be zooming out a little"
+  },
+  {
+   "t": 265.84,
+   "d": 1.76,
+   "text": "bit as well. I consider this a kind of"
+  },
+  {
+   "t": 267.6,
+   "d": 3.28,
+   "text": "found mathematical object art."
+  },
+  {
+   "t": 270.88,
+   "d": 1.84,
+   "text": "So where does this all begin? It started"
+  },
+  {
+   "t": 272.72,
+   "d": 1.84,
+   "text": "in a particle accelerator, which is not"
+  },
+  {
+   "t": 274.56,
+   "d": 1.6,
+   "text": "something you can say before a music"
+  },
+  {
+   "t": 276.16,
+   "d": 3.84,
+   "text": "talk very often. Um, so in 2004, Eric"
+  },
+  {
+   "t": 280.0,
+   "d": 1.76,
+   "text": "Bjorkland was interested in precisely"
+  },
+  {
+   "t": 281.76,
+   "d": 1.76,
+   "text": "controlling high voltage power supplies"
+  },
+  {
+   "t": 283.52,
+   "d": 2.48,
+   "text": "for the Spellelation neutron source"
+  },
+  {
+   "t": 286.0,
+   "d": 1.76,
+   "text": "particle accelerator at Oakidge National"
+  },
+  {
+   "t": 287.76,
+   "d": 3.2,
+   "text": "Labs. and he wanted to do distribute n"
+  },
+  {
+   "t": 290.96,
+   "d": 2.16,
+   "text": "pulses over m timing slots in the most"
+  },
+  {
+   "t": 293.12,
+   "d": 2.48,
+   "text": "even way possible. Um, and this is of"
+  },
+  {
+   "t": 295.6,
+   "d": 2.72,
+   "text": "course easy when m is divisible by n. If"
+  },
+  {
+   "t": 298.32,
+   "d": 1.92,
+   "text": "you have m timing or if you have nine"
+  },
+  {
+   "t": 300.24,
+   "d": 1.6,
+   "text": "timing slots and you have three pulses,"
+  },
+  {
+   "t": 301.84,
+   "d": 1.44,
+   "text": "you want to divide up into them. You"
+  },
+  {
+   "t": 303.28,
+   "d": 1.36,
+   "text": "know they're going to be separated by"
+  },
+  {
+   "t": 304.64,
+   "d": 2.48,
+   "text": "three timing slots. Uh, things get a"
+  },
+  {
+   "t": 307.12,
+   "d": 2.08,
+   "text": "little bit more wonky when uh, n is not"
+  },
+  {
+   "t": 309.2,
+   "d": 2.72,
+   "text": "a divisor of m. And things are really"
+  },
+  {
+   "t": 311.92,
+   "d": 3.44,
+   "text": "juicy when n and m are co-prime such as"
+  },
+  {
+   "t": 315.36,
+   "d": 3.2,
+   "text": "with the ratio of five pulses into 12"
+  },
+  {
+   "t": 318.56,
+   "d": 2.96,
+   "text": "timing slots."
+  },
+  {
+   "t": 321.52,
+   "d": 2.64,
+   "text": "So um we'll be discussing Bjorgan's"
+  },
+  {
+   "t": 324.16,
+   "d": 1.84,
+   "text": "algorithm here for a bit using this kind"
+  },
+  {
+   "t": 326.0,
+   "d": 1.92,
+   "text": "of weird cyberpunk graphic over here on"
+  },
+  {
+   "t": 327.92,
+   "d": 3.68,
+   "text": "the right. So we have 12 timing slots"
+  },
+  {
+   "t": 331.6,
+   "d": 2.32,
+   "text": "represented by squares on the top row"
+  },
+  {
+   "t": 333.92,
+   "d": 2.56,
+   "text": "there and the first five of those are"
+  },
+  {
+   "t": 336.48,
+   "d": 2.16,
+   "text": "gray. So those are our pulses. And then"
+  },
+  {
+   "t": 338.64,
+   "d": 4.64,
+   "text": "we have a remainder of se seven um uh"
+  },
+  {
+   "t": 343.28,
+   "d": 1.92,
+   "text": "silent timing slots essentially there."
+  },
+  {
+   "t": 345.2,
+   "d": 2.16,
+   "text": "So seven silences and this is a"
+  },
+  {
+   "t": 347.36,
+   "d": 1.84,
+   "text": "recursive algorithm and it'll operate on"
+  },
+  {
+   "t": 349.2,
+   "d": 3.12,
+   "text": "its own output. But for the first um uh"
+  },
+  {
+   "t": 352.32,
+   "d": 1.76,
+   "text": "iteration what we do is we pair as many"
+  },
+  {
+   "t": 354.08,
+   "d": 1.84,
+   "text": "pulses with a following silence as"
+  },
+  {
+   "t": 355.92,
+   "d": 3.52,
+   "text": "possible. So we create um little cyan"
+  },
+  {
+   "t": 359.44,
+   "d": 2.32,
+   "text": "pairs of a pulse and then a following"
+  },
+  {
+   "t": 361.76,
+   "d": 2.16,
+   "text": "silence. And then you'll notice that we"
+  },
+  {
+   "t": 363.92,
+   "d": 2.0,
+   "text": "end up with a remainder of two silences"
+  },
+  {
+   "t": 365.92,
+   "d": 2.88,
+   "text": "at the end of this iteration."
+  },
+  {
+   "t": 368.8,
+   "d": 2.16,
+   "text": "So in each in each subsequent iteration,"
+  },
+  {
+   "t": 370.96,
+   "d": 1.92,
+   "text": "we pair up as many longer sequences as"
+  },
+  {
+   "t": 372.88,
+   "d": 2.0,
+   "text": "possible with shorter sequences. So we"
+  },
+  {
+   "t": 374.88,
+   "d": 1.92,
+   "text": "take our cyan pairs and we group them up"
+  },
+  {
+   "t": 376.8,
+   "d": 2.16,
+   "text": "with a red silence and we end up with"
+  },
+  {
+   "t": 378.96,
+   "d": 1.76,
+   "text": "yellow trios. And then you'll notice"
+  },
+  {
+   "t": 380.72,
+   "d": 3.52,
+   "text": "that we had a bunch of cyan um pairs"
+  },
+  {
+   "t": 384.24,
+   "d": 1.92,
+   "text": "that we didn't use. Those I recolor is"
+  },
+  {
+   "t": 386.16,
+   "d": 1.92,
+   "text": "magenta. Those are shorter sequences."
+  },
+  {
+   "t": 388.08,
+   "d": 2.48,
+   "text": "And then in the final iteration here, we"
+  },
+  {
+   "t": 390.56,
+   "d": 1.68,
+   "text": "have yellow trios that we're going to"
+  },
+  {
+   "t": 392.24,
+   "d": 2.72,
+   "text": "combine with magenta duos uh to form"
+  },
+  {
+   "t": 394.96,
+   "d": 2.88,
+   "text": "these green groups of five. And we have"
+  },
+  {
+   "t": 397.84,
+   "d": 2.32,
+   "text": "one remaining short sequence left. And"
+  },
+  {
+   "t": 400.16,
+   "d": 2.0,
+   "text": "Bjorgland's algorithm, the original one,"
+  },
+  {
+   "t": 402.16,
+   "d": 2.32,
+   "text": "exits at this point. Um, but you can"
+  },
+  {
+   "t": 404.48,
+   "d": 1.36,
+   "text": "keep running it until there are no short"
+  },
+  {
+   "t": 405.84,
+   "d": 2.48,
+   "text": "sequences left. Basically everything to"
+  },
+  {
+   "t": 408.32,
+   "d": 1.52,
+   "text": "a big group. And it turns out that they"
+  },
+  {
+   "t": 409.84,
+   "d": 3.84,
+   "text": "are the same um density of pulses. Um,"
+  },
+  {
+   "t": 413.68,
+   "d": 1.92,
+   "text": "if you do that, so it's possible to exit"
+  },
+  {
+   "t": 415.6,
+   "d": 2.16,
+   "text": "early."
+  },
+  {
+   "t": 417.76,
+   "d": 2.72,
+   "text": "So about a year after Bjorgland released"
+  },
+  {
+   "t": 420.48,
+   "d": 2.56,
+   "text": "his paper, Godfrey Tusant at McGill"
+  },
+  {
+   "t": 423.04,
+   "d": 2.24,
+   "text": "who's in the school of computer science"
+  },
+  {
+   "t": 425.28,
+   "d": 1.76,
+   "text": "uh saw the paper and then wrote the"
+  },
+  {
+   "t": 427.04,
+   "d": 1.76,
+   "text": "uklidian algorithm generates traditional"
+  },
+  {
+   "t": 428.8,
+   "d": 2.48,
+   "text": "musical rhythms. Uh so he noticed that"
+  },
+  {
+   "t": 431.28,
+   "d": 1.84,
+   "text": "the overall shape of Jorgens's algorithm"
+  },
+  {
+   "t": 433.12,
+   "d": 1.52,
+   "text": "is the same as Uklid's recursive"
+  },
+  {
+   "t": 434.64,
+   "d": 1.28,
+   "text": "algorithm for the greatest common"
+  },
+  {
+   "t": 435.92,
+   "d": 2.16,
+   "text": "divisor. And this is a a sort of"
+  },
+  {
+   "t": 438.08,
+   "d": 2.08,
+   "text": "misconception about Uklidian rhythms. Uh"
+  },
+  {
+   "t": 440.16,
+   "d": 1.68,
+   "text": "you can definitely see these things"
+  },
+  {
+   "t": 441.84,
+   "d": 2.16,
+   "text": "online. It's particularly popular in"
+  },
+  {
+   "t": 444.0,
+   "d": 4.16,
+   "text": "like the Eurorack community. Um so it's"
+  },
+  {
+   "t": 448.16,
+   "d": 1.52,
+   "text": "not really that Uklid's algorithm is"
+  },
+  {
+   "t": 449.68,
+   "d": 1.52,
+   "text": "being used here. Bjorkland's algorithm"
+  },
+  {
+   "t": 451.2,
+   "d": 2.08,
+   "text": "is different um than the Uklidian"
+  },
+  {
+   "t": 453.28,
+   "d": 1.12,
+   "text": "algorithm, but they have the same"
+  },
+  {
+   "t": 454.4,
+   "d": 2.32,
+   "text": "recursive shape. And this is what Tucson"
+  },
+  {
+   "t": 456.72,
+   "d": 3.2,
+   "text": "wrote about. Um and what Tucson noticed"
+  },
+  {
+   "t": 459.92,
+   "d": 2.32,
+   "text": "with Bjorgland's algorithm is that um"
+  },
+  {
+   "t": 462.24,
+   "d": 3.44,
+   "text": "these rhythms um basically the patterns"
+  },
+  {
+   "t": 465.68,
+   "d": 2.24,
+   "text": "of pulsation and silence that occur here"
+  },
+  {
+   "t": 467.92,
+   "d": 2.0,
+   "text": "in Bjorggan's algorithm are really not"
+  },
+  {
+   "t": 469.92,
+   "d": 1.76,
+   "text": "at all rare in traditional music from"
+  },
+  {
+   "t": 471.68,
+   "d": 2.08,
+   "text": "around the world. So he ends up finding"
+  },
+  {
+   "t": 473.76,
+   "d": 3.52,
+   "text": "98 examples. And this isn't to say that,"
+  },
+  {
+   "t": 477.28,
+   "d": 1.52,
+   "text": "you know, traditional musicians were"
+  },
+  {
+   "t": 478.8,
+   "d": 1.76,
+   "text": "using either of these algorithms. It"
+  },
+  {
+   "t": 480.56,
+   "d": 1.92,
+   "text": "just so happens that they're finding the"
+  },
+  {
+   "t": 482.48,
+   "d": 2.0,
+   "text": "same patterns that Bjorkland was"
+  },
+  {
+   "t": 484.48,
+   "d": 2.4,
+   "text": "finding. And that brings us to this"
+  },
+  {
+   "t": 486.88,
+   "d": 2.4,
+   "text": "idea. So uklidian rhythms are kind of an"
+  },
+  {
+   "t": 489.28,
+   "d": 2.0,
+   "text": "example of found mathematical objects."
+  },
+  {
+   "t": 491.28,
+   "d": 2.8,
+   "text": "So this comes from the composer Tom"
+  },
+  {
+   "t": 494.08,
+   "d": 2.24,
+   "text": "Johnson. He writes uh a little bit"
+  },
+  {
+   "t": 496.32,
+   "d": 2.56,
+   "text": "earlier in 2001, it is now quite natural"
+  },
+  {
+   "t": 498.88,
+   "d": 1.92,
+   "text": "that a composer or artist might choose"
+  },
+  {
+   "t": 500.8,
+   "d": 1.92,
+   "text": "to work with a found mathematical object"
+  },
+  {
+   "t": 502.72,
+   "d": 2.56,
+   "text": "like Pascal's triangle or the Narana"
+  },
+  {
+   "t": 505.28,
+   "d": 3.28,
+   "text": "series or some automaton just as with a"
+  },
+  {
+   "t": 508.56,
+   "d": 1.92,
+   "text": "urinal, a bicycle wheel, a comb or a"
+  },
+  {
+   "t": 510.48,
+   "d": 2.4,
+   "text": "bottle rack."
+  },
+  {
+   "t": 512.88,
+   "d": 2.96,
+   "text": "So, um you're probably aware of Marcel"
+  },
+  {
+   "t": 515.84,
+   "d": 2.0,
+   "text": "Duchamp's fountain in 1917. That's the"
+  },
+  {
+   "t": 517.84,
+   "d": 2.16,
+   "text": "urinal he's talking about. But found"
+  },
+  {
+   "t": 520.0,
+   "d": 1.36,
+   "text": "object art takes a lot of different"
+  },
+  {
+   "t": 521.36,
+   "d": 2.4,
+   "text": "forms. Um, I particularly like Cornelia"
+  },
+  {
+   "t": 523.76,
+   "d": 2.96,
+   "text": "Parker's Hanging Fire from 1999, which"
+  },
+  {
+   "t": 526.72,
+   "d": 3.6,
+   "text": "is um basically charcoalized pieces of"
+  },
+  {
+   "t": 530.32,
+   "d": 1.44,
+   "text": "wood arranged in this sort of like study"
+  },
+  {
+   "t": 531.76,
+   "d": 1.84,
+   "text": "of density that looks a little bit like"
+  },
+  {
+   "t": 533.6,
+   "d": 2.32,
+   "text": "uh fire in and of itself. Um, and this"
+  },
+  {
+   "t": 535.92,
+   "d": 2.08,
+   "text": "is all scavenged from a suspected arson"
+  },
+  {
+   "t": 538.0,
+   "d": 2.8,
+   "text": "site."
+  },
+  {
+   "t": 540.8,
+   "d": 1.6,
+   "text": "Um, and then turning it around looking"
+  },
+  {
+   "t": 542.4,
+   "d": 2.64,
+   "text": "at found mathematical objects. Um when I"
+  },
+  {
+   "t": 545.04,
+   "d": 1.12,
+   "text": "I had never actually heard of the"
+  },
+  {
+   "t": 546.16,
+   "d": 1.92,
+   "text": "Nariana series before reading Tom"
+  },
+  {
+   "t": 548.08,
+   "d": 2.48,
+   "text": "Johnson's paper and then you know looked"
+  },
+  {
+   "t": 550.56,
+   "d": 2.64,
+   "text": "at Wikipedia as one used to do uh and"
+  },
+  {
+   "t": 553.2,
+   "d": 2.64,
+   "text": "noticed these monotonic lattice paths um"
+  },
+  {
+   "t": 555.84,
+   "d": 2.8,
+   "text": "with um and really what this looks like"
+  },
+  {
+   "t": 558.64,
+   "d": 2.88,
+   "text": "to me is um if you think about like time"
+  },
+  {
+   "t": 561.52,
+   "d": 2.16,
+   "text": "on the x-axis and pitch on the y- axis"
+  },
+  {
+   "t": 563.68,
+   "d": 1.92,
+   "text": "as a lot of musicians do that these look"
+  },
+  {
+   "t": 565.6,
+   "d": 1.6,
+   "text": "like a kind of like elemental"
+  },
+  {
+   "t": 567.2,
+   "d": 1.36,
+   "text": "understanding of melodic ornaments,"
+  },
+  {
+   "t": 568.56,
+   "d": 1.36,
+   "text": "right? you could consider this bottom"
+  },
+  {
+   "t": 569.92,
+   "d": 2.4,
+   "text": "one a sort of like elemental trill and"
+  },
+  {
+   "t": 572.32,
+   "d": 2.56,
+   "text": "then these might be variations upon that"
+  },
+  {
+   "t": 574.88,
+   "d": 2.16,
+   "text": "idea of a trill and then of course we"
+  },
+  {
+   "t": 577.04,
+   "d": 2.24,
+   "text": "have Lauren Schmidt's work um in this"
+  },
+  {
+   "t": 579.28,
+   "d": 2.0,
+   "text": "case goodn night traffic city um where"
+  },
+  {
+   "t": 581.28,
+   "d": 1.76,
+   "text": "cellular automata was used for world"
+  },
+  {
+   "t": 583.04,
+   "d": 1.92,
+   "text": "generation and then it's really like a"
+  },
+  {
+   "t": 584.96,
+   "d": 2.56,
+   "text": "provocation for other systems to be"
+  },
+  {
+   "t": 587.52,
+   "d": 1.44,
+   "text": "built on top of it including systems"
+  },
+  {
+   "t": 588.96,
+   "d": 4.92,
+   "text": "like u literally growing plants"
+  },
+  {
+   "t": 594.48,
+   "d": 2.72,
+   "text": "so for the rest of the talk um I'll be"
+  },
+  {
+   "t": 597.2,
+   "d": 1.92,
+   "text": "discussing essentially a ways to"
+  },
+  {
+   "t": 599.12,
+   "d": 2.08,
+   "text": "operationalize uklidian rhythms for beat"
+  },
+  {
+   "t": 601.2,
+   "d": 2.56,
+   "text": "generation. So, and although Bjorgland's"
+  },
+  {
+   "t": 603.76,
+   "d": 1.6,
+   "text": "algorithm is not too difficult to"
+  },
+  {
+   "t": 605.36,
+   "d": 1.92,
+   "text": "program, there's an even easier method"
+  },
+  {
+   "t": 607.28,
+   "d": 1.68,
+   "text": "for creating uklitian rhythms. And this"
+  },
+  {
+   "t": 608.96,
+   "d": 2.0,
+   "text": "is something that digital composers and"
+  },
+  {
+   "t": 610.96,
+   "d": 1.52,
+   "text": "producers use every day, and that's"
+  },
+  {
+   "t": 612.48,
+   "d": 1.68,
+   "text": "quantization. So, it turns out that"
+  },
+  {
+   "t": 614.16,
+   "d": 2.56,
+   "text": "uklitian rhythms are just equivalent to"
+  },
+  {
+   "t": 616.72,
+   "d": 4.4,
+   "text": "any arbitrary quantized to any grid."
+  },
+  {
+   "t": 621.12,
+   "d": 1.36,
+   "text": "And the first thing you have to do, of"
+  },
+  {
+   "t": 622.48,
+   "d": 3.12,
+   "text": "course, is play a 15 to 12let perfectly."
+  },
+  {
+   "t": 625.6,
+   "d": 3.92,
+   "text": "Uh, but no, don't actually do that. Um,"
+  },
+  {
+   "t": 629.52,
+   "d": 2.64,
+   "text": "so we'll be um looking at a lot of"
+  },
+  {
+   "t": 632.16,
+   "d": 2.72,
+   "text": "examples for the next section in um it's"
+  },
+  {
+   "t": 634.88,
+   "d": 2.4,
+   "text": "going to be examples in 128. Um, so"
+  },
+  {
+   "t": 637.28,
+   "d": 1.52,
+   "text": "we're going to have u I don't want to"
+  },
+  {
+   "t": 638.8,
+   "d": 1.12,
+   "text": "like completely go through all of"
+  },
+  {
+   "t": 639.92,
+   "d": 2.16,
+   "text": "western notation for you here, but u"
+  },
+  {
+   "t": 642.08,
+   "d": 1.44,
+   "text": "we're going to hear a lot of uh big"
+  },
+  {
+   "t": 643.52,
+   "d": 1.76,
+   "text": "beats with foot down high hat and that's"
+  },
+  {
+   "t": 645.28,
+   "d": 2.16,
+   "text": "notated here on the top staff. So that's"
+  },
+  {
+   "t": 647.44,
+   "d": 1.76,
+   "text": "keeping the the beats. And then we have"
+  },
+  {
+   "t": 649.2,
+   "d": 1.6,
+   "text": "subdivisions of the beats played by"
+  },
+  {
+   "t": 650.8,
+   "d": 2.96,
+   "text": "shaker with accents as well. And then"
+  },
+  {
+   "t": 653.76,
+   "d": 1.84,
+   "text": "our uklidian rhythms are going to be"
+  },
+  {
+   "t": 655.6,
+   "d": 1.6,
+   "text": "colored note heads. Um, and it's going"
+  },
+  {
+   "t": 657.2,
+   "d": 1.84,
+   "text": "to be played by a rimshot sound and a"
+  },
+  {
+   "t": 659.04,
+   "d": 4.16,
+   "text": "cowbell sound. U, so this, uh, initial"
+  },
+  {
+   "t": 663.2,
+   "d": 2.0,
+   "text": "view here, I'm showing you exactly how"
+  },
+  {
+   "t": 665.2,
+   "d": 3.2,
+   "text": "to calculate the time position um, for"
+  },
+  {
+   "t": 668.4,
+   "d": 1.84,
+   "text": "notes in a in a here. So we have an"
+  },
+  {
+   "t": 670.24,
+   "d": 2.48,
+   "text": "index into the zerooth index here, first"
+  },
+  {
+   "t": 672.72,
+   "d": 2.64,
+   "text": "index, second index, etc. And then"
+  },
+  {
+   "t": 675.36,
+   "d": 1.84,
+   "text": "multiply that by the numerator and"
+  },
+  {
+   "t": 677.2,
+   "d": 2.8,
+   "text": "divide the results by the denominator."
+  },
+  {
+   "t": 680.0,
+   "d": 2.56,
+   "text": "And that gives you uh, these time"
+  },
+  {
+   "t": 682.56,
+   "d": 2.24,
+   "text": "positions. So we have, of course, zero"
+  },
+  {
+   "t": 684.8,
+   "d": 1.52,
+   "text": "for the starting position. And then this"
+  },
+  {
+   "t": 686.32,
+   "d": 2.56,
+   "text": "blue event here occurs uh two and"
+  },
+  {
+   "t": 688.88,
+   "d": 3.2,
+   "text": "two-5ths eighth notes into this measure."
+  },
+  {
+   "t": 692.08,
+   "d": 1.68,
+   "text": "And why don't we listen to this? So this"
+  },
+  {
+   "t": 693.76,
+   "d": 2.48,
+   "text": "is um I'm secretly giving you a talk on"
+  },
+  {
+   "t": 696.24,
+   "d": 2.16,
+   "text": "music perception here. Um so let's"
+  },
+  {
+   "t": 698.4,
+   "d": 2.24,
+   "text": "listen to this and then just marinate on"
+  },
+  {
+   "t": 700.64,
+   "d": 1.12,
+   "text": "it for a second. You're going to hear"
+  },
+  {
+   "t": 701.76,
+   "d": 3.68,
+   "text": "four repetitions of this one bar here."
+  },
+  {
+   "t": 705.44,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 714.72,
+   "d": 1.84,
+   "text": "Okay. Actually, could everybody hear"
+  },
+  {
+   "t": 716.56,
+   "d": 1.2,
+   "text": "that? This is the one thing I just want"
+  },
+  {
+   "t": 717.76,
+   "d": 3.24,
+   "text": "to make sure."
+  },
+  {
+   "t": 723.12,
+   "d": 2.0,
+   "text": "Okay, I see people in here. Okay, good."
+  },
+  {
+   "t": 725.12,
+   "d": 3.2,
+   "text": "Um, so what this sounds like to me, and"
+  },
+  {
+   "t": 728.32,
+   "d": 1.44,
+   "text": "maybe I'm I'm going to lead here a"
+  },
+  {
+   "t": 729.76,
+   "d": 2.72,
+   "text": "little bit, is that um the arbitrary"
+  },
+  {
+   "t": 732.48,
+   "d": 1.68,
+   "text": "that we have up at the top there is sort"
+  },
+  {
+   "t": 734.16,
+   "d": 2.8,
+   "text": "of like um sounds like a different"
+  },
+  {
+   "t": 736.96,
+   "d": 1.36,
+   "text": "rhythmic strata. we have these two"
+  },
+  {
+   "t": 738.32,
+   "d": 1.76,
+   "text": "unrelated rhythmic strata occurring. Um"
+  },
+  {
+   "t": 740.08,
+   "d": 2.8,
+   "text": "sometimes for very complex like this um"
+  },
+  {
+   "t": 742.88,
+   "d": 2.56,
+   "text": "we call them complexuplets in new music"
+  },
+  {
+   "t": 745.44,
+   "d": 1.84,
+   "text": "and there's like entire genres of music"
+  },
+  {
+   "t": 747.28,
+   "d": 1.28,
+   "text": "kind of based around using this stuff"
+  },
+  {
+   "t": 748.56,
+   "d": 1.6,
+   "text": "and it's certainly very you know"
+  },
+  {
+   "t": 750.16,
+   "d": 3.76,
+   "text": "valuable in those contexts. Um but why"
+  },
+  {
+   "t": 753.92,
+   "d": 1.36,
+   "text": "don't we quantize this and it's going to"
+  },
+  {
+   "t": 755.28,
+   "d": 1.12,
+   "text": "be a little bit different musical"
+  },
+  {
+   "t": 756.4,
+   "d": 3.84,
+   "text": "experience here. So uh here's a more"
+  },
+  {
+   "t": 760.24,
+   "d": 2.32,
+   "text": "another equation for quantizing this. So"
+  },
+  {
+   "t": 762.56,
+   "d": 1.84,
+   "text": "what this particular method does is that"
+  },
+  {
+   "t": 764.4,
+   "d": 2.56,
+   "text": "we add a rounding point to this. So,"
+  },
+  {
+   "t": 766.96,
+   "d": 0.96,
+   "text": "we're going to use a rounding point"
+  },
+  {
+   "t": 767.92,
+   "d": 2.48,
+   "text": "value of 02. So, you can be within 1/5"
+  },
+  {
+   "t": 770.4,
+   "d": 2.88,
+   "text": "of a an eighth note to the next eighth"
+  },
+  {
+   "t": 773.28,
+   "d": 2.08,
+   "text": "note event before you're pulled forwards"
+  },
+  {
+   "t": 775.36,
+   "d": 2.32,
+   "text": "in time. Uh, everything else is pulled"
+  },
+  {
+   "t": 777.68,
+   "d": 1.28,
+   "text": "backwards in time. And we're using the"
+  },
+  {
+   "t": 778.96,
+   "d": 3.28,
+   "text": "floor function to do that. So, if you if"
+  },
+  {
+   "t": 782.24,
+   "d": 1.28,
+   "text": "we move back and forth in these two"
+  },
+  {
+   "t": 783.52,
+   "d": 1.6,
+   "text": "slides, you'll see that the green event"
+  },
+  {
+   "t": 785.12,
+   "d": 1.44,
+   "text": "gets pulled forwards in time because"
+  },
+  {
+   "t": 786.56,
+   "d": 2.72,
+   "text": "it's the only um event that was close"
+  },
+  {
+   "t": 789.28,
+   "d": 2.88,
+   "text": "enough to the next eighth note um time"
+  },
+  {
+   "t": 792.16,
+   "d": 1.44,
+   "text": "slot there. So, we're going to listen to"
+  },
+  {
+   "t": 793.6,
+   "d": 1.92,
+   "text": "this and it is a much different"
+  },
+  {
+   "t": 795.52,
+   "d": 2.48,
+   "text": "experience. Um, and yeah, sorry, it"
+  },
+  {
+   "t": 798.0,
+   "d": 2.08,
+   "text": "might be a hair loud."
+  },
+  {
+   "t": 800.08,
+   "d": 2.31,
+   "text": "Hear it click there."
+  },
+  {
+   "t": 802.38,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 807.62,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 810.88,
+   "d": 1.76,
+   "text": "So, oh wow, what happened? You know,"
+  },
+  {
+   "t": 812.64,
+   "d": 1.84,
+   "text": "suddenly it's like groovy essentially,"
+  },
+  {
+   "t": 814.48,
+   "d": 2.72,
+   "text": "right? So, um, again, this is sort of"
+  },
+  {
+   "t": 817.2,
+   "d": 2.64,
+   "text": "the magic of uklidian rhythms. It is um"
+  },
+  {
+   "t": 819.84,
+   "d": 2.64,
+   "text": "a way to essentially, you know, using"
+  },
+  {
+   "t": 822.48,
+   "d": 1.52,
+   "text": "this quantization method, you're able to"
+  },
+  {
+   "t": 824.0,
+   "d": 1.52,
+   "text": "sort of encode a lot of different"
+  },
+  {
+   "t": 825.52,
+   "d": 2.56,
+   "text": "syncopated rhythms. Um and yes, I"
+  },
+  {
+   "t": 828.08,
+   "d": 2.0,
+   "text": "clicked a couple times here. So this is"
+  },
+  {
+   "t": 830.08,
+   "d": 2.64,
+   "text": "the 128 son clave pattern from Afrouban"
+  },
+  {
+   "t": 832.72,
+   "d": 2.24,
+   "text": "music. So it is again one of these"
+  },
+  {
+   "t": 834.96,
+   "d": 2.24,
+   "text": "things that Tucson noticed occurs in"
+  },
+  {
+   "t": 837.2,
+   "d": 1.76,
+   "text": "traditional music from around the world."
+  },
+  {
+   "t": 838.96,
+   "d": 2.32,
+   "text": "So we have a duration string at the top"
+  },
+  {
+   "t": 841.28,
+   "d": 1.52,
+   "text": "here. This is represented in eighth"
+  },
+  {
+   "t": 842.8,
+   "d": 3.44,
+   "text": "notes. So we have 2 3 22 3. And what"
+  },
+  {
+   "t": 846.24,
+   "d": 2.64,
+   "text": "Tusant liked to do was consider uklitian"
+  },
+  {
+   "t": 848.88,
+   "d": 1.84,
+   "text": "rhythms to be a necklace like this. So"
+  },
+  {
+   "t": 850.72,
+   "d": 2.0,
+   "text": "we had arranged them on a clock face and"
+  },
+  {
+   "t": 852.72,
+   "d": 2.4,
+   "text": "then this allowed him to rotate through"
+  },
+  {
+   "t": 855.12,
+   "d": 2.16,
+   "text": "them. So you can see how you can start"
+  },
+  {
+   "t": 857.28,
+   "d": 4.56,
+   "text": "on different time slots within the"
+  },
+  {
+   "t": 861.84,
+   "d": 3.04,
+   "text": "different time slots within uh these"
+  },
+  {
+   "t": 864.88,
+   "d": 1.92,
+   "text": "rhythms."
+  },
+  {
+   "t": 866.8,
+   "d": 1.68,
+   "text": "Uh so this basically allows you to"
+  },
+  {
+   "t": 868.48,
+   "d": 2.48,
+   "text": "explore you know different starting"
+  },
+  {
+   "t": 870.96,
+   "d": 2.64,
+   "text": "positions using the same duration string"
+  },
+  {
+   "t": 873.6,
+   "d": 1.84,
+   "text": "um and allows you to start in rests as"
+  },
+  {
+   "t": 875.44,
+   "d": 2.72,
+   "text": "well. So what I would actually argue for"
+  },
+  {
+   "t": 878.16,
+   "d": 1.6,
+   "text": "is instead why don't you use the"
+  },
+  {
+   "t": 879.76,
+   "d": 1.2,
+   "text": "rounding point thing that I was just"
+  },
+  {
+   "t": 880.96,
+   "d": 1.44,
+   "text": "talking about and what it allows you to"
+  },
+  {
+   "t": 882.4,
+   "d": 2.0,
+   "text": "do is find perceptually adjacent"
+  },
+  {
+   "t": 884.4,
+   "d": 3.12,
+   "text": "rotations. Um we can increase our"
+  },
+  {
+   "t": 887.52,
+   "d": 1.76,
+   "text": "rounding point and as we do so we're"
+  },
+  {
+   "t": 889.28,
+   "d": 2.64,
+   "text": "consistently changing um these rhythms"
+  },
+  {
+   "t": 891.92,
+   "d": 2.56,
+   "text": "and mutating one single event at one"
+  },
+  {
+   "t": 894.48,
+   "d": 2.88,
+   "text": "time here. So as I increase from zero to"
+  },
+  {
+   "t": 897.36,
+   "d": 3.28,
+   "text": "0.2 I only move one event uh forwards in"
+  },
+  {
+   "t": 900.64,
+   "d": 1.44,
+   "text": "time. And you can keep doing this and"
+  },
+  {
+   "t": 902.08,
+   "d": 1.84,
+   "text": "you can actually go over a value of one"
+  },
+  {
+   "t": 903.92,
+   "d": 1.84,
+   "text": "as well. And you can then start on the"
+  },
+  {
+   "t": 905.76,
+   "d": 2.0,
+   "text": "rests. So um you don't lose anything"
+  },
+  {
+   "t": 907.76,
+   "d": 2.4,
+   "text": "with this method."
+  },
+  {
+   "t": 910.16,
+   "d": 2.16,
+   "text": "Uh and we'll listen to this. So this is"
+  },
+  {
+   "t": 912.32,
+   "d": 2.48,
+   "text": "sort of a a walkthrough of the five"
+  },
+  {
+   "t": 914.8,
+   "d": 1.68,
+   "text": "rotations that happen to start with a"
+  },
+  {
+   "t": 916.48,
+   "d": 2.32,
+   "text": "pulse and this particular thing here. So"
+  },
+  {
+   "t": 918.8,
+   "d": 2.88,
+   "text": "we have um this method of using the"
+  },
+  {
+   "t": 921.68,
+   "d": 1.36,
+   "text": "round point basically gives you access"
+  },
+  {
+   "t": 923.04,
+   "d": 2.8,
+   "text": "to modulating through a family of"
+  },
+  {
+   "t": 925.84,
+   "d": 2.0,
+   "text": "distinct but related rotations in a"
+  },
+  {
+   "t": 927.84,
+   "d": 2.4,
+   "text": "perceptually smooth continuum. And I'm"
+  },
+  {
+   "t": 930.24,
+   "d": 2.8,
+   "text": "going to accent every note that uh is"
+  },
+  {
+   "t": 933.04,
+   "d": 1.76,
+   "text": "about to change and every note that has"
+  },
+  {
+   "t": 934.8,
+   "d": 2.88,
+   "text": "changed. Oops."
+  },
+  {
+   "t": 937.68,
+   "d": 2.25,
+   "text": "All right. Ready?"
+  },
+  {
+   "t": 939.93,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 944.52,
+   "d": 2.02,
+   "text": ">> [music]"
+  },
+  {
+   "t": 949.76,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 955.0,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 960.48,
+   "d": 1.6,
+   "text": ">> the bowl of oatmeal dance. That's"
+  },
+  {
+   "t": 962.08,
+   "d": 3.04,
+   "text": "amazing. Thank you for that. Um,"
+  },
+  {
+   "t": 965.12,
+   "d": 3.28,
+   "text": "so, uh, so what is the possibility space"
+  },
+  {
+   "t": 968.4,
+   "d": 2.72,
+   "text": "of this particular setup here? So this"
+  },
+  {
+   "t": 971.12,
+   "d": 2.24,
+   "text": "is not a a surprising concept to anybody"
+  },
+  {
+   "t": 973.36,
+   "d": 1.84,
+   "text": "at this conference but if I present the"
+  },
+  {
+   "t": 975.2,
+   "d": 1.76,
+   "text": "same material at a music conference it's"
+  },
+  {
+   "t": 976.96,
+   "d": 1.68,
+   "text": "uh this is a sort of surprising thing to"
+  },
+  {
+   "t": 978.64,
+   "d": 3.2,
+   "text": "people. So um if we think in 44 for a"
+  },
+  {
+   "t": 981.84,
+   "d": 0.96,
+   "text": "little bit I know we've been listening"
+  },
+  {
+   "t": 982.8,
+   "d": 3.2,
+   "text": "in 128 we have 1616th notes that we can"
+  },
+  {
+   "t": 986.0,
+   "d": 2.96,
+   "text": "divide up our bars in two. So with that"
+  },
+  {
+   "t": 988.96,
+   "d": 2.48,
+   "text": "sort of time resolution we have 120"
+  },
+  {
+   "t": 991.44,
+   "d": 2.08,
+   "text": "unique combinations of numerators and"
+  },
+  {
+   "t": 993.52,
+   "d": 3.2,
+   "text": "denominators and 79 of those pairs are"
+  },
+  {
+   "t": 996.72,
+   "d": 3.04,
+   "text": "co-prime and then there's 431 rotations"
+  },
+  {
+   "t": 999.76,
+   "d": 3.2,
+   "text": "for those 79 co-prime pairs starting on"
+  },
+  {
+   "t": 1002.96,
+   "d": 2.72,
+   "text": "uh notes and then we have 862 rotations"
+  },
+  {
+   "t": 1005.68,
+   "d": 2.64,
+   "text": "if you start on rests. So that gives you"
+  },
+  {
+   "t": 1008.32,
+   "d": 2.48,
+   "text": "a kind of you know it's a a universe"
+  },
+  {
+   "t": 1010.8,
+   "d": 1.44,
+   "text": "that you could get to know and love as a"
+  },
+  {
+   "t": 1012.24,
+   "d": 1.12,
+   "text": "human. You could probably you know"
+  },
+  {
+   "t": 1013.36,
+   "d": 1.28,
+   "text": "really get to know all of this stuff in"
+  },
+  {
+   "t": 1014.64,
+   "d": 1.68,
+   "text": "a week or maybe even a few days with a"
+  },
+  {
+   "t": 1016.32,
+   "d": 2.0,
+   "text": "lot of dedication. And if we bump that"
+  },
+  {
+   "t": 1018.32,
+   "d": 4.08,
+   "text": "up to 32nd notes in 44, we suddenly have"
+  },
+  {
+   "t": 1022.4,
+   "d": 1.84,
+   "text": "7,000 rotations to deal with. So you're"
+  },
+  {
+   "t": 1024.24,
+   "d": 2.4,
+   "text": "getting into the territory of K. Who's"
+  },
+  {
+   "t": 1026.64,
+   "d": 1.68,
+   "text": "that? Sorry, I got to stop reading the"
+  },
+  {
+   "t": 1028.32,
+   "d": 4.08,
+   "text": "chat here. It's too funny. Um so"
+  },
+  {
+   "t": 1032.4,
+   "d": 3.28,
+   "text": "uh yeah, 7,000 rotations is really too"
+  },
+  {
+   "t": 1035.68,
+   "d": 2.16,
+   "text": "many to get to know and love as a human"
+  },
+  {
+   "t": 1037.84,
+   "d": 2.0,
+   "text": "um without using, you know, statistical"
+  },
+  {
+   "t": 1039.84,
+   "d": 2.96,
+   "text": "methods here. So um we start running"
+  },
+  {
+   "t": 1042.8,
+   "d": 2.4,
+   "text": "into roadblocks for this generative"
+  },
+  {
+   "t": 1045.2,
+   "d": 3.2,
+   "text": "material. So we also enter into a a sort"
+  },
+  {
+   "t": 1048.4,
+   "d": 1.36,
+   "text": "of space where we get diminishing"
+  },
+  {
+   "t": 1049.76,
+   "d": 1.84,
+   "text": "returns. As the number of time slots"
+  },
+  {
+   "t": 1051.6,
+   "d": 2.16,
+   "text": "increases, the perceptible difference"
+  },
+  {
+   "t": 1053.76,
+   "d": 1.6,
+   "text": "between a uklidian rhythm and its"
+  },
+  {
+   "t": 1055.36,
+   "d": 2.96,
+   "text": "purelet equivalent shrinks. So and"
+  },
+  {
+   "t": 1058.32,
+   "d": 2.56,
+   "text": "although interesting, complex may sound"
+  },
+  {
+   "t": 1060.88,
+   "d": 2.4,
+   "text": "like a sort of two unrelated rhythmic"
+  },
+  {
+   "t": 1063.28,
+   "d": 1.68,
+   "text": "strata."
+  },
+  {
+   "t": 1064.96,
+   "d": 2.16,
+   "text": "So the charm of lowresolution uklidian"
+  },
+  {
+   "t": 1067.12,
+   "d": 1.76,
+   "text": "rhythms really comes from their failure"
+  },
+  {
+   "t": 1068.88,
+   "d": 2.0,
+   "text": "to be per perfectly even and the"
+  },
+  {
+   "t": 1070.88,
+   "d": 2.56,
+   "text": "resulting sensation of syncopation. So,"
+  },
+  {
+   "t": 1073.44,
+   "d": 2.0,
+   "text": "this is a a phrase that's thrown around"
+  },
+  {
+   "t": 1075.44,
+   "d": 1.36,
+   "text": "a lot in the internet. People call"
+  },
+  {
+   "t": 1076.8,
+   "d": 2.16,
+   "text": "uklidian rhythms maximally even rhythms."
+  },
+  {
+   "t": 1078.96,
+   "d": 2.24,
+   "text": "It's not true really. What's interesting"
+  },
+  {
+   "t": 1081.2,
+   "d": 1.52,
+   "text": "about them is that they fail to be"
+  },
+  {
+   "t": 1082.72,
+   "d": 1.92,
+   "text": "perfectly even because you're they're"
+  },
+  {
+   "t": 1084.64,
+   "d": 2.32,
+   "text": "essentially being snapped onto a grid"
+  },
+  {
+   "t": 1086.96,
+   "d": 1.76,
+   "text": "and the notes get pushed off and then we"
+  },
+  {
+   "t": 1088.72,
+   "d": 1.36,
+   "text": "have this sensation of syncopation."
+  },
+  {
+   "t": 1090.08,
+   "d": 1.68,
+   "text": "There's sort of delightful"
+  },
+  {
+   "t": 1091.76,
+   "d": 2.8,
+   "text": "unpredictability about them. So, this is"
+  },
+  {
+   "t": 1094.56,
+   "d": 1.84,
+   "text": "again a kind of like perceptual"
+  },
+  {
+   "t": 1096.4,
+   "d": 1.76,
+   "text": "experiment here that we're going to try."
+  },
+  {
+   "t": 1098.16,
+   "d": 2.48,
+   "text": "Um, we're going to listen to uh uklidian"
+  },
+  {
+   "t": 1100.64,
+   "d": 2.24,
+   "text": "rhythms with 5 to 8, 5 to 12, 5 to 16, 5"
+  },
+  {
+   "t": 1102.88,
+   "d": 3.36,
+   "text": "to 24, 532, and then a pure 5 to2let"
+  },
+  {
+   "t": 1106.24,
+   "d": 3.28,
+   "text": "here at the bottom. And just listen, um,"
+  },
+  {
+   "t": 1109.52,
+   "d": 2.64,
+   "text": "and you know, think about, you know,"
+  },
+  {
+   "t": 1112.16,
+   "d": 1.84,
+   "text": "your experience of these things. Each"
+  },
+  {
+   "t": 1114.0,
+   "d": 1.92,
+   "text": "one is played twice. I'll try to conduct"
+  },
+  {
+   "t": 1115.92,
+   "d": 3.49,
+   "text": "through it with my mouse as well."
+  },
+  {
+   "t": 1119.41,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1126.61,
+   "d": 2.02,
+   "text": ">> [music]"
+  },
+  {
+   "t": 1135.78,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1140.37,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1145.28,
+   "d": 2.88,
+   "text": ">> So, um, did anybody notice that there's"
+  },
+  {
+   "t": 1148.16,
+   "d": 1.68,
+   "text": "sort of like categorical perceptual"
+  },
+  {
+   "t": 1149.84,
+   "d": 1.92,
+   "text": "shift? It may occur for you. I don't"
+  },
+  {
+   "t": 1151.76,
+   "d": 2.56,
+   "text": "know between the the middle systems here"
+  },
+  {
+   "t": 1154.32,
+   "d": 2.48,
+   "text": "or potentially maybe one below where for"
+  },
+  {
+   "t": 1156.8,
+   "d": 2.16,
+   "text": "me it's like it goes from being cool"
+  },
+  {
+   "t": 1158.96,
+   "d": 2.64,
+   "text": "syncopated rhythms um to suddenly those"
+  },
+  {
+   "t": 1161.6,
+   "d": 2.4,
+   "text": "unrelated rhythmic strata um as we"
+  },
+  {
+   "t": 1164.0,
+   "d": 1.36,
+   "text": "better and better approximate the"
+  },
+  {
+   "t": 1165.36,
+   "d": 3.36,
+   "text": "purelet at the bottom."
+  },
+  {
+   "t": 1168.72,
+   "d": 1.92,
+   "text": "So how do we overcome these limitations"
+  },
+  {
+   "t": 1170.64,
+   "d": 2.4,
+   "text": "here? So 24 time slots might instead be"
+  },
+  {
+   "t": 1173.04,
+   "d": 2.0,
+   "text": "an useful upper limit at medium and fast"
+  },
+  {
+   "t": 1175.04,
+   "d": 3.2,
+   "text": "tempe um as you might find in rock, pop,"
+  },
+  {
+   "t": 1178.24,
+   "d": 2.4,
+   "text": "hip-hop, etc. larger numbers of time"
+  },
+  {
+   "t": 1180.64,
+   "d": 2.0,
+   "text": "slots work pretty well at slower tempe"
+  },
+  {
+   "t": 1182.64,
+   "d": 3.84,
+   "text": "or for um you know events that are over"
+  },
+  {
+   "t": 1186.48,
+   "d": 2.72,
+   "text": "a phrase length but a single ukidian"
+  },
+  {
+   "t": 1189.2,
+   "d": 1.2,
+   "text": "rhythm is really not good enough for"
+  },
+  {
+   "t": 1190.4,
+   "d": 1.52,
+   "text": "interesting music alone. So what's the"
+  },
+  {
+   "t": 1191.92,
+   "d": 3.12,
+   "text": "solution? Um and the solution is to be a"
+  },
+  {
+   "t": 1195.04,
+   "d": 2.4,
+   "text": "composer. And this isn't to say that you"
+  },
+  {
+   "t": 1197.44,
+   "d": 1.92,
+   "text": "have to go back to school for 15 years"
+  },
+  {
+   "t": 1199.36,
+   "d": 2.0,
+   "text": "um and study classical music. You just"
+  },
+  {
+   "t": 1201.36,
+   "d": 1.2,
+   "text": "need to exercise your aesthetic"
+  },
+  {
+   "t": 1202.56,
+   "d": 2.24,
+   "text": "sensibility and build things. And you"
+  },
+  {
+   "t": 1204.8,
+   "d": 1.76,
+   "text": "know this community we build things that"
+  },
+  {
+   "t": 1206.56,
+   "d": 2.8,
+   "text": "build things. Um so what you can do is"
+  },
+  {
+   "t": 1209.36,
+   "d": 2.32,
+   "text": "curate a subsection of co-prime ratios"
+  },
+  {
+   "t": 1211.68,
+   "d": 2.64,
+   "text": "that fit your style. So powers of two"
+  },
+  {
+   "t": 1214.32,
+   "d": 2.96,
+   "text": "are good um with time slots for common"
+  },
+  {
+   "t": 1217.28,
+   "d": 2.0,
+   "text": "time of course. Uh then multiples of"
+  },
+  {
+   "t": 1219.28,
+   "d": 1.68,
+   "text": "three work great for time slots in"
+  },
+  {
+   "t": 1220.96,
+   "d": 1.84,
+   "text": "common time."
+  },
+  {
+   "t": 1222.8,
+   "d": 2.32,
+   "text": "Uh then we have primes for asymmetrical"
+  },
+  {
+   "t": 1225.12,
+   "d": 0.96,
+   "text": "meters. So if you want to write"
+  },
+  {
+   "t": 1226.08,
+   "d": 1.2,
+   "text": "something that's a little bit like an"
+  },
+  {
+   "t": 1227.28,
+   "d": 1.44,
+   "text": "Eastern European dance, you could go"
+  },
+  {
+   "t": 1228.72,
+   "d": 2.72,
+   "text": "with prime numbers of u for time slots."
+  },
+  {
+   "t": 1231.44,
+   "d": 1.68,
+   "text": "Then what you need to do is layer and"
+  },
+  {
+   "t": 1233.12,
+   "d": 1.36,
+   "text": "segment these things um with other"
+  },
+  {
+   "t": 1234.48,
+   "d": 1.76,
+   "text": "uklidian rhythms or with isocchronous"
+  },
+  {
+   "t": 1236.24,
+   "d": 2.56,
+   "text": "rhythms. We've heard um a whole lot of"
+  },
+  {
+   "t": 1238.8,
+   "d": 1.76,
+   "text": "foot down high hat and shaker throughout"
+  },
+  {
+   "t": 1240.56,
+   "d": 1.12,
+   "text": "this and that's giving us a sort of"
+  },
+  {
+   "t": 1241.68,
+   "d": 2.64,
+   "text": "metric background. Um you can accent"
+  },
+  {
+   "t": 1244.32,
+   "d": 2.24,
+   "text": "these things um or use them as an"
+  },
+  {
+   "t": 1246.56,
+   "d": 2.4,
+   "text": "accentuation pattern in other rhythms."
+  },
+  {
+   "t": 1248.96,
+   "d": 1.36,
+   "text": "And then finally what I'm going to talk"
+  },
+  {
+   "t": 1250.32,
+   "d": 1.52,
+   "text": "about for like the last little bit here"
+  },
+  {
+   "t": 1251.84,
+   "d": 3.28,
+   "text": "are uh using substitution systems um or"
+  },
+  {
+   "t": 1255.12,
+   "d": 3.28,
+   "text": "as musicians understand them ornaments."
+  },
+  {
+   "t": 1258.4,
+   "d": 2.08,
+   "text": "And so I'll be talking about two types"
+  },
+  {
+   "t": 1260.48,
+   "d": 2.56,
+   "text": "or two flavors here. And I want to thank"
+  },
+  {
+   "t": 1263.04,
+   "d": 2.16,
+   "text": "my former Banlab colleague Tory Irvin"
+  },
+  {
+   "t": 1265.2,
+   "d": 1.52,
+   "text": "for suggesting the words alative and"
+  },
+  {
+   "t": 1266.72,
+   "d": 2.64,
+   "text": "ablative here. So these are come from"
+  },
+  {
+   "t": 1269.36,
+   "d": 2.16,
+   "text": "the linguistic locative case um in this"
+  },
+  {
+   "t": 1271.52,
+   "d": 2.8,
+   "text": "one this case is movement towards"
+  },
+  {
+   "t": 1274.32,
+   "d": 2.08,
+   "text": "something. So we're propending some"
+  },
+  {
+   "t": 1276.4,
+   "d": 1.84,
+   "text": "number of short notes before a long one"
+  },
+  {
+   "t": 1278.24,
+   "d": 2.0,
+   "text": "and we're leading into that long note."
+  },
+  {
+   "t": 1280.24,
+   "d": 2.08,
+   "text": "And this is similar to the Aacaturura"
+  },
+  {
+   "t": 1282.32,
+   "d": 1.76,
+   "text": "ornament from the classical period"
+  },
+  {
+   "t": 1284.08,
+   "d": 2.0,
+   "text": "that's notated as a grace note with a"
+  },
+  {
+   "t": 1286.08,
+   "d": 2.72,
+   "text": "slash through it."
+  },
+  {
+   "t": 1288.8,
+   "d": 1.68,
+   "text": "So we're going to listen to this. I have"
+  },
+  {
+   "t": 1290.48,
+   "d": 3.52,
+   "text": "the allotive ornaments notated here as"
+  },
+  {
+   "t": 1294.0,
+   "d": 1.92,
+   "text": "uh magenta events and they're"
+  },
+  {
+   "t": 1295.92,
+   "d": 1.6,
+   "text": "ornamenting the thing behind them. We"
+  },
+  {
+   "t": 1297.52,
+   "d": 2.64,
+   "text": "have a little anti-acent here. So these"
+  },
+  {
+   "t": 1300.16,
+   "d": 1.68,
+   "text": "notes are actually played quieter than"
+  },
+  {
+   "t": 1301.84,
+   "d": 1.36,
+   "text": "the surrounding material and they're"
+  },
+  {
+   "t": 1303.2,
+   "d": 1.52,
+   "text": "just on cowbell this time. So this is"
+  },
+  {
+   "t": 1304.72,
+   "d": 2.48,
+   "text": "two repetitions on top and four on the"
+  },
+  {
+   "t": 1307.2,
+   "d": 2.82,
+   "text": "bottom."
+  },
+  {
+   "t": 1310.02,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1315.26,
+   "d": 2.02,
+   "text": ">> [music]"
+  },
+  {
+   "t": 1322.96,
+   "d": 1.76,
+   "text": ">> Okay. Well, that's pretty groovy. Uh, so"
+  },
+  {
+   "t": 1324.72,
+   "d": 2.08,
+   "text": "it turns out that's uh two things. It is"
+  },
+  {
+   "t": 1326.8,
+   "d": 1.84,
+   "text": "both a traditional musical pattern"
+  },
+  {
+   "t": 1328.64,
+   "d": 2.24,
+   "text": "called the BMBbe from AfroCaribbean"
+  },
+  {
+   "t": 1330.88,
+   "d": 2.88,
+   "text": "music and it happens to be a 7 to 12"
+  },
+  {
+   "t": 1333.76,
+   "d": 1.36,
+   "text": "uklidian rhythm as well. So, they're"
+  },
+  {
+   "t": 1335.12,
+   "d": 3.28,
+   "text": "really impossible to escape. Um and"
+  },
+  {
+   "t": 1338.4,
+   "d": 2.8,
+   "text": "again this was I guess I I did kind of"
+  },
+  {
+   "t": 1341.2,
+   "d": 1.68,
+   "text": "cheat and I chose this one because it"
+  },
+  {
+   "t": 1342.88,
+   "d": 3.2,
+   "text": "was the 7 to 12 uklidian rhythm but um"
+  },
+  {
+   "t": 1346.08,
+   "d": 2.48,
+   "text": "if you algorithmically apply these um"
+  },
+  {
+   "t": 1348.56,
+   "d": 2.08,
+   "text": "you will find them all over the place."
+  },
+  {
+   "t": 1350.64,
+   "d": 2.48,
+   "text": "So for this last uh ornament type we're"
+  },
+  {
+   "t": 1353.12,
+   "d": 1.6,
+   "text": "going to use ablation or ablative"
+  },
+  {
+   "t": 1354.72,
+   "d": 1.6,
+   "text": "ornaments. So movement away from"
+  },
+  {
+   "t": 1356.32,
+   "d": 2.08,
+   "text": "something replacement of one long note"
+  },
+  {
+   "t": 1358.4,
+   "d": 1.36,
+   "text": "with some number of short notes. And"
+  },
+  {
+   "t": 1359.76,
+   "d": 2.72,
+   "text": "this is similar to the apagetura from"
+  },
+  {
+   "t": 1362.48,
+   "d": 2.32,
+   "text": "the classical period."
+  },
+  {
+   "t": 1364.8,
+   "d": 2.08,
+   "text": "So we have some shorter notes here. um"
+  },
+  {
+   "t": 1366.88,
+   "d": 1.6,
+   "text": "that are ornamenting. They're"
+  },
+  {
+   "t": 1368.48,
+   "d": 1.44,
+   "text": "essentially trailing behind this first"
+  },
+  {
+   "t": 1369.92,
+   "d": 2.98,
+   "text": "event."
+  },
+  {
+   "t": 1372.89,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1382.07,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1384.16,
+   "d": 1.2,
+   "text": "So, definitely getting to the point"
+  },
+  {
+   "t": 1385.36,
+   "d": 1.68,
+   "text": "where you need a dedicated cow player"
+  },
+  {
+   "t": 1387.04,
+   "d": 1.76,
+   "text": "for this."
+  },
+  {
+   "t": 1388.8,
+   "d": 2.56,
+   "text": "So, putting this all together, um uh I"
+  },
+  {
+   "t": 1391.36,
+   "d": 2.08,
+   "text": "wrote a uh beat generator that's"
+  },
+  {
+   "t": 1393.44,
+   "d": 2.32,
+   "text": "available at foundobjects.org. I don't"
+  },
+  {
+   "t": 1395.76,
+   "d": 2.0,
+   "text": "know how I got that domain name, but I"
+  },
+  {
+   "t": 1397.76,
+   "d": 2.96,
+   "text": "did. Uh, so this is beat generation with"
+  },
+  {
+   "t": 1400.72,
+   "d": 1.6,
+   "text": "layered, segmented, and ornamented"
+  },
+  {
+   "t": 1402.32,
+   "d": 3.84,
+   "text": "uklitian rhythms. Uh, and for"
+  },
+  {
+   "t": 1406.16,
+   "d": 1.44,
+   "text": "programmers out there, so this is some"
+  },
+  {
+   "t": 1407.6,
+   "d": 2.08,
+   "text": "good oldfashioned artisal Python running"
+  },
+  {
+   "t": 1409.68,
+   "d": 3.44,
+   "text": "in AWS Lambda and a React app running in"
+  },
+  {
+   "t": 1413.12,
+   "d": 3.36,
+   "text": "AWS amplify."
+  },
+  {
+   "t": 1416.48,
+   "d": 2.48,
+   "text": "So we have uh interactive controls based"
+  },
+  {
+   "t": 1418.96,
+   "d": 2.32,
+   "text": "on music perception. Again, uh sort of"
+  },
+  {
+   "t": 1421.28,
+   "d": 1.68,
+   "text": "the theme of this talk here. So density"
+  },
+  {
+   "t": 1422.96,
+   "d": 1.52,
+   "text": "is just related to the number of notes"
+  },
+  {
+   "t": 1424.48,
+   "d": 3.12,
+   "text": "per unit time. Uh then we have variance"
+  },
+  {
+   "t": 1427.6,
+   "d": 2.08,
+   "text": "which is really durational variance. How"
+  },
+  {
+   "t": 1429.68,
+   "d": 2.16,
+   "text": "many different durations are available"
+  },
+  {
+   "t": 1431.84,
+   "d": 1.84,
+   "text": "in the rhythm. Then we have syncupation"
+  },
+  {
+   "t": 1433.68,
+   "d": 2.32,
+   "text": "here. And syncopation is not actually"
+  },
+  {
+   "t": 1436.0,
+   "d": 3.2,
+   "text": "well uh formalized in music theory and"
+  },
+  {
+   "t": 1439.2,
+   "d": 2.0,
+   "text": "music perception. There's about 15"
+  },
+  {
+   "t": 1441.2,
+   "d": 2.56,
+   "text": "competing formal definitions of it. So I"
+  },
+  {
+   "t": 1443.76,
+   "d": 2.08,
+   "text": "chose the simplest one which is a"
+  },
+  {
+   "t": 1445.84,
+   "d": 2.48,
+   "text": "measure of offbeatness essentially. Uh"
+  },
+  {
+   "t": 1448.32,
+   "d": 1.92,
+   "text": "then we have irregularity which is a"
+  },
+  {
+   "t": 1450.24,
+   "d": 1.84,
+   "text": "measure of a periodicity. And I paired"
+  },
+  {
+   "t": 1452.08,
+   "d": 2.56,
+   "text": "this up with offbeatness because"
+  },
+  {
+   "t": 1454.64,
+   "d": 2.56,
+   "text": "aperiodicity or like being able to not"
+  },
+  {
+   "t": 1457.2,
+   "d": 1.92,
+   "text": "predict where notes fall is sort of part"
+  },
+  {
+   "t": 1459.12,
+   "d": 3.92,
+   "text": "of the perception of syncopation in me."
+  },
+  {
+   "t": 1463.04,
+   "d": 1.92,
+   "text": "And so uklidian rhythms are super super"
+  },
+  {
+   "t": 1464.96,
+   "d": 2.4,
+   "text": "efficient as we saw. These are just um"
+  },
+  {
+   "t": 1467.36,
+   "d": 2.4,
+   "text": "quantization essentially. So I can"
+  },
+  {
+   "t": 1469.76,
+   "d": 1.68,
+   "text": "render thousands of them per second and"
+  },
+  {
+   "t": 1471.44,
+   "d": 3.28,
+   "text": "then I match the candidate uh rhythms"
+  },
+  {
+   "t": 1474.72,
+   "d": 1.52,
+   "text": "with these controls. I actually kept the"
+  },
+  {
+   "t": 1476.24,
+   "d": 1.44,
+   "text": "two things separate rather than trying"
+  },
+  {
+   "t": 1477.68,
+   "d": 2.24,
+   "text": "to parameterize the system. I kept them"
+  },
+  {
+   "t": 1479.92,
+   "d": 1.84,
+   "text": "separate so that I could independently"
+  },
+  {
+   "t": 1481.76,
+   "d": 2.08,
+   "text": "um work on both sides without having to"
+  },
+  {
+   "t": 1483.84,
+   "d": 1.44,
+   "text": "worry about constantly having it piped"
+  },
+  {
+   "t": 1485.28,
+   "d": 1.76,
+   "text": "in there. And then the only expensive"
+  },
+  {
+   "t": 1487.04,
+   "d": 2.4,
+   "text": "step is the audio generation step at the"
+  },
+  {
+   "t": 1489.44,
+   "d": 1.84,
+   "text": "end which is essentially just a simple"
+  },
+  {
+   "t": 1491.28,
+   "d": 1.76,
+   "text": "sampler."
+  },
+  {
+   "t": 1493.04,
+   "d": 3.44,
+   "text": "So here's an example. Um we have"
+  },
+  {
+   "t": 1496.48,
+   "d": 2.4,
+   "text": "something I added. I guess it was recent"
+  },
+  {
+   "t": 1498.88,
+   "d": 1.36,
+   "text": "until I don't know it was like February"
+  },
+  {
+   "t": 1500.24,
+   "d": 1.12,
+   "text": "or something. So it's a long time ago"
+  },
+  {
+   "t": 1501.36,
+   "d": 3.12,
+   "text": "now but um it feels recent. So I've"
+  },
+  {
+   "t": 1504.48,
+   "d": 1.84,
+   "text": "added the ability to have sort of a"
+  },
+  {
+   "t": 1506.32,
+   "d": 1.52,
+   "text": "variety of fairly complex time"
+  },
+  {
+   "t": 1507.84,
+   "d": 1.6,
+   "text": "signatures. So if you want to write some"
+  },
+  {
+   "t": 1509.44,
+   "d": 2.88,
+   "text": "really wild EDM or Prague rock um have"
+  },
+  {
+   "t": 1512.32,
+   "d": 2.0,
+   "text": "at it. This is example is going to be an"
+  },
+  {
+   "t": 1514.32,
+   "d": 2.96,
+   "text": "118 time with groupings of uh three"
+  },
+  {
+   "t": 1517.28,
+   "d": 2.56,
+   "text": "eighth notes. It's basically 3332 is the"
+  },
+  {
+   "t": 1519.84,
+   "d": 3.52,
+   "text": "groupings here. Um one thing to note is"
+  },
+  {
+   "t": 1523.36,
+   "d": 2.16,
+   "text": "that this is the tempo here is going to"
+  },
+  {
+   "t": 1525.52,
+   "d": 1.6,
+   "text": "be the quarter note tempo. So not the"
+  },
+  {
+   "t": 1527.12,
+   "d": 1.92,
+   "text": "dotted eighth or dotted quarter tempo."
+  },
+  {
+   "t": 1529.04,
+   "d": 1.68,
+   "text": "So it'll feel a little bit slower than"
+  },
+  {
+   "t": 1530.72,
+   "d": 2.88,
+   "text": "210. Um and I've chosen a sort of like"
+  },
+  {
+   "t": 1533.6,
+   "d": 2.24,
+   "text": "lowish density because I know I'm going"
+  },
+  {
+   "t": 1535.84,
+   "d": 1.92,
+   "text": "quite fast."
+  },
+  {
+   "t": 1537.76,
+   "d": 1.36,
+   "text": "Um, and yeah, you have lots of other"
+  },
+  {
+   "t": 1539.12,
+   "d": 2.16,
+   "text": "stuff to play with on here. Here's an an"
+  },
+  {
+   "t": 1541.28,
+   "d": 1.92,
+   "text": "example. Again, these are may be quite"
+  },
+  {
+   "t": 1543.2,
+   "d": 4.36,
+   "text": "loud, so just watch out."
+  },
+  {
+   "t": 1549.09,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1553.68,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1559.57,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1566.12,
+   "d": 2.02,
+   "text": ">> [music]"
+  },
+  {
+   "t": 1572.02,
+   "d": 2.02,
+   "text": "[music]"
+  },
+  {
+   "t": 1574.24,
+   "d": 2.72,
+   "text": ">> Okay. Um, so yeah, you could hear in"
+  },
+  {
+   "t": 1576.96,
+   "d": 1.76,
+   "text": "that there was these really fast kick"
+  },
+  {
+   "t": 1578.72,
+   "d": 1.52,
+   "text": "patterns that occur right before a beat"
+  },
+  {
+   "t": 1580.24,
+   "d": 1.76,
+   "text": "and those are of course our alitative"
+  },
+  {
+   "t": 1582.0,
+   "d": 2.56,
+   "text": "ornaments being applied. And I think the"
+  },
+  {
+   "t": 1584.56,
+   "d": 1.84,
+   "text": "all of the snare fills at the ends of"
+  },
+  {
+   "t": 1586.4,
+   "d": 1.92,
+   "text": "the patterns are all a uklidian rhythm."
+  },
+  {
+   "t": 1588.32,
+   "d": 2.24,
+   "text": "the overall you know phrase length"
+  },
+  {
+   "t": 1590.56,
+   "d": 2.48,
+   "text": "pulsations in the kick the sort of"
+  },
+  {
+   "t": 1593.04,
+   "d": 2.0,
+   "text": "structural beats there are a ukitian"
+  },
+  {
+   "t": 1595.04,
+   "d": 2.96,
+   "text": "rhythm and then the high hats um are a"
+  },
+  {
+   "t": 1598.0,
+   "d": 3.04,
+   "text": "mix of isocchronous and uklidian rhythms"
+  },
+  {
+   "t": 1601.04,
+   "d": 2.4,
+   "text": "okay so uh as our final slide here"
+  },
+  {
+   "t": 1603.44,
+   "d": 1.6,
+   "text": "here's a cheat sheet for the complete"
+  },
+  {
+   "t": 1605.04,
+   "d": 2.16,
+   "text": "equation for quantization of an onset"
+  },
+  {
+   "t": 1607.2,
+   "d": 2.48,
+   "text": "within alet giving you an additional"
+  },
+  {
+   "t": 1609.68,
+   "d": 1.84,
+   "text": "term here that you can use so if you"
+  },
+  {
+   "t": 1611.52,
+   "d": 1.76,
+   "text": "need to express it in a particular"
+  },
+  {
+   "t": 1613.28,
+   "d": 2.72,
+   "text": "duration a time resolution so if you"
+  },
+  {
+   "t": 1616.0,
+   "d": 2.32,
+   "text": "want to do 16th notes or whatever"
+  },
+  {
+   "t": 1618.32,
+   "d": 1.92,
+   "text": "you put those that in two places and"
+  },
+  {
+   "t": 1620.24,
+   "d": 3.12,
+   "text": "that gives you um a way to quantize to"
+  },
+  {
+   "t": 1623.36,
+   "d": 2.4,
+   "text": "any arbitrary point. So yeah, visit"
+  },
+  {
+   "t": 1625.76,
+   "d": 2.24,
+   "text": "foundobjects.org. Um again, yeah,"
+  },
+  {
+   "t": 1628.0,
+   "d": 2.56,
+   "text": "totally 100% ethical found mathematical"
+  },
+  {
+   "t": 1630.56,
+   "d": 2.88,
+   "text": "object beat generator. And yeah, I think"
+  },
+  {
+   "t": 1633.44,
+   "d": 1.44,
+   "text": "we should have time for some questions"
+  },
+  {
+   "t": 1634.88,
+   "d": 4.2,
+   "text": "now because I talked really fast."
+  },
+  {
+   "t": 1641.84,
+   "d": 2.64,
+   "text": "Paul, that was awesome. And uh yeah, we"
+  },
+  {
+   "t": 1644.48,
+   "d": 3.04,
+   "text": "do have time for a question. I know that"
+  },
+  {
+   "t": 1647.52,
+   "d": 2.08,
+   "text": "for myself this made me really excited"
+  },
+  {
+   "t": 1649.6,
+   "d": 2.48,
+   "text": "to tinker with music as someone who"
+  },
+  {
+   "t": 1652.08,
+   "d": 2.0,
+   "text": "hasn't had any like composing experience"
+  },
+  {
+   "t": 1654.08,
+   "d": 4.48,
+   "text": "before. Um so I think our question we've"
+  },
+  {
+   "t": 1658.56,
+   "d": 1.44,
+   "text": "got a couple questions all along a"
+  },
+  {
+   "t": 1660.0,
+   "d": 3.28,
+   "text": "similar theme um as that do you have"
+  },
+  {
+   "t": 1663.28,
+   "d": 2.56,
+   "text": "like recommendations for tools for total"
+  },
+  {
+   "t": 1665.84,
+   "d": 3.28,
+   "text": "beginners um other than strudel.cc is"
+  },
+  {
+   "t": 1669.12,
+   "d": 3.04,
+   "text": "shouted out um and like how do you"
+  },
+  {
+   "t": 1672.16,
+   "d": 2.72,
+   "text": "actually play music in code? Are there"
+  },
+  {
+   "t": 1674.88,
+   "d": 1.92,
+   "text": "libraries that like can handle those"
+  },
+  {
+   "t": 1676.8,
+   "d": 2.16,
+   "text": "sorts of things? Um, so you can focus on"
+  },
+  {
+   "t": 1678.96,
+   "d": 2.32,
+   "text": "like the generating composition stuff."
+  },
+  {
+   "t": 1681.28,
+   "d": 2.24,
+   "text": ">> I mean, I guess there's quite a lot of"
+  },
+  {
+   "t": 1683.52,
+   "d": 1.76,
+   "text": "of avenues out there. So, I mean, my"
+  },
+  {
+   "t": 1685.28,
+   "d": 2.16,
+   "text": "background is mostly originally with"
+  },
+  {
+   "t": 1687.44,
+   "d": 3.6,
+   "text": "Pure Data and Max MSP, kind of splitting"
+  },
+  {
+   "t": 1691.04,
+   "d": 2.48,
+   "text": "those two visual programming languages."
+  },
+  {
+   "t": 1693.52,
+   "d": 2.48,
+   "text": "So, they um"
+  },
+  {
+   "t": 1696.0,
+   "d": 1.52,
+   "text": "yeah, I would recommend them. Pure Data"
+  },
+  {
+   "t": 1697.52,
+   "d": 1.92,
+   "text": "is free um and it's fairly good. It's"
+  },
+  {
+   "t": 1699.44,
+   "d": 1.84,
+   "text": "essentially like a synthesis language."
+  },
+  {
+   "t": 1701.28,
+   "d": 2.16,
+   "text": "Um, a lot of if you're used to textbased"
+  },
+  {
+   "t": 1703.44,
+   "d": 1.52,
+   "text": "languages, I might recommend Super"
+  },
+  {
+   "t": 1704.96,
+   "d": 4.0,
+   "text": "Collider uh is one. Um, yeah, I see"
+  },
+  {
+   "t": 1708.96,
+   "d": 1.28,
+   "text": "there's some other stuff about there."
+  },
+  {
+   "t": 1710.24,
+   "d": 2.96,
+   "text": "Yeah, MSCore is is great for notation."
+  },
+  {
+   "t": 1713.2,
+   "d": 3.2,
+   "text": "Um, uh, yeah, other other tools just in"
+  },
+  {
+   "t": 1716.4,
+   "d": 2.08,
+   "text": "general. I mean, so you have systems"
+  },
+  {
+   "t": 1718.48,
+   "d": 2.32,
+   "text": "for, you know, generating music, I would"
+  },
+  {
+   "t": 1720.8,
+   "d": 2.32,
+   "text": "say. Pure data, Maximus P if you want a"
+  },
+  {
+   "t": 1723.12,
+   "d": 2.08,
+   "text": "paid option. Maximus P obviously works"
+  },
+  {
+   "t": 1725.2,
+   "d": 2.96,
+   "text": "with Ableton Live nowadays as well. Uh"
+  },
+  {
+   "t": 1728.16,
+   "d": 2.32,
+   "text": "and um Super Collider if you like"
+  },
+  {
+   "t": 1730.48,
+   "d": 3.04,
+   "text": "textbased languages and then um for"
+  },
+  {
+   "t": 1733.52,
+   "d": 2.08,
+   "text": "notation programs like Musecore is sort"
+  },
+  {
+   "t": 1735.6,
+   "d": 2.4,
+   "text": "of like the primary free one and it"
+  },
+  {
+   "t": 1738.0,
+   "d": 2.56,
+   "text": "works really really well frankly. Um"
+  },
+  {
+   "t": 1740.56,
+   "d": 2.72,
+   "text": "Dory Co is sort of like the the new big"
+  },
+  {
+   "t": 1743.28,
+   "d": 2.0,
+   "text": "notation program for if you want a paid"
+  },
+  {
+   "t": 1745.28,
+   "d": 2.08,
+   "text": "option. It can sort of do everything."
+  },
+  {
+   "t": 1747.36,
+   "d": 1.76,
+   "text": "And then like on the digital audio"
+  },
+  {
+   "t": 1749.12,
+   "d": 2.24,
+   "text": "workstation front I would recommend uh"
+  },
+  {
+   "t": 1751.36,
+   "d": 2.24,
+   "text": "Reaper because it's essentially Nagwear"
+  },
+  {
+   "t": 1753.6,
+   "d": 1.44,
+   "text": "and it's very very affordable if you"
+  },
+  {
+   "t": 1755.04,
+   "d": 2.96,
+   "text": "want to use it. I most gamedev or game"
+  },
+  {
+   "t": 1758.0,
+   "d": 1.52,
+   "text": "audio people use Reaper. It's sort of"
+  },
+  {
+   "t": 1759.52,
+   "d": 2.32,
+   "text": "like the the favorite thing in the game"
+  },
+  {
+   "t": 1761.84,
+   "d": 3.28,
+   "text": "audio community. Um the outputs of found"
+  },
+  {
+   "t": 1765.12,
+   "d": 2.16,
+   "text": "objects.org, you get an MP3 and then you"
+  },
+  {
+   "t": 1767.28,
+   "d": 1.2,
+   "text": "get a MIDI file. So you can take your"
+  },
+  {
+   "t": 1768.48,
+   "d": 1.68,
+   "text": "MIDI file and put that in your digital"
+  },
+  {
+   "t": 1770.16,
+   "d": 3.36,
+   "text": "audio workstation such as Reaper. Um and"
+  },
+  {
+   "t": 1773.52,
+   "d": 1.2,
+   "text": "you know use your own sounds with it."
+  },
+  {
+   "t": 1774.72,
+   "d": 1.28,
+   "text": "And really the idea with found"
+  },
+  {
+   "t": 1776.0,
+   "d": 2.48,
+   "text": "objects.org is to be not so large that"
+  },
+  {
+   "t": 1778.48,
+   "d": 1.76,
+   "text": "it replaces your entire workflow. So"
+  },
+  {
+   "t": 1780.24,
+   "d": 2.08,
+   "text": "it's not you know not trying to be"
+  },
+  {
+   "t": 1782.32,
+   "d": 2.72,
+   "text": "pseudo here. I mean, I really I don't"
+  },
+  {
+   "t": 1785.04,
+   "d": 1.76,
+   "text": "particularly like Sunno because of their"
+  },
+  {
+   "t": 1786.8,
+   "d": 1.28,
+   "text": "they they scrape the whole internet."
+  },
+  {
+   "t": 1788.08,
+   "d": 1.2,
+   "text": "They've definitely stolen my work as"
+  },
+  {
+   "t": 1789.28,
+   "d": 2.0,
+   "text": "well as lots of other people's work. So,"
+  },
+  {
+   "t": 1791.28,
+   "d": 2.56,
+   "text": "um and so this is the idea with this is"
+  },
+  {
+   "t": 1793.84,
+   "d": 1.52,
+   "text": "just to give you a small thing that you"
+  },
+  {
+   "t": 1795.36,
+   "d": 1.84,
+   "text": "can then sort of use as a provocation to"
+  },
+  {
+   "t": 1797.2,
+   "d": 2.96,
+   "text": "build up larger and larger things. Um"
+  },
+  {
+   "t": 1800.16,
+   "d": 1.68,
+   "text": "but yeah, those are sort of my tools"
+  },
+  {
+   "t": 1801.84,
+   "d": 2.0,
+   "text": "that I would recommend. Um"
+  },
+  {
+   "t": 1803.84,
+   "d": 1.92,
+   "text": ">> yeah, that's great. I I think you'll"
+  },
+  {
+   "t": 1805.76,
+   "d": 2.88,
+   "text": "probably see a couple different um"
+  },
+  {
+   "t": 1808.64,
+   "d": 2.0,
+   "text": "rogike projects with where people have"
+  },
+  {
+   "t": 1810.64,
+   "d": 1.68,
+   "text": "tinkered with their own music which is"
+  },
+  {
+   "t": 1812.32,
+   "d": 3.12,
+   "text": "pretty exciting. Um yeah, I'm excited"
+  },
+  {
+   "t": 1815.44,
+   "d": 2.48,
+   "text": "about that. And uh the breakout room for"
+  },
+  {
+   "t": 1817.92,
+   "d": 2.08,
+   "text": "Paul's talk will be in the dugout. So if"
+  },
+  {
+   "t": 1820.0,
+   "d": 1.36,
+   "text": "you have any more questions for Paul"
+  },
+  {
+   "t": 1821.36,
+   "d": 2.56,
+   "text": "after this uh block of talks, that is"
+  },
+  {
+   "t": 1823.92,
+   "d": 2.0,
+   "text": "where you can have those discussions."
+  },
+  {
+   "t": 1825.92,
+   "d": 1.44,
+   "text": "Thank you so much, Paul. Cool. All"
+  },
+  {
+   "t": 1827.36,
+   "d": 3.12,
+   "text": "right. Thank you."
+  }
+ ]
+}

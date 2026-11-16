@@ -1,0 +1,2921 @@
+{
+ "id": "fGLJC5UY2o4",
+ "url": "https://www.youtube.com/watch?v=fGLJC5UY2o4",
+ "title": "Thomas Biskup - There be dragons: Entity Component Systems for Roguelikes",
+ "speaker": "Thomas Biskup",
+ "talk_title": "There be dragons: Entity Component Systems for Roguelikes",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 2289,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the 2018 Roguelike Celebration - http://roguelike.club",
+ "chapters": [],
+ "caption_source": "whisper",
+ "caption_lang": "en",
+ "word_count": 7058,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 4.58,
+   "text": "So, yesterday I showed our demo of Ultimate ADOM, Entity Component Base."
+  },
+  {
+   "t": 4.78,
+   "d": 10.32,
+   "text": "Today I would like to dive into the technology behind that and just show how things kind of are configured and work and hopefully give an idea of how we designed the architecture around that."
+  },
+  {
+   "t": 16.64,
+   "d": 11.38,
+   "text": "First of all, some credits. Thanks to Josh for bringing up the idea of Entity Component Systems to me at Roguelike Celebration 2016. Without that I would never be standing here. Great job."
+  },
+  {
+   "t": 31.38,
+   "d": 4.76,
+   "text": "Second thing, thanks to Brian. I'm not sure where he's sitting, but there. Thanks, Brian,"
+  },
+  {
+   "t": 36.32,
+   "d": 3.86,
+   "text": "for exchanging lots of ideas about entity component systems and sharing new experiences"
+  },
+  {
+   "t": 40.18,
+   "d": 4.38,
+   "text": "with KFOSCUT. That probably saved like five years of work. So thank you very much."
+  },
+  {
+   "t": 48.66,
+   "d": 5.0,
+   "text": "And yeah, now entity component systems. I think we got all the explanations. I'm going to rush"
+  },
+  {
+   "t": 53.66,
+   "d": 4.92,
+   "text": "through that a little bit and recommend Brian's video. It's awesome. So if you want all the nasty"
+  },
+  {
+   "t": 58.58,
+   "d": 6.72,
+   "text": "details, watch Brian's video. The short gist, what is an entity component system? We have entities,"
+  },
+  {
+   "t": 65.56,
+   "d": 5.76,
+   "text": "which basically are, let's say, containers for something else. They have components. Components"
+  },
+  {
+   "t": 71.32,
+   "d": 7.08,
+   "text": "define data, behavior, other aspects. An entity usually has a lot of components, anything from"
+  },
+  {
+   "t": 78.4,
+   "d": 4.92,
+   "text": "one to several hundred, I don't know. It depends on your use case and you have"
+  },
+  {
+   "t": 83.32,
+   "d": 5.12,
+   "text": "systems that usually actually do something with these entities and their"
+  },
+  {
+   "t": 88.44,
+   "d": 4.96,
+   "text": "components and the state attached and so on and so forth. The pure definition from"
+  },
+  {
+   "t": 93.4,
+   "d": 4.34,
+   "text": "what I know is that the entity usually is nothing more than identifier like a UID"
+  },
+  {
+   "t": 97.74,
+   "d": 4.3,
+   "text": "or something. The component is basically the data for something special like"
+  },
+  {
+   "t": 102.04,
+   "d": 5.4,
+   "text": "physics or hit points or maybe position like coordinates or something like that"
+  },
+  {
+   "t": 107.44,
+   "d": 2.02,
+   "text": "and the system does all the behavior."
+  },
+  {
+   "t": 110.52,
+   "d": 2.42,
+   "text": "Personally, for the roguelike use case,"
+  },
+  {
+   "t": 113.02,
+   "d": 1.42,
+   "text": "I totally disagree with that."
+  },
+  {
+   "t": 114.56,
+   "d": 2.14,
+   "text": "So I'm doing it slightly different for Ultimate Atom"
+  },
+  {
+   "t": 116.7,
+   "d": 3.06,
+   "text": "because I think doing it differently has advantages."
+  },
+  {
+   "t": 122.16,
+   "d": 3.38,
+   "text": "In our approach, the entity is both an identifier"
+  },
+  {
+   "t": 126.32,
+   "d": 0.78,
+   "text": "and a data container."
+  },
+  {
+   "t": 127.42,
+   "d": 2.34,
+   "text": "That's simply because we know which rules"
+  },
+  {
+   "t": 129.76,
+   "d": 1.34,
+   "text": "we are using for our system."
+  },
+  {
+   "t": 131.22,
+   "d": 1.64,
+   "text": "We have a kind of predefined rule system"
+  },
+  {
+   "t": 132.86,
+   "d": 2.92,
+   "text": "that defines things like, yes, we are going to have attributes,"
+  },
+  {
+   "t": 135.78,
+   "d": 1.82,
+   "text": "We have a dodge value, a protection value."
+  },
+  {
+   "t": 137.84,
+   "d": 4.3,
+   "text": "That's the inherent role-playing game rules we are using."
+  },
+  {
+   "t": 142.4,
+   "d": 6.6,
+   "text": "And our intention never was to allow arbitrary rules to be injected into Ultimate ADOM."
+  },
+  {
+   "t": 149.3,
+   "d": 2.84,
+   "text": "That's a slightly more generic level."
+  },
+  {
+   "t": 152.4,
+   "d": 2.86,
+   "text": "And the more generic you get, the more complicated things get."
+  },
+  {
+   "t": 155.4,
+   "d": 4.42,
+   "text": "So we said, okay, we are going to define a certain middle level where we make assumptions."
+  },
+  {
+   "t": 160.16,
+   "d": 3.06,
+   "text": "These assumptions are certain core rules that apply to our game."
+  },
+  {
+   "t": 163.48,
+   "d": 1.76,
+   "text": "And you have to cope with them."
+  },
+  {
+   "t": 165.24,
+   "d": 6.42,
+   "text": "so we can insert data into entities because that makes it easier to look things up, to handle them, to change them and so on."
+  },
+  {
+   "t": 172.38,
+   "d": 4.3,
+   "text": "We decided that components for us actually do the data initialization."
+  },
+  {
+   "t": 177.02,
+   "d": 4.38,
+   "text": "So there might be something like a hit point component that tells an entity how many points does it have."
+  },
+  {
+   "t": 181.88,
+   "d": 4.56,
+   "text": "But it also includes simple behavior related to this aspect like for example"
+  },
+  {
+   "t": 186.44,
+   "d": 2.1,
+   "text": "receiving damage and doing something with it."
+  },
+  {
+   "t": 188.7,
+   "d": 6.22,
+   "text": "So if you have a hit point component, the component also knows how to react to damage and do things like events for example."
+  },
+  {
+   "t": 195.24,
+   "d": 6.5,
+   "text": "And then we use the systems only for really complex or usable things that are getting used in several aspects."
+  },
+  {
+   "t": 201.88,
+   "d": 0.66,
+   "text": "I will be showing that."
+  },
+  {
+   "t": 202.72,
+   "d": 5.04,
+   "text": "And our experience so far has been that this allows for much better modularization of everything"
+  },
+  {
+   "t": 207.76,
+   "d": 4.28,
+   "text": "and modding becomes easier because things are more closely coupled."
+  },
+  {
+   "t": 212.36,
+   "d": 4.02,
+   "text": "And so that's something where I disagree with the pure teachings about ECS."
+  },
+  {
+   "t": 216.54,
+   "d": 4.96,
+   "text": "So I think for Loglikes, you can get easily by with a little more joint structure."
+  },
+  {
+   "t": 223.12,
+   "d": 7.0,
+   "text": "So why ECS? I think right now really that ECS for Roguelikes is the hottest thing you can do and it's amazing."
+  },
+  {
+   "t": 230.72,
+   "d": 11.92,
+   "text": "First of all, it allows for data-driven design, which I think is a good thing because you can externalize lots of things and don't have to hide the rules of how your game works somewhere deep in code with special cases and if then else here's something special and so on."
+  },
+  {
+   "t": 242.64,
+   "d": 3.9,
+   "text": "but you can externally expose it in external data."
+  },
+  {
+   "t": 246.72,
+   "d": 3.78,
+   "text": "I will show how that works, which also has the advantage of making modding a lot easier"
+  },
+  {
+   "t": 250.5,
+   "d": 4.9,
+   "text": "because you just have external configurations that drive your engine and allow easy modding."
+  },
+  {
+   "t": 256.98,
+   "d": 1.84,
+   "text": "Then it's about developer productivity."
+  },
+  {
+   "t": 258.84,
+   "d": 5.9,
+   "text": "We have noticed that adding new stuff becomes so much faster than compared to having everything"
+  },
+  {
+   "t": 264.74,
+   "d": 2.98,
+   "text": "somewhere hidden in code with special cases and things you have to think about."
+  },
+  {
+   "t": 267.94,
+   "d": 4.24,
+   "text": "A clean data-driven architecture is just a lot more simple to handle."
+  },
+  {
+   "t": 272.64,
+   "d": 3.42,
+   "text": "and you can add on new things so much faster."
+  },
+  {
+   "t": 276.3,
+   "d": 3.5,
+   "text": "For example, yesterday I showed this brain exchange thing"
+  },
+  {
+   "t": 279.8,
+   "d": 1.34,
+   "text": "where I could possess other bodies"
+  },
+  {
+   "t": 281.14,
+   "d": 2.0,
+   "text": "and change my soul into another body."
+  },
+  {
+   "t": 284.66,
+   "d": 2.96,
+   "text": "Building this pentagram, which allowed that,"
+  },
+  {
+   "t": 287.82,
+   "d": 1.44,
+   "text": "probably took us like a day or something."
+  },
+  {
+   "t": 289.58,
+   "d": 1.88,
+   "text": "Adding the spell that allowed us to do this"
+  },
+  {
+   "t": 291.46,
+   "d": 2.78,
+   "text": "took us like eight minutes, just because this kind"
+  },
+  {
+   "t": 294.24,
+   "d": 1.86,
+   "text": "of external configuration made it so easy."
+  },
+  {
+   "t": 296.62,
+   "d": 1.6,
+   "text": "And that's something where we right now really"
+  },
+  {
+   "t": 298.22,
+   "d": 2.46,
+   "text": "feel have a great advantage, because whenever"
+  },
+  {
+   "t": 300.68,
+   "d": 4.92,
+   "text": "you implement a new component or a new behavior, you get like 20 ideas about, okay, I could"
+  },
+  {
+   "t": 305.6,
+   "d": 3.06,
+   "text": "an item that also does something with it, and I could add another feature that does"
+  },
+  {
+   "t": 308.66,
+   "d": 1.86,
+   "text": "something with it, and I could add a spell and a monster."
+  },
+  {
+   "t": 311.04,
+   "d": 5.4,
+   "text": "So it becomes very, very easy to suddenly reuse interesting features and functions in"
+  },
+  {
+   "t": 316.44,
+   "d": 3.28,
+   "text": "many, many places and create new stuff, and that's really very nice."
+  },
+  {
+   "t": 321.14,
+   "d": 4.92,
+   "text": "I think the architecture for complex games becomes much cleaner if you use a good ECS"
+  },
+  {
+   "t": 326.06,
+   "d": 5.1,
+   "text": "approach because responsibilities and dependencies are handled in a very generalized way."
+  },
+  {
+   "t": 333.74,
+   "d": 3.84,
+   "text": "You suddenly get a combinatorial explosion of possibilities of what you can do because"
+  },
+  {
+   "t": 337.58,
+   "d": 1.36,
+   "text": "you have all those nice components."
+  },
+  {
+   "t": 338.94,
+   "d": 4.22,
+   "text": "You can plug them together in different combinations and get amazing new things you can do that"
+  },
+  {
+   "t": 343.16,
+   "d": 4.22,
+   "text": "otherwise maybe would be very hard because they are hard-coded deep in some programming"
+  },
+  {
+   "t": 347.38,
+   "d": 0.66,
+   "text": "language level."
+  },
+  {
+   "t": 348.28,
+   "d": 4.58,
+   "text": "Now that they are externalized, I can just like in a puzzle piece or Lego game, plug"
+  },
+  {
+   "t": 352.86,
+   "d": 1.82,
+   "text": "things together and they become really powerful."
+  },
+  {
+   "t": 354.68,
+   "d": 1.1,
+   "text": "I will show examples of that."
+  },
+  {
+   "t": 356.96,
+   "d": 2.16,
+   "text": "And for our special case, we are really"
+  },
+  {
+   "t": 359.12,
+   "d": 2.38,
+   "text": "excited about the emergent gameplay it creates,"
+  },
+  {
+   "t": 361.66,
+   "d": 3.32,
+   "text": "because due to these many combinations and things"
+  },
+  {
+   "t": 364.98,
+   "d": 2.24,
+   "text": "you can do, players surely will think"
+  },
+  {
+   "t": 367.22,
+   "d": 3.44,
+   "text": "about adding dynamic changes to the game,"
+  },
+  {
+   "t": 370.82,
+   "d": 1.64,
+   "text": "doing things in the game we didn't think about."
+  },
+  {
+   "t": 372.54,
+   "d": 1.54,
+   "text": "And suddenly new strategies emerge,"
+  },
+  {
+   "t": 374.12,
+   "d": 3.14,
+   "text": "and things become possible that in a less flexible system"
+  },
+  {
+   "t": 377.26,
+   "d": 0.82,
+   "text": "wouldn't be as easy."
+  },
+  {
+   "t": 378.64,
+   "d": 3.18,
+   "text": "So that's why I really recommend thinking about ECS"
+  },
+  {
+   "t": 381.82,
+   "d": 2.74,
+   "text": "and trying to push the boundaries of roguelikes with ECS."
+  },
+  {
+   "t": 385.48,
+   "d": 4.14,
+   "text": "For our game, Ultimate Item, we have something we call H, that's the item game engine, which"
+  },
+  {
+   "t": 389.62,
+   "d": 4.3,
+   "text": "is basically the content game engine that drives all the rules and all the content in"
+  },
+  {
+   "t": 393.92,
+   "d": 0.34,
+   "text": "the game."
+  },
+  {
+   "t": 394.56,
+   "d": 4.34,
+   "text": "There is a separate layer based on Unity that does the UI and they are completely decoupled."
+  },
+  {
+   "t": 399.0,
+   "d": 2.32,
+   "text": "There is no dependency there."
+  },
+  {
+   "t": 402.2,
+   "d": 5.28,
+   "text": "Internally in H, we just work on entities, components and the systems that include, let's"
+  },
+  {
+   "t": 407.48,
+   "d": 0.68,
+   "text": "say, game logic."
+  },
+  {
+   "t": 408.16,
+   "d": 5.42,
+   "text": "and we then use we have taken a different approach than Danny just"
+  },
+  {
+   "t": 413.58,
+   "d": 6.46,
+   "text": "explained we are using special events UI signals that send data to the UI to"
+  },
+  {
+   "t": 420.04,
+   "d": 3.9,
+   "text": "visualize what just happened that's because our age threat is a separate"
+  },
+  {
+   "t": 423.94,
+   "d": 5.46,
+   "text": "threat from the rendering threat to prevent any blockages in the rendering"
+  },
+  {
+   "t": 429.4,
+   "d": 3.56,
+   "text": "to make everything run smooth so we have two threats and whenever you have"
+  },
+  {
+   "t": 432.96,
+   "d": 4.62,
+   "text": "multiple threats data synchronization becomes an issue so we decided to"
+  },
+  {
+   "t": 437.58,
+   "d": 4.84,
+   "text": "introduce those signals that send the required amount of data to the user"
+  },
+  {
+   "t": 442.42,
+   "d": 3.66,
+   "text": "interface so it can work on that and doesn't have the problem of needing to"
+  },
+  {
+   "t": 446.08,
+   "d": 3.98,
+   "text": "access for example an entity of an org because the org just was damaged to"
+  },
+  {
+   "t": 450.06,
+   "d": 6.0,
+   "text": "display some nice damage effect on the org and the other threat in H already"
+  },
+  {
+   "t": 456.06,
+   "d": 2.9,
+   "text": "could have killed the org maybe so you try to access an org that already is"
+  },
+  {
+   "t": 458.96,
+   "d": 5.08,
+   "text": "dead so we introduced this UI signal layer to prevent data access problems"
+  },
+  {
+   "t": 464.04,
+   "d": 4.46,
+   "text": "there. It's not trivial, but it was worth it, and we noticed that we actually do not"
+  },
+  {
+   "t": 468.5,
+   "d": 5.7,
+   "text": "need very much data that needs to be exchanged. It's pretty minimal, so not bad from a performance"
+  },
+  {
+   "t": 474.2,
+   "d": 5.02,
+   "text": "point of view, and it makes it in the end much easier to keep things, let's say, consistent."
+  },
+  {
+   "t": 481.1,
+   "d": 4.62,
+   "text": "The user interface has a very limited access to the game engine. There are some system calls it"
+  },
+  {
+   "t": 485.72,
+   "d": 4.44,
+   "text": "can do, some queries it can do for more complex situations that are specifically synchronized,"
+  },
+  {
+   "t": 490.16,
+   "d": 3.28,
+   "text": "but it's not really much. Most of the things happen due to this UI signal layer."
+  },
+  {
+   "t": 494.0,
+   "d": 6.9,
+   "text": "And then internally in age, the communication from components or systems is by calling certain"
+  },
+  {
+   "t": 500.9,
+   "d": 4.74,
+   "text": "functions. For example, like if I have an amputation component that does an amputation effect on"
+  },
+  {
+   "t": 505.64,
+   "d": 4.62,
+   "text": "something, because that's a very complex operation, there are lots of things happening when something"
+  },
+  {
+   "t": 510.26,
+   "d": 3.82,
+   "text": "is amputated. We actually have an amputation system, and it just calls a function there and"
+  },
+  {
+   "t": 514.08,
+   "d": 4.32,
+   "text": "says, okay, now amputate this. I don't want to have all the code in my small component. I'm"
+  },
+  {
+   "t": 518.4,
+   "d": 2.98,
+   "text": "We're going to reuse this in several places, so just delegate it there."
+  },
+  {
+   "t": 521.9,
+   "d": 1.38,
+   "text": "And everything else is events."
+  },
+  {
+   "t": 523.66,
+   "d": 1.86,
+   "text": "Everything else internally is event-driven."
+  },
+  {
+   "t": 525.94,
+   "d": 4.8,
+   "text": "So systems send events to entities, entities send events to components, components to send"
+  },
+  {
+   "t": 531.32,
+   "d": 2.32,
+   "text": "again events to entities or components and so on."
+  },
+  {
+   "t": 533.84,
+   "d": 3.64,
+   "text": "So the event routing part is a pretty complex subsystem in this."
+  },
+  {
+   "t": 537.66,
+   "d": 5.08,
+   "text": "And actually the one that took us most of the time because we had to think about caching,"
+  },
+  {
+   "t": 542.88,
+   "d": 4.02,
+   "text": "performance, rerouting, handling dynamic state changes."
+  },
+  {
+   "t": 546.9,
+   "d": 1.92,
+   "text": "because if you add a component or remove one,"
+  },
+  {
+   "t": 548.96,
+   "d": 1.74,
+   "text": "you suddenly need different routes for events."
+  },
+  {
+   "t": 550.9,
+   "d": 2.4,
+   "text": "And that's not quite trivial, but the good thing"
+  },
+  {
+   "t": 553.3,
+   "d": 1.66,
+   "text": "is you need to do it once, and once it works,"
+  },
+  {
+   "t": 555.08,
+   "d": 2.22,
+   "text": "then you have a very stable base system for that."
+  },
+  {
+   "t": 558.5,
+   "d": 2.6,
+   "text": "And components become very nicely decoupled."
+  },
+  {
+   "t": 563.5,
+   "d": 3.0,
+   "text": "Something to consider we learned while implementing the ECS."
+  },
+  {
+   "t": 566.68,
+   "d": 2.14,
+   "text": "For us, typing became a very important topic,"
+  },
+  {
+   "t": 568.86,
+   "d": 3.22,
+   "text": "because usually we have this entity, which is just a UID,"
+  },
+  {
+   "t": 572.44,
+   "d": 1.72,
+   "text": "and you have a list of components."
+  },
+  {
+   "t": 574.76,
+   "d": 2.06,
+   "text": "and then you wonder, okay, what's an org?"
+  },
+  {
+   "t": 577.86,
+   "d": 2.54,
+   "text": "And how do I describe an org as being an org?"
+  },
+  {
+   "t": 580.58,
+   "d": 2.28,
+   "text": "Because maybe I want to do a sort of org slaying."
+  },
+  {
+   "t": 583.12,
+   "d": 2.3,
+   "text": "And I surely don't want to do something like,"
+  },
+  {
+   "t": 585.52,
+   "d": 2.8,
+   "text": "okay, an org is characterized by having those 37 components"
+  },
+  {
+   "t": 588.32,
+   "d": 2.6,
+   "text": "with certain values, that is just crazy."
+  },
+  {
+   "t": 591.3,
+   "d": 4.46,
+   "text": "So you need to introduce some kind of typing mechanism."
+  },
+  {
+   "t": 596.2,
+   "d": 2.92,
+   "text": "We call that in our system entity templates,"
+  },
+  {
+   "t": 599.48,
+   "d": 2.98,
+   "text": "which is basically named collections of components"
+  },
+  {
+   "t": 602.46,
+   "d": 0.94,
+   "text": "that are pre-configured."
+  },
+  {
+   "t": 603.4,
+   "d": 7.06,
+   "text": "So you could have an org template that has like 24 components and you can apply that"
+  },
+  {
+   "t": 610.46,
+   "d": 5.32,
+   "text": "to other entity templates or entities to create an org warrior, an org shaman, an org whatever."
+  },
+  {
+   "t": 616.18,
+   "d": 3.72,
+   "text": "And then there is an internal typing system that knows, okay, I have inherited it from the org,"
+  },
+  {
+   "t": 620.0,
+   "d": 4.56,
+   "text": "so this is an org even if it's now an org warrior or an org shaman or whatever. And this allows"
+  },
+  {
+   "t": 624.56,
+   "d": 5.66,
+   "text": "to nicely group and characterize things. And so we incidentally also introduced multi-inheritance"
+  },
+  {
+   "t": 630.22,
+   "d": 5.56,
+   "text": "for us with certain very easy rulings, which you will see in the examples really allows"
+  },
+  {
+   "t": 635.78,
+   "d": 0.8,
+   "text": "powerful things."
+  },
+  {
+   "t": 637.98,
+   "d": 3.86,
+   "text": "Then we have this topic of, okay, how am I going to construct my entities in an efficient"
+  },
+  {
+   "t": 641.84,
+   "d": 1.96,
+   "text": "way while building up the game definition?"
+  },
+  {
+   "t": 643.84,
+   "d": 6.8,
+   "text": "Because if an org takes like 20, 30 components to configure and I have like four or 500 monsters,"
+  },
+  {
+   "t": 650.82,
+   "d": 5.44,
+   "text": "I don't want to write endless lists of component definitions that always are very similar."
+  },
+  {
+   "t": 656.26,
+   "d": 4.6,
+   "text": "Again, the answer here is those templating things, those inheritance things, if you build them"
+  },
+  {
+   "t": 660.86,
+   "d": 5.12,
+   "text": "smartly, you can get by with very, very few definitions to create more complex or more"
+  },
+  {
+   "t": 665.98,
+   "d": 6.76,
+   "text": "specialized things. I will show that in the code example too. Then we had efficiency concerns for"
+  },
+  {
+   "t": 672.74,
+   "d": 5.84,
+   "text": "a while because something like an org warrior, for example, is built from quite a lot of entities."
+  },
+  {
+   "t": 678.9,
+   "d": 5.52,
+   "text": "There's the org warrior entity, which probably has a contained race entity. The org has probably a"
+  },
+  {
+   "t": 684.42,
+   "d": 6.18,
+   "text": "professional entity, the warrior has maybe a body part structure with arms, legs, head, neck, whatever,"
+  },
+  {
+   "t": 691.06,
+   "d": 3.98,
+   "text": "which all again are entities. Then there are items that are attached to those body parts or to your"
+  },
+  {
+   "t": 695.04,
+   "d": 6.04,
+   "text": "backpack, so you get more entities. Items, for example, have a material they are made from,"
+  },
+  {
+   "t": 701.12,
+   "d": 5.08,
+   "text": "so a sword might be made from iron, which again is an entity. So you easily get into situations"
+  },
+  {
+   "t": 706.2,
+   "d": 5.74,
+   "text": "where a single Orc Warrior in our use case consists of something like maybe 30, 40 entities or so,"
+  },
+  {
+   "t": 711.94,
+   "d": 6.0,
+   "text": "And if all those again have like 10, 20, 30 components, you can imagine you have a quick"
+  },
+  {
+   "t": 717.94,
+   "d": 6.66,
+   "text": "proliferation of things in the game. So memory and all these things can become critical. So we"
+  },
+  {
+   "t": 724.6,
+   "d": 3.78,
+   "text": "fought for a while about that and what we decided to introduce is a kind of flyweight pattern"
+  },
+  {
+   "t": 728.38,
+   "d": 6.54,
+   "text": "implementation, which means that our entities refer to a singleton template for as long as"
+  },
+  {
+   "t": 734.92,
+   "d": 5.66,
+   "text": "they can. So for example, the Orc Warrior initially really is just a UID and something that says,"
+  },
+  {
+   "t": 740.58,
+   "d": 4.58,
+   "text": "okay, I'm based on the org warrior template, and only when the state of the org changes."
+  },
+  {
+   "t": 745.16,
+   "d": 4.8,
+   "text": "We make very local, let's say, copies of data so that, for example, if the hit points get"
+  },
+  {
+   "t": 749.96,
+   "d": 5.48,
+   "text": "changed, yeah, there's one single new piece of data that is introduced in my specific"
+  },
+  {
+   "t": 755.44,
+   "d": 0.96,
+   "text": "org warrior instance."
+  },
+  {
+   "t": 756.56,
+   "d": 3.76,
+   "text": "All the other stuff is still used from the template so that I don't have to copy much"
+  },
+  {
+   "t": 760.32,
+   "d": 5.18,
+   "text": "data, and even if I have 1,000 org warriors which are currently uninjured, they all consist"
+  },
+  {
+   "t": 765.5,
+   "d": 4.86,
+   "text": "of one ID and one reference to the template and thus do not use much memory, for example."
+  },
+  {
+   "t": 770.36,
+   "d": 4.76,
+   "text": "and that was also an important optimization for us in order to decrease"
+  },
+  {
+   "t": 775.12,
+   "d": 5.64,
+   "text": "the use of memory we had and be fast in creating things. Then we had this"
+  },
+  {
+   "t": 780.76,
+   "d": 3.96,
+   "text": "interesting topic of how do we describe that things are something or are made of"
+  },
+  {
+   "t": 784.72,
+   "d": 4.96,
+   "text": "something, which is a difference and an important one we notice on the midterms."
+  },
+  {
+   "t": 790.6,
+   "d": 3.22,
+   "text": "We have something that's called slot, I will show an example on the next"
+  },
+  {
+   "t": 793.82,
+   "d": 4.44,
+   "text": "slides that help us doing that, so wait for the next slide. And we had this thing"
+  },
+  {
+   "t": 798.26,
+   "d": 4.46,
+   "text": "about runtime type extensions, which actually is quite complicated in Ultimate Atom because,"
+  },
+  {
+   "t": 802.9,
+   "d": 5.14,
+   "text": "for example, if you take something like a wall, you cast this Animate Object Spell on"
+  },
+  {
+   "t": 808.04,
+   "d": 4.8,
+   "text": "the wall, turning it into a living being, the type hierarchy for this specific entity"
+  },
+  {
+   "t": 812.84,
+   "d": 0.44,
+   "text": "changes."
+  },
+  {
+   "t": 813.5,
+   "d": 6.04,
+   "text": "It was a tile, it was a wall, which is a tile, and now it also becomes a being, which has"
+  },
+  {
+   "t": 819.54,
+   "d": 3.44,
+   "text": "certain other features, data, components, and so on."
+  },
+  {
+   "t": 822.98,
+   "d": 5.42,
+   "text": "one, so we have to do runtime type extensions for specific entities and change their type"
+  },
+  {
+   "t": 828.4,
+   "d": 4.94,
+   "text": "hierarchy basically. That's actually quite complicated, but yeah. I can't show it today"
+  },
+  {
+   "t": 833.34,
+   "d": 4.12,
+   "text": "here, but maybe if you're interested afterwards, it's actually something to be kept in mind"
+  },
+  {
+   "t": 837.46,
+   "d": 6.04,
+   "text": "if you want to do such structural transformations in the game, they are wide reaching, that's"
+  },
+  {
+   "t": 843.5,
+   "d": 3.6,
+   "text": "a complex object to take into consideration, but it can be handled."
+  },
+  {
+   "t": 849.5,
+   "d": 7.8,
+   "text": "So, examples. One on the slide, the rest will be code. So, when I speak of an entity, it might be"
+  },
+  {
+   "t": 857.3,
+   "d": 5.36,
+   "text": "something like a Dwarven Warrior entity, for example. How is that built? It has a number of"
+  },
+  {
+   "t": 862.66,
+   "d": 6.08,
+   "text": "components, for example, something like hit points, strength and alignment, being an actor,"
+  },
+  {
+   "t": 868.86,
+   "d": 5.68,
+   "text": "which means it can act every couple of time units in the game, and many more. So, that makes up the"
+  },
+  {
+   "t": 874.54,
+   "d": 6.0,
+   "text": "basic definition of a Dwarven Warrior. Then we have these slot concepts. We use"
+  },
+  {
+   "t": 880.54,
+   "d": 5.18,
+   "text": "that to introduce more complex grouped features into a Dwarven Warrior. For"
+  },
+  {
+   "t": 885.72,
+   "d": 3.44,
+   "text": "example, we would have a slot that is a Dwarf and a slot that is a Warrior. The"
+  },
+  {
+   "t": 889.16,
+   "d": 3.3,
+   "text": "Dwarf has a couple of components that describe what makes up a Dwarf. The"
+  },
+  {
+   "t": 892.46,
+   "d": 3.96,
+   "text": "Warrior has a couple of components that describes what's a Warrior. And those"
+  },
+  {
+   "t": 896.42,
+   "d": 4.24,
+   "text": "things basically are plugged onto the Dwarven Warrior entity without"
+  },
+  {
+   "t": 900.66,
+   "d": 1.8,
+   "text": "without explicitly having to define them."
+  },
+  {
+   "t": 902.58,
+   "d": 2.8,
+   "text": "So it's a kind of runtime class extension mechanism,"
+  },
+  {
+   "t": 905.42,
+   "d": 2.8,
+   "text": "I would say, which is very nice and powerful."
+  },
+  {
+   "t": 908.46,
+   "d": 2.36,
+   "text": "And we originally introduced it for materials"
+  },
+  {
+   "t": 910.82,
+   "d": 1.66,
+   "text": "because we had this idea of alchemy"
+  },
+  {
+   "t": 912.48,
+   "d": 1.22,
+   "text": "where you can transform, for example,"
+  },
+  {
+   "t": 913.86,
+   "d": 1.46,
+   "text": "an iron sword into a mithril sword."
+  },
+  {
+   "t": 916.94,
+   "d": 4.64,
+   "text": "Iron, mithril, both would be slots for the name material."
+  },
+  {
+   "t": 921.92,
+   "d": 2.84,
+   "text": "We just could take out the iron material slot,"
+  },
+  {
+   "t": 924.86,
+   "d": 1.26,
+   "text": "remove it from the sword,"
+  },
+  {
+   "t": 926.34,
+   "d": 3.14,
+   "text": "and add a new mithril material slot,"
+  },
+  {
+   "t": 929.48,
+   "d": 3.86,
+   "text": "turning it to dust into mithril and bestowing the new abilities upon it."
+  },
+  {
+   "t": 933.54,
+   "d": 4.02,
+   "text": "So that was the idea and then we extended it to use it for professions, for races, for"
+  },
+  {
+   "t": 937.56,
+   "d": 0.82,
+   "text": "many other things."
+  },
+  {
+   "t": 940.48,
+   "d": 4.42,
+   "text": "And the interesting thing is each slot again is an entity that allows us to reuse all those"
+  },
+  {
+   "t": 944.9,
+   "d": 2.7,
+   "text": "component features and things and do smart stuff with that."
+  },
+  {
+   "t": 949.06,
+   "d": 3.74,
+   "text": "And finally, as a special thing in Ultimate Inglaterra, we also have containers that can"
+  },
+  {
+   "t": 952.8,
+   "d": 5.26,
+   "text": "contain other entities like, for example, things like your backpack, your equipment,"
+  },
+  {
+   "t": 958.06,
+   "d": 3.96,
+   "text": "your spell knowledge, your skill knowledge, and other things which technically are containers"
+  },
+  {
+   "t": 962.02,
+   "d": 2.8,
+   "text": "that, again, contain other entities that do something."
+  },
+  {
+   "t": 966.48,
+   "d": 5.34,
+   "text": "Okay, that's, I think, the part about slides."
+  },
+  {
+   "t": 972.82,
+   "d": 4.92,
+   "text": "And now I just would like to show how we do this actually in Ultimate Atom from a technical"
+  },
+  {
+   "t": 977.74,
+   "d": 0.5,
+   "text": "perspective."
+  },
+  {
+   "t": 979.24,
+   "d": 1.72,
+   "text": "First question, who knows Jason?"
+  },
+  {
+   "t": 981.62,
+   "d": 0.8,
+   "text": "Hands, please."
+  },
+  {
+   "t": 983.82,
+   "d": 0.7,
+   "text": "That's a lot of people."
+  },
+  {
+   "t": 984.76,
+   "d": 0.92,
+   "text": "Most, I think."
+  },
+  {
+   "t": 985.68,
+   "d": 6.52,
+   "text": "I think JSON is a text-based data definition format, I would say, that is mostly used in"
+  },
+  {
+   "t": 992.2,
+   "d": 2.92,
+   "text": "web programming to define data in a structural nested way."
+  },
+  {
+   "t": 995.42,
+   "d": 7.36,
+   "text": "We decided to use JSON for our configuration files because it has a, well, quite nice syntax,"
+  },
+  {
+   "t": 1002.96,
+   "d": 0.38,
+   "text": "I would say."
+  },
+  {
+   "t": 1003.5,
+   "d": 0.66,
+   "text": "It's easy to use."
+  },
+  {
+   "t": 1004.28,
+   "d": 1.12,
+   "text": "There are lots of parsers for it."
+  },
+  {
+   "t": 1005.54,
+   "d": 3.96,
+   "text": "And so we said, okay, we take that because later modding and extensions will become very"
+  },
+  {
+   "t": 1009.5,
+   "d": 2.94,
+   "text": "easy because you just need a text editor and can do everything."
+  },
+  {
+   "t": 1013.06,
+   "d": 4.18,
+   "text": "And I'll just start showing some of the things we have in the game."
+  },
+  {
+   "t": 1018.4,
+   "d": 2.46,
+   "text": "First thing is something that's actually called thing."
+  },
+  {
+   "t": 1021.4,
+   "d": 1.48,
+   "text": "One moment, I'll make this larger."
+  },
+  {
+   "t": 1026.48,
+   "d": 4.86,
+   "text": "So this now is an entity template in the syntax of Ultimate ADOM."
+  },
+  {
+   "t": 1031.56,
+   "d": 2.48,
+   "text": "It's a pretty trivial one because it consists of an ID."
+  },
+  {
+   "t": 1034.3,
+   "d": 3.88,
+   "text": "It's a thing, which is kind of thinking in a type hierarchy, the most basic thing you"
+  },
+  {
+   "t": 1038.18,
+   "d": 0.4,
+   "text": "can have."
+  },
+  {
+   "t": 1039.5,
+   "d": 4.98,
+   "text": "It could have a list of components. It doesn't in this case. I could have left it out, but I didn't."
+  },
+  {
+   "t": 1044.68,
+   "d": 5.16,
+   "text": "So this is just a thing. It's a kind of base class for the typing system, so that I can say something is a thing."
+  },
+  {
+   "t": 1049.98,
+   "d": 3.76,
+   "text": "So it's somehow tangible in some way. That's not very interesting."
+  },
+  {
+   "t": 1055.7,
+   "d": 4.08,
+   "text": "Just shows the basic way things are built. Let's take something more complicated."
+  },
+  {
+   "t": 1060.0,
+   "d": 4.18,
+   "text": "Oh, I have to increase the size each time. Okay. Let's take a tile."
+  },
+  {
+   "t": 1064.18,
+   "d": 5.88,
+   "text": "A tile is something on a map, something like a wall or a piece of floor or stairways or"
+  },
+  {
+   "t": 1070.06,
+   "d": 0.54,
+   "text": "something like that."
+  },
+  {
+   "t": 1071.42,
+   "d": 1.7,
+   "text": "And here you can see what we can do."
+  },
+  {
+   "t": 1073.34,
+   "d": 0.96,
+   "text": "We again give it an ID."
+  },
+  {
+   "t": 1074.4,
+   "d": 0.46,
+   "text": "It's a tile."
+  },
+  {
+   "t": 1075.26,
+   "d": 5.26,
+   "text": "And we say it's inheriting from a base template the thing template."
+  },
+  {
+   "t": 1080.78,
+   "d": 3.18,
+   "text": "Right now this doesn't do anything except telling the type hierarchy, okay, it's both"
+  },
+  {
+   "t": 1083.96,
+   "d": 1.72,
+   "text": "a thing and a tile."
+  },
+  {
+   "t": 1085.92,
+   "d": 1.02,
+   "text": "That's just for typing."
+  },
+  {
+   "t": 1087.4,
+   "d": 1.38,
+   "text": "And we give it one component."
+  },
+  {
+   "t": 1089.18,
+   "d": 4.12,
+   "text": "The standard definition in the game is anything that doesn't have a size is of medium size."
+  },
+  {
+   "t": 1093.3,
+   "d": 0.8,
+   "text": "That's the default."
+  },
+  {
+   "t": 1094.44,
+   "d": 4.26,
+   "text": "So it has a component and the component has one parameter and the parameter says it's"
+  },
+  {
+   "t": 1098.7,
+   "d": 0.54,
+   "text": "medium size."
+  },
+  {
+   "t": 1099.72,
+   "d": 2.92,
+   "text": "So that's how components can be used within the game."
+  },
+  {
+   "t": 1102.8,
+   "d": 3.12,
+   "text": "They can have parameters and they can become a lot more complex as we will see."
+  },
+  {
+   "t": 1106.22,
+   "d": 3.0,
+   "text": "And now I have defined the basic concept of a tile in the game."
+  },
+  {
+   "t": 1109.32,
+   "d": 2.26,
+   "text": "That doesn't really help so far."
+  },
+  {
+   "t": 1112.3,
+   "d": 1.72,
+   "text": "So we go one step further."
+  },
+  {
+   "t": 1114.02,
+   "d": 12.0,
+   "text": "further. We, for example, take a wall. A wall, same scheme, has an ID, it's a tile, it gets some more"
+  },
+  {
+   "t": 1126.02,
+   "d": 5.08,
+   "text": "components like, for example, the component that says it has a relative size, so within the range"
+  },
+  {
+   "t": 1131.1,
+   "d": 5.54,
+   "text": "of medium things, it's actually a huge medium thing, something very big. Why do we do that?"
+  },
+  {
+   "t": 1136.98,
+   "d": 3.98,
+   "text": "Because we have monster sizes. So, for example, you could have a longsword that's of medium size,"
+  },
+  {
+   "t": 1140.96,
+   "d": 3.4,
+   "text": "and Ork is wielding it, so it makes sense he is wielding a medium-sized longsword."
+  },
+  {
+   "t": 1144.78,
+   "d": 3.98,
+   "text": "If you now get a fire giant, and the fire giant is a huge creature, and the huge creature is"
+  },
+  {
+   "t": 1148.76,
+   "d": 3.62,
+   "text": "wielding a longsword, it surely won't be a medium-sized longsword sword, because that would be"
+  },
+  {
+   "t": 1152.38,
+   "d": 6.4,
+   "text": "kind of toothpick for a fire giant. He is wielding a huge, relatively, hugely-sized longsword."
+  },
+  {
+   "t": 1158.9,
+   "d": 5.56,
+   "text": "That has, in turn, effects on damage and weight and other things, but that's why we have this."
+  },
+  {
+   "t": 1164.64,
+   "d": 4.54,
+   "text": "So the wall is of medium size because we are normal humanoid, who is medium,"
+  },
+  {
+   "t": 1169.18,
+   "d": 4.22,
+   "text": "Wall stars are medium sized, but they are relatively pretty huge things because they"
+  },
+  {
+   "t": 1173.4,
+   "d": 2.4,
+   "text": "cover the whole space, for example."
+  },
+  {
+   "t": 1176.2,
+   "d": 0.92,
+   "text": "A wall is solid."
+  },
+  {
+   "t": 1177.26,
+   "d": 4.12,
+   "text": "That's another component without any parameters, which basically just says without special"
+  },
+  {
+   "t": 1181.38,
+   "d": 2.1,
+   "text": "powers you won't be able to pass through a wall."
+  },
+  {
+   "t": 1183.66,
+   "d": 3.7,
+   "text": "It will prevent you in the movement system to move through walls because they are solid."
+  },
+  {
+   "t": 1187.88,
+   "d": 2.8,
+   "text": "In case you are being a ghost, other things apply."
+  },
+  {
+   "t": 1190.82,
+   "d": 0.38,
+   "text": "We'll see that."
+  },
+  {
+   "t": 1192.36,
+   "d": 1.64,
+   "text": "And then we have this slot concept."
+  },
+  {
+   "t": 1194.28,
+   "d": 1.54,
+   "text": "A wall is made from stone."
+  },
+  {
+   "t": 1195.82,
+   "d": 4.58,
+   "text": "A wall has a slot with the name Material and the Material is Stone."
+  },
+  {
+   "t": 1201.56,
+   "d": 5.08,
+   "text": "Attached to the Stone entity in turn will be things like damage resistance to certain"
+  },
+  {
+   "t": 1206.64,
+   "d": 4.88,
+   "text": "types of damage, maybe a formula for determining how many hit points does a hugely sized medium"
+  },
+  {
+   "t": 1211.52,
+   "d": 2.62,
+   "text": "object have when it's made from stone and other things."
+  },
+  {
+   "t": 1215.5,
+   "d": 1.02,
+   "text": "So that's a wall."
+  },
+  {
+   "t": 1217.76,
+   "d": 3.52,
+   "text": "In this way, we really build up all the things in the game."
+  },
+  {
+   "t": 1223.12,
+   "d": 5.44,
+   "text": "and things can become a lot more complicated. I'll take another example, for example, the Orc"
+  },
+  {
+   "t": 1228.56,
+   "d": 7.48,
+   "text": "Warrior we were talking about. The Orc Warrior, its definition is again the ID, an Orc Warrior."
+  },
+  {
+   "t": 1236.28,
+   "d": 4.34,
+   "text": "It has a base template which is a being, a living thing, so we have some core concepts in the game."
+  },
+  {
+   "t": 1240.68,
+   "d": 2.76,
+   "text": "We can have tiles, we can have features, we can have beings, we can have items."
+  },
+  {
+   "t": 1245.66,
+   "d": 10.42,
+   "text": "This one is a being. It has some default equipment, so an Orc Warrior usually will wield a battle axe, wear a metal cap, have leather armor, wooden shield, and leather boots."
+  },
+  {
+   "t": 1256.94,
+   "d": 9.94,
+   "text": "It has, again, this slot concept. Because it's an Orc Warrior, it should have the warrior profession as one of its extending features, so it has all the capabilities of a Warrior, can gain levels, and so on."
+  },
+  {
+   "t": 1267.36,
+   "d": 1.68,
+   "text": "It also has another slot, the race."
+  },
+  {
+   "t": 1269.22,
+   "d": 4.28,
+   "text": "It's based on the orc race, so all the attributes will be derived from the orc race, which is"
+  },
+  {
+   "t": 1273.5,
+   "d": 2.22,
+   "text": "average strength, average learning, and so on."
+  },
+  {
+   "t": 1276.56,
+   "d": 4.78,
+   "text": "And because this is a monster, it's goal-driven, and here in this definition, the base goal"
+  },
+  {
+   "t": 1281.34,
+   "d": 1.54,
+   "text": "of all orcs is to kill the player."
+  },
+  {
+   "t": 1283.64,
+   "d": 3.26,
+   "text": "This can be overridden with special level definitions, but if you don't say anything"
+  },
+  {
+   "t": 1286.9,
+   "d": 1.9,
+   "text": "special, an orc will try to kill the player."
+  },
+  {
+   "t": 1290.72,
+   "d": 6.76,
+   "text": "To give you an idea of how an org race looks like, just to have that, the org race, for"
+  },
+  {
+   "t": 1297.48,
+   "d": 1.18,
+   "text": "example, again has an ID."
+  },
+  {
+   "t": 1298.98,
+   "d": 1.1,
+   "text": "It has a base template."
+  },
+  {
+   "t": 1300.2,
+   "d": 4.9,
+   "text": "It's a humanoid which describes the body structure, so it will have arms, legs, neck, head, all"
+  },
+  {
+   "t": 1305.1,
+   "d": 0.4,
+   "text": "these things."
+  },
+  {
+   "t": 1307.08,
+   "d": 1.94,
+   "text": "It has names that are displayed on the screen."
+  },
+  {
+   "t": 1309.34,
+   "d": 3.06,
+   "text": "It then gets definitions for those attributes."
+  },
+  {
+   "t": 1312.66,
+   "d": 1.48,
+   "text": "We usually have an ADOM, the nine attributes."
+  },
+  {
+   "t": 1314.58,
+   "d": 1.24,
+   "text": "They are in dice notation."
+  },
+  {
+   "t": 1315.98,
+   "d": 1.06,
+   "text": "That's something the system can do."
+  },
+  {
+   "t": 1317.04,
+   "d": 3.88,
+   "text": "so I can give a dice range, and whenever a specific instance is created of the AUG,"
+  },
+  {
+   "t": 1321.0,
+   "d": 3.9,
+   "text": "then the dice will be rolled, and an AUG has something like two die three plus seven points"
+  },
+  {
+   "t": 1324.9,
+   "d": 4.42,
+   "text": "of strength, which means anything from nine to thirteen points of strength as a result, for"
+  },
+  {
+   "t": 1329.32,
+   "d": 6.74,
+   "text": "example. It has medium size. It's not affected by darkness. It has a racial attribute that is used"
+  },
+  {
+   "t": 1336.06,
+   "d": 5.78,
+   "text": "when you hack off an arm. You will see something like a left arm of an AUG, for example. And"
+  },
+  {
+   "t": 1341.84,
+   "d": 2.38,
+   "text": "And this is this typing concept."
+  },
+  {
+   "t": 1344.5,
+   "d": 6.54,
+   "text": "An Orc, this Orc race entity is a race, but just because you get this injected, you don't"
+  },
+  {
+   "t": 1351.04,
+   "d": 0.6,
+   "text": "become a race."
+  },
+  {
+   "t": 1351.9,
+   "d": 5.02,
+   "text": "So it's kind of different, separate type hierarchy we use in addition."
+  },
+  {
+   "t": 1358.44,
+   "d": 3.06,
+   "text": "This now is a very, let's say, standard level for the game."
+  },
+  {
+   "t": 1361.62,
+   "d": 3.14,
+   "text": "So we define races, we define beings, we define their special abilities."
+  },
+  {
+   "t": 1366.82,
+   "d": 6.48,
+   "text": "We also have minute details like, for example, a hand that can be defined because you're"
+  },
+  {
+   "t": 1373.3,
+   "d": 3.36,
+   "text": "wielding weapons and when you're wielding weapons you usually need either a hand or"
+  },
+  {
+   "t": 1376.66,
+   "d": 1.3,
+   "text": "a tentacle to do that."
+  },
+  {
+   "t": 1378.5,
+   "d": 6.16,
+   "text": "To give you an example of how is a hand build, it has an ID, hand, it has again a base template,"
+  },
+  {
+   "t": 1384.8,
+   "d": 1.86,
+   "text": "a body part because a hand is a part of your body."
+  },
+  {
+   "t": 1388.84,
+   "d": 3.4,
+   "text": "Ignore this double definition here, it has internal historical reasons, we still are"
+  },
+  {
+   "t": 1392.24,
+   "d": 0.58,
+   "text": "going to refactor."
+  },
+  {
+   "t": 1394.02,
+   "d": 2.46,
+   "text": "It has, for example, the capability to handle doors."
+  },
+  {
+   "t": 1396.64,
+   "d": 1.66,
+   "text": "So if you have a hand, you can handle doors."
+  },
+  {
+   "t": 1399.06,
+   "d": 3.1,
+   "text": "That's very nice because if your hands get hacked off, you no longer will be able to"
+  },
+  {
+   "t": 1402.16,
+   "d": 1.0,
+   "text": "open doors or close them."
+  },
+  {
+   "t": 1403.3,
+   "d": 3.34,
+   "text": "That's just implicitly defined because a hand has the capability to handle doors."
+  },
+  {
+   "t": 1406.88,
+   "d": 3.42,
+   "text": "The internal system checks if there is a door, can you handle doors?"
+  },
+  {
+   "t": 1410.34,
+   "d": 1.0,
+   "text": "If not, you can't open them."
+  },
+  {
+   "t": 1411.6,
+   "d": 5.48,
+   "text": "And this definition basically ensures that if amputations go on or whatever, you either"
+  },
+  {
+   "t": 1417.08,
+   "d": 1.7,
+   "text": "can open doors or you can't."
+  },
+  {
+   "t": 1419.02,
+   "d": 1.8,
+   "text": "And we don't have to care about it."
+  },
+  {
+   "t": 1420.82,
+   "d": 3.16,
+   "text": "It has things like a hand permits you to attack in melee."
+  },
+  {
+   "t": 1424.22,
+   "d": 1.58,
+   "text": "That's a qualifier."
+  },
+  {
+   "t": 1427.08,
+   "d": 1.28,
+   "text": "It has a certain volume."
+  },
+  {
+   "t": 1428.6,
+   "d": 3.84,
+   "text": "The volume is used when an amputation takes place because the game system then looks at"
+  },
+  {
+   "t": 1432.44,
+   "d": 4.28,
+   "text": "all the volume of all your body parts and selects randomly the most appropriate body"
+  },
+  {
+   "t": 1436.72,
+   "d": 2.34,
+   "text": "part to be hacked off by an amputation attack, for example."
+  },
+  {
+   "t": 1439.42,
+   "d": 3.9,
+   "text": "It has a certain default weight that then gets modified by size, material, and other"
+  },
+  {
+   "t": 1443.32,
+   "d": 0.32,
+   "text": "things."
+  },
+  {
+   "t": 1445.3,
+   "d": 2.88,
+   "text": "This hand here still can't wield weapons."
+  },
+  {
+   "t": 1448.78,
+   "d": 1.02,
+   "text": "How does that work?"
+  },
+  {
+   "t": 1450.8,
+   "d": 2.94,
+   "text": "We have a humanoid hand to do that."
+  },
+  {
+   "t": 1454.08,
+   "d": 1.62,
+   "text": "You can ignore most of the text here."
+  },
+  {
+   "t": 1456.24,
+   "d": 4.32,
+   "text": "The humanoid hand is again extended from a hand, so it inherits all the things that a"
+  },
+  {
+   "t": 1460.56,
+   "d": 0.48,
+   "text": "hand can do."
+  },
+  {
+   "t": 1461.32,
+   "d": 1.3,
+   "text": "For example, open doors."
+  },
+  {
+   "t": 1462.98,
+   "d": 1.78,
+   "text": "It has a body part content slot."
+  },
+  {
+   "t": 1465.04,
+   "d": 7.14,
+   "text": "We call things like this component things that can take an item and use it."
+  },
+  {
+   "t": 1472.44,
+   "d": 4.1,
+   "text": "So this one has a body part content slot that can either take melee weapons or shields right"
+  },
+  {
+   "t": 1476.54,
+   "d": 0.32,
+   "text": "now."
+  },
+  {
+   "t": 1477.6,
+   "d": 3.42,
+   "text": "There are status changes and the rest is just amputation stuff, so you can ignore that."
+  },
+  {
+   "t": 1481.18,
+   "d": 3.8,
+   "text": "But that basically allows the hand to wield either a melee weapon or a shield and since"
+  },
+  {
+   "t": 1484.98,
+   "d": 3.98,
+   "text": "it has this inherited component of permitting melee attacks, those things then will be used"
+  },
+  {
+   "t": 1488.96,
+   "d": 1.66,
+   "text": "in combat and you are ready to fight."
+  },
+  {
+   "t": 1490.74,
+   "d": 1.78,
+   "text": "And if you have six arms, you will get six melee attacks."
+  },
+  {
+   "t": 1492.76,
+   "d": 1.7,
+   "text": "We don't have to care and think about that."
+  },
+  {
+   "t": 1497.16,
+   "d": 0.4,
+   "text": "Okay."
+  },
+  {
+   "t": 1498.0,
+   "d": 2.8,
+   "text": "Yesterday we had this interesting example about movement systems."
+  },
+  {
+   "t": 1500.8,
+   "d": 4.5,
+   "text": "If tile is wall, then message bunk, you hit the wall."
+  },
+  {
+   "t": 1507.76,
+   "d": 4.72,
+   "text": "Movement is something where I would like to show a system and this eventing stuff in ADOM."
+  },
+  {
+   "t": 1512.68,
+   "d": 7.28,
+   "text": "It's pretty complicated, much more complicated than this example we saw because the capabilities"
+  },
+  {
+   "t": 1519.96,
+   "d": 4.06,
+   "text": "and limitations of things, of entities, are determined by the component definitions."
+  },
+  {
+   "t": 1524.78,
+   "d": 4.5,
+   "text": "The movement system only is working on entities and thus has no idea if something is solid"
+  },
+  {
+   "t": 1529.28,
+   "d": 4.94,
+   "text": "or not, if you have capabilities to go through solid things or not, if there are spells preventing"
+  },
+  {
+   "t": 1534.22,
+   "d": 3.64,
+   "text": "you from moving or not, and there are thousands of things that could affect your movement."
+  },
+  {
+   "t": 1538.26,
+   "d": 5.98,
+   "text": "And so the movement system, to show that in code, is actually pretty..."
+  },
+  {
+   "t": 1546.46,
+   "d": 2.88,
+   "text": "You don't have to understand all the details, but pretty involved."
+  },
+  {
+   "t": 1549.62,
+   "d": 4.94,
+   "text": "So for example, if I try to execute a movement, this entity is going to move into a direction."
+  },
+  {
+   "t": 1555.8,
+   "d": 4.74,
+   "text": "We first check things like, is there something altering the direction of the movement?"
+  },
+  {
+   "t": 1560.8,
+   "d": 4.32,
+   "text": "Because for example, you might be confused or drunk or whatever, and if you are confused"
+  },
+  {
+   "t": 1565.12,
+   "d": 4.24,
+   "text": "or drunk, you probably won't be using the direction that the system asked you to use."
+  },
+  {
+   "t": 1569.58,
+   "d": 0.96,
+   "text": "Something else might be happening."
+  },
+  {
+   "t": 1570.68,
+   "d": 6.9,
+   "text": "What happens is we check, is this entity able to modify the movement direction for some reason?"
+  },
+  {
+   "t": 1577.64,
+   "d": 1.8,
+   "text": "Has it something that alters movement directions?"
+  },
+  {
+   "t": 1579.74,
+   "d": 3.74,
+   "text": "Then we create an event, and the event is fired at the entity."
+  },
+  {
+   "t": 1583.48,
+   "d": 4.88,
+   "text": "we get some result and might output some message and change the move direction in the end, maybe."
+  },
+  {
+   "t": 1589.72,
+   "d": 5.58,
+   "text": "Then, if this has occurred, we check the old position, the new position, check if it's a valid"
+  },
+  {
+   "t": 1595.3,
+   "d": 7.74,
+   "text": "position on the map, then we retrieve the map cells which are defined at the position,"
+  },
+  {
+   "t": 1604.0,
+   "d": 4.32,
+   "text": "and then we check, okay, can we do movement interactions on the new position because,"
+  },
+  {
+   "t": 1608.5,
+   "d": 3.2,
+   "text": "for example, in ADOM, if you walk into the door, normally the door is being opened,"
+  },
+  {
+   "t": 1611.7,
+   "d": 3.34,
+   "text": "So you just don't have to say explicitly, open the door, you just walk into the door,"
+  },
+  {
+   "t": 1615.18,
+   "d": 0.9,
+   "text": "the door gets opened."
+  },
+  {
+   "t": 1616.3,
+   "d": 3.14,
+   "text": "Or if there's a monster, you move into the monster, usually the monster will be attacked"
+  },
+  {
+   "t": 1619.44,
+   "d": 1.5,
+   "text": "if it's a hostile monster, for example."
+  },
+  {
+   "t": 1621.46,
+   "d": 4.98,
+   "text": "So the next thing before we actually think about movement is we think about, do we have"
+  },
+  {
+   "t": 1626.44,
+   "d": 3.26,
+   "text": "any other interactions we would like to do instead of moving?"
+  },
+  {
+   "t": 1630.4,
+   "d": 3.96,
+   "text": "Same pattern, we check are there movement interactions, send an event, collect all the"
+  },
+  {
+   "t": 1634.36,
+   "d": 4.0,
+   "text": "movement interactions, and if we find some, we execute them."
+  },
+  {
+   "t": 1639.06,
+   "d": 1.2,
+   "text": "We ignore the rest here."
+  },
+  {
+   "t": 1640.26,
+   "d": 4.16,
+   "text": "Let's assume there were no movement interactions so we finally can try to move from one position"
+  },
+  {
+   "t": 1644.42,
+   "d": 0.52,
+   "text": "to the next."
+  },
+  {
+   "t": 1646.1,
+   "d": 2.44,
+   "text": "Lots of things might happen while we do this."
+  },
+  {
+   "t": 1648.76,
+   "d": 3.62,
+   "text": "For example, for some reason we might not be allowed to leave the old position."
+  },
+  {
+   "t": 1652.94,
+   "d": 3.52,
+   "text": "It might be that we are glued to the ground, that we stepped into a bear trap that holds"
+  },
+  {
+   "t": 1656.46,
+   "d": 4.58,
+   "text": "us to that position, that some magical charm prevents us from moving out of that position,"
+  },
+  {
+   "t": 1661.3,
+   "d": 0.54,
+   "text": "whatever."
+  },
+  {
+   "t": 1662.24,
+   "d": 1.9,
+   "text": "All that is not predefined in the game."
+  },
+  {
+   "t": 1664.26,
+   "d": 2.28,
+   "text": "There are no if-and-else things that handle this."
+  },
+  {
+   "t": 1666.7,
+   "d": 0.96,
+   "text": "So what can we do?"
+  },
+  {
+   "t": 1667.66,
+   "d": 4.64,
+   "text": "we again check, is there something that prevents us from leaving the old position?"
+  },
+  {
+   "t": 1672.66,
+   "d": 4.3,
+   "text": "We ask that both to the entity itself, it might be affected by a charm,"
+  },
+  {
+   "t": 1677.18,
+   "d": 4.98,
+   "text": "or to the cell on the map, is there something preventing us from leaving the old position?"
+  },
+  {
+   "t": 1682.44,
+   "d": 2.96,
+   "text": "If not, we actually start leaving the old position."
+  },
+  {
+   "t": 1686.14,
+   "d": 2.24,
+   "text": "Note that in the meantime, something might have happened."
+  },
+  {
+   "t": 1688.58,
+   "d": 3.26,
+   "text": "For example, maybe there is a spell on the position you are standing on"
+  },
+  {
+   "t": 1691.84,
+   "d": 4.36,
+   "text": "that damages you for 1-6 points of damage whenever you try to leave the position."
+  },
+  {
+   "t": 1696.2,
+   "d": 3.72,
+   "text": "So it could be that we asked, can we leave this because we want to leave?"
+  },
+  {
+   "t": 1700.14,
+   "d": 4.0,
+   "text": "We get 1.6 points of damage and we're dead and movement ends because we were killed by"
+  },
+  {
+   "t": 1704.7,
+   "d": 1.08,
+   "text": "the environment affecting us."
+  },
+  {
+   "t": 1706.24,
+   "d": 2.42,
+   "text": "If this didn't happen, we actually leave the old position."
+  },
+  {
+   "t": 1709.56,
+   "d": 3.88,
+   "text": "Again things might be happening, like for example a curse being bestowed upon us because"
+  },
+  {
+   "t": 1713.44,
+   "d": 2.26,
+   "text": "we left some area we shouldn't leave or whatever."
+  },
+  {
+   "t": 1716.68,
+   "d": 1.64,
+   "text": "Then we try to enter the new position."
+  },
+  {
+   "t": 1718.54,
+   "d": 0.82,
+   "text": "Is it possible?"
+  },
+  {
+   "t": 1719.68,
+   "d": 4.38,
+   "text": "There might be a magical charm preventing us, an invisible force field, whatever, thousands"
+  },
+  {
+   "t": 1724.06,
+   "d": 0.38,
+   "text": "of things."
+  },
+  {
+   "t": 1724.44,
+   "d": 6.34,
+   "text": "things. We again create an event, we send it into the route for our components and entity"
+  },
+  {
+   "t": 1732.38,
+   "d": 3.74,
+   "text": "and continue with this. I don't want to explain all the special cases, but it's like, okay,"
+  },
+  {
+   "t": 1736.24,
+   "d": 5.1,
+   "text": "we try to enter the position, then we enter the position, then we finish the movement"
+  },
+  {
+   "t": 1741.34,
+   "d": 3.98,
+   "text": "because that might again update other things and finally we have done a movement. So it's"
+  },
+  {
+   "t": 1745.32,
+   "d": 5.06,
+   "text": "like six to eight steps we check while we do a movement and all those steps, because"
+  },
+  {
+   "t": 1750.38,
+   "d": 2.06,
+   "text": "because they are event-based, can be intercepted by components."
+  },
+  {
+   "t": 1752.66,
+   "d": 4.64,
+   "text": "So we create events, we send them to the entity or cell, and if there are components attached"
+  },
+  {
+   "t": 1757.3,
+   "d": 4.76,
+   "text": "to these things that have an opinion about the kind of movement phase we are in, they"
+  },
+  {
+   "t": 1762.06,
+   "d": 4.86,
+   "text": "will voice their opinion, do something, and maybe stop execution of further events or"
+  },
+  {
+   "t": 1766.92,
+   "d": 3.6,
+   "text": "allow us to proceed so that if everything is fine, in the end we are in the new position."
+  },
+  {
+   "t": 1770.94,
+   "d": 5.12,
+   "text": "If something strange occurred, we will be stopped and some other logic will take place."
+  },
+  {
+   "t": 1776.94,
+   "d": 8.44,
+   "text": "So that's, for example, the movement system right now in Atom, Ultimate Atom. I'd like"
+  },
+  {
+   "t": 1785.38,
+   "d": 6.92,
+   "text": "to return to some more items. Yesterday we saw the battle axe of sharpness that are used"
+  },
+  {
+   "t": 1792.3,
+   "d": 10.54,
+   "text": "to amputate body parts from beings. Same pattern. A battle axe of sharpness is derived from"
+  },
+  {
+   "t": 1802.84,
+   "d": 4.84,
+   "text": "a battleaxe. All the details that make up a battleaxe, like damage, hit bonuses, and so"
+  },
+  {
+   "t": 1807.68,
+   "d": 4.64,
+   "text": "on, don't need to be repeated. I just can use them by saying, okay, I'm basically a battleaxe."
+  },
+  {
+   "t": 1812.68,
+   "d": 4.9,
+   "text": "But I have two new things. The first one is the only interesting one for the amputation thing we"
+  },
+  {
+   "t": 1817.58,
+   "d": 5.68,
+   "text": "saw. I have an off-sharpness midi-sufx, and this off-sharpness thing provides the capability to"
+  },
+  {
+   "t": 1823.26,
+   "d": 5.16,
+   "text": "amputate body parts to my battleaxe. First, we take a quick look at the battleaxe to understand"
+  },
+  {
+   "t": 1828.42,
+   "d": 0.72,
+   "text": "Let's see how that is built."
+  },
+  {
+   "t": 1831.4,
+   "d": 0.48,
+   "text": "BattleX."
+  },
+  {
+   "t": 1834.3,
+   "d": 0.98,
+   "text": "There's a BattleX."
+  },
+  {
+   "t": 1835.6,
+   "d": 0.76,
+   "text": "It's an item."
+  },
+  {
+   "t": 1836.96,
+   "d": 0.88,
+   "text": "This one is funny."
+  },
+  {
+   "t": 1837.94,
+   "d": 0.8,
+   "text": "It's not yet an item."
+  },
+  {
+   "t": 1839.08,
+   "d": 3.62,
+   "text": "That's just a marker for us because this thing has not been formally finished."
+  },
+  {
+   "t": 1842.9,
+   "d": 2.92,
+   "text": "So we extracted the data from ADOM."
+  },
+  {
+   "t": 1845.96,
+   "d": 1.68,
+   "text": "There's some manual post-processing."
+  },
+  {
+   "t": 1847.72,
+   "d": 4.16,
+   "text": "We just inserted this marker to find all things that have not yet been, let's say, manually"
+  },
+  {
+   "t": 1851.88,
+   "d": 1.56,
+   "text": "checked and finalized."
+  },
+  {
+   "t": 1853.72,
+   "d": 1.9,
+   "text": "So it's basically working."
+  },
+  {
+   "t": 1855.62,
+   "d": 4.64,
+   "text": "You saw that yesterday, but someone has to go over it once and say, okay, we have thought"
+  },
+  {
+   "t": 1860.26,
+   "d": 0.44,
+   "text": "of everything."
+  },
+  {
+   "t": 1860.82,
+   "d": 0.32,
+   "text": "It's fine."
+  },
+  {
+   "t": 1861.38,
+   "d": 1.04,
+   "text": "It's a one-handed weapon."
+  },
+  {
+   "t": 1862.56,
+   "d": 0.8,
+   "text": "It's a melee weapon."
+  },
+  {
+   "t": 1863.5,
+   "d": 1.16,
+   "text": "So here you see multiple inheritance."
+  },
+  {
+   "t": 1864.9,
+   "d": 1.42,
+   "text": "We take properties from many things."
+  },
+  {
+   "t": 1867.84,
+   "d": 1.02,
+   "text": "It has, again, a label."
+  },
+  {
+   "t": 1869.04,
+   "d": 0.8,
+   "text": "It's made from iron."
+  },
+  {
+   "t": 1870.14,
+   "d": 1.04,
+   "text": "I explained the example."
+  },
+  {
+   "t": 1871.32,
+   "d": 1.84,
+   "text": "There's a modifier to hit when wielded."
+  },
+  {
+   "t": 1873.56,
+   "d": 1.0,
+   "text": "Okay, it's zero."
+  },
+  {
+   "t": 1874.74,
+   "d": 0.6,
+   "text": "That's not exciting."
+  },
+  {
+   "t": 1875.98,
+   "d": 2.72,
+   "text": "That's due to automatic extraction from ADOM."
+  },
+  {
+   "t": 1878.88,
+   "d": 1.0,
+   "text": "It causes damage."
+  },
+  {
+   "t": 1880.06,
+   "d": 3.84,
+   "text": "So it causes 1-6 damage when in combat mode, melee combat, and it's hacking damage that"
+  },
+  {
+   "t": 1883.9,
+   "d": 0.4,
+   "text": "it causes."
+  },
+  {
+   "t": 1885.0,
+   "d": 2.54,
+   "text": "It's randomly generated starting on Dungeon Level 1."
+  },
+  {
+   "t": 1888.1,
+   "d": 3.36,
+   "text": "It has an uncommon rarity, it has a certain value, it has a certain weight."
+  },
+  {
+   "t": 1891.64,
+   "d": 3.08,
+   "text": "It currently doesn't have a description because we still have to think about nice descriptions"
+  },
+  {
+   "t": 1894.72,
+   "d": 0.7,
+   "text": "for all the items."
+  },
+  {
+   "t": 1896.6,
+   "d": 3.82,
+   "text": "That's how our battleaxe is defined, and this battleaxe of sharpness now inherits all these"
+  },
+  {
+   "t": 1900.42,
+   "d": 4.62,
+   "text": "things, adds one more thing, this of sharpness midi suffix as a slot, so it gains all the"
+  },
+  {
+   "t": 1905.04,
+   "d": 1.56,
+   "text": "properties of this of sharpness thing."
+  },
+  {
+   "t": 1907.66,
+   "d": 5.8,
+   "text": "And if we look at that, it's kind of simple."
+  },
+  {
+   "t": 1914.44,
+   "d": 4.72,
+   "text": "It has a new, ignore the textual attribute, it has a new component, the so-called triggered"
+  },
+  {
+   "t": 1919.16,
+   "d": 3.9,
+   "text": "effect, which is again a kind of event handler we heard in the last talk."
+  },
+  {
+   "t": 1923.34,
+   "d": 2.96,
+   "text": "The triggered effect reacts to external triggers."
+  },
+  {
+   "t": 1926.46,
+   "d": 2.98,
+   "text": "This can be events, it can be textual triggers that are explicitly fired."
+  },
+  {
+   "t": 1929.82,
+   "d": 6.1,
+   "text": "This one here reacts to an event, the inflict-mili-cumbered damage event that gets fired at some stage"
+  },
+  {
+   "t": 1935.92,
+   "d": 0.48,
+   "text": "of the combat."
+  },
+  {
+   "t": 1936.7,
+   "d": 3.92,
+   "text": "So you are wielding your axe, you are hitting the orc, you are causing damage, then at some"
+  },
+  {
+   "t": 1940.62,
+   "d": 2.36,
+   "text": "point the inflict midi combat damage event gets fired."
+  },
+  {
+   "t": 1943.22,
+   "d": 4.04,
+   "text": "It gets also fired to your weapon, which is the battle axe of sharpness, which in turn"
+  },
+  {
+   "t": 1947.26,
+   "d": 4.08,
+   "text": "has this of sharpness midi suffix, so the event inflict midi combat damage in the end"
+  },
+  {
+   "t": 1951.34,
+   "d": 4.0,
+   "text": "is routed to this component here, the triggered effect."
+  },
+  {
+   "t": 1956.18,
+   "d": 2.28,
+   "text": "The triggered effect is a very simple component."
+  },
+  {
+   "t": 1958.64,
+   "d": 4.84,
+   "text": "When the trigger activates, it executes a list of other effects."
+  },
+  {
+   "t": 1963.48,
+   "d": 8.3,
+   "text": "In this case, for the demo purpose, it executes the animation, the amputation effect, with"
+  },
+  {
+   "t": 1971.78,
+   "d": 2.06,
+   "text": "a probability of 100%."
+  },
+  {
+   "t": 1973.84,
+   "d": 1.6,
+   "text": "So every hit will amputate something."
+  },
+  {
+   "t": 1975.66,
+   "d": 2.52,
+   "text": "That was for demo purposes, so that's bloody and nice."
+  },
+  {
+   "t": 1979.84,
+   "d": 4.54,
+   "text": "This here is a list of effects, so you could combine arbitrary things to additionally let"
+  },
+  {
+   "t": 1984.38,
+   "d": 3.22,
+   "text": "it cause fire or freeze things, paralyze them, whatever you want."
+  },
+  {
+   "t": 1988.26,
+   "d": 3.8,
+   "text": "And effects, again, are very reusable and they are easy to implement."
+  },
+  {
+   "t": 1992.06,
+   "d": 5.56,
+   "text": "So, for example, when you want to mod the system, this JSON parser is reflection-based,"
+  },
+  {
+   "t": 1997.7,
+   "d": 3.74,
+   "text": "which means it takes the logical names, it finds in the JSON definition, it has mapping"
+  },
+  {
+   "t": 2001.44,
+   "d": 1.68,
+   "text": "rules to map them to C-sharp files."
+  },
+  {
+   "t": 2003.7,
+   "d": 5.04,
+   "text": "And when you want to do a mod, for example, adding a new effect like, I don't know, amputed"
+  },
+  {
+   "t": 2008.74,
+   "d": 4.68,
+   "text": "heads, so that you always are amputating heads, you can write a new effect, just enter the"
+  },
+  {
+   "t": 2013.42,
+   "d": 4.36,
+   "text": "string here, and if you comply with the mapping rules, then the system will automatically load"
+  },
+  {
+   "t": 2017.78,
+   "d": 4.18,
+   "text": "the class you dropped into a class path and will provide the implementation of that effect."
+  },
+  {
+   "t": 2022.12,
+   "d": 1.76,
+   "text": "So it's very, very easy to mod things."
+  },
+  {
+   "t": 2024.94,
+   "d": 2.24,
+   "text": "The interface for modding also is very simple."
+  },
+  {
+   "t": 2027.34,
+   "d": 3.78,
+   "text": "For example, if you want to add new effects, we have an eye effect interface."
+  },
+  {
+   "t": 2032.36,
+   "d": 2.48,
+   "text": "The eye effect is very, very trivial."
+  },
+  {
+   "t": 2035.2,
+   "d": 2.64,
+   "text": "It has one method triggering the effect."
+  },
+  {
+   "t": 2038.18,
+   "d": 4.18,
+   "text": "The logic always is you have an actor, for example, the player character wielding the"
+  },
+  {
+   "t": 2042.36,
+   "d": 0.22,
+   "text": "axe."
+  },
+  {
+   "t": 2042.96,
+   "d": 3.02,
+   "text": "You have a method that causes the effect, for example, the axe."
+  },
+  {
+   "t": 2045.98,
+   "d": 5.88,
+   "text": "and you have a target position and a target, for example the org. So the logic is now you"
+  },
+  {
+   "t": 2051.86,
+   "d": 5.62,
+   "text": "can implement some logic for doing something to the org. And if you look at the implementation"
+  },
+  {
+   "t": 2057.48,
+   "d": 9.48,
+   "text": "of that, it's also pretty straightforward. Amputation effect. It's not a lot code, but"
+  },
+  {
+   "t": 2066.96,
+   "d": 7.28,
+   "text": "it's using some systems. So this implementation here determines the final probability of amputating"
+  },
+  {
+   "t": 2074.24,
+   "d": 7.82,
+   "text": "something, rolls dice, and if we hit this probability, we ask our grafting system to"
+  },
+  {
+   "t": 2082.06,
+   "d": 3.42,
+   "text": "find a body part that can be amputated, so that's externalized in the system because"
+  },
+  {
+   "t": 2085.48,
+   "d": 6.38,
+   "text": "we use it in several places. When we have found a body part, we signal a message to"
+  },
+  {
+   "t": 2091.86,
+   "d": 4.06,
+   "text": "the UI that says, okay, an amputation is going to take place, maybe display a message"
+  },
+  {
+   "t": 2095.92,
+   "d": 5.74,
+   "text": "or show something flying through the air or whatever. Then we do again a call to the grafting"
+  },
+  {
+   "t": 2101.66,
+   "d": 3.64,
+   "text": "system and tell it, okay, now amputate this body part, remove it from the target entity."
+  },
+  {
+   "t": 2105.44,
+   "d": 4.56,
+   "text": "It's no longer a part of the target entity. And then we call the item management system and tell"
+  },
+  {
+   "t": 2110.0,
+   "d": 4.22,
+   "text": "it, okay, now drop this amputated body part in front of the being from which it was amputated,"
+  },
+  {
+   "t": 2114.24,
+   "d": 3.66,
+   "text": "so it lands on the ground and is there. If that is for some reason not possible,"
+  },
+  {
+   "t": 2117.96,
+   "d": 4.68,
+   "text": "it will be destroyed. That's a rare case. And then final thing is, okay, amputations"
+  },
+  {
+   "t": 2122.64,
+   "d": 4.12,
+   "text": "usually are bloody things, so there might be some bleeding that happens. So we ask the"
+  },
+  {
+   "t": 2126.76,
+   "d": 5.28,
+   "text": "blood system to think about bleeding and causing bleeding, for example. So it's in the end"
+  },
+  {
+   "t": 2132.04,
+   "d": 3.7,
+   "text": "like 10 lines of code to do this imputation thing. There are some more details in the"
+  },
+  {
+   "t": 2135.74,
+   "d": 5.24,
+   "text": "systems, but that's how it works. Okay, I think I'm running late. Could that be?"
+  },
+  {
+   "t": 2142.86,
+   "d": 7.26,
+   "text": "Very final thing I'm showing. Then I'm... Well, I guess I'd stop showing that and return"
+  },
+  {
+   "t": 2154.78,
+   "d": 3.74,
+   "text": "The nice thing about entity component systems is they are very powerful."
+  },
+  {
+   "t": 2158.68,
+   "d": 4.26,
+   "text": "The bad thing is they can create all kinds of weird bugs, short best of."
+  },
+  {
+   "t": 2163.68,
+   "d": 3.96,
+   "text": "For example, we had the effect of you hacked off the spirits of a spider, they fell to"
+  },
+  {
+   "t": 2167.64,
+   "d": 3.54,
+   "text": "the ground, you moved onto that position, and suddenly you were able to spin webs, which"
+  },
+  {
+   "t": 2171.18,
+   "d": 4.1,
+   "text": "was not quite what we intended, but that happens when events don't get routed the way they"
+  },
+  {
+   "t": 2175.28,
+   "d": 0.6,
+   "text": "should be routed."
+  },
+  {
+   "t": 2176.1,
+   "d": 2.38,
+   "text": "So sometimes things are very dynamic."
+  },
+  {
+   "t": 2179.1,
+   "d": 6.64,
+   "text": "Or we had this similar effect. We amputated an arm of an orc, picked it up. The message"
+  },
+  {
+   "t": 2185.74,
+   "d": 3.62,
+   "text": "system was not yet fully implemented so we thought we just had this arm but attached"
+  },
+  {
+   "t": 2189.36,
+   "d": 4.08,
+   "text": "to the arm was a hand. Attached to the hand still was the club the orc was wielding. It"
+  },
+  {
+   "t": 2193.44,
+   "d": 4.64,
+   "text": "just was not visualized. And suddenly because it was my backpack the system thought oh there's"
+  },
+  {
+   "t": 2198.08,
+   "d": 4.6,
+   "text": "a third arm. No let's attack with that one. So suddenly I had three melee attacks. Also"
+  },
+  {
+   "t": 2202.68,
+   "d": 4.88,
+   "text": "a minor bug in the system but yeah it was kind of interesting. Or we had this effect"
+  },
+  {
+   "t": 2207.56,
+   "d": 4.88,
+   "text": "of animating a closed door which started moving around and then we moved into the door to attack"
+  },
+  {
+   "t": 2212.44,
+   "d": 4.86,
+   "text": "it but suddenly the movement interaction for opening closed doors triggered and the door was"
+  },
+  {
+   "t": 2217.3,
+   "d": 4.6,
+   "text": "opened and the internal mechanism at that time was like okay we replaced this entity by another"
+  },
+  {
+   "t": 2221.9,
+   "d": 4.56,
+   "text": "entity so a closed door has something other than an open door so it was completely replaced and"
+  },
+  {
+   "t": 2226.46,
+   "d": 5.04,
+   "text": "the process lost the animation status so we killed the door by opening it and once again had a static"
+  },
+  {
+   "t": 2231.5,
+   "d": 2.88,
+   "text": "open door. Such are things that can happen."
+  },
+  {
+   "t": 2234.5,
+   "d": 5.86,
+   "text": "Final one, initially we had a problem in the typing system. When we said a sword is made"
+  },
+  {
+   "t": 2240.36,
+   "d": 5.08,
+   "text": "from iron, suddenly the sword itself became a material and suddenly you could have sword"
+  },
+  {
+   "t": 2245.44,
+   "d": 4.86,
+   "text": "materials and that was a kind of small bug we had in the typing system, for example."
+  },
+  {
+   "t": 2251.24,
+   "d": 4.68,
+   "text": "It's all kind of weird stuff that can happen. Final words, I still think ECS is awesome."
+  },
+  {
+   "t": 2256.06,
+   "d": 2.9,
+   "text": "You can do fantastic things with that and really push the boundaries of what is possible"
+  },
+  {
+   "t": 2258.96,
+   "d": 5.0,
+   "text": "and kind of interaction possibilities you have. Totally I'm in love right now, but it's not trivial."
+  },
+  {
+   "t": 2264.64,
+   "d": 4.12,
+   "text": "You shouldn't underestimate the complexity of implementing such a thing and getting into work"
+  },
+  {
+   "t": 2268.76,
+   "d": 5.6,
+   "text": "in a reasonable speed. For us it took us nine months and there probably are another 10%, 15%"
+  },
+  {
+   "t": 2274.36,
+   "d": 3.96,
+   "text": "of stuff to be done, but nonetheless I can only recommend it if you want to do"
+  },
+  {
+   "t": 2279.0,
+   "d": 3.76,
+   "text": "something that tests the boundaries of what is possible in interaction means. Okay, thank you."
+  }
+ ],
+ "note": "Transcript made locally with speech-to-text (Whisper large-v3-turbo, language forced to English) because YouTube's only caption track for this video is a mis-detected German track."
+}

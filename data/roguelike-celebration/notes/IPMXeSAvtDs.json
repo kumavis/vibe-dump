@@ -1,0 +1,145 @@
+{
+  "id": "IPMXeSAvtDs",
+  "title": "Francesco Cottone - Chronicles of Stampadia",
+  "speaker": "Francesco Cottone",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=IPMXeSAvtDs",
+  "talk_type": "design",
+  "summary": "Francesco Cottone presents Chronicles of Stampadia, a generator that publishes a new one-page, print-and-play roguelike adventure every day, played with two dice, a pencil, an eraser and a token. He frames it as filling a gap in the 'beach umbrella gaming system' of pre-printed paper puzzles like crosswords, and explains how he borrowed from three paper games: Four Against Darkness for procedural dungeons on paper, Fallout: The Board Game for non-linear storytelling with consequence cards, and Fabled Lands for letting players store secret state with checkboxes. He maps each idea onto Stampadia's design (hidden pre-generated dungeons revealed through lookup tables, quest sub-events scattered through rooms, shuffled checkboxes) and recommends exploration board games to roguelike designers.",
+  "games": [
+    "Chronicles of Stampadia",
+    "Four Against Darkness",
+    "Fallout: The Board Game",
+    "Fabled Lands: The War-Torn Kingdom",
+    "Rogue",
+    "Skyrim",
+    "Fallout 4",
+    "City of Kings",
+    "Magic Maze",
+    "Mini Rogue",
+    "SUPERHOT"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "print and play",
+      "kind": "example",
+      "claim": "Chronicles of Stampadia generates a new one-page roguelike adventure every day that players print and play with two dice, a pencil, an eraser and a small token, with no computer.",
+      "detail": "Cottone presents it as a turn-based roguelike delivered entirely on paper, posted daily on the project website.",
+      "t": 38,
+      "quote": "every day there is a new one-page adventure to print and play with two dice an eraser a pencil and a small token",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "paper puzzle games",
+      "kind": "principle",
+      "claim": "Pre-printed single-sheet paper games (the 'beach umbrella gaming system' of crosswords and similar puzzles) can be treated as a gaming platform whose interface is numbers, grids, lookup tables and basic math, and it lacked a minimal roguelike.",
+      "detail": "Cottone describes games played under a beach umbrella in summer: pre-generated schemes printed on one side of paper, with pencil and eraser as input devices and dice or cards in 'deluxe editions'. These are mostly single-player puzzle games, which is the gap Stampadia fills.",
+      "t": 130,
+      "quote": "pencil in the razer are two common input devices numbers grids lookup tables and basic math are interface elements",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "solo tabletop",
+      "kind": "example",
+      "claim": "Four Against Darkness, a solo dungeon crawler, makes paper play feel like a computer roguelike by generating treasure, monsters and even the dungeon layout from dice rolls on lookup tables, with the player drawing the map while exploring.",
+      "detail": "Cottone describes it as a 2016 rulebook of about 100 pages inspired by Dungeons & Dragons and adapted for a single player, needing only scrap paper, two dice, a pencil and an eraser. He took ideas from it but had to adapt them to a single-sheet format.",
+      "t": 221,
+      "quote": "it also generates the dungeon layout using a specific lookup table so the player will draw the map as he explores it",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "hidden map reveal",
+      "kind": "technique",
+      "claim": "Chronicles of Stampadia generates a full consistent dungeon in code but prints only the starting room and numbered doors; entering a door, the player adds the exit number to the cell coordinates to get an id to look up the next room's position, size and description.",
+      "detail": "Cottone compares this to crosswords being pre-generated and partially printed. Unlike Four Against Darkness, which rolls the dungeon as you go, Stampadia knows the whole dungeon from the start like classic dungeon crawlers, using classic generation algorithms.",
+      "t": 276,
+      "quote": "the player will sum the exit number with the coordinates of the cell to get an id to look for in a lookup table",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "consequence cards",
+      "kind": "example",
+      "claim": "Fallout: The Board Game delivers non-linear story on paper with encounter cards: a decision on a card may tell the player to shuffle a numbered card into a deck, so consequences surface later elsewhere, and several storylines can interleave in one adventure.",
+      "detail": "Cottone describes the 2017 Fantasy Flight game as adapting the Fallout series, with randomised maps and events and adapted combat, character customisation and radiation. Visiting a place lets the player draw from that place type's encounter deck.",
+      "t": 383,
+      "quote": "consequences of that of the decisions may ask the player to pick a number an albert card from the game box and shuffle it in into one of the decks",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "short text",
+      "kind": "principle",
+      "claim": "Short sentences can carry even complex stories, fit the limited space of a printed lookup table, and match the roguelike genre, as Rogue itself tells the player what happened in short sentences.",
+      "detail": "Cottone applies this to Chronicles of Stampadia's room and quest text.",
+      "t": 428,
+      "quote": "short sentences both fits the small amount of space in the lookup table on a sheet of paper and the game genre",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest generation",
+      "kind": "technique",
+      "claim": "Chronicles of Stampadia draws quests from a database, splits each into sub-events and scatters them through the dungeon from the starting room to the farthest room, but because players can roam out of order it needs a memory system.",
+      "detail": "Cottone says this follows Fallout: The Board Game's sub-event structure. The open question it raised was how a paper game could let players store state without knowing what it means.",
+      "t": 445,
+      "quote": "chronicles of stampedia also needs a database of quests splitted in sub-events as fallout these sub-events will be eventually scattered around the dungeons",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "gamebooks",
+      "kind": "example",
+      "claim": "The Fabled Lands gamebook The War-Torn Kingdom stores secret state on paper by asking players to tick checkboxes without explaining why, later redirecting them to other paragraphs when conditions are met.",
+      "detail": "Cottone describes the 1995 book by Dave Morris and Jamie Thomson as an open-world gamebook of interconnected areas rather than a branching story, with quests, monsters, characters and ships between books. The checkboxes let it track time passing, gold spent, past decisions and cleared quests.",
+      "t": 543,
+      "quote": "the book may ask the player to pick a checkbox printed on the page without explaining the reason when a certain condition is verified",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden state",
+      "kind": "technique",
+      "claim": "Chronicles of Stampadia tracks player decisions with a shuffled set of checkboxes, one per room, which obscures the consequences of choices from the player recording them.",
+      "detail": "Cottone also writes room descriptions in code with placeholders that are resolved into English at print time, letting him shorten and improve sentences during development without changing the code.",
+      "t": 571,
+      "quote": "a set a system of check boxes shuffled check boxes one for every room to track the player decisions and obfuscating some way the consequences",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "board games",
+      "kind": "principle",
+      "claim": "Roguelike designers should look at exploration board games, which share much with classic roguelikes, including randomly generated dungeons and enemies.",
+      "detail": "Cottone cites examples from his collection: SUPERHOT's card game with random levels, City of Kings using a bag system to generate random enemies, Magic Maze's real-time co-op exploration of random dungeons, and Mini Rogue playable with nine cards, two of them used as the interface.",
+      "t": 626,
+      "quote": "if you're a roguelike gamer or a loca roguelike game designer i suggest you to start from exploration board games",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "board games",
+      "kind": "principle",
+      "claim": "In story-based board games random generation is almost mandatory because stories on the table must be short, so procedural content is how they create longer play experiences, much as roguelikes use it for longevity.",
+      "detail": "Cottone gave this as his main tip during Q&A about why roguelikes and board games have so much in common.",
+      "t": 782,
+      "quote": "story based board games are shorter we can we can't make long stories in board games so random regeneration is a way to create longer game experience",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest generation",
+      "kind": "technique",
+      "claim": "Each daily Chronicles of Stampadia adventure takes no designer time: the algorithm randomly selects quests and sub-quests with random elements from a pre-filled database and scatters their hotspots over a generated dungeon.",
+      "detail": "Cottone says writing a quest takes just a few minutes and is mostly text, so no graphics are needed; much of the game happens in the player's mind through symbols, numbers and rules. The game also supports moral decisions, quests with multiple endings, a simple card game called Beastcrafters, and shape puzzles.",
+      "t": 826,
+      "quote": "each quests have some random elements in it on it so it's all made by the algorithm so i filled the database",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

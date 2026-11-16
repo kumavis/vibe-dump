@@ -1,0 +1,4772 @@
+{
+ "id": "kvCky6BbTuE",
+ "url": "https://www.youtube.com/watch?v=kvCky6BbTuE",
+ "title": "Jason Grinblat- Before you Fix a Leak, Ask if it's a Fountain",
+ "speaker": "Jason Grinblat",
+ "talk_title": "Before you Fix a Leak, Ask if it's a Fountain",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1867,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Among the many ways digital worlds speak to us is through their bugs. As twitter accounts like The Strange Log and Dwarf Fortress Bugs show, we care about bugs in tenderer terms than how we define them — as interruptions in a misunderstood \"pure\" experience. This is an exploratory talk with a few goals: to build a framework for understanding the aesthetics at work here, to reflect on my own creative practice as a maker of buggy games, and, finally, to celebrate bugs and edge cases, and ask other devs to embrace them as the idiosyncratic feature of our medium.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to bugs"
+  },
+  {
+   "start": 37,
+   "title": "The case of drunk cats"
+  },
+  {
+   "start": 141,
+   "title": "Community bug stories"
+  },
+  {
+   "start": 240,
+   "title": "Taming digital chaos"
+  },
+  {
+   "start": 328,
+   "title": "Bugs in speedrunning"
+  },
+  {
+   "start": 409,
+   "title": "Video games as worlds"
+  },
+  {
+   "start": 566,
+   "title": "Ontological operations"
+  },
+  {
+   "start": 643,
+   "title": "Frame analysis"
+  },
+  {
+   "start": 730,
+   "title": "Tabletop RPG dynamics"
+  },
+  {
+   "start": 856,
+   "title": "Caves of Qud bugs"
+  },
+  {
+   "start": 1051,
+   "title": "Transgression as a feature"
+  },
+  {
+   "start": 1157,
+   "title": "Procedural backstory bugs"
+  },
+  {
+   "start": 1303,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1371,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6065,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.68,
+   "d": 2.96,
+   "text": "we have returned for a very exciting uh"
+  },
+  {
+   "t": 6.64,
+   "d": 2.48,
+   "text": "block of talks people have been chanting"
+  },
+  {
+   "t": 9.12,
+   "d": 3.52,
+   "text": "jason or caves in the chat and so you"
+  },
+  {
+   "t": 12.64,
+   "d": 2.32,
+   "text": "might uh have been spoiled for the fact"
+  },
+  {
+   "t": 14.96,
+   "d": 2.0,
+   "text": "but as our schedule says our next"
+  },
+  {
+   "t": 16.96,
+   "d": 2.8,
+   "text": "speaker is going to be jason grimblett"
+  },
+  {
+   "t": 19.76,
+   "d": 2.56,
+   "text": "uh co-founder creatively at freehold"
+  },
+  {
+   "t": 22.32,
+   "d": 2.32,
+   "text": "games tiny studio behind caves of cut"
+  },
+  {
+   "t": 24.64,
+   "d": 1.52,
+   "text": "and sprogywood which has already gotten"
+  },
+  {
+   "t": 26.16,
+   "d": 1.68,
+   "text": "some shout outs today"
+  },
+  {
+   "t": 27.84,
+   "d": 2.72,
+   "text": "and uh yeah i think we're very excited"
+  },
+  {
+   "t": 30.56,
+   "d": 2.08,
+   "text": "for your talk today jason so i think"
+  },
+  {
+   "t": 32.64,
+   "d": 1.6,
+   "text": "without further ado let's just let you"
+  },
+  {
+   "t": 34.24,
+   "d": 2.96,
+   "text": "get right into it"
+  },
+  {
+   "t": 37.36,
+   "d": 2.16,
+   "text": "okay and you can see my slides yes you"
+  },
+  {
+   "t": 39.52,
+   "d": 1.76,
+   "text": "can see your slides we can hear you it"
+  },
+  {
+   "t": 41.28,
+   "d": 1.28,
+   "text": "looks all good"
+  },
+  {
+   "t": 42.56,
+   "d": 3.2,
+   "text": "great okay well hello i'm jason"
+  },
+  {
+   "t": 45.76,
+   "d": 2.4,
+   "text": "grinblatt my pronouns are he him"
+  },
+  {
+   "t": 48.16,
+   "d": 1.44,
+   "text": "i'll tell you more about myself a bit"
+  },
+  {
+   "t": 49.6,
+   "d": 1.92,
+   "text": "later but first let's talk about some"
+  },
+  {
+   "t": 51.52,
+   "d": 1.6,
+   "text": "bugs"
+  },
+  {
+   "t": 53.12,
+   "d": 1.76,
+   "text": "one of my favorite bugs calls back to"
+  },
+  {
+   "t": 54.88,
+   "d": 2.24,
+   "text": "the very first roguelike celebration the"
+  },
+  {
+   "t": 57.12,
+   "d": 1.6,
+   "text": "mystery of the dead cats and dwarf"
+  },
+  {
+   "t": 58.72,
+   "d": 2.88,
+   "text": "fortress so in 2015 bug reports started"
+  },
+  {
+   "t": 61.6,
+   "d": 1.92,
+   "text": "appearing on the bay 12 forums reporting"
+  },
+  {
+   "t": 63.52,
+   "d": 2.4,
+   "text": "mysterious cat deaths alcohol was"
+  },
+  {
+   "t": 65.92,
+   "d": 1.76,
+   "text": "suspected due to the excessive vomit"
+  },
+  {
+   "t": 67.68,
+   "d": 1.68,
+   "text": "found near the death sites the cats"
+  },
+  {
+   "t": 69.36,
+   "d": 1.36,
+   "text": "weren't supposed to drink alcohol so"
+  },
+  {
+   "t": 70.72,
+   "d": 2.4,
+   "text": "what was going on thankfully at the very"
+  },
+  {
+   "t": 73.12,
+   "d": 1.76,
+   "text": "first roguelike celebration tarn and"
+  },
+  {
+   "t": 74.88,
+   "d": 2.08,
+   "text": "zach adams provided an illuminating"
+  },
+  {
+   "t": 76.96,
+   "d": 2.56,
+   "text": "exegesis of the spug here's a slide from"
+  },
+  {
+   "t": 79.52,
+   "d": 1.04,
+   "text": "their talk walking through the"
+  },
+  {
+   "t": 80.56,
+   "d": 1.68,
+   "text": "interlocking mechanics that produce the"
+  },
+  {
+   "t": 82.24,
+   "d": 0.8,
+   "text": "bug"
+  },
+  {
+   "t": 83.04,
+   "d": 1.44,
+   "text": "so dwarves go to the tavern when they"
+  },
+  {
+   "t": 84.48,
+   "d": 2.08,
+   "text": "want to drink they get served a mug of"
+  },
+  {
+   "t": 86.56,
+   "d": 2.32,
+   "text": "alcohol sometimes they get called away"
+  },
+  {
+   "t": 88.88,
+   "d": 2.24,
+   "text": "to do important work and when on their"
+  },
+  {
+   "t": 91.12,
+   "d": 1.84,
+   "text": "way out there's a chance that they spill"
+  },
+  {
+   "t": 92.96,
+   "d": 2.32,
+   "text": "their mug now independent from this cats"
+  },
+  {
+   "t": 95.28,
+   "d": 1.36,
+   "text": "are drawn to taverns because they want"
+  },
+  {
+   "t": 96.64,
+   "d": 2.16,
+   "text": "to be near dwarves and when they enter"
+  },
+  {
+   "t": 98.8,
+   "d": 2.16,
+   "text": "they walk over the spilled alcohol then"
+  },
+  {
+   "t": 100.96,
+   "d": 1.6,
+   "text": "they notice their positive dirty and so"
+  },
+  {
+   "t": 102.56,
+   "d": 1.52,
+   "text": "they clean them and while licking the"
+  },
+  {
+   "t": 104.08,
+   "d": 2.4,
+   "text": "paws clean they ingest the alcohol now"
+  },
+  {
+   "t": 106.48,
+   "d": 1.76,
+   "text": "here's the bug unfortunately there was"
+  },
+  {
+   "t": 108.24,
+   "d": 2.08,
+   "text": "just a single ingestion amount a full"
+  },
+  {
+   "t": 110.32,
+   "d": 2.0,
+   "text": "mug of beer which was overwhelming to"
+  },
+  {
+   "t": 112.32,
+   "d": 1.6,
+   "text": "the cat's body mass so they got"
+  },
+  {
+   "t": 113.92,
+   "d": 2.56,
+   "text": "violently drunk and vomited everywhere"
+  },
+  {
+   "t": 116.48,
+   "d": 1.36,
+   "text": "here's tarn in the middle of the"
+  },
+  {
+   "t": 117.84,
+   "d": 1.84,
+   "text": "regrettable announcement that some cats"
+  },
+  {
+   "t": 119.68,
+   "d": 2.56,
+   "text": "did indeed die"
+  },
+  {
+   "t": 122.24,
+   "d": 1.84,
+   "text": "i'm obsessed with these kind of kinds of"
+  },
+  {
+   "t": 124.08,
+   "d": 1.68,
+   "text": "bugs and how they let us peer into the"
+  },
+  {
+   "t": 125.76,
+   "d": 1.84,
+   "text": "ostensibly tamed realm of digital"
+  },
+  {
+   "t": 127.6,
+   "d": 1.36,
+   "text": "processes"
+  },
+  {
+   "t": 128.96,
+   "d": 2.08,
+   "text": "which turns out to be quite poetically"
+  },
+  {
+   "t": 131.04,
+   "d": 2.56,
+   "text": "untamed"
+  },
+  {
+   "t": 133.6,
+   "d": 1.84,
+   "text": "even when the bug is apocryphal as was"
+  },
+  {
+   "t": 135.44,
+   "d": 1.76,
+   "text": "the case with the boat stealing seagulls"
+  },
+  {
+   "t": 137.2,
+   "d": 1.6,
+   "text": "and valheim they still paint a"
+  },
+  {
+   "t": 138.8,
+   "d": 1.68,
+   "text": "fascinating picture of the protean"
+  },
+  {
+   "t": 140.48,
+   "d": 1.92,
+   "text": "socio-technical forces behind video"
+  },
+  {
+   "t": 142.4,
+   "d": 2.08,
+   "text": "games as a medium"
+  },
+  {
+   "t": 144.48,
+   "d": 1.76,
+   "text": "so i asked on twitter what some of your"
+  },
+  {
+   "t": 146.24,
+   "d": 1.36,
+   "text": "favorite bugs and edge cases were and"
+  },
+  {
+   "t": 147.6,
+   "d": 2.32,
+   "text": "got some great responses"
+  },
+  {
+   "t": 149.92,
+   "d": 2.48,
+   "text": "from tom nelpiner in one of my games i"
+  },
+  {
+   "t": 152.4,
+   "d": 1.68,
+   "text": "programmed dogs that picked a character"
+  },
+  {
+   "t": 154.08,
+   "d": 1.68,
+   "text": "to act as their master they would then"
+  },
+  {
+   "t": 155.76,
+   "d": 2.0,
+   "text": "follow that character around i didn't"
+  },
+  {
+   "t": 157.76,
+   "d": 2.08,
+   "text": "remember to exclude dogs from the list"
+  },
+  {
+   "t": 159.84,
+   "d": 2.24,
+   "text": "that got used instead of acting as pets"
+  },
+  {
+   "t": 162.08,
+   "d": 1.6,
+   "text": "they all got attached to each other and"
+  },
+  {
+   "t": 163.68,
+   "d": 4.56,
+   "text": "ran off to the hills no gods no masters"
+  },
+  {
+   "t": 168.24,
+   "d": 2.4,
+   "text": "in simcity hydropower was very cheap and"
+  },
+  {
+   "t": 170.64,
+   "d": 2.32,
+   "text": "very clean but waterfalls were very rare"
+  },
+  {
+   "t": 172.96,
+   "d": 1.68,
+   "text": "however you could build a mountain place"
+  },
+  {
+   "t": 174.64,
+   "d": 1.36,
+   "text": "a water tile on the slope of the"
+  },
+  {
+   "t": 176.0,
+   "d": 1.68,
+   "text": "mountain and thus create a waterfall"
+  },
+  {
+   "t": 177.68,
+   "d": 1.68,
+   "text": "giving yourself unlimited clean power"
+  },
+  {
+   "t": 179.36,
+   "d": 3.68,
+   "text": "with no reference to physics whatsoever"
+  },
+  {
+   "t": 183.04,
+   "d": 2.0,
+   "text": "twitter user endro brought up skyrim's"
+  },
+  {
+   "t": 185.04,
+   "d": 2.24,
+   "text": "treasure foxes i love this one so there"
+  },
+  {
+   "t": 187.28,
+   "d": 1.6,
+   "text": "was a bit of folklore wisdom among"
+  },
+  {
+   "t": 188.88,
+   "d": 1.6,
+   "text": "skyrim players that if you followed a"
+  },
+  {
+   "t": 190.48,
+   "d": 2.08,
+   "text": "fox it would often lead you to treasure"
+  },
+  {
+   "t": 192.56,
+   "d": 1.92,
+   "text": "what a cute design right except that"
+  },
+  {
+   "t": 194.48,
+   "d": 1.28,
+   "text": "none of the skyrim designers could"
+  },
+  {
+   "t": 195.76,
+   "d": 1.44,
+   "text": "figure out how this feature had gotten"
+  },
+  {
+   "t": 197.2,
+   "d": 2.4,
+   "text": "added to the game so as skyrim dev joel"
+  },
+  {
+   "t": 199.6,
+   "d": 1.76,
+   "text": "burgess tells it a group of the devs"
+  },
+  {
+   "t": 201.36,
+   "d": 1.36,
+   "text": "that worked on the game got together and"
+  },
+  {
+   "t": 202.72,
+   "d": 2.08,
+   "text": "decided to do some sleuthing here's what"
+  },
+  {
+   "t": 204.8,
+   "d": 2.08,
+   "text": "was happening foxes were programmed to"
+  },
+  {
+   "t": 206.88,
+   "d": 2.0,
+   "text": "be skittish and flee from the player"
+  },
+  {
+   "t": 208.88,
+   "d": 1.44,
+   "text": "meaning their path fighting would try to"
+  },
+  {
+   "t": 210.32,
+   "d": 2.16,
+   "text": "get as far away from you as possible but"
+  },
+  {
+   "t": 212.48,
+   "d": 1.76,
+   "text": "as far away from you as possible wasn't"
+  },
+  {
+   "t": 214.24,
+   "d": 1.76,
+   "text": "a strict distance metric but instead a"
+  },
+  {
+   "t": 216.0,
+   "d": 1.76,
+   "text": "number of triangles in the path finding"
+  },
+  {
+   "t": 217.76,
+   "d": 2.08,
+   "text": "navmesh and since camps and treasure"
+  },
+  {
+   "t": 219.84,
+   "d": 2.0,
+   "text": "sites are more geometrically complex"
+  },
+  {
+   "t": 221.84,
+   "d": 2.32,
+   "text": "they had more triangles so the fox's ai"
+  },
+  {
+   "t": 224.16,
+   "d": 1.6,
+   "text": "would accomplish this task just by"
+  },
+  {
+   "t": 225.76,
+   "d": 1.92,
+   "text": "running to the nearest camp thus where"
+  },
+  {
+   "t": 227.68,
+   "d": 2.08,
+   "text": "treasure fox is born"
+  },
+  {
+   "t": 229.76,
+   "d": 1.28,
+   "text": "and there are so many more horse"
+  },
+  {
+   "t": 231.04,
+   "d": 2.16,
+   "text": "emperors and crusader kings 2 glitch"
+  },
+  {
+   "t": 233.2,
+   "d": 2.32,
+   "text": "beings and pokemon a pandemic in world"
+  },
+  {
+   "t": 235.52,
+   "d": 1.92,
+   "text": "of warcraft"
+  },
+  {
+   "t": 237.44,
+   "d": 1.6,
+   "text": "some bugs i didn't even investigate i"
+  },
+  {
+   "t": 239.04,
+   "d": 3.84,
+   "text": "just appreciated them as found poetry"
+  },
+  {
+   "t": 242.88,
+   "d": 2.56,
+   "text": "so what's going on here clearly we find"
+  },
+  {
+   "t": 245.44,
+   "d": 1.6,
+   "text": "at least a certain class of bugs"
+  },
+  {
+   "t": 247.04,
+   "d": 2.16,
+   "text": "enchanting but the methodologies we use"
+  },
+  {
+   "t": 249.2,
+   "d": 2.16,
+   "text": "to evaluate and classify and act on them"
+  },
+  {
+   "t": 251.36,
+   "d": 1.28,
+   "text": "are all premised on the notion that"
+  },
+  {
+   "t": 252.64,
+   "d": 1.68,
+   "text": "they're bad that they're interruptions"
+  },
+  {
+   "t": 254.32,
+   "d": 2.8,
+   "text": "in some pure intended experience"
+  },
+  {
+   "t": 257.12,
+   "d": 1.84,
+   "text": "bugs have momentum they want to be"
+  },
+  {
+   "t": 258.96,
+   "d": 2.32,
+   "text": "triaged they want to be fixed or turned"
+  },
+  {
+   "t": 261.28,
+   "d": 1.76,
+   "text": "into features or if they are ignored"
+  },
+  {
+   "t": 263.04,
+   "d": 2.08,
+   "text": "done so mindfully due to lack of time or"
+  },
+  {
+   "t": 265.12,
+   "d": 1.52,
+   "text": "resources"
+  },
+  {
+   "t": 266.64,
+   "d": 1.92,
+   "text": "so no matter how beautiful these bugs"
+  },
+  {
+   "t": 268.56,
+   "d": 1.68,
+   "text": "are are they destined to be mere"
+  },
+  {
+   "t": 270.24,
+   "d": 2.24,
+   "text": "historical curiosities squashed or"
+  },
+  {
+   "t": 272.48,
+   "d": 2.32,
+   "text": "captured in real time than only catalog"
+  },
+  {
+   "t": 274.8,
+   "d": 2.0,
+   "text": "and admired after the fact or can we"
+  },
+  {
+   "t": 276.8,
+   "d": 1.84,
+   "text": "work them into a computational poetics"
+  },
+  {
+   "t": 278.64,
+   "d": 2.08,
+   "text": "for appreciating our game experiences as"
+  },
+  {
+   "t": 280.72,
+   "d": 2.88,
+   "text": "they happen and as creators for making"
+  },
+  {
+   "t": 283.6,
+   "d": 2.16,
+   "text": "explicit space for them in our designs"
+  },
+  {
+   "t": 285.76,
+   "d": 1.36,
+   "text": "this is particularly a meaningful"
+  },
+  {
+   "t": 287.12,
+   "d": 1.76,
+   "text": "question to me because"
+  },
+  {
+   "t": 288.88,
+   "d": 2.48,
+   "text": "hello i'm jason grimlatt maker of buggy"
+  },
+  {
+   "t": 291.36,
+   "d": 2.16,
+   "text": "games i want to reflect on my own"
+  },
+  {
+   "t": 293.52,
+   "d": 1.6,
+   "text": "creative process to understand my"
+  },
+  {
+   "t": 295.12,
+   "d": 1.76,
+   "text": "intuitions for what makes a good bug and"
+  },
+  {
+   "t": 296.88,
+   "d": 1.92,
+   "text": "what makes a bad bug and to more"
+  },
+  {
+   "t": 298.8,
+   "d": 1.84,
+   "text": "mindfully fold this comprehension back"
+  },
+  {
+   "t": 300.64,
+   "d": 2.0,
+   "text": "into my design practice and so i'm going"
+  },
+  {
+   "t": 302.64,
+   "d": 1.6,
+   "text": "to spend the rest of the talk focusing"
+  },
+  {
+   "t": 304.24,
+   "d": 1.44,
+   "text": "on a subset of games that are like my"
+  },
+  {
+   "t": 305.68,
+   "d": 1.68,
+   "text": "own those that are scaffolds for"
+  },
+  {
+   "t": 307.36,
+   "d": 1.92,
+   "text": "explorable worlds meaning i'll leave"
+  },
+  {
+   "t": 309.28,
+   "d": 2.32,
+   "text": "aside abstract games and i'll focus on a"
+  },
+  {
+   "t": 311.6,
+   "d": 1.52,
+   "text": "subset of bugs those that are the"
+  },
+  {
+   "t": 313.12,
+   "d": 3.04,
+   "text": "results of collisions of game systems"
+  },
+  {
+   "t": 316.16,
+   "d": 1.36,
+   "text": "meaning i'll leave aside things like"
+  },
+  {
+   "t": 317.52,
+   "d": 1.84,
+   "text": "graphics bugs as interesting as they are"
+  },
+  {
+   "t": 319.36,
+   "d": 2.08,
+   "text": "in their own right but first i do want"
+  },
+  {
+   "t": 321.44,
+   "d": 1.6,
+   "text": "to take a short detour and mention one"
+  },
+  {
+   "t": 323.04,
+   "d": 2.0,
+   "text": "play community that has incorporated"
+  },
+  {
+   "t": 325.04,
+   "d": 2.24,
+   "text": "bugs into its experiential framework and"
+  },
+  {
+   "t": 327.28,
+   "d": 2.0,
+   "text": "that's of course speed running this is"
+  },
+  {
+   "t": 329.28,
+   "d": 1.92,
+   "text": "the super mario brothers flagpole glitch"
+  },
+  {
+   "t": 331.2,
+   "d": 1.6,
+   "text": "that takes advantage of subpixel"
+  },
+  {
+   "t": 332.8,
+   "d": 1.6,
+   "text": "positional data to clip you through the"
+  },
+  {
+   "t": 334.4,
+   "d": 1.68,
+   "text": "flagpole block and bypass the pole"
+  },
+  {
+   "t": 336.08,
+   "d": 2.0,
+   "text": "without lowering the flag it'll shave a"
+  },
+  {
+   "t": 338.08,
+   "d": 2.4,
+   "text": "full 0.7 seconds off your run time"
+  },
+  {
+   "t": 340.48,
+   "d": 2.08,
+   "text": "by re-contextualizing the goal of a"
+  },
+  {
+   "t": 342.56,
+   "d": 1.52,
+   "text": "video game to beat it as fast as"
+  },
+  {
+   "t": 344.08,
+   "d": 2.16,
+   "text": "possible in any way possible speed"
+  },
+  {
+   "t": 346.24,
+   "d": 2.0,
+   "text": "running uplifts all the material quirks"
+  },
+  {
+   "t": 348.24,
+   "d": 1.76,
+   "text": "of the underlying hardware and software"
+  },
+  {
+   "t": 350.0,
+   "d": 2.4,
+   "text": "to first place class gameplay entities"
+  },
+  {
+   "t": 352.4,
+   "d": 1.68,
+   "text": "regardless of how we might classify them"
+  },
+  {
+   "t": 354.08,
+   "d": 2.16,
+   "text": "in other contexts bugger not it's fair"
+  },
+  {
+   "t": 356.24,
+   "d": 1.04,
+   "text": "game"
+  },
+  {
+   "t": 357.28,
+   "d": 1.44,
+   "text": "and if you've watched the semi-annual"
+  },
+  {
+   "t": 358.72,
+   "d": 1.52,
+   "text": "speedrunning event games done quick"
+  },
+  {
+   "t": 360.24,
+   "d": 1.52,
+   "text": "which i love you know that for each"
+  },
+  {
+   "t": 361.76,
+   "d": 1.76,
+   "text": "speed one game a rich and fascinating"
+  },
+  {
+   "t": 363.52,
+   "d": 1.68,
+   "text": "subculture has cohered around the"
+  },
+  {
+   "t": 365.2,
+   "d": 1.6,
+   "text": "discovery and performance of these"
+  },
+  {
+   "t": 366.8,
+   "d": 1.76,
+   "text": "glitches"
+  },
+  {
+   "t": 368.56,
+   "d": 2.0,
+   "text": "speedrunning is increasingly understood"
+  },
+  {
+   "t": 370.56,
+   "d": 2.16,
+   "text": "as an acceptable modality of play here's"
+  },
+  {
+   "t": 372.72,
+   "d": 2.8,
+   "text": "a recent update to platformer vvvv vvvv"
+  },
+  {
+   "t": 375.52,
+   "d": 1.6,
+   "text": "re-enabling key glitches that were"
+  },
+  {
+   "t": 377.12,
+   "d": 2.32,
+   "text": "necessary for certain popular running"
+  },
+  {
+   "t": 379.44,
+   "d": 1.6,
+   "text": "strats"
+  },
+  {
+   "t": 381.04,
+   "d": 1.76,
+   "text": "and here's the developer terry cavanaugh"
+  },
+  {
+   "t": 382.8,
+   "d": 1.6,
+   "text": "explaining how the bugs were isolated in"
+  },
+  {
+   "t": 384.4,
+   "d": 2.08,
+   "text": "an if statement for safekeeping so"
+  },
+  {
+   "t": 386.48,
+   "d": 1.6,
+   "text": "speedrunning is fascinating it deserves"
+  },
+  {
+   "t": 388.08,
+   "d": 2.0,
+   "text": "its own talk this type of developer"
+  },
+  {
+   "t": 390.08,
+   "d": 2.4,
+   "text": "community symbiosis is also fascinating"
+  },
+  {
+   "t": 392.48,
+   "d": 1.52,
+   "text": "but it still consigns the buggy"
+  },
+  {
+   "t": 394.0,
+   "d": 2.0,
+   "text": "experience to a parallel track of play"
+  },
+  {
+   "t": 396.0,
+   "d": 1.52,
+   "text": "so it's a little adjacent to what i want"
+  },
+  {
+   "t": 397.52,
+   "d": 1.44,
+   "text": "to spend the rest of the talk focusing"
+  },
+  {
+   "t": 398.96,
+   "d": 2.4,
+   "text": "on which is how can we understand bugs"
+  },
+  {
+   "t": 401.36,
+   "d": 1.84,
+   "text": "and edge cases as endemic to some sort"
+  },
+  {
+   "t": 403.2,
+   "d": 2.48,
+   "text": "of intended play experience as unstable"
+  },
+  {
+   "t": 405.68,
+   "d": 3.52,
+   "text": "as that concept admittedly is"
+  },
+  {
+   "t": 409.2,
+   "d": 1.44,
+   "text": "remember we're focusing on games as"
+  },
+  {
+   "t": 410.64,
+   "d": 1.6,
+   "text": "worlds and when i start to think through"
+  },
+  {
+   "t": 412.24,
+   "d": 1.84,
+   "text": "how the story worlds of these games come"
+  },
+  {
+   "t": 414.08,
+   "d": 2.4,
+   "text": "into being i think of their durability"
+  },
+  {
+   "t": 416.48,
+   "d": 2.08,
+   "text": "and how bugs are sort of like cracks in"
+  },
+  {
+   "t": 418.56,
+   "d": 2.4,
+   "text": "the vessel that contains their fiction"
+  },
+  {
+   "t": 420.96,
+   "d": 1.6,
+   "text": "so when i see meat meatballs and"
+  },
+  {
+   "t": 422.56,
+   "d": 2.08,
+   "text": "balsamic meatballs with meatballs i say"
+  },
+  {
+   "t": 424.64,
+   "d": 2.0,
+   "text": "to myself oh that's silly that's not"
+  },
+  {
+   "t": 426.64,
+   "d": 1.6,
+   "text": "real and the artifice of the medium is"
+  },
+  {
+   "t": 428.24,
+   "d": 2.08,
+   "text": "laid bare what i want to understand is"
+  },
+  {
+   "t": 430.32,
+   "d": 1.76,
+   "text": "how this framing which seems perfectly"
+  },
+  {
+   "t": 432.08,
+   "d": 1.92,
+   "text": "reasonable to me co-exists with my"
+  },
+  {
+   "t": 434.0,
+   "d": 1.6,
+   "text": "impulse to leave bugs like this in the"
+  },
+  {
+   "t": 435.6,
+   "d": 0.8,
+   "text": "game"
+  },
+  {
+   "t": 436.4,
+   "d": 2.16,
+   "text": "to do this we have to look at how play"
+  },
+  {
+   "t": 438.56,
+   "d": 2.32,
+   "text": "works inside a video game world so when"
+  },
+  {
+   "t": 440.88,
+   "d": 3.28,
+   "text": "you play a video game let's say skyrim"
+  },
+  {
+   "t": 444.16,
+   "d": 2.16,
+   "text": "you load it up you admire the photo"
+  },
+  {
+   "t": 446.32,
+   "d": 1.92,
+   "text": "realistic aesthetic and the richness of"
+  },
+  {
+   "t": 448.24,
+   "d": 2.08,
+   "text": "its sound design and simulative systems"
+  },
+  {
+   "t": 450.32,
+   "d": 1.52,
+   "text": "and whatever else contributes to the"
+  },
+  {
+   "t": 451.84,
+   "d": 2.0,
+   "text": "sense of verisimilitude of an imagined"
+  },
+  {
+   "t": 453.84,
+   "d": 2.08,
+   "text": "world and immediately you are fully"
+  },
+  {
+   "t": 455.92,
+   "d": 1.28,
+   "text": "immersed"
+  },
+  {
+   "t": 457.2,
+   "d": 1.84,
+   "text": "you become your character wholly"
+  },
+  {
+   "t": 459.04,
+   "d": 1.84,
+   "text": "integrated into the physical spaces and"
+  },
+  {
+   "t": 460.88,
+   "d": 2.4,
+   "text": "sociopolitics of skyrim and tamriel and"
+  },
+  {
+   "t": 463.28,
+   "d": 2.0,
+   "text": "the wider world of nirn you travel the"
+  },
+  {
+   "t": 465.28,
+   "d": 2.32,
+   "text": "snowy wilds of white run in east march"
+  },
+  {
+   "t": 467.6,
+   "d": 2.0,
+   "text": "and winterhold at some point you marry"
+  },
+  {
+   "t": 469.6,
+   "d": 2.32,
+   "text": "lydia buy a house in riften settle into"
+  },
+  {
+   "t": 471.92,
+   "d": 1.68,
+   "text": "the quiet life of a fishmonger on lake"
+  },
+  {
+   "t": 473.6,
+   "d": 2.16,
+   "text": "henrik several days later you collapse"
+  },
+  {
+   "t": 475.76,
+   "d": 1.52,
+   "text": "from exhaustion and it's only when your"
+  },
+  {
+   "t": 477.28,
+   "d": 1.84,
+   "text": "friends find you unconscious in front of"
+  },
+  {
+   "t": 479.12,
+   "d": 1.76,
+   "text": "your computer and wake you do you"
+  },
+  {
+   "t": 480.88,
+   "d": 1.36,
+   "text": "remember that you were the life you were"
+  },
+  {
+   "t": 482.24,
+   "d": 1.76,
+   "text": "living was a mere dream and you were"
+  },
+  {
+   "t": 484.0,
+   "d": 1.6,
+   "text": "actually someone else with a whole other"
+  },
+  {
+   "t": 485.6,
+   "d": 2.24,
+   "text": "life in their own greater reality you"
+  },
+  {
+   "t": 487.84,
+   "d": 2.0,
+   "text": "stand up brush yourself off and resume"
+  },
+  {
+   "t": 489.84,
+   "d": 2.16,
+   "text": "being the original you and that's video"
+  },
+  {
+   "t": 492.0,
+   "d": 2.4,
+   "text": "games"
+  },
+  {
+   "t": 494.64,
+   "d": 1.84,
+   "text": "okay that's not quite right is it in"
+  },
+  {
+   "t": 496.48,
+   "d": 1.92,
+   "text": "fact you're always aware that you're a"
+  },
+  {
+   "t": 498.4,
+   "d": 2.0,
+   "text": "person at a computer or video game"
+  },
+  {
+   "t": 500.4,
+   "d": 2.16,
+   "text": "console that you've chosen to inhabit a"
+  },
+  {
+   "t": 502.56,
+   "d": 2.0,
+   "text": "fictional world nested inside the real"
+  },
+  {
+   "t": 504.56,
+   "d": 1.6,
+   "text": "world and that the experience is"
+  },
+  {
+   "t": 506.16,
+   "d": 1.84,
+   "text": "mediated by a network of software and"
+  },
+  {
+   "t": 508.0,
+   "d": 2.32,
+   "text": "hardware systems in fact it goes further"
+  },
+  {
+   "t": 510.32,
+   "d": 1.52,
+   "text": "than this as researcher christine"
+  },
+  {
+   "t": 511.84,
+   "d": 1.68,
+   "text": "jorgensen points out in her book game"
+  },
+  {
+   "t": 513.52,
+   "d": 2.08,
+   "text": "world interfaces when you're playing"
+  },
+  {
+   "t": 515.6,
+   "d": 2.8,
+   "text": "diablo 2 and your amazon shouts at you i"
+  },
+  {
+   "t": 518.4,
+   "d": 1.6,
+   "text": "am overburdened you don't question"
+  },
+  {
+   "t": 520.0,
+   "d": 1.52,
+   "text": "whether this fictional character is"
+  },
+  {
+   "t": 521.52,
+   "d": 1.92,
+   "text": "actually able to perceive you nor do you"
+  },
+  {
+   "t": 523.44,
+   "d": 1.6,
+   "text": "even interpret her statement as some"
+  },
+  {
+   "t": 525.04,
+   "d": 2.0,
+   "text": "sort of avant-garde fourth wall breaking"
+  },
+  {
+   "t": 527.04,
+   "d": 1.6,
+   "text": "artistic maneuver in the way you might"
+  },
+  {
+   "t": 528.64,
+   "d": 2.16,
+   "text": "if it happened in a novel or a play"
+  },
+  {
+   "t": 530.8,
+   "d": 1.76,
+   "text": "rather due to the interactive nature of"
+  },
+  {
+   "t": 532.56,
+   "d": 1.92,
+   "text": "the medium threshold elements like this"
+  },
+  {
+   "t": 534.48,
+   "d": 1.84,
+   "text": "are made explicit in order to mediate"
+  },
+  {
+   "t": 536.32,
+   "d": 1.84,
+   "text": "communication between the two worlds"
+  },
+  {
+   "t": 538.16,
+   "d": 1.44,
+   "text": "they're necessary and so they've been"
+  },
+  {
+   "t": 539.6,
+   "d": 1.92,
+   "text": "naturalized into our expectations for"
+  },
+  {
+   "t": 541.52,
+   "d": 1.2,
+   "text": "video games"
+  },
+  {
+   "t": 542.72,
+   "d": 1.6,
+   "text": "so there's a few things going on here on"
+  },
+  {
+   "t": 544.32,
+   "d": 2.16,
+   "text": "the one hand when we play a game we"
+  },
+  {
+   "t": 546.48,
+   "d": 1.6,
+   "text": "adopt what's been called illusory"
+  },
+  {
+   "t": 548.08,
+   "d": 2.0,
+   "text": "attitude where we accept willingly the"
+  },
+  {
+   "t": 550.08,
+   "d": 1.6,
+   "text": "arbitrary rules of the game as if they"
+  },
+  {
+   "t": 551.68,
+   "d": 1.68,
+   "text": "were real"
+  },
+  {
+   "t": 553.36,
+   "d": 1.92,
+   "text": "in parallel to this games are sort of"
+  },
+  {
+   "t": 555.28,
+   "d": 1.68,
+   "text": "transmedial the rules can live in a"
+  },
+  {
+   "t": 556.96,
+   "d": 1.6,
+   "text": "number of different substrates and when"
+  },
+  {
+   "t": 558.56,
+   "d": 1.36,
+   "text": "they're implemented on the digital"
+  },
+  {
+   "t": 559.92,
+   "d": 1.52,
+   "text": "substrate they take on a particular"
+  },
+  {
+   "t": 561.44,
+   "d": 2.0,
+   "text": "character this product becomes a site"
+  },
+  {
+   "t": 563.44,
+   "d": 1.6,
+   "text": "where we experience the game in its"
+  },
+  {
+   "t": 565.04,
+   "d": 1.28,
+   "text": "fictional world while feeling the"
+  },
+  {
+   "t": 566.32,
+   "d": 2.48,
+   "text": "texture of video games as a medium"
+  },
+  {
+   "t": 568.8,
+   "d": 1.84,
+   "text": "in particular media theorists and game"
+  },
+  {
+   "t": 570.64,
+   "d": 1.76,
+   "text": "designers stephanie bullock and patrick"
+  },
+  {
+   "t": 572.4,
+   "d": 1.52,
+   "text": "lemieux argue that video games don't"
+  },
+  {
+   "t": 573.92,
+   "d": 1.84,
+   "text": "actually have rules despite their"
+  },
+  {
+   "t": 575.76,
+   "d": 2.56,
+   "text": "colloquial designation sales games video"
+  },
+  {
+   "t": 578.32,
+   "d": 1.76,
+   "text": "games do not have rules rules are"
+  },
+  {
+   "t": 580.08,
+   "d": 1.68,
+   "text": "voluntary constraints in social"
+  },
+  {
+   "t": 581.76,
+   "d": 2.0,
+   "text": "contracts they are packs between players"
+  },
+  {
+   "t": 583.76,
+   "d": 2.08,
+   "text": "not to peak or move outside individual"
+  },
+  {
+   "t": 585.84,
+   "d": 2.24,
+   "text": "invisible boundaries mechanics on the"
+  },
+  {
+   "t": 588.08,
+   "d": 2.32,
+   "text": "other hand are ontological operations"
+  },
+  {
+   "t": 590.4,
+   "d": 1.36,
+   "text": "players have no choice but to work"
+  },
+  {
+   "t": 591.76,
+   "d": 1.36,
+   "text": "within the limitations of these"
+  },
+  {
+   "t": 593.12,
+   "d": 2.24,
+   "text": "involuntary systems"
+  },
+  {
+   "t": 595.36,
+   "d": 1.76,
+   "text": "they go on to say that this peculiarity"
+  },
+  {
+   "t": 597.12,
+   "d": 1.84,
+   "text": "of the medium and how we react to it is"
+  },
+  {
+   "t": 598.96,
+   "d": 1.92,
+   "text": "one of a larger class of metagames that"
+  },
+  {
+   "t": 600.88,
+   "d": 1.92,
+   "text": "surround and inhabit the inter-stitches"
+  },
+  {
+   "t": 602.8,
+   "d": 2.48,
+   "text": "of what we call video games attitude"
+  },
+  {
+   "t": 605.28,
+   "d": 2.4,
+   "text": "affinity experience achievement status"
+  },
+  {
+   "t": 607.68,
+   "d": 2.88,
+   "text": "community etc etc the metagame ruptures"
+  },
+  {
+   "t": 610.56,
+   "d": 1.92,
+   "text": "the logic of the game escaping the"
+  },
+  {
+   "t": 612.48,
+   "d": 2.08,
+   "text": "formal autonomy of both ideal rules and"
+  },
+  {
+   "t": 614.56,
+   "d": 2.08,
+   "text": "utopian play via these practical and"
+  },
+  {
+   "t": 616.64,
+   "d": 2.08,
+   "text": "material factors not immediately"
+  },
+  {
+   "t": 618.72,
+   "d": 3.04,
+   "text": "enclosed within the game as we know it"
+  },
+  {
+   "t": 621.76,
+   "d": 1.76,
+   "text": "okay so we know we've chosen to play a"
+  },
+  {
+   "t": 623.52,
+   "d": 2.4,
+   "text": "game we've adopted a loosery attitude"
+  },
+  {
+   "t": 625.92,
+   "d": 2.0,
+   "text": "where a person interfacing with hardware"
+  },
+  {
+   "t": 627.92,
+   "d": 1.92,
+   "text": "and software networks via interface"
+  },
+  {
+   "t": 629.84,
+   "d": 2.0,
+   "text": "layers at their threshold embedded in a"
+  },
+  {
+   "t": 631.84,
+   "d": 1.92,
+   "text": "wider context of material and social"
+  },
+  {
+   "t": 633.76,
+   "d": 2.24,
+   "text": "systems than their expectations is there"
+  },
+  {
+   "t": 636.0,
+   "d": 1.92,
+   "text": "a methodology we can use to make sense"
+  },
+  {
+   "t": 637.92,
+   "d": 2.16,
+   "text": "of our experiences at these boundaries"
+  },
+  {
+   "t": 640.08,
+   "d": 2.8,
+   "text": "where bugs and edge cases thrive"
+  },
+  {
+   "t": 642.88,
+   "d": 2.56,
+   "text": "there is let's talk about frame analysis"
+  },
+  {
+   "t": 645.44,
+   "d": 2.8,
+   "text": "so in 1974 a canadian sociologist named"
+  },
+  {
+   "t": 648.24,
+   "d": 1.76,
+   "text": "irving goffman published a book called"
+  },
+  {
+   "t": 650.0,
+   "d": 1.6,
+   "text": "frame analysis an essay on the"
+  },
+  {
+   "t": 651.6,
+   "d": 1.76,
+   "text": "organization of experience that argues"
+  },
+  {
+   "t": 653.36,
+   "d": 1.84,
+   "text": "we understand the world through frames"
+  },
+  {
+   "t": 655.2,
+   "d": 1.68,
+   "text": "frames are principles of selection"
+  },
+  {
+   "t": 656.88,
+   "d": 2.08,
+   "text": "emphasis and presentation composed of"
+  },
+  {
+   "t": 658.96,
+   "d": 2.16,
+   "text": "little tacit theories about what exists"
+  },
+  {
+   "t": 661.12,
+   "d": 2.4,
+   "text": "what happens and what matters or put"
+  },
+  {
+   "t": 663.52,
+   "d": 1.84,
+   "text": "more simply a frame is a set of"
+  },
+  {
+   "t": 665.36,
+   "d": 1.52,
+   "text": "guidelines to enable or direct"
+  },
+  {
+   "t": 666.88,
+   "d": 1.84,
+   "text": "interpretation and frames can be"
+  },
+  {
+   "t": 668.72,
+   "d": 2.96,
+   "text": "intersecting nested etc similar language"
+  },
+  {
+   "t": 671.68,
+   "d": 1.84,
+   "text": "exists in our modern colloquial lexicon"
+  },
+  {
+   "t": 673.52,
+   "d": 1.28,
+   "text": "when we talk about framing a"
+  },
+  {
+   "t": 674.8,
+   "d": 2.08,
+   "text": "conversation or even implicitly at how"
+  },
+  {
+   "t": 676.88,
+   "d": 2.56,
+   "text": "we use the word framework"
+  },
+  {
+   "t": 679.44,
+   "d": 1.76,
+   "text": "goffman has a word for what happens when"
+  },
+  {
+   "t": 681.2,
+   "d": 2.0,
+   "text": "we transpose something that already has"
+  },
+  {
+   "t": 683.2,
+   "d": 1.76,
+   "text": "an established meaning in one frame to a"
+  },
+  {
+   "t": 684.96,
+   "d": 2.08,
+   "text": "new frame he calls this keying and"
+  },
+  {
+   "t": 687.04,
+   "d": 1.84,
+   "text": "there's a directionality to king because"
+  },
+  {
+   "t": 688.88,
+   "d": 1.6,
+   "text": "goffman assumes the existence of what he"
+  },
+  {
+   "t": 690.48,
+   "d": 2.08,
+   "text": "calls primary frameworks which are the"
+  },
+  {
+   "t": 692.56,
+   "d": 1.76,
+   "text": "broadest cult frameworks shared across"
+  },
+  {
+   "t": 694.32,
+   "d": 1.04,
+   "text": "culture"
+  },
+  {
+   "t": 695.36,
+   "d": 1.92,
+   "text": "when you're keying up out of the primary"
+  },
+  {
+   "t": 697.28,
+   "d": 1.84,
+   "text": "framework as in when you interpret"
+  },
+  {
+   "t": 699.12,
+   "d": 1.68,
+   "text": "something that's meant seriously as a"
+  },
+  {
+   "t": 700.8,
+   "d": 2.0,
+   "text": "joke that's called up keying and when"
+  },
+  {
+   "t": 702.8,
+   "d": 1.76,
+   "text": "you key down toward the primary"
+  },
+  {
+   "t": 704.56,
+   "d": 1.6,
+   "text": "framework as when you fail to read a"
+  },
+  {
+   "t": 706.16,
+   "d": 1.52,
+   "text": "joke as a joke and interpret it"
+  },
+  {
+   "t": 707.68,
+   "d": 2.72,
+   "text": "seriously that's called down keying"
+  },
+  {
+   "t": 710.4,
+   "d": 1.84,
+   "text": "this is exciting because it opens up the"
+  },
+  {
+   "t": 712.24,
+   "d": 2.08,
+   "text": "possibility that our leak is only being"
+  },
+  {
+   "t": 714.32,
+   "d": 1.92,
+   "text": "framed as a leak and could possibly be"
+  },
+  {
+   "t": 716.24,
+   "d": 1.92,
+   "text": "understood simultaneously as something"
+  },
+  {
+   "t": 718.16,
+   "d": 1.68,
+   "text": "else something more aesthetically"
+  },
+  {
+   "t": 719.84,
+   "d": 3.2,
+   "text": "cohesive being via keying to a different"
+  },
+  {
+   "t": 723.04,
+   "d": 2.0,
+   "text": "wider spanning frame or in the act of"
+  },
+  {
+   "t": 725.04,
+   "d": 2.24,
+   "text": "keying itself but to get there you'll"
+  },
+  {
+   "t": 727.28,
+   "d": 1.28,
+   "text": "have to bear with me a little more"
+  },
+  {
+   "t": 728.56,
+   "d": 1.04,
+   "text": "because i want to spend some time"
+  },
+  {
+   "t": 729.6,
+   "d": 1.68,
+   "text": "talking about tabletop role-playing"
+  },
+  {
+   "t": 731.28,
+   "d": 0.96,
+   "text": "games"
+  },
+  {
+   "t": 732.24,
+   "d": 2.48,
+   "text": "so in 1983 another sociologist gary"
+  },
+  {
+   "t": 734.72,
+   "d": 2.0,
+   "text": "allen fine published a field study of"
+  },
+  {
+   "t": 736.72,
+   "d": 1.6,
+   "text": "tabletop role-playing games called"
+  },
+  {
+   "t": 738.32,
+   "d": 2.16,
+   "text": "shared fantasy role-playing games as"
+  },
+  {
+   "t": 740.48,
+   "d": 2.0,
+   "text": "social worlds where he uses goffman's"
+  },
+  {
+   "t": 742.48,
+   "d": 1.92,
+   "text": "frame analysis to decode the language"
+  },
+  {
+   "t": 744.4,
+   "d": 1.84,
+   "text": "role-playing groups use to talk to each"
+  },
+  {
+   "t": 746.24,
+   "d": 1.44,
+   "text": "other while gaming"
+  },
+  {
+   "t": 747.68,
+   "d": 1.6,
+   "text": "fein motivates this approach with a very"
+  },
+  {
+   "t": 749.28,
+   "d": 2.24,
+   "text": "interesting observation he says games"
+  },
+  {
+   "t": 751.52,
+   "d": 1.68,
+   "text": "are quintessential examples for frame"
+  },
+  {
+   "t": 753.2,
+   "d": 1.68,
+   "text": "analysis because of their capacity for"
+  },
+  {
+   "t": 754.88,
+   "d": 2.64,
+   "text": "inducing engrossment that is voluntarily"
+  },
+  {
+   "t": 757.52,
+   "d": 1.92,
+   "text": "cutting oneself off from other realms of"
+  },
+  {
+   "t": 759.44,
+   "d": 1.76,
+   "text": "experience distinguishes this world of"
+  },
+  {
+   "t": 761.2,
+   "d": 2.0,
+   "text": "meanings from those primary frameworks"
+  },
+  {
+   "t": 763.2,
+   "d": 1.76,
+   "text": "or the paramount reality that"
+  },
+  {
+   "t": 764.96,
+   "d": 2.96,
+   "text": "individuals naturally inhabit"
+  },
+  {
+   "t": 767.92,
+   "d": 1.92,
+   "text": "he immediately follows this up with"
+  },
+  {
+   "t": 769.84,
+   "d": 1.76,
+   "text": "although perhaps contrary to common"
+  },
+  {
+   "t": 771.6,
+   "d": 2.4,
+   "text": "sense peoples easily slip into and out"
+  },
+  {
+   "t": 774.0,
+   "d": 2.24,
+   "text": "of engrossment frames succeed each other"
+  },
+  {
+   "t": 776.24,
+   "d": 1.92,
+   "text": "with remarkable rapidity in"
+  },
+  {
+   "t": 778.16,
+   "d": 2.0,
+   "text": "conversations people slip and slide"
+  },
+  {
+   "t": 780.16,
+   "d": 2.72,
+   "text": "among frames engrossment then need not"
+  },
+  {
+   "t": 782.88,
+   "d": 2.16,
+   "text": "imply a permanent orientation toward"
+  },
+  {
+   "t": 785.04,
+   "d": 1.68,
+   "text": "experience"
+  },
+  {
+   "t": 786.72,
+   "d": 2.0,
+   "text": "he identifies three frames that players"
+  },
+  {
+   "t": 788.72,
+   "d": 2.16,
+   "text": "slip and slide between the primary"
+  },
+  {
+   "t": 790.88,
+   "d": 2.72,
+   "text": "framework as he as always the game taunt"
+  },
+  {
+   "t": 793.6,
+   "d": 2.08,
+   "text": "context since his subjects are quote"
+  },
+  {
+   "t": 795.68,
+   "d": 1.6,
+   "text": "players whose actions are governed by a"
+  },
+  {
+   "t": 797.28,
+   "d": 2.08,
+   "text": "complicated set of rules and constraints"
+  },
+  {
+   "t": 799.36,
+   "d": 2.24,
+   "text": "and finally the story world inhabited by"
+  },
+  {
+   "t": 801.6,
+   "d": 2.4,
+   "text": "their characters fein provides examples"
+  },
+  {
+   "t": 804.0,
+   "d": 1.36,
+   "text": "from his field study of various"
+  },
+  {
+   "t": 805.36,
+   "d": 1.52,
+   "text": "role-playing groups where this"
+  },
+  {
+   "t": 806.88,
+   "d": 2.32,
+   "text": "remarkably rapid upkeeping and down king"
+  },
+  {
+   "t": 809.2,
+   "d": 2.08,
+   "text": "occurs and to those of us familiar with"
+  },
+  {
+   "t": 811.28,
+   "d": 1.76,
+   "text": "tabletop chatter this is extremely"
+  },
+  {
+   "t": 813.04,
+   "d": 2.4,
+   "text": "familiar here's an even more twisted"
+  },
+  {
+   "t": 815.44,
+   "d": 2.16,
+   "text": "example that without the context of what"
+  },
+  {
+   "t": 817.6,
+   "d": 1.92,
+   "text": "it's like to sit at a table and talk out"
+  },
+  {
+   "t": 819.52,
+   "d": 1.6,
+   "text": "a gaming session would be utterly"
+  },
+  {
+   "t": 821.12,
+   "d": 2.32,
+   "text": "nonsensical but with that context is"
+  },
+  {
+   "t": 823.44,
+   "d": 3.52,
+   "text": "normal is completely parsable"
+  },
+  {
+   "t": 826.96,
+   "d": 1.76,
+   "text": "and this process is essential to what"
+  },
+  {
+   "t": 828.72,
+   "d": 2.64,
+   "text": "tabletop is we're constantly upking dice"
+  },
+  {
+   "t": 831.36,
+   "d": 2.0,
+   "text": "rolls to make sense of the make sense of"
+  },
+  {
+   "t": 833.36,
+   "d": 1.84,
+   "text": "them in the fiction down keying events"
+  },
+  {
+   "t": 835.2,
+   "d": 1.52,
+   "text": "in the fiction and reinterpreting them"
+  },
+  {
+   "t": 836.72,
+   "d": 1.76,
+   "text": "in terms of the game rules up keying"
+  },
+  {
+   "t": 838.48,
+   "d": 1.6,
+   "text": "from the primary framework when we make"
+  },
+  {
+   "t": 840.08,
+   "d": 1.44,
+   "text": "a rules adjustment because players"
+  },
+  {
+   "t": 841.52,
+   "d": 2.4,
+   "text": "aren't having fun etc and the thing"
+  },
+  {
+   "t": 843.92,
+   "d": 1.68,
+   "text": "that's characteristic about tabletop is"
+  },
+  {
+   "t": 845.6,
+   "d": 2.0,
+   "text": "that these transpositions are negotiated"
+  },
+  {
+   "t": 847.6,
+   "d": 2.56,
+   "text": "by human people and so they're robust"
+  },
+  {
+   "t": 850.16,
+   "d": 1.92,
+   "text": "failures are graceful you can always"
+  },
+  {
+   "t": 852.08,
+   "d": 1.52,
+   "text": "smudge the lines and reach some sort of"
+  },
+  {
+   "t": 853.6,
+   "d": 2.8,
+   "text": "consensus but for video games we don't"
+  },
+  {
+   "t": 856.4,
+   "d": 1.68,
+   "text": "have rules we have ontological"
+  },
+  {
+   "t": 858.08,
+   "d": 2.32,
+   "text": "operations when the negotiation fails"
+  },
+  {
+   "t": 860.4,
+   "d": 2.0,
+   "text": "and king produces something bizarre we"
+  },
+  {
+   "t": 862.4,
+   "d": 2.16,
+   "text": "just got a deal and that dealing can be"
+  },
+  {
+   "t": 864.56,
+   "d": 2.32,
+   "text": "a joy on its own"
+  },
+  {
+   "t": 866.88,
+   "d": 1.84,
+   "text": "so with this framework on hand i want to"
+  },
+  {
+   "t": 868.72,
+   "d": 1.84,
+   "text": "reflect on some examples of bugs and"
+  },
+  {
+   "t": 870.56,
+   "d": 3.52,
+   "text": "edge cases in caves of cut the first one"
+  },
+  {
+   "t": 874.08,
+   "d": 2.16,
+   "text": "is a simple example that calls back to i"
+  },
+  {
+   "t": 876.24,
+   "d": 2.64,
+   "text": "am overburdened so in case of cut is it"
+  },
+  {
+   "t": 878.88,
+   "d": 1.68,
+   "text": "is entirely possible to create a"
+  },
+  {
+   "t": 880.56,
+   "d": 2.08,
+   "text": "character with enough starting gear and"
+  },
+  {
+   "t": 882.64,
+   "d": 1.76,
+   "text": "a low enough carry capacity due to"
+  },
+  {
+   "t": 884.4,
+   "d": 1.76,
+   "text": "dumping strength that you start the game"
+  },
+  {
+   "t": 886.16,
+   "d": 1.92,
+   "text": "without being able to move"
+  },
+  {
+   "t": 888.08,
+   "d": 1.76,
+   "text": "now we could fix this by limiting your"
+  },
+  {
+   "t": 889.84,
+   "d": 2.16,
+   "text": "starting gear based on carry capacity or"
+  },
+  {
+   "t": 892.0,
+   "d": 1.6,
+   "text": "putting a floor on how low your strength"
+  },
+  {
+   "t": 893.6,
+   "d": 2.16,
+   "text": "can go or in any number of ways and in"
+  },
+  {
+   "t": 895.76,
+   "d": 1.52,
+   "text": "fact when we look at the story world"
+  },
+  {
+   "t": 897.28,
+   "d": 2.0,
+   "text": "frame this is kind of a leak it's not"
+  },
+  {
+   "t": 899.28,
+   "d": 1.68,
+   "text": "sensible in the fiction to be unable to"
+  },
+  {
+   "t": 900.96,
+   "d": 1.76,
+   "text": "move although there is a caveat to this"
+  },
+  {
+   "t": 902.72,
+   "d": 1.84,
+   "text": "which we'll get back to in a minute"
+  },
+  {
+   "t": 904.56,
+   "d": 1.92,
+   "text": "if we look at the gameplay frame it's"
+  },
+  {
+   "t": 906.48,
+   "d": 1.44,
+   "text": "even more of a leak a character"
+  },
+  {
+   "t": 907.92,
+   "d": 1.76,
+   "text": "configuration that leaves you unable to"
+  },
+  {
+   "t": 909.68,
+   "d": 1.44,
+   "text": "move and having to go into your"
+  },
+  {
+   "t": 911.12,
+   "d": 2.0,
+   "text": "inventory to drop items as far from an"
+  },
+  {
+   "t": 913.12,
+   "d": 2.32,
+   "text": "ideal play experience"
+  },
+  {
+   "t": 915.44,
+   "d": 1.28,
+   "text": "back to the story world frame for a"
+  },
+  {
+   "t": 916.72,
+   "d": 1.2,
+   "text": "moment there's actually an interesting"
+  },
+  {
+   "t": 917.92,
+   "d": 1.84,
+   "text": "opportunity here in up keying from the"
+  },
+  {
+   "t": 919.76,
+   "d": 2.08,
+   "text": "game context to the story world if this"
+  },
+  {
+   "t": 921.84,
+   "d": 2.08,
+   "text": "incident occurred in a tabletop game you"
+  },
+  {
+   "t": 923.92,
+   "d": 2.0,
+   "text": "could imagine a clever gm interpreting"
+  },
+  {
+   "t": 925.92,
+   "d": 1.76,
+   "text": "it as your character being so stuffed"
+  },
+  {
+   "t": 927.68,
+   "d": 1.52,
+   "text": "with wares that you're dragging them"
+  },
+  {
+   "t": 929.2,
+   "d": 2.32,
+   "text": "back into town exhaustedly maybe that"
+  },
+  {
+   "t": 931.52,
+   "d": 2.0,
+   "text": "would involve a little rule smudging but"
+  },
+  {
+   "t": 933.52,
+   "d": 1.76,
+   "text": "it's a satisfying up keying into the"
+  },
+  {
+   "t": 935.28,
+   "d": 1.44,
+   "text": "story world"
+  },
+  {
+   "t": 936.72,
+   "d": 2.16,
+   "text": "even though the ontologicalness of video"
+  },
+  {
+   "t": 938.88,
+   "d": 1.6,
+   "text": "game mechanics prevents this sort of"
+  },
+  {
+   "t": 940.48,
+   "d": 1.76,
+   "text": "interpretation from getting actively"
+  },
+  {
+   "t": 942.24,
+   "d": 2.4,
+   "text": "folded back into the game context it's"
+  },
+  {
+   "t": 944.64,
+   "d": 1.68,
+   "text": "still fun and fruitful to do in your"
+  },
+  {
+   "t": 946.32,
+   "d": 1.92,
+   "text": "head as part of your unfolding emergent"
+  },
+  {
+   "t": 948.24,
+   "d": 2.32,
+   "text": "narrative this is what ai researcher max"
+  },
+  {
+   "t": 950.56,
+   "d": 1.68,
+   "text": "karminski calls extrapolate"
+  },
+  {
+   "t": 952.24,
+   "d": 2.0,
+   "text": "narrativization where you ornament the"
+  },
+  {
+   "t": 954.24,
+   "d": 1.44,
+   "text": "story coming out of your playthrough"
+  },
+  {
+   "t": 955.68,
+   "d": 2.16,
+   "text": "with details not explicitly represented"
+  },
+  {
+   "t": 957.84,
+   "d": 1.04,
+   "text": "in the game"
+  },
+  {
+   "t": 958.88,
+   "d": 2.48,
+   "text": "in fact max narrative designer kat"
+  },
+  {
+   "t": 961.36,
+   "d": 1.6,
+   "text": "manning and i have a paper coming out"
+  },
+  {
+   "t": 962.96,
+   "d": 1.68,
+   "text": "soon extending this concept to what"
+  },
+  {
+   "t": 964.64,
+   "d": 2.16,
+   "text": "we're calling reparative play sorry i"
+  },
+  {
+   "t": 966.8,
+   "d": 1.92,
+   "text": "missed that quote there you go extending"
+  },
+  {
+   "t": 968.72,
+   "d": 1.12,
+   "text": "this concept to what we're calling"
+  },
+  {
+   "t": 969.84,
+   "d": 2.16,
+   "text": "reparative play arguing that certain"
+  },
+  {
+   "t": 972.0,
+   "d": 1.52,
+   "text": "games are structured to encourage their"
+  },
+  {
+   "t": 973.52,
+   "d": 1.76,
+   "text": "players to repair the emerging narrative"
+  },
+  {
+   "t": 975.28,
+   "d": 2.08,
+   "text": "by providing only pre-narrative parts"
+  },
+  {
+   "t": 977.36,
+   "d": 3.36,
+   "text": "that arrive in disrepair"
+  },
+  {
+   "t": 980.88,
+   "d": 1.2,
+   "text": "but there's something even more"
+  },
+  {
+   "t": 982.08,
+   "d": 2.08,
+   "text": "essential going on here despite it being"
+  },
+  {
+   "t": 984.16,
+   "d": 2.0,
+   "text": "a sort of leak in the story world frame"
+  },
+  {
+   "t": 986.16,
+   "d": 1.76,
+   "text": "and definitely leak in the gameplay"
+  },
+  {
+   "t": 987.92,
+   "d": 2.4,
+   "text": "frame i like this edge case it's good"
+  },
+  {
+   "t": 990.32,
+   "d": 1.76,
+   "text": "it's doing work for us to achieve the"
+  },
+  {
+   "t": 992.08,
+   "d": 1.76,
+   "text": "aesthetic goals of what i'll call our"
+  },
+  {
+   "t": 993.84,
+   "d": 1.84,
+   "text": "meta frame which is aware that its"
+  },
+  {
+   "t": 995.68,
+   "d": 1.68,
+   "text": "players are people interfacing with"
+  },
+  {
+   "t": 997.36,
+   "d": 1.84,
+   "text": "hardware and software and knows that"
+  },
+  {
+   "t": 999.2,
+   "d": 1.84,
+   "text": "they're performing this remarkably rapid"
+  },
+  {
+   "t": 1001.04,
+   "d": 2.32,
+   "text": "keying as part of the experience"
+  },
+  {
+   "t": 1003.36,
+   "d": 1.84,
+   "text": "what this says is hey there's so much"
+  },
+  {
+   "t": 1005.2,
+   "d": 1.84,
+   "text": "going on here that mere manipulation of"
+  },
+  {
+   "t": 1007.04,
+   "d": 1.6,
+   "text": "the game mechanics cannot account for"
+  },
+  {
+   "t": 1008.64,
+   "d": 1.76,
+   "text": "all the emergent possibilities"
+  },
+  {
+   "t": 1010.4,
+   "d": 2.24,
+   "text": "both cudd's story world and game context"
+  },
+  {
+   "t": 1012.64,
+   "d": 1.12,
+   "text": "are interested in the idea that the"
+  },
+  {
+   "t": 1013.76,
+   "d": 2.16,
+   "text": "borders of the world are fuzzy in fact i"
+  },
+  {
+   "t": 1015.92,
+   "d": 1.6,
+   "text": "think this aesthetic is operative in"
+  },
+  {
+   "t": 1017.52,
+   "d": 2.0,
+   "text": "many systems driven games built around"
+  },
+  {
+   "t": 1019.52,
+   "d": 2.48,
+   "text": "emergence the possibility space is too"
+  },
+  {
+   "t": 1022.0,
+   "d": 2.16,
+   "text": "big too rich for us to have gone in and"
+  },
+  {
+   "t": 1024.16,
+   "d": 2.32,
+   "text": "filed off all the rough edges instead"
+  },
+  {
+   "t": 1026.48,
+   "d": 2.16,
+   "text": "we're saying here's a big messy space"
+  },
+  {
+   "t": 1028.64,
+   "d": 2.24,
+   "text": "let's figure out what's inside together"
+  },
+  {
+   "t": 1030.88,
+   "d": 2.16,
+   "text": "this gets out a core design philosophy"
+  },
+  {
+   "t": 1033.04,
+   "d": 1.44,
+   "text": "of mine which is"
+  },
+  {
+   "t": 1034.48,
+   "d": 1.36,
+   "text": "the dev team does not think of"
+  },
+  {
+   "t": 1035.84,
+   "d": 2.48,
+   "text": "everything"
+  },
+  {
+   "t": 1038.32,
+   "d": 1.6,
+   "text": "for those who don't know this is a riff"
+  },
+  {
+   "t": 1039.92,
+   "d": 1.92,
+   "text": "on the common refrain set about nethack"
+  },
+  {
+   "t": 1041.84,
+   "d": 1.44,
+   "text": "to describe the proliferation of"
+  },
+  {
+   "t": 1043.28,
+   "d": 2.4,
+   "text": "programmed behavior for special cases"
+  },
+  {
+   "t": 1045.68,
+   "d": 1.76,
+   "text": "the magic for me is in having in"
+  },
+  {
+   "t": 1047.44,
+   "d": 1.52,
+   "text": "everything that's more abundant than i"
+  },
+  {
+   "t": 1048.96,
+   "d": 2.32,
+   "text": "can know"
+  },
+  {
+   "t": 1051.28,
+   "d": 1.68,
+   "text": "okay second example this one gets a"
+  },
+  {
+   "t": 1052.96,
+   "d": 2.4,
+   "text": "little violent i apologize for that"
+  },
+  {
+   "t": 1055.36,
+   "d": 1.6,
+   "text": "so there's an ecosystem of psychic"
+  },
+  {
+   "t": 1056.96,
+   "d": 1.76,
+   "text": "abilities in caves of cod one of them"
+  },
+  {
+   "t": 1058.72,
+   "d": 1.92,
+   "text": "lets you inhabit another creature's mind"
+  },
+  {
+   "t": 1060.64,
+   "d": 1.84,
+   "text": "and control their body while this is"
+  },
+  {
+   "t": 1062.48,
+   "d": 1.76,
+   "text": "happening if your original body takes"
+  },
+  {
+   "t": 1064.24,
+   "d": 2.24,
+   "text": "damage you get ported back into it there"
+  },
+  {
+   "t": 1066.48,
+   "d": 2.08,
+   "text": "was a very popular bug though where if"
+  },
+  {
+   "t": 1068.56,
+   "d": 1.84,
+   "text": "your original body was destroyed in a"
+  },
+  {
+   "t": 1070.4,
+   "d": 2.08,
+   "text": "single hit the game had no body object"
+  },
+  {
+   "t": 1072.48,
+   "d": 1.76,
+   "text": "to send you back into and so you"
+  },
+  {
+   "t": 1074.24,
+   "d": 2.16,
+   "text": "remained in the host body permanently"
+  },
+  {
+   "t": 1076.4,
+   "d": 1.76,
+   "text": "this exploit was so popular because it"
+  },
+  {
+   "t": 1078.16,
+   "d": 2.0,
+   "text": "let you play the game as a diverse array"
+  },
+  {
+   "t": 1080.16,
+   "d": 1.92,
+   "text": "of creatures you otherwise had no access"
+  },
+  {
+   "t": 1082.08,
+   "d": 2.24,
+   "text": "to and since the tone of psychic power"
+  },
+  {
+   "t": 1084.32,
+   "d": 1.36,
+   "text": "in caves of cut is all about"
+  },
+  {
+   "t": 1085.68,
+   "d": 2.24,
+   "text": "transgression beyond known boundaries"
+  },
+  {
+   "t": 1087.92,
+   "d": 1.92,
+   "text": "there is a beautiful keying between this"
+  },
+  {
+   "t": 1089.84,
+   "d": 2.48,
+   "text": "cryptic corner of the story world and in"
+  },
+  {
+   "t": 1092.32,
+   "d": 2.24,
+   "text": "the game context the act of unraveling"
+  },
+  {
+   "t": 1094.56,
+   "d": 2.4,
+   "text": "the very mechanics themselves the bug"
+  },
+  {
+   "t": 1096.96,
+   "d": 1.04,
+   "text": "had a side effect where it would"
+  },
+  {
+   "t": 1098.0,
+   "d": 1.6,
+   "text": "occasionally crash your game though"
+  },
+  {
+   "t": 1099.6,
+   "d": 1.6,
+   "text": "which was too high a cost to leave it"
+  },
+  {
+   "t": 1101.2,
+   "d": 1.36,
+   "text": "untouched but we didn't want to"
+  },
+  {
+   "t": 1102.56,
+   "d": 1.76,
+   "text": "completely give it up so we filed off"
+  },
+  {
+   "t": 1104.32,
+   "d": 1.44,
+   "text": "this one edge and turned it into a"
+  },
+  {
+   "t": 1105.76,
+   "d": 0.96,
+   "text": "feature"
+  },
+  {
+   "t": 1106.72,
+   "d": 2.0,
+   "text": "but we wanted to preserve the air of"
+  },
+  {
+   "t": 1108.72,
+   "d": 2.24,
+   "text": "transgression around the swap so we paid"
+  },
+  {
+   "t": 1110.96,
+   "d": 2.0,
+   "text": "close attention to how we messaged it"
+  },
+  {
+   "t": 1112.96,
+   "d": 2.0,
+   "text": "for instance normally important events"
+  },
+  {
+   "t": 1114.96,
+   "d": 1.76,
+   "text": "in your character's life get inscribed"
+  },
+  {
+   "t": 1116.72,
+   "d": 2.0,
+   "text": "in the chronology tab of your character"
+  },
+  {
+   "t": 1118.72,
+   "d": 2.08,
+   "text": "journal but when you do the body swap we"
+  },
+  {
+   "t": 1120.8,
+   "d": 2.24,
+   "text": "explicitly don't include an entry"
+  },
+  {
+   "t": 1123.04,
+   "d": 1.76,
+   "text": "likewise this is typically the sort of"
+  },
+  {
+   "t": 1124.8,
+   "d": 3.12,
+   "text": "thing we award an achievement for for"
+  },
+  {
+   "t": 1127.92,
+   "d": 2.0,
+   "text": "we also don't do that all we do is"
+  },
+  {
+   "t": 1129.92,
+   "d": 2.08,
+   "text": "display a neutral tone message your mind"
+  },
+  {
+   "t": 1132.0,
+   "d": 1.44,
+   "text": "is stranded here that leaves you"
+  },
+  {
+   "t": 1133.44,
+   "d": 1.6,
+   "text": "wondering whether what happened was"
+  },
+  {
+   "t": 1135.04,
+   "d": 3.04,
+   "text": "expressly recognized by the game or not"
+  },
+  {
+   "t": 1138.08,
+   "d": 1.2,
+   "text": "there's a really interesting bit of"
+  },
+  {
+   "t": 1139.28,
+   "d": 2.0,
+   "text": "design texture here in a game filled"
+  },
+  {
+   "t": 1141.28,
+   "d": 2.16,
+   "text": "with baroque language we found there was"
+  },
+  {
+   "t": 1143.44,
+   "d": 2.0,
+   "text": "a lot of authorial weight in moving back"
+  },
+  {
+   "t": 1145.44,
+   "d": 2.4,
+   "text": "to terse almost console readout style"
+  },
+  {
+   "t": 1147.84,
+   "d": 2.24,
+   "text": "simplicity to access a boundary in the"
+  },
+  {
+   "t": 1150.08,
+   "d": 2.0,
+   "text": "software itself"
+  },
+  {
+   "t": 1152.08,
+   "d": 1.76,
+   "text": "instead of fixing the leak we built a"
+  },
+  {
+   "t": 1153.84,
+   "d": 3.44,
+   "text": "nice little pool around the league"
+  },
+  {
+   "t": 1158.56,
+   "d": 2.0,
+   "text": "third example this one's controversial"
+  },
+  {
+   "t": 1160.56,
+   "d": 1.92,
+   "text": "even among the cud dev team"
+  },
+  {
+   "t": 1162.48,
+   "d": 1.6,
+   "text": "when you start a new game in caves of"
+  },
+  {
+   "t": 1164.08,
+   "d": 1.92,
+   "text": "cud in the starting village of joppa"
+  },
+  {
+   "t": 1166.0,
+   "d": 2.0,
+   "text": "about one to two percent of the time a"
+  },
+  {
+   "t": 1168.0,
+   "d": 2.0,
+   "text": "fight breaks out between the water vine"
+  },
+  {
+   "t": 1170.0,
+   "d": 1.76,
+   "text": "farmer mehmet one of the first quest"
+  },
+  {
+   "t": 1171.76,
+   "d": 3.2,
+   "text": "givers in the village warden ulrig ulrig"
+  },
+  {
+   "t": 1174.96,
+   "d": 2.0,
+   "text": "is much stronger and is a much longer"
+  },
+  {
+   "t": 1176.96,
+   "d": 1.52,
+   "text": "character so he inevitably wins and"
+  },
+  {
+   "t": 1178.48,
+   "d": 1.52,
+   "text": "kills mehmet but sometimes the other"
+  },
+  {
+   "t": 1180.0,
+   "d": 1.76,
+   "text": "villagers jump in to help on mehmet's"
+  },
+  {
+   "t": 1181.76,
+   "d": 2.32,
+   "text": "side and the village erupts into bedlam"
+  },
+  {
+   "t": 1184.08,
+   "d": 2.08,
+   "text": "players are often left wondering what"
+  },
+  {
+   "t": 1186.16,
+   "d": 1.44,
+   "text": "the hell happened"
+  },
+  {
+   "t": 1187.6,
+   "d": 1.92,
+   "text": "the reason for this is that the main"
+  },
+  {
+   "t": 1189.52,
+   "d": 2.08,
+   "text": "characters generate with procedural"
+  },
+  {
+   "t": 1191.6,
+   "d": 2.08,
+   "text": "backstory that causes them to be admired"
+  },
+  {
+   "t": 1193.68,
+   "d": 2.0,
+   "text": "or disliked by randomly rolled factions"
+  },
+  {
+   "t": 1195.68,
+   "d": 2.4,
+   "text": "in the game if mehmet is disliked by"
+  },
+  {
+   "t": 1198.08,
+   "d": 1.92,
+   "text": "almost any of the game's 70 factions"
+  },
+  {
+   "t": 1200.0,
+   "d": 1.92,
+   "text": "nothing happens but if he's disliked"
+  },
+  {
+   "t": 1201.92,
+   "d": 1.68,
+   "text": "specifically by the fellowship of"
+  },
+  {
+   "t": 1203.6,
+   "d": 2.88,
+   "text": "wardens the fight breaks out now this is"
+  },
+  {
+   "t": 1206.48,
+   "d": 1.6,
+   "text": "somewhat interesting in the story world"
+  },
+  {
+   "t": 1208.08,
+   "d": 1.52,
+   "text": "frame there's a lot of potential for"
+  },
+  {
+   "t": 1209.6,
+   "d": 2.48,
+   "text": "extrapolative narrativization but it's"
+  },
+  {
+   "t": 1212.08,
+   "d": 1.68,
+   "text": "also a little awkward why does this"
+  },
+  {
+   "t": 1213.76,
+   "d": 1.44,
+   "text": "fight only ever break out when you"
+  },
+  {
+   "t": 1215.2,
+   "d": 1.68,
+   "text": "arrive in joppa why haven't these two"
+  },
+  {
+   "t": 1216.88,
+   "d": 2.08,
+   "text": "duked it out before"
+  },
+  {
+   "t": 1218.96,
+   "d": 2.08,
+   "text": "in the game context i'd say it's a big"
+  },
+  {
+   "t": 1221.04,
+   "d": 1.92,
+   "text": "leak you're completely locked out of the"
+  },
+  {
+   "t": 1222.96,
+   "d": 2.8,
+   "text": "starting side quest when this happens"
+  },
+  {
+   "t": 1225.76,
+   "d": 1.68,
+   "text": "in the meta frame though the picture is"
+  },
+  {
+   "t": 1227.44,
+   "d": 1.92,
+   "text": "more interesting players feel that"
+  },
+  {
+   "t": 1229.36,
+   "d": 1.6,
+   "text": "boundary breakage again and they learn"
+  },
+  {
+   "t": 1230.96,
+   "d": 2.16,
+   "text": "about an important game system and its"
+  },
+  {
+   "t": 1233.12,
+   "d": 2.4,
+   "text": "emergent dynamics granted they're doing"
+  },
+  {
+   "t": 1235.52,
+   "d": 2.0,
+   "text": "so via a somewhat discordant method"
+  },
+  {
+   "t": 1237.52,
+   "d": 1.92,
+   "text": "getting pushed out to the social spaces"
+  },
+  {
+   "t": 1239.44,
+   "d": 1.76,
+   "text": "that surround the game proper rather"
+  },
+  {
+   "t": 1241.2,
+   "d": 2.0,
+   "text": "than having them be tacitly legible or"
+  },
+  {
+   "t": 1243.2,
+   "d": 2.56,
+   "text": "taught via say a tutorial i know that"
+  },
+  {
+   "t": 1245.76,
+   "d": 1.6,
+   "text": "pushing players out to a wiki is"
+  },
+  {
+   "t": 1247.36,
+   "d": 2.48,
+   "text": "anathema to modern design ethos i"
+  },
+  {
+   "t": 1249.84,
+   "d": 2.24,
+   "text": "personally think it can be good you can"
+  },
+  {
+   "t": 1252.08,
+   "d": 1.68,
+   "text": "read this blog post of mine if you want"
+  },
+  {
+   "t": 1253.76,
+   "d": 3.04,
+   "text": "to hear more about that"
+  },
+  {
+   "t": 1258.0,
+   "d": 2.72,
+   "text": "serendipitously a reddit thread pop"
+  },
+  {
+   "t": 1260.72,
+   "d": 1.68,
+   "text": "popped up recently about this where"
+  },
+  {
+   "t": 1262.4,
+   "d": 1.84,
+   "text": "players discussed the joker chainsaw"
+  },
+  {
+   "t": 1264.24,
+   "d": 1.52,
+   "text": "massacre and the merits of this type of"
+  },
+  {
+   "t": 1265.76,
+   "d": 2.64,
+   "text": "emergence it worked my heart but"
+  },
+  {
+   "t": 1268.4,
+   "d": 1.92,
+   "text": "honestly in weighing the pros and cons"
+  },
+  {
+   "t": 1270.32,
+   "d": 2.24,
+   "text": "of this one the calculus is very close"
+  },
+  {
+   "t": 1272.56,
+   "d": 1.76,
+   "text": "i'd say it's even money on whether we"
+  },
+  {
+   "t": 1274.32,
+   "d": 2.24,
+   "text": "fix it before our 1.0 launch we"
+  },
+  {
+   "t": 1276.56,
+   "d": 1.92,
+   "text": "literally have the fix in the object"
+  },
+  {
+   "t": 1278.48,
+   "d": 2.56,
+   "text": "blueprint data it's just commented out"
+  },
+  {
+   "t": 1281.04,
+   "d": 2.24,
+   "text": "the arguments against it are compelling"
+  },
+  {
+   "t": 1283.28,
+   "d": 1.84,
+   "text": "but i love the idea that the hidden"
+  },
+  {
+   "t": 1285.12,
+   "d": 2.0,
+   "text": "processes driving this little rpg"
+  },
+  {
+   "t": 1287.12,
+   "d": 2.16,
+   "text": "village are so complex and untameable"
+  },
+  {
+   "t": 1289.28,
+   "d": 1.84,
+   "text": "that they rupture the very story we're"
+  },
+  {
+   "t": 1291.12,
+   "d": 2.08,
+   "text": "trying to use them to tell the video"
+  },
+  {
+   "t": 1293.2,
+   "d": 2.08,
+   "text": "game falls apart and leaves its pieces"
+  },
+  {
+   "t": 1295.28,
+   "d": 1.52,
+   "text": "for peeking through and putting back"
+  },
+  {
+   "t": 1296.8,
+   "d": 2.16,
+   "text": "together and there's a beautiful quote"
+  },
+  {
+   "t": 1298.96,
+   "d": 1.68,
+   "text": "that speaks to this by experimental"
+  },
+  {
+   "t": 1300.64,
+   "d": 2.24,
+   "text": "musician brian eno i'm going to read it"
+  },
+  {
+   "t": 1302.88,
+   "d": 2.4,
+   "text": "now it's a little long but it's worth it"
+  },
+  {
+   "t": 1305.28,
+   "d": 1.76,
+   "text": "whatever you find weird ugly"
+  },
+  {
+   "t": 1307.04,
+   "d": 1.84,
+   "text": "uncomfortable and nasty about a new"
+  },
+  {
+   "t": 1308.88,
+   "d": 2.32,
+   "text": "medium will surely become its signature"
+  },
+  {
+   "t": 1311.2,
+   "d": 2.24,
+   "text": "cd distortion the jitteriness of digital"
+  },
+  {
+   "t": 1313.44,
+   "d": 2.32,
+   "text": "video the crap sound of 8-bit all of"
+  },
+  {
+   "t": 1315.76,
+   "d": 1.92,
+   "text": "these will be cherished and emulated as"
+  },
+  {
+   "t": 1317.68,
+   "d": 1.84,
+   "text": "soon as they can be avoided it's the"
+  },
+  {
+   "t": 1319.52,
+   "d": 2.32,
+   "text": "sound of failure so much modern art is"
+  },
+  {
+   "t": 1321.84,
+   "d": 1.92,
+   "text": "the sound of things going out of control"
+  },
+  {
+   "t": 1323.76,
+   "d": 2.08,
+   "text": "of a medium be pushing to its limits and"
+  },
+  {
+   "t": 1325.84,
+   "d": 2.16,
+   "text": "breaking apart the distorted guitar"
+  },
+  {
+   "t": 1328.0,
+   "d": 1.84,
+   "text": "sound is the sound of something too loud"
+  },
+  {
+   "t": 1329.84,
+   "d": 2.0,
+   "text": "for the medium supposed to carry it the"
+  },
+  {
+   "t": 1331.84,
+   "d": 1.68,
+   "text": "blue singer with the crack voice is the"
+  },
+  {
+   "t": 1333.52,
+   "d": 2.08,
+   "text": "sound of an emotional cry too powerful"
+  },
+  {
+   "t": 1335.6,
+   "d": 1.84,
+   "text": "for the throat that releases it the"
+  },
+  {
+   "t": 1337.44,
+   "d": 2.08,
+   "text": "excitement of grainy film of bleached"
+  },
+  {
+   "t": 1339.52,
+   "d": 1.76,
+   "text": "out black and white is the excitement of"
+  },
+  {
+   "t": 1341.28,
+   "d": 2.32,
+   "text": "witnessing events too momentous for the"
+  },
+  {
+   "t": 1343.6,
+   "d": 3.68,
+   "text": "medium assigned to record them"
+  },
+  {
+   "t": 1347.28,
+   "d": 2.88,
+   "text": "with that i add i implore you"
+  },
+  {
+   "t": 1350.16,
+   "d": 2.16,
+   "text": "before you fix a leak ask if it's a"
+  },
+  {
+   "t": 1352.32,
+   "d": 2.16,
+   "text": "fountain"
+  },
+  {
+   "t": 1354.48,
+   "d": 2.16,
+   "text": "i just want to take a moment to thank"
+  },
+  {
+   "t": 1356.64,
+   "d": 1.44,
+   "text": "the several people who helped me work"
+  },
+  {
+   "t": 1358.08,
+   "d": 1.44,
+   "text": "through the ideas in this talk or"
+  },
+  {
+   "t": 1359.52,
+   "d": 1.6,
+   "text": "pointed me to relevant readings or"
+  },
+  {
+   "t": 1361.12,
+   "d": 2.32,
+   "text": "provided me with materials"
+  },
+  {
+   "t": 1363.44,
+   "d": 2.32,
+   "text": "and here is a list of references to the"
+  },
+  {
+   "t": 1365.76,
+   "d": 2.32,
+   "text": "readings and talks that i drew from"
+  },
+  {
+   "t": 1368.08,
+   "d": 2.24,
+   "text": "thank you very much"
+  },
+  {
+   "t": 1370.32,
+   "d": 2.24,
+   "text": "excellent thank you so much i feel it's"
+  },
+  {
+   "t": 1372.56,
+   "d": 2.32,
+   "text": "hard to even follow them like from an mp"
+  },
+  {
+   "t": 1374.88,
+   "d": 2.8,
+   "text": "and see perspective because that was a a"
+  },
+  {
+   "t": 1377.68,
+   "d": 2.16,
+   "text": "journey and yeah"
+  },
+  {
+   "t": 1379.84,
+   "d": 2.16,
+   "text": "people really enjoyed it um keep putting"
+  },
+  {
+   "t": 1382.0,
+   "d": 2.32,
+   "text": "questions in chat people um the first"
+  },
+  {
+   "t": 1384.32,
+   "d": 1.52,
+   "text": "question that went up i i would guess"
+  },
+  {
+   "t": 1385.84,
+   "d": 1.44,
+   "text": "that probably you won't have a full"
+  },
+  {
+   "t": 1387.28,
+   "d": 2.16,
+   "text": "answer to this but for what you are able"
+  },
+  {
+   "t": 1389.44,
+   "d": 1.68,
+   "text": "to share that talk the paper you"
+  },
+  {
+   "t": 1391.12,
+   "d": 0.88,
+   "text": "mentioned"
+  },
+  {
+   "t": 1392.0,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1392.96,
+   "d": 1.68,
+   "text": "you would like to know when and where we"
+  },
+  {
+   "t": 1394.64,
+   "d": 1.52,
+   "text": "might be able to get that paper people"
+  },
+  {
+   "t": 1396.16,
+   "d": 1.36,
+   "text": "are hyped about it"
+  },
+  {
+   "t": 1397.52,
+   "d": 2.72,
+   "text": "um oh that one is that it literally"
+  },
+  {
+   "t": 1400.24,
+   "d": 2.0,
+   "text": "might have max might have put put it up"
+  },
+  {
+   "t": 1402.24,
+   "d": 1.84,
+   "text": "on their site yesterday like last night"
+  },
+  {
+   "t": 1404.08,
+   "d": 2.0,
+   "text": "but if not then it'll be very soon"
+  },
+  {
+   "t": 1406.08,
+   "d": 1.04,
+   "text": "because"
+  },
+  {
+   "t": 1407.12,
+   "d": 1.04,
+   "text": "it's for"
+  },
+  {
+   "t": 1408.16,
+   "d": 1.92,
+   "text": "a conference that's upcoming and we just"
+  },
+  {
+   "t": 1410.08,
+   "d": 1.76,
+   "text": "submitted the final revisions last"
+  },
+  {
+   "t": 1411.84,
+   "d": 1.52,
+   "text": "literally last night so it'll be"
+  },
+  {
+   "t": 1413.36,
+   "d": 2.08,
+   "text": "exciting possibly within days you'll"
+  },
+  {
+   "t": 1415.44,
+   "d": 1.84,
+   "text": "have it okay congratulations maybe we'll"
+  },
+  {
+   "t": 1417.28,
+   "d": 1.76,
+   "text": "try and uh you know keep an eye on"
+  },
+  {
+   "t": 1419.04,
+   "d": 1.68,
+   "text": "twitter maybe we'll retweet it so people"
+  },
+  {
+   "t": 1420.72,
+   "d": 1.52,
+   "text": "can find it because uh yeah that's up"
+  },
+  {
+   "t": 1422.24,
+   "d": 1.36,
+   "text": "our alley"
+  },
+  {
+   "t": 1423.6,
+   "d": 2.64,
+   "text": "cool um oh and who did you hire to"
+  },
+  {
+   "t": 1426.24,
+   "d": 1.92,
+   "text": "illustrate those lovely vases oh that"
+  },
+  {
+   "t": 1428.16,
+   "d": 1.6,
+   "text": "was um"
+  },
+  {
+   "t": 1429.76,
+   "d": 2.56,
+   "text": "eric johnson and if you"
+  },
+  {
+   "t": 1432.32,
+   "d": 2.0,
+   "text": "i i don't have a twitter app but if you"
+  },
+  {
+   "t": 1434.32,
+   "d": 1.52,
+   "text": "look at the tweets i've been making"
+  },
+  {
+   "t": 1435.84,
+   "d": 1.68,
+   "text": "about my talk and i'd like the first one"
+  },
+  {
+   "t": 1437.52,
+   "d": 2.16,
+   "text": "where i said yes i i commissioned a"
+  },
+  {
+   "t": 1439.68,
+   "d": 1.28,
+   "text": "piece for my"
+  },
+  {
+   "t": 1440.96,
+   "d": 2.88,
+   "text": "this overall metaphor um his name his"
+  },
+  {
+   "t": 1443.84,
+   "d": 2.32,
+   "text": "twitter ad is there he's an awesome"
+  },
+  {
+   "t": 1446.16,
+   "d": 1.76,
+   "text": "yeah they're beautiful"
+  },
+  {
+   "t": 1447.92,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1448.72,
+   "d": 1.76,
+   "text": "cool here's a good question from big"
+  },
+  {
+   "t": 1450.48,
+   "d": 1.52,
+   "text": "simple can you name an example of a"
+  },
+  {
+   "t": 1452.0,
+   "d": 1.92,
+   "text": "buggers feature which was considered"
+  },
+  {
+   "t": 1453.92,
+   "d": 1.68,
+   "text": "positive or enjoyed but was deemed too"
+  },
+  {
+   "t": 1455.6,
+   "d": 1.76,
+   "text": "destructive to the core game to keep"
+  },
+  {
+   "t": 1457.36,
+   "d": 1.2,
+   "text": "kind of an example that you did end up"
+  },
+  {
+   "t": 1458.56,
+   "d": 2.56,
+   "text": "taking it out"
+  },
+  {
+   "t": 1461.12,
+   "d": 3.2,
+   "text": "uh in in in cud or at well i'll try to"
+  },
+  {
+   "t": 1464.32,
+   "d": 1.28,
+   "text": "pose anything"
+  },
+  {
+   "t": 1465.6,
+   "d": 1.84,
+   "text": "yeah um"
+  },
+  {
+   "t": 1467.44,
+   "d": 1.76,
+   "text": "very fun but you there's so there really"
+  },
+  {
+   "t": 1469.2,
+   "d": 2.0,
+   "text": "are a lot uh and if anyone i know there"
+  },
+  {
+   "t": 1471.2,
+   "d": 2.08,
+   "text": "are other cub devs in chat if"
+  },
+  {
+   "t": 1473.28,
+   "d": 0.96,
+   "text": "if"
+  },
+  {
+   "t": 1474.24,
+   "d": 2.56,
+   "text": "in case they think of one but um"
+  },
+  {
+   "t": 1476.8,
+   "d": 1.68,
+   "text": "hmm"
+  },
+  {
+   "t": 1478.48,
+   "d": 3.12,
+   "text": "i'm trying to think of what"
+  },
+  {
+   "t": 1481.6,
+   "d": 2.72,
+   "text": "we really like to keep as much as we can"
+  },
+  {
+   "t": 1484.32,
+   "d": 1.68,
+   "text": "there are there definitely all are"
+  },
+  {
+   "t": 1486.0,
+   "d": 1.36,
+   "text": "though but i can't think of an example"
+  },
+  {
+   "t": 1487.36,
+   "d": 2.16,
+   "text": "off the top of my head but um i think"
+  },
+  {
+   "t": 1489.52,
+   "d": 1.44,
+   "text": "brian mentions an entire mountain"
+  },
+  {
+   "t": 1490.96,
+   "d": 1.52,
+   "text": "burning down was fun does that ring any"
+  },
+  {
+   "t": 1492.48,
+   "d": 2.32,
+   "text": "bells oh yeah i mean there was like the"
+  },
+  {
+   "t": 1494.8,
+   "d": 2.48,
+   "text": "way our like heat propagation worked was"
+  },
+  {
+   "t": 1497.28,
+   "d": 1.84,
+   "text": "a lot more aggressive originally so it"
+  },
+  {
+   "t": 1499.12,
+   "d": 2.8,
+   "text": "was very easy to like burn down entire"
+  },
+  {
+   "t": 1501.92,
+   "d": 2.32,
+   "text": "mountains and and"
+  },
+  {
+   "t": 1504.24,
+   "d": 2.16,
+   "text": "just maps and set fires on the world map"
+  },
+  {
+   "t": 1506.4,
+   "d": 1.52,
+   "text": "anytime anyone can do an action on the"
+  },
+  {
+   "t": 1507.92,
+   "d": 2.16,
+   "text": "world map it's fun used to be able to"
+  },
+  {
+   "t": 1510.08,
+   "d": 1.84,
+   "text": "power skate on the world map"
+  },
+  {
+   "t": 1511.92,
+   "d": 2.0,
+   "text": "um but now there's just a message that"
+  },
+  {
+   "t": 1513.92,
+   "d": 2.0,
+   "text": "sadly says you cannot power skate on the"
+  },
+  {
+   "t": 1515.92,
+   "d": 1.2,
+   "text": "world man"
+  },
+  {
+   "t": 1517.12,
+   "d": 1.68,
+   "text": "that's amazing"
+  },
+  {
+   "t": 1518.8,
+   "d": 2.96,
+   "text": "um here's another question or i guess uh"
+  },
+  {
+   "t": 1521.76,
+   "d": 1.36,
+   "text": "i guess it's a suggestion that i'd be"
+  },
+  {
+   "t": 1523.12,
+   "d": 2.16,
+   "text": "curious to to think how you feel about"
+  },
+  {
+   "t": 1525.28,
+   "d": 2.96,
+   "text": "it um belugas in terms of the java"
+  },
+  {
+   "t": 1528.24,
+   "d": 2.24,
+   "text": "chainsaw massacre um what about the"
+  },
+  {
+   "t": 1530.48,
+   "d": 1.44,
+   "text": "solution of having a trigger that would"
+  },
+  {
+   "t": 1531.92,
+   "d": 2.08,
+   "text": "disable it after the player had played a"
+  },
+  {
+   "t": 1534.0,
+   "d": 1.2,
+   "text": "couple times do you think that that"
+  },
+  {
+   "t": 1535.2,
+   "d": 0.96,
+   "text": "would be"
+  },
+  {
+   "t": 1536.16,
+   "d": 3.2,
+   "text": "kind of uh a viable solution or or maybe"
+  },
+  {
+   "t": 1539.36,
+   "d": 1.28,
+   "text": "crossing the line of kind of a little"
+  },
+  {
+   "t": 1540.64,
+   "d": 2.56,
+   "text": "bit too much guardrails"
+  },
+  {
+   "t": 1543.2,
+   "d": 1.44,
+   "text": "uh it's"
+  },
+  {
+   "t": 1544.64,
+   "d": 2.8,
+   "text": "it's interesting i tend"
+  },
+  {
+   "t": 1547.44,
+   "d": 0.72,
+   "text": "just"
+  },
+  {
+   "t": 1548.16,
+   "d": 2.32,
+   "text": "just like as my personal aesthetic i"
+  },
+  {
+   "t": 1550.48,
+   "d": 2.32,
+   "text": "tend away from solution those types of"
+  },
+  {
+   "t": 1552.8,
+   "d": 1.36,
+   "text": "solutions that are like looking at where"
+  },
+  {
+   "t": 1554.16,
+   "d": 2.64,
+   "text": "the the player is in their like"
+  },
+  {
+   "t": 1556.8,
+   "d": 1.68,
+   "text": "life um"
+  },
+  {
+   "t": 1558.48,
+   "d": 1.52,
+   "text": "lifespan with the game and then making"
+  },
+  {
+   "t": 1560.0,
+   "d": 1.68,
+   "text": "decisions based on that there's just"
+  },
+  {
+   "t": 1561.68,
+   "d": 2.88,
+   "text": "something about it that is"
+  },
+  {
+   "t": 1564.56,
+   "d": 3.76,
+   "text": "violates some some like unwritten"
+  },
+  {
+   "t": 1568.32,
+   "d": 2.08,
+   "text": "probably um"
+  },
+  {
+   "t": 1570.4,
+   "d": 1.76,
+   "text": "aesthetic principle that i don't like"
+  },
+  {
+   "t": 1572.16,
+   "d": 2.0,
+   "text": "but um it i think it could work right"
+  },
+  {
+   "t": 1574.16,
+   "d": 1.68,
+   "text": "like i mean i think there's all sorts of"
+  },
+  {
+   "t": 1575.84,
+   "d": 1.68,
+   "text": "ways you could file the edges off this"
+  },
+  {
+   "t": 1577.52,
+   "d": 3.44,
+   "text": "and make it into an experience that is"
+  },
+  {
+   "t": 1580.96,
+   "d": 3.2,
+   "text": "still kind of like hooking into this"
+  },
+  {
+   "t": 1584.16,
+   "d": 2.48,
+   "text": "wider idea that like the game breaking"
+  },
+  {
+   "t": 1586.64,
+   "d": 2.16,
+   "text": "is interesting but without it being"
+  },
+  {
+   "t": 1588.8,
+   "d": 2.16,
+   "text": "quite so painful it's just like a matter"
+  },
+  {
+   "t": 1590.96,
+   "d": 1.68,
+   "text": "of i mean part one thing i don't mention"
+  },
+  {
+   "t": 1592.64,
+   "d": 1.6,
+   "text": "in the talk which i would i would have"
+  },
+  {
+   "t": 1594.24,
+   "d": 2.0,
+   "text": "loved to get to is like part of the part"
+  },
+  {
+   "t": 1596.24,
+   "d": 2.16,
+   "text": "of reason why bugs have momentum and"
+  },
+  {
+   "t": 1598.4,
+   "d": 2.08,
+   "text": "part of like why ultimately you have to"
+  },
+  {
+   "t": 1600.48,
+   "d": 1.36,
+   "text": "just make a decision on them is that"
+  },
+  {
+   "t": 1601.84,
+   "d": 1.52,
+   "text": "like it takes a lot of labor to make a"
+  },
+  {
+   "t": 1603.36,
+   "d": 1.6,
+   "text": "game and like you could obviously always"
+  },
+  {
+   "t": 1604.96,
+   "d": 1.28,
+   "text": "come back and"
+  },
+  {
+   "t": 1606.24,
+   "d": 2.32,
+   "text": "turn a bug into the interesting feature"
+  },
+  {
+   "t": 1608.56,
+   "d": 1.68,
+   "text": "version of the bug but you can only do"
+  },
+  {
+   "t": 1610.24,
+   "d": 1.76,
+   "text": "that for so many of your bugs right so"
+  },
+  {
+   "t": 1612.0,
+   "d": 1.52,
+   "text": "at some point you have to just say like"
+  },
+  {
+   "t": 1613.52,
+   "d": 2.64,
+   "text": "i'm going to like be at peace with what"
+  },
+  {
+   "t": 1616.16,
+   "d": 2.08,
+   "text": "is happening on this screen here or if"
+  },
+  {
+   "t": 1618.24,
+   "d": 1.76,
+   "text": "it's really truly bad enough then i'm"
+  },
+  {
+   "t": 1620.0,
+   "d": 1.36,
+   "text": "going to get rid of it you're both"
+  },
+  {
+   "t": 1621.36,
+   "d": 1.76,
+   "text": "fixing triage and your bug keeping"
+  },
+  {
+   "t": 1623.12,
+   "d": 3.36,
+   "text": "triage both expanding triage yeah i"
+  },
+  {
+   "t": 1626.48,
+   "d": 0.96,
+   "text": "think it's interesting because i don't"
+  },
+  {
+   "t": 1627.44,
+   "d": 1.52,
+   "text": "know about you i've definitely found"
+  },
+  {
+   "t": 1628.96,
+   "d": 2.08,
+   "text": "discussions around bugs people want to"
+  },
+  {
+   "t": 1631.04,
+   "d": 1.12,
+   "text": "keep will sometimes come down"
+  },
+  {
+   "t": 1632.16,
+   "d": 1.52,
+   "text": "specifically to that like well we would"
+  },
+  {
+   "t": 1633.68,
+   "d": 1.44,
+   "text": "keep this for people who play the game"
+  },
+  {
+   "t": 1635.12,
+   "d": 2.0,
+   "text": "before but we don't like this being a"
+  },
+  {
+   "t": 1637.12,
+   "d": 2.4,
+   "text": "first-time player experience so i think"
+  },
+  {
+   "t": 1639.52,
+   "d": 1.6,
+   "text": "i do find you get into those discussions"
+  },
+  {
+   "t": 1641.12,
+   "d": 1.6,
+   "text": "of like well can we make sure that a"
+  },
+  {
+   "t": 1642.72,
+   "d": 1.52,
+   "text": "first-time player doesn't find it but"
+  },
+  {
+   "t": 1644.24,
+   "d": 1.36,
+   "text": "yeah it's an interesting point of how do"
+  },
+  {
+   "t": 1645.6,
+   "d": 0.8,
+   "text": "you"
+  },
+  {
+   "t": 1646.4,
+   "d": 1.52,
+   "text": "how much so can you make a valid"
+  },
+  {
+   "t": 1647.92,
+   "d": 1.36,
+   "text": "assumption of how much the player"
+  },
+  {
+   "t": 1649.28,
+   "d": 2.0,
+   "text": "understands your game like is play time"
+  },
+  {
+   "t": 1651.28,
+   "d": 1.84,
+   "text": "and actual accurate"
+  },
+  {
+   "t": 1653.12,
+   "d": 2.88,
+   "text": "assumption right right yeah yeah"
+  },
+  {
+   "t": 1656.0,
+   "d": 1.68,
+   "text": "and it's perfectly reasonable to be"
+  },
+  {
+   "t": 1657.68,
+   "d": 2.0,
+   "text": "making to like looking at metrics like"
+  },
+  {
+   "t": 1659.68,
+   "d": 2.16,
+   "text": "that and acting on them just because"
+  },
+  {
+   "t": 1661.84,
+   "d": 1.76,
+   "text": "we're not doing it it's perfectly"
+  },
+  {
+   "t": 1663.6,
+   "d": 1.68,
+   "text": "reasonable for you to do that"
+  },
+  {
+   "t": 1665.28,
+   "d": 1.84,
+   "text": "um here's another question from pentose"
+  },
+  {
+   "t": 1667.12,
+   "d": 1.68,
+   "text": "has there been an instance of a bug fix"
+  },
+  {
+   "t": 1668.8,
+   "d": 1.84,
+   "text": "you experienced as a player that you"
+  },
+  {
+   "t": 1670.64,
+   "d": 1.52,
+   "text": "found especially disappointing when it"
+  },
+  {
+   "t": 1672.16,
+   "d": 2.8,
+   "text": "was fixed"
+  },
+  {
+   "t": 1675.28,
+   "d": 1.76,
+   "text": "i mean yeah this is another one where"
+  },
+  {
+   "t": 1677.04,
+   "d": 2.16,
+   "text": "absolutely i'm gonna try to think of an"
+  },
+  {
+   "t": 1679.2,
+   "d": 4.52,
+   "text": "example on the spot um"
+  },
+  {
+   "t": 1688.56,
+   "d": 1.6,
+   "text": "if you can't think of any we can just"
+  },
+  {
+   "t": 1690.16,
+   "d": 2.32,
+   "text": "like i'm see the thing is i'm i'm bad at"
+  },
+  {
+   "t": 1692.48,
+   "d": 4.16,
+   "text": "thinking these days so it's it's hard um"
+  },
+  {
+   "t": 1696.64,
+   "d": 2.24,
+   "text": "i have an 11 month old she's drained all"
+  },
+  {
+   "t": 1698.88,
+   "d": 3.6,
+   "text": "the brain cells out of me um yeah i'm"
+  },
+  {
+   "t": 1702.48,
+   "d": 1.44,
+   "text": "gonna i'll get back to you on that one"
+  },
+  {
+   "t": 1703.92,
+   "d": 1.76,
+   "text": "actually okay i'll think about that"
+  },
+  {
+   "t": 1705.68,
+   "d": 1.52,
+   "text": "here's another one that maybe again most"
+  },
+  {
+   "t": 1707.2,
+   "d": 2.88,
+   "text": "of these are example questions but um a"
+  },
+  {
+   "t": 1710.08,
+   "d": 2.96,
+   "text": "nonsense bird asks if there are any cud"
+  },
+  {
+   "t": 1713.04,
+   "d": 1.76,
+   "text": "bugs that didn't quite make the cut for"
+  },
+  {
+   "t": 1714.8,
+   "d": 2.08,
+   "text": "your planned speech that are still dear"
+  },
+  {
+   "t": 1716.88,
+   "d": 2.16,
+   "text": "to you so any any things active that you"
+  },
+  {
+   "t": 1719.04,
+   "d": 2.08,
+   "text": "are at least are meditating on the idea"
+  },
+  {
+   "t": 1721.12,
+   "d": 2.64,
+   "text": "of building a pool around them"
+  },
+  {
+   "t": 1723.76,
+   "d": 3.6,
+   "text": "yes uh okay now let me let me deep think"
+  },
+  {
+   "t": 1727.36,
+   "d": 2.16,
+   "text": "more deeply about this there definitely"
+  },
+  {
+   "t": 1729.52,
+   "d": 1.6,
+   "text": "there definitely were"
+  },
+  {
+   "t": 1731.12,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1740.16,
+   "d": 1.76,
+   "text": "i mean the the burning the mountain down"
+  },
+  {
+   "t": 1741.92,
+   "d": 1.92,
+   "text": "is interesting that did come across when"
+  },
+  {
+   "t": 1743.84,
+   "d": 1.36,
+   "text": "i was like looking through all my old"
+  },
+  {
+   "t": 1745.2,
+   "d": 2.08,
+   "text": "screenshots of of like funny cud bugs"
+  },
+  {
+   "t": 1747.28,
+   "d": 2.0,
+   "text": "that we've we've hit on"
+  },
+  {
+   "t": 1749.28,
+   "d": 2.08,
+   "text": "um"
+  },
+  {
+   "t": 1751.36,
+   "d": 1.68,
+   "text": "there's also like well there's one i"
+  },
+  {
+   "t": 1753.04,
+   "d": 3.76,
+   "text": "just posted about with the where the the"
+  },
+  {
+   "t": 1756.8,
+   "d": 2.72,
+   "text": "bug tracker story i vlogged was like it"
+  },
+  {
+   "t": 1759.52,
+   "d": 2.48,
+   "text": "seems like the extra dimensional corp"
+  },
+  {
+   "t": 1762.0,
+   "d": 1.44,
+   "text": "problem is real"
+  },
+  {
+   "t": 1763.44,
+   "d": 2.8,
+   "text": "um i saw that and it turned out to be"
+  },
+  {
+   "t": 1766.24,
+   "d": 1.76,
+   "text": "real actually so yeah i could have"
+  },
+  {
+   "t": 1768.0,
+   "d": 1.92,
+   "text": "gotten into that um"
+  },
+  {
+   "t": 1769.92,
+   "d": 2.08,
+   "text": "there's a no we have this triage meeting"
+  },
+  {
+   "t": 1772.0,
+   "d": 1.2,
+   "text": "every week i know some of the people"
+  },
+  {
+   "t": 1773.2,
+   "d": 1.28,
+   "text": "that come to it"
+  },
+  {
+   "t": 1774.48,
+   "d": 1.84,
+   "text": "um are in the chat uh because we"
+  },
+  {
+   "t": 1776.32,
+   "d": 2.16,
+   "text": "actually open it up to like our folks on"
+  },
+  {
+   "t": 1778.48,
+   "d": 2.24,
+   "text": "our discord who help us triage bugs but"
+  },
+  {
+   "t": 1780.72,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1781.68,
+   "d": 1.68,
+   "text": "they're it's always a fun meeting"
+  },
+  {
+   "t": 1783.36,
+   "d": 1.6,
+   "text": "because there's"
+  },
+  {
+   "t": 1784.96,
+   "d": 2.56,
+   "text": "it's just fun to read cud bugs they they"
+  },
+  {
+   "t": 1787.52,
+   "d": 2.32,
+   "text": "they read really poetically sometimes or"
+  },
+  {
+   "t": 1789.84,
+   "d": 2.32,
+   "text": "like i like to follow like these door"
+  },
+  {
+   "t": 1792.16,
+   "d": 1.68,
+   "text": "fortress bugs the twitter account or the"
+  },
+  {
+   "t": 1793.84,
+   "d": 2.0,
+   "text": "strange log again and they're like just"
+  },
+  {
+   "t": 1795.84,
+   "d": 2.96,
+   "text": "fun people have been talking about that"
+  },
+  {
+   "t": 1798.8,
+   "d": 1.28,
+   "text": "because there was even in the question"
+  },
+  {
+   "t": 1800.08,
+   "d": 1.84,
+   "text": "someone asked about you know a record of"
+  },
+  {
+   "t": 1801.92,
+   "d": 1.84,
+   "text": "bugs a kind of archive to at least be"
+  },
+  {
+   "t": 1803.76,
+   "d": 1.36,
+   "text": "able to look at even if you can't"
+  },
+  {
+   "t": 1805.12,
+   "d": 1.92,
+   "text": "maintain them in game which in some ways"
+  },
+  {
+   "t": 1807.04,
+   "d": 3.76,
+   "text": "the dwarf fortress fix log is almost a a"
+  },
+  {
+   "t": 1810.8,
+   "d": 2.48,
+   "text": "record of wonderful beautiful books"
+  },
+  {
+   "t": 1813.28,
+   "d": 1.68,
+   "text": "definitely right right and that's what"
+  },
+  {
+   "t": 1814.96,
+   "d": 1.68,
+   "text": "really inspired the talk the idea that"
+  },
+  {
+   "t": 1816.64,
+   "d": 3.04,
+   "text": "there there had been so many stories"
+  },
+  {
+   "t": 1819.68,
+   "d": 1.6,
+   "text": "for example by tarn and zach when they"
+  },
+  {
+   "t": 1821.28,
+   "d": 1.6,
+   "text": "said like beat this bug it's so"
+  },
+  {
+   "t": 1822.88,
+   "d": 1.28,
+   "text": "interesting illustrate so many"
+  },
+  {
+   "t": 1824.16,
+   "d": 1.84,
+   "text": "interlocking systems but we had to fix"
+  },
+  {
+   "t": 1826.0,
+   "d": 2.08,
+   "text": "it i know jeremiah reid who gave a talk"
+  },
+  {
+   "t": 1828.08,
+   "d": 3.28,
+   "text": "earlier today gave a talk at irdc 2016"
+  },
+  {
+   "t": 1831.36,
+   "d": 1.84,
+   "text": "where he was talking about this um time"
+  },
+  {
+   "t": 1833.2,
+   "d": 1.84,
+   "text": "travel roguelike he was making and he he"
+  },
+  {
+   "t": 1835.04,
+   "d": 2.72,
+   "text": "he noticed that"
+  },
+  {
+   "t": 1837.76,
+   "d": 1.28,
+   "text": "everyone was"
+  },
+  {
+   "t": 1839.04,
+   "d": 3.04,
+   "text": "all of the characters were marrying the"
+  },
+  {
+   "t": 1842.08,
+   "d": 2.24,
+   "text": "deceased like"
+  },
+  {
+   "t": 1844.32,
+   "d": 1.84,
+   "text": "there was like an excess number of"
+  },
+  {
+   "t": 1846.16,
+   "d": 2.56,
+   "text": "marriages being logged in in like the"
+  },
+  {
+   "t": 1848.72,
+   "d": 2.16,
+   "text": "the stack trace and that was because um"
+  },
+  {
+   "t": 1850.88,
+   "d": 1.84,
+   "text": "he had forgot to disable"
+  },
+  {
+   "t": 1852.72,
+   "d": 2.96,
+   "text": "marriage for um when you die and so that"
+  },
+  {
+   "t": 1855.68,
+   "d": 1.52,
+   "text": "was just really funny and evocative to"
+  },
+  {
+   "t": 1857.2,
+   "d": 1.68,
+   "text": "me so i'm always thinking like what is"
+  },
+  {
+   "t": 1858.88,
+   "d": 1.84,
+   "text": "the what is the game that like"
+  },
+  {
+   "t": 1860.72,
+   "d": 1.76,
+   "text": "spins off off that and like takes that"
+  },
+  {
+   "t": 1862.48,
+   "d": 2.24,
+   "text": "prep that bug seriously as a premise"
+  },
+  {
+   "t": 1864.72,
+   "d": 1.84,
+   "text": "right yeah excellent well thank you so"
+  },
+  {
+   "t": 1866.56,
+   "d": 2.4,
+   "text": "much"
+  }
+ ]
+}
