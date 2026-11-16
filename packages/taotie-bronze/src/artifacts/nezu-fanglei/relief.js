@@ -19,6 +19,8 @@ import LOW_PLATES from '../../../reference/nezu-fanglei/faces/face-low.plates.js
 import SHOULDER_PLATES from '../../../reference/nezu-fanglei/faces/face-shoulder.plates.json'
 import COLLAR_PLATES from '../../../reference/nezu-fanglei/faces/face-collar.plates.json'
 import LID_PLATES from '../../../reference/nezu-fanglei/faces/face-lid.plates.json'
+import HYBRID_META from '../../../reference/nezu-fanglei/faces/face-main.height-hybrid.json'
+import PURE_META from '../../../reference/nezu-fanglei/faces/face-main.height-pure.json'
 
 // Round 9: registers whose décor is TRACED PLATES — outlines taken off the flattened photograph by tools/trace.py
 // (reference/nezu-fanglei/faces/<face>.trace.json → <face>.plates.json) and raised by kit.tracedPlates: broad
@@ -196,10 +198,33 @@ function finish(kit, panel, design, { seed }) {
   for (const t of design.slits || []) slit(panel, t.c, t.len, t.w, 1.1, t.rot)
 }
 
-export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1 }) {
+/**
+ * EXPERIMENT (?relief=photo | photo-pure): the main register's relief read off the flattened photograph instead of
+ * drawn — tools/photoheight.py → reference/nezu-fanglei/faces/face-main.height-<variant>.png (the right half, 16-bit,
+ * mirrored here). 'photo' = hybrid (traced plates warped and snapped onto the photograph + its line work as shallow
+ * cuts), 'photo-pure' = nothing drawn at all. Off by default: the hand-drawn plates stay the vessel.
+ */
+const PHOTO_RELIEF = {
+  photo: { url: new URL('../../../reference/nezu-fanglei/faces/face-main.height-hybrid.png', import.meta.url), meta: HYBRID_META },
+  'photo-pure': { url: new URL('../../../reference/nezu-fanglei/faces/face-main.height-pure.png', import.meta.url), meta: PURE_META },
+}
+
+async function photoMain(kit, p, M, which) {
+  const v = PHOTO_RELIEF[which]
+  const img = await kit.loadHeightImage(v.url, v.meta)
+  const F = FACES.faces['face-main']
+  const k = F.up[1] / Math.hypot(...F.up)
+  const [xl, yb] = M([-F.width / 2, F.center[1] - (F.height / 2) * k])
+  const [xr, yt] = M([F.width / 2, F.center[1] + (F.height / 2) * k])
+  const box = v.meta.field // face mm [x0, y0, x1, y1]: only the decorated field, the plain band and the fillet above stay drawn
+  return kit.imageRelief(p, img, { rect: { x: xl, y: yb, w: xr - xl, h: yt - yb }, mirror: true, crop: { x0: 0, y0: box[1], x1: img.width, y1: box[3] }, feather: 1 })
+}
+
+export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1, relief = null }) {
   const half = kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.foot, half, kx })
-  const traced = ['main', 'second', 'low', 'narrow'].filter((r) => TRACED[r])
+  const photo = PHOTO_RELIEF[relief] ? relief : null
+  const traced = ['main', 'second', 'low', 'narrow'].filter((r) => TRACED[r] && !(photo && r === 'main'))
   tracedRegisters(kit, p, M, traced, seed)
   const skip = new Set(traced)
   const d1 = bellyDesign(kit, p, M, 1, skip), d2 = bellyDesign(kit, p, M, -1, skip)
@@ -211,9 +236,10 @@ export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1 }) {
   // shrinks to 52–56.5 when that register is traced)
   const lozTop = TRACED.low ? 56.5 : 64
   kit.lozengeFill(p, { rect: band(LV.narrow + 1.5, lozTop), include, margin: 0.5 }, { size: [6.4, 4.6], fill: 'dot', pitch: 0.9, levels: 0, depth: 0.45, seed })
-  for (const [ya, yb] of [[169.5, 253.5], [102.5, 168], [lozTop, 99.5], [LV.bellyBorder + 1, LV.narrow - 0.5]]) {
+  for (const [ya, yb] of [[169.5, photo ? 179.5 : 253.5], [102.5, 168], [lozTop, 99.5], [LV.bellyBorder + 1, LV.narrow - 0.5]]) {
     kit.leiwenFill(p, { rect: band(ya, yb), include, margin: 0.5 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + ya })
   }
+  if (photo) await photoMain(kit, p, M, photo)
   // register borders: thin raised fillets (photo-37: a narrow raised line along each register edge)
   p.raise((ctx) => {
     for (const y of [253.8, 168.6, 101.5, 50.9, 35.6]) ctx.fillRect(1.5, arc(y) - 0.45, W - 3, 0.9)

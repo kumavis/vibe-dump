@@ -59,7 +59,8 @@ export async function session({ timeout = 240000 } = {}) {
         if (m.type() === 'error') errors.push(m.text())
       })
       page.on('pageerror', (e) => errors.push(String(e)))
-      const qs = new URLSearchParams(params).toString()
+      // TAOTIE_PARAMS='relief=photo&…': extra URL parameters on every page this session opens (artifact variants)
+      const qs = new URLSearchParams({ ...Object.fromEntries(new URLSearchParams(process.env.TAOTIE_PARAMS || '')), ...params }).toString()
       await page.goto(`${server.url}/${qs ? '?' + qs : ''}${hash ? '#' + hash : ''}`, { waitUntil: 'load' })
       pages.push(page)
       page.__errors = errors

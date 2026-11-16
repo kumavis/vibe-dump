@@ -2,15 +2,13 @@
 // A signed distance field meshed with kit.meshSDF, built in the HANDLE PLANE: x = distance from the vessel axis
 // along the handle's azimuth (mm), y = height (mm), z = across the handle. The caller turns it to θ = ±90°.
 //
-// Read off photo-11 (crops detail-handle-right / -left, 4.27 px per fitted unit = 3.56 px/mm at the inferred
-// scale): a feline dragon climbing the shoulder. Its tail is a squared curl clamped on the shoulder (y 247–263,
-// out to r 148, a hole through it); the body rises from it, steep and fat, to a head under the neck rope that
-// looks OUT and a little down (snout tip r ≈ 137, y ≈ 312) with a horn / ear tuft standing up from the crown
-// (top y ≈ 345); from the back of the head the neck arches over (top y ≈ 338) and comes down against the vessel's
-// neck, so a round opening ≈ 14 × 16 mm stays between arch, head and a bar from the chin to the root.
-// Thickness across (z) is NOT visible (both are seen edge-on): 12 mm assumed, the head 16 mm.
-// Incised décor on the sides (photo: scrolls on the body and the tail curl, ladder ticks on the arch) is
-// reduced to a contour groove, a spine groove and a C-scroll on the tail.
+// Read off photo-11 on a grid in handle-plane mm (.work/r8-hu/hgrid.py; crops detail-handle / -left): a feline
+// dragon climbing the shoulder. A thick ring (the neck rolling over) round a round opening, its left side against the
+// vessel's neck; the head on its right, flat-faced, looking out, the snout down, two short horns on the crown; the body
+// from under the head steeply down and out to the tail, a squared curl with a hole on a bar clamped to the shoulder; a
+// haunch filling the angle between body and shoulder. Thickness across (z) is NOT visible (both are seen edge-on):
+// 12 mm assumed, the head 16 mm. Incised décor on the sides is reduced to a groove round the opening, ladder rings
+// behind the head, contour and spine grooves on the body and a squared spiral on the tail.
 
 const len2 = (x, y) => Math.sqrt(x * x + y * y)
 const len3 = (x, y, z) => Math.sqrt(x * x + y * y + z * z)
@@ -87,11 +85,14 @@ function limb(path, x, y, z, hz, r = 3.5) {
   return { d: sdRBox2(q.d, z, hw, hz, Math.min(r, hw * 0.9, hz * 0.9)), q, hw }
 }
 
-// centre lines in the handle plane (mm), read off photo-11 (right handle; the left one mirrors it)
-const ARCH = makePath([[87, 292], [95, 300], [97.5, 314], [100.5, 326], [108, 332], [116, 330.5], [121, 326]], (f) => 6.6 - 0.4 * f)
-const CHIN = makePath([[94, 299.5], [104, 301.5], [114, 304], [122, 309]], 3.9)
-const BODY = makePath([[124, 312], [128.5, 302], [132.5, 290], [137, 278], [140, 268], [141, 261]], (f) => 7.2 + 0.6 * f)
-
+// read off photo-11 on a grid in handle-plane mm (right handle; the left one mirrors it): the upper handle is a
+// thick ring (x 97–135, y 297–338) round a round opening (centre 117.5, 315.5; Ø ≈ 15), its left side lying against
+// the neck, the head on its right; the body runs from under the head steeply down and out to the tail (r 151 at
+// y 262); a haunch fills the angle between body and shoulder, leaving a small gap under the body (y ≈ 273)
+const ROOT = makePath([[87, 294], [95, 304], [99, 318]], 6.2)
+const BODY = makePath([[122, 305], [128.5, 297], [133, 287.5], [137, 278], [140.5, 270], [142, 263]], (f) => 9.2 - 1.2 * f)
+const LEG = makePath([[99, 297], [109, 290.5], [117, 283], [121, 274]], 8)
+const RING = { c: [116, 318], rx: 19, ry: 20.5, hole: [117.5, 315.5], hr: 7.6 }
 export const HANDLE = {
   bounds: { min: [80, 236, -12], max: [154, 352, 12] },
   hz: 6, // half thickness across the handle (mm, assumed)
@@ -101,57 +102,62 @@ export function handleSDF() {
   const hz = HANDLE.hz
   const sd = (x, y, z) => {
     // arch (neck curving back to the vessel) — its sides carry a groove parallel to the edges
-    const A = limb(ARCH, x, y, z, hz)
-    let d = A.d
-    d = smin(d, limb(CHIN, x, y, z, hz * 0.85).d, 2.4)
+    // the ring (neck rolling over into the head), sides rounded, the opening through it
+    let d = smax(sdEllipsoid(x - RING.c[0], y - RING.c[1], z, RING.rx, RING.ry, hz + 8) , Math.abs(z) - hz, 2.4)
+    d = smin(d, limb(ROOT, x, y, z, hz).d, 2.6)
+    d = smin(d, limb(LEG, x, y, z, hz * 0.95).d, 2.6)
     const B = limb(BODY, x, y, z, hz + 0.6)
     d = smin(d, B.d, 3)
-    // the tail: a squared curl clamped on the shoulder, a hole through its outer end
-    let t = sdRBox3(x - 132, y - 255, z, 16.5, 8.4, hz + 0.4, 3.2)
-    t = smax(t, -sdRBox3(x - 140.5, y - 254, z, 3.1, 2.8, hz + 4, 1.4), 0.6)
+    // the tail: a squared curl (x 128–151, y 252–275) on a bar clamped to the shoulder, a hole through its middle
+    let t = sdRBox3(x - 139.5, y - 263.5, z, 11.5, 11.5, hz + 0.4, 3.6)
+    t = smin(t, sdRBox3(x - 123, y - 262, z, 13, 5.6, hz, 2.4), 2)
+    t = smax(t, -sdRBox3(x - 141, y - 262.5, z, 3.0, 3.4, hz + 4, 1.4), 0.6)
     d = smin(d, t, 3.2)
     // incised line work on both side faces (z = ±hz): contour groove inside the edge of arch and body,
     // a spine groove down the body, a C-scroll on the tail
     const zf = hz + 0.6 - Math.abs(z)
     if (zf < 1.4) {
       let g = 1e9
-      if (A.q.f > 0.12 && A.q.f < 0.95) g = Math.min(g, Math.abs(A.q.d - (A.hw - 2.0)) - 0.32)
+      const rr = len2(x - RING.hole[0], y - RING.hole[1])
+      if (x < 128) g = Math.min(g, Math.abs(rr - RING.hr - 2.4) - 0.32)
       if (B.q.f > 0.08 && B.q.f < 0.92) {
         g = Math.min(g, Math.abs(B.q.d - (B.hw - 2.1)) - 0.32)
         g = Math.min(g, Math.max(B.q.d - 0.32, -1e9))
       }
       // C-scroll on the tail (open toward the hole)
-      const cx = x - 128, cy = y - 255.5
-      const rr = len2(cx, cy)
-      if (cx < 2.5) g = Math.min(g, Math.abs(rr - 4.6) - 0.34)
-      g = Math.min(g, Math.abs(rr - 1.6) - 0.3)
+      // a squared spiral round the tail's hole
+      g = Math.min(g, sdRBox2(x - 141, y - 262.5, 6.6, 7.0, 2.2) < 0 ? Math.abs(sdRBox2(x - 141, y - 262.5, 6.6, 7.0, 2.2)) - 0.34 : 1e9)
+      // ladder rings on the neck behind the head (photo: transverse ridges where the ring meets the head)
+      const ang = Math.atan2(y - RING.hole[1], x - RING.hole[0])
+      if (ang > 0.35 && ang < 1.2 && rr > RING.hr + 4) g = Math.min(g, Math.abs((((ang * 12) % 1) + 1) % 1 - 0.5) * 2.2 - 0.32)
       d = smax(d, -Math.max(g, zf - 0.6), 0.25)
     }
     d = smin(d, head(x, y, z), 2.6)
+    d = smax(d, -(len2(x - RING.hole[0], y - RING.hole[1]) - RING.hr), 3.2)
     return d
   }
   return { sd, bounds: HANDLE.bounds }
 }
 
-/** the head: looks out (+x) and a little down; a horn tuft and a smaller ear on the crown */
+/** the head: a flat face looking out (+x), the snout pointing down; a horn tuft on the crown */
 function head(x, y, z) {
   // skull
-  let d = sdEllipsoid(x - 127.5, y - 323.5, z, 8.6, 10.2, 7.8)
-  // brow over the eyes
-  d = smin(d, sdRBox3(x - 132.5, y - 327, z, 2.6, 2.2, 7.2, 1.6), 1.6)
-  // snout: out and down, squared, a broad muzzle
-  d = smin(d, sdCone(x, y, z, [131, 319.5, 0], [137.2, 312.2, 0], 5.6, 4.0), 2.2)
-  // the mouth: a slot under the muzzle
-  d = smax(d, -sdRBox3(x - 136.5, y - 309.6, z, 3.4, 0.7, 4.6, 0.4), 0.4)
-  // eyes: bulging, on the sides of the face
+  let d = sdEllipsoid(x - 131.5, y - 322, z, 8.0, 12.0, 8.0)
+  // flat face with a brow
+  d = smin(d, sdRBox3(x - 135, y - 322, z, 3.6, 7.2, 6.6, 2.4), 2)
+  d = smin(d, sdRBox3(x - 137.2, y - 327.4, z, 1.6, 1.6, 6.4, 1.0), 1.0)
+  // snout: down and a little out, a broad muzzle
+  d = smin(d, sdCone(x, y, z, [135, 316, 0], [137.6, 309.6, 0], 5.2, 4.2), 2.2)
+  d = smax(d, -sdRBox3(x - 139.6, y - 310.8, z, 1.8, 0.6, 4.2, 0.3), 0.4)
+  // eyes: bulging, on the face
   for (const s of [-1, 1]) {
-    d = smin(d, sdEllipsoid(x - 132.4, y - 323.2, z - s * 5.6, 2.4, 2.1, 1.8), 0.8)
-    d = smax(d, -(len3(x - 133.2, y - 323.2, z - s * 7.3) - 0.9), 0.3)
+    d = smin(d, sdEllipsoid(x - 137.4, y - 323.6, z - s * 3.6, 1.8, 2.0, 1.9), 0.7)
+    d = smax(d, -(len3(x - 139.0, y - 323.6, z - s * 3.8) - 0.8), 0.3)
   }
-  // horn tuft: a fat horn rising from the crown, leaning back, its tip rolled forward
-  d = smin(d, sdCone(x, y, z, [127, 331, 0], [126.4, 343, 0], 3.6, 2.2), 1.8)
-  d = smin(d, sdEllipsoid(x - 128.2, y - 344, z, 2.6, 2.0, 2.4), 1.0)
-  // a smaller ear behind it
-  for (const s of [-1, 1]) d = smin(d, sdCone(x, y, z, [121.5, 329.5, s * 3.2], [118.6, 337.2, s * 4.2], 2.4, 1.0), 1.4)
+  // horn tuft: two short horns side by side, tips rolled forward
+  for (const s of [-1, 1]) {
+    d = smin(d, sdCone(x, y, z, [130.5, 331, s * 2.6], [131.6, 338.4, s * 3.0], 3.2, 2.0), 1.8)
+    d = smin(d, sdEllipsoid(x - 132.6, y - 338.6, z - s * 3.0, 2.4, 1.6, 2.0), 1.0)
+  }
   return d
 }

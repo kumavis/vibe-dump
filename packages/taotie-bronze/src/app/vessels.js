@@ -153,6 +153,7 @@ export function createVessels({ stage, catalog, quality, cacheMax = 2, progress,
     entry.promise = (async () => {
       const result = await a.build(kit, {
         quality: q,
+        params: Object.fromEntries(new URLSearchParams(globalThis.location?.search || '')), // raw URL parameters (artifact variants, e.g. ?relief=photo)
         onProgress: async (f, what) => {
           if (building === a.id) {
             const pct = Math.round(Math.max(0, Math.min(1, f)) * 100)

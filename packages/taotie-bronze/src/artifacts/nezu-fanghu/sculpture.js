@@ -49,24 +49,25 @@ const sideX = (y) => bodyW(clamp(y, 13, 419))
 export function handleSDF() {
   // photo-08: the head is larger than first drawn (≈ 40 mm out, ears to y ≈ 368): the design below is scaled by S
   // about its root on the wall (u 0, y 340)
-  const S = 1.22
+  const S = 1.0
   const sd0 = (u, y, z) => {
     // root block on the wall
-    let d = sdRBox3(u - 3, y - 349, z, 7, 11, 10.5, 4)
-    // skull: a long rounded wedge leaning out
-    d = smin(d, sdEllipsoid(u - 15, y - 350, z, 13, 9.5, 9.5), 4)
-    // brow ridge
-    d = smin(d, sdTube(u, y, z, [[10, 356, 0, 6.5], [22, 355, 0, 5.5]]), 3)
-    // snout: forward, then down and back to the wall: a closed loop (the ring passes through it)
-    d = smin(d, sdTube(u, y, z, [[24, 352, 0, 6.6], [32, 347, 0, 6.0], [35.5, 339, 0, 5.2], [33, 330.5, 0, 4.6], [25, 325.5, 0, 4.3], [14, 325.5, 0, 4.2], [4, 328, 0, 4.6]]), 3)
-    // nostrils / mouth notch at the snout's turn
-    d = smax(d, -(len3(u - 37.5, y - 343, z) - 2.2), 0.8)
+    let d = sdRBox3(u - 4, y - 349, z, 8, 12, 10, 4)
+    // skull: a broad rounded block standing out from the wall, its face turned down
+    d = smin(d, sdEllipsoid(u - 17, y - 350, z, 13, 11, 10), 4)
+    // muzzle: hanging DOWN from the skull's outer end (photo-08: the face's front is near vertical)
+    d = smin(d, sdEllipsoid(u - 23, y - 336, z, 8.5, 10, 8), 3.5)
+    d = smin(d, sdTube(u, y, z, [[24, 343, 0, 6.8], [26.5, 333, 0, 6.2], [24.5, 326.5, 0, 5.4]]), 3)
+    // the loop under the chin: back from the muzzle to the wall (the ring hangs through it)
+    d = smin(d, sdTube(u, y, z, [[22, 325, 0, 3.8], [14, 320.5, 0, 3.6], [5, 322.5, 0, 3.9], [1, 328, 0, 4.4]]), 2)
+    // nostrils at the muzzle tip
+    for (const sg of [-1, 1]) d = smax(d, -(len3(u - 28, y - 327.5, z - sg * 3) - 1.5), 0.6)
     for (const sg of [-1, 1]) {
-      // ears / horns: lying back and up toward the wall
-      d = smin(d, sdTube(u, y, z, [[13, 357, sg * 6.5, 4.6], [8, 363.5, sg * 8.5, 3.6], [2, 366, sg * 8, 2.4], [-1, 365, sg * 7, 1.6]]), 2.2)
-      // eyes: round bosses on the skull's flanks
-      d = smin(d, len3(u - 22, y - 350.5, z - sg * 7.6) - 2.6, 1.2)
-      d = smax(d, -(len3(u - 22.3, y - 350.5, z - sg * 10.0) - 0.9), 0.3)
+      // ears / horns: standing up and back toward the wall
+      d = smin(d, sdTube(u, y, z, [[16, 357, sg * 6.5, 4.4], [13, 362.5, sg * 8, 3.6], [9, 366, sg * 8.5, 2.6], [6, 367, sg * 8, 1.8]]), 2.2)
+      // eyes: round bosses on the flanks of the skull
+      d = smin(d, len3(u - 21, y - 348.5, z - sg * 8.4) - 2.8, 1.2)
+      d = smax(d, -(len3(u - 21.2, y - 348.5, z - sg * 11.0) - 1.0), 0.3)
     }
     return d
   }
@@ -82,7 +83,7 @@ export function handleSDF() {
 /** the hanging ring of the +X handle: plane ∥ the side face, threaded through the snout loop, resting on the belly */
 export function ringFrame() {
   const R = 37.5, r = 2.8
-  const top = new THREE.Vector3(sideX(330) + 25, 333, 0) // over the scaled snout bar (top ≈ 327.5), inside the loop
+  const top = new THREE.Vector3(sideX(325) + 13.5, 327.6, 0) // over the chin loop's bar (top ≈ 324.4), under the muzzle
   // let it hang until its bottom touches the belly: tilt about the hanging point (Z axis)
   let tilt = 0
   for (let i = 0; i < 40; i++) {

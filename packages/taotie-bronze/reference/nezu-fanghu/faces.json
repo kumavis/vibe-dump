@@ -1,0 +1,551 @@
+{
+ "vessel": "nezu-fanghu",
+ "note": "Flat faces of the Nezu phoenix fanghu from the project owner's photo-08 (the broad face, near head-on, \u2248 3.2 px/mm on the belly). Points are [photo px, vessel mm x, y, z]: each zone's chord-plane corners, edge midpoints and centre projected through an ASSUMED pinhole camera (.work/r8-fanghu/solve/fit08.py: az 4.4\u00b0, el 6\u00b0 assumed, 965 mm from (0, 250, 0), f 3000 px; fitted to the silhouette at 11 levels and four centre-line landmarks, 7.9 px rms). They are a consistent flattening of the photograph under that camera, not an independent measurement. The d\u00e9cor itself was traced on faces/dev-*.jpg (the same photograph developed onto the model's own curved surface, reference/nezu-fanghu/trace.py); these planar faces are the instrument for comparing photo and model head-on.",
+ "blur": 0.9,
+ "sources": {
+  "p08": {
+   "file": "photo-08.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "the project owner's photograph, Nezu Museum, Tokyo, 2026; the committed file is the original"
+  }
+ },
+ "faces": {
+  "face-lower": {
+   "label": "front (+Z) lower register y 68\u2013168: the two lower bird cartouches either side of the vertical strap \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    118.0,
+    63.45
+   ],
+   "normal": [
+    0,
+    -0.0918,
+    0.9958
+   ],
+   "up": [
+    0,
+    0.9958,
+    0.0918
+   ],
+   "width": 236,
+   "height": 100.4,
+   "ppmm": 6,
+   "points": [
+    [
+     305.7,
+     1535.3,
+     -118,
+     68.0,
+     58.85
+    ],
+    [
+     683.0,
+     1545.1,
+     0,
+     68.0,
+     58.85
+    ],
+    [
+     1067.8,
+     1555.1,
+     118,
+     68.0,
+     58.85
+    ],
+    [
+     295.8,
+     1225.2,
+     -118,
+     168.0,
+     68.06
+    ],
+    [
+     681.2,
+     1232.2,
+     0,
+     168.0,
+     68.06
+    ],
+    [
+     1074.3,
+     1239.2,
+     118,
+     168.0,
+     68.06
+    ],
+    [
+     300.8,
+     1381.9,
+     -118,
+     118.0,
+     63.45
+    ],
+    [
+     682.1,
+     1390.3,
+     0,
+     118.0,
+     63.45
+    ],
+    [
+     1071.0,
+     1398.9,
+     118,
+     118.0,
+     63.45
+    ]
+   ],
+   "trust": "chord plane of a convex surface: the rounded corners (|x| beyond \u2248 W \u2212 r) leave the plane by up to \u2248 20 mm and come out compressed; the central half (strap, eyes, inner field) is good to \u2248 2 mm",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  },
+  "face-upper": {
+   "label": "front (+Z) upper register y 196\u2013292: the two upper bird cartouches, the triangle stud \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    244.0,
+    55.17
+   ],
+   "normal": [
+    0,
+    0.1958,
+    0.9806
+   ],
+   "up": [
+    0,
+    0.9806,
+    -0.1958
+   ],
+   "width": 184,
+   "height": 97.9,
+   "ppmm": 6,
+   "points": [
+    [
+     381.2,
+     1134.1,
+     -92,
+     196.0,
+     64.75
+    ],
+    [
+     682.2,
+     1138.8,
+     0,
+     196.0,
+     64.75
+    ],
+    [
+     987.9,
+     1143.6,
+     92,
+     196.0,
+     64.75
+    ],
+    [
+     389.9,
+     815.3,
+     -92,
+     292.0,
+     45.58
+    ],
+    [
+     688.0,
+     817.5,
+     0,
+     292.0,
+     45.58
+    ],
+    [
+     990.7,
+     819.7,
+     92,
+     292.0,
+     45.58
+    ],
+    [
+     385.6,
+     973.9,
+     -92,
+     244.0,
+     55.17
+    ],
+    [
+     685.1,
+     977.3,
+     0,
+     244.0,
+     55.17
+    ],
+    [
+     989.3,
+     980.8,
+     92,
+     244.0,
+     55.17
+    ]
+   ],
+   "trust": "chord plane of a convex surface: the rounded corners (|x| beyond \u2248 W \u2212 r) leave the plane by up to \u2248 20 mm and come out compressed; the central half (strap, eyes, inner field) is good to \u2248 2 mm",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  },
+  "face-strap": {
+   "label": "front (+Z) strap crossing y 150\u2013212: the horizontal strap and the diamond stud \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    181.0,
+    65.51
+   ],
+   "normal": [
+    0,
+    0.1206,
+    0.9927
+   ],
+   "up": [
+    0,
+    0.9927,
+    -0.1206
+   ],
+   "width": 120,
+   "height": 62.5,
+   "ppmm": 6,
+   "points": [
+    [
+     483.9,
+     1287.7,
+     -60,
+     150.0,
+     69.28
+    ],
+    [
+     680.7,
+     1291.6,
+     0,
+     150.0,
+     69.28
+    ],
+    [
+     879.5,
+     1295.5,
+     60,
+     150.0,
+     69.28
+    ],
+    [
+     486.6,
+     1082.1,
+     -60,
+     212.0,
+     61.75
+    ],
+    [
+     683.1,
+     1084.9,
+     0,
+     212.0,
+     61.75
+    ],
+    [
+     881.7,
+     1087.7,
+     60,
+     212.0,
+     61.75
+    ],
+    [
+     485.3,
+     1184.9,
+     -60,
+     181.0,
+     65.51
+    ],
+    [
+     681.9,
+     1188.2,
+     0,
+     181.0,
+     65.51
+    ],
+    [
+     880.6,
+     1191.5,
+     60,
+     181.0,
+     65.51
+    ]
+   ],
+   "trust": "chord plane of a convex surface: the rounded corners (|x| beyond \u2248 W \u2212 r) leave the plane by up to \u2248 20 mm and come out compressed; the central half (strap, eyes, inner field) is good to \u2248 2 mm",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  },
+  "face-neck": {
+   "label": "front (+Z) neck y 306\u2013420: the bird frieze and the rising triangles \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    363.0,
+    43.81
+   ],
+   "normal": [
+    0,
+    -0.0023,
+    1.0
+   ],
+   "up": [
+    0,
+    1.0,
+    0.0023
+   ],
+   "width": 152,
+   "height": 114.0,
+   "ppmm": 6,
+   "points": [
+    [
+     442.1,
+     769.8,
+     -76,
+     306.0,
+     43.68
+    ],
+    [
+     688.6,
+     771.3,
+     0,
+     306.0,
+     43.68
+    ],
+    [
+     938.2,
+     772.9,
+     76,
+     306.0,
+     43.68
+    ],
+    [
+     439.5,
+     393.8,
+     -76,
+     420.0,
+     43.95
+    ],
+    [
+     689.3,
+     392.9,
+     0,
+     420.0,
+     43.95
+    ],
+    [
+     942.3,
+     392.0,
+     76,
+     420.0,
+     43.95
+    ],
+    [
+     440.8,
+     583.0,
+     -76,
+     363.0,
+     43.81
+    ],
+    [
+     688.9,
+     583.4,
+     0,
+     363.0,
+     43.81
+    ],
+    [
+     940.3,
+     583.7,
+     76,
+     363.0,
+     43.81
+    ]
+   ],
+   "trust": "chord plane of a convex surface: the rounded corners (|x| beyond \u2248 W \u2212 r) leave the plane by up to \u2248 20 mm and come out compressed; the central half (strap, eyes, inner field) is good to \u2248 2 mm",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  },
+  "face-foot": {
+   "label": "front (+Z) foot band y 13\u201368: the roundel and the hooked S-bands \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    40.5,
+    58.99
+   ],
+   "normal": [
+    0,
+    0.0051,
+    1.0
+   ],
+   "up": [
+    0,
+    1.0,
+    -0.0051
+   ],
+   "width": 212,
+   "height": 55.0,
+   "ppmm": 6,
+   "points": [
+    [
+     345.3,
+     1707.5,
+     -106,
+     13.0,
+     59.13
+    ],
+    [
+     682.6,
+     1717.8,
+     0,
+     13.0,
+     59.13
+    ],
+    [
+     1025.9,
+     1728.2,
+     106,
+     13.0,
+     59.13
+    ],
+    [
+     343.8,
+     1536.2,
+     -106,
+     68.0,
+     58.85
+    ],
+    [
+     683.0,
+     1545.1,
+     0,
+     68.0,
+     58.85
+    ],
+    [
+     1028.3,
+     1554.0,
+     106,
+     68.0,
+     58.85
+    ],
+    [
+     344.5,
+     1622.1,
+     -106,
+     40.5,
+     58.99
+    ],
+    [
+     682.8,
+     1631.7,
+     0,
+     40.5,
+     58.99
+    ],
+    [
+     1027.1,
+     1641.4,
+     106,
+     40.5,
+     58.99
+    ]
+   ],
+   "trust": "chord plane of a convex surface: the rounded corners (|x| beyond \u2248 W \u2212 r) leave the plane by up to \u2248 20 mm and come out compressed; the central half (strap, eyes, inner field) is good to \u2248 2 mm",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  },
+  "face-lid": {
+   "label": "front (+Z) lid band y 425\u2013464: the two bird cartouches of the domed lid \u2014 chord plane",
+   "source": "p08",
+   "center": [
+    0,
+    444.5,
+    35.12
+   ],
+   "normal": [
+    0,
+    0.4015,
+    0.9159
+   ],
+   "up": [
+    0,
+    0.9159,
+    -0.4015
+   ],
+   "width": 144,
+   "height": 42.6,
+   "ppmm": 7,
+   "points": [
+    [
+     452.6,
+     377.1,
+     -72,
+     425.0,
+     43.67
+    ],
+    [
+     689.4,
+     376.1,
+     0,
+     425.0,
+     43.67
+    ],
+    [
+     929.1,
+     375.2,
+     72,
+     425.0,
+     43.67
+    ],
+    [
+     460.6,
+     252.9,
+     -72,
+     464.0,
+     26.57
+    ],
+    [
+     694.2,
+     251.3,
+     0,
+     464.0,
+     26.57
+    ],
+    [
+     930.5,
+     249.6,
+     72,
+     464.0,
+     26.57
+    ],
+    [
+     456.7,
+     314.6,
+     -72,
+     444.5,
+     35.12
+    ],
+    [
+     691.8,
+     313.3,
+     0,
+     444.5,
+     35.12
+    ],
+    [
+     929.8,
+     312.0,
+     72,
+     444.5,
+     35.12
+    ]
+   ],
+   "trust": "chord plane of a domed band seen nearly edge-on: low trust beyond the layout",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: \u2248 2\u20134 mm (7.9 px rms on its own landmarks)"
+  }
+ }
+}

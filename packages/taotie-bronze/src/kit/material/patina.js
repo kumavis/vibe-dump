@@ -439,6 +439,21 @@ export const PATINA_PRESETS = {
     speckleDecor: 0.6, crustIsles: 0.04, crustScale: 5, crustColor: '#4fa078', crustPlace: 0.5, pustules: 0.025,
     pustuleScale: 2.4, pustuleColor: '#25a066', lowerBody: 0.3, lowerHeight: 0.1, lowerColor: '#c8d0bc', grain: 0.6,
   },
+  // Nezu hu 90099 (photo-11): dark grey-brown noble skin; the stamped interlace a grey-green crust with pale green
+  // in the ground between the ribs and the rib tops rubbed brown; red-brown cuprite patches low on the belly; the
+  // plain neck and foot near-black and glossy-dull, the neck with pale grey-white lime islands
+  'nezu-hu': {
+    age: 1, tin: 0.14, lead: 0.08, polish: 0.3, tarnish: 0.6, cuprite: 0.6, cupriteTone: 0.3, tinOxide: 0.9,
+    tinOxideTone: 1.0, malachite: 0.03, carbonate: 0.3, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.75,
+    turquoiseTone: 0.5, islands: 0.3, malachiteScale: 1.0, crust: 0.12, chloride: 0, soot: 0.04, crevice: 0.95,
+    patchScale: 60, mottleScale: 6, patchiness: 0.4, softness: 0.6, drift: 0.3, earth: 0.06, earthColor: '#6a4c38',
+    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.5, interiorTone: 0.4, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.2, dulling: 0.35, tops: 1, nobleWarmth: 0.7, matte: 0.9, topsTone: 0.45, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#a39684', upperTone: 0.36, upperHeight: 0.7, plainTone: 0.42, speckle: 0.02, speckleScale: 0.6,
+    speckleColor: '#2f9a64', speckleDecor: 0.6, crustIsles: 0.0, crustScale: 9, crustColor: '#b8b6a8', crustPlace: 0.6,
+    pustules: 0.008, pustuleScale: 2.4, pustuleColor: '#25a066', lowerBody: 0.45, lowerHeight: 0.13, lowerColor: '#8a8478',
+    grain: 0.6,
+  },
   // the Stanford dragon (a scan dressed by geometry/skin.js): a showcase of cavity-driven corrosion — bright
   // malachite packed into every scale groove and the coils' creases, cuprite under a thin dark noble skin on
   // the open flanks, the crests of scales, spines and whiskers rubbed back to warm metal, pale crust islands
@@ -484,7 +499,7 @@ export const PATINA_PRESETS = {
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu', 'nezu-hu'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
   Classics: ['stanford-dragon', 'suzanne', 'utah-teapot'],

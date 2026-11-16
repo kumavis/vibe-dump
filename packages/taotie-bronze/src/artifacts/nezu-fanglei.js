@@ -66,7 +66,9 @@ export default {
     'face-lid': { face: { center: [0, 423, 33], normal: [0, 0.686, 0.7276], up: [0, 0.7276, -0.686], width: 180, height: 98.2 }, ref: 'faces/face-lid.jpg' },
   },
 
-  async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
+  async build(kit, { quality = 1, onProgress = async () => {}, params = {} } = {}) {
+    // ?relief=photo | photo-pure: the main register read off the photograph (experiment; nezu-fanglei/relief.js)
+    const relief = params.relief || null
     const q = Math.max(0.25, quality)
     const ppmm = 4.4 * Math.sqrt(q)
     const dens = 0.75 * Math.sqrt(q)
@@ -102,7 +104,7 @@ export default {
     const ctx = { ppmm, seed, q }
     const side = { ...ctx, kx: RHO, ppmm: ppmm * 0.7 } // the narrow faces: seen less, a lighter panel
     await onProgress(0.02, 'belly · broad face (traced)')
-    panels.bellyLong = await bellyPanel(kit, bellyL.sides.front.cells[0][0], ctx)
+    panels.bellyLong = await bellyPanel(kit, bellyL.sides.front.cells[0][0], { ...ctx, relief })
     await onProgress(0.2, 'belly · narrow face')
     panels.bellyShort = await bellyPanel(kit, bellyL.sides.right.cells[0][0], { ...side, seed: seed + 1 })
     await onProgress(0.36, 'shoulder frieze')

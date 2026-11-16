@@ -255,6 +255,29 @@ narrow triangles, flush, outline groove + inner mask; see research/03 and the gu
 **Kit: blade 'gu-trumpet' — correct in kind.**
 **Whorl bosses** (涡纹) — none on these pieces.
 
+**B2 The Western Zhou ribbon bird** (鳳文, phoenix) — Nezu square hu 90097-98, 9th c. BC (`reference/nezu-fanghu/`
+photo-08, faces/dev-low.jpg, dev-up.jpg; detail-phoenix.jpg, detail-upper.jpg). · Two centuries after Anyang and drawn
+by a different hand: NO leiwen ground under the motif and no plates standing on a ground — the cartouche is one flat
+level with the strap round it, and the bird is CUT into it. Fat flat ribbons 3–6 mm wide parted by wide channels
+(surface 1.5–3 mm, round-shouldered, ≈ 1.5–2 mm deep), the cartouche outlined by a wider deeper channel (≈ 2.8);
+a big domed eye (Ø ≈ 8) in a sunk ring with a dot pupil; crest plumes as concentric arcs over the eye, a curled beak
+with a deep hollow, a breast column of hooked feathers, a spiral wing, the long tail plumes curling up the outer side
+of the cartouche and round the corner of the vessel. Only a few hollows (head, crest window, breast) are cut deeper
+and packed with fine spirals (≈ 0.9 mm pitch). Each cartouche is a mirror of its neighbour across the strap
+(confronted birds). · **Kit: `cutRibbons` (relief/ribbon.js) + atlas `phoenix` (`nezu-fanghu-low`, `nezu-fanghu-up`,
+`pair-low`) — new.** The older `bird` motif (Anyang bird-kui on a leiwen ground) is the wrong language here.
+
+### Straps and studs (Western Zhou)
+
+**ST1 Crossing straps with pyramidal studs** (十字帯 / 乳丁) — Nezu square hu 90097-98 (photo-08, photo-09; face-strap,
+detail-stud.jpg). · Broad flat straps (≈ 31 mm) at the wall level divide each face of the belly into four cartouches: a
+horizontal strap round the belly at its widest, a vertical strap down every face. On each crossing stands a
+four-sided pyramid, a lozenge in plan taller than wide (≈ 50 × 58 mm, ≈ 17 proud, crisp arrises); where the vertical
+strap leaves the plain shoulder band hangs a three-sided one (a level top facet ≈ 44 wide, the apex pointing down to
+the wall ≈ 24 below). The narrow sides repeat it (their studs stand on the silhouettes of the front view). · **Kit:
+atlas `straps` (`nezu-fanghu`, `plain-cross`) — new; on the vessel the studs are geometry
+(nezu-fanghu/sculpture.js `studGeometry`).**
+
 ### Grounds (地纹)
 
 **G1 Big squared spirals, near-square cells** (雷纹) — `ground-leiwen-big.jpg` · Met fangyi everywhere. ·

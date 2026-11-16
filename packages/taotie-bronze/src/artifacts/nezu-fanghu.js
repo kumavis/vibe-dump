@@ -38,7 +38,7 @@ export default {
     // photo-08: assumed camera az 4.4°, el 6°, 965 mm from (0, 250, 0), vfov ≈ 38° (.work/r8-fanghu/solve/fit08.py)
     front: { azimuth: 4.4, elevation: 6, fov: 38, fit: 1.0, target: [0, 250, 0], ref: 'front.jpg' },
     // photo-09: az ≈ 38°, el ≈ 7.5°, ≈ 1.25 m (fit09.py; the twin at the left edge cropped out of the ref)
-    'three-quarter': { azimuth: 46, elevation: 8, fov: 38, fit: 1.25, target: [0, 250, 0], ref: 'three-quarter.jpg' },
+    'three-quarter': { azimuth: 46, elevation: 8, fov: 38, fit: 1.05, target: [0, 250, 0], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 6, fov: 26, fit: 1.08 },
     top: { azimuth: 12, elevation: 70, fov: 28, fit: 1.05 },
@@ -50,6 +50,13 @@ export default {
     'detail-upper': { azimuth: 4.4, elevation: 6, fov: 20, fit: 0.18, target: [-52, 245, 55], ref: 'detail-upper.jpg' },
     'detail-neck': { azimuth: 4.4, elevation: 6, fov: 20, fit: 0.22, target: [0, 360, 42], ref: 'detail-neck.jpg' },
     'detail-foot': { azimuth: 4.4, elevation: 6, fov: 20, fit: 0.2, target: [0, 42, 62], ref: 'detail-foot.jpg' },
+    // flat faces (KIT.md § Flat faces): head-on on each zone's chord plane; ref = photo-08 flattened (faces.json)
+    'face-lower': { face: { center: [0, 118, 63.45], normal: [0, -0.0918, 0.9958], up: [0, 0.9958, 0.0918], width: 236, height: 100.4 }, ref: 'faces/face-lower.jpg' },
+    'face-upper': { face: { center: [0, 244, 55.17], normal: [0, 0.1958, 0.9806], up: [0, 0.9806, -0.1958], width: 184, height: 97.9 }, ref: 'faces/face-upper.jpg' },
+    'face-strap': { face: { center: [0, 181, 65.51], normal: [0, 0.1206, 0.9927], up: [0, 0.9927, -0.1206], width: 120, height: 62.5 }, ref: 'faces/face-strap.jpg' },
+    'face-neck': { face: { center: [0, 363, 43.81], normal: [0, -0.0023, 1], up: [0, 1, 0.0023], width: 152, height: 114 }, ref: 'faces/face-neck.jpg' },
+    'face-foot': { face: { center: [0, 40.5, 58.99], normal: [0, 0.0051, 1], up: [0, 1, -0.0051], width: 212, height: 55 }, ref: 'faces/face-foot.jpg' },
+    'face-lid': { face: { center: [0, 444.5, 35.12], normal: [0, 0.4015, 0.9159], up: [0, 0.9159, -0.4015], width: 144, height: 42.6 }, ref: 'faces/face-lid.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {

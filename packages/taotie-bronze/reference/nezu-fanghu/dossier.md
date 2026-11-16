@@ -1,0 +1,87 @@
+# Dossier — nezu-fanghu (鳳文方壺, Nezu Museum 90097-98)
+
+Ground truth: the project owner's two photographs of the object, `photo-08.jpg` (the broad face, near head-on, a
+little to the right and above) and `photo-09.jpg` (three-quarter from the front right, higher; the twin vessel of the
+pair at the left edge), and the label `card-10.jpg`. Nothing else about this object was reachable. Tags:
+**[measured]** back-projected from photo-08 through the assumed camera (≈ ±3 % of H); **[est]** read obliquely,
+partly hidden, dark or worn (≈ ±10 %); **[inferred]** not visible.
+
+## a. Identity
+
+1. **Label** (transcribed in SOURCES.md): 鳳文方壺 · Square Hu with Phoenix Design · Bronze · China, Western Zhou
+   dynasty, 9th century BC · Nezu Museum · 90097・98 · exhibit 16. No findspot, no designation, no dimension.
+2. **A pair.** The double number and photo-09 (a second hu with the same rings, triangles and straps at its left edge)
+   say the museum shows two; this model is the one in front of the camera in both photographs. Which of 90097 / 90098 it
+   is cannot be told.
+3. **Scale [inferred].** No dimension on the label; the card is not in either object photograph, the plinth is a plain
+   block. H = 500 mm is assumed. Two weak checks agree: the spiral ground packed in the upper cartouches measures
+   ≈ 2.9 px centre to centre on photo-08 (3.27 px/mm at H = 500 → ≈ 0.9 mm, a normal 9th-century pitch), and the
+   hanging ring then measures ≈ 75 mm across, the size of the rings on Western Zhou hu of 45–60 cm. A 45 cm vessel
+   (0.8 mm pitch) or a 55 cm one (1.0 mm) cannot be excluded. **Every other number is a proportion measured on the
+   photographs, so the whole model scales with that one guess.**
+
+## b. Form (mm at H = 500; Y up, front +Z = the broad face of photo-08; handles on ±X)
+
+1. **Camera (assumed, then fitted).** A pinhole, f = 3000 px (the owner's phone at the zoom used for the other Nezu
+   pieces), looking at (0, 250, 0): azimuth 4.4°, distance 965 mm, image offset and roll fitted
+   (`.work/r8-fanghu/solve/fit08.py`, LM) to the silhouette's left and right edges at 11 levels plus four centre-line
+   landmarks (crown rim, neck-frieze divider, diamond stud, foot); 7.9 px rms. The **elevation is not determined by
+   these landmarks** (it trades against the image offset) and was set to 6° — the foot plate's top face shows as a
+   ≈ 35 px band, the crown's mouth is not seen into. Correction for the elevation: every level is the height at which a
+   point on the FRONT surface (z = 0.55 × the half width there) projects onto the photo row read, so a register on the
+   receding upper belly is placed at its own depth before its height is read (`prof.py`).
+2. **Plan depth [measured, photo-09]: 0.55 × the width (± 0.07).** Second camera fitted on photo-09
+   (`fit09.py`: az ≈ 38°, el ≈ 7.5°): the foot plate's three visible bottom corners (rounded-rectangle plate 0.564 :
+   1), the diamond and triangle studs on the centre line, three silhouette rows. The task brief calls the section
+   "rounded-square"; **the photograph wins**: a rounded RECTANGLE, nearly 2 : 1 — the narrow sides carry the handles.
+3. **Levels [measured]** (y): foot plate 0–13 (it overhangs the foot band); foot band 13–66 (concave, a frieze 20–56);
+   lower cartouches 71–162; horizontal strap 165–196 (diamond studs centred at 180); upper cartouches 197–283;
+   plain shoulder band 291–309; neck frieze 310–357; band of rising triangles 359–416; neck top 419; lid lip 419–425;
+   domed lid band 425–464 (cartouches 435–462); crown 464–500.
+4. **Half widths (x) [measured]** (silhouette, photo-08): foot band 107.5 @13 → 103.4 @50; belly 112 @72, 122.3 @88,
+   125.2 @100, **126.7 @132 (widest: the lower cartouches)**, 124.6 @162, 118.8 @192, 114.3 @207, 107.8 @222,
+   101.6 @237, 95.8 @252, 90.2 @267, 85.6 @282, 81.6 @297; neck 78.6 @310, 75.1 @340, **74.6 @358 (waist)**, 76.8 @388,
+   79.9 @419; lid 79.4 @425, 76.4 @440, 71.5 @448, 64 @455, 50 @463; crown 45.5 @465 flaring to 50.2 @500 (walls ≈ 3.6).
+   Foot plate 117 × 66 (half), corner radius ≈ 12 [est].
+5. **Section [est]:** fat rounded corners, radius ≈ 0.7 × the half depth (≈ 49 on the belly): in photo-09 the corner
+   is a broad curve, the cartouches wrap round it, and the side studs stand on the silhouette in photo-08.
+6. **Sculpture [est]:** two animal heads on the narrow sides of the neck (y ≈ 320–372, ≈ 40 mm out from the wall): a
+   broad skull, round eyes, two ears / horns standing up and back, a muzzle hanging down with a loop under the chin;
+   a loose ring ≈ 75 mm across, bar ≈ 5.6 mm, hangs from it in a plane parallel to the side and rests on the upper
+   belly (photo-08: rings at both silhouettes, edge-on; photo-09: the +X ring at ≈ 45°). **Studs:** on every face a
+   four-sided pyramid on the strap crossing (lozenge base ≈ 50 wide × 58 tall, ≈ 17 proud) and a three-sided one under
+   the shoulder band (top edge ≈ 44 wide at y 290, apex on the wall at y ≈ 266, ≈ 13 proud: a level top facet); the side
+   studs show on both silhouettes of photo-08 and on the right silhouette of photo-09.
+7. **Crown [est]:** an open flaring rectangular collar (its mouth seen in photo-09). photo-09 shows a cut-out in the
+   crown wall on the narrow side — **not modelled**.
+8. **Not visible:** the back, the left (−X) side face square-on, the inside, the underside, any inscription.
+
+## c. Décor (relief heights in mm; traced on faces/dev-*.jpg — photo-08 developed onto the model surface)
+
+The language is **not** Anyang taotie-and-leiwen. Strap, cartouche and bird share one flat level; the bird is drawn in
+FAT flat ribbons (3–6 mm) parted by wide round-shouldered channels (surface width 1.5–3 mm, depth ≈ 1.7) and a deeper
+border channel (≈ 2.8 wide, 2.2 deep) round each cartouche; a few hollows hold a fine spiral ground; the eyes are round
+domed bosses (Ø 8–8.5 on the belly, 7.8 in the neck frieze) in a sunk ring with a dot pupil. In the model the
+cartouche interior is lifted ≈ 1.3 mm as one cushion (photo-09 shows a step at the strap edges).
+
+| zone | photograph | what [measured unless tagged] |
+| --- | --- | --- |
+| lower cartouches (4 per broad face) | photo-08, both clear; photo-09 | a bird facing the vertical strap: crest plumes in concentric arcs over the eye (59, 129), a curled beak with a hollow, a breast column of four hooked feathers, a big spiral wing low inside, the long tail plumes curling up the outer side round the corner |
+| upper cartouches (4) | photo-08 | crested bird facing the centre: a G-hooked head, the eye (45, 259), a tall U crest plume with a spiral-filled window, the body rolling into a big spiral (50, 222), feet / tail bars below, spiral ground in four hollows |
+| neck frieze 310–357 | photo-08 | confronted birds either side of a centre line: beak column, head block with the eye (±26, 343), G-crest, a row of three small scrolls, claw, tail curling at the corner |
+| triangles 359–416 | photo-08, photo-09 (dark) | per face two rising triangles centred at ±Qh/3 and two halves straddling the corners; double outline, a scroll pair over a spiral hollow in the foot of each [est: the interior is dark] |
+| lid band 425–464 | photo-08/09 (domed, foreshortened) | a bird cartouche either side of a plain centre strip, head with the eye toward the centre, parallel feather ribbons [est] |
+| foot band 13–66 | photo-08 (dark, oblique) | a central roundel (an eye in a rounded square) and long hooked S-bands (qiequ) [est, low trust] |
+| narrow sides | photo-09 (oblique) | the same scheme compressed to their width [inferred] |
+
+## d. Patina (photo-08/09)
+
+Mottled grey-green: dark olive and blue-grey territories on the plain straps, pale grey-green crust islands, bright
+emerald specks everywhere; pinkish red-brown earth packed in the cut channels of the birds; the crown, handles and
+rings near-black olive. Preset `nezu-fanghu`.
+
+## e. Known differences (model vs photographs)
+
+See the final report of round 8 (r8-fanghu) and the compare images; in short: the ribbons read thinner and the
+channel network sparser than the photograph, the triangle and foot friezes are schematic, the crown cut-outs and
+the back are not modelled, scale is a guess.

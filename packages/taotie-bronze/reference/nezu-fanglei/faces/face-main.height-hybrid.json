@@ -1,0 +1,20 @@
+{
+ "face": "face-main",
+ "vessel": "nezu-fanglei",
+ "variant": "hybrid",
+ "note": "tools/photoheight.py: relief height derived from the flattened photograph (mirror-registered halves, two-light shading integration on the traced-plate prior, dark-line micro relief). RIGHT half only: x from the axis (0) to the face edge; mirror for the left half. Rows bottom-up (row 0 = y 0).",
+ "width": 132.5,
+ "height": 87.0,
+ "ppmm": 4.5,
+ "cols": 596,
+ "rows": 392,
+ "min": -0.5558,
+ "max": 3.0312,
+ "field": [
+  0,
+  0.5,
+  265,
+  75.5
+ ],
+ "axis": 132.5
+}

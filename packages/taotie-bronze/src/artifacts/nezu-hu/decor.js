@@ -5,12 +5,12 @@
 // each row's half circumference, so the two sectors share one panel and meet without a break.
 //
 // Rows and counts are counted on the photograph (dossier §c): shoulder 4 rows of ≈ 17.7 mm, body 9 rows of
-// ≈ 17.5 mm; a unit ≈ 24 mm wide (≈ 48 mm repeat with its mirror), so each row carries round(πr / 24) units per
+// ≈ 17.5 mm; one block ≈ 48 mm wide (the developed image's ≈ 48 mm repeat), so each row carries round(πr / 48) blocks per
 // half turn at its own radius — the cells narrow up the shoulder as the stamped rows do.
 
 import { LV } from './form.js'
 
-const RIB = { rib: 1.55, height: 1.05, knob: 1.3, knobHeight: 1.35, jitter: 0.14 }
+const RIB = { rib: 2.8, height: 1.6, shoulder: 1.05, knob: 1.7, knobHeight: 1.8, jitter: 0.45 }
 
 /** arc mm from the register's bottom for a height y */
 const arcOf = (P, y0) => (y) => P.sAtY(y) - P.sAtY(y0)
