@@ -238,27 +238,43 @@ export function vertexNormals(m) {
 function edgeTable(m) {
   const I = m.indices
   const N = m.positions.length / 3
-  const map = new Map()
-  const ea = [], eb = [], o1 = [], o2 = [], fc = []
-  const triEdges = new Uint32Array(I.length)
-  for (let t = 0; t < I.length; t += 3) {
-    for (let k = 0; k < 3; k++) {
-      const a = I[t + k], b = I[t + ((k + 1) % 3)], c = I[t + ((k + 2) % 3)]
-      const lo = a < b ? a : b, hi = a < b ? b : a
-      const key = lo * N + hi
-      let e = map.get(key)
-      if (e === undefined) {
-        e = ea.length
-        map.set(key, e)
-        ea.push(lo); eb.push(hi); o1.push(c); o2.push(-1); fc.push(1)
+  const H = I.length
+  // bucket the half-edges by their lower vertex, then match the upper vertex inside each (small) bucket
+  const start = new Uint32Array(N + 1)
+  for (let h = 0; h < H; h++) {
+    const a = I[h], b = I[h - (h % 3) + ((h % 3) + 1) % 3]
+    start[(a < b ? a : b) + 1]++
+  }
+  for (let v = 0; v < N; v++) start[v + 1] += start[v]
+  const fill = start.slice(0, N)
+  const bucket = new Uint32Array(H)
+  for (let h = 0; h < H; h++) {
+    const a = I[h], b = I[h - (h % 3) + ((h % 3) + 1) % 3]
+    bucket[fill[a < b ? a : b]++] = h
+  }
+  const ea = new Uint32Array(H), eb = new Uint32Array(H), o1 = new Int32Array(H), o2 = new Int32Array(H), fc = new Uint16Array(H)
+  const triEdges = new Uint32Array(H)
+  let count = 0
+  for (let v = 0; v < N; v++) {
+    const s0 = start[v], s1 = start[v + 1]
+    const first = count
+    for (let q = s0; q < s1; q++) {
+      const h = bucket[q], t = h - (h % 3), k = h % 3
+      const a = I[h], b = I[t + ((k + 1) % 3)], c = I[t + ((k + 2) % 3)]
+      const hi = a < b ? b : a
+      let e = -1
+      for (let x = first; x < count; x++) if (eb[x] === hi) { e = x; break }
+      if (e < 0) {
+        e = count++
+        ea[e] = v; eb[e] = hi; o1[e] = c; o2[e] = -1; fc[e] = 1
       } else {
         if (fc[e] === 1) o2[e] = c
         fc[e]++
       }
-      triEdges[t + k] = e // edge k = (I[t+k], I[t+k+1])
+      triEdges[h] = e // edge k = (I[t+k], I[t+k+1])
     }
   }
-  return { map, ea, eb, o1, o2, fc, triEdges, count: ea.length }
+  return { ea, eb, o1, o2, fc, triEdges, count }
 }
 
 /**
@@ -334,7 +350,8 @@ function loopOnce(m) {
  * @param {object} o
  * @param {number|((x:number,y:number,z:number)=>number)} o.edge  target edge length, mm
  * @param {(x:number,y:number,z:number,nx:number,ny:number,nz:number)=>number} [o.where]  > 0 = refine here
- *        (e.g. skinWeight(projectors)); default everywhere
+ *        (e.g. reliefWhere(regions) or skinWeight(projectors)); default everywhere. Evaluated once per vertex (new
+ *        vertices as they appear); an edge is split when either end is in
  * @param {number} [o.maxVerts] default 400k
  * @param {number} [o.passes] default 8
  * @param {number} [o.phong] 0 flat midpoints … 1 full Phong (default 0.75)
@@ -342,26 +359,28 @@ function loopOnce(m) {
 export function refineMesh(m, { edge, where = null, maxVerts = 400000, passes = 8, phong = 0.75 } = {}) {
   let cur = { positions: m.positions, indices: m.indices }
   const target = typeof edge === 'function' ? edge : () => edge
+  let flags = new Uint8Array(0) // per vertex: 0 unknown, 1 out, 2 in (vertex indices survive every pass)
   for (let pass = 0; pass < passes; pass++) {
     const P = cur.positions, I = cur.indices
     const N = P.length / 3
     const nrm = vertexNormals(cur)
+    if (where) {
+      const f = new Uint8Array(N)
+      f.set(flags.subarray(0, Math.min(flags.length, N)))
+      for (let v = 0; v < N; v++) if (!f[v]) f[v] = where(P[v * 3], P[v * 3 + 1], P[v * 3 + 2], nrm[v * 3], nrm[v * 3 + 1], nrm[v * 3 + 2]) > 0 ? 2 : 1
+      flags = f
+    }
     const E = edgeTable(cur)
     // candidate edges: too long and in the refine region
     const cand = []
     const len2 = new Float32Array(E.count)
     for (let e = 0; e < E.count; e++) {
+      if (where && flags[E.ea[e]] !== 2 && flags[E.eb[e]] !== 2) continue
       const a = E.ea[e] * 3, b = E.eb[e] * 3
       const dx = P[b] - P[a], dy = P[b + 1] - P[a + 1], dz = P[b + 2] - P[a + 2]
       const L = Math.hypot(dx, dy, dz)
-      const mx = (P[a] + P[b]) / 2, my = (P[a + 1] + P[b + 1]) / 2, mz = (P[a + 2] + P[b + 2]) / 2
-      const t = target(mx, my, mz)
+      const t = target((P[a] + P[b]) / 2, (P[a + 1] + P[b + 1]) / 2, (P[a + 2] + P[b + 2]) / 2)
       if (!(L > t)) continue
-      if (where) {
-        const nx = nrm[a] + nrm[b], ny = nrm[a + 1] + nrm[b + 1], nz = nrm[a + 2] + nrm[b + 2]
-        const nl = Math.hypot(nx, ny, nz) || 1
-        if (!(where(mx, my, mz, nx / nl, ny / nl, nz / nl) > 0)) continue
-      }
       len2[e] = L / t
       cand.push(e)
     }
@@ -382,31 +401,32 @@ export function refineMesh(m, { edge, where = null, maxVerts = 400000, passes = 
       phongMid(P, nrm, a, b, phong, out, nv * 3)
       mid[e] = nv++
     }
-    const idx = []
+    const idx = new Uint32Array(I.length * 4)
+    let w = 0
+    const tri = (a, b, c) => { idx[w++] = a; idx[w++] = b; idx[w++] = c }
+    const v = [0, 0, 0], sp = [0, 0, 0]
     for (let t = 0; t < I.length; t += 3) {
-      const v = [I[t], I[t + 1], I[t + 2]]
-      const s = [mid[E.triEdges[t]], mid[E.triEdges[t + 1]], mid[E.triEdges[t + 2]]] // s[k] on edge v[k]→v[k+1]
-      const n = (s[0] >= 0) + (s[1] >= 0) + (s[2] >= 0)
-      if (n === 0) idx.push(v[0], v[1], v[2])
+      v[0] = I[t]; v[1] = I[t + 1]; v[2] = I[t + 2]
+      sp[0] = mid[E.triEdges[t]]; sp[1] = mid[E.triEdges[t + 1]]; sp[2] = mid[E.triEdges[t + 2]] // sp[k] on edge v[k]→v[k+1]
+      const n = (sp[0] >= 0) + (sp[1] >= 0) + (sp[2] >= 0)
+      if (n === 0) tri(v[0], v[1], v[2])
       else if (n === 3) {
-        idx.push(v[0], s[0], s[2], v[1], s[1], s[0], v[2], s[2], s[1], s[0], s[1], s[2])
+        tri(v[0], sp[0], sp[2]); tri(v[1], sp[1], sp[0]); tri(v[2], sp[2], sp[1]); tri(sp[0], sp[1], sp[2])
       } else if (n === 1) {
-        const k = s[0] >= 0 ? 0 : s[1] >= 0 ? 1 : 2
-        const a = v[k], b = v[(k + 1) % 3], c = v[(k + 2) % 3], ab = s[k]
-        idx.push(a, ab, c, ab, b, c)
+        const k = sp[0] >= 0 ? 0 : sp[1] >= 0 ? 1 : 2
+        const a = v[k], b = v[(k + 1) % 3], c = v[(k + 2) % 3], ab = sp[k]
+        tri(a, ab, c); tri(ab, b, c)
       } else {
         // two split edges: k = the unsplit one; cut the corner opposite it, then the quad by its shorter diagonal
-        const k = s[0] < 0 ? 0 : s[1] < 0 ? 1 : 2
+        const k = sp[0] < 0 ? 0 : sp[1] < 0 ? 1 : 2
         const a = v[k], b = v[(k + 1) % 3], c = v[(k + 2) % 3]
-        const bc = s[(k + 1) % 3], ca = s[(k + 2) % 3]
-        idx.push(c, ca, bc)
+        const bc = sp[(k + 1) % 3], ca = sp[(k + 2) % 3]
+        tri(c, ca, bc)
         // quad a, b, bc, ca
-        const d1 = dist2(out, a, bc), d2 = dist2(out, b, ca)
-        if (d1 < d2) idx.push(a, b, bc, a, bc, ca)
-        else idx.push(a, b, ca, b, bc, ca)
+        if (dist2(out, a, bc) < dist2(out, b, ca)) { tri(a, b, bc); tri(a, bc, ca) } else { tri(a, b, ca); tri(b, bc, ca) }
       }
     }
-    cur = { positions: out, indices: Uint32Array.from(idx) }
+    cur = { positions: out, indices: idx.slice(0, w) }
     if (nv >= maxVerts) break
   }
   cur.normals = null
@@ -914,7 +934,7 @@ export function skinGeometry(m, { regions = [], cavity = null, spacing, threshol
     disp[v] = macros[br].sample(UV[k * 2], UV[k * 2 + 1]) * bw * (regions[br].scale ?? 1)
   }
   // split vertices per (vertex, region)
-  const keyOf = new Map()
+  const keyOf = new Int32Array(N * (R + 1)).fill(-1)
   const vIdx = [], vReg = []
   const newIdx = new Uint32Array(I.length)
   const order = []
@@ -932,10 +952,10 @@ export function skinGeometry(m, { regions = [], cavity = null, spacing, threshol
     for (let k = 0; k < 3; k++) {
       const v = I[t * 3 + k]
       const key = v * (R + 1) + (g + 1)
-      let id = keyOf.get(key)
-      if (id === undefined) {
+      let id = keyOf[key]
+      if (id < 0) {
         id = vIdx.length
-        keyOf.set(key, id)
+        keyOf[key] = id
         vIdx.push(v); vReg.push(g)
       }
       newIdx[w++] = id

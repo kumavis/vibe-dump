@@ -326,15 +326,15 @@ export const PATINA_PRESETS = {
   // a silvery grey-brown; broad bright malachite blotches across belly and shoulder, a little red-brown cuprite in the
   // ground; the plain lower body between the blades pale grey-beige mottled with green; lid and collar near-black olive
   'nezu-fanglei-dasikong': {
-    age: 1, tin: 0.15, lead: 0.07, polish: 0.35, tarnish: 0.55, cuprite: 0.6, cupriteTone: 0.35, tinOxide: 0.85,
-    tinOxideTone: 1.1, malachite: 0.55, carbonate: 0.15, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.45,
-    turquoiseTone: 0.6, islands: 0.45, malachiteScale: 1.2, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.9,
-    patchScale: 45, mottleScale: 7, patchiness: 0.75, softness: 0.55, drift: 0.3, earth: 0.12, earthColor: '#7a6650',
-    calcite: 0.03, streaks: 0.05, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.45, wax: 0, inlay: 0.2, inlayGround: 0.1,
-    wear: 0.15, dulling: 0.35, tops: 0.85, nobleWarmth: 0.3, matte: 1, topsTone: 0.7, ledgeMatte: 1, nobleRelief: 0.7,
-    tint: '#c8cabd', upperTone: 0.55, upperHeight: 0.68, speckle: 0.08, speckleScale: 1.0, speckleColor: '#2f9a64',
-    speckleDecor: 0.4, crustIsles: 0.12, crustScale: 6, crustColor: '#3a9a6e', crustPlace: 0.5, pustules: 0.05,
-    pustuleScale: 2.5, pustuleColor: '#22a060', lowerBody: 0.55, lowerHeight: 0.3, lowerColor: '#d8d2c0', grain: 0.6,
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.6, cuprite: 0.55, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.15, malachite: 0.42, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
+    turquoiseTone: 0.6, islands: 0.55, malachiteScale: 1.2, crust: 0.25, chloride: 0, soot: 0.05, crevice: 0.95,
+    patchScale: 45, mottleScale: 7, patchiness: 0.8, softness: 0.55, drift: 0.3, earth: 0.3, earthColor: '#b3aa94',
+    calcite: 0.12, streaks: 0.05, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.25, inlayGround: 0.15,
+    wear: 0.12, dulling: 0.4, tops: 0.6, nobleWarmth: 0.35, matte: 1, topsTone: 0.3, ledgeMatte: 1, nobleRelief: 0.35,
+    tint: '#b9b8ac', upperTone: 0.6, upperHeight: 0.69, plainTone: 1.5, speckle: 0.03, speckleScale: 1.0, speckleColor: '#2f9a64',
+    speckleDecor: 0.3, crustIsles: 0.14, crustScale: 6, crustColor: '#3f9a70', crustPlace: 0.5, pustules: 0,
+    pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
   },
 
   // Nezu you 90086 (owner's photographs 31/32): a dark grey-green bronze skin with the raised bands worn to a pale
@@ -416,13 +416,13 @@ export const PATINA_PRESETS = {
   // near-black olive; the foot's plain base band pale grey-green
   'nezu-bu': {
     age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.55, cuprite: 0.7, cupriteTone: 0.35, tinOxide: 0.9,
-    tinOxideTone: 1.1, malachite: 0.4, carbonate: 0.14, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
+    tinOxideTone: 1.1, malachite: 0.3, carbonate: 0.14, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
     turquoiseTone: 0.5, islands: 0.3, malachiteScale: 1.1, crust: 0.15, chloride: 0, soot: 0.03, crevice: 0.95,
     patchScale: 45, mottleScale: 7, patchiness: 0.7, softness: 0.65, drift: 0.3, earth: 0.08, earthColor: '#6a4c38',
     calcite: 0.02, streaks: 0.05, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.45, wax: 0, inlay: 0, inlayGround: 0,
-    wear: 0.2, dulling: 0.35, tops: 1, nobleWarmth: 0.35, matte: 1, topsTone: 0.85, ledgeMatte: 1, nobleRelief: 1,
-    tint: '#d6d8c8', upperTone: 0.55, upperHeight: 0.66, speckle: 0.1, speckleScale: 0.9, speckleColor: '#2f9a64',
-    speckleDecor: 0.6, crustIsles: 0.1, crustScale: 5, crustColor: '#4fa078', crustPlace: 0.5, pustules: 0.06,
+    wear: 0.2, dulling: 0.35, tops: 1, nobleWarmth: 0.35, matte: 1, topsTone: 0.6, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#b4b8a4', upperTone: 0.42, upperHeight: 0.69, speckle: 0.04, speckleScale: 0.6, speckleColor: '#2f9a64',
+    speckleDecor: 0.6, crustIsles: 0.04, crustScale: 5, crustColor: '#4fa078', crustPlace: 0.5, pustules: 0.025,
     pustuleScale: 2.4, pustuleColor: '#25a066', lowerBody: 0.3, lowerHeight: 0.1, lowerColor: '#c8d0bc', grain: 0.6,
   },
   // the Stanford dragon (a scan dressed by geometry/skin.js): a showcase of cavity-driven corrosion — bright

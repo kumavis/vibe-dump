@@ -1,0 +1,17 @@
+{
+  "note": "face-second (photo-37): plates DRAWN off the preview grid on the better-lit RIGHT half, snapped, mirrored; the auto classifier is off (pale ground, dense incision on the plate tops). x > 232 runs behind the corner flange: not drawn.",
+  "field": { "box": [0, 0.5, 258, 68.5] },
+  "mask": [{ "box": [117, 0, 129.8, 82] }, { "poly": [[233, 0], [258, 0], [258, 82], [246, 82], [239, 45]] }, { "poly": [[25, 0], [0, 0], [0, 82], [12, 82], [19, 45]] }],
+  "symmetry": { "axis": 129, "keep": "right" },
+  "regions": [{ "box": [0, 0, 258, 82], "mode": "off" }],
+  "draw": [
+    { "poly": [[130.6,22.5],[140,22.5],[140,64],[130.6,64]], "round": 2, "snap": 0.8, "label": "column beside the flange (hooks)" },
+    { "poly": [[130.6,11.5],[146,11.5],[146,21],[130.6,21]], "round": 2.5, "snap": 0.8, "label": "its foot" },
+    { "poly": [[152.5,34],[152.5,58],[157,64.5],[162,66.5],[205,66.5],[209,63.5],[208,60],[200,57.5],[166,57.5],[161.5,54],[161,46],[164,42.5],[177.5,42.5],[179.5,38.5],[178,31.2],[156,31.2]], "round": 3, "inner": 0.8, "snap": 0.8, "label": "the big C" },
+    { "poly": [[150,5],[181,5],[181,15.5],[150,15.5]], "round": 3, "snap": 0.8, "label": "boat band" },
+    { "poly": [[183.5,9],[199,9],[199,55.5],[185,55.5]], "round": 2.5, "snap": 0.8, "label": "slanting body" },
+    { "poly": [[201,8],[210.5,8],[210.5,30],[207,36],[201,33]], "round": 2, "snap": 0.8, "label": "blade" },
+    { "poly": [[211.5,6.5],[229,6.5],[229,28],[222,33],[212,31]], "round": 3, "snap": 0.8 },
+    { "poly": [[221,36],[232,36],[238,52],[236,62],[226,62],[220,50]], "round": 3, "snap": 0.8, "label": "crested body" }
+  ]
+}

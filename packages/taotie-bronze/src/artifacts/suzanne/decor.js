@@ -41,7 +41,7 @@ const lerpW = (stops) => (t) => {
 }
 
 /** the décor field's outer edge (left half, panel mm): over the crown, down the temple, along under the cheek */
-const FIELD = [[128, 168], [96, 167], [62, 160], [32, 146], [16, 120], [12, 84], [13, 44], [16, 18], [27, 8.5], [60, 8], [90, 9]]
+const FIELD = [[128, 168], [96, 167], [62, 160], [32, 146], [16, 120], [12, 84], [13, 44], [17, 25], [30, 16], [60, 15], [90, 16]]
 
 /** the face: C-horn brows, pointed canthi and a slit pupil, a kui on the cheek, a leiwen field with a bowstring edge */
 export function drawFace(kit, panel, { seed = 1 } = {}) {
@@ -57,17 +57,19 @@ export function drawFace(kit, panel, { seed = 1 } = {}) {
       { start: 'blunt', end: 'spiral', spiral: { turns: 0.85, dir: -1, R: 4 } }),
     // the canthi: fat spurs pinched to points, leaving the eyeball's rim — the inner one hooks down toward the nose
     smoothBand(kit, [[114, 53], [120, 45], [119, 33]], lerpW([[0, 8.5], [0.4, 7], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
-    smoothBand(kit, [[64, 57], [50, 60], [36, 57]], lerpW([[0, 9], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
-    // the kui on the cheek, facing the nose: a long body rolled up at the tail, a leg, the jaws
-    smoothBand(kit, [[27, 20], [46, 21.5], [66, 21], [76, 20.5]], lerpW([[0, 5.6], [1, 6.4]]), { start: 'spiral', startSpiral: { turns: 1, dir: -1, R: 3.6 }, end: 'blunt' }),
-    smoothBand(kit, [[76, 25.5], [87, 26.5], [94, 23.5]], lerpW([[0, 4.6], [1, 3.8]]), { end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 2.4 }, contour: false }),
-    smoothBand(kit, [[78, 15], [91, 13.5]], lerpW([[0, 3.8], [1, 0.6]]), { end: 'point', contour: false }),
-    smoothBand(kit, [[55, 18], [53.5, 12.5], [47, 12]], lerpW([[0, 3.8], [1, 0.6]]), { end: 'point', contour: false }),
+    smoothBand(kit, [[64, 57], [54, 60], [45, 58]], lerpW([[0, 9], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
+    // the kui on the cheek (the flat of the face between the eye and the ear — the strip under the eye is too
+    // steep and narrow for one): upright, head down toward the eye's corner, tail rolled at the top, a leg, a quill
+    smoothBand(kit, [[29, 101], [28, 82], [28, 60], [29, 49]], lerpW([[0, 6.4], [1, 7.4]]), { start: 'spiral', startSpiral: { turns: 1, dir: 1, R: 3.8 }, end: 'blunt' }),
+    smoothBand(kit, [[34, 41], [38.5, 33], [36, 25.5]], lerpW([[0, 4.8], [1, 4]]), { end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 2.6 }, contour: false }),
+    smoothBand(kit, [[24, 38], [21.5, 28]], lerpW([[0, 4], [1, 0.6]]), { end: 'point', contour: false }),
+    smoothBand(kit, [[23.5, 71], [18.5, 66], [18.5, 59]], lerpW([[0, 4], [1, 0.6]]), { end: 'point', contour: false }),
+    smoothBand(kit, [[33.5, 77], [39.5, 83], [39, 92]], lerpW([[0, 4.4], [1, 4]]), { end: 'spiral', spiral: { turns: 0.85, dir: 1, R: 2.4 }, contour: false }),
   ]
   kit.carve(panel, els, { height: H, shoulder: H * 0.6, depth: 0.45, seed, irregularity: 1, contour })
 
   // the kui's round eye
-  kit.pillowBoss(panel, { c: [79, 20.5], w: 6.4, h: 6.4, round: 1, height: H + 1.2, crown: 0.8, slit: false, ring: false })
+  kit.pillowBoss(panel, { c: [29, 43], w: 7.2, h: 7.2, round: 1, height: H + 1.3, crown: 0.8, slit: { len: 3.2, width: 0.8, depth: 0.6 }, ring: false })
 
   // the slit pupil, sunk across her raised pupil disk
   const E = FACE.eye
@@ -98,7 +100,7 @@ export function drawFace(kit, panel, { seed = 1 } = {}) {
     include: (ctx) => {
       ctx.beginPath()
       edge.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
-      ctx.lineTo(98, 10)
+      ctx.lineTo(98, 16)
       ctx.lineTo(98, 20)
       ctx.quadraticCurveTo(104, 31, 123, 32)
       ctx.lineTo(123, 168)
@@ -118,6 +120,8 @@ export function drawEar(kit, panel, { seed = 2 } = {}) {
     start: 'point', end: 'spiral', spiral: { turns: 1.3, dir: -1, R: 8.5 },
   })
   kit.carve(panel, [coil], { height: H, shoulder: H * 0.6, depth: 0.42, seed, irregularity: 1, contour })
-  kit.leiwenFill(panel, { rect: { x: 0, y: 0, w: panel.width, h: panel.height }, avoid: 'raised', margin: 0.55 },
+  // leiwen only in the bowl: the rim and the root where the projector lets go stay plain (no cut-off ground)
+  kit.leiwenFill(panel, { rect: { x: 0, y: 0, w: panel.width, h: panel.height }, avoid: 'raised', margin: 0.55,
+    include: (ctx) => { ctx.beginPath(); ctx.ellipse(33, 39, 24, 28.5, 0, 0, Math.PI * 2); ctx.fill() } },
     { pitch: 1.2, line: 0.5, depth: 0.42, cell: [5, 8.5], pairs: 0.2, maxAspect: 1.4, roundness: 0.12, jitter: 0.06, seed: seed + 5 })
 }

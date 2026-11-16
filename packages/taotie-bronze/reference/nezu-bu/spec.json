@@ -1,0 +1,14 @@
+{
+  "note": "Nezu Museum bu 饕餮文瓿 (90082), Shang–Western Zhou, 11th c. BC. Proportions MEASURED on the owner's single photograph (photo-06) through a camera fitted to its outline (1.6 px rms on the foot base, lid ledge, body lip and knob tip; belly radii from half widths between the flange teeth); ABSOLUTE SIZE INFERRED from the ground-line pitch (≈ 5 px ↔ 1.25 mm), ±20 %. Expected values are the measurements (dossier §b), not read off the model. Part names: body (foot + belly + shoulder + lip, one lathe), lid (ledge + dome), knob (bud on two posts), flanges (2 divider flanges at ±90°, 2 low beaded ridges at 0°/180°, 4 foot flanges, 4 lid flanges). See dossier.md.",
+  "dimensions": { "h": 281.5, "w": 235, "d": 235, "inferred": true },
+  "ratios": {
+    "widthOverFlanges": { "expr": "overall.w / overall.h",       "expected": 0.835, "tol": 0.04 },
+    "bellyWidth":       { "expr": "parts.body.w / overall.h",    "expected": 0.745, "tol": 0.03 },
+    "lidWidth":         { "expr": "parts.lid.w / overall.h",     "expected": 0.575, "tol": 0.03 },
+    "lidCrown":         { "expr": "parts.lid.max.1 / overall.h", "expected": 0.808, "tol": 0.025 },
+    "lidUnder":         { "expr": "parts.lid.min.1 / overall.h", "expected": 0.666, "tol": 0.02 },
+    "knobHeight":       { "expr": "parts.knob.h / overall.h",    "expected": 0.2,   "tol": 0.03 },
+    "flangeCount":      { "expr": "parts.flanges.count",         "expected": 12,    "tol": 0 },
+    "flangeFoot":       { "expr": "parts.flanges.min.1 / overall.h", "expected": 0.075, "tol": 0.02 }
+  }
+}

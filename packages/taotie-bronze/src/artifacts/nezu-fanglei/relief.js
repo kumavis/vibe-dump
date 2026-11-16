@@ -12,6 +12,48 @@
 // ground ≈ 1.1 mm pitch sunk between.
 
 import { LV, RHO, halfAt } from './form.js'
+import FACES from '../../../reference/nezu-fanglei/faces.json'
+import MAIN_PLATES from '../../../reference/nezu-fanglei/faces/face-main.plates.json'
+import SECOND_PLATES from '../../../reference/nezu-fanglei/faces/face-second.plates.json'
+import LOW_PLATES from '../../../reference/nezu-fanglei/faces/face-low.plates.json'
+import SHOULDER_PLATES from '../../../reference/nezu-fanglei/faces/face-shoulder.plates.json'
+import COLLAR_PLATES from '../../../reference/nezu-fanglei/faces/face-collar.plates.json'
+import LID_PLATES from '../../../reference/nezu-fanglei/faces/face-lid.plates.json'
+
+// Round 9: registers whose décor is TRACED PLATES — outlines taken off the flattened photograph by tools/trace.py
+// (reference/nezu-fanglei/faces/<face>.trace.json → <face>.plates.json) and raised by kit.tracedPlates: broad
+// plates with a rounded shoulder, an incised line parallel to the edge and spirals packed on the wide tops, the
+// leiwen ground only in the channels between them. The hand-stroked elements of those registers are skipped.
+const TRACED = {
+  main: { face: 'face-main', data: MAIN_PLATES },
+  second: { face: 'face-second', data: SECOND_PLATES },
+  low: { face: 'face-low', data: LOW_PLATES },
+  shoulder: { face: 'face-shoulder', data: SHOULDER_PLATES },
+  collar: { face: 'face-collar', data: COLLAR_PLATES },
+  lid: { face: 'face-lid', data: LID_PLATES },
+}
+const PLATES = {
+  height: 2.4, shoulder: 0.9, pillow: 0.25, pillowWidth: 3, depth: 0.42,
+  contour: { inset: 1.1, line: 0.5 }, contour2: { inset: 2.3, line: 0.42 },
+  // the tops: round hooked curls in S pairs (photo-37: rows of C hooks), bigger and rounder than the squared ground
+  fill: { kind: 'leiwen', inset: 3.3, pitch: 1.05, line: 0.42, roundness: 1, cell: [3.6, 6.6], pairs: 0.65, maxAspect: 2.4, jitter: 0.04, fillers: false },
+  boss: { height: 3.0, crown: 0.6, hole: { depth: 1.4 }, ring: { gap: 0.5, line: 0.6, depth: 0.4 } },
+}
+
+/** face mm of a traced face (origin bottom-left, y up) → [x from the centre line, VESSEL y], then through M */
+function faceToVessel(face, M) {
+  const F = FACES.faces[face]
+  const up = F.up || [0, 1, 0]
+  const k = up[1] / Math.hypot(up[0], up[1], up[2])
+  return ([x, y]) => M([x - F.width / 2, F.center[1] + (y - F.height / 2) * k])
+}
+
+function tracedRegisters(kit, panel, M, regs, seed) {
+  for (const r of regs) {
+    const t = TRACED[r]
+    kit.tracedPlates(panel, t.data, { ...PLATES, map: faceToVessel(t.face, M), seed: seed + r.length })
+  }
+}
 
 // Round 8 (fix pass): the bronze's band language — FAT bands (7.5–9.5 mm on the belly) with round outer corners,
 // two or three incised lines running parallel to the contour (NEST), horn ends rolling into big spirals, a fine ROUND
@@ -75,9 +117,10 @@ function hookColumn(S, x, y0, y1, pitch = 12.5) {
   return out
 }
 
-function bellyDesign(kit, panel, M, s) {
+function bellyDesign(kit, panel, M, s, skip = new Set()) {
   const { S, B, P } = maker(kit, M, s)
-  const els = [
+  const reg = {}
+  reg.main = [
     // MAIN (face-main): the G horn, ONE fat band (photo ≈ 8.5–9.5 mm): it starts in the big spiral block inside
     // the horn (centre ≈ (61, 229)), runs right along the bottom, up the outer column (x 72–80), across the top
     // (y 244–251) and down the inner column, whose end rolls into the teardrop curl at (33, 226)
@@ -93,6 +136,8 @@ function bellyDesign(kit, panel, M, s) {
     S([[60, 196], [104, 196], [104, 182.5], [93, 182.5]], { width: 7.8, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: -1, R: 3.6 }, fill: NEST }), // lower hook
     S([[47, 182], [47, 176], [18, 176], [18, 189], [38, 189]], { width: 7.4, ...ROUND, end: 'spiral', spiral: { turns: 1.1, dir: -1, R: 4.0 }, fill: NEST }), // the jaw under the eye
     S([[127, 181], [127, 206], [112, 206]], { width: 7, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: 1, R: 3.4 }, fill: NEST }), // corner hook
+  ]
+  reg.second = [
     // SECOND (face-second): a big C open to the right (x 24–72, y 135–164), slanting crested bodies toward the
     // corner, a curved boat-shaped band at the bottom rolled at both ends
     S([[73, 160.5], [28, 160.5], [28, 137.5], [49, 137.5]], { width: [8.6, 9.4, 9.4, 8.6], ...ROUND, end: 'round', fill: NEST }),
@@ -101,19 +146,26 @@ function bellyDesign(kit, panel, M, s) {
     S([[18, 118], [28, 111.5], [44, 110.5], [52, 113]], { width: 8.6, ...ROUND, start: 'spiral', startSpiral: { turns: 1, dir: -1, R: 3.6 }, end: 'round', fill: NEST }),
     ...hookColumn(S, 7.6, 103, 167),
     S([[91, 124], [91, 156], [100, 163]], { width: 7.4, ...ROUND, start: 'spiral', startSpiral: { turns: 0.9, dir: 1, R: 3 }, end: 'point', fill: NEST }),
+  ]
+  reg.low = [
     // LOW (face-low): a flat eye plate with a slit, a C under it, a hooked crest beside (the lug covers |x| < 24)
     B([35, 91], 27, 15, { round: 0.6 }),
     S([[48, 77.5], [25, 77.5], [25, 67], [46, 67]], { width: 6.8, ...ROUND, end: 'spiral', spiral: { turns: 0.9, dir: 1, R: 3 }, fill: NEST }),
     S([[53, 73], [59, 84], [69, 84], [71, 76]], { width: 6.2, ...ROUND, end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 3 }, fill: NOFILL }),
+  ]
+  reg.narrow = [
     // NARROW frieze 36–50: a running snake, rolled at both ends, one eye dot
     S([[5, 43], [14, 46.5], [25, 46.5], [35, 41], [46, 40], [56, 44.5], [65, 45.5], [70, 43]], { width: 5.2, round: 1, inner: 0.6, start: 'spiral', startSpiral: { turns: 0.9, dir: -1, R: 2.6 }, end: 'spiral', spiral: { turns: 0.9, dir: 1, R: 2.6 }, fill: NOFILL }),
   ]
   const eyes = [
-    { c: P([36.5, 205]), w: 19, h: 19, round: 1, height: RELIEF.eye, crown: 0.6, slit: false, ring: { gap: 0.5, line: 0.6, depth: 0.4 }, hole: 2.4 },
-    { c: P([52, 190]), w: 9.5, h: 9.5, round: 1, height: 2.6, crown: 0.7, slit: false },
-    { c: P([14, 45]), w: 3.8, h: 3.8, round: 1, height: 2.2, crown: 0.8 },
+    ...(skip.has('main') ? [] : [
+      { c: P([36.5, 205]), w: 19, h: 19, round: 1, height: RELIEF.eye, crown: 0.6, slit: false, ring: { gap: 0.5, line: 0.6, depth: 0.4 }, hole: 2.4 },
+      { c: P([52, 190]), w: 9.5, h: 9.5, round: 1, height: 2.6, crown: 0.7, slit: false },
+    ]),
+    ...(skip.has('narrow') ? [] : [{ c: P([14, 45]), w: 3.8, h: 3.8, round: 1, height: 2.2, crown: 0.8 }]),
   ]
-  const slits = [{ c: P([33, 91]), len: 10, w: 1.9 }]
+  const slits = skip.has('low') ? [] : [{ c: P([33, 91]), len: 10, w: 1.9 }]
+  const els = Object.entries(reg).flatMap(([k, v]) => (skip.has(k) ? [] : v))
   return { els, eyes, slits }
 }
 
@@ -139,13 +191,19 @@ function finish(kit, panel, design, { seed }) {
 export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1 }) {
   const half = kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.foot, half, kx })
-  const d1 = bellyDesign(kit, p, M, 1), d2 = bellyDesign(kit, p, M, -1)
+  const traced = ['main', 'second', 'low', 'narrow'].filter((r) => TRACED[r])
+  tracedRegisters(kit, p, M, traced, seed)
+  const skip = new Set(traced)
+  const d1 = bellyDesign(kit, p, M, 1, skip), d2 = bellyDesign(kit, p, M, -1, skip)
   finish(kit, p, { els: [...d1.els, ...d2.els], eyes: [...d1.eyes, ...d2.eyes], slits: [...d1.slits, ...d2.slits] }, { seed })
   // grounds: leiwen in the registers, a lozenge band at the bottom of the low register (photo-37: a checker of small
   // diamonds with dots, 52–62)
   const band = (ya, yb) => ({ x: 0, y: arc(ya), w: W, h: arc(yb) - arc(ya) })
-  kit.lozengeFill(p, { rect: band(LV.narrow + 1.5, 64), include, margin: 0.5 }, { size: [6.4, 4.6], fill: 'dot', pitch: 0.9, levels: 0, depth: 0.45, seed })
-  for (const [ya, yb] of [[169.5, 253.5], [102.5, 168], [64, 99.5], [LV.bellyBorder + 1, LV.narrow - 0.5]]) {
+  // (round 9: face-low shows the low mask's C reaching down to ≈ 59 over a narrow toothed strip, so the lozenge band
+  // shrinks to 52–56.5 when that register is traced)
+  const lozTop = TRACED.low ? 56.5 : 64
+  kit.lozengeFill(p, { rect: band(LV.narrow + 1.5, lozTop), include, margin: 0.5 }, { size: [6.4, 4.6], fill: 'dot', pitch: 0.9, levels: 0, depth: 0.45, seed })
+  for (const [ya, yb] of [[169.5, 253.5], [102.5, 168], [lozTop, 99.5], [LV.bellyBorder + 1, LV.narrow - 0.5]]) {
     kit.leiwenFill(p, { rect: band(ya, yb), include, margin: 0.5 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + ya })
   }
   // register borders: thin raised fillets (photo-37: a narrow raised line along each register edge)
@@ -177,8 +235,11 @@ function shoulderDesign(kit, M, s) {
 export function shoulderPanel(kit, cell, { ppmm, seed, kx = 1 }) {
   const half = kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.main, half, kx })
-  const a = shoulderDesign(kit, M, 1), b = shoulderDesign(kit, M, -1)
-  finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
+  if (TRACED.shoulder) tracedRegisters(kit, p, M, ['shoulder'], seed)
+  else {
+    const a = shoulderDesign(kit, M, 1), b = shoulderDesign(kit, M, -1)
+    finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
+  }
   kit.leiwenFill(p, { rect: { x: 0, y: arc(266.5), w: W, h: arc(310.5) - arc(266.5) }, include, margin: 0.5 }, { ...GROUND, depth: RELIEF.leiwen, seed })
   return p.bake()
 }
@@ -201,8 +262,11 @@ function collarDesign(kit, M, s) {
 
 export function collarPanel(kit, cell, { ppmm, seed, kx = 1 }) {
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.shoulder, half: () => 0, kx })
-  const a = collarDesign(kit, M, 1), b = collarDesign(kit, M, -1)
-  finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
+  if (TRACED.collar) tracedRegisters(kit, p, M, ['collar'], seed)
+  else {
+    const a = collarDesign(kit, M, 1), b = collarDesign(kit, M, -1)
+    finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
+  }
   kit.leiwenFill(p, { rect: { x: 0, y: arc(329), w: W, h: arc(372.5) - arc(329) }, include, margin: 0.5 }, { ...GROUND, depth: RELIEF.leiwen, seed })
   return p.bake()
 }
@@ -230,6 +294,12 @@ export function lidPanel(kit, f, { ppmm, seed, kind }) {
   const M = ([x, y]) => [f.w / 2 + x, ((y - y0) / rise) * f.h]
   const include = polyDraw(f.outline)
   const els = [], eyes = [], slits = []
+  if (kind === 'long' && TRACED.lid) {
+    // the long slopes: traced plates (face-lid); the triangular end slopes keep the hand-drawn mask below
+    tracedRegisters(kit, p, M, ['lid'], seed)
+    kit.leiwenFill(p, { include, margin: 0.6 }, { ...GROUND, depth: RELIEF.leiwen, seed })
+    return p.bake()
+  }
   for (const s of [1, -1]) {
     const { S, P } = maker(kit, M, s)
     if (kind === 'long') {

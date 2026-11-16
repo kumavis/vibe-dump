@@ -30,7 +30,7 @@ export default {
   findspot: '',
   collection: 'Mesh: Khronos glTF Sample Assets (CC0, © 2017 UX3D) — Suzanne is the Blender Foundation’s mascot',
   accession: '',
-  dimensions: { h: HEIGHT + LIFT, w: 306, d: 184 },
+  dimensions: { h: 225, w: 304, d: 186 },
   blurb:
     'Suzanne is the monkey head built into the Blender 3D software as its test model and mascot; this cage is the CC0 copy UX3D made for the Khronos glTF sample models. ' +
     'The Taotie Kit subdivided her and projected relief onto her own features, so her face becomes the mask: slit-pupilled eyes with pointed corners, brows turned into fat C-horns, a notched flange down the nose, spirals in her ears, and a fine leiwen ground — her muzzle and mouth left as they were.',
@@ -106,13 +106,6 @@ export default {
 
     const object = new THREE.Group()
     object.name = 'suzanne'
-    if (typeof location !== 'undefined' && /paneldebug/.test(location.search)) { // TEMP-DEBUG
-      const W = FACE.width, Hh = FACE.height
-      const g = kit.buildSurface({ surface: kit.quadSurface([-W / 2, 0, 0], [W / 2, 0, 0], [-W / 2, Hh, 0], [W / 2, Hh, 0]), segments: { density: 1 }, relief: faceMap })
-      const pm = new THREE.Mesh(g, new kit.PatinaMaterial({ relief: faceMap }))
-      object.add(pm)
-      return { object, parts: { body: pm }, panels: { face: faceMap } }
-    }
     object.add(socle, head)
     if (flange) object.add(flange)
     await onProgress(1, 'done')
@@ -122,27 +115,40 @@ export default {
   },
 }
 
-/** a notched flange on the path sliced off her centre plane (x = 0), from the crown down to the top of the nose */
+/** the notched flange on her centre line, sliced off the mesh (plane x = 0): one run from the crown down the
+ *  forehead to the brow notch, a second down the bridge between the eyes to the top of the nose — broken at
+ *  the notch, where her brow steps forward by a ledge no straight-sided flange can follow */
 function centreFlange(kit, m, q) {
   const lines = kit.sliceMesh(m, { point: [0, 0, 0], normal: [1, 0, 0] })
   // the head shell's centre section is the longest loop; keep its front-top part (one contiguous run)
   const loop = lines.sort((a, b) => b.length - a.length)[0]
   if (!loop) return null
-  const yTop = LIFT + 214, yBot = LIFT + 96
-  const keep = (p) => p[1] <= yTop && p[1] >= yBot && p[2] > -25
-  const k0 = loop.findIndex((p) => !keep(p))
-  const rot = k0 > 0 ? loop.slice(k0).concat(loop.slice(0, k0)) : loop
-  let pts = rot.filter(keep)
-  if (pts.length < 8) return null
-  if (pts[0][1] > pts[pts.length - 1][1]) pts.reverse()
-  // ease the brow notch's sharp step: resample every 1.5 mm and smooth over ≈ 9 mm
-  pts = smoothPath(resamplePath(pts, 1.5), 3)
-  const path = pathFrame(pts, [0, LIFT + 140, -15])
-  return kit.flange({
-    path, height: (f) => 7 + 2 * Math.sin(Math.PI * Math.min(1, f * 1.4)), thickness: 6.5, taper: 4, waver: 0.3, seed: 11,
-    notches: { shape: 'square', pitch: 16, depth: 0.45, width: 3.4 }, ends: { start: 'taper', end: 'taper' },
-    material: new kit.PatinaMaterial({ cavity: 0.85 }), part: 'flanges',
-  })
+  const run = (y0, y1) => {
+    const keep = (p) => p[1] <= y1 && p[1] >= y0 && p[2] > -25
+    const k0 = loop.findIndex((p) => !keep(p))
+    const rot = k0 > 0 ? loop.slice(k0).concat(loop.slice(0, k0)) : loop
+    let pts = rot.filter(keep)
+    if (pts.length < 8) return null
+    if (pts[0][1] > pts[pts.length - 1][1]) pts.reverse()
+    return smoothPath(resamplePath(pts, 1.5), 3)
+  }
+  const material = new kit.PatinaMaterial({ cavity: 0.85 })
+  const g = new THREE.Group()
+  g.name = 'flange'
+  const specs = [
+    { y0: LIFT + 167, y1: LIFT + 214, height: (f) => 7.5 + 1.5 * Math.sin(Math.PI * f), pitch: 16 },
+    { y0: LIFT + 97, y1: LIFT + 158, height: (f) => 6 + 1.5 * Math.sin(Math.PI * f), pitch: 14 },
+  ]
+  for (const sp of specs) {
+    const pts = run(sp.y0, sp.y1)
+    if (!pts) continue
+    g.add(kit.flange({
+      path: pathFrame(pts, [0, LIFT + 140, -15]), height: sp.height, thickness: 6.5, taper: 4, waver: 0.3, seed: 11,
+      notches: { shape: 'square', pitch: sp.pitch, depth: 0.45, width: 3.4 }, ends: { start: 'taper', end: 'taper' },
+      material, part: 'flanges',
+    }))
+  }
+  return g.children.length ? g : null
 }
 
 function resamplePath(pts, step) {
@@ -166,9 +172,7 @@ function smoothPath(pts, r) {
   return pts.map((p, i) => {
     let y = 0, z = 0, n = 0
     for (let j = Math.max(0, i - r); j <= Math.min(pts.length - 1, i + r); j++) { y += pts[j][1]; z += pts[j][2]; n++ }
-    // pull the smoothed point back out to the surface side (smoothing cuts corners inward): keep the outermost
-    const sy = y / n, sz = z / n
-    return [0, sy, Math.max(sz, p[2] - 0.5)]
+    return [0, y / n, z / n]
   })
 }
 

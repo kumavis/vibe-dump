@@ -1,0 +1,19 @@
+{
+  "note": "face-shoulder (photo-37, seen ≈ 10° from above, the head hides x 105–160): kui plates DRAWN on the RIGHT half, snapped, mirrored.",
+  "field": { "box": [0, 1, 265, 47] },
+  "mask": [{ "box": [104, 0, 161, 66.1] }, { "poly": [[244, 66.1], [265, 66.1], [265, 0], [262, 0]] }, { "poly": [[21, 66.1], [0, 66.1], [0, 0], [3, 0]] }],
+  "symmetry": { "axis": 132.5, "keep": "right" },
+  "regions": [{ "box": [0, 0, 265, 66.1], "mode": "off" }],
+  "draw": [
+    { "poly": [[169.5,29.5],[184,29.5],[184,40.5],[169.5,40.5]], "round": 4, "snap": 0.8, "label": "crest curl A" },
+    { "poly": [[188.5,30],[206,30],[206,40.5],[188.5,40.5]], "round": 4, "snap": 0.8, "label": "crest curl B" },
+    { "poly": [[172,41.4],[206,41.4],[206,45.5],[174,45.5]], "round": 2, "snap": 0.6, "label": "crest band" },
+    { "poly": [[166,19.5],[228,19.5],[228,27.6],[166,27.6]], "round": 2.5, "snap": 0.8, "label": "body" },
+    { "poly": [[229.5,26],[242,26],[242,38],[229.5,38]], "round": 4, "snap": 0.8, "label": "tail block" },
+    { "poly": [[171,4.5],[195,4.5],[195,17.4],[171,17.4]], "round": 5, "snap": 0.8, "label": "jaw C" },
+    { "poly": [[160,5.5],[169.6,5.5],[169.6,13.5],[160,13.5]], "round": 3, "snap": 0.8 },
+    { "circle": [207, 7.5, 4.3], "label": "lower curl" },
+    { "poly": [[239.5,8.5],[250,8.5],[250,15.5],[239.5,15.5]], "round": 3, "snap": 0.8 }
+  ],
+  "bosses": [{ "c": [182, 23.4], "r": 2.7, "snap": true }]
+}

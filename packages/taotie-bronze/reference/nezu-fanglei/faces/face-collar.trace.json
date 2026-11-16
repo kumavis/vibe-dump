@@ -1,0 +1,15 @@
+{
+  "note": "face-collar (photo-37, in deep shade under the eave: only the plate edges catch light) — DRAWN on the RIGHT half off those highlights, mirrored. Low confidence: ± 1.5 mm.",
+  "field": { "box": [0, 2, 175, 48] },
+  "mask": [{ "box": [84.5, 0, 90.5, 53] }, { "box": [0, 0, 9, 53] }, { "box": [166, 0, 175, 53] }],
+  "symmetry": { "axis": 87.5, "keep": "right" },
+  "regions": [{ "box": [0, 0, 175, 53], "mode": "off" }],
+  "draw": [
+    { "poly": [[106.5,24],[141,24],[141,28.5],[111.5,28.5],[111.5,38.5],[130,38.5],[130,43.5],[106.5,43.5]], "round": 2.2, "label": "G band" },
+    { "poly": [[141.5,28.5],[146,28.5],[146,39],[160,39],[160,44],[141.5,44]], "round": 2, "label": "second block" },
+    { "poly": [[108,10],[124,10],[124,14.5],[108,14.5]], "round": 2, "label": "hooked limb" },
+    { "poly": [[146,10],[160,10],[160,14.5],[146,14.5]], "round": 2, "label": "hooked limb" },
+    { "poly": [[90.5,8],[94.5,8],[94.5,45],[90.5,45]], "round": 1.5, "label": "strip beside the flange" }
+  ],
+  "bosses": [{ "c": [119.5, 24.8], "r": 2.1 }, { "c": [124.2, 18.4], "r": 1.8 }]
+}

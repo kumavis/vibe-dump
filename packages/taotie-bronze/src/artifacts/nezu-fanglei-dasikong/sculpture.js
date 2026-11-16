@@ -65,33 +65,30 @@ const wallZ = (y) => RHO * bodyW(clamp(y, 0, 346))
 export function shoulderHeadSDF() {
   const sd = (x, y, z) => {
     const wz = wallZ(y)
-    // the face block: a cushion lying on the slope (its back sunk in the wall)
-    let d = sdEllipsoid(x, y - 322, z - (wallZ(322) + 3), 25, 22, 13)
+    // the face: a broad cushion lying on the slope, its back sunk in the wall
+    let d = sdEllipsoid(x, y - 322, z - (wallZ(322) + 4), 23, 21, 12)
     d = Math.max(d, wz - 6 - z)
-    // brow ridge
-    d = smin(d, sdRBox3(x, y - 332, z - (wallZ(332) + 8), 18, 3.5, 5, 3), 3)
-    // horns: thick tubes from the brow outward and down, rolling into coils
+    // brow
+    d = smin(d, sdRBox3(x, y - 331, z - (wallZ(331) + 9), 17, 3.5, 5, 3), 3)
     for (const sg of [-1, 1]) {
-      const hz = wallZ(338) + 6
-      d = smin(d, sdTube(x, y, z, [[sg * 10, 340, hz, 5.2], [sg * 22, 344, hz - 1, 5.6], [sg * 30, 337, hz - 3, 5.0], [sg * 27, 328, hz - 3, 4.2], [sg * 20, 330, hz + 1, 3.2]]), 2.0)
-      d = smin(d, coil(x - sg * 26.5, y - 335.5, z - (hz + 2), 9, 1.6, 2.2), 1.0)
-      // eyes: round, bulging, with a sunk ring
-      const ez = wallZ(325) + 11.5
-      d = smin(d, len3(x - sg * 11, y - 325.5, (z - ez) * 1.2) - 4.6, 1.2)
-      d = smax(d, -(Math.abs(len2(x - sg * 11, y - 325.5) - 5.6) - 0.45 + Math.max(0, ez - 2 - z)), 0.3)
-      // ears behind the horns
-      d = smin(d, sdEllipsoid(x - sg * 33, y - 326, z - (wallZ(326) + 4), 6, 4, 4), 1.5)
+      // the horns: a FAT band arching up and out from the brow, rolling down and in at the sides (photo-34: the
+      // crown of the head is two massive rounded horns)
+      const hz = wallZ(338) + 7
+      d = smin(d, sdTube(x, y, z, [[sg * 5, 337, hz + 1, 5.4], [sg * 13, 344, hz, 6.2], [sg * 22, 342.5, hz - 2, 6.0], [sg * 26, 334, hz - 4, 5.2], [sg * 21.5, 328, hz - 2, 4.2], [sg * 16.5, 331, hz, 3.0]]), 2.4)
+      d = smax(d, -(Math.abs(len2(x - sg * 19.5, y - 336) - 5.6) - 0.45 + Math.max(0, hz + 3 - z)), 0.3) // a groove following the curl
+      // eyes: round, bulging under the brow
+      const ez = wallZ(325) + 12
+      d = smin(d, len3(x - sg * 10.5, y - 325, (z - ez) * 1.15) - 4.0, 1.4)
+      d = smax(d, -(len3(x - sg * 10.5, y - 325, z - ez - 3.6) - 1.3), 0.4) // pupil
     }
-    // the snout: a blunt block thrusting out and down
-    const sz = (y) => wallZ(y) + 14 + (318 - y) * 0.35
-    let sn = sdRBox3(x, y - 306, z - sz(306), 13.5, 11, 9.5, 5)
-    d = smin(d, sn, 4)
-    // nostrils and the mouth line
-    for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 6, y - 300.5, z - (sz(300) + 9)) - 2.4), 0.6)
-    d = smax(d, -smax(Math.abs(y - 297.5) - 0.7, Math.abs(x) - 11, 0.4), 0.4)
+    // the snout: a heavy blunt block thrusting out and down, flat-fronted
+    const sz = wallZ(306) + 17
+    d = smin(d, sdRBox3(x, y - 305, z - sz, 13.5, 11.5, 9.5, 4.5), 4.5)
+    for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 6, y - 300, z - (sz + 9)) - 2.4), 0.6)
+    d = smax(d, -smax(Math.abs(y - 296.2) - 0.7, Math.abs(x) - 11, 0.4), 0.4)
     return d
   }
-  return { sd, bounds: { min: [-42, 288, 86], max: [42, 352, 160] } }
+  return { sd, bounds: { min: [-42, 286, 86], max: [42, 356, 160] } }
 }
 
 // ------------------------------------------------------------------ shoulder loop handle (+X)
@@ -105,21 +102,19 @@ export function handleSDF() {
   const sd = (x, y, z) => {
     const W = bodyW(clamp(y, 280, 346))
     // the loop bar: from under the head's root, out and round, back into the wall
-    let d = sdTube(x, y, z, [[W - 6, 332, 0, 5.4], [146, 333, 0, 5.6], [157, 326, 0, 5.8], [160, 316, 0, 5.8], [155, 306, 0, 5.6], [146, 301.5, 0, 5.4], [W - 6, 300, 0, 5.4]])
-    // the head: an elongated block along x, snout at the outer end
-    d = smin(d, sdEllipsoid(x - 145, y - 337.5, z, 21, 7.5, 10), 3)
-    d = smin(d, sdRBox3(x - 160, y - 335, z, 6.5, 6, 7.5, 3.5), 2.5)
-    // horns at the back of the head, ears
+    let d = sdTube(x, y, z, [[W - 6, 327, 0, 5.2], [143, 328, 0, 5.4], [152, 322, 0, 5.6], [155, 313, 0, 5.6], [151, 304, 0, 5.4], [143, 300.5, 0, 5.2], [W - 6, 299.5, 0, 5.2]])
+    // the head: an elongated block along x lying on the loop's top, snout at the outer end, a little down
+    d = smin(d, sdEllipsoid(x - 140, y - 332, z, 19, 7, 9.5), 3)
+    d = smin(d, sdRBox3(x - 154, y - 330, z, 6, 5.5, 7, 3.2), 2.5)
     for (const sg of [-1, 1]) {
-      d = smin(d, sdTube(x, y, z, [[135, 341, sg * 5, 2.8], [131, 349, sg * 7.5, 2.4], [126, 352, sg * 6, 1.8]]), 1.2)
-      d = smin(d, len3(x - 151, y - 341, z - sg * 7.5) - 2.2, 0.8) // eyes
+      d = smin(d, sdTube(x, y, z, [[132, 336, sg * 5, 2.8], [128, 340.5, sg * 7, 2.2]]), 1.2) // ears / short horns
+      d = smin(d, len3(x - 146, y - 335, z - sg * 7) - 2.2, 0.8) // eyes
     }
-    // the snout's nostrils
-    d = smax(d, -(len3(x - 166, y - 336, z) - 2.4), 0.6)
+    d = smax(d, -(len3(x - 160, y - 330.5, z) - 2.2), 0.6)
     d = Math.max(d, W - 9 - x)
     return d
   }
-  return { sd, bounds: { min: [118, 292, -16], max: [172, 358, 16] } }
+  return { sd, bounds: { min: [118, 290, -16], max: [166, 348, 16] } }
 }
 
 // ------------------------------------------------------------------ low lug (front)
@@ -137,12 +132,12 @@ export function lugSDF() {
   const sd = (x, y, z) => {
     // the strap: a half annulus round a vertical axis
     let d = Math.abs(len2(x, Math.max(0, z - zc)) - 12.8) - 4.3
-    d = smax(d, Math.abs(y - 91.5) - 7.5, 2.2)
+    d = smax(d, Math.abs(y - 84.5) - 3.6, 1.6)
     d = Math.max(d, zc - 1 - z)
     // the pendant head: a plate sloping back into the wall to its point
     const wz = wallZ(y)
     let pl = smax(Math.abs(x) - hw(y), z - zf(y), 1.6)
-    pl = smax(pl, Math.max(31 - y, y - 88), 1.6)
+    pl = smax(pl, Math.max(31 - y, y - 86.5), 1.6)
     pl = Math.max(pl, wz - 3 - z)
     d = smin(d, pl, 2)
     for (const sg of [-1, 1]) {

@@ -44,6 +44,7 @@ src/kit/
     shapes.js           the band-ends-in-a-hook vocabulary (Turtle, fillet, curls, hooks, bands) + halfMaskFrame
     rounded.js          TRACED vocabulary: fat round-cornered strokes, plates, decorated plateau tops, pillow eyes (§ Rounded bands)
     lozenge.js          lattice grounds: diagonal lozenges / 回 squares, nested · squared · spiral · dot cells (§ Rounded bands)
+    plates.js           tracedPlates: traced OUTLINES (tools/trace.py) → solid plates: shoulder, contour lines, sunk centre, top fill, bosses (§ Traced plates)
     motifs/
       taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
       ground.js         leiwen on its own (atlas entry 'leiwen')
@@ -68,6 +69,7 @@ src/kit/
     parts.js            legacy columnarLeg / loopHandle, ringFoot; re-exports legs/handles/lid
     plate.js            plate(): flat cast plates (yue / ge blades, plaques): outline + true through-holes, thickness, relief both faces
     lobes.js            lobe() / lobedBody(): lobed bodies (li, he, jia): rounded-rect sock lofted into the legs, lobes overlap → real creases; one 1:1 panel over each lobe's two outer sides
+    skin.js             meshes the kit did not make (scans, polygon cages): weld, Loop subdivision, refinement, per-vertex cavity, projected relief (§ Skins)
   material/
     patina.js           PatinaMaterial + PATINA_PRESETS + shared uniforms
     noise.glsl.js       3D simplex / worley / fbm chunks
@@ -399,6 +401,32 @@ a 300 × 50 mm Houmuwu-scale band with 53 spirals ≈ 0.3 s (+ 0.5–0.7 s for i
 grid (as leiwen) + one sink; a 340 × 120 mm panel at 6 px/mm ≈ 0.4 s. No texture-size cost: every unit
 renders at whatever ppmm the panel has (phones: 2048 cap).
 
+### Traced plates — décor as solid masses (relief/plates.js)
+
+The bronzes are broad raised PLATES with narrow channels of ground between them, not pipes on a wide ground. Draw
+them as OUTLINES taken off the flattened photograph (§ Tracing plates from a flattened face) and let the kit do the
+edge language, all of it a function of the distance in from the plate edge:
+
+```js
+import PLATES from '../../reference/<id>/faces/<face>.plates.json'     // tools/trace.py output (face mm, origin bottom-left, y up)
+kit.tracedPlates(panel, PLATES, {
+  map: ([x, y]) => [x, y],      // face mm → panel mm (default identity); bosses follow it (radius from the local scale)
+  height: 1.6, shoulder: 0.6,   // plate top (mm above the ground) and the rounded shoulder (mm)
+  pillow: 0, pillowWidth: 3,    // extra crown toward the middle (mm) and how far in it rises
+  contour: { inset: 0.9, line: 0.45 }, contour2: null,   // incised line(s) parallel to the edge (the multiply-contoured bands)
+  depth: 0.35,                  // incised depth
+  centre: false,                // { inset: 2.8, depth: 0.5, shoulder: 0.3 }: sunk centre wherever the plate is wider than 2·inset
+  fill: null,                   // { kind: 'leiwen', inset: 2.2, …leiwen opts }: spirals / hooks packed on tops wider than 2·inset
+  bosses: null, boss: { height: 2.6, crown: 0.65, hole: { depth: 1.2 }, ring: false },   // default: PLATES.bosses (pillow eyes)
+  ground: false, groundRegion: null,   // leiwen opts → pack the ground (everything that is not plate) here
+  clip: null, seed: 0 })        // → { plates, area (mm² raised), bosses, ground, ms }
+kit.faceMap({ cx, ox, kx, y })  // helper: (x, y) ↦ (ox + kx·(x − cx), y(y))
+```
+One `panel.raise` (a shoulder/pillow profile of the edge distance) + one `panel.sink` (every contour line and sunk
+centre, a profile of the same distance: the groove channel is recorded) + optional `leiwenFill` on the cores, then
+`pillowBoss` per boss. Plates also accept `[{ outer, holes }]` or bare outlines; holes cut through (even-odd).
+Worked example: `src/artifacts/nezu-fanglei/relief.js` (`TRACED`, `PLATES`, `faceToVessel`).
+
 ## relief/compose.js — laying out a mould section
 
 All rects in panel mm. Every helper draws the LEFT half and mirrors where the Shang rule says so.
@@ -661,6 +689,74 @@ Draw any raised element a little PAST the opening it frames, so the cut wall run
 lies in XY, front +Z: position it yourself. Worked example: `src/artifacts/yachou-yue.js` (a 345 mm blade with a sculpted face:
 ≈ 141 k triangles at q 1 / 84 k at q 0.5, whole build ≈ 2.6 s / 1.7 s in headless SwiftShader).
 
+## Skins — skin.js (meshes the kit did not make)
+
+Everything above decorates surfaces the kit generates. `skin.js` dresses an arbitrary triangle mesh — a 3D scan,
+a polygon cage, an imported model — with the same relief and patina. A mesh is a plain object
+`{ positions: Float32Array (3N, mm), indices: Uint32Array (3T), normals? }`. Same conventions as buildSurface:
+mm, Y up, front +Z; the SHADING normal is the smooth undisplaced normal and the normal map carries all relief slope
+(§ geometry/surface.js, Normals); geometry is displaced by `relief.macro(spacing)` for silhouette and shadow only.
+
+```js
+// 1. preparation
+let m = kit.decodeMesh(arrayBuffer)            // the compact TTM1 binary (below), or kit.meshFromGeometry(bufferGeometry)
+kit.transformMesh(m, matrix4 | (v) => …)       // in place (a mirroring matrix flips the winding)
+m = kit.weldMesh(m, tolerance?)                // merge coincident vertices (UV seams), drop degenerate / duplicate triangles
+kit.orientFaces(m)                             // flip stray triangles wound against their neighbourhood (decimated scans)
+m = kit.loopSubdivide(m, levels)               // Loop, boundary / non-manifold edges kept as creases
+m = kit.refineMesh(m, { edge: mm | (x,y,z) => mm, where, maxVerts: 400k, passes: 8, phong: 0.75 })
+//   red-green splitting of edges longer than `edge` where `where(x,y,z,nx,ny,nz) > 0` (once per vertex; an edge is split
+//   when either end is in); new points on the Phong-tessellated surface; cap → longest edges first
+m = kit.decimateMesh(m, cellMM)                // vertex clustering: a light preview of a dense scan (quality < 1 only)
+kit.vertexNormals(m)                           // angle-weighted, stored on m.normals
+kit.meshBounds(m) → { min, max, size, center }   kit.meshNeighbours(m) → CSR { start, list }
+
+// 2. cavity — 0 deep crease → `flat` (0.72) open → 1 sharp crest, the sense of a ReliefMap's cavity channel
+const cavity = kit.meshCavity(m, { voxel: bboxMax / 140, radii: [≈2.5, 6, 14] × voxel / 1.6, weights: [0.5, 0.5, 0.4],
+  obscurance: 1.6, curvature: 0.8, curvatureScale: 1.2 × mean edge, smooth: [2, 12], flat: 0.72, gamma: 1 })
+//   voxel obscurance (surface voxelised, outside flood-filled, box-blurred per radius, read just off the surface)
+//   + the one-ring mean curvature band-passed ([fine, coarse] smoothing passes; the coarse copy is subtracted, so
+//   the grooves between a scan's scales count as recesses even on a convex flank). O(grid + edges): the 201 k-triangle
+//   dragon in ≈ 0.6–1 s.
+
+// 3. projected relief — a projector maps (p, n) to panel mm + the 3D directions of panel +x / +y, and a weight
+kit.planarProjector({ center, normal (the way the surface faces), up, width, height, anchor: [W/2, H/2],
+  fade: 6 (mm, edges), facing: [0.15, 0.45] (cos to `normal`: back faces get 0 — no print-through),
+  depth: [near, far] (mm along normal from center), depthFade, mask: (x,y,z,nx,ny,nz,px,py) => 0..1, mirror })
+kit.cylindricalProjector({ origin, axis, front, radius (mm per radian), width, height, anchor, fade, facing, radial: [r0, r1], mask, mirror })
+kit.sphericalProjector({ center, pole, front, radius, width, height, anchor, fade, facing, radial, mask, mirror })
+//   x = anchor + longitude·radius (positive toward pole × front = the lathe's azimuth sense: left → right seen from
+//   outside), y = anchor + latitude·radius — true size on the equator; keep décor off the poles
+kit.reliefWhere(regions, { size: 3, threshold: 0.05 })   // refineMesh's `where`: only where a band displaces (|macro| × w)
+kit.skinWeight(projectors)                               // or: anywhere a projector reaches
+
+const mesh = kit.skin(m, { regions: [{ relief, projectors: [p, …], scale?, material? }, …], cavity, spacing, material, part })
+//   → THREE.Mesh, group 0 = bare mesh (PatinaMaterial on the cavity attribute), group i+1 = regions[i] (its relief).
+//   A triangle joins the region weighing most at its corners (any corner > `threshold`), vertices shared by two
+//   regions are split (own uv + tangent), positions come from the heaviest region, so seams cannot crack. Materials
+//   get { cavityAttribute: true, skin: true }. userData.skin = { vertices, triangles, spacing, regionTriangles }.
+kit.skinGeometry(m, { regions, cavity, spacing, threshold })   // the BufferGeometry alone (position, normal, uv, tangent, cavity, groups)
+kit.sliceMesh(m, { point, normal }) → polylines               // e.g. a flange path down a mask's centre line (kit.flange path)
+kit.encodeMesh(m, { channel }) / kit.decodeMesh(buffer)       // TTM1: u16 positions over the bbox + varint first-use index deltas
+```
+
+**Drawing for a projector.** A projector's panel is an ordinary ReliefPanel in the projector's own mm. Draw on the
+mesh's features, not from memory: unwrap the subdivided mesh through the projector (every vertex → panel mm, shaded,
+gridded) and read the control points off that image (the Suzanne panels were traced this way). Keep the panel edges,
+and the band where `facing` fades, plain ground: displacement and weight go to 0 there, the normal map does not.
+Two regions meet at their fades — bound a décor field with a raised band of its own (a bowstring along a smooth
+outline) rather than letting fine ground run into a projector's straight edge. One region = one ReliefMap; several
+projectors may share it (a pair of ears: one projector `mirror: true`).
+
+**TTM1 binary** (tools/classics.mjs writes it): header `'TTM1'`, u32 vertices, u32 triangles, f32 bbox min[3],
+f32 size[3], u32 flags (bit 0: a u8 per-vertex channel follows); u16 positions; LEB128 index codes, code = next −
+index (0 = a new vertex; vertices numbered in first-use order). With triangles in vertex-cache order (the tool runs
+Forsyth) the indices cost ≈ 1.1 bytes each: the Stanford dragon's 201 k triangles are 1.27 MB, Suzanne's cage 25 kB.
+Load it as a bundled asset (`import url from './x/mesh.bin?url'`, then `fetch(url)`): relative, works from a sub-path
+and offline. Worked examples: `src/artifacts/stanford-dragon.js` (cavity + patina only, on a kit-built base) and
+`src/artifacts/suzanne.js` (subdivision, refinement, a spherical face projector and mirrored planar ear projectors,
+a sliced-path flange).
+
 ## material/patina.js
 
 `new PatinaMaterial({ relief: reliefMap | null })` — a `MeshStandardMaterial`
@@ -725,10 +821,11 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue`, `nezu-bu`, `nezu-fanglei-dasikong` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
-`blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
+`blue-green-excavated`, `azurite-bloom` · Classics `stanford-dragon` (cavity-driven corrosion on a scan),
+`suzanne`. A preset is applied over the PATINA_PARAMS defaults.
 
 Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
 `PATINA_PARAMS` (group, label, min/max/step, default, unit, hint),
@@ -748,7 +845,12 @@ noble-skin / cuprite / crust regions with sharp borders) · azurite field (azuri
 and botryoids (malachiteScale, Worley); each band fades to its mean below ~1.5 px.
 
 Constructor options: `{ relief, cavityAttribute, cavity = 0.8 (constant for plain meshes),
-interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear; ≥ 0.55 is already fully calm), normalStrength }`.
+interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear; ≥ 0.55 is already fully calm), normalStrength,
+skin = false }`. `cavityAttribute: true` reads a per-vertex `cavity` (0 recess → 1 exposed) on plain meshes; add `skin: true`
+(a mesh dressed by skin.js, § Skins) and the attribute also deepens a relief panel's own cavity (min), marks crests
+(cavity > 0.8) as arrises for wear, stands in for relief height on bare regions, and quiets the per-triangle screen-space
+curvature that a dense scan turns into facet noise. Both are compile-time defines: a material without them compiles the
+same shader as before (pixel-identical).
 Plain meshes (legs, handles, flanges) get a cavity estimate from signed screen-space curvature
 (convex arris → edge/wear, concave crease → recess), undersides and inward faces; the inner wall
 of a decorated panel (uv = -1) is treated as interior. Each layer is one GLSL function
@@ -876,7 +978,9 @@ face-front, face-side (4 / 3 px/mm from phone photos 25 and 42 of vessel A; lobe
 face-drum, face-upper (7 / 6 px/mm from ≈ 4.6 px/mm phone photo 21, a ROUND vessel shot from ≈ 0.4 m: chord planes down the photo's line of sight, 2.3 / 0.9 mm rms); `nezu-you`
 face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms); `nezu-zun`
 face-belly, face-circles, face-foot (6–7 px/mm from ≈ 4 px/mm phone photo 26) and face-divider (5 px/mm, photo 28): round plan, chord planes down each photo's line of sight, points through cameras fitted to the outlines (0.5–0.9 mm rms); `nezu-jue`
-face-band, face-upper (8 px/mm from ≈ 9 px/mm phone photo 02, one plane through the cup at θ 128 down the line of sight of a camera solved on 8 landmarks, ≈ 2 mm).
+face-band, face-upper (8 px/mm from ≈ 9 px/mm phone photo 02, one plane through the cup at θ 128 down the line of sight of a camera solved on 8 landmarks, ≈ 2 mm); `nezu-bu`
+face-belly, face-shoulder, face-foot, face-lid (6 px/mm from ≈ 4 px/mm phone photo 06, round plan, chord planes down its line of sight, points through the camera fitted to the outline, 0.2–0.6 mm rms; `faces/dev-*.jpg` are the same photo developed onto each register's panel, the images the décor was traced from); `nezu-fanglei-dasikong`
+face-lid, face-collar, face-shoulder, face-main, face-blades (5–6 px/mm from ≈ 3.3–3.8 px/mm phone photo 34, chord planes per zone, points through an ASSUMED camera (el 10°, ≈ 0.9 m) fitted to two centre-line points, ≈ 2–4 mm).
 Each face's `trust` and `fit` in faces.json say how far to believe it.
 
 ### reference/<id>/faces.json
@@ -972,4 +1076,38 @@ userData — `walls[side].corners`, lid `hips` / `midlines` — gives exact numb
 larger than the decorated field; (3) read 6 in-plane landmarks off the original at 1:1 (crop with a pixel
 grid); (4) `--rectify`, read the residuals, LOOK, iterate; (5) `--views` → paste into the artifact,
 `node tools/refs.mjs`, build; (6) `tools/faces.mjs --a id` and read the compare sheets.
+
+`tools/faces.mjs` also prints the **raised coverage** beside the similarity — `raised: model 24 % · photo 62 %`: the
+fraction of the face that is plate rather than ground, from the model's height render blurred by 1 mm (the leiwen
+threads go), and the same figure for the photograph's traced plates (`<face>.plates.json`, measured inside its field).
+
+### Tracing plates from a flattened face (`tools/trace.py`)
+
+Draw décor as the bronze's PLATES — outlines — never as stroked centre lines. The loop takes seconds:
+
+1. `python3 tools/trace.py <id> <face>` → `reference/<id>/faces/<face>.plates.json` + `<face>.trace.jpg`. Open the
+   preview: photograph with a 10 / 5 mm grid (face mm, origin BOTTOM-LEFT, y up) | mask (white traced · blue drawn ·
+   orange mirrored · red hatch unread) | the polygons over the photograph. The line printed says coverage, how much
+   was read, and traced / drawn / mirrored fractions.
+2. Write hints in `reference/<id>/faces/<face>.trace.json` (all mm, same frame): `field` (shape: the decorated
+   area), `mask` [shapes: flanges, heads, lug — neither plate nor ground], `symmetry` `{ axis, keep: 'right' | 'left'
+   | 'average' | 'none', y: [y0, y1] }` (trace the better-lit half, mirror it), `params` (auto classifier: `texture`,
+   `valley`, `brightness`, `window`, `bias` (− = more plate), `minWidth` 1.5, `close`, `grow`, `simplify` 0.3 …),
+   `regions` [shape + any param, or `mode: 'off' | 'plate' | 'ground'`], `seeds` `{ plate: [[x, y]…], ground: […],
+   only }`, `include` / `exclude` / `erase` [shapes], `draw` [shape + `round` (corner radius mm), `inner`, `snap`
+   (mm: pull the outline onto the photograph's edge within ±snap), `cut: true` (a sunk hole: a slit, a horn's centre)],
+   `bosses` [{ `c`, `r`, `snap`, `hole` }]. Shapes: `{ box: [x0, y0, x1, y1] }`, `{ poly: [[x, y]…] }`, `{ circle:
+   [x, y, r] }`, `{ band: [[x, y]…], width, cap }`.
+3. Re-run and LOOK; repeat 2–3 until the magenta outlines sit on the photograph's plates. Plates 8–10 mm wide with
+   ≈ 1–2 mm channels between them are normal; if the coverage reads under ≈ 35 %, you are drawing pipes.
+4. In the artifact, `import` the `.plates.json` and call `kit.tracedPlates(panel, data, { map, … })` (§ Traced plates)
+   before the ground fill; skip the hand-stroked elements of that register.
+5. Build privately, `TAOTIE_DIST=… node tools/faces.mjs --a <id> --face <face>`: similarity and `raised: model · photo`.
+6. `python3 tools/nometa.py` (the previews live under reference/).
+
+Auto classification (texture energy, density of thin dark lines, brightness; Otsu threshold; scale filter that
+drops threads under `minWidth`) reads photographs with tonal separation — a dark-inlaid ground under pale plates
+(met-fangding) — at ≈ 90 %. On pale-ground phone photographs whose plate tops are as busy as the ground (the Nezu
+vessels) it does not: switch it off (`regions: [{ box: whole face, mode: 'off' }]`) and DRAW the outlines off the grid
+with `snap`; that is still faster than stroking, and it is the outline that matters.
 

@@ -1,0 +1,15 @@
+{
+  "note": "face-low (photo-37, washed by glare but the plate edges read as incised outlines): plates DRAWN on the RIGHT half, snapped, mirrored. The lug sculpture covers x 82–120; beyond x ≈ 180 the face runs into the corner flange.",
+  "field": { "box": [0, 26, 202, 69.5] },
+  "mask": [{ "box": [81, 0, 121, 72] }, { "poly": [[180, 0], [202, 0], [202, 72], [196, 72]] }, { "poly": [[22, 0], [0, 0], [0, 72], [6, 72]] }],
+  "symmetry": { "axis": 101, "keep": "right" },
+  "regions": [{ "box": [0, 0, 202, 72], "mode": "off" }],
+  "draw": [
+    { "poly": [[121.5,46],[148,46],[149,62],[146,69],[124,69],[121,64]], "round": 5, "snap": 0.8, "label": "eye plate" },
+    { "poly": [[128.8,51.4],[139.7,51.4],[139.7,54.5],[128.8,54.5]], "round": 1.4, "cut": true, "label": "its slit (sunk)" },
+    { "poly": [[120.5,27.3],[144.5,27.3],[144.5,31.3],[129.5,31.3],[129.5,38],[144.5,38],[144.5,42],[120.5,42]], "round": 1.6, "inner": 0.8, "snap": 0.7, "label": "C under the eye" },
+    { "poly": [[149,43],[170,43],[170,55],[152,55]], "round": 3, "snap": 0.8, "label": "crest" },
+    { "poly": [[167,34.5],[179,34.5],[179,46],[167,46]], "round": 3, "snap": 0.8 },
+    { "poly": [[150,59.5],[178,59.5],[178,69],[150,69]], "round": 3, "snap": 0.8, "label": "horn band" }
+  ]
+}

@@ -65,7 +65,7 @@ export async function buildBase(kit, { quality = 1, onProgress = async () => {} 
   const g = new THREE.Group()
   g.name = 'base'
   g.userData.part = 'base'
-  const density = quality >= 1 ? 1.3 : 0.8
+  const density = quality >= 1 ? 0.95 : 0.6
   for (const [name, a, b, c, d, relief] of sides) {
     const geo = kit.buildSurface({ surface: kit.quadSurface(a, b, c, d), segments: { density }, relief, fade: 1.5 })
     const m = new THREE.Mesh(geo, mat(relief))

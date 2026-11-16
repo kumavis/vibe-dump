@@ -34,11 +34,13 @@ export const BODY = [
   [79.3, 19],
   [78.5, 30],
   [77.6, 46],
-  [77.0, 54.4],
-  [77.6, 56.4],
-  [78.3, 59.5],
-  [78.2, 62.6],
-  [79.6, 64.2, 'corner'],
+  [77.0, 54.4, 'corner'],
+  [78.6, 55.4],
+  [80.6, 57.4],
+  [81.4, 59.6],
+  [80.9, 62],
+  [79.8, 63.6],
+  [80.4, 64.4, 'corner'],
   [88, 63.4],
   [94.4, 64.8],
   [98.4, 68.6],
@@ -85,8 +87,16 @@ export const LID = [
 
 /** the bud knob in the round: [r, y] bottom → tip (photo-06: stem Ø ≈ 13 mm, bud Ø ≈ 24 mm widest a third up) */
 export const KNOB = [
-  [0.01, 224.6], [7.6, 224.6], [7.0, 227.6], [6.4, 232], [6.2, 240], [6.4, 248], [7.2, 251.4], [9.4, 253.6],
-  [11.4, 257.4], [12.1, 261.4], [11.6, 265.6], [10.0, 270], [7.4, 274.6], [4.2, 278.6], [1.6, 281], [0.01, 281.5],
+  [0.01, 250.6], [5.6, 250.6], [8, 251.4], [10.4, 253.4],
+  [12.6, 257.2], [13.4, 261.4], [12.8, 265.8], [11.0, 270.2], [8.0, 274.8], [4.4, 278.8], [1.6, 281], [0.01, 281.5],
+]
+
+/** the knob's stem: TWO posts side by side (photo-06: a gap between them, the front lid flange running up to the
+ *  near one), each [x, z, r] mm from the axis, from the crown (y 225) into the bud's base (y 252) */
+export const POSTS = [[-6.2, 0, 4.4], [6.2, 0, 4.4]]
+export const RIDGES = [
+  { y: 160.6, count: 1, width: 1.6, height: 0.6, shape: 'round' }, // the raised line over the shoulder frieze
+  { y: 170.2, count: 1, width: 1.8, height: 0.7, shape: 'round' }, // the ridge at the foot of the lip
 ]
 
 /** azimuths (deg; 0 = front +Z, + toward +X) */
@@ -107,35 +117,30 @@ export function rAt(y, P = BODY) {
 }
 
 /**
- * Hooked flange silhouette (photo-06, the two divider flanges seen in profile at the silhouette): a row of
- * teeth separated by deep narrow slots; each tooth's upper end is a beak (a small nick in its crest a little
- * below the slot) so the row reads as the "bird-head" crenellation of the photograph.
+ * Hooked flange silhouette (photo-06: the two divider flanges and the lid's flanges seen in profile at the
+ * silhouette): a row of blocky teeth separated by narrow slots; each tooth's upper end (toward +σ) rises into a
+ * short beak, and with `nick` > 0 a small notch in the crest behind the beak makes it a bird head (the lid).
  * → CCW polygon [σ, t] for kit.flange({ outline }), σ 0 → L along the path (upward), t outward, root at −embed.
  */
-export function hookTeeth(L, { height = 12, pitch = 9.5, slot = 0.3, depth = 0.6, nick = 0.28, nickW = 0.24, embed = 2, startPlain = 0, lowHeight = 2.5, phase = 0.5 } = {}) {
+export function hookTeeth(L, { height = 12, pitch = 9.5, slot = 0.26, depth = 0.5, beak = 0.12, nick = 0, nickW = 0.18, embed = 2, startPlain = 0, lowHeight = 2.5 } = {}) {
   const H = height
   const n = Math.max(1, Math.round((L - startPlain) / pitch))
   const p = (L - startPlain) / n
   const w = Math.max(1.2, p * slot)
   const top = []
-  // crest from σ = 0 upward
   if (startPlain > 0) top.push([0, lowHeight], [startPlain - 0.8, lowHeight])
-  else top.push([0, H * 0.82])
   for (let k = 0; k < n; k++) {
     const a = startPlain + k * p, b = a + p
-    const sa = k === 0 ? a + (startPlain > 0 ? 0 : p * 0.12) : a
-    top.push([sa, H])
-    // the nick under the beak
-    const n0 = b - w - (phase + nickW * 0.5) * p * 0.6, n1 = n0 + nickW * p * 0.55
-    top.push([n0, H], [n0 + 0.25, H * (1 - nick)], [n1, H * (1 - nick)], [n1 + 0.5, H])
-    // the beak's tip and the slot
-    if (k < n - 1) {
-      top.push([b - w, H * 1.03], [b - w, H * (1 - depth)], [b, H * (1 - depth)])
-    } else {
-      top.push([b - w * 0.4, H * 1.02], [L, H * 0.7])
-    }
+    const e = k === n - 1 ? L : b - w // the tooth's upper end
+    top.push([k === 0 && startPlain === 0 ? a + p * 0.1 : a, H * 0.9], [a + p * 0.15, H])
+    if (nick > 0) {
+      // a bird head facing +σ: crest, a beak overhanging the slot, the throat cut back under it
+      top.push([e - p * 0.08, H * (1 + beak * 0.3)], [e + p * 0.1, H * (1 + beak * 0.15)], [e + p * 0.11, H * (1 - nick * 0.35)],
+        [e - p * 0.06, H * (1 - nick)], [e, H * (1 - nick * 1.4)])
+    } else top.push([e - p * 0.28, H], [e - p * 0.04, H * (1 + beak)], [e, H * (1 + beak * 0.4)])
+    if (k < n - 1) top.push([e, H * (1 - depth)], [b, H * (1 - depth)])
+    else top.push([L, H * 0.6])
   }
-  // CCW: root (bottom) left → right, then crest right → left
   const pts = [[0, -embed], [L, -embed]]
   for (let i = top.length - 1; i >= 0; i--) pts.push(top[i])
   return pts

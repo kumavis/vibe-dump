@@ -12,7 +12,7 @@
 // Décor (nezu-bu/decor.js) is TRACED from photo-06 developed onto each register's panel (reference/nezu-bu/faces/).
 
 import * as THREE from 'three'
-import { LV, BODY, LID, KNOB, AZ, hookTeeth } from './nezu-bu/form.js'
+import { LV, BODY, LID, KNOB, POSTS, RIDGES, AZ, hookTeeth } from './nezu-bu/form.js'
 import { roundShell, meridianPath, revolveSolid } from './nezu-bu/shell.js'
 import { maskPanel, shoulderPanel, footPanel, lidPanel } from './nezu-bu/decor.js'
 
@@ -50,6 +50,11 @@ export default {
     'detail-eye': { azimuth: -5.8, elevation: 7.6, fov: 3.77, fit: 0.081, target: [52, 110, 91], ref: 'detail-eye.jpg' },
     'detail-flange': { azimuth: 9.8, elevation: 6, fov: 11.4, fit: 0.276, target: [-100, 118, 30], ref: 'detail-flange.jpg' },
     'detail-foot': { azimuth: -1.7, elevation: 15.3, fov: 10.85, fit: 0.245, target: [15, 34, 77], ref: 'detail-foot.jpg' },
+    // flat faces (KIT.md § Flat faces; reference/nezu-bu/faces.json): chord planes down photo-06's line of sight
+    'face-belly': { face: { center: [0, 100, 104.67], normal: [0, 0.1568, 0.9876], up: [0, 0.9876, -0.1568], width: 220, height: 50 }, ref: 'faces/face-belly.jpg' },
+    'face-shoulder': { face: { center: [0, 143, 100.89], normal: [0, 0.0722, 0.9974], up: [0, 0.9974, -0.0722], width: 220, height: 34 }, ref: 'faces/face-shoulder.jpg' },
+    'face-foot': { face: { center: [0, 37, 78.11], normal: [0, 0.2607, 0.9654], up: [0, 0.9654, -0.2607], width: 170, height: 38 }, ref: 'faces/face-foot.jpg' },
+    'face-lid': { face: { center: [0, 209, 61.49], normal: [0, -0.0539, 0.9985], up: [0, 0.9985, 0.0539], width: 130, height: 34 }, ref: 'faces/face-lid.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -62,7 +67,7 @@ export default {
     object.name = 'nezu-bu'
 
     // ---------------------------------------------------------------- body
-    const profile = new kit.Profile(BODY)
+    const profile = new kit.Profile(BODY, { ridges: RIDGES })
     const jobs = [['foot', LV.foot, footPanel], ['mask', LV.mask, maskPanel], ['shoulder', LV.shoulder, shoulderPanel]]
     const registers = {}
     for (let i = 0; i < jobs.length; i++) {
@@ -97,7 +102,7 @@ export default {
     for (const az of AZ.dividers) {
       const [s0, s1] = info.range({ y0: 66.5, y1: 156 })
       const path = info.meridian(az, { s0, s1 })
-      addFlange(path, { outline: hookTeeth(path.length, { height: 13, pitch: 9.6, embed: 2 }), seed: seed + az })
+      addFlange(path, { outline: hookTeeth(path.length, { height: 13, pitch: 9.6, slot: 0.24, depth: 0.5, beak: 0.12, embed: 2 }), seed: seed + az })
     }
     // mask-centre ridges (0°, 180°): low, narrow, beaded
     for (const az of AZ.masks) {
@@ -131,7 +136,7 @@ export default {
       // photo-06 (the right one in profile): three chunky teeth, each topped by a bird head whose beak points to the knob
       const s0 = lidP.sAtY(195.2), s1 = lidP.sAtY(224.4)
       const path = meridianPath(lidP, az, s0, s1)
-      const f = kit.flange({ path, outline: hookTeeth(path.length, { height: 10, pitch: 15, slot: 0.36, embed: 2, depth: 0.8, nick: 0.36, nickW: 0.3 }), thickness: 5, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: plain, part: 'flanges' })
+      const f = kit.flange({ path, outline: hookTeeth(path.length, { height: 10, pitch: 14, slot: 0.45, embed: 2, depth: 0.85, beak: 0.2, nick: 0.32 }), thickness: 5, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: plain, part: 'flanges' })
       object.add(f)
       flanges.push(f)
       lidFlanges.push(f)
@@ -139,8 +144,15 @@ export default {
 
     // ---------------------------------------------------------------- knob
     await onProgress(0.75, 'knob')
-    const knob = new THREE.Mesh(revolveSolid(KNOB, { segments: Math.round(40 * Math.sqrt(q)) }), new kit.PatinaMaterial())
+    const knobMat = new kit.PatinaMaterial()
+    const knob = new THREE.Group()
     knob.userData.part = 'knob'
+    knob.add(new THREE.Mesh(revolveSolid(KNOB, { segments: Math.round(40 * Math.sqrt(q)) }), knobMat))
+    const postGeo = new THREE.CylinderGeometry(1, 1, 1, Math.round(16 * Math.sqrt(q)))
+    for (const [x, z, r] of POSTS) {
+      const g = postGeo.clone().applyMatrix4(new THREE.Matrix4().makeScale(r, 252.6 - 224.6, r)).applyMatrix4(new THREE.Matrix4().makeTranslation(x, (252.6 + 224.6) / 2, z))
+      knob.add(new THREE.Mesh(g, knobMat))
+    }
     object.add(knob)
 
     object.traverse((m) => { if (m.isMesh) { m.castShadow = m.receiveShadow = true } })

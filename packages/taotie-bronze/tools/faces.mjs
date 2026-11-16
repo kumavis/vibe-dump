@@ -136,6 +136,7 @@ try {
     const { page, errors } = await s.open({ ui: '0', q, a: id }, { width: 1200, height: 900 })
     await s.waitReady(page)
     const results = {}
+    const raised = {} // raised coverage per face: model (height render) and photograph (traced plates), fractions
     const compares = []
     for (const [name, f] of faces) {
       const flat = join(REF, id, 'faces', name + '.jpg')
@@ -158,16 +159,19 @@ try {
       const out = join(dir, `${name}-compare.jpg`)
       const ppmm = W / f.width
       const blurMM = f.blur ?? d.blur ?? 0.5 // mm: above the leiwen pitch (faces.json `blur`, per face or per vessel)
-      const r = JSON.parse(py('compare', flat, shots.clay, shots.height, out, `${id} · ${name} · ${f.width}×${f.height} mm`, String(ppmm), String(blurMM)).trim())
+      const platesJson = join(REF, id, 'faces', name + '.plates.json') // tools/trace.py: the photograph's traced plates (optional)
+      const r = JSON.parse(py('compare', flat, shots.clay, shots.height, out, `${id} · ${name} · ${f.width}×${f.height} mm`, String(ppmm), String(blurMM), ...(existsSync(platesJson) ? [platesJson] : [])).trim())
       results[name] = r.ncc
+      if (r.raised != null) raised[name] = { model: r.raised, photo: r.raisedPhoto ?? null }
       compares.push(out)
-      console.log(`  ✓ ${name.padEnd(22)} similarity ${r.ncc.toFixed(3)}   ${out.startsWith(PKG) ? out.slice(PKG.length + 1) : out}`)
+      const pct = (v) => (v == null || Number.isNaN(v) ? '–' : `${Math.round(v * 100)} %`)
+      console.log(`  ✓ ${name.padEnd(22)} similarity ${r.ncc.toFixed(3)}   ${out.startsWith(PKG) ? out.slice(PKG.length + 1) : out}   raised: model ${pct(r.raised)} · photo ${pct(r.raisedPhoto)}`)
     }
     if (compares.length) {
       const sheet = join(dir, 'faces-sheet.jpg')
       py('sheet', sheet, `${id} · flat faces · photograph | model clay | model relief edges over the photograph`, ...compares)
       console.log(`  ✓ ${sheet.startsWith(PKG) ? sheet.slice(PKG.length + 1) : sheet}`)
-      writeFileSync(join(dir, 'similarity.json'), JSON.stringify({ id, q: Number(q), similarity: results }, null, 2) + '\n')
+      writeFileSync(join(dir, 'similarity.json'), JSON.stringify({ id, q: Number(q), similarity: results, raised }, null, 2) + '\n')
     }
     for (const e of errors) {
       console.error('  console: ' + e)

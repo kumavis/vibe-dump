@@ -1,0 +1,22 @@
+{
+  "note": "face-lid (photo-37, the long slope ≈ 35° off its normal, washed pale by the light): plates DRAWN on the RIGHT half, snapped, mirrored. The ridge ends and the hip strips are hidden by the hip flanges.",
+  "field": { "poly": [[6, 2], [174, 2], [143, 94], [37, 94]] },
+  "mask": [{ "box": [87, 0, 93, 98.2] }],
+  "symmetry": { "axis": 90, "keep": "right" },
+  "regions": [{ "box": [0, 0, 180, 98.2], "mode": "off" }],
+  "draw": [
+    { "poly": [[106.5,45],[126,45],[126,57.5],[106.5,57.5]], "round": 4.5, "snap": 0.8, "label": "eye plate" },
+    { "poly": [[112,51],[121,51],[121,53.2],[112,53.2]], "round": 1, "cut": true, "label": "its slit" },
+    { "poly": [[102,61.5],[124,61.5],[124,80],[102,80]], "round": 4, "snap": 0.8, "label": "horn" },
+    { "poly": [[110.5,66.5],[119.5,66.5],[119.5,74],[110.5,74]], "round": 2.5, "cut": true, "label": "the horn's sunk centre" },
+    { "poly": [[98,40],[150,40],[150,44.5],[98,44.5]], "round": 2, "snap": 0.6, "label": "brow" },
+    { "poly": [[103,31],[152,31],[152,38],[103,38]], "round": 2.5, "snap": 0.8, "label": "hooked band" },
+    { "poly": [[110,15],[131,15],[131,29.5],[110,29.5]], "round": 4, "snap": 0.8, "label": "spiral block" },
+    { "poly": [[93.5,4],[101,4],[101,37],[93.5,37]], "round": 2.5, "snap": 0.8, "label": "column beside the flange" },
+    { "poly": [[93.5,60],[99,60],[99,86],[93.5,86]], "round": 2.2, "snap": 0.8 },
+    { "poly": [[129,48],[140,48],[141,70],[133,76],[129,72]], "round": 3, "snap": 0.8, "label": "hip body" },
+    { "poly": [[141,46],[156,46],[159,52],[146,53.5]], "round": 2, "snap": 0.6 },
+    { "poly": [[133,12],[152,12],[156,26],[133,27]], "round": 3, "snap": 0.8 }
+  ],
+  "bosses": [{ "c": [100.6, 72.7], "r": 2.5, "snap": true }, { "c": [126.7, 57.6], "r": 2.5, "snap": true }, { "c": [145.4, 48.2], "r": 2.5, "snap": true }]
+}

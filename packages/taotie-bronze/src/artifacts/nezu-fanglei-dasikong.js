@@ -62,13 +62,15 @@ export default {
     side: { azimuth: 90, elevation: 8, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
     top: { azimuth: 15, elevation: 72, fov: 28, fit: 1.05 },
-    'detail-lid': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.36, target: [0, 440, 40], ref: 'detail-lid.jpg' },
-    'detail-shoulder': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.36, target: [0, 312, 110], ref: 'detail-shoulder.jpg' },
-    'detail-head': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.14, target: [0, 320, 125], ref: 'detail-head.jpg' },
-    'detail-main': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.36, target: [0, 245, 125], ref: 'detail-main.jpg' },
-    'detail-blade': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.42, target: [0, 130, 105], ref: 'detail-blade.jpg' },
-    'detail-handle': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.13, target: [148, 325, 0], ref: 'detail-handle.jpg' },
-    'detail-lug': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.17, target: [0, 70, 95], ref: 'detail-lug.jpg' },
+    // details: same camera as photo-34; each ref is the 1:1 crop of photo-34 that the view frames (4:3,
+    // .work/r8-dsk/solve/crops.py; R ≈ 332 mm)
+    'detail-lid': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.2, target: [0, 438, 60], ref: 'detail-lid.jpg' },
+    'detail-shoulder': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.165, target: [-58, 318, 112], ref: 'detail-shoulder.jpg' },
+    'detail-head': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.09, target: [0, 320, 125], ref: 'detail-head.jpg' },
+    'detail-main': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.165, target: [-58, 244, 126], ref: 'detail-main.jpg' },
+    'detail-blade': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.286, target: [0, 120, 100], ref: 'detail-blade.jpg' },
+    'detail-handle': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.09, target: [145, 318, 0], ref: 'detail-handle.jpg' },
+    'detail-lug': { azimuth: 3.5, elevation: 10, fov: 20, fit: 0.114, target: [0, 70, 95], ref: 'detail-lug.jpg' },
     // flat faces (KIT.md § Flat faces): head-on on each zone's chord plane; ref = the flattened photo-34
     'face-lid': { face: { center: [0, 433, 59.62], normal: [0, 0.5188, 0.8549], up: [0, 0.8549, -0.5188], width: 168, height: 81.2 }, ref: 'faces/face-lid.jpg' },
     'face-collar': { face: { center: [0, 372.75, 78.3], normal: [0, 0, 1], up: [0, 1, 0], width: 174, height: 53.5 }, ref: 'faces/face-collar.jpg' },
@@ -98,10 +100,11 @@ export default {
     const kxSide = Qh(1)(270) / Qh(0)(270)
     await onProgress(0.03, 'belly · broad faces (traced)')
     const pf = bodyPanel(kit, { ppmm, seed, Qh: Qh(0), arc: arcB, kx: 1, lug: true, Hmax: LV.shoulder })
-    panels.bodyLong = pf.relief
+    panels.bodyLong = pf.lugRelief
+    panels.bodyBack = pf.relief
     lap('body front')
     await onProgress(0.3, 'belly · narrow faces')
-    const ps = bodyPanel(kit, { ppmm: ppmm * 0.8, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: true, Hmax: LV.shoulder })
+    const ps = bodyPanel(kit, { ppmm: ppmm * 0.8, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: false, Hmax: LV.shoulder })
     panels.bodyShort = ps.relief
     lap('body side')
     await onProgress(0.55, 'collar and lid')
@@ -122,10 +125,10 @@ export default {
     await onProgress(0.72, 'casting')
     const mat = (relief) => new kit.PatinaMaterial({ relief })
     const bodyG = group('body')
-    const matB = [mat(pf.relief), mat(ps.relief)]
+    const matB = [mat(pf.lugRelief), mat(ps.relief), mat(pf.relief)]
     for (let k = 0; k < 4; k++) {
       const p = k % 2 ? ps : pf
-      bodyG.add(loftSide(kit, { k, y0: LV.base, y1: LV.shoulder, W: bodyW, R: Rb, relief: p.relief, arc: arcB, panelW: p.panelW, material: matB[k % 2], density: dens, fade: 1.0 }))
+      bodyG.add(loftSide(kit, { k, y0: LV.base, y1: LV.shoulder, W: bodyW, R: Rb, relief: k === 0 ? pf.lugRelief : p.relief, arc: arcB, panelW: p.panelW, material: k % 2 ? matB[1] : matB[k === 2 ? 2 : 0], density: dens, fade: 1.0 }))
     }
     bodyG.add(capMesh({ y: 0, a: bodyW(0), b: RHO * bodyW(0), r: Rb(0) }, plain, false))
     // the ledge: from the shoulder top in to the collar, a small round at its outer edge
@@ -153,9 +156,9 @@ export default {
 
     // knob: a little hipped roof on a thick vertical-sided cap, on a short post (photo-34: 39 mm across)
     const knob = kit.roofKnob({
-      width: 39, depth: 35, rise: 13, ridge: 0.55,
-      skirt: { height: 0.5, fascia: 15.5 },
-      post: { height: LV.knob - LV.lidTop + 0.5, width: 22, depth: 20, waist: 0 },
+      width: 40, depth: 35, rise: 7, ridge: 0.7,
+      skirt: { height: 0.5, fascia: 17 },
+      post: { height: LV.knob - LV.lidTop + 0.5, width: 15, depth: 13.5, waist: 0 },
       material: plain, part: 'knob', embed: 6,
     })
     knob.position.y = LV.lidTop - 0.5

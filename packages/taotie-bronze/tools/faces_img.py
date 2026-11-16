@@ -4,8 +4,9 @@
   faces_img.py rectify  <faces.json> <out dir> <originals dir> [face …]
       warp each face's photograph to a head-on image at `ppmm` (see KIT.md § Flat faces); prints
       one JSON line per face: {"face", "w", "h", "ppmm", "rms_mm", "max_mm", "src"}
-  faces_img.py compare  <flat.jpg> <clay.png> <height.png> <out.jpg> <title> [ppmm] [blur mm]
-      writes photo | model clay | overlay and prints {"ncc": …}
+  faces_img.py compare  <flat.jpg> <clay.png> <height.png> <out.jpg> <title> [ppmm] [blur mm] [plates.json]
+      writes photo | model clay | overlay and prints {"ncc": …, "raised": model raised coverage, "raisedPhoto": the traced
+      photograph's (from <face>.plates.json, tools/trace.py) or null}
   faces_img.py sheet    <out.jpg> <title> <compare.jpg> …
 """
 import json
@@ -221,7 +222,51 @@ def label(im, text, size=22):
     d.text((10, 6), text, font=f, fill=(233, 226, 212))
 
 
-def compare(flat_p, clay_p, height_p, out_p, title, ppmm='8', blur_mm='0.5'):
+def raised_coverage(hh, ppmm, inside, plates_p=None):
+    """The model's RAISED COVERAGE: fraction of the face that is plate rather than ground, from the height render
+    blurred by 1 mm (the leiwen threads go) and cut halfway-ish between the ground level and the plate tops. Measured
+    inside the traced field of <face>.plates.json when there is one (and its `mask`ed parts left out), so it is the same
+    area the photograph's figure is taken over. → (model fraction, photo fraction or None)"""
+    H, W = hh.shape
+    region = (blur((hh > 0.02).astype(np.float32), 2) > 0.5) & inside
+    photo = None
+    if plates_p and os.path.exists(plates_p):
+        d = json.load(open(plates_p))
+        photo = (d.get('stats') or {}).get('coverage')
+        fw, fh = float(d.get('width', W / ppmm)), float(d.get('height', H / ppmm))
+        sx, sy = W / fw, H / fh
+
+        def shape(s):
+            m = Image.new('L', (W, H), 0)
+            dr = ImageDraw.Draw(m)
+            if isinstance(s, list):
+                s = {'poly': s}
+            if 'box' in s:
+                x0, y0, x1, y1 = s['box']
+                dr.rectangle([min(x0, x1) * sx, (fh - max(y0, y1)) * sy, max(x0, x1) * sx, (fh - min(y0, y1)) * sy], fill=255)
+            elif 'poly' in s:
+                dr.polygon([(x * sx, (fh - y) * sy) for x, y in s['poly']], fill=255)
+            return np.asarray(m) > 127
+
+        if d.get('field'):
+            region &= shape(d['field'])
+        for s in d.get('mask') or []:
+            region &= ~shape(s)
+    if region.sum() < 100:
+        return float('nan'), photo
+    hb = blur(hh, max(0.8, 1.0 * float(ppmm)))
+    v = hb[region]
+    # two levels — ground (with its blurred-out threads) and plate tops (bosses above them): Otsu between them
+    h, e = np.histogram(v, 128)
+    c = (e[:-1] + e[1:]) / 2
+    w = np.cumsum(h).astype(float)
+    mu = np.cumsum(h * c)
+    sb = (mu[-1] * w / w[-1] - mu) ** 2 / (w * (w[-1] - w) + 1e-9)
+    thr = float(c[np.argmax(sb)])
+    return float((v > thr).mean()), photo
+
+
+def compare(flat_p, clay_p, height_p, out_p, title, ppmm='8', blur_mm='0.5', plates_p=None):
     photo = Image.open(flat_p).convert('RGB')
     W, H = photo.size
     clay = Image.open(clay_p).convert('RGB').resize((W, H), Image.LANCZOS)
@@ -242,6 +287,7 @@ def compare(flat_p, clay_p, height_p, out_p, title, ppmm='8', blur_mm='0.5'):
         a = gp[mask] - gp[mask].mean()
         b = gm[mask] - gm[mask].mean()
         ncc = float((a * b).sum() / max(1e-12, np.sqrt((a * a).sum() * (b * b).sum())))
+    raised, raised_photo = raised_coverage(hh, float(ppmm), np.abs(L - 24 / 255) > 0.01, plates_p)
     # overlay: desaturated, darkened photo + the model's relief edges in saturated magenta
     e = grad(blur(hh, 0.7))
     thr = np.percentile(e[e > 1e-4], 75) if (e > 1e-4).sum() > 100 else 1
@@ -258,9 +304,10 @@ def compare(flat_p, clay_p, height_p, out_p, title, ppmm='8', blur_mm='0.5'):
     for i, im in enumerate((photo, clay, overlay)):
         sheet.paste(im, (gap + i * (W + gap), head + gap))
     d = ImageDraw.Draw(sheet)
-    d.text((gap, 6), f'{title}   ·   similarity {ncc:.3f} (NCC of gradient magnitude, blur {float(blur_mm):g} mm)', font=font(max(16, head - 14)), fill=(233, 226, 212))
+    cov = ('' if raised != raised else f'   ·   raised: model {raised * 100:.0f} %') + (f' · photo (traced) {raised_photo * 100:.0f} %' if raised_photo is not None else '')
+    d.text((gap, 6), f'{title}   ·   similarity {ncc:.3f} (NCC of gradient magnitude, blur {float(blur_mm):g} mm){cov}', font=font(max(16, head - 14)), fill=(233, 226, 212))
     sheet.save(out_p, quality=88)
-    print(json.dumps({'ncc': round(ncc, 4), 'w': W, 'h': H}))
+    print(json.dumps({'ncc': round(ncc, 4), 'w': W, 'h': H, 'raised': None if raised != raised else round(raised, 4), 'raisedPhoto': raised_photo}))
 
 
 def sheet(out_p, title, files):
@@ -293,7 +340,7 @@ if __name__ == '__main__':
     if cmd == 'rectify':
         rectify(a[0], a[1], a[2], a[3:])
     elif cmd == 'compare':
-        compare(*a[:7])
+        compare(*a[:8])
     elif cmd == 'sheet':
         sheet(a[0], a[1], a[2:])
     else:

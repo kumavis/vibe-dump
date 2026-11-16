@@ -40,7 +40,6 @@ export default {
     side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.1 },
     top: { azimuth: 0, elevation: 82, fov: 26, fit: 1.05 },
     'detail-head': { azimuth: 30, elevation: 8, fov: 16, fit: 0.32, target: [78, TOP + 105, 8] },
-    'zz-base': { azimuth: 8, elevation: 4, fov: 16, fit: 0.3, target: [40, 18, 66] },
     'detail-scales': { azimuth: -20, elevation: 30, fov: 16, fit: 0.3, target: [-30, TOP + 70, 0] },
   },
 
@@ -73,12 +72,6 @@ export default {
     const dragon = kit.skin(m, { cavity, part: 'body' })
     // the decimated scan has a few pin-holes: show the inside skin through them, not the background
     for (const mat of dragon.material) mat.side = THREE.DoubleSide
-    if (typeof location !== 'undefined' && /cavdebug/.test(location.search)) { // TEMP-DEBUG
-      const c = dragon.geometry.getAttribute('cavity'), col = new Float32Array(c.count * 3)
-      for (let i = 0; i < c.count; i++) { const v = c.getX(i); col[i * 3] = v < 0.72 ? 1 - v / 0.72 : 0; col[i * 3 + 1] = 0.3; col[i * 3 + 2] = v > 0.72 ? (v - 0.72) / 0.28 : 0 }
-      dragon.geometry.setAttribute('color', new THREE.BufferAttribute(col, 3))
-      dragon.material = new THREE.MeshBasicMaterial({ vertexColors: true })
-    }
     dragon.name = 'stanford-dragon'
     dragon.position.y = TOP
 

@@ -1,0 +1,33 @@
+{
+  "note": "face-main (photo-37, ≈ 3.6 px/mm): the auto classifier cannot tell plate from ground here (plate tops carry dense hook incisions, the ground is pale too) — every plate is DRAWN off the 2 mm grid of the preview on the better-lit RIGHT half, snapped to the photograph's edges, and mirrored",
+  "field": { "box": [0, 0.5, 265, 75.5] },
+  "mask": [{ "box": [124, 0, 134.6, 87] }, { "poly": [[255, 0], [265, 0], [265, 87], [261, 87]] }, { "poly": [[10, 0], [0, 0], [0, 87], [4, 87]] }],
+  "symmetry": { "axis": 132.5, "keep": "right" },
+  "regions": [{ "box": [0, 0, 265, 87], "mode": "off" }],
+  "draw": [
+    { "poly": [[155,56],[155,70.5],[158,73.5],[202.5,73.5],[206.5,69.5],[206.5,44],[203,38],[184,37.5],[184,42.5],[199.5,42.5],[199.5,66.5],[161.5,66.5],[161.5,56]], "round": 2.5, "inner": 0.8, "snap": 0.8, "label": "G horn band" },
+    { "poly": [[163,58.5],[198.5,58.5],[198.5,65.5],[163,65.5]], "round": 2, "snap": 0.8, "label": "hooked band inside the horn" },
+    { "poly": [[158.5,40],[176.5,40],[176.5,56.5],[158.5,56.5]], "round": 4, "snap": 0.8, "label": "curl block (horn end)" },
+    { "poly": [[184,43.5],[198.5,43.5],[198.5,57.5],[184,57.5]], "round": 3.5, "snap": 0.8, "label": "spiral block" },
+    { "poly": [[141,34.5],[181,34.5],[181,38.7],[141,38.7]], "round": 1.5, "snap": 0.6, "label": "brow" },
+    { "poly": [[146.5,13],[160,13],[160,33.3],[146.5,33.3]], "round": 2, "snap": 0.8, "label": "cheek plate round the eye" },
+    { "poly": [[135.3,54],[145.5,54],[145.5,74],[135.3,74]], "round": 2.5, "snap": 0.8, "label": "flange-side kui, top" },
+    { "poly": [[135.3,41],[148,41],[148,52.5],[135.3,52.5]], "round": 3, "snap": 0.8 },
+    { "poly": [[135.3,12],[145,12],[145,33],[135.3,33]], "round": 2, "snap": 0.8, "label": "flange-side column" },
+    { "poly": [[135.3,1],[148,1],[148,10.5],[135.3,10.5]], "round": 3, "snap": 0.8 },
+    { "poly": [[149.5,0.8],[153.5,0.8],[153.5,7.5],[177,7.5],[177,12],[149.5,12]], "round": 2, "inner": 0.5, "snap": 0.8, "label": "jaw" },
+    { "poly": [[184,21.5],[201,21.5],[201,32.5],[184,32.5]], "round": 3, "snap": 0.8, "label": "trunk" },
+    { "poly": [[203,21.5],[237,21.5],[237,29],[203,29]], "round": 2.5, "snap": 0.8, "label": "crested body" },
+    { "poly": [[205,7.5],[227,7.5],[227,16.5],[205,16.5]], "round": 3.5, "snap": 0.8 },
+    { "poly": [[229,7.5],[243,7.5],[243,12],[229,12]], "round": 2, "snap": 0.8 },
+    { "poly": [[240.5,40],[253.5,41],[255,48],[253.5,56],[240.5,56.5],[239,48]], "round": 3, "snap": 0.8, "label": "ear" },
+    { "poly": [[229,59],[255,59],[256,64.5],[229,64.5]], "round": 2.5, "snap": 0.8, "label": "crest over the ear" },
+    { "poly": [[224.5,31.5],[230.5,31.5],[230.5,58],[224.5,58]], "round": 2.5, "snap": 0.8, "label": "upright kui" },
+    { "poly": [[243,8],[257,8],[257,19.5],[243,19.5]], "round": 3, "snap": 0.8, "label": "corner kui head" },
+    { "poly": [[256.5,33],[263.5,33],[263.5,56],[256.5,56]], "round": 2, "snap": 0.8, "label": "hook column at the corner" }
+  ],
+  "bosses": [
+    { "c": [170.4, 24.8], "r": 9.2, "snap": true, "hole": 1.8, "label": "eye" },
+    { "c": [185, 11.4], "r": 4.7, "snap": true }
+  ]
+}

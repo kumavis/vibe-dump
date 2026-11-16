@@ -99,8 +99,8 @@
      59.62
     ]
    ],
-   "trust": "",
-   "fit": ""
+   "trust": "chord plane of a convex dome: the slope leaves it by up to ≈ 10 mm at mid-height; the left half is clean, the right half crusted. Good for the mask layout and the boss row.",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: ≈ 2–4 mm, judged from the centre-line offset and register levelness"
   },
   "face-collar": {
    "label": "front (+Z) collar y 348–397.5: flush kui frieze either side of a centre strip — vertical plane",
@@ -188,8 +188,8 @@
      78.3
     ]
    ],
-   "trust": "",
-   "fit": ""
+   "trust": "vertical plane, but the collar is near-black and worn in photo-34: low contrast, the frieze is barely legible. Low trust.",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: ≈ 2–4 mm, judged from the centre-line offset and register levelness"
   },
   "face-shoulder": {
    "label": "front (+Z) shoulder y 284–346: kui frieze over the whorl-boss band, the head at the centre — chord plane",
@@ -277,8 +277,8 @@
      108.61
     ]
    ],
-   "trust": "",
-   "fit": ""
+   "trust": "chord plane of a strongly curved shoulder (≈ 10 mm off at the boss band): boss positions ±2 mm, kui bands ±3 mm. The head stands in front of the plane.",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: ≈ 2–4 mm, judged from the centre-line offset and register levelness"
   },
   "face-main": {
    "label": "front (+Z) main register y 210–280: the big mask with its centre strip — chord plane",
@@ -366,8 +366,8 @@
      124.42
     ]
    ],
-   "trust": "",
-   "fit": ""
+   "trust": "the most reliable face: the register is nearly vertical and flat across; centre line at x ≈ −3 mm (camera residual).",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: ≈ 2–4 mm, judged from the centre-line offset and register levelness"
   },
   "face-blades": {
    "label": "front (+Z) lower belly y 24–214: the hanging blades (centre blade with the lug; half blades at the corners) — chord plane",
@@ -455,8 +455,8 @@
      99.16
     ]
    ],
-   "trust": "",
-   "fit": ""
+   "trust": "chord plane of the lower belly (≈ 3 mm off); blade edges and mask ±2 mm; the corner blades are seen obliquely beyond x ≈ ±95 and compressed there.",
+   "fit": "points are exact projections through the assumed camera (rms 0.01 mm by construction); the real error is the camera: ≈ 2–4 mm, judged from the centre-line offset and register levelness"
   }
  }
 }
