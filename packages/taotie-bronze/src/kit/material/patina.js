@@ -336,6 +336,20 @@ export const PATINA_PRESETS = {
     speckleDecor: 0.3, crustIsles: 0.14, crustScale: 6, crustColor: '#3f9a70', crustPlace: 0.5, pustules: 0,
     pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
   },
+  // Nezu square hu with phoenix design 90097-98 (owner's photographs 08/09): a mottled grey-green skin — dark olive
+  // and blue-grey territories on the plain straps, pale grey-green crust islands, bright emerald specks everywhere;
+  // pinkish red-brown earth and cuprite packed in the cut channels of the birds; the crown and the handles near-black
+  'nezu-fanghu': {
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.25, tarnish: 0.6, cuprite: 0.6, cupriteTone: 0.55, tinOxide: 0.85,
+    tinOxideTone: 1.45, malachite: 0.5, carbonate: 0.2, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
+    turquoiseTone: 0.55, islands: 0.45, malachiteScale: 1.0, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.95,
+    patchScale: 28, mottleScale: 5, patchiness: 0.9, softness: 0.5, drift: 0.7, earth: 0.4, earthColor: '#a7765c',
+    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.9, interiorTone: 0.3, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.12, dulling: 0.35, tops: 0.5, nobleWarmth: 0.35, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.4,
+    tint: '#919a86', upperTone: 0.4, upperHeight: 0.93, plainTone: 1.2, speckle: 0.07, speckleScale: 0.9, speckleColor: '#2f9a64',
+    speckleDecor: 0.4, crustIsles: 0.12, crustScale: 7, crustColor: '#7f9483', crustPlace: 0.5, pustules: 0.05,
+    pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
+  },
 
   // Nezu you 90086 (owner's photographs 31/32): a dark grey-green bronze skin with the raised bands worn to a pale
   // grey-beige, bright malachite in broad soft territories over belly, lid and foot (green powder packed into the
@@ -470,7 +484,7 @@ export const PATINA_PRESETS = {
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
   Classics: ['stanford-dragon', 'suzanne', 'utah-teapot'],

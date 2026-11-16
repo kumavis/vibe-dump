@@ -182,10 +182,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   const W = 2 * Qh(270) + 2
   const Hp = arc(Hmax)
   const p = new kit.ReliefPanel({ width: W, height: Hp, ppmm, seed })
-  const t0 = performance.now(), lap = (l) => console.info(`  panel ${l} ${Math.round(performance.now() - t0)}`)
   const M = ([x, y]) => [W / 2 + x, arc(y)]
-  const strip = (y) => [[-Qh(y), y], [Qh(y), y]]
-  void strip
   // ----- blades
   const TOP = 207
   const centre = blade(kit, M, { ax: () => 0, hw: (y) => 65 * kx * Math.pow(Math.max(0, (y - 28) / (TOP - 28)), 0.92), y0: TOP, y1: 28, k: kx, nose: [lug ? 116 : 40, 186] })
@@ -204,22 +201,18 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     ctx.lineWidth = 0.42; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
     for (const b of blades) for (const l of b.lines) { if (l.length < 2) continue; ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
   }, { depth: 0.35, shoulder: 0.15, profile: 'u' })
-  lap('borders')
   // ----- main register + shoulder elements
   const eyes = [], mainEls = [], kuiEls = []
   for (const s of [1, -1]) {
     const m = mainDesign(kit, M, s, kx, Qh), k = kuiDesign(kit, M, s, kx)
     mainEls.push(...m.els); kuiEls.push(...k.els); eyes.push(...m.eyes, ...k.eyes)
   }
-  lap('elements')
   kit.carve(p, [...blades.flatMap((b) => b.els), ...mainEls, ...kuiEls], { height: RELIEF.band, shoulder: RELIEF.shoulder, depth: RELIEF.groove, contour: CONTOUR, irregularity: 1, seed })
-  lap('carve main')
   kit.carve(p, blades.flatMap((b) => b.coils), { height: 0.7, shoulder: 0.4, depth: 0.42, contour: { inset: 0.5, line: 0.42 }, irregularity: 1, seed: seed + 7 })
   p.sink((ctx) => {
     ctx.lineWidth = 0.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
     for (const b of blades) for (const l of b.scrolls) { ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
   }, { depth: 0.38, shoulder: 0.15, profile: 'u' })
-  lap('carve')
   for (const e of eyes) kit.pillowBoss(p, { slit: false, ...e })
   // ----- whorl-boss band (285–306)
   const xs = [0, 37, 74, 111].map((x) => x * kx)
@@ -235,7 +228,6 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   p.raise((ctx) => {
     for (const y of [340.2, 343.4]) { const a = M([-Qh(y) - 2, y - 0.8]), b = M([Qh(y) + 2, y + 0.8]); ctx.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]) }
   }, { height: 0.9, profile: 'ridge' })
-  lap('bosses+fillets')
   // ----- grounds: leiwen in every field, kept off a 1.4 mm strip either side of the corner lines (seam agreement)
   const seamFree = (y0, y1) => {
     const pts = []
@@ -251,11 +243,9 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     x0 = Math.max(0, x0); x1 = Math.min(W, x1)
     if (x1 - x0 > 2) kit.leiwenFill(p, { rect: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, include: polyDraw(b.inner), margin: 0.55 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + Math.round(x0) })
   }
-  lap('blade leiwen')
   fill(212, 271, polyDraw(seamFree(205, 280)))
   fill(287, 304.5, polyDraw(seamFree(280, 340)), { cell: [4.5, 8] })
   fill(307, 336.4, polyDraw(seamFree(300, 345)), { cell: [5, 9] })
-  lap('leiwen')
   const relief = p.bake()
   let lugRelief = null
   if (lug) {
@@ -265,7 +255,6 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     p.sink((ctx) => { const a = M([-17, 85.5]), b = M([17, 100]); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(a[0], a[1], b[0] - a[0], b[1] - a[1], 4) : ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.fill() }, { depth: 9, shoulder: 1.8, profile: 'u' })
     lugRelief = p.bake()
   }
-  lap('bake')
   return { relief, lugRelief, panelW: W, panelH: Hp }
 }
 

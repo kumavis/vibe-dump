@@ -188,6 +188,116 @@ class Face:
         return (x / self.ppmm, self.hmm - y / self.ppmm)
 
 
+def _fillet(pts, ws, bend):
+    """round every interior corner of the centre line with radius bend × local width (outer edge ≈ w round, inner
+    edge nearly square — the bronze's corners), as an arc of points."""
+    out, wo = [pts[0]], [ws[0]]
+    for i in range(1, len(pts) - 1):
+        a, b, c = np.array(pts[i - 1], float), np.array(pts[i], float), np.array(pts[i + 1], float)
+        u, v = b - a, c - b
+        lu, lv = np.hypot(*u), np.hypot(*v)
+        if lu < 1e-6 or lv < 1e-6:
+            continue
+        u, v = u / lu, v / lv
+        cosang = float(np.clip(np.dot(u, v), -1, 1))
+        th = np.arccos(cosang)  # turning angle
+        r = bend * ws[i]
+        if th < 0.05 or r <= 0:
+            out.append(tuple(b)); wo.append(ws[i]); continue
+        d = min(r * np.tan(th / 2), 0.49 * lu, 0.49 * lv)
+        r = d / np.tan(th / 2)
+        p0, p1 = b - u * d, b + v * d
+        side = np.sign(u[0] * v[1] - u[1] * v[0])  # +1 left turn
+        n0 = np.array([-u[1], u[0]]) * side
+        cc = p0 + n0 * r
+        a0 = np.arctan2(*(p0 - cc)[::-1])
+        a1 = np.arctan2(*(p1 - cc)[::-1])
+        da = (a1 - a0 + np.pi) % (2 * np.pi) - np.pi
+        n = max(2, int(np.ceil(abs(da) / 0.2)))
+        for t in np.linspace(0, 1, n + 1):
+            ang = a0 + da * t
+            out.append((cc[0] + r * np.cos(ang), cc[1] + r * np.sin(ang)))
+            wo.append(ws[i])
+    out.append(pts[-1]); wo.append(ws[-1])
+    return out, wo
+
+
+def _coil(end, head, w, spec, sign=1):
+    """an Archimedean coil rolled on from `end` (face mm, y up) along heading `head`: { turns 1.5, R (first radius,
+    mm, default 1.1 w), dir +1 rolls to the LEFT of travel / −1 right, gap (sunk land between turns, 0.3 w),
+    tip (end width × w, 0.6) }"""
+    turns = float(spec.get('turns', 1.5))
+    dirn = float(spec.get('dir', 1)) * sign
+    R = float(spec.get('R', 1.1 * w))
+    gap = float(spec.get('gap', 0.3 * w))
+    tip = float(spec.get('tip', 0.6))
+    h = np.array(head, float) / (np.hypot(*head) + 1e-9)
+    nl = np.array([-h[1], h[0]])
+    c = np.array(end, float) + dirn * R * nl
+    phi0 = np.arctan2(*(np.array(end) - c)[::-1])
+    pts, ws = [], []
+    n = max(8, int(turns * 40))
+    r = R
+    for k in range(1, n + 1):
+        t = turns * k / n
+        wk = w * (1 - (1 - tip) * t / turns)
+        r -= (wk + gap) * (turns / n)  # one turn inward = the band's own width + the sunk land between turns
+        if r < wk * 0.5:
+            break
+        phi = phi0 + dirn * 2 * np.pi * t
+        pts.append((c[0] + r * np.cos(phi), c[1] + r * np.sin(phi)))
+        ws.append(wk)
+    return pts, ws
+
+
+def sweep_band(s):
+    """centre line + widths of a `band` hint: `band` [[x, y]…], `width` mm | [mm per point], `bend` (corner radius ×
+    width, 0.5), `start` / `end`: 'square' | 'round' | 'point' | { coil: { turns, R, dir, gap, tip } }."""
+    pts = [tuple(map(float, p)) for p in s['band']]
+    w = s.get('width', 8)
+    ws = [float(x) for x in w] if isinstance(w, list) else [float(w)] * len(pts)
+    pts, ws = _fillet(pts, ws, float(s.get('bend', 0.5)))
+    # densify (≤ 0.5 mm) so widths interpolate
+    P, Wd = [pts[0]], [ws[0]]
+    for i in range(1, len(pts)):
+        a, b = np.array(pts[i - 1]), np.array(pts[i])
+        L = np.hypot(*(b - a))
+        k = max(1, int(np.ceil(L / 0.5)))
+        for t in range(1, k + 1):
+            P.append(tuple(a + (b - a) * t / k)); Wd.append(ws[i - 1] + (ws[i] - ws[i - 1]) * t / k)
+    for which in ('end', 'start'):
+        e = s.get(which)
+        if which == 'start':
+            P, Wd = P[::-1], Wd[::-1]
+        if isinstance(e, dict) and 'coil' in e:
+            head = np.array(P[-1]) - np.array(P[-2])
+            cp, cw = _coil(P[-1], head, Wd[-1], e['coil'], 1)
+            P += cp; Wd += cw
+        elif e == 'point':
+            m = max(2, min(len(P) // 3, int(2 * Wd[-1] / 0.5)))  # taper over ≈ 2 widths to a blunt point
+            for q in range(1, m + 1):
+                Wd[-q] *= 0.15 + 0.85 * (q - 1) / m
+        if which == 'start':
+            P, Wd = P[::-1], Wd[::-1]
+    return P, Wd
+
+
+def sweep_draw(d, P, Wp):
+    """rasterise a swept band: a quad per segment + a disc at every joint (no cracks on curves)."""
+    P = np.array(P, float)
+    for i in range(len(P) - 1):
+        a, b = P[i], P[i + 1]
+        t = b - a
+        L = np.hypot(*t)
+        if L < 1e-6:
+            continue
+        n = np.array([-t[1], t[0]]) / L
+        wa, wb = Wp[i] / 2, Wp[i + 1] / 2
+        d.polygon([tuple(a + n * wa), tuple(b + n * wb), tuple(b - n * wb), tuple(a - n * wa)], fill=255)
+        if 0 < i:
+            d.ellipse([a[0] - wa, a[1] - wa, a[0] + wa, a[1] + wa], fill=255)
+
+
 def shape_mask(face, shape, value=True):
     """Rasterise a hint shape: {"box": [x0,y0,x1,y1]} | {"poly": [[x,y]…]} | {"circle": [x,y,r]} | {"band": [[x,y]…],
     "width": mm, "cap": "square"|"round"} | a bare [[x,y]…] list. → bool array."""
@@ -207,21 +317,14 @@ def shape_mask(face, shape, value=True):
         rr = r * face.ppmm
         d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=255)
     elif 'band' in s:
-        pts = [face.px(p) for p in s['band']]
-        w = s.get('width', 8) * face.ppmm
-        d.line(pts, fill=255, width=max(1, int(round(w))), joint='curve')
-        cap = s.get('cap', 'square')
-        for i in (0, -1):
-            p = np.array(pts[i])
-            q = np.array(pts[1 if i == 0 else -2])
+        C, Wd = sweep_band(s)  # face mm centre line + width per point
+        P = [face.px(p) for p in C]
+        Wp = [w * face.ppmm for w in Wd]
+        sweep_draw(d, P, Wp)
+        for k, cap in ((0, s.get('startCap', s.get('cap', 'square'))), (-1, s.get('endCap', s.get('cap', 'square')))):
             if cap == 'round':
+                p, w = P[k], Wp[k]
                 d.ellipse([p[0] - w / 2, p[1] - w / 2, p[0] + w / 2, p[1] + w / 2], fill=255)
-            else:  # square: extend by w/2 — corners slightly rounded by the final smoothing
-                t = (p - q) / (np.hypot(*(p - q)) + 1e-9)
-                n = np.array([-t[1], t[0]])
-                e = p + t * w / 2 * (cap == 'square')
-                quad = [tuple(p + n * w / 2), tuple(e + n * w / 2), tuple(e - n * w / 2), tuple(p - n * w / 2)]
-                d.polygon(quad, fill=255)
     else:
         pts = [face.px(p) for p in s['poly']]
         if len(pts) >= 3:

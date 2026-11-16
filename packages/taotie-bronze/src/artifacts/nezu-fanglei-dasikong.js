@@ -90,7 +90,6 @@ export default {
     object.name = 'nezu-fanglei-dasikong'
     const panels = {}
     const V = (x, y, z) => new THREE.Vector3(x, y, z)
-    const t0 = performance.now(), lap = (l) => console.info(`dsk ${l} ${Math.round(performance.now() - t0)} ms`)
     const group = (part) => { const g = new THREE.Group(); g.userData.part = part; object.add(g); return g }
 
     // ---------------------------------------------------------------- body (rounded square, one panel per side)
@@ -102,11 +101,9 @@ export default {
     const pf = bodyPanel(kit, { ppmm, seed, Qh: Qh(0), arc: arcB, kx: 1, lug: true, Hmax: LV.shoulder })
     panels.bodyLong = pf.lugRelief
     panels.bodyBack = pf.relief
-    lap('body front')
     await onProgress(0.3, 'belly · narrow faces')
     const ps = bodyPanel(kit, { ppmm: ppmm * 0.8, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: false, Hmax: LV.shoulder })
     panels.bodyShort = ps.relief
-    lap('body side')
     await onProgress(0.55, 'collar and lid')
     const collarW = (k) => quarterLen(COLLAR, RHO * COLLAR, 3, k) + 2
     panels.collarLong = collarPanel(kit, { ppmm, seed: seed + 2, W: collarW(0), y0: 348, y1: LV.collar })
@@ -120,7 +117,6 @@ export default {
     panels.lidLong = pl.relief
     panels.lidShort = plS.relief
 
-    lap('collar+lid panels')
     // ---------------------------------------------------------------- casting
     await onProgress(0.72, 'casting')
     const mat = (relief) => new kit.PatinaMaterial({ relief })
@@ -185,7 +181,6 @@ export default {
       flanges.push(m); object.add(m)
     }
 
-    lap('meshes')
     // ---------------------------------------------------------------- sculpture
     await onProgress(0.86, 'handles and heads')
     const voxel = Math.max(0.6, 0.8 / Math.sqrt(q))
@@ -206,7 +201,6 @@ export default {
     const heads = [mesh(headGeo, 'heads'), mesh(headGeo.clone().applyMatrix4(turn), 'heads')] // back: inferred
     const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.8 }), 'lug')
 
-    lap('sculpture')
     await onProgress(1, 'done')
     void H
     return { object, parts: { body: bodyG, collar: collarG, lid: lidG, knob, flanges, handles, heads, lug }, panels }

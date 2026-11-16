@@ -34,9 +34,10 @@ const TRACED = {
 }
 const PLATES = {
   height: 2.4, shoulder: 0.9, pillow: 0.25, pillowWidth: 3, depth: 0.42,
-  contour: { inset: 1.1, line: 0.5 }, contour2: { inset: 2.3, line: 0.42 },
-  // the tops: round hooked curls in S pairs (photo-37: rows of C hooks), bigger and rounder than the squared ground
-  fill: { kind: 'leiwen', inset: 3.3, pitch: 1.05, line: 0.42, roundness: 1, cell: [3.6, 6.6], pairs: 0.65, maxAspect: 2.4, jitter: 0.04, fillers: false },
+  contour: { inset: 1.0, line: 0.46 },
+  // the tops (photo-37: every band is cut with rows of small hooked spirals): round spirals packed into whatever lies
+  // more than 1.9 mm inside the edge, so a 5.5 mm band gets a chain of them and the curl blocks a nest
+  fill: { kind: 'leiwen', inset: 1.9, pitch: 0.8, line: 0.4, roundness: 1, cell: [2.2, 4.8], pairs: 0.6, maxAspect: 3, jitter: 0.04, fillers: false },
   boss: { height: 3.0, crown: 0.6, hole: { depth: 1.4 }, ring: { gap: 0.5, line: 0.6, depth: 0.4 } },
 }
 
