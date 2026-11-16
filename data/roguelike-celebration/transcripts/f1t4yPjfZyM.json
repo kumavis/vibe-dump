@@ -1,0 +1,2223 @@
+{
+ "id": "f1t4yPjfZyM",
+ "url": "https://www.youtube.com/watch?v=f1t4yPjfZyM",
+ "title": "Thomas Robertson - Towards a New Understanding of Procedural Super Attacks",
+ "speaker": "Thomas Robertson",
+ "talk_title": "Towards a New Understanding of Procedural Super Attacks",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 892,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Fireballs. Super attacks. Fatalities. Summons. Limit breaks.\n\nWhatever you want to call them, some videogame attacks are more complex than a simple punch or kick. And some games have ridiculous amounts of super attacks, each carefully choreographed, using sounds, music, particles, animations, and anything else the game engine can possibly display. We know that all this content was created by loads of hard-working developers working insane hours.\n\nSo can't we procedurally generate them?",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 61,
+   "title": "Conceptual foundations"
+  },
+  {
+   "start": 149,
+   "title": "Atomic structure and system design"
+  },
+  {
+   "start": 288,
+   "title": "Blocking vs. concurrent execution"
+  },
+  {
+   "start": 334,
+   "title": "System architecture"
+  },
+  {
+   "start": 428,
+   "title": "Code implementation and testing"
+  },
+  {
+   "start": 522,
+   "title": "Technical deep dive"
+  },
+  {
+   "start": 782,
+   "title": "Q&A and concluding remarks"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2526,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.84,
+   "d": 1.76,
+   "text": "so yeah our next speaker is tom"
+  },
+  {
+   "t": 5.6,
+   "d": 2.64,
+   "text": "robertson another fantastic past speaker"
+  },
+  {
+   "t": 8.24,
+   "d": 1.92,
+   "text": "if any of you remember some procedurally"
+  },
+  {
+   "t": 10.16,
+   "d": 2.16,
+   "text": "generated whales from several years ago"
+  },
+  {
+   "t": 12.32,
+   "d": 2.8,
+   "text": "um as well as a past irdc speaker from"
+  },
+  {
+   "t": 15.12,
+   "d": 1.44,
+   "text": "our the"
+  },
+  {
+   "t": 16.56,
+   "d": 2.0,
+   "text": "predecessor to this conference that i"
+  },
+  {
+   "t": 18.56,
+   "d": 2.56,
+   "text": "read many many years ago and he's"
+  },
+  {
+   "t": 21.12,
+   "d": 1.44,
+   "text": "talking about"
+  },
+  {
+   "t": 22.56,
+   "d": 2.48,
+   "text": "a very fun topic a new understanding of"
+  },
+  {
+   "t": 25.04,
+   "d": 2.16,
+   "text": "procedural super attacks we already had"
+  },
+  {
+   "t": 27.2,
+   "d": 2.4,
+   "text": "some talk earlier about juice and like"
+  },
+  {
+   "t": 29.6,
+   "d": 1.04,
+   "text": "really"
+  },
+  {
+   "t": 30.64,
+   "d": 2.16,
+   "text": "fascinating funky"
+  },
+  {
+   "t": 32.8,
+   "d": 1.92,
+   "text": "little uh things and i think this will"
+  },
+  {
+   "t": 34.72,
+   "d": 2.24,
+   "text": "be a fun dovetail into that so tom take"
+  },
+  {
+   "t": 36.96,
+   "d": 2.64,
+   "text": "it away great yes absolutely you can"
+  },
+  {
+   "t": 39.6,
+   "d": 2.0,
+   "text": "hear me okay right yep you're great"
+  },
+  {
+   "t": 41.6,
+   "d": 2.56,
+   "text": "excellent okay well yes actually i saw"
+  },
+  {
+   "t": 44.16,
+   "d": 2.24,
+   "text": "the that juice presentation and i did"
+  },
+  {
+   "t": 46.4,
+   "d": 1.44,
+   "text": "think it was synergistic with my"
+  },
+  {
+   "t": 47.84,
+   "d": 1.28,
+   "text": "presentation"
+  },
+  {
+   "t": 49.12,
+   "d": 1.52,
+   "text": "uh let's get right into it because you"
+  },
+  {
+   "t": 50.64,
+   "d": 2.24,
+   "text": "know it's a short situation"
+  },
+  {
+   "t": 52.88,
+   "d": 3.12,
+   "text": "um i want to make sure that's"
+  },
+  {
+   "t": 56.0,
+   "d": 1.6,
+   "text": "that has no audio because i just want to"
+  },
+  {
+   "t": 57.6,
+   "d": 1.68,
+   "text": "show the video"
+  },
+  {
+   "t": 59.28,
+   "d": 2.0,
+   "text": "um"
+  },
+  {
+   "t": 61.28,
+   "d": 1.84,
+   "text": "the key here is that many years ago i"
+  },
+  {
+   "t": 63.12,
+   "d": 2.48,
+   "text": "played final fantasy 7"
+  },
+  {
+   "t": 65.6,
+   "d": 1.36,
+   "text": "and uh"
+  },
+  {
+   "t": 66.96,
+   "d": 2.72,
+   "text": "i was astounded by all the super special"
+  },
+  {
+   "t": 69.68,
+   "d": 2.96,
+   "text": "final limit break attacks that each and"
+  },
+  {
+   "t": 72.64,
+   "d": 1.44,
+   "text": "every character"
+  },
+  {
+   "t": 74.08,
+   "d": 1.76,
+   "text": "and monster seem to have"
+  },
+  {
+   "t": 75.84,
+   "d": 2.48,
+   "text": "i knew how much work this all took and i"
+  },
+  {
+   "t": 78.32,
+   "d": 1.76,
+   "text": "said this is what you get when you can"
+  },
+  {
+   "t": 80.08,
+   "d": 1.76,
+   "text": "hire 100 artists"
+  },
+  {
+   "t": 81.84,
+   "d": 1.6,
+   "text": "to work for your game"
+  },
+  {
+   "t": 83.44,
+   "d": 3.04,
+   "text": "you know pokemon has a move list of 826"
+  },
+  {
+   "t": 86.48,
+   "d": 3.12,
+   "text": "moves that's you know 826 possible"
+  },
+  {
+   "t": 89.6,
+   "d": 2.24,
+   "text": "attacks that of pokemon could do"
+  },
+  {
+   "t": 91.84,
+   "d": 1.84,
+   "text": "and each one has a unique graphical"
+  },
+  {
+   "t": 93.68,
+   "d": 2.0,
+   "text": "presentation in the game"
+  },
+  {
+   "t": 95.68,
+   "d": 1.92,
+   "text": "of course we roguelike devs just don't"
+  },
+  {
+   "t": 97.6,
+   "d": 1.52,
+   "text": "have the resources to do that kind of"
+  },
+  {
+   "t": 99.12,
+   "d": 1.52,
+   "text": "thing"
+  },
+  {
+   "t": 100.64,
+   "d": 2.4,
+   "text": "but we can use proc gym in fact it's one"
+  },
+  {
+   "t": 103.04,
+   "d": 2.32,
+   "text": "of our super attacks if you see what i"
+  },
+  {
+   "t": 105.36,
+   "d": 1.84,
+   "text": "did there"
+  },
+  {
+   "t": 107.2,
+   "d": 1.68,
+   "text": "so in this quick talk"
+  },
+  {
+   "t": 108.88,
+   "d": 1.6,
+   "text": "i'll show you how i set up to make a"
+  },
+  {
+   "t": 110.48,
+   "d": 2.64,
+   "text": "proc gen super attack system"
+  },
+  {
+   "t": 113.12,
+   "d": 1.84,
+   "text": "and what i actually came up with and"
+  },
+  {
+   "t": 114.96,
+   "d": 1.36,
+   "text": "lessons learned"
+  },
+  {
+   "t": 116.32,
+   "d": 2.48,
+   "text": "i want to emphasize that uh"
+  },
+  {
+   "t": 118.8,
+   "d": 1.52,
+   "text": "that i'm not done"
+  },
+  {
+   "t": 120.32,
+   "d": 1.76,
+   "text": "i haven't found any magical perfection"
+  },
+  {
+   "t": 122.08,
+   "d": 2.32,
+   "text": "this is a work in progress for me"
+  },
+  {
+   "t": 124.4,
+   "d": 1.92,
+   "text": "sorry i'm looking over here to my script"
+  },
+  {
+   "t": 126.32,
+   "d": 2.16,
+   "text": "instead of looking you in the eye"
+  },
+  {
+   "t": 128.48,
+   "d": 2.08,
+   "text": "and i'm eager to learn"
+  },
+  {
+   "t": 130.56,
+   "d": 1.52,
+   "text": "what some of you have already solved"
+  },
+  {
+   "t": 132.08,
+   "d": 2.32,
+   "text": "this problem in some better way"
+  },
+  {
+   "t": 134.4,
+   "d": 1.84,
+   "text": "and that and that will make me say of"
+  },
+  {
+   "t": 136.24,
+   "d": 2.08,
+   "text": "course when you tell me oh tom we just"
+  },
+  {
+   "t": 138.32,
+   "d": 1.52,
+   "text": "did it the red way and i'm like oh why"
+  },
+  {
+   "t": 139.84,
+   "d": 1.52,
+   "text": "didn't i do it that way"
+  },
+  {
+   "t": 141.36,
+   "d": 3.6,
+   "text": "so that's you know story of my life"
+  },
+  {
+   "t": 145.28,
+   "d": 0.88,
+   "text": "so"
+  },
+  {
+   "t": 146.16,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 149.52,
+   "d": 2.56,
+   "text": "you can see"
+  },
+  {
+   "t": 152.08,
+   "d": 0.8,
+   "text": "that"
+  },
+  {
+   "t": 152.88,
+   "d": 2.0,
+   "text": "big super attack presentations are made"
+  },
+  {
+   "t": 154.88,
+   "d": 1.92,
+   "text": "up of atomic pieces that are chained"
+  },
+  {
+   "t": 156.8,
+   "d": 2.08,
+   "text": "together it's helpful to think and build"
+  },
+  {
+   "t": 158.88,
+   "d": 2.32,
+   "text": "in terms of atomic pieces"
+  },
+  {
+   "t": 161.2,
+   "d": 1.76,
+   "text": "you don't get overwhelmed if you focus"
+  },
+  {
+   "t": 162.96,
+   "d": 2.08,
+   "text": "on each little piece each piece is mixed"
+  },
+  {
+   "t": 165.04,
+   "d": 1.76,
+   "text": "and matched with others and assembled"
+  },
+  {
+   "t": 166.8,
+   "d": 2.4,
+   "text": "into a complete super attack"
+  },
+  {
+   "t": 169.2,
+   "d": 2.72,
+   "text": "so in code i learned long ago that the"
+  },
+  {
+   "t": 171.92,
+   "d": 2.88,
+   "text": "atomic pieces should be added to a list"
+  },
+  {
+   "t": 174.8,
+   "d": 1.44,
+   "text": "and the list you know took"
+  },
+  {
+   "t": 176.24,
+   "d": 1.68,
+   "text": "responsibility for ticking and drawing"
+  },
+  {
+   "t": 177.92,
+   "d": 1.76,
+   "text": "each atomic piece"
+  },
+  {
+   "t": 179.68,
+   "d": 2.08,
+   "text": "and when the atom had reached its end"
+  },
+  {
+   "t": 181.76,
+   "d": 2.16,
+   "text": "the list removes and deletes the atom"
+  },
+  {
+   "t": 183.92,
+   "d": 3.44,
+   "text": "this is a good way to easily handle"
+  },
+  {
+   "t": 187.36,
+   "d": 2.48,
+   "text": "this chained kind of concept of how"
+  },
+  {
+   "t": 189.84,
+   "d": 2.4,
+   "text": "attacks work"
+  },
+  {
+   "t": 192.24,
+   "d": 2.0,
+   "text": "so if you want a special effect you just"
+  },
+  {
+   "t": 194.24,
+   "d": 2.0,
+   "text": "create several atoms and throw them onto"
+  },
+  {
+   "t": 196.24,
+   "d": 1.28,
+   "text": "the list and they'll be done in their"
+  },
+  {
+   "t": 197.52,
+   "d": 1.2,
+   "text": "own time"
+  },
+  {
+   "t": 198.72,
+   "d": 1.6,
+   "text": "and one of the most powerful aspects of"
+  },
+  {
+   "t": 200.32,
+   "d": 2.96,
+   "text": "this concept is that those atoms can"
+  },
+  {
+   "t": 203.28,
+   "d": 2.08,
+   "text": "create other atoms and add them to the"
+  },
+  {
+   "t": 205.36,
+   "d": 1.44,
+   "text": "list too"
+  },
+  {
+   "t": 206.8,
+   "d": 2.72,
+   "text": "so for instance a projectile atom could"
+  },
+  {
+   "t": 209.52,
+   "d": 2.0,
+   "text": "create an explosion atom when it reaches"
+  },
+  {
+   "t": 211.52,
+   "d": 1.68,
+   "text": "its destination"
+  },
+  {
+   "t": 213.2,
+   "d": 2.48,
+   "text": "which is pretty cool pretty flexible"
+  },
+  {
+   "t": 215.68,
+   "d": 1.92,
+   "text": "so many times in your code you'll want"
+  },
+  {
+   "t": 217.6,
+   "d": 2.0,
+   "text": "the game to wait while the super attack"
+  },
+  {
+   "t": 219.6,
+   "d": 1.2,
+   "text": "is happening"
+  },
+  {
+   "t": 220.8,
+   "d": 2.8,
+   "text": "or you'll want the input to be inhibited"
+  },
+  {
+   "t": 223.6,
+   "d": 1.28,
+   "text": "now"
+  },
+  {
+   "t": 224.88,
+   "d": 3.04,
+   "text": "um you know uh we were just watching at"
+  },
+  {
+   "t": 227.92,
+   "d": 2.88,
+   "text": "the beginning this uh great talk about"
+  },
+  {
+   "t": 230.8,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 232.0,
+   "d": 3.68,
+   "text": "about uh juice and how one of the key"
+  },
+  {
+   "t": 235.68,
+   "d": 2.88,
+   "text": "concepts of of juice is to not hold up"
+  },
+  {
+   "t": 238.56,
+   "d": 1.44,
+   "text": "the player not stop the player from"
+  },
+  {
+   "t": 240.0,
+   "d": 0.96,
+   "text": "moving"
+  },
+  {
+   "t": 240.96,
+   "d": 1.76,
+   "text": "but super attacks are a little different"
+  },
+  {
+   "t": 242.72,
+   "d": 2.24,
+   "text": "they're a big deal they stop everything"
+  },
+  {
+   "t": 244.96,
+   "d": 2.0,
+   "text": "while the attack happens"
+  },
+  {
+   "t": 246.96,
+   "d": 2.32,
+   "text": "and that's just how like final fantasy"
+  },
+  {
+   "t": 249.28,
+   "d": 2.24,
+   "text": "style super attacks have always been so"
+  },
+  {
+   "t": 251.52,
+   "d": 2.48,
+   "text": "that's certainly what i was thinking of"
+  },
+  {
+   "t": 254.0,
+   "d": 2.16,
+   "text": "there are obviously ways to skip or"
+  },
+  {
+   "t": 256.16,
+   "d": 1.52,
+   "text": "forward fast and that's what you would"
+  },
+  {
+   "t": 257.68,
+   "d": 0.72,
+   "text": "do"
+  },
+  {
+   "t": 258.4,
+   "d": 1.76,
+   "text": "to you know to"
+  },
+  {
+   "t": 260.16,
+   "d": 2.08,
+   "text": "to handle that requirement that you"
+  },
+  {
+   "t": 262.24,
+   "d": 1.84,
+   "text": "don't hold the player up"
+  },
+  {
+   "t": 264.08,
+   "d": 2.8,
+   "text": "um but"
+  },
+  {
+   "t": 267.12,
+   "d": 1.36,
+   "text": "but if but you're still going to want"
+  },
+  {
+   "t": 268.48,
+   "d": 1.68,
+   "text": "the input to be inhibited you you want"
+  },
+  {
+   "t": 270.16,
+   "d": 2.32,
+   "text": "to you know the attack you use happening"
+  },
+  {
+   "t": 272.48,
+   "d": 2.0,
+   "text": "and then you want to stop the keyboard"
+  },
+  {
+   "t": 274.48,
+   "d": 1.6,
+   "text": "until the attack's over"
+  },
+  {
+   "t": 276.08,
+   "d": 1.84,
+   "text": "and that's just checking to see"
+  },
+  {
+   "t": 277.92,
+   "d": 2.72,
+   "text": "if the uh if the atomic list the the"
+  },
+  {
+   "t": 280.64,
+   "d": 2.0,
+   "text": "atom list is empty i mean it's just you"
+  },
+  {
+   "t": 282.64,
+   "d": 2.08,
+   "text": "know it's list is empty go ahead if it's"
+  },
+  {
+   "t": 284.72,
+   "d": 1.84,
+   "text": "not empty well some sort of super attack"
+  },
+  {
+   "t": 286.56,
+   "d": 1.76,
+   "text": "is happening"
+  },
+  {
+   "t": 288.32,
+   "d": 1.6,
+   "text": "so now the trick is"
+  },
+  {
+   "t": 289.92,
+   "d": 2.16,
+   "text": "is the list blocking a concurrent and by"
+  },
+  {
+   "t": 292.08,
+   "d": 1.44,
+   "text": "that i mean"
+  },
+  {
+   "t": 293.52,
+   "d": 2.4,
+   "text": "uh so if there are three attack elements"
+  },
+  {
+   "t": 295.92,
+   "d": 2.4,
+   "text": "in the list attack atoms in the list are"
+  },
+  {
+   "t": 298.32,
+   "d": 2.56,
+   "text": "they being drawn at the same time"
+  },
+  {
+   "t": 300.88,
+   "d": 2.32,
+   "text": "or is the top one being drawn and then"
+  },
+  {
+   "t": 303.2,
+   "d": 1.36,
+   "text": "the other two wait they're turned until"
+  },
+  {
+   "t": 304.56,
+   "d": 1.92,
+   "text": "the top one's done"
+  },
+  {
+   "t": 306.48,
+   "d": 3.92,
+   "text": "uh well weary traveler why not both my"
+  },
+  {
+   "t": 310.4,
+   "d": 1.52,
+   "text": "learned experience is that you should"
+  },
+  {
+   "t": 311.92,
+   "d": 2.0,
+   "text": "make a concurrent list and a blocking"
+  },
+  {
+   "t": 313.92,
+   "d": 2.24,
+   "text": "list and each one can contain attack"
+  },
+  {
+   "t": 316.16,
+   "d": 2.48,
+   "text": "atoms and each one draws and kicks each"
+  },
+  {
+   "t": 318.64,
+   "d": 1.84,
+   "text": "atom they contain and you could put"
+  },
+  {
+   "t": 320.48,
+   "d": 2.16,
+   "text": "atoms in either list"
+  },
+  {
+   "t": 322.64,
+   "d": 1.12,
+   "text": "that"
+  },
+  {
+   "t": 323.76,
+   "d": 2.16,
+   "text": "solves problems that come up when you're"
+  },
+  {
+   "t": 325.92,
+   "d": 1.92,
+   "text": "building these really complex super"
+  },
+  {
+   "t": 327.84,
+   "d": 1.52,
+   "text": "attacks"
+  },
+  {
+   "t": 329.36,
+   "d": 1.44,
+   "text": "so all right that's enough of that"
+  },
+  {
+   "t": 330.8,
+   "d": 1.12,
+   "text": "sizzle"
+  },
+  {
+   "t": 331.92,
+   "d": 2.48,
+   "text": "i'm gonna show you something else here"
+  },
+  {
+   "t": 334.4,
+   "d": 2.8,
+   "text": "so this is a picture of a diagram on my"
+  },
+  {
+   "t": 337.2,
+   "d": 2.64,
+   "text": "whiteboard"
+  },
+  {
+   "t": 339.92,
+   "d": 1.76,
+   "text": "i've had this picture up on my"
+  },
+  {
+   "t": 341.68,
+   "d": 2.16,
+   "text": "whiteboard for far too long as i thought"
+  },
+  {
+   "t": 343.84,
+   "d": 1.6,
+   "text": "carefully about how my code could"
+  },
+  {
+   "t": 345.44,
+   "d": 2.48,
+   "text": "procedurally generate super attacks"
+  },
+  {
+   "t": 347.92,
+   "d": 1.44,
+   "text": "i knew many of the steps and tried to"
+  },
+  {
+   "t": 349.36,
+   "d": 1.6,
+   "text": "break it down into as many steps as"
+  },
+  {
+   "t": 350.96,
+   "d": 2.56,
+   "text": "possible so i could understand it better"
+  },
+  {
+   "t": 353.52,
+   "d": 1.84,
+   "text": "but i came up with a theory of a basic"
+  },
+  {
+   "t": 355.36,
+   "d": 1.04,
+   "text": "trio"
+  },
+  {
+   "t": 356.4,
+   "d": 2.24,
+   "text": "the dictionary the choreographer and the"
+  },
+  {
+   "t": 358.64,
+   "d": 1.04,
+   "text": "director"
+  },
+  {
+   "t": 359.68,
+   "d": 1.92,
+   "text": "so the dictionary is like a pokemon move"
+  },
+  {
+   "t": 361.6,
+   "d": 2.08,
+   "text": "chart or a spell book it lists all the"
+  },
+  {
+   "t": 363.68,
+   "d": 3.28,
+   "text": "available super attacks in the game"
+  },
+  {
+   "t": 366.96,
+   "d": 2.16,
+   "text": "and units choose which of these attacks"
+  },
+  {
+   "t": 369.12,
+   "d": 2.32,
+   "text": "they can do from the from the dictionary"
+  },
+  {
+   "t": 371.44,
+   "d": 1.68,
+   "text": "list"
+  },
+  {
+   "t": 373.12,
+   "d": 1.76,
+   "text": "the dictionary object itself is supposed"
+  },
+  {
+   "t": 374.88,
+   "d": 2.8,
+   "text": "to procedurally generate that list"
+  },
+  {
+   "t": 377.68,
+   "d": 1.52,
+   "text": "and then there's the choreographer which"
+  },
+  {
+   "t": 379.2,
+   "d": 1.6,
+   "text": "builds the super attack out of all"
+  },
+  {
+   "t": 380.8,
+   "d": 2.16,
+   "text": "possible pieces or atoms"
+  },
+  {
+   "t": 382.96,
+   "d": 2.56,
+   "text": "so it creates a script of pieces"
+  },
+  {
+   "t": 385.52,
+   "d": 1.36,
+   "text": "and then there's the director which"
+  },
+  {
+   "t": 386.88,
+   "d": 2.0,
+   "text": "executes the script which executes the"
+  },
+  {
+   "t": 388.88,
+   "d": 2.8,
+   "text": "super attack over time for the say four"
+  },
+  {
+   "t": 391.68,
+   "d": 1.6,
+   "text": "seconds the super attack is on the"
+  },
+  {
+   "t": 393.28,
+   "d": 2.56,
+   "text": "screen the director draws and changes"
+  },
+  {
+   "t": 395.84,
+   "d": 1.92,
+   "text": "the pieces according to the script the"
+  },
+  {
+   "t": 397.76,
+   "d": 1.84,
+   "text": "director actually is the piece of code"
+  },
+  {
+   "t": 399.6,
+   "d": 3.52,
+   "text": "that shows the attack to the player"
+  },
+  {
+   "t": 403.12,
+   "d": 1.52,
+   "text": "so the key insight i got from this"
+  },
+  {
+   "t": 404.64,
+   "d": 1.2,
+   "text": "diagram that's been sitting on my"
+  },
+  {
+   "t": 405.84,
+   "d": 1.52,
+   "text": "whiteboard for so long was that the"
+  },
+  {
+   "t": 407.36,
+   "d": 1.84,
+   "text": "director knows all about the pieces or"
+  },
+  {
+   "t": 409.2,
+   "d": 2.96,
+   "text": "the atoms but some of them can inform"
+  },
+  {
+   "t": 412.16,
+   "d": 2.24,
+   "text": "the dictionary so that the dictionary"
+  },
+  {
+   "t": 414.4,
+   "d": 3.52,
+   "text": "can generate its list of attacks"
+  },
+  {
+   "t": 418.08,
+   "d": 2.24,
+   "text": "so"
+  },
+  {
+   "t": 420.4,
+   "d": 2.16,
+   "text": "i'm going to scoot on down here and i'm"
+  },
+  {
+   "t": 422.56,
+   "d": 1.92,
+   "text": "going to actually fire up my test code"
+  },
+  {
+   "t": 424.48,
+   "d": 1.44,
+   "text": "base"
+  },
+  {
+   "t": 425.92,
+   "d": 1.92,
+   "text": "and get that working"
+  },
+  {
+   "t": 427.84,
+   "d": 1.76,
+   "text": "all right so"
+  },
+  {
+   "t": 429.6,
+   "d": 2.0,
+   "text": "um so this is my current implementation"
+  },
+  {
+   "t": 431.6,
+   "d": 2.56,
+   "text": "working of my test bed for super attacks"
+  },
+  {
+   "t": 434.16,
+   "d": 1.52,
+   "text": "for each broad type of attack the"
+  },
+  {
+   "t": 435.68,
+   "d": 2.48,
+   "text": "dictionary built five attacks for power"
+  },
+  {
+   "t": 438.16,
+   "d": 1.92,
+   "text": "levels one to five"
+  },
+  {
+   "t": 440.08,
+   "d": 1.92,
+   "text": "the director knows"
+  },
+  {
+   "t": 442.0,
+   "d": 2.88,
+   "text": "in my code now of three atoms"
+  },
+  {
+   "t": 444.88,
+   "d": 1.6,
+   "text": "that it showed to the dictionary so the"
+  },
+  {
+   "t": 446.48,
+   "d": 2.24,
+   "text": "dictionary defined a total of 15 attacks"
+  },
+  {
+   "t": 448.72,
+   "d": 1.6,
+   "text": "which the demo is cycling through right"
+  },
+  {
+   "t": 450.32,
+   "d": 1.6,
+   "text": "now"
+  },
+  {
+   "t": 451.92,
+   "d": 1.52,
+   "text": "so uh there actually isn't a"
+  },
+  {
+   "t": 453.44,
+   "d": 1.6,
+   "text": "choreographer object i didn't make a"
+  },
+  {
+   "t": 455.04,
+   "d": 2.48,
+   "text": "choreographer object i wound up making a"
+  },
+  {
+   "t": 457.52,
+   "d": 1.92,
+   "text": "a function in the director object called"
+  },
+  {
+   "t": 459.44,
+   "d": 1.76,
+   "text": "choreograph"
+  },
+  {
+   "t": 461.2,
+   "d": 1.28,
+   "text": "so i'm not sure if that's exactly the"
+  },
+  {
+   "t": 462.48,
+   "d": 1.6,
+   "text": "way to do it it's just it's been worked"
+  },
+  {
+   "t": 464.08,
+   "d": 2.8,
+   "text": "out for me for this test bed"
+  },
+  {
+   "t": 466.88,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 468.16,
+   "d": 2.32,
+   "text": "and in doing this test bed"
+  },
+  {
+   "t": 470.48,
+   "d": 2.48,
+   "text": "i learned that um"
+  },
+  {
+   "t": 472.96,
+   "d": 1.84,
+   "text": "you know the most important thing i did"
+  },
+  {
+   "t": 474.8,
+   "d": 2.0,
+   "text": "while hammering this all out is kind of"
+  },
+  {
+   "t": 476.8,
+   "d": 1.6,
+   "text": "something i already knew"
+  },
+  {
+   "t": 478.4,
+   "d": 1.92,
+   "text": "which is you should make it easy for"
+  },
+  {
+   "t": 480.32,
+   "d": 1.68,
+   "text": "yourself"
+  },
+  {
+   "t": 482.0,
+   "d": 2.16,
+   "text": "once i had the structure in place and it"
+  },
+  {
+   "t": 484.16,
+   "d": 2.96,
+   "text": "was easy to add a new effect adam"
+  },
+  {
+   "t": 487.12,
+   "d": 1.92,
+   "text": "i immediately started making new atoms"
+  },
+  {
+   "t": 489.04,
+   "d": 2.4,
+   "text": "and i had fun doing so"
+  },
+  {
+   "t": 491.44,
+   "d": 2.08,
+   "text": "uh if it's difficult to add a new fire"
+  },
+  {
+   "t": 493.52,
+   "d": 1.68,
+   "text": "effect you're not going to get around to"
+  },
+  {
+   "t": 495.2,
+   "d": 1.12,
+   "text": "it"
+  },
+  {
+   "t": 496.32,
+   "d": 1.68,
+   "text": "if it's easy you do it right away and"
+  },
+  {
+   "t": 498.0,
+   "d": 2.0,
+   "text": "then you go ah i'll add an ice effect"
+  },
+  {
+   "t": 500.0,
+   "d": 1.52,
+   "text": "too"
+  },
+  {
+   "t": 501.52,
+   "d": 1.04,
+   "text": "so"
+  },
+  {
+   "t": 502.56,
+   "d": 2.8,
+   "text": "set yourself up for success and this"
+  },
+  {
+   "t": 505.36,
+   "d": 1.92,
+   "text": "kind of structural"
+  },
+  {
+   "t": 507.28,
+   "d": 0.96,
+   "text": "piece"
+  },
+  {
+   "t": 508.24,
+   "d": 2.88,
+   "text": "parts way of making special effects"
+  },
+  {
+   "t": 511.12,
+   "d": 2.32,
+   "text": "uh can support that goal of setting"
+  },
+  {
+   "t": 513.44,
+   "d": 1.68,
+   "text": "yourself up for success making it so"
+  },
+  {
+   "t": 515.12,
+   "d": 2.08,
+   "text": "that the individual pieces are easy to"
+  },
+  {
+   "t": 517.2,
+   "d": 1.68,
+   "text": "make and easy to integrate with the rest"
+  },
+  {
+   "t": 518.88,
+   "d": 2.56,
+   "text": "of the system"
+  },
+  {
+   "t": 521.44,
+   "d": 1.76,
+   "text": "okay so"
+  },
+  {
+   "t": 523.2,
+   "d": 1.68,
+   "text": "i'm going to talk a little bit about my"
+  },
+  {
+   "t": 524.88,
+   "d": 1.36,
+   "text": "code here but i'm not going to get too"
+  },
+  {
+   "t": 526.24,
+   "d": 2.32,
+   "text": "deep into it or too crazy"
+  },
+  {
+   "t": 528.56,
+   "d": 4.52,
+   "text": "um i have my uh"
+  },
+  {
+   "t": 536.4,
+   "d": 1.44,
+   "text": "okay"
+  },
+  {
+   "t": 537.84,
+   "d": 1.92,
+   "text": "everything's good so"
+  },
+  {
+   "t": 539.76,
+   "d": 3.44,
+   "text": "um this is my uh attack handlers table"
+  },
+  {
+   "t": 543.2,
+   "d": 2.64,
+   "text": "each of these second arguments here"
+  },
+  {
+   "t": 545.84,
+   "d": 3.52,
+   "text": "is essentially a function that does the"
+  },
+  {
+   "t": 549.36,
+   "d": 2.08,
+   "text": "particular job"
+  },
+  {
+   "t": 551.44,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 552.8,
+   "d": 1.52,
+   "text": "and i've got essentially around it a"
+  },
+  {
+   "t": 554.32,
+   "d": 4.08,
+   "text": "bunch of text tags to"
+  },
+  {
+   "t": 558.4,
+   "d": 1.36,
+   "text": "help the"
+  },
+  {
+   "t": 559.76,
+   "d": 2.88,
+   "text": "the code process how this thing works"
+  },
+  {
+   "t": 562.64,
+   "d": 2.24,
+   "text": "notice again these top three have a"
+  },
+  {
+   "t": 564.88,
+   "d": 1.6,
+   "text": "middle tag"
+  },
+  {
+   "t": 566.48,
+   "d": 1.76,
+   "text": "suggesting that they're the bit that"
+  },
+  {
+   "t": 568.24,
+   "d": 2.96,
+   "text": "goes between the source and the target"
+  },
+  {
+   "t": 571.2,
+   "d": 2.24,
+   "text": "and those are the ones that kind of the"
+  },
+  {
+   "t": 573.44,
+   "d": 2.4,
+   "text": "dictionary can latch on to and say i'll"
+  },
+  {
+   "t": 575.84,
+   "d": 2.48,
+   "text": "make special i'll make attacks that use"
+  },
+  {
+   "t": 578.32,
+   "d": 2.4,
+   "text": "these"
+  },
+  {
+   "t": 580.96,
+   "d": 0.38,
+   "text": "um"
+  },
+  {
+   "t": 581.34,
+   "d": 1.78,
+   "text": "[Music]"
+  },
+  {
+   "t": 583.12,
+   "d": 2.48,
+   "text": "so uh over here in attack dictionary i"
+  },
+  {
+   "t": 585.6,
+   "d": 1.6,
+   "text": "have my attack dictionary object it's"
+  },
+  {
+   "t": 587.2,
+   "d": 1.6,
+   "text": "got my setup and shut down my tick and"
+  },
+  {
+   "t": 588.8,
+   "d": 2.48,
+   "text": "my draw it's got a list of attack"
+  },
+  {
+   "t": 591.28,
+   "d": 2.48,
+   "text": "records"
+  },
+  {
+   "t": 594.4,
+   "d": 2.24,
+   "text": "here's my attack record definition"
+  },
+  {
+   "t": 596.64,
+   "d": 1.44,
+   "text": "got my name"
+  },
+  {
+   "t": 598.08,
+   "d": 1.52,
+   "text": "the color"
+  },
+  {
+   "t": 599.6,
+   "d": 1.52,
+   "text": "um"
+  },
+  {
+   "t": 601.12,
+   "d": 2.56,
+   "text": "list tags here's the level of the attack"
+  },
+  {
+   "t": 603.68,
+   "d": 1.92,
+   "text": "and the seat that's the random seed so"
+  },
+  {
+   "t": 605.6,
+   "d": 2.32,
+   "text": "that when you hand off the attack record"
+  },
+  {
+   "t": 607.92,
+   "d": 2.16,
+   "text": "to the choreograph function"
+  },
+  {
+   "t": 610.08,
+   "d": 1.44,
+   "text": "it's always going to generate the same"
+  },
+  {
+   "t": 611.52,
+   "d": 1.44,
+   "text": "attack"
+  },
+  {
+   "t": 612.96,
+   "d": 3.36,
+   "text": "um and this little link to ah record is"
+  },
+  {
+   "t": 616.32,
+   "d": 2.08,
+   "text": "actually a link to what we were talking"
+  },
+  {
+   "t": 618.4,
+   "d": 3.04,
+   "text": "about that middle attack atom that kind"
+  },
+  {
+   "t": 621.44,
+   "d": 1.84,
+   "text": "of defines what the attack is supposed"
+  },
+  {
+   "t": 623.28,
+   "d": 2.24,
+   "text": "to be"
+  },
+  {
+   "t": 625.52,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 626.8,
+   "d": 1.36,
+   "text": "so now i'm going to look at attack of"
+  },
+  {
+   "t": 628.16,
+   "d": 2.32,
+   "text": "director's definition here we are with"
+  },
+  {
+   "t": 630.48,
+   "d": 2.0,
+   "text": "attack director it's a class"
+  },
+  {
+   "t": 632.48,
+   "d": 1.44,
+   "text": "got my setup got my shut down i got my"
+  },
+  {
+   "t": 633.92,
+   "d": 2.08,
+   "text": "tick in my draw here's my choreograph"
+  },
+  {
+   "t": 636.0,
+   "d": 1.04,
+   "text": "function"
+  },
+  {
+   "t": 637.04,
+   "d": 1.36,
+   "text": "not sure if we'll have time to dig into"
+  },
+  {
+   "t": 638.4,
+   "d": 0.96,
+   "text": "it though"
+  },
+  {
+   "t": 639.36,
+   "d": 1.92,
+   "text": "um look i've got my blocking list and my"
+  },
+  {
+   "t": 641.28,
+   "d": 1.6,
+   "text": "concurrent list"
+  },
+  {
+   "t": 642.88,
+   "d": 2.0,
+   "text": "um just like i was talking about i'll"
+  },
+  {
+   "t": 644.88,
+   "d": 2.72,
+   "text": "use them and operate on both of those"
+  },
+  {
+   "t": 647.6,
+   "d": 1.92,
+   "text": "and then i've got a bunch of maps"
+  },
+  {
+   "t": 649.52,
+   "d": 2.48,
+   "text": "to map keys to"
+  },
+  {
+   "t": 652.0,
+   "d": 1.04,
+   "text": "code"
+  },
+  {
+   "t": 653.04,
+   "d": 2.48,
+   "text": "and i use maps all the time"
+  },
+  {
+   "t": 655.52,
+   "d": 1.92,
+   "text": "in conjunction with string keys"
+  },
+  {
+   "t": 657.44,
+   "d": 2.16,
+   "text": "specifically because it makes it very"
+  },
+  {
+   "t": 659.6,
+   "d": 0.96,
+   "text": "easy"
+  },
+  {
+   "t": 660.56,
+   "d": 2.08,
+   "text": "to uh"
+  },
+  {
+   "t": 662.64,
+   "d": 1.68,
+   "text": "to to say hey"
+  },
+  {
+   "t": 664.32,
+   "d": 1.52,
+   "text": "tell me about the middle ones or tell me"
+  },
+  {
+   "t": 665.84,
+   "d": 1.76,
+   "text": "about the red ones or tell me about the"
+  },
+  {
+   "t": 667.6,
+   "d": 1.12,
+   "text": "whatever"
+  },
+  {
+   "t": 668.72,
+   "d": 2.8,
+   "text": "um it's just an elegant way i've found"
+  },
+  {
+   "t": 671.52,
+   "d": 2.08,
+   "text": "to to organize the the systems i'm"
+  },
+  {
+   "t": 673.6,
+   "d": 1.2,
+   "text": "building"
+  },
+  {
+   "t": 674.8,
+   "d": 1.44,
+   "text": "and then of course here is the actual"
+  },
+  {
+   "t": 676.24,
+   "d": 1.2,
+   "text": "data block"
+  },
+  {
+   "t": 677.44,
+   "d": 2.72,
+   "text": "it's the data of the actual"
+  },
+  {
+   "t": 680.16,
+   "d": 3.12,
+   "text": "uh atomic special effect that is"
+  },
+  {
+   "t": 683.28,
+   "d": 2.08,
+   "text": "currently being played"
+  },
+  {
+   "t": 685.36,
+   "d": 3.04,
+   "text": "when i created i add its handler"
+  },
+  {
+   "t": 688.4,
+   "d": 3.12,
+   "text": "um the source and target units you know"
+  },
+  {
+   "t": 691.52,
+   "d": 1.6,
+   "text": "who's shooting at who"
+  },
+  {
+   "t": 693.12,
+   "d": 3.12,
+   "text": "couple colors and the start time"
+  },
+  {
+   "t": 696.24,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 697.36,
+   "d": 2.0,
+   "text": "and just you know this is all generally"
+  },
+  {
+   "t": 699.36,
+   "d": 1.44,
+   "text": "data but this is interesting because"
+  },
+  {
+   "t": 700.8,
+   "d": 2.48,
+   "text": "this is a flag saying you know when this"
+  },
+  {
+   "t": 703.28,
+   "d": 2.24,
+   "text": "when this particular special effect is"
+  },
+  {
+   "t": 705.52,
+   "d": 0.8,
+   "text": "done"
+  },
+  {
+   "t": 706.32,
+   "d": 2.32,
+   "text": "you know it took its half second or four"
+  },
+  {
+   "t": 708.64,
+   "d": 1.52,
+   "text": "minutes or whatever"
+  },
+  {
+   "t": 710.16,
+   "d": 1.92,
+   "text": "uh over four seconds"
+  },
+  {
+   "t": 712.08,
+   "d": 2.0,
+   "text": "then uh it just raises its hand sets"
+  },
+  {
+   "t": 714.08,
+   "d": 1.76,
+   "text": "this flag to true and then the"
+  },
+  {
+   "t": 715.84,
+   "d": 2.64,
+   "text": "outer system says okay well we'll remove"
+  },
+  {
+   "t": 718.48,
+   "d": 1.36,
+   "text": "you and delete you and move on to the"
+  },
+  {
+   "t": 719.84,
+   "d": 2.16,
+   "text": "next attack"
+  },
+  {
+   "t": 722.0,
+   "d": 1.04,
+   "text": "and"
+  },
+  {
+   "t": 723.04,
+   "d": 2.64,
+   "text": "just you know functionality wise"
+  },
+  {
+   "t": 725.68,
+   "d": 1.6,
+   "text": "i let"
+  },
+  {
+   "t": 727.28,
+   "d": 2.64,
+   "text": "the game attach other blocks to this"
+  },
+  {
+   "t": 729.92,
+   "d": 1.84,
+   "text": "block so that when this block is dead"
+  },
+  {
+   "t": 731.76,
+   "d": 1.44,
+   "text": "and done"
+  },
+  {
+   "t": 733.2,
+   "d": 2.88,
+   "text": "these children that were kind of"
+  },
+  {
+   "t": 736.08,
+   "d": 2.24,
+   "text": "being carried around by it get moved"
+  },
+  {
+   "t": 738.32,
+   "d": 1.52,
+   "text": "into the concurrent list so that they"
+  },
+  {
+   "t": 739.84,
+   "d": 3.04,
+   "text": "can all happen immediately"
+  },
+  {
+   "t": 742.88,
+   "d": 1.76,
+   "text": "um so"
+  },
+  {
+   "t": 744.64,
+   "d": 2.0,
+   "text": "you know i could go on about code and it"
+  },
+  {
+   "t": 746.64,
+   "d": 1.92,
+   "text": "probably would be good to do so you know"
+  },
+  {
+   "t": 748.56,
+   "d": 2.0,
+   "text": "in the larger chat stuff"
+  },
+  {
+   "t": 750.56,
+   "d": 3.44,
+   "text": "but i really just wanted to show"
+  },
+  {
+   "t": 754.24,
+   "d": 2.8,
+   "text": "the the functionality of what i've been"
+  },
+  {
+   "t": 757.04,
+   "d": 3.28,
+   "text": "talking about uh you know this is not"
+  },
+  {
+   "t": 760.32,
+   "d": 1.36,
+   "text": "a finished"
+  },
+  {
+   "t": 761.68,
+   "d": 2.24,
+   "text": "job by any means this is just me"
+  },
+  {
+   "t": 763.92,
+   "d": 2.4,
+   "text": "hammering on this problem of i want a"
+  },
+  {
+   "t": 766.32,
+   "d": 2.16,
+   "text": "lot of really cool special unique"
+  },
+  {
+   "t": 768.48,
+   "d": 1.92,
+   "text": "attacks and i want to procedurally"
+  },
+  {
+   "t": 770.4,
+   "d": 2.72,
+   "text": "generate them how do i do that"
+  },
+  {
+   "t": 773.12,
+   "d": 2.16,
+   "text": "so i hope we can find each other and"
+  },
+  {
+   "t": 775.28,
+   "d": 2.24,
+   "text": "talk some more throughout the con"
+  },
+  {
+   "t": 777.52,
+   "d": 1.44,
+   "text": "and i think that's"
+  },
+  {
+   "t": 778.96,
+   "d": 2.88,
+   "text": "all i need to say"
+  },
+  {
+   "t": 782.8,
+   "d": 3.28,
+   "text": "excellent thank you so much that was"
+  },
+  {
+   "t": 786.08,
+   "d": 2.08,
+   "text": "gorgeous that was fantastic"
+  },
+  {
+   "t": 788.16,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 789.2,
+   "d": 1.92,
+   "text": "yeah and it's great having a live demo"
+  },
+  {
+   "t": 791.12,
+   "d": 1.84,
+   "text": "like right out you know doing it live"
+  },
+  {
+   "t": 792.96,
+   "d": 1.36,
+   "text": "right in front of all of us i think"
+  },
+  {
+   "t": 794.32,
+   "d": 3.84,
+   "text": "we're all very happy to see it um"
+  },
+  {
+   "t": 798.16,
+   "d": 2.08,
+   "text": "and if you're around at the top of that"
+  },
+  {
+   "t": 800.24,
+   "d": 1.76,
+   "text": "hour um you've been assigned to the"
+  },
+  {
+   "t": 802.0,
+   "d": 1.92,
+   "text": "breakup room warrior so if you want to"
+  },
+  {
+   "t": 803.92,
+   "d": 1.52,
+   "text": "talk more code details more"
+  },
+  {
+   "t": 805.44,
+   "d": 2.32,
+   "text": "implementation stuff more examples like"
+  },
+  {
+   "t": 807.76,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 808.64,
+   "d": 1.68,
+   "text": "maybe perhaps you'll be there that would"
+  },
+  {
+   "t": 810.32,
+   "d": 3.04,
+   "text": "be great i'm happy to be a warrior"
+  },
+  {
+   "t": 813.36,
+   "d": 2.16,
+   "text": "yeah and um"
+  },
+  {
+   "t": 815.52,
+   "d": 1.76,
+   "text": "some people were asking and this might"
+  },
+  {
+   "t": 817.28,
+   "d": 1.92,
+   "text": "be a something you bring to warrior"
+  },
+  {
+   "t": 819.2,
+   "d": 2.0,
+   "text": "later of like titles of some of those"
+  },
+  {
+   "t": 821.2,
+   "d": 2.0,
+   "text": "games that you showed off in terms of"
+  },
+  {
+   "t": 823.2,
+   "d": 2.56,
+   "text": "like really ridiculous splashy"
+  },
+  {
+   "t": 825.76,
+   "d": 1.68,
+   "text": "um super attacks it looked like there"
+  },
+  {
+   "t": 827.44,
+   "d": 1.28,
+   "text": "was a lot of them and some of them"
+  },
+  {
+   "t": 828.72,
+   "d": 1.44,
+   "text": "seemed fairly obscure so i think it"
+  },
+  {
+   "t": 830.16,
+   "d": 1.36,
+   "text": "would be fun to just share what those"
+  },
+  {
+   "t": 831.52,
+   "d": 0.96,
+   "text": "are"
+  },
+  {
+   "t": 832.48,
+   "d": 2.64,
+   "text": "and also people asked about the status"
+  },
+  {
+   "t": 835.12,
+   "d": 3.2,
+   "text": "of the whales from several years ago"
+  },
+  {
+   "t": 838.32,
+   "d": 1.84,
+   "text": "many of us miss them and love them"
+  },
+  {
+   "t": 840.16,
+   "d": 1.17,
+   "text": "dearly"
+  },
+  {
+   "t": 841.33,
+   "d": 1.39,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 842.72,
+   "d": 2.0,
+   "text": "well i hate to disappoint people but as"
+  },
+  {
+   "t": 844.72,
+   "d": 2.96,
+   "text": "much as they were impressive to"
+  },
+  {
+   "t": 847.68,
+   "d": 1.76,
+   "text": "the roguelike celebration crowd they"
+  },
+  {
+   "t": 849.44,
+   "d": 3.04,
+   "text": "weren't aggressive to anybody else"
+  },
+  {
+   "t": 852.48,
+   "d": 1.2,
+   "text": "you know"
+  },
+  {
+   "t": 853.68,
+   "d": 2.16,
+   "text": "one of your previous uh people giving"
+  },
+  {
+   "t": 855.84,
+   "d": 1.6,
+   "text": "the talk on"
+  },
+  {
+   "t": 857.44,
+   "d": 3.12,
+   "text": "um on the shattered pixel dungeon"
+  },
+  {
+   "t": 860.56,
+   "d": 1.84,
+   "text": "you know he he talked about how he'd"
+  },
+  {
+   "t": 862.4,
+   "d": 1.12,
+   "text": "managed to"
+  },
+  {
+   "t": 863.52,
+   "d": 2.88,
+   "text": "push past the morass push pass push out"
+  },
+  {
+   "t": 866.4,
+   "d": 3.04,
+   "text": "of that kind of zone where games"
+  },
+  {
+   "t": 869.44,
+   "d": 2.24,
+   "text": "languish and don't get any attention"
+  },
+  {
+   "t": 871.68,
+   "d": 1.28,
+   "text": "and i gotta say"
+  },
+  {
+   "t": 872.96,
+   "d": 2.0,
+   "text": "you know i you know my whale game never"
+  },
+  {
+   "t": 874.96,
+   "d": 2.08,
+   "text": "pushed past it my will game"
+  },
+  {
+   "t": 877.04,
+   "d": 1.52,
+   "text": "never found the audience that i was"
+  },
+  {
+   "t": 878.56,
+   "d": 1.28,
+   "text": "looking for"
+  },
+  {
+   "t": 879.84,
+   "d": 2.16,
+   "text": "well here's to hoping that in the future"
+  },
+  {
+   "t": 882.0,
+   "d": 2.0,
+   "text": "it will fight it will find its name ship"
+  },
+  {
+   "t": 884.0,
+   "d": 2.24,
+   "text": "will find its people but yes thank you"
+  },
+  {
+   "t": 886.24,
+   "d": 2.8,
+   "text": "so much for for showing off your stuff"
+  },
+  {
+   "t": 889.04,
+   "d": 4.2,
+   "text": "that was absolutely incredible"
+  }
+ ]
+}

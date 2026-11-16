@@ -1,0 +1,4680 @@
+{
+ "id": "wtlLa7BGZcs",
+ "url": "https://www.youtube.com/watch?v=wtlLa7BGZcs",
+ "title": "Rich Wilson: Roguelikes, Immersive Sims, and the Church of the Simulation",
+ "speaker": "Rich Wilson",
+ "talk_title": "Roguelikes, Immersive Sims, and the Church of the Simulation",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1805,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Rich is a Lead Level Designer at Arkane Studios, helped create Mooncrash and has worked on immersive sims for over a decade.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 134,
+   "title": "Immersive Sims"
+  },
+  {
+   "start": 350,
+   "title": "Systemic Design"
+  },
+  {
+   "start": 614,
+   "title": "Chris Crawford"
+  },
+  {
+   "start": 632,
+   "title": "Process Intensity"
+  },
+  {
+   "start": 710,
+   "title": "Moon Crash"
+  },
+  {
+   "start": 856,
+   "title": "The Rogue Legacy Model"
+  },
+  {
+   "start": 1199,
+   "title": "High Level Player Goals"
+  },
+  {
+   "start": 1254,
+   "title": "Reflections and Lessons"
+  },
+  {
+   "start": 1420,
+   "title": "Interaction Articulation"
+  },
+  {
+   "start": 1447,
+   "title": "Npc Fidelity"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6149,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.44,
+   "d": 1.84,
+   "text": "but it's rich wilson"
+  },
+  {
+   "t": 5.28,
+   "d": 3.84,
+   "text": "uh hello rich nice to have you hello"
+  },
+  {
+   "t": 9.12,
+   "d": 2.88,
+   "text": "um yeah and so you were previously the"
+  },
+  {
+   "t": 12.0,
+   "d": 2.0,
+   "text": "lead level designer at arcane studios"
+  },
+  {
+   "t": 14.0,
+   "d": 1.92,
+   "text": "and helped create prey moon crash you've"
+  },
+  {
+   "t": 15.92,
+   "d": 1.68,
+   "text": "been working on immersive sims for over"
+  },
+  {
+   "t": 17.6,
+   "d": 1.76,
+   "text": "a decade i know you've moved on to new"
+  },
+  {
+   "t": 19.36,
+   "d": 1.44,
+   "text": "things at this point i'm not sure if"
+  },
+  {
+   "t": 20.8,
+   "d": 1.68,
+   "text": "that's something that you want to like"
+  },
+  {
+   "t": 22.48,
+   "d": 1.44,
+   "text": "get the details on or if it's still a"
+  },
+  {
+   "t": 23.92,
+   "d": 2.08,
+   "text": "little up in the air but"
+  },
+  {
+   "t": 26.0,
+   "d": 1.2,
+   "text": "i'm currently doing level design at"
+  },
+  {
+   "t": 27.2,
+   "d": 2.8,
+   "text": "archetype entertainment here in austin"
+  },
+  {
+   "t": 30.0,
+   "d": 1.76,
+   "text": "yeah excellent and you're here to talk"
+  },
+  {
+   "t": 31.76,
+   "d": 1.76,
+   "text": "to us about roguelike subversive sims in"
+  },
+  {
+   "t": 33.52,
+   "d": 1.68,
+   "text": "the church of simulation which i just"
+  },
+  {
+   "t": 35.2,
+   "d": 1.6,
+   "text": "love as a phrase so"
+  },
+  {
+   "t": 36.8,
+   "d": 2.96,
+   "text": "uh yeah take it away all right thanks oh"
+  },
+  {
+   "t": 39.76,
+   "d": 2.24,
+   "text": "yeah so um yeah this this is my talk uh"
+  },
+  {
+   "t": 42.0,
+   "d": 1.52,
+   "text": "roguelike summers of sins in the church"
+  },
+  {
+   "t": 43.52,
+   "d": 3.76,
+   "text": "of the simulation um and this is uh"
+  },
+  {
+   "t": 47.28,
+   "d": 1.68,
+   "text": "basically using moon crash my my"
+  },
+  {
+   "t": 48.96,
+   "d": 1.76,
+   "text": "experience on moon crash as a kind of"
+  },
+  {
+   "t": 50.72,
+   "d": 1.84,
+   "text": "focus to talk about uh my experience"
+  },
+  {
+   "t": 52.56,
+   "d": 1.92,
+   "text": "building immersive sims uh and and the"
+  },
+  {
+   "t": 54.48,
+   "d": 1.6,
+   "text": "ways that i think simulation can produce"
+  },
+  {
+   "t": 56.08,
+   "d": 2.08,
+   "text": "the strongest player experiences it's"
+  },
+  {
+   "t": 58.16,
+   "d": 1.52,
+   "text": "also about the the kinship between"
+  },
+  {
+   "t": 59.68,
+   "d": 1.52,
+   "text": "immersive sims and roguelikes that kind"
+  },
+  {
+   "t": 61.2,
+   "d": 2.64,
+   "text": "of became apparent um as i was working"
+  },
+  {
+   "t": 63.84,
+   "d": 1.84,
+   "text": "on the project and these sort of you"
+  },
+  {
+   "t": 65.68,
+   "d": 3.12,
+   "text": "know similarities that bubbled up um"
+  },
+  {
+   "t": 68.8,
+   "d": 1.2,
+   "text": "it's also about limitations and"
+  },
+  {
+   "t": 70.0,
+   "d": 1.36,
+   "text": "opportunities that we came across when"
+  },
+  {
+   "t": 71.36,
+   "d": 2.24,
+   "text": "bringing roguelike elements into a sort"
+  },
+  {
+   "t": 73.6,
+   "d": 1.92,
+   "text": "of aaa"
+  },
+  {
+   "t": 75.52,
+   "d": 2.24,
+   "text": "gaming space with with higher fidelity"
+  },
+  {
+   "t": 77.76,
+   "d": 2.08,
+   "text": "representation and things like that um"
+  },
+  {
+   "t": 79.84,
+   "d": 1.12,
+   "text": "there will be a lot of examples from"
+  },
+  {
+   "t": 80.96,
+   "d": 2.64,
+   "text": "development on the project uh as as well"
+  },
+  {
+   "t": 83.6,
+   "d": 2.56,
+   "text": "as lots of like little tangents that"
+  },
+  {
+   "t": 86.16,
+   "d": 1.84,
+   "text": "that spiral off here and there i'm"
+  },
+  {
+   "t": 88.0,
+   "d": 1.52,
+   "text": "coming from an immersive sim background"
+  },
+  {
+   "t": 89.52,
+   "d": 1.76,
+   "text": "i know this is a roguelike conference so"
+  },
+  {
+   "t": 91.28,
+   "d": 2.16,
+   "text": "i'm like presenting my observations as"
+  },
+  {
+   "t": 93.44,
+   "d": 2.4,
+   "text": "an outsider and i like humbly you know"
+  },
+  {
+   "t": 95.84,
+   "d": 3.12,
+   "text": "uh bow before the roguelike experts"
+  },
+  {
+   "t": 98.96,
+   "d": 0.72,
+   "text": "uh here"
+  },
+  {
+   "t": 99.68,
+   "d": 2.0,
+   "text": "bit about me uh you know we kind of"
+  },
+  {
+   "t": 101.68,
+   "d": 1.76,
+   "text": "covered this already but i've got you"
+  },
+  {
+   "t": 103.44,
+   "d": 2.4,
+   "text": "know 13 ish years experience working on"
+  },
+  {
+   "t": 105.84,
+   "d": 1.84,
+   "text": "immersive sims"
+  },
+  {
+   "t": 107.68,
+   "d": 2.88,
+   "text": "17 total in the industry um going back"
+  },
+  {
+   "t": 110.56,
+   "d": 3.44,
+   "text": "to like bioshock 2 dishonored and pray i"
+  },
+  {
+   "t": 114.0,
+   "d": 2.56,
+   "text": "am a casual enjoyer of roguelikes and"
+  },
+  {
+   "t": 116.56,
+   "d": 2.08,
+   "text": "rogue lights uh and a fan of procedural"
+  },
+  {
+   "t": 118.64,
+   "d": 2.8,
+   "text": "generation as a technology um"
+  },
+  {
+   "t": 121.44,
+   "d": 1.52,
+   "text": "in general so all these things kind of"
+  },
+  {
+   "t": 122.96,
+   "d": 2.24,
+   "text": "were a happy confluence for me when"
+  },
+  {
+   "t": 125.2,
+   "d": 2.4,
+   "text": "working on moon crash"
+  },
+  {
+   "t": 127.6,
+   "d": 1.68,
+   "text": "uh so uh"
+  },
+  {
+   "t": 129.28,
+   "d": 1.84,
+   "text": "for starters uh just a bit of background"
+  },
+  {
+   "t": 131.12,
+   "d": 2.64,
+   "text": "and primer on on some terminology and"
+  },
+  {
+   "t": 133.76,
+   "d": 1.76,
+   "text": "things like that so immersive sims i'm"
+  },
+  {
+   "t": 135.52,
+   "d": 1.52,
+   "text": "sure a lot of you are familiar with what"
+  },
+  {
+   "t": 137.04,
+   "d": 1.44,
+   "text": "an immersive sim is but i thought it"
+  },
+  {
+   "t": 138.48,
+   "d": 1.92,
+   "text": "might be useful to get my my sort of"
+  },
+  {
+   "t": 140.4,
+   "d": 2.64,
+   "text": "lens on what they are uh given my"
+  },
+  {
+   "t": 143.04,
+   "d": 1.12,
+   "text": "experience and just to make sure"
+  },
+  {
+   "t": 144.16,
+   "d": 1.44,
+   "text": "everyone's on the same page"
+  },
+  {
+   "t": 145.6,
+   "d": 2.8,
+   "text": "um so um yes you can see here from this"
+  },
+  {
+   "t": 148.4,
+   "d": 1.12,
+   "text": "you know this little diagram i don't"
+  },
+  {
+   "t": 149.52,
+   "d": 1.52,
+   "text": "know where the type the diagrams are"
+  },
+  {
+   "t": 151.04,
+   "d": 2.32,
+   "text": "there over there um"
+  },
+  {
+   "t": 153.36,
+   "d": 1.68,
+   "text": "but uh yeah you can see there there are"
+  },
+  {
+   "t": 155.04,
+   "d": 1.6,
+   "text": "lots of different you know games that"
+  },
+  {
+   "t": 156.64,
+   "d": 2.08,
+   "text": "kind of fall under the umbrella um but"
+  },
+  {
+   "t": 158.72,
+   "d": 1.76,
+   "text": "my my sort of basic blanket term is"
+  },
+  {
+   "t": 160.48,
+   "d": 2.0,
+   "text": "something that takes simulation depth"
+  },
+  {
+   "t": 162.48,
+   "d": 1.52,
+   "text": "from something like dwarf fortress maybe"
+  },
+  {
+   "t": 164.0,
+   "d": 2.24,
+   "text": "not quite as deep as dwarf fortress but"
+  },
+  {
+   "t": 166.24,
+   "d": 1.36,
+   "text": "uh marrying that with the sort of"
+  },
+  {
+   "t": 167.6,
+   "d": 2.64,
+   "text": "immediacy and embodiment and presence of"
+  },
+  {
+   "t": 170.24,
+   "d": 2.32,
+   "text": "a first person shooter like wolfenstein"
+  },
+  {
+   "t": 172.56,
+   "d": 2.32,
+   "text": "right um and so you've got you know mini"
+  },
+  {
+   "t": 174.88,
+   "d": 1.84,
+   "text": "games that kind of fall under this"
+  },
+  {
+   "t": 176.72,
+   "d": 1.92,
+   "text": "category um i don't know if i have a"
+  },
+  {
+   "t": 178.64,
+   "d": 2.96,
+   "text": "cursor here to point at things but um"
+  },
+  {
+   "t": 181.6,
+   "d": 2.0,
+   "text": "you know you can see in the the upper"
+  },
+  {
+   "t": 183.6,
+   "d": 1.28,
+   "text": "right corner there the sort of"
+  },
+  {
+   "t": 184.88,
+   "d": 1.68,
+   "text": "progenitor of all this the ultimate"
+  },
+  {
+   "t": 186.56,
+   "d": 2.64,
+   "text": "underworld um"
+  },
+  {
+   "t": 189.2,
+   "d": 1.44,
+   "text": "and then a lot of other games you know"
+  },
+  {
+   "t": 190.64,
+   "d": 3.2,
+   "text": "far cry 2 system shock 1 and 2 etc uh"
+  },
+  {
+   "t": 193.84,
+   "d": 2.32,
+   "text": "that that follow this trend and what"
+  },
+  {
+   "t": 196.16,
+   "d": 2.72,
+   "text": "what that simulation depth means is that"
+  },
+  {
+   "t": 198.88,
+   "d": 2.8,
+   "text": "uh enemy npcs have an organic awareness"
+  },
+  {
+   "t": 201.68,
+   "d": 1.36,
+   "text": "model instead of just knowing where the"
+  },
+  {
+   "t": 203.04,
+   "d": 1.44,
+   "text": "player is at all times they don't spawn"
+  },
+  {
+   "t": 204.48,
+   "d": 1.52,
+   "text": "and shoot directly at you they can you"
+  },
+  {
+   "t": 206.0,
+   "d": 1.6,
+   "text": "know they have vision cones and things"
+  },
+  {
+   "t": 207.6,
+   "d": 0.96,
+   "text": "like that"
+  },
+  {
+   "t": 208.56,
+   "d": 1.36,
+   "text": "you may have things like elemental"
+  },
+  {
+   "t": 209.92,
+   "d": 2.32,
+   "text": "propagation like fire through grass or"
+  },
+  {
+   "t": 212.24,
+   "d": 1.6,
+   "text": "electricity through water or things like"
+  },
+  {
+   "t": 213.84,
+   "d": 1.36,
+   "text": "that instead of it just being like a"
+  },
+  {
+   "t": 215.2,
+   "d": 1.6,
+   "text": "particle effect with a damage volume on"
+  },
+  {
+   "t": 216.8,
+   "d": 0.64,
+   "text": "it"
+  },
+  {
+   "t": 217.44,
+   "d": 4.32,
+   "text": "uh things things of that nature right um"
+  },
+  {
+   "t": 221.76,
+   "d": 1.6,
+   "text": "and again this proof you know this this"
+  },
+  {
+   "t": 223.36,
+   "d": 1.52,
+   "text": "creates lots of fuzzy boundaries you"
+  },
+  {
+   "t": 224.88,
+   "d": 1.04,
+   "text": "know if you look at like breath of the"
+  },
+  {
+   "t": 225.92,
+   "d": 1.44,
+   "text": "wild as breath of the wild and immersive"
+  },
+  {
+   "t": 227.36,
+   "d": 3.44,
+   "text": "stem is job simulator immersive sim uh"
+  },
+  {
+   "t": 230.8,
+   "d": 2.64,
+   "text": "things like that"
+  },
+  {
+   "t": 233.76,
+   "d": 2.08,
+   "text": "um so"
+  },
+  {
+   "t": 235.84,
+   "d": 1.6,
+   "text": "the and this is where the sort of church"
+  },
+  {
+   "t": 237.44,
+   "d": 1.28,
+   "text": "of the simulation kind of comes into"
+  },
+  {
+   "t": 238.72,
+   "d": 1.92,
+   "text": "play um"
+  },
+  {
+   "t": 240.64,
+   "d": 2.08,
+   "text": "both both you know immersive sims and"
+  },
+  {
+   "t": 242.72,
+   "d": 2.32,
+   "text": "roguelikes rely heavily on simulation"
+  },
+  {
+   "t": 245.04,
+   "d": 2.4,
+   "text": "and math to kind of determine outcomes"
+  },
+  {
+   "t": 247.44,
+   "d": 2.16,
+   "text": "um and you often have emergent results"
+  },
+  {
+   "t": 249.6,
+   "d": 1.44,
+   "text": "of systems colliding with each other and"
+  },
+  {
+   "t": 251.04,
+   "d": 2.24,
+   "text": "stuff like that i think there is"
+  },
+  {
+   "t": 253.28,
+   "d": 2.48,
+   "text": "there is a sort of capital t truth to"
+  },
+  {
+   "t": 255.76,
+   "d": 1.84,
+   "text": "the outcomes of these systems as they"
+  },
+  {
+   "t": 257.6,
+   "d": 1.68,
+   "text": "interact with one another that you don't"
+  },
+  {
+   "t": 259.28,
+   "d": 1.04,
+   "text": "get from"
+  },
+  {
+   "t": 260.32,
+   "d": 2.96,
+   "text": "more like quote-unquote cinematic games"
+  },
+  {
+   "t": 263.28,
+   "d": 2.64,
+   "text": "um if if an event occurs"
+  },
+  {
+   "t": 265.92,
+   "d": 2.24,
+   "text": "because of systems then it actually"
+  },
+  {
+   "t": 268.16,
+   "d": 1.84,
+   "text": "happened in this sort of microcosmic"
+  },
+  {
+   "t": 270.0,
+   "d": 2.24,
+   "text": "reality whereas anything else is just"
+  },
+  {
+   "t": 272.24,
+   "d": 1.76,
+   "text": "someone telling you about it happening"
+  },
+  {
+   "t": 274.0,
+   "d": 1.44,
+   "text": "right it's you know it happens the same"
+  },
+  {
+   "t": 275.44,
+   "d": 2.56,
+   "text": "way every time it's it's an accounting"
+  },
+  {
+   "t": 278.0,
+   "d": 2.0,
+   "text": "of a tale rather than something"
+  },
+  {
+   "t": 280.0,
+   "d": 2.08,
+   "text": "legitimately occurring uh if that makes"
+  },
+  {
+   "t": 282.08,
+   "d": 3.2,
+   "text": "any any sense um"
+  },
+  {
+   "t": 285.28,
+   "d": 2.16,
+   "text": "and i think that this this can result in"
+  },
+  {
+   "t": 287.44,
+   "d": 2.08,
+   "text": "dramatic failures as well as dramatic"
+  },
+  {
+   "t": 289.52,
+   "d": 1.92,
+   "text": "triumphs and these player stories that"
+  },
+  {
+   "t": 291.44,
+   "d": 1.2,
+   "text": "come out of this"
+  },
+  {
+   "t": 292.64,
+   "d": 2.48,
+   "text": "um are very powerful uh there's an"
+  },
+  {
+   "t": 295.12,
+   "d": 1.52,
+   "text": "article called the dice can kill you on"
+  },
+  {
+   "t": 296.64,
+   "d": 2.0,
+   "text": "polygon talking about first edition a d"
+  },
+  {
+   "t": 298.64,
+   "d": 0.96,
+   "text": "and d"
+  },
+  {
+   "t": 299.6,
+   "d": 1.28,
+   "text": "and um"
+  },
+  {
+   "t": 300.88,
+   "d": 1.6,
+   "text": "you know there's this anecdote about a"
+  },
+  {
+   "t": 302.48,
+   "d": 1.76,
+   "text": "wizard that was the final surviving"
+  },
+  {
+   "t": 304.24,
+   "d": 2.08,
+   "text": "party member and the you know they cast"
+  },
+  {
+   "t": 306.32,
+   "d": 1.6,
+   "text": "a disintegration spell on a goddess who"
+  },
+  {
+   "t": 307.92,
+   "d": 2.48,
+   "text": "had 95 magic resistance and a saving"
+  },
+  {
+   "t": 310.4,
+   "d": 1.6,
+   "text": "throw of two or better or something like"
+  },
+  {
+   "t": 312.0,
+   "d": 2.56,
+   "text": "that and because of the luck of the dice"
+  },
+  {
+   "t": 314.56,
+   "d": 1.44,
+   "text": "and the tenacity of the wizard you know"
+  },
+  {
+   "t": 316.0,
+   "d": 3.44,
+   "text": "they disintegrated a goddess and won the"
+  },
+  {
+   "t": 319.44,
+   "d": 1.6,
+   "text": "scenario or you know survived or"
+  },
+  {
+   "t": 321.04,
+   "d": 2.56,
+   "text": "whatever um and this resonated with them"
+  },
+  {
+   "t": 323.6,
+   "d": 1.28,
+   "text": "and they you know it's the kind of thing"
+  },
+  {
+   "t": 324.88,
+   "d": 1.52,
+   "text": "if you have d d friends you hear this"
+  },
+  {
+   "t": 326.4,
+   "d": 1.6,
+   "text": "kind of stuff all the time"
+  },
+  {
+   "t": 328.0,
+   "d": 1.52,
+   "text": "um but it's the kind of thing that you"
+  },
+  {
+   "t": 329.52,
+   "d": 2.8,
+   "text": "talk about for years to come because of"
+  },
+  {
+   "t": 332.32,
+   "d": 1.44,
+   "text": "the the sheer"
+  },
+  {
+   "t": 333.76,
+   "d": 1.76,
+   "text": "audacity of the situation and the fact"
+  },
+  {
+   "t": 335.52,
+   "d": 1.36,
+   "text": "that it you know again it's not"
+  },
+  {
+   "t": 336.88,
+   "d": 1.28,
+   "text": "something that dungeon master said"
+  },
+  {
+   "t": 338.16,
+   "d": 1.6,
+   "text": "happened is something that happened"
+  },
+  {
+   "t": 339.76,
+   "d": 1.12,
+   "text": "because of"
+  },
+  {
+   "t": 340.88,
+   "d": 1.76,
+   "text": "systems impartial"
+  },
+  {
+   "t": 342.64,
+   "d": 3.76,
+   "text": "you know systems basically"
+  },
+  {
+   "t": 346.96,
+   "d": 1.52,
+   "text": "so in immersive sims a lot of this stuff"
+  },
+  {
+   "t": 348.48,
+   "d": 2.08,
+   "text": "comes about uh through something we call"
+  },
+  {
+   "t": 350.56,
+   "d": 1.92,
+   "text": "systemic design this uh these slides"
+  },
+  {
+   "t": 352.48,
+   "d": 1.52,
+   "text": "here"
+  },
+  {
+   "t": 354.0,
+   "d": 2.08,
+   "text": "here are from a talk that randy and"
+  },
+  {
+   "t": 356.08,
+   "d": 1.92,
+   "text": "harvey smith gave around 2004. you can"
+  },
+  {
+   "t": 358.0,
+   "d": 1.84,
+   "text": "find it on the gdc vault"
+  },
+  {
+   "t": 359.84,
+   "d": 2.72,
+   "text": "might be in yeah it's on youtube as well"
+  },
+  {
+   "t": 362.56,
+   "d": 2.0,
+   "text": "but the the gist is that anything in the"
+  },
+  {
+   "t": 364.56,
+   "d": 1.92,
+   "text": "world that is placed"
+  },
+  {
+   "t": 366.48,
+   "d": 2.4,
+   "text": "is is placed as the sort of full"
+  },
+  {
+   "t": 368.88,
+   "d": 1.76,
+   "text": "representation of itself right so if you"
+  },
+  {
+   "t": 370.64,
+   "d": 2.24,
+   "text": "see a gas can it's not just a static"
+  },
+  {
+   "t": 372.88,
+   "d": 2.0,
+   "text": "mesh like any time you place the gas can"
+  },
+  {
+   "t": 374.88,
+   "d": 2.16,
+   "text": "it is a gas can and that means it can"
+  },
+  {
+   "t": 377.04,
+   "d": 2.32,
+   "text": "explode or be picked up and dropped or"
+  },
+  {
+   "t": 379.36,
+   "d": 1.92,
+   "text": "be used to fuel things or whatever it"
+  },
+  {
+   "t": 381.28,
+   "d": 1.76,
+   "text": "has it has"
+  },
+  {
+   "t": 383.04,
+   "d": 2.16,
+   "text": "systemic properties right"
+  },
+  {
+   "t": 385.2,
+   "d": 2.4,
+   "text": "and so you know one way to handle this"
+  },
+  {
+   "t": 387.6,
+   "d": 2.56,
+   "text": "is to like in the top slide there is to"
+  },
+  {
+   "t": 390.16,
+   "d": 1.84,
+   "text": "hard code"
+  },
+  {
+   "t": 392.0,
+   "d": 2.0,
+   "text": "interactions between every single thing"
+  },
+  {
+   "t": 394.0,
+   "d": 1.2,
+   "text": "in your game and everything that could"
+  },
+  {
+   "t": 395.2,
+   "d": 1.2,
+   "text": "possibly"
+  },
+  {
+   "t": 396.4,
+   "d": 1.92,
+   "text": "interact with and that's that's brittle"
+  },
+  {
+   "t": 398.32,
+   "d": 1.76,
+   "text": "and time-consuming and it means you're"
+  },
+  {
+   "t": 400.08,
+   "d": 1.68,
+   "text": "less inclined to add stuff to your game"
+  },
+  {
+   "t": 401.76,
+   "d": 1.76,
+   "text": "because of the combinatorial workload"
+  },
+  {
+   "t": 403.52,
+   "d": 1.44,
+   "text": "that's required"
+  },
+  {
+   "t": 404.96,
+   "d": 2.56,
+   "text": "but instead uh whatever is immersive"
+  },
+  {
+   "t": 407.52,
+   "d": 2.56,
+   "text": "sims try to do uh is distill that stuff"
+  },
+  {
+   "t": 410.08,
+   "d": 1.68,
+   "text": "down into this sort of stimuli that they"
+  },
+  {
+   "t": 411.76,
+   "d": 2.16,
+   "text": "produce and then things that can respond"
+  },
+  {
+   "t": 413.92,
+   "d": 2.0,
+   "text": "to stimuli so you know both the flaming"
+  },
+  {
+   "t": 415.92,
+   "d": 2.16,
+   "text": "arrow and the candle"
+  },
+  {
+   "t": 418.08,
+   "d": 2.0,
+   "text": "produce fire and that is a that is a"
+  },
+  {
+   "t": 420.08,
+   "d": 2.8,
+   "text": "system that is a sort of systemic"
+  },
+  {
+   "t": 422.88,
+   "d": 1.36,
+   "text": "signal element and then there are"
+  },
+  {
+   "t": 424.24,
+   "d": 1.84,
+   "text": "certain things that respond to fire like"
+  },
+  {
+   "t": 426.08,
+   "d": 2.0,
+   "text": "you know a torch might light or an oil"
+  },
+  {
+   "t": 428.08,
+   "d": 1.84,
+   "text": "puddle might ignite or whatever so if"
+  },
+  {
+   "t": 429.92,
+   "d": 1.36,
+   "text": "you get you know a situation where"
+  },
+  {
+   "t": 431.28,
+   "d": 1.36,
+   "text": "someone shoots a guard and the guard's"
+  },
+  {
+   "t": 432.64,
+   "d": 1.28,
+   "text": "standing over an oil puddle and they"
+  },
+  {
+   "t": 433.92,
+   "d": 2.24,
+   "text": "drop a torch and the torch ignites the"
+  },
+  {
+   "t": 436.16,
+   "d": 2.0,
+   "text": "puddle that all happens through systems"
+  },
+  {
+   "t": 438.16,
+   "d": 1.68,
+   "text": "instead of someone you know very"
+  },
+  {
+   "t": 439.84,
+   "d": 2.24,
+   "text": "precariously hard coding a sequence of"
+  },
+  {
+   "t": 442.08,
+   "d": 1.6,
+   "text": "events like you know with trigger"
+  },
+  {
+   "t": 443.68,
+   "d": 1.76,
+   "text": "volumes or something like that"
+  },
+  {
+   "t": 445.44,
+   "d": 1.44,
+   "text": "uh so that's again that's where you get"
+  },
+  {
+   "t": 446.88,
+   "d": 2.16,
+   "text": "this sort of the honesty of this"
+  },
+  {
+   "t": 449.04,
+   "d": 1.92,
+   "text": "simulation sort of informing the"
+  },
+  {
+   "t": 450.96,
+   "d": 1.36,
+   "text": "structure of the game in the world and"
+  },
+  {
+   "t": 452.32,
+   "d": 2.16,
+   "text": "things like that and the systems they"
+  },
+  {
+   "t": 454.48,
+   "d": 1.76,
+   "text": "free you from this sort of brittle"
+  },
+  {
+   "t": 456.24,
+   "d": 2.88,
+   "text": "handcrafted interactions system or not"
+  },
+  {
+   "t": 459.12,
+   "d": 2.56,
+   "text": "system uh the the brittle handcrafted"
+  },
+  {
+   "t": 461.68,
+   "d": 1.28,
+   "text": "interactions that you could code or"
+  },
+  {
+   "t": 462.96,
+   "d": 2.64,
+   "text": "script or whatever um that make every"
+  },
+  {
+   "t": 465.6,
+   "d": 1.52,
+   "text": "new situation"
+  },
+  {
+   "t": 467.12,
+   "d": 1.92,
+   "text": "you know a big headache to to author and"
+  },
+  {
+   "t": 469.04,
+   "d": 1.12,
+   "text": "things like that and they break in a"
+  },
+  {
+   "t": 470.16,
+   "d": 2.88,
+   "text": "million ways if they're not systemic"
+  },
+  {
+   "t": 473.04,
+   "d": 1.68,
+   "text": "now occasionally um you know"
+  },
+  {
+   "t": 474.72,
+   "d": 1.52,
+   "text": "undishonored we had"
+  },
+  {
+   "t": 476.24,
+   "d": 1.6,
+   "text": "many many situations where there are"
+  },
+  {
+   "t": 477.84,
+   "d": 0.88,
+   "text": "these"
+  },
+  {
+   "t": 478.72,
+   "d": 1.92,
+   "text": "extravagant situations that characters"
+  },
+  {
+   "t": 480.64,
+   "d": 1.6,
+   "text": "are involved and usually npcs are the"
+  },
+  {
+   "t": 482.24,
+   "d": 1.52,
+   "text": "ones that sort of force us into"
+  },
+  {
+   "t": 483.76,
+   "d": 2.0,
+   "text": "scripting because you can't make npcs"
+  },
+  {
+   "t": 485.76,
+   "d": 1.68,
+   "text": "systemically"
+  },
+  {
+   "t": 487.44,
+   "d": 2.8,
+   "text": "think about the world that well yet um"
+  },
+  {
+   "t": 490.24,
+   "d": 1.84,
+   "text": "but you know so i had a like at the"
+  },
+  {
+   "t": 492.08,
+   "d": 3.2,
+   "text": "situation uh in in my mission where one"
+  },
+  {
+   "t": 495.28,
+   "d": 1.36,
+   "text": "character was trying to poison other"
+  },
+  {
+   "t": 496.64,
+   "d": 1.84,
+   "text": "characters and"
+  },
+  {
+   "t": 498.48,
+   "d": 2.08,
+   "text": "it resulted in what i call systemish"
+  },
+  {
+   "t": 500.56,
+   "d": 3.2,
+   "text": "design where scripting of these dramatic"
+  },
+  {
+   "t": 503.76,
+   "d": 3.04,
+   "text": "altered scenarios need needs to marry up"
+  },
+  {
+   "t": 506.8,
+   "d": 2.48,
+   "text": "with with systems right you have these"
+  },
+  {
+   "t": 509.28,
+   "d": 1.36,
+   "text": "systems that are out here doing their"
+  },
+  {
+   "t": 510.64,
+   "d": 1.2,
+   "text": "own thing and then you've got this one"
+  },
+  {
+   "t": 511.84,
+   "d": 1.28,
+   "text": "area that's like okay well i want this"
+  },
+  {
+   "t": 513.12,
+   "d": 1.68,
+   "text": "to be kind of constrained or these these"
+  },
+  {
+   "t": 514.8,
+   "d": 2.08,
+   "text": "sequences of events that happen"
+  },
+  {
+   "t": 516.88,
+   "d": 1.68,
+   "text": "within this system so"
+  },
+  {
+   "t": 518.56,
+   "d": 2.88,
+   "text": "uh you know the poisoning consists of a"
+  },
+  {
+   "t": 521.44,
+   "d": 2.08,
+   "text": "wine bottle and two wine glasses and and"
+  },
+  {
+   "t": 523.52,
+   "d": 1.84,
+   "text": "you can come in the room beforehand and"
+  },
+  {
+   "t": 525.36,
+   "d": 1.36,
+   "text": "mess around with it and switch the"
+  },
+  {
+   "t": 526.72,
+   "d": 2.96,
+   "text": "poison or whatever you want to do"
+  },
+  {
+   "t": 529.68,
+   "d": 2.0,
+   "text": "but the the problem or the yeah the"
+  },
+  {
+   "t": 531.68,
+   "d": 1.92,
+   "text": "problem to solve uh was the fact that"
+  },
+  {
+   "t": 533.6,
+   "d": 2.16,
+   "text": "the bottle and the glasses were bottles"
+  },
+  {
+   "t": 535.76,
+   "d": 1.36,
+   "text": "and glasses right they weren't just"
+  },
+  {
+   "t": 537.12,
+   "d": 1.76,
+   "text": "meshes depicting a bottle and glasses"
+  },
+  {
+   "t": 538.88,
+   "d": 1.68,
+   "text": "they were bottles and glasses"
+  },
+  {
+   "t": 540.56,
+   "d": 1.52,
+   "text": "and throughout the game anywhere those"
+  },
+  {
+   "t": 542.08,
+   "d": 1.76,
+   "text": "are placed they can be broken because"
+  },
+  {
+   "t": 543.84,
+   "d": 1.52,
+   "text": "you're wielding a sword and a you know"
+  },
+  {
+   "t": 545.36,
+   "d": 2.88,
+   "text": "crossbow and things like that so uh you"
+  },
+  {
+   "t": 548.24,
+   "d": 1.84,
+   "text": "know there was a crossroads here what"
+  },
+  {
+   "t": 550.08,
+   "d": 2.88,
+   "text": "what to do um and because of where i"
+  },
+  {
+   "t": 552.96,
+   "d": 2.24,
+   "text": "worked and because of you my my sort of"
+  },
+  {
+   "t": 555.2,
+   "d": 3.2,
+   "text": "penchant for for self-punishment um"
+  },
+  {
+   "t": 558.4,
+   "d": 1.84,
+   "text": "i was gonna support those things being"
+  },
+  {
+   "t": 560.24,
+   "d": 1.6,
+   "text": "breakable uh right because a player"
+  },
+  {
+   "t": 561.84,
+   "d": 2.16,
+   "text": "could drop in break that and then what"
+  },
+  {
+   "t": 564.0,
+   "d": 1.36,
+   "text": "happens right the poisoning scene can't"
+  },
+  {
+   "t": 565.36,
+   "d": 1.2,
+   "text": "just go off"
+  },
+  {
+   "t": 566.56,
+   "d": 2.16,
+   "text": "the same way so what happens and so i"
+  },
+  {
+   "t": 568.72,
+   "d": 2.16,
+   "text": "ended up scripting listeners to listen"
+  },
+  {
+   "t": 570.88,
+   "d": 1.84,
+   "text": "for the things being broken and then"
+  },
+  {
+   "t": 572.72,
+   "d": 1.28,
+   "text": "when the characters get to a certain"
+  },
+  {
+   "t": 574.0,
+   "d": 2.08,
+   "text": "point in their walk around the room then"
+  },
+  {
+   "t": 576.08,
+   "d": 1.52,
+   "text": "there's a there's a branch basically and"
+  },
+  {
+   "t": 577.6,
+   "d": 2.32,
+   "text": "is this broken is it not broken"
+  },
+  {
+   "t": 579.92,
+   "d": 1.2,
+   "text": "and then there there's a whole backup"
+  },
+  {
+   "t": 581.12,
+   "d": 1.36,
+   "text": "plan where the guy lures him down to the"
+  },
+  {
+   "t": 582.48,
+   "d": 1.2,
+   "text": "basement and stabs them in the back"
+  },
+  {
+   "t": 583.68,
+   "d": 2.72,
+   "text": "instead um and then i went back because"
+  },
+  {
+   "t": 586.4,
+   "d": 2.08,
+   "text": "the interaction was a context menu"
+  },
+  {
+   "t": 588.48,
+   "d": 1.92,
+   "text": "i went back and took spill the glasses"
+  },
+  {
+   "t": 590.4,
+   "d": 1.92,
+   "text": "and added that to the little context"
+  },
+  {
+   "t": 592.32,
+   "d": 1.84,
+   "text": "menu because i had already put the work"
+  },
+  {
+   "t": 594.16,
+   "d": 2.56,
+   "text": "in on it so why not surface it more for"
+  },
+  {
+   "t": 596.72,
+   "d": 1.92,
+   "text": "more players to kind of discover and see"
+  },
+  {
+   "t": 598.64,
+   "d": 1.52,
+   "text": "what happens right"
+  },
+  {
+   "t": 600.16,
+   "d": 2.24,
+   "text": "uh so in this case you know this is"
+  },
+  {
+   "t": 602.4,
+   "d": 1.28,
+   "text": "again the sort of church of the"
+  },
+  {
+   "t": 603.68,
+   "d": 1.44,
+   "text": "simulation is hurting itself you know"
+  },
+  {
+   "t": 605.12,
+   "d": 2.24,
+   "text": "the the authored content bowels to the"
+  },
+  {
+   "t": 607.36,
+   "d": 1.68,
+   "text": "simulation now you know things must be"
+  },
+  {
+   "t": 609.04,
+   "d": 2.4,
+   "text": "changed things must be updated uh and so"
+  },
+  {
+   "t": 611.44,
+   "d": 2.08,
+   "text": "forth"
+  },
+  {
+   "t": 613.52,
+   "d": 1.52,
+   "text": "as a game designer legendary game"
+  },
+  {
+   "t": 615.04,
+   "d": 1.68,
+   "text": "designer chris crawford"
+  },
+  {
+   "t": 616.72,
+   "d": 2.8,
+   "text": "who uh this is him at gdc back in 92"
+  },
+  {
+   "t": 619.52,
+   "d": 2.16,
+   "text": "before he galloped out of of the"
+  },
+  {
+   "t": 621.68,
+   "d": 1.36,
+   "text": "industry altogether with his sword"
+  },
+  {
+   "t": 623.04,
+   "d": 2.24,
+   "text": "brandished like like you do um he's"
+  },
+  {
+   "t": 625.28,
+   "d": 1.6,
+   "text": "currently working on or yeah i think"
+  },
+  {
+   "t": 626.88,
+   "d": 1.2,
+   "text": "he's still working on procedural"
+  },
+  {
+   "t": 628.08,
+   "d": 1.6,
+   "text": "storytelling stuff with storytron and"
+  },
+  {
+   "t": 629.68,
+   "d": 1.84,
+   "text": "things like that but uh he coined this"
+  },
+  {
+   "t": 631.52,
+   "d": 1.76,
+   "text": "this term that i really like called"
+  },
+  {
+   "t": 633.28,
+   "d": 2.88,
+   "text": "process intensity um and the gist of it"
+  },
+  {
+   "t": 636.16,
+   "d": 1.36,
+   "text": "is you know process intensity is the"
+  },
+  {
+   "t": 637.52,
+   "d": 2.16,
+   "text": "degree to which a program uses processes"
+  },
+  {
+   "t": 639.68,
+   "d": 2.4,
+   "text": "instead of data and sort of emphasizing"
+  },
+  {
+   "t": 642.08,
+   "d": 2.72,
+   "text": "that that games are better at processes"
+  },
+  {
+   "t": 644.8,
+   "d": 2.24,
+   "text": "than data right better than better at"
+  },
+  {
+   "t": 647.04,
+   "d": 2.16,
+   "text": "sort of making branches and supporting"
+  },
+  {
+   "t": 649.2,
+   "d": 2.0,
+   "text": "choices and stuff then pushing around"
+  },
+  {
+   "t": 651.2,
+   "d": 2.48,
+   "text": "animations or images or things like that"
+  },
+  {
+   "t": 653.68,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 655.12,
+   "d": 1.6,
+   "text": "and i think immersive sims embody this"
+  },
+  {
+   "t": 656.72,
+   "d": 2.24,
+   "text": "content sort of pulling or this concept"
+  },
+  {
+   "t": 658.96,
+   "d": 2.4,
+   "text": "rather about pulling the content towards"
+  },
+  {
+   "t": 661.36,
+   "d": 2.24,
+   "text": "the system's end of the spectrum"
+  },
+  {
+   "t": 663.6,
+   "d": 2.16,
+   "text": "uh i think you know this is this is also"
+  },
+  {
+   "t": 665.76,
+   "d": 2.48,
+   "text": "something that can go wrong uh if you if"
+  },
+  {
+   "t": 668.24,
+   "d": 2.0,
+   "text": "you misuse the concept of branches and"
+  },
+  {
+   "t": 670.24,
+   "d": 1.6,
+   "text": "loops and things like that but you can"
+  },
+  {
+   "t": 671.84,
+   "d": 1.28,
+   "text": "get what i call the threat of infinite"
+  },
+  {
+   "t": 673.12,
+   "d": 1.6,
+   "text": "content this is more stuff i was"
+  },
+  {
+   "t": 674.72,
+   "d": 1.28,
+   "text": "thinking about when working on moon"
+  },
+  {
+   "t": 676.0,
+   "d": 1.2,
+   "text": "crash"
+  },
+  {
+   "t": 677.2,
+   "d": 1.2,
+   "text": "but just because you can make something"
+  },
+  {
+   "t": 678.4,
+   "d": 2.56,
+   "text": "loop a thousand times uh doesn't mean"
+  },
+  {
+   "t": 680.96,
+   "d": 1.44,
+   "text": "you should make it loop a thousand times"
+  },
+  {
+   "t": 682.4,
+   "d": 1.92,
+   "text": "just because you could procedurally"
+  },
+  {
+   "t": 684.32,
+   "d": 1.44,
+   "text": "populate a warehouse with crates that"
+  },
+  {
+   "t": 685.76,
+   "d": 1.44,
+   "text": "the player has to search you know"
+  },
+  {
+   "t": 687.2,
+   "d": 1.92,
+   "text": "doesn't mean you should right uh and"
+  },
+  {
+   "t": 689.12,
+   "d": 2.4,
+   "text": "it's not necessarily like evil but there"
+  },
+  {
+   "t": 691.52,
+   "d": 1.2,
+   "text": "could be this part of you that's like"
+  },
+  {
+   "t": 692.72,
+   "d": 0.96,
+   "text": "yeah i want to give the player more"
+  },
+  {
+   "t": 693.68,
+   "d": 2.32,
+   "text": "gameplay uh hours and hours of gameplay"
+  },
+  {
+   "t": 696.0,
+   "d": 1.28,
+   "text": "but you know there's this sort of"
+  },
+  {
+   "t": 697.28,
+   "d": 2.8,
+   "text": "zealotry that can emerge uh when you're"
+  },
+  {
+   "t": 700.08,
+   "d": 1.36,
+   "text": "you know tinkering with these kinds of"
+  },
+  {
+   "t": 701.44,
+   "d": 3.04,
+   "text": "things to try and make them"
+  },
+  {
+   "t": 704.48,
+   "d": 1.6,
+   "text": "express themselves in the most extreme"
+  },
+  {
+   "t": 706.08,
+   "d": 2.56,
+   "text": "way i guess"
+  },
+  {
+   "t": 708.96,
+   "d": 2.24,
+   "text": "all right next up some stuff from moon"
+  },
+  {
+   "t": 711.2,
+   "d": 2.32,
+   "text": "crash"
+  },
+  {
+   "t": 713.52,
+   "d": 2.48,
+   "text": "uh so moon crash uh it was a dlc for our"
+  },
+  {
+   "t": 716.0,
+   "d": 3.12,
+   "text": "immersive sim prey um took a lot of the"
+  },
+  {
+   "t": 719.12,
+   "d": 1.68,
+   "text": "the immersive some tenets and introduced"
+  },
+  {
+   "t": 720.8,
+   "d": 1.76,
+   "text": "some roguelike elements to it"
+  },
+  {
+   "t": 722.56,
+   "d": 1.52,
+   "text": "we used this framing story that the"
+  },
+  {
+   "t": 724.08,
+   "d": 1.92,
+   "text": "player is a hacker trying to break into"
+  },
+  {
+   "t": 726.0,
+   "d": 1.92,
+   "text": "a simulation of a moon base that way we"
+  },
+  {
+   "t": 727.92,
+   "d": 2.0,
+   "text": "had our nice framing story so we could"
+  },
+  {
+   "t": 729.92,
+   "d": 2.8,
+   "text": "have our sort of static narrative uh"
+  },
+  {
+   "t": 732.72,
+   "d": 2.88,
+   "text": "being told while all the loopy"
+  },
+  {
+   "t": 735.6,
+   "d": 2.16,
+   "text": "system stuff is happening safely"
+  },
+  {
+   "t": 737.76,
+   "d": 1.44,
+   "text": "contained within so it's kind of like"
+  },
+  {
+   "t": 739.2,
+   "d": 1.92,
+   "text": "having our cake and eating it too"
+  },
+  {
+   "t": 741.12,
+   "d": 2.24,
+   "text": "the player has to escape from the moon"
+  },
+  {
+   "t": 743.36,
+   "d": 1.84,
+   "text": "simulation five different ways with five"
+  },
+  {
+   "t": 745.2,
+   "d": 1.68,
+   "text": "different characters uh among other"
+  },
+  {
+   "t": 746.88,
+   "d": 1.68,
+   "text": "things but that's the sort of"
+  },
+  {
+   "t": 748.56,
+   "d": 2.08,
+   "text": "thrust of the whole experience"
+  },
+  {
+   "t": 750.64,
+   "d": 1.44,
+   "text": "uh we didn't start with roguelikes as a"
+  },
+  {
+   "t": 752.08,
+   "d": 1.28,
+   "text": "thing to dissect and incorporate"
+  },
+  {
+   "t": 753.36,
+   "d": 1.6,
+   "text": "necessarily we just"
+  },
+  {
+   "t": 754.96,
+   "d": 1.52,
+   "text": "wanted to come up with economic ways to"
+  },
+  {
+   "t": 756.48,
+   "d": 1.76,
+   "text": "create new and interesting experiences"
+  },
+  {
+   "t": 758.24,
+   "d": 1.68,
+   "text": "and we were playing you know some of us"
+  },
+  {
+   "t": 759.92,
+   "d": 1.44,
+   "text": "were playing like darkest dungeon rogue"
+  },
+  {
+   "t": 761.36,
+   "d": 1.68,
+   "text": "legacy you risk a brain stuff like that"
+  },
+  {
+   "t": 763.04,
+   "d": 1.44,
+   "text": "at the time and so there were lots of"
+  },
+  {
+   "t": 764.48,
+   "d": 2.24,
+   "text": "ideas like hey this could fit in this"
+  },
+  {
+   "t": 766.72,
+   "d": 3.92,
+   "text": "could you know be applied and such"
+  },
+  {
+   "t": 770.64,
+   "d": 1.52,
+   "text": "and in the process of doing that you"
+  },
+  {
+   "t": 772.16,
+   "d": 1.44,
+   "text": "know we had this sort of two"
+  },
+  {
+   "t": 773.6,
+   "d": 2.0,
+   "text": "two genres that were sort of smashing"
+  },
+  {
+   "t": 775.6,
+   "d": 1.12,
+   "text": "together like peanut butter and"
+  },
+  {
+   "t": 776.72,
+   "d": 2.64,
+   "text": "chocolate or whatever um and some some"
+  },
+  {
+   "t": 779.36,
+   "d": 2.0,
+   "text": "ideas very neatly fit within that vin"
+  },
+  {
+   "t": 781.36,
+   "d": 2.0,
+   "text": "slice in the middle you know for for"
+  },
+  {
+   "t": 783.36,
+   "d": 1.12,
+   "text": "moon crash and then there were some"
+  },
+  {
+   "t": 784.48,
+   "d": 1.92,
+   "text": "things that we like we were trying to"
+  },
+  {
+   "t": 786.4,
+   "d": 2.08,
+   "text": "get in from either angle like what if"
+  },
+  {
+   "t": 788.48,
+   "d": 2.0,
+   "text": "there were a more you know authored"
+  },
+  {
+   "t": 790.48,
+   "d": 2.0,
+   "text": "narrative uh for drama purposes or"
+  },
+  {
+   "t": 792.48,
+   "d": 1.28,
+   "text": "whatever or what if there were more"
+  },
+  {
+   "t": 793.76,
+   "d": 1.92,
+   "text": "procedural generation or stuff like that"
+  },
+  {
+   "t": 795.68,
+   "d": 2.24,
+   "text": "and some some things just did not quite"
+  },
+  {
+   "t": 797.92,
+   "d": 2.56,
+   "text": "slot in there due to you know mechanics"
+  },
+  {
+   "t": 800.48,
+   "d": 3.44,
+   "text": "theme budget stuff like that"
+  },
+  {
+   "t": 803.92,
+   "d": 1.52,
+   "text": "one of the first major things we talked"
+  },
+  {
+   "t": 805.44,
+   "d": 2.56,
+   "text": "about was death and replay i mean the"
+  },
+  {
+   "t": 808.0,
+   "d": 3.12,
+   "text": "whole thing is about loops um"
+  },
+  {
+   "t": 811.12,
+   "d": 1.92,
+   "text": "death and loops um"
+  },
+  {
+   "t": 813.04,
+   "d": 1.36,
+   "text": "and so"
+  },
+  {
+   "t": 814.4,
+   "d": 2.56,
+   "text": "uh yeah we basically explored lots of"
+  },
+  {
+   "t": 816.96,
+   "d": 1.76,
+   "text": "different options and we distilled"
+  },
+  {
+   "t": 818.72,
+   "d": 1.76,
+   "text": "everything down to two models that we"
+  },
+  {
+   "t": 820.48,
+   "d": 1.6,
+   "text": "ended up calling the spelunky and rogue"
+  },
+  {
+   "t": 822.08,
+   "d": 1.28,
+   "text": "legacy models i realize there are lots"
+  },
+  {
+   "t": 823.36,
+   "d": 2.0,
+   "text": "of other games that do similar kinds of"
+  },
+  {
+   "t": 825.36,
+   "d": 1.52,
+   "text": "things with their with their death and"
+  },
+  {
+   "t": 826.88,
+   "d": 1.2,
+   "text": "stuff like that but those are just the"
+  },
+  {
+   "t": 828.08,
+   "d": 2.08,
+   "text": "ones we we settled on"
+  },
+  {
+   "t": 830.16,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 830.96,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 831.84,
+   "d": 3.2,
+   "text": "yeah so the spelunky model was okay the"
+  },
+  {
+   "t": 835.04,
+   "d": 1.6,
+   "text": "the game is stateless right you can play"
+  },
+  {
+   "t": 836.64,
+   "d": 1.92,
+   "text": "this thing over and over and over again"
+  },
+  {
+   "t": 838.56,
+   "d": 2.24,
+   "text": "every time you play it it starts from"
+  },
+  {
+   "t": 840.8,
+   "d": 1.6,
+   "text": "the start you know ignoring the the"
+  },
+  {
+   "t": 842.4,
+   "d": 2.56,
+   "text": "shortcuts and whatever and splunky um it"
+  },
+  {
+   "t": 844.96,
+   "d": 1.6,
+   "text": "is basically like a sport or like a"
+  },
+  {
+   "t": 846.56,
+   "d": 1.2,
+   "text": "session based kind of thing you know"
+  },
+  {
+   "t": 847.76,
+   "d": 1.2,
+   "text": "they had the daily challenge and stuff"
+  },
+  {
+   "t": 848.96,
+   "d": 1.52,
+   "text": "like that we even thought about daily"
+  },
+  {
+   "t": 850.48,
+   "d": 2.8,
+   "text": "challenges and things of that nature um"
+  },
+  {
+   "t": 853.28,
+   "d": 1.6,
+   "text": "so yeah that was that was one model and"
+  },
+  {
+   "t": 854.88,
+   "d": 2.72,
+   "text": "then on the other hand we had the"
+  },
+  {
+   "t": 857.6,
+   "d": 2.16,
+   "text": "rogue legacy model where death is kind"
+  },
+  {
+   "t": 859.76,
+   "d": 1.52,
+   "text": "of brought inside the systems with"
+  },
+  {
+   "t": 861.28,
+   "d": 1.2,
+   "text": "persistence"
+  },
+  {
+   "t": 862.48,
+   "d": 1.76,
+   "text": "uh there's progress towards an ultimate"
+  },
+  {
+   "t": 864.24,
+   "d": 1.68,
+   "text": "goal that you don't just get the first"
+  },
+  {
+   "t": 865.92,
+   "d": 2.64,
+   "text": "time through i i'm sure people probably"
+  },
+  {
+   "t": 868.56,
+   "d": 2.16,
+   "text": "could uh but you're ultimately trying to"
+  },
+  {
+   "t": 870.72,
+   "d": 1.52,
+   "text": "do something"
+  },
+  {
+   "t": 872.24,
+   "d": 1.52,
+   "text": "far-reaching and you're getting there"
+  },
+  {
+   "t": 873.76,
+   "d": 1.84,
+   "text": "through multiple deaths through you know"
+  },
+  {
+   "t": 875.6,
+   "d": 2.16,
+   "text": "playing through the game right um so we"
+  },
+  {
+   "t": 877.76,
+   "d": 3.12,
+   "text": "we took this uh this idea and ran with"
+  },
+  {
+   "t": 880.88,
+   "d": 1.44,
+   "text": "that for our game"
+  },
+  {
+   "t": 882.32,
+   "d": 2.96,
+   "text": "and for for various reasons i'll mention"
+  },
+  {
+   "t": 885.28,
+   "d": 2.72,
+   "text": "soon i guess um"
+  },
+  {
+   "t": 888.0,
+   "d": 2.08,
+   "text": "yeah so we we incorporated that um and"
+  },
+  {
+   "t": 890.08,
+   "d": 1.6,
+   "text": "we went an additional step having"
+  },
+  {
+   "t": 891.68,
+   "d": 1.68,
+   "text": "multiple characters that you could play"
+  },
+  {
+   "t": 893.36,
+   "d": 2.32,
+   "text": "so now you have this meta progression"
+  },
+  {
+   "t": 895.68,
+   "d": 2.16,
+   "text": "on top but then you've got sort of loops"
+  },
+  {
+   "t": 897.84,
+   "d": 1.6,
+   "text": "within loops so"
+  },
+  {
+   "t": 899.44,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 900.4,
+   "d": 1.12,
+   "text": "yeah so"
+  },
+  {
+   "t": 901.52,
+   "d": 1.76,
+   "text": "the characters uh you unlock them as you"
+  },
+  {
+   "t": 903.28,
+   "d": 0.88,
+   "text": "play"
+  },
+  {
+   "t": 904.16,
+   "d": 2.4,
+   "text": "uh inspiration partially from risk of"
+  },
+  {
+   "t": 906.56,
+   "d": 1.68,
+   "text": "rain uh mostly from risk of brain"
+  },
+  {
+   "t": 908.24,
+   "d": 2.32,
+   "text": "honestly but also like maniac mansion"
+  },
+  {
+   "t": 910.56,
+   "d": 1.92,
+   "text": "maybe just in my head but you know that"
+  },
+  {
+   "t": 912.48,
+   "d": 1.44,
+   "text": "was something that kind of loomed large"
+  },
+  {
+   "t": 913.92,
+   "d": 1.76,
+   "text": "in my my background"
+  },
+  {
+   "t": 915.68,
+   "d": 2.16,
+   "text": "um but when one character dies you play"
+  },
+  {
+   "t": 917.84,
+   "d": 2.56,
+   "text": "with or escapes i guess um you play with"
+  },
+  {
+   "t": 920.4,
+   "d": 1.52,
+   "text": "another character and they they kind of"
+  },
+  {
+   "t": 921.92,
+   "d": 2.56,
+   "text": "step in uh exactly where the last one"
+  },
+  {
+   "t": 924.48,
+   "d": 3.12,
+   "text": "left off so you get this accountability"
+  },
+  {
+   "t": 927.6,
+   "d": 1.36,
+   "text": "and sort of"
+  },
+  {
+   "t": 928.96,
+   "d": 1.92,
+   "text": "long-range player agency where your"
+  },
+  {
+   "t": 930.88,
+   "d": 2.88,
+   "text": "choices then impact your next self who"
+  },
+  {
+   "t": 933.76,
+   "d": 1.6,
+   "text": "can then make choices and impact your"
+  },
+  {
+   "t": 935.36,
+   "d": 2.32,
+   "text": "next self and so forth until"
+  },
+  {
+   "t": 937.68,
+   "d": 1.84,
+   "text": "all five of the characters either escape"
+  },
+  {
+   "t": 939.52,
+   "d": 1.44,
+   "text": "or die and then the whole simulation"
+  },
+  {
+   "t": 940.96,
+   "d": 2.56,
+   "text": "resets and you start over there's some"
+  },
+  {
+   "t": 943.52,
+   "d": 2.4,
+   "text": "meta progression currency and stuff that"
+  },
+  {
+   "t": 945.92,
+   "d": 1.84,
+   "text": "you can use to sort of beef up your"
+  },
+  {
+   "t": 947.76,
+   "d": 1.28,
+   "text": "characters and give them more options"
+  },
+  {
+   "t": 949.04,
+   "d": 2.16,
+   "text": "sort of like rug legacy but uh the"
+  },
+  {
+   "t": 951.2,
+   "d": 1.68,
+   "text": "simulation itself resets and so all the"
+  },
+  {
+   "t": 952.88,
+   "d": 2.4,
+   "text": "escapes reset doors"
+  },
+  {
+   "t": 955.28,
+   "d": 2.48,
+   "text": "re-lock or unlock and things like that"
+  },
+  {
+   "t": 957.76,
+   "d": 0.88,
+   "text": "right"
+  },
+  {
+   "t": 958.64,
+   "d": 1.52,
+   "text": "um"
+  },
+  {
+   "t": 960.16,
+   "d": 1.44,
+   "text": "but yeah they pick up in the same world"
+  },
+  {
+   "t": 961.6,
+   "d": 1.52,
+   "text": "but the last one left off and so you get"
+  },
+  {
+   "t": 963.12,
+   "d": 2.0,
+   "text": "this interesting choice structure where"
+  },
+  {
+   "t": 965.12,
+   "d": 1.68,
+   "text": "you can have a whole lot of loot as one"
+  },
+  {
+   "t": 966.8,
+   "d": 1.76,
+   "text": "character and then you can escape on a"
+  },
+  {
+   "t": 968.56,
+   "d": 2.32,
+   "text": "shuttle and take all that stuff with you"
+  },
+  {
+   "t": 970.88,
+   "d": 1.84,
+   "text": "and then your remaining selves don't"
+  },
+  {
+   "t": 972.72,
+   "d": 1.76,
+   "text": "have access to that stuff because the"
+  },
+  {
+   "t": 974.48,
+   "d": 2.16,
+   "text": "the base is a fine ad resource"
+  },
+  {
+   "t": 976.64,
+   "d": 2.48,
+   "text": "so every drawer you loot is now empty"
+  },
+  {
+   "t": 979.12,
+   "d": 1.36,
+   "text": "for the rest of the run"
+  },
+  {
+   "t": 980.48,
+   "d": 1.6,
+   "text": "so you have to make choices or or your"
+  },
+  {
+   "t": 982.08,
+   "d": 1.12,
+   "text": "character could have all this stuff and"
+  },
+  {
+   "t": 983.2,
+   "d": 2.16,
+   "text": "then die and then be resurrected as a"
+  },
+  {
+   "t": 985.36,
+   "d": 1.04,
+   "text": "monster"
+  },
+  {
+   "t": 986.4,
+   "d": 1.84,
+   "text": "that your next self has to fight to get"
+  },
+  {
+   "t": 988.24,
+   "d": 2.0,
+   "text": "that stuff if that's your you know what"
+  },
+  {
+   "t": 990.24,
+   "d": 3.12,
+   "text": "you want to do basically"
+  },
+  {
+   "t": 994.32,
+   "d": 2.08,
+   "text": "uh so another aspect from roguelikes we"
+  },
+  {
+   "t": 996.4,
+   "d": 2.56,
+   "text": "we dabbled with and took on uh took on"
+  },
+  {
+   "t": 998.96,
+   "d": 2.56,
+   "text": "in in a certain way uh was randomization"
+  },
+  {
+   "t": 1001.52,
+   "d": 2.08,
+   "text": "so we didn't go uh full-on procedural"
+  },
+  {
+   "t": 1003.6,
+   "d": 1.36,
+   "text": "generation just because of technical"
+  },
+  {
+   "t": 1004.96,
+   "d": 2.8,
+   "text": "constraints and uh expertise constraints"
+  },
+  {
+   "t": 1007.76,
+   "d": 2.96,
+   "text": "and things like that um"
+  },
+  {
+   "t": 1010.72,
+   "d": 1.44,
+   "text": "but because of the looping structure we"
+  },
+  {
+   "t": 1012.16,
+   "d": 2.16,
+   "text": "wanted to have variation in the spaces"
+  },
+  {
+   "t": 1014.32,
+   "d": 1.76,
+   "text": "because we didn't want it to be dry we"
+  },
+  {
+   "t": 1016.08,
+   "d": 1.52,
+   "text": "didn't want this you know repeatedly"
+  },
+  {
+   "t": 1017.6,
+   "d": 1.44,
+   "text": "going through the exact same space over"
+  },
+  {
+   "t": 1019.04,
+   "d": 1.84,
+   "text": "and over and over again"
+  },
+  {
+   "t": 1020.88,
+   "d": 2.08,
+   "text": "um and experiencing the exact same thing"
+  },
+  {
+   "t": 1022.96,
+   "d": 2.0,
+   "text": "so um"
+  },
+  {
+   "t": 1024.96,
+   "d": 1.76,
+   "text": "yeah we had limitations on the kind of"
+  },
+  {
+   "t": 1026.72,
+   "d": 1.92,
+   "text": "content we could do or the the amount of"
+  },
+  {
+   "t": 1028.64,
+   "d": 1.36,
+   "text": "content we could make and amount of"
+  },
+  {
+   "t": 1030.0,
+   "d": 2.0,
+   "text": "variability because it was all authored"
+  },
+  {
+   "t": 1032.0,
+   "d": 1.44,
+   "text": "we would turn on and off layers and"
+  },
+  {
+   "t": 1033.44,
+   "d": 1.76,
+   "text": "things like that and we had this robust"
+  },
+  {
+   "t": 1035.2,
+   "d": 2.8,
+   "text": "sort of serialized random number system"
+  },
+  {
+   "t": 1038.0,
+   "d": 1.76,
+   "text": "that uh we authored just for this game"
+  },
+  {
+   "t": 1039.76,
+   "d": 2.24,
+   "text": "where there would be just a chain of of"
+  },
+  {
+   "t": 1042.0,
+   "d": 1.92,
+   "text": "you know book so it could be uh"
+  },
+  {
+   "t": 1043.92,
+   "d": 1.92,
+   "text": "deterministic we had a chain of random"
+  },
+  {
+   "t": 1045.84,
+   "d": 2.16,
+   "text": "numbers that would say okay what is this"
+  },
+  {
+   "t": 1048.0,
+   "d": 2.0,
+   "text": "level's fire index okay this time around"
+  },
+  {
+   "t": 1050.0,
+   "d": 2.48,
+   "text": "it's two uh and then it would you know"
+  },
+  {
+   "t": 1052.48,
+   "d": 1.68,
+   "text": "set it up based off of fire index two"
+  },
+  {
+   "t": 1054.16,
+   "d": 1.92,
+   "text": "and stuff like that and sometimes there"
+  },
+  {
+   "t": 1056.08,
+   "d": 1.36,
+   "text": "were choices"
+  },
+  {
+   "t": 1057.44,
+   "d": 2.24,
+   "text": "that branched within those uh but anyway"
+  },
+  {
+   "t": 1059.68,
+   "d": 2.32,
+   "text": "uh so yeah so you can see here and this"
+  },
+  {
+   "t": 1062.0,
+   "d": 1.36,
+   "text": "this speaks to the sort of you know"
+  },
+  {
+   "t": 1063.36,
+   "d": 2.88,
+   "text": "fidelity choices or fidelity uh issues i"
+  },
+  {
+   "t": 1066.24,
+   "d": 2.16,
+   "text": "was talking about earlier where okay"
+  },
+  {
+   "t": 1068.4,
+   "d": 1.76,
+   "text": "what we want to do would adhere to a"
+  },
+  {
+   "t": 1070.16,
+   "d": 1.84,
+   "text": "certain quality of art"
+  },
+  {
+   "t": 1072.0,
+   "d": 1.68,
+   "text": "so that meant that if something is"
+  },
+  {
+   "t": 1073.68,
+   "d": 2.48,
+   "text": "burning then you know they want to have"
+  },
+  {
+   "t": 1076.16,
+   "d": 1.92,
+   "text": "pipes jutting out of the wall or the"
+  },
+  {
+   "t": 1078.08,
+   "d": 2.72,
+   "text": "stair banisters being melted or burned"
+  },
+  {
+   "t": 1080.8,
+   "d": 2.0,
+   "text": "down or whatever so that means there is"
+  },
+  {
+   "t": 1082.8,
+   "d": 1.92,
+   "text": "an over you know overhead to each of"
+  },
+  {
+   "t": 1084.72,
+   "d": 2.08,
+   "text": "those choices"
+  },
+  {
+   "t": 1086.8,
+   "d": 1.76,
+   "text": "i think in the long run what we came up"
+  },
+  {
+   "t": 1088.56,
+   "d": 2.72,
+   "text": "with was pretty good uh because"
+  },
+  {
+   "t": 1091.28,
+   "d": 1.84,
+   "text": "if we had a more granular or had had"
+  },
+  {
+   "t": 1093.12,
+   "d": 2.08,
+   "text": "much more um"
+  },
+  {
+   "t": 1095.2,
+   "d": 2.72,
+   "text": "art bandwidth then we would come across"
+  },
+  {
+   "t": 1097.92,
+   "d": 1.44,
+   "text": "what i ended up calling the the chopped"
+  },
+  {
+   "t": 1099.36,
+   "d": 1.28,
+   "text": "salad effect"
+  },
+  {
+   "t": 1100.64,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1101.84,
+   "d": 2.24,
+   "text": "and kate compton uh wrote about the ten"
+  },
+  {
+   "t": 1104.08,
+   "d": 1.52,
+   "text": "thousand bowls of oatmeal problem and i"
+  },
+  {
+   "t": 1105.6,
+   "d": 1.68,
+   "text": "think it's a very similar sort of thing"
+  },
+  {
+   "t": 1107.28,
+   "d": 2.4,
+   "text": "where if we had all these different"
+  },
+  {
+   "t": 1109.68,
+   "d": 1.6,
+   "text": "channels of randomization in every"
+  },
+  {
+   "t": 1111.28,
+   "d": 2.0,
+   "text": "single level like the moon bases a few"
+  },
+  {
+   "t": 1113.28,
+   "d": 2.08,
+   "text": "levels ringing a central uh center"
+  },
+  {
+   "t": 1115.36,
+   "d": 1.36,
+   "text": "crater level"
+  },
+  {
+   "t": 1116.72,
+   "d": 2.24,
+   "text": "um but yeah so if you have all these"
+  },
+  {
+   "t": 1118.96,
+   "d": 2.0,
+   "text": "different little random elements"
+  },
+  {
+   "t": 1120.96,
+   "d": 2.64,
+   "text": "in one level uh these are you know this"
+  },
+  {
+   "t": 1123.6,
+   "d": 1.84,
+   "text": "depiction is is hazards basically so"
+  },
+  {
+   "t": 1125.44,
+   "d": 3.44,
+   "text": "that flooding radiation fire etc"
+  },
+  {
+   "t": 1128.88,
+   "d": 1.76,
+   "text": "if you've got all these different"
+  },
+  {
+   "t": 1130.64,
+   "d": 2.4,
+   "text": "uh sort of representations of those in"
+  },
+  {
+   "t": 1133.04,
+   "d": 1.68,
+   "text": "one level you go to the next level and"
+  },
+  {
+   "t": 1134.72,
+   "d": 2.96,
+   "text": "you get that same sort of mix um it"
+  },
+  {
+   "t": 1137.68,
+   "d": 1.28,
+   "text": "becomes indistinguishable right it's"
+  },
+  {
+   "t": 1138.96,
+   "d": 1.68,
+   "text": "like a bite of a chopped salad it's like"
+  },
+  {
+   "t": 1140.64,
+   "d": 1.36,
+   "text": "it tastes the same you get the same"
+  },
+  {
+   "t": 1142.0,
+   "d": 2.16,
+   "text": "experiential effect level the level so"
+  },
+  {
+   "t": 1144.16,
+   "d": 2.0,
+   "text": "we ended up making it chunkier so you"
+  },
+  {
+   "t": 1146.16,
+   "d": 2.32,
+   "text": "know this level's mostly fire this level"
+  },
+  {
+   "t": 1148.48,
+   "d": 1.6,
+   "text": "is mostly radiation and there were like"
+  },
+  {
+   "t": 1150.08,
+   "d": 1.84,
+   "text": "three or four variations of that so when"
+  },
+  {
+   "t": 1151.92,
+   "d": 1.6,
+   "text": "you come back to the fire version of"
+  },
+  {
+   "t": 1153.52,
+   "d": 1.52,
+   "text": "that level later it'll be a bit"
+  },
+  {
+   "t": 1155.04,
+   "d": 0.96,
+   "text": "different"
+  },
+  {
+   "t": 1156.0,
+   "d": 2.48,
+   "text": "um but that kept it chunkier basically"
+  },
+  {
+   "t": 1158.48,
+   "d": 2.16,
+   "text": "so there was a more experiential"
+  },
+  {
+   "t": 1160.64,
+   "d": 2.16,
+   "text": "or a greater experiential difference"
+  },
+  {
+   "t": 1162.8,
+   "d": 2.08,
+   "text": "going from one to the other"
+  },
+  {
+   "t": 1164.88,
+   "d": 1.6,
+   "text": "and then on top of that uh because like"
+  },
+  {
+   "t": 1166.48,
+   "d": 3.2,
+   "text": "i said we had an overarching progress uh"
+  },
+  {
+   "t": 1169.68,
+   "d": 1.28,
+   "text": "you know to the to the narrative into"
+  },
+  {
+   "t": 1170.96,
+   "d": 0.72,
+   "text": "the"
+  },
+  {
+   "t": 1171.68,
+   "d": 2.16,
+   "text": "i guess the completion of the game uh we"
+  },
+  {
+   "t": 1173.84,
+   "d": 2.64,
+   "text": "added hazards and variation as you go so"
+  },
+  {
+   "t": 1176.48,
+   "d": 2.4,
+   "text": "we you know at the beginning it's pretty"
+  },
+  {
+   "t": 1178.88,
+   "d": 1.92,
+   "text": "pretty calm and then we add"
+  },
+  {
+   "t": 1180.8,
+   "d": 1.44,
+   "text": "elements and add elements and stuff like"
+  },
+  {
+   "t": 1182.24,
+   "d": 1.68,
+   "text": "that until the end it's this kind of"
+  },
+  {
+   "t": 1183.92,
+   "d": 2.08,
+   "text": "fever pitch but you've had time to sort"
+  },
+  {
+   "t": 1186.0,
+   "d": 2.64,
+   "text": "of customize or custom accustom yourself"
+  },
+  {
+   "t": 1188.64,
+   "d": 2.56,
+   "text": "anyway get accustomed to"
+  },
+  {
+   "t": 1191.2,
+   "d": 3.36,
+   "text": "all the elements at play"
+  },
+  {
+   "t": 1195.04,
+   "d": 1.52,
+   "text": "uh finally"
+  },
+  {
+   "t": 1196.56,
+   "d": 2.64,
+   "text": "uh akin to roguelikes as well we we"
+  },
+  {
+   "t": 1199.2,
+   "d": 1.68,
+   "text": "incorporated high level player goals so"
+  },
+  {
+   "t": 1200.88,
+   "d": 1.76,
+   "text": "instead of micromanaging the player or"
+  },
+  {
+   "t": 1202.64,
+   "d": 1.68,
+   "text": "providing you know an objective"
+  },
+  {
+   "t": 1204.32,
+   "d": 1.28,
+   "text": "structure as you progress through the"
+  },
+  {
+   "t": 1205.6,
+   "d": 2.72,
+   "text": "space uh it was this checklist of things"
+  },
+  {
+   "t": 1208.32,
+   "d": 1.52,
+   "text": "you need to do and the the big thing on"
+  },
+  {
+   "t": 1209.84,
+   "d": 2.08,
+   "text": "the checklist was the five escapes run"
+  },
+  {
+   "t": 1211.92,
+   "d": 2.08,
+   "text": "so in one run of the simulation escape"
+  },
+  {
+   "t": 1214.0,
+   "d": 1.28,
+   "text": "with five people"
+  },
+  {
+   "t": 1215.28,
+   "d": 2.32,
+   "text": "in five different ways are the the five"
+  },
+  {
+   "t": 1217.6,
+   "d": 1.92,
+   "text": "ways you have available right uh and so"
+  },
+  {
+   "t": 1219.52,
+   "d": 1.36,
+   "text": "that was kind of like this puzzle box"
+  },
+  {
+   "t": 1220.88,
+   "d": 1.68,
+   "text": "thing you had to kind of figure out as"
+  },
+  {
+   "t": 1222.56,
+   "d": 3.12,
+   "text": "you go um but again like roguelikes do"
+  },
+  {
+   "t": 1225.68,
+   "d": 1.36,
+   "text": "this a lot where it's like okay get to"
+  },
+  {
+   "t": 1227.04,
+   "d": 1.6,
+   "text": "the bottom of the dungeon get to you"
+  },
+  {
+   "t": 1228.64,
+   "d": 1.6,
+   "text": "know all the way through this scenario"
+  },
+  {
+   "t": 1230.24,
+   "d": 2.88,
+   "text": "alive um and so we we kind of embrace"
+  },
+  {
+   "t": 1233.12,
+   "d": 2.24,
+   "text": "that also we do that at a smaller scale"
+  },
+  {
+   "t": 1235.36,
+   "d": 2.24,
+   "text": "in immersive sims a lot where it's like"
+  },
+  {
+   "t": 1237.6,
+   "d": 2.32,
+   "text": "get in this room get to this place we"
+  },
+  {
+   "t": 1239.92,
+   "d": 2.24,
+   "text": "don't care how just you know just do it"
+  },
+  {
+   "t": 1242.16,
+   "d": 2.0,
+   "text": "and we are not going to micromanage so"
+  },
+  {
+   "t": 1244.16,
+   "d": 1.68,
+   "text": "all the dating elements and things like"
+  },
+  {
+   "t": 1245.84,
+   "d": 1.36,
+   "text": "that we let the player figure out and we"
+  },
+  {
+   "t": 1247.2,
+   "d": 1.2,
+   "text": "just tell them"
+  },
+  {
+   "t": 1248.4,
+   "d": 3.28,
+   "text": "what to do not how to do it"
+  },
+  {
+   "t": 1252.64,
+   "d": 1.28,
+   "text": "all right"
+  },
+  {
+   "t": 1253.92,
+   "d": 2.4,
+   "text": "uh lastly uh reflections and lessons so"
+  },
+  {
+   "t": 1256.32,
+   "d": 2.32,
+   "text": "these are the sort of yeah takeaways"
+  },
+  {
+   "t": 1258.64,
+   "d": 2.88,
+   "text": "from this experience in in my mind um"
+  },
+  {
+   "t": 1261.52,
+   "d": 1.68,
+   "text": "and and trade-offs that we had to"
+  },
+  {
+   "t": 1263.2,
+   "d": 0.96,
+   "text": "basically"
+  },
+  {
+   "t": 1264.16,
+   "d": 2.16,
+   "text": "wrangle and that that still kind of have"
+  },
+  {
+   "t": 1266.32,
+   "d": 1.68,
+   "text": "stuck with me since then um because i"
+  },
+  {
+   "t": 1268.0,
+   "d": 1.6,
+   "text": "don't think we solved all of them by any"
+  },
+  {
+   "t": 1269.6,
+   "d": 2.88,
+   "text": "by any means uh drama versus replay so"
+  },
+  {
+   "t": 1272.48,
+   "d": 1.92,
+   "text": "you know how do you how do you reconcile"
+  },
+  {
+   "t": 1274.4,
+   "d": 3.6,
+   "text": "a replayable system uh with a dramatic"
+  },
+  {
+   "t": 1278.0,
+   "d": 1.92,
+   "text": "uh"
+  },
+  {
+   "t": 1279.92,
+   "d": 2.48,
+   "text": "telling of a story right um because"
+  },
+  {
+   "t": 1282.4,
+   "d": 2.48,
+   "text": "again like uh prey"
+  },
+  {
+   "t": 1284.88,
+   "d": 2.24,
+   "text": "death was not canonical you you die and"
+  },
+  {
+   "t": 1287.12,
+   "d": 1.28,
+   "text": "it resets so you never actually"
+  },
+  {
+   "t": 1288.4,
+   "d": 2.48,
+   "text": "canonically died it just you know"
+  },
+  {
+   "t": 1290.88,
+   "d": 2.48,
+   "text": "forked uh reality behind the scenes or"
+  },
+  {
+   "t": 1293.36,
+   "d": 1.52,
+   "text": "something right uh you know you've got"
+  },
+  {
+   "t": 1294.88,
+   "d": 3.2,
+   "text": "the the sounds of time sort of uh meta"
+  },
+  {
+   "t": 1298.08,
+   "d": 2.32,
+   "text": "sort of elbowing you and saying hey we"
+  },
+  {
+   "t": 1300.4,
+   "d": 1.84,
+   "text": "we realized that this guy died you know"
+  },
+  {
+   "t": 1302.24,
+   "d": 1.44,
+   "text": "oh that's not the story or that's not"
+  },
+  {
+   "t": 1303.68,
+   "d": 1.2,
+   "text": "the way it happened let me tell the"
+  },
+  {
+   "t": 1304.88,
+   "d": 2.32,
+   "text": "story again um so you know and we kind"
+  },
+  {
+   "t": 1307.2,
+   "d": 1.2,
+   "text": "of accomplished that with our framing"
+  },
+  {
+   "t": 1308.4,
+   "d": 1.84,
+   "text": "narrative so in the framing narrative"
+  },
+  {
+   "t": 1310.24,
+   "d": 1.76,
+   "text": "you can't die uh because you're just"
+  },
+  {
+   "t": 1312.0,
+   "d": 2.16,
+   "text": "isolated in a satellite and and all that"
+  },
+  {
+   "t": 1314.16,
+   "d": 1.28,
+   "text": "stuff and so"
+  },
+  {
+   "t": 1315.44,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1316.24,
+   "d": 2.88,
+   "text": "yeah it's a tricky one to solve"
+  },
+  {
+   "t": 1319.12,
+   "d": 1.36,
+   "text": "and the next up and this is a big one"
+  },
+  {
+   "t": 1320.48,
+   "d": 0.88,
+   "text": "and uh"
+  },
+  {
+   "t": 1321.36,
+   "d": 1.68,
+   "text": "we did not you know solve this by any"
+  },
+  {
+   "t": 1323.04,
+   "d": 2.48,
+   "text": "means we kind of sidestepped it a lot um"
+  },
+  {
+   "t": 1325.52,
+   "d": 1.28,
+   "text": "and i don't know if we were trying to"
+  },
+  {
+   "t": 1326.8,
+   "d": 1.52,
+   "text": "solve it necessarily but drama versus"
+  },
+  {
+   "t": 1328.32,
+   "d": 1.92,
+   "text": "agency like what can you do to keep the"
+  },
+  {
+   "t": 1330.24,
+   "d": 2.56,
+   "text": "player from messing up your"
+  },
+  {
+   "t": 1332.8,
+   "d": 2.0,
+   "text": "you know preciously planned narrative"
+  },
+  {
+   "t": 1334.8,
+   "d": 1.52,
+   "text": "right the the sort of final fantasy 7"
+  },
+  {
+   "t": 1336.32,
+   "d": 1.76,
+   "text": "thing of why didn't you use a phoenix"
+  },
+  {
+   "t": 1338.08,
+   "d": 1.36,
+   "text": "down or something like that uh"
+  },
+  {
+   "t": 1339.44,
+   "d": 1.92,
+   "text": "assassin's creed handles this by"
+  },
+  {
+   "t": 1341.36,
+   "d": 2.88,
+   "text": "desyncing you um and and then you get"
+  },
+  {
+   "t": 1344.24,
+   "d": 1.52,
+   "text": "like skyrim or you can just put a bucket"
+  },
+  {
+   "t": 1345.76,
+   "d": 1.6,
+   "text": "on someone's head and everything"
+  },
+  {
+   "t": 1347.36,
+   "d": 3.52,
+   "text": "continues uh as normal right um"
+  },
+  {
+   "t": 1350.88,
+   "d": 2.48,
+   "text": "so this this is something i became aware"
+  },
+  {
+   "t": 1353.36,
+   "d": 2.96,
+   "text": "of uh much more in sort of stark relief"
+  },
+  {
+   "t": 1356.32,
+   "d": 1.92,
+   "text": "but i don't think we necessarily solved"
+  },
+  {
+   "t": 1358.24,
+   "d": 2.32,
+   "text": "it we had we had some handcrafted"
+  },
+  {
+   "t": 1360.56,
+   "d": 1.2,
+   "text": "narrative bits but they were more like"
+  },
+  {
+   "t": 1361.76,
+   "d": 1.92,
+   "text": "flashbacky things that were individual"
+  },
+  {
+   "t": 1363.68,
+   "d": 2.32,
+   "text": "characters sort of storylines that were"
+  },
+  {
+   "t": 1366.0,
+   "d": 1.92,
+   "text": "orthogonally kind of"
+  },
+  {
+   "t": 1367.92,
+   "d": 3.04,
+   "text": "weaving through and on top of everything"
+  },
+  {
+   "t": 1370.96,
+   "d": 1.28,
+   "text": "but they weren't you know something you"
+  },
+  {
+   "t": 1372.24,
+   "d": 3.6,
+   "text": "could potentially fail or mess up"
+  },
+  {
+   "t": 1376.08,
+   "d": 1.68,
+   "text": "fidelity versus agency so this is a"
+  },
+  {
+   "t": 1377.76,
+   "d": 2.56,
+   "text": "tricky thing um you know in most games"
+  },
+  {
+   "t": 1380.32,
+   "d": 1.6,
+   "text": "the player just has guns for hands like"
+  },
+  {
+   "t": 1381.92,
+   "d": 2.8,
+   "text": "our friend daniel radcliff here um"
+  },
+  {
+   "t": 1384.72,
+   "d": 2.64,
+   "text": "uh and and you get situations like the"
+  },
+  {
+   "t": 1387.36,
+   "d": 3.2,
+   "text": "the you know much much uh panned press f"
+  },
+  {
+   "t": 1390.56,
+   "d": 2.88,
+   "text": "to pay respects uh in in the funeral"
+  },
+  {
+   "t": 1393.44,
+   "d": 1.12,
+   "text": "scene there the player doesn't really"
+  },
+  {
+   "t": 1394.56,
+   "d": 2.32,
+   "text": "have the verbs to actually express"
+  },
+  {
+   "t": 1396.88,
+   "d": 3.28,
+   "text": "grief um because on you know this just"
+  },
+  {
+   "t": 1400.16,
+   "d": 2.24,
+   "text": "shoot and duck and jump and things like"
+  },
+  {
+   "t": 1402.4,
+   "d": 2.48,
+   "text": "that um now with something like the sims"
+  },
+  {
+   "t": 1404.88,
+   "d": 2.16,
+   "text": "you can get these radial context wheels"
+  },
+  {
+   "t": 1407.04,
+   "d": 2.16,
+   "text": "that that give you that sort of"
+  },
+  {
+   "t": 1409.2,
+   "d": 2.96,
+   "text": "expressive range but it's"
+  },
+  {
+   "t": 1412.16,
+   "d": 1.92,
+   "text": "a disconnect from the immediacy of a"
+  },
+  {
+   "t": 1414.08,
+   "d": 1.68,
+   "text": "first person game right so how do you"
+  },
+  {
+   "t": 1415.76,
+   "d": 3.52,
+   "text": "solve that right uh you've got um"
+  },
+  {
+   "t": 1419.28,
+   "d": 1.52,
+   "text": "the concept of what i'm calling like"
+  },
+  {
+   "t": 1420.8,
+   "d": 1.52,
+   "text": "interaction articulation instead of"
+  },
+  {
+   "t": 1422.32,
+   "d": 1.28,
+   "text": "interaction scale where it's like how"
+  },
+  {
+   "t": 1423.6,
+   "d": 2.32,
+   "text": "fine-tuned can we push buttons and stuff"
+  },
+  {
+   "t": 1425.92,
+   "d": 2.08,
+   "text": "like that introduction articulation is"
+  },
+  {
+   "t": 1428.0,
+   "d": 0.96,
+   "text": "like how"
+  },
+  {
+   "t": 1428.96,
+   "d": 1.92,
+   "text": "yeah how can you express different"
+  },
+  {
+   "t": 1430.88,
+   "d": 1.84,
+   "text": "deeper feelings and thoughts and things"
+  },
+  {
+   "t": 1432.72,
+   "d": 1.68,
+   "text": "like that and then does the game have"
+  },
+  {
+   "t": 1434.4,
+   "d": 2.64,
+   "text": "the receptors to sort of receive those"
+  },
+  {
+   "t": 1437.04,
+   "d": 1.92,
+   "text": "and yeah how do you how you marry those"
+  },
+  {
+   "t": 1438.96,
+   "d": 5.16,
+   "text": "two up um and it's it's tricky"
+  },
+  {
+   "t": 1444.4,
+   "d": 3.28,
+   "text": "uh lastly or yeah lastly uh with the"
+  },
+  {
+   "t": 1447.68,
+   "d": 2.72,
+   "text": "trade-offs npc fidelity so uh and we"
+  },
+  {
+   "t": 1450.4,
+   "d": 2.08,
+   "text": "again we sidestep this in fact a lot of"
+  },
+  {
+   "t": 1452.48,
+   "d": 1.84,
+   "text": "immersive sims uh"
+  },
+  {
+   "t": 1454.32,
+   "d": 2.32,
+   "text": "you will find uh are on mostly abandoned"
+  },
+  {
+   "t": 1456.64,
+   "d": 1.92,
+   "text": "spaceships or space stations and that's"
+  },
+  {
+   "t": 1458.56,
+   "d": 3.04,
+   "text": "because npcs are hard uh that you don't"
+  },
+  {
+   "t": 1461.6,
+   "d": 2.48,
+   "text": "you know just shoot or whatever um but"
+  },
+  {
+   "t": 1464.08,
+   "d": 1.36,
+   "text": "you get the situation where you know"
+  },
+  {
+   "t": 1465.44,
+   "d": 1.68,
+   "text": "like the higher fidelity your character"
+  },
+  {
+   "t": 1467.12,
+   "d": 1.68,
+   "text": "is then you get situations like okay"
+  },
+  {
+   "t": 1468.8,
+   "d": 2.32,
+   "text": "this door do we have them actually grab"
+  },
+  {
+   "t": 1471.12,
+   "d": 2.0,
+   "text": "the doorknob turn the doorknob and open"
+  },
+  {
+   "t": 1473.12,
+   "d": 1.6,
+   "text": "it and that's that's a huge headache to"
+  },
+  {
+   "t": 1474.72,
+   "d": 3.04,
+   "text": "do in the the high fidelity space"
+  },
+  {
+   "t": 1477.76,
+   "d": 1.6,
+   "text": "um but if you look at something like"
+  },
+  {
+   "t": 1479.36,
+   "d": 1.52,
+   "text": "shadows of doubt here you know if a"
+  },
+  {
+   "t": 1480.88,
+   "d": 1.36,
+   "text": "character walked up to a door and it"
+  },
+  {
+   "t": 1482.24,
+   "d": 1.76,
+   "text": "just opened in that game you'd be fine"
+  },
+  {
+   "t": 1484.0,
+   "d": 1.44,
+   "text": "with it because everything is abstract"
+  },
+  {
+   "t": 1485.44,
+   "d": 2.56,
+   "text": "enough low resolution enough that would"
+  },
+  {
+   "t": 1488.0,
+   "d": 1.52,
+   "text": "probably work and i've incorporated"
+  },
+  {
+   "t": 1489.52,
+   "d": 2.96,
+   "text": "included the uh understanding comics"
+  },
+  {
+   "t": 1492.48,
+   "d": 1.92,
+   "text": "blurb about you know the more abstract"
+  },
+  {
+   "t": 1494.4,
+   "d": 1.28,
+   "text": "something is the more you can sort of"
+  },
+  {
+   "t": 1495.68,
+   "d": 2.96,
+   "text": "impress your own thoughts upon it um"
+  },
+  {
+   "t": 1498.64,
+   "d": 1.36,
+   "text": "you can see here the the example of"
+  },
+  {
+   "t": 1500.0,
+   "d": 1.6,
+   "text": "people sitting in chairs as well uh"
+  },
+  {
+   "t": 1501.6,
+   "d": 1.36,
+   "text": "people sitting in chairs is a huge"
+  },
+  {
+   "t": 1502.96,
+   "d": 2.72,
+   "text": "problem in an immersive or in in"
+  },
+  {
+   "t": 1505.68,
+   "d": 2.48,
+   "text": "triple-a games uh right and i think this"
+  },
+  {
+   "t": 1508.16,
+   "d": 2.08,
+   "text": "is uh star citizen but i'm not picking"
+  },
+  {
+   "t": 1510.24,
+   "d": 1.52,
+   "text": "on them specifically because i've been"
+  },
+  {
+   "t": 1511.76,
+   "d": 1.52,
+   "text": "in many projects where we had chairs and"
+  },
+  {
+   "t": 1513.28,
+   "d": 2.72,
+   "text": "people and it was a nightmare but if you"
+  },
+  {
+   "t": 1516.0,
+   "d": 1.84,
+   "text": "look at dwarf fortress all you have to"
+  },
+  {
+   "t": 1517.84,
+   "d": 1.44,
+   "text": "do to depict someone sitting in a chair"
+  },
+  {
+   "t": 1519.28,
+   "d": 1.44,
+   "text": "there is just flash"
+  },
+  {
+   "t": 1520.72,
+   "d": 2.24,
+   "text": "the two icons on top of each other and"
+  },
+  {
+   "t": 1522.96,
+   "d": 2.16,
+   "text": "that's person sitting in a chair"
+  },
+  {
+   "t": 1525.12,
+   "d": 1.84,
+   "text": "versus i don't know they're standing on"
+  },
+  {
+   "t": 1526.96,
+   "d": 1.88,
+   "text": "it because the capsule and"
+  },
+  {
+   "t": 1528.84,
+   "d": 2.44,
+   "text": "interrupted with the the geometry of the"
+  },
+  {
+   "t": 1531.28,
+   "d": 1.68,
+   "text": "chair and the nav mesh is not built and"
+  },
+  {
+   "t": 1532.96,
+   "d": 2.8,
+   "text": "you know stuff like that"
+  },
+  {
+   "t": 1536.48,
+   "d": 1.52,
+   "text": "so uh the future these you know these"
+  },
+  {
+   "t": 1538.0,
+   "d": 1.36,
+   "text": "are thoughts that came to me as i was"
+  },
+  {
+   "t": 1539.36,
+   "d": 0.96,
+   "text": "working on it was like wouldn't it be"
+  },
+  {
+   "t": 1540.32,
+   "d": 2.08,
+   "text": "cool if uh and then some projects i've"
+  },
+  {
+   "t": 1542.4,
+   "d": 1.92,
+   "text": "seen you know since then and stuff that"
+  },
+  {
+   "t": 1544.32,
+   "d": 1.6,
+   "text": "have triggered thoughts about where"
+  },
+  {
+   "t": 1545.92,
+   "d": 1.92,
+   "text": "these things could go um"
+  },
+  {
+   "t": 1547.84,
+   "d": 2.48,
+   "text": "looking at uh your sort of interaction"
+  },
+  {
+   "t": 1550.32,
+   "d": 2.88,
+   "text": "model uh you know back back in the"
+  },
+  {
+   "t": 1553.2,
+   "d": 1.2,
+   "text": "ops or something that was again called"
+  },
+  {
+   "t": 1554.4,
+   "d": 2.0,
+   "text": "elebits that really struck me because"
+  },
+  {
+   "t": 1556.4,
+   "d": 1.6,
+   "text": "you could use your wii remote to sort of"
+  },
+  {
+   "t": 1558.0,
+   "d": 1.44,
+   "text": "interact with the world in a more"
+  },
+  {
+   "t": 1559.44,
+   "d": 1.84,
+   "text": "isomorphic way i can twist something and"
+  },
+  {
+   "t": 1561.28,
+   "d": 1.44,
+   "text": "it's actually twisting it wasn't gesture"
+  },
+  {
+   "t": 1562.72,
+   "d": 1.44,
+   "text": "recognition which is"
+  },
+  {
+   "t": 1564.16,
+   "d": 2.48,
+   "text": "hit or miss miss mostly uh and then if"
+  },
+  {
+   "t": 1566.64,
+   "d": 1.2,
+   "text": "you look at something like alex or"
+  },
+  {
+   "t": 1567.84,
+   "d": 1.44,
+   "text": "boneworks or whatever now you've got"
+  },
+  {
+   "t": 1569.28,
+   "d": 1.92,
+   "text": "these vr you know"
+  },
+  {
+   "t": 1571.2,
+   "d": 1.04,
+   "text": "interaction models where you can"
+  },
+  {
+   "t": 1572.24,
+   "d": 1.6,
+   "text": "actually use your hands you don't have"
+  },
+  {
+   "t": 1573.84,
+   "d": 1.84,
+   "text": "to map all these things to a controller"
+  },
+  {
+   "t": 1575.68,
+   "d": 1.92,
+   "text": "you can say i want to examine this oh"
+  },
+  {
+   "t": 1577.6,
+   "d": 1.76,
+   "text": "i'll examine it i want to throw this i"
+  },
+  {
+   "t": 1579.36,
+   "d": 1.76,
+   "text": "want to drop it i want to you know"
+  },
+  {
+   "t": 1581.12,
+   "d": 1.6,
+   "text": "take it apart or whatever"
+  },
+  {
+   "t": 1582.72,
+   "d": 2.08,
+   "text": "it's all more intuitive versus having to"
+  },
+  {
+   "t": 1584.8,
+   "d": 2.16,
+   "text": "be mapped to something"
+  },
+  {
+   "t": 1586.96,
+   "d": 1.36,
+   "text": "so i think that's you know that's"
+  },
+  {
+   "t": 1588.32,
+   "d": 1.68,
+   "text": "definitely really cool"
+  },
+  {
+   "t": 1590.0,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 1590.88,
+   "d": 1.84,
+   "text": "and useful for immersive sims and things"
+  },
+  {
+   "t": 1592.72,
+   "d": 2.0,
+   "text": "like that uh next up is a sort of"
+  },
+  {
+   "t": 1594.72,
+   "d": 2.48,
+   "text": "moore's law inevitability of simulation"
+  },
+  {
+   "t": 1597.2,
+   "d": 1.44,
+   "text": "uh granularity and things like that if"
+  },
+  {
+   "t": 1598.64,
+   "d": 2.0,
+   "text": "you look at noita tear down things of"
+  },
+  {
+   "t": 1600.64,
+   "d": 1.04,
+   "text": "that nature"
+  },
+  {
+   "t": 1601.68,
+   "d": 2.64,
+   "text": "you get these worlds that can respond uh"
+  },
+  {
+   "t": 1604.32,
+   "d": 1.68,
+   "text": "very granularly and and very"
+  },
+  {
+   "t": 1606.0,
+   "d": 1.84,
+   "text": "consistently so it's not just oh yeah"
+  },
+  {
+   "t": 1607.84,
+   "d": 1.6,
+   "text": "we've got the one box you can set on"
+  },
+  {
+   "t": 1609.44,
+   "d": 1.84,
+   "text": "fire it's like no everything would can"
+  },
+  {
+   "t": 1611.28,
+   "d": 2.72,
+   "text": "be set on fire now um and and now it"
+  },
+  {
+   "t": 1614.0,
+   "d": 1.44,
+   "text": "becomes a design problem of okay what do"
+  },
+  {
+   "t": 1615.44,
+   "d": 1.52,
+   "text": "we do with that if you look at like the"
+  },
+  {
+   "t": 1616.96,
+   "d": 2.24,
+   "text": "you know red faction gorilla problem uh"
+  },
+  {
+   "t": 1619.2,
+   "d": 2.16,
+   "text": "of of uh solving those you know"
+  },
+  {
+   "t": 1621.36,
+   "d": 1.28,
+   "text": "destructible buildings and stuff like"
+  },
+  {
+   "t": 1622.64,
+   "d": 2.24,
+   "text": "that now it's in designs court to figure"
+  },
+  {
+   "t": 1624.88,
+   "d": 1.28,
+   "text": "that out if you have these kinds of"
+  },
+  {
+   "t": 1626.16,
+   "d": 2.0,
+   "text": "systems"
+  },
+  {
+   "t": 1628.16,
+   "d": 1.2,
+   "text": "and then lastly you've got a lot of"
+  },
+  {
+   "t": 1629.36,
+   "d": 1.28,
+   "text": "really powerful sort of procedural"
+  },
+  {
+   "t": 1630.64,
+   "d": 3.12,
+   "text": "generation tools and uh polygon pushing"
+  },
+  {
+   "t": 1633.76,
+   "d": 1.92,
+   "text": "at your disposal now so something like"
+  },
+  {
+   "t": 1635.68,
+   "d": 1.52,
+   "text": "the dwarf fortress mug that has a"
+  },
+  {
+   "t": 1637.2,
+   "d": 1.52,
+   "text": "thousand dwarves on it"
+  },
+  {
+   "t": 1638.72,
+   "d": 1.84,
+   "text": "all howling in pain or something you"
+  },
+  {
+   "t": 1640.56,
+   "d": 2.16,
+   "text": "could make that happen uh through"
+  },
+  {
+   "t": 1642.72,
+   "d": 2.32,
+   "text": "something like you know nanite in unreal"
+  },
+  {
+   "t": 1645.04,
+   "d": 2.48,
+   "text": "five or houdini where you can build you"
+  },
+  {
+   "t": 1647.52,
+   "d": 2.0,
+   "text": "know entire apartment complexes just by"
+  },
+  {
+   "t": 1649.52,
+   "d": 1.52,
+   "text": "dragging a box and clicking a button i"
+  },
+  {
+   "t": 1651.04,
+   "d": 2.32,
+   "text": "know it's more complicated than that but"
+  },
+  {
+   "t": 1653.36,
+   "d": 1.04,
+   "text": "those tools are sort of force"
+  },
+  {
+   "t": 1654.4,
+   "d": 2.24,
+   "text": "multipliers for people that want to"
+  },
+  {
+   "t": 1656.64,
+   "d": 1.76,
+   "text": "add more simulation and"
+  },
+  {
+   "t": 1658.4,
+   "d": 2.56,
+   "text": "and things like that to their worlds and"
+  },
+  {
+   "t": 1660.96,
+   "d": 2.16,
+   "text": "yeah"
+  },
+  {
+   "t": 1663.12,
+   "d": 1.84,
+   "text": "and uh that that is it for me there was"
+  },
+  {
+   "t": 1664.96,
+   "d": 2.56,
+   "text": "a yeah uh i'm sure i've blasted through"
+  },
+  {
+   "t": 1667.52,
+   "d": 1.52,
+   "text": "some of that a little too quickly but"
+  },
+  {
+   "t": 1669.04,
+   "d": 1.52,
+   "text": "that's that's all i got special thanks"
+  },
+  {
+   "t": 1670.56,
+   "d": 1.76,
+   "text": "to uh everyone on the moon crash team"
+  },
+  {
+   "t": 1672.32,
+   "d": 2.0,
+   "text": "that was trying something new and uh"
+  },
+  {
+   "t": 1674.32,
+   "d": 1.2,
+   "text": "sort of"
+  },
+  {
+   "t": 1675.52,
+   "d": 1.6,
+   "text": "burying their way through it and ricardo"
+  },
+  {
+   "t": 1677.12,
+   "d": 2.08,
+   "text": "bear for you know being um my lead and"
+  },
+  {
+   "t": 1679.2,
+   "d": 1.44,
+   "text": "collaborator on that and alexi and the"
+  },
+  {
+   "t": 1680.64,
+   "d": 2.08,
+   "text": "team for having me"
+  },
+  {
+   "t": 1682.72,
+   "d": 2.16,
+   "text": "thank you yeah this was really exciting"
+  },
+  {
+   "t": 1684.88,
+   "d": 2.0,
+   "text": "for me especially like i find i don't"
+  },
+  {
+   "t": 1686.88,
+   "d": 2.24,
+   "text": "think we talk about it as much here but"
+  },
+  {
+   "t": 1689.12,
+   "d": 1.6,
+   "text": "yeah when you get into the question of"
+  },
+  {
+   "t": 1690.72,
+   "d": 1.52,
+   "text": "you know well what about applying more"
+  },
+  {
+   "t": 1692.24,
+   "d": 1.6,
+   "text": "roguelike elements to more aaa"
+  },
+  {
+   "t": 1693.84,
+   "d": 1.2,
+   "text": "development i think a lot of the stuff"
+  },
+  {
+   "t": 1695.04,
+   "d": 2.08,
+   "text": "you touch upon with you know fidelity"
+  },
+  {
+   "t": 1697.12,
+   "d": 2.88,
+   "text": "and that kind of conflict is you know"
+  },
+  {
+   "t": 1700.0,
+   "d": 1.52,
+   "text": "what actually comes up is the problem"
+  },
+  {
+   "t": 1701.52,
+   "d": 1.36,
+   "text": "more than the question of like should we"
+  },
+  {
+   "t": 1702.88,
+   "d": 1.52,
+   "text": "do this or do we want to do this a lot"
+  },
+  {
+   "t": 1704.4,
+   "d": 1.44,
+   "text": "of the time the interest is there it's"
+  },
+  {
+   "t": 1705.84,
+   "d": 2.56,
+   "text": "the it's the how and"
+  },
+  {
+   "t": 1708.4,
+   "d": 1.6,
+   "text": "yeah i think immersive sims has been"
+  },
+  {
+   "t": 1710.0,
+   "d": 1.84,
+   "text": "coming up a lot lately in a lot of"
+  },
+  {
+   "t": 1711.84,
+   "d": 1.92,
+   "text": "different discussions so it's a good"
+  },
+  {
+   "t": 1713.76,
+   "d": 1.52,
+   "text": "time to talk about the links between the"
+  },
+  {
+   "t": 1715.28,
+   "d": 0.8,
+   "text": "two"
+  },
+  {
+   "t": 1716.08,
+   "d": 0.96,
+   "text": "yeah"
+  },
+  {
+   "t": 1717.04,
+   "d": 0.96,
+   "text": "cool"
+  },
+  {
+   "t": 1718.0,
+   "d": 2.0,
+   "text": "yeah i think um"
+  },
+  {
+   "t": 1720.0,
+   "d": 1.6,
+   "text": "if anyone wants to write a question real"
+  },
+  {
+   "t": 1721.6,
+   "d": 1.6,
+   "text": "fast but"
+  },
+  {
+   "t": 1723.2,
+   "d": 2.4,
+   "text": "otherwise i might i guess just"
+  },
+  {
+   "t": 1725.6,
+   "d": 2.8,
+   "text": "lead it and then i guess maybe if you"
+  },
+  {
+   "t": 1728.4,
+   "d": 2.56,
+   "text": "just had to narrow in and i know stuff"
+  },
+  {
+   "t": 1730.96,
+   "d": 1.28,
+   "text": "on the fly is always hard but kind of"
+  },
+  {
+   "t": 1732.24,
+   "d": 2.16,
+   "text": "pick something rogue likey from some of"
+  },
+  {
+   "t": 1734.4,
+   "d": 1.6,
+   "text": "your games you would have wanted to add"
+  },
+  {
+   "t": 1736.0,
+   "d": 1.76,
+   "text": "to moon crash if you've been able to or"
+  },
+  {
+   "t": 1737.76,
+   "d": 1.52,
+   "text": "if it's easier to flip it and kind of"
+  },
+  {
+   "t": 1739.28,
+   "d": 1.76,
+   "text": "take something from immersive sims you'd"
+  },
+  {
+   "t": 1741.04,
+   "d": 1.12,
+   "text": "want to see in more of your favorite"
+  },
+  {
+   "t": 1742.16,
+   "d": 2.0,
+   "text": "roguelikes um"
+  },
+  {
+   "t": 1744.16,
+   "d": 1.76,
+   "text": "what do you think you might pick i think"
+  },
+  {
+   "t": 1745.92,
+   "d": 1.76,
+   "text": "one thing i really wanted to incorporate"
+  },
+  {
+   "t": 1747.68,
+   "d": 1.04,
+   "text": "more into"
+  },
+  {
+   "t": 1748.72,
+   "d": 2.16,
+   "text": "moon crash was finding a way to bring in"
+  },
+  {
+   "t": 1750.88,
+   "d": 2.56,
+   "text": "a like more people more human beings to"
+  },
+  {
+   "t": 1753.44,
+   "d": 2.0,
+   "text": "interact with and that sort of thing uh"
+  },
+  {
+   "t": 1755.44,
+   "d": 1.44,
+   "text": "like living characters that you could"
+  },
+  {
+   "t": 1756.88,
+   "d": 3.84,
+   "text": "then bounce off of and interact with uh"
+  },
+  {
+   "t": 1760.72,
+   "d": 1.04,
+   "text": "that would have been really great i"
+  },
+  {
+   "t": 1761.76,
+   "d": 1.76,
+   "text": "think it was primarily a budgetary thing"
+  },
+  {
+   "t": 1763.52,
+   "d": 1.2,
+   "text": "if you look at something like death loop"
+  },
+  {
+   "t": 1764.72,
+   "d": 1.44,
+   "text": "they've got more more characters and"
+  },
+  {
+   "t": 1766.16,
+   "d": 1.28,
+   "text": "more sort of"
+  },
+  {
+   "t": 1767.44,
+   "d": 1.92,
+   "text": "narrative kind of"
+  },
+  {
+   "t": 1769.36,
+   "d": 2.48,
+   "text": "interacting with that so"
+  },
+  {
+   "t": 1771.84,
+   "d": 1.92,
+   "text": "yeah and maybe one other quick question"
+  },
+  {
+   "t": 1773.76,
+   "d": 1.6,
+   "text": "i'm curious if you have like an off cuff"
+  },
+  {
+   "t": 1775.36,
+   "d": 1.6,
+   "text": "answer but do you find that immersive"
+  },
+  {
+   "t": 1776.96,
+   "d": 1.6,
+   "text": "sims lens cell study particular"
+  },
+  {
+   "t": 1778.56,
+   "d": 2.32,
+   "text": "architecture like is ecs like editing"
+  },
+  {
+   "t": 1780.88,
+   "d": 1.52,
+   "text": "component system a good match is there"
+  },
+  {
+   "t": 1782.4,
+   "d": 1.84,
+   "text": "any kind of like common pattern for"
+  },
+  {
+   "t": 1784.24,
+   "d": 2.48,
+   "text": "doing immersive sims uh component based"
+  },
+  {
+   "t": 1786.72,
+   "d": 1.36,
+   "text": "stuff definitely because then you can"
+  },
+  {
+   "t": 1788.08,
+   "d": 1.44,
+   "text": "say this thing emits fire i'll just put"
+  },
+  {
+   "t": 1789.52,
+   "d": 1.92,
+   "text": "it on this and this and this and so that"
+  },
+  {
+   "t": 1791.44,
+   "d": 2.32,
+   "text": "that kind of thing i think um modularity"
+  },
+  {
+   "t": 1793.76,
+   "d": 1.84,
+   "text": "definitely helps yeah that makes a lot"
+  },
+  {
+   "t": 1795.6,
+   "d": 2.0,
+   "text": "of sense cool all right and that brings"
+  },
+  {
+   "t": 1797.6,
+   "d": 2.0,
+   "text": "us exactly to time so thank you so much"
+  },
+  {
+   "t": 1799.6,
+   "d": 2.88,
+   "text": "rich for talking and uh yeah"
+  },
+  {
+   "t": 1802.48,
+   "d": 3.92,
+   "text": "i hope to see you around in the space"
+  }
+ ]
+}

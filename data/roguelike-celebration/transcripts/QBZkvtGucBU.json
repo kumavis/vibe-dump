@@ -1,0 +1,5106 @@
+{
+ "id": "QBZkvtGucBU",
+ "url": "https://www.youtube.com/watch?v=QBZkvtGucBU",
+ "title": "George Moromisato - Love Letter to Nethack",
+ "speaker": "George Moromisato",
+ "talk_title": "Love Letter to Nethack",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 2007,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nGeorge Moromisato will talk about his love for Nethack and how adapting its mechanics to his game, Transcendence, taught him more about game design than any course or book. Along the way he’ll speculate on what makes Nethack (and other Roguelikes) so special, and what makes them so much deeper and engaging than many big budget games.\n\nGeorge Moromisato is an American software engineer and game designer. He’s been programming for 70% of his life and has worked at Microsoft, IBM, and Lotus Development Corporation. He is the creator of several computer games, including Anacreon (one of the first 4X games), Chron X (the first online collectible card game), and most recently, Transcendence. You can reach him via email (gpm@kronosaur.com) or Twitter (@Transcendence).",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 100,
+   "title": "Nethack as Inspiration"
+  },
+  {
+   "start": 206,
+   "title": "Translating Nethack"
+  },
+  {
+   "start": 352,
+   "title": "Roguelikes vs AAA"
+  },
+  {
+   "start": 453,
+   "title": "Design Distinctions"
+  },
+  {
+   "start": 578,
+   "title": "Modern Roguelikes"
+  },
+  {
+   "start": 637,
+   "title": "Combinatorial Complexity"
+  },
+  {
+   "start": 788,
+   "title": "Knowledge Based Design"
+  },
+  {
+   "start": 943,
+   "title": "Managing Complex Verbs"
+  },
+  {
+   "start": 1100,
+   "title": "Dev Team System Design"
+  },
+  {
+   "start": 1230,
+   "title": "Random Rewards"
+  },
+  {
+   "start": 1378,
+   "title": "Variety as Quality"
+  },
+  {
+   "start": 1548,
+   "title": "Indie Development Lessons"
+  },
+  {
+   "start": 1716,
+   "title": "Q&A"
+  },
+  {
+   "start": 1981,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6232,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 13.68,
+   "d": 4.24,
+   "text": "i'm starting"
+  },
+  {
+   "t": 21.76,
+   "d": 1.92,
+   "text": "hi everyone hello welcome to the"
+  },
+  {
+   "t": 23.68,
+   "d": 1.84,
+   "text": "roguelike celebration"
+  },
+  {
+   "t": 25.52,
+   "d": 3.28,
+   "text": "uh thanks for coming it's a nice it's an"
+  },
+  {
+   "t": 28.8,
+   "d": 2.0,
+   "text": "intimate intimate crowd so definitely"
+  },
+  {
+   "t": 30.8,
+   "d": 1.04,
+   "text": "please feel free"
+  },
+  {
+   "t": 31.84,
+   "d": 1.28,
+   "text": "we'll you know do it a little bit"
+  },
+  {
+   "t": 33.12,
+   "d": 1.76,
+   "text": "interactive right i mean why not we we"
+  },
+  {
+   "t": 34.88,
+   "d": 1.44,
+   "text": "get we get if we can do it we should do"
+  },
+  {
+   "t": 36.32,
+   "d": 0.48,
+   "text": "it"
+  },
+  {
+   "t": 36.8,
+   "d": 2.4,
+   "text": "um my name is george moore masada"
+  },
+  {
+   "t": 39.2,
+   "d": 1.28,
+   "text": "founder of chronosword productions i've"
+  },
+  {
+   "t": 40.48,
+   "d": 2.0,
+   "text": "got a couple of games in acroyon chronix"
+  },
+  {
+   "t": 42.48,
+   "d": 1.36,
+   "text": "transcendence"
+  },
+  {
+   "t": 43.84,
+   "d": 3.68,
+   "text": "today i'm going to talk about net hack"
+  },
+  {
+   "t": 47.52,
+   "d": 3.52,
+   "text": "net hack net hack in particular"
+  },
+  {
+   "t": 51.04,
+   "d": 3.2,
+   "text": "is something that inspired transcendence"
+  },
+  {
+   "t": 54.24,
+   "d": 2.96,
+   "text": "and and and um i just when i played it"
+  },
+  {
+   "t": 57.2,
+   "d": 0.8,
+   "text": "back when i was"
+  },
+  {
+   "t": 58.0,
+   "d": 2.56,
+   "text": "you know whatever 20 years old i just"
+  },
+  {
+   "t": 60.56,
+   "d": 1.76,
+   "text": "loved it so much"
+  },
+  {
+   "t": 62.32,
+   "d": 2.08,
+   "text": "that um i wanted to essentially create a"
+  },
+  {
+   "t": 64.4,
+   "d": 1.68,
+   "text": "game that was just like"
+  },
+  {
+   "t": 66.08,
+   "d": 7.76,
+   "text": "it i'm going to let people filing"
+  },
+  {
+   "t": 83.84,
+   "d": 1.12,
+   "text": "all right this is not going to be"
+  },
+  {
+   "t": 84.96,
+   "d": 1.25,
+   "text": "interactive"
+  },
+  {
+   "t": 86.21,
+   "d": 3.38,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 91.02,
+   "d": 3.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 100.64,
+   "d": 3.12,
+   "text": "all right let me uh start again"
+  },
+  {
+   "t": 103.76,
+   "d": 2.08,
+   "text": "welcome once again to the roguelike"
+  },
+  {
+   "t": 105.84,
+   "d": 1.28,
+   "text": "celebration my name is george moore"
+  },
+  {
+   "t": 107.12,
+   "d": 0.96,
+   "text": "masato"
+  },
+  {
+   "t": 108.08,
+   "d": 1.84,
+   "text": "founder of chronosome productions uh"
+  },
+  {
+   "t": 109.92,
+   "d": 0.96,
+   "text": "i've got a couple games that have"
+  },
+  {
+   "t": 110.88,
+   "d": 0.64,
+   "text": "created an"
+  },
+  {
+   "t": 111.52,
+   "d": 2.08,
+   "text": "acronym chronic transcendence and i'm"
+  },
+  {
+   "t": 113.6,
+   "d": 1.84,
+   "text": "going to talk today about nethack in"
+  },
+  {
+   "t": 115.44,
+   "d": 1.04,
+   "text": "particular"
+  },
+  {
+   "t": 116.48,
+   "d": 2.96,
+   "text": "nethack when i was 20 years old just"
+  },
+  {
+   "t": 119.44,
+   "d": 0.88,
+   "text": "inspired me"
+  },
+  {
+   "t": 120.32,
+   "d": 2.48,
+   "text": "to create uh transcendence because just"
+  },
+  {
+   "t": 122.8,
+   "d": 0.96,
+   "text": "the richness"
+  },
+  {
+   "t": 123.76,
+   "d": 2.4,
+   "text": "you know just how amazing that heck is"
+  },
+  {
+   "t": 126.16,
+   "d": 0.64,
+   "text": "you guys"
+  },
+  {
+   "t": 126.8,
+   "d": 2.32,
+   "text": "probably all know um it just made me"
+  },
+  {
+   "t": 129.12,
+   "d": 1.12,
+   "text": "want to create a game"
+  },
+  {
+   "t": 130.24,
+   "d": 1.6,
+   "text": "just like it and that's that's i think"
+  },
+  {
+   "t": 131.84,
+   "d": 1.6,
+   "text": "what i what i tried to do"
+  },
+  {
+   "t": 133.44,
+   "d": 1.92,
+   "text": "uh in transcendence so that's what i'm"
+  },
+  {
+   "t": 135.36,
+   "d": 1.76,
+   "text": "gonna do this talk but first"
+  },
+  {
+   "t": 137.12,
+   "d": 1.76,
+   "text": "a confession a very quick confession you"
+  },
+  {
+   "t": 138.88,
+   "d": 1.52,
+   "text": "know when i said uh"
+  },
+  {
+   "t": 140.4,
+   "d": 2.0,
+   "text": "i net hack inspired me to create"
+  },
+  {
+   "t": 142.4,
+   "d": 1.76,
+   "text": "transcendence i i might have said"
+  },
+  {
+   "t": 144.16,
+   "d": 3.28,
+   "text": "i copied nethack um and in fact if you"
+  },
+  {
+   "t": 147.44,
+   "d": 1.04,
+   "text": "think about all the games that i've"
+  },
+  {
+   "t": 148.48,
+   "d": 0.88,
+   "text": "created"
+  },
+  {
+   "t": 149.36,
+   "d": 2.88,
+   "text": "um i may have been inspired by a lot of"
+  },
+  {
+   "t": 152.24,
+   "d": 0.56,
+   "text": "other games"
+  },
+  {
+   "t": 152.8,
+   "d": 1.28,
+   "text": "in fact every single game that i've"
+  },
+  {
+   "t": 154.08,
+   "d": 2.88,
+   "text": "created i kind of have a pattern"
+  },
+  {
+   "t": 156.96,
+   "d": 2.08,
+   "text": "i just i just add sci-fi that's my"
+  },
+  {
+   "t": 159.04,
+   "d": 1.84,
+   "text": "pattern so you know"
+  },
+  {
+   "t": 160.88,
+   "d": 1.84,
+   "text": "an acronym i started this with this game"
+  },
+  {
+   "t": 162.72,
+   "d": 1.44,
+   "text": "called empire which was"
+  },
+  {
+   "t": 164.16,
+   "d": 1.36,
+   "text": "you know i love this game it's kind of"
+  },
+  {
+   "t": 165.52,
+   "d": 1.68,
+   "text": "one of the first 4x games"
+  },
+  {
+   "t": 167.2,
+   "d": 1.6,
+   "text": "i played it on a mainframe believe it or"
+  },
+  {
+   "t": 168.8,
+   "d": 2.24,
+   "text": "not and i said hey at sci-fi"
+  },
+  {
+   "t": 171.04,
+   "d": 1.36,
+   "text": "we'll do it out in space go back to"
+  },
+  {
+   "t": 172.4,
+   "d": 1.68,
+   "text": "conquest awesome"
+  },
+  {
+   "t": 174.08,
+   "d": 2.56,
+   "text": "magic the gathering in the 90s i thought"
+  },
+  {
+   "t": 176.64,
+   "d": 1.28,
+   "text": "amazing game just"
+  },
+  {
+   "t": 177.92,
+   "d": 2.48,
+   "text": "super super um awesome rules and richard"
+  },
+  {
+   "t": 180.4,
+   "d": 1.44,
+   "text": "garrett i think just did an amazing"
+  },
+  {
+   "t": 181.84,
+   "d": 1.12,
+   "text": "design"
+  },
+  {
+   "t": 182.96,
+   "d": 2.24,
+   "text": "hey at sci-fi you know cyberpunk"
+  },
+  {
+   "t": 185.2,
+   "d": 1.52,
+   "text": "dystopian world"
+  },
+  {
+   "t": 186.72,
+   "d": 1.68,
+   "text": "uh you know it's all on the computer so"
+  },
+  {
+   "t": 188.4,
+   "d": 1.6,
+   "text": "hey we get we get you know stealth and"
+  },
+  {
+   "t": 190.0,
+   "d": 1.12,
+   "text": "other stuff"
+  },
+  {
+   "t": 191.12,
+   "d": 3.6,
+   "text": "chronics come 2000"
+  },
+  {
+   "t": 194.72,
+   "d": 2.72,
+   "text": "i said net hack oh i love hack i"
+  },
+  {
+   "t": 197.44,
+   "d": 1.76,
+   "text": "remember how awesome it is"
+  },
+  {
+   "t": 199.2,
+   "d": 1.36,
+   "text": "i'm gonna do transcendence it's gonna"
+  },
+  {
+   "t": 200.56,
+   "d": 1.44,
+   "text": "i'm just gonna add sci-fi it's gonna be"
+  },
+  {
+   "t": 202.0,
+   "d": 1.52,
+   "text": "out in space it's gonna be you know"
+  },
+  {
+   "t": 203.52,
+   "d": 1.52,
+   "text": "instead of dungeons it's gonna be star"
+  },
+  {
+   "t": 205.04,
+   "d": 1.76,
+   "text": "systems awesome"
+  },
+  {
+   "t": 206.8,
+   "d": 2.64,
+   "text": "um and you know now by this time i think"
+  },
+  {
+   "t": 209.44,
+   "d": 0.56,
+   "text": "i've gotten"
+  },
+  {
+   "t": 210.0,
+   "d": 2.72,
+   "text": "a little bit better at being inspired at"
+  },
+  {
+   "t": 212.72,
+   "d": 0.8,
+   "text": "copying"
+  },
+  {
+   "t": 213.52,
+   "d": 1.92,
+   "text": "uh so it's not quite the same it's not"
+  },
+  {
+   "t": 215.44,
+   "d": 1.36,
+   "text": "it's now it's it's a little bit"
+  },
+  {
+   "t": 216.8,
+   "d": 0.8,
+   "text": "different it's"
+  },
+  {
+   "t": 217.6,
+   "d": 2.4,
+   "text": "i think i've taken what i think are some"
+  },
+  {
+   "t": 220.0,
+   "d": 1.36,
+   "text": "of the key elements that make"
+  },
+  {
+   "t": 221.36,
+   "d": 2.16,
+   "text": "nethack amazing some of the you know"
+  },
+  {
+   "t": 223.52,
+   "d": 1.2,
+   "text": "core principles"
+  },
+  {
+   "t": 224.72,
+   "d": 1.2,
+   "text": "and i tried to pull them into"
+  },
+  {
+   "t": 225.92,
+   "d": 2.08,
+   "text": "transcendence it didn't always work"
+  },
+  {
+   "t": 228.0,
+   "d": 1.36,
+   "text": "there are many cases where i tried to"
+  },
+  {
+   "t": 229.36,
+   "d": 1.12,
+   "text": "take something that just works"
+  },
+  {
+   "t": 230.48,
+   "d": 1.28,
+   "text": "beautifully in net hack"
+  },
+  {
+   "t": 231.76,
+   "d": 1.6,
+   "text": "and when i put in transcendence it just"
+  },
+  {
+   "t": 233.36,
+   "d": 1.76,
+   "text": "just doesn't work and so"
+  },
+  {
+   "t": 235.12,
+   "d": 2.4,
+   "text": "as a game designer trying to analyze you"
+  },
+  {
+   "t": 237.52,
+   "d": 1.44,
+   "text": "know why it works sometimes why it"
+  },
+  {
+   "t": 238.96,
+   "d": 1.52,
+   "text": "doesn't work other times you know what's"
+  },
+  {
+   "t": 240.48,
+   "d": 2.16,
+   "text": "so cool about net hack why is it that"
+  },
+  {
+   "t": 242.64,
+   "d": 2.08,
+   "text": "you know this part in nethack works that"
+  },
+  {
+   "t": 244.72,
+   "d": 1.84,
+   "text": "just helped me to grow and learn as a"
+  },
+  {
+   "t": 246.56,
+   "d": 0.88,
+   "text": "game designer"
+  },
+  {
+   "t": 247.44,
+   "d": 1.6,
+   "text": "so a lot of this talk is going to be i'm"
+  },
+  {
+   "t": 249.04,
+   "d": 1.36,
+   "text": "going to take some of those key"
+  },
+  {
+   "t": 250.4,
+   "d": 2.0,
+   "text": "principles that i learned from nethack"
+  },
+  {
+   "t": 252.4,
+   "d": 1.84,
+   "text": "you know and talk about how i tried to"
+  },
+  {
+   "t": 254.24,
+   "d": 2.08,
+   "text": "translate them into transcendence"
+  },
+  {
+   "t": 256.32,
+   "d": 2.8,
+   "text": "so let me just very quickly show you a"
+  },
+  {
+   "t": 259.12,
+   "d": 0.96,
+   "text": "quick trailer of"
+  },
+  {
+   "t": 260.08,
+   "d": 1.28,
+   "text": "of transcendence just so you can get an"
+  },
+  {
+   "t": 261.36,
+   "d": 1.68,
+   "text": "idea of what what it what transcendence"
+  },
+  {
+   "t": 263.04,
+   "d": 2.56,
+   "text": "is all about"
+  },
+  {
+   "t": 266.16,
+   "d": 2.16,
+   "text": "so again exploration transcendence is"
+  },
+  {
+   "t": 268.32,
+   "d": 1.36,
+   "text": "all about just like net hack it's"
+  },
+  {
+   "t": 269.68,
+   "d": 1.52,
+   "text": "exploration you just kind of wander"
+  },
+  {
+   "t": 271.2,
+   "d": 1.76,
+   "text": "around the galaxy it's open world"
+  },
+  {
+   "t": 272.96,
+   "d": 1.6,
+   "text": "you know instead of shops and stuff you"
+  },
+  {
+   "t": 274.56,
+   "d": 2.16,
+   "text": "get stations instead of monsters"
+  },
+  {
+   "t": 276.72,
+   "d": 2.08,
+   "text": "you fight ships your ship is your"
+  },
+  {
+   "t": 278.8,
+   "d": 1.44,
+   "text": "character you upgraded"
+  },
+  {
+   "t": 280.24,
+   "d": 2.32,
+   "text": "there's deities you know that that you"
+  },
+  {
+   "t": 282.56,
+   "d": 0.72,
+   "text": "you"
+  },
+  {
+   "t": 283.28,
+   "d": 1.84,
+   "text": "worship or at least control you and that"
+  },
+  {
+   "t": 285.12,
+   "d": 1.28,
+   "text": "you get powers from there's"
+  },
+  {
+   "t": 286.4,
+   "d": 1.6,
+   "text": "stairs you know stargates are really"
+  },
+  {
+   "t": 288.0,
+   "d": 2.16,
+   "text": "just stairs to go to the next level"
+  },
+  {
+   "t": 290.16,
+   "d": 2.56,
+   "text": "um and and of course there's just a lot"
+  },
+  {
+   "t": 292.72,
+   "d": 1.36,
+   "text": "of battles with different types of"
+  },
+  {
+   "t": 294.08,
+   "d": 1.76,
+   "text": "weapons with different types of"
+  },
+  {
+   "t": 295.84,
+   "d": 1.52,
+   "text": "armors different types of equipment"
+  },
+  {
+   "t": 297.36,
+   "d": 2.64,
+   "text": "different type of items um"
+  },
+  {
+   "t": 300.0,
+   "d": 2.4,
+   "text": "excuse me so so a lot of that you know"
+  },
+  {
+   "t": 302.4,
+   "d": 1.28,
+   "text": "here you know list of different"
+  },
+  {
+   "t": 303.68,
+   "d": 0.56,
+   "text": "different"
+  },
+  {
+   "t": 304.24,
+   "d": 3.44,
+   "text": "different items you know boss levels"
+  },
+  {
+   "t": 307.68,
+   "d": 2.4,
+   "text": "looting you know opening up uh opening"
+  },
+  {
+   "t": 310.08,
+   "d": 2.24,
+   "text": "up treasure chests all that stuff"
+  },
+  {
+   "t": 312.32,
+   "d": 1.92,
+   "text": "that's uh you know all that stuff i kind"
+  },
+  {
+   "t": 314.24,
+   "d": 1.12,
+   "text": "of lifted from"
+  },
+  {
+   "t": 315.36,
+   "d": 1.84,
+   "text": "from net hack and and for the most part"
+  },
+  {
+   "t": 317.2,
+   "d": 1.68,
+   "text": "it for the most part it worked i mean a"
+  },
+  {
+   "t": 318.88,
+   "d": 0.88,
+   "text": "lot of this"
+  },
+  {
+   "t": 319.76,
+   "d": 1.84,
+   "text": "just just really really works that's i"
+  },
+  {
+   "t": 321.6,
+   "d": 1.52,
+   "text": "think a testament to"
+  },
+  {
+   "t": 323.12,
+   "d": 3.28,
+   "text": "the cool stuff about nethack"
+  },
+  {
+   "t": 326.96,
+   "d": 1.3,
+   "text": "i didn't time my time"
+  },
+  {
+   "t": 328.26,
+   "d": 6.74,
+   "text": "[Music]"
+  },
+  {
+   "t": 337.36,
+   "d": 3.76,
+   "text": "uh so that's that's so i'll talk about"
+  },
+  {
+   "t": 341.12,
+   "d": 2.64,
+   "text": "kind of how some some of the things in"
+  },
+  {
+   "t": 343.76,
+   "d": 0.64,
+   "text": "net hack"
+  },
+  {
+   "t": 344.4,
+   "d": 1.92,
+   "text": "turned into some of the things that that"
+  },
+  {
+   "t": 346.32,
+   "d": 1.28,
+   "text": "you saw here and where it worked and"
+  },
+  {
+   "t": 347.6,
+   "d": 0.4,
+   "text": "where"
+  },
+  {
+   "t": 348.0,
+   "d": 1.6,
+   "text": "where it didn't work uh that's that's"
+  },
+  {
+   "t": 349.6,
+   "d": 1.6,
+   "text": "kind of what what this presentation is"
+  },
+  {
+   "t": 351.2,
+   "d": 1.44,
+   "text": "about uh so"
+  },
+  {
+   "t": 352.64,
+   "d": 3.12,
+   "text": "yeah so let's start with well okay what"
+  },
+  {
+   "t": 355.76,
+   "d": 1.6,
+   "text": "is so awesome about net hack well you"
+  },
+  {
+   "t": 357.36,
+   "d": 0.96,
+   "text": "know"
+  },
+  {
+   "t": 358.32,
+   "d": 1.36,
+   "text": "you guys probably know but let me let me"
+  },
+  {
+   "t": 359.68,
+   "d": 2.32,
+   "text": "say why i think why i think it's awesome"
+  },
+  {
+   "t": 362.0,
+   "d": 0.72,
+   "text": "about net hack"
+  },
+  {
+   "t": 362.72,
+   "d": 3.52,
+   "text": "let's flip back to let's say the 1980s"
+  },
+  {
+   "t": 366.24,
+   "d": 2.64,
+   "text": "late 1980s 87 is when net hack came out"
+  },
+  {
+   "t": 368.88,
+   "d": 1.12,
+   "text": "i thought when i was doing research for"
+  },
+  {
+   "t": 370.0,
+   "d": 1.28,
+   "text": "this i thought that that net hack"
+  },
+  {
+   "t": 371.28,
+   "d": 0.88,
+   "text": "actually came"
+  },
+  {
+   "t": 372.16,
+   "d": 1.6,
+   "text": "a lot earlier kind of back in the you"
+  },
+  {
+   "t": 373.76,
+   "d": 1.36,
+   "text": "know when basically there was no other"
+  },
+  {
+   "t": 375.12,
+   "d": 1.36,
+   "text": "games other than character"
+  },
+  {
+   "t": 376.48,
+   "d": 2.0,
+   "text": "mode games but it's not true net came"
+  },
+  {
+   "t": 378.48,
+   "d": 1.52,
+   "text": "out you know around the same time as"
+  },
+  {
+   "t": 380.0,
+   "d": 0.72,
+   "text": "ultima"
+  },
+  {
+   "t": 380.72,
+   "d": 2.24,
+   "text": "not ultima 5 pry ultima 4 which i think"
+  },
+  {
+   "t": 382.96,
+   "d": 1.68,
+   "text": "is one of the key ultimates"
+  },
+  {
+   "t": 384.64,
+   "d": 2.48,
+   "text": "but i remember ultima 5. and think about"
+  },
+  {
+   "t": 387.12,
+   "d": 1.76,
+   "text": "it you know you're a kid back then"
+  },
+  {
+   "t": 388.88,
+   "d": 1.68,
+   "text": "and you're thinking hey i got ultima i"
+  },
+  {
+   "t": 390.56,
+   "d": 1.44,
+   "text": "get net hack i get ultimate which should"
+  },
+  {
+   "t": 392.0,
+   "d": 1.28,
+   "text": "i play what should i play"
+  },
+  {
+   "t": 393.28,
+   "d": 1.36,
+   "text": "look at the graphics in this you know"
+  },
+  {
+   "t": 394.64,
+   "d": 2.0,
+   "text": "it's i mean it's highly produced it's"
+  },
+  {
+   "t": 396.64,
+   "d": 2.56,
+   "text": "all this stuff and yet and yet we all"
+  },
+  {
+   "t": 399.2,
+   "d": 1.6,
+   "text": "know we all know there's something about"
+  },
+  {
+   "t": 400.8,
+   "d": 0.8,
+   "text": "net hack"
+  },
+  {
+   "t": 401.6,
+   "d": 2.56,
+   "text": "it has a certain depth it has a certain"
+  },
+  {
+   "t": 404.16,
+   "d": 1.84,
+   "text": "um you know replayability"
+  },
+  {
+   "t": 406.0,
+   "d": 1.6,
+   "text": "once you're finished with ultima you're"
+  },
+  {
+   "t": 407.6,
+   "d": 2.08,
+   "text": "finished you are never finished with net"
+  },
+  {
+   "t": 409.68,
+   "d": 0.4,
+   "text": "hack"
+  },
+  {
+   "t": 410.08,
+   "d": 1.2,
+   "text": "i think if you're if you're someone"
+  },
+  {
+   "t": 411.28,
+   "d": 2.16,
+   "text": "that's a net heck and you love just"
+  },
+  {
+   "t": 413.44,
+   "d": 2.08,
+   "text": "working on the mechanics you play net"
+  },
+  {
+   "t": 415.52,
+   "d": 2.32,
+   "text": "hack and and and you're done with ultima"
+  },
+  {
+   "t": 417.84,
+   "d": 1.68,
+   "text": "so that's to me that's so interesting"
+  },
+  {
+   "t": 419.52,
+   "d": 1.36,
+   "text": "that even back then"
+  },
+  {
+   "t": 420.88,
+   "d": 1.92,
+   "text": "we had kind of this triple a versus"
+  },
+  {
+   "t": 422.8,
+   "d": 1.2,
+   "text": "indie divide"
+  },
+  {
+   "t": 424.0,
+   "d": 2.32,
+   "text": "right even way back then this is a this"
+  },
+  {
+   "t": 426.32,
+   "d": 0.96,
+   "text": "is a triple a game"
+  },
+  {
+   "t": 427.28,
+   "d": 1.6,
+   "text": "ultimate is a triple a game it's got"
+  },
+  {
+   "t": 428.88,
+   "d": 2.24,
+   "text": "just um you know huge production values"
+  },
+  {
+   "t": 431.12,
+   "d": 1.52,
+   "text": "origin was a giant company"
+  },
+  {
+   "t": 432.64,
+   "d": 1.84,
+   "text": "nat hack is a you know tiny little indie"
+  },
+  {
+   "t": 434.48,
+   "d": 2.64,
+   "text": "game now i'm not saying here"
+  },
+  {
+   "t": 437.12,
+   "d": 1.92,
+   "text": "absolutely not saying that you know net"
+  },
+  {
+   "t": 439.04,
+   "d": 2.64,
+   "text": "hack is better than ultima or vice versa"
+  },
+  {
+   "t": 441.68,
+   "d": 1.12,
+   "text": "they're different right they're"
+  },
+  {
+   "t": 442.8,
+   "d": 1.6,
+   "text": "different they they both focus on"
+  },
+  {
+   "t": 444.4,
+   "d": 1.76,
+   "text": "different things i love playing ultima"
+  },
+  {
+   "t": 446.16,
+   "d": 2.4,
+   "text": "i love playing triple a games today but"
+  },
+  {
+   "t": 448.56,
+   "d": 1.92,
+   "text": "i love nethack too what so what is it"
+  },
+  {
+   "t": 450.48,
+   "d": 0.4,
+   "text": "what"
+  },
+  {
+   "t": 450.88,
+   "d": 1.68,
+   "text": "what is it what's different about these"
+  },
+  {
+   "t": 452.56,
+   "d": 1.52,
+   "text": "two things and"
+  },
+  {
+   "t": 454.08,
+   "d": 2.64,
+   "text": "and let me try to you know distill it"
+  },
+  {
+   "t": 456.72,
+   "d": 1.44,
+   "text": "down to these three things"
+  },
+  {
+   "t": 458.16,
+   "d": 1.76,
+   "text": "you know ultima here is on the left and"
+  },
+  {
+   "t": 459.92,
+   "d": 1.36,
+   "text": "that heck is on the right"
+  },
+  {
+   "t": 461.28,
+   "d": 1.68,
+   "text": "graphical immersion versus interactive"
+  },
+  {
+   "t": 462.96,
+   "d": 1.92,
+   "text": "immersion i think all of you guys know"
+  },
+  {
+   "t": 464.88,
+   "d": 1.76,
+   "text": "know what that means right triple a"
+  },
+  {
+   "t": 466.64,
+   "d": 1.76,
+   "text": "games uh focus on"
+  },
+  {
+   "t": 468.4,
+   "d": 2.08,
+   "text": "just having it be beautifully so you"
+  },
+  {
+   "t": 470.48,
+   "d": 1.84,
+   "text": "feel like you're in that world"
+  },
+  {
+   "t": 472.32,
+   "d": 2.64,
+   "text": "everything looks real ned heck is is"
+  },
+  {
+   "t": 474.96,
+   "d": 1.36,
+   "text": "doesn't care about that"
+  },
+  {
+   "t": 476.32,
+   "d": 1.52,
+   "text": "and other roguelikes dwarf fortress all"
+  },
+  {
+   "t": 477.84,
+   "d": 1.28,
+   "text": "those they don't care they care about"
+  },
+  {
+   "t": 479.12,
+   "d": 2.0,
+   "text": "interactive immersion they care that"
+  },
+  {
+   "t": 481.12,
+   "d": 1.36,
+   "text": "when you do something when you pick"
+  },
+  {
+   "t": 482.48,
+   "d": 2.08,
+   "text": "something up when you use something that"
+  },
+  {
+   "t": 484.56,
+   "d": 1.52,
+   "text": "it behaves the way you expect it to"
+  },
+  {
+   "t": 486.08,
+   "d": 1.44,
+   "text": "behave that you feel like you're"
+  },
+  {
+   "t": 487.52,
+   "d": 0.8,
+   "text": "actually"
+  },
+  {
+   "t": 488.32,
+   "d": 2.4,
+   "text": "manipulating all these objects quality"
+  },
+  {
+   "t": 490.72,
+   "d": 1.12,
+   "text": "versus variety"
+  },
+  {
+   "t": 491.84,
+   "d": 2.8,
+   "text": "again in in in something like ultima the"
+  },
+  {
+   "t": 494.64,
+   "d": 1.92,
+   "text": "set of monsters is fairly small"
+  },
+  {
+   "t": 496.56,
+   "d": 2.32,
+   "text": "right relative to net hack um and that's"
+  },
+  {
+   "t": 498.88,
+   "d": 1.6,
+   "text": "because they want to focus every single"
+  },
+  {
+   "t": 500.48,
+   "d": 1.52,
+   "text": "monster they want to be as high quality"
+  },
+  {
+   "t": 502.0,
+   "d": 1.6,
+   "text": "as possible they want to have"
+  },
+  {
+   "t": 503.6,
+   "d": 2.96,
+   "text": "you know um an animation as frame for"
+  },
+  {
+   "t": 506.56,
+   "d": 0.96,
+   "text": "all of them they wanted they want to"
+  },
+  {
+   "t": 507.52,
+   "d": 1.44,
+   "text": "make sure that you know they've spent a"
+  },
+  {
+   "t": 508.96,
+   "d": 1.68,
+   "text": "lot of time getting each monster to be"
+  },
+  {
+   "t": 510.64,
+   "d": 0.88,
+   "text": "exactly right"
+  },
+  {
+   "t": 511.52,
+   "d": 1.6,
+   "text": "they balance the you know the stats"
+  },
+  {
+   "t": 513.12,
+   "d": 1.68,
+   "text": "everything net hack is"
+  },
+  {
+   "t": 514.8,
+   "d": 1.84,
+   "text": "is the opposite now again i'm not saying"
+  },
+  {
+   "t": 516.64,
+   "d": 1.44,
+   "text": "that one is better than the other right"
+  },
+  {
+   "t": 518.08,
+   "d": 1.36,
+   "text": "i mean sometimes you want"
+  },
+  {
+   "t": 519.44,
+   "d": 2.24,
+   "text": "this graphical immersion but net heck"
+  },
+  {
+   "t": 521.68,
+   "d": 1.28,
+   "text": "does it differently they say no"
+  },
+  {
+   "t": 522.96,
+   "d": 2.4,
+   "text": "you know um we just want we just want so"
+  },
+  {
+   "t": 525.36,
+   "d": 1.6,
+   "text": "many monsters that it's different every"
+  },
+  {
+   "t": 526.96,
+   "d": 2.08,
+   "text": "time and that whenever you go someplace"
+  },
+  {
+   "t": 529.04,
+   "d": 2.56,
+   "text": "you know you can encounter something new"
+  },
+  {
+   "t": 531.6,
+   "d": 2.4,
+   "text": "lastly experience versus mastery"
+  },
+  {
+   "t": 534.0,
+   "d": 1.36,
+   "text": "you know i think this kind of sums it up"
+  },
+  {
+   "t": 535.36,
+   "d": 1.68,
+   "text": "in a way that triple games and ultima"
+  },
+  {
+   "t": 537.04,
+   "d": 1.6,
+   "text": "and things like that"
+  },
+  {
+   "t": 538.64,
+   "d": 1.92,
+   "text": "are about having this experience going"
+  },
+  {
+   "t": 540.56,
+   "d": 1.84,
+   "text": "through this this adventure"
+  },
+  {
+   "t": 542.4,
+   "d": 1.04,
+   "text": "and then when you're done you're done"
+  },
+  {
+   "t": 543.44,
+   "d": 1.68,
+   "text": "you had the experience you know you're"
+  },
+  {
+   "t": 545.12,
+   "d": 0.64,
+   "text": "you're done"
+  },
+  {
+   "t": 545.76,
+   "d": 1.28,
+   "text": "you went skydiving okay you're done"
+  },
+  {
+   "t": 547.04,
+   "d": 1.04,
+   "text": "you're not gonna sky the rest of your"
+  },
+  {
+   "t": 548.08,
+   "d": 0.72,
+   "text": "life"
+  },
+  {
+   "t": 548.8,
+   "d": 2.88,
+   "text": "most of us um net hack is the opposite"
+  },
+  {
+   "t": 551.68,
+   "d": 1.2,
+   "text": "it's about mastery"
+  },
+  {
+   "t": 552.88,
+   "d": 2.56,
+   "text": "any one game it doesn't really matter"
+  },
+  {
+   "t": 555.44,
+   "d": 2.0,
+   "text": "that much it's about it's about how good"
+  },
+  {
+   "t": 557.44,
+   "d": 0.8,
+   "text": "you get how"
+  },
+  {
+   "t": 558.24,
+   "d": 1.68,
+   "text": "how you figure out that last bit of"
+  },
+  {
+   "t": 559.92,
+   "d": 1.68,
+   "text": "combinations how you start to see"
+  },
+  {
+   "t": 561.6,
+   "d": 2.0,
+   "text": "patterns and say oh yeah i get it you"
+  },
+  {
+   "t": 563.6,
+   "d": 1.12,
+   "text": "know no i i"
+  },
+  {
+   "t": 564.72,
+   "d": 1.92,
+   "text": "i know how to get out of this situation"
+  },
+  {
+   "t": 566.64,
+   "d": 1.6,
+   "text": "mastery is the enjoyment that you get"
+  },
+  {
+   "t": 568.24,
+   "d": 2.0,
+   "text": "out of net hack the the idea that"
+  },
+  {
+   "t": 570.24,
+   "d": 2.48,
+   "text": "that you've you've figured out this"
+  },
+  {
+   "t": 572.72,
+   "d": 1.12,
+   "text": "complex world"
+  },
+  {
+   "t": 573.84,
+   "d": 1.76,
+   "text": "so that's that's i think one of the big"
+  },
+  {
+   "t": 575.6,
+   "d": 1.92,
+   "text": "big differences so flash forward to"
+  },
+  {
+   "t": 577.52,
+   "d": 0.48,
+   "text": "today"
+  },
+  {
+   "t": 578.0,
+   "d": 3.52,
+   "text": "you know um the the 2000s skyrim is"
+  },
+  {
+   "t": 581.52,
+   "d": 2.08,
+   "text": "is absolutely you know ultima now you"
+  },
+  {
+   "t": 583.6,
+   "d": 1.76,
+   "text": "know 20 years later or whatever"
+  },
+  {
+   "t": 585.36,
+   "d": 3.44,
+   "text": "um it's again beautiful i love it i love"
+  },
+  {
+   "t": 588.8,
+   "d": 1.44,
+   "text": "playing it open world you know the whole"
+  },
+  {
+   "t": 590.24,
+   "d": 0.48,
+   "text": "thing"
+  },
+  {
+   "t": 590.72,
+   "d": 2.96,
+   "text": "and yet and yet people are still still"
+  },
+  {
+   "t": 593.68,
+   "d": 0.8,
+   "text": "playing that hack"
+  },
+  {
+   "t": 594.48,
+   "d": 2.16,
+   "text": "netiq is still being developed there is"
+  },
+  {
+   "t": 596.64,
+   "d": 1.92,
+   "text": "still room for things like nethack this"
+  },
+  {
+   "t": 598.56,
+   "d": 0.56,
+   "text": "is"
+  },
+  {
+   "t": 599.12,
+   "d": 1.6,
+   "text": "you know um this is what i think is"
+  },
+  {
+   "t": 600.72,
+   "d": 3.28,
+   "text": "amazing about about nethack"
+  },
+  {
+   "t": 604.0,
+   "d": 2.64,
+   "text": "um so let me let me take now this is"
+  },
+  {
+   "t": 606.64,
+   "d": 1.04,
+   "text": "that was kind of the over"
+  },
+  {
+   "t": 607.68,
+   "d": 1.92,
+   "text": "overview of you know why i love net hack"
+  },
+  {
+   "t": 609.6,
+   "d": 1.76,
+   "text": "let me go dive a little bit"
+  },
+  {
+   "t": 611.36,
+   "d": 2.4,
+   "text": "a little bit more here's another reason"
+  },
+  {
+   "t": 613.76,
+   "d": 1.52,
+   "text": "why ned heck is so good"
+  },
+  {
+   "t": 615.28,
+   "d": 3.12,
+   "text": "right he had another stupid death right"
+  },
+  {
+   "t": 618.4,
+   "d": 0.64,
+   "text": "this is"
+  },
+  {
+   "t": 619.04,
+   "d": 2.08,
+   "text": "this is uh i don't know if ned hack"
+  },
+  {
+   "t": 621.12,
+   "d": 1.52,
+   "text": "started the concept of vietnam's stupid"
+  },
+  {
+   "t": 622.64,
+   "d": 0.64,
+   "text": "death"
+  },
+  {
+   "t": 623.28,
+   "d": 1.28,
+   "text": "david craddock and the other talk"
+  },
+  {
+   "t": 624.56,
+   "d": 1.92,
+   "text": "probably will be telling us um"
+  },
+  {
+   "t": 626.48,
+   "d": 2.8,
+   "text": "if that's true but uh but you know yet"
+  },
+  {
+   "t": 629.28,
+   "d": 1.2,
+   "text": "another stupid death i think"
+  },
+  {
+   "t": 630.48,
+   "d": 2.64,
+   "text": "is a key component of net hack and it"
+  },
+  {
+   "t": 633.12,
+   "d": 1.52,
+   "text": "and it plays into all three of those"
+  },
+  {
+   "t": 634.64,
+   "d": 1.52,
+   "text": "things that i talked about"
+  },
+  {
+   "t": 636.16,
+   "d": 2.96,
+   "text": "right um people at first i think get uh"
+  },
+  {
+   "t": 639.12,
+   "d": 1.68,
+   "text": "upset or or when they first play net"
+  },
+  {
+   "t": 640.8,
+   "d": 2.4,
+   "text": "hack they're like i died ah you know"
+  },
+  {
+   "t": 643.2,
+   "d": 2.48,
+   "text": "um but eventually eventually you you"
+  },
+  {
+   "t": 645.68,
+   "d": 1.44,
+   "text": "realize that net hack has this this"
+  },
+  {
+   "t": 647.12,
+   "d": 1.52,
+   "text": "amazing quality this illusion of"
+  },
+  {
+   "t": 648.64,
+   "d": 1.44,
+   "text": "winnability"
+  },
+  {
+   "t": 650.08,
+   "d": 2.72,
+   "text": "right this is this is this is and i i"
+  },
+  {
+   "t": 652.8,
+   "d": 1.36,
+   "text": "think i think you guys will all agree"
+  },
+  {
+   "t": 654.16,
+   "d": 0.72,
+   "text": "with me that"
+  },
+  {
+   "t": 654.88,
+   "d": 1.52,
+   "text": "that when you play net hack and you and"
+  },
+  {
+   "t": 656.4,
+   "d": 1.92,
+   "text": "you die you always say"
+  },
+  {
+   "t": 658.32,
+   "d": 3.2,
+   "text": "oh i i should have x y and z oh i"
+  },
+  {
+   "t": 661.52,
+   "d": 0.88,
+   "text": "shouldn't have you know"
+  },
+  {
+   "t": 662.4,
+   "d": 1.28,
+   "text": "i shouldn't have attacked i knew i"
+  },
+  {
+   "t": 663.68,
+   "d": 2.08,
+   "text": "should have retreated or oh i had a you"
+  },
+  {
+   "t": 665.76,
+   "d": 1.52,
+   "text": "know wanda blah blah blah blah i should"
+  },
+  {
+   "t": 667.28,
+   "d": 1.04,
+   "text": "use that"
+  },
+  {
+   "t": 668.32,
+   "d": 2.4,
+   "text": "um the beauty about net hack is even"
+  },
+  {
+   "t": 670.72,
+   "d": 0.96,
+   "text": "though it kills you"
+  },
+  {
+   "t": 671.68,
+   "d": 3.04,
+   "text": "all the time time it kills you it it it"
+  },
+  {
+   "t": 674.72,
+   "d": 2.16,
+   "text": "lets you you know exactly why you die"
+  },
+  {
+   "t": 676.88,
+   "d": 0.48,
+   "text": "and so"
+  },
+  {
+   "t": 677.36,
+   "d": 2.08,
+   "text": "you you loop back and say okay you know"
+  },
+  {
+   "t": 679.44,
+   "d": 1.04,
+   "text": "i'm not going to do that again now i"
+  },
+  {
+   "t": 680.48,
+   "d": 0.56,
+   "text": "know now"
+  },
+  {
+   "t": 681.04,
+   "d": 1.76,
+   "text": "now i've mastered it now i've mastered"
+  },
+  {
+   "t": 682.8,
+   "d": 2.16,
+   "text": "it again until the next time you die"
+  },
+  {
+   "t": 684.96,
+   "d": 3.12,
+   "text": "uh if you if you think about um"
+  },
+  {
+   "t": 688.08,
+   "d": 1.6,
+   "text": "if you think about civilization or or"
+  },
+  {
+   "t": 689.68,
+   "d": 2.24,
+   "text": "some of those you know uh forex games"
+  },
+  {
+   "t": 691.92,
+   "d": 2.4,
+   "text": "the the the the addiction the the"
+  },
+  {
+   "t": 694.32,
+   "d": 1.92,
+   "text": "addict's cry in civilization is one more"
+  },
+  {
+   "t": 696.24,
+   "d": 1.44,
+   "text": "turn one more turn"
+  },
+  {
+   "t": 697.68,
+   "d": 2.16,
+   "text": "right in that heck it's one more game"
+  },
+  {
+   "t": 699.84,
+   "d": 1.44,
+   "text": "and this time i'm not gonna be stupid"
+  },
+  {
+   "t": 701.28,
+   "d": 2.88,
+   "text": "you know i'm just not going to get it uh"
+  },
+  {
+   "t": 704.16,
+   "d": 0.4,
+   "text": "so"
+  },
+  {
+   "t": 704.56,
+   "d": 2.24,
+   "text": "so so so how does net hack do this how"
+  },
+  {
+   "t": 706.8,
+   "d": 1.12,
+   "text": "does net hack"
+  },
+  {
+   "t": 707.92,
+   "d": 1.84,
+   "text": "you know have all these different these"
+  },
+  {
+   "t": 709.76,
+   "d": 1.44,
+   "text": "different ways to die illusion of"
+  },
+  {
+   "t": 711.2,
+   "d": 1.04,
+   "text": "winnability"
+  },
+  {
+   "t": 712.24,
+   "d": 2.16,
+   "text": "um because if you think about it when"
+  },
+  {
+   "t": 714.4,
+   "d": 2.24,
+   "text": "when um"
+  },
+  {
+   "t": 716.64,
+   "d": 2.0,
+   "text": "net hack is is turn based right so at"
+  },
+  {
+   "t": 718.64,
+   "d": 1.36,
+   "text": "any given point um"
+  },
+  {
+   "t": 720.0,
+   "d": 1.44,
+   "text": "you can it's an open book test you can"
+  },
+  {
+   "t": 721.44,
+   "d": 1.68,
+   "text": "just stand there you can think through"
+  },
+  {
+   "t": 723.12,
+   "d": 1.52,
+   "text": "all the possible things you can say okay"
+  },
+  {
+   "t": 724.64,
+   "d": 1.28,
+   "text": "you know this is the best move"
+  },
+  {
+   "t": 725.92,
+   "d": 2.0,
+   "text": "why is it so hard the reason it's so"
+  },
+  {
+   "t": 727.92,
+   "d": 1.2,
+   "text": "hard is because"
+  },
+  {
+   "t": 729.12,
+   "d": 2.32,
+   "text": "this combinatorial explosion this the"
+  },
+  {
+   "t": 731.44,
+   "d": 1.44,
+   "text": "number of items that you have to deal"
+  },
+  {
+   "t": 732.88,
+   "d": 1.6,
+   "text": "with the number of verbs that you have"
+  },
+  {
+   "t": 734.48,
+   "d": 1.6,
+   "text": "to deal with each item"
+  },
+  {
+   "t": 736.08,
+   "d": 2.48,
+   "text": "just are are are so large that it's hard"
+  },
+  {
+   "t": 738.56,
+   "d": 1.36,
+   "text": "to even think about it"
+  },
+  {
+   "t": 739.92,
+   "d": 2.16,
+   "text": "something like chess has that same kind"
+  },
+  {
+   "t": 742.08,
+   "d": 1.36,
+   "text": "of combinatorial explosion"
+  },
+  {
+   "t": 743.44,
+   "d": 1.92,
+   "text": "but it's a it's it's because of depth"
+  },
+  {
+   "t": 745.36,
+   "d": 1.52,
+   "text": "right chess only has"
+  },
+  {
+   "t": 746.88,
+   "d": 3.28,
+   "text": "six pieces you know six unique pieces um"
+  },
+  {
+   "t": 750.16,
+   "d": 2.32,
+   "text": "so at any point in this in in in a game"
+  },
+  {
+   "t": 752.48,
+   "d": 0.96,
+   "text": "you kind of"
+  },
+  {
+   "t": 753.44,
+   "d": 1.36,
+   "text": "it's pretty easy to figure out what's"
+  },
+  {
+   "t": 754.8,
+   "d": 2.16,
+   "text": "gonna happen it's just that it's really"
+  },
+  {
+   "t": 756.96,
+   "d": 1.76,
+   "text": "really hard four or five moves ahead of"
+  },
+  {
+   "t": 758.72,
+   "d": 0.56,
+   "text": "time"
+  },
+  {
+   "t": 759.28,
+   "d": 2.8,
+   "text": "net hack even in one move you know in"
+  },
+  {
+   "t": 762.08,
+   "d": 1.6,
+   "text": "one move it's kind of hard to"
+  },
+  {
+   "t": 763.68,
+   "d": 2.24,
+   "text": "to know what the right move was because"
+  },
+  {
+   "t": 765.92,
+   "d": 1.76,
+   "text": "they're just so many items there's so"
+  },
+  {
+   "t": 767.68,
+   "d": 1.12,
+   "text": "many monsters there's so many"
+  },
+  {
+   "t": 768.8,
+   "d": 1.12,
+   "text": "capabilities"
+  },
+  {
+   "t": 769.92,
+   "d": 2.08,
+   "text": "so that concept of combinatorial"
+  },
+  {
+   "t": 772.0,
+   "d": 1.04,
+   "text": "complexity"
+  },
+  {
+   "t": 773.04,
+   "d": 1.76,
+   "text": "i think is is one of the key things that"
+  },
+  {
+   "t": 774.8,
+   "d": 1.68,
+   "text": "make makes net hack"
+  },
+  {
+   "t": 776.48,
+   "d": 2.8,
+   "text": "um just a rich game a deep game"
+  },
+  {
+   "t": 779.28,
+   "d": 1.92,
+   "text": "something that you always come back to"
+  },
+  {
+   "t": 781.2,
+   "d": 1.6,
+   "text": "and and again something that that"
+  },
+  {
+   "t": 782.8,
+   "d": 2.0,
+   "text": "reinforces that concept of mastery"
+  },
+  {
+   "t": 784.8,
+   "d": 3.04,
+   "text": "rather than an experience"
+  },
+  {
+   "t": 788.4,
+   "d": 2.8,
+   "text": "okay now um of course one of the"
+  },
+  {
+   "t": 791.2,
+   "d": 1.44,
+   "text": "problems with some of this commentarial"
+  },
+  {
+   "t": 792.64,
+   "d": 1.04,
+   "text": "complexity"
+  },
+  {
+   "t": 793.68,
+   "d": 2.56,
+   "text": "is that you end up in um well you just"
+  },
+  {
+   "t": 796.24,
+   "d": 0.96,
+   "text": "have to read the guide"
+  },
+  {
+   "t": 797.2,
+   "d": 1.6,
+   "text": "you know you that you get into"
+  },
+  {
+   "t": 798.8,
+   "d": 1.76,
+   "text": "situations where um"
+  },
+  {
+   "t": 800.56,
+   "d": 1.76,
+   "text": "you just don't know the optimal thing so"
+  },
+  {
+   "t": 802.32,
+   "d": 2.0,
+   "text": "you just search on google i don't there"
+  },
+  {
+   "t": 804.32,
+   "d": 1.12,
+   "text": "wasn't google in the 80s but"
+  },
+  {
+   "t": 805.44,
+   "d": 1.68,
+   "text": "now there is go on google and say okay"
+  },
+  {
+   "t": 807.12,
+   "d": 1.68,
+   "text": "what is the what is the best way and now"
+  },
+  {
+   "t": 808.8,
+   "d": 1.52,
+   "text": "you kind of get out of it"
+  },
+  {
+   "t": 810.32,
+   "d": 1.92,
+   "text": "that's a certain extent takes away i"
+  },
+  {
+   "t": 812.24,
+   "d": 1.36,
+   "text": "think from some of the"
+  },
+  {
+   "t": 813.6,
+   "d": 2.0,
+   "text": "from from you know some of the the the"
+  },
+  {
+   "t": 815.6,
+   "d": 1.68,
+   "text": "pleasure of of net hack"
+  },
+  {
+   "t": 817.28,
+   "d": 1.68,
+   "text": "but i think these guys have still done a"
+  },
+  {
+   "t": 818.96,
+   "d": 2.0,
+   "text": "good job because the places where you"
+  },
+  {
+   "t": 820.96,
+   "d": 0.4,
+   "text": "actually"
+  },
+  {
+   "t": 821.36,
+   "d": 1.36,
+   "text": "need to do this this is called this is"
+  },
+  {
+   "t": 822.72,
+   "d": 2.16,
+   "text": "called guy dang it from the"
+  },
+  {
+   "t": 824.88,
+   "d": 2.72,
+   "text": "tv tropes calls this uh guy dang it when"
+  },
+  {
+   "t": 827.6,
+   "d": 0.72,
+   "text": "you when you're"
+  },
+  {
+   "t": 828.32,
+   "d": 1.92,
+   "text": "when you've got a game mechanic that"
+  },
+  {
+   "t": 830.24,
+   "d": 1.76,
+   "text": "basically the the way to win is you just"
+  },
+  {
+   "t": 832.0,
+   "d": 1.6,
+   "text": "look up what the answer is"
+  },
+  {
+   "t": 833.6,
+   "d": 3.68,
+   "text": "um and straight up fortunately net hack"
+  },
+  {
+   "t": 837.28,
+   "d": 2.0,
+   "text": "actually minimizes this a lot there's"
+  },
+  {
+   "t": 839.28,
+   "d": 2.0,
+   "text": "many many places where net hack"
+  },
+  {
+   "t": 841.28,
+   "d": 1.52,
+   "text": "you know you you would think that you'd"
+  },
+  {
+   "t": 842.8,
+   "d": 2.08,
+   "text": "have to be able to just search online"
+  },
+  {
+   "t": 844.88,
+   "d": 1.84,
+   "text": "but but it's actually it it doesn't and"
+  },
+  {
+   "t": 846.72,
+   "d": 1.76,
+   "text": "and the way it works the reason"
+  },
+  {
+   "t": 848.48,
+   "d": 2.16,
+   "text": "the reason it works very well is because"
+  },
+  {
+   "t": 850.64,
+   "d": 1.92,
+   "text": "nethack kind of relies on your"
+  },
+  {
+   "t": 852.56,
+   "d": 1.76,
+   "text": "your knowledge of the world already"
+  },
+  {
+   "t": 854.32,
+   "d": 1.92,
+   "text": "right so i'll give you an example"
+  },
+  {
+   "t": 856.24,
+   "d": 3.36,
+   "text": "you know that um when you see a dragon"
+  },
+  {
+   "t": 859.6,
+   "d": 1.04,
+   "text": "for instance you know it's going to be"
+  },
+  {
+   "t": 860.64,
+   "d": 1.12,
+   "text": "immune to fire"
+  },
+  {
+   "t": 861.76,
+   "d": 2.4,
+   "text": "right this is not you know you know that"
+  },
+  {
+   "t": 864.16,
+   "d": 1.52,
+   "text": "if you have a scroll and you dip it in"
+  },
+  {
+   "t": 865.68,
+   "d": 1.44,
+   "text": "water you know that well okay it's going"
+  },
+  {
+   "t": 867.12,
+   "d": 2.0,
+   "text": "to get wet and the ink might run"
+  },
+  {
+   "t": 869.12,
+   "d": 1.36,
+   "text": "you know that if you dip a sword in"
+  },
+  {
+   "t": 870.48,
+   "d": 2.56,
+   "text": "water it's you know could rust and so"
+  },
+  {
+   "t": 873.04,
+   "d": 2.64,
+   "text": "net hack uses your common knowledge and"
+  },
+  {
+   "t": 875.68,
+   "d": 1.76,
+   "text": "knowledge that you already have"
+  },
+  {
+   "t": 877.44,
+   "d": 1.92,
+   "text": "um to make sure that you never get into"
+  },
+  {
+   "t": 879.36,
+   "d": 2.0,
+   "text": "or rarely get into situations of guy"
+  },
+  {
+   "t": 881.36,
+   "d": 1.92,
+   "text": "dang it where you're like wait a minute"
+  },
+  {
+   "t": 883.28,
+   "d": 1.92,
+   "text": "you know why did that ray bounce off of"
+  },
+  {
+   "t": 885.2,
+   "d": 1.28,
+   "text": "the dragon oh right"
+  },
+  {
+   "t": 886.48,
+   "d": 2.64,
+   "text": "you know um it tries to use that that"
+  },
+  {
+   "t": 889.12,
+   "d": 1.2,
+   "text": "that knowledge that you already have"
+  },
+  {
+   "t": 890.32,
+   "d": 1.2,
+   "text": "that implicit knowledge"
+  },
+  {
+   "t": 891.52,
+   "d": 1.36,
+   "text": "and that's why i think the developers"
+  },
+  {
+   "t": 892.88,
+   "d": 2.16,
+   "text": "work so hard that whenever"
+  },
+  {
+   "t": 895.04,
+   "d": 2.24,
+   "text": "someone tried something a player tried"
+  },
+  {
+   "t": 897.28,
+   "d": 1.2,
+   "text": "something in nethack"
+  },
+  {
+   "t": 898.48,
+   "d": 2.96,
+   "text": "that they expected to work you know they"
+  },
+  {
+   "t": 901.44,
+   "d": 2.0,
+   "text": "the developers made sure that that"
+  },
+  {
+   "t": 903.44,
+   "d": 1.52,
+   "text": "it did work the way that you would"
+  },
+  {
+   "t": 904.96,
+   "d": 2.0,
+   "text": "expect it it's because they wanted to"
+  },
+  {
+   "t": 906.96,
+   "d": 2.08,
+   "text": "they wanted to avoid the concept of god"
+  },
+  {
+   "t": 909.04,
+   "d": 0.56,
+   "text": "dang it"
+  },
+  {
+   "t": 909.6,
+   "d": 1.6,
+   "text": "this is something i've i struggle with"
+  },
+  {
+   "t": 911.2,
+   "d": 2.88,
+   "text": "in transcendence and transcendence"
+  },
+  {
+   "t": 914.08,
+   "d": 2.32,
+   "text": "you know it's a space game so it's not"
+  },
+  {
+   "t": 916.4,
+   "d": 1.36,
+   "text": "quite as close to"
+  },
+  {
+   "t": 917.76,
+   "d": 3.04,
+   "text": "our everyday experience right do plasma"
+  },
+  {
+   "t": 920.8,
+   "d": 1.28,
+   "text": "bolts bounce off of"
+  },
+  {
+   "t": 922.08,
+   "d": 2.64,
+   "text": "magnetic shields or not you know i don't"
+  },
+  {
+   "t": 924.72,
+   "d": 0.64,
+   "text": "know"
+  },
+  {
+   "t": 925.36,
+   "d": 2.32,
+   "text": "um so so transcendence has had trouble"
+  },
+  {
+   "t": 927.68,
+   "d": 1.6,
+   "text": "in in some of this stuff and and if i"
+  },
+  {
+   "t": 929.28,
+   "d": 1.44,
+   "text": "try to just"
+  },
+  {
+   "t": 930.72,
+   "d": 2.88,
+   "text": "you know put some directly from nethack"
+  },
+  {
+   "t": 933.6,
+   "d": 1.44,
+   "text": "and translate it into transcendence"
+  },
+  {
+   "t": 935.04,
+   "d": 0.4,
+   "text": "terms"
+  },
+  {
+   "t": 935.44,
+   "d": 1.36,
+   "text": "it doesn't work for the reasons that i"
+  },
+  {
+   "t": 936.8,
+   "d": 2.0,
+   "text": "just said because people don't have that"
+  },
+  {
+   "t": 938.8,
+   "d": 1.84,
+   "text": "implicit knowledge so i've had to be"
+  },
+  {
+   "t": 940.64,
+   "d": 1.76,
+   "text": "aware of that and then and then change"
+  },
+  {
+   "t": 942.4,
+   "d": 2.08,
+   "text": "that"
+  },
+  {
+   "t": 944.48,
+   "d": 2.72,
+   "text": "so um let me talk about now uh some of"
+  },
+  {
+   "t": 947.2,
+   "d": 1.12,
+   "text": "the complexity"
+  },
+  {
+   "t": 948.32,
+   "d": 2.48,
+   "text": "of netac okay an exaggeration an"
+  },
+  {
+   "t": 950.8,
+   "d": 2.0,
+   "text": "exaggeration please if anyone"
+  },
+  {
+   "t": 952.8,
+   "d": 1.92,
+   "text": "loves diablo or worked on diablo i love"
+  },
+  {
+   "t": 954.72,
+   "d": 2.0,
+   "text": "diablo um"
+  },
+  {
+   "t": 956.72,
+   "d": 2.16,
+   "text": "but but again there's a little bit of"
+  },
+  {
+   "t": 958.88,
+   "d": 1.68,
+   "text": "truth right diablo"
+  },
+  {
+   "t": 960.56,
+   "d": 2.0,
+   "text": "they they have a single verb which is"
+  },
+  {
+   "t": 962.56,
+   "d": 1.44,
+   "text": "you you click on the"
+  },
+  {
+   "t": 964.0,
+   "d": 1.68,
+   "text": "on an object and the object does its"
+  },
+  {
+   "t": 965.68,
+   "d": 1.6,
+   "text": "default behavior you click on a skeleton"
+  },
+  {
+   "t": 967.28,
+   "d": 1.52,
+   "text": "you attack and you click on a chest it"
+  },
+  {
+   "t": 968.8,
+   "d": 1.76,
+   "text": "opens you click on the door it opens"
+  },
+  {
+   "t": 970.56,
+   "d": 1.84,
+   "text": "et cetera et cetera et cetera it makes"
+  },
+  {
+   "t": 972.4,
+   "d": 1.6,
+   "text": "sense why they did that because if"
+  },
+  {
+   "t": 974.0,
+   "d": 1.36,
+   "text": "you're when you're a new player and you"
+  },
+  {
+   "t": 975.36,
+   "d": 1.2,
+   "text": "want to understand"
+  },
+  {
+   "t": 976.56,
+   "d": 1.2,
+   "text": "you know you want to play this game"
+  },
+  {
+   "t": 977.76,
+   "d": 3.12,
+   "text": "without having to learn a giant manual"
+  },
+  {
+   "t": 980.88,
+   "d": 1.6,
+   "text": "taran adams isn't here right no okay"
+  },
+  {
+   "t": 982.48,
+   "d": 2.08,
+   "text": "okay um if you want to play a game"
+  },
+  {
+   "t": 984.56,
+   "d": 1.84,
+   "text": "without having to like read the manual"
+  },
+  {
+   "t": 986.4,
+   "d": 1.92,
+   "text": "um then this is this you know this is"
+  },
+  {
+   "t": 988.32,
+   "d": 1.36,
+   "text": "the way you do it you basically just"
+  },
+  {
+   "t": 989.68,
+   "d": 1.36,
+   "text": "restrict the set of verbs so that the"
+  },
+  {
+   "t": 991.04,
+   "d": 1.2,
+   "text": "players can"
+  },
+  {
+   "t": 992.24,
+   "d": 1.76,
+   "text": "you know of just just play without"
+  },
+  {
+   "t": 994.0,
+   "d": 1.52,
+   "text": "essentially without having to learn"
+  },
+  {
+   "t": 995.52,
+   "d": 2.0,
+   "text": "look at nethack now obviously the"
+  },
+  {
+   "t": 997.52,
+   "d": 1.44,
+   "text": "advantage of nethack"
+  },
+  {
+   "t": 998.96,
+   "d": 2.48,
+   "text": "is all this set of verbs combined with"
+  },
+  {
+   "t": 1001.44,
+   "d": 1.6,
+   "text": "all the items combined with all the"
+  },
+  {
+   "t": 1003.04,
+   "d": 1.92,
+   "text": "monsters gives you that combinatorial"
+  },
+  {
+   "t": 1004.96,
+   "d": 2.0,
+   "text": "complexity and makes it so that"
+  },
+  {
+   "t": 1006.96,
+   "d": 2.16,
+   "text": "you know it's just you just you just"
+  },
+  {
+   "t": 1009.12,
+   "d": 1.52,
+   "text": "it's a deep game"
+  },
+  {
+   "t": 1010.64,
+   "d": 1.92,
+   "text": "but how do they avoid this well one of"
+  },
+  {
+   "t": 1012.56,
+   "d": 1.36,
+   "text": "the ways they avoid it and again there's"
+  },
+  {
+   "t": 1013.92,
+   "d": 0.88,
+   "text": "another thing i'm"
+  },
+  {
+   "t": 1014.8,
+   "d": 1.68,
+   "text": "learning in transcendence and trying to"
+  },
+  {
+   "t": 1016.48,
+   "d": 2.0,
+   "text": "you know apply is well look"
+  },
+  {
+   "t": 1018.48,
+   "d": 1.28,
+   "text": "most of us most of the verbs you"
+  },
+  {
+   "t": 1019.76,
+   "d": 2.32,
+   "text": "actually don't use they've done the"
+  },
+  {
+   "t": 1022.08,
+   "d": 2.08,
+   "text": "user interface correctly so that if you"
+  },
+  {
+   "t": 1024.16,
+   "d": 1.6,
+   "text": "if you if you look at it"
+  },
+  {
+   "t": 1025.76,
+   "d": 2.24,
+   "text": "many of those verbs are in secondary or"
+  },
+  {
+   "t": 1028.0,
+   "d": 1.36,
+   "text": "tertiary menus right"
+  },
+  {
+   "t": 1029.36,
+   "d": 3.2,
+   "text": "i mean something like um sit i think is"
+  },
+  {
+   "t": 1032.56,
+   "d": 1.6,
+   "text": "not a key command it's it's a"
+  },
+  {
+   "t": 1034.16,
+   "d": 3.44,
+   "text": "it's a you know pound sign type sit um"
+  },
+  {
+   "t": 1037.6,
+   "d": 2.48,
+   "text": "the the the key command in nethack is is"
+  },
+  {
+   "t": 1040.08,
+   "d": 1.52,
+   "text": "just move"
+  },
+  {
+   "t": 1041.6,
+   "d": 1.36,
+   "text": "right and when you run into something"
+  },
+  {
+   "t": 1042.96,
+   "d": 2.08,
+   "text": "you you know you attack it and and if"
+  },
+  {
+   "t": 1045.04,
+   "d": 1.2,
+   "text": "you're a newbie player and that's what"
+  },
+  {
+   "t": 1046.24,
+   "d": 1.04,
+   "text": "you're doing you"
+  },
+  {
+   "t": 1047.28,
+   "d": 1.12,
+   "text": "that's that's what you're doing you can"
+  },
+  {
+   "t": 1048.4,
+   "d": 2.0,
+   "text": "get pretty far with that until you run"
+  },
+  {
+   "t": 1050.4,
+   "d": 1.52,
+   "text": "into a closed door and then well okay"
+  },
+  {
+   "t": 1051.92,
+   "d": 1.12,
+   "text": "now you gotta figure out how to open a"
+  },
+  {
+   "t": 1053.04,
+   "d": 1.44,
+   "text": "door but that's okay that's"
+  },
+  {
+   "t": 1054.48,
+   "d": 1.6,
+   "text": "you know then you kind of learn one"
+  },
+  {
+   "t": 1056.08,
+   "d": 1.44,
+   "text": "little bit more and then you know"
+  },
+  {
+   "t": 1057.52,
+   "d": 1.36,
+   "text": "for secret doors okay now we gotta"
+  },
+  {
+   "t": 1058.88,
+   "d": 2.56,
+   "text": "search but so but the advantage of that"
+  },
+  {
+   "t": 1061.44,
+   "d": 1.76,
+   "text": "is they reveal it slowly you know they"
+  },
+  {
+   "t": 1063.2,
+   "d": 0.4,
+   "text": "they"
+  },
+  {
+   "t": 1063.6,
+   "d": 2.0,
+   "text": "bit by bit bit by bit and when you do"
+  },
+  {
+   "t": 1065.6,
+   "d": 1.12,
+   "text": "come into an item like"
+  },
+  {
+   "t": 1066.72,
+   "d": 2.88,
+   "text": "you know a lamp you you start to say"
+  },
+  {
+   "t": 1069.6,
+   "d": 0.4,
+   "text": "whoa"
+  },
+  {
+   "t": 1070.0,
+   "d": 2.0,
+   "text": "a lamp i wonder if i can rub it right"
+  },
+  {
+   "t": 1072.0,
+   "d": 1.44,
+   "text": "again we have the common knowledge of"
+  },
+  {
+   "t": 1073.44,
+   "d": 2.4,
+   "text": "what rent lamps can do and you know"
+  },
+  {
+   "t": 1075.84,
+   "d": 1.76,
+   "text": "so you you want to rub it and so now you"
+  },
+  {
+   "t": 1077.6,
+   "d": 1.6,
+   "text": "look in the man and say okay"
+  },
+  {
+   "t": 1079.2,
+   "d": 1.76,
+   "text": "is there a way to rub lamps oh yeah"
+  },
+  {
+   "t": 1080.96,
+   "d": 2.08,
+   "text": "there's a command so now now you got it"
+  },
+  {
+   "t": 1083.04,
+   "d": 0.4,
+   "text": "so"
+  },
+  {
+   "t": 1083.44,
+   "d": 2.08,
+   "text": "in a way again net hack kind of has the"
+  },
+  {
+   "t": 1085.52,
+   "d": 1.92,
+   "text": "best of both worlds it tries to"
+  },
+  {
+   "t": 1087.44,
+   "d": 2.64,
+   "text": "tries to to support its its massive"
+  },
+  {
+   "t": 1090.08,
+   "d": 1.44,
+   "text": "complexity without making it so"
+  },
+  {
+   "t": 1091.52,
+   "d": 3.44,
+   "text": "difficult for the user"
+  },
+  {
+   "t": 1094.96,
+   "d": 3.28,
+   "text": "um now that's what leads i think to"
+  },
+  {
+   "t": 1098.24,
+   "d": 2.08,
+   "text": "another one of the famous net hack uh"
+  },
+  {
+   "t": 1100.32,
+   "d": 1.52,
+   "text": "quotes which is the dev team thinks of"
+  },
+  {
+   "t": 1101.84,
+   "d": 0.48,
+   "text": "everything"
+  },
+  {
+   "t": 1102.32,
+   "d": 2.8,
+   "text": "this the the you guys all know i'm sure"
+  },
+  {
+   "t": 1105.12,
+   "d": 0.48,
+   "text": "about"
+  },
+  {
+   "t": 1105.6,
+   "d": 1.68,
+   "text": "you know the things like the cockatrice"
+  },
+  {
+   "t": 1107.28,
+   "d": 1.68,
+   "text": "and net hack where there's just"
+  },
+  {
+   "t": 1108.96,
+   "d": 1.52,
+   "text": "all sorts of combinations you know you"
+  },
+  {
+   "t": 1110.48,
+   "d": 2.08,
+   "text": "can use the cockatoos corpse to"
+  },
+  {
+   "t": 1112.56,
+   "d": 2.4,
+   "text": "to to to turn people to stone but only"
+  },
+  {
+   "t": 1114.96,
+   "d": 1.12,
+   "text": "if you've got a"
+  },
+  {
+   "t": 1116.08,
+   "d": 1.2,
+   "text": "a metal glove because otherwise you'll"
+  },
+  {
+   "t": 1117.28,
+   "d": 1.52,
+   "text": "turn to stone when you wield it but if"
+  },
+  {
+   "t": 1118.8,
+   "d": 1.6,
+   "text": "you fall and trip then the cockroach"
+  },
+  {
+   "t": 1120.4,
+   "d": 0.72,
+   "text": "hits you"
+  },
+  {
+   "t": 1121.12,
+   "d": 2.4,
+   "text": "so all those things every single one of"
+  },
+  {
+   "t": 1123.52,
+   "d": 0.72,
+   "text": "those things"
+  },
+  {
+   "t": 1124.24,
+   "d": 2.8,
+   "text": "every single one of those combinations"
+  },
+  {
+   "t": 1127.04,
+   "d": 1.76,
+   "text": "developers had to figure out"
+  },
+  {
+   "t": 1128.8,
+   "d": 1.6,
+   "text": "essentially you know well what what's"
+  },
+  {
+   "t": 1130.4,
+   "d": 1.68,
+   "text": "the right thing for for"
+  },
+  {
+   "t": 1132.08,
+   "d": 1.68,
+   "text": "what's the right thing that'll happen in"
+  },
+  {
+   "t": 1133.76,
+   "d": 2.88,
+   "text": "this situation and then"
+  },
+  {
+   "t": 1136.64,
+   "d": 3.04,
+   "text": "code it up you know write write code"
+  },
+  {
+   "t": 1139.68,
+   "d": 1.92,
+   "text": "for you guys who are indie developers"
+  },
+  {
+   "t": 1141.6,
+   "d": 1.44,
+   "text": "you know how hard that is"
+  },
+  {
+   "t": 1143.04,
+   "d": 2.08,
+   "text": "you know how hard it is for every single"
+  },
+  {
+   "t": 1145.12,
+   "d": 1.68,
+   "text": "one of those combinations to code"
+  },
+  {
+   "t": 1146.8,
+   "d": 1.76,
+   "text": "something specific and say"
+  },
+  {
+   "t": 1148.56,
+   "d": 1.44,
+   "text": "okay when this this this and this"
+  },
+  {
+   "t": 1150.0,
+   "d": 1.52,
+   "text": "happens you know this is what happens"
+  },
+  {
+   "t": 1151.52,
+   "d": 1.44,
+   "text": "and you type it in"
+  },
+  {
+   "t": 1152.96,
+   "d": 2.88,
+   "text": "it takes forever it's it's amazing again"
+  },
+  {
+   "t": 1155.84,
+   "d": 0.96,
+   "text": "another one of the things that these"
+  },
+  {
+   "t": 1156.8,
+   "d": 1.84,
+   "text": "guys have done which which helps"
+  },
+  {
+   "t": 1158.64,
+   "d": 2.16,
+   "text": "which have stolen which i've stolen from"
+  },
+  {
+   "t": 1160.8,
+   "d": 1.12,
+   "text": "transcendence"
+  },
+  {
+   "t": 1161.92,
+   "d": 2.0,
+   "text": "is reduce things to attributes just to"
+  },
+  {
+   "t": 1163.92,
+   "d": 1.68,
+   "text": "make it a little bit more manageable"
+  },
+  {
+   "t": 1165.6,
+   "d": 2.08,
+   "text": "so it's not that they they try to say"
+  },
+  {
+   "t": 1167.68,
+   "d": 2.08,
+   "text": "well okay you know magic leather armor"
+  },
+  {
+   "t": 1169.76,
+   "d": 0.8,
+   "text": "blah blah blah blah"
+  },
+  {
+   "t": 1170.56,
+   "d": 1.76,
+   "text": "against you know this sword does this"
+  },
+  {
+   "t": 1172.32,
+   "d": 2.08,
+   "text": "kind of combination or if you dip"
+  },
+  {
+   "t": 1174.4,
+   "d": 2.0,
+   "text": "you know dagger into this you know"
+  },
+  {
+   "t": 1176.4,
+   "d": 2.24,
+   "text": "poison you get that combination"
+  },
+  {
+   "t": 1178.64,
+   "d": 1.44,
+   "text": "instead they reduce it down into"
+  },
+  {
+   "t": 1180.08,
+   "d": 1.6,
+   "text": "attributes things are made out of"
+  },
+  {
+   "t": 1181.68,
+   "d": 1.6,
+   "text": "material so there's metal there's"
+  },
+  {
+   "t": 1183.28,
+   "d": 1.44,
+   "text": "leather there's wood"
+  },
+  {
+   "t": 1184.72,
+   "d": 1.76,
+   "text": "you know and a lot of the items you can"
+  },
+  {
+   "t": 1186.48,
+   "d": 1.6,
+   "text": "just say okay these are all the metal"
+  },
+  {
+   "t": 1188.08,
+   "d": 1.44,
+   "text": "items these are all the wood items"
+  },
+  {
+   "t": 1189.52,
+   "d": 1.68,
+   "text": "and then they just program in the pieces"
+  },
+  {
+   "t": 1191.2,
+   "d": 2.0,
+   "text": "that the interaction between metal"
+  },
+  {
+   "t": 1193.2,
+   "d": 1.52,
+   "text": "you know and wood between metal and"
+  },
+  {
+   "t": 1194.72,
+   "d": 1.68,
+   "text": "water between this and that"
+  },
+  {
+   "t": 1196.4,
+   "d": 1.44,
+   "text": "uh same thing with attributes for"
+  },
+  {
+   "t": 1197.84,
+   "d": 2.08,
+   "text": "monsters you know there's there's fire"
+  },
+  {
+   "t": 1199.92,
+   "d": 1.6,
+   "text": "resistance there's you know"
+  },
+  {
+   "t": 1201.52,
+   "d": 2.16,
+   "text": "there's there's a limited number of kind"
+  },
+  {
+   "t": 1203.68,
+   "d": 2.32,
+   "text": "of attributes which they combine"
+  },
+  {
+   "t": 1206.0,
+   "d": 1.84,
+   "text": "and so they focus on the attributes and"
+  },
+  {
+   "t": 1207.84,
+   "d": 2.16,
+   "text": "that helps you to kind of"
+  },
+  {
+   "t": 1210.0,
+   "d": 2.72,
+   "text": "as a developer team you know be seen as"
+  },
+  {
+   "t": 1212.72,
+   "d": 1.44,
+   "text": "the developer theme thinks of everything"
+  },
+  {
+   "t": 1214.16,
+   "d": 0.48,
+   "text": "because"
+  },
+  {
+   "t": 1214.64,
+   "d": 1.6,
+   "text": "you just kind of covered some of these"
+  },
+  {
+   "t": 1216.24,
+   "d": 1.6,
+   "text": "some of these basic cases"
+  },
+  {
+   "t": 1217.84,
+   "d": 1.6,
+   "text": "it's still a ton of work it's still a"
+  },
+  {
+   "t": 1219.44,
+   "d": 2.0,
+   "text": "ton of work because even then you have"
+  },
+  {
+   "t": 1221.44,
+   "d": 1.04,
+   "text": "like all these"
+  },
+  {
+   "t": 1222.48,
+   "d": 1.84,
+   "text": "edge conditions but it becomes more"
+  },
+  {
+   "t": 1224.32,
+   "d": 1.36,
+   "text": "manageable it becomes something that's"
+  },
+  {
+   "t": 1225.68,
+   "d": 0.88,
+   "text": "possible"
+  },
+  {
+   "t": 1226.56,
+   "d": 3.04,
+   "text": "in a human lifetime"
+  },
+  {
+   "t": 1230.48,
+   "d": 2.24,
+   "text": "okay i'm not proud i'm going to have a"
+  },
+  {
+   "t": 1232.72,
+   "d": 1.84,
+   "text": "picture of my dog and just to get people"
+  },
+  {
+   "t": 1234.56,
+   "d": 2.08,
+   "text": "to watch my presentation why not"
+  },
+  {
+   "t": 1236.64,
+   "d": 2.08,
+   "text": "um there's a slight story behind this so"
+  },
+  {
+   "t": 1238.72,
+   "d": 1.92,
+   "text": "this is my dot this is my dog hilo"
+  },
+  {
+   "t": 1240.64,
+   "d": 2.32,
+   "text": "uh when we were uh training my dog he"
+  },
+  {
+   "t": 1242.96,
+   "d": 1.68,
+   "text": "would just pull you know squirrel"
+  },
+  {
+   "t": 1244.64,
+   "d": 2.32,
+   "text": "blah you know whatever and so we go to"
+  },
+  {
+   "t": 1246.96,
+   "d": 1.44,
+   "text": "the trainer um"
+  },
+  {
+   "t": 1248.4,
+   "d": 1.52,
+   "text": "dog pulls all the time heal the pulse"
+  },
+  {
+   "t": 1249.92,
+   "d": 1.52,
+   "text": "all the time what you know why"
+  },
+  {
+   "t": 1251.44,
+   "d": 2.0,
+   "text": "it's like well because it works right i"
+  },
+  {
+   "t": 1253.44,
+   "d": 1.36,
+   "text": "mean it it that"
+  },
+  {
+   "t": 1254.8,
+   "d": 2.56,
+   "text": "for from kelo's perspective he's like i"
+  },
+  {
+   "t": 1257.36,
+   "d": 1.36,
+   "text": "see something he pulls"
+  },
+  {
+   "t": 1258.72,
+   "d": 3.28,
+   "text": "we're like and he gets it success he's"
+  },
+  {
+   "t": 1262.0,
+   "d": 1.12,
+   "text": "solved the game he's figured out the"
+  },
+  {
+   "t": 1263.12,
+   "d": 1.52,
+   "text": "game he just has to pull and he gets"
+  },
+  {
+   "t": 1264.64,
+   "d": 0.96,
+   "text": "what he wants"
+  },
+  {
+   "t": 1265.6,
+   "d": 2.72,
+   "text": "right so um how do we how do we fix this"
+  },
+  {
+   "t": 1268.32,
+   "d": 1.44,
+   "text": "how do we fix it well easy"
+  },
+  {
+   "t": 1269.76,
+   "d": 2.16,
+   "text": "whenever he pulls we we just don't let"
+  },
+  {
+   "t": 1271.92,
+   "d": 1.84,
+   "text": "him go we don't let him go because then"
+  },
+  {
+   "t": 1273.76,
+   "d": 1.92,
+   "text": "then now he'll get the idea that okay if"
+  },
+  {
+   "t": 1275.68,
+   "d": 1.28,
+   "text": "he pulls he's not going to get what he"
+  },
+  {
+   "t": 1276.96,
+   "d": 1.12,
+   "text": "wants"
+  },
+  {
+   "t": 1278.08,
+   "d": 2.48,
+   "text": "didn't work didn't work at all the exact"
+  },
+  {
+   "t": 1280.56,
+   "d": 1.52,
+   "text": "opposite happened now he pulled even"
+  },
+  {
+   "t": 1282.08,
+   "d": 0.72,
+   "text": "harder"
+  },
+  {
+   "t": 1282.8,
+   "d": 2.32,
+   "text": "it feels even harder and again this is"
+  },
+  {
+   "t": 1285.12,
+   "d": 1.44,
+   "text": "obvious right this is this is obvious"
+  },
+  {
+   "t": 1286.56,
+   "d": 0.32,
+   "text": "why"
+  },
+  {
+   "t": 1286.88,
+   "d": 2.64,
+   "text": "why is this is because he he now is"
+  },
+  {
+   "t": 1289.52,
+   "d": 1.44,
+   "text": "getting variable rewards"
+  },
+  {
+   "t": 1290.96,
+   "d": 1.92,
+   "text": "he's getting sometimes it works"
+  },
+  {
+   "t": 1292.88,
+   "d": 1.6,
+   "text": "sometimes it doesn't"
+  },
+  {
+   "t": 1294.48,
+   "d": 1.52,
+   "text": "you know and when it's when it's a case"
+  },
+  {
+   "t": 1296.0,
+   "d": 2.88,
+   "text": "like that now it's a slot machine"
+  },
+  {
+   "t": 1298.88,
+   "d": 3.28,
+   "text": "right now now it's like um"
+  },
+  {
+   "t": 1302.16,
+   "d": 1.44,
+   "text": "it it's it's when it does work it's like"
+  },
+  {
+   "t": 1303.6,
+   "d": 1.92,
+   "text": "oh my god it worked you know and it"
+  },
+  {
+   "t": 1305.52,
+   "d": 1.68,
+   "text": "reinforces that behavior for the next"
+  },
+  {
+   "t": 1307.2,
+   "d": 0.72,
+   "text": "time"
+  },
+  {
+   "t": 1307.92,
+   "d": 2.88,
+   "text": "so this concept of variable rewards"
+  },
+  {
+   "t": 1310.8,
+   "d": 1.28,
+   "text": "super important"
+  },
+  {
+   "t": 1312.08,
+   "d": 2.8,
+   "text": "um that's why the rng always wins the"
+  },
+  {
+   "t": 1314.88,
+   "d": 1.2,
+   "text": "random number generator"
+  },
+  {
+   "t": 1316.08,
+   "d": 2.16,
+   "text": "in net hack and this is why another"
+  },
+  {
+   "t": 1318.24,
+   "d": 1.28,
+   "text": "brilliant thing about net hack"
+  },
+  {
+   "t": 1319.52,
+   "d": 2.64,
+   "text": "is that that bit of randomness that idea"
+  },
+  {
+   "t": 1322.16,
+   "d": 1.36,
+   "text": "of variable rewards"
+  },
+  {
+   "t": 1323.52,
+   "d": 1.6,
+   "text": "um you know when you open up a chest you"
+  },
+  {
+   "t": 1325.12,
+   "d": 1.36,
+   "text": "don't know what's in it it could be"
+  },
+  {
+   "t": 1326.48,
+   "d": 1.04,
+   "text": "nothing it could be something that could"
+  },
+  {
+   "t": 1327.52,
+   "d": 0.24,
+   "text": "be"
+  },
+  {
+   "t": 1327.76,
+   "d": 1.92,
+   "text": "one of the wishing but when when it's a"
+  },
+  {
+   "t": 1329.68,
+   "d": 1.92,
+   "text": "wonder wishing it's like woohoo"
+  },
+  {
+   "t": 1331.6,
+   "d": 2.16,
+   "text": "and and now you're you're incented to do"
+  },
+  {
+   "t": 1333.76,
+   "d": 1.84,
+   "text": "it you know you keep on and and you keep"
+  },
+  {
+   "t": 1335.6,
+   "d": 0.88,
+   "text": "on coming back"
+  },
+  {
+   "t": 1336.48,
+   "d": 1.52,
+   "text": "and you play another game because you"
+  },
+  {
+   "t": 1338.0,
+   "d": 1.6,
+   "text": "think this time i'm going to find that"
+  },
+  {
+   "t": 1339.6,
+   "d": 1.28,
+   "text": "wand of wishing you know this time is"
+  },
+  {
+   "t": 1340.88,
+   "d": 1.2,
+   "text": "going to show up"
+  },
+  {
+   "t": 1342.08,
+   "d": 3.12,
+   "text": "now net hack again uses that that"
+  },
+  {
+   "t": 1345.2,
+   "d": 1.92,
+   "text": "technique that mechanic"
+  },
+  {
+   "t": 1347.12,
+   "d": 2.64,
+   "text": "as part of a complete game design"
+  },
+  {
+   "t": 1349.76,
+   "d": 0.8,
+   "text": "meaning it's not"
+  },
+  {
+   "t": 1350.56,
+   "d": 2.24,
+   "text": "it's not a slot machine right it it uses"
+  },
+  {
+   "t": 1352.8,
+   "d": 1.04,
+   "text": "it responsibly"
+  },
+  {
+   "t": 1353.84,
+   "d": 2.08,
+   "text": "you can obviously take this way too far"
+  },
+  {
+   "t": 1355.92,
+   "d": 1.52,
+   "text": "and where that becomes the only mechanic"
+  },
+  {
+   "t": 1357.44,
+   "d": 1.2,
+   "text": "and then you know it doesn't work"
+  },
+  {
+   "t": 1358.64,
+   "d": 2.24,
+   "text": "or maybe it does work but it's probably"
+  },
+  {
+   "t": 1360.88,
+   "d": 1.76,
+   "text": "probably wrong that it works"
+  },
+  {
+   "t": 1362.64,
+   "d": 2.24,
+   "text": "um but but in that hack you know use"
+  },
+  {
+   "t": 1364.88,
+   "d": 1.84,
+   "text": "responsibly which which they do"
+  },
+  {
+   "t": 1366.72,
+   "d": 1.84,
+   "text": "it works beautifully it's yet another"
+  },
+  {
+   "t": 1368.56,
+   "d": 1.2,
+   "text": "one of those things that make"
+  },
+  {
+   "t": 1369.76,
+   "d": 2.16,
+   "text": "nethack something that you go back to"
+  },
+  {
+   "t": 1371.92,
+   "d": 2.64,
+   "text": "again and again and again"
+  },
+  {
+   "t": 1374.56,
+   "d": 2.32,
+   "text": "if only they'd monetized it could have"
+  },
+  {
+   "t": 1376.88,
+   "d": 1.28,
+   "text": "been free to play like you know all"
+  },
+  {
+   "t": 1378.16,
+   "d": 1.92,
+   "text": "those years ago"
+  },
+  {
+   "t": 1380.08,
+   "d": 2.24,
+   "text": "okay another thing um this is this is"
+  },
+  {
+   "t": 1382.32,
+   "d": 1.52,
+   "text": "the set of ships and stations and"
+  },
+  {
+   "t": 1383.84,
+   "d": 0.96,
+   "text": "transcendence"
+  },
+  {
+   "t": 1384.8,
+   "d": 2.48,
+   "text": "uh again lots of them there's some that"
+  },
+  {
+   "t": 1387.28,
+   "d": 1.76,
+   "text": "are too tiny even to see just you know"
+  },
+  {
+   "t": 1389.04,
+   "d": 1.52,
+   "text": "in this particular scale"
+  },
+  {
+   "t": 1390.56,
+   "d": 3.04,
+   "text": "but my my point here is uh this is the"
+  },
+  {
+   "t": 1393.6,
+   "d": 1.52,
+   "text": "same this is another one of the things"
+  },
+  {
+   "t": 1395.12,
+   "d": 0.72,
+   "text": "that i"
+  },
+  {
+   "t": 1395.84,
+   "d": 1.92,
+   "text": "kind of learned from nethack is that"
+  },
+  {
+   "t": 1397.76,
+   "d": 1.92,
+   "text": "it's not enough to just have a small set"
+  },
+  {
+   "t": 1399.68,
+   "d": 0.88,
+   "text": "of things"
+  },
+  {
+   "t": 1400.56,
+   "d": 1.44,
+   "text": "in order to get that combinatorial"
+  },
+  {
+   "t": 1402.0,
+   "d": 1.92,
+   "text": "complexity in order to get enough"
+  },
+  {
+   "t": 1403.92,
+   "d": 1.76,
+   "text": "interest and get players to come back"
+  },
+  {
+   "t": 1405.68,
+   "d": 2.32,
+   "text": "from mastery you need a whole bunch of"
+  },
+  {
+   "t": 1408.0,
+   "d": 1.12,
+   "text": "these things"
+  },
+  {
+   "t": 1409.12,
+   "d": 2.8,
+   "text": "uh rogue started out with 26 monsters"
+  },
+  {
+   "t": 1411.92,
+   "d": 1.12,
+   "text": "right you know one for each letter of"
+  },
+  {
+   "t": 1413.04,
+   "d": 0.96,
+   "text": "the alphabet"
+  },
+  {
+   "t": 1414.0,
+   "d": 2.32,
+   "text": "that people did hack they're like ah you"
+  },
+  {
+   "t": 1416.32,
+   "d": 1.52,
+   "text": "know that's not enough monsters 26"
+  },
+  {
+   "t": 1417.84,
+   "d": 0.72,
+   "text": "that's not enough"
+  },
+  {
+   "t": 1418.56,
+   "d": 1.68,
+   "text": "you know they did 52 they started using"
+  },
+  {
+   "t": 1420.24,
+   "d": 1.52,
+   "text": "lower case letters and then ned heck of"
+  },
+  {
+   "t": 1421.76,
+   "d": 1.28,
+   "text": "course said you know"
+  },
+  {
+   "t": 1423.04,
+   "d": 2.08,
+   "text": "ah you know colors colors you know we"
+  },
+  {
+   "t": 1425.12,
+   "d": 1.68,
+   "text": "can we can have even more than 52. now"
+  },
+  {
+   "t": 1426.8,
+   "d": 1.36,
+   "text": "they've got hundreds"
+  },
+  {
+   "t": 1428.16,
+   "d": 1.6,
+   "text": "right and and that's part of the"
+  },
+  {
+   "t": 1429.76,
+   "d": 1.68,
+   "text": "awesomeness of net hack that"
+  },
+  {
+   "t": 1431.44,
+   "d": 2.8,
+   "text": "the the the it's it's not just again"
+  },
+  {
+   "t": 1434.24,
+   "d": 0.64,
+   "text": "it's it's"
+  },
+  {
+   "t": 1434.88,
+   "d": 2.64,
+   "text": "it's not just the quality of one single"
+  },
+  {
+   "t": 1437.52,
+   "d": 2.08,
+   "text": "attack or one single core loop or one"
+  },
+  {
+   "t": 1439.6,
+   "d": 1.28,
+   "text": "single thing"
+  },
+  {
+   "t": 1440.88,
+   "d": 2.0,
+   "text": "it's about the variety it's about just"
+  },
+  {
+   "t": 1442.88,
+   "d": 2.24,
+   "text": "experiencing this breadth of things"
+  },
+  {
+   "t": 1445.12,
+   "d": 2.16,
+   "text": "and for net hack it's not just monsters"
+  },
+  {
+   "t": 1447.28,
+   "d": 0.88,
+   "text": "it's also"
+  },
+  {
+   "t": 1448.16,
+   "d": 1.76,
+   "text": "you know levels right i mean you've got"
+  },
+  {
+   "t": 1449.92,
+   "d": 1.68,
+   "text": "this different kinds of levels vlots"
+  },
+  {
+   "t": 1451.6,
+   "d": 1.76,
+   "text": "tower the maze you know all these"
+  },
+  {
+   "t": 1453.36,
+   "d": 1.04,
+   "text": "different things"
+  },
+  {
+   "t": 1454.4,
+   "d": 1.68,
+   "text": "and when you when you think about the"
+  },
+  {
+   "t": 1456.08,
+   "d": 1.76,
+   "text": "the developers and kind of how they"
+  },
+  {
+   "t": 1457.84,
+   "d": 1.76,
+   "text": "think about okay what do we do to make"
+  },
+  {
+   "t": 1459.6,
+   "d": 1.52,
+   "text": "nethack better"
+  },
+  {
+   "t": 1461.12,
+   "d": 2.4,
+   "text": "it's almost always let's add you know"
+  },
+  {
+   "t": 1463.52,
+   "d": 1.52,
+   "text": "one more experience one more thing that"
+  },
+  {
+   "t": 1465.04,
+   "d": 1.52,
+   "text": "people can see one more thing that"
+  },
+  {
+   "t": 1466.56,
+   "d": 1.76,
+   "text": "people think they should be able to do"
+  },
+  {
+   "t": 1468.32,
+   "d": 3.28,
+   "text": "in nethack it almost it"
+  },
+  {
+   "t": 1471.6,
+   "d": 1.36,
+   "text": "they still have limits they try to it's"
+  },
+  {
+   "t": 1472.96,
+   "d": 1.6,
+   "text": "not like they throw the the kitchen"
+  },
+  {
+   "t": 1474.56,
+   "d": 1.44,
+   "text": "scent well they did the kitchen it's not"
+  },
+  {
+   "t": 1476.0,
+   "d": 1.2,
+   "text": "like they throw um"
+  },
+  {
+   "t": 1477.2,
+   "d": 2.0,
+   "text": "you know everything into it i read i"
+  },
+  {
+   "t": 1479.2,
+   "d": 1.84,
+   "text": "read i read in one of the one of the"
+  },
+  {
+   "t": 1481.04,
+   "d": 2.4,
+   "text": "histories that um that for instance one"
+  },
+  {
+   "t": 1483.44,
+   "d": 1.2,
+   "text": "of the net hack developers"
+  },
+  {
+   "t": 1484.64,
+   "d": 3.12,
+   "text": "wanted to add a jedi class a jedi client"
+  },
+  {
+   "t": 1487.76,
+   "d": 1.84,
+   "text": "and coded it up coded up a jedi class"
+  },
+  {
+   "t": 1489.6,
+   "d": 1.76,
+   "text": "there's a lightsaber you have to find"
+  },
+  {
+   "t": 1491.36,
+   "d": 0.64,
+   "text": "batteries"
+  },
+  {
+   "t": 1492.0,
+   "d": 1.44,
+   "text": "you know on the levels to power your"
+  },
+  {
+   "t": 1493.44,
+   "d": 2.08,
+   "text": "your lightsaber but the other"
+  },
+  {
+   "t": 1495.52,
+   "d": 1.6,
+   "text": "the other developers are like you know"
+  },
+  {
+   "t": 1497.12,
+   "d": 2.64,
+   "text": "as that doesn't quite fit it doesn't"
+  },
+  {
+   "t": 1499.76,
+   "d": 1.28,
+   "text": "quite fit so they cut it"
+  },
+  {
+   "t": 1501.04,
+   "d": 2.0,
+   "text": "they cut it i don't know was that a good"
+  },
+  {
+   "t": 1503.04,
+   "d": 1.2,
+   "text": "idea i don't know i don't know if that"
+  },
+  {
+   "t": 1504.24,
+   "d": 1.6,
+   "text": "was a good idea or not"
+  },
+  {
+   "t": 1505.84,
+   "d": 3.2,
+   "text": "um so so my point is quantity itself can"
+  },
+  {
+   "t": 1509.04,
+   "d": 1.2,
+   "text": "be quality"
+  },
+  {
+   "t": 1510.24,
+   "d": 3.12,
+   "text": "you know quantity of of the things you"
+  },
+  {
+   "t": 1513.36,
+   "d": 1.28,
+   "text": "can experience of the things that you"
+  },
+  {
+   "t": 1514.64,
+   "d": 0.96,
+   "text": "can do"
+  },
+  {
+   "t": 1515.6,
+   "d": 2.72,
+   "text": "that itself is a reason why we play"
+  },
+  {
+   "t": 1518.32,
+   "d": 1.76,
+   "text": "these games it's a reason why we play"
+  },
+  {
+   "t": 1520.08,
+   "d": 0.88,
+   "text": "nethack"
+  },
+  {
+   "t": 1520.96,
+   "d": 3.12,
+   "text": "is because it has all these monsters"
+  },
+  {
+   "t": 1524.08,
+   "d": 2.88,
+   "text": "you know rogue sparked off this immense"
+  },
+  {
+   "t": 1526.96,
+   "d": 1.6,
+   "text": "revolution"
+  },
+  {
+   "t": 1528.56,
+   "d": 2.24,
+   "text": "but how many of us play rogue now it's"
+  },
+  {
+   "t": 1530.8,
+   "d": 2.0,
+   "text": "it's a little bit more constrained it's"
+  },
+  {
+   "t": 1532.8,
+   "d": 3.92,
+   "text": "it's it it it it evolved into all these"
+  },
+  {
+   "t": 1536.72,
+   "d": 0.88,
+   "text": "other games"
+  },
+  {
+   "t": 1537.6,
+   "d": 2.0,
+   "text": "and you can see that that the ones that"
+  },
+  {
+   "t": 1539.6,
+   "d": 1.76,
+   "text": "end up we end up playing"
+  },
+  {
+   "t": 1541.36,
+   "d": 1.52,
+   "text": "you know whether it's net hack or you"
+  },
+  {
+   "t": 1542.88,
+   "d": 2.32,
+   "text": "know uh whatever those end up being uh"
+  },
+  {
+   "t": 1545.2,
+   "d": 1.36,
+   "text": "the ones that we play because they have"
+  },
+  {
+   "t": 1546.56,
+   "d": 2.64,
+   "text": "this just amazing breath"
+  },
+  {
+   "t": 1549.2,
+   "d": 1.6,
+   "text": "okay so i'm gonna i'm gonna i've got"
+  },
+  {
+   "t": 1550.8,
+   "d": 1.36,
+   "text": "about five minutes i'm gonna close"
+  },
+  {
+   "t": 1552.16,
+   "d": 0.64,
+   "text": "quickly"
+  },
+  {
+   "t": 1552.8,
+   "d": 2.24,
+   "text": "with uh basically just some you know"
+  },
+  {
+   "t": 1555.04,
+   "d": 1.12,
+   "text": "going back through"
+  },
+  {
+   "t": 1556.16,
+   "d": 1.2,
+   "text": "all that i've talked about all those"
+  },
+  {
+   "t": 1557.36,
+   "d": 1.76,
+   "text": "different things that nethack has and"
+  },
+  {
+   "t": 1559.12,
+   "d": 1.52,
+   "text": "you know how how we've tried to"
+  },
+  {
+   "t": 1560.64,
+   "d": 2.4,
+   "text": "adapt them some quick quick lessons for"
+  },
+  {
+   "t": 1563.04,
+   "d": 1.36,
+   "text": "indie developers i know not all of your"
+  },
+  {
+   "t": 1564.4,
+   "d": 1.44,
+   "text": "indie developers but"
+  },
+  {
+   "t": 1565.84,
+   "d": 3.12,
+   "text": "but this this will be very very quick to"
+  },
+  {
+   "t": 1568.96,
+   "d": 1.68,
+   "text": "go back to the first thing first you"
+  },
+  {
+   "t": 1570.64,
+   "d": 2.16,
+   "text": "know one of the first slides"
+  },
+  {
+   "t": 1572.8,
+   "d": 1.6,
+   "text": "do that side i mean if you got if you"
+  },
+  {
+   "t": 1574.4,
+   "d": 1.92,
+   "text": "have 100 million dollars do this side"
+  },
+  {
+   "t": 1576.32,
+   "d": 2.32,
+   "text": "that's you know that's absolutely 500"
+  },
+  {
+   "t": 1578.64,
+   "d": 1.76,
+   "text": "million actually i i take it back i take"
+  },
+  {
+   "t": 1580.4,
+   "d": 0.96,
+   "text": "it back"
+  },
+  {
+   "t": 1581.36,
+   "d": 1.84,
+   "text": "if you have because i'm not at all"
+  },
+  {
+   "t": 1583.2,
+   "d": 1.2,
+   "text": "creative if you're like you know"
+  },
+  {
+   "t": 1584.4,
+   "d": 2.0,
+   "text": "jonathan blown you can do braid"
+  },
+  {
+   "t": 1586.4,
+   "d": 2.24,
+   "text": "this is okay too if you have just this"
+  },
+  {
+   "t": 1588.64,
+   "d": 1.76,
+   "text": "brilliant idea for just a brilliant"
+  },
+  {
+   "t": 1590.4,
+   "d": 1.12,
+   "text": "experience"
+  },
+  {
+   "t": 1591.52,
+   "d": 2.0,
+   "text": "this is okay too this works this works"
+  },
+  {
+   "t": 1593.52,
+   "d": 1.36,
+   "text": "for indie games"
+  },
+  {
+   "t": 1594.88,
+   "d": 3.76,
+   "text": "for me i'm just not that creative um"
+  },
+  {
+   "t": 1598.64,
+   "d": 2.96,
+   "text": "this works that side works and and and"
+  },
+  {
+   "t": 1601.6,
+   "d": 0.48,
+   "text": "um"
+  },
+  {
+   "t": 1602.08,
+   "d": 1.52,
+   "text": "you know when you think about why net"
+  },
+  {
+   "t": 1603.6,
+   "d": 2.72,
+   "text": "hack has lasted all these years"
+  },
+  {
+   "t": 1606.32,
+   "d": 3.52,
+   "text": "i think a lot of it is that okay next"
+  },
+  {
+   "t": 1609.84,
+   "d": 2.24,
+   "text": "uh build a city instead of a resort this"
+  },
+  {
+   "t": 1612.08,
+   "d": 0.96,
+   "text": "this is another"
+  },
+  {
+   "t": 1613.04,
+   "d": 2.24,
+   "text": "great thing about net hack um a lot of"
+  },
+  {
+   "t": 1615.28,
+   "d": 1.12,
+   "text": "the"
+  },
+  {
+   "t": 1616.4,
+   "d": 1.52,
+   "text": "aaa experience a lot of the the the kind"
+  },
+  {
+   "t": 1617.92,
+   "d": 2.16,
+   "text": "of single experiences they're a resort"
+  },
+  {
+   "t": 1620.08,
+   "d": 1.76,
+   "text": "that you you know exactly what's going"
+  },
+  {
+   "t": 1621.84,
+   "d": 1.52,
+   "text": "to happen the experience is very well"
+  },
+  {
+   "t": 1623.36,
+   "d": 1.2,
+   "text": "controlled"
+  },
+  {
+   "t": 1624.56,
+   "d": 1.44,
+   "text": "nethack is slightly different it's not"
+  },
+  {
+   "t": 1626.0,
+   "d": 1.6,
+   "text": "afraid of"
+  },
+  {
+   "t": 1627.6,
+   "d": 2.08,
+   "text": "um adding stuff on even if it doesn't"
+  },
+  {
+   "t": 1629.68,
+   "d": 1.68,
+   "text": "well it doesn't quite fit but whatever"
+  },
+  {
+   "t": 1631.36,
+   "d": 1.04,
+   "text": "it's a good idea"
+  },
+  {
+   "t": 1632.4,
+   "d": 2.16,
+   "text": "um it's not afraid of having everything"
+  },
+  {
+   "t": 1634.56,
+   "d": 1.04,
+   "text": "be perfect"
+  },
+  {
+   "t": 1635.6,
+   "d": 2.32,
+   "text": "you know it's because again it's it's"
+  },
+  {
+   "t": 1637.92,
+   "d": 0.96,
+   "text": "all about the breath"
+  },
+  {
+   "t": 1638.88,
+   "d": 1.68,
+   "text": "you play netac and you kind of expect"
+  },
+  {
+   "t": 1640.56,
+   "d": 1.68,
+   "text": "that you know um"
+  },
+  {
+   "t": 1642.24,
+   "d": 1.44,
+   "text": "it's going to be different in some"
+  },
+  {
+   "t": 1643.68,
+   "d": 1.6,
+   "text": "places i mean you know the difference"
+  },
+  {
+   "t": 1645.28,
+   "d": 1.28,
+   "text": "between the maze level"
+  },
+  {
+   "t": 1646.56,
+   "d": 1.68,
+   "text": "and you know something else it's just"
+  },
+  {
+   "t": 1648.24,
+   "d": 2.0,
+   "text": "it's the mishmash of all the different"
+  },
+  {
+   "t": 1650.24,
+   "d": 1.36,
+   "text": "classes you know having a quantum"
+  },
+  {
+   "t": 1651.6,
+   "d": 0.64,
+   "text": "mechanic"
+  },
+  {
+   "t": 1652.24,
+   "d": 2.56,
+   "text": "attacking a vampire you know it's it's"
+  },
+  {
+   "t": 1654.8,
+   "d": 1.36,
+   "text": "it's it's kind of crazy it's like you"
+  },
+  {
+   "t": 1656.16,
+   "d": 1.44,
+   "text": "wouldn't do that at a resort but but"
+  },
+  {
+   "t": 1657.6,
+   "d": 2.24,
+   "text": "but in a city in something that's living"
+  },
+  {
+   "t": 1659.84,
+   "d": 1.84,
+   "text": "and breathing that's accreting"
+  },
+  {
+   "t": 1661.68,
+   "d": 2.96,
+   "text": "through time you know that's being built"
+  },
+  {
+   "t": 1664.64,
+   "d": 1.92,
+   "text": "right before your eyes essentially"
+  },
+  {
+   "t": 1666.56,
+   "d": 1.84,
+   "text": "it works and that i think is another"
+  },
+  {
+   "t": 1668.4,
+   "d": 1.68,
+   "text": "thing that that is great about net hack"
+  },
+  {
+   "t": 1670.08,
+   "d": 1.12,
+   "text": "and that i've tried to do in"
+  },
+  {
+   "t": 1671.2,
+   "d": 0.96,
+   "text": "transcendence"
+  },
+  {
+   "t": 1672.16,
+   "d": 3.2,
+   "text": "now of course um that takes time"
+  },
+  {
+   "t": 1675.36,
+   "d": 3.28,
+   "text": "that takes a lot of time um net hack has"
+  },
+  {
+   "t": 1678.64,
+   "d": 1.6,
+   "text": "been in development for you know decades"
+  },
+  {
+   "t": 1680.24,
+   "d": 1.36,
+   "text": "even transcendence"
+  },
+  {
+   "t": 1681.6,
+   "d": 2.16,
+   "text": "has been in development for for at least"
+  },
+  {
+   "t": 1683.76,
+   "d": 0.96,
+   "text": "a decade"
+  },
+  {
+   "t": 1684.72,
+   "d": 4.0,
+   "text": "and um you know to me i just"
+  },
+  {
+   "t": 1688.72,
+   "d": 2.4,
+   "text": "i i plan on working this for the rest of"
+  },
+  {
+   "t": 1691.12,
+   "d": 1.28,
+   "text": "my life i really think that"
+  },
+  {
+   "t": 1692.4,
+   "d": 1.76,
+   "text": "building this you know building that"
+  },
+  {
+   "t": 1694.16,
+   "d": 1.84,
+   "text": "kind of a a city building that"
+  },
+  {
+   "t": 1696.0,
+   "d": 3.04,
+   "text": "kind of a of a rich deep experience"
+  },
+  {
+   "t": 1699.04,
+   "d": 2.64,
+   "text": "is something that i just i just love and"
+  },
+  {
+   "t": 1701.68,
+   "d": 1.68,
+   "text": "and if if transcendence we can get if i"
+  },
+  {
+   "t": 1703.36,
+   "d": 2.0,
+   "text": "can get even close to even a tenth as"
+  },
+  {
+   "t": 1705.36,
+   "d": 1.12,
+   "text": "good as net hack"
+  },
+  {
+   "t": 1706.48,
+   "d": 3.6,
+   "text": "by the time i die i'll be happy thank"
+  },
+  {
+   "t": 1710.08,
+   "d": 2.96,
+   "text": "you guys thank you very much"
+  },
+  {
+   "t": 1716.72,
+   "d": 2.56,
+   "text": "um maybe maybe a minute for questions or"
+  },
+  {
+   "t": 1719.28,
+   "d": 0.88,
+   "text": "no"
+  },
+  {
+   "t": 1720.16,
+   "d": 1.12,
+   "text": "maybe a few minutes for questions if"
+  },
+  {
+   "t": 1721.28,
+   "d": 1.92,
+   "text": "anyone if anyone's gotten if not"
+  },
+  {
+   "t": 1723.2,
+   "d": 3.28,
+   "text": "that's what that's all cool please six"
+  },
+  {
+   "t": 1726.48,
+   "d": 1.04,
+   "text": "different"
+  },
+  {
+   "t": 1727.52,
+   "d": 3.76,
+   "text": "six different qualities of games"
+  },
+  {
+   "t": 1731.28,
+   "d": 1.68,
+   "text": "you you said that it was like two"
+  },
+  {
+   "t": 1732.96,
+   "d": 1.68,
+   "text": "different sides could you do something"
+  },
+  {
+   "t": 1734.64,
+   "d": 0.32,
+   "text": "like"
+  },
+  {
+   "t": 1734.96,
+   "d": 4.88,
+   "text": "thinking i'm gonna pick quality"
+  },
+  {
+   "t": 1741.84,
+   "d": 3.44,
+   "text": "yeah great question great question um"
+  },
+  {
+   "t": 1745.28,
+   "d": 2.48,
+   "text": "yeah sorry the question is so here i've"
+  },
+  {
+   "t": 1747.76,
+   "d": 1.12,
+   "text": "shown basically six"
+  },
+  {
+   "t": 1748.88,
+   "d": 1.92,
+   "text": "qualities and i basically said that you"
+  },
+  {
+   "t": 1750.8,
+   "d": 1.44,
+   "text": "know these three go together those three"
+  },
+  {
+   "t": 1752.24,
+   "d": 1.6,
+   "text": "go together and the question is well"
+  },
+  {
+   "t": 1753.84,
+   "d": 1.84,
+   "text": "is that true really could you just mix"
+  },
+  {
+   "t": 1755.68,
+   "d": 1.76,
+   "text": "and match could you just say you know"
+  },
+  {
+   "t": 1757.44,
+   "d": 0.88,
+   "text": "i'll take that"
+  },
+  {
+   "t": 1758.32,
+   "d": 2.88,
+   "text": "that and that it's a great question and"
+  },
+  {
+   "t": 1761.2,
+   "d": 0.8,
+   "text": "and i'll be honest"
+  },
+  {
+   "t": 1762.0,
+   "d": 3.44,
+   "text": "i i don't know uh i i think so i i think"
+  },
+  {
+   "t": 1765.44,
+   "d": 1.28,
+   "text": "i think that'll work"
+  },
+  {
+   "t": 1766.72,
+   "d": 3.2,
+   "text": "i know some of these are kind of um"
+  },
+  {
+   "t": 1769.92,
+   "d": 2.48,
+   "text": "reinforcing right interactive immersion"
+  },
+  {
+   "t": 1772.4,
+   "d": 1.76,
+   "text": "kind of goes with mastery"
+  },
+  {
+   "t": 1774.16,
+   "d": 2.88,
+   "text": "but at the same time i do think of these"
+  },
+  {
+   "t": 1777.04,
+   "d": 2.96,
+   "text": "this is a little too um"
+  },
+  {
+   "t": 1780.0,
+   "d": 3.28,
+   "text": "to to hardco or hardcore"
+  },
+  {
+   "t": 1783.28,
+   "d": 1.6,
+   "text": "really it's a slider right really"
+  },
+  {
+   "t": 1784.88,
+   "d": 1.28,
+   "text": "there's there's a slider there and you"
+  },
+  {
+   "t": 1786.16,
+   "d": 1.44,
+   "text": "can say well i want"
+  },
+  {
+   "t": 1787.6,
+   "d": 1.36,
+   "text": "a little bit more graphical immersion a"
+  },
+  {
+   "t": 1788.96,
+   "d": 1.76,
+   "text": "little bit more interactive immersion"
+  },
+  {
+   "t": 1790.72,
+   "d": 1.92,
+   "text": "um same with quality you know i mean you"
+  },
+  {
+   "t": 1792.64,
+   "d": 1.44,
+   "text": "don't want crap"
+  },
+  {
+   "t": 1794.08,
+   "d": 2.16,
+   "text": "you know and lots of it that also"
+  },
+  {
+   "t": 1796.24,
+   "d": 2.56,
+   "text": "doesn't work"
+  },
+  {
+   "t": 1798.96,
+   "d": 2.64,
+   "text": "so so it's it's it's a great question"
+  },
+  {
+   "t": 1801.6,
+   "d": 1.92,
+   "text": "the balance and figuring out"
+  },
+  {
+   "t": 1803.52,
+   "d": 2.24,
+   "text": "when you can you know pull from one for"
+  },
+  {
+   "t": 1805.76,
+   "d": 1.76,
+   "text": "the other when you can when it's"
+  },
+  {
+   "t": 1807.52,
+   "d": 1.6,
+   "text": "you know not enough quality when it's"
+  },
+  {
+   "t": 1809.12,
+   "d": 1.68,
+   "text": "not enough experience"
+  },
+  {
+   "t": 1810.8,
+   "d": 2.96,
+   "text": "um not enough graphical um that's i"
+  },
+  {
+   "t": 1813.76,
+   "d": 0.4,
+   "text": "think"
+  },
+  {
+   "t": 1814.16,
+   "d": 2.32,
+   "text": "what a designer what i think a good game"
+  },
+  {
+   "t": 1816.48,
+   "d": 1.2,
+   "text": "designer is going to have to"
+  },
+  {
+   "t": 1817.68,
+   "d": 1.52,
+   "text": "figure out so but thank you that's"
+  },
+  {
+   "t": 1819.2,
+   "d": 3.36,
+   "text": "that's a great question"
+  },
+  {
+   "t": 1822.56,
+   "d": 3.52,
+   "text": "thank you thank you thank you guys"
+  },
+  {
+   "t": 1826.78,
+   "d": 3.94,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1830.72,
+   "d": 7.12,
+   "text": "i'm sorry"
+  },
+  {
+   "t": 1862.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1876.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1904.84,
+   "d": 3.0,
+   "text": "this"
+  },
+  {
+   "t": 1960.84,
+   "d": 3.0,
+   "text": "um"
+  },
+  {
+   "t": 1981.28,
+   "d": 3.44,
+   "text": "all right well hello everybody"
+  },
+  {
+   "t": 1984.72,
+   "d": 2.0,
+   "text": "so my name is alexi and i'm here to talk"
+  },
+  {
+   "t": 1986.72,
+   "d": 1.76,
+   "text": "about accessibility for visually"
+  },
+  {
+   "t": 1988.48,
+   "d": 1.84,
+   "text": "impaired players within the roguelike"
+  },
+  {
+   "t": 1990.32,
+   "d": 0.8,
+   "text": "genre"
+  },
+  {
+   "t": 1991.12,
+   "d": 1.2,
+   "text": "specifically i'm going to talk about"
+  },
+  {
+   "t": 1992.32,
+   "d": 2.08,
+   "text": "some research that i did with dr john"
+  },
+  {
+   "t": 1994.4,
+   "d": 1.76,
+   "text": "aycock at the university of calgary"
+  },
+  {
+   "t": 1996.16,
+   "d": 0.64,
+   "text": "which is in"
+  },
+  {
+   "t": 1996.8,
+   "d": 1.92,
+   "text": "alberta canada if you're not familiar"
+  },
+  {
+   "t": 1998.72,
+   "d": 1.12,
+   "text": "with it"
+  },
+  {
+   "t": 1999.84,
+   "d": 1.76,
+   "text": "on this topic and kind of what we"
+  },
+  {
+   "t": 2001.6,
+   "d": 2.8,
+   "text": "learned and the work that we did"
+  },
+  {
+   "t": 2004.4,
+   "d": 2.08,
+   "text": "so to give some background on this video"
+  },
+  {
+   "t": 2006.48,
+   "d": 2.4,
+   "text": "games"
+  }
+ ]
+}

@@ -1,0 +1,132 @@
+{
+  "id": "b2VkgcC1xRc",
+  "title": "Ian Holmes - Cellular Automata for Emergent Dungeons",
+  "speaker": "Ian Holmes",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=b2VkgcC1xRc",
+  "talk_type": "technical",
+  "summary": "Ian Holmes, a biologist and former game developer, surveys cellular automata as a broad framework of local tile-neighbourhood interactions, used in science and in games from SimCity to Dwarf Fortress. He describes his prototypes, including Nematode, a multiplayer roguelike built entirely on a CA with gases, polymers and rigid bodies, and argues that stochastic physics (detailed balance, random walks, birth-death processes) helps balance such systems. He closes with graph grammars for level design, crediting Joris Dormans' Unexplored, and suggests MCMC for global constraints like symmetry or consistent backstories.",
+  "games": [
+    "Exile",
+    "Core War",
+    "SimCity",
+    "Dwarf Fortress",
+    "Minecraft",
+    "Caves of Qud",
+    "Unexplored",
+    "Nematode"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ecosystem simulation",
+      "kind": "example",
+      "claim": "The metroidvania Exile combined a heavily curated procedural map (to fit a 32K memory limit) with Newtonian physics and a rich ecosystem of interacting creatures.",
+      "detail": "Holmes calls it his most influential game. Agents interacted with each other and with physical properties like mass and viscosity, and he would like to build something like it.",
+      "t": 103,
+      "quote": "it used procedural generation in a very interesting way to circumvent the 32k memory limit on the machines at the time",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Cellular automata can be treated broadly as any lattice of tiles with local neighbourhood rules, synchronous or not, including lookup-table reaction systems and entity-component cells that respond to messages.",
+      "detail": "Holmes includes Conway-style counting rules, reaction-diffusion and general 'computational chemistry' interactions; cells can update at different speeds. The core idea is very localized interactions between a cell and its neighbourhood.",
+      "t": 243,
+      "quote": "the basic idea is that you're talking about very localized interactions between a cell in its neighborhood that may or may not happen synchronously",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cellular automata",
+      "kind": "history",
+      "claim": "Many games are built on cellular automata, from SimCity's interacting CA layers to Dwarf Fortress and Minecraft, alongside scientific models of fire, crystal growth and fluids.",
+      "detail": "Holmes lists Turing's morphogen model of leopard spots, forest fire and diffusion-limited aggregation models, and points to a PhD thesis analysing SimCity's layers of cellular automata. He notes Caves of Qud giving every wall a melting point.",
+      "t": 314,
+      "quote": "SimCity I think is is really useful because it's been very well studied",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "particle simulation",
+      "kind": "technique",
+      "claim": "Fast, Brownian-like particle systems can still produce overall patterns that gameplay is built around, as in Holmes's predator-prey 'zookeeper' prototype with a rock-paper-scissors ecology.",
+      "detail": "The player balanced populations by building enclosures to stop species killing each other. Later versions added particulate fluids, permeable membranes and cells running small programs, rebuilt in a C virtual machine for speed.",
+      "t": 516,
+      "quote": "not really going anywhere and yet so overall patterns can develop and that can kind of be what you build the gameplay around",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "balancing simulations",
+      "kind": "technique",
+      "claim": "Balancing interacting systems that spawn, grow or trigger catastrophes like fires can draw on stochastic-process tools: detailed balance in Markov chains, Metropolis-Hastings, random-walk diffusion models.",
+      "detail": "Holmes says models of gases and populations on lattices are the key concepts, and the stochastic physics, chemistry and biology literature has many tools for balancing such systems.",
+      "t": 569,
+      "quote": "you have to think a lot about how you're balancing your system and there are a lot of tools for doing this in the stochastic process modeling literature",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "spawning",
+      "kind": "warning",
+      "claim": "Birth-death process models are worth studying to stop spawning entities from taking over the whole map in a simulation-driven roguelike.",
+      "detail": "Holmes names the birth-death process as 'a very key one' among the stochastic models he keeps returning to in his prototypes.",
+      "t": 600,
+      "quote": "a birth-death process is really a very key one to study if you're going to try and think about how to avoid spawning problems from taking over your whole map",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "cellular automata engine",
+      "kind": "example",
+      "claim": "Holmes's Nematode puts a snake-like mechanic in a roguelike setting and implements its whole persistent, multiplayer world inside a cellular automaton with gases, polymers and rigid bodies.",
+      "detail": "The world is procedurally generated with procedural texture descriptions, graphics deliberately minimal. Multiplayer uses Alan Kay's TeaTime model from the Croquet work, running in JavaScript with a Node back end; the demo is an early prototype without goals.",
+      "t": 673,
+      "quote": "the whole thing is implemented within a cellular automata with a few extension so it's got gases it's got polymers",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "graph grammars",
+      "kind": "technique",
+      "claim": "Graph grammars generate levels by repeatedly applying rewrite rules to a coarse graph of the map (extend paths, add detours, lock-and-key puzzles, shortcuts), as pioneered by Joris Dormans in Unexplored.",
+      "detail": "Holmes uses this for Nematode's level design and released an open-source library for it. He credits Unexplored's levels with a cohesive, human-designed feel achieved through graph grammars.",
+      "t": 842,
+      "quote": "in a graph grammar you apply a set of transformation rules to transform this graph and the way that you transform it is by sir extending paths or introducing detours",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cyclic dungeons",
+      "kind": "technique",
+      "claim": "A graph grammar can guarantee a shortcut back from a side path's key to its locked door, producing cyclic levels with long-range structure that local methods like string grammars lack.",
+      "detail": "Holmes shows a Nematode level whose overall structure brings you back to the start and lets you skip things; he added one red herring branch.",
+      "t": 872,
+      "quote": "there's always a shortcut back from where the key is to where the door is and so you end up with these sorts of so called cyclic levels",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "branching stories",
+      "kind": "example",
+      "claim": "The same graph-grammar approach generated a choose-your-own-adventure story graph: mostly tree-like but with local cycles, ending in outcomes such as a boss or death, from a very small rule set.",
+      "detail": "Holmes says the appeal is driving a program from a compact set of rules that are conceptually easy to understand, analyse, debug and maintain.",
+      "t": 958,
+      "quote": "you can drive your program you know with a very small set of rules that are conceptually easy to understand and to analyze and to debug and maintain",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "global constraints",
+      "kind": "open-question",
+      "claim": "Symmetry and other global properties are hard to produce with locally applied grammar rules; Holmes suggests combining grammars with MCMC methods that optimise global cost functions.",
+      "detail": "Answering a question about architectural-looking levels, Holmes calls symmetry a global property. He cites procedural alibi generation, which uses MCMC to stochastically search NPC backstories until they fit everything the player has seen, and imagines this knitting together histories and lore in a persistent world.",
+      "t": 1072,
+      "quote": "it's hard to generate with these sort of rule-based systems that apply that work locally because it's a global property",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

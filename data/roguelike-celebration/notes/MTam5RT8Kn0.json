@@ -1,0 +1,119 @@
+{
+  "id": "MTam5RT8Kn0",
+  "title": "Philomena Schwab: 100,000 wishlists in 3 months - Weird roguelikes are taking over the world",
+  "speaker": "Philomena Schwab",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=MTam5RT8Kn0",
+  "talk_type": "postmortem",
+  "summary": "Philomena Schwab, co-founder of Zurich's Stray Fawn Studio (Niche, Nimbatus, The Wandering Village), tells how a small team turned a shelved claw-machine deckbuilder prototype into Dungeon Clawler, which reached about 175,000 Steam wishlists. Seeing Peglin as proof that roguelike deckbuilders could branch into physics-based sub-genres, the team brainstormed a claw-machine mechanic, revived the prototype after an arcade-filled team trip to Japan, and kept art simple for fast iteration. She credits the Steam Deckbuilders Fest demo, Japanese PR and especially roguelike-focused streamers and Next Fest influencer outreach, while social media did little. In Q&A she discusses free-to-play mobile clones copying their content and the advice to launch the mobile port as premium.",
+  "games": [
+    "Dungeon Clawler",
+    "Peglin",
+    "The Wandering Village",
+    "Luck be a Landlord",
+    "Slay the Spire"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "deckbuilder sub-genres",
+      "kind": "history",
+      "claim": "Peglin showed roguelike deckbuilders could diversify into physics-based sub-genres, which led Stray Fawn to look for other familiar real-world mechanics to fuse with a deckbuilder.",
+      "detail": "Schwab says the team felt there were already many roguelike deckbuilders and looked for exceptions; Peglin stood out as one of the first with a physical spin, opening a sub-genre. Brainstorming easily understood mechanics, they landed on a claw machine and a punning name, Dungeon Clawler.",
+      "t": 194,
+      "quote": "Peglin is almost like a different sub-genre of roguelike where we are starting to diversify within the genre and opening up little sub-genres.",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping time",
+      "kind": "technique",
+      "claim": "Stray Fawn keeps regular 'do what you want' prototyping afternoons, and the Dungeon Clawler prototype came from one before being shelved and later revived.",
+      "detail": "Every Monday and Friday afternoon staff prototype freely. Schwab's co-founder built the claw-machine prototype alone; it was fun but the team moved on and left it 'in the freezer' until a later trip rekindled interest. The team also votes yearly on what the studio should make next.",
+      "t": 249,
+      "quote": "We have do what you want afternoons every Monday and Friday afternoons where people are just prototyping.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "market research",
+      "kind": "example",
+      "claim": "Stray Fawn revived Dungeon Clawler after noticing claw machines' popularity in Japan and China, linking a familiar mechanic to large Steam audiences in Asia.",
+      "detail": "During a team trip to Japan they found arcades with five floors of claw machines, unlike the rare, rigged machines in Europe. With China having the most Steam users, they thought a game built on a mechanic popular there had potential, and two team members built the current game in three months.",
+      "t": 339,
+      "quote": "The idea of the genre that is pretty popular and the emergent Asian markets on Steam. China is the country with the most users on Steam.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "small team scope",
+      "kind": "technique",
+      "claim": "Dungeon Clawler deliberately used basic art so a tiny team, including a one-day-a-week artist, could iterate quickly and add content fast.",
+      "detail": "Schwab says it was clear from the start the art should be simple for easy iteration and content addition, partly because the artist worked only one day a week and had to produce missing art quickly. A 2-3 person team made the demo in 3-4 months, versus the 13-person, four-year Wandering Village.",
+      "t": 371,
+      "quote": "we wanted the arch to be pretty basic so we could quickly and easily iterate and add new content to the game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "demo launch",
+      "kind": "example",
+      "claim": "Dungeon Clawler launched its Steam page and demo together at the Steam Deckbuilders Fest, and wishlists tracked demo player numbers closely.",
+      "detail": "After 3-4 months of work they set up the store page, launched the demo during the fest and reached out to YouTubers and streamers who had played their previous games. Schwab notes Steam's rules about demo releases and wishlists have since changed, so this might not work the same way now.",
+      "t": 475,
+      "quote": "You can see the wishlist is corresponding quite well to the demo players.",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "press coverage",
+      "kind": "example",
+      "claim": "Japanese press covered Dungeon Clawler about ten times more than global press, drawn to the story of Western devs inspired by Japanese arcades.",
+      "detail": "Schwab ran international PR with a Japan focus. She also notes this kind of game is hard to sell to press before it is already a success.",
+      "t": 509,
+      "quote": "we had like 10 times more PR coverage from Japan than from global in total",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "influencer marketing",
+      "kind": "principle",
+      "claim": "Roguelike-focused YouTubers and streamers actively seek new and weird roguelikes, and they rather than social media drove Dungeon Clawler's growth.",
+      "detail": "Without paid campaigns, dedicated roguelike influencers kept the game alive; then a large outreach push to a few thousand creators for Steam Next Fest made it the 11th most played game of that fest. Social media did little apart from one Reddit post. Schwab sees this audience as why 'weird roguelikes are here to take over the world'.",
+      "t": 530,
+      "quote": "There is a very dedicated influencer base like YouTube streamers for roguelikes that are really on the look out for new and weird things",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mobile monetization",
+      "kind": "example",
+      "claim": "Developers of Peglin, Luck be a Landlord and other roguelikes advised Stray Fawn to launch Dungeon Clawler's mobile port as premium rather than free-to-play.",
+      "detail": "Because players asked for mobile, Stray Fawn decided on a simultaneous mobile and PC (early access) release, a first for them. Schwab talked to several roguelike devs about monetization; most recommended premium to start, and she was unsure how mobile sales would compare to Steam.",
+      "t": 658,
+      "quote": "most of them recommended we should just go premium to start out with",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "clones",
+      "kind": "warning",
+      "claim": "Simple, novel roguelikes are vulnerable to fast mobile clones: three free-to-play clones copied Dungeon Clawler's itemization, characters and balancing after Next Fest.",
+      "detail": "Schwab distinguishes this from legitimate inspiration: another claw-machine roguelike was completely different and she would happily bundle with it. With The Wandering Village, people stole footage or models, but here clones took the entire design and released free, which hurts before a premium launch.",
+      "t": 794,
+      "quote": "here they just took our whole itemization, all of our character designs, and like all of the balancing and the games are free to play",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "regional pr partners",
+      "kind": "technique",
+      "claim": "Stray Fawn handles most PR itself but works with external partners for China and Japan.",
+      "detail": "Asked whether they hire PR, Schwab says the studio became a publisher too, and usually does everything itself, but for Japan and China always uses external companies, which worked well for Dungeon Clawler's Japanese push.",
+      "t": 887,
+      "quote": "For China and Japan, we always work with external companies.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

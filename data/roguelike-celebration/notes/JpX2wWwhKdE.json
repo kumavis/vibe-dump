@@ -1,0 +1,98 @@
+{
+  "id": "JpX2wWwhKdE",
+  "title": "Michael Brough - The Roots of Roguelikes in Fantasy Fiction",
+  "speaker": "Michael Brough",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=JpX2wWwhKdE",
+  "talk_type": "history",
+  "summary": "Michael Brough traces roguelike mechanics back through Dungeons & Dragons to early and mid 20th-century fantasy short fiction. Reading from Fritz Leiber's Fafhrd and the Gray Mouser stories, he argues that the rogue who can use a magic scroll became D&D's thief device-use ability and thence Rogue's item-using thief. He explains D&D's twin roots in wargaming and pulp fantasy, why short stories suit rogue protagonists and session-sized arcs, and why designers should study source material, including Rogue itself. He closes with Jack Vance's Dying Earth: Vancian magic as a storytelling device, and Cugel, whose wizardry is defined by a collection of magic items, like a roguelike character's.",
+  "games": [
+    "Rogue",
+    "NetHack",
+    "Dungeons & Dragons",
+    "Chainmail"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue device use",
+      "kind": "history",
+      "claim": "Brough argues the roguelike thief who uses magic devices descends from fantasy fiction like Leiber's Gray Mouser, a rogue who casts a spell from a scroll, via D&D's rogue use-magic-device ability.",
+      "detail": "He reads a scene where the Mouser, a thief with failed magician training, reads a scroll that destroys sorcerers of lesser rank. D&D designers wanted scenes from this fiction to be possible in play, so rogues, not fighters or barbarians, could use wands and scrolls; Rogue then made a thief who picks up devices and figures out how to use them.",
+      "t": 423,
+      "quote": "This, in my opinion, is how to came to pass that the Dungeons and Dragons rogue character has the use metric device ability",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "d&d ancestry",
+      "kind": "history",
+      "claim": "Dungeons & Dragons had two main roots: the fantasy miniatures wargame Chainmail, descended from historical wargames used to plan real battles, and early-to-mid 20th-century fantasy fiction.",
+      "detail": "Brough notes historical wargames grew from planning real war by moving pieces, so our games have roots in actual horrific violence. He shows Gary Gygax's reading list from the Dungeon Master's Guide citing authors including the Leiber story he read.",
+      "t": 517,
+      "quote": "Dungeons and Dragons has two main branches of ancestry. It was based on a fantasy -- like a miniature war game called Chain Mail",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "short-story structure",
+      "kind": "principle",
+      "claim": "Short adventure stories suit rogue protagonists and roguelikes better than epic trilogies, because they tell brief, self-contained arcs of discovery, adventure, success and failure.",
+      "detail": "Brough describes the pulp magazine market of the early 20th century as an accessible place to sell short stories, like the later Flash games market, which flourished then died; later fantasy was dominated by Lord of the Rings-style trilogies. Novels have epic heroes, short stories have rogues.",
+      "t": 842,
+      "quote": "Novels and like epic trillgies have epic heroes but short stories are much more suited to rogues",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "session arcs",
+      "kind": "principle",
+      "claim": "Each tabletop play session needs a satisfying self-contained arc even within a longer campaign, and pulp short stories modelled that structure for D&D.",
+      "detail": "Brough says if sessions lack their own arc, people will not keep returning weekly. He sees the short-story mode as inspiration for how a play session is structured.",
+      "t": 963,
+      "quote": "you still have to have each session have a self-contained ark where it feels satisfied to do that or people aren't going to keep coming back",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "studying sources",
+      "kind": "principle",
+      "claim": "Roguelike designers should play Rogue and read the fiction and tabletop games it came from, because you can only judge what a work added if you know its sources.",
+      "detail": "Brough says knowing the source shows whether a work is merely derivative or brought something new, and how ideas adapt to new contexts. Naming the genre after Rogue honors it, so it is odd to claim it as inspiration without knowing its details.",
+      "t": 1099,
+      "quote": "this is why I always advocate for people who are interested in roguelikes to go back and play Rogue",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "dated source material",
+      "kind": "principle",
+      "claim": "Brough encourages engaging with older fantasy despite its dated cultural norms, since tracing how depictions changed over time gives a picture of progress and hope.",
+      "detail": "He contrasts The Night Land (around 1912), visionary but with a completely helpless female character, against stories from the '40s to '60s where women throw daggers and hold their own in fights.",
+      "t": 1285,
+      "quote": "if you trace it from the time to the present it is way of seeing the change that has happened and that gives a lot of hope",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "vancian magic",
+      "kind": "history",
+      "claim": "Vancian magic from Jack Vance's Dying Earth, where discrete memorized spells burn out of the caster's mind when cast, was a storytelling mechanic that became a game mechanic.",
+      "detail": "Brough notes it is an unusual depiction of magic compared with commanding spirits or magic as engineering. It enables the fairy-tale structure where a hero has a set of items and solves each challenge with one, which otherwise is hard to do with wizards; he cites Gandalf never being around when needed.",
+      "t": 1842,
+      "quote": "This is a story mechanic which became a game mechanic",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "items define the character",
+      "kind": "principle",
+      "claim": "Vance's Cugel shows that being a wizard can be defined purely by owning a collection of magic items, which is the essence of a roguelike character's power.",
+      "detail": "Brough first read Cugel as a rogue pretending to be a wizard, then realised he does exactly what the real wizard does. In roguelikes you collect items, and by the end you are making a wizard's decisions more than a rogue's.",
+      "t": 1941,
+      "quote": "There being a wizard is defined by having this collection of magic items. That's really the magic of a roguelikes",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

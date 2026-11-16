@@ -1,0 +1,930 @@
+{
+ "id": "wxmio1S3iN0",
+ "url": "https://www.youtube.com/watch?v=wxmio1S3iN0",
+ "title": "Andrea Interguglielmi - Designing a turn based roguelike inside a real time simulated environment",
+ "speaker": "Andrea Interguglielmi",
+ "talk_title": "Designing a turn based roguelike inside a real time simulated environment",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 938,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nAndrea Interguglielmi has been around the game industry long enough to remember his first title published on a gameboy! His curiosity led him astray for a few years, working around the globe in VFX and animation studios, only to be eventually back to where he started. Making games with a bit of a vintage flavor. He’s not that old though.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 23,
+   "title": "What is Nauticrawl, it doesn't look like a roguelike!"
+  },
+  {
+   "start": 62,
+   "title": "Dungeon Crawling, Escape Room, Cockpit Simulator, Narrative Experience"
+  },
+  {
+   "start": 130,
+   "title": "A simple premise"
+  },
+  {
+   "start": 166,
+   "title": "Procedural world • Voronoi procedurally generated maps with fog of war"
+  },
+  {
+   "start": 299,
+   "title": "Textmode art"
+  },
+  {
+   "start": 323,
+   "title": "User interface or escape room puzzler?"
+  },
+  {
+   "start": 487,
+   "title": "Back to the drawing board"
+  },
+  {
+   "start": 661,
+   "title": "Enemy's turn"
+  },
+  {
+   "start": 783,
+   "title": "Teaching players about turns...without a tutorial?"
+  },
+  {
+   "start": 882,
+   "title": "Worth the development headaches!"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2052,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.0,
+   "d": 1.0,
+   "text": "Hello!"
+  },
+  {
+   "t": 3.0,
+   "d": 4.61,
+   "text": "My name is Andrea Interguglielmi and today we'll be talking about my game Nauticrawl"
+  },
+  {
+   "t": 7.61,
+   "d": 6.98,
+   "text": "published by Armor Games Studios and the many headaches that went into designing these experiences"
+  },
+  {
+   "t": 14.59,
+   "d": 8.25,
+   "text": "which blends a real-time machine simulation with turn-based Roguelike elements."
+  },
+  {
+   "t": 22.84,
+   "d": 1.78,
+   "text": "Nauticrawl."
+  },
+  {
+   "t": 24.62,
+   "d": 6.99,
+   "text": "You might notice during the slides that this game doesn't look like a standard Roguelike."
+  },
+  {
+   "t": 31.61,
+   "d": 5.83,
+   "text": "In fact, at some point we decided to drop completely the Roguelike tag."
+  },
+  {
+   "t": 37.44,
+   "d": 7.69,
+   "text": "We didn't want to go for Roguelite either, or or Roguelike-like or none of that craziness."
+  },
+  {
+   "t": 45.13,
+   "d": 12.12,
+   "text": "I had to accept that this game is just unique on its own and it blends games that I love."
+  },
+  {
+   "t": 57.25,
+   "d": 6.57,
+   "text": "Of course, I do happen to love Roguelikes a lot and that really shows, you will see"
+  },
+  {
+   "t": 63.82,
+   "d": 3.18,
+   "text": "during the slides."
+  },
+  {
+   "t": 67.0,
+   "d": 4.46,
+   "text": "Definitely one of the major influences is the one that you can see here."
+  },
+  {
+   "t": 71.46,
+   "d": 6.51,
+   "text": "The usual suspect, Brogue, which is a brilliant Roguelike that influenced me growing up as"
+  },
+  {
+   "t": 77.97,
+   "d": 1.06,
+   "text": "a game designer."
+  },
+  {
+   "t": 79.03,
+   "d": 7.24,
+   "text": "Some of the other elements I borrowed from other games are space cockpit simulations"
+  },
+  {
+   "t": 86.27,
+   "d": 5.67,
+   "text": "with X-wing which is game I loved growing up."
+  },
+  {
+   "t": 91.94,
+   "d": 8.31,
+   "text": "A Dark Room also showed me how narrative can be seamlessly blended with a Roguelike experience."
+  },
+  {
+   "t": 100.25,
+   "d": 6.19,
+   "text": "And The Room - I love this game because it has all these gizmos you can fiddle with,"
+  },
+  {
+   "t": 106.44,
+   "d": 1.47,
+   "text": "but there's no tutorial at all."
+  },
+  {
+   "t": 107.91,
+   "d": 9.34,
+   "text": "All these influences sort of went into the crafting my own vision and that's what you"
+  },
+  {
+   "t": 117.25,
+   "d": 2.99,
+   "text": "are presented with when the game starts."
+  },
+  {
+   "t": 120.24,
+   "d": 5.0,
+   "text": "You have no idea how these things work."
+  },
+  {
+   "t": 125.24,
+   "d": 5.43,
+   "text": "Nothing is going to be told to you if not a simple premise."
+  },
+  {
+   "t": 130.67,
+   "d": 5.22,
+   "text": "That premise is that you are stealing this machine to try and get away from a horrible"
+  },
+  {
+   "t": 135.89,
+   "d": 8.09,
+   "text": "situation but your kind is never allowed to ever touch this machine."
+  },
+  {
+   "t": 143.98,
+   "d": 2.67,
+   "text": "You have no idea of how it works."
+  },
+  {
+   "t": 146.65,
+   "d": 3.83,
+   "text": "You stole it and now you are going to have to put up with this situation and have to"
+  },
+  {
+   "t": 150.48,
+   "d": 6.71,
+   "text": "push every button, pull every lever and eventually, as you become familiar with the machine, it"
+  },
+  {
+   "t": 157.19,
+   "d": 6.98,
+   "text": "will fade into a dungeon crawl exploration experience and you will dungeon crawl your"
+  },
+  {
+   "t": 164.17,
+   "d": 2.6,
+   "text": "way to salvation."
+  },
+  {
+   "t": 166.77,
+   "d": 1.67,
+   "text": "The game is set in a procedural world."
+  },
+  {
+   "t": 168.44,
+   "d": 6.08,
+   "text": "It is not presented grid based but it does have fog of war; it is presented from the"
+  },
+  {
+   "t": 174.52,
+   "d": 3.46,
+   "text": "top inside a radar."
+  },
+  {
+   "t": 177.98,
+   "d": 3.62,
+   "text": "It's all generated using Voronoi cells."
+  },
+  {
+   "t": 181.6,
+   "d": 6.23,
+   "text": "I make procedural islands I can scale up and down depending on the need during the game."
+  },
+  {
+   "t": 187.83,
+   "d": 8.07,
+   "text": "It is displayed inside the radar and you cannot see anything else outside."
+  },
+  {
+   "t": 195.9,
+   "d": 6.16,
+   "text": "The descriptions of places you enter are handled through the interface."
+  },
+  {
+   "t": 202.06,
+   "d": 7.41,
+   "text": "That is because the story goes the pressure on this planet is so massive that the only"
+  },
+  {
+   "t": 209.47,
+   "d": 5.96,
+   "text": "thing that can roam around the surface of this planet is these machines called the Nauticrawl."
+  },
+  {
+   "t": 215.43,
+   "d": 5.49,
+   "text": "So there's not going to be this big porthole showing what's outside, only monitors."
+  },
+  {
+   "t": 220.92,
+   "d": 7.78,
+   "text": "That is why I like to talk about - That is why I like to say is a Roguelike that has"
+  },
+  {
+   "t": 228.7,
+   "d": 3.9,
+   "text": "been scattered around a machine simulation."
+  },
+  {
+   "t": 232.6,
+   "d": 3.91,
+   "text": "Many elements of Roguelike are in these interfaces."
+  },
+  {
+   "t": 236.51,
+   "d": 6.18,
+   "text": "There is a log of actions happening inside the machine and the world outside."
+  },
+  {
+   "t": 242.69,
+   "d": 4.31,
+   "text": "There is a monitor just for that, there is a monitor just for inventory, there is a monitor"
+  },
+  {
+   "t": 247.0,
+   "d": 8.32,
+   "text": "just for the stats - and the stats actually map almost 1:1 to a traditional dungeon crawler."
+  },
+  {
+   "t": 255.32,
+   "d": 6.67,
+   "text": "There is the hull integrity which is the HP of the player, fuel which is hunger, battery"
+  },
+  {
+   "t": 261.99,
+   "d": 8.0,
+   "text": "which is stamina, and components are parts you keep on the machine to augment what it"
+  },
+  {
+   "t": 269.99,
+   "d": 4.72,
+   "text": "does, weapons and improvements as such."
+  },
+  {
+   "t": 274.71,
+   "d": 7.08,
+   "text": "All of that is presented through some sort of old terminal simulation and works like"
+  },
+  {
+   "t": 281.79,
+   "d": 9.35,
+   "text": "a terminal in that it displays tile-based two color graphics."
+  },
+  {
+   "t": 291.14,
+   "d": 6.12,
+   "text": "At some point, I figured, we have these old school interfaces, why don't we also display"
+  },
+  {
+   "t": 297.26,
+   "d": 3.68,
+   "text": "some old school text mode art with that?"
+  },
+  {
+   "t": 300.94,
+   "d": 6.32,
+   "text": "I got in touch with these amazing artist, his name is Ben Jones, you can find him on"
+  },
+  {
+   "t": 307.26,
+   "d": 2.65,
+   "text": "Twitter by the name @polyducks."
+  },
+  {
+   "t": 309.91,
+   "d": 1.41,
+   "text": "He loves to use REXPaint."
+  },
+  {
+   "t": 311.32,
+   "d": 3.0,
+   "text": "I personally am a big fan of Playscii."
+  },
+  {
+   "t": 314.32,
+   "d": 10.55,
+   "text": "We used to pipe all the data through Playscii for the final JSON output format."
+  },
+  {
+   "t": 324.87,
+   "d": 7.59,
+   "text": "I mentioned that all of that is a big puzzle to solve but I also mentioned that all of"
+  },
+  {
+   "t": 332.46,
+   "d": 7.78,
+   "text": "these controls are also the user interface to a dungeon crawling sort of gameplay."
+  },
+  {
+   "t": 340.24,
+   "d": 2.56,
+   "text": "Really which one is it?"
+  },
+  {
+   "t": 342.8,
+   "d": 2.25,
+   "text": "It is actually both."
+  },
+  {
+   "t": 345.05,
+   "d": 12.22,
+   "text": "These panels are both -- they sort of blend together escape room puzzle elements with"
+  },
+  {
+   "t": 357.27,
+   "d": 7.66,
+   "text": "being a user experience to pilot these big house-sized crawling machines."
+  },
+  {
+   "t": 364.93,
+   "d": 5.13,
+   "text": "The core gameplay loop is all about experimenting and eventually dying is part of the experience,"
+  },
+  {
+   "t": 370.06,
+   "d": 9.61,
+   "text": "but hopefully, you will learn and carry forward your meta experience on to the next run."
+  },
+  {
+   "t": 379.67,
+   "d": 7.24,
+   "text": "There are rewards that try and sort of hook with curiosity you so that you don't give"
+  },
+  {
+   "t": 386.91,
+   "d": 6.88,
+   "text": "up and there's scraps of lore that will be revealed to you eventually and more controls"
+  },
+  {
+   "t": 393.79,
+   "d": 2.43,
+   "text": "to fiddle with."
+  },
+  {
+   "t": 396.22,
+   "d": 6.15,
+   "text": "You will be presented with even more buttons and even more levers to press and that will"
+  },
+  {
+   "t": 402.37,
+   "d": 5.36,
+   "text": "start the whole process again where you explore, gain new scraps of lore, die, repeat."
+  },
+  {
+   "t": 407.73,
+   "d": 3.45,
+   "text": "Now, it is quite a mix."
+  },
+  {
+   "t": 411.18,
+   "d": 6.8,
+   "text": "Of course, some of these elements at some point, it was only natural they start clashing"
+  },
+  {
+   "t": 417.98,
+   "d": 1.21,
+   "text": "one with the other."
+  },
+  {
+   "t": 419.19,
+   "d": 1.45,
+   "text": "In fact, that happened."
+  },
+  {
+   "t": 420.64,
+   "d": 6.43,
+   "text": "The real-time simulation part of the game at some point specifically got so big and"
+  },
+  {
+   "t": 427.07,
+   "d": 6.51,
+   "text": "predominant that it sort of killed the dungeon crawling experience."
+  },
+  {
+   "t": 433.58,
+   "d": 7.19,
+   "text": "What happened was that by the time you start facing enemies, you have all these red blinking"
+  },
+  {
+   "t": 440.77,
+   "d": 7.27,
+   "text": "lights all over the place asking for attention, asking for some actions to be performed to"
+  },
+  {
+   "t": 448.04,
+   "d": 8.84,
+   "text": "maintain the machine, but the enemy, meanwhile was still kicking your ass in real-time and"
+  },
+  {
+   "t": 456.88,
+   "d": 1.94,
+   "text": "that really was a mess."
+  },
+  {
+   "t": 458.82,
+   "d": 1.63,
+   "text": "It was really hard to play."
+  },
+  {
+   "t": 460.45,
+   "d": 7.54,
+   "text": "By the time we entered the first early beta of the game, general consensus was pressing"
+  },
+  {
+   "t": 467.99,
+   "d": 6.52,
+   "text": "all the buttons was fun but players were dying without even understanding why."
+  },
+  {
+   "t": 474.51,
+   "d": 4.25,
+   "text": "Very few testers managed to get to the end of the game."
+  },
+  {
+   "t": 478.76,
+   "d": 3.63,
+   "text": "I think like three or four."
+  },
+  {
+   "t": 482.39,
+   "d": 4.63,
+   "text": "It was really time to go back to the drawing board once again."
+  },
+  {
+   "t": 487.02,
+   "d": 6.05,
+   "text": "It was scary because we were right in the middle of the project and approaching the"
+  },
+  {
+   "t": 493.07,
+   "d": 2.38,
+   "text": "final deadline."
+  },
+  {
+   "t": 495.45,
+   "d": 9.44,
+   "text": "Clearly, something went wrong along the way because in my mind the actual dungeon crawling"
+  },
+  {
+   "t": 504.89,
+   "d": 2.94,
+   "text": "part of the game was always meant to be turn-based."
+  },
+  {
+   "t": 507.83,
+   "d": 5.99,
+   "text": "It was a slow experience about wonder and discovery."
+  },
+  {
+   "t": 513.82,
+   "d": 1.95,
+   "text": "So what happened?"
+  },
+  {
+   "t": 515.77,
+   "d": 8.98,
+   "text": "What happened I guess is that it became sort of a natural design process to also make the"
+  },
+  {
+   "t": 524.75,
+   "d": 6.23,
+   "text": "world around you real-time just like the rest of the machine because I didn't want to take"
+  },
+  {
+   "t": 530.98,
+   "d": 8.3,
+   "text": "players out of the simulated, you know, atmospheric experience."
+  },
+  {
+   "t": 539.28,
+   "d": 5.23,
+   "text": "If I was to at some point present the player with a big banner saying it is your turn,"
+  },
+  {
+   "t": 544.51,
+   "d": 4.82,
+   "text": "or it is the enemy's turn, now you can do this, now you can do that, blocking the player"
+  },
+  {
+   "t": 549.33,
+   "d": 8.11,
+   "text": "during the experience, would have taken him out of the immersion and I didn't want that."
+  },
+  {
+   "t": 557.44,
+   "d": 10.57,
+   "text": "The headache was how do I keep not blocking the player while still slowing down this experience"
+  },
+  {
+   "t": 568.01,
+   "d": 6.09,
+   "text": "in a way that simulates a turn-based dungeon crawling experience."
+  },
+  {
+   "t": 574.1,
+   "d": 4.14,
+   "text": "And it turns out, the solution was in the story setting."
+  },
+  {
+   "t": 578.24,
+   "d": 7.64,
+   "text": "This game is about a massive crushing atmosphere that forces you inside the only machine that"
+  },
+  {
+   "t": 585.88,
+   "d": 2.06,
+   "text": "can crawl around this planet."
+  },
+  {
+   "t": 587.94,
+   "d": 2.75,
+   "text": "It is all about pressure."
+  },
+  {
+   "t": 590.69,
+   "d": 5.02,
+   "text": "What if I use pressure as part of the simulation?"
+  },
+  {
+   "t": 595.71,
+   "d": 8.66,
+   "text": "What if I let the user pipe in pressure into the engine and I will make sure they take"
+  },
+  {
+   "t": 604.37,
+   "d": 6.35,
+   "text": "some time to actually build up the required pressure to move forward."
+  },
+  {
+   "t": 610.72,
+   "d": 5.03,
+   "text": "That will slow down the experience but it will also create some interesting side effects"
+  },
+  {
+   "t": 615.75,
+   "d": 8.27,
+   "text": "because the player, with some levers, will be able to also speed up the time that it"
+  },
+  {
+   "t": 624.02,
+   "d": 4.22,
+   "text": "takes to accumulate the pressure to move forward."
+  },
+  {
+   "t": 628.24,
+   "d": 9.4,
+   "text": "When the engine is put under stress, it will start giving up, releasing heat and make more"
+  },
+  {
+   "t": 637.64,
+   "d": 6.5,
+   "text": "noise and the noise and heat will both impact the stealth device which in turn requires"
+  },
+  {
+   "t": 644.14,
+   "d": 1.55,
+   "text": "more power."
+  },
+  {
+   "t": 645.69,
+   "d": 10.66,
+   "text": "Not only did I slow down the experience in a way that was unique but I made the turns"
+  },
+  {
+   "t": 656.35,
+   "d": 7.14,
+   "text": "part of the machine simulation, which was a side effect I didn't see coming."
+  },
+  {
+   "t": 663.49,
+   "d": 3.62,
+   "text": "What about the enemies' turn?"
+  },
+  {
+   "t": 667.11,
+   "d": 3.21,
+   "text": "The solution for that was also part of the story setting."
+  },
+  {
+   "t": 670.32,
+   "d": 6.17,
+   "text": "We are talking about a place the game refers to as the \"forbidden surface\"."
+  },
+  {
+   "t": 676.49,
+   "d": 5.45,
+   "text": "It has been abandoned for generations."
+  },
+  {
+   "t": 681.94,
+   "d": 8.68,
+   "text": "I made it so that naturally both creatures and technology developed this way of not wasting"
+  },
+  {
+   "t": 690.62,
+   "d": 4.71,
+   "text": "energy when nothing moves, because it's a place that's mostly deserted."
+  },
+  {
+   "t": 695.33,
+   "d": 6.62,
+   "text": "I reprogrammed the AI so it only reacts when something makes a noise and moves."
+  },
+  {
+   "t": 701.95,
+   "d": 9.89,
+   "text": "At this point, I have the player blocked and being able to experiment with all the different"
+  },
+  {
+   "t": 711.84,
+   "d": 5.59,
+   "text": "values of the machine and nothing moves until you commit to moving forward."
+  },
+  {
+   "t": 717.43,
+   "d": 7.18,
+   "text": "So the game is becoming very strategic and the enemies are all there silently waiting"
+  },
+  {
+   "t": 724.61,
+   "d": 3.66,
+   "text": "for you and the atmosphere is even creepier than before."
+  },
+  {
+   "t": 728.27,
+   "d": 3.75,
+   "text": "In my mind it is all working and it is great."
+  },
+  {
+   "t": 732.02,
+   "d": 4.25,
+   "text": "What happens when we give it back to the players?"
+  },
+  {
+   "t": 736.27,
+   "d": 3.83,
+   "text": "They don't realize there are turns at all."
+  },
+  {
+   "t": 740.1,
+   "d": 4.33,
+   "text": "They come back to us saying, you know, I make a move and I am still chased by the enemy"
+  },
+  {
+   "t": 744.43,
+   "d": 6.04,
+   "text": "so I want to make the next move faster and I go fast and this heat coming out of the"
+  },
+  {
+   "t": 750.47,
+   "d": 7.01,
+   "text": "engine but I am just trying to be as fast as I can because the enemy is chasing me."
+  },
+  {
+   "t": 757.48,
+   "d": 1.0,
+   "text": "It is still a big mess."
+  },
+  {
+   "t": 758.48,
+   "d": 5.41,
+   "text": "This is not slow at all and I am like damn it."
+  },
+  {
+   "t": 763.89,
+   "d": 6.53,
+   "text": "I basically need to teach the player past the initial stage of pressing every button,"
+  },
+  {
+   "t": 770.42,
+   "d": 2.55,
+   "text": "which is fine if nobody tells you anything."
+  },
+  {
+   "t": 772.97,
+   "d": 5.64,
+   "text": "Then there is the dungeon crawling part which has rules and how do I teach the player about"
+  },
+  {
+   "t": 778.61,
+   "d": 2.03,
+   "text": "rules if there is no tutorial?"
+  },
+  {
+   "t": 780.64,
+   "d": 2.14,
+   "text": "Yet another headache."
+  },
+  {
+   "t": 782.78,
+   "d": 7.76,
+   "text": "I am about to wrap this talk now because really this was what sort of unlocked us from this"
+  },
+  {
+   "t": 790.54,
+   "d": 4.81,
+   "text": "evil loop of obfuscation."
+  },
+  {
+   "t": 795.35,
+   "d": 5.76,
+   "text": "We eventually came up with these ideas of trying to understand when the player is dying"
+  },
+  {
+   "t": 801.11,
+   "d": 6.87,
+   "text": "repeatedly -- at that point, after you start a run and turn on the machine, the machine"
+  },
+  {
+   "t": 807.98,
+   "d": 8.24,
+   "text": "enters a safety lock and it will present the player with a check to rebalance the machine."
+  },
+  {
+   "t": 816.22,
+   "d": 5.87,
+   "text": "In that check, you might be asked to check on the battery, or the stealth device, or"
+  },
+  {
+   "t": 822.09,
+   "d": 4.06,
+   "text": "how much hull integrity is left and eventually even the turns."
+  },
+  {
+   "t": 826.15,
+   "d": 6.12,
+   "text": "The turns is a bit of a bastard move that the game does on the player in that it will"
+  },
+  {
+   "t": 832.27,
+   "d": 4.16,
+   "text": "stone the creature next to you when the game starts."
+  },
+  {
+   "t": 836.43,
+   "d": 3.74,
+   "text": "You hear the thing roaming around and it is creepy."
+  },
+  {
+   "t": 840.17,
+   "d": 6.93,
+   "text": "A radio message will tell you that you have to stay still."
+  },
+  {
+   "t": 847.1,
+   "d": 3.58,
+   "text": "The message is broadcasted to all the pilots in the area."
+  },
+  {
+   "t": 850.68,
+   "d": 5.67,
+   "text": "It is saying stay still, remember that nothing moves until you make a move."
+  },
+  {
+   "t": 856.35,
+   "d": 6.87,
+   "text": "Just move very quietly and the creature will not notice you."
+  },
+  {
+   "t": 863.22,
+   "d": 5.63,
+   "text": "If you die straight after that, fine, because the game restarts and it will teach you one"
+  },
+  {
+   "t": 868.85,
+   "d": 1.0,
+   "text": "more game mechanic."
+  },
+  {
+   "t": 869.85,
+   "d": 5.19,
+   "text": "It does that one trick at a time."
+  },
+  {
+   "t": 875.04,
+   "d": 2.09,
+   "text": "That really worked."
+  },
+  {
+   "t": 877.13,
+   "d": 2.78,
+   "text": "It is quite a unique experience."
+  },
+  {
+   "t": 879.91,
+   "d": 3.07,
+   "text": "There were many headaches involved."
+  },
+  {
+   "t": 882.98,
+   "d": 6.73,
+   "text": "We, of course, we were scared to release this thing in the wild and couldn't have been happier"
+  },
+  {
+   "t": 889.71,
+   "d": 2.58,
+   "text": "about the reception."
+  },
+  {
+   "t": 892.29,
+   "d": 4.61,
+   "text": "The game has scored a very positive rate on Steam."
+  },
+  {
+   "t": 896.9,
+   "d": 5.73,
+   "text": "We have like 60 plus positive reviews and counting."
+  },
+  {
+   "t": 902.63,
+   "d": 2.6,
+   "text": "Nice comments on each as well."
+  },
+  {
+   "t": 905.23,
+   "d": 7.44,
+   "text": "Please don't kill me because somebody said that the game looks like NetHack."
+  },
+  {
+   "t": 912.67,
+   "d": 6.11,
+   "text": "We just hope the game is fun regardless if it is a standard Roguelike or not."
+  },
+  {
+   "t": 918.78,
+   "d": 4.9,
+   "text": "We just hope people going to enjoy the experience."
+  },
+  {
+   "t": 923.68,
+   "d": 1.89,
+   "text": "Yeah, it was a fun ride."
+  },
+  {
+   "t": 925.57,
+   "d": 5.28,
+   "text": "I hope it was fun to hear about all this gameplay and game design challenges."
+  },
+  {
+   "t": 930.85,
+   "d": 5.51,
+   "text": "If you want to hear more about me rambling about Nauticrawl, please get in touch with"
+  },
+  {
+   "t": 936.36,
+   "d": 1.18,
+   "text": "me on Twitter."
+  }
+ ]
+}

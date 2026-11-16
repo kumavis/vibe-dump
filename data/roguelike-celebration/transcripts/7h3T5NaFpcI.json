@@ -1,0 +1,3795 @@
+{
+ "id": "7h3T5NaFpcI",
+ "url": "https://www.youtube.com/watch?v=7h3T5NaFpcI",
+ "title": "Andrew Plotkin - Mazes: Are We Lost Yet?",
+ "speaker": "Andrew Plotkin",
+ "talk_title": "Mazes: Are We Lost Yet?",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1778,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "The earliest computer adventure games had mazes. Wizardry and Ultima had mazes. The classical roguelike screen just begs to be filled with a maze. Can you say what a maze actually *is*? ... Not as easy as it looks, right?\n\nI'll thread through some classical examples and try to show what very different genres of maze have in common. Textual, graphical, first-person or third-person: what is it about mazes that leaves you feeling lost?",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5178,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.04,
+   "d": 2.64,
+   "text": "Next up, we have Andrew Plotkin, a"
+  },
+  {
+   "t": 5.68,
+   "d": 1.92,
+   "text": "designer whose work deals with concepts"
+  },
+  {
+   "t": 7.6,
+   "d": 2.16,
+   "text": "of fear, vulnerability, monstrous"
+  },
+  {
+   "t": 9.76,
+   "d": 1.6,
+   "text": "embodiment, cognitive dissonance,"
+  },
+  {
+   "t": 11.36,
+   "d": 1.6,
+   "text": "reluctant capitalism, never knowing"
+  },
+  {
+   "t": 12.96,
+   "d": 1.68,
+   "text": "what's going on inside the meat or the"
+  },
+  {
+   "t": 14.64,
+   "d": 1.68,
+   "text": "mind of yourself or anyone else, and"
+  },
+  {
+   "t": 16.32,
+   "d": 2.8,
+   "text": "generally feeling haunted. Sounds great."
+  },
+  {
+   "t": 19.12,
+   "d": 3.15,
+   "text": "Here to talk about mazes."
+  },
+  {
+   "t": 22.27,
+   "d": 0.05,
+   "text": "[snorts]"
+  },
+  {
+   "t": 22.32,
+   "d": 4.4,
+   "text": ">> Yes. Am I audible? We'll look at the"
+  },
+  {
+   "t": 26.72,
+   "d": 1.76,
+   "text": "screen and see if people can respond to"
+  },
+  {
+   "t": 28.48,
+   "d": 3.56,
+   "text": "me being audible."
+  },
+  {
+   "t": 32.56,
+   "d": 3.0,
+   "text": "And"
+  },
+  {
+   "t": 35.84,
+   "d": 1.12,
+   "text": "this is probably going to look like a"
+  },
+  {
+   "t": 36.96,
+   "d": 2.0,
+   "text": "delay. Okay, good. Yes, I'm up. I'm"
+  },
+  {
+   "t": 38.96,
+   "d": 2.4,
+   "text": "being um [clears throat] I'm being"
+  },
+  {
+   "t": 41.36,
+   "d": 2.4,
+   "text": "transcribed. I have all my windows set"
+  },
+  {
+   "t": 43.76,
+   "d": 1.92,
+   "text": "up. My windows are the wrong aspect"
+  },
+  {
+   "t": 45.68,
+   "d": 2.0,
+   "text": "ratio, and we're going to live with it."
+  },
+  {
+   "t": 47.68,
+   "d": 5.04,
+   "text": "Um hi, I'm here to talk about mazes."
+  },
+  {
+   "t": 52.72,
+   "d": 2.4,
+   "text": "Everybody knows what a maze is."
+  },
+  {
+   "t": 55.12,
+   "d": 1.52,
+   "text": "I'm going to assume everybody knows what"
+  },
+  {
+   "t": 56.64,
+   "d": 4.16,
+   "text": "Amaze is. This is Amaze. Um, I love this"
+  },
+  {
+   "t": 60.8,
+   "d": 3.04,
+   "text": "guy. This is uh amaze author from the"
+  },
+  {
+   "t": 63.84,
+   "d": 2.08,
+   "text": "70s named Lyrie Evans. I have a bunch of"
+  },
+  {
+   "t": 65.92,
+   "d": 1.92,
+   "text": "books of his. Really, this talk is just"
+  },
+  {
+   "t": 67.84,
+   "d": 2.72,
+   "text": "an excuse for me to put up a bunch of um"
+  },
+  {
+   "t": 70.56,
+   "d": 3.04,
+   "text": "screenshots of his stuff. So, if anybody"
+  },
+  {
+   "t": 73.6,
+   "d": 2.16,
+   "text": "wants to say this is not a maze, talk to"
+  },
+  {
+   "t": 75.76,
+   "d": 2.0,
+   "text": "me later. I think we're we are going to"
+  },
+  {
+   "t": 77.76,
+   "d": 1.6,
+   "text": "for the purpose of this talk say this is"
+  },
+  {
+   "t": 79.36,
+   "d": 5.2,
+   "text": "definitely a maze. Um, okay. So about 45"
+  },
+  {
+   "t": 84.56,
+   "d": 2.16,
+   "text": "seconds after uh video games were"
+  },
+  {
+   "t": 86.72,
+   "d": 2.0,
+   "text": "invented, someone said, \"We're going to"
+  },
+  {
+   "t": 88.72,
+   "d": 2.64,
+   "text": "put a maze in a video game.\" Here's an"
+  },
+  {
+   "t": 91.36,
+   "d": 2.48,
+   "text": "example. Uh this is a Unix game called"
+  },
+  {
+   "t": 93.84,
+   "d": 2.0,
+   "text": "Hunt. It's a actually a multiplayer"
+  },
+  {
+   "t": 95.84,
+   "d": 3.04,
+   "text": "game, very early multiplayer tag. It's"
+  },
+  {
+   "t": 98.88,
+   "d": 3.84,
+   "text": "happens in a maze. Um this is a randomly"
+  },
+  {
+   "t": 102.72,
+   "d": 2.08,
+   "text": "generated maze."
+  },
+  {
+   "t": 104.8,
+   "d": 2.4,
+   "text": "Uh they're very easy, very simple"
+  },
+  {
+   "t": 107.2,
+   "d": 2.4,
+   "text": "algorithms for generating grid mazes"
+  },
+  {
+   "t": 109.6,
+   "d": 2.0,
+   "text": "like this. But this is not an algorithm"
+  },
+  {
+   "t": 111.6,
+   "d": 3.36,
+   "text": "talk. This is a philosophical andor"
+  },
+  {
+   "t": 114.96,
+   "d": 1.68,
+   "text": "touchy feely talk. So I'm not going to"
+  },
+  {
+   "t": 116.64,
+   "d": 1.44,
+   "text": "get into the algorithms. There are many"
+  },
+  {
+   "t": 118.08,
+   "d": 1.92,
+   "text": "good websites on different algorithms"
+  },
+  {
+   "t": 120.0,
+   "d": 2.56,
+   "text": "for making these things. Um this is not"
+  },
+  {
+   "t": 122.56,
+   "d": 3.12,
+   "text": "a beautiful maze like the first one was"
+  },
+  {
+   "t": 125.68,
+   "d": 3.52,
+   "text": "back here. Um but it the algorithm"
+  },
+  {
+   "t": 129.2,
+   "d": 1.52,
+   "text": "guarantees that there's a path from any"
+  },
+  {
+   "t": 130.72,
+   "d": 2.72,
+   "text": "point to any other point. Uh obviously"
+  },
+  {
+   "t": 133.44,
+   "d": 1.68,
+   "text": "this kind of algorithm is very popular"
+  },
+  {
+   "t": 135.12,
+   "d": 3.28,
+   "text": "in rog likes. Uh here's the the nomish"
+  },
+  {
+   "t": 138.4,
+   "d": 2.24,
+   "text": "mines from Net Hack I believe. Same"
+  },
+  {
+   "t": 140.64,
+   "d": 2.96,
+   "text": "deal, same sort of algorithm."
+  },
+  {
+   "t": 143.6,
+   "d": 5.12,
+   "text": "Um, okay. Here's another couple of uh"
+  },
+  {
+   "t": 148.72,
+   "d": 3.52,
+   "text": "video game mazes. Uh, these visually"
+  },
+  {
+   "t": 152.24,
+   "d": 1.92,
+   "text": "don't look anything like the ones I just"
+  },
+  {
+   "t": 154.16,
+   "d": 2.56,
+   "text": "showed you, but we understand that this"
+  },
+  {
+   "t": 156.72,
+   "d": 1.76,
+   "text": "is also a maze. It's a first-person"
+  },
+  {
+   "t": 158.48,
+   "d": 1.76,
+   "text": "viewpoint. You're navigating around."
+  },
+  {
+   "t": 160.24,
+   "d": 2.24,
+   "text": "It's the same idea, the same kind of"
+  },
+  {
+   "t": 162.48,
+   "d": 3.44,
+   "text": "thing. Um,"
+  },
+  {
+   "t": 165.92,
+   "d": 2.8,
+   "text": "here's another video game maze, which"
+  },
+  {
+   "t": 168.72,
+   "d": 2.08,
+   "text": "doesn't look anything like either of the"
+  },
+  {
+   "t": 170.8,
+   "d": 1.76,
+   "text": "previous examples, but we still"
+  },
+  {
+   "t": 172.56,
+   "d": 1.92,
+   "text": "understand that this is a maze. And in"
+  },
+  {
+   "t": 174.48,
+   "d": 4.96,
+   "text": "fact, it says it's a maze, right? Um,"
+  },
+  {
+   "t": 179.44,
+   "d": 1.04,
+   "text": "here's [clears throat] another one. This"
+  },
+  {
+   "t": 180.48,
+   "d": 4.2,
+   "text": "is Zork. Uh,"
+  },
+  {
+   "t": 185.28,
+   "d": 3.68,
+   "text": "so why is it that this is the same sort"
+  },
+  {
+   "t": 188.96,
+   "d": 2.64,
+   "text": "of thing, right?"
+  },
+  {
+   "t": 191.6,
+   "d": 2.0,
+   "text": "how I've just showed screenshots of"
+  },
+  {
+   "t": 193.6,
+   "d": 1.36,
+   "text": "three completely different games and"
+  },
+  {
+   "t": 194.96,
+   "d": 1.6,
+   "text": "said they're all mazes and you agreed"
+  },
+  {
+   "t": 196.56,
+   "d": 2.72,
+   "text": "with me. So why is that and how does"
+  },
+  {
+   "t": 199.28,
+   "d": 2.24,
+   "text": "that work?"
+  },
+  {
+   "t": 201.52,
+   "d": 2.4,
+   "text": "Um do they have anything in common? Do"
+  },
+  {
+   "t": 203.92,
+   "d": 1.36,
+   "text": "they have anything not in common? Do"
+  },
+  {
+   "t": 205.28,
+   "d": 2.0,
+   "text": "they have anything abstractly in common?"
+  },
+  {
+   "t": 207.28,
+   "d": 1.28,
+   "text": "I'm going to try to write down some"
+  },
+  {
+   "t": 208.56,
+   "d": 1.36,
+   "text": "definitions, all of which are going to"
+  },
+  {
+   "t": 209.92,
+   "d": 4.0,
+   "text": "be wrong. Um when you're playing Ultima"
+  },
+  {
+   "t": 213.92,
+   "d": 2.32,
+   "text": "or Wizardry, you draw a map. You pretty"
+  },
+  {
+   "t": 216.24,
+   "d": 3.6,
+   "text": "much have to. Uh here's a map of the"
+  },
+  {
+   "t": 219.84,
+   "d": 1.52,
+   "text": "level of wizardry that I just showed"
+  },
+  {
+   "t": 221.36,
+   "d": 2.64,
+   "text": "you. I think it's the same level. Might"
+  },
+  {
+   "t": 224.0,
+   "d": 2.64,
+   "text": "as well be first level probably. Um once"
+  },
+  {
+   "t": 226.64,
+   "d": 1.76,
+   "text": "you've drawn it, this is from a cheat"
+  },
+  {
+   "t": 228.4,
+   "d": 1.28,
+   "text": "book called The Big Book of Adventure"
+  },
+  {
+   "t": 229.68,
+   "d": 2.72,
+   "text": "Games, but you drew if when back in the"
+  },
+  {
+   "t": 232.4,
+   "d": 1.52,
+   "text": "day you played it, you drew it on graph"
+  },
+  {
+   "t": 233.92,
+   "d": 2.0,
+   "text": "paper and it came out looking like the"
+  },
+  {
+   "t": 235.92,
+   "d": 3.2,
+   "text": "original like artistic classical drawing"
+  },
+  {
+   "t": 239.12,
+   "d": 3.52,
+   "text": "maze. Um the same thing is true in the"
+  },
+  {
+   "t": 242.64,
+   "d": 3.2,
+   "text": "video game world. Uh these like you"
+  },
+  {
+   "t": 245.84,
+   "d": 1.6,
+   "text": "don't draw the maze with pencil and"
+  },
+  {
+   "t": 247.44,
+   "d": 2.72,
+   "text": "paper, but the maze like the both of"
+  },
+  {
+   "t": 250.16,
+   "d": 1.52,
+   "text": "these games are set up so that the maze"
+  },
+  {
+   "t": 251.68,
+   "d": 2.08,
+   "text": "draws itself as you go through it. You"
+  },
+  {
+   "t": 253.76,
+   "d": 2.0,
+   "text": "can actually see that both of these maps"
+  },
+  {
+   "t": 255.76,
+   "d": 2.08,
+   "text": "are incomplete because the player has"
+  },
+  {
+   "t": 257.84,
+   "d": 2.88,
+   "text": "not gone through every corridor and"
+  },
+  {
+   "t": 260.72,
+   "d": 1.68,
+   "text": "therefore"
+  },
+  {
+   "t": 262.4,
+   "d": 1.52,
+   "text": "even though you're not drawing the map,"
+  },
+  {
+   "t": 263.92,
+   "d": 1.68,
+   "text": "there is still the experience of the map"
+  },
+  {
+   "t": 265.6,
+   "d": 2.16,
+   "text": "being drawn for you. So that's a point"
+  },
+  {
+   "t": 267.76,
+   "d": 2.64,
+   "text": "of commonality. Um and when you play"
+  },
+  {
+   "t": 270.4,
+   "d": 2.16,
+   "text": "text adventures, you draw a map too."
+  },
+  {
+   "t": 272.56,
+   "d": 2.56,
+   "text": "This is my slightly diagrammatic"
+  },
+  {
+   "t": 275.12,
+   "d": 2.4,
+   "text": "illustration of the the Zork one map."
+  },
+  {
+   "t": 277.52,
+   "d": 2.88,
+   "text": "Um, as it's again, it doesn't look like"
+  },
+  {
+   "t": 280.4,
+   "d": 4.24,
+   "text": "a classical drawn beautiful maze, but"
+  },
+  {
+   "t": 284.64,
+   "d": 1.76,
+   "text": "it's a representation of what's going"
+  },
+  {
+   "t": 286.4,
+   "d": 5.12,
+   "text": "on. Uh, so you could"
+  },
+  {
+   "t": 291.52,
+   "d": 1.52,
+   "text": "use that definition, right? You could"
+  },
+  {
+   "t": 293.04,
+   "d": 1.76,
+   "text": "say a maze is a thing that you have to"
+  },
+  {
+   "t": 294.8,
+   "d": 2.96,
+   "text": "map. There is a problem with that"
+  },
+  {
+   "t": 297.76,
+   "d": 3.12,
+   "text": "definition. Um,"
+  },
+  {
+   "t": 300.88,
+   "d": 2.0,
+   "text": "this is not a maze that you have to draw"
+  },
+  {
+   "t": 302.88,
+   "d": 3.44,
+   "text": "a map of. This is a maze where the guy"
+  },
+  {
+   "t": 306.32,
+   "d": 2.48,
+   "text": "gives you a map of the maze and you're"
+  },
+  {
+   "t": 308.8,
+   "d": 2.4,
+   "text": "still like, you're not done. Problem is"
+  },
+  {
+   "t": 311.2,
+   "d": 1.2,
+   "text": "not solved just because you have the"
+  },
+  {
+   "t": 312.4,
+   "d": 4.12,
+   "text": "map. Uh,"
+  },
+  {
+   "t": 316.72,
+   "d": 1.6,
+   "text": "what you're doing after you get the map"
+  },
+  {
+   "t": 318.32,
+   "d": 2.4,
+   "text": "is solving the maze. So, there's this"
+  },
+  {
+   "t": 320.72,
+   "d": 2.08,
+   "text": "disjunction here. And that definition,"
+  },
+  {
+   "t": 322.8,
+   "d": 1.76,
+   "text": "the the original definition that I gave"
+  },
+  {
+   "t": 324.56,
+   "d": 2.08,
+   "text": "doesn't really work. You might say,"
+  },
+  {
+   "t": 326.64,
+   "d": 1.68,
+   "text": "okay, maybe it's not drawing maps"
+  },
+  {
+   "t": 328.32,
+   "d": 1.68,
+   "text": "important. Maybe it's important that"
+  },
+  {
+   "t": 330.0,
+   "d": 2.32,
+   "text": "there is a map of the maze in there"
+  },
+  {
+   "t": 332.32,
+   "d": 4.16,
+   "text": "somewhere. Uh, in some sense, the the g"
+  },
+  {
+   "t": 336.48,
+   "d": 2.48,
+   "text": "the experience or the uh illustration is"
+  },
+  {
+   "t": 338.96,
+   "d": 4.16,
+   "text": "representing a maze. Um, both of the"
+  },
+  {
+   "t": 343.12,
+   "d": 1.52,
+   "text": "ultimate and wizardry levels that I"
+  },
+  {
+   "t": 344.64,
+   "d": 2.24,
+   "text": "showed you have the shape of mazes. Even"
+  },
+  {
+   "t": 346.88,
+   "d": 1.36,
+   "text": "though there's nothing that's drawn on"
+  },
+  {
+   "t": 348.24,
+   "d": 2.32,
+   "text": "the screen in that shape, uh, once you"
+  },
+  {
+   "t": 350.56,
+   "d": 1.84,
+   "text": "draw it, you realize, yes, it's it's"
+  },
+  {
+   "t": 352.4,
+   "d": 2.4,
+   "text": "mazelike. So that could be the"
+  },
+  {
+   "t": 354.8,
+   "d": 1.44,
+   "text": "equivalency that we're looking for,"
+  },
+  {
+   "t": 356.24,
+   "d": 2.56,
+   "text": "right? The the definition of a maze,"
+  },
+  {
+   "t": 358.8,
+   "d": 3.04,
+   "text": "except this one isn't. When you draw it"
+  },
+  {
+   "t": 361.84,
+   "d": 2.16,
+   "text": "out, you don't get what looks like a"
+  },
+  {
+   "t": 364.0,
+   "d": 2.72,
+   "text": "maze. What you get is a hairball, right?"
+  },
+  {
+   "t": 366.72,
+   "d": 2.88,
+   "text": "It's a it's a knot. It's a graph. So"
+  },
+  {
+   "t": 369.6,
+   "d": 2.16,
+   "text": "that's kind of not the same thing at"
+  },
+  {
+   "t": 371.76,
+   "d": 3.6,
+   "text": "all. Um, which means that my definition"
+  },
+  {
+   "t": 375.36,
+   "d": 2.0,
+   "text": "has once again failed. Uh, here's"
+  },
+  {
+   "t": 377.36,
+   "d": 1.6,
+   "text": "another example. By the way, like the"
+  },
+  {
+   "t": 378.96,
+   "d": 3.84,
+   "text": "Zor map is the Zork maze is text. This"
+  },
+  {
+   "t": 382.8,
+   "d": 2.08,
+   "text": "is an illustrated like choosing your"
+  },
+  {
+   "t": 384.88,
+   "d": 1.84,
+   "text": "adventure maze. This is from the book"
+  },
+  {
+   "t": 386.72,
+   "d": 1.52,
+   "text": "which is called Maze by Christopher"
+  },
+  {
+   "t": 388.24,
+   "d": 2.64,
+   "text": "Manson. Uh if you played Blueprints, you"
+  },
+  {
+   "t": 390.88,
+   "d": 1.52,
+   "text": "probably recognize the style. That was a"
+  },
+  {
+   "t": 392.4,
+   "d": 2.48,
+   "text": "big inspiration. Um it's a kind of"
+  },
+  {
+   "t": 394.88,
+   "d": 1.76,
+   "text": "choose your own adventure maze book in"
+  },
+  {
+   "t": 396.64,
+   "d": 1.76,
+   "text": "which each door is numbered and each"
+  },
+  {
+   "t": 398.4,
+   "d": 1.6,
+   "text": "page is numbered and that leads you to a"
+  },
+  {
+   "t": 400.0,
+   "d": 3.12,
+   "text": "different room. You can draw a map of"
+  },
+  {
+   "t": 403.12,
+   "d": 2.24,
+   "text": "this graph as well. There's a map that"
+  },
+  {
+   "t": 405.36,
+   "d": 2.16,
+   "text": "someone drew of it. Find the secret"
+  },
+  {
+   "t": 407.52,
+   "d": 2.64,
+   "text": "door. Um"
+  },
+  {
+   "t": 410.16,
+   "d": 2.56,
+   "text": "what you get is not really a maze in the"
+  },
+  {
+   "t": 412.72,
+   "d": 2.8,
+   "text": "classical sense. It's a state diagram."
+  },
+  {
+   "t": 415.52,
+   "d": 4.92,
+   "text": "Um as a digression like"
+  },
+  {
+   "t": 420.48,
+   "d": 1.76,
+   "text": "you can draw a state diagram of any"
+  },
+  {
+   "t": 422.24,
+   "d": 2.96,
+   "text": "puzzle. Like literally this is a sliding"
+  },
+  {
+   "t": 425.2,
+   "d": 1.84,
+   "text": "blocks puzzle. You could draw a state"
+  },
+  {
+   "t": 427.04,
+   "d": 1.76,
+   "text": "diagram of all the positions of the"
+  },
+  {
+   "t": 428.8,
+   "d": 2.16,
+   "text": "blocks and which ones to connect to each"
+  },
+  {
+   "t": 430.96,
+   "d": 3.68,
+   "text": "other um positions. I haven't drawn that"
+  },
+  {
+   "t": 434.64,
+   "d": 1.6,
+   "text": "diagram because I hate sliding block"
+  },
+  {
+   "t": 436.24,
+   "d": 2.4,
+   "text": "puzzles, but you can imagine it, right?"
+  },
+  {
+   "t": 438.64,
+   "d": 1.92,
+   "text": "Does that mean it's a maze? Well, most"
+  },
+  {
+   "t": 440.56,
+   "d": 1.92,
+   "text": "people wouldn't say so. I'm going to say"
+  },
+  {
+   "t": 442.48,
+   "d": 2.24,
+   "text": "it's not. It doesn't feel maze-like to"
+  },
+  {
+   "t": 444.72,
+   "d": 2.64,
+   "text": "me. It's an abstract graph."
+  },
+  {
+   "t": 447.36,
+   "d": 3.0,
+   "text": "Uh,"
+  },
+  {
+   "t": 453.52,
+   "d": 1.76,
+   "text": "so"
+  },
+  {
+   "t": 455.28,
+   "d": 1.36,
+   "text": "what's the difference between something"
+  },
+  {
+   "t": 456.64,
+   "d": 1.6,
+   "text": "which is like complicated, confusing,"
+  },
+  {
+   "t": 458.24,
+   "d": 1.76,
+   "text": "and something which is actually a maze?"
+  },
+  {
+   "t": 460.0,
+   "d": 2.32,
+   "text": "You could say, well, I mean, this book"
+  },
+  {
+   "t": 462.32,
+   "d": 1.76,
+   "text": "that I showed a page of earlier must be"
+  },
+  {
+   "t": 464.08,
+   "d": 1.44,
+   "text": "a maze because it says maze on the"
+  },
+  {
+   "t": 465.52,
+   "d": 3.84,
+   "text": "cover, right? Um, if you play Zork, it"
+  },
+  {
+   "t": 469.36,
+   "d": 1.6,
+   "text": "says you're in a maze. You are in a"
+  },
+  {
+   "t": 470.96,
+   "d": 3.2,
+   "text": "maze. It literally says so. Uh, Colossal"
+  },
+  {
+   "t": 474.16,
+   "d": 2.8,
+   "text": "Cave, same idea. So, maybe that's the"
+  },
+  {
+   "t": 476.96,
+   "d": 2.08,
+   "text": "definition. Like, it's a maze if it's"
+  },
+  {
+   "t": 479.04,
+   "d": 1.36,
+   "text": "labeled a maze. That's not very"
+  },
+  {
+   "t": 480.4,
+   "d": 2.64,
+   "text": "satisfying because labels are confusing"
+  },
+  {
+   "t": 483.04,
+   "d": 2.96,
+   "text": "and labels can lie. Uh, furthermore,"
+  },
+  {
+   "t": 486.0,
+   "d": 2.4,
+   "text": "like even in Zor, even just confined to"
+  },
+  {
+   "t": 488.4,
+   "d": 2.16,
+   "text": "that game, Zor actually has two mazes."
+  },
+  {
+   "t": 490.56,
+   "d": 2.0,
+   "text": "The first one is called the maze. The"
+  },
+  {
+   "t": 492.56,
+   "d": 1.92,
+   "text": "second one is called the coal mine. So,"
+  },
+  {
+   "t": 494.48,
+   "d": 2.96,
+   "text": "the labels are obviously wrong."
+  },
+  {
+   "t": 497.44,
+   "d": 2.88,
+   "text": "So, um, let's drop that. Let's, uh, try"
+  },
+  {
+   "t": 500.32,
+   "d": 3.44,
+   "text": "a different idea. It's a maze if you can"
+  },
+  {
+   "t": 503.76,
+   "d": 3.04,
+   "text": "get lost in it. This seems much more"
+  },
+  {
+   "t": 506.8,
+   "d": 3.52,
+   "text": "likely to work, right? Um,"
+  },
+  {
+   "t": 510.32,
+   "d": 2.08,
+   "text": "all the games that we've provided give"
+  },
+  {
+   "t": 512.4,
+   "d": 2.48,
+   "text": "you the experience of getting lost and"
+  },
+  {
+   "t": 514.88,
+   "d": 2.24,
+   "text": "having trouble getting out and therefore"
+  },
+  {
+   "t": 517.12,
+   "d": 2.48,
+   "text": "they are all mazes."
+  },
+  {
+   "t": 519.6,
+   "d": 2.16,
+   "text": "That's a great definition which doesn't"
+  },
+  {
+   "t": 521.76,
+   "d": 1.76,
+   "text": "work either because there's all sorts of"
+  },
+  {
+   "t": 523.52,
+   "d": 3.6,
+   "text": "other places you can get lost in. Um,"
+  },
+  {
+   "t": 527.12,
+   "d": 1.6,
+   "text": "a couple weeks ago I got lost in my"
+  },
+  {
+   "t": 528.72,
+   "d": 2.72,
+   "text": "doctor's office. Uh, that wasn't a maze."
+  },
+  {
+   "t": 531.44,
+   "d": 1.92,
+   "text": "I mean, you could metaphorically say"
+  },
+  {
+   "t": 533.36,
+   "d": 2.4,
+   "text": "that building was a maze, but it would"
+  },
+  {
+   "t": 535.76,
+   "d": 1.52,
+   "text": "be a metaphor. It wouldn't be the"
+  },
+  {
+   "t": 537.28,
+   "d": 2.48,
+   "text": "literal truth. If I if I put a map of"
+  },
+  {
+   "t": 539.76,
+   "d": 1.6,
+   "text": "that medical building into a game, you"
+  },
+  {
+   "t": 541.36,
+   "d": 1.44,
+   "text": "wouldn't think of it as a maze. You just"
+  },
+  {
+   "t": 542.8,
+   "d": 1.68,
+   "text": "think of it as a slightly confusing"
+  },
+  {
+   "t": 544.48,
+   "d": 1.6,
+   "text": "level."
+  },
+  {
+   "t": 546.08,
+   "d": 1.52,
+   "text": "Really, what we want to see is"
+  },
+  {
+   "t": 547.6,
+   "d": 2.24,
+   "text": "intention."
+  },
+  {
+   "t": 549.84,
+   "d": 1.52,
+   "text": "It's not just that the maze gets you"
+  },
+  {
+   "t": 551.36,
+   "d": 1.68,
+   "text": "lost. It's that the maze like"
+  },
+  {
+   "t": 553.04,
+   "d": 3.2,
+   "text": "intentionally tries to get you lost."
+  },
+  {
+   "t": 556.24,
+   "d": 2.48,
+   "text": "Uh that works a lot better. Of course,"
+  },
+  {
+   "t": 558.72,
+   "d": 2.0,
+   "text": "you can quibble about the intentionality"
+  },
+  {
+   "t": 560.72,
+   "d": 2.72,
+   "text": "of the colossal cave maze. I mean the"
+  },
+  {
+   "t": 563.44,
+   "d": 2.8,
+   "text": "actual colossal cave maze, the uh the"
+  },
+  {
+   "t": 566.24,
+   "d": 3.04,
+   "text": "cavern that Will and Pat Crother"
+  },
+  {
+   "t": 569.28,
+   "d": 2.24,
+   "text": "explored that inspired the game Colossal"
+  },
+  {
+   "t": 571.52,
+   "d": 2.08,
+   "text": "Cave. This is a very confusing layout of"
+  },
+  {
+   "t": 573.6,
+   "d": 2.8,
+   "text": "tunnels. You can get lost in it if"
+  },
+  {
+   "t": 576.4,
+   "d": 1.6,
+   "text": "especially if you don't, you know, if"
+  },
+  {
+   "t": 578.0,
+   "d": 2.48,
+   "text": "you're not good at spelunking, but it"
+  },
+  {
+   "t": 580.48,
+   "d": 1.52,
+   "text": "wasn't intentionally created. It was"
+  },
+  {
+   "t": 582.0,
+   "d": 3.68,
+   "text": "created by flowing water. But is this a"
+  },
+  {
+   "t": 585.68,
+   "d": 2.48,
+   "text": "maze or not? You know, you it says"
+  },
+  {
+   "t": 588.16,
+   "d": 2.0,
+   "text": "labyrinth at one point, but it also says"
+  },
+  {
+   "t": 590.16,
+   "d": 2.64,
+   "text": "all sorts of other things. Um, cavers"
+  },
+  {
+   "t": 592.8,
+   "d": 2.48,
+   "text": "love metaphors. Cavers love to name cave"
+  },
+  {
+   "t": 595.28,
+   "d": 2.56,
+   "text": "bits after things that they represent or"
+  },
+  {
+   "t": 597.84,
+   "d": 3.84,
+   "text": "remind them of. Here's a list of uh uh"
+  },
+  {
+   "t": 601.68,
+   "d": 3.04,
+   "text": "landmarks in the actual mammoth cave."
+  },
+  {
+   "t": 604.72,
+   "d": 1.84,
+   "text": "So, I don't think we need to necessarily"
+  },
+  {
+   "t": 606.56,
+   "d": 2.88,
+   "text": "call the original cave a maze. So, this"
+  },
+  {
+   "t": 609.44,
+   "d": 3.52,
+   "text": "intentionality works um pretty good,"
+  },
+  {
+   "t": 612.96,
+   "d": 2.48,
+   "text": "pretty well as a a notion of what a maze"
+  },
+  {
+   "t": 615.44,
+   "d": 3.76,
+   "text": "is. um"
+  },
+  {
+   "t": 619.2,
+   "d": 2.72,
+   "text": "except that once again the definition"
+  },
+  {
+   "t": 621.92,
+   "d": 3.12,
+   "text": "doesn't always work. Here's a maze. This"
+  },
+  {
+   "t": 625.04,
+   "d": 2.24,
+   "text": "is from Chartra Cathedral in France."
+  },
+  {
+   "t": 627.28,
+   "d": 2.64,
+   "text": "It's uh quite a lot of um cathedrals of"
+  },
+  {
+   "t": 629.92,
+   "d": 2.24,
+   "text": "this era and in fact within like 500"
+  },
+  {
+   "t": 632.16,
+   "d": 3.84,
+   "text": "years have mazes on the floor. Um I mean"
+  },
+  {
+   "t": 636.0,
+   "d": 2.32,
+   "text": "you can say that this is not really a"
+  },
+  {
+   "t": 638.32,
+   "d": 3.12,
+   "text": "maze. It's it's a universal maze meaning"
+  },
+  {
+   "t": 641.44,
+   "d": 2.72,
+   "text": "one path meaning there are no branches"
+  },
+  {
+   "t": 644.16,
+   "d": 2.0,
+   "text": "if you follow the the route through it."
+  },
+  {
+   "t": 646.16,
+   "d": 1.44,
+   "text": "uh there's never any choices. You just"
+  },
+  {
+   "t": 647.6,
+   "d": 1.36,
+   "text": "follow the wiggles until you're at the"
+  },
+  {
+   "t": 648.96,
+   "d": 3.92,
+   "text": "center. And in some sense, that means"
+  },
+  {
+   "t": 652.88,
+   "d": 3.04,
+   "text": "it's not a maze, it's a labyrinth."
+  },
+  {
+   "t": 655.92,
+   "d": 2.32,
+   "text": "Um here's another example. I drew this"
+  },
+  {
+   "t": 658.24,
+   "d": 2.16,
+   "text": "one. The problem is that if you try to"
+  },
+  {
+   "t": 660.4,
+   "d": 1.52,
+   "text": "make this distinction between mazes and"
+  },
+  {
+   "t": 661.92,
+   "d": 2.4,
+   "text": "labyrinths and like if you try if you've"
+  },
+  {
+   "t": 664.32,
+   "d": 1.12,
+   "text": "ever like turned to someone and"
+  },
+  {
+   "t": 665.44,
+   "d": 1.28,
+   "text": "corrected them and said, \"That's not"
+  },
+  {
+   "t": 666.72,
+   "d": 1.92,
+   "text": "actually a maze, it's a labyrinth.\" What"
+  },
+  {
+   "t": 668.64,
+   "d": 1.36,
+   "text": "happens is that they look back at you"
+  },
+  {
+   "t": 670.0,
+   "d": 2.4,
+   "text": "like you're both penguins."
+  },
+  {
+   "t": 672.4,
+   "d": 2.0,
+   "text": "Nobody actually, nobody in real life"
+  },
+  {
+   "t": 674.4,
+   "d": 2.08,
+   "text": "outside of game design makes that"
+  },
+  {
+   "t": 676.48,
+   "d": 3.2,
+   "text": "distinction. And I would like to"
+  },
+  {
+   "t": 679.68,
+   "d": 2.64,
+   "text": "hold on to the common understanding"
+  },
+  {
+   "t": 682.32,
+   "d": 1.92,
+   "text": "rather than the technical understanding"
+  },
+  {
+   "t": 684.24,
+   "d": 5.84,
+   "text": "and say that this really is a maze."
+  },
+  {
+   "t": 690.08,
+   "d": 1.84,
+   "text": "Uh here's another one. This is a photo"
+  },
+  {
+   "t": 691.92,
+   "d": 2.64,
+   "text": "that I uh I took this in a trip to Italy"
+  },
+  {
+   "t": 694.56,
+   "d": 2.16,
+   "text": "a few years ago uh in the Basilica of"
+  },
+  {
+   "t": 696.72,
+   "d": 2.88,
+   "text": "San Vital. Um, by the way, notice in"
+  },
+  {
+   "t": 699.6,
+   "d": 2.32,
+   "text": "this one, if the triangle tile,"
+  },
+  {
+   "t": 701.92,
+   "d": 2.4,
+   "text": "triangular tiles are arrows, then this"
+  },
+  {
+   "t": 704.32,
+   "d": 2.08,
+   "text": "is a maze where you start in the center"
+  },
+  {
+   "t": 706.4,
+   "d": 2.4,
+   "text": "and find your way to the exit, which is"
+  },
+  {
+   "t": 708.8,
+   "d": 3.2,
+   "text": "a little bit unusual for um laid out"
+  },
+  {
+   "t": 712.0,
+   "d": 2.56,
+   "text": "path or or hedge mazes. Uh, I thought"
+  },
+  {
+   "t": 714.56,
+   "d": 2.4,
+   "text": "that was interesting, but not relevant."
+  },
+  {
+   "t": 716.96,
+   "d": 3.04,
+   "text": "Or maybe it is. Anyway, so here's a maze"
+  },
+  {
+   "t": 720.0,
+   "d": 2.16,
+   "text": "where you can't get lost. It's not"
+  },
+  {
+   "t": 722.16,
+   "d": 1.44,
+   "text": "intended to get you lost, right? So,"
+  },
+  {
+   "t": 723.6,
+   "d": 1.76,
+   "text": "it's not a maze. Maybe that's what why"
+  },
+  {
+   "t": 725.36,
+   "d": 1.28,
+   "text": "people think that there ought to be a"
+  },
+  {
+   "t": 726.64,
+   "d": 2.72,
+   "text": "distinction. Except I disagree. I think"
+  },
+  {
+   "t": 729.36,
+   "d": 3.6,
+   "text": "you can get lost in here because if"
+  },
+  {
+   "t": 732.96,
+   "d": 2.0,
+   "text": "you're attempt to solve it, if you if"
+  },
+  {
+   "t": 734.96,
+   "d": 2.0,
+   "text": "you're standing at the cathedral where I"
+  },
+  {
+   "t": 736.96,
+   "d": 2.88,
+   "text": "was and you try to like follow the path,"
+  },
+  {
+   "t": 739.84,
+   "d": 2.16,
+   "text": "it takes work. Like you hold out your"
+  },
+  {
+   "t": 742.0,
+   "d": 2.48,
+   "text": "finger and you go like, okay, I'm going"
+  },
+  {
+   "t": 744.48,
+   "d": 2.16,
+   "text": "like this and move my finger around."
+  },
+  {
+   "t": 746.64,
+   "d": 2.56,
+   "text": "You're making like a noise like you're"
+  },
+  {
+   "t": 749.2,
+   "d": 4.24,
+   "text": "the frog and you can lose your place."
+  },
+  {
+   "t": 753.44,
+   "d": 2.4,
+   "text": "You can slip off and forget which wiggle"
+  },
+  {
+   "t": 755.84,
+   "d": 1.6,
+   "text": "you're on or accidentally cross one of"
+  },
+  {
+   "t": 757.44,
+   "d": 2.72,
+   "text": "these little lines and then you have"
+  },
+  {
+   "t": 760.16,
+   "d": 2.96,
+   "text": "made a mistake and losing your place is"
+  },
+  {
+   "t": 763.12,
+   "d": 1.92,
+   "text": "a synonym for getting lost. Right? I"
+  },
+  {
+   "t": 765.04,
+   "d": 2.48,
+   "text": "mean it's the the experience of what"
+  },
+  {
+   "t": 767.52,
+   "d": 3.52,
+   "text": "you're doing is actually surprisingly"
+  },
+  {
+   "t": 771.04,
+   "d": 5.52,
+   "text": "similar to any other branch maze."
+  },
+  {
+   "t": 776.56,
+   "d": 2.48,
+   "text": "Um,"
+  },
+  {
+   "t": 779.04,
+   "d": 3.36,
+   "text": "here's a branchy maze where you have"
+  },
+  {
+   "t": 782.4,
+   "d": 1.44,
+   "text": "exactly the same problem. You're trying"
+  },
+  {
+   "t": 783.84,
+   "d": 2.08,
+   "text": "to follow it. You can fall off the path."
+  },
+  {
+   "t": 785.92,
+   "d": 1.36,
+   "text": "You have to like point with your finger"
+  },
+  {
+   "t": 787.28,
+   "d": 2.8,
+   "text": "and squint and try to remember where you"
+  },
+  {
+   "t": 790.08,
+   "d": 1.76,
+   "text": "are and how many wiggles you've gone"
+  },
+  {
+   "t": 791.84,
+   "d": 2.24,
+   "text": "past. This one does have some branches."
+  },
+  {
+   "t": 794.08,
+   "d": 2.08,
+   "text": "It's a It's a relatively It has"
+  },
+  {
+   "t": 796.16,
+   "d": 2.64,
+   "text": "relatively few branches. quite a lot of"
+  },
+  {
+   "t": 798.8,
+   "d": 1.6,
+   "text": "what you're doing when you saw this one"
+  },
+  {
+   "t": 800.4,
+   "d": 2.08,
+   "text": "is exactly the same thing you were doing"
+  },
+  {
+   "t": 802.48,
+   "d": 4.96,
+   "text": "in the uh in the chartro one. So I think"
+  },
+  {
+   "t": 807.44,
+   "d": 1.92,
+   "text": "that"
+  },
+  {
+   "t": 809.36,
+   "d": 2.96,
+   "text": "those experiences are more alike than"
+  },
+  {
+   "t": 812.32,
+   "d": 2.24,
+   "text": "the mathematical underpinnings of maze"
+  },
+  {
+   "t": 814.56,
+   "d": 3.24,
+   "text": "would say."
+  },
+  {
+   "t": 819.36,
+   "d": 2.72,
+   "text": "Um"
+  },
+  {
+   "t": 822.08,
+   "d": 3.76,
+   "text": "here is a feeling here's a here's a"
+  },
+  {
+   "t": 825.84,
+   "d": 2.56,
+   "text": "contrasting example. A maze is a"
+  },
+  {
+   "t": 828.4,
+   "d": 1.76,
+   "text": "feeling."
+  },
+  {
+   "t": 830.16,
+   "d": 1.28,
+   "text": "This is the feeling of being"
+  },
+  {
+   "t": 831.44,
+   "d": 2.08,
+   "text": "disoriented, but it's not a maze. It's"
+  },
+  {
+   "t": 833.52,
+   "d": 1.6,
+   "text": "just an empty space. You can't find a"
+  },
+  {
+   "t": 835.12,
+   "d": 1.44,
+   "text": "way around in it because there's nothing"
+  },
+  {
+   "t": 836.56,
+   "d": 2.48,
+   "text": "there. So, that's"
+  },
+  {
+   "t": 839.04,
+   "d": 3.36,
+   "text": "not the same thing. Sorry, I'm I'm also"
+  },
+  {
+   "t": 842.4,
+   "d": 3.2,
+   "text": "slightly lost in my notes. Um,"
+  },
+  {
+   "t": 845.6,
+   "d": 2.8,
+   "text": "here's an example. Like, one of the"
+  },
+  {
+   "t": 848.4,
+   "d": 1.76,
+   "text": "reasons I love Larry Evans and his stuff"
+  },
+  {
+   "t": 850.16,
+   "d": 2.08,
+   "text": "is that his mo his maces invoke the"
+  },
+  {
+   "t": 852.24,
+   "d": 1.76,
+   "text": "feeling of being in the first person"
+  },
+  {
+   "t": 854.0,
+   "d": 3.6,
+   "text": "view. Even though this is a top down or"
+  },
+  {
+   "t": 857.6,
+   "d": 2.24,
+   "text": "angular uh like angle down"
+  },
+  {
+   "t": 859.84,
+   "d": 1.84,
+   "text": "representation of the maze, you can't"
+  },
+  {
+   "t": 861.68,
+   "d": 2.72,
+   "text": "look at it without thinking I could be"
+  },
+  {
+   "t": 864.4,
+   "d": 1.6,
+   "text": "in one of those corridors. I could be"
+  },
+  {
+   "t": 866.0,
+   "d": 0.96,
+   "text": "looking out through one of those"
+  },
+  {
+   "t": 866.96,
+   "d": 2.64,
+   "text": "windows. I could see that bridge and I I"
+  },
+  {
+   "t": 869.6,
+   "d": 2.0,
+   "text": "would be wondering if I had crossed that"
+  },
+  {
+   "t": 871.6,
+   "d": 1.52,
+   "text": "bridge already or if it was a different"
+  },
+  {
+   "t": 873.12,
+   "d": 1.36,
+   "text": "one."
+  },
+  {
+   "t": 874.48,
+   "d": 3.28,
+   "text": "uh he really plays with the idea of the"
+  },
+  {
+   "t": 877.76,
+   "d": 2.96,
+   "text": "experience of being inside the place"
+  },
+  {
+   "t": 880.72,
+   "d": 2.72,
+   "text": "even though you're not it's not drawn"
+  },
+  {
+   "t": 883.44,
+   "d": 2.8,
+   "text": "from inside the place. So [snorts] this"
+  },
+  {
+   "t": 886.24,
+   "d": 2.0,
+   "text": "sense of disorientation and trying to"
+  },
+  {
+   "t": 888.24,
+   "d": 2.32,
+   "text": "orient yourself"
+  },
+  {
+   "t": 890.56,
+   "d": 2.88,
+   "text": "is I think even more critical than the"
+  },
+  {
+   "t": 893.44,
+   "d": 2.08,
+   "text": "intention of the maze trying to get you"
+  },
+  {
+   "t": 895.52,
+   "d": 1.84,
+   "text": "lost. What the maze is really trying to"
+  },
+  {
+   "t": 897.36,
+   "d": 4.64,
+   "text": "do is allow you to find yourself."
+  },
+  {
+   "t": 902.0,
+   "d": 3.2,
+   "text": "It's not just getting rid of your"
+  },
+  {
+   "t": 905.2,
+   "d": 1.6,
+   "text": "orientation, which the void, the big"
+  },
+  {
+   "t": 906.8,
+   "d": 2.4,
+   "text": "empty dark void does. It is giving you"
+  },
+  {
+   "t": 909.2,
+   "d": 2.4,
+   "text": "ways you can orient yourself, but you"
+  },
+  {
+   "t": 911.6,
+   "d": 2.72,
+   "text": "have to work at it."
+  },
+  {
+   "t": 914.32,
+   "d": 2.4,
+   "text": "Uh, and this gets back to the the"
+  },
+  {
+   "t": 916.72,
+   "d": 3.76,
+   "text": "adventure um examples."
+  },
+  {
+   "t": 920.48,
+   "d": 1.28,
+   "text": "When you're navigating around the"
+  },
+  {
+   "t": 921.76,
+   "d": 2.08,
+   "text": "colossal cave maze, there are no"
+  },
+  {
+   "t": 923.84,
+   "d": 1.52,
+   "text": "landmarks. You have to make your own"
+  },
+  {
+   "t": 925.36,
+   "d": 3.68,
+   "text": "landmarks. You have to drop items um and"
+  },
+  {
+   "t": 929.04,
+   "d": 1.76,
+   "text": "also record yourself. Record where you"
+  },
+  {
+   "t": 930.8,
+   "d": 3.76,
+   "text": "are. record a map. It's not just that it"
+  },
+  {
+   "t": 934.56,
+   "d": 1.52,
+   "text": "is impossible to find your way around."
+  },
+  {
+   "t": 936.08,
+   "d": 1.52,
+   "text": "It's that it's impossible, but you have"
+  },
+  {
+   "t": 937.6,
+   "d": 2.0,
+   "text": "to think about it. Uh the second"
+  },
+  {
+   "t": 939.6,
+   "d": 2.64,
+   "text": "example, even more so, you can you hit"
+  },
+  {
+   "t": 942.24,
+   "d": 1.6,
+   "text": "this other maze, the second maze in"
+  },
+  {
+   "t": 943.84,
+   "d": 2.0,
+   "text": "Colossal Cave, and you start poking"
+  },
+  {
+   "t": 945.84,
+   "d": 1.6,
+   "text": "around and maybe even start dropping"
+  },
+  {
+   "t": 947.44,
+   "d": 2.88,
+   "text": "items before you realize that it's not"
+  },
+  {
+   "t": 950.32,
+   "d": 2.64,
+   "text": "the same thing at all. All these rooms"
+  },
+  {
+   "t": 952.96,
+   "d": 1.76,
+   "text": "are different, but they're hard to"
+  },
+  {
+   "t": 954.72,
+   "d": 1.28,
+   "text": "remember how they're different. they"
+  },
+  {
+   "t": 956.0,
+   "d": 1.6,
+   "text": "look"
+  },
+  {
+   "t": 957.6,
+   "d": 2.0,
+   "text": "like it's it's not it's a set of it's a"
+  },
+  {
+   "t": 959.6,
+   "d": 1.6,
+   "text": "sense of difference which is difficult"
+  },
+  {
+   "t": 961.2,
+   "d": 3.72,
+   "text": "to keep in your mind."
+  },
+  {
+   "t": 965.6,
+   "d": 3.44,
+   "text": "Um Zork also [snorts] subverts the"
+  },
+  {
+   "t": 969.04,
+   "d": 3.68,
+   "text": "original drop items idea but it subverts"
+  },
+  {
+   "t": 972.72,
+   "d": 2.08,
+   "text": "it differently. Uh this is a line of"
+  },
+  {
+   "t": 974.8,
+   "d": 2.08,
+   "text": "code from the the source code from Zor"
+  },
+  {
+   "t": 976.88,
+   "d": 3.6,
+   "text": "one. Um this is the line where the thief"
+  },
+  {
+   "t": 980.48,
+   "d": 1.52,
+   "text": "like picks up one of your objects in the"
+  },
+  {
+   "t": 982.0,
+   "d": 1.44,
+   "text": "maze that you dropped as a landmark and"
+  },
+  {
+   "t": 983.44,
+   "d": 3.12,
+   "text": "moves it. uh which Zor does, at least"
+  },
+  {
+   "t": 986.56,
+   "d": 1.6,
+   "text": "some versions of Zor. There's a bug and"
+  },
+  {
+   "t": 988.16,
+   "d": 1.44,
+   "text": "one that he doesn't do it, but he's"
+  },
+  {
+   "t": 989.6,
+   "d": 4.08,
+   "text": "supposed to. Um, so"
+  },
+  {
+   "t": 993.68,
+   "d": 2.08,
+   "text": "your toolkit for solving the maze is"
+  },
+  {
+   "t": 995.76,
+   "d": 2.16,
+   "text": "actually deliberately being broken and"
+  },
+  {
+   "t": 997.92,
+   "d": 2.24,
+   "text": "you have to do a different kind of work"
+  },
+  {
+   "t": 1000.16,
+   "d": 1.2,
+   "text": "to like come up with a different"
+  },
+  {
+   "t": 1001.36,
+   "d": 2.88,
+   "text": "solution. Uh, in Zor 2, it happens"
+  },
+  {
+   "t": 1004.24,
+   "d": 3.76,
+   "text": "again. This is the diamond maze in which"
+  },
+  {
+   "t": 1008.0,
+   "d": 1.44,
+   "text": "actually I'm not going to even get into"
+  },
+  {
+   "t": 1009.44,
+   "d": 1.44,
+   "text": "the diamond maze. There's a whole like"
+  },
+  {
+   "t": 1010.88,
+   "d": 1.6,
+   "text": "sort of discussion about it, but the"
+  },
+  {
+   "t": 1012.48,
+   "d": 2.24,
+   "text": "point is that"
+  },
+  {
+   "t": 1014.72,
+   "d": 2.4,
+   "text": "It makes you think about what you're"
+  },
+  {
+   "t": 1017.12,
+   "d": 2.0,
+   "text": "trying to do. And really, every"
+  },
+  {
+   "t": 1019.12,
+   "d": 3.44,
+   "text": "adventure game of the genre of of that"
+  },
+  {
+   "t": 1022.56,
+   "d": 2.48,
+   "text": "of that era tries to come up with a"
+  },
+  {
+   "t": 1025.04,
+   "d": 2.8,
+   "text": "different way to mess with your head and"
+  },
+  {
+   "t": 1027.84,
+   "d": 1.36,
+   "text": "make you think about its maze"
+  },
+  {
+   "t": 1029.2,
+   "d": 2.32,
+   "text": "differently."
+  },
+  {
+   "t": 1031.52,
+   "d": 4.08,
+   "text": "Um, or the maze could cheat, which makes"
+  },
+  {
+   "t": 1035.6,
+   "d": 1.76,
+   "text": "you work differently by realizing that"
+  },
+  {
+   "t": 1037.36,
+   "d": 3.28,
+   "text": "it's impossible, or it makes you cheat."
+  },
+  {
+   "t": 1040.64,
+   "d": 1.6,
+   "text": "Uh, by the way, this is from an Edward"
+  },
+  {
+   "t": 1042.24,
+   "d": 2.8,
+   "text": "Gory book. I was halfway through writing"
+  },
+  {
+   "t": 1045.04,
+   "d": 2.0,
+   "text": "this talk when I realized that I had all"
+  },
+  {
+   "t": 1047.04,
+   "d": 1.92,
+   "text": "these screenshots from Larry Evans maze"
+  },
+  {
+   "t": 1048.96,
+   "d": 2.0,
+   "text": "books and I had just put in a screenshot"
+  },
+  {
+   "t": 1050.96,
+   "d": 2.0,
+   "text": "from Edward Gory and I actually own a"
+  },
+  {
+   "t": 1052.96,
+   "d": 2.56,
+   "text": "book which is Edward Gory collaborating"
+  },
+  {
+   "t": 1055.52,
+   "d": 3.12,
+   "text": "with Larry Evans uh or at least Edward"
+  },
+  {
+   "t": 1058.64,
+   "d": 2.8,
+   "text": "Gory art and Larry Evans mazes. Um, it's"
+  },
+  {
+   "t": 1061.44,
+   "d": 1.52,
+   "text": "not the greatest maze book, but it was"
+  },
+  {
+   "t": 1062.96,
+   "d": 1.36,
+   "text": "pretty awesome that I remembered that"
+  },
+  {
+   "t": 1064.32,
+   "d": 1.44,
+   "text": "that I came across it on my shelf, so I"
+  },
+  {
+   "t": 1065.76,
+   "d": 1.36,
+   "text": "had to put it in a screenshot. Here it"
+  },
+  {
+   "t": 1067.12,
+   "d": 2.0,
+   "text": "is."
+  },
+  {
+   "t": 1069.12,
+   "d": 3.28,
+   "text": "Anyway, um by the way, with all these uh"
+  },
+  {
+   "t": 1072.4,
+   "d": 2.16,
+   "text": "digressions and and dead ends in my"
+  },
+  {
+   "t": 1074.56,
+   "d": 2.0,
+   "text": "talk, you might reasonably wonder if I"
+  },
+  {
+   "t": 1076.56,
+   "d": 2.0,
+   "text": "know where I'm going with this talk,"
+  },
+  {
+   "t": 1078.56,
+   "d": 1.84,
+   "text": "maybe I'm just like blundering down"
+  },
+  {
+   "t": 1080.4,
+   "d": 2.4,
+   "text": "blind alleys, hoping that if I try"
+  },
+  {
+   "t": 1082.8,
+   "d": 1.76,
+   "text": "enough topics, I will stumble across the"
+  },
+  {
+   "t": 1084.56,
+   "d": 2.16,
+   "text": "way out of this presentation before my"
+  },
+  {
+   "t": 1086.72,
+   "d": 2.88,
+   "text": "time is up. That would be an impolite"
+  },
+  {
+   "t": 1089.6,
+   "d": 3.2,
+   "text": "suggestion, but accurate."
+  },
+  {
+   "t": 1092.8,
+   "d": 2.48,
+   "text": "Um okay, try this. I just said that a"
+  },
+  {
+   "t": 1095.28,
+   "d": 1.68,
+   "text": "maze is something which makes you work"
+  },
+  {
+   "t": 1096.96,
+   "d": 2.16,
+   "text": "at finding your way out. But it doesn't"
+  },
+  {
+   "t": 1099.12,
+   "d": 1.76,
+   "text": "necessarily have to make you work hard"
+  },
+  {
+   "t": 1100.88,
+   "d": 3.36,
+   "text": "at finding your way out. Uh this is also"
+  },
+  {
+   "t": 1104.24,
+   "d": 2.32,
+   "text": "from uh this is also from a Italy trip."
+  },
+  {
+   "t": 1106.56,
+   "d": 1.92,
+   "text": "This is from the city of Ferrara. This"
+  },
+  {
+   "t": 1108.48,
+   "d": 2.56,
+   "text": "is a hedge maze. The hedges are waist"
+  },
+  {
+   "t": 1111.04,
+   "d": 4.56,
+   "text": "high. I mean unless you're not short. Um"
+  },
+  {
+   "t": 1115.6,
+   "d": 1.92,
+   "text": "you can get lost in it, but only in the"
+  },
+  {
+   "t": 1117.52,
+   "d": 1.2,
+   "text": "sense that you're standing in the middle"
+  },
+  {
+   "t": 1118.72,
+   "d": 1.6,
+   "text": "looking around and you can still see"
+  },
+  {
+   "t": 1120.32,
+   "d": 2.96,
+   "text": "where you are. You can't step out across"
+  },
+  {
+   "t": 1123.28,
+   "d": 1.6,
+   "text": "the lines like you could in a pavement"
+  },
+  {
+   "t": 1124.88,
+   "d": 3.12,
+   "text": "maze, but you can still like get it's"
+  },
+  {
+   "t": 1128.0,
+   "d": 2.56,
+   "text": "not intending to hide the maze from you."
+  },
+  {
+   "t": 1130.56,
+   "d": 1.92,
+   "text": "It's not intending to make it impossible"
+  },
+  {
+   "t": 1132.48,
+   "d": 2.32,
+   "text": "to solve. It's just intended to be the"
+  },
+  {
+   "t": 1134.8,
+   "d": 2.32,
+   "text": "experience of the maze. It's fun even"
+  },
+  {
+   "t": 1137.12,
+   "d": 2.16,
+   "text": "though it's not difficult."
+  },
+  {
+   "t": 1139.28,
+   "d": 2.4,
+   "text": "Actually, let me reverse that. Finding"
+  },
+  {
+   "t": 1141.68,
+   "d": 1.36,
+   "text": "your way through this maze isn't"
+  },
+  {
+   "t": 1143.04,
+   "d": 1.68,
+   "text": "difficult, but it's still fun. You're"
+  },
+  {
+   "t": 1144.72,
+   "d": 2.56,
+   "text": "still having the maze experience."
+  },
+  {
+   "t": 1147.28,
+   "d": 3.0,
+   "text": "Um"
+  },
+  {
+   "t": 1151.2,
+   "d": 2.16,
+   "text": "similarly even when you find a pavement"
+  },
+  {
+   "t": 1153.36,
+   "d": 4.08,
+   "text": "maze nothing forces you to walk it to"
+  },
+  {
+   "t": 1157.44,
+   "d": 2.4,
+   "text": "get out of the cathedral."
+  },
+  {
+   "t": 1159.84,
+   "d": 1.92,
+   "text": "I mean maybe metaphorically you're you"
+  },
+  {
+   "t": 1161.76,
+   "d": 2.32,
+   "text": "need to it is it represents maybe the"
+  },
+  {
+   "t": 1164.08,
+   "d": 3.76,
+   "text": "experience of of salvation the path of"
+  },
+  {
+   "t": 1167.84,
+   "d": 2.72,
+   "text": "the soul but the priest doesn't actually"
+  },
+  {
+   "t": 1170.56,
+   "d": 2.32,
+   "text": "force you to walk it."
+  },
+  {
+   "t": 1172.88,
+   "d": 2.64,
+   "text": "It's there as something that you want to"
+  },
+  {
+   "t": 1175.52,
+   "d": 2.88,
+   "text": "engage with because mazes are great."
+  },
+  {
+   "t": 1178.4,
+   "d": 1.68,
+   "text": "Like that's your reason for solving it."
+  },
+  {
+   "t": 1180.08,
+   "d": 1.52,
+   "text": "You want to have the experience of"
+  },
+  {
+   "t": 1181.6,
+   "d": 2.88,
+   "text": "solving a maze, which is rather unlike"
+  },
+  {
+   "t": 1184.48,
+   "d": 3.88,
+   "text": "what we do in game design."
+  },
+  {
+   "t": 1189.28,
+   "d": 2.08,
+   "text": "So, uh, that's why you should put mazes"
+  },
+  {
+   "t": 1191.36,
+   "d": 2.56,
+   "text": "into your game because they're awesome."
+  },
+  {
+   "t": 1193.92,
+   "d": 3.6,
+   "text": "Um, now I'm going to qualify that. Of"
+  },
+  {
+   "t": 1197.52,
+   "d": 2.16,
+   "text": "course, mazes are beautiful when they"
+  },
+  {
+   "t": 1199.68,
+   "d": 2.16,
+   "text": "challenge you and make you work. Game"
+  },
+  {
+   "t": 1201.84,
+   "d": 2.08,
+   "text": "design is beautiful when everything in"
+  },
+  {
+   "t": 1203.92,
+   "d": 1.84,
+   "text": "the game is there for a reason, right?"
+  },
+  {
+   "t": 1205.76,
+   "d": 1.84,
+   "text": "We have that as an ideal. I know this"
+  },
+  {
+   "t": 1207.6,
+   "d": 2.32,
+   "text": "the statement of why things are why you"
+  },
+  {
+   "t": 1209.92,
+   "d": 1.28,
+   "text": "put things in game is infinitely"
+  },
+  {
+   "t": 1211.2,
+   "d": 1.76,
+   "text": "flexible. And some of the reasons are"
+  },
+  {
+   "t": 1212.96,
+   "d": 3.92,
+   "text": "artistic, but I like puzzle games where"
+  },
+  {
+   "t": 1216.88,
+   "d": 2.64,
+   "text": "every time you find an element, there is"
+  },
+  {
+   "t": 1219.52,
+   "d": 1.6,
+   "text": "a moment later in the game when you say,"
+  },
+  {
+   "t": 1221.12,
+   "d": 2.0,
+   "text": "\"Aha, that's what that's there for."
+  },
+  {
+   "t": 1223.12,
+   "d": 2.24,
+   "text": "That's what that's connected to.\" So, if"
+  },
+  {
+   "t": 1225.36,
+   "d": 2.24,
+   "text": "you put a maze into your puzzle game and"
+  },
+  {
+   "t": 1227.6,
+   "d": 1.76,
+   "text": "there's no obvious reward for solving"
+  },
+  {
+   "t": 1229.36,
+   "d": 2.4,
+   "text": "it, then players are going to look for"
+  },
+  {
+   "t": 1231.76,
+   "d": 1.52,
+   "text": "the unobvious reward, right? They're"
+  },
+  {
+   "t": 1233.28,
+   "d": 2.72,
+   "text": "going to look for the secret. Um, if the"
+  },
+  {
+   "t": 1236.0,
+   "d": 1.6,
+   "text": "maze is purely decorative and is there"
+  },
+  {
+   "t": 1237.6,
+   "d": 2.48,
+   "text": "for only artistic purposes, then in the"
+  },
+  {
+   "t": 1240.08,
+   "d": 2.4,
+   "text": "game design sense, it's a red herring."
+  },
+  {
+   "t": 1242.48,
+   "d": 2.16,
+   "text": "You better label it very clearly as a"
+  },
+  {
+   "t": 1244.64,
+   "d": 2.24,
+   "text": "red herring. Otherwise, the players are"
+  },
+  {
+   "t": 1246.88,
+   "d": 1.92,
+   "text": "going to get annoyed at you because they"
+  },
+  {
+   "t": 1248.8,
+   "d": 1.6,
+   "text": "spent wasted a lot of time looking for"
+  },
+  {
+   "t": 1250.4,
+   "d": 2.16,
+   "text": "something which isn't there."
+  },
+  {
+   "t": 1252.56,
+   "d": 3.6,
+   "text": "um which is the bad play experience. A"
+  },
+  {
+   "t": 1256.16,
+   "d": 1.6,
+   "text": "good play experience is when you spend a"
+  },
+  {
+   "t": 1257.76,
+   "d": 1.92,
+   "text": "lot of time looking for something which"
+  },
+  {
+   "t": 1259.68,
+   "d": 2.72,
+   "text": "is there and then find it. I mean not"
+  },
+  {
+   "t": 1262.4,
+   "d": 2.4,
+   "text": "everybody will find it but at least the"
+  },
+  {
+   "t": 1264.8,
+   "d": 1.36,
+   "text": "puzzle sickos will appreciate what"
+  },
+  {
+   "t": 1266.16,
+   "d": 4.0,
+   "text": "you've done. Um so we can go down a path"
+  },
+  {
+   "t": 1270.16,
+   "d": 2.0,
+   "text": "even though it may not be necessary of"
+  },
+  {
+   "t": 1272.16,
+   "d": 2.0,
+   "text": "putting mazes into a game for artistic"
+  },
+  {
+   "t": 1274.16,
+   "d": 1.52,
+   "text": "reasons but there's actually some other"
+  },
+  {
+   "t": 1275.68,
+   "d": 4.16,
+   "text": "reason. What might that reason be? Uh"
+  },
+  {
+   "t": 1279.84,
+   "d": 1.6,
+   "text": "some simple answers. There could be a"
+  },
+  {
+   "t": 1281.44,
+   "d": 2.0,
+   "text": "maze with landmarks."
+  },
+  {
+   "t": 1283.44,
+   "d": 1.92,
+   "text": "Uh, as you follow the path through the"
+  },
+  {
+   "t": 1285.36,
+   "d": 1.52,
+   "text": "decorative maze, you come across a"
+  },
+  {
+   "t": 1286.88,
+   "d": 2.64,
+   "text": "sequence of things, the sequence is"
+  },
+  {
+   "t": 1289.52,
+   "d": 1.76,
+   "text": "there, therefore becomes a clue, which"
+  },
+  {
+   "t": 1291.28,
+   "d": 4.0,
+   "text": "is relevant later in the game. Um,"
+  },
+  {
+   "t": 1295.28,
+   "d": 3.12,
+   "text": "maybe the maze has a rule. Uh, there's a"
+  },
+  {
+   "t": 1298.4,
+   "d": 2.96,
+   "text": "whole category of rule mazes or logic"
+  },
+  {
+   "t": 1301.36,
+   "d": 1.84,
+   "text": "mazes, which I don't have time to get"
+  },
+  {
+   "t": 1303.2,
+   "d": 2.16,
+   "text": "into in this talk. Um, but they're"
+  },
+  {
+   "t": 1305.36,
+   "d": 2.0,
+   "text": "generally based on mazes with some"
+  },
+  {
+   "t": 1307.36,
+   "d": 2.16,
+   "text": "additional constraint. This is a maze"
+  },
+  {
+   "t": 1309.52,
+   "d": 2.08,
+   "text": "where you have to alternate colors. Uh,"
+  },
+  {
+   "t": 1311.6,
+   "d": 1.68,
+   "text": "red, blue, yellow, red, blue, yellow,"
+  },
+  {
+   "t": 1313.28,
+   "d": 1.36,
+   "text": "red, blue, yellow as you move through"
+  },
+  {
+   "t": 1314.64,
+   "d": 4.24,
+   "text": "it. Uh, here is a left turn maze. In"
+  },
+  {
+   "t": 1318.88,
+   "d": 2.0,
+   "text": "this one, you're allowed to turn left or"
+  },
+  {
+   "t": 1320.88,
+   "d": 1.44,
+   "text": "go straight, but you're not allowed to"
+  },
+  {
+   "t": 1322.32,
+   "d": 2.08,
+   "text": "turn right or double back, which is"
+  },
+  {
+   "t": 1324.4,
+   "d": 4.4,
+   "text": "pretty cool. Uh, mostly logic mazes"
+  },
+  {
+   "t": 1328.8,
+   "d": 3.76,
+   "text": "aren't as like as viscerally exciting to"
+  },
+  {
+   "t": 1332.56,
+   "d": 3.44,
+   "text": "me. Um, they're good puzzles. They can"
+  },
+  {
+   "t": 1336.0,
+   "d": 1.44,
+   "text": "be great puzzles. This one is a great"
+  },
+  {
+   "t": 1337.44,
+   "d": 4.32,
+   "text": "puzzle, but they don't I'm not even"
+  },
+  {
+   "t": 1341.76,
+   "d": 1.52,
+   "text": "going to say that they're not mazes, but"
+  },
+  {
+   "t": 1343.28,
+   "d": 1.92,
+   "text": "they don't really have as much of the"
+  },
+  {
+   "t": 1345.2,
+   "d": 2.64,
+   "text": "feel for me because the rule kind of"
+  },
+  {
+   "t": 1347.84,
+   "d": 2.56,
+   "text": "distances me from the experience of"
+  },
+  {
+   "t": 1350.4,
+   "d": 2.72,
+   "text": "localizing myself in the space. Uh, I"
+  },
+  {
+   "t": 1353.12,
+   "d": 1.36,
+   "text": "mean, the whole point of the rule maze"
+  },
+  {
+   "t": 1354.48,
+   "d": 2.4,
+   "text": "is that you can come back to the same"
+  },
+  {
+   "t": 1356.88,
+   "d": 2.4,
+   "text": "place, [snorts] but you're facing the"
+  },
+  {
+   "t": 1359.28,
+   "d": 1.84,
+   "text": "wrong way or you're on the wrong color."
+  },
+  {
+   "t": 1361.12,
+   "d": 1.2,
+   "text": "Like in this example, you could be in"
+  },
+  {
+   "t": 1362.32,
+   "d": 1.2,
+   "text": "the same square, but you're on blue"
+  },
+  {
+   "t": 1363.52,
+   "d": 2.8,
+   "text": "instead of yellow. So it's a different"
+  },
+  {
+   "t": 1366.32,
+   "d": 2.24,
+   "text": "state which is great for the puzzle but"
+  },
+  {
+   "t": 1368.56,
+   "d": 1.36,
+   "text": "kind of distracts you from the feeling"
+  },
+  {
+   "t": 1369.92,
+   "d": 4.16,
+   "text": "of being in the world. However, however,"
+  },
+  {
+   "t": 1374.08,
+   "d": 1.92,
+   "text": "where there are rules, there could be"
+  },
+  {
+   "t": 1376.0,
+   "d": 2.4,
+   "text": "rule discovery and rule discovery is a"
+  },
+  {
+   "t": 1378.4,
+   "d": 2.4,
+   "text": "big category, right? Uh this is zero"
+  },
+  {
+   "t": 1380.8,
+   "d": 3.52,
+   "text": "player, which is a a non-interactive uh"
+  },
+  {
+   "t": 1384.32,
+   "d": 2.72,
+   "text": "puzzle that from last year, which is"
+  },
+  {
+   "t": 1387.04,
+   "d": 3.6,
+   "text": "very cool. Uh the witness of course is"
+  },
+  {
+   "t": 1390.64,
+   "d": 3.28,
+   "text": "sort of the game of rule discovery."
+  },
+  {
+   "t": 1393.92,
+   "d": 3.28,
+   "text": "Um, rule discovery might mean playing a"
+  },
+  {
+   "t": 1397.2,
+   "d": 2.32,
+   "text": "maze backwards."
+  },
+  {
+   "t": 1399.52,
+   "d": 2.56,
+   "text": "If I gave you this color alternation"
+  },
+  {
+   "t": 1402.08,
+   "d": 1.76,
+   "text": "maze and didn't tell you what the color"
+  },
+  {
+   "t": 1403.84,
+   "d": 2.96,
+   "text": "sequence was, could you figure it out? I"
+  },
+  {
+   "t": 1406.8,
+   "d": 2.72,
+   "text": "mean, if you look at this and you don't"
+  },
+  {
+   "t": 1409.52,
+   "d": 1.76,
+   "text": "know the rule, you could say, \"Well,"
+  },
+  {
+   "t": 1411.28,
+   "d": 1.68,
+   "text": "maybe the colors are irrelevant.\" Then"
+  },
+  {
+   "t": 1412.96,
+   "d": 1.36,
+   "text": "it's not amazed. You could say, \"Maybe"
+  },
+  {
+   "t": 1414.32,
+   "d": 1.68,
+   "text": "I'm supposed to use one color at a"
+  },
+  {
+   "t": 1416.0,
+   "d": 3.0,
+   "text": "time.\""
+  },
+  {
+   "t": 1420.16,
+   "d": 1.68,
+   "text": "Um,"
+  },
+  {
+   "t": 1421.84,
+   "d": 2.64,
+   "text": "sorry distracted by tab. Uh, maybe you"
+  },
+  {
+   "t": 1424.48,
+   "d": 1.2,
+   "text": "could use one color at a time. Well,"
+  },
+  {
+   "t": 1425.68,
+   "d": 2.32,
+   "text": "then it's a kind of a simple maze. If"
+  },
+  {
+   "t": 1428.0,
+   "d": 2.72,
+   "text": "you know the idea of color alternation,"
+  },
+  {
+   "t": 1430.72,
+   "d": 3.76,
+   "text": "however, you could extract the the"
+  },
+  {
+   "t": 1434.48,
+   "d": 2.64,
+   "text": "single color sequence that makes this a"
+  },
+  {
+   "t": 1437.12,
+   "d": 2.32,
+   "text": "good puzzle because if you use a"
+  },
+  {
+   "t": 1439.44,
+   "d": 2.0,
+   "text": "different color sequence, it's not it's"
+  },
+  {
+   "t": 1441.44,
+   "d": 2.16,
+   "text": "either more too difficult or it's too"
+  },
+  {
+   "t": 1443.6,
+   "d": 4.04,
+   "text": "easy. Um,"
+  },
+  {
+   "t": 1449.2,
+   "d": 2.4,
+   "text": "sorry. distracted by"
+  },
+  {
+   "t": 1451.6,
+   "d": 1.28,
+   "text": "never look at anything else but your"
+  },
+  {
+   "t": 1452.88,
+   "d": 2.24,
+   "text": "slides when you're giving a talk. Um if"
+  },
+  {
+   "t": 1455.12,
+   "d": 3.2,
+   "text": "you so you can look at this and work out"
+  },
+  {
+   "t": 1458.32,
+   "d": 2.8,
+   "text": "from first principles in some sense that"
+  },
+  {
+   "t": 1461.12,
+   "d": 1.84,
+   "text": "red blue yellow is the sequence that"
+  },
+  {
+   "t": 1462.96,
+   "d": 1.76,
+   "text": "you're supposed to use. Maybe that's a"
+  },
+  {
+   "t": 1464.72,
+   "d": 1.84,
+   "text": "puzzle which is a clue for something"
+  },
+  {
+   "t": 1466.56,
+   "d": 2.8,
+   "text": "elsewhere in the game. I mean red blue"
+  },
+  {
+   "t": 1469.36,
+   "d": 1.52,
+   "text": "yellow isn't a very good clue for a"
+  },
+  {
+   "t": 1470.88,
+   "d": 1.28,
+   "text": "puzzle but you could imagine a more"
+  },
+  {
+   "t": 1472.16,
+   "d": 1.92,
+   "text": "complicated setup where the sequence"
+  },
+  {
+   "t": 1474.08,
+   "d": 3.12,
+   "text": "gives you uh useful information."
+  },
+  {
+   "t": 1477.2,
+   "d": 2.96,
+   "text": "If I was going to Whoops. Go the wrong"
+  },
+  {
+   "t": 1480.16,
+   "d": 2.32,
+   "text": "way. If I was going to look at this one"
+  },
+  {
+   "t": 1482.48,
+   "d": 2.64,
+   "text": "and say and not tell you that it's a"
+  },
+  {
+   "t": 1485.12,
+   "d": 2.24,
+   "text": "right turn maze, could you figure it out"
+  },
+  {
+   "t": 1487.36,
+   "d": 1.92,
+   "text": "that is uh that like that's the"
+  },
+  {
+   "t": 1489.28,
+   "d": 1.84,
+   "text": "important thing?"
+  },
+  {
+   "t": 1491.12,
+   "d": 1.68,
+   "text": "I probably couldn't, but there's"
+  },
+  {
+   "t": 1492.8,
+   "d": 2.48,
+   "text": "probably some sicko out there who could."
+  },
+  {
+   "t": 1495.28,
+   "d": 2.4,
+   "text": "And that's the audience for your game,"
+  },
+  {
+   "t": 1497.68,
+   "d": 3.76,
+   "text": "and you can do that. Okay, I'm actually"
+  },
+  {
+   "t": 1501.44,
+   "d": 1.52,
+   "text": "going to cheat at this point and cut"
+  },
+  {
+   "t": 1502.96,
+   "d": 2.64,
+   "text": "through the hedge to the exit because"
+  },
+  {
+   "t": 1505.6,
+   "d": 1.6,
+   "text": "I've been in here for almost half an"
+  },
+  {
+   "t": 1507.2,
+   "d": 2.56,
+   "text": "hour and I've run through a whole lot of"
+  },
+  {
+   "t": 1509.76,
+   "d": 3.2,
+   "text": "ideas and I don't want to um come to any"
+  },
+  {
+   "t": 1512.96,
+   "d": 1.2,
+   "text": "great conclusion because I don't have"
+  },
+  {
+   "t": 1514.16,
+   "d": 2.08,
+   "text": "any great conclusion. I just wanted to"
+  },
+  {
+   "t": 1516.24,
+   "d": 1.84,
+   "text": "run through all the awesome things that"
+  },
+  {
+   "t": 1518.08,
+   "d": 3.04,
+   "text": "you can do with mazes here. I will I do"
+  },
+  {
+   "t": 1521.12,
+   "d": 1.44,
+   "text": "not yet have the slides up on my"
+  },
+  {
+   "t": 1522.56,
+   "d": 1.44,
+   "text": "website, but I should have them up by"
+  },
+  {
+   "t": 1524.0,
+   "d": 3.04,
+   "text": "tomorrow. Here is the uh the overview of"
+  },
+  {
+   "t": 1527.04,
+   "d": 2.8,
+   "text": "the talk. I hope that you have enjoyed"
+  },
+  {
+   "t": 1529.84,
+   "d": 2.88,
+   "text": "it. I shall be I think we also have a"
+  },
+  {
+   "t": 1532.72,
+   "d": 1.92,
+   "text": "few minutes for questions."
+  },
+  {
+   "t": 1534.64,
+   "d": 2.0,
+   "text": ">> Excellent. I'm glad I was waiting. I was"
+  },
+  {
+   "t": 1536.64,
+   "d": 1.97,
+   "text": "really hoping we get that zoom out. So"
+  },
+  {
+   "t": 1538.61,
+   "d": 2.02,
+   "text": "[laughter]"
+  },
+  {
+   "t": 1540.72,
+   "d": 2.72,
+   "text": "delightful. Um there's one question from"
+  },
+  {
+   "t": 1543.44,
+   "d": 2.08,
+   "text": "Tuckleberry. I don't think it came up"
+  },
+  {
+   "t": 1545.52,
+   "d": 1.84,
+   "text": "though. If it did, I apologize. which is"
+  },
+  {
+   "t": 1547.36,
+   "d": 1.44,
+   "text": "the question of if you have any"
+  },
+  {
+   "t": 1548.8,
+   "d": 2.48,
+   "text": "distinction in your mind between mazes"
+  },
+  {
+   "t": 1551.28,
+   "d": 2.88,
+   "text": "that you have to escape through or from"
+  },
+  {
+   "t": 1554.16,
+   "d": 1.68,
+   "text": "versus the ones that you need to delve"
+  },
+  {
+   "t": 1555.84,
+   "d": 3.68,
+   "text": "into and get something and then kind of"
+  },
+  {
+   "t": 1559.52,
+   "d": 1.68,
+   "text": "that you're seeking something inside the"
+  },
+  {
+   "t": 1561.2,
+   "d": 2.24,
+   "text": "maze versus traversing through the maze."
+  },
+  {
+   "t": 1563.44,
+   "d": 2.4,
+   "text": "Do you think that that's a"
+  },
+  {
+   "t": 1565.84,
+   "d": 1.04,
+   "text": "difference in feeling?"
+  },
+  {
+   "t": 1566.88,
+   "d": 3.04,
+   "text": ">> Interesting. It I I tend to think think"
+  },
+  {
+   "t": 1569.92,
+   "d": 2.56,
+   "text": "of those as the same feeling. It is an"
+  },
+  {
+   "t": 1572.48,
+   "d": 2.72,
+   "text": "interesting point of design. Uh, for"
+  },
+  {
+   "t": 1575.2,
+   "d": 2.72,
+   "text": "example,"
+  },
+  {
+   "t": 1577.92,
+   "d": 3.6,
+   "text": "I was once in a a cornfield maze where"
+  },
+  {
+   "t": 1581.52,
+   "d": 1.76,
+   "text": "the goal was to get to the center and"
+  },
+  {
+   "t": 1583.28,
+   "d": 2.48,
+   "text": "then there was a bridge leading out. So,"
+  },
+  {
+   "t": 1585.76,
+   "d": 2.16,
+   "text": "is that different from a rectangular"
+  },
+  {
+   "t": 1587.92,
+   "d": 1.28,
+   "text": "maze where you have to get to the other"
+  },
+  {
+   "t": 1589.2,
+   "d": 2.4,
+   "text": "side? I mean, I was traversing a field"
+  },
+  {
+   "t": 1591.6,
+   "d": 2.08,
+   "text": "of maze and emerged into a big open"
+  },
+  {
+   "t": 1593.68,
+   "d": 2.56,
+   "text": "space and then I wasn't in the maze"
+  },
+  {
+   "t": 1596.24,
+   "d": 1.92,
+   "text": "anymore. I was merely surrounded by the"
+  },
+  {
+   "t": 1598.16,
+   "d": 2.96,
+   "text": "maze. So, and we also saw the the"
+  },
+  {
+   "t": 1601.12,
+   "d": 2.4,
+   "text": "pavement example where you know in one"
+  },
+  {
+   "t": 1603.52,
+   "d": 1.92,
+   "text": "maybe maybe in chart maybe in France"
+  },
+  {
+   "t": 1605.44,
+   "d": 1.28,
+   "text": "you're supposed to get into the center"
+  },
+  {
+   "t": 1606.72,
+   "d": 1.92,
+   "text": "but in Mirvena you're supposed to get"
+  },
+  {
+   "t": 1608.64,
+   "d": 2.48,
+   "text": "out from the center to the outside. It"
+  },
+  {
+   "t": 1611.12,
+   "d": 2.16,
+   "text": "seems like the same idea to me but"
+  },
+  {
+   "t": 1613.28,
+   "d": 1.84,
+   "text": "there's always going to be um details of"
+  },
+  {
+   "t": 1615.12,
+   "d": 1.92,
+   "text": "presentation that matter."
+  },
+  {
+   "t": 1617.04,
+   "d": 1.36,
+   "text": ">> When you were on the bridge were you"
+  },
+  {
+   "t": 1618.4,
+   "d": 1.68,
+   "text": "able to look down at all of the suckers"
+  },
+  {
+   "t": 1620.08,
+   "d": 1.68,
+   "text": "still inside the corn maze? Because I"
+  },
+  {
+   "t": 1621.76,
+   "d": 1.35,
+   "text": "think that changes the experience."
+  },
+  {
+   "t": 1623.11,
+   "d": 0.17,
+   "text": "[laughter]"
+  },
+  {
+   "t": 1623.28,
+   "d": 2.08,
+   "text": ">> Yes, of course. There's always bridges"
+  },
+  {
+   "t": 1625.36,
+   "d": 1.6,
+   "text": "in a corn maze anyway because you need"
+  },
+  {
+   "t": 1626.96,
+   "d": 3.04,
+   "text": "bridges to uh to prevent the uh like the"
+  },
+  {
+   "t": 1630.0,
+   "d": 1.44,
+   "text": "lefth hand rule from making the maze"
+  },
+  {
+   "t": 1631.44,
+   "d": 1.2,
+   "text": "trivial."
+  },
+  {
+   "t": 1632.64,
+   "d": 1.36,
+   "text": ">> Yeah, which actually was a question from"
+  },
+  {
+   "t": 1634.0,
+   "d": 2.72,
+   "text": "Hypergarden and I think that the um the"
+  },
+  {
+   "t": 1636.72,
+   "d": 1.84,
+   "text": "examples you had of those rule mazes"
+  },
+  {
+   "t": 1638.56,
+   "d": 1.52,
+   "text": "maybe part of the answer, but yeah, it"
+  },
+  {
+   "t": 1640.08,
+   "d": 2.0,
+   "text": "was any thoughts on how to keep players"
+  },
+  {
+   "t": 1642.08,
+   "d": 1.76,
+   "text": "from optimizing and kind of single"
+  },
+  {
+   "t": 1643.84,
+   "d": 1.52,
+   "text": "tooling like the left-hand rule, the"
+  },
+  {
+   "t": 1645.36,
+   "d": 2.56,
+   "text": "right hand rule to just brute forward."
+  },
+  {
+   "t": 1647.92,
+   "d": 2.16,
+   "text": ">> There's a thousand ways, right? in in"
+  },
+  {
+   "t": 1650.08,
+   "d": 1.84,
+   "text": "Wizardry, you'd step along and there's a"
+  },
+  {
+   "t": 1651.92,
+   "d": 1.92,
+   "text": "like a spinner which rotates you 90"
+  },
+  {
+   "t": 1653.84,
+   "d": 3.6,
+   "text": "degrees and you can't tell. Uh there's"
+  },
+  {
+   "t": 1657.44,
+   "d": 1.68,
+   "text": "like bridges are always good. Being"
+  },
+  {
+   "t": 1659.12,
+   "d": 1.28,
+   "text": "getting into the center has the"
+  },
+  {
+   "t": 1660.4,
+   "d": 2.64,
+   "text": "advantage that um you can make an"
+  },
+  {
+   "t": 1663.04,
+   "d": 1.92,
+   "text": "outside descender maze where the the"
+  },
+  {
+   "t": 1664.96,
+   "d": 2.08,
+   "text": "left hand rule doesn't work because"
+  },
+  {
+   "t": 1667.04,
+   "d": 4.32,
+   "text": "there's a circular path or an island. Um"
+  },
+  {
+   "t": 1671.36,
+   "d": 2.4,
+   "text": "or you can have doors or locks or keys."
+  },
+  {
+   "t": 1673.76,
+   "d": 2.72,
+   "text": "Locks and keys are pretty physical. It"
+  },
+  {
+   "t": 1676.48,
+   "d": 1.52,
+   "text": "counts as the style of real maze, but"
+  },
+  {
+   "t": 1678.0,
+   "d": 1.68,
+   "text": "it's uh it's it's something I played"
+  },
+  {
+   "t": 1679.68,
+   "d": 0.8,
+   "text": "with."
+  },
+  {
+   "t": 1680.48,
+   "d": 2.96,
+   "text": ">> Right. Um Greg L asks, \"Do you think a"
+  },
+  {
+   "t": 1683.44,
+   "d": 2.55,
+   "text": "racetrack qualifies as a maze?\""
+  },
+  {
+   "t": 1685.99,
+   "d": 2.02,
+   "text": "[laughter]"
+  },
+  {
+   "t": 1688.08,
+   "d": 1.84,
+   "text": ">> It certainly doesn't have the feel of a"
+  },
+  {
+   "t": 1689.92,
+   "d": 0.64,
+   "text": "maze."
+  },
+  {
+   "t": 1690.56,
+   "d": 0.4,
+   "text": ">> No,"
+  },
+  {
+   "t": 1690.96,
+   "d": 1.44,
+   "text": ">> it has to feel that you know exactly"
+  },
+  {
+   "t": 1692.4,
+   "d": 2.08,
+   "text": "where you're going. And your goal is not"
+  },
+  {
+   "t": 1694.48,
+   "d": 3.04,
+   "text": "to work at getting there, but to work at"
+  },
+  {
+   "t": 1697.52,
+   "d": 2.24,
+   "text": "going fast. Mhm."
+  },
+  {
+   "t": 1699.76,
+   "d": 1.92,
+   "text": ">> I guess unless you've perhaps been"
+  },
+  {
+   "t": 1701.68,
+   "d": 2.16,
+   "text": "forced into"
+  },
+  {
+   "t": 1703.84,
+   "d": 1.68,
+   "text": "racing and really want to go home, which"
+  },
+  {
+   "t": 1705.52,
+   "d": 2.64,
+   "text": "is my experience of doing races,"
+  },
+  {
+   "t": 1708.16,
+   "d": 1.6,
+   "text": ">> but there are also race games that take"
+  },
+  {
+   "t": 1709.76,
+   "d": 1.84,
+   "text": "place on very complicated tangle tracks"
+  },
+  {
+   "t": 1711.6,
+   "d": 1.52,
+   "text": "where you can jump off the track and"
+  },
+  {
+   "t": 1713.12,
+   "d": 2.4,
+   "text": "like fly along and uh like land"
+  },
+  {
+   "t": 1715.52,
+   "d": 2.08,
+   "text": "somewhere else and there's hidden"
+  },
+  {
+   "t": 1717.6,
+   "d": 2.24,
+   "text": "shortcuts and and things like that. So"
+  },
+  {
+   "t": 1719.84,
+   "d": 2.24,
+   "text": "elements can be drawn from anywhere,"
+  },
+  {
+   "t": 1722.08,
+   "d": 2.72,
+   "text": ">> right? Um, I think a good last question"
+  },
+  {
+   "t": 1724.8,
+   "d": 3.04,
+   "text": "to end on from Snake Lady is whether you"
+  },
+  {
+   "t": 1727.84,
+   "d": 2.32,
+   "text": "have a favorite maze, either in games or"
+  },
+  {
+   "t": 1730.16,
+   "d": 1.68,
+   "text": "without."
+  },
+  {
+   "t": 1731.84,
+   "d": 4.16,
+   "text": "Um, do I have a favorite maze? I"
+  },
+  {
+   "t": 1736.0,
+   "d": 3.36,
+   "text": "actually drew up a list of maze games"
+  },
+  {
+   "t": 1739.36,
+   "d": 3.12,
+   "text": "that I enjoy and I don't know that any"
+  },
+  {
+   "t": 1742.48,
+   "d": 2.96,
+   "text": "one of them is my favorite because there"
+  },
+  {
+   "t": 1745.44,
+   "d": 1.6,
+   "text": "are so many wonderful things you can do."
+  },
+  {
+   "t": 1747.04,
+   "d": 3.92,
+   "text": "But I will I will get the uh my my"
+  },
+  {
+   "t": 1750.96,
+   "d": 2.08,
+   "text": "source list up on on the obelisk and I"
+  },
+  {
+   "t": 1753.04,
+   "d": 1.2,
+   "text": "guess we're going to do breakout room"
+  },
+  {
+   "t": 1754.24,
+   "d": 0.96,
+   "text": "too."
+  },
+  {
+   "t": 1755.2,
+   "d": 2.24,
+   "text": ">> Okay. Wonderful. Well, we'll get a whole"
+  },
+  {
+   "t": 1757.44,
+   "d": 2.48,
+   "text": "list of favorite mazes. Um well, thank"
+  },
+  {
+   "t": 1759.92,
+   "d": 2.16,
+   "text": "you so much. Um and apologies. I"
+  },
+  {
+   "t": 1762.08,
+   "d": 1.84,
+   "text": "realized I read the wrong bio for you at"
+  },
+  {
+   "t": 1763.92,
+   "d": 1.76,
+   "text": "the start. So hopefully people people"
+  },
+  {
+   "t": 1765.68,
+   "d": 2.16,
+   "text": "know who Andrew Placin is."
+  },
+  {
+   "t": 1767.84,
+   "d": 1.76,
+   "text": ">> I wasn't even listening to that part. I"
+  },
+  {
+   "t": 1769.6,
+   "d": 2.24,
+   "text": "was panicking about my talk. [laughter]"
+  },
+  {
+   "t": 1771.84,
+   "d": 2.24,
+   "text": ">> That's so valid. But um excellent. Well,"
+  },
+  {
+   "t": 1774.08,
+   "d": 2.16,
+   "text": "thank you so much and uh yeah, hopefully"
+  },
+  {
+   "t": 1776.24,
+   "d": 1.36,
+   "text": "people will follow up in the breakout"
+  },
+  {
+   "t": 1777.6,
+   "d": 2.16,
+   "text": "rooms."
+  }
+ ]
+}

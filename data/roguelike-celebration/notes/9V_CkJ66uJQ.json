@@ -1,0 +1,158 @@
+{
+  "id": "9V_CkJ66uJQ",
+  "title": "Jesse Collet & Keni - Fireside chat about the development of NetHack",
+  "speaker": "Jesse Collet, Keni (NetHack DevTeam); moderated by Alexei Pepers",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=9V_CkJ66uJQ",
+  "talk_type": "panel",
+  "summary": "Two NetHack DevTeam members, Jesse Collet (active from 1988 for about 12-13 years) and Keni (Amiga porter, later web and infrastructure), answer questions about how NetHack was developed. They describe a leaderless, email-and-Usenet collaboration with Izchak Miller as 'librarian' of the source tree, which Collet likens to improv's 'yes, and'. They recall NetHack's late fame (including Blizzard North pitching Diablo as NetHack with graphics and sound), technical contributions such as fake mail on the Amiga, the special-level compiler, the multi-level Vlad's Tower that led to ladders and the branch system, and an unreleased Amiga overlay system. They discuss 'the DevTeam thinks of everything' as largely crediting players' experiments.",
+  "games": [
+    "NetHack",
+    "Hack",
+    "Rogue",
+    "Diablo"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "open source development",
+      "kind": "history",
+      "claim": "In early NetHack development, players posted bug-fix diffs and then tested feature patches on Usenet, and strong contributors were invited onto the DevTeam.",
+      "detail": "Jesse Collet started by porting NetHack to unsupported systems, fixing bugs and posting diffs; after posting suggestions with tested code he was contacted by the DevTeam in 1988 and joined to work on NetHack 3.0.",
+      "t": 236,
+      "quote": "after that you start having your own ideas on how to improve the game and you start posting suggestions with the code because you tested it",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "team practice",
+      "kind": "principle",
+      "claim": "The NetHack DevTeam had no real leader or code ownership; ideas arrived as 'here is what I coded' and evolved through a 'yes, and' culture borrowed from improv.",
+      "detail": "Collet says nobody owned any part of the code or features and everyone worked on everything, with many player contributions besides. Looking back he realised the team never said 'no' or 'but', only 'yes, and', trying to improve on what was done.",
+      "t": 400,
+      "quote": "we never said no or but. We also said yes and you try to improve on what was done",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "nethack devteam",
+      "kind": "history",
+      "claim": "Izchak Miller, a non-programmer, served as the NetHack 'librarian', holding the source tree at the University of Pennsylvania and mailing tarballs, acting as the team's stabilising core rather than its boss.",
+      "detail": "Keni says contributors otherwise had to keep up with email and apply patches themselves, starting again when patches failed. Collet describes Miller, a philosophy professor, as the team's moderator in many ways.",
+      "t": 513,
+      "quote": "He was much more the stabilizing core of the team than somebody who would tell you what to do and what not to do",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "attribution",
+      "kind": "history",
+      "claim": "When MoMA added NetHack to its collection, the team insisted it be credited solely to 'the NetHack DevTeam', reflecting their view of it as a community effort rather than secrecy.",
+      "detail": "Collet says the team laughed at the suggestion they might want to speak anonymously; the reticence is about embracing that NetHack wasn't built by a select few.",
+      "t": 623,
+      "quote": "without any discretion we knew it would have to be the NetHack dev team period",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "influence",
+      "kind": "history",
+      "claim": "NetHack only became widely known in the mid-to-late 1990s, and Blizzard North told the DevTeam that they pitched Diablo to management as NetHack with graphics and sound.",
+      "detail": "Collet recalls journalists and authors suddenly asking about the game and wondering if they had it confused with something else. He wishes he had kept the Blizzard email.",
+      "t": 845,
+      "quote": "when they pitched Diablo to their management they said we want to do NetHack with graphics and sounds",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "fake mail",
+      "kind": "example",
+      "claim": "On multi-user Unix systems NetHack delivered real incoming email as a scroll brought by a mail daemon, and Keni added random fake mail to the Amiga port to keep that fun interruption.",
+      "detail": "The mail daemon was a Unix joke, since the mail daemon distributes email on Unix. Since a PC couldn't readily read real mail, Keni made the mail daemon appear relatively randomly with obviously fake messages. Alexei notes browser NetHack has repurposed the system for messages between players.",
+      "t": 1014,
+      "quote": "It was the occasional interruption that was kind of fun so, I believe it was me, I just added this thing that just triggered the mail demon relatively randomly",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "portability",
+      "kind": "warning",
+      "claim": "NetHack's code for porting and for compile-time optional features became a maintenance nightmare, so the team made many options permanent to simplify the code.",
+      "detail": "Alexei notes how much of the source is porting support for many systems. Collet says the combination of port code and toggleable features made going through the code hard, so they stopped 'the nonsense' and fixed options in place.",
+      "t": 1172,
+      "quote": "We had let's stop with the nonsense and made options completely permanent so we wouldn't have to deal with that",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "special levels",
+      "kind": "history",
+      "claim": "Jesse Collet started NetHack's special levels to add pre-designed, story-driven environments to a fully procedural game while keeping enough randomness that each place still differed.",
+      "detail": "NetHack was initially fully procedurally generated; since the team drew on literature and wanted to tell stories, Collet wanted pre-designed spaces but feared identical levels would lower the fun. He designed the first one, the castle at the bottom of the main dungeon.",
+      "t": 1368,
+      "quote": "How can I have a preconceived, pre-designed environment in a random environment while keeping that path?",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "level compiler",
+      "kind": "technique",
+      "claim": "NetHack's special levels were built with a level compiler so level data wasn't left readable as hint files on shared multi-user systems, and so errors were caught at compile time rather than runtime.",
+      "detail": "Collet explains the choice was driven by multi-user systems where people could read files on disk; compiling everything in advance avoided that and caught mistakes early.",
+      "t": 1384,
+      "quote": "we didn't want to leave too much hints on the file systems because multi-user systems and so on and people could read the files",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "multi-level structures",
+      "kind": "example",
+      "claim": "Collet designed Vlad's Tower to span three levels entered from the bottom, breaking the idea that levels are independent, which required blocking digging and teleport shortcuts and introducing ladders.",
+      "detail": "He recalls reading it became one of NetHack's most evil parts. Previously stairs were simple: generate the next level and put the player on its stairs. With inside and outside stairs that broke, so he added ladders as a hack.",
+      "t": 1433,
+      "quote": "at the time I wanted to really break the idea that each level is completely independent from the previous one",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "dungeon branches",
+      "kind": "history",
+      "claim": "The ladder hack for Vlad's Tower prompted a redesign that let stairs connect specific levels, which later evolved into NetHack's dungeon branch system.",
+      "detail": "Collet says he didn't build the branches himself, but the discussion his ladders triggered led to them.",
+      "t": 1516,
+      "quote": "That triggered a discussion that came up to a few design for the stairs where we could now connect stairs between levels",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "memory overlays",
+      "kind": "history",
+      "claim": "Keni wrote an automatic overlay system for NetHack's Amiga port using a modified GCC, but it was never released because licensing would have required shipping all of GCC with the game.",
+      "detail": "The Amiga port was running out of RAM and the PC's overlay system required intrusive per-function declarations that broke often. NetHack was already the largest thing distributed through comp.sources.games, so making it ten times larger was untenable.",
+      "t": 1583,
+      "quote": "you had everything function needed a declaration about where it was going and it was a frequent cause of breakage",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player exploits",
+      "kind": "example",
+      "claim": "When NetHack players invented polypiling (piling up objects and zapping polymorph), the DevTeam kept it as clever play but added risk to the objects and relied on limited wand charges.",
+      "detail": "Collet says the team didn't see it coming but thought stopping it wouldn't be fair; instead they added a chance of losing objects when polymorphing so the tactic carries risk.",
+      "t": 1782,
+      "quote": "We didn't see that one coming but we said yeah, that's smart and we tonight -- don't want to stop that. That wouldn't be fair",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "responding to players",
+      "kind": "principle",
+      "claim": "'The DevTeam thinks of everything' largely reflects the team absorbing players' attempts and suggestions, asking first whether an idea makes sense and then how to make it work.",
+      "detail": "Collet says the team was often surprised by what players tried and reported, and credits the phrase to those players. Keni treats it as a personal challenge, probing each patch with 'what if you did this in this situation?'.",
+      "t": 1813,
+      "quote": "first question is does make sense? If it makes sense, how can we make it work?",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

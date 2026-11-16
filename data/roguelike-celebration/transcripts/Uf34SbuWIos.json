@@ -1,0 +1,1889 @@
+{
+ "id": "Uf34SbuWIos",
+ "url": "https://www.youtube.com/watch?v=Uf34SbuWIos",
+ "title": "Johnathan Pagnutti - Wait, No, Hear Me Out: Simulating Encounter AI in Slay the Spire with SQL",
+ "speaker": "Johnathan Pagnutti",
+ "talk_title": "Wait, No, Hear Me Out: Simulating Encounter AI in Slay the Spire with SQL",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-01-29",
+ "duration_s": 860,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Bring your best warding potions, safety sigils, and blessings: this talk is a light dip of some cursed queries to show how to simulate Slay the Spire's encounter AI with nothing more than SQL (and a lot of free time). Along the way, we'll go over some basic data structures for simulation, declarative vs imperative programming and how (with a little probability) even simple systems can lead to memorable, complex AI.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and motivation"
+  },
+  {
+   "start": 90,
+   "title": "Slay the Spire encounter AI"
+  },
+  {
+   "start": 171,
+   "title": "Modeling the state machine"
+  },
+  {
+   "start": 339,
+   "title": "Recursive CTE explanation"
+  },
+  {
+   "start": 506,
+   "title": "The simulation logic"
+  },
+  {
+   "start": 686,
+   "title": "Evolving simulation results"
+  },
+  {
+   "start": 777,
+   "title": "Q&A and closing thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2647,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 8.24,
+   "d": 2.64,
+   "text": "we'll introduce our next talk which is"
+  },
+  {
+   "t": 10.88,
+   "d": 4.4,
+   "text": "with Blit um and we're going to hear"
+  },
+  {
+   "t": 15.28,
+   "d": 2.48,
+   "text": "about simulating encounter AI in Slay"
+  },
+  {
+   "t": 17.76,
+   "d": 3.6,
+   "text": "the Spire with SQL which I'm fascinated"
+  },
+  {
+   "t": 21.36,
+   "d": 3.52,
+   "text": "to hear about. Uh so do you want to tell"
+  },
+  {
+   "t": 24.88,
+   "d": 2.72,
+   "text": "us a little bit about that? Um Jonathan,"
+  },
+  {
+   "t": 27.6,
+   "d": 4.64,
+   "text": ">> sure. Um, I lost my mind uh a little bit"
+  },
+  {
+   "t": 32.24,
+   "d": 2.0,
+   "text": "while we were all uh doing shelter in"
+  },
+  {
+   "t": 34.24,
+   "d": 3.04,
+   "text": "place and so I wanted to try to figure"
+  },
+  {
+   "t": 37.28,
+   "d": 2.8,
+   "text": "out if it was possible to write uh a"
+  },
+  {
+   "t": 40.08,
+   "d": 3.04,
+   "text": "game simulation with just one single SQL"
+  },
+  {
+   "t": 43.12,
+   "d": 2.96,
+   "text": "query. Uh turns out the answer is"
+  },
+  {
+   "t": 46.08,
+   "d": 2.24,
+   "text": "mostly. Uh some terms and conditions"
+  },
+  {
+   "t": 48.32,
+   "d": 2.16,
+   "text": "apply. Um and I thought it was a fun"
+  },
+  {
+   "t": 50.48,
+   "d": 2.56,
+   "text": "project to put together. Uh and I would"
+  },
+  {
+   "t": 53.04,
+   "d": 2.0,
+   "text": "hoping that you would all love to hear"
+  },
+  {
+   "t": 55.04,
+   "d": 3.16,
+   "text": "about it."
+  },
+  {
+   "t": 62.8,
+   "d": 4.56,
+   "text": "All right. So, um, hi, I'm Jonathan. Uh,"
+  },
+  {
+   "t": 67.36,
+   "d": 1.68,
+   "text": "as I kind of launch into this talk, I'm"
+  },
+  {
+   "t": 69.04,
+   "d": 2.96,
+   "text": "going to go grab a sip of water. Uh,"
+  },
+  {
+   "t": 72.0,
+   "d": 2.48,
+   "text": "but, uh, if anybody has their favorite"
+  },
+  {
+   "t": 74.48,
+   "d": 2.56,
+   "text": "SQL variant, I would love to hear it in"
+  },
+  {
+   "t": 77.04,
+   "d": 2.08,
+   "text": "the chat. Uh, because there's just so"
+  },
+  {
+   "t": 79.12,
+   "d": 1.36,
+   "text": "many different ways in which we can"
+  },
+  {
+   "t": 80.48,
+   "d": 4.76,
+   "text": "query a database in 2025."
+  },
+  {
+   "t": 89.92,
+   "d": 2.24,
+   "text": "So, uh, this isn't just about sequel."
+  },
+  {
+   "t": 92.16,
+   "d": 3.04,
+   "text": "Um, I am actually also going to talk"
+  },
+  {
+   "t": 95.2,
+   "d": 1.52,
+   "text": "about this video game called Slay the"
+  },
+  {
+   "t": 96.72,
+   "d": 2.16,
+   "text": "Spire. It's a game I have played a"
+  },
+  {
+   "t": 98.88,
+   "d": 2.64,
+   "text": "little bit of. Um, these are actually"
+  },
+  {
+   "t": 101.52,
+   "d": 1.52,
+   "text": "sort of rookie numbers when it comes to"
+  },
+  {
+   "t": 103.04,
+   "d": 2.32,
+   "text": "Slay the Spire players. Uh, they can get"
+  },
+  {
+   "t": 105.36,
+   "d": 2.8,
+   "text": "up to truly phenomenal play hour rates"
+  },
+  {
+   "t": 108.16,
+   "d": 2.96,
+   "text": "that, uh, boggle my mind and scare me."
+  },
+  {
+   "t": 111.12,
+   "d": 2.32,
+   "text": "Um, and also before we get in, I would"
+  },
+  {
+   "t": 113.44,
+   "d": 2.24,
+   "text": "like to introduce my co-presenter,"
+  },
+  {
+   "t": 115.68,
+   "d": 3.36,
+   "text": "Jawworm. Everybody say hi to Jawworm."
+  },
+  {
+   "t": 119.04,
+   "d": 2.56,
+   "text": "Uh, Jawworm says hi back. We're going to"
+  },
+  {
+   "t": 121.6,
+   "d": 2.24,
+   "text": "talk about kind of just this one"
+  },
+  {
+   "t": 123.84,
+   "d": 2.16,
+   "text": "encounter uh because I only have 15"
+  },
+  {
+   "t": 126.0,
+   "d": 4.64,
+   "text": "minutes for uh this uh simulation talk"
+  },
+  {
+   "t": 130.64,
+   "d": 1.12,
+   "text": "and it's going to be all about kind of"
+  },
+  {
+   "t": 131.76,
+   "d": 3.04,
+   "text": "how Jawworm does Jawworm things. So,"
+  },
+  {
+   "t": 134.8,
+   "d": 2.56,
+   "text": "Slay the Spire, if you're not familiar,"
+  },
+  {
+   "t": 137.36,
+   "d": 2.16,
+   "text": "is a card game where you use these"
+  },
+  {
+   "t": 139.52,
+   "d": 2.16,
+   "text": "virtual cards to fight the monsters on"
+  },
+  {
+   "t": 141.68,
+   "d": 1.76,
+   "text": "the right side of the screen and reduce"
+  },
+  {
+   "t": 143.44,
+   "d": 3.04,
+   "text": "their HP to zero. They have a bunch of"
+  },
+  {
+   "t": 146.48,
+   "d": 2.4,
+   "text": "intents and moves that they play to try"
+  },
+  {
+   "t": 148.88,
+   "d": 2.88,
+   "text": "to reduce your HP to zero. Our good"
+  },
+  {
+   "t": 151.76,
+   "d": 2.32,
+   "text": "friend Jawworm does three different"
+  },
+  {
+   "t": 154.08,
+   "d": 3.04,
+   "text": "things. Jawworm can chomp, dealing a lot"
+  },
+  {
+   "t": 157.12,
+   "d": 2.48,
+   "text": "of damage. Jawworm can thrash, dealing"
+  },
+  {
+   "t": 159.6,
+   "d": 2.48,
+   "text": "some damage and generating some block."
+  },
+  {
+   "t": 162.08,
+   "d": 2.48,
+   "text": "And Jawworm can bellow, gaining a"
+  },
+  {
+   "t": 164.56,
+   "d": 1.44,
+   "text": "permanent strength buff and also"
+  },
+  {
+   "t": 166.0,
+   "d": 1.6,
+   "text": "generating some block. Block is a"
+  },
+  {
+   "t": 167.6,
+   "d": 2.24,
+   "text": "temporary resource uh that Jawworm can"
+  },
+  {
+   "t": 169.84,
+   "d": 2.32,
+   "text": "use to block your attacks. And we can"
+  },
+  {
+   "t": 172.16,
+   "d": 1.36,
+   "text": "look at this as a table. We could also"
+  },
+  {
+   "t": 173.52,
+   "d": 2.0,
+   "text": "look at this as a graph where the nodes"
+  },
+  {
+   "t": 175.52,
+   "d": 2.16,
+   "text": "on this graph are the things Jawworm"
+  },
+  {
+   "t": 177.68,
+   "d": 3.04,
+   "text": "does. And the arrows are sort of what"
+  },
+  {
+   "t": 180.72,
+   "d": 3.12,
+   "text": "Jawworm will do next. So let's say"
+  },
+  {
+   "t": 183.84,
+   "d": 2.32,
+   "text": "Jawworm is chomping. Jawworm could"
+  },
+  {
+   "t": 186.16,
+   "d": 2.88,
+   "text": "follow that top arrow and bellow. Or"
+  },
+  {
+   "t": 189.04,
+   "d": 2.48,
+   "text": "Jawworm could follow the lower arrow and"
+  },
+  {
+   "t": 191.52,
+   "d": 2.32,
+   "text": "do it onto thrash. Or Jawworm could"
+  },
+  {
+   "t": 193.84,
+   "d": 1.76,
+   "text": "follow that poorly drawn loopy little"
+  },
+  {
+   "t": 195.6,
+   "d": 4.08,
+   "text": "arrow and chomp. Again, the thing about"
+  },
+  {
+   "t": 199.68,
+   "d": 2.4,
+   "text": "Slay the Spire is that actually it's not"
+  },
+  {
+   "t": 202.08,
+   "d": 2.0,
+   "text": "that generic. Jawworm has a bunch of"
+  },
+  {
+   "t": 204.08,
+   "d": 2.08,
+   "text": "rules that Jawworm has to follow in"
+  },
+  {
+   "t": 206.16,
+   "d": 3.92,
+   "text": "order to uh fight us. So, uh, at least"
+  },
+  {
+   "t": 210.08,
+   "d": 1.36,
+   "text": "according to the Slay Spire wiki, which"
+  },
+  {
+   "t": 211.44,
+   "d": 1.36,
+   "text": "I assume is correct because again,"
+  },
+  {
+   "t": 212.8,
+   "d": 1.36,
+   "text": "people who play this game are very"
+  },
+  {
+   "t": 214.16,
+   "d": 2.4,
+   "text": "sickos. Uh, and I mean that extremely"
+  },
+  {
+   "t": 216.56,
+   "d": 2.08,
+   "text": "affectionately, uh, jawworm always"
+  },
+  {
+   "t": 218.64,
+   "d": 2.4,
+   "text": "starts with chomp. Uh, and then has most"
+  },
+  {
+   "t": 221.04,
+   "d": 1.52,
+   "text": "of a chance of using bellow, less of a"
+  },
+  {
+   "t": 222.56,
+   "d": 2.08,
+   "text": "chance of using thrash, and the smallest"
+  },
+  {
+   "t": 224.64,
+   "d": 2.72,
+   "text": "chance of using chomp. Um, and then"
+  },
+  {
+   "t": 227.36,
+   "d": 2.32,
+   "text": "jawworm cannot bellow twice in a row,"
+  },
+  {
+   "t": 229.68,
+   "d": 1.84,
+   "text": "twice in a row, cannot thrash three"
+  },
+  {
+   "t": 231.52,
+   "d": 1.92,
+   "text": "times in a row, and cannot chomp twice"
+  },
+  {
+   "t": 233.44,
+   "d": 2.48,
+   "text": "in a row. So the real sort of graph that"
+  },
+  {
+   "t": 235.92,
+   "d": 1.84,
+   "text": "we're looking at here is something a"
+  },
+  {
+   "t": 237.76,
+   "d": 2.0,
+   "text": "little bit closer to this. And the thing"
+  },
+  {
+   "t": 239.76,
+   "d": 1.68,
+   "text": "that you might immediately note is that"
+  },
+  {
+   "t": 241.44,
+   "d": 2.16,
+   "text": "there's two thrash nodes now. And that's"
+  },
+  {
+   "t": 243.6,
+   "d": 1.68,
+   "text": "because jawworm can't thrash three times"
+  },
+  {
+   "t": 245.28,
+   "d": 1.84,
+   "text": "in a row, right? We only have to track"
+  },
+  {
+   "t": 247.12,
+   "d": 1.6,
+   "text": "jawworm thrashing once, then jawworm"
+  },
+  {
+   "t": 248.72,
+   "d": 1.12,
+   "text": "thrashing twice. And then we'll just"
+  },
+  {
+   "t": 249.84,
+   "d": 1.44,
+   "text": "never have an arrow that goes back. And"
+  },
+  {
+   "t": 251.28,
+   "d": 2.48,
+   "text": "we've sort of managed to encode that."
+  },
+  {
+   "t": 253.76,
+   "d": 3.12,
+   "text": "And this graph is also kind of special"
+  },
+  {
+   "t": 256.88,
+   "d": 2.24,
+   "text": "because the thicker arrows denote the"
+  },
+  {
+   "t": 259.12,
+   "d": 1.44,
+   "text": "things that Jawworm has a higher"
+  },
+  {
+   "t": 260.56,
+   "d": 2.48,
+   "text": "probability of doing."
+  },
+  {
+   "t": 263.04,
+   "d": 2.64,
+   "text": "So if we look at the second thrash node"
+  },
+  {
+   "t": 265.68,
+   "d": 2.8,
+   "text": "down here, jaw room is likely to bellow"
+  },
+  {
+   "t": 268.48,
+   "d": 2.48,
+   "text": "and less likely to chomp. These are not"
+  },
+  {
+   "t": 270.96,
+   "d": 1.76,
+   "text": "drawn to scale. It's just sort of for a"
+  },
+  {
+   "t": 272.72,
+   "d": 2.4,
+   "text": "visual uh reference."
+  },
+  {
+   "t": 275.12,
+   "d": 2.4,
+   "text": "And a thing that I didn't realize even"
+  },
+  {
+   "t": 277.52,
+   "d": 1.68,
+   "text": "though I had played slay the spire for"
+  },
+  {
+   "t": 279.2,
+   "d": 2.16,
+   "text": "like 300 hours before putting this talk"
+  },
+  {
+   "t": 281.36,
+   "d": 2.0,
+   "text": "together was kind of these nodes and all"
+  },
+  {
+   "t": 283.36,
+   "d": 1.92,
+   "text": "the thick arrows that connect them kind"
+  },
+  {
+   "t": 285.28,
+   "d": 2.56,
+   "text": "of in the bottom part of this graph. It"
+  },
+  {
+   "t": 287.84,
+   "d": 2.16,
+   "text": "is a way to reveal the dynamics of the"
+  },
+  {
+   "t": 290.0,
+   "d": 2.08,
+   "text": "fight. Jawworm spends a lot of time"
+  },
+  {
+   "t": 292.08,
+   "d": 1.84,
+   "text": "generating that temporary block resource"
+  },
+  {
+   "t": 293.92,
+   "d": 1.52,
+   "text": "being hard to hit and buffing its"
+  },
+  {
+   "t": 295.44,
+   "d": 2.0,
+   "text": "strength until it eventually decides to"
+  },
+  {
+   "t": 297.44,
+   "d": 2.4,
+   "text": "really chomp you. It lends a texture to"
+  },
+  {
+   "t": 299.84,
+   "d": 1.76,
+   "text": "it and it's a texture that's not easy to"
+  },
+  {
+   "t": 301.6,
+   "d": 3.2,
+   "text": "figure out just by experiencing it. Um,"
+  },
+  {
+   "t": 304.8,
+   "d": 3.12,
+   "text": "so these are called uh finite state"
+  },
+  {
+   "t": 307.92,
+   "d": 2.88,
+   "text": "machines. Um, I'm ish I'm not being"
+  },
+  {
+   "t": 310.8,
+   "d": 2.4,
+   "text": "super precise with my language here. Um,"
+  },
+  {
+   "t": 313.2,
+   "d": 1.6,
+   "text": "and it can lead to some pretty dynamic"
+  },
+  {
+   "t": 314.8,
+   "d": 4.0,
+   "text": "experiences uh with AI. uh and I mean"
+  },
+  {
+   "t": 318.8,
+   "d": 2.08,
+   "text": "then like you know uh artificial players"
+  },
+  {
+   "t": 320.88,
+   "d": 1.6,
+   "text": "um but it's difficult to extend this out"
+  },
+  {
+   "t": 322.48,
+   "d": 2.56,
+   "text": "to being very reactive. So you can model"
+  },
+  {
+   "t": 325.04,
+   "d": 1.68,
+   "text": "player input this way and have Jawworm"
+  },
+  {
+   "t": 326.72,
+   "d": 2.0,
+   "text": "react to that. Uh I'm not going to go"
+  },
+  {
+   "t": 328.72,
+   "d": 3.04,
+   "text": "into why but this graph explodes. Um and"
+  },
+  {
+   "t": 331.76,
+   "d": 2.16,
+   "text": "the hint there is that thrash started as"
+  },
+  {
+   "t": 333.92,
+   "d": 3.28,
+   "text": "one node and became two nodes."
+  },
+  {
+   "t": 337.2,
+   "d": 1.44,
+   "text": "And the cool part about all this and"
+  },
+  {
+   "t": 338.64,
+   "d": 0.88,
+   "text": "this is where we're going to get into"
+  },
+  {
+   "t": 339.52,
+   "d": 1.84,
+   "text": "the data sos part is that all of this"
+  },
+  {
+   "t": 341.36,
+   "d": 2.96,
+   "text": "can just be expressed as data in tables."
+  },
+  {
+   "t": 344.32,
+   "d": 4.24,
+   "text": "So all the nodes in that graph um can"
+  },
+  {
+   "t": 348.56,
+   "d": 1.92,
+   "text": "just be shown as a table here, right?"
+  },
+  {
+   "t": 350.48,
+   "d": 1.76,
+   "text": "This is a table of states that jawworm"
+  },
+  {
+   "t": 352.24,
+   "d": 2.96,
+   "text": "can be in. When jawworm bellows, jawworm"
+  },
+  {
+   "t": 355.2,
+   "d": 2.72,
+   "text": "generates six block and three strength."
+  },
+  {
+   "t": 357.92,
+   "d": 2.24,
+   "text": "The transitions table is a little bit"
+  },
+  {
+   "t": 360.16,
+   "d": 2.0,
+   "text": "bigger"
+  },
+  {
+   "t": 362.16,
+   "d": 2.32,
+   "text": "and you sort of read a row on this table"
+  },
+  {
+   "t": 364.48,
+   "d": 3.12,
+   "text": "like 60% of the time when jawworm is"
+  },
+  {
+   "t": 367.6,
+   "d": 3.12,
+   "text": "chopping, jawworm will then bellow. And"
+  },
+  {
+   "t": 370.72,
+   "d": 2.56,
+   "text": "that's kind of our data model. But"
+  },
+  {
+   "t": 373.28,
+   "d": 1.6,
+   "text": "that's only one part of it. Uh the"
+  },
+  {
+   "t": 374.88,
+   "d": 2.24,
+   "text": "important part is how does the SQL work?"
+  },
+  {
+   "t": 377.12,
+   "d": 5.52,
+   "text": "And the magic sort of bit here is that"
+  },
+  {
+   "t": 382.64,
+   "d": 1.92,
+   "text": "uh there is a thing called a recursive"
+  },
+  {
+   "t": 384.56,
+   "d": 2.24,
+   "text": "common table expression. So a common"
+  },
+  {
+   "t": 386.8,
+   "d": 3.28,
+   "text": "table expression is pretty common uh in"
+  },
+  {
+   "t": 390.08,
+   "d": 1.68,
+   "text": "SQL dialects uh and they essentially let"
+  },
+  {
+   "t": 391.76,
+   "d": 1.68,
+   "text": "you create a table that only exists for"
+  },
+  {
+   "t": 393.44,
+   "d": 1.44,
+   "text": "one query. While you're running that"
+  },
+  {
+   "t": 394.88,
+   "d": 2.08,
+   "text": "query, you get a table that has some"
+  },
+  {
+   "t": 396.96,
+   "d": 2.24,
+   "text": "data in it that you can operate on."
+  },
+  {
+   "t": 399.2,
+   "d": 2.0,
+   "text": "Recursive common table expressions let"
+  },
+  {
+   "t": 401.2,
+   "d": 2.8,
+   "text": "you union that table with itself while"
+  },
+  {
+   "t": 404.0,
+   "d": 3.12,
+   "text": "it's being built. So in theory you can"
+  },
+  {
+   "t": 407.12,
+   "d": 1.6,
+   "text": "probably do this out without a recursive"
+  },
+  {
+   "t": 408.72,
+   "d": 2.16,
+   "text": "CTE and just using union but this is how"
+  },
+  {
+   "t": 410.88,
+   "d": 2.24,
+   "text": "I did it. Another thing you might note"
+  },
+  {
+   "t": 413.12,
+   "d": 2.16,
+   "text": "if you are very into standards is that"
+  },
+  {
+   "t": 415.28,
+   "d": 1.76,
+   "text": "recursive common table expressions I"
+  },
+  {
+   "t": 417.04,
+   "d": 2.4,
+   "text": "don't think are part of standard SQL. I"
+  },
+  {
+   "t": 419.44,
+   "d": 1.2,
+   "text": "had a whole bunch of slides about trying"
+  },
+  {
+   "t": 420.64,
+   "d": 1.52,
+   "text": "to figure out if this was true or not"
+  },
+  {
+   "t": 422.16,
+   "d": 1.68,
+   "text": "and I axed all of them. You'll have to"
+  },
+  {
+   "t": 423.84,
+   "d": 1.84,
+   "text": "ask me after the talk if you want to"
+  },
+  {
+   "t": 425.68,
+   "d": 3.36,
+   "text": "hear about the standards of code in 1980"
+  },
+  {
+   "t": 429.04,
+   "d": 3.04,
+   "text": "something. But uh we can look through"
+  },
+  {
+   "t": 432.08,
+   "d": 3.28,
+   "text": "the query plan that uh in this case I"
+  },
+  {
+   "t": 435.36,
+   "d": 2.32,
+   "text": "used SQLite for this talk. Uh we can"
+  },
+  {
+   "t": 437.68,
+   "d": 1.28,
+   "text": "look at the query plan that'll sort of"
+  },
+  {
+   "t": 438.96,
+   "d": 1.28,
+   "text": "tell us how the computer's going to"
+  },
+  {
+   "t": 440.24,
+   "d": 2.96,
+   "text": "execute this magic query. And I also"
+  },
+  {
+   "t": 443.2,
+   "d": 1.04,
+   "text": "think it'll help us break it down"
+  },
+  {
+   "t": 444.24,
+   "d": 1.28,
+   "text": "because the query is kind of big and"
+  },
+  {
+   "t": 445.52,
+   "d": 3.12,
+   "text": "doesn't fit on one slide. So we'll start"
+  },
+  {
+   "t": 448.64,
+   "d": 2.24,
+   "text": "by uh looking at setting up this"
+  },
+  {
+   "t": 450.88,
+   "d": 2.64,
+   "text": "temporary table called simulation. And"
+  },
+  {
+   "t": 453.52,
+   "d": 1.92,
+   "text": "so we get that magic width recursive"
+  },
+  {
+   "t": 455.44,
+   "d": 2.32,
+   "text": "thing here. And then this next line is"
+  },
+  {
+   "t": 457.76,
+   "d": 2.08,
+   "text": "just saying like okay here are all of"
+  },
+  {
+   "t": 459.84,
+   "d": 2.8,
+   "text": "the columns I need in this table. I want"
+  },
+  {
+   "t": 462.64,
+   "d": 1.44,
+   "text": "to know what round I'm on. I want to"
+  },
+  {
+   "t": 464.08,
+   "d": 1.68,
+   "text": "keep a trace of everything I've seen so"
+  },
+  {
+   "t": 465.76,
+   "d": 1.6,
+   "text": "far. I want to know the current state"
+  },
+  {
+   "t": 467.36,
+   "d": 2.08,
+   "text": "I'm in. I want the running probability"
+  },
+  {
+   "t": 469.44,
+   "d": 2.16,
+   "text": "for how likely that trace is in"
+  },
+  {
+   "t": 471.6,
+   "d": 1.36,
+   "text": "comparison to all the other ones for"
+  },
+  {
+   "t": 472.96,
+   "d": 2.24,
+   "text": "that round. I want running totals on the"
+  },
+  {
+   "t": 475.2,
+   "d": 1.52,
+   "text": "amount of damage drawworm has done, the"
+  },
+  {
+   "t": 476.72,
+   "d": 1.36,
+   "text": "amount of block Jawworm has generated,"
+  },
+  {
+   "t": 478.08,
+   "d": 3.36,
+   "text": "and the amount of strength drawworm has."
+  },
+  {
+   "t": 481.44,
+   "d": 1.76,
+   "text": "It actually sort of helps to go from the"
+  },
+  {
+   "t": 483.2,
+   "d": 2.56,
+   "text": "outside looking in here. So, I'm going"
+  },
+  {
+   "t": 485.76,
+   "d": 2.32,
+   "text": "to go jump to the bottom line, that last"
+  },
+  {
+   "t": 488.08,
+   "d": 2.48,
+   "text": "simulation table scan. And all that I'm"
+  },
+  {
+   "t": 490.56,
+   "d": 2.0,
+   "text": "doing here is I'm just dumping the the"
+  },
+  {
+   "t": 492.56,
+   "d": 1.52,
+   "text": "contents of that table out. That's what"
+  },
+  {
+   "t": 494.08,
+   "d": 1.84,
+   "text": "I will eventually see when I run this"
+  },
+  {
+   "t": 495.92,
+   "d": 2.96,
+   "text": "query. You can do more uh interesting"
+  },
+  {
+   "t": 498.88,
+   "d": 1.6,
+   "text": "things here. I have again extra slides"
+  },
+  {
+   "t": 500.48,
+   "d": 1.76,
+   "text": "on it but uh I want to make sure I get"
+  },
+  {
+   "t": 502.24,
+   "d": 2.72,
+   "text": "through kind of the meat and potatoes."
+  },
+  {
+   "t": 504.96,
+   "d": 1.6,
+   "text": "So now we get into the recursive"
+  },
+  {
+   "t": 506.56,
+   "d": 2.16,
+   "text": "simulation part and that broken into two"
+  },
+  {
+   "t": 508.72,
+   "d": 1.92,
+   "text": "steps. The first step is kind of our"
+  },
+  {
+   "t": 510.64,
+   "d": 1.68,
+   "text": "initial state and then the recursive"
+  },
+  {
+   "t": 512.32,
+   "d": 2.0,
+   "text": "step is where all the actual simulation"
+  },
+  {
+   "t": 514.32,
+   "d": 1.92,
+   "text": "happens and the first step makes a lot"
+  },
+  {
+   "t": 516.24,
+   "d": 1.44,
+   "text": "of sense. We're going to scan the states"
+  },
+  {
+   "t": 517.68,
+   "d": 3.12,
+   "text": "table and load in sort of the first bits"
+  },
+  {
+   "t": 520.8,
+   "d": 1.52,
+   "text": "of information we need to start that"
+  },
+  {
+   "t": 522.32,
+   "d": 1.6,
+   "text": "recursion."
+  },
+  {
+   "t": 523.92,
+   "d": 3.12,
+   "text": "So for this, this is sort of within that"
+  },
+  {
+   "t": 527.04,
+   "d": 4.0,
+   "text": "with recursive uh block and it's pretty"
+  },
+  {
+   "t": 531.04,
+   "d": 1.2,
+   "text": "simple stuff, right? We're always going"
+  },
+  {
+   "t": 532.24,
+   "d": 1.36,
+   "text": "to start at round one because I think"
+  },
+  {
+   "t": 533.6,
+   "d": 2.16,
+   "text": "it's easier to read. Uh although people"
+  },
+  {
+   "t": 535.76,
+   "d": 2.64,
+   "text": "who enjoy zero indexing, I'm sorry. Um"
+  },
+  {
+   "t": 538.4,
+   "d": 1.36,
+   "text": "the trace will start with our starting"
+  },
+  {
+   "t": 539.76,
+   "d": 2.88,
+   "text": "state. The we'll actually note what our"
+  },
+  {
+   "t": 542.64,
+   "d": 1.44,
+   "text": "starting state is. We'll keep a running"
+  },
+  {
+   "t": 544.08,
+   "d": 1.36,
+   "text": "probability which will start at one"
+  },
+  {
+   "t": 545.44,
+   "d": 2.64,
+   "text": "because jawworm always must chomp. Uh"
+  },
+  {
+   "t": 548.08,
+   "d": 1.6,
+   "text": "and then we'll start the running totals"
+  },
+  {
+   "t": 549.68,
+   "d": 1.6,
+   "text": "on block damage and strength with the"
+  },
+  {
+   "t": 551.28,
+   "d": 2.24,
+   "text": "values from that state. So what this"
+  },
+  {
+   "t": 553.52,
+   "d": 1.84,
+   "text": "looks like sort of in practice and I'll"
+  },
+  {
+   "t": 555.36,
+   "d": 1.36,
+   "text": "highlight kind of the where statement"
+  },
+  {
+   "t": 556.72,
+   "d": 1.36,
+   "text": "there which is doing that limiting is"
+  },
+  {
+   "t": 558.08,
+   "d": 1.68,
+   "text": "that we're going to go through this the"
+  },
+  {
+   "t": 559.76,
+   "d": 3.52,
+   "text": "states table and grab the right row"
+  },
+  {
+   "t": 563.28,
+   "d": 3.28,
+   "text": "loading in all of the initial state."
+  },
+  {
+   "t": 566.56,
+   "d": 1.84,
+   "text": "Now again this is where things get"
+  },
+  {
+   "t": 568.4,
+   "d": 2.4,
+   "text": "gnarly. Um I'll start talking about this"
+  },
+  {
+   "t": 570.8,
+   "d": 1.6,
+   "text": "recursive step and I want to talk about"
+  },
+  {
+   "t": 572.4,
+   "d": 1.68,
+   "text": "these two searches which are the two"
+  },
+  {
+   "t": 574.08,
+   "d": 1.92,
+   "text": "joins that kind of power everything and"
+  },
+  {
+   "t": 576.0,
+   "d": 1.44,
+   "text": "then I'll talk about that scan step"
+  },
+  {
+   "t": 577.44,
+   "d": 2.16,
+   "text": "which shows how the simulation evolves"
+  },
+  {
+   "t": 579.6,
+   "d": 2.4,
+   "text": "over time."
+  },
+  {
+   "t": 582.0,
+   "d": 2.8,
+   "text": "So these two, this is underneath the"
+  },
+  {
+   "t": 584.8,
+   "d": 1.2,
+   "text": "union statement. So this is the"
+  },
+  {
+   "t": 586.0,
+   "d": 3.12,
+   "text": "recursive part of our recursive CTE. And"
+  },
+  {
+   "t": 589.12,
+   "d": 2.8,
+   "text": "these two joins do all of the work. That"
+  },
+  {
+   "t": 591.92,
+   "d": 2.0,
+   "text": "first top join where we're talking about"
+  },
+  {
+   "t": 593.92,
+   "d": 2.24,
+   "text": "the transitions table is how we spider"
+  },
+  {
+   "t": 596.16,
+   "d": 1.84,
+   "text": "out and figure out how many more new"
+  },
+  {
+   "t": 598.0,
+   "d": 3.44,
+   "text": "rows we have to add for each uh union."
+  },
+  {
+   "t": 601.44,
+   "d": 2.4,
+   "text": "That bottom join on states lets us load"
+  },
+  {
+   "t": 603.84,
+   "d": 1.68,
+   "text": "in all of the data that's associated"
+  },
+  {
+   "t": 605.52,
+   "d": 2.0,
+   "text": "with those transitions to actually"
+  },
+  {
+   "t": 607.52,
+   "d": 2.32,
+   "text": "record them and evolve the system."
+  },
+  {
+   "t": 609.84,
+   "d": 2.08,
+   "text": "That's a little bit that's kind of a lot"
+  },
+  {
+   "t": 611.92,
+   "d": 3.28,
+   "text": "to say. Um, so"
+  },
+  {
+   "t": 615.2,
+   "d": 1.68,
+   "text": "I'm going to try to step through that as"
+  },
+  {
+   "t": 616.88,
+   "d": 3.04,
+   "text": "best as I can. So for this transitions"
+  },
+  {
+   "t": 619.92,
+   "d": 1.92,
+   "text": "join, we'll look at the first round."
+  },
+  {
+   "t": 621.84,
+   "d": 1.68,
+   "text": "Also, I'm kind of spoiling the punch"
+  },
+  {
+   "t": 623.52,
+   "d": 1.68,
+   "text": "line. Uh, this simulation table is what"
+  },
+  {
+   "t": 625.2,
+   "d": 1.44,
+   "text": "eventually you generate and creates the"
+  },
+  {
+   "t": 626.64,
+   "d": 2.24,
+   "text": "simulation. Uh, sorry, it's just way"
+  },
+  {
+   "t": 628.88,
+   "d": 2.24,
+   "text": "easier to explain with it up. Uh, I'm"
+  },
+  {
+   "t": 631.12,
+   "d": 2.16,
+   "text": "terrible about drama. So at round one,"
+  },
+  {
+   "t": 633.28,
+   "d": 1.68,
+   "text": "we know that Jawworm must start with"
+  },
+  {
+   "t": 634.96,
+   "d": 2.64,
+   "text": "Chomp. That's where our trace begins."
+  },
+  {
+   "t": 637.6,
+   "d": 2.08,
+   "text": "That join will then go look up our"
+  },
+  {
+   "t": 639.68,
+   "d": 2.48,
+   "text": "transitions table and go, okay, if I'm"
+  },
+  {
+   "t": 642.16,
+   "d": 2.56,
+   "text": "at chomp, where do I go to next? So for"
+  },
+  {
+   "t": 644.72,
+   "d": 1.44,
+   "text": "round two, we're going to have to add"
+  },
+  {
+   "t": 646.16,
+   "d": 2.0,
+   "text": "two more rows, one for bellowing, one"
+  },
+  {
+   "t": 648.16,
+   "d": 2.88,
+   "text": "for thrashing. On round two, we'll look"
+  },
+  {
+   "t": 651.04,
+   "d": 1.6,
+   "text": "at the fact that we're either at bellow"
+  },
+  {
+   "t": 652.64,
+   "d": 1.84,
+   "text": "or thrash. And then we'll do the same"
+  },
+  {
+   "t": 654.48,
+   "d": 1.76,
+   "text": "join."
+  },
+  {
+   "t": 656.24,
+   "d": 1.76,
+   "text": "It's going to sort of try to look at all"
+  },
+  {
+   "t": 658.0,
+   "d": 2.0,
+   "text": "the things that we can do when we start"
+  },
+  {
+   "t": 660.0,
+   "d": 1.84,
+   "text": "with thrash. So that's a bellow, thrash"
+  },
+  {
+   "t": 661.84,
+   "d": 1.36,
+   "text": "again, or a chomp. And all things we can"
+  },
+  {
+   "t": 663.2,
+   "d": 1.68,
+   "text": "do when we start with bellow. That's"
+  },
+  {
+   "t": 664.88,
+   "d": 1.92,
+   "text": "thrash one or that's thrashing and"
+  },
+  {
+   "t": 666.8,
+   "d": 3.0,
+   "text": "chomping."
+  },
+  {
+   "t": 669.92,
+   "d": 1.84,
+   "text": "And then the last little bit here is to"
+  },
+  {
+   "t": 671.76,
+   "d": 1.76,
+   "text": "pull all the information that we need to"
+  },
+  {
+   "t": 673.52,
+   "d": 2.24,
+   "text": "actually note this state change. So"
+  },
+  {
+   "t": 675.76,
+   "d": 1.6,
+   "text": "chomp because this is the first"
+  },
+  {
+   "t": 677.36,
+   "d": 2.88,
+   "text": "transition u needs all the information"
+  },
+  {
+   "t": 680.24,
+   "d": 1.6,
+   "text": "from that state table just like that"
+  },
+  {
+   "t": 681.84,
+   "d": 3.12,
+   "text": "initial scan."
+  },
+  {
+   "t": 684.96,
+   "d": 1.6,
+   "text": "Now we'll get to kind of the last bit"
+  },
+  {
+   "t": 686.56,
+   "d": 1.44,
+   "text": "and this is the chunkiest bit of code"
+  },
+  {
+   "t": 688.0,
+   "d": 1.6,
+   "text": "I'm going to show which is actually"
+  },
+  {
+   "t": 689.6,
+   "d": 4.08,
+   "text": "evolving the simulation over time."
+  },
+  {
+   "t": 693.68,
+   "d": 2.8,
+   "text": "And so uh this is a lot. Uh I'm going to"
+  },
+  {
+   "t": 696.48,
+   "d": 2.32,
+   "text": "highlight two lines here from the select"
+  },
+  {
+   "t": 698.8,
+   "d": 2.56,
+   "text": "statement um which will kind of show how"
+  },
+  {
+   "t": 701.36,
+   "d": 3.04,
+   "text": "this thing happens. So if we look at our"
+  },
+  {
+   "t": 704.4,
+   "d": 2.4,
+   "text": "trace column, we'll get sort of the fact"
+  },
+  {
+   "t": 706.8,
+   "d": 1.76,
+   "text": "that we're just appending more"
+  },
+  {
+   "t": 708.56,
+   "d": 1.76,
+   "text": "information on the back of each trace"
+  },
+  {
+   "t": 710.32,
+   "d": 3.2,
+   "text": "with each recursive run. And all of that"
+  },
+  {
+   "t": 713.52,
+   "d": 2.24,
+   "text": "is again just doing concatenation and"
+  },
+  {
+   "t": 715.76,
+   "d": 2.72,
+   "text": "it's all powered by just this one line"
+  },
+  {
+   "t": 718.48,
+   "d": 2.16,
+   "text": "for uh the probabilities which I think"
+  },
+  {
+   "t": 720.64,
+   "d": 1.44,
+   "text": "makes a little bit of sense to talk"
+  },
+  {
+   "t": 722.08,
+   "d": 2.88,
+   "text": "about because it's a math operation and"
+  },
+  {
+   "t": 724.96,
+   "d": 1.44,
+   "text": "just thinking about string concatenation"
+  },
+  {
+   "t": 726.4,
+   "d": 3.92,
+   "text": "can get you know a little funky. Um"
+  },
+  {
+   "t": 730.32,
+   "d": 3.2,
+   "text": "so uh it looks like this right we know"
+  },
+  {
+   "t": 733.52,
+   "d": 2.64,
+   "text": "that jaw must always start with chomp so"
+  },
+  {
+   "t": 736.16,
+   "d": 3.04,
+   "text": "the probability is 100%. As we have more"
+  },
+  {
+   "t": 739.2,
+   "d": 2.4,
+   "text": "rounds, there are more traces that could"
+  },
+  {
+   "t": 741.6,
+   "d": 2.56,
+   "text": "have happened that get us to that round."
+  },
+  {
+   "t": 744.16,
+   "d": 1.76,
+   "text": "So for round two, we know that the"
+  },
+  {
+   "t": 745.92,
+   "d": 2.64,
+   "text": "jawworm could either chomp or bellow or"
+  },
+  {
+   "t": 748.56,
+   "d": 1.84,
+   "text": "chomp and then thrash. And there"
+  },
+  {
+   "t": 750.4,
+   "d": 1.2,
+   "text": "henceforth the probabilities are still"
+  },
+  {
+   "t": 751.6,
+   "d": 2.16,
+   "text": "pretty big. 60% of the time jawworm is"
+  },
+  {
+   "t": 753.76,
+   "d": 1.28,
+   "text": "going to bellow. 40% of the time"
+  },
+  {
+   "t": 755.04,
+   "d": 1.44,
+   "text": "drawworm's going to thrash. But they"
+  },
+  {
+   "t": 756.48,
+   "d": 1.84,
+   "text": "start getting small pretty fast because"
+  },
+  {
+   "t": 758.32,
+   "d": 1.76,
+   "text": "as we get to round three, there are now"
+  },
+  {
+   "t": 760.08,
+   "d": 1.76,
+   "text": "five different ways in which all of this"
+  },
+  {
+   "t": 761.84,
+   "d": 2.96,
+   "text": "could play out."
+  },
+  {
+   "t": 764.8,
+   "d": 1.28,
+   "text": "And all of that is really just"
+  },
+  {
+   "t": 766.08,
+   "d": 3.2,
+   "text": "calculated by just this one line. So"
+  },
+  {
+   "t": 769.28,
+   "d": 3.44,
+   "text": "kind of the big punchline here is that"
+  },
+  {
+   "t": 772.72,
+   "d": 2.56,
+   "text": "um you end up with a table that looks"
+  },
+  {
+   "t": 775.28,
+   "d": 2.72,
+   "text": "like this. And unfortunately I have gone"
+  },
+  {
+   "t": 778.0,
+   "d": 2.88,
+   "text": "over um but it was super fun to put this"
+  },
+  {
+   "t": 780.88,
+   "d": 1.36,
+   "text": "together. I'm happy to talk more about"
+  },
+  {
+   "t": 782.24,
+   "d": 2.8,
+   "text": "details uh about it. Uh thanks so much"
+  },
+  {
+   "t": 785.04,
+   "d": 3.4,
+   "text": "for your time."
+  },
+  {
+   "t": 790.4,
+   "d": 2.56,
+   "text": ">> Awesome. Thank you so much Jonathan. Um,"
+  },
+  {
+   "t": 792.96,
+   "d": 4.0,
+   "text": "that was fascinating. Uh, so what drove"
+  },
+  {
+   "t": 796.96,
+   "d": 3.12,
+   "text": "you to, um, think about like crafting"
+  },
+  {
+   "t": 800.08,
+   "d": 2.8,
+   "text": "gameplay in SQL and do you have any"
+  },
+  {
+   "t": 802.88,
+   "d": 1.52,
+   "text": "plans to use it for something that"
+  },
+  {
+   "t": 804.4,
+   "d": 2.0,
+   "text": "you're making personally?"
+  },
+  {
+   "t": 806.4,
+   "d": 1.52,
+   "text": ">> Um,"
+  },
+  {
+   "t": 807.92,
+   "d": 2.56,
+   "text": "I'm kind of a spreadsheet sicko, so I've"
+  },
+  {
+   "t": 810.48,
+   "d": 2.56,
+   "text": "done a lot of trying to like simulate"
+  },
+  {
+   "t": 813.04,
+   "d": 2.56,
+   "text": "out games in nothing but Google Sheets."
+  },
+  {
+   "t": 815.6,
+   "d": 2.72,
+   "text": "Uh I have a very complicated Google"
+  },
+  {
+   "t": 818.32,
+   "d": 1.84,
+   "text": "sheet somewhere that tries to optimize"
+  },
+  {
+   "t": 820.16,
+   "d": 4.0,
+   "text": "Stardew Valley uh planting seasons. Um"
+  },
+  {
+   "t": 824.16,
+   "d": 1.36,
+   "text": "so this is something I just like I'm"
+  },
+  {
+   "t": 825.52,
+   "d": 2.64,
+   "text": "naturally drawn to. I think SQL in"
+  },
+  {
+   "t": 828.16,
+   "d": 2.08,
+   "text": "general uh I got super interested in"
+  },
+  {
+   "t": 830.24,
+   "d": 2.72,
+   "text": "declarative versus imperative languages."
+  },
+  {
+   "t": 832.96,
+   "d": 3.04,
+   "text": "Um and I'm very bad at prologue. So I"
+  },
+  {
+   "t": 836.0,
+   "d": 2.88,
+   "text": "wanted to try to do like declarative"
+  },
+  {
+   "t": 838.88,
+   "d": 2.32,
+   "text": "programming and SQL is kind of the"
+  },
+  {
+   "t": 841.2,
+   "d": 2.32,
+   "text": "workhorse language that I know and so I"
+  },
+  {
+   "t": 843.52,
+   "d": 4.32,
+   "text": "wanted to see if I could do it in that."
+  },
+  {
+   "t": 847.84,
+   "d": 2.24,
+   "text": ">> Cool. Yeah, I don't think you are alone"
+  },
+  {
+   "t": 850.08,
+   "d": 2.16,
+   "text": "in the Rogu acceleration community uh"
+  },
+  {
+   "t": 852.24,
+   "d": 1.92,
+   "text": "for being a spreadsheet sicko. I think"
+  },
+  {
+   "t": 854.16,
+   "d": 3.04,
+   "text": "you're in very good company here. Um"
+  },
+  {
+   "t": 857.2,
+   "d": 2.08,
+   "text": "well awesome. Thank you so much, uh,"
+  },
+  {
+   "t": 859.28,
+   "d": 2.32,
+   "text": "Jonathan."
+  }
+ ]
+}

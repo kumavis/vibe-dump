@@ -1,0 +1,226 @@
+{
+  "id": "H5EU9_Gdu94",
+  "title": "Alexei Pepers - Designing for System Suspense",
+  "speaker": "Alexei Pepers",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=H5EU9_Gdu94",
+  "talk_type": "design",
+  "summary": "Alexei Pepers presents a free version of a GDC talk on 'system suspense', a term from Jason Grinblat of Freehold Games (Caves of Qud) for the experience of navigating game systems whose boundaries are not immediately known, so that discovering the rules is part of the fun. Drawing on a Polaris think-tank report, she frames surprise as a sudden change in the player's mental model and suspense as awareness that part of that model is fuzzy, and explains how to shape expectations, manage clarity versus opacity, avoid costly hypothesis testing, and pay off uncertainty through designed or emergent revelations. Case studies cover Blaseball (preserving edge cases, limiting hypothesis tests, spending effort where fans will go) and Caves of Qud (cutting a powered-furniture system that implied too much, and unconstrained-by-default generators), ending with system versus content suspense in Elden Ring, FromSoftware games and Yakuza.",
+  "games": [
+    "Caves of Qud",
+    "Mass Effect 2",
+    "Tunic",
+    "Baldur's Gate 3",
+    "Dwarf Fortress",
+    "The Witness",
+    "Tactical Breach Wizards",
+    "Blaseball",
+    "Resident Evil 3",
+    "Elden Ring",
+    "Dark Souls",
+    "Yakuza 0"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "system suspense",
+      "kind": "principle",
+      "claim": "System suspense, a term from the Caves of Qud team, is the experience of moving through game systems that do not reveal their boundaries, where players discover the axioms themselves and learning the game is part of the fun.",
+      "detail": "Pepers credits Jason Grinblat's blog post 'Apologia for Game Wikis'. She illustrates with Caves of Qud: dominating a Snapjaw shows its inventory, a cave spider has pseudopods, and spraying a door with 'spray-a-brain' lets you dominate a sentient door and equip it, making players wonder what the game is even capable of.",
+      "t": 317,
+      "quote": "system suspense is the experience of maneuvering through game systems that do not make their boundaries immediately known",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "deep simulation",
+      "kind": "example",
+      "claim": "In Caves of Qud, a single mutation (domination) combined with a brain-granting item lets the player inhabit a sentient door and inspect its inventory, signalling the depth of the systems.",
+      "detail": "Every creature, even non-bipedal ones, has a full body and inventory layout, so domination exposes normally hidden stats. The speaker notes this was one of about a hundred mutations, and the resulting 'what is this game capable of' feeling is the subject of the talk.",
+      "t": 259,
+      "quote": "you now are inhabiting a newly sentient door and you can look at its inventory and you can equip things",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden mechanics",
+      "kind": "example",
+      "claim": "Mass Effect 2 creates system suspense by tying the crew's survival to a hidden counter of missions completed after their abduction, breaking the series' dialogue-choice convention.",
+      "detail": "Players expect 'urgent' quests to mean finish side quests first. When crew die because of wasted time, players realise the game tracks things it never surfaced and start asking what else it tracks and which of their assumptions are wrong, turning narrative suspense into suspense about systems.",
+      "t": 543,
+      "quote": "There is an invisible counter that starts ticking up after that scene every time you go on a different mission",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "mental model",
+      "kind": "principle",
+      "claim": "Surprise is a sudden change in the player's mental model of a game, while suspense is a lingering awareness that part of that model is fuzzy and cannot yet be resolved.",
+      "detail": "The mental model is the player's understanding of how the game links together, like a surveyed map of what is inside and outside the game. To design suspense, designers must purposefully shape the mental model, then draw the player's attention to the uncertainty.",
+      "t": 783,
+      "quote": "Surprise is the moment discreet moment when there is a rapid change in the mental model",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player expectations",
+      "kind": "technique",
+      "claim": "Players arrive with expectations from marketing, reviews, art style, genre and team size, which designers can exploit or must work within; Caves of Qud's strange achievements prime curiosity before play begins.",
+      "detail": "Pepers notes genre definitions can drift between developers and audiences and become a constraint. User testing reveals expectations, and the Tunic manual and a Caves of Qud achievement about wearing your own severed face put players in a curious frame of mind.",
+      "t": 859,
+      "quote": "your players are not a blank slate before they even come in and sit down",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "cognitive load",
+      "kind": "principle",
+      "claim": "Games built on system suspense still need tutorials and very clear communication in non-mysterious areas, so players have the cognitive space to test hypotheses about the deliberately uncertain parts.",
+      "detail": "Dwarf Fortress now has a tutorial without losing its mysterious depth. If there is too much noise or players do not know how to act on a hypothesis, they are not engaging with a fuzzy area, they are just lost.",
+      "t": 1057,
+      "quote": "For the areas that are not meant to be suspenseful, make sure that they are very clear and well understood",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "secret affordances",
+      "kind": "example",
+      "claim": "Baldur's Gate 3 hides secret affordances among junk items, such as a shovel that lets you dig up treasure, rewarding players for experimenting with ordinary-looking inventory.",
+      "detail": "Mechanical keywords are clearly highlighted elsewhere, but the shovel has only flavour text like sellable forks and spoons. Discovering it makes players feel smart and wonder about everything else; the speaker later put out a fire by throwing a bottle of water.",
+      "t": 1144,
+      "quote": "only if you have one in your inventory does that pile of dirt become interactable and you can dig up a treasure chest",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hypothesis testing",
+      "kind": "warning",
+      "claim": "System suspense turns to frustration when testing a hypothesis is unfun or outside the core loop, or when being wrong is costly; Baldur's Gate 3 eventually patched its shovel to state its use.",
+      "detail": "Players hoard heavy junk in case it matters, and a 'small shovel' does not dig. Pepers links this to roguelike identification by use, which many modern roguelikes consider too punishing when it wastes valuable consumables. The patched shovel description shows the developers judged the cost not worth it.",
+      "t": 1288,
+      "quote": "if there is a high cost associated with getting a hypothesis wrong, but we're also encouraging the players to test out their hypothesis",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "revelation",
+      "kind": "technique",
+      "claim": "Uncertainty can be resolved by a designed surprise (Resident Evil 3's safe room breach), by an ambient realisation players reach on their own (The Witness's environmental puzzles), or by breadcrumbs in between (Tactical Breach Wizards' optional objectives).",
+      "detail": "The Witness lets each player notice hidden puzzles at different times, which is powerful but some players bounce off first. Tactical Breach Wizards' cosmetic optional objectives often require unintuitive system interactions, hinting at what is possible without forcing it.",
+      "t": 1498,
+      "quote": "am I going to have a really specific moment that I hit every player with or am I going to set up the groundwork",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "collective speculation",
+      "kind": "example",
+      "claim": "Blaseball sustained system suspense by letting fans vote on mysterious rule-changing decrees where only one would pass, so unchosen options remained permanent objects of speculation.",
+      "detail": "All players shared one simulation. In season 10 'black hole' passed and was revealed, but a 'countdown self-destruct' option never passed and remains unknown; fans spent each week debating meanings and continued speculating afterward.",
+      "t": 1727,
+      "quote": "Countdown self-destruct did not pass. So, we will never know what that is",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "embracing exploits",
+      "kind": "example",
+      "claim": "When Blaseball fans coordinated to idolize a dead player into a 'steal the 14th most idolized player' slot, the developers allowed the unintended necromancy and added mechanics so the player came back wrong.",
+      "detail": "Rather than cutting off the edge case, the team built on it; the revived player started killing others with balls. This became a huge moment that trained fans to explore edge cases and system interactions.",
+      "t": 1828,
+      "quote": "instead of cutting this off. The developers decided to allow it even though it had not been intended",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping edge cases",
+      "kind": "principle",
+      "claim": "Closing off an edge case saves development time but has the cost of turning a fuzzy boundary into a hard one and killing player suspense, which should be weighed when scoping.",
+      "detail": "On Blaseball, Pepers says the system-suspense vocabulary helped communicate this cost-value trade-off to engineers when the instinct was to cut fringe cases such as idolizing dead players.",
+      "t": 2078,
+      "quote": "when you close off an edge case, that gives you a benefit, saves you time, but it has a cost of closing off player suspense",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "productive uncertainty",
+      "kind": "principle",
+      "claim": "Designers should distinguish productive uncertainty, preserved for suspense, from unproductive uncertainty that should be removed, rather than reflexively making every mechanic clear.",
+      "detail": "Blaseball had many hard-to-understand elements; the normal intuition to remove uncertainty about mechanics also removes space for suspense and surprise, so the team decided case by case where to keep it.",
+      "t": 2132,
+      "quote": "where are the places where we are intentionally preserving uncertainty for particular outcomes and where are we going to correctly remove some uncertainty",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "branching outcomes",
+      "kind": "technique",
+      "claim": "Limiting how many times players can test a hypothesis lets designers reuse functionally identical outcomes behind different text, and spend expensive unique work only on the branches players are likely to reach.",
+      "detail": "The Blaseball team mapped edge cases into an outcome tree and allowed only two triggers of an idol choice. Players who never see the whole list cannot spot superficially different options, and the cheaper branches get lighter reactivity, informed by past fan behaviour or playtesting.",
+      "t": 2198,
+      "quote": "if the player of the game does not get to look at the exhaustive list of all options, they can't as easily pick up on things",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "speculation value",
+      "kind": "principle",
+      "claim": "Content players never see can still add value if they believe it existed and speculate about it, because speculation itself is part of the experience.",
+      "detail": "Pepers acknowledges this is counterintuitive: some argue never-triggered branches are wasted time, but in Blaseball the believable existence of unseen options fed the suspense.",
+      "t": 2224,
+      "quote": "even if players never see an option, the fact that it believably did exist and they speculated about it adds to the game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "implied systems",
+      "kind": "warning",
+      "claim": "Caves of Qud cut back its powered-furniture content because, once players are primed to expect deep systems, a half-sized system implies a bigger one (like base building) that the game cannot deliver.",
+      "detail": "Players saw lots of powered furniture and expected a Minecraft-redstone-like system. To avoid disappointment the team shrank the system until they could fully deliver on it; Pepers concludes such systems become all or nothing once you lean into suspense.",
+      "t": 2383,
+      "quote": "they had to actively cut that system back to be smaller so that it did not suggest a bigger system",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator constraints",
+      "kind": "principle",
+      "claim": "The Caves of Qud team keeps generators unconstrained by default and adds only minimal constraints once a specific negative impact is proven.",
+      "detail": "Pepers found this surprising since constraining generators is common advice. For creature placement, a difficulty constraint stops lethal late-game creatures appearing in starting areas, and a biome constraint preserves sense of place (fungi in fungal forests).",
+      "t": 2437,
+      "quote": "by default keep your generators totally unconstrained and only add minimum constraints at the moment that you can prove that there are specific negative impacts",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "creature placement",
+      "kind": "example",
+      "claim": "Caves of Qud's Six Day Stilt drops both difficulty and biome constraints because all creatures there are peaceful, so early players can glimpse late-game creatures and wonder how they would fight them.",
+      "detail": "Because it is a pilgrimage site, creatures from anywhere can appear and will not attack unless provoked. Similarly, merchants can sell high-level crafting recipes early since they are useless without late-game materials and skills, simply letting players be curious.",
+      "t": 2551,
+      "quote": "in the sixday stilt, it is just a grab bag. Anything in the game can be here",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "exploration mechanics",
+      "kind": "example",
+      "claim": "FromSoftware games sustain systemic suspense about exploration by having many secret-finding mechanics, each used only a few times, and adding a few more in each game.",
+      "detail": "Elden Ring's teleport trap suddenly zooms the map out, which the Polaris group debated as content versus system surprise. Illusory walls in Dark Souls are the stereotypical example; taken together these keep suspense alive across a series rather than working only once.",
+      "t": 2715,
+      "quote": "Each one only used a few times, but taken together gives you this type of feeling of exploration that is very open-ended",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "content suspense",
+      "kind": "technique",
+      "claim": "Uneven content scope, as in Yakuza's substories where one may unexpectedly have a unique game mode, creates content suspense about how big or strange any given piece will be.",
+      "detail": "Most Yakuza 0 substories use two verbs, but the Miracle Johnson substory has a unique zombie-defence mode and animations with nothing drawing attention to it. Pepers notes small games can do this too, citing Tactical Breach Wizards' mechanically different anxiety dreams.",
+      "t": 2850,
+      "quote": "it leads to a content suspense of not knowing for any given substory how big it's going to be or how it's going to feel",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

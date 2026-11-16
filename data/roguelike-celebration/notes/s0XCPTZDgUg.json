@@ -1,0 +1,89 @@
+{
+  "id": "s0XCPTZDgUg",
+  "title": "Kaysa Konopljak: Going legit with DotA: How to transform a thousand authors into four",
+  "speaker": "Kaysa Konopljak",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=s0XCPTZDgUg",
+  "talk_type": "culture",
+  "summary": "Artist Kaysa Konopljak examines how collective authorship is erased when community-made games 'go legit', focusing on the 2015-era lawsuit by Valve and Blizzard against Lilith Games and uCool over DotA clones. She frames it with the story of Ms. Pac-Man's creators, who went from receiving a cease-and-desist to patenting anti-copying protection themselves. She describes the companies' three-pronged argument (four 'masterminds' with an unbroken line of authorship, discrediting the community, and demanding proof of claims), the legal system's preference for singular authorship, the deletion of the DotA-Allstars forums, and the eventual settlement. She closes by urging roguelike developers to keep their culture of open development, open source and credited inspirations as a defence against such 'authorship heists'.",
+  "games": [
+    "Defense of the Ancients (DotA)",
+    "DotA 2",
+    "League of Legends",
+    "Ms. Pac-Man",
+    "Warcraft III"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "going legit",
+      "kind": "history",
+      "claim": "Ms. Pac-Man's creators went from receiving an Atari cease-and-desist over their enhancement kits to being hired by Atari, then patented an anti-copying device to keep others like their former selves out.",
+      "detail": "Konopljak tells the story twice: once as an underdog tale and once as a business manoeuvre in which Atari hired them rather than risk a court precedent allowing enhancement kits. The omitted part, she says, is that they 'pulled up the ladder' once on the legit side.",
+      "t": 269,
+      "quote": "There came an anti code copying encryption device to keep people like Kevin and Doug at bay",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "dota lineage",
+      "kind": "history",
+      "claim": "DotA evolved as a Warcraft III mod through many hands: Eul's original, Guinsoo's DotA Allstars collecting the best community branches, an open-source release, a community forum, and IceFrog's later stewardship.",
+      "detail": "Konopljak lays out a timeline from 2002 to DotA 2's release, during which key contributors were hired by Riot and Valve. Blizzard's lawyers named four 'masterminds' as the game's authors.",
+      "t": 481,
+      "quote": "a version of daughter steps up as a collection of the prominent and popular daughter versions or branches",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "collective authorship",
+      "kind": "principle",
+      "claim": "In the DotA case, the legal system's preference for easy-to-understand singular authorship let Valve and Blizzard reframe a collectively made community mod as the work of a few hired 'masterminds'.",
+      "detail": "Konopljak describes a three-pronged strategy: declaring mastermindship with an unbroken chronological line of authorship, discrediting the community as unserious people with usernames, and demanding that anyone else prove their claim. She says courts find collective works too messy to adjudicate.",
+      "t": 973,
+      "quote": "The legal system can't obtain any other kind of authorship other than single authorship",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community contributors",
+      "kind": "warning",
+      "claim": "Earlier DotA contributors whose work laid the groundwork for DotA Allstars were mentioned only in passing in the lawsuit because they never encrypted or claimed their work, showing copyright protects those able to police ownership.",
+      "detail": "Konopljak argues the main difference between those contributors and Guinsoo, besides who came first, is that they didn't encrypt it and weren't in the room with lawyers. She concludes that if copyright only protects those who enact and police ownership, the argument that it protects artists does not hold.",
+      "t": 1358,
+      "quote": "If your system can only hold copyright for those who have the need to enact the ownership and police it",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "forum deletion",
+      "kind": "warning",
+      "claim": "Deleting the DotA-Allstars community forums destroyed the very records of community design work that the companies later said did not exist, an eviction of the community's history in support of an ownership claim.",
+      "detail": "Konopljak says the forum was put under 'maintenance' and replaced with an ad for three years, while Valve and Blizzard argued uCool could not produce a single message board reflecting reported hero concepts. She calls it moving thousands of people at once by eviction.",
+      "t": 1458,
+      "quote": "ucool can't even produce a single message board or check log reflecting any of the reported hero concepts",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "incentives",
+      "kind": "warning",
+      "claim": "Copyright structures incentivise secrecy, receipt-keeping and competitive anti-social behaviour, which works against the collective authorship that made games like DotA possible.",
+      "detail": "Konopljak says articles stress keeping proof-of-work timelines to avoid losing copyright, which pushes people to hold ideas secret until they can afford lawyers. The lawsuit ended in a settlement, from which she draws the moral that copyright is meant for those with the means to police it.",
+      "t": 1665,
+      "quote": "you can ends up spending all your energy engaging in anti-social and competitive behavior",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "open development",
+      "kind": "principle",
+      "claim": "The roguelike community's transparency, open-source code, open development and practice of openly declaring inspirations are among the best defences against authorship being appropriated.",
+      "detail": "Konopljak addresses roguelike developers directly, praising their slow, caring, often free work and mutual support. She notes that ownership of player-driven emergent narratives in procedural media is weird at best.",
+      "t": 1858,
+      "quote": "This transparency, pride, and sharing shoulder to shoulder and lending muscle and brain to each other is one of the best defenses",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

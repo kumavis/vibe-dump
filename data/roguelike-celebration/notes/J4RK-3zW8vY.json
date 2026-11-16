@@ -1,0 +1,156 @@
+{
+  "id": "J4RK-3zW8vY",
+  "title": "Drew Streib - Servers and NAO",
+  "speaker": "Drew Streib",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=J4RK-3zW8vY",
+  "talk_type": "technical",
+  "summary": "Drew Streib, operator of the public NetHack server nethack.alt.org (NAO) and author of dgamelaunch, describes the history of public roguelike servers and why players use them: shared bones, verified games, standardized versions, play from work and community. He explains dgamelaunch and ttyrec-based live game watching, which accelerated how quickly players learn to ascend, plus the server's architecture, security challenges, crash reporting to the DevTeam, the move to AWS and a websocket browser terminal. He covers server statistics and what makes a game impressive, the large ttyrec archive's use for analytics and bots, hosting the NetHack wiki, and a call to broaden accessibility to grow the community.",
+  "games": [
+    "NetHack",
+    "Diablo"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "public servers",
+      "kind": "history",
+      "claim": "Early roguelike multiplayer features like shared bones files and in-game mail came from university shell servers, and early public NetHack servers were mostly in Finland and northern Europe.",
+      "detail": "Streib recalls fishpool in Finland had only 22 ascensions listed in January 2001. He started NAO in 2001 because there were no servers with local latency for him.",
+      "t": 201,
+      "quote": "the servers were actually local servers you would shell into um and the bones files shared games",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "shared bones",
+      "kind": "example",
+      "claim": "Public servers make bones files from other players a real part of NetHack, since a solo local player rarely encounters them.",
+      "detail": "Streib says stumbling randomly on someone's bones, perhaps a wizard's, was his only realistic chance to ascend, and felt less like cheating than deliberately inserting a level.",
+      "t": 333,
+      "quote": "i had no opportunity to see bones as a user that wasn't at the time at a university on a server with other people playing",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "verified games",
+      "kind": "principle",
+      "claim": "Verified server games give scores meaning, so NAO takes a hard line against restoring games or save-scumming, though Streib warns fewer people care about bragging rights than you think.",
+      "detail": "Streib's main reason for running a server was proving his achievements; he lost interest in Diablo when its online verification broke. Later he says NAO refuses restores so a score sitting there 'actually means something'.",
+      "t": 397,
+      "quote": "i promise you fewer people care about your bragging rights on these verified games and you think they do",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "game watching",
+      "kind": "principle",
+      "claim": "Live game watching on public servers doesn't change NetHack but greatly accelerates the learning curve, so players who once took years to ascend now often ascend within weeks.",
+      "detail": "Players at first pushed back because they didn't want their secrets given away, so NAO displays a banner saying all games are watched. Streib calls ttyrec watching a 'prehistoric Twitch'.",
+      "t": 704,
+      "quote": "it doesn't change the game it just accelerates the learning curve",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "dgamelaunch",
+      "kind": "technique",
+      "claim": "dgamelaunch is a generic front end for any TTY game that forks a ttyrec spooling process for watching alongside the game, with in-game mail as the only player interaction.",
+      "detail": "Streib repurposed ttyrec, which someone else made for a different purpose, and uses simple mail to message players mid-game. It now fronts many games, mostly NetHack variants; website and IRC bots run outside the jail.",
+      "t": 791,
+      "quote": "this is basically the front end i built it for nethack it really is for any tty based front end",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "server security",
+      "kind": "warning",
+      "claim": "Running roguelikes on a public server is a security headache: game binaries have bugs and options editors must be locked down so they can't write arbitrary files.",
+      "detail": "Streib advises separating a game server from other services because it has 'enough holes to drive trucks through', backing up often and getting a co-admin. He credits co-admin Pasi Kallinen (paxed) with carrying NAO for years.",
+      "t": 926,
+      "quote": "an amazing amount of time goes into editing and options that are there to remove its ability to write random files across the disk",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "crash reports",
+      "kind": "technique",
+      "claim": "A busy public server surfaces rare bugs that individual players never hit, making it a useful source of core dumps for the NetHack DevTeam.",
+      "detail": "With thousands of games a month, a one-in-a-thousand bug shows up on the server even if not for others.",
+      "t": 962,
+      "quote": "we we have been able to be a good feed basically for for core dumps and such",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "cloud hosting",
+      "kind": "technique",
+      "claim": "NAO stays on simple Linux instances rather than containers or serverless because live watching needs fast open sockets and Streib avoids patching stock game binaries.",
+      "detail": "Modified binaries could save to object storage on transient instances, but these are long-running games kept as stock as possible. Moving to AWS got NAO out of the hardware failure business.",
+      "t": 1020,
+      "quote": "live game watching has kind of been the big one the main feature that everyone seems to like",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "browser terminal",
+      "kind": "technique",
+      "claim": "A JavaScript terminal over websockets (Chromium's hterm) lets players run NetHack in a browser, including through networks that block telnet.",
+      "detail": "Streib presents it as reaching people who previously couldn't telnet in, such as at work, through TLS interception that supports websocket pass-through.",
+      "t": 1096,
+      "quote": "there's a javascript implemented terminal if you haven't tried it yet at work and you previously couldn't telnet in give it a try",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "score metrics",
+      "kind": "principle",
+      "claim": "In NetHack, high score tracks improvement only before a player ascends; for serial ascenders, low-turn, low-score and high-conduct ascensions are the more impressive feats.",
+      "detail": "Streib says he focused on high scores early, but lower-score ascensions usually mean a better player who didn't need to stockpile preparation. He'd like more stats on conducts.",
+      "t": 1169,
+      "quote": "low turn games low scoring games are actually more impressive and high conduct games than our high scorers",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "replay data",
+      "kind": "example",
+      "claim": "NAO's roughly 200 GB of ttyrec recordings capture every situation and what worked, and have been used for analytics and bots, one of which ascended on a public server.",
+      "detail": "The bot used mechanics like pudding farming that are nerfed in NetHack 3.6, and no bot had yet beaten 3.6. Streib offers the archive to anyone who ships him a hard drive.",
+      "t": 1208,
+      "quote": "there has been one bot ascension on a public server on nao in the past",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "Being spoiled doesn't ruin NetHack: knowing what will happen doesn't save you when you make the wrong choice, and many fully spoiled players still can't win.",
+      "detail": "Streib contrasts the old effort of browsing scattered spoiler pages with the modern NetHack wiki, which he co-hosts and plans to move to a non-profit so it outlives him and stays ad-free.",
+      "t": 1522,
+      "quote": "just knowing what's going to happen doesn't save you when you make the wrong choice",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "accessibility and reach",
+      "kind": "principle",
+      "claim": "Keeping a roguelike community alive requires broadening access, for example browser and phone play, rather than dismissing low-barrier newcomers.",
+      "detail": "Streib admits he once rolled his eyes at the Reddit NetHack crowd but now sees them as important. His call to action is that accessibility to a big audience fills the pipeline of new players, alongside offering more game choice on servers.",
+      "t": 1634,
+      "quote": "accessibility to a big audience is a big deal and anything that we can do to kind of broaden that",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mentoring",
+      "kind": "example",
+      "claim": "Server game watching enabled live mentoring: an IRC helper could watch a stuck player's game and tell them exactly what to do.",
+      "detail": "An audience member (an event organizer) described ascending on NAO with a friend sending in-game mail advice and IRC helpers watching her game. Streib calls this a more advanced spoiler and is fine with it.",
+      "t": 1739,
+      "quote": "what's your name on nethack.org i'll go watch the game and see like like oh open your inventory",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,98 @@
+Caelyn Sandel and Grahu-Rubufo - Teaching the Fun of Losing
+Speaker: Caelyn Sandel and Grahu-Rubufo
+https://www.youtube.com/watch?v=NANqgqeqh2k
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:00] EMCEE: Writing and designing Caves of Qud she also voices. Let's bring up this wonderful video from Caelyn. CAELYN SANDEL: Oh, shit. Oh, we are live. Hang on a second. This is going to have to go. Let me just get under it. Always remember to lift with your legs. OK. Camera feeds are heavy.
+
+[0:01:01] Hello, everyone.
+
+## Meet the vtuber
+
+[0:01:04] My name is grahoob and I am doing this one. Gra is doing it. My pronouns are she and her and you can call me Gra for short but only if you follow me on Twitch. I will make it easy. Boom. Look at that beautiful mug. This art was by dige my the way. I am voiced by Caelyn Sandel give credentials. Sorry. Caelyn Sandel who is an indy narrative game designer and developer and one of the additional writers and designs for Caves of Qud. She was supposed to give this talk but she had an anxiety attack and chickened out so
+
+[0:02:05] I guess it falls on me. That's fine. I will probably do a better job than she would have. OK. As you can see, I am a snap jaw. I am one of Caves of Qud ever present trash mobs and I am also a V tuber. You might wonder what a V tuber is. Well you are looking at one. You can see that I am in 2D animated Avatar made slightly 3D through the application of rigging. There is a program on my desktop. Here is the interface. It streams information about Caelyn's face from her phone and uses it to animate me. Good use of technology. Usually Vtubers are cute Anime girls but I think I am opening the art form for cute animal
+
+[0:03:08] girls. I am here to talk about Caves of Qud.
+
+## Caves of cud complexity
+
+[0:03:16] This is Caves of Qud. It my favorite game. It is absolutely my favorite. Between us, K and I have logs over 1800 hours and we still YASDery constantly because we are careless people. Once a mobile version comes out we will probably never need to leave bed and if a switch version every comes out, well, forget it. The fact of the matter is I come here not to praise Qud but to roast it because let's be real. Caves of Qud is hard to get into. It just is. Sorry. I am not saying this to be hard on the game. I am just admitting that it has shortcomings. Here, I will show you. Let's play Caves of Qud for a second.
+
+[0:04:18] Coming in as a new player nothing turned on, nothing interesting happening. Just this fairly austere but understandably smart screen. Once we start a new game things start to get more opaque. See there is only one option here that actually matters to a new player and that's create new character. Rolling a random character would make for a pretty bad experience and they are not going to have a build library yet so already you can see a new player's intended experience fits in just a little corner of the screen. If we create new character, it just gets worse. Let's choose mutated human and look. Look at all this D&D nonsense. I suppose it is great if you like D&D nonsense but a lot of people aren't into this kind of stat stuff, so let's just assign random points and because I raised some of them ahead
+
+[0:05:25] of time this looks OK and I can play with this. What's this? What is this screen? What is all this nonsense? Look at all this. That's so much reading. It is one of the best parts of the game. It is wonderful there are this many mutations and it is so cool to learn what they will do but for a new player how are they going to know which ones to take? Let's pick random ones. We don't know what we are doing but we have to keep going. Still more choices. At least are relatively easy to understand from a relatively low amount of description. Here we are.
+
+## UI and onboarding challenges
+
+[0:06:10] Let's start the game. It is only now. It is only now that the game really shows what it is good at which is to say mood, writing, atmosphere and to a certain extent, like procedural generation but that's not visible just yet. You will have to forgive my monumental UI size but even now what do we do? We are in this town. Now, we did get a little hint here. It says press space and F1 for help. Let's do that. OK. Here is our help index. It still looks like a lot of plaintext. 10 things you should do when you start to play. That's getting somewhere. That sounds like a quick start guide. Well, it is a quick start guide but that's still a lot of reading.
+
+[0:07:12] And a lot of this stuff is pretty technical. And it tells you to go to other menus and look at other things. That's a lot. It is asking a lot. A lot of players are just going to, you know, give up. And that's a shame because just because someone was daunted by that experience doesn't mean that they don't have the fortitude to play a game like Qud or to learn about it or to delve into those complexities. It is just, you know, Caves of Qud is hard to get into. Like I said, and, you know, I am kind of kidding but I am also kind of not kidding. Apologies to the team for roasting them in front of everybody but everybody seems to like Qud a got. I figure it is fine. Brian is probably nodding his head and going that's fair.
+
+[0:08:15] Yeah, yeah, I see you Brian. And yeah, the thing is as an early access game, we have new players before things are
+
+## Future UI and outreach
+
+[0:08:26] finished. This isn't finished. Don't get me wrong. Let me show you something. This design here was by an artist that the Freehold Games team hired to help us figure out what your new interface was going to look like. Look at that. It is beautiful. It gives us an impression of what everything looks like in addition to how everything plays. I think that's real cool. Once it goes in it is probably likely to be more friendly to new players but it is not there yet and it is not going to be there for awhile so still Caves of Qud is hard to get into but there are stopgap measures and we have been taking them for a long time. That's what this talk is really about. Let's call it the path to outreach. It is not so much a manual or a style guide as it is just going over what Caelyn has observed
+
+[0:09:27] from the years of doing outreach work for Caves of Qud and what that work was and well it worked or didn't work or how well we can estimate that it worked. Let's get into it. This isn't the solution. It is just a perspective but it is a perspective based on years of player and as a dev. It is subject to bias and the circumstances framing but it is probably worth listening
+
+## The hindrance guide
+
+[0:10:00] to so tune in. When Cae first started playing Caves of Qud there were no secrets or random starts but she was hooked. Long, long ago on a friend's PC compatible computer, sorry IBM compatible computer, she played the construction kit and it was the first introduction to fantasy and sci-fi being presented alongside and mixing possibly. It had gorgeous graphics and bright colors over black backgrounds. Qud has managed to capture that perfectly and was the perfect hook for Caelyn. It held her at least and she invested and that investment paid off big time because Qud is huge and its atmosphere and writing are wonderful and fun but she needed a way
+
+[0:11:07] to make the early game which was very flat and very difficult a little bit easier to do, so she picked a single starting build, the hendron. This is -- I hid the wrong thing. I am hiding the title. This the main character of a game called a hindren's guide to Qud. This is also an interactive fiction story Cae wrote after playing a bunch of Caves of Qud and deciding everyone else needed to play it too. She wrote this twine game designed to tell a story and get across the feel of being in Qud but to give people an easier time in addition to showing the world of Qud and introducing
+
+[0:12:12] the environment, the idea was also to let people know about some of the tricks early on like using witch wood bark to heal yourself or having enough armor to move on or knowing which enemies to run from and which ones to fight. It proved to be reasonably popular but most of all it also got the attention of the lead designer. At this point, Brian, our lead coder had been following me on Twitter, but once Hindren's guide happened that made Jason take notice and asked if Hindren could go into Qud and Cae was thrilled and said 100%. He never added Hindren to Qud and that's OK because he hired Caelyn to do it. This was wonderful for us. But it did cause outreach to drop off.
+
+## Community management
+
+[0:13:17] Learning the basics of XML and bits of C# to work with the rest of the team look a lot and for awhile Caelyn wasn't do a whole lot of outreach work but that's changed. She got more comfortable and she realized that there was still this niche that needed to be filled and that other people were contributing more and more but there was still more she could do. She started reaching out. A lot of it started with the publization of our public discord. The Caves of Qud discord was initially just a place for free hold friends and others who were working with the project to come and talk about that project but in 2018, we opened up the discord to the public and Ivy Melinda was hired as a community manager and that was the beginning of this amazing community that is now cholked full of inside jokes and
+
+[0:14:22] a wonderful image of a cute girl dabbing if you can see that and an entire channel devoted to posting weird pictures and saying the words Caves of Qud. It kind of rules. There was more to do. Now that Cae new how to do basic programming she could go further. She made the Qud survival guide and starred the same Hindren that, you know, years ago had walked the water vine marshes and met another one of her kind who taught her the ropes. Now they are teaching the player and showing up and waiting for someone to instruct in the art of staying alive in Qud. This way we could actually couch the lessons as quest.
+
+[0:15:22] Possibly paving the way for a new starting game quest which, well, it is not guaranteed to go in but Cae will be discussing it with Jason at the very least. We will see what happens. After that, there was more to learn and do.
+
+## Twitch streaming and avatars
+
+[0:15:41] A matter of figuring out what was giving people problems and Twitch was perfect for that. By watching people stream Qud Cae was able to observe problems and common points of confuse and frustration. It was really helpful. But even with all of this stuff, Cae was yet to come up with her best idea yet. Me. See, when Cae was appointed as on official broadcaster for Caves of Qud, she tried to do a face cam game stream. It went about as well as face cam game streams typically do in front of a large gaming audience when the broadcaster is a transwoman which is to say she was immediately mocked and called
+
+[0:16:41] ugly and, you know, sometimes she can power through but sometimes she can't and it is exhausting in any case, so someone jokingly suggested that she could stream with a v2 Avatar like a dinosaur or something. She said I don't want to be a dinosaur. I want to be myself. It turned out there was a better option. There was me. One of our community moderators said her sister was doing commissions for live 2D Avatars and would Cae be interested in maybe commissioning one. Cae sat down and thought up a good snap jaw name based on the in-game name generator and drew this. Ignore the bear baiter part. I wasn't baiting that guy. He just didn't ask me for my pronouns.
+
+## VTuber marketing success
+
+[0:17:41] We started streaming as me. It has taken off. Every Monday we do a teaching stream and every Friday we play whatever we want and then we do miscellaneous Qud streams as we see fit in the meantime. We have the backing and support of the founding devs and this counts effectively as a marketing expense and in the process it has been a huge and wonderful success. V-tubers are pretty hot right now. If you look up dog girl who streams video games like doom and banjo-kazooey all over the place. If you scroll past and see this pretty face playing video games at you how you going to
+
+[0:18:41] click away? You can't. You can't do it. Best of all, though, it was fun. It was really fun. It was such a fun way of interacting with people. I had this bombastic personality that I could put out there. I could enthusiastically promote this game in a way that would instantly be eye catching and ear catching and fly catching to anybody who watched it. And that enthusiasm is reflected in the way I look and sound. So having done all this stuff, we would like to share with you what we figured out and
+
+## Tips for player outreach
+
+[0:19:29] specifically what we have noticed and how we think it might help new players find you and help you keep them. There is a lot of stuff out there. I think it is important to note that, like, a new player's time and energy are very important. It is important that you don't squander that investment from them. To that end, presenting more complexity up front means asking the player for more investment. You can't be frivolous with that investment and you have to make it payoff and that payoff can vary from game to game and the complexity can present from game to game but you should keep your eye out for nots of progresses and things that slow players down and figure out how to make it worth it them to push through. It isn't about making it easier necessarily but making continuing trying fun. Core players don't know what it is like to be a new player and that goes the other way
+
+[0:20:30] around too but their needs aren't at odds. Core players will often be convinced that they are. Accessibility options and ways to make the game less miserable for people outside the community may be seen as pandering. It is kind of your job to convince them it is not. New players need have a welcome intro to your game but core players need to be kept interesting. It is a balancing act that requires paying attention and staying open minded. Questions that keep coming up may reflect a gap in accessibility. If the same thing keeps affecting new players, if new players keep having the same issue, or the same confusion, or failing to figure out a particular part of your user interface that's a good indication that you could stand to shore that up a little bit and make it
+
+[0:21:32] a little bit more apparent somehow. Figure out how you are not speaking the language of the new player and speak it. Now this one is a little bit controversial because of the community but you shouldn't
+
+## Community values
+
+[0:21:48] let the RNG manage your community. Create a space where new players feel welcome. If there are hostile or distasteful elements in the gaming community they will take over unless you show them the door or tell them that they need to quiet down and let everybody else play. It is really, really easy to just let community form itself but what that means is that the loudest and meanest voices are going to be the ones that run things. We didn't do that. Ivy Melinda and their team have been doing an amazing job of creating a space that feels good for the people that Qud ought to be aimed at. The people who are different. The people who get pushed out of other gaming spaces. And that's why I am telling you that the last point here is to reach out, reach out.
+
+[0:22:50] Whenever Caelyn sees somebody talking about how they wish they could play Caves of Qud but they are too broke that's a perfect person to bring in the old. Give them a key. That's what she has been doing. Especially if you aim at the people who are likely to enjoy what you put down which is bodily autonomy and anti-authoritarian messages. We have to make sure the community reflects those values and we have and we are proud of that.
+
+## Conclusion
+
+[0:23:25] Here are some questions that you just want to be thinking about and asking yourself. This is the last part I will go over before questions. Just chew on these and you know, I can talk about them to people if you want but, you know, there isn't so much time left so I will go over them. What's it like to be your new players? Who feels welcome by your game? Who feels alienated? Who is your audience? How do you find them and how do you keep them? If you are not guiding your games online presence who is because someone will. So those are our findings so far. Not conclusive. Not exhaustive but they are definitely things I think a lot of devs should be thinking about and don't necessarily always get the most airtime.
+
+## Q&A session
+
+[0:24:22] So with that having been said, I am grahu-rubufo and learned snapjaw on VTuber. Thank you so much and play Caves of Qud and follow by Twitch stream. Bye. EMCEE: Well, my goodness. The best way to do this. Here we go. The continued quest to make your emcee try goes well. Do we have your audio now, Gra? >> We should. EMCEE: We can hear you. Can I call you Gra? >> Yes, of course. You are following my Twitch?
+
+[0:25:23] If you follow my Twitch you can call me Gra. Oh, boy. I see how it is. EMCEE: Right after this. I am working. >> No, that's fine. A commitment will do. Gra is fine. EMCEE: Thank you so much. Beautiful talk. Very much agree. Absolutely. I think it is important that -- a great reminder we have a code of conduct and everything in there is important and we have no tolerance for transphobic. The first important question is Gra how are you so cool and sexy at all times? >> I was literally created with sexiness and coolness at the core of my being. I could not be anything else. That's just how it is. EMCEE: I will skip this question from someone. I don't think it is important asking how dare you. >> Oh, how dare I? Well, like this.
+
+[0:26:23] Hi, Jason. You have made an incredibly good product. Don't be mad at me please. EMCEE: Who could stay mad at Gra? You can't be mad. One more serious question. It keeps refreshing because people are upvoting Jason's response. How do you communicate with new players? I imagine many players bounce off a game quickly and quietly without telling anyone they tried. >> That's absolutely true. It is not the kind of thing you can necessarily stay on top of. There is no way for you to catch everyone who is bounced off the game but part of it is by creating more points of exposure, more different perspectives. Don't just have the same community, same materials or the same videos with the same trailers. You need new things and different ways to look at the game so people who is it will
+
+[0:27:28] see it again later. EMCEE: That's a great point. There is a lot of posts on the board in terms of linking to your Twitch and things like that. One other good question. Cuds inclusive community subverts common misconceptions about players and complex games. Can you point to other communities that are successful in the regard of making an inclusive community despite being one of those difficult games? >> I don't know much about communities outside of Qud. It just takes up a lot of time, you know? It is a lot of time and focus. Honestly, what I have seen though is there have been some teams that seem to be consistently pretty good about the responses and engaging with the smaller devs. Teams like brace yourself games and fail better is fantastic. Fail better has a very good track record with regard to heading the needs of marginalized
+
+[0:28:35] employees. I feel like the larger a game is the less likely it is their community will be carefully controlled and curated. It is pretty rare.

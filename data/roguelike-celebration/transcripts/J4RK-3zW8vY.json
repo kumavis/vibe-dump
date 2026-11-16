@@ -1,0 +1,5284 @@
+{
+ "id": "J4RK-3zW8vY",
+ "url": "https://www.youtube.com/watch?v=J4RK-3zW8vY",
+ "title": "Drew Streib - Servers and NAO",
+ "speaker": "Drew Streib",
+ "talk_title": "Servers and NAO",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1792,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nDrew is the owner of nethack.alt.org, the host of nethackwiki.com, and the author of dgamelaunch (the frontend for most public Nethack and Nethack variant servers these days). He will talk about the role of public servers for roguelikes and will field questions about NAO.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 35,
+   "title": "Background. What got this started?"
+  },
+  {
+   "start": 178,
+   "title": "A Brief History of Public Servers (indulge the wistful thoughts) Original servers were (are?) universities, shared \"nix systems, but not really \"public ."
+  },
+  {
+   "start": 292,
+   "title": "Why a public server?"
+  },
+  {
+   "start": 788,
+   "title": "dgamelaunch"
+  },
+  {
+   "start": 856,
+   "title": "server anatomy"
+  },
+  {
+   "start": 893,
+   "title": "Challenges"
+  },
+  {
+   "start": 1120,
+   "title": "server stats"
+  },
+  {
+   "start": 1277,
+   "title": "public cloud (and hardwa abstraction in general)"
+  },
+  {
+   "start": 1381,
+   "title": "What is next?"
+  },
+  {
+   "start": 1626,
+   "title": "Call to action"
+  },
+  {
+   "start": 1678,
+   "title": "Contact"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6630,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.73,
+   "d": 1.31,
+   "text": "[Applause]"
+  },
+  {
+   "t": 5.04,
+   "d": 0.4,
+   "text": "all right"
+  },
+  {
+   "t": 5.44,
+   "d": 3.04,
+   "text": "and and thank you um so yeah i'm my name"
+  },
+  {
+   "t": 8.48,
+   "d": 1.52,
+   "text": "is drew stribe i'm here to talk to you"
+  },
+  {
+   "t": 10.0,
+   "d": 0.8,
+   "text": "today about"
+  },
+  {
+   "t": 10.8,
+   "d": 3.04,
+   "text": "uh nethack.org uh d game launch"
+  },
+  {
+   "t": 13.84,
+   "d": 2.4,
+   "text": "the narcissist this is narcissistically"
+  },
+  {
+   "t": 16.24,
+   "d": 1.84,
+   "text": "named uh drew's game launcher"
+  },
+  {
+   "t": 18.08,
+   "d": 1.76,
+   "text": "uh that i put together for uh for the"
+  },
+  {
+   "t": 19.84,
+   "d": 1.44,
+   "text": "front of the servers a little bit about"
+  },
+  {
+   "t": 21.28,
+   "d": 0.96,
+   "text": "the wiki"
+  },
+  {
+   "t": 22.24,
+   "d": 1.84,
+   "text": "um i i feel like i'm a little bit of a"
+  },
+  {
+   "t": 24.08,
+   "d": 1.52,
+   "text": "nethack representative in here today so"
+  },
+  {
+   "t": 25.6,
+   "d": 1.6,
+   "text": "i'll say nethack a few times even though"
+  },
+  {
+   "t": 27.2,
+   "d": 1.6,
+   "text": "i mean roguelike in a number of cases"
+  },
+  {
+   "t": 28.8,
+   "d": 1.12,
+   "text": "but really i mean net hack because"
+  },
+  {
+   "t": 29.92,
+   "d": 1.36,
+   "text": "that's kind of a little bit of my tunnel"
+  },
+  {
+   "t": 31.28,
+   "d": 2.08,
+   "text": "vision world"
+  },
+  {
+   "t": 33.36,
+   "d": 2.16,
+   "text": "so just talking uh just a little bit"
+  },
+  {
+   "t": 35.52,
+   "d": 1.76,
+   "text": "about"
+  },
+  {
+   "t": 37.28,
+   "d": 1.68,
+   "text": "where we got started from a public"
+  },
+  {
+   "t": 38.96,
+   "d": 2.16,
+   "text": "server perspective briefly on me at"
+  },
+  {
+   "t": 41.12,
+   "d": 0.8,
+   "text": "least as i"
+  },
+  {
+   "t": 41.92,
+   "d": 1.68,
+   "text": "i've been an operations guy for a pretty"
+  },
+  {
+   "t": 43.6,
+   "d": 1.52,
+   "text": "long time so i'm going to be"
+  },
+  {
+   "t": 45.12,
+   "d": 2.4,
+   "text": "one of the least coding oriented persons"
+  },
+  {
+   "t": 47.52,
+   "d": 1.36,
+   "text": "here despite the amount of code that"
+  },
+  {
+   "t": 48.88,
+   "d": 0.96,
+   "text": "i've written"
+  },
+  {
+   "t": 49.84,
+   "d": 1.12,
+   "text": "if you've asked anyone that's ever"
+  },
+  {
+   "t": 50.96,
+   "d": 1.6,
+   "text": "inherited my code they will tell you and"
+  },
+  {
+   "t": 52.56,
+   "d": 1.44,
+   "text": "they'll agree with me i'm not a coder i"
+  },
+  {
+   "t": 54.0,
+   "d": 1.28,
+   "text": "shouldn't be a coder and i have no"
+  },
+  {
+   "t": 55.28,
+   "d": 0.8,
+   "text": "business"
+  },
+  {
+   "t": 56.08,
+   "d": 2.16,
+   "text": "writing anything that said sometimes it"
+  },
+  {
+   "t": 58.24,
+   "d": 1.52,
+   "text": "compiles and works and in the end that's"
+  },
+  {
+   "t": 59.76,
+   "d": 3.12,
+   "text": "kind of the bar that i sometimes go for"
+  },
+  {
+   "t": 62.88,
+   "d": 1.52,
+   "text": "i got lured out here kind of in the tech"
+  },
+  {
+   "t": 64.4,
+   "d": 1.84,
+   "text": "boom along with a bunch of others"
+  },
+  {
+   "t": 66.24,
+   "d": 2.16,
+   "text": "one of my other big projects was"
+  },
+  {
+   "t": 68.4,
+   "d": 1.68,
+   "text": "sourceforge.net so i'm one of the four"
+  },
+  {
+   "t": 70.08,
+   "d": 1.28,
+   "text": "folks that started that while working at"
+  },
+  {
+   "t": 71.36,
+   "d": 1.12,
+   "text": "va linux"
+  },
+  {
+   "t": 72.48,
+   "d": 1.52,
+   "text": "depending on how old you are you don't"
+  },
+  {
+   "t": 74.0,
+   "d": 1.6,
+   "text": "know at all what it is today or you're"
+  },
+  {
+   "t": 75.6,
+   "d": 1.36,
+   "text": "really happy with what it was way back"
+  },
+  {
+   "t": 76.96,
+   "d": 1.36,
+   "text": "or you're mad at me for something that"
+  },
+  {
+   "t": 78.32,
+   "d": 1.52,
+   "text": "happened in between"
+  },
+  {
+   "t": 79.84,
+   "d": 3.04,
+   "text": "so i wasn't there at the time uh"
+  },
+  {
+   "t": 82.88,
+   "d": 1.6,
+   "text": "i think the guy that owns it now assures"
+  },
+  {
+   "t": 84.48,
+   "d": 1.6,
+   "text": "me everything is better but we'll um"
+  },
+  {
+   "t": 86.08,
+   "d": 2.48,
+   "text": "give them the benefit of the doubt did"
+  },
+  {
+   "t": 88.56,
+   "d": 1.44,
+   "text": "tivo hacking work which gives a little"
+  },
+  {
+   "t": 90.0,
+   "d": 1.6,
+   "text": "bit of basis for"
+  },
+  {
+   "t": 91.6,
+   "d": 1.6,
+   "text": "where i started on the on the server"
+  },
+  {
+   "t": 93.2,
+   "d": 1.76,
+   "text": "side as i've always been and a number of"
+  },
+  {
+   "t": 94.96,
+   "d": 0.48,
+   "text": "people"
+  },
+  {
+   "t": 95.44,
+   "d": 1.2,
+   "text": "today at least have talked about"
+  },
+  {
+   "t": 96.64,
+   "d": 1.52,
+   "text": "community and the nethack community"
+  },
+  {
+   "t": 98.16,
+   "d": 1.36,
+   "text": "roguelike community"
+  },
+  {
+   "t": 99.52,
+   "d": 2.0,
+   "text": "that's something i found uh pretty"
+  },
+  {
+   "t": 101.52,
+   "d": 1.92,
+   "text": "endearing initially here is is that as i"
+  },
+  {
+   "t": 103.44,
+   "d": 2.0,
+   "text": "started playing nethack"
+  },
+  {
+   "t": 105.44,
+   "d": 1.52,
+   "text": "at this point i feel like i'm early or"
+  },
+  {
+   "t": 106.96,
+   "d": 2.16,
+   "text": "sorry late to the game i'm at 2000"
+  },
+  {
+   "t": 109.12,
+   "d": 1.44,
+   "text": "playing nethack i see people up here"
+  },
+  {
+   "t": 110.56,
+   "d": 1.44,
+   "text": "with slides starting in the 80s and"
+  },
+  {
+   "t": 112.0,
+   "d": 2.16,
+   "text": "early 90s and i feel like i'm"
+  },
+  {
+   "t": 114.16,
+   "d": 2.08,
+   "text": "i'm behind but so i've been playing"
+  },
+  {
+   "t": 116.24,
+   "d": 2.88,
+   "text": "nethack sort of for about 16 17 years"
+  },
+  {
+   "t": 119.12,
+   "d": 2.16,
+   "text": "i ended up wanting a place to play games"
+  },
+  {
+   "t": 121.28,
+   "d": 1.44,
+   "text": "and i'll talk about this in a bit but"
+  },
+  {
+   "t": 122.72,
+   "d": 0.4,
+   "text": "the only"
+  },
+  {
+   "t": 123.12,
+   "d": 3.12,
+   "text": "public servers at the time uh were in uh"
+  },
+  {
+   "t": 126.24,
+   "d": 2.0,
+   "text": "in europe mostly in finland uh there's"
+  },
+  {
+   "t": 128.24,
+   "d": 1.2,
+   "text": "actually been a pretty big"
+  },
+  {
+   "t": 129.44,
+   "d": 2.32,
+   "text": "at the time at least um kind of late 90s"
+  },
+  {
+   "t": 131.76,
+   "d": 2.08,
+   "text": "early 2000s uh finland sweden"
+  },
+  {
+   "t": 133.84,
+   "d": 2.08,
+   "text": "um and a bunch of the northern european"
+  },
+  {
+   "t": 135.92,
+   "d": 1.52,
+   "text": "countries reaching down kind of into"
+  },
+  {
+   "t": 137.44,
+   "d": 1.84,
+   "text": "germany where the main kind of footholds"
+  },
+  {
+   "t": 139.28,
+   "d": 2.32,
+   "text": "roguelike games and a particular nethack"
+  },
+  {
+   "t": 141.6,
+   "d": 2.0,
+   "text": "um so i will give a warning this is kind"
+  },
+  {
+   "t": 143.6,
+   "d": 0.72,
+   "text": "of the"
+  },
+  {
+   "t": 144.32,
+   "d": 1.84,
+   "text": "uh the least rogue-like talk today and"
+  },
+  {
+   "t": 146.16,
+   "d": 1.84,
+   "text": "as much as you know the specifics of the"
+  },
+  {
+   "t": 148.0,
+   "d": 1.52,
+   "text": "games i'll go a little bit less into"
+  },
+  {
+   "t": 149.52,
+   "d": 1.12,
+   "text": "more around the mechanics"
+  },
+  {
+   "t": 150.64,
+   "d": 1.84,
+   "text": "around the outside of those games"
+  },
+  {
+   "t": 152.48,
+   "d": 2.08,
+   "text": "statistics uh what we can do and sort of"
+  },
+  {
+   "t": 154.56,
+   "d": 0.4,
+   "text": "you know"
+  },
+  {
+   "t": 154.96,
+   "d": 2.24,
+   "text": "in terms of uh kind of bringing up the"
+  },
+  {
+   "t": 157.2,
+   "d": 1.12,
+   "text": "community and getting more people"
+  },
+  {
+   "t": 158.32,
+   "d": 0.56,
+   "text": "playing"
+  },
+  {
+   "t": 158.88,
+   "d": 1.52,
+   "text": "um it's actually been interesting"
+  },
+  {
+   "t": 160.4,
+   "d": 2.16,
+   "text": "there's been a resurgence of roguelike"
+  },
+  {
+   "t": 162.56,
+   "d": 0.88,
+   "text": "games and and"
+  },
+  {
+   "t": 163.44,
+   "d": 2.24,
+   "text": "nethack but others in general um and"
+  },
+  {
+   "t": 165.68,
+   "d": 1.44,
+   "text": "i'll show kind of some server stats that"
+  },
+  {
+   "t": 167.12,
+   "d": 1.12,
+   "text": "even show that uh"
+  },
+  {
+   "t": 168.24,
+   "d": 2.08,
+   "text": "where we kind of had a waning at least"
+  },
+  {
+   "t": 170.32,
+   "d": 2.32,
+   "text": "from my view uh 2005 6 7"
+  },
+  {
+   "t": 172.64,
+   "d": 1.12,
+   "text": "8 we've actually started to get some"
+  },
+  {
+   "t": 173.76,
+   "d": 3.2,
+   "text": "pick up again and i'm excited for that"
+  },
+  {
+   "t": 176.96,
+   "d": 3.04,
+   "text": "for some reason so it's just a brief"
+  },
+  {
+   "t": 180.0,
+   "d": 1.92,
+   "text": "history of public servers"
+  },
+  {
+   "t": 181.92,
+   "d": 2.88,
+   "text": "um and this is this will be nostalgia uh"
+  },
+  {
+   "t": 184.8,
+   "d": 1.28,
+   "text": "for me at least going back"
+  },
+  {
+   "t": 186.08,
+   "d": 2.16,
+   "text": "for those 16 years um the original"
+  },
+  {
+   "t": 188.24,
+   "d": 1.36,
+   "text": "servers for games like this"
+  },
+  {
+   "t": 189.6,
+   "d": 1.92,
+   "text": "um weren't actually kind of the public"
+  },
+  {
+   "t": 191.52,
+   "d": 1.68,
+   "text": "uh servers that we see today"
+  },
+  {
+   "t": 193.2,
+   "d": 1.68,
+   "text": "um folks that kind of grew up with this"
+  },
+  {
+   "t": 194.88,
+   "d": 2.4,
+   "text": "especially in the late 80s 90s"
+  },
+  {
+   "t": 197.28,
+   "d": 1.84,
+   "text": "during the rogue and and hack and net"
+  },
+  {
+   "t": 199.12,
+   "d": 1.28,
+   "text": "hack games might remember these from"
+  },
+  {
+   "t": 200.4,
+   "d": 0.88,
+   "text": "universities"
+  },
+  {
+   "t": 201.28,
+   "d": 1.36,
+   "text": "uh the servers were actually local"
+  },
+  {
+   "t": 202.64,
+   "d": 1.92,
+   "text": "servers you would shell into um and"
+  },
+  {
+   "t": 204.56,
+   "d": 2.08,
+   "text": "the bones files shared games uh the mail"
+  },
+  {
+   "t": 206.64,
+   "d": 1.12,
+   "text": "daemon that will come up and deliver"
+  },
+  {
+   "t": 207.76,
+   "d": 0.96,
+   "text": "your mail for you"
+  },
+  {
+   "t": 208.72,
+   "d": 1.52,
+   "text": "actually was delivering you email that"
+  },
+  {
+   "t": 210.24,
+   "d": 2.0,
+   "text": "you you know back before you got 300"
+  },
+  {
+   "t": 212.24,
+   "d": 0.96,
+   "text": "emails a day the"
+  },
+  {
+   "t": 213.2,
+   "d": 1.92,
+   "text": "the you know instance of getting a new"
+  },
+  {
+   "t": 215.12,
+   "d": 1.36,
+   "text": "email was interesting and so playing the"
+  },
+  {
+   "t": 216.48,
+   "d": 1.36,
+   "text": "game and have that show up"
+  },
+  {
+   "t": 217.84,
+   "d": 1.2,
+   "text": "uh was something that was also"
+  },
+  {
+   "t": 219.04,
+   "d": 2.0,
+   "text": "interesting uh the servers that were"
+  },
+  {
+   "t": 221.04,
+   "d": 1.04,
+   "text": "around at the time"
+  },
+  {
+   "t": 222.08,
+   "d": 1.76,
+   "text": "and i'm sure some folks remember these"
+  },
+  {
+   "t": 223.84,
+   "d": 1.44,
+   "text": "fishpool was the big one"
+  },
+  {
+   "t": 225.28,
+   "d": 2.88,
+   "text": "for a very long time out of finland but"
+  },
+  {
+   "t": 228.16,
+   "d": 2.0,
+   "text": "in january of 2001 when i was getting"
+  },
+  {
+   "t": 230.16,
+   "d": 1.04,
+   "text": "started in nethack"
+  },
+  {
+   "t": 231.2,
+   "d": 2.24,
+   "text": "they had 22 ascensions listed ascending"
+  },
+  {
+   "t": 233.44,
+   "d": 0.8,
+   "text": "was a lot harder"
+  },
+  {
+   "t": 234.24,
+   "d": 1.52,
+   "text": "sorry i feel like an old man back in the"
+  },
+  {
+   "t": 235.76,
+   "d": 2.4,
+   "text": "day ascension was really hard"
+  },
+  {
+   "t": 238.16,
+   "d": 2.96,
+   "text": "back in the day uh you know and and they"
+  },
+  {
+   "t": 241.12,
+   "d": 1.12,
+   "text": "develop features like"
+  },
+  {
+   "t": 242.24,
+   "d": 2.72,
+   "text": "is checkbot and f net net hack um the"
+  },
+  {
+   "t": 244.96,
+   "d": 1.28,
+   "text": "channel wasn't finished if you had"
+  },
+  {
+   "t": 246.24,
+   "d": 1.52,
+   "text": "hopped in there in 2001"
+  },
+  {
+   "t": 247.76,
+   "d": 2.08,
+   "text": "2000 uh to look at server games they"
+  },
+  {
+   "t": 249.84,
+   "d": 1.2,
+   "text": "would have instantly it's funny they"
+  },
+  {
+   "t": 251.04,
+   "d": 1.04,
+   "text": "would have switched from"
+  },
+  {
+   "t": 252.08,
+   "d": 1.44,
+   "text": "finnish to english if they knew that you"
+  },
+  {
+   "t": 253.52,
+   "d": 1.68,
+   "text": "were a non-finnish speaker at the time"
+  },
+  {
+   "t": 255.2,
+   "d": 1.6,
+   "text": "in fact i one of the little background"
+  },
+  {
+   "t": 256.8,
+   "d": 1.76,
+   "text": "pieces in the slide here that the rules"
+  },
+  {
+   "t": 258.56,
+   "d": 1.28,
+   "text": "on that channel say"
+  },
+  {
+   "t": 259.84,
+   "d": 1.44,
+   "text": "uh if there's english speaker or if"
+  },
+  {
+   "t": 261.28,
+   "d": 1.44,
+   "text": "there's non-finished speakers and"
+  },
+  {
+   "t": 262.72,
+   "d": 1.52,
+   "text": "channels switched to english"
+  },
+  {
+   "t": 264.24,
+   "d": 1.44,
+   "text": "and that was actually on the page for"
+  },
+  {
+   "t": 265.68,
+   "d": 1.84,
+   "text": "for the uh for the fish pool and for the"
+  },
+  {
+   "t": 267.52,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 268.4,
+   "d": 2.88,
+   "text": "uh for the fnet server channel um a few"
+  },
+  {
+   "t": 271.28,
+   "d": 1.76,
+   "text": "others a couple out of germany"
+  },
+  {
+   "t": 273.04,
+   "d": 2.64,
+   "text": "um sweden uh we're kind of the mainstay"
+  },
+  {
+   "t": 275.68,
+   "d": 1.6,
+   "text": "here so i i kind of got started with"
+  },
+  {
+   "t": 277.28,
+   "d": 1.44,
+   "text": "things largely because there weren't"
+  },
+  {
+   "t": 278.72,
+   "d": 3.04,
+   "text": "servers with local latency all of these"
+  },
+  {
+   "t": 281.76,
+   "d": 1.28,
+   "text": "i'll note were built on previous"
+  },
+  {
+   "t": 283.04,
+   "d": 2.24,
+   "text": "contributions so i i feel like i get a"
+  },
+  {
+   "t": 285.28,
+   "d": 1.76,
+   "text": "a bit of a pass so i got to basically do"
+  },
+  {
+   "t": 287.04,
+   "d": 1.6,
+   "text": "nothing but an operational role"
+  },
+  {
+   "t": 288.64,
+   "d": 1.36,
+   "text": "but it picked up and gave a place of"
+  },
+  {
+   "t": 290.0,
+   "d": 2.48,
+   "text": "people to play most importantly it gave"
+  },
+  {
+   "t": 292.48,
+   "d": 1.52,
+   "text": "me a place to play which is why i built"
+  },
+  {
+   "t": 294.0,
+   "d": 1.6,
+   "text": "it in the first place"
+  },
+  {
+   "t": 295.6,
+   "d": 2.32,
+   "text": "so why a public server and i wanted to"
+  },
+  {
+   "t": 297.92,
+   "d": 1.2,
+   "text": "ask a little bit"
+  },
+  {
+   "t": 299.12,
+   "d": 1.2,
+   "text": "the folks on twitch will just have to"
+  },
+  {
+   "t": 300.32,
+   "d": 1.92,
+   "text": "believe me on hand i'm just curious as"
+  },
+  {
+   "t": 302.24,
+   "d": 0.48,
+   "text": "to"
+  },
+  {
+   "t": 302.72,
+   "d": 3.28,
+   "text": "folks that play the two categories up"
+  },
+  {
+   "t": 306.0,
+   "d": 0.32,
+   "text": "front"
+  },
+  {
+   "t": 306.32,
+   "d": 2.16,
+   "text": "are people that play locally roguelike"
+  },
+  {
+   "t": 308.48,
+   "d": 1.52,
+   "text": "games in general whether net hack"
+  },
+  {
+   "t": 310.0,
+   "d": 1.68,
+   "text": "or other or whether in some way they're"
+  },
+  {
+   "t": 311.68,
+   "d": 1.52,
+   "text": "playing on some kind of online server"
+  },
+  {
+   "t": 313.2,
+   "d": 1.92,
+   "text": "but i'm just curious from a sampling"
+  },
+  {
+   "t": 315.12,
+   "d": 0.56,
+   "text": "here and"
+  },
+  {
+   "t": 315.68,
+   "d": 1.2,
+   "text": "show of hands for folks that play at"
+  },
+  {
+   "t": 316.88,
+   "d": 1.36,
+   "text": "least a reasonable percentage of their"
+  },
+  {
+   "t": 318.24,
+   "d": 2.32,
+   "text": "games on some kind of online server"
+  },
+  {
+   "t": 320.56,
+   "d": 2.32,
+   "text": "all right all right for anybody on"
+  },
+  {
+   "t": 322.88,
+   "d": 1.12,
+   "text": "twitch that's about half or a little"
+  },
+  {
+   "t": 324.0,
+   "d": 1.76,
+   "text": "more than half i think of the audience"
+  },
+  {
+   "t": 325.76,
+   "d": 3.04,
+   "text": "um so a number of reasons for that"
+  },
+  {
+   "t": 328.8,
+   "d": 3.04,
+   "text": "um shared high scores and bones were"
+  },
+  {
+   "t": 331.84,
+   "d": 1.52,
+   "text": "kind of the easy one"
+  },
+  {
+   "t": 333.36,
+   "d": 1.52,
+   "text": "you know i had no opportunity to see"
+  },
+  {
+   "t": 334.88,
+   "d": 2.08,
+   "text": "bones as a user that wasn't at the time"
+  },
+  {
+   "t": 336.96,
+   "d": 1.6,
+   "text": "at a university on a server with other"
+  },
+  {
+   "t": 338.56,
+   "d": 1.84,
+   "text": "people playing so bones files were"
+  },
+  {
+   "t": 340.4,
+   "d": 4.0,
+   "text": "fascinating and frankly my only possible"
+  },
+  {
+   "t": 344.4,
+   "d": 1.76,
+   "text": "ascension possibility you know i was"
+  },
+  {
+   "t": 346.16,
+   "d": 1.44,
+   "text": "never actually going to end up ascending"
+  },
+  {
+   "t": 347.6,
+   "d": 1.84,
+   "text": "unless i happened upon somebody's"
+  },
+  {
+   "t": 349.44,
+   "d": 1.92,
+   "text": "wizard bones or something really easy um"
+  },
+  {
+   "t": 351.36,
+   "d": 1.84,
+   "text": "and so just having the availability of"
+  },
+  {
+   "t": 353.2,
+   "d": 0.32,
+   "text": "that"
+  },
+  {
+   "t": 353.52,
+   "d": 1.76,
+   "text": "kind of hearst was one thing but the"
+  },
+  {
+   "t": 355.28,
+   "d": 1.28,
+   "text": "ability to actually have that"
+  },
+  {
+   "t": 356.56,
+   "d": 1.2,
+   "text": "you know randomly on a server was"
+  },
+  {
+   "t": 357.76,
+   "d": 1.84,
+   "text": "another i felt like if i randomly"
+  },
+  {
+   "t": 359.6,
+   "d": 1.92,
+   "text": "you know stumbled on bones it was a"
+  },
+  {
+   "t": 361.52,
+   "d": 1.2,
+   "text": "little less cheating than sticking a"
+  },
+  {
+   "t": 362.72,
+   "d": 1.44,
+   "text": "hurst level in there"
+  },
+  {
+   "t": 364.16,
+   "d": 2.48,
+   "text": "that said uh the other big reason and"
+  },
+  {
+   "t": 366.64,
+   "d": 1.12,
+   "text": "this is kind of the reason i actually"
+  },
+  {
+   "t": 367.76,
+   "d": 2.08,
+   "text": "started it was verified games"
+  },
+  {
+   "t": 369.84,
+   "d": 3.2,
+   "text": "and i've got a neurosis uh you know"
+  },
+  {
+   "t": 373.04,
+   "d": 1.92,
+   "text": "i like having kind of a verified spot"
+  },
+  {
+   "t": 374.96,
+   "d": 1.92,
+   "text": "for games for me when i play local games"
+  },
+  {
+   "t": 376.88,
+   "d": 1.6,
+   "text": "that i can't share with somebody i prove"
+  },
+  {
+   "t": 378.48,
+   "d": 1.76,
+   "text": "that i did something you know this is"
+  },
+  {
+   "t": 380.24,
+   "d": 1.52,
+   "text": "i never played you know even in the"
+  },
+  {
+   "t": 381.76,
+   "d": 1.52,
+   "text": "diablo games i never really played the"
+  },
+  {
+   "t": 383.28,
+   "d": 2.0,
+   "text": "local diablo i loved the diablo online"
+  },
+  {
+   "t": 385.28,
+   "d": 1.28,
+   "text": "so i could show hey this was my"
+  },
+  {
+   "t": 386.56,
+   "d": 1.36,
+   "text": "character or this is my hardcore"
+  },
+  {
+   "t": 387.92,
+   "d": 1.2,
+   "text": "character and as soon as those things"
+  },
+  {
+   "t": 389.12,
+   "d": 1.2,
+   "text": "got broken"
+  },
+  {
+   "t": 390.32,
+   "d": 2.16,
+   "text": "i felt like you know i didn't really"
+  },
+  {
+   "t": 392.48,
+   "d": 1.28,
+   "text": "have a reason to play anymore because i"
+  },
+  {
+   "t": 393.76,
+   "d": 1.36,
+   "text": "couldn't prove that my character was the"
+  },
+  {
+   "t": 395.12,
+   "d": 1.28,
+   "text": "best based on some not you know"
+  },
+  {
+   "t": 396.4,
+   "d": 1.44,
+   "text": "infallible server"
+  },
+  {
+   "t": 397.84,
+   "d": 2.56,
+   "text": "um so verified games i promise you fewer"
+  },
+  {
+   "t": 400.4,
+   "d": 1.44,
+   "text": "people care about your bragging rights"
+  },
+  {
+   "t": 401.84,
+   "d": 1.28,
+   "text": "on these verified games and you think"
+  },
+  {
+   "t": 403.12,
+   "d": 0.88,
+   "text": "they do"
+  },
+  {
+   "t": 404.0,
+   "d": 1.28,
+   "text": "i've tested this in a number of"
+  },
+  {
+   "t": 405.28,
+   "d": 2.64,
+   "text": "different spots it does not matter so on"
+  },
+  {
+   "t": 407.92,
+   "d": 0.96,
+   "text": "that note"
+  },
+  {
+   "t": 408.88,
+   "d": 2.56,
+   "text": "i have ascended seven times in net hack"
+  },
+  {
+   "t": 411.44,
+   "d": 2.16,
+   "text": "um on a server you cannot prove i didn't"
+  },
+  {
+   "t": 413.6,
+   "d": 2.48,
+   "text": "cheat on and i lost all the tty rex in a"
+  },
+  {
+   "t": 416.08,
+   "d": 2.88,
+   "text": "server crash a few years ago"
+  },
+  {
+   "t": 418.96,
+   "d": 2.24,
+   "text": "uh you can believe me i promise i'd"
+  },
+  {
+   "t": 421.2,
+   "d": 0.88,
+   "text": "ascended"
+  },
+  {
+   "t": 422.08,
+   "d": 2.32,
+   "text": "have not ascended 36. uh the other"
+  },
+  {
+   "t": 424.4,
+   "d": 1.52,
+   "text": "reason is standardized versions we"
+  },
+  {
+   "t": 425.92,
+   "d": 1.76,
+   "text": "started this off on a vanilla version"
+  },
+  {
+   "t": 427.68,
+   "d": 2.48,
+   "text": "we kind of grew our own we being me and"
+  },
+  {
+   "t": 430.16,
+   "d": 1.2,
+   "text": "the other server admin"
+  },
+  {
+   "t": 431.36,
+   "d": 1.76,
+   "text": "posie calendar you might know is paxed"
+  },
+  {
+   "t": 433.12,
+   "d": 1.76,
+   "text": "online uh"
+  },
+  {
+   "t": 434.88,
+   "d": 2.88,
+   "text": "pext yes he is fantastic and he carried"
+  },
+  {
+   "t": 437.76,
+   "d": 2.08,
+   "text": "a lot of nao for a long time when i"
+  },
+  {
+   "t": 439.84,
+   "d": 1.44,
+   "text": "went dark and actually tried to work and"
+  },
+  {
+   "t": 441.28,
+   "d": 1.84,
+   "text": "make money for a little while uh"
+  },
+  {
+   "t": 443.12,
+   "d": 2.4,
+   "text": "the so those standardized versions of"
+  },
+  {
+   "t": 445.52,
+   "d": 2.48,
+   "text": "this 343 nao that kind of got"
+  },
+  {
+   "t": 448.0,
+   "d": 1.68,
+   "text": "was the most popular version for a while"
+  },
+  {
+   "t": 449.68,
+   "d": 1.76,
+   "text": "until 3 6 kind of"
+  },
+  {
+   "t": 451.44,
+   "d": 2.56,
+   "text": "superseded things and again we've kind"
+  },
+  {
+   "t": 454.0,
+   "d": 1.2,
+   "text": "of a couple of folks that talked about"
+  },
+  {
+   "t": 455.2,
+   "d": 1.04,
+   "text": "perma-death but if you're going to"
+  },
+  {
+   "t": 456.24,
+   "d": 1.52,
+   "text": "perma-die you might as well complain"
+  },
+  {
+   "t": 457.76,
+   "d": 1.68,
+   "text": "about it point to the tty wreck and at"
+  },
+  {
+   "t": 459.44,
+   "d": 0.32,
+   "text": "least"
+  },
+  {
+   "t": 459.76,
+   "d": 2.48,
+   "text": "you know be able to complain it was"
+  },
+  {
+   "t": 462.24,
+   "d": 2.08,
+   "text": "accessible at work so i've begun"
+  },
+  {
+   "t": 464.32,
+   "d": 1.68,
+   "text": "we can clock the hours years and years"
+  },
+  {
+   "t": 466.0,
+   "d": 1.52,
+   "text": "and decades of people wasting time at"
+  },
+  {
+   "t": 467.52,
+   "d": 0.56,
+   "text": "work"
+  },
+  {
+   "t": 468.08,
+   "d": 3.2,
+   "text": "uh on net heck and it can tie into other"
+  },
+  {
+   "t": 471.28,
+   "d": 1.92,
+   "text": "other infrastructure uh like"
+  },
+  {
+   "t": 473.2,
+   "d": 2.16,
+   "text": "you know like free node or other spots"
+  },
+  {
+   "t": 475.36,
+   "d": 0.88,
+   "text": "if you don't"
+  },
+  {
+   "t": 476.24,
+   "d": 2.48,
+   "text": "if you don't yet i mean free note irc a"
+  },
+  {
+   "t": 478.72,
+   "d": 1.76,
+   "text": "pretty common open source irt channel"
+  },
+  {
+   "t": 480.48,
+   "d": 2.32,
+   "text": "around pound nut hack idles 250 or 300"
+  },
+  {
+   "t": 482.8,
+   "d": 1.76,
+   "text": "people these days um which is"
+  },
+  {
+   "t": 484.56,
+   "d": 2.8,
+   "text": "i don't know for a for a niche game like"
+  },
+  {
+   "t": 487.36,
+   "d": 0.48,
+   "text": "uh"
+  },
+  {
+   "t": 487.84,
+   "d": 2.56,
+   "text": "like net hack is a fairly large kind of"
+  },
+  {
+   "t": 490.4,
+   "d": 0.88,
+   "text": "irc"
+  },
+  {
+   "t": 491.28,
+   "d": 1.52,
+   "text": "group in fact you can get a lot of help"
+  },
+  {
+   "t": 492.8,
+   "d": 1.52,
+   "text": "uh there um"
+  },
+  {
+   "t": 494.32,
+   "d": 1.6,
+   "text": "and and importantly here and i'll talk"
+  },
+  {
+   "t": 495.92,
+   "d": 1.68,
+   "text": "to this uh josh i think"
+  },
+  {
+   "t": 497.6,
+   "d": 2.08,
+   "text": "alluded to this uh 45 minutes ago in his"
+  },
+  {
+   "t": 499.68,
+   "d": 1.84,
+   "text": "talk i was making the game accessible to"
+  },
+  {
+   "t": 501.52,
+   "d": 1.68,
+   "text": "more people so he's doing this with some"
+  },
+  {
+   "t": 503.2,
+   "d": 1.64,
+   "text": "sound and cool effects"
+  },
+  {
+   "t": 504.84,
+   "d": 3.0,
+   "text": "um on his end uh you know i'm i'm doing"
+  },
+  {
+   "t": 507.84,
+   "d": 1.28,
+   "text": "this with net hack static but"
+  },
+  {
+   "t": 509.12,
+   "d": 1.52,
+   "text": "accessibility of the game"
+  },
+  {
+   "t": 510.64,
+   "d": 2.72,
+   "text": "uh and what i i actually did i was at"
+  },
+  {
+   "t": 513.36,
+   "d": 1.36,
+   "text": "fault for this early on was kind of"
+  },
+  {
+   "t": 514.72,
+   "d": 1.68,
+   "text": "leaving out the windows only"
+  },
+  {
+   "t": 516.4,
+   "d": 1.68,
+   "text": "low barrier to entry crowd actually when"
+  },
+  {
+   "t": 518.08,
+   "d": 1.84,
+   "text": "i found out reddit had a netcast nethack"
+  },
+  {
+   "t": 519.92,
+   "d": 1.6,
+   "text": "channel i rolled my eyes and i said we"
+  },
+  {
+   "t": 521.52,
+   "d": 1.12,
+   "text": "don't want the red you know the reddit"
+  },
+  {
+   "t": 522.64,
+   "d": 2.24,
+   "text": "crowd on that hacked or not"
+  },
+  {
+   "t": 524.88,
+   "d": 1.12,
+   "text": "you know what though there's there's a"
+  },
+  {
+   "t": 526.0,
+   "d": 2.32,
+   "text": "lot of them and uh"
+  },
+  {
+   "t": 528.32,
+   "d": 1.68,
+   "text": "them probably several people and i'm on"
+  },
+  {
+   "t": 530.0,
+   "d": 1.84,
+   "text": "reddit now but it's uh"
+  },
+  {
+   "t": 531.84,
+   "d": 2.64,
+   "text": "i sounded like an old man uh yeah i kind"
+  },
+  {
+   "t": 534.48,
+   "d": 1.2,
+   "text": "of rid of the count"
+  },
+  {
+   "t": 535.68,
+   "d": 1.92,
+   "text": "the uh but no but there's a lot of folks"
+  },
+  {
+   "t": 537.6,
+   "d": 1.28,
+   "text": "there that have a lot of input and so"
+  },
+  {
+   "t": 538.88,
+   "d": 1.12,
+   "text": "leaving out that crowd or you know"
+  },
+  {
+   "t": 540.0,
+   "d": 1.28,
+   "text": "making the game more accessible is"
+  },
+  {
+   "t": 541.28,
+   "d": 1.04,
+   "text": "actually kind of important i think"
+  },
+  {
+   "t": 542.32,
+   "d": 0.64,
+   "text": "towards"
+  },
+  {
+   "t": 542.96,
+   "d": 2.48,
+   "text": "you know continuing a community so just"
+  },
+  {
+   "t": 545.44,
+   "d": 2.24,
+   "text": "on on nao in general so it started in"
+  },
+  {
+   "t": 547.68,
+   "d": 1.28,
+   "text": "2001"
+  },
+  {
+   "t": 548.96,
+   "d": 1.2,
+   "text": "again it was really just kind of a"
+  },
+  {
+   "t": 550.16,
+   "d": 1.68,
+   "text": "platform for me the fact that other"
+  },
+  {
+   "t": 551.84,
+   "d": 1.28,
+   "text": "people hopped on it was"
+  },
+  {
+   "t": 553.12,
+   "d": 1.36,
+   "text": "mildly annoying because when they asked"
+  },
+  {
+   "t": 554.48,
+   "d": 1.12,
+   "text": "for things i didn't want to have to do"
+  },
+  {
+   "t": 555.6,
+   "d": 0.96,
+   "text": "it for them but"
+  },
+  {
+   "t": 556.56,
+   "d": 2.0,
+   "text": "um you know i didn't have a i needed a"
+  },
+  {
+   "t": 558.56,
+   "d": 1.44,
+   "text": "game launcher in front of it"
+  },
+  {
+   "t": 560.0,
+   "d": 1.44,
+   "text": "named it d game launch and i'll go into"
+  },
+  {
+   "t": 561.44,
+   "d": 1.84,
+   "text": "a little bit of that um"
+  },
+  {
+   "t": 563.28,
+   "d": 2.0,
+   "text": "really though the the game the server"
+  },
+  {
+   "t": 565.28,
+   "d": 2.16,
+   "text": "didn't hit stride until 2003"
+  },
+  {
+   "t": 567.44,
+   "d": 1.84,
+   "text": "and the game watching was something that"
+  },
+  {
+   "t": 569.28,
+   "d": 2.16,
+   "text": "um basically i couldn't beat the game"
+  },
+  {
+   "t": 571.44,
+   "d": 1.44,
+   "text": "otherwise so"
+  },
+  {
+   "t": 572.88,
+   "d": 1.2,
+   "text": "watching other people play with"
+  },
+  {
+   "t": 574.08,
+   "d": 0.96,
+   "text": "something that i thought might be"
+  },
+  {
+   "t": 575.04,
+   "d": 0.96,
+   "text": "interesting"
+  },
+  {
+   "t": 576.0,
+   "d": 1.44,
+   "text": "and i'll talk about it piggybacks off"
+  },
+  {
+   "t": 577.44,
+   "d": 2.0,
+   "text": "the work of some other folks but it"
+  },
+  {
+   "t": 579.44,
+   "d": 1.76,
+   "text": "made a lot of sense and as it's i think"
+  },
+  {
+   "t": 581.2,
+   "d": 1.52,
+   "text": "impacted the ability for a lot of people"
+  },
+  {
+   "t": 582.72,
+   "d": 1.6,
+   "text": "to ascend quickly today"
+  },
+  {
+   "t": 584.32,
+   "d": 2.08,
+   "text": "we regularly hit 30 or 40 simultaneous"
+  },
+  {
+   "t": 586.4,
+   "d": 0.96,
+   "text": "games"
+  },
+  {
+   "t": 587.36,
+   "d": 1.44,
+   "text": "i joke here world of warcraft i'm going"
+  },
+  {
+   "t": 588.8,
+   "d": 2.24,
+   "text": "to make it so we've"
+  },
+  {
+   "t": 591.04,
+   "d": 2.32,
+   "text": "3.6 million played games overall so it's"
+  },
+  {
+   "t": 593.36,
+   "d": 1.28,
+   "text": "a reasonable subset"
+  },
+  {
+   "t": 594.64,
+   "d": 2.16,
+   "text": "um i've been a bit of a vanilla net hack"
+  },
+  {
+   "t": 596.8,
+   "d": 1.04,
+   "text": "stalwart in the past"
+  },
+  {
+   "t": 597.84,
+   "d": 1.76,
+   "text": "accused of not moving you know not"
+  },
+  {
+   "t": 599.6,
+   "d": 1.68,
+   "text": "supporting variants enough and"
+  },
+  {
+   "t": 601.28,
+   "d": 2.16,
+   "text": "well d-net hack and unnet hack and then"
+  },
+  {
+   "t": 603.44,
+   "d": 1.12,
+   "text": "heck 4 and"
+  },
+  {
+   "t": 604.56,
+   "d": 2.56,
+   "text": "many others have kind of come around all"
+  },
+  {
+   "t": 607.12,
+   "d": 1.28,
+   "text": "those guys are for the most part"
+  },
+  {
+   "t": 608.4,
+   "d": 3.28,
+   "text": "on the dev team now so"
+  },
+  {
+   "t": 611.68,
+   "d": 2.08,
+   "text": "you know i've been kind of a stalwart"
+  },
+  {
+   "t": 613.76,
+   "d": 1.76,
+   "text": "one thing i'll bring up here if i don't"
+  },
+  {
+   "t": 615.52,
+   "d": 1.28,
+   "text": "emphasize it later"
+  },
+  {
+   "t": 616.8,
+   "d": 1.84,
+   "text": "everything that i'm doing here is open"
+  },
+  {
+   "t": 618.64,
+   "d": 2.0,
+   "text": "source um"
+  },
+  {
+   "t": 620.64,
+   "d": 1.84,
+   "text": "and i just should say fsf buddies free"
+  },
+  {
+   "t": 622.48,
+   "d": 1.36,
+   "text": "for the for the free software foundation"
+  },
+  {
+   "t": 623.84,
+   "d": 0.72,
+   "text": "folks um"
+  },
+  {
+   "t": 624.56,
+   "d": 2.32,
+   "text": "the other one the uh even if it's not"
+  },
+  {
+   "t": 626.88,
+   "d": 1.6,
+   "text": "packaged nicely i'm really bad at"
+  },
+  {
+   "t": 628.48,
+   "d": 1.6,
+   "text": "packaging things up for other people to"
+  },
+  {
+   "t": 630.08,
+   "d": 0.72,
+   "text": "consume"
+  },
+  {
+   "t": 630.8,
+   "d": 1.44,
+   "text": "other people luckily do that for me"
+  },
+  {
+   "t": 632.24,
+   "d": 1.28,
+   "text": "these days and a lot of things but"
+  },
+  {
+   "t": 633.52,
+   "d": 1.92,
+   "text": "anything anyone wants on the site"
+  },
+  {
+   "t": 635.44,
+   "d": 1.92,
+   "text": "up to and including 200 gigabytes of"
+  },
+  {
+   "t": 637.36,
+   "d": 1.6,
+   "text": "compressed tty rex if you have a good"
+  },
+  {
+   "t": 638.96,
+   "d": 1.36,
+   "text": "reason to use them"
+  },
+  {
+   "t": 640.32,
+   "d": 1.44,
+   "text": "ship me a hard drive i'll copy them off"
+  },
+  {
+   "t": 641.76,
+   "d": 1.84,
+   "text": "and ship them to your back so"
+  },
+  {
+   "t": 643.6,
+   "d": 2.32,
+   "text": "everything's available as much as you"
+  },
+  {
+   "t": 645.92,
+   "d": 1.12,
+   "text": "want so"
+  },
+  {
+   "t": 647.04,
+   "d": 2.56,
+   "text": "um the the new thing uh the piece that"
+  },
+  {
+   "t": 649.6,
+   "d": 1.36,
+   "text": "was introduced that was a little"
+  },
+  {
+   "t": 650.96,
+   "d": 0.56,
+   "text": "different"
+  },
+  {
+   "t": 651.52,
+   "d": 2.72,
+   "text": "uh was this tty voyeurism uh and never"
+  },
+  {
+   "t": 654.24,
+   "d": 0.64,
+   "text": "tell people"
+  },
+  {
+   "t": 654.88,
+   "d": 1.76,
+   "text": "you know you're a tty warrior we i"
+  },
+  {
+   "t": 656.64,
+   "d": 1.76,
+   "text": "actually got a little pushback on this"
+  },
+  {
+   "t": 658.4,
+   "d": 1.44,
+   "text": "uh when it first came out because folks"
+  },
+  {
+   "t": 659.84,
+   "d": 1.2,
+   "text": "were a little bit proud of the fact they"
+  },
+  {
+   "t": 661.04,
+   "d": 0.88,
+   "text": "could get down to"
+  },
+  {
+   "t": 661.92,
+   "d": 1.84,
+   "text": "get home and and beat the game and"
+  },
+  {
+   "t": 663.76,
+   "d": 1.28,
+   "text": "having people watch them and give away"
+  },
+  {
+   "t": 665.04,
+   "d": 0.88,
+   "text": "their secrets"
+  },
+  {
+   "t": 665.92,
+   "d": 1.36,
+   "text": "uh was not something they wanted that's"
+  },
+  {
+   "t": 667.28,
+   "d": 1.52,
+   "text": "the big banner you see if you ever log"
+  },
+  {
+   "t": 668.8,
+   "d": 1.36,
+   "text": "in today that says by the way all the"
+  },
+  {
+   "t": 670.16,
+   "d": 2.16,
+   "text": "games are watched so nobody can complain"
+  },
+  {
+   "t": 672.32,
+   "d": 1.76,
+   "text": "um it did used to be fairly normal to"
+  },
+  {
+   "t": 674.08,
+   "d": 1.6,
+   "text": "play for years and never ascend i did"
+  },
+  {
+   "t": 675.68,
+   "d": 0.96,
+   "text": "for a year or two"
+  },
+  {
+   "t": 676.64,
+   "d": 2.08,
+   "text": "um thus the game watching so i could"
+  },
+  {
+   "t": 678.72,
+   "d": 1.36,
+   "text": "watch people do it and then"
+  },
+  {
+   "t": 680.08,
+   "d": 1.76,
+   "text": "maybe do it myself but it's actually"
+  },
+  {
+   "t": 681.84,
+   "d": 2.48,
+   "text": "pretty normal now uh to watch others and"
+  },
+  {
+   "t": 684.32,
+   "d": 1.44,
+   "text": "i have a number of players that pick it"
+  },
+  {
+   "t": 685.76,
+   "d": 1.2,
+   "text": "up and actually ascend within a few"
+  },
+  {
+   "t": 686.96,
+   "d": 1.76,
+   "text": "weeks which makes those of us that spent"
+  },
+  {
+   "t": 688.72,
+   "d": 1.2,
+   "text": "years and years that a little little"
+  },
+  {
+   "t": 689.92,
+   "d": 0.88,
+   "text": "jealous but"
+  },
+  {
+   "t": 690.8,
+   "d": 2.88,
+   "text": "um i'm just gonna i mean i'm sure folks"
+  },
+  {
+   "t": 693.68,
+   "d": 0.4,
+   "text": "here"
+  },
+  {
+   "t": 694.08,
+   "d": 1.6,
+   "text": "asked for raise your hand i mean"
+  },
+  {
+   "t": 695.68,
+   "d": 1.76,
+   "text": "depending on what time you picked up uh"
+  },
+  {
+   "t": 697.44,
+   "d": 2.08,
+   "text": "roguelikes or nethack um it's quite"
+  },
+  {
+   "t": 699.52,
+   "d": 1.44,
+   "text": "possible you spent five or ten years"
+  },
+  {
+   "t": 700.96,
+   "d": 1.36,
+   "text": "playing and never ascended it's actually"
+  },
+  {
+   "t": 702.32,
+   "d": 1.2,
+   "text": "probably a number of people still in"
+  },
+  {
+   "t": 703.52,
+   "d": 1.12,
+   "text": "that category"
+  },
+  {
+   "t": 704.64,
+   "d": 2.56,
+   "text": "um uh it doesn't change the game it just"
+  },
+  {
+   "t": 707.2,
+   "d": 1.28,
+   "text": "accelerates the learning curve"
+  },
+  {
+   "t": 708.48,
+   "d": 1.92,
+   "text": "um and i'll it's a prehistoric twitch"
+  },
+  {
+   "t": 710.4,
+   "d": 2.08,
+   "text": "right we knew way back then people knew"
+  },
+  {
+   "t": 712.48,
+   "d": 1.6,
+   "text": "watching games you know"
+  },
+  {
+   "t": 714.08,
+   "d": 1.2,
+   "text": "it looked like watching games is going"
+  },
+  {
+   "t": 715.28,
+   "d": 1.36,
+   "text": "to be interesting clearly the day that's"
+  },
+  {
+   "t": 716.64,
+   "d": 1.12,
+   "text": "carried forward with"
+  },
+  {
+   "t": 717.76,
+   "d": 1.36,
+   "text": "technology a little more advanced than"
+  },
+  {
+   "t": 719.12,
+   "d": 2.0,
+   "text": "tty playback but"
+  },
+  {
+   "t": 721.12,
+   "d": 1.28,
+   "text": "in the form of stuff like twitch which"
+  },
+  {
+   "t": 722.4,
+   "d": 1.84,
+   "text": "we're on right now um"
+  },
+  {
+   "t": 724.24,
+   "d": 1.28,
+   "text": "i was going to do this and i'll kind of"
+  },
+  {
+   "t": 725.52,
+   "d": 2.32,
+   "text": "skip it because i think it'll um"
+  },
+  {
+   "t": 727.84,
+   "d": 1.44,
+   "text": "actually i won't completely skip if you"
+  },
+  {
+   "t": 729.28,
+   "d": 2.4,
+   "text": "haven't seen it before um"
+  },
+  {
+   "t": 731.68,
+   "d": 2.0,
+   "text": "you know watching games online is"
+  },
+  {
+   "t": 733.68,
+   "d": 1.76,
+   "text": "actually fairly straightforward over"
+  },
+  {
+   "t": 735.44,
+   "d": 1.44,
+   "text": "telnet or ssh"
+  },
+  {
+   "t": 736.88,
+   "d": 1.52,
+   "text": "i was a little stoked because earlier on"
+  },
+  {
+   "t": 738.4,
+   "d": 1.84,
+   "text": "today i was a guy named feck"
+  },
+  {
+   "t": 740.24,
+   "d": 1.52,
+   "text": "who's one of the best serial ascenders"
+  },
+  {
+   "t": 741.76,
+   "d": 1.36,
+   "text": "in the game but this is one of the"
+  },
+  {
+   "t": 743.12,
+   "d": 1.12,
+   "text": "things that makes"
+  },
+  {
+   "t": 744.24,
+   "d": 1.52,
+   "text": "uh you know playing on an online server"
+  },
+  {
+   "t": 745.76,
+   "d": 2.24,
+   "text": "interesting is unique at any given time"
+  },
+  {
+   "t": 748.0,
+   "d": 0.96,
+   "text": "of course i'm going to pick someone"
+  },
+  {
+   "t": 748.96,
+   "d": 1.44,
+   "text": "that's not moving or not doing anything"
+  },
+  {
+   "t": 750.4,
+   "d": 1.04,
+   "text": "but"
+  },
+  {
+   "t": 751.44,
+   "d": 1.52,
+   "text": "at any given time you can actually watch"
+  },
+  {
+   "t": 752.96,
+   "d": 1.28,
+   "text": "people play and if you if you look at"
+  },
+  {
+   "t": 754.24,
+   "d": 1.6,
+   "text": "statistics you can even find people that"
+  },
+  {
+   "t": 755.84,
+   "d": 0.88,
+   "text": "are"
+  },
+  {
+   "t": 756.72,
+   "d": 1.68,
+   "text": "that are really good or really bad at"
+  },
+  {
+   "t": 758.4,
+   "d": 1.68,
+   "text": "playing um i"
+  },
+  {
+   "t": 760.08,
+   "d": 3.12,
+   "text": "i've spent countless hours um you know"
+  },
+  {
+   "t": 763.2,
+   "d": 1.52,
+   "text": "in telnet sessions or more recently here"
+  },
+  {
+   "t": 764.72,
+   "d": 1.2,
+   "text": "in the web browser-based version"
+  },
+  {
+   "t": 765.92,
+   "d": 1.6,
+   "text": "watching folks"
+  },
+  {
+   "t": 767.52,
+   "d": 1.76,
+   "text": "but again if you haven't seen it before"
+  },
+  {
+   "t": 769.28,
+   "d": 1.36,
+   "text": "exact same as the game you know"
+  },
+  {
+   "t": 770.64,
+   "d": 1.84,
+   "text": "this is actually a guy someone playing"
+  },
+  {
+   "t": 772.48,
+   "d": 1.36,
+   "text": "live um"
+  },
+  {
+   "t": 773.84,
+   "d": 2.64,
+   "text": "no idea how good they are but well"
+  },
+  {
+   "t": 776.48,
+   "d": 1.52,
+   "text": "usually the answer is not very but"
+  },
+  {
+   "t": 778.0,
+   "d": 2.0,
+   "text": "sometimes there's"
+  },
+  {
+   "t": 780.0,
+   "d": 1.92,
+   "text": "there's exceptions um if you're online"
+  },
+  {
+   "t": 781.92,
+   "d": 2.24,
+   "text": "now it's just at all.org net hack"
+  },
+  {
+   "t": 784.16,
+   "d": 2.4,
+   "text": "definitely easy way to kill time someone"
+  },
+  {
+   "t": 786.56,
+   "d": 1.28,
+   "text": "was talking to me earlier about making"
+  },
+  {
+   "t": 787.84,
+   "d": 1.44,
+   "text": "screen savers out of it sounds like a"
+  },
+  {
+   "t": 789.28,
+   "d": 1.92,
+   "text": "great idea to me"
+  },
+  {
+   "t": 791.2,
+   "d": 2.4,
+   "text": "so uh quickly on d game launch this is"
+  },
+  {
+   "t": 793.6,
+   "d": 1.68,
+   "text": "basically the front end"
+  },
+  {
+   "t": 795.28,
+   "d": 1.84,
+   "text": "i built it for nethack it really is for"
+  },
+  {
+   "t": 797.12,
+   "d": 1.76,
+   "text": "any tty based front end you know"
+  },
+  {
+   "t": 798.88,
+   "d": 2.0,
+   "text": "any game it's short for drew's game"
+  },
+  {
+   "t": 800.88,
+   "d": 1.6,
+   "text": "launcher it has no"
+  },
+  {
+   "t": 802.48,
+   "d": 1.44,
+   "text": "big meaning other than the fact that i"
+  },
+  {
+   "t": 803.92,
+   "d": 1.68,
+   "text": "named things really horribly again not a"
+  },
+  {
+   "t": 805.6,
+   "d": 1.44,
+   "text": "programmer"
+  },
+  {
+   "t": 807.04,
+   "d": 1.76,
+   "text": "my answer to portability was it runs on"
+  },
+  {
+   "t": 808.8,
+   "d": 1.6,
+   "text": "my system so other people eventually"
+  },
+  {
+   "t": 810.4,
+   "d": 2.08,
+   "text": "packaged it up made it work on bsd and a"
+  },
+  {
+   "t": 812.48,
+   "d": 0.96,
+   "text": "bunch of other things"
+  },
+  {
+   "t": 813.44,
+   "d": 1.36,
+   "text": "at the time it worked on mine which was"
+  },
+  {
+   "t": 814.8,
+   "d": 2.96,
+   "text": "enough it is a massive security headache"
+  },
+  {
+   "t": 817.76,
+   "d": 1.52,
+   "text": "it does employ game watching that's"
+  },
+  {
+   "t": 819.28,
+   "d": 1.28,
+   "text": "probably the biggest reason why i think"
+  },
+  {
+   "t": 820.56,
+   "d": 0.48,
+   "text": "people"
+  },
+  {
+   "t": 821.04,
+   "d": 2.0,
+   "text": "still use it today as a front-end is not"
+  },
+  {
+   "t": 823.04,
+   "d": 1.44,
+   "text": "terribly impressive but it does do the"
+  },
+  {
+   "t": 824.48,
+   "d": 2.08,
+   "text": "game watching pretty well"
+  },
+  {
+   "t": 826.56,
+   "d": 2.64,
+   "text": "and it piggybacks so i didn't invent tty"
+  },
+  {
+   "t": 829.2,
+   "d": 1.92,
+   "text": "rec every time i can where credit is due"
+  },
+  {
+   "t": 831.12,
+   "d": 0.56,
+   "text": "i'll"
+  },
+  {
+   "t": 831.68,
+   "d": 1.36,
+   "text": "name the folks that started it this was"
+  },
+  {
+   "t": 833.04,
+   "d": 1.2,
+   "text": "actually something that somebody else"
+  },
+  {
+   "t": 834.24,
+   "d": 1.36,
+   "text": "did for a different reason"
+  },
+  {
+   "t": 835.6,
+   "d": 1.92,
+   "text": "that i ended up taking a look at and"
+  },
+  {
+   "t": 837.52,
+   "d": 2.16,
+   "text": "repurposing um and things like simple"
+  },
+  {
+   "t": 839.68,
+   "d": 1.28,
+   "text": "mail and implements to do the mail"
+  },
+  {
+   "t": 840.96,
+   "d": 2.4,
+   "text": "watching this is the only method for"
+  },
+  {
+   "t": 843.36,
+   "d": 1.6,
+   "text": "player interaction during a game so it's"
+  },
+  {
+   "t": 844.96,
+   "d": 1.6,
+   "text": "kind of fun to be able to send a mail to"
+  },
+  {
+   "t": 846.56,
+   "d": 1.04,
+   "text": "a player and"
+  },
+  {
+   "t": 847.6,
+   "d": 2.16,
+   "text": "interact usually people type back by"
+  },
+  {
+   "t": 849.76,
+   "d": 2.32,
+   "text": "putting junk on the screen kind of a"
+  },
+  {
+   "t": 852.08,
+   "d": 1.28,
+   "text": "you know pound just typing something of"
+  },
+  {
+   "t": 853.36,
+   "d": 1.28,
+   "text": "nonsense but there is a little bit of"
+  },
+  {
+   "t": 854.64,
+   "d": 2.0,
+   "text": "interaction in the game"
+  },
+  {
+   "t": 856.64,
+   "d": 2.0,
+   "text": "quickly on the server anatomy i mean so"
+  },
+  {
+   "t": 858.64,
+   "d": 2.72,
+   "text": "basically then process wise"
+  },
+  {
+   "t": 861.36,
+   "d": 1.36,
+   "text": "and i want to encourage other folks that"
+  },
+  {
+   "t": 862.72,
+   "d": 1.84,
+   "text": "are interested in doing this it's fairly"
+  },
+  {
+   "t": 864.56,
+   "d": 1.92,
+   "text": "arcane from a unixy standpoint and that"
+  },
+  {
+   "t": 866.48,
+   "d": 1.2,
+   "text": "it's kind of a"
+  },
+  {
+   "t": 867.68,
+   "d": 1.84,
+   "text": "an inept process that launches basically"
+  },
+  {
+   "t": 869.52,
+   "d": 1.44,
+   "text": "this front end processor that they're a"
+  },
+  {
+   "t": 870.96,
+   "d": 1.36,
+   "text": "process that forks"
+  },
+  {
+   "t": 872.32,
+   "d": 2.08,
+   "text": "splits off a game watch thread on one"
+  },
+  {
+   "t": 874.4,
+   "d": 1.36,
+   "text": "you know a game spooling thread and the"
+  },
+  {
+   "t": 875.76,
+   "d": 2.4,
+   "text": "actual game in the other"
+  },
+  {
+   "t": 878.16,
+   "d": 1.52,
+   "text": "it should support about any game and in"
+  },
+  {
+   "t": 879.68,
+   "d": 1.36,
+   "text": "fact it does front end a lot of"
+  },
+  {
+   "t": 881.04,
+   "d": 0.88,
+   "text": "different games now"
+  },
+  {
+   "t": 881.92,
+   "d": 1.84,
+   "text": "mostly nethack variants that i work with"
+  },
+  {
+   "t": 883.76,
+   "d": 1.28,
+   "text": "but there's not a reason it can't be"
+  },
+  {
+   "t": 885.04,
+   "d": 0.8,
+   "text": "others"
+  },
+  {
+   "t": 885.84,
+   "d": 1.44,
+   "text": "a number of things happen outside of the"
+  },
+  {
+   "t": 887.28,
+   "d": 2.16,
+   "text": "jail for me it's website and irc bots"
+  },
+  {
+   "t": 889.44,
+   "d": 1.52,
+   "text": "things like that"
+  },
+  {
+   "t": 890.96,
+   "d": 3.44,
+   "text": "but it's a fairly generic front end"
+  },
+  {
+   "t": 894.4,
+   "d": 2.16,
+   "text": "challenges and there are someone on a"
+  },
+  {
+   "t": 896.56,
+   "d": 1.2,
+   "text": "server basis"
+  },
+  {
+   "t": 897.76,
+   "d": 2.24,
+   "text": "a lot of these are around security as as"
+  },
+  {
+   "t": 900.0,
+   "d": 1.6,
+   "text": "much as i'd love for just"
+  },
+  {
+   "t": 901.6,
+   "d": 1.36,
+   "text": "you know running that hack on a local"
+  },
+  {
+   "t": 902.96,
+   "d": 2.32,
+   "text": "machine is relatively safe if it crashes"
+  },
+  {
+   "t": 905.28,
+   "d": 1.2,
+   "text": "or has a problem you're not going to end"
+  },
+  {
+   "t": 906.48,
+   "d": 1.04,
+   "text": "up with an issue"
+  },
+  {
+   "t": 907.52,
+   "d": 1.52,
+   "text": "but in this case i've got a lot of spots"
+  },
+  {
+   "t": 909.04,
+   "d": 2.16,
+   "text": "to fail and cross my fingers knock on"
+  },
+  {
+   "t": 911.2,
+   "d": 0.8,
+   "text": "wood"
+  },
+  {
+   "t": 912.0,
+   "d": 1.36,
+   "text": "either we're good enough to have not"
+  },
+  {
+   "t": 913.36,
+   "d": 1.36,
+   "text": "been owned yet or people have been nice"
+  },
+  {
+   "t": 914.72,
+   "d": 1.52,
+   "text": "enough to own me and fix it on the way"
+  },
+  {
+   "t": 916.24,
+   "d": 0.64,
+   "text": "out i guess"
+  },
+  {
+   "t": 916.88,
+   "d": 2.4,
+   "text": "um and so far we're doing okay i'm"
+  },
+  {
+   "t": 919.28,
+   "d": 1.52,
+   "text": "helped now by the fact that we can back"
+  },
+  {
+   "t": 920.8,
+   "d": 1.04,
+   "text": "up and do things"
+  },
+  {
+   "t": 921.84,
+   "d": 2.56,
+   "text": "um you know net hack can have bugs or"
+  },
+  {
+   "t": 924.4,
+   "d": 1.6,
+   "text": "the other game binaries i've got to have"
+  },
+  {
+   "t": 926.0,
+   "d": 1.92,
+   "text": "options editors an amazing amount of"
+  },
+  {
+   "t": 927.92,
+   "d": 1.28,
+   "text": "time goes into editing and options that"
+  },
+  {
+   "t": 929.2,
+   "d": 1.44,
+   "text": "are there to remove its ability to write"
+  },
+  {
+   "t": 930.64,
+   "d": 1.68,
+   "text": "random files across the disk"
+  },
+  {
+   "t": 932.32,
+   "d": 2.24,
+   "text": "uh the website of course has many"
+  },
+  {
+   "t": 934.56,
+   "d": 1.84,
+   "text": "potential for holes from the"
+  },
+  {
+   "t": 936.4,
+   "d": 1.84,
+   "text": "underlying technology up to the horrible"
+  },
+  {
+   "t": 938.24,
+   "d": 1.36,
+   "text": "php that i write"
+  },
+  {
+   "t": 939.6,
+   "d": 2.48,
+   "text": "and you know there's a bot that has"
+  },
+  {
+   "t": 942.08,
+   "d": 1.12,
+   "text": "access to things"
+  },
+  {
+   "t": 943.2,
+   "d": 1.92,
+   "text": "and just the overall implementation we"
+  },
+  {
+   "t": 945.12,
+   "d": 1.76,
+   "text": "do get a lot of game crashing"
+  },
+  {
+   "t": 946.88,
+   "d": 1.84,
+   "text": "in fact i'd feed the dev team quite a"
+  },
+  {
+   "t": 948.72,
+   "d": 1.28,
+   "text": "bit on"
+  },
+  {
+   "t": 950.0,
+   "d": 1.84,
+   "text": "you know when games crash and core dumps"
+  },
+  {
+   "t": 951.84,
+   "d": 1.52,
+   "text": "are kind of a normal part of the process"
+  },
+  {
+   "t": 953.36,
+   "d": 1.68,
+   "text": "uh where even if i have a thousand sign"
+  },
+  {
+   "t": 955.04,
+   "d": 0.24,
+   "text": "will"
+  },
+  {
+   "t": 955.28,
+   "d": 1.6,
+   "text": "you know a thousand games any given time"
+  },
+  {
+   "t": 956.88,
+   "d": 1.36,
+   "text": "or not any given time any given month or"
+  },
+  {
+   "t": 958.24,
+   "d": 0.96,
+   "text": "let's say running"
+  },
+  {
+   "t": 959.2,
+   "d": 2.88,
+   "text": "um a one in a thousand game bug occurs"
+  },
+  {
+   "t": 962.08,
+   "d": 1.92,
+   "text": "for me or it might not for others so we"
+  },
+  {
+   "t": 964.0,
+   "d": 1.84,
+   "text": "we have been able to be a good feed"
+  },
+  {
+   "t": 965.84,
+   "d": 2.16,
+   "text": "basically for for core dumps and such"
+  },
+  {
+   "t": 968.0,
+   "d": 2.24,
+   "text": "um you know have explored other"
+  },
+  {
+   "t": 970.24,
+   "d": 1.6,
+   "text": "technologies so why not"
+  },
+  {
+   "t": 971.84,
+   "d": 2.08,
+   "text": "docker lambda atlanta other containers"
+  },
+  {
+   "t": 973.92,
+   "d": 1.36,
+   "text": "message queues and workers"
+  },
+  {
+   "t": 975.28,
+   "d": 3.12,
+   "text": "in fact you know i've been using this um"
+  },
+  {
+   "t": 978.4,
+   "d": 1.68,
+   "text": "you know as an opportunity to maybe"
+  },
+  {
+   "t": 980.08,
+   "d": 1.44,
+   "text": "learn a little more and i'll"
+  },
+  {
+   "t": 981.52,
+   "d": 1.76,
+   "text": "go into this we recently or not recently"
+  },
+  {
+   "t": 983.28,
+   "d": 2.16,
+   "text": "five six years moved to amazon aws which"
+  },
+  {
+   "t": 985.44,
+   "d": 1.6,
+   "text": "got us out of the hardware game"
+  },
+  {
+   "t": 987.04,
+   "d": 2.08,
+   "text": "um this audience in particular a"
+  },
+  {
+   "t": 989.12,
+   "d": 1.68,
+   "text": "technical group in the city"
+  },
+  {
+   "t": 990.8,
+   "d": 2.0,
+   "text": "has you know i'm sure many folks have"
+  },
+  {
+   "t": 992.8,
+   "d": 1.12,
+   "text": "moved beyond"
+  },
+  {
+   "t": 993.92,
+   "d": 2.64,
+   "text": "simple launch instances of linux very"
+  },
+  {
+   "t": 996.56,
+   "d": 0.88,
+   "text": "rightly so"
+  },
+  {
+   "t": 997.44,
+   "d": 1.84,
+   "text": "a few reasons we haven't done it one"
+  },
+  {
+   "t": 999.28,
+   "d": 1.44,
+   "text": "it's a net hex server"
+  },
+  {
+   "t": 1000.72,
+   "d": 3.2,
+   "text": "just it's not a big unicorn startup"
+  },
+  {
+   "t": 1003.92,
+   "d": 2.56,
+   "text": "i'll take a quick break here to say if"
+  },
+  {
+   "t": 1006.48,
+   "d": 0.88,
+   "text": "someone knows"
+  },
+  {
+   "t": 1007.36,
+   "d": 1.84,
+   "text": "how to get rich doing this the talk is"
+  },
+  {
+   "t": 1009.2,
+   "d": 2.16,
+   "text": "over i'll meet you right over here"
+  },
+  {
+   "t": 1011.36,
+   "d": 1.28,
+   "text": "i would love for this to be a"
+  },
+  {
+   "t": 1012.64,
+   "d": 2.0,
+   "text": "money-making enterprise i just don't see"
+  },
+  {
+   "t": 1014.64,
+   "d": 0.8,
+   "text": "it"
+  },
+  {
+   "t": 1015.44,
+   "d": 1.76,
+   "text": "but why not more elegant given the"
+  },
+  {
+   "t": 1017.2,
+   "d": 1.76,
+   "text": "chance there are a couple of reasons why"
+  },
+  {
+   "t": 1018.96,
+   "d": 1.28,
+   "text": "we haven't gone there"
+  },
+  {
+   "t": 1020.24,
+   "d": 1.44,
+   "text": "live game watching has kind of been the"
+  },
+  {
+   "t": 1021.68,
+   "d": 1.68,
+   "text": "big one the main feature that everyone"
+  },
+  {
+   "t": 1023.36,
+   "d": 1.28,
+   "text": "seems to like"
+  },
+  {
+   "t": 1024.64,
+   "d": 2.0,
+   "text": "10 you know needs basically an open a"
+  },
+  {
+   "t": 1026.64,
+   "d": 1.2,
+   "text": "fast open socket"
+  },
+  {
+   "t": 1027.84,
+   "d": 1.6,
+   "text": "that someone can pull and i can't dump"
+  },
+  {
+   "t": 1029.44,
+   "d": 2.24,
+   "text": "things into persistent buckets or"
+  },
+  {
+   "t": 1031.68,
+   "d": 2.4,
+   "text": "or others other storage very easily and"
+  },
+  {
+   "t": 1034.08,
+   "d": 1.44,
+   "text": "have that kind of be a live thread you"
+  },
+  {
+   "t": 1035.52,
+   "d": 1.44,
+   "text": "know unix sockets just aren't"
+  },
+  {
+   "t": 1036.96,
+   "d": 0.88,
+   "text": "aren't the kind of thing that are"
+  },
+  {
+   "t": 1037.84,
+   "d": 2.16,
+   "text": "implemented really in higher level"
+  },
+  {
+   "t": 1040.0,
+   "d": 3.2,
+   "text": "you know higher level services that said"
+  },
+  {
+   "t": 1043.2,
+   "d": 1.36,
+   "text": "modifying the games"
+  },
+  {
+   "t": 1044.56,
+   "d": 1.44,
+   "text": "gives a lot of possibilities right i"
+  },
+  {
+   "t": 1046.0,
+   "d": 1.76,
+   "text": "could modify various binaries to save"
+  },
+  {
+   "t": 1047.76,
+   "d": 1.76,
+   "text": "things in object buckets or in various"
+  },
+  {
+   "t": 1049.52,
+   "d": 1.6,
+   "text": "spots i could have"
+  },
+  {
+   "t": 1051.12,
+   "d": 1.36,
+   "text": "you know transient instances pulling"
+  },
+  {
+   "t": 1052.48,
+   "d": 1.6,
+   "text": "from things like that and save them the"
+  },
+  {
+   "t": 1054.08,
+   "d": 2.4,
+   "text": "problem is that they"
+  },
+  {
+   "t": 1056.48,
+   "d": 1.6,
+   "text": "these are basically long-running binary"
+  },
+  {
+   "t": 1058.08,
+   "d": 2.0,
+   "text": "games and i'm trying not to patch them"
+  },
+  {
+   "t": 1060.08,
+   "d": 1.44,
+   "text": "so as much as possible we're going with"
+  },
+  {
+   "t": 1061.52,
+   "d": 1.2,
+   "text": "stock"
+  },
+  {
+   "t": 1062.72,
+   "d": 2.4,
+   "text": "stock binaries here which is kind of"
+  },
+  {
+   "t": 1065.12,
+   "d": 1.68,
+   "text": "leaving me with a relatively small"
+  },
+  {
+   "t": 1066.8,
+   "d": 1.44,
+   "text": "you know narrow list of things that i"
+  },
+  {
+   "t": 1068.24,
+   "d": 2.0,
+   "text": "can do outside of some things that we"
+  },
+  {
+   "t": 1070.24,
+   "d": 0.64,
+   "text": "have done"
+  },
+  {
+   "t": 1070.88,
+   "d": 2.16,
+   "text": "um x-log file for instance is one of the"
+  },
+  {
+   "t": 1073.04,
+   "d": 2.16,
+   "text": "improvements that we really liked"
+  },
+  {
+   "t": 1075.2,
+   "d": 1.92,
+   "text": "more recently i found a way to waste"
+  },
+  {
+   "t": 1077.12,
+   "d": 1.2,
+   "text": "more time at work"
+  },
+  {
+   "t": 1078.32,
+   "d": 1.6,
+   "text": "websockets and h-term gave us an"
+  },
+  {
+   "t": 1079.92,
+   "d": 2.0,
+   "text": "interesting new opportunity uh google"
+  },
+  {
+   "t": 1081.92,
+   "d": 1.36,
+   "text": "with it's now somewhat abandoned"
+  },
+  {
+   "t": 1083.28,
+   "d": 1.36,
+   "text": "chromium browser"
+  },
+  {
+   "t": 1084.64,
+   "d": 2.16,
+   "text": "uh gave us an http terminal and that"
+  },
+  {
+   "t": 1086.8,
+   "d": 1.6,
+   "text": "with websockets being supported in a"
+  },
+  {
+   "t": 1088.4,
+   "d": 1.28,
+   "text": "bunch of browsers"
+  },
+  {
+   "t": 1089.68,
+   "d": 1.44,
+   "text": "gives me the thing that i've got here in"
+  },
+  {
+   "t": 1091.12,
+   "d": 2.32,
+   "text": "my chrome browser today but it works in"
+  },
+  {
+   "t": 1093.44,
+   "d": 0.64,
+   "text": "others"
+  },
+  {
+   "t": 1094.08,
+   "d": 1.84,
+   "text": "which is this web socket layer viewer so"
+  },
+  {
+   "t": 1095.92,
+   "d": 0.96,
+   "text": "i don't actually have to be in a"
+  },
+  {
+   "t": 1096.88,
+   "d": 1.28,
+   "text": "throttle anymore there's a"
+  },
+  {
+   "t": 1098.16,
+   "d": 2.4,
+   "text": "javascript implemented terminal if you"
+  },
+  {
+   "t": 1100.56,
+   "d": 1.44,
+   "text": "haven't tried it yet at work and you"
+  },
+  {
+   "t": 1102.0,
+   "d": 1.84,
+   "text": "previously couldn't telnet in"
+  },
+  {
+   "t": 1103.84,
+   "d": 1.76,
+   "text": "give it a try it works through browsers"
+  },
+  {
+   "t": 1105.6,
+   "d": 1.76,
+   "text": "through tls interception"
+  },
+  {
+   "t": 1107.36,
+   "d": 1.52,
+   "text": "as long as it supports websocket"
+  },
+  {
+   "t": 1108.88,
+   "d": 1.76,
+   "text": "pass-through"
+  },
+  {
+   "t": 1110.64,
+   "d": 1.76,
+   "text": "great other way to waste waste time at"
+  },
+  {
+   "t": 1112.4,
+   "d": 1.52,
+   "text": "work and again credit to a couple of"
+  },
+  {
+   "t": 1113.92,
+   "d": 1.2,
+   "text": "folks that contributed"
+  },
+  {
+   "t": 1115.12,
+   "d": 2.08,
+   "text": "curio if you happen to know them online"
+  },
+  {
+   "t": 1117.2,
+   "d": 1.76,
+   "text": "and the chromium team gave us the free"
+  },
+  {
+   "t": 1118.96,
+   "d": 3.76,
+   "text": "h-term browser in terms of what we can"
+  },
+  {
+   "t": 1122.72,
+   "d": 0.48,
+   "text": "do"
+  },
+  {
+   "t": 1123.2,
+   "d": 2.4,
+   "text": "so now we've got a cool server a bunch"
+  },
+  {
+   "t": 1125.6,
+   "d": 1.36,
+   "text": "of people playing games"
+  },
+  {
+   "t": 1126.96,
+   "d": 2.0,
+   "text": "um i'd like to have more games on there"
+  },
+  {
+   "t": 1128.96,
+   "d": 1.44,
+   "text": "i'll talk briefly to it"
+  },
+  {
+   "t": 1130.4,
+   "d": 1.76,
+   "text": "uh you know now that we have stats"
+  },
+  {
+   "t": 1132.16,
+   "d": 1.76,
+   "text": "initially it was just games played"
+  },
+  {
+   "t": 1133.92,
+   "d": 1.76,
+   "text": "a number of ascensions and my stats were"
+  },
+  {
+   "t": 1135.68,
+   "d": 1.6,
+   "text": "pretty rudimentary like who's playing"
+  },
+  {
+   "t": 1137.28,
+   "d": 1.04,
+   "text": "and what are they doing"
+  },
+  {
+   "t": 1138.32,
+   "d": 2.4,
+   "text": "uh you know i i was pretty much on high"
+  },
+  {
+   "t": 1140.72,
+   "d": 1.6,
+   "text": "scores for the first few years you know"
+  },
+  {
+   "t": 1142.32,
+   "d": 1.52,
+   "text": "who if you scored higher obviously that"
+  },
+  {
+   "t": 1143.84,
+   "d": 1.12,
+   "text": "means you're a better player right"
+  },
+  {
+   "t": 1144.96,
+   "d": 2.24,
+   "text": "obviously that's"
+  },
+  {
+   "t": 1147.2,
+   "d": 1.52,
+   "text": "ends up not being the case for serial"
+  },
+  {
+   "t": 1148.72,
+   "d": 2.24,
+   "text": "ascenders so in fact it's been"
+  },
+  {
+   "t": 1150.96,
+   "d": 1.6,
+   "text": "brought up in many discussions that"
+  },
+  {
+   "t": 1152.56,
+   "d": 1.84,
+   "text": "before you ascend score is actually a"
+  },
+  {
+   "t": 1154.4,
+   "d": 0.72,
+   "text": "pretty good"
+  },
+  {
+   "t": 1155.12,
+   "d": 1.28,
+   "text": "indicator that you're doing better and"
+  },
+  {
+   "t": 1156.4,
+   "d": 1.52,
+   "text": "better as soon as you ascend and are"
+  },
+  {
+   "t": 1157.92,
+   "d": 1.6,
+   "text": "ascending somewhat regularly it's the"
+  },
+  {
+   "t": 1159.52,
+   "d": 2.0,
+   "text": "inverse actually lower score ascensions"
+  },
+  {
+   "t": 1161.52,
+   "d": 1.52,
+   "text": "usually mean you're a better player"
+  },
+  {
+   "t": 1163.04,
+   "d": 1.2,
+   "text": "because you didn't have to stack up a"
+  },
+  {
+   "t": 1164.24,
+   "d": 0.96,
+   "text": "whole bunch of"
+  },
+  {
+   "t": 1165.2,
+   "d": 1.76,
+   "text": "uh you know a whole bunch of prep ahead"
+  },
+  {
+   "t": 1166.96,
+   "d": 1.04,
+   "text": "of time you're actually a little bit"
+  },
+  {
+   "t": 1168.0,
+   "d": 1.28,
+   "text": "better prepared so"
+  },
+  {
+   "t": 1169.28,
+   "d": 1.92,
+   "text": "low turn games low scoring games are"
+  },
+  {
+   "t": 1171.2,
+   "d": 1.36,
+   "text": "actually more impressive and high"
+  },
+  {
+   "t": 1172.56,
+   "d": 1.36,
+   "text": "conduct games"
+  },
+  {
+   "t": 1173.92,
+   "d": 2.32,
+   "text": "than our high scorers so we've"
+  },
+  {
+   "t": 1176.24,
+   "d": 1.04,
+   "text": "implemented other things"
+  },
+  {
+   "t": 1177.28,
+   "d": 2.08,
+   "text": "i'm always open to pieces here so none"
+  },
+  {
+   "t": 1179.36,
+   "d": 2.0,
+   "text": "of this is particular magic the most"
+  },
+  {
+   "t": 1181.36,
+   "d": 1.12,
+   "text": "recent thing that people tend to"
+  },
+  {
+   "t": 1182.48,
+   "d": 0.64,
+   "text": "reference"
+  },
+  {
+   "t": 1183.12,
+   "d": 2.4,
+   "text": "um are simply simply based on ascensions"
+  },
+  {
+   "t": 1185.52,
+   "d": 0.88,
+   "text": "um i'd love to"
+  },
+  {
+   "t": 1186.4,
+   "d": 1.84,
+   "text": "start doing more with conducts and"
+  },
+  {
+   "t": 1188.24,
+   "d": 2.08,
+   "text": "things just haven't gotten to it"
+  },
+  {
+   "t": 1190.32,
+   "d": 1.76,
+   "text": "xlog file made a whole lot of whole lot"
+  },
+  {
+   "t": 1192.08,
+   "d": 1.28,
+   "text": "of things interesting"
+  },
+  {
+   "t": 1193.36,
+   "d": 1.44,
+   "text": "um there are a lot of analytics"
+  },
+  {
+   "t": 1194.8,
+   "d": 1.84,
+   "text": "possibilities so again in fact i've done"
+  },
+  {
+   "t": 1196.64,
+   "d": 1.04,
+   "text": "this for a couple of friends and"
+  },
+  {
+   "t": 1197.68,
+   "d": 1.52,
+   "text": "analytics companies here in the city if"
+  },
+  {
+   "t": 1199.2,
+   "d": 2.0,
+   "text": "you want 200 gigs of tty rex"
+  },
+  {
+   "t": 1201.2,
+   "d": 2.16,
+   "text": "everything anyone wished for every"
+  },
+  {
+   "t": 1203.36,
+   "d": 1.2,
+   "text": "scenario where they were faced with"
+  },
+  {
+   "t": 1204.56,
+   "d": 1.2,
+   "text": "monsters what worked and what didn't"
+  },
+  {
+   "t": 1205.76,
+   "d": 0.8,
+   "text": "work"
+  },
+  {
+   "t": 1206.56,
+   "d": 1.44,
+   "text": "some folks have used that in terms of"
+  },
+  {
+   "t": 1208.0,
+   "d": 2.48,
+   "text": "creating bots there has been one"
+  },
+  {
+   "t": 1210.48,
+   "d": 2.32,
+   "text": "bot ascension on a public server on nao"
+  },
+  {
+   "t": 1212.8,
+   "d": 0.8,
+   "text": "in the past so"
+  },
+  {
+   "t": 1213.6,
+   "d": 1.76,
+   "text": "there now has been a proved automated"
+  },
+  {
+   "t": 1215.36,
+   "d": 1.84,
+   "text": "bot that's beating the game"
+  },
+  {
+   "t": 1217.2,
+   "d": 3.28,
+   "text": "none has beaten 3-6 yet but"
+  },
+  {
+   "t": 1220.48,
+   "d": 1.36,
+   "text": "we'll see if one comes around the bot"
+  },
+  {
+   "t": 1221.84,
+   "d": 1.36,
+   "text": "that did win ended up making use of a"
+  },
+  {
+   "t": 1223.2,
+   "d": 1.28,
+   "text": "lot of things like pudding farming and"
+  },
+  {
+   "t": 1224.48,
+   "d": 1.12,
+   "text": "some of the"
+  },
+  {
+   "t": 1225.6,
+   "d": 1.52,
+   "text": "some of the mechanics that are otherwise"
+  },
+  {
+   "t": 1227.12,
+   "d": 2.8,
+   "text": "a little nerfed in 36."
+  },
+  {
+   "t": 1229.92,
+   "d": 1.2,
+   "text": "you know and to that end we've always"
+  },
+  {
+   "t": 1231.12,
+   "d": 1.84,
+   "text": "tried to take a fairly hard line in"
+  },
+  {
+   "t": 1232.96,
+   "d": 1.52,
+   "text": "terms of not restoring games or making"
+  },
+  {
+   "t": 1234.48,
+   "d": 1.04,
+   "text": "sure there's not"
+  },
+  {
+   "t": 1235.52,
+   "d": 1.52,
+   "text": "saves coming things like that again kind"
+  },
+  {
+   "t": 1237.04,
+   "d": 2.16,
+   "text": "of my neurosis on if it sits there as a"
+  },
+  {
+   "t": 1239.2,
+   "d": 1.2,
+   "text": "score i want it to actually mean"
+  },
+  {
+   "t": 1240.4,
+   "d": 2.0,
+   "text": "something"
+  },
+  {
+   "t": 1242.4,
+   "d": 2.32,
+   "text": "so cross game and cross game version"
+  },
+  {
+   "t": 1244.72,
+   "d": 1.28,
+   "text": "stats are my newest challenge that i"
+  },
+  {
+   "t": 1246.0,
+   "d": 1.76,
+   "text": "haven't quite figured out yet um"
+  },
+  {
+   "t": 1247.76,
+   "d": 1.44,
+   "text": "the site was never really built and the"
+  },
+  {
+   "t": 1249.2,
+   "d": 2.32,
+   "text": "game launcher for i'd love to actually"
+  },
+  {
+   "t": 1251.52,
+   "d": 2.32,
+   "text": "at this point um despite being kind of"
+  },
+  {
+   "t": 1253.84,
+   "d": 1.44,
+   "text": "nethack only for a while i'm"
+  },
+  {
+   "t": 1255.28,
+   "d": 1.6,
+   "text": "actually this conference has gotten me"
+  },
+  {
+   "t": 1256.88,
+   "d": 1.44,
+   "text": "kind of jazzed on"
+  },
+  {
+   "t": 1258.32,
+   "d": 1.68,
+   "text": "a lot of the other games that are out"
+  },
+  {
+   "t": 1260.0,
+   "d": 2.08,
+   "text": "there i always knew they were out but it"
+  },
+  {
+   "t": 1262.08,
+   "d": 1.2,
+   "text": "would be really interesting if we could"
+  },
+  {
+   "t": 1263.28,
+   "d": 1.6,
+   "text": "potentially offer several others and"
+  },
+  {
+   "t": 1264.88,
+   "d": 1.84,
+   "text": "even several versions within that"
+  },
+  {
+   "t": 1266.72,
+   "d": 1.52,
+   "text": "and i've had pressure from that for for"
+  },
+  {
+   "t": 1268.24,
+   "d": 1.84,
+   "text": "a while on the other variants given the"
+  },
+  {
+   "t": 1270.08,
+   "d": 1.68,
+   "text": "10-year hiatus that nethack took on"
+  },
+  {
+   "t": 1271.76,
+   "d": 1.28,
+   "text": "development"
+  },
+  {
+   "t": 1273.04,
+   "d": 1.84,
+   "text": "but i'm open to it so at this point"
+  },
+  {
+   "t": 1274.88,
+   "d": 1.04,
+   "text": "actually i'm kind of excited about"
+  },
+  {
+   "t": 1275.92,
+   "d": 1.68,
+   "text": "jumping back in on that"
+  },
+  {
+   "t": 1277.6,
+   "d": 1.52,
+   "text": "i won't spend too much time on this we"
+  },
+  {
+   "t": 1279.12,
+   "d": 1.6,
+   "text": "did move to public cloud"
+  },
+  {
+   "t": 1280.72,
+   "d": 1.6,
+   "text": "i will say if you're running on hardware"
+  },
+  {
+   "t": 1282.32,
+   "d": 1.52,
+   "text": "today it's so much cooler"
+  },
+  {
+   "t": 1283.84,
+   "d": 2.08,
+   "text": "much so much better the quick story i"
+  },
+  {
+   "t": 1285.92,
+   "d": 1.6,
+   "text": "have here is i used to have hardware"
+  },
+  {
+   "t": 1287.52,
+   "d": 1.36,
+   "text": "failures as you always do when you're on"
+  },
+  {
+   "t": 1288.88,
+   "d": 1.12,
+   "text": "hardware"
+  },
+  {
+   "t": 1290.0,
+   "d": 2.8,
+   "text": "drives died or power supplies died i"
+  },
+  {
+   "t": 1292.8,
+   "d": 2.08,
+   "text": "kind of decided i wanted out of that"
+  },
+  {
+   "t": 1294.88,
+   "d": 2.4,
+   "text": "3 or 4 a.m at some point in the morning"
+  },
+  {
+   "t": 1297.28,
+   "d": 1.32,
+   "text": "i got a call"
+  },
+  {
+   "t": 1298.6,
+   "d": 2.44,
+   "text": "2003-2004 from a guy with i'm going to"
+  },
+  {
+   "t": 1301.04,
+   "d": 1.6,
+   "text": "say it's a finnish accent but i wasn't"
+  },
+  {
+   "t": 1302.64,
+   "d": 0.64,
+   "text": "sure"
+  },
+  {
+   "t": 1303.28,
+   "d": 2.72,
+   "text": "i said is this drew the net hack server"
+  },
+  {
+   "t": 1306.0,
+   "d": 0.8,
+   "text": "is down"
+  },
+  {
+   "t": 1306.8,
+   "d": 2.32,
+   "text": "um i've gotten my name out of the who is"
+  },
+  {
+   "t": 1309.12,
+   "d": 1.6,
+   "text": "on the on the website or because i'm not"
+  },
+  {
+   "t": 1310.72,
+   "d": 1.52,
+   "text": "real shy with my phone number"
+  },
+  {
+   "t": 1312.24,
+   "d": 1.52,
+   "text": "um and then i said you know all right"
+  },
+  {
+   "t": 1313.76,
+   "d": 0.88,
+   "text": "all right i'll take a look at it"
+  },
+  {
+   "t": 1314.64,
+   "d": 0.64,
+   "text": "sometime"
+  },
+  {
+   "t": 1315.28,
+   "d": 1.28,
+   "text": "you know later and then he asked to"
+  },
+  {
+   "t": 1316.56,
+   "d": 1.6,
+   "text": "follow up i was like so when's it going"
+  },
+  {
+   "t": 1318.16,
+   "d": 2.48,
+   "text": "to be back"
+  },
+  {
+   "t": 1321.12,
+   "d": 2.88,
+   "text": "ned hat community"
+  },
+  {
+   "t": 1325.12,
+   "d": 3.04,
+   "text": "eventually so we're we're better at"
+  },
+  {
+   "t": 1328.16,
+   "d": 1.28,
+   "text": "recovery these days"
+  },
+  {
+   "t": 1329.44,
+   "d": 1.84,
+   "text": "but i will say it's a whole lot better"
+  },
+  {
+   "t": 1331.28,
+   "d": 2.16,
+   "text": "with the hardware abstraction"
+  },
+  {
+   "t": 1333.44,
+   "d": 2.32,
+   "text": "also please don't call me with the"
+  },
+  {
+   "t": 1335.76,
+   "d": 1.44,
+   "text": "servers down somebody will have figured"
+  },
+  {
+   "t": 1337.2,
+   "d": 2.24,
+   "text": "it out you can email me your text or"
+  },
+  {
+   "t": 1339.44,
+   "d": 2.16,
+   "text": "whatever else i do encourage folks"
+  },
+  {
+   "t": 1341.6,
+   "d": 1.76,
+   "text": "potentially to run public servers"
+  },
+  {
+   "t": 1343.36,
+   "d": 1.44,
+   "text": "i don't have a monopoly on it and there"
+  },
+  {
+   "t": 1344.8,
+   "d": 2.88,
+   "text": "are a lot of folks that run them"
+  },
+  {
+   "t": 1347.68,
+   "d": 1.52,
+   "text": "quick advice if you're going to get a"
+  },
+  {
+   "t": 1349.2,
+   "d": 1.52,
+   "text": "co-admin i've been"
+  },
+  {
+   "t": 1350.72,
+   "d": 3.04,
+   "text": "in and out for 16 years running nao"
+  },
+  {
+   "t": 1353.76,
+   "d": 1.44,
+   "text": "during the times when i was working and"
+  },
+  {
+   "t": 1355.2,
+   "d": 2.48,
+   "text": "doing other stuff pazzy cullen and pax"
+  },
+  {
+   "t": 1357.68,
+   "d": 1.36,
+   "text": "i was a guy that basically i mean in"
+  },
+  {
+   "t": 1359.04,
+   "d": 1.92,
+   "text": "fact if you go to poundnet hack on"
+  },
+  {
+   "t": 1360.96,
+   "d": 2.08,
+   "text": "irc most folks there assume he runs it"
+  },
+  {
+   "t": 1363.04,
+   "d": 1.2,
+   "text": "more than i do because he's been a lot"
+  },
+  {
+   "t": 1364.24,
+   "d": 2.8,
+   "text": "more responsive for the past 15 years"
+  },
+  {
+   "t": 1367.04,
+   "d": 2.08,
+   "text": "but a co-admin is definitely helpful"
+  },
+  {
+   "t": 1369.12,
+   "d": 1.04,
+   "text": "there's actually not a whole lot of"
+  },
+  {
+   "t": 1370.16,
+   "d": 1.12,
+   "text": "hardware requirement"
+  },
+  {
+   "t": 1371.28,
+   "d": 1.92,
+   "text": "just be cognizant of security i kind of"
+  },
+  {
+   "t": 1373.2,
+   "d": 1.2,
+   "text": "recommend separating it from other"
+  },
+  {
+   "t": 1374.4,
+   "d": 1.84,
+   "text": "services because it is a"
+  },
+  {
+   "t": 1376.24,
+   "d": 1.6,
+   "text": "it's got enough holes to drive trucks"
+  },
+  {
+   "t": 1377.84,
+   "d": 1.76,
+   "text": "through for the potential for security"
+  },
+  {
+   "t": 1379.6,
+   "d": 2.56,
+   "text": "problems back it up often"
+  },
+  {
+   "t": 1382.16,
+   "d": 1.28,
+   "text": "just in terms of what's next there's a"
+  },
+  {
+   "t": 1383.44,
+   "d": 1.76,
+   "text": "lot we can do uh and"
+  },
+  {
+   "t": 1385.2,
+   "d": 2.32,
+   "text": "and again it's really great to see some"
+  },
+  {
+   "t": 1387.52,
+   "d": 1.36,
+   "text": "of the games that are revolving"
+  },
+  {
+   "t": 1388.88,
+   "d": 1.6,
+   "text": "um you know kind of beyond some of the"
+  },
+  {
+   "t": 1390.48,
+   "d": 1.6,
+   "text": "the basic tech stuff that's going on in"
+  },
+  {
+   "t": 1392.08,
+   "d": 1.44,
+   "text": "tty and net hack"
+  },
+  {
+   "t": 1393.52,
+   "d": 1.28,
+   "text": "that said there's still a community"
+  },
+  {
+   "t": 1394.8,
+   "d": 1.92,
+   "text": "around uh some of the games with the"
+  },
+  {
+   "t": 1396.72,
+   "d": 1.84,
+   "text": "more straightforward mechanics"
+  },
+  {
+   "t": 1398.56,
+   "d": 1.36,
+   "text": "i would love to do more with tournament"
+  },
+  {
+   "t": 1399.92,
+   "d": 2.24,
+   "text": "support i've toured around with global"
+  },
+  {
+   "t": 1402.16,
+   "d": 2.32,
+   "text": "presence you know having local nodes and"
+  },
+  {
+   "t": 1404.48,
+   "d": 1.84,
+   "text": "in europe and asia and east west coast"
+  },
+  {
+   "t": 1406.32,
+   "d": 1.44,
+   "text": "that you always had something within 10"
+  },
+  {
+   "t": 1407.76,
+   "d": 1.6,
+   "text": "20 milliseconds of latency if you've"
+  },
+  {
+   "t": 1409.36,
+   "d": 1.28,
+   "text": "played on public servers you know"
+  },
+  {
+   "t": 1410.64,
+   "d": 2.08,
+   "text": "latency is kind of the big disadvantage"
+  },
+  {
+   "t": 1412.72,
+   "d": 1.04,
+   "text": "is that unless you happen to be"
+  },
+  {
+   "t": 1413.76,
+   "d": 2.64,
+   "text": "co-located with it you know you might"
+  },
+  {
+   "t": 1416.4,
+   "d": 0.64,
+   "text": "have"
+  },
+  {
+   "t": 1417.04,
+   "d": 0.96,
+   "text": "you know more than you're going to have"
+  },
+  {
+   "t": 1418.0,
+   "d": 2.16,
+   "text": "locally and it does affect gameplay"
+  },
+  {
+   "t": 1420.16,
+   "d": 1.36,
+   "text": "we're looking at doing that over shared"
+  },
+  {
+   "t": 1421.52,
+   "d": 1.84,
+   "text": "file systems"
+  },
+  {
+   "t": 1423.36,
+   "d": 1.36,
+   "text": "you know linked servers in general are"
+  },
+  {
+   "t": 1424.72,
+   "d": 1.92,
+   "text": "of interest and i mentioned here one of"
+  },
+  {
+   "t": 1426.64,
+   "d": 1.84,
+   "text": "the things that i'm really wanting to do"
+  },
+  {
+   "t": 1428.48,
+   "d": 2.24,
+   "text": "is just support more game choice um you"
+  },
+  {
+   "t": 1430.72,
+   "d": 1.6,
+   "text": "know today has just enforced that my"
+  },
+  {
+   "t": 1432.32,
+   "d": 1.84,
+   "text": "highest priority that were easy would be"
+  },
+  {
+   "t": 1434.16,
+   "d": 1.76,
+   "text": "to have 10 games available for folks to"
+  },
+  {
+   "t": 1435.92,
+   "d": 0.48,
+   "text": "play"
+  },
+  {
+   "t": 1436.4,
+   "d": 1.52,
+   "text": "and again it's at this point more of an"
+  },
+  {
+   "t": 1437.92,
+   "d": 1.92,
+   "text": "accessibility play so"
+  },
+  {
+   "t": 1439.84,
+   "d": 1.44,
+   "text": "the the high scores and everything else"
+  },
+  {
+   "t": 1441.28,
+   "d": 1.68,
+   "text": "are great but"
+  },
+  {
+   "t": 1442.96,
+   "d": 1.68,
+   "text": "you know i got jazzed a little bit just"
+  },
+  {
+   "t": 1444.64,
+   "d": 1.6,
+   "text": "kind of reading through and looking at"
+  },
+  {
+   "t": 1446.24,
+   "d": 1.52,
+   "text": "again as kind of the reddit threads"
+  },
+  {
+   "t": 1447.76,
+   "d": 1.2,
+   "text": "um it's actually kind of cool that"
+  },
+  {
+   "t": 1448.96,
+   "d": 1.52,
+   "text": "people are just jumping on uh you know"
+  },
+  {
+   "t": 1450.48,
+   "d": 1.2,
+   "text": "it's nice to see people in the crowd"
+  },
+  {
+   "t": 1451.68,
+   "d": 1.28,
+   "text": "here that are you know"
+  },
+  {
+   "t": 1452.96,
+   "d": 1.04,
+   "text": "i thought i was going to be about the"
+  },
+  {
+   "t": 1454.0,
+   "d": 2.0,
+   "text": "youngest person here at 41 but it's cool"
+  },
+  {
+   "t": 1456.0,
+   "d": 0.56,
+   "text": "to"
+  },
+  {
+   "t": 1456.56,
+   "d": 1.36,
+   "text": "actually see folks that have apparently"
+  },
+  {
+   "t": 1457.92,
+   "d": 2.72,
+   "text": "picked it up after i did at some point"
+  },
+  {
+   "t": 1460.64,
+   "d": 2.08,
+   "text": "and the game still has some momentum and"
+  },
+  {
+   "t": 1462.72,
+   "d": 1.12,
+   "text": "so the only way it's going to continue"
+  },
+  {
+   "t": 1463.84,
+   "d": 1.84,
+   "text": "momentum is really if we get more people"
+  },
+  {
+   "t": 1465.68,
+   "d": 1.68,
+   "text": "interested"
+  },
+  {
+   "t": 1467.36,
+   "d": 3.04,
+   "text": "over the longer term i feel like i"
+  },
+  {
+   "t": 1470.4,
+   "d": 1.6,
+   "text": "should talk to a couple other pieces so"
+  },
+  {
+   "t": 1472.0,
+   "d": 1.04,
+   "text": "this is uh"
+  },
+  {
+   "t": 1473.04,
+   "d": 1.6,
+   "text": "on the server side of things and i'll"
+  },
+  {
+   "t": 1474.64,
+   "d": 1.76,
+   "text": "come back to it"
+  },
+  {
+   "t": 1476.4,
+   "d": 3.2,
+   "text": "you know for altador really quickly uh"
+  },
+  {
+   "t": 1479.6,
+   "d": 1.68,
+   "text": "nethack wiki is also something i happen"
+  },
+  {
+   "t": 1481.28,
+   "d": 1.84,
+   "text": "to co-host"
+  },
+  {
+   "t": 1483.12,
+   "d": 1.92,
+   "text": "spoiling used to be a fairly effort"
+  },
+  {
+   "t": 1485.04,
+   "d": 1.12,
+   "text": "driven game"
+  },
+  {
+   "t": 1486.16,
+   "d": 1.76,
+   "text": "and if you were looking at this 15 years"
+  },
+  {
+   "t": 1487.92,
+   "d": 1.28,
+   "text": "ago you could have seen folks"
+  },
+  {
+   "t": 1489.2,
+   "d": 1.92,
+   "text": "it was uh i got them written here but"
+  },
+  {
+   "t": 1491.12,
+   "d": 1.76,
+   "text": "kevin hugo dylan o'donnell"
+  },
+  {
+   "t": 1492.88,
+   "d": 1.6,
+   "text": "spod central i you know if anybody"
+  },
+  {
+   "t": 1494.48,
+   "d": 1.52,
+   "text": "remembers the long list of bookmarks you"
+  },
+  {
+   "t": 1496.0,
+   "d": 1.6,
+   "text": "would always go to on spod central that"
+  },
+  {
+   "t": 1497.6,
+   "d": 0.48,
+   "text": "had"
+  },
+  {
+   "t": 1498.08,
+   "d": 2.24,
+   "text": "you know amulets and rings and and armor"
+  },
+  {
+   "t": 1500.32,
+   "d": 1.12,
+   "text": "and weapons and you'd have to actually"
+  },
+  {
+   "t": 1501.44,
+   "d": 1.44,
+   "text": "go to every single spoiler and kind of"
+  },
+  {
+   "t": 1502.88,
+   "d": 1.52,
+   "text": "look at them separately"
+  },
+  {
+   "t": 1504.4,
+   "d": 3.68,
+   "text": "in five minutes um uh you know"
+  },
+  {
+   "t": 1508.08,
+   "d": 1.84,
+   "text": "i actually think we're it's interesting"
+  },
+  {
+   "t": 1509.92,
+   "d": 1.84,
+   "text": "that being spoiled doesn't ruin the game"
+  },
+  {
+   "t": 1511.76,
+   "d": 1.04,
+   "text": "it's different and there's plenty of"
+  },
+  {
+   "t": 1512.8,
+   "d": 1.52,
+   "text": "reasons to play non-spoiled"
+  },
+  {
+   "t": 1514.32,
+   "d": 1.52,
+   "text": "but but being spoiled doesn't mean you"
+  },
+  {
+   "t": 1515.84,
+   "d": 2.16,
+   "text": "can beat the game if it plenty of people"
+  },
+  {
+   "t": 1518.0,
+   "d": 1.36,
+   "text": "have run through the wiki many many"
+  },
+  {
+   "t": 1519.36,
+   "d": 1.36,
+   "text": "times or through spoilers and wish they"
+  },
+  {
+   "t": 1520.72,
+   "d": 1.2,
+   "text": "could beat the game"
+  },
+  {
+   "t": 1521.92,
+   "d": 1.04,
+   "text": "i still wish i could read it"
+  },
+  {
+   "t": 1522.96,
+   "d": 2.0,
+   "text": "consistently so just just knowing what's"
+  },
+  {
+   "t": 1524.96,
+   "d": 1.2,
+   "text": "going to happen doesn't save you when"
+  },
+  {
+   "t": 1526.16,
+   "d": 1.76,
+   "text": "you make the wrong choice"
+  },
+  {
+   "t": 1527.92,
+   "d": 3.12,
+   "text": "so it was on wikia ended up moving over"
+  },
+  {
+   "t": 1531.04,
+   "d": 1.28,
+   "text": "i'm actually thinking of moving this to"
+  },
+  {
+   "t": 1532.32,
+   "d": 1.76,
+   "text": "a non-profit so it survives me kind of"
+  },
+  {
+   "t": 1534.08,
+   "d": 0.8,
+   "text": "to that"
+  },
+  {
+   "t": 1534.88,
+   "d": 1.44,
+   "text": "to the end of it seems like some of"
+  },
+  {
+   "t": 1536.32,
+   "d": 1.28,
+   "text": "these things ought to kind of exist and"
+  },
+  {
+   "t": 1537.6,
+   "d": 0.64,
+   "text": "persist"
+  },
+  {
+   "t": 1538.24,
+   "d": 1.52,
+   "text": "beyond single people i happen to own"
+  },
+  {
+   "t": 1539.76,
+   "d": 1.68,
+   "text": "this one i'm probably going to be moving"
+  },
+  {
+   "t": 1541.44,
+   "d": 1.04,
+   "text": "that off"
+  },
+  {
+   "t": 1542.48,
+   "d": 2.0,
+   "text": "mostly they kind of keep keep interest"
+  },
+  {
+   "t": 1544.48,
+   "d": 1.68,
+   "text": "alive and i feel like people will join"
+  },
+  {
+   "t": 1546.16,
+   "d": 1.2,
+   "text": "and contribute to something if they feel"
+  },
+  {
+   "t": 1547.36,
+   "d": 1.44,
+   "text": "like it's not owned by somebody"
+  },
+  {
+   "t": 1548.8,
+   "d": 1.76,
+   "text": "i could as easily tomorrow throw ads on"
+  },
+  {
+   "t": 1550.56,
+   "d": 1.84,
+   "text": "this thing and and kind of make it as"
+  },
+  {
+   "t": 1552.4,
+   "d": 1.84,
+   "text": "unpopular as it was when wikia did that"
+  },
+  {
+   "t": 1554.24,
+   "d": 2.88,
+   "text": "several years ago but i'm not going to"
+  },
+  {
+   "t": 1557.12,
+   "d": 0.72,
+   "text": "and i'm going to"
+  },
+  {
+   "t": 1557.84,
+   "d": 1.36,
+   "text": "do some things to make sure that doesn't"
+  },
+  {
+   "t": 1559.2,
+   "d": 2.48,
+   "text": "occur it does accommodate non-nethack"
+  },
+  {
+   "t": 1561.68,
+   "d": 1.28,
+   "text": "roguelikes and in fact there's a lot of"
+  },
+  {
+   "t": 1562.96,
+   "d": 1.36,
+   "text": "information on that there"
+  },
+  {
+   "t": 1564.32,
+   "d": 1.84,
+   "text": "so i'm always happy for contributions"
+  },
+  {
+   "t": 1566.16,
+   "d": 1.36,
+   "text": "and again maybe you'll be"
+  },
+  {
+   "t": 1567.52,
+   "d": 1.2,
+   "text": "you'll feel better about contributing"
+  },
+  {
+   "t": 1568.72,
+   "d": 1.68,
+   "text": "once i uh get that off and it's"
+  },
+  {
+   "t": 1570.4,
+   "d": 0.96,
+   "text": "something that's other than me"
+  },
+  {
+   "t": 1571.36,
+   "d": 1.44,
+   "text": "in the meantime you can take my word i"
+  },
+  {
+   "t": 1572.8,
+   "d": 1.44,
+   "text": "have no interest in sticking ads on it"
+  },
+  {
+   "t": 1574.24,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 1574.96,
+   "d": 3.28,
+   "text": "um last piece here net hack is alive so"
+  },
+  {
+   "t": 1578.24,
+   "d": 1.76,
+   "text": "as a representative of net hack you know"
+  },
+  {
+   "t": 1580.0,
+   "d": 2.0,
+   "text": "there are new dev team members as of"
+  },
+  {
+   "t": 1582.0,
+   "d": 1.76,
+   "text": "now more than a year ago one of them"
+  },
+  {
+   "t": 1583.76,
+   "d": 1.52,
+   "text": "being my good buddy pozzi"
+  },
+  {
+   "t": 1585.28,
+   "d": 2.24,
+   "text": "uh but uh you know there's more dev team"
+  },
+  {
+   "t": 1587.52,
+   "d": 1.28,
+   "text": "members here um"
+  },
+  {
+   "t": 1588.8,
+   "d": 1.6,
+   "text": "i know it's kind of this is that hack's"
+  },
+  {
+   "t": 1590.4,
+   "d": 2.28,
+   "text": "been one of the the old rank"
+  },
+  {
+   "t": 1592.68,
+   "d": 2.84,
+   "text": "non-open source but non-visible games it"
+  },
+  {
+   "t": 1595.52,
+   "d": 2.96,
+   "text": "has a git repo now it's has a long time"
+  },
+  {
+   "t": 1598.48,
+   "d": 2.0,
+   "text": "um i won't make excuses for any of that"
+  },
+  {
+   "t": 1600.48,
+   "d": 1.28,
+   "text": "i'm not on the dev team so i couldn't"
+  },
+  {
+   "t": 1601.76,
+   "d": 1.28,
+   "text": "anyway but we you know"
+  },
+  {
+   "t": 1603.04,
+   "d": 1.52,
+   "text": "uh folks like pazzy some of the newer"
+  },
+  {
+   "t": 1604.56,
+   "d": 1.76,
+   "text": "members even even the members that i'm"
+  },
+  {
+   "t": 1606.32,
+   "d": 1.28,
+   "text": "interacting with now that have been on"
+  },
+  {
+   "t": 1607.6,
+   "d": 1.36,
+   "text": "the team for a while seem to have some"
+  },
+  {
+   "t": 1608.96,
+   "d": 1.04,
+   "text": "renewed interest so"
+  },
+  {
+   "t": 1610.0,
+   "d": 1.28,
+   "text": "looking forward to a little more"
+  },
+  {
+   "t": 1611.28,
+   "d": 1.84,
+   "text": "occurring there that said i'm also not"
+  },
+  {
+   "t": 1613.12,
+   "d": 2.16,
+   "text": "looking to to keep public servers and"
+  },
+  {
+   "t": 1615.28,
+   "d": 0.96,
+   "text": "mine in particular"
+  },
+  {
+   "t": 1616.24,
+   "d": 2.0,
+   "text": "net hack specific so it's it's just"
+  },
+  {
+   "t": 1618.24,
+   "d": 1.76,
+   "text": "easier that way a 10-year lull kind of"
+  },
+  {
+   "t": 1620.0,
+   "d": 1.52,
+   "text": "gets you into"
+  },
+  {
+   "t": 1621.52,
+   "d": 2.24,
+   "text": "a fairly easy mode of things and so i"
+  },
+  {
+   "t": 1623.76,
+   "d": 1.2,
+   "text": "didn't have to change anything for a"
+  },
+  {
+   "t": 1624.96,
+   "d": 1.12,
+   "text": "long time"
+  },
+  {
+   "t": 1626.08,
+   "d": 3.44,
+   "text": "um last piece uh just call to action"
+  },
+  {
+   "t": 1629.52,
+   "d": 1.68,
+   "text": "coding is an easy way to contribute uh"
+  },
+  {
+   "t": 1631.2,
+   "d": 1.52,
+   "text": "sorry an obvious way not easy to"
+  },
+  {
+   "t": 1632.72,
+   "d": 1.28,
+   "text": "contribute uh and and"
+  },
+  {
+   "t": 1634.0,
+   "d": 2.16,
+   "text": "very necessary but accessibility to a"
+  },
+  {
+   "t": 1636.16,
+   "d": 1.52,
+   "text": "big audience is a big deal"
+  },
+  {
+   "t": 1637.68,
+   "d": 1.92,
+   "text": "and anything that we can do to kind of"
+  },
+  {
+   "t": 1639.6,
+   "d": 1.92,
+   "text": "broaden that i think that's"
+  },
+  {
+   "t": 1641.52,
+   "d": 2.16,
+   "text": "in my net hack age if it were i think"
+  },
+  {
+   "t": 1643.68,
+   "d": 1.76,
+   "text": "the um"
+  },
+  {
+   "t": 1645.44,
+   "d": 1.28,
+   "text": "you know the idea that we can bring that"
+  },
+  {
+   "t": 1646.72,
+   "d": 1.52,
+   "text": "hack to a bigger audience and kind of"
+  },
+  {
+   "t": 1648.24,
+   "d": 1.92,
+   "text": "fill that pipeline of folks that are get"
+  },
+  {
+   "t": 1650.16,
+   "d": 1.12,
+   "text": "get interested in it whether they're"
+  },
+  {
+   "t": 1651.28,
+   "d": 1.52,
+   "text": "playing in a browser to make it easier"
+  },
+  {
+   "t": 1652.8,
+   "d": 1.6,
+   "text": "or whether they're playing online"
+  },
+  {
+   "t": 1654.4,
+   "d": 1.84,
+   "text": "um you know the fact that you could do a"
+  },
+  {
+   "t": 1656.24,
+   "d": 1.36,
+   "text": "phone game kind of with an online"
+  },
+  {
+   "t": 1657.6,
+   "d": 1.04,
+   "text": "terminal you know"
+  },
+  {
+   "t": 1658.64,
+   "d": 1.92,
+   "text": "makes an easy port that's something that"
+  },
+  {
+   "t": 1660.56,
+   "d": 1.6,
+   "text": "i find really interesting"
+  },
+  {
+   "t": 1662.16,
+   "d": 1.28,
+   "text": "i was going to take questions then i'm"
+  },
+  {
+   "t": 1663.44,
+   "d": 2.16,
+   "text": "kind of out here the usual questions go"
+  },
+  {
+   "t": 1665.6,
+   "d": 1.6,
+   "text": "in the realm of why don't you do x on"
+  },
+  {
+   "t": 1667.2,
+   "d": 1.68,
+   "text": "the server and the answer is one of two"
+  },
+  {
+   "t": 1668.88,
+   "d": 1.28,
+   "text": "things it was hard"
+  },
+  {
+   "t": 1670.16,
+   "d": 2.48,
+   "text": "and it was i'm lazy i haven't gotten to"
+  },
+  {
+   "t": 1672.64,
+   "d": 1.6,
+   "text": "it yet um"
+  },
+  {
+   "t": 1674.24,
+   "d": 4.16,
+   "text": "please help you know this is um"
+  },
+  {
+   "t": 1678.72,
+   "d": 1.52,
+   "text": "as much as anyone is interested in"
+  },
+  {
+   "t": 1680.24,
+   "d": 2.64,
+   "text": "contributing or helping out"
+  },
+  {
+   "t": 1682.88,
+   "d": 1.52,
+   "text": "i'm not here to lock anybody out of it"
+  },
+  {
+   "t": 1684.4,
+   "d": 1.92,
+   "text": "so"
+  },
+  {
+   "t": 1686.32,
+   "d": 10.48,
+   "text": "and with that hooray"
+  },
+  {
+   "t": 1696.8,
+   "d": 2.4,
+   "text": "i'm going to say a few things sure one"
+  },
+  {
+   "t": 1699.2,
+   "d": 0.88,
+   "text": "brita here"
+  },
+  {
+   "t": 1700.08,
+   "d": 1.52,
+   "text": "who is one of the organizers of this"
+  },
+  {
+   "t": 1701.6,
+   "d": 1.52,
+   "text": "event also runs"
+  },
+  {
+   "t": 1703.12,
+   "d": 3.04,
+   "text": "wiki edit-a-thons i think we should have"
+  },
+  {
+   "t": 1706.16,
+   "d": 3.12,
+   "text": "a nethack wiki edit-a-thon maybe"
+  },
+  {
+   "t": 1709.28,
+   "d": 4.24,
+   "text": "after we break into uh free play"
+  },
+  {
+   "t": 1713.52,
+   "d": 1.92,
+   "text": "also i want to say that my first"
+  },
+  {
+   "t": 1715.44,
+   "d": 1.92,
+   "text": "ascension in nethack"
+  },
+  {
+   "t": 1717.36,
+   "d": 2.24,
+   "text": "was on hack.alt.org with one of my"
+  },
+  {
+   "t": 1719.6,
+   "d": 1.44,
+   "text": "friends who was across the country"
+  },
+  {
+   "t": 1721.04,
+   "d": 0.72,
+   "text": "sending me"
+  },
+  {
+   "t": 1721.76,
+   "d": 4.72,
+   "text": "mail in-game repeatedly giving me advice"
+  },
+  {
+   "t": 1726.48,
+   "d": 2.8,
+   "text": "um and a lot of what i learned how i"
+  },
+  {
+   "t": 1729.28,
+   "d": 2.48,
+   "text": "learned to play was from"
+  },
+  {
+   "t": 1731.76,
+   "d": 3.6,
+   "text": "uh being on that irc room and saying"
+  },
+  {
+   "t": 1735.36,
+   "d": 1.84,
+   "text": "like i'm stuck here like i don't know"
+  },
+  {
+   "t": 1737.2,
+   "d": 1.52,
+   "text": "what to do in this area and then the"
+  },
+  {
+   "t": 1738.72,
+   "d": 1.12,
+   "text": "person goes like"
+  },
+  {
+   "t": 1739.84,
+   "d": 2.88,
+   "text": "what's your name on nethack.org i'll go"
+  },
+  {
+   "t": 1742.72,
+   "d": 1.52,
+   "text": "watch the game"
+  },
+  {
+   "t": 1744.24,
+   "d": 2.48,
+   "text": "and see like like oh open your inventory"
+  },
+  {
+   "t": 1746.72,
+   "d": 1.36,
+   "text": "okay scroll down"
+  },
+  {
+   "t": 1748.08,
+   "d": 2.4,
+   "text": "like oh well you have this like wand of"
+  },
+  {
+   "t": 1750.48,
+   "d": 1.52,
+   "text": "digging use that one of digging"
+  },
+  {
+   "t": 1752.0,
+   "d": 2.56,
+   "text": "and so i don't know what you think about"
+  },
+  {
+   "t": 1754.56,
+   "d": 1.84,
+   "text": "that sort of community aspect of"
+  },
+  {
+   "t": 1756.4,
+   "d": 1.52,
+   "text": "communication i don't think i'd have"
+  },
+  {
+   "t": 1757.92,
+   "d": 2.24,
+   "text": "beaten it without more help"
+  },
+  {
+   "t": 1760.16,
+   "d": 1.76,
+   "text": "you know and it was a lot more sparse"
+  },
+  {
+   "t": 1761.92,
+   "d": 1.52,
+   "text": "the time now it's actually been great"
+  },
+  {
+   "t": 1763.44,
+   "d": 1.44,
+   "text": "like i said it's it's just a more"
+  },
+  {
+   "t": 1764.88,
+   "d": 1.52,
+   "text": "advanced version of a spoiler right or"
+  },
+  {
+   "t": 1766.4,
+   "d": 1.52,
+   "text": "you could have eventually gotten to that"
+  },
+  {
+   "t": 1767.92,
+   "d": 2.48,
+   "text": "kind of on your own but at some point um"
+  },
+  {
+   "t": 1770.4,
+   "d": 1.12,
+   "text": "yeah people are just"
+  },
+  {
+   "t": 1771.52,
+   "d": 2.88,
+   "text": "spoilers people are just spoilers"
+  },
+  {
+   "t": 1774.4,
+   "d": 0.88,
+   "text": "waiting to"
+  },
+  {
+   "t": 1775.28,
+   "d": 3.2,
+   "text": "spoil you i'm okay with it um uh"
+  },
+  {
+   "t": 1778.48,
+   "d": 2.4,
+   "text": "i'm sorry we are actually out of time so"
+  },
+  {
+   "t": 1780.88,
+   "d": 2.16,
+   "text": "no more questions"
+  },
+  {
+   "t": 1783.04,
+   "d": 2.08,
+   "text": "um and now it's time for lightning talks"
+  },
+  {
+   "t": 1785.12,
+   "d": 1.68,
+   "text": "hosted by brita"
+  },
+  {
+   "t": 1786.8,
+   "d": 7.2,
+   "text": "so again big round of applause"
+  }
+ ]
+}

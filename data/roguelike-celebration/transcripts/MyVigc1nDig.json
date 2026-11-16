@@ -1,0 +1,686 @@
+{
+ "id": "MyVigc1nDig",
+ "url": "https://www.youtube.com/watch?v=MyVigc1nDig",
+ "title": "Stav Hinenzon - A Messy Approach to Dynamic Narrative in Sunshine Shuffle",
+ "speaker": "Stav Hinenzon",
+ "talk_title": "A Messy Approach to Dynamic Narrative in Sunshine Shuffle",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 963,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "An overview of the dialogue system in narrative poker game Sunshine Shuffle, covering both how the system is structured and a bit of its development history. The talk will discuss how the game's tech was built to support its dynamic structure, while also talking about the assumptions made at the start of development, and how those assumptions were challenged over the course of the game's production.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 80,
+   "title": "The Game"
+  },
+  {
+   "start": 155,
+   "title": "The Talk"
+  },
+  {
+   "start": 185,
+   "title": "The Tools"
+  },
+  {
+   "start": 372,
+   "title": "The Structure"
+  },
+  {
+   "start": 499,
+   "title": "The Problems"
+  },
+  {
+   "start": 597,
+   "title": "The Timing"
+  },
+  {
+   "start": 648,
+   "title": "Delegation"
+  },
+  {
+   "start": 744,
+   "title": "Cool Things"
+  },
+  {
+   "start": 885,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2074,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 13.68,
+   "text": "ALEXEI: First to the stage I want to welcome Stav. I practiced this and now I have been talking."
+  },
+  {
+   "t": 15.68,
+   "d": 9.68,
+   "text": "Stav Hinenzon is a game designer and developer based in Redmond,"
+  },
+  {
+   "t": 25.36,
+   "d": 3.6,
+   "text": "WA. He is currently working as a technical game designer at Sony"
+  },
+  {
+   "t": 28.96,
+   "d": 3.56,
+   "text": "Interactive Entertainment on an unannounced title. His previous"
+  },
+  {
+   "t": 32.52,
+   "d": 5.44,
+   "text": "work includes Forza Street, The Last of Us Part I (PS5), and"
+  },
+  {
+   "t": 37.96,
+   "d": 1.16,
+   "text": "Sunshine Shuffle. Stav is a solo game dev"
+  },
+  {
+   "t": 39.12,
+   "d": 5.92,
+   "text": "Which is the topic of today. Please go ahead and take it away, Stav."
+  },
+  {
+   "t": 49.0,
+   "d": 6.16,
+   "text": "STAV: I am Stav Hinenzon a game developer based in Redmond, Washington. My contract ended this"
+  },
+  {
+   "t": 55.16,
+   "d": 10.48,
+   "text": "month so as of this month I am unemployed. I am here to talk about a game I worked on"
+  },
+  {
+   "t": 65.64,
+   "d": 6.6,
+   "text": "called Sunshine Shuffle and talk about the dialogue, tooling and assumptions that went"
+  },
+  {
+   "t": 72.24,
+   "d": 10.92,
+   "text": "into it. This is a \"A Messy Approach to Dynamic Narrative in Sunshine Shuffle.\" Sunshine Shuffle"
+  },
+  {
+   "t": 83.16,
+   "d": 7.44,
+   "text": "a narrative poker game where you sit at a table with cute animals and play games of poker as they"
+  },
+  {
+   "t": 90.6,
+   "d": 8.56,
+   "text": "tell you a thrilling crime and betrayal that happened years ago. The poker and narrative"
+  },
+  {
+   "t": 99.16,
+   "d": 6.36,
+   "text": "layer happen simultaneously and independent of each other. Characters can talk and play poker"
+  },
+  {
+   "t": 105.52,
+   "d": 10.88,
+   "text": "at the same time. The character might bet, say a line, pass and turn and it all flows. Now if"
+  },
+  {
+   "t": 116.4,
+   "d": 7.72,
+   "text": "you are familiar with Tall tale you might know this. Another game where characters sit around"
+  },
+  {
+   "t": 124.12,
+   "d": 5.32,
+   "text": "and play poker and shoot the shit but Sunshine Shuffle is a game with an original character"
+  },
+  {
+   "t": 129.44,
+   "d": 7.64,
+   "text": "and story where as poker knight is more a poker game with characters you know and love serving as"
+  },
+  {
+   "t": 137.08,
+   "d": 7.72,
+   "text": "background to that. In Sunshine Shuffle the poker is really a background to a thriller story."
+  },
+  {
+   "t": 144.8,
+   "d": 4.08,
+   "text": "You might also have heard of us from the switch version of the game got delayed due"
+  },
+  {
+   "t": 148.88,
+   "d": 12.28,
+   "text": "to hilarious shenanigans. I am going to talk about the dialogue system and the assumptions"
+  },
+  {
+   "t": 161.16,
+   "d": 13.04,
+   "text": "that went into it and the tooling that allowed conversation and what got baked in. Some of them"
+  },
+  {
+   "t": 174.2,
+   "d": 6.16,
+   "text": "turn out to be wrong. Then I am going to talk about what the game was able to accomplish and"
+  },
+  {
+   "t": 180.36,
+   "d": 10.88,
+   "text": "what I am proud about and end with takeaways. Sunshine Shuffle means a bunch of conversations"
+  },
+  {
+   "t": 191.24,
+   "d": 8.12,
+   "text": "to happen around the table. Those conversations are conceptualized as storylets. I recommend Emily"
+  },
+  {
+   "t": 199.36,
+   "d": 9.84,
+   "text": "short who has great blogs on this subject. For the purpose of this game they are conversations"
+  },
+  {
+   "t": 209.2,
+   "d": 7.2,
+   "text": "as discreet assets with certain preconditions that determine which conversation can be"
+  },
+  {
+   "t": 216.4,
+   "d": 4.68,
+   "text": "selected. Post-conditions that affect which future conversations are going to be selected"
+  },
+  {
+   "t": 221.76,
+   "d": 5.12,
+   "text": "and some kind of selection mechanism. This is what as it looks like for Sunshine Shuffle. We"
+  },
+  {
+   "t": 226.88,
+   "d": 8.08,
+   "text": "had a lot of conversation and each conversation has its preconditions and when the table needed"
+  },
+  {
+   "t": 234.96,
+   "d": 5.24,
+   "text": "another conversation at certain intervals we would select from one of the available"
+  },
+  {
+   "t": 240.2,
+   "d": 7.88,
+   "text": "conversation based on weighted randomness. Sunshine Shuffle's story structure is a linear"
+  },
+  {
+   "t": 248.08,
+   "d": 7.08,
+   "text": "story of main conversations that happen in a sequence and optional conversations that get"
+  },
+  {
+   "t": 255.16,
+   "d": 6.64,
+   "text": "unlocked at certain points. Any time we need a conversation we will select from the next main"
+  },
+  {
+   "t": 261.8,
+   "d": 6.68,
+   "text": "conversation and any number the player unlocks. When it is selected it gets played at the table."
+  },
+  {
+   "t": 269.32,
+   "d": 9.96,
+   "text": "To author that conversation it is a squiggles node based editor built using xNode. That came"
+  },
+  {
+   "t": 279.28,
+   "d": 8.88,
+   "text": "about from talking about what is preferred and need to plug that into eye 2 localization. When"
+  },
+  {
+   "t": 288.16,
+   "d": 10.48,
+   "text": "I was first making the tool my goal was to be atomic. A partner on the project had a lot of"
+  },
+  {
+   "t": 298.64,
+   "d": 10.72,
+   "text": "advice for building the tool and I wanted to have a degree of control like they seemed to have back"
+  },
+  {
+   "t": 309.36,
+   "d": 6.2,
+   "text": "them. We can have animation, we can a look, we can have a character making a face and each thing can"
+  },
+  {
+   "t": 315.56,
+   "d": 7.24,
+   "text": "be integrated into the conversation. That was the mindset that went into it. Everything needs"
+  },
+  {
+   "t": 322.8,
+   "d": 6.68,
+   "text": "to be very atomic. There were some problems with that but I will get to that later."
+  },
+  {
+   "t": 330.4,
+   "d": 6.32,
+   "text": "In addition to have individual lines interrupt the course of gameplay outside of the normal"
+  },
+  {
+   "t": 336.72,
+   "d": 3.92,
+   "text": "conversation system we had books which in the case of Sunshine Shuffle were based on"
+  },
+  {
+   "t": 340.64,
+   "d": 6.04,
+   "text": "particular gameplay triggers on particular characters. Then we have a bunch of lines"
+  },
+  {
+   "t": 346.68,
+   "d": 8.12,
+   "text": "and you will notice that here everything about the line is in one place. The speaker is in one place,"
+  },
+  {
+   "t": 354.8,
+   "d": 3.96,
+   "text": "the localization term we are using, the text of the line, the animation that plays with the line,"
+  },
+  {
+   "t": 358.76,
+   "d": 7.72,
+   "text": "the face that accompany it, it is all in one entry and that affects how the schema for how things are"
+  },
+  {
+   "t": 367.64,
+   "d": 13.56,
+   "text": "consolidated over the course of development. The queue and the parser were behind the screens."
+  },
+  {
+   "t": 381.2,
+   "d": 10.84,
+   "text": "That node graph, each node is a chore. That's how we conceptualized it. A chore is an animation. A"
+  },
+  {
+   "t": 392.04,
+   "d": 9.12,
+   "text": "turn in a poker game. A character making a face. So you essentially had a set of chores, a set of"
+  },
+  {
+   "t": 401.16,
+   "d": 9.68,
+   "text": "nodes and each node representing a chore and a parser that started a conversation and put"
+  },
+  {
+   "t": 410.84,
+   "d": 10.28,
+   "text": "that on an event queue and put it on the queue and the queue. From the poker side,"
+  },
+  {
+   "t": 421.12,
+   "d": 8.36,
+   "text": "that also put events on the same queue and that was a priority queue. Each chore had a priority,"
+  },
+  {
+   "t": 429.48,
+   "d": 7.28,
+   "text": "they were organized by that priority and then the highest priority task got played first. And it was"
+  },
+  {
+   "t": 436.76,
+   "d": 9.48,
+   "text": "particularly important that any chore that could block other things from playing would get higher"
+  },
+  {
+   "t": 446.24,
+   "d": 6.0,
+   "text": "priority and would play first. That way when something big happened in the game, a character"
+  },
+  {
+   "t": 452.24,
+   "d": 5.84,
+   "text": "going all in or a showdown, that would get high priority because it would go and lock other things"
+  },
+  {
+   "t": 458.08,
+   "d": 5.28,
+   "text": "from playing. Otherwise everything plays and when something like that happened we need to"
+  },
+  {
+   "t": 463.36,
+   "d": 10.52,
+   "text": "lock conversations and prevent chores from firing. Then if when we get back we can insert things into"
+  },
+  {
+   "t": 473.88,
+   "d": 9.76,
+   "text": "the queue, a mark to return to the conversation in this case. That was the basic skeleton of it."
+  },
+  {
+   "t": 483.64,
+   "d": 6.32,
+   "text": "There is a node graph, a parser that goes through those nodes and converts those into chores that"
+  },
+  {
+   "t": 489.96,
+   "d": 5.52,
+   "text": "go on to a queue that takes events from multiple sources and we have everything in one place and"
+  },
+  {
+   "t": 495.48,
+   "d": 7.56,
+   "text": "we know in what order things need to play. Here was problems with this as the game was"
+  },
+  {
+   "t": 503.04,
+   "d": 7.2,
+   "text": "going through development. Like I mentioned earlier, over the course of development our"
+  },
+  {
+   "t": 510.24,
+   "d": 11.88,
+   "text": "structures and workflows coalesced in ways I didn't predict at the start. Our main unit for"
+  },
+  {
+   "t": 522.12,
+   "d": 6.96,
+   "text": "the story was the lines like in a script and then for poker, poker is a turn-based game, we had our"
+  },
+  {
+   "t": 529.08,
+   "d": 7.8,
+   "text": "turns. What ended up happening behind the scenes is that to control the timing of things to make"
+  },
+  {
+   "t": 536.88,
+   "d": 7.36,
+   "text": "sure that everything from a particular unit lined up and that entire thing got through and we could"
+  },
+  {
+   "t": 545.0,
+   "d": 4.84,
+   "text": "be free to focus on something else, all the chores from that essentially got consolidated"
+  },
+  {
+   "t": 549.84,
+   "d": 7.44,
+   "text": "and played at the same time. That means that earlier atomic kind of conception of the chore"
+  },
+  {
+   "t": 557.28,
+   "d": 8.12,
+   "text": "graph wasn't necessary. It added a lot of time and work to creating conversations in the game"
+  },
+  {
+   "t": 565.4,
+   "d": 6.52,
+   "text": "because everything you want to do to click, make a new note, drag the link, it was time consuming and"
+  },
+  {
+   "t": 571.92,
+   "d": 8.28,
+   "text": "it just required people to come in and do the work of hooking up conversations. Eventually,"
+  },
+  {
+   "t": 580.2,
+   "d": 6.56,
+   "text": "in order to pain maintain focus and control over what was happening at the table, we needed to"
+  },
+  {
+   "t": 586.76,
+   "d": 4.44,
+   "text": "have those units. Lines were the units for the dialogue and turns were the units for gameplay"
+  },
+  {
+   "t": 591.2,
+   "d": 7.72,
+   "text": "and we could go through all the chores in one and do another or focus on something else. And"
+  },
+  {
+   "t": 598.92,
+   "d": 7.76,
+   "text": "just general the timing of how things went timing is essential in any narrative game and designers"
+  },
+  {
+   "t": 606.68,
+   "d": 4.08,
+   "text": "should have control over that. The way the tool was built with storylets and a node of grass and"
+  },
+  {
+   "t": 610.76,
+   "d": 9.64,
+   "text": "the code handles the rest, it didn't really provide well surfaced means to control that"
+  },
+  {
+   "t": 620.4,
+   "d": 6.76,
+   "text": "kind of timing to the designers. This ruled in a need for program to step in and do that"
+  },
+  {
+   "t": 627.16,
+   "d": 6.84,
+   "text": "work to control the timing because it was all based on float variables scattered across many"
+  },
+  {
+   "t": 634.0,
+   "d": 10.48,
+   "text": "C# scripts and that cost us in iteration time. How do we iterate on the flow of conversation,"
+  },
+  {
+   "t": 644.48,
+   "d": 8.44,
+   "text": "the flow of poker and just player load. And delegation when I said it was across"
+  },
+  {
+   "t": 652.92,
+   "d": 10.0,
+   "text": "many C# scripts I meant it. What exactly handles timing? Because the plan going in was that the"
+  },
+  {
+   "t": 662.92,
+   "d": 5.48,
+   "text": "chore queue would provide essentially a snapshot of when things were going to happen. If you look"
+  },
+  {
+   "t": 668.4,
+   "d": 5.64,
+   "text": "in the chore queue you were supposed to have an idea of what things were coming up and in"
+  },
+  {
+   "t": 674.04,
+   "d": 12.16,
+   "text": "practice that responsibility shifted towards the graph parser. Essentially, it would go through all"
+  },
+  {
+   "t": 686.2,
+   "d": 5.0,
+   "text": "the chores online, put all of them on the queue, and then wait until it would have permission to"
+  },
+  {
+   "t": 691.2,
+   "d": 6.96,
+   "text": "play another line and then it would go through and turn all the grass related to the next line into"
+  },
+  {
+   "t": 698.16,
+   "d": 8.48,
+   "text": "more chores and the actual queue, it ended up as a tie breaker. Usually chores wouldn't spend"
+  },
+  {
+   "t": 706.64,
+   "d": 6.2,
+   "text": "more than a few frames on that queue and it would go on. It was really important if we were playing"
+  },
+  {
+   "t": 712.84,
+   "d": 5.72,
+   "text": "thing but one thing had to lock everything else. So it had to have higher priority to"
+  },
+  {
+   "t": 718.56,
+   "d": 14.8,
+   "text": "go first. The timing stuff, some of that was on the UI. That kind of thing between does"
+  },
+  {
+   "t": 733.36,
+   "d": 7.24,
+   "text": "controlling the time have to do with how long we are hiding the UI and waiting after that?"
+  },
+  {
+   "t": 740.6,
+   "d": 7.6,
+   "text": "And that, again, cost us in iteration time. But in spite of those problems Sunshine Shuffle"
+  },
+  {
+   "t": 748.2,
+   "d": 5.52,
+   "text": "does cool things and I want to talk about them. The first is space. Everything happens in the"
+  },
+  {
+   "t": 753.72,
+   "d": 12.04,
+   "text": "boat cabin, the same boat cabin. The talk, the poker, and the menus are in the boat cabin. That"
+  },
+  {
+   "t": 765.76,
+   "d": 7.64,
+   "text": "results in a certain effect that I have a hard time putting a finger on it but I would compare"
+  },
+  {
+   "t": 773.4,
+   "d": 7.88,
+   "text": "it to actors performing secondary actions on stage while delivering their lines. It gives"
+  },
+  {
+   "t": 781.28,
+   "d": 4.36,
+   "text": "the character a certain like because they are involved in things that aren't directly related"
+  },
+  {
+   "t": 785.64,
+   "d": 10.64,
+   "text": "to what they're saying to the player. And there is no hard delineation in interface, it makes the"
+  },
+  {
+   "t": 796.28,
+   "d": 8.72,
+   "text": "space and characters in it seem more alive. The next is re-interpretation. This explosive"
+  },
+  {
+   "t": 805.0,
+   "d": 6.0,
+   "text": "line and in the game, because the poker layer and the narrative layer are independent of each other,"
+  },
+  {
+   "t": 811.0,
+   "d": 5.92,
+   "text": "you have a lot of opportunities for that happening in a different context. It could happen after an"
+  },
+  {
+   "t": 816.92,
+   "d": 10.24,
+   "text": "all in or daring raise or cautious bet. That means the line lands a little bit differently in each"
+  },
+  {
+   "t": 827.16,
+   "d": 12.96,
+   "text": "playthrough. And adversely, I found that players project intention on to the poker AI's decisions"
+  },
+  {
+   "t": 840.12,
+   "d": 4.68,
+   "text": "based on what just happened in the narrative regardless of whether or not that connection"
+  },
+  {
+   "t": 844.8,
+   "d": 5.68,
+   "text": "actually exists. That kind of having two layers, acting independent of each other in the game,"
+  },
+  {
+   "t": 850.48,
+   "d": 5.08,
+   "text": "allows for a lot of unique moments of characterization and unique moments of"
+  },
+  {
+   "t": 855.56,
+   "d": 6.44,
+   "text": "comedy when you have a long pause because of the scripted think before a turn that happened after"
+  },
+  {
+   "t": 862.0,
+   "d": 4.88,
+   "text": "an awkward line, for example. That means each playthrough of Sunshine Shuffle is a little"
+  },
+  {
+   "t": 866.88,
+   "d": 9.28,
+   "text": "unique and it means that they are and I am proud of that. We did a lot of work toward"
+  },
+  {
+   "t": 876.16,
+   "d": 18.24,
+   "text": "minimizing player load through the iteration and cost we got through the inefficiencies."
+  },
+  {
+   "t": 900.32,
+   "d": 7.0,
+   "text": "The design and the tooling, we needed to talk. The tooling was directly done by talking to the"
+  },
+  {
+   "t": 907.32,
+   "d": 4.32,
+   "text": "person using the tool, what they felt comfortable with and what the game was going to be. That was"
+  },
+  {
+   "t": 911.64,
+   "d": 9.4,
+   "text": "clear from the start. And finally, the tools were shipped and shipped something I was proud of. So"
+  },
+  {
+   "t": 921.04,
+   "d": 7.0,
+   "text": "that's my main takeaway. This talk comes from the tension between the flaws of the tools in what we"
+  },
+  {
+   "t": 928.04,
+   "d": 4.64,
+   "text": "paid and I wanted to talk about that. -- made. Thank you for listening to my talk. I hope you"
+  },
+  {
+   "t": 932.68,
+   "d": 3.9,
+   "text": "enjoy the subsequent talk and have a good time at Roguelike Celebration. Thank you very much."
+  },
+  {
+   "t": 936.58,
+   "d": 3.98,
+   "text": "ALEXEI: Thank you very much, Stav. Well done fitting so much into that"
+  },
+  {
+   "t": 940.56,
+   "d": 3.4,
+   "text": "15 minutes. We probably won't have time for questions which is probably good because the"
+  },
+  {
+   "t": 943.96,
+   "d": 10.08,
+   "text": "question now is what is a conversation and I am not going to answer that in one minute. I"
+  },
+  {
+   "t": 954.04,
+   "d": 8.2,
+   "text": "love the final note of flawed tools ship is fantastic. Thank you very much for coming."
+  }
+ ]
+}

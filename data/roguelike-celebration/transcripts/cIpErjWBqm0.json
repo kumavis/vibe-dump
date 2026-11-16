@@ -1,0 +1,3952 @@
+{
+ "id": "cIpErjWBqm0",
+ "url": "https://www.youtube.com/watch?v=cIpErjWBqm0",
+ "title": "Robin Sloan - Writing with the machine: GPT-2 and text generation",
+ "speaker": "Robin Sloan",
+ "talk_title": "Writing with the machine: GPT-2 and text generation",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1902,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nRobin Sloan is the author of the novels Mr. Penumbra's 24-Hour Bookstore and Sourdough. He also regularly publishes digital experiments.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 80,
+   "title": "What is machine learning"
+  },
+  {
+   "start": 200,
+   "title": "Case study"
+  },
+  {
+   "start": 460,
+   "title": "Writing prompts"
+  },
+  {
+   "start": 605,
+   "title": "Machine learning"
+  },
+  {
+   "start": 662,
+   "title": "Filtering"
+  },
+  {
+   "start": 770,
+   "title": "Reading"
+  },
+  {
+   "start": 1155,
+   "title": "Frameworks"
+  },
+  {
+   "start": 1537,
+   "title": "Subtlety"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5628,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.57,
+   "text": "what a total delight to be here this is"
+  },
+  {
+   "t": 3.57,
+   "d": 1.62,
+   "text": "my first roguelike celebration although"
+  },
+  {
+   "t": 5.19,
+   "d": 2.01,
+   "text": "I probably watched from the equivalent"
+  },
+  {
+   "t": 7.2,
+   "d": 1.95,
+   "text": "of two conferences worth of videos"
+  },
+  {
+   "t": 9.15,
+   "d": 1.98,
+   "text": "online over the years so it's really an"
+  },
+  {
+   "t": 11.13,
+   "d": 1.53,
+   "text": "honor to be up on the stage and to be"
+  },
+  {
+   "t": 12.66,
+   "d": 3.15,
+   "text": "here with all of you so this talk is"
+  },
+  {
+   "t": 15.81,
+   "d": 2.67,
+   "text": "called writing with the Machine it is"
+  },
+  {
+   "t": 18.48,
+   "d": 3.69,
+   "text": "emphatically a bard talk so thank you"
+  },
+  {
+   "t": 22.17,
+   "d": 1.92,
+   "text": "all I see for that taxonomy it's useful"
+  },
+  {
+   "t": 24.09,
+   "d": 3.3,
+   "text": "and fun there's gonna be the how and why"
+  },
+  {
+   "t": 27.39,
+   "d": 3.72,
+   "text": "of generating text with tools like GPT -"
+  },
+  {
+   "t": 31.11,
+   "d": 3.09,
+   "text": "so if Everest Pipkins talk was sort of"
+  },
+  {
+   "t": 34.2,
+   "d": 4.35,
+   "text": "the theory the phronesis the wisdom on"
+  },
+  {
+   "t": 38.55,
+   "d": 1.83,
+   "text": "this talk is gonna be the practice the"
+  },
+  {
+   "t": 40.38,
+   "d": 3.03,
+   "text": "craft or the technique so I'm Robin"
+  },
+  {
+   "t": 43.41,
+   "d": 1.77,
+   "text": "Sloane briefly I am a fiction writer"
+  },
+  {
+   "t": 45.18,
+   "d": 2.1,
+   "text": "that's how I pay my bills which feels"
+  },
+  {
+   "t": 47.28,
+   "d": 2.01,
+   "text": "astonishing sometimes I'm ever in two"
+  },
+  {
+   "t": 49.29,
+   "d": 1.65,
+   "text": "books one is called mr. penumbra's"
+  },
+  {
+   "t": 50.94,
+   "d": 2.28,
+   "text": "24-hour bookstore the other is called"
+  },
+  {
+   "t": 53.22,
+   "d": 2.64,
+   "text": "sourdough I'm working on a third now and"
+  },
+  {
+   "t": 55.86,
+   "d": 1.98,
+   "text": "the manuscript actually integrates text"
+  },
+  {
+   "t": 57.84,
+   "d": 1.8,
+   "text": "from the techniques that I'm going to"
+  },
+  {
+   "t": 59.64,
+   "d": 2.16,
+   "text": "show you and also notably I just want to"
+  },
+  {
+   "t": 61.8,
+   "d": 1.56,
+   "text": "mention that I did some writing for a"
+  },
+  {
+   "t": 63.36,
+   "d": 1.53,
+   "text": "video game that just came out it's"
+  },
+  {
+   "t": 64.89,
+   "d": 2.28,
+   "text": "called neo cab it's on many different"
+  },
+  {
+   "t": 67.17,
+   "d": 1.89,
+   "text": "platforms including the Nintendo switch"
+  },
+  {
+   "t": 69.06,
+   "d": 2.22,
+   "text": "and although not a roguelike I think has"
+  },
+  {
+   "t": 71.28,
+   "d": 2.79,
+   "text": "a lot of this sort of procedural and"
+  },
+  {
+   "t": 74.07,
+   "d": 2.19,
+   "text": "recombinant Ori elements that might"
+  },
+  {
+   "t": 76.26,
+   "d": 1.65,
+   "text": "appeal to a group like this so I"
+  },
+  {
+   "t": 77.91,
+   "d": 1.76,
+   "text": "encourage you to check it out"
+  },
+  {
+   "t": 79.67,
+   "d": 3.07,
+   "text": "so just to kind of locate ourselves in"
+  },
+  {
+   "t": 82.74,
+   "d": 2.54,
+   "text": "the technology space time continuum"
+  },
+  {
+   "t": 85.28,
+   "d": 2.98,
+   "text": "there's machine learning and although"
+  },
+  {
+   "t": 88.26,
+   "d": 3.69,
+   "text": "it's a big wide disparate complicated"
+  },
+  {
+   "t": 91.95,
+   "d": 2.01,
+   "text": "field of long history the thing that I"
+  },
+  {
+   "t": 93.96,
+   "d": 2.25,
+   "text": "have found most clarifying is to"
+  },
+  {
+   "t": 96.21,
+   "d": 2.67,
+   "text": "remember that there's statistics at the"
+  },
+  {
+   "t": 98.88,
+   "d": 2.4,
+   "text": "core of it I feel like a lot of the sort"
+  },
+  {
+   "t": 101.28,
+   "d": 2.82,
+   "text": "of smartest and in a way most grounded"
+  },
+  {
+   "t": 104.1,
+   "d": 3.17,
+   "text": "practitioners of AI and machine learning"
+  },
+  {
+   "t": 107.27,
+   "d": 2.38,
+   "text": "talk about their work it's just kind of"
+  },
+  {
+   "t": 109.65,
+   "d": 1.89,
+   "text": "like deciding on a statistical"
+  },
+  {
+   "t": 111.54,
+   "d": 2.19,
+   "text": "distribution and it could be a"
+  },
+  {
+   "t": 113.73,
+   "d": 2.97,
+   "text": "distribution of images or words or"
+  },
+  {
+   "t": 116.7,
+   "d": 2.67,
+   "text": "musical notes or you know decisions that"
+  },
+  {
+   "t": 119.37,
+   "d": 1.5,
+   "text": "a person makes behind the wheel of a car"
+  },
+  {
+   "t": 120.87,
+   "d": 2.07,
+   "text": "and so perhaps a little simplistic but I"
+  },
+  {
+   "t": 122.94,
+   "d": 1.23,
+   "text": "find I found it very sort of"
+  },
+  {
+   "t": 124.17,
+   "d": 3.27,
+   "text": "demystifying as well so under the broad"
+  },
+  {
+   "t": 127.44,
+   "d": 1.05,
+   "text": "category of machine learning there are"
+  },
+  {
+   "t": 128.49,
+   "d": 1.71,
+   "text": "language models and language models are"
+  },
+  {
+   "t": 130.2,
+   "d": 2.79,
+   "text": "even simpler they just tell you what"
+  },
+  {
+   "t": 132.99,
+   "d": 0.48,
+   "text": "word"
+  },
+  {
+   "t": 133.47,
+   "d": 3.39,
+   "text": "comes next in the context of some corpus"
+  },
+  {
+   "t": 136.86,
+   "d": 1.53,
+   "text": "that you're working with and we heard"
+  },
+  {
+   "t": 138.39,
+   "d": 2.82,
+   "text": "all about that earlier and finally we"
+  },
+  {
+   "t": 141.21,
+   "d": 3.09,
+   "text": "have a very specific particular kind of"
+  },
+  {
+   "t": 144.3,
+   "d": 1.92,
+   "text": "model actually a particular code base"
+  },
+  {
+   "t": 146.22,
+   "d": 3.0,
+   "text": "and that's GPT - which is made by open a"
+  },
+  {
+   "t": 149.22,
+   "d": 2.49,
+   "text": "I really interesting an intense"
+  },
+  {
+   "t": 151.71,
+   "d": 3.87,
+   "text": "organization here in San Francisco GPT -"
+  },
+  {
+   "t": 155.58,
+   "d": 3.11,
+   "text": "stands for generative pre-training"
+  },
+  {
+   "t": 158.69,
+   "d": 5.74,
+   "text": "transformer - and setting up that"
+  },
+  {
+   "t": 164.43,
+   "d": 1.23,
+   "text": "environment and getting that code"
+  },
+  {
+   "t": 165.66,
+   "d": 1.62,
+   "text": "running is way beyond the scope of this"
+  },
+  {
+   "t": 167.28,
+   "d": 2.37,
+   "text": "talk the good news is that the machine"
+  },
+  {
+   "t": 169.65,
+   "d": 2.1,
+   "text": "learning community especially of late"
+  },
+  {
+   "t": 171.75,
+   "d": 2.22,
+   "text": "it's been really good about documenting"
+  },
+  {
+   "t": 173.97,
+   "d": 1.77,
+   "text": "its work and being kind of open with"
+  },
+  {
+   "t": 175.74,
+   "d": 1.92,
+   "text": "tutorials and like resources that can"
+  },
+  {
+   "t": 177.66,
+   "d": 1.74,
+   "text": "bring people up to speed so you'll have"
+  },
+  {
+   "t": 179.4,
+   "d": 2.34,
+   "text": "no problem finding that yourself online"
+  },
+  {
+   "t": 181.74,
+   "d": 2.31,
+   "text": "in my experience the best existing"
+  },
+  {
+   "t": 184.05,
+   "d": 2.58,
+   "text": "tutorial is by the strange and"
+  },
+  {
+   "t": 186.63,
+   "d": 3.66,
+   "text": "mysterious burn it's kind of like the"
+  },
+  {
+   "t": 190.29,
+   "d": 2.04,
+   "text": "sage of the internet and you can find it"
+  },
+  {
+   "t": 192.33,
+   "d": 1.5,
+   "text": "by googling burn"
+  },
+  {
+   "t": 193.83,
+   "d": 4.32,
+   "text": "GPT - who sort of sounds like a spell on"
+  },
+  {
+   "t": 198.15,
+   "d": 3.84,
+   "text": "its own so uhm the technical part is"
+  },
+  {
+   "t": 201.99,
+   "d": 2.04,
+   "text": "easy there's a lot of resources to get"
+  },
+  {
+   "t": 204.03,
+   "d": 2.22,
+   "text": "you started really more difficult once"
+  },
+  {
+   "t": 206.25,
+   "d": 3.18,
+   "text": "you have this up and running is how do"
+  },
+  {
+   "t": 209.43,
+   "d": 2.28,
+   "text": "you use it right how do you actually use"
+  },
+  {
+   "t": 211.71,
+   "d": 3.03,
+   "text": "this model to produce text text that is"
+  },
+  {
+   "t": 214.74,
+   "d": 1.77,
+   "text": "not just a tech demo but text it's"
+  },
+  {
+   "t": 216.51,
+   "d": 2.16,
+   "text": "actually useful in some creative context"
+  },
+  {
+   "t": 218.67,
+   "d": 2.25,
+   "text": "so I want to ground this talk in a very"
+  },
+  {
+   "t": 220.92,
+   "d": 2.34,
+   "text": "particular case study and it's a project"
+  },
+  {
+   "t": 223.26,
+   "d": 2.49,
+   "text": "I did earlier this year so I'll set it"
+  },
+  {
+   "t": 225.75,
+   "d": 0.87,
+   "text": "up for you"
+  },
+  {
+   "t": 226.62,
+   "d": 2.67,
+   "text": "I decided after playing with these tools"
+  },
+  {
+   "t": 229.29,
+   "d": 2.67,
+   "text": "and finding them sort of inspiring and"
+  },
+  {
+   "t": 231.96,
+   "d": 2.07,
+   "text": "and provocative I decided that I wanted"
+  },
+  {
+   "t": 234.03,
+   "d": 3.75,
+   "text": "to send people fantasy stories quest"
+  },
+  {
+   "t": 237.78,
+   "d": 3.21,
+   "text": "tales generated by a machine learning"
+  },
+  {
+   "t": 240.99,
+   "d": 3.39,
+   "text": "system so because nothing can be simple"
+  },
+  {
+   "t": 244.38,
+   "d": 3.48,
+   "text": "I came up with a story about sending"
+  },
+  {
+   "t": 247.86,
+   "d": 2.82,
+   "text": "people stories generated by a machine"
+  },
+  {
+   "t": 250.68,
+   "d": 1.71,
+   "text": "learning system and the story is that"
+  },
+  {
+   "t": 252.39,
+   "d": 2.94,
+   "text": "you know these this Academy of liver"
+  },
+  {
+   "t": 255.33,
+   "d": 3.72,
+   "text": "wizards lives in a world reigned over by"
+  },
+  {
+   "t": 259.05,
+   "d": 3.42,
+   "text": "a dark and powerful Dark Lord and"
+  },
+  {
+   "t": 262.47,
+   "d": 1.14,
+   "text": "they're trying to figure out what quest"
+  },
+  {
+   "t": 263.61,
+   "d": 1.32,
+   "text": "they can use to defeat him they're not"
+  },
+  {
+   "t": 264.93,
+   "d": 1.93,
+   "text": "just gonna try a quest blindly"
+  },
+  {
+   "t": 266.86,
+   "d": 2.51,
+   "text": "they're not dumb so they're simulating"
+  },
+  {
+   "t": 269.37,
+   "d": 2.98,
+   "text": "different possible quests on their sort"
+  },
+  {
+   "t": 272.35,
+   "d": 2.72,
+   "text": "of cosmic computers their mage frames"
+  },
+  {
+   "t": 275.07,
+   "d": 4.23,
+   "text": "and so they've reached out to you"
+  },
+  {
+   "t": 279.3,
+   "d": 3.1,
+   "text": "unworthy apprentices to define the"
+  },
+  {
+   "t": 282.4,
+   "d": 2.04,
+   "text": "parameters for one of these quests"
+  },
+  {
+   "t": 284.44,
+   "d": 1.47,
+   "text": "you're gonna decide who does the quest"
+  },
+  {
+   "t": 285.91,
+   "d": 1.77,
+   "text": "what they're after where they're going"
+  },
+  {
+   "t": 287.68,
+   "d": 2.19,
+   "text": "they're gonna run these through their"
+  },
+  {
+   "t": 289.87,
+   "d": 2.31,
+   "text": "mage frames and they're gonna hope that"
+  },
+  {
+   "t": 292.18,
+   "d": 2.79,
+   "text": "one of these just one succeeds because"
+  },
+  {
+   "t": 294.97,
+   "d": 3.33,
+   "text": "so far they haven't found it so stories"
+  },
+  {
+   "t": 298.3,
+   "d": 1.47,
+   "text": "actually look like this and they were"
+  },
+  {
+   "t": 299.77,
+   "d": 2.43,
+   "text": "delivered in the mail they were sent via"
+  },
+  {
+   "t": 302.2,
+   "d": 1.95,
+   "text": "this terrific and sort of strange"
+  },
+  {
+   "t": 304.15,
+   "d": 3.42,
+   "text": "service called lob you can actually mail"
+  },
+  {
+   "t": 307.57,
+   "d": 1.68,
+   "text": "a letter a real letter or a postcard"
+  },
+  {
+   "t": 309.25,
+   "d": 3.12,
+   "text": "with just a line of code and there's an"
+  },
+  {
+   "t": 312.37,
+   "d": 1.86,
+   "text": "aside I think there's a play by mail"
+  },
+  {
+   "t": 314.23,
+   "d": 2.28,
+   "text": "game waiting to be built probably by"
+  },
+  {
+   "t": 316.51,
+   "d": 2.22,
+   "text": "someone in this room so that sounds like"
+  },
+  {
+   "t": 318.73,
+   "d": 2.37,
+   "text": "you need to check out lob I just did one"
+  },
+  {
+   "t": 321.1,
+   "d": 2.61,
+   "text": "mailing just a quest my letters were"
+  },
+  {
+   "t": 323.71,
+   "d": 1.88,
+   "text": "formatted to look sort of like crusty"
+  },
+  {
+   "t": 325.59,
+   "d": 2.74,
+   "text": "mainframe reports and of course each one"
+  },
+  {
+   "t": 328.33,
+   "d": 4.41,
+   "text": "also came with a printed map obviously I"
+  },
+  {
+   "t": 332.74,
+   "d": 2.01,
+   "text": "generated and mailed about a thousand of"
+  },
+  {
+   "t": 334.75,
+   "d": 2.46,
+   "text": "these stories total and you know the"
+  },
+  {
+   "t": 337.21,
+   "d": 2.58,
+   "text": "inputs to each one came from survey so"
+  },
+  {
+   "t": 339.79,
+   "d": 2.76,
+   "text": "people paid $0.99 to fill out this"
+  },
+  {
+   "t": 342.55,
+   "d": 2.7,
+   "text": "survey and then get this generated quest"
+  },
+  {
+   "t": 345.25,
+   "d": 2.61,
+   "text": "narrative in the mail the survey asked"
+  },
+  {
+   "t": 347.86,
+   "d": 1.35,
+   "text": "some really basic questions right you"
+  },
+  {
+   "t": 349.21,
+   "d": 3.12,
+   "text": "know like who starts the quest you know"
+  },
+  {
+   "t": 352.33,
+   "d": 1.98,
+   "text": "who leads the quest and and I had these"
+  },
+  {
+   "t": 354.31,
+   "d": 1.8,
+   "text": "sort of built-in options for people who"
+  },
+  {
+   "t": 356.11,
+   "d": 1.8,
+   "text": "weren't feeling creative and I didn't"
+  },
+  {
+   "t": 357.91,
+   "d": 1.53,
+   "text": "want anybody to be stalked by the sense"
+  },
+  {
+   "t": 359.44,
+   "d": 3.11,
+   "text": "that they like didn't know how to even"
+  },
+  {
+   "t": 362.55,
+   "d": 2.47,
+   "text": "parameterize a quest I wanted everybody"
+  },
+  {
+   "t": 365.02,
+   "d": 1.53,
+   "text": "to be able to try it so you can choose"
+  },
+  {
+   "t": 366.55,
+   "d": 1.95,
+   "text": "one of the options I selected or of"
+  },
+  {
+   "t": 368.5,
+   "d": 2.34,
+   "text": "course you could fill in the blank"
+  },
+  {
+   "t": 370.84,
+   "d": 1.44,
+   "text": "yourself with literally whatever you"
+  },
+  {
+   "t": 372.28,
+   "d": 2.46,
+   "text": "wanted this was a free entry text field"
+  },
+  {
+   "t": 374.74,
+   "d": 1.56,
+   "text": "they're both six of them you know I"
+  },
+  {
+   "t": 376.3,
+   "d": 1.56,
+   "text": "asked what they were after is it a sword"
+  },
+  {
+   "t": 377.86,
+   "d": 4.2,
+   "text": "a chalice a book a severed head no do"
+  },
+  {
+   "t": 382.06,
+   "d": 2.67,
+   "text": "they encounter a pig in elk a dragon a"
+  },
+  {
+   "t": 384.73,
+   "d": 2.79,
+   "text": "melancholy giant or something totally"
+  },
+  {
+   "t": 387.52,
+   "d": 2.91,
+   "text": "different and even before we get to the"
+  },
+  {
+   "t": 390.43,
+   "d": 2.25,
+   "text": "quest generation part of this the text"
+  },
+  {
+   "t": 392.68,
+   "d": 1.62,
+   "text": "generation part I have to say one of the"
+  },
+  {
+   "t": 394.3,
+   "d": 2.34,
+   "text": "great benefits of I'm doing a project"
+  },
+  {
+   "t": 396.64,
+   "d": 3.56,
+   "text": "like that is you end up with a CSV file"
+  },
+  {
+   "t": 400.2,
+   "d": 2.61,
+   "text": "full of things like this you know who"
+  },
+  {
+   "t": 402.81,
+   "d": 3.63,
+   "text": "who might undertake a quest maybe a"
+  },
+  {
+   "t": 406.44,
+   "d": 2.88,
+   "text": "theologian a basketball star a gymnast"
+  },
+  {
+   "t": 409.32,
+   "d": 5.28,
+   "text": "and a beagle maybe a talking Fox a swarm"
+  },
+  {
+   "t": 414.6,
+   "d": 4.86,
+   "text": "of ticks so additionally everyone who"
+  },
+  {
+   "t": 419.46,
+   "d": 1.29,
+   "text": "filled out the survey and paid their"
+  },
+  {
+   "t": 420.75,
+   "d": 3.57,
+   "text": "$0.99 got a custom generated map this"
+  },
+  {
+   "t": 424.32,
+   "d": 1.73,
+   "text": "map was generated using techniques"
+  },
+  {
+   "t": 426.05,
+   "d": 3.01,
+   "text": "familiar to people in this room I'm sure"
+  },
+  {
+   "t": 429.06,
+   "d": 1.89,
+   "text": "there are videos about it in the"
+  },
+  {
+   "t": 430.95,
+   "d": 3.06,
+   "text": "roguelike celebration archive and the"
+  },
+  {
+   "t": 434.01,
+   "d": 1.86,
+   "text": "place names on the map were also"
+  },
+  {
+   "t": 435.87,
+   "d": 1.86,
+   "text": "procedurally generated and importantly"
+  },
+  {
+   "t": 437.73,
+   "d": 3.75,
+   "text": "those also became inputs into this text"
+  },
+  {
+   "t": 441.48,
+   "d": 2.85,
+   "text": "generation system that's important and"
+  },
+  {
+   "t": 444.33,
+   "d": 1.29,
+   "text": "I'm gonna talk more about that as we go"
+  },
+  {
+   "t": 445.62,
+   "d": 2.19,
+   "text": "on but that's sort of what tied the map"
+  },
+  {
+   "t": 447.81,
+   "d": 2.07,
+   "text": "and the text together these place names"
+  },
+  {
+   "t": 449.88,
+   "d": 2.4,
+   "text": "became the key the glue that you hold"
+  },
+  {
+   "t": 452.28,
+   "d": 2.19,
+   "text": "your map in one hand and your story in"
+  },
+  {
+   "t": 454.47,
+   "d": 1.83,
+   "text": "the other and realize that this was kind"
+  },
+  {
+   "t": 456.3,
+   "d": 4.17,
+   "text": "of taking place in a real world okay so"
+  },
+  {
+   "t": 460.47,
+   "d": 2.16,
+   "text": "that's what I had to start with these"
+  },
+  {
+   "t": 462.63,
+   "d": 2.22,
+   "text": "are ingredients how did I connect that"
+  },
+  {
+   "t": 464.85,
+   "d": 2.13,
+   "text": "to this machine learning system how did"
+  },
+  {
+   "t": 466.98,
+   "d": 3.96,
+   "text": "I connect it to GPT to what I did"
+  },
+  {
+   "t": 470.94,
+   "d": 2.01,
+   "text": "there's a lot of different ways you"
+  },
+  {
+   "t": 472.95,
+   "d": 1.41,
+   "text": "could approach this I came up with this"
+  },
+  {
+   "t": 474.36,
+   "d": 2.69,
+   "text": "simple format for what I considered"
+  },
+  {
+   "t": 477.05,
+   "d": 1.99,
+   "text": "prompts for the system and you can see"
+  },
+  {
+   "t": 479.04,
+   "d": 1.88,
+   "text": "it's just a really simple almost like a"
+  },
+  {
+   "t": 480.92,
+   "d": 4.03,
+   "text": "stupidly simple domain-specific language"
+  },
+  {
+   "t": 484.95,
+   "d": 2.19,
+   "text": "and part of each prompt obviously was"
+  },
+  {
+   "t": 487.14,
+   "d": 1.83,
+   "text": "just written by me you know everyone's"
+  },
+  {
+   "t": 488.97,
+   "d": 2.67,
+   "text": "first line had the words began their"
+  },
+  {
+   "t": 491.64,
+   "d": 2.37,
+   "text": "quest in but then there were these parts"
+  },
+  {
+   "t": 494.01,
+   "d": 2.94,
+   "text": "that the user or the soon-to-be reader"
+  },
+  {
+   "t": 496.95,
+   "d": 2.07,
+   "text": "filled in as well so a pair of thieves"
+  },
+  {
+   "t": 499.02,
+   "d": 2.28,
+   "text": "and that the city of flybridge taken"
+  },
+  {
+   "t": 501.3,
+   "d": 2.16,
+   "text": "from the map the name of the person who"
+  },
+  {
+   "t": 503.46,
+   "d": 1.68,
+   "text": "started the quest what they were seeking"
+  },
+  {
+   "t": 505.14,
+   "d": 3.12,
+   "text": "and on and on I'm just as importantly I"
+  },
+  {
+   "t": 508.26,
+   "d": 1.86,
+   "text": "mean you can see after the bar in these"
+  },
+  {
+   "t": 510.12,
+   "d": 1.92,
+   "text": "prompts I'm telling the system how many"
+  },
+  {
+   "t": 512.04,
+   "d": 1.95,
+   "text": "sentences I want this turns out to be a"
+  },
+  {
+   "t": 513.99,
+   "d": 3.15,
+   "text": "key expressive control often in the"
+  },
+  {
+   "t": 517.14,
+   "d": 2.73,
+   "text": "demos of these systems online or the way"
+  },
+  {
+   "t": 519.87,
+   "d": 1.35,
+   "text": "you can kind of get it set up on your"
+  },
+  {
+   "t": 521.22,
+   "d": 1.86,
+   "text": "machine what you get is this sense of"
+  },
+  {
+   "t": 523.08,
+   "d": 2.91,
+   "text": "just turning on a spigot and almost"
+  },
+  {
+   "t": 525.99,
+   "d": 1.92,
+   "text": "being washed away because of course I"
+  },
+  {
+   "t": 527.91,
+   "d": 1.92,
+   "text": "can just keep going and going and going"
+  },
+  {
+   "t": 529.83,
+   "d": 2.7,
+   "text": "I knew from the jump that that's not"
+  },
+  {
+   "t": 532.53,
+   "d": 0.78,
+   "text": "what I wanted I"
+  },
+  {
+   "t": 533.31,
+   "d": 1.41,
+   "text": "didn't want to just give it a seed and"
+  },
+  {
+   "t": 534.72,
+   "d": 2.04,
+   "text": "then have it write two pages of dense"
+  },
+  {
+   "t": 536.76,
+   "d": 2.19,
+   "text": "text I wanted to be sort of guiding it"
+  },
+  {
+   "t": 538.95,
+   "d": 2.22,
+   "text": "at every turn and I wanted to be asking"
+  },
+  {
+   "t": 541.17,
+   "d": 1.77,
+   "text": "for a specific amount of text and this"
+  },
+  {
+   "t": 542.94,
+   "d": 1.68,
+   "text": "is where a lot of sort of tuning came in"
+  },
+  {
+   "t": 544.62,
+   "d": 1.44,
+   "text": "you know in some places I would just"
+  },
+  {
+   "t": 546.06,
+   "d": 2.55,
+   "text": "want one sentence like that's enough we"
+  },
+  {
+   "t": 548.61,
+   "d": 1.8,
+   "text": "get the point on to the next thing and"
+  },
+  {
+   "t": 550.41,
+   "d": 1.92,
+   "text": "in other places I learned it was fun to"
+  },
+  {
+   "t": 552.33,
+   "d": 1.62,
+   "text": "kind of let it go and build up a little"
+  },
+  {
+   "t": 553.95,
+   "d": 3.33,
+   "text": "scene out of two or three sentences the"
+  },
+  {
+   "t": 557.28,
+   "d": 1.53,
+   "text": "other thing that's important it's kind"
+  },
+  {
+   "t": 558.81,
+   "d": 1.29,
+   "text": "of subtle thing if you haven't used"
+  },
+  {
+   "t": 560.1,
+   "d": 1.71,
+   "text": "systems before that I'm actually"
+  },
+  {
+   "t": 561.81,
+   "d": 1.35,
+   "text": "building up here these are not"
+  },
+  {
+   "t": 563.16,
+   "d": 2.73,
+   "text": "independent questions it's sort of I'm"
+  },
+  {
+   "t": 565.89,
+   "d": 2.07,
+   "text": "not clearing the slate every time and"
+  },
+  {
+   "t": 567.96,
+   "d": 1.44,
+   "text": "starting with one of these prompts"
+  },
+  {
+   "t": 569.4,
+   "d": 1.23,
+   "text": "instead I'm beginning with that first"
+  },
+  {
+   "t": 570.63,
+   "d": 1.95,
+   "text": "prompt pair of these began their quest"
+  },
+  {
+   "t": 572.58,
+   "d": 2.94,
+   "text": "and flybridge a city known for okay give"
+  },
+  {
+   "t": 575.52,
+   "d": 1.59,
+   "text": "me three sentences we're gonna see what"
+  },
+  {
+   "t": 577.11,
+   "d": 1.32,
+   "text": "those sentences look like in a moment"
+  },
+  {
+   "t": 578.43,
+   "d": 2.61,
+   "text": "but then those sentences they stay in"
+  },
+  {
+   "t": 581.04,
+   "d": 2.04,
+   "text": "the system they sort of stay in its"
+  },
+  {
+   "t": 583.08,
+   "d": 2.1,
+   "text": "memory it's not quite a memory but sort"
+  },
+  {
+   "t": 585.18,
+   "d": 2.04,
+   "text": "of a sense of the world and they"
+  },
+  {
+   "t": 587.22,
+   "d": 2.1,
+   "text": "influence what comes next and then that"
+  },
+  {
+   "t": 589.32,
+   "d": 1.98,
+   "text": "goes in and influences what comes after"
+  },
+  {
+   "t": 591.3,
+   "d": 1.86,
+   "text": "that and on and on so by the time we get"
+  },
+  {
+   "t": 593.16,
+   "d": 2.31,
+   "text": "to the last prompt here it's actually"
+  },
+  {
+   "t": 595.47,
+   "d": 2.88,
+   "text": "built up a state of the world and it's"
+  },
+  {
+   "t": 598.35,
+   "d": 1.44,
+   "text": "it's about a half and a half mix of"
+  },
+  {
+   "t": 599.79,
+   "d": 2.01,
+   "text": "these problems that I provided and the"
+  },
+  {
+   "t": 601.8,
+   "d": 3.69,
+   "text": "text that it has generated itself so"
+  },
+  {
+   "t": 605.49,
+   "d": 3.72,
+   "text": "here's my machine learning node in my"
+  },
+  {
+   "t": 609.21,
+   "d": 1.56,
+   "text": "lab in Berkeley it's just a couple of"
+  },
+  {
+   "t": 610.77,
+   "d": 3.51,
+   "text": "sort of disgusting black boxes he just"
+  },
+  {
+   "t": 614.28,
+   "d": 1.59,
+   "text": "on these boxes that I generated all"
+  },
+  {
+   "t": 615.87,
+   "d": 2.34,
+   "text": "these quests and this was using a copy"
+  },
+  {
+   "t": 618.21,
+   "d": 3.48,
+   "text": "of GPT to which as we heard is pre"
+  },
+  {
+   "t": 621.69,
+   "d": 1.64,
+   "text": "trained on this vast and sort of"
+  },
+  {
+   "t": 623.33,
+   "d": 3.16,
+   "text": "horrible corpus of Internet text very"
+  },
+  {
+   "t": 626.49,
+   "d": 1.86,
+   "text": "importantly crucially I didn't"
+  },
+  {
+   "t": 628.35,
+   "d": 2.37,
+   "text": "fine-tuned that on a much smaller group"
+  },
+  {
+   "t": 630.72,
+   "d": 2.52,
+   "text": "of high fantasy novels that I gathered"
+  },
+  {
+   "t": 633.24,
+   "d": 4.32,
+   "text": "from various sources trained in on that"
+  },
+  {
+   "t": 637.56,
+   "d": 1.35,
+   "text": "for about a week you know this is these"
+  },
+  {
+   "t": 638.91,
+   "d": 1.2,
+   "text": "are still kind of heavyweight"
+  },
+  {
+   "t": 640.11,
+   "d": 2.61,
+   "text": "time-consuming processes but by the time"
+  },
+  {
+   "t": 642.72,
+   "d": 1.44,
+   "text": "it's finished it had really although"
+  },
+  {
+   "t": 644.16,
+   "d": 1.83,
+   "text": "that that other stuff is still lurking"
+  },
+  {
+   "t": 645.99,
+   "d": 2.61,
+   "text": "in its sense of grammar and sentence"
+  },
+  {
+   "t": 648.6,
+   "d": 1.86,
+   "text": "construction and just the way English"
+  },
+  {
+   "t": 650.46,
+   "d": 2.19,
+   "text": "works it had in many ways been"
+  },
+  {
+   "t": 652.65,
+   "d": 2.46,
+   "text": "overwritten by a sensibility that came"
+  },
+  {
+   "t": 655.11,
+   "d": 1.65,
+   "text": "from high fantasy and it had learned"
+  },
+  {
+   "t": 656.76,
+   "d": 2.34,
+   "text": "very effectively to guess the next word"
+  },
+  {
+   "t": 659.1,
+   "d": 1.31,
+   "text": "in a"
+  },
+  {
+   "t": 660.41,
+   "d": 3.69,
+   "text": "Stickle sentence so I'm gonna read you"
+  },
+  {
+   "t": 664.1,
+   "d": 3.84,
+   "text": "one complete generated quest but I"
+  },
+  {
+   "t": 667.94,
+   "d": 1.2,
+   "text": "should say that this is very very"
+  },
+  {
+   "t": 669.14,
+   "d": 1.8,
+   "text": "important um although I'm gonna read you"
+  },
+  {
+   "t": 670.94,
+   "d": 3.18,
+   "text": "raw output from my quest generating"
+  },
+  {
+   "t": 674.12,
+   "d": 2.88,
+   "text": "system this is not the same as raw"
+  },
+  {
+   "t": 677.0,
+   "d": 4.64,
+   "text": "output from GPT to to kind of put on my"
+  },
+  {
+   "t": 681.64,
+   "d": 4.21,
+   "text": "paladin helmet for a second I guess it's"
+  },
+  {
+   "t": 685.85,
+   "d": 2.25,
+   "text": "never responsible to pipe the output"
+  },
+  {
+   "t": 688.1,
+   "d": 2.28,
+   "text": "from one of these systems certainly GPT"
+  },
+  {
+   "t": 690.38,
+   "d": 2.73,
+   "text": "two straight out into the world into a"
+  },
+  {
+   "t": 693.11,
+   "d": 2.82,
+   "text": "player's face or readers face there's a"
+  },
+  {
+   "t": 695.93,
+   "d": 1.41,
+   "text": "lot of weird stuff lurking in there"
+  },
+  {
+   "t": 697.34,
+   "d": 1.32,
+   "text": "there's a lot of weird stuff lurking in"
+  },
+  {
+   "t": 698.66,
+   "d": 1.71,
+   "text": "fantasy novels you know like in this"
+  },
+  {
+   "t": 700.37,
+   "d": 2.61,
+   "text": "model before I put my many layers of"
+  },
+  {
+   "t": 702.98,
+   "d": 1.8,
+   "text": "filters on it would pipe things out that"
+  },
+  {
+   "t": 704.78,
+   "d": 2.79,
+   "text": "I would find anywhere from sort of"
+  },
+  {
+   "t": 707.57,
+   "d": 2.4,
+   "text": "mildly gross to legitimately horrifying"
+  },
+  {
+   "t": 709.97,
+   "d": 1.86,
+   "text": "and I would have been truly horrified to"
+  },
+  {
+   "t": 711.83,
+   "d": 1.41,
+   "text": "put my name on it and send it out into"
+  },
+  {
+   "t": 713.24,
+   "d": 1.53,
+   "text": "the world or you know have it arrive in"
+  },
+  {
+   "t": 714.77,
+   "d": 2.28,
+   "text": "someone's mailbox so this output is"
+  },
+  {
+   "t": 717.05,
+   "d": 1.86,
+   "text": "heavily filtered there's a lot of"
+  },
+  {
+   "t": 718.91,
+   "d": 1.32,
+   "text": "different ways to approach that there's"
+  },
+  {
+   "t": 720.23,
+   "d": 1.68,
+   "text": "again whole talks about sort of"
+  },
+  {
+   "t": 721.91,
+   "d": 2.31,
+   "text": "filtering the output of procedurally"
+  },
+  {
+   "t": 724.22,
+   "d": 2.91,
+   "text": "generated content I um took sort of a"
+  },
+  {
+   "t": 727.13,
+   "d": 2.13,
+   "text": "simple approach the great strength of a"
+  },
+  {
+   "t": 729.26,
+   "d": 1.95,
+   "text": "system like GPT two is that it can"
+  },
+  {
+   "t": 731.21,
+   "d": 2.49,
+   "text": "generate lots and lots of tax like it"
+  },
+  {
+   "t": 733.7,
+   "d": 2.4,
+   "text": "just wants to like generate more text"
+  },
+  {
+   "t": 736.1,
+   "d": 1.95,
+   "text": "all the time so I adopted a really"
+  },
+  {
+   "t": 738.05,
+   "d": 3.33,
+   "text": "simple Vito system if it put spit out a"
+  },
+  {
+   "t": 741.38,
+   "d": 1.77,
+   "text": "block of tax that triggered any one of"
+  },
+  {
+   "t": 743.15,
+   "d": 2.94,
+   "text": "my many many many filters um I just said"
+  },
+  {
+   "t": 746.09,
+   "d": 3.0,
+   "text": "you know what never mind and I threw it"
+  },
+  {
+   "t": 749.09,
+   "d": 1.74,
+   "text": "away and I asked it for something new"
+  },
+  {
+   "t": 750.83,
+   "d": 2.61,
+   "text": "for me it was easier and sort of um"
+  },
+  {
+   "t": 753.44,
+   "d": 2.9,
+   "text": "cleaner than trying to go in and like"
+  },
+  {
+   "t": 756.34,
+   "d": 2.53,
+   "text": "re-edit it or stitch something in its do"
+  },
+  {
+   "t": 758.87,
+   "d": 2.4,
+   "text": "something out so I did that a lot this"
+  },
+  {
+   "t": 761.27,
+   "d": 1.65,
+   "text": "is highly filtered but after that"
+  },
+  {
+   "t": 762.92,
+   "d": 5.04,
+   "text": "filtering step this is a quest from the"
+  },
+  {
+   "t": 767.96,
+   "d": 3.69,
+   "text": "mage frame so I'll say each section"
+  },
+  {
+   "t": 771.65,
+   "d": 2.1,
+   "text": "begins with the prompt in all caps I"
+  },
+  {
+   "t": 773.75,
+   "d": 1.68,
+   "text": "said there's an interesting way to do it"
+  },
+  {
+   "t": 775.43,
+   "d": 1.23,
+   "text": "because it kind of showed the"
+  },
+  {
+   "t": 776.66,
+   "d": 1.68,
+   "text": "delineation between the call and"
+  },
+  {
+   "t": 778.34,
+   "d": 2.49,
+   "text": "response of human and machine and so it"
+  },
+  {
+   "t": 780.83,
+   "d": 1.35,
+   "text": "was with this kind of formatting that"
+  },
+  {
+   "t": 782.18,
+   "d": 4.52,
+   "text": "they arrived in people's mailboxes so a"
+  },
+  {
+   "t": 786.7,
+   "d": 2.71,
+   "text": "pair of thieves began their quest in fly"
+  },
+  {
+   "t": 789.41,
+   "d": 2.33,
+   "text": "bridge a city known for its prosperity"
+  },
+  {
+   "t": 791.74,
+   "d": 2.1,
+   "text": "the usual bar was at"
+  },
+  {
+   "t": 793.84,
+   "d": 1.59,
+   "text": "fit and it seemed as if the two were"
+  },
+  {
+   "t": 795.43,
+   "d": 2.61,
+   "text": "always out late the two were no"
+  },
+  {
+   "t": 798.04,
+   "d": 3.89,
+   "text": "strangers to the truth of the night I"
+  },
+  {
+   "t": 801.93,
+   "d": 2.2,
+   "text": "promise I'm not gonna pause and gape at"
+  },
+  {
+   "t": 804.13,
+   "d": 1.86,
+   "text": "every section but I do want to say just"
+  },
+  {
+   "t": 805.99,
+   "d": 0.69,
+   "text": "a start"
+  },
+  {
+   "t": 806.68,
+   "d": 2.1,
+   "text": "the truth of the night I mean this is"
+  },
+  {
+   "t": 808.78,
+   "d": 2.91,
+   "text": "really interesting it's weird it's sort"
+  },
+  {
+   "t": 811.69,
+   "d": 3.21,
+   "text": "of a twist it's not just a cliche it has"
+  },
+  {
+   "t": 814.9,
+   "d": 2.43,
+   "text": "this sort of poetry to it I feel like I"
+  },
+  {
+   "t": 817.33,
+   "d": 2.37,
+   "text": "know what it means although that might"
+  },
+  {
+   "t": 819.7,
+   "d": 4.11,
+   "text": "just be me projecting myself into it but"
+  },
+  {
+   "t": 823.81,
+   "d": 1.65,
+   "text": "of course that's what all reading is so"
+  },
+  {
+   "t": 825.46,
+   "d": 3.84,
+   "text": "of course this quest to defeat the Dark"
+  },
+  {
+   "t": 829.3,
+   "d": 2.76,
+   "text": "Lord was led by femoris tusk who had"
+  },
+  {
+   "t": 832.06,
+   "d": 1.79,
+   "text": "previously fought in the Free Cities"
+  },
+  {
+   "t": 833.85,
+   "d": 2.65,
+   "text": "defenders had escaped the fall of Lord"
+  },
+  {
+   "t": 836.5,
+   "d": 3.9,
+   "text": "Marisol and his consort sulla that's"
+  },
+  {
+   "t": 840.4,
+   "d": 1.83,
+   "text": "cool some world building there we of"
+  },
+  {
+   "t": 842.23,
+   "d": 1.89,
+   "text": "course did not specify Lord Marisol or"
+  },
+  {
+   "t": 844.12,
+   "d": 1.77,
+   "text": "sulla anywhere that just comes out of"
+  },
+  {
+   "t": 845.89,
+   "d": 3.63,
+   "text": "the machines imagination the Questor"
+  },
+  {
+   "t": 849.52,
+   "d": 2.01,
+   "text": "sought a lost grimoire which with its"
+  },
+  {
+   "t": 851.53,
+   "d": 2.19,
+   "text": "seven pages revealed the secrets of the"
+  },
+  {
+   "t": 853.72,
+   "d": 2.73,
+   "text": "old tongue and also reveal the secret of"
+  },
+  {
+   "t": 856.45,
+   "d": 3.51,
+   "text": "locating the land of the dead solid"
+  },
+  {
+   "t": 859.96,
+   "d": 2.01,
+   "text": "I might have wished for more than seven"
+  },
+  {
+   "t": 861.97,
+   "d": 2.43,
+   "text": "pages but"
+  },
+  {
+   "t": 864.4,
+   "d": 2.92,
+   "text": "then on the road towards Ning bag and"
+  },
+  {
+   "t": 867.32,
+   "d": 1.5,
+   "text": "remember Ning bag is a place on the map"
+  },
+  {
+   "t": 868.82,
+   "d": 1.56,
+   "text": "so you can kind of see be like oh I see"
+  },
+  {
+   "t": 870.38,
+   "d": 1.29,
+   "text": "it I see we're going south through the"
+  },
+  {
+   "t": 871.67,
+   "d": 3.39,
+   "text": "swamps they encountered an elk it was a"
+  },
+  {
+   "t": 875.06,
+   "d": 1.89,
+   "text": "majestic beast with a massive horned"
+  },
+  {
+   "t": 876.95,
+   "d": 2.97,
+   "text": "head and wings like the night sky it"
+  },
+  {
+   "t": 879.92,
+   "d": 1.98,
+   "text": "moved from such power that it was almost"
+  },
+  {
+   "t": 881.9,
+   "d": 3.18,
+   "text": "a joy to behold these were in truth the"
+  },
+  {
+   "t": 885.08,
+   "d": 2.46,
+   "text": "most dangerous and fearsome creatures in"
+  },
+  {
+   "t": 887.54,
+   "d": 3.96,
+   "text": "the realms this is high quality fantasy"
+  },
+  {
+   "t": 891.5,
+   "d": 4.44,
+   "text": "content the Questers crossed into the"
+  },
+  {
+   "t": 895.94,
+   "d": 2.4,
+   "text": "country called under maiya known for its"
+  },
+  {
+   "t": 898.34,
+   "d": 2.28,
+   "text": "wealth the land of the Dead was one of"
+  },
+  {
+   "t": 900.62,
+   "d": 1.35,
+   "text": "the richest in the world and its riches"
+  },
+  {
+   "t": 901.97,
+   "d": 2.34,
+   "text": "were matched by the generosity of its"
+  },
+  {
+   "t": 904.31,
+   "d": 3.72,
+   "text": "rulers okay now people in the room who"
+  },
+  {
+   "t": 908.03,
+   "d": 1.92,
+   "text": "have not worked with these kind of"
+  },
+  {
+   "t": 909.95,
+   "d": 2.76,
+   "text": "generative tech systems before probably"
+  },
+  {
+   "t": 912.71,
+   "d": 3.54,
+   "text": "think fine interesting if like me you"
+  },
+  {
+   "t": 916.25,
+   "d": 2.04,
+   "text": "have worked with these systems this"
+  },
+  {
+   "t": 918.29,
+   "d": 1.59,
+   "text": "paragraph will kind of knock you back a"
+  },
+  {
+   "t": 919.88,
+   "d": 2.49,
+   "text": "little bit because here the land of the"
+  },
+  {
+   "t": 922.37,
+   "d": 3.57,
+   "text": "dead recurs it remembered I didn't just"
+  },
+  {
+   "t": 925.94,
+   "d": 1.77,
+   "text": "remember it from the last sentence or"
+  },
+  {
+   "t": 927.71,
+   "d": 1.65,
+   "text": "even a few sentences before this is like"
+  },
+  {
+   "t": 929.36,
+   "d": 2.67,
+   "text": "several paragraphs way back near the"
+  },
+  {
+   "t": 932.03,
+   "d": 1.11,
+   "text": "start of the story we talked about the"
+  },
+  {
+   "t": 933.14,
+   "d": 1.74,
+   "text": "grimoire and the grimoire was going to"
+  },
+  {
+   "t": 934.88,
+   "d": 1.56,
+   "text": "sort of show us the path to the land of"
+  },
+  {
+   "t": 936.44,
+   "d": 3.39,
+   "text": "the dead now it probably should not be"
+  },
+  {
+   "t": 939.83,
+   "d": 3.18,
+   "text": "as impressive as it is that the system"
+  },
+  {
+   "t": 943.01,
+   "d": 2.37,
+   "text": "can keep that kind of context that kind"
+  },
+  {
+   "t": 945.38,
+   "d": 2.46,
+   "text": "of state in its world but the truth is"
+  },
+  {
+   "t": 947.84,
+   "d": 3.63,
+   "text": "this represents really the state of the"
+  },
+  {
+   "t": 951.47,
+   "d": 2.22,
+   "text": "art the huge step forward that gp2"
+  },
+  {
+   "t": 953.69,
+   "d": 2.46,
+   "text": "represents no system for at least none"
+  },
+  {
+   "t": 956.15,
+   "d": 1.71,
+   "text": "that I've ever used has been able to do"
+  },
+  {
+   "t": 957.86,
+   "d": 2.22,
+   "text": "this they've been able to write color"
+  },
+  {
+   "t": 960.08,
+   "d": 2.4,
+   "text": "sentences like really really interesting"
+  },
+  {
+   "t": 962.48,
+   "d": 2.01,
+   "text": "beautiful sentences but then they keep"
+  },
+  {
+   "t": 964.49,
+   "d": 2.46,
+   "text": "going and they just lose the thread and"
+  },
+  {
+   "t": 966.95,
+   "d": 3.23,
+   "text": "it basically sort of devolved into"
+  },
+  {
+   "t": 970.18,
+   "d": 3.46,
+   "text": "absurdist genre poetry which has its"
+  },
+  {
+   "t": 973.64,
+   "d": 2.97,
+   "text": "place gbt too and there's a whole host"
+  },
+  {
+   "t": 976.61,
+   "d": 2.07,
+   "text": "of it's kind of cousins now other models"
+  },
+  {
+   "t": 978.68,
+   "d": 1.44,
+   "text": "made by other organizations that use"
+  },
+  {
+   "t": 980.12,
+   "d": 2.82,
+   "text": "many of the same techniques it keep"
+  },
+  {
+   "t": 982.94,
+   "d": 4.41,
+   "text": "track it remembers they're in through"
+  },
+  {
+   "t": 987.35,
+   "d": 3.0,
+   "text": "wall the Dark Lord found them he sat in"
+  },
+  {
+   "t": 990.35,
+   "d": 1.95,
+   "text": "his snow-covered throne room in a tower"
+  },
+  {
+   "t": 992.3,
+   "d": 2.54,
+   "text": "which had not been there before"
+  },
+  {
+   "t": 994.84,
+   "d": 2.47,
+   "text": "the floor was carpeted and the woodwork"
+  },
+  {
+   "t": 997.31,
+   "d": 4.8,
+   "text": "was intricate I like it I like my baby"
+  },
+  {
+   "t": 1002.11,
+   "d": 3.0,
+   "text": "house to get seen the Dark Lord truly"
+  },
+  {
+   "t": 1005.11,
+   "d": 3.69,
+   "text": "and permanently wounded Fenris Fenris"
+  },
+  {
+   "t": 1008.8,
+   "d": 2.46,
+   "text": "awoke from the stunning loss of glide to"
+  },
+  {
+   "t": 1011.26,
+   "d": 6.9,
+   "text": "see the elk gallop toward him again it"
+  },
+  {
+   "t": 1018.16,
+   "d": 1.44,
+   "text": "probably shouldn't be as impressive as"
+  },
+  {
+   "t": 1019.6,
+   "d": 1.35,
+   "text": "it is and I think in another year"
+  },
+  {
+   "t": 1020.95,
+   "d": 1.65,
+   "text": "certainly another few years it won't be"
+  },
+  {
+   "t": 1022.6,
+   "d": 1.05,
+   "text": "impressive anymore because we'll have"
+  },
+  {
+   "t": 1023.65,
+   "d": 3.15,
+   "text": "moved far beyond it but really the magic"
+  },
+  {
+   "t": 1026.8,
+   "d": 1.86,
+   "text": "happened this year this amazing step"
+  },
+  {
+   "t": 1028.66,
+   "d": 2.67,
+   "text": "forward that allowed these systems to"
+  },
+  {
+   "t": 1031.33,
+   "d": 3.48,
+   "text": "move beyond just language and into"
+  },
+  {
+   "t": 1034.81,
+   "d": 2.37,
+   "text": "stories or a sense of keeping track of a"
+  },
+  {
+   "t": 1037.18,
+   "d": 1.35,
+   "text": "state of the world right now it said"
+  },
+  {
+   "t": 1038.53,
+   "d": 1.71,
+   "text": "that I would say the level of paragraphs"
+  },
+  {
+   "t": 1040.24,
+   "d": 2.21,
+   "text": "or of long paragraphs not even pages"
+  },
+  {
+   "t": 1042.45,
+   "d": 3.04,
+   "text": "definitely not all the twisty sort of"
+  },
+  {
+   "t": 1045.49,
+   "d": 2.31,
+   "text": "phasing in and out interconnections that"
+  },
+  {
+   "t": 1047.8,
+   "d": 2.34,
+   "text": "comprise a novel you can do a lot with"
+  },
+  {
+   "t": 1050.14,
+   "d": 4.32,
+   "text": "paragraphs Fenris tusks last thoughts"
+  },
+  {
+   "t": 1054.46,
+   "d": 2.82,
+   "text": "were of defiance but he was too weary to"
+  },
+  {
+   "t": 1057.28,
+   "d": 4.68,
+   "text": "even speak them aloud the earth had"
+  },
+  {
+   "t": 1061.96,
+   "d": 2.82,
+   "text": "dried up and the red Sun hung in a smoky"
+  },
+  {
+   "t": 1064.78,
+   "d": 4.77,
+   "text": "sky revealing little spoiler alert all"
+  },
+  {
+   "t": 1069.55,
+   "d": 3.48,
+   "text": "the quests end in defeat there is no way"
+  },
+  {
+   "t": 1073.03,
+   "d": 1.74,
+   "text": "that we found yet to defeat the Dark"
+  },
+  {
+   "t": 1074.77,
+   "d": 3.87,
+   "text": "Lord so that's the end so a few things"
+  },
+  {
+   "t": 1078.64,
+   "d": 1.56,
+   "text": "there's the output but what did I learn"
+  },
+  {
+   "t": 1080.2,
+   "d": 1.05,
+   "text": "in kind of putting this together and"
+  },
+  {
+   "t": 1081.25,
+   "d": 2.94,
+   "text": "what did I learn from the process so"
+  },
+  {
+   "t": 1084.19,
+   "d": 3.42,
+   "text": "first of all I hope I can convince you"
+  },
+  {
+   "t": 1087.61,
+   "d": 2.58,
+   "text": "that it's good um you know in its"
+  },
+  {
+   "t": 1090.19,
+   "d": 2.82,
+   "text": "structure in the way it can surprise you"
+  },
+  {
+   "t": 1093.01,
+   "d": 3.15,
+   "text": "in the subtle things it can do I believe"
+  },
+  {
+   "t": 1096.16,
+   "d": 1.5,
+   "text": "and it's just my opinion based on all"
+  },
+  {
+   "t": 1097.66,
+   "d": 1.26,
+   "text": "the things I have experimented with all"
+  },
+  {
+   "t": 1098.92,
+   "d": 1.41,
+   "text": "the things I've seen the games I've"
+  },
+  {
+   "t": 1100.33,
+   "d": 3.12,
+   "text": "played I really think the output from"
+  },
+  {
+   "t": 1103.45,
+   "d": 2.67,
+   "text": "models like this outpaces what you get"
+  },
+  {
+   "t": 1106.12,
+   "d": 2.85,
+   "text": "from kind of text templates I know that"
+  },
+  {
+   "t": 1108.97,
+   "d": 1.74,
+   "text": "templates can be really complicated I"
+  },
+  {
+   "t": 1110.71,
+   "d": 2.43,
+   "text": "know you can nest templates inside of"
+  },
+  {
+   "t": 1113.14,
+   "d": 3.75,
+   "text": "templates but even so I think you always"
+  },
+  {
+   "t": 1116.89,
+   "d": 2.43,
+   "text": "see the seams I think you read one and"
+  },
+  {
+   "t": 1119.32,
+   "d": 1.53,
+   "text": "it's interesting I think you read five"
+  },
+  {
+   "t": 1120.85,
+   "d": 2.34,
+   "text": "and you start to sense the pattern and"
+  },
+  {
+   "t": 1123.19,
+   "d": 1.8,
+   "text": "that's fine because then the unit of"
+  },
+  {
+   "t": 1124.99,
+   "d": 2.06,
+   "text": "sort of reading or the unit of enjoy"
+  },
+  {
+   "t": 1127.05,
+   "d": 2.52,
+   "text": "becomes the pattern the thing and you"
+  },
+  {
+   "t": 1129.57,
+   "d": 2.91,
+   "text": "say oh yeah it's one of those but if"
+  },
+  {
+   "t": 1132.48,
+   "d": 1.5,
+   "text": "it's the language you're interested in"
+  },
+  {
+   "t": 1133.98,
+   "d": 1.41,
+   "text": "if it's the words I think you've lost"
+  },
+  {
+   "t": 1135.39,
+   "d": 1.59,
+   "text": "something when people sort of see"
+  },
+  {
+   "t": 1136.98,
+   "d": 3.18,
+   "text": "through the words to this Rubik's Cube"
+  },
+  {
+   "t": 1140.16,
+   "d": 2.79,
+   "text": "underneath with gbt too you don't see"
+  },
+  {
+   "t": 1142.95,
+   "d": 1.56,
+   "text": "through the words I mean it is a"
+  },
+  {
+   "t": 1144.51,
+   "d": 1.95,
+   "text": "template of course like what else could"
+  },
+  {
+   "t": 1146.46,
+   "d": 1.68,
+   "text": "it be the difference is that it's a"
+  },
+  {
+   "t": 1148.14,
+   "d": 2.84,
+   "text": "template like as large and diverse as"
+  },
+  {
+   "t": 1150.98,
+   "d": 5.16,
+   "text": "the library or maybe as the language I"
+  },
+  {
+   "t": 1156.14,
+   "d": 1.99,
+   "text": "don't need to tell the people in this"
+  },
+  {
+   "t": 1158.13,
+   "d": 2.19,
+   "text": "room the text isn't a great amazing"
+  },
+  {
+   "t": 1160.32,
+   "d": 2.43,
+   "text": "rendering medium right it offloaded so"
+  },
+  {
+   "t": 1162.75,
+   "d": 2.04,
+   "text": "much of the work into the reader or the"
+  },
+  {
+   "t": 1164.79,
+   "d": 1.86,
+   "text": "players brain and I think that that"
+  },
+  {
+   "t": 1166.65,
+   "d": 3.12,
+   "text": "effect is multiplied when that text gets"
+  },
+  {
+   "t": 1169.77,
+   "d": 2.07,
+   "text": "pinned to some kind of framework so in"
+  },
+  {
+   "t": 1171.84,
+   "d": 2.37,
+   "text": "my case it was a map I think maps work"
+  },
+  {
+   "t": 1174.21,
+   "d": 2.22,
+   "text": "really great honestly of course I was"
+  },
+  {
+   "t": 1176.43,
+   "d": 1.89,
+   "text": "committed to this kind of print layout"
+  },
+  {
+   "t": 1178.32,
+   "d": 2.01,
+   "text": "and delivery but this connection would"
+  },
+  {
+   "t": 1180.33,
+   "d": 1.71,
+   "text": "have worked even better if this had been"
+  },
+  {
+   "t": 1182.04,
+   "d": 2.55,
+   "text": "saying interactive experience we've got"
+  },
+  {
+   "t": 1184.59,
+   "d": 2.46,
+   "text": "this map in a browser tab and the words"
+  },
+  {
+   "t": 1187.05,
+   "d": 2.46,
+   "text": "are actually appearing kind of in"
+  },
+  {
+   "t": 1189.51,
+   "d": 1.53,
+   "text": "different places on the map and maybe"
+  },
+  {
+   "t": 1191.04,
+   "d": 1.35,
+   "text": "you're even getting those Indiana"
+  },
+  {
+   "t": 1192.39,
+   "d": 2.64,
+   "text": "jones-style arrows sort of sweeping"
+  },
+  {
+   "t": 1195.03,
+   "d": 1.29,
+   "text": "across this map it'd be really really"
+  },
+  {
+   "t": 1196.32,
+   "d": 0.54,
+   "text": "cool"
+  },
+  {
+   "t": 1196.86,
+   "d": 2.79,
+   "text": "same text but the way of kind of pinning"
+  },
+  {
+   "t": 1199.65,
+   "d": 1.95,
+   "text": "it somewhere and sort of saying like yes"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.57,
+   "text": "this doesn't make sense"
+  },
+  {
+   "t": 1204.17,
+   "d": 2.2,
+   "text": "even if it doesn't always seem like it"
+  },
+  {
+   "t": 1206.37,
+   "d": 2.4,
+   "text": "um it's just a good trick there's a lot"
+  },
+  {
+   "t": 1208.77,
+   "d": 1.41,
+   "text": "different ways you can do that you could"
+  },
+  {
+   "t": 1210.18,
+   "d": 1.74,
+   "text": "use a dramatis personae you could use a"
+  },
+  {
+   "t": 1211.92,
+   "d": 3.45,
+   "text": "family tree a list of spells a best iary"
+  },
+  {
+   "t": 1215.37,
+   "d": 1.71,
+   "text": "I mean this goes on and on and on"
+  },
+  {
+   "t": 1217.08,
+   "d": 1.77,
+   "text": "I think that's rich territory for the"
+  },
+  {
+   "t": 1218.85,
+   "d": 3.06,
+   "text": "sort of structural systemic thinking um"
+  },
+  {
+   "t": 1221.91,
+   "d": 3.23,
+   "text": "that people in this room are so good at"
+  },
+  {
+   "t": 1225.14,
+   "d": 2.08,
+   "text": "one way I like to think of it this might"
+  },
+  {
+   "t": 1227.22,
+   "d": 2.51,
+   "text": "be a little too sort of metaphorical I"
+  },
+  {
+   "t": 1229.73,
+   "d": 2.68,
+   "text": "think what you have that framework that"
+  },
+  {
+   "t": 1232.41,
+   "d": 1.62,
+   "text": "other sort of systematic framework I"
+  },
+  {
+   "t": 1234.03,
+   "d": 1.29,
+   "text": "think that becomes sort of the rhythm"
+  },
+  {
+   "t": 1235.32,
+   "d": 2.64,
+   "text": "section and so the language generated by"
+  },
+  {
+   "t": 1237.96,
+   "d": 3.84,
+   "text": "a system like GPT 2 can kind of soar and"
+  },
+  {
+   "t": 1241.8,
+   "d": 1.91,
+   "text": "riff and go off in weird directions"
+  },
+  {
+   "t": 1243.71,
+   "d": 2.83,
+   "text": "meanwhile your framework you know your"
+  },
+  {
+   "t": 1246.54,
+   "d": 2.28,
+   "text": "map say it's keeping the beat it's going"
+  },
+  {
+   "t": 1248.82,
+   "d": 4.08,
+   "text": "like boom boom pat the port mountain the"
+  },
+  {
+   "t": 1252.9,
+   "d": 2.76,
+   "text": "city the road and then meanwhile IGBT 2"
+  },
+  {
+   "t": 1255.66,
+   "d": 2.41,
+   "text": "is talking about elk with wing"
+  },
+  {
+   "t": 1258.07,
+   "d": 7.65,
+   "text": "the color of the night sky the other"
+  },
+  {
+   "t": 1265.72,
+   "d": 1.74,
+   "text": "thing I think you want to think about is"
+  },
+  {
+   "t": 1267.46,
+   "d": 3.06,
+   "text": "guiding the model with sharp turns you"
+  },
+  {
+   "t": 1270.52,
+   "d": 1.35,
+   "text": "know with templates and other kinds of"
+  },
+  {
+   "t": 1271.87,
+   "d": 1.89,
+   "text": "procedural generation you're you're"
+  },
+  {
+   "t": 1273.76,
+   "d": 2.51,
+   "text": "planning ahead of time you're defining"
+  },
+  {
+   "t": 1276.27,
+   "d": 2.59,
+   "text": "this probably becomes almost sort of"
+  },
+  {
+   "t": 1278.86,
+   "d": 2.22,
+   "text": "druidic in addition to being bard like"
+  },
+  {
+   "t": 1281.08,
+   "d": 2.49,
+   "text": "because with systems like GPT - you're"
+  },
+  {
+   "t": 1283.57,
+   "d": 3.21,
+   "text": "definitely coaxing and you're guiding"
+  },
+  {
+   "t": 1286.78,
+   "d": 2.88,
+   "text": "and sometimes you're insisting um if you"
+  },
+  {
+   "t": 1289.66,
+   "d": 2.22,
+   "text": "don't prompt in this way if you just"
+  },
+  {
+   "t": 1291.88,
+   "d": 1.89,
+   "text": "kind of set something up if you like"
+  },
+  {
+   "t": 1293.77,
+   "d": 1.35,
+   "text": "make a statement about the world and"
+  },
+  {
+   "t": 1295.12,
+   "d": 1.41,
+   "text": "then ask the models to continue it"
+  },
+  {
+   "t": 1296.53,
+   "d": 1.08,
+   "text": "you'll still get interesting results"
+  },
+  {
+   "t": 1297.61,
+   "d": 2.76,
+   "text": "they're just a lot more variable you're"
+  },
+  {
+   "t": 1300.37,
+   "d": 1.35,
+   "text": "really letting the Machine kind of"
+  },
+  {
+   "t": 1301.72,
+   "d": 2.19,
+   "text": "decide entirely what comes next"
+  },
+  {
+   "t": 1303.91,
+   "d": 2.67,
+   "text": "and in my experience these prompts"
+  },
+  {
+   "t": 1306.58,
+   "d": 1.59,
+   "text": "became a really easy way to tell the"
+  },
+  {
+   "t": 1308.17,
+   "d": 3.21,
+   "text": "model here's what I want and to sort of"
+  },
+  {
+   "t": 1311.38,
+   "d": 3.96,
+   "text": "inject some alcohol in motion or maybe"
+  },
+  {
+   "t": 1315.34,
+   "d": 3.03,
+   "text": "drama maybe should verb is actually so"
+  },
+  {
+   "t": 1318.37,
+   "d": 1.26,
+   "text": "you see them highlighted here in my"
+  },
+  {
+   "t": 1319.63,
+   "d": 1.71,
+   "text": "prompts again these are all my decision"
+  },
+  {
+   "t": 1321.34,
+   "d": 2.49,
+   "text": "this is probably the most fully authored"
+  },
+  {
+   "t": 1323.83,
+   "d": 2.16,
+   "text": "part of this whole project"
+  },
+  {
+   "t": 1325.99,
+   "d": 1.92,
+   "text": "you know I've inserted these words these"
+  },
+  {
+   "t": 1327.91,
+   "d": 3.63,
+   "text": "turns like a city known for was led by"
+  },
+  {
+   "t": 1331.54,
+   "d": 3.18,
+   "text": "Fenris tusk who like I want you to tell"
+  },
+  {
+   "t": 1334.72,
+   "d": 2.16,
+   "text": "me more about this character Fenris tusk"
+  },
+  {
+   "t": 1336.88,
+   "d": 2.1,
+   "text": "the quest just saw the lost grimoire"
+  },
+  {
+   "t": 1338.98,
+   "d": 4.41,
+   "text": "which even things like you know in the"
+  },
+  {
+   "t": 1343.39,
+   "d": 1.71,
+   "text": "sort of third to last prompt the Dark"
+  },
+  {
+   "t": 1345.1,
+   "d": 3.06,
+   "text": "Lord truly there's gonna be a verb after"
+  },
+  {
+   "t": 1348.16,
+   "d": 2.58,
+   "text": "that some action and I would like it to"
+  },
+  {
+   "t": 1350.74,
+   "d": 2.7,
+   "text": "be a bad one and I tried a bunch of"
+  },
+  {
+   "t": 1353.44,
+   "d": 2.07,
+   "text": "different things kind of configuring and"
+  },
+  {
+   "t": 1355.51,
+   "d": 1.5,
+   "text": "authoring these proms and I found that"
+  },
+  {
+   "t": 1357.01,
+   "d": 1.92,
+   "text": "these super simple little twists just"
+  },
+  {
+   "t": 1358.93,
+   "d": 2.31,
+   "text": "really made a huge difference and kind"
+  },
+  {
+   "t": 1361.24,
+   "d": 2.61,
+   "text": "of channeling the creative potential of"
+  },
+  {
+   "t": 1363.85,
+   "d": 1.44,
+   "text": "the system towards something that I"
+  },
+  {
+   "t": 1365.29,
+   "d": 0.6,
+   "text": "wanted"
+  },
+  {
+   "t": 1365.89,
+   "d": 2.67,
+   "text": "now again you get good X you get good"
+  },
+  {
+   "t": 1368.56,
+   "d": 3.0,
+   "text": "result if you don't do it one thing I"
+  },
+  {
+   "t": 1371.56,
+   "d": 2.1,
+   "text": "notice is that these kind of systems"
+  },
+  {
+   "t": 1373.66,
+   "d": 1.8,
+   "text": "it's not just GPT - it's it's its"
+  },
+  {
+   "t": 1375.46,
+   "d": 2.34,
+   "text": "precursors as well they're very happy"
+  },
+  {
+   "t": 1377.8,
+   "d": 3.33,
+   "text": "perhaps happiest of all to just describe"
+  },
+  {
+   "t": 1381.13,
+   "d": 2.42,
+   "text": "things I mean they could just describe"
+  },
+  {
+   "t": 1383.55,
+   "d": 4.54,
+   "text": "the grimoire all day describe it and"
+  },
+  {
+   "t": 1388.09,
+   "d": 1.86,
+   "text": "read ascribe it and just loving"
+  },
+  {
+   "t": 1389.95,
+   "d": 3.12,
+   "text": "we lovingly lay it out and of course you"
+  },
+  {
+   "t": 1393.07,
+   "d": 1.4,
+   "text": "can use that to your advantage sometimes"
+  },
+  {
+   "t": 1394.47,
+   "d": 2.29,
+   "text": "you want to just describe things and if"
+  },
+  {
+   "t": 1396.76,
+   "d": 1.59,
+   "text": "I you know was if I was playing the role"
+  },
+  {
+   "t": 1398.35,
+   "d": 1.8,
+   "text": "of a ranger and I was helping people"
+  },
+  {
+   "t": 1400.15,
+   "d": 2.49,
+   "text": "understand how best to use this tool and"
+  },
+  {
+   "t": 1402.64,
+   "d": 2.12,
+   "text": "really any kind of project or game"
+  },
+  {
+   "t": 1404.76,
+   "d": 2.35,
+   "text": "probably the first thing I would say is"
+  },
+  {
+   "t": 1407.11,
+   "d": 3.6,
+   "text": "this can be your description engine so"
+  },
+  {
+   "t": 1410.71,
+   "d": 1.74,
+   "text": "just for example I ran a few of those"
+  },
+  {
+   "t": 1412.45,
+   "d": 2.79,
+   "text": "prompts through my fantasy model just a"
+  },
+  {
+   "t": 1415.24,
+   "d": 1.53,
+   "text": "bunch of times to get a whole host of"
+  },
+  {
+   "t": 1416.77,
+   "d": 2.37,
+   "text": "descriptions so we get things like the"
+  },
+  {
+   "t": 1419.14,
+   "d": 1.38,
+   "text": "village of fire puddle was known for its"
+  },
+  {
+   "t": 1420.52,
+   "d": 2.46,
+   "text": "strange swirling clouds scattered sand"
+  },
+  {
+   "t": 1422.98,
+   "d": 2.76,
+   "text": "covering the streets cool the village of"
+  },
+  {
+   "t": 1425.74,
+   "d": 1.26,
+   "text": "fire puddle was known for its placement"
+  },
+  {
+   "t": 1427.0,
+   "d": 1.95,
+   "text": "and the lovely purple leaves of the"
+  },
+  {
+   "t": 1428.95,
+   "d": 2.55,
+   "text": "royal palm tree the village of fire"
+  },
+  {
+   "t": 1431.5,
+   "d": 2.04,
+   "text": "puddle is known for its play and dancing"
+  },
+  {
+   "t": 1433.54,
+   "d": 2.85,
+   "text": "it's fine musical stages and prodigious"
+  },
+  {
+   "t": 1436.39,
+   "d": 4.14,
+   "text": "haystacks I mean this truly this is the"
+  },
+  {
+   "t": 1440.53,
+   "d": 2.67,
+   "text": "beauty the beauty of words and the power"
+  },
+  {
+   "t": 1443.2,
+   "d": 2.37,
+   "text": "of reading prodigious haystacks is"
+  },
+  {
+   "t": 1445.57,
+   "d": 1.74,
+   "text": "ridiculous but given the context you're"
+  },
+  {
+   "t": 1447.31,
+   "d": 4.1,
+   "text": "like oh they must play on the haystacks"
+  },
+  {
+   "t": 1451.41,
+   "d": 2.53,
+   "text": "haystack Oh a haystack gaming culture I"
+  },
+  {
+   "t": 1453.94,
+   "d": 3.06,
+   "text": "loved it at the port of saw dad was"
+  },
+  {
+   "t": 1457.0,
+   "d": 1.05,
+   "text": "known for anything that wasn't quite"
+  },
+  {
+   "t": 1458.05,
+   "d": 2.25,
+   "text": "right like old scar tissue and tobacco"
+  },
+  {
+   "t": 1460.3,
+   "d": 3.18,
+   "text": "beans amazing the port of saudade was"
+  },
+  {
+   "t": 1463.48,
+   "d": 1.77,
+   "text": "known for its dazzling dazzlingly"
+  },
+  {
+   "t": 1465.25,
+   "d": 3.93,
+   "text": "colored drapes and gaudier furniture the"
+  },
+  {
+   "t": 1469.18,
+   "d": 1.44,
+   "text": "port of saw dad was known for the rock"
+  },
+  {
+   "t": 1470.62,
+   "d": 2.4,
+   "text": "sculptures and gold work of the great"
+  },
+  {
+   "t": 1473.02,
+   "d": 2.67,
+   "text": "family of Casa del once the Lords of"
+  },
+  {
+   "t": 1475.69,
+   "d": 3.12,
+   "text": "loot and again you could generate these"
+  },
+  {
+   "t": 1478.81,
+   "d": 2.43,
+   "text": "offline and then filter them and kind of"
+  },
+  {
+   "t": 1481.24,
+   "d": 1.92,
+   "text": "store them to be deployed however you"
+  },
+  {
+   "t": 1483.16,
+   "d": 1.44,
+   "text": "want you could make thousands of them"
+  },
+  {
+   "t": 1484.6,
+   "d": 2.28,
+   "text": "millions of them no problem you could"
+  },
+  {
+   "t": 1486.88,
+   "d": 1.35,
+   "text": "generate them live and you could let"
+  },
+  {
+   "t": 1488.23,
+   "d": 1.89,
+   "text": "them be super weird you can also"
+  },
+  {
+   "t": 1490.12,
+   "d": 1.41,
+   "text": "generate them live and then you could"
+  },
+  {
+   "t": 1491.53,
+   "d": 2.07,
+   "text": "stringently filter them as you could"
+  },
+  {
+   "t": 1493.6,
+   "d": 2.1,
+   "text": "only accept descriptions that kind of"
+  },
+  {
+   "t": 1495.7,
+   "d": 1.62,
+   "text": "like to fit a certain particular"
+  },
+  {
+   "t": 1497.32,
+   "d": 2.52,
+   "text": "template and even within that template I"
+  },
+  {
+   "t": 1499.84,
+   "d": 2.46,
+   "text": "believe you would get diversity and sort"
+  },
+  {
+   "t": 1502.3,
+   "d": 2.4,
+   "text": "of these just these little twists of"
+  },
+  {
+   "t": 1504.7,
+   "d": 2.34,
+   "text": "delight really that you wouldn't get"
+  },
+  {
+   "t": 1507.04,
+   "d": 1.5,
+   "text": "from a template that you'd written"
+  },
+  {
+   "t": 1508.54,
+   "d": 1.1,
+   "text": "yourself"
+  },
+  {
+   "t": 1509.64,
+   "d": 2.65,
+   "text": "the town of Roy on I was you could tell"
+  },
+  {
+   "t": 1512.29,
+   "d": 1.59,
+   "text": "from running out of fictional place"
+  },
+  {
+   "t": 1513.88,
+   "d": 2.46,
+   "text": "names the town of fryin was known for"
+  },
+  {
+   "t": 1516.34,
+   "d": 2.55,
+   "text": "its refined taste its soapstone bads its"
+  },
+  {
+   "t": 1518.89,
+   "d": 2.34,
+   "text": "many excellent restaurants its elegantly"
+  },
+  {
+   "t": 1521.23,
+   "d": 1.33,
+   "text": "carved and Gil"
+  },
+  {
+   "t": 1522.56,
+   "d": 2.91,
+   "text": "did you jaha's the town of frien was"
+  },
+  {
+   "t": 1525.47,
+   "d": 1.86,
+   "text": "known for sweet making and embroidery"
+  },
+  {
+   "t": 1527.33,
+   "d": 5.04,
+   "text": "and for the exploration of time or maybe"
+  },
+  {
+   "t": 1532.37,
+   "d": 1.89,
+   "text": "the town of fry an was simply known for"
+  },
+  {
+   "t": 1534.26,
+   "d": 4.38,
+   "text": "its simplicity okay so this is the last"
+  },
+  {
+   "t": 1538.64,
+   "d": 2.28,
+   "text": "sort of piece of tactical advice I have"
+  },
+  {
+   "t": 1540.92,
+   "d": 2.94,
+   "text": "it is the subtlest one and maybe also"
+  },
+  {
+   "t": 1543.86,
+   "d": 2.07,
+   "text": "that was powerful I think the good thing"
+  },
+  {
+   "t": 1545.93,
+   "d": 2.13,
+   "text": "is that also I think this is useful in"
+  },
+  {
+   "t": 1548.06,
+   "d": 2.07,
+   "text": "many different kinds of language and"
+  },
+  {
+   "t": 1550.13,
+   "d": 2.01,
+   "text": "text generation this is definitely not"
+  },
+  {
+   "t": 1552.14,
+   "d": 3.09,
+   "text": "just something that applies to GPT - so"
+  },
+  {
+   "t": 1555.23,
+   "d": 1.08,
+   "text": "I think you could use this effectively"
+  },
+  {
+   "t": 1556.31,
+   "d": 1.92,
+   "text": "with other kinds of neural nets I think"
+  },
+  {
+   "t": 1558.23,
+   "d": 1.29,
+   "text": "you could probably use it with Markov"
+  },
+  {
+   "t": 1559.52,
+   "d": 4.14,
+   "text": "chains I'm really anything you have so"
+  },
+  {
+   "t": 1563.66,
+   "d": 2.31,
+   "text": "in this last prompt there's a trick it's"
+  },
+  {
+   "t": 1565.97,
+   "d": 1.74,
+   "text": "very cryptic because this is my weird"
+  },
+  {
+   "t": 1567.71,
+   "d": 2.19,
+   "text": "kind of way of describing things but you"
+  },
+  {
+   "t": 1569.9,
+   "d": 2.88,
+   "text": "notice there's an extra pipe and there's"
+  },
+  {
+   "t": 1572.78,
+   "d": 2.34,
+   "text": "actually a blank string following that"
+  },
+  {
+   "t": 1575.12,
+   "d": 2.07,
+   "text": "extra pipe which is of course invisible"
+  },
+  {
+   "t": 1577.19,
+   "d": 1.8,
+   "text": "and the system knows that any time it"
+  },
+  {
+   "t": 1578.99,
+   "d": 2.97,
+   "text": "sees that extra pipe what its gonna do"
+  },
+  {
+   "t": 1581.96,
+   "d": 2.25,
+   "text": "is rather than output the prompt which"
+  },
+  {
+   "t": 1584.21,
+   "d": 1.47,
+   "text": "it has done in every other case right"
+  },
+  {
+   "t": 1585.68,
+   "d": 1.89,
+   "text": "it's showing us the text that went in"
+  },
+  {
+   "t": 1587.57,
+   "d": 2.22,
+   "text": "and then its own completion I'm in this"
+  },
+  {
+   "t": 1589.79,
+   "d": 1.95,
+   "text": "case it's going to show me what comes"
+  },
+  {
+   "t": 1591.74,
+   "d": 1.8,
+   "text": "after the pipe and so it could say"
+  },
+  {
+   "t": 1593.54,
+   "d": 1.29,
+   "text": "something different I could I could"
+  },
+  {
+   "t": 1594.83,
+   "d": 1.41,
+   "text": "substitute different tacks in this case"
+  },
+  {
+   "t": 1596.24,
+   "d": 2.91,
+   "text": "I'm substituting nothing at all so I'm"
+  },
+  {
+   "t": 1599.15,
+   "d": 1.53,
+   "text": "giving it a prompt and asking it for a"
+  },
+  {
+   "t": 1600.68,
+   "d": 2.88,
+   "text": "completion and I'm saying keep that"
+  },
+  {
+   "t": 1603.56,
+   "d": 2.7,
+   "text": "prompt to yourself so again here's the"
+  },
+  {
+   "t": 1606.26,
+   "d": 1.29,
+   "text": "conclusion of our story you might"
+  },
+  {
+   "t": 1607.55,
+   "d": 2.43,
+   "text": "remember Fenris tusks last thoughts were"
+  },
+  {
+   "t": 1609.98,
+   "d": 2.49,
+   "text": "defiance but he was too weary to even"
+  },
+  {
+   "t": 1612.47,
+   "d": 2.82,
+   "text": "speak them aloud the earth had dried up"
+  },
+  {
+   "t": 1615.29,
+   "d": 4.22,
+   "text": "etc well that's what the Machine saw"
+  },
+  {
+   "t": 1619.51,
+   "d": 2.95,
+   "text": "after Fenris test last thoughts I sort"
+  },
+  {
+   "t": 1622.46,
+   "d": 3.51,
+   "text": "of whispered in its year I said to see"
+  },
+  {
+   "t": 1625.97,
+   "d": 3.51,
+   "text": "you know the world is quiet what happens"
+  },
+  {
+   "t": 1629.48,
+   "d": 2.52,
+   "text": "next it really is a whisper it's in"
+  },
+  {
+   "t": 1632.0,
+   "d": 3.33,
+   "text": "Dutch it's saying like here's some extra"
+  },
+  {
+   "t": 1635.33,
+   "d": 1.71,
+   "text": "guidance I'm gonna tell you the kind of"
+  },
+  {
+   "t": 1637.04,
+   "d": 2.7,
+   "text": "scene that I'm interested in so just"
+  },
+  {
+   "t": 1639.74,
+   "d": 1.62,
+   "text": "again to run through some other examples"
+  },
+  {
+   "t": 1641.36,
+   "d": 2.55,
+   "text": "with that same prompt you know the world"
+  },
+  {
+   "t": 1643.91,
+   "d": 2.25,
+   "text": "was quiet you might get it you might get"
+  },
+  {
+   "t": 1646.16,
+   "d": 3.51,
+   "text": "something like only the water and birds"
+  },
+  {
+   "t": 1649.67,
+   "d": 4.68,
+   "text": "saying only the water like yeah the"
+  },
+  {
+   "t": 1654.35,
+   "d": 1.94,
+   "text": "water did sing"
+  },
+  {
+   "t": 1656.29,
+   "d": 1.62,
+   "text": "the stillness there's like that"
+  },
+  {
+   "t": 1657.91,
+   "d": 1.32,
+   "text": "stillness and poetry there but you"
+  },
+  {
+   "t": 1659.23,
+   "d": 1.92,
+   "text": "wouldn't get it without kind of setting"
+  },
+  {
+   "t": 1661.15,
+   "d": 2.55,
+   "text": "the stage first maybe get something like"
+  },
+  {
+   "t": 1663.7,
+   "d": 2.49,
+   "text": "this a few hundred miles beyond the dim"
+  },
+  {
+   "t": 1666.19,
+   "d": 2.7,
+   "text": "City the desert grew cold and empty and"
+  },
+  {
+   "t": 1668.89,
+   "d": 1.74,
+   "text": "the tumbled rocks and hollows and"
+  },
+  {
+   "t": 1670.63,
+   "d": 2.73,
+   "text": "cressets of the land were all that held"
+  },
+  {
+   "t": 1673.36,
+   "d": 2.84,
+   "text": "the people together"
+  },
+  {
+   "t": 1679.34,
+   "d": 3.45,
+   "text": "so so this is literary I I really think"
+  },
+  {
+   "t": 1682.79,
+   "d": 1.86,
+   "text": "it is and I guess by literary I mean"
+  },
+  {
+   "t": 1684.65,
+   "d": 1.59,
+   "text": "it's beautiful interesting language"
+  },
+  {
+   "t": 1686.24,
+   "d": 3.39,
+   "text": "I think it's sores well beyond genre and"
+  },
+  {
+   "t": 1689.63,
+   "d": 1.98,
+   "text": "I think it leaves gaps for readers to"
+  },
+  {
+   "t": 1691.61,
+   "d": 3.12,
+   "text": "fill in that's really important so I"
+  },
+  {
+   "t": 1694.73,
+   "d": 1.71,
+   "text": "promised a why I think this is important"
+  },
+  {
+   "t": 1696.44,
+   "d": 1.71,
+   "text": "because I certainly am guilty of getting"
+  },
+  {
+   "t": 1698.15,
+   "d": 2.27,
+   "text": "distracted by cool new technical tricks"
+  },
+  {
+   "t": 1700.42,
+   "d": 2.68,
+   "text": "and I do think a system like GPT 2 is"
+  },
+  {
+   "t": 1703.1,
+   "d": 1.95,
+   "text": "interesting and worth studying and"
+  },
+  {
+   "t": 1705.05,
+   "d": 2.72,
+   "text": "playing with just for its own sake but"
+  },
+  {
+   "t": 1707.77,
+   "d": 2.44,
+   "text": "as an ingredient in a work of"
+  },
+  {
+   "t": 1710.21,
+   "d": 3.39,
+   "text": "entertainment or interaction or art I"
+  },
+  {
+   "t": 1713.6,
+   "d": 1.77,
+   "text": "think you have to actually have a better"
+  },
+  {
+   "t": 1715.37,
+   "d": 2.55,
+   "text": "reason than that of course roguelikes"
+  },
+  {
+   "t": 1717.92,
+   "d": 2.73,
+   "text": "are built on this judicious Ness the"
+  },
+  {
+   "t": 1720.65,
+   "d": 3.87,
+   "text": "sense that like the right technology"
+  },
+  {
+   "t": 1724.52,
+   "d": 2.1,
+   "text": "even if it's an old one or sort of one"
+  },
+  {
+   "t": 1726.62,
+   "d": 1.32,
+   "text": "that's been forgotten and left behind"
+  },
+  {
+   "t": 1727.94,
+   "d": 2.55,
+   "text": "can be very effective in fact it can"
+  },
+  {
+   "t": 1730.49,
+   "d": 2.49,
+   "text": "fire the imagination better than the new"
+  },
+  {
+   "t": 1732.98,
+   "d": 2.55,
+   "text": "thing there's a way of suspiciousness a"
+  },
+  {
+   "t": 1735.53,
+   "d": 2.85,
+   "text": "suspicion of the of the shiny new thing"
+  },
+  {
+   "t": 1738.38,
+   "d": 3.0,
+   "text": "that I think is very healthy so what I"
+  },
+  {
+   "t": 1741.38,
+   "d": 1.35,
+   "text": "think it's an important question and a"
+  },
+  {
+   "t": 1742.73,
+   "d": 3.0,
+   "text": "fair one this is the why these systems"
+  },
+  {
+   "t": 1745.73,
+   "d": 2.73,
+   "text": "can produce beautiful interesting tax"
+  },
+  {
+   "t": 1748.46,
+   "d": 2.97,
+   "text": "that engages your curiosity I think they"
+  },
+  {
+   "t": 1751.43,
+   "d": 1.74,
+   "text": "make words that are beautiful and"
+  },
+  {
+   "t": 1753.17,
+   "d": 2.46,
+   "text": "surprising and they do so in ways that"
+  },
+  {
+   "t": 1755.63,
+   "d": 1.5,
+   "text": "are actually really flexible you're not"
+  },
+  {
+   "t": 1757.13,
+   "d": 2.04,
+   "text": "just pressing one big button and hoping"
+  },
+  {
+   "t": 1759.17,
+   "d": 2.22,
+   "text": "for the best you can really shape and"
+  },
+  {
+   "t": 1761.39,
+   "d": 1.59,
+   "text": "morph and guide these systems in"
+  },
+  {
+   "t": 1762.98,
+   "d": 0.77,
+   "text": "interesting ways"
+  },
+  {
+   "t": 1763.75,
+   "d": 2.41,
+   "text": "now if this wasn't true the language"
+  },
+  {
+   "t": 1766.16,
+   "d": 1.71,
+   "text": "wasn't beautiful it just was just kind"
+  },
+  {
+   "t": 1767.87,
+   "d": 2.01,
+   "text": "of a cool technical trick and I wouldn't"
+  },
+  {
+   "t": 1769.88,
+   "d": 1.11,
+   "text": "be standing here I wouldn't be sharing"
+  },
+  {
+   "t": 1770.99,
+   "d": 3.24,
+   "text": "this with you that's it that's the lure"
+  },
+  {
+   "t": 1774.23,
+   "d": 1.57,
+   "text": "the only reason"
+  },
+  {
+   "t": 1775.8,
+   "d": 2.58,
+   "text": "I mean of course that's I'm a fiction"
+  },
+  {
+   "t": 1778.38,
+   "d": 1.41,
+   "text": "writer this is the only reason I kind of"
+  },
+  {
+   "t": 1779.79,
+   "d": 1.47,
+   "text": "think there is to put any text on any"
+  },
+  {
+   "t": 1781.26,
+   "d": 2.22,
+   "text": "screen or any page it's beautiful and"
+  },
+  {
+   "t": 1783.48,
+   "d": 2.67,
+   "text": "surprising so just to finish up I want"
+  },
+  {
+   "t": 1786.15,
+   "d": 2.13,
+   "text": "to say that on the metal level working"
+  },
+  {
+   "t": 1788.28,
+   "d": 1.92,
+   "text": "on all this stuff has made me introspect"
+  },
+  {
+   "t": 1790.2,
+   "d": 3.6,
+   "text": "a lot about how I come up with new"
+  },
+  {
+   "t": 1793.8,
+   "d": 2.54,
+   "text": "sentences you know where do I pluck"
+  },
+  {
+   "t": 1796.34,
+   "d": 3.22,
+   "text": "ideas from how do I choose the next word"
+  },
+  {
+   "t": 1799.56,
+   "d": 2.82,
+   "text": "as I'm going in a particular genre or"
+  },
+  {
+   "t": 1802.38,
+   "d": 3.27,
+   "text": "not I do not know I have no answers but"
+  },
+  {
+   "t": 1805.65,
+   "d": 2.42,
+   "text": "I've found that question the sort of"
+  },
+  {
+   "t": 1808.07,
+   "d": 2.92,
+   "text": "murky mirror that this model has been"
+  },
+  {
+   "t": 1810.99,
+   "d": 1.62,
+   "text": "for me really provocative and"
+  },
+  {
+   "t": 1812.61,
+   "d": 2.61,
+   "text": "interesting and the other thing that"
+  },
+  {
+   "t": 1815.22,
+   "d": 1.62,
+   "text": "working with these tools has made me"
+  },
+  {
+   "t": 1816.84,
+   "d": 4.05,
+   "text": "aware of is just how much language is"
+  },
+  {
+   "t": 1820.89,
+   "d": 4.44,
+   "text": "out there just how many things we can"
+  },
+  {
+   "t": 1825.33,
+   "d": 3.24,
+   "text": "say that are beautiful and interesting"
+  },
+  {
+   "t": 1828.57,
+   "d": 4.5,
+   "text": "and new I mean this one this one model"
+  },
+  {
+   "t": 1833.07,
+   "d": 3.6,
+   "text": "my same GPT GPT to model trained on all"
+  },
+  {
+   "t": 1836.67,
+   "d": 2.58,
+   "text": "these fantasy novels it says things like"
+  },
+  {
+   "t": 1839.25,
+   "d": 3.39,
+   "text": "this a pair of thieves began their quest"
+  },
+  {
+   "t": 1842.64,
+   "d": 1.68,
+   "text": "and flybridge the city known for its"
+  },
+  {
+   "t": 1844.32,
+   "d": 2.76,
+   "text": "wine the master of the city was an old"
+  },
+  {
+   "t": 1847.08,
+   "d": 2.9,
+   "text": "man with red hair and a deceptively"
+  },
+  {
+   "t": 1849.98,
+   "d": 3.52,
+   "text": "childlike face I would start a novel"
+  },
+  {
+   "t": 1853.5,
+   "d": 3.62,
+   "text": "that way and it says things like this"
+  },
+  {
+   "t": 1857.12,
+   "d": 2.62,
+   "text": "then on the road towards ending bag they"
+  },
+  {
+   "t": 1859.74,
+   "d": 1.98,
+   "text": "encountered an elk it trotted along"
+  },
+  {
+   "t": 1861.72,
+   "d": 2.52,
+   "text": "silently its massive head bent low over"
+  },
+  {
+   "t": 1864.24,
+   "d": 2.88,
+   "text": "its neck a white tipped arrow of fire"
+  },
+  {
+   "t": 1867.12,
+   "d": 2.94,
+   "text": "shot out from its forehead marking it as"
+  },
+  {
+   "t": 1870.06,
+   "d": 4.43,
+   "text": "a member of a secretive race of elves"
+  },
+  {
+   "t": 1876.94,
+   "d": 2.86,
+   "text": "there could be a secret of race of elves"
+  },
+  {
+   "t": 1879.8,
+   "d": 4.08,
+   "text": "who wield Pale Fire and if it took"
+  },
+  {
+   "t": 1883.88,
+   "d": 2.55,
+   "text": "something like GPT to to tell me that"
+  },
+  {
+   "t": 1886.43,
+   "d": 4.35,
+   "text": "then I say thank you to the Machine and"
+  },
+  {
+   "t": 1890.78,
+   "d": 2.81,
+   "text": "thank you also to you"
+  }
+ ]
+}

@@ -1,0 +1,209 @@
+{
+  "id": "DT9_7sW5knY",
+  "title": "Benjamin Berman - Tips, Tricks and History for Card Game Roguelike Design",
+  "speaker": "Benjamin Berman",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=DT9_7sW5knY",
+  "talk_type": "design",
+  "summary": "Benjamin Berman, director of the community-authored card game Spellsource, traces a 'tech tree' of card game roguelikes from Magic: The Gathering draft through Heroes of Might and Magic, Munchkin, Mega Man Battle Chip Challenge, Pokemon Defense, Card Hunter, Dream Quest, Guild of Dungeoneering, Slay the Spire and Dicey Dungeons, arguing that nearly every ingredient existed long ago. His design advice: Hearthstone's battle format is very hard to beat, so either focus solely on improving combat or adopt it and innovate elsewhere (navigation, persistence, generated cards). He offers concrete tips: fit everything on one screen, make the start of every run winnable by random play, embrace modding, and judge content by whether it looks good and plays good. On engineering he recommends coroutine-based rules engines whose call stack mirrors game logic, arena-allocated game state (Cap'n Proto), and cards authored in structured data rather than code.",
+  "games": [
+    "Spellsource",
+    "Magic: The Gathering",
+    "Heroes of Might and Magic",
+    "Munchkin",
+    "Mega Man Battle Chip Challenge",
+    "Dominion",
+    "Pokemon Defense",
+    "Dota Auto Chess",
+    "Card Hunter",
+    "Dream Quest",
+    "Hearthstone",
+    "Guild of Dungeoneering",
+    "Slay the Spire",
+    "Dicey Dungeons",
+    "Pokemon Showdown"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "card game roguelikes",
+      "kind": "principle",
+      "claim": "Card game roguelikes use cards as the metaphor for an RPG's spells, equipment and encounters, with deck building abstracting away experience points, equipment and levelling, and shuffling serving as randomization.",
+      "detail": "Berman defines the subgenre this way at the start and closes his history by urging designers to stick to the metaphors: cards and decks stand for content and shuffling is the randomizer.",
+      "t": 39,
+      "quote": "it's abstracting away stuff like experience points and equipment and leveling up",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "card game roguelikes",
+      "kind": "history",
+      "claim": "Magic: The Gathering's 1995 booster draft tournaments already contained core card roguelike ingredients, including a form of permadeath: once eliminated you are out.",
+      "detail": "Berman contrasts this with multiplayer games that try to get you back in for retention; he says many designers are afraid of that kind of finality, but it was there in Magic's tournament format.",
+      "t": 114,
+      "quote": "the most interesting part is the perma death in the tournament format like once you're out you're out",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "card game roguelikes",
+      "kind": "history",
+      "claim": "Earlier games supplied many modern card roguelike mechanics: Heroes of Might and Magic's left-versus-right battle layout, Munchkin's randomly ordered encounter deck, and Mega Man Battle Chip Challenge's opponents choosing randomly from small visible option sets.",
+      "detail": "Berman presents these as part of a tech tree showing 'nothing is original'. He notes Battle Chip Challenge's random-choice opponent prefigures modern enemies that pick from a small set of random options, and that Pokemon Defense (2011) already had drafting and auto-battling.",
+      "t": 282,
+      "quote": "your opponent will choose randomly from these few things on this turn that you're gonna play against so you have a strategy you can put together",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "card game roguelikes",
+      "kind": "history",
+      "claim": "Card Hunter made positional grid combat and dice-to-card activation meaningful, and Dream Quest's key contribution was bringing back permadeath to card games.",
+      "detail": "Berman says card games always had an endless activity generator, so procedural generation mattered less than permadeath, which was hard to bring back. Dream Quest's creator Peter Whalen later worked at Blizzard; Hearthstone lacked a procedural roguelike mode until 2017.",
+      "t": 482,
+      "quote": "card games they always had like the infinite activity generator thing going on perma death is really something special it was hard to bring back",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "early access",
+      "kind": "example",
+      "claim": "Slay the Spire's two years of early access with constant player feedback honed the card roguelike UX, and embracing mods let players communicate what they wanted without asking permission.",
+      "detail": "Berman credits Slay the Spire with polishing a UX lineage going back to Heroes of Might and Magic, and with popularizing graph-based map navigation where players choose encounters. Players could edit the Java game to add cards.",
+      "t": 619,
+      "quote": "they also embraced mods people can edit their java game and put in new cards",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "card battle format",
+      "kind": "principle",
+      "claim": "Hearthstone's battle format is so hard to beat that card roguelike designers should either devote themselves entirely to building a better combat system or adopt it and innovate elsewhere.",
+      "detail": "Berman says improving on it would consume your whole development time; Dicey Dungeons takes it on successfully. He considers everything else, including persistent worlds, quest navigation and randomly authored cards, up for grabs.",
+      "t": 710,
+      "quote": "it's super hard to beat heart stones battle format",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "readable rules",
+      "kind": "principle",
+      "claim": "Accessible card combat puts everything you need on the card: short decks, small-number arithmetic and few keywords, avoiding inflated numbers.",
+      "detail": "Berman contrasts Hearthstone with Yu-Gi-Oh's numbers with extra zeroes, telling designers to keep values to small integers.",
+      "t": 754,
+      "quote": "short decks small number arithmetic few key words",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "interactivity",
+      "kind": "principle",
+      "claim": "Good card combat is interactive: each player builds a puzzle board the opponent must solve, and a well-written card makes clear how an opponent has to play around it, which works in PvE too.",
+      "detail": "Berman cites a Hearthstone card whose arithmetic changed how people arranged their boards, and says you can tell from the text how your opponent must respond.",
+      "t": 783,
+      "quote": "you're building you and your opponent's puzzle boards and you're solving each other's puzzle boards you can do this in the PvE setting",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "digitization",
+      "kind": "example",
+      "claim": "Hearthstone digitized Magic's turn-interrupting Counterspell as a hidden secret played on your own turn, keeping interactivity while removing interrupts, which Berman argues made a more interesting game.",
+      "detail": "Because several secrets exist, opponents must play around what the secret might be, inferring it when e.g. a minion fails to trigger another secret. Magic has many counterspells to remember; Hearthstone has one. He urges embracing the constraints of digitization.",
+      "t": 842,
+      "quote": "in hearthstone you play on your turn something called a counter spell that will counter whatever is the next spell your opponent plays",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "screen layout",
+      "kind": "principle",
+      "claim": "Card game combat should fit on one screen; games spreading play over multiple screens are very hard for players.",
+      "detail": "Berman points to Slay the Spire's 2017 layout and says breakout mobile and strategy hits almost all fit on one screen, apart from games like Civilization or Hearts of Iron.",
+      "t": 960,
+      "quote": "my hint to you is it should all fit on one screen whatever you're doing fit in on one screen",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "warning",
+      "claim": "Playtest and analytics data for permadeath games is biased toward skilled players, because people who lose stop playing and your community is far more skilled than the general public.",
+      "detail": "Berman cites HSReplay data showing its users sit well above the average Hearthstone player, who is in turn better than someone who has never played; the community may be two standard deviations above a random person.",
+      "t": 1015,
+      "quote": "people who lose they just stop playing forget about that so it's not gonna show up in your data",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curve",
+      "kind": "technique",
+      "claim": "The start of every run in a permadeath game should be winnable by playing randomly, because a player who knows nothing behaves indistinguishably from random input.",
+      "detail": "Berman's test: close your eyes, press random keys and do random things; if you reach level 2, you have succeeded in tuning early difficulty.",
+      "t": 1066,
+      "quote": "start of every life should be winnable by playing randomly literally if you hit random Keys and you moved into random places",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "example",
+      "claim": "Pokemon Showdown sustains around 15,000 concurrent players on community-authored content and many contributors, showing the value of giving players ways to contribute.",
+      "detail": "Berman says its pull is not just the Pokemon license but community involvement, with around 17,000 commits; his advice is simply to do what players ask for.",
+      "t": 1145,
+      "quote": "it's got all this community involvement and they have a lot of ways 17,000 commits",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "card generation",
+      "kind": "principle",
+      "claim": "Strategy card content must both look good and play good, because players will not pick a card that looks bad; this makes randomly generated cards a hard engineering challenge.",
+      "detail": "Berman notes Slay the Spire tested by showing people three cards and seeing which they picked. Cut anything that fails either test; a model feeding pick data back into generation might help.",
+      "t": 1185,
+      "quote": "it's got to look good and play good okay no one's gonna pick a card that looks bad even if it plays bad",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "rules engine",
+      "kind": "technique",
+      "claim": "A card game rules engine should use the language's coroutines, fibers or async rather than a homemade virtual machine, so the code call stack mirrors the game's logical call stack.",
+      "detail": "Berman says when something receives damage, you should see a receive-damage function in the stack, which makes debugging far easier; many games needlessly write their own rule languages.",
+      "t": 1265,
+      "quote": "your code stack you can see a spell source code stack on the right should look like your game call stack",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "game state",
+      "kind": "technique",
+      "claim": "Store game state in an arena allocator such as Cap'n Proto so it can be copied and sent as byte buffers, enabling networked multiplayer and fast AI that needs to copy state.",
+      "detail": "Berman says anyone who has written 'entity' has reinvented an arena allocator. Without designing for this up front, he found himself facing a years-old card base that could not easily support multiplayer or a textbook AI, requiring months of rewriting.",
+      "t": 1302,
+      "quote": "if you've ever you written the word entity in your codebase you've already reinvented an arena allocator",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "technique",
+      "claim": "Author cards in a structured data format rather than code, because contributors are put off by writing code, and structured data also suits future card generators.",
+      "detail": "Berman contrasts cards written as Java or Python classes or as Lua inside Dicey Dungeons with data formats, and cites Paradox games and Civilization as succeeding with modding through big structured data. In Q&A he said the obstacle to ML card generation is a large dataset of coded cards in a usable representation.",
+      "t": 1355,
+      "quote": "when you get other people to write the cards the first thing that their body's telling them is I don't want to write code",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical prototyping",
+      "kind": "technique",
+      "claim": "Random effects like Hearthstone's 'discover' are things a computer referee does far better than tedious physical shuffling and dice rolling, but they can still be prototyped physically before programming.",
+      "detail": "Answering a question on digital versus paper card games, Berman notes the old MicroProse Magic game invented effects like picking random cards from an opponent's deck, and that Dicey Dungeons' constant dice handling would be a drag physically.",
+      "t": 1954,
+      "quote": "in the physical you can you can cheat you can do all these effects physically before you start programming them",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

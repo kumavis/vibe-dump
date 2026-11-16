@@ -1,0 +1,155 @@
+{
+  "id": "3daNITP9vBc",
+  "title": "Mike Cook- Generating Procedures:Rule & System Generation for Roguelikes",
+  "speaker": "Mike Cook",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=3daNITP9vBc",
+  "talk_type": "design",
+  "summary": "Mike Cook, an AI researcher and founder of PROCJAM, argues that roguelikes should extend procedural generation from levels and items to the game's rules and mechanics themselves. He frames all game design as generative design: designers control systems and rules, not the action space, which is always vaster than they can imagine. He presents three escalating approaches: rearranging existing modular content (Invisible, Inc. settings, Slay the Spire daily modifiers), custom design languages (Noita wands, Baba Is You, Caves of Qud mod files), and generating program code directly (his tool Pixy for C#). He closes with ways to keep generated mechanics under control: design around unfairness, curate generated systems at development time, test with generated unwinnable scenarios, and wrap generated mechanics in a theme like potions.",
+  "games": [
+    "Brogue",
+    "Invisible, Inc.",
+    "Slay the Spire",
+    "Noita",
+    "Baba Is You",
+    "Caves of Qud",
+    "Bad Chess",
+    "Mosa Lina",
+    "Elite",
+    "Breakout",
+    "Sudoku"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "mechanic generation",
+      "kind": "principle",
+      "claim": "Roguelikes should use procedural generation not only for levels but also for game rules and mechanics, so players encounter genuinely new ways to interact with the world.",
+      "detail": "Cook jokes that even Brogue's generated levels are full of familiar things like doors, and he wants exciting new interactions. He means hand-crafted generators, not large language models, and gives examples like a match-three where swiping subtracts numbers or Breakout where a new rule triggers on each brick hit.",
+      "t": 199,
+      "quote": "procedural generation is OK but we only tend to use it for things that we are comfortable using it for",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "action space",
+      "kind": "principle",
+      "claim": "Game designers control systems and rules rather than the player's action space, which is always far larger than they can imagine; this is why edge cases emerge and why all game design is effectively generative design.",
+      "detail": "Cook uses a fake roguelike where placing a campfire removes a move option and makes a fireball more attractive. He argues even hand-made Sudoku has a possibility space with pacing and difficulty, so generating rules that reshape actions isn't so different from generating physical space.",
+      "t": 534,
+      "quote": "we are controlling the systems and rules. We are not controlling the action space",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "Unidentified potions are an existing roguelike case of procedurally generated rules, but their novelty fades once players learn the effects and detection techniques; generating mechanics could keep them always fresh.",
+      "detail": "Cook proposes taking the potion idea and supercharging it with new techniques.",
+      "t": 618,
+      "quote": "What I am suggesting is we take the potion idea and supercharge it with new techniques so the potions are always fresh and exciting",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "modular content",
+      "kind": "technique",
+      "claim": "The safest form of rule generation is rearranging existing modular content, toggling and combining existing options to create campaign or run variance, as in Invisible, Inc. campaign settings and Slay the Spire's daily-challenge modifiers.",
+      "detail": "In Slay the Spire's dailies, modifiers can compound, e.g. allowing green cards plus starting with five copies of a random card can yield five green cards.",
+      "t": 676,
+      "quote": "this allows us to build generative systems that turn on and off various things and just shuffle around options that already exist",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "daily challenges",
+      "kind": "warning",
+      "claim": "Generated rule variants can alienate players whose expectations come from the main game; many skip a Slay the Spire daily challenge when they see an unwelcome modifier like one removing map decisions.",
+      "detail": "Cook says the daily challenge is not communicated well and players aren't prepared for the experience, which is why preparing players is part of making generated rules work.",
+      "t": 734,
+      "quote": "The difficulty with Slay the Spire's daily challenge is it isn't necessarily communicated super well to the players",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "design languages",
+      "kind": "technique",
+      "claim": "Custom design languages, like Noita's wand programming, Baba Is You's rule sentences or Caves of Qud's mod data, give a constrained but expressive way to describe mechanics that a generator can also write.",
+      "detail": "Cook notes designers already build such languages for modders, and they could be randomly generated. A language scoped to a domain like spells or potions trades some expressivity for focus, and he used this approach in ANGELINA and Puck.",
+      "t": 791,
+      "quote": "we can have special language that let's us describe things in a different form",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "design languages",
+      "kind": "warning",
+      "claim": "A generator using a design language lacks human common sense, so the language must make illegal or absurd statements (like negative hit points) hard to write, or they may cause glitches or crashes.",
+      "detail": "Cook says modders learn a tool's limits through play, but a procedural generator doesn't. He also describes the 'PuzzleScript effect': tools are remembered for their most limit-pushing uses, while AI tends to use the central intended features.",
+      "t": 988,
+      "quote": "When you release modding tools the players are going to play around and learn what the limits are but your procedural generator doesn't",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "code generation",
+      "kind": "technique",
+      "claim": "Mechanics can be generated directly as program code compiled at runtime, which is more expressive than a domain-specific language and stays linked to the codebase as it changes.",
+      "detail": "Cook notes Unity C# can compile text into an assembly at runtime. His tool Pixy is shown parts of the codebase it may use, with attributes marking data to touch or not, then fills an empty code block; it generated the Breakout ball-grows mechanic. He stresses it only knows your codebase, unlike Copilot.",
+      "t": 1060,
+      "quote": "The thing with code is code is just text. You know, we know how to generate text",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fairness",
+      "kind": "technique",
+      "claim": "If generated rules may be broken or unfair, design the game around it so winning every run isn't expected, as Bad Chess scores wins and losses and roguelike streaks reward consistency across runs.",
+      "detail": "Cook cites the Slay the Spire streamer who says he loses most games even when playing right but cares about playing his best in given conditions; players need that mindset. Mosa Lina similarly sets players up to expect randomly given tools that may not suit a level.",
+      "t": 1266,
+      "quote": "If we expect the game is going to produce broken rules and systems we can design the game around that with that in mind",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "curation",
+      "kind": "technique",
+      "claim": "Generated mechanics can be curated at development time, with the designer choosing which generated systems ship, as Elite shipped only a few of the galaxies its generator could make.",
+      "detail": "Cook suggests e.g. picking one generated system each month for the next patch, since systems are impactful enough to justify manual release.",
+      "t": 1393,
+      "quote": "As a designer you can decide which procedural generation goes into the game",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generate and test",
+      "kind": "technique",
+      "claim": "Generated items or mechanics can be filtered by constructing test scenarios, e.g. an unwinnable situation where the player dies next turn, and keeping generated items that let them survive.",
+      "detail": "Cook uses this in Pixy: generate an item, have the player use it on themselves, repeat hundreds of times; any item that saves them is interesting regardless of what it does. This works when you can recognise good results even if you can't specify them.",
+      "t": 1440,
+      "quote": "Generate an item, give it to the player and get them to use it on themselves and we can do this hundreds of times",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme",
+      "kind": "principle",
+      "claim": "Generated mechanics need a theme, such as potions, spells, ancient languages or experimental technology, that explains to players why an object's effect is unknown.",
+      "detail": "Cook notes doors work because everyone understands them; generated mechanics leave you not knowing what to tell the player the thing is. He concedes, via his 'rubber Santa' story from a 2012 experiment, that sometimes ignoring theme is fine.",
+      "t": 1487,
+      "quote": "you often need a theme that tells the story of the generated con tent",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "code generation",
+      "kind": "principle",
+      "claim": "A mechanic code generator should constrain values to sensible ranges but otherwise be given freedom, since the most interesting results often come from unexpected changes.",
+      "detail": "In Q&A Cook says Pixy lets you restrict numbers to ranges, but letting it call functions you didn't think useful can be interesting; most cool results come from things he forgot to forbid.",
+      "t": 1734,
+      "quote": "Don't just restrict yourself to the things that you think are going to lead to good game",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

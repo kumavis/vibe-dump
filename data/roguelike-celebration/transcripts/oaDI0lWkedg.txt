@@ -1,0 +1,74 @@
+Max Kreminski - Synthesizing Story Sifters
+Speaker: Max Kreminski
+https://www.youtube.com/watch?v=oaDI0lWkedg
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] My name is Max Kreminski. I am a computational media PhD student at UC Santa Cruz. The thing I love about Roguelikes are the player stories. I love Dwarf Fortress in particular and even a number that don't have the name murder in the title. The great thing about the stories is their emergent nature. As a player, you go into the game world, fumble around and die and the end result makes for a compelling story even though you nor the game are trying to create one.
+
+## The Problem
+
+[0:00:30] Unfortunately, this kind of storytelling plays often off limits to novice players and it is hard to find the story in Roguelikes where there is so much going on and so much information in the UI and in the background. It is hard to find the story bits that make the play compelling. What if we can do something about this overwhelm and build a system that is able to identify the most compelling narrative stuff in the world and surface those for the player to
+
+## Blaze
+
+[0:01:05] see? And you can pull out the epic storeose of the sol HP o home run happening 8 minutes after being incinerated by a Rogue -- this is an example of a game I will be using in examples here.
+
+## Micro Stories
+
+[0:01:24] We call these systems that can automatically identify the interesting narrative story sifters. The process of story sifting is allowing the simulation to produce an overwhelming amount of content and start to filter it down into a chronicle of game events we can search in to find compelling sequences and pull them out to automatically surface them to the player as micro stories. We have a micro story where character A starts the project, gives up and B comes along and talks about the project and A decides to resume work on the project. The ideal here is to have a whole bunch of different story sifting patterns so you can pull out as many diverse micro stories as possible from what transpired in the simulation.
+
+## Shifting Patterns
+
+[0:02:12] We use sifting patterns that specify groups of related events that make compelling building blocks. You want a lot of these so we should make them as easy to author as possible as game
+
+## Felt
+
+[0:02:28] developers. There is a system called felt I worked on that is a domain specific language and this is a logic programming language based on data log. You can see it divided into clauses and we have a sequence of events looking for event A and B, two events. Each event has attributes and the same actor and this character has the trait impulseive and so on. We have this non-join clause. This saying we are looking for a sequence of two betrayals perpetrated by the same impulsive character.
+
+## Not Join
+
+[0:03:12] You have to learn the language of the sifting syntax first. It is not like Python or whatever but there is a lot of constraints you have to understand to write the story patterns and you have to learn the semantics. This is implemented more like SQL than like Python or JavaScript which means the semantics are a bit non-intuitive. On top of that you have to learn the relevant simulation concepts like an event type called betrayal or that that is stored in the event type and you might have to learn characters have traits like impulsive. You have to learn this every simulation. On top of that, you also have to remember to implement all the relevant constraints for the sequences you are looking for. It is easy to forget to include an important rule that is obvious to you as a human as
+
+[0:04:15] to why it matters when others don't but the computer is not able to infer automatically. What if to make it even easier to write story sifting patterns we could point at some of the micro stories we want to match as examples and let the computer write the code that actually matches them.
+
+## Inductive Logic Programming
+
+[0:04:37] This turns out to be programming synthesize when you have the computer writing the code and this is one of the hard problems of computer science because the real difficulty is you are searching a space of all the possible programs that could do the thing you want to do and the search space of possible Python functions is huge. It is unbounded and it is really hard to find the particular Python function you are looking for in that space. And on top of that, how do you specify what you are looking in terms of the behavior of the function you are trying to find? Fortunately for us, we are in a well defined program search base which is called inductive logic programming and I promise this is actually better and not work. The thing about this is it helps when finding a logic program and classifies the difference between positive and negative. Here are the event sequences we want to match and here are some that are similar but we don't want to match.
+
+[0:05:39] The computer's job is to find the logic program in this case a felt sifting pattern that accurately classifies the difference.
+
+## Example
+
+[0:05:50] Let's say we want at a find stories of a weak hitter who is performing well and then fumbles at a pivotal moment that disrupts the game? We have to figure out the concept of weak hitter and fumble means.
+
+## Rules
+
+[0:06:04] We define them as rules and say here is what a weak hitter means. A player is a weak hitter if they are a member of the batting line up and their rating is two stars or less. It is pivotal if there is a hit with a runner on third base.
+
+## Side Note
+
+[0:06:28] As a side note, there is actually, you can't say third base you have to say last base. There is a much of falsehoods and this thread goes on for some time and you should check it out probably.
+
+## User Interface
+
+[0:06:39] Any way once you have done that you can provide the user with an interface for selecting positive and negative examples. Event sequences they are looking for versus ones that look similar but they are not trying to match and then pull out from each example a set of properties and these are yes/no questions
+
+## Properties
+
+[0:06:55] about the event sequence and get a simple straightforward answers. Does event three have the tag swing and miss? Is the batter for the first event the same as the second? Is event three pivotal as defined by the rules we defined earlier? Once you have the properties for all positive examples you can widow down to just the properties that apply for all the positive examples you have defineded and in the end you have a set of properties you can translate to a felt sifting story pattern directly such as the one on the right.
+
+## Synthesistter
+
+[0:07:35] The definition of synthesize sifter is here. On the left side you see a filter and searchable log of everything happening in the simulated world. You can type in define certain events. On the right-hand side is the positive events identified. We also have a synthesize sifting pattern which a text box containing the sifting pattern that we decided as positive. We have possible matches which are additional sequencing events that this synthesizing pattern needs and these can be added as positive or negative example do is further refine the sifting pattern definition. Finally, we have negative examples and these are specifying sequence of events that are similar with some of the same properties but we want to exclude from consideration for
+
+[0:08:35] whatever reason.
+
+## Future work
+
+[0:08:38] Now what? One thing we are doing is using these tools to write an artificial com commentator. It is early days for this but you can follow along at this URL for the GitHub repo. We are extending this to support more synthesizing stuff but provide additional tools for filtering and searching event logs. I am excited about incorporating this work into a more powerful tool in the toolbox. It helps you write code you can interpret or modify yourself which I think is very exciting.
+
+## Outro
+
+[0:09:26] If you want the details you can read this paper. My website has a bunch more information. I have worked on other story sifting stuff you can find there and you can hit me up on Twitter and I will be hanging around the conference for any other questions as desired. Thank you.

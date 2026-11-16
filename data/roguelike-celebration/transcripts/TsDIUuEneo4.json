@@ -1,0 +1,1034 @@
+{
+ "id": "TsDIUuEneo4",
+ "url": "https://www.youtube.com/watch?v=TsDIUuEneo4",
+ "title": "Aaron Santos - Optimizing procgen parameters using mini-batch gradient descent",
+ "speaker": "Aaron Santos",
+ "talk_title": "Optimizing procgen parameters using mini-batch gradient descent",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 856,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nAaron is a hobby roguelike developer who works on Robinson",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 168,
+   "title": "Loss functions"
+  },
+  {
+   "start": 319,
+   "title": "Second generator"
+  },
+  {
+   "start": 407,
+   "title": "Gradient descent"
+  },
+  {
+   "start": 462,
+   "title": "Finding the slope"
+  },
+  {
+   "start": 708,
+   "title": "Github examples"
+  },
+  {
+   "start": 740,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2122,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.05,
+   "d": 2.59,
+   "text": "AARON SANTOS: This is a gonna be a little bit of a warlock talk."
+  },
+  {
+   "t": 3.64,
+   "d": 3.13,
+   "text": "I guess I found out I’m a warlock."
+  },
+  {
+   "t": 6.77,
+   "d": 4.8,
+   "text": "This is like coming to a party and saying \"I found a really cool demon, I think you guys should"
+  },
+  {
+   "t": 11.57,
+   "d": 2.36,
+   "text": "check it out.\""
+  },
+  {
+   "t": 13.93,
+   "d": 2.91,
+   "text": "I’m Aaron and I work on a Roguelike called Robinson."
+  },
+  {
+   "t": 16.84,
+   "d": 6.38,
+   "text": "I want to share a technique related to procedural generation."
+  },
+  {
+   "t": 23.22,
+   "d": 7.18,
+   "text": "I start off, maybe you are like me - you start off with an idea, if you are feeling really"
+  },
+  {
+   "t": 30.4,
+   "d": 6.29,
+   "text": "good about it maybe you make a mockup of the idea, and then you start prototyping a generator."
+  },
+  {
+   "t": 36.69,
+   "d": 7.68,
+   "text": "And you find - I find myself in a position where I need some magic."
+  },
+  {
+   "t": 44.37,
+   "d": 4.53,
+   "text": "I need some magic numbers."
+  },
+  {
+   "t": 48.9,
+   "d": 1.91,
+   "text": "Maybe they modulate the randomness."
+  },
+  {
+   "t": 50.81,
+   "d": 5.33,
+   "text": "It could be amplifying things, it could be a rate at which some random event’s happening."
+  },
+  {
+   "t": 56.14,
+   "d": 5.99,
+   "text": "But I need to figure out some magic number, and I put it in there, and the generator works."
+  },
+  {
+   "t": 62.13,
+   "d": 4.95,
+   "text": "And it’s going along and then it breaks."
+  },
+  {
+   "t": 67.08,
+   "d": 2.1,
+   "text": "Maybe I changed the generator code."
+  },
+  {
+   "t": 69.18,
+   "d": 2.23,
+   "text": "Maybe the game needs to be rebalanced."
+  },
+  {
+   "t": 71.41,
+   "d": 3.35,
+   "text": "Maybe I want to add more complexity to the generator."
+  },
+  {
+   "t": 74.76,
+   "d": 4.53,
+   "text": "And I think it’s hard to pick random numbers."
+  },
+  {
+   "t": 79.29,
+   "d": 5.08,
+   "text": "They interact in really weird ways and we might just feel like we want to give up."
+  },
+  {
+   "t": 84.37,
+   "d": 3.52,
+   "text": "Like, I’m just not going to have magic in my generator at all."
+  },
+  {
+   "t": 87.89,
+   "d": 1.36,
+   "text": "I don't think that's possible."
+  },
+  {
+   "t": 89.25,
+   "d": 8.58,
+   "text": "I took a look at the source code for NetHack, for Crawl, for Angband, for Pixel Dungeon,"
+  },
+  {
+   "t": 97.83,
+   "d": 3.35,
+   "text": "and it was easy to find magic numbers."
+  },
+  {
+   "t": 101.18,
+   "d": 2.36,
+   "text": "It just took me a minute for like each of those."
+  },
+  {
+   "t": 103.54,
+   "d": 2.51,
+   "text": "They're everywhere and they’re not well documented."
+  },
+  {
+   "t": 106.05,
+   "d": 5.92,
+   "text": "It’s hard to figure out what the intention of the designer was when they picked those"
+  },
+  {
+   "t": 111.97,
+   "d": 2.66,
+   "text": "magic numbers earlier."
+  },
+  {
+   "t": 114.63,
+   "d": 1.36,
+   "text": "So there has to be a better way."
+  },
+  {
+   "t": 115.99,
+   "d": 4.26,
+   "text": "Can we have the computer pick magic numbers for us?"
+  },
+  {
+   "t": 120.25,
+   "d": 3.27,
+   "text": "It does a good job at other stuff."
+  },
+  {
+   "t": 123.52,
+   "d": 2.01,
+   "text": "I think we can."
+  },
+  {
+   "t": 125.53,
+   "d": 4.03,
+   "text": "I think we can have the computer pick the magic numbers for us."
+  },
+  {
+   "t": 129.56,
+   "d": 5.33,
+   "text": "I kind of want to share a way that worked for me to do that and maybe it will work for"
+  },
+  {
+   "t": 134.89,
+   "d": 1.0,
+   "text": "you too."
+  },
+  {
+   "t": 135.89,
+   "d": 1.81,
+   "text": "We need to break things down a little bit."
+  },
+  {
+   "t": 137.7,
+   "d": 4.53,
+   "text": "We need to start with our generator."
+  },
+  {
+   "t": 142.23,
+   "d": 3.25,
+   "text": "The generator is going to take some parameters."
+  },
+  {
+   "t": 145.48,
+   "d": 2.25,
+   "text": "That's going to be like the set of magic numbers."
+  },
+  {
+   "t": 147.73,
+   "d": 5.64,
+   "text": "They are just going to exist outside the generator instead of writing them in place."
+  },
+  {
+   "t": 153.37,
+   "d": 2.51,
+   "text": "And the generator is also going to take random input."
+  },
+  {
+   "t": 155.88,
+   "d": 5.31,
+   "text": "Instead of calling rand and getting random values inside the generator we’re just gonna"
+  },
+  {
+   "t": 161.19,
+   "d": 1.73,
+   "text": "pass those in."
+  },
+  {
+   "t": 162.92,
+   "d": 3.75,
+   "text": "The generator’s gonna do its thing, it’s gonna produce the output or artifact of the"
+  },
+  {
+   "t": 166.67,
+   "d": 2.92,
+   "text": "generator."
+  },
+  {
+   "t": 169.59,
+   "d": 6.17,
+   "text": "The second part is we need some way to score the output of the generator."
+  },
+  {
+   "t": 175.76,
+   "d": 6.54,
+   "text": "So one idea here, I am kind of pulling from the machine learning community, is the concept"
+  },
+  {
+   "t": 182.3,
+   "d": 1.6,
+   "text": "of a loss function."
+  },
+  {
+   "t": 183.9,
+   "d": 5.51,
+   "text": "A loss function takes the output, in this case the output from the generator, and it"
+  },
+  {
+   "t": 189.41,
+   "d": 1.94,
+   "text": "scores it according to some metrics."
+  },
+  {
+   "t": 191.35,
+   "d": 6.18,
+   "text": "Depends on your goals and it could be a number of things."
+  },
+  {
+   "t": 197.53,
+   "d": 7.05,
+   "text": "Some really common or really simple metrics that work well for me in loss functions were"
+  },
+  {
+   "t": 204.58,
+   "d": 4.98,
+   "text": "things like density, or connectedness, or emptiness or jaggedness."
+  },
+  {
+   "t": 209.56,
+   "d": 3.37,
+   "text": "They work really well for dungeon generation and stuff like that."
+  },
+  {
+   "t": 212.93,
+   "d": 3.52,
+   "text": "We’re gonna calculate some metrics on the output and then we’re gonna compare those"
+  },
+  {
+   "t": 216.45,
+   "d": 2.2,
+   "text": "metrics to target values."
+  },
+  {
+   "t": 218.65,
+   "d": 3.53,
+   "text": "How close are they to the targets we want."
+  },
+  {
+   "t": 222.18,
+   "d": 5.62,
+   "text": "A really simple way of doing that is subtracting one from the other and just squaring them."
+  },
+  {
+   "t": 227.8,
+   "d": 1.68,
+   "text": "That's pretty straightforward."
+  },
+  {
+   "t": 229.48,
+   "d": 8.48,
+   "text": "I want to share two generators and talk about some loss functions that score the output"
+  },
+  {
+   "t": 237.96,
+   "d": 5.89,
+   "text": "of the generators, and then I want to circle around back to optimization."
+  },
+  {
+   "t": 243.85,
+   "d": 2.58,
+   "text": "This is some output from a cave generator."
+  },
+  {
+   "t": 246.43,
+   "d": 5.39,
+   "text": "The way this generator works is it takes a grid of random numbers and goes cell by cell"
+  },
+  {
+   "t": 251.82,
+   "d": 7.04,
+   "text": "and it adds up all the values of the neighbor and that becomes the new value in the cell."
+  },
+  {
+   "t": 258.86,
+   "d": 4.68,
+   "text": "The magic number or parameter for this is the threshold value."
+  },
+  {
+   "t": 263.54,
+   "d": 3.99,
+   "text": "There is one magic number in this generator."
+  },
+  {
+   "t": 267.53,
+   "d": 3.99,
+   "text": "We take that new output from the cell and we subtract this threshold value."
+  },
+  {
+   "t": 271.52,
+   "d": 4.98,
+   "text": "We get a new number back and pass that through what’s called a sigmoid function, really"
+  },
+  {
+   "t": 276.5,
+   "d": 5.03,
+   "text": "all that does is just squash everything down into a range of 0 to 1, makes it a little"
+  },
+  {
+   "t": 281.53,
+   "d": 1.72,
+   "text": "easier to play with."
+  },
+  {
+   "t": 283.25,
+   "d": 6.25,
+   "text": "We repeat that process 3-4 times and that becomes the output of the generator."
+  },
+  {
+   "t": 289.5,
+   "d": 3.18,
+   "text": "The loss function that I used here was just density."
+  },
+  {
+   "t": 292.68,
+   "d": 4.77,
+   "text": "It counted up how many walls and how many open areas were there."
+  },
+  {
+   "t": 297.45,
+   "d": 2.36,
+   "text": "The target value was 50%."
+  },
+  {
+   "t": 299.81,
+   "d": 3.77,
+   "text": "So the generator made things based on those goals."
+  },
+  {
+   "t": 303.58,
+   "d": 2.35,
+   "text": "It’s about halfway filled in."
+  },
+  {
+   "t": 305.93,
+   "d": 1.38,
+   "text": "It works great."
+  },
+  {
+   "t": 307.31,
+   "d": 2.36,
+   "text": "One thing I didn't consider was connectivity."
+  },
+  {
+   "t": 309.67,
+   "d": 3.85,
+   "text": "So the generator and the loss function don't really care about that at all and you will"
+  },
+  {
+   "t": 313.52,
+   "d": 6.97,
+   "text": "see examples that aren't fully connected there."
+  },
+  {
+   "t": 320.49,
+   "d": 5.18,
+   "text": "This is the output from a second generator that I played around with."
+  },
+  {
+   "t": 325.67,
+   "d": 7.74,
+   "text": "The way the generator works is it, again, takes a grid of random inputs, and it goes"
+  },
+  {
+   "t": 333.41,
+   "d": 5.81,
+   "text": "cell by cell and adds up the neighbors, but instead of giving those neighbors equal weights"
+  },
+  {
+   "t": 339.22,
+   "d": 1.52,
+   "text": "we let the weights vary."
+  },
+  {
+   "t": 340.74,
+   "d": 4.7,
+   "text": "In fact the weights are actually the parameters that go into this generator."
+  },
+  {
+   "t": 345.44,
+   "d": 5.55,
+   "text": "Again, at the end, we pass everything through a sigmoid function that just squashes everything"
+  },
+  {
+   "t": 350.99,
+   "d": 6.15,
+   "text": "between 0-1 and that becomes the output of this generator."
+  },
+  {
+   "t": 357.14,
+   "d": 5.01,
+   "text": "This generator has like 36 magic numbers in it."
+  },
+  {
+   "t": 362.15,
+   "d": 6.38,
+   "text": "So the generator is paired with a loss function and the loss function here has two goals."
+  },
+  {
+   "t": 368.53,
+   "d": 3.5,
+   "text": "One goal is it wants as few corridors as possible."
+  },
+  {
+   "t": 372.03,
+   "d": 2.2,
+   "text": "It’s really low-density."
+  },
+  {
+   "t": 374.23,
+   "d": 1.45,
+   "text": "But it is paired with another goal."
+  },
+  {
+   "t": 375.68,
+   "d": 3.64,
+   "text": "The other goal is we want everything to be as connected as possible."
+  },
+  {
+   "t": 379.32,
+   "d": 4.32,
+   "text": "So the output of this generator is kind of, like, tree-based in a way."
+  },
+  {
+   "t": 383.64,
+   "d": 4.82,
+   "text": "I think that kind of makes sense and that's a really good way to have things as connected"
+  },
+  {
+   "t": 388.46,
+   "d": 3.18,
+   "text": "as possible but uses as few corridors as possible."
+  },
+  {
+   "t": 391.64,
+   "d": 5.43,
+   "text": "It doesn't penalize dead ends, so this generator will produce a lot of dead ends."
+  },
+  {
+   "t": 397.07,
+   "d": 4.52,
+   "text": "If I wanted to adjust that I would have to add that as another goal in the loss function,"
+  },
+  {
+   "t": 401.59,
+   "d": 1.8,
+   "text": "but I wouldn't have to change the generator at all."
+  },
+  {
+   "t": 403.39,
+   "d": 5.12,
+   "text": "We’d find new magic numbers that satisfied it."
+  },
+  {
+   "t": 408.51,
+   "d": 6.49,
+   "text": "How do we use the generator and loss function to find those right magic numbers?"
+  },
+  {
+   "t": 415.0,
+   "d": 7.14,
+   "text": "There’s a really great kind of algorithm that comes from, or it’s really used widely"
+  },
+  {
+   "t": 422.14,
+   "d": 5.6,
+   "text": "in the deep learning and machine learning community and that's gradient descent."
+  },
+  {
+   "t": 427.74,
+   "d": 5.65,
+   "text": "The mental model here is kind of like imagining you are on the side of this really foggy mountain"
+  },
+  {
+   "t": 433.39,
+   "d": 3.81,
+   "text": "and you’re trying to find your way down the mountain."
+  },
+  {
+   "t": 437.2,
+   "d": 5.26,
+   "text": "You know how high you are up on the mountain, so you know your elevation, but you can't"
+  },
+  {
+   "t": 442.46,
+   "d": 1.0,
+   "text": "see very far."
+  },
+  {
+   "t": 443.46,
+   "d": 5.94,
+   "text": "You can see the slope around you but you can use that information to orient yourself and"
+  },
+  {
+   "t": 449.4,
+   "d": 6.12,
+   "text": "you can walk a little bit, reorient, continue that process until you find your way down"
+  },
+  {
+   "t": 455.52,
+   "d": 1.0,
+   "text": "the side of the mountain."
+  },
+  {
+   "t": 456.52,
+   "d": 4.36,
+   "text": "That’s kind of what gradient descent’s going to do."
+  },
+  {
+   "t": 460.88,
+   "d": 3.38,
+   "text": "Let's go back to the generator and the loss function."
+  },
+  {
+   "t": 464.26,
+   "d": 8.19,
+   "text": "The trick here is that we have a generator and we have a loss function."
+  },
+  {
+   "t": 472.45,
+   "d": 4.09,
+   "text": "We actually need the slope of that."
+  },
+  {
+   "t": 476.54,
+   "d": 2.6,
+   "text": "We need slope information."
+  },
+  {
+   "t": 479.14,
+   "d": 8.15,
+   "text": "The question kind of becomes how can we, like, find the slope of a function and one idea"
+  },
+  {
+   "t": 487.29,
+   "d": 2.29,
+   "text": "you might have is let's go back to math class."
+  },
+  {
+   "t": 489.58,
+   "d": 4.4,
+   "text": "Finding the slope of a function is like finding the derivative of it."
+  },
+  {
+   "t": 493.98,
+   "d": 4.99,
+   "text": "Can you find the derivative of a computer program and the answer actually turns out"
+  },
+  {
+   "t": 498.97,
+   "d": 5.65,
+   "text": "to be yes, you can find the derivative of a computer program if it is structured in"
+  },
+  {
+   "t": 504.62,
+   "d": 1.63,
+   "text": "the right way."
+  },
+  {
+   "t": 506.25,
+   "d": 7.1,
+   "text": "That’s a programming technique called differential programming."
+  },
+  {
+   "t": 513.35,
+   "d": 3.28,
+   "text": "For my examples, I used Python."
+  },
+  {
+   "t": 516.63,
+   "d": 8.27,
+   "text": "There’s a really great Python library called jax which is a drop-in replacement for another"
+  },
+  {
+   "t": 524.9,
+   "d": 2.19,
+   "text": "Python library called numpy."
+  },
+  {
+   "t": 527.09,
+   "d": 4.67,
+   "text": "It’s really widely used, it’s a numerical processing library and it’s really great"
+  },
+  {
+   "t": 531.76,
+   "d": 5.15,
+   "text": "at taking number values and transforming them in certain ways."
+  },
+  {
+   "t": 536.91,
+   "d": 2.95,
+   "text": "That works really great in generators and loss functions too."
+  },
+  {
+   "t": 539.86,
+   "d": 4.1,
+   "text": "Let's tie it all together."
+  },
+  {
+   "t": 543.96,
+   "d": 3.95,
+   "text": "We need to find pick starting values for the magic numbers."
+  },
+  {
+   "t": 547.91,
+   "d": 6.89,
+   "text": "A good rule of thumb is just picking really tiny random numbers for the magic numbers."
+  },
+  {
+   "t": 554.8,
+   "d": 4.24,
+   "text": "That just kind of is a nice way of getting things started."
+  },
+  {
+   "t": 559.04,
+   "d": 5.98,
+   "text": "We also need a batch of random input."
+  },
+  {
+   "t": 565.02,
+   "d": 2.36,
+   "text": "We need a batch of these target values."
+  },
+  {
+   "t": 567.38,
+   "d": 5.44,
+   "text": "The reason why we use the batch of those is because if you just kind of take one example"
+  },
+  {
+   "t": 572.82,
+   "d": 4.84,
+   "text": "at a time you’re gonna find a really windy path down that mountain."
+  },
+  {
+   "t": 577.66,
+   "d": 5.09,
+   "text": "On the other hand if you take a huge number of examples, it’s gonna take a long time"
+  },
+  {
+   "t": 582.75,
+   "d": 1.0,
+   "text": "to compute."
+  },
+  {
+   "t": 583.75,
+   "d": 1.86,
+   "text": "There is a middle ground there."
+  },
+  {
+   "t": 585.61,
+   "d": 3.99,
+   "text": "In my examples, I used a batch size of 32."
+  },
+  {
+   "t": 589.6,
+   "d": 2.39,
+   "text": "That's kind of where the mini-batch idea comes from."
+  },
+  {
+   "t": 591.99,
+   "d": 9.07,
+   "text": "Anyways, we take the parameters, our batches, and we use the derivative of this loss function"
+  },
+  {
+   "t": 601.06,
+   "d": 7.19,
+   "text": "generator and we find that slope in that local area that we’re interested in we use that"
+  },
+  {
+   "t": 608.25,
+   "d": 4.08,
+   "text": "information in the same way we’re looking at the slope on the side of the mountain,"
+  },
+  {
+   "t": 612.33,
+   "d": 2.43,
+   "text": "to nudge the parameters in the right way."
+  },
+  {
+   "t": 614.76,
+   "d": 11.91,
+   "text": "We start to converge on magic numbers that tend towards the goals of the loss function."
+  },
+  {
+   "t": 626.67,
+   "d": 7.94,
+   "text": "And when we’re converged, when we’re kind of done with that process, we can take those"
+  },
+  {
+   "t": 634.61,
+   "d": 5.38,
+   "text": "magic numbers, and we can take the generator, and use them in our game or the code that"
+  },
+  {
+   "t": 639.99,
+   "d": 6.03,
+   "text": "we’re writing, and we can feed in as much random input as you want and we can get the"
+  },
+  {
+   "t": 646.02,
+   "d": 4.47,
+   "text": "artifacts back that satisfy the properties of the loss function."
+  },
+  {
+   "t": 650.49,
+   "d": 3.44,
+   "text": "We have kind of flipped the problem on its head."
+  },
+  {
+   "t": 653.93,
+   "d": 6.87,
+   "text": "We can change the generator, hopefully without being too scared about messing anything up"
+  },
+  {
+   "t": 660.8,
+   "d": 4.13,
+   "text": "because we have the loss function that’ll just find really good magic numbers for us."
+  },
+  {
+   "t": 664.93,
+   "d": 7.75,
+   "text": "We can also change the loss function, we can change the metrics, or refine it in certain"
+  },
+  {
+   "t": 672.68,
+   "d": 8.93,
+   "text": "ways, and get new sets of magic numbers for the generator that take into account other"
+  },
+  {
+   "t": 681.61,
+   "d": 1.0,
+   "text": "properties."
+  },
+  {
+   "t": 682.61,
+   "d": 3.94,
+   "text": "We can change other parts of the codebase and feel a little bit more confident we’re"
+  },
+  {
+   "t": 686.55,
+   "d": 1.05,
+   "text": "not going to break things."
+  },
+  {
+   "t": 687.6,
+   "d": 5.19,
+   "text": "The loss functions with those metrics inside of them are really good ways to document the"
+  },
+  {
+   "t": 692.79,
+   "d": 8.19,
+   "text": "goals we are embedding and that becomes a good way further on in the development cycle"
+  },
+  {
+   "t": 700.98,
+   "d": 3.81,
+   "text": "when we need to go back and figure out really what our goals were, because they’re kind"
+  },
+  {
+   "t": 704.79,
+   "d": 1.66,
+   "text": "of crystalized in the last function."
+  },
+  {
+   "t": 706.45,
+   "d": 2.76,
+   "text": "Where do you go from here?"
+  },
+  {
+   "t": 709.21,
+   "d": 6.07,
+   "text": "I used a Python notebook and it is on GitHub."
+  },
+  {
+   "t": 715.28,
+   "d": 2.54,
+   "text": "Feel free to steal that code."
+  },
+  {
+   "t": 717.82,
+   "d": 2.27,
+   "text": "That's a really good way to get started."
+  },
+  {
+   "t": 720.09,
+   "d": 5.01,
+   "text": "GitHub has kind of an issue with rendering a large notebook so you might have to hit"
+  },
+  {
+   "t": 725.1,
+   "d": 5.55,
+   "text": "refresh a few times but eventually it will show up."
+  },
+  {
+   "t": 730.65,
+   "d": 5.37,
+   "text": "This helped me look at magic numbers kind of in a new light."
+  },
+  {
+   "t": 736.02,
+   "d": 5.86,
+   "text": "I hope that it helps you as well."
+  },
+  {
+   "t": 741.88,
+   "d": 3.87,
+   "text": "Thank you."
+  },
+  {
+   "t": 745.75,
+   "d": 5.42,
+   "text": "[Applause] >> Do you want to take any questions?"
+  },
+  {
+   "t": 751.17,
+   "d": 3.13,
+   "text": "AARON SANTOS: I would love to if we have time."
+  },
+  {
+   "t": 754.3,
+   "d": 1.35,
+   "text": ">> Great, we have time for one or two questions."
+  },
+  {
+   "t": 755.65,
+   "d": 1.09,
+   "text": "We will start here."
+  },
+  {
+   "t": 756.74,
+   "d": 7.15,
+   "text": "AUDIENCE: I don't know much about this but I was taught that one doesn't just take arbitrary"
+  },
+  {
+   "t": 763.89,
+   "d": 3.0,
+   "text": "code and make it differentiable."
+  },
+  {
+   "t": 766.89,
+   "d": 2.76,
+   "text": "Could you talk a little bit more about that?"
+  },
+  {
+   "t": 769.65,
+   "d": 3.29,
+   "text": "AARON SANTOS: Yeah, there are some constraints there."
+  },
+  {
+   "t": 772.94,
+   "d": 6.52,
+   "text": "That is a field I am a little bit new to myself."
+  },
+  {
+   "t": 779.46,
+   "d": 5.74,
+   "text": "And maybe I’ll put it this way."
+  },
+  {
+   "t": 785.2,
+   "d": 4.85,
+   "text": "Maybe the proof is in the pudding, too."
+  },
+  {
+   "t": 790.05,
+   "d": 3.19,
+   "text": "It did work, yes."
+  },
+  {
+   "t": 793.24,
+   "d": 3.2,
+   "text": "AUDIENCE: Yeah, good talk."
+  },
+  {
+   "t": 796.44,
+   "d": 7.44,
+   "text": "I could imagine finding a lot of those magic numbers arbitrarily also by using a genetic"
+  },
+  {
+   "t": 803.88,
+   "d": 2.33,
+   "text": "algorithm with a fitness function."
+  },
+  {
+   "t": 806.21,
+   "d": 3.35,
+   "text": "Would you care to maybe compare and contrast?"
+  },
+  {
+   "t": 809.56,
+   "d": 4.03,
+   "text": "AARON SANTOS: That kind of thought crossed by mind too."
+  },
+  {
+   "t": 813.59,
+   "d": 9.37,
+   "text": "The big constraint that the differentiable programming imposes is that sort of all the"
+  },
+  {
+   "t": 822.96,
+   "d": 4.83,
+   "text": "numbers have to be continuous, so they all pretty much have to be floating point numbers."
+  },
+  {
+   "t": 827.79,
+   "d": 3.7,
+   "text": "But it’s very, very efficient at optimizing those numbers."
+  },
+  {
+   "t": 831.49,
+   "d": 9.48,
+   "text": "A genetic algorithm based on my little experiences with it can probably deal with discontinuity"
+  },
+  {
+   "t": 840.97,
+   "d": 4.08,
+   "text": "better but might take more time to optimize them."
+  },
+  {
+   "t": 845.05,
+   "d": 1.06,
+   "text": "Good question."
+  },
+  {
+   "t": 846.11,
+   "d": 1.0,
+   "text": ">> Cool."
+  },
+  {
+   "t": 847.11,
+   "d": 1.66,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 848.77,
+   "d": 0.54,
+   "text": "[Applause]"
+  }
+ ]
+}

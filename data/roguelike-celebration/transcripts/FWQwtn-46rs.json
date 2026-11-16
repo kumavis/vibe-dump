@@ -1,0 +1,990 @@
+{
+ "id": "FWQwtn-46rs",
+ "url": "https://www.youtube.com/watch?v=FWQwtn-46rs",
+ "title": "bleeptrack - From Code to Craft: Procedural Generation for the Physical World",
+ "speaker": "bleeptrack",
+ "talk_title": "From Code to Craft: Procedural Generation for the Physical World",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-12-05",
+ "duration_s": 1727,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Join bleeptrack for a deep dive into the fascinating world of procedural generation beyond the screen. From stickers and paper lanterns to PCBs, furniture, and even physical procedural generators, this talk explores the challenges and creative possibilities of bringing generative projects into tangible form.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3573,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 11.52,
+   "d": 28.64,
+   "text": "BLEEPTRACK: Thank for having me. I am super excited to be here. A few words. I am bleeptrack."
+  },
+  {
+   "t": 40.16,
+   "d": 6.48,
+   "text": "I am a full time artist and creative technologist. I have way too many side quests in my life so on"
+  },
+  {
+   "t": 46.64,
+   "d": 7.84,
+   "text": "the side I am also trying to finish my PhD where I am researching co-creative drawing tools but my"
+  },
+  {
+   "t": 54.48,
+   "d": 7.12,
+   "text": "artist practice is mainly in generative art and procedural generation and especially I really"
+  },
+  {
+   "t": 61.6,
+   "d": 6.4,
+   "text": "enjoy making physical things out of rhythms in some sort of way. But you might also know me"
+  },
+  {
+   "t": 68.0,
+   "d": 7.04,
+   "text": "from fabulous coffee brew and shock I post now and then to social media or for my other side"
+  },
+  {
+   "t": 75.04,
+   "d": 8.9,
+   "text": "project which is renovating this 1993 electric car vehicle. It is not allowed on the streets. If you"
+  },
+  {
+   "t": 83.94,
+   "d": 8.54,
+   "text": "are interested in anything like that, follow me somewhere on social media. But now into procedural"
+  },
+  {
+   "t": 92.48,
+   "d": 7.12,
+   "text": "generation. I enjoy making a lot of generators and not so much in the direction of games to be"
+  },
+  {
+   "t": 99.6,
+   "d": 7.2,
+   "text": "honest but more like as a standalone project, casual creators, maybe. This is one project of"
+  },
+  {
+   "t": 106.8,
+   "d": 9.12,
+   "text": "mine called overlay flowers. It is your typical generator with parameters, you can randomize a"
+  },
+  {
+   "t": 115.92,
+   "d": 6.64,
+   "text": "few things, and have fun making a little flower you can use for whatever you want. I usually Open"
+  },
+  {
+   "t": 122.56,
+   "d": 8.24,
+   "text": "Source my things and use them as websites stow is accessible for people to enjoy it and have fun."
+  },
+  {
+   "t": 131.36,
+   "d": 8.32,
+   "text": "My first thing I tried to make something physical was stickers, in fact. And it is very fun to make"
+  },
+  {
+   "t": 139.68,
+   "d": 5.92,
+   "text": "stickers. You can show off your variety. They can be very big. You can stick them on laptops,"
+  },
+  {
+   "t": 145.6,
+   "d": 5.36,
+   "text": "on notebooks, on your phone, on everything. They are very nice to show off your things. And"
+  },
+  {
+   "t": 151.68,
+   "d": 5.68,
+   "text": "just nice things to give away. That was the first thing I tried. I also tried this with different"
+  },
+  {
+   "t": 157.36,
+   "d": 6.08,
+   "text": "generators. This one is called bux and beetles. I had a Twitterbot at the time when Twitter was cool"
+  },
+  {
+   "t": 163.44,
+   "d": 6.51,
+   "text": "running that. It generates bugs. It might have some bugs in the code. -- bugs and beetles. It"
+  },
+  {
+   "t": 169.95,
+   "d": 10.93,
+   "text": "is there to generate fun bug shapes. It is really neat to change a bit of the size and play a bit"
+  },
+  {
+   "t": 180.88,
+   "d": 8.56,
+   "text": "with the medium. Yeah, just have them on hand and give them out. I also have generators more"
+  },
+  {
+   "t": 189.44,
+   "d": 12.0,
+   "text": "on the activist let's say side of things. There might be confusion about what is wrong with NFTS."
+  },
+  {
+   "t": 201.44,
+   "d": 8.48,
+   "text": "It is nothing with the file system. It is about NF temperature -- NFTs. I made a generator that"
+  },
+  {
+   "t": 210.72,
+   "d": 9.44,
+   "text": "expresses my anger on several things and printed stickers and gave them out on different events and"
+  },
+  {
+   "t": 220.16,
+   "d": 7.04,
+   "text": "they are always sort of a big laugh when people find angry middle finger stickers lying around"
+  },
+  {
+   "t": 227.2,
+   "d": 8.96,
+   "text": "somewhere. Fun fact, if you try too hard on your things they might end up in a museum. I had prints"
+  },
+  {
+   "t": 236.16,
+   "d": 6.96,
+   "text": "on shirts and caps that ended up in a museum exhibition about protest for whatever reason."
+  },
+  {
+   "t": 244.8,
+   "d": 6.88,
+   "text": "There is one thing with stickers and that is if you do procedural generation you want to show off"
+  },
+  {
+   "t": 251.68,
+   "d": 5.76,
+   "text": "all the cool things that can be generated. You are optimizing your generator to have that super large"
+  },
+  {
+   "t": 257.44,
+   "d": 5.44,
+   "text": "variety and things should look interesting and now you want to make stickers. So you send them"
+  },
+  {
+   "t": 262.88,
+   "d": 6.88,
+   "text": "out to a manufacturer but can't say make me 10,000 different stickers because I want to show off my"
+  },
+  {
+   "t": 269.76,
+   "d": 9.12,
+   "text": "variety. This isn't going to work. What I ended up doing is making my own stickers. You can just"
+  },
+  {
+   "t": 278.88,
+   "d": 11.12,
+   "text": "buy final prints to print on the computer and it is easy to make them sort of water proof by just"
+  },
+  {
+   "t": 290.0,
+   "d": 10.4,
+   "text": "buying some protective foil scrubbed on with a squeegee. It is very doable. I think the"
+  },
+  {
+   "t": 300.4,
+   "d": 7.12,
+   "text": "most exhausting part in a way is cutting out the stickers. There are cutting plotters out there"
+  },
+  {
+   "t": 307.52,
+   "d": 6.4,
+   "text": "like these machines or maybe the hex space near you might have a little plotter machine you can"
+  },
+  {
+   "t": 313.92,
+   "d": 8.16,
+   "text": "use but to be honest, for myself, I find it is super relaxing and soothing to just cut my own"
+  },
+  {
+   "t": 322.08,
+   "d": 6.08,
+   "text": "stickers. I have to like -- each sticker I have in my hand I can take a second look at it and"
+  },
+  {
+   "t": 328.16,
+   "d": 10.4,
+   "text": "enjoy the creation coming out of my code and do a little signage on the back side. Now I hand them"
+  },
+  {
+   "t": 338.56,
+   "d": 6.48,
+   "text": "out like business cards more or less. It is very nice opportunity to show off your cool things,"
+  },
+  {
+   "t": 345.04,
+   "d": 6.64,
+   "text": "I think. Also, if you lay them out at a booth or event and you tell people each one of these"
+  },
+  {
+   "t": 351.68,
+   "d": 6.56,
+   "text": "stickers is unique so choose the one you like best they will be excited and take 10 minutes"
+  },
+  {
+   "t": 358.24,
+   "d": 6.88,
+   "text": "to grab that one sticker that they really think is the one that matches them best. I think this is a"
+  },
+  {
+   "t": 365.12,
+   "d": 10.4,
+   "text": "very nice incentive to show off. And you can also make stickers digitally and directed again. This"
+  },
+  {
+   "t": 375.52,
+   "d": 8.48,
+   "text": "project is called tin foil art. It is a regular sticker but has a C tap inside so you can tap it"
+  },
+  {
+   "t": 384.0,
+   "d": 17.04,
+   "text": "with your phone and it will open a website. The NFC tag has an ID so each tag has its own unique"
+  },
+  {
+   "t": 401.04,
+   "d": 10.08,
+   "text": "ID. And you can also use a scan count so the tech can keep track of how often it has been scanned"
+  },
+  {
+   "t": 411.12,
+   "d": 7.2,
+   "text": "already. You can make a whole series of generative art pieces that count on these seeds. I use one"
+  },
+  {
+   "t": 422.32,
+   "d": 6.88,
+   "text": "as a color and shape base seed and the counting number I use to just shuffle the shapes around"
+  },
+  {
+   "t": 429.2,
+   "d": 5.92,
+   "text": "to make a new shape into the serious. If you tap these stickers, and then like here,"
+  },
+  {
+   "t": 435.12,
+   "d": 5.2,
+   "text": "you can just scroll through the series and explore the scans that had already happened"
+  },
+  {
+   "t": 440.32,
+   "d": 10.0,
+   "text": "so far. If you are buying NFC tag be aware there are different ones so you need to choose the one"
+  },
+  {
+   "t": 450.32,
+   "d": 9.6,
+   "text": "that works best for you. I bought a role of 1,000 stickers that was a few hundred bucks and I didn't"
+  },
+  {
+   "t": 459.92,
+   "d": 6.32,
+   "text": "read the Inscription and the ones I got are the super regular ones that won't work if you put"
+  },
+  {
+   "t": 466.24,
+   "d": 6.8,
+   "text": "them on metal was this was a street art project so it was like street signs and lamp posts and"
+  },
+  {
+   "t": 473.04,
+   "d": 6.88,
+   "text": "stuff and they are not working there. You can't read them out. Make sure to buy the proper NFC"
+  },
+  {
+   "t": 479.92,
+   "d": 7.36,
+   "text": "tags if you do anything with them. So much for stickers, if you have a generator that can make"
+  },
+  {
+   "t": 487.28,
+   "d": 6.96,
+   "text": "like a pattern texture shape thing then I can really recommend getting it printed on fabric"
+  },
+  {
+   "t": 494.24,
+   "d": 8.64,
+   "text": "like this one. This is nowadays super easy. It is basically like getting a photograph printed. It is"
+  },
+  {
+   "t": 502.88,
+   "d": 6.56,
+   "text": "like a manufacturer, you upload a pixel image, you can choose which fabric you want, and yup,"
+  },
+  {
+   "t": 509.44,
+   "d": 6.96,
+   "text": "just get it printed. And also if your generator is maybe not doing a texture think maybe you can"
+  },
+  {
+   "t": 516.4,
+   "d": 5.84,
+   "text": "arrange your generative outcome to be more like a texture. This is what I did with the overflow"
+  },
+  {
+   "t": 522.24,
+   "d": 7.52,
+   "text": "generator. A flower bed, kept the colors the same, and each flower pad is unique. A fun thing with"
+  },
+  {
+   "t": 529.76,
+   "d": 6.4,
+   "text": "fabric is you can cover huge areas, super easily, because the fabric in one direction is more or"
+  },
+  {
+   "t": 536.16,
+   "d": 5.12,
+   "text": "less unlimited on the roll, maybe 50 meters is still something, and in the other direction you"
+  },
+  {
+   "t": 541.28,
+   "d": 8.88,
+   "text": "are at about 1.5 meters I would say. Sorry I don't know how much that is in yards. You can convert"
+  },
+  {
+   "t": 550.16,
+   "d": 8.64,
+   "text": "yourself, I guess. Fabric printing is super fun, not that expensive, and you can make a lot of fun"
+  },
+  {
+   "t": 558.8,
+   "d": 10.56,
+   "text": "things. This summer, I did a lot of unique generated pouch and created from a generator"
+  },
+  {
+   "t": 569.92,
+   "d": 9.28,
+   "text": "called interlace. It is inspired by shapes where it looks like cables and plant parts are"
+  },
+  {
+   "t": 579.2,
+   "d": 8.48,
+   "text": "intertwined and tangled in some form. I did send these out for my Patreon. I have a patron running"
+  },
+  {
+   "t": 587.68,
+   "d": 6.8,
+   "text": "and twice a year I send out unique generated goodies to people that support me there. The"
+  },
+  {
+   "t": 594.48,
+   "d": 8.56,
+   "text": "pouches were this summer's presents mainly because I really, really needed a pouch for my pencils."
+  },
+  {
+   "t": 604.24,
+   "d": 14.0,
+   "text": "Fabric is really nice. You can make clothes out of the fabric I just printed it super large. My"
+  },
+  {
+   "t": 618.24,
+   "d": 8.56,
+   "text": "idea was to have some sort of cape-gown, whatever thing I could just pull over when I am at events"
+  },
+  {
+   "t": 626.8,
+   "d": 7.36,
+   "text": "so I will be easily to spot and have this iconic piece of clothing where people say I want to talk"
+  },
+  {
+   "t": 634.16,
+   "d": 19.92,
+   "text": "to her. It is my typical piece of clothes I wear. It is machine washable also. That is about fabric."
+  },
+  {
+   "t": 654.08,
+   "d": 7.6,
+   "text": "Let's talk machines. We can do other fun stuff with procedurally generated things. I think one"
+  },
+  {
+   "t": 661.68,
+   "d": 12.24,
+   "text": "thing that has had a renaissance is pen plotter. This is a form you can see here drawn. The pen"
+  },
+  {
+   "t": 673.92,
+   "d": 6.48,
+   "text": "plotter is like a little machine you can attach to the computer, pack into the computer, you touch a"
+  },
+  {
+   "t": 680.4,
+   "d": 9.68,
+   "text": "pen, and it will draw a nice image. And there is just one caveat. You really need past data. You"
+  },
+  {
+   "t": 690.08,
+   "d": 7.6,
+   "text": "usually want to work because printing stickers and fabrics doesn't matter. It is just a pixel image"
+  },
+  {
+   "t": 697.68,
+   "d": 5.92,
+   "text": "you need for that. But if you go into digital fabrication you want to work with some sort of"
+  },
+  {
+   "t": 703.6,
+   "d": 9.28,
+   "text": "ethnographic. A machine needs to know where it will draw a pixel mother-in-law and it won't"
+  },
+  {
+   "t": 712.88,
+   "d": 5.48,
+   "text": "work for that -- image. This is the modern type of pen plotter you can buy nowadays but there"
+  },
+  {
+   "t": 719.2,
+   "d": 11.12,
+   "text": "are older types from the '80s that plotted large building plans for architecture, for example. And"
+  },
+  {
+   "t": 730.32,
+   "d": 8.72,
+   "text": "they suddenly became quite expensive now that they became popular again. If you can grab a used one,"
+  },
+  {
+   "t": 739.04,
+   "d": 9.52,
+   "text": "the chances are high that you can use it out-of-the-box. They have awesome features"
+  },
+  {
+   "t": 748.56,
+   "d": 11.52,
+   "text": "like electrostatic bats so you can press a button and have electricity and they will come on and"
+  },
+  {
+   "t": 760.08,
+   "d": 12.88,
+   "text": "the paper stick do is the drawing bed. It will just stick. It is super awesome. This particular"
+  },
+  {
+   "t": 772.96,
+   "d": 8.0,
+   "text": "machine can exchange the pen for different colors. Awesome features that lot of modern pen plotters"
+  },
+  {
+   "t": 780.96,
+   "d": 8.32,
+   "text": "wouldn't bring you. If you, for whatever reason, come across pen plotters, definitely grab one. I"
+  },
+  {
+   "t": 789.28,
+   "d": 12.16,
+   "text": "usually bring them to events. This was I think two summers ago. I plotted very aspect forms"
+  },
+  {
+   "t": 801.44,
+   "d": 9.6,
+   "text": "of a plotter. It runs through neural net in this case that I trained on my own scribbles."
+  },
+  {
+   "t": 811.04,
+   "d": 7.28,
+   "text": "This was part of my research. The pen plotter is awesome because it is not only showing off your"
+  },
+  {
+   "t": 818.32,
+   "d": 6.16,
+   "text": "procedurally generated pieces but it is a machine people enjoy watching and it will draw them in"
+  },
+  {
+   "t": 824.48,
+   "d": 4.96,
+   "text": "and then you will have nice chats about what you are doing, what this is, what a machine is. And"
+  },
+  {
+   "t": 830.72,
+   "d": 11.44,
+   "text": "I think people also really value the drawings more if they are drawn from a machine and can"
+  },
+  {
+   "t": 842.16,
+   "d": 8.24,
+   "text": "see the effort in the pictures. You can also go full circle. For example, with this project,"
+  },
+  {
+   "t": 850.4,
+   "d": 6.72,
+   "text": "I took generated portrait and images and rendered them back into video. To be honest, that's not"
+  },
+  {
+   "t": 857.12,
+   "d": 4.64,
+   "text": "that physical but a part of it is physical. I took videos where I am holding an empty piece of paper"
+  },
+  {
+   "t": 861.76,
+   "d": 18.96,
+   "text": "in the camera, grabbing a still from the video I shot, and the blender generatored this. Pen"
+  },
+  {
+   "t": 880.72,
+   "d": 13.28,
+   "text": "plotters are fun. I have a machine I like even more. I did a little snowflake generator a few"
+  },
+  {
+   "t": 894.0,
+   "d": 9.92,
+   "text": "years ago. They are one of the nicest procedural systems that nature has. Snowflakes are just"
+  },
+  {
+   "t": 905.2,
+   "d": 12.48,
+   "text": "the iconic procedural thing to do. I put them on my lasercutter. You can never have enough lasers."
+  },
+  {
+   "t": 921.68,
+   "d": 8.4,
+   "text": "You can work with nice materials like paper, carton, wood, and it is material that I prefer"
+  },
+  {
+   "t": 930.08,
+   "d": 15.92,
+   "text": "over plastic things in a 3D printer. I prefer to have more materials to work with. This is a"
+  },
+  {
+   "t": 946.0,
+   "d": 7.92,
+   "text": "test thing for winter decoration and get nice snowflakes. In the center is the tracing paper"
+  },
+  {
+   "t": 953.92,
+   "d": 11.52,
+   "text": "and on the outside is like icy blue carton paper. Nothing that special. But you can do a lot more"
+  },
+  {
+   "t": 965.44,
+   "d": 18.48,
+   "text": "fun thing with laser cutters. I was once inquiring to do an event and I adapted the beetles to work"
+  },
+  {
+   "t": 983.92,
+   "d": 10.0,
+   "text": "with the laser cutter and made a lot of patches. I made 200 more or less by hand. Obviously cut"
+  },
+  {
+   "t": 993.92,
+   "d": 7.36,
+   "text": "by the laser cutter but there is a lot of manual work involved in the things. That was really quite"
+  },
+  {
+   "t": 1001.28,
+   "d": 15.12,
+   "text": "a lot of work. You can play with the medium. The dark lines are not printed. They are engraved or"
+  },
+  {
+   "t": 1016.4,
+   "d": 7.92,
+   "text": "etched. You can set the laser cutter to half the power you need to cut and it will just etch or"
+  },
+  {
+   "t": 1024.32,
+   "d": 5.6,
+   "text": "darken the parts of the paper. You can also lighten parts of the paper and that's super"
+  },
+  {
+   "t": 1034.88,
+   "d": 8.24,
+   "text": "fun. And what I did was have this dark paper and colorful paper and sandwich glued that together"
+  },
+  {
+   "t": 1043.12,
+   "d": 8.32,
+   "text": "tob give these nice shapes. I used the patterns that emerged in the wings to also engrave on the"
+  },
+  {
+   "t": 1051.44,
+   "d": 15.12,
+   "text": "paper to give it more like interesting background patterns. People enjoyed it. It felt very costly"
+  },
+  {
+   "t": 1066.56,
+   "d": 8.88,
+   "text": "in some forms. It had a very nice touch to it. And I always also wanted to go 3D in some way."
+  },
+  {
+   "t": 1075.44,
+   "d": 22.72,
+   "text": "I have to admit I have no idea on the emails or anything. I like a paper lantern. Let's"
+  },
+  {
+   "t": 1098.16,
+   "d": 6.4,
+   "text": "make generated paper lanterns and this is what I ended up. The project is called wish upon a star."
+  },
+  {
+   "t": 1106.16,
+   "d": 5.52,
+   "text": "As you can see on the left side, there are parameters about the amount of spikes you want to"
+  },
+  {
+   "t": 1111.68,
+   "d": 7.36,
+   "text": "have and size dimensions, and on the right side, you get the 2D shape you can cut out to assemble"
+  },
+  {
+   "t": 1119.04,
+   "d": 8.16,
+   "text": "yourself. I made experiments and put it on a laser cutter. I made wrong mathematical calculations and"
+  },
+  {
+   "t": 1127.2,
+   "d": 7.52,
+   "text": "redid the whole thing several times but in the end it worked out and gave very nice shapes. There is"
+  },
+  {
+   "t": 1134.72,
+   "d": 6.48,
+   "text": "still manual process and obviously the assembly as a whole but if you cut on a lasercutter there"
+  },
+  {
+   "t": 1141.2,
+   "d": 7.28,
+   "text": "might be parts that aren't properly cut or stick to the paper so there is a lot of manual cleaning"
+  },
+  {
+   "t": 1148.48,
+   "d": 8.0,
+   "text": "up. And I did tracing paper on one side to seal it up but make it translucent enough to"
+  },
+  {
+   "t": 1157.68,
+   "d": 9.2,
+   "text": "light it up. It is quite lengthy. Assembly one star is more than half an hour. It takes a lot"
+  },
+  {
+   "t": 1166.88,
+   "d": 7.12,
+   "text": "of time but I enjoy doing paper craft a lot. I think they came out really nice. This is what"
+  },
+  {
+   "t": 1174.0,
+   "d": 7.76,
+   "text": "they looked like. You light them up. Very fun. I did one little LED on the inside. You can control"
+  },
+  {
+   "t": 1181.76,
+   "d": 9.6,
+   "text": "it by a smartphone and set the color and patterns to make it look like. It is very cute. And of"
+  },
+  {
+   "t": 1191.36,
+   "d": 9.12,
+   "text": "course you can make it on a lasercutter. This works if you just print it on your regular ink"
+  },
+  {
+   "t": 1200.48,
+   "d": 4.64,
+   "text": "jet printer at home and just cut out regular paper and assembly that. Also when you light it up,"
+  },
+  {
+   "t": 1206.32,
+   "d": 6.64,
+   "text": "it doesn't have to be expense rev -- expensive laser cutters. You can just use it on a regular"
+  },
+  {
+   "t": 1213.84,
+   "d": 8.88,
+   "text": "printer. My next thought is 3D things is cool and making things accessible is also something"
+  },
+  {
+   "t": 1222.72,
+   "d": 7.6,
+   "text": "I really strive my projects to be but I really wanted to bring the generative process itself"
+  },
+  {
+   "t": 1230.32,
+   "d": 5.2,
+   "text": "to the physical world in some form. And yeah, I was thinking back and forth and what I came"
+  },
+  {
+   "t": 1235.52,
+   "d": 9.68,
+   "text": "up is making a stamp set out of three stamps that fit together like dominos like tiling. You are the"
+  },
+  {
+   "t": 1245.2,
+   "d": 5.76,
+   "text": "professionals when it comes to tiling, I think, so I made patterns that tile nicely together,"
+  },
+  {
+   "t": 1250.96,
+   "d": 7.28,
+   "text": "and each stem set consists of three stems, triangular shape with sides fitting together."
+  },
+  {
+   "t": 1258.24,
+   "d": 5.76,
+   "text": "There is one stamp in the set that can connect one side, one that can connect two, and one that can"
+  },
+  {
+   "t": 1264.0,
+   "d": 8.16,
+   "text": "connect on all sides. Putting them on a laser cutter looks like this. On the laser cutter"
+  },
+  {
+   "t": 1273.92,
+   "d": 7.28,
+   "text": "you can engrave rubber parts that are especially laser cutter fabricated rubber mats you can use"
+  },
+  {
+   "t": 1281.2,
+   "d": 7.36,
+   "text": "to make stamps. It creates a ton of dust and takes forever but the results are nice. On the back side"
+  },
+  {
+   "t": 1288.56,
+   "d": 7.6,
+   "text": "I just used regular crafting plywood from every craft store. I did not forget to flip the image"
+  },
+  {
+   "t": 1296.16,
+   "d": 8.56,
+   "text": "for the stamp side. I am very proud of myself. You saw different examples of the sets and what they"
+  },
+  {
+   "t": 1304.72,
+   "d": 8.48,
+   "text": "look like. The three stamps put together but they are not interchangeable between the sets because"
+  },
+  {
+   "t": 1313.2,
+   "d": 17.68,
+   "text": "the connection parts are different. This is a nice process to just sit there with your paper and stem"
+  },
+  {
+   "t": 1330.88,
+   "d": 8.48,
+   "text": "patterns and think about how you want to arrange the stem, rotate it, close this shape. 35 stem"
+  },
+  {
+   "t": 1346.72,
+   "d": 17.52,
+   "text": "sets I made. It was a lot of fun. Stem vets really nice. I think interactive participation thing to"
+  },
+  {
+   "t": 1364.24,
+   "d": 6.56,
+   "text": "do and show off how procedural generation might work in some physical form. This were"
+  },
+  {
+   "t": 1370.8,
+   "d": 5.76,
+   "text": "methods that I think were easily accessible. I know laser cutters are not that accessible but"
+  },
+  {
+   "t": 1376.56,
+   "d": 6.88,
+   "text": "most tech spaces will have one. If you look around, you might get access to one. But two"
+  },
+  {
+   "t": 1383.44,
+   "d": 9.28,
+   "text": "things that are not that accessible but also very fun. One is this one. I wanted to make a garden"
+  },
+  {
+   "t": 1392.72,
+   "d": 8.08,
+   "text": "chair for myself some summers ago. I thought man, I would really like to have this nice patterns and"
+  },
+  {
+   "t": 1400.8,
+   "d": 6.96,
+   "text": "I really enjoy nervous systems and they make very cool procedural things or things that come out of"
+  },
+  {
+   "t": 1407.76,
+   "d": 7.28,
+   "text": "simulation. I think some time ago they mentioned a paper that described how you can super easily"
+  },
+  {
+   "t": 1415.84,
+   "d": 6.72,
+   "text": "simulate vein growth in tree leaves or leaves over all and I found it so cool it is such a"
+  },
+  {
+   "t": 1422.56,
+   "d": 5.28,
+   "text": "nice pattern. I thought I am making a chair out of that and reimplemented the paper, through it"
+  },
+  {
+   "t": 1427.84,
+   "d": 8.48,
+   "text": "on my machine, and heavily underestimated how long it takes to yield this out. I grew"
+  },
+  {
+   "t": 1436.32,
+   "d": 8.8,
+   "text": "the pattern in the square shape twice to have the back rest and the seat part. And I think only one"
+  },
+  {
+   "t": 1445.12,
+   "d": 8.56,
+   "text": "of these took 10 hours to just mill. As you can see the machine I have is like DIY and it isn't"
+  },
+  {
+   "t": 1454.56,
+   "d": 9.6,
+   "text": "sucking up the excess. I think the result is very nice. I think it ended up in an exhibition."
+  },
+  {
+   "t": 1467.6,
+   "d": 10.48,
+   "text": "It is regular ply wood from a working store so nothing special. I thought about maybe I want"
+  },
+  {
+   "t": 1478.08,
+   "d": 6.32,
+   "text": "to do the chair legs out of this pattern but realized, oh, man, with the simulation part,"
+  },
+  {
+   "t": 1484.4,
+   "d": 5.84,
+   "text": "I can't really control how the pattern will look like in the end or at least weld have been a lot"
+  },
+  {
+   "t": 1490.24,
+   "d": 12.32,
+   "text": "of overhead. I scrapped the idea after realizing this isn't going to work. I need to make it more"
+  },
+  {
+   "t": 1502.56,
+   "d": 12.64,
+   "text": "sturdy or won't do this. If you mill out a pattern that more or less maximizes the surface you have"
+  },
+  {
+   "t": 1515.2,
+   "d": 10.0,
+   "text": "a maximum of surface to send down in the end. All were all these nooks and crannies. I had to stick"
+  },
+  {
+   "t": 1525.2,
+   "d": 6.16,
+   "text": "sand paper in that and sand it down. This also took several days to finish the whole thing off."
+  },
+  {
+   "t": 1531.36,
+   "d": 5.6,
+   "text": "If you are, for some reason, into wood working and want to replicate this, I have the files on"
+  },
+  {
+   "t": 1536.96,
+   "d": 7.84,
+   "text": "my website. Feel free to make one but just so you know it will take forever. Let's go to the last"
+  },
+  {
+   "t": 1544.8,
+   "d": 9.36,
+   "text": "example. This is this little generator generating stars and swirlies backgrounds. It belongs to"
+  },
+  {
+   "t": 1555.68,
+   "d": 8.56,
+   "text": "sort of a unique project. I always wanted to learn how people are creating PCBs and circuit boards"
+  },
+  {
+   "t": 1564.24,
+   "d": 7.04,
+   "text": "like for computers and Arduinos. I thought for my first circuit board, let's make it procedural. It"
+  },
+  {
+   "t": 1571.28,
+   "d": 5.92,
+   "text": "should be a keyboard where you can button press in this case the planets and it should register"
+  },
+  {
+   "t": 1577.2,
+   "d": 5.76,
+   "text": "these presses and act as a keyboard that you can program. Let's say make the volume louder,"
+  },
+  {
+   "t": 1584.32,
+   "d": 6.64,
+   "text": "mute your microphone or whatever you want, and this is what I wrote a generator for. I tried"
+  },
+  {
+   "t": 1590.96,
+   "d": 5.2,
+   "text": "to re-create the traces in key cat. This was the first rendering, and then I did send it out to"
+  },
+  {
+   "t": 1596.16,
+   "d": 12.64,
+   "text": "a manufacturer and this is what I got back and I think it is nice. PCPs get cheap if you buy"
+  },
+  {
+   "t": 1608.8,
+   "d": 6.8,
+   "text": "a lot that look the same but if you are doing procedural stuff and want to show off variety"
+  },
+  {
+   "t": 1615.6,
+   "d": 6.4,
+   "text": "you want unique pieces you you need to find the path in between to make it feasible. What I did"
+  },
+  {
+   "t": 1622.0,
+   "d": 8.72,
+   "text": "was order 10 per design. And also, if you look at top part of the boards you can see they are the"
+  },
+  {
+   "t": 1630.72,
+   "d": 10.56,
+   "text": "same. The traces are the same. This also makes it nicer. I tried to play with the material itself."
+  },
+  {
+   "t": 1642.24,
+   "d": 11.2,
+   "text": "I am not sure if you ever look. It fiberglass center and if you remove the copper it gets"
+  },
+  {
+   "t": 1653.44,
+   "d": 8.32,
+   "text": "translucent. You can shine the light through. The stars should be signee. So you could put things"
+  },
+  {
+   "t": 1661.76,
+   "d": 10.16,
+   "text": "on the back side to shine through. You can also make structures -- if you leave the copper in some"
+  },
+  {
+   "t": 1671.92,
+   "d": 5.84,
+   "text": "areas where it is not needed but for decoration you get structures that have a very interesting"
+  },
+  {
+   "t": 1677.76,
+   "d": 7.28,
+   "text": "texture feel on the board in the end. This is our pecoplanet boards I made. I still use them now and"
+  },
+  {
+   "t": 1685.04,
+   "d": 8.0,
+   "text": "then to control some things on my computer. Very fun. Yeah, this was my very colorful run through"
+  },
+  {
+   "t": 1693.04,
+   "d": 5.12,
+   "text": "a lot of different projects. I know I had a lot of videos and they are a bit choppy on"
+  },
+  {
+   "t": 1698.16,
+   "d": 5.44,
+   "text": "the stream so if you want to rewatch the slides you can find them on roguelike.bleeptrack.de."
+  },
+  {
+   "t": 1703.6,
+   "d": 6.16,
+   "text": "And if you want to reach out to me you can find me as bleeptrack on most websites."
+  }
+ ]
+}

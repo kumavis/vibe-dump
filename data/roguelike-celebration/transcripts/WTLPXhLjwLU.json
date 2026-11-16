@@ -1,0 +1,2396 @@
+{
+ "id": "WTLPXhLjwLU",
+ "url": "https://www.youtube.com/watch?v=WTLPXhLjwLU",
+ "title": "Nathan Savant - One Quest To Rule Them All: Quest Design in Non-Games Media",
+ "speaker": "Nathan Savant",
+ "talk_title": "One Quest To Rule Them All: Quest Design in Non-Games Media",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 868,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "A deep dive exploration of non-games media and how to apply lessons learned while making nonlinear, even procedural games. What is the quest design of Lord of the Rings, and how do we apply the storytelling of Tolkien (and similar) to a roguelike, without breaking from the procedural format? What types of quests should we offer our players, and how do we structure those quests to enable variable play styles without massive scope creep?",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 6,
+   "title": "Nathan Savant"
+  },
+  {
+   "start": 55,
+   "title": "Procedurally Generated Stories"
+  },
+  {
+   "start": 219,
+   "title": "Types of Response When Offered a Quest"
+  },
+  {
+   "start": 242,
+   "title": "How Was the Quest Offered"
+  },
+  {
+   "start": 254,
+   "title": "Lord of the Rings"
+  },
+  {
+   "start": 338,
+   "title": "Types of Choice"
+  },
+  {
+   "start": 401,
+   "title": "Accepting a Quest"
+  },
+  {
+   "start": 449,
+   "title": "Internal Struggles and External Struggles"
+  },
+  {
+   "start": 452,
+   "title": "External Struggles"
+  },
+  {
+   "start": 515,
+   "title": "Internal Struggles"
+  },
+  {
+   "start": 591,
+   "title": "Character Progression Trees"
+  },
+  {
+   "start": 635,
+   "title": "Moment-to-Moment Gameplay"
+  },
+  {
+   "start": 687,
+   "title": "End of the Quest"
+  },
+  {
+   "start": 788,
+   "title": "Contact Information"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2954,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.84,
+   "d": 2.24,
+   "text": "All right, for our next lightning talk,"
+  },
+  {
+   "t": 6.08,
+   "d": 3.36,
+   "text": "we have Nathan Savant."
+  },
+  {
+   "t": 9.44,
+   "d": 2.44,
+   "text": "Hello, Nathan. Hey."
+  },
+  {
+   "t": 11.88,
+   "d": 2.76,
+   "text": "All right, you made it."
+  },
+  {
+   "t": 14.64,
+   "d": 2.16,
+   "text": "Meredith is game designer."
+  },
+  {
+   "t": 16.8,
+   "d": 1.36,
+   "text": "You wrote you believe action speak"
+  },
+  {
+   "t": 18.16,
+   "d": 1.52,
+   "text": "louder than words, so I take that to"
+  },
+  {
+   "t": 19.68,
+   "d": 2.84,
+   "text": "mean you don't want an introduction."
+  },
+  {
+   "t": 22.52,
+   "d": 1.64,
+   "text": "I was planning my own, so it's fine"
+  },
+  {
+   "t": 24.16,
+   "d": 1.56,
+   "text": "either way to be honest, so"
+  },
+  {
+   "t": 25.72,
+   "d": 2.2,
+   "text": "Well, then take it away. Thank you very"
+  },
+  {
+   "t": 27.92,
+   "d": 1.16,
+   "text": "much, Ali."
+  },
+  {
+   "t": 29.08,
+   "d": 2.2,
+   "text": "So, hi. I'm Nathan Savant. I'm a game"
+  },
+  {
+   "t": 31.28,
+   "d": 1.96,
+   "text": "narrative designer, as she just said."
+  },
+  {
+   "t": 33.24,
+   "d": 1.32,
+   "text": "I research film, books, and other"
+  },
+  {
+   "t": 34.56,
+   "d": 1.92,
+   "text": "storytelling media. Basically, I'm just"
+  },
+  {
+   "t": 36.48,
+   "d": 1.48,
+   "text": "trying to understand how to tell"
+  },
+  {
+   "t": 37.96,
+   "d": 1.32,
+   "text": "character stories that fit into"
+  },
+  {
+   "t": 39.28,
+   "d": 2.08,
+   "text": "gameplay, and you know, how to design"
+  },
+  {
+   "t": 41.36,
+   "d": 1.12,
+   "text": "gameplay that fits into character"
+  },
+  {
+   "t": 42.48,
+   "d": 1.92,
+   "text": "stories, and everything involved"
+  },
+  {
+   "t": 44.4,
+   "d": 1.12,
+   "text": "therein."
+  },
+  {
+   "t": 45.52,
+   "d": 1.36,
+   "text": "So, this is going to be a pretty dense"
+  },
+  {
+   "t": 46.88,
+   "d": 1.12,
+   "text": "talk. I'm going to I'm going to"
+  },
+  {
+   "t": 48.0,
+   "d": 2.04,
+   "text": "apologize in advance basically for going"
+  },
+  {
+   "t": 50.04,
+   "d": 1.32,
+   "text": "to have to go pretty quick through a lot"
+  },
+  {
+   "t": 51.36,
+   "d": 2.12,
+   "text": "of very deep subjects. We can talk more"
+  },
+  {
+   "t": 53.48,
+   "d": 1.44,
+   "text": "after basically."
+  },
+  {
+   "t": 54.92,
+   "d": 1.4,
+   "text": "So, let's just dive right in."
+  },
+  {
+   "t": 56.32,
+   "d": 2.0,
+   "text": "So, procedurally generated stories,"
+  },
+  {
+   "t": 58.32,
+   "d": 1.76,
+   "text": "they're kind of a new frontier. It can"
+  },
+  {
+   "t": 60.08,
+   "d": 1.08,
+   "text": "be a little bit difficult to tell a"
+  },
+  {
+   "t": 61.16,
+   "d": 1.48,
+   "text": "story between all of your randomly"
+  },
+  {
+   "t": 62.64,
+   "d": 1.92,
+   "text": "generated pieces that you're making. You"
+  },
+  {
+   "t": 64.56,
+   "d": 1.8,
+   "text": "know, not only that, you're probably not"
+  },
+  {
+   "t": 66.36,
+   "d": 1.12,
+   "text": "really a writer yourself. You're"
+  },
+  {
+   "t": 67.48,
+   "d": 1.28,
+   "text": "probably programmers. You're probably"
+  },
+  {
+   "t": 68.76,
+   "d": 1.56,
+   "text": "working on solo projects, and you just"
+  },
+  {
+   "t": 70.32,
+   "d": 2.84,
+   "text": "have way too much to do already. So, how"
+  },
+  {
+   "t": 73.16,
+   "d": 2.32,
+   "text": "do you fit a story in with all of your"
+  },
+  {
+   "t": 75.48,
+   "d": 1.92,
+   "text": "procedural systems? How do you"
+  },
+  {
+   "t": 77.4,
+   "d": 1.76,
+   "text": "procedurally summon the deep magics of"
+  },
+  {
+   "t": 79.16,
+   "d": 1.76,
+   "text": "satisfying storytelling?"
+  },
+  {
+   "t": 80.92,
+   "d": 2.36,
+   "text": "Well, to sort of answer this, we'll look"
+  },
+  {
+   "t": 83.28,
+   "d": 1.44,
+   "text": "at how the ancients do it. We'll look at"
+  },
+  {
+   "t": 84.72,
+   "d": 1.52,
+   "text": "Lord of the Rings, you know, their quest"
+  },
+  {
+   "t": 86.24,
+   "d": 1.92,
+   "text": "structure overall. I'm going to cite"
+  },
+  {
+   "t": 88.16,
+   "d": 2.0,
+   "text": "some specifics along the way. Mostly,"
+  },
+  {
+   "t": 90.16,
+   "d": 1.04,
+   "text": "I'm going to keep things pretty high"
+  },
+  {
+   "t": 91.2,
+   "d": 1.12,
+   "text": "level."
+  },
+  {
+   "t": 92.32,
+   "d": 1.32,
+   "text": "It's a short talk. I don't want to go"
+  },
+  {
+   "t": 93.64,
+   "d": 1.32,
+   "text": "into super technical details about"
+  },
+  {
+   "t": 94.96,
+   "d": 1.56,
+   "text": "anything. I'm going to keep all the"
+  },
+  {
+   "t": 96.52,
+   "d": 1.64,
+   "text": "terms and concepts simple as well. You"
+  },
+  {
+   "t": 98.16,
+   "d": 1.92,
+   "text": "know, a hammer is a simple tool. You use"
+  },
+  {
+   "t": 100.08,
+   "d": 2.0,
+   "text": "it to build decidedly not simple things,"
+  },
+  {
+   "t": 102.08,
+   "d": 1.16,
+   "text": "right?"
+  },
+  {
+   "t": 103.24,
+   "d": 1.4,
+   "text": "So, quests."
+  },
+  {
+   "t": 104.64,
+   "d": 1.84,
+   "text": "Quests are stories. Because quests are"
+  },
+  {
+   "t": 106.48,
+   "d": 1.64,
+   "text": "stories, quests break down into three"
+  },
+  {
+   "t": 108.12,
+   "d": 1.84,
+   "text": "sections. You have a beginning, you have"
+  },
+  {
+   "t": 109.96,
+   "d": 2.68,
+   "text": "a middle, and you have an end."
+  },
+  {
+   "t": 112.64,
+   "d": 1.76,
+   "text": "Each of those sections of the story has"
+  },
+  {
+   "t": 114.4,
+   "d": 2.4,
+   "text": "particular needs. So, we can break all"
+  },
+  {
+   "t": 116.8,
+   "d": 1.52,
+   "text": "those down into their component pieces"
+  },
+  {
+   "t": 118.32,
+   "d": 1.68,
+   "text": "to kind of understand how they work a"
+  },
+  {
+   "t": 120.0,
+   "d": 1.68,
+   "text": "little bit better. And you know,"
+  },
+  {
+   "t": 121.68,
+   "d": 1.08,
+   "text": "obviously through the lens of Lord of"
+  },
+  {
+   "t": 122.76,
+   "d": 1.52,
+   "text": "the Rings. So, let's start the"
+  },
+  {
+   "t": 124.28,
+   "d": 3.12,
+   "text": "beginning. How does Frodo get the quest"
+  },
+  {
+   "t": 127.4,
+   "d": 2.04,
+   "text": "to destroy the ring?"
+  },
+  {
+   "t": 129.44,
+   "d": 1.56,
+   "text": "You might respond saying that Gandalf"
+  },
+  {
+   "t": 131.0,
+   "d": 1.96,
+   "text": "gives it to him. It's technically not"
+  },
+  {
+   "t": 132.96,
+   "d": 2.56,
+   "text": "true. Like, Gandalf gives Frodo the"
+  },
+  {
+   "t": 135.52,
+   "d": 1.92,
+   "text": "quest to deliver the ring to the elves,"
+  },
+  {
+   "t": 137.44,
+   "d": 2.2,
+   "text": "and then Frodo gives himself the quest"
+  },
+  {
+   "t": 139.64,
+   "d": 1.76,
+   "text": "to deliver the ring to Mordor once he"
+  },
+  {
+   "t": 141.4,
+   "d": 1.52,
+   "text": "kind of understands the situation more"
+  },
+  {
+   "t": 142.92,
+   "d": 2.2,
+   "text": "fully. So, right there, we have two"
+  },
+  {
+   "t": 145.12,
+   "d": 2.32,
+   "text": "possible options. We have someone gives"
+  },
+  {
+   "t": 147.44,
+   "d": 1.92,
+   "text": "Frodo the first quest, and then Frodo"
+  },
+  {
+   "t": 149.36,
+   "d": 1.96,
+   "text": "accepts the second quest himself"
+  },
+  {
+   "t": 151.32,
+   "d": 3.0,
+   "text": "internally. And in both of those cases,"
+  },
+  {
+   "t": 154.32,
+   "d": 1.88,
+   "text": "Frodo accepts willingly, but a player"
+  },
+  {
+   "t": 156.2,
+   "d": 1.92,
+   "text": "might not, you know, free will and all"
+  },
+  {
+   "t": 158.12,
+   "d": 3.08,
+   "text": "that. So, how do we break all this down?"
+  },
+  {
+   "t": 161.2,
+   "d": 2.32,
+   "text": "Well, we end up with three groups of"
+  },
+  {
+   "t": 163.52,
+   "d": 1.48,
+   "text": "information."
+  },
+  {
+   "t": 165.0,
+   "d": 2.04,
+   "text": "We have a type of response, which is,"
+  },
+  {
+   "t": 167.04,
+   "d": 1.2,
+   "text": "you know, whether or not the player is"
+  },
+  {
+   "t": 168.24,
+   "d": 1.92,
+   "text": "accepting the quest, pretty much yes or"
+  },
+  {
+   "t": 170.16,
+   "d": 2.16,
+   "text": "no. We have the type of choice it was,"
+  },
+  {
+   "t": 172.32,
+   "d": 2.04,
+   "text": "which is were they, you know, making a"
+  },
+  {
+   "t": 174.36,
+   "d": 1.28,
+   "text": "choice they were aware of, were they"
+  },
+  {
+   "t": 175.64,
+   "d": 2.08,
+   "text": "just kind of stumble into it? And then"
+  },
+  {
+   "t": 177.72,
+   "d": 0.96,
+   "text": "you have the mechanics of the"
+  },
+  {
+   "t": 178.68,
+   "d": 1.2,
+   "text": "acceptance, which is what did they"
+  },
+  {
+   "t": 179.88,
+   "d": 3.0,
+   "text": "actually do to accept the quest?"
+  },
+  {
+   "t": 182.88,
+   "d": 0.84,
+   "text": "So, let's start with the type of"
+  },
+  {
+   "t": 183.72,
+   "d": 1.68,
+   "text": "response cuz this is simplest, and break"
+  },
+  {
+   "t": 185.4,
+   "d": 3.16,
+   "text": "that down. So, Frodo accepts the main"
+  },
+  {
+   "t": 188.56,
+   "d": 2.56,
+   "text": "quest willingly. But he just as likely,"
+  },
+  {
+   "t": 191.12,
+   "d": 1.84,
+   "text": "in a game at least, might have refused"
+  },
+  {
+   "t": 192.96,
+   "d": 2.0,
+   "text": "the quest, right? If he were a player,"
+  },
+  {
+   "t": 194.96,
+   "d": 1.28,
+   "text": "he could have just say, well, you know,"
+  },
+  {
+   "t": 196.24,
+   "d": 1.4,
+   "text": "did my job, good luck folks, and then"
+  },
+  {
+   "t": 197.64,
+   "d": 1.28,
+   "text": "walked away."
+  },
+  {
+   "t": 198.92,
+   "d": 1.96,
+   "text": "That's a valid response here."
+  },
+  {
+   "t": 200.88,
+   "d": 1.56,
+   "text": "It's also valid if he had done that and"
+  },
+  {
+   "t": 202.44,
+   "d": 2.72,
+   "text": "then felt guilty later and come back."
+  },
+  {
+   "t": 205.16,
+   "d": 1.76,
+   "text": "Or if he had tried to do that, and then"
+  },
+  {
+   "t": 206.92,
+   "d": 1.84,
+   "text": "like Gandalf walks up to him and like"
+  },
+  {
+   "t": 208.76,
+   "d": 1.2,
+   "text": "hits him over the head with a stick and"
+  },
+  {
+   "t": 209.96,
+   "d": 2.28,
+   "text": "says, \"No, get back in there.\""
+  },
+  {
+   "t": 212.24,
+   "d": 1.76,
+   "text": "These are all valid depending on the"
+  },
+  {
+   "t": 214.0,
+   "d": 1.8,
+   "text": "story, depending on the the type of"
+  },
+  {
+   "t": 215.8,
+   "d": 1.12,
+   "text": "protagonist that you have, you know,"
+  },
+  {
+   "t": 216.92,
+   "d": 1.84,
+   "text": "your characters, whatever. So, let's"
+  },
+  {
+   "t": 218.76,
+   "d": 1.4,
+   "text": "write all that down"
+  },
+  {
+   "t": 220.16,
+   "d": 1.48,
+   "text": "as types of response when offered a"
+  },
+  {
+   "t": 221.64,
+   "d": 2.48,
+   "text": "quest. So, you can accept the quest. You"
+  },
+  {
+   "t": 224.12,
+   "d": 1.88,
+   "text": "can reject the quest. You can reject the"
+  },
+  {
+   "t": 226.0,
+   "d": 1.88,
+   "text": "quest and then accept it later."
+  },
+  {
+   "t": 227.88,
+   "d": 1.4,
+   "text": "And you can reject the quest and then be"
+  },
+  {
+   "t": 229.28,
+   "d": 2.2,
+   "text": "forced to accept it later."
+  },
+  {
+   "t": 231.48,
+   "d": 2.0,
+   "text": "Each of those things will change how the"
+  },
+  {
+   "t": 233.48,
+   "d": 1.92,
+   "text": "rest of the quest is perceived, and thus"
+  },
+  {
+   "t": 235.4,
+   "d": 1.36,
+   "text": "will tell the story in a slightly"
+  },
+  {
+   "t": 236.76,
+   "d": 1.68,
+   "text": "different way without you having to"
+  },
+  {
+   "t": 238.44,
+   "d": 2.28,
+   "text": "necessarily write anything."
+  },
+  {
+   "t": 240.72,
+   "d": 1.4,
+   "text": "And the next piece of this to be aware"
+  },
+  {
+   "t": 242.12,
+   "d": 2.76,
+   "text": "of is how was the quest offered?"
+  },
+  {
+   "t": 244.88,
+   "d": 1.36,
+   "text": "Did someone walk up to Frodo and say,"
+  },
+  {
+   "t": 246.24,
+   "d": 1.84,
+   "text": "\"Hey, do you want a quest?\""
+  },
+  {
+   "t": 248.08,
+   "d": 1.28,
+   "text": "You know, was Gandalf standing around"
+  },
+  {
+   "t": 249.36,
+   "d": 2.24,
+   "text": "with an exclamation mark over his head?"
+  },
+  {
+   "t": 251.6,
+   "d": 2.0,
+   "text": "No, but it's not too far off of that"
+  },
+  {
+   "t": 253.6,
+   "d": 2.48,
+   "text": "either. So, Lord of the Rings starts"
+  },
+  {
+   "t": 256.08,
+   "d": 2.2,
+   "text": "with a very normal video game thing."
+  },
+  {
+   "t": 258.28,
+   "d": 1.52,
+   "text": "Frodo accepts the first part of the"
+  },
+  {
+   "t": 259.8,
+   "d": 2.76,
+   "text": "quest when Gandalf asks him for help."
+  },
+  {
+   "t": 262.56,
+   "d": 1.8,
+   "text": "That's easy. That's a standard quest"
+  },
+  {
+   "t": 264.36,
+   "d": 1.32,
+   "text": "giver situation."
+  },
+  {
+   "t": 265.68,
+   "d": 2.64,
+   "text": "But how does Gandalf accept his part of"
+  },
+  {
+   "t": 268.32,
+   "d": 2.44,
+   "text": "this quest? You know, Gandalf accepts"
+  },
+  {
+   "t": 270.76,
+   "d": 1.96,
+   "text": "his part of the quest by gaining some"
+  },
+  {
+   "t": 272.72,
+   "d": 1.32,
+   "text": "knowledge when he reads a bunch of old"
+  },
+  {
+   "t": 274.04,
+   "d": 1.24,
+   "text": "books and he kind of realizes what he"
+  },
+  {
+   "t": 275.28,
+   "d": 1.4,
+   "text": "has to do."
+  },
+  {
+   "t": 276.68,
+   "d": 2.48,
+   "text": "This is another internal acceptance, but"
+  },
+  {
+   "t": 279.16,
+   "d": 2.16,
+   "text": "this time there's no mention of a quest"
+  },
+  {
+   "t": 281.32,
+   "d": 2.28,
+   "text": "at all. You know, he just gets the idea"
+  },
+  {
+   "t": 283.6,
+   "d": 2.56,
+   "text": "from some books. Or scrolls or whatever"
+  },
+  {
+   "t": 286.16,
+   "d": 2.48,
+   "text": "as it were. And then as the story goes,"
+  },
+  {
+   "t": 288.64,
+   "d": 1.96,
+   "text": "there's a bunch of other characters who"
+  },
+  {
+   "t": 290.6,
+   "d": 1.24,
+   "text": "get a bunch of other different quests in"
+  },
+  {
+   "t": 291.84,
+   "d": 1.68,
+   "text": "a bunch of different ways. We can play a"
+  },
+  {
+   "t": 293.52,
+   "d": 1.08,
+   "text": "little bit fast and loose with the"
+  },
+  {
+   "t": 294.6,
+   "d": 1.92,
+   "text": "definition of quest here because"
+  },
+  {
+   "t": 296.52,
+   "d": 1.32,
+   "text": "basically the triggers are the same"
+  },
+  {
+   "t": 297.84,
+   "d": 1.12,
+   "text": "anyway."
+  },
+  {
+   "t": 298.96,
+   "d": 2.48,
+   "text": "But so, we have quests that can trigger"
+  },
+  {
+   "t": 301.44,
+   "d": 2.04,
+   "text": "when a character enters a certain area."
+  },
+  {
+   "t": 303.48,
+   "d": 1.52,
+   "text": "You know, like as an example, maybe you"
+  },
+  {
+   "t": 305.0,
+   "d": 1.36,
+   "text": "have to fight the giant spider because"
+  },
+  {
+   "t": 306.36,
+   "d": 2.56,
+   "text": "you enter its nest, right? So, you have"
+  },
+  {
+   "t": 308.92,
+   "d": 1.48,
+   "text": "direct quests that can trigger because"
+  },
+  {
+   "t": 310.4,
+   "d": 1.48,
+   "text": "you interact with an object. Maybe it"
+  },
+  {
+   "t": 311.88,
+   "d": 1.6,
+   "text": "makes some noise, and it just changes"
+  },
+  {
+   "t": 313.48,
+   "d": 1.64,
+   "text": "your quest cuz now you have to like"
+  },
+  {
+   "t": 315.12,
+   "d": 1.36,
+   "text": "respond cuz people are aware that you're"
+  },
+  {
+   "t": 316.48,
+   "d": 1.88,
+   "text": "there, that type of thing."
+  },
+  {
+   "t": 318.36,
+   "d": 1.76,
+   "text": "You can have other types of quests which"
+  },
+  {
+   "t": 320.12,
+   "d": 1.68,
+   "text": "are which are accepted because a"
+  },
+  {
+   "t": 321.8,
+   "d": 2.88,
+   "text": "character just has an item, and that's"
+  },
+  {
+   "t": 324.68,
+   "d": 1.48,
+   "text": "once kind of the premise of the whole"
+  },
+  {
+   "t": 326.16,
+   "d": 2.44,
+   "text": "story, right? Like, you put on the ring,"
+  },
+  {
+   "t": 328.6,
+   "d": 2.24,
+   "text": "you get this quest, you can't refuse,"
+  },
+  {
+   "t": 330.84,
+   "d": 2.52,
+   "text": "and completing that quest is bad for"
+  },
+  {
+   "t": 333.36,
+   "d": 2.12,
+   "text": "society at large really."
+  },
+  {
+   "t": 335.48,
+   "d": 1.8,
+   "text": "So, basically,"
+  },
+  {
+   "t": 337.28,
+   "d": 2.2,
+   "text": "this all breaks down into three types of"
+  },
+  {
+   "t": 339.48,
+   "d": 1.32,
+   "text": "choice."
+  },
+  {
+   "t": 340.8,
+   "d": 1.76,
+   "text": "You can make a conscious choice on"
+  },
+  {
+   "t": 342.56,
+   "d": 1.92,
+   "text": "purpose because you were offered more"
+  },
+  {
+   "t": 344.48,
+   "d": 2.28,
+   "text": "information. Oops, sorry."
+  },
+  {
+   "t": 346.76,
+   "d": 1.72,
+   "text": "You can make an implied choice by"
+  },
+  {
+   "t": 348.48,
+   "d": 1.52,
+   "text": "walking into a space or doing some other"
+  },
+  {
+   "t": 350.0,
+   "d": 1.2,
+   "text": "action without accepting the quest"
+  },
+  {
+   "t": 351.2,
+   "d": 1.76,
+   "text": "without being aware of it. Then you can"
+  },
+  {
+   "t": 352.96,
+   "d": 1.92,
+   "text": "have just no choice at all, and you're"
+  },
+  {
+   "t": 354.88,
+   "d": 0.96,
+   "text": "just destined to complete this"
+  },
+  {
+   "t": 355.84,
+   "d": 1.64,
+   "text": "particular task regardless of what you"
+  },
+  {
+   "t": 357.48,
+   "d": 1.36,
+   "text": "do or, you know, what you what your"
+  },
+  {
+   "t": 358.84,
+   "d": 1.2,
+   "text": "choices you're making. So, let's write"
+  },
+  {
+   "t": 360.04,
+   "d": 1.48,
+   "text": "all those down. Then you have the"
+  },
+  {
+   "t": 361.52,
+   "d": 1.84,
+   "text": "conscious choice, the implied choice,"
+  },
+  {
+   "t": 363.36,
+   "d": 2.4,
+   "text": "and no choice."
+  },
+  {
+   "t": 365.76,
+   "d": 1.24,
+   "text": "And then the last part of all this are"
+  },
+  {
+   "t": 367.0,
+   "d": 2.12,
+   "text": "the mechanics of the acceptance. Those"
+  },
+  {
+   "t": 369.12,
+   "d": 2.24,
+   "text": "are the actions that you actually take."
+  },
+  {
+   "t": 371.36,
+   "d": 2.32,
+   "text": "So, do you accept the quest by talking"
+  },
+  {
+   "t": 373.68,
+   "d": 1.88,
+   "text": "to someone in kind of a traditional"
+  },
+  {
+   "t": 375.56,
+   "d": 1.6,
+   "text": "video game way?"
+  },
+  {
+   "t": 377.16,
+   "d": 1.56,
+   "text": "Do you accept the quest by interacting"
+  },
+  {
+   "t": 378.72,
+   "d": 1.72,
+   "text": "with an object in the world? Like, maybe"
+  },
+  {
+   "t": 380.44,
+   "d": 1.8,
+   "text": "it's a job board or a treasure map that"
+  },
+  {
+   "t": 382.24,
+   "d": 1.56,
+   "text": "you get your quest from."
+  },
+  {
+   "t": 383.8,
+   "d": 1.92,
+   "text": "Do you accept the quest by picking up an"
+  },
+  {
+   "t": 385.72,
+   "d": 3.16,
+   "text": "item or gaining some knowledge or, you"
+  },
+  {
+   "t": 388.88,
+   "d": 2.88,
+   "text": "know, entering a space or maybe even"
+  },
+  {
+   "t": 391.76,
+   "d": 2.88,
+   "text": "just by using an action? Like, maybe you"
+  },
+  {
+   "t": 394.64,
+   "d": 2.24,
+   "text": "cast a spell that's been deemed illegal"
+  },
+  {
+   "t": 396.88,
+   "d": 1.48,
+   "text": "by the magical authorities, and now"
+  },
+  {
+   "t": 398.36,
+   "d": 2.6,
+   "text": "you're on the run, right? So, those are"
+  },
+  {
+   "t": 400.96,
+   "d": 2.8,
+   "text": "all valid ways of accepting a quest."
+  },
+  {
+   "t": 403.76,
+   "d": 2.08,
+   "text": "So, let's write all those down. So, you"
+  },
+  {
+   "t": 405.84,
+   "d": 1.72,
+   "text": "have interact with a character, interact"
+  },
+  {
+   "t": 407.56,
+   "d": 2.72,
+   "text": "with an object, gain an item, gain some"
+  },
+  {
+   "t": 410.28,
+   "d": 2.6,
+   "text": "knowledge, enter an area, and use a"
+  },
+  {
+   "t": 412.88,
+   "d": 1.56,
+   "text": "verb."
+  },
+  {
+   "t": 414.44,
+   "d": 1.68,
+   "text": "And now with that, that's the beginning"
+  },
+  {
+   "t": 416.12,
+   "d": 1.88,
+   "text": "of the quest. We've covered the every"
+  },
+  {
+   "t": 418.0,
+   "d": 1.72,
+   "text": "way that a quest might start. So, what"
+  },
+  {
+   "t": 419.72,
+   "d": 1.8,
+   "text": "do we do when we're on the quest? What"
+  },
+  {
+   "t": 421.52,
+   "d": 2.56,
+   "text": "happens in the middle?"
+  },
+  {
+   "t": 424.08,
+   "d": 3.28,
+   "text": "Well, in this example, we have Think of"
+  },
+  {
+   "t": 427.36,
+   "d": 0.96,
+   "text": "it in your basically think of the one"
+  },
+  {
+   "t": 428.32,
+   "d": 0.88,
+   "text": "ring."
+  },
+  {
+   "t": 429.2,
+   "d": 1.44,
+   "text": "Once you put it on,"
+  },
+  {
+   "t": 430.64,
+   "d": 2.16,
+   "text": "you've accepted the evil quest. This"
+  },
+  {
+   "t": 432.8,
+   "d": 2.32,
+   "text": "draws ring wraiths to you. As long as"
+  },
+  {
+   "t": 435.12,
+   "d": 2.24,
+   "text": "you have the ring on, you have kind of a"
+  },
+  {
+   "t": 437.36,
+   "d": 2.04,
+   "text": "status effect that flags you as a target"
+  },
+  {
+   "t": 439.4,
+   "d": 2.52,
+   "text": "for flying nightmare ghost king dudes."
+  },
+  {
+   "t": 441.92,
+   "d": 2.24,
+   "text": "So, what can we do to our game's"
+  },
+  {
+   "t": 444.16,
+   "d": 1.2,
+   "text": "protagonist?"
+  },
+  {
+   "t": 445.36,
+   "d": 2.48,
+   "text": "Well, what types of things can happen?"
+  },
+  {
+   "t": 447.84,
+   "d": 1.28,
+   "text": "And so, you break down into two"
+  },
+  {
+   "t": 449.12,
+   "d": 2.0,
+   "text": "categories. You have internal struggles"
+  },
+  {
+   "t": 451.12,
+   "d": 1.8,
+   "text": "and external struggles."
+  },
+  {
+   "t": 452.92,
+   "d": 1.76,
+   "text": "So, external struggles are things which"
+  },
+  {
+   "t": 454.68,
+   "d": 2.2,
+   "text": "you're happen to around your character."
+  },
+  {
+   "t": 456.88,
+   "d": 1.56,
+   "text": "You're already very familiar with these."
+  },
+  {
+   "t": 458.44,
+   "d": 1.64,
+   "text": "These are just things like cutscenes,"
+  },
+  {
+   "t": 460.08,
+   "d": 1.56,
+   "text": "you know, scripted sequences, just like"
+  },
+  {
+   "t": 461.64,
+   "d": 1.08,
+   "text": "the events that are happening kind of"
+  },
+  {
+   "t": 462.72,
+   "d": 1.32,
+   "text": "around your character or to your"
+  },
+  {
+   "t": 464.04,
+   "d": 1.48,
+   "text": "character, etc. These are things like"
+  },
+  {
+   "t": 465.52,
+   "d": 2.08,
+   "text": "environments which can change as part of"
+  },
+  {
+   "t": 467.6,
+   "d": 2.12,
+   "text": "a quest. Like, perhaps, you know, an"
+  },
+  {
+   "t": 469.72,
+   "d": 2.44,
+   "text": "army of orcs invades or the ents march"
+  },
+  {
+   "t": 472.16,
+   "d": 2.12,
+   "text": "off to war, right?"
+  },
+  {
+   "t": 474.28,
+   "d": 2.16,
+   "text": "You have things like the ring wraiths,"
+  },
+  {
+   "t": 476.44,
+   "d": 1.8,
+   "text": "which are external gameplay elements"
+  },
+  {
+   "t": 478.24,
+   "d": 1.16,
+   "text": "which change the way you have to"
+  },
+  {
+   "t": 479.4,
+   "d": 1.6,
+   "text": "interact with the world. You know, you"
+  },
+  {
+   "t": 481.0,
+   "d": 1.8,
+   "text": "can't follow normal roads right now"
+  },
+  {
+   "t": 482.8,
+   "d": 1.72,
+   "text": "because the ring wraiths are after you."
+  },
+  {
+   "t": 484.52,
+   "d": 2.08,
+   "text": "You also can't light fires either"
+  },
+  {
+   "t": 486.6,
+   "d": 2.2,
+   "text": "because they will see it. So, your core"
+  },
+  {
+   "t": 488.8,
+   "d": 2.96,
+   "text": "gameplay has changed because of some,"
+  },
+  {
+   "t": 491.76,
+   "d": 1.68,
+   "text": "you know, difference in you know, some"
+  },
+  {
+   "t": 493.44,
+   "d": 1.32,
+   "text": "mechanical change here. Like, some"
+  },
+  {
+   "t": 494.76,
+   "d": 1.64,
+   "text": "something is out to get you basically."
+  },
+  {
+   "t": 496.4,
+   "d": 2.12,
+   "text": "So, let's write all that out."
+  },
+  {
+   "t": 498.52,
+   "d": 1.48,
+   "text": "You know, so that's the specific events,"
+  },
+  {
+   "t": 500.0,
+   "d": 1.96,
+   "text": "the cutscenes, sequences, etc. The"
+  },
+  {
+   "t": 501.96,
+   "d": 1.48,
+   "text": "environments that you go to, whether"
+  },
+  {
+   "t": 503.44,
+   "d": 2.0,
+   "text": "that's changing or just new places that"
+  },
+  {
+   "t": 505.44,
+   "d": 1.84,
+   "text": "you get access to. And then mechanical"
+  },
+  {
+   "t": 507.28,
+   "d": 1.44,
+   "text": "stresses, which are any kind of gameplay"
+  },
+  {
+   "t": 508.72,
+   "d": 1.8,
+   "text": "things like status effects or different"
+  },
+  {
+   "t": 510.52,
+   "d": 2.08,
+   "text": "enemies, those types of things."
+  },
+  {
+   "t": 512.6,
+   "d": 1.76,
+   "text": "Then on the other half of this are the"
+  },
+  {
+   "t": 514.36,
+   "d": 2.04,
+   "text": "internal struggles. So, the internal"
+  },
+  {
+   "t": 516.4,
+   "d": 3.2,
+   "text": "struggles are how those things affect"
+  },
+  {
+   "t": 519.6,
+   "d": 2.12,
+   "text": "your character's mental state."
+  },
+  {
+   "t": 521.72,
+   "d": 1.84,
+   "text": "You know, wearing the ring causes these"
+  },
+  {
+   "t": 523.56,
+   "d": 1.48,
+   "text": "evil ghost king dudes to come and hunt"
+  },
+  {
+   "t": 525.04,
+   "d": 3.16,
+   "text": "Frodo, but not wearing the ring causes"
+  },
+  {
+   "t": 528.2,
+   "d": 2.44,
+   "text": "Frodo to feel increasingly stressed. The"
+  },
+  {
+   "t": 530.64,
+   "d": 2.0,
+   "text": "more he resists the psychic pull of the"
+  },
+  {
+   "t": 532.64,
+   "d": 3.12,
+   "text": "ring, the worse his mind gets. So, in"
+  },
+  {
+   "t": 535.76,
+   "d": 2.2,
+   "text": "games, unlike film or books though,"
+  },
+  {
+   "t": 537.96,
+   "d": 1.8,
+   "text": "internal struggles are not just some"
+  },
+  {
+   "t": 539.76,
+   "d": 2.0,
+   "text": "abstract concept. In games, we actually"
+  },
+  {
+   "t": 541.76,
+   "d": 1.36,
+   "text": "represent them in a specific and"
+  },
+  {
+   "t": 543.12,
+   "d": 2.24,
+   "text": "concrete way. And that way is through"
+  },
+  {
+   "t": 545.36,
+   "d": 1.4,
+   "text": "the UI."
+  },
+  {
+   "t": 546.76,
+   "d": 2.32,
+   "text": "This is what the UI is for. It exists as"
+  },
+  {
+   "t": 549.08,
+   "d": 2.48,
+   "text": "a means of communicating character state"
+  },
+  {
+   "t": 551.56,
+   "d": 1.48,
+   "text": "to the player."
+  },
+  {
+   "t": 553.04,
+   "d": 1.6,
+   "text": "You can animate the UI to denote that"
+  },
+  {
+   "t": 554.64,
+   "d": 1.84,
+   "text": "your character takes a blow to the head."
+  },
+  {
+   "t": 556.48,
+   "d": 0.88,
+   "text": "You know, maybe they can't remember"
+  },
+  {
+   "t": 557.36,
+   "d": 1.88,
+   "text": "their skills right now. You know, you"
+  },
+  {
+   "t": 559.24,
+   "d": 2.04,
+   "text": "can make somebody blind by blocking out"
+  },
+  {
+   "t": 561.28,
+   "d": 1.76,
+   "text": "their screen or just cover their eyes"
+  },
+  {
+   "t": 563.04,
+   "d": 1.12,
+   "text": "with something as they have something on"
+  },
+  {
+   "t": 564.16,
+   "d": 2.4,
+   "text": "their face, right? You can do the same"
+  },
+  {
+   "t": 566.56,
+   "d": 1.4,
+   "text": "with audio. You can block out the audio"
+  },
+  {
+   "t": 567.96,
+   "d": 2.04,
+   "text": "or distort the audio, and that changes"
+  },
+  {
+   "t": 570.0,
+   "d": 1.32,
+   "text": "kind of how your character is perceiving"
+  },
+  {
+   "t": 571.32,
+   "d": 2.12,
+   "text": "things. You can do all sorts of things"
+  },
+  {
+   "t": 573.44,
+   "d": 2.16,
+   "text": "here basically. This is what the UI is"
+  },
+  {
+   "t": 575.6,
+   "d": 2.08,
+   "text": "for. We generally tend to only use the"
+  },
+  {
+   "t": 577.68,
+   "d": 2.28,
+   "text": "UI for health points, things like that."
+  },
+  {
+   "t": 579.96,
+   "d": 2.04,
+   "text": "There's a ton of room here for different"
+  },
+  {
+   "t": 582.0,
+   "d": 2.28,
+   "text": "types of communication if you want them,"
+  },
+  {
+   "t": 584.28,
+   "d": 1.16,
+   "text": "if they fit into the scope of your"
+  },
+  {
+   "t": 585.44,
+   "d": 1.48,
+   "text": "project, of course."
+  },
+  {
+   "t": 586.92,
+   "d": 1.76,
+   "text": "And so, if UI is communicating the"
+  },
+  {
+   "t": 588.68,
+   "d": 1.28,
+   "text": "short-term,"
+  },
+  {
+   "t": 589.96,
+   "d": 1.72,
+   "text": "what about the long-term?"
+  },
+  {
+   "t": 591.68,
+   "d": 1.92,
+   "text": "Well, character progression trees"
+  },
+  {
+   "t": 593.6,
+   "d": 2.32,
+   "text": "represent the type of person that your"
+  },
+  {
+   "t": 595.92,
+   "d": 2.8,
+   "text": "character can imagine themself becoming"
+  },
+  {
+   "t": 598.72,
+   "d": 1.6,
+   "text": "and that can change over the course of a"
+  },
+  {
+   "t": 600.32,
+   "d": 2.76,
+   "text": "story. So, maybe you talk to a mentor"
+  },
+  {
+   "t": 603.08,
+   "d": 2.24,
+   "text": "and you unlock a new skill tree, right?"
+  },
+  {
+   "t": 605.32,
+   "d": 1.64,
+   "text": "Or maybe you suffer some trauma and you"
+  },
+  {
+   "t": 606.96,
+   "d": 2.44,
+   "text": "lose a skill tree, right?"
+  },
+  {
+   "t": 609.4,
+   "d": 1.76,
+   "text": "Uh maybe accepting a quest grants you a"
+  },
+  {
+   "t": 611.16,
+   "d": 2.16,
+   "text": "new skill for a short amount of time or"
+  },
+  {
+   "t": 613.32,
+   "d": 1.48,
+   "text": "maybe you pick up a magical item and you"
+  },
+  {
+   "t": 614.8,
+   "d": 1.64,
+   "text": "get a new skill that way."
+  },
+  {
+   "t": 616.44,
+   "d": 1.68,
+   "text": "A person's abilities can expand and"
+  },
+  {
+   "t": 618.12,
+   "d": 2.8,
+   "text": "contract over time as is necessary. As"
+  },
+  {
+   "t": 620.92,
+   "d": 1.6,
+   "text": "an example of this, we see the hobbits"
+  },
+  {
+   "t": 622.52,
+   "d": 1.72,
+   "text": "throughout the story, they all learn to"
+  },
+  {
+   "t": 624.24,
+   "d": 1.24,
+   "text": "use swords while they're out in the"
+  },
+  {
+   "t": 625.48,
+   "d": 2.56,
+   "text": "wilds, but throughout the entire story,"
+  },
+  {
+   "t": 628.04,
+   "d": 4.16,
+   "text": "their primary verb remains sneak."
+  },
+  {
+   "t": 632.2,
+   "d": 1.48,
+   "text": "And then the most complicated way of"
+  },
+  {
+   "t": 633.68,
+   "d": 2.16,
+   "text": "communicating an internal struggle is"
+  },
+  {
+   "t": 635.84,
+   "d": 2.84,
+   "text": "through moment-to-moment gameplay."
+  },
+  {
+   "t": 638.68,
+   "d": 2.4,
+   "text": "So, The Last of Us has that moment where"
+  },
+  {
+   "t": 641.08,
+   "d": 1.32,
+   "text": "Ellie doesn't respond to you when you"
+  },
+  {
+   "t": 642.4,
+   "d": 1.24,
+   "text": "press a button, right? That's a"
+  },
+  {
+   "t": 643.64,
+   "d": 2.12,
+   "text": "mechanical representation of an internal"
+  },
+  {
+   "t": 645.76,
+   "d": 0.96,
+   "text": "struggle."
+  },
+  {
+   "t": 646.72,
+   "d": 1.72,
+   "text": "Maybe your character no longer moves as"
+  },
+  {
+   "t": 648.44,
+   "d": 1.92,
+   "text": "they once did because they can't focus"
+  },
+  {
+   "t": 650.36,
+   "d": 1.56,
+   "text": "anymore. Maybe they can no longer"
+  },
+  {
+   "t": 651.92,
+   "d": 1.52,
+   "text": "distinguish friend from foe cuz they're"
+  },
+  {
+   "t": 653.44,
+   "d": 2.12,
+   "text": "just so angry. There's lots of design"
+  },
+  {
+   "t": 655.56,
+   "d": 1.52,
+   "text": "stuff you can do there. It's all very,"
+  },
+  {
+   "t": 657.08,
+   "d": 1.56,
+   "text": "very touchy. So, you just have to be"
+  },
+  {
+   "t": 658.64,
+   "d": 3.2,
+   "text": "very careful. Like 99% of the time,"
+  },
+  {
+   "t": 661.84,
+   "d": 2.56,
+   "text": "changing the player's movement speed or"
+  },
+  {
+   "t": 664.4,
+   "d": 2.44,
+   "text": "the response to an input command is"
+  },
+  {
+   "t": 666.84,
+   "d": 1.88,
+   "text": "about the worst thing you can do to"
+  },
+  {
+   "t": 668.72,
+   "d": 0.92,
+   "text": "them."
+  },
+  {
+   "t": 669.64,
+   "d": 1.52,
+   "text": "But it's a tool in your toolbox. So,"
+  },
+  {
+   "t": 671.16,
+   "d": 1.72,
+   "text": "let's write that down."
+  },
+  {
+   "t": 672.88,
+   "d": 2.64,
+   "text": "So, we have UI animations of any kind,"
+  },
+  {
+   "t": 675.52,
+   "d": 2.0,
+   "text": "alterations, whatever. You have"
+  },
+  {
+   "t": 677.52,
+   "d": 1.56,
+   "text": "character progression, whether that's"
+  },
+  {
+   "t": 679.08,
+   "d": 2.32,
+   "text": "skill trees or abilities, and you have"
+  },
+  {
+   "t": 681.4,
+   "d": 1.68,
+   "text": "mechanical interactions, things like"
+  },
+  {
+   "t": 683.08,
+   "d": 2.28,
+   "text": "changing the inputs."
+  },
+  {
+   "t": 685.36,
+   "d": 2.72,
+   "text": "And then with that, we come to the end."
+  },
+  {
+   "t": 688.08,
+   "d": 2.16,
+   "text": "The end of the quest is the reward. So,"
+  },
+  {
+   "t": 690.24,
+   "d": 2.28,
+   "text": "what is the reward for having done"
+  },
+  {
+   "t": 692.52,
+   "d": 2.24,
+   "text": "whatever the thing was?"
+  },
+  {
+   "t": 694.76,
+   "d": 1.64,
+   "text": "In other types of story, the reward is"
+  },
+  {
+   "t": 696.4,
+   "d": 2.16,
+   "text": "usually just a return to normalcy."
+  },
+  {
+   "t": 698.56,
+   "d": 1.92,
+   "text": "So, you destroyed the ring, go home to"
+  },
+  {
+   "t": 700.48,
+   "d": 3.04,
+   "text": "the Shire, relax, get married, whatever."
+  },
+  {
+   "t": 703.52,
+   "d": 2.24,
+   "text": "In games, this is also basically true."
+  },
+  {
+   "t": 705.76,
+   "d": 1.68,
+   "text": "The alterations that you're doing to the"
+  },
+  {
+   "t": 707.44,
+   "d": 2.0,
+   "text": "game mechanics, the UI, etc., all those"
+  },
+  {
+   "t": 709.44,
+   "d": 1.68,
+   "text": "things I've been talking about,"
+  },
+  {
+   "t": 711.12,
+   "d": 1.84,
+   "text": "those are all exhausting."
+  },
+  {
+   "t": 712.96,
+   "d": 1.52,
+   "text": "You have to apply these things very"
+  },
+  {
+   "t": 714.48,
+   "d": 2.56,
+   "text": "carefully and very much with intention."
+  },
+  {
+   "t": 717.04,
+   "d": 2.0,
+   "text": "In Lord of the Rings, if you notice, the"
+  },
+  {
+   "t": 719.04,
+   "d": 2.52,
+   "text": "main quest is the only one that has"
+  },
+  {
+   "t": 721.56,
+   "d": 2.68,
+   "text": "significant alterations to the gameplay."
+  },
+  {
+   "t": 724.24,
+   "d": 2.0,
+   "text": "Like the Palantír kind of slightly"
+  },
+  {
+   "t": 726.24,
+   "d": 1.92,
+   "text": "alters things, you have to carry an orb"
+  },
+  {
+   "t": 728.16,
+   "d": 1.4,
+   "text": "in a certain way."
+  },
+  {
+   "t": 729.56,
+   "d": 1.12,
+   "text": "Um and then there's like lots of"
+  },
+  {
+   "t": 730.68,
+   "d": 1.68,
+   "text": "environment changes and like as kings"
+  },
+  {
+   "t": 732.36,
+   "d": 2.2,
+   "text": "become corrupt or whatever and you know,"
+  },
+  {
+   "t": 734.56,
+   "d": 1.28,
+   "text": "those types of things happen, but they"
+  },
+  {
+   "t": 735.84,
+   "d": 2.64,
+   "text": "aren't direct character effects."
+  },
+  {
+   "t": 738.48,
+   "d": 2.08,
+   "text": "So, basically, just be aware that"
+  },
+  {
+   "t": 740.56,
+   "d": 2.36,
+   "text": "anything you change about the interface"
+  },
+  {
+   "t": 742.92,
+   "d": 1.4,
+   "text": "stressful to the player and pace"
+  },
+  {
+   "t": 744.32,
+   "d": 1.96,
+   "text": "accordingly. These are powerful tools,"
+  },
+  {
+   "t": 746.28,
+   "d": 1.76,
+   "text": "use them carefully."
+  },
+  {
+   "t": 748.04,
+   "d": 1.12,
+   "text": "Also, if you wanted to hear more about"
+  },
+  {
+   "t": 749.16,
+   "d": 1.44,
+   "text": "these sort of traditional rogue-like or"
+  },
+  {
+   "t": 750.6,
+   "d": 1.8,
+   "text": "traditional reward design in a game, I'm"
+  },
+  {
+   "t": 752.4,
+   "d": 1.64,
+   "text": "not going to be going into that so much."
+  },
+  {
+   "t": 754.04,
+   "d": 1.64,
+   "text": "Uh there's a million other talks that"
+  },
+  {
+   "t": 755.68,
+   "d": 1.16,
+   "text": "are going to go in way more detail than"
+  },
+  {
+   "t": 756.84,
+   "d": 1.4,
+   "text": "I ever could. So, I'll leave that to"
+  },
+  {
+   "t": 758.24,
+   "d": 1.16,
+   "text": "them."
+  },
+  {
+   "t": 759.4,
+   "d": 1.84,
+   "text": "And with that, that's the final graphic"
+  },
+  {
+   "t": 761.24,
+   "d": 1.96,
+   "text": "for me. So, this is how you break down"
+  },
+  {
+   "t": 763.2,
+   "d": 1.48,
+   "text": "your quest into its component parts and"
+  },
+  {
+   "t": 764.68,
+   "d": 1.6,
+   "text": "hopefully do something a little bit more"
+  },
+  {
+   "t": 766.28,
+   "d": 1.16,
+   "text": "interesting than your average game"
+  },
+  {
+   "t": 767.44,
+   "d": 1.44,
+   "text": "manages to do."
+  },
+  {
+   "t": 768.88,
+   "d": 1.48,
+   "text": "Uh this is just a very simple set of"
+  },
+  {
+   "t": 770.36,
+   "d": 2.0,
+   "text": "examples from one book, obviously. I"
+  },
+  {
+   "t": 772.36,
+   "d": 1.44,
+   "text": "urge each of you to take the thought"
+  },
+  {
+   "t": 773.8,
+   "d": 1.76,
+   "text": "process here. Hopefully, you can glean a"
+  },
+  {
+   "t": 775.56,
+   "d": 1.64,
+   "text": "little enough from it to apply this to"
+  },
+  {
+   "t": 777.2,
+   "d": 1.8,
+   "text": "your own favorite books, movies, TV"
+  },
+  {
+   "t": 779.0,
+   "d": 2.24,
+   "text": "show, plays, whatever. Uh there's a lot"
+  },
+  {
+   "t": 781.24,
+   "d": 1.24,
+   "text": "you can learn from other media and"
+  },
+  {
+   "t": 782.48,
+   "d": 1.52,
+   "text": "hopefully this is kind of showing you a"
+  },
+  {
+   "t": 784.0,
+   "d": 2.04,
+   "text": "little bit of how to do that. Uh feel"
+  },
+  {
+   "t": 786.04,
+   "d": 1.12,
+   "text": "free to ask questions if there's time"
+  },
+  {
+   "t": 787.16,
+   "d": 2.4,
+   "text": "left and here's my contact information"
+  },
+  {
+   "t": 789.56,
+   "d": 1.68,
+   "text": "for anybody who wants it. So, thank you"
+  },
+  {
+   "t": 791.24,
+   "d": 2.08,
+   "text": "very much for your time."
+  },
+  {
+   "t": 793.32,
+   "d": 2.76,
+   "text": "Thank you, Nathan. Yeah, I think that um"
+  },
+  {
+   "t": 796.08,
+   "d": 1.52,
+   "text": "yeah, I mean, Melody put it directly,"
+  },
+  {
+   "t": 797.6,
+   "d": 1.84,
+   "text": "it's a very idea-provoking kind of"
+  },
+  {
+   "t": 799.44,
+   "d": 2.64,
+   "text": "framework. So, um yeah, people enjoyed"
+  },
+  {
+   "t": 802.08,
+   "d": 1.28,
+   "text": "that and the skill tree metaphor. I"
+  },
+  {
+   "t": 803.36,
+   "d": 2.08,
+   "text": "think that it's got people thinking in"
+  },
+  {
+   "t": 805.44,
+   "d": 1.6,
+   "text": "so far as they're able to think at this"
+  },
+  {
+   "t": 807.04,
+   "d": 1.96,
+   "text": "point in the conference."
+  },
+  {
+   "t": 809.0,
+   "d": 1.36,
+   "text": "So far as anybody's able to think this"
+  },
+  {
+   "t": 810.36,
+   "d": 1.68,
+   "text": "far in the conference, yeah."
+  },
+  {
+   "t": 812.04,
+   "d": 2.04,
+   "text": "But uh no, it is really interesting. I"
+  },
+  {
+   "t": 814.08,
+   "d": 1.84,
+   "text": "know even when we saw the proposal, it's"
+  },
+  {
+   "t": 815.92,
+   "d": 1.44,
+   "text": "it's really cool to see that kind of"
+  },
+  {
+   "t": 817.36,
+   "d": 2.44,
+   "text": "approach applied to"
+  },
+  {
+   "t": 819.8,
+   "d": 1.8,
+   "text": "written narrative that is a, you know, a"
+  },
+  {
+   "t": 821.6,
+   "d": 1.48,
+   "text": "novel. That's"
+  },
+  {
+   "t": 823.08,
+   "d": 1.44,
+   "text": "We cover a lot of strange topics in"
+  },
+  {
+   "t": 824.52,
+   "d": 1.36,
+   "text": "Rogue Like Celebration. I don't know if"
+  },
+  {
+   "t": 825.88,
+   "d": 2.0,
+   "text": "we'd had like a quest analysis of a"
+  },
+  {
+   "t": 827.88,
+   "d": 2.2,
+   "text": "written novel before. So,"
+  },
+  {
+   "t": 830.08,
+   "d": 2.52,
+   "text": "yeah, it's a first. So,"
+  },
+  {
+   "t": 832.6,
+   "d": 1.12,
+   "text": "yeah,"
+  },
+  {
+   "t": 833.72,
+   "d": 0.6,
+   "text": "um"
+  },
+  {
+   "t": 834.32,
+   "d": 1.48,
+   "text": "we probably we could maybe fit one"
+  },
+  {
+   "t": 835.8,
+   "d": 2.72,
+   "text": "question if we had a chance. Oh,"
+  },
+  {
+   "t": 838.52,
+   "d": 1.4,
+   "text": "Kristen, do you want to"
+  },
+  {
+   "t": 839.92,
+   "d": 0.64,
+   "text": "uh"
+  },
+  {
+   "t": 840.56,
+   "d": 1.76,
+   "text": "from the quest talk earlier, do you"
+  },
+  {
+   "t": 842.32,
+   "d": 1.44,
+   "text": "think you can have a quest without"
+  },
+  {
+   "t": 843.76,
+   "d": 1.6,
+   "text": "narrative?"
+  },
+  {
+   "t": 845.36,
+   "d": 4.04,
+   "text": "Uh sure. I mean, Mario."
+  },
+  {
+   "t": 849.44,
+   "d": 0.96,
+   "text": "You know?"
+  },
+  {
+   "t": 850.4,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 851.4,
+   "d": 2.04,
+   "text": "I mean, define your definition of"
+  },
+  {
+   "t": 853.44,
+   "d": 2.44,
+   "text": "narrative, of course, but Yeah. Yeah."
+  },
+  {
+   "t": 855.88,
+   "d": 2.4,
+   "text": "Kristen did the definition of quest, but"
+  },
+  {
+   "t": 858.28,
+   "d": 0.92,
+   "text": "Right."
+  },
+  {
+   "t": 859.2,
+   "d": 2.12,
+   "text": "Well, yeah, and that's a whole"
+  },
+  {
+   "t": 861.32,
+   "d": 1.68,
+   "text": "I'll leave the semantics to her. Yeah,"
+  },
+  {
+   "t": 863.0,
+   "d": 1.32,
+   "text": "exactly. I'm not going to get into the"
+  },
+  {
+   "t": 864.32,
+   "d": 2.6,
+   "text": "definition."
+  }
+ ]
+}

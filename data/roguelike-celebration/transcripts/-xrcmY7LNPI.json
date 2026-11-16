@@ -1,0 +1,2130 @@
+{
+ "id": "-xrcmY7LNPI",
+ "url": "https://www.youtube.com/watch?v=-xrcmY7LNPI",
+ "title": "Chelsea Thompto - Spaces for Contemplation: Procedural Generation in Nonlinear Narrative in Art",
+ "speaker": "Chelsea Thompto",
+ "talk_title": "Spaces for Contemplation: Procedural Generation in Nonlinear Narrative in Art",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 999,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "An artist talk about how procedural generation can be employed in a new media arts context to create spaces that have legible and concrete themes but that also resist linear narrative construction.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2783,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.2,
+   "d": 3.4,
+   "text": "Excellent. So next up is Chelsea Topto,"
+  },
+  {
+   "t": 6.6,
+   "d": 2.4,
+   "text": "who is here to talk about"
+  },
+  {
+   "t": 9.0,
+   "d": 2.0,
+   "text": "procedural generation and non-linear"
+  },
+  {
+   "t": 11.0,
+   "d": 3.7,
+   "text": "narrative in art. I'll let you take it"
+  },
+  {
+   "t": 14.7,
+   "d": 1.4,
+   "text": "away, Chelsea."
+  },
+  {
+   "t": 16.1,
+   "d": 2.2,
+   "text": ">> Thank you. And before I get started, I"
+  },
+  {
+   "t": 18.3,
+   "d": 1.9,
+   "text": "just want to also say thank you to the"
+  },
+  {
+   "t": 20.2,
+   "d": 3.2,
+   "text": "organizers. This is my first time"
+  },
+  {
+   "t": 23.4,
+   "d": 2.2,
+   "text": "attending the event synchronously and"
+  },
+  {
+   "t": 25.6,
+   "d": 1.9,
+   "text": "also my first time speaking, and I just"
+  },
+  {
+   "t": 27.5,
+   "d": 1.8,
+   "text": "really appreciate all the work that goes"
+  },
+  {
+   "t": 29.3,
+   "d": 1.1,
+   "text": "into it."
+  },
+  {
+   "t": 30.4,
+   "d": 1.6,
+   "text": "And I'd also just like to give two"
+  },
+  {
+   "t": 32.0,
+   "d": 1.9,
+   "text": "little programming notes. The first is"
+  },
+  {
+   "t": 33.9,
+   "d": 1.9,
+   "text": "that you're going to see moving images"
+  },
+  {
+   "t": 35.8,
+   "d": 2.1,
+   "text": "throughout the presentation, but there"
+  },
+  {
+   "t": 37.9,
+   "d": 1.9,
+   "text": "is no sound"
+  },
+  {
+   "t": 39.8,
+   "d": 2.4,
+   "text": "in those moving images. So as long as"
+  },
+  {
+   "t": 42.2,
+   "d": 1.4,
+   "text": "you're hearing my voice, you're getting"
+  },
+  {
+   "t": 43.6,
+   "d": 2.8,
+   "text": "everything that is intended. And then"
+  },
+  {
+   "t": 46.4,
+   "d": 1.4,
+   "text": "the last thing I'll say is that there is"
+  },
+  {
+   "t": 47.8,
+   "d": 2.3,
+   "text": "a link to the slides which includes the"
+  },
+  {
+   "t": 50.1,
+   "d": 2.3,
+   "text": "code that I talk about because today's"
+  },
+  {
+   "t": 52.4,
+   "d": 1.3,
+   "text": "talk is going to be a little bit more"
+  },
+  {
+   "t": 53.7,
+   "d": 2.8,
+   "text": "focused on the visual and conceptual"
+  },
+  {
+   "t": 56.5,
+   "d": 1.7,
+   "text": "aspects and a little bit less on the"
+  },
+  {
+   "t": 58.2,
+   "d": 2.3,
+   "text": "technical."
+  },
+  {
+   "t": 60.5,
+   "d": 2.9,
+   "text": "So as an artist, I'm drawn to creating"
+  },
+  {
+   "t": 63.4,
+   "d": 2.3,
+   "text": "work about my specific political and"
+  },
+  {
+   "t": 65.7,
+   "d": 2.9,
+   "text": "personal context as a trans woman."
+  },
+  {
+   "t": 68.6,
+   "d": 3.1,
+   "text": "But I have also always had an aversion"
+  },
+  {
+   "t": 71.7,
+   "d": 2.9,
+   "text": "to my work being understood as being as"
+  },
+  {
+   "t": 74.6,
+   "d": 3.1,
+   "text": "having one clear, simplistic message or"
+  },
+  {
+   "t": 77.7,
+   "d": 1.5,
+   "text": "becoming another site of"
+  },
+  {
+   "t": 79.2,
+   "d": 1.8,
+   "text": "objectification."
+  },
+  {
+   "t": 81.0,
+   "d": 3.5,
+   "text": "So I create systems that resist linear"
+  },
+  {
+   "t": 84.5,
+   "d": 2.2,
+   "text": "narrative readings in favor of creating"
+  },
+  {
+   "t": 86.7,
+   "d": 2.6,
+   "text": "spaces of contemplation"
+  },
+  {
+   "t": 89.3,
+   "d": 2.7,
+   "text": "populated with the texts, visual forms,"
+  },
+  {
+   "t": 92.0,
+   "d": 2.0,
+   "text": "and feelings I want the viewer to"
+  },
+  {
+   "t": 94.0,
+   "d": 1.0,
+   "text": "confront."
+  },
+  {
+   "t": 95.0,
+   "d": 2.1,
+   "text": "This talk will be a brief examination of"
+  },
+  {
+   "t": 97.1,
+   "d": 1.8,
+   "text": "this process and of how procedural"
+  },
+  {
+   "t": 98.9,
+   "d": 2.3,
+   "text": "generation can be employed in a new"
+  },
+  {
+   "t": 101.2,
+   "d": 2.5,
+   "text": "media and book arts context to create"
+  },
+  {
+   "t": 103.7,
+   "d": 2.6,
+   "text": "spaces that have legible and concrete"
+  },
+  {
+   "t": 106.3,
+   "d": 2.3,
+   "text": "themes, but that also resist"
+  },
+  {
+   "t": 108.6,
+   "d": 1.5,
+   "text": "narrative, linear narrative"
+  },
+  {
+   "t": 110.1,
+   "d": 1.6,
+   "text": "construction."
+  },
+  {
+   "t": 111.7,
+   "d": 3.0,
+   "text": "So the heart of this work for me is the"
+  },
+  {
+   "t": 114.7,
+   "d": 1.4,
+   "text": "question, how might procedural"
+  },
+  {
+   "t": 116.1,
+   "d": 2.6,
+   "text": "generation be used in art to address"
+  },
+  {
+   "t": 118.7,
+   "d": 3.29,
+   "text": "specific political struggles, while also"
+  },
+  {
+   "t": 121.99,
+   "d": 2.6,
+   "text": "resisting the context of asymmetrical"
+  },
+  {
+   "t": 124.59,
+   "d": 2.5,
+   "text": "visibility that has caused harm to so"
+  },
+  {
+   "t": 127.09,
+   "d": 3.0,
+   "text": "many minoritized communities."
+  },
+  {
+   "t": 130.09,
+   "d": 2.8,
+   "text": "So I want to talk a little bit about um"
+  },
+  {
+   "t": 132.89,
+   "d": 2.9,
+   "text": "two sets of influences. First, Vera"
+  },
+  {
+   "t": 135.79,
+   "d": 3.1,
+   "text": "Molnár and Sol LeWitt from the fine art"
+  },
+  {
+   "t": 138.89,
+   "d": 2.8,
+   "text": "standpoint. Um I'm trained as a visual"
+  },
+  {
+   "t": 141.69,
+   "d": 2.8,
+   "text": "artist, trained in um sculpture and"
+  },
+  {
+   "t": 144.49,
+   "d": 2.6,
+   "text": "drawing. And so these artists were some"
+  },
+  {
+   "t": 147.09,
+   "d": 1.6,
+   "text": "of my first introductions to"
+  },
+  {
+   "t": 148.69,
+   "d": 2.7,
+   "text": "randomization and procedural generation."
+  },
+  {
+   "t": 151.39,
+   "d": 2.7,
+   "text": "And they really allowed me to understand"
+  },
+  {
+   "t": 154.09,
+   "d": 2.9,
+   "text": "that uh a single drop of randomization"
+  },
+  {
+   "t": 156.99,
+   "d": 2.0,
+   "text": "can be extremely powerful in a work of"
+  },
+  {
+   "t": 158.99,
+   "d": 2.3,
+   "text": "art and that you actually don't need a"
+  },
+  {
+   "t": 161.29,
+   "d": 2.7,
+   "text": "huge amount of random number generation"
+  },
+  {
+   "t": 163.99,
+   "d": 2.1,
+   "text": "to create um pretty stunning and"
+  },
+  {
+   "t": 166.09,
+   "d": 1.6,
+   "text": "interesting things."
+  },
+  {
+   "t": 167.69,
+   "d": 3.4,
+   "text": "Um and as an artist, uh I've also been a"
+  },
+  {
+   "t": 171.09,
+   "d": 3.8,
+   "text": "lifelong um gamer. And uh for me, there"
+  },
+  {
+   "t": 174.89,
+   "d": 1.6,
+   "text": "was a long period of time where I didn't"
+  },
+  {
+   "t": 176.49,
+   "d": 2.4,
+   "text": "have access to any console games. Uh and"
+  },
+  {
+   "t": 178.89,
+   "d": 1.6,
+   "text": "so games like Ancient Domains of"
+  },
+  {
+   "t": 180.49,
+   "d": 3.4,
+   "text": "Mystery, um NetHack, and other roguelike"
+  },
+  {
+   "t": 183.89,
+   "d": 2.1,
+   "text": "games which which I didn't even really"
+  },
+  {
+   "t": 185.99,
+   "d": 2.6,
+   "text": "fully understand as a genre um were"
+  },
+  {
+   "t": 188.59,
+   "d": 2.6,
+   "text": "really my main touch point for games. Um"
+  },
+  {
+   "t": 191.19,
+   "d": 3.1,
+   "text": "and of course uh contemporary work also"
+  },
+  {
+   "t": 194.29,
+   "d": 2.5,
+   "text": "uh influences my thinking."
+  },
+  {
+   "t": 196.79,
+   "d": 2.7,
+   "text": "So I want to start with the work um"
+  },
+  {
+   "t": 199.49,
+   "d": 3.4,
+   "text": "titled Productive Bodies."
+  },
+  {
+   "t": 203.69,
+   "d": 2.8,
+   "text": "Uh so Productive Bodies is a non-linear"
+  },
+  {
+   "t": 206.49,
+   "d": 2.4,
+   "text": "single channel video. The piece overlays"
+  },
+  {
+   "t": 208.89,
+   "d": 1.9,
+   "text": "videos of the Mississippi River, river"
+  },
+  {
+   "t": 210.79,
+   "d": 2.8,
+   "text": "maps, and renderings of gender-affirming"
+  },
+  {
+   "t": 213.59,
+   "d": 2.4,
+   "text": "surgical techniques to create a living"
+  },
+  {
+   "t": 215.99,
+   "d": 2.0,
+   "text": "Xerox effect."
+  },
+  {
+   "t": 217.99,
+   "d": 2.6,
+   "text": "So that effect can be seen here."
+  },
+  {
+   "t": 220.59,
+   "d": 1.8,
+   "text": "So in this work, um this is one of the"
+  },
+  {
+   "t": 222.39,
+   "d": 1.9,
+   "text": "first times I was really able to think"
+  },
+  {
+   "t": 224.29,
+   "d": 1.8,
+   "text": "through randomization or procedural"
+  },
+  {
+   "t": 226.09,
+   "d": 2.4,
+   "text": "generation as something that could be"
+  },
+  {
+   "t": 228.49,
+   "d": 3.9,
+   "text": "useful in my artwork. Um this is powered"
+  },
+  {
+   "t": 232.39,
+   "d": 4.0,
+   "text": "by um Java in the um"
+  },
+  {
+   "t": 236.39,
+   "d": 2.4,
+   "text": "library called Processing, um which is"
+  },
+  {
+   "t": 238.79,
+   "d": 1.2,
+   "text": "really popular with artists and"
+  },
+  {
+   "t": 239.99,
+   "d": 3.1,
+   "text": "designers. And this work overlays um"
+  },
+  {
+   "t": 243.09,
+   "d": 1.9,
+   "text": "undulating uh"
+  },
+  {
+   "t": 244.99,
+   "d": 2.1,
+   "text": "video of the Mississippi River, which I"
+  },
+  {
+   "t": 247.09,
+   "d": 3.3,
+   "text": "took at its headwaters, um with maps of"
+  },
+  {
+   "t": 250.39,
+   "d": 3.7,
+   "text": "the Mississippi River and renderings of"
+  },
+  {
+   "t": 254.09,
+   "d": 1.3,
+   "text": "um"
+  },
+  {
+   "t": 255.39,
+   "d": 3.0,
+   "text": "medical procedures often associated with"
+  },
+  {
+   "t": 258.39,
+   "d": 2.3,
+   "text": "gender-affirming care. Uh all of this is"
+  },
+  {
+   "t": 260.69,
+   "d": 2.4,
+   "text": "sort of po- posterized and then given"
+  },
+  {
+   "t": 263.09,
+   "d": 2.1,
+   "text": "this tint, which creates this sort of"
+  },
+  {
+   "t": 265.19,
+   "d": 2.8,
+   "text": "undulating um"
+  },
+  {
+   "t": 267.99,
+   "d": 2.0,
+   "text": "scene that you see before you. So the"
+  },
+  {
+   "t": 269.99,
+   "d": 3.4,
+   "text": "work draws from over 50 different media"
+  },
+  {
+   "t": 273.39,
+   "d": 2.6,
+   "text": "sources. So at any given point, I"
+  },
+  {
+   "t": 275.99,
+   "d": 2.7,
+   "text": "understand that a viewer is going to see"
+  },
+  {
+   "t": 278.69,
+   "d": 2.7,
+   "text": "the river, a map of the river, and these"
+  },
+  {
+   "t": 281.39,
+   "d": 2.7,
+   "text": "medical procedures. But what exactly is"
+  },
+  {
+   "t": 284.09,
+   "d": 1.6,
+   "text": "interacting with one another and how"
+  },
+  {
+   "t": 285.69,
+   "d": 2.2,
+   "text": "they're interacting is unpredictable."
+  },
+  {
+   "t": 287.89,
+   "d": 1.4,
+   "text": "And that's what I mean by a space of"
+  },
+  {
+   "t": 289.29,
+   "d": 3.9,
+   "text": "contemplation, a space where I am"
+  },
+  {
+   "t": 293.19,
+   "d": 1.5,
+   "text": "thinking about and designing"
+  },
+  {
+   "t": 294.69,
+   "d": 2.5,
+   "text": "relationships rather than a specific"
+  },
+  {
+   "t": 297.19,
+   "d": 1.2,
+   "text": "narrative."
+  },
+  {
+   "t": 298.39,
+   "d": 2.4,
+   "text": "So I took this idea that I made with"
+  },
+  {
+   "t": 300.79,
+   "d": 2.3,
+   "text": "code and I started to think about how uh"
+  },
+  {
+   "t": 303.09,
+   "d": 1.6,
+   "text": "it might be represented in a physical"
+  },
+  {
+   "t": 304.69,
+   "d": 2.9,
+   "text": "form, which led me to the question, what"
+  },
+  {
+   "t": 307.59,
+   "d": 2.6,
+   "text": "would a book look like if the spine was"
+  },
+  {
+   "t": 310.19,
+   "d": 2.9,
+   "text": "a point rather than a line?"
+  },
+  {
+   "t": 313.09,
+   "d": 3.3,
+   "text": "This led me to design a physical"
+  },
+  {
+   "t": 316.39,
+   "d": 3.1,
+   "text": "node-based spine structure for a book."
+  },
+  {
+   "t": 319.49,
+   "d": 2.2,
+   "text": "You can see it here."
+  },
+  {
+   "t": 321.69,
+   "d": 2.6,
+   "text": "And to actually print that and create a"
+  },
+  {
+   "t": 324.29,
+   "d": 2.8,
+   "text": "functioning, non-linear, nodal-based"
+  },
+  {
+   "t": 327.09,
+   "d": 4.0,
+   "text": "book that mimicked the non-linear ideas"
+  },
+  {
+   "t": 331.09,
+   "d": 3.2,
+   "text": "that I was working in the code."
+  },
+  {
+   "t": 334.29,
+   "d": 2.4,
+   "text": "Uh you can see one installation version"
+  },
+  {
+   "t": 336.69,
+   "d": 1.3,
+   "text": "of it here."
+  },
+  {
+   "t": 337.99,
+   "d": 1.8,
+   "text": "And this really became a core part of my"
+  },
+  {
+   "t": 339.79,
+   "d": 2.6,
+   "text": "practice, this idea of thinking about"
+  },
+  {
+   "t": 342.39,
+   "d": 2.0,
+   "text": "creating spaces of relationship"
+  },
+  {
+   "t": 344.39,
+   "d": 2.2,
+   "text": "digitally and then also thinking about"
+  },
+  {
+   "t": 346.59,
+   "d": 3.2,
+   "text": "ways to work that into physical"
+  },
+  {
+   "t": 349.79,
+   "d": 1.6,
+   "text": "manifestations."
+  },
+  {
+   "t": 351.39,
+   "d": 1.9,
+   "text": "And all along the way here, I'm really"
+  },
+  {
+   "t": 353.29,
+   "d": 2.0,
+   "text": "thinking pretty broadly about procedural"
+  },
+  {
+   "t": 355.29,
+   "d": 2.6,
+   "text": "generation, but in particular, you know,"
+  },
+  {
+   "t": 357.89,
+   "d": 2.7,
+   "text": "I'm really interested in not necessarily"
+  },
+  {
+   "t": 360.59,
+   "d": 2.7,
+   "text": "what technical process, but rather how"
+  },
+  {
+   "t": 363.29,
+   "d": 4.0,
+   "text": "that result is manifest in a viewer."
+  },
+  {
+   "t": 367.3,
+   "d": 2.9,
+   "text": "So I'm going to move on now to the fog."
+  },
+  {
+   "t": 370.19,
+   "d": 1.9,
+   "text": "Um this piece, the fog, and the last"
+  },
+  {
+   "t": 372.1,
+   "d": 2.1,
+   "text": "piece I'm going to talk about, A Walk in"
+  },
+  {
+   "t": 374.19,
+   "d": 3.3,
+   "text": "the Dark, were both created um primarily"
+  },
+  {
+   "t": 377.5,
+   "d": 3.7,
+   "text": "with HTML, CSS, and JavaScript um using"
+  },
+  {
+   "t": 381.19,
+   "d": 3.4,
+   "text": "the Three.js library for the 3D effects"
+  },
+  {
+   "t": 384.6,
+   "d": 1.8,
+   "text": "that you'll see."
+  },
+  {
+   "t": 386.39,
+   "d": 3.0,
+   "text": "So the fog is a web experience in three"
+  },
+  {
+   "t": 389.39,
+   "d": 3.5,
+   "text": "acts. Each act features a 3D scene with"
+  },
+  {
+   "t": 392.89,
+   "d": 2.9,
+   "text": "a different camera/control scheme."
+  },
+  {
+   "t": 395.8,
+   "d": 2.3,
+   "text": "The scenes draw from archival and"
+  },
+  {
+   "t": 398.1,
+   "d": 2.8,
+   "text": "artist-authored text which are used um"
+  },
+  {
+   "t": 400.89,
+   "d": 3.2,
+   "text": "in the generated spaces."
+  },
+  {
+   "t": 404.1,
+   "d": 2.4,
+   "text": "So here we actually see the contents"
+  },
+  {
+   "t": 406.5,
+   "d": 3.5,
+   "text": "page and the first really basic use of"
+  },
+  {
+   "t": 410.0,
+   "d": 2.2,
+   "text": "procedural generation in the sort of"
+  },
+  {
+   "t": 412.19,
+   "d": 2.4,
+   "text": "title card that comes up. Every time the"
+  },
+  {
+   "t": 414.6,
+   "d": 3.0,
+   "text": "page is refreshed, a new version of this"
+  },
+  {
+   "t": 417.6,
+   "d": 3.1,
+   "text": "wall of fog text comes up. And one of"
+  },
+  {
+   "t": 420.69,
+   "d": 1.8,
+   "text": "the really exciting things about this"
+  },
+  {
+   "t": 422.5,
+   "d": 3.6,
+   "text": "work is um it was commissioned through a"
+  },
+  {
+   "t": 426.1,
+   "d": 2.3,
+   "text": "museum and so we're really interested in"
+  },
+  {
+   "t": 428.39,
+   "d": 2.4,
+   "text": "thinking about accessibility. And so I"
+  },
+  {
+   "t": 430.8,
+   "d": 1.7,
+   "text": "was able to"
+  },
+  {
+   "t": 432.5,
+   "d": 3.8,
+   "text": "tie in the ARIA tag system in JavaScript"
+  },
+  {
+   "t": 436.3,
+   "d": 1.7,
+   "text": "and um"
+  },
+  {
+   "t": 438.0,
+   "d": 2.9,
+   "text": "web pages in general to make it so that"
+  },
+  {
+   "t": 440.89,
+   "d": 2.9,
+   "text": "a screen reader would ignore all of the"
+  },
+  {
+   "t": 443.8,
+   "d": 3.7,
+   "text": "symbol text and only pull out um the"
+  },
+  {
+   "t": 447.5,
+   "d": 1.8,
+   "text": "physical the actual text that you can"
+  },
+  {
+   "t": 449.3,
+   "d": 2.4,
+   "text": "read, the readable text um for screen"
+  },
+  {
+   "t": 451.69,
+   "d": 1.6,
+   "text": "readers. And so it was also a chance for"
+  },
+  {
+   "t": 453.3,
+   "d": 1.9,
+   "text": "me to think about how procedural"
+  },
+  {
+   "t": 455.19,
+   "d": 2.1,
+   "text": "generation can spread out into these"
+  },
+  {
+   "t": 457.3,
+   "d": 2.5,
+   "text": "accessibility technologies."
+  },
+  {
+   "t": 459.8,
+   "d": 2.3,
+   "text": "The works themselves are all comprised"
+  },
+  {
+   "t": 462.1,
+   "d": 2.8,
+   "text": "of 3D spaces again created with"
+  },
+  {
+   "t": 464.89,
+   "d": 3.9,
+   "text": "Three.js. Um these spaces are all"
+  },
+  {
+   "t": 468.8,
+   "d": 2.7,
+   "text": "rendered uh live on the screen with"
+  },
+  {
+   "t": 471.5,
+   "d": 4.2,
+   "text": "ASCII characters rather than with uh"
+  },
+  {
+   "t": 475.69,
+   "d": 2.0,
+   "text": "say, you know, regular rendering"
+  },
+  {
+   "t": 477.69,
+   "d": 2.0,
+   "text": "geometry that you might see on the web."
+  },
+  {
+   "t": 479.69,
+   "d": 3.0,
+   "text": "This causes the uh physicality, the"
+  },
+  {
+   "t": 482.69,
+   "d": 3.3,
+   "text": "materiality of the space to be really"
+  },
+  {
+   "t": 486.0,
+   "d": 2.5,
+   "text": "obvious. Um I'm really interested in"
+  },
+  {
+   "t": 488.5,
+   "d": 3.1,
+   "text": "thinking about digital materiality and"
+  },
+  {
+   "t": 491.6,
+   "d": 2.7,
+   "text": "um not really allowing the"
+  },
+  {
+   "t": 494.3,
+   "d": 3.3,
+   "text": "myth of like a perfect virtual world to"
+  },
+  {
+   "t": 497.6,
+   "d": 1.7,
+   "text": "to take hold. And so I'm like I'm always"
+  },
+  {
+   "t": 499.3,
+   "d": 3.2,
+   "text": "trying to find ways to sort of undercut"
+  },
+  {
+   "t": 502.5,
+   "d": 3.3,
+   "text": "immersion in some way or um"
+  },
+  {
+   "t": 505.8,
+   "d": 2.5,
+   "text": "verisimilitude to reality in some way uh"
+  },
+  {
+   "t": 508.3,
+   "d": 2.5,
+   "text": "in favor of creating immersion of an"
+  },
+  {
+   "t": 510.8,
+   "d": 2.6,
+   "text": "idea, of a concept, of a set of"
+  },
+  {
+   "t": 513.4,
+   "d": 3.4,
+   "text": "relationships. So um finally with the"
+  },
+  {
+   "t": 516.8,
+   "d": 2.2,
+   "text": "fog piece I want to talk about how this"
+  },
+  {
+   "t": 519.0,
+   "d": 3.0,
+   "text": "piece became physicalized. So I pulled"
+  },
+  {
+   "t": 522.0,
+   "d": 2.4,
+   "text": "um parts of this out, the text portions"
+  },
+  {
+   "t": 524.4,
+   "d": 1.8,
+   "text": "of this out, and I created these"
+  },
+  {
+   "t": 526.2,
+   "d": 2.1,
+   "text": "inverted fog lights. And so these fog"
+  },
+  {
+   "t": 528.3,
+   "d": 2.1,
+   "text": "lights have textured glass. It's a small"
+  },
+  {
+   "t": 530.4,
+   "d": 3.8,
+   "text": "Raspberry Pi that um runs a little live"
+  },
+  {
+   "t": 534.2,
+   "d": 3.5,
+   "text": "web page that feeds um from a large body"
+  },
+  {
+   "t": 537.7,
+   "d": 3.1,
+   "text": "of text and displays them on the screen."
+  },
+  {
+   "t": 540.8,
+   "d": 3.1,
+   "text": "The screens do not really emit light as"
+  },
+  {
+   "t": 543.9,
+   "d": 2.3,
+   "text": "much as they require someone to lean"
+  },
+  {
+   "t": 546.2,
+   "d": 2.2,
+   "text": "into them. And so"
+  },
+  {
+   "t": 548.4,
+   "d": 1.4,
+   "text": "what I really love about this work is"
+  },
+  {
+   "t": 549.8,
+   "d": 1.4,
+   "text": "that a fog light, which is usually meant"
+  },
+  {
+   "t": 551.2,
+   "d": 1.6,
+   "text": "to pierce through"
+  },
+  {
+   "t": 552.8,
+   "d": 4.0,
+   "text": "um the veil of fog, is instead here uh"
+  },
+  {
+   "t": 556.8,
+   "d": 2.7,
+   "text": "inviting people to peer in."
+  },
+  {
+   "t": 559.5,
+   "d": 2.0,
+   "text": "So the last work I want to talk about is"
+  },
+  {
+   "t": 561.5,
+   "d": 2.5,
+   "text": "my current ongoing piece uh a walk in"
+  },
+  {
+   "t": 564.0,
+   "d": 1.6,
+   "text": "the dark."
+  },
+  {
+   "t": 565.6,
+   "d": 2.8,
+   "text": "So this piece is a piece composed of six"
+  },
+  {
+   "t": 568.4,
+   "d": 2.9,
+   "text": "poems, each with six lines. The poems"
+  },
+  {
+   "t": 571.3,
+   "d": 1.7,
+   "text": "are displayed across a variety of"
+  },
+  {
+   "t": 573.0,
+   "d": 2.9,
+   "text": "repeating spaces. When one poem ends,"
+  },
+  {
+   "t": 575.9,
+   "d": 2.0,
+   "text": "the other is random another is randomly"
+  },
+  {
+   "t": 577.9,
+   "d": 2.4,
+   "text": "chosen, and the spaces are shuffled and"
+  },
+  {
+   "t": 580.3,
+   "d": 2.9,
+   "text": "reordered. So here I'm thinking about"
+  },
+  {
+   "t": 583.2,
+   "d": 3.0,
+   "text": "randomization and authorship and how I"
+  },
+  {
+   "t": 586.2,
+   "d": 2.4,
+   "text": "can bring those two things together in a"
+  },
+  {
+   "t": 588.6,
+   "d": 2.5,
+   "text": "balance. Again, in all of this work, I'm"
+  },
+  {
+   "t": 591.1,
+   "d": 2.9,
+   "text": "really interested in thinking about ways"
+  },
+  {
+   "t": 594.0,
+   "d": 2.9,
+   "text": "that I myself as a trans woman um or"
+  },
+  {
+   "t": 596.9,
+   "d": 3.1,
+   "text": "other minoritized people can actually"
+  },
+  {
+   "t": 600.0,
+   "d": 2.1,
+   "text": "speak their stories and their truth"
+  },
+  {
+   "t": 602.1,
+   "d": 3.2,
+   "text": "without necessarily coming into contact"
+  },
+  {
+   "t": 605.3,
+   "d": 2.4,
+   "text": "with the idea of trauma porn or having"
+  },
+  {
+   "t": 607.7,
+   "d": 2.2,
+   "text": "their work and their ideas and their"
+  },
+  {
+   "t": 609.9,
+   "d": 3.2,
+   "text": "were sort of consumed for melodramatic"
+  },
+  {
+   "t": 613.1,
+   "d": 2.2,
+   "text": "content. And for me, I think procedural"
+  },
+  {
+   "t": 615.3,
+   "d": 2.3,
+   "text": "generation is a lovely way to sort of"
+  },
+  {
+   "t": 617.6,
+   "d": 1.5,
+   "text": "flip the script on what we normally"
+  },
+  {
+   "t": 619.1,
+   "d": 2.9,
+   "text": "think of as narrative and also to insist"
+  },
+  {
+   "t": 622.0,
+   "d": 2.9,
+   "text": "upon viewers sitting with a work for a"
+  },
+  {
+   "t": 624.9,
+   "d": 2.0,
+   "text": "longer period of time. This for me is"
+  },
+  {
+   "t": 626.9,
+   "d": 1.8,
+   "text": "one of the things I love about the"
+  },
+  {
+   "t": 628.7,
+   "d": 2.6,
+   "text": "roguelike genre in general is that a"
+  },
+  {
+   "t": 631.3,
+   "d": 2.4,
+   "text": "work kind of blossoms and grows in one's"
+  },
+  {
+   "t": 633.7,
+   "d": 2.5,
+   "text": "mind over time and in over experiencing"
+  },
+  {
+   "t": 636.2,
+   "d": 3.8,
+   "text": "it um rather than being immediately uh"
+  },
+  {
+   "t": 640.0,
+   "d": 1.9,
+   "text": "clear what the work totally is and what"
+  },
+  {
+   "t": 641.9,
+   "d": 1.2,
+   "text": "it's about."
+  },
+  {
+   "t": 643.1,
+   "d": 2.7,
+   "text": "So in this uh scene here, you can see"
+  },
+  {
+   "t": 645.8,
+   "d": 1.3,
+   "text": "the uh"
+  },
+  {
+   "t": 647.1,
+   "d": 3.1,
+   "text": "piece as it's functioning. Um it is"
+  },
+  {
+   "t": 650.2,
+   "d": 2.1,
+   "text": "inspired by tunnel books. Tunnel books"
+  },
+  {
+   "t": 652.3,
+   "d": 2.8,
+   "text": "are books that have accordion sides that"
+  },
+  {
+   "t": 655.1,
+   "d": 2.2,
+   "text": "you look through the front. And so my"
+  },
+  {
+   "t": 657.3,
+   "d": 2.9,
+   "text": "idea was how could you make a shuffling,"
+  },
+  {
+   "t": 660.2,
+   "d": 3.6,
+   "text": "randomizing tunnel book that would um"
+  },
+  {
+   "t": 663.8,
+   "d": 3.0,
+   "text": "shuffle the scenes over time and feed"
+  },
+  {
+   "t": 666.8,
+   "d": 2.6,
+   "text": "the lines of poems scene by scene."
+  },
+  {
+   "t": 669.4,
+   "d": 2.0,
+   "text": "This has led to me looking at historical"
+  },
+  {
+   "t": 671.4,
+   "d": 2.6,
+   "text": "examples of tunnel books"
+  },
+  {
+   "t": 674.0,
+   "d": 3.0,
+   "text": "and finally has led to me figuring out"
+  },
+  {
+   "t": 677.0,
+   "d": 2.1,
+   "text": "how to create a procedurally generated"
+  },
+  {
+   "t": 679.1,
+   "d": 2.4,
+   "text": "physical tunnel book. Um so I'm thinking"
+  },
+  {
+   "t": 681.5,
+   "d": 3.4,
+   "text": "about how one might need to roll dice or"
+  },
+  {
+   "t": 684.9,
+   "d": 2.8,
+   "text": "otherwise determine the order uh and"
+  },
+  {
+   "t": 687.7,
+   "d": 1.8,
+   "text": "thinking about how these ideas of"
+  },
+  {
+   "t": 689.5,
+   "d": 2.3,
+   "text": "procedural generation and randomization"
+  },
+  {
+   "t": 691.8,
+   "d": 2.9,
+   "text": "can again take physical form."
+  },
+  {
+   "t": 694.7,
+   "d": 2.3,
+   "text": "Um so I'll end it there. Again, the QR"
+  },
+  {
+   "t": 697.0,
+   "d": 2.1,
+   "text": "code at the top is a link to the slides"
+  },
+  {
+   "t": 699.1,
+   "d": 1.9,
+   "text": "um and some of the pieces I talked about"
+  },
+  {
+   "t": 701.0,
+   "d": 2.5,
+   "text": "here are represented um in the links."
+  },
+  {
+   "t": 703.5,
+   "d": 2.4,
+   "text": "Thank you very much."
+  },
+  {
+   "t": 705.9,
+   "d": 3.0,
+   "text": ">> Thank you. That's wonderful. Um yeah,"
+  },
+  {
+   "t": 708.9,
+   "d": 2.2,
+   "text": "the tunnel box. That's that's beautiful,"
+  },
+  {
+   "t": 711.1,
+   "d": 1.7,
+   "text": "the tunnel book. Um"
+  },
+  {
+   "t": 712.8,
+   "d": 1.5,
+   "text": "one thing actually, just so we have a"
+  },
+  {
+   "t": 714.3,
+   "d": 1.2,
+   "text": "little bit of time for questions if"
+  },
+  {
+   "t": 715.5,
+   "d": 1.6,
+   "text": "anyone wants to put one up quickly, but"
+  },
+  {
+   "t": 717.1,
+   "d": 1.6,
+   "text": "what I saw in chat and I don't know if"
+  },
+  {
+   "t": 718.7,
+   "d": 1.5,
+   "text": "you have a good answer, but we've"
+  },
+  {
+   "t": 720.2,
+   "d": 1.9,
+   "text": "sometimes had like from Everest Pipkin"
+  },
+  {
+   "t": 722.1,
+   "d": 1.8,
+   "text": "and stuff these kind of poetic,"
+  },
+  {
+   "t": 723.9,
+   "d": 3.4,
+   "text": "immersive, technical art. Are there any"
+  },
+  {
+   "t": 727.3,
+   "d": 2.9,
+   "text": "other terms for this kind of genre for"
+  },
+  {
+   "t": 730.2,
+   "d": 1.9,
+   "text": "people who are looking for more types of"
+  },
+  {
+   "t": 732.1,
+   "d": 1.6,
+   "text": "art like this."
+  },
+  {
+   "t": 733.7,
+   "d": 2.3,
+   "text": ">> Mm, that's a that is a good question."
+  },
+  {
+   "t": 736.0,
+   "d": 1.1,
+   "text": "Um,"
+  },
+  {
+   "t": 737.1,
+   "d": 3.0,
+   "text": "I would say you know, new media art as a"
+  },
+  {
+   "t": 740.1,
+   "d": 3.2,
+   "text": "as a um field is one way to think about"
+  },
+  {
+   "t": 743.3,
+   "d": 1.9,
+   "text": "it, but there's also sometimes it's"
+  },
+  {
+   "t": 745.2,
+   "d": 2.9,
+   "text": "easier to look at spaces that are um"
+  },
+  {
+   "t": 748.1,
+   "d": 2.4,
+   "text": "doing these things. So finding galleries"
+  },
+  {
+   "t": 750.5,
+   "d": 1.2,
+   "text": "there's a"
+  },
+  {
+   "t": 751.7,
+   "d": 2.8,
+   "text": "newer space called Public Access"
+  },
+  {
+   "t": 754.5,
+   "d": 2.8,
+   "text": "Memories um which has like an online"
+  },
+  {
+   "t": 757.3,
+   "d": 2.6,
+   "text": "residency that deals with a lot of work"
+  },
+  {
+   "t": 759.9,
+   "d": 1.8,
+   "text": "like this. Um,"
+  },
+  {
+   "t": 761.7,
+   "d": 1.4,
+   "text": "but yeah, I mean critical new media art,"
+  },
+  {
+   "t": 763.1,
+   "d": 3.2,
+   "text": "new media art, net art are some terms."
+  },
+  {
+   "t": 766.3,
+   "d": 1.5,
+   "text": ">> Okay. Thank you. That's useful. I know"
+  },
+  {
+   "t": 767.8,
+   "d": 1.5,
+   "text": "that like God forbid we try and put a"
+  },
+  {
+   "t": 769.3,
+   "d": 2.7,
+   "text": "category box [laughter] around art. Just"
+  },
+  {
+   "t": 772.0,
+   "d": 2.4,
+   "text": "categorize your art for me. Um, but no,"
+  },
+  {
+   "t": 774.4,
+   "d": 1.1,
+   "text": "that's really helpful to have some other"
+  },
+  {
+   "t": 775.5,
+   "d": 1.7,
+   "text": "and that's a good point about looking at"
+  },
+  {
+   "t": 777.2,
+   "d": 2.2,
+   "text": "um galleries and places like that."
+  },
+  {
+   "t": 779.4,
+   "d": 1.2,
+   "text": "Um,"
+  },
+  {
+   "t": 780.6,
+   "d": 2.2,
+   "text": "I think we can do one other question"
+  },
+  {
+   "t": 782.8,
+   "d": 1.4,
+   "text": "which is also from Hyper Gardens. Thank"
+  },
+  {
+   "t": 784.2,
+   "d": 1.5,
+   "text": "you Hyper Gardens for all the questions."
+  },
+  {
+   "t": 785.7,
+   "d": 2.8,
+   "text": "Um, how much does the pre-planning"
+  },
+  {
+   "t": 788.5,
+   "d": 2.4,
+   "text": "matter to you and your art? Like how"
+  },
+  {
+   "t": 790.9,
+   "d": 2.4,
+   "text": "much is it about following the process?"
+  },
+  {
+   "t": 793.3,
+   "d": 1.8,
+   "text": "Do you discard a lot of designs as"
+  },
+  {
+   "t": 795.1,
+   "d": 2.3,
+   "text": "you're working through this?"
+  },
+  {
+   "t": 797.4,
+   "d": 3.6,
+   "text": ">> Yeah, so um I'll say again I'm trained"
+  },
+  {
+   "t": 801.0,
+   "d": 2.1,
+   "text": "as more of a sculptor and I started"
+  },
+  {
+   "t": 803.1,
+   "d": 2.5,
+   "text": "coding um as a self-taught person in"
+  },
+  {
+   "t": 805.6,
+   "d": 4.1,
+   "text": "2016 or so um with the prompting of of a"
+  },
+  {
+   "t": 809.7,
+   "d": 2.2,
+   "text": "professor who was like maybe try this"
+  },
+  {
+   "t": 811.9,
+   "d": 3.2,
+   "text": "and then kind of let me uh go. And and"
+  },
+  {
+   "t": 815.1,
+   "d": 2.6,
+   "text": "so yeah, for me I find I plan a lot in"
+  },
+  {
+   "t": 817.7,
+   "d": 2.5,
+   "text": "sketchbooks and I have an idea. Um, like"
+  },
+  {
+   "t": 820.2,
+   "d": 2.1,
+   "text": "for this piece this last piece it's like"
+  },
+  {
+   "t": 822.3,
+   "d": 1.7,
+   "text": "what would a tunnel book look like on"
+  },
+  {
+   "t": 824.0,
+   "d": 1.5,
+   "text": "the internet? And that is sort of the"
+  },
+  {
+   "t": 825.5,
+   "d": 2.4,
+   "text": "plan and then from there I'm building."
+  },
+  {
+   "t": 827.9,
+   "d": 2.3,
+   "text": "Um, I've in the last like six years I've"
+  },
+  {
+   "t": 830.2,
+   "d": 2.8,
+   "text": "really kind of leaned into 3JS. So a lot"
+  },
+  {
+   "t": 833.0,
+   "d": 2.3,
+   "text": "of my design patterns and thinking go"
+  },
+  {
+   "t": 835.3,
+   "d": 1.3,
+   "text": "into that just because it's like the"
+  },
+  {
+   "t": 836.6,
+   "d": 1.3,
+   "text": "thing that I'm learning. But I'm"
+  },
+  {
+   "t": 837.9,
+   "d": 1.9,
+   "text": "currently learning um a new software"
+  },
+  {
+   "t": 839.8,
+   "d": 3.1,
+   "text": "which is L5 which is processing for Lua."
+  },
+  {
+   "t": 842.9,
+   "d": 2.2,
+   "text": "Uh, so I'm not familiar with the Lua"
+  },
+  {
+   "t": 845.1,
+   "d": 1.6,
+   "text": "programming language before starting"
+  },
+  {
+   "t": 846.7,
+   "d": 1.9,
+   "text": "this. Um, but it is starting to produce"
+  },
+  {
+   "t": 848.6,
+   "d": 2.3,
+   "text": "like new patterns in my brain. So it is"
+  },
+  {
+   "t": 850.9,
+   "d": 2.0,
+   "text": "a it is sort of a dynamic process"
+  },
+  {
+   "t": 852.9,
+   "d": 1.5,
+   "text": "between like what is visually and"
+  },
+  {
+   "t": 854.4,
+   "d": 2.0,
+   "text": "conceptually interesting and then like"
+  },
+  {
+   "t": 856.4,
+   "d": 2.5,
+   "text": "how would I um make that happen"
+  },
+  {
+   "t": 858.9,
+   "d": 1.4,
+   "text": "technically, and then that technical"
+  },
+  {
+   "t": 860.3,
+   "d": 2.5,
+   "text": "execution always changes and informs the"
+  },
+  {
+   "t": 862.8,
+   "d": 1.8,
+   "text": "work in ways that I find really"
+  },
+  {
+   "t": 864.6,
+   "d": 1.1,
+   "text": "exciting."
+  },
+  {
+   "t": 865.7,
+   "d": 1.3,
+   "text": ">> Cool. Yeah, thank you. I think that's"
+  },
+  {
+   "t": 867.0,
+   "d": 1.1,
+   "text": "one thing that yeah speaks to a lot of"
+  },
+  {
+   "t": 868.1,
+   "d": 1.5,
+   "text": "people is the way that the technical"
+  },
+  {
+   "t": 869.6,
+   "d": 2.2,
+   "text": "process is itself part of what feeds"
+  },
+  {
+   "t": 871.8,
+   "d": 2.2,
+   "text": "into the artistic process. So,"
+  },
+  {
+   "t": 874.0,
+   "d": 2.0,
+   "text": "excellent. Well, thank you so much and"
+  },
+  {
+   "t": 876.0,
+   "d": 1.6,
+   "text": "uh yeah hopefully people can do some"
+  },
+  {
+   "t": 877.6,
+   "d": 1.6,
+   "text": "follow-up in the breakout rooms, but uh"
+  },
+  {
+   "t": 879.2,
+   "d": 1.0,
+   "text": "it was wonderful to have you at"
+  },
+  {
+   "t": 880.2,
+   "d": 1.4,
+   "text": "Roguelike Celebration. Thank you so much"
+  },
+  {
+   "t": 881.6,
+   "d": 1.1,
+   "text": "for taking the time to share."
+  },
+  {
+   "t": 882.7,
+   "d": 1.0,
+   "text": ">> Thank you very much."
+  },
+  {
+   "t": 883.7,
+   "d": 1.8,
+   "text": ">> Yeah, excellent."
+  },
+  {
+   "t": 885.5,
+   "d": 1.5,
+   "text": "All right. So, that brings us to the end"
+  },
+  {
+   "t": 887.0,
+   "d": 2.4,
+   "text": "of our first block of talks. I'm going"
+  },
+  {
+   "t": 889.4,
+   "d": 2.0,
+   "text": "to run through a reminder of the"
+  },
+  {
+   "t": 891.4,
+   "d": 1.9,
+   "text": "breakout room. So, if you want to follow"
+  },
+  {
+   "t": 893.3,
+   "d": 2.2,
+   "text": "up some of the speakers are in the space"
+  },
+  {
+   "t": 895.5,
+   "d": 1.9,
+   "text": "if they have time, um but also you can"
+  },
+  {
+   "t": 897.4,
+   "d": 2.0,
+   "text": "just talk to the fellow attendees about"
+  },
+  {
+   "t": 899.4,
+   "d": 2.7,
+   "text": "ideas that those sparked in your mind."
+  },
+  {
+   "t": 902.1,
+   "d": 2.0,
+   "text": "Um and I'll just do the quick reminder"
+  },
+  {
+   "t": 904.1,
+   "d": 1.4,
+   "text": "too that if you're watching this on"
+  },
+  {
+   "t": 905.5,
+   "d": 1.8,
+   "text": "Twitch or YouTube and you're not in the"
+  },
+  {
+   "t": 907.3,
+   "d": 1.3,
+   "text": "social space to have those"
+  },
+  {
+   "t": 908.6,
+   "d": 1.6,
+   "text": "conversations, it's not too late to get"
+  },
+  {
+   "t": 910.2,
+   "d": 3.1,
+   "text": "a ticket. Just go to uh roguelike.club"
+  },
+  {
+   "t": 913.3,
+   "d": 2.5,
+   "text": "and you can pay what you can and join us"
+  },
+  {
+   "t": 915.8,
+   "d": 3.8,
+   "text": "to hang out. So, if you want to discuss"
+  },
+  {
+   "t": 919.6,
+   "d": 2.7,
+   "text": "um unfolding traps across time and"
+  },
+  {
+   "t": 922.3,
+   "d": 1.2,
+   "text": "space,"
+  },
+  {
+   "t": 923.5,
+   "d": 2.3,
+   "text": "that will be in the dugout. If you want"
+  },
+  {
+   "t": 925.8,
+   "d": 2.0,
+   "text": "to talk about street photography and"
+  },
+  {
+   "t": 927.8,
+   "d": 2.1,
+   "text": "generative systems, that will be in the"
+  },
+  {
+   "t": 929.9,
+   "d": 2.3,
+   "text": "press box. If you want to be talking"
+  },
+  {
+   "t": 932.2,
+   "d": 3.2,
+   "text": "about the corrupted database Discord"
+  },
+  {
+   "t": 935.4,
+   "d": 3.7,
+   "text": "puzzles, that will be in the VIP seats."
+  },
+  {
+   "t": 939.1,
+   "d": 1.8,
+   "text": "And if you'd like to talk about"
+  },
+  {
+   "t": 940.9,
+   "d": 1.7,
+   "text": "procedural generation as a tactic for"
+  },
+  {
+   "t": 942.6,
+   "d": 2.1,
+   "text": "non-linear narrative in art, that will"
+  },
+  {
+   "t": 944.7,
+   "d": 3.3,
+   "text": "be in the Waterboy lounge. I believe"
+  },
+  {
+   "t": 948.0,
+   "d": 2.4,
+   "text": "that if you click on the happening now"
+  },
+  {
+   "t": 950.4,
+   "d": 2.3,
+   "text": "button, yes it's working, uh in the mud,"
+  },
+  {
+   "t": 952.7,
+   "d": 2.0,
+   "text": "it'll also remind you of those"
+  },
+  {
+   "t": 954.7,
+   "d": 1.6,
+   "text": "assignments and give you a link to click"
+  },
+  {
+   "t": 956.3,
+   "d": 2.8,
+   "text": "on them. So, we will be back in just"
+  },
+  {
+   "t": 959.1,
+   "d": 2.0,
+   "text": "under half an hour with another great"
+  },
+  {
+   "t": 961.1,
+   "d": 1.7,
+   "text": "set of talks. We're going to be going"
+  },
+  {
+   "t": 962.8,
+   "d": 1.3,
+   "text": "into This is one of my favorite blocks"
+  },
+  {
+   "t": 964.1,
+   "d": 3.4,
+   "text": "of the con. Um metalectic convergences,"
+  },
+  {
+   "t": 967.5,
+   "d": 2.9,
+   "text": "mazes, and yearning for the mines, a"
+  },
+  {
+   "t": 970.4,
+   "d": 2.7,
+   "text": "retrospective on video game holes, which"
+  },
+  {
+   "t": 973.1,
+   "d": 1.4,
+   "text": "I saw people talking about Everest"
+  },
+  {
+   "t": 974.5,
+   "d": 1.6,
+   "text": "Pipkin um"
+  },
+  {
+   "t": 976.1,
+   "d": 1.6,
+   "text": "in regards to the last talk in terms of"
+  },
+  {
+   "t": 977.7,
+   "d": 2.0,
+   "text": "like poetic technical, and so Everest is"
+  },
+  {
+   "t": 979.7,
+   "d": 1.5,
+   "text": "part of that. So if you enjoyed this"
+  },
+  {
+   "t": 981.2,
+   "d": 2.0,
+   "text": "last talk, you will probably enjoy"
+  },
+  {
+   "t": 983.2,
+   "d": 1.1,
+   "text": "those."
+  },
+  {
+   "t": 984.3,
+   "d": 2.1,
+   "text": "And yeah, reminder if anything goes"
+  },
+  {
+   "t": 986.4,
+   "d": 2.2,
+   "text": "wrong in the mud, let us know. If"
+  },
+  {
+   "t": 988.6,
+   "d": 2.3,
+   "text": "anything comes up code of conduct wise,"
+  },
+  {
+   "t": 990.9,
+   "d": 2.6,
+   "text": "there are mods, reach out. But generally"
+  },
+  {
+   "t": 993.5,
+   "d": 2.0,
+   "text": "have a good time and I will see you back"
+  },
+  {
+   "t": 995.5,
+   "d": 4.5,
+   "text": "here in a little under a half hour."
+  }
+ ]
+}

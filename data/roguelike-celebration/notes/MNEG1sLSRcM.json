@@ -1,0 +1,160 @@
+{
+  "id": "MNEG1sLSRcM",
+  "title": "Emilia Lazer-Walker - Emergent Storytelling in Physical Spaces (or, \"Is Sleep No More A Roguelike?\")",
+  "speaker": "Emilia Lazer-Walker",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=MNEG1sLSRcM",
+  "talk_type": "design",
+  "summary": "Emilia Lazer-Walker compares emergent storytelling in roguelikes with immersive theatre (Sleep No More), Janet Cardiff's audio walks, and her own generative poetry walk, Computational Flaneur. She distinguishes embedded from emergent narrative and argues roguelikes excel at the latter, but that even deterministic works produce personal stories when the possibility space is large or real-world uncertainty intervenes. Building Computational Flaneur taught her that opaque inputs read as randomness, so she simplified to legible GPS regions and treated the piece like a Twitter bot that occasionally lands a resonant moment.",
+  "games": [
+    "Sleep No More",
+    "Dear Esther",
+    "Dwarf Fortress",
+    "Brogue",
+    "Ultima",
+    "Computational Flaneur"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Games carry two stories, embedded (authored content) and emergent (the player's own choices), and roguelikes are better than any other genre at emergent storytelling.",
+      "detail": "Lazer-Walker cites Marc Laidlaw's embedded-versus-emergent framing: the game is where the story lives and can be studded with hand-authored content. Roguelikes can have both, but what they are special at is making space for players to come up with their own stories.",
+      "t": 238,
+      "quote": "roguelikes are really special at and I think better than any other genre of game is a submergent storytelling and creating space for players to come up",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergence",
+      "kind": "principle",
+      "claim": "Roguelikes generate emergent stories the way Conway's Life produces gliders: very small rules (how water works, how kobolds move) combine into behaviour the parts do not exhibit.",
+      "detail": "Lazer-Walker defines emergence as small interacting objects creating larger structures with new behaviour. She distinguishes this human-system collaboration from two-player stories like chess, where the meaning comes from people anticipating each other.",
+      "t": 290,
+      "quote": "you have very very small rules if here is here's how water works in this world here is how kobolds move",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation stories",
+      "kind": "warning",
+      "claim": "Dwarf Fortress's drunk-cat bug shows colliding systems creating combinatorial complexity, but it is a story of the simulation running, not a player story.",
+      "detail": "Spilled beer gets on cats' paws, they lick it, get drunk and vomit in the tavern. Lazer-Walker calls it a 'bad example' of emergent storytelling precisely because the player did not author it, though it shows what interesting systems colliding can do.",
+      "t": 351,
+      "quote": "I think this isn't a great example because this is this isn't a player story this is just a story of a simulation going",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "immersive theatre",
+      "kind": "example",
+      "claim": "Sleep No More is a fully scripted 'clockwork' production, yet its huge possibility space means each audience member finds personal moments of synchrony, producing emergent stories without simulation.",
+      "detail": "Audience members roam a multi-storey building freely; the embedded Macbeth plot is nearly illegible, and the real story is what you saw, compared with friends afterwards. Lazer-Walker found an abandoned, cobwebbed replica of the opening bar that later was full of people, a moment that felt like hers alone.",
+      "t": 490,
+      "quote": "this is so deterministic but the possibility space is so large that any individual player wandering through the space is going to find interesting moments of synchrony",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "audio walks",
+      "kind": "example",
+      "claim": "Janet Cardiff's fixed audio walk feels personal because it plays off reliable real-world events, like a binaural police siren on 59th Street that listeners cannot tell is recorded.",
+      "detail": "The 25-minute Central Park recording has not changed in 15 years, but as long as there are cars in Manhattan there will be sirens there, so a moment everyone gets still feels like your own. Turning your head would break the illusion, and the piece uses psychological tricks to stop you.",
+      "t": 706,
+      "quote": "this is a thing where it works because you don't know if it's real or not",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authored content and uncertainty",
+      "kind": "principle",
+      "claim": "Authored content can be written so it is meaningful whether or not the world matches it, as in Cardiff's walk mentioning a zoo polar bear that may no longer be there.",
+      "detail": "If the bear is present it seems she knows where you are; if it is absent, it fits the piece's theme of the passage of time. Unpredictable real-world events (weather, strangers, even a film shoot blocking the route) further personalise the experience.",
+      "t": 728,
+      "quote": "there are things that are in a set in stone but they're equally meaningful whether they have changed or haven't",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "location-based generation",
+      "kind": "technique",
+      "claim": "Computational Flaneur generates location-seeded poetry: phone sensor input feeds a neural net trained on mid-20th-century poetry, which is read aloud two lines at a time while the next snippet generates.",
+      "detail": "Lazer-Walker says the goal is poems interesting enough to pull you out of your thoughts but not enough to grab your attention, a machine for creating awareness of the space around you rather than providing its own world. An Irish-accented voice masks poor free text-to-speech.",
+      "t": 898,
+      "quote": "the poems are supposed to be interesting enough to pull you outside of your thoughts as you're walking through the park but not so interesting to grab your attention",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "endings",
+      "kind": "warning",
+      "claim": "Giving a heavily procedural experience a shaped arc and ending proved too hard for Computational Flaneur, so it adopted a Twitter-bot model that works whether you walk five minutes or five hours.",
+      "detail": "Lazer-Walker tried emulating the culminating structures of Sleep No More, roguelike deaths and Dear Esther; using music to shape emotion and detecting waning attention to wrap up were more trouble than worth. The guiding metaphor became how to make this like a Twitter bot.",
+      "t": 979,
+      "quote": "you can start anywhere on the park you can walk for five minutes or five hours and I'll make it work",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "legibility",
+      "kind": "warning",
+      "claim": "When players cannot model how complex inputs shape a generator, the result is indistinguishable from randomness, so Computational Flaneur cut its many sensors down to simple GPS regions.",
+      "detail": "Rain, walking speed, time of day and nearby people originally changed the poems, but no one expects a poem-reading companion to change based on how fast you walk. Lazer-Walker contrasts roguelikes, where water on slippery surfaces is an understandable metaphor for the real world; by the water you simply hear water poems.",
+      "t": 1011,
+      "quote": "black box emulation is indistinct from randomness",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "on-site design",
+      "kind": "technique",
+      "claim": "Location-based generative work must be designed on site: Lazer-Walker built a geofencing tool to walk the space, draw regions and tag each with seed words for the generator.",
+      "detail": "She says being there in person is super important. In Q&A she adds that playtesting and walking the space took the bulk of the time, the edit-walk-test loop was slower than she would like, and a flat waterfront park spared her urban-canyon GPS problems.",
+      "t": 1074,
+      "quote": "doing it in person is super important if you're doing anything location-based you really need to be on site",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "hit rate",
+      "kind": "principle",
+      "claim": "Comedy Twitter bots and real-time generators work like Skinner boxes: most output is oatmeal, and occasional good results keep people engaged, but real-time systems cannot curate.",
+      "detail": "Lazer-Walker raises the aesthetic choice between curating a bot's best output and posting everything. Computational Flaneur responds to live input so it cannot curate; it can only try to choose poems the robot thinks will interest you, and it doesn't always fire.",
+      "t": 1141,
+      "quote": "a lot of comedy Twitter BOTS or basically Skinner boxes that if you're looking at this Twitter feed like a lot of the contents not going to be great",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player ownership",
+      "kind": "principle",
+      "claim": "Generated moments driven by the player's own input feel like the player's story even when their only action was standing somewhere, more so when they happen in real space.",
+      "detail": "Lazer-Walker contrasts a funny bot tweet, which earns a small laugh, with a moment of synchrony in Computational Flaneur that feels like yours. She says it can reshape your relationship with the place even when you return without the app.",
+      "t": 1223,
+      "quote": "this feels like it is yours even though you didn't really do anything other than stand in some GPS coordinates",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player verbs",
+      "kind": "principle",
+      "claim": "If a game's main verb is kill, players will resolve emergent setups with violence; designers should either embrace the carnage or provide other verbs that invite the behaviour they want.",
+      "detail": "An audience member recounted Richard Garriott's Ultima setup of sheep, town and dragon, where players killed everything. Lazer-Walker ties this to Kazemi's point about context: with kill as one of two verbs, killing is sensible.",
+      "t": 1344,
+      "quote": "find verbs that aren't kill and create experiences where players are going to want to do behaviors that you want them to do",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "training data",
+      "kind": "warning",
+      "claim": "Uncleaned training data leaks into output: Computational Flaneur's poetry net kept reading snippets of poetry-book title pages, so walkers heard lists of years.",
+      "detail": "Lazer-Walker gives this as her notable failure state. She also says a simple Markov chain would have worked as well as a neural net for this purpose, and that getting the net running on an iPhone took a lot of hacking.",
+      "t": 1443,
+      "quote": "I had a lot of problems with training data where it kept reading out snippets from title pages of poetry books",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

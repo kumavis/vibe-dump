@@ -1,0 +1,146 @@
+{
+  "id": "9yFferxbrBU",
+  "title": "Elliot Trinidad- Tuning the Blaseball Name Generator",
+  "speaker": "Elliot Trinidad",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=9yFferxbrBU",
+  "talk_type": "design",
+  "summary": "Elliot Trinidad, a community designer on Blaseball, describes overhauling the game's character name pool ahead of a 2023 relaunch. Blaseball's generator simply picks a random first and last name, so the work was really manual curation of the lists. Goals included a baseline of plain 'just some guy' names so special names stand out, retiring names with established reputations, pausing moderation-heavy user submissions, and expanding cultural diversity through careful research. He explains seeding thematic names that create happy accidents (Beef Knight replaced by Flan Prince), tuning by repeatedly generating batches of ten against target ratios, and treating the name list as a living document open to community feedback.",
+  "games": [
+    "Blaseball",
+    "Magic: The Gathering"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "text-only characters",
+      "kind": "example",
+      "claim": "Blaseball's randomly generated players had no graphics, only names and a few facts, yet fans formed deep attachments and made art and fiction about them because chance outcomes felt like miracles.",
+      "detail": "Blaseball was a 2020 browser MMO sports simulator watched live by fans. Outcomes and event triggers were not prescripted, so surprises heightened attachment. Its absurdist horror setting sometimes incinerated players mid-game, generating new names.",
+      "t": 268,
+      "quote": "They are just going off the text of their name and a new facts like their favorite coffee and what they do in the game them self",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "principle",
+      "claim": "Blaseball's name generator treated every character equally, with no saving of cool names for bosses or elites, and aimed for a dry, pro-sports humour rather than trying to be funny.",
+      "detail": "Dozens of generated characters appear together and interact, unlike an RPG with a few named NPCs. Real sports have goofy names, and the writing channels that rather than winking at the player.",
+      "t": 370,
+      "quote": "There is no saving cool sounding names or like high level sounding adjectives for a certain tier of generation. They just all go in the pot",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "manual curation",
+      "kind": "technique",
+      "claim": "Blaseball's name generator just picked a random first and last name with no repeat checks or alliteration weighting, so tuning it was a job of curating the lists rather than coding.",
+      "detail": "This was easier because programmers were busy, letting the community design team work without touching the code pipeline. Trinidad says the talk is less about procgen than thoughtful manual curation.",
+      "t": 504,
+      "quote": "this talk is really less about name generation, less about procedural generation and more about thoughtful manual curation",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "user-submitted content",
+      "kind": "warning",
+      "claim": "User-submitted names (a Blaseball Patreon perk) built audience buy-in but cost heavy moderation and drifted the game's tone toward bombastic names.",
+      "detail": "Moderation covered not only unsavory names but borderline ones and copyright infringement. Names present the world's fiction as much as narrative does, so submissions shifted tone.",
+      "t": 612,
+      "quote": "It was a significant source of moderation labor not just like moderating out, you know, bad unsavory fames but things that are bordered line and copyright infringement",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "baseline names",
+      "kind": "principle",
+      "claim": "A generated name pool needs plenty of plain 'just some guy' names so the unusual ones feel special; when every name is wild, none stand out.",
+      "detail": "Blaseball's narrative team requested this baseline after seasons of bombastic user submissions filled teams with whack names.",
+      "t": 705,
+      "quote": "when they're all special none of them are that special. You kind of need the more plain names in that field to make the other ones shine",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "retiring names",
+      "kind": "technique",
+      "claim": "Blaseball retired names already tied to famous characters, like retiring a jersey number, so new characters wouldn't inherit meme expectations.",
+      "detail": "A second Parker in the same season would be a funny coincidence, but one appearing a year later would be distracting and prevent that character being their own person.",
+      "t": 766,
+      "quote": "in the same way you kind of retire a jersey number sort of, we wanted to make sure those old names wouldn't come back",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent characters",
+      "kind": "example",
+      "claim": "Plain-named Blaseball characters can rise through random events, as Mike Townsend went from a hated, meme-worthy pitcher to a central hero, while main-character names sometimes got benched and did nothing.",
+      "detail": "The narrative team wanted more 'nobody' characters with a chance to rise purely through procedurally generated events. The community was drawn to giving a plain guy an interesting story, and chance also gave him one.",
+      "t": 884,
+      "quote": "This totally plain, unassuming and unremarkable character had this arc with a plain name",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "cultural diversity",
+      "kind": "principle",
+      "claim": "Blaseball audited its name pool for cultural diversity because a global-feeling world generated characters that didn't feel global, and representation shaped how the community attached to characters.",
+      "detail": "Online English-speaking fandoms default to a white American perspective even when diverse. Even though names don't touch mechanics, they shape community interaction, so it was a high priority; Trinidad says investing in an anti-racist fandom yields an easier community.",
+      "t": 973,
+      "quote": "Blaseball felt global both in the fiction and in the fan base but the characters it generated didn't so I wanted to fix that",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name research",
+      "kind": "technique",
+      "claim": "When sourcing real-world names from unfamiliar cultures, cross-reference many sources such as census data rather than trusting single sites like baby-name blogs.",
+      "detail": "Trinidad started with cultures already connected to baseball and expanded outward, researching how names are transcribed into English. Accuracy to real names was the goal.",
+      "t": 1163,
+      "quote": "when you are unfamiliar with language, you should cross reference as many sources as possible",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic seeding",
+      "kind": "technique",
+      "claim": "Adding names around repeating themes (animals, foods) gives a random pool internal consistency, like Magic: The Gathering card cycles, and says something about the world's naming culture.",
+      "detail": "Players can group thematically similar names rather than facing hundreds of unrelated ones. In fiction-heavy games, name patterns imply how parents name kids and how names pass down.",
+      "t": 1291,
+      "quote": "the kinds of name patterns you find that pop up in your world will tell you more about the world",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "happy accidents",
+      "kind": "example",
+      "claim": "Seeding themed name parts in Blaseball produced memorable coincidences: Beef Knight died and was replaced by Flan Prince, instantly creating backstory and fan speculation.",
+      "detail": "Trinidad added 'beef' hoping it might land on the Dallas Steaks; Zuri Shoelace was seeded hoping for the shoe-themed Charleston Shoe Thieves. Even misplaced, fans wanted to acquire such characters. When a generator outputs a hundred things, players connect the dots.",
+      "t": 1439,
+      "quote": "the death of beef knight replaced by flan prince who has a similarly themed name for reasons that are similar and one in a million chance",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "sampling and ratios",
+      "kind": "technique",
+      "claim": "Trinidad tuned Blaseball's name pool by repeatedly generating ten names, reading them aloud, and checking them against target ratios per ten.",
+      "detail": "Targets per ten: 1-2 absurd/comedic, 5-10 explicitly non-white, 9-10 fun to say, maybe one tongue twister. If too many were hard to pronounce he removed, changed or rebalanced entries; he preferred quick trial and error over writing a tagging program.",
+      "t": 1534,
+      "quote": "for every 10 names I wanted 1-2 to be absurd and comedic and 5-10 to sound explicitly non-white, and 9-10 to be fun to say",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "living content",
+      "kind": "warning",
+      "claim": "Generated name lists should be treated as living documents because names can acquire negative associations you couldn't predict.",
+      "detail": "A Blaseball surname matched a famous football player who made offensive comments about Black Lives Matter in 2020; fans asked for a change and the team obliged at no cost. Trinidad also recommends hiring sensitivity consultants when drawing on real cultures.",
+      "t": 1597,
+      "quote": "names can ask should change. They are susceptible to negative associations you couldn't imagine",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

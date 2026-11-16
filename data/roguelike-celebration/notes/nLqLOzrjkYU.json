@@ -1,0 +1,170 @@
+{
+  "id": "nLqLOzrjkYU",
+  "title": "Paul Dean - Picking up the Pieces: Building Story in a Roguelike World",
+  "speaker": "Paul Dean",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=nLqLOzrjkYU",
+  "talk_type": "design",
+  "summary": "Writer Paul Dean (Pacific Drive) delivers a deliberately non-linear talk, structured as rearrangeable fragments each opening 'My name is Paul and this is a picture of me...', arguing that narrative has rarely been truly linear and that roguelikes suit fragmentary, discoverable storytelling. Drawing on Captain Blood, Nuclear Throne, Stardew Valley, Slaughterhouse-Five, Pale Fire and Horizon Zero Dawn, he advocates brevity, unexplained ideas that pay off later, loose narratives with holes players fill, and lore as optional rewards for curious players. He describes his own process of writing in random order and iterating, and his work on Pacific Drive's bite-sized, non-essential lore and its card-deck fax machine. In Q&A he suggests a fixed intro then non-linear middle, and warns that voice-acted audio does not chop up well.",
+  "games": [
+    "Pacific Drive",
+    "Nuclear Throne",
+    "Captain Blood",
+    "Stardew Valley",
+    "Horizon Zero Dawn",
+    "Pentiment"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "suspense",
+      "kind": "principle",
+      "claim": "Narrative can introduce an idea without explaining it and pay it off later, creating suspense, as roguelikes often do; stories are not programs that must load all references up front.",
+      "detail": "Dean recalls a diary-format children's book that mentioned something unexplained; he flipped back looking for it but it was explained later. That taught him you don't have to explain everything at the start.",
+      "t": 206,
+      "quote": "Stories and narrative are not programming and you aren't loading in the DLL, libraries, and references up front",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "brevity",
+      "kind": "example",
+      "claim": "In Captain Blood, releasing a young alien on a planet without atmosphere triggered two or three lines of him saying he was suffocating and missed his parents before dying, a memorable moment discovered organically through gameplay.",
+      "detail": "Dean says it was the first game to make him cry; restarting and taking the alien to a different planet produced excited dialogue instead. He still remembers it 35 years later as proof good narrative need not be wordy.",
+      "t": 293,
+      "quote": "good narrative doesn't have to be wordy, complex or elaborate. In fact, particularly in a roguelike context,",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "brevity",
+      "kind": "example",
+      "claim": "Nuclear Throne's sassy single-line mid-level interstitials hint at the wider world and the character's feelings without compromising tone or pacing in a fast roguelike shooter.",
+      "detail": "Dean calls them lines you could miss if you look away, 'just the right amount' of worldbuilding for that genre, that don't waste your time.",
+      "t": 366,
+      "quote": "They don't compromise tone, pacing, don't waste your time and",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "loose narrative",
+      "kind": "principle",
+      "claim": "A loose narrative with gaps, like Stardew Valley's short conversations and parallel threads, invites players to build their own interpretations from what characters don't say.",
+      "detail": "Players discover relationships and secrets in various orders; the fanbase has extrapolated for a decade partly from what NPCs leave unsaid, and Dean wove his own life into a viral feature because the fabric had holes big enough to thread things through.",
+      "t": 436,
+      "quote": "the fabric of the narrative is loose with holes big enough to thread all sorts of things through",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "writing process",
+      "kind": "principle",
+      "claim": "Writers need not start at the start or know the ending; writing pieces in any order and stitching and iterating later is normal, while insisting on starting at the beginning is where people get stuck.",
+      "detail": "Dean wrote this talk's middle, start and end out of order, and on Pacific Drive began with item descriptions in a random place, redrafting for consistency with teammates' changes and evolving mechanics.",
+      "t": 571,
+      "quote": "one of the worst things you can do as a writer is believe you have to start at the start. The start is where people get stuck",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "justifying mechanics",
+      "kind": "technique",
+      "claim": "Writers can find complementary in-fiction explanations for gameplay facts, as Dean did for Pacific Drive's ubiquitous gasoline by making portable fuel essential in a world whose infrastructure keeps breaking down.",
+      "detail": "Like writing for collaborative tabletop sourcebooks, he described existing elements in supporting ways, and filled in lore about people's everyday lives: getting lost, resenting work, colleagues dying, practical jokes, falling in love.",
+      "t": 605,
+      "quote": "the constant break down of the world's infrastructure caused by the game's ever shifting word would make an essential power source",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "optional lore",
+      "kind": "principle",
+      "claim": "In a mechanics-first roguelike like Pacific Drive, lore should be bite-sized, non-essential rewards for curious players, never an obstacle that less interested players resent.",
+      "detail": "Dean assumed players wouldn't read lore, or would read it at random, so he kept it digestible and repeated key consistency. Writing complements gameplay rather than taking the limelight.",
+      "t": 682,
+      "quote": "It is not supposed to be an obstacle to enjoying the game's mechanics",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "appropriateness",
+      "kind": "principle",
+      "claim": "Writing in games is like drumming: what you leave out and when matters as much as what you include, and the amount should be appropriate to the game's tone and pace.",
+      "detail": "Dean contrasts Nuclear Throne's one-liners, which need no 'thunderous rock drummer', with Pacific Drive, where writing had to complement rather than ruin the rest of the team's work.",
+      "t": 694,
+      "quote": "The thing with a drumbeat is it as much about what and when you don't play as what and when you do",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "card-deck randomness",
+      "kind": "example",
+      "claim": "Pacific Drive's fax machine works like a deck of cards, yielding one unique strange story or message per use, rewarding explorers and encouraging further poking around.",
+      "detail": "Dean wanted to connect with players who go off the beaten path and give them reinforcing rewards and collectible tidbits.",
+      "t": 747,
+      "quote": "The fax machine works like a",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "influences",
+      "kind": "principle",
+      "claim": "Studying how other works are made (films, novels, music, games) is as important as studying results, because creative problem solving mirrors across media.",
+      "detail": "Dean studied Vonnegut's drafts of Slaughterhouse-Five as being as valuable as the book; he later recommends drawing greedily on everything and notes non-game hobbies feed into designers' games.",
+      "t": 795,
+      "quote": "studying people's process is as important as studying the end result",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "non-linear narrative",
+      "kind": "principle",
+      "claim": "Roguelikes are built on repetition, mirroring and parallels punctuated by novel discoveries that join a bigger picture, so players will encounter story elements in any order and authors need not treat linear narrative as necessary.",
+      "detail": "Dean ties this to Slaughterhouse-Five's unstuck-in-time moments gaining context side by side, and to Pacific Drive's design director wanting players to experiment and discover rather than be told everything up front.",
+      "t": 880,
+      "quote": "Roguelike games are so often about repetition, reinforcement, mirroring, and parallels but also about new moments of novelty",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "self-discovery",
+      "kind": "example",
+      "claim": "Pale Fire's unreliable narrator lets readers discover for themselves that they are being lied to, prompting them to flip back and check, the kind of figuring-out roguelike players love.",
+      "detail": "Dean cites a reader noticing a poem with an odd number of lines can't be in couplets; he himself hit a point where he had to thumb back to verify, which he valued because he discovered it himself.",
+      "t": 979,
+      "quote": "It is all about the realization that you cannot trust its narrator",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fragmentary lore",
+      "kind": "principle",
+      "claim": "A roguelike doesn't need to tell its whole story, or tell it linearly; like archaeology or a jigsaw, players can get the gist from partial fragments that increasingly make sense.",
+      "detail": "Dean cites Horizon Zero Dawn's side quests and lore collected in any order as an influence on Pacific Drive, filling out a world image that makes sense even if never completed. He kept lore short, snappy, relevant, varied and worth finding.",
+      "t": 1043,
+      "quote": "You don't have to tell a story, or let it unfold in a linear fashion for to make sense. You don't even need to tell the whole story",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "gating",
+      "kind": "technique",
+      "claim": "To give non-linear snippets some structure, use gating: a universal introductory section that teaches mechanics and key characters, then wide freedom in the middle.",
+      "detail": "Dean says Pacific Drive and many games do this; with fixed points there are a hundred ways between them, and how much hand-holding is a choice about how punishing or helpful you want to be.",
+      "t": 1513,
+      "quote": "I don't think it necessarily hurts to give yourself a universal start point and an introduction to mechanics there",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "voice acting",
+      "kind": "warning",
+      "claim": "Dean would not advise chopping up and procedurally rearranging recorded voice performance, because inflection is too organic and human to slice well.",
+      "detail": "Asked what doesn't work non-linearly, Dean named voiced audio first, mentioning he worked with Cari, a good voice director; even a chopped robot voice wouldn't work well, he thinks. He hedges that he would have to think more to find other examples.",
+      "t": 1579,
+      "quote": "I wouldn't advise if you are recording with voice actors, any voice audio or anything like that",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

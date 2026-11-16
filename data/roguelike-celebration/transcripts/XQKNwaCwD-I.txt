@@ -1,0 +1,54 @@
+Sraëka-Lillian - Procedural Phonology: Generating Name Generators
+Speaker: Sraëka-Lillian
+https://www.youtube.com/watch?v=XQKNwaCwD-I
+Year: 2021   Kind: talk   Captions: manual (en)
+
+## procgen phonology generating name generators
+
+[0:00:08] who will be talking about "The Cost of Magic" -- procedural phonology. Sraëka-Lillian: Good morning. It is a tremendous honor to talk about my all time favorite subtags with all my time favorite community. My name is Sraëka-Lillian and I am going to talk about random name generators and how we can use phonology to generate names. My goals are to introduce fundamental concepts clearly and precisely, to open a window into a world you might not know existed and highlight a thing I love. As a disclaimer, I am not an expert on phonology, never studied linguistic formally. I am a nerd who wanted to make a random naming generator which I have been working on on
+
+[0:01:12] and off for the past couple years and everything I know about phonology I have learned through that experience. My perspective might be informal so bear in mind this is just one count among many. Sometimes in works of fancy fiction, you have worlds with multiple nations or cultures and sometimes they speak different languages. When we give different characters and names that are identifiable as names that belong to the same language it ties them to culture and suggests the distinction of the cultures. If you are doing procgen work and generating arbitrarily many worlds with arbitrarily many
+
+## goals of name generators
+
+[0:02:05] culture and you want the names used in the cultures to reflect state cultural identities you need a way to generate names and generating random name generators is a great way to supply yourself with this. With this purpose in mind, we can name a couple of goals for our generators and the languages they represent. First their output should be varied. A name generator that only Jenn jet -- generates one name won't do the job or a generator that produces a 1,000 names that are distinct but similar. It is OK to have a couple similar names. English names survive John, June, Jan all in their rotation but if these were all the names we had it would get confusing. We want mostly distinct from other names. At the same time, the name generator should be cohesive.
+
+[0:03:09] Names within a language have a sense of sharing something in common which isn't necessarily evident in every pair of names but across larger order of names patterns of sound and shape occur. In this list of Latin masculine names you can see the sounds coming up and what is universal in these names. At the same time, the overall is the distinctiveness saying the patterns of sounds and structure consistent with the language should be different from the patterns and sounds of structure in other languages at hand. When you compare these Japanese masculine given names to the Latin ones earlier you see different sounds and clusters and so on. A language that is both internally cohesive and externally distinctive is likely to have
+
+[0:04:09] a strong sense of identity which is essential. And then on a functional level, we want the names each generator produces to feel intentionally formed. What this means precisely is a matter of interpretation but we at least want to keep names with generation errors to a minimum. We should hope that our names are generally pronounceable whether that pronunciation people come to is correct or not. If you can't come to any way to pronounce the name that's in front of you you will have a harder time sticking in memory and risks degenerating into noise and being forgotten.
+
+## what is phonology?
+
+[0:04:56] Phonology is a brand of linguistic concerning speech sounds and their relationship to each other specifically as they occur within a language. How do we break a language and speech up into different sounds? What sequences of sounds are allowed and which are forbidden? How do different sounds influence each other in proximity? And how do language sounds change over time? Phonology is not not concerned with the production of speech sounds as physical phenomenon. This is the concern of phonetics which is often relevant to phonology. Phonology helps us make name generators is a couple different ways. It helps us identify the different components that come together to make up the sound system of language and second it highlights the patterns that shape each of those components individually. Once we identify these components we can describe the basic shape of procedural for generating
+
+[0:05:59] a language which I will do next -- procedure -- and then we will take a closer look at each component and see what phonology can tell us about generating them individually.
+
+## basic structure
+
+[0:06:11] Our basic strategy is built around three components. To start naming language has to know what sounds or phonames are and this is called our phonomic library. And it combines how the sounds are distributed and arranged. We can generate syllabus and combine them to make multi-syllabic names. We might use additional techniques to smooth out the syllabus and this comes into play if we have complex names with with roots and suffices attached. Deciding on the language phonemic inventoryy is the first step.
+
+## phonemic inventory
+
+[0:07:17] There are more than 2,000 sounds across the language and the Roman alphabet in English has only 26 letters for us to work with. For the sake of keeping our workload manageable and our outputs readable there is a wisdom in keeping our master inventory small and mostly limiting it to sounds folks in the audience have prior intuition about how to pronounce already. For me this means not using a lot of accent marks which help distinguish sounds but also I think risk coming off as visual noise to a lot of English speakers not used to interpreting them. And then to keep things from feeling too English or European in general, I use a handful of non-English sounds. These all represent relatively common sounds worldwide but are still pronounced reasonably
+
+[0:08:18] close to the letters I use to spell them so they can add flavor without causing too much confusion. With a master inventory decided we can decide which sounds should be available in the specific language we are generating. There is a couple different databases online that can describe the prevalence of each sound across languages as individual sounds. We can use that to estimate the chance of each sound appearing independently in the generator. There are more sophisticated ways of doing this that mice produce more cohesive results but in practice the results are a little subtle. It is perfectly valid to select phonames independently and not worry about how they work to each
+
+## phonotactics
+
+[0:09:10] other. Phonotactics are about where sounds are allowed to appear structurally. Syllabus structure has a huge impact on the shape of the words. The traditional model is the onset, followed by the vowel portion called the nucleus and a constenant called coda. All languages allow codas and languages differ on other factors like whether onset and coda can include multiple constenants or occur at the end or middle or both. With syllabus structure established, we can ask questions about how frequently each sound in the language occurs and what context. Sometimes constants appear in one place more often than others.
+
+[0:10:10] Perhaps the H sound only appears in the onset and I think literally never in the coda which you can see in the great number of English words beginning with the sound compared to the complete absent of any at the end form. We can ask sounds about how sounds operate within the structure. Particularly important are constant clusters. Most languages are stricted and constants are allowed to touch so if we are not careful we can end up with contant soup.
+
+## morphology
+
+[0:11:02] Morphology describes how we create more complex words and these are called units of [indiscernible] and it isn't necessary to have multiple ones in a name but seeing elements reoccurring across different names can help in terms of structure which helps tell if there is an intentional order to how names are shaped. When two are combined to make a more complex words sometimes sounds change the boundary between them. We are free to ignore this area but we should be aware if you potentially put two sounds together that our touching in real language these meanings can result in complex changes to one or both sounds or to sounds surrounding them but I have learned that one of the most common results of these changes is just to delete one of the offending sounds entirely. I used to be hesitant to doing this but once I learned how prominent it was I wish I had
+
+[0:12:05] always known because you can solve a lot of problems by just deleting them.
+
+## concluding reflections
+
+[0:12:12] But no matter how well we answer our phonology questions we will still get some names that don't look right. We have a couple options when this happens. We can try to identify what we don't like about them and change the strategy or add safeguards to prevent them in the first place or we can try to embrace the weirdness of them. We ask be humble in making adjustments about -- in judgments about what names are normal because the possibility of language space is enormous and our exposure is quite limited oh specially for many of us who only speak English and our exposure to languages outside of English is heavily bias in favor of the handful of European and maybe Asian languages that we have the most contact with.
+
+[0:13:13] When we generate name that looks weird to us, we have the option to ask if that's something that might be normal. In another language, we don't have context for, or that could be normal or could have been normal in a language that exist in the past but no longer does or could still exist in a language that doesn't yet exist. This brings me to my final thought. When we are playing with language we don't have to feel beholden to submit to the real world. This is a generative art that has the potential to be creative, speculative or an endeavor that celebrates the real, unreal and potentially real right alongside with the actionable. Generating names is an art. As much as a science, an art can and should do more than reproduce established rules. That's I will know. Thanks for coming to my talk and have a lovely Roguelike Celebration. EMCEE: Thank you.
+
+[0:14:14] Love a lovely final slide. People in chat were definitely engaging and sharing lots of other things that reminded them of this. Sraëka-Lillian: I am thrilled to hear. EMCEE: It spawned a lot of conversation. Sraëka-Lillian: I think -- did I leave time for questions? EMCEE: You timed it just right.

@@ -1,0 +1,203 @@
+{
+  "id": "IaB7iQhts_c",
+  "title": "Glenn Wichman, Michael Toy & Ken Arnold - Rogue panel",
+  "speaker": "Glenn Wichman, Michael Toy & Ken Arnold",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=IaB7iQhts_c",
+  "talk_type": "panel",
+  "summary": "The three creators of Rogue reunite in a moderated Q&A about its origins. Michael Toy explains he wanted a game that could surprise its own author, unlike the text adventures he had played and written; Ken Arnold describes writing the curses library as a terminal-independent abstraction that made Rogue possible. The panel recounts playtesting in the UC Santa Cruz stat lab, adding starvation to stop players idling, the crude 3x3 room grid generator, spread via Bell Labs and the Berkeley Unix distribution, shared score files and cheating. Glenn Wichman closes by reframing permadeath as 'consequence persistence', needed so that unidentified items create real decisions.",
+  "games": [
+    "Rogue",
+    "Colossal Cave Adventure",
+    "Rog-O-Matic",
+    "Words with Friends",
+    "Mission Thunderbolt",
+    "Ananias",
+    "No Man's Sky",
+    "Beneath Apple Manor",
+    "Diablo"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue origins",
+      "kind": "history",
+      "claim": "Michael Toy made Rogue because authored text adventures cannot surprise their own author: once you write the puzzle, you already know the troll won't attack if you have the poison.",
+      "detail": "Toy loved playing Colossal Cave Adventure but found writing an adventure game boring to play himself. He wanted a game that kept the sense of wonder while he was also its author.",
+      "t": 79,
+      "quote": "how do i write a game so i can have that sense of wonder uh but also be the author",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "curses library",
+      "kind": "history",
+      "claim": "Ken Arnold wrote the curses library as a single abstraction over cursor-addressable terminals so programs did not need rewriting per terminal type, and Rogue could not have existed without it.",
+      "detail": "Arnold built on the terminal capability database Bill Joy had written for vi, which only vi could use. Toy and Wichman, on an ADM-3A terminal, used curses first for games like snake before asking whether they could make a graphical adventure game with it.",
+      "t": 347,
+      "quote": "i wanted a regular thing so that everything could work that way everything could be cursor addressable without needing to be rewritten for all these terminals",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii symbols",
+      "kind": "example",
+      "claim": "Rogue's letter-based monsters became frightening through play: lab players screamed when a 'T' appeared because after a while they saw a troll, not a letter.",
+      "detail": "Wichman recalls ten or more players in the UC Santa Cruz stat lab. The T looked no scarier than a B, but players read it as a troll, which struck him as amazing.",
+      "t": 541,
+      "quote": "you played it for a while and it was you didn't see a t on the screen you saw a troll",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "history",
+      "claim": "Rogue's creators had a constant community of playtesters in the college computer lab, who played each new feature immediately.",
+      "detail": "Wichman says he did not realise at the time how valuable this was: friends in the stat lab played every addition as soon as it went in, and roguelikes are hard to test because circumstances rarely repeat.",
+      "t": 467,
+      "quote": "we had a community of tests of game testers available to us all the time",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger",
+      "kind": "history",
+      "claim": "Rogue added starvation in response to player exploits: players were holding down the space bar to rest while away at lunch, which the designers had not anticipated.",
+      "detail": "The speaker (apparently Ken Arnold) says much of his engagement came from being surprised by player reactions, including clever exploits like weighting the space bar with a shoe.",
+      "t": 566,
+      "quote": "we introduced starvation because people you figured out how to take advantage of hanging you know putting your you know shoe on the space bar",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player perception",
+      "kind": "example",
+      "claim": "Players of Rogue invented patterns in the randomness, such as believing an algorithm made some games 'scroll heavy', when no such system existed.",
+      "detail": "The speaker found people personified the algorithms and constructed a world around them, which taught him how humans perceive and build the world around them.",
+      "t": 595,
+      "quote": "you must have this algorithm back there that said oh it's gonna be a scroll heavy game and we go no not even not even slightly",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player imagination",
+      "kind": "principle",
+      "claim": "Rogue's creators planned rich monster lives and ecology but found that simple rooms, letters and stats were enough because players imagined the rest; the design lesson was to get out of players' way.",
+      "detail": "They intended monsters to have their own ways of living, perhaps building their own dungeons, but once rooms, letters and stats were in place the game was effectively done because players were already creating those things in their minds.",
+      "t": 649,
+      "quote": "all the things that we were imagining people were creating in their mind and it was completely unnecessary right you just sort of had to get out of people's way",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "low bandwidth display",
+      "kind": "technique",
+      "claim": "Ken Arnold optimised Rogue for 300 baud play by drawing the inventory as a small window in the upper-right corner and repainting only that region instead of clearing and redrawing the whole screen.",
+      "detail": "At 30 characters per second, with cursor addressing alone costing four characters, full redraws were slow. Arnold also reduced keystrokes, such as needing fewer space presses after messages.",
+      "t": 728,
+      "quote": "put in the inventory in a little window there and then just repaint that small part of the screen",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "unpredictability",
+      "kind": "history",
+      "claim": "Ken Arnold made it a rule that every Rogue release would break Rog-O-Matic, the AI built to play Rogue, adding quirky unpredictability such as hallucination without changing core gameplay.",
+      "detail": "Arnold says he liked little things that made the game more unpredictable and quirky without altering the gameplay, and used them to force the Rog-O-Matic authors to keep adapting.",
+      "t": 777,
+      "quote": "i made it my rule that every release of rogue would break rogamatic",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster pursuit",
+      "kind": "technique",
+      "claim": "Glenn Wichman worked on Rogue monster pursuit so that when the player leaves a room, a chasing monster heads for the door rather than directly at the player.",
+      "detail": "Wichman also added special monster abilities in his Atari ST version, such as centaurs cursing your weapon after hitting you, which exists only in that version.",
+      "t": 846,
+      "quote": "you leave the room then the monster needs to stop following you and figure out where the door is instead",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room grid",
+      "kind": "history",
+      "claim": "Rogue's level generator is a tic-tac-toe board with one randomly placed room per square, because Michael Toy did not yet know how to place random rooms and guarantee a connected graph.",
+      "detail": "Toy says he is embarrassed by how poor the generation is, having not yet taken the relevant computer science class. The moderator recalls him describing early experiments as loading paint into a gun and spraying the wall.",
+      "t": 901,
+      "quote": "it's a tic tac toe board with a room randomly placed in each square",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "niche appeal",
+      "kind": "principle",
+      "claim": "The panel argues roguelikes are a niche for players who want to think hard, and that something inherently good does not need mass-market appeal.",
+      "detail": "Wichman notes roguelikes aren't twitchy and suit people who want something hard. Another panelist says Rogue was sold in boxes and failed to reach a mass market, so 'that ship has sailed', and that is fine.",
+      "t": 1097,
+      "quote": "you can make something that has quality that's inherent that's beautiful that doesn't appeal to everybody",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "distribution",
+      "kind": "history",
+      "claim": "Rogue spread because a binary reached Bell Labs (where it was renamed UBL) and it was then included in the 4.2 Berkeley Unix distribution, making it widely played on campuses without earning its authors money.",
+      "detail": "The creators were shocked anyone outside their lab played it. Wichman advises that if you can get your game shipped with an operating system, take it.",
+      "t": 1331,
+      "quote": "if you got the operating system you got our game which if you can get that kind of distribution",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "score files",
+      "kind": "principle",
+      "claim": "A shared high-score file changed Rogue's design priorities: cheating for your own fun is fine, but competing against others made fairness and save-file security matter.",
+      "detail": "The speaker says changes broke players' save files, so they knew they had a real player base. They tried to keep things clean despite neither understanding security; Ken Thompson reportedly cheated by copying save files on a mounted disk and replaying.",
+      "t": 1256,
+      "quote": "if you're competing against other people right that is a whole nother thing entirely and it's unfair",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "adaptive monsters",
+      "kind": "open-question",
+      "claim": "One Rogue creator says that had he kept working, he would have used neural networks to make monsters that get smarter as you fight them.",
+      "detail": "Asked what he wished the genre would do, he named learning monsters and entire generated worlds, noting the latter is already being done by No Man's Sky.",
+      "t": 1527,
+      "quote": "i wanted to to have neural networks um and monsters that got smarter uh as you fought them",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Glenn Wichman argues permadeath should be called 'consequence persistence': Rogue made actions irreversible not to be mean, but so that unidentified items create real decisions.",
+      "detail": "If players could save, drink an unknown potion and restore when it is bad, the whole mystery-item mechanic disappears. The rule is that once a consequence has happened it cannot be undone; Wichman asks the audience to find a better name.",
+      "t": 1712,
+      "quote": "permadeath is an example of of consequence persistence um and so this is what this is the name that we need",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Rogue's irreversibility was meant to make the game more fun and immersive by making choices matter, and the good outcomes are just as permanent as the bad ones.",
+      "detail": "Following Wichman's point, the panel adds that the aim was not to make the game more painful; the auto-captions do not show whether Wichman or another panelist says this.",
+      "t": 1774,
+      "quote": "the good stuff is just as permanent as the bad stuff",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "source code",
+      "kind": "history",
+      "claim": "A post-5.3 Rogue source version, recovered from a UC San Francisco backup, is on SourceForge under the project 'rogue' but does not run because it was taken mid-development.",
+      "detail": "The speaker invites anyone to debug it so the real Rogue source could run again.",
+      "t": 1809,
+      "quote": "it is just post 5.3 and it doesn't quite work because they stole it in the middle of development",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,140 @@
+{
+  "id": "kvgKKRLil_8",
+  "title": "Dylan White - The Cost of Magic",
+  "speaker": "Dylan White",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=kvgKKRLil_8",
+  "talk_type": "design",
+  "summary": "Dylan White, developer of Rift Wizard, gives a lightning talk on spellcasting resource mechanics in roguelikes and RPGs. He argues resource systems are hard to change once content is built on them, and frames them with two questions: renewability (how easily spent resources come back) and fungibility (whether spells draw on one shared pool or separate ones). Each axis trades off different things: frequent satisfying casting versus careful strategic spending, and optimising one pool versus a wider variety of actions. He illustrates with Dungeon Crawl Stone Soup's mana and piety, cooldowns, D&D spell slots and cards, and warns that time (turns) is an implicit resource that can dominate the explicit ones.",
+  "games": [
+    "Rift Wizard",
+    "Dungeon Crawl Stone Soup",
+    "Diablo III",
+    "World of Warcraft",
+    "Tales of Maj'Eyal",
+    "Dungeons & Dragons"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "action selection",
+      "kind": "principle",
+      "claim": "Roguelike turns typically offer three kinds of choice: move to reposition, attack to make a small change to the board, or spend resources to make a big change to the game state, which is what spellcasting is regardless of setting.",
+      "detail": "White frames spellcasting broadly: in a sci-fi game the same role may be played by items or devices. What matters is that these options consume a resource and then change the game state substantially.",
+      "t": 106,
+      "quote": "you have the option to make a big change to the game state while expending a bunch of resources and that's what i would consider spell casting",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "resource mechanics",
+      "kind": "warning",
+      "claim": "A game's spellcasting resource mechanics should be decided carefully up front, because spells, items and skills get designed around them and changing them later means throwing away a lot of work.",
+      "detail": "White notes there are infinite variations (mana bars, cooldowns, cards, regeneration rates, draw rates), so he distilled two questions designers should answer before committing to one.",
+      "t": 151,
+      "quote": "it's very hard to change them retroactively because you may have designed a lot of you may have designed spells you may have designed items",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "resource mechanics",
+      "kind": "principle",
+      "claim": "Two questions characterise any spellcasting resource system: how resources are renewed (renewability) and whether different spells share the same resource (fungibility).",
+      "detail": "White says answering these for a game you are playing or designing tells you a lot about it, and that the answers strongly shape how the game feels.",
+      "t": 232,
+      "quote": "how are your spell casting resources renewed and number two do different spells use the same resources or do they use different resources",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "renewability",
+      "kind": "principle",
+      "claim": "Highly renewable spell resources let players cast often, which is most rewarding in games with strong audiovisual feedback; making casting scarce there feels like missing out on the fun part.",
+      "detail": "White uses Diablo III, not technically a roguelike, as the most satisfying game in which to cast a spell, with great particles, sound and a heavy sense of doing something big. The easier resources come back, the more players spend them and interact with the game.",
+      "t": 350,
+      "quote": "the easier it is to get your resources back the more you get to spend them and the more you get to interact with the game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "renewability",
+      "kind": "principle",
+      "claim": "Low renewability of spell resources forces players to think hard about every action, suiting low-graphics strategic roguelikes like Rift Wizard and Dungeon Crawl Stone Soup that trade some look-and-feel satisfaction for strategy.",
+      "detail": "White says players will always ask for both easier and harder resource renewal, and there is no easy conclusion. If the goal is strategic thinking and you are willing to sacrifice some satisfaction, low renewability may be the way to go.",
+      "t": 385,
+      "quote": "when it's hard to get them back you have to think really hard about every action that you're going to take",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "fungibility",
+      "kind": "principle",
+      "claim": "With highly fungible resources (one mana pool for all spells) players spend their time optimising that pool, while with low fungibility (separate charges per spell) using one spell doesn't preclude another, so players take a wider variety of actions.",
+      "detail": "White's extremes are a mana bar that every spell draws on versus spells with independent charges where casting fireball has no bearing on lightning bolt. Fungibility dictates how players think about action selection.",
+      "t": 494,
+      "quote": "if your game has low fungibility then the k the player has all of these different actions that they can take",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "fungibility",
+      "kind": "open-question",
+      "claim": "The fungibility choice is a trade-off between the strategic depth of choosing the best tool for a situation (high fungibility) and the gameplay variety of making players do different things (low fungibility).",
+      "detail": "White says the drawback of pushing players toward different actions is that they are no longer choosing which action to take. He declines to name a correct answer; the point is to understand the consequence of each direction.",
+      "t": 530,
+      "quote": "do i want the strategic depth of the pla of player agency and letting players uh evaluate a situation and think which tool is best",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "layered resources",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup layers two resource systems: fungible, quickly renewing mana for spells, and piety for god powers, which renews slowly and has fewer uses, giving the benefits of both high and low fungibility.",
+      "detail": "Mana comes back after walking a few turns; piety comes from pleasing your god, for example by killing its enemies or exploring. White says layering two resource systems is a very common trick in game resource design.",
+      "t": 636,
+      "quote": "you have these two different resource systems so you get you get the benefits of high fungibility and low fungibility in the same game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cooldowns",
+      "kind": "technique",
+      "claim": "A cooldown system can be understood as a separate tiny mana bar per spell: very easy to renew since it refills automatically, and with zero fungibility since one spell's cooldown can't pay for another.",
+      "detail": "White cites MMOs such as World of Warcraft and the roguelike Tales of Maj'Eyal as cooldown users. He classes D&D memorised spell slots as zero fungibility too, and cards as zero fungibility usually with high renewability through drawing.",
+      "t": 665,
+      "quote": "you can think of a cooldown system as a little mana bar for each spell like each spell has its own mana bar which is the cooldown timer",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "time as resource",
+      "kind": "warning",
+      "claim": "Time (or turns) is an implicit, fungible, constantly renewing resource that cannot be hoarded, and in a turn-based game it can matter more than the explicit spell resources.",
+      "detail": "White says this snuck up on him in Rift Wizard: players were reluctant to use many spells because they didn't feel worth a turn. The lesson is to think carefully about time and look for other implicit resource systems you didn't realise you had.",
+      "t": 788,
+      "quote": "i found in rift wizard that there are a lot of spells that people are reluctant to use because they didn't feel like they were worth a turn",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "resource mechanics",
+      "kind": "principle",
+      "claim": "There is no single correct resource system; designers need to know what their resource systems are, what behaviour they encourage, and how the cost of actions shapes the game's feel.",
+      "detail": "White's closing takeaway deliberately avoids prescribing a particular system.",
+      "t": 825,
+      "quote": "you should think about what your research system is encouraging your players to do",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "piety",
+      "kind": "example",
+      "claim": "In Dungeon Crawl Stone Soup, Trog's summon consumes a large share of the piety bar and scales with current piety, so every encounter becomes a decision about whether to push through or spend it; White finds Xom, the god with no piety mechanic, the most boring.",
+      "detail": "Answering a Q&A question about his favourite resource system outside his own game, White singles out DCSS piety. Even this simple act of weighing whether to 'do the thing' or mash through an encounter is what he finds interesting and satisfying.",
+      "t": 919,
+      "quote": "he has this summon that takes like a really big portion of your piety bar and its strength is actually determined by how much piety you have",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

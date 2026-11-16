@@ -1,0 +1,700 @@
+{
+ "id": "xgBGrgucH2s",
+ "url": "https://www.youtube.com/watch?v=xgBGrgucH2s",
+ "title": "Duke Dougal - My 30 year quest to find a lost Roguelike",
+ "speaker": "Duke Dougal",
+ "talk_title": "My 30 year quest to find a lost Roguelike",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 679,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nDuke is a programmer from Melbourne, Australia with too many vintage computers. In this lightning talk he tells the remarkable story of how in 1979 at age 12, he and his brother played an early Roguelike called \"Wilderness\" on the Exidy Sorcerer. As an adult he searched for 30 years to find it. The quest was recently fulfilled and the great treasure found.\n\nFind him on Twitter: https://twitter.com/bootrino\nCheck out Wilderness yourself! https://github.com/dukedougal/wilderness",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the quest"
+  },
+  {
+   "start": 34,
+   "title": "Origins at school"
+  },
+  {
+   "start": 175,
+   "title": "Locating the lost game"
+  },
+  {
+   "start": 336,
+   "title": "Playing original Wilderness"
+  },
+  {
+   "start": 537,
+   "title": "Commodore 64 version"
+  },
+  {
+   "start": 640,
+   "title": "Conclusion and mystery"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1399,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 11.19,
+   "d": 5.9,
+   "text": "Our last talk of the day is Duke Dougal who is going to talk about his search for a long"
+  },
+  {
+   "t": 17.09,
+   "d": 1.69,
+   "text": "lost game."
+  },
+  {
+   "t": 18.78,
+   "d": 3.77,
+   "text": ">> Thanks so much."
+  },
+  {
+   "t": 22.55,
+   "d": 1.41,
+   "text": "Lost in the wilderness."
+  },
+  {
+   "t": 23.96,
+   "d": 9.04,
+   "text": "This is the story of my 40 years quest to find wilderness a 1979 Roguelike."
+  },
+  {
+   "t": 33.0,
+   "d": 7.5,
+   "text": "The story begins of course back in 1979 when I had just started high school."
+  },
+  {
+   "t": 40.5,
+   "d": 6.27,
+   "text": "I was 11 years old and I was there with my older brother Paul who was about 13."
+  },
+  {
+   "t": 46.77,
+   "d": 5.21,
+   "text": "He was the next year level up and you can see here in the picture this is the high school"
+  },
+  {
+   "t": 51.98,
+   "d": 2.18,
+   "text": "that we went to."
+  },
+  {
+   "t": 54.16,
+   "d": 3.25,
+   "text": "It looks more like Hogwarts than it does a high school."
+  },
+  {
+   "t": 57.41,
+   "d": 7.7,
+   "text": "There was a church that had been converted into high school so that was a bit magical"
+  },
+  {
+   "t": 65.11,
+   "d": 4.61,
+   "text": "but one thing that was really magical was the science teacher."
+  },
+  {
+   "t": 69.72,
+   "d": 2.21,
+   "text": "He was a real character."
+  },
+  {
+   "t": 71.93,
+   "d": 6.45,
+   "text": "A guy with a big bushy beard, excentric and had a passion for teaching science."
+  },
+  {
+   "t": 78.38,
+   "d": 7.3,
+   "text": "He had a science room that was full of test tubes and vander graph generators and all"
+  },
+  {
+   "t": 85.68,
+   "d": 2.93,
+   "text": "sorts of weird stuff."
+  },
+  {
+   "t": 88.61,
+   "d": 7.63,
+   "text": "One of things that he did was that he actually bought with his own money a personal computer."
+  },
+  {
+   "t": 96.24,
+   "d": 5.99,
+   "text": "Back in 1979 in Australia most people had never even heard of what a computer was so"
+  },
+  {
+   "t": 102.23,
+   "d": 4.72,
+   "text": "it was completely extraordinary this science teacher had bought one."
+  },
+  {
+   "t": 106.95,
+   "d": 4.44,
+   "text": "It would have cost him about a month worth of his own salary and he brought it into the"
+  },
+  {
+   "t": 111.39,
+   "d": 1.84,
+   "text": "school for the kids to use."
+  },
+  {
+   "t": 113.23,
+   "d": 3.96,
+   "text": "He was trusting enough for the kids to use it."
+  },
+  {
+   "t": 117.19,
+   "d": 5.86,
+   "text": "Where it was located in the school is you would go into the great hall you see and up"
+  },
+  {
+   "t": 123.05,
+   "d": 8.45,
+   "text": "to the back of the hall and there was an alter there and the behind the alter was there was"
+  },
+  {
+   "t": 131.5,
+   "d": 9.44,
+   "text": "a set of stairs and at the bottom of the set of stairs was the room called the cookers"
+  },
+  {
+   "t": 140.94,
+   "d": 4.55,
+   "text": "nest and inside the cookers nest taus computer."
+  },
+  {
+   "t": 145.49,
+   "d": 1.88,
+   "text": "The computer was a fabulous machine."
+  },
+  {
+   "t": 147.37,
+   "d": 4.87,
+   "text": "It was a sorcery computer which was a Z80 machine."
+  },
+  {
+   "t": 152.24,
+   "d": 1.69,
+   "text": "No color, no sound."
+  },
+  {
+   "t": 153.93,
+   "d": 1.0,
+   "text": "Black and white."
+  },
+  {
+   "t": 154.93,
+   "d": 1.0,
+   "text": "No graphics."
+  },
+  {
+   "t": 155.93,
+   "d": 8.63,
+   "text": "It was not much to ride home about but we absolutely loved it."
+  },
+  {
+   "t": 164.56,
+   "d": 5.53,
+   "text": "Paul and I and all our nerdy friends would spend as much time as we possibly could in"
+  },
+  {
+   "t": 170.09,
+   "d": 5.0,
+   "text": "the cooker nest using the computer, the and writing games."
+  },
+  {
+   "t": 175.09,
+   "d": 9.64,
+   "text": "Wilderness was one of the games and was everything you would recognize to be a Roguelike."
+  },
+  {
+   "t": 184.73,
+   "d": 10.77,
+   "text": "It was magic, casting spells and scrolls, finding treasure, wandering through the wilderness,"
+  },
+  {
+   "t": 195.5,
+   "d": 3.92,
+   "text": "encountering random monsters, leveling up and hit points."
+  },
+  {
+   "t": 199.42,
+   "d": 1.07,
+   "text": "It was terrific."
+  },
+  {
+   "t": 200.49,
+   "d": 10.42,
+   "text": "But of course, Paul and I ended up leaving that school and moved on to other things."
+  },
+  {
+   "t": 210.91,
+   "d": 4.8,
+   "text": "And the sourcery became an obsolete computer but over the years Paul and I continued to"
+  },
+  {
+   "t": 215.71,
+   "d": 6.34,
+   "text": "speak about wilderness and were nostalgic for wilderness."
+  },
+  {
+   "t": 222.05,
+   "d": 6.11,
+   "text": "What we did was we continued to talk about it."
+  },
+  {
+   "t": 228.16,
+   "d": 5.11,
+   "text": "I searched for Wilderness for many years and there was no sign of it."
+  },
+  {
+   "t": 233.27,
+   "d": 8.07,
+   "text": "I would post messages in the forums and you can see there is a picture I found a YouTube"
+  },
+  {
+   "t": 241.34,
+   "d": 9.34,
+   "text": "video where a guy made a video of his types and one said Wilderness so I knew it was out"
+  },
+  {
+   "t": 250.68,
+   "d": 1.0,
+   "text": "there."
+  },
+  {
+   "t": 251.68,
+   "d": 2.36,
+   "text": "I posted a message to the thread and he didn't reply."
+  },
+  {
+   "t": 254.04,
+   "d": 11.4,
+   "text": "I started collecting vintage computers and did it for 15 years with no sign of one turning"
+  },
+  {
+   "t": 265.44,
+   "d": 1.0,
+   "text": "up."
+  },
+  {
+   "t": 266.44,
+   "d": 6.59,
+   "text": "Eventually one day, I saw on a local classified sites one came up for sale and it was only"
+  },
+  {
+   "t": 273.03,
+   "d": 1.0,
+   "text": "down the road."
+  },
+  {
+   "t": 274.03,
+   "d": 5.67,
+   "text": "I went down the road, gave him the money, put the equipment in my car and sat there"
+  },
+  {
+   "t": 279.7,
+   "d": 5.88,
+   "text": "and felt like my God, I may have found Wilderness after all these years."
+  },
+  {
+   "t": 285.58,
+   "d": 1.76,
+   "text": "It was an incredible find."
+  },
+  {
+   "t": 287.34,
+   "d": 6.74,
+   "text": "It wasn't just the X80 computer but the expansion unit."
+  },
+  {
+   "t": 294.08,
+   "d": 1.61,
+   "text": "It was two disk drives."
+  },
+  {
+   "t": 295.69,
+   "d": 2.75,
+   "text": "A green screen monitor and a whole bunch of floppy disks."
+  },
+  {
+   "t": 298.44,
+   "d": 9.66,
+   "text": "I took it all back home and turned it on and bang pop and the smell of smoke and, of course,"
+  },
+  {
+   "t": 308.1,
+   "d": 6.39,
+   "text": "the 40-year old capacitors are not survived, so I had to send the machine off to get it"
+  },
+  {
+   "t": 314.49,
+   "d": 5.44,
+   "text": "repaired and when I got it back, I had to try again to get it fired up."
+  },
+  {
+   "t": 319.93,
+   "d": 5.93,
+   "text": "I got the machine fired up and started having a look through the disks."
+  },
+  {
+   "t": 325.86,
+   "d": 7.35,
+   "text": "Of course, fortunately on one of the disk there was a file called wilder.dos and I knew"
+  },
+  {
+   "t": 333.21,
+   "d": 1.32,
+   "text": "it was found."
+  },
+  {
+   "t": 334.53,
+   "d": 2.17,
+   "text": "There it was."
+  },
+  {
+   "t": 336.7,
+   "d": 4.49,
+   "text": "After 40 years I had found Wilderness."
+  },
+  {
+   "t": 341.19,
+   "d": 4.6,
+   "text": "Where found by brother Paul who lives in London and is watching today."
+  },
+  {
+   "t": 345.79,
+   "d": 9.04,
+   "text": "I said Paul I found Wilderness and he couldn't believe I had found it and gone to the trouble"
+  },
+  {
+   "t": 354.83,
+   "d": 15.07,
+   "text": "of digging it up and I had to write a file transfer program to get it off the computer."
+  },
+  {
+   "t": 369.9,
+   "d": 3.51,
+   "text": "Let's have a look at what Wilderness is like."
+  },
+  {
+   "t": 373.41,
+   "d": 5.18,
+   "text": "Let's play wilderness."
+  },
+  {
+   "t": 378.59,
+   "d": 4.36,
+   "text": "We will talk in run because it is a basic program."
+  },
+  {
+   "t": 382.95,
+   "d": 5.21,
+   "text": "We will select beginner because as far as Roguelikes go this is a brutally difficult"
+  },
+  {
+   "t": 388.16,
+   "d": 1.0,
+   "text": "game."
+  },
+  {
+   "t": 389.16,
+   "d": 1.0,
+   "text": "We have good stuff."
+  },
+  {
+   "t": 390.16,
+   "d": 11.49,
+   "text": "The way you play the game is hit A to advance through the wilderness."
+  },
+  {
+   "t": 401.65,
+   "d": 1.31,
+   "text": "It paints that little map."
+  },
+  {
+   "t": 402.96,
+   "d": 5.7,
+   "text": "You can see you are the person in the middle of the map and you are surrounded by trees."
+  },
+  {
+   "t": 408.66,
+   "d": 4.05,
+   "text": "As you advance through the Wilderness, you can see other things appear on the map."
+  },
+  {
+   "t": 412.71,
+   "d": 2.95,
+   "text": "That was a U which was an entrance to the underworld."
+  },
+  {
+   "t": 415.66,
+   "d": 2.34,
+   "text": "The F indicate the monster."
+  },
+  {
+   "t": 418.0,
+   "d": 2.6,
+   "text": "We will type ID to identify the monster."
+  },
+  {
+   "t": 420.6,
+   "d": 2.91,
+   "text": "They are bats."
+  },
+  {
+   "t": 423.51,
+   "d": 4.96,
+   "text": "Let's attack with our sword."
+  },
+  {
+   "t": 428.47,
+   "d": 2.47,
+   "text": "We killed a bat and went up a level."
+  },
+  {
+   "t": 430.94,
+   "d": 5.25,
+   "text": "What the you can do is type in AX to see the experience levels that you need to go up and"
+  },
+  {
+   "t": 436.19,
+   "d": 4.35,
+   "text": "how many experience points you need."
+  },
+  {
+   "t": 440.54,
+   "d": 5.0,
+   "text": "You can type in A0 to get a list of all monsters in the game."
+  },
+  {
+   "t": 445.54,
+   "d": 6.79,
+   "text": "There is all kinds of weird ones."
+  },
+  {
+   "t": 452.33,
+   "d": 12.72,
+   "text": "There is also -- we can continue through the wilderness"
+  },
+  {
+   "t": 465.05,
+   "d": 7.7,
+   "text": "and there is an entrance to the underworld and we will type ID to enter the under world."
+  },
+  {
+   "t": 472.75,
+   "d": 2.05,
+   "text": "Entrance to underworld found."
+  },
+  {
+   "t": 474.8,
+   "d": 2.62,
+   "text": "Going down."
+  },
+  {
+   "t": 477.42,
+   "d": 3.93,
+   "text": "Yes we are."
+  },
+  {
+   "t": 481.35,
+   "d": 6.27,
+   "text": "Now, the underworld in wilderness is a strange thing because it is very much like the old"
+  },
+  {
+   "t": 487.62,
+   "d": 2.82,
+   "text": "game hunt the whompers."
+  },
+  {
+   "t": 490.44,
+   "d": 8.09,
+   "text": "When you land in a room you have to hit ID to see if there is other monsters."
+  },
+  {
+   "t": 498.53,
+   "d": 4.95,
+   "text": "M slash and the room number to go to a different room number."
+  },
+  {
+   "t": 503.48,
+   "d": 2.43,
+   "text": "This room has four big worms in it."
+  },
+  {
+   "t": 505.91,
+   "d": 4.25,
+   "text": "We are going to be in big trouble unless we can cast magic to sort them out."
+  },
+  {
+   "t": 510.16,
+   "d": 2.82,
+   "text": "Let's read a scroll."
+  },
+  {
+   "t": 512.98,
+   "d": 4.89,
+   "text": "We will read a power wood killed scroll."
+  },
+  {
+   "t": 517.87,
+   "d": 8.68,
+   "text": "The power wood killed four greeblies."
+  },
+  {
+   "t": 526.55,
+   "d": 1.94,
+   "text": "That is awesome."
+  },
+  {
+   "t": 528.49,
+   "d": 3.31,
+   "text": "We will search."
+  },
+  {
+   "t": 531.8,
+   "d": 2.95,
+   "text": "That is a quick look at what Wilderness is about."
+  },
+  {
+   "t": 534.75,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 535.75,
+   "d": 10.0,
+   "text": "As a bonus, one other thing is that Paul and I actually a few years later in 1984, mostly"
+  },
+  {
+   "t": 545.75,
+   "d": 5.51,
+   "text": "Paul wrote a version of wilderness for our own home computer which was a Commodore 64."
+  },
+  {
+   "t": 551.26,
+   "d": 1.99,
+   "text": "I helped Paul write it."
+  },
+  {
+   "t": 553.25,
+   "d": 8.75,
+   "text": "It was preserved because I sent a printout who printed it in a magazine and I kept a"
+  },
+  {
+   "t": 562.0,
+   "d": 2.88,
+   "text": "copy for all of the years."
+  },
+  {
+   "t": 564.88,
+   "d": 8.12,
+   "text": "For the Roguelike Celebration 2020 I added into a mushine and edited to get all the bugs"
+  },
+  {
+   "t": 573.0,
+   "d": 3.5,
+   "text": "out and got it running just to give you a quick demo."
+  },
+  {
+   "t": 576.5,
+   "d": 6.04,
+   "text": "Let's have a quick look at wilderness for the 64."
+  },
+  {
+   "t": 582.54,
+   "d": 12.36,
+   "text": "This is a rapid look at the c-64 version of wilderness built by Paul and I on the C-64"
+  },
+  {
+   "t": 594.9,
+   "d": 5.21,
+   "text": "that we eventually got at home."
+  },
+  {
+   "t": 600.11,
+   "d": 2.34,
+   "text": "Let's move through the Wilderness."
+  },
+  {
+   "t": 602.45,
+   "d": 5.18,
+   "text": "It paints a similar map to Wilderness."
+  },
+  {
+   "t": 607.63,
+   "d": 3.63,
+   "text": "Person in the center and trees all around."
+  },
+  {
+   "t": 611.26,
+   "d": 13.7,
+   "text": "You move through the wildernize -- wilderness, monsters are likely to appear."
+  },
+  {
+   "t": 624.96,
+   "d": 5.59,
+   "text": "We killed the greeblie and let's keep moving through the Wilderness."
+  },
+  {
+   "t": 630.55,
+   "d": 11.27,
+   "text": "That is the C-64 version of Wilderness that Paul and I built way back in 1984."
+  },
+  {
+   "t": 641.82,
+   "d": 4.37,
+   "text": ">> And the final mystery, who wrote Wilderness?"
+  },
+  {
+   "t": 646.19,
+   "d": 1.32,
+   "text": "I don't think we will ever know."
+  },
+  {
+   "t": 647.51,
+   "d": 5.62,
+   "text": "I couldn't mind it in all of my research and nothing in the source code to indicate who"
+  },
+  {
+   "t": 653.13,
+   "d": 1.0,
+   "text": "wrote it."
+  },
+  {
+   "t": 654.13,
+   "d": 4.92,
+   "text": "The source code is on GitHub if you want to have a look."
+  },
+  {
+   "t": 659.05,
+   "d": 5.81,
+   "text": "Thanks for listening and happy questing."
+  },
+  {
+   "t": 664.86,
+   "d": 8.69,
+   "text": "EMCEE: People in the chat were very excited and they are going to look at the sources"
+  },
+  {
+   "t": 673.55,
+   "d": 5.18,
+   "text": "on GitHub."
+  }
+ ]
+}

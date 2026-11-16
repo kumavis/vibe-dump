@@ -1,0 +1,109 @@
+{
+  "id": "KKwgKTbiEY0",
+  "title": "Matt Ritche - Tips for Finishing Your Video Games",
+  "speaker": "Matt Ritchie",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=KKwgKTbiEY0",
+  "talk_type": "postmortem",
+  "summary": "Hobbyist developer Matt Ritchie, who works on the open-world science-fantasy roguelike Axu in his spare time, gives a short talk on managing scope in long part-time projects. He describes past failed projects (shifting genres, unreliable collaborators) and offers tips: know why you make games, cut anything not serving the core, build moddable systems layer by layer, add something new every day, don't restart from scratch, and don't treat any definition of roguelike as gospel. Q&A touches on motivation and rotating between art, systems and content work.",
+  "games": [
+    "Axu",
+    "Caves of Qud",
+    "ADOM",
+    "Elona",
+    "The Binding of Isaac"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "example",
+      "claim": "Axu's world map is a 200 by 200 grid where each tile opens into a 45 by 30 local map, a scale Ritchie cites as why the part-time project has taken four years.",
+      "detail": "The game has a persistent procedural open world with static and randomized maps, a limb system, traits and proficiencies, and was about sixty percent done after four years of part-time development.",
+      "t": 144,
+      "quote": "a 200 by 200 grid of tiles that makes up the world map and each one of these ones can be entered for a 45 by 30 grid",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "failed projects",
+      "kind": "warning",
+      "claim": "Ritchie's earlier projects failed by repeatedly changing genre (survival game to Binding of Isaac-like roguelite) and by depending on collaborating artists who never delivered.",
+      "detail": "His first Unity game took multiple years and became 'a mess'; a 3D platformer ended with only his programmer art because the artists did nothing.",
+      "t": 188,
+      "quote": "I started working with two artists which is a big mistake again",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "motivation",
+      "kind": "principle",
+      "claim": "To sustain motivation on a long project, know why you are making the game (creativity, money, challenge, learning) and who it is for, and know why you abandoned past projects.",
+      "detail": "Ritchie lists lack of time, lack of motivation, failed ideas and scope creep as reasons projects get put down. His own drivers are creativity, challenge and learning, since donations earned about $400 in two years.",
+      "t": 246,
+      "quote": "you need to know why you're making your game and who you're making your game for",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "principle",
+      "claim": "In a large project, always adhere to the core of the game and cut anything that doesn't add to it.",
+      "detail": "Ritchie calls scope his nemesis and says he builds huge games because he never expects to finish; his discipline is cutting non-core features.",
+      "t": 288,
+      "quote": "you have to always adhere to the core of the game always if it doesn't add to the core of",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modding",
+      "kind": "technique",
+      "claim": "Build large games to be easy to modify from the start, e.g. with a mod system giving modders the same tools as the developer, and build layer by layer like a pyramid rather than a tall tower.",
+      "detail": "Ritchie did this in Axu; the pyramid image means build a broad foundation so the structure doesn't fall over.",
+      "t": 308,
+      "quote": "start out with something maybe like a mod system that's what I've done in my game so the modders have the tools that I have",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "daily progress",
+      "kind": "principle",
+      "claim": "Add something new every day you work on a game, even small; endless tweaking and premature optimisation produce no progress.",
+      "detail": "Ritchie says tweaked code will be replaced anyway. Even one hour a day, about the time spent watching TV, makes a difference.",
+      "t": 326,
+      "quote": "you want to add something new every day that you're working on it even if it's small",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "restarting",
+      "kind": "warning",
+      "claim": "Don't throw away a project to start over because you've learned enough to do it better; keep the existing code malleable and work with it.",
+      "detail": "Ritchie sees many developers fall into this pitfall of restarting after learning.",
+      "t": 341,
+      "quote": "do not start all over again because you can do it better faster",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike definition",
+      "kind": "principle",
+      "claim": "Don't treat any interpretation of 'roguelike' as gospel or make a roguelike just to make one; make a fun game with your own spin, inspired by roguelikes if you like.",
+      "detail": "Ritchie ties this to a preceding speaker's point and urges developers to have fun themselves.",
+      "t": 364,
+      "quote": "don't treat any roguelike interpretation as gospel",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "task rotation",
+      "kind": "technique",
+      "claim": "Rotating daily work between art, system code and new content like enemies keeps a solo developer's work fresh and avoids getting stuck in a rut.",
+      "detail": "Asked how he picks what to do in his daily hour, Ritchie says he diversifies; he does most art himself with an intermittent artist helping on tiles.",
+      "t": 469,
+      "quote": "you want to diversify and keep yourself working on something new so it's always fresh",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

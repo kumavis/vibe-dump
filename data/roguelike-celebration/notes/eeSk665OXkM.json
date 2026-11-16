@@ -1,0 +1,219 @@
+{
+  "id": "eeSk665OXkM",
+  "title": "Erik Osheim and Robert Au - Angband",
+  "speaker": "Erik Osheim and Robert Au",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=eeSk665OXkM",
+  "talk_type": "postmortem",
+  "summary": "Angband DevTeam members Erik Osheim and Robert Au review roughly ten years of maintaining Angband, a 1990 roguelike whose original creators left almost immediately. They discuss the special difficulties of being a maintainer rather than the author, the maintainer handoff to Andi Sidwell and the creation of a collaborative dev team with public tooling and a GPL relicense. They describe ergonomic changes that make the game more approachable without making it easier, streamlining such as removing charisma and haggling, and the controversial push to reward the 'diving' play style through forced descent and nerfs to risk-free strategies. They close on community pushback and the reward of seeing those changes help a 20-year player finally win.",
+  "games": [
+    "Angband",
+    "Moria",
+    "Rogue",
+    "NetHack",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "angband lineage",
+      "kind": "history",
+      "claim": "Angband (1990, University of Warwick) extended Moria's 50 levels to 100 non-persistent levels, making it a grindy, tactical game where characters improve mostly through equipment rather than clever combinations.",
+      "detail": "The speakers summarize the lineage as Rogue, then Moria as 'Rogue but more', then Angband as 'Moria but more'. Non-persistent levels mean potentially infinite monsters and items, and play centres on individual battles more than long-term strategy.",
+      "t": 72,
+      "quote": "it's more you just have to keep slowly making your",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "maintainership",
+      "kind": "principle",
+      "claim": "Maintainers of a long-lived roguelike get less leeway for drastic changes than original creators, because veteran players are attached to old versions and question whether the original author would approve.",
+      "detail": "Angband's creators graduated in 1990 and the first public release in 1993 was by other students, so it was maintained by non-creators very early. On IRC people claim the last good version was 1997 or 2005. Yet volunteers need room to make their own mark, not just fix bugs.",
+      "t": 236,
+      "quote": "if you are the original creator then you are given a little bit more leeway by the community to make changes uh that are drastic because it's your vision",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "volunteer motivation",
+      "kind": "principle",
+      "claim": "Volunteer maintainers of an unpaid roguelike need room to make their own mark on the game, because most won't volunteer just to fix bugs.",
+      "detail": "The speakers also note external drivers of change, such as Angband now running on Android with small screens that require design allowances.",
+      "t": 272,
+      "quote": "most people don't want to just volunteer to go fix bugs all the time they want to do things they want to make their own mark on the game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "item glut",
+      "kind": "warning",
+      "claim": "Regenerating levels in Angband create a 'too much junk' problem late in the game, when nearly everything found is worse than current equipment.",
+      "detail": "Because levels are all new each visit and never stay cleared, by dungeon level 90 players have great gear. The team debated whether to stop generating such items or hide them, and whether to randomize artifacts once players recognize them.",
+      "t": 349,
+      "quote": "by dungeon level 90 something you've got great equipment almost everything you find is probably worse than what you you had",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "maintainer burnout",
+      "kind": "history",
+      "claim": "When Angband maintainer Robert Rühlmann burned out after five years, a roughly year-and-a-half dead zone followed before Andi Sidwell, who had been releasing unofficial versions, became maintainer by fiat.",
+      "detail": "Traditionally the next maintainer released unofficial patches and the official one passed the torch. The announced successor, Julian Lighton, released nothing, so Nick McConnell declared Sidwell the maintainer and nobody disagreed.",
+      "t": 452,
+      "quote": "after about five years of doing this kind of unpaid work you know i think he just you know needed a break or just wanted to be done",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "dev team",
+      "kind": "history",
+      "claim": "Angband moved from a benevolent-dictator maintainer to a collaborative dev team with a public issue tracker, public version control and a GPLv2 relicense that required contacting over 100 contributors.",
+      "detail": "Sidwell came from the open source world and wanted collaborators to delegate to. The speakers describe this as the shift from a singular to a collaborative vision with more community say, though the question of what vanilla Angband should be (museum piece or radically changing) remained open.",
+      "t": 592,
+      "quote": "there had been a relicensing effort that they managed to kind of push through to re-license angband as gpl v2 which i think required contacting like over 100 people",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "approachability",
+      "kind": "principle",
+      "claim": "Angband's ergonomic changes aimed to make the game approachable and comfortable for new players without making it easier, starting with on-screen monster and item lists.",
+      "detail": "Previously you couldn't easily tell whether a detected red 'd' five tiles away was a small or big dragon. Item lists help goal-setting once objects are detected.",
+      "t": 688,
+      "quote": "we want to make that easy without actually making the game easier",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "transparent mechanics",
+      "kind": "technique",
+      "claim": "Angband made mechanics more transparent: it shows damage dealt, wand failure rates, and progressively reveals a monster's spells, frequency and damage as you encounter it more.",
+      "detail": "You still don't know a new monster's spells on first meeting, but repeated encounters build up recall that the game displays when you look at it.",
+      "t": 747,
+      "quote": "there is a lot more movement towards making the mechanics of the game more transparent",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "targeting",
+      "kind": "technique",
+      "claim": "A one-keystroke 'fire at nearest monster' command makes missile attacks roughly as easy as bump-to-melee, reducing cumbersome, RSI-inducing targeting.",
+      "detail": "Previously players pressed star to target, moved a cursor, then pressed the fire key.",
+      "t": 807,
+      "quote": "it makes missile attacks roughly as easy to do as melee attacks which are just bumping into people",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "beginner aids",
+      "kind": "technique",
+      "claim": "Angband added beginner aids: a birth screen showing exact race and class stat bonuses, optional sensible starting equipment instead of money, and a knowledge menu tracking home, store contents and identified flavors.",
+      "detail": "Because potion and scroll names are randomized per game, identification is a mini-game, and the knowledge menu shows where you stand in it from anywhere in the dungeon.",
+      "t": 867,
+      "quote": "the knowledge menu uh i don't exactly remember when that came in but it's basically it lets you see at any given point",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "streamlining",
+      "kind": "technique",
+      "claim": "The Angband team removed little-used options and untestable old ports, since features nobody uses don't get bug reports and can't be maintained.",
+      "detail": "This was somewhat controversial because a small number of people still used them.",
+      "t": 944,
+      "quote": "there's only so many things you can test especially if people most people aren't using them so you're not necessarily going to get bug reports",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "removing stats",
+      "kind": "example",
+      "claim": "Angband removed the charisma stat and store haggling because charisma had no meaningful gameplay impact beyond occasionally being drained, a departure from D&D tradition.",
+      "detail": "Store prices were only slightly affected by losing haggling. Flavor-only dungeon clutter like piles of bones was also removed.",
+      "t": 999,
+      "quote": "charisma was really not having any sort of meaningful gameplay impact",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "outdated guides",
+      "kind": "warning",
+      "claim": "Angband's documentation lagged its changes, so new players still find a 1996 newbie guide with rigid depth checkpoints.",
+      "detail": "The guide prescribes checkpoints like having free action by a certain depth. The speakers admit nobody likes doing documentation and testing.",
+      "t": 1115,
+      "quote": "something called the angband newbie guide pops up and that's from 1996",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "slow safe play",
+      "kind": "warning",
+      "claim": "Slow, zero-risk Angband play with stair-scumming is boring and actually makes the game harder, because habits learned at shallow depths fail at deep levels where resting can get you killed in a turn.",
+      "detail": "Traditional play spent millions of turns acquiring resistances and repeatedly regenerating shallow levels for artifacts. Deep levels are so dangerous those habits stop working.",
+      "t": 1199,
+      "quote": "they actually make the game harder in the sense that you kind of learn bad behaviors",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "diving",
+      "kind": "principle",
+      "claim": "The 'diving' strategy popularized by Eddie Grove, descending as fast as possible while fleeing uncertain fights, beats slow play in Angband because deeper levels yield better items and constant danger keeps players sharp.",
+      "detail": "Stealth and avoidance become hugely important. Because players aren't bored they make fewer dumb mistakes and develop habits that work at dungeon level 90. Long-time players who never did well began winning.",
+      "t": 1277,
+      "quote": "because you don't get bored you don't tend to make dumb mistakes if you're always on edge",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "forced descent",
+      "kind": "technique",
+      "claim": "Angband's forced descent option sends you to a deeper level each time, acting as a timer that prevents camping near the bottom until the final battle is risk-free.",
+      "detail": "Players used to wait on dungeon level 98 for amazing equipment before fighting Morgoth. With forced descent, by level 97 only two levels remain before Sauron and one before Morgoth. The dev team wanted to encourage, not mandate, diving.",
+      "t": 1322,
+      "quote": "every time you go back to the dungeon you go to a deeper level than you were on there's really no way to decrease your your danger threshold",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "risk-free strategies",
+      "kind": "technique",
+      "claim": "Angband nerfed boring risk-free strategies by making object detection fuzzy so levels must be explored, and by making teleport-everything-away play harder.",
+      "detail": "The Global Invulnerability spell had earlier been removed for breaking the game. Classes were rebalanced too: rangers were too easy, so missile effectiveness was reduced and melee strengthened to offset its danger.",
+      "t": 1378,
+      "quote": "the big problem in admin is you have these risk-free strategies that are really boring and maybe hard to discover",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level variety",
+      "kind": "warning",
+      "claim": "With 100 dungeon levels, uniform level generation becomes very boring by the 60s and 70s, and Angband's attempts to vary levels had mixed results.",
+      "detail": "The speakers say 100 levels is probably too many, especially if they all look the same.",
+      "t": 1456,
+      "quote": "if those levels are all the same it's like really boring by the time you get in like the 60s or 70s",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community pushback",
+      "kind": "principle",
+      "claim": "Maintainers changing a beloved roguelike will hear loudest from unhappy veterans, but should remember the silent majority who enjoy changes and that some critics come around.",
+      "detail": "Some players wanted the old game, some forked variants, and some said it got too easy; the team ran simulations and found item distribution had risen and adjusted it. Without polling data, vocal critics dominate.",
+      "t": 1551,
+      "quote": "often you hear from the most vocal people who maybe don't like a particular thing but actually uh they they sometimes change their minds",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "non-persistent levels",
+      "kind": "principle",
+      "claim": "Incidental features can become core to a game's identity in ways even the original author couldn't predict, as Angband's non-persistent levels created its unique play style.",
+      "detail": "The speakers enjoy teasing apart whether such features were hacks or intrinsic, and think the non-persistent levels are the latter. Separately, they cite a 20-year player who finally won and credited the forced-descent feature for making them do the final battle instead of agonizing.",
+      "t": 1602,
+      "quote": "was the non-persistent level thing just like a hack or does that actually become like really core to ankman's identity",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,152 @@
+{
+  "id": "rNi5nO5yqLs",
+  "title": "Roguelike Celebration 2022 Preview: Justin Ma & Matthew Davis - Subset Games",
+  "speaker": "Justin Ma & Matthew Davis",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=rNi5nO5yqLs",
+  "talk_type": "postmortem",
+  "summary": "In a preview-event fireside chat, Subset Games founders Justin Ma and Matthew Davis discuss FTL and Into the Breach. Topics include why Into the Breach's deployment turn feels information-poor, how much of their development is really UX and presentation work, and how they handle community complaints by asking whether an issue is design or presentation. They describe Into the Breach as partly a response to FTL's slot-machine randomness, reframing randomness as visible input randomness the player works with rather than hit-or-miss output randomness, and explain that they start from an emotional goal (being a starship captain; caring about collateral damage) rather than a genre. They close on modding support and on designing obvious, readable creatures whose look telegraphs their mechanic.",
+  "games": [
+    "FTL: Faster Than Light",
+    "Into the Breach",
+    "XCOM",
+    "Fire Emblem",
+    "Sunless Sea",
+    "Out There",
+    "NetHack",
+    "Slay the Spire"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "telegraphed enemy actions",
+      "kind": "principle",
+      "claim": "Into the Breach focuses on solving the fully visible puzzle in front of you rather than predicting and manipulating enemy AI, as in Fire Emblem where you stand in a space to steer where enemies go.",
+      "detail": "Ma says exploiting AI patterns is possible but was never meant to be the focus. Davis explains the deployment turn shows the same information as any other turn; enemy movement is never known in advance, so the drop-in simply has little to show.",
+      "t": 161,
+      "quote": "we wanted the focus to be like here is a puzzle that you can see right now do what you can with it",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "warning",
+      "claim": "Into the Breach's deployment turn is commonly misread as random and information-free, which the developers see as a failure to introduce the elements players can use, not a design difference.",
+      "detail": "Netflix QA even filed it as a bug during the mobile port. Davis says players can position melee mechs close, ranged far, and stay out of scorpion web range; they wonder about telling players such things explicitly.",
+      "t": 340,
+      "quote": "sometimes it's a failure in our part to um have the information ready for the player to understand what our intention was",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "presentation",
+      "kind": "warning",
+      "claim": "Early Into the Breach playtests were painful because players didn't understand what to expect or do; the design wasn't bad, the presentation was, and fixes like animated tooltips made a massive difference.",
+      "detail": "The biggest playtest lessons were how little people understood things the developers thought were clear, requiring UI changes and hiding or showing information. They estimate half or more of development time on their games goes to UX.",
+      "t": 438,
+      "quote": "it wasn't a case of the design being bad it was a case of the presentation being problematic",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "technique",
+      "claim": "Subset builds the most hardcore version of a game first and makes it approachable later, using other developers and people familiar with their work as early playtesters because they can imagine the finished presentation.",
+      "detail": "Such testers give leeway and aren't as confused by strange mechanics as players who play or develop less would be.",
+      "t": 494,
+      "quote": "we do the most hardcore serious game possible and then make it more approachable later",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Treat every player complaint as valid but diagnose whether it is a design issue, a presentation issue, or simply players wanting a different game, then look for a middle ground or explain your reasoning.",
+      "detail": "Into the Breach's weapon cost, power cost and shop availability have been repeatedly changed and repeatedly criticised; Subset explained their logic and stuck to what their testing supported.",
+      "t": 577,
+      "quote": "every complaint is valid it's just if is it a design issue is it a presentation is the issue",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "crew and power management",
+      "kind": "principle",
+      "claim": "Davis considers FTL's crew and power micromanagement its coolest and least-imitated element, more than the text events and random battles others latched onto, and wants successors to twist concepts aggressively into something new.",
+      "detail": "He wants more games about micromanaging people to put out fires or turning off oxygen; he praises Sunless Sea as FTL-inspired but completely different.",
+      "t": 706,
+      "quote": "actual crew and power management i feel like is the one thing that like i thought was really maybe the coolest part of ftl",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "example",
+      "claim": "Into the Breach was partly a response to FTL's slot-machine randomness, where runs swing between an amazing setup and never finding a shop; Into the Breach normalizes randomness with self-sufficient squads and predicted attacks.",
+      "detail": "FTL has more dice rolls (e.g. evasion) and bigger per-run swings. For Into the Breach, squads were designed not to need weapon drops, and the team pulled randomness out to see where it led within a roguelike structure.",
+      "t": 863,
+      "quote": "a lot more of that pulling the casino slot machine and you might get a huge spike with an amazing setup",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design goals",
+      "kind": "principle",
+      "claim": "Subset Games starts from an emotional goal or feeling and builds whatever game best serves it, assembling their way into genres rather than choosing a genre first.",
+      "detail": "FTL's feeling was captaining a starship like Adama or Picard. Into the Breach responded to superhero movies where cities are destroyed and nobody cares: collateral damage should matter and you should be willing to sacrifice yourself to save the city.",
+      "t": 917,
+      "quote": "usually we kind of have like a goal of like an emotional state or like a feeling or something and then we sort of just make the game",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "cover and damage",
+      "kind": "example",
+      "claim": "Davis wanted Into the Breach to invert XCOM's hide-behind-cover play by motivating players to step in front of damage to protect civilians, making them the hero.",
+      "detail": "Davis began by implementing a grid-based turn-based game with no goal; XCOM was a huge influence, but he wanted a turn-based game where you aren't only avoiding damage.",
+      "t": 1031,
+      "quote": "how can you make a turn-based game that you're not specifically avoiding damage that there's a motivation to step out in front of damage",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "input vs output randomness",
+      "kind": "principle",
+      "claim": "Into the Breach didn't remove randomness so much as move it to the input: the enemy setup and spawns are random, but the player's own actions are deterministic, like dice games where you roll first and then place the results.",
+      "detail": "Davis contrasts tabletop games where you roll to see if you hit (FTL-style swing-and-miss) with games where you roll seven dice and then decide how to use them, which feels less random because you work with the randomness handed to you. Ma names this input versus output randomness.",
+      "t": 1089,
+      "quote": "the funny part is we didn't really take out randomness so much has changed the way it's presented",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "classic roguelike ui",
+      "kind": "open-question",
+      "claim": "What would a classic roguelike with the best, clearest UI look like? The developers think it is a hard but worthwhile goal.",
+      "detail": "The interviewer recalls user-testing NetHack with university students who had never played and finding cheat sheets were never enough.",
+      "t": 1196,
+      "quote": "the classic roguelike with the best and the most clearest ui and just be like what would that game be like",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "example",
+      "claim": "Surprised by how much players modded FTL, Subset tried to make Into the Breach easier to mod through scripting, and tries not to break mods with updates, though they lack time to build full modding tools.",
+      "detail": "Davis calls fans continuing to play with your design ideas nothing but a compliment.",
+      "t": 1438,
+      "quote": "we did not expect how much people would like modeling ftl and so we um tried to make it much easier for into the breach",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "readable creature design",
+      "kind": "principle",
+      "claim": "Subset designs races and creatures backwards from mechanics, choosing obvious visuals that telegraph function (the high-health race is a rock, the stabbing enemy is a praying mantis), which solves player-introduction problems as a form of UX.",
+      "detail": "Players don't have to memorise weird alien names or lore or distinguish grey aliens from pink ones. Lapses happen: a 'mosquito' enemy became a squid when art changed but the name didn't, a warning against placeholders you don't expect to ship.",
+      "t": 1576,
+      "quote": "you've solved a lot of like player introduction problems just by making obvious art and creature design",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,220 @@
+{
+  "id": "isB82kORimk",
+  "title": "Kate Compton - Practical Low Effort PCG: Tracery and data oriented PCG authoring",
+  "speaker": "Kate Compton",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=isB82kORimk",
+  "talk_type": "technical",
+  "summary": "Kate Compton presents Tracery, her JSON-based text grammar library, and the many bots, games and generators built with it. She generalises from it to a 'don't whittle your own screws' philosophy: when content needs a long chain of if statements, author it as data in a standard structure interpreted by one well-tested interpreter. She surveys reusable structures (grammars, hypertext, Sims objects, finite state machines, decision trees, constraint solvers) and tools for visualising a generator's expressive space, then admits that special cases are inevitable and shows cheap hacks such as tagging generated text with HTML-like tags.",
+  "games": [
+    "Dungeons of Spore",
+    "Castle of the Winds",
+    "The Sims",
+    "Hip Chef",
+    "Twine",
+    "Kingdom of Loathing"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "grammars",
+      "kind": "technique",
+      "claim": "Tracery is a reusable templating grammar: you write a small JSON grammar of symbols and rules and it recursively expands them into generated text.",
+      "detail": "Compton built it so nobody has to build their own templating text system again, comparing it to the one Kingdom of Loathing built. It has been ported to Python, Ruby, Unity, Twine and more, and through the Cheap Bots Done Quick host it runs hundreds of Twitter bots.",
+      "t": 169,
+      "quote": "i made a templating text system uh so that nobody has to make a templating text system anymore",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "apophenia",
+      "kind": "principle",
+      "claim": "Short generated descriptions that make the player's mind fill in a story are, for Compton, a core ingredient of roguelikeness.",
+      "detail": "Her Hip Chef patron generator produces people like 'a nervous nun with haunted eyes' or 'an angry nun in a wedding dress' who orders chardonnay and leaves. Although not a dungeon crawl, she says this sketching out of text and letting your mind fill it in feels most roguelike-ish.",
+      "t": 560,
+      "quote": "it's giving you text that makes your mind tell stories and this for me is like one of the core ingredients of roguelikeness",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "authoring volume",
+      "kind": "principle",
+      "claim": "A generator's authoring format should make writing large amounts of content painless, because authors won't write much content if each piece needs code.",
+      "detail": "Compton says that if she had had to write if statements for each patron description she would not have written so much text. Tracery is designed so you can write a ton of content easily, which is why she calls it painless or low-effort PCG.",
+      "t": 615,
+      "quote": "if i had to write if statements for each one of these i would not have written this much text",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "technique",
+      "claim": "Storing generative content as JSON data rather than code makes it copy-pasteable, lintable, safe to run from strangers, and easy to author in bulk.",
+      "detail": "Compton lists the benefits of JSON: you can copy large sections of someone else's grammar, run an online linter, and safely run arbitrary user grammars. George Buckenham's server runs around 500 strangers' bots without restarts, which she says would be inadvisable with arbitrary JavaScript.",
+      "t": 662,
+      "quote": "if you use json instead there's things like a copy paste really easily",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "warning",
+      "claim": "When a roguelike's content logic turns into a giant chain of if statements, stop and design a data structure, because the code cost multiplies with each piece of content.",
+      "detail": "Roguelikes need lots of content, and each piece tends to need custom behaviour, such as a different sound for the axe and the hammer, which becomes a code nightmare. Compton says the chain will be repeated times x pieces of content, or worse.",
+      "t": 783,
+      "quote": "if you have a giant chain of if statements that's when you want to stop and think about data structures",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "principle",
+      "claim": "Compton's 'don't whittle your own screws' rule: use a standard data structure for content, author many pieces as static data, and run them through one well-built, well-tested interpreter.",
+      "detail": "Indie developers keep hand-making custom one-off solutions for each new connection problem. Because most content needs fairly standard behaviour, you should make or better yet find a standard structure, often from academia; since you only build one interpreter, you can build and test it well, which is why Tracery is stable.",
+      "t": 823,
+      "quote": "a lot of content requires pretty standard behavior so make a standard data structure for it or better yet find one",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "example",
+      "claim": "Twine shows the payoff of a standard data structure: once hypertext was formalised as nodes, text and links with an interpreter, many non-programmers built immense structures without writing if statements.",
+      "detail": "Compton frames hypertext as an established genre needing nodes, text, and clicks to move between them. Making a data structure and interpreter for it gave people ready-made parts, like assembling furniture rather than whittling screws, to make what matters to them.",
+      "t": 905,
+      "quote": "the goal is to make big structures without writing custom code for each one",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "advertised needs",
+      "kind": "example",
+      "claim": "In The Sims 1 every object is data (images, footprint, needs it advertises, an animation, needs it increments), so endless objects can be added without custom code.",
+      "detail": "Compton says this let expansions add objects without changing or debugging code. A user-made smoking table reused the chess table and advertised it would reduce loneliness without actually doing so, showing that a good data structure lets people find expressive uses the designers never anticipated.",
+      "t": 941,
+      "quote": "you can make endless objects without writing custom code for each one",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "finite state machines",
+      "kind": "technique",
+      "claim": "Finite state machines model many game behaviours, from locked and unlocked chests to alive and dead to menu navigation, with a central interpreter tracking transitions.",
+      "detail": "Nodes are connected and rules decide whether you can move between them, such as needing a key to unlock a chest or hitting zero HP. Compton says the interpreter is the hero: a director tracks state rather than every chest checking each frame. Hypertext and Markov text generators are also largely finite state machines.",
+      "t": 1068,
+      "quote": "i have a chest that is locked and if i have the key that can move from lock to unlocked",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "decision trees",
+      "kind": "technique",
+      "claim": "Representing monster AI as decision-tree data instead of nested if statements lets you log which branches fire, and evolve or machine-learn the trees.",
+      "detail": "Compton calls decision trees the ultimate chain of if statements. As data, you can log how often monsters drink potions and why they attack, spotting an over-set aggro flag without replaying a hundred times. You can mutate branches so monsters from the same 'school' decide slightly differently, or use decision forests and automated tree learning.",
+      "t": 1187,
+      "quote": "you can actually evolve and modify trees you can do tree based machine learning so you can actually learn better trees",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint solving",
+      "kind": "technique",
+      "claim": "Off-the-shelf constraint solvers such as answer set programming can place content subject to constraints that are hard to hand-code, like treasure far from both entrance and exit.",
+      "detail": "Compton points to Adam Smith's 'Map generation speedrun with answer set programming', which builds a heavily constrained ASCII map generator, including requiring the player to pass the key before reaching the exit. Her group uses the Clingo solver, which she says is hard to learn.",
+      "t": 1284,
+      "quote": "pcg has constraints but it's incredibly hard to implement those in an algorithm",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint solving",
+      "kind": "warning",
+      "claim": "Hand-written generators without a constraint solver tend to generate and discard much of their output or get neutered into trivial results, and writing your own solver can cost years.",
+      "detail": "Compton says generators end up throwing out half their output or producing a straight line because that is the only way to reach the exit. Some games discovered they were really writing a constraint solver and spent three years on it, when a mature solver tuned over about 100 PhD-years already existed.",
+      "t": 1306,
+      "quote": "they're hard to learn but writing your own can be worse",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "content coverage",
+      "kind": "technique",
+      "claim": "Visualising a procedural story system's logic can show whether authored content actually covers all the combinations that can arise.",
+      "detail": "Compton shows a tool made for a procedural storytelling game by two colleagues that maps where the game's combinations have high or low ratios of problems, so authors can see whether they have coverage of what they wrote. She argues this is a benefit of standardising game logic as data.",
+      "t": 1379,
+      "quote": "how do you know if you've actually got coverage of all the stuff that you've written",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range",
+      "kind": "technique",
+      "claim": "Expressive space tools map a generator's output across its tuning parameters so designers can see and cut off bad regions instead of hitting refresh thousands of times.",
+      "detail": "Compton credits Gillian Smith and Michael Cook. For example, plot platformer level difficulty against tuning values A and B, see clusters move as values change, and slice off bad sections to curate what the generator produces.",
+      "t": 1402,
+      "quote": "it's really hard to understand the space of the stuff that you're generating until you just like hit refresh a thousand times",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "special cases",
+      "kind": "warning",
+      "claim": "No matter how clean the data structures, most content becomes special cases, and the more interesting the generated world the more common they get, so plan around them.",
+      "detail": "Compton says chess has few special cases, but a world with weird generated things that should do something funny on the 4th of July is special cases forever. The more complex the program, the more likely any given piece of content needs special handling.",
+      "t": 1496,
+      "quote": "the more interesting the world gets the more interesting your special case more interesting and common your special cases get",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "semantic tagging",
+      "kind": "technique",
+      "claim": "Hip Chef tags generated text with inline HTML-style tags and strips them afterward, giving recipes semantic tags (poultry, citrus, melon) with minimal extra authoring.",
+      "detail": "Compton wanted recipes to know that kumquat is citrus and duck is poultry so ingredient categories can become cool and vegan or kosher restaurants can exclude items. Bigger data structures would mean much more authoring, so she embeds tags in the grammar text and separates tags from display text after generation.",
+      "t": 1575,
+      "quote": "i just do little html tags and after it's generated i like put it through the grinder strip out all the html tags",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "flexible data",
+      "kind": "principle",
+      "claim": "Flexible data structures, especially plain text strings, let users bend a generator to purposes the author never intended.",
+      "detail": "Compton made Tracery for stories, but users used it to make ASCII art, SVG art, HTML, emoji and JSON, since all are just text. Taken further, she made generators that generate generators, such as an art colony producing art bots with their own SVG styles that critique each other.",
+      "t": 1596,
+      "quote": "if you design your data structures to be flexible and bend to new purposes um sorry this means users will come up with new ways that surprise you",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "long-term state",
+      "kind": "technique",
+      "claim": "For conversations with long-term state, Compton keeps the logic in plain JavaScript and rewrites Tracery symbol rules at runtime, treating the grammar as a whiteboard.",
+      "detail": "Answering a question about dialogue, she says the grammar is just JSON loaded into JavaScript objects, so code can push values onto a symbol when characters start discussing something and pull them off later.",
+      "t": 1775,
+      "quote": "i can like rewrite symbol rules so if they start discussing something then i can push a value to that symbol rule",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "word lists",
+      "kind": "warning",
+      "claim": "Generic shared word lists often flatten a generator's tone, because flavour comes from genre-specific vocabulary.",
+      "detail": "Asked about curated ontologies such as Darius Kazemi's Corpora, Compton says a colour list was less useful than expected: a Jane Austen generator wants words like 'ecru' and 'daffodil', and a Lovecraft one wants 'squamous'. Dropping in red, green and blue would cut out the fun bits.",
+      "t": 1857,
+      "quote": "just dropping red green and blue into those situations uh actually would be like not it would kind of lobotomize your story",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "grammatical gender",
+      "kind": "open-question",
+      "claim": "Grammatical gender in text grammars is unsolved in Tracery and degenerates into the same giant-if-statement problem.",
+      "detail": "Compton says handling gender in Tracery is painful. Her attempt at French nouns and gendered adjectives for the restaurant generator became the Tracery version of the giant if statement, and she invites a tool that automatically pushes and tracks gender.",
+      "t": 1869,
+      "quote": "doing gender with tracery is a real pain in the ass",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

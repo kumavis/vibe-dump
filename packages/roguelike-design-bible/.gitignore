@@ -1,0 +1,3 @@
+dist/
+# copied from design-bible/ by scripts/copy-chapters.mjs before every dev/build
+public/chapters/

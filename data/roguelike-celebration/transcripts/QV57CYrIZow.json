@@ -1,0 +1,4513 @@
+{
+ "id": "QV57CYrIZow",
+ "url": "https://www.youtube.com/watch?v=QV57CYrIZow",
+ "title": "Alan Malloy - Data Driven Crawl Development",
+ "speaker": "Alan Malloy",
+ "talk_title": "Data Driven Crawl Development",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 2129,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Alan Malloy talks about using data from Crawl game servers to influence game development.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Online play introduction"
+  },
+  {
+   "start": 93,
+   "title": "Dungeon crawl overview"
+  },
+  {
+   "start": 235,
+   "title": "Benefits of online infrastructure"
+  },
+  {
+   "start": 522,
+   "title": "Data collection tools"
+  },
+  {
+   "start": 777,
+   "title": "Using the Henzell bot"
+  },
+  {
+   "start": 1081,
+   "title": "Data-driven balance"
+  },
+  {
+   "start": 1211,
+   "title": "Community and social features"
+  },
+  {
+   "start": 1462,
+   "title": "Q&A and future outlook"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6590,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.59,
+   "d": 3.16,
+   "text": "cool okay well guess what I'm Allen boy"
+  },
+  {
+   "t": 3.75,
+   "d": 2.37,
+   "text": "done you crawl developer you guys know"
+  },
+  {
+   "t": 6.12,
+   "d": 4.23,
+   "text": "all this already and what I want to talk"
+  },
+  {
+   "t": 10.35,
+   "d": 2.7,
+   "text": "about today is pretty much every rogue"
+  },
+  {
+   "t": 13.05,
+   "d": 2.34,
+   "text": "like that well most rogue likes anyway"
+  },
+  {
+   "t": 15.39,
+   "d": 2.7,
+   "text": "our single-player games and so it's"
+  },
+  {
+   "t": 18.09,
+   "d": 1.38,
+   "text": "pretty natural that how do you play a"
+  },
+  {
+   "t": 19.47,
+   "d": 1.56,
+   "text": "single-player game you download it you"
+  },
+  {
+   "t": 21.03,
+   "d": 3.66,
+   "text": "install it you run it whatever and you"
+  },
+  {
+   "t": 24.69,
+   "d": 2.16,
+   "text": "can do that with dungeon crawl but we"
+  },
+  {
+   "t": 26.85,
+   "d": 3.48,
+   "text": "also offer online play and we're not"
+  },
+  {
+   "t": 30.33,
+   "d": 2.67,
+   "text": "alone in this but I think that dungeon"
+  },
+  {
+   "t": 33.0,
+   "d": 4.74,
+   "text": "crawl gets a lot of unique benefits from"
+  },
+  {
+   "t": 37.74,
+   "d": 5.4,
+   "text": "its online support that that I think a"
+  },
+  {
+   "t": 43.14,
+   "d": 0.84,
+   "text": "lot of other roguelikes"
+  },
+  {
+   "t": 43.98,
+   "d": 2.55,
+   "text": "could benefit from and so some of this"
+  },
+  {
+   "t": 46.53,
+   "d": 3.0,
+   "text": "talk is directed at developers of other"
+  },
+  {
+   "t": 49.53,
+   "d": 1.77,
+   "text": "roguelike saying like hey if you don't"
+  },
+  {
+   "t": 51.3,
+   "d": 1.7,
+   "text": "have your thing online maybe you should"
+  },
+  {
+   "t": 53.0,
+   "d": 4.51,
+   "text": "and also at what how of course the whole"
+  },
+  {
+   "t": 57.51,
+   "d": 1.32,
+   "text": "point of everything is to make the game"
+  },
+  {
+   "t": 58.83,
+   "d": 2.58,
+   "text": "good for players right no one really"
+  },
+  {
+   "t": 61.41,
+   "d": 1.44,
+   "text": "cares how good things are for developers"
+  },
+  {
+   "t": 62.85,
+   "d": 5.31,
+   "text": "except maybe in this room and so this is"
+  },
+  {
+   "t": 68.16,
+   "d": 2.16,
+   "text": "how having online play is good for"
+  },
+  {
+   "t": 70.32,
+   "d": 1.74,
+   "text": "players and there's two ways it's good"
+  },
+  {
+   "t": 72.06,
+   "d": 2.46,
+   "text": "one is it's just like generally the game"
+  },
+  {
+   "t": 74.52,
+   "d": 2.49,
+   "text": "being online is good but even just"
+  },
+  {
+   "t": 77.01,
+   "d": 2.01,
+   "text": "improving the development process while"
+  },
+  {
+   "t": 79.02,
+   "d": 2.67,
+   "text": "not in itself a goal results in a game"
+  },
+  {
+   "t": 81.69,
+   "d": 6.75,
+   "text": "that is better for players so I show of"
+  },
+  {
+   "t": 88.44,
+   "d": 2.46,
+   "text": "hands who's played dungeon crawl okay"
+  },
+  {
+   "t": 90.9,
+   "d": 1.41,
+   "text": "not everyone in the room so I'll have to"
+  },
+  {
+   "t": 92.31,
+   "d": 3.66,
+   "text": "tell you what it is unlucky it's it's a"
+  },
+  {
+   "t": 95.97,
+   "d": 2.31,
+   "text": "fairly traditional roguelike and like as"
+  },
+  {
+   "t": 98.28,
+   "d": 2.01,
+   "text": "I learned in the last slide if you can"
+  },
+  {
+   "t": 100.29,
+   "d": 1.41,
+   "text": "play it with a character based display"
+  },
+  {
+   "t": 101.7,
+   "d": 2.57,
+   "text": "it's a roguelike so dungeon call counts"
+  },
+  {
+   "t": 104.27,
+   "d": 1.99,
+   "text": "but it's only half a roguelike because"
+  },
+  {
+   "t": 106.26,
+   "d": 1.91,
+   "text": "you don't have to"
+  },
+  {
+   "t": 108.17,
+   "d": 2.62,
+   "text": "it is turn-based and you die a lot I"
+  },
+  {
+   "t": 110.79,
+   "d": 2.67,
+   "text": "think those are some of the let's see"
+  },
+  {
+   "t": 113.46,
+   "d": 2.52,
+   "text": "yeah I think that the second through"
+  },
+  {
+   "t": 115.98,
+   "d": 2.28,
+   "text": "fourth slides are baits bullet points"
+  },
+  {
+   "t": 118.26,
+   "d": 2.55,
+   "text": "are basically the three points in in the"
+  },
+  {
+   "t": 120.81,
+   "d": 2.1,
+   "text": "last slide for his personal what what"
+  },
+  {
+   "t": 122.91,
+   "d": 3.06,
+   "text": "makes a role like to me right we have we"
+  },
+  {
+   "t": 125.97,
+   "d": 1.89,
+   "text": "have no carry over you there's permanent"
+  },
+  {
+   "t": 127.86,
+   "d": 1.92,
+   "text": "consequences its turn-based it's"
+  },
+  {
+   "t": 129.78,
+   "d": 2.94,
+   "text": "procedurally generated I didn't say a"
+  },
+  {
+   "t": 132.72,
+   "d": 1.0,
+   "text": "procedurally generated up"
+  },
+  {
+   "t": 133.72,
+   "d": 4.26,
+   "text": "but it's true and so it's got its got a"
+  },
+  {
+   "t": 137.98,
+   "d": 2.37,
+   "text": "character-based display and also a tiles"
+  },
+  {
+   "t": 140.35,
+   "d": 1.89,
+   "text": "based display so which really helps"
+  },
+  {
+   "t": 142.24,
+   "d": 2.49,
+   "text": "broaden the appeal so here's a"
+  },
+  {
+   "t": 144.73,
+   "d": 1.65,
+   "text": "screenshot of me playing thunder all"
+  },
+  {
+   "t": 146.38,
+   "d": 2.22,
+   "text": "right you've got letters all over the"
+  },
+  {
+   "t": 148.6,
+   "d": 1.62,
+   "text": "screen sort of this ASCII soup sort of"
+  },
+  {
+   "t": 150.22,
+   "d": 2.85,
+   "text": "thing you're in a dungeon there's"
+  },
+  {
+   "t": 153.07,
+   "d": 1.92,
+   "text": "monsters you have swords all this stuff"
+  },
+  {
+   "t": 154.99,
+   "d": 2.07,
+   "text": "very like sort of classic meth a key"
+  },
+  {
+   "t": 157.06,
+   "d": 3.96,
+   "text": "thing and if you want to though you"
+  },
+  {
+   "t": 161.02,
+   "d": 1.8,
+   "text": "don't have to play that way we've got a"
+  },
+  {
+   "t": 162.82,
+   "d": 1.38,
+   "text": "tiles interface we have a number of"
+  },
+  {
+   "t": 164.2,
+   "d": 2.19,
+   "text": "artists who have showed up and just sort"
+  },
+  {
+   "t": 166.39,
+   "d": 1.29,
+   "text": "of the way the dungeon crawl developers"
+  },
+  {
+   "t": 167.68,
+   "d": 1.98,
+   "text": "appear out of the ether and so I'd love"
+  },
+  {
+   "t": 169.66,
+   "d": 2.13,
+   "text": "to draw some art for you thanks great"
+  },
+  {
+   "t": 171.79,
+   "d": 4.62,
+   "text": "you're on the dev team welcome so and we"
+  },
+  {
+   "t": 176.41,
+   "d": 3.39,
+   "text": "have we get I I play console a lot of"
+  },
+  {
+   "t": 179.8,
+   "d": 3.21,
+   "text": "the developers do although not all but I"
+  },
+  {
+   "t": 183.01,
+   "d": 2.82,
+   "text": "think the art style and and the really"
+  },
+  {
+   "t": 185.83,
+   "d": 1.59,
+   "text": "really broadens the appeal right you get"
+  },
+  {
+   "t": 187.42,
+   "d": 1.86,
+   "text": "a lot more people who who are not really"
+  },
+  {
+   "t": 189.28,
+   "d": 4.89,
+   "text": "willing to look at at this but but but"
+  },
+  {
+   "t": 194.17,
+   "d": 1.17,
+   "text": "would love to play something like this"
+  },
+  {
+   "t": 195.34,
+   "d": 5.64,
+   "text": "and so as I said sort of sounds"
+  },
+  {
+   "t": 200.98,
+   "d": 1.41,
+   "text": "basically like okay it's just an attack"
+  },
+  {
+   "t": 202.39,
+   "d": 2.88,
+   "text": "but more right or maybe less depending"
+  },
+  {
+   "t": 205.27,
+   "d": 4.56,
+   "text": "on your point of view and so why don't"
+  },
+  {
+   "t": 209.83,
+   "d": 1.89,
+   "text": "we just play it offline you know you can"
+  },
+  {
+   "t": 211.72,
+   "d": 2.1,
+   "text": "just down you can download it and and so"
+  },
+  {
+   "t": 213.82,
+   "d": 3.15,
+   "text": "we do that you can download I think just"
+  },
+  {
+   "t": 216.97,
+   "d": 1.17,
+   "text": "about any version that's ever been"
+  },
+  {
+   "t": 218.14,
+   "d": 2.73,
+   "text": "published they're still there somewhere"
+  },
+  {
+   "t": 220.87,
+   "d": 1.38,
+   "text": "on the internet and you can play them"
+  },
+  {
+   "t": 222.25,
+   "d": 2.94,
+   "text": "off an offline a lot of players do that"
+  },
+  {
+   "t": 225.19,
+   "d": 1.65,
+   "text": "I don't know how many it's a lot harder"
+  },
+  {
+   "t": 226.84,
+   "d": 1.2,
+   "text": "to measure them since they're offline"
+  },
+  {
+   "t": 228.04,
+   "d": 2.34,
+   "text": "but probably more than half if I had to"
+  },
+  {
+   "t": 230.38,
+   "d": 1.68,
+   "text": "guess just play the offline version"
+  },
+  {
+   "t": 232.06,
+   "d": 5.7,
+   "text": "exclusively so why do we why do we even"
+  },
+  {
+   "t": 237.76,
+   "d": 1.53,
+   "text": "bother to offer online play what's the"
+  },
+  {
+   "t": 239.29,
+   "d": 3.92,
+   "text": "point what does it get us well one it's"
+  },
+  {
+   "t": 243.21,
+   "d": 2.56,
+   "text": "just another offering you can reach more"
+  },
+  {
+   "t": 245.77,
+   "d": 2.01,
+   "text": "players that way if you offer both than"
+  },
+  {
+   "t": 247.78,
+   "d": 1.98,
+   "text": "if you offer just one that's not super"
+  },
+  {
+   "t": 249.76,
+   "d": 1.98,
+   "text": "compelling of course we could we could"
+  },
+  {
+   "t": 251.74,
+   "d": 1.92,
+   "text": "offer all sorts of ridiculous versions"
+  },
+  {
+   "t": 253.66,
+   "d": 1.47,
+   "text": "like a board game or whatever you would"
+  },
+  {
+   "t": 255.13,
+   "d": 1.29,
+   "text": "reach a few more people that way but"
+  },
+  {
+   "t": 256.42,
+   "d": 6.33,
+   "text": "it's a lot more work but somewhat so you"
+  },
+  {
+   "t": 262.75,
+   "d": 1.35,
+   "text": "reach more players that way another"
+  },
+  {
+   "t": 264.1,
+   "d": 3.38,
+   "text": "reason that we'll get to is"
+  },
+  {
+   "t": 267.48,
+   "d": 3.43,
+   "text": "by having all of the information for a"
+  },
+  {
+   "t": 270.91,
+   "d": 4.95,
+   "text": "player's game available online we can we"
+  },
+  {
+   "t": 275.86,
+   "d": 1.74,
+   "text": "you know the developers but also just"
+  },
+  {
+   "t": 277.6,
+   "d": 2.28,
+   "text": "the community in general can do sort of"
+  },
+  {
+   "t": 279.88,
+   "d": 1.92,
+   "text": "data analysis of games that have been"
+  },
+  {
+   "t": 281.8,
+   "d": 2.64,
+   "text": "played we don't have to you know install"
+  },
+  {
+   "t": 284.44,
+   "d": 1.74,
+   "text": "an agent on your computer that uploads"
+  },
+  {
+   "t": 286.18,
+   "d": 1.41,
+   "text": "every Street every character that you"
+  },
+  {
+   "t": 287.59,
+   "d": 1.56,
+   "text": "type so that we can see what happened"
+  },
+  {
+   "t": 289.15,
+   "d": 3.26,
+   "text": "which would be spooky and sinister right"
+  },
+  {
+   "t": 292.41,
+   "d": 3.61,
+   "text": "and so we can we can use that to learn"
+  },
+  {
+   "t": 296.02,
+   "d": 1.08,
+   "text": "more about what games are being played"
+  },
+  {
+   "t": 297.1,
+   "d": 2.1,
+   "text": "to help people who are playing games and"
+  },
+  {
+   "t": 299.2,
+   "d": 1.65,
+   "text": "having trouble or want advice or"
+  },
+  {
+   "t": 300.85,
+   "d": 6.03,
+   "text": "whatever and it also is a place for"
+  },
+  {
+   "t": 306.88,
+   "d": 3.09,
+   "text": "players to socialize right when you're"
+  },
+  {
+   "t": 309.97,
+   "d": 2.22,
+   "text": "playing online you there's a little like"
+  },
+  {
+   "t": 312.19,
+   "d": 1.2,
+   "text": "me you don't have to but there's a chat"
+  },
+  {
+   "t": 313.39,
+   "d": 1.95,
+   "text": "area you can you can talk to the person"
+  },
+  {
+   "t": 315.34,
+   "d": 1.02,
+   "text": "playing the game or two people"
+  },
+  {
+   "t": 316.36,
+   "d": 1.35,
+   "text": "spectating can chat amongst themselves"
+  },
+  {
+   "t": 317.71,
+   "d": 3.39,
+   "text": "and so on and i don't really get that"
+  },
+  {
+   "t": 321.1,
+   "d": 2.54,
+   "text": "but a lot of people seem to like it"
+  },
+  {
+   "t": 323.64,
+   "d": 2.29,
+   "text": "there's sort of it the whole community"
+  },
+  {
+   "t": 325.93,
+   "d": 2.07,
+   "text": "around the web tiles chat it's like its"
+  },
+  {
+   "t": 328.0,
+   "d": 1.98,
+   "text": "own planet right and any place that"
+  },
+  {
+   "t": 329.98,
+   "d": 1.88,
+   "text": "people aggregate develops this weird"
+  },
+  {
+   "t": 331.86,
+   "d": 2.23,
+   "text": "subculture and I'm not part of web tiles"
+  },
+  {
+   "t": 334.09,
+   "d": 5.49,
+   "text": "culture but it sure exists and and there"
+  },
+  {
+   "t": 339.58,
+   "d": 1.77,
+   "text": "are other other ways that we use the"
+  },
+  {
+   "t": 341.35,
+   "d": 3.99,
+   "text": "online infrastructure to organize events"
+  },
+  {
+   "t": 345.34,
+   "d": 1.92,
+   "text": "you know every time we release a new"
+  },
+  {
+   "t": 347.26,
+   "d": 2.64,
+   "text": "version which for quite a while has been"
+  },
+  {
+   "t": 349.9,
+   "d": 2.31,
+   "text": "one version two versions a year I should"
+  },
+  {
+   "t": 352.21,
+   "d": 1.89,
+   "text": "say we're sort of in a lull right now I"
+  },
+  {
+   "t": 354.1,
+   "d": 1.38,
+   "text": "think we're gonna miss our six-month"
+  },
+  {
+   "t": 355.48,
+   "d": 3.09,
+   "text": "deadline 4.21 but that's life it's free"
+  },
+  {
+   "t": 358.57,
+   "d": 4.92,
+   "text": "you know take what you can get and it"
+  },
+  {
+   "t": 363.49,
+   "d": 1.62,
+   "text": "also just helps us get feedback from"
+  },
+  {
+   "t": 365.11,
+   "d": 2.31,
+   "text": "players better in a lot of different"
+  },
+  {
+   "t": 367.42,
+   "d": 3.62,
+   "text": "ways which which helps improve the game"
+  },
+  {
+   "t": 371.04,
+   "d": 2.56,
+   "text": "and also improve players perception of"
+  },
+  {
+   "t": 373.6,
+   "d": 2.16,
+   "text": "the game even even if we didn't really"
+  },
+  {
+   "t": 375.76,
+   "d": 1.59,
+   "text": "listen to the players at all like they"
+  },
+  {
+   "t": 377.35,
+   "d": 1.17,
+   "text": "would feel better for telling us things"
+  },
+  {
+   "t": 378.52,
+   "d": 3.24,
+   "text": "right you know we do listen as it"
+  },
+  {
+   "t": 381.76,
+   "d": 2.58,
+   "text": "happens but but just getting feedback"
+  },
+  {
+   "t": 384.34,
+   "d": 3.0,
+   "text": "from players is a virtue in itself of a"
+  },
+  {
+   "t": 387.34,
+   "d": 6.23,
+   "text": "sort so so here we're on like the"
+  },
+  {
+   "t": 393.57,
+   "d": 2.38,
+   "text": "flexibility for players having an online"
+  },
+  {
+   "t": 395.95,
+   "d": 4.23,
+   "text": "means you can play from pretty much any"
+  },
+  {
+   "t": 400.18,
+   "d": 0.4,
+   "text": "device"
+  },
+  {
+   "t": 400.58,
+   "d": 2.13,
+   "text": "that like has an internet connection you"
+  },
+  {
+   "t": 402.71,
+   "d": 2.79,
+   "text": "don't have to download anything I"
+  },
+  {
+   "t": 405.5,
+   "d": 2.34,
+   "text": "usually play dungeon crawl over SSH"
+  },
+  {
+   "t": 407.84,
+   "d": 1.26,
+   "text": "myself you know if you're a developer"
+  },
+  {
+   "t": 409.1,
+   "d": 1.95,
+   "text": "that's familiar to you is one of the"
+  },
+  {
+   "t": 411.05,
+   "d": 2.64,
+   "text": "tools available on pretty much any any"
+  },
+  {
+   "t": 413.69,
+   "d": 1.47,
+   "text": "machine that you want to write code on"
+  },
+  {
+   "t": 415.16,
+   "d": 2.19,
+   "text": "probably you have access to SSH or"
+  },
+  {
+   "t": 417.35,
+   "d": 2.43,
+   "text": "telnet I actually don't think we let you"
+  },
+  {
+   "t": 419.78,
+   "d": 3.87,
+   "text": "play over telnet but you can also play"
+  },
+  {
+   "t": 423.65,
+   "d": 5.16,
+   "text": "over web tiles which is the browser in"
+  },
+  {
+   "t": 428.81,
+   "d": 2.91,
+   "text": "browser JavaScript and Ajax and JSON or"
+  },
+  {
+   "t": 431.72,
+   "d": 3.57,
+   "text": "whatever who knows we send the tiles out"
+  },
+  {
+   "t": 435.29,
+   "d": 1.65,
+   "text": "over the web and they appear on your"
+  },
+  {
+   "t": 436.94,
+   "d": 1.74,
+   "text": "browser as if you were playing the local"
+  },
+  {
+   "t": 438.68,
+   "d": 3.21,
+   "text": "version and I think we have limited"
+  },
+  {
+   "t": 441.89,
+   "d": 2.01,
+   "text": "Mouse support but but some Mouse support"
+  },
+  {
+   "t": 443.9,
+   "d": 4.05,
+   "text": "anyway and even if you don't have SSH"
+  },
+  {
+   "t": 447.95,
+   "d": 2.67,
+   "text": "every device has a browser right you can"
+  },
+  {
+   "t": 450.62,
+   "d": 1.41,
+   "text": "you could probably play dungeon crawl on"
+  },
+  {
+   "t": 452.03,
+   "d": 1.29,
+   "text": "the right kind of toaster if you could"
+  },
+  {
+   "t": 453.32,
+   "d": 4.11,
+   "text": "get a browser installed on it and so"
+  },
+  {
+   "t": 457.43,
+   "d": 1.38,
+   "text": "just this this makes it really easy you"
+  },
+  {
+   "t": 458.81,
+   "d": 4.11,
+   "text": "can you can play on like you know people"
+  },
+  {
+   "t": 462.92,
+   "d": 1.59,
+   "text": "have installed ports on your phone that"
+  },
+  {
+   "t": 464.51,
+   "d": 3.12,
+   "text": "like display it locally but talk to the"
+  },
+  {
+   "t": 467.63,
+   "d": 2.34,
+   "text": "web tile server or whatever that seems I"
+  },
+  {
+   "t": 469.97,
+   "d": 0.99,
+   "text": "don't want to play on my phone but"
+  },
+  {
+   "t": 470.96,
+   "d": 2.01,
+   "text": "apparently people do and just having it"
+  },
+  {
+   "t": 472.97,
+   "d": 2.22,
+   "text": "offered online lets people get to it"
+  },
+  {
+   "t": 475.19,
+   "d": 4.32,
+   "text": "however they want and you don't have to"
+  },
+  {
+   "t": 479.51,
+   "d": 1.56,
+   "text": "do the work of updating we do that for"
+  },
+  {
+   "t": 481.07,
+   "d": 1.83,
+   "text": "you we update the servers you can choose"
+  },
+  {
+   "t": 482.9,
+   "d": 2.1,
+   "text": "to play on an old version and you get"
+  },
+  {
+   "t": 485.0,
+   "d": 1.86,
+   "text": "the bug fixes back port to that version"
+  },
+  {
+   "t": 486.86,
+   "d": 2.91,
+   "text": "but not the new features well you really"
+  },
+  {
+   "t": 489.77,
+   "d": 2.12,
+   "text": "bad bug fixes you get back ported but"
+  },
+  {
+   "t": 491.89,
+   "d": 3.69,
+   "text": "but it's more or less the old version"
+  },
+  {
+   "t": 495.58,
+   "d": 1.93,
+   "text": "doesn't go back until the end of time"
+  },
+  {
+   "t": 497.51,
+   "d": 3.84,
+   "text": "but of course you can download that and"
+  },
+  {
+   "t": 501.35,
+   "d": 1.65,
+   "text": "you don't have to play from the same"
+  },
+  {
+   "t": 503.0,
+   "d": 2.16,
+   "text": "place right you can play from your your"
+  },
+  {
+   "t": 505.16,
+   "d": 3.78,
+   "text": "laptop at home and then you know if your"
+  },
+  {
+   "t": 508.94,
+   "d": 1.35,
+   "text": "boss isn't watching you can play at work"
+  },
+  {
+   "t": 510.29,
+   "d": 4.77,
+   "text": "and it's the same game right so that's"
+  },
+  {
+   "t": 515.06,
+   "d": 0.9,
+   "text": "that's one of the nice things about"
+  },
+  {
+   "t": 515.96,
+   "d": 2.13,
+   "text": "online play all of its it's easy to play"
+  },
+  {
+   "t": 518.09,
+   "d": 5.34,
+   "text": "to get access to be able to play and"
+  },
+  {
+   "t": 523.43,
+   "d": 4.65,
+   "text": "having having the data from from these"
+  },
+  {
+   "t": 528.08,
+   "d": 4.25,
+   "text": "games online means that we we have"
+  },
+  {
+   "t": 532.33,
+   "d": 1.97,
+   "text": "there's a lot of ways that we record"
+  },
+  {
+   "t": 534.3,
+   "d": 1.95,
+   "text": "this data and make it available to"
+  },
+  {
+   "t": 536.25,
+   "d": 2.49,
+   "text": "anybody who wants it both humans and"
+  },
+  {
+   "t": 538.74,
+   "d": 3.33,
+   "text": "programs can access this stuff whenever"
+  },
+  {
+   "t": 542.07,
+   "d": 3.78,
+   "text": "you die or win rarely we save what's"
+  },
+  {
+   "t": 545.85,
+   "d": 1.62,
+   "text": "called a morgue file which is like a log"
+  },
+  {
+   "t": 547.47,
+   "d": 1.35,
+   "text": "of like hey here's roughly what your"
+  },
+  {
+   "t": 548.82,
+   "d": 1.35,
+   "text": "character looked like here's a list of"
+  },
+  {
+   "t": 550.17,
+   "d": 1.2,
+   "text": "all the important events that happened"
+  },
+  {
+   "t": 551.37,
+   "d": 2.37,
+   "text": "to you here's some stuff that you did"
+  },
+  {
+   "t": 553.74,
+   "d": 1.32,
+   "text": "what your character was good at what he"
+  },
+  {
+   "t": 555.06,
+   "d": 2.67,
+   "text": "was wearing and it's all saved in a text"
+  },
+  {
+   "t": 557.73,
+   "d": 1.92,
+   "text": "file online for you know basically the"
+  },
+  {
+   "t": 559.65,
+   "d": 2.34,
+   "text": "end of time mate I don't think we've"
+  },
+  {
+   "t": 561.99,
+   "d": 4.68,
+   "text": "deleted any but maybe and there's so"
+  },
+  {
+   "t": 566.67,
+   "d": 1.77,
+   "text": "much detail in these that it really"
+  },
+  {
+   "t": 568.44,
+   "d": 2.31,
+   "text": "helps when players ask for help you can"
+  },
+  {
+   "t": 570.75,
+   "d": 1.29,
+   "text": "create a morgue file on whenever you"
+  },
+  {
+   "t": 572.04,
+   "d": 1.65,
+   "text": "want during a game that's ongoing you"
+  },
+  {
+   "t": 573.69,
+   "d": 1.8,
+   "text": "say make me a morgue file and it saves"
+  },
+  {
+   "t": 575.49,
+   "d": 3.06,
+   "text": "an in-progress one and so there's this"
+  },
+  {
+   "t": 578.55,
+   "d": 2.31,
+   "text": "culture of when you ask for help you"
+  },
+  {
+   "t": 580.86,
+   "d": 1.95,
+   "text": "should provide a morgue file like you're"
+  },
+  {
+   "t": 582.81,
+   "d": 3.24,
+   "text": "saying oh geez I keep dying in in the"
+  },
+  {
+   "t": 586.05,
+   "d": 2.16,
+   "text": "lair you know what I think it's because"
+  },
+  {
+   "t": 588.21,
+   "d": 1.35,
+   "text": "I'm wielding the wrong weapon like what"
+  },
+  {
+   "t": 589.56,
+   "d": 0.42,
+   "text": "can I do"
+  },
+  {
+   "t": 589.98,
+   "d": 2.37,
+   "text": "here's my morgue and sometimes the extra"
+  },
+  {
+   "t": 592.35,
+   "d": 1.68,
+   "text": "so well yeah that weapon is terrible"
+  },
+  {
+   "t": 594.03,
+   "d": 4.05,
+   "text": "like you should do XYZ instead but a lot"
+  },
+  {
+   "t": 598.08,
+   "d": 1.77,
+   "text": "more often you look at the morgue file"
+  },
+  {
+   "t": 599.85,
+   "d": 1.5,
+   "text": "and say well you're doing 15 basic"
+  },
+  {
+   "t": 601.35,
+   "d": 1.41,
+   "text": "things that are not very good in general"
+  },
+  {
+   "t": 602.76,
+   "d": 1.56,
+   "text": "and so like all of your characters are"
+  },
+  {
+   "t": 604.32,
+   "d": 3.33,
+   "text": "gonna suck until you fix those and you"
+  },
+  {
+   "t": 607.65,
+   "d": 1.47,
+   "text": "couldn't do that if we didn't have these"
+  },
+  {
+   "t": 609.12,
+   "d": 1.44,
+   "text": "morgue files sometimes players say I"
+  },
+  {
+   "t": 610.56,
+   "d": 1.32,
+   "text": "need help with X and they don't really"
+  },
+  {
+   "t": 611.88,
+   "d": 1.44,
+   "text": "provide a more files like yeah well I"
+  },
+  {
+   "t": 613.32,
+   "d": 2.07,
+   "text": "don't know X sounds fine to me sorry you"
+  },
+  {
+   "t": 615.39,
+   "d": 3.66,
+   "text": "keep dying but if if people upload the"
+  },
+  {
+   "t": 619.05,
+   "d": 1.5,
+   "text": "morgue you can you can do some really"
+  },
+  {
+   "t": 620.55,
+   "d": 1.98,
+   "text": "in-depth analysis on these things just a"
+  },
+  {
+   "t": 622.53,
+   "d": 1.59,
+   "text": "snapshot of the character and say here's"
+  },
+  {
+   "t": 624.12,
+   "d": 1.8,
+   "text": "some stuff that doesn't look so great to"
+  },
+  {
+   "t": 625.92,
+   "d": 1.68,
+   "text": "me there's a lot of different playstyles"
+  },
+  {
+   "t": 627.6,
+   "d": 1.68,
+   "text": "of course and what looks bad to one"
+  },
+  {
+   "t": 629.28,
+   "d": 1.65,
+   "text": "player will look fine to another but"
+  },
+  {
+   "t": 630.93,
+   "d": 2.1,
+   "text": "there are some common patterns in that"
+  },
+  {
+   "t": 633.03,
+   "d": 2.49,
+   "text": "you can get from morgue files and if"
+  },
+  {
+   "t": 635.52,
+   "d": 3.87,
+   "text": "that's not enough we keep Freight you"
+  },
+  {
+   "t": 639.39,
+   "d": 2.7,
+   "text": "know frame in so much as a console game"
+  },
+  {
+   "t": 642.09,
+   "d": 1.86,
+   "text": "has frames we keep frame by frame"
+  },
+  {
+   "t": 643.95,
+   "d": 2.16,
+   "text": "replays of every game ever played online"
+  },
+  {
+   "t": 646.11,
+   "d": 3.24,
+   "text": "and you can download these you can view"
+  },
+  {
+   "t": 649.35,
+   "d": 3.57,
+   "text": "them online and so just within the past"
+  },
+  {
+   "t": 652.92,
+   "d": 1.47,
+   "text": "couple of weeks on the dungeon crawl"
+  },
+  {
+   "t": 654.39,
+   "d": 2.4,
+   "text": "subreddit I've seen at least two threads"
+  },
+  {
+   "t": 656.79,
+   "d": 1.59,
+   "text": "where like something interesting was"
+  },
+  {
+   "t": 658.38,
+   "d": 1.26,
+   "text": "discovered as a result of someone"
+  },
+  {
+   "t": 659.64,
+   "d": 3.81,
+   "text": "looking through a TTY wreck one was me a"
+  },
+  {
+   "t": 663.45,
+   "d": 2.7,
+   "text": "player said geez I I had two hundred and"
+  },
+  {
+   "t": 666.15,
+   "d": 2.04,
+   "text": "thirty health and the next turn I had 2l"
+  },
+  {
+   "t": 668.19,
+   "d": 2.34,
+   "text": "what happened that that seems crazy I"
+  },
+  {
+   "t": 670.53,
+   "d": 2.42,
+   "text": "was like that's a lot yeah I agree"
+  },
+  {
+   "t": 672.95,
+   "d": 2.23,
+   "text": "so I looked at it and it you know was"
+  },
+  {
+   "t": 675.18,
+   "d": 1.62,
+   "text": "able to say oh okay well you know this"
+  },
+  {
+   "t": 676.8,
+   "d": 2.19,
+   "text": "first this happened which multiplied all"
+  },
+  {
+   "t": 678.99,
+   "d": 2.61,
+   "text": "day imaged by 50 by 150 percent and then"
+  },
+  {
+   "t": 681.6,
+   "d": 1.53,
+   "text": "this happened was multiplied all damage"
+  },
+  {
+   "t": 683.13,
+   "d": 2.22,
+   "text": "by two and a half and then like okay"
+  },
+  {
+   "t": 685.35,
+   "d": 2.01,
+   "text": "then you had hit for about sixty which"
+  },
+  {
+   "t": 687.36,
+   "d": 2.76,
+   "text": "is a lot but you know it turned into 230"
+  },
+  {
+   "t": 690.12,
+   "d": 3.3,
+   "text": "or or whatever and then someone found a"
+  },
+  {
+   "t": 693.42,
+   "d": 2.7,
+   "text": "bug I think just yesterday by looking at"
+  },
+  {
+   "t": 696.12,
+   "d": 1.5,
+   "text": "somebody's CD why wreck they complained"
+  },
+  {
+   "t": 697.62,
+   "d": 3.12,
+   "text": "that the devs had disabled magic mapping"
+  },
+  {
+   "t": 700.74,
+   "d": 3.09,
+   "text": "from working in the realm of zot that's"
+  },
+  {
+   "t": 703.83,
+   "d": 1.8,
+   "text": "like well no we didn't what what's wrong"
+  },
+  {
+   "t": 705.63,
+   "d": 2.46,
+   "text": "yeah you must be misremembering but"
+  },
+  {
+   "t": 708.09,
+   "d": 1.35,
+   "text": "since there was a TTY wrecked another"
+  },
+  {
+   "t": 709.44,
+   "d": 1.5,
+   "text": "player went and watched it and said no"
+  },
+  {
+   "t": 710.94,
+   "d": 1.68,
+   "text": "he it really did happen and what he did"
+  },
+  {
+   "t": 712.62,
+   "d": 2.1,
+   "text": "before this was X Y & Z I was like oh"
+  },
+  {
+   "t": 714.72,
+   "d": 1.17,
+   "text": "that's interesting let's go look at the"
+  },
+  {
+   "t": 715.89,
+   "d": 2.55,
+   "text": "functions yeah well sure enough if you"
+  },
+  {
+   "t": 718.44,
+   "d": 2.55,
+   "text": "choose to forget what you've seen of the"
+  },
+  {
+   "t": 720.99,
+   "d": 1.89,
+   "text": "map so far and then read the scroll of"
+  },
+  {
+   "t": 722.88,
+   "d": 1.74,
+   "text": "magic mapping there's something"
+  },
+  {
+   "t": 724.62,
+   "d": 1.2,
+   "text": "incorrectly set that says they never"
+  },
+  {
+   "t": 725.82,
+   "d": 2.4,
+   "text": "want to know anything about the map okay"
+  },
+  {
+   "t": 728.22,
+   "d": 2.07,
+   "text": "so I fixed it and having a TTY rack made"
+  },
+  {
+   "t": 730.29,
+   "d": 1.2,
+   "text": "that possible where before I would've"
+  },
+  {
+   "t": 731.49,
+   "d": 6.45,
+   "text": "said no can't reproduce clothes right so"
+  },
+  {
+   "t": 737.94,
+   "d": 2.73,
+   "text": "and a lot of this is made available"
+  },
+  {
+   "t": 740.67,
+   "d": 2.49,
+   "text": "through what we call sick well is an IRC"
+  },
+  {
+   "t": 743.16,
+   "d": 3.06,
+   "text": "BOTS that hangs out in in our IRC"
+  },
+  {
+   "t": 746.22,
+   "d": 3.3,
+   "text": "Channel both both the public well both"
+  },
+  {
+   "t": 749.52,
+   "d": 1.68,
+   "text": "channels are public of course but the"
+  },
+  {
+   "t": 751.2,
+   "d": 2.64,
+   "text": "the crawl IRC channel focused on players"
+  },
+  {
+   "t": 753.84,
+   "d": 2.4,
+   "text": "chatting amongst themselves and we crawl"
+  },
+  {
+   "t": 756.24,
+   "d": 1.91,
+   "text": "dev channel focused on developers"
+  },
+  {
+   "t": 758.15,
+   "d": 2.23,
+   "text": "talking to themselves or you know"
+  },
+  {
+   "t": 760.38,
+   "d": 2.37,
+   "text": "players asking for reporting bugs or"
+  },
+  {
+   "t": 762.75,
+   "d": 3.51,
+   "text": "what have you and so not only are these"
+  },
+  {
+   "t": 766.26,
+   "d": 1.02,
+   "text": "morgue files"
+  },
+  {
+   "t": 767.28,
+   "d": 2.43,
+   "text": "ie snapshots of your character at death"
+  },
+  {
+   "t": 769.71,
+   "d": 2.34,
+   "text": "and frame-by-frame replays ttyl rights"
+  },
+  {
+   "t": 772.05,
+   "d": 0.42,
+   "text": "stored"
+  },
+  {
+   "t": 772.47,
+   "d": 1.95,
+   "text": "those are both sort of good at for"
+  },
+  {
+   "t": 774.42,
+   "d": 1.47,
+   "text": "looking at by humans right but not so"
+  },
+  {
+   "t": 775.89,
+   "d": 2.76,
+   "text": "good for computers and so every game"
+  },
+  {
+   "t": 778.65,
+   "d": 3.39,
+   "text": "played online also reports what are"
+  },
+  {
+   "t": 782.04,
+   "d": 3.18,
+   "text": "called milestones the game has a lot of"
+  },
+  {
+   "t": 785.22,
+   "d": 4.05,
+   "text": "things that notes as important you you"
+  },
+  {
+   "t": 789.27,
+   "d": 4.77,
+   "text": "enter a new dungeon area you you defeat"
+  },
+  {
+   "t": 794.04,
+   "d": 5.28,
+   "text": "a unique monster you start worshipping a"
+  },
+  {
+   "t": 799.32,
+   "d": 0.69,
+   "text": "new god"
+  },
+  {
+   "t": 800.01,
+   "d": 1.54,
+   "text": "there's lots of stuff that happens again"
+  },
+  {
+   "t": 801.55,
+   "d": 1.53,
+   "text": "game will probably have dozens of"
+  },
+  {
+   "t": 803.08,
+   "d": 1.59,
+   "text": "milestones in it if you get to the end"
+  },
+  {
+   "t": 804.67,
+   "d": 3.75,
+   "text": "or one if you die really early and all"
+  },
+  {
+   "t": 808.42,
+   "d": 3.14,
+   "text": "of these milestones have a bunch of"
+  },
+  {
+   "t": 811.56,
+   "d": 1.99,
+   "text": "properties attached to them what kind"
+  },
+  {
+   "t": 813.55,
+   "d": 1.98,
+   "text": "what what race were you when this"
+  },
+  {
+   "t": 815.53,
+   "d": 2.01,
+   "text": "happened what God were you following"
+  },
+  {
+   "t": 817.54,
+   "d": 2.04,
+   "text": "what level were you what what was your"
+  },
+  {
+   "t": 819.58,
+   "d": 3.51,
+   "text": "highest trained skill what monster was"
+  },
+  {
+   "t": 823.09,
+   "d": 1.41,
+   "text": "it that dealt the killing blow to you"
+  },
+  {
+   "t": 824.5,
+   "d": 1.86,
+   "text": "and what weapon were they using this is"
+  },
+  {
+   "t": 826.36,
+   "d": 2.34,
+   "text": "all put into our milestones and uploaded"
+  },
+  {
+   "t": 828.7,
+   "d": 4.41,
+   "text": "to I remember where we store milestones"
+  },
+  {
+   "t": 833.11,
+   "d": 2.97,
+   "text": "but sick well downloads them somehow and"
+  },
+  {
+   "t": 836.08,
+   "d": 2.52,
+   "text": "puts them into a Postgres database which"
+  },
+  {
+   "t": 838.6,
+   "d": 2.28,
+   "text": "is like basically a repository of"
+  },
+  {
+   "t": 840.88,
+   "d": 1.17,
+   "text": "everything interesting that has ever"
+  },
+  {
+   "t": 842.05,
+   "d": 1.47,
+   "text": "happened in any game of dungeon crawl"
+  },
+  {
+   "t": 843.52,
+   "d": 3.39,
+   "text": "played online and of course nobody wants"
+  },
+  {
+   "t": 846.91,
+   "d": 1.74,
+   "text": "to write sequel queries against this"
+  },
+  {
+   "t": 848.65,
+   "d": 2.07,
+   "text": "database you could if you had permission"
+  },
+  {
+   "t": 850.72,
+   "d": 2.16,
+   "text": "but we don't I don't anyway probably"
+  },
+  {
+   "t": 852.88,
+   "d": 3.35,
+   "text": "Green snark does but there's also"
+  },
+  {
+   "t": 856.23,
+   "d": 3.28,
+   "text": "sequelae the IRC bot has a query"
+  },
+  {
+   "t": 859.51,
+   "d": 2.43,
+   "text": "language against this database tailored"
+  },
+  {
+   "t": 861.94,
+   "d": 2.55,
+   "text": "towards dungeon crawl you can say I"
+  },
+  {
+   "t": 864.49,
+   "d": 1.41,
+   "text": "think I have some examples on it coming"
+  },
+  {
+   "t": 865.9,
+   "d": 1.86,
+   "text": "slide but you can ask very targeted"
+  },
+  {
+   "t": 867.76,
+   "d": 3.06,
+   "text": "questions about any subset of games"
+  },
+  {
+   "t": 870.82,
+   "d": 3.6,
+   "text": "played online yours or anyone elses and"
+  },
+  {
+   "t": 874.42,
+   "d": 2.1,
+   "text": "it's relatively simple to learn it's"
+  },
+  {
+   "t": 876.52,
+   "d": 1.8,
+   "text": "some work but it's you know easier than"
+  },
+  {
+   "t": 878.32,
+   "d": 1.2,
+   "text": "figuring out the structure of the sequel"
+  },
+  {
+   "t": 879.52,
+   "d": 3.6,
+   "text": "database and so you can use this a lot"
+  },
+  {
+   "t": 883.12,
+   "d": 1.23,
+   "text": "of ways you can look at your own games"
+  },
+  {
+   "t": 884.35,
+   "d": 2.61,
+   "text": "and say where do I usually die what what"
+  },
+  {
+   "t": 886.96,
+   "d": 3.87,
+   "text": "am I good at or you can like ask hey"
+  },
+  {
+   "t": 890.83,
+   "d": 3.09,
+   "text": "what what do other players do and so"
+  },
+  {
+   "t": 893.92,
+   "d": 1.68,
+   "text": "I've got a few examples here that I that"
+  },
+  {
+   "t": 895.6,
+   "d": 2.19,
+   "text": "I put together for this talk of me using"
+  },
+  {
+   "t": 897.79,
+   "d": 3.33,
+   "text": "sick well in a relatively simple way you"
+  },
+  {
+   "t": 901.12,
+   "d": 1.08,
+   "text": "one thing you can do is just say like"
+  },
+  {
+   "t": 902.2,
+   "d": 1.41,
+   "text": "what what am i up to how much have I"
+  },
+  {
+   "t": 903.61,
+   "d": 3.69,
+   "text": "played well in the past what is this"
+  },
+  {
+   "t": 907.3,
+   "d": 2.42,
+   "text": "two of the three and a half years I've"
+  },
+  {
+   "t": 909.72,
+   "d": 6.13,
+   "text": "played for a lot of time right and and"
+  },
+  {
+   "t": 915.85,
+   "d": 2.1,
+   "text": "this doesn't count idle right if you if"
+  },
+  {
+   "t": 917.95,
+   "d": 1.56,
+   "text": "you if you don't touch any keys for five"
+  },
+  {
+   "t": 919.51,
+   "d": 1.44,
+   "text": "or ten seconds we stop counting this is"
+  },
+  {
+   "t": 920.95,
+   "d": 1.81,
+   "text": "how much I've actually played"
+  },
+  {
+   "t": 922.76,
+   "d": 1.19,
+   "text": "[Music]"
+  },
+  {
+   "t": 923.95,
+   "d": 2.76,
+   "text": "and if it seems like a lot especially"
+  },
+  {
+   "t": 926.71,
+   "d": 1.2,
+   "text": "considering I haven't really played much"
+  },
+  {
+   "t": 927.91,
+   "d": 3.39,
+   "text": "in the last six months but okay that's"
+  },
+  {
+   "t": 931.3,
+   "d": 2.07,
+   "text": "like a summary how much do I win you"
+  },
+  {
+   "t": 933.37,
+   "d": 2.28,
+   "text": "know see 15% I'm pretty proud of its"
+  },
+  {
+   "t": 935.65,
+   "d": 1.05,
+   "text": "it's a hard game"
+  },
+  {
+   "t": 936.7,
+   "d": 4.02,
+   "text": "most players win nothing never but you"
+  },
+  {
+   "t": 940.72,
+   "d": 1.53,
+   "text": "know a few percent is pretty reasonable"
+  },
+  {
+   "t": 942.25,
+   "d": 2.73,
+   "text": "for an average player I think you know"
+  },
+  {
+   "t": 944.98,
+   "d": 2.1,
+   "text": "players who really try hard and are a"
+  },
+  {
+   "t": 947.08,
+   "d": 2.25,
+   "text": "lot better than me can do substantially"
+  },
+  {
+   "t": 949.33,
+   "d": 2.79,
+   "text": "better than this but doesn't matter I'm"
+  },
+  {
+   "t": 952.12,
+   "d": 2.64,
+   "text": "not here to brag but I can't ask"
+  },
+  {
+   "t": 954.76,
+   "d": 2.28,
+   "text": "questions about like well okay dungeon"
+  },
+  {
+   "t": 957.04,
+   "d": 4.5,
+   "text": "crawl has a pantheon of what 26 I think"
+  },
+  {
+   "t": 961.54,
+   "d": 1.86,
+   "text": "we keep taking them out and putting them"
+  },
+  {
+   "t": 963.4,
+   "d": 1.71,
+   "text": "back but around there about as many"
+  },
+  {
+   "t": 965.11,
+   "d": 1.94,
+   "text": "letters as there are in the alphabet"
+  },
+  {
+   "t": 967.05,
+   "d": 2.38,
+   "text": "because each one has a different first"
+  },
+  {
+   "t": 969.43,
+   "d": 2.07,
+   "text": "letter for their name so you can access"
+  },
+  {
+   "t": 971.5,
+   "d": 2.7,
+   "text": "them through the character thingy and I"
+  },
+  {
+   "t": 974.2,
+   "d": 1.38,
+   "text": "can say well which ones are you know the"
+  },
+  {
+   "t": 975.58,
+   "d": 3.36,
+   "text": "strongest from my perspective each give"
+  },
+  {
+   "t": 978.94,
+   "d": 1.5,
+   "text": "me a listing of all the games that I've"
+  },
+  {
+   "t": 980.44,
+   "d": 2.34,
+   "text": "won or every game that I've played"
+  },
+  {
+   "t": 982.78,
+   "d": 2.34,
+   "text": "sorted by God and display the win rate"
+  },
+  {
+   "t": 985.12,
+   "d": 2.55,
+   "text": "and it's like okay well Bo I played one"
+  },
+  {
+   "t": 987.67,
+   "d": 1.86,
+   "text": "game and I want it and very strong right"
+  },
+  {
+   "t": 989.53,
+   "d": 4.59,
+   "text": "but a small sample size and like Trog"
+  },
+  {
+   "t": 994.12,
+   "d": 1.86,
+   "text": "really is probably stronger than Bo but"
+  },
+  {
+   "t": 995.98,
+   "d": 3.48,
+   "text": "I messed one up and so you can see this"
+  },
+  {
+   "t": 999.46,
+   "d": 1.05,
+   "text": "kind of stuff what are you good at what"
+  },
+  {
+   "t": 1000.51,
+   "d": 3.03,
+   "text": "should you practice you don't have to do"
+  },
+  {
+   "t": 1003.54,
+   "d": 1.14,
+   "text": "it by God you could do it by race"
+  },
+  {
+   "t": 1004.68,
+   "d": 1.26,
+   "text": "whatever it's got a million different"
+  },
+  {
+   "t": 1005.94,
+   "d": 3.75,
+   "text": "things in here or something that I I"
+  },
+  {
+   "t": 1009.69,
+   "d": 3.45,
+   "text": "remember doing is like okay so the Elven"
+  },
+  {
+   "t": 1013.14,
+   "d": 2.52,
+   "text": "halls are sort of an optional side area"
+  },
+  {
+   "t": 1015.66,
+   "d": 1.71,
+   "text": "in dungeon crawl that you can go to if"
+  },
+  {
+   "t": 1017.37,
+   "d": 2.04,
+   "text": "you like think your character is"
+  },
+  {
+   "t": 1019.41,
+   "d": 1.44,
+   "text": "relatively strong but you're just in"
+  },
+  {
+   "t": 1020.85,
+   "d": 1.2,
+   "text": "need of some better equipment or"
+  },
+  {
+   "t": 1022.05,
+   "d": 1.44,
+   "text": "whatever there are dangerous elves in"
+  },
+  {
+   "t": 1023.49,
+   "d": 1.98,
+   "text": "the elven halls but some great loot and"
+  },
+  {
+   "t": 1025.47,
+   "d": 1.89,
+   "text": "like it's optional and I can never"
+  },
+  {
+   "t": 1027.36,
+   "d": 1.5,
+   "text": "really remember exactly how strong the"
+  },
+  {
+   "t": 1028.86,
+   "d": 2.28,
+   "text": "monsters there are and so I can say list"
+  },
+  {
+   "t": 1031.14,
+   "d": 2.31,
+   "text": "for all players recently on a trunk"
+  },
+  {
+   "t": 1033.45,
+   "d": 4.92,
+   "text": "version when they entered elf sorted by"
+  },
+  {
+   "t": 1038.37,
+   "d": 1.98,
+   "text": "their experience level and tell me what"
+  },
+  {
+   "t": 1040.35,
+   "d": 3.18,
+   "text": "percent of them died right I was like"
+  },
+  {
+   "t": 1043.53,
+   "d": 1.71,
+   "text": "okay well probably don't go in at level"
+  },
+  {
+   "t": 1045.24,
+   "d": 2.88,
+   "text": "10 but things start to drop off down"
+  },
+  {
+   "t": 1048.12,
+   "d": 1.83,
+   "text": "there at around 19 all right that's"
+  },
+  {
+   "t": 1049.95,
+   "d": 1.41,
+   "text": "probably an OK estimate for when it"
+  },
+  {
+   "t": 1051.36,
+   "d": 3.3,
+   "text": "might be safe to go in yeah I see some"
+  },
+  {
+   "t": 1054.66,
+   "d": 1.62,
+   "text": "shake and heads in the audience sure you"
+  },
+  {
+   "t": 1056.28,
+   "d": 2.92,
+   "text": "have to be a good player but"
+  },
+  {
+   "t": 1059.2,
+   "d": 2.46,
+   "text": "you you you know and you can still die"
+  },
+  {
+   "t": 1061.66,
+   "d": 1.59,
+   "text": "there and this is not perfect because"
+  },
+  {
+   "t": 1063.25,
+   "d": 2.16,
+   "text": "maybe you go into elf at level 19 and"
+  },
+  {
+   "t": 1065.41,
+   "d": 2.64,
+   "text": "leave and then come back at level 30"
+  },
+  {
+   "t": 1068.05,
+   "d": 2.64,
+   "text": "there's no level 30 level 27 you know so"
+  },
+  {
+   "t": 1070.69,
+   "d": 1.77,
+   "text": "this is not perfect it's just for the"
+  },
+  {
+   "t": 1072.46,
+   "d": 1.35,
+   "text": "milestone that they entered else did"
+  },
+  {
+   "t": 1073.81,
+   "d": 1.65,
+   "text": "they eventually die an elf not that they"
+  },
+  {
+   "t": 1075.46,
+   "d": 2.73,
+   "text": "die right away you can you can construct"
+  },
+  {
+   "t": 1078.19,
+   "d": 1.38,
+   "text": "more careful queries but that sort of"
+  },
+  {
+   "t": 1079.57,
+   "d": 3.54,
+   "text": "thing happens and the thing that's"
+  },
+  {
+   "t": 1083.11,
+   "d": 1.94,
+   "text": "happened a few times is like huh"
+  },
+  {
+   "t": 1085.05,
+   "d": 1.84,
+   "text": "something really strange has happened we"
+  },
+  {
+   "t": 1086.89,
+   "d": 1.35,
+   "text": "run a tournament every time we release a"
+  },
+  {
+   "t": 1088.24,
+   "d": 0.54,
+   "text": "new version"
+  },
+  {
+   "t": 1088.78,
+   "d": 1.95,
+   "text": "what was the with the win rate for the"
+  },
+  {
+   "t": 1090.73,
+   "d": 3.0,
+   "text": "0.15 tournament well about 1.5 percent"
+  },
+  {
+   "t": 1093.73,
+   "d": 2.82,
+   "text": "how about the 0.16 tournament almost"
+  },
+  {
+   "t": 1096.55,
+   "d": 1.53,
+   "text": "twice as high someone noticed this a"
+  },
+  {
+   "t": 1098.08,
+   "d": 1.92,
+   "text": "week into the two week tournament what's"
+  },
+  {
+   "t": 1100.0,
+   "d": 2.49,
+   "text": "that all about and so we went digging"
+  },
+  {
+   "t": 1102.49,
+   "d": 2.04,
+   "text": "and once we once we found the answer"
+  },
+  {
+   "t": 1104.53,
+   "d": 1.77,
+   "text": "someone made this commit to github stop"
+  },
+  {
+   "t": 1106.3,
+   "d": 2.6,
+   "text": "doubling all damage dealt by the player"
+  },
+  {
+   "t": 1108.9,
+   "d": 2.83,
+   "text": "but that put the win right back where it"
+  },
+  {
+   "t": 1111.73,
+   "d": 2.49,
+   "text": "was supposed to be right and we might"
+  },
+  {
+   "t": 1114.22,
+   "d": 2.04,
+   "text": "not have noticed this for a long long"
+  },
+  {
+   "t": 1116.26,
+   "d": 1.86,
+   "text": "time there there are bugs that have been"
+  },
+  {
+   "t": 1118.12,
+   "d": 1.8,
+   "text": "in there since 0.8 that we found last"
+  },
+  {
+   "t": 1119.92,
+   "d": 3.45,
+   "text": "year right if you knew the secret tech"
+  },
+  {
+   "t": 1123.37,
+   "d": 1.71,
+   "text": "you could take a spell that was supposed"
+  },
+  {
+   "t": 1125.08,
+   "d": 2.28,
+   "text": "to be melee range targeted and just aim"
+  },
+  {
+   "t": 1127.36,
+   "d": 1.11,
+   "text": "it anywhere on the screen if you just"
+  },
+  {
+   "t": 1128.47,
+   "d": 2.0,
+   "text": "pressed a button we didn't expect and"
+  },
+  {
+   "t": 1130.47,
+   "d": 2.35,
+   "text": "you know since there's no milestones"
+  },
+  {
+   "t": 1132.82,
+   "d": 1.14,
+   "text": "about that nobody noticed it until"
+  },
+  {
+   "t": 1133.96,
+   "d": 2.61,
+   "text": "someone told us but this one we do have"
+  },
+  {
+   "t": 1136.57,
+   "d": 1.92,
+   "text": "milestones for and we found it and we"
+  },
+  {
+   "t": 1138.49,
+   "d": 4.8,
+   "text": "fixed it and and sort of similarly we"
+  },
+  {
+   "t": 1143.29,
+   "d": 1.95,
+   "text": "can get metrics on what's happening with"
+  },
+  {
+   "t": 1145.24,
+   "d": 2.73,
+   "text": "things that have recently changed when"
+  },
+  {
+   "t": 1147.97,
+   "d": 1.86,
+   "text": "the monster iron Giants were added"
+  },
+  {
+   "t": 1149.83,
+   "d": 1.59,
+   "text": "players were complaining geez these guys"
+  },
+  {
+   "t": 1151.42,
+   "d": 1.83,
+   "text": "are really oppressive and horrible and"
+  },
+  {
+   "t": 1153.25,
+   "d": 2.1,
+   "text": "they killed me all the time and so we"
+  },
+  {
+   "t": 1155.35,
+   "d": 2.31,
+   "text": "said okay well let's look in all of the"
+  },
+  {
+   "t": 1157.66,
+   "d": 3.12,
+   "text": "dungeon carl's for various hell's discs"
+  },
+  {
+   "t": 1160.78,
+   "d": 2.49,
+   "text": "Gehenna kook itis and the other one"
+  },
+  {
+   "t": 1163.27,
+   "d": 1.55,
+   "text": "Tartarus"
+  },
+  {
+   "t": 1164.82,
+   "d": 2.23,
+   "text": "how often are players dying in each of"
+  },
+  {
+   "t": 1167.05,
+   "d": 2.04,
+   "text": "these comparatively okay well they died"
+  },
+  {
+   "t": 1169.09,
+   "d": 0.9,
+   "text": "the most in deaths"
+  },
+  {
+   "t": 1169.99,
+   "d": 1.8,
+   "text": "yes that is where the iron giants have"
+  },
+  {
+   "t": 1171.79,
+   "d": 2.34,
+   "text": "been put what's killing things in dis"
+  },
+  {
+   "t": 1174.13,
+   "d": 2.73,
+   "text": "well health sentinels and iron giants"
+  },
+  {
+   "t": 1176.86,
+   "d": 3.9,
+   "text": "okay so now these are I did this query"
+  },
+  {
+   "t": 1180.76,
+   "d": 2.72,
+   "text": "like last week and so it doesn't measure"
+  },
+  {
+   "t": 1183.48,
+   "d": 2.47,
+   "text": "what what stats we might have seen at"
+  },
+  {
+   "t": 1185.95,
+   "d": 2.79,
+   "text": "the time it was much worse back then and"
+  },
+  {
+   "t": 1188.74,
+   "d": 1.5,
+   "text": "so it's like yes there are a lot of our"
+  },
+  {
+   "t": 1190.24,
+   "d": 0.9,
+   "text": "n Giants killing"
+  },
+  {
+   "t": 1191.14,
+   "d": 1.86,
+   "text": "and we can watch some replays and see if"
+  },
+  {
+   "t": 1193.0,
+   "d": 1.41,
+   "text": "it was a fun way to die or not right"
+  },
+  {
+   "t": 1194.41,
+   "d": 1.83,
+   "text": "it's okay if players die as long as they"
+  },
+  {
+   "t": 1196.24,
+   "d": 3.41,
+   "text": "have fun and feel like they deserved it"
+  },
+  {
+   "t": 1200.4,
+   "d": 2.17,
+   "text": "and so being able to look at this stuff"
+  },
+  {
+   "t": 1202.57,
+   "d": 3.57,
+   "text": "lets us make adjustments based on how"
+  },
+  {
+   "t": 1206.14,
+   "d": 1.56,
+   "text": "games are actually progressing and not"
+  },
+  {
+   "t": 1207.7,
+   "d": 3.26,
+   "text": "just how we think they ought to progress"
+  },
+  {
+   "t": 1211.11,
+   "d": 3.01,
+   "text": "it's also now that now we're done"
+  },
+  {
+   "t": 1214.12,
+   "d": 2.52,
+   "text": "looking at sick well and statistics sort"
+  },
+  {
+   "t": 1216.64,
+   "d": 2.85,
+   "text": "of we have there's a bunch of just ways"
+  },
+  {
+   "t": 1219.49,
+   "d": 1.2,
+   "text": "you can socialize around being online"
+  },
+  {
+   "t": 1220.69,
+   "d": 4.14,
+   "text": "right we run score keepers that you know"
+  },
+  {
+   "t": 1224.83,
+   "d": 2.55,
+   "text": "that list for a player all of you know"
+  },
+  {
+   "t": 1227.38,
+   "d": 2.79,
+   "text": "in a in a more accessible version than"
+  },
+  {
+   "t": 1230.17,
+   "d": 1.47,
+   "text": "sequelae you don't have to know how to"
+  },
+  {
+   "t": 1231.64,
+   "d": 2.43,
+   "text": "write LG queries you can just look at a"
+  },
+  {
+   "t": 1234.07,
+   "d": 2.1,
+   "text": "webpage but it shows like a table of all"
+  },
+  {
+   "t": 1236.17,
+   "d": 1.23,
+   "text": "the characters and races you've played"
+  },
+  {
+   "t": 1237.4,
+   "d": 1.77,
+   "text": "it shows the streaks how many wins in a"
+  },
+  {
+   "t": 1239.17,
+   "d": 1.44,
+   "text": "row you've ever gotten that your best"
+  },
+  {
+   "t": 1240.61,
+   "d": 1.74,
+   "text": "what percentage of the time you win"
+  },
+  {
+   "t": 1242.35,
+   "d": 2.12,
+   "text": "what's your high score are there any"
+  },
+  {
+   "t": 1244.47,
+   "d": 3.75,
+   "text": "characters flat or any race / background"
+  },
+  {
+   "t": 1248.22,
+   "d": 2.68,
+   "text": "characters that you have the global high"
+  },
+  {
+   "t": 1250.9,
+   "d": 1.77,
+   "text": "score for you know it shows you all this"
+  },
+  {
+   "t": 1252.67,
+   "d": 1.05,
+   "text": "kind of stuff that you can brag to your"
+  },
+  {
+   "t": 1253.72,
+   "d": 1.26,
+   "text": "friends and say check out this game look"
+  },
+  {
+   "t": 1254.98,
+   "d": 3.75,
+   "text": "how good I am at it and you can anyone"
+  },
+  {
+   "t": 1258.73,
+   "d": 1.29,
+   "text": "who's playing online you can spectate"
+  },
+  {
+   "t": 1260.02,
+   "d": 2.4,
+   "text": "whether they're playing console or tiles"
+  },
+  {
+   "t": 1262.42,
+   "d": 2.07,
+   "text": "you can spectate them in console or"
+  },
+  {
+   "t": 1264.49,
+   "d": 2.01,
+   "text": "tiles which really helps you know a lot"
+  },
+  {
+   "t": 1266.5,
+   "d": 1.53,
+   "text": "of players play tiles and they're like"
+  },
+  {
+   "t": 1268.03,
+   "d": 1.95,
+   "text": "something's wrong and I don't know how"
+  },
+  {
+   "t": 1269.98,
+   "d": 1.02,
+   "text": "to read tiles this looks like"
+  },
+  {
+   "t": 1271.0,
+   "d": 1.62,
+   "text": "gobbledygook but I can check I can log"
+  },
+  {
+   "t": 1272.62,
+   "d": 2.25,
+   "text": "in in console and see oh yeah okay I see"
+  },
+  {
+   "t": 1274.87,
+   "d": 1.74,
+   "text": "what you're talking about now unless"
+  },
+  {
+   "t": 1276.61,
+   "d": 0.93,
+   "text": "what they're complaining about is a"
+  },
+  {
+   "t": 1277.54,
+   "d": 3.36,
+   "text": "graphics bug of course as I mentioned"
+  },
+  {
+   "t": 1280.9,
+   "d": 3.24,
+   "text": "web tiles chat like it gets recorded"
+  },
+  {
+   "t": 1284.14,
+   "d": 1.53,
+   "text": "into morgue files and so you can go read"
+  },
+  {
+   "t": 1285.67,
+   "d": 1.49,
+   "text": "what people are saying to each other but"
+  },
+  {
+   "t": 1287.16,
+   "d": 1.96,
+   "text": "there's like a whole community around"
+  },
+  {
+   "t": 1289.12,
+   "d": 4.08,
+   "text": "that and you can also track custom"
+  },
+  {
+   "t": 1293.2,
+   "d": 2.19,
+   "text": "milestones with sick well you can it's"
+  },
+  {
+   "t": 1295.39,
+   "d": 1.14,
+   "text": "not just a query language it's a"
+  },
+  {
+   "t": 1296.53,
+   "d": 1.83,
+   "text": "scripting language you can define new"
+  },
+  {
+   "t": 1298.36,
+   "d": 2.49,
+   "text": "sequel commands we have some like great"
+  },
+  {
+   "t": 1300.85,
+   "d": 2.1,
+   "text": "player which is have you won at least"
+  },
+  {
+   "t": 1302.95,
+   "d": 1.89,
+   "text": "one game with every race in the game and"
+  },
+  {
+   "t": 1304.84,
+   "d": 1.74,
+   "text": "sick well we'll let you know well you've"
+  },
+  {
+   "t": 1306.58,
+   "d": 1.62,
+   "text": "won these fourteen here's the ones you"
+  },
+  {
+   "t": 1308.2,
+   "d": 2.75,
+   "text": "have left or you have congratulations"
+  },
+  {
+   "t": 1310.95,
+   "d": 5.29,
+   "text": "and we also have tournaments that we run"
+  },
+  {
+   "t": 1316.24,
+   "d": 4.59,
+   "text": "with every release and we track the we"
+  },
+  {
+   "t": 1320.83,
+   "d": 2.01,
+   "text": "set certain like goals hey if you can do"
+  },
+  {
+   "t": 1322.84,
+   "d": 1.83,
+   "text": "X Y & Z you get some tournament points"
+  },
+  {
+   "t": 1324.67,
+   "d": 1.11,
+   "text": "and some players play this very"
+  },
+  {
+   "t": 1325.78,
+   "d": 3.45,
+   "text": "competitively like personally I think"
+  },
+  {
+   "t": 1329.23,
+   "d": 1.32,
+   "text": "the tournaments are a lot of fun I don't"
+  },
+  {
+   "t": 1330.55,
+   "d": 1.44,
+   "text": "like the scoring system because I feel"
+  },
+  {
+   "t": 1331.99,
+   "d": 2.04,
+   "text": "like it rewards playing a lot more than"
+  },
+  {
+   "t": 1334.03,
+   "d": 1.68,
+   "text": "it record rewards playing well you have"
+  },
+  {
+   "t": 1335.71,
+   "d": 2.58,
+   "text": "to do both but if you play well and not"
+  },
+  {
+   "t": 1338.29,
+   "d": 1.83,
+   "text": "very much you won't win which oh well"
+  },
+  {
+   "t": 1340.12,
+   "d": 2.79,
+   "text": "yeah no prizes but you get you get a you"
+  },
+  {
+   "t": 1342.91,
+   "d": 8.73,
+   "text": "get a banner so there's that and so we"
+  },
+  {
+   "t": 1351.64,
+   "d": 1.77,
+   "text": "have as I was saying we update the game"
+  },
+  {
+   "t": 1353.41,
+   "d": 1.29,
+   "text": "for you automatically and so who needs"
+  },
+  {
+   "t": 1354.7,
+   "d": 4.38,
+   "text": "tests when you have players trunk this"
+  },
+  {
+   "t": 1359.08,
+   "d": 1.26,
+   "text": "is a joke of course our trunk is"
+  },
+  {
+   "t": 1360.34,
+   "d": 1.85,
+   "text": "actually quite stable it's very it's"
+  },
+  {
+   "t": 1362.19,
+   "d": 2.11,
+   "text": "it's very rare that there's a bug that"
+  },
+  {
+   "t": 1364.3,
+   "d": 2.19,
+   "text": "ruins the game that even makes it to"
+  },
+  {
+   "t": 1366.49,
+   "d": 3.93,
+   "text": "trunk it does happen and usually this is"
+  },
+  {
+   "t": 1370.42,
+   "d": 2.45,
+   "text": "just in the form of oak the game crashed"
+  },
+  {
+   "t": 1372.87,
+   "d": 2.68,
+   "text": "you know you have to it goes back to the"
+  },
+  {
+   "t": 1375.55,
+   "d": 1.47,
+   "text": "last time the game was saved for you"
+  },
+  {
+   "t": 1377.02,
+   "d": 1.62,
+   "text": "which is like every time you go to a new"
+  },
+  {
+   "t": 1378.64,
+   "d": 3.69,
+   "text": "floor of the dungeon but you know it"
+  },
+  {
+   "t": 1382.33,
+   "d": 0.9,
+   "text": "doesn't happen so often but it does"
+  },
+  {
+   "t": 1383.23,
+   "d": 2.13,
+   "text": "happen and we update trunk automatically"
+  },
+  {
+   "t": 1385.36,
+   "d": 1.26,
+   "text": "so you don't so as soon as the bug is"
+  },
+  {
+   "t": 1386.62,
+   "d": 1.14,
+   "text": "fixed it'll never happen to you again"
+  },
+  {
+   "t": 1387.76,
+   "d": 5.13,
+   "text": "and importantly whenever a crash happens"
+  },
+  {
+   "t": 1392.89,
+   "d": 2.46,
+   "text": "online it gets pasted to the dev IRC"
+  },
+  {
+   "t": 1395.35,
+   "d": 2.1,
+   "text": "channel with a link to their morgue and"
+  },
+  {
+   "t": 1397.45,
+   "d": 3.06,
+   "text": "a stack trace and you know all of the"
+  },
+  {
+   "t": 1400.51,
+   "d": 1.14,
+   "text": "stuff that we thought might ever be"
+  },
+  {
+   "t": 1401.65,
+   "d": 2.04,
+   "text": "useful in debugging a crash and we can"
+  },
+  {
+   "t": 1403.69,
+   "d": 1.23,
+   "text": "go download their save file and try to"
+  },
+  {
+   "t": 1404.92,
+   "d": 2.85,
+   "text": "reproduce it which all this is much"
+  },
+  {
+   "t": 1407.77,
+   "d": 1.5,
+   "text": "harder to do if you convince players to"
+  },
+  {
+   "t": 1409.27,
+   "d": 5.78,
+   "text": "do it you're themselves right and just"
+  },
+  {
+   "t": 1415.05,
+   "d": 2.59,
+   "text": "given that we are in IRC listening to"
+  },
+  {
+   "t": 1417.64,
+   "d": 1.62,
+   "text": "this kind of stuff it means that players"
+  },
+  {
+   "t": 1419.26,
+   "d": 1.74,
+   "text": "who are on IRC to talk amongst"
+  },
+  {
+   "t": 1421.0,
+   "d": 1.32,
+   "text": "themselves it's easy for them to reach"
+  },
+  {
+   "t": 1422.32,
+   "d": 3.57,
+   "text": "out to developers and ask for help or to"
+  },
+  {
+   "t": 1425.89,
+   "d": 1.44,
+   "text": "point out something that doesn't seem to"
+  },
+  {
+   "t": 1427.33,
+   "d": 0.83,
+   "text": "be working quite right"
+  },
+  {
+   "t": 1428.16,
+   "d": 2.2,
+   "text": "we're also you know active on reddit"
+  },
+  {
+   "t": 1430.36,
+   "d": 1.32,
+   "text": "which is not really the same thing as"
+  },
+  {
+   "t": 1431.68,
+   "d": 2.16,
+   "text": "being an online game but it's an online"
+  },
+  {
+   "t": 1433.84,
+   "d": 3.6,
+   "text": "presence that this reaches out to and we"
+  },
+  {
+   "t": 1437.44,
+   "d": 1.83,
+   "text": "can use these forensic tools that we"
+  },
+  {
+   "t": 1439.27,
+   "d": 1.41,
+   "text": "were looking at for debugging TTY writes"
+  },
+  {
+   "t": 1440.68,
+   "d": 1.65,
+   "text": "right like I was saying that player"
+  },
+  {
+   "t": 1442.33,
+   "d": 2.25,
+   "text": "watched a replay of a game and saw yes"
+  },
+  {
+   "t": 1444.58,
+   "d": 1.44,
+   "text": "that really weird thing did happen and"
+  },
+  {
+   "t": 1446.02,
+   "d": 2.1,
+   "text": "here's what he did first usually players"
+  },
+  {
+   "t": 1448.12,
+   "d": 1.53,
+   "text": "don't go to that much effort but you"
+  },
+  {
+   "t": 1449.65,
+   "d": 4.95,
+   "text": "know we can when we need to yes all"
+  },
+  {
+   "t": 1454.6,
+   "d": 2.64,
+   "text": "those things I have said great"
+  },
+  {
+   "t": 1457.24,
+   "d": 1.76,
+   "text": "which I guess means that I must be done"
+  },
+  {
+   "t": 1459.0,
+   "d": 3.49,
+   "text": "with my prepared prepared stuff to have"
+  },
+  {
+   "t": 1462.49,
+   "d": 3.6,
+   "text": "any questions someone someone get those"
+  },
+  {
+   "t": 1466.09,
+   "d": 2.73,
+   "text": "people are Mike right is that a thing"
+  },
+  {
+   "t": 1468.82,
+   "d": 3.03,
+   "text": "that's happening I don't know people"
+  },
+  {
+   "t": 1471.85,
+   "d": 1.47,
+   "text": "have mics last time all right I'll bring"
+  },
+  {
+   "t": 1473.32,
+   "d": 0.99,
+   "text": "you mine for the moment"
+  },
+  {
+   "t": 1474.31,
+   "d": 3.62,
+   "text": "okay thanks No"
+  },
+  {
+   "t": 1487.38,
+   "d": 5.53,
+   "text": "hi two comments um first off um I am a"
+  },
+  {
+   "t": 1492.91,
+   "d": 2.7,
+   "text": "web tiles player okay to my terrible"
+  },
+  {
+   "t": 1495.61,
+   "d": 4.17,
+   "text": "shame and honestly one of the things for"
+  },
+  {
+   "t": 1499.78,
+   "d": 2.58,
+   "text": "what tells chat for me is I find t2i"
+  },
+  {
+   "t": 1502.36,
+   "d": 2.46,
+   "text": "wrecks hard to do but people can watch"
+  },
+  {
+   "t": 1504.82,
+   "d": 1.62,
+   "text": "and give me commentary alive on how to"
+  },
+  {
+   "t": 1506.44,
+   "d": 1.77,
+   "text": "be a better player than I currently am"
+  },
+  {
+   "t": 1508.21,
+   "d": 3.54,
+   "text": "and I think that's maybe a useful thing"
+  },
+  {
+   "t": 1511.75,
+   "d": 2.79,
+   "text": "to remember when thinking about web"
+  },
+  {
+   "t": 1514.54,
+   "d": 3.48,
+   "text": "tiles culture secondly I always thought"
+  },
+  {
+   "t": 1518.02,
+   "d": 5.91,
+   "text": "it was sequel not to quell sure it's you"
+  },
+  {
+   "t": 1523.93,
+   "d": 1.83,
+   "text": "know no one ever taught me how to say it"
+  },
+  {
+   "t": 1525.76,
+   "d": 3.0,
+   "text": "I noticed that there are two L's and the"
+  },
+  {
+   "t": 1528.76,
+   "d": 2.16,
+   "text": "word sequel has only one out but"
+  },
+  {
+   "t": 1530.92,
+   "d": 1.5,
+   "text": "actually I think that there's another"
+  },
+  {
+   "t": 1532.42,
+   "d": 3.24,
+   "text": "reason which is that the first IRC BOTS"
+  },
+  {
+   "t": 1535.66,
+   "d": 1.86,
+   "text": "for dungeon crawl was named Henzell"
+  },
+  {
+   "t": 1537.52,
+   "d": 2.4,
+   "text": "after Lindley Henzell the original"
+  },
+  {
+   "t": 1539.92,
+   "d": 2.04,
+   "text": "developer of dungeon crawl and so sort"
+  },
+  {
+   "t": 1541.96,
+   "d": 1.35,
+   "text": "of all the bots that we've written since"
+  },
+  {
+   "t": 1543.31,
+   "d": 1.14,
+   "text": "then end with ëall"
+  },
+  {
+   "t": 1544.45,
+   "d": 2.85,
+   "text": "yeah and so probably pronounced like"
+  },
+  {
+   "t": 1547.3,
+   "d": 1.14,
+   "text": "Henzell is my guess"
+  },
+  {
+   "t": 1548.44,
+   "d": 3.62,
+   "text": "whereas I guessed well it's like sequel"
+  },
+  {
+   "t": 1552.06,
+   "d": 2.5,
+   "text": "that that's the pun of course right you"
+  },
+  {
+   "t": 1554.56,
+   "d": 2.57,
+   "text": "use SiC well to execute sequel queries"
+  },
+  {
+   "t": 1557.13,
+   "d": 5.56,
+   "text": "thanks so I'm a huge database nerd I'm"
+  },
+  {
+   "t": 1562.69,
+   "d": 3.15,
+   "text": "just curious how do you store those ttyl"
+  },
+  {
+   "t": 1565.84,
+   "d": 1.98,
+   "text": "wrecks and how big is the database in"
+  },
+  {
+   "t": 1567.82,
+   "d": 2.01,
+   "text": "total so the TVI wrecks are actually"
+  },
+  {
+   "t": 1569.83,
+   "d": 2.25,
+   "text": "distort in flat files there's they're"
+  },
+  {
+   "t": 1572.08,
+   "d": 2.28,
+   "text": "not sorted in the database that sequelae"
+  },
+  {
+   "t": 1574.36,
+   "d": 2.43,
+   "text": "uses each server has its own directory"
+  },
+  {
+   "t": 1576.79,
+   "d": 1.77,
+   "text": "that stores ttyl wrecks and there's"
+  },
+  {
+   "t": 1578.56,
+   "d": 2.61,
+   "text": "there's some well-known format for TV"
+  },
+  {
+   "t": 1581.17,
+   "d": 1.5,
+   "text": "wyrex if you just search for the word TV"
+  },
+  {
+   "t": 1582.67,
+   "d": 1.47,
+   "text": "why rekt you'll find out what it is I"
+  },
+  {
+   "t": 1584.14,
+   "d": 4.26,
+   "text": "don't know what it is but I know that"
+  },
+  {
+   "t": 1588.4,
+   "d": 2.67,
+   "text": "those are the main consumer of disk"
+  },
+  {
+   "t": 1591.07,
+   "d": 1.8,
+   "text": "space on the server's people are"
+  },
+  {
+   "t": 1592.87,
+   "d": 1.2,
+   "text": "constantly having to upgrade their"
+  },
+  {
+   "t": 1594.07,
+   "d": 3.03,
+   "text": "server or delete old binaries or"
+  },
+  {
+   "t": 1597.1,
+   "d": 1.62,
+   "text": "whatever to make room for more TP wyrex"
+  },
+  {
+   "t": 1598.72,
+   "d": 1.29,
+   "text": "that players keep dumping on there as"
+  },
+  {
+   "t": 1600.01,
+   "d": 5.34,
+   "text": "they play hey blue sky infinite time and"
+  },
+  {
+   "t": 1605.35,
+   "d": 2.46,
+   "text": "tech what's something you feel like is"
+  },
+  {
+   "t": 1607.81,
+   "d": 2.25,
+   "text": "unrealized potential of this system that"
+  },
+  {
+   "t": 1610.06,
+   "d": 6.69,
+   "text": "you would love to see happen unrealized"
+  },
+  {
+   "t": 1616.75,
+   "d": 2.79,
+   "text": "potential of like having an online"
+  },
+  {
+   "t": 1619.54,
+   "d": 2.4,
+   "text": "so well something we've wanted to do for"
+  },
+  {
+   "t": 1621.94,
+   "d": 1.08,
+   "text": "years and years and years is just"
+  },
+  {
+   "t": 1623.02,
+   "d": 2.55,
+   "text": "unified sign-on right right now there's"
+  },
+  {
+   "t": 1625.57,
+   "d": 1.74,
+   "text": "a bunch of official public crawl servers"
+  },
+  {
+   "t": 1627.31,
+   "d": 1.38,
+   "text": "like I don't know if six or seven or"
+  },
+  {
+   "t": 1628.69,
+   "d": 1.68,
+   "text": "something like that and they each have"
+  },
+  {
+   "t": 1630.37,
+   "d": 3.27,
+   "text": "their own sign-on system and the"
+  },
+  {
+   "t": 1633.64,
+   "d": 1.89,
+   "text": "usernames are not necessarily the same"
+  },
+  {
+   "t": 1635.53,
+   "d": 2.25,
+   "text": "like I've registered a Malloy on the"
+  },
+  {
+   "t": 1637.78,
+   "d": 2.1,
+   "text": "popular ones but like someone could"
+  },
+  {
+   "t": 1639.88,
+   "d": 1.32,
+   "text": "register a Malloy on the Korean server"
+  },
+  {
+   "t": 1641.2,
+   "d": 1.2,
+   "text": "if they wanted"
+  },
+  {
+   "t": 1642.4,
+   "d": 3.69,
+   "text": "please don't but and it's actually fine"
+  },
+  {
+   "t": 1646.09,
+   "d": 2.1,
+   "text": "you can tell sac well actually the only"
+  },
+  {
+   "t": 1648.19,
+   "d": 1.8,
+   "text": "games that I want to consider as being"
+  },
+  {
+   "t": 1649.99,
+   "d": 1.95,
+   "text": "by me are the ones on these servers or"
+  },
+  {
+   "t": 1651.94,
+   "d": 3.57,
+   "text": "please count games by me as being games"
+  },
+  {
+   "t": 1655.51,
+   "d": 2.01,
+   "text": "by a Malloy or hyper a Malloy one of the"
+  },
+  {
+   "t": 1657.52,
+   "d": 2.97,
+   "text": "challenges I created so it it would be"
+  },
+  {
+   "t": 1660.49,
+   "d": 1.62,
+   "text": "really nice if someone who knows how to"
+  },
+  {
+   "t": 1662.11,
+   "d": 2.28,
+   "text": "do unified sign-on could like do that"
+  },
+  {
+   "t": 1664.39,
+   "d": 2.64,
+   "text": "because we keep meaning to and like we"
+  },
+  {
+   "t": 1667.03,
+   "d": 6.72,
+   "text": "never get around to it and it's hard you"
+  },
+  {
+   "t": 1673.75,
+   "d": 1.44,
+   "text": "mentioned with every release that you"
+  },
+  {
+   "t": 1675.19,
+   "d": 2.13,
+   "text": "have tournaments did you elaborate on"
+  },
+  {
+   "t": 1677.32,
+   "d": 1.89,
+   "text": "that is that literally just so my"
+  },
+  {
+   "t": 1679.21,
+   "d": 1.59,
+   "text": "players there's that automation so the"
+  },
+  {
+   "t": 1680.8,
+   "d": 3.33,
+   "text": "way that the tournament works is you can"
+  },
+  {
+   "t": 1684.13,
+   "d": 2.22,
+   "text": "have we have I think it's about two"
+  },
+  {
+   "t": 1686.35,
+   "d": 2.76,
+   "text": "weeks well two weeks including the three"
+  },
+  {
+   "t": 1689.11,
+   "d": 1.32,
+   "text": "weekends bracketing those two weeks"
+  },
+  {
+   "t": 1690.43,
+   "d": 2.04,
+   "text": "during that time every game that you"
+  },
+  {
+   "t": 1692.47,
+   "d": 2.01,
+   "text": "play on the newly released version on"
+  },
+  {
+   "t": 1694.48,
+   "d": 2.13,
+   "text": "any online server counts towards the"
+  },
+  {
+   "t": 1696.61,
+   "d": 2.37,
+   "text": "tournament and the scoring bots in the"
+  },
+  {
+   "t": 1698.98,
+   "d": 2.13,
+   "text": "meantime are tracking all the stuff that"
+  },
+  {
+   "t": 1701.11,
+   "d": 1.53,
+   "text": "you do putting it onto a tournament page"
+  },
+  {
+   "t": 1702.64,
+   "d": 1.59,
+   "text": "and there's stuff updating as the"
+  },
+  {
+   "t": 1704.23,
+   "d": 2.04,
+   "text": "tournament goes on like you know winning"
+  },
+  {
+   "t": 1706.27,
+   "d": 1.47,
+   "text": "winning a game gets you tournament"
+  },
+  {
+   "t": 1707.74,
+   "d": 2.88,
+   "text": "points great but as the tournament"
+  },
+  {
+   "t": 1710.62,
+   "d": 3.42,
+   "text": "progresses the races gods and"
+  },
+  {
+   "t": 1714.04,
+   "d": 1.26,
+   "text": "backgrounds that are won the most"
+  },
+  {
+   "t": 1715.3,
+   "d": 2.28,
+   "text": "frequently likes a Minotaur Berserker of"
+  },
+  {
+   "t": 1717.58,
+   "d": 2.01,
+   "text": "Trog the most popular easiest to win"
+  },
+  {
+   "t": 1719.59,
+   "d": 1.95,
+   "text": "thing start giving you fewer and fewer"
+  },
+  {
+   "t": 1721.54,
+   "d": 1.08,
+   "text": "tournament points and you're rewarded"
+  },
+  {
+   "t": 1722.62,
+   "d": 2.25,
+   "text": "for winning things that are one less"
+  },
+  {
+   "t": 1724.87,
+   "d": 2.82,
+   "text": "often and this is all done automatically"
+  },
+  {
+   "t": 1727.69,
+   "d": 1.47,
+   "text": "the players can just log in look at"
+  },
+  {
+   "t": 1729.16,
+   "d": 1.41,
+   "text": "their tournament score page and it says"
+  },
+  {
+   "t": 1730.57,
+   "d": 1.47,
+   "text": "here's how you're doing this is the"
+  },
+  {
+   "t": 1732.04,
+   "d": 1.2,
+   "text": "streak you're on here are the scores you"
+  },
+  {
+   "t": 1733.24,
+   "d": 3.99,
+   "text": "could get by playing X Y Z and also you"
+  },
+  {
+   "t": 1737.23,
+   "d": 1.44,
+   "text": "know similarly there's what we called an"
+  },
+  {
+   "t": 1738.67,
+   "d": 3.3,
+   "text": "ml X choice there's nimel X as God"
+  },
+  {
+   "t": 1741.97,
+   "d": 3.47,
+   "text": "crawls god of randomness basically and"
+  },
+  {
+   "t": 1745.44,
+   "d": 7.17,
+   "text": "he at sorry gods are genderless mem LX"
+  },
+  {
+   "t": 1753.09,
+   "d": 4.45,
+   "text": "chooses a rarely played race and"
+  },
+  {
+   "t": 1757.54,
+   "d": 2.34,
+   "text": "background and says you got a ton of"
+  },
+  {
+   "t": 1759.88,
+   "d": 1.2,
+   "text": "extra points if you can be one of the"
+  },
+  {
+   "t": 1761.08,
+   "d": 1.17,
+   "text": "first eight players to win this"
+  },
+  {
+   "t": 1762.25,
+   "d": 2.13,
+   "text": "challenge race and as soon as somebody"
+  },
+  {
+   "t": 1764.38,
+   "d": 2.19,
+   "text": "wins it nem LX goes and picks another"
+  },
+  {
+   "t": 1766.57,
+   "d": 1.26,
+   "text": "challenge race since their challenge"
+  },
+  {
+   "t": 1767.83,
+   "d": 2.04,
+   "text": "background and says okay that last one's"
+  },
+  {
+   "t": 1769.87,
+   "d": 1.23,
+   "text": "still good for the next eight players"
+  },
+  {
+   "t": 1771.1,
+   "d": 1.8,
+   "text": "but now here's a new challenge there's"
+  },
+  {
+   "t": 1772.9,
+   "d": 2.34,
+   "text": "always you know something fun you can"
+  },
+  {
+   "t": 1775.24,
+   "d": 2.01,
+   "text": "aim for whether that's winning an mlx"
+  },
+  {
+   "t": 1777.25,
+   "d": 1.98,
+   "text": "choice achieving one of the extra"
+  },
+  {
+   "t": 1779.23,
+   "d": 2.67,
+   "text": "challenge goals like I don't know win a"
+  },
+  {
+   "t": 1781.9,
+   "d": 1.56,
+   "text": "game without using any potions I think"
+  },
+  {
+   "t": 1783.46,
+   "d": 1.89,
+   "text": "is a thing that we have any potions or"
+  },
+  {
+   "t": 1785.35,
+   "d": 1.29,
+   "text": "Scrolls and this is all tracked"
+  },
+  {
+   "t": 1786.64,
+   "d": 1.26,
+   "text": "automatically players don't have to"
+  },
+  {
+   "t": 1787.9,
+   "d": 1.44,
+   "text": "worry about it there's an official score"
+  },
+  {
+   "t": 1789.34,
+   "d": 6.81,
+   "text": "and you don't self-report anything high"
+  },
+  {
+   "t": 1796.15,
+   "d": 2.94,
+   "text": "so search engines put a lot of effort"
+  },
+  {
+   "t": 1799.09,
+   "d": 1.89,
+   "text": "into quantifying like whether someone"
+  },
+  {
+   "t": 1800.98,
+   "d": 1.23,
+   "text": "left because they were frustrated or"
+  },
+  {
+   "t": 1802.21,
+   "d": 1.35,
+   "text": "they they found what they wanted and"
+  },
+  {
+   "t": 1803.56,
+   "d": 1.65,
+   "text": "dating sites put a lot of effort into"
+  },
+  {
+   "t": 1805.21,
+   "d": 1.71,
+   "text": "quantifying whether someone left because"
+  },
+  {
+   "t": 1806.92,
+   "d": 1.23,
+   "text": "they were frustrated they found what"
+  },
+  {
+   "t": 1808.15,
+   "d": 2.97,
+   "text": "they wanted how would you quantify a fun"
+  },
+  {
+   "t": 1811.12,
+   "d": 3.98,
+   "text": "death so I would encourage you to watch"
+  },
+  {
+   "t": 1815.1,
+   "d": 2.65,
+   "text": "last year's roguelike celebration talk"
+  },
+  {
+   "t": 1817.75,
+   "d": 1.83,
+   "text": "by pleasing fungus another dungeon crawl"
+  },
+  {
+   "t": 1819.58,
+   "d": 2.61,
+   "text": "developer which was about I think he"
+  },
+  {
+   "t": 1822.19,
+   "d": 1.5,
+   "text": "called it combating the hypothetically"
+  },
+  {
+   "t": 1823.69,
+   "d": 3.6,
+   "text": "optimal player dungeon crawl is not"
+  },
+  {
+   "t": 1827.29,
+   "d": 2.76,
+   "text": "unique but uncommon in having a codified"
+  },
+  {
+   "t": 1830.05,
+   "d": 2.52,
+   "text": "design philosophy of like we don't just"
+  },
+  {
+   "t": 1832.57,
+   "d": 1.59,
+   "text": "add stuff because it seems like fun we"
+  },
+  {
+   "t": 1834.16,
+   "d": 1.47,
+   "text": "have a list of like here's the kinds of"
+  },
+  {
+   "t": 1835.63,
+   "d": 1.5,
+   "text": "things we think are fun things we think"
+  },
+  {
+   "t": 1837.13,
+   "d": 2.76,
+   "text": "are unfun and like we have a saying when"
+  },
+  {
+   "t": 1839.89,
+   "d": 3.38,
+   "text": "in doubt do the opposite of net heck"
+  },
+  {
+   "t": 1845.0,
+   "d": 2.26,
+   "text": "which is not because nethack is a bad"
+  },
+  {
+   "t": 1847.26,
+   "d": 1.41,
+   "text": "game it's a lot of fun but it's very"
+  },
+  {
+   "t": 1848.67,
+   "d": 2.64,
+   "text": "different from crawl and we we don't"
+  },
+  {
+   "t": 1851.31,
+   "d": 1.94,
+   "text": "like the kinds of things they like and"
+  },
+  {
+   "t": 1853.25,
+   "d": 2.65,
+   "text": "so pleasing funguses talk was about"
+  },
+  {
+   "t": 1855.9,
+   "d": 2.22,
+   "text": "don't include mechanics that are"
+  },
+  {
+   "t": 1858.12,
+   "d": 2.76,
+   "text": "powerful but frustrating you don't want"
+  },
+  {
+   "t": 1860.88,
+   "d": 1.89,
+   "text": "people to go in there and say oh darn it"
+  },
+  {
+   "t": 1862.77,
+   "d": 1.62,
+   "text": "if only I had there used to be a"
+  },
+  {
+   "t": 1864.39,
+   "d": 2.64,
+   "text": "mechanic called Vic it we called a"
+  },
+  {
+   "t": 1867.03,
+   "d": 1.35,
+   "text": "victory dancing but it wasn't put it on"
+  },
+  {
+   "t": 1868.38,
+   "d": 3.78,
+   "text": "purpose was like after you defeat a"
+  },
+  {
+   "t": 1872.16,
+   "d": 1.29,
+   "text": "monster you get some experience in your"
+  },
+  {
+   "t": 1873.45,
+   "d": 2.16,
+   "text": "pool and later that experience is put"
+  },
+  {
+   "t": 1875.61,
+   "d": 1.89,
+   "text": "into skills that you're using seems"
+  },
+  {
+   "t": 1877.5,
+   "d": 1.44,
+   "text": "great a good way to get players to be"
+  },
+  {
+   "t": 1878.94,
+   "d": 1.92,
+   "text": "good at the stuff they're doing but the"
+  },
+  {
+   "t": 1880.86,
+   "d": 1.47,
+   "text": "optimal way to do this was to kill a"
+  },
+  {
+   "t": 1882.33,
+   "d": 1.14,
+   "text": "monster and then if you want to get good"
+  },
+  {
+   "t": 1883.47,
+   "d": 0.99,
+   "text": "at swing here so are you just go like"
+  },
+  {
+   "t": 1884.46,
+   "d": 1.95,
+   "text": "this for a while right and that's like"
+  },
+  {
+   "t": 1886.41,
+   "d": 2.88,
+   "text": "that sucks in it's boring and you don't"
+  },
+  {
+   "t": 1889.29,
+   "d": 2.22,
+   "text": "want players to die saying oh if only I"
+  },
+  {
+   "t": 1891.51,
+   "d": 1.35,
+   "text": "could subscribe to the super boring"
+  },
+  {
+   "t": 1892.86,
+   "d": 1.62,
+   "text": "victory dancing or if only I had cast"
+  },
+  {
+   "t": 1894.48,
+   "d": 2.19,
+   "text": "fireball at a wall 80 times first maybe"
+  },
+  {
+   "t": 1896.67,
+   "d": 1.02,
+   "text": "I would have been strong enough to"
+  },
+  {
+   "t": 1897.69,
+   "d": 3.99,
+   "text": "survive and so we have guidelines like"
+  },
+  {
+   "t": 1901.68,
+   "d": 5.25,
+   "text": "that of you know what what players"
+  },
+  {
+   "t": 1906.93,
+   "d": 1.08,
+   "text": "should be encouraged to do and what"
+  },
+  {
+   "t": 1908.01,
+   "d": 0.93,
+   "text": "they're not and that's not quite the"
+  },
+  {
+   "t": 1908.94,
+   "d": 1.41,
+   "text": "same thing as what's a fun death which"
+  },
+  {
+   "t": 1910.35,
+   "d": 2.07,
+   "text": "we don't have you know you watch it and"
+  },
+  {
+   "t": 1912.42,
+   "d": 3.24,
+   "text": "if you laugh it was probably fun or if"
+  },
+  {
+   "t": 1915.66,
+   "d": 1.11,
+   "text": "you feel bad about it and there's"
+  },
+  {
+   "t": 1916.77,
+   "d": 2.13,
+   "text": "something you could have done that was"
+  },
+  {
+   "t": 1918.9,
+   "d": 1.89,
+   "text": "tactically good as opposed to just like"
+  },
+  {
+   "t": 1920.79,
+   "d": 2.52,
+   "text": "grinding you know there's something to"
+  },
+  {
+   "t": 1923.31,
+   "d": 1.65,
+   "text": "learn from if there's nothing to learn"
+  },
+  {
+   "t": 1924.96,
+   "d": 1.71,
+   "text": "from like the game just kills you for no"
+  },
+  {
+   "t": 1926.67,
+   "d": 1.83,
+   "text": "good reason it's not a lot of fun but if"
+  },
+  {
+   "t": 1928.5,
+   "d": 0.99,
+   "text": "there's something you could have done to"
+  },
+  {
+   "t": 1929.49,
+   "d": 2.7,
+   "text": "prevent it that's interesting then it's"
+  },
+  {
+   "t": 1932.19,
+   "d": 6.0,
+   "text": "sort of a fun useful death hi I play"
+  },
+  {
+   "t": 1938.19,
+   "d": 1.44,
+   "text": "locally in character but I watch"
+  },
+  {
+   "t": 1939.63,
+   "d": 2.67,
+   "text": "sometimes in SSH in order to learn from"
+  },
+  {
+   "t": 1942.3,
+   "d": 1.65,
+   "text": "other people who are more experienced"
+  },
+  {
+   "t": 1943.95,
+   "d": 1.77,
+   "text": "and I was a little curious about the"
+  },
+  {
+   "t": 1945.72,
+   "d": 2.91,
+   "text": "cross spectating thing between web tiles"
+  },
+  {
+   "t": 1948.63,
+   "d": 5.48,
+   "text": "and SSH I haven't seen I think"
+  },
+  {
+   "t": 1954.11,
+   "d": 2.44,
+   "text": "statistics in SSH of the number of web"
+  },
+  {
+   "t": 1956.55,
+   "d": 2.28,
+   "text": "tiles Watchers and I don't know if"
+  },
+  {
+   "t": 1958.83,
+   "d": 2.19,
+   "text": "there's a way for me as an SSH watcher"
+  },
+  {
+   "t": 1961.02,
+   "d": 1.83,
+   "text": "to interact with the web tiles watchers"
+  },
+  {
+   "t": 1962.85,
+   "d": 2.82,
+   "text": "reports to see the actual gameplay so"
+  },
+  {
+   "t": 1965.67,
+   "d": 3.33,
+   "text": "that's that's a a missing feature is"
+  },
+  {
+   "t": 1969.0,
+   "d": 2.55,
+   "text": "that you can spectate you can cross"
+  },
+  {
+   "t": 1971.55,
+   "d": 2.72,
+   "text": "spectate but you can't really cross chat"
+  },
+  {
+   "t": 1974.27,
+   "d": 2.8,
+   "text": "there's a separate chat mechanism for"
+  },
+  {
+   "t": 1977.07,
+   "d": 1.02,
+   "text": "tiles and for console"
+  },
+  {
+   "t": 1978.09,
+   "d": 1.68,
+   "text": "which is kind of a shame the player can"
+  },
+  {
+   "t": 1979.77,
+   "d": 1.35,
+   "text": "chat in a way that both tiles and"
+  },
+  {
+   "t": 1981.12,
+   "d": 3.33,
+   "text": "console can see but you have to be"
+  },
+  {
+   "t": 1984.45,
+   "d": 2.22,
+   "text": "spectating in the same way in order to"
+  },
+  {
+   "t": 1986.67,
+   "d": 1.68,
+   "text": "communicate to each other or to the or"
+  },
+  {
+   "t": 1988.35,
+   "d": 3.3,
+   "text": "or to the player so that's the thing we"
+  },
+  {
+   "t": 1991.65,
+   "d": 1.65,
+   "text": "don't have we'd like it I don't know"
+  },
+  {
+   "t": 1993.3,
+   "d": 1.08,
+   "text": "what's involved in making it work"
+  },
+  {
+   "t": 1994.38,
+   "d": 2.07,
+   "text": "probably similar to unified sign-on if I"
+  },
+  {
+   "t": 1996.45,
+   "d": 4.56,
+   "text": "had to guess I have a question okay"
+  },
+  {
+   "t": 2001.01,
+   "d": 2.94,
+   "text": "which is I thought that graph of like"
+  },
+  {
+   "t": 2003.95,
+   "d": 4.89,
+   "text": "player death in the yeah and that elf"
+  },
+  {
+   "t": 2008.84,
+   "d": 2.1,
+   "text": "branch was really interesting there's a"
+  },
+  {
+   "t": 2010.94,
+   "d": 2.19,
+   "text": "ton of things in crawl don't like I"
+  },
+  {
+   "t": 2013.13,
+   "d": 1.44,
+   "text": "still haven't seen because it's just"
+  },
+  {
+   "t": 2014.57,
+   "d": 2.94,
+   "text": "such a vast game how many players do you"
+  },
+  {
+   "t": 2017.51,
+   "d": 2.07,
+   "text": "think take this sort of data-driven"
+  },
+  {
+   "t": 2019.58,
+   "d": 4.71,
+   "text": "approach to choosing things and is it"
+  },
+  {
+   "t": 2024.29,
+   "d": 2.22,
+   "text": "something you support and want more"
+  },
+  {
+   "t": 2026.51,
+   "d": 2.97,
+   "text": "players to use I mean I would say the"
+  },
+  {
+   "t": 2029.48,
+   "d": 1.44,
+   "text": "number of players who do this has got to"
+  },
+  {
+   "t": 2030.92,
+   "d": 2.64,
+   "text": "be quite small I'm a little bit biased"
+  },
+  {
+   "t": 2033.56,
+   "d": 1.74,
+   "text": "because the people who hang around in"
+  },
+  {
+   "t": 2035.3,
+   "d": 1.35,
+   "text": "IRC are the ones who do it and they're"
+  },
+  {
+   "t": 2036.65,
+   "d": 2.64,
+   "text": "the ones that I see I hang out on reddit"
+  },
+  {
+   "t": 2039.29,
+   "d": 3.09,
+   "text": "as well and there are some players but"
+  },
+  {
+   "t": 2042.38,
+   "d": 3.3,
+   "text": "you know not a lot I think some of the"
+  },
+  {
+   "t": 2045.68,
+   "d": 2.1,
+   "text": "best players do because they want more"
+  },
+  {
+   "t": 2047.78,
+   "d": 1.83,
+   "text": "they want more ways to improve and they"
+  },
+  {
+   "t": 2049.61,
+   "d": 1.83,
+   "text": "find this and they're like aha here's a"
+  },
+  {
+   "t": 2051.44,
+   "d": 2.79,
+   "text": "useful thing I'm I don't think it's"
+  },
+  {
+   "t": 2054.23,
+   "d": 1.62,
+   "text": "something players should enjoy the game"
+  },
+  {
+   "t": 2055.85,
+   "d": 1.47,
+   "text": "however they want this is one way to"
+  },
+  {
+   "t": 2057.32,
+   "d": 1.74,
+   "text": "enjoy it and so I don't want to say that"
+  },
+  {
+   "t": 2059.06,
+   "d": 1.95,
+   "text": "I encourage it I welcome people to do"
+  },
+  {
+   "t": 2061.01,
+   "d": 3.15,
+   "text": "this and we have some documentation for"
+  },
+  {
+   "t": 2064.16,
+   "d": 1.5,
+   "text": "doing it but I think a lot of it is sort"
+  },
+  {
+   "t": 2065.66,
+   "d": 1.41,
+   "text": "of ad hoc like you watched someone and"
+  },
+  {
+   "t": 2067.07,
+   "d": 1.05,
+   "text": "then eventually you figure out what"
+  },
+  {
+   "t": 2068.12,
+   "d": 1.89,
+   "text": "they're doing it would be nice if we had"
+  },
+  {
+   "t": 2070.01,
+   "d": 1.44,
+   "text": "better documentation on how to use this"
+  },
+  {
+   "t": 2071.45,
+   "d": 2.34,
+   "text": "stuff but it is sort of complicated we"
+  },
+  {
+   "t": 2073.79,
+   "d": 1.32,
+   "text": "have a lot of documentation is just sort"
+  },
+  {
+   "t": 2075.11,
+   "d": 4.23,
+   "text": "of hard to pick up yeah I can't decide"
+  },
+  {
+   "t": 2079.34,
+   "d": 1.5,
+   "text": "if it would be super cool to see this"
+  },
+  {
+   "t": 2080.84,
+   "d": 3.14,
+   "text": "like on the wiki like you know the layer"
+  },
+  {
+   "t": 2083.98,
+   "d": 2.7,
+   "text": "people died at this level in the lair"
+  },
+  {
+   "t": 2086.68,
+   "d": 2.5,
+   "text": "yeah there's a similar graph like"
+  },
+  {
+   "t": 2089.18,
+   "d": 1.95,
+   "text": "someone wrote a canned query that's like"
+  },
+  {
+   "t": 2091.13,
+   "d": 2.52,
+   "text": "there are four sub branches of layer"
+  },
+  {
+   "t": 2093.65,
+   "d": 3.54,
+   "text": "right spider snake swamp and shoals yes"
+  },
+  {
+   "t": 2097.19,
+   "d": 3.06,
+   "text": "and you don't get all of them every game"
+  },
+  {
+   "t": 2100.25,
+   "d": 1.71,
+   "text": "you get two and so someone wrote a query"
+  },
+  {
+   "t": 2101.96,
+   "d": 1.77,
+   "text": "that's like which of these four do"
+  },
+  {
+   "t": 2103.73,
+   "d": 1.92,
+   "text": "players die in most often and like it's"
+  },
+  {
+   "t": 2105.65,
+   "d": 4.23,
+   "text": "always shoals of course so we try not to"
+  },
+  {
+   "t": 2109.88,
+   "d": 1.35,
+   "text": "make shoals harder right"
+  },
+  {
+   "t": 2111.23,
+   "d": 1.68,
+   "text": "a result of this and you can write stuff"
+  },
+  {
+   "t": 2112.91,
+   "d": 3.0,
+   "text": "like that a lot of different ways you"
+  },
+  {
+   "t": 2115.91,
+   "d": 2.31,
+   "text": "can use this whether it's studying or"
+  },
+  {
+   "t": 2118.22,
+   "d": 2.07,
+   "text": "trying to find patterns or what-have-you"
+  },
+  {
+   "t": 2120.29,
+   "d": 2.91,
+   "text": "cool well thank you so much big round of"
+  },
+  {
+   "t": 2123.2,
+   "d": 2.3,
+   "text": "applause"
+  },
+  {
+   "t": 2127.01,
+   "d": 3.19,
+   "text": "[Applause]"
+  }
+ ]
+}

@@ -1,0 +1,193 @@
+{
+  "id": "BDcZSWHu8RQ",
+  "title": "Max Kreminski - Designing AI systems to support player storytelling",
+  "speaker": "Max Kreminski",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=BDcZSWHu8RQ",
+  "talk_type": "design",
+  "summary": "Max Kreminski examines why players use simulation-heavy games such as Dwarf Fortress, The Sims 3, Football Manager and Crusader Kings II as storytelling partners, producing retellings like Boatmurdered, Alice and Kev and Pro Vercelli. He argues these games provide creativity support against the blank canvas, fear of judgment, writer's block and perfectionism through generativity, incrementality, boundedness and limited player control. Because complex simulations overwhelm players with insignificant events, he proposes story sifting (from James Ryan's work): authoring patterns that pick out narratively interesting event sequences, implemented in his Felt system with Datalog queries. He shows two lab projects, Cozy Mystery Construction Kit and Diarytown, and argues story construction is an emerging computational genre.",
+  "games": [
+    "Dwarf Fortress",
+    "The Sims 3",
+    "Football Manager 2009",
+    "Crusader Kings II",
+    "Stellaris",
+    "Cozy Mystery Construction Kit",
+    "Diarytown",
+    "Microscope",
+    "The Quiet Year"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Kreminski argues that for some players, building stories is the primary motivation for playing simulation games like Dwarf Fortress, Football Manager and The Sims, not an incidental by-product.",
+      "detail": "Retellings such as Boatmurdered, Alice and Kev and Pro Vercelli show players seeking out specific games with the intent to write a story. He relays an academic view that a game succeeds if it drives players to create stories about their experiences.",
+      "t": 297,
+      "quote": "What we are seeing in these specific examples are the players are seeking out these games as primarily storytelling partners",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "creativity support",
+      "kind": "principle",
+      "claim": "Games become good storytelling partners by helping players past common creative barriers: fear of the blank canvas, fear of judgment, writer's block and perfectionism.",
+      "detail": "A blank page offers too many options and causes paralysis; writers block strikes mid-process; perfectionism asks why bother if the story isn't the best. These games have design elements that help players overcome these barriers and make things they otherwise couldn't.",
+      "t": 324,
+      "quote": "games are providing players with creativity support by helping them get around common barriers to creativity",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "creativity support",
+      "kind": "principle",
+      "claim": "Generativity counters the blank canvas by giving players a starting scenario to react to, and lets them disclaim responsibility for bad parts by saying the game did it.",
+      "detail": "A generated cast or map shrinks the huge possibility space to small things the player wants to fix or change. It also eases fear of judgment, since players can blame the game for parts they dislike while claiming the parts they like.",
+      "t": 461,
+      "quote": "a way to declaim responsibility for what they are creating especially the bad parts by saying the game did that, not me",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "creativity support",
+      "kind": "technique",
+      "claim": "Incrementality fights writer's block: a story game should keep introducing new disruptive elements so the story moves even when the player doesn't know what happens next.",
+      "detail": "Kreminski cites Raymond Chandler's adage about a man coming through the door with a gun. In Dwarf Fortress (Matul Remrit), recurring elf raiding parties destabilize everything; in Football Manager, repeated drafts of new generated players disrupt things.",
+      "t": 486,
+      "quote": "As long as you're always introducing new elements over time, You're always giving them something new to react",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "creativity support",
+      "kind": "example",
+      "claim": "Boundedness, restricting rerolls and undo, forces players to live with mistakes and justify them narratively, which often makes stories better, as in the Pro Vercelli Football Manager story.",
+      "detail": "In Pro Vercelli the player fat-fingered a UI decision and traded away a star player at a crucial moment, something the character would never do, and had to explain it in the story. The lack of a clean undo also undercuts perfectionism.",
+      "t": 546,
+      "quote": "they are forced to live with whatever mistakes they made and keep moving forward in a way that often makes for better stories",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "creativity support",
+      "kind": "principle",
+      "claim": "Limiting the player's options at any moment, counter-intuitively for a creative tool, avoids paralysis when players are enjoying the process rather than aiming at a specific result.",
+      "detail": "This aligns with Kate Compton's work on casual creators. Kreminski says giving the non-human participant more agency moves creative burden onto the system, letting players focus on the parts they care about while the system smooths over the uncertain parts.",
+      "t": 591,
+      "quote": "by limiting the number of options available to the player at any given point",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "simulation legibility",
+      "kind": "warning",
+      "claim": "Simulation-driven games like Dwarf Fortress and Crusader Kings II expose complex simulations directly through inscrutable UI, leaving players lost in a deluge of insignificant events.",
+      "detail": "Kreminski jokes by showing a Photoshop menu among their UIs. Rather than reducing simulation complexity, which takes creative burden off players, he proposes giving players tools to make sense of it.",
+      "t": 701,
+      "quote": "Players can feel lost in the deluge of mostly insignificant simulated events",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story sifting",
+      "kind": "principle",
+      "claim": "In James Ryan's model, emergent narrative is not what the simulation outputs directly but what results after events are chronicled, story-sifted for interesting material, and narrativized.",
+      "detail": "Story sifting, from Ryan's dissertation 'Curating Simulated Storyworlds', curates and prioritises the most narratively useful events from a simulation that still runs freely. The narrativizer, a player's head or an AI, turns that raw material into the emergent story.",
+      "t": 809,
+      "quote": "That is not the emergent narrative. Nothing that comes out of that directly is the emergent narrative",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "story sifting",
+      "kind": "technique",
+      "claim": "Felt expresses sifting patterns as Datalog queries over event sequences, such as an impulsive character committing two betrayals with no other actions in between.",
+      "detail": "Patterns are groups of interrelated events that make good narrative building blocks, like love triangles or revenge cycles. Authors should be able to write many quickly for diversity. Felt uses JavaScript and the DataScript library, with a 'not-join' clause to exclude intervening events.",
+      "t": 914,
+      "quote": "They are perpetrated by the same character and the character has to have the impulsive trait",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "character subjectivity",
+      "kind": "technique",
+      "claim": "Felt lets characters run their own sifting patterns as introspective actions that produce motivation tokens, so different characters interpret the same events differently and act on them.",
+      "detail": "A character who was treated meanly three times may produce a 'get revenge' token consumed by later actions, while another character's patterns notice the other person was having a bad day and choose kindness. Differential interpretation creates subjectivity and conflict.",
+      "t": 958,
+      "quote": "you can build characters that are performing story sifting to subjectively naratize the world",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "values",
+      "kind": "example",
+      "claim": "Cozy Mystery Construction Kit gives characters random values (science, survival, comfort, order) used to judge whether an action is a crime, so the same act draws different reactions.",
+      "detail": "Characters are research scientists in a snowed-in observatory; leaving the break-room door unlocked reads differently to someone valuing security versus comfort. The cast is generated with relationships, shared or opposed values, and traits like celebrity, funding or secret expertise; the team prototyped it with paper and index cards.",
+      "t": 1139,
+      "quote": "these values are the things they use to evaluate if an action is a crime",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "co-creative storytelling",
+      "kind": "technique",
+      "claim": "Cozy Mystery Construction Kit auto-generates a description of every action into a transcript that players can optionally edit collaboratively, producing a written story without extra tracking.",
+      "detail": "Players can flesh out important or flavourful moments Google Docs style or leave them, which allows players to exert less creative agency when they don't feel strongly.",
+      "t": 1218,
+      "quote": "action is performed, we generate an automatic descripton of that action. Players can edit it Google Docs style",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "co-creative storytelling",
+      "kind": "technique",
+      "claim": "Cozy Mystery Construction Kit turns 'what should happen next' into a choice among about 5-7 generated, plausibly motivated actions.",
+      "detail": "The system proposes actions a character might want, actions advancing an author-level goal, or revenge for an earlier action. In testing, 5-7 alternatives worked well.",
+      "t": 1266,
+      "quote": "This transforms this hugely open-ended question of \"what should happen next\" into an operation of choosing a relatively low number of alternatives",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "author goals",
+      "kind": "principle",
+      "claim": "Generated stories need both character-level goals, which make scenes compelling, and author-level goals, which keep the story moving instead of becoming a soup of characters acting aimlessly.",
+      "detail": "Author goals include 'raise the tension between these characters' or 'illustrate a conflict between two values'; character goals include 'perform my experiment' or 'get revenge on Fred'. Kreminski says they found both are needed.",
+      "t": 1295,
+      "quote": "You need character-level goals make the scenes feel compelling, and you need author-level goals to keep the story moving forward",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "malleable simulation",
+      "kind": "example",
+      "claim": "Diarytown, led by Melanie Dickinson, has players compose diary entries from Lego-like action blocks about their real lives, then runs sifting patterns to renarrativize their life in a magical-realist tone.",
+      "detail": "The game builds a model of the player's friends and family. Kreminski frames it as a step toward malleable simulation, where players co-construct the story partner through play, pushing back on one-sided tacit personalization.",
+      "t": 1388,
+      "quote": "we think is a malleable simulation which is a game where you shape your computational story partner through play",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "genre as attractor",
+      "kind": "principle",
+      "claim": "Kreminski defines a genre as a collection of mutually supportive design patterns, an attractor in design space, and sees story construction as a new computation-dependent genre.",
+      "detail": "Adding one pattern makes it sensible to add more until they reinforce one another. He urges studying how players already use games as story partners, e.g. whether they need logs of what killed everything or who the king was.",
+      "t": 1504,
+      "quote": "The idea that genre is a collection of mutually supportive design patterns, an attractor in design space",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "story sifting",
+      "kind": "open-question",
+      "claim": "Whether sifting patterns can be generated, or replaced by generic 'sifting heuristics' modelling what makes events read as a story, remains unexplored in Kreminski's lab.",
+      "detail": "In Q&A he says they haven't tried generating patterns, but James Ryan proposed higher-level sifting heuristics, and Indexter is technology they might build on. He also notes intern-written patterns made characters see events too similarly, so characterising characters through distinct patterns is still early.",
+      "t": 1661,
+      "quote": "we have an idea from James of sifting heuristics which are higher level more generic patterns that are looking for what makes a good story in general",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

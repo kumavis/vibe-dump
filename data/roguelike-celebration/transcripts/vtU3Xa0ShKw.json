@@ -1,0 +1,1344 @@
+{
+ "id": "vtU3Xa0ShKw",
+ "url": "https://www.youtube.com/watch?v=vtU3Xa0ShKw",
+ "title": "Patrick Belanger & Jackson Wagner - Hand-Crafted Randomness: Storytelling in Wildermyth",
+ "speaker": "Patrick Belanger & Jackson Wagner",
+ "talk_title": "Hand-Crafted Randomness: Storytelling in Wildermyth",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-07",
+ "duration_s": 1963,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "How do we make memorable characters and story moments when they're procedurally generated? How much hand-crafted content needs to be interwoven with procedural content to immerse the player in a story-driven world? (Spoiler: A lot!) Wildermyth is a party-based tactical storytelling RPG, and this talk will go over how we generate memorable characters and put those characters in situations that further characterize them.\n\nWe'll show the developer tools we created to help bring the story events and dialogue to life, specifically focusing on the ways hand-written dialogue works with the procedural heroes and events. We'll also go over how our combat maps similarly use a combination of hand-crafted and procedural content.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and overview"
+  },
+  {
+   "start": 90,
+   "title": "Game design goals"
+  },
+  {
+   "start": 221,
+   "title": "Hero generation and character"
+  },
+  {
+   "start": 521,
+   "title": "Event and narrative systems"
+  },
+  {
+   "start": 711,
+   "title": "Variations and storytelling"
+  },
+  {
+   "start": 902,
+   "title": "Advanced event design"
+  },
+  {
+   "start": 1073,
+   "title": "Tidings and small events"
+  },
+  {
+   "start": 1146,
+   "title": "Combat map design"
+  },
+  {
+   "start": 1363,
+   "title": "Scenery and world interaction"
+  },
+  {
+   "start": 1544,
+   "title": "The mystic class"
+  },
+  {
+   "start": 1621,
+   "title": "Overland map and conclusion"
+  },
+  {
+   "start": 1735,
+   "title": "Q&A and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4351,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.14,
+   "d": 1.5,
+   "text": "R ROURKE: I will get into"
+  },
+  {
+   "t": 8.64,
+   "d": 11.52,
+   "text": "introduce your next speakers. Jackson and Patrick are going to talk about \"Hand-Crafted Randomness:"
+  },
+  {
+   "t": 20.16,
+   "d": 6.08,
+   "text": "Storytelling in Wildermyth's Proc-Gen World.\" We are going to learn more about procedural"
+  },
+  {
+   "t": 26.24,
+   "d": 9.28,
+   "text": "generation in narrative. Thank you so much. PATRICK: Hi, everyone. I was one of the developer"
+  },
+  {
+   "t": 36.48,
+   "d": 15.68,
+   "text": "on Wildermyth and working on a multiplayer roguelike game called be gone beast."
+  },
+  {
+   "t": 53.44,
+   "d": 3.48,
+   "text": "ROURKE: We can't hear you. >>"
+  },
+  {
+   "t": 66.24,
+   "d": 10.8,
+   "text": "I am Jackson wilder. I am the lead programmer and designer"
+  },
+  {
+   "t": 77.04,
+   "d": 2.88,
+   "text": "at flat line game. We are making a dystopic"
+  },
+  {
+   "t": 79.92,
+   "d": 5.84,
+   "text": "post office simulator called letter loss. >> Our presentation is called \"Hand-Crafted"
+  },
+  {
+   "t": 85.76,
+   "d": 8.4,
+   "text": "Randomness: Storytelling in Wildermyth's Proc-Gen World.\" So Wildermyth to give a brief overview is"
+  },
+  {
+   "t": 94.16,
+   "d": 5.44,
+   "text": "a party-based tactical strategy storytelling RPG with randomly generated hero, several different"
+  },
+  {
+   "t": 100.16,
+   "d": 6.32,
+   "text": "plots, many different smaller events within each campaign and lots of procedural generation. It"
+  },
+  {
+   "t": 106.48,
+   "d": 5.92,
+   "text": "was released in 2021 and received quite well with overwhelmingly positive reviews on Steam."
+  },
+  {
+   "t": 112.4,
+   "d": 12.72,
+   "text": "We stopped working on the game in mid-2024. The general flow is like this. You pick a campaign"
+  },
+  {
+   "t": 125.12,
+   "d": 7.04,
+   "text": "and roll your party of heroes, you start out with three and some might join or leave, but heroes are"
+  },
+  {
+   "t": 132.88,
+   "d": 4.64,
+   "text": "the central buoyant point of the game. They are randomly generated but you can customize them."
+  },
+  {
+   "t": 138.16,
+   "d": 5.28,
+   "text": "There is an overland section of the gameplay where you move to different locations, reveal sites and"
+  },
+  {
+   "t": 143.44,
+   "d": 8.4,
+   "text": "decide what monster groups to attach. The layout and biomes are chosen procedurally larger. You"
+  },
+  {
+   "t": 153.02,
+   "d": 4.98,
+   "text": "are brought into a tactical turn base strategy mission and this is the meat of the play and"
+  },
+  {
+   "t": 158.0,
+   "d": 8.16,
+   "text": "influenced by the overland tile, site and type of events sometimes. Before and after missions"
+  },
+  {
+   "t": 166.16,
+   "d": 8.32,
+   "text": "and several other places the story is told around comic panels some talk about the plot and many can"
+  },
+  {
+   "t": 174.48,
+   "d": 5.36,
+   "text": "happen in many campaign ranging from the heroes trying decide what to make for dinner, to someone"
+  },
+  {
+   "t": 179.84,
+   "d": 5.2,
+   "text": "becoming one with the spirit of a ghost bear, to handling conversations about death and loss."
+  },
+  {
+   "t": 186.32,
+   "d": 5.12,
+   "text": "The goal of Wildermyth could be considered many things but I describe the main one as"
+  },
+  {
+   "t": 191.44,
+   "d": 6.16,
+   "text": "creating character and story moments that feel unique to each play through but also stick with"
+  },
+  {
+   "t": 197.6,
+   "d": 11.2,
+   "text": "the player and feel gene genuine. Heroes and maps are randomly chosen but that generation"
+  },
+  {
+   "t": 208.8,
+   "d": 5.84,
+   "text": "is often guided by or leads to many different piece of handcrafted content. Heroes and myths"
+  },
+  {
+   "t": 214.64,
+   "d": 8.16,
+   "text": "and combat are the three main parts of Wildermyth and we will go over them. Starting with heroes."
+  },
+  {
+   "t": 223.52,
+   "d": 4.8,
+   "text": "Wildermyth is a party-based game meaning you control all heroes in the party usually around"
+  },
+  {
+   "t": 228.32,
+   "d": 6.0,
+   "text": "four at the start and closer to 10 at the end. I will talk about how they are generated and"
+  },
+  {
+   "t": 234.32,
+   "d": 7.04,
+   "text": "some of what can happen to them over the course of the campaign. There is a legacy system but I"
+  },
+  {
+   "t": 241.36,
+   "d": 7.92,
+   "text": "won't be talking about that during the talk. There are 11 personality traits to determine"
+  },
+  {
+   "t": 249.28,
+   "d": 5.68,
+   "text": "what a hero acts like. Poet, healer, hothead, bookish, cowered, leader, Romanic, loaner, snark,"
+  },
+  {
+   "t": 254.96,
+   "d": 10.64,
+   "text": "greedy and goof ball. The primary and secondary starts are the most important. If you try to"
+  },
+  {
+   "t": 265.6,
+   "d": 8.24,
+   "text": "get players to remember more than two personality traits on a hero it tend do is dilute. Each hero"
+  },
+  {
+   "t": 273.84,
+   "d": 7.44,
+   "text": "starts out with history about their upbringing and motivations. These influence hook quests which are"
+  },
+  {
+   "t": 281.28,
+   "d": 7.52,
+   "text": "little side quests focused on that hero and stat buffs and those from random generation are small"
+  },
+  {
+   "t": 288.8,
+   "d": 6.88,
+   "text": "and add flair but if you make them too impactful players will reroll heroes until they get stats"
+  },
+  {
+   "t": 295.68,
+   "d": 6.16,
+   "text": "they want which isn't fun. We try to let the stats you earn over the course of the adventure be more"
+  },
+  {
+   "t": 301.84,
+   "d": 9.6,
+   "text": "important. Personality traits play a large part in picking. That's the core of hero generation. Most"
+  },
+  {
+   "t": 311.44,
+   "d": 5.52,
+   "text": "of the other interesting stuff happens during the campaign bringing us to the first choice players"
+  },
+  {
+   "t": 316.96,
+   "d": 12.0,
+   "text": "encounter. Relationships. You can form randomly or due to a player's choice. Players get really"
+  },
+  {
+   "t": 328.96,
+   "d": 6.56,
+   "text": "invested in relationships. We will put a choice between all three at the start of our campaigns."
+  },
+  {
+   "t": 335.52,
+   "d": 5.2,
+   "text": "Aside from their story impact, relationships also provide combat buffs. Romance make you"
+  },
+  {
+   "t": 340.72,
+   "d": 12.16,
+   "text": "deal more damage to those who attack your lover. Heroes can have children and siblings. The family"
+  },
+  {
+   "t": 352.88,
+   "d": 5.84,
+   "text": "system company in later in development and it is simple but gives nice story variation and players"
+  },
+  {
+   "t": 358.72,
+   "d": 8.16,
+   "text": "really enjoy it. Since Wildermyth is a party-based game it is OK for some heroes to die or leave the"
+  },
+  {
+   "t": 366.88,
+   "d": 6.16,
+   "text": "party. Campaigns take place over many years so you will see your heroes age and eventually retire."
+  },
+  {
+   "t": 373.04,
+   "d": 5.52,
+   "text": "Retirement felt like an important part but players don't like losing heroes so we tried to mitigate"
+  },
+  {
+   "t": 378.56,
+   "d": 7.36,
+   "text": "that and give experience point. We didn't want to shy away from death but didn't want it to be"
+  },
+  {
+   "t": 385.92,
+   "d": 11.12,
+   "text": "common. When you lose all your health in combat there is a mortal choice choosing to be named and"
+  },
+  {
+   "t": 397.04,
+   "d": 6.48,
+   "text": "fall back often losing an arm, or eye or getting a permanent scar or go out in a blaze of glory and"
+  },
+  {
+   "t": 403.52,
+   "d": 15.36,
+   "text": "doing damage or granting bluff protection. Gear is one of the most important factors for how heroes"
+  },
+  {
+   "t": 418.88,
+   "d": 8.8,
+   "text": "play in combat and for that reason we don't allow swapping weapons. The gears is theirs and theirs"
+  },
+  {
+   "t": 427.68,
+   "d": 5.92,
+   "text": "alone. This helps to further characterize the heroes. I have the hero with the big hammer which"
+  },
+  {
+   "t": 433.6,
+   "d": 6.56,
+   "text": "smashes hammers and my hero with a bow who refunds the action point and makes him feel crafty."
+  },
+  {
+   "t": 442.88,
+   "d": 4.88,
+   "text": "Players would give gear to whatever hero would be most useful at the time and weapons would feel"
+  },
+  {
+   "t": 447.76,
+   "d": 12.64,
+   "text": "separate. Weapons, armor, scarves and more show up in combat and during the comic. In the case"
+  },
+  {
+   "t": 460.4,
+   "d": 7.76,
+   "text": "of random loot this is a visual representation of your hero getting stronger and progressing. For"
+  },
+  {
+   "t": 468.16,
+   "d": 6.24,
+   "text": "loot from specific events it serves as a reminder for events. We have a couple cases where specific"
+  },
+  {
+   "t": 474.4,
+   "d": 8.96,
+   "text": "gear triggers certain events. There are some pets and they show up along with the hero and serve as"
+  },
+  {
+   "t": 483.36,
+   "d": 7.2,
+   "text": "a reminder to a specific event that occurred. And lastly, transformations. They are probably one of"
+  },
+  {
+   "t": 490.56,
+   "d": 4.08,
+   "text": "the most successful types of hero progression in Wildermyth for a couple reasons. They are"
+  },
+  {
+   "t": 494.64,
+   "d": 9.68,
+   "text": "visually distinct. They affect combat and give new abilities and have you use those instead of normal"
+  },
+  {
+   "t": 504.32,
+   "d": 5.28,
+   "text": "weapons. And there are lots of interesting ways to reference them in story events. Referencing"
+  },
+  {
+   "t": 509.6,
+   "d": 4.72,
+   "text": "something that's visible on the hero is easy because the player might forget something"
+  },
+  {
+   "t": 514.32,
+   "d": 5.36,
+   "text": "their hero did in the past but definitely won't forget their hero has a wolf head."
+  },
+  {
+   "t": 520.96,
+   "d": 4.72,
+   "text": "Now that we talked about what makes heroes unique and memorable let's talk about how we use that."
+  },
+  {
+   "t": 526.72,
+   "d": 5.28,
+   "text": "Events are the combs that tell Wildermyth story and lap happen at the start and between chapters"
+  },
+  {
+   "t": 532.8,
+   "d": 11.52,
+   "text": "and during combat. Most happen randomly and we refer to this random collection of events as a"
+  },
+  {
+   "t": 544.32,
+   "d": 5.6,
+   "text": "library of plays where the heroes are the cast. When you are putting on a play you need to be sure"
+  },
+  {
+   "t": 549.92,
+   "d": 6.72,
+   "text": "you have the right number of actors and the actors are right for the role the play requires. The goal"
+  },
+  {
+   "t": 556.64,
+   "d": 6.56,
+   "text": "is acknowledging who the heroes are and pushing them toward who they can become. We look at all"
+  },
+  {
+   "t": 563.2,
+   "d": 5.28,
+   "text": "events and pick one we have the role for. They are weighted differently depending how specific they"
+  },
+  {
+   "t": 568.48,
+   "d": 6.08,
+   "text": "are. An event with a wolf hero talking to a parent while walking through the forest has a higher"
+  },
+  {
+   "t": 574.56,
+   "d": 9.12,
+   "text": "event than friends chatting. We try to pick the event that is best suited for the current party of"
+  },
+  {
+   "t": 583.68,
+   "d": 11.6,
+   "text": "heroes you have. There are many text and dialogue splits and additional comic panels or choices. If"
+  },
+  {
+   "t": 595.28,
+   "d": 6.8,
+   "text": "you have seen an event it is rare it is the exact same twice. We include small events called tidings"
+  },
+  {
+   "t": 602.08,
+   "d": 4.64,
+   "text": "that reference specific things about characters and are much quicker to create. I am going to"
+  },
+  {
+   "t": 606.72,
+   "d": 11.84,
+   "text": "drink some water. Talking is hard. Let's look at an example. Here is relatively simple event about"
+  },
+  {
+   "t": 618.56,
+   "d": 10.72,
+   "text": "two heroes talking about what keeps them fighting while traveling to meet monster. Overland tile is"
+  },
+  {
+   "t": 629.28,
+   "d": 8.64,
+   "text": "the map tile including forest or field or swamp. Site is is the specific location. Party is the"
+  },
+  {
+   "t": 637.92,
+   "d": 4.64,
+   "text": "specific group of heroes you brought along. Foes are the enemies you are facing. These all require"
+  },
+  {
+   "t": 643.28,
+   "d": 6.64,
+   "text": "like events that happen in a fire or library. But in this case we are not making any restrictions"
+  },
+  {
+   "t": 649.92,
+   "d": 6.08,
+   "text": "there. The right side is where we are doing some actual matching. First, we are saying we need one"
+  },
+  {
+   "t": 656.0,
+   "d": 4.56,
+   "text": "hero who will refer to as hero. Next we want to pick a different hero that's friends-with-benefits"
+  },
+  {
+   "t": 660.56,
+   "d": 5.36,
+   "text": "situation or lovers with hero. Friend with and lover with return the tier of relationship which"
+  },
+  {
+   "t": 665.92,
+   "d": 6.24,
+   "text": "can be up to five. We score lovers more highly so we will prefer to choose a lover if there is one."
+  },
+  {
+   "t": 672.16,
+   "d": 6.64,
+   "text": "We will refer to this hero as friend. Next we want a third hero whichever has the highest leader stat"
+  },
+  {
+   "t": 678.8,
+   "d": 7.28,
+   "text": "among the remaining. We aren't saying any specific amount just getting the best we can find from"
+  },
+  {
+   "t": 686.08,
+   "d": 6.88,
+   "text": "what's left and we will refer to them as leader. Note hero, friend and leader are just names we"
+  },
+  {
+   "t": 692.96,
+   "d": 6.8,
+   "text": "are giving the roles. It doesn't matter the name. The logic is happening in the scoring. Finally, we"
+  },
+  {
+   "t": 699.76,
+   "d": 6.8,
+   "text": "have optional heroes 4 and 5 and a lover role is matched it friend is lover. There are additional"
+  },
+  {
+   "t": 706.56,
+   "d": 12.08,
+   "text": "options that allow the role to match the same hero more than once. We pick an event based on the main"
+  },
+  {
+   "t": 719.36,
+   "d": 8.4,
+   "text": "requirements but there are many places where there can be variations in site, monster type and more."
+  },
+  {
+   "t": 729.44,
+   "d": 6.8,
+   "text": "A text split where dialogue or narration is the most common one. The response to a question about"
+  },
+  {
+   "t": 736.24,
+   "d": 7.92,
+   "text": "the hero's favorite fruit is different depending on their personality. We start with a tag,"
+  },
+  {
+   "t": 744.16,
+   "d": 5.36,
+   "text": "hero personality that tells the game we are going to split the next text into 11 different options"
+  },
+  {
+   "t": 749.52,
+   "d": 7.84,
+   "text": "based on personality. Those options are written in with a slash. Content sensitive coloring so"
+  },
+  {
+   "t": 757.36,
+   "d": 5.52,
+   "text": "you can see there text you are working on. Bread crumbing at the bottom showing information about"
+  },
+  {
+   "t": 762.88,
+   "d": 6.16,
+   "text": "the specific branch you are working on. And the comic is always visible in the editor and can"
+  },
+  {
+   "t": 769.04,
+   "d": 5.44,
+   "text": "automatically adjust the stats of the heroes in the comment to match to the selected text section."
+  },
+  {
+   "t": 774.48,
+   "d": 6.24,
+   "text": "There is expressions to match the hero also since that's something we often want to change."
+  },
+  {
+   "t": 781.52,
+   "d": 6.24,
+   "text": "You may note writing 11 responses to one question is a lot of work especially because as you can see"
+  },
+  {
+   "t": 788.56,
+   "d": 6.24,
+   "text": "the response to the response is also changing. Earlier in development, there were more cases"
+  },
+  {
+   "t": 794.8,
+   "d": 6.24,
+   "text": "where we would only have a couple variations like a romantic hero and book hero would have the same"
+  },
+  {
+   "t": 801.04,
+   "d": 10.32,
+   "text": "lines but it turned out writing 11 splits was important for heroes to have consistent"
+  },
+  {
+   "t": 811.36,
+   "d": 5.76,
+   "text": "voices. That is important for a game that is centered around memorial heroes. It also presents"
+  },
+  {
+   "t": 817.12,
+   "d": 6.64,
+   "text": "a lot of challenges. You can't go too over the top because if a hero speak only in poetry for a book"
+  },
+  {
+   "t": 823.76,
+   "d": 7.12,
+   "text": "split but normal for the rest of the place it will feel out of line. You can't have charactertures"
+  },
+  {
+   "t": 830.88,
+   "d": 5.76,
+   "text": "meaning the relationships need to be similar in our case all heroes are a friendly group."
+  },
+  {
+   "t": 836.64,
+   "d": 6.4,
+   "text": "In the rivalry relationship, the heroes may get on each other's nerves but overall still working"
+  },
+  {
+   "t": 843.04,
+   "d": 4.4,
+   "text": "together for the common good. We can't have any of our heroes hate each other because there would"
+  },
+  {
+   "t": 847.44,
+   "d": 7.12,
+   "text": "be no way to have that happen consistently. I mentioned the second hero of this event could"
+  },
+  {
+   "t": 854.56,
+   "d": 8.0,
+   "text": "optionally be a lover of the first. That is where unique choices come into place. There is a choice"
+  },
+  {
+   "t": 862.56,
+   "d": 8.08,
+   "text": "at the end usually 2-4 options. Sometimes they grant gear, sometimes they transform your hero,"
+  },
+  {
+   "t": 870.64,
+   "d": 5.52,
+   "text": "sometimes it is just a story difference. Sometimes they only show up if you have a specific hero in"
+  },
+  {
+   "t": 877.36,
+   "d": 8.48,
+   "text": "the case. One and two always happen but the third only happens if the two are lovers. This exist to"
+  },
+  {
+   "t": 885.84,
+   "d": 4.48,
+   "text": "acknowledge who the heroes are and what they have done to make it feel like the events that happen"
+  },
+  {
+   "t": 890.32,
+   "d": 5.36,
+   "text": "to them aren't just things that occurred and were gone but those events have shaped who they are"
+  },
+  {
+   "t": 895.68,
+   "d": 7.52,
+   "text": "now and to tease that any event could in some way shape who they will become in the future."
+  },
+  {
+   "t": 903.2,
+   "d": 3.92,
+   "text": "Here is another example. We have got some heroes in the mountains and want to present the player"
+  },
+  {
+   "t": 907.12,
+   "d": 5.12,
+   "text": "with the option of continuing up the mountain or discover a cave. How do they discover the cave?"
+  },
+  {
+   "t": 912.96,
+   "d": 10.48,
+   "text": "Our friend is looking around and notices it. What if they were a wolf hero? His nose samples the"
+  },
+  {
+   "t": 923.44,
+   "d": 10.72,
+   "text": "local breezes. As a wolf she could have spotted it out but sniffing it out encourages the belief"
+  },
+  {
+   "t": 934.16,
+   "d": 7.44,
+   "text": "in the player this isn't just a template. They are doing something only they could do."
+  },
+  {
+   "t": 942.72,
+   "d": 4.96,
+   "text": "Or what if one of the heroes had a pet critter that was distracted by a squirrel and chased it"
+  },
+  {
+   "t": 947.68,
+   "d": 5.92,
+   "text": "up to the cave? Here is where I will introduce panel splits. We add additional panels if you"
+  },
+  {
+   "t": 953.6,
+   "d": 12.24,
+   "text": "have a credit. It does take more effort to set-up so they are not as often as text splits. Say you"
+  },
+  {
+   "t": 965.84,
+   "d": 10.64,
+   "text": "encounter winter lock in the cave, it is often useful to ask yourself what is a trait you would"
+  },
+  {
+   "t": 976.48,
+   "d": 7.6,
+   "text": "expect to draw dramatically alter this encounter? You might expect something differently if you had"
+  },
+  {
+   "t": 984.08,
+   "d": 8.24,
+   "text": "access to fire. Winter Lock acknowledges the flame touch hero bringing her warmth into this"
+  },
+  {
+   "t": 992.32,
+   "d": 4.8,
+   "text": "place of ice. There is a similar panel split if you have a hero with a pet fire chicken."
+  },
+  {
+   "t": 998.72,
+   "d": 6.96,
+   "text": "When we get the choice portion, we have a unique choice. There is a skill check you have to pass"
+  },
+  {
+   "t": 1005.68,
+   "d": 5.2,
+   "text": "but with the fire abilities, the interaction can become trivial. It feels satisfying to be"
+  },
+  {
+   "t": 1010.88,
+   "d": 9.2,
+   "text": "rewarded for a big change. A guideline we or more specifically our lead writer dug started following"
+  },
+  {
+   "t": 1020.08,
+   "d": 5.36,
+   "text": "later into the development is to try to add variation wherever it would feel weird not to have"
+  },
+  {
+   "t": 1025.44,
+   "d": 5.12,
+   "text": "it. Here is an example with a hero encountering their estranged father. It would feel weird if"
+  },
+  {
+   "t": 1030.56,
+   "d": 9.84,
+   "text": "the father didn't mention the hero has an animal head they did not have last time. It is only in"
+  },
+  {
+   "t": 1040.4,
+   "d": 11.6,
+   "text": "one panel but that's enough to satisfy players. It is also OK, and sometimes easier to forbid events"
+  },
+  {
+   "t": 1052.0,
+   "d": 5.76,
+   "text": "for certain heroes. We have an event where a hero falls into a hole and can't get out. It"
+  },
+  {
+   "t": 1057.76,
+   "d": 6.32,
+   "text": "felt weird if that hero had wings so we made it to where that would not trigger the events. Writing"
+  },
+  {
+   "t": 1064.08,
+   "d": 6.32,
+   "text": "up additional panel splits and choices might be interesting but the reworking of one specific"
+  },
+  {
+   "t": 1070.4,
+   "d": 7.4,
+   "text": "case is more than the loss of the specific case. Let's talk about tidings. They are one line events"
+  },
+  {
+   "t": 1077.8,
+   "d": 7.0,
+   "text": "that that happen during the years of piece between enemy attacks. We show 1-2 per hero and many are"
+  },
+  {
+   "t": 1084.8,
+   "d": 8.4,
+   "text": "written around transformations or follow-up. For examples, here are two about transformations. One"
+  },
+  {
+   "t": 1093.2,
+   "d": 4.8,
+   "text": "about carving art with a hook hand and one that's a follow-up to an event where you decide you will"
+  },
+  {
+   "t": 1098.0,
+   "d": 7.04,
+   "text": "take care of an egg. That one grants loot which is a nice perk. It is worth noting while many changes"
+  },
+  {
+   "t": 1105.68,
+   "d": 7.52,
+   "text": "happen due to choices a player made others don't. Losing a hand and having it be replaced likely"
+  },
+  {
+   "t": 1113.2,
+   "d": 5.44,
+   "text": "wasn't intentional. Children and relationships can happen randomly without input. Wildermyth"
+  },
+  {
+   "t": 1118.64,
+   "d": 4.8,
+   "text": "is a game where it often feels like the player is discovering a heroes story while providing a"
+  },
+  {
+   "t": 1123.44,
+   "d": 6.56,
+   "text": "guiding hand rather than choosing it directly. We don't always have to be acknowledging choices the"
+  },
+  {
+   "t": 1130.0,
+   "d": 5.04,
+   "text": "player made directly. It can be just as impactful to acknowledge things that happened to the hero"
+  },
+  {
+   "t": 1135.04,
+   "d": 6.74,
+   "text": "randomly. Procedurally generated challenges can be impactful still if we acknowledge"
+  },
+  {
+   "t": 1142.4,
+   "d": 11.68,
+   "text": "them. Now I will hand it over to Jackson. >> I will be talking about how we handled"
+  },
+  {
+   "t": 1154.08,
+   "d": 7.84,
+   "text": "creating the map, the procedurally generated kind, and the handcrafted kind and the scenery"
+  },
+  {
+   "t": 1163.36,
+   "d": 6.88,
+   "text": "and the mystic class and how they interact with scenery and low it changes gameplay and keeps"
+  },
+  {
+   "t": 1170.24,
+   "d": 7.36,
+   "text": "things interesting. Right off the bat, procgen maps are amazing because we can make a ton and"
+  },
+  {
+   "t": 1177.6,
+   "d": 6.8,
+   "text": "in theory adding a new one cost nothing. We setup the guidelines. You know, we had to fine tune it"
+  },
+  {
+   "t": 1184.4,
+   "d": 5.52,
+   "text": "to make sure nothing would break when we were playing it. But after that point, initially,"
+  },
+  {
+   "t": 1189.92,
+   "d": 5.92,
+   "text": "almost all the maps were procedurally generated. We didn't have any hand-crafted ones or very few"
+  },
+  {
+   "t": 1195.84,
+   "d": 11.12,
+   "text": "of them. They were great for a lot of reasons. Mostly because we had the initial method. I"
+  },
+  {
+   "t": 1228.48,
+   "d": 14.24,
+   "text": "felt like this was a real part of the world because the scenery was positioned procedurally"
+  },
+  {
+   "t": 1250.88,
+   "d": 10.88,
+   "text": "and not individually hand placed. It made the fights feel a little less special. We talked"
+  },
+  {
+   "t": 1261.76,
+   "d": 7.36,
+   "text": "about how sites can be workshops and forges. If there is a Tower full of forge equipment it feels"
+  },
+  {
+   "t": 1269.12,
+   "d": 7.92,
+   "text": "more like a forge than a forest area with forest items. The other nice part of the Tower maps is"
+  },
+  {
+   "t": 1278.08,
+   "d": 5.84,
+   "text": "when trying to fit some of Wildermyth's larger monsters, there could be an issue"
+  },
+  {
+   "t": 1283.92,
+   "d": 7.04,
+   "text": "if there wasn't enough room but the Tower maps could scale in size based on how many monsters"
+  },
+  {
+   "t": 1290.96,
+   "d": 6.8,
+   "text": "we would include and how much space they would take up. There were also occasionally issues with"
+  },
+  {
+   "t": 1298.4,
+   "d": 4.48,
+   "text": "the feel of some of them. For instance, with maps like this, something that can happen pretty often"
+  },
+  {
+   "t": 1302.88,
+   "d": 6.72,
+   "text": "is if you have big monsters they would have a hard time fitting through the smaller pathways. So you"
+  },
+  {
+   "t": 1309.6,
+   "d": 5.2,
+   "text": "would not really get the same sensation of heroes exploring the map and fighting and discovering new"
+  },
+  {
+   "t": 1314.8,
+   "d": 6.96,
+   "text": "pockets of monsters. It would just be the heroes stand there which could be fun but wasn't what"
+  },
+  {
+   "t": 1321.76,
+   "d": 6.96,
+   "text": "this type of map was specifically designed for so it could feel odd when you played it enough."
+  },
+  {
+   "t": 1329.76,
+   "d": 9.68,
+   "text": "They have a lot of benefits. Felt more customized, could create carefully constructed areas that felt"
+  },
+  {
+   "t": 1339.44,
+   "d": 11.92,
+   "text": "like real parts of the world, and are critical for any story moment or boss fight. We wanted the"
+  },
+  {
+   "t": 1353.76,
+   "d": 6.88,
+   "text": "pacing of where monsters should spawn. It meant we could do a lot more and be intentional with"
+  },
+  {
+   "t": 1360.64,
+   "d": 6.08,
+   "text": "the maps we are creating. The are main downside of procgen maps is they are beautiful but they"
+  },
+  {
+   "t": 1366.72,
+   "d": 5.68,
+   "text": "also take a long time to make. There is a lot of design and iteration and back and forth that goes"
+  },
+  {
+   "t": 1372.4,
+   "d": 5.2,
+   "text": "into them because people have different opinions on gameplay and you have to play test each one to"
+  },
+  {
+   "t": 1377.6,
+   "d": 7.2,
+   "text": "make sure it feels good. Other benefits were if you wanted multiple stages or pieces of"
+  },
+  {
+   "t": 1384.8,
+   "d": 8.0,
+   "text": "scenery you could do that here. Specific enemies randomly appeared in maps. However you could place"
+  },
+  {
+   "t": 1392.8,
+   "d": 8.4,
+   "text": "it specifically and intentionally and make it feel like their base. Other benefits you could control"
+  },
+  {
+   "t": 1401.2,
+   "d": 5.76,
+   "text": "spawn regions. If you wanted to control the flow of the fight you could do that easier. You could"
+  },
+  {
+   "t": 1406.96,
+   "d": 6.64,
+   "text": "make sure there were larger areas meant for bigger interactions with lots of enemies and smaller"
+  },
+  {
+   "t": 1413.6,
+   "d": 5.04,
+   "text": "hallways or pathways meant for the heroes to make their way through and maybe have a small breather"
+  },
+  {
+   "t": 1418.64,
+   "d": 9.12,
+   "text": "between these engagements. They took a long time to make. Especially if we wanted to include unique"
+  },
+  {
+   "t": 1427.76,
+   "d": 5.68,
+   "text": "mechanics it could make it more difficult to test and generally took longer. However, other"
+  },
+  {
+   "t": 1433.44,
+   "d": 5.28,
+   "text": "benefits of it were if we wanted to have unique goals as all of the procedural generated maps,"
+  },
+  {
+   "t": 1438.72,
+   "d": 7.12,
+   "text": "or almost all, the main goal is to just kill all the enemies. For hand-crafted ones we could have"
+  },
+  {
+   "t": 1445.84,
+   "d": 6.08,
+   "text": "goals like trying to destroy specific pieces of scenery or escape a certain part of the map that"
+  },
+  {
+   "t": 1451.92,
+   "d": 6.96,
+   "text": "we could not do with procgen ones. So the other big thing I am going to talk about or one of the"
+  },
+  {
+   "t": 1458.88,
+   "d": 4.24,
+   "text": "other big things is scenery. It was based on the type of monster you are fighting, the biome and"
+  },
+  {
+   "t": 1463.12,
+   "d": 6.08,
+   "text": "the sets. This was super useful because it meant even if there were small variations in the map's"
+  },
+  {
+   "t": 1469.2,
+   "d": 6.24,
+   "text": "shape they would not make it feel interesting or different, however, if we had what fills the scene"
+  },
+  {
+   "t": 1475.44,
+   "d": 4.16,
+   "text": "change based on the environment you are in or what you are fighting, it could feel more interesting"
+  },
+  {
+   "t": 1479.6,
+   "d": 5.84,
+   "text": "and keep things fresher. There is an example of environment scenery. You in the hills with this"
+  },
+  {
+   "t": 1485.44,
+   "d": 9.04,
+   "text": "mossy stone and the monster scenery. You are fighting Gorgans and there are tentacle and you"
+  },
+  {
+   "t": 1494.48,
+   "d": 8.72,
+   "text": "have a ring of stones and a fountain. This was a hand-crafted map and meant to evoke the feeling of"
+  },
+  {
+   "t": 1503.2,
+   "d": 9.84,
+   "text": "mystical font in the mountains. Scenery curved as cover and had mechanical uses. If you hid behind"
+  },
+  {
+   "t": 1513.04,
+   "d": 5.84,
+   "text": "them or monsters were hiding behind them they would be more difficult to hit. This varied in"
+  },
+  {
+   "t": 1518.88,
+   "d": 5.36,
+   "text": "quality. However, we made sure it would never be too annoying because if you make an attack"
+  },
+  {
+   "t": 1524.24,
+   "d": 5.04,
+   "text": "against an enemy and the ally is flanking them, they are guaranteed to hit them as long as you"
+  },
+  {
+   "t": 1529.28,
+   "d": 6.16,
+   "text": "tried to hit them from the opposite angle. This is a core part of the combat and where strategy came"
+  },
+  {
+   "t": 1535.44,
+   "d": 6.72,
+   "text": "in. Hunters if attacking with a dagger could deal double damage when flanking. This was another way"
+  },
+  {
+   "t": 1542.16,
+   "d": 7.04,
+   "text": "scenery was critical for the flow of combat. And then we come to mystics which is where the scenery"
+  },
+  {
+   "t": 1549.2,
+   "d": 6.24,
+   "text": "really shines. Instead of being a traditional cast and throw fireballs they put a tiny piece"
+  },
+  {
+   "t": 1555.44,
+   "d": 7.52,
+   "text": "of their soul into an item and then they gain new abilities. If they interfuse with a bookshelf,"
+  },
+  {
+   "t": 1562.96,
+   "d": 5.04,
+   "text": "they may be able to pull the knowledge out of books, and shove it in someone's mind or cause"
+  },
+  {
+   "t": 1568.0,
+   "d": 8.08,
+   "text": "pieces of wood to explode in brilliant displays. This meant as the scenery change the ability is"
+  },
+  {
+   "t": 1576.08,
+   "d": 6.08,
+   "text": "available to the mystic. It would make up a third of the party and throws would change as well. Not"
+  },
+  {
+   "t": 1582.16,
+   "d": 4.88,
+   "text": "only were you looking at something different but you were having to approach combat differently."
+  },
+  {
+   "t": 1587.04,
+   "d": 14.08,
+   "text": "You could upgrade mystics in certain ways to make sure they had abilities. And this kept things"
+  },
+  {
+   "t": 1601.12,
+   "d": 34.08,
+   "text": "feeling interesting. And yeah, another example, there is one ability that lets you do this. Each"
+  },
+  {
+   "t": 1635.2,
+   "d": 8.24,
+   "text": "time the map was created the tiles had a rough proportion and a lot of grass and fewer mountains"
+  },
+  {
+   "t": 1643.44,
+   "d": 12.64,
+   "text": "and swamps. There was a chance to get a comic based in that section. As the game progressed, the"
+  },
+  {
+   "t": 1656.08,
+   "d": 14.96,
+   "text": "map would get more and more full. And then another important component were mountains as they would"
+  },
+  {
+   "t": 1671.04,
+   "d": 7.12,
+   "text": "slow down monsters that would kind of be launching raids against your out posts. The other part of"
+  },
+  {
+   "t": 1678.16,
+   "d": 5.76,
+   "text": "tiles that was critical is you could build sites that would give resources and they could be spent"
+  },
+  {
+   "t": 1683.92,
+   "d": 6.88,
+   "text": "to buy upgrades and weapon for your heroes. This meant you had to keep an eye on what resources"
+  },
+  {
+   "t": 1690.8,
+   "d": 7.2,
+   "text": "were plentiful. If you had places to build you could have swords but if you were lacking them"
+  },
+  {
+   "t": 1698.0,
+   "d": 8.64,
+   "text": "you would have to go for things that had more wood involved or things that of nature. These were less"
+  },
+  {
+   "t": 1706.64,
+   "d": 6.16,
+   "text": "obviously significant ways in which the procedural generation influenced gameplay but over tile you"
+  },
+  {
+   "t": 1712.8,
+   "d": 6.16,
+   "text": "would feel the lack of certain resources in a way a map was ren generated where rivers were could"
+  },
+  {
+   "t": 1718.96,
+   "d": 7.76,
+   "text": "shift the way you play. Also pause Fe because when raids were launched you had to defend your town"
+  },
+  {
+   "t": 1728.56,
+   "d": 5.12,
+   "text": "and if you didn't have people positioned properly it could make it difficult to keep playing"
+  },
+  {
+   "t": 1733.68,
+   "d": 7.12,
+   "text": "and not just lose that whole hand. Yeah. So. Patrick, please, what are our main takeaways?"
+  },
+  {
+   "t": 1741.6,
+   "d": 8.16,
+   "text": "PATRICK: when you are making randomly generated heroes give them lots of traits. When possible,"
+  },
+  {
+   "t": 1749.76,
+   "d": 6.0,
+   "text": "show the traits visually and make sure heroes have a consistent voice. When making events that"
+  },
+  {
+   "t": 1755.76,
+   "d": 7.04,
+   "text": "utilize those heroes hand craft stories you pick based on the hero's traits and"
+  },
+  {
+   "t": 1762.8,
+   "d": 6.4,
+   "text": "add additional acknowledgment. It is going to be a lot of work. That's the unaffectionate truth."
+  },
+  {
+   "t": 1769.2,
+   "d": 6.4,
+   "text": ">> And same thing with combat maps. You can make handcrafted maps and they can be furnished with"
+  },
+  {
+   "t": 1775.6,
+   "d": 7.76,
+   "text": "procgen but they can vary. That takes a lot of time. However the feeling of having your heroes"
+  },
+  {
+   "t": 1783.36,
+   "d": 4.56,
+   "text": "interact differently with their environment in different scenery made them feel more"
+  },
+  {
+   "t": 1787.92,
+   "d": 6.08,
+   "text": "unique especially as you play the game for longer periods of time with bigger and different parties."
+  },
+  {
+   "t": 1794.0,
+   "d": 4.16,
+   "text": "You still remember the character who was really good at messing around with rocks or something."
+  },
+  {
+   "t": 1798.88,
+   "d": 8.0,
+   "text": "Another thing that you have probably seen in a lot of talks. It can be seen as a way for smaller"
+  },
+  {
+   "t": 1806.88,
+   "d": 13.12,
+   "text": "teams to pick out a lot or content. Hopefully this talk shows the time it take do is hone"
+  },
+  {
+   "t": 1820.0,
+   "d": 5.92,
+   "text": "it into something of high-quality is something you have to consider as you make the decision"
+  },
+  {
+   "t": 1825.92,
+   "d": 10.48,
+   "text": "do is use procedural generation in your stuff. >> And that is all. If you are looking for more"
+  },
+  {
+   "t": 1836.4,
+   "d": 11.76,
+   "text": "Wildermyth's talk I will put Nate's GTC 2022 talk on the obelisk. Yeah."
+  },
+  {
+   "t": 1848.16,
+   "d": 11.12,
+   "text": "HAYLEE: This is awesome to see. It procedurally generates all these stories perfectly easily but"
+  },
+  {
+   "t": 1859.28,
+   "d": 6.96,
+   "text": "there is a lot of intentional choices made there. Just a quick question. I think we have time for"
+  },
+  {
+   "t": 1866.24,
+   "d": 5.68,
+   "text": "one here that someone posted. Dr. G asked what were your biggest challenges building"
+  },
+  {
+   "t": 1871.92,
+   "d": 6.76,
+   "text": "the editor and were their cases are core systems changed and you had to revise because of it?"
+  },
+  {
+   "t": 1878.68,
+   "d": 10.76,
+   "text": ">> I think the data structure changed a lot at the start but when I came on it largely stayed the"
+  },
+  {
+   "t": 1889.44,
+   "d": 9.12,
+   "text": "same and we added on. The editor did go through a lot of changes. At the start none of that"
+  },
+  {
+   "t": 1903.68,
+   "d": 5.92,
+   "text": "you were not able to click on a piece of text to see it show up. There is a bunch"
+  },
+  {
+   "t": 1909.6,
+   "d": 12.0,
+   "text": "of autofill stuff happening now. Prior to that, it was like write in a text editor and hope you"
+  },
+  {
+   "t": 1921.6,
+   "d": 12.0,
+   "text": "don't miss the slashes. HAYLEE: It would be nice"
+  },
+  {
+   "t": 1933.6,
+   "d": 6.72,
+   "text": "with highlights and auto complete. >> When I was first designing the maps,"
+  },
+  {
+   "t": 1941.04,
+   "d": 9.44,
+   "text": "I would use an ASCII art editor to indicate what kind of tiles I wanted to make. Once tools were"
+  },
+  {
+   "t": 1950.48,
+   "d": 6.48,
+   "text": "added it became easier to hand-craft and stuff. HAYLEE: Thanks again for the wonderful talk."
+  },
+  {
+   "t": 1956.96,
+   "d": 3.84,
+   "text": "Definitely post your other one on the obelisk. Thanks for joining us."
+  }
+ ]
+}

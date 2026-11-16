@@ -1,0 +1,3668 @@
+{
+ "id": "Wi-OHFmW4Ew",
+ "url": "https://www.youtube.com/watch?v=Wi-OHFmW4Ew",
+ "title": "Marlowe Dobbe: A Swarm of Monsters is Hard To Build: Generating Visual Concepts for Enemies",
+ "speaker": "Marlowe Dobbe",
+ "talk_title": "A Swarm of Monsters is Hard To Build: Generating Visual Concepts for Enemies",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1715,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Join Art Director Marlowe Dobbe for a deep dive into techniques she has used to generate visual concepts for enemies for roguelike games. Visual variety is an important consideration when working on games that are highly replayable, and these techniques can streamline the brainstorming process to help you to create a lot of unique and distinct enemy designs without letting the well run dry. Learn how to collect reference, generate ideas, and design an enemy alongside Marlowe during the presentation!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 41,
+   "title": "Welcome"
+  },
+  {
+   "start": 55,
+   "title": "Who am I"
+  },
+  {
+   "start": 88,
+   "title": "My Monsters"
+  },
+  {
+   "start": 151,
+   "title": "Generating Ideas"
+  },
+  {
+   "start": 194,
+   "title": "Spoiler Alert"
+  },
+  {
+   "start": 242,
+   "title": "The List of 10"
+  },
+  {
+   "start": 277,
+   "title": "Example List"
+  },
+  {
+   "start": 333,
+   "title": "Example Character"
+  },
+  {
+   "start": 394,
+   "title": "Reference Game Mechanics"
+  },
+  {
+   "start": 444,
+   "title": "Example Game Mechanics"
+  },
+  {
+   "start": 534,
+   "title": "Visual Reference"
+  },
+  {
+   "start": 670,
+   "title": "Reference is not cheating"
+  },
+  {
+   "start": 836,
+   "title": "What makes a good reference"
+  },
+  {
+   "start": 908,
+   "title": "Example"
+  },
+  {
+   "start": 952,
+   "title": "Live Drawing"
+  },
+  {
+   "start": 1453,
+   "title": "Final Thoughts"
+  },
+  {
+   "start": 1557,
+   "title": "QA"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5125,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.52,
+   "d": 3.16,
+   "text": "next talk for this slot is from Marlo"
+  },
+  {
+   "t": 6.68,
+   "d": 2.4,
+   "text": "who was previous artist for Rik"
+  },
+  {
+   "t": 9.08,
+   "d": 2.32,
+   "text": "celebration designed uh some of my"
+  },
+  {
+   "t": 11.4,
+   "d": 1.64,
+   "text": "favorite shirts they're all my favorite"
+  },
+  {
+   "t": 13.04,
+   "d": 1.64,
+   "text": "shirts unless I'm talking to you and"
+  },
+  {
+   "t": 14.68,
+   "d": 2.24,
+   "text": "then your shirt is of course my favorite"
+  },
+  {
+   "t": 16.92,
+   "d": 3.4,
+   "text": "yes that's right yes also uh working at"
+  },
+  {
+   "t": 20.32,
+   "d": 2.36,
+   "text": "Mega crit on art director for slay the"
+  },
+  {
+   "t": 22.68,
+   "d": 2.56,
+   "text": "Spire 2 which of course I think surely"
+  },
+  {
+   "t": 25.24,
+   "d": 2.72,
+   "text": "everyone here is quite excited about and"
+  },
+  {
+   "t": 27.96,
+   "d": 2.08,
+   "text": "worked on dicey Dungeons and floppiness"
+  },
+  {
+   "t": 30.04,
+   "d": 3.92,
+   "text": "nights so some real uh Rog like Classics"
+  },
+  {
+   "t": 33.96,
+   "d": 2.36,
+   "text": "the last while here and uh going to talk"
+  },
+  {
+   "t": 36.32,
+   "d": 1.68,
+   "text": "about visual concepts for enemies and"
+  },
+  {
+   "t": 38.0,
+   "d": 2.84,
+   "text": "Rog legs very exciting that's"
+  },
+  {
+   "t": 40.84,
+   "d": 3.48,
+   "text": "right awesome um hello everybody uh I'm"
+  },
+  {
+   "t": 44.32,
+   "d": 2.56,
+   "text": "Marlo uh and thanks for stumbling into"
+  },
+  {
+   "t": 46.88,
+   "d": 2.68,
+   "text": "my talk here a swarm of monsters is hard"
+  },
+  {
+   "t": 49.56,
+   "d": 2.68,
+   "text": "to build generating visual concepts for"
+  },
+  {
+   "t": 52.24,
+   "d": 3.28,
+   "text": "enemies in Rog leges let's just get to"
+  },
+  {
+   "t": 55.52,
+   "d": 3.12,
+   "text": "it so I had a lovely introduction but I"
+  },
+  {
+   "t": 58.64,
+   "d": 2.0,
+   "text": "might repeat some information here who"
+  },
+  {
+   "t": 60.64,
+   "d": 3.12,
+   "text": "am I uh I am an artist and animator and"
+  },
+  {
+   "t": 63.76,
+   "d": 1.96,
+   "text": "art director I've worked on titles such"
+  },
+  {
+   "t": 65.72,
+   "d": 1.88,
+   "text": "as dicey Dungeons and floppy nights"
+  },
+  {
+   "t": 67.6,
+   "d": 2.32,
+   "text": "currently I'm art directing for slay the"
+  },
+  {
+   "t": 69.92,
+   "d": 3.08,
+   "text": "Spire 2 uh when I'm not doing all of"
+  },
+  {
+   "t": 73.0,
+   "d": 1.92,
+   "text": "that I'm an officer for the Portland"
+  },
+  {
+   "t": 74.92,
+   "d": 2.28,
+   "text": "indie game Squad which is the uh"
+  },
+  {
+   "t": 77.2,
+   "d": 2.04,
+   "text": "Portland Indie scene here locally in"
+  },
+  {
+   "t": 79.24,
+   "d": 3.64,
+   "text": "Portland but also online and I also am a"
+  },
+  {
+   "t": 82.88,
+   "d": 1.64,
+   "text": "developer of a bunch of random itch"
+  },
+  {
+   "t": 84.52,
+   "d": 1.68,
+   "text": "games some of which you can see at the"
+  },
+  {
+   "t": 86.2,
+   "d": 2.32,
+   "text": "bottom of the slide"
+  },
+  {
+   "t": 88.52,
+   "d": 3.92,
+   "text": "here so the games that I work on have so"
+  },
+  {
+   "t": 92.44,
+   "d": 1.0,
+   "text": "many"
+  },
+  {
+   "t": 93.44,
+   "d": 3.16,
+   "text": "Monsters uh on the left here you can see"
+  },
+  {
+   "t": 96.6,
+   "d": 1.32,
+   "text": "some of the monsters I designed for"
+  },
+  {
+   "t": 97.92,
+   "d": 2.08,
+   "text": "dicey Dungeons and on the right are some"
+  },
+  {
+   "t": 100.0,
+   "d": 2.28,
+   "text": "monsters I designed for floppy nights"
+  },
+  {
+   "t": 102.28,
+   "d": 1.52,
+   "text": "these are both games that I worked on"
+  },
+  {
+   "t": 103.8,
+   "d": 2.92,
+   "text": "back to back um as you can"
+  },
+  {
+   "t": 106.72,
+   "d": 3.4,
+   "text": "see there's a lot of enemies in them um"
+  },
+  {
+   "t": 110.12,
+   "d": 1.64,
+   "text": "and of course as I'm working on slay the"
+  },
+  {
+   "t": 111.76,
+   "d": 3.36,
+   "text": "Spire 2 uh I wrote here uh plus 5"
+  },
+  {
+   "t": 115.12,
+   "d": 1.72,
+   "text": "million others give or take a couple"
+  },
+  {
+   "t": 116.84,
+   "d": 2.28,
+   "text": "million um you can see uh the few that"
+  },
+  {
+   "t": 119.12,
+   "d": 1.48,
+   "text": "we've been able to share so far we're"
+  },
+  {
+   "t": 120.6,
+   "d": 2.24,
+   "text": "already starting to build out a huge"
+  },
+  {
+   "t": 122.84,
+   "d": 3.48,
+   "text": "cast of characters for these uh games so"
+  },
+  {
+   "t": 126.32,
+   "d": 1.8,
+   "text": "I think a really important thing when"
+  },
+  {
+   "t": 128.12,
+   "d": 2.84,
+   "text": "you're doing art for Rog likes is these"
+  },
+  {
+   "t": 130.96,
+   "d": 2.92,
+   "text": "games are highly replayable by Nature"
+  },
+  {
+   "t": 133.88,
+   "d": 1.8,
+   "text": "you really want to make sure that the"
+  },
+  {
+   "t": 135.68,
+   "d": 1.92,
+   "text": "art doesn't feel stale you're not seeing"
+  },
+  {
+   "t": 137.6,
+   "d": 1.76,
+   "text": "the same three enemies over and over and"
+  },
+  {
+   "t": 139.36,
+   "d": 2.8,
+   "text": "over again and so um generating these"
+  },
+  {
+   "t": 142.16,
+   "d": 2.68,
+   "text": "sort of huge swarms of monsters if you"
+  },
+  {
+   "t": 144.84,
+   "d": 2.2,
+   "text": "will um is a really great way to kind of"
+  },
+  {
+   "t": 147.04,
+   "d": 1.4,
+   "text": "keep it feeling fresh visually while"
+  },
+  {
+   "t": 148.44,
+   "d": 2.4,
+   "text": "you're playing through these games"
+  },
+  {
+   "t": 150.84,
+   "d": 2.84,
+   "text": "repeatedly so how do you keep The Well"
+  },
+  {
+   "t": 153.68,
+   "d": 1.92,
+   "text": "of ideas from running dry how do you"
+  },
+  {
+   "t": 155.6,
+   "d": 3.08,
+   "text": "generate ideas um with these huge casts"
+  },
+  {
+   "t": 158.68,
+   "d": 1.68,
+   "text": "of monsters that we're talking about"
+  },
+  {
+   "t": 160.36,
+   "d": 2.24,
+   "text": "here it can be really intimidating to"
+  },
+  {
+   "t": 162.6,
+   "d": 2.64,
+   "text": "say like sit down come up with 50 ideas"
+  },
+  {
+   "t": 165.24,
+   "d": 1.44,
+   "text": "for different visual designs for"
+  },
+  {
+   "t": 166.68,
+   "d": 2.32,
+   "text": "Monsters I think that would be pretty"
+  },
+  {
+   "t": 169.0,
+   "d": 2.04,
+   "text": "impossible for most of us to just like"
+  },
+  {
+   "t": 171.04,
+   "d": 2.44,
+   "text": "sit down and just like go from A to Z"
+  },
+  {
+   "t": 173.48,
+   "d": 2.68,
+   "text": "and make an entire cast of enemies like"
+  },
+  {
+   "t": 176.16,
+   "d": 3.28,
+   "text": "that uh so spoiler alert for"
+  },
+  {
+   "t": 179.44,
+   "d": 2.36,
+   "text": "professional creatives ideas aren't"
+  },
+  {
+   "t": 181.8,
+   "d": 2.28,
+   "text": "usually these magical things that just"
+  },
+  {
+   "t": 184.08,
+   "d": 3.12,
+   "text": "appear or materialize from thin air"
+  },
+  {
+   "t": 187.2,
+   "d": 2.0,
+   "text": "generating ideas is actually a skill"
+  },
+  {
+   "t": 189.2,
+   "d": 1.72,
+   "text": "that you can practice and we are going"
+  },
+  {
+   "t": 190.92,
+   "d": 2.92,
+   "text": "to be doing that uh during this"
+  },
+  {
+   "t": 193.84,
+   "d": 2.56,
+   "text": "talk so the techniques that I'm going to"
+  },
+  {
+   "t": 196.4,
+   "d": 2.2,
+   "text": "go over there are countless ways you can"
+  },
+  {
+   "t": 198.6,
+   "d": 2.24,
+   "text": "practice to generate ideas I will be"
+  },
+  {
+   "t": 200.84,
+   "d": 1.68,
+   "text": "going over my three favorite techniques"
+  },
+  {
+   "t": 202.52,
+   "d": 1.76,
+   "text": "that have worked well for me personally"
+  },
+  {
+   "t": 204.28,
+   "d": 2.2,
+   "text": "so these are my go-tos my bread and"
+  },
+  {
+   "t": 206.48,
+   "d": 2.44,
+   "text": "butter um these are the things that can"
+  },
+  {
+   "t": 208.92,
+   "d": 1.48,
+   "text": "kind of like help me get the creative"
+  },
+  {
+   "t": 210.4,
+   "d": 1.56,
+   "text": "juices flowing when I need to come up"
+  },
+  {
+   "t": 211.96,
+   "d": 2.88,
+   "text": "with can character or enemy designs uh"
+  },
+  {
+   "t": 214.84,
+   "d": 2.04,
+   "text": "these techniques are list of 10"
+  },
+  {
+   "t": 216.88,
+   "d": 2.16,
+   "text": "referencing game mechanics and of course"
+  },
+  {
+   "t": 219.04,
+   "d": 2.04,
+   "text": "visual reference um so what I'm going to"
+  },
+  {
+   "t": 221.08,
+   "d": 1.84,
+   "text": "be doing is I'm going to be describing"
+  },
+  {
+   "t": 222.92,
+   "d": 2.04,
+   "text": "each of these techniques I'm going to be"
+  },
+  {
+   "t": 224.96,
+   "d": 1.76,
+   "text": "showing you a little example of how to"
+  },
+  {
+   "t": 226.72,
+   "d": 1.72,
+   "text": "do them and a character that came from"
+  },
+  {
+   "t": 228.44,
+   "d": 1.48,
+   "text": "them and then we are actually going to"
+  },
+  {
+   "t": 229.92,
+   "d": 2.64,
+   "text": "use one of them and design a character"
+  },
+  {
+   "t": 232.56,
+   "d": 1.92,
+   "text": "live I'm going to do some live drawing"
+  },
+  {
+   "t": 234.48,
+   "d": 2.48,
+   "text": "as part of this so uh hold on to your"
+  },
+  {
+   "t": 236.96,
+   "d": 3.04,
+   "text": "hats for that that's coming up soon"
+  },
+  {
+   "t": 240.0,
+   "d": 1.68,
+   "text": "um but the first technique the list of"
+  },
+  {
+   "t": 241.68,
+   "d": 2.84,
+   "text": "10 the list of 10 is an ideation"
+  },
+  {
+   "t": 244.52,
+   "d": 1.76,
+   "text": "technique in which you write down the"
+  },
+  {
+   "t": 246.28,
+   "d": 2.6,
+   "text": "first 10 ideas that come to mind no"
+  },
+  {
+   "t": 248.88,
+   "d": 2.36,
+   "text": "matter how good or bad they may be uh"
+  },
+  {
+   "t": 251.24,
+   "d": 1.44,
+   "text": "the key to using the list of 10"
+  },
+  {
+   "t": 252.68,
+   "d": 2.16,
+   "text": "technique is to not filter your ideas or"
+  },
+  {
+   "t": 254.84,
+   "d": 2.24,
+   "text": "think too much about them the goal is to"
+  },
+  {
+   "t": 257.08,
+   "d": 1.96,
+   "text": "write down ideas in a sort of stream of"
+  },
+  {
+   "t": 259.04,
+   "d": 1.52,
+   "text": "Consciousness state that allows you to"
+  },
+  {
+   "t": 260.56,
+   "d": 2.52,
+   "text": "unblock your brain so in the end when"
+  },
+  {
+   "t": 263.08,
+   "d": 1.32,
+   "text": "you're done with this practice you will"
+  },
+  {
+   "t": 264.4,
+   "d": 2.04,
+   "text": "have a list of 10 ideas and more likely"
+  },
+  {
+   "t": 266.44,
+   "d": 1.76,
+   "text": "than not a handful of them will be"
+  },
+  {
+   "t": 268.2,
+   "d": 2.28,
+   "text": "inspiring or useful to you and I really"
+  },
+  {
+   "t": 270.48,
+   "d": 1.84,
+   "text": "just want to reiterate you do not need"
+  },
+  {
+   "t": 272.32,
+   "d": 1.92,
+   "text": "to worry about the quality of the ideas"
+  },
+  {
+   "t": 274.24,
+   "d": 1.64,
+   "text": "it's just the first 10 things that come"
+  },
+  {
+   "t": 275.88,
+   "d": 0.96,
+   "text": "to"
+  },
+  {
+   "t": 276.84,
+   "d": 3.32,
+   "text": "mind so here's an example I did um a"
+  },
+  {
+   "t": 280.16,
+   "d": 2.84,
+   "text": "list of 10 random ideas off the Dome so"
+  },
+  {
+   "t": 283.0,
+   "d": 3.44,
+   "text": "I wrote down Lil snail construction"
+  },
+  {
+   "t": 286.44,
+   "d": 4.28,
+   "text": "materials weeds sentient cave floating"
+  },
+  {
+   "t": 290.72,
+   "d": 3.56,
+   "text": "guy in a hole clouds bioluminescent"
+  },
+  {
+   "t": 294.28,
+   "d": 2.8,
+   "text": "Galactic and Street fashion um I don't"
+  },
+  {
+   "t": 297.08,
+   "d": 1.28,
+   "text": "know what it says about me that these"
+  },
+  {
+   "t": 298.36,
+   "d": 1.92,
+   "text": "are the first 10 Things I thought of but"
+  },
+  {
+   "t": 300.28,
+   "d": 2.08,
+   "text": "as you can see these are not really like"
+  },
+  {
+   "t": 302.36,
+   "d": 2.28,
+   "text": "complicated ideas they're more"
+  },
+  {
+   "t": 304.64,
+   "d": 2.2,
+   "text": "conceptual they're really loose I'm not"
+  },
+  {
+   "t": 306.84,
+   "d": 2.04,
+   "text": "sitting down and like describing all the"
+  },
+  {
+   "t": 308.88,
+   "d": 2.48,
+   "text": "details of a character an enemy I'm just"
+  },
+  {
+   "t": 311.36,
+   "d": 2.88,
+   "text": "like here's some here's some Vibes on a"
+  },
+  {
+   "t": 314.24,
+   "d": 3.84,
+   "text": "page um So based off this list uh I"
+  },
+  {
+   "t": 318.08,
+   "d": 2.72,
+   "text": "chose weeds clouds and Galactic CU I was"
+  },
+  {
+   "t": 320.8,
+   "d": 1.8,
+   "text": "like looking at this like this word has"
+  },
+  {
+   "t": 322.6,
+   "d": 2.24,
+   "text": "given me some ideas seeing it next to"
+  },
+  {
+   "t": 324.84,
+   "d": 2.24,
+   "text": "this words giving me some ideas not"
+  },
+  {
+   "t": 327.08,
+   "d": 1.4,
+   "text": "really crazy about these other ones"
+  },
+  {
+   "t": 328.48,
+   "d": 2.16,
+   "text": "they're not doing anything for me so"
+  },
+  {
+   "t": 330.64,
+   "d": 2.44,
+   "text": "this is what we're going to work"
+  },
+  {
+   "t": 333.08,
+   "d": 3.08,
+   "text": "with so here on the right um is the"
+  },
+  {
+   "t": 336.16,
+   "d": 3.0,
+   "text": "character that I drew based on these"
+  },
+  {
+   "t": 339.16,
+   "d": 2.0,
+   "text": "three words from our list of 10 and I"
+  },
+  {
+   "t": 341.16,
+   "d": 2.44,
+   "text": "did a little speed paint video here this"
+  },
+  {
+   "t": 343.6,
+   "d": 4.08,
+   "text": "is about a 20 minute uh drawing session"
+  },
+  {
+   "t": 347.68,
+   "d": 1.8,
+   "text": "um I use the words weeds clouds and"
+  },
+  {
+   "t": 349.48,
+   "d": 2.88,
+   "text": "Galactic again and yeah I was kind of"
+  },
+  {
+   "t": 352.36,
+   "d": 2.52,
+   "text": "inspired by like doing this sort of like"
+  },
+  {
+   "t": 354.88,
+   "d": 3.48,
+   "text": "dandelion kind of enemy um clouds having"
+  },
+  {
+   "t": 358.36,
+   "d": 2.24,
+   "text": "it sort of be like this Flo"
+  },
+  {
+   "t": 360.6,
+   "d": 1.8,
+   "text": "Godlike being with his like Cloud"
+  },
+  {
+   "t": 362.4,
+   "d": 3.12,
+   "text": "collars and bracers and then Galactic I"
+  },
+  {
+   "t": 365.52,
+   "d": 1.88,
+   "text": "was actually really inspired by like"
+  },
+  {
+   "t": 367.4,
+   "d": 3.16,
+   "text": "using the star shape for the eyes and"
+  },
+  {
+   "t": 370.56,
+   "d": 2.48,
+   "text": "the head and yeah this is the result"
+  },
+  {
+   "t": 373.04,
+   "d": 2.4,
+   "text": "it's kind of an interesting weird"
+  },
+  {
+   "t": 375.44,
+   "d": 2.72,
+   "text": "character I can put in my Rog likee RPG"
+  },
+  {
+   "t": 378.16,
+   "d": 2.36,
+   "text": "um it didn't exist before I did this"
+  },
+  {
+   "t": 380.52,
+   "d": 2.84,
+   "text": "list of 10 so I had no idea where it was"
+  },
+  {
+   "t": 383.36,
+   "d": 1.4,
+   "text": "going to go and it's pretty cool that"
+  },
+  {
+   "t": 384.76,
+   "d": 2.0,
+   "text": "you can kind of just come out the other"
+  },
+  {
+   "t": 386.76,
+   "d": 2.32,
+   "text": "end of that with a word association"
+  },
+  {
+   "t": 389.08,
+   "d": 2.04,
+   "text": "project and have a whole character"
+  },
+  {
+   "t": 391.12,
+   "d": 2.96,
+   "text": "design that you can work"
+  },
+  {
+   "t": 394.08,
+   "d": 2.72,
+   "text": "with so the second technique is"
+  },
+  {
+   "t": 396.8,
+   "d": 2.64,
+   "text": "referencing game mechanics uh sometimes"
+  },
+  {
+   "t": 399.44,
+   "d": 1.6,
+   "text": "you have information about your"
+  },
+  {
+   "t": 401.04,
+   "d": 2.4,
+   "text": "character before you design them this"
+  },
+  {
+   "t": 403.44,
+   "d": 3.08,
+   "text": "can be a backstory lore or even just"
+  },
+  {
+   "t": 406.52,
+   "d": 2.72,
+   "text": "like technical design mechanics so maybe"
+  },
+  {
+   "t": 409.24,
+   "d": 1.64,
+   "text": "your character comes from a specific"
+  },
+  {
+   "t": 410.88,
+   "d": 2.24,
+   "text": "region in your world maybe they have a"
+  },
+  {
+   "t": 413.12,
+   "d": 2.8,
+   "text": "particular profession maybe they do AOE"
+  },
+  {
+   "t": 415.92,
+   "d": 2.92,
+   "text": "damage or big heavy attacks um and if"
+  },
+  {
+   "t": 418.84,
+   "d": 1.64,
+   "text": "this is the case we can reference that"
+  },
+  {
+   "t": 420.48,
+   "d": 1.64,
+   "text": "information to influence the design of"
+  },
+  {
+   "t": 422.12,
+   "d": 1.88,
+   "text": "our characters so kind of all those"
+  },
+  {
+   "t": 424.0,
+   "d": 1.48,
+   "text": "things I listed would be really great"
+  },
+  {
+   "t": 425.48,
+   "d": 2.48,
+   "text": "examples of jumping off points that you"
+  },
+  {
+   "t": 427.96,
+   "d": 1.96,
+   "text": "can use to inspire the visuals of your"
+  },
+  {
+   "t": 429.92,
+   "d": 1.52,
+   "text": "characters and oftentimes when you're"
+  },
+  {
+   "t": 431.44,
+   "d": 2.36,
+   "text": "working with a team that kind of will"
+  },
+  {
+   "t": 433.8,
+   "d": 1.6,
+   "text": "happen like you'll have a design they'll"
+  },
+  {
+   "t": 435.4,
+   "d": 2.32,
+   "text": "know how the enemy needs to act but they"
+  },
+  {
+   "t": 437.72,
+   "d": 2.36,
+   "text": "don't have a visual design for it and"
+  },
+  {
+   "t": 440.08,
+   "d": 2.0,
+   "text": "you'll have this information going into"
+  },
+  {
+   "t": 442.08,
+   "d": 2.08,
+   "text": "your character design"
+  },
+  {
+   "t": 444.16,
+   "d": 2.92,
+   "text": "phase so here's a character I came up"
+  },
+  {
+   "t": 447.08,
+   "d": 2.2,
+   "text": "with using the game mechanics reference"
+  },
+  {
+   "t": 449.28,
+   "d": 1.72,
+   "text": "the first thing I did to practice this"
+  },
+  {
+   "t": 451.0,
+   "d": 3.04,
+   "text": "is I just made these example mechanics"
+  },
+  {
+   "t": 454.04,
+   "d": 2.24,
+   "text": "on the left here I said let's make a"
+  },
+  {
+   "t": 456.28,
+   "d": 3.12,
+   "text": "weak enemy encounter that does multi-hit"
+  },
+  {
+   "t": 459.4,
+   "d": 2.44,
+   "text": "attacks dealing small damage the attacks"
+  },
+  {
+   "t": 461.84,
+   "d": 2.0,
+   "text": "are poisonous and it has a defensive"
+  },
+  {
+   "t": 463.84,
+   "d": 1.84,
+   "text": "State when not attacking so this is kind"
+  },
+  {
+   "t": 465.68,
+   "d": 1.92,
+   "text": "of emblematic of some of the information"
+  },
+  {
+   "t": 467.6,
+   "d": 1.48,
+   "text": "you might have when you're going into"
+  },
+  {
+   "t": 469.08,
+   "d": 2.84,
+   "text": "designing an enemy um and I interpreted"
+  },
+  {
+   "t": 471.92,
+   "d": 3.16,
+   "text": "that in that it's a weak enemy it's got"
+  },
+  {
+   "t": 475.08,
+   "d": 2.04,
+   "text": "to not look very intimidating we're"
+  },
+  {
+   "t": 477.12,
+   "d": 2.36,
+   "text": "going to give it these like really sad"
+  },
+  {
+   "t": 479.48,
+   "d": 2.12,
+   "text": "gry eyes and kind of have him look you"
+  },
+  {
+   "t": 481.6,
+   "d": 2.96,
+   "text": "know a little sad um the multi-hit"
+  },
+  {
+   "t": 484.56,
+   "d": 2.76,
+   "text": "attacks I interpreted as having these"
+  },
+  {
+   "t": 487.32,
+   "d": 2.0,
+   "text": "tentacles that could maybe like I could"
+  },
+  {
+   "t": 489.32,
+   "d": 2.44,
+   "text": "see it being animated to do like four"
+  },
+  {
+   "t": 491.76,
+   "d": 2.04,
+   "text": "hits really fast with each of the"
+  },
+  {
+   "t": 493.8,
+   "d": 2.68,
+   "text": "tentacles obviously he looks pretty"
+  },
+  {
+   "t": 496.48,
+   "d": 2.24,
+   "text": "poisonous um I had thought oh it could"
+  },
+  {
+   "t": 498.72,
+   "d": 3.56,
+   "text": "be this like poison goopy potion"
+  },
+  {
+   "t": 502.28,
+   "d": 2.12,
+   "text": "spilling out of an upside down"
+  },
+  {
+   "t": 504.4,
+   "d": 2.72,
+   "text": "cauldron um and then in the defensive"
+  },
+  {
+   "t": 507.12,
+   "d": 3.24,
+   "text": "State mechanic uh I had thought I could"
+  },
+  {
+   "t": 510.36,
+   "d": 1.72,
+   "text": "design something that could maybe like"
+  },
+  {
+   "t": 512.08,
+   "d": 1.88,
+   "text": "it could suck up back into the cauldron"
+  },
+  {
+   "t": 513.96,
+   "d": 2.2,
+   "text": "when it's not attacking and that would"
+  },
+  {
+   "t": 516.16,
+   "d": 3.56,
+   "text": "be its defensive state so um yeah I"
+  },
+  {
+   "t": 519.72,
+   "d": 1.52,
+   "text": "think that something like this would"
+  },
+  {
+   "t": 521.24,
+   "d": 2.32,
+   "text": "kind of hit all of the checkboxes of"
+  },
+  {
+   "t": 523.56,
+   "d": 2.36,
+   "text": "what this enemy's mechanics might be and"
+  },
+  {
+   "t": 525.92,
+   "d": 1.48,
+   "text": "again it's something that just didn't"
+  },
+  {
+   "t": 527.4,
+   "d": 3.0,
+   "text": "exist you know 20 minutes ago when we"
+  },
+  {
+   "t": 530.4,
+   "d": 2.52,
+   "text": "made our example mechanics list and did"
+  },
+  {
+   "t": 532.92,
+   "d": 1.84,
+   "text": "the"
+  },
+  {
+   "t": 534.76,
+   "d": 2.84,
+   "text": "drawing and then the third concept I'm"
+  },
+  {
+   "t": 537.6,
+   "d": 2.32,
+   "text": "going to go over is definitely uh the"
+  },
+  {
+   "t": 539.92,
+   "d": 2.24,
+   "text": "most detailed so bear with me here it's"
+  },
+  {
+   "t": 542.16,
+   "d": 1.92,
+   "text": "visual reference not as straightforward"
+  },
+  {
+   "t": 544.08,
+   "d": 2.4,
+   "text": "as it seems um but yeah it's just the"
+  },
+  {
+   "t": 546.48,
+   "d": 2.2,
+   "text": "practice of collecting visual reference"
+  },
+  {
+   "t": 548.68,
+   "d": 2.04,
+   "text": "material that you can be inspired by I"
+  },
+  {
+   "t": 550.72,
+   "d": 1.84,
+   "text": "do this from a variety of different"
+  },
+  {
+   "t": 552.56,
+   "d": 2.32,
+   "text": "sources um generally I'm looking for"
+  },
+  {
+   "t": 554.88,
+   "d": 2.6,
+   "text": "images online I wrote glossy jpegs but"
+  },
+  {
+   "t": 557.48,
+   "d": 2.88,
+   "text": "you can feel free and do any file type"
+  },
+  {
+   "t": 560.36,
+   "d": 2.84,
+   "text": "that you like um I actually have a"
+  },
+  {
+   "t": 563.2,
+   "d": 2.6,
+   "text": "personal Discord with a channel in it"
+  },
+  {
+   "t": 565.8,
+   "d": 2.28,
+   "text": "that I have just like an images Channel"
+  },
+  {
+   "t": 568.08,
+   "d": 2.2,
+   "text": "where I paste all the images I find"
+  },
+  {
+   "t": 570.28,
+   "d": 2.08,
+   "text": "online that I really like that I find"
+  },
+  {
+   "t": 572.36,
+   "d": 2.2,
+   "text": "inspiring um and I'd encourage you to"
+  },
+  {
+   "t": 574.56,
+   "d": 1.76,
+   "text": "try that out I also would encourage you"
+  },
+  {
+   "t": 576.32,
+   "d": 1.8,
+   "text": "to keep a local version of these things"
+  },
+  {
+   "t": 578.12,
+   "d": 1.8,
+   "text": "because nothing is permanent online or"
+  },
+  {
+   "t": 579.92,
+   "d": 2.88,
+   "text": "in apps um and then the second one I"
+  },
+  {
+   "t": 582.8,
+   "d": 2.28,
+   "text": "have here is books I'm a huge collector"
+  },
+  {
+   "t": 585.08,
+   "d": 2.4,
+   "text": "of art books and reference material so"
+  },
+  {
+   "t": 587.48,
+   "d": 2.4,
+   "text": "it can be like art books from shows"
+  },
+  {
+   "t": 589.88,
+   "d": 4.08,
+   "text": "Comics video games other artists um"
+  },
+  {
+   "t": 593.96,
+   "d": 1.92,
+   "text": "sometimes it's reference like lettering"
+  },
+  {
+   "t": 595.88,
+   "d": 3.12,
+   "text": "stuff or anatomy books um I know this"
+  },
+  {
+   "t": 599.0,
+   "d": 2.56,
+   "text": "can be cost prohibitive to kind of build"
+  },
+  {
+   "t": 601.56,
+   "d": 3.48,
+   "text": "up a library like that so if uh you"
+  },
+  {
+   "t": 605.04,
+   "d": 1.32,
+   "text": "don't really have the money to go"
+  },
+  {
+   "t": 606.36,
+   "d": 2.16,
+   "text": "throwing around on art books I would say"
+  },
+  {
+   "t": 608.52,
+   "d": 1.76,
+   "text": "your local librar is a really great"
+  },
+  {
+   "t": 610.28,
+   "d": 2.12,
+   "text": "source for stuff like that you can also"
+  },
+  {
+   "t": 612.4,
+   "d": 2.2,
+   "text": "oftentimes ask your library to buy books"
+  },
+  {
+   "t": 614.6,
+   "d": 2.88,
+   "text": "for you um and then also there's places"
+  },
+  {
+   "t": 617.48,
+   "d": 2.08,
+   "text": "like archive.org that have a lot of"
+  },
+  {
+   "t": 619.56,
+   "d": 2.52,
+   "text": "digital copies and scans or PDFs of"
+  },
+  {
+   "t": 622.08,
+   "d": 1.36,
+   "text": "artbooks that you can check out and"
+  },
+  {
+   "t": 623.44,
+   "d": 2.28,
+   "text": "borrow so checking out those resources"
+  },
+  {
+   "t": 625.72,
+   "d": 1.76,
+   "text": "like that and like being able to build a"
+  },
+  {
+   "t": 627.48,
+   "d": 1.92,
+   "text": "digital library like that is very very"
+  },
+  {
+   "t": 629.4,
+   "d": 1.12,
+   "text": "very cool"
+  },
+  {
+   "t": 630.52,
+   "d": 2.76,
+   "text": "too and the last thing I wrote down here"
+  },
+  {
+   "t": 633.28,
+   "d": 4.28,
+   "text": "is photo reference um so I use Photo"
+  },
+  {
+   "t": 637.56,
+   "d": 3.16,
+   "text": "reference not just for say I need to"
+  },
+  {
+   "t": 640.72,
+   "d": 2.36,
+   "text": "draw a horse or a car and I have"
+  },
+  {
+   "t": 643.08,
+   "d": 1.8,
+   "text": "completely forgotten what a horse or a"
+  },
+  {
+   "t": 644.88,
+   "d": 1.72,
+   "text": "car look like and I need to look at a"
+  },
+  {
+   "t": 646.6,
+   "d": 2.76,
+   "text": "photo to remind myself but it can also"
+  },
+  {
+   "t": 649.36,
+   "d": 1.96,
+   "text": "be a really great place to find artistic"
+  },
+  {
+   "t": 651.32,
+   "d": 2.68,
+   "text": "inspiration so this photo that I chose"
+  },
+  {
+   "t": 654.0,
+   "d": 2.4,
+   "text": "from my folder I just really like the"
+  },
+  {
+   "t": 656.4,
+   "d": 1.92,
+   "text": "pose I think the for shortening is"
+  },
+  {
+   "t": 658.32,
+   "d": 2.24,
+   "text": "really fun on the leg I think the"
+  },
+  {
+   "t": 660.56,
+   "d": 1.84,
+   "text": "fashion is really great in it like"
+  },
+  {
+   "t": 662.4,
+   "d": 1.32,
+   "text": "there's a lot of different things I"
+  },
+  {
+   "t": 663.72,
+   "d": 1.72,
+   "text": "could pull from something like that to"
+  },
+  {
+   "t": 665.44,
+   "d": 4.4,
+   "text": "inspire an illustration or an enemy"
+  },
+  {
+   "t": 669.84,
+   "d": 2.68,
+   "text": "design um and yes I just want to say it"
+  },
+  {
+   "t": 672.52,
+   "d": 2.36,
+   "text": "out loud reference material is not"
+  },
+  {
+   "t": 674.88,
+   "d": 2.36,
+   "text": "cheating I think that there for artists"
+  },
+  {
+   "t": 677.24,
+   "d": 1.44,
+   "text": "and creatives there can be a lot of"
+  },
+  {
+   "t": 678.68,
+   "d": 2.72,
+   "text": "anxiety around the idea of like oh no"
+  },
+  {
+   "t": 681.4,
+   "d": 1.96,
+   "text": "I'm like looking at someone else's art"
+  },
+  {
+   "t": 683.36,
+   "d": 1.56,
+   "text": "I'm referencing someone else's art is"
+  },
+  {
+   "t": 684.92,
+   "d": 2.64,
+   "text": "that cheating it is not cheating uh"
+  },
+  {
+   "t": 687.56,
+   "d": 1.36,
+   "text": "don't be scared of referencing other"
+  },
+  {
+   "t": 688.92,
+   "d": 2.0,
+   "text": "people's art there is nothing wrong with"
+  },
+  {
+   "t": 690.92,
+   "d": 1.76,
+   "text": "being inspired by others work it is how"
+  },
+  {
+   "t": 692.68,
+   "d": 1.96,
+   "text": "art has evolved and developed since the"
+  },
+  {
+   "t": 694.64,
+   "d": 2.32,
+   "text": "dawn of time so as long as you're not"
+  },
+  {
+   "t": 696.96,
+   "d": 1.68,
+   "text": "copying or ripping off your reference"
+  },
+  {
+   "t": 698.64,
+   "d": 2.08,
+   "text": "material you will be fine there is a"
+  },
+  {
+   "t": 700.72,
+   "d": 1.92,
+   "text": "huge Gulf between being inspired by"
+  },
+  {
+   "t": 702.64,
+   "d": 2.68,
+   "text": "someone's work and plagiarizing them and"
+  },
+  {
+   "t": 705.32,
+   "d": 2.16,
+   "text": "quite often times all you really need to"
+  },
+  {
+   "t": 707.48,
+   "d": 2.48,
+   "text": "know which of those camps you're in is"
+  },
+  {
+   "t": 709.96,
+   "d": 2.72,
+   "text": "your common sense right like don't sweat"
+  },
+  {
+   "t": 712.68,
+   "d": 2.44,
+   "text": "it so much uh so I wrote here some quick"
+  },
+  {
+   "t": 715.12,
+   "d": 3.32,
+   "text": "tips to remain inspired versus copying"
+  },
+  {
+   "t": 718.44,
+   "d": 1.56,
+   "text": "make sure that you select elements of a"
+  },
+  {
+   "t": 720.0,
+   "d": 1.52,
+   "text": "piece that you like versus the whole"
+  },
+  {
+   "t": 721.52,
+   "d": 2.2,
+   "text": "piece so that's like saying I really"
+  },
+  {
+   "t": 723.72,
+   "d": 1.88,
+   "text": "like X Y and Z about it but I'm not"
+  },
+  {
+   "t": 725.6,
+   "d": 2.12,
+   "text": "going to copy this whole image I'm not"
+  },
+  {
+   "t": 727.72,
+   "d": 1.36,
+   "text": "going to try to recreate this whole"
+  },
+  {
+   "t": 729.08,
+   "d": 2.88,
+   "text": "image like whole cloth uh find reference"
+  },
+  {
+   "t": 731.96,
+   "d": 1.48,
+   "text": "for many different sources I had"
+  },
+  {
+   "t": 733.44,
+   "d": 1.68,
+   "text": "mentioned some of the sources I look at"
+  },
+  {
+   "t": 735.12,
+   "d": 1.64,
+   "text": "and I can find that like making sure"
+  },
+  {
+   "t": 736.76,
+   "d": 1.52,
+   "text": "you're looking at a wide breadth of"
+  },
+  {
+   "t": 738.28,
+   "d": 2.28,
+   "text": "sources is going to keep you sort of"
+  },
+  {
+   "t": 740.56,
+   "d": 2.64,
+   "text": "like generally inspired by a lot of"
+  },
+  {
+   "t": 743.2,
+   "d": 2.16,
+   "text": "stuff rather than like honing in on one"
+  },
+  {
+   "t": 745.36,
+   "d": 2.28,
+   "text": "thing that you really like find"
+  },
+  {
+   "t": 747.64,
+   "d": 1.68,
+   "text": "reference materials for many different"
+  },
+  {
+   "t": 749.32,
+   "d": 1.92,
+   "text": "Styles and especially Styles different"
+  },
+  {
+   "t": 751.24,
+   "d": 1.84,
+   "text": "from your own I think that's really"
+  },
+  {
+   "t": 753.08,
+   "d": 2.2,
+   "text": "important it uh will kind of broaden"
+  },
+  {
+   "t": 755.28,
+   "d": 1.56,
+   "text": "your horizon of the kind of things it"
+  },
+  {
+   "t": 756.84,
+   "d": 2.4,
+   "text": "can inspire you and it'll also keep you"
+  },
+  {
+   "t": 759.24,
+   "d": 2.08,
+   "text": "from like feeling that urge to copy"
+  },
+  {
+   "t": 761.32,
+   "d": 1.4,
+   "text": "stuff if it's something that's very"
+  },
+  {
+   "t": 762.72,
+   "d": 1.56,
+   "text": "different from the work that you already"
+  },
+  {
+   "t": 764.28,
+   "d": 2.44,
+   "text": "make use multiple different references"
+  },
+  {
+   "t": 766.72,
+   "d": 2.56,
+   "text": "at once uh often times when I'm doing"
+  },
+  {
+   "t": 769.28,
+   "d": 2.96,
+   "text": "this like no joke I will have anywhere"
+  },
+  {
+   "t": 772.24,
+   "d": 3.08,
+   "text": "from like three to 15 reference images"
+  },
+  {
+   "t": 775.32,
+   "d": 1.84,
+   "text": "when I'm designing one enemy I'll like"
+  },
+  {
+   "t": 777.16,
+   "d": 1.8,
+   "text": "have them all open in Photoshop and I'll"
+  },
+  {
+   "t": 778.96,
+   "d": 2.2,
+   "text": "have my little drg in the corner and"
+  },
+  {
+   "t": 781.16,
+   "d": 1.72,
+   "text": "I'll like those will all kind of feed"
+  },
+  {
+   "t": 782.88,
+   "d": 2.84,
+   "text": "into one design uh and do not Trace I"
+  },
+  {
+   "t": 785.72,
+   "d": 1.88,
+   "text": "think that's an obvious one but uh just"
+  },
+  {
+   "t": 787.6,
+   "d": 1.36,
+   "text": "wanted to say it make sure you're not"
+  },
+  {
+   "t": 788.96,
+   "d": 1.68,
+   "text": "tracing others work and you're just kind"
+  },
+  {
+   "t": 790.64,
+   "d": 2.4,
+   "text": "of using it as a reference looking at it"
+  },
+  {
+   "t": 793.04,
+   "d": 2.44,
+   "text": "with your eyes the goal is to kind of"
+  },
+  {
+   "t": 795.48,
+   "d": 2.8,
+   "text": "see art and internalize it be inspired"
+  },
+  {
+   "t": 798.28,
+   "d": 2.76,
+   "text": "by it and you know work on your stuff"
+  },
+  {
+   "t": 801.04,
+   "d": 2.72,
+   "text": "with your own hand so an example I put"
+  },
+  {
+   "t": 803.76,
+   "d": 2.16,
+   "text": "here for the Fine Art fans in the"
+  },
+  {
+   "t": 805.92,
+   "d": 2.16,
+   "text": "audience is a painting by Goan and a"
+  },
+  {
+   "t": 808.08,
+   "d": 2.32,
+   "text": "painting by Van Go these are two artists"
+  },
+  {
+   "t": 810.4,
+   "d": 2.92,
+   "text": "that have a well documented friendship"
+  },
+  {
+   "t": 813.32,
+   "d": 1.84,
+   "text": "they were inspired by each other they"
+  },
+  {
+   "t": 815.16,
+   "d": 1.8,
+   "text": "were inspired by similar things they"
+  },
+  {
+   "t": 816.96,
+   "d": 1.8,
+   "text": "like saw each other's work and work"
+  },
+  {
+   "t": 818.76,
+   "d": 1.8,
+   "text": "together a lot and I think with these"
+  },
+  {
+   "t": 820.56,
+   "d": 1.76,
+   "text": "two paintings you can tell like you can"
+  },
+  {
+   "t": 822.32,
+   "d": 1.64,
+   "text": "kind of see how they're inspired by each"
+  },
+  {
+   "t": 823.96,
+   "d": 2.24,
+   "text": "other and how they're pulling from a lot"
+  },
+  {
+   "t": 826.2,
+   "d": 2.24,
+   "text": "of similar things but their work is very"
+  },
+  {
+   "t": 828.44,
+   "d": 2.04,
+   "text": "different and that's kind of like the"
+  },
+  {
+   "t": 830.48,
+   "d": 2.16,
+   "text": "ideal relationship to have with art and"
+  },
+  {
+   "t": 832.64,
+   "d": 3.36,
+   "text": "other artists in my"
+  },
+  {
+   "t": 836.0,
+   "d": 2.68,
+   "text": "opinion so what makes a good piece of"
+  },
+  {
+   "t": 838.68,
+   "d": 2.8,
+   "text": "visual reference when I am collecting"
+  },
+  {
+   "t": 841.48,
+   "d": 1.88,
+   "text": "visual references I tend to look for"
+  },
+  {
+   "t": 843.36,
+   "d": 2.36,
+   "text": "things that inspire me such as character"
+  },
+  {
+   "t": 845.72,
+   "d": 2.08,
+   "text": "clothing and accessories shapes and"
+  },
+  {
+   "t": 847.8,
+   "d": 2.04,
+   "text": "Silhouettes meaning like what's the"
+  },
+  {
+   "t": 849.84,
+   "d": 1.8,
+   "text": "shape of the body what's the silhouette"
+  },
+  {
+   "t": 851.64,
+   "d": 2.12,
+   "text": "of the whole character color palettes of"
+  },
+  {
+   "t": 853.76,
+   "d": 2.6,
+   "text": "an illustration facial body features or"
+  },
+  {
+   "t": 856.36,
+   "d": 2.52,
+   "text": "body types how things are rendered and"
+  },
+  {
+   "t": 858.88,
+   "d": 2.24,
+   "text": "when I say rendered I mean like is the"
+  },
+  {
+   "t": 861.12,
+   "d": 2.44,
+   "text": "line work really sketchy or is it really"
+  },
+  {
+   "t": 863.56,
+   "d": 3.16,
+   "text": "like loose or is it very painterly or is"
+  },
+  {
+   "t": 866.72,
+   "d": 1.8,
+   "text": "it very flat like those are different"
+  },
+  {
+   "t": 868.52,
+   "d": 2.56,
+   "text": "rendering Styles I also look for poses a"
+  },
+  {
+   "t": 871.08,
+   "d": 2.4,
+   "text": "lot I find them very inspired by poses"
+  },
+  {
+   "t": 873.48,
+   "d": 3.12,
+   "text": "in art and remember just to reiterate"
+  },
+  {
+   "t": 876.6,
+   "d": 1.52,
+   "text": "it's better to look at Parts you like"
+  },
+  {
+   "t": 878.12,
+   "d": 2.24,
+   "text": "versus the whole I find it even more"
+  },
+  {
+   "t": 880.36,
+   "d": 1.64,
+   "text": "helpful to look at reference material"
+  },
+  {
+   "t": 882.0,
+   "d": 1.4,
+   "text": "that is a very different style than my"
+  },
+  {
+   "t": 883.4,
+   "d": 2.2,
+   "text": "own helps me to avoid the urge to copy"
+  },
+  {
+   "t": 885.6,
+   "d": 2.28,
+   "text": "one things one for one so this image"
+  },
+  {
+   "t": 887.88,
+   "d": 2.04,
+   "text": "from my folder on the right here I"
+  },
+  {
+   "t": 889.92,
+   "d": 1.56,
+   "text": "really like the color palette I think"
+  },
+  {
+   "t": 891.48,
+   "d": 2.04,
+   "text": "the off-white they use is really cool"
+  },
+  {
+   "t": 893.52,
+   "d": 1.72,
+   "text": "the angle is very interesting like this"
+  },
+  {
+   "t": 895.24,
+   "d": 2.8,
+   "text": "sort of fishey lens pose on the"
+  },
+  {
+   "t": 898.04,
+   "d": 2.16,
+   "text": "character and I also just really like"
+  },
+  {
+   "t": 900.2,
+   "d": 1.8,
+   "text": "the way that they drew the eyes so I"
+  },
+  {
+   "t": 902.0,
+   "d": 1.68,
+   "text": "might take any one of those pieces from"
+  },
+  {
+   "t": 903.68,
+   "d": 1.96,
+   "text": "this and be inspired by it but I'm not"
+  },
+  {
+   "t": 905.64,
+   "d": 2.64,
+   "text": "going to be copying this whole image"
+  },
+  {
+   "t": 908.28,
+   "d": 4.44,
+   "text": "right so we're going to do an example um"
+  },
+  {
+   "t": 912.72,
+   "d": 2.64,
+   "text": "live so I selected three images and"
+  },
+  {
+   "t": 915.36,
+   "d": 1.88,
+   "text": "we're going to design a character based"
+  },
+  {
+   "t": 917.24,
+   "d": 1.72,
+   "text": "on them and if you're feeling brave you"
+  },
+  {
+   "t": 918.96,
+   "d": 2.08,
+   "text": "can follow along with me too in your own"
+  },
+  {
+   "t": 921.04,
+   "d": 3.24,
+   "text": "art projects um so this first image I"
+  },
+  {
+   "t": 924.28,
+   "d": 2.08,
+   "text": "selected because I really like this like"
+  },
+  {
+   "t": 926.36,
+   "d": 2.4,
+   "text": "Castle structure I think the little flag"
+  },
+  {
+   "t": 928.76,
+   "d": 2.12,
+   "text": "at the top is Fun the overall shape was"
+  },
+  {
+   "t": 930.88,
+   "d": 2.88,
+   "text": "really inspiring to me the center image"
+  },
+  {
+   "t": 933.76,
+   "d": 2.56,
+   "text": "I really like the character silhouette"
+  },
+  {
+   "t": 936.32,
+   "d": 2.88,
+   "text": "uh he's got big hands and a funny head"
+  },
+  {
+   "t": 939.2,
+   "d": 2.0,
+   "text": "which was enough for me to put it on the"
+  },
+  {
+   "t": 941.2,
+   "d": 3.32,
+   "text": "list uh and then this last uh image here"
+  },
+  {
+   "t": 944.52,
+   "d": 1.84,
+   "text": "I really like the color palette I really"
+  },
+  {
+   "t": 946.36,
+   "d": 1.84,
+   "text": "like the lighting I think I want to try"
+  },
+  {
+   "t": 948.2,
+   "d": 1.6,
+   "text": "to like emulate that a little bit while"
+  },
+  {
+   "t": 949.8,
+   "d": 2.8,
+   "text": "I'm doing my character design so we'll"
+  },
+  {
+   "t": 952.6,
+   "d": 2.28,
+   "text": "see how successful we are cuz it's live"
+  },
+  {
+   "t": 954.88,
+   "d": 2.96,
+   "text": "drawing time pick up your pens your"
+  },
+  {
+   "t": 957.84,
+   "d": 2.0,
+   "text": "tablets"
+  },
+  {
+   "t": 959.84,
+   "d": 1.8,
+   "text": "um looks like this is all working fine"
+  },
+  {
+   "t": 961.64,
+   "d": 2.32,
+   "text": "I've got my Photoshop file ready to go"
+  },
+  {
+   "t": 963.96,
+   "d": 2.44,
+   "text": "here so we're just going to see what we"
+  },
+  {
+   "t": 966.4,
+   "d": 2.12,
+   "text": "can do with a short little bit of"
+  },
+  {
+   "t": 968.52,
+   "d": 1.8,
+   "text": "drawing time and I've got a timer so I"
+  },
+  {
+   "t": 970.32,
+   "d": 2.68,
+   "text": "make sure I don't go over um so yeah I'm"
+  },
+  {
+   "t": 973.0,
+   "d": 2.2,
+   "text": "going to start I think I'm very I said I"
+  },
+  {
+   "t": 975.2,
+   "d": 1.44,
+   "text": "was very inspired by this guy's big"
+  },
+  {
+   "t": 976.64,
+   "d": 3.96,
+   "text": "funny head and I think I can kind of"
+  },
+  {
+   "t": 980.6,
+   "d": 2.8,
+   "text": "make that work with this Castle shape"
+  },
+  {
+   "t": 983.4,
+   "d": 3.28,
+   "text": "so I'm going to start with the"
+  },
+  {
+   "t": 986.68,
+   "d": 1.96,
+   "text": "character's head being like this maybe"
+  },
+  {
+   "t": 988.64,
+   "d": 2.24,
+   "text": "long"
+  },
+  {
+   "t": 990.88,
+   "d": 3.36,
+   "text": "long Castle shape"
+  },
+  {
+   "t": 994.24,
+   "d": 3.04,
+   "text": "here and I'd be very curious if anybody"
+  },
+  {
+   "t": 997.28,
+   "d": 2.52,
+   "text": "else does decide to follow"
+  },
+  {
+   "t": 999.8,
+   "d": 2.6,
+   "text": "along if they draw something completely"
+  },
+  {
+   "t": 1002.4,
+   "d": 1.88,
+   "text": "different than I do which I bet they"
+  },
+  {
+   "t": 1004.28,
+   "d": 3.32,
+   "text": "would okay maybe there can be like this"
+  },
+  {
+   "t": 1007.6,
+   "d": 1.48,
+   "text": "is where the face is there's like a"
+  },
+  {
+   "t": 1009.08,
+   "d": 2.0,
+   "text": "little hole in the bottom of the castle"
+  },
+  {
+   "t": 1011.08,
+   "d": 3.64,
+   "text": "tower just draw a little placeholder"
+  },
+  {
+   "t": 1014.72,
+   "d": 2.2,
+   "text": "face for now bear with"
+  },
+  {
+   "t": 1016.92,
+   "d": 3.92,
+   "text": "me cool give him a little"
+  },
+  {
+   "t": 1021.96,
+   "d": 2.2,
+   "text": "funny body I think he's going to be made"
+  },
+  {
+   "t": 1024.16,
+   "d": 3.56,
+   "text": "entirely of Castle material so he's"
+  },
+  {
+   "t": 1027.72,
+   "d": 2.84,
+   "text": "going to be like bricks all the way down"
+  },
+  {
+   "t": 1030.56,
+   "d": 2.24,
+   "text": "I like this door"
+  },
+  {
+   "t": 1032.8,
+   "d": 3.88,
+   "text": "too so I think I'm going to"
+  },
+  {
+   "t": 1036.68,
+   "d": 3.6,
+   "text": "like give him a little tummy"
+  },
+  {
+   "t": 1040.28,
+   "d": 2.72,
+   "text": "drawer perhaps this is where the food"
+  },
+  {
+   "t": 1043.0,
+   "d": 1.2,
+   "text": "goes when he"
+  },
+  {
+   "t": 1044.2,
+   "d": 2.48,
+   "text": "eats we're making lore for a character"
+  },
+  {
+   "t": 1046.68,
+   "d": 3.08,
+   "text": "right away uh so he's probably pretty"
+  },
+  {
+   "t": 1049.76,
+   "d": 2.92,
+   "text": "heavy I'm going to give him"
+  },
+  {
+   "t": 1052.68,
+   "d": 3.0,
+   "text": "big"
+  },
+  {
+   "t": 1056.84,
+   "d": 2.32,
+   "text": "legs I think he needs like little"
+  },
+  {
+   "t": 1059.16,
+   "d": 1.76,
+   "text": "shoulder oh you know I'm going to make"
+  },
+  {
+   "t": 1060.92,
+   "d": 2.2,
+   "text": "the"
+  },
+  {
+   "t": 1064.12,
+   "d": 2.64,
+   "text": "shoulders kind of copy the top of the"
+  },
+  {
+   "t": 1066.76,
+   "d": 2.92,
+   "text": "castle I don't know what you call that"
+  },
+  {
+   "t": 1069.68,
+   "d": 2.08,
+   "text": "the ram"
+  },
+  {
+   "t": 1071.76,
+   "d": 3.56,
+   "text": "part the little castle zigzag"
+  },
+  {
+   "t": 1075.32,
+   "d": 2.32,
+   "text": "tops and then another thing I really"
+  },
+  {
+   "t": 1077.64,
+   "d": 1.92,
+   "text": "like about this sort of of alien on the"
+  },
+  {
+   "t": 1079.56,
+   "d": 2.2,
+   "text": "left is I like his really skinny arms"
+  },
+  {
+   "t": 1081.76,
+   "d": 3.72,
+   "text": "that kind of turn into these big hands"
+  },
+  {
+   "t": 1085.48,
+   "d": 2.4,
+   "text": "if you remember I said big hands funny"
+  },
+  {
+   "t": 1087.88,
+   "d": 1.48,
+   "text": "or something to that"
+  },
+  {
+   "t": 1089.36,
+   "d": 3.48,
+   "text": "effect so I'm going to try"
+  },
+  {
+   "t": 1092.84,
+   "d": 4.12,
+   "text": "to kind of give him these big arms oh my"
+  },
+  {
+   "t": 1096.96,
+   "d": 3.08,
+   "text": "gosh I like this"
+  },
+  {
+   "t": 1100.04,
+   "d": 4.0,
+   "text": "guy he seems a bit like a"
+  },
+  {
+   "t": 1105.44,
+   "d": 1.84,
+   "text": "Bruiser"
+  },
+  {
+   "t": 1107.28,
+   "d": 2.52,
+   "text": "Okay so we've got"
+  },
+  {
+   "t": 1109.8,
+   "d": 3.04,
+   "text": "got a general concept here that wasn't"
+  },
+  {
+   "t": 1112.84,
+   "d": 3.32,
+   "text": "so bad so now I'm going to turn this"
+  },
+  {
+   "t": 1116.16,
+   "d": 1.48,
+   "text": "down"
+  },
+  {
+   "t": 1117.64,
+   "d": 2.76,
+   "text": "let's bring this in a little"
+  },
+  {
+   "t": 1120.4,
+   "d": 2.16,
+   "text": "bit I'm going to zoom in so I'm going to"
+  },
+  {
+   "t": 1122.56,
+   "d": 1.68,
+   "text": "start referencing this illustration I"
+  },
+  {
+   "t": 1124.24,
+   "d": 1.8,
+   "text": "have on the left here for"
+  },
+  {
+   "t": 1126.04,
+   "d": 4.6,
+   "text": "colors um so let's do pardon me I'm"
+  },
+  {
+   "t": 1130.64,
+   "d": 1.48,
+   "text": "going to start color picking off this so"
+  },
+  {
+   "t": 1132.12,
+   "d": 2.4,
+   "text": "I like this dark purple here I think"
+  },
+  {
+   "t": 1134.52,
+   "d": 1.72,
+   "text": "that could be a"
+  },
+  {
+   "t": 1136.24,
+   "d": 3.08,
+   "text": "fun Line work color to use instead of"
+  },
+  {
+   "t": 1139.32,
+   "d": 3.56,
+   "text": "just a pure black so let's go in"
+  },
+  {
+   "t": 1142.88,
+   "d": 3.6,
+   "text": "and clean this guy up a little"
+  },
+  {
+   "t": 1146.48,
+   "d": 2.6,
+   "text": "bit okay we're doing good for time this"
+  },
+  {
+   "t": 1149.08,
+   "d": 1.6,
+   "text": "is going to be a quick one a little"
+  },
+  {
+   "t": 1150.68,
+   "d": 2.76,
+   "text": "quicker than the 20 minutes"
+  },
+  {
+   "t": 1153.44,
+   "d": 3.6,
+   "text": "but I think you'll get the"
+  },
+  {
+   "t": 1157.04,
+   "d": 3.56,
+   "text": "idea and often times when I'm doing this"
+  },
+  {
+   "t": 1160.6,
+   "d": 2.8,
+   "text": "for work too the end goal of this kind"
+  },
+  {
+   "t": 1163.4,
+   "d": 3.6,
+   "text": "of stuff is not to like come out at the"
+  },
+  {
+   "t": 1167.0,
+   "d": 3.68,
+   "text": "end of it with like a perfectly rendered"
+  },
+  {
+   "t": 1170.68,
+   "d": 2.12,
+   "text": "ready to put in the game character but"
+  },
+  {
+   "t": 1172.8,
+   "d": 1.72,
+   "text": "rather something that it's like you can"
+  },
+  {
+   "t": 1174.52,
+   "d": 2.0,
+   "text": "get the vibe across you can show it to"
+  },
+  {
+   "t": 1176.52,
+   "d": 0.84,
+   "text": "your"
+  },
+  {
+   "t": 1177.36,
+   "d": 2.88,
+   "text": "team and you know they'll understand"
+  },
+  {
+   "t": 1180.24,
+   "d": 1.68,
+   "text": "what you're going for when you say like"
+  },
+  {
+   "t": 1181.92,
+   "d": 1.8,
+   "text": "hey this I came up with this character"
+  },
+  {
+   "t": 1183.72,
+   "d": 3.36,
+   "text": "design is this a yes or no um okay I"
+  },
+  {
+   "t": 1187.08,
+   "d": 1.68,
+   "text": "want to give"
+  },
+  {
+   "t": 1188.76,
+   "d": 3.72,
+   "text": "him big funny"
+  },
+  {
+   "t": 1194.0,
+   "d": 2.64,
+   "text": "eyes that's the mood I'm"
+  },
+  {
+   "t": 1196.64,
+   "d": 3.4,
+   "text": "in yes like this"
+  },
+  {
+   "t": 1200.04,
+   "d": 2.72,
+   "text": "oh my gosh"
+  },
+  {
+   "t": 1207.32,
+   "d": 2.44,
+   "text": "okay all right just do our little"
+  },
+  {
+   "t": 1209.76,
+   "d": 3.2,
+   "text": "shoulders nice and quick our big beefy"
+  },
+  {
+   "t": 1212.96,
+   "d": 3.4,
+   "text": "well our skinny to beefy"
+  },
+  {
+   "t": 1216.44,
+   "d": 2.4,
+   "text": "arms and you can kind of also start to"
+  },
+  {
+   "t": 1218.84,
+   "d": 1.68,
+   "text": "imagine what kind of mechanics would go"
+  },
+  {
+   "t": 1220.52,
+   "d": 2.08,
+   "text": "with someone like this I had"
+  },
+  {
+   "t": 1222.6,
+   "d": 2.16,
+   "text": "mentioned yeah he kind of looks like a"
+  },
+  {
+   "t": 1224.76,
+   "d": 3.28,
+   "text": "Bruiser he could probably get you"
+  },
+  {
+   "t": 1228.04,
+   "d": 2.44,
+   "text": "definitely stop PS around maybe he's a"
+  },
+  {
+   "t": 1230.48,
+   "d": 3.96,
+   "text": "giant that you fight at some"
+  },
+  {
+   "t": 1236.4,
+   "d": 2.36,
+   "text": "point and you can kind of already start"
+  },
+  {
+   "t": 1238.76,
+   "d": 2.16,
+   "text": "to get a sense too"
+  },
+  {
+   "t": 1240.92,
+   "d": 2.72,
+   "text": "for like I'm really obviously being"
+  },
+  {
+   "t": 1243.64,
+   "d": 2.04,
+   "text": "heavily inspired by these pieces that I"
+  },
+  {
+   "t": 1245.68,
+   "d": 3.16,
+   "text": "picked but I think we can all agree that"
+  },
+  {
+   "t": 1248.84,
+   "d": 3.56,
+   "text": "this is a very different uh creature"
+  },
+  {
+   "t": 1252.4,
+   "d": 1.96,
+   "text": "that has come out of this than what any"
+  },
+  {
+   "t": 1254.36,
+   "d": 2.48,
+   "text": "of the reference materials might suggest"
+  },
+  {
+   "t": 1256.84,
+   "d": 2.32,
+   "text": "right"
+  },
+  {
+   "t": 1259.16,
+   "d": 3.56,
+   "text": "we are certainly not copying anything"
+  },
+  {
+   "t": 1262.72,
+   "d": 3.64,
+   "text": "here okay big"
+  },
+  {
+   "t": 1266.6,
+   "d": 3.48,
+   "text": "legs nice and"
+  },
+  {
+   "t": 1270.64,
+   "d": 2.32,
+   "text": "quick he's kind of cute I don't know if"
+  },
+  {
+   "t": 1272.96,
+   "d": 2.96,
+   "text": "I want to fight him"
+  },
+  {
+   "t": 1280.12,
+   "d": 4.56,
+   "text": "actually oh my gosh the quickest ever"
+  },
+  {
+   "t": 1285.08,
+   "d": 5.24,
+   "text": "little brick patterns you've ever seen"
+  },
+  {
+   "t": 1290.32,
+   "d": 2.88,
+   "text": "okay cool and then I think when I I'm"
+  },
+  {
+   "t": 1293.2,
+   "d": 1.56,
+   "text": "just going to do like some really quick"
+  },
+  {
+   "t": 1294.76,
+   "d": 2.52,
+   "text": "flat colors on them or something um I"
+  },
+  {
+   "t": 1297.28,
+   "d": 3.04,
+   "text": "like this red a lot in this image so"
+  },
+  {
+   "t": 1300.32,
+   "d": 1.8,
+   "text": "let's grab"
+  },
+  {
+   "t": 1302.12,
+   "d": 2.12,
+   "text": "that and just give"
+  },
+  {
+   "t": 1304.24,
+   "d": 2.84,
+   "text": "them a big flat red and this is kind of"
+  },
+  {
+   "t": 1307.08,
+   "d": 1.72,
+   "text": "fun because I think that if I didn't"
+  },
+  {
+   "t": 1308.8,
+   "d": 2.56,
+   "text": "have this reference image here I"
+  },
+  {
+   "t": 1311.36,
+   "d": 1.64,
+   "text": "probably wouldn't think"
+  },
+  {
+   "t": 1313.0,
+   "d": 4.24,
+   "text": "to draw like a castle character red like"
+  },
+  {
+   "t": 1317.24,
+   "d": 2.08,
+   "text": "I probably would have done a gray or a"
+  },
+  {
+   "t": 1319.32,
+   "d": 2.4,
+   "text": "brown or something like that but since I"
+  },
+  {
+   "t": 1321.72,
+   "d": 1.4,
+   "text": "was like oh I really like this color"
+  },
+  {
+   "t": 1323.12,
+   "d": 1.52,
+   "text": "palette I'm kind of going outside of my"
+  },
+  {
+   "t": 1324.64,
+   "d": 2.48,
+   "text": "comfort zone trying something a little"
+  },
+  {
+   "t": 1327.12,
+   "d": 2.04,
+   "text": "goofy"
+  },
+  {
+   "t": 1329.16,
+   "d": 3.32,
+   "text": "here maybe it makes him more"
+  },
+  {
+   "t": 1332.48,
+   "d": 1.88,
+   "text": "Sinister um and then I think I'm going"
+  },
+  {
+   "t": 1334.36,
+   "d": 1.6,
+   "text": "to grabb this"
+  },
+  {
+   "t": 1335.96,
+   "d": 3.68,
+   "text": "yellow let's do his little eyes o yes"
+  },
+  {
+   "t": 1339.64,
+   "d": 2.48,
+   "text": "his little eyes and then I think I'm"
+  },
+  {
+   "t": 1342.12,
+   "d": 2.16,
+   "text": "going to grab this pink that's down here"
+  },
+  {
+   "t": 1344.28,
+   "d": 1.8,
+   "text": "you see this gradient from red to Pink"
+  },
+  {
+   "t": 1346.08,
+   "d": 3.2,
+   "text": "and do a little bit of like just quick"
+  },
+  {
+   "t": 1349.28,
+   "d": 2.49,
+   "text": "Shadows where there might be shadows on"
+  },
+  {
+   "t": 1351.77,
+   "d": 1.51,
+   "text": "[Music]"
+  },
+  {
+   "t": 1353.28,
+   "d": 2.84,
+   "text": "him I I really like the pink with this"
+  },
+  {
+   "t": 1356.12,
+   "d": 2.16,
+   "text": "red I would keep that that's a fun"
+  },
+  {
+   "t": 1358.28,
+   "d": 1.2,
+   "text": "little"
+  },
+  {
+   "t": 1359.48,
+   "d": 2.32,
+   "text": "combo then another thing I mentioned I"
+  },
+  {
+   "t": 1361.8,
+   "d": 2.0,
+   "text": "really liked the uh Rim Lighting in this"
+  },
+  {
+   "t": 1363.8,
+   "d": 1.76,
+   "text": "illustration and when I say that I mean"
+  },
+  {
+   "t": 1365.56,
+   "d": 1.68,
+   "text": "sort of these like lights on the edges I"
+  },
+  {
+   "t": 1367.24,
+   "d": 2.48,
+   "text": "like this hot green that they're using"
+  },
+  {
+   "t": 1369.72,
+   "d": 2.88,
+   "text": "to like light the edges of the character"
+  },
+  {
+   "t": 1372.6,
+   "d": 1.56,
+   "text": "so I'm going to grab that and try to"
+  },
+  {
+   "t": 1374.16,
+   "d": 2.44,
+   "text": "like replicate that a little bit here"
+  },
+  {
+   "t": 1376.6,
+   "d": 3.84,
+   "text": "give them a little bit of"
+  },
+  {
+   "t": 1380.84,
+   "d": 3.12,
+   "text": "fun detail lighting as if he's being lit"
+  },
+  {
+   "t": 1383.96,
+   "d": 2.24,
+   "text": "from"
+  },
+  {
+   "t": 1388.68,
+   "d": 2.64,
+   "text": "behind just a little bit of detail work"
+  },
+  {
+   "t": 1391.32,
+   "d": 2.16,
+   "text": "to kind of push that concept over the"
+  },
+  {
+   "t": 1393.48,
+   "d": 2.48,
+   "text": "edge little bit of"
+  },
+  {
+   "t": 1395.96,
+   "d": 3.28,
+   "text": "cleanup oh yeah he needs going to color"
+  },
+  {
+   "t": 1399.24,
+   "d": 3.52,
+   "text": "pick again need some bars for the"
+  },
+  {
+   "t": 1403.48,
+   "d": 2.8,
+   "text": "tummy and oh yes and then I also said I"
+  },
+  {
+   "t": 1406.28,
+   "d": 2.24,
+   "text": "liked the flags in that one illustration"
+  },
+  {
+   "t": 1408.52,
+   "d": 2.84,
+   "text": "so let's pop some little flags on them"
+  },
+  {
+   "t": 1411.36,
+   "d": 3.76,
+   "text": "too can't forget the"
+  },
+  {
+   "t": 1415.16,
+   "d": 4.52,
+   "text": "flags I like that we'll color those in"
+  },
+  {
+   "t": 1419.68,
+   "d": 2.68,
+   "text": "with the green and then yeah I think"
+  },
+  {
+   "t": 1422.36,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 1423.24,
+   "d": 2.2,
+   "text": "that's pretty"
+  },
+  {
+   "t": 1425.44,
+   "d": 2.12,
+   "text": "set of"
+  },
+  {
+   "t": 1427.56,
+   "d": 2.6,
+   "text": "course Angry"
+  },
+  {
+   "t": 1430.16,
+   "d": 3.52,
+   "text": "Eyes had to do it um but yeah as you can"
+  },
+  {
+   "t": 1433.68,
+   "d": 2.04,
+   "text": "see we did it we came up with a really"
+  },
+  {
+   "t": 1435.72,
+   "d": 2.08,
+   "text": "quick character uh I think that was"
+  },
+  {
+   "t": 1437.8,
+   "d": 1.88,
+   "text": "really effective"
+  },
+  {
+   "t": 1439.68,
+   "d": 2.48,
+   "text": "um yeah and that's something you could"
+  },
+  {
+   "t": 1442.16,
+   "d": 2.0,
+   "text": "show to your team and say like hey is"
+  },
+  {
+   "t": 1444.16,
+   "d": 1.84,
+   "text": "this something we could use as an enemy"
+  },
+  {
+   "t": 1446.0,
+   "d": 1.36,
+   "text": "you can see it's very different from the"
+  },
+  {
+   "t": 1447.36,
+   "d": 1.4,
+   "text": "three reference materials but you can"
+  },
+  {
+   "t": 1448.76,
+   "d": 2.0,
+   "text": "tell where I pulled from to make this"
+  },
+  {
+   "t": 1450.76,
+   "d": 2.48,
+   "text": "kind of image so thanks for following"
+  },
+  {
+   "t": 1453.24,
+   "d": 1.32,
+   "text": "along with me we're going to go back to"
+  },
+  {
+   "t": 1454.56,
+   "d": 2.32,
+   "text": "talk time I'm just going to wrap up here"
+  },
+  {
+   "t": 1456.88,
+   "d": 3.44,
+   "text": "I have a few minutes left um so some"
+  },
+  {
+   "t": 1460.32,
+   "d": 3.4,
+   "text": "final thoughts on all of this idea"
+  },
+  {
+   "t": 1463.72,
+   "d": 1.64,
+   "text": "generation is a skill that like any"
+  },
+  {
+   "t": 1465.36,
+   "d": 2.32,
+   "text": "skill can take some practice the more"
+  },
+  {
+   "t": 1467.68,
+   "d": 1.76,
+   "text": "you do it the EAS easier it will be for"
+  },
+  {
+   "t": 1469.44,
+   "d": 3.16,
+   "text": "you um you can try these experiment or"
+  },
+  {
+   "t": 1472.6,
+   "d": 1.2,
+   "text": "you can try these techniques or"
+  },
+  {
+   "t": 1473.8,
+   "d": 1.48,
+   "text": "experiment with some others find what"
+  },
+  {
+   "t": 1475.28,
+   "d": 1.56,
+   "text": "works best for your brain these are just"
+  },
+  {
+   "t": 1476.84,
+   "d": 1.88,
+   "text": "the three like I said at the beginning"
+  },
+  {
+   "t": 1478.72,
+   "d": 2.36,
+   "text": "that work really well for me and you can"
+  },
+  {
+   "t": 1481.08,
+   "d": 1.84,
+   "text": "kind of see how they can be used over"
+  },
+  {
+   "t": 1482.92,
+   "d": 1.64,
+   "text": "and over and over again to different"
+  },
+  {
+   "t": 1484.56,
+   "d": 2.36,
+   "text": "results feel free to mix and match the"
+  },
+  {
+   "t": 1486.92,
+   "d": 4.52,
+   "text": "techniques too I also um will oftentimes"
+  },
+  {
+   "t": 1491.44,
+   "d": 2.24,
+   "text": "do like a list of 10 and I'll have"
+  },
+  {
+   "t": 1493.68,
+   "d": 2.84,
+   "text": "reference materials or I'll have game"
+  },
+  {
+   "t": 1496.52,
+   "d": 2.04,
+   "text": "mechanics but I'll also do a list of of"
+  },
+  {
+   "t": 1498.56,
+   "d": 2.44,
+   "text": "10 with it so anything like that you"
+  },
+  {
+   "t": 1501.0,
+   "d": 1.48,
+   "text": "know you don't have to limit yourself to"
+  },
+  {
+   "t": 1502.48,
+   "d": 1.72,
+   "text": "just one kind of just whatever you feel"
+  },
+  {
+   "t": 1504.2,
+   "d": 1.84,
+   "text": "like works best for you in the scenario"
+  },
+  {
+   "t": 1506.04,
+   "d": 2.2,
+   "text": "that you're in and then I also wrote be"
+  },
+  {
+   "t": 1508.24,
+   "d": 2.0,
+   "text": "kind to yourself and have fun uh you"
+  },
+  {
+   "t": 1510.24,
+   "d": 1.56,
+   "text": "want to keep it playful and loose in the"
+  },
+  {
+   "t": 1511.8,
+   "d": 1.96,
+   "text": "idea generation phase and it'll allow"
+  },
+  {
+   "t": 1513.76,
+   "d": 1.68,
+   "text": "you to land on more unique ideas that"
+  },
+  {
+   "t": 1515.44,
+   "d": 2.44,
+   "text": "you can take to final don't worry about"
+  },
+  {
+   "t": 1517.88,
+   "d": 2.84,
+   "text": "having the perfect idea each time this"
+  },
+  {
+   "t": 1520.72,
+   "d": 2.08,
+   "text": "is the exploration process and it will"
+  },
+  {
+   "t": 1522.8,
+   "d": 1.8,
+   "text": "help you get to that perfect idea"
+  },
+  {
+   "t": 1524.6,
+   "d": 2.52,
+   "text": "eventually so like I said the end of"
+  },
+  {
+   "t": 1527.12,
+   "d": 1.72,
+   "text": "this is not intended to be like here's"
+  },
+  {
+   "t": 1528.84,
+   "d": 2.64,
+   "text": "my fully rendered final enemy it's"
+  },
+  {
+   "t": 1531.48,
+   "d": 3.24,
+   "text": "really to come up with the ideas only"
+  },
+  {
+   "t": 1534.72,
+   "d": 2.48,
+   "text": "spend a little bit of time on it rapidly"
+  },
+  {
+   "t": 1537.2,
+   "d": 2.72,
+   "text": "iterate like take in information and"
+  },
+  {
+   "t": 1539.92,
+   "d": 2.4,
+   "text": "create things and then the ideal place"
+  },
+  {
+   "t": 1542.32,
+   "d": 1.6,
+   "text": "to be is at the end of it you have a"
+  },
+  {
+   "t": 1543.92,
+   "d": 2.4,
+   "text": "huge swarm of designs that you can kind"
+  },
+  {
+   "t": 1546.32,
+   "d": 1.64,
+   "text": "of start to pick and choose from on"
+  },
+  {
+   "t": 1547.96,
+   "d": 1.76,
+   "text": "which ones you do want to take to final"
+  },
+  {
+   "t": 1549.72,
+   "d": 2.04,
+   "text": "or maybe take two of those and mash them"
+  },
+  {
+   "t": 1551.76,
+   "d": 2.32,
+   "text": "up like just getting the ideas out and"
+  },
+  {
+   "t": 1554.08,
+   "d": 1.88,
+   "text": "getting the floodgates going is really"
+  },
+  {
+   "t": 1555.96,
+   "d": 3.28,
+   "text": "the goal for all of this so I do want to"
+  },
+  {
+   "t": 1559.24,
+   "d": 3.2,
+   "text": "thank everybody uh for chatting with me"
+  },
+  {
+   "t": 1562.44,
+   "d": 2.32,
+   "text": "here today here's all the places you can"
+  },
+  {
+   "t": 1564.76,
+   "d": 3.72,
+   "text": "find me I have a website I'm on Blue Sky"
+  },
+  {
+   "t": 1568.48,
+   "d": 2.24,
+   "text": "mostly for social media right now you"
+  },
+  {
+   "t": 1570.72,
+   "d": 2.28,
+   "text": "can feel free and talk gamedev with me"
+  },
+  {
+   "t": 1573.0,
+   "d": 2.04,
+   "text": "at uh the pig Squad Discord which I have"
+  },
+  {
+   "t": 1575.04,
+   "d": 2.36,
+   "text": "the link for right here and you can also"
+  },
+  {
+   "t": 1577.4,
+   "d": 3.04,
+   "text": "play uh my weird little games on"
+  },
+  {
+   "t": 1580.44,
+   "d": 2.56,
+   "text": "itch.io um but yeah I think that leaves"
+  },
+  {
+   "t": 1583.0,
+   "d": 3.56,
+   "text": "us with a little bit of time for QA um"
+  },
+  {
+   "t": 1586.56,
+   "d": 4.32,
+   "text": "so yeah that that's it for me excellent"
+  },
+  {
+   "t": 1590.88,
+   "d": 2.4,
+   "text": "uh love it I feel physically relaxed St"
+  },
+  {
+   "t": 1593.28,
+   "d": 3.24,
+   "text": "for watching so chat decided that that"
+  },
+  {
+   "t": 1596.52,
+   "d": 2.32,
+   "text": "little Tower guy look like a pizza oven"
+  },
+  {
+   "t": 1598.84,
+   "d": 1.84,
+   "text": "cuz it's got"
+  },
+  {
+   "t": 1600.68,
+   "d": 3.52,
+   "text": "like like a pizza Tower piz out of his"
+  },
+  {
+   "t": 1604.2,
+   "d": 2.4,
+   "text": "tummy yeah and see we already have"
+  },
+  {
+   "t": 1606.6,
+   "d": 2.72,
+   "text": "Mechanics for him I love it yeah it's"
+  },
+  {
+   "t": 1609.32,
+   "d": 3.68,
+   "text": "it's wonderful um I love it so much"
+  },
+  {
+   "t": 1613.0,
+   "d": 2.16,
+   "text": "please use Pizza Tower man in any of"
+  },
+  {
+   "t": 1615.16,
+   "d": 4.24,
+   "text": "your games and it'll I'll find celebrate"
+  },
+  {
+   "t": 1619.4,
+   "d": 2.52,
+   "text": "reference beautiful oh spinning my"
+  },
+  {
+   "t": 1621.92,
+   "d": 2.64,
+   "text": "microphone all right um we do have one"
+  },
+  {
+   "t": 1624.56,
+   "d": 1.2,
+   "text": "question oh and this is a really good"
+  },
+  {
+   "t": 1625.76,
+   "d": 2.32,
+   "text": "question from too much tomato cool great"
+  },
+  {
+   "t": 1628.08,
+   "d": 2.72,
+   "text": "name do you use a similar process of"
+  },
+  {
+   "t": 1630.8,
+   "d": 1.64,
+   "text": "idea generation for coming up with an"
+  },
+  {
+   "t": 1632.44,
+   "d": 3.08,
+   "text": "art style or direction for the full game"
+  },
+  {
+   "t": 1635.52,
+   "d": 2.08,
+   "text": "oh that's a really good question um I"
+  },
+  {
+   "t": 1637.6,
+   "d": 2.6,
+   "text": "think that uh a little bit probably is"
+  },
+  {
+   "t": 1640.2,
+   "d": 1.76,
+   "text": "the answer like yes you can absolutely"
+  },
+  {
+   "t": 1641.96,
+   "d": 3.32,
+   "text": "do that one thing I tend to do a lot for"
+  },
+  {
+   "t": 1645.28,
+   "d": 1.48,
+   "text": "deciding on an art direction for the"
+  },
+  {
+   "t": 1646.76,
+   "d": 1.6,
+   "text": "game is mood boards which are didn't"
+  },
+  {
+   "t": 1648.36,
+   "d": 2.04,
+   "text": "really go over here but that is sort of"
+  },
+  {
+   "t": 1650.4,
+   "d": 1.84,
+   "text": "the idea of collecting references and"
+  },
+  {
+   "t": 1652.24,
+   "d": 2.32,
+   "text": "just like making a huge mood board of"
+  },
+  {
+   "t": 1654.56,
+   "d": 2.6,
+   "text": "like really like this painter style"
+  },
+  {
+   "t": 1657.16,
+   "d": 1.84,
+   "text": "really like this color palette like put"
+  },
+  {
+   "t": 1659.0,
+   "d": 1.68,
+   "text": "these all in the same place and then"
+  },
+  {
+   "t": 1660.68,
+   "d": 2.88,
+   "text": "kind of present that to uh the team I'm"
+  },
+  {
+   "t": 1663.56,
+   "d": 1.92,
+   "text": "working with and say like is this the"
+  },
+  {
+   "t": 1665.48,
+   "d": 1.64,
+   "text": "vibe we want to go for and then from"
+  },
+  {
+   "t": 1667.12,
+   "d": 2.72,
+   "text": "there you kind of like will iterate and"
+  },
+  {
+   "t": 1669.84,
+   "d": 1.84,
+   "text": "add on things or tack off things"
+  },
+  {
+   "t": 1671.68,
+   "d": 1.96,
+   "text": "depending on what direction you go in"
+  },
+  {
+   "t": 1673.64,
+   "d": 1.72,
+   "text": "but yeah I guess I would say reference"
+  },
+  {
+   "t": 1675.36,
+   "d": 2.0,
+   "text": "material as the closest technique that I"
+  },
+  {
+   "t": 1677.36,
+   "d": 2.16,
+   "text": "would use for something like that yeah"
+  },
+  {
+   "t": 1679.52,
+   "d": 1.4,
+   "text": "that makes sense every physical game"
+  },
+  {
+   "t": 1680.92,
+   "d": 1.68,
+   "text": "Studio I've worked in has filled the"
+  },
+  {
+   "t": 1682.6,
+   "d": 2.48,
+   "text": "walls with the mood boards that then get"
+  },
+  {
+   "t": 1685.08,
+   "d": 1.52,
+   "text": "replaced with the concept art once you"
+  },
+  {
+   "t": 1686.6,
+   "d": 1.8,
+   "text": "get that colored printer does a lot of"
+  },
+  {
+   "t": 1688.4,
+   "d": 2.56,
+   "text": "work oh"
+  },
+  {
+   "t": 1690.96,
+   "d": 3.04,
+   "text": "yeah well excellent all right I think"
+  },
+  {
+   "t": 1694.0,
+   "d": 2.04,
+   "text": "that yeah we will um move to the"
+  },
+  {
+   "t": 1696.04,
+   "d": 1.88,
+   "text": "breakout room so if you're around and if"
+  },
+  {
+   "t": 1697.92,
+   "d": 2.12,
+   "text": "people want to talk about pizza Tower"
+  },
+  {
+   "t": 1700.04,
+   "d": 0.8,
+   "text": "man"
+  },
+  {
+   "t": 1700.84,
+   "d": 4.84,
+   "text": "or extremely useful relevant advice uh"
+  },
+  {
+   "t": 1705.68,
+   "d": 1.64,
+   "text": "they can do so in the joust Arena but"
+  },
+  {
+   "t": 1707.32,
+   "d": 1.44,
+   "text": "thank you so much Marin"
+  },
+  {
+   "t": 1708.76,
+   "d": 2.08,
+   "text": "fantastic talk yeah thank you so much"
+  },
+  {
+   "t": 1710.84,
+   "d": 1.8,
+   "text": "I'm really honored to be here really"
+  },
+  {
+   "t": 1712.64,
+   "d": 4.0,
+   "text": "excited so thank you so much"
+  }
+ ]
+}

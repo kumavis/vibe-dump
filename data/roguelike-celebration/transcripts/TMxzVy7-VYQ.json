@@ -1,0 +1,3497 @@
+{
+ "id": "TMxzVy7-VYQ",
+ "url": "https://www.youtube.com/watch?v=TMxzVy7-VYQ",
+ "title": "Santiago Zapata - Get your game done: experiences through the development of 13 roguelikes",
+ "speaker": "Santiago Zapata",
+ "talk_title": "Get your game done: experiences through the development of 13 roguelikes",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1590,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nGet your game done: Experiences through the development of 13 roguelikes.\n\nSantiago Zapata (also known as Slash) has been messing around with roguelikes for about 15 years. Creator of roguebasin, roguetemple, and many not-so-famous roguelikes, he enjoys pushing the boundaries of the roguelike genre to create new gameplay experiences, while keeping the spirit of the originals.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 101,
+   "title": "Early development struggles"
+  },
+  {
+   "start": 216,
+   "title": "Key early projects"
+  },
+  {
+   "start": 494,
+   "title": "Iterative learning approach"
+  },
+  {
+   "start": 617,
+   "title": "Failures and technical lessons"
+  },
+  {
+   "start": 827,
+   "title": "Refining design and accessibility"
+  },
+  {
+   "start": 1074,
+   "title": "Platform adaptation and testing"
+  },
+  {
+   "start": 1289,
+   "title": "Future goals and conclusions"
+  },
+  {
+   "start": 1421,
+   "title": "Q&A: Development strategies"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4221,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 12.88,
+   "d": 2.04,
+   "text": "All right. Hello, everybody."
+  },
+  {
+   "t": 14.92,
+   "d": 1.0,
+   "text": "Um"
+  },
+  {
+   "t": 15.92,
+   "d": 2.04,
+   "text": "it seems there's another uh talk going"
+  },
+  {
+   "t": 17.96,
+   "d": 1.64,
+   "text": "on. I don't know if you have heard about"
+  },
+  {
+   "t": 19.6,
+   "d": 2.88,
+   "text": "it, about Dwarf Fortress, so"
+  },
+  {
+   "t": 22.48,
+   "d": 2.0,
+   "text": "Yeah, that explains."
+  },
+  {
+   "t": 24.48,
+   "d": 1.44,
+   "text": "Uh but, thank you for coming to this"
+  },
+  {
+   "t": 25.92,
+   "d": 2.12,
+   "text": "talk. Um"
+  },
+  {
+   "t": 28.04,
+   "d": 1.68,
+   "text": "the idea is to talk a bit about my"
+  },
+  {
+   "t": 29.72,
+   "d": 2.24,
+   "text": "journey through the development of"
+  },
+  {
+   "t": 31.96,
+   "d": 2.52,
+   "text": "Kaita, a bunch of roguelikes that I have"
+  },
+  {
+   "t": 34.48,
+   "d": 3.44,
+   "text": "been developing through the years, and"
+  },
+  {
+   "t": 37.92,
+   "d": 2.56,
+   "text": "basically, the experience that I have"
+  },
+  {
+   "t": 40.48,
+   "d": 3.52,
+   "text": "had there, and maybe how it could help"
+  },
+  {
+   "t": 44.0,
+   "d": 0.84,
+   "text": "you"
+  },
+  {
+   "t": 44.84,
+   "d": 1.92,
+   "text": "finish your games."
+  },
+  {
+   "t": 46.76,
+   "d": 1.44,
+   "text": "Um how many of you are roguelike"
+  },
+  {
+   "t": 48.2,
+   "d": 2.04,
+   "text": "developers?"
+  },
+  {
+   "t": 50.24,
+   "d": 2.24,
+   "text": "All right, quite a bunch."
+  },
+  {
+   "t": 52.48,
+   "d": 2.96,
+   "text": "So, yeah, uh I'm going to just start"
+  },
+  {
+   "t": 55.44,
+   "d": 3.6,
+   "text": "because time is pretty short. Um"
+  },
+  {
+   "t": 59.04,
+   "d": 2.36,
+   "text": "What what's up?"
+  },
+  {
+   "t": 61.4,
+   "d": 2.16,
+   "text": "Late later?"
+  },
+  {
+   "t": 63.56,
+   "d": 1.72,
+   "text": "Is it the end? So, thank you for coming."
+  },
+  {
+   "t": 65.28,
+   "d": 1.44,
+   "text": "Yeah."
+  },
+  {
+   "t": 66.72,
+   "d": 2.64,
+   "text": "I'm sorry about that."
+  },
+  {
+   "t": 73.16,
+   "d": 2.36,
+   "text": "Okay."
+  },
+  {
+   "t": 78.4,
+   "d": 1.8,
+   "text": "All right. So, this was me when I"
+  },
+  {
+   "t": 80.2,
+   "d": 2.88,
+   "text": "started doing roguelikes like about 5 15"
+  },
+  {
+   "t": 83.08,
+   "d": 3.16,
+   "text": "years ago or something like that. Um I"
+  },
+  {
+   "t": 86.24,
+   "d": 1.76,
+   "text": "still don't have like a big roguelike"
+  },
+  {
+   "t": 88.0,
+   "d": 3.0,
+   "text": "like right like a famous roguelike that"
+  },
+  {
+   "t": 91.0,
+   "d": 3.0,
+   "text": "thousands of people are playing, but"
+  },
+  {
+   "t": 94.0,
+   "d": 2.16,
+   "text": "So, what I want to share is this"
+  },
+  {
+   "t": 96.16,
+   "d": 1.92,
+   "text": "experience that I have had, and how it"
+  },
+  {
+   "t": 98.08,
+   "d": 3.2,
+   "text": "could help you probably. Um"
+  },
+  {
+   "t": 101.28,
+   "d": 1.88,
+   "text": "So, yeah, you can find all my games at"
+  },
+  {
+   "t": 103.16,
+   "d": 2.28,
+   "text": "slashy.net. There's a huge list there"
+  },
+  {
+   "t": 105.44,
+   "d": 1.32,
+   "text": "that I have put."
+  },
+  {
+   "t": 106.76,
+   "d": 1.64,
+   "text": "And"
+  },
+  {
+   "t": 108.4,
+   "d": 4.28,
+   "text": "So, I started around 2003, 2004, when I"
+  },
+  {
+   "t": 112.68,
+   "d": 4.24,
+   "text": "went to the college. So, by that time I"
+  },
+  {
+   "t": 116.92,
+   "d": 1.24,
+   "text": "got I I I"
+  },
+  {
+   "t": 118.16,
+   "d": 2.44,
+   "text": "I was able to play Adom, right? And it"
+  },
+  {
+   "t": 120.6,
+   "d": 1.6,
+   "text": "really inspired me into doing"
+  },
+  {
+   "t": 122.2,
+   "d": 3.12,
+   "text": "roguelikes. And at first"
+  },
+  {
+   "t": 125.32,
+   "d": 2.88,
+   "text": "I tried to do like replicate what Adom"
+  },
+  {
+   "t": 128.2,
+   "d": 1.84,
+   "text": "is. And especially Jade, which was a"
+  },
+  {
+   "t": 130.04,
+   "d": 2.28,
+   "text": "project that Thomas Biskup had at that"
+  },
+  {
+   "t": 132.32,
+   "d": 1.4,
+   "text": "time."
+  },
+  {
+   "t": 133.72,
+   "d": 1.64,
+   "text": "Uh so I wanted to create like a very"
+  },
+  {
+   "t": 135.36,
+   "d": 2.84,
+   "text": "complex simulator of the medieval"
+  },
+  {
+   "t": 138.2,
+   "d": 2.56,
+   "text": "fantasy, right? So like"
+  },
+  {
+   "t": 140.76,
+   "d": 2.56,
+   "text": "complete world that you could play on."
+  },
+  {
+   "t": 143.32,
+   "d": 4.08,
+   "text": "And that's what I went in for at first,"
+  },
+  {
+   "t": 147.4,
+   "d": 1.92,
+   "text": "right? And it was uh"
+  },
+  {
+   "t": 149.32,
+   "d": 1.8,
+   "text": "I did not have the experience to carry"
+  },
+  {
+   "t": 151.12,
+   "d": 2.76,
+   "text": "that, but I jumped straight into it."
+  },
+  {
+   "t": 153.88,
+   "d": 2.48,
+   "text": "Uh by then we had the Usenet roguelike"
+  },
+  {
+   "t": 156.36,
+   "d": 1.44,
+   "text": "development channel. It was like the"
+  },
+  {
+   "t": 157.8,
+   "d": 1.6,
+   "text": "primary communication channel that we"
+  },
+  {
+   "t": 159.4,
+   "d": 2.64,
+   "text": "had. And I was not alone. There was a"
+  },
+  {
+   "t": 162.04,
+   "d": 1.68,
+   "text": "lot of people that was trying to do just"
+  },
+  {
+   "t": 163.72,
+   "d": 2.24,
+   "text": "that, right? Like you recreate like the"
+  },
+  {
+   "t": 165.96,
+   "d": 3.84,
+   "text": "very complex simulation of a world. But"
+  },
+  {
+   "t": 169.8,
+   "d": 1.68,
+   "text": "we're we were not really thinking on"
+  },
+  {
+   "t": 171.48,
+   "d": 2.04,
+   "text": "doing a game, right? We were thinking on"
+  },
+  {
+   "t": 173.52,
+   "d": 2.36,
+   "text": "doing like a sandbox where you could"
+  },
+  {
+   "t": 175.88,
+   "d": 2.76,
+   "text": "like play and then the game will rise."
+  },
+  {
+   "t": 178.64,
+   "d": 1.44,
+   "text": "So"
+  },
+  {
+   "t": 180.08,
+   "d": 2.84,
+   "text": "I played a I mean I I worked a long time"
+  },
+  {
+   "t": 182.92,
+   "d": 2.28,
+   "text": "on that, like trying to get that done."
+  },
+  {
+   "t": 185.2,
+   "d": 1.08,
+   "text": "Um"
+  },
+  {
+   "t": 186.28,
+   "d": 2.76,
+   "text": "until I got to the 7-Day Roguelike"
+  },
+  {
+   "t": 189.04,
+   "d": 1.6,
+   "text": "Challenge, which was like a turning"
+  },
+  {
+   "t": 190.64,
+   "d": 1.44,
+   "text": "point for me."
+  },
+  {
+   "t": 192.08,
+   "d": 1.68,
+   "text": "That was around"
+  },
+  {
+   "t": 193.76,
+   "d": 1.44,
+   "text": "2005."
+  },
+  {
+   "t": 195.2,
+   "d": 4.0,
+   "text": "Um so in this talk I want to talk about"
+  },
+  {
+   "t": 199.2,
+   "d": 1.72,
+   "text": "all the different 7-Day Roguelikes that"
+  },
+  {
+   "t": 200.92,
+   "d": 3.08,
+   "text": "I have done, right? And how each one of"
+  },
+  {
+   "t": 204.0,
+   "d": 2.64,
+   "text": "these uh kind of taught me something"
+  },
+  {
+   "t": 206.64,
+   "d": 2.6,
+   "text": "that I could use in the next one. And"
+  },
+  {
+   "t": 209.24,
+   "d": 1.72,
+   "text": "finally in my current project, which is"
+  },
+  {
+   "t": 210.96,
+   "d": 1.6,
+   "text": "Ananias. And"
+  },
+  {
+   "t": 212.56,
+   "d": 4.0,
+   "text": "and how it may help to you too for this."
+  },
+  {
+   "t": 216.56,
+   "d": 1.8,
+   "text": "All right. So the first one I made was"
+  },
+  {
+   "t": 218.36,
+   "d": 2.6,
+   "text": "Castlevania Roguelike. I actually um"
+  },
+  {
+   "t": 220.96,
+   "d": 2.0,
+   "text": "developed it further after the 7-Day"
+  },
+  {
+   "t": 222.96,
+   "d": 2.64,
+   "text": "Roguelike Challenge. And"
+  },
+  {
+   "t": 225.6,
+   "d": 2.0,
+   "text": "so I had been working already for like 2"
+  },
+  {
+   "t": 227.6,
+   "d": 2.36,
+   "text": "years on the other one and still didn't"
+  },
+  {
+   "t": 229.96,
+   "d": 2.52,
+   "text": "manage to produce anything. So I jumped"
+  },
+  {
+   "t": 232.48,
+   "d": 2.72,
+   "text": "into the challenge thinking that it was"
+  },
+  {
+   "t": 235.2,
+   "d": 2.92,
+   "text": "like a waste of time because 7 days is"
+  },
+  {
+   "t": 238.12,
+   "d": 1.76,
+   "text": "very little time. So,"
+  },
+  {
+   "t": 239.88,
+   "d": 2.24,
+   "text": "but in the end I managed to ship a game."
+  },
+  {
+   "t": 242.12,
+   "d": 2.44,
+   "text": "Well, it was a game. It was playable. It"
+  },
+  {
+   "t": 244.56,
+   "d": 2.2,
+   "text": "was not very fun. It was not very"
+  },
+  {
+   "t": 246.76,
+   "d": 3.48,
+   "text": "complete. Uh but I managed to like say,"
+  },
+  {
+   "t": 250.24,
+   "d": 1.68,
+   "text": "\"Hey, this is my game. I finally made a"
+  },
+  {
+   "t": 251.92,
+   "d": 2.4,
+   "text": "game.\" And I think this is that's a very"
+  },
+  {
+   "t": 254.32,
+   "d": 1.68,
+   "text": "important step like being able to ship"
+  },
+  {
+   "t": 256.0,
+   "d": 2.04,
+   "text": "something because else you just keep"
+  },
+  {
+   "t": 258.04,
+   "d": 2.36,
+   "text": "working and working on that on demos or"
+  },
+  {
+   "t": 260.4,
+   "d": 2.2,
+   "text": "or technical stuff and never get"
+  },
+  {
+   "t": 262.6,
+   "d": 2.48,
+   "text": "feedback from from anyone."
+  },
+  {
+   "t": 265.08,
+   "d": 2.36,
+   "text": "So, another thing that I I learned for"
+  },
+  {
+   "t": 267.44,
+   "d": 2.2,
+   "text": "this one is uh that I could focus in"
+  },
+  {
+   "t": 269.64,
+   "d": 3.0,
+   "text": "like single uh feature that was fun."
+  },
+  {
+   "t": 272.64,
+   "d": 1.88,
+   "text": "And for example, this one didn't even"
+  },
+  {
+   "t": 274.52,
+   "d": 2.08,
+   "text": "have procedural generation."
+  },
+  {
+   "t": 276.6,
+   "d": 3.52,
+   "text": "So, it was like uh more of an Well, it"
+  },
+  {
+   "t": 280.12,
+   "d": 2.28,
+   "text": "had ASCII art so that looked a bit like"
+  },
+  {
+   "t": 282.4,
+   "d": 2.2,
+   "text": "a roguelike, but it didn't have a lot of"
+  },
+  {
+   "t": 284.6,
+   "d": 2.64,
+   "text": "other factors. Mm."
+  },
+  {
+   "t": 287.24,
+   "d": 2.0,
+   "text": "But still, it's like an initial step."
+  },
+  {
+   "t": 289.24,
+   "d": 2.56,
+   "text": "So, I think it's that's a good uh"
+  },
+  {
+   "t": 291.8,
+   "d": 3.0,
+   "text": "thing that you can do is uh like have a"
+  },
+  {
+   "t": 294.8,
+   "d": 1.88,
+   "text": "work incrementally, right? Like having a"
+  },
+  {
+   "t": 296.68,
+   "d": 1.56,
+   "text": "first iteration of your game and then"
+  },
+  {
+   "t": 298.24,
+   "d": 2.92,
+   "text": "continue developing on it. Um"
+  },
+  {
+   "t": 301.16,
+   "d": 2.28,
+   "text": "next year I did Drash Roguelike, which"
+  },
+  {
+   "t": 303.44,
+   "d": 3.64,
+   "text": "is uh based on the an very old Ultima"
+  },
+  {
+   "t": 307.08,
+   "d": 1.96,
+   "text": "game, which is called Escape from Mount"
+  },
+  {
+   "t": 309.04,
+   "d": 1.24,
+   "text": "Drash."
+  },
+  {
+   "t": 310.28,
+   "d": 1.76,
+   "text": "The first thing I did there is that I"
+  },
+  {
+   "t": 312.04,
+   "d": 2.64,
+   "text": "utilized the code from Castlevania. And"
+  },
+  {
+   "t": 314.68,
+   "d": 1.8,
+   "text": "this time I did include procedural"
+  },
+  {
+   "t": 316.48,
+   "d": 1.68,
+   "text": "generation. So,"
+  },
+  {
+   "t": 318.16,
+   "d": 0.72,
+   "text": "uh"
+  },
+  {
+   "t": 318.88,
+   "d": 2.64,
+   "text": "it was like a more more close to what a"
+  },
+  {
+   "t": 321.52,
+   "d": 1.56,
+   "text": "roguelike really is."
+  },
+  {
+   "t": 323.08,
+   "d": 1.84,
+   "text": "Another thing that I did for this one is"
+  },
+  {
+   "t": 324.92,
+   "d": 2.52,
+   "text": "I this I established some design"
+  },
+  {
+   "t": 327.44,
+   "d": 1.48,
+   "text": "guidelines from the beginning. So, I"
+  },
+  {
+   "t": 328.92,
+   "d": 2.32,
+   "text": "knew what I wanted, right? So, I had a"
+  },
+  {
+   "t": 331.24,
+   "d": 3.84,
+   "text": "plan instead of just trying to do uh"
+  },
+  {
+   "t": 335.08,
+   "d": 2.92,
+   "text": "and see what what can come up. I I knew"
+  },
+  {
+   "t": 338.0,
+   "d": 1.48,
+   "text": "from the beginning that I didn't want to"
+  },
+  {
+   "t": 339.48,
+   "d": 2.16,
+   "text": "have experience fun. Didn't have to be"
+  },
+  {
+   "t": 341.64,
+   "d": 3.28,
+   "text": "grinding or doing that stuff. And that"
+  },
+  {
+   "t": 344.92,
+   "d": 3.28,
+   "text": "the everything was going to be like uh"
+  },
+  {
+   "t": 348.2,
+   "d": 1.88,
+   "text": "without commands, without menus, without"
+  },
+  {
+   "t": 350.08,
+   "d": 2.64,
+   "text": "anything like that. So, that also helps"
+  },
+  {
+   "t": 352.72,
+   "d": 2.68,
+   "text": "a bit. And actually for this one I had a"
+  },
+  {
+   "t": 355.4,
+   "d": 2.32,
+   "text": "completely different plan by by the"
+  },
+  {
+   "t": 357.72,
+   "d": 2.84,
+   "text": "beginning of the of the challenge. Uh"
+  },
+  {
+   "t": 360.56,
+   "d": 2.28,
+   "text": "I wanted to create like a simulator of"
+  },
+  {
+   "t": 362.84,
+   "d": 3.36,
+   "text": "an ant colony. So, you could like be an"
+  },
+  {
+   "t": 366.2,
+   "d": 1.96,
+   "text": "ant fighter and defend the colony from"
+  },
+  {
+   "t": 368.16,
+   "d": 2.04,
+   "text": "invaders or something like that."
+  },
+  {
+   "t": 370.2,
+   "d": 2.04,
+   "text": "And in the end, well, I did some"
+  },
+  {
+   "t": 372.24,
+   "d": 2.64,
+   "text": "research on the different types of ants"
+  },
+  {
+   "t": 374.88,
+   "d": 1.56,
+   "text": "and"
+  },
+  {
+   "t": 376.44,
+   "d": 2.24,
+   "text": "it I mean, I could not find like a way"
+  },
+  {
+   "t": 378.68,
+   "d": 2.32,
+   "text": "to make it like a into a funny mechanic,"
+  },
+  {
+   "t": 381.0,
+   "d": 3.08,
+   "text": "right? So, I changed what I was planning"
+  },
+  {
+   "t": 384.08,
+   "d": 1.72,
+   "text": "to do and ended up with like just a"
+  },
+  {
+   "t": 385.8,
+   "d": 1.72,
+   "text": "survival arena."
+  },
+  {
+   "t": 387.52,
+   "d": 3.04,
+   "text": "Um it worked much better. So,"
+  },
+  {
+   "t": 390.56,
+   "d": 2.52,
+   "text": "this this one was actually pretty fun to"
+  },
+  {
+   "t": 393.08,
+   "d": 2.28,
+   "text": "play uh unlike Castlevania Roguelike,"
+  },
+  {
+   "t": 395.36,
+   "d": 2.56,
+   "text": "which was not very good."
+  },
+  {
+   "t": 397.92,
+   "d": 2.36,
+   "text": "Then the same year,"
+  },
+  {
+   "t": 400.28,
+   "d": 1.72,
+   "text": "I created another one, which is was"
+  },
+  {
+   "t": 402.0,
+   "d": 2.92,
+   "text": "called Metroid Roguelike. And this one I"
+  },
+  {
+   "t": 404.92,
+   "d": 2.4,
+   "text": "think what I did was again reutilizing"
+  },
+  {
+   "t": 407.32,
+   "d": 3.32,
+   "text": "the code, but I really"
+  },
+  {
+   "t": 410.64,
+   "d": 0.6,
+   "text": "uh"
+  },
+  {
+   "t": 411.24,
+   "d": 1.92,
+   "text": "invested a lot of time in the world"
+  },
+  {
+   "t": 413.16,
+   "d": 3.2,
+   "text": "generation. So, this is uh in this one I"
+  },
+  {
+   "t": 416.36,
+   "d": 2.52,
+   "text": "created like a base, so similar to the"
+  },
+  {
+   "t": 418.88,
+   "d": 2.0,
+   "text": "Metroid games, and you have to explore"
+  },
+  {
+   "t": 420.88,
+   "d": 3.2,
+   "text": "the different areas of the base and find"
+  },
+  {
+   "t": 424.08,
+   "d": 2.28,
+   "text": "a power up and then go to another part"
+  },
+  {
+   "t": 426.36,
+   "d": 2.16,
+   "text": "of the base and use that power up. So,"
+  },
+  {
+   "t": 428.52,
+   "d": 1.92,
+   "text": "it was like backtracking and it was"
+  },
+  {
+   "t": 430.44,
+   "d": 2.64,
+   "text": "randomly generated. So, I think that"
+  },
+  {
+   "t": 433.08,
+   "d": 1.68,
+   "text": "one's pretty good."
+  },
+  {
+   "t": 434.76,
+   "d": 2.52,
+   "text": "Um I I also included like additional"
+  },
+  {
+   "t": 437.28,
+   "d": 2.16,
+   "text": "features, which apart from random from"
+  },
+  {
+   "t": 439.44,
+   "d": 1.84,
+   "text": "procedural generation, which were like"
+  },
+  {
+   "t": 441.28,
+   "d": 3.08,
+   "text": "the pseudo 3D. So, it was still a"
+  },
+  {
+   "t": 444.36,
+   "d": 2.4,
+   "text": "overhead view, but each cell had a"
+  },
+  {
+   "t": 446.76,
+   "d": 2.32,
+   "text": "different height. So, you could jump and"
+  },
+  {
+   "t": 449.08,
+   "d": 2.88,
+   "text": "get into different parts of the world."
+  },
+  {
+   "t": 451.96,
+   "d": 1.24,
+   "text": "And finally, another thing that I"
+  },
+  {
+   "t": 453.2,
+   "d": 2.16,
+   "text": "included was the background music, which"
+  },
+  {
+   "t": 455.36,
+   "d": 1.4,
+   "text": "I think is"
+  },
+  {
+   "t": 456.76,
+   "d": 3.0,
+   "text": "uh maybe it was present in other games,"
+  },
+  {
+   "t": 459.76,
+   "d": 2.64,
+   "text": "but I think Doom Roguelike was like the"
+  },
+  {
+   "t": 462.4,
+   "d": 2.2,
+   "text": "first one to like really"
+  },
+  {
+   "t": 464.6,
+   "d": 2.88,
+   "text": "um innovate with that, and I think it's"
+  },
+  {
+   "t": 467.48,
+   "d": 3.12,
+   "text": "a huge uh help like to create a mood for"
+  },
+  {
+   "t": 470.6,
+   "d": 1.24,
+   "text": "the games."
+  },
+  {
+   "t": 471.84,
+   "d": 1.76,
+   "text": "So, as you can see, I was like"
+  },
+  {
+   "t": 473.6,
+   "d": 2.92,
+   "text": "reutilizing or or using uh"
+  },
+  {
+   "t": 476.52,
+   "d": 2.04,
+   "text": "existing universes. So, Castlevania,"
+  },
+  {
+   "t": 478.56,
+   "d": 1.36,
+   "text": "Ultima,"
+  },
+  {
+   "t": 479.92,
+   "d": 2.96,
+   "text": "uh Metroid. And that helped, of course,"
+  },
+  {
+   "t": 482.88,
+   "d": 2.2,
+   "text": "like to get the music because I could go"
+  },
+  {
+   "t": 485.08,
+   "d": 1.96,
+   "text": "into internet and find it out without"
+  },
+  {
+   "t": 487.04,
+   "d": 1.84,
+   "text": "having to have an artist for it."
+  },
+  {
+   "t": 488.88,
+   "d": 4.8,
+   "text": "So, that's also a very helpful."
+  },
+  {
+   "t": 494.24,
+   "d": 2.88,
+   "text": "Next year, I had Zelda Roguelike."
+  },
+  {
+   "t": 497.12,
+   "d": 1.8,
+   "text": "Again, I worked more on the procedural"
+  },
+  {
+   "t": 498.92,
+   "d": 2.88,
+   "text": "generator. I added like um"
+  },
+  {
+   "t": 501.8,
+   "d": 2.24,
+   "text": "overworld generator, which generated"
+  },
+  {
+   "t": 504.04,
+   "d": 2.44,
+   "text": "like forests and lakes and mountains"
+  },
+  {
+   "t": 506.48,
+   "d": 2.4,
+   "text": "based on the dungeon that you were going"
+  },
+  {
+   "t": 508.88,
+   "d": 3.0,
+   "text": "to explore, and also um created like"
+  },
+  {
+   "t": 511.88,
+   "d": 2.16,
+   "text": "more complex dungeon generator. So,"
+  },
+  {
+   "t": 514.04,
+   "d": 3.0,
+   "text": "again, like incrementally going, so"
+  },
+  {
+   "t": 517.04,
+   "d": 1.72,
+   "text": "so that I could be adding new"
+  },
+  {
+   "t": 518.76,
+   "d": 1.64,
+   "text": "complexity."
+  },
+  {
+   "t": 520.4,
+   "d": 2.12,
+   "text": "It was I mean, it was complete, but it"
+  },
+  {
+   "t": 522.52,
+   "d": 1.8,
+   "text": "was a bit unbalanced."
+  },
+  {
+   "t": 524.32,
+   "d": 2.44,
+   "text": "And the thing here is yeah, as I as as I"
+  },
+  {
+   "t": 526.76,
+   "d": 2.28,
+   "text": "told you, uh I think including elements"
+  },
+  {
+   "t": 529.04,
+   "d": 1.72,
+   "text": "for um an really established universe"
+  },
+  {
+   "t": 530.76,
+   "d": 3.12,
+   "text": "like Zelda or Metroid or or Castlevania,"
+  },
+  {
+   "t": 533.88,
+   "d": 1.76,
+   "text": "of course, helps you get people into the"
+  },
+  {
+   "t": 535.64,
+   "d": 2.6,
+   "text": "game and get gets you feedback."
+  },
+  {
+   "t": 538.24,
+   "d": 1.92,
+   "text": "And I think the most important thing uh"
+  },
+  {
+   "t": 540.16,
+   "d": 2.96,
+   "text": "up to this point is learning, right? So,"
+  },
+  {
+   "t": 543.12,
+   "d": 2.16,
+   "text": "maybe initially you want to create like"
+  },
+  {
+   "t": 545.28,
+   "d": 2.68,
+   "text": "a huge game to have people like to I"
+  },
+  {
+   "t": 547.96,
+   "d": 1.56,
+   "text": "mean, you have a vision, and you want"
+  },
+  {
+   "t": 549.52,
+   "d": 1.2,
+   "text": "people to"
+  },
+  {
+   "t": 550.72,
+   "d": 2.4,
+   "text": "to to to uh"
+  },
+  {
+   "t": 553.12,
+   "d": 2.8,
+   "text": "experience what you want, but you still"
+  },
+  {
+   "t": 555.92,
+   "d": 1.8,
+   "text": "don't know how to make a good game,"
+  },
+  {
+   "t": 557.72,
+   "d": 2.32,
+   "text": "right? So, you can then end up like"
+  },
+  {
+   "t": 560.04,
+   "d": 1.92,
+   "text": "walking in circles like trying to make"
+  },
+  {
+   "t": 561.96,
+   "d": 1.92,
+   "text": "the game while you still don't really"
+  },
+  {
+   "t": 563.88,
+   "d": 2.32,
+   "text": "know how to make a game."
+  },
+  {
+   "t": 566.2,
+   "d": 2.68,
+   "text": "So, this I mean, I think the way that I"
+  },
+  {
+   "t": 568.88,
+   "d": 3.12,
+   "text": "did it allowed me to learn, to get"
+  },
+  {
+   "t": 572.0,
+   "d": 2.76,
+   "text": "feedback, and to like move on, right?"
+  },
+  {
+   "t": 574.76,
+   "d": 2.52,
+   "text": "Because these games were most most of"
+  },
+  {
+   "t": 577.28,
+   "d": 1.92,
+   "text": "them I developed them for the 7-Day"
+  },
+  {
+   "t": 579.2,
+   "d": 2.44,
+   "text": "Roguelike Challenge and then forgot"
+  },
+  {
+   "t": 581.64,
+   "d": 1.92,
+   "text": "about them. So, they were like more like"
+  },
+  {
+   "t": 583.56,
+   "d": 2.4,
+   "text": "learning experiences. So, I was not"
+  },
+  {
+   "t": 585.96,
+   "d": 2.96,
+   "text": "completely invested into them uh with a"
+  },
+  {
+   "t": 588.92,
+   "d": 2.68,
+   "text": "few exceptions. Uh but they they were"
+  },
+  {
+   "t": 591.6,
+   "d": 3.68,
+   "text": "more like a one-time thing that I would"
+  },
+  {
+   "t": 595.28,
+   "d": 1.4,
+   "text": "get some uh"
+  },
+  {
+   "t": 596.68,
+   "d": 2.56,
+   "text": "experience, also uh develop some"
+  },
+  {
+   "t": 599.24,
+   "d": 3.64,
+   "text": "algorithm that I I could reutilize later"
+  },
+  {
+   "t": 602.88,
+   "d": 1.36,
+   "text": "in other projects."
+  },
+  {
+   "t": 604.24,
+   "d": 1.88,
+   "text": "But mainly the experience was the the"
+  },
+  {
+   "t": 606.12,
+   "d": 2.24,
+   "text": "part. Uh so, if you are using an"
+  },
+  {
+   "t": 608.36,
+   "d": 1.96,
+   "text": "existing universe, um"
+  },
+  {
+   "t": 610.32,
+   "d": 1.88,
+   "text": "you can get feedback from the players"
+  },
+  {
+   "t": 612.2,
+   "d": 2.4,
+   "text": "and that helps you like become better in"
+  },
+  {
+   "t": 614.6,
+   "d": 1.88,
+   "text": "game design and in in the programming"
+  },
+  {
+   "t": 616.48,
+   "d": 1.48,
+   "text": "itself."
+  },
+  {
+   "t": 617.96,
+   "d": 2.52,
+   "text": "Next year, Mega Man Roguelike."
+  },
+  {
+   "t": 620.48,
+   "d": 2.44,
+   "text": "Uh I tried to create a side-scrolling"
+  },
+  {
+   "t": 622.92,
+   "d": 2.68,
+   "text": "turn-based Roguelike. It didn't end up"
+  },
+  {
+   "t": 625.6,
+   "d": 2.28,
+   "text": "very well"
+  },
+  {
+   "t": 627.88,
+   "d": 2.4,
+   "text": "because it was pretty complicated pretty"
+  },
+  {
+   "t": 630.28,
+   "d": 2.36,
+   "text": "complex. So, you didn't know what was"
+  },
+  {
+   "t": 632.64,
+   "d": 2.12,
+   "text": "going on. Um"
+  },
+  {
+   "t": 634.76,
+   "d": 2.24,
+   "text": "since it was to turn-based, so when you"
+  },
+  {
+   "t": 637.0,
+   "d": 2.48,
+   "text": "jump, you stand in the air. And then you"
+  },
+  {
+   "t": 639.48,
+   "d": 2.08,
+   "text": "pass your turn and you continue going up"
+  },
+  {
+   "t": 641.56,
+   "d": 1.84,
+   "text": "like another tile and then you fall back"
+  },
+  {
+   "t": 643.4,
+   "d": 2.44,
+   "text": "again. And then you can shoot with your"
+  },
+  {
+   "t": 645.84,
+   "d": 2.84,
+   "text": "arm cannon, but the the bullets don't"
+  },
+  {
+   "t": 648.68,
+   "d": 2.52,
+   "text": "immediately go. They are also objects in"
+  },
+  {
+   "t": 651.2,
+   "d": 2.28,
+   "text": "in the world. So, you have to keep track"
+  },
+  {
+   "t": 653.48,
+   "d": 1.4,
+   "text": "and try to hit your enemies like"
+  },
+  {
+   "t": 654.88,
+   "d": 2.68,
+   "text": "calculating when they're going to hit."
+  },
+  {
+   "t": 657.56,
+   "d": 3.84,
+   "text": "It was a I had the the idea to do it and"
+  },
+  {
+   "t": 661.4,
+   "d": 1.0,
+   "text": "uh"
+  },
+  {
+   "t": 662.4,
+   "d": 1.64,
+   "text": "that's the point of this one,"
+  },
+  {
+   "t": 664.04,
+   "d": 2.56,
+   "text": "experimenting with stuff, right?"
+  },
+  {
+   "t": 666.6,
+   "d": 1.44,
+   "text": "Sometimes you have an idea and you think"
+  },
+  {
+   "t": 668.04,
+   "d": 2.28,
+   "text": "it's great, but it ended not being that"
+  },
+  {
+   "t": 670.32,
+   "d": 4.16,
+   "text": "great like in the in reality. So,"
+  },
+  {
+   "t": 674.68,
+   "d": 2.28,
+   "text": "so yeah, ex- experimentation, I think"
+  },
+  {
+   "t": 676.96,
+   "d": 1.72,
+   "text": "it's also important, but again,"
+  },
+  {
+   "t": 678.68,
+   "d": 1.76,
+   "text": "experimenting in a small scale so you"
+  },
+  {
+   "t": 680.44,
+   "d": 3.04,
+   "text": "can All right, that was a failure"
+  },
+  {
+   "t": 683.48,
+   "d": 1.72,
+   "text": "complete failure. Let's move on and"
+  },
+  {
+   "t": 685.2,
+   "d": 2.76,
+   "text": "forget that it happened. So,"
+  },
+  {
+   "t": 687.96,
+   "d": 2.28,
+   "text": "yeah."
+  },
+  {
+   "t": 690.84,
+   "d": 3.16,
+   "text": "All right, 2009 expedition."
+  },
+  {
+   "t": 694.0,
+   "d": 3.28,
+   "text": "Um this one was based on Seven Cities of"
+  },
+  {
+   "t": 697.28,
+   "d": 2.04,
+   "text": "Gold and and colonization, which are"
+  },
+  {
+   "t": 699.32,
+   "d": 1.72,
+   "text": "like uh"
+  },
+  {
+   "t": 701.04,
+   "d": 2.32,
+   "text": "games about creating a colony in the new"
+  },
+  {
+   "t": 703.36,
+   "d": 1.12,
+   "text": "world."
+  },
+  {
+   "t": 704.48,
+   "d": 3.12,
+   "text": "Uh this one I really want That's This is"
+  },
+  {
+   "t": 707.6,
+   "d": 3.0,
+   "text": "also an idea that I had for a while."
+  },
+  {
+   "t": 710.6,
+   "d": 3.08,
+   "text": "Um I I decided to try to do it in the"
+  },
+  {
+   "t": 713.68,
+   "d": 1.76,
+   "text": "7-day Roguelike Challenge, and but it"
+  },
+  {
+   "t": 715.44,
+   "d": 2.32,
+   "text": "was huge, right? So,"
+  },
+  {
+   "t": 717.76,
+   "d": 1.6,
+   "text": "it was impossible to have it done by"
+  },
+  {
+   "t": 719.36,
+   "d": 1.2,
+   "text": "that time."
+  },
+  {
+   "t": 720.56,
+   "d": 1.92,
+   "text": "Um I didn't manage to implement the"
+  },
+  {
+   "t": 722.48,
+   "d": 1.8,
+   "text": "procedural generation, so we just had"
+  },
+  {
+   "t": 724.28,
+   "d": 1.64,
+   "text": "like a high-resolution map that you"
+  },
+  {
+   "t": 725.92,
+   "d": 1.4,
+   "text": "could uh"
+  },
+  {
+   "t": 727.32,
+   "d": 2.48,
+   "text": "travel around and and put the the"
+  },
+  {
+   "t": 729.8,
+   "d": 2.12,
+   "text": "settlements on."
+  },
+  {
+   "t": 731.92,
+   "d": 4.28,
+   "text": "Um so, another lesson lesson here was to"
+  },
+  {
+   "t": 736.2,
+   "d": 2.16,
+   "text": "watch out for the scope, right?"
+  },
+  {
+   "t": 738.36,
+   "d": 2.52,
+   "text": "Especially, I mean, if you're starting,"
+  },
+  {
+   "t": 740.88,
+   "d": 2.64,
+   "text": "you you you want to like go with small"
+  },
+  {
+   "t": 743.52,
+   "d": 2.76,
+   "text": "iterations."
+  },
+  {
+   "t": 746.52,
+   "d": 2.44,
+   "text": "2010 was Ruler."
+  },
+  {
+   "t": 748.96,
+   "d": 2.16,
+   "text": "It was similar to Expedition, but it was"
+  },
+  {
+   "t": 751.12,
+   "d": 2.4,
+   "text": "more like um"
+  },
+  {
+   "t": 753.52,
+   "d": 1.28,
+   "text": "the influence was more from"
+  },
+  {
+   "t": 754.8,
+   "d": 1.72,
+   "text": "Civilization, so you had like a"
+  },
+  {
+   "t": 756.52,
+   "d": 3.08,
+   "text": "civilization that you could um"
+  },
+  {
+   "t": 759.6,
+   "d": 1.96,
+   "text": "advance through the different ages and"
+  },
+  {
+   "t": 761.56,
+   "d": 2.64,
+   "text": "create more powerful units."
+  },
+  {
+   "t": 764.2,
+   "d": 2.12,
+   "text": "And the the lesson I got from this one"
+  },
+  {
+   "t": 766.32,
+   "d": 1.76,
+   "text": "was that I really I mean, you need to"
+  },
+  {
+   "t": 768.08,
+   "d": 2.64,
+   "text": "really invest into playtesting, right? I"
+  },
+  {
+   "t": 770.72,
+   "d": 2.2,
+   "text": "didn't get to playtest until the very"
+  },
+  {
+   "t": 772.92,
+   "d": 1.16,
+   "text": "last,"
+  },
+  {
+   "t": 774.08,
+   "d": 3.12,
+   "text": "and it ended up being completely broken,"
+  },
+  {
+   "t": 777.2,
+   "d": 2.48,
+   "text": "right? So, you could get into the space"
+  },
+  {
+   "t": 779.68,
+   "d": 3.48,
+   "text": "age very quickly, and then the game was"
+  },
+  {
+   "t": 783.16,
+   "d": 1.24,
+   "text": "broken."
+  },
+  {
+   "t": 784.4,
+   "d": 2.08,
+   "text": "So, I implemented a lot of"
+  },
+  {
+   "t": 786.48,
+   "d": 1.56,
+   "text": "infrastructure, right? Like,"
+  },
+  {
+   "t": 788.04,
+   "d": 1.52,
+   "text": "technically, you could like create"
+  },
+  {
+   "t": 789.56,
+   "d": 1.68,
+   "text": "cities, create roads between them,"
+  },
+  {
+   "t": 791.24,
+   "d": 3.28,
+   "text": "trade, do a lot of stuff, but the game"
+  },
+  {
+   "t": 794.52,
+   "d": 2.32,
+   "text": "itself, I mean, trying to play the game"
+  },
+  {
+   "t": 796.84,
+   "d": 2.76,
+   "text": "was completely broken. So,"
+  },
+  {
+   "t": 799.6,
+   "d": 2.12,
+   "text": "and you don't want to create that that,"
+  },
+  {
+   "t": 801.72,
+   "d": 1.56,
+   "text": "right? You want your game to be"
+  },
+  {
+   "t": 803.28,
+   "d": 1.8,
+   "text": "playable."
+  },
+  {
+   "t": 805.08,
+   "d": 2.28,
+   "text": "So, playtesting like having some friends"
+  },
+  {
+   "t": 807.36,
+   "d": 3.08,
+   "text": "help you play test your game. Now, well,"
+  },
+  {
+   "t": 810.44,
+   "d": 1.8,
+   "text": "we have internet, we have like a easier"
+  },
+  {
+   "t": 812.24,
+   "d": 2.28,
+   "text": "way to connect with people and have that"
+  },
+  {
+   "t": 814.52,
+   "d": 1.2,
+   "text": "happen."
+  },
+  {
+   "t": 815.72,
+   "d": 2.2,
+   "text": "Because, well, you want to make the best"
+  },
+  {
+   "t": 817.92,
+   "d": 2.24,
+   "text": "use of your time, right? And if you what"
+  },
+  {
+   "t": 820.16,
+   "d": 2.08,
+   "text": "you do is developing, then you really"
+  },
+  {
+   "t": 822.24,
+   "d": 3.8,
+   "text": "need someone to help you test."
+  },
+  {
+   "t": 826.6,
+   "d": 2.56,
+   "text": "2011"
+  },
+  {
+   "t": 829.16,
+   "d": 2.44,
+   "text": "2011, right?"
+  },
+  {
+   "t": 831.6,
+   "d": 2.64,
+   "text": "was Elite International Detective. This"
+  },
+  {
+   "t": 834.24,
+   "d": 2.32,
+   "text": "one was like influenced by Where in the"
+  },
+  {
+   "t": 836.56,
+   "d": 2.0,
+   "text": "World is Carmen Sandiego. So, it was"
+  },
+  {
+   "t": 838.56,
+   "d": 1.8,
+   "text": "supposed to be like a roguelike, but you"
+  },
+  {
+   "t": 840.36,
+   "d": 2.08,
+   "text": "were traveling the world and trying to"
+  },
+  {
+   "t": 842.44,
+   "d": 2.84,
+   "text": "find Carmen Sandiego, but you found like"
+  },
+  {
+   "t": 845.28,
+   "d": 0.56,
+   "text": "um"
+  },
+  {
+   "t": 845.84,
+   "d": 2.12,
+   "text": "detectives that were would shoot you"
+  },
+  {
+   "t": 847.96,
+   "d": 1.6,
+   "text": "down. So, you have guns and you have to"
+  },
+  {
+   "t": 849.56,
+   "d": 2.4,
+   "text": "kill them actually and try to find find"
+  },
+  {
+   "t": 851.96,
+   "d": 0.96,
+   "text": "her."
+  },
+  {
+   "t": 852.92,
+   "d": 1.28,
+   "text": "Um"
+  },
+  {
+   "t": 854.2,
+   "d": 2.44,
+   "text": "And this one what what was missing was"
+  },
+  {
+   "t": 856.64,
+   "d": 3.52,
+   "text": "quality content, right? So, all the all"
+  },
+  {
+   "t": 860.16,
+   "d": 1.8,
+   "text": "the engine was there."
+  },
+  {
+   "t": 861.96,
+   "d": 2.96,
+   "text": "Uh I managed to test it, right?"
+  },
+  {
+   "t": 864.92,
+   "d": 3.04,
+   "text": "Uh it worked, it was it was stable."
+  },
+  {
+   "t": 867.96,
+   "d": 3.48,
+   "text": "But, I didn't have in mind the quantity"
+  },
+  {
+   "t": 871.44,
+   "d": 2.0,
+   "text": "of content that was required to make"
+  },
+  {
+   "t": 873.44,
+   "d": 2.88,
+   "text": "this interesting. So, for example, in"
+  },
+  {
+   "t": 876.32,
+   "d": 1.96,
+   "text": "this one, well, I needed like a database"
+  },
+  {
+   "t": 878.28,
+   "d": 3.0,
+   "text": "of cities and countries and um like"
+  },
+  {
+   "t": 881.28,
+   "d": 1.64,
+   "text": "features from these countries so that it"
+  },
+  {
+   "t": 882.92,
+   "d": 1.6,
+   "text": "would be interesting like trying to find"
+  },
+  {
+   "t": 884.52,
+   "d": 2.12,
+   "text": "the clues to get to the next country and"
+  },
+  {
+   "t": 886.64,
+   "d": 1.92,
+   "text": "I didn't have that. Even though I had"
+  },
+  {
+   "t": 888.56,
+   "d": 2.64,
+   "text": "someone uh try to help me."
+  },
+  {
+   "t": 891.2,
+   "d": 3.12,
+   "text": "So, it it didn't happen. So, in the end,"
+  },
+  {
+   "t": 894.32,
+   "d": 1.76,
+   "text": "the experience that people had was not"
+  },
+  {
+   "t": 896.08,
+   "d": 1.96,
+   "text": "very good."
+  },
+  {
+   "t": 898.04,
+   "d": 4.08,
+   "text": "2012 was Hope."
+  },
+  {
+   "t": 902.36,
+   "d": 2.32,
+   "text": "I tried As you can see, all of the all"
+  },
+  {
+   "t": 904.68,
+   "d": 3.16,
+   "text": "of the the previous one were console"
+  },
+  {
+   "t": 907.84,
+   "d": 2.4,
+   "text": "mode, right? So, only characters. So,"
+  },
+  {
+   "t": 910.24,
+   "d": 1.68,
+   "text": "for the first time I tried doing doing"
+  },
+  {
+   "t": 911.92,
+   "d": 1.28,
+   "text": "graphics."
+  },
+  {
+   "t": 913.2,
+   "d": 3.24,
+   "text": "But, I didn't have I I am not a pixel"
+  },
+  {
+   "t": 916.44,
+   "d": 3.0,
+   "text": "artist and I did not have a like a good"
+  },
+  {
+   "t": 919.44,
+   "d": 2.36,
+   "text": "pixel artist. Um"
+  },
+  {
+   "t": 921.8,
+   "d": 1.24,
+   "text": "So,"
+  },
+  {
+   "t": 923.04,
+   "d": 2.04,
+   "text": "yeah, you need to have like so much"
+  },
+  {
+   "t": 925.08,
+   "d": 2.76,
+   "text": "skill because else it didn't end pretty"
+  },
+  {
+   "t": 927.84,
+   "d": 0.92,
+   "text": "well."
+  },
+  {
+   "t": 928.76,
+   "d": 0.72,
+   "text": "Uh"
+  },
+  {
+   "t": 929.48,
+   "d": 2.28,
+   "text": "it was not very aesthetically pleasing,"
+  },
+  {
+   "t": 931.76,
+   "d": 2.24,
+   "text": "right? And if you're going for graphics,"
+  },
+  {
+   "t": 934.0,
+   "d": 2.24,
+   "text": "you need it to be pleasing. I think so"
+  },
+  {
+   "t": 936.24,
+   "d": 3.6,
+   "text": "because if you're doing just um like"
+  },
+  {
+   "t": 939.84,
+   "d": 3.28,
+   "text": "console mode, well, we know that what"
+  },
+  {
+   "t": 943.12,
+   "d": 1.96,
+   "text": "kind of players will will play, right?"
+  },
+  {
+   "t": 945.08,
+   "d": 1.88,
+   "text": "And they they they have the imagination"
+  },
+  {
+   "t": 946.96,
+   "d": 1.6,
+   "text": "to think what's going on and to fill the"
+  },
+  {
+   "t": 948.56,
+   "d": 1.04,
+   "text": "gaps."
+  },
+  {
+   "t": 949.6,
+   "d": 1.6,
+   "text": "But if you're going for graphics, you're"
+  },
+  {
+   "t": 951.2,
+   "d": 2.36,
+   "text": "targeting a much larger audience and"
+  },
+  {
+   "t": 953.56,
+   "d": 1.88,
+   "text": "they have different expectations. So,"
+  },
+  {
+   "t": 955.44,
+   "d": 1.56,
+   "text": "they expect"
+  },
+  {
+   "t": 957.0,
+   "d": 2.16,
+   "text": "to be more clear what's going on."
+  },
+  {
+   "t": 959.16,
+   "d": 2.2,
+   "text": "Um so, there's no I mean, going for a"
+  },
+  {
+   "t": 961.36,
+   "d": 2.24,
+   "text": "middle ground is not going to be"
+  },
+  {
+   "t": 963.6,
+   "d": 4.0,
+   "text": "pleasing anyone. So, yeah."
+  },
+  {
+   "t": 967.6,
+   "d": 2.24,
+   "text": "All right. So,"
+  },
+  {
+   "t": 969.84,
+   "d": 3.84,
+   "text": "up to this time I had I had used Java."
+  },
+  {
+   "t": 973.68,
+   "d": 1.52,
+   "text": "And"
+  },
+  {
+   "t": 975.2,
+   "d": 2.32,
+   "text": "I have not had like a lot of exposure"
+  },
+  {
+   "t": 977.52,
+   "d": 1.88,
+   "text": "because it was hard for people to run"
+  },
+  {
+   "t": 979.4,
+   "d": 3.56,
+   "text": "the games. So, in 2013, I got I started"
+  },
+  {
+   "t": 982.96,
+   "d": 2.24,
+   "text": "doing JavaScript games. This one was the"
+  },
+  {
+   "t": 985.2,
+   "d": 1.04,
+   "text": "first."
+  },
+  {
+   "t": 986.24,
+   "d": 1.72,
+   "text": "Name was Rodney."
+  },
+  {
+   "t": 987.96,
+   "d": 1.96,
+   "text": "So,"
+  },
+  {
+   "t": 989.92,
+   "d": 2.08,
+   "text": "the lesson here was like, yeah, I had to"
+  },
+  {
+   "t": 992.0,
+   "d": 3.0,
+   "text": "close that cycle because really, I mean,"
+  },
+  {
+   "t": 995.0,
+   "d": 1.64,
+   "text": "I had learned a lot and everything I"
+  },
+  {
+   "t": 996.64,
+   "d": 3.28,
+   "text": "learned was very useful for me for my"
+  },
+  {
+   "t": 999.92,
+   "d": 2.48,
+   "text": "uh professional life, right? Everything."
+  },
+  {
+   "t": 1002.4,
+   "d": 2.08,
+   "text": "But really that wasn't working for"
+  },
+  {
+   "t": 1004.48,
+   "d": 2.8,
+   "text": "games. So, I closed that cycle and"
+  },
+  {
+   "t": 1007.28,
+   "d": 1.92,
+   "text": "decided to change things."
+  },
+  {
+   "t": 1009.2,
+   "d": 2.24,
+   "text": "And actually in Rodney, the the bosses"
+  },
+  {
+   "t": 1011.44,
+   "d": 3.08,
+   "text": "of the dungeon are Glenn,"
+  },
+  {
+   "t": 1014.52,
+   "d": 1.2,
+   "text": "Ken,"
+  },
+  {
+   "t": 1015.72,
+   "d": 3.72,
+   "text": "and also Michael, who's who's not here."
+  },
+  {
+   "t": 1019.44,
+   "d": 1.52,
+   "text": "So, if you can go all the way down to"
+  },
+  {
+   "t": 1020.96,
+   "d": 1.6,
+   "text": "the dungeon, you can you have to kill"
+  },
+  {
+   "t": 1022.56,
+   "d": 3.72,
+   "text": "them to win. So, good luck."
+  },
+  {
+   "t": 1027.36,
+   "d": 2.48,
+   "text": "Um other things that I included in this"
+  },
+  {
+   "t": 1029.84,
+   "d": 2.4,
+   "text": "one was a single action button. So, they"
+  },
+  {
+   "t": 1032.24,
+   "d": 1.48,
+   "text": "there are no commands. You just move"
+  },
+  {
+   "t": 1033.72,
+   "d": 2.28,
+   "text": "around and use a single action button."
+  },
+  {
+   "t": 1036.0,
+   "d": 2.36,
+   "text": "And it's all based on the skills. So,"
+  },
+  {
+   "t": 1038.36,
+   "d": 2.48,
+   "text": "for example, moving around you trigger"
+  },
+  {
+   "t": 1040.84,
+   "d": 2.48,
+   "text": "the skills. If you have the wall jump"
+  },
+  {
+   "t": 1043.32,
+   "d": 2.6,
+   "text": "skill, you just run into a wall and then"
+  },
+  {
+   "t": 1045.92,
+   "d": 2.64,
+   "text": "it gets triggered when you actually run"
+  },
+  {
+   "t": 1048.56,
+   "d": 4.04,
+   "text": "into it. Yeah, so that was That was also"
+  },
+  {
+   "t": 1052.6,
+   "d": 1.64,
+   "text": "uh an important thing there, the"
+  },
+  {
+   "t": 1054.24,
+   "d": 2.56,
+   "text": "recapitulation simplification. So, I"
+  },
+  {
+   "t": 1056.8,
+   "d": 2.12,
+   "text": "just went through like all my previous"
+  },
+  {
+   "t": 1058.92,
+   "d": 3.68,
+   "text": "games or game efforts and and try to see"
+  },
+  {
+   "t": 1062.6,
+   "d": 2.92,
+   "text": "Okay, so let's see what's good in these"
+  },
+  {
+   "t": 1065.52,
+   "d": 2.32,
+   "text": "and let's try to get some features from"
+  },
+  {
+   "t": 1067.84,
+   "d": 2.56,
+   "text": "there that that work, simplify them and"
+  },
+  {
+   "t": 1070.4,
+   "d": 2.12,
+   "text": "bring them into something new. So,"
+  },
+  {
+   "t": 1072.52,
+   "d": 1.6,
+   "text": "that's what I did."
+  },
+  {
+   "t": 1074.12,
+   "d": 1.4,
+   "text": "Another important point here is"
+  },
+  {
+   "t": 1075.52,
+   "d": 2.6,
+   "text": "accessibility."
+  },
+  {
+   "t": 1078.12,
+   "d": 1.92,
+   "text": "Again, the my previous game were not"
+  },
+  {
+   "t": 1080.04,
+   "d": 2.44,
+   "text": "very accessible and I think that's a"
+  },
+  {
+   "t": 1082.48,
+   "d": 2.24,
+   "text": "goal that I put myself like make my"
+  },
+  {
+   "t": 1084.72,
+   "d": 2.8,
+   "text": "following games accessible."
+  },
+  {
+   "t": 1087.52,
+   "d": 3.0,
+   "text": "2014 was Ananias the Seven Day Roguelike"
+  },
+  {
+   "t": 1090.52,
+   "d": 2.8,
+   "text": "version. It was made for touch devices."
+  },
+  {
+   "t": 1093.32,
+   "d": 2.64,
+   "text": "Um"
+  },
+  {
+   "t": 1096.48,
+   "d": 0.84,
+   "text": "Yeah,"
+  },
+  {
+   "t": 1097.32,
+   "d": 3.4,
+   "text": "it was like my first mobile game. Um"
+  },
+  {
+   "t": 1100.72,
+   "d": 1.72,
+   "text": "And it was also the first time that I"
+  },
+  {
+   "t": 1102.44,
+   "d": 2.52,
+   "text": "decided to use a library instead of like"
+  },
+  {
+   "t": 1104.96,
+   "d": 1.84,
+   "text": "trying to do some everything from"
+  },
+  {
+   "t": 1106.8,
+   "d": 1.32,
+   "text": "scratch."
+  },
+  {
+   "t": 1108.12,
+   "d": 3.12,
+   "text": "So, I think the lesson for this one was"
+  },
+  {
+   "t": 1111.24,
+   "d": 2.52,
+   "text": "like creating a an experience"
+  },
+  {
+   "t": 1113.76,
+   "d": 3.96,
+   "text": "target to a specific platform, right?"
+  },
+  {
+   "t": 1117.72,
+   "d": 2.24,
+   "text": "Basically, I I did it because there were"
+  },
+  {
+   "t": 1119.96,
+   "d": 2.56,
+   "text": "no good mobile games mobile Roguelikes."
+  },
+  {
+   "t": 1122.52,
+   "d": 1.56,
+   "text": "I don't know if"
+  },
+  {
+   "t": 1124.08,
+   "d": 2.8,
+   "text": "if any of you has a develop a mobile"
+  },
+  {
+   "t": 1126.88,
+   "d": 2.04,
+   "text": "Roguelike, but it's very different than"
+  },
+  {
+   "t": 1128.92,
+   "d": 2.32,
+   "text": "than doing a a Roguelike for desktop,"
+  },
+  {
+   "t": 1131.24,
+   "d": 1.2,
+   "text": "right?"
+  },
+  {
+   "t": 1132.44,
+   "d": 3.36,
+   "text": "So, the ports we had for Roguelikes um"
+  },
+  {
+   "t": 1135.8,
+   "d": 1.68,
+   "text": "were very difficult to play because you"
+  },
+  {
+   "t": 1137.48,
+   "d": 2.48,
+   "text": "had a lot of commands. It was not made"
+  },
+  {
+   "t": 1139.96,
+   "d": 1.88,
+   "text": "for that. I'm going to just move this"
+  },
+  {
+   "t": 1141.84,
+   "d": 2.04,
+   "text": "here."
+  },
+  {
+   "t": 1143.88,
+   "d": 1.88,
+   "text": "So,"
+  },
+  {
+   "t": 1145.76,
+   "d": 2.36,
+   "text": "yeah, I found that that that was like"
+  },
+  {
+   "t": 1148.12,
+   "d": 1.76,
+   "text": "something that needed to be done better"
+  },
+  {
+   "t": 1149.88,
+   "d": 3.08,
+   "text": "and went for it."
+  },
+  {
+   "t": 1152.96,
+   "d": 2.96,
+   "text": "2015 Fusion Abyss, so"
+  },
+  {
+   "t": 1155.92,
+   "d": 2.04,
+   "text": "first time I teamed with someone to to"
+  },
+  {
+   "t": 1157.96,
+   "d": 2.04,
+   "text": "do the 7-day Roguelike Challenge. He"
+  },
+  {
+   "t": 1160.0,
+   "d": 3.16,
+   "text": "basically did all the 3D display code."
+  },
+  {
+   "t": 1163.16,
+   "d": 2.52,
+   "text": "It was a 3D dungeon crawler."
+  },
+  {
+   "t": 1165.68,
+   "d": 1.8,
+   "text": "Um"
+  },
+  {
+   "t": 1167.48,
+   "d": 2.72,
+   "text": "and I did the the dungeon generation,"
+  },
+  {
+   "t": 1170.2,
+   "d": 2.12,
+   "text": "which was based on Ultima Underworld, so"
+  },
+  {
+   "t": 1172.32,
+   "d": 2.04,
+   "text": "it generates levels like similar to"
+  },
+  {
+   "t": 1174.36,
+   "d": 1.72,
+   "text": "Ultima Underworld."
+  },
+  {
+   "t": 1176.08,
+   "d": 1.6,
+   "text": "Uh we had a hard time getting the"
+  },
+  {
+   "t": 1177.68,
+   "d": 2.84,
+   "text": "graphics. So, you can get an artist on"
+  },
+  {
+   "t": 1180.52,
+   "d": 1.96,
+   "text": "board, you you will be in much better"
+  },
+  {
+   "t": 1182.48,
+   "d": 1.24,
+   "text": "shape."
+  },
+  {
+   "t": 1183.72,
+   "d": 1.96,
+   "text": "And I really had a lot of fun doing the"
+  },
+  {
+   "t": 1185.68,
+   "d": 2.0,
+   "text": "procedural generator, so I think one"
+  },
+  {
+   "t": 1187.68,
+   "d": 2.12,
+   "text": "thing here is like focusing on what you"
+  },
+  {
+   "t": 1189.8,
+   "d": 1.96,
+   "text": "can really provide the most value,"
+  },
+  {
+   "t": 1191.76,
+   "d": 2.0,
+   "text": "right? So, teaming up with someone with"
+  },
+  {
+   "t": 1193.76,
+   "d": 2.2,
+   "text": "someone getting an artist, having"
+  },
+  {
+   "t": 1195.96,
+   "d": 2.4,
+   "text": "someone working the display code."
+  },
+  {
+   "t": 1198.36,
+   "d": 2.0,
+   "text": "You can work in a different component of"
+  },
+  {
+   "t": 1200.36,
+   "d": 1.68,
+   "text": "the game."
+  },
+  {
+   "t": 1202.04,
+   "d": 1.4,
+   "text": "Uh"
+  },
+  {
+   "t": 1203.44,
+   "d": 3.04,
+   "text": "It ended up pretty pretty well, but um"
+  },
+  {
+   "t": 1206.48,
+   "d": 2.8,
+   "text": "again, it was not very fun."
+  },
+  {
+   "t": 1209.28,
+   "d": 2.0,
+   "text": "It was fancy because I mean, I don't"
+  },
+  {
+   "t": 1211.28,
+   "d": 1.56,
+   "text": "know if any of you has played Ultima"
+  },
+  {
+   "t": 1212.84,
+   "d": 1.72,
+   "text": "Underworld."
+  },
+  {
+   "t": 1214.56,
+   "d": 1.16,
+   "text": "So,"
+  },
+  {
+   "t": 1215.72,
+   "d": 1.96,
+   "text": "yeah, that game was like a very"
+  },
+  {
+   "t": 1217.68,
+   "d": 2.48,
+   "text": "important for me and it creates levels"
+  },
+  {
+   "t": 1220.16,
+   "d": 2.4,
+   "text": "like Ultima Underworld. But yeah, so"
+  },
+  {
+   "t": 1222.56,
+   "d": 1.52,
+   "text": "they are empty because you don't have a"
+  },
+  {
+   "t": 1224.08,
+   "d": 2.8,
+   "text": "plot and what you have to do in the game"
+  },
+  {
+   "t": 1226.88,
+   "d": 2.96,
+   "text": "is like explore these huge levels and"
+  },
+  {
+   "t": 1229.84,
+   "d": 1.48,
+   "text": "try to find a"
+  },
+  {
+   "t": 1231.32,
+   "d": 2.28,
+   "text": "single tile, which is the stairway to"
+  },
+  {
+   "t": 1233.6,
+   "d": 1.44,
+   "text": "the next level."
+  },
+  {
+   "t": 1235.04,
+   "d": 2.08,
+   "text": "And you can easily get lost."
+  },
+  {
+   "t": 1237.12,
+   "d": 2.04,
+   "text": "So, I also stuck to"
+  },
+  {
+   "t": 1239.16,
+   "d": 2.28,
+   "text": "I had like this idea that getting lost"
+  },
+  {
+   "t": 1241.44,
+   "d": 3.12,
+   "text": "is good, right? And that players should"
+  },
+  {
+   "t": 1244.56,
+   "d": 1.64,
+   "text": "not complain about it, but rather try"
+  },
+  {
+   "t": 1246.2,
+   "d": 3.24,
+   "text": "not to. So, for example, people"
+  },
+  {
+   "t": 1249.44,
+   "d": 2.36,
+   "text": "suggested that I add in an an automap,"
+  },
+  {
+   "t": 1251.8,
+   "d": 2.76,
+   "text": "right? And I say no."
+  },
+  {
+   "t": 1254.56,
+   "d": 2.2,
+   "text": "I don't want to I will not do that"
+  },
+  {
+   "t": 1256.76,
+   "d": 2.2,
+   "text": "because that will break what I want like"
+  },
+  {
+   "t": 1258.96,
+   "d": 2.56,
+   "text": "like my vision for the game. But"
+  },
+  {
+   "t": 1261.52,
+   "d": 2.04,
+   "text": "it made the game like unplayable, right?"
+  },
+  {
+   "t": 1263.56,
+   "d": 2.44,
+   "text": "Because yeah, no one will like wander"
+  },
+  {
+   "t": 1266.0,
+   "d": 2.76,
+   "text": "around for 2 hours in a single level"
+  },
+  {
+   "t": 1268.76,
+   "d": 2.08,
+   "text": "looking for a tile."
+  },
+  {
+   "t": 1270.84,
+   "d": 2.28,
+   "text": "Right? Like a small tile. And also the"
+  },
+  {
+   "t": 1273.12,
+   "d": 1.84,
+   "text": "dungeon is dark."
+  },
+  {
+   "t": 1274.96,
+   "d": 1.52,
+   "text": "So"
+  },
+  {
+   "t": 1276.48,
+   "d": 1.12,
+   "text": "So yeah,"
+  },
+  {
+   "t": 1277.6,
+   "d": 2.0,
+   "text": "you got to listen sometimes to to people"
+  },
+  {
+   "t": 1279.6,
+   "d": 1.68,
+   "text": "if you want to make a game that someone"
+  },
+  {
+   "t": 1281.28,
+   "d": 2.04,
+   "text": "else will play. I mean, I I play it and"
+  },
+  {
+   "t": 1283.32,
+   "d": 3.2,
+   "text": "I I have the patience to go through. But"
+  },
+  {
+   "t": 1286.52,
+   "d": 2.52,
+   "text": "most people won't do that."
+  },
+  {
+   "t": 1289.04,
+   "d": 2.32,
+   "text": "Um finally this year I made this one."
+  },
+  {
+   "t": 1291.36,
+   "d": 3.28,
+   "text": "It's made for smartwatches. So"
+  },
+  {
+   "t": 1294.64,
+   "d": 1.92,
+   "text": "yeah, exploring new medias and new"
+  },
+  {
+   "t": 1296.56,
+   "d": 1.24,
+   "text": "technologies."
+  },
+  {
+   "t": 1297.8,
+   "d": 2.44,
+   "text": "I was thinking on either doing that or"
+  },
+  {
+   "t": 1300.24,
+   "d": 2.56,
+   "text": "virtual reality, but I didn't know."
+  },
+  {
+   "t": 1302.8,
+   "d": 1.76,
+   "text": "Didn't have like the"
+  },
+  {
+   "t": 1304.56,
+   "d": 3.56,
+   "text": "technological stuff to do the VR. So"
+  },
+  {
+   "t": 1308.12,
+   "d": 1.96,
+   "text": "it's a simple game that you can play in"
+  },
+  {
+   "t": 1310.08,
+   "d": 3.0,
+   "text": "your smartwatch. It's like a very"
+  },
+  {
+   "t": 1313.08,
+   "d": 1.52,
+   "text": "simplified"
+  },
+  {
+   "t": 1314.6,
+   "d": 2.4,
+   "text": "uh version of the roguelike formula."
+  },
+  {
+   "t": 1317.0,
+   "d": 1.24,
+   "text": "But it works well. I mean, if you're"
+  },
+  {
+   "t": 1318.24,
+   "d": 1.56,
+   "text": "waiting for your bus or some or"
+  },
+  {
+   "t": 1319.8,
+   "d": 1.88,
+   "text": "something, you can just try to get as"
+  },
+  {
+   "t": 1321.68,
+   "d": 1.4,
+   "text": "far as you can"
+  },
+  {
+   "t": 1323.08,
+   "d": 3.76,
+   "text": "in your in the tower."
+  },
+  {
+   "t": 1326.84,
+   "d": 2.6,
+   "text": "So yeah, this that's like the story. I"
+  },
+  {
+   "t": 1329.44,
+   "d": 2.08,
+   "text": "think I'm running out of time. Finally"
+  },
+  {
+   "t": 1331.52,
+   "d": 1.84,
+   "text": "for the future uh"
+  },
+  {
+   "t": 1333.36,
+   "d": 2.72,
+   "text": "Ananias is what I'm working on. So I"
+  },
+  {
+   "t": 1336.08,
+   "d": 2.32,
+   "text": "worked this from 2014."
+  },
+  {
+   "t": 1338.4,
+   "d": 3.24,
+   "text": "And I am almost ready to hit Steam."
+  },
+  {
+   "t": 1341.64,
+   "d": 2.28,
+   "text": "So I think the most important lesson is"
+  },
+  {
+   "t": 1343.92,
+   "d": 2.88,
+   "text": "like um going I mean"
+  },
+  {
+   "t": 1346.8,
+   "d": 1.6,
+   "text": "being able to"
+  },
+  {
+   "t": 1348.4,
+   "d": 0.68,
+   "text": "um"
+  },
+  {
+   "t": 1349.08,
+   "d": 2.4,
+   "text": "stand in one point of time and looking"
+  },
+  {
+   "t": 1351.48,
+   "d": 2.0,
+   "text": "back and seeing okay, so I've done all"
+  },
+  {
+   "t": 1353.48,
+   "d": 2.44,
+   "text": "this. I will take all the lessons I have"
+  },
+  {
+   "t": 1355.92,
+   "d": 2.64,
+   "text": "learned and I will apply them to my new"
+  },
+  {
+   "t": 1358.56,
+   "d": 2.56,
+   "text": "projects instead of like keeping like"
+  },
+  {
+   "t": 1361.12,
+   "d": 2.12,
+   "text": "doing the same again again because it's"
+  },
+  {
+   "t": 1363.24,
+   "d": 2.76,
+   "text": "very easy I think to to fall into the"
+  },
+  {
+   "t": 1366.0,
+   "d": 2.72,
+   "text": "trap of never releasing and keeping"
+  },
+  {
+   "t": 1368.72,
+   "d": 2.4,
+   "text": "working on on your game."
+  },
+  {
+   "t": 1371.12,
+   "d": 1.36,
+   "text": "Um"
+  },
+  {
+   "t": 1372.48,
+   "d": 2.96,
+   "text": "So yeah, you're welcome to keep in touch"
+  },
+  {
+   "t": 1375.44,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 1376.56,
+   "d": 2.2,
+   "text": "uh Ananias is already available. So you"
+  },
+  {
+   "t": 1378.76,
+   "d": 2.92,
+   "text": "can download it for for Android and iOS."
+  },
+  {
+   "t": 1381.68,
+   "d": 2.48,
+   "text": "Uh not not iOS yet, but soon."
+  },
+  {
+   "t": 1384.16,
+   "d": 2.16,
+   "text": "But you can download for Android and"
+  },
+  {
+   "t": 1386.32,
+   "d": 1.32,
+   "text": "desktop."
+  },
+  {
+   "t": 1387.64,
+   "d": 3.2,
+   "text": "And we'll be releasing soon in uh"
+  },
+  {
+   "t": 1390.84,
+   "d": 2.16,
+   "text": "in Steam. So, that's the idea to do it"
+  },
+  {
+   "t": 1393.0,
+   "d": 1.48,
+   "text": "the next month."
+  },
+  {
+   "t": 1394.48,
+   "d": 1.84,
+   "text": "It's a roguelike that keeps the spirit"
+  },
+  {
+   "t": 1396.32,
+   "d": 2.12,
+   "text": "of the classic roguelike. So, it's"
+  },
+  {
+   "t": 1398.44,
+   "d": 2.52,
+   "text": "turn-based, permanent"
+  },
+  {
+   "t": 1400.96,
+   "d": 2.44,
+   "text": "What What's the new name?"
+  },
+  {
+   "t": 1403.4,
+   "d": 3.32,
+   "text": "Consequence persistence."
+  },
+  {
+   "t": 1406.72,
+   "d": 2.4,
+   "text": "Fully certified by the by the by the"
+  },
+  {
+   "t": 1409.12,
+   "d": 2.04,
+   "text": "original developers of Brogue."
+  },
+  {
+   "t": 1411.16,
+   "d": 2.76,
+   "text": "Um"
+  },
+  {
+   "t": 1414.0,
+   "d": 1.4,
+   "text": "So, yeah."
+  },
+  {
+   "t": 1415.4,
+   "d": 0.64,
+   "text": "Uh"
+  },
+  {
+   "t": 1416.04,
+   "d": 2.08,
+   "text": "that's what I wanted to share. I don't"
+  },
+  {
+   "t": 1418.12,
+   "d": 3.08,
+   "text": "know if you have any questions."
+  },
+  {
+   "t": 1421.2,
+   "d": 0.84,
+   "text": "Um"
+  },
+  {
+   "t": 1422.04,
+   "d": 1.48,
+   "text": "so,"
+  },
+  {
+   "t": 1423.52,
+   "d": 2.48,
+   "text": "after 13 times of"
+  },
+  {
+   "t": 1426.0,
+   "d": 1.8,
+   "text": "having a development cycle that lasts 7"
+  },
+  {
+   "t": 1427.8,
+   "d": 0.84,
+   "text": "days,"
+  },
+  {
+   "t": 1428.64,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 1429.52,
+   "d": 2.28,
+   "text": "how do you feel like you should divide"
+  },
+  {
+   "t": 1431.8,
+   "d": 2.36,
+   "text": "up the 7 days? How much time in design,"
+  },
+  {
+   "t": 1434.16,
+   "d": 0.72,
+   "text": "development,"
+  },
+  {
+   "t": 1434.88,
+   "d": 0.64,
+   "text": "Mhm."
+  },
+  {
+   "t": 1435.52,
+   "d": 0.8,
+   "text": "playtesting?"
+  },
+  {
+   "t": 1436.32,
+   "d": 1.04,
+   "text": "Okay."
+  },
+  {
+   "t": 1437.36,
+   "d": 1.64,
+   "text": "So, can you elaborate"
+  },
+  {
+   "t": 1439.0,
+   "d": 1.24,
+   "text": "Uh yeah, so"
+  },
+  {
+   "t": 1440.24,
+   "d": 2.36,
+   "text": "So, after this whole uh participation on"
+  },
+  {
+   "t": 1442.6,
+   "d": 1.72,
+   "text": "the 7-day roguelike challenge, how do I"
+  },
+  {
+   "t": 1444.32,
+   "d": 2.2,
+   "text": "think that I should split like those 7"
+  },
+  {
+   "t": 1446.52,
+   "d": 2.72,
+   "text": "days into the different uh"
+  },
+  {
+   "t": 1449.24,
+   "d": 2.52,
+   "text": "kinds of tasks for for to release"
+  },
+  {
+   "t": 1451.76,
+   "d": 2.68,
+   "text": "something that is good. I think uh it's"
+  },
+  {
+   "t": 1454.44,
+   "d": 2.16,
+   "text": "important to have time for playtesting."
+  },
+  {
+   "t": 1456.6,
+   "d": 2.8,
+   "text": "So, that Usually I keep like the last"
+  },
+  {
+   "t": 1459.4,
+   "d": 2.56,
+   "text": "day for that, like to do playtesting"
+  },
+  {
+   "t": 1461.96,
+   "d": 2.16,
+   "text": "playtesting, excuse me."
+  },
+  {
+   "t": 1464.12,
+   "d": 2.12,
+   "text": "And doing any tweaks that are needed."
+  },
+  {
+   "t": 1466.24,
+   "d": 2.16,
+   "text": "You need at least 2 days for data,"
+  },
+  {
+   "t": 1468.4,
+   "d": 2.36,
+   "text": "right? Like to put interesting data,"
+  },
+  {
+   "t": 1470.76,
+   "d": 4.68,
+   "text": "monster data, items, uh quests. So, so"
+  },
+  {
+   "t": 1475.44,
+   "d": 2.48,
+   "text": "that is going to be like an important uh"
+  },
+  {
+   "t": 1477.92,
+   "d": 3.08,
+   "text": "like a fun game. And yeah, I mean, it's"
+  },
+  {
+   "t": 1481.0,
+   "d": 3.04,
+   "text": "a very short span of time. So, the rest"
+  },
+  {
+   "t": 1484.04,
+   "d": 2.76,
+   "text": "of the time you have to to to be coding."
+  },
+  {
+   "t": 1486.8,
+   "d": 1.88,
+   "text": "Um"
+  },
+  {
+   "t": 1488.68,
+   "d": 2.2,
+   "text": "Most I mean, especially for the first"
+  },
+  {
+   "t": 1490.88,
+   "d": 2.12,
+   "text": "time that you participate, the result is"
+  },
+  {
+   "t": 1493.0,
+   "d": 2.0,
+   "text": "not going to be very good. But the"
+  },
+  {
+   "t": 1495.0,
+   "d": 3.32,
+   "text": "important part is the experience of like"
+  },
+  {
+   "t": 1498.32,
+   "d": 1.92,
+   "text": "having this compressed"
+  },
+  {
+   "t": 1500.24,
+   "d": 2.04,
+   "text": "uh development cycle because developing"
+  },
+  {
+   "t": 1502.28,
+   "d": 2.44,
+   "text": "a game normally takes much longer,"
+  },
+  {
+   "t": 1504.72,
+   "d": 1.44,
+   "text": "right? But you are compressing"
+  },
+  {
+   "t": 1506.16,
+   "d": 3.96,
+   "text": "everything into 7 days, so you can uh"
+  },
+  {
+   "t": 1510.12,
+   "d": 1.88,
+   "text": "have the experience of having developing"
+  },
+  {
+   "t": 1512.0,
+   "d": 3.08,
+   "text": "a a whole game forgetting that moving"
+  },
+  {
+   "t": 1515.08,
+   "d": 3.4,
+   "text": "moving on to the next. So, you can like"
+  },
+  {
+   "t": 1518.48,
+   "d": 4.08,
+   "text": "gain those skills more quickly."
+  },
+  {
+   "t": 1523.04,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1524.04,
+   "d": 1.6,
+   "text": "So, when you do this stuff, do you look"
+  },
+  {
+   "t": 1525.64,
+   "d": 2.88,
+   "text": "back at the end of the year"
+  },
+  {
+   "t": 1529.4,
+   "d": 1.36,
+   "text": "Do you have a structure for the way that"
+  },
+  {
+   "t": 1530.76,
+   "d": 0.88,
+   "text": "you"
+  },
+  {
+   "t": 1531.64,
+   "d": 1.52,
+   "text": "distill"
+  },
+  {
+   "t": 1533.16,
+   "d": 1.64,
+   "text": "like what the good parts of it and what"
+  },
+  {
+   "t": 1534.8,
+   "d": 1.52,
+   "text": "you might have used or like do you just"
+  },
+  {
+   "t": 1536.32,
+   "d": 1.2,
+   "text": "kind of completely ignore the game"
+  },
+  {
+   "t": 1537.52,
+   "d": 1.24,
+   "text": "technology?"
+  },
+  {
+   "t": 1538.76,
+   "d": 2.56,
+   "text": "Well, I I think the the important point"
+  },
+  {
+   "t": 1541.32,
+   "d": 1.44,
+   "text": "there is listening to what people"
+  },
+  {
+   "t": 1542.76,
+   "d": 2.8,
+   "text": "thinks, right? So, that's like uh my"
+  },
+  {
+   "t": 1545.56,
+   "d": 2.92,
+   "text": "main uh source of finding out what"
+  },
+  {
+   "t": 1548.48,
+   "d": 2.2,
+   "text": "worked and what didn't work. Uh the"
+  },
+  {
+   "t": 1550.68,
+   "d": 2.32,
+   "text": "feedback that I got from the players."
+  },
+  {
+   "t": 1553.0,
+   "d": 2.16,
+   "text": "And that's also an important part of the"
+  },
+  {
+   "t": 1555.16,
+   "d": 2.44,
+   "text": "7DRL is that you get a lot of feedback,"
+  },
+  {
+   "t": 1557.6,
+   "d": 2.32,
+   "text": "especially in recent years like"
+  },
+  {
+   "t": 1559.92,
+   "d": 2.2,
+   "text": "about 40 years um"
+  },
+  {
+   "t": 1562.12,
+   "d": 2.24,
+   "text": "the last 4 years, we have had a lot of"
+  },
+  {
+   "t": 1564.36,
+   "d": 2.4,
+   "text": "exposure. So, there's been like I don't"
+  },
+  {
+   "t": 1566.76,
+   "d": 3.88,
+   "text": "know about 200 and more entries. And"
+  },
+  {
+   "t": 1570.64,
+   "d": 1.8,
+   "text": "there's a lot of people like looking"
+  },
+  {
+   "t": 1572.44,
+   "d": 2.32,
+   "text": "into your games. So, that helps you like"
+  },
+  {
+   "t": 1574.76,
+   "d": 1.48,
+   "text": "get the feedback and I think that's like"
+  },
+  {
+   "t": 1576.24,
+   "d": 3.32,
+   "text": "the most important metric."
+  },
+  {
+   "t": 1580.24,
+   "d": 3.44,
+   "text": "All right. Thank you."
+  }
+ ]
+}

@@ -1,0 +1,219 @@
+{
+  "id": "NjIduRLJL7U",
+  "title": "Sersa Victory and Joris Dormans - “Unfolding” Traps: Extending Hazards Across Time and Space",
+  "speaker": "Sersa Victory and Joris Dormans",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=NjIduRLJL7U",
+  "talk_type": "design",
+  "summary": "Tabletop trap designer Sersa Victory and Unexplored/Bane developer Joris Dormans present a pattern language for 'unfolding' traps so that hazards become as meaningful as combat. Victory explains why traps are usually one-and-done damage taxes, proposes six player behaviours as a theory of quality, and groups patterns into those unfolding across time, across space and through consequences, illustrated by transforming a simple acid-spraying statue trap. Dormans explains implementation: graph-based, multi-pass level planning in Unexplored, the fragility of pre-planning everything, and the need for just-in-time techniques inspired by game masters. He applies the patterns to hazards in Bane and concludes that designers should make combinations of hazards challenging rather than individual hazards.",
+  "games": [
+    "Unexplored",
+    "Unexplored 2: The Wayfarer's Legacy",
+    "Bane: Dawn of the Lost",
+    "Dungeons & Dragons",
+    "The Legend of Zelda"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap design",
+      "kind": "warning",
+      "claim": "Traps in dungeon crawlers and roguelikes often feel boring or unfair because they are one-and-done encounters limited to damage or standard conditions, offering few meaningful choices.",
+      "detail": "Victory summarises problems identified by Reed Lockwood's 2022 Roguelike Celebration talk and others: traps end as soon as they begin, so they rarely produce interesting gameplay and feel more like a surprise tax for moving through the dungeon than a contribution to the play experience.",
+      "t": 279,
+      "quote": "They can feel more like a surprise tax for moving through the dungeon than something that contributes to the desired play experience.",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap design",
+      "kind": "principle",
+      "claim": "Tabletop RPG designers improved traps by treating them more like monsters: multiple actions, effects that worsen over time, and multiple ways to overcome them.",
+      "detail": "Victory traces this through sources from Dragon Magazine in the 80s, D&D encounter traps in the 2000s, the Treacherous Traps series in 2020 and the magazine Knock. It moves trap design beyond 'move to a square, make a save, take damage, end of interaction'.",
+      "t": 344,
+      "quote": "treating traps more like monsters, giving them more than one action, giving them effects that change or worsen over time, and giving them multiple ways to be overcome",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "trap patterns",
+      "kind": "principle",
+      "claim": "Generic, reusable trap patterns are more useful to designers and generators than large tables of specific traps, because they describe the underlying interactions and can be reified into any theme.",
+      "detail": "Victory says tables of specific traps in RPG supplements don't articulate the interaction patterns that make traps interesting. Patterns, in the sense of UI or software design patterns, give a generic vocabulary for modelling, combining and ultimately generating interactions.",
+      "t": 446,
+      "quote": "unlike long lists of specific traps picked by a generator, patterns provide us a generic vocabulary for modeling, combining, and ultimately generating the underlying interactions",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap design",
+      "kind": "technique",
+      "claim": "Because player emotion is not directly observable, trap quality can be judged by six desired player behaviours: deliberation, collaboration, investigation, avoiding, exploiting and enduring.",
+      "detail": "Victory says any pattern language needs a theory of quality. Player behaviour serves as a practical proxy for fun and engagement, defines the patterns themselves and gives a metric for whether they were effective; the full definitions are in the speakers' companion PDF.",
+      "t": 512,
+      "quote": "Deliberation, collaboration, investigation, avoiding, exploiting, and enduring.",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap patterns",
+      "kind": "technique",
+      "claim": "Trap patterns that unfold across time, namely foreshadowing, a ramp-up window, staged effects and a multi-step sequence to disable, give players more chances to observe, react and decide.",
+      "detail": "Foreshadowing puts clues earlier in the delve; a ramp-up window delays activation; staged effects ratchet up over several stages; sequence to disable requires multiple discrete actions rather than one disable or attack action.",
+      "t": 582,
+      "quote": "patterns in the time category extend a trap interaction over time rather than resolving it immediately",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap patterns",
+      "kind": "technique",
+      "claim": "Trap patterns that unfold across space, namely foreshadowing, separate trigger and effect, networked traps, remote solutions and forced division, make players think about how parts of the dungeon relate.",
+      "detail": "Networked traps interact, e.g. a boulder rolling over a pressure plate that triggers another trap. A remote solution means the means to circumvent a hazard is elsewhere in the dungeon. Forced division, for party or multiplayer games, requires simultaneous action in separate places such as two pressure plates.",
+      "t": 639,
+      "quote": "patterns in the space category spread trap interactions across locations or interconnected parts of the environment",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap patterns",
+      "kind": "technique",
+      "claim": "Trap patterns that unfold through consequences, namely lingering consequences, delayed payoff, encounter triggers and salvage value, carry a trap's effects into later parts of the adventure.",
+      "detail": "Lingering consequences include curses, disease or degraded equipment; delayed payoff manifests mainly in a later area; an encounter trigger kicks off combat or an NPC interaction; salvage value makes trap components useful resources after triggering or disabling. These create continuity between encounters.",
+      "t": 724,
+      "quote": "patterns in the consequences category extend the trap interaction beyond the immediate encounter allowing the trap's effects to shape what happens later",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "trap design",
+      "kind": "example",
+      "claim": "A simple 'take the idol, statue sprays acid, save or take damage' trap becomes rich by combining foreshadowing, a ramp-up window and an encounter trigger.",
+      "detail": "Earlier, the player finds remains with acid-corroded armour. Taking the idol makes the serpent statue grind open with a three-turn delay so the player can reposition, use an escape item or destroy it. The acid burns through a sarcophagus, releasing a mummy that moves into an adjacent chamber.",
+      "t": 857,
+      "quote": "instead of attacking immediately, there's a three-turn ramp-up window before it sprays, giving the player time to reposition",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "trap patterns",
+      "kind": "technique",
+      "claim": "To generate unfolding traps, a generator must know the larger dungeon's room order and contents and the thematic ways elements can interact, such as acid corroding armour or burning open a sarcophagus.",
+      "detail": "Victory says each abstract pattern must be translated into relationships between concrete dungeon elements: acid can corrode armour and burn stone, a sarcophagus can contain a mummy, and a mummy can move to another room.",
+      "t": 897,
+      "quote": "A generator needs awareness of the larger dungeon, the arrangement and order of its rooms, the elements those rooms contain, and the ways those elements can interact thematically.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "graph-based generation",
+      "kind": "technique",
+      "claim": "Dormans uses an early graph-based generation step to give the generator a plan, since graphs capture relationships across space and time such as where a lock's key is.",
+      "detail": "He says interesting features and interactions need more than a random assortment; the generator needs a plan. In Unexplored, level graphs make locks aware of keys and lay out abstract features and obstacles before any detail is added.",
+      "t": 984,
+      "quote": "The generator basically needs a plan. Uh and and I found that for me if I want the generator to create plans",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "multi-pass generation",
+      "kind": "example",
+      "claim": "Unexplored plans its whole dungeon backward from the final dragon, whose type themes earlier levels and drives seeding of required tools such as a slaying weapon held by a Lich King, with hints placed in early levels.",
+      "detail": "The generator lines up all levels and populates from the last one upward. A fire dragon may theme the final levels; the plan might seed a slaying item at level six with a Lich King, add undead themes and an earlier anti-undead tool, and reference the Lich King or dragon in levels one or two as foreshadowing.",
+      "t": 1082,
+      "quote": "the particular dragon dragon it picked is going to theme the levels leading up to it and that's already playing into foreshadowing",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "multi-pass generation",
+      "kind": "technique",
+      "claim": "Dormans generates levels in multiple passes, starting with high-level graphs focused on structure, theme and room count, and only later fleshing out rooms with floors, detail and population.",
+      "detail": "The early graph pass builds a gestalt, keeping rooms tied together thematically and the room count under control. Later passes populate each room according to what the graph says it needs.",
+      "t": 1161,
+      "quote": "I start out with high level graph like overviews of a level that's really focused on structure and outline",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "over-planning",
+      "kind": "warning",
+      "claim": "Generating complex levels entirely in advance turns them into fragile machines that collapse when the player deviates from the planned path or misses a clue.",
+      "detail": "Dormans says Unexplored 2 pushed sophistication further and hit this problem; trying to generate everything beforehand is itself a trap. Space patterns can be pre-generated, but time and consequence patterns are much harder to do that way.",
+      "t": 1207,
+      "quote": "you end up making levels very complex machines and they become fragile and error-prone as a result",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "just-in-time generation",
+      "kind": "principle",
+      "claim": "Like a tabletop game master who improvises live, a generator should adapt just in time, reseeding dangers, enemies and clues based on what the player actually does.",
+      "detail": "Dormans calls live orchestration the pivotal insight. He cites Zelda raising the chance of hearts from broken vases when health is low, or arrows when arrows are low, as a simple just-in-time technique.",
+      "t": 1308,
+      "quote": "the fact that it is a live orchestration is really the the the the pivotal insight here",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "stuck detection",
+      "kind": "example",
+      "claim": "Unexplored had a 'pray for help' button that checked the level graph to see whether the player was genuinely stuck and, if so, opened doors or spawned tools.",
+      "detail": "Behind the scenes the game looked at where the player was, which parts were accessible and where tools were, to judge whether the player was justified in believing they could not get past a door, then helped in an interesting way.",
+      "t": 1372,
+      "quote": "you could basically press a button say help I think I'm stuck and at that moment the the game behind the scenes would actually look at the graphs",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "hazard design",
+      "kind": "example",
+      "claim": "In Bane, tanglethorn plants can be passed slowly or hacked away, but cutting them angers plants across the level (a lingering consequence) that druidic stones elsewhere can calm (a remote solution).",
+      "detail": "Dormans randomly picked lingering consequence and remote solution to improve an underdeveloped hazard. Moving cautiously costs time, a valuable resource in Bane, so the player chooses between time and risk.",
+      "t": 1509,
+      "quote": "by cutting down some plants in the neighborhood, lots of plants everywhere in the level can get angry at you",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "networked hazards",
+      "kind": "example",
+      "claim": "Applying the patterns to Bane's plant hazards quickly led to networked traps: poison-spore mushrooms released when disturbed, plants reacting to each other's destruction, and all of them being fire hazards.",
+      "detail": "Spore mushrooms can be passed cautiously, but carelessness or a nearby fight releases a lingering poison cloud. Since the plants burn, a fire trap or a player's fireball can create new problems very quickly.",
+      "t": 1570,
+      "quote": "the thing that you really quickly get to is the idea of network traps. So so one plant reacts to the destruction of another.",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "just-in-time generation",
+      "kind": "technique",
+      "claim": "Hazard sources that are creatures or off-screen events, like Bane's light-attracted 'flutter moths' that start fires or falling rocks that disturb spores, can be spawned at any time to spice up a level dynamically.",
+      "detail": "Because they are creatures, they can plausibly appear even in a room the player already visited, letting the game decide it hasn't seen enough action lately. Falling rocks can be dropped off-camera and added to a level-specific random encounter table where spores appear.",
+      "t": 1621,
+      "quote": "these are sort of creatures so you can spawn them at any moment you you feel feel them that they're necessary",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "hazard combinations",
+      "kind": "principle",
+      "claim": "Don't over-design individual hazards; make combinations of hazards the challenge, just as combat encounters gain dynamism from mixing enemy roles.",
+      "detail": "Dormans says he repeatedly forgets this lesson and tries to make each hazard challenging on its own. Different combinations yield diverse challenges, like mixing soldiers, bruisers, leaders and summoners in combat, so hazards become more than a health tax.",
+      "t": 1721,
+      "quote": "you want to make the combinations of things challenging, not necessarily the individual things",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "trap affordances",
+      "kind": "principle",
+      "claim": "Trap affordances should be clear: completely hidden traps never become interesting, so expose at least one component of a trap without giving everything away.",
+      "detail": "Answering a Q&A question, Dormans says players should always know that something in the dungeon has changed even if the exact nature is less clear. The more of the trap can be exposed without revealing all of it, the more interesting it becomes.",
+      "t": 1910,
+      "quote": "traps that are completely hidden in every way, they they never become interesting",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

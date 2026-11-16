@@ -1,0 +1,237 @@
+{
+  "id": "hnoF_bL-HjI",
+  "title": "Thomas Biskup - Thoughts about modern roguelike user interfaces",
+  "speaker": "Thomas Biskup",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=hnoF_bL-HjI",
+  "talk_type": "design",
+  "summary": "Thomas Biskup, creator of ADOM, argues that traditional roguelikes are not successful in the mainstream largely because of their user interfaces, and that roguelike communities, though loyal and creative, are 'our biggest enemy' in building mainstream UIs because they are power users who demand shortcuts, options and complexity. He learned this when ADOM's long-praised interface was savaged on Steam. His prescriptions, drawn from Ultimate ADOM: a seven-key control scheme, minimal menu-based options, hiding complexity in game logic rather than the UI, graphics for mainstream reach, removing item identification and death by hunger, configurable statistic detail levels, a unified skill system, and four-directional movement. He urges observed user testing with diverse groups and checking whether you are designing inside a bubble; Q&A covers hunger alternatives, unfair trap deaths, auto-discovered secret doors and balancing late game with power-player feedback.",
+  "games": [
+    "ADOM",
+    "Ultimate ADOM",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "mainstream success",
+      "kind": "principle",
+      "claim": "Biskup argues traditional roguelikes are not successful in the mainstream, and that mainstream-successful games share a great user interface alongside great design and a large community.",
+      "detail": "Players keep telling him roguelikes are rare even though RogueBasin and Steam show more than ever, which he reads as the genre being absent from mainstream awareness. Of the three success factors, he says design is the cheapest (genius and inspiration), UI is costlier and needs experience and brains, and community can be bought through marketing or arise underground as with Minecraft.",
+      "t": 126,
+      "quote": "I think the ugly truth is that traditional roguelikes are not very successful.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "community bubble",
+      "kind": "warning",
+      "claim": "Biskup's central thesis is that roguelike communities, however great, are the biggest obstacle to mainstream-friendly interfaces, as ADOM learned when its praised UI was condemned on Steam.",
+      "detail": "For almost 20 years ADOM's interface got feedback calling it slick and optimized; on Steam the reaction was that it was unplayable. He blames himself for getting caught in the community bubble, which fed things that were not good for the game.",
+      "t": 444,
+      "quote": "while roguelike communities are truly great, they probably are our biggest enemy in creating great mainstream user interfaces.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "power users",
+      "kind": "warning",
+      "claim": "Roguelike communities are dominated by power users, like Olympic athletes, who demand highly optimized tools, endless options and complexity, and whose confident feedback can be mistaken for universal truth.",
+      "detail": "Power users suffer from every inefficiency; options multiply complexity for casual users; demands for detail (his joke: critical hit zones for fingernails) risk complexity for its own sake. The community is outspoken and argues well, so its feedback feels universally valid when it is not.",
+      "t": 651,
+      "quote": "what works for certain power users is not necessarily what works for more casual or more mainstream gamers.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "keyboard shortcuts",
+      "kind": "example",
+      "claim": "A game playable only through memorized shortcuts loses casual players; an ADOM fan spent years not knowing he could drink potions because 'd' drops and drink is Shift-D.",
+      "detail": "Power users making tens of thousands of key presses need shortcuts, but a casual player who tries something that fails gives up on the concept. The fan, an experienced gamer, assumed potions were only for selling.",
+      "t": 712,
+      "quote": "it took him years to understand that he can drink potions in Adam.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "control scheme",
+      "kind": "technique",
+      "claim": "Ultimate ADOM targets seven keys (WASD, E, F and space) instead of ADOM's 100+ commands, because about 90% of players die within roughly 3,000 turns and never need power commands.",
+      "detail": "ADOM has over 100 keyboard commands, configuration spread over several files, and mouse support that took 20 years. Biskup says the UI should be convenient and understandable without explanation for those short-lived players, which is impossible with 100 commands.",
+      "t": 779,
+      "quote": "So for Ultimate AIDEM we are trying to get by with seven keys.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "options",
+      "kind": "principle",
+      "claim": "Keep options minimal and in expected menus, because every visible option costs every player the effort of understanding it, and a page of 60 options makes a game look forbidding.",
+      "detail": "Biskup says a well-designed game with good defaults does not need 1,000 options; power users will find options, casual ones do not need them. Ultimate ADOM starts with only essentials (sound, resolution, key customization) in a structured menu, like mainstream games.",
+      "t": 844,
+      "quote": "always with every option, think about the price you pay, because if it's an option that's visible to everyone, it will create complexity for everyone",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "hiding complexity",
+      "kind": "principle",
+      "claim": "Design for fun, not complexity: keep depth in the game logic but hide it from the UI, since a cool action needing ten key presses will be used by perhaps one player in a thousand.",
+      "detail": "Biskup values intricate, combinable mechanics as the genre's strength but says not to clutter the interface or over-text the player about how to do the cool things.",
+      "t": 934,
+      "quote": "Hide the complexity on the UI side. Have it in the game logic that's wonderful but not in the user interface.",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "warning",
+      "claim": "Mechanics should be deducible from in-game observation; requiring players to look things up in FAQs or spoilers is lazy design, which Biskup admits ADOM is guilty of.",
+      "detail": "He also praises roguelites for focusing on what makes one aspect great and cutting away excess complexity, making each part pure and usable before adding more.",
+      "t": 955,
+      "quote": "Design should be logical so that you can deduce them from observations, not something arcane you need to look up in FAQ or in some spoilers.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii vs graphics",
+      "kind": "principle",
+      "claim": "Biskup says a roguelike aiming for the mainstream needs graphics, because mainstream users don't really get ASCII.",
+      "detail": "He calls ASCII wonderful but says if you want the mainstream you need graphics or should not consider going there.",
+      "t": 1002,
+      "quote": "I think for mainstream, you really need graphics. It doesn't help. ASCII is wonderful.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "dice notation",
+      "kind": "example",
+      "claim": "In Ultimate ADOM tests, more than half of role-players could not read dice notation like 4d3+2 and silently ignored it, so the game offers simpler damage displays.",
+      "detail": "Biskup notes 6-14 loses the distribution information that 4d3+2 conveys, but casual players do not care. The simplest display might be a single strength number for a weapon.",
+      "t": 1048,
+      "quote": "more than half of our roleplayers couldn't read it.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "principle",
+      "claim": "Ultimate ADOM drops the identification game so players use items when they find them instead of dying with unused items in their backpack.",
+      "detail": "Test groups surprised the team on identification, the deadly hunger system and statistical notation. Biskup says dying with unknown items is not fun for casual gamers.",
+      "t": 1064,
+      "quote": "we wanted people to use the items when they find them, not just die with unused items in their backpack",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "principle",
+      "claim": "In Ultimate ADOM hunger weakens but no longer kills, because death by a clock is not fun; other mechanics can push players onward instead.",
+      "detail": "Asked how to stop slow, boring optimal play, Biskup says mainstream players rarely optimize that way. Alternatives he suggests: stop generating treasure on a level while spawning monsters giving less and less experience, or allow natural healing only after leaving a level after some time. The right mechanism depends on the game's theme.",
+      "t": 1076,
+      "quote": "hunger will not kill you anymore because being killed due to some clock is not that fun. It just will make you weaker",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "user testing",
+      "kind": "technique",
+      "claim": "Observed play tests with diverse small groups (non-gamers, casual, RPG and roguelike players), with no explanation given, taught Biskup more in an hour than 20 years of ADOM.",
+      "detail": "He calls taking more than 20 years to test with other gamer types a huge mistake. His first session yielded about 20 pages of notes and around 147 bug reports and feature requests; even finding the start button can be a challenge. Sessions were repeated and iterated.",
+      "t": 1149,
+      "quote": "we learned so many things within an hour that we didn't learn in 20 years.",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "target audience",
+      "kind": "principle",
+      "claim": "Choose your main audience: a roguelike-community hit can use 30-year-old conventions, but wider appeal requires discarding roguelike assumptions and rethinking everything, then accommodating the existing community.",
+      "detail": "Biskup says this takes bravery and may mean doing things the community initially dislikes.",
+      "t": 1244,
+      "quote": "you probably should forget all the assumptions you have learned about Roguelike games, get away with them and try to rethink everything",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "detail levels",
+      "kind": "technique",
+      "claim": "Ultimate ADOM offers configurable detail levels (bars only, some numbers, full modifiers), which must be designed in from the start; ADOM has one detail level baked into its DNA.",
+      "detail": "Power users get all statistics and engine internals at the high level. Retrofitting this into ADOM would require rewriting too many places.",
+      "t": 1285,
+      "quote": "But that's possible if you design your game for that and plan it from the beginning. If you try to check in on afterwards, it's not really possible.",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill system",
+      "kind": "principle",
+      "claim": "Ultimate ADOM merges ADOM's separately working skills, weapon skills and talents into one unified skill system structured like those in other games, avoiding being exotic for its own sake.",
+      "detail": "The aim is that people immediately understand how it works.",
+      "t": 1309,
+      "quote": "We now try to have one unified skill system that more looks like skill systems in other games",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "four-way movement",
+      "kind": "example",
+      "claim": "Ultimate ADOM dropped diagonal movement because no user-friendly keyboard mapping existed, and testers who expected it to fail did not even notice; missiles still fire in any direction, giving ranged combat a new strategic edge.",
+      "detail": "Biskup says vi keys do not work for normal users. Melee is four-directional while targeting uses its own system, so missiles reach points melee cannot. He uses it as an example of challenging assumed must-have features.",
+      "t": 1352,
+      "quote": "Ultimate Atom doesn't have any diagonal movement right now, because we couldn't find a good way to map it to the keyboard",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "four-way movement",
+      "kind": "open-question",
+      "claim": "With four-directional movement two characters can dodge around each other endlessly; Ultimate ADOM's provisional fix is having monster AI sometimes hesitate rather than always taking the optimal step.",
+      "detail": "Asked in Q&A how to stop characters circling with no way to corner each other, Biskup says he has no final answer, but hesitation forces one side to move and feels good enough for now.",
+      "t": 1844,
+      "quote": "the monster AI doesn't always forcefully try to move to the next optimal position, but sometimes hesitates.",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "unfair deaths",
+      "kind": "technique",
+      "claim": "Ultimate ADOM mitigates non-interactive deaths: a reasonably healthy character will not be killed by a trap, only reduced to low hit points so the situation still feels critical.",
+      "detail": "Biskup says death by traps became ADOM cliches but is bad for gameplay. These hidden 'cheat mechanisms' prevent unfair deaths while keeping danger, allowing 'fair dying'.",
+      "t": 1768,
+      "quote": "If you are rather healthy and get hit by the trap, you won't die. Full stop.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "secret doors",
+      "kind": "technique",
+      "claim": "Ultimate ADOM auto-discovers secret doors when the player moves close, after a tester painfully searched every wall repeatedly; players still need to visit relevant areas but no longer rely on chance.",
+      "detail": "A roguelike-experienced tester pressed the search key at every wall, sometimes several times. Biskup says auto-discovery works great; similar treatment is likely for traps.",
+      "t": 1742,
+      "quote": "when you move close to a secret door, it's automatically discovered, and it works great.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iteration",
+      "kind": "warning",
+      "claim": "Designing for novices risks overcorrecting, so Ultimate ADOM tests ideas early and drops failures; its UI has been reworked at least three times, and small test groups are themselves a bubble.",
+      "detail": "Biskup says you always lean too strongly to one side, and testing with early feedback is what helps. They plan a larger test base.",
+      "t": 1615,
+      "quote": "we, for example, rework the user interface at least three times by now and are still working on fine-tuning it.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "late-game balancing",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's late game will be balanced largely with feedback from core power players, who are the only ones who reach it, while guarding the early game from their influence.",
+      "detail": "ADOM's existing rules and hit-point balancing give experience of what works at different depths, and the small team cannot test everything. Biskup warns power players' feedback must not ruin early stages through premature optimization because things are too easy.",
+      "t": 1967,
+      "quote": "you just must make sure that they don't influence the early stages too much and destroy them again by some kind of premature optimization",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,138 @@
+Herbert Wolverson - Procedural Map Generation Techniques
+Speaker: Herbert Wolverson
+https://www.youtube.com/watch?v=TlLIOgWYVpI
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] Noah: Our next speaker is Herbert Wolverson. Herbert is a hobby game developer, and he has been since the 1990s. He developed Nox Futura, One Night in the Dungeon, and a bunch of 7DRLs. He also wrote a book about Rust roguelike game development, and he's currently writing another book about learning Rust through making games. This talk is called Procedural Map Generation Techniques, and this is acctually something I'm super excited about, as I've always wanted someone to give a talk about this topic. So without further ado, here's Herbert. Herbert: Hi. Welcome to Procedural Map Generation. I'm Herbert Wolverson of Bracket Productions, which is really just my consulting company. I'm gonna be talking to you about using algorithms to generate maps, and then using more algorithms to fix the maps you just created and find out if they're even usable. There's a lot of content to cover, so I'm gonna be going on
+
+[0:01:03] at quite a rate of knots. So, who am I? As Noah just said, I'm the author of the Rust Roguelike Tutorial, on the address on the screen there. I talk way too much on Twitter @herberticus. If you ever want to get in touch with me, /u/thebracket on Reddit is the best way to find me. I love hanging out on the roguelike dev forums, answering short answer questions with SAS. I do have a book coming out very soon, Hands-on Rust: Effective Learning through 2D Game Development and Play, which will be out on PragProg.com. I promise I won't keep promoting that, but I really wanted to mention it, and all the sourcecode that goes with this talk can be found on GitHub at that address. That'll be repeated on the final slide of this presentation. So we're gonna give a quick shoutout to Rogue, from 1980, because we really wouldn't be here without it. It's one of the seminal and first uses of procedural generation that really defined the genre. It splats out up to nine rooms, connected randomly.
+
+[0:02:03] It's been said that they did that because they needed to keep the game small and really couldn't fit in 50 beautifully hand-designed levels, but really that created one of the strengths of the genre in the first place. When you start a new game, you have a different map every time. So every time you play, instead of memorizing that I need to go up, up, up, right, you're learning instead that I should interact this way with different monsters, and interact this way with rooms, navigate like this, learning the system rather than learning the game itself, giving you effectively infinite replay.
+
+## Dwarf Fortress (2086 - Present)
+
+[0:02:37] Also, any talk on procgen really has to mention Dwarf Fortress, because no other procgen game has ever managed to cram this much procedural generation into one binary. If you haven't played it, go out and do so. Support them on Steam, and tell them how awesome they are. They generate everything from a massive overworld with sweeping mountain ranges, dense forests, volcanoes, demon-infested fortresses, fill it up with procedurally-generated civilizations who either like or hate each other, and then you can drill all the way down to Urist and find out which proedurally-generated deity he worships, which procedurally-generated tavern he drinks in, and learn all about his quest to cross the land and find the perfect sock. At the mid-scale, you can zoom in to any particular land block on the map, find out that it is beautifully rendered, still matches the overall shape of the overall world above it, the trees gain foliage, lose foliage, depending on their type and the type spawns appropriate to the biome.
+
+[0:03:38] In other words, there is pretty much every procgen technique that you can think of in this game. Hang out in the Bay 12 forums and that is a great place to learn about them. So one thing that's clear from both of these games is that, while they're random, their randomness doesn't define the game. The randomness is fed into an algorithm that generates something that approximates what you want to get, but ensures that it is different every time. So, we're gonna start looking at some algorithms
+
+## Simple Room-Placement
+
+[0:04:03] for doing that. A simple room placement. If you've done any of the roguelike development tutorials, then you've seen this one. You start with a solid map. You pick a random rectangle. If there isn't a room already there, you fill in the rectangle. You keep adding rooms until you meet whatever criteria you've come up with for enough, and then you join the rooms together with corridors. Let's watch this in action.
+
+## Room Placement - Animated
+
+[0:04:28] As you can see, it's placing rooms randomly. When you see the red rectangles with the exclamation marks, they tried to generate one that overlaps, so you have to discard it and try again. And then it joins them together with corridors. In this case, they went with a simple dog leg algorithm, that randomly switches between being either vertical first or horizontal first. That's pretty much exactly the algorithm from the Python roguelike dev tutorial that the roguelike dev subreddit recommends that you start with. So a good refinement of that is Binary Space Partition rooms, or BSP. Binary Space Partition is fancy developer talk for chopping in half. It gives a similar result to random room placement, but it pretty much guarantees that everything is better spaced out. You'll find that it's used in Nethack, amongst other games. So to do BSP, you divide your map in half, and you randomly decide whether you want to divide vertically or horizontally, and divide that half in half. Then you keep dividing your halves all the way down until you have
+
+[0:05:31] a space that's roughly the right size you want to use for a room. And I personally like to then add a gutter of one tile around it, to ensure that you don't get rooms joining together, unless that's what you want. So watching that in action,
+
+## Animated BSP
+
+[0:05:43] you see that there's absolutely no rejections, the rooms are nicely spaced out, and you wind up with a pretty usable map. So complete change of gear, Cellular Automata. I personally love this one, because it involves an ordered-looking natural map from complete chaos. You know, I said you don't always start with complete random? Well, this one, you do. You can literally make half your map walls half your map floors, randomly picked, no chance of getting through it, and you'll end up with something you can use. If you played Conway's Game of Life or seen articles about it, it's the same principle here. So once you've got your map, you make a copy of it, you iterate every tile that isn't on the edge, and you count the number of neighbors, including diagonals. If there are no neighbors, then it becomes a wall. If there's one to four neighbors, it becomes empty. Five or more neighbors, it becomes a wall. Now, you can and should tweak these rules to suit your game.
+
+## Animated Cellular Automata
+
+[0:06:48] Let's watch this in action. Completely random soup quickly turns into a far more natural looking structure that can actually be turned into a pretty useful map. And it's a really simple algorithm, really fast, and given the same seed, you get the same result every time.
+
+## Drunkard's Walk
+
+[0:07:07] Next one to talk about is Drunkard's Walk. This is another popular one for beginners. So the basic principle of Drunkard's Walk is that you start with a solid map, find one Umber Hulk, and ply it with beer until he's staggering randomly. Place him somewhere on the map. As he staggers, he randomly smashes through walls, and carving out a map. Don't bother worrying about whether he backtracks. Let him stagger wherever he wants. Pick a maximum distance for him to travel, or her. I'm really not sure how Umber Hulk's gender works. If they travel too far, they pass out, and you can pick another Umber Hulk, spawn them somewhere within the open map, and let them smash. Then you stop spawning Hulks when enough of your map is open. In this case, I've used one-third of the map.
+
+## Animated Drunken Umber Hulks
+
+[0:07:53] So watching this in action, you can see that each Hulk is staggering completely randomly, carving out more and more of the map. One big advantage of this is that you can guarantee that your map will be contiguous. It won't generate any areas that your player can't reach. It tends to give you maps that looks like it was carved out by water, ideal for creating limestone caverns and similar.
+
+## Diffusion Limited Aggregation
+
+[0:08:17] Another algorithm, Diffusion Limited Aggregation. I highly recommend the RogueBasin article on this one. So for the simple version of this, you start by digging out a small target seed, and then you pick a random point anywhere on the map, a random direction, and shoot a particle. If you're really lucky, the particle will hit one of the already open areas. If it doesn't, you keep shooting until it hits something. Something I've heard from a lot of military friends. In the event that you do hit a target area, then you carve out the last solid area that you passed through. This tends to give you a very winding, open map. Again, it's guaranteed to be contiguous. And there's a lot of ways that you can tweak the algorithm to make something more interesting.
+
+## DLA with a Central Attractor
+
+[0:09:01] So the Central Attractor is much more likely to always hit the target. You randomly spawn your starting point and then shoot the particle directly at the middle of the map. This pretty much ensures that you get an open space in the middle, ideal, for example, for you to put a dragon with his hoard, and then a more interesting pattern forming around the edges, which could be where the hobbit would lurk while he torments the poor dragon. On the right, you can see what happens if we use the same Central Attractor algorithm, but simply apply a symmetry down the vertical. You start to get maps that look a lot like they either want to eat you, or maybe it's a butterfly, maybe it's a Space Invaders character. I recommend using this one sparingly, but a bit of symmetry like that can be applied to any algorithm when you want to produce something that looks a lot less random.
+
+## Voronoi Diagrams
+
+[0:09:54] Another algorithm that everyone should have in their toolkit is the Voronoi Diagram. So to make one of these, I do recommend Googling it. You randomly or deliberately place seeds all over your map. You randomly place them if you just want to produce something random. If you place them very deliberately - for example, you can equally space them all over the map - you can produce something that looks very, very much like a beehive. And then you iterate every point on the map, and it joins the area belonging to the closest seed. There are various fancy algorithms, like Delaunay triangulations, to do this quickly. In the source code I've provided, I just brute forced it and did it the hard way. Now, one neat trick for customizing what you get is that you can use a different distance algorithm to determine which group every tile joins. So on the left, I've used Pythagoras, and it gives you
+
+[0:10:58] relatively smooth edges. Using Manhattan distance, which is the same distance that you get if you ask a New York taxi driver how far it is to get to somewhere, a number of blocks north plus number of blocks east, it gives you a much more manmade-looking, sharp-edged structure. And Chebychev is a similar distance algorithm, and tends to give you somewhere in between the two. So what do you do with Voronoi diagrams? Well,
+
+## Find the edges
+
+[0:11:29] the first thing you can do with them is find the edges, place walls there, and wind up with an alien cell structure. Another good thing to do is decide that when you're spawning monsters, you'll spawn the monsters together within a Voronoi cell. So, for example, you've decided that the orc king should always be seated with his retinue. Then, you should probably spawn them in the same cell together, if possible. Likewise, if you decided that orcs must never, in fact, be near dark elves, make sure that you spawn them in far away cells. You can also use this for very effective city generation. In my PROCJAM game, Apocalypse Taxi, I used the edges of Voronoi cells to determine where the roads went, and then randomly populated the content of each cell with something like heavy industrial city, light industrial, and it worked pretty well. Combined with other techniques, this can be extremely useful.
+
+## Perlin/Simplex Noise
+
+[0:12:29] The next one up is Perlin/Simplex Noise, which is used all over the place, more than you might think. So Perlin/Simplex Noise are basically a bunch of gradients combined together with a few variables we'll talk about in a moment. You can generate it in either two or three dimensions. If you look in X/Y value, it gives you a number between -1 and 1. And the nice thing is, if you look at an adjacent one, it will be smoothly moving either up or down, relative to the neighboring squares. It's also continuous, so if you decide to look from X 1 through 2, and then decide to zoom in to 1.5 through 2, you'll actually get exactly the same shape as you saw on the right-hand side in the first one. So what do the variables mean? Now, the number of octaves give how many different gradients it's mixing in. Gain is how long the various gradients last. Lacunarity adds in randomness, and as you can see,
+
+[0:13:34] from the picture on the right-hand side, which I guess is my left, this starts to feather it in and make it look a lot more random. Now, frequency is how frequently each of the various octaves peaks. So, what I recommend you do is find a Perlin/Simplex Noise tool and simply play with these values until you get something that you like. So what can you do with them? The answer is actually quite a lot.
+
+## Overworld by Altitude
+
+[0:13:59] The most common use is to make an overworld. Because Perlin is deterministic by random seed, every time you use the same seed, you get the same map. Now, what I've done here is altitudes from -1 to 0 blued out as water, altitudes from 0 to .75 are in green, shaded as terrain, altitudes above that are marked as mountains. And this is very common. You'll find this used in a lot of games. And as I mentioned, you can zoom in. So as you zoom in, you start to see more of the gradient. The problem is that the gradients are actually kind of dull.
+
+## Mix in a second noise layer
+
+[0:14:38] Now, you can fix that. The best way to fix that is to make a second layer of noise. So in this case, we've got a second layer of noise that is much more bumpy, has much more fine-grained detail, but looks terrible as a continent as a whole. And then as you zoom in, you change the percentage of each of the two gradients that you're mixing together. So when you're zoomed all the way out like that, you're seeing the relatively coherent overworld. As you start to zoom in, you see bays, peaks, valleys, troughs. And the great thing is, this is actually really easy to implement. There's a lot of really good Perlin/Simplex libraries out there. I highly recommend it. You can use it for anything from making a pirate game with cool seas to sail around, or just building the overworld for your map. You can also use it if you want to generate realistic-looking clouds, particles. You can even make wood grain with it, with the right values.
+
+## You can use more than one technique
+
+[0:15:34] And that brings me to one point that I can't emphasize enough. You very rarely need to use just one technique on a map. So here, on the top left, we've used WSP technique to produce a pretty linear-looking dwarven fortress. On the right, Cellular Automata has made a really open-looking sort of cavern system. It might be a dangerous underworld. So running with that theme, I simply took the left half of the dwarven fortress and the right half of the Cellular Automata, and you have what looks like a fortress that suddenly breaks out into a nasty underworld. Well, I thought, a better theme for that might be that the dwarves were digging, they came to the underworld, and they needed to protect themselves. So I added a prefab, a predesigned section in the middle, adding fortifications. And so, with two very simple techniques, you've produced a map that actually tells a story, rather than just being a bunch of random rooms.
+
+## Combine Techniques - DLA for erosion
+
+[0:16:36] Another popular combination is take a map and then use DLA to fire particles at it, and blast parts of the map away. This starts to look like dwarves failed to pay their maintenance bill, or had a serious water problem, as the map becomes more and more organic-looking while keeping its basic structure.
+
+## Placing Prefabs
+
+[0:16:55] I mentioned prefabs before. Prefabs are a great idea. So you can make a massively random map, but if you start injecting human design elements into it, then you get the chance to really make the game your own. So I've got a prefab here that is definitely not a trap. It's death traps surrounding a treasure chest. You've probably seen that in a lot of console RPGs. You enter a room, you see a chest, with nothing guarding it. You can be pretty sure that something bad's about to happen to you. So the room structure makes it relatively easy to place a prefab. You can go through the room list, find a room that's bigger than the prefab, and you know the prefab fits there. On a map that doesn't have rooms, it can be a little more tricky. What I usually do is I pick random locations, look and see if the prefab will fit, and place them. If it won't, then I don't place it there. If I've got a nice, big list of prefabs, then I'll keep going until I've added a few of them and been careful not to add all of them, so the game is
+
+[0:17:56] different next time I play.
+
+## Algorithm: Dijkstra Maps
+
+[0:17:58] Very quick change of gears, because the next set of algorithms all are going to rely on this one, the Dijkstra maps. I highly recommend that you go to RogueBasin and read The Incredible Power of Dijkstra Maps on there. It is an excellent article. And Dijkstra maps are a very powerful tool if you're into making roguelikes. I recommend that you learn about them. To make them, you start with one or more starting points. In this case, the blue knight. The rest of the map gets marked to a sentinel value, meaning you can't go there. And then you look at all the tiles adjacent to your starting point. If you can walk into them, you put a 1 on them. You can get there in one step away from the starting point. Then you keep going. So every walkable tile that's next to a 1 gets a 2, and a 3, and a 4, and a 5. Eventually, you have a complete map that tells you, first of all, the sentinel value means that you can't go there. So now, you've got
+
+[0:19:06] a list of all the cells you can't use. Likewise, the numbered tiles tell you how far away you are from a starting point.
+
+## Removing Unreachable Areas
+
+[0:19:16] So the first big use for this is when you've generated something like Cellular Automata, that can give you chunks of a map that you can't get to. Pick a central point, find one that's open, generate a Dijkstra map, and then all of the tiles that are open that have the sentinel value on your Dijkstra map can't be reached, and I've highlighted those in red on the map. You can delete those, because nobody can get there. Or, if you've got a game system that encourages tunneling, then go ahead and hide the stuff that needs to be reached with tunneling in those areas.
+
+## Finding a Starting point
+
+[0:19:50] This can also help you with placing a starting point on your map. Making sure that you cull the unreachable areas before you pick a starting point ensures that you won't place the player somewhere that they can't get out of, and it avoids the always embarassing case of the map that's only got two tiles that you can actually walk on. That has happened to me. So typically, to place a starting point, if I know that I want to be on the left, I'll place somewhere in the middle on the left, and then I'll simply look around for a neighboring tile that is open and hasn't been culled by the Dijkstra map.
+
+## Find an Endpoint - using distance to target
+
+[0:20:28] To find an endpoint, you can use the same thing, if you want to go left to right. A lot of games prefer to have more of a structured progression. Once you've culled the map, you know that anywhere on the map can be - that is still open after you've removed the areas you can't get to, it's safe to place an exit. So you find the rough area you want to put the exit and you place on a nearby open tile. I've gone ahead and marked the optimal route through that map.
+
+## Endpoint - Dijkstra to find farthest point
+
+[0:21:00] You can also, if you really dislike your player, use Dijkstra to find the least accessible part of the map and put the exit there. If they're starting in the middle, this is a really bad idea, because three-quarters of the map is basically irrelevant. However, if you want to hide something, this is a great way to do it. Find the starting point, then find the least accessible point on the map, hide something there, and you force the player to go on a treasure hunt, if they're gonna get the bonus item.
+
+## The "Hot Path"
+
+[0:21:29] That leads to one of my favorite techniques for refining a map, once you've generated it. I call it the "Hot Path." Once you've got your start point and your end point, you generate the path between the two. I use ASTAR. In this case, I think I used a Dijkstra map and just walked the distance between the two. Then you make another Dijkstra map, using all the points on the path as your hot path. Then, on that Dijkstra map, everything with a tile value of under, say ten, is the hot path and is close, but not necessarily directly on the best path through the dungeon. So what can you do with this? Well, if you prefer a less-branchy game,
+
+## Culling based on the hot path Hate branching?
+
+[0:22:10] you can use it to remove the parts of the map that are completely irrelevant. If your game involves a great deal of progression from, say, left to right, this is a good way to do it, and a good way to not force the player to explore huge, winding labyrinths with no real purpose to them.
+
+## Hot Path for Rooms
+
+[0:22:29] If you're using a room-based generation, then this can be even more useful. I've marked in yellow the rooms that are on the hot path that go directly from point A to point B. Also, that means the grey rooms aren't really necessary. Or are they? Maybe the grey rooms could be culled, if you just want to have a go to room, go to room, go to room type of game. Or, the grey rooms could be where you hide bonus things. You might have the yellow rooms mark some breadcrumbs to give the player a clue as to where to go, and teach them by putting really scary things in the grey area that are off the beaten path and only to be done once you're a little more experienced.
+
+## Telling a Story
+
+[0:23:08] You can also use this knowledge to order the progression of the story. So you know that if the player's gonna go through this dungeon, they're probably gonna go through one to nine. And that's okay. If you're telling a story, let's say your grandfather tells you that it is your destiny to go out and save the world, he's probably going to want to tell you that somewhere around room one, so you can't avoid the old windbag. Somewhere around two, somebody should show up and tell you that your destiny is futile, you should abandon it, give up, and the whole adventuring thing isn't for you, and so on. Alternatively, you might have decided that you wanted to do the old saw of the locked door that has a key somewhere on the map. Supposing that you've decided that room five is gonna be where the locked door shall be, it would be a good choice because you can do a flood-fill and discover that there's nowhere else, there's no alternates to going through
+
+[0:24:09] the exit from room five. So you place a locked door there, and now you absolutely know that the key has to be somewhere between rooms one and four, for this to be a solvable puzzle. It would really suck if you decided to spawn the key in room six, and leave yourself with a map that cannot be solved without finding some other way to open the door. You know, unless of course that's your point. And really, that is the point of what I've been trying to say, is guide your randomness and then use algorithms to check your randomness, to make sure that it matches what you want. I've written quite a bit about other algorithms on my roguelike tutorial, tried really hard to be language-agnostic, even though all the examples are in Rust. So, I do recommend checking there for a few more. I wanted to talk about Wave Form Collapse, and realized that I needed another 30 minutes.
+
+## Questions?
+
+[0:25:01] Alright, so like I said before, the source code for this talk is all up on my GitHub. That repost should have gone public a few minutes ago. And just to be a terrible shill one more time, my book Hands-on Rust: Effective Learning through 2D Game Development and Play will be in beta on PragProg relatively soon, next few weeks, as long as I get off my butt and finish editing it, and in your favorite bookstore pretty soon. If there's any questions, I'd be happy to take them. Noah: Wonderful. Thank you so much for that talk. Herbert: Thanks for having me. Noah: Yeah. We have a few questions. The first one is from Darren Gray, who asks, "How do you make generated maps not look very samey?" For example, he says that he can always notice when an overworld is generated with Perlin noise. Herbert: Yeah, that's actually a fun one, and I play spot the Perlin. One of the best things to do is to generate multiple noise maps
+
+[0:26:03] and mix them together. So if you've decided that this region is mountains, start mixing in height values from another more mountainous-looking height map. That gets you something that is, as well as just going up, actually goes up and down, up and down, and starts to look more like mountains and less like a boring little gradient. You can also have a lot of fun generating your Perlin, and then run something like a Russian on it. Running a simpler Russian simluator, especially if you decide that some rocks are harder than others, gives you a beautiful map in no time. I think that's how World Machine works. Noah: Cool. Our next question is do you know any techniques for generating vertical structures, or Z levels in map generation? Herbert: That is something I am honestly terrible at. I've seen Wave Form Collapse used to make some absolutely amazing Voxel-based cities. I can't honestly pretend that I know how to do that.
+
+[0:27:06] Noah: Cool. That looks like all of the questions that people have put in. But thank you so much, and then I'm sure if you hang out somewhere in the social space, people will come and ask you more questions. Herbert: Yes, I should be around there and on the Discord tonight. I'll be editing my book and alternating between the two. Thank you. Noah: Cool, thanks so much.

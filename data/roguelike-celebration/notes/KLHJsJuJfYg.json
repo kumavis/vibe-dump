@@ -1,0 +1,192 @@
+{
+  "id": "KLHJsJuJfYg",
+  "title": "Kawa -  Yet Another Conduct Conversation: a history of conducts in roguelikes",
+  "speaker": "Kawa",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=KLHJsJuJfYg",
+  "talk_type": "history",
+  "summary": "Kawa, former host of Roguelike Radio, surveys conduct play: deliberately playing a game under self-imposed rules that differ from the stated ones, usually to make it harder, sometimes tracked in-game. Examples are ADOM's Eternium Man challenge in the small cave, NetHack's polypile-less conduct and pudding farming, NetHack's in-game conduct tracking (1999, predating console achievements), and Hoplite's altar-free runs and daily challenge. Kawa then distinguishes toys from games: conducts turn a mastered game's mechanics back into a toy from which players make new, harder games. The talk asks for help recovering conduct history and urges developers to consider which mechanics are easy to ignore and what skills they ask for.",
+  "games": [
+    "ADOM",
+    "NetHack",
+    "SLASH'EM",
+    "Hoplite",
+    "Dwarf Fortress",
+    "Dungeon Crawl Stone Soup",
+    "Doom",
+    "Celeste"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "principle",
+      "claim": "Conduct play is deliberately changing a game's rules from those initially stated, usually to make it harder, either as player-invented challenges or tracked inside the game.",
+      "detail": "Kawa notes in-game tracking is today mostly known as achievements, but other forms exist.",
+      "t": 213,
+      "quote": "Conduct play in general, I am going to talk about as a style of playing a game that deliberately changes the rules of the game",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "escalating spawns",
+      "kind": "example",
+      "claim": "ADOM's small cave spawns a stronger monster each time you kill one, escalating out of control, to teach that you don't need combat to get what you need.",
+      "detail": "The intended approach is to run in, kill as little as possible, take useful items or use it as a shortcut, and leave. The starting scrolls warn that time is working against you.",
+      "t": 328,
+      "quote": "You kill monsters, new monsters appear, those new monsters are much more powerful than the ones you just killed",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "example",
+      "claim": "ADOM's Eternium Man challenge asks players to reach maximum level solely within the escalating small cave, which is very hard yet technically faster than the main game and purely tests combat knowledge.",
+      "detail": "Kawa asks what it means to survive in a space you weren't meant to survive in. It is one small cave the size of a terminal with one goal; such metal-named challenges were common in the ADOM community, with the earliest reference found around 2000 on an Angelfire site.",
+      "t": 416,
+      "quote": "It is all just one little place in one little cave cave the size of a terminal but it tests the limits of a player's combat knowledge.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "degenerate strategies",
+      "kind": "example",
+      "claim": "NetHack's polymorph wand combined with farming splitting puddings for loot made a tedious but potentially infinite item engine that could break the game.",
+      "detail": "Polypiling turns junk into random items, possibly including recharges for the wand. Repeatedly splitting and killing puddings generates trash to polymorph, enough for an ascension kit and more if you endure it.",
+      "t": 599,
+      "quote": "You could just keep doing this and get everything you need for your ascension kit, and then some, and completely break the game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "degenerate strategies",
+      "kind": "example",
+      "claim": "NetHack's polypile-less conduct is easy (about 42% of winners on public servers never polymorph items), suggesting the mechanic is broken and tedious, and puddings were later nerfed so split puddings no longer drop loot.",
+      "detail": "Kawa notes the nerf came around 2015, evidence that NetHack is still updated, and later cites it as developers responding to players abusing mechanics.",
+      "t": 633,
+      "quote": "Roughly 42% of everyone who has won on one of Nethack's public servers hasn't needed to bother with doing this at all.",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "conduct tracking",
+      "kind": "history",
+      "claim": "NetHack added in-game conduct tracking via an extended command in December 1999 (version 3.3.0), years before Xbox Live or Steam achievements.",
+      "detail": "Vanilla NetHack tracks 10 conducts; SLASH'EM tracks more. Kawa could not find why those 10 were chosen, or why others like zen were not tracked, and asks for help searching Usenet.",
+      "t": 712,
+      "quote": "This is at least three years before Xbox tracked achievements on Xbox Live.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "conduct warnings",
+      "kind": "example",
+      "claim": "NetHack's developers deliberately chose not to warn players before they break a conduct, since the point of conduct is avoiding the actions that violate it.",
+      "detail": "Kawa quotes the 3.3.0 release notes' rejection of prompting the player as an example of the dev team consciously not doing something.",
+      "t": 823,
+      "quote": "How about prompting the player before they break a conduct? No, the whole point of conduct is you are avoiding the actions",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optional mechanics",
+      "kind": "example",
+      "claim": "Hoplite splits its altar-gift mechanic into two challenges: conduct-style tracking of runs that never use altars, and a daily challenge of three very hard levels with an arbitrary skill set.",
+      "detail": "Altars feel essential but are technically optional; Kawa saw a run that skipped them and never took damage. The daily challenge resembles Eternium Man's pure combat test.",
+      "t": 900,
+      "quote": "They are technically optional. They don't feel like it because the game is that hard but they are.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "principle",
+      "claim": "Any game's mechanics can be pulled apart to create new challenges, which designers can embrace.",
+      "detail": "Kawa draws this from Hoplite's two challenge modes and finds it inspiring.",
+      "t": 948,
+      "quote": "I think there is so much room within any given play space for people to examine their mechanics, pull them apart and create challenges from them.",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "games versus toys",
+      "kind": "principle",
+      "claim": "Toys become games when we add win and loss conditions that test a skill, and as players master those skills the rules get refined to stay challenging.",
+      "detail": "A ball is a toy, catching is a skill, catching under specific rules is a game. Kawa points to Jon Bois's writing on what counts as a catch in American football as rule refinement.",
+      "t": 996,
+      "quote": "We turn toys into games by asking can you do this skill with this toy?",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "sandbox goals",
+      "kind": "example",
+      "claim": "Sandbox games like Dwarf Fortress are toys, and players make them games through self-imposed constraints, such as building a fort in the middle of the ocean on ice.",
+      "detail": "Kawa says that artificial constraint created a compelling victory condition and a compelling video series by Kruggsmash. The Dwarf Fortress example was also partly role-play motivated.",
+      "t": 1104,
+      "quote": "By creating that artificial constraint of can I build on the ice suddenly you have a compelling victory condition",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "mastery",
+      "kind": "principle",
+      "claim": "Conducts arise when players master a game and treat its mechanics as a toy, adding rules to keep it interesting and testing their skills in new ways.",
+      "detail": "Players ask whether removing a mechanic or doing things a certain way is easier or harder, more interesting, or tests different skills.",
+      "t": 1146,
+      "quote": "creating conducts for the game is using the mechanics as its own toy for refined and advanced gameplay",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "principle",
+      "claim": "Developers should ask which mechanics in their game are easy or hard to ignore, what high-level players altering them implies about the game, and what skills the game asks for.",
+      "detail": "Kawa's closing takeaways for developers, alongside a plea to help preserve roguelike history.",
+      "t": 1208,
+      "quote": "what mechanics in your games are easy to ignore or hard to ignore?",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "tournaments",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup tournaments include challenges to win with randomly chosen species and background combos, rotating to a new combo once eight players succeed.",
+      "detail": "Kawa's favourite conduct-like challenge: weird combinations 'no sane person' would pick. Kawa also mentions players who ascended NetHack with all 10 standard conducts.",
+      "t": 1295,
+      "quote": "can you beat the game under these randomized constraints and the first eight players to get it get the trophy",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "example",
+      "claim": "Extreme ADOM conducts include winning using only a drakeling's breath weapon and winning with a 100-stone carry limit despite chaos orbs weighing 100.",
+      "detail": "The breath example is Kawa's; the 100-stone conduct came from an audience member, meaning no food or armor and carrying one orb at a time past a miniboss. Pacifist runs in traditional roguelikes are similarly absurd.",
+      "t": 1401,
+      "quote": "there is one person who has beaten the game using only that. Why? Why would you do that to yourself?",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "principle",
+      "claim": "Besides challenge, conducts are motivated by role-play and by removing tedium, and some make the game easier by narrowing the decision tree.",
+      "detail": "Kawa says polypile-less removes an awful but unnecessary mechanic. Easier-making conducts include sticking to one weapon or skill subset, or in Crawl never switching gods.",
+      "t": 1490,
+      "quote": "There is a level of mainly removing tedium as I brought up with the polypile.",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "balancing for conducts",
+      "kind": "example",
+      "claim": "Developers have changed games in response to conducts and exploits, as with NetHack removing pudding farming and balancing food for vegetarian and vegan conducts.",
+      "detail": "Answering a Q&A question, Kawa also notes non-roguelike games designed for speedrunning, like Celeste, as adjacent, and asks for more evidence.",
+      "t": 1533,
+      "quote": "Certainly the whole removing pudding farming in NetHack was clearly a response to people abusing mechanics in certain ways.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

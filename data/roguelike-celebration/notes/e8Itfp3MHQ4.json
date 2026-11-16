@@ -1,0 +1,192 @@
+{
+  "id": "e8Itfp3MHQ4",
+  "title": "Alexei Pepers - Accessibility",
+  "speaker": "Alexei Pepers",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=e8Itfp3MHQ4",
+  "talk_type": "design",
+  "summary": "Alexei Pepers describes a research project that made NetHack playable for visually impaired players without simplifying the game, by adding text commands that describe the map, movement shortcuts, and other quality-of-life features usable with screen readers. She contrasts this with fully accessible but map-less text or audio roguelikes and with partially accessible games like Angband and Dungeon Crawl Stone Soup. User studies taught the team to rely on visually impaired players' feedback, to make contested choices into options, and to expect unanticipated special cases. Her main argument is that ASCII roguelikes are unusually good candidates for accessibility because so much of their information is already text, with the hard remaining problem being concise, non-technical description of precise spatial information.",
+  "games": [
+    "NetHack",
+    "Angband",
+    "Dungeon Crawl Stone Soup",
+    "Rogue",
+    "Entombed",
+    "Brogue",
+    "BrogueSpeak",
+    "Zork"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "visual impairment",
+      "kind": "principle",
+      "claim": "Accessible games for visually impaired players have mostly been simple and low-replayability, so the goal should be games that are both fully accessible and as deep as those sighted players enjoy.",
+      "detail": "Pepers notes that accessibility research focused on access more than on the games, producing fully accessible but simplistic titles; making Battleship accessible is easy but not much fun. The project asked whether a complex, replayable roguelike like NetHack could be made accessible.",
+      "t": 47,
+      "quote": "there's a lot of games that are fully accessible but were pretty simplistic and not very replayable compared to the kind of games available for sighted players",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "screen readers",
+      "kind": "example",
+      "claim": "Some visually impaired players already play NetHack by having a screen reader read the raw ASCII map aloud, which works but is a miserable experience.",
+      "detail": "Because everything in NetHack is an ASCII character, a screen reader can read the map as 'hash dot dot dot hash'. Pepers calls this terrible but notes people do it anyway because they want to play so badly, motivating the team to do better.",
+      "t": 135,
+      "quote": "a screen reader can read it aloud as hash dot dot dot hash and it's terrible",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "text-only roguelikes",
+      "kind": "example",
+      "claim": "Fully accessible text and audio roguelikes achieve accessibility by dropping the tile map entirely in favour of interactive-fiction-style rooms, which fundamentally changes gameplay such as combat.",
+      "detail": "Pepers cites a purely text-based roguelike and the audio roguelike Entombed. Without a tile map, you are simply in a room with items, and combat becomes a choice of dodge or attack against the monster's choice, unlike positional tile combat.",
+      "t": 186,
+      "quote": "they get rid of the map completely they don't have some kind of internal representation of a tile-based map instead they do more what interactive fiction does",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "auto-explore",
+      "kind": "example",
+      "claim": "Angband's auto-targeting and monster list make its combat accessible, and Dungeon Crawl Stone Soup's auto-explore makes exploration accessible, but auto-explore alone leaves blind players disoriented.",
+      "detail": "Angband's map exploration still can't be done through text, so it suits players with partial vision who enlarge tiles. Crawl's auto-explore lets blind players move through the map without seeing it, but they never know where they are and go from encounter to encounter, losing the exploration aspect.",
+      "t": 280,
+      "quote": "if you're playing the game that way you never know where you actually are and it's fairly disorienting you're kind of just going from encounter to",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "text map description",
+      "kind": "technique",
+      "claim": "The accessible NetHack added a view command listing every visible object, monster and dungeon feature with its exact tile offset from the player, plus a cursor-based 'feel' mode for probing individual tiles.",
+      "detail": "Exact positions (e.g. two tiles north) are needed to interact with things in a tile-based game. In hallways, every move prints how many tiles are visible and accessible in each direction.",
+      "t": 334,
+      "quote": "a view command that when you press it gives you a text list of everything around you that you can see",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "travel commands",
+      "kind": "technique",
+      "claim": "Listing remembered dungeon features and auto-travelling to a chosen one removes the hardest part of blind NetHack play: holding a mental map of the whole level and backtracking through it.",
+      "detail": "Visually impaired players said moving through the dungeon as a whole was most taxing. The team added a list of seen features (stairs, altars, fountains) that the player can select to auto-travel to, and made it possible to select a visible item to walk over and pick it up. The aim was to minimise frustration without removing gameplay.",
+      "t": 438,
+      "quote": "we added a command that you can get a list of all the dungeon features you've seen so things like staircases and altars and fountains",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "user testing",
+      "kind": "warning",
+      "claim": "There is no substitute for testing accessibility features with visually impaired players, because sighted developers misjudge how screen readers behave.",
+      "detail": "The team left the ASCII map on so screen readers could fall back on it, but players immediately asked to turn it off: screen readers read the map after every useful text line. The team ran an in-person study with sighted players with the map off and an online study with visually impaired players.",
+      "t": 523,
+      "quote": "there's really no substitute for getting the feedback directly from visually impaired players they know what's best for them",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "options",
+      "kind": "principle",
+      "claim": "When visually impaired players hold strong but conflicting preferences, such as compass directions versus up/down/left/right, make it a configuration option.",
+      "detail": "Pepers notes options already fit the roguelike ethos of configuration files. Any single choice on contested issues would anger half the user base.",
+      "t": 619,
+      "quote": "there's no decision you can make that won't make 50 of your user base angry so make it an option",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "special cases",
+      "kind": "warning",
+      "claim": "In a game as complex as NetHack, accessibility features miss emergent player tactics such as pet-assisted shop theft, so only real play reveals the gaps.",
+      "detail": "Stealing from a shop with a pet requires knowing exactly where the pet drops each item, but the view command re-reads the entire shop inventory each time. The team hadn't anticipated this non-core behaviour; a fix might be announcing where pets drop items.",
+      "t": 643,
+      "quote": "you can steal from shops and net hack using your pet you let your pet go into the shop you stand in the doorway",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii and text",
+      "kind": "principle",
+      "claim": "ASCII roguelikes are unusually well suited to accessibility because their limited graphics force most game information, such as status effects and spell results, to be delivered as text already.",
+      "detail": "ASCII can't show that you are levitating, so the game tells you in text; even a graphic wand-of-lightning effect comes with a text description as flavour. This means relatively few changes make these games fully accessible.",
+      "t": 729,
+      "quote": "this genre really is super exciting in terms of accessibility because so much of these games is already text",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "accessibility benefits",
+      "kind": "principle",
+      "claim": "Accessibility features often benefit the whole player base, as NetHack's view command helps newer players identify unfamiliar ASCII symbols and lets anyone quickly identify distant items.",
+      "detail": "Pepers gives the example of seeing a weapon across the room and learning in one keypress that it is a silver saber. She frames this as extra incentive for developers to invest in accessibility.",
+      "t": 795,
+      "quote": "accessibility improvements can be useful for your whole player base in ways that are hard to predict",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "verbosity",
+      "kind": "open-question",
+      "claim": "Text description for blind players must balance giving enough information to play against staying immersive and not overwhelming players with text.",
+      "detail": "The view command struck this balance well ('you see your little dog named Sirius'). Hallway printouts did not: technical tile counts every single move produce a lot of text.",
+      "t": 844,
+      "quote": "the real push and pull is between being descriptive enough to give the player all the information they need to play the game but still trying to be immersive",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "corridors",
+      "kind": "example",
+      "claim": "NetHack corridors resist simple verbal description because they dead-end, overlap, change during play when dwarves dig, and contain monsters and gold so they can't be skipped.",
+      "detail": "The team abandoned both automatic room-to-room travel and immersive descriptions like 'the hallway branches left and right', because most hallways don't fit easy descriptions. They fell back on listing all tiles in each direction, the most frustrating part of the blind version.",
+      "t": 899,
+      "quote": "corridors can dead end corridors can kind of overlap corridors can do whatever is going on on the left side of the screen",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "spatial information",
+      "kind": "open-question",
+      "claim": "The central unsolved accessibility problem for tile roguelikes is conveying precise spatial positions in text that is neither technical nor verbose, a problem interactive fiction sidesteps by abstracting space into rooms.",
+      "detail": "Saying 'you see a wand and a kobold to the southwest' doesn't tell you whether you can reach the wand first, whether you can route around the encounter, or whether you're lined up to zap a wand. Pepers says future work must find better ways to handle this.",
+      "t": 984,
+      "quote": "giving precise spatial location information using text in a way that's not really technical and verbose is really hard to do",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "audio roguelikes",
+      "kind": "history",
+      "claim": "NetHack 3.6 added listing of monster and object locations, and BrogueSpeak is building a screen-reader-free, fully audio accessible version of Brogue.",
+      "detail": "The NetHack feature closely resembled the research team's work, though buried in menus. BrogueSpeak converts text into spoken audio and sound effects internally and had good early feedback from visually impaired players.",
+      "t": 1196,
+      "quote": "there's also a project called broguespeak which is in development right now which is 100 accessible version of brogue",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "spatial audio",
+      "kind": "open-question",
+      "claim": "Directional spatialized audio works for shooters but is insufficient alone for tile roguelikes, though combining it with precise text could reduce text overload.",
+      "detail": "Answering an audience question, Pepers mentions an accessible spatial-audio Doom. In NetHack you need the exact tile, not just a direction, but she thinks a combination is worth exploring.",
+      "t": 1482,
+      "quote": "if there could be a combination of the two where you had the kind of directional audio as well as being able to get the specific information",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "auto-explore",
+      "kind": "technique",
+      "claim": "For roguelikes with irregular rooms, auto-explore should be offered as an option and paired with orientation aids such as absolute coordinates so blind players know where they are in the level.",
+      "detail": "In a Q&A answer about Angband-style irregular maps, Pepers says Crawl's auto-explore makes play accessible but disorienting. Absolute coordinates, rather than only local offsets, might help; auto-explore remains optional for players who want to explore themselves.",
+      "t": 1613,
+      "quote": "having absolute coordinates like you're 50 tiles right into the dungeon would maybe help a player feel more oriented in the dungeon as a whole",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

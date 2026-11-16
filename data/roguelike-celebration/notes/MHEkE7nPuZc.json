@@ -1,0 +1,226 @@
+{
+  "id": "MHEkE7nPuZc",
+  "title": "Isaac Karth - Why Do You Want to Generate That? A Vocabulary For Talking About Procedural Generation",
+  "speaker": "Isaac Karth",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=MHEkE7nPuZc",
+  "talk_type": "design",
+  "summary": "Isaac Karth, a procedural generation researcher at UC Santa Cruz, proposes a vocabulary of critical lenses ('procedural generation poetics') for asking what a generator is for, judged by its effect on the player. The lenses contrast individual artifacts with the gestalt 'forest' of everything a generator makes, and surface with structure. He adds further axes: repetition, multiplicity (variety), cohesion and style (fit to context). Examples include Dwarf Fortress's Forgotten Beasts, NetHack's stairs, No Man's Sky's single-biome planets, Minecraft diamond placement, Spelunky's guaranteed paths and Elite Dangerous's identical docking ports. In Q&A he suggests foregrounding causality to help players perceive structure, and walks the lenses through designing a Dungeon Crawl Stone Soup room template.",
+  "games": [
+    "Dwarf Fortress",
+    "NetHack",
+    "No Man's Sky",
+    "Minecraft",
+    "Spelunky",
+    "Unexplored",
+    "Elite",
+    "Elite Dangerous",
+    "Starflight",
+    "Exile",
+    "Dungeon Crawl Stone Soup",
+    "Annals of the Parrigues"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator analysis",
+      "kind": "principle",
+      "claim": "Designers should ask explicitly why they want to generate something and what effect it should have on the player, using critical lenses that each raise a set of questions about a generator.",
+      "detail": "Karth calls this 'procedural generation poetics', looking at generators by the effect they create in the player. A critical lens is a theory used as one perspective, not the only one; he credits Emily Short's generative tarot in Annals of the Parrigues as inspiration.",
+      "t": 8,
+      "quote": "we're making procedural generators but why do you want to generate that particular thing exactly? What are you hoping to get out of it?",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "artifact versus forest",
+      "kind": "principle",
+      "claim": "A generator can be judged by its individual artifacts (the single snowflake) or by the overall impression of its whole generative space (the blizzard), and these lenses ask different questions.",
+      "detail": "Artifact questions: what effect does one output have on the player, and what differences between outputs matter? Forest questions: what overall impression does the space give, do outputs always or never have some property, and do connections between them matter?",
+      "t": 181,
+      "quote": "are we concentrating on the individual artifacts that the generator creates? Or are we looking at the effect of the entire forest?",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monster generation",
+      "kind": "example",
+      "claim": "Dwarf Fortress's Forgotten Beasts are memorable as individual artifacts because their specific generated properties change what happens to your fortress.",
+      "detail": "They are only short descriptions yet have inspired reams of fan art. Whether a beast is made of bronze or water matters, because one will kill many more dwarves.",
+      "t": 279,
+      "quote": "It matters if it is made out of bronze or water. One of those is going to kill a lot more of my dwarfs.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "memorable levels",
+      "kind": "technique",
+      "claim": "When tuning a level generator, look for what makes an individual level stand out, such as a fountain or a branch staircase, and add or change features to make standout levels more likely.",
+      "detail": "Karth uses NetHack-style dungeon levels: is this the level with the fountain, or the one with stairs to the Gnomish Mines? He also notes games like Exile and Starflight used one fixed-seed generator, so players never see the whole generative space, only individual results.",
+      "t": 406,
+      "quote": "If we are tweaking our generator, what can we add or change to make different levels more likely to stand out?",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "biomes",
+      "kind": "example",
+      "claim": "No Man's Sky gives each planet a single biome so players immediately grasp the planet's gestalt, such as the blue-grass planet or the canal planet.",
+      "detail": "Karth uses this to show designing for the forest lens: deciding what the whole should exhibit, so patterns emerge once enough is seen.",
+      "t": 439,
+      "quote": "No Man's Sky deliberately made the sky to have each planet only have a single biome",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "invariants",
+      "kind": "principle",
+      "claim": "What a generator never varies is often its most characteristic trait, so breaking an invariant signals something important, as when a NetHack level departs from one up and one down staircase.",
+      "detail": "Karth says the more characteristic part of a generator turns out to be what it is not generating. A default NetHack level has one up and one down stair; when that pattern breaks, players know something is going on.",
+      "t": 480,
+      "quote": "the more characteristic part of the generator turns out to be the things it isn't generating",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range",
+      "kind": "warning",
+      "claim": "A generator can have huge numeric variety yet produce outputs that all feel the same (Kate Compton's '10,000 bowls of oatmeal' problem), which gestalt and expressive-range thinking help diagnose.",
+      "detail": "Karth relays Compton's term for generators whose outputs differ in numbers but blur into mush.",
+      "t": 509,
+      "quote": "you have a generator that can do all sorts of things but they all look similar. The numbers are different but it all turns into this kind of mush",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "framing",
+      "kind": "technique",
+      "claim": "How a generator is presented in context and described to the player (framing) shapes how players perceive what it makes.",
+      "detail": "Karth borrows 'framing' from computational creativity: the computer explains what decisions it made and why. Designers can tune generators and their presentation to steer player perception.",
+      "t": 560,
+      "quote": "how the generator exist in context and how we describe it to the player shapes those perceptions",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "structure versus surface",
+      "kind": "principle",
+      "claim": "Players' attention naturally shifts from the surface of generated content to the generator's structure as they become familiar, but in roguelikes consequential individual details keep attention on the surface, which helps proc gen work well.",
+      "detail": "Karth's 'aesthetic locus' lens asks whether focus is on how something was made or what it does. In a roguelike it matters a great deal whether an encounter is a lowercase d or a capital D dragon; he thinks this is one reason roguelikes use procedural generation so effectively.",
+      "t": 687,
+      "quote": "in roguelikes, the way that individual details matter a lot tends to keep the player focused on the surface even as they become more familiar with the generator",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "history simulation",
+      "kind": "example",
+      "claim": "Dwarf Fortress engravings reference events from the world-generation history simulation, letting players indirectly sense a hidden history they never see directly.",
+      "detail": "Karth cites engravings and detailed artifact descriptions as Dwarf Fortress surface content that also exposes underlying structure.",
+      "t": 764,
+      "quote": "Even though the player can't directly see that history simulation, they can indirectly experience those effects",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "learnable generators",
+      "kind": "example",
+      "claim": "Minecraft places diamonds by specific rules (clusters at particular depths), so players can learn and exploit the generator's structure without knowing where any specific diamond is.",
+      "detail": "Players generalize: dig down this far with a suitable pickaxe. Karth presents it as players getting a feel for the generator indirectly.",
+      "t": 785,
+      "quote": "They're always found in clusters and always found at particular depths. The player can learn those rules",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "connectivity",
+      "kind": "example",
+      "claim": "Spelunky guarantees a path from entrance to exit through rules about which rooms may connect, while Unexplored uses a separate mission-structure graph, a hidden system for players to discover.",
+      "detail": "In Spelunky the rules are implicit in the tiles it places; in Unexplored the mission graph is separate from the dungeon layout.",
+      "t": 820,
+      "quote": "Spelunky guarantees there is a path to the entrance and exit. It does this by having rules on which rooms can connect to other rooms.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "landmarks",
+      "kind": "technique",
+      "claim": "Add structure to generated levels by varying contrast in a parameter between levels (many small rooms vs many big rooms) or dropping in unique landmark levels like an Oracle level or big room.",
+      "detail": "Karth notes this is common in roguelikes, which use a usual dungeon generator but insert special levels.",
+      "t": 893,
+      "quote": "This level might have a lot of small rooms, this level might have a lot of big rooms, or having a particular unique landmark to drop in.",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "repetition",
+      "kind": "principle",
+      "claim": "Repetition is a separate axis: whether generated elements repeat exactly or resemble each other fractally, and low-uniqueness background 'mushroom' content can form a useful carpet of generativity.",
+      "detail": "Karth relays Emily Short's term for non-unique background detail, like ordinary room layouts or Markov text, that isn't important individually but provides a generative background. The question is whether columns repeat identically or are self-similar yet unique.",
+      "t": 1027,
+      "quote": "just stuff that's not super unique on it's own but gives you a background carpet of generativity",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "multiplicity",
+      "kind": "example",
+      "claim": "Elite Dangerous generated widely varied space station shapes, but docking gameplay required identical docking ports, so players always saw nearly the same thing.",
+      "detail": "Karth uses it to show that variety players don't actually perceive in play fails; designers must balance multiplicity for their generator.",
+      "t": 1114,
+      "quote": "because of how the docking gameplay worked, they all had exactly identical docking ports",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cohesion",
+      "kind": "principle",
+      "claim": "A generator that is constrained to only place compatible elements, like Spelunky's, is powerful because any settings still yield a usable result, though cohesion does not help if the artifacts are the wrong ones.",
+      "detail": "Karth calls this cohesion: Spelunky always has a cohesive level because it can't place things that don't fit together.",
+      "t": 1156,
+      "quote": "you can basically throw whatever settings at it and because of the constraints it has, it will guarantee you will have a usable result",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "style and context",
+      "kind": "principle",
+      "claim": "Generators should be judged on style: how appropriately each artifact fits the context it was generated for, such as a water monster on a swamp level.",
+      "detail": "Karth cites SpeedTree's tools for wrapping roots around the environment. Questions include how well outputs fit, and whether they can be adjusted to match current needs.",
+      "t": 1245,
+      "quote": "Is the generator smart enough to give us a water monster on the swamp level?",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "causality",
+      "kind": "technique",
+      "claim": "To help players perceive structure behind procedural generation rather than dismissing it as random, foreground causality, as NetHack does by tracking the source of every damage instance for the death message.",
+      "detail": "Answering an audience question, Karth suggests extending NetHack's damage-source tracking to the generator: give rooms made by a particular technique a distinctive style, like a floor pattern, so players learn associations.",
+      "t": 1429,
+      "quote": "One way is just foregrounding some of the causality",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room templates",
+      "kind": "technique",
+      "claim": "When designing a new room template (e.g. a class-themed vault for Dungeon Crawl Stone Soup), apply the lenses: its individual effect, how it differs from other rooms, how often it appears, whether its shape is recognizable, and whether it fits level difficulty.",
+      "detail": "Karth imagines a Minotaur- or ogre-themed room that plays differently by class; consider making such rooms share a shape so players know what's coming, clue them with hints, avoid unbalancing rewards or out-of-depth monsters, and adapt to the level's difficulty.",
+      "t": 1723,
+      "quote": "So start thinking about like what are the differences between these rooms.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "foreshadowing",
+      "kind": "example",
+      "claim": "NetHack's sound messages let players hear undiscovered features, hinting at what kind of level they are on and exposing the generator's structure.",
+      "detail": "Karth cites this as a way to clue players in before they reach a special room, alongside giving such rooms unique shapes or scattering clues around a level.",
+      "t": 1837,
+      "quote": "NetHack uses its sound system to do this. You can hear things you haven't discovered yet that gives you a clue as to what kind of level you are on.",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

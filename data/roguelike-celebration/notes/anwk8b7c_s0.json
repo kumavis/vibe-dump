@@ -1,0 +1,143 @@
+{
+  "id": "anwk8b7c_s0",
+  "title": "Max Hawkins - Mapping Activity Space - Adventures in Randomized Living",
+  "speaker": "Max Hawkins",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=anwk8b7c_s0",
+  "talk_type": "culture",
+  "summary": "Max Hawkins argues that identity and recommender systems trap people in a narrow subspace of possible actions, and that submitting to an unbiased random generator is a way out. He describes years of randomizing his life: random restaurants, a random elimination diet, random clothes and tattoo, and random places to live chosen from flight fares. He offers a framework for building randomizers (map the space, sample uniformly, commit to the result, observe and iterate) and walks through apps that sample Google Places and Facebook events, then an in-progress attempt to mine actions from text via verb-phrase extraction. He invites roguelike developers to apply their procedural generation skills to life outside the screen.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "randomized living",
+      "kind": "principle",
+      "claim": "Hawkins argues that choices and identity carve out a narrow subspace of possible actions that acts like an attractor, and recommender systems deepen that rut by predicting preferences.",
+      "detail": "Once you decide you are 'a guitar person' it has implications that make other actions harder to reach, like climbing a wall out of a well. Recommenders aim to know you so well you don't need to choose, which he sees as removing agency.",
+      "t": 249,
+      "quote": "when you choose a subset of action space you're putting yourself into an attractor like you you are sort of trapping yourself in a rut",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "randomized living",
+      "kind": "principle",
+      "claim": "Hawkins' paradoxical remedy for preference loops is to submit fully to a random, unbiased computer system that suggests actions unconditioned by your past choices.",
+      "detail": "A free-association exercise on the word 'game' shows people think of only a few nouns, while a computer's comprehensive list would include many they never thought of. Sampling from such a list acts as a ladder out of your subspace.",
+      "t": 479,
+      "quote": "in order to free yourself from these sorts of preference loops you actually have to submit completely to the will of the machine",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "randomized living",
+      "kind": "example",
+      "claim": "Hawkins randomized restaurants, diet, appearance, clothing and where he lived, choosing random affordable flights and moving for a couple of months at a time for about two years.",
+      "detail": "His Random Diet Club cumulatively eliminated a random food each week. He built a database of flight fares within budget and lived wherever it chose, ending up in places like Slovenia and Dubai he would not have picked by preference.",
+      "t": 713,
+      "quote": "I made a big database of every flight fare and the cost of it and figured out like what's within my budget and I chose a random one",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "procgen skills",
+      "kind": "principle",
+      "claim": "Hawkins urges roguelike developers to apply their procedural generation expertise to randomizing real life outside the screen.",
+      "detail": "Roguelike designers are experts in procedural generation and create realities that differ every play, which he says are exactly the skills needed to escape preference loops.",
+      "t": 757,
+      "quote": "people that design roguelikes have the sorts of skills that are important for getting outside of these preference loops",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "uniform sampling",
+      "kind": "technique",
+      "claim": "Hawkins' framework for a randomizer is to make a comprehensive map of the space, sample from it (preferably uniformly at random), commit to the result, and observe what changes.",
+      "detail": "The map could be every city in the world or all your friends. You do whatever the computer gives you barring ethical concerns, then see how it changed your life and iterate.",
+      "t": 822,
+      "quote": "first you make a map of the thing that you want to randomize",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "rerolling",
+      "kind": "warning",
+      "claim": "A randomizer only works if you accept the first result, because allowing rerolls lets you press again until you get what you already wanted.",
+      "detail": "In his Google Places randomizer app, whatever place it chooses must be the one you go to, as long as it is practical; otherwise you fall into a loop of rerolling toward your preferences.",
+      "t": 917,
+      "quote": "no matter what it chooses it has to be the first one because you can get in this loop where you're like pressing again and again",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "apophenia",
+      "kind": "example",
+      "claim": "People detect meaning in purely random outcomes, which Hawkins experienced when a random destination for discussing a project's end sent him to a pet cemetery.",
+      "detail": "He also found that random places often turned out to be on his daily route but had been blocked out by habit. When ending a business partnership, the randomizer sent them to a pet cemetery, which felt like the perfect place to bury the project.",
+      "t": 963,
+      "quote": "I start to detect patterns in the noise and this is like a very human thing like even though it's totally random it seems to have a meaning",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "scheduling",
+      "kind": "technique",
+      "claim": "Hawkins chained random Facebook events into a continuous schedule by running a traveling-salesperson optimization with time windows over the event list.",
+      "detail": "His Third Party app picked a random event from the full city listing, far below the personalized items at the top. The variation produced an optimal route between random events, which in Berlin took him from a children's puppet show to a taxi school to a government energy conference and beyond.",
+      "t": 1143,
+      "quote": "a traveling salesperson optimization with time windows and give it the list of events and it would make an optimal schedule",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "action extraction",
+      "kind": "technique",
+      "claim": "Hawkins mines a corpus of possible actions from books and web text by constituency parsing sentences, extracting verb phrases, lemmatizing them and replacing pronouns with 'you'.",
+      "detail": "Using Stanford CoreNLP, 'she went to the park and thought she was a tree' becomes 'go to the park and think you are a tree'. Done at scale this yields a large action database he samples and prints; he is also curious about neural models completing action sentences.",
+      "t": 1377,
+      "quote": "if you pull out all the verb phrases you get all these like person does something sorts of ideas",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "filtering output",
+      "kind": "warning",
+      "claim": "Hawkins' raw corpus of extracted actions is mostly noise (vague or non-actionable), and he has not yet found the filter that makes it useful.",
+      "detail": "Outputs like 'meet a certain goal' or ones referencing specific politicians do not change how he thinks. He says some conceptual piece is missing, though a few actions in the list were interesting.",
+      "t": 1472,
+      "quote": "there's a lot of noise there's like I get the action meet a certain goal it's super vague like that doesn't work",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "randomized living",
+      "kind": "example",
+      "claim": "Taking a random generator's suggestions seriously can expose contradictions in one's own values, as when a randomly drawn action made Hawkins confront his views on eating meat.",
+      "detail": "His first instinct was to throw away a shocking action, but asking why he couldn't do it revealed a hypocrisy, since he eats meat yet feels bad about killing a deer. Because he is not the one choosing, the experiments probe what he cares about; he went on a hunting trip but never saw a deer.",
+      "t": 1550,
+      "quote": "by taking the computer seriously I realized this sort of hypocrisy within my own framework the world",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "curation",
+      "kind": "principle",
+      "claim": "Hawkins sees randomization as a step before curation: it expands the set of possibilities, after which you decide what to integrate into your sense of self.",
+      "detail": "Answering a Q&A question about whether drawing from everything makes you nobody, he says the random step widens options and then you ask whether to integrate or push away what happened.",
+      "t": 1706,
+      "quote": "I see this as a step you do before you make that curatorial decision you're sort of like expanding the set of",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "fast feedback",
+      "kind": "principle",
+      "claim": "Hawkins chose which parts of life to randomize by what was easy to build, so he could get experience trying it quickly rather than building a big system first.",
+      "detail": "In Q&A he explains that the Google Places API was available, so he tried it and got feedback fast, using 'can I do that in a day' as his constraint.",
+      "t": 1742,
+      "quote": "I had the constraint whatever I chose should be easy I didn't want to spend a lot of time building up this big system",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,4003 @@
+{
+ "id": "jNUMRG_tvrY",
+ "url": "https://www.youtube.com/watch?v=jNUMRG_tvrY",
+ "title": "Zack Johnson - Kingdom of Loathing",
+ "speaker": "Zack Johnson",
+ "talk_title": "Kingdom of Loathing",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1593,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nBeyond the Mad Lib (But Just Barely): an oral history of the ways in which Kingdom of Loathing uses procedural text generation for flavor and humor.\n\nZack Johnson is the creator of the long-running web MMORPG Kingdom of Loathing and its upcoming cowboy spinoff West of Loathing. If prompted (or intoxicated) he will speak at length on the virtues of HTML frames.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 140,
+   "title": "The history of Kingdom of Loathing"
+  },
+  {
+   "start": 277,
+   "title": "Procedural combat mechanics"
+  },
+  {
+   "start": 422,
+   "title": "Generating procedural content"
+  },
+  {
+   "start": 575,
+   "title": "Haiku mode challenges"
+  },
+  {
+   "start": 845,
+   "title": "Name generation and state"
+  },
+  {
+   "start": 978,
+   "title": "Complex procedural zones"
+  },
+  {
+   "start": 1115,
+   "title": "Q&A and future preservation"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5000,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.08,
+   "d": 1.52,
+   "text": "wonderful game that i hope all of you"
+  },
+  {
+   "t": 1.6,
+   "d": 1.84,
+   "text": "have played in the other room"
+  },
+  {
+   "t": 3.44,
+   "d": 2.88,
+   "text": "if you want to run right now eric and"
+  },
+  {
+   "t": 6.32,
+   "d": 2.0,
+   "text": "robert are talking about"
+  },
+  {
+   "t": 8.32,
+   "d": 3.84,
+   "text": "engband so um and then after this we're"
+  },
+  {
+   "t": 12.16,
+   "d": 0.48,
+   "text": "going to go"
+  },
+  {
+   "t": 12.64,
+   "d": 2.0,
+   "text": "till about 12 15 12 20 because we"
+  },
+  {
+   "t": 14.64,
+   "d": 1.44,
+   "text": "started a bit late and we all get to go"
+  },
+  {
+   "t": 16.08,
+   "d": 1.36,
+   "text": "to lunch"
+  },
+  {
+   "t": 17.44,
+   "d": 1.76,
+   "text": "and then make sure to come back from"
+  },
+  {
+   "t": 19.2,
+   "d": 1.52,
+   "text": "lunch on time"
+  },
+  {
+   "t": 20.72,
+   "d": 1.68,
+   "text": "because we have great talks and i"
+  },
+  {
+   "t": 22.4,
+   "d": 1.92,
+   "text": "probably have more announcements"
+  },
+  {
+   "t": 24.32,
+   "d": 3.36,
+   "text": "um come over here"
+  },
+  {
+   "t": 27.68,
+   "d": 3.2,
+   "text": "i don't know how to make it"
+  },
+  {
+   "t": 30.88,
+   "d": 2.48,
+   "text": "look nice"
+  },
+  {
+   "t": 39.6,
+   "d": 6.24,
+   "text": "present moon is"
+  },
+  {
+   "t": 47.04,
+   "d": 3.28,
+   "text": "sorry everyone computers are hard"
+  },
+  {
+   "t": 50.32,
+   "d": 2.4,
+   "text": "i guess"
+  },
+  {
+   "t": 55.44,
+   "d": 4.4,
+   "text": "you did lose internet"
+  },
+  {
+   "t": 73.92,
+   "d": 1.28,
+   "text": "i haven't actually practiced this talk"
+  },
+  {
+   "t": 75.2,
+   "d": 1.44,
+   "text": "so it might only be 10 minutes long they"
+  },
+  {
+   "t": 76.64,
+   "d": 11.2,
+   "text": "might be fine"
+  },
+  {
+   "t": 98.84,
+   "d": 3.0,
+   "text": "uh"
+  },
+  {
+   "t": 123.28,
+   "d": 2.8,
+   "text": "okay now we are starting big round of"
+  },
+  {
+   "t": 126.08,
+   "d": 1.04,
+   "text": "applause for jack"
+  },
+  {
+   "t": 127.12,
+   "d": 2.72,
+   "text": "for zach"
+  },
+  {
+   "t": 133.44,
+   "d": 2.88,
+   "text": "hi i'm zach johnson i'm the founder of"
+  },
+  {
+   "t": 136.32,
+   "d": 1.28,
+   "text": "asymmetric"
+  },
+  {
+   "t": 137.6,
+   "d": 2.96,
+   "text": "small independent game studio what we"
+  },
+  {
+   "t": 140.56,
+   "d": 1.2,
+   "text": "are largely known for is"
+  },
+  {
+   "t": 141.76,
+   "d": 2.0,
+   "text": "kingdom of loathing which is a web-based"
+  },
+  {
+   "t": 143.76,
+   "d": 3.44,
+   "text": "mmorpg that came out in 2003"
+  },
+  {
+   "t": 147.2,
+   "d": 1.76,
+   "text": "you might remember it if your junior"
+  },
+  {
+   "t": 148.96,
+   "d": 1.6,
+   "text": "high computer lab wouldn't let you run"
+  },
+  {
+   "t": 150.56,
+   "d": 2.56,
+   "text": "runescape"
+  },
+  {
+   "t": 154.0,
+   "d": 1.84,
+   "text": "but what it has done is it has uh"
+  },
+  {
+   "t": 155.84,
+   "d": 1.84,
+   "text": "provided a very weird job for me and a"
+  },
+  {
+   "t": 157.68,
+   "d": 1.6,
+   "text": "lot of my friends for the last 13 and a"
+  },
+  {
+   "t": 159.28,
+   "d": 1.6,
+   "text": "half years and uh"
+  },
+  {
+   "t": 160.88,
+   "d": 1.76,
+   "text": "since this is what it looks like we've"
+  },
+  {
+   "t": 162.64,
+   "d": 1.44,
+   "text": "had to rely largely on its"
+  },
+  {
+   "t": 164.08,
+   "d": 2.16,
+   "text": "sort of charm and humor and writing"
+  },
+  {
+   "t": 166.24,
+   "d": 0.96,
+   "text": "we've consistently"
+  },
+  {
+   "t": 167.2,
+   "d": 1.6,
+   "text": "employed more writers than programmers"
+  },
+  {
+   "t": 168.8,
+   "d": 3.76,
+   "text": "which i think is fairly rare"
+  },
+  {
+   "t": 173.44,
+   "d": 1.44,
+   "text": "we've done a lot of stuff with"
+  },
+  {
+   "t": 174.88,
+   "d": 1.76,
+   "text": "procedurally generated text"
+  },
+  {
+   "t": 176.64,
+   "d": 1.84,
+   "text": "and trying to make it funny and that is"
+  },
+  {
+   "t": 178.48,
+   "d": 2.16,
+   "text": "what i'm going to talk about today"
+  },
+  {
+   "t": 180.64,
+   "d": 1.92,
+   "text": "not there's not any real thesis or"
+  },
+  {
+   "t": 182.56,
+   "d": 1.84,
+   "text": "thrust to this it's more just"
+  },
+  {
+   "t": 184.4,
+   "d": 1.52,
+   "text": "these are some things that we ran into"
+  },
+  {
+   "t": 185.92,
+   "d": 1.84,
+   "text": "some things that we did and then"
+  },
+  {
+   "t": 187.76,
+   "d": 3.12,
+   "text": "that's it so the way i see it there's a"
+  },
+  {
+   "t": 190.88,
+   "d": 2.08,
+   "text": "couple different approaches to this"
+  },
+  {
+   "t": 192.96,
+   "d": 3.52,
+   "text": "you can just randomly generate stuff"
+  },
+  {
+   "t": 196.48,
+   "d": 2.4,
+   "text": "and somewhere in this list is the"
+  },
+  {
+   "t": 198.88,
+   "d": 1.2,
+   "text": "funniest knock-knock joke"
+  },
+  {
+   "t": 200.08,
+   "d": 2.0,
+   "text": "that has ever been written but it's"
+  },
+  {
+   "t": 202.08,
+   "d": 1.68,
+   "text": "going to be really hard to find"
+  },
+  {
+   "t": 203.76,
+   "d": 4.56,
+   "text": "amidst all of the nonsense and"
+  },
+  {
+   "t": 208.72,
+   "d": 1.68,
+   "text": "this is this is kind of how i feel about"
+  },
+  {
+   "t": 210.4,
+   "d": 1.84,
+   "text": "a lot of the sort of like markov chain"
+  },
+  {
+   "t": 212.24,
+   "d": 2.64,
+   "text": "generated random text and more recently"
+  },
+  {
+   "t": 214.88,
+   "d": 1.44,
+   "text": "the sort of recurrent neural network"
+  },
+  {
+   "t": 216.32,
+   "d": 0.56,
+   "text": "stuff"
+  },
+  {
+   "t": 216.88,
+   "d": 3.2,
+   "text": "where it is funny but a lot of times"
+  },
+  {
+   "t": 220.08,
+   "d": 1.68,
+   "text": "it's funny because it's nonsense and so"
+  },
+  {
+   "t": 221.76,
+   "d": 1.28,
+   "text": "it's sort of difficult to"
+  },
+  {
+   "t": 223.04,
+   "d": 2.64,
+   "text": "use it for anything uh an alternative"
+  },
+  {
+   "t": 225.68,
+   "d": 0.48,
+   "text": "approach"
+  },
+  {
+   "t": 226.16,
+   "d": 3.84,
+   "text": "is this which this is always"
+  },
+  {
+   "t": 230.0,
+   "d": 1.92,
+   "text": "exactly as funny as the original source"
+  },
+  {
+   "t": 231.92,
+   "d": 1.44,
+   "text": "joke"
+  },
+  {
+   "t": 233.36,
+   "d": 3.2,
+   "text": "how funny that is up to you i guess but"
+  },
+  {
+   "t": 236.56,
+   "d": 2.4,
+   "text": "we tend to try in kingdom of loathing to"
+  },
+  {
+   "t": 238.96,
+   "d": 1.12,
+   "text": "do stuff that is"
+  },
+  {
+   "t": 240.08,
+   "d": 2.48,
+   "text": "somewhere in between those two"
+  },
+  {
+   "t": 242.56,
+   "d": 2.48,
+   "text": "approaches"
+  },
+  {
+   "t": 246.0,
+   "d": 2.88,
+   "text": "very very early on in kol we started"
+  },
+  {
+   "t": 248.88,
+   "d": 1.6,
+   "text": "doing this kind of stuff so it's just"
+  },
+  {
+   "t": 250.48,
+   "d": 1.84,
+   "text": "very very deep in the dna in in the"
+  },
+  {
+   "t": 252.32,
+   "d": 0.72,
+   "text": "beginning"
+  },
+  {
+   "t": 253.04,
+   "d": 1.6,
+   "text": "the game was very much just like it"
+  },
+  {
+   "t": 254.64,
+   "d": 1.52,
+   "text": "would present a list of locations to you"
+  },
+  {
+   "t": 256.16,
+   "d": 1.12,
+   "text": "and you could click on them and then you"
+  },
+  {
+   "t": 257.28,
+   "d": 1.2,
+   "text": "would get a little story about what"
+  },
+  {
+   "t": 258.48,
+   "d": 0.56,
+   "text": "happened"
+  },
+  {
+   "t": 259.04,
+   "d": 2.32,
+   "text": "which was all just written nothing"
+  },
+  {
+   "t": 261.36,
+   "d": 1.68,
+   "text": "procedurally generated and then it would"
+  },
+  {
+   "t": 263.04,
+   "d": 2.16,
+   "text": "make some stats go up or down randomly"
+  },
+  {
+   "t": 265.2,
+   "d": 1.68,
+   "text": "the stats didn't really mean anything at"
+  },
+  {
+   "t": 266.88,
+   "d": 1.12,
+   "text": "first you could get equipment"
+  },
+  {
+   "t": 268.0,
+   "d": 2.48,
+   "text": "and put it on but it didn't do anything"
+  },
+  {
+   "t": 270.48,
+   "d": 1.2,
+   "text": "eventually"
+  },
+  {
+   "t": 271.68,
+   "d": 1.2,
+   "text": "people were paying enough attention to"
+  },
+  {
+   "t": 272.88,
+   "d": 1.52,
+   "text": "it and i was like well you know i guess"
+  },
+  {
+   "t": 274.4,
+   "d": 1.84,
+   "text": "i could make a game out of this i"
+  },
+  {
+   "t": 276.24,
+   "d": 1.44,
+   "text": "suppose"
+  },
+  {
+   "t": 277.68,
+   "d": 2.72,
+   "text": "so introduced a combat system started"
+  },
+  {
+   "t": 280.4,
+   "d": 0.8,
+   "text": "doing a lot of things where you were"
+  },
+  {
+   "t": 281.2,
+   "d": 1.36,
+   "text": "actually fighting with monsters instead"
+  },
+  {
+   "t": 282.56,
+   "d": 1.52,
+   "text": "of just reading these stories"
+  },
+  {
+   "t": 284.08,
+   "d": 1.92,
+   "text": "and so we needed a bunch of like"
+  },
+  {
+   "t": 286.0,
+   "d": 2.48,
+   "text": "metadata about the monsters so like what"
+  },
+  {
+   "t": 288.48,
+   "d": 0.56,
+   "text": "their"
+  },
+  {
+   "t": 289.04,
+   "d": 2.64,
+   "text": "gender pronoun was and for their for"
+  },
+  {
+   "t": 291.68,
+   "d": 1.6,
+   "text": "what they did to you as an attack we"
+  },
+  {
+   "t": 293.28,
+   "d": 1.68,
+   "text": "just gave them a single verb"
+  },
+  {
+   "t": 294.96,
+   "d": 3.04,
+   "text": "uh and we only ever i don't"
+  },
+  {
+   "t": 298.0,
+   "d": 1.2,
+   "text": "know now that i think about it if there"
+  },
+  {
+   "t": 299.2,
+   "d": 1.44,
+   "text": "are any verbs that don't work this way"
+  },
+  {
+   "t": 300.64,
+   "d": 0.64,
+   "text": "but uh"
+  },
+  {
+   "t": 301.28,
+   "d": 1.68,
+   "text": "it was just a verb and you put an s on"
+  },
+  {
+   "t": 302.96,
+   "d": 1.68,
+   "text": "it and it makes it present tense or he"
+  },
+  {
+   "t": 304.64,
+   "d": 2.96,
+   "text": "tries to do it without an s"
+  },
+  {
+   "t": 307.6,
+   "d": 1.84,
+   "text": "the all of that stuff was attached to"
+  },
+  {
+   "t": 309.44,
+   "d": 1.2,
+   "text": "the monster"
+  },
+  {
+   "t": 310.64,
+   "d": 1.52,
+   "text": "they they you know they had gender they"
+  },
+  {
+   "t": 312.16,
+   "d": 2.72,
+   "text": "had verb but then the body part list"
+  },
+  {
+   "t": 314.88,
+   "d": 2.0,
+   "text": "just came out of this hard-coded uh"
+  },
+  {
+   "t": 316.88,
+   "d": 2.16,
+   "text": "array in the php script that"
+  },
+  {
+   "t": 319.04,
+   "d": 2.16,
+   "text": "ran the fight and you can see from the"
+  },
+  {
+   "t": 321.2,
+   "d": 1.76,
+   "text": "end there in the in the beginning the"
+  },
+  {
+   "t": 322.96,
+   "d": 0.48,
+   "text": "tone"
+  },
+  {
+   "t": 323.44,
+   "d": 2.88,
+   "text": "of of uh kol was a lot more sort of"
+  },
+  {
+   "t": 326.32,
+   "d": 1.36,
+   "text": "beavis and buttheady than"
+  },
+  {
+   "t": 327.68,
+   "d": 3.2,
+   "text": "it ended up being as we all got older"
+  },
+  {
+   "t": 330.88,
+   "d": 3.04,
+   "text": "um that said i think the inclusion of"
+  },
+  {
+   "t": 333.92,
+   "d": 0.4,
+   "text": "bung"
+  },
+  {
+   "t": 334.32,
+   "d": 1.52,
+   "text": "in this list turned out to be weirdly"
+  },
+  {
+   "t": 335.84,
+   "d": 1.6,
+   "text": "important because every screenshot of"
+  },
+  {
+   "t": 337.44,
+   "d": 1.28,
+   "text": "kol that you see in"
+  },
+  {
+   "t": 338.72,
+   "d": 1.92,
+   "text": "a magazine or on an early website from"
+  },
+  {
+   "t": 340.64,
+   "d": 1.92,
+   "text": "like 2003 2004 when the internet was"
+  },
+  {
+   "t": 342.56,
+   "d": 1.2,
+   "text": "paying attention to it"
+  },
+  {
+   "t": 343.76,
+   "d": 3.52,
+   "text": "always showed bung in the body part slot"
+  },
+  {
+   "t": 347.28,
+   "d": 2.56,
+   "text": "in the combat message so so basically"
+  },
+  {
+   "t": 349.84,
+   "d": 2.24,
+   "text": "you'd fight these monsters it would"
+  },
+  {
+   "t": 352.08,
+   "d": 1.2,
+   "text": "generate a sentence that tells you what"
+  },
+  {
+   "t": 353.28,
+   "d": 1.28,
+   "text": "happens then it would pick a bunch of"
+  },
+  {
+   "t": 354.56,
+   "d": 1.52,
+   "text": "random sort of"
+  },
+  {
+   "t": 356.08,
+   "d": 1.84,
+   "text": "ouch noises that you've made tell you"
+  },
+  {
+   "t": 357.92,
+   "d": 1.84,
+   "text": "what happened"
+  },
+  {
+   "t": 359.76,
+   "d": 2.08,
+   "text": "when you hit them did a bunch of sort of"
+  },
+  {
+   "t": 361.84,
+   "d": 1.92,
+   "text": "like batman noises and"
+  },
+  {
+   "t": 363.76,
+   "d": 1.6,
+   "text": "that this ended up being kind of a cool"
+  },
+  {
+   "t": 365.36,
+   "d": 1.76,
+   "text": "system to mess with because we could do"
+  },
+  {
+   "t": 367.12,
+   "d": 1.6,
+   "text": "a thing later where it's like well"
+  },
+  {
+   "t": 368.72,
+   "d": 1.28,
+   "text": "if you're hitting them with like a"
+  },
+  {
+   "t": 370.0,
+   "d": 2.0,
+   "text": "squeaky hammer it can replace those with"
+  },
+  {
+   "t": 372.0,
+   "d": 1.2,
+   "text": "different kinds of noises and then"
+  },
+  {
+   "t": 373.2,
+   "d": 1.84,
+   "text": "that's something new for you to see"
+  },
+  {
+   "t": 375.04,
+   "d": 3.44,
+   "text": "um and this was this was really"
+  },
+  {
+   "t": 378.48,
+   "d": 2.96,
+   "text": "rudimentary uh but but it was necessary"
+  },
+  {
+   "t": 381.44,
+   "d": 0.88,
+   "text": "i think once"
+  },
+  {
+   "t": 382.32,
+   "d": 1.2,
+   "text": "once we moved to this model where you"
+  },
+  {
+   "t": 383.52,
+   "d": 1.12,
+   "text": "were actually fighting monsters it"
+  },
+  {
+   "t": 384.64,
+   "d": 1.6,
+   "text": "needed to just not be the same sentence"
+  },
+  {
+   "t": 386.24,
+   "d": 1.28,
+   "text": "over and over again so this was at least"
+  },
+  {
+   "t": 387.52,
+   "d": 0.48,
+   "text": "like"
+  },
+  {
+   "t": 388.0,
+   "d": 1.52,
+   "text": "something that you could look at that"
+  },
+  {
+   "t": 389.52,
+   "d": 3.32,
+   "text": "was maybe funny some of the time"
+  },
+  {
+   "t": 392.84,
+   "d": 2.52,
+   "text": "um eventually we decided to make this"
+  },
+  {
+   "t": 395.36,
+   "d": 2.8,
+   "text": "great big multiplayer dungeon and it was"
+  },
+  {
+   "t": 398.16,
+   "d": 1.44,
+   "text": "kind of modeled after early world of"
+  },
+  {
+   "t": 399.6,
+   "d": 1.6,
+   "text": "warcraft raids and so"
+  },
+  {
+   "t": 401.2,
+   "d": 1.52,
+   "text": "it's like well you're going to be"
+  },
+  {
+   "t": 402.72,
+   "d": 2.24,
+   "text": "fighting a lot of hobos"
+  },
+  {
+   "t": 404.96,
+   "d": 2.08,
+   "text": "leading up to a big hobo boss that"
+  },
+  {
+   "t": 407.04,
+   "d": 1.04,
+   "text": "you're gonna fight and"
+  },
+  {
+   "t": 408.08,
+   "d": 1.36,
+   "text": "the way that it made sense to implement"
+  },
+  {
+   "t": 409.44,
+   "d": 1.84,
+   "text": "this was that all of the all of the sort"
+  },
+  {
+   "t": 411.28,
+   "d": 2.16,
+   "text": "of trash mobs as wow would call them"
+  },
+  {
+   "t": 413.44,
+   "d": 1.68,
+   "text": "were the same monster and so we were"
+  },
+  {
+   "t": 415.12,
+   "d": 2.48,
+   "text": "like well we really don't want this to"
+  },
+  {
+   "t": 417.6,
+   "d": 2.08,
+   "text": "just seem super grindy so what if we"
+  },
+  {
+   "t": 419.68,
+   "d": 1.84,
+   "text": "just randomly generated the names of"
+  },
+  {
+   "t": 421.52,
+   "d": 0.48,
+   "text": "these things"
+  },
+  {
+   "t": 422.0,
+   "d": 1.84,
+   "text": "as you were fighting them john hodgman"
+  },
+  {
+   "t": 423.84,
+   "d": 1.12,
+   "text": "had recently published this book the"
+  },
+  {
+   "t": 424.96,
+   "d": 1.52,
+   "text": "areas of my expertise which had a big"
+  },
+  {
+   "t": 426.48,
+   "d": 1.84,
+   "text": "appendix that was 700"
+  },
+  {
+   "t": 428.32,
+   "d": 2.56,
+   "text": "random hobo names i mean not random i'm"
+  },
+  {
+   "t": 430.88,
+   "d": 1.92,
+   "text": "sure he actually wrote them"
+  },
+  {
+   "t": 432.8,
+   "d": 1.92,
+   "text": "got his permission to to use that as a"
+  },
+  {
+   "t": 434.72,
+   "d": 1.92,
+   "text": "starting point for a name generator"
+  },
+  {
+   "t": 436.64,
+   "d": 3.84,
+   "text": "which at that point looked like this"
+  },
+  {
+   "t": 440.48,
+   "d": 2.16,
+   "text": "if you look closely at this code which"
+  },
+  {
+   "t": 442.64,
+   "d": 2.32,
+   "text": "don't"
+  },
+  {
+   "t": 445.28,
+   "d": 1.6,
+   "text": "you can see that a lot of the a lot of"
+  },
+  {
+   "t": 446.88,
+   "d": 2.08,
+   "text": "the logic and indentation is also"
+  },
+  {
+   "t": 448.96,
+   "d": 1.04,
+   "text": "randomly generated"
+  },
+  {
+   "t": 450.0,
+   "d": 3.44,
+   "text": "i i like to describe kol as a game with"
+  },
+  {
+   "t": 453.44,
+   "d": 3.68,
+   "text": "programmer art and artist code"
+  },
+  {
+   "t": 458.16,
+   "d": 2.96,
+   "text": "so what this mostly does is it uses a"
+  },
+  {
+   "t": 461.12,
+   "d": 2.56,
+   "text": "function called misc text which pulls"
+  },
+  {
+   "t": 463.68,
+   "d": 1.44,
+   "text": "so we have the we have a data structure"
+  },
+  {
+   "t": 465.12,
+   "d": 1.6,
+   "text": "in the back end of kol that is just a"
+  },
+  {
+   "t": 466.72,
+   "d": 1.12,
+   "text": "misc text block"
+  },
+  {
+   "t": 467.84,
+   "d": 2.16,
+   "text": "which is a bunch of just it's a just a"
+  },
+  {
+   "t": 470.0,
+   "d": 2.08,
+   "text": "text field in sql"
+  },
+  {
+   "t": 472.08,
+   "d": 2.0,
+   "text": "and the misc text function just pulls a"
+  },
+  {
+   "t": 474.08,
+   "d": 1.36,
+   "text": "random line out of that"
+  },
+  {
+   "t": 475.44,
+   "d": 1.44,
+   "text": "it has a few arguments that you can send"
+  },
+  {
+   "t": 476.88,
+   "d": 1.68,
+   "text": "to it like give me one that starts with"
+  },
+  {
+   "t": 478.56,
+   "d": 0.4,
+   "text": "d"
+  },
+  {
+   "t": 478.96,
+   "d": 2.08,
+   "text": "or give me the fourth one or whatever"
+  },
+  {
+   "t": 481.04,
+   "d": 2.16,
+   "text": "but uh for the most part it's just"
+  },
+  {
+   "t": 483.2,
+   "d": 2.48,
+   "text": "pulling a random line out of a text"
+  },
+  {
+   "t": 485.68,
+   "d": 0.56,
+   "text": "field"
+  },
+  {
+   "t": 486.24,
+   "d": 2.16,
+   "text": "and uh it became cumbersome to refer to"
+  },
+  {
+   "t": 488.4,
+   "d": 1.6,
+   "text": "these as misc text blocks"
+  },
+  {
+   "t": 490.0,
+   "d": 1.44,
+   "text": "so we started just calling them word"
+  },
+  {
+   "t": 491.44,
+   "d": 1.92,
+   "text": "buckets which is the terminology that i"
+  },
+  {
+   "t": 493.36,
+   "d": 1.68,
+   "text": "will use for the rest of the time here"
+  },
+  {
+   "t": 495.04,
+   "d": 2.32,
+   "text": "but this this was a generator that would"
+  },
+  {
+   "t": 497.36,
+   "d": 1.6,
+   "text": "i think this is way more on the like"
+  },
+  {
+   "t": 498.96,
+   "d": 1.68,
+   "text": "purely random side because there is a"
+  },
+  {
+   "t": 500.64,
+   "d": 1.04,
+   "text": "little bit of structure to it it's"
+  },
+  {
+   "t": 501.68,
+   "d": 1.36,
+   "text": "always going to do like first name last"
+  },
+  {
+   "t": 503.04,
+   "d": 0.48,
+   "text": "name"
+  },
+  {
+   "t": 503.52,
+   "d": 3.28,
+   "text": "that kind of thing and we took"
+  },
+  {
+   "t": 506.8,
+   "d": 1.52,
+   "text": "the we took the john hodgman data"
+  },
+  {
+   "t": 508.32,
+   "d": 1.44,
+   "text": "separated it all up and then added a"
+  },
+  {
+   "t": 509.76,
+   "d": 1.12,
+   "text": "tremendous amount of our own data"
+  },
+  {
+   "t": 510.88,
+   "d": 1.28,
+   "text": "because we had to do some things like"
+  },
+  {
+   "t": 512.16,
+   "d": 2.16,
+   "text": "some of the hobos had like hot elemental"
+  },
+  {
+   "t": 514.32,
+   "d": 1.28,
+   "text": "attacks and so we wanted to give them"
+  },
+  {
+   "t": 515.6,
+   "d": 1.2,
+   "text": "different names that kind of reflected"
+  },
+  {
+   "t": 516.8,
+   "d": 0.88,
+   "text": "that stuff"
+  },
+  {
+   "t": 517.68,
+   "d": 3.52,
+   "text": "and what we found was that people really"
+  },
+  {
+   "t": 521.2,
+   "d": 2.24,
+   "text": "really liked it like the the response to"
+  },
+  {
+   "t": 523.44,
+   "d": 1.44,
+   "text": "the randomly generated names were often"
+  },
+  {
+   "t": 524.88,
+   "d": 1.12,
+   "text": "so much better than the stuff that we"
+  },
+  {
+   "t": 526.0,
+   "d": 1.12,
+   "text": "had written on purpose that it was"
+  },
+  {
+   "t": 527.12,
+   "d": 1.6,
+   "text": "honestly kind of demoralizing"
+  },
+  {
+   "t": 528.72,
+   "d": 3.04,
+   "text": "but um even in generating"
+  },
+  {
+   "t": 531.76,
+   "d": 2.64,
+   "text": "just just for this slide randomly"
+  },
+  {
+   "t": 534.4,
+   "d": 1.84,
+   "text": "generating stuff the first thing that it"
+  },
+  {
+   "t": 536.24,
+   "d": 0.8,
+   "text": "produced was"
+  },
+  {
+   "t": 537.04,
+   "d": 3.92,
+   "text": "thoughtless bill clinton the ladies man"
+  },
+  {
+   "t": 542.4,
+   "d": 1.44,
+   "text": "and so people were sharing screenshots"
+  },
+  {
+   "t": 543.84,
+   "d": 1.68,
+   "text": "with each other it's like hey they"
+  },
+  {
+   "t": 545.52,
+   "d": 1.68,
+   "text": "i found a hobo that was named after this"
+  },
+  {
+   "t": 547.2,
+   "d": 1.76,
+   "text": "friend of mine and so haha"
+  },
+  {
+   "t": 548.96,
+   "d": 1.92,
+   "text": "this game says that you smell bad and i"
+  },
+  {
+   "t": 550.88,
+   "d": 2.08,
+   "text": "just beat you up um"
+  },
+  {
+   "t": 552.96,
+   "d": 3.12,
+   "text": "and that this sort of really showed us i"
+  },
+  {
+   "t": 556.08,
+   "d": 1.44,
+   "text": "think the the potential"
+  },
+  {
+   "t": 557.52,
+   "d": 2.72,
+   "text": "for this in it's a lot easier to have a"
+  },
+  {
+   "t": 560.24,
+   "d": 1.04,
+   "text": "computer write stuff"
+  },
+  {
+   "t": 561.28,
+   "d": 1.76,
+   "text": "than to have to write it all yourself so"
+  },
+  {
+   "t": 563.04,
+   "d": 1.68,
+   "text": "uh especially if we're going to ask the"
+  },
+  {
+   "t": 564.72,
+   "d": 1.36,
+   "text": "player to do something really repetitive"
+  },
+  {
+   "t": 566.08,
+   "d": 1.28,
+   "text": "like this is a nice way of"
+  },
+  {
+   "t": 567.36,
+   "d": 1.36,
+   "text": "differentiating things to make it"
+  },
+  {
+   "t": 568.72,
+   "d": 0.72,
+   "text": "interesting"
+  },
+  {
+   "t": 569.44,
+   "d": 1.04,
+   "text": "so there's something more to look"
+  },
+  {
+   "t": 570.48,
+   "d": 1.2,
+   "text": "forward to when you fight the next"
+  },
+  {
+   "t": 571.68,
+   "d": 1.44,
+   "text": "monster other than just like your stats"
+  },
+  {
+   "t": 573.12,
+   "d": 1.28,
+   "text": "getting higher"
+  },
+  {
+   "t": 574.4,
+   "d": 4.0,
+   "text": "um so going back to that transition from"
+  },
+  {
+   "t": 578.4,
+   "d": 1.76,
+   "text": "when it was just a bunch of"
+  },
+  {
+   "t": 580.16,
+   "d": 1.28,
+   "text": "stories that you would get from clicking"
+  },
+  {
+   "t": 581.44,
+   "d": 1.44,
+   "text": "on something to actually fighting"
+  },
+  {
+   "t": 582.88,
+   "d": 0.64,
+   "text": "monsters"
+  },
+  {
+   "t": 583.52,
+   "d": 2.56,
+   "text": "there was a really old early zone in kol"
+  },
+  {
+   "t": 586.08,
+   "d": 0.96,
+   "text": "that all of the"
+  },
+  {
+   "t": 587.04,
+   "d": 1.44,
+   "text": "all of the text that you got was just"
+  },
+  {
+   "t": 588.48,
+   "d": 1.28,
+   "text": "written in haiku and that was another"
+  },
+  {
+   "t": 589.76,
+   "d": 0.72,
+   "text": "thing that like"
+  },
+  {
+   "t": 590.48,
+   "d": 2.48,
+   "text": "early press really latched on to uh"
+  },
+  {
+   "t": 592.96,
+   "d": 0.96,
+   "text": "because it you know"
+  },
+  {
+   "t": 593.92,
+   "d": 1.76,
+   "text": "it was that that period of time where"
+  },
+  {
+   "t": 595.68,
+   "d": 1.2,
+   "text": "something was funny just because it was"
+  },
+  {
+   "t": 596.88,
+   "d": 1.92,
+   "text": "a haiku"
+  },
+  {
+   "t": 598.8,
+   "d": 1.76,
+   "text": "when we went to sort of modernize that"
+  },
+  {
+   "t": 600.56,
+   "d": 1.36,
+   "text": "zone"
+  },
+  {
+   "t": 601.92,
+   "d": 1.52,
+   "text": "i thought well so we want to put"
+  },
+  {
+   "t": 603.44,
+   "d": 1.68,
+   "text": "monsters in there that you can fight as"
+  },
+  {
+   "t": 605.12,
+   "d": 0.48,
+   "text": "normal"
+  },
+  {
+   "t": 605.6,
+   "d": 1.44,
+   "text": "but we want all of the stuff that"
+  },
+  {
+   "t": 607.04,
+   "d": 1.68,
+   "text": "happens in there to still be in haiku"
+  },
+  {
+   "t": 608.72,
+   "d": 1.52,
+   "text": "which is fine we could just write"
+  },
+  {
+   "t": 610.24,
+   "d": 1.52,
+   "text": "the the description of the monster as"
+  },
+  {
+   "t": 611.76,
+   "d": 1.92,
+   "text": "haiku we can write the the the messages"
+  },
+  {
+   "t": 613.68,
+   "d": 1.68,
+   "text": "that they generate when they hit you"
+  },
+  {
+   "t": 615.36,
+   "d": 2.32,
+   "text": "but all of the players actions would not"
+  },
+  {
+   "t": 617.68,
+   "d": 0.88,
+   "text": "be in haiku"
+  },
+  {
+   "t": 618.56,
+   "d": 3.84,
+   "text": "and i thought well what if we just"
+  },
+  {
+   "t": 622.4,
+   "d": 1.52,
+   "text": "tried to make it so we could throw the"
+  },
+  {
+   "t": 623.92,
+   "d": 2.8,
+   "text": "entire game into haiku output without"
+  },
+  {
+   "t": 626.72,
+   "d": 2.0,
+   "text": "concealing any information like because"
+  },
+  {
+   "t": 628.72,
+   "d": 1.2,
+   "text": "it just becomes impossible to actually"
+  },
+  {
+   "t": 629.92,
+   "d": 1.44,
+   "text": "play the game if you don't"
+  },
+  {
+   "t": 631.36,
+   "d": 0.96,
+   "text": "know what's happening if they're"
+  },
+  {
+   "t": 632.32,
+   "d": 1.76,
+   "text": "abstracted out to just just to just a"
+  },
+  {
+   "t": 634.08,
+   "d": 0.72,
+   "text": "joke"
+  },
+  {
+   "t": 634.8,
+   "d": 1.36,
+   "text": "and i thought well all you have to do is"
+  },
+  {
+   "t": 636.16,
+   "d": 1.2,
+   "text": "categorize all the different kinds of"
+  },
+  {
+   "t": 637.36,
+   "d": 1.84,
+   "text": "text that the combat script is able to"
+  },
+  {
+   "t": 639.2,
+   "d": 0.56,
+   "text": "produce"
+  },
+  {
+   "t": 639.76,
+   "d": 1.44,
+   "text": "and then write a bunch of haikus for"
+  },
+  {
+   "t": 641.2,
+   "d": 1.04,
+   "text": "each of those and like how many"
+  },
+  {
+   "t": 642.24,
+   "d": 2.24,
+   "text": "categories could there possibly be"
+  },
+  {
+   "t": 644.48,
+   "d": 2.64,
+   "text": "and it turned out there were like a lot"
+  },
+  {
+   "t": 647.12,
+   "d": 1.04,
+   "text": "and what i didn't think of in the"
+  },
+  {
+   "t": 648.16,
+   "d": 0.88,
+   "text": "beginning was"
+  },
+  {
+   "t": 649.04,
+   "d": 2.32,
+   "text": "also haikus have like a format and"
+  },
+  {
+   "t": 651.36,
+   "d": 2.0,
+   "text": "that's why they're haikus right so"
+  },
+  {
+   "t": 653.36,
+   "d": 2.72,
+   "text": "if we're putting a number in to a haiku"
+  },
+  {
+   "t": 656.08,
+   "d": 0.64,
+   "text": "for instance"
+  },
+  {
+   "t": 656.72,
+   "d": 1.44,
+   "text": "we're gonna need to have like a bunch of"
+  },
+  {
+   "t": 658.16,
+   "d": 1.44,
+   "text": "different variants on that haiku"
+  },
+  {
+   "t": 659.6,
+   "d": 1.28,
+   "text": "depending on how many syllables the"
+  },
+  {
+   "t": 660.88,
+   "d": 0.88,
+   "text": "number is so"
+  },
+  {
+   "t": 661.76,
+   "d": 1.76,
+   "text": "had to write a function to figure out"
+  },
+  {
+   "t": 663.52,
+   "d": 2.08,
+   "text": "how many syllables were in a number"
+  },
+  {
+   "t": 665.6,
+   "d": 1.52,
+   "text": "there was a lot of editorializing there"
+  },
+  {
+   "t": 667.12,
+   "d": 1.92,
+   "text": "and some internal arguments about like"
+  },
+  {
+   "t": 669.04,
+   "d": 2.56,
+   "text": "one zero eight how many syllables is"
+  },
+  {
+   "t": 671.6,
+   "d": 2.64,
+   "text": "that is it 108 is it 108"
+  },
+  {
+   "t": 674.24,
+   "d": 4.0,
+   "text": "is it 108 is it 100 and a yet"
+  },
+  {
+   "t": 678.24,
+   "d": 4.96,
+   "text": "it was one guys we fired that guy uh"
+  },
+  {
+   "t": 683.2,
+   "d": 1.76,
+   "text": "so so this was fine this was just"
+  },
+  {
+   "t": 684.96,
+   "d": 1.28,
+   "text": "writing a function deciding how many"
+  },
+  {
+   "t": 686.24,
+   "d": 1.28,
+   "text": "syllables were in a number and then it"
+  },
+  {
+   "t": 687.52,
+   "d": 0.64,
+   "text": "could generate"
+  },
+  {
+   "t": 688.16,
+   "d": 2.64,
+   "text": "all of these uh eventually it got to the"
+  },
+  {
+   "t": 690.8,
+   "d": 1.36,
+   "text": "point where it's like"
+  },
+  {
+   "t": 692.16,
+   "d": 2.16,
+   "text": "well we'll put the information in sort"
+  },
+  {
+   "t": 694.32,
+   "d": 1.76,
+   "text": "of hover text when you mouse over that"
+  },
+  {
+   "t": 696.08,
+   "d": 1.2,
+   "text": "if you really want to know how many hit"
+  },
+  {
+   "t": 697.28,
+   "d": 1.2,
+   "text": "points you lost but"
+  },
+  {
+   "t": 698.48,
+   "d": 2.48,
+   "text": "but we sort of we only had so much time"
+  },
+  {
+   "t": 700.96,
+   "d": 2.48,
+   "text": "before we had to release this feature"
+  },
+  {
+   "t": 703.44,
+   "d": 2.4,
+   "text": "the other thing is you get a lot of"
+  },
+  {
+   "t": 705.84,
+   "d": 0.64,
+   "text": "items"
+  },
+  {
+   "t": 706.48,
+   "d": 1.6,
+   "text": "in the game and because we eventually"
+  },
+  {
+   "t": 708.08,
+   "d": 1.76,
+   "text": "decided that we wanted this mode to not"
+  },
+  {
+   "t": 709.84,
+   "d": 0.56,
+   "text": "only be"
+  },
+  {
+   "t": 710.4,
+   "d": 2.56,
+   "text": "available in the haiku zone but anywhere"
+  },
+  {
+   "t": 712.96,
+   "d": 0.64,
+   "text": "in the game"
+  },
+  {
+   "t": 713.6,
+   "d": 1.44,
+   "text": "which meant that any item that you could"
+  },
+  {
+   "t": 715.04,
+   "d": 1.28,
+   "text": "get anywhere in the game needed to be"
+  },
+  {
+   "t": 716.32,
+   "d": 1.52,
+   "text": "presented like this"
+  },
+  {
+   "t": 717.84,
+   "d": 3.04,
+   "text": "so this time we actually had to count"
+  },
+  {
+   "t": 720.88,
+   "d": 1.52,
+   "text": "the syllables in the names of all of the"
+  },
+  {
+   "t": 722.4,
+   "d": 1.2,
+   "text": "items in the game which"
+  },
+  {
+   "t": 723.6,
+   "d": 2.64,
+   "text": "now were at like almost ten thousand"
+  },
+  {
+   "t": 726.24,
+   "d": 0.96,
+   "text": "individual items"
+  },
+  {
+   "t": 727.2,
+   "d": 2.4,
+   "text": "at the time it was only four or five"
+  },
+  {
+   "t": 729.6,
+   "d": 0.96,
+   "text": "thousand"
+  },
+  {
+   "t": 730.56,
+   "d": 1.52,
+   "text": "uh coincidentally this was also right"
+  },
+  {
+   "t": 732.08,
+   "d": 1.12,
+   "text": "around the time we decided we should get"
+  },
+  {
+   "t": 733.2,
+   "d": 0.64,
+   "text": "an intern"
+  },
+  {
+   "t": 733.84,
+   "d": 3.12,
+   "text": "for the first time um"
+  },
+  {
+   "t": 736.96,
+   "d": 2.96,
+   "text": "but you can see here there is a lot of"
+  },
+  {
+   "t": 739.92,
+   "d": 1.68,
+   "text": "there's a lot of stuff happening here"
+  },
+  {
+   "t": 741.6,
+   "d": 3.04,
+   "text": "like the a n and the a n"
+  },
+  {
+   "t": 744.64,
+   "d": 3.84,
+   "text": "in capitals just because a bunch of code"
+  },
+  {
+   "t": 748.48,
+   "d": 1.52,
+   "text": "because it was very important to us that"
+  },
+  {
+   "t": 750.0,
+   "d": 1.52,
+   "text": "the writing be"
+  },
+  {
+   "t": 751.52,
+   "d": 1.6,
+   "text": "like at least grammatically correct"
+  },
+  {
+   "t": 753.12,
+   "d": 1.6,
+   "text": "right so a lot of early kol code was"
+  },
+  {
+   "t": 754.72,
+   "d": 1.04,
+   "text": "centered around like"
+  },
+  {
+   "t": 755.76,
+   "d": 1.92,
+   "text": "making sure that things like if you're"
+  },
+  {
+   "t": 757.68,
+   "d": 1.76,
+   "text": "fighting a monster that is a group of"
+  },
+  {
+   "t": 759.44,
+   "d": 1.76,
+   "text": "monsters there was a sort of markup for"
+  },
+  {
+   "t": 761.2,
+   "d": 1.68,
+   "text": "making sure that the messages made sense"
+  },
+  {
+   "t": 762.88,
+   "d": 1.44,
+   "text": "for you to be fighting more than one"
+  },
+  {
+   "t": 764.32,
+   "d": 1.84,
+   "text": "thing as opposed to just one"
+  },
+  {
+   "t": 766.16,
+   "d": 1.36,
+   "text": "you know some of the items names started"
+  },
+  {
+   "t": 767.52,
+   "d": 1.36,
+   "text": "with vowels in some of them started with"
+  },
+  {
+   "t": 768.88,
+   "d": 1.12,
+   "text": "consonants so there needed to be"
+  },
+  {
+   "t": 770.0,
+   "d": 1.04,
+   "text": "processing for that"
+  },
+  {
+   "t": 771.04,
+   "d": 1.68,
+   "text": "we hadn't really standardized all of"
+  },
+  {
+   "t": 772.72,
+   "d": 2.32,
+   "text": "this which led to us"
+  },
+  {
+   "t": 775.04,
+   "d": 2.32,
+   "text": "standardizing a lot of this using this"
+  },
+  {
+   "t": 777.36,
+   "d": 2.64,
+   "text": "function called mad lib"
+  },
+  {
+   "t": 780.0,
+   "d": 4.16,
+   "text": "which even that"
+  },
+  {
+   "t": 784.16,
+   "d": 1.04,
+   "text": "eventually sort of showed its"
+  },
+  {
+   "t": 785.2,
+   "d": 1.6,
+   "text": "limitations because like right here what"
+  },
+  {
+   "t": 786.8,
+   "d": 1.76,
+   "text": "if you wanted it to be an aardvark from"
+  },
+  {
+   "t": 788.56,
+   "d": 1.76,
+   "text": "nantucket or what if you wanted"
+  },
+  {
+   "t": 790.32,
+   "d": 3.2,
+   "text": "the the bucket that was replacing place"
+  },
+  {
+   "t": 793.52,
+   "d": 3.04,
+   "text": "to say like random colorville"
+  },
+  {
+   "t": 796.56,
+   "d": 3.6,
+   "text": "so we added some features to it like a"
+  },
+  {
+   "t": 800.16,
+   "d": 1.84,
+   "text": "and to just like automatically put an a"
+  },
+  {
+   "t": 802.0,
+   "d": 1.84,
+   "text": "or an n before whatever uh whatever"
+  },
+  {
+   "t": 803.84,
+   "d": 1.04,
+   "text": "thing it pulls out of the bucket"
+  },
+  {
+   "t": 804.88,
+   "d": 1.28,
+   "text": "capitalize to make sure that the"
+  },
+  {
+   "t": 806.16,
+   "d": 1.68,
+   "text": "capitalization was correct for a proper"
+  },
+  {
+   "t": 807.84,
+   "d": 0.48,
+   "text": "noun"
+  },
+  {
+   "t": 808.32,
+   "d": 1.28,
+   "text": "if you were building a proper noun out"
+  },
+  {
+   "t": 809.6,
+   "d": 1.6,
+   "text": "of something that wasn't a proper noun"
+  },
+  {
+   "t": 811.2,
+   "d": 0.88,
+   "text": "and then a bunch of like"
+  },
+  {
+   "t": 812.08,
+   "d": 2.0,
+   "text": "text processing things for just making"
+  },
+  {
+   "t": 814.08,
+   "d": 1.36,
+   "text": "things fit into sentences"
+  },
+  {
+   "t": 815.44,
+   "d": 2.32,
+   "text": "the singular and plural uh just used a"
+  },
+  {
+   "t": 817.76,
+   "d": 2.16,
+   "text": "sort of generic markup that we had for"
+  },
+  {
+   "t": 819.92,
+   "d": 2.32,
+   "text": "sometimes it would uh it would change"
+  },
+  {
+   "t": 822.24,
+   "d": 2.0,
+   "text": "the output based on whether the"
+  },
+  {
+   "t": 824.24,
+   "d": 1.6,
+   "text": "the function's called genderized because"
+  },
+  {
+   "t": 825.84,
+   "d": 1.28,
+   "text": "it was it would change the output based"
+  },
+  {
+   "t": 827.12,
+   "d": 0.24,
+   "text": "on"
+  },
+  {
+   "t": 827.36,
+   "d": 1.36,
+   "text": "whether the player was was male or"
+  },
+  {
+   "t": 828.72,
+   "d": 2.0,
+   "text": "female the character was uh but then"
+  },
+  {
+   "t": 830.72,
+   "d": 1.52,
+   "text": "also was used for singular and plural in"
+  },
+  {
+   "t": 832.24,
+   "d": 1.36,
+   "text": "a lot of different places and so"
+  },
+  {
+   "t": 833.6,
+   "d": 3.2,
+   "text": "that didn't always get used but uh"
+  },
+  {
+   "t": 836.8,
+   "d": 1.12,
+   "text": "you know but it was a feature that we"
+  },
+  {
+   "t": 837.92,
+   "d": 2.16,
+   "text": "had there and then"
+  },
+  {
+   "t": 840.08,
+   "d": 2.4,
+   "text": "state tracking for inside of a given"
+  },
+  {
+   "t": 842.48,
+   "d": 1.76,
+   "text": "iteration of the mad lib function"
+  },
+  {
+   "t": 844.24,
+   "d": 2.56,
+   "text": "um which so if we wanted to say you know"
+  },
+  {
+   "t": 846.8,
+   "d": 1.68,
+   "text": "something we wanted a lizard to not be"
+  },
+  {
+   "t": 848.48,
+   "d": 1.92,
+   "text": "blue with blue stripes so we would ask"
+  },
+  {
+   "t": 850.4,
+   "d": 0.48,
+   "text": "for"
+  },
+  {
+   "t": 850.88,
+   "d": 1.52,
+   "text": "two colors that were unique and it would"
+  },
+  {
+   "t": 852.4,
+   "d": 2.48,
+   "text": "know not to use the same one over again"
+  },
+  {
+   "t": 854.88,
+   "d": 1.52,
+   "text": "reuse was the opposite of that if we did"
+  },
+  {
+   "t": 856.4,
+   "d": 1.44,
+   "text": "want to use the same random thing that"
+  },
+  {
+   "t": 857.84,
+   "d": 0.96,
+   "text": "it had pulled out before"
+  },
+  {
+   "t": 858.8,
+   "d": 2.0,
+   "text": "it would just store store a variable in"
+  },
+  {
+   "t": 860.8,
+   "d": 1.92,
+   "text": "memory that kept track of what the"
+  },
+  {
+   "t": 862.72,
+   "d": 4.64,
+   "text": "function yielded the last time it ran um"
+  },
+  {
+   "t": 867.36,
+   "d": 1.84,
+   "text": "because it was recursive we were able to"
+  },
+  {
+   "t": 869.2,
+   "d": 1.68,
+   "text": "do stuff like this like the the"
+  },
+  {
+   "t": 870.88,
+   "d": 2.72,
+   "text": "adjectives bucket could call itself"
+  },
+  {
+   "t": 873.6,
+   "d": 2.08,
+   "text": "and so what that would occasionally do"
+  },
+  {
+   "t": 875.68,
+   "d": 1.68,
+   "text": "was if the dice rolled just right you"
+  },
+  {
+   "t": 877.36,
+   "d": 1.52,
+   "text": "would end up with a guy named big big"
+  },
+  {
+   "t": 878.88,
+   "d": 3.2,
+   "text": "big big big ugly dan"
+  },
+  {
+   "t": 882.08,
+   "d": 2.8,
+   "text": "and that's cool you don't you you i"
+  },
+  {
+   "t": 884.88,
+   "d": 1.36,
+   "text": "think the key is to build it in so that"
+  },
+  {
+   "t": 886.24,
+   "d": 1.6,
+   "text": "happens every once in a while so that it"
+  },
+  {
+   "t": 887.84,
+   "d": 2.08,
+   "text": "is remarkable when it happens and and"
+  },
+  {
+   "t": 889.92,
+   "d": 3.36,
+   "text": "thus actually funny um"
+  },
+  {
+   "t": 893.28,
+   "d": 3.2,
+   "text": "if you'll indulge me for a second um"
+  },
+  {
+   "t": 896.48,
+   "d": 2.72,
+   "text": "i have not seen this movie but i think"
+  },
+  {
+   "t": 899.2,
+   "d": 2.8,
+   "text": "that the name paul blart is pretty funny"
+  },
+  {
+   "t": 902.0,
+   "d": 3.12,
+   "text": "and here's here's why i think it is the"
+  },
+  {
+   "t": 905.12,
+   "d": 0.4,
+   "text": "name"
+  },
+  {
+   "t": 905.52,
+   "d": 3.2,
+   "text": "paul is a very ordinary name probably"
+  },
+  {
+   "t": 908.72,
+   "d": 1.28,
+   "text": "somebody named paul in the audience or"
+  },
+  {
+   "t": 910.0,
+   "d": 1.44,
+   "text": "at least you know somebody named paul"
+  },
+  {
+   "t": 911.44,
+   "d": 3.04,
+   "text": "the name blart however very silly"
+  },
+  {
+   "t": 914.48,
+   "d": 0.96,
+   "text": "when you put them together the"
+  },
+  {
+   "t": 915.44,
+   "d": 1.36,
+   "text": "juxtaposition of the ordinary name and"
+  },
+  {
+   "t": 916.8,
+   "d": 1.44,
+   "text": "the silly name results in what i think"
+  },
+  {
+   "t": 918.24,
+   "d": 1.36,
+   "text": "is pretty funny"
+  },
+  {
+   "t": 919.6,
+   "d": 2.16,
+   "text": "so i wrote this generator mostly to"
+  },
+  {
+   "t": 921.76,
+   "d": 1.44,
+   "text": "illustrate another"
+  },
+  {
+   "t": 923.2,
+   "d": 1.52,
+   "text": "another feature of our generators that"
+  },
+  {
+   "t": 924.72,
+   "d": 1.44,
+   "text": "i'll tell you about in a second but um"
+  },
+  {
+   "t": 926.16,
+   "d": 0.88,
+   "text": "this was just"
+  },
+  {
+   "t": 927.04,
+   "d": 0.8,
+   "text": "there was a place where you were"
+  },
+  {
+   "t": 927.84,
+   "d": 1.12,
+   "text": "fighting a bunch of security guards"
+  },
+  {
+   "t": 928.96,
+   "d": 1.2,
+   "text": "while you were trick-or-treating and we"
+  },
+  {
+   "t": 930.16,
+   "d": 1.2,
+   "text": "just wanted to make sure that they had"
+  },
+  {
+   "t": 931.36,
+   "d": 0.8,
+   "text": "names that were"
+  },
+  {
+   "t": 932.16,
+   "d": 2.96,
+   "text": "evocative of paul blart uh so either"
+  },
+  {
+   "t": 935.12,
+   "d": 1.76,
+   "text": "silly first name normal last name or"
+  },
+  {
+   "t": 936.88,
+   "d": 1.12,
+   "text": "vice versa"
+  },
+  {
+   "t": 938.0,
+   "d": 2.08,
+   "text": "when i was uh when i was doing this i"
+  },
+  {
+   "t": 940.08,
+   "d": 2.0,
+   "text": "remembered we have this sort of"
+  },
+  {
+   "t": 942.08,
+   "d": 3.36,
+   "text": "internal uh internal rule that if"
+  },
+  {
+   "t": 945.44,
+   "d": 1.44,
+   "text": "what we're doing is generating a"
+  },
+  {
+   "t": 946.88,
+   "d": 2.16,
+   "text": "person's name the generator has to be"
+  },
+  {
+   "t": 949.04,
+   "d": 2.0,
+   "text": "capable of generating bob goldweight"
+  },
+  {
+   "t": 951.04,
+   "d": 3.28,
+   "text": "as a name which results in"
+  },
+  {
+   "t": 954.32,
+   "d": 1.6,
+   "text": "some stuff like for instance that that"
+  },
+  {
+   "t": 955.92,
+   "d": 1.44,
+   "text": "is a sort of a normal first name"
+  },
+  {
+   "t": 957.36,
+   "d": 2.48,
+   "text": "and arguably a very normal last name but"
+  },
+  {
+   "t": 959.84,
+   "d": 1.28,
+   "text": "it's funny if the guy's on the"
+  },
+  {
+   "t": 961.12,
+   "d": 3.04,
+   "text": "name bob goldwater"
+  },
+  {
+   "t": 965.52,
+   "d": 2.56,
+   "text": "so the state tracking that was just"
+  },
+  {
+   "t": 968.08,
+   "d": 1.76,
+   "text": "built into the mad lib function ended up"
+  },
+  {
+   "t": 969.84,
+   "d": 0.96,
+   "text": "not being"
+  },
+  {
+   "t": 970.8,
+   "d": 3.44,
+   "text": "uh it it was powerful but it didn't"
+  },
+  {
+   "t": 974.24,
+   "d": 1.52,
+   "text": "allow us to do anything that really"
+  },
+  {
+   "t": 975.76,
+   "d": 2.16,
+   "text": "meant anything in terms of gameplay"
+  },
+  {
+   "t": 977.92,
+   "d": 1.92,
+   "text": "we had in the meantime developed this"
+  },
+  {
+   "t": 979.84,
+   "d": 1.76,
+   "text": "scripting language that we used"
+  },
+  {
+   "t": 981.6,
+   "d": 3.2,
+   "text": "to sort of let the let the writers do"
+  },
+  {
+   "t": 984.8,
+   "d": 2.16,
+   "text": "more code themselves without having to"
+  },
+  {
+   "t": 986.96,
+   "d": 2.4,
+   "text": "actually know php"
+  },
+  {
+   "t": 989.36,
+   "d": 2.8,
+   "text": "and that had a more sort of fundamental"
+  },
+  {
+   "t": 992.16,
+   "d": 1.36,
+   "text": "kind of state tracking that let us"
+  },
+  {
+   "t": 993.52,
+   "d": 1.84,
+   "text": "actually store data about the player so"
+  },
+  {
+   "t": 995.36,
+   "d": 2.56,
+   "text": "rift connor our writer and designer"
+  },
+  {
+   "t": 997.92,
+   "d": 1.12,
+   "text": "who's been with us since nearly the"
+  },
+  {
+   "t": 999.04,
+   "d": 0.72,
+   "text": "beginning"
+  },
+  {
+   "t": 999.76,
+   "d": 1.76,
+   "text": "made this thing that basically randomly"
+  },
+  {
+   "t": 1001.52,
+   "d": 2.24,
+   "text": "generated an entire game facts"
+  },
+  {
+   "t": 1003.76,
+   "d": 4.48,
+   "text": "article about an imaginary video game"
+  },
+  {
+   "t": 1008.96,
+   "d": 3.28,
+   "text": "so it had and"
+  },
+  {
+   "t": 1012.24,
+   "d": 1.76,
+   "text": "chris moyer our programmer figured out a"
+  },
+  {
+   "t": 1014.0,
+   "d": 1.68,
+   "text": "way to have it on like randomly"
+  },
+  {
+   "t": 1015.68,
+   "d": 3.2,
+   "text": "select an ascii art font and"
+  },
+  {
+   "t": 1018.88,
+   "d": 2.24,
+   "text": "generate a generate a big header for it"
+  },
+  {
+   "t": 1021.12,
+   "d": 1.84,
+   "text": "that's different every time and based on"
+  },
+  {
+   "t": 1022.96,
+   "d": 1.12,
+   "text": "what the what the generator"
+  },
+  {
+   "t": 1024.08,
+   "d": 2.4,
+   "text": "comes up with it uh it had like a lot of"
+  },
+  {
+   "t": 1026.48,
+   "d": 1.28,
+   "text": "controls"
+  },
+  {
+   "t": 1027.76,
+   "d": 2.32,
+   "text": "i i think it was a mistake on the"
+  },
+  {
+   "t": 1030.08,
+   "d": 1.2,
+   "text": "developer's part to map"
+  },
+  {
+   "t": 1031.28,
+   "d": 3.6,
+   "text": "tab to both run and plumber mode because"
+  },
+  {
+   "t": 1034.88,
+   "d": 2.8,
+   "text": "so sometimes you want to run but not be"
+  },
+  {
+   "t": 1037.68,
+   "d": 2.48,
+   "text": "a plumber"
+  },
+  {
+   "t": 1041.76,
+   "d": 1.68,
+   "text": "but the thing that so this was this"
+  },
+  {
+   "t": 1043.44,
+   "d": 2.16,
+   "text": "ended up being like 1500 lines of script"
+  },
+  {
+   "t": 1045.6,
+   "d": 1.36,
+   "text": "that riff wrote which"
+  },
+  {
+   "t": 1046.96,
+   "d": 2.32,
+   "text": "led us to change the engine to support"
+  },
+  {
+   "t": 1049.28,
+   "d": 0.8,
+   "text": "more than"
+  },
+  {
+   "t": 1050.08,
+   "d": 1.2,
+   "text": "the number of lines of script that it"
+  },
+  {
+   "t": 1051.28,
+   "d": 2.4,
+   "text": "supported before but"
+  },
+  {
+   "t": 1053.68,
+   "d": 1.44,
+   "text": "something that it was able to do just"
+  },
+  {
+   "t": 1055.12,
+   "d": 1.2,
+   "text": "because it was it was originally"
+  },
+  {
+   "t": 1056.32,
+   "d": 0.88,
+   "text": "designed to for"
+  },
+  {
+   "t": 1057.2,
+   "d": 1.44,
+   "text": "dialogue with npcs and stuff and we"
+  },
+  {
+   "t": 1058.64,
+   "d": 1.36,
+   "text": "needed to be able to store like what you"
+  },
+  {
+   "t": 1060.0,
+   "d": 1.44,
+   "text": "had done and what you had said to them"
+  },
+  {
+   "t": 1061.44,
+   "d": 1.84,
+   "text": "and if you learned things"
+  },
+  {
+   "t": 1063.28,
+   "d": 2.96,
+   "text": "so it sets states on the player rather"
+  },
+  {
+   "t": 1066.24,
+   "d": 0.96,
+   "text": "than just for the"
+  },
+  {
+   "t": 1067.2,
+   "d": 2.16,
+   "text": "for the duration of the of the execution"
+  },
+  {
+   "t": 1069.36,
+   "d": 0.88,
+   "text": "of the generator"
+  },
+  {
+   "t": 1070.24,
+   "d": 3.04,
+   "text": "so we've described these zones and then"
+  },
+  {
+   "t": 1073.28,
+   "d": 0.64,
+   "text": "it actually"
+  },
+  {
+   "t": 1073.92,
+   "d": 2.24,
+   "text": "builds out zones in kol that you can"
+  },
+  {
+   "t": 1076.16,
+   "d": 1.12,
+   "text": "play through"
+  },
+  {
+   "t": 1077.28,
+   "d": 1.6,
+   "text": "and puts the monsters that are described"
+  },
+  {
+   "t": 1078.88,
+   "d": 1.36,
+   "text": "in there so here you end up with the"
+  },
+  {
+   "t": 1080.24,
+   "d": 0.56,
+   "text": "diseased"
+  },
+  {
+   "t": 1080.8,
+   "d": 1.76,
+   "text": "skeleton superstars and the hopping bat"
+  },
+  {
+   "t": 1082.56,
+   "d": 2.56,
+   "text": "bodyguards and especially narrow clown"
+  },
+  {
+   "t": 1085.12,
+   "d": 2.32,
+   "text": "warlords"
+  },
+  {
+   "t": 1087.44,
+   "d": 1.36,
+   "text": "and then at a certain point when you're"
+  },
+  {
+   "t": 1088.8,
+   "d": 1.44,
+   "text": "playing in that zone it throws you into"
+  },
+  {
+   "t": 1090.24,
+   "d": 2.16,
+   "text": "a maze and you have to like have read"
+  },
+  {
+   "t": 1092.4,
+   "d": 1.68,
+   "text": "this to know how to get through the maze"
+  },
+  {
+   "t": 1094.08,
+   "d": 1.2,
+   "text": "because there's just no other way to do"
+  },
+  {
+   "t": 1095.28,
+   "d": 2.64,
+   "text": "it and uh so that ended up being the"
+  },
+  {
+   "t": 1097.92,
+   "d": 1.44,
+   "text": "kind of culmination of how random text"
+  },
+  {
+   "t": 1099.36,
+   "d": 0.72,
+   "text": "generation"
+  },
+  {
+   "t": 1100.08,
+   "d": 2.72,
+   "text": "fed back into the game in a way that"
+  },
+  {
+   "t": 1102.8,
+   "d": 1.36,
+   "text": "this is sort of the most complicated"
+  },
+  {
+   "t": 1104.16,
+   "d": 4.4,
+   "text": "version of it that we have in there um"
+  },
+  {
+   "t": 1108.56,
+   "d": 1.76,
+   "text": "this was the point where i realized that"
+  },
+  {
+   "t": 1110.32,
+   "d": 2.24,
+   "text": "uh this really was just kind of a story"
+  },
+  {
+   "t": 1112.56,
+   "d": 1.36,
+   "text": "about a bunch of stuff that happened and"
+  },
+  {
+   "t": 1113.92,
+   "d": 1.04,
+   "text": "that was the last"
+  },
+  {
+   "t": 1114.96,
+   "d": 4.24,
+   "text": "one so in conclusion uh"
+  },
+  {
+   "t": 1119.2,
+   "d": 1.92,
+   "text": "this is who i am and where to find me"
+  },
+  {
+   "t": 1121.12,
+   "d": 2.48,
+   "text": "and and where to find our stuff um"
+  },
+  {
+   "t": 1123.6,
+   "d": 1.36,
+   "text": "google slides was kind enough to make"
+  },
+  {
+   "t": 1124.96,
+   "d": 3.44,
+   "text": "this a link we can all click"
+  },
+  {
+   "t": 1131.92,
+   "d": 1.92,
+   "text": "but i'm happy to answer any questions"
+  },
+  {
+   "t": 1133.84,
+   "d": 1.76,
+   "text": "that anybody has i'm also happy to go to"
+  },
+  {
+   "t": 1135.6,
+   "d": 2.24,
+   "text": "lunch"
+  },
+  {
+   "t": 1150.32,
+   "d": 1.84,
+   "text": "hi uh could you talk about the randomly"
+  },
+  {
+   "t": 1152.16,
+   "d": 1.76,
+   "text": "generated puzzle that was in the"
+  },
+  {
+   "t": 1153.92,
+   "d": 2.0,
+   "text": "original naughty sorceresses tower with"
+  },
+  {
+   "t": 1155.92,
+   "d": 2.4,
+   "text": "the with the guards and the"
+  },
+  {
+   "t": 1158.32,
+   "d": 2.0,
+   "text": "uh you remember that one yeah there was"
+  },
+  {
+   "t": 1160.32,
+   "d": 1.68,
+   "text": "a so this was another thing that riff"
+  },
+  {
+   "t": 1162.0,
+   "d": 1.28,
+   "text": "wrote it was uh"
+  },
+  {
+   "t": 1163.28,
+   "d": 2.88,
+   "text": "we when when you got to the the original"
+  },
+  {
+   "t": 1166.16,
+   "d": 2.32,
+   "text": "kind of end game of kol was this weird"
+  },
+  {
+   "t": 1168.48,
+   "d": 2.24,
+   "text": "sort of more adventure gamey kind of"
+  },
+  {
+   "t": 1170.72,
+   "d": 1.28,
+   "text": "thing that didn't really tie into a lot"
+  },
+  {
+   "t": 1172.0,
+   "d": 1.44,
+   "text": "of the game mechanics it's it's since"
+  },
+  {
+   "t": 1173.44,
+   "d": 2.0,
+   "text": "been replaced with something that"
+  },
+  {
+   "t": 1175.44,
+   "d": 2.08,
+   "text": "i like a lot better players probably"
+  },
+  {
+   "t": 1177.52,
+   "d": 1.6,
+   "text": "prefer the old one because"
+  },
+  {
+   "t": 1179.12,
+   "d": 3.52,
+   "text": "they're players that's what happens um"
+  },
+  {
+   "t": 1182.64,
+   "d": 2.48,
+   "text": "so you you would you would reach a you"
+  },
+  {
+   "t": 1185.12,
+   "d": 0.88,
+   "text": "would reach a room"
+  },
+  {
+   "t": 1186.0,
+   "d": 2.96,
+   "text": "where there were three guards and uh one"
+  },
+  {
+   "t": 1188.96,
+   "d": 1.36,
+   "text": "of them always lies one of them always"
+  },
+  {
+   "t": 1190.32,
+   "d": 2.24,
+   "text": "tells the truth and one of them"
+  },
+  {
+   "t": 1192.56,
+   "d": 2.64,
+   "text": "craves the taste of human flesh and they"
+  },
+  {
+   "t": 1195.2,
+   "d": 1.28,
+   "text": "would between them say a bunch of stuff"
+  },
+  {
+   "t": 1196.48,
+   "d": 1.84,
+   "text": "about what the combination was to a lock"
+  },
+  {
+   "t": 1198.32,
+   "d": 1.76,
+   "text": "that you had to open to get to the next"
+  },
+  {
+   "t": 1200.08,
+   "d": 1.52,
+   "text": "uh get to the next room"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.4,
+   "text": "and it was just a sort of a it would"
+  },
+  {
+   "t": 1204.0,
+   "d": 1.12,
+   "text": "randomly generate the code and then"
+  },
+  {
+   "t": 1205.12,
+   "d": 0.88,
+   "text": "randomly generate things"
+  },
+  {
+   "t": 1206.0,
+   "d": 1.6,
+   "text": "that they would say that you had to"
+  },
+  {
+   "t": 1207.6,
+   "d": 1.76,
+   "text": "figure out uh you know which one was"
+  },
+  {
+   "t": 1209.36,
+   "d": 0.88,
+   "text": "lying and which one was telling the"
+  },
+  {
+   "t": 1210.24,
+   "d": 0.64,
+   "text": "truth to"
+  },
+  {
+   "t": 1210.88,
+   "d": 2.96,
+   "text": "to get through it we've done a bunch of"
+  },
+  {
+   "t": 1213.84,
+   "d": 1.52,
+   "text": "there's been a lot of times when we have"
+  },
+  {
+   "t": 1215.36,
+   "d": 0.8,
+   "text": "wanted"
+  },
+  {
+   "t": 1216.16,
+   "d": 2.88,
+   "text": "to make puzzles or or challenges in the"
+  },
+  {
+   "t": 1219.04,
+   "d": 0.96,
+   "text": "game that you couldn't just"
+  },
+  {
+   "t": 1220.0,
+   "d": 2.72,
+   "text": "go to the wiki and look up how to do it"
+  },
+  {
+   "t": 1222.72,
+   "d": 1.92,
+   "text": "we've used off on that a little bit"
+  },
+  {
+   "t": 1224.64,
+   "d": 2.72,
+   "text": "because it's you know honestly like it"
+  },
+  {
+   "t": 1227.36,
+   "d": 1.44,
+   "text": "was a lot more interesting to us as"
+  },
+  {
+   "t": 1228.8,
+   "d": 1.6,
+   "text": "designers than i think it was"
+  },
+  {
+   "t": 1230.4,
+   "d": 1.84,
+   "text": "to the players but that was just one of"
+  },
+  {
+   "t": 1232.24,
+   "d": 2.08,
+   "text": "the ways that we tried to do it is by"
+  },
+  {
+   "t": 1234.32,
+   "d": 1.6,
+   "text": "putting in puzzles that could be"
+  },
+  {
+   "t": 1235.92,
+   "d": 1.52,
+   "text": "randomized like that something if the"
+  },
+  {
+   "t": 1237.44,
+   "d": 1.12,
+   "text": "answer is just a number"
+  },
+  {
+   "t": 1238.56,
+   "d": 3.04,
+   "text": "it can be any number um but yeah there's"
+  },
+  {
+   "t": 1241.6,
+   "d": 0.96,
+   "text": "a few things like that there's"
+  },
+  {
+   "t": 1242.56,
+   "d": 2.48,
+   "text": "there's some like sort of mazes that you"
+  },
+  {
+   "t": 1245.04,
+   "d": 0.8,
+   "text": "go through"
+  },
+  {
+   "t": 1245.84,
+   "d": 1.52,
+   "text": "that that we procedurally generate so"
+  },
+  {
+   "t": 1247.36,
+   "d": 1.2,
+   "text": "they're a little different every time"
+  },
+  {
+   "t": 1248.56,
+   "d": 0.32,
+   "text": "what"
+  },
+  {
+   "t": 1248.88,
+   "d": 1.52,
+   "text": "ends up invariably happening is somebody"
+  },
+  {
+   "t": 1250.4,
+   "d": 1.52,
+   "text": "just writes a grease monkey script to"
+  },
+  {
+   "t": 1251.92,
+   "d": 1.44,
+   "text": "automatically solve it for you so"
+  },
+  {
+   "t": 1253.36,
+   "d": 1.6,
+   "text": "that's effectively the same as you"
+  },
+  {
+   "t": 1254.96,
+   "d": 1.44,
+   "text": "looking it up on the wiki so"
+  },
+  {
+   "t": 1256.4,
+   "d": 2.16,
+   "text": "we've sort of just things the game's"
+  },
+  {
+   "t": 1258.56,
+   "d": 4.08,
+   "text": "easier now than it used to be uh"
+  },
+  {
+   "t": 1262.64,
+   "d": 3.12,
+   "text": "a couple of things first uh do we all"
+  },
+  {
+   "t": 1265.76,
+   "d": 1.76,
+   "text": "get mr accessories for attending this"
+  },
+  {
+   "t": 1267.52,
+   "d": 1.2,
+   "text": "talk"
+  },
+  {
+   "t": 1268.72,
+   "d": 1.04,
+   "text": "i don't know how much did the ticket"
+  },
+  {
+   "t": 1269.76,
+   "d": 2.24,
+   "text": "cost uh"
+  },
+  {
+   "t": 1272.0,
+   "d": 1.84,
+   "text": "uh actual question you know this is an"
+  },
+  {
+   "t": 1273.84,
+   "d": 1.36,
+   "text": "opportunity for you to tell us all about"
+  },
+  {
+   "t": 1275.2,
+   "d": 2.0,
+   "text": "the nethack theme dungeon in kingdom of"
+  },
+  {
+   "t": 1277.2,
+   "d": 0.72,
+   "text": "clothing"
+  },
+  {
+   "t": 1277.92,
+   "d": 3.28,
+   "text": "oh yeah so we did uh we did do a zone"
+  },
+  {
+   "t": 1281.2,
+   "d": 3.2,
+   "text": "a few years in that was uh"
+  },
+  {
+   "t": 1284.4,
+   "d": 2.56,
+   "text": "that was nethack themed it would start"
+  },
+  {
+   "t": 1286.96,
+   "d": 1.6,
+   "text": "out you would um"
+  },
+  {
+   "t": 1288.56,
+   "d": 1.12,
+   "text": "you would just be fighting a bunch of"
+  },
+  {
+   "t": 1289.68,
+   "d": 1.44,
+   "text": "actual letters and the objects that"
+  },
+  {
+   "t": 1291.12,
+   "d": 1.76,
+   "text": "would drop like you found a plus sign or"
+  },
+  {
+   "t": 1292.88,
+   "d": 1.68,
+   "text": "you found an exclamation point and what"
+  },
+  {
+   "t": 1294.56,
+   "d": 1.28,
+   "text": "is that and then eventually you would"
+  },
+  {
+   "t": 1295.84,
+   "d": 1.12,
+   "text": "solve a puzzle in there that would allow"
+  },
+  {
+   "t": 1296.96,
+   "d": 1.28,
+   "text": "you to talk to an oracle"
+  },
+  {
+   "t": 1298.24,
+   "d": 1.6,
+   "text": "at which point all of the monsters"
+  },
+  {
+   "t": 1299.84,
+   "d": 1.44,
+   "text": "became the names of the monsters that"
+  },
+  {
+   "t": 1301.28,
+   "d": 1.28,
+   "text": "they were in that hack"
+  },
+  {
+   "t": 1302.56,
+   "d": 1.68,
+   "text": "um we did actually do some some"
+  },
+  {
+   "t": 1304.24,
+   "d": 1.44,
+   "text": "procedural gameplay stuff in there there"
+  },
+  {
+   "t": 1305.68,
+   "d": 1.2,
+   "text": "were a bunch of different potions that"
+  },
+  {
+   "t": 1306.88,
+   "d": 1.6,
+   "text": "were just described by"
+  },
+  {
+   "t": 1308.48,
+   "d": 3.04,
+   "text": "the nethack potion adjectives and they"
+  },
+  {
+   "t": 1311.52,
+   "d": 1.44,
+   "text": "had a there was a set of effects that"
+  },
+  {
+   "t": 1312.96,
+   "d": 1.04,
+   "text": "was associated with them"
+  },
+  {
+   "t": 1314.0,
+   "d": 1.68,
+   "text": "but it was randomized on a per player"
+  },
+  {
+   "t": 1315.68,
+   "d": 3.36,
+   "text": "basis um so it was different every time"
+  },
+  {
+   "t": 1319.04,
+   "d": 3.28,
+   "text": "but yeah that's just it's"
+  },
+  {
+   "t": 1322.32,
+   "d": 1.12,
+   "text": "you know kingdom of loathing is"
+  },
+  {
+   "t": 1323.44,
+   "d": 2.08,
+   "text": "obviously not a roguelike but i spent a"
+  },
+  {
+   "t": 1325.52,
+   "d": 1.52,
+   "text": "lot of time playing adom"
+  },
+  {
+   "t": 1327.04,
+   "d": 1.92,
+   "text": "and playing hack and playing that hack"
+  },
+  {
+   "t": 1328.96,
+   "d": 1.52,
+   "text": "and so it was"
+  },
+  {
+   "t": 1330.48,
+   "d": 1.92,
+   "text": "hugely influential and that was just a"
+  },
+  {
+   "t": 1332.4,
+   "d": 1.6,
+   "text": "way of putting in a kind of an homage to"
+  },
+  {
+   "t": 1334.0,
+   "d": 2.16,
+   "text": "it"
+  },
+  {
+   "t": 1337.12,
+   "d": 3.28,
+   "text": "hi have you ever entertained the"
+  },
+  {
+   "t": 1340.4,
+   "d": 2.16,
+   "text": "idea of localization of your game or is"
+  },
+  {
+   "t": 1342.56,
+   "d": 1.2,
+   "text": "that a"
+  },
+  {
+   "t": 1343.76,
+   "d": 2.8,
+   "text": "giant black hole yeah i don't i don't"
+  },
+  {
+   "t": 1346.56,
+   "d": 1.36,
+   "text": "think that it would be worth it it's"
+  },
+  {
+   "t": 1347.92,
+   "d": 1.12,
+   "text": "it's one of those things where it would"
+  },
+  {
+   "t": 1349.04,
+   "d": 0.88,
+   "text": "be"
+  },
+  {
+   "t": 1349.92,
+   "d": 3.12,
+   "text": "well a so much of the text"
+  },
+  {
+   "t": 1353.04,
+   "d": 2.48,
+   "text": "is just embedded in php files from like"
+  },
+  {
+   "t": 1355.52,
+   "d": 1.12,
+   "text": "before we sort of"
+  },
+  {
+   "t": 1356.64,
+   "d": 2.56,
+   "text": "learned how to write good code uh that"
+  },
+  {
+   "t": 1359.2,
+   "d": 0.8,
+   "text": "it would be a"
+  },
+  {
+   "t": 1360.0,
+   "d": 2.64,
+   "text": "huge hassle to to localize and also"
+  },
+  {
+   "t": 1362.64,
+   "d": 1.92,
+   "text": "because so much of it is like wordplay"
+  },
+  {
+   "t": 1364.56,
+   "d": 0.8,
+   "text": "and pun"
+  },
+  {
+   "t": 1365.36,
+   "d": 2.48,
+   "text": "based i think that really it's a game"
+  },
+  {
+   "t": 1367.84,
+   "d": 6.8,
+   "text": "that just has to be played in english"
+  },
+  {
+   "t": 1374.64,
+   "d": 2.08,
+   "text": "um so with that in mind has anyone ever"
+  },
+  {
+   "t": 1376.72,
+   "d": 1.52,
+   "text": "tried to play kingdom of loathing"
+  },
+  {
+   "t": 1378.24,
+   "d": 2.16,
+   "text": "through google translate"
+  },
+  {
+   "t": 1380.4,
+   "d": 2.56,
+   "text": "i don't know"
+  },
+  {
+   "t": 1383.52,
+   "d": 1.76,
+   "text": "i i think that we're going to figure out"
+  },
+  {
+   "t": 1385.28,
+   "d": 4.56,
+   "text": "how to do that and stream it later"
+  },
+  {
+   "t": 1395.76,
+   "d": 1.92,
+   "text": "as a game with a very comprehensive wiki"
+  },
+  {
+   "t": 1397.68,
+   "d": 0.96,
+   "text": "as you mentioned what do you think about"
+  },
+  {
+   "t": 1398.64,
+   "d": 1.12,
+   "text": "the interplay between"
+  },
+  {
+   "t": 1399.76,
+   "d": 1.92,
+   "text": "procedural content generation and"
+  },
+  {
+   "t": 1401.68,
+   "d": 2.96,
+   "text": "archival storage in wikis and whatnot"
+  },
+  {
+   "t": 1404.64,
+   "d": 2.0,
+   "text": "you know the kol wiki is usually pretty"
+  },
+  {
+   "t": 1406.64,
+   "d": 2.08,
+   "text": "good about recognizing when something"
+  },
+  {
+   "t": 1408.72,
+   "d": 1.76,
+   "text": "has been procedurally generated and like"
+  },
+  {
+   "t": 1410.48,
+   "d": 1.44,
+   "text": "writing down lists of possibilities or"
+  },
+  {
+   "t": 1411.92,
+   "d": 1.44,
+   "text": "giving a bunch of examples"
+  },
+  {
+   "t": 1413.36,
+   "d": 3.04,
+   "text": "um it's a good question because i"
+  },
+  {
+   "t": 1416.4,
+   "d": 2.0,
+   "text": "you know i like the idea of those"
+  },
+  {
+   "t": 1418.4,
+   "d": 2.16,
+   "text": "generators in their functional form"
+  },
+  {
+   "t": 1420.56,
+   "d": 1.2,
+   "text": "being a thing that's preserved i mean i"
+  },
+  {
+   "t": 1421.76,
+   "d": 1.68,
+   "text": "like everything being preserved but"
+  },
+  {
+   "t": 1423.44,
+   "d": 2.48,
+   "text": "that is a thing that just a document"
+  },
+  {
+   "t": 1425.92,
+   "d": 1.12,
+   "text": "about a game"
+  },
+  {
+   "t": 1427.04,
+   "d": 2.8,
+   "text": "can't really express about it i mean you"
+  },
+  {
+   "t": 1429.84,
+   "d": 0.96,
+   "text": "end up with something like i"
+  },
+  {
+   "t": 1430.8,
+   "d": 2.32,
+   "text": "like i really appreciated uh darius"
+  },
+  {
+   "t": 1433.12,
+   "d": 2.0,
+   "text": "kazimi wrote this article like a blog"
+  },
+  {
+   "t": 1435.12,
+   "d": 1.44,
+   "text": "post where he described"
+  },
+  {
+   "t": 1436.56,
+   "d": 1.6,
+   "text": "the level generation algorithms of"
+  },
+  {
+   "t": 1438.16,
+   "d": 2.32,
+   "text": "spelunky which i think is just a really"
+  },
+  {
+   "t": 1440.48,
+   "d": 2.4,
+   "text": "fascinating companion document to the"
+  },
+  {
+   "t": 1442.88,
+   "d": 1.28,
+   "text": "actual game"
+  },
+  {
+   "t": 1444.16,
+   "d": 3.2,
+   "text": "and this it would be way easier to write"
+  },
+  {
+   "t": 1447.36,
+   "d": 1.68,
+   "text": "that about this kind of stuff you just"
+  },
+  {
+   "t": 1449.04,
+   "d": 0.48,
+   "text": "put in"
+  },
+  {
+   "t": 1449.52,
+   "d": 1.52,
+   "text": "you know we could just we could just"
+  },
+  {
+   "t": 1451.04,
+   "d": 1.84,
+   "text": "print out all of the word buckets"
+  },
+  {
+   "t": 1452.88,
+   "d": 1.76,
+   "text": "and then you'd be able to reconstruct"
+  },
+  {
+   "t": 1454.64,
+   "d": 1.36,
+   "text": "everything based on that because it"
+  },
+  {
+   "t": 1456.0,
+   "d": 2.08,
+   "text": "even the structures are just a different"
+  },
+  {
+   "t": 1458.08,
+   "d": 2.0,
+   "text": "bucket that contains the structure for"
+  },
+  {
+   "t": 1460.08,
+   "d": 0.64,
+   "text": "the stuff"
+  },
+  {
+   "t": 1460.72,
+   "d": 2.32,
+   "text": "um the the game facts thing is a little"
+  },
+  {
+   "t": 1463.04,
+   "d": 1.28,
+   "text": "trickier because that's"
+  },
+  {
+   "t": 1464.32,
+   "d": 1.28,
+   "text": "just a sort of written in a weird"
+  },
+  {
+   "t": 1465.6,
+   "d": 1.52,
+   "text": "scripting language it's a little hard to"
+  },
+  {
+   "t": 1467.12,
+   "d": 0.88,
+   "text": "parse"
+  },
+  {
+   "t": 1468.0,
+   "d": 2.8,
+   "text": "um probably even for the guy who wrote"
+  },
+  {
+   "t": 1470.8,
+   "d": 1.28,
+   "text": "it it's hard to parse because"
+  },
+  {
+   "t": 1472.08,
+   "d": 2.8,
+   "text": "it's it's been a while and and that like"
+  },
+  {
+   "t": 1474.88,
+   "d": 1.12,
+   "text": "one of the things about that scripting"
+  },
+  {
+   "t": 1476.0,
+   "d": 0.88,
+   "text": "language is that it doesn't have the"
+  },
+  {
+   "t": 1476.88,
+   "d": 0.72,
+   "text": "concept of"
+  },
+  {
+   "t": 1477.6,
+   "d": 2.08,
+   "text": "blocks like you can't ever everything is"
+  },
+  {
+   "t": 1479.68,
+   "d": 1.28,
+   "text": "just a single"
+  },
+  {
+   "t": 1480.96,
+   "d": 1.36,
+   "text": "uh single line of code that either"
+  },
+  {
+   "t": 1482.32,
+   "d": 1.92,
+   "text": "executes or not and so any complicated"
+  },
+  {
+   "t": 1484.24,
+   "d": 1.68,
+   "text": "logic has to be done with go-to's"
+  },
+  {
+   "t": 1485.92,
+   "d": 4.72,
+   "text": "because we're good programmers and"
+  },
+  {
+   "t": 1491.04,
+   "d": 1.68,
+   "text": "but yeah that's it it's interesting"
+  },
+  {
+   "t": 1492.72,
+   "d": 2.72,
+   "text": "because it is"
+  },
+  {
+   "t": 1495.68,
+   "d": 1.76,
+   "text": "random generation of stuff is kind of a"
+  },
+  {
+   "t": 1497.44,
+   "d": 1.76,
+   "text": "barrier to archival and i think it makes"
+  },
+  {
+   "t": 1499.2,
+   "d": 2.32,
+   "text": "it even more important that when stuff"
+  },
+  {
+   "t": 1501.52,
+   "d": 1.44,
+   "text": "like this is being preserved that it be"
+  },
+  {
+   "t": 1502.96,
+   "d": 3.2,
+   "text": "preserved in a playable form"
+  },
+  {
+   "t": 1507.44,
+   "d": 3.68,
+   "text": "one more question anyone"
+  },
+  {
+   "t": 1513.28,
+   "d": 1.36,
+   "text": "how will you preserve kingdom of"
+  },
+  {
+   "t": 1514.64,
+   "d": 2.48,
+   "text": "loathing in a playable form"
+  },
+  {
+   "t": 1517.12,
+   "d": 3.28,
+   "text": "that is a great question um you know"
+  },
+  {
+   "t": 1520.4,
+   "d": 1.92,
+   "text": "hopefully we won't have to for a while"
+  },
+  {
+   "t": 1522.32,
+   "d": 1.44,
+   "text": "uh but you"
+  },
+  {
+   "t": 1523.76,
+   "d": 2.56,
+   "text": "you know i'm guessing that it wouldn't"
+  },
+  {
+   "t": 1526.32,
+   "d": 1.84,
+   "text": "be that tricky and i'm sure that this"
+  },
+  {
+   "t": 1528.16,
+   "d": 0.8,
+   "text": "already exists"
+  },
+  {
+   "t": 1528.96,
+   "d": 1.76,
+   "text": "like just to be able to to make an"
+  },
+  {
+   "t": 1530.72,
+   "d": 1.6,
+   "text": "executable that pretended to be a web"
+  },
+  {
+   "t": 1532.32,
+   "d": 2.0,
+   "text": "server pretended to be able to run php"
+  },
+  {
+   "t": 1534.32,
+   "d": 0.32,
+   "text": "and"
+  },
+  {
+   "t": 1534.64,
+   "d": 2.0,
+   "text": "mysql on the back end i'm sure that"
+  },
+  {
+   "t": 1536.64,
+   "d": 1.6,
+   "text": "there exists something"
+  },
+  {
+   "t": 1538.24,
+   "d": 3.12,
+   "text": "that could encapsulate a web app and"
+  },
+  {
+   "t": 1541.36,
+   "d": 3.04,
+   "text": "run it offline um"
+  },
+  {
+   "t": 1544.4,
+   "d": 0.88,
+   "text": "it's something that we've actually"
+  },
+  {
+   "t": 1545.28,
+   "d": 1.92,
+   "text": "looked into because it's that's sort of"
+  },
+  {
+   "t": 1547.2,
+   "d": 1.52,
+   "text": "been the only thing that we were ever"
+  },
+  {
+   "t": 1548.72,
+   "d": 1.6,
+   "text": "good at until we finally hired a unity"
+  },
+  {
+   "t": 1550.32,
+   "d": 1.44,
+   "text": "guy so now we can make a real video game"
+  },
+  {
+   "t": 1551.76,
+   "d": 1.92,
+   "text": "which we're doing now"
+  },
+  {
+   "t": 1553.68,
+   "d": 1.2,
+   "text": "if you want to play a stick figure"
+  },
+  {
+   "t": 1554.88,
+   "d": 3.52,
+   "text": "cowboy game we might be your only bet"
+  },
+  {
+   "t": 1558.4,
+   "d": 1.84,
+   "text": "starting next year unless somebody beats"
+  },
+  {
+   "t": 1560.24,
+   "d": 1.44,
+   "text": "us to market with that"
+  },
+  {
+   "t": 1561.68,
+   "d": 3.04,
+   "text": "hot hot concept"
+  },
+  {
+   "t": 1566.16,
+   "d": 1.36,
+   "text": "but yeah i mean i think i would"
+  },
+  {
+   "t": 1567.52,
+   "d": 2.0,
+   "text": "definitely be into the idea of making a"
+  },
+  {
+   "t": 1569.52,
+   "d": 1.6,
+   "text": "standalone version of it but since it's"
+  },
+  {
+   "t": 1571.12,
+   "d": 0.4,
+   "text": "still"
+  },
+  {
+   "t": 1571.52,
+   "d": 2.0,
+   "text": "a living game and still has people"
+  },
+  {
+   "t": 1573.52,
+   "d": 1.92,
+   "text": "playing it there's like never"
+  },
+  {
+   "t": 1575.44,
+   "d": 1.68,
+   "text": "there's not a point at which it makes a"
+  },
+  {
+   "t": 1577.12,
+   "d": 1.84,
+   "text": "ton of sense to do a snapshot"
+  },
+  {
+   "t": 1578.96,
+   "d": 1.84,
+   "text": "of it and that's the point in which you"
+  },
+  {
+   "t": 1580.8,
+   "d": 3.44,
+   "text": "know you would do something like that"
+  },
+  {
+   "t": 1584.24,
+   "d": 10.0,
+   "text": "yay all right thanks everybody"
+  }
+ ]
+}

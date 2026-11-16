@@ -1,0 +1,163 @@
+{
+  "id": "JfNeYtH7xI4",
+  "title": "Ezra Szanton - Building Synergy Networks for better Roguelike Deckbuilders",
+  "speaker": "Ezra Szanton",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=JfNeYtH7xI4",
+  "talk_type": "design",
+  "summary": "Ezra Szanton, developer of Hellscaper and Mr. Magpie's Harmless Card Game, presents synergy networks as a design lens for roguelike deckbuilders: cards are nodes and pairwise synergies (win-percentage increases) are edges. Aiming for improvisational play and depth, he describes failure modes (networks that are too sparse, including sparse in practice due to goal scaling, and siloed clusters) and the goal of a well-connected network with weak clusters and pivot points. He shows how categories build networks succinctly, how synergies range from obvious to obscure to serve all skill levels, how anti-synergies prune the network, and how card packs, characters and rule changes create new networks from the same cards. He closes with future work: analytics-derived networks, three-card synergies and real-world networks as content.",
+  "games": [
+    "Mr. Magpie's Harmless Card Game",
+    "Hellscaper",
+    "Slumber Realm",
+    "Balatro",
+    "Slay the Spire",
+    "Party House",
+    "Star Vaders",
+    "Super Auto Pets",
+    "Dicey Dungeons"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "improvisational play",
+      "kind": "principle",
+      "claim": "A roguelike deckbuilder succeeds at improvisational play and depth when even its best players cannot name a strategy that works every time and must adapt to what the run offers.",
+      "detail": "Szanton's goals are improvisation (making the best of what the game gives you rather than entering with a plan) and depth (how long players keep learning). He was delighted when Mr. Magpie's best player told a newcomer you can't shoot for one thing every time.",
+      "t": 292,
+      "quote": "You can't shoot for one thing every time. You have to roll with the punches",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "synergy",
+      "kind": "principle",
+      "claim": "Drafting decisions only become interesting when card values change with game state, and making value depend on other cards in the deck is what synergy is: two cards worth more than the sum of their parts.",
+      "detail": "In Szanton's toy game 'Alpha Balatro', fixed point values make A strictly better than B, so drafting is trivial. Value could vary with environment or upcoming enemies, but a deckbuilder already has a deck, so card-to-card dependence is the natural lever.",
+      "t": 346,
+      "quote": "we want some way for the cards to change their value based on the game state. That's what's going to make those drafting decisions interesting",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "synergy networks",
+      "kind": "technique",
+      "claim": "Modelling cards as nodes and pairwise synergies as edges gives designers an explicit synergy network, approximating the mental model experienced players use when drafting.",
+      "detail": "Adding a B-C edge to a lonely, weak card C makes it the correct pick when you already hold several Bs, so changing edges changes which card is correct in which situation. Szanton later measures edges as the win-percentage increase from holding both cards, thresholded to the meaningful positive ones.",
+      "t": 553,
+      "quote": "that thought process, that mental model that you build up and then use over time is basically the synergy network",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "sparse synergy",
+      "kind": "warning",
+      "claim": "A synergy network can be sparse in practice when the challenge scales faster than most synergies, so players ignore linear synergies and chase only the few that keep pace with the power curve.",
+      "detail": "Networks start sparse early in development, but sparseness can sneak in late too. If the goal grows at a higher-order polynomial than some synergies, the game tells players those synergies don't matter.",
+      "t": 646,
+      "quote": "players will just ignore all the linear synergies and they just go for the synergies that put them on that power curve",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "siloed builds",
+      "kind": "warning",
+      "claim": "Siloed synergy clusters with few connections between them make drafting shallow, because once a player commits to a cluster they ignore everything outside it.",
+      "detail": "In Hellscaper Szanton designed sets like all-fire and all-monster cards that were fun to play but not to draft: players spotted the five builds, took one good card and went down that path. Silos can also reduce improvisation by allowing pre-planned strategies.",
+      "t": 704,
+      "quote": "once you choose one of these strategies, you kind of put your blinders on and you're just ignoring all of the ones outside of it",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "healthy network",
+      "kind": "principle",
+      "claim": "A healthy synergy network is well connected with weak clusters, so build-arounds still exist but pivot points let players branch out or switch strategies.",
+      "detail": "This is the target state between sparse and siloed networks that the rest of Szanton's talk works toward.",
+      "t": 774,
+      "quote": "the clusters are weak enough and they're connected to each other in a way that um players can still think about well maybe it's worth branching out",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "card categories",
+      "kind": "technique",
+      "claim": "Because card text must stay short, overlapping categories are the succinct way to create many synergy edges and connect clusters.",
+      "detail": "Balatro's Smiley Face joker references the face-card category, affecting the network more broadly than its text suggests. Szanton suggests overlapping slices (vowels/consonants plus 'piano notes') and effect categories like 'do X' vs 'when X happens' or create-token vs spend-token cards.",
+      "t": 894,
+      "quote": "categories are basically the way to build these things up in a succinct manner",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "synergy discoverability",
+      "kind": "example",
+      "claim": "Slay the Spire's synergies span obvious to obscure: Perfected Strike explicitly calls out Strike cards, Inflame links to attacks via Strength, and Acrobatics plus zero-cost Slice is a synergy only discovered through play.",
+      "detail": "Szanton once dismissed explicit callouts as uninteresting but now sees them as essential for getting new players on board, while experts can ignore them. Intermediate synergies go through a shared mechanic; obscure ones emerge from how the game plays and many players wouldn't call them synergies.",
+      "t": 1031,
+      "quote": "the new players do need this and it's important to get them on board and realizing what kinds of synergies you might have in your game",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "synergy types",
+      "kind": "technique",
+      "claim": "Synergy sources can be ordered from obvious to obscure: explicit callouts, resource generation and use, chains of events, multiplicative relationships, and benefiting from the same gameplay choice.",
+      "detail": "Examples: fire-token makers and users; heal-then-draw chains (which can loop); Balatro's chips times mult; poison that decays is multiplicative with itself; and Mr. Magpie perks that reward checkerboard versus right-to-left flipping, so cards favouring the same choice synergise.",
+      "t": 1133,
+      "quote": "I'm listed them here from obvious to obscure",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "anti-synergy",
+      "kind": "technique",
+      "claim": "Anti-synergies (compounding downsides, competing for the same resource, diminishing returns, conflicting gameplay choices) let designers prune a synergy network and add depth, but should be implicit rather than explicit downsides.",
+      "detail": "Players find discovering anti-synergies less exciting than synergies, and explicit callouts exist to excite new players, so explicit downsides make little sense. Examples: many self-damage cards, many expensive-mana cards, excess defence beyond incoming attacks.",
+      "t": 1309,
+      "quote": "this is really a tool for us as designers to call some of the synergy network down",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "card pools",
+      "kind": "technique",
+      "claim": "Card packs, new characters and rule changes let players learn a new synergy network from the same cards by changing what surrounds them.",
+      "detail": "Szanton cites Star Vaders, Super Auto Pets and Party House's randomized mode for packs, Slay the Spire's per-character card sets, and Dicey Dungeons, where characters share equipment but different rules change how it is evaluated.",
+      "t": 1459,
+      "quote": "giving players a chance to learn a new synergy network out of the same cards",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "analytics",
+      "kind": "open-question",
+      "claim": "Synergy networks could be built from analytics, measuring win percentage when players hold card pairs, to diagnose whether a deckbuilder behaves as intended.",
+      "detail": "Szanton plans to try this in Mr. Magpie's Harmless Card Game. He also flags synergies among three or more cards as unexplored, and in Q&A calls the balance between real graph theory and design by feel an open question.",
+      "t": 1533,
+      "quote": "building synergy networks using analytics. I think this would be totally fascinating to try to build this up um analytically",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "real-world data",
+      "kind": "open-question",
+      "claim": "A roguelike deckbuilder could take a real-world network, such as Wikipedia links, map distances or IMDb actors and films, as its card content and synergy structure.",
+      "detail": "Szanton finds this the most exciting idea: content would already exist and players would have mental models to piggyback on. The hard part is a rule set translating the network's qualities into gameplay.",
+      "t": 1583,
+      "quote": "if someone could use a real world network as the content for a road like deck builder",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design lens",
+      "kind": "technique",
+      "claim": "Synergy networks can serve as a mid-development check on whether drafting feels right, and building in natural multiplicative mechanics early is an easy way to seed synergies players understand.",
+      "detail": "In Q&A Szanton says he has used it as a checkpoint (add or weaken synergies when it fails) and may apply it earlier; Mr. Magpie's multiplier-and-money mechanic, inspired by Balatro, helps a lot.",
+      "t": 1751,
+      "quote": "it's been in the past for me like more of a check where I'm like, \"Okay, is this feeling the way I want it to?",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

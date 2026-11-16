@@ -1,0 +1,644 @@
+{
+ "id": "HCbiYSzHtrI",
+ "url": "https://www.youtube.com/watch?v=HCbiYSzHtrI",
+ "title": "Stanley W. Baxton: Bringing Real-World Occultism into Your Games Without Accidentally Being Racist",
+ "speaker": "Stanley W. Baxton",
+ "talk_title": "Bringing Real-World Occultism into Your Games Without Accidentally Being Racist",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 981,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Do you want to make your fantasy roguelike stand out from all the other fantasy roguelikes? Do you want to bring REAL magic into your game? Do you want to scare the living daylights out of someone with some demonic sigils? Did you know there's a million and one pitfalls about that spooky symbol you found online? In this talk, learn about the most common forms of cultural appropriation in Western Esoterica, how to evaluate if something is suitable to use for aesthetic reasons, listen to some guy rant about people who have been dead for nearly a hundred years, and learn how to better bring occult practices and symbology into games you make. Together, we can Bring Real-World Occultism into our Games Without Accidentally Being Racist.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 42,
+   "title": "Welcome"
+  },
+  {
+   "start": 63,
+   "title": "Introduction"
+  },
+  {
+   "start": 89,
+   "title": "Why Im here"
+  },
+  {
+   "start": 114,
+   "title": "The Problem"
+  },
+  {
+   "start": 162,
+   "title": "Western Esoterica"
+  },
+  {
+   "start": 209,
+   "title": "Cultural Appropriation"
+  },
+  {
+   "start": 229,
+   "title": "Crowley"
+  },
+  {
+   "start": 288,
+   "title": "Helena Blavatsky"
+  },
+  {
+   "start": 384,
+   "title": "Western Occultism"
+  },
+  {
+   "start": 403,
+   "title": "Open and Closed Traditions"
+  },
+  {
+   "start": 577,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1933,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.08,
+   "d": 5.76,
+   "text": "For our final talk of this block, another lightning talk. We will welcome to the stage"
+  },
+  {
+   "t": 8.84,
+   "d": 5.28,
+   "text": "Stanley W. Baxter who is a solo dev Stanley is a solo dev who makes narrative games for exactly"
+  },
+  {
+   "t": 14.12,
+   "d": 7.84,
+   "text": "three people to lose their minds. His works are usually satirical, horrifying, or queer,"
+  },
+  {
+   "t": 21.96,
+   "d": 4.48,
+   "text": "and sometimes all at once. In his spare time he likes spending inordinate amounts of money on"
+  },
+  {
+   "t": 26.44,
+   "d": 4.6,
+   "text": "occult texts and getting mad about people who have been dead for hundreds of years.. So here"
+  },
+  {
+   "t": 31.04,
+   "d": 6.68,
+   "text": "to talk about \"Bringing Real-World Occultism into Your Games Without Accidentally Being Racist\" we"
+  },
+  {
+   "t": 37.72,
+   "d": 10.48,
+   "text": "have Stanley. Why we are going to take it away. STANLEY: Thank you. Thank you. Welcome to my talk."
+  },
+  {
+   "t": 48.2,
+   "d": 3.16,
+   "text": "Bringing \"Bringing Real-World Occultism into Your Games Without Accidentally"
+  },
+  {
+   "t": 51.36,
+   "d": 6.08,
+   "text": "Being Racist.\" Content warning. We will be going into a little anti-Semitism, racism,"
+  },
+  {
+   "t": 57.44,
+   "d": 9.0,
+   "text": "and Nazi ideology and not too deeply but take heed if these are sensitive topics. My name is Stanley."
+  },
+  {
+   "t": 66.44,
+   "d": 12.68,
+   "text": "I make narrative games and most importantly for this talk I spend far too much money on books"
+  },
+  {
+   "t": 79.12,
+   "d": 7.16,
+   "text": "specifically books about the occult and these makes their way into my games. To flex to a very"
+  },
+  {
+   "t": 86.28,
+   "d": 6.12,
+   "text": "select group of people there you go. To answer why I am actually here, I would like everyone in"
+  },
+  {
+   "t": 92.4,
+   "d": 6.96,
+   "text": "the audience to go open your game library and see how long it take use to hit a game that features"
+  },
+  {
+   "t": 99.36,
+   "d": 6.84,
+   "text": "magic. It is practically embedded in the medium itself considering how ubiquitous magic points"
+  },
+  {
+   "t": 106.2,
+   "d": 11.12,
+   "text": "for the casting of spells. It is rampant and everywhere. That begs the question of what's the"
+  },
+  {
+   "t": 117.32,
+   "d": 5.76,
+   "text": "problem with this? I will create a hypothetical with something I have seen a million times. You"
+  },
+  {
+   "t": 123.08,
+   "d": 8.52,
+   "text": "have a horror dev and want to make your game stand out and you are going add real magic into"
+  },
+  {
+   "t": 131.6,
+   "d": 7.72,
+   "text": "your game. You do intense and vigorous rougher Fe research and come across this eventually. It is"
+  },
+  {
+   "t": 139.32,
+   "d": 10.32,
+   "text": "spooky. This is a real symbol used. It is great. Terrifying and pack up the game and ship it."
+  },
+  {
+   "t": 151.32,
+   "d": 7.76,
+   "text": "You have just done something antisemitic. I should hope the reaction in the crowd is I did not intend"
+  },
+  {
+   "t": 159.08,
+   "d": 11.96,
+   "text": "this and how do I fix it. If you go searching for real magic on the internet you will get a bunch of"
+  },
+  {
+   "t": 171.04,
+   "d": 14.0,
+   "text": "resources on western esoteric which synchronize and create a lose corrective of practices called"
+  },
+  {
+   "t": 185.04,
+   "d": 11.36,
+   "text": "esoterica. What is a magic tradition? These are things a group of people partake in and usually"
+  },
+  {
+   "t": 196.4,
+   "d": 6.36,
+   "text": "have roots in a specific cultures. The important part is many traditions go out of specific"
+  },
+  {
+   "t": 202.76,
+   "d": 7.0,
+   "text": "cultures. That's the critical takeaway. Western esoterica has a history of culture appropriation."
+  },
+  {
+   "t": 217.2,
+   "d": 7.32,
+   "text": "I am deploying a special technique for this talk. When you see this image that is an ex planation in"
+  },
+  {
+   "t": 224.52,
+   "d": 4.68,
+   "text": "history but we don't have the time right now and if you want to know you can catch me after the"
+  },
+  {
+   "t": 229.2,
+   "d": 10.52,
+   "text": "talk. Crash course. I am about to introduce you to two of the most influential characters. First"
+  },
+  {
+   "t": 240.36,
+   "d": 19.88,
+   "text": "is Aleister Crowley who created religion and magic and - continues the tradition of stealing"
+  },
+  {
+   "t": 260.24,
+   "d": 15.84,
+   "text": "from many and he was good at what he did. I need to stress the golden dawn is western ceremonial"
+  },
+  {
+   "t": 276.08,
+   "d": 6.04,
+   "text": "magic. You cannot study and practice anything without becoming acquainted with Crowley and"
+  },
+  {
+   "t": 282.12,
+   "d": 9.32,
+   "text": "often people take inspiration and engage while being ignorant of the sources. The second is"
+  },
+  {
+   "t": 291.44,
+   "d": 11.28,
+   "text": "Helena Blavatsky who is most well known for being the founder of theosophy. I am just going to quote"
+  },
+  {
+   "t": 302.72,
+   "d": 6.12,
+   "text": "someone. The first white rich woman to go to Tibet and claim she was taught ancient secrets"
+  },
+  {
+   "t": 308.84,
+   "d": 14.81,
+   "text": "and became a grifter influencer. I need the stress the first part. Spoiler warning. She didn't have"
+  },
+  {
+   "t": 323.65,
+   "d": 6.11,
+   "text": "contact with these mystics. She made shit up and pretended she was in contact or someone"
+  },
+  {
+   "t": 329.76,
+   "d": 10.04,
+   "text": "in Tibet was as much as of a grifter as she was. She inspired the inspiring of eastern mysticism,"
+  },
+  {
+   "t": 342.68,
+   "d": 11.96,
+   "text": "chakras, continued pushing of conspiracy theories around ancient civilizations, the idea of the lost"
+  },
+  {
+   "t": 354.64,
+   "d": 10.68,
+   "text": "continent that held an advanced civilization, the idea of a higher race, the main influence of"
+  },
+  {
+   "t": 365.32,
+   "d": 9.68,
+   "text": "Nazi cultism, and influenced so much more. She is everywhere. Finally, the crowning jewel is"
+  },
+  {
+   "t": 375.0,
+   "d": 4.76,
+   "text": "Christianity and the influence it had on European thought and interacted with other traditions"
+  },
+  {
+   "t": 379.76,
+   "d": 11.48,
+   "text": "around the world. Western esoterica is a bit of a mind field and not many know this. People take"
+  },
+  {
+   "t": 391.24,
+   "d": 6.24,
+   "text": "occult symbols they will see everywhere to put in games, comics, novels and have no idea where"
+  },
+  {
+   "t": 397.48,
+   "d": 11.35,
+   "text": "they are from. Let's talk about how we can combat this. I am going into this assume Yugoslavia"
+  },
+  {
+   "t": 408.83,
+   "d": 7.77,
+   "text": "are just here because you want some inspiration, primarily esthetic, from real life, or nice nod to"
+  },
+  {
+   "t": 416.6,
+   "d": 6.36,
+   "text": "the real thing. The first thing we need to define is an open and closed tradition. In general,"
+  },
+  {
+   "t": 422.96,
+   "d": 8.4,
+   "text": "an open tradition is one that can be practiced by anyone. A closed tradition requires invitation."
+  },
+  {
+   "t": 435.32,
+   "d": 7.24,
+   "text": "Most closed traditions are ethno-religions being tied to a specific culture often to the point that"
+  },
+  {
+   "t": 442.56,
+   "d": 6.36,
+   "text": "divorcing it strips away anything meaningful from it. Inversely, most open traditions are ones that"
+  },
+  {
+   "t": 448.92,
+   "d": 14.28,
+   "text": "are encouraged to spread usually ones that -- this is very generalized thing and a fluid system but"
+  },
+  {
+   "t": 463.2,
+   "d": 6.08,
+   "text": "generally a good starting point to go from. If you want to represent a closed tradition in your game,"
+  },
+  {
+   "t": 469.28,
+   "d": 6.0,
+   "text": "or in any sort of media, you almost always need permission or to do it in a very specific way."
+  },
+  {
+   "t": 475.28,
+   "d": 4.6,
+   "text": "Often if you ask for permission people are going to say no. Practices are closed for a"
+  },
+  {
+   "t": 479.88,
+   "d": 6.96,
+   "text": "reason and most of the time that is disrespect from colonizers. Equally, you need to consider"
+  },
+  {
+   "t": 486.84,
+   "d": 6.0,
+   "text": "context if you take from open traditions. Consider some of the ones I put under open traditions and"
+  },
+  {
+   "t": 492.84,
+   "d": 7.68,
+   "text": "remember everything is political. Right. As a quick exercise we will go back to the symbol we"
+  },
+  {
+   "t": 500.52,
+   "d": 7.4,
+   "text": "saw at the beginning. That guy in the very middle which some of you may know is Baphomet who has an"
+  },
+  {
+   "t": 508.56,
+   "d": 10.2,
+   "text": "interesting history and the source of that symbol ism is open and inspired by a Greco Egyptian"
+  },
+  {
+   "t": 518.76,
+   "d": 18.24,
+   "text": "mystic tradition. These are Hebrew letters. Which is the sacred language of Judaism. Jewish magic"
+  },
+  {
+   "t": 537.0,
+   "d": 8.8,
+   "text": "isn't for outsiders to use and practice. It is disrespectful for how important those letters"
+  },
+  {
+   "t": 545.8,
+   "d": 6.64,
+   "text": "are. As you might have guessed from the name of the symbol. This isn't a Jewish symbol. Western"
+  },
+  {
+   "t": 552.44,
+   "d": 11.16,
+   "text": "esoterica loves messing Hebrew letters. This does give us a rule of thumb. If you see Hebrew letters"
+  },
+  {
+   "t": 563.6,
+   "d": 6.28,
+   "text": "an an occult symbol it is something you should avoid for either of those reasons. If you follow"
+  },
+  {
+   "t": 569.88,
+   "d": 10.84,
+   "text": "this one rule you will probably dodge about 80% of appropriation. Let's wrap it up. What I hope I"
+  },
+  {
+   "t": 580.72,
+   "d": 11.28,
+   "text": "taught you today is western magic traditions have a long history of cultural appropriation. Many are"
+  },
+  {
+   "t": 595.48,
+   "d": 6.28,
+   "text": "taken without consent or are so different from the original it is not close to what it actually was."
+  },
+  {
+   "t": 601.76,
+   "d": 5.12,
+   "text": "Sometimes to the point where it is just insulting. There are rules of thumbs to avoid the egregious"
+  },
+  {
+   "t": 606.88,
+   "d": 8.32,
+   "text": "cases but there is never going to be paint by numbers solution. There is always context and edge"
+  },
+  {
+   "t": 615.2,
+   "d": 7.2,
+   "text": "cases to account for. Something to ask yourself, and if you take anything really take this,"
+  },
+  {
+   "t": 622.4,
+   "d": 5.56,
+   "text": "why do you want to use that symbol. Does it just look cool? If you are using something to"
+  },
+  {
+   "t": 627.96,
+   "d": 6.44,
+   "text": "represent an idea or concept is that idea what the symbol represents or what other decided it"
+  },
+  {
+   "t": 634.4,
+   "d": 7.24,
+   "text": "means? Talk to people from minority religions and how they want their practices to be depicted if"
+  },
+  {
+   "t": 641.64,
+   "d": 5.88,
+   "text": "at all. If someone doesn't want to share their culture with you respect that. There are plenty"
+  },
+  {
+   "t": 647.52,
+   "d": 10.12,
+   "text": "willing to share. If you would like further reading on this, I cannot stress enough how"
+  },
+  {
+   "t": 657.64,
+   "d": 9.24,
+   "text": "FYMA goes deeper in the appropriation of Jewish magic which is foundational to a lot of western"
+  },
+  {
+   "t": 666.88,
+   "d": 6.0,
+   "text": "esoterica and written by a Jewish practitioner. If you are left want to learn more about magic,"
+  },
+  {
+   "t": 673.56,
+   "d": 10.32,
+   "text": "there is a YouTube channel and everyone raises on Dr. Sledge. Magic this is which is a podcast"
+  },
+  {
+   "t": 683.88,
+   "d": 5.76,
+   "text": "I don't agree with all the takes but if you want an introduction with a reading list I do recommend"
+  },
+  {
+   "t": 689.64,
+   "d": 9.92,
+   "text": "it. And finally CT Kelly. You can learn a ton by following them. They are currently writing"
+  },
+  {
+   "t": 699.56,
+   "d": 7.43,
+   "text": "an introductory book on magic. Keep an eye out. That is it from me. I am Stanley Baxton and I"
+  },
+  {
+   "t": 706.99,
+   "d": 5.33,
+   "text": "will continue to be. And hopefully you can bring real world occultism into your games now with a"
+  },
+  {
+   "t": 712.32,
+   "d": 5.44,
+   "text": "sharper eye. If you want to chat about any of this, meet me in the Breakout rooms later"
+  },
+  {
+   "t": 721.64,
+   "d": 8.32,
+   "text": "ALEXEI: Impressive job fitting a lot into a short talk. We will make sure all the"
+  },
+  {
+   "t": 730.76,
+   "d": 11.92,
+   "text": "links are available and accessible. We will probably have time for a couple questions"
+  },
+  {
+   "t": 742.68,
+   "d": 9.2,
+   "text": "if that's all right with you, Stanley. The one question we have is someone who needs"
+  },
+  {
+   "t": 751.88,
+   "d": 9.56,
+   "text": "to know what the book is at the beginning. STANLEY: That's by Andrew Chumbley. It is a"
+  },
+  {
+   "t": 761.44,
+   "d": 6.28,
+   "text": "book. This is going to take a lot of context. It is a book about sabbatical witchcraft which"
+  },
+  {
+   "t": 767.72,
+   "d": 8.2,
+   "text": "is a specific brand Andrew pioneered. The best way I can explain is it a chaos magic"
+  },
+  {
+   "t": 775.92,
+   "d": 8.88,
+   "text": "for pretentious people and that book can sell for over $1,000 and I managed to snag it for $200."
+  },
+  {
+   "t": 787.48,
+   "d": 12.8,
+   "text": "ALEXEI: Wonderful. We appreciate esoteric flex at Roguelike Celebration. Cool. One thing I saw"
+  },
+  {
+   "t": 800.28,
+   "d": 5.64,
+   "text": "come up in chat, and I am curious if you have thoughts, in terms of, you know, obviously that"
+  },
+  {
+   "t": 805.92,
+   "d": 5.68,
+   "text": "kind of distinction between open and closed and thinking about the origin of different practices"
+  },
+  {
+   "t": 811.6,
+   "d": 6.48,
+   "text": "but also talking about diaspora and you can have ways religion and practices get tied up in that"
+  },
+  {
+   "t": 818.08,
+   "d": 7.72,
+   "text": "difference and those who moved in that culture to other places and whether or not the way that"
+  },
+  {
+   "t": 825.8,
+   "d": 7.68,
+   "text": "gets tied up in colonialism. Curious if you have thoughts on diaspora religions and practices."
+  },
+  {
+   "t": 834.2,
+   "d": 10.16,
+   "text": "STANLEY: It is a complex one because you find a lot of diasporic practice and one that comes"
+  },
+  {
+   "t": 844.36,
+   "d": 18.04,
+   "text": "to mind is Santoria and that is syncretized to Central America. It was basically a way"
+  },
+  {
+   "t": 862.4,
+   "d": 5.96,
+   "text": "for Indigenous people in Central America to hide or mask their religion while pretending"
+  },
+  {
+   "t": 868.36,
+   "d": 6.32,
+   "text": "it was Catholicism. It is a case of well it is technically Catholicism on paper but it is"
+  },
+  {
+   "t": 874.68,
+   "d": 7.04,
+   "text": "a specific and niche way people practice their religion. It is a case where there"
+  },
+  {
+   "t": 881.72,
+   "d": 5.48,
+   "text": "is no real paint by number solution. It is a matter of talking to practitioners and doing a"
+  },
+  {
+   "t": 887.2,
+   "d": 3.18,
+   "text": "deep dive on why it came about and if you want do represent it there are many practitioners"
+  },
+  {
+   "t": 890.38,
+   "d": 10.82,
+   "text": "alive and many will want to discuss it and might want to pop up in whatever game you are doing."
+  },
+  {
+   "t": 902.48,
+   "d": 6.68,
+   "text": "That's the takeaway. Talk to people. 90% could be avoided if people just talk to each other."
+  },
+  {
+   "t": 912.24,
+   "d": 8.0,
+   "text": "ALEXEI: Are there examples of games you think have navigated western Esotericism well?"
+  },
+  {
+   "t": 920.24,
+   "d": 9.04,
+   "text": "STANLEY: That's a good question. I would say in general less that it uses it"
+  },
+  {
+   "t": 929.28,
+   "d": 7.72,
+   "text": "but the idea of occult ideas I would say fallen London is a good one. I think fallen London gets"
+  },
+  {
+   "t": 937.0,
+   "d": 14.8,
+   "text": "away with it because it is set before Crawley is born. It is usually tied in a way it is a special"
+  },
+  {
+   "t": 951.8,
+   "d": 7.2,
+   "text": "nod of if you know you know and I understand why you didn't do the full reference because"
+  },
+  {
+   "t": 959.0,
+   "d": 6.48,
+   "text": "you don't want that full racist thing or you have taken this and transformed the core idea"
+  },
+  {
+   "t": 965.48,
+   "d": 6.0,
+   "text": "and taken it into a different direction. ALEXEI: Excellent. Thank you very much,"
+  },
+  {
+   "t": 971.48,
+   "d": 6.6,
+   "text": "Stanley. We appreciate you sharing with the conference. Yeah, such an informative"
+  },
+  {
+   "t": 978.08,
+   "d": 2.72,
+   "text": "packed 15 minutes. STANLEY: Thank you."
+  }
+ ]
+}

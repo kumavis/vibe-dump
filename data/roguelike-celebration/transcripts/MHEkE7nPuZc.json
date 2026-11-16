@@ -1,0 +1,1914 @@
+{
+ "id": "MHEkE7nPuZc",
+ "url": "https://www.youtube.com/watch?v=MHEkE7nPuZc",
+ "title": "Isaac Karth - Why Do You Want to Generate That? A Vocabulary For Talking About Procedural Generation",
+ "speaker": "Isaac Karth",
+ "talk_title": "Why Do You Want to Generate That? A Vocabulary For Talking About Procedural Generation",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1952,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nIsaac Karth has been interested in roguelikes and procedural generation since playing NetHack and Elite. He is currently a PhD student at the University of California Santa Cruz, researching procedural generation. He has escaped with the Orb of Zot in Dungeon Crawl Stone Soup once.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and concepts"
+  },
+  {
+   "start": 85,
+   "title": "Defining critical lenses"
+  },
+  {
+   "start": 173,
+   "title": "Artifact versus forest lens"
+  },
+  {
+   "start": 289,
+   "title": "Generator form and examples"
+  },
+  {
+   "start": 416,
+   "title": "Gestalt and expressivity"
+  },
+  {
+   "start": 535,
+   "title": "Player perception and theory"
+  },
+  {
+   "start": 638,
+   "title": "Structure versus surface"
+  },
+  {
+   "start": 776,
+   "title": "System interaction and rules"
+  },
+  {
+   "start": 930,
+   "title": "Procedural poetics"
+  },
+  {
+   "start": 1074,
+   "title": "Variety, cohesion, and style"
+  },
+  {
+   "start": 1257,
+   "title": "Conclusion and takeaways"
+  },
+  {
+   "start": 1352,
+   "title": "Q&A and application example"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4147,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.25,
+   "d": 8.34,
+   "text": "ISAAC KARTH: This is going to be, in the terminology of the last talk more \"wizard focused\"."
+  },
+  {
+   "t": 8.59,
+   "d": 7.17,
+   "text": "I want to answer the general question of - we're making procedural generators but why do you"
+  },
+  {
+   "t": 15.76,
+   "d": 2.06,
+   "text": "want to generate that particular thing exactly?"
+  },
+  {
+   "t": 17.82,
+   "d": 2.68,
+   "text": "What are you hoping to get out of it?"
+  },
+  {
+   "t": 20.5,
+   "d": 6.74,
+   "text": "This is coming out of my research into trying to develop a vocabulary for better ways to"
+  },
+  {
+   "t": 27.24,
+   "d": 8.31,
+   "text": "talk of Proc Gen. As introduced, I am Isaac Karth and doing research into the procedural"
+  },
+  {
+   "t": 35.55,
+   "d": 4.52,
+   "text": "generation at UC Santa Cruz as part of the design reasoning lab."
+  },
+  {
+   "t": 40.07,
+   "d": 5.13,
+   "text": "This is springing out of some of the work I have done on this."
+  },
+  {
+   "t": 45.2,
+   "d": 7.69,
+   "text": "So I want to have a very practical application for people to takeaway from this."
+  },
+  {
+   "t": 52.89,
+   "d": 4.93,
+   "text": "That's what questions can we ask about our generators."
+  },
+  {
+   "t": 57.82,
+   "d": 5.83,
+   "text": "If we want to understand them better, what should we be asking ourselves to try and figure"
+  },
+  {
+   "t": 63.65,
+   "d": 1.42,
+   "text": "that out?"
+  },
+  {
+   "t": 65.07,
+   "d": 2.31,
+   "text": "Quick overview."
+  },
+  {
+   "t": 67.38,
+   "d": 8.46,
+   "text": "I am going to have an intro and try and walk-through different lenses I think we can use to examine"
+  },
+  {
+   "t": 75.84,
+   "d": 4.46,
+   "text": "our generators and then wrap up the conclusion."
+  },
+  {
+   "t": 80.3,
+   "d": 5.91,
+   "text": "First, I want to declare some variables at the top of the talk."
+  },
+  {
+   "t": 86.21,
+   "d": 1.96,
+   "text": "These are three terms I am going to be using quite a bit."
+  },
+  {
+   "t": 88.17,
+   "d": 2.33,
+   "text": "A generator is pretty straightforward."
+  },
+  {
+   "t": 90.5,
+   "d": 1.91,
+   "text": "It is a thing that makes thing."
+  },
+  {
+   "t": 92.41,
+   "d": 5.34,
+   "text": "An artifact is a term that I have been using for a thing that the generator makes which,"
+  },
+  {
+   "t": 97.75,
+   "d": 4.31,
+   "text": "yes, that gets a little bit confusing when I start talking about Roguelike artifacts"
+  },
+  {
+   "t": 102.06,
+   "d": 4.4,
+   "text": "and generator artifacts but we will run with it."
+  },
+  {
+   "t": 106.46,
+   "d": 8.21,
+   "text": "And finally and most critically the idea of critical lens, which is the idea that you"
+  },
+  {
+   "t": 114.67,
+   "d": 4.42,
+   "text": "can use a theory as a way to view and talk about something."
+  },
+  {
+   "t": 119.09,
+   "d": 6.86,
+   "text": "It doesn't have to be the totality or the one way to talk about a thing but it gives"
+  },
+  {
+   "t": 125.95,
+   "d": 3.66,
+   "text": "you a particular perspective on it."
+  },
+  {
+   "t": 129.61,
+   "d": 7.21,
+   "text": "My research was partially inspired by the generative tarot from Emily Short's Annals"
+  },
+  {
+   "t": 136.82,
+   "d": 1.18,
+   "text": "of the Parrigues."
+  },
+  {
+   "t": 138.0,
+   "d": 7.75,
+   "text": "I took it in a different direction but if you have any interest at all in figuring out"
+  },
+  {
+   "t": 145.75,
+   "d": 5.22,
+   "text": "why Proc Gen works, why different approaches work, that you should check out Emily Short's"
+  },
+  {
+   "t": 150.97,
+   "d": 3.6,
+   "text": "work."
+  },
+  {
+   "t": 154.57,
+   "d": 8.46,
+   "text": "And for definitions, what I have been putting this all under is an umbrella title of what"
+  },
+  {
+   "t": 163.03,
+   "d": 5.82,
+   "text": "I have been calling procedural generation poetics and thinking about it from the effect"
+  },
+  {
+   "t": 168.85,
+   "d": 1.16,
+   "text": "it creates in the player."
+  },
+  {
+   "t": 170.01,
+   "d": 4.62,
+   "text": "That is how I will be talking about the lenses."
+  },
+  {
+   "t": 174.63,
+   "d": 6.8,
+   "text": "I have lenses that deal with the form of the generator first up."
+  },
+  {
+   "t": 181.43,
+   "d": 5.23,
+   "text": "Specifically are we concentrating on the individual artifacts that the generator creates?"
+  },
+  {
+   "t": 186.66,
+   "d": 6.64,
+   "text": "Or are we looking at the effect of the entire forest?"
+  },
+  {
+   "t": 193.3,
+   "d": 6.14,
+   "text": "Another metaphor that I have been using is are we looking at the unique individual snowflake"
+  },
+  {
+   "t": 199.44,
+   "d": 5.63,
+   "text": "that this particular generator produced or are we looking at the entire blizzard of all"
+  },
+  {
+   "t": 205.07,
+   "d": 3.09,
+   "text": "the possible snowflakes?"
+  },
+  {
+   "t": 208.16,
+   "d": 7.41,
+   "text": "And some questions we can ask about these are things like what effect does a single"
+  },
+  {
+   "t": 215.57,
+   "d": 2.93,
+   "text": "artifact have on the player's experience?"
+  },
+  {
+   "t": 218.5,
+   "d": 4.86,
+   "text": "What are the differences that we look for between artifacts?"
+  },
+  {
+   "t": 223.36,
+   "d": 5.0,
+   "text": "And then on the forest side, what is the overall impression that we get from this generative"
+  },
+  {
+   "t": 228.36,
+   "d": 1.05,
+   "text": "space?"
+  },
+  {
+   "t": 229.41,
+   "d": 2.67,
+   "text": "Do the artifacts always have a particular property?"
+  },
+  {
+   "t": 232.08,
+   "d": 2.87,
+   "text": "Do the artifacts never have something?"
+  },
+  {
+   "t": 234.95,
+   "d": 5.77,
+   "text": "Are the connections between different artifacts what's important?"
+  },
+  {
+   "t": 240.72,
+   "d": 8.39,
+   "text": "For like a concrete practical example, let's consider the Forgotten Beasts in Dwarf Fortress."
+  },
+  {
+   "t": 249.11,
+   "d": 3.99,
+   "text": "These are really popular with the fan base."
+  },
+  {
+   "t": 253.1,
+   "d": 6.15,
+   "text": "They are short descriptions but there are reams and reams of fan arts."
+  },
+  {
+   "t": 259.25,
+   "d": 8.03,
+   "text": "I have asked this particular artist if I could use these illustrations from specific forgotten"
+  },
+  {
+   "t": 267.28,
+   "d": 3.68,
+   "text": "beasts."
+  },
+  {
+   "t": 270.96,
+   "d": 6.98,
+   "text": "The thing we remember about them is because whatever beast our fortress encounters has"
+  },
+  {
+   "t": 277.94,
+   "d": 1.94,
+   "text": "these particular properties."
+  },
+  {
+   "t": 279.88,
+   "d": 6.96,
+   "text": "It matters if it is made out of bronze or water."
+  },
+  {
+   "t": 286.84,
+   "d": 3.76,
+   "text": "One of those is going to kill a lot more of my dwarfs."
+  },
+  {
+   "t": 290.6,
+   "d": 5.69,
+   "text": "We can also think about other aspects of the generator like this."
+  },
+  {
+   "t": 296.29,
+   "d": 5.77,
+   "text": "Like the artifacts the dwarfs create, the masterwork engravings, the dwarf personalities,"
+  },
+  {
+   "t": 302.06,
+   "d": 9.3,
+   "text": "we can think about how the generator handles individual details, and does it matter how"
+  },
+  {
+   "t": 311.36,
+   "d": 6.57,
+   "text": "many distinct personalities we can get out of it."
+  },
+  {
+   "t": 317.93,
+   "d": 6.66,
+   "text": "Another clear example where this lens is useful is talking about games that have one single"
+  },
+  {
+   "t": 324.59,
+   "d": 2.94,
+   "text": "overarching generator that has a fixed seed."
+  },
+  {
+   "t": 327.53,
+   "d": 5.74,
+   "text": "This was really popular back in the days when everything had to fit on a tiny floppy disk."
+  },
+  {
+   "t": 333.27,
+   "d": 5.39,
+   "text": "You had several games like Exile that used the generator to create these massive worlds"
+  },
+  {
+   "t": 338.66,
+   "d": 1.77,
+   "text": "that you could explore."
+  },
+  {
+   "t": 340.43,
+   "d": 8.96,
+   "text": "You would never really see what the generator as a whole could make because it is always"
+  },
+  {
+   "t": 349.39,
+   "d": 3.0,
+   "text": "working off one fixed seed."
+  },
+  {
+   "t": 352.39,
+   "d": 7.12,
+   "text": "Within it, like in Starflight here, there might be subgenerators."
+  },
+  {
+   "t": 359.51,
+   "d": 7.98,
+   "text": "There is a subgenerator that can produce a whole bunch of different planets, for example."
+  },
+  {
+   "t": 367.49,
+   "d": 2.74,
+   "text": "And just a little history of Proc Gen notes."
+  },
+  {
+   "t": 370.23,
+   "d": 8.89,
+   "text": "Starflight is the inspiration for a lot of space exploration games that came later including"
+  },
+  {
+   "t": 379.12,
+   "d": 4.71,
+   "text": "Star Control and Mass Effect."
+  },
+  {
+   "t": 383.83,
+   "d": 2.38,
+   "text": "We don't just have to look at the unique things."
+  },
+  {
+   "t": 386.21,
+   "d": 5.37,
+   "text": "We can think about the individual properties of things we get in groups."
+  },
+  {
+   "t": 391.58,
+   "d": 4.35,
+   "text": "For example, what's important about this particular dudgeon level?"
+  },
+  {
+   "t": 395.93,
+   "d": 1.84,
+   "text": "What makes it stand out?"
+  },
+  {
+   "t": 397.77,
+   "d": 1.81,
+   "text": "Is this the dudgeon level with the fountain?"
+  },
+  {
+   "t": 399.58,
+   "d": 6.63,
+   "text": "Is this the dudgeon level with the stairs to the Gnomish Mines?"
+  },
+  {
+   "t": 406.21,
+   "d": 5.93,
+   "text": "If we are tweaking our generator, what can we add or change to make different levels"
+  },
+  {
+   "t": 412.14,
+   "d": 2.54,
+   "text": "more likely to stand out?"
+  },
+  {
+   "t": 414.68,
+   "d": 9.33,
+   "text": "Turning to the gestalt forest side of things, the example I have been using is even though"
+  },
+  {
+   "t": 424.01,
+   "d": 5.56,
+   "text": "both of the forests use the exact same trees they look very different."
+  },
+  {
+   "t": 429.57,
+   "d": 9.66,
+   "text": "That kind of way of thinking about our generators can help us decide what we want them to exhibit."
+  },
+  {
+   "t": 439.23,
+   "d": 7.26,
+   "text": "For example, No Man's Sky deliberately made the sky to have each planet only have a single"
+  },
+  {
+   "t": 446.49,
+   "d": 9.76,
+   "text": "biome, so therefore when you land on a planet you immediately get the gestalt effect of"
+  },
+  {
+   "t": 456.25,
+   "d": 1.35,
+   "text": "the entire planet."
+  },
+  {
+   "t": 457.6,
+   "d": 5.39,
+   "text": "You know this is the planet with the blue grass, or this is the planet with these weird"
+  },
+  {
+   "t": 462.99,
+   "d": 9.34,
+   "text": "canals or whatever other feature is spread across the entire planet."
+  },
+  {
+   "t": 472.33,
+   "d": 8.48,
+   "text": "Once we see enough, you can see the patterns and get the feel for the gestalt."
+  },
+  {
+   "t": 480.81,
+   "d": 4.22,
+   "text": "The interesting thing about this is the more characteristic part of the generator turns"
+  },
+  {
+   "t": 485.03,
+   "d": 4.41,
+   "text": "out to be the things it isn't generating."
+  },
+  {
+   "t": 489.44,
+   "d": 4.51,
+   "text": "A default Nethack level has one up and one down stair."
+  },
+  {
+   "t": 493.95,
+   "d": 8.6,
+   "text": "Whenever that pattern is broken, you know something important is going on."
+  },
+  {
+   "t": 502.55,
+   "d": 6.7,
+   "text": "I think gestalt is something to especially think about what Kate Compton called the \"10,000"
+  },
+  {
+   "t": 509.25,
+   "d": 5.58,
+   "text": "bowls of oatmeal problem\" where you have a generator that can do all sorts of things"
+  },
+  {
+   "t": 514.83,
+   "d": 5.22,
+   "text": "but they all look similar."
+  },
+  {
+   "t": 520.05,
+   "d": 5.17,
+   "text": "The numbers are different but it all turns into this kind of mush."
+  },
+  {
+   "t": 525.22,
+   "d": 7.66,
+   "text": "Thinking about in terms of the expressive range of the Gestalt experience of the generator"
+  },
+  {
+   "t": 532.88,
+   "d": 3.89,
+   "text": "can help."
+  },
+  {
+   "t": 536.77,
+   "d": 2.79,
+   "text": "And then players can use these lenses too."
+  },
+  {
+   "t": 539.56,
+   "d": 7.33,
+   "text": "I think this term from computational creativity is helpful."
+  },
+  {
+   "t": 546.89,
+   "d": 3.85,
+   "text": "Framing in those terms is a technique where the computer explains what decisions it has"
+  },
+  {
+   "t": 550.74,
+   "d": 2.34,
+   "text": "made and why it makes it."
+  },
+  {
+   "t": 553.08,
+   "d": 7.68,
+   "text": "We can tune our generators to steer the player in one direction or another."
+  },
+  {
+   "t": 560.76,
+   "d": 7.25,
+   "text": "In fact, how the generator exist in context and how we describe it to the player shapes"
+  },
+  {
+   "t": 568.01,
+   "d": 4.65,
+   "text": "those perceptions."
+  },
+  {
+   "t": 572.66,
+   "d": 5.85,
+   "text": "When I am analyzing procedural generators, this is helpful because I make analogies to"
+  },
+  {
+   "t": 578.51,
+   "d": 11.01,
+   "text": "different art movements and I think the motifs and manifestos that the different art movements"
+  },
+  {
+   "t": 589.52,
+   "d": 6.6,
+   "text": "valued is also something that we can relate to how our procedural generators work."
+  },
+  {
+   "t": 596.12,
+   "d": 9.11,
+   "text": "For example, if your generator is more concerned about individual artifacts, it could be related"
+  },
+  {
+   "t": 605.23,
+   "d": 6.19,
+   "text": "to the way the arts and crafts movement was reacting against mass-produced consumer objects"
+  },
+  {
+   "t": 611.42,
+   "d": 7.1,
+   "text": "and wanted things to be handmade and individual versus if we are looking at a generator that's"
+  },
+  {
+   "t": 618.52,
+   "d": 6.27,
+   "text": "more on the forest side, we can talk of it in terms of pointalism or constructivism where"
+  },
+  {
+   "t": 624.79,
+   "d": 5.8,
+   "text": "the individual dabbles paint or the red triangle or the particular room in the dungeon don't"
+  },
+  {
+   "t": 630.59,
+   "d": 5.5,
+   "text": "mean much on their own but when you put it together in a whole picture it starts makes"
+  },
+  {
+   "t": 636.09,
+   "d": 1.76,
+   "text": "more sense."
+  },
+  {
+   "t": 637.85,
+   "d": 1.46,
+   "text": "OK."
+  },
+  {
+   "t": 639.31,
+   "d": 4.46,
+   "text": "I call this next set of lenses the aesthetic locus because it is about where the center"
+  },
+  {
+   "t": 643.77,
+   "d": 1.9,
+   "text": "of attention is."
+  },
+  {
+   "t": 645.67,
+   "d": 4.63,
+   "text": "Are we focused on the artifacts or the generator?"
+  },
+  {
+   "t": 650.3,
+   "d": 8.91,
+   "text": "Are we looking at the structure of the thing or the surface which gives us two different"
+  },
+  {
+   "t": 659.21,
+   "d": 2.66,
+   "text": "sets of questions to ask."
+  },
+  {
+   "t": 661.87,
+   "d": 3.4,
+   "text": "Are we more concerned about how this was made?"
+  },
+  {
+   "t": 665.27,
+   "d": 1.81,
+   "text": "Why is it made like this?"
+  },
+  {
+   "t": 667.08,
+   "d": 5.51,
+   "text": "Or are we concerned with how does this interact with other generated artifacts or what does"
+  },
+  {
+   "t": 672.59,
+   "d": 2.88,
+   "text": "this particular artifact do?"
+  },
+  {
+   "t": 675.47,
+   "d": 5.61,
+   "text": "There is a natural tendency for the player's attention to shift away from the surface and"
+  },
+  {
+   "t": 681.08,
+   "d": 6.13,
+   "text": "toward the structure as you become more familiar with the generator, but on the other hand,"
+  },
+  {
+   "t": 687.21,
+   "d": 9.86,
+   "text": "I think in roguelikes, the way that individual details matter a lot tends to keep the player"
+  },
+  {
+   "t": 697.07,
+   "d": 4.84,
+   "text": "focused on the surface even as they become more familiar with the generator."
+  },
+  {
+   "t": 701.91,
+   "d": 5.23,
+   "text": "It matters a whole lot if that thing you encounter in a dudgeon is a lower case d or a capital"
+  },
+  {
+   "t": 707.14,
+   "d": 5.99,
+   "text": "D. You want to be able to tell which one is the dragon."
+  },
+  {
+   "t": 713.13,
+   "d": 5.11,
+   "text": "I think this is one reason roguelikes have been so successful at using procedural generation"
+  },
+  {
+   "t": 718.24,
+   "d": 4.74,
+   "text": "effectively."
+  },
+  {
+   "t": 722.98,
+   "d": 8.81,
+   "text": "I think single generators push the focus toward the surface which is why I think one reason"
+  },
+  {
+   "t": 731.79,
+   "d": 4.71,
+   "text": "why Elite was so successful originally."
+  },
+  {
+   "t": 736.5,
+   "d": 5.76,
+   "text": "When we talk about surface in Dwarf Fortress, there is a lot of examples."
+  },
+  {
+   "t": 742.26,
+   "d": 6.82,
+   "text": "One I really like is the engravings that the dwarfs make or the artifacts and a detailed"
+  },
+  {
+   "t": 749.08,
+   "d": 5.2,
+   "text": "description of what it is your dwarf has constructed."
+  },
+  {
+   "t": 754.28,
+   "d": 7.2,
+   "text": "We can also flip it around because engravings can reference historical events from the history"
+  },
+  {
+   "t": 761.48,
+   "d": 2.93,
+   "text": "simulation when the world was created."
+  },
+  {
+   "t": 764.41,
+   "d": 6.85,
+   "text": "Even though the player can't directly see that history simulation, they can indirectly"
+  },
+  {
+   "t": 771.26,
+   "d": 6.44,
+   "text": "experience those effects and start getting a feel for what the history looks like."
+  },
+  {
+   "t": 777.7,
+   "d": 6.13,
+   "text": "Another example I really like is the way that diamonds are placed in Minecraft because they"
+  },
+  {
+   "t": 783.83,
+   "d": 1.62,
+   "text": "follow very specific rules."
+  },
+  {
+   "t": 785.45,
+   "d": 6.08,
+   "text": "They're always found in clusters and always found at particular depths."
+  },
+  {
+   "t": 791.53,
+   "d": 4.66,
+   "text": "The player can learn those rules and they can't tell where exactly any particular diamond"
+  },
+  {
+   "t": 796.19,
+   "d": 6.38,
+   "text": "is going to be found, they can generalize and say well, I have to do this and dig down"
+  },
+  {
+   "t": 802.57,
+   "d": 11.14,
+   "text": "this far, and have a, you know, a pickaxe that can reliably take me there and get this"
+  },
+  {
+   "t": 813.71,
+   "d": 7.28,
+   "text": "feel for what the generator is doing indirectly."
+  },
+  {
+   "t": 820.99,
+   "d": 8.8,
+   "text": "Another example is this way that Spelunky guarantees there is a path to the entrance"
+  },
+  {
+   "t": 829.79,
+   "d": 1.0,
+   "text": "and exit."
+  },
+  {
+   "t": 830.79,
+   "d": 5.03,
+   "text": "It does this by having rules on which rooms can connect to other rooms."
+  },
+  {
+   "t": 835.82,
+   "d": 13.68,
+   "text": "There is always some way to get from point A to point B even if that's kind of the long"
+  },
+  {
+   "t": 849.5,
+   "d": 1.85,
+   "text": "way around."
+  },
+  {
+   "t": 851.35,
+   "d": 6.24,
+   "text": "Unexplored, on the other hand, rather than having the rules implicitly in the tiles it"
+  },
+  {
+   "t": 857.59,
+   "d": 9.54,
+   "text": "places down, use a mission structures that gives a graph separate from the dungeon layout,"
+  },
+  {
+   "t": 867.13,
+   "d": 7.35,
+   "text": "so there is another hidden system here for the"
+  },
+  {
+   "t": 874.48,
+   "d": 2.26,
+   "text": "player to discover."
+  },
+  {
+   "t": 876.74,
+   "d": 7.24,
+   "text": "There is a lot of ways to introduce more structure to stuff when it is adjusting the distributions"
+  },
+  {
+   "t": 883.98,
+   "d": 2.14,
+   "text": "or the hierarchy."
+  },
+  {
+   "t": 886.12,
+   "d": 7.11,
+   "text": "I like changing the contrast within a particular variable."
+  },
+  {
+   "t": 893.23,
+   "d": 6.84,
+   "text": "This level might have a lot of small rooms, this level might have a lot of big rooms,"
+  },
+  {
+   "t": 900.07,
+   "d": 3.37,
+   "text": "or having a particular unique landmark to drop in."
+  },
+  {
+   "t": 903.44,
+   "d": 6.15,
+   "text": "This is really common in rougelikes that will have your usual dungeon generator but have"
+  },
+  {
+   "t": 909.59,
+   "d": 3.76,
+   "text": "an Oracle level or the big room or something like that."
+  },
+  {
+   "t": 913.35,
+   "d": 2.63,
+   "text": "And, again, to recap."
+  },
+  {
+   "t": 915.98,
+   "d": 7.13,
+   "text": "These are some of the questions about the processes that we can discern from the structure,"
+  },
+  {
+   "t": 923.11,
+   "d": 8.99,
+   "text": "or the direct impact that an individual artifact would have on our experience."
+  },
+  {
+   "t": 932.1,
+   "d": 8.54,
+   "text": "So then I promised to talk about poetics and so now that I have these four lenses, I want"
+  },
+  {
+   "t": 940.64,
+   "d": 5.54,
+   "text": "to build on them and figure out what else I can say about them."
+  },
+  {
+   "t": 946.18,
+   "d": 5.96,
+   "text": "If we combine them, there is a whole bunch of new questions we can ask of, you know,"
+  },
+  {
+   "t": 952.14,
+   "d": 7.02,
+   "text": "are we asking, you know, is this random artifact balanced for the way we have the game setup"
+  },
+  {
+   "t": 959.16,
+   "d": 1.0,
+   "text": "now?"
+  },
+  {
+   "t": 960.16,
+   "d": 7.45,
+   "text": "Or are we looking more on The Gestalt experience of the thing."
+  },
+  {
+   "t": 967.61,
+   "d": 4.92,
+   "text": "How much gold is going to be spawned over this run of the game?"
+  },
+  {
+   "t": 972.53,
+   "d": 5.76,
+   "text": "So, one additional way to building on top of this I have been thinking about is talking"
+  },
+  {
+   "t": 978.29,
+   "d": 6.98,
+   "text": "about the repetition where it is not about the shape of the experience so much as how"
+  },
+  {
+   "t": 985.27,
+   "d": 4.02,
+   "text": "the individual elements are similar to each other."
+  },
+  {
+   "t": 989.29,
+   "d": 9.39,
+   "text": "I talked a bit about the things that generator holds fixed and how these similarities can"
+  },
+  {
+   "t": 998.68,
+   "d": 6.7,
+   "text": "often become the characteristic emblem of your generator."
+  },
+  {
+   "t": 1005.38,
+   "d": 12.76,
+   "text": "Emily Short has this term mushroom of the kind of not very unique background details."
+  },
+  {
+   "t": 1018.14,
+   "d": 4.75,
+   "text": "This might be like the way your individual rooms and your dudgeon are kind of laid out,"
+  },
+  {
+   "t": 1022.89,
+   "d": 4.62,
+   "text": "so each individual room might not be important, or it could be all the text from a Markov"
+  },
+  {
+   "t": 1027.51,
+   "d": 8.07,
+   "text": "chain, just stuff that's not super unique on it's own but gives you a background carpet"
+  },
+  {
+   "t": 1035.58,
+   "d": 3.0,
+   "text": "of generativity."
+  },
+  {
+   "t": 1038.58,
+   "d": 10.62,
+   "text": "I have been differentiating this from the other axis because it is a question of is"
+  },
+  {
+   "t": 1049.2,
+   "d": 2.33,
+   "text": "it repeating these columns exactly?"
+  },
+  {
+   "t": 1051.53,
+   "d": 1.99,
+   "text": "Are they exactly identical?"
+  },
+  {
+   "t": 1053.52,
+   "d": 5.92,
+   "text": "Or is it more like a fractal where this part is very similar to the whole but it is unique"
+  },
+  {
+   "t": 1059.44,
+   "d": 1.41,
+   "text": "in itself?"
+  },
+  {
+   "t": 1060.85,
+   "d": 7.43,
+   "text": "Again, I have been related these to some different art movements and how they approach the idea"
+  },
+  {
+   "t": 1068.28,
+   "d": 5.61,
+   "text": "of rhythm and repetition."
+  },
+  {
+   "t": 1073.89,
+   "d": 8.15,
+   "text": "And then three more questions I found useful are looking at how much multiplicity there"
+  },
+  {
+   "t": 1082.04,
+   "d": 6.93,
+   "text": "is, how much cohesion there is in the system, and how well artifacts fit into the context"
+  },
+  {
+   "t": 1088.97,
+   "d": 3.89,
+   "text": "with which they have been generated."
+  },
+  {
+   "t": 1092.86,
+   "d": 6.95,
+   "text": "High multiplicity is one of the big problems, I think, for a lot of people who are trying"
+  },
+  {
+   "t": 1099.81,
+   "d": 1.49,
+   "text": "to generate stuff."
+  },
+  {
+   "t": 1101.3,
+   "d": 6.36,
+   "text": "My go-to example for this is that when the game Elite Dangerous was released, they had"
+  },
+  {
+   "t": 1107.66,
+   "d": 7.28,
+   "text": "this amazing space station generator that generated all these different kind of shapes"
+  },
+  {
+   "t": 1114.94,
+   "d": 4.83,
+   "text": "for different stations you can visit, but because of how the docking gameplay worked,"
+  },
+  {
+   "t": 1119.77,
+   "d": 3.67,
+   "text": "they all had exactly identical docking ports."
+  },
+  {
+   "t": 1123.44,
+   "d": 2.91,
+   "text": "Whenever you were going to dock your ship, you always saw something that looked very"
+  },
+  {
+   "t": 1126.35,
+   "d": 5.48,
+   "text": "close to this screen shot on the right."
+  },
+  {
+   "t": 1131.83,
+   "d": 5.09,
+   "text": "Finding a balance between those for your particular generator can be important."
+  },
+  {
+   "t": 1136.92,
+   "d": 10.19,
+   "text": "Cohesion, I talked about how Spelunky's generator guaranteed the different elements fit together."
+  },
+  {
+   "t": 1147.11,
+   "d": 4.35,
+   "text": "Spelunky always has a cohesive level because it is not allowed to place things that don't"
+  },
+  {
+   "t": 1151.46,
+   "d": 5.45,
+   "text": "fit in with the other ones."
+  },
+  {
+   "t": 1156.91,
+   "d": 6.65,
+   "text": "When you have a generator with this property it is really powerful because you can basically"
+  },
+  {
+   "t": 1163.56,
+   "d": 6.13,
+   "text": "throw whatever settings at it and because of the constraints it has, it will guarantee"
+  },
+  {
+   "t": 1169.69,
+   "d": 2.63,
+   "text": "you will have a usable result."
+  },
+  {
+   "t": 1172.32,
+   "d": 6.24,
+   "text": "Of course, it doesn't matter how cohesive they are if they are still the wrong artifacts."
+  },
+  {
+   "t": 1178.56,
+   "d": 14.54,
+   "text": "I have also been talking about style in terms of within this artifact, how appropriate are"
+  },
+  {
+   "t": 1193.1,
+   "d": 9.55,
+   "text": "the choices it is making for the environment it is in, or the -- how well it is conforming"
+  },
+  {
+   "t": 1202.65,
+   "d": 4.23,
+   "text": "to what it needs to fit into."
+  },
+  {
+   "t": 1206.88,
+   "d": 5.95,
+   "text": "SpeedTree is a really fun example because it has tools to make the roots wrap around"
+  },
+  {
+   "t": 1212.83,
+   "d": 7.29,
+   "text": "and always fit in with the environment it is in."
+  },
+  {
+   "t": 1220.12,
+   "d": 5.25,
+   "text": "And then some questions we can ask about these different dimensions are what are the similarities"
+  },
+  {
+   "t": 1225.37,
+   "d": 2.01,
+   "text": "between the artifacts?"
+  },
+  {
+   "t": 1227.38,
+   "d": 4.36,
+   "text": "How much variance can we perceive across the generative space?"
+  },
+  {
+   "t": 1231.74,
+   "d": 2.83,
+   "text": "Do the artifacts feel like they belong together?"
+  },
+  {
+   "t": 1234.57,
+   "d": 1.94,
+   "text": "Do they fit in?"
+  },
+  {
+   "t": 1236.51,
+   "d": 4.45,
+   "text": "Can we kind of perceive a cohesive system behind them?"
+  },
+  {
+   "t": 1240.96,
+   "d": 2.77,
+   "text": "And for style, how well do they fit in the context?"
+  },
+  {
+   "t": 1243.73,
+   "d": 2.19,
+   "text": "Can they be adjusted to match the current needs?"
+  },
+  {
+   "t": 1245.92,
+   "d": 11.29,
+   "text": "Is the generator smart enough to give us a water monster on the swamp level?"
+  },
+  {
+   "t": 1257.21,
+   "d": 2.21,
+   "text": "OK."
+  },
+  {
+   "t": 1259.42,
+   "d": 8.22,
+   "text": "To conclude, this is by no means been an exhaustive list."
+  },
+  {
+   "t": 1267.64,
+   "d": 6.57,
+   "text": "There are other ways to break apart generators, other ways to generate questions to ask."
+  },
+  {
+   "t": 1274.21,
+   "d": 8.25,
+   "text": "For example, Emily Short's Annals of the Parrigues has this five principle approach and other"
+  },
+  {
+   "t": 1282.46,
+   "d": 6.76,
+   "text": "people have built off this and generated their own five principles to orient their generators"
+  },
+  {
+   "t": 1289.22,
+   "d": 3.9,
+   "text": "around."
+  },
+  {
+   "t": 1293.12,
+   "d": 7.6,
+   "text": "So to sum up, the takeaways I want you to have from this is that we can theorize about"
+  },
+  {
+   "t": 1300.72,
+   "d": 6.6,
+   "text": "the effects of generators with these lenses which give questions we can ask about the"
+  },
+  {
+   "t": 1307.32,
+   "d": 7.56,
+   "text": "generators and answering those questions can help us give us a better understanding of"
+  },
+  {
+   "t": 1314.88,
+   "d": 3.27,
+   "text": "what it is we want our generators to be."
+  },
+  {
+   "t": 1318.15,
+   "d": 2.86,
+   "text": "I want to empathize multiple lenses are valid."
+  },
+  {
+   "t": 1321.01,
+   "d": 4.21,
+   "text": "There's lots of questions we can ask, and your generator may find one aspect more important"
+  },
+  {
+   "t": 1325.22,
+   "d": 2.65,
+   "text": "than the other."
+  },
+  {
+   "t": 1327.87,
+   "d": 4.66,
+   "text": "We can use framing to influence how the player's perceive our generators."
+  },
+  {
+   "t": 1332.53,
+   "d": 7.99,
+   "text": "There is one slide with all of the different questions just for reference."
+  },
+  {
+   "t": 1340.52,
+   "d": 11.36,
+   "text": "And thanks for listening to my talk."
+  },
+  {
+   "t": 1351.88,
+   "d": 4.25,
+   "text": "[Applause] >> Cool."
+  },
+  {
+   "t": 1356.13,
+   "d": 6.39,
+   "text": "We have time for some questions."
+  },
+  {
+   "t": 1362.52,
+   "d": 1.0,
+   "text": "Does anyone have any questions?"
+  },
+  {
+   "t": 1363.52,
+   "d": 2.69,
+   "text": "ISAAC KARTH: While people are thinking, I want to mention, I am looking to interview"
+  },
+  {
+   "t": 1366.21,
+   "d": 4.49,
+   "text": "people about what they want to do with procedural generation in the future, what problems they"
+  },
+  {
+   "t": 1370.7,
+   "d": 7.99,
+   "text": "have been running into, stuff like that, so, please, do contact me if you are interested"
+  },
+  {
+   "t": 1378.69,
+   "d": 6.41,
+   "text": "in influencing the future direction of research."
+  },
+  {
+   "t": 1385.1,
+   "d": 6.64,
+   "text": "AUDIENCE: Hey, great talk."
+  },
+  {
+   "t": 1391.74,
+   "d": 2.93,
+   "text": "My question which is leading into things I want to do with procedural generation is,"
+  },
+  {
+   "t": 1394.67,
+   "d": 6.7,
+   "text": "I think the structure versus surface distinction is interesting."
+  },
+  {
+   "t": 1401.37,
+   "d": 4.2,
+   "text": "You mention how the user experience in roguelikes tends itself in one way or another."
+  },
+  {
+   "t": 1405.57,
+   "d": 4.64,
+   "text": "How do we encourage the players to pick up on the structure?"
+  },
+  {
+   "t": 1410.21,
+   "d": 6.16,
+   "text": "I feel when you see players bouncing off certain things with proc gen mechanics, they're not"
+  },
+  {
+   "t": 1416.37,
+   "d": 1.38,
+   "text": "seeing that there is a structure."
+  },
+  {
+   "t": 1417.75,
+   "d": 5.88,
+   "text": "They're too focused on the surface so they call it random and move on."
+  },
+  {
+   "t": 1423.63,
+   "d": 4.7,
+   "text": "Any thoughts on how to encourage a player to keep the structure in mind as well as the"
+  },
+  {
+   "t": 1428.33,
+   "d": 1.0,
+   "text": "surface?"
+  },
+  {
+   "t": 1429.33,
+   "d": 12.06,
+   "text": "ISAAC KARTH: One way is just foregrounding some of the causality."
+  },
+  {
+   "t": 1441.39,
+   "d": 9.73,
+   "text": "For example, one thing a lot of roguelikes do is track what caused a particular damage"
+  },
+  {
+   "t": 1451.12,
+   "d": 2.69,
+   "text": "to the player."
+  },
+  {
+   "t": 1453.81,
+   "d": 5.88,
+   "text": "NetHack passes around where did this damage originally come from whenever something hits"
+  },
+  {
+   "t": 1459.69,
+   "d": 3.63,
+   "text": "something else."
+  },
+  {
+   "t": 1463.32,
+   "d": 4.32,
+   "text": "That means that when it print out for the player when they die, the player knows exactly"
+  },
+  {
+   "t": 1467.64,
+   "d": 2.89,
+   "text": "this thing, hit this thing, that killed me."
+  },
+  {
+   "t": 1470.53,
+   "d": 8.76,
+   "text": "I think extending that idea to other parts of the generator and giving a bit more foreground"
+  },
+  {
+   "t": 1479.29,
+   "d": 4.64,
+   "text": "into the cause into things can help bring out the structure."
+  },
+  {
+   "t": 1483.93,
+   "d": 8.55,
+   "text": "For example, if a particular -- if your generator is generating like a particular kind of room,"
+  },
+  {
+   "t": 1492.48,
+   "d": 4.8,
+   "text": "or using a particular technique to generate that kind of room, maybe give that a unique"
+  },
+  {
+   "t": 1497.28,
+   "d": 3.61,
+   "text": "style so they can tell."
+  },
+  {
+   "t": 1500.89,
+   "d": 3.93,
+   "text": "They don't necessarily know which part of the generator did that but they know when"
+  },
+  {
+   "t": 1504.82,
+   "d": 5.99,
+   "text": "I start to see this floor pattern that means it has these other associations with it."
+  },
+  {
+   "t": 1510.81,
+   "d": 1.84,
+   "text": ">> Other questions?"
+  },
+  {
+   "t": 1512.65,
+   "d": 2.76,
+   "text": "AUDIENCE: General question."
+  },
+  {
+   "t": 1515.41,
+   "d": 8.62,
+   "text": "You know, I have run across various Proc Gen techniques everywhere."
+  },
+  {
+   "t": 1524.03,
+   "d": 7.16,
+   "text": "I don't know of one seminal, fairly modern reference that would give me a good overview"
+  },
+  {
+   "t": 1531.19,
+   "d": 2.12,
+   "text": "of all the good ones in application."
+  },
+  {
+   "t": 1533.31,
+   "d": 3.82,
+   "text": "Do you have any recommendations of some literature?"
+  },
+  {
+   "t": 1537.13,
+   "d": 3.7,
+   "text": "ISAAC KARTH: Overview of all the possible ones."
+  },
+  {
+   "t": 1540.83,
+   "d": 4.97,
+   "text": ">> AUDIENCE: All the known ones, I guess."
+  },
+  {
+   "t": 1545.8,
+   "d": 4.49,
+   "text": "[Laughter] ISAAC KARTH: So there is actually a couple"
+  },
+  {
+   "t": 1550.29,
+   "d": 7.63,
+   "text": "books that I am currently blanking on the titles of though some of the editors are in"
+  },
+  {
+   "t": 1557.92,
+   "d": 3.79,
+   "text": "the audience."
+  },
+  {
+   "t": 1561.71,
+   "d": 10.75,
+   "text": "Actually, the first chapter of the procedural generation book that Tarn edited with Tanya"
+  },
+  {
+   "t": 1572.46,
+   "d": 6.13,
+   "text": "Short has like a really good list of a bunch of different techniques."
+  },
+  {
+   "t": 1578.59,
+   "d": 9.34,
+   "text": "Well, a bunch of different questions and a bunch of different techniques covered in there."
+  },
+  {
+   "t": 1587.93,
+   "d": 2.18,
+   "text": "Um..."
+  },
+  {
+   "t": 1590.11,
+   "d": 4.64,
+   "text": "Kate Compton has a rather popular blog post."
+  },
+  {
+   "t": 1594.75,
+   "d": 13.35,
+   "text": "I believe it is titled >> \"So you want to build a generator?\""
+  },
+  {
+   "t": 1608.1,
+   "d": 6.5,
+   "text": "ISAAC KARTH: Thanks, Kate."
+  },
+  {
+   "t": 1614.6,
+   "d": 3.25,
+   "text": "[Laughter] >> Cool."
+  },
+  {
+   "t": 1617.85,
+   "d": 6.49,
+   "text": "The other book was called Procedural Generation in Game Design."
+  },
+  {
+   "t": 1624.34,
+   "d": 1.56,
+   "text": "ISAAC KARTH: Ah!"
+  },
+  {
+   "t": 1625.9,
+   "d": 1.0,
+   "text": "Thanks."
+  },
+  {
+   "t": 1626.9,
+   "d": 2.07,
+   "text": "We have time for one more question."
+  },
+  {
+   "t": 1628.97,
+   "d": 7.45,
+   "text": "If you had your hand up, you should wave it vigorously."
+  },
+  {
+   "t": 1636.42,
+   "d": 1.0,
+   "text": "Anyone?"
+  },
+  {
+   "t": 1637.42,
+   "d": 6.58,
+   "text": "AUDIENCE: You have the title of your talk being this great question why do you want"
+  },
+  {
+   "t": 1644.0,
+   "d": 1.0,
+   "text": "to generate that."
+  },
+  {
+   "t": 1645.0,
+   "d": 8.31,
+   "text": "Could you work through an example of how you would use vocabulary you laid out on the last"
+  },
+  {
+   "t": 1653.31,
+   "d": 2.72,
+   "text": "side to answer this question?"
+  },
+  {
+   "t": 1656.03,
+   "d": 1.63,
+   "text": "ISAAC KARTH: OK."
+  },
+  {
+   "t": 1657.66,
+   "d": 7.99,
+   "text": "So let's pick something to generate."
+  },
+  {
+   "t": 1665.65,
+   "d": 9.55,
+   "text": "Say Dungeon Crawl Stone Soup has the ability to add different room templates, basically."
+  },
+  {
+   "t": 1675.2,
+   "d": 10.16,
+   "text": "I am trying to decide what room template I want to mod in to add a particular effect."
+  },
+  {
+   "t": 1685.36,
+   "d": 4.54,
+   "text": "The first question is what effect does this particular room have?"
+  },
+  {
+   "t": 1689.9,
+   "d": 6.94,
+   "text": "How does that change its relation to the other rooms that are being generated?"
+  },
+  {
+   "t": 1696.84,
+   "d": 8.8,
+   "text": "Say I want to, like, start emphasizing different classes or races."
+  },
+  {
+   "t": 1705.64,
+   "d": 10.2,
+   "text": "Say I want to have a Minotaur themed room, or an ogre-themed room and have a different"
+  },
+  {
+   "t": 1715.84,
+   "d": 7.28,
+   "text": "experience if the player is playing that class versus not playing that class."
+  },
+  {
+   "t": 1723.12,
+   "d": 3.62,
+   "text": "So start thinking about like what are the differences between these rooms."
+  },
+  {
+   "t": 1726.74,
+   "d": 5.58,
+   "text": "If I setup these -- if I am layingout here is the rooms I want to add to the generator,"
+  },
+  {
+   "t": 1732.32,
+   "d": 3.33,
+   "text": "how am I going to make them different from each other?"
+  },
+  {
+   "t": 1735.65,
+   "d": 1.7,
+   "text": "And then what's the overall impression?"
+  },
+  {
+   "t": 1737.35,
+   "d": 3.99,
+   "text": "How does this change the rooms that the player is experiencing?"
+  },
+  {
+   "t": 1741.34,
+   "d": 4.24,
+   "text": "It is only going to show up -- because there is already a lot of rooms in the game that"
+  },
+  {
+   "t": 1745.58,
+   "d": 3.93,
+   "text": "can be added, it is only going to show up a little bit of time, so I have to think about"
+  },
+  {
+   "t": 1749.51,
+   "d": 3.51,
+   "text": "does it matter if I only see one of them?"
+  },
+  {
+   "t": 1753.02,
+   "d": 8.68,
+   "text": "Do I want a level where I force a bunch to show up like the Temple with the gods in the"
+  },
+  {
+   "t": 1761.7,
+   "d": 1.0,
+   "text": "game?"
+  },
+  {
+   "t": 1762.7,
+   "d": 6.15,
+   "text": "For repetition, I want to think about like maybe I want to make these rooms all kind"
+  },
+  {
+   "t": 1768.85,
+   "d": 3.8,
+   "text": "of like a similar shape so when the player sees one of these they know what's coming"
+  },
+  {
+   "t": 1772.65,
+   "d": 4.25,
+   "text": "up."
+  },
+  {
+   "t": 1776.9,
+   "d": 7.14,
+   "text": "And then for structure and surface, it is things like so when the player encounters"
+  },
+  {
+   "t": 1784.04,
+   "d": 5.78,
+   "text": "this room, what are they going to be thinking about?"
+  },
+  {
+   "t": 1789.82,
+   "d": 3.93,
+   "text": "I want to -- I have already wanted to clue them in that this challenge is going to be"
+  },
+  {
+   "t": 1793.75,
+   "d": 1.47,
+   "text": "coming up."
+  },
+  {
+   "t": 1795.22,
+   "d": 6.24,
+   "text": "Maybe it is a challenge that particular easy or hard for a particular class and so to know"
+  },
+  {
+   "t": 1801.46,
+   "d": 7.21,
+   "text": "that if they are playing this class, they should be looking out for it because it is"
+  },
+  {
+   "t": 1808.67,
+   "d": 1.0,
+   "text": "like giving them a big advantage."
+  },
+  {
+   "t": 1809.67,
+   "d": 2.57,
+   "text": "If they are not playing the class maybe they want to avoid it and try and find another"
+  },
+  {
+   "t": 1812.24,
+   "d": 4.51,
+   "text": "solution to the problem."
+  },
+  {
+   "t": 1816.75,
+   "d": 6.66,
+   "text": "And then thinking about, you know, how do I want to foreground this structure tot he"
+  },
+  {
+   "t": 1823.41,
+   "d": 1.0,
+   "text": "player?"
+  },
+  {
+   "t": 1824.41,
+   "d": 5.58,
+   "text": "Like I said maybe I want to make these a unique shape or highlight them or if I want to clue"
+  },
+  {
+   "t": 1829.99,
+   "d": 5.17,
+   "text": "the player in that they are like going to becoming up to it, maybe scatter other clues"
+  },
+  {
+   "t": 1835.16,
+   "d": 2.14,
+   "text": "around the level."
+  },
+  {
+   "t": 1837.3,
+   "d": 2.81,
+   "text": "NetHack uses its sound system to do this."
+  },
+  {
+   "t": 1840.11,
+   "d": 4.14,
+   "text": "You can hear things you haven't discovered yet that gives you a clue as to what kind"
+  },
+  {
+   "t": 1844.25,
+   "d": 1.83,
+   "text": "of level you are on."
+  },
+  {
+   "t": 1846.08,
+   "d": 4.8,
+   "text": "That's another way that NetHack exhibits structure."
+  },
+  {
+   "t": 1850.88,
+   "d": 11.84,
+   "text": "And then these other questions of like how much variety do we want to see in the different"
+  },
+  {
+   "t": 1862.72,
+   "d": 1.0,
+   "text": "rooms."
+  },
+  {
+   "t": 1863.72,
+   "d": 4.75,
+   "text": "We have enough other rooms maybe these rooms are always the same or maybe we want to have"
+  },
+  {
+   "t": 1868.47,
+   "d": 4.29,
+   "text": "some more, you know, variations."
+  },
+  {
+   "t": 1872.76,
+   "d": 3.65,
+   "text": "So if the player doesn't know exactly what the challenge is going to be."
+  },
+  {
+   "t": 1876.41,
+   "d": 5.59,
+   "text": "There is different strengths and weaknesses to mixing like a fixed thing in with your"
+  },
+  {
+   "t": 1882.0,
+   "d": 4.58,
+   "text": "generator versus always having it be very changeable."
+  },
+  {
+   "t": 1886.58,
+   "d": 3.95,
+   "text": "And do these rooms feel like they belong with the rest of the game?"
+  },
+  {
+   "t": 1890.53,
+   "d": 6.91,
+   "text": "Do they, like, because I don't want -- I am moding Dungeon Crawl so I don't want to drop"
+  },
+  {
+   "t": 1897.44,
+   "d": 2.76,
+   "text": "in something that would be completely out of place."
+  },
+  {
+   "t": 1900.2,
+   "d": 4.51,
+   "text": "I want to kind of fit in with the rest of the stuff."
+  },
+  {
+   "t": 1904.71,
+   "d": 5.22,
+   "text": "I don't want to disrupt the rest of the levels that they are being placed on."
+  },
+  {
+   "t": 1909.93,
+   "d": 6.37,
+   "text": "I don't want to unbalance the game too much by giving, you know, too strong or too many"
+  },
+  {
+   "t": 1916.3,
+   "d": 1.74,
+   "text": "rewards or not enough."
+  },
+  {
+   "t": 1918.04,
+   "d": 6.81,
+   "text": "Or like having a way out of depth monster."
+  },
+  {
+   "t": 1924.85,
+   "d": 6.35,
+   "text": "And then speaking of way out of depth monsters, can we adjust the rooms to fit in the level"
+  },
+  {
+   "t": 1931.2,
+   "d": 1.71,
+   "text": "they are generated on?"
+  },
+  {
+   "t": 1932.91,
+   "d": 6.13,
+   "text": "You know, do they respect the difficulty?"
+  },
+  {
+   "t": 1939.04,
+   "d": 3.41,
+   "text": "Do they play in with the other aspects of the generator."
+  },
+  {
+   "t": 1942.45,
+   "d": 1.0,
+   "text": "I hope that answers the question."
+  },
+  {
+   "t": 1943.45,
+   "d": 1.0,
+   "text": ">> Cool."
+  },
+  {
+   "t": 1944.45,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 1945.45,
+   "d": 1.0,
+   "text": "[Applause] >> We are going to take a short break."
+  },
+  {
+   "t": 1946.45,
+   "d": 1.16,
+   "text": "Everyone get up, stretch their legs and grab coffee and we will be back at 11:15."
+  }
+ ]
+}

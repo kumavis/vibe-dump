@@ -1,0 +1,98 @@
+{
+  "id": "2BHfpAF76J8",
+  "title": "Andrea Roberts - That's the Way the Ball Bounces: Using Physics to Manifest Chance in Roundguard",
+  "speaker": "Andrea Roberts",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=2BHfpAF76J8",
+  "talk_type": "design",
+  "summary": "Andrea Roberts, designer and artist of Roundguard (described as Peggle plus a roguelike), explains how the game uses deterministic physics as a system of uncertainty in place of to-hit and evasion rolls. Because multi-bounce trajectories are too complex to model mentally, players reason in likely outcomes, then react mid-bounce with class skills. Roundguard inverts the classic roguelike: enemies are predictable while the hero's own movement is uncertain, preserving the genre's emphasis on improvisation over memorization. She closes by inviting designers to look for new systems of uncertainty in gambling, science, psychology and divination.",
+  "games": [
+    "Roundguard",
+    "Peggle",
+    "Spelunky",
+    "Super Mario"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "technique",
+      "claim": "Roundguard uses physics-based bouncing of the hero to stand in for what other games express as percent chance to hit or evade.",
+      "detail": "The hero is fired from a ballista and bounces through the dungeon like Peggle. RNG is still used for dungeon generation, loot and item procs, but hero movement represents hit and evasion odds through physics.",
+      "t": 126,
+      "quote": "We use physics in the hero movement to represent something that could be expressed as a hero's percent chance to hit or percent chance to evade an enemy",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "systems of uncertainty",
+      "kind": "principle",
+      "claim": "A deterministic system becomes a source of chance when it is too complex for players to model, so 'systems of uncertainty' are a broader design tool than random number generation.",
+      "detail": "Roundguard's physics has no hidden randomness; a cranked-up aim predictor shows the hero follows the line exactly. But like Plinko, after a few bounces the outcome becomes a mess in players' heads, so it functions as uncertainty.",
+      "t": 185,
+      "quote": "let's broaden that term to say it’s a system of uncertainty, which really is any system that is that complicated that we can't model it out",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "probabilistic reasoning",
+      "kind": "example",
+      "claim": "In Roundguard, players plan shots in zones of likelihood: certain about the first bounce, probable about the next, then weighing risk regions against current health and mana.",
+      "detail": "Roberts walks through a shot: certain of hitting a pot, confident of an orc, then likely bouncing middle for health pots, possibly left toward hard-hitting orcs while at half health, and unlikely right where mana pots would be wasted at full mana, making it a good turn to spend skills.",
+      "t": 262,
+      "quote": "Then my brain starts to shift into these sorta areas of likeliness",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "technique",
+      "claim": "A Roundguard turn has a planning and prediction phase followed by a reaction phase where class skills like the Rogue's double jump are used mid-bounce to improvise.",
+      "detail": "In the example, a mediocre shot was salvaged by double-jumping over spikes and using the gained height to hit a red spider.",
+      "t": 308,
+      "quote": "We’ve got this planning prediction phase, and then there’s the reaction phase, where you’re reacting with your skills",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "inverted uncertainty",
+      "kind": "principle",
+      "claim": "Roundguard inverts classic roguelike uncertainty: the player's movement is unpredictable while enemies are predictable, so players must react to their own unpredictability.",
+      "detail": "In grid roguelikes the player has full movement control and uncertainty comes from enemies. Roundguard's enemies are stationary or follow set paths with learnable behaviours, which creates drama and surprise from the player's own shots while using the same predict-then-react brain patterns.",
+      "t": 354,
+      "quote": "In a classic grid-based Roguelike you have 100% control over your hero's movement. The uncertainty comes into play with how are the enemies moving and behaving",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "mastery",
+      "kind": "principle",
+      "claim": "Roguelikes reward improvisation over memorization: unlike rehearsing a Mario level, Spelunky players must learn underlying principles and build a palette of reactions.",
+      "detail": "Roberts argues this means strong roguelike players come to know a game's design as well as its designers; Roundguard beta players sometimes taught her implications of her own design.",
+      "t": 465,
+      "quote": "a Spelunky player doesn't have the luxury of memorization, instead really what they need to do is really tease apart the underlying principles of the game",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systems of uncertainty",
+      "kind": "open-question",
+      "claim": "Designers could mine new systems of uncertainty from gambling, scientific models, human psychology, genetic mutation, climate models and divination practices like cleromancy.",
+      "detail": "Roberts notes RNGs are usually constrained to simulate a die roll, bag pull or deck shuffle, and asks what other sources of uncertainty exist and what textures they create. An audience member added other players, in PvP and co-op, as another source.",
+      "t": 542,
+      "quote": "What else are you using in your games or what could you be using as systems of uncertainty? And what kind of textures and what kind of feelings",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "massaging randomness",
+      "kind": "technique",
+      "claim": "Roundguard does not secretly correct bounces as Peggle reportedly did, but slows time at dramatic moments such as near misses to give the player a moment to react.",
+      "detail": "Asked whether they massage randomness so players don't feel bad about outliers, Roberts said nothing is adjusted under the hood; the slowdowns are their only intervention.",
+      "t": 770,
+      "quote": "We have some things where we do slowdowns at certain moments when we know it’s going to be very dramatic, like a near miss",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

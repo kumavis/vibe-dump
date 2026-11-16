@@ -1,0 +1,910 @@
+{
+ "id": "LaOcggk7U88",
+ "url": "https://www.youtube.com/watch?v=LaOcggk7U88",
+ "title": "Nick McConnell - Things I've Learnt from Maintaining Angband",
+ "speaker": "Nick McConnell",
+ "talk_title": "Things I've Learnt from Maintaining Angband",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 890,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I'll give a personal view of what it's been like doing Angband and variant development, especially being actual Angband maintainer. I'm likely to include things like why I got into it in the first place, how Angband has progressed over the years, and what people expect from Angband and its maintainers. I want to leave plenty of time for Q&A.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 149,
+   "title": "Everyone has a different view of Angband"
+  },
+  {
+   "start": 288,
+   "title": "Games and their traditions influence each other"
+  },
+  {
+   "start": 508,
+   "title": "Making a variant frees you from history"
+  },
+  {
+   "start": 580,
+   "title": "Having a vision is good, but so is listening"
+  },
+  {
+   "start": 639,
+   "title": "Best practice is getting stuff done"
+  },
+  {
+   "start": 678,
+   "title": "Community is great"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1860,
+ "trimmed": {
+  "segments": 32,
+  "words": 320
+ },
+ "segments": [
+  {
+   "t": 4.71,
+   "d": 1.0,
+   "text": "I am pleased to introduce Nick McConnell."
+  },
+  {
+   "t": 8.54,
+   "d": 1.0,
+   "text": "Welcome, Nick."
+  },
+  {
+   "t": 12.26,
+   "d": 1.0,
+   "text": "Nick: Hey."
+  },
+  {
+   "t": 15.99,
+   "d": 1.0,
+   "text": "EMCEE: You are currently involved in egg man and have been since 2005."
+  },
+  {
+   "t": 20.85,
+   "d": 1.0,
+   "text": "That's a long time."
+  },
+  {
+   "t": 23.81,
+   "d": 1.0,
+   "text": "Take it away and talk about with an it is like working on Angband."
+  },
+  {
+   "t": 35.55,
+   "d": 1.0,
+   "text": "Nick: Before starting, big thanks to the organizers and being friendly and making everything work"
+  },
+  {
+   "t": 41.95,
+   "d": 1.0,
+   "text": "well."
+  },
+  {
+   "t": 42.95,
+   "d": 1.0,
+   "text": "Also, a huge thanks to all the previous speakers."
+  },
+  {
+   "t": 43.95,
+   "d": 8.6,
+   "text": "There have been a truly excellent array of talks and my mind is in shreds from continually"
+  },
+  {
+   "t": 52.55,
+   "d": 2.62,
+   "text": "being blown by all of them."
+  },
+  {
+   "t": 55.17,
+   "d": 6.45,
+   "text": "We will see how I go with keeping a coherent narrative here."
+  },
+  {
+   "t": 61.62,
+   "d": 8.15,
+   "text": "I have always wanted to go to the Roguelike Celebration and being in Australia that is"
+  },
+  {
+   "t": 69.77,
+   "d": 1.39,
+   "text": "difficult."
+  },
+  {
+   "t": 71.16,
+   "d": 6.75,
+   "text": "Given it is online this year, this has been a good opportunity and happily the organizers"
+  },
+  {
+   "t": 77.91,
+   "d": 7.47,
+   "text": "approached me, or rather approached the current Angband team, to see if I would be able to"
+  },
+  {
+   "t": 85.38,
+   "d": 1.0,
+   "text": "give a talk."
+  },
+  {
+   "t": 86.38,
+   "d": 1.46,
+   "text": "I thought great."
+  },
+  {
+   "t": 87.84,
+   "d": 2.02,
+   "text": "I will do that."
+  },
+  {
+   "t": 89.86,
+   "d": 3.39,
+   "text": "I had no idea what I was going totalk -- to talk about it."
+  },
+  {
+   "t": 93.25,
+   "d": 5.43,
+   "text": "I didn't know what people would be interested in about Angband."
+  },
+  {
+   "t": 98.68,
+   "d": 6.61,
+   "text": "I thought I will run through a few quick things and leave a lot of time for people to ask"
+  },
+  {
+   "t": 105.29,
+   "d": 3.01,
+   "text": "questions about what they are actually interested."
+  },
+  {
+   "t": 108.3,
+   "d": 6.45,
+   "text": "That's the game plan and hopefully I will say some interest things along the way but"
+  },
+  {
+   "t": 114.75,
+   "d": 1.57,
+   "text": "we will see."
+  },
+  {
+   "t": 116.32,
+   "d": 15.96,
+   "text": "For those who don't know, Angband descendent of UMoria and it is -- I am a long way from"
+  },
+  {
+   "t": 132.28,
+   "d": 1.44,
+   "text": "being an industry professional."
+  },
+  {
+   "t": 133.72,
+   "d": 9.26,
+   "text": "It is a free open source game written entirely in large quantities of C and operated on by"
+  },
+  {
+   "t": 142.98,
+   "d": 5.06,
+   "text": "volunteers in their spare time basically."
+  },
+  {
+   "t": 148.04,
+   "d": 5.16,
+   "text": "Thing number one and here is where I will talk about a little history."
+  },
+  {
+   "t": 153.2,
+   "d": 11.31,
+   "text": "Angband was developed from Umoria in 1999 by some students in the UK."
+  },
+  {
+   "t": 164.51,
+   "d": 7.89,
+   "text": "It floated around the university for a few years and then in 1993 it was released on"
+  },
+  {
+   "t": 172.4,
+   "d": 11.62,
+   "text": "to the then fairly embryonic internet."
+  },
+  {
+   "t": 184.02,
+   "d": 8.02,
+   "text": "And then, you know, in those days, things, code was often not very portable so then there"
+  },
+  {
+   "t": 192.04,
+   "d": 6.77,
+   "text": "was a port to the PC and the MAC and things like this."
+  },
+  {
+   "t": 198.81,
+   "d": 7.4,
+   "text": "And time went on and the internet gradually improved and somewhere around about the mid-90s"
+  },
+  {
+   "t": 206.21,
+   "d": 5.58,
+   "text": "Angband had a moment where a lot of people were getting to play it."
+  },
+  {
+   "t": 211.79,
+   "d": 7.67,
+   "text": "It was a theme in the Zeitgeist of the internet at the time."
+  },
+  {
+   "t": 219.46,
+   "d": 4.19,
+   "text": "But the other thing about it is that since it started in 1990 it has been in continuous"
+  },
+  {
+   "t": 223.65,
+   "d": 4.33,
+   "text": "development for that entire time."
+  },
+  {
+   "t": 227.98,
+   "d": 7.73,
+   "text": "It's a very interesting thing to observe because I will put out a new version, occasionally,"
+  },
+  {
+   "t": 235.71,
+   "d": 6.75,
+   "text": "and some of the comments that you get on that are Angband, why would you change that?"
+  },
+  {
+   "t": 242.46,
+   "d": 4.03,
+   "text": "I mean, it was good already, wasn't it?"
+  },
+  {
+   "t": 246.49,
+   "d": 6.14,
+   "text": "And you don't know where to start with a comment like that because um, first, I am hoping that"
+  },
+  {
+   "t": 252.63,
+   "d": 6.34,
+   "text": "my new version is making it better, and also, I don't know which bit you are talking about"
+  },
+  {
+   "t": 258.97,
+   "d": 1.22,
+   "text": "was already good."
+  },
+  {
+   "t": 260.19,
+   "d": 2.73,
+   "text": "Do you know 2.6?"
+  },
+  {
+   "t": 262.92,
+   "d": 1.0,
+   "text": "2.8?"
+  },
+  {
+   "t": 263.92,
+   "d": 1.0,
+   "text": "# 3.0?"
+  },
+  {
+   "t": 264.92,
+   "d": 1.0,
+   "text": "What?"
+  },
+  {
+   "t": 265.92,
+   "d": 1.0,
+   "text": "I don't know."
+  },
+  {
+   "t": 266.92,
+   "d": 10.49,
+   "text": "A game that has existed over such a long span has a very eclectic range of viewpoints that"
+  },
+  {
+   "t": 277.41,
+   "d": 2.23,
+   "text": "people have of it."
+  },
+  {
+   "t": 279.64,
+   "d": 8.65,
+   "text": "But, you know, it is still a great thing to be maintainer of."
+  },
+  {
+   "t": 288.29,
+   "d": 1.48,
+   "text": "OK."
+  },
+  {
+   "t": 289.77,
+   "d": 9.22,
+   "text": "Second point and again, this is kind of a function of being a really long-term game."
+  },
+  {
+   "t": 298.99,
+   "d": 5.39,
+   "text": "Traditions build up over how to play games."
+  },
+  {
+   "t": 304.38,
+   "d": 8.08,
+   "text": "People play the game, they talk about it, the developers listen to what the people who"
+  },
+  {
+   "t": 312.46,
+   "d": 5.17,
+   "text": "are playing are talking about, they fix bugs, they incorporate new features that people"
+  },
+  {
+   "t": 317.63,
+   "d": 9.75,
+   "text": "think might be interesting, and so you have this symbiosis between the game and its tradition."
+  },
+  {
+   "t": 327.38,
+   "d": 11.35,
+   "text": "Angband had a particular twist on that because it was extensively modelled in the '90s particularly"
+  },
+  {
+   "t": 338.73,
+   "d": 6.16,
+   "text": "so there was a huge array of Angband variants so you had this constant process of people"
+  },
+  {
+   "t": 344.89,
+   "d": 5.47,
+   "text": "writing their on mod for Angband, releasing it as a variant, the original maintainers"
+  },
+  {
+   "t": 350.36,
+   "d": 6.01,
+   "text": "then absorbing bits of that back into the main game."
+  },
+  {
+   "t": 356.37,
+   "d": 7.71,
+   "text": "And so you get this long, interweaving process of the game and the tradition."
+  },
+  {
+   "t": 364.08,
+   "d": 3.42,
+   "text": "And there is another very interesting thing that happened with Angband specifically here"
+  },
+  {
+   "t": 367.5,
+   "d": 7.08,
+   "text": "where it was assumed for a very long time that the best way to play Angband was extraordinarily"
+  },
+  {
+   "t": 374.58,
+   "d": 1.0,
+   "text": "conservatively."
+  },
+  {
+   "t": 375.58,
+   "d": 2.19,
+   "text": "It is a big, long game."
+  },
+  {
+   "t": 377.77,
+   "d": 7.4,
+   "text": "You have to dive to the bottom of a 100 level dungeon and kill the main boss."
+  },
+  {
+   "t": 385.17,
+   "d": 4.83,
+   "text": "It is very easy to die along the way obviously."
+  },
+  {
+   "t": 390.0,
+   "d": 8.49,
+   "text": "It was accepted wisdom that you would play slowly and carefully because you really didn't"
+  },
+  {
+   "t": 398.49,
+   "d": 5.06,
+   "text": "want to die so it made it a very long game and that made people even more conservative"
+  },
+  {
+   "t": 403.55,
+   "d": 6.0,
+   "text": "because you wouldn't want to loose a month's worth of play because you did something careless"
+  },
+  {
+   "t": 409.55,
+   "d": 6.66,
+   "text": "or played tired or your Cat stood on the keyboard."
+  },
+  {
+   "t": 416.21,
+   "d": 1.82,
+   "text": "So this was believed for a long time."
+  },
+  {
+   "t": 418.03,
+   "d": 1.0,
+   "text": "Conservative play."
+  },
+  {
+   "t": 419.03,
+   "d": 1.0,
+   "text": "You have got to do it."
+  },
+  {
+   "t": 420.03,
+   "d": 6.58,
+   "text": "Don't go below level 20 without having free action that sort of thing."
+  },
+  {
+   "t": 426.61,
+   "d": 6.61,
+   "text": "Somewhere in the mid-2000s, some players starting saying no, that's not the best way to play."
+  },
+  {
+   "t": 433.22,
+   "d": 8.07,
+   "text": "It is not just boring but you are actually better in terms of number of games you complete"
+  },
+  {
+   "t": 441.29,
+   "d": 9.35,
+   "text": "successfully to play aggressively, to dive hard, to take down stairs as soon as you can,"
+  },
+  {
+   "t": 450.64,
+   "d": 8.21,
+   "text": "and to, you know, sure you will lose some characters but you can play five characters"
+  },
+  {
+   "t": 458.85,
+   "d": 7.63,
+   "text": "to level 20 in the same time as you used to be playing one to level 24."
+  },
+  {
+   "t": 466.48,
+   "d": 9.02,
+   "text": "And so, this is an interesting example, I think, of when the tradition has actually"
+  },
+  {
+   "t": 475.5,
+   "d": 7.87,
+   "text": "changed gameplay considerably and that has in turn influenced the development rather"
+  },
+  {
+   "t": 483.37,
+   "d": 5.81,
+   "text": "than the assumption being everybody will be being ultraconservative the assumption now"
+  },
+  {
+   "t": 489.18,
+   "d": 3.42,
+   "text": "is people are probably not being ultraconservative."
+  },
+  {
+   "t": 492.6,
+   "d": 6.23,
+   "text": "Although Angband is a game which fundamentally doesn't tell its players how to play it so"
+  },
+  {
+   "t": 498.83,
+   "d": 8.8,
+   "text": "there will still be some doing conservative play as well presumably."
+  },
+  {
+   "t": 507.63,
+   "d": 8.82,
+   "text": "Now, Angband does have a long tradition and on a good day that's a wonderful thing."
+  },
+  {
+   "t": 516.45,
+   "d": 4.91,
+   "text": "It is, you know, a maintainer of a game that been around for a long time."
+  },
+  {
+   "t": 521.36,
+   "d": 8.32,
+   "text": "It has a proud history and in Roguelike games and games in general."
+  },
+  {
+   "t": 529.68,
+   "d": 5.05,
+   "text": "On a bad day that's all just baggage."
+  },
+  {
+   "t": 534.73,
+   "d": 6.28,
+   "text": "One thing that you can do which frees you from this baggage is to just fork the game."
+  },
+  {
+   "t": 541.01,
+   "d": 1.0,
+   "text": "Make a new variant."
+  },
+  {
+   "t": 542.01,
+   "d": 7.33,
+   "text": "You know, it can be themed around something, it can just have some tweaks you like, wharf"
+  },
+  {
+   "t": 549.34,
+   "d": 1.0,
+   "text": "-- whatever."
+  },
+  {
+   "t": 550.34,
+   "d": 5.2,
+   "text": "Typically the community as a whole is very accepting of this."
+  },
+  {
+   "t": 555.54,
+   "d": 6.61,
+   "text": "They will be quite hard on the original game and complain about things that go wrong but"
+  },
+  {
+   "t": 562.15,
+   "d": 5.36,
+   "text": "if somebody puts out a variant they will be excited about it and positive and say yes,"
+  },
+  {
+   "t": 567.51,
+   "d": 3.8,
+   "text": "you know, there are wonderful ideas in this game and by the way, you should know every"
+  },
+  {
+   "t": 571.31,
+   "d": 11.8,
+   "text": "time you read a scroll the game crashes but they are still very accepting."
+  },
+  {
+   "t": 583.11,
+   "d": 8.06,
+   "text": "This is, you know, people talk a lot about having a vision for a game and certainly as"
+  },
+  {
+   "t": 591.17,
+   "d": 5.37,
+   "text": "a game developer, you have to have a vision, and you have to have an idea of what you should"
+  },
+  {
+   "t": 596.54,
+   "d": 2.95,
+   "text": "be doing."
+  },
+  {
+   "t": 599.49,
+   "d": 5.17,
+   "text": "And you have grand plans but very commonly, you put your grand plans into effect, and"
+  },
+  {
+   "t": 604.66,
+   "d": 5.27,
+   "text": "you put out the game, and some people will not like what you are done and sometimes a"
+  },
+  {
+   "t": 609.93,
+   "d": 2.65,
+   "text": "lot of people won't like what you have done."
+  },
+  {
+   "t": 612.58,
+   "d": 7.61,
+   "text": "It is very good to get feedback, early feedback if possible, something suggested yesterday"
+  },
+  {
+   "t": 620.19,
+   "d": 7.32,
+   "text": "was one of the things most useful to do is do early play testing and putting it out to"
+  },
+  {
+   "t": 627.51,
+   "d": 8.63,
+   "text": "the players early is a very good way to get early feedback and something I would advise"
+  },
+  {
+   "t": 636.14,
+   "d": 6.07,
+   "text": "for everybody."
+  },
+  {
+   "t": 642.21,
+   "d": 2.01,
+   "text": "Best practice is getting stuff done."
+  },
+  {
+   "t": 644.22,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 645.22,
+   "d": 2.91,
+   "text": "So the whole plate early thing is a good idea."
+  },
+  {
+   "t": 648.13,
+   "d": 7.51,
+   "text": "Also, if you want to make progress on improving your game, particularly if it is an existing"
+  },
+  {
+   "t": 655.64,
+   "d": 5.66,
+   "text": "game that is out there, avoiding going down rabbit holes is a really good idea, actually,"
+  },
+  {
+   "t": 661.3,
+   "d": 4.67,
+   "text": "it is probably even more true if it is not an existing game out there and you are still"
+  },
+  {
+   "t": 665.97,
+   "d": 1.59,
+   "text": "developing it."
+  },
+  {
+   "t": 667.56,
+   "d": 5.86,
+   "text": "I mean, you want to do it right and you want to do it well but sometimes you just need"
+  },
+  {
+   "t": 673.42,
+   "d": 5.86,
+   "text": "to do to and get it out there."
+  },
+  {
+   "t": 679.28,
+   "d": 4.81,
+   "text": "Final one, and hopefully leaving a little time for questions, community."
+  },
+  {
+   "t": 684.09,
+   "d": 5.2,
+   "text": "The Angband community is just awesome."
+  },
+  {
+   "t": 689.29,
+   "d": 6.14,
+   "text": "We have forums we talk on, we discuss improvements to the game, we discuss what is right with"
+  },
+  {
+   "t": 695.43,
+   "d": 2.75,
+   "text": "it, we discuss what is wrong with it."
+  },
+  {
+   "t": 698.18,
+   "d": 6.66,
+   "text": "And so many ideas that I have had or that other people have had have been improved massively"
+  },
+  {
+   "t": 704.84,
+   "d": 6.73,
+   "text": "by discussion and by play testing and so on."
+  },
+  {
+   "t": 711.57,
+   "d": 5.5,
+   "text": "And the Roguelike community I have particularly discovered over the last two days is absolutely"
+  },
+  {
+   "t": 717.07,
+   "d": 1.0,
+   "text": "great."
+  },
+  {
+   "t": 718.07,
+   "d": 2.89,
+   "text": "You people are all part of that."
+  },
+  {
+   "t": 720.96,
+   "d": 2.26,
+   "text": "Give yourselves a pat on the back."
+  },
+  {
+   "t": 723.22,
+   "d": 1.87,
+   "text": "You are awesome."
+  },
+  {
+   "t": 725.09,
+   "d": 1.97,
+   "text": "And now chance for questions."
+  },
+  {
+   "t": 727.06,
+   "d": 1.09,
+   "text": "EMCEE: Excellent."
+  },
+  {
+   "t": 728.15,
+   "d": 7.65,
+   "text": "I would agree the two days has been a showcase of a lot of the lovely people in the community."
+  },
+  {
+   "t": 735.8,
+   "d": 1.58,
+   "text": "And yeah, we do have plenty of questions."
+  },
+  {
+   "t": 737.38,
+   "d": 2.27,
+   "text": "More than we will have time to get into unfortunately."
+  },
+  {
+   "t": 739.65,
+   "d": 1.56,
+   "text": "But we will go through a couple."
+  },
+  {
+   "t": 741.21,
+   "d": 14.9,
+   "text": "Starting with Evan who asked what do you add or change in a game that's been around for"
+  },
+  {
+   "t": 756.11,
+   "d": 1.0,
+   "text": "a decade?"
+  },
+  {
+   "t": 757.11,
+   "d": 1.0,
+   "text": ">> Oh, lots of things."
+  },
+  {
+   "t": 758.11,
+   "d": 8.64,
+   "text": "It can get a little oslified and you can get mechanics that no longer work the way they"
+  },
+  {
+   "t": 766.75,
+   "d": 2.93,
+   "text": "intended to."
+  },
+  {
+   "t": 769.68,
+   "d": 2.54,
+   "text": "You look at traps."
+  },
+  {
+   "t": 772.22,
+   "d": 4.09,
+   "text": "Traps became a thing where the general idea is simple."
+  },
+  {
+   "t": 776.31,
+   "d": 5.14,
+   "text": "You are walk along, hit a trap, something bad happens."
+  },
+  {
+   "t": 781.45,
+   "d": 3.54,
+   "text": "You had to work out ways for the player getting around that."
+  },
+  {
+   "t": 784.99,
+   "d": 6.63,
+   "text": "They had to have perception to notice the trap or spells to detect traps and it degenerated"
+  },
+  {
+   "t": 791.62,
+   "d": 7.16,
+   "text": "to the point where every character would get easy trap detection early on in the game."
+  },
+  {
+   "t": 798.78,
+   "d": 3.26,
+   "text": "Now, what's the point?"
+  },
+  {
+   "t": 802.04,
+   "d": 6.97,
+   "text": "Everybody just detects the traps and you know, it is a press button not to die sort of scenario."
+  },
+  {
+   "t": 809.01,
+   "d": 8.17,
+   "text": "A few years back, we completely reworked the trap system so that traps were interesting"
+  },
+  {
+   "t": 817.18,
+   "d": 1.64,
+   "text": "again."
+  },
+  {
+   "t": 818.82,
+   "d": 9.0,
+   "text": "And there are a whole lot of mechanics like that where maybe it started off in a, you"
+  },
+  {
+   "t": 827.82,
+   "d": 5.33,
+   "text": "know, in a way that worked and it has gradually degenerated over time or where it never really"
+  },
+  {
+   "t": 833.15,
+   "d": 1.95,
+   "text": "worked but nobody was saying anything."
+  },
+  {
+   "t": 835.1,
+   "d": 1.3,
+   "text": "EMCEE: Right."
+  },
+  {
+   "t": 836.4,
+   "d": 5.3,
+   "text": "A chance to deossify and shake off the calcium."
+  },
+  {
+   "t": 841.7,
+   "d": 5.29,
+   "text": "I think we have one more question."
+  },
+  {
+   "t": 846.99,
+   "d": 5.03,
+   "text": "Has egg man changed due to speed runner interest?"
+  },
+  {
+   "t": 852.02,
+   "d": 3.73,
+   "text": "Is that something that's come up?"
+  },
+  {
+   "t": 855.75,
+   "d": 1.51,
+   "text": ">> Not a huge amount."
+  },
+  {
+   "t": 857.26,
+   "d": 5.42,
+   "text": "It has always been -- there have been competitions."
+  },
+  {
+   "t": 862.68,
+   "d": 9.61,
+   "text": "There is an ongoing Angband competition thing and that is usually judged by Turn Count so"
+  },
+  {
+   "t": 872.29,
+   "d": 6.26,
+   "text": "speed running has always been a kind of a thing to some extent."
+  },
+  {
+   "t": 878.55,
+   "d": 4.09,
+   "text": "It is probably not a new thing for Angband."
+  },
+  {
+   "t": 882.64,
+   "d": 1.0,
+   "text": "EMCEE: Right."
+  },
+  {
+   "t": 883.64,
+   "d": 2.66,
+   "text": "It has just been a part of it for the history of it."
+  },
+  {
+   "t": 886.3,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 887.3,
+   "d": 1.0,
+   "text": "All right."
+  }
+ ],
+ "note": "re-timed 7 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 30 s off the audio)"
+}

@@ -1,0 +1,153 @@
+{
+  "id": "R8DSq8qSJ44@28748",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 28748,
+    "end": 30672
+  },
+  "title": "Roguelike, more like Roguedyke: A queer Reading of Traditional Roguelike Conventions",
+  "speaker": "Alexandra Leonhart",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=28748s",
+  "talk_type": "culture",
+  "summary": "Alexandra Leonhart, a PhD candidate in ludonarrative design and queer theory, maps concepts from seven queer theorists (Butler, Foucault, Preciado, Stryker, Ahmed, Freeman, Halberstam) onto traditional roguelike conventions: procedural generation and identification, the dungeon, permadeath, turn-based actions, the grid, fog of war, the message log and character identity. Her aim is not representation but using theory as a lens that inspires design. She describes her method, a grid of theorists against conventions to find 'bright sparks', and a cyberpunk roguelike prototype that inverts cyber-psychosis and gives every entity its own fog of war. She closes by asking designers which lenses they bring to their designs and whether their procedural systems read well to a diverse audience.",
+  "games": [
+    "Rogue",
+    "Brogue",
+    "NetHack",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "queer reading",
+      "kind": "principle",
+      "claim": "A queer reading of games goes beyond representation (gay characters, pronoun options) to playing games queerly and to queering the design process itself.",
+      "detail": "Drawing on queer game studies (Bo Ruberg, Adrienne Shaw), Leonhart gives examples of playing queerly: speedrunning beyond the designers' boundaries, or friends inventing their own success metric in a racing game, such as who does the coolest flip off a ramp. Her talk sits in the third category, queering design philosophy.",
+      "t": 29179,
+      "quote": "it's not just about representation. It certainly we can certainly talk about representation",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "unworlding",
+      "kind": "principle",
+      "claim": "Procedural generation's run-to-run deconstruction and reconstruction of spaces, elements and traits resonates with Jack Halberstam's ideas of unmaking, unbuilding and 'unworlding'.",
+      "detail": "Leonhart describes Halberstam's recent work as linking radical 1970s practices of dismantling structures to the way the trans body unmakes the gender binary and conventions of bodily coherence.",
+      "t": 29334,
+      "quote": "these terms like unmaking, unbuilding, unworlding, like nothing speaks more to me towards like procedural generation at large",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "principle",
+      "claim": "Roguelike item identification enacts Foucault's power/knowledge: each run's hidden rule set defines what is true (the orange potion may be healing or fire), and the player has agency only within it.",
+      "detail": "For Foucault, those who control systems of knowledge, such as schools, governments, prisons and hospitals, control what society accepts as normal, real or true. Leonhart maps this onto randomised identities: the player can drink, throw or ignore a potion but is ultimately at the mercy of that run's 'institution'.",
+      "t": 29404,
+      "quote": "we have to kind of subscribe and exist in the rule set that was established for that run",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "dungeon as space",
+      "kind": "principle",
+      "claim": "The fantasy roguelike dungeon is a Foucauldian heterotopia: a deviant space juxtaposing objects and times, which the hero visits rather than lives in.",
+      "detail": "Foucault's examples include a cemetery inside a living city and a museum holding objects from many places and periods. Leonhart notes that Rogue's hero, Rodney, does not live in the dungeon but comes from elsewhere to delve for the Amulet of Yendor.",
+      "t": 29463,
+      "quote": "I feel like that's the dungeon at large really in these more fantastical um or fantasy based games where the dungeon is this kind of deviant space",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Permadeath echoes Halberstam's 'queer art of failure': games that throw players out for mistakes might be expected to deter them, yet players accept the challenge and become more involved in the world.",
+      "detail": "Halberstam argues that failing to meet heteronormative, capitalist standards of success can be a tool for living more freely. Leonhart calls permadeath a strange but compelling form of non-trivial engagement, notes that turn-based play lets players contemplate (or wallow) between turns, and cites Dwarf Fortress's unofficial motto that losing is fun.",
+      "t": 29619,
+      "quote": "players accept the challenge and it gets them more involved in the world",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "message log",
+      "kind": "open-question",
+      "claim": "The roguelike message log works like Foucauldian confession, an institution's feedback on your actions, which suggests an unexplored design space: an unreliable message-log narrator.",
+      "detail": "Leonhart describes the log reporting whether you succeeded in stabbing (or kissing) the goblin, or what happened when you drank or threw a potion, as the response that keeps you subscribed to the system's power.",
+      "t": 29902,
+      "quote": "I do think there's an interesting space to explore of like an unreliable like message log narrator",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii",
+      "kind": "principle",
+      "claim": "In ASCII roguelikes the player's glyph shares a typographic lineage with monster and item glyphs, a 'glyph kinship' that shapes how players relate to their avatar.",
+      "detail": "Leonhart coins the terms 'glyph self' (the @ avatar), 'glyph kinship' and 'meta self' (the player above the avatar) for her discussion of role-play and embodied identity.",
+      "t": 30019,
+      "quote": "the player character and the monsters and the items all kind of come from that same Latinate veiling",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "playing against type",
+      "kind": "principle",
+      "claim": "Roguelike role-play lets players define their characters against their stats, such as a strong character played as a pacifist vegetarian magic enthusiast, which echoes Preciado's and Stryker's ideas of bodily self-definition.",
+      "detail": "Preciado stresses control over one's own body through food, exercise or medication; Stryker writes of trans rage at a hostile world channelled into resistance and self-definition; Butler's performativity frames identity as constituted through repeated acts. Leonhart compares choosing a NetHack pacifist run, and how emergent systems may change who players think they are playing as.",
+      "t": 30163,
+      "quote": "we can kind of choose how we play through. can play towards type or against type",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design lenses",
+      "kind": "technique",
+      "claim": "Leonhart's method for theory-driven design is to lay out a grid of theorists and concepts against roguelike conventions, look for 'bright sparks' where they resonate, and then filter the results through a genre or setting.",
+      "detail": "She is early in her PhD and plans three prototypes to test how fruitful the exercise is. The first is a cyberpunk roguelike drawing on transhumanist media and theory such as Frankenstein, Patchwork Girl, Haraway's cyborg manifesto and Mark Fisher.",
+      "t": 30294,
+      "quote": "I would kind of put them together and make a big grid and then kind of see where those bright sparks are",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "levelling",
+      "kind": "example",
+      "claim": "Leonhart's cyberpunk prototype inverts the genre trope of cyber-psychosis: instead of losing humanity as they merge with technology, characters level up through decisions and introspection about their identity.",
+      "detail": "She calls cyber-psychosis shortsighted and builds the levelling system around identity choices, connecting it to Stryker's and Preciado's theories of the assembled body.",
+      "t": 30416,
+      "quote": "the more you should feel kind of um strengthened through those decisions and those kind of introspections. And so that's kind of the leveling system",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "fog of war",
+      "kind": "technique",
+      "claim": "Fog of war can invert Foucault's idea of surveillance: Leonhart's cyberpunk prototype gives every entity its own fog of war, so play is about minimising your signal, hacking cameras and controlling how institutions read you.",
+      "detail": "Foucault describes people policing themselves because they feel watched. Leonhart links this to cone-shaped fog of war, where players act on what they see and on what they think enemies can perceive.",
+      "t": 30444,
+      "quote": "everybody else, all the other entities have their own uh fog of war as well",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design lenses",
+      "kind": "principle",
+      "claim": "Mapping any theoretical lens that excites you onto a genre's conventions, not just queer theory, can seed and inform a design philosophy.",
+      "detail": "Leonhart compares this to Tyler Coleman's kit-bashing talk earlier that day. Her closing question to designers is 'how are you queering your designs?', meaning which intersections they draw from.",
+      "t": 30536,
+      "quote": "you could probably do this and and move this to other things like if you wanted to do critical race theory and and French new wave film",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "unintended readings",
+      "kind": "warning",
+      "claim": "Designers should ask whether their procedural systems' intent is readable to a diverse audience, since algorithms can produce unintended outcomes that players read as statements.",
+      "detail": "Leonhart cites Mike Cook's essay in 'Procedural Storytelling in Game Design', edited by Tanya X. Short and Tarn Adams, on unintended algorithmic outcomes, including how generated gravestone names imply who is allowed in a space.",
+      "t": 30547,
+      "quote": "how might your procedural systems be uh intent be readable to a diverse audience?",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

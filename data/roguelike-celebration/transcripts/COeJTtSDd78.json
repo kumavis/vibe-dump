@@ -1,0 +1,1294 @@
+{
+ "id": "COeJTtSDd78",
+ "url": "https://www.youtube.com/watch?v=COeJTtSDd78",
+ "title": "Jasper Cole - Backpack Hero - Player Upgrades and Progression",
+ "speaker": "Jasper Cole",
+ "talk_title": "Backpack Hero - Player Upgrades and Progression",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1790,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "The creator of Backpack Hero discusses balance and item creation! Also discussed is the inspiration behind Backpack Hero, how items are designed and implemented, and how Jasper fits these pieces into the player progression and upcoming story-mode meta-progression in the game.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the game"
+  },
+  {
+   "start": 128,
+   "title": "Design inspirations"
+  },
+  {
+   "start": 392,
+   "title": "Item systems development"
+  },
+  {
+   "start": 724,
+   "title": "Exploring possibility space"
+  },
+  {
+   "start": 1073,
+   "title": "Balancing complex items"
+  },
+  {
+   "start": 1338,
+   "title": "Progression and mechanics"
+  },
+  {
+   "start": 1622,
+   "title": "Summary and conclusions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4372,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.36,
+   "d": 0.56,
+   "text": "As you saw a brief preview of our next"
+  },
+  {
+   "t": 5.92,
+   "d": 3.76,
+   "text": "speaker is Jasper Cole. Jasper is a lifelong gamer and"
+  },
+  {
+   "t": 9.68,
+   "d": 3.8,
+   "text": "programmer. In 2022 he released Backpack Hero with the other"
+  },
+  {
+   "t": 13.48,
+   "d": 4.88,
+   "text": "members of Team Backpack. I see a cat and a backpack"
+  },
+  {
+   "t": 18.36,
+   "d": 5.24,
+   "text": "plushy appearing which I appreciate. JASPER: I tried to get those in the"
+  },
+  {
+   "t": 23.6,
+   "d": 9.16,
+   "text": "shot. I thought that was important. ALEXEI: You know what's important but"
+  },
+  {
+   "t": 32.76,
+   "d": 6.2,
+   "text": "also important is your exciting talk. Go ahead. JASPER: Thank you very much. I really appreciate"
+  },
+  {
+   "t": 38.96,
+   "d": 8.04,
+   "text": "you for having pea on. All the other talks -- me -- and I feel honored be apart of this. I am here"
+  },
+  {
+   "t": 47.0,
+   "d": 9.12,
+   "text": "to talk about \"Backpack Hero - Player Upgrades and Progression.\" First of all what is Backpack"
+  },
+  {
+   "t": 56.12,
+   "d": 5.52,
+   "text": "Hero? It is a game available on Steam in early access. It is a roguelike inventory management"
+  },
+  {
+   "t": 61.64,
+   "d": 9.64,
+   "text": "game. Basically it is a strategy roguelike where you collect items and fight through waves of"
+  },
+  {
+   "t": 71.28,
+   "d": 7.48,
+   "text": "enemies similar to other roguelike games. You are sort of building this deck of abilities or"
+  },
+  {
+   "t": 78.76,
+   "d": 6.44,
+   "text": "items as you go along but what makes Backpack Hero unique is not only are you choosing which items to"
+  },
+  {
+   "t": 85.2,
+   "d": 7.4,
+   "text": "have with you but you are also having to determine how you organize and structure these items within"
+  },
+  {
+   "t": 92.6,
+   "d": 8.36,
+   "text": "your inventory. I am Jas. The lead developer and we have Felix who did the music and helped"
+  },
+  {
+   "t": 100.96,
+   "d": 7.93,
+   "text": "with technical considerations of the game and also Calvin who is the game's lead artist and"
+  },
+  {
+   "t": 108.89,
+   "d": 6.03,
+   "text": "has done most of the story, lure and balance considerations for the game. We are going to"
+  },
+  {
+   "t": 114.92,
+   "d": 5.08,
+   "text": "talk briefly about what the game is and its history and then we are going to jump into"
+  },
+  {
+   "t": 120.0,
+   "d": 7.84,
+   "text": "those questions of player progress and how we can apply these progress in other roguelike games."
+  },
+  {
+   "t": 127.84,
+   "d": 6.92,
+   "text": "So the inspiration for Backpack Hero came from other deckbuilder games. I am a huge fan of things"
+  },
+  {
+   "t": 134.76,
+   "d": 6.0,
+   "text": "like dicey dungeons and Slay the Spire and games everyone at this convention is probably familiar"
+  },
+  {
+   "t": 140.76,
+   "d": 5.52,
+   "text": "with but the strategy games with lots of decision making and lots of items that the"
+  },
+  {
+   "t": 146.28,
+   "d": 8.48,
+   "text": "player is collecting and this sense of progression that players as they progress through I had the"
+  },
+  {
+   "t": 154.76,
+   "d": 7.72,
+   "text": "idea of creating a game like those but it was all about a grid and placing things into a grid. For"
+  },
+  {
+   "t": 162.48,
+   "d": 6.76,
+   "text": "years I explored this idea. There were a lot of different variants of how can we make a game where"
+  },
+  {
+   "t": 169.24,
+   "d": 6.96,
+   "text": "the player is going through randomized challenges and have to place thing in a grid? One example had"
+  },
+  {
+   "t": 176.2,
+   "d": 8.39,
+   "text": "the player placing units or heroes into a grid. Another example on the right side was a card"
+  },
+  {
+   "t": 184.59,
+   "d": 6.53,
+   "text": "based game where the player was drawing cards each turn and placing those cards in the grid"
+  },
+  {
+   "t": 191.12,
+   "d": 5.96,
+   "text": "and that was determining their ability to defend their base and things like that. None of these"
+  },
+  {
+   "t": 197.08,
+   "d": 8.84,
+   "text": "ideas really quite clicked for me until finally I came upon the idea of inventory management."
+  },
+  {
+   "t": 205.92,
+   "d": 8.12,
+   "text": "So dicey dungeons has this really cool system in it where when you get new abilities you play them"
+  },
+  {
+   "t": 214.04,
+   "d": 6.52,
+   "text": "into this little grid. Now it doesn't matter where you place the ability within the grid"
+  },
+  {
+   "t": 220.56,
+   "d": 7.64,
+   "text": "but each ability basically has a cost assigned to it which is the size of the ability. Skills"
+  },
+  {
+   "t": 228.2,
+   "d": 5.88,
+   "text": "that I guess the game has deemed as more useful take up more space and skills that are smaller,"
+  },
+  {
+   "t": 234.08,
+   "d": 7.24,
+   "text": "more accessory kind of skills, take up less space. This is kind of the same concept as Backpack Hero"
+  },
+  {
+   "t": 241.32,
+   "d": 6.04,
+   "text": "where you are taking these things and placing them into a grid and trying make the best build you"
+  },
+  {
+   "t": 247.36,
+   "d": 13.12,
+   "text": "can given the space That's Available to You. Another interpretation was Deus ex. A lot of"
+  },
+  {
+   "t": 260.48,
+   "d": 7.6,
+   "text": "people have compared it to resident evil 4 which is another game that has a similar system to this."
+  },
+  {
+   "t": 268.08,
+   "d": 7.04,
+   "text": "One of the things where found fascinating about Deus ex is it is a complicated game"
+  },
+  {
+   "t": 275.12,
+   "d": 5.88,
+   "text": "so a lot of different things can fit into your inventory. The player is having to make a lot"
+  },
+  {
+   "t": 281.0,
+   "d": 7.28,
+   "text": "of interesting choices on what they will bring. You can see they have weapons in their inventory"
+  },
+  {
+   "t": 288.28,
+   "d": 7.96,
+   "text": "and also have ammunition and like utility items and all of these things are competing"
+  },
+  {
+   "t": 296.24,
+   "d": 6.28,
+   "text": "for space within the player's inventory. So all those ideas sort of game together and"
+  },
+  {
+   "t": 302.52,
+   "d": 6.4,
+   "text": "created Backpack Hero. Hopefully we brought some original things to the table but the original"
+  },
+  {
+   "t": 308.92,
+   "d": 7.52,
+   "text": "version of the game was created in January of last year so that's 2022. It was released totally for"
+  },
+  {
+   "t": 316.44,
+   "d": 8.28,
+   "text": "free on Itch.io and this is a screenshot from I believe the very earliest first build. You can"
+  },
+  {
+   "t": 324.72,
+   "d": 9.0,
+   "text": "see the game was still in 4X3 and missing a lot of features that the game currently has now."
+  },
+  {
+   "t": 333.72,
+   "d": 8.64,
+   "text": "Then in May we did a Kickstarter and that is what blew up and changed the trajectory of in"
+  },
+  {
+   "t": 342.36,
+   "d": 10.8,
+   "text": "game. At that point, Backpack Hero became the main focus for all the development team. We have been"
+  },
+  {
+   "t": 353.16,
+   "d": 8.0,
+   "text": "working on it trying to get it ready for its 1.0 release and working on it as much as we can."
+  },
+  {
+   "t": 361.76,
+   "d": 6.24,
+   "text": "The main questions I want to talk about today are how do you make items interesting in a game"
+  },
+  {
+   "t": 368.0,
+   "d": 6.28,
+   "text": "that has so many different items? I think binding of Isaac is a famous roguelike that has probably"
+  },
+  {
+   "t": 374.28,
+   "d": 6.84,
+   "text": "almost a thousand items in it. What does a game do to make all those items interesting? How do"
+  },
+  {
+   "t": 381.12,
+   "d": 6.32,
+   "text": "you balance items within a game? And also, how do these items fit into a larger picture"
+  },
+  {
+   "t": 387.44,
+   "d": 5.88,
+   "text": "of player progression as the player continues throughout the game? We are going to start by"
+  },
+  {
+   "t": 393.32,
+   "d": 5.64,
+   "text": "talking about items in Backpack Hero and how they are structured and we have set them up."
+  },
+  {
+   "t": 401.92,
+   "d": 6.52,
+   "text": "In the oldest version of the game, the version from the earlier screenshot, we had a system"
+  },
+  {
+   "t": 408.44,
+   "d": 7.2,
+   "text": "we called the item system uncreatively named and the item system basically was how we would code"
+  },
+  {
+   "t": 415.64,
+   "d": 6.8,
+   "text": "all of the different items into the game. For the most part items had to be very simple or we"
+  },
+  {
+   "t": 422.44,
+   "d": 6.16,
+   "text": "were manually writing the code for those items. When the game became a little more popular and"
+  },
+  {
+   "t": 428.6,
+   "d": 8.36,
+   "text": "we went back and refactored a lot of our code we created the item two system and this allows us to"
+  },
+  {
+   "t": 436.96,
+   "d": 7.08,
+   "text": "create items from a drop-down menu for the most part. Some items still have some special coding"
+  },
+  {
+   "t": 444.04,
+   "d": 6.52,
+   "text": "involved but most of the items in the game are simple enough that we can just use these drop"
+  },
+  {
+   "t": 450.56,
+   "d": 6.36,
+   "text": "down menus that you see here. This is unity's inspector if anyone is familiar with unity. Here"
+  },
+  {
+   "t": 456.92,
+   "d": 6.52,
+   "text": "we have the wooden sword. It deals seven damage. You can see we have basically assigned all of"
+  },
+  {
+   "t": 463.44,
+   "d": 6.4,
+   "text": "those properties just through a drop-down. When it item is used it is going to do damage and the"
+  },
+  {
+   "t": 469.84,
+   "d": 7.76,
+   "text": "value is 7 and the target is the enemy meaning the single enemy that the player has selected."
+  },
+  {
+   "t": 477.6,
+   "d": 7.52,
+   "text": "So once we created this item2 system not only did it allow us to create many different items"
+  },
+  {
+   "t": 485.12,
+   "d": 7.28,
+   "text": "for the game and a wide variety of items but it also enabled the game for mod support. Modders"
+  },
+  {
+   "t": 492.4,
+   "d": 11.52,
+   "text": "can tap into the same system and determine how an item will work all of the values and effects"
+  },
+  {
+   "t": 503.92,
+   "d": 7.24,
+   "text": "it will have. Creating this strong possibility space, this strong foundation basically allowed"
+  },
+  {
+   "t": 511.16,
+   "d": 7.64,
+   "text": "us to not only expand the game our selves but make a more flexible game for anyone else who"
+  },
+  {
+   "t": 518.8,
+   "d": 9.56,
+   "text": "wanted to come in and work on the game. In Backpack Hero I think there is about 865"
+  },
+  {
+   "t": 528.36,
+   "d": 7.28,
+   "text": "items so there is a ton of items in the game. The vast majority are implemented using that"
+  },
+  {
+   "t": 535.64,
+   "d": 4.92,
+   "text": "item2 system. I think what's interesting about these items and what I would want to"
+  },
+  {
+   "t": 540.56,
+   "d": 6.96,
+   "text": "stress is similar to what I was saying earlier about Deus ex these items are varied in their"
+  },
+  {
+   "t": 547.52,
+   "d": 8.88,
+   "text": "use and have a lot of different purposes. This is a water flask. It is a consumable."
+  },
+  {
+   "t": 556.4,
+   "d": 7.28,
+   "text": "The player can use this item and gain some energy from it. We have weapons. These are used to defeat"
+  },
+  {
+   "t": 563.68,
+   "d": 6.2,
+   "text": "enemies. We also have utility items. This item is like a wet stone. When you use it,"
+  },
+  {
+   "t": 569.88,
+   "d": 4.76,
+   "text": "I believe all adjacent weapons gain a little buff and then become more"
+  },
+  {
+   "t": 574.64,
+   "d": 6.88,
+   "text": "powerful for the remainder of combat. So because items serve such a wide variety"
+  },
+  {
+   "t": 581.52,
+   "d": 6.64,
+   "text": "of functions and can do so many different things helps with the first question of how do we make"
+  },
+  {
+   "t": 588.16,
+   "d": 6.84,
+   "text": "a wide variety of items that are interesting in the game. It is not like they are all just"
+  },
+  {
+   "t": 595.0,
+   "d": 6.04,
+   "text": "weapons or the only thing you carry with you are consumables. Because they have so many different"
+  },
+  {
+   "t": 601.04,
+   "d": 8.0,
+   "text": "purposes the player is always challenged to make interesting decisions. Do I want a larger shield"
+  },
+  {
+   "t": 609.04,
+   "d": 7.48,
+   "text": "which will serve me well over time? Or do I want a meal which will serve me well in my next combat"
+  },
+  {
+   "t": 616.52,
+   "d": 5.28,
+   "text": "but maybe isn't going to be something that will stick around for a long time because I will use"
+  },
+  {
+   "t": 621.8,
+   "d": 6.72,
+   "text": "it up. Do I want maybe something that buffs adjacent weapons or something like that? Or"
+  },
+  {
+   "t": 628.52,
+   "d": 6.2,
+   "text": "do I want something that's going to be destroyed when I use it? These questions are the life blood"
+  },
+  {
+   "t": 634.72,
+   "d": 7.96,
+   "text": "of the game. It is what allows it to constantly create interesting questions for the player."
+  },
+  {
+   "t": 643.76,
+   "d": 5.44,
+   "text": "How do we actually create items? What is our creative process for this? There are"
+  },
+  {
+   "t": 649.2,
+   "d": 5.0,
+   "text": "many different answers to that question. I am just going to go through a few of the different"
+  },
+  {
+   "t": 654.2,
+   "d": 7.6,
+   "text": "things we did to create items for the game. Number one is items that we planned for. Many"
+  },
+  {
+   "t": 661.8,
+   "d": 7.44,
+   "text": "of the items in the game we sort of had a concept that we had to create these items"
+  },
+  {
+   "t": 669.24,
+   "d": 7.56,
+   "text": "and then we built items around those. We knew at the beginning of the game the player would"
+  },
+  {
+   "t": 676.8,
+   "d": 7.4,
+   "text": "need a basic weapon they would need to fight enemies and defeat enemies and move forward in"
+  },
+  {
+   "t": 684.2,
+   "d": 6.48,
+   "text": "the game and progress into those more interesting items. We created the wooden sword as just like"
+  },
+  {
+   "t": 690.68,
+   "d": 7.92,
+   "text": "the most basic simple weapon that the player could start with. Also a lot of items in the community."
+  },
+  {
+   "t": 698.6,
+   "d": 7.0,
+   "text": "The black manustone you see here I believe was created from a contest we had on our Discord."
+  },
+  {
+   "t": 705.6,
+   "d": 6.08,
+   "text": "People got to vote for items that they like the most. And based on the winner of those polls they"
+  },
+  {
+   "t": 711.68,
+   "d": 7.8,
+   "text": "were incorporated into the game. We have other community items and Kickstarter items that we are"
+  },
+  {
+   "t": 720.52,
+   "d": 9.8,
+   "text": "trying to work on incorporating into the games. Each item has a different shape. It is displayed"
+  },
+  {
+   "t": 730.32,
+   "d": 9.48,
+   "text": "in the upper left of the card. The nun chucks as you can see are this Z shape. Because items have"
+  },
+  {
+   "t": 739.8,
+   "d": 5.36,
+   "text": "different shapes, they all have a different cost. They all take a different amount of inventory"
+  },
+  {
+   "t": 745.16,
+   "d": 7.56,
+   "text": "space to carry. And each one of these items can be a source of inspiration for us. Each one of"
+  },
+  {
+   "t": 752.72,
+   "d": 8.44,
+   "text": "these shapes can be a source of inspiration. Often we will a unique shape or come up with an idea of"
+  },
+  {
+   "t": 761.16,
+   "d": 7.68,
+   "text": "what about an L shaped item or what about a line or a square and we will create items around that"
+  },
+  {
+   "t": 768.84,
+   "d": 6.0,
+   "text": "shape. In the previous slide, we can see here that the wooden sword takes up three spaces and"
+  },
+  {
+   "t": 774.84,
+   "d": 8.4,
+   "text": "a line. The black manostone takes up one space. Many items are created around the theme. It is"
+  },
+  {
+   "t": 783.24,
+   "d": 8.0,
+   "text": "Halloween right now so last year for Halloween we did a whole set of scary items. And then"
+  },
+  {
+   "t": 791.24,
+   "d": 5.32,
+   "text": "we created many different items that would synergize and work with one another and also"
+  },
+  {
+   "t": 796.56,
+   "d": 7.2,
+   "text": "items that had some sort of interesting thematic connections all of these items are traditional"
+  },
+  {
+   "t": 803.76,
+   "d": 7.68,
+   "text": "Halloween things like pumpkins, candy apples, Jason's mask and things along those lines."
+  },
+  {
+   "t": 812.68,
+   "d": 6.64,
+   "text": "Also we have created cep -- some items with the art first idea. The rough buckler we drew"
+  },
+  {
+   "t": 819.32,
+   "d": 8.48,
+   "text": "up a sprite sheet of a 100 items that could exist in the game. This was one of the ones"
+  },
+  {
+   "t": 827.8,
+   "d": 7.44,
+   "text": "that already exist and we were trying to think of functions. That can be a great way to come up with"
+  },
+  {
+   "t": 835.24,
+   "d": 6.68,
+   "text": "creative ideas. Artists tend to be creative people and allowing them just to draw whatever they want"
+  },
+  {
+   "t": 841.92,
+   "d": 5.44,
+   "text": "and working backwards from that to try to create something that will be interesting mechanically"
+  },
+  {
+   "t": 847.36,
+   "d": 8.12,
+   "text": "is a great way to come up with fresh ideas. It is always a collaborative process like Calvin"
+  },
+  {
+   "t": 855.48,
+   "d": 5.76,
+   "text": "the main artist in the game and I am always working with him back and forth. He draws"
+  },
+  {
+   "t": 861.24,
+   "d": 7.44,
+   "text": "things. I come up with ideas for them. He edits the art, adjust my idea, I revise it further,"
+  },
+  {
+   "t": 869.64,
+   "d": 6.2,
+   "text": "that kind of collaboration can really create items that are interesting. Sometimes it really is"
+  },
+  {
+   "t": 875.84,
+   "d": 7.68,
+   "text": "the symptoms that take the most work to get them just right. Get those number values just right."
+  },
+  {
+   "t": 883.52,
+   "d": 8.28,
+   "text": "The other thing is the possibility space. Exploring it fully. The rose of thorns for example"
+  },
+  {
+   "t": 891.8,
+   "d": 5.04,
+   "text": "was an item where we had the sprite for it but didn't know exactly what we wanted to do with this"
+  },
+  {
+   "t": 896.84,
+   "d": 8.08,
+   "text": "rose. What would a rose do in a combat oriented game? So because we have this item2 system which"
+  },
+  {
+   "t": 904.92,
+   "d": 8.32,
+   "text": "is this broad possibility space, we were able to consider what possibilities we had not yet"
+  },
+  {
+   "t": 913.24,
+   "d": 7.4,
+   "text": "used within that system and then when we had an item like the rose of thorns or this rose sprite,"
+  },
+  {
+   "t": 920.64,
+   "d": 5.4,
+   "text": "we were trying to figure out what to do, we could come up with what are the possibilities"
+  },
+  {
+   "t": 926.04,
+   "d": 6.88,
+   "text": "that we have not yet explored. Let's talk about that a little further. Zee a lot of interesting"
+  },
+  {
+   "t": 932.92,
+   "d": 6.4,
+   "text": "items in the game long the double poison potion. It adds poise to know the enemy and doubles the"
+  },
+  {
+   "t": 939.32,
+   "d": 7.92,
+   "text": "poison on the enemy and this item gets destroyed -- poison. This is done through these drop-down"
+  },
+  {
+   "t": 947.24,
+   "d": 7.8,
+   "text": "menus in unity but these are all of the different triggers that we have setup for items. We can say"
+  },
+  {
+   "t": 955.04,
+   "d": 7.8,
+   "text": "basically a trigger of when the effect will occur. So the double poison potion occurs on use. So we"
+  },
+  {
+   "t": 962.84,
+   "d": 8.16,
+   "text": "can chose that from the drop-down menu. We can ache make an item that has an effect each turn or"
+  },
+  {
+   "t": 971.0,
+   "d": 8.4,
+   "text": "every time the turn ends or once a combat or only when you defeat an enemy or something like that."
+  },
+  {
+   "t": 979.4,
+   "d": 5.8,
+   "text": "We can determine the effect of the item like is it going to damage someone? Will it add block to"
+  },
+  {
+   "t": 985.2,
+   "d": 6.2,
+   "text": "a character? Will it heal someone? Will it add additional energy to someone? Will it increase"
+  },
+  {
+   "t": 991.4,
+   "d": 6.56,
+   "text": "someone's max health? There is many, many things that we can chose from this list."
+  },
+  {
+   "t": 997.96,
+   "d": 8.6,
+   "text": "The third list is the targets. You can target the player so probably we would want items"
+  },
+  {
+   "t": 1006.56,
+   "d": 5.6,
+   "text": "that did good things to the player like adding brock block or healing them. You can target an"
+  },
+  {
+   "t": 1012.16,
+   "d": 5.92,
+   "text": "enemy and we would probably want to damage the enemy or inflict some sort of negative status"
+  },
+  {
+   "t": 1018.08,
+   "d": 8.04,
+   "text": "effect on them. We can also choose all enemies, everyone in the combat, and there is all these"
+  },
+  {
+   "t": 1026.12,
+   "d": 8.04,
+   "text": "more complicated targets that we can choose as well. From this possibility space you can it is"
+  },
+  {
+   "t": 1034.16,
+   "d": 9.16,
+   "text": "possible to immediately create item ideas without having an interesting idea going in. You can have"
+  },
+  {
+   "t": 1043.32,
+   "d": 6.6,
+   "text": "this rose and don't know exactly what to do with this rose and you come here and you can say well,"
+  },
+  {
+   "t": 1049.92,
+   "d": 4.92,
+   "text": "it is a rose. So it isn't an item you would use. We will say it does something on the"
+  },
+  {
+   "t": 1054.84,
+   "d": 7.32,
+   "text": "start of your turn. Then we will chose an effect we think is appropriate, chose a target we think"
+  },
+  {
+   "t": 1062.16,
+   "d": 6.84,
+   "text": "is appropriately, and use that as the starting point to think creatively and come up with what"
+  },
+  {
+   "t": 1069.0,
+   "d": 7.52,
+   "text": "the item can do that might be interesting. When it comes to balancing items that becomes"
+  },
+  {
+   "t": 1076.52,
+   "d": 7.36,
+   "text": "a much harder question. It is easy to explore this possibility space, to come up with what we"
+  },
+  {
+   "t": 1083.88,
+   "d": 5.68,
+   "text": "think items could do, but that doesn't mean that they are balanced within the game. We have a few"
+  },
+  {
+   "t": 1089.56,
+   "d": 7.04,
+   "text": "systems to balance items. The first one which is the simplest is a rarity system. Each item"
+  },
+  {
+   "t": 1096.6,
+   "d": 8.4,
+   "text": "is assigned a rarity and we know the drop rates of different rarity items. So common items are"
+  },
+  {
+   "t": 1105.0,
+   "d": 6.68,
+   "text": "going to drop more commonly than legendary items and because of this we can make common items,"
+  },
+  {
+   "t": 1111.68,
+   "d": 6.57,
+   "text": "items that are usually weak, they have a broader functionality and also they are items where it"
+  },
+  {
+   "t": 1118.25,
+   "d": 7.67,
+   "text": "is OK if you get multiple of them where as a legendary item can be more powerful, it can have"
+  },
+  {
+   "t": 1125.92,
+   "d": 8.76,
+   "text": "a more complicated list of effects, and ideally it is something that the player is not going to find"
+  },
+  {
+   "t": 1134.68,
+   "d": 6.8,
+   "text": "multiple times on their run or at least rarely will they get more than one or two on their run."
+  },
+  {
+   "t": 1141.48,
+   "d": 5.8,
+   "text": "We can also balance an item through its stats. So it is easy to adjust any of the numbers for"
+  },
+  {
+   "t": 1147.28,
+   "d": 8.52,
+   "text": "it item. The machete does three damage right now but it would be very easy for us to crank"
+  },
+  {
+   "t": 1155.8,
+   "d": 5.6,
+   "text": "that up to doing four damage or turn it down to doing only two damage. Whatever we thought"
+  },
+  {
+   "t": 1161.4,
+   "d": 10.0,
+   "text": "was appropriate based on player feedback and our experience with the game. The other thing"
+  },
+  {
+   "t": 1171.4,
+   "d": 6.72,
+   "text": "we can use to balance items which we think is interesting is the size of the item. I talked"
+  },
+  {
+   "t": 1178.12,
+   "d": 6.32,
+   "text": "about that previously but we could easily expand either of these sprites changing it from a three"
+  },
+  {
+   "t": 1184.44,
+   "d": 10.2,
+   "text": "space to a four space or shrink it down so it is only a two item. And smaller items for the"
+  },
+  {
+   "t": 1194.64,
+   "d": 8.2,
+   "text": "most part are more effective in the game, easier to use, and easier to fit in with more items."
+  },
+  {
+   "t": 1202.84,
+   "d": 5.96,
+   "text": "It kind of gets complicated if we say are big or little items better but it is just another"
+  },
+  {
+   "t": 1208.8,
+   "d": 6.24,
+   "text": "thing we can do to try to balance the items and come up with interesting relationships"
+  },
+  {
+   "t": 1215.04,
+   "d": 5.32,
+   "text": "between which one is better and worse. Another thing I want to talk about with balance"
+  },
+  {
+   "t": 1220.36,
+   "d": 8.32,
+   "text": "is each item has its own niche. Even though the fox is generally much better than the machete we"
+  },
+  {
+   "t": 1228.68,
+   "d": 6.12,
+   "text": "have tried to make it so there aren't items that are just better versions of other items. It is not"
+  },
+  {
+   "t": 1234.8,
+   "d": 6.12,
+   "text": "like if you see the fox rapier you always want to replace the machete with it. We have tried"
+  },
+  {
+   "t": 1240.92,
+   "d": 10.44,
+   "text": "hard to say at least in some cases there is always a reason to consider every item in the game. And"
+  },
+  {
+   "t": 1251.36,
+   "d": 5.4,
+   "text": "then of course we go through a lot of iterations of feedback from the community. We don't pretend"
+  },
+  {
+   "t": 1256.76,
+   "d": 10.84,
+   "text": "to have all the answers. We have to listen to the players and do play testing. We can do that"
+  },
+  {
+   "t": 1267.6,
+   "d": 6.48,
+   "text": "with analytics also. We have been able to capture good analytics. We can see information about the"
+  },
+  {
+   "t": 1274.08,
+   "d": 6.44,
+   "text": "player's run. We can see what happened if they won or lost the game. We can see which character they"
+  },
+  {
+   "t": 1280.52,
+   "d": 6.12,
+   "text": "were playing as, which items they chose not to take, which items they carried with them,"
+  },
+  {
+   "t": 1286.64,
+   "d": 7.08,
+   "text": "which enemies defeated them. This type of information really helps us to determine"
+  },
+  {
+   "t": 1293.72,
+   "d": 8.08,
+   "text": "how effective or ineffective certain items are. We haven't done the best job with analytics and got"
+  },
+  {
+   "t": 1301.8,
+   "d": 7.6,
+   "text": "criticism why were overly public with how we did it and some people didn't like the idea we would"
+  },
+  {
+   "t": 1311.16,
+   "d": 6.48,
+   "text": "make an item worse because the analytics showed it was too good so this is something we are trying to"
+  },
+  {
+   "t": 1317.64,
+   "d": 7.24,
+   "text": "figure out but we do believe this is an important piece when it comes to determining, you know,"
+  },
+  {
+   "t": 1324.88,
+   "d": 7.08,
+   "text": "how we are going to balance 865 items in the game. That can't all be done just in conversations"
+  },
+  {
+   "t": 1331.96,
+   "d": 6.76,
+   "text": "with our players directly. It is too much content. We need to look at broader picture."
+  },
+  {
+   "t": 1338.72,
+   "d": 5.32,
+   "text": "The other thing that I want to talk about is just player progress in general. It is all done through"
+  },
+  {
+   "t": 1344.04,
+   "d": 6.69,
+   "text": "items. We think that's really good because it makes it feel very tangible and concrete. You"
+  },
+  {
+   "t": 1350.73,
+   "d": 6.51,
+   "text": "are always able to see what you've gotten in the game and you always able to reevaluate your"
+  },
+  {
+   "t": 1357.24,
+   "d": 7.24,
+   "text": "progress. In some games when you level up, you make permanent decisions which lock you into are a"
+  },
+  {
+   "t": 1364.48,
+   "d": 5.8,
+   "text": "certain build type or something like that. One of the things that's cool about this game being about"
+  },
+  {
+   "t": 1370.28,
+   "d": 7.24,
+   "text": "inventory management is that you are constantly in a position where you can re-organize things"
+  },
+  {
+   "t": 1379.24,
+   "d": 7.56,
+   "text": "and come out with better and different load outs based on the challenges you are encountering."
+  },
+  {
+   "t": 1387.76,
+   "d": 8.6,
+   "text": "Progression is after each fight you get seven drops of items. You can chose a few of those"
+  },
+  {
+   "t": 1396.36,
+   "d": 5.2,
+   "text": "items and add them into your inventory. So far this is the type of progress I have been"
+  },
+  {
+   "t": 1401.56,
+   "d": 6.08,
+   "text": "talking about but there is one other type of progress in Backpack Hero which is leveling"
+  },
+  {
+   "t": 1407.64,
+   "d": 7.16,
+   "text": "up. Once you defeat enough enemies you get an opportunity to level up. Additional spaces open"
+  },
+  {
+   "t": 1414.8,
+   "d": 8.12,
+   "text": "up in your backpack and you are able to expand your backpack. This is probably the part of the"
+  },
+  {
+   "t": 1422.92,
+   "d": 7.08,
+   "text": "game that works the best. It is always really fun to expand your backpack. It is a very tangible"
+  },
+  {
+   "t": 1430.0,
+   "d": 5.68,
+   "text": "type of progression and you can see visually you can carry more stuff. It fits with the"
+  },
+  {
+   "t": 1435.68,
+   "d": 6.64,
+   "text": "theme of the game in that you are constantly collecting items and the value in the game is"
+  },
+  {
+   "t": 1442.96,
+   "d": 7.0,
+   "text": "to collect more stuff so we think this type of progression works really well for us."
+  },
+  {
+   "t": 1450.68,
+   "d": 6.8,
+   "text": "We have items built around this idea. Here is an item that gives you energy but it becomes"
+  },
+  {
+   "t": 1457.48,
+   "d": 7.8,
+   "text": "disabled if it is adjacent to any other items in your backpack. This is an item where you"
+  },
+  {
+   "t": 1465.28,
+   "d": 6.68,
+   "text": "might want to build out your own space for it. So you can shove this in a corn n -- corner and you"
+  },
+  {
+   "t": 1471.96,
+   "d": 7.2,
+   "text": "get the positive effect without having deal with any items too close to it."
+  },
+  {
+   "t": 1480.16,
+   "d": 7.28,
+   "text": "I would mention item buffs and I haven't talked about why the player would want to organize things"
+  },
+  {
+   "t": 1487.44,
+   "d": 5.56,
+   "text": "in a different way within their backpack but a lot of items have effects based on where they are"
+  },
+  {
+   "t": 1493.0,
+   "d": 10.4,
+   "text": "placed. All these gem items increase the amount of damage that nearby weapons can inflict on enemies."
+  },
+  {
+   "t": 1503.4,
+   "d": 7.2,
+   "text": "Since I have placed these gems next to this sword we can see the sword is doing more damage. From"
+  },
+  {
+   "t": 1510.6,
+   "d": 5.12,
+   "text": "earlier in my presentation you might remember the wooden sword normally does seven damage"
+  },
+  {
+   "t": 1515.72,
+   "d": 12.96,
+   "text": "but it is adjacent to all these pour -- power ups it is to 15. I think that you can visually"
+  },
+  {
+   "t": 1528.68,
+   "d": 9.6,
+   "text": "see the arrangement makes it feel tangible and fun in a way where just increasing a number on a"
+  },
+  {
+   "t": 1538.28,
+   "d": 8.04,
+   "text": "character sheet can feel a lot more abstract. The other thing to talk about is meta progress."
+  },
+  {
+   "t": 1546.32,
+   "d": 6.16,
+   "text": "Right now we are working on the story mode of the game. In the story mode of the game you are"
+  },
+  {
+   "t": 1552.48,
+   "d": 7.6,
+   "text": "always bringing items back to your town even if you lose. You are still able to choose an item to"
+  },
+  {
+   "t": 1560.08,
+   "d": 7.08,
+   "text": "save which you will then bring back to town. You get a little bit of progress even though you maybe"
+  },
+  {
+   "t": 1567.16,
+   "d": 5.96,
+   "text": "didn't succeed in the round that you tried. Once you are back in town, you build all of these"
+  },
+  {
+   "t": 1573.12,
+   "d": 6.96,
+   "text": "structures based on the items that you've brought back and you are able to see you have an inventory"
+  },
+  {
+   "t": 1580.08,
+   "d": 5.96,
+   "text": "that is basically storing all of the items that you have collected from all of your adventures"
+  },
+  {
+   "t": 1586.04,
+   "d": 6.56,
+   "text": "until you choose to sell it items to upgrade the town further. Story mode is something we"
+  },
+  {
+   "t": 1592.6,
+   "d": 6.4,
+   "text": "are really working on. We don't think we have all of the answers there yet but it is an important"
+  },
+  {
+   "t": 1599.0,
+   "d": 7.4,
+   "text": "piece in a modern roguelike to have that player making that constant progress throughout where"
+  },
+  {
+   "t": 1606.4,
+   "d": 5.84,
+   "text": "within their run they are making decisions that will give them up grades for future runs or unlock"
+  },
+  {
+   "t": 1612.24,
+   "d": 7.04,
+   "text": "new features for them or it will allow them to move forward in a longer and more tangible way."
+  },
+  {
+   "t": 1621.32,
+   "d": 7.56,
+   "text": "Yeah. So in summary, my biggest suggestion to other people who are working on roguelike games,"
+  },
+  {
+   "t": 1628.88,
+   "d": 4.92,
+   "text": "number one, would be to release something. Backpack Hero went to the next level when"
+  },
+  {
+   "t": 1633.8,
+   "d": 6.04,
+   "text": "we released it on itch.io and then did the Kickstarter. So releasing things and getting"
+  },
+  {
+   "t": 1639.84,
+   "d": 8.04,
+   "text": "things out there is huge. It changed the trajectory of this game. I would also say build a"
+  },
+  {
+   "t": 1647.88,
+   "d": 7.32,
+   "text": "wide possibility space. We had to recode Backpack Hero and create that item2 system because the"
+  },
+  {
+   "t": 1655.2,
+   "d": 7.2,
+   "text": "original item system we had setup was not flexible enough. So it is really important that you create"
+  },
+  {
+   "t": 1662.4,
+   "d": 8.4,
+   "text": "this possibility space where you will be able to create a wide variety of items or power ups within"
+  },
+  {
+   "t": 1670.8,
+   "d": 5.88,
+   "text": "your game and also modders and other people who are involved in the game will be able to"
+  },
+  {
+   "t": 1676.68,
+   "d": 7.92,
+   "text": "come in and have their own creative ideas for what items and power ups in the game could look like."
+  },
+  {
+   "t": 1684.6,
+   "d": 6.64,
+   "text": "Once you have that possibility space, explore it fully to the best of your ability. Create loot"
+  },
+  {
+   "t": 1691.24,
+   "d": 6.92,
+   "text": "that solves multiple different purposes in the game. Try your best to come up with many creative"
+  },
+  {
+   "t": 1698.16,
+   "d": 6.36,
+   "text": "different items that will cause the player to play and interact with the game in fresh ways. That's"
+  },
+  {
+   "t": 1704.52,
+   "d": 7.8,
+   "text": "the life blood of a roguelike is this idea you can replay it over and over again. And finally,"
+  },
+  {
+   "t": 1712.32,
+   "d": 6.28,
+   "text": "create that sense of progression which is tangible in that it is something that the player can see."
+  },
+  {
+   "t": 1718.6,
+   "d": 6.4,
+   "text": "They are building something or progressing towards something. And also something which is flexible;"
+  },
+  {
+   "t": 1725.0,
+   "d": 6.8,
+   "text": "right? They want to be constantly to be making few decisions and changing thing"
+  },
+  {
+   "t": 1731.8,
+   "d": 14.6,
+   "text": "as the run continues. That is it for me. Thank you for joining us today. I am thejaspel1. You"
+  },
+  {
+   "t": 1746.4,
+   "d": 8.0,
+   "text": "can hit me up on Twitter and then also you can look for Backpack Hero on Steam and that"
+  },
+  {
+   "t": 1754.4,
+   "d": 8.2,
+   "text": "has links to our Discord. I will be hanging around if anyone has questions for me. Again,"
+  },
+  {
+   "t": 1762.6,
+   "d": 6.96,
+   "text": "I want to thank everyone for having me on today. ALEXEI: Thank you, Jasper. I don't think we have"
+  },
+  {
+   "t": 1769.56,
+   "d": 4.6,
+   "text": "time for questions here but we will do the follow-up. You perfectly just hit the end"
+  },
+  {
+   "t": 1774.16,
+   "d": 7.28,
+   "text": "of your slot. That was extremely accurate 30-minute talk. I find it very satisfying"
+  },
+  {
+   "t": 1781.44,
+   "d": 8.28,
+   "text": "as a speaker. Thank so much, Jasper. JASPER: Cool. Thanks for having me."
+  }
+ ]
+}

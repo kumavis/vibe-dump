@@ -1,0 +1,4422 @@
+{
+ "id": "C2sm-z7Ag4U",
+ "url": "https://www.youtube.com/watch?v=C2sm-z7Ag4U",
+ "title": "Darren Grey - What Is A *Rogue* Like?",
+ "speaker": "Darren Grey",
+ "talk_title": "What Is A *Rogue* Like?",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1725,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nDarren is the host of Roguelike Radio, community busybody and developer of many small roguelikes, including Broken Bottle, FireTail, The Trapped Heart and Time To Die. Many people have asked what is a roguelike, but few people have focused on what makes for a *rogue*. In this talk he explores what a \"rogue\" really means in human culture, from Harley Quinn to North Korea, and how that affects the way we design rogues in games.\n\nFind him on Twitter: https://twitter.com/dgrey0\nRoguelike Radio: http://www.roguelikeradio.com/\nRoguelike Celebration on Roguelike Radio! http://www.roguelikeradio.com/2020/09/episode-156-roguelike-celebration-event.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to rogues"
+  },
+  {
+   "start": 94,
+   "title": "Etymology and definitions"
+  },
+  {
+   "start": 329,
+   "title": "Cultural archetypes"
+  },
+  {
+   "start": 526,
+   "title": "Origins of the game Rogue"
+  },
+  {
+   "start": 665,
+   "title": "Design of Rogue"
+  },
+  {
+   "start": 811,
+   "title": "The hero trap"
+  },
+  {
+   "start": 953,
+   "title": "Heroes vs. rogues"
+  },
+  {
+   "start": 1036,
+   "title": "Designing for rogueness"
+  },
+  {
+   "start": 1453,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5115,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.44,
+   "d": 1.76,
+   "text": "all right wow"
+  },
+  {
+   "t": 3.2,
+   "d": 2.8,
+   "text": "lightning talks really really fantastic"
+  },
+  {
+   "t": 6.0,
+   "d": 1.36,
+   "text": "really really fast"
+  },
+  {
+   "t": 7.36,
+   "d": 1.36,
+   "text": "and now you barely have time to catch"
+  },
+  {
+   "t": 8.72,
+   "d": 1.76,
+   "text": "your breath because next up we have"
+  },
+  {
+   "t": 10.48,
+   "d": 1.28,
+   "text": "darren gray"
+  },
+  {
+   "t": 11.76,
+   "d": 1.76,
+   "text": "host of roguelike radio community"
+  },
+  {
+   "t": 13.52,
+   "d": 1.92,
+   "text": "busybody developer of many small"
+  },
+  {
+   "t": 15.44,
+   "d": 1.6,
+   "text": "roguelikes including broken bottle fire"
+  },
+  {
+   "t": 17.04,
+   "d": 1.76,
+   "text": "tale the trapped heart and time to die"
+  },
+  {
+   "t": 18.8,
+   "d": 3.04,
+   "text": "and he has a baby with him hello yes"
+  },
+  {
+   "t": 21.84,
+   "d": 1.6,
+   "text": "i've got a little rogue with me"
+  },
+  {
+   "t": 23.44,
+   "d": 1.84,
+   "text": "uh just in case i need help during my"
+  },
+  {
+   "t": 25.28,
+   "d": 1.84,
+   "text": "talk with extra vomit"
+  },
+  {
+   "t": 27.12,
+   "d": 2.88,
+   "text": "all right uh take it away oh yes uh"
+  },
+  {
+   "t": 30.0,
+   "d": 1.68,
+   "text": "those are some great talks weren't they"
+  },
+  {
+   "t": 31.68,
+   "d": 3.12,
+   "text": "right what is a road like is what i want"
+  },
+  {
+   "t": 34.8,
+   "d": 0.96,
+   "text": "to talk about not"
+  },
+  {
+   "t": 35.76,
+   "d": 2.64,
+   "text": "the age-old argument of what is a"
+  },
+  {
+   "t": 38.4,
+   "d": 0.64,
+   "text": "roguelike"
+  },
+  {
+   "t": 39.04,
+   "d": 2.32,
+   "text": "no but what is a rogue like the the word"
+  },
+  {
+   "t": 41.36,
+   "d": 0.96,
+   "text": "rogue"
+  },
+  {
+   "t": 42.32,
+   "d": 2.4,
+   "text": "uh has lots of associations we of course"
+  },
+  {
+   "t": 44.72,
+   "d": 1.92,
+   "text": "associate it with our fantastic genre"
+  },
+  {
+   "t": 46.64,
+   "d": 2.24,
+   "text": "but it has more associations than that"
+  },
+  {
+   "t": 48.88,
+   "d": 0.8,
+   "text": "and importantly"
+  },
+  {
+   "t": 49.68,
+   "d": 1.84,
+   "text": "what do those associations mean for our"
+  },
+  {
+   "t": 51.52,
+   "d": 1.36,
+   "text": "genre how likely"
+  },
+  {
+   "t": 52.88,
+   "d": 2.48,
+   "text": "we want our roguelikes to be like"
+  },
+  {
+   "t": 55.36,
+   "d": 1.28,
+   "text": "something like that"
+  },
+  {
+   "t": 56.64,
+   "d": 3.6,
+   "text": "so for example rogues are not"
+  },
+  {
+   "t": 60.24,
+   "d": 3.36,
+   "text": "rouge okay so a rogue will not typically"
+  },
+  {
+   "t": 63.6,
+   "d": 1.68,
+   "text": "stop to ensure that they are looking"
+  },
+  {
+   "t": 65.28,
+   "d": 1.84,
+   "text": "fantastic before they kick someone in"
+  },
+  {
+   "t": 67.12,
+   "d": 0.72,
+   "text": "the nuts"
+  },
+  {
+   "t": 67.84,
+   "d": 3.36,
+   "text": "right so and in this way we see this"
+  },
+  {
+   "t": 71.2,
+   "d": 1.68,
+   "text": "reflected in the genre because"
+  },
+  {
+   "t": 72.88,
+   "d": 2.4,
+   "text": "the ascii aesthetic that is dominant in"
+  },
+  {
+   "t": 75.28,
+   "d": 2.08,
+   "text": "the early stage of the genre"
+  },
+  {
+   "t": 77.36,
+   "d": 2.4,
+   "text": "is not particularly rouge you can pretty"
+  },
+  {
+   "t": 79.76,
+   "d": 1.6,
+   "text": "it up a little bit like brogue"
+  },
+  {
+   "t": 81.36,
+   "d": 2.8,
+   "text": "but ultimately the utilitarianism of the"
+  },
+  {
+   "t": 84.16,
+   "d": 0.72,
+   "text": "gameplay"
+  },
+  {
+   "t": 84.88,
+   "d": 3.12,
+   "text": "is more important than the looks so in"
+  },
+  {
+   "t": 88.0,
+   "d": 0.72,
+   "text": "this way"
+  },
+  {
+   "t": 88.72,
+   "d": 3.52,
+   "text": "roguelikes are like rogues and not rouge"
+  },
+  {
+   "t": 92.24,
+   "d": 2.24,
+   "text": "okay hopefully you vaguely understand"
+  },
+  {
+   "t": 94.48,
+   "d": 0.8,
+   "text": "that so"
+  },
+  {
+   "t": 95.28,
+   "d": 1.36,
+   "text": "i'm going to be talking a little bit"
+  },
+  {
+   "t": 96.64,
+   "d": 2.16,
+   "text": "about etymology and definitions of the"
+  },
+  {
+   "t": 98.8,
+   "d": 1.6,
+   "text": "word rogue itself"
+  },
+  {
+   "t": 100.4,
+   "d": 3.76,
+   "text": "and looking at the place that rogues"
+  },
+  {
+   "t": 104.16,
+   "d": 1.52,
+   "text": "have in our culture and some of the"
+  },
+  {
+   "t": 105.68,
+   "d": 1.84,
+   "text": "different connotations of that"
+  },
+  {
+   "t": 107.52,
+   "d": 1.76,
+   "text": "then looking at the game rogue itself"
+  },
+  {
+   "t": 109.28,
+   "d": 1.52,
+   "text": "and how it adopts"
+  },
+  {
+   "t": 110.8,
+   "d": 1.6,
+   "text": "some of those connotations and cultural"
+  },
+  {
+   "t": 112.4,
+   "d": 2.4,
+   "text": "elements and then going on to"
+  },
+  {
+   "t": 114.8,
+   "d": 1.28,
+   "text": "how that affects our design in"
+  },
+  {
+   "t": 116.08,
+   "d": 1.52,
+   "text": "particular something i call the hero"
+  },
+  {
+   "t": 117.6,
+   "d": 0.8,
+   "text": "trap"
+  },
+  {
+   "t": 118.4,
+   "d": 2.56,
+   "text": "and how we can design our roguelikes for"
+  },
+  {
+   "t": 120.96,
+   "d": 0.72,
+   "text": "rogues how"
+  },
+  {
+   "t": 121.68,
+   "d": 3.52,
+   "text": "we can embed the very idealism of"
+  },
+  {
+   "t": 125.2,
+   "d": 0.96,
+   "text": "rogueness"
+  },
+  {
+   "t": 126.16,
+   "d": 2.64,
+   "text": "into our broken legs right so let's get"
+  },
+  {
+   "t": 128.8,
+   "d": 0.64,
+   "text": "started"
+  },
+  {
+   "t": 129.44,
+   "d": 3.04,
+   "text": "firstly a wall of text the definition of"
+  },
+  {
+   "t": 132.48,
+   "d": 1.68,
+   "text": "the word rogue so there's two main"
+  },
+  {
+   "t": 134.16,
+   "d": 1.6,
+   "text": "definitions the first one"
+  },
+  {
+   "t": 135.76,
+   "d": 2.24,
+   "text": "is a dishonest or unprincipled man well"
+  },
+  {
+   "t": 138.0,
+   "d": 1.6,
+   "text": "that's straight away sexist so i don't"
+  },
+  {
+   "t": 139.6,
+   "d": 1.2,
+   "text": "agree with that"
+  },
+  {
+   "t": 140.8,
+   "d": 3.04,
+   "text": "um and with a a subtext of a person"
+  },
+  {
+   "t": 143.84,
+   "d": 2.16,
+   "text": "whose behavior one disapproves of"
+  },
+  {
+   "t": 146.0,
+   "d": 2.24,
+   "text": "but is nonetheless likable or attractive"
+  },
+  {
+   "t": 148.24,
+   "d": 1.84,
+   "text": "okay that sounds better"
+  },
+  {
+   "t": 150.08,
+   "d": 2.0,
+   "text": "so we've got this idea that's a like a"
+  },
+  {
+   "t": 152.08,
+   "d": 2.32,
+   "text": "villain a replicator rascal and yet also"
+  },
+  {
+   "t": 154.4,
+   "d": 0.48,
+   "text": "oh"
+  },
+  {
+   "t": 154.88,
+   "d": 3.44,
+   "text": "impish uh scampish is sort of a mischief"
+  },
+  {
+   "t": 158.32,
+   "d": 0.88,
+   "text": "maker"
+  },
+  {
+   "t": 159.2,
+   "d": 1.84,
+   "text": "so we have these ideas embedded within"
+  },
+  {
+   "t": 161.04,
+   "d": 1.2,
+   "text": "the rogue that it's wrong"
+  },
+  {
+   "t": 162.24,
+   "d": 3.28,
+   "text": "but we sort of like it too um"
+  },
+  {
+   "t": 165.52,
+   "d": 2.16,
+   "text": "the second major definition is an"
+  },
+  {
+   "t": 167.68,
+   "d": 0.96,
+   "text": "elephant or other"
+  },
+  {
+   "t": 168.64,
+   "d": 2.24,
+   "text": "large wild animal living apart from that"
+  },
+  {
+   "t": 170.88,
+   "d": 1.76,
+   "text": "what on earth does this mean"
+  },
+  {
+   "t": 172.64,
+   "d": 3.04,
+   "text": "wow this is about this comes from the"
+  },
+  {
+   "t": 175.68,
+   "d": 1.36,
+   "text": "idea of a rogue elephant and we'll get"
+  },
+  {
+   "t": 177.04,
+   "d": 1.12,
+   "text": "into the history of that in just a"
+  },
+  {
+   "t": 178.16,
+   "d": 0.72,
+   "text": "second"
+  },
+  {
+   "t": 178.88,
+   "d": 2.24,
+   "text": "but it's something that is abundant it's"
+  },
+  {
+   "t": 181.12,
+   "d": 2.0,
+   "text": "unpredictable separate from the rest"
+  },
+  {
+   "t": 183.12,
+   "d": 1.52,
+   "text": "okay so a rogue is"
+  },
+  {
+   "t": 184.64,
+   "d": 1.92,
+   "text": "somehow different from the norm not part"
+  },
+  {
+   "t": 186.56,
+   "d": 2.08,
+   "text": "of the herd not part of the crowd"
+  },
+  {
+   "t": 188.64,
+   "d": 2.0,
+   "text": "and we'll look a little bit more like"
+  },
+  {
+   "t": 190.64,
+   "d": 1.12,
+   "text": "that uh"
+  },
+  {
+   "t": 191.76,
+   "d": 2.24,
+   "text": "a little bit more at that as we go on"
+  },
+  {
+   "t": 194.0,
+   "d": 2.08,
+   "text": "right that's the modern definition"
+  },
+  {
+   "t": 196.08,
+   "d": 1.28,
+   "text": "it's important to look at the the"
+  },
+  {
+   "t": 197.36,
+   "d": 2.32,
+   "text": "history of this so"
+  },
+  {
+   "t": 199.68,
+   "d": 2.56,
+   "text": "it comes from the 1950s from an idol"
+  },
+  {
+   "t": 202.24,
+   "d": 0.64,
+   "text": "vagrant"
+  },
+  {
+   "t": 202.88,
+   "d": 2.48,
+   "text": "or wall of text here um perhaps a"
+  },
+  {
+   "t": 205.36,
+   "d": 0.8,
+   "text": "shortened form of"
+  },
+  {
+   "t": 206.16,
+   "d": 2.64,
+   "text": "roger sees slang for a begging vagabond"
+  },
+  {
+   "t": 208.8,
+   "d": 1.68,
+   "text": "who pretends to be a poor scholar from"
+  },
+  {
+   "t": 210.48,
+   "d": 1.84,
+   "text": "oxford or cambridge"
+  },
+  {
+   "t": 212.32,
+   "d": 2.08,
+   "text": "i didn't expect the history of the word"
+  },
+  {
+   "t": 214.4,
+   "d": 2.0,
+   "text": "rogue to come from oxford's graduates or"
+  },
+  {
+   "t": 216.4,
+   "d": 2.24,
+   "text": "pretend oxford's graduates but it's"
+  },
+  {
+   "t": 218.64,
+   "d": 2.16,
+   "text": "coming potentially from the latin regard"
+  },
+  {
+   "t": 220.8,
+   "d": 2.16,
+   "text": "to ask"
+  },
+  {
+   "t": 222.96,
+   "d": 2.32,
+   "text": "another theory traces it back to the"
+  },
+  {
+   "t": 225.28,
+   "d": 2.32,
+   "text": "celtic rogue meaning haughty"
+  },
+  {
+   "t": 227.6,
+   "d": 3.6,
+   "text": "um but it seems to be mostly this first"
+  },
+  {
+   "t": 231.2,
+   "d": 1.12,
+   "text": "one with that it's"
+  },
+  {
+   "t": 232.32,
+   "d": 2.0,
+   "text": "associations with vagabonds so straight"
+  },
+  {
+   "t": 234.32,
+   "d": 1.92,
+   "text": "away we've got outcasts"
+  },
+  {
+   "t": 236.24,
+   "d": 1.6,
+   "text": "who are doing something slightly wrong"
+  },
+  {
+   "t": 237.84,
+   "d": 1.76,
+   "text": "and yet somehow we end up"
+  },
+  {
+   "t": 239.6,
+   "d": 2.0,
+   "text": "kind of pitying them or or rooting for"
+  },
+  {
+   "t": 241.6,
+   "d": 1.68,
+   "text": "them in some way"
+  },
+  {
+   "t": 243.28,
+   "d": 2.32,
+   "text": "um from the 1590s it evolved into"
+  },
+  {
+   "t": 245.6,
+   "d": 2.24,
+   "text": "something playful or affectionate as"
+  },
+  {
+   "t": 247.84,
+   "d": 2.56,
+   "text": "one who was mischievous okay so there"
+  },
+  {
+   "t": 250.4,
+   "d": 0.88,
+   "text": "came to be this"
+  },
+  {
+   "t": 251.28,
+   "d": 3.52,
+   "text": "uh affection for the idea of a rogue"
+  },
+  {
+   "t": 254.8,
+   "d": 2.96,
+   "text": "and then in the 1800s it came to mean a"
+  },
+  {
+   "t": 257.76,
+   "d": 0.88,
+   "text": "large wheel"
+  },
+  {
+   "t": 258.64,
+   "d": 3.04,
+   "text": "a large beast a wild beast living apart"
+  },
+  {
+   "t": 261.68,
+   "d": 1.52,
+   "text": "from the herb originally of elephants so"
+  },
+  {
+   "t": 263.2,
+   "d": 1.6,
+   "text": "the idea of rogue elephants"
+  },
+  {
+   "t": 264.8,
+   "d": 3.36,
+   "text": "comes from the 1850s originally but the"
+  },
+  {
+   "t": 268.16,
+   "d": 1.12,
+   "text": "idea is that you've got a single"
+  },
+  {
+   "t": 269.28,
+   "d": 1.68,
+   "text": "elephant behaving in a rogue"
+  },
+  {
+   "t": 270.96,
+   "d": 2.56,
+   "text": "manner and we see the connotations of"
+  },
+  {
+   "t": 273.52,
+   "d": 0.88,
+   "text": "that word actually"
+  },
+  {
+   "t": 274.4,
+   "d": 2.0,
+   "text": "in a lot of the ways we apply rogue"
+  },
+  {
+   "t": 276.4,
+   "d": 1.2,
+   "text": "these days"
+  },
+  {
+   "t": 277.6,
+   "d": 3.04,
+   "text": "um and then from the 60s onwards"
+  },
+  {
+   "t": 280.64,
+   "d": 2.48,
+   "text": "something uncontrolled or undisciplined"
+  },
+  {
+   "t": 283.12,
+   "d": 0.56,
+   "text": "i like that"
+  },
+  {
+   "t": 283.68,
+   "d": 2.8,
+   "text": "lacking discipline um and we also have"
+  },
+  {
+   "t": 286.48,
+   "d": 2.0,
+   "text": "this idea of the rogues gallery and this"
+  },
+  {
+   "t": 288.48,
+   "d": 0.64,
+   "text": "goes back"
+  },
+  {
+   "t": 289.12,
+   "d": 3.6,
+   "text": "uh again to the the 17th uh"
+  },
+  {
+   "t": 292.72,
+   "d": 2.4,
+   "text": "or 18th century or is it 19th i actually"
+  },
+  {
+   "t": 295.12,
+   "d": 1.04,
+   "text": "can't tell"
+  },
+  {
+   "t": 296.16,
+   "d": 2.48,
+   "text": "what that is saying but the idea is that"
+  },
+  {
+   "t": 298.64,
+   "d": 1.28,
+   "text": "you have a rogues gallery which is a"
+  },
+  {
+   "t": 299.92,
+   "d": 1.52,
+   "text": "police collection of mug shots so you've"
+  },
+  {
+   "t": 301.44,
+   "d": 1.2,
+   "text": "got a lineup of"
+  },
+  {
+   "t": 302.64,
+   "d": 1.76,
+   "text": "these are the different rogues which is"
+  },
+  {
+   "t": 304.4,
+   "d": 2.72,
+   "text": "the rogue that you particularly like"
+  },
+  {
+   "t": 307.12,
+   "d": 3.2,
+   "text": "um yeah so"
+  },
+  {
+   "t": 310.32,
+   "d": 1.76,
+   "text": "those are some of the ideas of what"
+  },
+  {
+   "t": 312.08,
+   "d": 2.08,
+   "text": "makes up the word rogue"
+  },
+  {
+   "t": 314.16,
+   "d": 2.48,
+   "text": "and importantly we can think about how"
+  },
+  {
+   "t": 316.64,
+   "d": 0.88,
+   "text": "that affects"
+  },
+  {
+   "t": 317.52,
+   "d": 2.08,
+   "text": "how the rogues in our games are"
+  },
+  {
+   "t": 319.6,
+   "d": 1.76,
+   "text": "presented in what way"
+  },
+  {
+   "t": 321.36,
+   "d": 3.2,
+   "text": "uh our main characters or the the whole"
+  },
+  {
+   "t": 324.56,
+   "d": 0.88,
+   "text": "theme of the game"
+  },
+  {
+   "t": 325.44,
+   "d": 2.0,
+   "text": "is somehow representing this this core"
+  },
+  {
+   "t": 327.44,
+   "d": 2.08,
+   "text": "concept of a rogue"
+  },
+  {
+   "t": 329.52,
+   "d": 2.0,
+   "text": "but those those are literal definitions"
+  },
+  {
+   "t": 331.52,
+   "d": 1.68,
+   "text": "um words can have a little bit more"
+  },
+  {
+   "t": 333.2,
+   "d": 1.92,
+   "text": "meaning than their literal definitions"
+  },
+  {
+   "t": 335.12,
+   "d": 1.6,
+   "text": "uh they've got all sorts of cultural"
+  },
+  {
+   "t": 336.72,
+   "d": 2.16,
+   "text": "connotations so i want to investigate"
+  },
+  {
+   "t": 338.88,
+   "d": 2.88,
+   "text": "a few of the ideas of rogues in culture"
+  },
+  {
+   "t": 341.76,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 342.88,
+   "d": 2.32,
+   "text": "now we have the idea for instance of the"
+  },
+  {
+   "t": 345.2,
+   "d": 1.84,
+   "text": "grey mouser who is a big inspiration for"
+  },
+  {
+   "t": 347.04,
+   "d": 1.44,
+   "text": "dungeons and dragons"
+  },
+  {
+   "t": 348.48,
+   "d": 2.96,
+   "text": "uh a roguish hero who gets into various"
+  },
+  {
+   "t": 351.44,
+   "d": 1.28,
+   "text": "different types of troubles and"
+  },
+  {
+   "t": 352.72,
+   "d": 1.68,
+   "text": "and uses various tricks to get out of"
+  },
+  {
+   "t": 354.4,
+   "d": 1.44,
+   "text": "them um"
+  },
+  {
+   "t": 355.84,
+   "d": 2.0,
+   "text": "we have the idea of rogue ai so this is"
+  },
+  {
+   "t": 357.84,
+   "d": 1.2,
+   "text": "a term that's"
+  },
+  {
+   "t": 359.04,
+   "d": 1.44,
+   "text": "comes from that kind of idea of a rogue"
+  },
+  {
+   "t": 360.48,
+   "d": 2.24,
+   "text": "elephant but we see in system shock in"
+  },
+  {
+   "t": 362.72,
+   "d": 1.76,
+   "text": "in hal 9000 and all these different"
+  },
+  {
+   "t": 364.48,
+   "d": 0.8,
+   "text": "ideas of"
+  },
+  {
+   "t": 365.28,
+   "d": 2.48,
+   "text": "an ai that is somehow gone rogue meaning"
+  },
+  {
+   "t": 367.76,
+   "d": 2.08,
+   "text": "it's not obeying us anymore it's doing"
+  },
+  {
+   "t": 369.84,
+   "d": 1.04,
+   "text": "its own thing"
+  },
+  {
+   "t": 370.88,
+   "d": 3.52,
+   "text": "and that is a threat um you also have"
+  },
+  {
+   "t": 374.4,
+   "d": 2.16,
+   "text": "charismatic creatures like the the joker"
+  },
+  {
+   "t": 376.56,
+   "d": 0.96,
+   "text": "who's a"
+  },
+  {
+   "t": 377.52,
+   "d": 1.68,
+   "text": "heavily loved villain in the batman"
+  },
+  {
+   "t": 379.2,
+   "d": 2.32,
+   "text": "universe and importantly he's a villain"
+  },
+  {
+   "t": 381.52,
+   "d": 0.48,
+   "text": "who"
+  },
+  {
+   "t": 382.0,
+   "d": 2.96,
+   "text": "uses tricks uses chicanery uses"
+  },
+  {
+   "t": 384.96,
+   "d": 0.96,
+   "text": "intelligence"
+  },
+  {
+   "t": 385.92,
+   "d": 2.4,
+   "text": "to get around the much more brawny and"
+  },
+  {
+   "t": 388.32,
+   "d": 2.96,
+   "text": "resourced batman"
+  },
+  {
+   "t": 391.28,
+   "d": 2.64,
+   "text": "so we have this idea of the rogue here"
+  },
+  {
+   "t": 393.92,
+   "d": 1.04,
+   "text": "being somewhat of an"
+  },
+  {
+   "t": 394.96,
+   "d": 2.48,
+   "text": "underdog and being someone who although"
+  },
+  {
+   "t": 397.44,
+   "d": 2.88,
+   "text": "he's a villain we quite like him"
+  },
+  {
+   "t": 400.32,
+   "d": 3.52,
+   "text": "um north korea is a rogue state"
+  },
+  {
+   "t": 403.84,
+   "d": 1.6,
+   "text": "uh it's important to think about the"
+  },
+  {
+   "t": 405.44,
+   "d": 1.52,
+   "text": "connotations of that again"
+  },
+  {
+   "t": 406.96,
+   "d": 1.52,
+   "text": "there's that idea of it being separate"
+  },
+  {
+   "t": 408.48,
+   "d": 1.76,
+   "text": "from the herd not part of the pack"
+  },
+  {
+   "t": 410.24,
+   "d": 2.08,
+   "text": "but also there's a threat there right"
+  },
+  {
+   "t": 412.32,
+   "d": 1.28,
+   "text": "there's a sense of"
+  },
+  {
+   "t": 413.6,
+   "d": 1.76,
+   "text": "although it may not be the most powerful"
+  },
+  {
+   "t": 415.36,
+   "d": 1.28,
+   "text": "nation on earth"
+  },
+  {
+   "t": 416.64,
+   "d": 2.08,
+   "text": "it's chaotic way of behaving is a threat"
+  },
+  {
+   "t": 418.72,
+   "d": 1.36,
+   "text": "to us all"
+  },
+  {
+   "t": 420.08,
+   "d": 3.2,
+   "text": "um rogue in x-men uh is an interesting"
+  },
+  {
+   "t": 423.28,
+   "d": 1.04,
+   "text": "character because"
+  },
+  {
+   "t": 424.32,
+   "d": 2.8,
+   "text": "her special powers are different from"
+  },
+  {
+   "t": 427.12,
+   "d": 1.52,
+   "text": "all the other types of special powers"
+  },
+  {
+   "t": 428.64,
+   "d": 3.04,
+   "text": "in the the comic uh she has a special"
+  },
+  {
+   "t": 431.68,
+   "d": 1.76,
+   "text": "power whereby if she touches someone she"
+  },
+  {
+   "t": 433.44,
+   "d": 0.88,
+   "text": "gains"
+  },
+  {
+   "t": 434.32,
+   "d": 2.24,
+   "text": "their power right so it's a kind of meta"
+  },
+  {
+   "t": 436.56,
+   "d": 1.12,
+   "text": "power in a way"
+  },
+  {
+   "t": 437.68,
+   "d": 1.76,
+   "text": "and that makes her very different and"
+  },
+  {
+   "t": 439.44,
+   "d": 1.84,
+   "text": "this also has a physical effect on her"
+  },
+  {
+   "t": 441.28,
+   "d": 1.68,
+   "text": "in that she can't touch people"
+  },
+  {
+   "t": 442.96,
+   "d": 2.0,
+   "text": "which makes her physically distanced as"
+  },
+  {
+   "t": 444.96,
+   "d": 2.32,
+   "text": "well as sort of a"
+  },
+  {
+   "t": 447.28,
+   "d": 2.64,
+   "text": "uh conceptually distant from the other"
+  },
+  {
+   "t": 449.92,
+   "d": 0.64,
+   "text": "people"
+  },
+  {
+   "t": 450.56,
+   "d": 2.24,
+   "text": "so again this is the idea of isolation"
+  },
+  {
+   "t": 452.8,
+   "d": 1.12,
+   "text": "and separatism"
+  },
+  {
+   "t": 453.92,
+   "d": 2.0,
+   "text": "inherent in in the idea of the character"
+  },
+  {
+   "t": 455.92,
+   "d": 1.04,
+   "text": "rogue"
+  },
+  {
+   "t": 456.96,
+   "d": 2.88,
+   "text": "and sarah palin had an autobiography"
+  },
+  {
+   "t": 459.84,
+   "d": 1.44,
+   "text": "called going rogue"
+  },
+  {
+   "t": 461.28,
+   "d": 1.6,
+   "text": "i must admit i haven't read it i haven't"
+  },
+  {
+   "t": 462.88,
+   "d": 0.96,
+   "text": "done all my research for this"
+  },
+  {
+   "t": 463.84,
+   "d": 1.76,
+   "text": "presentation"
+  },
+  {
+   "t": 465.6,
+   "d": 3.2,
+   "text": "um but i imagine what she's doing is"
+  },
+  {
+   "t": 468.8,
+   "d": 2.88,
+   "text": "channeling the idea of separatism and"
+  },
+  {
+   "t": 471.68,
+   "d": 2.4,
+   "text": "uniqueness and being uniquely driven or"
+  },
+  {
+   "t": 474.08,
+   "d": 1.6,
+   "text": "having a voice which is different from"
+  },
+  {
+   "t": 475.68,
+   "d": 1.52,
+   "text": "the rest of the pack"
+  },
+  {
+   "t": 477.2,
+   "d": 3.6,
+   "text": "uh and it speaks certainly to certain um"
+  },
+  {
+   "t": 480.8,
+   "d": 2.08,
+   "text": "right-wing ideals in america especially"
+  },
+  {
+   "t": 482.88,
+   "d": 2.24,
+   "text": "kind of cultural ideals that you'll find"
+  },
+  {
+   "t": 485.12,
+   "d": 1.68,
+   "text": "among certain right-wing circles"
+  },
+  {
+   "t": 486.8,
+   "d": 2.64,
+   "text": "but it also speaks to a a stronger kind"
+  },
+  {
+   "t": 489.44,
+   "d": 0.96,
+   "text": "of american"
+  },
+  {
+   "t": 490.4,
+   "d": 2.32,
+   "text": "ideal the idea of the wild west the"
+  },
+  {
+   "t": 492.72,
+   "d": 1.76,
+   "text": "cowboy the clint eastwood"
+  },
+  {
+   "t": 494.48,
+   "d": 2.24,
+   "text": "uh the american exceptionalism american"
+  },
+  {
+   "t": 496.72,
+   "d": 1.2,
+   "text": "individualism"
+  },
+  {
+   "t": 497.92,
+   "d": 2.88,
+   "text": "uh which so affects american culture and"
+  },
+  {
+   "t": 500.8,
+   "d": 1.76,
+   "text": "american foreign policy and all sorts of"
+  },
+  {
+   "t": 502.56,
+   "d": 1.68,
+   "text": "different things"
+  },
+  {
+   "t": 504.24,
+   "d": 3.6,
+   "text": "so we see all these ideas embedded"
+  },
+  {
+   "t": 507.84,
+   "d": 3.52,
+   "text": "into what a rogue is um"
+  },
+  {
+   "t": 511.36,
+   "d": 3.36,
+   "text": "and of course the one cultural uh pillar"
+  },
+  {
+   "t": 514.72,
+   "d": 1.76,
+   "text": "of rogueness that i haven't discussed is"
+  },
+  {
+   "t": 516.48,
+   "d": 1.36,
+   "text": "dungeons and dragons"
+  },
+  {
+   "t": 517.84,
+   "d": 2.56,
+   "text": "and that is really the primary"
+  },
+  {
+   "t": 520.4,
+   "d": 2.0,
+   "text": "inspiration behind the game rogue itself"
+  },
+  {
+   "t": 522.4,
+   "d": 0.72,
+   "text": "as well as"
+  },
+  {
+   "t": 523.12,
+   "d": 2.56,
+   "text": "a lot of our ideas about rogues in games"
+  },
+  {
+   "t": 525.68,
+   "d": 0.56,
+   "text": "okay"
+  },
+  {
+   "t": 526.24,
+   "d": 1.44,
+   "text": "now the original dungeons and dragons"
+  },
+  {
+   "t": 527.68,
+   "d": 1.52,
+   "text": "that should be noted did not have a"
+  },
+  {
+   "t": 529.2,
+   "d": 2.16,
+   "text": "rogue character it was added as a"
+  },
+  {
+   "t": 531.36,
+   "d": 3.28,
+   "text": "um sort of an add-on a dlc as it were"
+  },
+  {
+   "t": 534.64,
+   "d": 1.68,
+   "text": "in those days you got dlcs by buying"
+  },
+  {
+   "t": 536.32,
+   "d": 2.0,
+   "text": "pieces of paper at a conference"
+  },
+  {
+   "t": 538.32,
+   "d": 4.32,
+   "text": "um so uh the thief class when originally"
+  },
+  {
+   "t": 542.64,
+   "d": 1.04,
+   "text": "added was"
+  },
+  {
+   "t": 543.68,
+   "d": 3.44,
+   "text": "uh was a class that uh"
+  },
+  {
+   "t": 547.12,
+   "d": 1.6,
+   "text": "had lower number of hit points than a"
+  },
+  {
+   "t": 548.72,
+   "d": 1.84,
+   "text": "normal character that"
+  },
+  {
+   "t": 550.56,
+   "d": 2.08,
+   "text": "could backstab could engage in stealth"
+  },
+  {
+   "t": 552.64,
+   "d": 1.28,
+   "text": "could detect traps"
+  },
+  {
+   "t": 553.92,
+   "d": 2.0,
+   "text": "could make use of magical items in ways"
+  },
+  {
+   "t": 555.92,
+   "d": 1.52,
+   "text": "that normal characters couldn't as well"
+  },
+  {
+   "t": 557.44,
+   "d": 2.16,
+   "text": "by reading scrolls which were normally"
+  },
+  {
+   "t": 559.6,
+   "d": 2.72,
+   "text": "set for wizards so there's all sorts of"
+  },
+  {
+   "t": 562.32,
+   "d": 2.08,
+   "text": "different ways in which it was set apart"
+  },
+  {
+   "t": 564.4,
+   "d": 1.92,
+   "text": "yet also there was this inherent idea"
+  },
+  {
+   "t": 566.32,
+   "d": 1.76,
+   "text": "that it was weaker"
+  },
+  {
+   "t": 568.08,
+   "d": 2.32,
+   "text": "okay and i had to rely on tricks on"
+  },
+  {
+   "t": 570.4,
+   "d": 0.88,
+   "text": "intelligence"
+  },
+  {
+   "t": 571.28,
+   "d": 2.24,
+   "text": "potentially charisma and that evolved"
+  },
+  {
+   "t": 573.52,
+   "d": 2.16,
+   "text": "into a whole a whole rogue class which"
+  },
+  {
+   "t": 575.68,
+   "d": 2.4,
+   "text": "includes things like bards and other"
+  },
+  {
+   "t": 578.08,
+   "d": 4.32,
+   "text": "uh other types of uh player character"
+  },
+  {
+   "t": 582.4,
+   "d": 1.6,
+   "text": "which all split off into different"
+  },
+  {
+   "t": 584.0,
+   "d": 1.84,
+   "text": "splinters of this idea of what a rogue"
+  },
+  {
+   "t": 585.84,
+   "d": 2.0,
+   "text": "means"
+  },
+  {
+   "t": 587.84,
+   "d": 3.52,
+   "text": "so going to the game rogue 40 years old"
+  },
+  {
+   "t": 591.36,
+   "d": 1.44,
+   "text": "this year i think that's a"
+  },
+  {
+   "t": 592.8,
+   "d": 2.96,
+   "text": "a really important thing to celebrate um"
+  },
+  {
+   "t": 595.76,
+   "d": 0.8,
+   "text": "rogue"
+  },
+  {
+   "t": 596.56,
+   "d": 3.68,
+   "text": "it should be noted as cold rogue"
+  },
+  {
+   "t": 601.68,
+   "d": 2.0,
+   "text": "that maybe seems obvious but you know it"
+  },
+  {
+   "t": 603.68,
+   "d": 1.28,
+   "text": "could easily have been called something"
+  },
+  {
+   "t": 604.96,
+   "d": 1.44,
+   "text": "else right and we could easily be"
+  },
+  {
+   "t": 606.4,
+   "d": 1.12,
+   "text": "talking about"
+  },
+  {
+   "t": 607.52,
+   "d": 1.84,
+   "text": "a completely different genre name right"
+  },
+  {
+   "t": 609.36,
+   "d": 2.4,
+   "text": "now if it had been called something else"
+  },
+  {
+   "t": 611.76,
+   "d": 3.44,
+   "text": "uh disappointingly when glenn wickman"
+  },
+  {
+   "t": 615.2,
+   "d": 1.68,
+   "text": "was asked on our podcast"
+  },
+  {
+   "t": 616.88,
+   "d": 2.48,
+   "text": "why uh it was called rogue his answer"
+  },
+  {
+   "t": 619.36,
+   "d": 1.04,
+   "text": "was"
+  },
+  {
+   "t": 620.4,
+   "d": 2.96,
+   "text": "because the word is short so it's quick"
+  },
+  {
+   "t": 623.36,
+   "d": 2.4,
+   "text": "to type into unix terminals"
+  },
+  {
+   "t": 625.76,
+   "d": 1.84,
+   "text": "that uh that's quite a disappointing"
+  },
+  {
+   "t": 627.6,
+   "d": 1.28,
+   "text": "answer glenn you gotta do better than"
+  },
+  {
+   "t": 628.88,
+   "d": 1.2,
+   "text": "that come on invent some sort of"
+  },
+  {
+   "t": 630.08,
+   "d": 1.6,
+   "text": "mythology around it came to you in a"
+  },
+  {
+   "t": 631.68,
+   "d": 0.32,
+   "text": "dream"
+  },
+  {
+   "t": 632.0,
+   "d": 3.44,
+   "text": "or something you know but okay so that's"
+  },
+  {
+   "t": 635.44,
+   "d": 2.56,
+   "text": "that's his literal reason for it i don't"
+  },
+  {
+   "t": 638.0,
+   "d": 0.72,
+   "text": "believe him"
+  },
+  {
+   "t": 638.72,
+   "d": 2.24,
+   "text": "though because as i've been talking"
+  },
+  {
+   "t": 640.96,
+   "d": 2.16,
+   "text": "rogues are part of our culture"
+  },
+  {
+   "t": 643.12,
+   "d": 2.24,
+   "text": "we don't use these words lightly okay he"
+  },
+  {
+   "t": 645.36,
+   "d": 1.12,
+   "text": "could have called the game"
+  },
+  {
+   "t": 646.48,
+   "d": 2.08,
+   "text": "hero and that would have been less"
+  },
+  {
+   "t": 648.56,
+   "d": 1.84,
+   "text": "characters so i think there was some"
+  },
+  {
+   "t": 650.4,
+   "d": 1.92,
+   "text": "subconscious thing about this"
+  },
+  {
+   "t": 652.32,
+   "d": 1.92,
+   "text": "the cultural implications of the word"
+  },
+  {
+   "t": 654.24,
+   "d": 2.24,
+   "text": "rogue that entered into their minds when"
+  },
+  {
+   "t": 656.48,
+   "d": 1.52,
+   "text": "they designed this game"
+  },
+  {
+   "t": 658.0,
+   "d": 3.28,
+   "text": "because it isn't just called rogue"
+  },
+  {
+   "t": 661.28,
+   "d": 2.56,
+   "text": "it has roguish elements to its game"
+  },
+  {
+   "t": 663.84,
+   "d": 0.72,
+   "text": "design"
+  },
+  {
+   "t": 664.56,
+   "d": 4.08,
+   "text": "okay so we've got a game where you start"
+  },
+  {
+   "t": 668.64,
+   "d": 2.96,
+   "text": "very weak okay you're you're not a"
+  },
+  {
+   "t": 671.6,
+   "d": 1.6,
+   "text": "strong character you're not a big muscly"
+  },
+  {
+   "t": 673.2,
+   "d": 1.28,
+   "text": "heroic character"
+  },
+  {
+   "t": 674.48,
+   "d": 2.24,
+   "text": "you're surrounded by unknowns it's got"
+  },
+  {
+   "t": 676.72,
+   "d": 2.32,
+   "text": "the item identification system"
+  },
+  {
+   "t": 679.04,
+   "d": 2.08,
+   "text": "it's got the the line of sight system"
+  },
+  {
+   "t": 681.12,
+   "d": 2.32,
+   "text": "it's got procedural generation system"
+  },
+  {
+   "t": 683.44,
+   "d": 2.0,
+   "text": "all of which add to this aspect of"
+  },
+  {
+   "t": 685.44,
+   "d": 2.64,
+   "text": "you're surrounded by unknown threats"
+  },
+  {
+   "t": 688.08,
+   "d": 1.52,
+   "text": "it's got a pressure system you would"
+  },
+  {
+   "t": 689.6,
+   "d": 2.32,
+   "text": "have heard rosalind talk earlier about"
+  },
+  {
+   "t": 691.92,
+   "d": 1.68,
+   "text": "hunger systems and pressure systems in"
+  },
+  {
+   "t": 693.6,
+   "d": 2.48,
+   "text": "rogue mics they come from rogue okay"
+  },
+  {
+   "t": 696.08,
+   "d": 2.16,
+   "text": "it had a hunger system a hunger clock"
+  },
+  {
+   "t": 698.24,
+   "d": 1.52,
+   "text": "which meant that you were never safe"
+  },
+  {
+   "t": 699.76,
+   "d": 3.12,
+   "text": "right you couldn't just stand still and"
+  },
+  {
+   "t": 702.88,
+   "d": 1.36,
+   "text": "rest up whenever you liked"
+  },
+  {
+   "t": 704.24,
+   "d": 2.24,
+   "text": "there was a continuous pressure and"
+  },
+  {
+   "t": 706.48,
+   "d": 1.76,
+   "text": "quite a strong pressure in many versions"
+  },
+  {
+   "t": 708.24,
+   "d": 0.72,
+   "text": "of the game"
+  },
+  {
+   "t": 708.96,
+   "d": 1.76,
+   "text": "to keep advancing otherwise you will"
+  },
+  {
+   "t": 710.72,
+   "d": 1.76,
+   "text": "starve to death"
+  },
+  {
+   "t": 712.48,
+   "d": 3.68,
+   "text": "and what like one unheroic way to die"
+  },
+  {
+   "t": 716.16,
+   "d": 0.64,
+   "text": "okay"
+  },
+  {
+   "t": 716.8,
+   "d": 2.4,
+   "text": "uh what a rogueish way to die you might"
+  },
+  {
+   "t": 719.2,
+   "d": 1.68,
+   "text": "be clutching some powerful item"
+  },
+  {
+   "t": 720.88,
+   "d": 3.04,
+   "text": "but you starve to death in the end um"
+  },
+  {
+   "t": 723.92,
+   "d": 2.4,
+   "text": "so there's an element of you can die"
+  },
+  {
+   "t": 726.32,
+   "d": 1.92,
+   "text": "quite pathetically in this game"
+  },
+  {
+   "t": 728.24,
+   "d": 3.28,
+   "text": "if you don't take it seriously um"
+  },
+  {
+   "t": 731.52,
+   "d": 1.68,
+   "text": "a threat there's the idea of this threat"
+  },
+  {
+   "t": 733.2,
+   "d": 1.36,
+   "text": "in the game and it's an escalating"
+  },
+  {
+   "t": 734.56,
+   "d": 1.68,
+   "text": "threat it keeps getting"
+  },
+  {
+   "t": 736.24,
+   "d": 3.2,
+   "text": "uh harder um but also opportunities for"
+  },
+  {
+   "t": 739.44,
+   "d": 1.2,
+   "text": "ingenuity and this"
+  },
+  {
+   "t": 740.64,
+   "d": 2.64,
+   "text": "to me comes to the real heart of what a"
+  },
+  {
+   "t": 743.28,
+   "d": 1.2,
+   "text": "rogue is about"
+  },
+  {
+   "t": 744.48,
+   "d": 1.68,
+   "text": "because you have all these things making"
+  },
+  {
+   "t": 746.16,
+   "d": 2.64,
+   "text": "it not particularly easy for you"
+  },
+  {
+   "t": 748.8,
+   "d": 1.6,
+   "text": "but you have your different items your"
+  },
+  {
+   "t": 750.4,
+   "d": 2.4,
+   "text": "abilities and opportunities"
+  },
+  {
+   "t": 752.8,
+   "d": 3.28,
+   "text": "which if used in clever ways can get you"
+  },
+  {
+   "t": 756.08,
+   "d": 2.48,
+   "text": "out of the situation"
+  },
+  {
+   "t": 758.56,
+   "d": 2.16,
+   "text": "so rogue is wonderful for giving you"
+  },
+  {
+   "t": 760.72,
+   "d": 1.36,
+   "text": "lots of opportunities"
+  },
+  {
+   "t": 762.08,
+   "d": 2.08,
+   "text": "to find clever solutions to different"
+  },
+  {
+   "t": 764.16,
+   "d": 2.0,
+   "text": "problems and you can think through them"
+  },
+  {
+   "t": 766.16,
+   "d": 1.84,
+   "text": "and the problems are always new and"
+  },
+  {
+   "t": 768.0,
+   "d": 2.24,
+   "text": "exciting and invigorating"
+  },
+  {
+   "t": 770.24,
+   "d": 1.52,
+   "text": "and you can feel really special and"
+  },
+  {
+   "t": 771.76,
+   "d": 3.44,
+   "text": "really broke-ish when you solve them"
+  },
+  {
+   "t": 775.2,
+   "d": 3.04,
+   "text": "now uh i have noted in the uh"
+  },
+  {
+   "t": 778.24,
+   "d": 1.68,
+   "text": "there was a sort of uh what was it"
+  },
+  {
+   "t": 779.92,
+   "d": 1.52,
+   "text": "called the preview event"
+  },
+  {
+   "t": 781.44,
+   "d": 2.32,
+   "text": "uh that road came with a few different"
+  },
+  {
+   "t": 783.76,
+   "d": 0.88,
+   "text": "covers and"
+  },
+  {
+   "t": 784.64,
+   "d": 2.56,
+   "text": "this some of them give different ideas"
+  },
+  {
+   "t": 787.2,
+   "d": 1.92,
+   "text": "of what the game is really about"
+  },
+  {
+   "t": 789.12,
+   "d": 2.64,
+   "text": "um i'm not going to go into as much"
+  },
+  {
+   "t": 791.76,
+   "d": 1.68,
+   "text": "detail but do check out the"
+  },
+  {
+   "t": 793.44,
+   "d": 2.16,
+   "text": "the preview event for more analysis of"
+  },
+  {
+   "t": 795.6,
+   "d": 1.2,
+   "text": "these two images and"
+  },
+  {
+   "t": 796.8,
+   "d": 2.08,
+   "text": "why the one on the left is so wrong for"
+  },
+  {
+   "t": 798.88,
+   "d": 2.48,
+   "text": "this game once the one on the right"
+  },
+  {
+   "t": 801.36,
+   "d": 2.0,
+   "text": "gets a little bit more representative of"
+  },
+  {
+   "t": 803.36,
+   "d": 1.92,
+   "text": "what the gameplay is about"
+  },
+  {
+   "t": 805.28,
+   "d": 1.28,
+   "text": "but importantly i'm just showing this as"
+  },
+  {
+   "t": 806.56,
+   "d": 2.16,
+   "text": "a segue into the idea of the"
+  },
+  {
+   "t": 808.72,
+   "d": 3.6,
+   "text": "hero trap so there is a concept"
+  },
+  {
+   "t": 812.32,
+   "d": 2.72,
+   "text": "that when a new player comes to play a"
+  },
+  {
+   "t": 815.04,
+   "d": 1.2,
+   "text": "roguelike"
+  },
+  {
+   "t": 816.24,
+   "d": 2.64,
+   "text": "uh when they haven't really encountered"
+  },
+  {
+   "t": 818.88,
+   "d": 0.88,
+   "text": "the genre before"
+  },
+  {
+   "t": 819.76,
+   "d": 3.04,
+   "text": "they fall into the hero trap"
+  },
+  {
+   "t": 822.8,
+   "d": 3.36,
+   "text": "an example of this is from ftl where"
+  },
+  {
+   "t": 826.16,
+   "d": 1.44,
+   "text": "there's an event called the"
+  },
+  {
+   "t": 827.6,
+   "d": 4.24,
+   "text": "giant alien spiders event and"
+  },
+  {
+   "t": 831.84,
+   "d": 1.92,
+   "text": "by default you have two options right"
+  },
+  {
+   "t": 833.76,
+   "d": 1.36,
+   "text": "you're being told a station's been"
+  },
+  {
+   "t": 835.12,
+   "d": 1.84,
+   "text": "overrun by giant alien spiders"
+  },
+  {
+   "t": 836.96,
+   "d": 2.96,
+   "text": "and the first option is send the crew to"
+  },
+  {
+   "t": 839.92,
+   "d": 3.28,
+   "text": "help giant damien spiders are no joke"
+  },
+  {
+   "t": 843.2,
+   "d": 2.72,
+   "text": "the second option is no thanks leave"
+  },
+  {
+   "t": 845.92,
+   "d": 1.2,
+   "text": "them alone"
+  },
+  {
+   "t": 847.12,
+   "d": 2.0,
+   "text": "experienced ftl players will know which"
+  },
+  {
+   "t": 849.12,
+   "d": 1.12,
+   "text": "is the correct option"
+  },
+  {
+   "t": 850.24,
+   "d": 2.96,
+   "text": "to choose in this instance um it is not"
+  },
+  {
+   "t": 853.2,
+   "d": 1.84,
+   "text": "the heroic option okay"
+  },
+  {
+   "t": 855.04,
+   "d": 2.48,
+   "text": "if you come from another game like a"
+  },
+  {
+   "t": 857.52,
+   "d": 1.92,
+   "text": "like another standard rpg where you just"
+  },
+  {
+   "t": 859.44,
+   "d": 1.44,
+   "text": "say yes to every quest you"
+  },
+  {
+   "t": 860.88,
+   "d": 3.28,
+   "text": "by default choose the heroic option um"
+  },
+  {
+   "t": 864.16,
+   "d": 2.96,
+   "text": "you will die a lot in roguelikes okay"
+  },
+  {
+   "t": 867.12,
+   "d": 0.56,
+   "text": "and this"
+  },
+  {
+   "t": 867.68,
+   "d": 2.08,
+   "text": "particular event is an example of a hero"
+  },
+  {
+   "t": 869.76,
+   "d": 1.52,
+   "text": "trap because"
+  },
+  {
+   "t": 871.28,
+   "d": 1.76,
+   "text": "people coming to roguelikes expecting to"
+  },
+  {
+   "t": 873.04,
+   "d": 2.4,
+   "text": "be the hero suddenly find that being a"
+  },
+  {
+   "t": 875.44,
+   "d": 3.12,
+   "text": "hero is not the way to survive"
+  },
+  {
+   "t": 878.56,
+   "d": 2.0,
+   "text": "um so i'll go into this in a lot more"
+  },
+  {
+   "t": 880.56,
+   "d": 1.92,
+   "text": "depth in a"
+  },
+  {
+   "t": 882.48,
+   "d": 1.52,
+   "text": "roguelike radio episode about quite"
+  },
+  {
+   "t": 884.0,
+   "d": 1.52,
+   "text": "specifically this topic"
+  },
+  {
+   "t": 885.52,
+   "d": 2.16,
+   "text": "uh but i want to briefly touch on the"
+  },
+  {
+   "t": 887.68,
+   "d": 1.2,
+   "text": "fact that you know"
+  },
+  {
+   "t": 888.88,
+   "d": 1.28,
+   "text": "we are talking about games that are"
+  },
+  {
+   "t": 890.16,
+   "d": 2.08,
+   "text": "about rogues and not about heroes"
+  },
+  {
+   "t": 892.24,
+   "d": 1.36,
+   "text": "and it's important for us to be able to"
+  },
+  {
+   "t": 893.6,
+   "d": 1.92,
+   "text": "differentiate those ideas"
+  },
+  {
+   "t": 895.52,
+   "d": 3.44,
+   "text": "so heroes versus rogues they're the hero"
+  },
+  {
+   "t": 898.96,
+   "d": 0.72,
+   "text": "typically"
+  },
+  {
+   "t": 899.68,
+   "d": 2.96,
+   "text": "uh has a noble cause whilst a rogue in a"
+  },
+  {
+   "t": 902.64,
+   "d": 1.84,
+   "text": "lot of fiction will be"
+  },
+  {
+   "t": 904.48,
+   "d": 1.52,
+   "text": "involved for self-interest they'll be"
+  },
+  {
+   "t": 906.0,
+   "d": 1.52,
+   "text": "wanting to win gold or"
+  },
+  {
+   "t": 907.52,
+   "d": 3.44,
+   "text": "rescue an amulet uh for their own"
+  },
+  {
+   "t": 910.96,
+   "d": 2.56,
+   "text": "personal gain uh the hero often is a"
+  },
+  {
+   "t": 913.52,
+   "d": 1.44,
+   "text": "defender of the establishment"
+  },
+  {
+   "t": 914.96,
+   "d": 1.44,
+   "text": "you know on a quest from the king or"
+  },
+  {
+   "t": 916.4,
+   "d": 1.28,
+   "text": "something like that what's the rogue is"
+  },
+  {
+   "t": 917.68,
+   "d": 1.04,
+   "text": "a rebel"
+  },
+  {
+   "t": 918.72,
+   "d": 2.24,
+   "text": "uh typically doing something that goes"
+  },
+  {
+   "t": 920.96,
+   "d": 2.56,
+   "text": "against some sort of evil empire"
+  },
+  {
+   "t": 923.52,
+   "d": 3.28,
+   "text": "the hero might be inspired by destiny"
+  },
+  {
+   "t": 926.8,
+   "d": 2.64,
+   "text": "on a divine quest uh was the rogues"
+  },
+  {
+   "t": 929.44,
+   "d": 1.6,
+   "text": "often accidentally involved if not"
+  },
+  {
+   "t": 931.04,
+   "d": 0.64,
+   "text": "involved just"
+  },
+  {
+   "t": 931.68,
+   "d": 2.08,
+   "text": "purely for their own self game and we"
+  },
+  {
+   "t": 933.76,
+   "d": 1.2,
+   "text": "see this in roguelikes of course you"
+  },
+  {
+   "t": 934.96,
+   "d": 1.12,
+   "text": "know how on earth"
+  },
+  {
+   "t": 936.08,
+   "d": 2.48,
+   "text": "can you be the one true destiny person"
+  },
+  {
+   "t": 938.56,
+   "d": 1.48,
+   "text": "when you are number"
+  },
+  {
+   "t": 940.04,
+   "d": 3.72,
+   "text": "1048 of players killed by the"
+  },
+  {
+   "t": 943.76,
+   "d": 3.2,
+   "text": "just uh this month alone so you know the"
+  },
+  {
+   "t": 946.96,
+   "d": 1.84,
+   "text": "idea of a destiny a divine quest a"
+  },
+  {
+   "t": 948.8,
+   "d": 0.96,
+   "text": "heroic quest"
+  },
+  {
+   "t": 949.76,
+   "d": 2.32,
+   "text": "doesn't gel well with a roguelike theme"
+  },
+  {
+   "t": 952.08,
+   "d": 1.44,
+   "text": "of game"
+  },
+  {
+   "t": 953.52,
+   "d": 2.32,
+   "text": "um heroes have big swords rogues small"
+  },
+  {
+   "t": 955.84,
+   "d": 2.0,
+   "text": "daggers it's not the size that matters"
+  },
+  {
+   "t": 957.84,
+   "d": 2.24,
+   "text": "it's what you do with it that counts"
+  },
+  {
+   "t": 960.08,
+   "d": 2.88,
+   "text": "uh heroes are brave rogues are cautious"
+  },
+  {
+   "t": 962.96,
+   "d": 1.04,
+   "text": "if not actively"
+  },
+  {
+   "t": 964.0,
+   "d": 2.56,
+   "text": "running away uh hero will try and"
+  },
+  {
+   "t": 966.56,
+   "d": 0.88,
+   "text": "intimidate"
+  },
+  {
+   "t": 967.44,
+   "d": 2.24,
+   "text": "an enemy whilst the rogue will quite"
+  },
+  {
+   "t": 969.68,
+   "d": 2.08,
+   "text": "literally run away at the sign of"
+  },
+  {
+   "t": 971.76,
+   "d": 2.56,
+   "text": "overwhelming danger uh a hero will"
+  },
+  {
+   "t": 974.32,
+   "d": 1.36,
+   "text": "engage in a"
+  },
+  {
+   "t": 975.68,
+   "d": 2.88,
+   "text": "uh a jewel you know an honorable jewel"
+  },
+  {
+   "t": 978.56,
+   "d": 1.2,
+   "text": "whilst the hero will"
+  },
+  {
+   "t": 979.76,
+   "d": 2.24,
+   "text": "sneak up or the rogue will sneak up and"
+  },
+  {
+   "t": 982.0,
+   "d": 1.68,
+   "text": "backstab you know"
+  },
+  {
+   "t": 983.68,
+   "d": 3.2,
+   "text": "uh there's no room for for honor"
+  },
+  {
+   "t": 986.88,
+   "d": 2.08,
+   "text": "in the road um especially if there's"
+  },
+  {
+   "t": 988.96,
+   "d": 1.44,
+   "text": "some advantage to be had in"
+  },
+  {
+   "t": 990.4,
+   "d": 3.04,
+   "text": "ignoring that um the hero might win by"
+  },
+  {
+   "t": 993.44,
+   "d": 1.52,
+   "text": "the power of love and friendship and all"
+  },
+  {
+   "t": 994.96,
+   "d": 1.36,
+   "text": "that sort of thing"
+  },
+  {
+   "t": 996.32,
+   "d": 1.76,
+   "text": "the hero the rogue will win by"
+  },
+  {
+   "t": 998.08,
+   "d": 2.08,
+   "text": "craftiness and intelligence and coming"
+  },
+  {
+   "t": 1000.16,
+   "d": 2.32,
+   "text": "up with clever ways to get out of things"
+  },
+  {
+   "t": 1002.48,
+   "d": 1.68,
+   "text": "uh at the end of the quest the hero will"
+  },
+  {
+   "t": 1004.16,
+   "d": 2.08,
+   "text": "refuse the war the reward that's on"
+  },
+  {
+   "t": 1006.24,
+   "d": 1.76,
+   "text": "offer once the whole the rogue"
+  },
+  {
+   "t": 1008.0,
+   "d": 1.84,
+   "text": "will steal whatever valuables are not"
+  },
+  {
+   "t": 1009.84,
+   "d": 1.68,
+   "text": "nailed down"
+  },
+  {
+   "t": 1011.52,
+   "d": 2.56,
+   "text": "and the hero might win the princess at"
+  },
+  {
+   "t": 1014.08,
+   "d": 1.76,
+   "text": "the end of the quest once the rogue"
+  },
+  {
+   "t": 1015.84,
+   "d": 1.92,
+   "text": "typically is associated with seducing"
+  },
+  {
+   "t": 1017.76,
+   "d": 1.84,
+   "text": "the princess"
+  },
+  {
+   "t": 1019.6,
+   "d": 2.08,
+   "text": "so there's some ideas of how heroes and"
+  },
+  {
+   "t": 1021.68,
+   "d": 1.28,
+   "text": "rogues are different"
+  },
+  {
+   "t": 1022.96,
+   "d": 2.88,
+   "text": "um but let's dive in in a little bit"
+  },
+  {
+   "t": 1025.84,
+   "d": 1.2,
+   "text": "more depth about"
+  },
+  {
+   "t": 1027.04,
+   "d": 2.32,
+   "text": "designing for the very idea of a rogue"
+  },
+  {
+   "t": 1029.36,
+   "d": 2.08,
+   "text": "so not just in comparison with heroes"
+  },
+  {
+   "t": 1031.44,
+   "d": 3.52,
+   "text": "but things are intrinsic to rogues"
+  },
+  {
+   "t": 1034.96,
+   "d": 3.04,
+   "text": "um so firstly"
+  },
+  {
+   "t": 1038.0,
+   "d": 1.44,
+   "text": "for the main thing to consider is your"
+  },
+  {
+   "t": 1039.44,
+   "d": 1.84,
+   "text": "theme right if you're making a roguelike"
+  },
+  {
+   "t": 1041.28,
+   "d": 1.6,
+   "text": "game and your theme is a big"
+  },
+  {
+   "t": 1042.88,
+   "d": 2.0,
+   "text": "muscly warrior all your your artwork and"
+  },
+  {
+   "t": 1044.88,
+   "d": 1.6,
+   "text": "all your your names"
+  },
+  {
+   "t": 1046.48,
+   "d": 2.08,
+   "text": "are emphasizing an idea of a heroic"
+  },
+  {
+   "t": 1048.56,
+   "d": 1.2,
+   "text": "character"
+  },
+  {
+   "t": 1049.76,
+   "d": 2.08,
+   "text": "then you're probably not presenting well"
+  },
+  {
+   "t": 1051.84,
+   "d": 1.6,
+   "text": "the idea that this is a roguelike you're"
+  },
+  {
+   "t": 1053.44,
+   "d": 1.6,
+   "text": "not setting up the player very well to"
+  },
+  {
+   "t": 1055.04,
+   "d": 1.76,
+   "text": "anticipate the type of gameplay they're"
+  },
+  {
+   "t": 1056.8,
+   "d": 2.16,
+   "text": "going to encounter"
+  },
+  {
+   "t": 1058.96,
+   "d": 2.96,
+   "text": "whereas instead if your theme emphasizes"
+  },
+  {
+   "t": 1061.92,
+   "d": 1.84,
+   "text": "the threat"
+  },
+  {
+   "t": 1063.76,
+   "d": 3.04,
+   "text": "emphasizes the challenge um emphasizes"
+  },
+  {
+   "t": 1066.8,
+   "d": 0.96,
+   "text": "the danger"
+  },
+  {
+   "t": 1067.76,
+   "d": 2.64,
+   "text": "then that better uh incorporates the"
+  },
+  {
+   "t": 1070.4,
+   "d": 1.6,
+   "text": "idea that that is a rogue they're"
+  },
+  {
+   "t": 1072.0,
+   "d": 1.04,
+   "text": "playing"
+  },
+  {
+   "t": 1073.04,
+   "d": 3.2,
+   "text": "but also the theme should consider"
+  },
+  {
+   "t": 1076.24,
+   "d": 2.88,
+   "text": "the rogue as a sort of tricky individual"
+  },
+  {
+   "t": 1079.12,
+   "d": 0.88,
+   "text": "as a"
+  },
+  {
+   "t": 1080.0,
+   "d": 2.32,
+   "text": "where intelligence is the way to get"
+  },
+  {
+   "t": 1082.32,
+   "d": 1.04,
+   "text": "through"
+  },
+  {
+   "t": 1083.36,
+   "d": 3.44,
+   "text": "um so just in terms of the way your main"
+  },
+  {
+   "t": 1086.8,
+   "d": 2.4,
+   "text": "character is presented the way in which"
+  },
+  {
+   "t": 1089.2,
+   "d": 2.56,
+   "text": "uh if there is a story how it enforces"
+  },
+  {
+   "t": 1091.76,
+   "d": 1.84,
+   "text": "how that character got involved"
+  },
+  {
+   "t": 1093.6,
+   "d": 1.28,
+   "text": "there's lots of different ways you can"
+  },
+  {
+   "t": 1094.88,
+   "d": 1.76,
+   "text": "layer on the theme the idea that it's a"
+  },
+  {
+   "t": 1096.64,
+   "d": 1.36,
+   "text": "rogue you're playing"
+  },
+  {
+   "t": 1098.0,
+   "d": 5.12,
+   "text": "um and that we can uh"
+  },
+  {
+   "t": 1103.12,
+   "d": 1.52,
+   "text": "and that the player should be expecting"
+  },
+  {
+   "t": 1104.64,
+   "d": 2.0,
+   "text": "to play in a roguish fashion"
+  },
+  {
+   "t": 1106.64,
+   "d": 2.4,
+   "text": "right uh importantly you know a lot of"
+  },
+  {
+   "t": 1109.04,
+   "d": 2.08,
+   "text": "that upfront really reinforces the idea"
+  },
+  {
+   "t": 1111.12,
+   "d": 0.32,
+   "text": "of"
+  },
+  {
+   "t": 1111.44,
+   "d": 2.0,
+   "text": "how the players should be approaching"
+  },
+  {
+   "t": 1113.44,
+   "d": 1.36,
+   "text": "your game um"
+  },
+  {
+   "t": 1114.8,
+   "d": 2.24,
+   "text": "you'll have seen the talk earlier by"
+  },
+  {
+   "t": 1117.04,
+   "d": 1.52,
+   "text": "andrew a versa"
+  },
+  {
+   "t": 1118.56,
+   "d": 2.16,
+   "text": "on permadeath and all the different"
+  },
+  {
+   "t": 1120.72,
+   "d": 1.28,
+   "text": "reviews of like oh"
+  },
+  {
+   "t": 1122.0,
+   "d": 1.92,
+   "text": "how the permadeath is so terrible and"
+  },
+  {
+   "t": 1123.92,
+   "d": 1.44,
+   "text": "stuff you know a lot of that is so much"
+  },
+  {
+   "t": 1125.36,
+   "d": 1.44,
+   "text": "down to the framing"
+  },
+  {
+   "t": 1126.8,
+   "d": 3.04,
+   "text": "if people don't understand uh"
+  },
+  {
+   "t": 1129.84,
+   "d": 2.0,
+   "text": "the the style of game it is or what's"
+  },
+  {
+   "t": 1131.84,
+   "d": 1.52,
+   "text": "expected of them and playing it then"
+  },
+  {
+   "t": 1133.36,
+   "d": 1.6,
+   "text": "they will approach it like"
+  },
+  {
+   "t": 1134.96,
+   "d": 2.96,
+   "text": "a standard rpg and not quite get the"
+  },
+  {
+   "t": 1137.92,
+   "d": 2.0,
+   "text": "behavior they're supposed to do"
+  },
+  {
+   "t": 1139.92,
+   "d": 2.72,
+   "text": "um especially when you consider you know"
+  },
+  {
+   "t": 1142.64,
+   "d": 1.44,
+   "text": "a lot of the trappings that we have in"
+  },
+  {
+   "t": 1144.08,
+   "d": 1.28,
+   "text": "roguelikes a lot of the game mechanics"
+  },
+  {
+   "t": 1145.36,
+   "d": 0.8,
+   "text": "we have about"
+  },
+  {
+   "t": 1146.16,
+   "d": 1.92,
+   "text": "detecting traps for instance or or"
+  },
+  {
+   "t": 1148.08,
+   "d": 2.64,
+   "text": "status effects often they're just like"
+  },
+  {
+   "t": 1150.72,
+   "d": 1.68,
+   "text": "little optional side extras in a"
+  },
+  {
+   "t": 1152.4,
+   "d": 1.6,
+   "text": "standard rpg whereas they end up"
+  },
+  {
+   "t": 1154.0,
+   "d": 1.84,
+   "text": "becoming core required features for you"
+  },
+  {
+   "t": 1155.84,
+   "d": 0.56,
+   "text": "to"
+  },
+  {
+   "t": 1156.4,
+   "d": 3.2,
+   "text": "really take advantage of in a roguelike"
+  },
+  {
+   "t": 1159.6,
+   "d": 1.44,
+   "text": "so it's important to separate out your"
+  },
+  {
+   "t": 1161.04,
+   "d": 2.48,
+   "text": "game in that way"
+  },
+  {
+   "t": 1163.52,
+   "d": 2.08,
+   "text": "reinforcing running away is something"
+  },
+  {
+   "t": 1165.6,
+   "d": 2.64,
+   "text": "that is difficult to do but important"
+  },
+  {
+   "t": 1168.24,
+   "d": 2.16,
+   "text": "um and in particular there's there's the"
+  },
+  {
+   "t": 1170.4,
+   "d": 1.76,
+   "text": "idea when you're playing a roguelike"
+  },
+  {
+   "t": 1172.16,
+   "d": 2.8,
+   "text": "that you suddenly realize this is a bad"
+  },
+  {
+   "t": 1174.96,
+   "d": 1.2,
+   "text": "situation"
+  },
+  {
+   "t": 1176.16,
+   "d": 3.12,
+   "text": "right uh and you have to get away so i"
+  },
+  {
+   "t": 1179.28,
+   "d": 0.4,
+   "text": "mean"
+  },
+  {
+   "t": 1179.68,
+   "d": 1.92,
+   "text": "firstly a game needs to give the player"
+  },
+  {
+   "t": 1181.6,
+   "d": 1.76,
+   "text": "escape options running away is a core"
+  },
+  {
+   "t": 1183.36,
+   "d": 1.04,
+   "text": "part of being a rogue"
+  },
+  {
+   "t": 1184.4,
+   "d": 2.08,
+   "text": "the idea of regrouping or even just"
+  },
+  {
+   "t": 1186.48,
+   "d": 1.36,
+   "text": "avoiding that fight you don't need to"
+  },
+  {
+   "t": 1187.84,
+   "d": 1.36,
+   "text": "kill that thing to progress"
+  },
+  {
+   "t": 1189.2,
+   "d": 1.36,
+   "text": "you can run away to the stairs go down"
+  },
+  {
+   "t": 1190.56,
+   "d": 2.08,
+   "text": "to the next level hopefully that"
+  },
+  {
+   "t": 1192.64,
+   "d": 2.32,
+   "text": "we can get around it in future as well"
+  },
+  {
+   "t": 1194.96,
+   "d": 0.88,
+   "text": "um so"
+  },
+  {
+   "t": 1195.84,
+   "d": 2.16,
+   "text": "you can have monsters that are literally"
+  },
+  {
+   "t": 1198.0,
+   "d": 1.84,
+   "text": "impossible to kill for instance"
+  },
+  {
+   "t": 1199.84,
+   "d": 1.84,
+   "text": "uh you have to run away and that teaches"
+  },
+  {
+   "t": 1201.68,
+   "d": 1.6,
+   "text": "the player there's no getting around"
+  },
+  {
+   "t": 1203.28,
+   "d": 1.68,
+   "text": "this if you keep trying to attack this"
+  },
+  {
+   "t": 1204.96,
+   "d": 0.4,
+   "text": "thing"
+  },
+  {
+   "t": 1205.36,
+   "d": 2.72,
+   "text": "you will just keep dying um but giving"
+  },
+  {
+   "t": 1208.08,
+   "d": 1.76,
+   "text": "escape option giving way of getting away"
+  },
+  {
+   "t": 1209.84,
+   "d": 0.72,
+   "text": "easily"
+  },
+  {
+   "t": 1210.56,
+   "d": 2.24,
+   "text": "and inserting the right warnings in the"
+  },
+  {
+   "t": 1212.8,
+   "d": 1.6,
+   "text": "games and certain the right mental"
+  },
+  {
+   "t": 1214.4,
+   "d": 1.04,
+   "text": "breaks so you stop"
+  },
+  {
+   "t": 1215.44,
+   "d": 1.84,
+   "text": "going from the heroic charge mental"
+  },
+  {
+   "t": 1217.28,
+   "d": 2.32,
+   "text": "attitude to the oh dear i need to"
+  },
+  {
+   "t": 1219.6,
+   "d": 1.84,
+   "text": "reevaluate my options here"
+  },
+  {
+   "t": 1221.44,
+   "d": 2.96,
+   "text": "uh mental state um some games do this"
+  },
+  {
+   "t": 1224.4,
+   "d": 1.92,
+   "text": "with warning signs flashing"
+  },
+  {
+   "t": 1226.32,
+   "d": 2.32,
+   "text": "uh you're flashing the screen red things"
+  },
+  {
+   "t": 1228.64,
+   "d": 1.6,
+   "text": "like that there's various ways to"
+  },
+  {
+   "t": 1230.24,
+   "d": 2.08,
+   "text": "reinforce you're in danger rethink what"
+  },
+  {
+   "t": 1232.32,
+   "d": 2.0,
+   "text": "you're doing um"
+  },
+  {
+   "t": 1234.32,
+   "d": 2.24,
+   "text": "signaling threats so making sure that"
+  },
+  {
+   "t": 1236.56,
+   "d": 0.88,
+   "text": "you know"
+  },
+  {
+   "t": 1237.44,
+   "d": 1.52,
+   "text": "your game isn't just full of lots of"
+  },
+  {
+   "t": 1238.96,
+   "d": 1.52,
+   "text": "creatures that look all cuddly but are"
+  },
+  {
+   "t": 1240.48,
+   "d": 1.52,
+   "text": "actually quite terrifying"
+  },
+  {
+   "t": 1242.0,
+   "d": 2.8,
+   "text": "um so even down to the the dungeon"
+  },
+  {
+   "t": 1244.8,
+   "d": 0.88,
+   "text": "design"
+  },
+  {
+   "t": 1245.68,
+   "d": 2.24,
+   "text": "um you know there's various games where"
+  },
+  {
+   "t": 1247.92,
+   "d": 1.84,
+   "text": "you enter a really difficult level"
+  },
+  {
+   "t": 1249.76,
+   "d": 1.92,
+   "text": "and you'll get you get a special threat"
+  },
+  {
+   "t": 1251.68,
+   "d": 1.76,
+   "text": "message or the walls will be a different"
+  },
+  {
+   "t": 1253.44,
+   "d": 0.96,
+   "text": "color"
+  },
+  {
+   "t": 1254.4,
+   "d": 2.64,
+   "text": "um and that the enemies you know an"
+  },
+  {
+   "t": 1257.04,
+   "d": 1.6,
+   "text": "enemy boss is a special color or"
+  },
+  {
+   "t": 1258.64,
+   "d": 1.84,
+   "text": "especially highlighted in some way"
+  },
+  {
+   "t": 1260.48,
+   "d": 2.56,
+   "text": "ensuring that the player has the option"
+  },
+  {
+   "t": 1263.04,
+   "d": 0.96,
+   "text": "of knowing"
+  },
+  {
+   "t": 1264.0,
+   "d": 1.52,
+   "text": "these are the real things i need to care"
+  },
+  {
+   "t": 1265.52,
+   "d": 1.6,
+   "text": "about"
+  },
+  {
+   "t": 1267.12,
+   "d": 2.56,
+   "text": "um hard choices so making sure that the"
+  },
+  {
+   "t": 1269.68,
+   "d": 0.48,
+   "text": "player"
+  },
+  {
+   "t": 1270.16,
+   "d": 2.48,
+   "text": "doesn't always just have press x to win"
+  },
+  {
+   "t": 1272.64,
+   "d": 1.04,
+   "text": "okay that"
+  },
+  {
+   "t": 1273.68,
+   "d": 2.08,
+   "text": "um so things like inventory limits force"
+  },
+  {
+   "t": 1275.76,
+   "d": 1.76,
+   "text": "them to assess the value of different"
+  },
+  {
+   "t": 1277.52,
+   "d": 0.88,
+   "text": "items"
+  },
+  {
+   "t": 1278.4,
+   "d": 3.44,
+   "text": "that they have to carry um or"
+  },
+  {
+   "t": 1281.84,
+   "d": 1.28,
+   "text": "or lots of other things where you have"
+  },
+  {
+   "t": 1283.12,
+   "d": 1.92,
+   "text": "to make a choice between x and y"
+  },
+  {
+   "t": 1285.04,
+   "d": 2.24,
+   "text": "and it's really not an easy choice okay"
+  },
+  {
+   "t": 1287.28,
+   "d": 1.68,
+   "text": "so never make it so that"
+  },
+  {
+   "t": 1288.96,
+   "d": 1.76,
+   "text": "upgrading your sword is always really"
+  },
+  {
+   "t": 1290.72,
+   "d": 1.84,
+   "text": "obvious that one's plus one"
+  },
+  {
+   "t": 1292.56,
+   "d": 3.04,
+   "text": "this one's plus two oh i'm sorry"
+  },
+  {
+   "t": 1295.6,
+   "d": 1.28,
+   "text": "i've got a hard choice of whether to"
+  },
+  {
+   "t": 1296.88,
+   "d": 3.6,
+   "text": "continue this uh talk right now"
+  },
+  {
+   "t": 1300.48,
+   "d": 2.16,
+   "text": "i'm gonna uh opt give her a little"
+  },
+  {
+   "t": 1302.64,
+   "d": 1.52,
+   "text": "potion there we go"
+  },
+  {
+   "t": 1304.16,
+   "d": 4.16,
+   "text": "all fine um opportunities to feel clever"
+  },
+  {
+   "t": 1308.32,
+   "d": 1.6,
+   "text": "is the really important thing"
+  },
+  {
+   "t": 1309.92,
+   "d": 3.2,
+   "text": "uh so making sure that uh"
+  },
+  {
+   "t": 1313.12,
+   "d": 1.44,
+   "text": "that there are other different items the"
+  },
+  {
+   "t": 1314.56,
+   "d": 2.16,
+   "text": "different systems in there"
+  },
+  {
+   "t": 1316.72,
+   "d": 1.84,
+   "text": "for the player to be able to combine in"
+  },
+  {
+   "t": 1318.56,
+   "d": 2.0,
+   "text": "an interesting way"
+  },
+  {
+   "t": 1320.56,
+   "d": 1.68,
+   "text": "so that they're not just doing an"
+  },
+  {
+   "t": 1322.24,
+   "d": 2.0,
+   "text": "obvious thing all the time they can find"
+  },
+  {
+   "t": 1324.24,
+   "d": 1.44,
+   "text": "interesting ways out of what"
+  },
+  {
+   "t": 1325.68,
+   "d": 2.48,
+   "text": "looked like on the surface in possible"
+  },
+  {
+   "t": 1328.16,
+   "d": 2.64,
+   "text": "or very difficult scenarios"
+  },
+  {
+   "t": 1330.8,
+   "d": 1.68,
+   "text": "so making sure those options are there"
+  },
+  {
+   "t": 1332.48,
+   "d": 1.92,
+   "text": "making sure those options are clear"
+  },
+  {
+   "t": 1334.4,
+   "d": 3.04,
+   "text": "okay uh sometimes i think uh"
+  },
+  {
+   "t": 1337.44,
+   "d": 2.16,
+   "text": "some of the bigger games fill the game"
+  },
+  {
+   "t": 1339.6,
+   "d": 0.96,
+   "text": "with so much junk"
+  },
+  {
+   "t": 1340.56,
+   "d": 1.36,
+   "text": "that you forget what's important or"
+  },
+  {
+   "t": 1341.92,
+   "d": 1.68,
+   "text": "what's clever um"
+  },
+  {
+   "t": 1343.6,
+   "d": 1.44,
+   "text": "so making sure that you can't signal"
+  },
+  {
+   "t": 1345.04,
+   "d": 1.92,
+   "text": "that to the player is very important"
+  },
+  {
+   "t": 1346.96,
+   "d": 1.92,
+   "text": "and lastly making the player different"
+  },
+  {
+   "t": 1348.88,
+   "d": 1.12,
+   "text": "from the enemies"
+  },
+  {
+   "t": 1350.0,
+   "d": 2.56,
+   "text": "um there's this old notion that the a"
+  },
+  {
+   "t": 1352.56,
+   "d": 1.12,
+   "text": "player is a monster"
+  },
+  {
+   "t": 1353.68,
+   "d": 2.56,
+   "text": "in roguelike design that's more about"
+  },
+  {
+   "t": 1356.24,
+   "d": 1.52,
+   "text": "how the players integrated into the"
+  },
+  {
+   "t": 1357.76,
+   "d": 1.76,
+   "text": "environment so like if a bomb goes off"
+  },
+  {
+   "t": 1359.52,
+   "d": 1.52,
+   "text": "it affects you just in the same way you"
+  },
+  {
+   "t": 1361.04,
+   "d": 1.12,
+   "text": "affect the enemy"
+  },
+  {
+   "t": 1362.16,
+   "d": 1.2,
+   "text": "but i think it's quite important in the"
+  },
+  {
+   "t": 1363.36,
+   "d": 2.32,
+   "text": "mechanics then your player"
+  },
+  {
+   "t": 1365.68,
+   "d": 2.4,
+   "text": "functions in a different way from the"
+  },
+  {
+   "t": 1368.08,
+   "d": 1.68,
+   "text": "other entities in the game"
+  },
+  {
+   "t": 1369.76,
+   "d": 2.32,
+   "text": "to signal that idea of separatism being"
+  },
+  {
+   "t": 1372.08,
+   "d": 1.44,
+   "text": "different from the herd"
+  },
+  {
+   "t": 1373.52,
+   "d": 2.72,
+   "text": "uh so an example of all these different"
+  },
+  {
+   "t": 1376.24,
+   "d": 1.68,
+   "text": "things is a screenshot there"
+  },
+  {
+   "t": 1377.92,
+   "d": 2.32,
+   "text": "of a game i made once called toby the"
+  },
+  {
+   "t": 1380.24,
+   "d": 1.76,
+   "text": "trapper this little seven-day roguelike"
+  },
+  {
+   "t": 1382.0,
+   "d": 0.8,
+   "text": "i made"
+  },
+  {
+   "t": 1382.8,
+   "d": 3.36,
+   "text": "um in this you play a gnome facing an"
+  },
+  {
+   "t": 1386.16,
+   "d": 1.28,
+   "text": "army of goblins"
+  },
+  {
+   "t": 1387.44,
+   "d": 3.04,
+   "text": "no sorry facing army of ogres okay you"
+  },
+  {
+   "t": 1390.48,
+   "d": 2.64,
+   "text": "cannot attack the ogres directly"
+  },
+  {
+   "t": 1393.12,
+   "d": 3.04,
+   "text": "um and they can kill you in one hit"
+  },
+  {
+   "t": 1396.16,
+   "d": 2.8,
+   "text": "so this thematically showing that you're"
+  },
+  {
+   "t": 1398.96,
+   "d": 1.52,
+   "text": "facing powerful things"
+  },
+  {
+   "t": 1400.48,
+   "d": 1.52,
+   "text": "and the idea of running away is"
+  },
+  {
+   "t": 1402.0,
+   "d": 2.08,
+   "text": "intrinsic to the game because"
+  },
+  {
+   "t": 1404.08,
+   "d": 3.04,
+   "text": "you cannot attack them head on um the"
+  },
+  {
+   "t": 1407.12,
+   "d": 1.2,
+   "text": "game you can only"
+  },
+  {
+   "t": 1408.32,
+   "d": 2.16,
+   "text": "harm enemies by laying traps right"
+  },
+  {
+   "t": 1410.48,
+   "d": 1.52,
+   "text": "that's the only thing you can do but"
+  },
+  {
+   "t": 1412.0,
+   "d": 1.44,
+   "text": "there's various different clever traps"
+  },
+  {
+   "t": 1413.44,
+   "d": 1.12,
+   "text": "that you can chain together in"
+  },
+  {
+   "t": 1414.56,
+   "d": 1.04,
+   "text": "interesting ways"
+  },
+  {
+   "t": 1415.6,
+   "d": 2.72,
+   "text": "to hit them in interesting effects and"
+  },
+  {
+   "t": 1418.32,
+   "d": 1.52,
+   "text": "you have double the movement speed of"
+  },
+  {
+   "t": 1419.84,
+   "d": 1.68,
+   "text": "every enemy"
+  },
+  {
+   "t": 1421.52,
+   "d": 3.52,
+   "text": "um so you're always able to run away uh"
+  },
+  {
+   "t": 1425.04,
+   "d": 2.08,
+   "text": "so you can be in a position where you're"
+  },
+  {
+   "t": 1427.12,
+   "d": 1.44,
+   "text": "always feeling threatened you're"
+  },
+  {
+   "t": 1428.56,
+   "d": 2.08,
+   "text": "surrounded by monsters yet you know if"
+  },
+  {
+   "t": 1430.64,
+   "d": 2.0,
+   "text": "you move cleverly or you lay your traps"
+  },
+  {
+   "t": 1432.64,
+   "d": 0.72,
+   "text": "cleverly"
+  },
+  {
+   "t": 1433.36,
+   "d": 2.64,
+   "text": "there's ways of getting around them um"
+  },
+  {
+   "t": 1436.0,
+   "d": 0.48,
+   "text": "and"
+  },
+  {
+   "t": 1436.48,
+   "d": 1.92,
+   "text": "helping you feel just a little bit more"
+  },
+  {
+   "t": 1438.4,
+   "d": 1.92,
+   "text": "like a rogue"
+  },
+  {
+   "t": 1440.32,
+   "d": 1.92,
+   "text": "these are some ideas there's lots of"
+  },
+  {
+   "t": 1442.24,
+   "d": 1.84,
+   "text": "other ideas out there"
+  },
+  {
+   "t": 1444.08,
+   "d": 1.92,
+   "text": "i think we should think more about the"
+  },
+  {
+   "t": 1446.0,
+   "d": 1.6,
+   "text": "word rogue and what it really means to"
+  },
+  {
+   "t": 1447.6,
+   "d": 0.96,
+   "text": "us and how we make"
+  },
+  {
+   "t": 1448.56,
+   "d": 1.68,
+   "text": "our players feel like rogues or"
+  },
+  {
+   "t": 1450.24,
+   "d": 3.44,
+   "text": "potentially feel like sarah palin"
+  },
+  {
+   "t": 1453.68,
+   "d": 1.84,
+   "text": "thank you very happy to take any"
+  },
+  {
+   "t": 1455.52,
+   "d": 1.6,
+   "text": "questions and i'll probably hang around"
+  },
+  {
+   "t": 1457.12,
+   "d": 1.84,
+   "text": "at the at symbol statue at the next"
+  },
+  {
+   "t": 1458.96,
+   "d": 1.68,
+   "text": "break"
+  },
+  {
+   "t": 1460.64,
+   "d": 2.16,
+   "text": "what a what a way to end it and"
+  },
+  {
+   "t": 1462.8,
+   "d": 1.04,
+   "text": "fantastic"
+  },
+  {
+   "t": 1463.84,
+   "d": 1.6,
+   "text": "baby charming there there's a lot of"
+  },
+  {
+   "t": 1465.44,
+   "d": 1.92,
+   "text": "discussion about babies being ideal"
+  },
+  {
+   "t": 1467.36,
+   "d": 0.72,
+   "text": "rogues"
+  },
+  {
+   "t": 1468.08,
+   "d": 3.28,
+   "text": "for multiple reasons uh and let's"
+  },
+  {
+   "t": 1471.36,
+   "d": 4.16,
+   "text": "take a look at questions"
+  },
+  {
+   "t": 1475.52,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 1479.2,
+   "d": 2.08,
+   "text": "i'm trying to decide if all of these are"
+  },
+  {
+   "t": 1481.28,
+   "d": 1.44,
+   "text": "based on this one or if we cleared the"
+  },
+  {
+   "t": 1482.72,
+   "d": 1.12,
+   "text": "ones before"
+  },
+  {
+   "t": 1483.84,
+   "d": 1.68,
+   "text": "um there is one point from dustin"
+  },
+  {
+   "t": 1485.52,
+   "d": 1.92,
+   "text": "freeman that there's something wonderful"
+  },
+  {
+   "t": 1487.44,
+   "d": 1.44,
+   "text": "about being accused of being a rogue"
+  },
+  {
+   "t": 1488.88,
+   "d": 1.44,
+   "text": "with someone with a british accent could"
+  },
+  {
+   "t": 1490.32,
+   "d": 2.48,
+   "text": "you do that"
+  },
+  {
+   "t": 1492.8,
+   "d": 3.36,
+   "text": "uh i'm irish yeah do you sorry"
+  },
+  {
+   "t": 1496.16,
+   "d": 2.24,
+   "text": "that's a good answer i have lived in"
+  },
+  {
+   "t": 1498.4,
+   "d": 1.2,
+   "text": "england for quite a long time so i do"
+  },
+  {
+   "t": 1499.6,
+   "d": 2.88,
+   "text": "have a british accent yes"
+  },
+  {
+   "t": 1502.48,
+   "d": 3.92,
+   "text": "there is a question of"
+  },
+  {
+   "t": 1506.4,
+   "d": 1.84,
+   "text": "well i don't think these got cleared is"
+  },
+  {
+   "t": 1508.24,
+   "d": 1.6,
+   "text": "why i'm trying to figure out everyone"
+  },
+  {
+   "t": 1509.84,
+   "d": 2.96,
+   "text": "add questions for darren here i think"
+  },
+  {
+   "t": 1512.8,
+   "d": 0.8,
+   "text": "we've got"
+  },
+  {
+   "t": 1513.6,
+   "d": 2.72,
+   "text": "questions from the uh lightning talks"
+  },
+  {
+   "t": 1516.32,
+   "d": 0.64,
+   "text": "still"
+  },
+  {
+   "t": 1516.96,
+   "d": 1.92,
+   "text": "unless you want to talk about local"
+  },
+  {
+   "t": 1518.88,
+   "d": 1.84,
+   "text": "minima and maxima terran"
+  },
+  {
+   "t": 1520.72,
+   "d": 1.84,
+   "text": "i'm not qualified for that no those"
+  },
+  {
+   "t": 1522.56,
+   "d": 1.44,
+   "text": "lighting talks were amazing though"
+  },
+  {
+   "t": 1524.0,
+   "d": 2.96,
+   "text": "yes there was one point if giant alien"
+  },
+  {
+   "t": 1526.96,
+   "d": 1.84,
+   "text": "spiders were a joke what joke would they"
+  },
+  {
+   "t": 1528.8,
+   "d": 2.24,
+   "text": "be"
+  },
+  {
+   "t": 1531.68,
+   "d": 3.36,
+   "text": "um uh i mean"
+  },
+  {
+   "t": 1535.04,
+   "d": 1.68,
+   "text": "the joke there is that they're a trap"
+  },
+  {
+   "t": 1536.72,
+   "d": 2.96,
+   "text": "right that the joke is in fact that"
+  },
+  {
+   "t": 1539.68,
+   "d": 1.76,
+   "text": "the heroic option is giant dying"
+  },
+  {
+   "t": 1541.44,
+   "d": 2.0,
+   "text": "sparrows are no joke and the truth is"
+  },
+  {
+   "t": 1543.44,
+   "d": 2.24,
+   "text": "they aren't a joke so it should be i'm"
+  },
+  {
+   "t": 1545.68,
+   "d": 1.6,
+   "text": "going away because john and the spiders"
+  },
+  {
+   "t": 1547.28,
+   "d": 1.04,
+   "text": "are no joke"
+  },
+  {
+   "t": 1548.32,
+   "d": 3.52,
+   "text": "so it's quite cleverly written in a way"
+  },
+  {
+   "t": 1551.84,
+   "d": 3.44,
+   "text": "yeah uh here's a question for you"
+  },
+  {
+   "t": 1555.28,
+   "d": 1.6,
+   "text": "what are some good implementations of"
+  },
+  {
+   "t": 1556.88,
+   "d": 3.04,
+   "text": "the feeling of being a rogue"
+  },
+  {
+   "t": 1559.92,
+   "d": 2.88,
+   "text": "um a game that you feel is most rogue"
+  },
+  {
+   "t": 1562.8,
+   "d": 1.2,
+   "text": "like"
+  },
+  {
+   "t": 1564.0,
+   "d": 2.24,
+   "text": "yeah i mean brogue is very good at it"
+  },
+  {
+   "t": 1566.24,
+   "d": 1.44,
+   "text": "because it's got lots of"
+  },
+  {
+   "t": 1567.68,
+   "d": 3.52,
+   "text": "opportunities for um"
+  },
+  {
+   "t": 1571.2,
+   "d": 2.0,
+   "text": "being powerful without feeling powerful"
+  },
+  {
+   "t": 1573.2,
+   "d": 1.92,
+   "text": "so various of its items"
+  },
+  {
+   "t": 1575.12,
+   "d": 2.64,
+   "text": "uh let you manipulate you know the way"
+  },
+  {
+   "t": 1577.76,
+   "d": 1.76,
+   "text": "monsters move or different things like"
+  },
+  {
+   "t": 1579.52,
+   "d": 0.72,
+   "text": "that"
+  },
+  {
+   "t": 1580.24,
+   "d": 2.16,
+   "text": "which you know you can end up making a"
+  },
+  {
+   "t": 1582.4,
+   "d": 1.6,
+   "text": "monster walk into lava for instance"
+  },
+  {
+   "t": 1584.0,
+   "d": 1.68,
+   "text": "and that that makes you feel clever you"
+  },
+  {
+   "t": 1585.68,
+   "d": 1.68,
+   "text": "can set a field on fire and then run"
+  },
+  {
+   "t": 1587.36,
+   "d": 1.6,
+   "text": "away or set a"
+  },
+  {
+   "t": 1588.96,
+   "d": 1.84,
+   "text": "caustic gas trap off so you're"
+  },
+  {
+   "t": 1590.8,
+   "d": 1.68,
+   "text": "manipulating things that are essentially"
+  },
+  {
+   "t": 1592.48,
+   "d": 1.68,
+   "text": "sort of external power sources to"
+  },
+  {
+   "t": 1594.16,
+   "d": 1.12,
+   "text": "yourself"
+  },
+  {
+   "t": 1595.28,
+   "d": 3.36,
+   "text": "uh was you yourself remain quite weak"
+  },
+  {
+   "t": 1598.64,
+   "d": 3.28,
+   "text": "that makes a lot of sense i like that um"
+  },
+  {
+   "t": 1601.92,
+   "d": 1.84,
+   "text": "here's another question what would you"
+  },
+  {
+   "t": 1603.76,
+   "d": 1.52,
+   "text": "think would be the implication if"
+  },
+  {
+   "t": 1605.28,
+   "d": 1.68,
+   "text": "roguelikes were called something like"
+  },
+  {
+   "t": 1606.96,
+   "d": 1.76,
+   "text": "dungeon crawlers or such if the original"
+  },
+  {
+   "t": 1608.72,
+   "d": 1.52,
+   "text": "game wasn't called rogue or would that"
+  },
+  {
+   "t": 1610.24,
+   "d": 3.04,
+   "text": "alternate history perhaps look like"
+  },
+  {
+   "t": 1613.28,
+   "d": 3.92,
+   "text": "uh probably just the same to be honest"
+  },
+  {
+   "t": 1617.28,
+   "d": 1.44,
+   "text": "i mean let's face it a lot of the big"
+  },
+  {
+   "t": 1618.72,
+   "d": 2.16,
+   "text": "roguelikes don't don't think too much"
+  },
+  {
+   "t": 1620.88,
+   "d": 2.08,
+   "text": "about this they implement some of the"
+  },
+  {
+   "t": 1622.96,
+   "d": 1.92,
+   "text": "rogue mechanics quite blindly so hunger"
+  },
+  {
+   "t": 1624.88,
+   "d": 1.6,
+   "text": "clock got discussed before"
+  },
+  {
+   "t": 1626.48,
+   "d": 1.6,
+   "text": "um you know you look at nehack and you"
+  },
+  {
+   "t": 1628.08,
+   "d": 1.52,
+   "text": "ate and adam you think why did they"
+  },
+  {
+   "t": 1629.6,
+   "d": 1.04,
+   "text": "bother including"
+  },
+  {
+   "t": 1630.64,
+   "d": 2.48,
+   "text": "hunger apart from the fact that roach"
+  },
+  {
+   "t": 1633.12,
+   "d": 0.88,
+   "text": "had it"
+  },
+  {
+   "t": 1634.0,
+   "d": 2.88,
+   "text": "um so i think some games quite cleverly"
+  },
+  {
+   "t": 1636.88,
+   "d": 1.12,
+   "text": "approach it but"
+  },
+  {
+   "t": 1638.0,
+   "d": 4.72,
+   "text": "um some games just are dungeon crawlers"
+  },
+  {
+   "t": 1642.72,
+   "d": 2.48,
+   "text": "we actually have uh a hot tip slashie"
+  },
+  {
+   "t": 1645.2,
+   "d": 1.44,
+   "text": "says that he just got a message from"
+  },
+  {
+   "t": 1646.64,
+   "d": 0.72,
+   "text": "glenn"
+  },
+  {
+   "t": 1647.36,
+   "d": 1.68,
+   "text": "that says there was the aspect that you"
+  },
+  {
+   "t": 1649.04,
+   "d": 1.52,
+   "text": "were a rogue in the sense of being on"
+  },
+  {
+   "t": 1650.56,
+   "d": 1.6,
+   "text": "your own and not part of a team since it"
+  },
+  {
+   "t": 1652.16,
+   "d": 2.24,
+   "text": "was a single-player game"
+  },
+  {
+   "t": 1654.4,
+   "d": 1.92,
+   "text": "okay well he didn't say that in our"
+  },
+  {
+   "t": 1656.32,
+   "d": 2.56,
+   "text": "interview uh but i'm glad to hear that"
+  },
+  {
+   "t": 1658.88,
+   "d": 1.2,
+   "text": "because i do think that"
+  },
+  {
+   "t": 1660.08,
+   "d": 1.84,
+   "text": "that has actually had a big effect on"
+  },
+  {
+   "t": 1661.92,
+   "d": 1.36,
+   "text": "roblox and there was a talk earlier"
+  },
+  {
+   "t": 1663.28,
+   "d": 0.72,
+   "text": "about"
+  },
+  {
+   "t": 1664.0,
+   "d": 3.2,
+   "text": "um squad-based games and you know a key"
+  },
+  {
+   "t": 1667.2,
+   "d": 0.8,
+   "text": "thing in rogue"
+  },
+  {
+   "t": 1668.0,
+   "d": 1.92,
+   "text": "is that you can move quite quickly"
+  },
+  {
+   "t": 1669.92,
+   "d": 1.36,
+   "text": "whenever you want to and then when"
+  },
+  {
+   "t": 1671.28,
+   "d": 2.0,
+   "text": "things get hairy you can stop and"
+  },
+  {
+   "t": 1673.28,
+   "d": 1.28,
+   "text": "really take your time and think and make"
+  },
+  {
+   "t": 1674.56,
+   "d": 1.76,
+   "text": "sure you're making the right action and"
+  },
+  {
+   "t": 1676.32,
+   "d": 1.36,
+   "text": "in the squad based game you don't really"
+  },
+  {
+   "t": 1677.68,
+   "d": 2.32,
+   "text": "get to do that in quite the same way"
+  },
+  {
+   "t": 1680.0,
+   "d": 1.52,
+   "text": "yeah i think that's an interesting point"
+  },
+  {
+   "t": 1681.52,
+   "d": 1.84,
+   "text": "there's also a good point here from"
+  },
+  {
+   "t": 1683.36,
+   "d": 0.88,
+   "text": "phentos of"
+  },
+  {
+   "t": 1684.24,
+   "d": 1.68,
+   "text": "isn't there something inherently on"
+  },
+  {
+   "t": 1685.92,
+   "d": 3.6,
+   "text": "roguelike about pacifism"
+  },
+  {
+   "t": 1689.84,
+   "d": 1.28,
+   "text": "which brings up an interesting question"
+  },
+  {
+   "t": 1691.12,
+   "d": 2.96,
+   "text": "in terms of these conducts to me"
+  },
+  {
+   "t": 1694.08,
+   "d": 2.4,
+   "text": "um well if everyone else is a killer and"
+  },
+  {
+   "t": 1696.48,
+   "d": 1.12,
+   "text": "you're not"
+  },
+  {
+   "t": 1697.6,
+   "d": 2.72,
+   "text": "that's pretty rogue i guess that's true"
+  },
+  {
+   "t": 1700.32,
+   "d": 1.6,
+   "text": "being uh"
+  },
+  {
+   "t": 1701.92,
+   "d": 1.92,
+   "text": "if you're finding really clever ways to"
+  },
+  {
+   "t": 1703.84,
+   "d": 1.36,
+   "text": "sort of uh"
+  },
+  {
+   "t": 1705.2,
+   "d": 2.24,
+   "text": "disable things and and you're tricking"
+  },
+  {
+   "t": 1707.44,
+   "d": 1.36,
+   "text": "things into not attacking them that's"
+  },
+  {
+   "t": 1708.8,
+   "d": 1.6,
+   "text": "pretty broken i think"
+  },
+  {
+   "t": 1710.4,
+   "d": 2.08,
+   "text": "yeah that's a good point all right well"
+  },
+  {
+   "t": 1712.48,
+   "d": 1.52,
+   "text": "thank you so much for joining us"
+  },
+  {
+   "t": 1714.0,
+   "d": 1.84,
+   "text": "especially at a relatively late hour and"
+  },
+  {
+   "t": 1715.84,
+   "d": 0.56,
+   "text": "with"
+  },
+  {
+   "t": 1716.4,
+   "d": 2.24,
+   "text": "the baby adventure that thankfully was"
+  },
+  {
+   "t": 1718.64,
+   "d": 1.84,
+   "text": "satisfied by a potion"
+  },
+  {
+   "t": 1720.48,
+   "d": 5.84,
+   "text": "uh thanks for joking cheers bye"
+  }
+ ]
+}

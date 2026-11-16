@@ -1,0 +1,47 @@
+{
+  "id": "LoPxtQq0ut4",
+  "title": "Cassie Stuurman - Slime Molds",
+  "speaker": "Cassie Stuurman",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=LoPxtQq0ut4",
+  "talk_type": "culture",
+  "summary": "Earth and planetary scientist Cassie Stuurman gives a short, affectionate talk on slime molds, starting from their recurring appearance in roguelikes since Rogue and the story, told to her by Glenn Wichman, of how they got there. Most of the talk is popular science: what slime molds are, their life cycle, maze solving, network formation resembling the Tokyo rail system, spatial memory via residue, and their use in bio-computing. She ends with practical advice on finding and keeping a pet slime mold. Design content is limited to the origin of the slime mold as NetHack's customizable fruit and the slime mold's spatial-memory behaviour.",
+  "games": [
+    "Rogue",
+    "NetHack",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "slime molds",
+      "kind": "history",
+      "claim": "Slime molds have appeared in roguelikes since Rogue, where drinking a potion of see invisible says it tastes like slime mold juice, and recur in NetHack and Angband as food, foes or the player.",
+      "detail": "Stuurman surveys appearances: something to eat in NetHack, something to fight, something you play as, or an obscure reference in monster descriptions.",
+      "t": 59,
+      "quote": "when you drink a potion of see invisible you'll get the message saying that it tastes like slime mold juice",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "slime molds",
+      "kind": "history",
+      "claim": "Slime molds entered Rogue as a running joke from a slime mold on a drainpipe at UC Santa Cruz, and NetHack's customizable fruit defaults to slime mold to nudge players to rename it.",
+      "detail": "Stuurman relays Glenn Wichman's account that he and Michael Toy were studying at UC Santa Cruz when the slime mold joke began. In NetHack, the customizable food was called slime mold on the assumption that players would find it gross and change the option.",
+      "t": 145,
+      "quote": "they called it a slime mold to encourage players to change it and the options to something that wasn't a slime mold",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "biological pathfinding",
+      "kind": "example",
+      "claim": "Real slime molds solve mazes by filling the whole space and then shrinking to the shortest path between food sources, and avoid places marked by their own residue as a spatial memory.",
+      "detail": "Stuurman describes a 2000 maze study, a 2010 study where slime mold networks resembled the Tokyo rail system, and residue-based memory that lets a slime mold escape a U-shaped trap used to test robot navigation.",
+      "t": 446,
+      "quote": "anywhere that they've been they leave a residue and if a slime mold encounters that kind of residue that will not go there again",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

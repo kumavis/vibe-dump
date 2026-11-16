@@ -1,0 +1,149 @@
+{
+  "id": "Q_MFTUYnaf0",
+  "title": "Mark Gritter - Procedurally Generating Economies with Graph Grammars (and Math)",
+  "speaker": "Mark Gritter",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=Q_MFTUYnaf0",
+  "talk_type": "technical",
+  "summary": "Mark Gritter asks whether trade in games like NetHack, Elite and Dwarf Fortress is more than decoration, and presents his Emoji Economy prototype for generating toy economies. It builds a graph of goods and transformation processes with a graph grammar, assigns a sigmoid diminishing-marginal-utility function, optimizes the allocation of goods with projected gradient descent, then breaks per-region copies of the graph by removing parts and finds trades between regions that restore utility. He compares an auction mechanism for trades (realistic but slow) with random trades (fast but odd), and notes limits such as no triangle trades or transport costs. He also argues simulated economies need not be optimal, since visible inefficiency gives players something to act on.",
+  "games": [
+    "NetHack",
+    "Elite",
+    "Adventure Construction Set",
+    "Dwarf Fortress",
+    "Unexplored"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "economy",
+      "kind": "open-question",
+      "claim": "Game trade systems raise the question of whether the economy actually makes a difference in the world or is just decoration: who buys what players sell to shops, and why.",
+      "detail": "Gritter cites shopkeepers in NetHack, trade in Elite and Dwarf Fortress, and asks what a merchant does with all the stone tableware a fortress sells, or how a whole planet ends up agricultural.",
+      "t": 61,
+      "quote": "does trade in the broader economy make it a difference in a game world, or is it just decoration",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "economy generation",
+      "kind": "technique",
+      "claim": "Emoji Economy generates toy economies in four steps: build a graph of goods flows, maximize a diminishing-returns utility over the graph's choices, make altered regional copies, and find trade routes that restore utility.",
+      "detail": "Gritter presents this as the overall pipeline of his project, with each step described in turn in the talk.",
+      "t": 78,
+      "quote": "Build a graph that represents a flow of items, apply a utility function that has a decreasing marginal utility",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "production graphs",
+      "kind": "technique",
+      "claim": "An economy can be modelled as a graph whose nodes are goods or processes, starting from natural goods and ending in a consumption sink, with factories combining two units and processing plants splitting one.",
+      "detail": "Gritter's example graph starts from plants like melons and lemons and produces consumables like pie. His prototype had only these two transformation types.",
+      "t": 140,
+      "quote": "Factories that put two units together to create a single new unit, or processing plants that split a single unit into its component parts",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "economy",
+      "kind": "principle",
+      "claim": "Letting a good have more than one possible use (eat a plant directly or brew it into beer) forces the economy to make decisions rather than just flowing through the graph.",
+      "detail": "Gritter says this choice gives the economy 'play'. The sink represents consumption by the population, and the aim is for as many goods as possible to be used.",
+      "t": 175,
+      "quote": "this gives us some play in the economy. We have to make decisions rather than just everything flowing through the graph",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "graph grammars",
+      "kind": "technique",
+      "claim": "A graph grammar is a set of production rules that match labelled nodes and edges in a graph and alter them, such as inserting a new plant between a source and the sink.",
+      "detail": "Gritter shows a rule that grows a new plant eaten directly, and its application to a graph that already has flow. A more complex rule adds an alternate process producing the same good plus an unconnected byproduct that later rules could use or turn into negative-utility garbage.",
+      "t": 188,
+      "quote": "a graph grammar is a set of production rules that matches some set of labeled nodes and edges within a graph and makes an alteration",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "graph grammars",
+      "kind": "principle",
+      "claim": "Graph grammars make it easy to preserve structural invariants: Joris Dormans' Unexplored never puts a key behind the door it opens, and Emoji Economy keeps every good's inputs and outputs hooked up.",
+      "detail": "Gritter credits Dormans' use in Unexplored and applies the same property to ensure no consumable item is left unused in the economy graph.",
+      "t": 217,
+      "quote": "the strength of a graph grammar is that it makes it easy to preserve structural invariance",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "utility",
+      "kind": "technique",
+      "claim": "Simulated consumers can be given diminishing marginal utility, modelled as a sigmoid that approaches a limit, so the thousandth lemon is worth much less than the first.",
+      "detail": "Gritter notes economists define utility circularly as whatever people try to maximize, roughly happiness, and virtually every real good has diminishing marginal utility.",
+      "t": 305,
+      "quote": "So I modeled this as a sigmoid function which asymptotically reaches some limit",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "optimization",
+      "kind": "technique",
+      "claim": "Because the utility objective is nonlinear, Emoji Economy allocates goods with gradient descent, projecting choices that exceed 100% back to the nearest valid point.",
+      "detail": "Choices for a good (eat apples, make juice, make apple butter) must sum to 100%, ruling out linear programming. Gradient descent moves toward improvement and takes smaller steps after a worsening; a simple projection algorithm from 2011 handles constraint violations.",
+      "t": 356,
+      "quote": "Just move in the direction that makes things better and if you end up making things worse, take smaller steps next time",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "economy",
+      "kind": "principle",
+      "claim": "A simulated economy doesn't need to be optimal; visible suboptimal choices are good if players have the power to do something about them.",
+      "detail": "Gritter notes real economies aren't perfect either.",
+      "t": 398,
+      "quote": "I think it's actually cool if players notice that a sub optimal choice has been made if they have the power to do something about it",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "regional variation",
+      "kind": "technique",
+      "claim": "Regional economic differences can be simulated by removing parts of each region's copy of the goods graph, which lowers utility and creates motivation for trade to repair it.",
+      "detail": "A region may be unable to grow apples or lack infrastructure for juice. In the simple version, if A can make juice but not butter and B the reverse, trading equal amounts leaves both better off.",
+      "t": 420,
+      "quote": "most of these differences I think can be simulated by removing parts of the original graph",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "trade negotiation",
+      "kind": "open-question",
+      "claim": "Simulating trade raises a theoretical problem (how negotiators agree on a split, where economic models disagree and real humans fit none) and a practical one (efficiently finding all good trade opportunities).",
+      "detail": "Gritter asks whether a party should give in when the other demands more than a fair share just because some benefit beats none.",
+      "t": 472,
+      "quote": "Economists developed several models all of which disagree and the bad news is that when we study real humans",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "trade routes",
+      "kind": "technique",
+      "claim": "Emoji Economy finds trades with a round-based auction where a seller region offers goods, others bid honestly, and the seller accepts the bid that maximizes its utility, which looks realistic but is very slow; random trades are fast but odd.",
+      "detail": "Each acceptance requires rerunning the optimizer, so it means lots of optimization runs. The alternative is picking random trades and keeping positive ones.",
+      "t": 521,
+      "quote": "They pick the bid that maximizes their utility or they just reject them all if the game is too small",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "economy generation",
+      "kind": "example",
+      "claim": "Breaking nine regions and running Emoji Economy's trade algorithm produced a dense, sensible trade network with variety, but only bidirectional trades and no transport or geography costs.",
+      "detail": "Gritter notes real life has triangle trades and that adding transport costs and geography could make interesting modifications. Code is on GitHub, built on his Tracery-inspired graph grammar library.",
+      "t": 568,
+      "quote": "All the trades are bidirectional. There's no triangle trades, although they occur in real life",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

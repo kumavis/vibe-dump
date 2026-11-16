@@ -1,0 +1,914 @@
+{
+ "id": "avVsu4VLhes",
+ "url": "https://www.youtube.com/watch?v=avVsu4VLhes",
+ "title": "Crashtroid - Preventing Ear Fatigue with Roguelike Music",
+ "speaker": "Crashtroid",
+ "talk_title": "Preventing Ear Fatigue with Roguelike Music",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 958,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Music in roguelike games will be heard hundreds and hundreds of times over by the players, and is liable to become a bit exhausting to if not considered closely. There are techniques and decisions that can aid in creating music for your game (or directing a composer to create your game's music) that will truly augment the sense of adventure that roguelike a bring to the table. This talk is both geared towards composers AND people who work with them on games. For composers, it will shed some light on the aforementioned techniques, and for other devs it will give you the ability to effectively communicate these ideas to your composer! Everyone gets a little something with this one, so stop on by for a quick look into designing roguelike music!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and context"
+  },
+  {
+   "start": 140,
+   "title": "Understanding ear fatigue"
+  },
+  {
+   "start": 239,
+   "title": "Demonstrating segmentation"
+  },
+  {
+   "start": 374,
+   "title": "Implementing segmentation"
+  },
+  {
+   "start": 487,
+   "title": "Pacing music to gameplay"
+  },
+  {
+   "start": 669,
+   "title": "Transitions and flow"
+  },
+  {
+   "start": 874,
+   "title": "Conclusion and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2000,
+ "trimmed": {
+  "segments": 297,
+  "words": 3087
+ },
+ "segments": [
+  {
+   "t": 6.69,
+   "d": 8.31,
+   "text": "Coming up next we have Crashtroid who is here to tell us about \"Preventing Ear Fatigue with"
+  },
+  {
+   "t": 15.0,
+   "d": 2.29,
+   "text": "Roguelike Music\"."
+  },
+  {
+   "t": 17.29,
+   "d": 4.22,
+   "text": "Crashtroid, is a self-taught composer for video games."
+  },
+  {
+   "t": 21.51,
+   "d": 4.64,
+   "text": "Located in BC, Canada, he works on Peglin, a peggle inspired"
+  },
+  {
+   "t": 26.15,
+   "d": 1.0,
+   "text": "roguelike."
+  },
+  {
+   "t": 27.15,
+   "d": 5.48,
+   "text": "He has over 25 game, welcome to the celebration."
+  },
+  {
+   "t": 32.63,
+   "d": 2.36,
+   "text": "CRASHTROID: Thank for the intro."
+  },
+  {
+   "t": 34.99,
+   "d": 1.44,
+   "text": "You are gone."
+  },
+  {
+   "t": 36.43,
+   "d": 1.52,
+   "text": "I guess that means get going."
+  },
+  {
+   "t": 37.95,
+   "d": 4.94,
+   "text": "I am Adam and I go online as Crashtroid."
+  },
+  {
+   "t": 42.89,
+   "d": 2.09,
+   "text": "That's the music name I use everywhere."
+  },
+  {
+   "t": 44.98,
+   "d": 4.0,
+   "text": "I wanted to talk to you a little bit about ear fatigue and how to prevent it when you"
+  },
+  {
+   "t": 48.98,
+   "d": 2.25,
+   "text": "are working with roguelikes."
+  },
+  {
+   "t": 51.23,
+   "d": 5.96,
+   "text": "Roguelikes are a genre you will play over and over as I am sure you already know and"
+  },
+  {
+   "t": 57.19,
+   "d": 4.18,
+   "text": "when you go and play a game over and over sometimes it is easy to get exhausted with"
+  },
+  {
+   "t": 61.37,
+   "d": 6.11,
+   "text": "some of the stuff whether it is busting through walls of text or listening to a shop theme"
+  },
+  {
+   "t": 67.48,
+   "d": 1.51,
+   "text": "a million times over."
+  },
+  {
+   "t": 68.99,
+   "d": 6.53,
+   "text": "I wanted to share some of the antidotal strategies I have learned writing music to kind of do"
+  },
+  {
+   "t": 75.52,
+   "d": 4.55,
+   "text": "your best to prevent people from getting exhausted when they do replay your game over and over"
+  },
+  {
+   "t": 80.07,
+   "d": 1.0,
+   "text": "and over."
+  },
+  {
+   "t": 81.07,
+   "d": 2.72,
+   "text": "There we go."
+  },
+  {
+   "t": 83.79,
+   "d": 6.1,
+   "text": "Yeah, I have been working on Peglin and that's been my big thing."
+  },
+  {
+   "t": 89.89,
+   "d": 4.18,
+   "text": "I have done plenty of game jams and worked on smaller project and a handful of other"
+  },
+  {
+   "t": 94.07,
+   "d": 1.0,
+   "text": "commercial releases."
+  },
+  {
+   "t": 95.07,
+   "d": 7.01,
+   "text": "I have a wide variety of music I compose in but it is melodic and I would call it game"
+  },
+  {
+   "t": 102.08,
+   "d": 3.02,
+   "text": "cube era style."
+  },
+  {
+   "t": 105.1,
+   "d": 7.81,
+   "text": "Very inspired by David Wise, Joshman Cell, Danny Bernaski."
+  },
+  {
+   "t": 112.91,
+   "d": 4.68,
+   "text": "Because I am self taught a lot of stuff I will talk about is completely antidotal and"
+  },
+  {
+   "t": 117.59,
+   "d": 1.08,
+   "text": "opinions."
+  },
+  {
+   "t": 118.67,
+   "d": 4.92,
+   "text": "If you have insight that works better for you, follow your gut."
+  },
+  {
+   "t": 123.59,
+   "d": 4.48,
+   "text": "This is all me telling you how I would do things and if you would do things differently,"
+  },
+  {
+   "t": 128.07,
+   "d": 1.38,
+   "text": "you know, please do."
+  },
+  {
+   "t": 129.45,
+   "d": 4.43,
+   "text": "Part of the reason this industry is so varied and interesting is because everybody puts"
+  },
+  {
+   "t": 133.88,
+   "d": 1.81,
+   "text": "their own ideas into the ring."
+  },
+  {
+   "t": 135.69,
+   "d": 4.84,
+   "text": "There is going to be very little theory talk here."
+  },
+  {
+   "t": 140.53,
+   "d": 2.63,
+   "text": "What is ear fatigue?"
+  },
+  {
+   "t": 143.16,
+   "d": 6.19,
+   "text": "It is some someone has heard something so often or so much or at such a volume even"
+  },
+  {
+   "t": 149.35,
+   "d": 4.37,
+   "text": "that different frequencies start to blur into each other and it makes it hard to distinguish"
+  },
+  {
+   "t": 153.72,
+   "d": 1.0,
+   "text": "different things."
+  },
+  {
+   "t": 154.72,
+   "d": 5.61,
+   "text": "If you have written music and been playing a section over and over and trying to mix"
+  },
+  {
+   "t": 160.33,
+   "d": 5.91,
+   "text": "things or figure out one specific sound you might get ear fatigue because you have listened"
+  },
+  {
+   "t": 166.24,
+   "d": 9.77,
+   "text": "to that same portion and you can't distinguish that snare from that one and it is tiring."
+  },
+  {
+   "t": 176.01,
+   "d": 5.6,
+   "text": "A roguelike is a game someone will play over and over, ear fatigue is libel to occur to"
+  },
+  {
+   "t": 181.61,
+   "d": 2.71,
+   "text": "them and you don't really want that to happen."
+  },
+  {
+   "t": 184.32,
+   "d": 5.95,
+   "text": "You would like to keep your player engaged in your art as much as you can."
+  },
+  {
+   "t": 190.27,
+   "d": 3.48,
+   "text": "Strategies I employ is things like unique segmentation."
+  },
+  {
+   "t": 193.75,
+   "d": 8.63,
+   "text": "They might sound obvious when you talk out loud but in practice it makes a difference."
+  },
+  {
+   "t": 202.38,
+   "d": 4.92,
+   "text": "I am talking about having different chunks of the song so there is an identifiable progress"
+  },
+  {
+   "t": 207.3,
+   "d": 3.04,
+   "text": "in the loop of music you have created."
+  },
+  {
+   "t": 210.34,
+   "d": 5.55,
+   "text": "Some people might look at that as the intro, refrain, chorus, whatever the music theory"
+  },
+  {
+   "t": 215.89,
+   "d": 2.05,
+   "text": "words are."
+  },
+  {
+   "t": 217.94,
+   "d": 4.36,
+   "text": "Some people might just look at that as like actually swapping song halfway through to"
+  },
+  {
+   "t": 222.3,
+   "d": 4.4,
+   "text": "keep things varied depending if you have a radio system in the game."
+  },
+  {
+   "t": 226.7,
+   "d": 5.5,
+   "text": "In essence, the reason you changing things up is to make sure that the player upon hearing"
+  },
+  {
+   "t": 232.2,
+   "d": 4.75,
+   "text": "this loop is feeling like there is progress being made rather than having it meld into"
+  },
+  {
+   "t": 236.95,
+   "d": 2.46,
+   "text": "the background."
+  },
+  {
+   "t": 239.41,
+   "d": 3.83,
+   "text": "I have a sample of music I am going to allow to play."
+  },
+  {
+   "t": 243.24,
+   "d": 6.95,
+   "text": "I chose repentant from the original binding of Isaac and I think it has a strong demonstration"
+  },
+  {
+   "t": 250.19,
+   "d": 3.99,
+   "text": "of the unique segmentation I am talking about where there is four different sections."
+  },
+  {
+   "t": 254.18,
+   "d": 4.68,
+   "text": "I will hold up my fingers as I play these sections and you will kind of identify where"
+  },
+  {
+   "t": 258.86,
+   "d": 2.27,
+   "text": "the songs -- excuse me."
+  },
+  {
+   "t": 261.13,
+   "d": 3.39,
+   "text": "Where the song starts to shift in order to show you that progress."
+  },
+  {
+   "t": 264.52,
+   "d": 5.68,
+   "text": "So the beginning will introduce all the instruments, and the second section pulls in cords and"
+  },
+  {
+   "t": 270.2,
+   "d": 6.84,
+   "text": "gets more spooky and full of despair, vocals are introduced and then my favorite part is"
+  },
+  {
+   "t": 277.04,
+   "d": 6.38,
+   "text": "the ending where a piano is focused on and the song is pulled into a major chord where"
+  },
+  {
+   "t": 283.42,
+   "d": 4.36,
+   "text": "it feels more helpful like there is a chance for you to survive this game you are playing."
+  },
+  {
+   "t": 287.78,
+   "d": 51.0,
+   "text": "I will stop talking and play it for you and"
+  },
+  {
+   "t": 338.78,
+   "d": 12.84,
+   "text": "I will hold up my fingers."
+  },
+  {
+   "t": 351.62,
+   "d": 10.27,
+   "text": "This is section one."
+  },
+  {
+   "t": 361.89,
+   "d": 8.6,
+   "text": "RAY: Now you generally have an idea of where the segments lie now that I have been able"
+  },
+  {
+   "t": 370.49,
+   "d": 2.74,
+   "text": "to divide them for you."
+  },
+  {
+   "t": 373.23,
+   "d": 4.44,
+   "text": "I am going to skip past this one."
+  },
+  {
+   "t": 377.67,
+   "d": 7.47,
+   "text": "The unique segmentation can be found in Peglin where I implemented it."
+  },
+  {
+   "t": 385.14,
+   "d": 7.35,
+   "text": "I recommend you go take a listen to it and see if you can discern the individual sections"
+  },
+  {
+   "t": 392.49,
+   "d": 1.0,
+   "text": "themselves."
+  },
+  {
+   "t": 393.49,
+   "d": 4.39,
+   "text": "They are a little more subtle."
+  },
+  {
+   "t": 397.88,
+   "d": 6.97,
+   "text": "This is the main theme of the final stage of the game right now and the different changes"
+  },
+  {
+   "t": 404.85,
+   "d": 7.48,
+   "text": "I have made were changing the solo instrument, changes in the drum line, you know, things"
+  },
+  {
+   "t": 412.33,
+   "d": 1.61,
+   "text": "like that have all adjusted."
+  },
+  {
+   "t": 413.94,
+   "d": 4.53,
+   "text": "You can use key changes or whatever it is you want to distinguish those different sections."
+  },
+  {
+   "t": 418.47,
+   "d": 27.51,
+   "text": "I will just play you a chunk and we will move on real quick."
+  },
+  {
+   "t": 445.98,
+   "d": 42.76,
+   "text": "RAY: I will let you listen to that song on your own time and piece that one apart."
+  },
+  {
+   "t": 488.74,
+   "d": 3.55,
+   "text": "The next thing I want to talk about is pacing music to the gameplay."
+  },
+  {
+   "t": 492.29,
+   "d": 6.73,
+   "text": "I think one thing people expect immediately is you pace your music to your esthetic of"
+  },
+  {
+   "t": 499.02,
+   "d": 5.71,
+   "text": "your game and I think that's incredibly important but the main thing the player is doing with"
+  },
+  {
+   "t": 504.73,
+   "d": 1.93,
+   "text": "your game is playing it."
+  },
+  {
+   "t": 506.66,
+   "d": 4.41,
+   "text": "The actions they take every moment of their journey through your game are going to reflect"
+  },
+  {
+   "t": 511.07,
+   "d": 2.19,
+   "text": "in the way they perceive the audio."
+  },
+  {
+   "t": 513.26,
+   "d": 5.94,
+   "text": "Being able to develop a prototype is helpful."
+  },
+  {
+   "t": 519.2,
+   "d": 4.23,
+   "text": "Not always possible but when it is it is super helpful."
+  },
+  {
+   "t": 523.43,
+   "d": 6.61,
+   "text": "You understanding as a composer how the game you are writing for actually feels and what"
+  },
+  {
+   "t": 530.04,
+   "d": 5.9,
+   "text": "the player is experiencing exactly helps you write music that better fits the actual game."
+  },
+  {
+   "t": 535.94,
+   "d": 3.63,
+   "text": "So a list of mechanics in the two games I have listed here."
+  },
+  {
+   "t": 539.57,
+   "d": 5.54,
+   "text": "Roboquest an arena shooter kind of roguelike game."
+  },
+  {
+   "t": 545.11,
+   "d": 7.93,
+   "text": "Rail grinding, bouncing off enemies heads, weapon switching quickly like doom games and"
+  },
+  {
+   "t": 553.04,
+   "d": 5.17,
+   "text": "quake and I am trying to think of other examples."
+  },
+  {
+   "t": 558.21,
+   "d": 4.2,
+   "text": "All of these are very fast-paced kind of arena focused mechanics where you are moving and"
+  },
+  {
+   "t": 562.41,
+   "d": 7.88,
+   "text": "attacking as fast as possible and the game is in linear levels with branching paths but"
+  },
+  {
+   "t": 570.29,
+   "d": 3.37,
+   "text": "primarily they are big arenas full of prespawn enemies."
+  },
+  {
+   "t": 573.66,
+   "d": 4.08,
+   "text": "You walk in and there are things for you to fight."
+  },
+  {
+   "t": 577.74,
+   "d": 2.65,
+   "text": "The music is then of course catered to this."
+  },
+  {
+   "t": 580.39,
+   "d": 5.72,
+   "text": "Risk of rain 2 which I am sure plenty of people are familiar with the stages are massive,"
+  },
+  {
+   "t": 586.11,
+   "d": 5.34,
+   "text": "sprawling and take place on an alien planet and you are searching out enemies in the early"
+  },
+  {
+   "t": 591.45,
+   "d": 3.11,
+   "text": "game, looking for them to collect money and then searching for loot."
+  },
+  {
+   "t": 594.56,
+   "d": 3.98,
+   "text": "You are exploring quite a bit more than Roboquest."
+  },
+  {
+   "t": 598.54,
+   "d": 6.17,
+   "text": "That sense of discovery of the foreign planet is emphasized in the way that the game plays."
+  },
+  {
+   "t": 604.71,
+   "d": 5.24,
+   "text": "So I have taken chunks of music from the both of them although they are both shooter and"
+  },
+  {
+   "t": 609.95,
+   "d": 6.26,
+   "text": "combat roguelike games, you will notice exactly how different the composer's chose to make"
+  },
+  {
+   "t": 616.21,
+   "d": 1.18,
+   "text": "the music."
+  },
+  {
+   "t": 617.39,
+   "d": 25.69,
+   "text": "This one here is for Roboquest."
+  },
+  {
+   "t": 643.08,
+   "d": 5.24,
+   "text": "So I don't know if it was a coincidence but playing the song and then playing the game,"
+  },
+  {
+   "t": 648.32,
+   "d": 10.03,
+   "text": "a lot of actions like the bunny hopping as well as a lot of the guns fire rates really"
+  },
+  {
+   "t": 658.35,
+   "d": 4.74,
+   "text": "line up with the beats per minute of a lot of the songs in the game so it feels like"
+  },
+  {
+   "t": 663.09,
+   "d": 2.35,
+   "text": "you are almost playing in time with the music."
+  },
+  {
+   "t": 665.44,
+   "d": 14.79,
+   "text": "I will play the section from risk of rain 2 now."
+  },
+  {
+   "t": 680.23,
+   "d": 16.69,
+   "text": "I am going to leave that one to you."
+  },
+  {
+   "t": 696.92,
+   "d": 3.94,
+   "text": "Pacing your music to the gameplay is something you can think about."
+  },
+  {
+   "t": 700.86,
+   "d": 2.57,
+   "text": "Trying to move past these."
+  },
+  {
+   "t": 703.43,
+   "d": 1.43,
+   "text": "There we go."
+  },
+  {
+   "t": 704.86,
+   "d": 4.67,
+   "text": "The final chunk I want to talk about is transitions and flow."
+  },
+  {
+   "t": 709.53,
+   "d": 5.26,
+   "text": "Being able to maintain a consistent like audio experience and not have the music jerk around"
+  },
+  {
+   "t": 714.79,
+   "d": 4.73,
+   "text": "or cut in and out really helps the player when they're doing multiple runs of a game"
+  },
+  {
+   "t": 719.52,
+   "d": 1.39,
+   "text": "over and over."
+  },
+  {
+   "t": 720.91,
+   "d": 5.43,
+   "text": "Not having that jarring transition between songs is really helpful to maintain that sense"
+  },
+  {
+   "t": 726.34,
+   "d": 1.16,
+   "text": "of flow."
+  },
+  {
+   "t": 727.5,
+   "d": 3.88,
+   "text": "When you have speed runners, when you have people who are playing three hour long runs"
+  },
+  {
+   "t": 731.38,
+   "d": 5.71,
+   "text": "or what have you, you want them to maintain a bit of a flow state."
+  },
+  {
+   "t": 737.09,
+   "d": 4.18,
+   "text": "You can do this with alternate versions of tracks fade in and out."
+  },
+  {
+   "t": 741.27,
+   "d": 8.58,
+   "text": "Combat and ambient are great examples in games like bord lands."
+  },
+  {
+   "t": 749.85,
+   "d": 2.67,
+   "text": "You can do it for motifs."
+  },
+  {
+   "t": 752.52,
+   "d": 10.58,
+   "text": "The map area share the same melody in a cut down passive version and that unification"
+  },
+  {
+   "t": 763.1,
+   "d": 6.41,
+   "text": "helps the flow and helps the whole area feel more cohesive."
+  },
+  {
+   "t": 769.51,
+   "d": 7.08,
+   "text": "I don't have time to show you the entirety of a Hades stage but I made this flowchart"
+  },
+  {
+   "t": 776.59,
+   "d": 7.94,
+   "text": "showing how the music works or how I perceive it to work."
+  },
+  {
+   "t": 784.53,
+   "d": 5.81,
+   "text": "You start the stage with the ambient theme and you start fighting enemies and it phases"
+  },
+  {
+   "t": 790.34,
+   "d": 5.96,
+   "text": "into the combat version where it is more excitable and when you defeat all enemies in the room"
+  },
+  {
+   "t": 796.3,
+   "d": 4.11,
+   "text": "it goes become to ambient."
+  },
+  {
+   "t": 800.41,
+   "d": 8.7,
+   "text": "At a certain point you will reach a part where a stinger plays and concludes that song and"
+  },
+  {
+   "t": 809.11,
+   "d": 4.4,
+   "text": "there is no more ambient theme and it is silence until you reach the next room in which a new"
+  },
+  {
+   "t": 813.51,
+   "d": 1.0,
+   "text": "song plays."
+  },
+  {
+   "t": 814.51,
+   "d": 7.58,
+   "text": "It gives the player something fresh and tells them they reach the 33% mark of that floor."
+  },
+  {
+   "t": 822.09,
+   "d": 1.0,
+   "text": "Just audible."
+  },
+  {
+   "t": 823.09,
+   "d": 5.36,
+   "text": "It is a quiet way of telling the player they are making progress."
+  },
+  {
+   "t": 828.45,
+   "d": 5.97,
+   "text": "You have ambient and combat themes and then get a room with unique music and then the"
+  },
+  {
+   "t": 834.42,
+   "d": 5.18,
+   "text": "stinger plays again after you defeat the mini boss and silence until you reach the third"
+  },
+  {
+   "t": 839.6,
+   "d": 8.94,
+   "text": "phase which does the same, reach the boss room, the stinger and after that stinger you"
+  },
+  {
+   "t": 848.54,
+   "d": 7.31,
+   "text": "are kind of incomplete silence until you reach the next stage and move on to the next floor."
+  },
+  {
+   "t": 855.85,
+   "d": 4.72,
+   "text": "Using a flowchart like this might hope you visualize how it is going to work for music"
+  },
+  {
+   "t": 860.57,
+   "d": 5.32,
+   "text": "to be lined up and where you might have gaps that take the player out of the experience."
+  },
+  {
+   "t": 865.89,
+   "d": 3.87,
+   "text": "I encourage you to take a look at this and go play Hades and see if you can line up each"
+  },
+  {
+   "t": 869.76,
+   "d": 1.52,
+   "text": "theme."
+  },
+  {
+   "t": 871.28,
+   "d": 7.84,
+   "text": "I wanted to reaffirm the three points before this thing is over."
+  },
+  {
+   "t": 879.12,
+   "d": 4.46,
+   "text": "Try to make your segmentation unique and have some variation."
+  },
+  {
+   "t": 883.58,
+   "d": 1.92,
+   "text": "Try to pace the music to the gameplay."
+  },
+  {
+   "t": 885.5,
+   "d": 3.26,
+   "text": "And try to use transitions and control the flow."
+  },
+  {
+   "t": 888.76,
+   "d": 4.95,
+   "text": "All these pieces help keep players more invested over a long period of time which is exactly"
+  },
+  {
+   "t": 893.71,
+   "d": 3.19,
+   "text": "what you want for a roguelike."
+  },
+  {
+   "t": 896.9,
+   "d": 4.77,
+   "text": "Also, listen to the music outside of the game yourself."
+  },
+  {
+   "t": 901.67,
+   "d": 5.77,
+   "text": "If you can't listen to the song more than 15 minutes at a time outside the game it probably"
+  },
+  {
+   "t": 907.44,
+   "d": 2.34,
+   "text": "won't work inside the game."
+  },
+  {
+   "t": 909.78,
+   "d": 14.47,
+   "text": "Figuring out if it is a palatable song is important."
+  },
+  {
+   "t": 924.25,
+   "d": 3.58,
+   "text": "If you want to reach out on social media or go to a breakout room I am happy to talk about"
+  },
+  {
+   "t": 927.83,
+   "d": 3.19,
+   "text": "this."
+  },
+  {
+   "t": 931.02,
+   "d": 6.53,
+   "text": "You can reach me through my website or on New Grounds, Spotify or you can check out"
+  },
+  {
+   "t": 937.55,
+   "d": 2.89,
+   "text": "Peglin or do all five of those things."
+  },
+  {
+   "t": 940.44,
+   "d": 3.02,
+   "text": "It would be really cool if you did."
+  },
+  {
+   "t": 943.46,
+   "d": 3.44,
+   "text": "Yeah, hopefully that helped out a little bit and thanks for listening."
+  },
+  {
+   "t": 946.9,
+   "d": 1.0,
+   "text": "QRISTY: Cool."
+  },
+  {
+   "t": 947.9,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 948.9,
+   "d": 5.68,
+   "text": "As soon who does not know how to music at all, that was super easy to follow and made"
+  },
+  {
+   "t": 954.58,
+   "d": 1.0,
+   "text": "a lot of sense."
+  },
+  {
+   "t": 955.58,
+   "d": 1.0,
+   "text": "Thank you for sharing."
+  }
+ ]
+}

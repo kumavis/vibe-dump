@@ -1,0 +1,2157 @@
+{
+ "id": "MJZvWgcxV0M",
+ "url": "https://www.youtube.com/watch?v=MJZvWgcxV0M",
+ "title": "JP LeBreton - All Possible Glyphs: Playscii, an ASCII art, animation, and game creation tool",
+ "speaker": "JP LeBreton",
+ "talk_title": "All Possible Glyphs: Playscii, an ASCII art, animation, and game creation tool",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1656,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nJP is a veteran game creator. He's worked on \"immersive sims\" like Bioshock, adventure games like The Cave, and has deep connections to Doom and related mod communities. He believes a more diverse range of tools are key to making games a better medium.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Playskee"
+  },
+  {
+   "start": 83,
+   "title": "History of text mode art"
+  },
+  {
+   "start": 286,
+   "title": "Developing the tool"
+  },
+  {
+   "start": 463,
+   "title": "User interface and features"
+  },
+  {
+   "start": 653,
+   "title": "Game engine capabilities"
+  },
+  {
+   "start": 886,
+   "title": "Live demo of game mode"
+  },
+  {
+   "start": 1055,
+   "title": "Philosophy of toolmaking"
+  },
+  {
+   "start": 1186,
+   "title": "Community and conclusion"
+  },
+  {
+   "start": 1315,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4942,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.94,
+   "d": 4.34,
+   "text": "JP: Hi, everyone. Yeah, y'all are lovely, but I am gonna be looking"
+  },
+  {
+   "t": 5.28,
+   "d": 3.69,
+   "text": "down at my notes here periodically."
+  },
+  {
+   "t": 8.96,
+   "d": 3.66,
+   "text": "Hi, everyone. I'm JP, and I'm going to talk to you about something I built"
+  },
+  {
+   "t": 12.62,
+   "d": 5.08,
+   "text": "called Playscii. Playscii, or Playable ASCII, if you like, is a free and opensource"
+  },
+  {
+   "t": 17.71,
+   "d": 5.65,
+   "text": "ASCII art, animation, and game creation tool. It runs on Windows, Linux, and"
+  },
+  {
+   "t": 23.36,
+   "d": 5.15,
+   "text": "for now until Apple finishes locking down their platform, Mac OS. You can see"
+  },
+  {
+   "t": 28.51,
+   "d": 3.61,
+   "text": "the URL to the page on my website there. I'm gonna try to keep this"
+  },
+  {
+   "t": 32.12,
+   "d": 3.39,
+   "text": "as jargon-free as possible, but I want to unpack some important"
+  },
+  {
+   "t": 35.51,
+   "d": 3.5,
+   "text": "acronyms up front. ASCII is a standard for representing text"
+  },
+  {
+   "t": 39.01,
+   "d": 4.55,
+   "text": "characters on a computer. ANSI is a standards body that introduced"
+  },
+  {
+   "t": 43.56,
+   "d": 3.93,
+   "text": "a specific set of these characters for the IBM PCs back in the 80s,"
+  },
+  {
+   "t": 47.49,
+   "d": 3.55,
+   "text": "and people sometimes refer to this as ANSI art. But if you're new to all this,"
+  },
+  {
+   "t": 51.04,
+   "d": 4.49,
+   "text": "you can treat ASCII art, ANSI art, and text mode art as interchangeable."
+  },
+  {
+   "t": 55.52,
+   "d": 4.53,
+   "text": "So, I built Playscii as an ASCII art tool with an eye towards expanding"
+  },
+  {
+   "t": 60.05,
+   "d": 4.51,
+   "text": "it to be a game engine, which is a bit weird, and I'll talk more about that later."
+  },
+  {
+   "t": 64.57,
+   "d": 2.69,
+   "text": "Now, to be clear, this talk isn't so much about, \"Here's my"
+  },
+  {
+   "t": 67.25,
+   "d": 3.41,
+   "text": "hot stuff technology, everyone should be using it.\" This is an odd little"
+  },
+  {
+   "t": 70.67,
+   "d": 3.74,
+   "text": "homebrew project that I did because I really wanted to. I learned a lot,"
+  },
+  {
+   "t": 74.4,
+   "d": 3.92,
+   "text": "I'm proud of it, and I enjoy using it, and I'll talk about this more at the end,"
+  },
+  {
+   "t": 78.32,
+   "d": 3.46,
+   "text": "but I think the world would be a better place if everyone could afford to do something"
+  },
+  {
+   "t": 81.78,
+   "d": 5.15,
+   "text": "like that. So first, a bit about ASCII art and what drew me to it initially."
+  },
+  {
+   "t": 86.94,
+   "d": 4.22,
+   "text": "I don't like games being an island, culturally. Broad influences are very"
+  },
+  {
+   "t": 91.15,
+   "d": 3.92,
+   "text": "important for growing medium, so I like to think of things that we all do as"
+  },
+  {
+   "t": 95.07,
+   "d": 3.4,
+   "text": "connected to much older traditions that often predate digital games."
+  },
+  {
+   "t": 98.47,
+   "d": 3.58,
+   "text": "Pixel art came from mosaic and weaving and needlepoint, et cetera."
+  },
+  {
+   "t": 102.04,
+   "d": 4.62,
+   "text": "And ASCII art arguably originated with pictographic languages, such as"
+  },
+  {
+   "t": 106.67,
+   "d": 4.63,
+   "text": "Egyptian hieroglyphs and later concrete poetry, et cetera. As long as humans"
+  },
+  {
+   "t": 111.3,
+   "d": 3.38,
+   "text": "have been writing and drawing, we've been communicating interesting"
+  },
+  {
+   "t": 114.68,
+   "d": 3.3,
+   "text": "things by blurring the lines between those two things."
+  },
+  {
+   "t": 117.98,
+   "d": 3.35,
+   "text": "Typewriter art is what happened as soon as we got machines that could"
+  },
+  {
+   "t": 121.33,
+   "d": 4.01,
+   "text": "print text with the press of a key. The immediacy of that let people"
+  },
+  {
+   "t": 125.34,
+   "d": 4.02,
+   "text": "play with text as art way more easily than say, like, movable type,"
+  },
+  {
+   "t": 129.36,
+   "d": 3.58,
+   "text": "which I guess was the prior technology. And so, at the dawn of the computer"
+  },
+  {
+   "t": 132.94,
+   "d": 4.32,
+   "text": "age, text characters were your graphics. Every computer had a character set"
+  },
+  {
+   "t": 137.26,
+   "d": 3.78,
+   "text": "of all the possible glyphs that they could draw. And so, for example,"
+  },
+  {
+   "t": 141.04,
+   "d": 3.1,
+   "text": "emoticons were just people improvising within the constraints of that"
+  },
+  {
+   "t": 144.14,
+   "d": 1.6,
+   "text": "character set."
+  },
+  {
+   "t": 145.74,
+   "d": 4.02,
+   "text": "And people obviously wanted to make images, but they had to get creative."
+  },
+  {
+   "t": 149.76,
+   "d": 4.17,
+   "text": "So character sets on the microcomputers of the late 70s and early 80s got"
+  },
+  {
+   "t": 153.93,
+   "d": 4.1,
+   "text": "these special glyphs called semigraphics, things like little blocks and wedges that"
+  },
+  {
+   "t": 158.02,
+   "d": 4.13,
+   "text": "let you draw pictures. This is a famous Commodore 64 program that just generates"
+  },
+  {
+   "t": 162.16,
+   "d": 3.35,
+   "text": "a little infinite maze out of the semigraphics."
+  },
+  {
+   "t": 165.51,
+   "d": 4.62,
+   "text": "In the BBS era, this stuff flourished as ANSI art, and this became the primary"
+  },
+  {
+   "t": 170.12,
+   "d": 3.9,
+   "text": "medium for branding and art in these pre-internet digital spaces, like"
+  },
+  {
+   "t": 174.02,
+   "d": 4.22,
+   "text": "bulletin boards. ANSI made sense because while computers soon"
+  },
+  {
+   "t": 178.24,
+   "d": 3.51,
+   "text": "had the ability to draw pixel or raster graphics, as they're sometimes called,"
+  },
+  {
+   "t": 181.75,
+   "d": 4.0,
+   "text": "transmitting them over a modem was almost always massively slower."
+  },
+  {
+   "t": 185.75,
+   "d": 2.74,
+   "text": "So when home computers became networked, they kind of got busted"
+  },
+  {
+   "t": 188.49,
+   "d": 2.4,
+   "text": "back down to pure text mode art for a bit."
+  },
+  {
+   "t": 190.89,
+   "d": 5.13,
+   "text": "Also around this time, there was an ASCII-based game with a built-in"
+  },
+  {
+   "t": 196.02,
+   "d": 3.53,
+   "text": "level editor called ZZT, which I totally missed. I think I was too busy"
+  },
+  {
+   "t": 199.55,
+   "d": 3.65,
+   "text": "playing Wolfenstein 3D at the time. But this little game ended up being"
+  },
+  {
+   "t": 203.2,
+   "d": 3.61,
+   "text": "enormously influential for a lot of people, and for decades down the road,"
+  },
+  {
+   "t": 206.82,
+   "d": 3.93,
+   "text": "and it was an early seed for the concept of game mods and having flexible"
+  },
+  {
+   "t": 210.75,
+   "d": 3.61,
+   "text": "enough technology, a game engine, to support that."
+  },
+  {
+   "t": 214.36,
+   "d": 3.79,
+   "text": "And so today, ASCII art or text mode art, or whatever you want to call it,"
+  },
+  {
+   "t": 218.15,
+   "d": 4.18,
+   "text": "is just another widely recognized aesthetic realm within visual art."
+  },
+  {
+   "t": 222.33,
+   "d": 2.4,
+   "text": "Much like all the different kinds of pixel art you see."
+  },
+  {
+   "t": 224.73,
+   "d": 3.95,
+   "text": "It's a medium, and about ten years ago, I delved into this and started"
+  },
+  {
+   "t": 228.68,
+   "d": 3.3,
+   "text": "noticing cool work by specific artists, and I got inspired, and I wanted to"
+  },
+  {
+   "t": 231.98,
+   "d": 3.75,
+   "text": "mention a few whose work I really connected with."
+  },
+  {
+   "t": 235.73,
+   "d": 4.27,
+   "text": "So Raquel Meyers is a German artist, and her work is very bold and graphic,"
+  },
+  {
+   "t": 240.0,
+   "d": 3.73,
+   "text": "and it crackles with this kind of punk glitchiness. She does all her work"
+  },
+  {
+   "t": 243.73,
+   "d": 3.57,
+   "text": "on a real Commodore 64 computer, and typing it in character by"
+  },
+  {
+   "t": 247.3,
+   "d": 2.43,
+   "text": "character, which is just amazing."
+  },
+  {
+   "t": 250.51,
+   "d": 3.81,
+   "text": "Ailadi is an illustrator, and her figures and use of color have this playfulness"
+  },
+  {
+   "t": 254.32,
+   "d": 3.42,
+   "text": "to them that I think stands out from what we normally think of as text mode"
+  },
+  {
+   "t": 257.74,
+   "d": 1.73,
+   "text": "aesthetics."
+  },
+  {
+   "t": 259.48,
+   "d": 3.53,
+   "text": "Polyducks is a veteran pixel artist and game dev whose work draws"
+  },
+  {
+   "t": 263.01,
+   "d": 4.5,
+   "text": "from a lot of different traditions within pixel art, and datad00r does a lot"
+  },
+  {
+   "t": 267.51,
+   "d": 3.65,
+   "text": "of work with custom character sets, which gives the work this kind of"
+  },
+  {
+   "t": 271.16,
+   "d": 2.65,
+   "text": "intricacy and mystery."
+  },
+  {
+   "t": 275.31,
+   "d": 4.0,
+   "text": "So, I started delving into ASCII art and realized that I loved it a whole lot,"
+  },
+  {
+   "t": 279.31,
+   "d": 2.92,
+   "text": "and also around that time, I saw a talk by Brett Victor called"
+  },
+  {
+   "t": 282.23,
+   "d": 1.83,
+   "text": "\"Inventing on Principle.\""
+  },
+  {
+   "t": 284.06,
+   "d": 2.73,
+   "text": "And I was like, \"Hmm, I should try making tools sometime.\""
+  },
+  {
+   "t": 286.79,
+   "d": 4.62,
+   "text": "So just for fun, I made a tool called EDSCII over a long weekend in 2012,"
+  },
+  {
+   "t": 291.41,
+   "d": 4.2,
+   "text": "and it was a basic ASCII painting program, but I also added this"
+  },
+  {
+   "t": 295.61,
+   "d": 3.41,
+   "text": "ability to convert bitmap images, and I really liked the way that that looked."
+  },
+  {
+   "t": 299.02,
+   "d": 2.99,
+   "text": "I don't want to go into detail about it now, but if we have time at the end,"
+  },
+  {
+   "t": 302.01,
+   "d": 2.17,
+   "text": "feel free to ask me about how it works."
+  },
+  {
+   "t": 304.17,
+   "d": 3.4,
+   "text": "So to break down some basic concepts here, a piece of ASCII art uses"
+  },
+  {
+   "t": 307.57,
+   "d": 4.19,
+   "text": "a particular character set and a color palette. A document is"
+  },
+  {
+   "t": 311.76,
+   "d": 4.65,
+   "text": "simply a grid of tiles, and each of these tiles has a character, a foreground"
+  },
+  {
+   "t": 316.4,
+   "d": 4.08,
+   "text": "color, and a background color, and each of these are represented by"
+  },
+  {
+   "t": 320.49,
+   "d": 4.23,
+   "text": "numerical indices into a character and palette table, respectively."
+  },
+  {
+   "t": 324.72,
+   "d": 4.97,
+   "text": "So this is the underlying decomposition of all ASCII art."
+  },
+  {
+   "t": 330.81,
+   "d": 3.23,
+   "text": "So, a few years later, I wanted to make a game on my own,"
+  },
+  {
+   "t": 334.04,
+   "d": 5.31,
+   "text": "a roguelike-like-like, or a roguelite or whatever you all call them,"
+  },
+  {
+   "t": 339.35,
+   "d": 6.22,
+   "text": "and since around 2007, I had wanted to \"go indie,\" and even though by 2015,"
+  },
+  {
+   "t": 345.58,
+   "d": 2.92,
+   "text": "the window of opportunity really felt like it was closing, I still wasn't"
+  },
+  {
+   "t": 348.67,
+   "d": 4.0,
+   "text": "ready to give up on that dream, even though I maybe already should have,"
+  },
+  {
+   "t": 352.67,
+   "d": 3.83,
+   "text": "anyway, I wanted to make this game. And ASCII seemed like a reasonable"
+  },
+  {
+   "t": 356.5,
+   "d": 2.68,
+   "text": "way to make a game that was both visually distinct and within my"
+  },
+  {
+   "t": 359.18,
+   "d": 3.52,
+   "text": "artistic capabilities, so I started making Playscii."
+  },
+  {
+   "t": 362.7,
+   "d": 3.62,
+   "text": "I used Python again, and I learned Open GL and STL2, so all the"
+  },
+  {
+   "t": 366.31,
+   "d": 3.53,
+   "text": "hard platform level stuff was basically already done for me."
+  },
+  {
+   "t": 371.5,
+   "d": 3.9,
+   "text": "One reason that ASCII appealed to me was that it was a way of making"
+  },
+  {
+   "t": 375.4,
+   "d": 3.87,
+   "text": "art that reduced and discretized the total number of decisions to be"
+  },
+  {
+   "t": 379.26,
+   "d": 3.2,
+   "text": "made on a page or a document, canvas, whatever."
+  },
+  {
+   "t": 382.46,
+   "d": 2.48,
+   "text": "It's easier for me to start drawing something when there's a"
+  },
+  {
+   "t": 384.94,
+   "d": 3.42,
+   "text": "finite enough set of possibilities that I can see them all,"
+  },
+  {
+   "t": 388.36,
+   "d": 3.23,
+   "text": "character and color combinations, in front of me at once."
+  },
+  {
+   "t": 391.59,
+   "d": 3.05,
+   "text": "And this also gains some of the same advantages of tile-based level"
+  },
+  {
+   "t": 394.64,
+   "d": 3.85,
+   "text": "editing, and indeed, Playscii can be used as a tile-based level editor."
+  },
+  {
+   "t": 398.49,
+   "d": 3.6,
+   "text": "Jim Stormdancer used it to layout the overworld wap for Frog Fractions 2,"
+  },
+  {
+   "t": 402.09,
+   "d": 3.28,
+   "text": "not that Frog Fractions 2 is a real game, that anyone can play."
+  },
+  {
+   "t": 407.73,
+   "d": 4.06,
+   "text": "There are already a lot of great ASCII editors out there, like REXPaint"
+  },
+  {
+   "t": 411.79,
+   "d": 3.97,
+   "text": "and PabloDraw and one for the Commodore 64 called simply PETSCII."
+  },
+  {
+   "t": 415.76,
+   "d": 2.85,
+   "text": "I made my own editor, rather than use any of these existing ones,"
+  },
+  {
+   "t": 418.6,
+   "d": 3.42,
+   "text": "because I wanted to be able to have weird things like layers,"
+  },
+  {
+   "t": 422.02,
+   "d": 5.53,
+   "text": "alpha blending, postprocessing for things like this cool CRT filter,"
+  },
+  {
+   "t": 427.56,
+   "d": 3.07,
+   "text": "and a game engine built in, where objects could move off-grid and"
+  },
+  {
+   "t": 430.62,
+   "d": 3.44,
+   "text": "do all the stuff that game objects do. This all made it less of a pure"
+  },
+  {
+   "t": 434.07,
+   "d": 4.23,
+   "text": "retro, could exist on a real old computer thing, but that wasn't"
+  },
+  {
+   "t": 438.3,
+   "d": 3.29,
+   "text": "really a priority for me. If I wanted something really authentic-looking,"
+  },
+  {
+   "t": 441.59,
+   "d": 3.58,
+   "text": "it's easier to create that in a more powerful program and write a bit"
+  },
+  {
+   "t": 445.17,
+   "d": 4.32,
+   "text": "of code to export down to the simpler format, was my opinion."
+  },
+  {
+   "t": 449.49,
+   "d": 2.79,
+   "text": "But I also had my own ideas about user interface that I wanted to"
+  },
+  {
+   "t": 452.28,
+   "d": 3.05,
+   "text": "put into practice. So if you hadn't already guessed, these slides"
+  },
+  {
+   "t": 455.33,
+   "d": 3.07,
+   "text": "were built with and are running in Playscii's game mode,"
+  },
+  {
+   "t": 458.4,
+   "d": 3.03,
+   "text": "which allows me to do a bit of a live demo, and first, a brief overview"
+  },
+  {
+   "t": 461.43,
+   "d": 3.08,
+   "text": "of art mode, which I'm going to switch over to now."
+  },
+  {
+   "t": 464.51,
+   "d": 5.55,
+   "text": "As you can see, there's a menu bar along the top, a status bar. I guess it's cut off"
+  },
+  {
+   "t": 470.07,
+   "d": 5.27,
+   "text": "on one of these TVs. Anyway, yeah. Okay, cool. You can see it."
+  },
+  {
+   "t": 475.33,
+   "d": 3.73,
+   "text": "Yeah, there's a menu bar along the top, with conventional pull-down menus"
+  },
+  {
+   "t": 479.06,
+   "d": 3.95,
+   "text": "and a status bar along the bottom, showing the character and colors"
+  },
+  {
+   "t": 483.01,
+   "d": 3.69,
+   "text": "that you have currently selected. Paint operations preview under the"
+  },
+  {
+   "t": 486.71,
+   "d": 6.99,
+   "text": "cursor, so this is what I will get if I click this, and I can do things"
+  },
+  {
+   "t": 493.7,
+   "d": 7.5,
+   "text": "like copy-paste and select and undo and all that good stuff."
+  },
+  {
+   "t": 501.19,
+   "d": 4.46,
+   "text": "And I brought back EDSCII's concept of a character and color selection popup,"
+  },
+  {
+   "t": 505.66,
+   "d": 4.03,
+   "text": "so that you have instant access. You just tap the spacebar and you"
+  },
+  {
+   "t": 509.69,
+   "d": 3.62,
+   "text": "can have access to all of the different foreground and background colors"
+  },
+  {
+   "t": 513.3,
+   "d": 3.93,
+   "text": "that you want. You can paint around with that different stuff,"
+  },
+  {
+   "t": 517.24,
+   "d": 3.13,
+   "text": "and sample a character and all that."
+  },
+  {
+   "t": 520.37,
+   "d": 4.22,
+   "text": "Except now you can dock it and just leave it as a persistent UI element."
+  },
+  {
+   "t": 524.59,
+   "d": 4.0,
+   "text": "So yeah, that's a little bit of art mode."
+  },
+  {
+   "t": 529.54,
+   "d": 5.52,
+   "text": "I care a lot about this idea of tool flow, but what that actually means"
+  },
+  {
+   "t": 535.05,
+   "d": 4.3,
+   "text": "in many situations is finding operations that you do several times a minute,"
+  },
+  {
+   "t": 539.35,
+   "d": 4.17,
+   "text": "but are high friction. So just ones that take a lot of clicks or dragging"
+  },
+  {
+   "t": 543.52,
+   "d": 3.21,
+   "text": "stuff around, and I try to work out a design that reduces that"
+  },
+  {
+   "t": 546.74,
+   "d": 1.87,
+   "text": "by as much as possible."
+  },
+  {
+   "t": 548.6,
+   "d": 3.37,
+   "text": "But I also weigh the cognitive cost of UI actions. What am I being made to"
+  },
+  {
+   "t": 551.97,
+   "d": 3.4,
+   "text": "think about? When do I make decisions? How many decisions do I have to make,"
+  },
+  {
+   "t": 555.37,
+   "d": 4.83,
+   "text": "and how many UI concepts do I have to engage with for a given operation?"
+  },
+  {
+   "t": 560.2,
+   "d": 3.46,
+   "text": "I also care deeply about approachability. I don't know if there's a more official"
+  },
+  {
+   "t": 563.66,
+   "d": 3.8,
+   "text": "lingo for that, and I avoid the word \"intuitive,\" because much like flow,"
+  },
+  {
+   "t": 567.47,
+   "d": 3.61,
+   "text": "it can be amorphous and baggage-y. Playscii's starting document here,"
+  },
+  {
+   "t": 571.08,
+   "d": 3.4,
+   "text": "which is what I've been painting on, gets new users past a blank page"
+  },
+  {
+   "t": 574.48,
+   "d": 3.02,
+   "text": "and immediately invites them to play with it. There's even like this"
+  },
+  {
+   "t": 577.5,
+   "d": 3.23,
+   "text": "bottom edge that invites you to pan around and scroll past it and"
+  },
+  {
+   "t": 580.73,
+   "d": 4.72,
+   "text": "understand that documents can actually be of arbitrary size."
+  },
+  {
+   "t": 585.45,
+   "d": 4.5,
+   "text": "That said, this is definitely not a so simple a five year old could use it"
+  },
+  {
+   "t": 589.95,
+   "d": 3.2,
+   "text": "kind of tool. It's targeting a specific level of expertise, but hopefully"
+  },
+  {
+   "t": 593.14,
+   "d": 3.08,
+   "text": "the onramp to that is as simple as I could make it."
+  },
+  {
+   "t": 596.23,
+   "d": 2.87,
+   "text": "I also wrote a whole user manual that's included with the program,"
+  },
+  {
+   "t": 599.09,
+   "d": 3.47,
+   "text": "and opens up in your web browser, just for that reason, and because"
+  },
+  {
+   "t": 602.56,
+   "d": 3.75,
+   "text": "I think any program that's breaking conventions or mixing paradigms"
+  },
+  {
+   "t": 606.31,
+   "d": 3.47,
+   "text": "like this should have one."
+  },
+  {
+   "t": 609.78,
+   "d": 3.48,
+   "text": "So, like I said, old 80s microcomputers each have their own character sets"
+  },
+  {
+   "t": 613.26,
+   "d": 3.12,
+   "text": "and color palettes, and I was eager to add all of them to the selection"
+  },
+  {
+   "t": 616.38,
+   "d": 4.16,
+   "text": "available out of the box with Playscii. I quickly found that these have a"
+  },
+  {
+   "t": 620.54,
+   "d": 2.4,
+   "text": "massive effect on the kind of art that you're making."
+  },
+  {
+   "t": 622.94,
+   "d": 3.38,
+   "text": "Each character set and color palette have their own personality, and it's"
+  },
+  {
+   "t": 626.32,
+   "d": 2.67,
+   "text": "hard to put into words. You just kind of have to work with it for a little bit."
+  },
+  {
+   "t": 628.99,
+   "d": 2.5,
+   "text": "And these are some examples of things that people have done with"
+  },
+  {
+   "t": 631.49,
+   "d": 3.41,
+   "text": "radically different types of things."
+  },
+  {
+   "t": 634.91,
+   "d": 5.77,
+   "text": "It feels like a mix of using different fonts, using different tile sets or textures"
+  },
+  {
+   "t": 640.67,
+   "d": 3.62,
+   "text": "in a level editor, and writing in a different human language."
+  },
+  {
+   "t": 644.29,
+   "d": 3.76,
+   "text": "So it simultaneously tickles both our language brains and our visual brains,"
+  },
+  {
+   "t": 648.05,
+   "d": 3.48,
+   "text": "and I think that's one of the amazing things about ASCII art."
+  },
+  {
+   "t": 653.02,
+   "d": 4.13,
+   "text": "So, from the start, I knew that I wanted Playscii to use real-time 3D rendering,"
+  },
+  {
+   "t": 657.15,
+   "d": 3.2,
+   "text": "and handle input, and have a simulation loop much like a game engine."
+  },
+  {
+   "t": 660.36,
+   "d": 3.06,
+   "text": "I didn't initially think of it as an engine, but I might as well own up"
+  },
+  {
+   "t": 663.42,
+   "d": 3.31,
+   "text": "to it. I made my own engine. It's the first one that I've made,"
+  },
+  {
+   "t": 666.73,
+   "d": 2.9,
+   "text": "and I tried to put into practice a lot of what I had learned and opinions"
+  },
+  {
+   "t": 669.63,
+   "d": 3.42,
+   "text": "that I've developed over years of working with a lot of different engines,"
+  },
+  {
+   "t": 673.05,
+   "d": 5.38,
+   "text": "Doom, Quake, Goldsource, Unreal, Double Fine's Buddha tech, et cetera."
+  },
+  {
+   "t": 678.43,
+   "d": 4.22,
+   "text": "And specifically, I wanted a game editing tool with a strong emphasis on, as I'll"
+  },
+  {
+   "t": 682.65,
+   "d": 5.1,
+   "text": "call it, liveness and dynamicity. So, someone I mentioned earlier,"
+  },
+  {
+   "t": 687.75,
+   "d": 3.23,
+   "text": "Brett Victor's work expands upon this dramatically, and to be honest, I think"
+  },
+  {
+   "t": 690.98,
+   "d": 3.75,
+   "text": "I've only just scratched it with Playscii. But it's a major idea in any future"
+  },
+  {
+   "t": 694.73,
+   "d": 3.27,
+   "text": "tools work that I do. This idea of tightening feedback loops,"
+  },
+  {
+   "t": 698.0,
+   "d": 4.35,
+   "text": "seeing things that are hidden or hard to visualize, seeing all the way"
+  },
+  {
+   "t": 702.35,
+   "d": 3.42,
+   "text": "through a process instead of just one step ahead, and seeing across"
+  },
+  {
+   "t": 705.76,
+   "d": 3.25,
+   "text": "simulation time or production time. And sometimes it's as simple as"
+  },
+  {
+   "t": 709.01,
+   "d": 3.5,
+   "text": "facilitating an instant connection between a piece of art and a game"
+  },
+  {
+   "t": 712.51,
+   "d": 3.5,
+   "text": "object, between a tuning value and something it affects,"
+  },
+  {
+   "t": 716.01,
+   "d": 2.92,
+   "text": "between collision simulation and visuals."
+  },
+  {
+   "t": 718.93,
+   "d": 3.25,
+   "text": "And I thought back to my time designing Quake or Half-Life maps, when making"
+  },
+  {
+   "t": 722.18,
+   "d": 3.08,
+   "text": "a small change to a map often meant waiting several hours for it to"
+  },
+  {
+   "t": 725.26,
+   "d": 4.27,
+   "text": "recompile. Modern big budget tools still thrive on big, expensive, big"
+  },
+  {
+   "t": 729.53,
+   "d": 3.33,
+   "text": "processes. I don't know, it makes all of us feel important or something."
+  },
+  {
+   "t": 732.86,
+   "d": 4.85,
+   "text": "And I wanted the opposite of that, because for Pete's sake, it's ASCII."
+  },
+  {
+   "t": 737.71,
+   "d": 3.33,
+   "text": "So I tried to ask, \"What are the turnaround times on a given action?"
+  },
+  {
+   "t": 741.04,
+   "d": 4.05,
+   "text": "What requires a compilation process? What requires a reboot of the engine?"
+  },
+  {
+   "t": 745.09,
+   "d": 4.4,
+   "text": "What requires just even a quick load?\" So, as an example, in Playscii,"
+  },
+  {
+   "t": 749.49,
+   "d": 3.27,
+   "text": "the art that a game object refers to is the same data object that you"
+  },
+  {
+   "t": 752.76,
+   "d": 3.03,
+   "text": "work with in the editor. So I can easily select this animating"
+  },
+  {
+   "t": 755.79,
+   "d": 4.3,
+   "text": "object here, and I can open up its art, and pop back into game"
+  },
+  {
+   "t": 760.09,
+   "d": 6.57,
+   "text": "mode, and then I can make a tiny little change to it. Let's make this"
+  },
+  {
+   "t": 766.66,
+   "d": 3.2,
+   "text": "owl's eyes big."
+  },
+  {
+   "t": 770.87,
+   "d": 2.35,
+   "text": "Yeah, and I can just flip back to game mode and, without even"
+  },
+  {
+   "t": 773.22,
+   "d": 4.08,
+   "text": "saving the file, I can see that it's there. Yeah."
+  },
+  {
+   "t": 779.07,
+   "d": 3.65,
+   "text": "So, other than thinking about, as carefully as I could,"
+  },
+  {
+   "t": 782.72,
+   "d": 3.08,
+   "text": "about overall architecture, I tried not to freak out too much about"
+  },
+  {
+   "t": 785.8,
+   "d": 3.01,
+   "text": "performance and avoiding gauging and the dreaded premature"
+  },
+  {
+   "t": 788.82,
+   "d": 2.47,
+   "text": "optimization that everybody tells you to avoid."
+  },
+  {
+   "t": 791.28,
+   "d": 3.43,
+   "text": "For example, in the architecture of the original Doom engine,"
+  },
+  {
+   "t": 794.72,
+   "d": 3.95,
+   "text": "moving the floors and ceilings of any given room was basically free."
+  },
+  {
+   "t": 798.67,
+   "d": 3.96,
+   "text": "And as a direct result, level designers used that a ton to create effects."
+  },
+  {
+   "t": 802.63,
+   "d": 3.47,
+   "text": "Anything could be an elevator, any floor could suddenly collapse"
+  },
+  {
+   "t": 806.1,
+   "d": 3.23,
+   "text": "out from under you, walls could appear to tumble down, and staircases"
+  },
+  {
+   "t": 809.33,
+   "d": 3.75,
+   "text": "could rise up out of the floor. So for Playscii, one principle was"
+  },
+  {
+   "t": 813.08,
+   "d": 3.7,
+   "text": "make as few speed-related restrictions on behavior as possible,"
+  },
+  {
+   "t": 816.78,
+   "d": 3.07,
+   "text": "and the ones that are there should be easy to lift."
+  },
+  {
+   "t": 822.8,
+   "d": 2.52,
+   "text": "This focus led me to other things like hot reloading as much"
+  },
+  {
+   "t": 825.33,
+   "d": 2.86,
+   "text": "external data as possible, such as character set and color palette"
+  },
+  {
+   "t": 828.19,
+   "d": 2.72,
+   "text": "bitmaps. Eventually, I'd like you to be able to edit those from"
+  },
+  {
+   "t": 830.91,
+   "d": 3.57,
+   "text": "within Playscii itself, just 'cause that makes sense. Also, maintaining"
+  },
+  {
+   "t": 834.48,
+   "d": 3.0,
+   "text": "a very thin separation between art mode and game mode."
+  },
+  {
+   "t": 837.48,
+   "d": 3.01,
+   "text": "Nearly everything, including the editor UI itself, is modifiable"
+  },
+  {
+   "t": 840.49,
+   "d": 2.6,
+   "text": "at runtime, so that you have as few reasons as possible"
+  },
+  {
+   "t": 843.09,
+   "d": 2.82,
+   "text": "to actually restart the entire program."
+  },
+  {
+   "t": 845.91,
+   "d": 4.69,
+   "text": "I also added a quick-style pulldown console that exposes"
+  },
+  {
+   "t": 850.6,
+   "d": 3.75,
+   "text": "the Python read-evaluate-print loop, and some other special case commands,"
+  },
+  {
+   "t": 854.36,
+   "d": 5.38,
+   "text": "so you can just do all the stuff that you would at a normal Python console."
+  },
+  {
+   "t": 863.54,
+   "d": 2.32,
+   "text": "Some other miscellaneous stuff about game mode, games that you make"
+  },
+  {
+   "t": 865.85,
+   "d": 3.75,
+   "text": "within it are written in Python, same as the program itself, and loaded in"
+  },
+  {
+   "t": 869.6,
+   "d": 3.5,
+   "text": "as modules. There's very little protecting the engine code from game code."
+  },
+  {
+   "t": 873.1,
+   "d": 2.42,
+   "text": "I just assume that you know what you're doing."
+  },
+  {
+   "t": 875.52,
+   "d": 3.56,
+   "text": "Don't run Playscii games for people that you don't trust."
+  },
+  {
+   "t": 879.09,
+   "d": 2.98,
+   "text": "Any of this code can modify a game object's art at runtime,"
+  },
+  {
+   "t": 882.07,
+   "d": 3.73,
+   "text": "so you can do things like procedural animation, and actually, back in"
+  },
+  {
+   "t": 885.8,
+   "d": 3.64,
+   "text": "art mode, you can run Python code on your art documents."
+  },
+  {
+   "t": 889.43,
+   "d": 6.1,
+   "text": "So for instance, I can switch back and then I can run a Cellular Automata"
+  },
+  {
+   "t": 895.53,
+   "d": 5.1,
+   "text": "thing on this starting document one step at a time, or I can have it"
+  },
+  {
+   "t": 900.63,
+   "d": 5.68,
+   "text": "run continuously over game simulation time. Yeah."
+  },
+  {
+   "t": 907.93,
+   "d": 3.03,
+   "text": "Yeah, we're deep into the live demo thing here."
+  },
+  {
+   "t": 910.96,
+   "d": 2.25,
+   "text": "I also ended up writing my own collision system and I'm gonna"
+  },
+  {
+   "t": 913.21,
+   "d": 6.65,
+   "text": "open up the first game, or game-like thing that I made, using -"
+  },
+  {
+   "t": 919.86,
+   "d": 3.25,
+   "text": "yeah, this was the first thing that I made to prove out."
+  },
+  {
+   "t": 923.11,
+   "d": 7.39,
+   "text": "I basically converted Chrono Trigger sprites into cool-looking ASCII versions"
+  },
+  {
+   "t": 930.49,
+   "d": 4.04,
+   "text": "of them, and I have debugged visualizations of the collision shapes,"
+  },
+  {
+   "t": 934.54,
+   "d": 4.02,
+   "text": "primitives like circles and rectangles, but also being able to paint specific"
+  },
+  {
+   "t": 938.56,
+   "d": 4.95,
+   "text": "tiles within a given piece of ASCII art as collision, and then yeah, I can"
+  },
+  {
+   "t": 943.51,
+   "d": 6.0,
+   "text": "also just click on objects and live edit their properties, and just make"
+  },
+  {
+   "t": 949.51,
+   "d": 2.55,
+   "text": "an extra-wide thing. Yeah."
+  },
+  {
+   "t": 952.06,
+   "d": 8.31,
+   "text": "So yeah, after this, I tried building something with a larger world."
+  },
+  {
+   "t": 960.37,
+   "d": 4.95,
+   "text": "And I realized that I needed to add this concept of rooms that let you"
+  },
+  {
+   "t": 965.32,
+   "d": 5.21,
+   "text": "organize stuff and manage the scope of the simulation and rendering."
+  },
+  {
+   "t": 970.52,
+   "d": 1.95,
+   "text": "There it is."
+  },
+  {
+   "t": 973.27,
+   "d": 2.75,
+   "text": "So yeah, here's a very ZZT-like example game that I made."
+  },
+  {
+   "t": 976.02,
+   "d": 3.18,
+   "text": "There are multiple screens, there's a little town over here."
+  },
+  {
+   "t": 979.2,
+   "d": 3.45,
+   "text": "And I'm gonna cheat ahead and give myself the key that will"
+  },
+  {
+   "t": 982.65,
+   "d": 3.73,
+   "text": "get me past that lock on this screen. Go back into edit mode,"
+  },
+  {
+   "t": 986.39,
+   "d": 3.61,
+   "text": "drag this over, and then yeah. Now I'm just gonna select"
+  },
+  {
+   "t": 990.0,
+   "d": 5.82,
+   "text": "the player character itself, and drag it over to here. Woah, jeez."
+  },
+  {
+   "t": 997.32,
+   "d": 2.45,
+   "text": "Oh jeez, yeah, I'm outside the - alright."
+  },
+  {
+   "t": 1000.83,
+   "d": 2.18,
+   "text": "I kind of skipped past."
+  },
+  {
+   "t": 1004.84,
+   "d": 4.38,
+   "text": "Alright. Nope, nope. Well, my little optical mouse here"
+  },
+  {
+   "t": 1009.22,
+   "d": 4.61,
+   "text": "is just freaking out on this wooden table. Okay."
+  },
+  {
+   "t": 1013.83,
+   "d": 3.32,
+   "text": "So we'll get through this little lock and key thing, we're gonna claim"
+  },
+  {
+   "t": 1017.15,
+   "d": 4.38,
+   "text": "this artifact. And hey, actually it's just randomly cycling through"
+  },
+  {
+   "t": 1021.53,
+   "d": 2.81,
+   "text": "all the different characters that are in the character sets,"
+  },
+  {
+   "t": 1024.34,
+   "d": 3.52,
+   "text": "so the fact it landed on the @ is maybe especially auspicious."
+  },
+  {
+   "t": 1027.86,
+   "d": 3.35,
+   "text": "Anyway, so now we're at the end of the little example game here,"
+  },
+  {
+   "t": 1031.21,
+   "d": 3.8,
+   "text": "and it puts you into this flying mode, where you can see the entire world"
+  },
+  {
+   "t": 1035.01,
+   "d": 5.73,
+   "text": "laid out in a 3D perspective. So yes, that's game mode."
+  },
+  {
+   "t": 1041.56,
+   "d": 8.78,
+   "text": "Okay, let me go back to my slides here, which should just be - thank you."
+  },
+  {
+   "t": 1054.41,
+   "d": 2.0,
+   "text": "Okay, yeah. We did that."
+  },
+  {
+   "t": 1057.23,
+   "d": 3.88,
+   "text": "So the choice to write one's own engine versus using an existing one"
+  },
+  {
+   "t": 1061.11,
+   "d": 3.25,
+   "text": "is so often framed in terms of expediency versus programmer"
+  },
+  {
+   "t": 1064.36,
+   "d": 4.5,
+   "text": "ego and autonomy. The autonomy part is only part of that for me, though."
+  },
+  {
+   "t": 1068.86,
+   "d": 3.0,
+   "text": "For me, it was actually being able to put different values into"
+  },
+  {
+   "t": 1071.86,
+   "d": 4.6,
+   "text": "practice. And I would say it's this, more than anything, that has"
+  },
+  {
+   "t": 1076.46,
+   "d": 2.83,
+   "text": "made working on Playscii worthwhile and enjoyable"
+  },
+  {
+   "t": 1079.29,
+   "d": 3.07,
+   "text": "to me. Some broader context."
+  },
+  {
+   "t": 1082.36,
+   "d": 3.35,
+   "text": "So many people are making games now, and our needs, I think,"
+  },
+  {
+   "t": 1085.71,
+   "d": 3.4,
+   "text": "have never been more diverse. But at the same time, much of"
+  },
+  {
+   "t": 1089.1,
+   "d": 2.8,
+   "text": "game development now is dominated by the Unity and"
+  },
+  {
+   "t": 1091.9,
+   "d": 3.3,
+   "text": "Unreal duopoly. These engines often don't share our values."
+  },
+  {
+   "t": 1095.2,
+   "d": 3.23,
+   "text": "They're fundamentally tools for converting money into content,"
+  },
+  {
+   "t": 1098.43,
+   "d": 4.15,
+   "text": "you might say, a sort of industrialized distortion of practices by which the"
+  },
+  {
+   "t": 1102.58,
+   "d": 3.89,
+   "text": "earliest generations of game developers built our medium. And these tools"
+  },
+  {
+   "t": 1106.47,
+   "d": 3.33,
+   "text": "are, in many ways, designed around their business models, and I think"
+  },
+  {
+   "t": 1109.8,
+   "d": 2.51,
+   "text": "we'll increasingly find ourselves prevented from using them"
+  },
+  {
+   "t": 1112.32,
+   "d": 3.3,
+   "text": "how we prefer to, renting them instead of owning them, and in general,"
+  },
+  {
+   "t": 1115.62,
+   "d": 4.23,
+   "text": "being made subjects of the platform capitalism that their creators espouse,"
+  },
+  {
+   "t": 1119.85,
+   "d": 3.0,
+   "text": "and that's not really the world that I want to live in."
+  },
+  {
+   "t": 1122.85,
+   "d": 3.48,
+   "text": "So I think we would all be very well-served by a flourishing of"
+  },
+  {
+   "t": 1126.33,
+   "d": 2.6,
+   "text": "these kinds of smaller tools, each with a unique creative"
+  },
+  {
+   "t": 1128.94,
+   "d": 4.05,
+   "text": "identity, a tighter focus, an unusual new way of doing things,"
+  },
+  {
+   "t": 1132.99,
+   "d": 3.32,
+   "text": "or a committment to being approachable in specific ways that empower new"
+  },
+  {
+   "t": 1136.3,
+   "d": 4.23,
+   "text": "creators to develop new things, tools with different values."
+  },
+  {
+   "t": 1140.54,
+   "d": 2.8,
+   "text": "And the good news is, lots of people besides me have made small,"
+  },
+  {
+   "t": 1143.34,
+   "d": 3.87,
+   "text": "weird tools like Playscii, and I think we may well be in the early stages"
+  },
+  {
+   "t": 1147.2,
+   "d": 4.25,
+   "text": "of a renaissance of small tools. Search for tools on itch.io,"
+  },
+  {
+   "t": 1151.45,
+   "d": 4.28,
+   "text": "and you'll find tons of amazing stuff. In a lot of ways, big tools try to be"
+  },
+  {
+   "t": 1155.73,
+   "d": 4.4,
+   "text": "all things to all people, but I've come to believe very strongly that if"
+  },
+  {
+   "t": 1160.13,
+   "d": 3.63,
+   "text": "everyone made one thing that wasn't for everyone, there would be plenty"
+  },
+  {
+   "t": 1163.77,
+   "d": 4.49,
+   "text": "of something for everyone, and I think that goes for not just tools."
+  },
+  {
+   "t": 1169.57,
+   "d": 3.52,
+   "text": "So yeah, artists have made a ton of cool stuff with Playscii, and seeing it"
+  },
+  {
+   "t": 1173.08,
+   "d": 3.22,
+   "text": "is always incredibly inspiring to me. I try to post everything that people"
+  },
+  {
+   "t": 1176.3,
+   "d": 2.35,
+   "text": "send me that they've made with the tool to the Playscii Tumblr"
+  },
+  {
+   "t": 1178.65,
+   "d": 3.63,
+   "text": "and Twitter accounts. This is a Russian artist who goes by None Petrovich,"
+  },
+  {
+   "t": 1182.28,
+   "d": 3.42,
+   "text": "and this work was tiled out in Playscii and then colored in the paint program"
+  },
+  {
+   "t": 1185.7,
+   "d": 2.5,
+   "text": "Krita."
+  },
+  {
+   "t": 1188.2,
+   "d": 2.03,
+   "text": "And yeah, yesterday, Andrea mentioned that for his game, Nauticrawl,"
+  },
+  {
+   "t": 1190.23,
+   "d": 2.49,
+   "text": "he had commissioned some text mode art from Polyducks and run it through"
+  },
+  {
+   "t": 1192.75,
+   "d": 3.42,
+   "text": "Playscii for displaying on the screens in its 3D world, and people have used"
+  },
+  {
+   "t": 1196.17,
+   "d": 6.63,
+   "text": "Playscii to make art for album covers and art for games, ASCII and non-ASCII alike,"
+  },
+  {
+   "t": 1202.8,
+   "d": 3.77,
+   "text": "and art for gallery exhibitions, fan art, music videos."
+  },
+  {
+   "t": 1207.64,
+   "d": 2.4,
+   "text": "And yeah, when people send me this stuff or I stumble across it,"
+  },
+  {
+   "t": 1210.05,
+   "d": 3.75,
+   "text": "it just floors me, because here's the thing. If you make tools, people will make"
+  },
+  {
+   "t": 1213.8,
+   "d": 4.0,
+   "text": "stuff with them. People with talents utterly unlike yours, and you'll be amazed, and"
+  },
+  {
+   "t": 1217.8,
+   "d": 4.78,
+   "text": "you'll feel proud in a way that's kind of like what I imagine being a parent is like."
+  },
+  {
+   "t": 1222.58,
+   "d": 3.58,
+   "text": "This artist's talent produced this, but I helped enable it in some small way."
+  },
+  {
+   "t": 1226.16,
+   "d": 5.23,
+   "text": "I was there in the background, humbly handing over just the right paintbrush."
+  },
+  {
+   "t": 1232.34,
+   "d": 3.22,
+   "text": "This is a photo that I took one evening in February, four years ago,"
+  },
+  {
+   "t": 1235.56,
+   "d": 3.03,
+   "text": "across town in Precita Park, as the sun was going down."
+  },
+  {
+   "t": 1238.59,
+   "d": 2.94,
+   "text": "It was one of the first images I ran through Playscii's bitmap"
+  },
+  {
+   "t": 1241.53,
+   "d": 3.15,
+   "text": "image conversion code, as I was putting the finishing touches on it."
+  },
+  {
+   "t": 1244.67,
+   "d": 2.53,
+   "text": "And I really liked the way that it looked, and I remember feeling really"
+  },
+  {
+   "t": 1247.21,
+   "d": 3.2,
+   "text": "proud that I had made this weird little tool, this unique way of creating"
+  },
+  {
+   "t": 1250.41,
+   "d": 3.91,
+   "text": "images. It was like learning a new song, and I wanted to share it with others,"
+  },
+  {
+   "t": 1254.32,
+   "d": 2.85,
+   "text": "anyone in the world, for free on the internet."
+  },
+  {
+   "t": 1257.17,
+   "d": 3.11,
+   "text": "And I started off with this, wanting to make a game, but it's good that"
+  },
+  {
+   "t": 1260.29,
+   "d": 3.05,
+   "text": "I set that dream aside for a better one, I think."
+  },
+  {
+   "t": 1263.34,
+   "d": 3.4,
+   "text": "And it comes back to why I did this. Building a tool for creative work"
+  },
+  {
+   "t": 1266.74,
+   "d": 3.85,
+   "text": "is a specific kind of social act, a political act. You are opening"
+  },
+  {
+   "t": 1270.59,
+   "d": 4.9,
+   "text": "doors for people to make new things, and sometimes for new creators"
+  },
+  {
+   "t": 1275.49,
+   "d": 1.78,
+   "text": "to start making things."
+  },
+  {
+   "t": 1277.27,
+   "d": 2.66,
+   "text": "And once I started doing that, I found it fulfilling in ways unlike anything"
+  },
+  {
+   "t": 1279.93,
+   "d": 3.85,
+   "text": "else I'd experienced in my career to date. So I don't really care"
+  },
+  {
+   "t": 1283.79,
+   "d": 3.33,
+   "text": "if I never work on another critically-acclaimed game again."
+  },
+  {
+   "t": 1287.11,
+   "d": 3.47,
+   "text": "I want to spend the rest of my career building tools and enabling others."
+  },
+  {
+   "t": 1290.59,
+   "d": 4.1,
+   "text": "So again, I'm not saying use Playscii. I'm saying build something like this,"
+  },
+  {
+   "t": 1294.69,
+   "d": 3.27,
+   "text": "that echoes your values, whatever that might be. Playscii was just"
+  },
+  {
+   "t": 1297.95,
+   "d": 3.25,
+   "text": "my first step. Show me what yours is."
+  },
+  {
+   "t": 1301.2,
+   "d": 4.18,
+   "text": "Thanks, everyone. My website is vectorpoem.com."
+  },
+  {
+   "t": 1305.38,
+   "d": 3.11,
+   "text": "You can get Playscii from itch.io, and my code is hosted, until June"
+  },
+  {
+   "t": 1308.5,
+   "d": 3.3,
+   "text": "of next year at least, on BitBucket. And hey, follow me on Mastodon."
+  },
+  {
+   "t": 1311.8,
+   "d": 2.05,
+   "text": "It's better than Twitter in a lot of ways."
+  },
+  {
+   "t": 1313.85,
+   "d": 2.18,
+   "text": "Thank you so much. Have a lovely day."
+  },
+  {
+   "t": 1326.43,
+   "d": 2.21,
+   "text": "Do we have time for questions?"
+  },
+  {
+   "t": 1329.98,
+   "d": 2.02,
+   "text": "Host: Cool, any questions?"
+  },
+  {
+   "t": 1336.48,
+   "d": 3.23,
+   "text": "Audience: Hi. Thanks, I really enjoyed your talk."
+  },
+  {
+   "t": 1339.71,
+   "d": 4.8,
+   "text": "So, suppose that I make an animation or a piece of art, probably specifically"
+  },
+  {
+   "t": 1344.51,
+   "d": 4.82,
+   "text": "an animation in Playscii, and I'm developing a game using some"
+  },
+  {
+   "t": 1349.33,
+   "d": 3.37,
+   "text": "other technology, or rolling my own engine in that. Is there some"
+  },
+  {
+   "t": 1352.69,
+   "d": 3.63,
+   "text": "sort of standardized format that I can use for exporting Playscii animations"
+  },
+  {
+   "t": 1356.33,
+   "d": 4.72,
+   "text": "and playing them back as sprites in my game? Is there a rendering"
+  },
+  {
+   "t": 1361.04,
+   "d": 2.52,
+   "text": "engine I can bind to?"
+  },
+  {
+   "t": 1363.56,
+   "d": 5.53,
+   "text": "JP: Yeah, Playscii has a native internal format that's JSON-based,"
+  },
+  {
+   "t": 1369.09,
+   "d": 3.72,
+   "text": "so it's very easy to just take the native format and parse it into"
+  },
+  {
+   "t": 1372.81,
+   "d": 4.92,
+   "text": "whatever sort of thing you're doing. But yeah, you can export it to"
+  },
+  {
+   "t": 1377.72,
+   "d": 3.38,
+   "text": "a bitmap, you can export it - I don't export to sprites currently,"
+  },
+  {
+   "t": 1381.1,
+   "d": 4.76,
+   "text": "but there's an import-export plugin system that you could write something for."
+  },
+  {
+   "t": 1385.87,
+   "d": 4.08,
+   "text": "But yeah, just being able to export to PNG images or just anything like that, that"
+  },
+  {
+   "t": 1389.95,
+   "d": 4.9,
+   "text": "you want. And then yeah, you can also export to legacy formats like"
+  },
+  {
+   "t": 1394.86,
+   "d": 3.62,
+   "text": "the ANSI format. Like I think somebody was running a BBS and they had"
+  },
+  {
+   "t": 1398.47,
+   "d": 3.55,
+   "text": "like a - they were able to author some of their stuff in that."
+  },
+  {
+   "t": 1402.02,
+   "d": 4.25,
+   "text": "So yes, definitely. I definitely wanted to make sure that people could use this to"
+  },
+  {
+   "t": 1406.27,
+   "d": 4.82,
+   "text": "create stuff that they could then ship off to other engines, technologies,"
+  },
+  {
+   "t": 1411.09,
+   "d": 2.03,
+   "text": "printing, whatever."
+  },
+  {
+   "t": 1418.2,
+   "d": 2.0,
+   "text": "Host: Any other questions?"
+  },
+  {
+   "t": 1422.53,
+   "d": 2.58,
+   "text": "Audience: I have a question. What's the most surprising thing"
+  },
+  {
+   "t": 1425.12,
+   "d": 4.31,
+   "text": "you've seen someone make with Playscii?"
+  },
+  {
+   "t": 1431.15,
+   "d": 4.3,
+   "text": "JP: Gosh, yeah. I think somebody,"
+  },
+  {
+   "t": 1435.45,
+   "d": 4.1,
+   "text": "an artist in Prague, that I think showed up in one of the slides,"
+  },
+  {
+   "t": 1439.55,
+   "d": 5.65,
+   "text": "did some analog paintings, and they converted it and sort of"
+  },
+  {
+   "t": 1445.19,
+   "d": 5.62,
+   "text": "put the different ASCII versions alongside their original painting,"
+  },
+  {
+   "t": 1450.81,
+   "d": 3.88,
+   "text": "as sort of this exercise in visual deconstruction and whatever."
+  },
+  {
+   "t": 1454.69,
+   "d": 3.5,
+   "text": "I really was definitely expecting people to make cool retro stuff"
+  },
+  {
+   "t": 1458.19,
+   "d": 4.28,
+   "text": "with it, but seeing it cross over into fine art was weird and cool."
+  },
+  {
+   "t": 1469.48,
+   "d": 3.35,
+   "text": "Audience: Hey, I was really inspired by this talk, and I was wondering,"
+  },
+  {
+   "t": 1472.83,
+   "d": 2.48,
+   "text": "actually, what are some of the tools that you're inspired by,"
+  },
+  {
+   "t": 1475.31,
+   "d": 4.83,
+   "text": "or that excited you, or that have informed your tool making?"
+  },
+  {
+   "t": 1482.03,
+   "d": 5.85,
+   "text": "JP: Yeah, I guess it's easy - I missed it back in the day, but"
+  },
+  {
+   "t": 1487.87,
+   "d": 4.75,
+   "text": "it's sort of going back to it and reading about how it developed,"
+  },
+  {
+   "t": 1492.62,
+   "d": 3.65,
+   "text": "this whole community around it. ZZT was definitely one of those."
+  },
+  {
+   "t": 1496.27,
+   "d": 6.07,
+   "text": "I've been involved with mod communities for most of my life, so actually just"
+  },
+  {
+   "t": 1502.34,
+   "d": 4.16,
+   "text": "like Doom level editing tools, which there are contemporary Doom"
+  },
+  {
+   "t": 1506.5,
+   "d": 5.15,
+   "text": "level editing tools that are cool and modern and stuff. I'd have to think"
+  },
+  {
+   "t": 1511.65,
+   "d": 3.41,
+   "text": "about that, actually, because I just sort of voraciously consumed interfaces"
+  },
+  {
+   "t": 1515.07,
+   "d": 4.01,
+   "text": "and tools and stuff. So yeah, I think it would be good for me to"
+  },
+  {
+   "t": 1519.08,
+   "d": 3.67,
+   "text": "put a list like that together, maybe."
+  },
+  {
+   "t": 1523.96,
+   "d": 4.28,
+   "text": "Audience: [inaudible] JP: Yeah, actually."
+  },
+  {
+   "t": 1528.24,
+   "d": 3.72,
+   "text": "I'm trying to remember if I have - oh, yeah. Well, general tool inspiration,"
+  },
+  {
+   "t": 1531.96,
+   "d": 3.52,
+   "text": "maybe not so much specifically for Playscii. I used HyperCard back"
+  },
+  {
+   "t": 1535.48,
+   "d": 4.92,
+   "text": "in junior high, and that was eye-opening, because it was like,"
+  },
+  {
+   "t": 1540.39,
+   "d": 2.63,
+   "text": "because I wasn't a computer programmer, right? And neither"
+  },
+  {
+   "t": 1543.03,
+   "d": 5.0,
+   "text": "of my parents were able to connect me to an engineering education"
+  },
+  {
+   "t": 1548.03,
+   "d": 4.2,
+   "text": "or anything. So yeah, HyperCard, Kid Pix, absolutely. My sibling"
+  },
+  {
+   "t": 1552.22,
+   "d": 3.43,
+   "text": "had that back in the day, and I remember messing around with it,"
+  },
+  {
+   "t": 1555.65,
+   "d": 5.15,
+   "text": "with them, and yeah, just those sort of radically accessible tools,"
+  },
+  {
+   "t": 1560.81,
+   "d": 4.03,
+   "text": "and then also tools that are off doing a super weird, specific thing,"
+  },
+  {
+   "t": 1564.84,
+   "d": 3.13,
+   "text": "I think are equally inspiring."
+  },
+  {
+   "t": 1569.79,
+   "d": 3.8,
+   "text": "Audience: Hey, so I've known about Playscii for a while. I've seen a lot"
+  },
+  {
+   "t": 1573.59,
+   "d": 3.82,
+   "text": "of art done with it. I didn't realize it was a game engine as well, though."
+  },
+  {
+   "t": 1577.41,
+   "d": 4.53,
+   "text": "And I noticed you were showing off a lot of the art and visual aspect sides of it."
+  },
+  {
+   "t": 1581.93,
+   "d": 4.44,
+   "text": "But I'm curious, what the actual game - is there a game development"
+  },
+  {
+   "t": 1586.37,
+   "d": 2.6,
+   "text": "community around it? Like, what sorts of interactive things have"
+  },
+  {
+   "t": 1588.97,
+   "d": 3.15,
+   "text": "been made with it so far? JP: I've made a few small things"
+  },
+  {
+   "t": 1592.12,
+   "d": 4.84,
+   "text": "that I've released on itch.io. But yeah, I don't know of anybody"
+  },
+  {
+   "t": 1596.95,
+   "d": 5.13,
+   "text": "else who has shipped a game with Playscii's game mode."
+  },
+  {
+   "t": 1602.08,
+   "d": 3.65,
+   "text": "And I'm not disappointed really by that. It was basically just like,"
+  },
+  {
+   "t": 1605.73,
+   "d": 2.98,
+   "text": "\"I'm gonna make this weird thing, and I'm gonna try to make it as"
+  },
+  {
+   "t": 1608.72,
+   "d": 3.9,
+   "text": "accessible as I can, and I'm gonna write documentation and make sure"
+  },
+  {
+   "t": 1612.62,
+   "d": 2.25,
+   "text": "that it can auto-generate the documentation about all the game"
+  },
+  {
+   "t": 1614.87,
+   "d": 5.23,
+   "text": "mode API-type stuff.\" So yeah, a lot of people have made art"
+  },
+  {
+   "t": 1620.1,
+   "d": 4.7,
+   "text": "for their games, that are Game Maker or Unity or whatever, with Playscii."
+  },
+  {
+   "t": 1624.8,
+   "d": 6.68,
+   "text": "The premise of this talk was very much like, \"Oh, I want all of y'all to start"
+  },
+  {
+   "t": 1631.48,
+   "d": 3.52,
+   "text": "using the game mode of this thing,\" because I am just inviting you"
+  },
+  {
+   "t": 1635.0,
+   "d": 5.42,
+   "text": "into my home code base, and I always want to be realistic about how"
+  },
+  {
+   "t": 1640.41,
+   "d": 4.83,
+   "text": "horrifying and weird that's going to be. I try to write good, comprehensible"
+  },
+  {
+   "t": 1645.24,
+   "d": 3.8,
+   "text": "code and stuff, but yeah."
+  },
+  {
+   "t": 1649.81,
+   "d": 2.37,
+   "text": "Host: Well, thank you so much. JP: Thank you."
+  }
+ ]
+}

@@ -1,0 +1,190 @@
+{
+  "id": "tg-CjNodlmY",
+  "title": "bhauth - What makes Dungeon Crawl Stone Soup a good game?",
+  "speaker": "bhauth",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=tg-CjNodlmY",
+  "talk_type": "design",
+  "summary": "bhauth, who runs the DCSS fork bcrawl, plays Dungeon Crawl Stone Soup live while explaining why it is a good game, then gives a slide-based analysis. He frames roguelike elements as a package built around permadeath, with procedural generation, consumables and turn-based play each compensating for consequences of the others, and argues permadeath matters because it forces players to weigh probabilities. He credits DCSS's replayability to refined species/background combinations, hundreds of spells and items, and a polynomial skill-cost curve, and names its weaknesses as visuals, discoverability and lack of guidance for new players.",
+  "games": [
+    "Dungeon Crawl Stone Soup",
+    "bcrawl",
+    "Brogue",
+    "NetHack",
+    "Angband",
+    "Ghost of Tsushima"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "species and background",
+      "kind": "technique",
+      "claim": "DCSS splits character creation into species (permanent effects) and background (starting equipment and skills), giving many starting combinations without making balance too hard.",
+      "detail": "bhauth's demo picks a Minotaur Fighter with an axe: Minotaur is the species and Fighter the background. Dividing it that way multiplies combinations while keeping the balance problem manageable.",
+      "t": 93,
+      "quote": "dividing things up like that gives a lot of starting combinations without making the game too hard to balance",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "strategic and tactical layers",
+      "kind": "example",
+      "claim": "In DCSS, shields lose effectiveness the more attacks you take per turn, and axes hit all adjacent enemies, so choosing axe plus shield (strategic) links to positioning against groups (tactical).",
+      "detail": "Being surrounded is very bad with a big shield; the axe helps deal with that. bhauth says this interplay between a strategic layer that links all encounters and a tactical layer is part of what makes DCSS interesting and effectively makes the game bigger. Skill experience allocation is part of the strategic layer.",
+      "t": 134,
+      "quote": "this kind of interaction between strategic and tactical layers is part of what makes dcss an interesting game the strategic layer creates a link between all the encounters",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "automation",
+      "kind": "example",
+      "claim": "DCSS automates many common activities, such as auto-explore, because whenever players were annoyed by something repetitive someone submitted a fix.",
+      "detail": "bhauth notes DCSS has a disproportionate number of programmer players. Auto-explore can even happen instantly, which helps real-time speedrunners average 20 moves a second. A careful win-streak player would instead reveal as few tiles as possible and keep retreat paths.",
+      "t": 223,
+      "quote": "a lot of common activities have some automation available and that's because whenever players got annoyed by something repetitive somebody usually submitted a fix",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "influence",
+      "kind": "history",
+      "claim": "Traditional roguelikes have few players but disproportionate influence, and DCSS has taken over from NetHack and Angband as the most influential, being popular with professional players, streamers and game designers.",
+      "detail": "bhauth claims a Blizzard employee is over a hundred times as likely to play DCSS as the average gamer, and names Hearthstone lead designer Mike Donais as having an octopode win streak.",
+      "t": 309,
+      "quote": "looking back nethack and angband were probably the most influential traditional roguelikes for a while but now i would say that position has been taken by dcss",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "skill gap",
+      "kind": "principle",
+      "claim": "A useful way to evaluate a game is the difference between what new players and very good players do, because that difference is what the game teaches, the essence of its gameplay.",
+      "detail": "In DCSS, new players do not retreat upstairs or identify consumables. bhauth says the game teaches planning ahead for future resource needs, rather than getting stuck in an explore-attack-level-up loop. In bcrawl he made identify scrolls always identified to encourage IDing, though unsure how effective it has been.",
+      "t": 411,
+      "quote": "that difference between what new players do and what good players do is basically what the game teaches which in some sense is the essence of gameplay",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "consumable use",
+      "kind": "principle",
+      "claim": "DCSS teaches players to slow down and consider all their options in dangerous situations, since new players use consumables in combat too rarely and too late.",
+      "detail": "bhauth argues that in the modern world panic and fast decisions are rarely helpful in stressful situations, so games that encourage calm deliberation when something goes wrong are valuable.",
+      "t": 470,
+      "quote": "new players also tend not to use consumables in combat and to use them too late",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "permadeath package",
+      "kind": "principle",
+      "claim": "Roguelike elements form a package around permadeath: replaying the start requires procedural generation for variety, procgen causes uneven difficulty that consumables smooth out, and turn-based play gives time to use those consumables.",
+      "detail": "bhauth defines roguelike as permadeath, procedural generation, consumable resources, discrete actions and random results. Permadeath also means players cannot smooth difficulty by replaying hard parts, and procedurally generated levels get less thought and testing. Turn-based play smooths difficulty a little by letting players slow down in hard parts.",
+      "t": 744,
+      "quote": "permadeath means playing the start repeatedly and procedural generation is needed to keep that from being repetitive",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Permadeath is worth designing around because it forces players to consider probabilities across a huge space of possible outcomes; like poker with save and reload, the game would be boring without it.",
+      "detail": "Heading into a randomly generated unknown, the game state is a universe of possibility much bigger than any single result, and permadeath plus randomness makes players engage with it, effectively making games bigger. bhauth warns this can go too far, diluting possibilities until they are not worth considering.",
+      "t": 789,
+      "quote": "it forces players to consider probabilities imagine poker with saves and reloads that would be pretty boring wouldn't it",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build variety",
+      "kind": "example",
+      "claim": "DCSS's replayability comes from species/background/god combos refined for distinct play, hundreds of items and spells (giving hundreds of viable caster strategies), and resistances found during a run changing which enemies are threatening.",
+      "detail": "Casters combine roughly three spell schools; the combinations themselves are interesting. Having poison resistance but not fire resistance, or vice versa, changes the run.",
+      "t": 861,
+      "quote": "there are hundreds of distinct and viable strategies based around some combination of three spell schools with a bit of other stuff",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill cost curves",
+      "kind": "principle",
+      "claim": "Linear upgrade costs push players to focus everything on one or two things (as in Brogue), exponential costs make them buy an even spread, and polynomial costs like DCSS's skill system yield a good mix and more viable builds.",
+      "detail": "bhauth attributes Brogue's few viable strategies partly to linear costs and recommends copying DCSS's skill system. DCSS has enough viable strategies that distinct styles are visible among the top players.",
+      "t": 888,
+      "quote": "if the cost of skills or items is linear with power players will tend to focus all their upgrades on one or two things that's what happens in brogue",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "player-facing features",
+      "kind": "example",
+      "claim": "DCSS has development effort comparable to a AAA game, spent on what hardcore players and programmers value: online and offline play, statistics, logs, leaderboards, spectating, Lua scripting, macros and search.",
+      "detail": "bhauth says more development has gone into DCSS than any other traditional roguelike, giving over 500 creature types and hundreds of items and spells with pixel art, which adds choices and lets players find a style they like.",
+      "t": 960,
+      "quote": "it has a similar amount of programming work in it to a modern aaa game",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design philosophy",
+      "kind": "principle",
+      "claim": "Because DCSS was built and tested by many people over a long time, its design philosophy is the overlap of several perspectives rather than one framework, and bhauth advises designers not to be ideological.",
+      "detail": "Example: eliminating or automating no-brainer decisions where one option is strictly better but more annoying is official DCSS philosophy, which bhauth sees as an intersection of game psychology, UI principles and game design theory. A blend of heuristics usually beats a single one since games have multiple goals.",
+      "t": 1078,
+      "quote": "a blend of heuristics like this is usually better than one and games have multiple goals to meet so if you're making a game don't be ideological",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "information density",
+      "kind": "principle",
+      "claim": "Aesthetics and information density are not directly in conflict, but doing both is harder than doing one; DCSS chooses dense information over spectacle.",
+      "detail": "bhauth contrasts DCSS's numbers-heavy tiles with Ghost of Tsushima's minimal overlay, joking that to a roguelike player it is wasteful to fill the screen with grass when a small tile would do.",
+      "t": 1142,
+      "quote": "i personally don't think aesthetics and information density are directly in conflict i'd instead say that it's harder to do both than to just do one",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "discoverability",
+      "kind": "warning",
+      "claim": "DCSS has poor discoverability and little guidance toward good strategies, so new players who keep dying early as melee characters never see most of its content.",
+      "detail": "People can play for years without learning useful features; bhauth says watching a good player on YouTube teaches more than the manual or tutorial. He still prefers a flawed but sometimes great game to a mediocre one.",
+      "t": 1191,
+      "quote": "if you're a new player and all you do is play a melee character and die on the first few levels over and over you'll never get to see it",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "build experimentation",
+      "kind": "technique",
+      "claim": "To get players to try new builds, bhauth has considered official video tutorials per archetype and unlockable well-built mid-game character saves that show how good players build.",
+      "detail": "Answering a question, he called this a difficult problem he had not yet implemented in bcrawl and was open to suggestions.",
+      "t": 1261,
+      "quote": "having a set of well-designed mid-game character saves characters in progress that players can unlock as they make progress",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fairness",
+      "kind": "example",
+      "claim": "bcrawl changes DCSS to fill strategy holes, reduce unfairness and excess randomness (shorter max paralysis, shaft traps replaced), buff boring enemies, and help newcomers with danger warnings and a multiple-lives mode.",
+      "detail": "bhauth added species and spells to support more play styles where the game would not follow through on a planned strategy. He thinks DCSS most lacks a multiple-lives mode, which its devs said they probably won't add.",
+      "t": 1320,
+      "quote": "i reduced the max duration of player paralysis and replaced shaft traps i also buffed or reworked some enemies that were weak or boring",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "early game",
+      "kind": "example",
+      "claim": "For a strong DCSS player the simpler early game is the most dangerous part of a win streak, so streakers play the first levels very carefully.",
+      "detail": "bhauth says the early game sets up the character and has subtle tricks, though he personally enjoys the mid and late game more.",
+      "t": 1368,
+      "quote": "if you're on a win streak it's also the most dangerous part of the game for a good player",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

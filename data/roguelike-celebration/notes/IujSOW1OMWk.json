@@ -1,0 +1,63 @@
+{
+  "id": "IujSOW1OMWk",
+  "title": "Botnik - Live Procedurally Generated Comedy",
+  "speaker": "Botnik (Jamie Brew, Steven Barlow, Mike Fredrickson)",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=IujSOW1OMWk",
+  "talk_type": "performance",
+  "summary": "The comedy collective Botnik performs pieces written with their predictive text keyboard, which suggests next words drawn from a chosen source corpus rather than common texting language. After a short explanation of the tool and their writing process (a community of about 300 writers in jams, voting on lines that an editor assembles), the bulk of the session is a live performance: a countdown of invented roguelike titles with tips, table reads of generated X-Files and Seinfeld scripts, a Thanksgiving history, a Harry Potter chapter, a Dear Abby video, a cooking video and a Morrissey/P90X song. Design content is limited to the opening description of their human-in-the-loop generation method and how source texts are split per character.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "predictive text",
+      "kind": "technique",
+      "claim": "Botnik's predictive writer offers next-word suggestions drawn from a specific source text, such as TED talks, rather than from common texting language, so the output takes on that source's voice.",
+      "detail": "Botnik contrasts their tool with a phone's predictive text, which predicts from common texts and emails. Fed TED talks about the future, choosing suggestions word by word yields lines in TED's style.",
+      "t": 136,
+      "quote": "it offers you words that are specific to whatever source text you feed into it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "human in the loop",
+      "kind": "principle",
+      "claim": "Botnik treats text generation as an instrument where a human author intervenes after every single word, rather than letting a neural net produce a page of output to laugh at.",
+      "detail": "They say they are less interested in an algorithm that spits out amusing text than in a writer working with the algorithm word by word.",
+      "t": 200,
+      "quote": "we're really interested in the setting this thing up to be a little bit more like an instrument where an author",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "collaborative writing",
+      "kind": "technique",
+      "claim": "Botnik produces pieces through community writing jams where around 300 writers generate lines with a shared keyboard, vote on them, and an editor arranges the best into a script or video.",
+      "detail": "The community works in a Slack channel with a couple of jams a week; the editor pulls from voted lines to assemble a piece. The roguelike titles and tips in the show were made this way.",
+      "t": 235,
+      "quote": "write lines and vote on them and an editor will kind of pull from those and arrange them into some kind of a piece",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text generation",
+      "kind": "technique",
+      "claim": "To generate a script, Botnik split X-Files transcripts into separate corpora for Mulder lines, Scully lines and stage directions, using each as its own generative source.",
+      "detail": "The resulting four-to-five page script was performed as a table read. They used the same idea for Dear Abby, with one source text for questions and one for answers.",
+      "t": 490,
+      "quote": "breaking the x-files transcripts down into Mulder lines Scully lines and stage directions and use those as separate generative source materials",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text generation",
+      "kind": "technique",
+      "claim": "Combining two unrelated source corpora in one predictive keyboard, such as Amazon reviews of P90X and Morrissey lyrics, produces comic mashups.",
+      "detail": "Jamie Brew closes the show with a song generated from the combined sources, framed as what Morrissey would write if he reviewed P90X workout DVDs.",
+      "t": 2637,
+      "quote": "I have combined as a source material Amazon reviews of p90x and the collected lyrics of Morrissey",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

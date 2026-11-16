@@ -1,0 +1,3564 @@
+{
+ "id": "fSmaqjbU2xg",
+ "url": "https://www.youtube.com/watch?v=fSmaqjbU2xg",
+ "title": "Dan DiIorio - Luck be a Landlord - 10 Lessons Learned",
+ "speaker": "Dan DiIorio",
+ "talk_title": "Luck be a Landlord - 10 Lessons Learned",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 1656,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "I'll be discussing 10 lessons I learned during the development of Luck be a Landlord, the slot machine roguelike deckbuilder. My goal is to share the knowledge I've gained with aspiring game designers and developers.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 106,
+   "title": "Understanding player feedback"
+  },
+  {
+   "start": 206,
+   "title": "Interesting over balance"
+  },
+  {
+   "start": 317,
+   "title": "Designing for fun"
+  },
+  {
+   "start": 413,
+   "title": "Fixing design issues early"
+  },
+  {
+   "start": 503,
+   "title": "Adding depth to content"
+  },
+  {
+   "start": 589,
+   "title": "Managing game complexity"
+  },
+  {
+   "start": 697,
+   "title": "Effective playtesting"
+  },
+  {
+   "start": 845,
+   "title": "The impact of small tweaks"
+  },
+  {
+   "start": 933,
+   "title": "Tracking player stats"
+  },
+  {
+   "start": 1011,
+   "title": "Releasing your creation"
+  },
+  {
+   "start": 1171,
+   "title": "Q&A and conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4529,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.44,
+   "d": 2.32,
+   "text": "We are going to welcome to this jage Dan"
+  },
+  {
+   "t": 9.76,
+   "d": 3.68,
+   "text": "Diorio who is the developer of Luck Be a"
+  },
+  {
+   "t": 13.44,
+   "d": 2.24,
+   "text": "Landlord and Maze Mice, a professional"
+  },
+  {
+   "t": 15.68,
+   "d": 1.36,
+   "text": "independent game developer based out of"
+  },
+  {
+   "t": 17.04,
+   "d": 2.48,
+   "text": "the Midwestern United States. And uh"
+  },
+  {
+   "t": 19.52,
+   "d": 1.52,
+   "text": "yeah, I'm a big fan of Luck Be a"
+  },
+  {
+   "t": 21.04,
+   "d": 1.36,
+   "text": "Landlord. I know it's come up as"
+  },
+  {
+   "t": 22.4,
+   "d": 1.84,
+   "text": "inspiration for games like Pelatro. And"
+  },
+  {
+   "t": 24.24,
+   "d": 2.08,
+   "text": "so I'm very excited that Dan's here to"
+  },
+  {
+   "t": 26.32,
+   "d": 2.08,
+   "text": "talk a bit about some of the big lessons"
+  },
+  {
+   "t": 28.4,
+   "d": 3.2,
+   "text": "learned working on Lucky Landlord. So"
+  },
+  {
+   "t": 31.6,
+   "d": 2.0,
+   "text": "welcome Dan. Thank you for having me and"
+  },
+  {
+   "t": 33.6,
+   "d": 2.16,
+   "text": "for that great introduction."
+  },
+  {
+   "t": 35.76,
+   "d": 3.6,
+   "text": "All right, so"
+  },
+  {
+   "t": 39.36,
+   "d": 2.24,
+   "text": "my talk is called Luck Be a Landlord: 10"
+  },
+  {
+   "t": 41.6,
+   "d": 4.16,
+   "text": "Lessons Learned. Um I'm Dandy Oreo, also"
+  },
+  {
+   "t": 45.76,
+   "d": 2.72,
+   "text": "known as Trampoline Tales. Uh I've been"
+  },
+  {
+   "t": 48.48,
+   "d": 1.36,
+   "text": "a professional independent game"
+  },
+  {
+   "t": 49.84,
+   "d": 3.6,
+   "text": "developer for about 5 years now."
+  },
+  {
+   "t": 53.44,
+   "d": 1.76,
+   "text": "If you know any of my games, it's"
+  },
+  {
+   "t": 55.2,
+   "d": 2.16,
+   "text": "probably Luck Be a Landlord, which is a"
+  },
+  {
+   "t": 57.36,
+   "d": 2.0,
+   "text": "rogike deck builder where you use a slot"
+  },
+  {
+   "t": 59.36,
+   "d": 2.0,
+   "text": "machine to pay your rent and defeat your"
+  },
+  {
+   "t": 61.36,
+   "d": 2.8,
+   "text": "landlord. Uh, during the development of"
+  },
+  {
+   "t": 64.16,
+   "d": 2.4,
+   "text": "Luck Be a Landlord, I learned multiple"
+  },
+  {
+   "t": 66.56,
+   "d": 1.76,
+   "text": "lessons that would have saved me a lot"
+  },
+  {
+   "t": 68.32,
+   "d": 2.48,
+   "text": "of time and effort"
+  },
+  {
+   "t": 70.8,
+   "d": 1.52,
+   "text": "if I had already known them at the start"
+  },
+  {
+   "t": 72.32,
+   "d": 2.88,
+   "text": "of my game development career. Uh, so"
+  },
+  {
+   "t": 75.2,
+   "d": 2.56,
+   "text": "over the next 30 minutes or so, I'm"
+  },
+  {
+   "t": 77.76,
+   "d": 1.6,
+   "text": "going to break down 10 of the lessons"
+  },
+  {
+   "t": 79.36,
+   "d": 1.52,
+   "text": "I've learned while making luck be a"
+  },
+  {
+   "t": 80.88,
+   "d": 2.32,
+   "text": "landlord. If you're an aspiring game"
+  },
+  {
+   "t": 83.2,
+   "d": 2.0,
+   "text": "developer looking to add more tools to"
+  },
+  {
+   "t": 85.2,
+   "d": 3.52,
+   "text": "your toolbox, this talk is for you."
+  },
+  {
+   "t": 88.72,
+   "d": 2.16,
+   "text": "Now, not all of these lessons are"
+  },
+  {
+   "t": 90.88,
+   "d": 1.84,
+   "text": "necessarily exclusive to rogike"
+  },
+  {
+   "t": 92.72,
+   "d": 2.16,
+   "text": "development and design, but I think"
+  },
+  {
+   "t": 94.88,
+   "d": 1.44,
+   "text": "there's a very good chance you'll be"
+  },
+  {
+   "t": 96.32,
+   "d": 1.92,
+   "text": "helped by some of these lessons if you"
+  },
+  {
+   "t": 98.24,
+   "d": 2.08,
+   "text": "are making a rogike."
+  },
+  {
+   "t": 100.32,
+   "d": 2.16,
+   "text": "So, without further ado, let's jump into"
+  },
+  {
+   "t": 102.48,
+   "d": 3.16,
+   "text": "the lessons."
+  },
+  {
+   "t": 106.56,
+   "d": 2.08,
+   "text": "Lesson one,"
+  },
+  {
+   "t": 108.64,
+   "d": 4.12,
+   "text": "hear what isn't being said."
+  },
+  {
+   "t": 112.8,
+   "d": 1.68,
+   "text": "Throughout Luck Bay landlord's time in"
+  },
+  {
+   "t": 114.48,
+   "d": 2.0,
+   "text": "early access, I received a lot of"
+  },
+  {
+   "t": 116.48,
+   "d": 3.2,
+   "text": "feedback that was along the lines of"
+  },
+  {
+   "t": 119.68,
+   "d": 1.36,
+   "text": "the game is too easy. It should be"
+  },
+  {
+   "t": 121.04,
+   "d": 2.8,
+   "text": "harder. My solution to this feedback was"
+  },
+  {
+   "t": 123.84,
+   "d": 3.52,
+   "text": "to of course make the base game harder."
+  },
+  {
+   "t": 127.36,
+   "d": 1.76,
+   "text": "Now, you might think that this was the"
+  },
+  {
+   "t": 129.12,
+   "d": 2.16,
+   "text": "correct thing to do, but after releasing"
+  },
+  {
+   "t": 131.28,
+   "d": 2.24,
+   "text": "the difficulty patch, I received a lot"
+  },
+  {
+   "t": 133.52,
+   "d": 3.52,
+   "text": "of new feedback, such as"
+  },
+  {
+   "t": 137.04,
+   "d": 1.92,
+   "text": "the game is too hard. It should be"
+  },
+  {
+   "t": 138.96,
+   "d": 2.48,
+   "text": "easier."
+  },
+  {
+   "t": 141.44,
+   "d": 4.0,
+   "text": "It felt like I couldn't win."
+  },
+  {
+   "t": 145.44,
+   "d": 2.4,
+   "text": "But there was actually a better solution"
+  },
+  {
+   "t": 147.84,
+   "d": 1.92,
+   "text": "rather than making the base game harder"
+  },
+  {
+   "t": 149.76,
+   "d": 2.16,
+   "text": "or easier, and that was to add"
+  },
+  {
+   "t": 151.92,
+   "d": 1.76,
+   "text": "unlockable difficulties that the player"
+  },
+  {
+   "t": 153.68,
+   "d": 3.12,
+   "text": "can select."
+  },
+  {
+   "t": 156.8,
+   "d": 2.24,
+   "text": "I eventually realized this and added 20"
+  },
+  {
+   "t": 159.04,
+   "d": 2.4,
+   "text": "of them to the game, much like SLspire's"
+  },
+  {
+   "t": 161.44,
+   "d": 3.48,
+   "text": "ascension modifiers."
+  },
+  {
+   "t": 165.52,
+   "d": 2.16,
+   "text": "And the result was that the both was"
+  },
+  {
+   "t": 167.68,
+   "d": 2.24,
+   "text": "that both the this game is too easy and"
+  },
+  {
+   "t": 169.92,
+   "d": 2.48,
+   "text": "the this game is too hard feedback"
+  },
+  {
+   "t": 172.4,
+   "d": 3.68,
+   "text": "stopped, which is great. This was what I"
+  },
+  {
+   "t": 176.08,
+   "d": 2.24,
+   "text": "was shooting for in the first place."
+  },
+  {
+   "t": 178.32,
+   "d": 3.2,
+   "text": "Now, the lesson here isn't every game"
+  },
+  {
+   "t": 181.52,
+   "d": 1.52,
+   "text": "should have unlockable difficulty"
+  },
+  {
+   "t": 183.04,
+   "d": 2.96,
+   "text": "modifiers. It's to hear what isn't being"
+  },
+  {
+   "t": 186.0,
+   "d": 4.08,
+   "text": "said. Or in other words,"
+  },
+  {
+   "t": 190.08,
+   "d": 1.84,
+   "text": "if I'm going to make a change to appeal"
+  },
+  {
+   "t": 191.92,
+   "d": 2.8,
+   "text": "to the vocal critical players, I need to"
+  },
+  {
+   "t": 194.72,
+   "d": 1.92,
+   "text": "take the quiet content players into"
+  },
+  {
+   "t": 196.64,
+   "d": 2.96,
+   "text": "account, too."
+  },
+  {
+   "t": 199.6,
+   "d": 1.76,
+   "text": "Otherwise, they'll just switch places"
+  },
+  {
+   "t": 201.36,
+   "d": 1.44,
+   "text": "and I'll be stuck playing feedback"
+  },
+  {
+   "t": 202.8,
+   "d": 3.0,
+   "text": "whack-a-ole."
+  },
+  {
+   "t": 206.4,
+   "d": 2.56,
+   "text": "Lesson two,"
+  },
+  {
+   "t": 208.96,
+   "d": 4.36,
+   "text": "interesting is better than balanced."
+  },
+  {
+   "t": 213.84,
+   "d": 2.08,
+   "text": "Very early on in development, I added"
+  },
+  {
+   "t": 215.92,
+   "d": 2.0,
+   "text": "symbols to Luck Landlord that pertain to"
+  },
+  {
+   "t": 217.92,
+   "d": 2.24,
+   "text": "card suits. And these symbols went"
+  },
+  {
+   "t": 220.16,
+   "d": 3.88,
+   "text": "through a lot of revisions."
+  },
+  {
+   "t": 224.08,
+   "d": 2.32,
+   "text": "At first, every suit increased the value"
+  },
+  {
+   "t": 226.4,
+   "d": 3.6,
+   "text": "of all other adjacent suits by one coin."
+  },
+  {
+   "t": 230.0,
+   "d": 2.16,
+   "text": "Unfortunately, since I hadn't added many"
+  },
+  {
+   "t": 232.16,
+   "d": 2.48,
+   "text": "symbols to the game's pool of options,"
+  },
+  {
+   "t": 234.64,
+   "d": 2.08,
+   "text": "it was very easy to get a lot of suits"
+  },
+  {
+   "t": 236.72,
+   "d": 4.56,
+   "text": "and steam steamroll a run."
+  },
+  {
+   "t": 241.28,
+   "d": 2.08,
+   "text": "Eventually, I dialed the power level"
+  },
+  {
+   "t": 243.36,
+   "d": 1.76,
+   "text": "back and made suits only trigger off"
+  },
+  {
+   "t": 245.12,
+   "d": 3.04,
+   "text": "adjacent suits of their color."
+  },
+  {
+   "t": 248.16,
+   "d": 1.92,
+   "text": "But now, the suits, while at an"
+  },
+  {
+   "t": 250.08,
+   "d": 2.0,
+   "text": "acceptable power level, just felt"
+  },
+  {
+   "t": 252.08,
+   "d": 1.76,
+   "text": "boring."
+  },
+  {
+   "t": 253.84,
+   "d": 1.44,
+   "text": "Now, I was making a bit of a design"
+  },
+  {
+   "t": 255.28,
+   "d": 2.8,
+   "text": "mistake here. If a piece of content in"
+  },
+  {
+   "t": 258.08,
+   "d": 2.0,
+   "text": "your game is boring, it doesn't matter"
+  },
+  {
+   "t": 260.08,
+   "d": 2.4,
+   "text": "if it's overpowered, underpowered, or"
+  },
+  {
+   "t": 262.48,
+   "d": 2.56,
+   "text": "just right. Players are unlikely to"
+  },
+  {
+   "t": 265.04,
+   "d": 1.76,
+   "text": "engage with that with the boring"
+  },
+  {
+   "t": 266.8,
+   "d": 3.12,
+   "text": "content. And if they do engage with it,"
+  },
+  {
+   "t": 269.92,
+   "d": 3.2,
+   "text": "they won't have fun."
+  },
+  {
+   "t": 273.12,
+   "d": 2.24,
+   "text": "The eventual design solution I came up"
+  },
+  {
+   "t": 275.36,
+   "d": 2.0,
+   "text": "with was to add a secondary effect to"
+  },
+  {
+   "t": 277.36,
+   "d": 2.0,
+   "text": "every suit symbol, which made them give"
+  },
+  {
+   "t": 279.36,
+   "d": 2.0,
+   "text": "an extra coin if your amount of suits"
+  },
+  {
+   "t": 281.36,
+   "d": 2.16,
+   "text": "was at least three."
+  },
+  {
+   "t": 283.52,
+   "d": 2.24,
+   "text": "I found that this extra line of text was"
+  },
+  {
+   "t": 285.76,
+   "d": 1.76,
+   "text": "enough to make players engage with suits"
+  },
+  {
+   "t": 287.52,
+   "d": 2.88,
+   "text": "more, which is great. I put the content"
+  },
+  {
+   "t": 290.4,
+   "d": 1.52,
+   "text": "in the game. I want players to at least"
+  },
+  {
+   "t": 291.92,
+   "d": 2.8,
+   "text": "give it a try."
+  },
+  {
+   "t": 294.72,
+   "d": 2.0,
+   "text": "The little twist on the mechanic was"
+  },
+  {
+   "t": 296.72,
+   "d": 2.32,
+   "text": "better than, say, slightly increasing a"
+  },
+  {
+   "t": 299.04,
+   "d": 2.72,
+   "text": "symbol's value or decreasing a symbol's"
+  },
+  {
+   "t": 301.76,
+   "d": 1.84,
+   "text": "appearance likelihood by a small"
+  },
+  {
+   "t": 303.6,
+   "d": 3.2,
+   "text": "percentage. It keeps things exciting and"
+  },
+  {
+   "t": 306.8,
+   "d": 3.12,
+   "text": "not necessarily balanced,"
+  },
+  {
+   "t": 309.92,
+   "d": 3.2,
+   "text": "which is okay. Not balance is a good"
+  },
+  {
+   "t": 313.12,
+   "d": 3.92,
+   "text": "thing because at the end of the day,"
+  },
+  {
+   "t": 317.04,
+   "d": 2.08,
+   "text": "lesson three,"
+  },
+  {
+   "t": 319.12,
+   "d": 3.88,
+   "text": "you're not making chess."
+  },
+  {
+   "t": 323.04,
+   "d": 1.6,
+   "text": "I would often receive feedback from"
+  },
+  {
+   "t": 324.64,
+   "d": 2.08,
+   "text": "players evaluating the viability of"
+  },
+  {
+   "t": 326.72,
+   "d": 2.0,
+   "text": "content in the game as if it was an item"
+  },
+  {
+   "t": 328.72,
+   "d": 1.6,
+   "text": "in League of Legends, a competitive"
+  },
+  {
+   "t": 330.32,
+   "d": 3.28,
+   "text": "multiplayer game."
+  },
+  {
+   "t": 333.6,
+   "d": 2.24,
+   "text": "Now, in League of Legends, an item being"
+  },
+  {
+   "t": 335.84,
+   "d": 2.16,
+   "text": "overpowered is a bad thing since each"
+  },
+  {
+   "t": 338.0,
+   "d": 1.2,
+   "text": "player starts with a different"
+  },
+  {
+   "t": 339.2,
+   "d": 2.4,
+   "text": "character, and each of those characters,"
+  },
+  {
+   "t": 341.6,
+   "d": 1.52,
+   "text": "since they have different stats and"
+  },
+  {
+   "t": 343.12,
+   "d": 2.24,
+   "text": "abilities, will benefit from items in"
+  },
+  {
+   "t": 345.36,
+   "d": 2.48,
+   "text": "different ways."
+  },
+  {
+   "t": 347.84,
+   "d": 2.56,
+   "text": "If one item is extremely powerful in the"
+  },
+  {
+   "t": 350.4,
+   "d": 2.4,
+   "text": "hands of one character, that can be a"
+  },
+  {
+   "t": 352.8,
+   "d": 2.32,
+   "text": "problem since whichever team has that"
+  },
+  {
+   "t": 355.12,
+   "d": 2.24,
+   "text": "character and that item could have an"
+  },
+  {
+   "t": 357.36,
+   "d": 2.0,
+   "text": "unfair advantage."
+  },
+  {
+   "t": 359.36,
+   "d": 1.92,
+   "text": "And it's easy to fall into a design trap"
+  },
+  {
+   "t": 361.28,
+   "d": 4.08,
+   "text": "and apply this logic logic to a rogike"
+  },
+  {
+   "t": 365.36,
+   "d": 1.52,
+   "text": "trying to balance everything to be"
+  },
+  {
+   "t": 366.88,
+   "d": 3.2,
+   "text": "equally powerful."
+  },
+  {
+   "t": 370.08,
+   "d": 1.92,
+   "text": "But a single player roguelike doesn't"
+  },
+  {
+   "t": 372.0,
+   "d": 4.32,
+   "text": "have two teams with five players each"
+  },
+  {
+   "t": 376.32,
+   "d": 2.64,
+   "text": "team with the player and a team with"
+  },
+  {
+   "t": 378.96,
+   "d": 1.44,
+   "text": "everything that stands between the"
+  },
+  {
+   "t": 380.4,
+   "d": 2.72,
+   "text": "player and their win condition. And the"
+  },
+  {
+   "t": 383.12,
+   "d": 2.48,
+   "text": "best part is the enemies the player"
+  },
+  {
+   "t": 385.6,
+   "d": 2.0,
+   "text": "defeats in the rogike don't have"
+  },
+  {
+   "t": 387.6,
+   "d": 1.92,
+   "text": "feelings. They don't care if the player"
+  },
+  {
+   "t": 389.52,
+   "d": 3.16,
+   "text": "is overpowered."
+  },
+  {
+   "t": 392.88,
+   "d": 2.0,
+   "text": "If a player in chess got to start with"
+  },
+  {
+   "t": 394.88,
+   "d": 2.32,
+   "text": "an extra queen, the player with just one"
+  },
+  {
+   "t": 397.2,
+   "d": 2.4,
+   "text": "queen would have a lot less fun. They"
+  },
+  {
+   "t": 399.6,
+   "d": 3.36,
+   "text": "would think the game sucks."
+  },
+  {
+   "t": 402.96,
+   "d": 2.24,
+   "text": "But you're not making chess. You're"
+  },
+  {
+   "t": 405.2,
+   "d": 2.56,
+   "text": "making a rogike. Your players will have"
+  },
+  {
+   "t": 407.76,
+   "d": 2.16,
+   "text": "more fun if they become more powerful"
+  },
+  {
+   "t": 409.92,
+   "d": 3.2,
+   "text": "than their enemies."
+  },
+  {
+   "t": 413.12,
+   "d": 2.4,
+   "text": "Lesson four."
+  },
+  {
+   "t": 415.52,
+   "d": 3.56,
+   "text": "Rip off the band-aids."
+  },
+  {
+   "t": 419.36,
+   "d": 2.08,
+   "text": "The cultus is a symbol in luck via a"
+  },
+  {
+   "t": 421.44,
+   "d": 3.68,
+   "text": "landlord that some players really love."
+  },
+  {
+   "t": 425.12,
+   "d": 2.08,
+   "text": "It doesn't do anything on its own, but"
+  },
+  {
+   "t": 427.2,
+   "d": 1.76,
+   "text": "it becomes more powerful if you can get"
+  },
+  {
+   "t": 428.96,
+   "d": 2.4,
+   "text": "more of them. This means a lot of"
+  },
+  {
+   "t": 431.36,
+   "d": 1.84,
+   "text": "players will be offered a cultist early"
+  },
+  {
+   "t": 433.2,
+   "d": 3.28,
+   "text": "in the run, read the effect, and say,"
+  },
+  {
+   "t": 436.48,
+   "d": 1.44,
+   "text": "\"All right, we're doing a cultist"
+  },
+  {
+   "t": 437.92,
+   "d": 2.56,
+   "text": "build.\""
+  },
+  {
+   "t": 440.48,
+   "d": 1.92,
+   "text": "Unfortunately, cultist builds just"
+  },
+  {
+   "t": 442.4,
+   "d": 2.08,
+   "text": "aren't that interesting. You either"
+  },
+  {
+   "t": 444.48,
+   "d": 2.16,
+   "text": "collect enough of them to win or you get"
+  },
+  {
+   "t": 446.64,
+   "d": 3.2,
+   "text": "unlucky and don't see enough of them."
+  },
+  {
+   "t": 449.84,
+   "d": 2.08,
+   "text": "Now, logically, I would just remove the"
+  },
+  {
+   "t": 451.92,
+   "d": 2.24,
+   "text": "cultist symbol from the game or rework"
+  },
+  {
+   "t": 454.16,
+   "d": 3.68,
+   "text": "it into having a different effect."
+  },
+  {
+   "t": 457.84,
+   "d": 1.6,
+   "text": "But the cultist was one of the very"
+  },
+  {
+   "t": 459.44,
+   "d": 2.48,
+   "text": "first symbols added to the game. So, the"
+  },
+  {
+   "t": 461.92,
+   "d": 1.52,
+   "text": "thousands of people who have played Luck"
+  },
+  {
+   "t": 463.44,
+   "d": 2.24,
+   "text": "Be a Landlord would feel off if it was"
+  },
+  {
+   "t": 465.68,
+   "d": 2.56,
+   "text": "suddenly removed or changed."
+  },
+  {
+   "t": 468.24,
+   "d": 1.68,
+   "text": "And I noticed this issue with cultist"
+  },
+  {
+   "t": 469.92,
+   "d": 2.24,
+   "text": "early on in development. But at the"
+  },
+  {
+   "t": 472.16,
+   "d": 2.16,
+   "text": "time, I thought, well, it's too late"
+  },
+  {
+   "t": 474.32,
+   "d": 2.64,
+   "text": "now. Players already like the cultist."
+  },
+  {
+   "t": 476.96,
+   "d": 2.4,
+   "text": "But the game was still in early access."
+  },
+  {
+   "t": 479.36,
+   "d": 1.44,
+   "text": "I should have just removed this cultist"
+  },
+  {
+   "t": 480.8,
+   "d": 2.96,
+   "text": "symbol years ago."
+  },
+  {
+   "t": 483.76,
+   "d": 1.6,
+   "text": "And now it's been years since the game"
+  },
+  {
+   "t": 485.36,
+   "d": 2.56,
+   "text": "exited early access. Or now, now that"
+  },
+  {
+   "t": 487.92,
+   "d": 1.44,
+   "text": "it's been years since the game exited"
+  },
+  {
+   "t": 489.36,
+   "d": 2.08,
+   "text": "early access, the negative response from"
+  },
+  {
+   "t": 491.44,
+   "d": 2.48,
+   "text": "players would be much greater. So don't"
+  },
+  {
+   "t": 493.92,
+   "d": 2.08,
+   "text": "be like me. If you notice a design"
+  },
+  {
+   "t": 496.0,
+   "d": 4.88,
+   "text": "issue, fix it before you regret it."
+  },
+  {
+   "t": 500.88,
+   "d": 2.56,
+   "text": "Lesson five."
+  },
+  {
+   "t": 503.44,
+   "d": 4.2,
+   "text": "Vanilla is boring."
+  },
+  {
+   "t": 508.0,
+   "d": 1.76,
+   "text": "If you've ever played a rogike where you"
+  },
+  {
+   "t": 509.76,
+   "d": 2.24,
+   "text": "equip yourself with gear, what's more"
+  },
+  {
+   "t": 512.0,
+   "d": 1.84,
+   "text": "exciting?"
+  },
+  {
+   "t": 513.84,
+   "d": 3.28,
+   "text": "Armor that says plus five defense"
+  },
+  {
+   "t": 517.12,
+   "d": 3.36,
+   "text": "or armor that says plus 12 defense. This"
+  },
+  {
+   "t": 520.48,
+   "d": 2.16,
+   "text": "armor is destroyed after you take damage"
+  },
+  {
+   "t": 522.64,
+   "d": 1.68,
+   "text": "twice."
+  },
+  {
+   "t": 524.32,
+   "d": 2.96,
+   "text": "To almost every player,"
+  },
+  {
+   "t": 527.28,
+   "d": 2.24,
+   "text": "the armor with more text will be more"
+  },
+  {
+   "t": 529.52,
+   "d": 2.48,
+   "text": "exciting, even though the armor with"
+  },
+  {
+   "t": 532.0,
+   "d": 2.08,
+   "text": "less text might be objectively more"
+  },
+  {
+   "t": 534.08,
+   "d": 3.0,
+   "text": "powerful."
+  },
+  {
+   "t": 538.56,
+   "d": 2.48,
+   "text": "As a rogike designer, my job isn't to"
+  },
+  {
+   "t": 541.04,
+   "d": 2.48,
+   "text": "make sure all the content is powerful."
+  },
+  {
+   "t": 543.52,
+   "d": 1.68,
+   "text": "It's to make sure all the content is"
+  },
+  {
+   "t": 545.2,
+   "d": 2.72,
+   "text": "exciting."
+  },
+  {
+   "t": 547.92,
+   "d": 1.84,
+   "text": "I applied this philosophy a lot with"
+  },
+  {
+   "t": 549.76,
+   "d": 2.24,
+   "text": "Luck Be a Landlord, adding effects to"
+  },
+  {
+   "t": 552.0,
+   "d": 1.44,
+   "text": "symbols that didn't previously have"
+  },
+  {
+   "t": 553.44,
+   "d": 3.04,
+   "text": "them. And the best part is when you add"
+  },
+  {
+   "t": 556.48,
+   "d": 1.68,
+   "text": "a ton of effects to content in your"
+  },
+  {
+   "t": 558.16,
+   "d": 1.92,
+   "text": "game, there will be interactions that"
+  },
+  {
+   "t": 560.08,
+   "d": 4.12,
+   "text": "you didn't even plan for."
+  },
+  {
+   "t": 564.32,
+   "d": 2.72,
+   "text": "Maybe in our previous example, there's"
+  },
+  {
+   "t": 567.04,
+   "d": 1.68,
+   "text": "another piece of gear that gives you"
+  },
+  {
+   "t": 568.72,
+   "d": 1.84,
+   "text": "permanent bonuses when the armor is"
+  },
+  {
+   "t": 570.56,
+   "d": 1.52,
+   "text": "destroyed."
+  },
+  {
+   "t": 572.08,
+   "d": 1.68,
+   "text": "Now we've got a combo that wouldn't be"
+  },
+  {
+   "t": 573.76,
+   "d": 2.08,
+   "text": "possible with just a boring plus five"
+  },
+  {
+   "t": 575.84,
+   "d": 3.0,
+   "text": "defense."
+  },
+  {
+   "t": 579.2,
+   "d": 1.92,
+   "text": "And this with this philosophy, it's"
+  },
+  {
+   "t": 581.12,
+   "d": 1.76,
+   "text": "really tempting to add tons of effects"
+  },
+  {
+   "t": 582.88,
+   "d": 3.04,
+   "text": "to every piece of content in our game."
+  },
+  {
+   "t": 585.92,
+   "d": 3.44,
+   "text": "But that brings us to our next lesson."
+  },
+  {
+   "t": 589.36,
+   "d": 2.48,
+   "text": "Lesson six,"
+  },
+  {
+   "t": 591.84,
+   "d": 4.44,
+   "text": "introduce complexity slowly."
+  },
+  {
+   "t": 596.56,
+   "d": 1.52,
+   "text": "I don't want to overwhelm the player"
+  },
+  {
+   "t": 598.08,
+   "d": 3.04,
+   "text": "with mechanics. Until I release my game,"
+  },
+  {
+   "t": 601.12,
+   "d": 1.44,
+   "text": "I'm the one who has spent the most time"
+  },
+  {
+   "t": 602.56,
+   "d": 2.32,
+   "text": "with it. So, what's obvious to me isn't"
+  },
+  {
+   "t": 604.88,
+   "d": 4.04,
+   "text": "obvious to a first-time player."
+  },
+  {
+   "t": 609.44,
+   "d": 1.92,
+   "text": "But if every symbol in the game has"
+  },
+  {
+   "t": 611.36,
+   "d": 2.16,
+   "text": "dozens of lines of explanation text on"
+  },
+  {
+   "t": 613.52,
+   "d": 2.08,
+   "text": "it, players will be overwhelmed and"
+  },
+  {
+   "t": 615.6,
+   "d": 1.68,
+   "text": "won't be able to interact with the game"
+  },
+  {
+   "t": 617.28,
+   "d": 3.52,
+   "text": "in a meaningful way. So, what's the"
+  },
+  {
+   "t": 620.8,
+   "d": 3.32,
+   "text": "solution here?"
+  },
+  {
+   "t": 624.32,
+   "d": 1.76,
+   "text": "Trading card games have actually already"
+  },
+  {
+   "t": 626.08,
+   "d": 2.96,
+   "text": "figured this one out. For a long time, a"
+  },
+  {
+   "t": 629.04,
+   "d": 2.16,
+   "text": "booster pack in Magic the Gathering made"
+  },
+  {
+   "t": 631.2,
+   "d": 2.0,
+   "text": "sure complex effects weren't printed on"
+  },
+  {
+   "t": 633.2,
+   "d": 2.64,
+   "text": "common rarity cards, which make up about"
+  },
+  {
+   "t": 635.84,
+   "d": 3.76,
+   "text": "80% of a booster pack. So, if you open"
+  },
+  {
+   "t": 639.6,
+   "d": 3.04,
+   "text": "up a pack of 15 Magic cards, only three"
+  },
+  {
+   "t": 642.64,
+   "d": 4.52,
+   "text": "or four cards will have complex effects."
+  },
+  {
+   "t": 647.52,
+   "d": 1.92,
+   "text": "By the way, Magic the Gathering's design"
+  },
+  {
+   "t": 649.44,
+   "d": 1.84,
+   "text": "team called this philosophy new world"
+  },
+  {
+   "t": 651.28,
+   "d": 4.84,
+   "text": "order if you want to read up on it more."
+  },
+  {
+   "t": 656.72,
+   "d": 2.08,
+   "text": "I applied a variation of new world order"
+  },
+  {
+   "t": 658.8,
+   "d": 2.64,
+   "text": "to luck be a landlord. I made sure that"
+  },
+  {
+   "t": 661.44,
+   "d": 1.92,
+   "text": "the symbols and items with complex"
+  },
+  {
+   "t": 663.36,
+   "d": 2.8,
+   "text": "effects or of uncommon rarity were"
+  },
+  {
+   "t": 666.16,
+   "d": 3.96,
+   "text": "usually even rarer."
+  },
+  {
+   "t": 670.32,
+   "d": 2.4,
+   "text": "I also made it so that uh only common"
+  },
+  {
+   "t": 672.72,
+   "d": 1.44,
+   "text": "symbols could appear at the beginning of"
+  },
+  {
+   "t": 674.16,
+   "d": 2.64,
+   "text": "a run. After the player has been offered"
+  },
+  {
+   "t": 676.8,
+   "d": 2.48,
+   "text": "a few symbol choices, the base rarity"
+  },
+  {
+   "t": 679.28,
+   "d": 4.2,
+   "text": "chances gradually increase."
+  },
+  {
+   "t": 684.32,
+   "d": 2.32,
+   "text": "And since the uh the rarer symbols are"
+  },
+  {
+   "t": 686.64,
+   "d": 2.24,
+   "text": "also more complex, this creates a bit of"
+  },
+  {
+   "t": 688.88,
+   "d": 1.92,
+   "text": "a complexity curve over the course of a"
+  },
+  {
+   "t": 690.8,
+   "d": 2.08,
+   "text": "run, similar to the difficulty curve"
+  },
+  {
+   "t": 692.88,
+   "d": 4.04,
+   "text": "you'd see in a linear game."
+  },
+  {
+   "t": 697.6,
+   "d": 2.24,
+   "text": "Lesson seven,"
+  },
+  {
+   "t": 699.84,
+   "d": 4.28,
+   "text": "you're not in the room with them."
+  },
+  {
+   "t": 704.64,
+   "d": 1.92,
+   "text": "I see a lot of designers steer players"
+  },
+  {
+   "t": 706.56,
+   "d": 2.56,
+   "text": "during play testing, sometimes outright"
+  },
+  {
+   "t": 709.12,
+   "d": 3.12,
+   "text": "telling testers how to play their game."
+  },
+  {
+   "t": 712.24,
+   "d": 3.2,
+   "text": "This is a terrible idea. If I stop play"
+  },
+  {
+   "t": 715.44,
+   "d": 1.84,
+   "text": "testers from finding sore spots in my"
+  },
+  {
+   "t": 717.28,
+   "d": 3.52,
+   "text": "game, in my design, I won't know where"
+  },
+  {
+   "t": 720.8,
+   "d": 3.16,
+   "text": "they are."
+  },
+  {
+   "t": 724.24,
+   "d": 1.92,
+   "text": "Right now, there are about 200 people"
+  },
+  {
+   "t": 726.16,
+   "d": 2.96,
+   "text": "playing Luck Be a Landlord on Steam. I"
+  },
+  {
+   "t": 729.12,
+   "d": 1.6,
+   "text": "cannot be in the room with all of them"
+  },
+  {
+   "t": 730.72,
+   "d": 2.08,
+   "text": "saying, \"Oh, you're you're supposed to"
+  },
+  {
+   "t": 732.8,
+   "d": 3.36,
+   "text": "try this here.\""
+  },
+  {
+   "t": 736.16,
+   "d": 2.88,
+   "text": "For example, one of the very first play"
+  },
+  {
+   "t": 739.04,
+   "d": 2.48,
+   "text": "testers of Luck Landlord took three"
+  },
+  {
+   "t": 741.52,
+   "d": 3.04,
+   "text": "copies of coal, which gave zero coins,"
+  },
+  {
+   "t": 744.56,
+   "d": 2.4,
+   "text": "but had a 2% chance of transforming into"
+  },
+  {
+   "t": 746.96,
+   "d": 3.36,
+   "text": "a diamond that gave five coins."
+  },
+  {
+   "t": 750.32,
+   "d": 1.92,
+   "text": "The coal didn't transform during their"
+  },
+  {
+   "t": 752.24,
+   "d": 1.84,
+   "text": "run, and they lost, [clears throat]"
+  },
+  {
+   "t": 754.08,
+   "d": 1.84,
+   "text": "excuse me,"
+  },
+  {
+   "t": 755.92,
+   "d": 2.16,
+   "text": "and they lost because they had three"
+  },
+  {
+   "t": 758.08,
+   "d": 1.52,
+   "text": "symbols that weren't doing anything for"
+  },
+  {
+   "t": 759.6,
+   "d": 2.56,
+   "text": "their build."
+  },
+  {
+   "t": 762.16,
+   "d": 3.0,
+   "text": "Sorry."
+  },
+  {
+   "t": 767.6,
+   "d": 3.72,
+   "text": "Stay hydrated, folks."
+  },
+  {
+   "t": 772.25,
+   "d": 1.99,
+   "text": "[clears throat]"
+  },
+  {
+   "t": 774.24,
+   "d": 2.32,
+   "text": "I could have said, \"What are you doing?"
+  },
+  {
+   "t": 776.56,
+   "d": 2.64,
+   "text": "Don't take three coal."
+  },
+  {
+   "t": 779.2,
+   "d": 2.08,
+   "text": "You need to take more symbols that give"
+  },
+  {
+   "t": 781.28,
+   "d": 3.92,
+   "text": "you coins early, not to not lose.\""
+  },
+  {
+   "t": 785.2,
+   "d": 1.92,
+   "text": "But instead, I waited for them to play"
+  },
+  {
+   "t": 787.12,
+   "d": 2.88,
+   "text": "again and saw them once again take coal"
+  },
+  {
+   "t": 790.0,
+   "d": 3.44,
+   "text": "whenever it was presented to them."
+  },
+  {
+   "t": 793.44,
+   "d": 2.24,
+   "text": "After the play test was done, I asked"
+  },
+  {
+   "t": 795.68,
+   "d": 2.56,
+   "text": "the player, \"Why did you take Cole so"
+  },
+  {
+   "t": 798.24,
+   "d": 3.36,
+   "text": "often and they told me, \"Ah, if it"
+  },
+  {
+   "t": 801.6,
+   "d": 3.2,
+   "text": "transforms, I'm good.\""
+  },
+  {
+   "t": 804.8,
+   "d": 2.64,
+   "text": "This piece of feedback was vital to me,"
+  },
+  {
+   "t": 807.44,
+   "d": 1.44,
+   "text": "and I never would have discovered that"
+  },
+  {
+   "t": 808.88,
+   "d": 2.48,
+   "text": "this player and most likely many other"
+  },
+  {
+   "t": 811.36,
+   "d": 2.72,
+   "text": "players will behave the same way when"
+  },
+  {
+   "t": 814.08,
+   "d": 3.96,
+   "text": "presented with a similar symbol."
+  },
+  {
+   "t": 818.32,
+   "d": 2.72,
+   "text": "In fact, this play test made me rework"
+  },
+  {
+   "t": 821.04,
+   "d": 2.8,
+   "text": "the call symbol to always transform"
+  },
+  {
+   "t": 823.84,
+   "d": 2.16,
+   "text": "after 20 spins instead of having the"
+  },
+  {
+   "t": 826.0,
+   "d": 3.96,
+   "text": "random chance it had before."
+  },
+  {
+   "t": 831.12,
+   "d": 1.6,
+   "text": "It also made me develop a design"
+  },
+  {
+   "t": 832.72,
+   "d": 2.72,
+   "text": "philosophy for the game. Symbols that"
+  },
+  {
+   "t": 835.44,
+   "d": 2.4,
+   "text": "have a chance to do something should"
+  },
+  {
+   "t": 837.84,
+   "d": 2.32,
+   "text": "still have a small beneficial effect"
+  },
+  {
+   "t": 840.16,
+   "d": 1.84,
+   "text": "when not triggering their low random"
+  },
+  {
+   "t": 842.0,
+   "d": 3.0,
+   "text": "chance."
+  },
+  {
+   "t": 845.92,
+   "d": 2.0,
+   "text": "Lesson eight,"
+  },
+  {
+   "t": 847.92,
+   "d": 4.44,
+   "text": "every number matters."
+  },
+  {
+   "t": 852.72,
+   "d": 2.24,
+   "text": "A few months after I after uh Luck"
+  },
+  {
+   "t": 854.96,
+   "d": 2.16,
+   "text": "Landlord exited early access, I released"
+  },
+  {
+   "t": 857.12,
+   "d": 3.28,
+   "text": "a patch I called the big buffs update."
+  },
+  {
+   "t": 860.4,
+   "d": 2.4,
+   "text": "The main goal of this update was to very"
+  },
+  {
+   "t": 862.8,
+   "d": 1.84,
+   "text": "slightly increase the power level of"
+  },
+  {
+   "t": 864.64,
+   "d": 4.52,
+   "text": "many pieces of content in the game."
+  },
+  {
+   "t": 869.36,
+   "d": 2.08,
+   "text": "Now, the vast majority of the changes"
+  },
+  {
+   "t": 871.44,
+   "d": 2.16,
+   "text": "were very minuscule number uh number"
+  },
+  {
+   "t": 873.6,
+   "d": 1.84,
+   "text": "tweaks,"
+  },
+  {
+   "t": 875.44,
+   "d": 2.88,
+   "text": "excuse me."
+  },
+  {
+   "t": 878.32,
+   "d": 2.32,
+   "text": "For example, the watering can, which"
+  },
+  {
+   "t": 880.64,
+   "d": 2.0,
+   "text": "makes seeds grow instantly and give 10"
+  },
+  {
+   "t": 882.64,
+   "d": 2.0,
+   "text": "extra coins, had the bonus value"
+  },
+  {
+   "t": 884.64,
+   "d": 3.52,
+   "text": "increased to 12 coins."
+  },
+  {
+   "t": 888.16,
+   "d": 2.24,
+   "text": "This might seem inconsequential, but"
+  },
+  {
+   "t": 890.4,
+   "d": 3.52,
+   "text": "that's exactly the point."
+  },
+  {
+   "t": 893.92,
+   "d": 2.0,
+   "text": "There are plenty of instances in my game"
+  },
+  {
+   "t": 895.92,
+   "d": 2.24,
+   "text": "where players can be one coin short from"
+  },
+  {
+   "t": 898.16,
+   "d": 2.16,
+   "text": "winning a run. And while this makes for"
+  },
+  {
+   "t": 900.32,
+   "d": 2.48,
+   "text": "a funny screenshot, the player will have"
+  },
+  {
+   "t": 902.8,
+   "d": 2.4,
+   "text": "a much better story to tell if they were"
+  },
+  {
+   "t": 905.2,
+   "d": 2.16,
+   "text": "exactly one coin ahead and went on to"
+  },
+  {
+   "t": 907.36,
+   "d": 3.4,
+   "text": "win the run."
+  },
+  {
+   "t": 910.96,
+   "d": 2.24,
+   "text": "By increasing the power of content by a"
+  },
+  {
+   "t": 913.2,
+   "d": 2.48,
+   "text": "seemingly inconsequential amount, I've"
+  },
+  {
+   "t": 915.68,
+   "d": 1.6,
+   "text": "increased the number of players that are"
+  },
+  {
+   "t": 917.28,
+   "d": 1.76,
+   "text": "able to beat my game and have fun"
+  },
+  {
+   "t": 919.04,
+   "d": 2.48,
+   "text": "stories to tell about their wins."
+  },
+  {
+   "t": 921.52,
+   "d": 2.48,
+   "text": "And by not increasing the numbers by a"
+  },
+  {
+   "t": 924.0,
+   "d": 2.32,
+   "text": "large amount, I've tried to make sure"
+  },
+  {
+   "t": 926.32,
+   "d": 1.76,
+   "text": "that the players wanting more of a"
+  },
+  {
+   "t": 928.08,
+   "d": 3.96,
+   "text": "challenge don't feel alienated."
+  },
+  {
+   "t": 933.28,
+   "d": 2.56,
+   "text": "Lesson nine,"
+  },
+  {
+   "t": 935.84,
+   "d": 4.12,
+   "text": "don't track win rates."
+  },
+  {
+   "t": 940.0,
+   "d": 2.16,
+   "text": "A few years ago, I was exchanging emails"
+  },
+  {
+   "t": 942.16,
+   "d": 1.6,
+   "text": "with Richard Garfield, the creator of"
+  },
+  {
+   "t": 943.76,
+   "d": 2.64,
+   "text": "Magic the Gathering. We got to talking"
+  },
+  {
+   "t": 946.4,
+   "d": 2.88,
+   "text": "about win percentages and he mentioned,"
+  },
+  {
+   "t": 949.28,
+   "d": 2.56,
+   "text": "I'm paraphrasing here, that players of"
+  },
+  {
+   "t": 951.84,
+   "d": 1.76,
+   "text": "Luck via landlord might have enjoyed a"
+  },
+  {
+   "t": 953.6,
+   "d": 3.84,
+   "text": "win rate statistic displayed to them."
+  },
+  {
+   "t": 957.44,
+   "d": 1.68,
+   "text": "Maybe could track their percentage of"
+  },
+  {
+   "t": 959.12,
+   "d": 2.8,
+   "text": "wins and losses for their past five, 10,"
+  },
+  {
+   "t": 961.92,
+   "d": 2.64,
+   "text": "or 20 runs."
+  },
+  {
+   "t": 964.56,
+   "d": 1.68,
+   "text": "But with all due respect to the inventor"
+  },
+  {
+   "t": 966.24,
+   "d": 2.48,
+   "text": "of the original deck builder, I felt"
+  },
+  {
+   "t": 968.72,
+   "d": 2.16,
+   "text": "that displaying a win rate statistic to"
+  },
+  {
+   "t": 970.88,
+   "d": 2.0,
+   "text": "players would detract from luck be a"
+  },
+  {
+   "t": 972.88,
+   "d": 2.0,
+   "text": "landlord and probably do the same with"
+  },
+  {
+   "t": 974.88,
+   "d": 3.32,
+   "text": "other rogikes."
+  },
+  {
+   "t": 978.32,
+   "d": 2.56,
+   "text": "For example, if a player wins a run"
+  },
+  {
+   "t": 980.88,
+   "d": 2.08,
+   "text": "after losing four times, they should"
+  },
+  {
+   "t": 982.96,
+   "d": 3.44,
+   "text": "feel triumphant. They finally won. I"
+  },
+  {
+   "t": 986.4,
+   "d": 2.4,
+   "text": "shouldn't remind them,"
+  },
+  {
+   "t": 988.8,
+   "d": 1.68,
+   "text": "hey, by the way, you lost the previous"
+  },
+  {
+   "t": 990.48,
+   "d": 2.8,
+   "text": "four times. Your five uh run win rate is"
+  },
+  {
+   "t": 993.28,
+   "d": 3.96,
+   "text": "20%. get good."
+  },
+  {
+   "t": 997.84,
+   "d": 1.92,
+   "text": "And ultimately, players who want to"
+  },
+  {
+   "t": 999.76,
+   "d": 1.36,
+   "text": "track their win rate will do that"
+  },
+  {
+   "t": 1001.12,
+   "d": 2.16,
+   "text": "anyway. You don't need to implement that"
+  },
+  {
+   "t": 1003.28,
+   "d": 2.48,
+   "text": "feature. It actually does more harm than"
+  },
+  {
+   "t": 1005.76,
+   "d": 4.12,
+   "text": "good in a single player experience."
+  },
+  {
+   "t": 1011.12,
+   "d": 3.76,
+   "text": "And finally, lesson 10."
+  },
+  {
+   "t": 1014.88,
+   "d": 3.8,
+   "text": "It's not your game anymore."
+  },
+  {
+   "t": 1019.04,
+   "d": 2.16,
+   "text": "The instant someone else experiences my"
+  },
+  {
+   "t": 1021.2,
+   "d": 3.44,
+   "text": "game, my art, it doesn't belong to me"
+  },
+  {
+   "t": 1024.64,
+   "d": 3.92,
+   "text": "anymore. It belongs to the player."
+  },
+  {
+   "t": 1028.56,
+   "d": 1.68,
+   "text": "To be clear, I'm not talking about"
+  },
+  {
+   "t": 1030.24,
+   "d": 1.84,
+   "text": "legality here, like copyright or"
+  },
+  {
+   "t": 1032.08,
+   "d": 1.52,
+   "text": "trademarks."
+  },
+  {
+   "t": 1033.6,
+   "d": 1.68,
+   "text": "I'm talking about the experiences the"
+  },
+  {
+   "t": 1035.28,
+   "d": 2.16,
+   "text": "players will have."
+  },
+  {
+   "t": 1037.44,
+   "d": 4.16,
+   "text": "Those are their experiences, not yours."
+  },
+  {
+   "t": 1041.6,
+   "d": 2.0,
+   "text": "And this is especially true with rogue"
+  },
+  {
+   "t": 1043.6,
+   "d": 1.84,
+   "text": "likes where there are endless"
+  },
+  {
+   "t": 1045.44,
+   "d": 1.52,
+   "text": "possibilities for how players will"
+  },
+  {
+   "t": 1046.96,
+   "d": 3.28,
+   "text": "experience your game."
+  },
+  {
+   "t": 1050.24,
+   "d": 2.8,
+   "text": "Trust me when I say this, it will feel"
+  },
+  {
+   "t": 1053.04,
+   "d": 1.84,
+   "text": "very strange putting your art into the"
+  },
+  {
+   "t": 1054.88,
+   "d": 3.52,
+   "text": "world and having people react to it."
+  },
+  {
+   "t": 1058.4,
+   "d": 1.52,
+   "text": "Players of Luck Be Landlord will have"
+  },
+  {
+   "t": 1059.92,
+   "d": 2.8,
+   "text": "their own stories to tell. Stories that"
+  },
+  {
+   "t": 1062.72,
+   "d": 2.48,
+   "text": "I have no say in."
+  },
+  {
+   "t": 1065.2,
+   "d": 2.72,
+   "text": "They don't feel like it's a game I made."
+  },
+  {
+   "t": 1067.92,
+   "d": 4.0,
+   "text": "They feel like it's a game they played."
+  },
+  {
+   "t": 1071.92,
+   "d": 1.76,
+   "text": "This was a really hard thing for me to"
+  },
+  {
+   "t": 1073.68,
+   "d": 1.84,
+   "text": "wrap my head around as an artist. And"
+  },
+  {
+   "t": 1075.52,
+   "d": 2.72,
+   "text": "it's a very personal thing. So, I'm"
+  },
+  {
+   "t": 1078.24,
+   "d": 1.6,
+   "text": "going to tell you a very personal story"
+  },
+  {
+   "t": 1079.84,
+   "d": 2.56,
+   "text": "about how I'm able to deal with it. Bear"
+  },
+  {
+   "t": 1082.4,
+   "d": 2.96,
+   "text": "with me here."
+  },
+  {
+   "t": 1085.36,
+   "d": 2.0,
+   "text": "When I was a little kid, I had a beach"
+  },
+  {
+   "t": 1087.36,
+   "d": 2.4,
+   "text": "ball. I liked playing with it at the"
+  },
+  {
+   "t": 1089.76,
+   "d": 3.28,
+   "text": "beach. And one day, while I was playing"
+  },
+  {
+   "t": 1093.04,
+   "d": 2.4,
+   "text": "with it in the ocean, a wave came and"
+  },
+  {
+   "t": 1095.44,
+   "d": 2.72,
+   "text": "pulled the beach ball out of my hands."
+  },
+  {
+   "t": 1098.16,
+   "d": 1.68,
+   "text": "I couldn't swim fast enough to get it"
+  },
+  {
+   "t": 1099.84,
+   "d": 2.32,
+   "text": "back before it was swept away. So, I"
+  },
+  {
+   "t": 1102.16,
+   "d": 2.4,
+   "text": "lost the beach ball."
+  },
+  {
+   "t": 1104.56,
+   "d": 2.48,
+   "text": "I cried for a long time about this, but"
+  },
+  {
+   "t": 1107.04,
+   "d": 2.48,
+   "text": "I wanted my beach ball back. What"
+  },
+  {
+   "t": 1109.52,
+   "d": 2.48,
+   "text": "eventually got me to feel better was for"
+  },
+  {
+   "t": 1112.0,
+   "d": 2.56,
+   "text": "whatever reason, my little kid brain"
+  },
+  {
+   "t": 1114.56,
+   "d": 2.4,
+   "text": "thought eventually the beach ball will"
+  },
+  {
+   "t": 1116.96,
+   "d": 2.4,
+   "text": "wash up on a beach in China and then a"
+  },
+  {
+   "t": 1119.36,
+   "d": 1.68,
+   "text": "kid there will find it and have fun with"
+  },
+  {
+   "t": 1121.04,
+   "d": 2.16,
+   "text": "it."
+  },
+  {
+   "t": 1123.2,
+   "d": 2.0,
+   "text": "Now, while this helped me feel better at"
+  },
+  {
+   "t": 1125.2,
+   "d": 2.32,
+   "text": "the time, eventually I grew older and"
+  },
+  {
+   "t": 1127.52,
+   "d": 2.0,
+   "text": "realized that there's no way the beach"
+  },
+  {
+   "t": 1129.52,
+   "d": 1.28,
+   "text": "ball made it all the way to a kid in"
+  },
+  {
+   "t": 1130.8,
+   "d": 4.24,
+   "text": "China. That's just not realistic."
+  },
+  {
+   "t": 1135.04,
+   "d": 3.12,
+   "text": "With my games, I give up give up a part"
+  },
+  {
+   "t": 1138.16,
+   "d": 1.68,
+   "text": "of myself when I release them to the"
+  },
+  {
+   "t": 1139.84,
+   "d": 2.88,
+   "text": "world. They're not mine anymore, just"
+  },
+  {
+   "t": 1142.72,
+   "d": 2.96,
+   "text": "like my beach ball."
+  },
+  {
+   "t": 1145.68,
+   "d": 3.36,
+   "text": "But unlike my beach ball, with my games,"
+  },
+  {
+   "t": 1149.04,
+   "d": 2.24,
+   "text": "others can experience a part of me that"
+  },
+  {
+   "t": 1151.28,
+   "d": 2.72,
+   "text": "I gave up. They might even make"
+  },
+  {
+   "t": 1154.0,
+   "d": 3.2,
+   "text": "something inspired by my game."
+  },
+  {
+   "t": 1157.2,
+   "d": 2.72,
+   "text": "They might keep my art alive long after"
+  },
+  {
+   "t": 1159.92,
+   "d": 2.96,
+   "text": "I die."
+  },
+  {
+   "t": 1162.88,
+   "d": 1.44,
+   "text": "And that's worth it not being mine"
+  },
+  {
+   "t": 1164.32,
+   "d": 3.0,
+   "text": "anymore."
+  },
+  {
+   "t": 1168.24,
+   "d": 3.24,
+   "text": "Thank you."
+  },
+  {
+   "t": 1171.52,
+   "d": 2.4,
+   "text": ">> Thank you. That's very a beautiful"
+  },
+  {
+   "t": 1173.92,
+   "d": 3.44,
+   "text": "sentiment. Uh and I think especially I"
+  },
+  {
+   "t": 1177.36,
+   "d": 2.48,
+   "text": "mean you know ver like community tends"
+  },
+  {
+   "t": 1179.84,
+   "d": 2.56,
+   "text": "to share and open source like the"
+  },
+  {
+   "t": 1182.4,
+   "d": 1.36,
+   "text": "history of the community is very much"
+  },
+  {
+   "t": 1183.76,
+   "d": 1.6,
+   "text": "people building off of each other's work"
+  },
+  {
+   "t": 1185.36,
+   "d": 1.84,
+   "text": "in a way that I think that resonates"
+  },
+  {
+   "t": 1187.2,
+   "d": 1.84,
+   "text": "even more than other genres."
+  },
+  {
+   "t": 1189.04,
+   "d": 1.12,
+   "text": ">> Yeah. Standing on the shoulders of"
+  },
+  {
+   "t": 1190.16,
+   "d": 1.36,
+   "text": "giants and all that."
+  },
+  {
+   "t": 1191.52,
+   "d": 2.56,
+   "text": ">> Yeah. Exactly. Excellent. Well, we have"
+  },
+  {
+   "t": 1194.08,
+   "d": 2.56,
+   "text": "a little bit of time for questions. Um"
+  },
+  {
+   "t": 1196.64,
+   "d": 2.32,
+   "text": "there's one actually already from Ason"
+  },
+  {
+   "t": 1198.96,
+   "d": 2.64,
+   "text": "wondering if you considered in terms of"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.32,
+   "text": "that like not wanting to track kind of"
+  },
+  {
+   "t": 1203.92,
+   "d": 2.16,
+   "text": "win rates. Did you consider tracking"
+  },
+  {
+   "t": 1206.08,
+   "d": 1.76,
+   "text": "streaks? And so this is something that I"
+  },
+  {
+   "t": 1207.84,
+   "d": 1.84,
+   "text": "think Ka mentioned Michael Bro's also"
+  },
+  {
+   "t": 1209.68,
+   "d": 1.84,
+   "text": "done of of just telling you like hey"
+  },
+  {
+   "t": 1211.52,
+   "d": 1.84,
+   "text": "this is your 10th row you know 10th win"
+  },
+  {
+   "t": 1213.36,
+   "d": 0.56,
+   "text": "in a row."
+  },
+  {
+   "t": 1213.92,
+   "d": 2.0,
+   "text": ">> Yeah I I do actually track uh win"
+  },
+  {
+   "t": 1215.92,
+   "d": 2.96,
+   "text": "streaks in in luck be a landlord. Um one"
+  },
+  {
+   "t": 1218.88,
+   "d": 2.32,
+   "text": "thing I try to avoid doing is"
+  },
+  {
+   "t": 1221.2,
+   "d": 1.76,
+   "text": "prominently displaying it to the player."
+  },
+  {
+   "t": 1222.96,
+   "d": 1.52,
+   "text": "Um, if they go into their stats screen,"
+  },
+  {
+   "t": 1224.48,
+   "d": 2.64,
+   "text": "they'll see it. Um, I know in like"
+  },
+  {
+   "t": 1227.12,
+   "d": 1.6,
+   "text": "Binding of Isaac, they'll do a negative"
+  },
+  {
+   "t": 1228.72,
+   "d": 1.92,
+   "text": "win streak if you've lost a lot, and I"
+  },
+  {
+   "t": 1230.64,
+   "d": 1.52,
+   "text": "don't really like doing that. It feels"
+  },
+  {
+   "t": 1232.16,
+   "d": 1.28,
+   "text": "all too bad."
+  },
+  {
+   "t": 1233.44,
+   "d": 2.0,
+   "text": ">> Wow, that's mean."
+  },
+  {
+   "t": 1235.44,
+   "d": 2.24,
+   "text": ">> Uh, yeah. And I think that's really"
+  },
+  {
+   "t": 1237.68,
+   "d": 3.2,
+   "text": "great. And um, it reminded me of"
+  },
+  {
+   "t": 1240.88,
+   "d": 1.28,
+   "text": "Oh, I don't even remember where I saw"
+  },
+  {
+   "t": 1242.16,
+   "d": 2.64,
+   "text": "it, but I think that um, local thunk"
+  },
+  {
+   "t": 1244.8,
+   "d": 2.32,
+   "text": "talking about in Batro choices about not"
+  },
+  {
+   "t": 1247.12,
+   "d": 1.52,
+   "text": "displaying"
+  },
+  {
+   "t": 1248.64,
+   "d": 0.96,
+   "text": "um,"
+  },
+  {
+   "t": 1249.6,
+   "d": 1.52,
+   "text": ">> what your score will be before you play"
+  },
+  {
+   "t": 1251.12,
+   "d": 1.36,
+   "text": "the hand. Like yeah,"
+  },
+  {
+   "t": 1252.48,
+   "d": 1.6,
+   "text": ">> even though that's you could calculate"
+  },
+  {
+   "t": 1254.08,
+   "d": 0.72,
+   "text": "it,"
+  },
+  {
+   "t": 1254.8,
+   "d": 2.16,
+   "text": ">> but just like there are sometimes like"
+  },
+  {
+   "t": 1256.96,
+   "d": 1.84,
+   "text": "numbers that are detrimental to the"
+  },
+  {
+   "t": 1258.8,
+   "d": 2.32,
+   "text": "experience to show even if they are"
+  },
+  {
+   "t": 1261.12,
+   "d": 1.6,
+   "text": "accessible information like the player"
+  },
+  {
+   "t": 1262.72,
+   "d": 1.68,
+   "text": "could figure it out, but drawing"
+  },
+  {
+   "t": 1264.4,
+   "d": 1.36,
+   "text": "attention to it."
+  },
+  {
+   "t": 1265.76,
+   "d": 1.84,
+   "text": ">> Yeah."
+  },
+  {
+   "t": 1267.6,
+   "d": 2.56,
+   "text": ">> Um here's a question from Dr. G. Is"
+  },
+  {
+   "t": 1270.16,
+   "d": 2.0,
+   "text": "there one of these lessons you find most"
+  },
+  {
+   "t": 1272.16,
+   "d": 1.6,
+   "text": "important or something that led you to"
+  },
+  {
+   "t": 1273.76,
+   "d": 1.76,
+   "text": "change your practices in terms of what"
+  },
+  {
+   "t": 1275.52,
+   "d": 3.68,
+   "text": "you're working on next? Um"
+  },
+  {
+   "t": 1279.2,
+   "d": 2.4,
+   "text": "maybe the the I forget what number it"
+  },
+  {
+   "t": 1281.6,
+   "d": 2.64,
+   "text": "is, but the one about Cole where um just"
+  },
+  {
+   "t": 1284.24,
+   "d": 2.0,
+   "text": "shut up during play testing. Even though"
+  },
+  {
+   "t": 1286.24,
+   "d": 2.88,
+   "text": "that's really hard to do, I'll you know"
+  },
+  {
+   "t": 1289.12,
+   "d": 1.52,
+   "text": "just be like watching a player just be"
+  },
+  {
+   "t": 1290.64,
+   "d": 1.6,
+   "text": "like"
+  },
+  {
+   "t": 1292.24,
+   "d": 2.8,
+   "text": "but like you you notice things that like"
+  },
+  {
+   "t": 1295.04,
+   "d": 1.92,
+   "text": "eventually they'll give up on a problem"
+  },
+  {
+   "t": 1296.96,
+   "d": 2.4,
+   "text": "for example in a in a puzzle game let's"
+  },
+  {
+   "t": 1299.36,
+   "d": 2.96,
+   "text": "say and they'll just or in a rogike"
+  },
+  {
+   "t": 1302.32,
+   "d": 1.2,
+   "text": "they'll find a piece of content and be"
+  },
+  {
+   "t": 1303.52,
+   "d": 1.28,
+   "text": "like oh I just really want to stick to"
+  },
+  {
+   "t": 1304.8,
+   "d": 3.12,
+   "text": "this sort of thing and it's like maybe I"
+  },
+  {
+   "t": 1307.92,
+   "d": 1.36,
+   "text": "don't actually want the players to be"
+  },
+  {
+   "t": 1309.28,
+   "d": 1.6,
+   "text": "doing that and you really won't discover"
+  },
+  {
+   "t": 1310.88,
+   "d": 1.2,
+   "text": "that unless you let people go through"
+  },
+  {
+   "t": 1312.08,
+   "d": 1.84,
+   "text": "the permutations which in Roglex"
+  },
+  {
+   "t": 1313.92,
+   "d": 2.0,
+   "text": "especially you'll you'll need to test"
+  },
+  {
+   "t": 1315.92,
+   "d": 1.76,
+   "text": "all the permutations more more so than"
+  },
+  {
+   "t": 1317.68,
+   "d": 1.76,
+   "text": "in other genres."
+  },
+  {
+   "t": 1319.44,
+   "d": 1.36,
+   "text": ">> Yeah. And I think that's interesting"
+  },
+  {
+   "t": 1320.8,
+   "d": 1.12,
+   "text": "that you mentioned, you know, letting"
+  },
+  {
+   "t": 1321.92,
+   "d": 2.24,
+   "text": "them do it and repeat it and then at the"
+  },
+  {
+   "t": 1324.16,
+   "d": 1.76,
+   "text": "end being able to be like, okay, why"
+  },
+  {
+   "t": 1325.92,
+   "d": 1.36,
+   "text": "were you doing that? because I feel like"
+  },
+  {
+   "t": 1327.28,
+   "d": 1.76,
+   "text": "that's leaving you the room of, you"
+  },
+  {
+   "t": 1329.04,
+   "d": 2.0,
+   "text": "know, there are people like even so the"
+  },
+  {
+   "t": 1331.04,
+   "d": 2.48,
+   "text": "cultist like I get the feeling when I"
+  },
+  {
+   "t": 1333.52,
+   "d": 1.12,
+   "text": "play that the cultist build isn't"
+  },
+  {
+   "t": 1334.64,
+   "d": 1.2,
+   "text": "necessarily the best build, but"
+  },
+  {
+   "t": 1335.84,
+   "d": 1.68,
+   "text": "sometimes I just want to be cheered up"
+  },
+  {
+   "t": 1337.52,
+   "d": 1.84,
+   "text": "and it makes me happy to see all those"
+  },
+  {
+   "t": 1339.36,
+   "d": 2.0,
+   "text": "little guys in a grid [laughter]"
+  },
+  {
+   "t": 1341.36,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 1342.48,
+   "d": 1.92,
+   "text": ">> you know so it's like I think if I was"
+  },
+  {
+   "t": 1344.4,
+   "d": 1.52,
+   "text": "to play test you might see me doing a"
+  },
+  {
+   "t": 1345.92,
+   "d": 1.6,
+   "text": "bunch of failed cultist builds and at"
+  },
+  {
+   "t": 1347.52,
+   "d": 1.52,
+   "text": "the end you'd be like why' you do that?"
+  },
+  {
+   "t": 1349.04,
+   "d": 1.84,
+   "text": "You'd be like oh well it's just like I"
+  },
+  {
+   "t": 1350.88,
+   "d": 1.36,
+   "text": "don't really care so much about winning"
+  },
+  {
+   "t": 1352.24,
+   "d": 2.24,
+   "text": "today. It's just like it's a build that"
+  },
+  {
+   "t": 1354.48,
+   "d": 2.48,
+   "text": "makes me happy and maybe that's a valid"
+  },
+  {
+   "t": 1356.96,
+   "d": 2.4,
+   "text": "reason to play, you know, that you want"
+  },
+  {
+   "t": 1359.36,
+   "d": 1.2,
+   "text": "to keep in. Different people have"
+  },
+  {
+   "t": 1360.56,
+   "d": 2.0,
+   "text": "different like risk profiles. So, that's"
+  },
+  {
+   "t": 1362.56,
+   "d": 0.64,
+   "text": "interesting."
+  },
+  {
+   "t": 1363.2,
+   "d": 1.12,
+   "text": ">> Yeah, it's definitely something the"
+  },
+  {
+   "t": 1364.32,
+   "d": 1.2,
+   "text": "cultist especially is something I would"
+  },
+  {
+   "t": 1365.52,
+   "d": 2.24,
+   "text": "have changed if it was earlier on. Um,"
+  },
+  {
+   "t": 1367.76,
+   "d": 1.68,
+   "text": "but now it's just like if I'm changing"
+  },
+  {
+   "t": 1369.44,
+   "d": 2.16,
+   "text": "it too much or really at all, I'm taking"
+  },
+  {
+   "t": 1371.6,
+   "d": 2.0,
+   "text": "away a lot of people's happiness like"
+  },
+  {
+   "t": 1373.6,
+   "d": 1.68,
+   "text": "yours you described."
+  },
+  {
+   "t": 1375.28,
+   "d": 2.4,
+   "text": ">> Yeah. Yeah. And and Evan brings up, it's"
+  },
+  {
+   "t": 1377.68,
+   "d": 2.0,
+   "text": "funny, I don't know if you were um"
+  },
+  {
+   "t": 1379.68,
+   "d": 1.76,
+   "text": "watching when we had Brian's talk on"
+  },
+  {
+   "t": 1381.44,
+   "d": 2.64,
+   "text": "play testing uh before this where Brian"
+  },
+  {
+   "t": 1384.08,
+   "d": 1.6,
+   "text": "was saying, \"Oh, you should be like an"
+  },
+  {
+   "t": 1385.68,
+   "d": 2.4,
+   "text": "active listener and talking to your play"
+  },
+  {
+   "t": 1388.08,
+   "d": 2.24,
+   "text": "tester.\" Um curious how you feel about"
+  },
+  {
+   "t": 1390.32,
+   "d": 1.04,
+   "text": "that. I think there's some difference"
+  },
+  {
+   "t": 1391.36,
+   "d": 2.24,
+   "text": "because even Brian was like, \"Don't bias"
+  },
+  {
+   "t": 1393.6,
+   "d": 1.84,
+   "text": "the play tester.\""
+  },
+  {
+   "t": 1395.44,
+   "d": 3.12,
+   "text": ">> Um I I I want to go back and watch that"
+  },
+  {
+   "t": 1398.56,
+   "d": 1.36,
+   "text": "talk. I haven't actually heard it,"
+  },
+  {
+   "t": 1399.92,
+   "d": 2.24,
+   "text": ">> but I"
+  },
+  {
+   "t": 1402.16,
+   "d": 1.84,
+   "text": "I think we definitely disagree on that"
+  },
+  {
+   "t": 1404.0,
+   "d": 3.68,
+   "text": "at least to some extent. Um, but I think"
+  },
+  {
+   "t": 1407.68,
+   "d": 1.2,
+   "text": "there's definitely something to be said"
+  },
+  {
+   "t": 1408.88,
+   "d": 3.2,
+   "text": "for like if there's something not ready,"
+  },
+  {
+   "t": 1412.08,
+   "d": 2.08,
+   "text": "if it's like early in in a game where"
+  },
+  {
+   "t": 1414.16,
+   "d": 1.44,
+   "text": "it's like,"
+  },
+  {
+   "t": 1415.6,
+   "d": 2.16,
+   "text": ">> oh yeah, uh, if you walk there that that"
+  },
+  {
+   "t": 1417.76,
+   "d": 1.36,
+   "text": "texture that's temporary, something like"
+  },
+  {
+   "t": 1419.12,
+   "d": 2.16,
+   "text": "that, like that's just not useful"
+  },
+  {
+   "t": 1421.28,
+   "d": 1.12,
+   "text": "information if they're thinking like,"
+  },
+  {
+   "t": 1422.4,
+   "d": 2.48,
+   "text": "oh, I can it, you know, just this whole"
+  },
+  {
+   "t": 1424.88,
+   "d": 2.56,
+   "text": "wall is purple for some reason. Um,"
+  },
+  {
+   "t": 1427.44,
+   "d": 2.0,
+   "text": "things like that, definitely. But no, I"
+  },
+  {
+   "t": 1429.44,
+   "d": 2.88,
+   "text": "I I think just again, you're not going"
+  },
+  {
+   "t": 1432.32,
+   "d": 1.2,
+   "text": "to be in the room with them when tons of"
+  },
+  {
+   "t": 1433.52,
+   "d": 2.0,
+   "text": "people are playing your game and just"
+  },
+  {
+   "t": 1435.52,
+   "d": 2.72,
+   "text": "knowing early on, oh, this player is"
+  },
+  {
+   "t": 1438.24,
+   "d": 2.08,
+   "text": "running into this issue, this player or"
+  },
+  {
+   "t": 1440.32,
+   "d": 2.08,
+   "text": "any that could be hundreds of players if"
+  },
+  {
+   "t": 1442.4,
+   "d": 2.08,
+   "text": "the game is popular. So, just getting"
+  },
+  {
+   "t": 1444.48,
+   "d": 2.0,
+   "text": "that one little bug squashed or whatever"
+  },
+  {
+   "t": 1446.48,
+   "d": 2.56,
+   "text": "it is, design flaws squashed potentially"
+  },
+  {
+   "t": 1449.04,
+   "d": 1.68,
+   "text": "is really valuable."
+  },
+  {
+   "t": 1450.72,
+   "d": 2.8,
+   "text": ">> Yeah. And I for what I love when we have"
+  },
+  {
+   "t": 1453.52,
+   "d": 2.32,
+   "text": "um talks where people have different"
+  },
+  {
+   "t": 1455.84,
+   "d": 1.6,
+   "text": "approaches like that's good. Not"
+  },
+  {
+   "t": 1457.44,
+   "d": 1.52,
+   "text": "everyone. My one of my favorite years"
+  },
+  {
+   "t": 1458.96,
+   "d": 2.08,
+   "text": "was we had one talk that was like pro"
+  },
+  {
+   "t": 1461.04,
+   "d": 2.24,
+   "text": "ECS and one talk that was anti-ECS. They"
+  },
+  {
+   "t": 1463.28,
+   "d": 2.0,
+   "text": "were in the same conference. It's like"
+  },
+  {
+   "t": 1465.28,
+   "d": 0.72,
+   "text": "hey"
+  },
+  {
+   "t": 1466.0,
+   "d": 3.36,
+   "text": ">> arguments for and against. Um there's a"
+  },
+  {
+   "t": 1469.36,
+   "d": 2.96,
+   "text": "question here from Josh G of um what's"
+  },
+  {
+   "t": 1472.32,
+   "d": 2.08,
+   "text": "your philosophy for adding new symbols"
+  },
+  {
+   "t": 1474.4,
+   "d": 1.92,
+   "text": "in Luck Be a Landlord? How do you try to"
+  },
+  {
+   "t": 1476.32,
+   "d": 2.08,
+   "text": "fit new things into a game that already"
+  },
+  {
+   "t": 1478.4,
+   "d": 4.4,
+   "text": "feels quite complete? Um well I it's"
+  },
+  {
+   "t": 1482.8,
+   "d": 2.96,
+   "text": "pretty complete now I'd say but early on"
+  },
+  {
+   "t": 1485.76,
+   "d": 1.68,
+   "text": "in early access when I was just adding"
+  },
+  {
+   "t": 1487.44,
+   "d": 2.16,
+   "text": "more and more and more. Um it was kind"
+  },
+  {
+   "t": 1489.6,
+   "d": 2.48,
+   "text": "of just a general"
+  },
+  {
+   "t": 1492.08,
+   "d": 2.8,
+   "text": "um what can I add one without well not"
+  },
+  {
+   "t": 1494.88,
+   "d": 1.52,
+   "text": "necessarily without breaking anything"
+  },
+  {
+   "t": 1496.4,
+   "d": 2.8,
+   "text": "but like what can I add to what is"
+  },
+  {
+   "t": 1499.2,
+   "d": 3.28,
+   "text": "lacking um like"
+  },
+  {
+   "t": 1502.48,
+   "d": 2.48,
+   "text": "the diver um let me it would be better"
+  },
+  {
+   "t": 1504.96,
+   "d": 1.44,
+   "text": "if I had visuals but there were symbols"
+  },
+  {
+   "t": 1506.4,
+   "d": 3.6,
+   "text": "that had less interactions so I added"
+  },
+  {
+   "t": 1510.0,
+   "d": 3.44,
+   "text": "symbols that were good for that symbol"
+  },
+  {
+   "t": 1513.44,
+   "d": 3.12,
+   "text": "um and I tried to apply a philosophy"
+  },
+  {
+   "t": 1516.56,
+   "d": 2.4,
+   "text": "similar to what they do in Dota"
+  },
+  {
+   "t": 1518.96,
+   "d": 4.64,
+   "text": "um where they try they try not to nerf"
+  },
+  {
+   "t": 1523.6,
+   "d": 3.28,
+   "text": "or uh nerf things and try to instead"
+  },
+  {
+   "t": 1526.88,
+   "d": 1.84,
+   "text": "buff everything else. So like if"
+  },
+  {
+   "t": 1528.72,
+   "d": 2.4,
+   "text": "something's really really powerful, they"
+  },
+  {
+   "t": 1531.12,
+   "d": 2.24,
+   "text": "just bring everything else up or like"
+  },
+  {
+   "t": 1533.36,
+   "d": 1.6,
+   "text": "shift things around and try and change"
+  },
+  {
+   "t": 1534.96,
+   "d": 2.08,
+   "text": "mechanics rather than saying, \"Okay,"
+  },
+  {
+   "t": 1537.04,
+   "d": 2.16,
+   "text": "this was a five, now it's a three.\""
+  },
+  {
+   "t": 1539.2,
+   "d": 2.56,
+   "text": ">> Um and things like that. I think you can"
+  },
+  {
+   "t": 1541.76,
+   "d": 1.68,
+   "text": "apply it to rogue like rogue likes as"
+  },
+  {
+   "t": 1543.44,
+   "d": 1.52,
+   "text": "well. I think I wrote some of that for"
+  },
+  {
+   "t": 1544.96,
+   "d": 1.6,
+   "text": "my talk, but I must have cut it a little"
+  },
+  {
+   "t": 1546.56,
+   "d": 2.24,
+   "text": "bit, but it's it's very it's a very"
+  },
+  {
+   "t": 1548.8,
+   "d": 2.4,
+   "text": "similar concept, I'd say."
+  },
+  {
+   "t": 1551.2,
+   "d": 2.24,
+   "text": ">> Yeah, I think that that makes sense. And"
+  },
+  {
+   "t": 1553.44,
+   "d": 2.0,
+   "text": "and it ties in nicely like one of the"
+  },
+  {
+   "t": 1555.44,
+   "d": 1.52,
+   "text": "things I love about Ruggs and Deck"
+  },
+  {
+   "t": 1556.96,
+   "d": 2.16,
+   "text": "Builders, and I remember reading it in"
+  },
+  {
+   "t": 1559.12,
+   "d": 1.28,
+   "text": "an article about Slay the Despire all"
+  },
+  {
+   "t": 1560.4,
+   "d": 1.36,
+   "text": "the way back when that first came out of"
+  },
+  {
+   "t": 1561.76,
+   "d": 2.16,
+   "text": "this idea of it not being balanced."
+  },
+  {
+   "t": 1563.92,
+   "d": 2.0,
+   "text": "Like, it's not a multiplayer game. It"
+  },
+  {
+   "t": 1565.92,
+   "d": 1.2,
+   "text": "doesn't have to be all perfectly"
+  },
+  {
+   "t": 1567.12,
+   "d": 2.8,
+   "text": "balanced. And so it's even safer to buff"
+  },
+  {
+   "t": 1569.92,
+   "d": 2.8,
+   "text": "everything instead of nerfing because"
+  },
+  {
+   "t": 1572.72,
+   "d": 2.64,
+   "text": "like the risk of oh you overbuffed"
+  },
+  {
+   "t": 1575.36,
+   "d": 1.92,
+   "text": "something now there's a combo that's"
+  },
+  {
+   "t": 1577.28,
+   "d": 2.4,
+   "text": "super powerful if people can get it."
+  },
+  {
+   "t": 1579.68,
+   "d": 1.12,
+   "text": ">> Maybe that's not a bad thing."
+  },
+  {
+   "t": 1580.8,
+   "d": 0.24,
+   "text": ">> Yeah."
+  },
+  {
+   "t": 1581.04,
+   "d": 1.6,
+   "text": ">> Now it's a new combo that's really fun."
+  },
+  {
+   "t": 1582.64,
+   "d": 1.92,
+   "text": ">> It's a story for them to tell."
+  },
+  {
+   "t": 1584.56,
+   "d": 2.96,
+   "text": ">> Yeah. Exactly. Like I love um Yeah. I"
+  },
+  {
+   "t": 1587.52,
+   "d": 1.2,
+   "text": "think that in Lucky Landlord there's a"
+  },
+  {
+   "t": 1588.72,
+   "d": 2.08,
+   "text": "lot of that synergy and things and so"
+  },
+  {
+   "t": 1590.8,
+   "d": 2.08,
+   "text": "yeah, like a diver is one that plays off"
+  },
+  {
+   "t": 1592.88,
+   "d": 1.44,
+   "text": "of a bunch of different types of things"
+  },
+  {
+   "t": 1594.32,
+   "d": 1.68,
+   "text": "and it's like that can get if you get"
+  },
+  {
+   "t": 1596.0,
+   "d": 1.28,
+   "text": "lucky"
+  },
+  {
+   "t": 1597.28,
+   "d": 2.0,
+   "text": ">> turn into a really really great build."
+  },
+  {
+   "t": 1599.28,
+   "d": 0.88,
+   "text": ">> And for those who"
+  },
+  {
+   "t": 1600.16,
+   "d": 1.33,
+   "text": ">> sometimes it doesn't come together."
+  },
+  {
+   "t": 1601.49,
+   "d": 0.19,
+   "text": "[laughter]"
+  },
+  {
+   "t": 1601.68,
+   "d": 1.6,
+   "text": ">> Yeah. For those who know the game, for"
+  },
+  {
+   "t": 1603.28,
+   "d": 2.08,
+   "text": "example, the jellyfish, the puffer fish,"
+  },
+  {
+   "t": 1605.36,
+   "d": 1.6,
+   "text": "and the sand dollar, those were ones I"
+  },
+  {
+   "t": 1606.96,
+   "d": 2.24,
+   "text": "added later on because the diver can"
+  },
+  {
+   "t": 1609.2,
+   "d": 2.4,
+   "text": "only remove a few specific symbols and"
+  },
+  {
+   "t": 1611.6,
+   "d": 1.36,
+   "text": "that was helpful."
+  },
+  {
+   "t": 1612.96,
+   "d": 3.44,
+   "text": ">> Okay, cool. That's neat to know. Um"
+  },
+  {
+   "t": 1616.4,
+   "d": 3.6,
+   "text": "yeah. Okay. Well, thank you very much"
+  },
+  {
+   "t": 1620.0,
+   "d": 2.4,
+   "text": "and thanks for uh having some time for"
+  },
+  {
+   "t": 1622.4,
+   "d": 2.24,
+   "text": "Q&A there and um"
+  },
+  {
+   "t": 1624.64,
+   "d": 1.44,
+   "text": ">> yeah, it's wonderful to have you at Rugg"
+  },
+  {
+   "t": 1626.08,
+   "d": 1.6,
+   "text": "Lake Celebration and and nice to get to"
+  },
+  {
+   "t": 1627.68,
+   "d": 1.84,
+   "text": "talk about Luck Be a Landlord since"
+  },
+  {
+   "t": 1629.52,
+   "d": 2.56,
+   "text": "yeah, it's a game I'm fond of and and I"
+  },
+  {
+   "t": 1632.08,
+   "d": 1.68,
+   "text": "think has inspired there's kind of I"
+  },
+  {
+   "t": 1633.76,
+   "d": 4.24,
+   "text": "feel like um a nebulous genre of these"
+  },
+  {
+   "t": 1638.0,
+   "d": 2.0,
+   "text": "kind of it's almost like coffee break"
+  },
+  {
+   "t": 1640.0,
+   "d": 1.68,
+   "text": "style like these kind of short quick"
+  },
+  {
+   "t": 1641.68,
+   "d": 2.16,
+   "text": "replay rogue likes in the style of of"
+  },
+  {
+   "t": 1643.84,
+   "d": 1.44,
+   "text": "like Bolro and Lucky Landlord and I"
+  },
+  {
+   "t": 1645.28,
+   "d": 1.76,
+   "text": "think Lucky Landlord is one of the like"
+  },
+  {
+   "t": 1647.04,
+   "d": 1.92,
+   "text": "useful texts for understanding ing it"
+  },
+  {
+   "t": 1648.96,
+   "d": 1.68,
+   "text": "since I think it's been inspirational to"
+  },
+  {
+   "t": 1650.64,
+   "d": 3.28,
+   "text": "a lot of devs in that space."
+  }
+ ]
+}

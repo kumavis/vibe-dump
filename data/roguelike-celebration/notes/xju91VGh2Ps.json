@@ -1,0 +1,180 @@
+{
+  "id": "xju91VGh2Ps",
+  "title": "Gabriel Koenig - Good Mutation/Bad Mutation: Player Agency in Procedural Generation",
+  "speaker": "Gabriel Koenig",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=xju91VGh2Ps",
+  "talk_type": "postmortem",
+  "summary": "Solo developer Gabriel Koenig contrasts two of his games. In Jettomero, procedural generation excited him as a creative collaborator during development, but players who played once couldn't tell it from handmade content; only a photo mode let some players engage creatively with the generator. In Test Tube Titans he made procedural mutation of physics-based monsters the core mechanic: players pick among generated variants, tune a radiation level controlling mutation size, and learn through failure which traits work. He argues developers should treat procedural generation as a player-facing feature rather than just a content tool, and in Q&A discusses granular mutation controls, sharing creations, and the ethics of breeding mechanics handled through narrative.",
+  "games": [
+    "Jettomero",
+    "Test Tube Titans",
+    "No Man's Sky",
+    "Wobbledogs",
+    "Spore",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "solo development",
+      "kind": "principle",
+      "claim": "Solo developers with no budget can use procedural generation to make games bigger than they could build by hand.",
+      "detail": "Koenig typically works alone without budget and quickly turned to procgen for scale; his first experiment was a jam game populating infinite space on the fly from predetermined celestial objects.",
+      "t": 63,
+      "quote": "my capacity of being sole developer I quickly turned to procedural generation to make my game bigger than they would be otherwise",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator as collaborator",
+      "kind": "principle",
+      "claim": "For the developer, a procedural generator can act as a creative collaborator that keeps development exciting because every playtest differs.",
+      "detail": "In Jettomero Koenig built procedural animation combined with physics and enemies assembled from premodelled parts. He compulsively screenshotted generated spaces, choosing camera placements, and was always excited to see what the generator would come up with next.",
+      "t": 228,
+      "quote": "the procedural generation is like a creative collaborator for me. I was always excited to see what it would come up with next",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "invisible procgen",
+      "kind": "warning",
+      "claim": "If players only play a procedurally generated game once, they may never notice the generation, and the result is effectively identical to handmade content.",
+      "detail": "Koenig realised after releasing Jettomero that it didn't matter to most players that it used procgen; he could have built everything by hand and it would be nearly identical to them, so much of the excitement was lost in translation.",
+      "t": 304,
+      "quote": "Plenty of people wouldn't notice because they play once and that would be it. I could have manually constructed ever element of the game",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "photo mode",
+      "kind": "example",
+      "claim": "Jettomero's photo mode let some players spend more time creatively exploring the procedural world than playing the 2-3 hour game itself.",
+      "detail": "Koenig concludes player exploration of procedural systems was most meaningful when it offered creative engagement, as the photo mode did.",
+      "t": 342,
+      "quote": "The opportunity for the player to explore the procedural systems seemed the most relative when it offered creative engagement",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "physics creatures",
+      "kind": "technique",
+      "claim": "Test Tube Titans mutates a working physics-based bipedal template, so changes to limb weights and shapes directly produce characters that move and handle differently.",
+      "detail": "Koenig needed a functional system to mutate around. A bipedal with per-limb controls worked, and warping it procedurally made some mutants more agile or easier to handle and others worse.",
+      "t": 529,
+      "quote": "if I modified weights I would end up with characters that move and handle different than one another",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "player-driven generation",
+      "kind": "principle",
+      "claim": "In Test Tube Titans the generator outputs endless configurations but the player selects which to keep, turning procedural generation into the core mechanic.",
+      "detail": "Koenig wanted players to make the discoveries. He compares it to Jettomero's photo mode, except now creative engagement with the generator is core gameplay.",
+      "t": 556,
+      "quote": "I created the system that spit out infinite configurations but the players needed to select what they believed",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutation",
+      "kind": "technique",
+      "claim": "Test Tube Titans gives players a radiation dial that sets mutation range: high radiation makes bigger, riskier leaps; low radiation is safer but takes more cycles.",
+      "detail": "Players must mutate titans to grow them but learn the procedural system through trial and error. Each mutation step offers three choices from the same process, starting from three random titans.",
+      "t": 596,
+      "quote": "Higher radiation generally causes a shift of greater leaps which could frequently take the wrong turn",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "ownership",
+      "kind": "principle",
+      "claim": "A creature built from many compounding player selections becomes one of a kind, which gives players strong ownership even though they never controlled outcomes directly.",
+      "detail": "Koenig says traits like stumpy legs begin to emerge as players choose paths. In Q&A he and the host note players quickly identified with their fully procedural titans.",
+      "t": 681,
+      "quote": "Despite the player never had control over the outcomes their titan is one of a kind",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "encouraging failure",
+      "kind": "technique",
+      "claim": "Because player-driven generation lets players create weak characters, Test Tube Titans forces players to make new titans so they see more variety and learn which traits are desirable.",
+      "detail": "Koenig saw players choose poorly performing titans and struggle. He calls encouraging failure the essential condition for giving players the reins of procedural generation.",
+      "t": 707,
+      "quote": "I forced the player to create a brand new titan and the player could be exposed to a wider variety of titans",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "emergent mastery",
+      "kind": "principle",
+      "claim": "With no predesigned way to play each generated character, players must balance build, stats and aesthetics with no correct choice, developing a specialised mastery they can invest in or abandon.",
+      "detail": "Koenig invited players to exploit, while avoiding buggy mutations. Unlike static characters in other games, titans have no designer-intended playstyle.",
+      "t": 754,
+      "quote": "There was no correct choice and unlike more static characters in other games there is no predesigned ideas on how to play with each titan",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "human selection",
+      "kind": "example",
+      "claim": "Test Tube Titans' late-added auto-mutation used the same process but took a single path without player evaluation, and the titans almost always turned out terrible, showing player selection drives quality.",
+      "detail": "Koenig likens the player's role to machine learning: random products assessed through trial and error toward a goal, and asks why let machine learning have all the fun.",
+      "t": 795,
+      "quote": "instead of allowing the player to evaluate multiple paths the game took one and ran with it and the titans almost always turned out terribly",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "granular control",
+      "kind": "technique",
+      "claim": "Test Tube Titans unlocks finer control later (crossbreeding, selective mutation of e.g. only legs) and randomises which manual upgrades each titan can take, while multiplayer simplifies to accept-or-reroll.",
+      "detail": "Koenig started mostly random to avoid too many options; later granular options reduce chaos by letting players choose where change happens without controlling the outcome. Upgrades like a tail vary in length or thickness per titan.",
+      "t": 839,
+      "quote": "I added a couple granular option for players to unlock with crossbreeding and selective mutations allowed slightly more control",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "procgen as feature",
+      "kind": "principle",
+      "claim": "Developers should treat procedural generation not just as a content tool but as a feature that lets players experiment and collaborate with the system.",
+      "detail": "Koenig contrasts Jettomero with Test Tube Titans, which kept pulling players back because they had an important role in the creative process.",
+      "t": 960,
+      "quote": "consider how procedural generation can be used as more than a tool and make it a feature to allow the player to experiment",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "seed curation",
+      "kind": "open-question",
+      "claim": "Rather than developers curating good seeds, games could let players evaluate which generated levels to play, or use granular seeds for sub-elements like monster distribution.",
+      "detail": "In Q&A, asked about devs saving seeds for good levels, Koenig suggests player evaluation and partial seeds; the host relays that Spore saved planet seeds but it was cooler when players did it.",
+      "t": 1033,
+      "quote": "even building a system where the player can evaluate which levels they might want to play could be useful",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "sharing creations",
+      "kind": "open-question",
+      "claim": "Players who build unique procedural creatures want to show them off, but Test Tube Titans only supported sharing via exported files or screenshots.",
+      "detail": "Koenig says titans export to separate files but there's no in-game sharing system; some players mutated things he'd never seen. The host compares it to sharing DCSS builds.",
+      "t": 1255,
+      "quote": "other than taking a screenshot of your titan and posting it there is no way to currently share stuff",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "breeding ethics",
+      "kind": "technique",
+      "claim": "Test Tube Titans addresses the 'icky' feel of breeding mechanics through narrative: each titan decomposes after use, and the story is critical of the lab's monster-making.",
+      "detail": "Asked by Dustin Freeman how to avoid the ickiness of breeding, Koenig says setting strongly shapes the feeling (a lab vs nature). The host notes monster-breeding games struggle with what to do with leftover monsters, and that it matters whether the narrative addresses what the mechanics do.",
+      "t": 1423,
+      "quote": "each titan naturally decomposes after it is done and you save a copy of the genetic code",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

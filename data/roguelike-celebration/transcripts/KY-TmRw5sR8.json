@@ -1,0 +1,4704 @@
+{
+ "id": "KY-TmRw5sR8",
+ "url": "https://www.youtube.com/watch?v=KY-TmRw5sR8",
+ "title": "John Harris - Difficulty in random games",
+ "speaker": "John Harris",
+ "talk_title": "Difficulty in random games",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 2046,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nJohn Harris is the author of @Play, a column about roguelike games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 64,
+   "title": "Writing about games"
+  },
+  {
+   "start": 154,
+   "title": "The rise of roguelikes"
+  },
+  {
+   "start": 245,
+   "title": "Favorite roguelike games"
+  },
+  {
+   "start": 379,
+   "title": "The issue with grinding"
+  },
+  {
+   "start": 512,
+   "title": "The role of random dungeons"
+  },
+  {
+   "start": 737,
+   "title": "Roguelikes as gambling"
+  },
+  {
+   "start": 926,
+   "title": "Adding depth and story"
+  },
+  {
+   "start": 1102,
+   "title": "The future of procedural stories"
+  },
+  {
+   "start": 1255,
+   "title": "Knowledge, logic, and wit"
+  },
+  {
+   "start": 1527,
+   "title": "Learning through experience"
+  },
+  {
+   "start": 1684,
+   "title": "Casino dungeon experiment"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5354,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 11.04,
+   "d": 0.72,
+   "text": "oh"
+  },
+  {
+   "t": 11.76,
+   "d": 3.92,
+   "text": "sorry echo echo echo echo"
+  },
+  {
+   "t": 15.68,
+   "d": 3.36,
+   "text": "all right uh i apologize first for a bit"
+  },
+  {
+   "t": 19.04,
+   "d": 1.12,
+   "text": "of confusing the topic"
+  },
+  {
+   "t": 20.16,
+   "d": 1.6,
+   "text": "you know it's i sort of wrote it like i"
+  },
+  {
+   "t": 21.76,
+   "d": 2.56,
+   "text": "write at play which is"
+  },
+  {
+   "t": 24.32,
+   "d": 2.08,
+   "text": "a sort of discursion that i later sort"
+  },
+  {
+   "t": 26.4,
+   "d": 2.96,
+   "text": "of hone in on some kind of topic"
+  },
+  {
+   "t": 29.36,
+   "d": 3.36,
+   "text": "um uh so that's pretty much in fact um"
+  },
+  {
+   "t": 32.72,
+   "d": 2.16,
+   "text": "one thing how many of you know about app"
+  },
+  {
+   "t": 34.88,
+   "d": 2.56,
+   "text": "play or i've ever seen it on reddit"
+  },
+  {
+   "t": 37.44,
+   "d": 3.68,
+   "text": "okay a few more than i expected yeah"
+  },
+  {
+   "t": 41.12,
+   "d": 2.64,
+   "text": "okay so let's see any case you can go"
+  },
+  {
+   "t": 43.76,
+   "d": 1.84,
+   "text": "ahead and put the slides up now"
+  },
+  {
+   "t": 45.6,
+   "d": 2.96,
+   "text": "the infinite dungeon reverses and"
+  },
+  {
+   "t": 48.56,
+   "d": 1.84,
+   "text": "drawbacks of and new uses for randomness"
+  },
+  {
+   "t": 50.4,
+   "d": 1.2,
+   "text": "and roguelike games"
+  },
+  {
+   "t": 51.6,
+   "d": 3.84,
+   "text": "gaming with about five major asides to"
+  },
+  {
+   "t": 55.44,
+   "d": 1.6,
+   "text": "random topics that"
+  },
+  {
+   "t": 57.04,
+   "d": 2.32,
+   "text": "are mostly actually related to the main"
+  },
+  {
+   "t": 59.36,
+   "d": 1.6,
+   "text": "topic so"
+  },
+  {
+   "t": 60.96,
+   "d": 3.12,
+   "text": "all right so any case so"
+  },
+  {
+   "t": 64.08,
+   "d": 2.48,
+   "text": "that so let's move on first question who"
+  },
+  {
+   "t": 66.56,
+   "d": 0.64,
+   "text": "the hell"
+  },
+  {
+   "t": 67.2,
+   "d": 3.2,
+   "text": "am i uh let's see"
+  },
+  {
+   "t": 70.4,
+   "d": 2.4,
+   "text": "uh i wrote a roguelite column for the"
+  },
+  {
+   "t": 72.8,
+   "d": 2.48,
+   "text": "website game set watch"
+  },
+  {
+   "t": 75.28,
+   "d": 3.28,
+   "text": "for about six or seven years back"
+  },
+  {
+   "t": 78.56,
+   "d": 2.0,
+   "text": "back when game set watch was updating if"
+  },
+  {
+   "t": 80.56,
+   "d": 1.12,
+   "text": "you don't know if any of you know of"
+  },
+  {
+   "t": 81.68,
+   "d": 1.6,
+   "text": "that website"
+  },
+  {
+   "t": 83.28,
+   "d": 3.12,
+   "text": "uh yeah game watch was my favorite"
+  },
+  {
+   "t": 86.4,
+   "d": 1.76,
+   "text": "gaming website on the internet and i"
+  },
+  {
+   "t": 88.16,
+   "d": 1.44,
+   "text": "jumped at the chance"
+  },
+  {
+   "t": 89.6,
+   "d": 2.8,
+   "text": "to write a column for and it lasted for"
+  },
+  {
+   "t": 92.4,
+   "d": 0.8,
+   "text": "some time"
+  },
+  {
+   "t": 93.2,
+   "d": 3.12,
+   "text": "um let's see beyond that"
+  },
+  {
+   "t": 96.32,
+   "d": 2.88,
+   "text": "um multi-ascender at nethack i can talk"
+  },
+  {
+   "t": 99.2,
+   "d": 1.36,
+   "text": "your ear off about"
+  },
+  {
+   "t": 100.56,
+   "d": 3.36,
+   "text": "50 or 60 different computer games and"
+  },
+  {
+   "t": 103.92,
+   "d": 3.28,
+   "text": "subcultures and such but beyond all"
+  },
+  {
+   "t": 107.2,
+   "d": 2.72,
+   "text": "those things i feel it's important"
+  },
+  {
+   "t": 109.92,
+   "d": 4.24,
+   "text": "to drive this home i am just a guy"
+  },
+  {
+   "t": 114.16,
+   "d": 3.92,
+   "text": "uh i do not claim to be an expert"
+  },
+  {
+   "t": 118.08,
+   "d": 3.6,
+   "text": "on roguelike design uh i've i've played"
+  },
+  {
+   "t": 121.68,
+   "d": 1.44,
+   "text": "around with some of the game my"
+  },
+  {
+   "t": 123.12,
+   "d": 4.0,
+   "text": "uh concepts i've played a ton of games"
+  },
+  {
+   "t": 127.12,
+   "d": 1.2,
+   "text": "especially back when i was writing the"
+  },
+  {
+   "t": 128.32,
+   "d": 1.36,
+   "text": "column and i'm still writing the column"
+  },
+  {
+   "t": 129.68,
+   "d": 2.32,
+   "text": "now it's just a lot slower now"
+  },
+  {
+   "t": 132.0,
+   "d": 4.24,
+   "text": "and not in games that watch um"
+  },
+  {
+   "t": 137.36,
+   "d": 2.72,
+   "text": "but other than i mean this is the world"
+  },
+  {
+   "t": 140.08,
+   "d": 0.48,
+   "text": "as i"
+  },
+  {
+   "t": 140.56,
+   "d": 3.12,
+   "text": "see it and i'm not trying to yeah"
+  },
+  {
+   "t": 143.68,
+   "d": 3.12,
+   "text": "it's well i'm this is kind of anyway so"
+  },
+  {
+   "t": 146.8,
+   "d": 0.64,
+   "text": "as i say"
+  },
+  {
+   "t": 147.44,
+   "d": 1.12,
+   "text": "i don't think that would take us"
+  },
+  {
+   "t": 148.56,
+   "d": 1.44,
+   "text": "indisputable facts like i only write"
+  },
+  {
+   "t": 150.0,
+   "d": 1.36,
+   "text": "about how things seem to me my"
+  },
+  {
+   "t": 151.36,
+   "d": 1.04,
+   "text": "perspective"
+  },
+  {
+   "t": 152.4,
+   "d": 4.4,
+   "text": "all right so let's move on um well"
+  },
+  {
+   "t": 156.8,
+   "d": 2.56,
+   "text": "uh to begin with one of the reasons why"
+  },
+  {
+   "t": 159.36,
+   "d": 1.36,
+   "text": "the columns slowed down while"
+  },
+  {
+   "t": 160.72,
+   "d": 2.32,
+   "text": "still kind of slow now is and please"
+  },
+  {
+   "t": 163.04,
+   "d": 0.8,
+   "text": "don't be worried"
+  },
+  {
+   "t": 163.84,
+   "d": 3.92,
+   "text": "about this is that i've sort of started"
+  },
+  {
+   "t": 167.76,
+   "d": 2.8,
+   "text": "to get the satisfied with some aspects"
+  },
+  {
+   "t": 170.56,
+   "d": 1.36,
+   "text": "of roguelike play"
+  },
+  {
+   "t": 171.92,
+   "d": 3.36,
+   "text": "roguelike games right um which is part"
+  },
+  {
+   "t": 175.28,
+   "d": 0.56,
+   "text": "of this"
+  },
+  {
+   "t": 175.84,
+   "d": 3.2,
+   "text": "i feel like i felt like i was exhausting"
+  },
+  {
+   "t": 179.04,
+   "d": 2.64,
+   "text": "the topic i read about 77 columns on"
+  },
+  {
+   "t": 181.68,
+   "d": 0.88,
+   "text": "this"
+  },
+  {
+   "t": 182.56,
+   "d": 1.52,
+   "text": "and i actually much more collected into"
+  },
+  {
+   "t": 184.08,
+   "d": 2.48,
+   "text": "a book actually available on newsstands"
+  },
+  {
+   "t": 186.56,
+   "d": 0.72,
+   "text": "now"
+  },
+  {
+   "t": 187.28,
+   "d": 3.2,
+   "text": "uh but uh"
+  },
+  {
+   "t": 190.48,
+   "d": 2.48,
+   "text": "yeah i thought you know i i spent i"
+  },
+  {
+   "t": 192.96,
+   "d": 1.36,
+   "text": "remember when the rogue guys were up"
+  },
+  {
+   "t": 194.32,
+   "d": 1.68,
+   "text": "here i talked about rogomatic i wrote a"
+  },
+  {
+   "t": 196.0,
+   "d": 2.24,
+   "text": "whole column on rogomatic"
+  },
+  {
+   "t": 198.24,
+   "d": 3.12,
+   "text": "yeah and because of bitrat how web pages"
+  },
+  {
+   "t": 201.36,
+   "d": 0.96,
+   "text": "tend to"
+  },
+  {
+   "t": 202.32,
+   "d": 2.96,
+   "text": "disappear from the internet if someone"
+  },
+  {
+   "t": 205.28,
+   "d": 0.96,
+   "text": "isn't"
+  },
+  {
+   "t": 206.24,
+   "d": 2.08,
+   "text": "curating them and is keep paying the"
+  },
+  {
+   "t": 208.32,
+   "d": 1.2,
+   "text": "server bills"
+  },
+  {
+   "t": 209.52,
+   "d": 1.6,
+   "text": "i don't even know if any other"
+  },
+  {
+   "t": 211.12,
+   "d": 1.92,
+   "text": "information rogue-matic still exists on"
+  },
+  {
+   "t": 213.04,
+   "d": 1.52,
+   "text": "the internet"
+  },
+  {
+   "t": 214.56,
+   "d": 2.16,
+   "text": "um so i'm kind of proud to preserve"
+  },
+  {
+   "t": 216.72,
+   "d": 1.68,
+   "text": "something about that"
+  },
+  {
+   "t": 218.4,
+   "d": 2.08,
+   "text": "any case about the time that i was"
+  },
+  {
+   "t": 220.48,
+   "d": 2.64,
+   "text": "starting to"
+  },
+  {
+   "t": 223.52,
+   "d": 3.12,
+   "text": "just satisfied um that's about the time"
+  },
+  {
+   "t": 226.64,
+   "d": 1.2,
+   "text": "actually when roguelike started to hit"
+  },
+  {
+   "t": 227.84,
+   "d": 1.92,
+   "text": "the public eye the weird"
+  },
+  {
+   "t": 229.76,
+   "d": 3.12,
+   "text": "uh conjunction of occurrences there"
+  },
+  {
+   "t": 232.88,
+   "d": 1.6,
+   "text": "sometimes i say as it says here that"
+  },
+  {
+   "t": 234.48,
+   "d": 2.16,
+   "text": "half the things on steam call themselves"
+  },
+  {
+   "t": 236.64,
+   "d": 1.92,
+   "text": "roguelikes"
+  },
+  {
+   "t": 238.56,
+   "d": 2.72,
+   "text": "um including a number of things where i"
+  },
+  {
+   "t": 241.28,
+   "d": 0.8,
+   "text": "think"
+  },
+  {
+   "t": 242.08,
+   "d": 2.16,
+   "text": "the the connection is kind of tenuous"
+  },
+  {
+   "t": 244.24,
+   "d": 2.32,
+   "text": "anyway so about that"
+  },
+  {
+   "t": 246.56,
+   "d": 1.84,
+   "text": "i i started thinking about it and one of"
+  },
+  {
+   "t": 248.4,
+   "d": 1.28,
+   "text": "the things that considered was the"
+  },
+  {
+   "t": 249.68,
+   "d": 2.4,
+   "text": "hipster's urge like oh it's popular now"
+  },
+  {
+   "t": 252.08,
+   "d": 2.08,
+   "text": "i'm not intruding on that"
+  },
+  {
+   "t": 254.16,
+   "d": 1.84,
+   "text": "um i don't think that's it though"
+  },
+  {
+   "t": 256.0,
+   "d": 1.44,
+   "text": "because i still really"
+  },
+  {
+   "t": 257.44,
+   "d": 2.72,
+   "text": "really love rogue and i still pretty"
+  },
+  {
+   "t": 260.16,
+   "d": 0.32,
+   "text": "much"
+  },
+  {
+   "t": 260.48,
+   "d": 2.48,
+   "text": "love nethack and i think the reason i'm"
+  },
+  {
+   "t": 262.96,
+   "d": 1.68,
+   "text": "kind of falling away from netac recently"
+  },
+  {
+   "t": 264.64,
+   "d": 1.12,
+   "text": "is because"
+  },
+  {
+   "t": 265.76,
+   "d": 2.0,
+   "text": "although it had this fearsome reputation"
+  },
+  {
+   "t": 267.76,
+   "d": 1.28,
+   "text": "as the player killer"
+  },
+  {
+   "t": 269.04,
+   "d": 2.0,
+   "text": "of a game of infinite depth it's not"
+  },
+  {
+   "t": 271.04,
+   "d": 1.6,
+   "text": "it's still finite"
+  },
+  {
+   "t": 272.64,
+   "d": 1.76,
+   "text": "and after you've read through the netac"
+  },
+  {
+   "t": 274.4,
+   "d": 3.12,
+   "text": "wiki about 20 times like i have"
+  },
+  {
+   "t": 277.52,
+   "d": 2.32,
+   "text": "yeah you you do eventually learn"
+  },
+  {
+   "t": 279.84,
+   "d": 2.24,
+   "text": "everything that's in the game"
+  },
+  {
+   "t": 282.08,
+   "d": 2.56,
+   "text": "um you believe it or not it can happen"
+  },
+  {
+   "t": 284.64,
+   "d": 1.92,
+   "text": "to you"
+  },
+  {
+   "t": 286.56,
+   "d": 3.36,
+   "text": "uh yeah uh"
+  },
+  {
+   "t": 289.92,
+   "d": 2.64,
+   "text": "i played crawl a bit um and there are"
+  },
+  {
+   "t": 292.56,
+   "d": 1.68,
+   "text": "some of the newer games i do like and"
+  },
+  {
+   "t": 294.24,
+   "d": 1.52,
+   "text": "i'm trying to focus more on those these"
+  },
+  {
+   "t": 295.76,
+   "d": 0.48,
+   "text": "days"
+  },
+  {
+   "t": 296.24,
+   "d": 1.84,
+   "text": "like spelunky i think spelunky is"
+  },
+  {
+   "t": 298.08,
+   "d": 1.28,
+   "text": "godlike"
+  },
+  {
+   "t": 299.36,
+   "d": 1.92,
+   "text": "spelunky is one of my favorite games of"
+  },
+  {
+   "t": 301.28,
+   "d": 1.36,
+   "text": "all time if you haven't played it you"
+  },
+  {
+   "t": 302.64,
+   "d": 1.68,
+   "text": "should go and play that"
+  },
+  {
+   "t": 304.32,
+   "d": 4.08,
+   "text": "as soon as possible uh sc uh hyper rogue"
+  },
+  {
+   "t": 308.4,
+   "d": 2.08,
+   "text": "which is a much simpler game but still"
+  },
+  {
+   "t": 310.48,
+   "d": 2.4,
+   "text": "got sort of interesting ideas to it"
+  },
+  {
+   "t": 312.88,
+   "d": 2.0,
+   "text": "uh brogue how many of you have played"
+  },
+  {
+   "t": 314.88,
+   "d": 1.52,
+   "text": "brogue"
+  },
+  {
+   "t": 316.4,
+   "d": 3.76,
+   "text": "oh brogue is great and he's made some"
+  },
+  {
+   "t": 320.16,
+   "d": 1.92,
+   "text": "wonderful design choices that i greatly"
+  },
+  {
+   "t": 322.08,
+   "d": 1.76,
+   "text": "respect like taking out experience"
+  },
+  {
+   "t": 323.84,
+   "d": 1.2,
+   "text": "points"
+  },
+  {
+   "t": 325.04,
+   "d": 3.2,
+   "text": "uh just making tying player player"
+  },
+  {
+   "t": 328.24,
+   "d": 2.08,
+   "text": "uh advancement entirely to your"
+  },
+  {
+   "t": 330.32,
+   "d": 1.28,
+   "text": "equipment"
+  },
+  {
+   "t": 331.6,
+   "d": 2.88,
+   "text": "um oh also another game uh in that fact"
+  },
+  {
+   "t": 334.48,
+   "d": 1.44,
+   "text": "this is sort of an aside so i devote a"
+  },
+  {
+   "t": 335.92,
+   "d": 1.92,
+   "text": "whole slide to it"
+  },
+  {
+   "t": 337.84,
+   "d": 2.8,
+   "text": "this strange adventures in infinite"
+  },
+  {
+   "t": 340.64,
+   "d": 0.96,
+   "text": "space"
+  },
+  {
+   "t": 341.6,
+   "d": 1.68,
+   "text": "this is another my favorite games of all"
+  },
+  {
+   "t": 343.28,
+   "d": 1.92,
+   "text": "time if you get uh"
+  },
+  {
+   "t": 345.2,
+   "d": 2.8,
+   "text": "this it's a it's uh the guy people who"
+  },
+  {
+   "t": 348.0,
+   "d": 1.28,
+   "text": "made it didn't call it a sort of a"
+  },
+  {
+   "t": 349.28,
+   "d": 1.92,
+   "text": "roguelike at first but then the buzzword"
+  },
+  {
+   "t": 351.2,
+   "d": 0.96,
+   "text": "thing hit"
+  },
+  {
+   "t": 352.16,
+   "d": 2.0,
+   "text": "so now they refer to it as that but"
+  },
+  {
+   "t": 354.16,
+   "d": 1.04,
+   "text": "really it's it's"
+  },
+  {
+   "t": 355.2,
+   "d": 2.48,
+   "text": "a coffee break rug like it's a full game"
+  },
+  {
+   "t": 357.68,
+   "d": 2.56,
+   "text": "beginning to end it's about 20 minutes"
+  },
+  {
+   "t": 360.24,
+   "d": 3.44,
+   "text": "if you don't die uh"
+  },
+  {
+   "t": 363.68,
+   "d": 2.48,
+   "text": "i'm sorry for saying oh a lot let's see"
+  },
+  {
+   "t": 366.16,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 367.04,
+   "d": 2.4,
+   "text": "uh but uh yeah the people make it"
+  },
+  {
+   "t": 369.44,
+   "d": 1.68,
+   "text": "digital eel they've made a couple of"
+  },
+  {
+   "t": 371.12,
+   "d": 0.64,
+   "text": "sequels"
+  },
+  {
+   "t": 371.76,
+   "d": 3.2,
+   "text": "and this is this is uh if you come on"
+  },
+  {
+   "t": 374.96,
+   "d": 2.48,
+   "text": "nothing else try to look up this game"
+  },
+  {
+   "t": 377.44,
+   "d": 0.8,
+   "text": "yeah"
+  },
+  {
+   "t": 378.24,
+   "d": 3.04,
+   "text": "uh anyway so moving on yeah"
+  },
+  {
+   "t": 381.28,
+   "d": 1.68,
+   "text": "but i love the new games had great"
+  },
+  {
+   "t": 382.96,
+   "d": 1.28,
+   "text": "people getting interested in"
+  },
+  {
+   "t": 384.24,
+   "d": 1.84,
+   "text": "particularly and this is not meant as an"
+  },
+  {
+   "t": 386.08,
+   "d": 1.84,
+   "text": "offense to people who made the game"
+  },
+  {
+   "t": 387.92,
+   "d": 1.68,
+   "text": "especially if you're in the audience"
+  },
+  {
+   "t": 389.6,
+   "d": 1.68,
+   "text": "here"
+  },
+  {
+   "t": 391.28,
+   "d": 2.08,
+   "text": "uh dungeons of dread more for that i"
+  },
+  {
+   "t": 393.36,
+   "d": 1.28,
+   "text": "played a great deal of drone to the red"
+  },
+  {
+   "t": 394.64,
+   "d": 1.76,
+   "text": "war before i realized"
+  },
+  {
+   "t": 396.4,
+   "d": 3.6,
+   "text": "that it's it's mostly kind of a grind"
+  },
+  {
+   "t": 400.0,
+   "d": 2.4,
+   "text": "yeah and rogue legacy to me is a game"
+  },
+  {
+   "t": 402.4,
+   "d": 2.16,
+   "text": "that's about grinding"
+  },
+  {
+   "t": 404.56,
+   "d": 1.12,
+   "text": "actually the binding of i think i"
+  },
+  {
+   "t": 405.68,
+   "d": 2.32,
+   "text": "haven't really played that much of uh"
+  },
+  {
+   "t": 408.0,
+   "d": 2.16,
+   "text": "but there are things about that lead me"
+  },
+  {
+   "t": 410.16,
+   "d": 1.36,
+   "text": "to believe that it wouldn't be too"
+  },
+  {
+   "t": 411.52,
+   "d": 1.04,
+   "text": "interesting to me"
+  },
+  {
+   "t": 412.56,
+   "d": 3.76,
+   "text": "uh let's see um that that's one thing"
+  },
+  {
+   "t": 416.32,
+   "d": 3.12,
+   "text": "that i i can just take a moment against"
+  },
+  {
+   "t": 419.44,
+   "d": 3.6,
+   "text": "grind any of you who are aspiring game"
+  },
+  {
+   "t": 423.04,
+   "d": 1.68,
+   "text": "developers or designers"
+  },
+  {
+   "t": 424.72,
+   "d": 1.2,
+   "text": "from the bottom of my heart if you come"
+  },
+  {
+   "t": 425.92,
+   "d": 2.8,
+   "text": "only there's no other information here"
+  },
+  {
+   "t": 428.72,
+   "d": 3.68,
+   "text": "try to avoid grind okay and uh"
+  },
+  {
+   "t": 432.4,
+   "d": 2.0,
+   "text": "the stone soup guys the dungeon crawl"
+  },
+  {
+   "t": 434.4,
+   "d": 1.84,
+   "text": "guys have gone to great lengths to"
+  },
+  {
+   "t": 436.24,
+   "d": 2.72,
+   "text": "eliminate grind from their game"
+  },
+  {
+   "t": 438.96,
+   "d": 2.4,
+   "text": "that grind is just sort of make work"
+  },
+  {
+   "t": 441.36,
+   "d": 0.64,
+   "text": "play"
+  },
+  {
+   "t": 442.0,
+   "d": 2.24,
+   "text": "that's when you're just bapping away at"
+  },
+  {
+   "t": 444.24,
+   "d": 1.76,
+   "text": "monsters like world of warcraft just to"
+  },
+  {
+   "t": 446.0,
+   "d": 1.36,
+   "text": "gain experience points to get to the"
+  },
+  {
+   "t": 447.36,
+   "d": 0.96,
+   "text": "next level"
+  },
+  {
+   "t": 448.32,
+   "d": 3.12,
+   "text": "it's it's spacer it's filler it's not no"
+  },
+  {
+   "t": 451.44,
+   "d": 1.52,
+   "text": "interesting gameplay decisions there"
+  },
+  {
+   "t": 452.96,
+   "d": 1.12,
+   "text": "it's just"
+  },
+  {
+   "t": 454.08,
+   "d": 3.36,
+   "text": "increasing numbers mindlessly and grind"
+  },
+  {
+   "t": 457.44,
+   "d": 1.36,
+   "text": "is very popular in"
+  },
+  {
+   "t": 458.8,
+   "d": 1.76,
+   "text": "game design circles right now i think"
+  },
+  {
+   "t": 460.56,
+   "d": 1.44,
+   "text": "like half the free to play games that"
+  },
+  {
+   "t": 462.0,
+   "d": 2.0,
+   "text": "you find are about grind"
+  },
+  {
+   "t": 464.0,
+   "d": 1.2,
+   "text": "most things that call themselves a"
+  },
+  {
+   "t": 465.2,
+   "d": 1.92,
+   "text": "role-playing game are like 90 percent"
+  },
+  {
+   "t": 467.12,
+   "d": 1.28,
+   "text": "grind"
+  },
+  {
+   "t": 468.4,
+   "d": 1.84,
+   "text": "please do everything you can to"
+  },
+  {
+   "t": 470.24,
+   "d": 1.76,
+   "text": "eliminate grind"
+  },
+  {
+   "t": 472.0,
+   "d": 3.84,
+   "text": "the the human race will thank you"
+  },
+  {
+   "t": 475.84,
+   "d": 2.4,
+   "text": "um any case so there are these games a"
+  },
+  {
+   "t": 478.24,
+   "d": 1.92,
+   "text": "lot of these games are out there"
+  },
+  {
+   "t": 480.16,
+   "d": 1.68,
+   "text": "and i had the choice with the rights"
+  },
+  {
+   "t": 481.84,
+   "d": 1.6,
+   "text": "about them or not and the thing is i"
+  },
+  {
+   "t": 483.44,
+   "d": 2.08,
+   "text": "in that sense right here is the strong"
+  },
+  {
+   "t": 485.52,
+   "d": 1.44,
+   "text": "opinion that you can't"
+  },
+  {
+   "t": 486.96,
+   "d": 2.8,
+   "text": "fake enthusiasm if you don't like the"
+  },
+  {
+   "t": 489.76,
+   "d": 1.12,
+   "text": "thing you're writing about but you have"
+  },
+  {
+   "t": 490.88,
+   "d": 1.12,
+   "text": "to pretend to like it"
+  },
+  {
+   "t": 492.0,
+   "d": 2.56,
+   "text": "i've never mastered that trick i can't"
+  },
+  {
+   "t": 494.56,
+   "d": 1.2,
+   "text": "do it"
+  },
+  {
+   "t": 495.76,
+   "d": 2.88,
+   "text": "uh and i've read countless articles by"
+  },
+  {
+   "t": 498.64,
+   "d": 1.84,
+   "text": "people who are very obviously doing it"
+  },
+  {
+   "t": 500.48,
+   "d": 1.52,
+   "text": "and i have no idea how they live with"
+  },
+  {
+   "t": 502.0,
+   "d": 2.4,
+   "text": "themselves which is not to say anything"
+  },
+  {
+   "t": 504.4,
+   "d": 0.88,
+   "text": "about these"
+  },
+  {
+   "t": 505.28,
+   "d": 2.32,
+   "text": "these games up here are bad i just don't"
+  },
+  {
+   "t": 507.6,
+   "d": 1.68,
+   "text": "appeal to me personally and i don't"
+  },
+  {
+   "t": 509.28,
+   "d": 0.96,
+   "text": "think i can"
+  },
+  {
+   "t": 510.24,
+   "d": 1.6,
+   "text": "i can do them justice if they don't"
+  },
+  {
+   "t": 511.84,
+   "d": 2.16,
+   "text": "anyway so i started thinking about why"
+  },
+  {
+   "t": 514.0,
+   "d": 2.08,
+   "text": "they don't appeal to me so we'll move on"
+  },
+  {
+   "t": 516.08,
+   "d": 1.92,
+   "text": "what the games lack is a complicated"
+  },
+  {
+   "t": 518.0,
+   "d": 1.68,
+   "text": "question there's many things but there's"
+  },
+  {
+   "t": 519.68,
+   "d": 0.8,
+   "text": "something"
+  },
+  {
+   "t": 520.48,
+   "d": 2.0,
+   "text": "about that been on my mind a long time"
+  },
+  {
+   "t": 522.48,
+   "d": 1.52,
+   "text": "and"
+  },
+  {
+   "t": 524.0,
+   "d": 1.6,
+   "text": "this is something i've struggled to put"
+  },
+  {
+   "t": 525.6,
+   "d": 1.52,
+   "text": "into words for years"
+  },
+  {
+   "t": 527.12,
+   "d": 2.0,
+   "text": "and i've tried to write an app play"
+  },
+  {
+   "t": 529.12,
+   "d": 1.2,
+   "text": "column about them"
+  },
+  {
+   "t": 530.32,
+   "d": 2.4,
+   "text": "and failed for months it's one of the"
+  },
+  {
+   "t": 532.72,
+   "d": 1.36,
+   "text": "reasons why the column is sort of on"
+  },
+  {
+   "t": 534.08,
+   "d": 1.28,
+   "text": "break right now i've been trying to do"
+  },
+  {
+   "t": 535.36,
+   "d": 0.56,
+   "text": "this"
+  },
+  {
+   "t": 535.92,
+   "d": 1.84,
+   "text": "this is one of my attempt to get off my"
+  },
+  {
+   "t": 537.76,
+   "d": 1.84,
+   "text": "chest so we're moving on"
+  },
+  {
+   "t": 539.6,
+   "d": 3.6,
+   "text": "now for that has to do with the nature"
+  },
+  {
+   "t": 543.2,
+   "d": 2.8,
+   "text": "of a random dungeon you know a thing"
+  },
+  {
+   "t": 546.0,
+   "d": 0.8,
+   "text": "that"
+  },
+  {
+   "t": 546.8,
+   "d": 2.4,
+   "text": "you you uh it's a space that you know uh"
+  },
+  {
+   "t": 549.2,
+   "d": 1.52,
+   "text": "your character explores they're supposed"
+  },
+  {
+   "t": 550.72,
+   "d": 2.4,
+   "text": "to be like full of deadly peril"
+  },
+  {
+   "t": 553.12,
+   "d": 2.4,
+   "text": "um it's worth going back to the big"
+  },
+  {
+   "t": 555.52,
+   "d": 1.92,
+   "text": "origins of the idea this is before well"
+  },
+  {
+   "t": 557.44,
+   "d": 1.44,
+   "text": "i have to ask the rogue people if they"
+  },
+  {
+   "t": 558.88,
+   "d": 1.52,
+   "text": "knew about this before and they told me"
+  },
+  {
+   "t": 560.4,
+   "d": 0.8,
+   "text": "no"
+  },
+  {
+   "t": 561.2,
+   "d": 3.68,
+   "text": "so what do i know uh the first"
+  },
+  {
+   "t": 564.88,
+   "d": 1.84,
+   "text": "uh recorded instance i think i could"
+  },
+  {
+   "t": 566.72,
+   "d": 1.2,
+   "text": "find about"
+  },
+  {
+   "t": 567.92,
+   "d": 3.52,
+   "text": "random dungeon gameplay was actually"
+  },
+  {
+   "t": 571.44,
+   "d": 2.72,
+   "text": "in back in tsr's days of owning dungeons"
+  },
+  {
+   "t": 574.16,
+   "d": 2.08,
+   "text": "and dragons uh"
+  },
+  {
+   "t": 576.24,
+   "d": 2.56,
+   "text": "but long before wizard of the coast uh"
+  },
+  {
+   "t": 578.8,
+   "d": 1.44,
+   "text": "they published a magazine"
+  },
+  {
+   "t": 580.24,
+   "d": 1.68,
+   "text": "called the strategic review and the"
+  },
+  {
+   "t": 581.92,
+   "d": 2.88,
+   "text": "first issue gary gygax himself"
+  },
+  {
+   "t": 584.8,
+   "d": 2.08,
+   "text": "wrote an article about creating random"
+  },
+  {
+   "t": 586.88,
+   "d": 2.64,
+   "text": "dungeons just with thyroids"
+  },
+  {
+   "t": 589.52,
+   "d": 3.28,
+   "text": "um and and the first edition"
+  },
+  {
+   "t": 592.8,
+   "d": 3.12,
+   "text": "of the advent of the dragon's dm guide"
+  },
+  {
+   "t": 595.92,
+   "d": 3.12,
+   "text": "uh you expanded it into an appendix"
+  },
+  {
+   "t": 599.04,
+   "d": 1.92,
+   "text": "which is laughably complete it doesn't"
+  },
+  {
+   "t": 600.96,
+   "d": 2.08,
+   "text": "roll dice how long this corridor will be"
+  },
+  {
+   "t": 603.04,
+   "d": 2.08,
+   "text": "how many branches they'll be and the"
+  },
+  {
+   "t": 605.12,
+   "d": 2.08,
+   "text": "whole appendix is kind of silly"
+  },
+  {
+   "t": 607.2,
+   "d": 1.84,
+   "text": "because none of it means anything it"
+  },
+  {
+   "t": 609.04,
+   "d": 1.92,
+   "text": "doesn't create a dungeon it's just"
+  },
+  {
+   "t": 610.96,
+   "d": 3.28,
+   "text": "a layout of rooms and i've played a"
+  },
+  {
+   "t": 614.24,
+   "d": 1.52,
+   "text": "number of roguelike games that"
+  },
+  {
+   "t": 615.76,
+   "d": 3.76,
+   "text": "feel sort of like that uh"
+  },
+  {
+   "t": 619.52,
+   "d": 3.04,
+   "text": "if there's no like chat like let's look"
+  },
+  {
+   "t": 622.56,
+   "d": 0.8,
+   "text": "at oh"
+  },
+  {
+   "t": 623.36,
+   "d": 2.48,
+   "text": "yeah oh let's look off actually well"
+  },
+  {
+   "t": 625.84,
+   "d": 1.36,
+   "text": "yeah i'm"
+  },
+  {
+   "t": 627.2,
+   "d": 1.44,
+   "text": "sorry i'm kind of meandering through"
+  },
+  {
+   "t": 628.64,
+   "d": 2.32,
+   "text": "here uh how to put this way"
+  },
+  {
+   "t": 630.96,
+   "d": 3.28,
+   "text": "uh let's say you had uh uh you had a"
+  },
+  {
+   "t": 634.24,
+   "d": 1.6,
+   "text": "game in front of you"
+  },
+  {
+   "t": 635.84,
+   "d": 3.04,
+   "text": "and it had a grid of rooms you know and"
+  },
+  {
+   "t": 638.88,
+   "d": 3.12,
+   "text": "it was uh trying to find out where to"
+  },
+  {
+   "t": 642.0,
+   "d": 0.88,
+   "text": "put this words"
+  },
+  {
+   "t": 642.88,
+   "d": 3.76,
+   "text": "let's say oh ah sorry"
+  },
+  {
+   "t": 646.64,
+   "d": 3.52,
+   "text": "sorry uh i'm a little nervous"
+  },
+  {
+   "t": 650.16,
+   "d": 2.48,
+   "text": "uh let's say that you explore and"
+  },
+  {
+   "t": 652.64,
+   "d": 2.16,
+   "text": "there's of course monsters and items but"
+  },
+  {
+   "t": 654.8,
+   "d": 1.68,
+   "text": "the monsters aren't challenging"
+  },
+  {
+   "t": 656.48,
+   "d": 3.12,
+   "text": "and the items are interesting so"
+  },
+  {
+   "t": 659.6,
+   "d": 2.08,
+   "text": "why in this case do you have a random"
+  },
+  {
+   "t": 661.68,
+   "d": 1.36,
+   "text": "dungeon"
+  },
+  {
+   "t": 663.04,
+   "d": 2.8,
+   "text": "if if the if the contents of the dungeon"
+  },
+  {
+   "t": 665.84,
+   "d": 1.44,
+   "text": "are interesting"
+  },
+  {
+   "t": 667.28,
+   "d": 3.04,
+   "text": "the dungeon is meaningless it's it's"
+  },
+  {
+   "t": 670.32,
+   "d": 2.64,
+   "text": "just grind as i told you before"
+  },
+  {
+   "t": 672.96,
+   "d": 1.44,
+   "text": "it's just a way to get your numbers up"
+  },
+  {
+   "t": 674.4,
+   "d": 1.44,
+   "text": "to be ready for the next dungeon which"
+  },
+  {
+   "t": 675.84,
+   "d": 1.12,
+   "text": "hopefully will be harder"
+  },
+  {
+   "t": 676.96,
+   "d": 3.68,
+   "text": "but probably won't be um"
+  },
+  {
+   "t": 680.64,
+   "d": 2.8,
+   "text": "if if there isn't things that challenge"
+  },
+  {
+   "t": 683.44,
+   "d": 1.68,
+   "text": "you along these corridors there's no"
+  },
+  {
+   "t": 685.12,
+   "d": 2.16,
+   "text": "reason to go by on one corridor"
+  },
+  {
+   "t": 687.28,
+   "d": 2.16,
+   "text": "rather than another one it's just the"
+  },
+  {
+   "t": 689.44,
+   "d": 2.0,
+   "text": "space it doesn't"
+  },
+  {
+   "t": 691.44,
+   "d": 2.64,
+   "text": "you might as well have just created uh a"
+  },
+  {
+   "t": 694.08,
+   "d": 2.0,
+   "text": "non-random dungeon"
+  },
+  {
+   "t": 696.08,
+   "d": 3.36,
+   "text": "oh it's anyway and sort of like to"
+  },
+  {
+   "t": 699.44,
+   "d": 1.92,
+   "text": "illustrate this there exists this flash"
+  },
+  {
+   "t": 701.36,
+   "d": 1.84,
+   "text": "game on the internet that took"
+  },
+  {
+   "t": 703.2,
+   "d": 2.72,
+   "text": "the appendix a of dungeons and dragons"
+  },
+  {
+   "t": 705.92,
+   "d": 0.4,
+   "text": "and"
+  },
+  {
+   "t": 706.32,
+   "d": 3.36,
+   "text": "animated into a flash game and"
+  },
+  {
+   "t": 709.68,
+   "d": 2.16,
+   "text": "it creates a dungeon for you exactly"
+  },
+  {
+   "t": 711.84,
+   "d": 2.4,
+   "text": "like gary gayak's system would"
+  },
+  {
+   "t": 714.24,
+   "d": 2.16,
+   "text": "but it's just basically a gambling"
+  },
+  {
+   "t": 716.4,
+   "d": 2.0,
+   "text": "simulation do you keep exploring and"
+  },
+  {
+   "t": 718.4,
+   "d": 1.04,
+   "text": "maybe die"
+  },
+  {
+   "t": 719.44,
+   "d": 2.24,
+   "text": "or do you retire and bank your funds and"
+  },
+  {
+   "t": 721.68,
+   "d": 0.88,
+   "text": "then play again"
+  },
+  {
+   "t": 722.56,
+   "d": 2.4,
+   "text": "and it's that that thing though about"
+  },
+  {
+   "t": 724.96,
+   "d": 0.72,
+   "text": "sort of"
+  },
+  {
+   "t": 725.68,
+   "d": 3.04,
+   "text": "uh dungeons about roguelike games having"
+  },
+  {
+   "t": 728.72,
+   "d": 2.56,
+   "text": "an essential gambling aspect"
+  },
+  {
+   "t": 731.28,
+   "d": 1.84,
+   "text": "and i noticed that and i know this sort"
+  },
+  {
+   "t": 733.12,
+   "d": 2.16,
+   "text": "of just was a disquieting thought for me"
+  },
+  {
+   "t": 735.28,
+   "d": 2.08,
+   "text": "um and we'll get to that in a minute"
+  },
+  {
+   "t": 737.36,
+   "d": 2.32,
+   "text": "anyways so where was i"
+  },
+  {
+   "t": 739.68,
+   "d": 1.52,
+   "text": "okay uh one of the things that this"
+  },
+  {
+   "t": 741.2,
+   "d": 1.36,
+   "text": "early edition of solo deity is this"
+  },
+  {
+   "t": 742.56,
+   "d": 1.92,
+   "text": "arbitrariness nothing lots to connect to"
+  },
+  {
+   "t": 744.48,
+   "d": 1.44,
+   "text": "anything else"
+  },
+  {
+   "t": 745.92,
+   "d": 1.2,
+   "text": "uh the process of mapping can be"
+  },
+  {
+   "t": 747.12,
+   "d": 2.16,
+   "text": "discarded even though the uh"
+  },
+  {
+   "t": 749.28,
+   "d": 2.32,
+   "text": "there are choices given for movement it"
+  },
+  {
+   "t": 751.6,
+   "d": 1.12,
+   "text": "doesn't matter which one you pick"
+  },
+  {
+   "t": 752.72,
+   "d": 0.72,
+   "text": "because they"
+  },
+  {
+   "t": 753.44,
+   "d": 2.4,
+   "text": "all lead to the same function the same"
+  },
+  {
+   "t": 755.84,
+   "d": 1.68,
+   "text": "die rolling"
+  },
+  {
+   "t": 757.52,
+   "d": 3.04,
+   "text": "um the dungeons it's ultimately just a"
+  },
+  {
+   "t": 760.56,
+   "d": 1.84,
+   "text": "linear series of challenges"
+  },
+  {
+   "t": 762.4,
+   "d": 1.36,
+   "text": "with the occasional opportunities for"
+  },
+  {
+   "t": 763.76,
+   "d": 1.76,
+   "text": "escape mixed in"
+  },
+  {
+   "t": 765.52,
+   "d": 4.4,
+   "text": "uh oh this is another thing um"
+  },
+  {
+   "t": 769.92,
+   "d": 3.2,
+   "text": "some people were inspired by the uh"
+  },
+  {
+   "t": 773.12,
+   "d": 2.56,
+   "text": "the that appendix and made their own"
+  },
+  {
+   "t": 775.68,
+   "d": 1.04,
+   "text": "game based on it"
+  },
+  {
+   "t": 776.72,
+   "d": 1.76,
+   "text": "this is one of them i discovered this a"
+  },
+  {
+   "t": 778.48,
+   "d": 1.28,
+   "text": "few years ago"
+  },
+  {
+   "t": 779.76,
+   "d": 3.68,
+   "text": "have you ever heard of the plato system"
+  },
+  {
+   "t": 783.44,
+   "d": 2.32,
+   "text": "oh it does my heart good to see even"
+  },
+  {
+   "t": 785.76,
+   "d": 2.0,
+   "text": "just two or three hands"
+  },
+  {
+   "t": 787.76,
+   "d": 3.36,
+   "text": "yeah so this it's uh it's"
+  },
+  {
+   "t": 791.12,
+   "d": 3.04,
+   "text": "it's incredibly obscure these days"
+  },
+  {
+   "t": 794.16,
+   "d": 2.32,
+   "text": "but it yeah these are basically the"
+  },
+  {
+   "t": 796.48,
+   "d": 2.08,
+   "text": "first computerized versions"
+  },
+  {
+   "t": 798.56,
+   "d": 1.2,
+   "text": "of dungeons and dragon actually the"
+  },
+  {
+   "t": 799.76,
+   "d": 2.32,
+   "text": "first some of the first uh"
+  },
+  {
+   "t": 802.08,
+   "d": 1.92,
+   "text": "computer games at all other than i think"
+  },
+  {
+   "t": 804.0,
+   "d": 1.12,
+   "text": "arcades"
+  },
+  {
+   "t": 805.12,
+   "d": 1.92,
+   "text": "there are these amber screen monitors"
+  },
+  {
+   "t": 807.04,
+   "d": 1.36,
+   "text": "and they made several dungeons and"
+  },
+  {
+   "t": 808.4,
+   "d": 1.6,
+   "text": "dragon style games for them"
+  },
+  {
+   "t": 810.0,
+   "d": 2.0,
+   "text": "you can experience themselves yourself"
+  },
+  {
+   "t": 812.0,
+   "d": 1.36,
+   "text": "at a website"
+  },
+  {
+   "t": 813.36,
+   "d": 3.28,
+   "text": "it's uh they're cyberone.org"
+  },
+  {
+   "t": 816.64,
+   "d": 1.6,
+   "text": "you can't just go there and play them"
+  },
+  {
+   "t": 818.24,
+   "d": 1.68,
+   "text": "but you have to apply for an account"
+  },
+  {
+   "t": 819.92,
+   "d": 1.84,
+   "text": "there"
+  },
+  {
+   "t": 821.76,
+   "d": 2.96,
+   "text": "uh but yeah i wrote about it and linked"
+  },
+  {
+   "t": 824.72,
+   "d": 2.08,
+   "text": "back in 2008 on games that watch and"
+  },
+  {
+   "t": 826.8,
+   "d": 1.52,
+   "text": "there's the link right there"
+  },
+  {
+   "t": 828.32,
+   "d": 1.76,
+   "text": "if any of you wants a copy of this"
+  },
+  {
+   "t": 830.08,
+   "d": 1.36,
+   "text": "presentation afterward"
+  },
+  {
+   "t": 831.44,
+   "d": 1.44,
+   "text": "i'll be happy to give you a copy and you"
+  },
+  {
+   "t": 832.88,
+   "d": 1.2,
+   "text": "can get all these things you have to"
+  },
+  {
+   "t": 834.08,
+   "d": 1.12,
+   "text": "take notes"
+  },
+  {
+   "t": 835.2,
+   "d": 2.48,
+   "text": "i'll probably put up my website anyway"
+  },
+  {
+   "t": 837.68,
+   "d": 1.28,
+   "text": "moving on moving on"
+  },
+  {
+   "t": 838.96,
+   "d": 2.24,
+   "text": "so gambling i compare these games to"
+  },
+  {
+   "t": 841.2,
+   "d": 2.0,
+   "text": "gambling what do i mean well"
+  },
+  {
+   "t": 843.2,
+   "d": 1.28,
+   "text": "you progress through a series of"
+  },
+  {
+   "t": 844.48,
+   "d": 1.6,
+   "text": "encounters the contents of which you"
+  },
+  {
+   "t": 846.08,
+   "d": 1.52,
+   "text": "have very limited control and you have"
+  },
+  {
+   "t": 847.6,
+   "d": 2.32,
+   "text": "to try your luck against them"
+  },
+  {
+   "t": 849.92,
+   "d": 3.04,
+   "text": "yeah um let's see"
+  },
+  {
+   "t": 852.96,
+   "d": 2.72,
+   "text": "the game dnd that i pointed out like"
+  },
+  {
+   "t": 855.68,
+   "d": 0.8,
+   "text": "that"
+  },
+  {
+   "t": 856.48,
+   "d": 3.52,
+   "text": "is particularly like that you uh"
+  },
+  {
+   "t": 860.0,
+   "d": 1.84,
+   "text": "and you're a one first level character"
+  },
+  {
+   "t": 861.84,
+   "d": 2.0,
+   "text": "in this game you're going to die"
+  },
+  {
+   "t": 863.84,
+   "d": 2.0,
+   "text": "50 of the time if you encounter a"
+  },
+  {
+   "t": 865.84,
+   "d": 1.68,
+   "text": "monster"
+  },
+  {
+   "t": 867.52,
+   "d": 4.08,
+   "text": "uh if you win or lose another matter of"
+  },
+  {
+   "t": 871.6,
+   "d": 1.84,
+   "text": "fact the next monster you also have a 50"
+  },
+  {
+   "t": 873.44,
+   "d": 1.84,
+   "text": "chance of winning uh so you'll"
+  },
+  {
+   "t": 875.28,
+   "d": 1.6,
+   "text": "eventually die until you lock into a"
+  },
+  {
+   "t": 876.88,
+   "d": 1.04,
+   "text": "magic item"
+  },
+  {
+   "t": 877.92,
+   "d": 2.32,
+   "text": "which basically effectively boosts your"
+  },
+  {
+   "t": 880.24,
+   "d": 1.12,
+   "text": "levels by several"
+  },
+  {
+   "t": 881.36,
+   "d": 2.96,
+   "text": "points just by itself and it's just"
+  },
+  {
+   "t": 884.32,
+   "d": 1.2,
+   "text": "basically"
+  },
+  {
+   "t": 885.52,
+   "d": 2.56,
+   "text": "is this basically uh role playing by die"
+  },
+  {
+   "t": 888.08,
+   "d": 1.12,
+   "text": "rolling and"
+  },
+  {
+   "t": 889.2,
+   "d": 3.2,
+   "text": "uh let's see there is a point to this"
+  },
+  {
+   "t": 892.4,
+   "d": 1.84,
+   "text": "i'm just trying to remember what it was"
+  },
+  {
+   "t": 894.24,
+   "d": 3.92,
+   "text": "uh anyway so the only real choice in the"
+  },
+  {
+   "t": 898.16,
+   "d": 0.56,
+   "text": "game"
+  },
+  {
+   "t": 898.72,
+   "d": 2.24,
+   "text": "is do you stay on the current level and"
+  },
+  {
+   "t": 900.96,
+   "d": 1.84,
+   "text": "you hope to find another magic arm"
+  },
+  {
+   "t": 902.8,
+   "d": 2.8,
+   "text": "in case you strength more or do you dive"
+  },
+  {
+   "t": 905.6,
+   "d": 1.28,
+   "text": "and"
+  },
+  {
+   "t": 906.88,
+   "d": 2.4,
+   "text": "uh that's that's really all the game"
+  },
+  {
+   "t": 909.28,
+   "d": 2.08,
+   "text": "ultimately that's there"
+  },
+  {
+   "t": 911.36,
+   "d": 1.6,
+   "text": "uh you know if you make the wrong"
+  },
+  {
+   "t": 912.96,
+   "d": 1.92,
+   "text": "decision you die and you start over from"
+  },
+  {
+   "t": 914.88,
+   "d": 1.04,
+   "text": "scratch"
+  },
+  {
+   "t": 915.92,
+   "d": 1.68,
+   "text": "this is primitive i think it's actually"
+  },
+  {
+   "t": 917.6,
+   "d": 2.24,
+   "text": "before rogue uh"
+  },
+  {
+   "t": 919.84,
+   "d": 1.84,
+   "text": "and you're back at level one weekly and"
+  },
+  {
+   "t": 921.68,
+   "d": 1.44,
+   "text": "you have to find another magic item"
+  },
+  {
+   "t": 923.12,
+   "d": 0.8,
+   "text": "before you can"
+  },
+  {
+   "t": 923.92,
+   "d": 2.64,
+   "text": "can really play again oh and rogue came"
+  },
+  {
+   "t": 926.56,
+   "d": 0.8,
+   "text": "along"
+  },
+  {
+   "t": 927.36,
+   "d": 3.6,
+   "text": "and rogue expanded the dungeon"
+  },
+  {
+   "t": 930.96,
+   "d": 2.08,
+   "text": "model tremendously it was no longer like"
+  },
+  {
+   "t": 933.04,
+   "d": 1.36,
+   "text": "a sequence"
+  },
+  {
+   "t": 934.4,
+   "d": 2.4,
+   "text": "of spaces each of which might include an"
+  },
+  {
+   "t": 936.8,
+   "d": 1.12,
+   "text": "encounter"
+  },
+  {
+   "t": 937.92,
+   "d": 1.92,
+   "text": "but the spaces mattered because the"
+  },
+  {
+   "t": 939.84,
+   "d": 2.56,
+   "text": "monsters could use them too"
+  },
+  {
+   "t": 942.4,
+   "d": 3.12,
+   "text": "and uh the tactics of the game expanded"
+  },
+  {
+   "t": 945.52,
+   "d": 1.68,
+   "text": "the"
+  },
+  {
+   "t": 947.2,
+   "d": 1.76,
+   "text": "uh expanded the tactics of the"
+  },
+  {
+   "t": 948.96,
+   "d": 1.84,
+   "text": "simulation tremendously uh"
+  },
+  {
+   "t": 950.8,
+   "d": 1.12,
+   "text": "and you could encounter multiple"
+  },
+  {
+   "t": 951.92,
+   "d": 3.52,
+   "text": "monsters at once and it made the dungeon"
+  },
+  {
+   "t": 955.44,
+   "d": 1.76,
+   "text": "more of a place"
+  },
+  {
+   "t": 957.2,
+   "d": 2.4,
+   "text": "that uh you know the dungeon itself"
+  },
+  {
+   "t": 959.6,
+   "d": 2.16,
+   "text": "provided your opportunities"
+  },
+  {
+   "t": 961.76,
+   "d": 2.64,
+   "text": "uh you know doorways are safe spots to"
+  },
+  {
+   "t": 964.4,
+   "d": 1.2,
+   "text": "attack from"
+  },
+  {
+   "t": 965.6,
+   "d": 1.92,
+   "text": "rooms that are dark you could be"
+  },
+  {
+   "t": 967.52,
+   "d": 1.44,
+   "text": "attacked in multiple directions"
+  },
+  {
+   "t": 968.96,
+   "d": 3.44,
+   "text": "just at any moment uh"
+  },
+  {
+   "t": 972.4,
+   "d": 3.36,
+   "text": "yeah let's see anyway"
+  },
+  {
+   "t": 975.76,
+   "d": 3.28,
+   "text": "so i considered that uh uh since the"
+  },
+  {
+   "t": 979.04,
+   "d": 0.8,
+   "text": "place yeah"
+  },
+  {
+   "t": 979.84,
+   "d": 3.76,
+   "text": "yeah that's just what i said yeah uh"
+  },
+  {
+   "t": 983.6,
+   "d": 3.68,
+   "text": "let's see i'm sorry i'm sorry uh"
+  },
+  {
+   "t": 987.28,
+   "d": 1.92,
+   "text": "so anyway so i started thinking about"
+  },
+  {
+   "t": 989.2,
+   "d": 1.52,
+   "text": "these random dungeons"
+  },
+  {
+   "t": 990.72,
+   "d": 3.44,
+   "text": "and what their lacks were and so i went"
+  },
+  {
+   "t": 994.16,
+   "d": 1.92,
+   "text": "to the ultimate source of all this which"
+  },
+  {
+   "t": 996.08,
+   "d": 0.56,
+   "text": "would be"
+  },
+  {
+   "t": 996.64,
+   "d": 3.44,
+   "text": "dungeons and dragons adventures uh"
+  },
+  {
+   "t": 1000.08,
+   "d": 2.8,
+   "text": "and this is the cover of the village of"
+  },
+  {
+   "t": 1002.88,
+   "d": 1.44,
+   "text": "hamlet"
+  },
+  {
+   "t": 1004.32,
+   "d": 2.88,
+   "text": "yeah which is the beginning of one of"
+  },
+  {
+   "t": 1007.2,
+   "d": 2.08,
+   "text": "the"
+  },
+  {
+   "t": 1009.28,
+   "d": 1.12,
+   "text": "done archetypal done to the dragon"
+  },
+  {
+   "t": 1010.4,
+   "d": 1.44,
+   "text": "adventures of all time that would be the"
+  },
+  {
+   "t": 1011.84,
+   "d": 2.4,
+   "text": "temple of elemental evil"
+  },
+  {
+   "t": 1014.24,
+   "d": 1.68,
+   "text": "uh i don't know if any of you have ever"
+  },
+  {
+   "t": 1015.92,
+   "d": 1.6,
+   "text": "played this adventure i had a chance to"
+  },
+  {
+   "t": 1017.52,
+   "d": 2.72,
+   "text": "run up for some friends a few years ago"
+  },
+  {
+   "t": 1020.24,
+   "d": 3.2,
+   "text": "and this is the most amazing thing it's"
+  },
+  {
+   "t": 1023.44,
+   "d": 0.56,
+   "text": "like"
+  },
+  {
+   "t": 1024.0,
+   "d": 2.24,
+   "text": "even the town at the beginning if you"
+  },
+  {
+   "t": 1026.24,
+   "d": 0.8,
+   "text": "read through it"
+  },
+  {
+   "t": 1027.04,
+   "d": 2.88,
+   "text": "there are subplots upon subplots these"
+  },
+  {
+   "t": 1029.92,
+   "d": 1.28,
+   "text": "merchants are actually"
+  },
+  {
+   "t": 1031.2,
+   "d": 1.84,
+   "text": "secretly evil people who are watching"
+  },
+  {
+   "t": 1033.04,
+   "d": 1.76,
+   "text": "what the adventurers are doing"
+  },
+  {
+   "t": 1034.8,
+   "d": 1.36,
+   "text": "if they come back with a lot of money"
+  },
+  {
+   "t": 1036.16,
+   "d": 1.68,
+   "text": "they're going to try to shank them"
+  },
+  {
+   "t": 1037.84,
+   "d": 2.4,
+   "text": "these other guys they're just honest"
+  },
+  {
+   "t": 1040.24,
+   "d": 1.44,
+   "text": "innkeepers"
+  },
+  {
+   "t": 1041.68,
+   "d": 2.4,
+   "text": "um the temple itself uh if you've"
+  },
+  {
+   "t": 1044.08,
+   "d": 0.96,
+   "text": "already adventure"
+  },
+  {
+   "t": 1045.04,
+   "d": 2.64,
+   "text": "there's stuff buried in the walls of"
+  },
+  {
+   "t": 1047.68,
+   "d": 1.2,
+   "text": "this dungeon"
+  },
+  {
+   "t": 1048.88,
+   "d": 1.84,
+   "text": "there's a big sand pit on the first"
+  },
+  {
+   "t": 1050.72,
+   "d": 2.32,
+   "text": "level if the player should happen to dig"
+  },
+  {
+   "t": 1053.04,
+   "d": 1.2,
+   "text": "60 feet down"
+  },
+  {
+   "t": 1054.24,
+   "d": 2.16,
+   "text": "there's a gigantic pile of treasure down"
+  },
+  {
+   "t": 1056.4,
+   "d": 1.84,
+   "text": "there"
+  },
+  {
+   "t": 1058.24,
+   "d": 2.64,
+   "text": "my players started digging in that room"
+  },
+  {
+   "t": 1060.88,
+   "d": 1.6,
+   "text": "and i got so excited"
+  },
+  {
+   "t": 1062.48,
+   "d": 2.08,
+   "text": "oh my god they're gonna find the horde"
+  },
+  {
+   "t": 1064.56,
+   "d": 1.84,
+   "text": "or the plus five sword down there and at"
+  },
+  {
+   "t": 1066.4,
+   "d": 1.52,
+   "text": "like level three"
+  },
+  {
+   "t": 1067.92,
+   "d": 1.61,
+   "text": "but then they stopped"
+  },
+  {
+   "t": 1069.53,
+   "d": 3.27,
+   "text": "[Music]"
+  },
+  {
+   "t": 1072.8,
+   "d": 1.6,
+   "text": "and i just wanted to tell them keep"
+  },
+  {
+   "t": 1074.4,
+   "d": 2.96,
+   "text": "digging uh"
+  },
+  {
+   "t": 1077.36,
+   "d": 3.2,
+   "text": "if the things like that that you know i"
+  },
+  {
+   "t": 1080.56,
+   "d": 2.48,
+   "text": "speak with such enthusiasm about all the"
+  },
+  {
+   "t": 1083.04,
+   "d": 1.52,
+   "text": "ingenuity that witness done this one of"
+  },
+  {
+   "t": 1084.56,
+   "d": 2.08,
+   "text": "gary geigx's best"
+  },
+  {
+   "t": 1086.64,
+   "d": 2.56,
+   "text": "i think it's in frank mintzer who wrote"
+  },
+  {
+   "t": 1089.2,
+   "d": 1.36,
+   "text": "it actually"
+  },
+  {
+   "t": 1090.56,
+   "d": 3.04,
+   "text": "uh but that's the type of excitement and"
+  },
+  {
+   "t": 1093.6,
+   "d": 1.6,
+   "text": "this sort of thing that i find that"
+  },
+  {
+   "t": 1095.2,
+   "d": 1.12,
+   "text": "roguelikes don't"
+  },
+  {
+   "t": 1096.32,
+   "d": 2.96,
+   "text": "have so much you know it's and i started"
+  },
+  {
+   "t": 1099.28,
+   "d": 1.76,
+   "text": "thinking i thought about what it is is"
+  },
+  {
+   "t": 1101.04,
+   "d": 1.28,
+   "text": "that"
+  },
+  {
+   "t": 1102.32,
+   "d": 3.28,
+   "text": "what the what those old-school dnd games"
+  },
+  {
+   "t": 1105.6,
+   "d": 0.48,
+   "text": "had"
+  },
+  {
+   "t": 1106.08,
+   "d": 3.12,
+   "text": "ultimately was a backstory you know"
+  },
+  {
+   "t": 1109.2,
+   "d": 3.52,
+   "text": "it wasn't it wasn't just exploring the"
+  },
+  {
+   "t": 1112.72,
+   "d": 1.52,
+   "text": "dungeon or it's"
+  },
+  {
+   "t": 1114.24,
+   "d": 2.24,
+   "text": "there was a reason for everything the"
+  },
+  {
+   "t": 1116.48,
+   "d": 2.0,
+   "text": "monsters in that room they have a social"
+  },
+  {
+   "t": 1118.48,
+   "d": 1.12,
+   "text": "structure"
+  },
+  {
+   "t": 1119.6,
+   "d": 2.24,
+   "text": "yeah they moved in about 20 years ago"
+  },
+  {
+   "t": 1121.84,
+   "d": 2.0,
+   "text": "they found out the pickings in the area"
+  },
+  {
+   "t": 1123.84,
+   "d": 0.88,
+   "text": "were good"
+  },
+  {
+   "t": 1124.72,
+   "d": 3.2,
+   "text": "they make a living whaling travelers"
+  },
+  {
+   "t": 1127.92,
+   "d": 1.6,
+   "text": "they get rid of their their trash dump"
+  },
+  {
+   "t": 1129.52,
+   "d": 1.92,
+   "text": "is this room this room is where they"
+  },
+  {
+   "t": 1131.44,
+   "d": 1.36,
+   "text": "have the nursery and they raise new"
+  },
+  {
+   "t": 1132.8,
+   "d": 1.52,
+   "text": "goblins"
+  },
+  {
+   "t": 1134.32,
+   "d": 1.92,
+   "text": "and this connection this this sort of"
+  },
+  {
+   "t": 1136.24,
+   "d": 2.24,
+   "text": "backstory how all together together"
+  },
+  {
+   "t": 1138.48,
+   "d": 2.16,
+   "text": "not only does it make the dungeon seem a"
+  },
+  {
+   "t": 1140.64,
+   "d": 2.0,
+   "text": "lot more like a real place"
+  },
+  {
+   "t": 1142.64,
+   "d": 2.16,
+   "text": "but also can be taken advantage of by"
+  },
+  {
+   "t": 1144.8,
+   "d": 1.6,
+   "text": "the players it's not just window"
+  },
+  {
+   "t": 1146.4,
+   "d": 1.04,
+   "text": "dressing"
+  },
+  {
+   "t": 1147.44,
+   "d": 2.96,
+   "text": "if say the players find the goblins"
+  },
+  {
+   "t": 1150.4,
+   "d": 0.72,
+   "text": "secret"
+  },
+  {
+   "t": 1151.12,
+   "d": 3.12,
+   "text": "uh their prison they can release the"
+  },
+  {
+   "t": 1154.24,
+   "d": 2.16,
+   "text": "prisoners and perhaps gain allies"
+  },
+  {
+   "t": 1156.4,
+   "d": 1.68,
+   "text": "if they find the trash dump they might"
+  },
+  {
+   "t": 1158.08,
+   "d": 2.08,
+   "text": "search through it and find the worthless"
+  },
+  {
+   "t": 1160.16,
+   "d": 2.08,
+   "text": "gold pieces that they throw away because"
+  },
+  {
+   "t": 1162.24,
+   "d": 2.48,
+   "text": "goblins these goblins at least have no"
+  },
+  {
+   "t": 1164.72,
+   "d": 2.0,
+   "text": "uh wealth incentive"
+  },
+  {
+   "t": 1166.72,
+   "d": 3.36,
+   "text": "um and that's that's one of the things i"
+  },
+  {
+   "t": 1170.08,
+   "d": 2.0,
+   "text": "really like about war fortress because"
+  },
+  {
+   "t": 1172.08,
+   "d": 1.44,
+   "text": "it's sort of like approaching the"
+  },
+  {
+   "t": 1173.52,
+   "d": 2.16,
+   "text": "problem from that direction"
+  },
+  {
+   "t": 1175.68,
+   "d": 2.72,
+   "text": "where uh if you guys from your door"
+  },
+  {
+   "t": 1178.4,
+   "d": 0.8,
+   "text": "fortresses"
+  },
+  {
+   "t": 1179.2,
+   "d": 3.12,
+   "text": "uh uh the the the the reason for its"
+  },
+  {
+   "t": 1182.32,
+   "d": 1.2,
+   "text": "creation is basically"
+  },
+  {
+   "t": 1183.52,
+   "d": 2.8,
+   "text": "tarn's brother writes these stories and"
+  },
+  {
+   "t": 1186.32,
+   "d": 1.44,
+   "text": "taran adams"
+  },
+  {
+   "t": 1187.76,
+   "d": 1.6,
+   "text": "tries to create a game in which the"
+  },
+  {
+   "t": 1189.36,
+   "d": 2.0,
+   "text": "stories are possible where they could"
+  },
+  {
+   "t": 1191.36,
+   "d": 1.44,
+   "text": "happen"
+  },
+  {
+   "t": 1192.8,
+   "d": 3.12,
+   "text": "and i i really like that idea and i"
+  },
+  {
+   "t": 1195.92,
+   "d": 0.32,
+   "text": "think"
+  },
+  {
+   "t": 1196.24,
+   "d": 1.68,
+   "text": "ultimately in the direction that"
+  },
+  {
+   "t": 1197.92,
+   "d": 2.0,
+   "text": "roguelike games will be we'll be going"
+  },
+  {
+   "t": 1199.92,
+   "d": 1.28,
+   "text": "in the future we'll be going to see more"
+  },
+  {
+   "t": 1201.2,
+   "d": 1.04,
+   "text": "about that sort of like"
+  },
+  {
+   "t": 1202.24,
+   "d": 1.36,
+   "text": "behind the scenes algorithmically"
+  },
+  {
+   "t": 1203.6,
+   "d": 1.52,
+   "text": "generated stories that explain the"
+  },
+  {
+   "t": 1205.12,
+   "d": 0.88,
+   "text": "dungeon"
+  },
+  {
+   "t": 1206.0,
+   "d": 1.6,
+   "text": "and that a kenny player can take"
+  },
+  {
+   "t": 1207.6,
+   "d": 2.0,
+   "text": "advantage of like he might have"
+  },
+  {
+   "t": 1209.6,
+   "d": 1.52,
+   "text": "developed some intuition"
+  },
+  {
+   "t": 1211.12,
+   "d": 2.0,
+   "text": "i'm beginning to more about intuition in"
+  },
+  {
+   "t": 1213.12,
+   "d": 1.36,
+   "text": "a minute because it's really the focus"
+  },
+  {
+   "t": 1214.48,
+   "d": 1.68,
+   "text": "of what i'm getting to"
+  },
+  {
+   "t": 1216.16,
+   "d": 3.04,
+   "text": "uh if you find uh the"
+  },
+  {
+   "t": 1219.2,
+   "d": 1.92,
+   "text": "explanation sort of reasons that things"
+  },
+  {
+   "t": 1221.12,
+   "d": 1.68,
+   "text": "are in the dungeon it's"
+  },
+  {
+   "t": 1222.8,
+   "d": 3.04,
+   "text": "anyway let me move on here uh about"
+  },
+  {
+   "t": 1225.84,
+   "d": 1.44,
+   "text": "yeah i just i think i just actually"
+  },
+  {
+   "t": 1227.28,
+   "d": 1.44,
+   "text": "skipped over several slides just to"
+  },
+  {
+   "t": 1228.72,
+   "d": 1.84,
+   "text": "explain them to you directly"
+  },
+  {
+   "t": 1230.56,
+   "d": 2.72,
+   "text": "uh it's great yeah there's such more"
+  },
+  {
+   "t": 1233.28,
+   "d": 2.24,
+   "text": "suction boy by the way is the evil demon"
+  },
+  {
+   "t": 1235.52,
+   "d": 0.64,
+   "text": "who"
+  },
+  {
+   "t": 1236.16,
+   "d": 2.56,
+   "text": "runs the temple of elemental evil yeah"
+  },
+  {
+   "t": 1238.72,
+   "d": 0.48,
+   "text": "uh"
+  },
+  {
+   "t": 1239.2,
+   "d": 4.32,
+   "text": "is this fun to say zuch moy zaktmore"
+  },
+  {
+   "t": 1243.52,
+   "d": 3.28,
+   "text": "uh let's see there's the the yeah let's"
+  },
+  {
+   "t": 1246.8,
+   "d": 1.52,
+   "text": "see so anyway there's a random yeah this"
+  },
+  {
+   "t": 1248.32,
+   "d": 0.24,
+   "text": "is"
+  },
+  {
+   "t": 1248.56,
+   "d": 1.76,
+   "text": "just what i talked about whoever wrote"
+  },
+  {
+   "t": 1250.32,
+   "d": 1.68,
+   "text": "this was a genius"
+  },
+  {
+   "t": 1252.0,
+   "d": 3.28,
+   "text": "um yeah patterns"
+  },
+  {
+   "t": 1255.28,
+   "d": 3.28,
+   "text": "uh yeah let's go about that okay this is"
+  },
+  {
+   "t": 1258.56,
+   "d": 2.96,
+   "text": "the slide that's kept me up for months"
+  },
+  {
+   "t": 1261.52,
+   "d": 3.52,
+   "text": "knowledge logic and wit i have thought"
+  },
+  {
+   "t": 1265.04,
+   "d": 0.88,
+   "text": "about this for"
+  },
+  {
+   "t": 1265.92,
+   "d": 3.28,
+   "text": "years okay trying to sort of"
+  },
+  {
+   "t": 1269.2,
+   "d": 3.2,
+   "text": "codify the the types of game playing"
+  },
+  {
+   "t": 1272.4,
+   "d": 2.16,
+   "text": "skill and this is what i've come up with"
+  },
+  {
+   "t": 1274.56,
+   "d": 3.6,
+   "text": "knowledge logic and wit okay"
+  },
+  {
+   "t": 1278.16,
+   "d": 3.28,
+   "text": "knowledge is stuff that you consciously"
+  },
+  {
+   "t": 1281.44,
+   "d": 3.6,
+   "text": "know you know uh there's stuff on the"
+  },
+  {
+   "t": 1285.04,
+   "d": 2.08,
+   "text": "next page about that actually knowledge"
+  },
+  {
+   "t": 1287.12,
+   "d": 1.44,
+   "text": "the things the player consciously knows"
+  },
+  {
+   "t": 1288.56,
+   "d": 2.4,
+   "text": "about a game cockatrices may turn you to"
+  },
+  {
+   "t": 1290.96,
+   "d": 0.64,
+   "text": "stone"
+  },
+  {
+   "t": 1291.6,
+   "d": 2.88,
+   "text": "interesting fact that how to identify"
+  },
+  {
+   "t": 1294.48,
+   "d": 1.52,
+   "text": "wand do you know a net hack if you write"
+  },
+  {
+   "t": 1296.0,
+   "d": 1.52,
+   "text": "with a wand in the ground the effects"
+  },
+  {
+   "t": 1297.52,
+   "d": 2.24,
+   "text": "can tell you what the wand does"
+  },
+  {
+   "t": 1299.76,
+   "d": 2.48,
+   "text": "but some of the effects are inconclusive"
+  },
+  {
+   "t": 1302.24,
+   "d": 2.48,
+   "text": "unless there was already text there"
+  },
+  {
+   "t": 1304.72,
+   "d": 1.6,
+   "text": "so you always write with your finger"
+  },
+  {
+   "t": 1306.32,
+   "d": 2.48,
+   "text": "first and then write with the one second"
+  },
+  {
+   "t": 1308.8,
+   "d": 1.6,
+   "text": "because you'll get more information that"
+  },
+  {
+   "t": 1310.4,
+   "d": 2.48,
+   "text": "way that's knowledge that's"
+  },
+  {
+   "t": 1312.88,
+   "d": 2.64,
+   "text": "something about the game that you you've"
+  },
+  {
+   "t": 1315.52,
+   "d": 1.92,
+   "text": "learned or got from a fact"
+  },
+  {
+   "t": 1317.44,
+   "d": 1.44,
+   "text": "that's that's the important that's the"
+  },
+  {
+   "t": 1318.88,
+   "d": 2.24,
+   "text": "definition knowledge just things you can"
+  },
+  {
+   "t": 1321.12,
+   "d": 2.16,
+   "text": "read in a fact"
+  },
+  {
+   "t": 1323.28,
+   "d": 3.28,
+   "text": "and i thought for a long time about"
+  },
+  {
+   "t": 1326.56,
+   "d": 2.4,
+   "text": "what kinds of information don't go into"
+  },
+  {
+   "t": 1328.96,
+   "d": 0.64,
+   "text": "effect"
+  },
+  {
+   "t": 1329.6,
+   "d": 2.88,
+   "text": "what what ways can you write a game"
+  },
+  {
+   "t": 1332.48,
+   "d": 1.84,
+   "text": "that's fact proof"
+  },
+  {
+   "t": 1334.32,
+   "d": 1.52,
+   "text": "i ultimately came up with the conclusion"
+  },
+  {
+   "t": 1335.84,
+   "d": 2.4,
+   "text": "that ultimately nothing"
+  },
+  {
+   "t": 1338.24,
+   "d": 3.52,
+   "text": "uh but you can you can delay it a random"
+  },
+  {
+   "t": 1341.76,
+   "d": 1.36,
+   "text": "game is"
+  },
+  {
+   "t": 1343.12,
+   "d": 3.04,
+   "text": "ultimately a response to facts or at"
+  },
+  {
+   "t": 1346.16,
+   "d": 0.64,
+   "text": "least"
+  },
+  {
+   "t": 1346.8,
+   "d": 2.0,
+   "text": "a way to get around just players telling"
+  },
+  {
+   "t": 1348.8,
+   "d": 1.28,
+   "text": "each other how to play"
+  },
+  {
+   "t": 1350.08,
+   "d": 2.8,
+   "text": "how to do a walk through the net hack is"
+  },
+  {
+   "t": 1352.88,
+   "d": 1.68,
+   "text": "not the same thing as a walk through to"
+  },
+  {
+   "t": 1354.56,
+   "d": 1.04,
+   "text": "the elder scrolls"
+  },
+  {
+   "t": 1355.6,
+   "d": 2.24,
+   "text": "or anything like that because there's so"
+  },
+  {
+   "t": 1357.84,
+   "d": 2.96,
+   "text": "much variance along the way"
+  },
+  {
+   "t": 1360.8,
+   "d": 2.24,
+   "text": "uh but there are still facts for netac"
+  },
+  {
+   "t": 1363.04,
+   "d": 1.76,
+   "text": "they're more instead of like exactly"
+  },
+  {
+   "t": 1364.8,
+   "d": 1.68,
+   "text": "what to do it's what all the possible"
+  },
+  {
+   "t": 1366.48,
+   "d": 1.04,
+   "text": "items are"
+  },
+  {
+   "t": 1367.52,
+   "d": 2.0,
+   "text": "well why did you write a roguelike game"
+  },
+  {
+   "t": 1369.52,
+   "d": 1.44,
+   "text": "that could make up"
+  },
+  {
+   "t": 1370.96,
+   "d": 2.96,
+   "text": "its own items well then people would"
+  },
+  {
+   "t": 1373.92,
+   "d": 0.88,
+   "text": "write a fact"
+  },
+  {
+   "t": 1374.8,
+   "d": 1.44,
+   "text": "about the limits of the range of"
+  },
+  {
+   "t": 1376.24,
+   "d": 2.56,
+   "text": "possibilities and just goes on and on"
+  },
+  {
+   "t": 1378.8,
+   "d": 2.0,
+   "text": "it's a fool's errand there's no end to"
+  },
+  {
+   "t": 1380.8,
+   "d": 1.44,
+   "text": "that trail"
+  },
+  {
+   "t": 1382.24,
+   "d": 1.84,
+   "text": "it's up to me people will always find"
+  },
+  {
+   "t": 1384.08,
+   "d": 1.44,
+   "text": "information to tell each other about a"
+  },
+  {
+   "t": 1385.52,
+   "d": 1.52,
+   "text": "game"
+  },
+  {
+   "t": 1387.04,
+   "d": 2.08,
+   "text": "anyway that's knowledge i think a thing"
+  },
+  {
+   "t": 1389.12,
+   "d": 1.76,
+   "text": "is logic which is"
+  },
+  {
+   "t": 1390.88,
+   "d": 2.72,
+   "text": "thinking about the knowledge that you"
+  },
+  {
+   "t": 1393.6,
+   "d": 1.92,
+   "text": "are even using it to deduce things about"
+  },
+  {
+   "t": 1395.52,
+   "d": 1.52,
+   "text": "the game's day it's sort of like if you"
+  },
+  {
+   "t": 1397.04,
+   "d": 1.28,
+   "text": "encounter a puzzle in a game you've"
+  },
+  {
+   "t": 1398.32,
+   "d": 0.72,
+   "text": "never"
+  },
+  {
+   "t": 1399.04,
+   "d": 2.96,
+   "text": "seen before but the puzzle obeys certain"
+  },
+  {
+   "t": 1402.0,
+   "d": 1.36,
+   "text": "rules the rules are"
+  },
+  {
+   "t": 1403.36,
+   "d": 3.52,
+   "text": "knowledge applying the rules is logic"
+  },
+  {
+   "t": 1406.88,
+   "d": 1.76,
+   "text": "and then we have wit which is the thing"
+  },
+  {
+   "t": 1408.64,
+   "d": 1.68,
+   "text": "i'm most uh"
+  },
+  {
+   "t": 1410.32,
+   "d": 2.08,
+   "text": "thinking about and the thing i'm most"
+  },
+  {
+   "t": 1412.4,
+   "d": 1.6,
+   "text": "iffy about"
+  },
+  {
+   "t": 1414.0,
+   "d": 2.8,
+   "text": "wit is sort of natural game playing"
+  },
+  {
+   "t": 1416.8,
+   "d": 2.72,
+   "text": "ability if such a thing exists"
+  },
+  {
+   "t": 1419.52,
+   "d": 2.56,
+   "text": "like you ever have a friend who you show"
+  },
+  {
+   "t": 1422.08,
+   "d": 1.6,
+   "text": "him a game the first time"
+  },
+  {
+   "t": 1423.68,
+   "d": 2.8,
+   "text": "and he wins it in the first try or you"
+  },
+  {
+   "t": 1426.48,
+   "d": 1.6,
+   "text": "teach someone a board game and they beat"
+  },
+  {
+   "t": 1428.08,
+   "d": 1.36,
+   "text": "you that first time"
+  },
+  {
+   "t": 1429.44,
+   "d": 1.12,
+   "text": "even though they've never played it"
+  },
+  {
+   "t": 1430.56,
+   "d": 2.24,
+   "text": "before uh"
+  },
+  {
+   "t": 1432.8,
+   "d": 1.36,
+   "text": "and that's sort of what i'm talking"
+  },
+  {
+   "t": 1434.16,
+   "d": 2.64,
+   "text": "about this sort of intuition"
+  },
+  {
+   "t": 1436.8,
+   "d": 3.36,
+   "text": "and it's in a sense it's things you"
+  },
+  {
+   "t": 1440.16,
+   "d": 1.6,
+   "text": "don't know you know"
+  },
+  {
+   "t": 1441.76,
+   "d": 1.44,
+   "text": "which makes me sound a bit like dick"
+  },
+  {
+   "t": 1443.2,
+   "d": 2.48,
+   "text": "cheney i'm sorry for that"
+  },
+  {
+   "t": 1445.68,
+   "d": 3.44,
+   "text": "um yeah i know it's not a good name"
+  },
+  {
+   "t": 1449.12,
+   "d": 2.72,
+   "text": "uh let's see it but it's interesting"
+  },
+  {
+   "t": 1451.84,
+   "d": 0.72,
+   "text": "because it's"
+  },
+  {
+   "t": 1452.56,
+   "d": 3.76,
+   "text": "hard to pin down like that uh"
+  },
+  {
+   "t": 1456.32,
+   "d": 1.76,
+   "text": "let's see it's just more about"
+  },
+  {
+   "t": 1458.08,
+   "d": 1.6,
+   "text": "probabilities and"
+  },
+  {
+   "t": 1459.68,
+   "d": 2.24,
+   "text": "what will probably work well for you but"
+  },
+  {
+   "t": 1461.92,
+   "d": 1.76,
+   "text": "also sort of"
+  },
+  {
+   "t": 1463.68,
+   "d": 4.08,
+   "text": "sort of figuring out uh"
+  },
+  {
+   "t": 1468.4,
+   "d": 2.0,
+   "text": "and the difficulty of having telling you"
+  },
+  {
+   "t": 1470.4,
+   "d": 1.6,
+   "text": "this right now just me with"
+  },
+  {
+   "t": 1472.0,
+   "d": 2.4,
+   "text": "the reason why it took me months and"
+  },
+  {
+   "t": 1474.4,
+   "d": 2.48,
+   "text": "years to actually put this down"
+  },
+  {
+   "t": 1476.88,
+   "d": 2.8,
+   "text": "uh anyways things to do with whim"
+  },
+  {
+   "t": 1479.68,
+   "d": 1.68,
+   "text": "psychology of the algorithm designer"
+  },
+  {
+   "t": 1481.36,
+   "d": 2.64,
+   "text": "educated guesses all of this stuff"
+  },
+  {
+   "t": 1484.0,
+   "d": 2.0,
+   "text": "the thing about wit though is the the"
+  },
+  {
+   "t": 1486.0,
+   "d": 1.44,
+   "text": "more you think about it the more it"
+  },
+  {
+   "t": 1487.44,
+   "d": 0.56,
+   "text": "becomes"
+  },
+  {
+   "t": 1488.0,
+   "d": 2.88,
+   "text": "knowledge whit turns into knowledge as"
+  },
+  {
+   "t": 1490.88,
+   "d": 1.92,
+   "text": "you realize what's happening like"
+  },
+  {
+   "t": 1492.8,
+   "d": 2.16,
+   "text": "say you're given a choice of rooms and"
+  },
+  {
+   "t": 1494.96,
+   "d": 1.6,
+   "text": "although you don't know it yet"
+  },
+  {
+   "t": 1496.56,
+   "d": 2.0,
+   "text": "if you go to the left room 70 of the"
+  },
+  {
+   "t": 1498.56,
+   "d": 2.0,
+   "text": "time you'll find a lot of treasure"
+  },
+  {
+   "t": 1500.56,
+   "d": 1.12,
+   "text": "and thirty percent of the time you'll"
+  },
+  {
+   "t": 1501.68,
+   "d": 2.56,
+   "text": "find a horrible monster and the other"
+  },
+  {
+   "t": 1504.24,
+   "d": 2.4,
+   "text": "room mirrors those possibilities"
+  },
+  {
+   "t": 1506.64,
+   "d": 1.84,
+   "text": "well if you play the game enough times"
+  },
+  {
+   "t": 1508.48,
+   "d": 2.48,
+   "text": "eventually you'll realize that"
+  },
+  {
+   "t": 1510.96,
+   "d": 2.96,
+   "text": "if you make this choice it will come out"
+  },
+  {
+   "t": 1513.92,
+   "d": 0.96,
+   "text": "the better for you"
+  },
+  {
+   "t": 1514.88,
+   "d": 3.04,
+   "text": "more often and at first that'll become a"
+  },
+  {
+   "t": 1517.92,
+   "d": 1.84,
+   "text": "subconscious realization"
+  },
+  {
+   "t": 1519.76,
+   "d": 1.44,
+   "text": "and when you've noticed it it'll become"
+  },
+  {
+   "t": 1521.2,
+   "d": 1.44,
+   "text": "a conscious realization that's how it"
+  },
+  {
+   "t": 1522.64,
+   "d": 1.04,
+   "text": "progresses"
+  },
+  {
+   "t": 1523.68,
+   "d": 3.76,
+   "text": "from just chance to wit to knowledge"
+  },
+  {
+   "t": 1527.44,
+   "d": 3.28,
+   "text": "and so i said i have the problem of"
+  },
+  {
+   "t": 1530.72,
+   "d": 2.16,
+   "text": "five minutes okay uh i'll try to hurry"
+  },
+  {
+   "t": 1532.88,
+   "d": 1.28,
+   "text": "up here um"
+  },
+  {
+   "t": 1534.16,
+   "d": 3.36,
+   "text": "let's see it's like uh"
+  },
+  {
+   "t": 1537.52,
+   "d": 4.08,
+   "text": "why are you interested games uh yeah"
+  },
+  {
+   "t": 1541.6,
+   "d": 1.6,
+   "text": "yeah so just five minutes left how about"
+  },
+  {
+   "t": 1543.2,
+   "d": 1.6,
+   "text": "we just like does anyone have any"
+  },
+  {
+   "t": 1544.8,
+   "d": 1.76,
+   "text": "questions about this"
+  },
+  {
+   "t": 1546.56,
+   "d": 1.28,
+   "text": "or have you explained it well enough"
+  },
+  {
+   "t": 1547.84,
+   "d": 3.04,
+   "text": "okay i gotta keep going all right"
+  },
+  {
+   "t": 1551.52,
+   "d": 1.44,
+   "text": "uh here's here's an example i don't know"
+  },
+  {
+   "t": 1552.96,
+   "d": 2.48,
+   "text": "if any of you crossword puzzles"
+  },
+  {
+   "t": 1555.44,
+   "d": 2.48,
+   "text": "uh if you've a very experienced"
+  },
+  {
+   "t": 1557.92,
+   "d": 1.52,
+   "text": "crossword puzzle"
+  },
+  {
+   "t": 1559.44,
+   "d": 3.2,
+   "text": "uh solvers will tell you this obviously"
+  },
+  {
+   "t": 1562.64,
+   "d": 2.08,
+   "text": "that you can sort of get a sense after a"
+  },
+  {
+   "t": 1564.72,
+   "d": 1.84,
+   "text": "while about what the answers will be"
+  },
+  {
+   "t": 1566.56,
+   "d": 1.76,
+   "text": "that sort of serves a sort of kind of"
+  },
+  {
+   "t": 1568.32,
+   "d": 0.8,
+   "text": "internal"
+  },
+  {
+   "t": 1569.12,
+   "d": 2.32,
+   "text": "hint guide the way crossword puzzles are"
+  },
+  {
+   "t": 1571.44,
+   "d": 1.76,
+   "text": "put they're hard to put together because"
+  },
+  {
+   "t": 1573.2,
+   "d": 1.04,
+   "text": "all the words"
+  },
+  {
+   "t": 1574.24,
+   "d": 2.08,
+   "text": "every letter in a traditional"
+  },
+  {
+   "t": 1576.32,
+   "d": 1.68,
+   "text": "professional crawford puzzle"
+  },
+  {
+   "t": 1578.0,
+   "d": 2.56,
+   "text": "has to cross twice vertically and"
+  },
+  {
+   "t": 1580.56,
+   "d": 1.76,
+   "text": "horizontally"
+  },
+  {
+   "t": 1582.32,
+   "d": 2.56,
+   "text": "uh and there are only so many kinds of"
+  },
+  {
+   "t": 1584.88,
+   "d": 1.2,
+   "text": "combination of that"
+  },
+  {
+   "t": 1586.08,
+   "d": 3.2,
+   "text": "that exists and so like you're never"
+  },
+  {
+   "t": 1589.28,
+   "d": 1.2,
+   "text": "going to find"
+  },
+  {
+   "t": 1590.48,
+   "d": 1.36,
+   "text": "a crossword puzzle where you're very"
+  },
+  {
+   "t": 1591.84,
+   "d": 1.36,
+   "text": "rarely going to find one with uses like"
+  },
+  {
+   "t": 1593.2,
+   "d": 1.76,
+   "text": "xylophone is a word"
+  },
+  {
+   "t": 1594.96,
+   "d": 1.6,
+   "text": "because the thing about xylophone is the"
+  },
+  {
+   "t": 1596.56,
+   "d": 1.92,
+   "text": "first is an x"
+  },
+  {
+   "t": 1598.48,
+   "d": 2.56,
+   "text": "which means if you use xylophone some"
+  },
+  {
+   "t": 1601.04,
+   "d": 1.28,
+   "text": "you're gonna have to have some word in"
+  },
+  {
+   "t": 1602.32,
+   "d": 2.4,
+   "text": "the public has an x in it"
+  },
+  {
+   "t": 1604.72,
+   "d": 1.92,
+   "text": "and so that's one of the little tips to"
+  },
+  {
+   "t": 1606.64,
+   "d": 2.24,
+   "text": "follow but if you find a very"
+  },
+  {
+   "t": 1608.88,
+   "d": 2.56,
+   "text": "rarely used letter you know that the"
+  },
+  {
+   "t": 1611.44,
+   "d": 1.28,
+   "text": "thing that crosses is going to be in"
+  },
+  {
+   "t": 1612.72,
+   "d": 1.12,
+   "text": "these certain possibilities and the"
+  },
+  {
+   "t": 1613.84,
+   "d": 1.52,
+   "text": "result is"
+  },
+  {
+   "t": 1615.36,
+   "d": 2.08,
+   "text": "the matrix of probabilities about which"
+  },
+  {
+   "t": 1617.44,
+   "d": 1.52,
+   "text": "words can go into which places and the"
+  },
+  {
+   "t": 1618.96,
+   "d": 1.44,
+   "text": "more puzzles you do"
+  },
+  {
+   "t": 1620.4,
+   "d": 2.32,
+   "text": "the more you realize what that is and"
+  },
+  {
+   "t": 1622.72,
+   "d": 1.04,
+   "text": "it's something that really only"
+  },
+  {
+   "t": 1623.76,
+   "d": 2.64,
+   "text": "experience can teach you"
+  },
+  {
+   "t": 1626.4,
+   "d": 2.72,
+   "text": "uh cryptograms are another sort of type"
+  },
+  {
+   "t": 1629.12,
+   "d": 1.44,
+   "text": "of puzzle that works like that"
+  },
+  {
+   "t": 1630.56,
+   "d": 2.0,
+   "text": "uh cryptograms are just basically simple"
+  },
+  {
+   "t": 1632.56,
+   "d": 2.08,
+   "text": "substitution ciphers"
+  },
+  {
+   "t": 1634.64,
+   "d": 3.52,
+   "text": "uh to do them people looking at one at"
+  },
+  {
+   "t": 1638.16,
+   "d": 1.92,
+   "text": "first they seem like impossible until"
+  },
+  {
+   "t": 1640.08,
+   "d": 1.84,
+   "text": "you realize that the english language"
+  },
+  {
+   "t": 1641.92,
+   "d": 1.84,
+   "text": "words have shapes"
+  },
+  {
+   "t": 1643.76,
+   "d": 2.56,
+   "text": "that are determined by their lengths and"
+  },
+  {
+   "t": 1646.32,
+   "d": 2.48,
+   "text": "the occurrence of letters the frequency"
+  },
+  {
+   "t": 1648.8,
+   "d": 1.2,
+   "text": "and that shape is also determined by"
+  },
+  {
+   "t": 1650.0,
+   "d": 1.84,
+   "text": "that place in the sentence"
+  },
+  {
+   "t": 1651.84,
+   "d": 2.24,
+   "text": "and that way you get up a sense of what"
+  },
+  {
+   "t": 1654.08,
+   "d": 1.2,
+   "text": "this word"
+  },
+  {
+   "t": 1655.28,
+   "d": 2.16,
+   "text": "can or can't be and again it's it's"
+  },
+  {
+   "t": 1657.44,
+   "d": 1.68,
+   "text": "something that you can find rules of"
+  },
+  {
+   "t": 1659.12,
+   "d": 0.96,
+   "text": "thumb for"
+  },
+  {
+   "t": 1660.08,
+   "d": 2.24,
+   "text": "but ultimately only experience can teach"
+  },
+  {
+   "t": 1662.32,
+   "d": 1.36,
+   "text": "you and that's"
+  },
+  {
+   "t": 1663.68,
+   "d": 2.24,
+   "text": "i think ultimately the direction that"
+  },
+  {
+   "t": 1665.92,
+   "d": 1.84,
+   "text": "these gay i think that's"
+  },
+  {
+   "t": 1667.76,
+   "d": 1.92,
+   "text": "i think it gives something the the core"
+  },
+  {
+   "t": 1669.68,
+   "d": 1.44,
+   "text": "of roguelike gaming"
+  },
+  {
+   "t": 1671.12,
+   "d": 2.8,
+   "text": "it's finding things that are fact with"
+  },
+  {
+   "t": 1673.92,
+   "d": 2.4,
+   "text": "the only experience can teach you"
+  },
+  {
+   "t": 1676.32,
+   "d": 3.6,
+   "text": "and uh and i ultimately think"
+  },
+  {
+   "t": 1679.92,
+   "d": 3.44,
+   "text": "that it's impossible but it's it's worth"
+  },
+  {
+   "t": 1683.36,
+   "d": 0.56,
+   "text": "chasing"
+  },
+  {
+   "t": 1683.92,
+   "d": 2.08,
+   "text": "anyway i think i'll just stop it there"
+  },
+  {
+   "t": 1686.0,
+   "d": 1.6,
+   "text": "uh that's that's not sound good"
+  },
+  {
+   "t": 1687.6,
+   "d": 8.32,
+   "text": "yes good question um so as you were"
+  },
+  {
+   "t": 1695.92,
+   "d": 1.04,
+   "text": "talking about"
+  },
+  {
+   "t": 1696.96,
+   "d": 2.4,
+   "text": "these three stages i was thinking about"
+  },
+  {
+   "t": 1699.36,
+   "d": 0.96,
+   "text": "uh the game"
+  },
+  {
+   "t": 1700.32,
+   "d": 3.36,
+   "text": "go to"
+  },
+  {
+   "t": 1703.68,
+   "d": 2.48,
+   "text": "a computer"
+  },
+  {
+   "t": 1706.72,
+   "d": 3.52,
+   "text": "computer there's knowledge about the"
+  },
+  {
+   "t": 1710.24,
+   "d": 3.28,
+   "text": "rules of the game yeah and how eyes are"
+  },
+  {
+   "t": 1713.52,
+   "d": 1.68,
+   "text": "set up and how to form them"
+  },
+  {
+   "t": 1715.2,
+   "d": 1.92,
+   "text": "right so then there's there's logic"
+  },
+  {
+   "t": 1717.12,
+   "d": 1.44,
+   "text": "given a current board state about how"
+  },
+  {
+   "t": 1718.56,
+   "d": 1.12,
+   "text": "you might proceed"
+  },
+  {
+   "t": 1719.68,
+   "d": 1.84,
+   "text": "but there's also an intuition that you"
+  },
+  {
+   "t": 1721.52,
+   "d": 1.36,
+   "text": "have to develop because"
+  },
+  {
+   "t": 1722.88,
+   "d": 2.72,
+   "text": "our brains aren't aren't able to really"
+  },
+  {
+   "t": 1725.6,
+   "d": 0.56,
+   "text": "track"
+  },
+  {
+   "t": 1726.16,
+   "d": 1.52,
+   "text": "all of the possibility all possible"
+  },
+  {
+   "t": 1727.68,
+   "d": 1.6,
+   "text": "futures for a game i wish i had found"
+  },
+  {
+   "t": 1729.28,
+   "d": 1.52,
+   "text": "that example because that's perfect"
+  },
+  {
+   "t": 1730.8,
+   "d": 2.64,
+   "text": "right yeah so yeah i guess you probably"
+  },
+  {
+   "t": 1733.44,
+   "d": 0.96,
+   "text": "got it i'll i'll"
+  },
+  {
+   "t": 1734.4,
+   "d": 1.84,
+   "text": "i'll leave that as a comment question"
+  },
+  {
+   "t": 1736.24,
+   "d": 1.76,
+   "text": "but i wonder if that well yeah let me"
+  },
+  {
+   "t": 1738.0,
+   "d": 1.44,
+   "text": "add one thing i guess that"
+  },
+  {
+   "t": 1739.44,
+   "d": 2.48,
+   "text": "um that it seems to me there's there's a"
+  },
+  {
+   "t": 1741.92,
+   "d": 1.04,
+   "text": "valuable thing"
+  },
+  {
+   "t": 1742.96,
+   "d": 1.92,
+   "text": "that is maybe what you're getting at in"
+  },
+  {
+   "t": 1744.88,
+   "d": 1.28,
+   "text": "the randomness of a game"
+  },
+  {
+   "t": 1746.16,
+   "d": 2.32,
+   "text": "like a roguelike where because it's"
+  },
+  {
+   "t": 1748.48,
+   "d": 1.92,
+   "text": "random the the space of possibilities"
+  },
+  {
+   "t": 1750.4,
+   "d": 1.28,
+   "text": "that could be created"
+  },
+  {
+   "t": 1751.68,
+   "d": 1.92,
+   "text": "if it's artfully done can create a set"
+  },
+  {
+   "t": 1753.6,
+   "d": 1.2,
+   "text": "of interesting problems that you can"
+  },
+  {
+   "t": 1754.8,
+   "d": 1.44,
+   "text": "develop an intuition for"
+  },
+  {
+   "t": 1756.24,
+   "d": 2.4,
+   "text": "but never truly have the logic to"
+  },
+  {
+   "t": 1758.64,
+   "d": 1.52,
+   "text": "strictly proceed through"
+  },
+  {
+   "t": 1760.16,
+   "d": 2.48,
+   "text": "um but then if that's done poorly you"
+  },
+  {
+   "t": 1762.64,
+   "d": 0.64,
+   "text": "just have"
+  },
+  {
+   "t": 1763.28,
+   "d": 1.36,
+   "text": "random events that there's no way to"
+  },
+  {
+   "t": 1764.64,
+   "d": 1.76,
+   "text": "develop an intuition and uh and an"
+  },
+  {
+   "t": 1766.4,
+   "d": 1.28,
+   "text": "intuitive skill"
+  },
+  {
+   "t": 1767.68,
+   "d": 1.92,
+   "text": "and gambling i don't really what i'm"
+  },
+  {
+   "t": 1769.6,
+   "d": 0.96,
+   "text": "almost concerned i think what's because"
+  },
+  {
+   "t": 1770.56,
+   "d": 1.84,
+   "text": "you're at like not a game"
+  },
+  {
+   "t": 1772.4,
+   "d": 2.48,
+   "text": "um then you know i did the ultimate the"
+  },
+  {
+   "t": 1774.88,
+   "d": 1.36,
+   "text": "word all this was leading us i've"
+  },
+  {
+   "t": 1776.24,
+   "d": 2.32,
+   "text": "actually been starting work on a game"
+  },
+  {
+   "t": 1778.56,
+   "d": 3.04,
+   "text": "that i i hope will demonstrate this sort"
+  },
+  {
+   "t": 1781.6,
+   "d": 0.4,
+   "text": "of"
+  },
+  {
+   "t": 1782.0,
+   "d": 1.6,
+   "text": "principle of intuition and actually"
+  },
+  {
+   "t": 1783.6,
+   "d": 1.92,
+   "text": "prove if i monitor anything or not"
+  },
+  {
+   "t": 1785.52,
+   "d": 3.04,
+   "text": "it's again working called casino dungeon"
+  },
+  {
+   "t": 1788.56,
+   "d": 1.68,
+   "text": "and one of the things about the game is"
+  },
+  {
+   "t": 1790.24,
+   "d": 1.76,
+   "text": "most games that use randomness"
+  },
+  {
+   "t": 1792.0,
+   "d": 2.64,
+   "text": "basically simulate the the logical and"
+  },
+  {
+   "t": 1794.64,
+   "d": 0.56,
+   "text": "the"
+  },
+  {
+   "t": 1795.2,
+   "d": 1.44,
+   "text": "the random contract they similarly are"
+  },
+  {
+   "t": 1796.64,
+   "d": 2.24,
+   "text": "die rolls which are"
+  },
+  {
+   "t": 1798.88,
+   "d": 2.64,
+   "text": "discrete events each number nothing the"
+  },
+  {
+   "t": 1801.52,
+   "d": 1.84,
+   "text": "number has nothing to do with each other"
+  },
+  {
+   "t": 1803.36,
+   "d": 2.48,
+   "text": "well casino dungeon replaces die rolls"
+  },
+  {
+   "t": 1805.84,
+   "d": 0.8,
+   "text": "as with"
+  },
+  {
+   "t": 1806.64,
+   "d": 4.0,
+   "text": "of its core logical uh representatives"
+  },
+  {
+   "t": 1810.64,
+   "d": 2.16,
+   "text": "with decks of playing cards"
+  },
+  {
+   "t": 1812.8,
+   "d": 2.0,
+   "text": "like the dungeon layout is actually a"
+  },
+  {
+   "t": 1814.8,
+   "d": 2.16,
+   "text": "grid of 49 playing cards arranged in a"
+  },
+  {
+   "t": 1816.96,
+   "d": 0.64,
+   "text": "grid"
+  },
+  {
+   "t": 1817.6,
+   "d": 1.68,
+   "text": "and the cards that only determine the"
+  },
+  {
+   "t": 1819.28,
+   "d": 1.6,
+   "text": "type of encounter you'll have in that"
+  },
+  {
+   "t": 1820.88,
+   "d": 0.72,
+   "text": "space"
+  },
+  {
+   "t": 1821.6,
+   "d": 2.48,
+   "text": "but it'll also determine the the pr the"
+  },
+  {
+   "t": 1824.08,
+   "d": 1.84,
+   "text": "layer of the dungeon itself"
+  },
+  {
+   "t": 1825.92,
+   "d": 3.44,
+   "text": "so the dungeon layout is itself a hint"
+  },
+  {
+   "t": 1829.36,
+   "d": 2.48,
+   "text": "for where the good stuff are is and"
+  },
+  {
+   "t": 1831.84,
+   "d": 0.56,
+   "text": "where"
+  },
+  {
+   "t": 1832.4,
+   "d": 1.36,
+   "text": "the things that probably kill you will"
+  },
+  {
+   "t": 1833.76,
+   "d": 2.48,
+   "text": "go and because there are those hints"
+  },
+  {
+   "t": 1836.24,
+   "d": 2.96,
+   "text": "i ratchet up the difficulty a bit so"
+  },
+  {
+   "t": 1839.2,
+   "d": 0.88,
+   "text": "there are"
+  },
+  {
+   "t": 1840.08,
+   "d": 1.92,
+   "text": "spaces you don't ever want to go i just"
+  },
+  {
+   "t": 1842.0,
+   "d": 1.52,
+   "text": "could possibly just kill you outright"
+  },
+  {
+   "t": 1843.52,
+   "d": 1.76,
+   "text": "unless you're prepared for them"
+  },
+  {
+   "t": 1845.28,
+   "d": 1.76,
+   "text": "and that's the order to give weight to"
+  },
+  {
+   "t": 1847.04,
+   "d": 1.92,
+   "text": "it in order to"
+  },
+  {
+   "t": 1848.96,
+   "d": 1.84,
+   "text": "in order to give the player an incentive"
+  },
+  {
+   "t": 1850.8,
+   "d": 1.92,
+   "text": "to develop that intuition"
+  },
+  {
+   "t": 1852.72,
+   "d": 1.68,
+   "text": "whether i'm on the right track whether"
+  },
+  {
+   "t": 1854.4,
+   "d": 1.92,
+   "text": "or not i have no clue"
+  },
+  {
+   "t": 1856.32,
+   "d": 3.04,
+   "text": "it's this is a gameplay experiment but i"
+  },
+  {
+   "t": 1859.36,
+   "d": 1.28,
+   "text": "think ultimately those are the kinds of"
+  },
+  {
+   "t": 1860.64,
+   "d": 1.04,
+   "text": "games that are"
+  },
+  {
+   "t": 1861.68,
+   "d": 1.84,
+   "text": "that are best to work on the game the"
+  },
+  {
+   "t": 1863.52,
+   "d": 1.44,
+   "text": "ones you don't know if they'll work or"
+  },
+  {
+   "t": 1864.96,
+   "d": 1.76,
+   "text": "not while you're working on it"
+  },
+  {
+   "t": 1866.72,
+   "d": 2.64,
+   "text": "that's why the 7d roguelikes are so"
+  },
+  {
+   "t": 1869.36,
+   "d": 1.28,
+   "text": "great because"
+  },
+  {
+   "t": 1870.64,
+   "d": 2.96,
+   "text": "they're all gameplay experiments and"
+  },
+  {
+   "t": 1873.6,
+   "d": 1.92,
+   "text": "just bless them everyone"
+  },
+  {
+   "t": 1875.52,
+   "d": 2.4,
+   "text": "all right hey thank you so much thanks"
+  },
+  {
+   "t": 1877.92,
+   "d": 15.92,
+   "text": "for putting up with me"
+  },
+  {
+   "t": 1895.44,
+   "d": 3.14,
+   "text": "[Music]"
+  },
+  {
+   "t": 1935.84,
+   "d": 14.0,
+   "text": "get down"
+  },
+  {
+   "t": 1951.97,
+   "d": 5.45,
+   "text": "[Music]"
+  },
+  {
+   "t": 1974.84,
+   "d": 3.0,
+   "text": "downtown"
+  },
+  {
+   "t": 1979.61,
+   "d": 8.49,
+   "text": "[Music]"
+  },
+  {
+   "t": 1988.84,
+   "d": 2.91,
+   "text": "right"
+  },
+  {
+   "t": 1991.75,
+   "d": 6.11,
+   "text": "[Music]"
+  },
+  {
+   "t": 2002.16,
+   "d": 2.88,
+   "text": "get your bike"
+  },
+  {
+   "t": 2006.58,
+   "d": 3.08,
+   "text": "[Music]"
+  },
+  {
+   "t": 2017.33,
+   "d": 3.22,
+   "text": "[Music]"
+  },
+  {
+   "t": 2037.44,
+   "d": 10.0,
+   "text": "get your body down"
+  }
+ ]
+}

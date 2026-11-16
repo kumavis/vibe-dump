@@ -1,0 +1,177 @@
+{
+  "id": "rWPJ5fW1UH8",
+  "title": "Patrick Kemp - Design tooling at Spry Fox",
+  "speaker": "Patrick Kemp",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=rWPJ5fW1UH8",
+  "talk_type": "technical",
+  "summary": "Patrick Kemp describes how Spry Fox's small design team authors large amounts of content for games like Cozy Grove using YAML text configs processed by their open-sourced library DarkConfig. He walks through 'procedural patterns' (tags, includes, multi-dimensional variants and mods) that let one source config expand into hundreds of generated items, and their downsides: complexity, unpredictability and unwanted emergent connections. The centerpiece is the design dashboard, an HTML page that reads the generated configs and offers views for items, loot tables, content usage, calendar scheduling and planned economy and terrain statistics. His argument is that a dashboard derived from game data gives spreadsheet-style insight into emergent patterns without the upkeep of hand-maintained spreadsheets.",
+  "games": [
+    "Cozy Grove",
+    "Triple Town",
+    "Alphabear"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "text configs",
+      "kind": "principle",
+      "claim": "Spry Fox stores most design content in YAML text files so designers can leverage mature IDEs and their extension ecosystems instead of building custom editors.",
+      "detail": "Text files are malleable, easy to hook to code, searchable and support find-and-replace and copy-paste. Kemp says much of their day-to-day tooling is just polished IDEs they did not have to build themselves; graphical tools are reserved for things like terrain and set pieces.",
+      "t": 214,
+      "quote": "by choosing to make most of our design content out of text files we're leveraging this mature ecosystem of existing idees",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "config validation",
+      "kind": "technique",
+      "claim": "Spry Fox's open-sourced DarkConfig library converts YAML configs into gameplay data with hot loading and lets developers write validators that define what good or bad game data looks like.",
+      "detail": "DarkConfig validates the YAML syntax itself and serves as a platform for game-specific validation so issues are caught automatically. It also implements the procedural patterns used in their configs.",
+      "t": 279,
+      "quote": "it kind of serves as a platform for you to write your own validation for your game data",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tags",
+      "kind": "technique",
+      "claim": "Spry Fox lets loot tables, crafting recipes and shop inventories reference items by tag rather than by ID, so a newly tagged item automatically flows into every relevant system.",
+      "detail": "Tags live in a central registry. Designers make a new item, assign appropriate tags, and it starts showing up in loot tables and recipes without anyone maintaining lists of specific items, which suits their sprawling intertwined economies.",
+      "t": 357,
+      "quote": "designers can just make new items and assign appropriate tags and then that item just gets sucked into all these different systems automatically",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "config includes",
+      "kind": "technique",
+      "claim": "Spry Fox configs support named includes of reusable config blocks, used both for boilerplate and for composing behaviour from multiple sources, expanded at generation time into final configs.",
+      "detail": "Designers author source configs; at generation time (on compile or manually) DarkConfig copies included blocks in place to produce generated configs the engine consumes. This source-versus-generated distinction underpins the later patterns.",
+      "t": 418,
+      "quote": "you can sort of compose different Behavior by pulling in confing blocks from different sources",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "combinatorial variants",
+      "kind": "technique",
+      "claim": "Spry Fox's variant pattern marks parts of a config for substitution and generates one item for every combination of several variant arrays, so a single flower config can yield dozens or hundreds of items.",
+      "detail": "Fields wrapped in chevrons are replaced by variants; with arrays for type, season and rarity, one config produced 36 flowers (3 x 4 x 3) in the simplified example. Variants can change colour, icon, sprite or economic behaviour. Cozy Grove's collectible flowers, hundreds of items, come largely from one config.",
+      "t": 612,
+      "quote": "it actually uh generates a i a an item for every possible combination of those three arrays",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "mods",
+      "kind": "technique",
+      "claim": "Spry Fox pairs variants with mods that adjust numeric properties, and keeps shared variants like rarity in a global file so any content type gains common-to-rare versions with adjusted prices and drop weights.",
+      "detail": "An uncommon rarity variant might modify drop weight and buy and sell prices. Because rarity, seasons and types are defined once as global variants, mushrooms, flowers or fish can simply include them.",
+      "t": 678,
+      "quote": "this one basically allows you to within a variant um modify numerical properties of the base config",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "expansibility",
+      "kind": "principle",
+      "claim": "Procedural config patterns make content highly expansible: adding a new season or species is a few lines that multiply out into all associated variations, with tags creating emergent connections.",
+      "detail": "Kemp lists expressiveness, expansibility, and emergent connections via the tag substrate as the strengths of the system built up over years at Spry Fox.",
+      "t": 776,
+      "quote": "it's trivial to add essentially a new row to The Matrix of like uh you know like a new season or a new flower species",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator pitfalls",
+      "kind": "warning",
+      "claim": "Procedural config patterns are complicated and unpredictable: a designer who misunderstands a source config can generate lots of bad content unnoticed, and tags can connect things that should not be connected.",
+      "detail": "Real configs are borderline code-like. When one source config generates hundreds of outputs, mistakes multiply, and emergent connections are not always good. These accumulated downsides motivated the design dashboard.",
+      "t": 830,
+      "quote": "you might accidentally make a bunch of bad content and not really uh fully realize it",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "design dashboard",
+      "kind": "technique",
+      "claim": "Spry Fox's design dashboard is an HTML page that reads the generated configs and provides sortable, filterable views of game data, with buttons that open the source config in the editor.",
+      "detail": "The item view lists all generated items (about 8,800) with search, toggleable property columns, and a VS Code button per item that opens the source config that produced it, making the dashboard the first stop for investigating issues.",
+      "t": 1014,
+      "quote": "those are clickable buttons that when you click one it pops open Visual Studio code and opens the source config um that generated that item",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "loot table inspection",
+      "kind": "technique",
+      "claim": "Because loot tables are authored by tag, Spry Fox's dashboard can filter items by loot table and show a 'dropped by' column listing every table that can drop a given item.",
+      "detail": "Authors describe the kinds of items to drop rather than seeing specific items, so the view resolves what could actually drop. The reverse lookup helps trace an unexpected item in the inventory back to its source tables.",
+      "t": 1094,
+      "quote": "for any given item it it lists out the loot tables that could drop that item",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content usage counts",
+      "kind": "example",
+      "claim": "Spry Fox's content usage view counts how often each NPC dialogue animation tag is used, helping writers spot over- or under-used animations and guiding animators on what to make next.",
+      "detail": "Writers annotate dialogue lines with animation names such as an angry face; the view searches all game data and counts occurrences. It was not in the original spec but was trivial to add.",
+      "t": 1179,
+      "quote": "the animators use this to see how writers are using their animations and using that to guide what animations they might want to make",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "calendar view",
+      "kind": "technique",
+      "claim": "For real-time calendar games, Spry Fox's dashboard draws scheduled scenarios from a calendar YAML on a timeline so designers can see daily coverage and gaps at a glance.",
+      "detail": "Their current game, like Cozy Grove, schedules events by weekday, season and holidays in a text file, which is hard to read temporally. The timeline view with durations and colour coding shows whether each day has enough to do.",
+      "t": 1259,
+      "quote": "we can see what the coverage is on a given day is there enough stuff for a player to do on that day",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "economy balancing",
+      "kind": "example",
+      "claim": "In Cozy Grove a community spreadsheet exposed an overpowered uncommon chair that players crafted repeatedly for profit, a balance issue missed because prices fell out of procedural mods and variants.",
+      "detail": "A community member computed profitability from ingredient costs and sell prices for all decorations. Spry Fox used that spreadsheet to nerf the worst offenders and plans an economy view in the dashboard to see such higher-level patterns.",
+      "t": 1355,
+      "quote": "we had missed the stuff because no one was we weren't manually setting the prices of these things",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "terrain statistics",
+      "kind": "technique",
+      "claim": "Kemp wants a dashboard view that generates many terrains and reports statistics on content over- or under-use and how often terrain meets gameplay specs.",
+      "detail": "Spry Fox uses procedural terrain generation in parts of its current game; this statistical view is a hoped-for future addition.",
+      "t": 1435,
+      "quote": "how often a gener ated terrain like meets the specs required by gameplay",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "single source of truth",
+      "kind": "principle",
+      "claim": "A dashboard derived from game data gives spreadsheet-style visibility into higher-level patterns without the upkeep and desync problems of hand-maintained design spreadsheets.",
+      "detail": "Cozy Grove's progression spreadsheet was hugely useful but a ton of work and drifted out of sync with game data. With the dashboard, the configs are the single source of truth and the view updates automatically. Local versions serve designers iterating; a remote version serves non-designers and QA.",
+      "t": 1574,
+      "quote": "there's always a single source of truth it's the game data the configs are the truth",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tooling investment",
+      "kind": "principle",
+      "claim": "Tooling that pays off later in production is hard to justify against feature work, but an HTML page parsing JSON was quick to set up and new dashboard views take a day or two.",
+      "detail": "In Q&A Kemp said an engineer treats the dashboard as a pet project. Formats change often when building new systems, but the dashboard, especially the item view, has stayed resilient.",
+      "t": 1666,
+      "quote": "it's always a little hard to make a case for this kind of tooling where it's like it's really gonna hit its stride later in production",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

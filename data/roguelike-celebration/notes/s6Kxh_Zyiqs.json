@@ -1,0 +1,86 @@
+{
+  "id": "s6Kxh_Zyiqs",
+  "title": "Younès Rabii-There’s A Skull In My Garden: Simple interactions give new meanings to generated things",
+  "speaker": "Younès Rabii",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=s6Kxh_Zyiqs",
+  "talk_type": "design",
+  "summary": "A lightning talk on player interpretation, the step by which players turn abstract on-screen symbols into meaning and stories. Using his PICO-8 gardening roguelike Tea Garden, whose flowers are symmetric 6x6 two-colour pixel patterns, Rabii shows that most generated flowers read as junk but some evoke things (a butterfly, a frog face), and that adding simple interactions (pick up onto the head, place on the ground, wear) changes what players see in them. He warns that evoked meanings cannot be controlled and may include unwanted imagery such as fascist symbols, or a skull.",
+  "games": [
+    "Tea Garden",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player interpretation",
+      "kind": "principle",
+      "claim": "Player interpretation, turning abstract symbols into meaning, is what makes roguelike stories possible, so designing a roguelike can be seen as shaping player interpretation.",
+      "detail": "Rabii uses the example of ASCII where a slash and a green 'g' become 'I hold a sword and a goblin is to my right', and of Dwarf Fortress screenshots that look like keyboard mashing yet yield dramatic stories with plot twists.",
+      "t": 120,
+      "quote": "you can also see designing roguelikes as shaping player interpretation",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "flower generation",
+      "kind": "technique",
+      "claim": "Tea Garden generates flowers by taking a 6x6 pixel grid, applying symmetry (horizontal, diagonal and so on) and colouring it with at most two colours from the PICO-8 palette, whose colours already match.",
+      "detail": "Players brew tea, dream, see generated flowers and bring back the ones they like. The balanced palette means results look strange but sometimes compelling.",
+      "t": 174,
+      "quote": "you just take a six by six pixel grid you put some symmetry on it, horizontal symmetry, diagonal symmetry ,everything and you color this pattern with at most two colors",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "apophenia",
+      "kind": "example",
+      "claim": "Like cloud-gazing, around 90% of Tea Garden's generated flowers have no perceived meaning, but the remainder evoke things players recognize and become attached to, and these readings differ from player to player.",
+      "detail": "Rabii points out an orange flower that is just orange, a pink one like a butterfly and a green one like a frog face, which is his favourite because it is round and lovable.",
+      "t": 227,
+      "quote": "approximately 90% of the things you see is junk is it has no perceived meaning whatsoever to any player",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interaction and meaning",
+      "kind": "example",
+      "claim": "Adding a pick-up interaction in Tea Garden, where the armless character places items on its head, made players see previously meaningless flowers as hats, turning them into favourites.",
+      "detail": "An orange flower became a cowboy hat. Rabii concludes that player interaction can turn meaningless visuals into something that holds genuine meaning.",
+      "t": 276,
+      "quote": "flowers that had no meaning before starting being seen as hats by players like this orange thing became cowboy hats",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interaction and meaning",
+      "kind": "principle",
+      "claim": "Each new interaction gives players more blanks to fill in, effectively co-creating a visual language with the game; in Tea Garden, placing flowers on the ground led players to arrange them and read some as letters.",
+      "detail": "Rabii's personal theory is that the game creates a language with the player: if something can go on your head it must be a hat, crown or helmet. Interactions therefore shape interpretations and the stories players create.",
+      "t": 364,
+      "quote": "by adding a new interaction you're actually giving more opportunities to a player to to fill in more blanks and give more meaning to what's in the game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design feedback loop",
+      "kind": "principle",
+      "claim": "Interpretation also drives design: seeing masks in Tea Garden's flowers made Rabii add a wear interaction, creating a loop where interpretations inspire interactions that inspire new interpretations.",
+      "detail": "He notes this means player interpretation shapes how games are made, modded and customized, not only how meaning is given.",
+      "t": 419,
+      "quote": "the interpretation i had influenced my desire for new interactions and what's cool is that since we saw it before new interactions can help create new interpretations",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "unwanted output",
+      "kind": "warning",
+      "claim": "Meanings evoked by generated content cannot be controlled: Tea Garden produced cross-shaped flowers resembling fascist imagery, and there is no easy way to prevent such readings.",
+      "detail": "Rabii contrasts a positive reading he gave a blue-and-pink T-shaped flower (trans rights activism) with unwanted ones, and says designers must ask what they want their game able to evoke. Generated content can even spook the developer, as when he found a skull in a garden while debugging.",
+      "t": 481,
+      "quote": "i also came across flowers that were like crosses with four branches and it looked to me like fascist imagery",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

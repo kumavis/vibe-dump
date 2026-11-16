@@ -1,0 +1,146 @@
+{
+  "id": "zDKheM-E45I",
+  "title": "Michael Brough - The Roots of Roguelikes in Fantasy Fiction (Full length backup)",
+  "speaker": "Michael Brough",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=zDKheM-E45I",
+  "talk_type": "history",
+  "summary": "Michael Brough traces roguelikes back through Dungeons & Dragons to the pulp fantasy fiction listed in Gygax's Appendix N, reading passages from Fritz Leiber's Fafhrd and the Grey Mouser stories and Jack Vance's Dying Earth books. He argues that the rogue's ability to use magic items comes from the Grey Mouser's backstory as a magician's apprentice, that Vancian spell memorization was a story mechanic for a 'loadout then challenges' short-story structure, and that the picaresque Cugel stories are effectively a roguelike novel. His central design point is that the classic roguelike arc turns a rogue into a de facto wizard by accumulating magic items, changing the kind of decisions the player makes. He closes by urging developers to read the sources of their influences, including older work whose social attitudes are uncomfortable.",
+  "games": [
+    "Rogue",
+    "Dungeons & Dragons"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "genre lineage",
+      "kind": "history",
+      "claim": "Rogue and early roguelikes were digital implementations of Dungeons & Dragons, which itself descends both from miniature wargames (like Chainmail) and from fantasy fiction.",
+      "detail": "Brough traces the war-game line back to simulating and planning real battles, and describes D&D as an attempt to use wargame rules to play out situations from fantasy novels. Fantasy fiction is the second, less discussed root he focuses on.",
+      "t": 441,
+      "quote": "Rogue and the early rogue likes were um very much digital implementations of Dungeons and Dragons and similar tabletop",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "rogue class",
+      "kind": "history",
+      "claim": "The D&D rogue (and hence the Rogue protagonist) can use magic scrolls and items because the class was modelled on Fritz Leiber's Grey Mouser, a thief who had trained as a magician's apprentice.",
+      "detail": "Brough notes a pure physical-stealth rogue would have no reason to read magic; the ability exists because one character's backstory was generalised to every rogue. He points out a game where the rogue cannot read scrolls is plausible but 'not so interesting'.",
+      "t": 734,
+      "quote": "the rogue class has has this ability because this particular character who Rose inspired by had a backstory as as an apprentice",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "pulp fiction",
+      "kind": "history",
+      "claim": "Pulp short-story magazines, an accessible market for fiction, favoured episodic rogue protagonists over epic heroes, and their self-contained adventure structure strongly shaped tabletop RPG sessions.",
+      "detail": "Brough argues that format shapes what gets written: later epic trilogies demanded epic heroes, while short pulp stories suited rogues. A weekly tabletop group needs every session to feel worthwhile in itself, which the pulp short story's few-page adventure structure fits.",
+      "t": 995,
+      "quote": "in the short pulp stories they they are more suited to [clears throat] rogues because because that there there's not there's not the same scope for for an epic scale",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "vancian magic",
+      "kind": "history",
+      "claim": "Jack Vance's Dying Earth magic, where wizards memorise a handful of discrete named spells that burn out of memory on casting, was a story mechanic that D&D lifted directly into spell slots.",
+      "detail": "Brough reads a Turjan passage where the wizard selects three spells of general application before setting out. He notes treating spells as discrete named effects is taken for granted in games but is unusual in fiction, where magic is represented many ways.",
+      "t": 1610,
+      "quote": "spells spells must be memorized to be used. You you you you put them into your memory and you utter them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "loadout story structure",
+      "kind": "principle",
+      "claim": "A constrained magic system like Vancian memorisation exists to enable a specific story shape: the adventurer packs a few items, then solves each challenge by applying one of them, sometimes creatively.",
+      "detail": "Brough compares this to fairy tales and James Bond gadget setups. Without some constraint on a wizard's power it is hard to tell stories about wizards; he cites Gandalf being conveniently absent as another solution to the same problem.",
+      "t": 1723,
+      "quote": "every challenge gets gets solved through an application of one of the items that they brought with them. and but some sometimes in a creative or surprising way",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "abstraction vs flavor",
+      "kind": "warning",
+      "claim": "When Vancian spell memorisation became a game mechanic, players demanded duplicate slots of the same spell, and the system drifted toward abstract magic points, trading story flavour for design flexibility.",
+      "detail": "Brough argues memorising the same spell twice is nonsense in the fiction (brains are not hard drives holding separate copies), but game players want two fireballs. The progression ends in mana-point systems, popular because they are flexible but stripped of the original flavour.",
+      "t": 1969,
+      "quote": "people want to have two copies of the same spell and it gets more abstract and loses some of the flavor and eventually you have like it's it's completely abstract",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "picaresque",
+      "kind": "history",
+      "claim": "The picaresque, a story form dating to the 16th century about a down-on-their-luck character surviving by wits whose successes are temporary and often lost, is essentially the roguelike novel.",
+      "detail": "Brough describes Vance's Cugel stories as highly episodic: occasionally Cugel carries money or items into the next chapter, but often he faces disaster and enters it with nothing. He says these stories read like a game though written long before video games.",
+      "t": 2247,
+      "quote": "When they succeed, it's usually only temporarily and often followed by losing everything that they gained",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "flawed protagonist",
+      "kind": "example",
+      "claim": "Cugel repeatedly gains a powerful magic item (e.g. boot polish that makes kicked things fly) and loses it through his own over-ambition, yet earns grudging admiration by persisting after each knockback.",
+      "detail": "Brough recounts Cugel escaping a wizard's mansion by kicking a bed out the window, later losing the polish through a misadventure largely his own fault. He is foolish and often unlikable but gets up after setbacks, a pattern Brough finds very roguelike.",
+      "t": 2375,
+      "quote": "He gets some money, he gets a magic item and and he just does something foolish and he loses it. And that's that's how the story goes",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item-based progression",
+      "kind": "principle",
+      "claim": "The fundamental roguelike progression arc is a rogue becoming effectively a wizard by accumulating magic items, so the same rules produce a different kind of game as the character's equipment grows.",
+      "detail": "Brough draws on a Vance wizard who never casts a spell and whose power is only a collection of items, and Cugel declaring himself a wizard once he steals some. In Rogue, the player starts with a short bow and sword and ends choosing among a vast array of magical equipment rather than thinking about sneaking or tactical positioning; he stresses this is not multiclassing.",
+      "t": 2665,
+      "quote": "the momentto moment decisions you're making in the game are about which of my vast array of magical equipment shall I use rather than how to sneak past something",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item-based progression",
+      "kind": "principle",
+      "claim": "A roguelike can let the game being played change mid-run, shifting the player from thinking like a rogue to thinking like a wizard under the same rules, purely through volume of equipment.",
+      "detail": "Brough calls this a fundamental interesting thing about roguelikes: the progression arc changes the nature of play, not just the numbers.",
+      "t": 2703,
+      "quote": "you have this progression arc in which the game you're playing can change",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "reading influences",
+      "kind": "principle",
+      "claim": "Designers should go back to the sources of the works they love, because understanding how ideas developed across media fuels more original transformations rather than reducing creativity.",
+      "detail": "Brough says people fear reading sources will make them less original but in his experience the opposite holds: you can only see what a creator added if you know what they drew from. He recommends Vance, Leiber, Lovecraft (read aloud) and Zelazny from Gygax's Appendix N list.",
+      "t": 2860,
+      "quote": "the more you go to the roots, the deeper your understanding gets",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "games as culture",
+      "kind": "principle",
+      "claim": "Treating video games as a wholly new medium devalues them by neglecting how they connect to creative work going back centuries, from the picaresque to Shakespeare.",
+      "detail": "Brough notes Leiber was influenced by Shakespeare and that roguelikes are rooted in work back to antiquity. He ties this to old 'are games art' debates, which he says came from not seeing games as part of all of culture.",
+      "t": 2991,
+      "quote": "that kind of attitude can also devalue our work um because uh we we can neglect how our work connects to work that's gone before",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "reading older work",
+      "kind": "open-question",
+      "claim": "Older fantasy sources often carry sexist and racist attitudes that make them uncomfortable to read, and Brough has no answer beyond encouraging reading widely across time to see social progress.",
+      "detail": "He contrasts The Night Land (1912), with a helpless sole female character, against later works, arguing the thread across history shows progress in social attitudes, while insisting art itself has not progressed and older works should not be dismissed.",
+      "t": 3100,
+      "quote": "reading reading back some of these things from a long time ago can be very uncomfortable because you're you're you're reading from a different culture",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

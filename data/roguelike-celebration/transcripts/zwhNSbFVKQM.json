@@ -1,0 +1,3747 @@
+{
+ "id": "zwhNSbFVKQM",
+ "url": "https://www.youtube.com/watch?v=zwhNSbFVKQM",
+ "title": "Adrian Zeyfang: Probably Impossible: NecroDancer's network code",
+ "speaker": "Adrian Zeyfang",
+ "talk_title": "Probably Impossible: NecroDancer's network code",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1641,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "A technical overview of Crypt of the NecroDancer's unique approach to online multiplayer, based on the principles of rollback, while replacing the conventional frame-based timeline by a turn-based system. Bringing online multiplayer to a rhythm game in which players can directly interact with the world and each other poses many challenges that aren't typically encountered while working on other network games - all while preserving the emergent, quirky mechanics that the game's community grew to love. This talk introduces a conventional rollback approach, then gradually shapes it into the architecture found in NecroDancer today, describing and resolving edge cases along the way. Follow the journey of how online multiplayer, a feature once dismissed as \"impossible\", was implemented!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 40,
+   "title": "Background"
+  },
+  {
+   "start": 113,
+   "title": "Netcode Basics"
+  },
+  {
+   "start": 338,
+   "title": "Requirements"
+  },
+  {
+   "start": 436,
+   "title": "Initial attempt"
+  },
+  {
+   "start": 527,
+   "title": "Bard H"
+  },
+  {
+   "start": 611,
+   "title": "Turn IDs"
+  },
+  {
+   "start": 757,
+   "title": "Mixing characters"
+  },
+  {
+   "start": 808,
+   "title": "Rhythm mechanic"
+  },
+  {
+   "start": 892,
+   "title": "Animations"
+  },
+  {
+   "start": 947,
+   "title": "Animation rollback"
+  },
+  {
+   "start": 1115,
+   "title": "Sound rollback"
+  },
+  {
+   "start": 1251,
+   "title": "Player collisions"
+  },
+  {
+   "start": 1531,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4948,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.84,
+   "d": 4.12,
+   "text": "Adrian uh who uh I am so curious to see"
+  },
+  {
+   "t": 7.96,
+   "d": 1.8,
+   "text": "uh how this plays out and the details"
+  },
+  {
+   "t": 9.76,
+   "d": 2.68,
+   "text": "behind this uh because Adrian is talking"
+  },
+  {
+   "t": 12.44,
+   "d": 2.92,
+   "text": "about the probably impossible aka"
+  },
+  {
+   "t": 15.36,
+   "d": 3.2,
+   "text": "crypted the necro dancers Network code"
+  },
+  {
+   "t": 18.56,
+   "d": 2.28,
+   "text": "um which initially started as a DLC but"
+  },
+  {
+   "t": 20.84,
+   "d": 2.04,
+   "text": "or initially started as a fan project"
+  },
+  {
+   "t": 22.88,
+   "d": 2.36,
+   "text": "but was brought into the game as a DLC"
+  },
+  {
+   "t": 25.24,
+   "d": 3.84,
+   "text": "so uh take it away Adrian thank you hi"
+  },
+  {
+   "t": 29.08,
+   "d": 1.88,
+   "text": "I'm Adrian thank you for having me I'm"
+  },
+  {
+   "t": 30.96,
+   "d": 1.8,
+   "text": "the lead developer behind Crypt of the"
+  },
+  {
+   "t": 32.76,
+   "d": 3.08,
+   "text": "necr Dano synchrony DLC and I'd like to"
+  },
+  {
+   "t": 35.84,
+   "d": 1.36,
+   "text": "give you a brief overview of what it"
+  },
+  {
+   "t": 37.2,
+   "d": 1.72,
+   "text": "took to bring online multiplayer"
+  },
+  {
+   "t": 38.92,
+   "d": 2.04,
+   "text": "functionality to this"
+  },
+  {
+   "t": 40.96,
+   "d": 2.04,
+   "text": "game so if you haven't heard of NEC"
+  },
+  {
+   "t": 43.0,
+   "d": 2.64,
+   "text": "rener before it's best described as a"
+  },
+  {
+   "t": 45.64,
+   "d": 1.88,
+   "text": "rhythmic Rog likee Dungeon Crawler"
+  },
+  {
+   "t": 47.52,
+   "d": 2.16,
+   "text": "hybrid it's turn-based at its core but"
+  },
+  {
+   "t": 49.68,
+   "d": 2.68,
+   "text": "it has a strict turn timer which just so"
+  },
+  {
+   "t": 52.36,
+   "d": 1.92,
+   "text": "happens to align with the Beat of the"
+  },
+  {
+   "t": 54.28,
+   "d": 2.56,
+   "text": "Music the controls are very simple you"
+  },
+  {
+   "t": 56.84,
+   "d": 2.04,
+   "text": "use the arrow keys for movement and you"
+  },
+  {
+   "t": 58.88,
+   "d": 1.68,
+   "text": "attack automatically if there's an enemy"
+  },
+  {
+   "t": 60.56,
+   "d": 3.24,
+   "text": "in the way and a few years ago I got"
+  },
+  {
+   "t": 63.8,
+   "d": 2.24,
+   "text": "very addicted to this game and stumbled"
+  },
+  {
+   "t": 66.04,
+   "d": 2.08,
+   "text": "upon a steam Forum threat where people"
+  },
+  {
+   "t": 68.12,
+   "d": 2.24,
+   "text": "were asking for online multiplayer and"
+  },
+  {
+   "t": 70.36,
+   "d": 2.52,
+   "text": "the dev team responded that this is just"
+  },
+  {
+   "t": 72.88,
+   "d": 2.04,
+   "text": "impossible it's not going to happen how"
+  },
+  {
+   "t": 74.92,
+   "d": 1.72,
+   "text": "could you add online multiplayer to game"
+  },
+  {
+   "t": 76.64,
+   "d": 2.84,
+   "text": "like this and I saw these posts and they"
+  },
+  {
+   "t": 79.48,
+   "d": 2.48,
+   "text": "kind of looked like a challenge to me so"
+  },
+  {
+   "t": 81.96,
+   "d": 1.28,
+   "text": "I gathered some friends from the"
+  },
+  {
+   "t": 83.24,
+   "d": 2.08,
+   "text": "community we started tinkering with a"
+  },
+  {
+   "t": 85.32,
+   "d": 2.92,
+   "text": "prototype and built a multiplayer clone"
+  },
+  {
+   "t": 88.24,
+   "d": 3.0,
+   "text": "of the game um over the course of well"
+  },
+  {
+   "t": 91.24,
+   "d": 1.56,
+   "text": "initially it was just a few weeks which"
+  },
+  {
+   "t": 92.8,
+   "d": 2.0,
+   "text": "turned to months and then years we got"
+  },
+  {
+   "t": 94.8,
+   "d": 2.68,
+   "text": "carried away and yeah eventually the"
+  },
+  {
+   "t": 97.48,
+   "d": 2.28,
+   "text": "studio behind the cred dancer noticed"
+  },
+  {
+   "t": 99.76,
+   "d": 3.24,
+   "text": "and today what initially started as a"
+  },
+  {
+   "t": 103.0,
+   "d": 1.96,
+   "text": "little fan project is now known as the"
+  },
+  {
+   "t": 104.96,
+   "d": 1.0,
+   "text": "synchrony"
+  },
+  {
+   "t": 105.96,
+   "d": 3.96,
+   "text": "DLC but what did it take to get there so"
+  },
+  {
+   "t": 109.92,
+   "d": 1.68,
+   "text": "let's just start from the beginning with"
+  },
+  {
+   "t": 111.6,
+   "d": 1.52,
+   "text": "some net code"
+  },
+  {
+   "t": 113.12,
+   "d": 2.76,
+   "text": "Basics so fundamentally multiplayer"
+  },
+  {
+   "t": 115.88,
+   "d": 1.84,
+   "text": "network code is about making sure that"
+  },
+  {
+   "t": 117.72,
+   "d": 1.6,
+   "text": "two copies of the game running on"
+  },
+  {
+   "t": 119.32,
+   "d": 1.88,
+   "text": "different machines are in sync with each"
+  },
+  {
+   "t": 121.2,
+   "d": 3.24,
+   "text": "other and reflect the same shared game"
+  },
+  {
+   "t": 124.44,
+   "d": 2.6,
+   "text": "State the most common approach for net"
+  },
+  {
+   "t": 127.04,
+   "d": 1.72,
+   "text": "code is State replication with an"
+  },
+  {
+   "t": 128.76,
+   "d": 2.12,
+   "text": "authoritative server all clients are"
+  },
+  {
+   "t": 130.88,
+   "d": 2.32,
+   "text": "connected to the same server which holds"
+  },
+  {
+   "t": 133.2,
+   "d": 2.08,
+   "text": "a single source of Truth copy of the"
+  },
+  {
+   "t": 135.28,
+   "d": 2.08,
+   "text": "game's current state the positions of"
+  },
+  {
+   "t": 137.36,
+   "d": 3.0,
+   "text": "all objects tiles variables and so on"
+  },
+  {
+   "t": 140.36,
+   "d": 2.32,
+   "text": "and whenever a client performs an action"
+  },
+  {
+   "t": 142.68,
+   "d": 1.96,
+   "text": "they send a message to the server which"
+  },
+  {
+   "t": 144.64,
+   "d": 2.24,
+   "text": "then runs some game logic and propagates"
+  },
+  {
+   "t": 146.88,
+   "d": 2.24,
+   "text": "the results to all clients in the form"
+  },
+  {
+   "t": 149.12,
+   "d": 2.52,
+   "text": "of object property updates but these"
+  },
+  {
+   "t": 151.64,
+   "d": 1.84,
+   "text": "changes take a moment to travel across"
+  },
+  {
+   "t": 153.48,
+   "d": 2.0,
+   "text": "the network from the client that's sent"
+  },
+  {
+   "t": 155.48,
+   "d": 1.48,
+   "text": "the key press to the server for"
+  },
+  {
+   "t": 156.96,
+   "d": 2.6,
+   "text": "processing and then back to all clients"
+  },
+  {
+   "t": 159.56,
+   "d": 1.68,
+   "text": "this means that when you press a key"
+  },
+  {
+   "t": 161.24,
+   "d": 1.76,
+   "text": "there is a noticeable delay before your"
+  },
+  {
+   "t": 163.0,
+   "d": 1.84,
+   "text": "character actually moves which for a"
+  },
+  {
+   "t": 164.84,
+   "d": 2.56,
+   "text": "rhythm game is not really the best"
+  },
+  {
+   "t": 167.4,
+   "d": 2.76,
+   "text": "thing so an alternative to this approach"
+  },
+  {
+   "t": 170.16,
+   "d": 2.12,
+   "text": "which reduces the amount of data sent"
+  },
+  {
+   "t": 172.28,
+   "d": 2.12,
+   "text": "from the server to clients is known as"
+  },
+  {
+   "t": 174.4,
+   "d": 2.32,
+   "text": "the terministic lock step instead of"
+  },
+  {
+   "t": 176.72,
+   "d": 1.88,
+   "text": "sending State changes the server"
+  },
+  {
+   "t": 178.6,
+   "d": 1.68,
+   "text": "actually just relays input between"
+  },
+  {
+   "t": 180.28,
+   "d": 2.72,
+   "text": "clients and lets them run the game logic"
+  },
+  {
+   "t": 183.0,
+   "d": 2.36,
+   "text": "simulation locally if the simulation"
+  },
+  {
+   "t": 185.36,
+   "d": 2.2,
+   "text": "doesn't have any outside dependencies or"
+  },
+  {
+   "t": 187.56,
+   "d": 1.72,
+   "text": "Randomness then all clients should end"
+  },
+  {
+   "t": 189.28,
+   "d": 1.64,
+   "text": "up with the same game state after"
+  },
+  {
+   "t": 190.92,
+   "d": 2.88,
+   "text": "applying the same sequence of inputs but"
+  },
+  {
+   "t": 193.8,
+   "d": 1.52,
+   "text": "this approach is also sometimes called"
+  },
+  {
+   "t": 195.32,
+   "d": 1.68,
+   "text": "delay net code especially in the"
+  },
+  {
+   "t": 197.0,
+   "d": 2.36,
+   "text": "fighting community and well that's"
+  },
+  {
+   "t": 199.36,
+   "d": 2.44,
+   "text": "because key presses again need to take a"
+  },
+  {
+   "t": 201.8,
+   "d": 2.2,
+   "text": "full round trip over the network to the"
+  },
+  {
+   "t": 204.0,
+   "d": 1.88,
+   "text": "server and back before being applied to"
+  },
+  {
+   "t": 205.88,
+   "d": 1.8,
+   "text": "the client so once again there is input"
+  },
+  {
+   "t": 207.68,
+   "d": 2.16,
+   "text": "lag the server has to enforce a"
+  },
+  {
+   "t": 209.84,
+   "d": 1.96,
+   "text": "consistent ordering between button"
+  },
+  {
+   "t": 211.8,
+   "d": 1.96,
+   "text": "presses across players since the order"
+  },
+  {
+   "t": 213.76,
+   "d": 2.6,
+   "text": "can affect how the game plays out and"
+  },
+  {
+   "t": 216.36,
+   "d": 1.64,
+   "text": "well once we apply a player input to the"
+  },
+  {
+   "t": 218.0,
+   "d": 1.92,
+   "text": "game that's it it's final we can't just"
+  },
+  {
+   "t": 219.92,
+   "d": 2.52,
+   "text": "go back in time and unapply the action"
+  },
+  {
+   "t": 222.44,
+   "d": 1.84,
+   "text": "that someone else you know might have"
+  },
+  {
+   "t": 224.28,
+   "d": 3.04,
+   "text": "performed something earlier right oh or"
+  },
+  {
+   "t": 227.32,
+   "d": 2.8,
+   "text": "can we turns out we can that's what"
+  },
+  {
+   "t": 230.12,
+   "d": 1.76,
+   "text": "rollback is about rollback net code"
+  },
+  {
+   "t": 231.88,
+   "d": 1.96,
+   "text": "takes the idea of deterministic lock"
+  },
+  {
+   "t": 233.84,
+   "d": 2.36,
+   "text": "step but it aims to additionally reduce"
+  },
+  {
+   "t": 236.2,
+   "d": 2.28,
+   "text": "the local delay by allowing your client"
+  },
+  {
+   "t": 238.48,
+   "d": 2.04,
+   "text": "to run the game simulation even if"
+  },
+  {
+   "t": 240.52,
+   "d": 1.44,
+   "text": "inputs from other players haven't"
+  },
+  {
+   "t": 241.96,
+   "d": 2.76,
+   "text": "arrived yet we just skip processing the"
+  },
+  {
+   "t": 244.72,
+   "d": 1.84,
+   "text": "player actions at first assume that"
+  },
+  {
+   "t": 246.56,
+   "d": 1.52,
+   "text": "whatever they're doing doesn't affect"
+  },
+  {
+   "t": 248.08,
+   "d": 2.92,
+   "text": "our game State too much and if they did"
+  },
+  {
+   "t": 251.0,
+   "d": 2.48,
+   "text": "press a button earlier than we did we"
+  },
+  {
+   "t": 253.48,
+   "d": 2.88,
+   "text": "roll back time retroactively apply their"
+  },
+  {
+   "t": 256.36,
+   "d": 2.44,
+   "text": "input and then eventually all clients"
+  },
+  {
+   "t": 258.8,
+   "d": 1.88,
+   "text": "will end up on the same deterministic"
+  },
+  {
+   "t": 260.68,
+   "d": 2.2,
+   "text": "outcome so a key press will directly"
+  },
+  {
+   "t": 262.88,
+   "d": 1.88,
+   "text": "correspond to visual and audio feedback"
+  },
+  {
+   "t": 264.76,
+   "d": 2.84,
+   "text": "on a local client regardless of ping"
+  },
+  {
+   "t": 267.6,
+   "d": 3.12,
+   "text": "pretty simple except for the time TR"
+  },
+  {
+   "t": 270.72,
+   "d": 3.2,
+   "text": "part so roback net code can be thought"
+  },
+  {
+   "t": 273.92,
+   "d": 2.52,
+   "text": "of as an undo redo system that affects"
+  },
+  {
+   "t": 276.44,
+   "d": 2.12,
+   "text": "the entire game we need to take"
+  },
+  {
+   "t": 278.56,
+   "d": 1.92,
+   "text": "snapshots of the game which are copies"
+  },
+  {
+   "t": 280.48,
+   "d": 2.24,
+   "text": "of the game state every single time we"
+  },
+  {
+   "t": 282.72,
+   "d": 2.64,
+   "text": "run a game simulation tick these"
+  },
+  {
+   "t": 285.36,
+   "d": 1.88,
+   "text": "snapshots need to encode absolutely"
+  },
+  {
+   "t": 287.24,
+   "d": 2.12,
+   "text": "everything the game needs to run Global"
+  },
+  {
+   "t": 289.36,
+   "d": 3.0,
+   "text": "variables random number seats tiles"
+  },
+  {
+   "t": 292.36,
+   "d": 2.8,
+   "text": "object positions Health timers items and"
+  },
+  {
+   "t": 295.16,
+   "d": 2.96,
+   "text": "everything else effectively it is a save"
+  },
+  {
+   "t": 298.12,
+   "d": 1.56,
+   "text": "load system that needs to be ex"
+  },
+  {
+   "t": 299.68,
+   "d": 1.68,
+   "text": "extremely fast since it's going to run"
+  },
+  {
+   "t": 301.36,
+   "d": 2.44,
+   "text": "many times per second during gameplay"
+  },
+  {
+   "t": 303.8,
+   "d": 1.6,
+   "text": "whenever the player is about to perform"
+  },
+  {
+   "t": 305.4,
+   "d": 2.12,
+   "text": "an action we first take a snapshot of"
+  },
+  {
+   "t": 307.52,
+   "d": 1.52,
+   "text": "the current game State and store that in"
+  },
+  {
+   "t": 309.04,
+   "d": 1.8,
+   "text": "a list alongside the input that's being"
+  },
+  {
+   "t": 310.84,
+   "d": 2.12,
+   "text": "performed and then we repeat this for"
+  },
+  {
+   "t": 312.96,
+   "d": 2.12,
+   "text": "every step of the simulation filling up"
+  },
+  {
+   "t": 315.08,
+   "d": 1.56,
+   "text": "the buffer with more and more snapshots"
+  },
+  {
+   "t": 316.64,
+   "d": 3.72,
+   "text": "and inputs so at any point we can return"
+  },
+  {
+   "t": 320.36,
+   "d": 2.36,
+   "text": "into the past by loading the snapshot"
+  },
+  {
+   "t": 322.72,
+   "d": 1.88,
+   "text": "corresponding to a past"
+  },
+  {
+   "t": 324.6,
+   "d": 2.56,
+   "text": "turn making some retroactive adjustments"
+  },
+  {
+   "t": 327.16,
+   "d": 2.64,
+   "text": "to the inputs and then fast forwarding"
+  },
+  {
+   "t": 329.8,
+   "d": 2.72,
+   "text": "the game with new inputs in place so"
+  },
+  {
+   "t": 332.52,
+   "d": 2.32,
+   "text": "that uh we can res simulate with the"
+  },
+  {
+   "t": 334.84,
+   "d": 3.72,
+   "text": "different based on a different initial"
+  },
+  {
+   "t": 338.84,
+   "d": 3.04,
+   "text": "State now traditional roback net code is"
+  },
+  {
+   "t": 341.88,
+   "d": 1.84,
+   "text": "usually designed to suit the needs of"
+  },
+  {
+   "t": 343.72,
+   "d": 2.56,
+   "text": "fighting games but neet creder is"
+  },
+  {
+   "t": 346.28,
+   "d": 2.28,
+   "text": "somewhat atypical and has a bunch of"
+  },
+  {
+   "t": 348.56,
+   "d": 1.92,
+   "text": "unique requirements that aren't usually"
+  },
+  {
+   "t": 350.48,
+   "d": 3.04,
+   "text": "found elsewhere first of all it's"
+  },
+  {
+   "t": 353.52,
+   "d": 1.92,
+   "text": "absolutely critical that there is no"
+  },
+  {
+   "t": 355.44,
+   "d": 2.0,
+   "text": "delay for actions performed by the local"
+  },
+  {
+   "t": 357.44,
+   "d": 2.28,
+   "text": "player most rollback implementations"
+  },
+  {
+   "t": 359.72,
+   "d": 2.32,
+   "text": "limit the number of roll back frames and"
+  },
+  {
+   "t": 362.04,
+   "d": 2.48,
+   "text": "tend to fall back to delay net code um"
+  },
+  {
+   "t": 364.52,
+   "d": 2.16,
+   "text": "on particularly High pings which is done"
+  },
+  {
+   "t": 366.68,
+   "d": 2.0,
+   "text": "for performance reasons since it's going"
+  },
+  {
+   "t": 368.68,
+   "d": 2.4,
+   "text": "to be quite slow to simulate eight times"
+  },
+  {
+   "t": 371.08,
+   "d": 3.84,
+   "text": "as much game logic per tick as usual um"
+  },
+  {
+   "t": 374.92,
+   "d": 1.88,
+   "text": "we cannot afford to Ste NEC Craner"
+  },
+  {
+   "t": 376.8,
+   "d": 1.88,
+   "text": "though all actions that are performed"
+  },
+  {
+   "t": 378.68,
+   "d": 1.84,
+   "text": "locally must happen instantly no matter"
+  },
+  {
+   "t": 380.52,
+   "d": 2.12,
+   "text": "the latency just so that players can"
+  },
+  {
+   "t": 382.64,
+   "d": 1.32,
+   "text": "keep the beat more"
+  },
+  {
+   "t": 383.96,
+   "d": 2.2,
+   "text": "easily and relatedly if there's a"
+  },
+  {
+   "t": 386.16,
+   "d": 2.2,
+   "text": "momentary hiccup in a network like a"
+  },
+  {
+   "t": 388.36,
+   "d": 2.04,
+   "text": "router dropping some packet or delaying"
+  },
+  {
+   "t": 390.4,
+   "d": 2.0,
+   "text": "messages players shouldn't have to"
+  },
+  {
+   "t": 392.4,
+   "d": 1.68,
+   "text": "compensate for this they should ideally"
+  },
+  {
+   "t": 394.08,
+   "d": 1.2,
+   "text": "not even be aware that this is"
+  },
+  {
+   "t": 395.28,
+   "d": 1.96,
+   "text": "necessarily happening we don't want"
+  },
+  {
+   "t": 397.24,
+   "d": 2.2,
+   "text": "players to run into m beats that can be"
+  },
+  {
+   "t": 399.44,
+   "d": 2.28,
+   "text": "blamed on lag so the client should be"
+  },
+  {
+   "t": 401.72,
+   "d": 1.68,
+   "text": "the only one deciding whether a key"
+  },
+  {
+   "t": 403.4,
+   "d": 3.04,
+   "text": "press has been on beat or not and"
+  },
+  {
+   "t": 406.44,
+   "d": 2.16,
+   "text": "finally every player should feel like"
+  },
+  {
+   "t": 408.6,
+   "d": 1.64,
+   "text": "they're playing the game in single"
+  },
+  {
+   "t": 410.24,
+   "d": 2.8,
+   "text": "player locally so all monsters and other"
+  },
+  {
+   "t": 413.04,
+   "d": 1.72,
+   "text": "interactions with the world immediately"
+  },
+  {
+   "t": 414.76,
+   "d": 2.12,
+   "text": "around the player should feel like"
+  },
+  {
+   "t": 416.88,
+   "d": 1.48,
+   "text": "they're taking place between just a"
+  },
+  {
+   "t": 418.36,
+   "d": 2.84,
+   "text": "player and um the monster and should be"
+  },
+  {
+   "t": 421.2,
+   "d": 1.52,
+   "text": "unaffected by what other players are"
+  },
+  {
+   "t": 422.72,
+   "d": 1.24,
+   "text": "doing far away so even if there's"
+  },
+  {
+   "t": 423.96,
+   "d": 1.72,
+   "text": "someone else dancing at light speed on"
+  },
+  {
+   "t": 425.68,
+   "d": 2.12,
+   "text": "the other end of the map uh slower"
+  },
+  {
+   "t": 427.8,
+   "d": 1.92,
+   "text": "player character shouldn't notice that"
+  },
+  {
+   "t": 429.72,
+   "d": 2.36,
+   "text": "and should interact with the game using"
+  },
+  {
+   "t": 432.08,
+   "d": 1.88,
+   "text": "the same interactions that they're that"
+  },
+  {
+   "t": 433.96,
+   "d": 2.68,
+   "text": "they're used to from single"
+  },
+  {
+   "t": 436.64,
+   "d": 3.08,
+   "text": "player so in our initial attempt we"
+  },
+  {
+   "t": 439.72,
+   "d": 1.6,
+   "text": "consider just following the fighting"
+  },
+  {
+   "t": 441.32,
+   "d": 2.0,
+   "text": "game system directly where we subdivide"
+  },
+  {
+   "t": 443.32,
+   "d": 2.28,
+   "text": "the timeline into distinct frames and"
+  },
+  {
+   "t": 445.6,
+   "d": 2.48,
+   "text": "perform roll back every single tick but"
+  },
+  {
+   "t": 448.08,
+   "d": 1.96,
+   "text": "as it turns out in necod Dan"
+  },
+  {
+   "t": 450.04,
+   "d": 2.12,
+   "text": "most frames don't really affect game"
+  },
+  {
+   "t": 452.16,
+   "d": 2.8,
+   "text": "logic at all when a player presses a key"
+  },
+  {
+   "t": 454.96,
+   "d": 1.84,
+   "text": "monsters respond instantly there's no"
+  },
+  {
+   "t": 456.8,
+   "d": 1.92,
+   "text": "delay they just act in response to what"
+  },
+  {
+   "t": 458.72,
+   "d": 1.96,
+   "text": "the player does and the duration of a"
+  },
+  {
+   "t": 460.68,
+   "d": 1.84,
+   "text": "key press has no effect either we only"
+  },
+  {
+   "t": 462.52,
+   "d": 1.4,
+   "text": "care about key presses and not the"
+  },
+  {
+   "t": 463.92,
+   "d": 3.0,
+   "text": "duration or the release time of a key"
+  },
+  {
+   "t": 466.92,
+   "d": 1.96,
+   "text": "and animations are purely cosmetic they"
+  },
+  {
+   "t": 468.88,
+   "d": 1.76,
+   "text": "don't have any gameplay effects they do"
+  },
+  {
+   "t": 470.64,
+   "d": 2.24,
+   "text": "occur between turns but they cannot"
+  },
+  {
+   "t": 472.88,
+   "d": 3.28,
+   "text": "affect game State at all so for a"
+  },
+  {
+   "t": 476.16,
+   "d": 1.76,
+   "text": "sequence of key presses that looks like"
+  },
+  {
+   "t": 477.92,
+   "d": 2.28,
+   "text": "this what we actually store in the"
+  },
+  {
+   "t": 480.2,
+   "d": 2.2,
+   "text": "action buffer under our initial attempt"
+  },
+  {
+   "t": 482.4,
+   "d": 4.08,
+   "text": "was more like that lots of plank space"
+  },
+  {
+   "t": 486.48,
+   "d": 3.04,
+   "text": "separating very little actually useful"
+  },
+  {
+   "t": 489.52,
+   "d": 4.4,
+   "text": "data so the next iteration we thought of"
+  },
+  {
+   "t": 493.92,
+   "d": 1.68,
+   "text": "ways that we could compress this action"
+  },
+  {
+   "t": 495.6,
+   "d": 2.28,
+   "text": "buffer into just those useful input"
+  },
+  {
+   "t": 497.88,
+   "d": 2.48,
+   "text": "frames and the obvious approach here"
+  },
+  {
+   "t": 500.36,
+   "d": 1.8,
+   "text": "seemed to be well we just skip all of"
+  },
+  {
+   "t": 502.16,
+   "d": 2.72,
+   "text": "these idle frames here and use beats as"
+  },
+  {
+   "t": 504.88,
+   "d": 2.48,
+   "text": "the index for the action buffer instead"
+  },
+  {
+   "t": 507.36,
+   "d": 2.48,
+   "text": "so that gives us an action buffer that's"
+  },
+  {
+   "t": 509.84,
+   "d": 1.84,
+   "text": "completely and tightly packed with input"
+  },
+  {
+   "t": 511.68,
+   "d": 2.52,
+   "text": "data and since beat maps and music"
+  },
+  {
+   "t": 514.2,
+   "d": 2.44,
+   "text": "playback are synced across all players"
+  },
+  {
+   "t": 516.64,
+   "d": 1.4,
+   "text": "everyone should write to the action"
+  },
+  {
+   "t": 518.04,
+   "d": 2.32,
+   "text": "buffer at the same time to the same"
+  },
+  {
+   "t": 520.36,
+   "d": 2.44,
+   "text": "indices and yeah this worked great when"
+  },
+  {
+   "t": 522.8,
+   "d": 2.88,
+   "text": "we first implemented that system um but"
+  },
+  {
+   "t": 525.68,
+   "d": 4.04,
+   "text": "then this guy showed up yeah"
+  },
+  {
+   "t": 529.72,
+   "d": 3.04,
+   "text": "Bard H an alternate playable character"
+  },
+  {
+   "t": 532.76,
+   "d": 2.68,
+   "text": "um who does not follow the rules he does"
+  },
+  {
+   "t": 535.44,
+   "d": 2.24,
+   "text": "not follow the beat specifically and he"
+  },
+  {
+   "t": 537.68,
+   "d": 2.04,
+   "text": "disables the game's entire gimmick and"
+  },
+  {
+   "t": 539.72,
+   "d": 2.44,
+   "text": "just turns it into a regular turnbas"
+  },
+  {
+   "t": 542.16,
+   "d": 3.44,
+   "text": "like he's intended as kind of an easy"
+  },
+  {
+   "t": 545.6,
+   "d": 2.28,
+   "text": "mode for newcomers to the game by"
+  },
+  {
+   "t": 547.88,
+   "d": 1.52,
+   "text": "letting them think about their moves"
+  },
+  {
+   "t": 549.4,
+   "d": 1.72,
+   "text": "before they have to you know they don't"
+  },
+  {
+   "t": 551.12,
+   "d": 2.36,
+   "text": "have to follow the beat but his"
+  },
+  {
+   "t": 553.48,
+   "d": 1.24,
+   "text": "existence actually just makes things a"
+  },
+  {
+   "t": 554.72,
+   "d": 1.96,
+   "text": "lot more complicated in multiplayer"
+  },
+  {
+   "t": 556.68,
+   "d": 1.48,
+   "text": "since he can move at any time his"
+  },
+  {
+   "t": 558.16,
+   "d": 1.4,
+   "text": "actions are just going to be completely"
+  },
+  {
+   "t": 559.56,
+   "d": 2.48,
+   "text": "misaligned from the Beat Map and cannot"
+  },
+  {
+   "t": 562.04,
+   "d": 1.64,
+   "text": "be reasonably mixed with inputs from"
+  },
+  {
+   "t": 563.68,
+   "d": 2.68,
+   "text": "Rhythm based players if he moves quickly"
+  },
+  {
+   "t": 566.36,
+   "d": 2.28,
+   "text": "like here he's going to build up a lead"
+  },
+  {
+   "t": 568.64,
+   "d": 2.4,
+   "text": "in front of rhythm players and if a"
+  },
+  {
+   "t": 571.04,
+   "d": 1.44,
+   "text": "rhythm player then tries to perform"
+  },
+  {
+   "t": 572.48,
+   "d": 2.16,
+   "text": "another move their input is going to be"
+  },
+  {
+   "t": 574.64,
+   "d": 2.4,
+   "text": "sorted into an action slot that's way"
+  },
+  {
+   "t": 577.04,
+   "d": 2.12,
+   "text": "before all of these build up bar actions"
+  },
+  {
+   "t": 579.16,
+   "d": 2.76,
+   "text": "and that causes an enormous amount of"
+  },
+  {
+   "t": 581.92,
+   "d": 1.88,
+   "text": "roll back invalidating all of these"
+  },
+  {
+   "t": 583.8,
+   "d": 2.72,
+   "text": "snapshots here and that's going to lead"
+  },
+  {
+   "t": 586.52,
+   "d": 1.64,
+   "text": "to significant performance issues"
+  },
+  {
+   "t": 588.16,
+   "d": 1.44,
+   "text": "because we have to Res simulate all of"
+  },
+  {
+   "t": 589.6,
+   "d": 3.76,
+   "text": "this in one in one frame and also causes"
+  },
+  {
+   "t": 593.36,
+   "d": 2.76,
+   "text": "all sorts of artifacts teleportation of"
+  },
+  {
+   "t": 596.12,
+   "d": 1.56,
+   "text": "objects because we're essentially"
+  },
+  {
+   "t": 597.68,
+   "d": 3.16,
+   "text": "editing bars past and then just stacking"
+  },
+  {
+   "t": 600.84,
+   "d": 1.92,
+   "text": "the same actions and inputs on top of"
+  },
+  {
+   "t": 602.76,
+   "d": 2.2,
+   "text": "that so beat numbers are just not"
+  },
+  {
+   "t": 604.96,
+   "d": 3.08,
+   "text": "flexible enough to support um having"
+  },
+  {
+   "t": 608.04,
+   "d": 2.16,
+   "text": "variance in in Rhythm modes between"
+  },
+  {
+   "t": 610.2,
+   "d": 1.56,
+   "text": "different"
+  },
+  {
+   "t": 611.76,
+   "d": 2.44,
+   "text": "players so the solution we actually"
+  },
+  {
+   "t": 614.2,
+   "d": 2.32,
+   "text": "ended up settling on for the game was to"
+  },
+  {
+   "t": 616.52,
+   "d": 2.24,
+   "text": "take a step back and revisit the frame"
+  },
+  {
+   "t": 618.76,
+   "d": 2.56,
+   "text": "based approach at first but put a slight"
+  },
+  {
+   "t": 621.32,
+   "d": 2.76,
+   "text": "Twist on it we again subdivide the"
+  },
+  {
+   "t": 624.08,
+   "d": 2.56,
+   "text": "timeline into frames which we just call"
+  },
+  {
+   "t": 626.64,
+   "d": 2.84,
+   "text": "turn IDs instead um but the big change"
+  },
+  {
+   "t": 629.48,
+   "d": 1.32,
+   "text": "here is that the action buffer is no"
+  },
+  {
+   "t": 630.8,
+   "d": 2.24,
+   "text": "longer a dense list of frames but a"
+  },
+  {
+   "t": 633.04,
+   "d": 2.0,
+   "text": "sparse map that Associates these turn"
+  },
+  {
+   "t": 635.04,
+   "d": 3.68,
+   "text": "IDs with player inputs and they are"
+  },
+  {
+   "t": 638.72,
+   "d": 2.04,
+   "text": "created on demand whenever a player"
+  },
+  {
+   "t": 640.76,
+   "d": 1.76,
+   "text": "first performs an action for a specific"
+  },
+  {
+   "t": 642.52,
+   "d": 1.04,
+   "text": "turn"
+  },
+  {
+   "t": 643.56,
+   "d": 3.0,
+   "text": "ID so Rhythm bound players will use the"
+  },
+  {
+   "t": 646.56,
+   "d": 1.8,
+   "text": "beat map to assign a turn ID to each"
+  },
+  {
+   "t": 648.36,
+   "d": 4.0,
+   "text": "beat by snapping the um beats ideal"
+  },
+  {
+   "t": 652.36,
+   "d": 2.16,
+   "text": "timing uh to the center even if they're"
+  },
+  {
+   "t": 654.52,
+   "d": 2.56,
+   "text": "a bit early or late on a beat the turn"
+  },
+  {
+   "t": 657.08,
+   "d": 1.6,
+   "text": "ID is always going to be the same for"
+  },
+  {
+   "t": 658.68,
+   "d": 2.52,
+   "text": "every single beat in the song and this"
+  },
+  {
+   "t": 661.2,
+   "d": 2.4,
+   "text": "way we ensure that if multiple players"
+  },
+  {
+   "t": 663.6,
+   "d": 1.6,
+   "text": "uh perform actions for the same beat"
+  },
+  {
+   "t": 665.2,
+   "d": 1.68,
+   "text": "they end up sharing the same turn ID as"
+  },
+  {
+   "t": 666.88,
+   "d": 2.0,
+   "text": "well even if one is a little bit later"
+  },
+  {
+   "t": 668.88,
+   "d": 3.0,
+   "text": "or earlier on the"
+  },
+  {
+   "t": 671.88,
+   "d": 4.16,
+   "text": "beat now if we put B on here again uh if"
+  },
+  {
+   "t": 676.04,
+   "d": 1.56,
+   "text": "the bar player performs an input the"
+  },
+  {
+   "t": 677.6,
+   "d": 1.96,
+   "text": "turn ID will be computed directly from"
+  },
+  {
+   "t": 679.56,
+   "d": 2.4,
+   "text": "the current time stamp and bypasses the"
+  },
+  {
+   "t": 681.96,
+   "d": 1.4,
+   "text": "Beat Map alt"
+  },
+  {
+   "t": 683.36,
+   "d": 2.64,
+   "text": "together so these actions usually take"
+  },
+  {
+   "t": 686.0,
+   "d": 1.8,
+   "text": "place in between the inputs of Earth"
+  },
+  {
+   "t": 687.8,
+   "d": 3.24,
+   "text": "some characters so you will most turns"
+  },
+  {
+   "t": 691.04,
+   "d": 2.52,
+   "text": "you'll either have actions from Rhythm"
+  },
+  {
+   "t": 693.56,
+   "d": 2.6,
+   "text": "based characters or from a barred player"
+  },
+  {
+   "t": 696.16,
+   "d": 1.56,
+   "text": "but rarely from"
+  },
+  {
+   "t": 697.72,
+   "d": 2.6,
+   "text": "both if a character doesn't act on a"
+  },
+  {
+   "t": 700.32,
+   "d": 1.56,
+   "text": "given turn which is indicated by these"
+  },
+  {
+   "t": 701.88,
+   "d": 2.2,
+   "text": "little z z z icons here on the action"
+  },
+  {
+   "t": 704.08,
+   "d": 2.84,
+   "text": "buffer um that means that time doesn't"
+  },
+  {
+   "t": 706.92,
+   "d": 1.8,
+   "text": "actually pass for them at all nearby"
+  },
+  {
+   "t": 708.72,
+   "d": 1.92,
+   "text": "monsters don't move countdowns and"
+  },
+  {
+   "t": 710.64,
+   "d": 2.04,
+   "text": "status effects do not take down and so"
+  },
+  {
+   "t": 712.68,
+   "d": 4.12,
+   "text": "on so basically time is completely still"
+  },
+  {
+   "t": 716.8,
+   "d": 1.68,
+   "text": "and the player ideally won't even notice"
+  },
+  {
+   "t": 718.48,
+   "d": 1.76,
+   "text": "that there is a turn turn being inserted"
+  },
+  {
+   "t": 720.24,
+   "d": 2.4,
+   "text": "on behalf of another player depending on"
+  },
+  {
+   "t": 722.64,
+   "d": 2.2,
+   "text": "the latency there will be moments where"
+  },
+  {
+   "t": 724.84,
+   "d": 2.68,
+   "text": "actions arrive out of order for example"
+  },
+  {
+   "t": 727.52,
+   "d": 2.72,
+   "text": "uh Cadence pressing on turn 50 here but"
+  },
+  {
+   "t": 730.24,
+   "d": 2.2,
+   "text": "then B because of network delay just"
+  },
+  {
+   "t": 732.44,
+   "d": 3.36,
+   "text": "squeezed in the turn 49 which arrives by"
+  },
+  {
+   "t": 735.8,
+   "d": 2.16,
+   "text": "the time Cadence already processed this"
+  },
+  {
+   "t": 737.96,
+   "d": 2.72,
+   "text": "um turn 50 and when this happens we just"
+  },
+  {
+   "t": 740.68,
+   "d": 1.88,
+   "text": "shift all the subsequent actions to the"
+  },
+  {
+   "t": 742.56,
+   "d": 2.16,
+   "text": "right insert a new slot in the buffer"
+  },
+  {
+   "t": 744.72,
+   "d": 2.44,
+   "text": "and then perform some roll back to weave"
+  },
+  {
+   "t": 747.16,
+   "d": 2.56,
+   "text": "the action into Cadence's timeline"
+  },
+  {
+   "t": 749.72,
+   "d": 1.96,
+   "text": "and make things consistent again while"
+  },
+  {
+   "t": 751.68,
+   "d": 2.28,
+   "text": "preserving the ascending turn ID order"
+  },
+  {
+   "t": 753.96,
+   "d": 2.52,
+   "text": "for the whole"
+  },
+  {
+   "t": 757.76,
+   "d": 3.36,
+   "text": "buffer this system also supports mixing"
+  },
+  {
+   "t": 761.12,
+   "d": 1.68,
+   "text": "Rhythm based characters with different"
+  },
+  {
+   "t": 762.8,
+   "d": 2.8,
+   "text": "tempo for example bolt is a character"
+  },
+  {
+   "t": 765.6,
+   "d": 2.2,
+   "text": "that plays the game at twice the speed"
+  },
+  {
+   "t": 767.8,
+   "d": 1.8,
+   "text": "of regular characters and that makes the"
+  },
+  {
+   "t": 769.6,
+   "d": 2.72,
+   "text": "game a lot more challenging for every"
+  },
+  {
+   "t": 772.32,
+   "d": 2.2,
+   "text": "regular beat bolt gets an in between"
+  },
+  {
+   "t": 774.52,
+   "d": 2.56,
+   "text": "beat on which they have to act and this"
+  },
+  {
+   "t": 777.08,
+   "d": 1.52,
+   "text": "subdivided Beat Map essentially"
+  },
+  {
+   "t": 778.6,
+   "d": 1.84,
+   "text": "generates twice as many turn IDs for"
+  },
+  {
+   "t": 780.44,
+   "d": 3.64,
+   "text": "both players compared to Cadence on even"
+  },
+  {
+   "t": 784.08,
+   "d": 2.52,
+   "text": "beats um both players share the same"
+  },
+  {
+   "t": 786.6,
+   "d": 2.68,
+   "text": "turn IDs and get to act simultaneously"
+  },
+  {
+   "t": 789.28,
+   "d": 2.6,
+   "text": "whereas on odd beats only double Tempo"
+  },
+  {
+   "t": 791.88,
+   "d": 2.0,
+   "text": "characters get to act and again for"
+  },
+  {
+   "t": 793.88,
+   "d": 2.28,
+   "text": "single Tempo characters time doesn't"
+  },
+  {
+   "t": 796.16,
+   "d": 2.4,
+   "text": "pass during these offbeats so monsters"
+  },
+  {
+   "t": 798.56,
+   "d": 2.12,
+   "text": "don't move countdowns don't take down"
+  },
+  {
+   "t": 800.68,
+   "d": 2.24,
+   "text": "and a Cadence that's not near a bolt"
+  },
+  {
+   "t": 802.92,
+   "d": 1.88,
+   "text": "ideally shouldn't notice that there is a"
+  },
+  {
+   "t": 804.8,
+   "d": 4.36,
+   "text": "bol player in the game at all"
+  },
+  {
+   "t": 809.48,
+   "d": 1.84,
+   "text": "so now that we've covered how inputs are"
+  },
+  {
+   "t": 811.32,
+   "d": 2.04,
+   "text": "processed how does the game's Rhythm"
+  },
+  {
+   "t": 813.36,
+   "d": 2.8,
+   "text": "mechanic tie into this the core"
+  },
+  {
+   "t": 816.16,
+   "d": 1.96,
+   "text": "principle is that the client should have"
+  },
+  {
+   "t": 818.12,
+   "d": 2.36,
+   "text": "full authority over the Beat Map and all"
+  },
+  {
+   "t": 820.48,
+   "d": 2.0,
+   "text": "these relevant checks should occur"
+  },
+  {
+   "t": 822.48,
+   "d": 2.24,
+   "text": "locally so this makes sure that the"
+  },
+  {
+   "t": 824.72,
+   "d": 2.28,
+   "text": "player never has to take network issues"
+  },
+  {
+   "t": 827.0,
+   "d": 1.76,
+   "text": "into account while playing and can just"
+  },
+  {
+   "t": 828.76,
+   "d": 1.84,
+   "text": "tap to the Rhythm knowing that their"
+  },
+  {
+   "t": 830.6,
+   "d": 2.56,
+   "text": "actions will go through every beat has"
+  },
+  {
+   "t": 833.16,
+   "d": 1.96,
+   "text": "an a window of acceptable input timing"
+  },
+  {
+   "t": 835.12,
+   "d": 1.72,
+   "text": "surrounding it and as long as the player"
+  },
+  {
+   "t": 836.84,
+   "d": 1.68,
+   "text": "presses a movement key within that"
+  },
+  {
+   "t": 838.52,
+   "d": 1.96,
+   "text": "window the action will go through and"
+  },
+  {
+   "t": 840.48,
+   "d": 1.8,
+   "text": "the game advances the index of the next"
+  },
+  {
+   "t": 842.28,
+   "d": 1.76,
+   "text": "expected beat by"
+  },
+  {
+   "t": 844.04,
+   "d": 2.76,
+   "text": "one so here for example we're expected"
+  },
+  {
+   "t": 846.8,
+   "d": 3.92,
+   "text": "to hit beat 48 if we hit it on time the"
+  },
+  {
+   "t": 850.72,
+   "d": 1.8,
+   "text": "game will accept our input perform an"
+  },
+  {
+   "t": 852.52,
+   "d": 2.84,
+   "text": "action and advance to the next beat if"
+  },
+  {
+   "t": 855.36,
+   "d": 2.24,
+   "text": "we miss the window then the game will"
+  },
+  {
+   "t": 857.6,
+   "d": 1.88,
+   "text": "automatically insert an idle turn giving"
+  },
+  {
+   "t": 859.48,
+   "d": 2.72,
+   "text": "the enemies U free move instead and if"
+  },
+  {
+   "t": 862.2,
+   "d": 2.04,
+   "text": "we double tap hitting too early the game"
+  },
+  {
+   "t": 864.24,
+   "d": 1.92,
+   "text": "inserts a special subbe action that"
+  },
+  {
+   "t": 866.16,
+   "d": 1.28,
+   "text": "indicates whoop you dropped your"
+  },
+  {
+   "t": 867.44,
+   "d": 1.96,
+   "text": "multiplier but does not move the next"
+  },
+  {
+   "t": 869.4,
+   "d": 2.56,
+   "text": "beat ahead by one"
+  },
+  {
+   "t": 871.96,
+   "d": 2.12,
+   "text": "index it's important to note that this"
+  },
+  {
+   "t": 874.08,
+   "d": 2.84,
+   "text": "Beat Map state is not part of snapshots"
+  },
+  {
+   "t": 876.92,
+   "d": 2.04,
+   "text": "or rollback so rollback is um never"
+  },
+  {
+   "t": 878.96,
+   "d": 1.6,
+   "text": "going to affect the Beat Map everything"
+  },
+  {
+   "t": 880.56,
+   "d": 2.16,
+   "text": "is completely local and that's how we"
+  },
+  {
+   "t": 882.72,
+   "d": 2.6,
+   "text": "make sure that networking issues um can"
+  },
+  {
+   "t": 885.32,
+   "d": 2.24,
+   "text": "never cause a player to drop a beat or"
+  },
+  {
+   "t": 887.56,
+   "d": 2.4,
+   "text": "at least should do so only in the rarest"
+  },
+  {
+   "t": 889.96,
+   "d": 2.2,
+   "text": "of"
+  },
+  {
+   "t": 892.36,
+   "d": 2.84,
+   "text": "cases so with input action processing"
+  },
+  {
+   "t": 895.2,
+   "d": 1.64,
+   "text": "now in place let's look at how"
+  },
+  {
+   "t": 896.84,
+   "d": 2.72,
+   "text": "animations work that play between turns"
+  },
+  {
+   "t": 899.56,
+   "d": 1.28,
+   "text": "I mean right now the game would just"
+  },
+  {
+   "t": 900.84,
+   "d": 2.36,
+   "text": "look something like this if we want the"
+  },
+  {
+   "t": 903.2,
+   "d": 1.32,
+   "text": "player to be a static Sprite that"
+  },
+  {
+   "t": 904.52,
+   "d": 2.0,
+   "text": "teleports between grid tiles great"
+  },
+  {
+   "t": 906.52,
+   "d": 2.2,
+   "text": "that's all we need but because we do"
+  },
+  {
+   "t": 908.72,
+   "d": 2.04,
+   "text": "want animations and because no game"
+  },
+  {
+   "t": 910.76,
+   "d": 1.76,
+   "text": "logic can take place outside of action"
+  },
+  {
+   "t": 912.52,
+   "d": 2.88,
+   "text": "turns we have to apply animations to the"
+  },
+  {
+   "t": 915.4,
+   "d": 1.8,
+   "text": "visual representations of players and"
+  },
+  {
+   "t": 917.2,
+   "d": 2.68,
+   "text": "monsters directly without touching the"
+  },
+  {
+   "t": 919.88,
+   "d": 3.48,
+   "text": "underlying game State most entities have"
+  },
+  {
+   "t": 923.36,
+   "d": 2.36,
+   "text": "an idle animation Loop which is synced"
+  },
+  {
+   "t": 925.72,
+   "d": 1.96,
+   "text": "with the music and we achiev this by"
+  },
+  {
+   "t": 927.68,
+   "d": 1.68,
+   "text": "just subdividing the interval between"
+  },
+  {
+   "t": 929.36,
+   "d": 2.16,
+   "text": "adjacent beads into fractions and each"
+  },
+  {
+   "t": 931.52,
+   "d": 2.2,
+   "text": "of these fractions represents a frame"
+  },
+  {
+   "t": 933.72,
+   "d": 1.88,
+   "text": "within the player animation cycle Sprite"
+  },
+  {
+   "t": 935.6,
+   "d": 1.8,
+   "text": "sheet this is completely local and"
+  },
+  {
+   "t": 937.4,
+   "d": 1.92,
+   "text": "stateless we can just update Des Sprite"
+  },
+  {
+   "t": 939.32,
+   "d": 2.44,
+   "text": "every render tick based on the player's"
+  },
+  {
+   "t": 941.76,
+   "d": 2.0,
+   "text": "current music playback time which is"
+  },
+  {
+   "t": 943.76,
+   "d": 3.88,
+   "text": "entirely local and again independent of"
+  },
+  {
+   "t": 947.64,
+   "d": 2.36,
+   "text": "snapshots things get a lot trickier when"
+  },
+  {
+   "t": 950.0,
+   "d": 2.96,
+   "text": "it comes to movement though when um when"
+  },
+  {
+   "t": 952.96,
+   "d": 2.64,
+   "text": "players move around game logic can undo"
+  },
+  {
+   "t": 955.6,
+   "d": 2.4,
+   "text": "and redo these moves repeatedly for the"
+  },
+  {
+   "t": 958.0,
+   "d": 3.0,
+   "text": "same term do rollback we have to find"
+  },
+  {
+   "t": 961.0,
+   "d": 2.2,
+   "text": "ways that uh to identify whether a"
+  },
+  {
+   "t": 963.2,
+   "d": 2.04,
+   "text": "specific move animation has already"
+  },
+  {
+   "t": 965.24,
+   "d": 2.04,
+   "text": "started and is currently playing and"
+  },
+  {
+   "t": 967.28,
+   "d": 2.32,
+   "text": "preserve its playback State there's a"
+  },
+  {
+   "t": 969.6,
+   "d": 1.76,
+   "text": "global animation timer that counts up"
+  },
+  {
+   "t": 971.36,
+   "d": 1.76,
+   "text": "locally for each client and when an"
+  },
+  {
+   "t": 973.12,
+   "d": 1.52,
+   "text": "animation takes place for a specific"
+  },
+  {
+   "t": 974.64,
+   "d": 2.6,
+   "text": "object in a certain turn like Cadence's"
+  },
+  {
+   "t": 977.24,
+   "d": 3.0,
+   "text": "um pending move to the right here the"
+  },
+  {
+   "t": 980.24,
+   "d": 1.6,
+   "text": "global animation timer is read and"
+  },
+  {
+   "t": 981.84,
+   "d": 2.16,
+   "text": "copied into the animation buffer for"
+  },
+  {
+   "t": 984.0,
+   "d": 2.6,
+   "text": "that turn and that"
+  },
+  {
+   "t": 986.6,
+   "d": 2.72,
+   "text": "object during um during rendering we"
+  },
+  {
+   "t": 989.32,
+   "d": 1.68,
+   "text": "then take the difference between the"
+  },
+  {
+   "t": 991.0,
+   "d": 1.72,
+   "text": "global timer and the store animation"
+  },
+  {
+   "t": 992.72,
+   "d": 1.8,
+   "text": "time and use it as an interpolation"
+  },
+  {
+   "t": 994.52,
+   "d": 3.4,
+   "text": "factor for moving the object from one"
+  },
+  {
+   "t": 997.92,
+   "d": 2.64,
+   "text": "grid tile to the other with a nice in"
+  },
+  {
+   "t": 1000.56,
+   "d": 2.96,
+   "text": "between um interpolation function this"
+  },
+  {
+   "t": 1003.52,
+   "d": 1.96,
+   "text": "essentially creates the illusion of"
+  },
+  {
+   "t": 1005.48,
+   "d": 1.24,
+   "text": "movement even though the player is"
+  },
+  {
+   "t": 1006.72,
+   "d": 2.16,
+   "text": "actually just teleporting and storing"
+  },
+  {
+   "t": 1008.88,
+   "d": 2.16,
+   "text": "the previous position for these"
+  },
+  {
+   "t": 1011.04,
+   "d": 1.24,
+   "text": "animation"
+  },
+  {
+   "t": 1012.28,
+   "d": 2.16,
+   "text": "purposes if there's another player that"
+  },
+  {
+   "t": 1014.44,
+   "d": 2.64,
+   "text": "inserts an action at an earlier turn ID"
+  },
+  {
+   "t": 1017.08,
+   "d": 2.6,
+   "text": "like ARA on the right here this actually"
+  },
+  {
+   "t": 1019.68,
+   "d": 1.36,
+   "text": "would roll back the move we just"
+  },
+  {
+   "t": 1021.04,
+   "d": 2.88,
+   "text": "performed with cadence and then cause it"
+  },
+  {
+   "t": 1023.92,
+   "d": 4.68,
+   "text": "to be resimulated while aras's um move"
+  },
+  {
+   "t": 1028.6,
+   "d": 1.88,
+   "text": "here produces a new animation and does"
+  },
+  {
+   "t": 1030.48,
+   "d": 4.4,
+   "text": "gets a new timer value um Cadence's move"
+  },
+  {
+   "t": 1034.88,
+   "d": 1.04,
+   "text": "while it's being"
+  },
+  {
+   "t": 1035.92,
+   "d": 2.52,
+   "text": "resimulated it's already being animated"
+  },
+  {
+   "t": 1038.44,
+   "d": 2.44,
+   "text": "so we don't want to override the"
+  },
+  {
+   "t": 1040.88,
+   "d": 2.16,
+   "text": "existing animation time with a new value"
+  },
+  {
+   "t": 1043.04,
+   "d": 2.0,
+   "text": "but we instead want to preserve it in"
+  },
+  {
+   "t": 1045.04,
+   "d": 1.44,
+   "text": "this case because a lot of time has"
+  },
+  {
+   "t": 1046.48,
+   "d": 1.8,
+   "text": "already passed it just looks like"
+  },
+  {
+   "t": 1048.28,
+   "d": 1.88,
+   "text": "Cadence is tell torted to the new tile"
+  },
+  {
+   "t": 1050.16,
+   "d": 1.64,
+   "text": "again but if this happens during"
+  },
+  {
+   "t": 1051.8,
+   "d": 2.76,
+   "text": "gameplay with very short times um"
+  },
+  {
+   "t": 1054.56,
+   "d": 2.0,
+   "text": "between players acting and Performing"
+  },
+  {
+   "t": 1056.56,
+   "d": 2.48,
+   "text": "roll back this should ideally result in"
+  },
+  {
+   "t": 1059.04,
+   "d": 1.72,
+   "text": "the animation continuing to play"
+  },
+  {
+   "t": 1060.76,
+   "d": 2.08,
+   "text": "seamlessly even though technically it's"
+  },
+  {
+   "t": 1062.84,
+   "d": 2.4,
+   "text": "being reverted and reapplied many times"
+  },
+  {
+   "t": 1065.24,
+   "d": 2.44,
+   "text": "per um per"
+  },
+  {
+   "t": 1067.68,
+   "d": 2.68,
+   "text": "second so in order for this system to"
+  },
+  {
+   "t": 1070.36,
+   "d": 2.6,
+   "text": "work we have to assign unique identities"
+  },
+  {
+   "t": 1072.96,
+   "d": 2.64,
+   "text": "to each animation event which uh"
+  },
+  {
+   "t": 1075.6,
+   "d": 1.76,
+   "text": "typically consists of the entity being"
+  },
+  {
+   "t": 1077.36,
+   "d": 1.92,
+   "text": "moved and the turn ID at which the move"
+  },
+  {
+   "t": 1079.28,
+   "d": 2.72,
+   "text": "took place plus some animation name so"
+  },
+  {
+   "t": 1082.0,
+   "d": 1.36,
+   "text": "that we can distinguish different types"
+  },
+  {
+   "t": 1083.36,
+   "d": 1.56,
+   "text": "of movement animations that might apply"
+  },
+  {
+   "t": 1084.92,
+   "d": 2.2,
+   "text": "to the same entity it's important to"
+  },
+  {
+   "t": 1087.12,
+   "d": 1.56,
+   "text": "preserve this identity and make sure"
+  },
+  {
+   "t": 1088.68,
+   "d": 2.28,
+   "text": "it's stable because if this identity"
+  },
+  {
+   "t": 1090.96,
+   "d": 2.8,
+   "text": "changes for some reason um then the"
+  },
+  {
+   "t": 1093.76,
+   "d": 1.76,
+   "text": "animation would restart so we can't just"
+  },
+  {
+   "t": 1095.52,
+   "d": 2.92,
+   "text": "put something like uh the index of the"
+  },
+  {
+   "t": 1098.44,
+   "d": 2.04,
+   "text": "move happening if there's like a global"
+  },
+  {
+   "t": 1100.48,
+   "d": 1.44,
+   "text": "counter that starts at one and every"
+  },
+  {
+   "t": 1101.92,
+   "d": 1.76,
+   "text": "time an object moves we increment that"
+  },
+  {
+   "t": 1103.68,
+   "d": 2.64,
+   "text": "counter if roback causes that counter to"
+  },
+  {
+   "t": 1106.32,
+   "d": 2.04,
+   "text": "be shifted around then all animations"
+  },
+  {
+   "t": 1108.36,
+   "d": 2.4,
+   "text": "would get scambled and things wouldn't"
+  },
+  {
+   "t": 1110.76,
+   "d": 2.04,
+   "text": "look quite as smooth so stability for"
+  },
+  {
+   "t": 1112.8,
+   "d": 2.44,
+   "text": "these animation IDs is important"
+  },
+  {
+   "t": 1115.24,
+   "d": 3.0,
+   "text": "here and this kind of relates to sound"
+  },
+  {
+   "t": 1118.24,
+   "d": 1.8,
+   "text": "effects which are internally treated"
+  },
+  {
+   "t": 1120.04,
+   "d": 1.76,
+   "text": "very similarly to these move animations"
+  },
+  {
+   "t": 1121.8,
+   "d": 1.56,
+   "text": "we store some information outside of"
+  },
+  {
+   "t": 1123.36,
+   "d": 2.16,
+   "text": "snapshot state to make sure that we can"
+  },
+  {
+   "t": 1125.52,
+   "d": 2.44,
+   "text": "track whether a sound effect is being"
+  },
+  {
+   "t": 1127.96,
+   "d": 2.4,
+   "text": "replayed within a resimulation of the"
+  },
+  {
+   "t": 1130.36,
+   "d": 2.92,
+   "text": "same turn in this example here Cadence"
+  },
+  {
+   "t": 1133.28,
+   "d": 2.24,
+   "text": "on the left hits this skeleton to the"
+  },
+  {
+   "t": 1135.52,
+   "d": 2.12,
+   "text": "right knocking it into Arya and dealing"
+  },
+  {
+   "t": 1137.64,
+   "d": 1.68,
+   "text": "damage to her how rude"
+  },
+  {
+   "t": 1139.32,
+   "d": 1.52,
+   "text": "this causes three sound effects be"
+  },
+  {
+   "t": 1140.84,
+   "d": 2.12,
+   "text": "played Cadence's attack noise the"
+  },
+  {
+   "t": 1142.96,
+   "d": 1.96,
+   "text": "skeleton's hurt sound and arya's HT"
+  },
+  {
+   "t": 1144.92,
+   "d": 2.12,
+   "text": "sound each of these sounds is played"
+  },
+  {
+   "t": 1147.04,
+   "d": 1.92,
+   "text": "using the game's audio system and stored"
+  },
+  {
+   "t": 1148.96,
+   "d": 1.4,
+   "text": "in the sound list for the current turn"
+  },
+  {
+   "t": 1150.36,
+   "d": 1.52,
+   "text": "because this is the first time these"
+  },
+  {
+   "t": 1151.88,
+   "d": 2.24,
+   "text": "sound effects are playing in this"
+  },
+  {
+   "t": 1154.12,
+   "d": 2.6,
+   "text": "turn but in the same beat we actually"
+  },
+  {
+   "t": 1156.72,
+   "d": 2.12,
+   "text": "receive a packet from Arya that she's"
+  },
+  {
+   "t": 1158.84,
+   "d": 3.32,
+   "text": "also making a move in the same turn and"
+  },
+  {
+   "t": 1162.16,
+   "d": 2.6,
+   "text": "in this case she's attacking to the left"
+  },
+  {
+   "t": 1164.76,
+   "d": 1.72,
+   "text": "to apply it we first roll back the game"
+  },
+  {
+   "t": 1166.48,
+   "d": 2.72,
+   "text": "state to just before Cadence um"
+  },
+  {
+   "t": 1169.2,
+   "d": 2.68,
+   "text": "performed her action and in doing so we"
+  },
+  {
+   "t": 1171.88,
+   "d": 1.6,
+   "text": "actually set a flag on each of these"
+  },
+  {
+   "t": 1173.48,
+   "d": 2.6,
+   "text": "sound effects as marked for stop or"
+  },
+  {
+   "t": 1176.08,
+   "d": 2.56,
+   "text": "awaiting recurrence during rollack"
+  },
+  {
+   "t": 1178.64,
+   "d": 2.68,
+   "text": "aras's move attacks the same skeleton"
+  },
+  {
+   "t": 1181.32,
+   "d": 1.4,
+   "text": "and because players always out"
+  },
+  {
+   "t": 1182.72,
+   "d": 2.68,
+   "text": "prioritize monsters um she goes first"
+  },
+  {
+   "t": 1185.4,
+   "d": 1.56,
+   "text": "and didn't actually end up taking damage"
+  },
+  {
+   "t": 1186.96,
+   "d": 1.84,
+   "text": "from the skeleton at all because of that"
+  },
+  {
+   "t": 1188.8,
+   "d": 3.88,
+   "text": "new action so Cadence's attack and the"
+  },
+  {
+   "t": 1192.68,
+   "d": 1.92,
+   "text": "skeletons hit still have their previous"
+  },
+  {
+   "t": 1194.6,
+   "d": 1.6,
+   "text": "sounds because these events still took"
+  },
+  {
+   "t": 1196.2,
+   "d": 1.32,
+   "text": "place and they are allowed to continue"
+  },
+  {
+   "t": 1197.52,
+   "d": 1.88,
+   "text": "playing but because are already in the"
+  },
+  {
+   "t": 1199.4,
+   "d": 1.84,
+   "text": "turn sound lists they won't be played on"
+  },
+  {
+   "t": 1201.24,
+   "d": 2.04,
+   "text": "the native audio system a second time"
+  },
+  {
+   "t": 1203.28,
+   "d": 1.72,
+   "text": "which would just duplicate The Sounds"
+  },
+  {
+   "t": 1205.0,
+   "d": 2.12,
+   "text": "there're still probably audio coming"
+  },
+  {
+   "t": 1207.12,
+   "d": 2.2,
+   "text": "through the speakers from that initial"
+  },
+  {
+   "t": 1209.32,
+   "d": 4.04,
+   "text": "playback event so we just marked them as"
+  },
+  {
+   "t": 1213.36,
+   "d": 2.24,
+   "text": "recurred and there's some new sounds"
+  },
+  {
+   "t": 1215.6,
+   "d": 1.88,
+   "text": "arya's attack and the skeleton's death"
+  },
+  {
+   "t": 1217.48,
+   "d": 1.8,
+   "text": "sound so they are added to the buffer"
+  },
+  {
+   "t": 1219.28,
+   "d": 1.6,
+   "text": "and because they're new they will be"
+  },
+  {
+   "t": 1220.88,
+   "d": 1.56,
+   "text": "played to the native audio system as"
+  },
+  {
+   "t": 1222.44,
+   "d": 2.8,
+   "text": "well but notice how Arya didn't actually"
+  },
+  {
+   "t": 1225.24,
+   "d": 2.4,
+   "text": "end up getting hurt the skeleton didn't"
+  },
+  {
+   "t": 1227.64,
+   "d": 2.08,
+   "text": "didn't hit her so the her sound"
+  },
+  {
+   "t": 1229.72,
+   "d": 2.32,
+   "text": "shouldn't actually be playing at all at"
+  },
+  {
+   "t": 1232.04,
+   "d": 1.88,
+   "text": "the end of the turn any remaining marked"
+  },
+  {
+   "t": 1233.92,
+   "d": 2.0,
+   "text": "for stop sounds that didn't recur during"
+  },
+  {
+   "t": 1235.92,
+   "d": 2.24,
+   "text": "rowback will be cut short and that's"
+  },
+  {
+   "t": 1238.16,
+   "d": 2.12,
+   "text": "especially important for long drawn out"
+  },
+  {
+   "t": 1240.28,
+   "d": 3.2,
+   "text": "sounds like player deaths or boss phase"
+  },
+  {
+   "t": 1243.48,
+   "d": 1.76,
+   "text": "transitions we don't want players to"
+  },
+  {
+   "t": 1245.24,
+   "d": 1.76,
+   "text": "have any misleading audio feedback if"
+  },
+  {
+   "t": 1247.0,
+   "d": 2.0,
+   "text": "rollback changed the outcome of a"
+  },
+  {
+   "t": 1249.0,
+   "d": 2.24,
+   "text": "significant event like"
+  },
+  {
+   "t": 1251.24,
+   "d": 2.4,
+   "text": "this now with most of these technical"
+  },
+  {
+   "t": 1253.64,
+   "d": 1.84,
+   "text": "aspects in place there are still a few"
+  },
+  {
+   "t": 1255.48,
+   "d": 2.16,
+   "text": "factors that can influence how a game"
+  },
+  {
+   "t": 1257.64,
+   "d": 2.12,
+   "text": "with rback feels in practice factors"
+  },
+  {
+   "t": 1259.76,
+   "d": 2.08,
+   "text": "generally it's important to minimize the"
+  },
+  {
+   "t": 1261.84,
+   "d": 1.8,
+   "text": "impact of mispredictions and direct"
+  },
+  {
+   "t": 1263.64,
+   "d": 2.2,
+   "text": "interactions between players in the same"
+  },
+  {
+   "t": 1265.84,
+   "d": 2.88,
+   "text": "turn and a pretty good example of this"
+  },
+  {
+   "t": 1268.72,
+   "d": 1.64,
+   "text": "that we ran into very early on during"
+  },
+  {
+   "t": 1270.36,
+   "d": 1.52,
+   "text": "development and play testing are player"
+  },
+  {
+   "t": 1271.88,
+   "d": 2.16,
+   "text": "collisions necrodancer original local"
+  },
+  {
+   "t": 1274.04,
+   "d": 1.84,
+   "text": "co-op mode had player collisions you"
+  },
+  {
+   "t": 1275.88,
+   "d": 2.08,
+   "text": "weren't allowed to occupy the same space"
+  },
+  {
+   "t": 1277.96,
+   "d": 1.6,
+   "text": "as another player so we just carried"
+  },
+  {
+   "t": 1279.56,
+   "d": 1.96,
+   "text": "this over because well we wanted to"
+  },
+  {
+   "t": 1281.52,
+   "d": 2.8,
+   "text": "retain gameplay accuracy but there's"
+  },
+  {
+   "t": 1284.32,
+   "d": 1.48,
+   "text": "always going to be some order in which"
+  },
+  {
+   "t": 1285.8,
+   "d": 1.52,
+   "text": "player actions are evaluated with"
+  },
+  {
+   "t": 1287.32,
+   "d": 2.48,
+   "text": "respect to each other and we chose to"
+  },
+  {
+   "t": 1289.8,
+   "d": 1.6,
+   "text": "prioritize players who hit early on the"
+  },
+  {
+   "t": 1291.4,
+   "d": 2.44,
+   "text": "beat before those who hit late and in"
+  },
+  {
+   "t": 1293.84,
+   "d": 2.16,
+   "text": "our example here Cadence on the left um"
+  },
+  {
+   "t": 1296.0,
+   "d": 1.48,
+   "text": "presses her movement key a bit early in"
+  },
+  {
+   "t": 1297.48,
+   "d": 2.04,
+   "text": "the beat and Arya is a bit late but"
+  },
+  {
+   "t": 1299.52,
+   "d": 1.6,
+   "text": "because their actions don't conflict"
+  },
+  {
+   "t": 1301.12,
+   "d": 2.72,
+   "text": "rback doesn't actually change how um the"
+  },
+  {
+   "t": 1303.84,
+   "d": 2.04,
+   "text": "actions play out when the remote inputs"
+  },
+  {
+   "t": 1305.88,
+   "d": 1.88,
+   "text": "arrive from the other"
+  },
+  {
+   "t": 1307.76,
+   "d": 2.84,
+   "text": "player now if both players want to step"
+  },
+  {
+   "t": 1310.6,
+   "d": 1.88,
+   "text": "on the same Center tile though it's a"
+  },
+  {
+   "t": 1312.48,
+   "d": 2.32,
+   "text": "different story only one of them will be"
+  },
+  {
+   "t": 1314.8,
+   "d": 3.76,
+   "text": "able to occupy This Ti on the end and"
+  },
+  {
+   "t": 1318.56,
+   "d": 1.28,
+   "text": "the other player will just collide with"
+  },
+  {
+   "t": 1319.84,
+   "d": 2.0,
+   "text": "the one who stepped on it first in this"
+  },
+  {
+   "t": 1321.84,
+   "d": 2.28,
+   "text": "case Arya was first to press um the"
+  },
+  {
+   "t": 1324.12,
+   "d": 1.76,
+   "text": "movement key and she immediately sees"
+  },
+  {
+   "t": 1325.88,
+   "d": 2.76,
+   "text": "herself stepping on that Center tile but"
+  },
+  {
+   "t": 1328.64,
+   "d": 1.84,
+   "text": "before the input can make it over the"
+  },
+  {
+   "t": 1330.48,
+   "d": 2.28,
+   "text": "network Cadence also presses the key and"
+  },
+  {
+   "t": 1332.76,
+   "d": 2.56,
+   "text": "sees her own movement succeed now"
+  },
+  {
+   "t": 1335.32,
+   "d": 2.44,
+   "text": "because arya's input time stamp is lower"
+  },
+  {
+   "t": 1337.76,
+   "d": 2.0,
+   "text": "she gets priority here and the result is"
+  },
+  {
+   "t": 1339.76,
+   "d": 1.52,
+   "text": "that Cadence's input actually just gets"
+  },
+  {
+   "t": 1341.28,
+   "d": 2.72,
+   "text": "rolled back without being reapplied"
+  },
+  {
+   "t": 1344.0,
+   "d": 1.52,
+   "text": "because ARA's input actually got"
+  },
+  {
+   "t": 1345.52,
+   "d": 2.2,
+   "text": "processed first on Caden's screen it"
+  },
+  {
+   "t": 1347.72,
+   "d": 1.52,
+   "text": "looks like she just got shoved off the"
+  },
+  {
+   "t": 1349.24,
+   "d": 2.16,
+   "text": "tile by Arya after a short delay and"
+  },
+  {
+   "t": 1351.4,
+   "d": 2.16,
+   "text": "that's quite disorienting because your"
+  },
+  {
+   "t": 1353.56,
+   "d": 1.56,
+   "text": "player already moved and then your move"
+  },
+  {
+   "t": 1355.12,
+   "d": 2.56,
+   "text": "is kind of changed into something else"
+  },
+  {
+   "t": 1357.68,
+   "d": 2.32,
+   "text": "on arya's screen it's not quite that bad"
+  },
+  {
+   "t": 1360.0,
+   "d": 2.08,
+   "text": "Cadence just harmlessly bumps into ARA"
+  },
+  {
+   "t": 1362.08,
+   "d": 2.12,
+   "text": "after the move so that's not really a"
+  },
+  {
+   "t": 1364.2,
+   "d": 3.28,
+   "text": "problem but definitely we wanted to"
+  },
+  {
+   "t": 1367.48,
+   "d": 1.96,
+   "text": "solve this because it kept occurring far"
+  },
+  {
+   "t": 1369.44,
+   "d": 2.04,
+   "text": "too often in our play test so we tried a"
+  },
+  {
+   "t": 1371.48,
+   "d": 2.2,
+   "text": "few approaches but we just stuck with"
+  },
+  {
+   "t": 1373.68,
+   "d": 1.72,
+   "text": "the simplest one players don't collide"
+  },
+  {
+   "t": 1375.4,
+   "d": 1.76,
+   "text": "with each other we just disabled this"
+  },
+  {
+   "t": 1377.16,
+   "d": 2.68,
+   "text": "mechanic altogether um the narrow"
+  },
+  {
+   "t": 1379.84,
+   "d": 2.2,
+   "text": "corridors of cp's procedural dungeons"
+  },
+  {
+   "t": 1382.04,
+   "d": 1.52,
+   "text": "make it really difficult to get out of"
+  },
+  {
+   "t": 1383.56,
+   "d": 2.28,
+   "text": "each other's way anyway so we also saw"
+  },
+  {
+   "t": 1385.84,
+   "d": 2.4,
+   "text": "this as like a quality of life change"
+  },
+  {
+   "t": 1388.24,
+   "d": 1.92,
+   "text": "and yeah after doing this players no"
+  },
+  {
+   "t": 1390.16,
+   "d": 1.36,
+   "text": "longer interrupt each other with roll"
+  },
+  {
+   "t": 1391.52,
+   "d": 1.92,
+   "text": "back and this just makes everything a"
+  },
+  {
+   "t": 1393.44,
+   "d": 2.72,
+   "text": "lot smoother when moving around even"
+  },
+  {
+   "t": 1396.16,
+   "d": 2.16,
+   "text": "when there's a high latency towards"
+  },
+  {
+   "t": 1398.32,
+   "d": 2.2,
+   "text": "other"
+  },
+  {
+   "t": 1400.72,
+   "d": 2.28,
+   "text": "players now there's another Edge case"
+  },
+  {
+   "t": 1403.0,
+   "d": 2.0,
+   "text": "though even with this tweak which can"
+  },
+  {
+   "t": 1405.0,
+   "d": 1.88,
+   "text": "arise if two players try to attack the"
+  },
+  {
+   "t": 1406.88,
+   "d": 2.04,
+   "text": "same enemy in this case these green"
+  },
+  {
+   "t": 1408.92,
+   "d": 2.16,
+   "text": "slimes here have a single hit point and"
+  },
+  {
+   "t": 1411.08,
+   "d": 2.64,
+   "text": "one attack will take them out right away"
+  },
+  {
+   "t": 1413.72,
+   "d": 2.16,
+   "text": "now both Cadence and Arya press a"
+  },
+  {
+   "t": 1415.88,
+   "d": 2.04,
+   "text": "movement key towards the Slime"
+  },
+  {
+   "t": 1417.92,
+   "d": 2.48,
+   "text": "performing an attack and again Arya is a"
+  },
+  {
+   "t": 1420.4,
+   "d": 1.92,
+   "text": "bit faster this time and hits the Slime"
+  },
+  {
+   "t": 1422.32,
+   "d": 2.4,
+   "text": "first followed by Cadence a bit later"
+  },
+  {
+   "t": 1424.72,
+   "d": 2.12,
+   "text": "and both players see the attack go"
+  },
+  {
+   "t": 1426.84,
+   "d": 1.6,
+   "text": "through on their screen while waiting"
+  },
+  {
+   "t": 1428.44,
+   "d": 1.68,
+   "text": "for the other players action for that be"
+  },
+  {
+   "t": 1430.12,
+   "d": 2.84,
+   "text": "to arrive now once Cadence is notified"
+  },
+  {
+   "t": 1432.96,
+   "d": 1.8,
+   "text": "of arya's attack the Slime is"
+  },
+  {
+   "t": 1434.76,
+   "d": 2.48,
+   "text": "resurrected via roll back and then"
+  },
+  {
+   "t": 1437.24,
+   "d": 2.04,
+   "text": "actually retroactively killed by by ARA"
+  },
+  {
+   "t": 1439.28,
+   "d": 3.08,
+   "text": "instead and because Cadence's action was"
+  },
+  {
+   "t": 1442.36,
+   "d": 3.28,
+   "text": "a tiny bit later the right arrow key"
+  },
+  {
+   "t": 1445.64,
+   "d": 1.88,
+   "text": "that initially was an attack now"
+  },
+  {
+   "t": 1447.52,
+   "d": 2.0,
+   "text": "suddenly counts as a move and from her"
+  },
+  {
+   "t": 1449.52,
+   "d": 1.48,
+   "text": "perspective it just looks like she got"
+  },
+  {
+   "t": 1451.0,
+   "d": 1.6,
+   "text": "teleported onto the tile the Slime was"
+  },
+  {
+   "t": 1452.6,
+   "d": 2.2,
+   "text": "standing on a short time after attacking"
+  },
+  {
+   "t": 1454.8,
+   "d": 2.8,
+   "text": "it and that's not great on Arya screen"
+  },
+  {
+   "t": 1457.6,
+   "d": 1.68,
+   "text": "it doesn't look quite as bad Cadence"
+  },
+  {
+   "t": 1459.28,
+   "d": 1.56,
+   "text": "just kind of moves onto the tire that"
+  },
+  {
+   "t": 1460.84,
+   "d": 2.28,
+   "text": "the Slime was previously occupying and"
+  },
+  {
+   "t": 1463.12,
+   "d": 1.84,
+   "text": "picks up the dropped"
+  },
+  {
+   "t": 1464.96,
+   "d": 3.44,
+   "text": "gold um to eliminate this ordering the"
+  },
+  {
+   "t": 1468.4,
+   "d": 2.48,
+   "text": "tendency here we actually introduced a"
+  },
+  {
+   "t": 1470.88,
+   "d": 3.0,
+   "text": "special invisible object that is dropped"
+  },
+  {
+   "t": 1473.88,
+   "d": 3.68,
+   "text": "by any slain monsters and we call this a"
+  },
+  {
+   "t": 1477.56,
+   "d": 2.32,
+   "text": "tombstone it's invisible normally but"
+  },
+  {
+   "t": 1479.88,
+   "d": 2.16,
+   "text": "we've made it visible here for the demo"
+  },
+  {
+   "t": 1482.04,
+   "d": 3.16,
+   "text": "so as soon as Cadence hits the Slime the"
+  },
+  {
+   "t": 1485.2,
+   "d": 1.56,
+   "text": "tile isn't freed up right away but it's"
+  },
+  {
+   "t": 1486.76,
+   "d": 1.8,
+   "text": "blocked by this Tombstone and same"
+  },
+  {
+   "t": 1488.56,
+   "d": 2.04,
+   "text": "happens for Arya because Arya again"
+  },
+  {
+   "t": 1490.6,
+   "d": 2.64,
+   "text": "attacks before Cadence's input arrives"
+  },
+  {
+   "t": 1493.24,
+   "d": 1.96,
+   "text": "the down input is also interpreted as an"
+  },
+  {
+   "t": 1495.2,
+   "d": 3.2,
+   "text": "attack at first now both players are"
+  },
+  {
+   "t": 1498.4,
+   "d": 1.68,
+   "text": "trying to push towards the same tile"
+  },
+  {
+   "t": 1500.08,
+   "d": 2.72,
+   "text": "again but this time the slower character"
+  },
+  {
+   "t": 1502.8,
+   "d": 1.24,
+   "text": "actually just ends up attacking the"
+  },
+  {
+   "t": 1504.04,
+   "d": 2.56,
+   "text": "tombstone instead so Arya is prevented"
+  },
+  {
+   "t": 1506.6,
+   "d": 2.2,
+   "text": "from moving down even though Cadence's"
+  },
+  {
+   "t": 1508.8,
+   "d": 2.2,
+   "text": "attack has already killed the Slime for"
+  },
+  {
+   "t": 1511.0,
+   "d": 1.72,
+   "text": "both players it just actually looks like"
+  },
+  {
+   "t": 1512.72,
+   "d": 2.16,
+   "text": "the other player is attacking thin air"
+  },
+  {
+   "t": 1514.88,
+   "d": 1.64,
+   "text": "on the empty tile that the Slime was"
+  },
+  {
+   "t": 1516.52,
+   "d": 2.12,
+   "text": "previously occupying which is a lot"
+  },
+  {
+   "t": 1518.64,
+   "d": 1.64,
+   "text": "better than having their positions"
+  },
+  {
+   "t": 1520.28,
+   "d": 2.52,
+   "text": "suddenly changed and um moving to an"
+  },
+  {
+   "t": 1522.8,
+   "d": 2.72,
+   "text": "unexpected position at the end of the"
+  },
+  {
+   "t": 1525.52,
+   "d": 2.12,
+   "text": "turn the tombstone is despawned and then"
+  },
+  {
+   "t": 1527.64,
+   "d": 1.64,
+   "text": "both players can move onto the tile on"
+  },
+  {
+   "t": 1529.28,
+   "d": 2.24,
+   "text": "the next"
+  },
+  {
+   "t": 1531.52,
+   "d": 2.76,
+   "text": "beat so after addressing all of these"
+  },
+  {
+   "t": 1534.28,
+   "d": 1.56,
+   "text": "Technical and design challenges we've"
+  },
+  {
+   "t": 1535.84,
+   "d": 1.24,
+   "text": "encountered throughout the Project's"
+  },
+  {
+   "t": 1537.08,
+   "d": 1.96,
+   "text": "development how does this all look in"
+  },
+  {
+   "t": 1539.04,
+   "d": 3.12,
+   "text": "practice well looking at this short clip"
+  },
+  {
+   "t": 1542.16,
+   "d": 2.16,
+   "text": "from synchrony launch stream it looks"
+  },
+  {
+   "t": 1544.32,
+   "d": 1.4,
+   "text": "like everyone's enjoying themselves in"
+  },
+  {
+   "t": 1545.72,
+   "d": 2.88,
+   "text": "the absolute chaos of a 16 player Lobby"
+  },
+  {
+   "t": 1548.6,
+   "d": 1.88,
+   "text": "the rollback system was initially"
+  },
+  {
+   "t": 1550.48,
+   "d": 1.4,
+   "text": "designed and tested for up to eight"
+  },
+  {
+   "t": 1551.88,
+   "d": 2.36,
+   "text": "players but people were very quick to"
+  },
+  {
+   "t": 1554.24,
+   "d": 2.76,
+   "text": "find out how to bypass the player limit"
+  },
+  {
+   "t": 1557.0,
+   "d": 2.72,
+   "text": "and yeah lot lobbies like this were very"
+  },
+  {
+   "t": 1559.72,
+   "d": 3.4,
+   "text": "very common site so ultimately I think"
+  },
+  {
+   "t": 1563.12,
+   "d": 1.6,
+   "text": "we achieved our goal of bringing online"
+  },
+  {
+   "t": 1564.72,
+   "d": 1.4,
+   "text": "multiplayer to a game that was never"
+  },
+  {
+   "t": 1566.12,
+   "d": 2.24,
+   "text": "meant to have such a feature and while"
+  },
+  {
+   "t": 1568.36,
+   "d": 2.04,
+   "text": "it took many years to get to this point"
+  },
+  {
+   "t": 1570.4,
+   "d": 2.44,
+   "text": "the journey was well worth it so with"
+  },
+  {
+   "t": 1572.84,
+   "d": 1.96,
+   "text": "that thank you so much for your"
+  },
+  {
+   "t": 1574.8,
+   "d": 2.64,
+   "text": "attention huge thanks to gamy preate"
+  },
+  {
+   "t": 1577.44,
+   "d": 2.16,
+   "text": "snowball and the entire synchrony team"
+  },
+  {
+   "t": 1579.6,
+   "d": 1.92,
+   "text": "for all their amazing work to raise"
+  },
+  {
+   "t": 1581.52,
+   "d": 2.88,
+   "text": "yourself games for the openness towards"
+  },
+  {
+   "t": 1584.4,
+   "d": 2.04,
+   "text": "accepting such a fan-made passion"
+  },
+  {
+   "t": 1586.44,
+   "d": 1.36,
+   "text": "project like this and inviting us to"
+  },
+  {
+   "t": 1587.8,
+   "d": 1.6,
+   "text": "collaborate"
+  },
+  {
+   "t": 1589.4,
+   "d": 1.88,
+   "text": "and thanks so much to everyone who's"
+  },
+  {
+   "t": 1591.28,
+   "d": 2.28,
+   "text": "organizing Rog like celebration hosting"
+  },
+  {
+   "t": 1593.56,
+   "d": 2.12,
+   "text": "this conference and giving me a chance"
+  },
+  {
+   "t": 1595.68,
+   "d": 1.68,
+   "text": "to talk about the inner workings of"
+  },
+  {
+   "t": 1597.36,
+   "d": 2.72,
+   "text": "something I'm so passionate about there"
+  },
+  {
+   "t": 1600.08,
+   "d": 2.44,
+   "text": "is a lot I'd love to go into more detail"
+  },
+  {
+   "t": 1602.52,
+   "d": 1.76,
+   "text": "about but then that would probably"
+  },
+  {
+   "t": 1604.28,
+   "d": 2.84,
+   "text": "stretch just talk to a few hours so how"
+  },
+  {
+   "t": 1607.12,
+   "d": 2.52,
+   "text": "about some questions instead oh yeah"
+  },
+  {
+   "t": 1609.64,
+   "d": 3.48,
+   "text": "Adrian uh what an incredible talk that"
+  },
+  {
+   "t": 1613.12,
+   "d": 2.36,
+   "text": "was so cool and great job on solving"
+  },
+  {
+   "t": 1615.48,
+   "d": 2.28,
+   "text": "problems and and also just limiting"
+  },
+  {
+   "t": 1617.76,
+   "d": 2.32,
+   "text": "scope when needed to like just maybe"
+  },
+  {
+   "t": 1620.08,
+   "d": 1.24,
+   "text": "they don't need to"
+  },
+  {
+   "t": 1621.32,
+   "d": 3.52,
+   "text": "collide uh that's that was wonderful and"
+  },
+  {
+   "t": 1624.84,
+   "d": 2.96,
+   "text": "also your slides uh everyone cannot get"
+  },
+  {
+   "t": 1627.8,
+   "d": 1.12,
+   "text": "enough I think it would have been hard"
+  },
+  {
+   "t": 1628.92,
+   "d": 2.56,
+   "text": "to parse uh your talk without the"
+  },
+  {
+   "t": 1631.48,
+   "d": 1.96,
+   "text": "incredible slides so thank you so much"
+  },
+  {
+   "t": 1633.44,
+   "d": 2.04,
+   "text": "for uh you know bringing that along as"
+  },
+  {
+   "t": 1635.48,
+   "d": 2.88,
+   "text": "well um specifically for talking about"
+  },
+  {
+   "t": 1638.36,
+   "d": 4.28,
+   "text": "time travel it was very helpful"
+  }
+ ]
+}

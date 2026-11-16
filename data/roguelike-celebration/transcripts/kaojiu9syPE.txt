@@ -1,0 +1,60 @@
+Evan Debenham: Smoothing the Sharp Edges of RNG
+Speaker: Evan Debenham
+https://www.youtube.com/watch?v=kaojiu9syPE
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:11] Debenham the developer for shattered pixel dungeon talking about smoothing the sharp edges of RNG. EVAN: We love random generation because it
+
+## We love Randomness in Roguelikes
+
+[0:00:33] makes roguelikes fun and replayable. It leads to random combat outcomes and random item and procedural generation is a whole topic and many roguelike games let the player select from random perks. This unpredictability is exciting and means no two games are quite the same. There are sharp edges we can cut ourselves on. RNG can have rare extreme outcomes like constantly missing attacks or minimum damage or enemies always hitting you and getting maximum damage. Finding items that aren't powerful or don't work well for your build. Or finding the same item type a whole bunch of times. It can lead to unfair enemy encounters where stronger enemies than intended perhaps fight you all at once. At its worse this can make players feel like they are at the mercy of the RNG and the success is or determined by the randomness than their own skill.
+
+[0:01:39] Smoothing RNG means reducing the outcomes but not significantly impacting. We want more consistency and the player to feel like they are in control but enough randomness to make the game exciting. Shattered pixel dungeon is a roguelike I make and it isn't the purpose of this but I will use it as an example. Let's talk about numerical distributions first. Pictures here is a screenshot from dicey dungeons, a roguelike all about numbers in the range of 1 6. A number range is any random number with some maximum and minimum values and RPG games use this everywhere. They are called rolls where you roll a dice. how likely is each outcome within this number range? A uniform distribution is the obvious
+
+## Uniform Distribution
+
+[0:02:39] default but they can be hard to play around. It can be difficult to strategize when there is high variance in the numbers and big ranges can be fun and exciting but make the randomness even worse. It clashes with our intuitive perception. A pax me maximum and minimum feels special but it isn't with this and it leads us to see patterns that don't exist. Two maximum rolls in a row feels more exceptional than the average result multiple times. Over time this leads players to think there is a pattern working for or against them when there actually isn't. There is a ton of different distributions you could use instead. You could use a pyramid distribution, the average of two uniform out comes. Or you could use a bell distribution
+
+[0:03:44] which is an average of three uniform results. You can see how the maximum and minimum are very unlikely now. Or if that's too extreme, perhaps a half pyramid. Two 3rds of one uniform outcome plus a third of another. You can see how it looks like a uniform in the center and pyramid at the edges. The common trait here is make the average more likely and maximum and minimum less likely increasing the perceived consistency and making it feel more fair and easier to strategize. Shattered pixel dungeon uses pyramid but used uniform randomly. Armor could overblock or block almost no damage quite frequently. The players would ignore armor because it wasn't worth the Rick it might roll low. Switching to pyramid, armor became more consistent and better at doing the
+
+[0:04:48] job of protecting the players but low rolls were possible so players needed to keep on their toes. This balanced offense and defense and dumping up grades into the weapons isn't the only effective way to play now. upgrades. Next I will talk about deck systems shown here as a promotional screenshot from the roguelike Slay the Spire which is of course all about decks. To understand why deck systems are helpful let's look at probability over time versus
+
+## Probability Over Time vs. Right Now
+
+[0:05:19] right now. As an example, say we have a 1 10 chance for something to occur. 1 occurrence in every 10 tries but a 1 in a 100 chance it happens twice and 1 in a 100 Lamictal take 40 plus tries. These are rare extreme edge cases that be frustrating. Unfortunately, roguelikes get the worst of this because in an average roguelike run, you are not going to experience enough probability it will converge to the average but you will play a lot of individual runs and so we will see these extreme cases particularly run might be really lucky or really unlucky.
+
+## Introducing Deck Systems
+
+[0:06:04] Deck systems help deal with this. Rather than a random chance eat a shuffled deck. No chance for repeats as long as you are careful to avoid shuffling and putting the last as the first card in the second shuffle and chance to take 10 tries. We have complete eliminated extreme outcomes.
+
+## Decks Are Flexible
+
+[0:06:34] Decks are flexible. If you have a lot of cards you could record the count of each card and this is often called weighting and means less data feeds to be tracked. Decks can be shuffled when empty or you can reset them with the same order. Just make sure to be aware of that last card to become first card shuffling problem fall. Shattered ix pixel dungeon
+
+## Shattered Item Generation
+
+[0:07:06] uses decks extensively. Each deck has their own enemy type but previously they were based on chance. This is a player encountering three sewer crabs and this was unlikely but possible in the old probably system and meant you immediately lost. Now on this floor you will rarely encounter two crabs but almost always just one at a time even tow the probability of each enemy being a crab hasn't changed. This removes unfair encounters from the early stages of the game. Decks are also used for item generation but it is a bit more complicated. Regular items still use a weighting systems but rooms that generate loot and there is two decks one for each auto. They are shuffled and interwoven together. When we draw a card it goes back instead
+
+[0:08:10] of reshuffled and sometimes draw a second or third to draw unpredictability. This ensures consistency of loot over a run and eliminates a whole bunch of one loot type pictured where an early game player got four of the same type of armor. This is frustrating because it means the player doesn't have anything else. The first set is nice but after that it is mostly worthless. And, of course, there is an entire subgenre of roguelike games dedicated to deck playing. They are consistent enough to allow for strategy. It is worth note there are other
+
+## Other Ways To Smooth Probability
+
+[0:08:52] ways to smooth probability. Forced averaging where a game adjust the chance of something to occur based on an algorithm. This is used in competitive games so that competitive integrity isn't affected too heavily by luck. It is used in path of exile for evasion chance so builds based around evading attacks can be just as effective as ones bill around tanking them. There is pity systems where after so many negative outcomes the game guarantees a positive. This is used for loot boxes to manipulate players into buying more but you can use it for nicer things like guaranteeing a drop after so many tries so a player does haven't to grind for something forever. Lastly, let's talk about giving the players control. This is a picture from darkest dungeon 2.
+
+[0:09:54] This is all about how RNG feels. Can we make changes to the feel of RNG without changing the actual mechanics so much? Players feel less frustrated if control so let's see if we can add mechanics and this is game deputy.
+
+## Shattered Surprise Attacks
+
+[0:10:15] In shattered pixel dungeon hit chance is usually a little low overall but players can surprise attack enemies to guarantee a hit. A surprise attack is any attack from stealth or an attack that uses the environment against an enemy such as attacking them when they move into a doorway. This mechanic encourages positioning and environmental interaction and let's there player counter enemies without feeding specific items. needing. All this let's there player fight back against RNG so missing a bunch is less frustrating and helps reward smart gameplay in the early stages of the game when the player not have a lot of other game mechanics to play around with.
+
+## Darkest Dungeon 2 and Tokens
+
+[0:10:57] In darkest dungeon 2 highlights this well with the new token system for combat. In darkest dungeon 1 there were lots of stats and things like accuracy, evasion and there were a lot of numerical buffs and debuffs. Darkest dungeon 2 has fewer stats and instead there are tokens that affect combat. A lot of abilities now give tokens or interact with them instead of giving number buffs. Hit chance is normally a 100% but can be reduced by 50% if the enemy has torch token or the character has a blind token. The next attack against this character yields 50% more damage. The leper character I think is the best example of this. In darkest dungeon one low damage and high
+
+[0:12:00] accuracy and misses often so it gameplay strategy is to boost accuracy with abilities and items. In 2, he has high damage and applies blind tokens to himself so the strategy is to clear the tokens. Tokens end up feeling way more impactful and gamy and interactive even though had the player is doing the same thing. They feel more engaged and in control. In conclusion, should you keep RNG sharp or smooth? By smoothing RNG you can reduce player frustration. Things like more consistent new empirical distributions can make number ranges more consistent and feel more fair. Deck systems can enforce consistency and probability outcomes without having to do a million probability iterations something a regular player would never do. Adding game mechanics can help the player feel more control and possibly deepen complexity in a good way. I like these
+
+[0:13:05] systems because shattered pixel dungeon prides itself on being consistent and you might refer more random. It is fine to RNG sharp. The purpose of this talk is to give you a few more tools in the toolbox. Choose what works best for you. KAWA: Thank you, Evan. That was fantastic. Always exciting to see people thinking deeply about the actual things of statistical distributions as well as people's perception of randomness and how those those are very different. As a developer of games who uses randomness and a data analyst in my day job life it is so true. EVAN: Especially with probability. Humans with terrible at math.
+
+[0:14:05] KAWA: The ways we perceive randomness is so different than what is happening on it ground

@@ -1,0 +1,104 @@
+Gabriel Santos - ASCII Art Techniques & Animation
+Speaker: Gabriel Santos
+https://www.youtube.com/watch?v=5sFVVQcUWVE
+Year: 2019   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:02] Gabriel: I'm glad to be here. The talks so far have been great. I wanted to make my presentation all in ASCII.
+
+## Half Mate
+
+[0:00:12] And I wanted to open up by showing one of the animations that I have made. And this one really is the culmination of all the techniques that I've developed in the past six years that I've been studying ASCII art. The audio in this shot is pretty good, too, but I wanted to show - to focus on the art here. You can see a lot of the things that I'm gonna talk about right now, in the coming slides. For example, the shadows and the use of negative space here, to give depth. Et cetera. But it is a short talk, so I'm just gonna scroll through the topics real quick, and then you guys can ask me about which ones you want to know more about.
+
+## Decomposition
+
+[0:01:05] I want to show how this scene is decomposed. So there's a background layer, and here's the animation for the cultist.
+
+## Animation
+
+[0:01:13] And then the other cultist, on the bottom, the victim here, and even little details on the chain animating. If you guys want to see the details of this presentation, there's a link at the end. You can download the text file. The candle on the wall, right here, has a nice little detail on the glyphs. It works really nicely. I was very proud of that one, because it's just one symbol for the candle. That's always good.
+
+## ASCII Particle Emitter
+
+[0:01:54] This is the nagaraja, the supreme serpent coming up. The tongue is omitted for simplicity, because there's a lot of frames for the tongue, so I kept that one out. But here, I wanted to stop to show the special metadata here, that is where the particles get emitted. So I wrote a very simple ASCII particle emitter. When I say simple, it doesn't do things that other particle systems do, where smoke interacts, the particles interact with each other. It doesn't do any of that. It just has velocity and it shows the ASCII symbols. It's able to fit two particles within the same cell, so it does some smart things, but it's very simple and it gets the job done. I think that's how projects should be. Some of the frames, let me move on.
+
+[0:02:54] The drool is something that worked really well, so I used it in lots of characters. It's just really simple. You start with one symbol and then you just grow it, and keep going. And then you take that line and you break it up, and it works really nicely when it plays.
+
+## ASCII Walk Cycle
+
+[0:03:19] Poison Adept, let's look at this guy. So this is another animation, that is much simpler. So I think it's easier to get a grasp for the animation technique that's being used here. It's just a walk cycle. And here are some of the frames for that, so it's easy to wrap your head around this one. I wanted to include that as well.
+
+## Unicode
+
+[0:03:49] You will see that this is not a traditional ASCII. There is some Unicode thrown in there, and I feel like, in modern computers, you should leverage that. But I wanted to stick to the style, so I used Unicode symbols that retained the style.
+
+## Block
+
+[0:04:09] But allow me to expand what's possible. Here are some of the different styles that you'll see in text art, and I named them to make it easy to talk about. Block art, there's this filled style that pretty much just uses negative space. You'll see this a lot in procedurally-generated, so if you take a video and convert it automatically into ASCII, this is generally the style that comes out. Line art is what I do most of the time, is what I've focused on. And box drawing is something I use. The difference between line art and box drawing is that you get more organic characters and organic objects when you do line art, and you get more geometric, more mechanical things when you do box drawing. It's pretty cool. You'll see a lot of that in like Cogmind. He does a lot of box drawing, because it's a game about robots and that makes a lot of sense. Also for UI, so if you're doing buttons and scroll windows,
+
+[0:05:09] things like that, box drawing's really good.
+
+## Fonts
+
+[0:05:14] I wanted to talk about fonts real quick. So obviously, mono-spaced is how you get the job done, but then if you look at things like Asian ASCII, that is non-mono-spaced, some really incredible art comes out of that, and that's an area that I plan to explore in the future, but I haven't gotten there yet. Aspect ratio of your fonts. So I've come to the conclusion that 1:1 is really good for top-down games, but if you're going for an isometric perspective or side perspective, like I'm doing, 1:2 is better, or more exactly, my choice would have been 16:29. It's a bit awkward, but it took a lot of experimentation to get to this aspect ratio. Some fonts to base yourself around, classical ones here. Mine is a spinoff of Courier Sans, and I just created my own.
+
+[0:06:19] I ended up making over 20 different font sizes of the same font. I hired a couple people to help with that work, and the reason I went for so many different font sizes is the smallest one is 3x5 pixels, so it's pretty tiny. But magically, the game still reads when it goes that small. It's because I wanted the game to be pixel perfect at any resolution. You're able to scale the window size and it picks the font dynamically.
+
+## Basic Characters
+
+[0:06:53] Here's some of the alphabet for line art, specifically. The basic classic characters up here, that you'll see in a lot of old school ASCII art, and I have found that these four right here are really, really useful. The four Latin accent is the mirror, of course, of that one. These are Unicode, though, so if you just take this text file, this presentation, and open it on your phone or on your browser, it's gonna look terrible because of the Unicode. But if you download the file, then it'll look fine in a text sharer. The upside-down exclamation, when I do anti-aliasing in some of the lines, this one's really useful. And the center dot, it helps with balancing and negative space.
+
+## A Miracle Effect
+
+[0:07:47] I wanted to talk about alphanumericals, which if you take a letter like A or number 9 or something like that, and you put that in the middle of the art, it affects a different part of the brain. And you can do that purposefully, but you need to be aware that that's where the eye's gonna be drawn to first. So if you want that effect in your art, then fine. But I find that it's usually an unwanted distraction. So these are the symbols that I do use sometimes. They're useful, and they stick to the line art style. I try to use them purposefully, because they still have that effect, the alphanumerical effect. But you shouldn't use the letter B or something like that, that's gonna trigger a different - the reader is gonna read it differently, and it's gonna be a distraction most of the time.
+
+## Line Art
+
+[0:08:44] Here are some of the lines, and it's called line art because you get these - basically, you're just doing a bunch of lines at different angles. And some come very naturally, like the 60 degrees one. And here are the gradients, all the way to almost horizontal. But if you take a closer look, this one right here, and that one, these two are the same angle. But they're drawn in different ways, and you can use this in the language of your greater work, if you're consistent with how you use these materials. You can assign them to, say, metal or wood or I don't know, rock. Like, this one might be rock and that one might be metal, and if you're consistent in that, the reader will internalize that, and you can then paint a bigger picture, using that language. This bottom one is the same, so these bottom two are the same angle, but they're done slightly
+
+[0:09:48] differently in style, so you get different results.
+
+## AntiAliasing
+
+[0:09:52] Those are some options. Now, these are all quasi-horizontal lines, and there's an interesting aspect of ASCII line art that comes out when you try to do vertical lines. You get into trouble, because in the horizontal ones, you have a lot of gradation in which glyphs you can use inside the space of the cell. But with the vertical lines, you don't, because all the glyphs are horizontally aligned. So you can't really do lines between 90 degrees and 60 degrees. You will usually see things like this one right here. And yeah, maybe for a rock surface or a spiderweb or something, you can do that. But if you're trying to make it look smooth, it's not gonna look smooth, and this is where I've developed a few anti-aliasing tricks, such as that, or that. These are all three the same angle, but different ways of doing that.
+
+[0:10:53] And then for a curved side, you could use the - here are two ways with aliasing that you can do it, the same shape. And then here are some ways you can do it with anti-aliasing, with the exclamation mark or the single quote.
+
+## Quick Example
+
+[0:11:08] So I wanted to draw something real quick, to show that it's not a very time-consuming thing. Like, people always ask, "Oh, this must take a ton of time to do." Yeah, it does, but once you practice and you get used to it, then it's a pretty fast process. I'm gonna try to make a pumpkin here, but I don't know if I'm gonna be able to do it, how good a job I'll do at that. But since it is October, I wanted to make a pumpkin of sorts here. Maybe a Jack-o-lantern or something. I guess I could have practiced this, to make it faster. But let's do it live. And you will see, there are certain combinations of glyphs that always come up. So these three right here is something that is very common. So once you practice enough and you're like, "Oh, blah," you got the symbols memorized and how you place them down, it becomes
+
+[0:12:09] a very fast process. Alright, so we got the basic shape of the pumpkin. I'll put some sort of stem here. I don't know where I'm going with this, but whoops. You know, alphanumericals. Maybe some negative space here. It's coming out alright. There we go. Let's see, how do I do the face? And then for the mouth, maybe I'll just do a bunch of - I don't know. That's already working, so iteration and
+
+[0:13:11] exploration is really important, and with this example here, you can see how efficient it actually can be, and how quickly I swapped those two. It's much faster than other art mediums. And I very quickly made three different ways of doing the mouth, and I can now choose which one I want. So I actually like this one a lot. Let's stop here, and yeah, you could keep going. You could polish some of these curves, you could maybe add a little detail here and there. Whoops. Yeah, you can maybe add a little detail here and there, but this is probably enough for now and the talk's short, so let's keep going.
+
+## Negative Space
+
+[0:13:54] I mentioned negative space a few times. So here, I wanted to get more specific about that. In this example here, you're doing two circles drawn on top of each other, and they have these two connections. That can be problematic for reading quickly, the scene. So what you can do is you can swap some of these glyphs and just add some empty space, and it gives it more depth and reads faster, separates the objects from each other. And then you can also do color changes, so you can do this one a white, and this one a light grey, and you'll get depth that way as well. And for this robot guardian guy, you can see that used here in the shoulder, very effectively, because it is a foreground layer in the character. So adding that space here makes it look like it's on top. The same here on the belt, with the arm. If I connected these, then maybe you wouldn't be able to read that this is an arm, but because it's broken up,
+
+[0:14:57] it's easy. Here again, the same trick, this little detail. So that's negative space, very useful. Dithering is something that I came across.
+
+## Pixel Art
+
+[0:15:08] You do dithering in pixel art, but hey, you can do it in ASCII art too, and you can see that here at the bottom. I wanted to try to do some lighting, and I think it worked.
+
+## Shadow Art
+
+[0:15:20] Shadows was a big surprise. So I accidentally discovered shadows. I was doing this patterned ground in the temple, and I started adding the characters on top, and one of them just happened to have a lot of blank space on the bottom, and when he was walking around, I was like, "No way. This is a shadow." And then I just add shadows to everything now. So it works very effectively, if you have a pattern or a texture on the ground.
+
+## Animation Process
+
+[0:15:48] My animation process is here. I don't want to go through it, because this can be a talk in itself. But my point here is that this is the same animation process as animation in other mediums. Animation is a very labor-intensive task, but the process is the same. You find references, videos on YouTube, pictures of the subject matter, you draw concepts. You try to find a primary idle, key pose for the character, and then you need to test that within the context, to make sure you have the size correct and the composition correct, before you start animating, before you start spending hours of animation work. You need to make sure you've got the right size. Otherwise, you're just gonna have to redo it, or you're gonna be clipping off the top of the character's head, which happened to me a couple times, but nobody really noticed. I got away with it.
+
+## Subtractive Animation
+
+[0:16:51] There is this technique that is subtractive. So in this case here, I wanted to make a pyramid that was building brick by brick, and the way I achieved that is I first drew the pyramid completely, and then, for each frame, I removed a brick. So you do it the other way around. That can be a trick for a lot of animations, where you subtract from the full picture, and then after you have these layers, you can then remove it brick by brick, each layer, and then you just order the frames in the correct order, and it looks like the pyramid's building up instead of being deleted. So the order in which you animate can be reverted as well. And iteration is really important. So, like with the pumpkin where we tried different things with the mouth, for this presentation, I wanted to do a logo for the first slide, and this was the first one that I did, and it looks fine. But it doesn't fit the composition. It's not big enough. And I wanted to try, at least, to make
+
+[0:17:54] a bigger one, and if I fail, I can just fall back to this one, which is great. But I persisted, and yeah, this one works. It's the right size. But it's a little too 90s, and I wanted to modernize it a little bit. So I kept going and I arrived at something that I thought, "Oh, this is pretty good, but it's a little too round and I don't know." So I swapped the parentheses for the exclamations, and I'm not sure that was the correct choice, but here, I do think this right here is the correct choice. It's a very subtle difference, but you can see that it's moved up half a cell, where here it's the underscore. Here, it's actually the box drawing symbol, because if you use the hyphen here, you get these empty spaces in between, and that changes the lighting. If you put the solid at the top, this will most of the time be rendered white on black, so you get brighter at the top, and then darker at the bottom, which is what you want.
+
+[0:18:57] And it also centered it better, vertically. It put it more in the center of the font, so this little detail here is really the main difference between those two. And that's where I ended with the logo. I was happy with that. I could have kept going, but I called it a day. Sometimes you've just got to stop after an hour.
+
+## Conclusion
+
+[0:19:15] Thank you very much. That's my presentation. So if you want to look at some of the details of those, you can find those here on this text file. Like I said, it looks better if you download it to your PC and look in a text header and don't look through your browser. Let me know if any of those topics you want me to develop more. Host: Cool, thank you so much.

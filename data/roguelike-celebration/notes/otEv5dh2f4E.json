@@ -1,0 +1,146 @@
+{
+  "id": "otEv5dh2f4E",
+  "title": "Alex Byaly: Causal Graphs for Procedural Generation",
+  "speaker": "Alex Byaly",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=otEv5dh2f4E",
+  "talk_type": "technical",
+  "summary": "Alex Byaly, a 7DRL developer, demonstrates live that generating each trait of a population independently (weighted raffles per trait) produces perfectly symmetrical data: every subset looks the same as the whole, so exploring a new city teaches nothing new. He points to Tales of Maj'Eyal's grouped item egos and Dwarf Fortress's real-world models and history simulation as ways games avoid this. His solution borrows causal graphs from statistics: draw arrows between traits, roll traits in an order that respects the arrows, and let earlier results adjust the raffle tickets of later ones. The resulting correlations become storytelling fuel and stereotypes that players can learn and occasionally be surprised by.",
+  "games": [
+    "Tales of Maj'Eyal",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "independent attributes",
+      "kind": "warning",
+      "claim": "Generating each attribute independently from fixed weights makes every subset of the population look identical to the whole, so a new city or region has nothing distinctive to discover.",
+      "detail": "Byaly generated characters with city, species, food, job and crime each drawn from a weighted raffle. Filtering to one city shrinks the numbers but leaves every proportion unchanged; he calls this perfectly symmetrical data and says it is bad.",
+      "t": 264,
+      "quote": "No matter how much I restrict the population I am looking at, the proportions of everything I am not filtering on stay exactly the same",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "correlated attributes",
+      "kind": "principle",
+      "claim": "Arbitrary local correlations, like different restaurants or cities having different tastes, are part of what makes exploring a world interesting, and procedural worlds should reproduce them.",
+      "detail": "Byaly compares surveying people in the real world, where answers vary by restaurant, time of day and city for no obvious reason. When you travel somewhere new people act differently, and that is exactly what is missing from independently generated data.",
+      "t": 329,
+      "quote": "there are these random, fun coincidences all over the real world and that's part of what makes exploring interesting and fun",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "oatmeal problem",
+      "kind": "warning",
+      "claim": "Uncorrelated generation is one face of the oatmeal problem: once you have learned one region's distribution, every other region is the same, so there is no reason to visit them.",
+      "detail": "Having met everyone in Agraria and learned the species and job ratios, going to another city reveals exactly the same mix. Byaly asks what the point of going to a different city would be.",
+      "t": 372,
+      "quote": "You go to a different city and it is exactly the same. There is no difference. What was the point of going to a different city?",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "item affixes",
+      "kind": "example",
+      "claim": "Tales of Maj'Eyal generates item properties in bundles (egos like 'of clarity' bringing mental save and confusion immunity together), and which egos are available depends on item type, so item stats are correlated rather than independent.",
+      "detail": "Byaly notes material tiers also bundle stat sizes, and rings have different ego lists than shoes. Because traits come in batches, knowing one stat tells you something about others.",
+      "t": 429,
+      "quote": "Clarity comes with mental save and confusion immunity and this is why this is infused with sionic forces",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build planning",
+      "kind": "principle",
+      "claim": "When item stats are correlated, players can plan builds around those correlations, for example skimping on one stat because they expect it to come bundled with another they are chasing.",
+      "detail": "Byaly's example from Tales of Maj'Eyal: if mental save and confusion immunity show up together, a player chasing 100 confusion immunity can afford to neglect mental save.",
+      "t": 537,
+      "quote": "If you know these two stats so up together and you want a 100 confusion immunity maybe it is OK to scrape on mental save",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "simulation",
+      "kind": "example",
+      "claim": "Dwarf Fortress avoids symmetric data by using real-world models such as erosion and biomes, and by playing out a strategy-game simulation during history generation whose winners and losers create patterns.",
+      "detail": "Byaly argues reproducing any real-world model yields patterns because the real world has them, and that a simulation where some actors fare better than others leaves patterned results even from unpatterned starting points.",
+      "t": 593,
+      "quote": "if you reproduce that model you are going to end up with patterns in the stuff you generated and you don't get this perfect symmetry",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "causal graphs",
+      "kind": "principle",
+      "claim": "Causal graphs are a convenient generation tool because many different graphs fit the same data, so a designer can draw arrows in whatever direction is convenient and still get similar-looking results.",
+      "detail": "Scientists use causal graphs plus data to build predictive models (his example: forest fires and ice cream sales), and struggle because many graphs match the same data. Byaly goes the other direction, from graph to model to data, so that ambiguity frees him.",
+      "t": 885,
+      "quote": "lots of graphs correspond to the same data so I don't need to worry about the kind of graph I draw",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "causal graphs",
+      "kind": "technique",
+      "claim": "To generate with a causal graph, roll the cause first and then add or remove raffle tickets for the effect based on the result, e.g. roll a character's city and then adjust the weights of crimes in that city.",
+      "detail": "Byaly's demo: drawing Cliffside adds tickets for slander and tax evasion, Megalopolis for copyright infringement, Agraria for slander. Each city then shows a distinct crime profile, and the reverse relationship (which city a crime comes from) emerges for free.",
+      "t": 916,
+      "quote": "I am going to do the raffle for the city before I do the raffle for the crime",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "causal graphs",
+      "kind": "technique",
+      "claim": "With multiple causal arrows, attributes must be rolled in an order that never goes backwards along an arrow, which rules out loops in the graph unless you do several passes.",
+      "detail": "Byaly orders species, city, food, job, crime. A loop like species to city to food back to species cannot be honoured in a single raffle pass; he suggests multiple passes might allow backward arrows but did not do it.",
+      "t": 1073,
+      "quote": "I need to do the raffles in an order that makes me never go backwards on an arrow",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "causal graphs",
+      "kind": "warning",
+      "claim": "Chaining causal weight adjustments can produce extreme quirks, such as a city becoming almost entirely unpopulated, which then need correcting via base weights or the adjustment tables.",
+      "detail": "After adding several arrows, Agraria ended up nearly empty. Byaly says he could raise its base raffle tickets or adjust the grids so it shows up more.",
+      "t": 1196,
+      "quote": "Agraria is almost entirely underpopulated. This is a kind of quark that comes from this sort of thing",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Correlations produced by causal generation are storytelling fuel: every pattern (accountants evade more tax, goats never eat mice) invites an explanation from the designer or the players.",
+      "detail": "Byaly notes the relationships could have gone either way and either could be explained. If he does not explain why goats avoid mice, players can come up with their own explanation.",
+      "t": 1316,
+      "quote": "if I don't come up with an explanation for that and put it in a game, the players can come up with an explanation. This storytelling fuel",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "learnable patterns",
+      "kind": "principle",
+      "claim": "Correlated generation creates stereotypes that players learn and rely on, and the rare exceptions that break them produce a kind of surprise impossible in pattern-free data.",
+      "detail": "A few goats in Byaly's world do eat mice. Someone who assumes no mouse-eater is a goat will occasionally be surprised, a surprise that only exists because there was a pattern to assume in the first place.",
+      "t": 1363,
+      "quote": "This is a type of surprise that you would never see if you had never made that assumption in the first place",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "persistent seeds",
+      "kind": "technique",
+      "claim": "Holding generated correlations fixed across runs or for a period like a week would let players learn them, discuss them and plan around them, before rotating to a new version.",
+      "detail": "In Q&A Byaly says random regeneration creates a disconnect because knowledge cannot carry from run to run or player to player; this is a direction he is considering, and he admits he has not yet used the technique in a real game.",
+      "t": 1503,
+      "quote": "hold it fixed for a period of time or across runs or like a week or something so that people can learn it",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

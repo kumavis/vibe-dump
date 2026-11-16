@@ -1,0 +1,70 @@
+Cara Esten Hurtle: Telnet, a New Session, and transsexualizing the past
+Speaker: Cara Esten Hurtle
+https://www.youtube.com/watch?v=ua2Brr6KCJM
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Introduction to nostalgia
+
+[0:00:16] Happy to welcome to the stage Cara Esten Hurtle who is a computer necromancer working on everything from Telnet to VHS to hypercard which is extremely cool. CARA: Thank you so much for the intro. I have been watching all these talks and participating in the chat. And it's been awesome this year, so it's been great to be here. So cool - uh hi, I'm Cara I am going to talk about the aesthetics of nostalgia and this is probably the least roguelike thing that has happened in the two days of this conference, so bear with me in terms of the game aspect of it because there is nothing about -- well, there's two slides where I talk about games and one is Caves of Qud, of course. I worked on a few projects recently which use styles and themes from '80s and '90s computing to tell stories. It has made me think about how we talk about nostalgia without burying ourselves and our stories
+
+[0:01:18] in the past. I am going to start with talking about terms.
+
+## The politics of the past
+
+[0:01:23] Nostalgia comes from the term 'Nostos' which in Greek means return home. The history of that term has largely been applied to heroes returning home from the Trojan war. This shows one particular example of this -- the Odyssey. All of them had one thing in common. All of these stories about coming back home after you've been gone for this 10 year war Going back home SUCKED. It just was bad. You get back and realize 'wait, this place is actively hostile to me now'. Just ask Odysseus and this is especially true, y'know to bring it back to the present, for queer and trans people like me But really, it's not just that
+
+## HyperCard and old tools
+
+[0:02:04] That's kind of the nature of nostalgia in America. The past is a hostile place and nostalgia demands a return to it. It's hegemonic, it's reactionary, it's make America great again for movies and video games and the '80s and all that's true but you're probably asking me why are you presenting all these slides in hypercard then if that's the case? This 30-year-old piece of software. For one reason, hypercard rules and beyond that I think that there is more to nostalgia than just the sort of barely subtle reactionary politics. To get into the projects I have worked on, in 2021, my and my friend Lo Ferris edited
+
+## New Session zine
+
+[0:02:48] A digital zine delivered over Telnet called New Session. We focused on literary content - so short stories, poems, a bit of ASCII art - that kind of thing. We published two issues. The first one began with an editor note that we're starting over, or that we want to. And that's an important thing, this idea of starting over But before we get to that let me just talk about where we're starting over from. Telnet was an internet protocol that replicated the direct serial to serial connection between two computers. If you've used multi-user dungeons or BBSs (bulletin board systems) or anything like this You're familiar with this. Because this is how old computers talked to each other before the internet. You dial in with your modem and setup a serial link between two computer and they would talk to each other and where you would see text or ASCII art or a dungeon. And the internet version was meant to replace the direct telephone connection, so it was called Telnet.
+
+## Artistic constraints
+
+[0:03:51] The first issue was almost entirely composed of art from queer and trans authors. This is an example of that. This is a piece by AC where they talk about the malleability of their body. This is jade G, you can see the heavy use of ASCII art as part of this Here's another piece - this is by ecariglino. These are two meditations on telephone girlhood. This is the initial page. This is a story about women in the bell system - sort of excerpts from the history of that. This is called azalea asterism and talks about a transwoman finding herself via the medium of a chatroom. A fandom chat room. It plays with aesthetic themes, but also it is specifically about queer and trans life. That's a thing that a lot of the popular BBS of that era were not. Which is the interesting thing.
+
+[0:04:55] New Sessions originally started as a way to ask authors to engage in particular constraints. And I think we are all familiar, especially here, about constraints imposed by old software. Sort of a breeding ground for creativity.
+
+## The aesthetic of nostalgia
+
+[0:05:08] Look at Caves of Qud where you have this retroaesthetic. You can do that for ASCII art for all of the other roguelikes. It's a constraint that's been applied that breeds this degree of creativity. Another example of that is Sigil. The pack of doom maps that Romero came out with fairly recently spoke specifically about how engaging with this old engine allowed him to think about the world itself that he was building rather than the sort of technical implementation of these details - which is really cool. Beyond all that technical limitation it used the aesthetics of nostalgia rather than constraints. Let's not just think about what is it constraining us to, but what we're trying to say with this. I think nostalgia really takes off when you ask the question what if things were different. When we talk about what if things were different we talk about a gap tween imagined and the
+
+[0:06:12] historical -- between. What actually happened and how we want to picture it. Now I think this is also something you to be deeply careful about. You can also sort of create a new version of the past that washes over all the sins that legitimately existed. That can be a reactionary practice in and of itself.
+
+## Countering nostalgia
+
+[0:06:32] You can talk about Hamilton where a critique that comes out is the Black and Latinx cast serve as a way of laundering the founding father legacy of white supremacy. Ishmael Reed wrote an article about this and there is writing about this. The specific effects that that kind of nostalgia practice has. If you think about Stranger Things and how a gay character in the show makes it easier to imagine a degree of tolerance but in reality there was mass death in the background from the AIDs pandemic. So you really have to steer clear of this. It's not as on face reactionary as being like "Hey, let's go back to the 80's" But it does have that pretending everything was alright, pretending everything was better. I don't think it is right for us to pretend things didn't have these problem.
+
+## Queering retro tech
+
+[0:07:26] I believe the power in nostalgia is this delta, the friction that arises when the an aesthetic of a piece doesn't match the expected content of the piece. Earlier this year, I published a hypercard stack of my nudes alongside text describing feelings about my trans, gay body. This idea started specifically as a reaction to retrocomputing groups that had a strict no not safe for work content policy And that's really interesting as a queer person - especially as a trans person Trans life is often not safe for work. Trans existence is not safe for work and trans joy which is deeply centered on our bodies is very not safe for work. There is not a really good way to talk about this that doesn't involve you know the idea of our body developing into this thing we want it to develop into. These rule are deeply anti-queer and people won't fess up to that. They will just say well we are concerned about, you know, the family.
+
+[0:08:28] Well, You're excluding whole segments of life.
+
+## Reclaiming the narrative
+
+[0:08:32] And not only that they're also somewhat ahistorical. We can talk about caper in the castro, one of the first explicitly queer games that was DECIDEDLY not safe for work. There was a NSFW warning when you start the game, and it was a hypercard stack. This type of thing has always existed as part of the community but it gets brushed under the rug like we will not talk about this and won't let this be part of our discussions. The reality of so much of this retrocomputing revival and retrogaming content is that it takes cis white male yearning for a simpler better time and dresses it up in a hobby. I also yearn for that time. But it's so much more complex for me! I think about the reason I was engaging in computers and technology and hiding away from the world. That kind of thing. I yearn for that, but I think it was something that was made hegemonic even in its time. Y'know all the parts of it that were queer were kept away from me, it was brushed aside.
+
+[0:09:34] And I think that those people that are sort of aware of having done that need to understand they are the ones who are actively doing that and now guess what? I am going to keep making this content. I want revenge. I want to make something that is beautiful and exist in these groups and is still outwardly queer and outwardly trans.
+
+## Modern queer retro art
+
+[0:09:52] I am regularly now reading posts on Gopher, an old hyperyext system from a socialist lesbian raising a child with her partner. I am seeing CGI rendered trans flags on old computers. If you're not familiar with Foone, their content is really amazing. They post a ton of retrocomputing stuff. There's also a trans woman who published a zine of game boy camera nudes. This is Cara Monir. You can see more of her work at diskettepress.com There's tons of really incredible stuff, and I'm not the only person work in this aesthetic. This has largely become something that queer and trans people are participating in. The aesthetics of old technology are being reclaimed by queers who have been here consistently but who's narratives have been systemically shutout and that's that delta and that difference between point A and point B. We are seeing the world of queer retrocomputing and we're contrasting it with what people
+
+[0:10:52] expect this retrocomputing, this glossed over version of the past and we are saying there is something here and there is aesthetics here. And I think that's really powerful.
+
+## Conclusion and resources
+
+[0:11:01] I hope that this reclamation involves all of that. That sort of presence of queerness - permeating into the spaces that are dominated by cis-white men. And I hope it makes them uncomfortable. I hope they understand understand they could take from us once early in our childhoods but that they can't do it again and that it is not their story but our story too. Thank you for your time. I really apprecite it. I really enjoyed being able to present to you here at Roguelike Celebration. If you want, you can check out New Session at newsession.com. I talked about it being on Telnet but there is an HTML version I publish. There is "Body Out Of Time" and this is very not safe for work but if you are interested in that that's at caraesten.itch.io and you can find me on Twitter at @caraesten. ALEXEI: Thank you. I think I saw someone describe the vibe of this talk as joyful rage which I love and
+
+## Q&A session
+
+[0:12:12] yeah. It is really fantastic given that this conference spends a lot of time talking about older technology, older history of this particular genre, and we have an idea of within this genre and this space of games how history can be lost and kind of niche but this whole element to it as well I am really thankful you took the time to be able to let us highlight that part of the history as well on the conference stage. CARA: Thank you so much. I really enjoy talking about this and joyful rage is a 100% my vibe. ALEXEI: We have a little time for questions. So far no questions quite yet because, y'know, you went really fast. It was great, just like great energy. In lieu of questions, I guess just if there are any other places offhand where to learn more about this?
+
+[0:13:21] CARA: SDF's(?) Gopher they call it flogs. I have been fascinated with lately. There is a variety of different people writing about a very different of things. There is a ton of interesting retrocomputing content done by action retro. They run a couple sites called frog find which is the search engine for vintage computers. 68K news is the news feeds formatted down so you can read them on all browsers. There is a ton of retro content indexed through these things. ALEXEI: That is great. And bam. There is four questions. Now there is more we will have time for. The top one. When did you make your first stack and do you remember what it was? CARA: Playing around with hypercard in class because there was something on there and I am like I don't know what this is, I'm gonna start clicking around I'm bored, I finished all my homework.
+
+[0:14:25] So I started clicking around in hypercard and made like cool. You can put buttons in this and make the buttons do stuff. When I was young I was playing with Q basic. That was kind of my thing back then. ALEXEI: Excellent. I think I also messed around and my dad and I have talked about Q basic which is great. One other quick question which is bumped up to the top. What retro aesthetics really speak to you? CARA: I think the ones that speak me are the ones that aren't doing it just to do. The cohesiveness of an art project needs to understand you are not just doing retro content because it is interesting that old computers exist. The thing that matters is when you use old technology to tell a story that could not be told in any other way. I mentioned the game boy camera photos and stuff.
+
+[0:15:26] But there has been projects where the noise introduced is like particularly an aesthetic component where you need to imagine that noise or distortion exists in the underlying message that's being passed through and that helps you understand the artistic message of creator. I am not interested in aesthetics for aesthetics sake. ALEXEI: Thank you so much for packing so much into these 15 minutes. Thank you.

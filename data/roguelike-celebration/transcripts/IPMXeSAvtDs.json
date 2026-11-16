@@ -1,0 +1,1945 @@
+{
+ "id": "IPMXeSAvtDs",
+ "url": "https://www.youtube.com/watch?v=IPMXeSAvtDs",
+ "title": "Francesco Cottone - Chronicles of Stampadia",
+ "speaker": "Francesco Cottone",
+ "talk_title": "Chronicles of Stampadia",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 921,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "n the board game world Fallout is a nice roguelite with randomized narrative, SuperHOT had procedurally generated levels and missions way before its sequel and a game like Diablo fits a 100 pages book. There are a lot of fantastic ideas and implementations in that world that are worth seeing - as a developer and as a player. I'd like to talk about some of the ones I've got the inspiration to create Chronicles of Stampadia (https://kesiev.com/stampadia), a print-and-play roguelike. And maybe suggest some other interesting board games with randomized exploration.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 37,
+   "title": "What is Chronicles of Stampadia?"
+  },
+  {
+   "start": 52,
+   "title": "Cos generates roguelike adventures to play with no computer"
+  },
+  {
+   "start": 127,
+   "title": "The Beach Umbrella Gaming System (aka the BUGS)"
+  },
+  {
+   "start": 153,
+   "title": "Beach Umbrella Gaming System Games"
+  },
+  {
+   "start": 183,
+   "title": "Feeling a roguelike videogame on paper - The Answer"
+  },
+  {
+   "start": 218,
+   "title": "Feeling a roguelike videogame on paper - The Cool Things"
+  },
+  {
+   "start": 248,
+   "title": "Feeling a roguelike videogame on paper - The BUGS way"
+  },
+  {
+   "start": 324,
+   "title": "Interactive nonlinear storytelling on paper · The Answer"
+  },
+  {
+   "start": 364,
+   "title": "Interactive nonlinear storytelling on paper - The Cool Things"
+  },
+  {
+   "start": 421,
+   "title": "Interactive nonlinear storytelling on paper - The BUGS way"
+  },
+  {
+   "start": 486,
+   "title": "Let the player store secret data on paper - The Answer"
+  },
+  {
+   "start": 539,
+   "title": "Let the player store secret data on paper - The Cool Things"
+  },
+  {
+   "start": 571,
+   "title": "Let the player store secret data on paper - The BUGS way"
+  },
+  {
+   "start": 614,
+   "title": "Postcards from Alternate Gaming Worlds"
+  },
+  {
+   "start": 653,
+   "title": "Some Proofs Coming From My Game Collection"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2135,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 3.04,
+   "text": "and our next speaker will be uh"
+  },
+  {
+   "t": 6.64,
+   "d": 2.16,
+   "text": "francesco catone who is talking"
+  },
+  {
+   "t": 8.8,
+   "d": 2.24,
+   "text": "chronicles of stampedia and other"
+  },
+  {
+   "t": 11.04,
+   "d": 2.64,
+   "text": "postcards from an alternate world i hear"
+  },
+  {
+   "t": 13.68,
+   "d": 2.8,
+   "text": "you bring a souvenir from a magical"
+  },
+  {
+   "t": 16.48,
+   "d": 1.6,
+   "text": "sounding world where there's no boundary"
+  },
+  {
+   "t": 18.08,
+   "d": 2.72,
+   "text": "between games and toys so"
+  },
+  {
+   "t": 20.8,
+   "d": 2.48,
+   "text": "please take it away i'm excited to know"
+  },
+  {
+   "t": 23.28,
+   "d": 1.04,
+   "text": "more"
+  },
+  {
+   "t": 24.32,
+   "d": 1.6,
+   "text": "okay well"
+  },
+  {
+   "t": 25.92,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 27.12,
+   "d": 1.92,
+   "text": "hi i'm francesco"
+  },
+  {
+   "t": 29.04,
+   "d": 3.2,
+   "text": "and the last few months i worked on a"
+  },
+  {
+   "t": 32.24,
+   "d": 2.88,
+   "text": "third base roguelike called chronicles"
+  },
+  {
+   "t": 35.12,
+   "d": 3.2,
+   "text": "of stampadia it works this way on the"
+  },
+  {
+   "t": 38.32,
+   "d": 3.28,
+   "text": "project website every day there is a new"
+  },
+  {
+   "t": 41.6,
+   "d": 2.32,
+   "text": "one-page adventure to print and play"
+  },
+  {
+   "t": 43.92,
+   "d": 2.96,
+   "text": "with two dice an eraser a pencil and a"
+  },
+  {
+   "t": 46.88,
+   "d": 3.6,
+   "text": "small token like a small button"
+  },
+  {
+   "t": 50.48,
+   "d": 0.88,
+   "text": "well"
+  },
+  {
+   "t": 51.36,
+   "d": 2.32,
+   "text": "chronicles of stampada generates"
+  },
+  {
+   "t": 53.68,
+   "d": 3.36,
+   "text": "roguelike adventures to play with no"
+  },
+  {
+   "t": 57.04,
+   "d": 3.12,
+   "text": "computer and even if it may looks like a"
+  },
+  {
+   "t": 60.16,
+   "d": 3.04,
+   "text": "weird way to play a roguelike adventure"
+  },
+  {
+   "t": 63.2,
+   "d": 2.88,
+   "text": "there is a wall gaming world that plays"
+  },
+  {
+   "t": 66.08,
+   "d": 3.52,
+   "text": "games and even video games this way"
+  },
+  {
+   "t": 69.6,
+   "d": 3.12,
+   "text": "but first i'd like to tell you the story"
+  },
+  {
+   "t": 72.72,
+   "d": 2.48,
+   "text": "of chronicles of stampedia"
+  },
+  {
+   "t": 75.2,
+   "d": 2.96,
+   "text": "chronicles of stampadia is my"
+  },
+  {
+   "t": 78.16,
+   "d": 2.56,
+   "text": "personal answer to one of the most"
+  },
+  {
+   "t": 80.72,
+   "d": 3.6,
+   "text": "crucial questions in roguelike gaming"
+  },
+  {
+   "t": 84.32,
+   "d": 1.12,
+   "text": "and that"
+  },
+  {
+   "t": 85.44,
+   "d": 2.56,
+   "text": "is there a gaming system that's still"
+  },
+  {
+   "t": 88.0,
+   "d": 3.36,
+   "text": "missing is mandatory minimal looking"
+  },
+  {
+   "t": 91.36,
+   "d": 2.16,
+   "text": "turn based roguelike"
+  },
+  {
+   "t": 93.52,
+   "d": 3.2,
+   "text": "and my answer was yes but to get the"
+  },
+  {
+   "t": 96.72,
+   "d": 2.32,
+   "text": "answer you need to switch your"
+  },
+  {
+   "t": 99.04,
+   "d": 2.32,
+   "text": "perspective a little on"
+  },
+  {
+   "t": 101.36,
+   "d": 2.4,
+   "text": "what a gaming system is"
+  },
+  {
+   "t": 103.76,
+   "d": 2.48,
+   "text": "i'd like to introduce you a gaming"
+  },
+  {
+   "t": 106.24,
+   "d": 3.36,
+   "text": "system that probably you already know"
+  },
+  {
+   "t": 109.6,
+   "d": 2.8,
+   "text": "but you don't know it with this name and"
+  },
+  {
+   "t": 112.4,
+   "d": 4.0,
+   "text": "that's the beach umbrella gaming system"
+  },
+  {
+   "t": 116.4,
+   "d": 1.92,
+   "text": "the beach umbrella gaming system is a"
+  },
+  {
+   "t": 118.32,
+   "d": 2.8,
+   "text": "gaming system you often play"
+  },
+  {
+   "t": 121.12,
+   "d": 3.44,
+   "text": "in summer under under the beach umbrella"
+  },
+  {
+   "t": 124.56,
+   "d": 3.52,
+   "text": "and it works this way and game schemes"
+  },
+  {
+   "t": 128.08,
+   "d": 2.88,
+   "text": "are often pre-generated and printed on"
+  },
+  {
+   "t": 130.96,
+   "d": 3.12,
+   "text": "one side of a sheet of paper and pencil"
+  },
+  {
+   "t": 134.08,
+   "d": 2.4,
+   "text": "in the razer are two common input"
+  },
+  {
+   "t": 136.48,
+   "d": 1.68,
+   "text": "devices"
+  },
+  {
+   "t": 138.16,
+   "d": 2.88,
+   "text": "numbers grids lookup tables and basic"
+  },
+  {
+   "t": 141.04,
+   "d": 3.28,
+   "text": "math are interface elements and deluxe"
+  },
+  {
+   "t": 144.32,
+   "d": 2.4,
+   "text": "editions of the system may include"
+  },
+  {
+   "t": 146.72,
+   "d": 2.88,
+   "text": "playing cards or dice mostly to play"
+  },
+  {
+   "t": 149.6,
+   "d": 1.76,
+   "text": "social games"
+  },
+  {
+   "t": 151.36,
+   "d": 0.96,
+   "text": "well"
+  },
+  {
+   "t": 152.32,
+   "d": 2.16,
+   "text": "the beach umbrella gaming system games"
+  },
+  {
+   "t": 154.48,
+   "d": 3.04,
+   "text": "are often single player puzzle games and"
+  },
+  {
+   "t": 157.52,
+   "d": 1.44,
+   "text": "that's why i started working on"
+  },
+  {
+   "t": 158.96,
+   "d": 2.0,
+   "text": "chronicles of stampede because this"
+  },
+  {
+   "t": 160.96,
+   "d": 3.36,
+   "text": "system is missing his roguelike with"
+  },
+  {
+   "t": 164.32,
+   "d": 2.56,
+   "text": "minimal graphics"
+  },
+  {
+   "t": 166.88,
+   "d": 2.56,
+   "text": "another answer i had another question"
+  },
+  {
+   "t": 169.44,
+   "d": 2.08,
+   "text": "sorry i had to answer was"
+  },
+  {
+   "t": 171.52,
+   "d": 2.4,
+   "text": "is it possible to feel like playing a"
+  },
+  {
+   "t": 173.92,
+   "d": 2.8,
+   "text": "computer roguelike using just paper"
+  },
+  {
+   "t": 176.72,
+   "d": 2.56,
+   "text": "and the answer is yes i'd like to talk"
+  },
+  {
+   "t": 179.28,
+   "d": 1.28,
+   "text": "to you about"
+  },
+  {
+   "t": 180.56,
+   "d": 3.44,
+   "text": "four against darkness"
+  },
+  {
+   "t": 184.0,
+   "d": 4.4,
+   "text": "darkness is a 2016 dungeon crawler by"
+  },
+  {
+   "t": 188.4,
+   "d": 1.76,
+   "text": "andreas filigoy"
+  },
+  {
+   "t": 190.16,
+   "d": 2.56,
+   "text": "it's a 100 pages book explaining the"
+  },
+  {
+   "t": 192.72,
+   "d": 2.64,
+   "text": "rules and it's a game inspired by pen"
+  },
+  {
+   "t": 195.36,
+   "d": 1.68,
+   "text": "and paper rpgs like dangerous and"
+  },
+  {
+   "t": 197.04,
+   "d": 3.2,
+   "text": "dragons adapted to be played by a single"
+  },
+  {
+   "t": 200.24,
+   "d": 1.36,
+   "text": "player"
+  },
+  {
+   "t": 201.6,
+   "d": 2.24,
+   "text": "to play the game you need the manual a"
+  },
+  {
+   "t": 203.84,
+   "d": 2.88,
+   "text": "sheet of scrap paper and two dies an"
+  },
+  {
+   "t": 206.72,
+   "d": 2.08,
+   "text": "eraser and"
+  },
+  {
+   "t": 208.8,
+   "d": 2.64,
+   "text": "a pencil a cool thing about forges"
+  },
+  {
+   "t": 211.44,
+   "d": 2.88,
+   "text": "darkness it um it's that"
+  },
+  {
+   "t": 214.32,
+   "d": 2.08,
+   "text": "dungeons are also"
+  },
+  {
+   "t": 216.4,
+   "d": 3.36,
+   "text": "randomly generated it uses dice rolls"
+  },
+  {
+   "t": 219.76,
+   "d": 2.0,
+   "text": "and look up tables in a manual to"
+  },
+  {
+   "t": 221.76,
+   "d": 3.52,
+   "text": "generate treasures and monsters but it"
+  },
+  {
+   "t": 225.28,
+   "d": 2.56,
+   "text": "also generates the dungeon layout using"
+  },
+  {
+   "t": 227.84,
+   "d": 3.28,
+   "text": "a specific lookup table so the player"
+  },
+  {
+   "t": 231.12,
+   "d": 3.44,
+   "text": "will draw the map as he explores it"
+  },
+  {
+   "t": 234.56,
+   "d": 3.44,
+   "text": "there are a lot of good ideas in"
+  },
+  {
+   "t": 238.0,
+   "d": 2.0,
+   "text": "four against darkness to steal to get"
+  },
+  {
+   "t": 240.0,
+   "d": 2.72,
+   "text": "inspiration from but we have to adapt"
+  },
+  {
+   "t": 242.72,
+   "d": 3.12,
+   "text": "this and these cool ideas to the system"
+  },
+  {
+   "t": 245.84,
+   "d": 2.32,
+   "text": "limitations"
+  },
+  {
+   "t": 248.16,
+   "d": 2.32,
+   "text": "the beach umbrella game systems game"
+  },
+  {
+   "t": 250.48,
+   "d": 2.72,
+   "text": "schemes are often pre-generated and then"
+  },
+  {
+   "t": 253.2,
+   "d": 2.72,
+   "text": "partially printed think about crosswords"
+  },
+  {
+   "t": 255.92,
+   "d": 2.24,
+   "text": "so chronicles stamp audio must do the"
+  },
+  {
+   "t": 258.16,
+   "d": 1.04,
+   "text": "same"
+  },
+  {
+   "t": 259.2,
+   "d": 2.32,
+   "text": "the game code generates a consistent"
+  },
+  {
+   "t": 261.52,
+   "d": 2.88,
+   "text": "dungeon in memory using classic dungeon"
+  },
+  {
+   "t": 264.4,
+   "d": 1.28,
+   "text": "generator"
+  },
+  {
+   "t": 265.68,
+   "d": 2.72,
+   "text": "generation algorithms but only prints"
+  },
+  {
+   "t": 268.4,
+   "d": 2.48,
+   "text": "agreed with the starting room and"
+  },
+  {
+   "t": 270.88,
+   "d": 1.36,
+   "text": "numbers"
+  },
+  {
+   "t": 272.24,
+   "d": 2.48,
+   "text": "around all the group doors when the"
+  },
+  {
+   "t": 274.72,
+   "d": 1.76,
+   "text": "player enters"
+  },
+  {
+   "t": 276.48,
+   "d": 2.72,
+   "text": "a new room with a token the player will"
+  },
+  {
+   "t": 279.2,
+   "d": 2.96,
+   "text": "sum the exit number with the coordinates"
+  },
+  {
+   "t": 282.16,
+   "d": 2.96,
+   "text": "of the cell to get an id to look for in"
+  },
+  {
+   "t": 285.12,
+   "d": 1.92,
+   "text": "a lookup table"
+  },
+  {
+   "t": 287.04,
+   "d": 2.32,
+   "text": "and the matching row will explain where"
+  },
+  {
+   "t": 289.36,
+   "d": 1.36,
+   "text": "the room is"
+  },
+  {
+   "t": 290.72,
+   "d": 3.44,
+   "text": "the room size and the room description"
+  },
+  {
+   "t": 294.16,
+   "d": 2.8,
+   "text": "unlike four guest darknet that uses uh"
+  },
+  {
+   "t": 296.96,
+   "d": 2.24,
+   "text": "dice rolls chronicles of stampedianos"
+  },
+  {
+   "t": 299.2,
+   "d": 2.4,
+   "text": "the wall dungeon from the very beginning"
+  },
+  {
+   "t": 301.6,
+   "d": 3.12,
+   "text": "like classic dungeon crawlers so why not"
+  },
+  {
+   "t": 304.72,
+   "d": 2.48,
+   "text": "try adding some kind of"
+  },
+  {
+   "t": 307.2,
+   "d": 2.24,
+   "text": "modern storytelling to the game"
+  },
+  {
+   "t": 309.44,
+   "d": 3.04,
+   "text": "but is it possible to create an"
+  },
+  {
+   "t": 312.48,
+   "d": 2.64,
+   "text": "interactive non-linear storytelling"
+  },
+  {
+   "t": 315.12,
+   "d": 2.96,
+   "text": "using just paper and the answer is still"
+  },
+  {
+   "t": 318.08,
+   "d": 2.24,
+   "text": "yes and i'd like i'd like to talk you"
+  },
+  {
+   "t": 320.32,
+   "d": 1.04,
+   "text": "about"
+  },
+  {
+   "t": 321.36,
+   "d": 3.6,
+   "text": "fallout the ball game fallout the ball"
+  },
+  {
+   "t": 324.96,
+   "d": 2.24,
+   "text": "game is a 2017"
+  },
+  {
+   "t": 327.2,
+   "d": 2.8,
+   "text": "adventure and exploration board game"
+  },
+  {
+   "t": 330.0,
+   "d": 2.8,
+   "text": "from fantasy flight games it's a game"
+  },
+  {
+   "t": 332.8,
+   "d": 2.4,
+   "text": "inspired by the fallout series for"
+  },
+  {
+   "t": 335.2,
+   "d": 2.16,
+   "text": "example the first mission tells"
+  },
+  {
+   "t": 337.36,
+   "d": 2.88,
+   "text": "key events for of fallout 4 maps are"
+  },
+  {
+   "t": 340.24,
+   "d": 2.4,
+   "text": "randomly generated by the way mission"
+  },
+  {
+   "t": 342.64,
+   "d": 2.64,
+   "text": "maps and events are partially randomized"
+  },
+  {
+   "t": 345.28,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 346.16,
+   "d": 2.08,
+   "text": "and also the original game mechanics has"
+  },
+  {
+   "t": 348.24,
+   "d": 2.48,
+   "text": "been adapted for example the fighting"
+  },
+  {
+   "t": 350.72,
+   "d": 2.8,
+   "text": "system the character customization the"
+  },
+  {
+   "t": 353.52,
+   "d": 2.88,
+   "text": "radiation's effects and so on but the"
+  },
+  {
+   "t": 356.4,
+   "d": 2.96,
+   "text": "cool thing about this game is that the"
+  },
+  {
+   "t": 359.36,
+   "d": 2.4,
+   "text": "narrative season has been adapted to the"
+  },
+  {
+   "t": 361.76,
+   "d": 1.76,
+   "text": "ball game too"
+  },
+  {
+   "t": 363.52,
+   "d": 1.36,
+   "text": "when the player"
+  },
+  {
+   "t": 364.88,
+   "d": 2.8,
+   "text": "visits a place on the game board he may"
+  },
+  {
+   "t": 367.68,
+   "d": 2.64,
+   "text": "decide to perform an encounter action"
+  },
+  {
+   "t": 370.32,
+   "d": 1.84,
+   "text": "when the player performs an encounter"
+  },
+  {
+   "t": 372.16,
+   "d": 3.2,
+   "text": "action he draws a card an encounter card"
+  },
+  {
+   "t": 375.36,
+   "d": 2.8,
+   "text": "from that place type deck of cards on"
+  },
+  {
+   "t": 378.16,
+   "d": 2.72,
+   "text": "the cards there is a short story and the"
+  },
+  {
+   "t": 380.88,
+   "d": 2.24,
+   "text": "player may take a decision"
+  },
+  {
+   "t": 383.12,
+   "d": 3.36,
+   "text": "consequences of that of the decisions"
+  },
+  {
+   "t": 386.48,
+   "d": 2.48,
+   "text": "may ask the player to pick a number an"
+  },
+  {
+   "t": 388.96,
+   "d": 2.32,
+   "text": "albert card from the game box and"
+  },
+  {
+   "t": 391.28,
+   "d": 2.32,
+   "text": "shuffle it in"
+  },
+  {
+   "t": 393.6,
+   "d": 2.88,
+   "text": "into one of the decks of cards this way"
+  },
+  {
+   "t": 396.48,
+   "d": 2.64,
+   "text": "the player will face the consequences of"
+  },
+  {
+   "t": 399.12,
+   "d": 1.6,
+   "text": "his own decision"
+  },
+  {
+   "t": 400.72,
+   "d": 3.04,
+   "text": "elsewhere and well as expected"
+  },
+  {
+   "t": 403.76,
+   "d": 1.76,
+   "text": "but the cool thing another cool thing"
+  },
+  {
+   "t": 405.52,
+   "d": 0.88,
+   "text": "about"
+  },
+  {
+   "t": 406.4,
+   "d": 2.56,
+   "text": "fallout the board game is that the game"
+  },
+  {
+   "t": 408.96,
+   "d": 2.56,
+   "text": "is able to mix multiple interactive"
+  },
+  {
+   "t": 411.52,
+   "d": 2.8,
+   "text": "storylines in the same adventures"
+  },
+  {
+   "t": 414.32,
+   "d": 1.76,
+   "text": "in the same adventure"
+  },
+  {
+   "t": 416.08,
+   "d": 2.4,
+   "text": "there are a lot of cool ideas also in"
+  },
+  {
+   "t": 418.48,
+   "d": 2.8,
+   "text": "fallout the bird game for example"
+  },
+  {
+   "t": 421.28,
+   "d": 4.0,
+   "text": "short sentences are good to tell a story"
+  },
+  {
+   "t": 425.28,
+   "d": 2.24,
+   "text": "even if the story is as complex as the"
+  },
+  {
+   "t": 427.52,
+   "d": 1.2,
+   "text": "pull out one"
+  },
+  {
+   "t": 428.72,
+   "d": 2.48,
+   "text": "and short sentences both fits the small"
+  },
+  {
+   "t": 431.2,
+   "d": 2.48,
+   "text": "amount of space in the lookup table on a"
+  },
+  {
+   "t": 433.68,
+   "d": 2.8,
+   "text": "sheet of paper and the game genre for"
+  },
+  {
+   "t": 436.48,
+   "d": 1.76,
+   "text": "example the classic roguelike the"
+  },
+  {
+   "t": 438.24,
+   "d": 2.4,
+   "text": "classic rogue sorry um"
+  },
+  {
+   "t": 440.64,
+   "d": 3.36,
+   "text": "uses short sentences to tell the player"
+  },
+  {
+   "t": 444.0,
+   "d": 1.6,
+   "text": "what's happened"
+  },
+  {
+   "t": 445.6,
+   "d": 2.16,
+   "text": "chronicles of stampedia also needs a"
+  },
+  {
+   "t": 447.76,
+   "d": 2.08,
+   "text": "database of quests splitted in"
+  },
+  {
+   "t": 449.84,
+   "d": 2.88,
+   "text": "sub-events as fallout these sub-events"
+  },
+  {
+   "t": 452.72,
+   "d": 2.32,
+   "text": "will be eventually"
+  },
+  {
+   "t": 455.04,
+   "d": 2.24,
+   "text": "scattered around the dungeons from the"
+  },
+  {
+   "t": 457.28,
+   "d": 2.32,
+   "text": "starting room to the farthest room of"
+  },
+  {
+   "t": 459.6,
+   "d": 2.4,
+   "text": "the dungeon but even using this"
+  },
+  {
+   "t": 462.0,
+   "d": 2.48,
+   "text": "technique the player may roam around"
+  },
+  {
+   "t": 464.48,
+   "d": 3.2,
+   "text": "the dungeon breaking the sequence so"
+  },
+  {
+   "t": 467.68,
+   "d": 3.04,
+   "text": "some kind of memory system even if this"
+  },
+  {
+   "t": 470.72,
+   "d": 3.28,
+   "text": "game is on paper is needed"
+  },
+  {
+   "t": 474.0,
+   "d": 2.88,
+   "text": "but is it possible to let the players"
+  },
+  {
+   "t": 476.88,
+   "d": 2.56,
+   "text": "store the secret data"
+  },
+  {
+   "t": 479.44,
+   "d": 2.72,
+   "text": "behind his own back"
+  },
+  {
+   "t": 482.16,
+   "d": 3.2,
+   "text": "and the answer is still yeah i'd like to"
+  },
+  {
+   "t": 485.36,
+   "d": 3.6,
+   "text": "talk you about a fabled lens the wartwo"
+  },
+  {
+   "t": 488.96,
+   "d": 1.04,
+   "text": "kingdom"
+  },
+  {
+   "t": 490.0,
+   "d": 3.44,
+   "text": "fabulous the wharton kingdom is a 1995"
+  },
+  {
+   "t": 493.44,
+   "d": 3.12,
+   "text": "game book by david morris and jamie"
+  },
+  {
+   "t": 496.56,
+   "d": 2.32,
+   "text": "thompson it is a game book that instead"
+  },
+  {
+   "t": 498.88,
+   "d": 2.08,
+   "text": "of telling a branching path story as"
+  },
+  {
+   "t": 500.96,
+   "d": 2.08,
+   "text": "many classic game books it offers"
+  },
+  {
+   "t": 503.04,
+   "d": 2.8,
+   "text": "interconnected areas that the player may"
+  },
+  {
+   "t": 505.84,
+   "d": 2.56,
+   "text": "freely explore like in open world video"
+  },
+  {
+   "t": 508.4,
+   "d": 2.24,
+   "text": "games like skyrim"
+  },
+  {
+   "t": 510.64,
+   "d": 2.08,
+   "text": "the player will will meet strange"
+  },
+  {
+   "t": 512.72,
+   "d": 2.24,
+   "text": "characters will accept and fulfill"
+  },
+  {
+   "t": 514.96,
+   "d": 2.96,
+   "text": "quests will fight monsters and as in"
+  },
+  {
+   "t": 517.92,
+   "d": 2.48,
+   "text": "sandbox gaming he will look"
+  },
+  {
+   "t": 520.4,
+   "d": 3.12,
+   "text": "for creative ways to get killed"
+  },
+  {
+   "t": 523.52,
+   "d": 2.24,
+   "text": "you can even move from one book of the"
+  },
+  {
+   "t": 525.76,
+   "d": 3.2,
+   "text": "series to another book sailing on"
+  },
+  {
+   "t": 528.96,
+   "d": 2.8,
+   "text": "in-game ships it's a very cool and"
+  },
+  {
+   "t": 531.76,
+   "d": 1.2,
+   "text": "modern"
+  },
+  {
+   "t": 532.96,
+   "d": 2.88,
+   "text": "game book but the cool thing the cool"
+  },
+  {
+   "t": 535.84,
+   "d": 2.72,
+   "text": "thing about this this book is"
+  },
+  {
+   "t": 538.56,
+   "d": 2.4,
+   "text": "it managed to let the player store"
+  },
+  {
+   "t": 540.96,
+   "d": 2.24,
+   "text": "secret data on paper"
+  },
+  {
+   "t": 543.2,
+   "d": 2.48,
+   "text": "the book may ask the player to pick a"
+  },
+  {
+   "t": 545.68,
+   "d": 2.72,
+   "text": "checkbox printed on the page without"
+  },
+  {
+   "t": 548.4,
+   "d": 2.16,
+   "text": "explaining the reason"
+  },
+  {
+   "t": 550.56,
+   "d": 2.8,
+   "text": "when a certain condition is verified the"
+  },
+  {
+   "t": 553.36,
+   "d": 1.84,
+   "text": "game might ask the player to jump to"
+  },
+  {
+   "t": 555.2,
+   "d": 2.4,
+   "text": "another paragraph instead of keep"
+  },
+  {
+   "t": 557.6,
+   "d": 2.16,
+   "text": "instead of keep reading this way the"
+  },
+  {
+   "t": 559.76,
+   "d": 2.96,
+   "text": "game may keep track of the time passing"
+  },
+  {
+   "t": 562.72,
+   "d": 2.0,
+   "text": "the gold over spent"
+  },
+  {
+   "t": 564.72,
+   "d": 2.48,
+   "text": "player past decisions clear quest and so"
+  },
+  {
+   "t": 567.2,
+   "d": 1.36,
+   "text": "on"
+  },
+  {
+   "t": 568.56,
+   "d": 1.92,
+   "text": "starting from this idea i've added to"
+  },
+  {
+   "t": 570.48,
+   "d": 1.04,
+   "text": "the game"
+  },
+  {
+   "t": 571.52,
+   "d": 3.12,
+   "text": "and a set a system of check boxes"
+  },
+  {
+   "t": 574.64,
+   "d": 3.04,
+   "text": "shuffled check boxes one for every room"
+  },
+  {
+   "t": 577.68,
+   "d": 3.12,
+   "text": "to track the player decisions and"
+  },
+  {
+   "t": 580.8,
+   "d": 2.88,
+   "text": "obfuscating some way the consequences"
+  },
+  {
+   "t": 583.68,
+   "d": 3.2,
+   "text": "moreover the game called"
+  },
+  {
+   "t": 586.88,
+   "d": 1.84,
+   "text": "the game code the room descriptions are"
+  },
+  {
+   "t": 588.72,
+   "d": 3.68,
+   "text": "using a set of place order that are sold"
+  },
+  {
+   "t": 592.4,
+   "d": 2.32,
+   "text": "and translated to english when printed"
+  },
+  {
+   "t": 594.72,
+   "d": 1.2,
+   "text": "on paper"
+  },
+  {
+   "t": 595.92,
+   "d": 4.24,
+   "text": "this way i could find shorter and"
+  },
+  {
+   "t": 600.16,
+   "d": 2.56,
+   "text": "more readable sentences during"
+  },
+  {
+   "t": 602.72,
+   "d": 2.4,
+   "text": "development and without changing all the"
+  },
+  {
+   "t": 605.12,
+   "d": 1.76,
+   "text": "code and this this"
+  },
+  {
+   "t": 606.88,
+   "d": 2.0,
+   "text": "and this is the way the game"
+  },
+  {
+   "t": 608.88,
+   "d": 1.28,
+   "text": "targets"
+  },
+  {
+   "t": 610.16,
+   "d": 2.56,
+   "text": "table and map elements"
+  },
+  {
+   "t": 612.72,
+   "d": 0.88,
+   "text": "well"
+  },
+  {
+   "t": 613.6,
+   "d": 1.6,
+   "text": "long story short"
+  },
+  {
+   "t": 615.2,
+   "d": 2.56,
+   "text": "short and chronicles tampadia has been"
+  },
+  {
+   "t": 617.76,
+   "d": 1.84,
+   "text": "inspired by"
+  },
+  {
+   "t": 619.6,
+   "d": 4.08,
+   "text": "a lot of gaming worlds and i i hope you"
+  },
+  {
+   "t": 623.68,
+   "d": 2.32,
+   "text": "will explore one of this world at least"
+  },
+  {
+   "t": 626.0,
+   "d": 1.68,
+   "text": "one of this world if you're a roguelike"
+  },
+  {
+   "t": 627.68,
+   "d": 3.2,
+   "text": "gamer or a loca roguelike game designer"
+  },
+  {
+   "t": 630.88,
+   "d": 2.8,
+   "text": "i suggest you to start from exploration"
+  },
+  {
+   "t": 633.68,
+   "d": 2.32,
+   "text": "board games there are a lot of there is"
+  },
+  {
+   "t": 636.0,
+   "d": 2.8,
+   "text": "a lot of stuff in common with classic"
+  },
+  {
+   "t": 638.8,
+   "d": 2.72,
+   "text": "roguelike video games but i don't want i"
+  },
+  {
+   "t": 641.52,
+   "d": 2.24,
+   "text": "want to i don't want to spoil you the"
+  },
+  {
+   "t": 643.76,
+   "d": 2.24,
+   "text": "fun here"
+  },
+  {
+   "t": 646.0,
+   "d": 1.77,
+   "text": "but i brought some"
+  },
+  {
+   "t": 647.77,
+   "d": 1.19,
+   "text": "[Music]"
+  },
+  {
+   "t": 648.96,
+   "d": 2.0,
+   "text": "proofs coming from my board game"
+  },
+  {
+   "t": 650.96,
+   "d": 2.08,
+   "text": "collection"
+  },
+  {
+   "t": 653.04,
+   "d": 3.52,
+   "text": "first bloodborne is a game with randomly"
+  },
+  {
+   "t": 656.56,
+   "d": 1.68,
+   "text": "generated dungeons"
+  },
+  {
+   "t": 658.24,
+   "d": 2.4,
+   "text": "and is a funny party game"
+  },
+  {
+   "t": 660.64,
+   "d": 2.88,
+   "text": "super hot mind control delete first"
+  },
+  {
+   "t": 663.52,
+   "d": 2.0,
+   "text": "featuring the randomly generated levels"
+  },
+  {
+   "t": 665.52,
+   "d": 3.28,
+   "text": "in 2020 but there is a prequel they did"
+  },
+  {
+   "t": 668.8,
+   "d": 1.2,
+   "text": "the same"
+  },
+  {
+   "t": 670.0,
+   "d": 1.76,
+   "text": "in the 2017"
+  },
+  {
+   "t": 671.76,
+   "d": 3.52,
+   "text": "or city of kings a cooperative rpg that"
+  },
+  {
+   "t": 675.28,
+   "d": 3.6,
+   "text": "literally uses a back system so a system"
+  },
+  {
+   "t": 678.88,
+   "d": 3.28,
+   "text": "of real life banks to generate random"
+  },
+  {
+   "t": 682.16,
+   "d": 0.96,
+   "text": "enemies"
+  },
+  {
+   "t": 683.12,
+   "d": 2.8,
+   "text": "in magic maze players are exploring"
+  },
+  {
+   "t": 685.92,
+   "d": 2.0,
+   "text": "randomly generated dungeons together but"
+  },
+  {
+   "t": 687.92,
+   "d": 1.52,
+   "text": "in real time"
+  },
+  {
+   "t": 689.44,
+   "d": 3.76,
+   "text": "so it makes a it makes it a roguelite"
+  },
+  {
+   "t": 693.2,
+   "d": 1.76,
+   "text": "board game i don't know"
+  },
+  {
+   "t": 694.96,
+   "d": 3.44,
+   "text": "and there is a free mini rogue game that"
+  },
+  {
+   "t": 698.4,
+   "d": 2.4,
+   "text": "you can play with just nine cards using"
+  },
+  {
+   "t": 700.8,
+   "d": 2.24,
+   "text": "just nine cards but don't worry two of"
+  },
+  {
+   "t": 703.04,
+   "d": 0.88,
+   "text": "them"
+  },
+  {
+   "t": 703.92,
+   "d": 3.44,
+   "text": "are used for the user interface"
+  },
+  {
+   "t": 707.36,
+   "d": 0.96,
+   "text": "well"
+  },
+  {
+   "t": 708.32,
+   "d": 4.08,
+   "text": "i hope you enjoyed our um short trip in"
+  },
+  {
+   "t": 712.4,
+   "d": 2.88,
+   "text": "chronicles of stampede design and i hope"
+  },
+  {
+   "t": 715.28,
+   "d": 2.32,
+   "text": "to see you roaming around randomly"
+  },
+  {
+   "t": 717.6,
+   "d": 2.56,
+   "text": "generated dungeons but in other gaming"
+  },
+  {
+   "t": 720.16,
+   "d": 1.76,
+   "text": "worlds"
+  },
+  {
+   "t": 721.92,
+   "d": 2.88,
+   "text": "thank you so much that's amazing i'm i'm"
+  },
+  {
+   "t": 724.8,
+   "d": 1.92,
+   "text": "still caught up on that having hidden"
+  },
+  {
+   "t": 726.72,
+   "d": 2.16,
+   "text": "data in something that the players out"
+  },
+  {
+   "t": 728.88,
+   "d": 2.08,
+   "text": "filling out themselves over paper that's"
+  },
+  {
+   "t": 730.96,
+   "d": 2.16,
+   "text": "that i didn't i didn't know you could do"
+  },
+  {
+   "t": 733.12,
+   "d": 3.36,
+   "text": "that so that's amazing um we actually"
+  },
+  {
+   "t": 736.48,
+   "d": 2.4,
+   "text": "have four minutes does anyone have some"
+  },
+  {
+   "t": 738.88,
+   "d": 2.16,
+   "text": "questions for francesco"
+  },
+  {
+   "t": 741.04,
+   "d": 2.56,
+   "text": "um you could put them in the note board"
+  },
+  {
+   "t": 743.6,
+   "d": 1.36,
+   "text": "or you could probably do it right in"
+  },
+  {
+   "t": 744.96,
+   "d": 1.68,
+   "text": "chat because i'm watching"
+  },
+  {
+   "t": 746.64,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 747.92,
+   "d": 1.6,
+   "text": "but yeah we actually have a few minutes"
+  },
+  {
+   "t": 749.52,
+   "d": 3.04,
+   "text": "because you that was a nice tight talk"
+  },
+  {
+   "t": 752.56,
+   "d": 2.4,
+   "text": "very good lightning talk timing"
+  },
+  {
+   "t": 754.96,
+   "d": 1.68,
+   "text": "i didn't want to spoil you the phone to"
+  },
+  {
+   "t": 756.64,
+   "d": 2.72,
+   "text": "discover why roguelike"
+  },
+  {
+   "t": 759.36,
+   "d": 2.88,
+   "text": "video games and board games"
+  },
+  {
+   "t": 762.24,
+   "d": 2.32,
+   "text": "are have a lot of common but one"
+  },
+  {
+   "t": 764.56,
+   "d": 1.6,
+   "text": "suggestion can give you"
+  },
+  {
+   "t": 766.16,
+   "d": 1.76,
+   "text": "is that um"
+  },
+  {
+   "t": 767.92,
+   "d": 3.44,
+   "text": "roguelike games or usually use randomly"
+  },
+  {
+   "t": 771.36,
+   "d": 2.8,
+   "text": "generated content to"
+  },
+  {
+   "t": 774.16,
+   "d": 2.96,
+   "text": "give longevity to a game in board games"
+  },
+  {
+   "t": 777.12,
+   "d": 3.52,
+   "text": "is a way to stay alive to make the game"
+  },
+  {
+   "t": 780.64,
+   "d": 1.36,
+   "text": "because"
+  },
+  {
+   "t": 782.0,
+   "d": 3.6,
+   "text": "story based board games are shorter"
+  },
+  {
+   "t": 785.6,
+   "d": 2.56,
+   "text": "we can we can't make long stories in"
+  },
+  {
+   "t": 788.16,
+   "d": 2.32,
+   "text": "board games so"
+  },
+  {
+   "t": 790.48,
+   "d": 3.2,
+   "text": "random regeneration is a way to"
+  },
+  {
+   "t": 793.68,
+   "d": 2.72,
+   "text": "create longer game experience so it's"
+  },
+  {
+   "t": 796.4,
+   "d": 3.12,
+   "text": "quite mandatory to make a roguelike game"
+  },
+  {
+   "t": 799.52,
+   "d": 2.24,
+   "text": "when you are making an adventure game in"
+  },
+  {
+   "t": 801.76,
+   "d": 3.36,
+   "text": "morgan it's quite an often practice yeah"
+  },
+  {
+   "t": 805.12,
+   "d": 2.16,
+   "text": "yeah an overlap of the way the"
+  },
+  {
+   "t": 807.28,
+   "d": 1.12,
+   "text": "development works that's really"
+  },
+  {
+   "t": 808.4,
+   "d": 1.12,
+   "text": "interesting"
+  },
+  {
+   "t": 809.52,
+   "d": 2.24,
+   "text": "um okay i've got one question here from"
+  },
+  {
+   "t": 811.76,
+   "d": 1.84,
+   "text": "mr foldy does it take a lot of uh"
+  },
+  {
+   "t": 813.6,
+   "d": 2.32,
+   "text": "designer time to make each daily stamp"
+  },
+  {
+   "t": 815.92,
+   "d": 3.68,
+   "text": "pad stampadia puzzle"
+  },
+  {
+   "t": 819.6,
+   "d": 2.0,
+   "text": "chronicles or stampede works with the"
+  },
+  {
+   "t": 821.6,
+   "d": 2.48,
+   "text": "database of quests and subquests that"
+  },
+  {
+   "t": 824.08,
+   "d": 2.72,
+   "text": "are randomly selected and"
+  },
+  {
+   "t": 826.8,
+   "d": 3.04,
+   "text": "each quests have"
+  },
+  {
+   "t": 829.84,
+   "d": 2.56,
+   "text": "some random elements in it on it so"
+  },
+  {
+   "t": 832.4,
+   "d": 2.4,
+   "text": "it's all made by the algorithm so i"
+  },
+  {
+   "t": 834.8,
+   "d": 2.32,
+   "text": "filled the database then"
+  },
+  {
+   "t": 837.12,
+   "d": 2.16,
+   "text": "the rooms are randomly scattered around"
+  },
+  {
+   "t": 839.28,
+   "d": 2.72,
+   "text": "the dungeon are making the dungeon and"
+  },
+  {
+   "t": 842.0,
+   "d": 1.6,
+   "text": "then the quests are"
+  },
+  {
+   "t": 843.6,
+   "d": 3.2,
+   "text": "quest hot spots as cover around so there"
+  },
+  {
+   "t": 846.8,
+   "d": 1.2,
+   "text": "is no"
+  },
+  {
+   "t": 848.0,
+   "d": 2.72,
+   "text": "work for the designer"
+  },
+  {
+   "t": 850.72,
+   "d": 1.92,
+   "text": "to make the requests"
+  },
+  {
+   "t": 852.64,
+   "d": 3.28,
+   "text": "moreover is often text only so you can"
+  },
+  {
+   "t": 855.92,
+   "d": 1.92,
+   "text": "tell the story without"
+  },
+  {
+   "t": 857.84,
+   "d": 3.52,
+   "text": "making graphics and so on uh more of the"
+  },
+  {
+   "t": 861.36,
+   "d": 1.6,
+   "text": "the stuff"
+  },
+  {
+   "t": 862.96,
+   "d": 2.64,
+   "text": "a lot of stuff of chronicles stampedia"
+  },
+  {
+   "t": 865.6,
+   "d": 2.4,
+   "text": "happens in the player's mind"
+  },
+  {
+   "t": 868.0,
+   "d": 1.84,
+   "text": "because it's just symbols and numbers"
+  },
+  {
+   "t": 869.84,
+   "d": 2.8,
+   "text": "and nice roles as in many board games"
+  },
+  {
+   "t": 872.64,
+   "d": 3.36,
+   "text": "and sometimes it works if you play with"
+  },
+  {
+   "t": 876.0,
+   "d": 2.24,
+   "text": "the rules of chronicles of stampede you"
+  },
+  {
+   "t": 878.24,
+   "d": 1.76,
+   "text": "can make"
+  },
+  {
+   "t": 880.0,
+   "d": 1.76,
+   "text": "moral decisions"
+  },
+  {
+   "t": 881.76,
+   "d": 2.56,
+   "text": "so multiple chronicles of stampedia"
+  },
+  {
+   "t": 884.32,
+   "d": 1.92,
+   "text": "features multiple endings some quests"
+  },
+  {
+   "t": 886.24,
+   "d": 3.68,
+   "text": "has multiple endings there is um"
+  },
+  {
+   "t": 889.92,
+   "d": 1.6,
+   "text": "a card game"
+  },
+  {
+   "t": 891.52,
+   "d": 2.96,
+   "text": "you can play in chronicles of stampedia"
+  },
+  {
+   "t": 894.48,
+   "d": 4.08,
+   "text": "is very simple card game and called"
+  },
+  {
+   "t": 898.56,
+   "d": 2.08,
+   "text": "the beastcrafters"
+  },
+  {
+   "t": 900.64,
+   "d": 2.08,
+   "text": "but there are also"
+  },
+  {
+   "t": 902.72,
+   "d": 2.24,
+   "text": "other little features like"
+  },
+  {
+   "t": 904.96,
+   "d": 2.72,
+   "text": "shade puzzles that are common in"
+  },
+  {
+   "t": 907.68,
+   "d": 2.4,
+   "text": "action adventures but you can find shape"
+  },
+  {
+   "t": 910.08,
+   "d": 2.48,
+   "text": "puzzles in chronicles of somebody too"
+  },
+  {
+   "t": 912.56,
+   "d": 3.44,
+   "text": "and so on but is making a quest needs"
+  },
+  {
+   "t": 916.0,
+   "d": 2.64,
+   "text": "just few minutes right right it's just"
+  },
+  {
+   "t": 918.64,
+   "d": 2.96,
+   "text": "set up in the beginning"
+  }
+ ]
+}

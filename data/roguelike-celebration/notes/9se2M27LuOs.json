@@ -1,0 +1,219 @@
+{
+  "id": "9se2M27LuOs",
+  "title": "Josh Ge - Cogmind & becoming a dev",
+  "speaker": "Josh Ge (Kyzrati)",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=9se2M27LuOs",
+  "talk_type": "postmortem",
+  "summary": "Josh Ge describes his path from a non-CS background through a 10,000-hour unreleased hobby game, an X-COM roguelike, REXPaint and a 7DRL to working full-time on Cogmind. He stresses community engagement as the thing that made the career possible. The second half argues that roguelikes can reach a wider audience through polish: immersive audio, full mouse support, context help, automation of no-brainer actions, tilesets that keep ASCII qualities, and particle-driven animation, while gameplay itself needs no help.",
+  "games": [
+    "Cogmind",
+    "X@COM",
+    "Dungeon Crawl Stone Soup",
+    "X-COM",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "first project scope",
+      "kind": "principle",
+      "claim": "A good first roguelike project is a roguelike version of a game you already know well, because familiar mechanics let you focus on technical and usability problems without being overwhelmed.",
+      "detail": "Ge made an X-COM roguelike as his first roguelike after reading Andrew Doull's 2008 call for one. Knowing the X-COM mechanics let him concentrate on technical aspects and usability, such as representing a 3D multi-level world in a roguelike interface. He notes many first roguelikes take a favourite thing and turn it into a roguelike.",
+      "t": 345,
+      "quote": "it was a really good starting point for me because i was very familiar with the mechanics i was very familiar with xcom",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "technique",
+      "claim": "Giving players modding tools is a way to help a roguelike's community build itself.",
+      "detail": "Ge says you need a community to have a successful roguelike. With his X-COM roguelike he gave players the tools to build their own content through mods, which helped build the community.",
+      "t": 408,
+      "quote": "you really need to build a community if you're gonna uh have a successful roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl planning",
+      "kind": "technique",
+      "claim": "Cogmind's 7DRL version was only possible because Ge spent over a month planning on paper before the seven-day jam.",
+      "detail": "Ge considered the design far too ambitious for a week, so he planned for more than a month in advance; he says otherwise it would have been impossible, and that the planning paid off. He also notes 7DRL entrants need not work as intensely as he did.",
+      "t": 509,
+      "quote": "it's a seven day roguelike but i actually spent over a month planning what i was going to do with it otherwise it would have been impossible",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "part attachment",
+      "kind": "example",
+      "claim": "Cogmind's core concept is that the player takes parts from enemies and attaches them to themselves, growing bigger and more powerful.",
+      "detail": "Ge says the idea came from a single sentence he saw posted on a forum while in Thailand, asking what if you could take the parts of your enemies and make them part of you. Later he notes destroyed robots explode into parts the player can pick up and use.",
+      "t": 537,
+      "quote": "what if you could take the parts of your enemies and and make them a part of you and you know become bigger and bigger",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "ascii art editor",
+      "kind": "example",
+      "claim": "REXPaint, an ASCII art editor Ge built, serves roguelike developers for mock-ups and mapping, and he uses it in every aspect of Cogmind.",
+      "detail": "He built it because nothing had all the features he needed, describing it as Photoshop for ASCII art. Users make UI mock-ups with it, and he opens it every day while working on Cogmind.",
+      "t": 660,
+      "quote": "it's really good tool for uh roguelike development as well as art you can use it for mock-ups for mapping",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "developer engagement",
+      "kind": "warning",
+      "claim": "Developers who avoid social media and community discussion miss the varied opinions about roguelikes that should inform their design.",
+      "detail": "Ge avoided social media for years and calls that a big problem for starting developers and a mistake that slowed him down. Blogging, Reddit and forums let him understand the many viewpoints on roguelikes, which he says you cannot think of all by yourself; developers should listen to all sides.",
+      "t": 763,
+      "quote": "you can't think of them all yourself so it really helps to interact with the community",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope growth",
+      "kind": "example",
+      "claim": "Expanding Cogmind from a 7DRL into a commercial game grew from an expected one year to nearly 6,000 hours over three and a half years.",
+      "detail": "Ge expected turning the 7DRL into a small game would take a year, but players liked early versions and he saw potential for much more. He also wanted an impressive first commercial game, because failure would mean quitting full-time development.",
+      "t": 860,
+      "quote": "here's the cumulative hours i've spent working on cogmind for the past three and a half years we're approaching 6 000 hours",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "polish",
+      "kind": "principle",
+      "claim": "Ge argues roguelikes can reach a wider audience mainly through polish, which most traditional roguelikes lack.",
+      "detail": "He contrasts traditional roguelikes with polished 2D and 3D roguelites and set out to make a roguelike people would call polished, perfecting each feature before moving on. He says this is why Cogmind is taking so long.",
+      "t": 957,
+      "quote": "polish is important a lot of roguelikes aren't too polished",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sound effects",
+      "kind": "principle",
+      "claim": "Roguelikes should add sound effects because audio supports the player's imagination of an ASCII world without hijacking it the way visuals do.",
+      "detail": "Ge says few roguelikes have audio and more developers need to work on it, meaning sound effects and atmosphere rather than music. Cogmind has over 1,000 sound samples where most roguelikes have about zero.",
+      "t": 1034,
+      "quote": "sound effects can support that imagination without hijacking it like visuals do",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "positional ambient sound",
+      "kind": "technique",
+      "claim": "In Cogmind, machines in the world emit ambient sound by distance and direction, so players can hear things around corners.",
+      "detail": "Different objects in the generated world produce ambient sound, such as different types of machines. Ge says this builds an immersive atmosphere and lets you hear things you cannot see.",
+      "t": 1189,
+      "quote": "you can hear different things around the corner based on their distance and direction so audio is really important",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "mouse support",
+      "kind": "principle",
+      "claim": "Every action in a roguelike should be reachable by mouse, because Cogmind's data shows keyboard-only players are a minority.",
+      "detail": "Cogmind uses every key and about 300 commands, yet player data shows keyboard users are in the minority. Ge says first make everything accessible by mouse, add drag-and-drop inventory management, and let players gradually move to the faster keyboard. Among movement inputs the numpad is most common and vi-keys least.",
+      "t": 1214,
+      "quote": "keyboard users um are still are in the minority",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "context help",
+      "kind": "principle",
+      "claim": "Roguelikes should import standard conveniences from non-roguelike games, such as clicking a stat to learn what it does, as long as the game stays a roguelike.",
+      "detail": "Ge points to context help as a big accessibility feature. He argues these features are common elsewhere and there is no reason not to put them into roguelikes when doing so keeps the roguelike a roguelike.",
+      "t": 1281,
+      "quote": "what we need to do is take all these non-roguelike things and put them into roguelikes there's just no reason not to",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "auto labeling",
+      "kind": "technique",
+      "claim": "Cogmind automatically labels robots, parts and objects as they come into view, so players need not use a look command to identify things.",
+      "detail": "Because Cogmind has many parts lying around after explosions, auto-labeling helps a lot. The labels are optional and their duration is configurable, and Ge says they let new players get into the game without looking anything up.",
+      "t": 1299,
+      "quote": "every new objects that come into view they're automatically labeled why not i mean why make someone use a look command",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "automation",
+      "kind": "technique",
+      "claim": "Roguelikes should automate no-brainer decisions, as Cogmind does with a single key that swaps a damaged part for a less damaged one of the same type.",
+      "detail": "Ge lists inventory sorting, stat comparison bars and smart inventory management as automated features. The swap key picks up the better part, attaches it, and drops or stores the old one. He stresses that plenty of real decisions remain and these solve problems specific to the game's mechanics.",
+      "t": 1376,
+      "quote": "there are decisions in roguelikes which are kind of no-brainer",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tilesets",
+      "kind": "principle",
+      "claim": "Roguelikes should offer tiles because most players use them, but tiles can keep ASCII qualities such as monochrome colour and recognisable shapes.",
+      "detail": "Recent Cogmind data showed 66 players using tiles against 18 in ASCII mode. Cogmind's tiles are monochrome and identifiable by shape, which Ge considers important for retaining the roguelike aesthetic.",
+      "t": 1434,
+      "quote": "the tiles do kind of keep ascii characteristics they're all monochrome they're kind of identifiable by shape",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "particle effects",
+      "kind": "technique",
+      "claim": "Cogmind gets smooth particle effects in a terminal look by running particles on a hidden 9x9 subgrid per cell while still drawing one colour per tile.",
+      "detail": "Behind the visible emulated terminal grid is a finer logic-only grid where particles move and stack. Because each tile still shows a single colour, the roguelike aesthetic stays consistent. The same technique animates the UI, which runs about 200 particle engines at once.",
+      "t": 1502,
+      "quote": "each cell each space is actually nine by nine it's a nine by nine space so cut like a tic-tac-toe board",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "animated ui",
+      "kind": "principle",
+      "claim": "Animated interfaces attract mainstream audiences without taking anything away from a roguelike, and in Cogmind they reinforce the theme of being a robot.",
+      "detail": "Ge says more roguelike developers should animate their UIs if they can. In Cogmind the player is a robot seeing everything through animated interfaces, so the animation enhances the theme.",
+      "t": 1557,
+      "quote": "it's attracted to more mainstream audiences and it doesn't take anything away from the experience",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "living world",
+      "kind": "example",
+      "claim": "Cogmind's world is alive: most robots are doing their own tasks like rebuilding walls and digging tunnels rather than just hunting the player.",
+      "detail": "Ge says roguelikes need no help with gameplay, and gives Cogmind's living world as its unique gameplay. The game is not just bumping and killing or fleeing things that would kill you.",
+      "t": 1595,
+      "quote": "most things out there actually doing their own tasks these are robots of rebuilding walls building new tunnels the world is alive",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "revenue",
+      "kind": "example",
+      "claim": "Cogmind earned about $62,000 in its first year before reaching Steam, barely enough to sustain one full-time developer after over three years of work.",
+      "detail": "Ge says the figure later rose to about $75,000 and is surprising for a traditional-looking roguelike. He calls it just enough to keep going, summed up by a friend as going from unpaid to poorly paid.",
+      "t": 1615,
+      "quote": "in the first year it brought in uh 62 thousand dollars which is pretty good",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "gateway games",
+      "kind": "example",
+      "claim": "Accessible, polished traditional roguelikes like Cogmind can act as a bridge for roguelite players into the wider genre.",
+      "detail": "Ge reports several attendees told him Cogmind was the first non-roguelite roguelike they played after many roguelites. He hopes others will adopt the features he listed so players can move on to other roguelikes.",
+      "t": 1725,
+      "quote": "cogmine was the first non-roguelite roguelike they played",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

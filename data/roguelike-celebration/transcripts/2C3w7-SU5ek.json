@@ -1,0 +1,5049 @@
+{
+ "id": "2C3w7-SU5ek",
+ "url": "https://www.youtube.com/watch?v=2C3w7-SU5ek",
+ "title": "Phillip Daigle - Rogue's Gate: Feeling Around in the Dark",
+ "speaker": "Phillip Daigle",
+ "talk_title": "Rogue's Gate: Feeling Around in the Dark",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1814,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nPhil is a 14 year veteran of the games industry, former Studio Director @ Beamdog, currently Senior Design Producer @ Improbable Canada. He describes himself as an \"Insufferably positive, uneducated lout who fell ass-backwards into CRPGs.\"\n\nIn this talk, he showcases a roguelike he has been working on for the last few years called Rogue's Gate. Its development involved learning to program all over again, exploring the depths of Open Source Game Artwork, and designing-as-he-went with an eye towards game feel rather than mechanical finesse. He quite literally followed one of the \"How to build a roguelike\" guides off RogueBasin for some aspects of it. He shares what he ran into, how he handled problems with the tools he had on hand and not necessarily the ones he wanted, and how he designs from the gut.\n\nFind him on Twitter: https://twitter.com/daigledopple\nRogue's Gate: https://daigledopple.itch.io/rogues-gate",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 150,
+   "title": "The concept of Rogues Gates"
+  },
+  {
+   "start": 313,
+   "title": "Project philosophy"
+  },
+  {
+   "start": 445,
+   "title": "Choosing game development tools"
+  },
+  {
+   "start": 655,
+   "title": "Learning to program"
+  },
+  {
+   "start": 880,
+   "title": "Leveraging external assets"
+  },
+  {
+   "start": 1048,
+   "title": "Art and engine inspiration"
+  },
+  {
+   "start": 1170,
+   "title": "Audio and lore development"
+  },
+  {
+   "start": 1278,
+   "title": "Design process and iteration"
+  },
+  {
+   "start": 1445,
+   "title": "Encouragement for new developers"
+  },
+  {
+   "start": 1598,
+   "title": "Future plans and experiments"
+  },
+  {
+   "start": 1650,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6106,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.16,
+   "d": 2.48,
+   "text": "hello welcome back to the roguelike"
+  },
+  {
+   "t": 2.64,
+   "d": 1.68,
+   "text": "celebration"
+  },
+  {
+   "t": 4.32,
+   "d": 2.48,
+   "text": "um i'm noah schwartz i'm going to be"
+  },
+  {
+   "t": 6.8,
+   "d": 1.2,
+   "text": "doing mc"
+  },
+  {
+   "t": 8.0,
+   "d": 3.6,
+   "text": "duty for the rest of the evening um"
+  },
+  {
+   "t": 11.6,
+   "d": 3.68,
+   "text": "our next speaker is phillip daigle"
+  },
+  {
+   "t": 15.28,
+   "d": 2.8,
+   "text": "uh phillip is a 14-year veteran of the"
+  },
+  {
+   "t": 18.08,
+   "d": 1.44,
+   "text": "games industry"
+  },
+  {
+   "t": 19.52,
+   "d": 2.4,
+   "text": "uh formerly he was a studio director at"
+  },
+  {
+   "t": 21.92,
+   "d": 0.88,
+   "text": "beamdog"
+  },
+  {
+   "t": 22.8,
+   "d": 2.16,
+   "text": "and now he is a senior design producer"
+  },
+  {
+   "t": 24.96,
+   "d": 2.56,
+   "text": "at improbable canada"
+  },
+  {
+   "t": 27.52,
+   "d": 2.96,
+   "text": "phillips talk is called feeling around"
+  },
+  {
+   "t": 30.48,
+   "d": 0.64,
+   "text": "in the dark"
+  },
+  {
+   "t": 31.12,
+   "d": 3.52,
+   "text": "so without further ado here's phil"
+  },
+  {
+   "t": 34.64,
+   "d": 2.16,
+   "text": "hey folks thank you for joining me i'm"
+  },
+  {
+   "t": 36.8,
+   "d": 3.36,
+   "text": "just going to share my screen here"
+  },
+  {
+   "t": 41.68,
+   "d": 5.6,
+   "text": "all right just get set up"
+  },
+  {
+   "t": 47.28,
+   "d": 2.16,
+   "text": "okay so assuming that you guys can see"
+  },
+  {
+   "t": 49.44,
+   "d": 1.2,
+   "text": "that we are ready to go"
+  },
+  {
+   "t": 50.64,
+   "d": 1.92,
+   "text": "so hello i hope you're enjoying the"
+  },
+  {
+   "t": 52.56,
+   "d": 2.32,
+   "text": "roguelike celebration so far"
+  },
+  {
+   "t": 54.88,
+   "d": 2.96,
+   "text": "and thank you for coming to see my talk"
+  },
+  {
+   "t": 57.84,
+   "d": 1.36,
+   "text": "so i'm phil daigle"
+  },
+  {
+   "t": 59.2,
+   "d": 2.16,
+   "text": "uh this is my work history i've been in"
+  },
+  {
+   "t": 61.36,
+   "d": 1.92,
+   "text": "the industry for many many years"
+  },
+  {
+   "t": 63.28,
+   "d": 3.12,
+   "text": "starting as a hobbyist before then"
+  },
+  {
+   "t": 66.4,
+   "d": 2.0,
+   "text": "i worked on baldur's gate iceman dale"
+  },
+  {
+   "t": 68.4,
+   "d": 1.2,
+   "text": "planescape torments"
+  },
+  {
+   "t": 69.6,
+   "d": 3.12,
+   "text": "axis and allies lots and lots of dnd and"
+  },
+  {
+   "t": 72.72,
+   "d": 1.52,
+   "text": "digital board game experiences at"
+  },
+  {
+   "t": 74.24,
+   "d": 0.96,
+   "text": "beamdog"
+  },
+  {
+   "t": 75.2,
+   "d": 1.84,
+   "text": "and we'll come back to that later i"
+  },
+  {
+   "t": 77.04,
+   "d": 1.6,
+   "text": "worked on first-person shooters"
+  },
+  {
+   "t": 78.64,
+   "d": 3.44,
+   "text": "real-time strategy turn-based games mmos"
+  },
+  {
+   "t": 82.08,
+   "d": 1.6,
+   "text": "and in those games i've worked on system"
+  },
+  {
+   "t": 83.68,
+   "d": 2.8,
+   "text": "design writing scheduling map design"
+  },
+  {
+   "t": 86.48,
+   "d": 1.92,
+   "text": "pitching to publishers vo creative"
+  },
+  {
+   "t": 88.4,
+   "d": 1.36,
+   "text": "direction mocap"
+  },
+  {
+   "t": 89.76,
+   "d": 1.76,
+   "text": "if it's a task in the industry i've"
+  },
+  {
+   "t": 91.52,
+   "d": 1.6,
+   "text": "probably dipped ato"
+  },
+  {
+   "t": 93.12,
+   "d": 2.72,
+   "text": "into it unless those tasks were related"
+  },
+  {
+   "t": 95.84,
+   "d": 2.32,
+   "text": "to programming or art"
+  },
+  {
+   "t": 98.16,
+   "d": 2.0,
+   "text": "if anyone out there is a captcha i'd"
+  },
+  {
+   "t": 100.16,
+   "d": 1.6,
+   "text": "like you to know that i am in fact a"
+  },
+  {
+   "t": 101.76,
+   "d": 0.48,
+   "text": "human"
+  },
+  {
+   "t": 102.24,
+   "d": 2.08,
+   "text": "who has interests and you can ask me"
+  },
+  {
+   "t": 104.32,
+   "d": 1.36,
+   "text": "about any of these uh"
+  },
+  {
+   "t": 105.68,
+   "d": 3.12,
+   "text": "after the presentation if you desire"
+  },
+  {
+   "t": 108.8,
+   "d": 2.16,
+   "text": "so a brief aside about baldur's gate uh"
+  },
+  {
+   "t": 110.96,
+   "d": 1.84,
+   "text": "this is a dungeons and dragons game"
+  },
+  {
+   "t": 112.8,
+   "d": 2.8,
+   "text": "it's real time with pausing you control"
+  },
+  {
+   "t": 115.6,
+   "d": 1.76,
+   "text": "a party of characters with a bunch of"
+  },
+  {
+   "t": 117.36,
+   "d": 2.0,
+   "text": "detailed stats and equipment and you"
+  },
+  {
+   "t": 119.36,
+   "d": 1.04,
+   "text": "guide them through"
+  },
+  {
+   "t": 120.4,
+   "d": 1.52,
+   "text": "a bunch of combat and narrative"
+  },
+  {
+   "t": 121.92,
+   "d": 2.56,
+   "text": "scenarios and i worked on the enhanced"
+  },
+  {
+   "t": 124.48,
+   "d": 1.6,
+   "text": "editions of those games which started"
+  },
+  {
+   "t": 126.08,
+   "d": 0.72,
+   "text": "showing up"
+  },
+  {
+   "t": 126.8,
+   "d": 2.64,
+   "text": "in 2010 so the thing you need to"
+  },
+  {
+   "t": 129.44,
+   "d": 2.32,
+   "text": "remember is baldur's gate is a real-time"
+  },
+  {
+   "t": 131.76,
+   "d": 1.2,
+   "text": "strategy game"
+  },
+  {
+   "t": 132.96,
+   "d": 2.56,
+   "text": "with you know some persistence and if"
+  },
+  {
+   "t": 135.52,
+   "d": 0.96,
+   "text": "you want me to say something really"
+  },
+  {
+   "t": 136.48,
+   "d": 2.16,
+   "text": "controversial baldur's gate and the sims"
+  },
+  {
+   "t": 138.64,
+   "d": 2.24,
+   "text": "are basically the same game"
+  },
+  {
+   "t": 140.88,
+   "d": 1.92,
+   "text": "baldr's gate 3 is coming out soon i"
+  },
+  {
+   "t": 142.8,
+   "d": 1.84,
+   "text": "believe it's entering early access"
+  },
+  {
+   "t": 144.64,
+   "d": 1.6,
+   "text": "middle of this month so go check it out"
+  },
+  {
+   "t": 146.24,
+   "d": 1.36,
+   "text": "i did not work on it but it looks really"
+  },
+  {
+   "t": 147.6,
+   "d": 1.84,
+   "text": "really cool"
+  },
+  {
+   "t": 149.44,
+   "d": 2.0,
+   "text": "all right so enough about my background"
+  },
+  {
+   "t": 151.44,
+   "d": 2.08,
+   "text": "this is what you wanted to see"
+  },
+  {
+   "t": 153.52,
+   "d": 1.84,
+   "text": "i'm going to tell you about my journey"
+  },
+  {
+   "t": 155.36,
+   "d": 1.2,
+   "text": "in building a roguelike"
+  },
+  {
+   "t": 156.56,
+   "d": 2.24,
+   "text": "and how i tackled some of the obstacles"
+  },
+  {
+   "t": 158.8,
+   "d": 0.8,
+   "text": "that i faced"
+  },
+  {
+   "t": 159.6,
+   "d": 3.2,
+   "text": "based on my skill set and how you can do"
+  },
+  {
+   "t": 162.8,
+   "d": 1.68,
+   "text": "the same"
+  },
+  {
+   "t": 164.48,
+   "d": 1.44,
+   "text": "you don't need to be an experienced"
+  },
+  {
+   "t": 165.92,
+   "d": 1.44,
+   "text": "programmer you don't need to be an"
+  },
+  {
+   "t": 167.36,
+   "d": 1.2,
+   "text": "experienced artist"
+  },
+  {
+   "t": 168.56,
+   "d": 1.76,
+   "text": "you don't need to be smart but you do"
+  },
+  {
+   "t": 170.32,
+   "d": 1.52,
+   "text": "have to show up and put in the effort"
+  },
+  {
+   "t": 171.84,
+   "d": 1.68,
+   "text": "that's the important bit"
+  },
+  {
+   "t": 173.52,
+   "d": 2.16,
+   "text": "although i will say that being smart is"
+  },
+  {
+   "t": 175.68,
+   "d": 1.68,
+   "text": "very very beneficial and if you have"
+  },
+  {
+   "t": 177.36,
+   "d": 1.36,
+   "text": "that option"
+  },
+  {
+   "t": 178.72,
+   "d": 2.24,
+   "text": "i would take it and last i'm going to"
+  },
+  {
+   "t": 180.96,
+   "d": 2.08,
+   "text": "try to convey to you that you should try"
+  },
+  {
+   "t": 183.04,
+   "d": 0.96,
+   "text": "making a game that's"
+  },
+  {
+   "t": 184.0,
+   "d": 4.16,
+   "text": "just for you so what did i make"
+  },
+  {
+   "t": 188.16,
+   "d": 2.56,
+   "text": "i made a game called rogues gates which"
+  },
+  {
+   "t": 190.72,
+   "d": 1.68,
+   "text": "is my love letter to"
+  },
+  {
+   "t": 192.4,
+   "d": 4.0,
+   "text": "90s pc gaming i made a lot of classic"
+  },
+  {
+   "t": 196.4,
+   "d": 1.6,
+   "text": "game dev mistakes while i was"
+  },
+  {
+   "t": 198.0,
+   "d": 2.4,
+   "text": "working on this game sometimes because i"
+  },
+  {
+   "t": 200.4,
+   "d": 1.44,
+   "text": "wasn't paying enough attention"
+  },
+  {
+   "t": 201.84,
+   "d": 1.52,
+   "text": "and sometimes intentionally because i"
+  },
+  {
+   "t": 203.36,
+   "d": 1.52,
+   "text": "wanted to gaze"
+  },
+  {
+   "t": 204.88,
+   "d": 2.0,
+   "text": "into the dark abyss of these cursed"
+  },
+  {
+   "t": 206.88,
+   "d": 1.76,
+   "text": "design problems for myself"
+  },
+  {
+   "t": 208.64,
+   "d": 1.76,
+   "text": "and really understand why they're so"
+  },
+  {
+   "t": 210.4,
+   "d": 1.76,
+   "text": "intractable and so frustrating to deal"
+  },
+  {
+   "t": 212.16,
+   "d": 0.64,
+   "text": "with"
+  },
+  {
+   "t": 212.8,
+   "d": 2.8,
+   "text": "i'm also still not done uh the game is"
+  },
+  {
+   "t": 215.6,
+   "d": 0.4,
+   "text": "still"
+  },
+  {
+   "t": 216.0,
+   "d": 2.32,
+   "text": "getting worked on you know that last 20"
+  },
+  {
+   "t": 218.32,
+   "d": 1.28,
+   "text": "is always the hardest i'm sure you've"
+  },
+  {
+   "t": 219.6,
+   "d": 0.56,
+   "text": "heard"
+  },
+  {
+   "t": 220.16,
+   "d": 2.0,
+   "text": "but i will finish it because i am driven"
+  },
+  {
+   "t": 222.16,
+   "d": 2.32,
+   "text": "forward by an unstoppable force which is"
+  },
+  {
+   "t": 224.48,
+   "d": 1.28,
+   "text": "spiked spikes"
+  },
+  {
+   "t": 225.76,
+   "d": 2.0,
+   "text": "a co-worker of mine once jokingly"
+  },
+  {
+   "t": 227.76,
+   "d": 2.0,
+   "text": "suggested that i would never finish the"
+  },
+  {
+   "t": 229.76,
+   "d": 0.96,
+   "text": "game"
+  },
+  {
+   "t": 230.72,
+   "d": 2.56,
+   "text": "and so i must prove them wrong at all"
+  },
+  {
+   "t": 233.28,
+   "d": 1.6,
+   "text": "costs"
+  },
+  {
+   "t": 234.88,
+   "d": 1.44,
+   "text": "so let's take a look at the actual game"
+  },
+  {
+   "t": 236.32,
+   "d": 1.76,
+   "text": "itself"
+  },
+  {
+   "t": 238.08,
+   "d": 1.84,
+   "text": "so the game is a real-time strategy game"
+  },
+  {
+   "t": 239.92,
+   "d": 1.6,
+   "text": "you start by creating your own character"
+  },
+  {
+   "t": 241.52,
+   "d": 1.68,
+   "text": "you choose a race and a class and a"
+  },
+  {
+   "t": 243.2,
+   "d": 1.36,
+   "text": "starting party"
+  },
+  {
+   "t": 244.56,
+   "d": 2.0,
+   "text": "so the starting party will determine"
+  },
+  {
+   "t": 246.56,
+   "d": 2.16,
+   "text": "your starting companions the equipment"
+  },
+  {
+   "t": 248.72,
+   "d": 1.52,
+   "text": "that you have and a little bit of a"
+  },
+  {
+   "t": 250.24,
+   "d": 1.04,
+   "text": "narrative nudge"
+  },
+  {
+   "t": 251.28,
+   "d": 2.16,
+   "text": "in a particular direction just kind of"
+  },
+  {
+   "t": 253.44,
+   "d": 1.36,
+   "text": "like different flavors or different"
+  },
+  {
+   "t": 254.8,
+   "d": 1.84,
+   "text": "challenges for starting the game"
+  },
+  {
+   "t": 256.64,
+   "d": 1.6,
+   "text": "so once you're actually in the game it's"
+  },
+  {
+   "t": 258.24,
+   "d": 2.0,
+   "text": "all about sort of going through this"
+  },
+  {
+   "t": 260.24,
+   "d": 1.04,
+   "text": "over world"
+  },
+  {
+   "t": 261.28,
+   "d": 2.72,
+   "text": "battling creatures talking to npcs"
+  },
+  {
+   "t": 264.0,
+   "d": 1.6,
+   "text": "getting better equipment for your party"
+  },
+  {
+   "t": 265.6,
+   "d": 1.28,
+   "text": "and that sort of thing"
+  },
+  {
+   "t": 266.88,
+   "d": 1.68,
+   "text": "you have to travel to six different"
+  },
+  {
+   "t": 268.56,
+   "d": 2.16,
+   "text": "towers on this world map"
+  },
+  {
+   "t": 270.72,
+   "d": 1.84,
+   "text": "at the top of each tower is an item of"
+  },
+  {
+   "t": 272.56,
+   "d": 2.48,
+   "text": "power you bring it back down into"
+  },
+  {
+   "t": 275.04,
+   "d": 1.6,
+   "text": "or sorry you bring all six of them back"
+  },
+  {
+   "t": 276.64,
+   "d": 1.68,
+   "text": "down to the shrine of ascension and off"
+  },
+  {
+   "t": 278.32,
+   "d": 1.28,
+   "text": "you go you win the game"
+  },
+  {
+   "t": 279.6,
+   "d": 1.36,
+   "text": "conceptually it's very similar to"
+  },
+  {
+   "t": 280.96,
+   "d": 1.52,
+   "text": "nethack and how you go down get the"
+  },
+  {
+   "t": 282.48,
+   "d": 2.64,
+   "text": "amulet of the endor and come back up"
+  },
+  {
+   "t": 285.12,
+   "d": 2.24,
+   "text": "so everything in this game i wrote"
+  },
+  {
+   "t": 287.36,
+   "d": 2.72,
+   "text": "myself every every piece of code is me"
+  },
+  {
+   "t": 290.08,
+   "d": 1.68,
+   "text": "the arch is taken from a variety of"
+  },
+  {
+   "t": 291.76,
+   "d": 1.68,
+   "text": "sources that i'll show you"
+  },
+  {
+   "t": 293.44,
+   "d": 2.24,
+   "text": "very very soon but the enemies have"
+  },
+  {
+   "t": 295.68,
+   "d": 1.52,
+   "text": "unique behaviors they'll run different"
+  },
+  {
+   "t": 297.2,
+   "d": 1.28,
+   "text": "ai scripts they'll have different"
+  },
+  {
+   "t": 298.48,
+   "d": 1.52,
+   "text": "actions they'll cast spells they'll try"
+  },
+  {
+   "t": 300.0,
+   "d": 2.16,
+   "text": "and heal their allies etc etc"
+  },
+  {
+   "t": 302.16,
+   "d": 2.08,
+   "text": "and i'm very very proud of you know the"
+  },
+  {
+   "t": 304.24,
+   "d": 1.68,
+   "text": "the shape that the game has taken"
+  },
+  {
+   "t": 305.92,
+   "d": 1.68,
+   "text": "and you know it's a lot of fun for me to"
+  },
+  {
+   "t": 307.6,
+   "d": 2.0,
+   "text": "play and that that's what was important"
+  },
+  {
+   "t": 309.6,
+   "d": 1.28,
+   "text": "to me is making something"
+  },
+  {
+   "t": 310.88,
+   "d": 3.76,
+   "text": "for me to enjoy a little bit more detail"
+  },
+  {
+   "t": 314.64,
+   "d": 1.12,
+   "text": "about the game itself"
+  },
+  {
+   "t": 315.76,
+   "d": 1.68,
+   "text": "so uh you can create your character in"
+  },
+  {
+   "t": 317.44,
+   "d": 1.84,
+   "text": "the top left there using screenshots"
+  },
+  {
+   "t": 319.28,
+   "d": 1.6,
+   "text": "showcasing you know some combat"
+  },
+  {
+   "t": 320.88,
+   "d": 1.36,
+   "text": "exploring the overworld"
+  },
+  {
+   "t": 322.24,
+   "d": 2.88,
+   "text": "this is the equipment management screen"
+  },
+  {
+   "t": 325.12,
+   "d": 1.36,
+   "text": "this is the world map that gets"
+  },
+  {
+   "t": 326.48,
+   "d": 2.0,
+   "text": "generated procedurally every time you"
+  },
+  {
+   "t": 328.48,
+   "d": 1.12,
+   "text": "play the game"
+  },
+  {
+   "t": 329.6,
+   "d": 2.24,
+   "text": "uh i don't know if you can tell which"
+  },
+  {
+   "t": 331.84,
+   "d": 1.44,
+   "text": "one of these art assets"
+  },
+  {
+   "t": 333.28,
+   "d": 3.12,
+   "text": "i created uh by hand if you guess the"
+  },
+  {
+   "t": 336.4,
+   "d": 0.48,
+   "text": "graphic"
+  },
+  {
+   "t": 336.88,
+   "d": 2.24,
+   "text": "for the floors here that is correct that"
+  },
+  {
+   "t": 339.12,
+   "d": 1.76,
+   "text": "is the extent of my artistic"
+  },
+  {
+   "t": 340.88,
+   "d": 1.92,
+   "text": "skill which is amazing when you see the"
+  },
+  {
+   "t": 342.8,
+   "d": 1.6,
+   "text": "rest of the game and i will explain why"
+  },
+  {
+   "t": 344.4,
+   "d": 1.84,
+   "text": "soon"
+  },
+  {
+   "t": 346.24,
+   "d": 2.32,
+   "text": "this is an event uh top left you get a"
+  },
+  {
+   "t": 348.56,
+   "d": 1.2,
+   "text": "variety of options"
+  },
+  {
+   "t": 349.76,
+   "d": 1.6,
+   "text": "based on different things that happen in"
+  },
+  {
+   "t": 351.36,
+   "d": 1.68,
+   "text": "the game there's different biomes that"
+  },
+  {
+   "t": 353.04,
+   "d": 1.36,
+   "text": "have different impacts on gameplay"
+  },
+  {
+   "t": 354.4,
+   "d": 2.0,
+   "text": "there's a whole merchant store system"
+  },
+  {
+   "t": 356.4,
+   "d": 2.24,
+   "text": "and no uh roguelike would be complete if"
+  },
+  {
+   "t": 358.64,
+   "d": 1.52,
+   "text": "it didn't have dungeons so there you go"
+  },
+  {
+   "t": 360.16,
+   "d": 1.76,
+   "text": "on the bottom right"
+  },
+  {
+   "t": 361.92,
+   "d": 3.28,
+   "text": "so why did i make baldur's gator sorry"
+  },
+  {
+   "t": 365.2,
+   "d": 0.96,
+   "text": "rogues gates"
+  },
+  {
+   "t": 366.16,
+   "d": 1.36,
+   "text": "you can guess where the name came from"
+  },
+  {
+   "t": 367.52,
+   "d": 3.2,
+   "text": "now um roguelikes are rad i think that"
+  },
+  {
+   "t": 370.72,
+   "d": 0.88,
+   "text": "they're very"
+  },
+  {
+   "t": 371.6,
+   "d": 2.64,
+   "text": "pure expressions of gameplay and i find"
+  },
+  {
+   "t": 374.24,
+   "d": 1.04,
+   "text": "them really really interesting"
+  },
+  {
+   "t": 375.28,
+   "d": 2.08,
+   "text": "the added tension and threats when you"
+  },
+  {
+   "t": 377.36,
+   "d": 1.76,
+   "text": "know your characters can die permanently"
+  },
+  {
+   "t": 379.12,
+   "d": 1.92,
+   "text": "forever the thing adds"
+  },
+  {
+   "t": 381.04,
+   "d": 1.44,
+   "text": "a lot to a game and i really really like"
+  },
+  {
+   "t": 382.48,
+   "d": 1.52,
+   "text": "that so i wanted my game to be a"
+  },
+  {
+   "t": 384.0,
+   "d": 1.2,
+   "text": "roguelike"
+  },
+  {
+   "t": 385.2,
+   "d": 2.64,
+   "text": "i wanted to learn how to program um and"
+  },
+  {
+   "t": 387.84,
+   "d": 1.84,
+   "text": "i wanted to learn more than just you"
+  },
+  {
+   "t": 389.68,
+   "d": 0.32,
+   "text": "know"
+  },
+  {
+   "t": 390.0,
+   "d": 2.08,
+   "text": "making snake in python or something like"
+  },
+  {
+   "t": 392.08,
+   "d": 1.52,
+   "text": "that i wanted to try doing something a"
+  },
+  {
+   "t": 393.6,
+   "d": 1.52,
+   "text": "little more extensive than that"
+  },
+  {
+   "t": 395.12,
+   "d": 1.84,
+   "text": "because i knew that you know i i would"
+  },
+  {
+   "t": 396.96,
+   "d": 1.68,
+   "text": "bounce off of learning programming if it"
+  },
+  {
+   "t": 398.64,
+   "d": 1.6,
+   "text": "was something that simple"
+  },
+  {
+   "t": 400.24,
+   "d": 1.68,
+   "text": "um and last i wanted to be a dictator"
+  },
+  {
+   "t": 401.92,
+   "d": 1.68,
+   "text": "you know group projects are fantastic"
+  },
+  {
+   "t": 403.6,
+   "d": 0.64,
+   "text": "they're great"
+  },
+  {
+   "t": 404.24,
+   "d": 1.92,
+   "text": "but sometimes you want to make arbitrary"
+  },
+  {
+   "t": 406.16,
+   "d": 2.24,
+   "text": "decisions and not have to explain them"
+  },
+  {
+   "t": 408.4,
+   "d": 1.92,
+   "text": "and guess what a lot of the decisions i"
+  },
+  {
+   "t": 410.32,
+   "d": 3.52,
+   "text": "made were pretty arbitrary"
+  },
+  {
+   "t": 414.16,
+   "d": 1.52,
+   "text": "uh some guiding principles that i kept"
+  },
+  {
+   "t": 415.68,
+   "d": 2.0,
+   "text": "in mind make something for your 12 year"
+  },
+  {
+   "t": 417.68,
+   "d": 1.76,
+   "text": "old self so i wanted to capture that"
+  },
+  {
+   "t": 419.44,
+   "d": 2.72,
+   "text": "90s pc gaming feel it was where i grew"
+  },
+  {
+   "t": 422.16,
+   "d": 1.36,
+   "text": "up and it's where i have a lot of fun"
+  },
+  {
+   "t": 423.52,
+   "d": 0.8,
+   "text": "memories"
+  },
+  {
+   "t": 424.32,
+   "d": 2.08,
+   "text": "um can i procedurally generate baldur's"
+  },
+  {
+   "t": 426.4,
+   "d": 2.0,
+   "text": "gate which is a very narrative heavy"
+  },
+  {
+   "t": 428.4,
+   "d": 2.16,
+   "text": "rpg but when you really look at the"
+  },
+  {
+   "t": 430.56,
+   "d": 1.6,
+   "text": "components of the game and how they come"
+  },
+  {
+   "t": 432.16,
+   "d": 2.0,
+   "text": "together you can see a way that"
+  },
+  {
+   "t": 434.16,
+   "d": 1.84,
+   "text": "it could be procedurally generated"
+  },
+  {
+   "t": 436.0,
+   "d": 1.84,
+   "text": "that's what i wanted to attempt"
+  },
+  {
+   "t": 437.84,
+   "d": 1.68,
+   "text": "and i wanted to keep it short so an"
+  },
+  {
+   "t": 439.52,
+   "d": 2.0,
+   "text": "inspirational game of mine is ftl"
+  },
+  {
+   "t": 441.52,
+   "d": 2.16,
+   "text": "which you can play a complete experience"
+  },
+  {
+   "t": 443.68,
+   "d": 0.96,
+   "text": "in an hour and a half"
+  },
+  {
+   "t": 444.64,
+   "d": 3.12,
+   "text": "i think that's wonderful so"
+  },
+  {
+   "t": 447.76,
+   "d": 1.92,
+   "text": "i know a lot of you in the audience are"
+  },
+  {
+   "t": 449.68,
+   "d": 1.2,
+   "text": "experienced developers"
+  },
+  {
+   "t": 450.88,
+   "d": 2.56,
+   "text": "and you're probably not terribly blown"
+  },
+  {
+   "t": 453.44,
+   "d": 1.52,
+   "text": "away by anything you've seen in terms of"
+  },
+  {
+   "t": 454.96,
+   "d": 0.96,
+   "text": "complexity"
+  },
+  {
+   "t": 455.92,
+   "d": 1.68,
+   "text": "but i know that a lot of you in the"
+  },
+  {
+   "t": 457.6,
+   "d": 1.84,
+   "text": "audience are not programmers or game"
+  },
+  {
+   "t": 459.44,
+   "d": 1.68,
+   "text": "developers who might be thinking"
+  },
+  {
+   "t": 461.12,
+   "d": 2.0,
+   "text": "wow are you kidding me this seems"
+  },
+  {
+   "t": 463.12,
+   "d": 1.84,
+   "text": "monstrously complex there's programming"
+  },
+  {
+   "t": 464.96,
+   "d": 1.52,
+   "text": "art audio lower gameplay like this is"
+  },
+  {
+   "t": 466.48,
+   "d": 0.96,
+   "text": "nuts"
+  },
+  {
+   "t": 467.44,
+   "d": 2.16,
+   "text": "um but it's important to realize like"
+  },
+  {
+   "t": 469.6,
+   "d": 1.84,
+   "text": "when i sat down to do this"
+  },
+  {
+   "t": 471.44,
+   "d": 1.92,
+   "text": "i was very much of the same mindset i"
+  },
+  {
+   "t": 473.36,
+   "d": 1.68,
+   "text": "did not think that i could do this"
+  },
+  {
+   "t": 475.04,
+   "d": 2.24,
+   "text": "i learned some very limited web"
+  },
+  {
+   "t": 477.28,
+   "d": 2.08,
+   "text": "programming in 1999 and believe it or"
+  },
+  {
+   "t": 479.36,
+   "d": 2.4,
+   "text": "not things have changed since then"
+  },
+  {
+   "t": 481.76,
+   "d": 1.28,
+   "text": "if you sat me down in front of a"
+  },
+  {
+   "t": 483.04,
+   "d": 1.84,
+   "text": "terminal with an install of python and"
+  },
+  {
+   "t": 484.88,
+   "d": 1.84,
+   "text": "told me hey make some snake"
+  },
+  {
+   "t": 486.72,
+   "d": 2.4,
+   "text": "i i would say snope can't do it i don't"
+  },
+  {
+   "t": 489.12,
+   "d": 1.6,
+   "text": "know how to do that"
+  },
+  {
+   "t": 490.72,
+   "d": 1.92,
+   "text": "um so i would have started to sweat and"
+  },
+  {
+   "t": 492.64,
+   "d": 1.68,
+   "text": "cry but today"
+  },
+  {
+   "t": 494.32,
+   "d": 2.8,
+   "text": "these days there's tools and resources"
+  },
+  {
+   "t": 497.12,
+   "d": 1.68,
+   "text": "that you can use to elevate your"
+  },
+  {
+   "t": 498.8,
+   "d": 1.2,
+   "text": "capabilities"
+  },
+  {
+   "t": 500.0,
+   "d": 2.08,
+   "text": "when i first started in game dev the"
+  },
+  {
+   "t": 502.08,
+   "d": 1.36,
+   "text": "engines that"
+  },
+  {
+   "t": 503.44,
+   "d": 1.92,
+   "text": "we have available today just weren't"
+  },
+  {
+   "t": 505.36,
+   "d": 2.0,
+   "text": "there if you showed someone when i"
+  },
+  {
+   "t": 507.36,
+   "d": 0.72,
+   "text": "started"
+  },
+  {
+   "t": 508.08,
+   "d": 1.68,
+   "text": "what you're capable of doing with the"
+  },
+  {
+   "t": 509.76,
+   "d": 1.36,
+   "text": "tools that are available today"
+  },
+  {
+   "t": 511.12,
+   "d": 1.44,
+   "text": "they would have started to vomit with"
+  },
+  {
+   "t": 512.56,
+   "d": 2.24,
+   "text": "rage it would have been hilarious to see"
+  },
+  {
+   "t": 514.8,
+   "d": 1.68,
+   "text": "their brains break"
+  },
+  {
+   "t": 516.48,
+   "d": 1.36,
+   "text": "so let's break down how i actually"
+  },
+  {
+   "t": 517.84,
+   "d": 2.4,
+   "text": "accomplished all this"
+  },
+  {
+   "t": 520.24,
+   "d": 1.52,
+   "text": "the first thing that i had to tackle was"
+  },
+  {
+   "t": 521.76,
+   "d": 1.6,
+   "text": "programming and there's a lot of"
+  },
+  {
+   "t": 523.36,
+   "d": 1.6,
+   "text": "different avenues to get into"
+  },
+  {
+   "t": 524.96,
+   "d": 1.04,
+   "text": "programming"
+  },
+  {
+   "t": 526.0,
+   "d": 2.0,
+   "text": "python is probably a fantastic way to"
+  },
+  {
+   "t": 528.0,
+   "d": 1.92,
+   "text": "learn programming but"
+  },
+  {
+   "t": 529.92,
+   "d": 1.68,
+   "text": "it's also kind of slow to see the"
+  },
+  {
+   "t": 531.6,
+   "d": 1.36,
+   "text": "results that i wanted to see"
+  },
+  {
+   "t": 532.96,
+   "d": 2.16,
+   "text": "i'm an impatient child and i wanted to"
+  },
+  {
+   "t": 535.12,
+   "d": 1.68,
+   "text": "do more than just ascii art"
+  },
+  {
+   "t": 536.8,
+   "d": 2.56,
+   "text": "for my first thing out um i didn't think"
+  },
+  {
+   "t": 539.36,
+   "d": 1.12,
+   "text": "that i could really innovate in the"
+  },
+  {
+   "t": 540.48,
+   "d": 2.08,
+   "text": "ascii art space and i wanted to you know"
+  },
+  {
+   "t": 542.56,
+   "d": 2.08,
+   "text": "push some pixels around so"
+  },
+  {
+   "t": 544.64,
+   "d": 1.68,
+   "text": "python didn't really jump out at me uh"
+  },
+  {
+   "t": 546.32,
+   "d": 2.32,
+   "text": "and then of course c go java like"
+  },
+  {
+   "t": 548.64,
+   "d": 1.92,
+   "text": "they're fantastic languages they're very"
+  },
+  {
+   "t": 550.56,
+   "d": 1.28,
+   "text": "very powerful but"
+  },
+  {
+   "t": 551.84,
+   "d": 3.44,
+   "text": "the barrier to entries is very very high"
+  },
+  {
+   "t": 555.28,
+   "d": 1.68,
+   "text": "so all right let's look at unity and"
+  },
+  {
+   "t": 556.96,
+   "d": 2.24,
+   "text": "unreal um they're fantastic engines they"
+  },
+  {
+   "t": 559.2,
+   "d": 0.48,
+   "text": "do"
+  },
+  {
+   "t": 559.68,
+   "d": 2.48,
+   "text": "amazing things in both 2d and 3d i've"
+  },
+  {
+   "t": 562.16,
+   "d": 2.48,
+   "text": "used both of them they're fantastic but"
+  },
+  {
+   "t": 564.64,
+   "d": 1.76,
+   "text": "there's a lot of overhead associated"
+  },
+  {
+   "t": 566.4,
+   "d": 1.44,
+   "text": "with them i'm not"
+  },
+  {
+   "t": 567.84,
+   "d": 2.88,
+   "text": "terribly good at 3d and you know they"
+  },
+  {
+   "t": 570.72,
+   "d": 1.52,
+   "text": "also hold your hands in ways that"
+  },
+  {
+   "t": 572.24,
+   "d": 1.44,
+   "text": "perhaps i didn't want them to hold my"
+  },
+  {
+   "t": 573.68,
+   "d": 0.8,
+   "text": "hand i wanted"
+  },
+  {
+   "t": 574.48,
+   "d": 1.84,
+   "text": "some help but i didn't want too much"
+  },
+  {
+   "t": 576.32,
+   "d": 2.96,
+   "text": "help i wanted kind of that sweet spot of"
+  },
+  {
+   "t": 579.28,
+   "d": 1.92,
+   "text": "accelerated development while still"
+  },
+  {
+   "t": 581.2,
+   "d": 1.6,
+   "text": "having some learning and challenge ahead"
+  },
+  {
+   "t": 582.8,
+   "d": 0.8,
+   "text": "of me"
+  },
+  {
+   "t": 583.6,
+   "d": 3.04,
+   "text": "so as luck would have it at gdc 2017 i"
+  },
+  {
+   "t": 586.64,
+   "d": 2.16,
+   "text": "ended up with a free copy of game maker"
+  },
+  {
+   "t": 588.8,
+   "d": 1.6,
+   "text": "studio 2"
+  },
+  {
+   "t": 590.4,
+   "d": 3.2,
+   "text": "which is a fantastic 2d engine so"
+  },
+  {
+   "t": 593.6,
+   "d": 1.92,
+   "text": "this is an engine by yoyogames it's been"
+  },
+  {
+   "t": 595.52,
+   "d": 1.52,
+   "text": "in development for years and years the"
+  },
+  {
+   "t": 597.04,
+   "d": 2.32,
+   "text": "gamemaker platform is actually"
+  },
+  {
+   "t": 599.36,
+   "d": 2.32,
+   "text": "quite old and has a lot of developers on"
+  },
+  {
+   "t": 601.68,
+   "d": 2.24,
+   "text": "it but this is actually a kind of a"
+  },
+  {
+   "t": 603.92,
+   "d": 1.36,
+   "text": "brand new iteration"
+  },
+  {
+   "t": 605.28,
+   "d": 2.48,
+   "text": "of their core technology and their ide"
+  },
+  {
+   "t": 607.76,
+   "d": 2.96,
+   "text": "so this is all still pretty new stuff"
+  },
+  {
+   "t": 610.72,
+   "d": 1.2,
+   "text": "um the engine does a lot of heavy"
+  },
+  {
+   "t": 611.92,
+   "d": 1.44,
+   "text": "lifting for you if you're starting out"
+  },
+  {
+   "t": 613.36,
+   "d": 1.68,
+   "text": "with programming but it still has an"
+  },
+  {
+   "t": 615.04,
+   "d": 2.32,
+   "text": "elaborate programming language in it"
+  },
+  {
+   "t": 617.36,
+   "d": 1.76,
+   "text": "um it handles all your assets your"
+  },
+  {
+   "t": 619.12,
+   "d": 2.16,
+   "text": "memory management and it's got fantastic"
+  },
+  {
+   "t": 621.28,
+   "d": 1.6,
+   "text": "2d sprite tools and there's a lot of"
+  },
+  {
+   "t": 622.88,
+   "d": 1.2,
+   "text": "documentation"
+  },
+  {
+   "t": 624.08,
+   "d": 1.84,
+   "text": "so this seemed like it would handle all"
+  },
+  {
+   "t": 625.92,
+   "d": 3.04,
+   "text": "of the stuff that i wanted to accelerate"
+  },
+  {
+   "t": 628.96,
+   "d": 2.16,
+   "text": "but there's some caveats there it's not"
+  },
+  {
+   "t": 631.12,
+   "d": 1.12,
+   "text": "free"
+  },
+  {
+   "t": 632.24,
+   "d": 3.36,
+   "text": "it costs money and you know uh a lot of"
+  },
+  {
+   "t": 635.6,
+   "d": 1.52,
+   "text": "the documentation you'll find out there"
+  },
+  {
+   "t": 637.12,
+   "d": 1.28,
+   "text": "is not necessarily for this"
+  },
+  {
+   "t": 638.4,
+   "d": 3.04,
+   "text": "version of game maker now that i know"
+  },
+  {
+   "t": 641.44,
+   "d": 1.92,
+   "text": "more about the game that i made and what"
+  },
+  {
+   "t": 643.36,
+   "d": 1.76,
+   "text": "my needs are and i have more programming"
+  },
+  {
+   "t": 645.12,
+   "d": 1.76,
+   "text": "capability i would probably go back and"
+  },
+  {
+   "t": 646.88,
+   "d": 1.44,
+   "text": "use godot if i were starting from"
+  },
+  {
+   "t": 648.32,
+   "d": 0.96,
+   "text": "scratch"
+  },
+  {
+   "t": 649.28,
+   "d": 2.0,
+   "text": "but gamemaker studio 2 worked it worked"
+  },
+  {
+   "t": 651.28,
+   "d": 1.76,
+   "text": "for me it's great and i have no plans to"
+  },
+  {
+   "t": 653.04,
+   "d": 1.76,
+   "text": "move away from it in the future for this"
+  },
+  {
+   "t": 654.8,
+   "d": 2.24,
+   "text": "game"
+  },
+  {
+   "t": 657.04,
+   "d": 1.52,
+   "text": "so i decided all right i'm going to"
+  },
+  {
+   "t": 658.56,
+   "d": 1.28,
+   "text": "learn some programming through the"
+  },
+  {
+   "t": 659.84,
+   "d": 0.64,
+   "text": "medium"
+  },
+  {
+   "t": 660.48,
+   "d": 2.4,
+   "text": "of game maker uh but it does have some"
+  },
+  {
+   "t": 662.88,
+   "d": 1.68,
+   "text": "pros and cons so"
+  },
+  {
+   "t": 664.56,
+   "d": 2.64,
+   "text": "i learned more about programming uh i"
+  },
+  {
+   "t": 667.2,
+   "d": 1.44,
+   "text": "know more about programming now than i"
+  },
+  {
+   "t": 668.64,
+   "d": 1.28,
+   "text": "did when i first started this"
+  },
+  {
+   "t": 669.92,
+   "d": 1.92,
+   "text": "this whole journey so a lot of the"
+  },
+  {
+   "t": 671.84,
+   "d": 1.36,
+   "text": "deficiencies that"
+  },
+  {
+   "t": 673.2,
+   "d": 1.84,
+   "text": "the engine has weren't things that i"
+  },
+  {
+   "t": 675.04,
+   "d": 1.76,
+   "text": "really knew about or understood or"
+  },
+  {
+   "t": 676.8,
+   "d": 0.56,
+   "text": "understood"
+  },
+  {
+   "t": 677.36,
+   "d": 1.76,
+   "text": "why they would be deficiencies but now i"
+  },
+  {
+   "t": 679.12,
+   "d": 2.08,
+   "text": "do so one example"
+  },
+  {
+   "t": 681.2,
+   "d": 1.2,
+   "text": "if you're willing to put up with some"
+  },
+  {
+   "t": 682.4,
+   "d": 2.56,
+   "text": "jargon is the concept of a struct"
+  },
+  {
+   "t": 684.96,
+   "d": 2.64,
+   "text": "in code that is not something that game"
+  },
+  {
+   "t": 687.6,
+   "d": 0.4,
+   "text": "maker"
+  },
+  {
+   "t": 688.0,
+   "d": 1.84,
+   "text": "language could do when i first started"
+  },
+  {
+   "t": 689.84,
+   "d": 2.24,
+   "text": "out and i didn't really miss it because"
+  },
+  {
+   "t": 692.08,
+   "d": 1.44,
+   "text": "i didn't know about it but"
+  },
+  {
+   "t": 693.52,
+   "d": 1.52,
+   "text": "had i been using a more elaborate"
+  },
+  {
+   "t": 695.04,
+   "d": 1.12,
+   "text": "programming language i probably would"
+  },
+  {
+   "t": 696.16,
+   "d": 1.04,
+   "text": "have known about it it would have been"
+  },
+  {
+   "t": 697.2,
+   "d": 1.44,
+   "text": "very very useful"
+  },
+  {
+   "t": 698.64,
+   "d": 2.56,
+   "text": "as an aside it does have that now it's"
+  },
+  {
+   "t": 701.2,
+   "d": 0.8,
+   "text": "got a whole bunch of great"
+  },
+  {
+   "t": 702.0,
+   "d": 1.84,
+   "text": "features that make it behave like a"
+  },
+  {
+   "t": 703.84,
+   "d": 1.84,
+   "text": "modern language but at the time it"
+  },
+  {
+   "t": 705.68,
+   "d": 1.04,
+   "text": "didn't so"
+  },
+  {
+   "t": 706.72,
+   "d": 1.36,
+   "text": "if you wanted to do something like try"
+  },
+  {
+   "t": 708.08,
+   "d": 2.4,
+   "text": "catch to catch debugging issues"
+  },
+  {
+   "t": 710.48,
+   "d": 1.44,
+   "text": "sorry that's that's not part of the"
+  },
+  {
+   "t": 711.92,
+   "d": 2.0,
+   "text": "thing it also meant that i couldn't use"
+  },
+  {
+   "t": 713.92,
+   "d": 2.32,
+   "text": "common roguelike tools like liptic cod"
+  },
+  {
+   "t": 716.24,
+   "d": 1.76,
+   "text": "or pie game or anything like that so"
+  },
+  {
+   "t": 718.0,
+   "d": 1.76,
+   "text": "everything that i wanted i had to"
+  },
+  {
+   "t": 719.76,
+   "d": 2.0,
+   "text": "make myself for the most part which was"
+  },
+  {
+   "t": 721.76,
+   "d": 1.76,
+   "text": "good because that was kind of the goal"
+  },
+  {
+   "t": 723.52,
+   "d": 2.96,
+   "text": "is learn programming"
+  },
+  {
+   "t": 726.88,
+   "d": 2.56,
+   "text": "for me programming has always been a"
+  },
+  {
+   "t": 729.44,
+   "d": 0.56,
+   "text": "very very"
+  },
+  {
+   "t": 730.0,
+   "d": 1.92,
+   "text": "hard thing to learn i've bounced off of"
+  },
+  {
+   "t": 731.92,
+   "d": 1.76,
+   "text": "learning programming many many times"
+  },
+  {
+   "t": 733.68,
+   "d": 1.92,
+   "text": "and here's a hot take programming is"
+  },
+  {
+   "t": 735.6,
+   "d": 1.68,
+   "text": "hard and it kind of sucks"
+  },
+  {
+   "t": 737.28,
+   "d": 2.72,
+   "text": "there's a bunch of like angry esoteric"
+  },
+  {
+   "t": 740.0,
+   "d": 1.76,
+   "text": "math symbols screaming at you"
+  },
+  {
+   "t": 741.76,
+   "d": 2.0,
+   "text": "a bunch of jargon from the 1970s that"
+  },
+  {
+   "t": 743.76,
+   "d": 1.36,
+   "text": "you don't understand"
+  },
+  {
+   "t": 745.12,
+   "d": 2.16,
+   "text": "so you know it's not for the faint of"
+  },
+  {
+   "t": 747.28,
+   "d": 1.28,
+   "text": "heart if you're going into it for the"
+  },
+  {
+   "t": 748.56,
+   "d": 1.12,
+   "text": "first time"
+  },
+  {
+   "t": 749.68,
+   "d": 2.48,
+   "text": "and for me the more abstract a problem"
+  },
+  {
+   "t": 752.16,
+   "d": 2.0,
+   "text": "was the harder it was for me to stay"
+  },
+  {
+   "t": 754.16,
+   "d": 0.96,
+   "text": "engaged so"
+  },
+  {
+   "t": 755.12,
+   "d": 2.56,
+   "text": "what was key for me staying involved was"
+  },
+  {
+   "t": 757.68,
+   "d": 0.72,
+   "text": "seeing like"
+  },
+  {
+   "t": 758.4,
+   "d": 2.0,
+   "text": "little bits of progress that were very"
+  },
+  {
+   "t": 760.4,
+   "d": 1.12,
+   "text": "very visible"
+  },
+  {
+   "t": 761.52,
+   "d": 1.76,
+   "text": "and game maker studio 2 is a very very"
+  },
+  {
+   "t": 763.28,
+   "d": 2.08,
+   "text": "good engine for that in that yes there"
+  },
+  {
+   "t": 765.36,
+   "d": 1.52,
+   "text": "it lets you program something but it"
+  },
+  {
+   "t": 766.88,
+   "d": 1.6,
+   "text": "also does a lot of hand holding for you"
+  },
+  {
+   "t": 768.48,
+   "d": 0.4,
+   "text": "so"
+  },
+  {
+   "t": 768.88,
+   "d": 1.52,
+   "text": "you're not getting bogged down with like"
+  },
+  {
+   "t": 770.4,
+   "d": 1.52,
+   "text": "how do i rotate a sprite well there's"
+  },
+  {
+   "t": 771.92,
+   "d": 1.6,
+   "text": "just a function that does that and you"
+  },
+  {
+   "t": 773.52,
+   "d": 0.4,
+   "text": "can"
+  },
+  {
+   "t": 773.92,
+   "d": 2.8,
+   "text": "go off and have more fun that way um"
+  },
+  {
+   "t": 776.72,
+   "d": 1.44,
+   "text": "some pieces of advice that i can give"
+  },
+  {
+   "t": 778.16,
+   "d": 1.52,
+   "text": "for staying engaged uh"
+  },
+  {
+   "t": 779.68,
+   "d": 3.2,
+   "text": "it's not the tool it's you uh 99 of the"
+  },
+  {
+   "t": 782.88,
+   "d": 1.68,
+   "text": "time when i was like well clearly the"
+  },
+  {
+   "t": 784.56,
+   "d": 1.2,
+   "text": "engine is broken and i"
+  },
+  {
+   "t": 785.76,
+   "d": 2.56,
+   "text": "am not at fault here i am god's blessed"
+  },
+  {
+   "t": 788.32,
+   "d": 1.52,
+   "text": "child who can do no wrong"
+  },
+  {
+   "t": 789.84,
+   "d": 1.6,
+   "text": "no you're wrong you're probably not"
+  },
+  {
+   "t": 791.44,
+   "d": 1.6,
+   "text": "reading the error messages properly"
+  },
+  {
+   "t": 793.04,
+   "d": 1.84,
+   "text": "you're not probably uh looking at them"
+  },
+  {
+   "t": 794.88,
+   "d": 1.28,
+   "text": "carefully enough"
+  },
+  {
+   "t": 796.16,
+   "d": 3.04,
+   "text": "so don't get frustrated with your tools"
+  },
+  {
+   "t": 799.2,
+   "d": 1.92,
+   "text": "uh good enough is good enough keep going"
+  },
+  {
+   "t": 801.12,
+   "d": 1.52,
+   "text": "so what i mean by that is you can"
+  },
+  {
+   "t": 802.64,
+   "d": 1.12,
+   "text": "pigeonhole yourself"
+  },
+  {
+   "t": 803.76,
+   "d": 2.4,
+   "text": "real hard on some features like"
+  },
+  {
+   "t": 806.16,
+   "d": 1.36,
+   "text": "pathfinding for instance"
+  },
+  {
+   "t": 807.52,
+   "d": 2.56,
+   "text": "for essentially an infinite amount of"
+  },
+  {
+   "t": 810.08,
+   "d": 0.96,
+   "text": "time"
+  },
+  {
+   "t": 811.04,
+   "d": 1.84,
+   "text": "and you know you will always make"
+  },
+  {
+   "t": 812.88,
+   "d": 2.16,
+   "text": "progress but that is an infinite problem"
+  },
+  {
+   "t": 815.04,
+   "d": 1.6,
+   "text": "that you can spend forever on so it's"
+  },
+  {
+   "t": 816.64,
+   "d": 1.52,
+   "text": "important to develop the skill of like"
+  },
+  {
+   "t": 818.16,
+   "d": 0.64,
+   "text": "learning"
+  },
+  {
+   "t": 818.8,
+   "d": 1.6,
+   "text": "when you can put something down and"
+  },
+  {
+   "t": 820.4,
+   "d": 1.84,
+   "text": "focus on another aspect of the game you"
+  },
+  {
+   "t": 822.24,
+   "d": 1.12,
+   "text": "want to build"
+  },
+  {
+   "t": 823.36,
+   "d": 1.44,
+   "text": "for me it was always important to have"
+  },
+  {
+   "t": 824.8,
+   "d": 1.52,
+   "text": "like two or three different things that"
+  },
+  {
+   "t": 826.32,
+   "d": 1.52,
+   "text": "i could switch back and forth to any"
+  },
+  {
+   "t": 827.84,
+   "d": 1.68,
+   "text": "given time once i felt like"
+  },
+  {
+   "t": 829.52,
+   "d": 1.92,
+   "text": "i'd gotten enough progress in a specific"
+  },
+  {
+   "t": 831.44,
+   "d": 1.52,
+   "text": "feature that anymore was going to be a"
+  },
+  {
+   "t": 832.96,
+   "d": 2.08,
+   "text": "bit of a grind"
+  },
+  {
+   "t": 835.04,
+   "d": 1.6,
+   "text": "programmers are usually going to tell"
+  },
+  {
+   "t": 836.64,
+   "d": 2.08,
+   "text": "you if you make a change compile and"
+  },
+  {
+   "t": 838.72,
+   "d": 1.44,
+   "text": "look at what changed that's"
+  },
+  {
+   "t": 840.16,
+   "d": 1.76,
+   "text": "kind of a bad practice because you"
+  },
+  {
+   "t": 841.92,
+   "d": 1.6,
+   "text": "should probably know about the things"
+  },
+  {
+   "t": 843.52,
+   "d": 1.44,
+   "text": "that you're changing and not just doing"
+  },
+  {
+   "t": 844.96,
+   "d": 0.96,
+   "text": "blind guessing"
+  },
+  {
+   "t": 845.92,
+   "d": 2.0,
+   "text": "that's true that's great advice but when"
+  },
+  {
+   "t": 847.92,
+   "d": 1.44,
+   "text": "you're starting programming when you're"
+  },
+  {
+   "t": 849.36,
+   "d": 1.44,
+   "text": "first learning how to do a lot of these"
+  },
+  {
+   "t": 850.8,
+   "d": 0.72,
+   "text": "things"
+  },
+  {
+   "t": 851.52,
+   "d": 1.36,
+   "text": "that's kind of the only way you're going"
+  },
+  {
+   "t": 852.88,
+   "d": 1.36,
+   "text": "to figure out how a lot of these"
+  },
+  {
+   "t": 854.24,
+   "d": 2.32,
+   "text": "functions work is change one variable"
+  },
+  {
+   "t": 856.56,
+   "d": 2.16,
+   "text": "oh that's what that thing does with that"
+  },
+  {
+   "t": 858.72,
+   "d": 1.44,
+   "text": "now i understand"
+  },
+  {
+   "t": 860.16,
+   "d": 2.56,
+   "text": "so it's good advice but when you're just"
+  },
+  {
+   "t": 862.72,
+   "d": 1.04,
+   "text": "starting out don't"
+  },
+  {
+   "t": 863.76,
+   "d": 1.68,
+   "text": "don't feel afraid to just like poke"
+  },
+  {
+   "t": 865.44,
+   "d": 1.36,
+   "text": "something tinker with it see what"
+  },
+  {
+   "t": 866.8,
+   "d": 1.44,
+   "text": "happens"
+  },
+  {
+   "t": 868.24,
+   "d": 1.92,
+   "text": "and when you're staying uh engaged"
+  },
+  {
+   "t": 870.16,
+   "d": 1.6,
+   "text": "you're gonna work on some stuff that"
+  },
+  {
+   "t": 871.76,
+   "d": 1.6,
+   "text": "doesn't get used you're gonna end up"
+  },
+  {
+   "t": 873.36,
+   "d": 1.92,
+   "text": "making things that get tossed out"
+  },
+  {
+   "t": 875.28,
+   "d": 1.76,
+   "text": "that's totally fine that was the point"
+  },
+  {
+   "t": 877.04,
+   "d": 2.0,
+   "text": "of this whole exercise is understanding"
+  },
+  {
+   "t": 879.04,
+   "d": 3.36,
+   "text": "why something does or doesn't fit"
+  },
+  {
+   "t": 882.4,
+   "d": 3.12,
+   "text": "uh so art this is another huge obstacle"
+  },
+  {
+   "t": 885.52,
+   "d": 0.96,
+   "text": "for a lot of people"
+  },
+  {
+   "t": 886.48,
+   "d": 1.92,
+   "text": "and a lot of people just end up not"
+  },
+  {
+   "t": 888.4,
+   "d": 1.36,
+   "text": "trying to tackle with it because it's"
+  },
+  {
+   "t": 889.76,
+   "d": 1.52,
+   "text": "very very frustrating to deal with you"
+  },
+  {
+   "t": 891.28,
+   "d": 1.04,
+   "text": "can't draw"
+  },
+  {
+   "t": 892.32,
+   "d": 2.72,
+   "text": "i can't draw i can't do 3d modeling i'm"
+  },
+  {
+   "t": 895.04,
+   "d": 1.2,
+   "text": "terrible at those things"
+  },
+  {
+   "t": 896.24,
+   "d": 2.64,
+   "text": "i can edit things that already exist"
+  },
+  {
+   "t": 898.88,
+   "d": 0.64,
+   "text": "which is"
+  },
+  {
+   "t": 899.52,
+   "d": 2.24,
+   "text": "not a particularly elite skill set but"
+  },
+  {
+   "t": 901.76,
+   "d": 1.92,
+   "text": "what i do know is that the"
+  },
+  {
+   "t": 903.68,
+   "d": 2.24,
+   "text": "open source community the public domain"
+  },
+  {
+   "t": 905.92,
+   "d": 1.68,
+   "text": "community the creative commons community"
+  },
+  {
+   "t": 907.6,
+   "d": 1.2,
+   "text": "has an insane"
+  },
+  {
+   "t": 908.8,
+   "d": 2.64,
+   "text": "amount of awesome resources and assets"
+  },
+  {
+   "t": 911.44,
+   "d": 0.56,
+   "text": "available for"
+  },
+  {
+   "t": 912.0,
+   "d": 2.24,
+   "text": "you to use and what i discovered is that"
+  },
+  {
+   "t": 914.24,
+   "d": 1.28,
+   "text": "like a lot of the time you'll find a"
+  },
+  {
+   "t": 915.52,
+   "d": 1.12,
+   "text": "piece of art that's"
+  },
+  {
+   "t": 916.64,
+   "d": 1.6,
+   "text": "almost what you need and another piece"
+  },
+  {
+   "t": 918.24,
+   "d": 2.4,
+   "text": "of art that's almost what you need"
+  },
+  {
+   "t": 920.64,
+   "d": 1.52,
+   "text": "and you can kind of kit bash those"
+  },
+  {
+   "t": 922.16,
+   "d": 1.28,
+   "text": "things together to make something that"
+  },
+  {
+   "t": 923.44,
+   "d": 0.64,
+   "text": "looks"
+  },
+  {
+   "t": 924.08,
+   "d": 2.48,
+   "text": "bespoke and custom to your game uh kit"
+  },
+  {
+   "t": 926.56,
+   "d": 1.6,
+   "text": "bashing is a term that came out of like"
+  },
+  {
+   "t": 928.16,
+   "d": 1.92,
+   "text": "old sci-fi tv shows where they would"
+  },
+  {
+   "t": 930.08,
+   "d": 0.64,
+   "text": "take"
+  },
+  {
+   "t": 930.72,
+   "d": 2.24,
+   "text": "a model train kit and a model airplane"
+  },
+  {
+   "t": 932.96,
+   "d": 0.96,
+   "text": "kit and just"
+  },
+  {
+   "t": 933.92,
+   "d": 1.6,
+   "text": "plunge a bunch of parts together to make"
+  },
+  {
+   "t": 935.52,
+   "d": 1.76,
+   "text": "something new and you can do the same"
+  },
+  {
+   "t": 937.28,
+   "d": 1.2,
+   "text": "thing with open source"
+  },
+  {
+   "t": 938.48,
+   "d": 1.84,
+   "text": "free assets out there and you get"
+  },
+  {
+   "t": 940.32,
+   "d": 1.52,
+   "text": "amazing results"
+  },
+  {
+   "t": 941.84,
+   "d": 1.36,
+   "text": "another thing i learned is that if you"
+  },
+  {
+   "t": 943.2,
+   "d": 2.72,
+   "text": "are willing to spend even a small amount"
+  },
+  {
+   "t": 945.92,
+   "d": 0.48,
+   "text": "of money"
+  },
+  {
+   "t": 946.4,
+   "d": 3.12,
+   "text": "you can get some amazing things for very"
+  },
+  {
+   "t": 949.52,
+   "d": 1.28,
+   "text": "very cheap"
+  },
+  {
+   "t": 950.8,
+   "d": 2.48,
+   "text": "one guy made an entire tile set that"
+  },
+  {
+   "t": 953.28,
+   "d": 2.72,
+   "text": "kind of apes the chrono trigger style"
+  },
+  {
+   "t": 956.0,
+   "d": 1.2,
+   "text": "and it's available for just a few"
+  },
+  {
+   "t": 957.2,
+   "d": 1.52,
+   "text": "dollars and immediately it makes your"
+  },
+  {
+   "t": 958.72,
+   "d": 0.64,
+   "text": "project look"
+  },
+  {
+   "t": 959.36,
+   "d": 3.72,
+   "text": "amazing while i was working on this"
+  },
+  {
+   "t": 963.08,
+   "d": 1.88,
+   "text": "opengameart.org was probably my"
+  },
+  {
+   "t": 964.96,
+   "d": 1.92,
+   "text": "most visited website throughout the"
+  },
+  {
+   "t": 966.88,
+   "d": 2.72,
+   "text": "entire uh development cycle because"
+  },
+  {
+   "t": 969.6,
+   "d": 2.32,
+   "text": "they have thousands and thousands and"
+  },
+  {
+   "t": 971.92,
+   "d": 0.96,
+   "text": "thousands of"
+  },
+  {
+   "t": 972.88,
+   "d": 1.68,
+   "text": "of assets of all kinds you're probably"
+  },
+  {
+   "t": 974.56,
+   "d": 1.84,
+   "text": "familiar with this graphic in the center"
+  },
+  {
+   "t": 976.4,
+   "d": 1.68,
+   "text": "here the"
+  },
+  {
+   "t": 978.08,
+   "d": 3.04,
+   "text": "stone soup tile set i believe that was"
+  },
+  {
+   "t": 981.12,
+   "d": 2.48,
+   "text": "and alongside that there are thousands"
+  },
+  {
+   "t": 983.6,
+   "d": 1.84,
+   "text": "and thousands of fantastic assets that"
+  },
+  {
+   "t": 985.44,
+   "d": 1.36,
+   "text": "are probably going to be relevant to"
+  },
+  {
+   "t": 986.8,
+   "d": 1.04,
+   "text": "your game"
+  },
+  {
+   "t": 987.84,
+   "d": 2.08,
+   "text": "uh there's also stuff like kennedy.nls"
+  },
+  {
+   "t": 989.92,
+   "d": 2.0,
+   "text": "is a person that makes amazing assets"
+  },
+  {
+   "t": 991.92,
+   "d": 1.52,
+   "text": "for free just gives them away they make"
+  },
+  {
+   "t": 993.44,
+   "d": 2.0,
+   "text": "asset creation tools so that you can"
+  },
+  {
+   "t": 995.44,
+   "d": 0.56,
+   "text": "make whatever"
+  },
+  {
+   "t": 996.0,
+   "d": 2.64,
+   "text": "you need there's just a lot of stuff"
+  },
+  {
+   "t": 998.64,
+   "d": 1.92,
+   "text": "available on this site and i encourage"
+  },
+  {
+   "t": 1000.56,
+   "d": 2.0,
+   "text": "you to go check it out"
+  },
+  {
+   "t": 1002.56,
+   "d": 1.68,
+   "text": "one thing i will suggest though is make"
+  },
+  {
+   "t": 1004.24,
+   "d": 0.88,
+   "text": "sure you're keeping track of your"
+  },
+  {
+   "t": 1005.12,
+   "d": 1.52,
+   "text": "licenses and your credits"
+  },
+  {
+   "t": 1006.64,
+   "d": 1.44,
+   "text": "because there's nothing worse than you"
+  },
+  {
+   "t": 1008.08,
+   "d": 1.68,
+   "text": "know six months down the line"
+  },
+  {
+   "t": 1009.76,
+   "d": 1.52,
+   "text": "trying to step through your project be"
+  },
+  {
+   "t": 1011.28,
+   "d": 1.6,
+   "text": "like where'd i get that graphic okay"
+  },
+  {
+   "t": 1012.88,
+   "d": 1.2,
+   "text": "where to get that one"
+  },
+  {
+   "t": 1014.08,
+   "d": 2.32,
+   "text": "what's this one even if you think you're"
+  },
+  {
+   "t": 1016.4,
+   "d": 1.44,
+   "text": "just goofing off of something try to"
+  },
+  {
+   "t": 1017.84,
+   "d": 2.0,
+   "text": "keep track of the credits file because"
+  },
+  {
+   "t": 1019.84,
+   "d": 2.4,
+   "text": "it will be handy in the future one thing"
+  },
+  {
+   "t": 1022.24,
+   "d": 0.96,
+   "text": "i do want to point out though the"
+  },
+  {
+   "t": 1023.2,
+   "d": 1.92,
+   "text": "liberated pixel cup on open game art"
+  },
+  {
+   "t": 1025.12,
+   "d": 1.6,
+   "text": "holy crap this thing is amazing so"
+  },
+  {
+   "t": 1026.72,
+   "d": 1.2,
+   "text": "there's hundreds of people"
+  },
+  {
+   "t": 1027.92,
+   "d": 3.52,
+   "text": "contributing to this cross-compatible"
+  },
+  {
+   "t": 1031.44,
+   "d": 2.32,
+   "text": "pixel art archive essentially with"
+  },
+  {
+   "t": 1033.76,
+   "d": 2.08,
+   "text": "characters tile sets items equipment"
+  },
+  {
+   "t": 1035.84,
+   "d": 0.72,
+   "text": "everything"
+  },
+  {
+   "t": 1036.56,
+   "d": 1.76,
+   "text": "and it all works together and it's all"
+  },
+  {
+   "t": 1038.32,
+   "d": 1.36,
+   "text": "open source and it's available for you"
+  },
+  {
+   "t": 1039.68,
+   "d": 0.72,
+   "text": "to use so"
+  },
+  {
+   "t": 1040.4,
+   "d": 1.92,
+   "text": "there's a lot of great stuff out there"
+  },
+  {
+   "t": 1042.32,
+   "d": 2.08,
+   "text": "for absolutely free and i was"
+  },
+  {
+   "t": 1044.4,
+   "d": 2.08,
+   "text": "shocked at the stuff that you could"
+  },
+  {
+   "t": 1046.48,
+   "d": 1.92,
+   "text": "build just based off of the stuff on"
+  },
+  {
+   "t": 1048.4,
+   "d": 1.68,
+   "text": "that site"
+  },
+  {
+   "t": 1050.08,
+   "d": 3.12,
+   "text": "um so you may have noticed that uh"
+  },
+  {
+   "t": 1053.2,
+   "d": 1.92,
+   "text": "rogue's gate has a very strong"
+  },
+  {
+   "t": 1055.12,
+   "d": 2.48,
+   "text": "resemblance to a game called warcraft 2."
+  },
+  {
+   "t": 1057.6,
+   "d": 2.08,
+   "text": "so a brief aside um strategist is an"
+  },
+  {
+   "t": 1059.68,
+   "d": 2.48,
+   "text": "open source reimplementation of warcraft"
+  },
+  {
+   "t": 1062.16,
+   "d": 1.44,
+   "text": "2"
+  },
+  {
+   "t": 1063.6,
+   "d": 2.0,
+   "text": "and i was kind of hanging around with"
+  },
+  {
+   "t": 1065.6,
+   "d": 1.6,
+   "text": "the development team for that game about"
+  },
+  {
+   "t": 1067.2,
+   "d": 1.28,
+   "text": "20 years ago"
+  },
+  {
+   "t": 1068.48,
+   "d": 1.44,
+   "text": "and it had gotten to the point where it"
+  },
+  {
+   "t": 1069.92,
+   "d": 1.76,
+   "text": "was so good that you could actually"
+  },
+  {
+   "t": 1071.68,
+   "d": 2.08,
+   "text": "extract the data from a warcraft 2"
+  },
+  {
+   "t": 1073.76,
+   "d": 1.36,
+   "text": "install disk"
+  },
+  {
+   "t": 1075.12,
+   "d": 2.48,
+   "text": "and just start playing warcraft 2 inside"
+  },
+  {
+   "t": 1077.6,
+   "d": 1.04,
+   "text": "of this open source"
+  },
+  {
+   "t": 1078.64,
+   "d": 3.44,
+   "text": "engine so blizzard did not like that"
+  },
+  {
+   "t": 1082.08,
+   "d": 1.76,
+   "text": "believe it or not especially because it"
+  },
+  {
+   "t": 1083.84,
+   "d": 1.36,
+   "text": "was originally called"
+  },
+  {
+   "t": 1085.2,
+   "d": 3.2,
+   "text": "free craft so when you name your game"
+  },
+  {
+   "t": 1088.4,
+   "d": 2.0,
+   "text": "free craft and it allows you to"
+  },
+  {
+   "t": 1090.4,
+   "d": 2.56,
+   "text": "extract warcraft 2 data files and play"
+  },
+  {
+   "t": 1092.96,
+   "d": 1.04,
+   "text": "an open source version"
+  },
+  {
+   "t": 1094.0,
+   "d": 2.96,
+   "text": "of that commercial game companies take"
+  },
+  {
+   "t": 1096.96,
+   "d": 0.32,
+   "text": "uh"
+  },
+  {
+   "t": 1097.28,
+   "d": 1.6,
+   "text": "take exception to that so i'm not"
+  },
+  {
+   "t": 1098.88,
+   "d": 1.44,
+   "text": "surprised that they came down with a"
+  },
+  {
+   "t": 1100.32,
+   "d": 0.96,
+   "text": "cease and desist"
+  },
+  {
+   "t": 1101.28,
+   "d": 2.32,
+   "text": "and forced us to change the name so i"
+  },
+  {
+   "t": 1103.6,
+   "d": 2.4,
+   "text": "had made some campaigns some maps but i"
+  },
+  {
+   "t": 1106.0,
+   "d": 1.84,
+   "text": "mostly just idled in the irc channel"
+  },
+  {
+   "t": 1107.84,
+   "d": 1.44,
+   "text": "with all the other developers and i was"
+  },
+  {
+   "t": 1109.28,
+   "d": 1.2,
+   "text": "familiar with how"
+  },
+  {
+   "t": 1110.48,
+   "d": 1.6,
+   "text": "this engine arranged its sprites and"
+  },
+  {
+   "t": 1112.08,
+   "d": 1.36,
+   "text": "whatnot so i was pretty curious to see"
+  },
+  {
+   "t": 1113.44,
+   "d": 0.96,
+   "text": "if there's anything out there that i"
+  },
+  {
+   "t": 1114.4,
+   "d": 0.88,
+   "text": "could use"
+  },
+  {
+   "t": 1115.28,
+   "d": 3.36,
+   "text": "and as luck would have it i found warm"
+  },
+  {
+   "t": 1118.64,
+   "d": 0.4,
+   "text": "sun"
+  },
+  {
+   "t": 1119.04,
+   "d": 2.48,
+   "text": "which is this amazing game that's"
+  },
+  {
+   "t": 1121.52,
+   "d": 1.92,
+   "text": "available on steam it's an rts you can"
+  },
+  {
+   "t": 1123.44,
+   "d": 1.6,
+   "text": "go play it right now"
+  },
+  {
+   "t": 1125.04,
+   "d": 1.84,
+   "text": "and it takes the strategist engine and"
+  },
+  {
+   "t": 1126.88,
+   "d": 2.08,
+   "text": "it implements an all-new rts"
+  },
+  {
+   "t": 1128.96,
+   "d": 2.4,
+   "text": "with all custom open source art by this"
+  },
+  {
+   "t": 1131.36,
+   "d": 1.36,
+   "text": "amazing artist"
+  },
+  {
+   "t": 1132.72,
+   "d": 2.96,
+   "text": "named jyn and it's fantastic go check it"
+  },
+  {
+   "t": 1135.68,
+   "d": 0.4,
+   "text": "out"
+  },
+  {
+   "t": 1136.08,
+   "d": 1.92,
+   "text": "but the important thing was that it had"
+  },
+  {
+   "t": 1138.0,
+   "d": 1.92,
+   "text": "amazing licenses"
+  },
+  {
+   "t": 1139.92,
+   "d": 1.76,
+   "text": "so i looked at this and i thought wow"
+  },
+  {
+   "t": 1141.68,
+   "d": 2.08,
+   "text": "this has everything that i need that i"
+  },
+  {
+   "t": 1143.76,
+   "d": 2.0,
+   "text": "would want to use making a roguelike"
+  },
+  {
+   "t": 1145.76,
+   "d": 3.04,
+   "text": "so why don't i adopt this uh another"
+  },
+  {
+   "t": 1148.8,
+   "d": 2.0,
+   "text": "cool thing was that all the sprites were"
+  },
+  {
+   "t": 1150.8,
+   "d": 1.28,
+   "text": "broken down by"
+  },
+  {
+   "t": 1152.08,
+   "d": 2.16,
+   "text": "layers so i could make new sprites just"
+  },
+  {
+   "t": 1154.24,
+   "d": 1.52,
+   "text": "by stacking them together"
+  },
+  {
+   "t": 1155.76,
+   "d": 1.84,
+   "text": "so it was kind of a mother lode in terms"
+  },
+  {
+   "t": 1157.6,
+   "d": 3.2,
+   "text": "of developing an art style for your game"
+  },
+  {
+   "t": 1160.8,
+   "d": 1.6,
+   "text": "uh and as you may have noticed the game"
+  },
+  {
+   "t": 1162.4,
+   "d": 2.24,
+   "text": "is 16x9 so we're going to pretend that"
+  },
+  {
+   "t": 1164.64,
+   "d": 1.36,
+   "text": "this is a love letter to an"
+  },
+  {
+   "t": 1166.0,
+   "d": 2.88,
+   "text": "alternate 90s where everybody had"
+  },
+  {
+   "t": 1168.88,
+   "d": 3.36,
+   "text": "monitors like john carmack"
+  },
+  {
+   "t": 1172.4,
+   "d": 2.32,
+   "text": "all right so what about audio well the"
+  },
+  {
+   "t": 1174.72,
+   "d": 1.36,
+   "text": "lucky thing here is that"
+  },
+  {
+   "t": 1176.08,
+   "d": 2.0,
+   "text": "open source strikes again there are"
+  },
+  {
+   "t": 1178.08,
+   "d": 1.84,
+   "text": "thousands and thousands and thousands of"
+  },
+  {
+   "t": 1179.92,
+   "d": 0.48,
+   "text": "great"
+  },
+  {
+   "t": 1180.4,
+   "d": 3.36,
+   "text": "pieces of music voice files little ui"
+  },
+  {
+   "t": 1183.76,
+   "d": 0.96,
+   "text": "sounds everything that you would"
+  },
+  {
+   "t": 1184.72,
+   "d": 2.24,
+   "text": "possibly need available in the open"
+  },
+  {
+   "t": 1186.96,
+   "d": 1.2,
+   "text": "source community"
+  },
+  {
+   "t": 1188.16,
+   "d": 1.68,
+   "text": "and you know instantly you can elevate"
+  },
+  {
+   "t": 1189.84,
+   "d": 1.68,
+   "text": "the presentation your game in a very"
+  },
+  {
+   "t": 1191.52,
+   "d": 0.56,
+   "text": "very"
+  },
+  {
+   "t": 1192.08,
+   "d": 2.64,
+   "text": "easy way audio is also a really really"
+  },
+  {
+   "t": 1194.72,
+   "d": 2.32,
+   "text": "fantastic place to bring a friend in"
+  },
+  {
+   "t": 1197.04,
+   "d": 1.28,
+   "text": "um it's something that's easy to"
+  },
+  {
+   "t": 1198.32,
+   "d": 1.76,
+   "text": "collaborate on so"
+  },
+  {
+   "t": 1200.08,
+   "d": 1.52,
+   "text": "a friend of mine actually wanted to"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.16,
+   "text": "learn about making video game music"
+  },
+  {
+   "t": 1203.76,
+   "d": 2.08,
+   "text": "and so we both decided okay we'll all"
+  },
+  {
+   "t": 1205.84,
+   "d": 1.52,
+   "text": "make the game you can make the music and"
+  },
+  {
+   "t": 1207.36,
+   "d": 0.8,
+   "text": "we both"
+  },
+  {
+   "t": 1208.16,
+   "d": 1.92,
+   "text": "benefited by you know learning all about"
+  },
+  {
+   "t": 1210.08,
+   "d": 1.44,
+   "text": "the process"
+  },
+  {
+   "t": 1211.52,
+   "d": 1.92,
+   "text": "um the one thing that i will say as a"
+  },
+  {
+   "t": 1213.44,
+   "d": 1.84,
+   "text": "piece of advice is try not to bring that"
+  },
+  {
+   "t": 1215.28,
+   "d": 0.8,
+   "text": "friend in a little"
+  },
+  {
+   "t": 1216.08,
+   "d": 2.16,
+   "text": "early because it's very frustrating for"
+  },
+  {
+   "t": 1218.24,
+   "d": 1.84,
+   "text": "a musician to try and make music for"
+  },
+  {
+   "t": 1220.08,
+   "d": 3.12,
+   "text": "a rapidly moving target that oscillates"
+  },
+  {
+   "t": 1223.2,
+   "d": 2.72,
+   "text": "in one week from a sci-fi ship shooter"
+  },
+  {
+   "t": 1225.92,
+   "d": 0.32,
+   "text": "to"
+  },
+  {
+   "t": 1226.24,
+   "d": 3.84,
+   "text": "a balder's gate club"
+  },
+  {
+   "t": 1231.12,
+   "d": 2.96,
+   "text": "all right so lore i got some news for"
+  },
+  {
+   "t": 1234.08,
+   "d": 0.64,
+   "text": "you folks"
+  },
+  {
+   "t": 1234.72,
+   "d": 1.68,
+   "text": "all lore is made up and there are no"
+  },
+  {
+   "t": 1236.4,
+   "d": 1.68,
+   "text": "wrong answers you can write whatever the"
+  },
+  {
+   "t": 1238.08,
+   "d": 1.44,
+   "text": "heck you want"
+  },
+  {
+   "t": 1239.52,
+   "d": 3.12,
+   "text": "um i'm a bit softer on lore to me"
+  },
+  {
+   "t": 1242.64,
+   "d": 1.84,
+   "text": "lore should give rise to interesting"
+  },
+  {
+   "t": 1244.48,
+   "d": 1.6,
+   "text": "gameplay scenarios"
+  },
+  {
+   "t": 1246.08,
+   "d": 1.36,
+   "text": "i'm always interested in writing"
+  },
+  {
+   "t": 1247.44,
+   "d": 1.52,
+   "text": "something that's actually relevant to"
+  },
+  {
+   "t": 1248.96,
+   "d": 1.52,
+   "text": "the game that you're playing"
+  },
+  {
+   "t": 1250.48,
+   "d": 2.08,
+   "text": "um you know i think i think laura's is"
+  },
+  {
+   "t": 1252.56,
+   "d": 1.36,
+   "text": "where you can get as wild as you want"
+  },
+  {
+   "t": 1253.92,
+   "d": 1.6,
+   "text": "because there's no wrong answers"
+  },
+  {
+   "t": 1255.52,
+   "d": 1.84,
+   "text": "write whatever you feel is cool and if"
+  },
+  {
+   "t": 1257.36,
+   "d": 2.24,
+   "text": "people are into it they're into it"
+  },
+  {
+   "t": 1259.6,
+   "d": 1.92,
+   "text": "if you are writing stuff that you think"
+  },
+  {
+   "t": 1261.52,
+   "d": 1.84,
+   "text": "might appeal to someone"
+  },
+  {
+   "t": 1263.36,
+   "d": 2.64,
+   "text": "somewhere but you are pretty soft on it"
+  },
+  {
+   "t": 1266.0,
+   "d": 1.44,
+   "text": "it's gonna show"
+  },
+  {
+   "t": 1267.44,
+   "d": 2.56,
+   "text": "so my advice is you know write what's"
+  },
+  {
+   "t": 1270.0,
+   "d": 0.8,
+   "text": "relevant to you"
+  },
+  {
+   "t": 1270.8,
+   "d": 2.48,
+   "text": "and what's relevant to the game and you"
+  },
+  {
+   "t": 1273.28,
+   "d": 1.36,
+   "text": "know the people will tell you if they"
+  },
+  {
+   "t": 1274.64,
+   "d": 1.68,
+   "text": "like it or not and if they don't"
+  },
+  {
+   "t": 1276.32,
+   "d": 3.12,
+   "text": "forget it what do they know"
+  },
+  {
+   "t": 1280.16,
+   "d": 2.72,
+   "text": "all right design so when i see feeling"
+  },
+  {
+   "t": 1282.88,
+   "d": 1.28,
+   "text": "around in the dark i mean it's okay to"
+  },
+  {
+   "t": 1284.16,
+   "d": 1.28,
+   "text": "start working on something"
+  },
+  {
+   "t": 1285.44,
+   "d": 2.08,
+   "text": "that you've only got a vague design or a"
+  },
+  {
+   "t": 1287.52,
+   "d": 2.32,
+   "text": "vague idea for"
+  },
+  {
+   "t": 1289.84,
+   "d": 1.68,
+   "text": "and in doing that you're probably going"
+  },
+  {
+   "t": 1291.52,
+   "d": 2.32,
+   "text": "to implement a bunch of things that you"
+  },
+  {
+   "t": 1293.84,
+   "d": 2.8,
+   "text": "don't need and in commercial development"
+  },
+  {
+   "t": 1296.64,
+   "d": 0.56,
+   "text": "that's a"
+  },
+  {
+   "t": 1297.2,
+   "d": 1.76,
+   "text": "horrible idea because you need to be"
+  },
+  {
+   "t": 1298.96,
+   "d": 1.44,
+   "text": "very careful about how you're spending"
+  },
+  {
+   "t": 1300.4,
+   "d": 1.44,
+   "text": "your time and your resources and that"
+  },
+  {
+   "t": 1301.84,
+   "d": 1.12,
+   "text": "sort of thing"
+  },
+  {
+   "t": 1302.96,
+   "d": 2.24,
+   "text": "but if you're making a game for yourself"
+  },
+  {
+   "t": 1305.2,
+   "d": 0.96,
+   "text": "then you know"
+  },
+  {
+   "t": 1306.16,
+   "d": 2.8,
+   "text": "that is no longer the case and you can"
+  },
+  {
+   "t": 1308.96,
+   "d": 0.48,
+   "text": "learn"
+  },
+  {
+   "t": 1309.44,
+   "d": 1.52,
+   "text": "from the stuff that you end up throwing"
+  },
+  {
+   "t": 1310.96,
+   "d": 2.16,
+   "text": "away you can learn why something does or"
+  },
+  {
+   "t": 1313.12,
+   "d": 1.44,
+   "text": "something doesn't work which i think you"
+  },
+  {
+   "t": 1314.56,
+   "d": 0.24,
+   "text": "know"
+  },
+  {
+   "t": 1314.8,
+   "d": 2.32,
+   "text": "are equally important there's there's"
+  },
+  {
+   "t": 1317.12,
+   "d": 1.36,
+   "text": "been tons and tons of features and"
+  },
+  {
+   "t": 1318.48,
+   "d": 1.12,
+   "text": "things that i've built that i ended up"
+  },
+  {
+   "t": 1319.6,
+   "d": 1.84,
+   "text": "throwing away but i still cherish them"
+  },
+  {
+   "t": 1321.44,
+   "d": 1.6,
+   "text": "because i learned from them"
+  },
+  {
+   "t": 1323.04,
+   "d": 1.68,
+   "text": "and maybe i can take those concepts to a"
+  },
+  {
+   "t": 1324.72,
+   "d": 2.32,
+   "text": "future game my original plan for this"
+  },
+  {
+   "t": 1327.04,
+   "d": 0.64,
+   "text": "game was"
+  },
+  {
+   "t": 1327.68,
+   "d": 2.0,
+   "text": "dramatically different from where it"
+  },
+  {
+   "t": 1329.68,
+   "d": 2.16,
+   "text": "ended up but i made a bunch of decisions"
+  },
+  {
+   "t": 1331.84,
+   "d": 0.96,
+   "text": "about you know what"
+  },
+  {
+   "t": 1332.8,
+   "d": 2.96,
+   "text": "felt good to me what made sense to my"
+  },
+  {
+   "t": 1335.76,
+   "d": 0.48,
+   "text": "gut"
+  },
+  {
+   "t": 1336.24,
+   "d": 2.64,
+   "text": "and because i arrived at something at"
+  },
+  {
+   "t": 1338.88,
+   "d": 1.92,
+   "text": "that i'm very happy with what i've ended"
+  },
+  {
+   "t": 1340.8,
+   "d": 2.32,
+   "text": "up at"
+  },
+  {
+   "t": 1344.96,
+   "d": 1.76,
+   "text": "all right so you've got a bunch of tools"
+  },
+  {
+   "t": 1346.72,
+   "d": 1.52,
+   "text": "you've got a bunch of resources"
+  },
+  {
+   "t": 1348.24,
+   "d": 1.44,
+   "text": "available to you so"
+  },
+  {
+   "t": 1349.68,
+   "d": 2.24,
+   "text": "this is where kind of the the fun starts"
+  },
+  {
+   "t": 1351.92,
+   "d": 2.08,
+   "text": "right for me i like to draw and i like"
+  },
+  {
+   "t": 1354.0,
+   "d": 0.56,
+   "text": "to doodle"
+  },
+  {
+   "t": 1354.56,
+   "d": 2.96,
+   "text": "um but in photoshop with pixel art so"
+  },
+  {
+   "t": 1357.52,
+   "d": 1.76,
+   "text": "with the tools and the resources i had i"
+  },
+  {
+   "t": 1359.28,
+   "d": 1.2,
+   "text": "started putting together different"
+  },
+  {
+   "t": 1360.48,
+   "d": 2.08,
+   "text": "scenarios that i wanted my game to have"
+  },
+  {
+   "t": 1362.56,
+   "d": 1.6,
+   "text": "and what they might look like so i was"
+  },
+  {
+   "t": 1364.16,
+   "d": 0.96,
+   "text": "thinking about"
+  },
+  {
+   "t": 1365.12,
+   "d": 1.68,
+   "text": "what kind of emotion do i want to avoid"
+  },
+  {
+   "t": 1366.8,
+   "d": 1.36,
+   "text": "what kind of pressure do i want the"
+  },
+  {
+   "t": 1368.16,
+   "d": 1.36,
+   "text": "player to be feeling what kind of mood"
+  },
+  {
+   "t": 1369.52,
+   "d": 1.68,
+   "text": "do i want to be in i was just"
+  },
+  {
+   "t": 1371.2,
+   "d": 2.24,
+   "text": "doodling around those concepts and then"
+  },
+  {
+   "t": 1373.44,
+   "d": 1.36,
+   "text": "once i had something that"
+  },
+  {
+   "t": 1374.8,
+   "d": 1.84,
+   "text": "looked cool to me that i was like yeah i"
+  },
+  {
+   "t": 1376.64,
+   "d": 1.92,
+   "text": "want to make that or i want to play that"
+  },
+  {
+   "t": 1378.56,
+   "d": 1.76,
+   "text": "i just work backwards from there so how"
+  },
+  {
+   "t": 1380.32,
+   "d": 1.44,
+   "text": "would a player arrive at the scenario"
+  },
+  {
+   "t": 1381.76,
+   "d": 1.36,
+   "text": "what systems do they need to interact"
+  },
+  {
+   "t": 1383.12,
+   "d": 1.36,
+   "text": "with what should i build to make this"
+  },
+  {
+   "t": 1384.48,
+   "d": 0.88,
+   "text": "happen"
+  },
+  {
+   "t": 1385.36,
+   "d": 1.2,
+   "text": "and then you start investigating each"
+  },
+  {
+   "t": 1386.56,
+   "d": 1.12,
+   "text": "one of those features and you develop a"
+  },
+  {
+   "t": 1387.68,
+   "d": 0.96,
+   "text": "plan of attack"
+  },
+  {
+   "t": 1388.64,
+   "d": 1.92,
+   "text": "you're probably familiar with this uh"
+  },
+  {
+   "t": 1390.56,
+   "d": 2.16,
+   "text": "you maybe heard it is like strong or"
+  },
+  {
+   "t": 1392.72,
+   "d": 1.36,
+   "text": "agile or something where you make"
+  },
+  {
+   "t": 1394.08,
+   "d": 2.08,
+   "text": "a user story that has like here's what i"
+  },
+  {
+   "t": 1396.16,
+   "d": 1.2,
+   "text": "want them to experience and then you"
+  },
+  {
+   "t": 1397.36,
+   "d": 1.04,
+   "text": "step backwards from there"
+  },
+  {
+   "t": 1398.4,
+   "d": 1.68,
+   "text": "it's essentially the same thing you just"
+  },
+  {
+   "t": 1400.08,
+   "d": 1.44,
+   "text": "have a vision that you've established"
+  },
+  {
+   "t": 1401.52,
+   "d": 3.12,
+   "text": "and you work backwards from there"
+  },
+  {
+   "t": 1405.76,
+   "d": 2.4,
+   "text": "so a lot of this advice doesn't really"
+  },
+  {
+   "t": 1408.16,
+   "d": 1.44,
+   "text": "apply if you're making a game for an"
+  },
+  {
+   "t": 1409.6,
+   "d": 1.2,
+   "text": "audience which is"
+  },
+  {
+   "t": 1410.8,
+   "d": 1.36,
+   "text": "something that i've been doing for a"
+  },
+  {
+   "t": 1412.16,
+   "d": 1.92,
+   "text": "decade and a half so"
+  },
+  {
+   "t": 1414.08,
+   "d": 1.76,
+   "text": "when there's no pressure it stops being"
+  },
+  {
+   "t": 1415.84,
+   "d": 2.08,
+   "text": "a chore and a stressor it becomes an"
+  },
+  {
+   "t": 1417.92,
+   "d": 2.4,
+   "text": "expression of creativity i think that"
+  },
+  {
+   "t": 1420.32,
+   "d": 0.96,
+   "text": "anyone who"
+  },
+  {
+   "t": 1421.28,
+   "d": 1.92,
+   "text": "can make a game for themselves should"
+  },
+  {
+   "t": 1423.2,
+   "d": 1.76,
+   "text": "make a game for themselves"
+  },
+  {
+   "t": 1424.96,
+   "d": 2.4,
+   "text": "rogue's gate was like that game for me"
+  },
+  {
+   "t": 1427.36,
+   "d": 1.76,
+   "text": "and if other people like it that's great"
+  },
+  {
+   "t": 1429.12,
+   "d": 1.28,
+   "text": "but the important thing is that i'm"
+  },
+  {
+   "t": 1430.4,
+   "d": 0.56,
+   "text": "expressing"
+  },
+  {
+   "t": 1430.96,
+   "d": 2.48,
+   "text": "myself creatively i don't care if no one"
+  },
+  {
+   "t": 1433.44,
+   "d": 1.04,
+   "text": "ever hears about it or if i want to"
+  },
+  {
+   "t": 1434.48,
+   "d": 2.32,
+   "text": "replace it because i learned a lot about"
+  },
+  {
+   "t": 1436.8,
+   "d": 2.24,
+   "text": "games and my own preferences and"
+  },
+  {
+   "t": 1439.04,
+   "d": 0.96,
+   "text": "building it"
+  },
+  {
+   "t": 1440.0,
+   "d": 1.84,
+   "text": "so in that way like building a game for"
+  },
+  {
+   "t": 1441.84,
+   "d": 2.48,
+   "text": "yourself is a very therapeutic exercise"
+  },
+  {
+   "t": 1444.32,
+   "d": 3.2,
+   "text": "because you learn about yourself"
+  },
+  {
+   "t": 1448.16,
+   "d": 1.92,
+   "text": "um and i want to emphasize that anyone"
+  },
+  {
+   "t": 1450.08,
+   "d": 1.44,
+   "text": "can do this i know that it's kind of a"
+  },
+  {
+   "t": 1451.52,
+   "d": 1.6,
+   "text": "cliche thing to say and you may have"
+  },
+  {
+   "t": 1453.12,
+   "d": 1.36,
+   "text": "heard it before but i"
+  },
+  {
+   "t": 1454.48,
+   "d": 2.32,
+   "text": "truly and genuinely believe this i had"
+  },
+  {
+   "t": 1456.8,
+   "d": 1.36,
+   "text": "so many missing skills"
+  },
+  {
+   "t": 1458.16,
+   "d": 2.16,
+   "text": "when i started this despite being a"
+  },
+  {
+   "t": 1460.32,
+   "d": 2.4,
+   "text": "professional developer for a long time"
+  },
+  {
+   "t": 1462.72,
+   "d": 1.68,
+   "text": "um and i'm not blind to the fact that i"
+  },
+  {
+   "t": 1464.4,
+   "d": 1.68,
+   "text": "had a lot of general game and computer"
+  },
+  {
+   "t": 1466.08,
+   "d": 1.84,
+   "text": "knowledge to draw and to help me succeed"
+  },
+  {
+   "t": 1467.92,
+   "d": 1.68,
+   "text": "but i want to stress that none of that"
+  },
+  {
+   "t": 1469.6,
+   "d": 1.76,
+   "text": "is what mattered in the end"
+  },
+  {
+   "t": 1471.36,
+   "d": 2.32,
+   "text": "i used the same resources you can use"
+  },
+  {
+   "t": 1473.68,
+   "d": 1.6,
+   "text": "and i followed in a lot of the same"
+  },
+  {
+   "t": 1475.28,
+   "d": 1.76,
+   "text": "steps that you can follow"
+  },
+  {
+   "t": 1477.04,
+   "d": 1.52,
+   "text": "if you go on rogue basin there's an"
+  },
+  {
+   "t": 1478.56,
+   "d": 1.36,
+   "text": "amazing article called how to write a"
+  },
+  {
+   "t": 1479.92,
+   "d": 1.28,
+   "text": "roguelike in 15 steps"
+  },
+  {
+   "t": 1481.2,
+   "d": 2.64,
+   "text": "it was remarkably accurate and useful"
+  },
+  {
+   "t": 1483.84,
+   "d": 1.2,
+   "text": "the only thing that was key to my"
+  },
+  {
+   "t": 1485.04,
+   "d": 1.84,
+   "text": "success was not feeling discouraged and"
+  },
+  {
+   "t": 1486.88,
+   "d": 2.0,
+   "text": "giving up so no matter how irritating of"
+  },
+  {
+   "t": 1488.88,
+   "d": 1.6,
+   "text": "a problem i ran into"
+  },
+  {
+   "t": 1490.48,
+   "d": 2.08,
+   "text": "with enough application of time and"
+  },
+  {
+   "t": 1492.56,
+   "d": 1.76,
+   "text": "bashing my brain against a wall like it"
+  },
+  {
+   "t": 1494.32,
+   "d": 1.76,
+   "text": "eventually worked out"
+  },
+  {
+   "t": 1496.08,
+   "d": 2.72,
+   "text": "so i was making something for me on my"
+  },
+  {
+   "t": 1498.8,
+   "d": 0.64,
+   "text": "schedule"
+  },
+  {
+   "t": 1499.44,
+   "d": 3.44,
+   "text": "i could take that time so arbitrary"
+  },
+  {
+   "t": 1502.88,
+   "d": 1.44,
+   "text": "limits are just that like don't give"
+  },
+  {
+   "t": 1504.32,
+   "d": 1.6,
+   "text": "yourself arbitrary limits if you don't"
+  },
+  {
+   "t": 1505.92,
+   "d": 0.56,
+   "text": "have to"
+  },
+  {
+   "t": 1506.48,
+   "d": 2.0,
+   "text": "make something in your own time for you"
+  },
+  {
+   "t": 1508.48,
+   "d": 2.08,
+   "text": "at your own pace"
+  },
+  {
+   "t": 1510.56,
+   "d": 1.2,
+   "text": "another thing i want to mention is you"
+  },
+  {
+   "t": 1511.76,
+   "d": 2.48,
+   "text": "know ask for help it's the easiest thing"
+  },
+  {
+   "t": 1514.24,
+   "d": 0.8,
+   "text": "in the world to do"
+  },
+  {
+   "t": 1515.04,
+   "d": 2.88,
+   "text": "it's free usually and if you ever get"
+  },
+  {
+   "t": 1517.92,
+   "d": 2.56,
+   "text": "stuck on something try rubber ducking so"
+  },
+  {
+   "t": 1520.48,
+   "d": 1.76,
+   "text": "explain the problem that you're facing"
+  },
+  {
+   "t": 1522.24,
+   "d": 1.84,
+   "text": "to a rubber duck that you hold in your"
+  },
+  {
+   "t": 1524.08,
+   "d": 0.72,
+   "text": "hand"
+  },
+  {
+   "t": 1524.8,
+   "d": 2.64,
+   "text": "describe all the variables all of the"
+  },
+  {
+   "t": 1527.44,
+   "d": 1.36,
+   "text": "things that you've tried to solve it"
+  },
+  {
+   "t": 1528.8,
+   "d": 1.76,
+   "text": "why they didn't work why you think other"
+  },
+  {
+   "t": 1530.56,
+   "d": 2.0,
+   "text": "solutions might work or might not work"
+  },
+  {
+   "t": 1532.56,
+   "d": 1.6,
+   "text": "and then bringing all that data together"
+  },
+  {
+   "t": 1534.16,
+   "d": 1.68,
+   "text": "and formatting it so you can communicate"
+  },
+  {
+   "t": 1535.84,
+   "d": 1.84,
+   "text": "it to another person you might arrive at"
+  },
+  {
+   "t": 1537.68,
+   "d": 2.0,
+   "text": "a fantastic solution or the solution"
+  },
+  {
+   "t": 1539.68,
+   "d": 2.32,
+   "text": "that you needed before and that rubber"
+  },
+  {
+   "t": 1542.0,
+   "d": 2.0,
+   "text": "duck can be a friend that you ask for"
+  },
+  {
+   "t": 1544.0,
+   "d": 0.4,
+   "text": "help"
+  },
+  {
+   "t": 1544.4,
+   "d": 1.28,
+   "text": "it doesn't have to be a physical rubber"
+  },
+  {
+   "t": 1545.68,
+   "d": 2.56,
+   "text": "duck even if the person you're talking"
+  },
+  {
+   "t": 1548.24,
+   "d": 0.4,
+   "text": "to"
+  },
+  {
+   "t": 1548.64,
+   "d": 1.68,
+   "text": "doesn't have the technical knowledge"
+  },
+  {
+   "t": 1550.32,
+   "d": 1.68,
+   "text": "that you think they need to be able to"
+  },
+  {
+   "t": 1552.0,
+   "d": 1.44,
+   "text": "offer valuable insight"
+  },
+  {
+   "t": 1553.44,
+   "d": 1.6,
+   "text": "just explaining your problem to that"
+  },
+  {
+   "t": 1555.04,
+   "d": 3.12,
+   "text": "person can be hugely beneficial"
+  },
+  {
+   "t": 1558.16,
+   "d": 1.92,
+   "text": "um and i think one other thing that i"
+  },
+  {
+   "t": 1560.08,
+   "d": 1.12,
+   "text": "want to say is"
+  },
+  {
+   "t": 1561.2,
+   "d": 1.68,
+   "text": "everyone has a different journey to"
+  },
+  {
+   "t": 1562.88,
+   "d": 2.0,
+   "text": "success don't feel like you're not"
+  },
+  {
+   "t": 1564.88,
+   "d": 1.76,
+   "text": "capable of doing something like this"
+  },
+  {
+   "t": 1566.64,
+   "d": 1.52,
+   "text": "because your journey looks different"
+  },
+  {
+   "t": 1568.16,
+   "d": 1.28,
+   "text": "from all the others"
+  },
+  {
+   "t": 1569.44,
+   "d": 2.48,
+   "text": "i ignored a bunch of very common wisdom"
+  },
+  {
+   "t": 1571.92,
+   "d": 1.36,
+   "text": "that you probably shouldn't ignore"
+  },
+  {
+   "t": 1573.28,
+   "d": 2.0,
+   "text": "for example starting with something"
+  },
+  {
+   "t": 1575.28,
+   "d": 1.6,
+   "text": "small that you can build upon"
+  },
+  {
+   "t": 1576.88,
+   "d": 1.44,
+   "text": "that's a great piece of advice that i"
+  },
+  {
+   "t": 1578.32,
+   "d": 2.4,
+   "text": "ignored but wisdom for everyone isn't"
+  },
+  {
+   "t": 1580.72,
+   "d": 0.56,
+   "text": "going to be"
+  },
+  {
+   "t": 1581.28,
+   "d": 3.04,
+   "text": "wisdom for you necessarily i want to"
+  },
+  {
+   "t": 1584.32,
+   "d": 0.72,
+   "text": "encourage you"
+  },
+  {
+   "t": 1585.04,
+   "d": 2.64,
+   "text": "you know to make something for you at"
+  },
+  {
+   "t": 1587.68,
+   "d": 1.12,
+   "text": "your own pace"
+  },
+  {
+   "t": 1588.8,
+   "d": 2.8,
+   "text": "answering only to yourself and you might"
+  },
+  {
+   "t": 1591.6,
+   "d": 0.8,
+   "text": "find that"
+  },
+  {
+   "t": 1592.4,
+   "d": 2.0,
+   "text": "it it's wonderful and you love it and it"
+  },
+  {
+   "t": 1594.4,
+   "d": 1.76,
+   "text": "makes you want to build games for other"
+  },
+  {
+   "t": 1596.16,
+   "d": 2.4,
+   "text": "people after that"
+  },
+  {
+   "t": 1598.56,
+   "d": 2.8,
+   "text": "all right or you could just do this and"
+  },
+  {
+   "t": 1601.36,
+   "d": 1.2,
+   "text": "when your game is 90"
+  },
+  {
+   "t": 1602.56,
+   "d": 2.4,
+   "text": "done restart development inside of"
+  },
+  {
+   "t": 1604.96,
+   "d": 1.28,
+   "text": "unreal 4 for"
+  },
+  {
+   "t": 1606.24,
+   "d": 1.52,
+   "text": "no real reason other than you wanted to"
+  },
+  {
+   "t": 1607.76,
+   "d": 2.24,
+   "text": "see what it was like this is a project"
+  },
+  {
+   "t": 1610.0,
+   "d": 0.32,
+   "text": "that i"
+  },
+  {
+   "t": 1610.32,
+   "d": 2.56,
+   "text": "sunk a few months into last year taking"
+  },
+  {
+   "t": 1612.88,
+   "d": 1.68,
+   "text": "my game that i'd already built in 2d and"
+  },
+  {
+   "t": 1614.56,
+   "d": 1.92,
+   "text": "just throwing it inside of unreal"
+  },
+  {
+   "t": 1616.48,
+   "d": 1.76,
+   "text": "it actually worked pretty great unreal"
+  },
+  {
+   "t": 1618.24,
+   "d": 1.76,
+   "text": "is a fantastic engine and because i"
+  },
+  {
+   "t": 1620.0,
+   "d": 1.36,
+   "text": "already knew the game that i was trying"
+  },
+  {
+   "t": 1621.36,
+   "d": 1.04,
+   "text": "to make"
+  },
+  {
+   "t": 1622.4,
+   "d": 3.2,
+   "text": "it came together pretty quickly"
+  },
+  {
+   "t": 1625.6,
+   "d": 1.84,
+   "text": "but at the same time this was just a fun"
+  },
+  {
+   "t": 1627.44,
+   "d": 1.6,
+   "text": "side experiment and i think that i have"
+  },
+  {
+   "t": 1629.04,
+   "d": 1.6,
+   "text": "more fun in the 2d version so i'm going"
+  },
+  {
+   "t": 1630.64,
+   "d": 1.36,
+   "text": "to focus on that for now"
+  },
+  {
+   "t": 1632.0,
+   "d": 1.68,
+   "text": "my original plan was hey what if i"
+  },
+  {
+   "t": 1633.68,
+   "d": 1.68,
+   "text": "finished both games and then released"
+  },
+  {
+   "t": 1635.36,
+   "d": 1.44,
+   "text": "them together as some sort of art"
+  },
+  {
+   "t": 1636.8,
+   "d": 1.76,
+   "text": "project where i discovered a game from"
+  },
+  {
+   "t": 1638.56,
+   "d": 1.44,
+   "text": "the 90s then remastered"
+  },
+  {
+   "t": 1640.0,
+   "d": 3.2,
+   "text": "all by myself i have eyes that are"
+  },
+  {
+   "t": 1643.2,
+   "d": 2.64,
+   "text": "bigger than my stomach at times"
+  },
+  {
+   "t": 1645.84,
+   "d": 1.36,
+   "text": "all right so thank you very much for"
+  },
+  {
+   "t": 1647.2,
+   "d": 1.84,
+   "text": "listening to me yammer on let's take"
+  },
+  {
+   "t": 1649.04,
+   "d": 3.36,
+   "text": "some questions from the audience"
+  },
+  {
+   "t": 1652.84,
+   "d": 3.16,
+   "text": "great uh wonderful talk"
+  },
+  {
+   "t": 1656.0,
+   "d": 3.52,
+   "text": "um travis asks if there's a way to play"
+  },
+  {
+   "t": 1659.52,
+   "d": 0.48,
+   "text": "your game"
+  },
+  {
+   "t": 1660.0,
+   "d": 1.76,
+   "text": "is there a demo that's out that people"
+  },
+  {
+   "t": 1661.76,
+   "d": 2.08,
+   "text": "can go play"
+  },
+  {
+   "t": 1663.84,
+   "d": 2.0,
+   "text": "so i feel horrible because my goal was"
+  },
+  {
+   "t": 1665.84,
+   "d": 1.84,
+   "text": "originally get this thing out the door"
+  },
+  {
+   "t": 1667.68,
+   "d": 0.32,
+   "text": "before"
+  },
+  {
+   "t": 1668.0,
+   "d": 1.44,
+   "text": "the roguelike celebration but"
+  },
+  {
+   "t": 1669.44,
+   "d": 2.16,
+   "text": "unfortunately i did not hit that goal"
+  },
+  {
+   "t": 1671.6,
+   "d": 1.84,
+   "text": "so eventually yes you'll be able to play"
+  },
+  {
+   "t": 1673.44,
+   "d": 2.24,
+   "text": "but right now no it's not out there yet"
+  },
+  {
+   "t": 1675.68,
+   "d": 1.68,
+   "text": "i'm not kidding when i say it's like"
+  },
+  {
+   "t": 1677.36,
+   "d": 1.84,
+   "text": "it's almost there i just need to do some"
+  },
+  {
+   "t": 1679.2,
+   "d": 2.16,
+   "text": "dead entry and figuring out"
+  },
+  {
+   "t": 1681.36,
+   "d": 2.8,
+   "text": "some equipment progression but soon i"
+  },
+  {
+   "t": 1684.16,
+   "d": 1.68,
+   "text": "promise it will be out there i will not"
+  },
+  {
+   "t": 1685.84,
+   "d": 1.6,
+   "text": "let this thing die"
+  },
+  {
+   "t": 1687.44,
+   "d": 3.44,
+   "text": "cool well we look forward to it um"
+  },
+  {
+   "t": 1690.88,
+   "d": 2.64,
+   "text": "someone else asks is there a good way to"
+  },
+  {
+   "t": 1693.52,
+   "d": 1.04,
+   "text": "find"
+  },
+  {
+   "t": 1694.56,
+   "d": 3.04,
+   "text": "digital assets free digital assets uh"
+  },
+  {
+   "t": 1697.6,
+   "d": 2.48,
+   "text": "freely licensed ones online just"
+  },
+  {
+   "t": 1700.08,
+   "d": 1.04,
+   "text": "googling you know"
+  },
+  {
+   "t": 1701.12,
+   "d": 2.88,
+   "text": "free assets doesn't always return the"
+  },
+  {
+   "t": 1704.0,
+   "d": 1.28,
+   "text": "right thing"
+  },
+  {
+   "t": 1705.28,
+   "d": 1.44,
+   "text": "so when you google for free assets"
+  },
+  {
+   "t": 1706.72,
+   "d": 2.08,
+   "text": "you're going to get a lot of"
+  },
+  {
+   "t": 1708.8,
+   "d": 3.36,
+   "text": "garbage filtered in because like uh"
+  },
+  {
+   "t": 1712.16,
+   "d": 1.92,
+   "text": "getty images and a bunch of other uh"
+  },
+  {
+   "t": 1714.08,
+   "d": 1.76,
+   "text": "stock image places will be like yeah we"
+  },
+  {
+   "t": 1715.84,
+   "d": 1.52,
+   "text": "have free stuff here come to our website"
+  },
+  {
+   "t": 1717.36,
+   "d": 1.12,
+   "text": "and then you go there and it's actually"
+  },
+  {
+   "t": 1718.48,
+   "d": 1.44,
+   "text": "a bunch of commercial stuff"
+  },
+  {
+   "t": 1719.92,
+   "d": 1.44,
+   "text": "um for me it's that site that i"
+  },
+  {
+   "t": 1721.36,
+   "d": 1.48,
+   "text": "mentioned in the presentation"
+  },
+  {
+   "t": 1722.84,
+   "d": 2.2,
+   "text": "opengamearts.org"
+  },
+  {
+   "t": 1725.04,
+   "d": 2.32,
+   "text": "it's kind of this central repo for free"
+  },
+  {
+   "t": 1727.36,
+   "d": 1.68,
+   "text": "open source game art"
+  },
+  {
+   "t": 1729.04,
+   "d": 1.44,
+   "text": "so that's the main place that you should"
+  },
+  {
+   "t": 1730.48,
+   "d": 1.2,
+   "text": "go and then if you're just looking for"
+  },
+  {
+   "t": 1731.68,
+   "d": 1.84,
+   "text": "art in general go to like the wikimedia"
+  },
+  {
+   "t": 1733.52,
+   "d": 1.6,
+   "text": "creative commons section"
+  },
+  {
+   "t": 1735.12,
+   "d": 1.6,
+   "text": "look through there you can filter by"
+  },
+  {
+   "t": 1736.72,
+   "d": 2.08,
+   "text": "license and then you can"
+  },
+  {
+   "t": 1738.8,
+   "d": 1.84,
+   "text": "filter like if you need gpl or creative"
+  },
+  {
+   "t": 1740.64,
+   "d": 1.6,
+   "text": "commons whatever you need"
+  },
+  {
+   "t": 1742.24,
+   "d": 1.52,
+   "text": "there's great tools for that open game"
+  },
+  {
+   "t": 1743.76,
+   "d": 1.52,
+   "text": "art as well lets you filter by license"
+  },
+  {
+   "t": 1745.28,
+   "d": 1.36,
+   "text": "so if you're constrained by like a"
+  },
+  {
+   "t": 1746.64,
+   "d": 1.68,
+   "text": "particular set of criteria"
+  },
+  {
+   "t": 1748.32,
+   "d": 1.36,
+   "text": "i would suggest going there and taking a"
+  },
+  {
+   "t": 1749.68,
+   "d": 2.4,
+   "text": "look at what they have to offer"
+  },
+  {
+   "t": 1752.08,
+   "d": 4.0,
+   "text": "cool and then um someone wanted to know"
+  },
+  {
+   "t": 1756.08,
+   "d": 1.76,
+   "text": "how do you feel about games that have"
+  },
+  {
+   "t": 1757.84,
+   "d": 1.6,
+   "text": "purposely minimal lore"
+  },
+  {
+   "t": 1759.44,
+   "d": 1.68,
+   "text": "where the community has to sort of fill"
+  },
+  {
+   "t": 1761.12,
+   "d": 3.28,
+   "text": "in the blanks about the backstory"
+  },
+  {
+   "t": 1764.4,
+   "d": 3.28,
+   "text": "i i kind of love that concept i mean"
+  },
+  {
+   "t": 1767.68,
+   "d": 1.76,
+   "text": "i i'm pretty ambivalent about lore"
+  },
+  {
+   "t": 1769.44,
+   "d": 1.52,
+   "text": "because like i've worked in dnd for a"
+  },
+  {
+   "t": 1770.96,
+   "d": 1.76,
+   "text": "long time which is like extremely lower"
+  },
+  {
+   "t": 1772.72,
+   "d": 0.72,
+   "text": "heavy"
+  },
+  {
+   "t": 1773.44,
+   "d": 1.76,
+   "text": "so when i'm in you know my free time"
+  },
+  {
+   "t": 1775.2,
+   "d": 1.68,
+   "text": "making stuff for me i like to go pretty"
+  },
+  {
+   "t": 1776.88,
+   "d": 0.4,
+   "text": "lower"
+  },
+  {
+   "t": 1777.28,
+   "d": 3.44,
+   "text": "light because i i just like having a"
+  },
+  {
+   "t": 1780.72,
+   "d": 1.68,
+   "text": "lightweight set of lore that players can"
+  },
+  {
+   "t": 1782.4,
+   "d": 1.2,
+   "text": "think about on their own"
+  },
+  {
+   "t": 1783.6,
+   "d": 1.84,
+   "text": "so i'm really a big fan of going"
+  },
+  {
+   "t": 1785.44,
+   "d": 1.6,
+   "text": "lightweight lore let the players figure"
+  },
+  {
+   "t": 1787.04,
+   "d": 0.88,
+   "text": "it out on their own"
+  },
+  {
+   "t": 1787.92,
+   "d": 1.6,
+   "text": "and maybe you know they take it in a"
+  },
+  {
+   "t": 1789.52,
+   "d": 1.44,
+   "text": "direction that you find interesting and"
+  },
+  {
+   "t": 1790.96,
+   "d": 1.36,
+   "text": "you're like yeah okay let's let's"
+  },
+  {
+   "t": 1792.32,
+   "d": 2.48,
+   "text": "incorporate that into the game cool well"
+  },
+  {
+   "t": 1794.8,
+   "d": 1.36,
+   "text": "thank you so much phil"
+  },
+  {
+   "t": 1796.16,
+   "d": 1.84,
+   "text": "is there a place in the social space"
+  },
+  {
+   "t": 1798.0,
+   "d": 2.64,
+   "text": "you'll hang out to answer more questions"
+  },
+  {
+   "t": 1800.64,
+   "d": 2.32,
+   "text": "uh i might briefly be available in the"
+  },
+  {
+   "t": 1802.96,
+   "d": 1.76,
+   "text": "main chat after this"
+  },
+  {
+   "t": 1804.72,
+   "d": 4.4,
+   "text": "wonderful well thank you so much"
+  },
+  {
+   "t": 1809.12,
+   "d": 1.52,
+   "text": "you're welcome it was a pleasure and"
+  },
+  {
+   "t": 1810.64,
+   "d": 4.8,
+   "text": "thanks everybody for attending the talk"
+  }
+ ]
+}

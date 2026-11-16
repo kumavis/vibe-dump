@@ -1,0 +1,289 @@
+{
+  "id": "a3ZYDA2JVSM",
+  "title": "Thomas Biskup - 24 Years of ADOM in 24 Minutes",
+  "speaker": "Thomas Biskup",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=a3ZYDA2JVSM",
+  "talk_type": "history",
+  "summary": "Thomas Biskup, creator of ADOM (Ancient Domains of Mystery), recounts the game's 24-year history in four ages: the 'dream time' (1992-1996) when he started it to learn C, the 'boomtown' years of explosive popularity and community interaction, a near-decade 'void' when a company, a PhD and a Java successor (JADE) starved it of time, and the current 'industrialization' age funded by a 2012 crowdfunding campaign and a 2015 Steam release. Along the way he draws lessons about underestimating scope, the drug of early community feedback, communication being the first casualty of an overloaded life, the difficulty of modernising legacy code, and that content rather than engine is the real work. In Q&A he explains why he chose not to open-source ADOM: it is his story, and he did not want to become the support desk for dozens of variants.",
+  "games": [
+    "ADOM (Ancient Domains of Mystery)",
+    "JADE",
+    "NetHack",
+    "Hack",
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "believable world",
+      "kind": "principle",
+      "claim": "ADOM was started partly because its creator disliked NetHack's tourists and samurai, which clashed with his wish for a believable, story-coherent world.",
+      "detail": "Biskup played Hack, Rogue and NetHack and liked them, but not everything about them; anachronistic classes like the tourist and samurai broke his understanding of the story. He frames this as personal taste rather than a flaw in NetHack.",
+      "t": 101,
+      "quote": "i for example didn't like tourists and Samurai and NetHack because it created my, created problems with my way of understanding stories and wanting to have a believable world",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "learning project",
+      "kind": "history",
+      "claim": "ADOM began in 1992 as a project to learn C, after its author judged the NetHack sources too complicated to modify and decided writing his own game would be easier.",
+      "detail": "Biskup learns languages best with a project, so as a computer science student he looked for one to learn C. He downloaded the NetHack sources intending to modify them, found them advanced, and chose what he ironically calls 'the easier route' of writing his own game, attributing that idea to youth and inexperience.",
+      "t": 126,
+      "quote": "looked at them and said, wow, that's complicated stuff, pretty advanced. Ooh, let's try the easier route I write my own game",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "development tooling",
+      "kind": "history",
+      "claim": "Early ADOM was written in what its author calls 'neolithic programming': no syntax highlighting, auto-completion, refactoring tools, easy version control or internet help, with compile cycles that surfaced days of errors at once.",
+      "detail": "Biskup describes typing code for hours or days, then starting a compiler that took minutes and returned hundreds of errors. Make files were the build system, Emacs his main tool, and help came only from books or elitist Usenet groups. He wonders how he wrote tens of thousands of lines that way.",
+      "t": 183,
+      "quote": "there also was no live compiling, so you typed code sometimes for hours, sometimes for days. Then you started the compiler for the first time",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "warning",
+      "claim": "ADOM's author believed the game was almost complete at 15,000 lines of C in 1995; by 2016 it had over 230,000 lines and he says it will never be finished.",
+      "detail": "In summer 1995 he told university friends that a couple more months would finish it. Twenty-one years later the codebase is more than fifteen times larger, with thousands of images and dozens of musical scores, and release 70 was going out the day of the talk.",
+      "t": 315,
+      "quote": "I have 15,000 lines of C code by now. And I think it's almost complete.",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "adom origins",
+      "kind": "history",
+      "claim": "ADOM was originally called 'Advanced Dungeons of Mystery' and consisted of a single 100-level dungeon, which later became the 50-level Caves of Chaos.",
+      "detail": "The 'Advanced' prefix came from an earlier failed prototype called 'Domains of Mystery'; the new attempt was meant to be the advanced version that did it right. The name later changed to Ancient Domains of Mystery.",
+      "t": 331,
+      "quote": "there was only one dungeon 100 levels deep which later became the caves of chaos that are now in the game with 50 levels",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "first release",
+      "kind": "example",
+      "claim": "ADOM's first public release (0.7, posted to Usenet in early 1996) got no reaction at all, and its author kept going only because he was writing it for his own fun.",
+      "detail": "After two years of work the silence was discouraging. He continued because the game was fun for him; a month later 0.7.1 brought the first few dozen emails with bug reports, suggestions and questions.",
+      "t": 375,
+      "quote": "I waited full of excitement and nothing happened, to be honest. like zero reaction and was not so nice after two years on working on this game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "history",
+      "claim": "Monthly releases of early ADOM built a fast-growing feedback loop with players worldwide that its author describes as being like a drug that pushed development.",
+      "detail": "By 0.8.0, a month after 0.7.1, he was receiving hundreds of emails from people discussing the game and suggesting ideas. Talking to players in the US and Finland was a new experience before widespread internet, and as a student he could pour most of his time into the game.",
+      "t": 415,
+      "quote": "again a month later we had Adam 0.8.0 at that point I received hundreds of emails by then from people trying to interact and discuss the game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player expectations",
+      "kind": "warning",
+      "claim": "As ADOM's audience grew, so did expectations, and the self-imposed deadlines its author failed to keep became a defining experience of the 'boomtown' years.",
+      "detail": "Biskup calls the community awesome, full of ideas, feedback and support, and the dynamic very high. But a larger audience naturally brings expectations, and missing deadlines you set yourself was an important lesson of that roughly five-year period.",
+      "t": 471,
+      "quote": "if you have more audience they have expectations and there are deadlines that you set yourself then fail to keep",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "adom popularity",
+      "kind": "history",
+      "claim": "At its peak around 1998 ADOM was voted the number one downloadable game on the worldcharts.com site, ahead of Doom and Quake, and had more than 15,000 downloads per day.",
+      "detail": "Biskup found the ranking amazing and a big driving force. He says he does not know who those daily downloaders were and would like to find them again, for example on Steam.",
+      "t": 529,
+      "quote": "in his heyday in his best days adam had more than 15 000 downloads per day",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "open source pressure",
+      "kind": "warning",
+      "claim": "After ADOM's author hinted he might open-source the game, some players sent persistent death threats demanding the source, which shaped his later refusal to open it.",
+      "detail": "Biskup says the community is overwhelmingly great but includes some lunatics who insisted he had no right to keep the sources to himself. He did not expect it, says he no longer cares about such people, but that it shaped his view on open-sourcing ADOM considerably.",
+      "t": 660,
+      "quote": "And there I got my first death threats, which were quite persistent. We are going to kill you if you don't release the sources",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "postcardware",
+      "kind": "technique",
+      "claim": "ADOM was licensed as postcardware: players who enjoyed it 'paid' by mailing a postcard from wherever they lived, which produced thousands of postcards from around the world.",
+      "detail": "There was no way to earn money from the game then and Biskup enjoyed interacting with people worldwide, so he made a postcard the price. He received thousands with great messages and designs, and aimed to get one from every continent, eventually including Antarctica.",
+      "t": 719,
+      "quote": "the license model was if you like the game enjoy playing it send me a postcard from wherever you are living and you have paid for the game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player impact",
+      "kind": "example",
+      "claim": "A postcard from war-torn ex-Yugoslavia thanking him for a game that ran on old computers and helped people forget the war taught ADOM's creator the responsibility game makers have toward players.",
+      "detail": "Around 1996 the sender wrote that ADOM gave them a few hours to relax and think of something else amid the war. Biskup says it still moves him and made him think about how such games affect people's lives.",
+      "t": 776,
+      "quote": "I really learned how such games can affect people and their lives, and I thought about the responsibility you also have in interacting with people",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "version numbers",
+      "kind": "warning",
+      "claim": "ADOM 1.0 shipped in August 2001, more than four years and about 17 releases after version 0.9.9, when its author thought it was almost done.",
+      "detail": "Biskup notes that version numbers are 'just a number' but developers get attached to them and they come to feel more meaningful than they really are. The 1.0 era was ADOM's heyday of audience and visibility.",
+      "t": 818,
+      "quote": "the version 0.9.9 which is very very close to 1.0 was released more than four years before and i thought we were almost done",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "long-running projects",
+      "kind": "warning",
+      "claim": "ADOM entered a near-decade 'void' when its code had outgrown itself and founding a company left too little time; communication with players was the first thing to stop.",
+      "detail": "Biskup co-founded an IT company (now over 100 employees) around 2001, working 60-80 hour weeks. Exhausted, he stopped communicating first; a PhD and marriage further cut his time. There were only two releases in almost a decade, the last at the end of 2002.",
+      "t": 914,
+      "quote": "At some point, you just fall down and want to sleep and no longer think about anything else and communication is the first thing that stops then.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "rewrites",
+      "kind": "warning",
+      "claim": "Disliking ADOM's architecture, its author spent his little remaining programming time on a modern Java successor (JADE), which further stalled ADOM itself.",
+      "detail": "Biskup says he had grown wary of ADOM because the code was not that awesome and had outgrown itself, so what time he had went into the successor, losing more momentum on the original.",
+      "t": 921,
+      "quote": "I had started actually working on the successor of Atom because I didn't like the architecture of Atom anymore. I wanted to write something modern in Java.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "burnout",
+      "kind": "history",
+      "claim": "In 2010, feeling close to burnout from juggling five or six projects, ADOM's author cut everything else and returned to ADOM because its players were still there after ten years.",
+      "detail": "Besides the PhD he had been writing pen-and-paper RPGs and other projects and felt constant pressure. On a beach in Thailand he decided to keep only his 'true love', which began ADOM's fourth age of 'industrialization', trying to be more professional.",
+      "t": 1042,
+      "quote": "I noticed yeah Adam is so much fun and the people are still there even after 10 years so let's get back into this",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "returning to a project",
+      "kind": "warning",
+      "claim": "Reviving ADOM after years of little contact required slowly rekindling both passion and player trust, and balancing it with real life remains a constant challenge.",
+      "detail": "Biskup says after so little contact it is hard to come back and tell people something is really going to happen. Releasing JADE on Creator's Day 2011 helped by showing something tangible, and his longtime porter Jochen pushed him to revive ADOM itself rather than focus on ADOM II/JADE.",
+      "t": 1062,
+      "quote": "after having so little contact for so long it's hard to get back and say hey i'm here and believe me it's going to happen",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding",
+      "kind": "warning",
+      "claim": "ADOM's 2012 crowdfunding campaign with a $48,000 goal drew a lot of hate from people who considered the amount outrageous.",
+      "detail": "Biskup says he was only politely asking, 'but that's how people are'. The campaign was launched on Indiegogo on Creator's Day and ultimately raised more than $90,000, allowing work to restart in September 2012.",
+      "t": 1129,
+      "quote": "that was also one thing that generated lots of hate because people thought it outrageous to demand so much money",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding",
+      "kind": "example",
+      "claim": "ADOM's joke $50,000 tier (the source code bound in leather, hand-delivered with a weekend of explanation) was claimed by a genuine backer within three minutes, but Indiegogo's PayPal limit of $10,000 meant the pledge could not be accepted.",
+      "detail": "The tier mocked those who had threatened him over open-sourcing. Indiegogo let campaigns create donation levels of any amount while its PayPal account capped at $10,000, and five days of effort could not resolve it. Biskup regrets the lost publicity more than the money, calling visibility more important than anything else.",
+      "t": 1216,
+      "quote": "i'm much more sad about the lack of publicity that we had due to that, because had we gained that donation, I guess there would have been huge publicity push",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "legacy code",
+      "kind": "warning",
+      "claim": "Modernising ADOM with graphics, sound and a modern UI is hard because the work is on ancient legacy code never designed for anything graphical, not on a new game.",
+      "detail": "After the campaign the team set out to add sounds, graphics and a modern UI and, by 2016, were still not at the goal. The team included Jochen (architecture, build systems, testing), Chris (art, several thousand images), Lucas (sound) and Zeno, whose interface library lets ADOM be graphical.",
+      "t": 1285,
+      "quote": "we have the challenge that we are not building a new game but we have lots of ancient legacy code that never was planned for anything graphical",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "steam",
+      "kind": "history",
+      "claim": "ADOM's 2015 Steam release mattered because it generated income to pay team members working on it full-time, while its creator still works for fun.",
+      "detail": "Biskup does not need the money but some of the team work full-time on ADOM and need to be paid, so generating more income is important. He says it has worked quite well so far.",
+      "t": 1322,
+      "quote": "allowed us to get to steam which was very good because because it generates more income allows me to pay those guys",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding rewards",
+      "kind": "warning",
+      "claim": "ADOM's crowdfunding taught its creator to offer no physical rewards in future campaigns, after the promised pen-and-paper ADOM RPG was delayed again and again.",
+      "detail": "The RPG was a campaign promise; Biskup discovered that while he loves programming he hates writing. Even once finished, shipping it worldwide and sorting out addresses remained to be done.",
+      "t": 1371,
+      "quote": "what i learned from that for the next crowdfunding campaign if we ever do one is no more physical rewards that's not rewarding",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "platforms",
+      "kind": "example",
+      "claim": "ADOM supports more than 24 platforms, including exotic ones like Amiga and Raspberry Pi, which the team maintains out of love even though few people play there.",
+      "detail": "Biskup says the team is proud of the platform count. Looking ahead, they continually get requests for iOS and Android, and he is interested in Xbox and other platforms, though not imminently.",
+      "t": 1397,
+      "quote": "We have support from more than 24 platforms, which we're still very proud of because it's things like Amiga, Raspberry Pi",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content vs engine",
+      "kind": "principle",
+      "claim": "Writing content, not the engine, is the real work of a roguelike, so ADOM's creator chose to backport ideas from his Java successor JADE into ADOM rather than port ADOM's content to JADE.",
+      "detail": "ADOM has so much content that is not portable to Java that porting it would take five or more years. It is easier to bring JADE's good ideas back into ADOM.",
+      "t": 1446,
+      "quote": "I learned that writing all the content is the real work not the engine and Adam has so much content that is not portable to Java",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content reuse",
+      "kind": "technique",
+      "claim": "ADOM's creator wants to use ADOM as an engine for other games, reusing its large body of content with different gameplay, as in the prototype 'ADOM the Arena' aimed at mobile.",
+      "detail": "Because ADOM has all that content, it can support very different gameplay types. The Arena prototype was not public; he would pursue such ventures once the crowdfunding obligations were finished.",
+      "t": 1485,
+      "quote": "using atom as an engine for more games not just as a game because it has all the content you can do awesome things with that",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "open source",
+      "kind": "principle",
+      "claim": "ADOM's creator declined to open-source it because it is a story-driven game expressing his own story, and he feared becoming the perceived supporter fielding requests for dozens of variants.",
+      "detail": "His original plan was to open-source at 1.0, but the death threats, the tens of thousands of hours invested, and the wish not to see things like Jedi knights in ADOM changed his mind. He expected variant players to ask him for changes, turning joyful storytelling into a management task.",
+      "t": 1606,
+      "quote": "my fear was that when i would release the sources there would be probably lots of variants but usually people ask the originator questions",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "modifying legacy code",
+      "kind": "principle",
+      "claim": "ADOM's creator argues that if you have your own vision it is often easier to write a new roguelike than to modify ADOM's sources, which his own team finds really hard.",
+      "detail": "He points to the vibrant roguelike community: if you want to tell your own story, start writing your game. He has a will ensuring the sources survive if he dies of natural causes.",
+      "t": 1651,
+      "quote": "it's not simpler than taking the item sources and trying to change them because i know what i talk about",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

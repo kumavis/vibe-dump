@@ -1,0 +1,1871 @@
+{
+ "id": "x0Xh4oCX9t0",
+ "url": "https://www.youtube.com/watch?v=x0Xh4oCX9t0",
+ "title": "Aaron A  Reed - Cadences, Lacunae, and Subcutaneans: Ten Years of Procedural Novels",
+ "speaker": "Aaron A  Reed",
+ "talk_title": "Cadences, Lacunae, and Subcutaneans: Ten Years of Procedural Novels",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1775,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAaron is a writer and game designer focused on helping gamemakers and players tell stories together. He is a multi-time IndieCade and IGF finalist, and has spoken about digital storytelling at venues as diverse as Google, PAX, GaymerX, and WorldCon. He is the author of \"Adventure Games: Playing the Outsider\" and an upcoming book on the history of text games.\n\nAaron's recent project \"Subcutanean\" is a queer horror novel written with procedural text: each time someone orders a copy, it regenerates itself to present a slightly different permutation of its story. Over the last ten years he's created a series of novel-length games that explore what it means to write strongly authored content informed by procedural systems and algorithmic aesthetics. In this talk he focuses on three of these pieces and how the lessons I've learned from making them might be useful to other folks working with procedural text: Subcutanean, 18 Cadence (a 2013 Kirkus \"Best Book App\"), and Blue Lacuna (voted in 2015 one of the top 10 interactive fiction games of all time).\n\nFind him on Twitter: https://twitter.com/aaronareed\nGet your own copy of Subcutanean: http://subcutanean.textories.com/\n18 Cadence: https://18cadence.textories.com/\nBlue Lacuna: https://blue-lacuna.textories.com/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 9,
+   "title": "Aaron a Reed"
+  },
+  {
+   "start": 65,
+   "title": "Who Am I"
+  },
+  {
+   "start": 149,
+   "title": "Text Adventures"
+  },
+  {
+   "start": 460,
+   "title": "Hollywood Visionary"
+  },
+  {
+   "start": 1543,
+   "title": "Mailing List"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3993,
+ "trimmed": {
+  "segments": 11,
+  "words": 112
+ },
+ "segments": [
+  {
+   "t": 1.25,
+   "d": 1.0,
+   "text": "EMCEE: People are questions for neo pets and many questions."
+  },
+  {
+   "t": 2.25,
+   "d": 1.0,
+   "text": "Thank you so much, Kate."
+  },
+  {
+   "t": 3.25,
+   "d": 1.0,
+   "text": "All right."
+  },
+  {
+   "t": 4.25,
+   "d": 5.38,
+   "text": "And next up we have our last talk before we have another break block hard to say."
+  },
+  {
+   "t": 9.63,
+   "d": 7.53,
+   "text": "Welcome Aaron Reed who is writer and game designer."
+  },
+  {
+   "t": 17.16,
+   "d": 9.8,
+   "text": "He is a multi time finalist and spoken about storytelling at Google, gamer X and world"
+  },
+  {
+   "t": 26.96,
+   "d": 6.11,
+   "text": "con and the author of adventure games and an upcoming book on the history of text games."
+  },
+  {
+   "t": 33.07,
+   "d": 5.48,
+   "text": "You are here to talk about books in general and procedural novels in particular."
+  },
+  {
+   "t": 38.55,
+   "d": 6.18,
+   "text": "ANDREW AVERSA: Thank you for having me."
+  },
+  {
+   "t": 44.73,
+   "d": 3.65,
+   "text": "I also have my screen setup so I won't bow able to see chat messages so if something"
+  },
+  {
+   "t": 48.38,
+   "d": 2.75,
+   "text": "goes wrong tell me."
+  },
+  {
+   "t": 51.13,
+   "d": 3.57,
+   "text": "EMCEE: I am here and I will pop in if anything goes wrong."
+  },
+  {
+   "t": 54.7,
+   "d": 6.08,
+   "text": "AARON REED: Thanks to the Roguelike Celebration for having me back and to the organizers for"
+  },
+  {
+   "t": 60.78,
+   "d": 1.71,
+   "text": "putting on this fantastic virtual event."
+  },
+  {
+   "t": 62.49,
+   "d": 3.36,
+   "text": "I have been love the hell out of it."
+  },
+  {
+   "t": 65.85,
+   "d": 5.36,
+   "text": "Who am I?"
+  },
+  {
+   "t": 71.21,
+   "d": 10.76,
+   "text": "Mostly I am a writer and I approach procedural text projects with other goals."
+  },
+  {
+   "t": 81.97,
+   "d": 6.59,
+   "text": "The output of my game is sentences and paragraphs rather than visual and my biggest priority"
+  },
+  {
+   "t": 88.56,
+   "d": 6.33,
+   "text": "is to tell a compelling story and I am interested in ways code can enhance that rather than"
+  },
+  {
+   "t": 94.89,
+   "d": 5.42,
+   "text": "starting from a gameplay mechanic and working backwards."
+  },
+  {
+   "t": 100.31,
+   "d": 4.44,
+   "text": "I want to talk about eight lessons I have learned over a decade of doing novel length"
+  },
+  {
+   "t": 104.75,
+   "d": 1.26,
+   "text": "procedural text projects."
+  },
+  {
+   "t": 106.01,
+   "d": 3.55,
+   "text": "There is a lot to cover so I will jump in."
+  },
+  {
+   "t": 109.56,
+   "d": 2.25,
+   "text": "These are descriptive of my own experience."
+  },
+  {
+   "t": 111.81,
+   "d": 5.68,
+   "text": "I am not saying everyone should do these things."
+  },
+  {
+   "t": 117.49,
+   "d": 6.8,
+   "text": "These are just my personal milestones that have evolved in my own design philosophy."
+  },
+  {
+   "t": 124.29,
+   "d": 1.0,
+   "text": "Let's get to it."
+  },
+  {
+   "t": 125.29,
+   "d": 1.0,
+   "text": "Number one."
+  },
+  {
+   "t": 126.29,
+   "d": 2.91,
+   "text": "Simulate only what the story needs you to simulate."
+  },
+  {
+   "t": 129.2,
+   "d": 1.15,
+   "text": "Lots of us love simulation."
+  },
+  {
+   "t": 130.35,
+   "d": 4.9,
+   "text": "It is fun to play with nem them and more fun to make them."
+  },
+  {
+   "t": 135.25,
+   "d": 7.26,
+   "text": "I have learned stimulating things for the sake of it can be a distraction from focusing"
+  },
+  {
+   "t": 142.51,
+   "d": 4.15,
+   "text": "on what's going to best shape the narrative experience I want my players to have."
+  },
+  {
+   "t": 146.66,
+   "d": 4.93,
+   "text": "To illustrate this with a project of mine, I want to talk about text adventures or interactive"
+  },
+  {
+   "t": 151.59,
+   "d": 1.0,
+   "text": "fiction."
+  },
+  {
+   "t": 152.59,
+   "d": 4.2,
+   "text": "My gateway drug in the procedural storytelling."
+  },
+  {
+   "t": 156.79,
+   "d": 5.32,
+   "text": "They drop you in an environment and let you see action by action what you are doing and"
+  },
+  {
+   "t": 162.11,
+   "d": 8.4,
+   "text": "a world model and inventory and containment and locked sources and keys andtic be incredibly"
+  },
+  {
+   "t": 170.51,
+   "d": 6.2,
+   "text": "fun to play in the world when it all works but quite often the player's imagination exceeds"
+  },
+  {
+   "t": 176.71,
+   "d": 3.65,
+   "text": "the boundaries of the author's simulation."
+  },
+  {
+   "t": 180.36,
+   "d": 10.32,
+   "text": "Around 2005 I decided I would solve this with a simulation for every."
+  },
+  {
+   "t": 190.68,
+   "d": 4.58,
+   "text": "Responses to anything you could type, a dynamic world you could explore every corner of, you"
+  },
+  {
+   "t": 195.26,
+   "d": 4.6,
+   "text": "could interact with everything and your choices would matter."
+  },
+  {
+   "t": 199.86,
+   "d": 6.28,
+   "text": "I ended up making this game blue lacuna."
+  },
+  {
+   "t": 206.14,
+   "d": 6.42,
+   "text": "It was it biggest text adventure that had been written."
+  },
+  {
+   "t": 212.56,
+   "d": 9.85,
+   "text": "I printed it went a book."
+  },
+  {
+   "t": 222.41,
+   "d": 6.9,
+   "text": "I went a little overboard."
+  },
+  {
+   "t": 229.31,
+   "d": 3.91,
+   "text": "Rooms with twilight were described differently than at sunrise or mid morning."
+  },
+  {
+   "t": 233.22,
+   "d": 5.62,
+   "text": "There was a moon that went through realistic phases and changed the tides and changed the"
+  },
+  {
+   "t": 238.84,
+   "d": 1.44,
+   "text": "room description."
+  },
+  {
+   "t": 240.28,
+   "d": 6.41,
+   "text": "Each room had a numareical situation."
+  },
+  {
+   "t": 246.69,
+   "d": 1.09,
+   "text": "There was weather."
+  },
+  {
+   "t": 247.78,
+   "d": 7.94,
+   "text": "Ambient messages triggered by the weather or what the tide were doing."
+  },
+  {
+   "t": 255.72,
+   "d": 6.03,
+   "text": "People noticed almost none of that or if they did it wasn't what they remembered."
+  },
+  {
+   "t": 261.75,
+   "d": 4.27,
+   "text": "When you look at this room description, you don't realize or care if there is 18 different"
+  },
+  {
+   "t": 266.02,
+   "d": 5.1,
+   "text": "variations or that the trees are only swaying because there is a storm coming in."
+  },
+  {
+   "t": 271.12,
+   "d": 3.09,
+   "text": "You don't really care about this location at all except to the extent it is a stage"
+  },
+  {
+   "t": 274.21,
+   "d": 2.8,
+   "text": "for something interesting to happen on."
+  },
+  {
+   "t": 277.01,
+   "d": 6.84,
+   "text": "What people did remember is the code built to simulate the game's character."
+  },
+  {
+   "t": 283.85,
+   "d": 6.46,
+   "text": "A castaway named progue."
+  },
+  {
+   "t": 290.31,
+   "d": 8.03,
+   "text": "The most mentioned word is progue the name of the character and all the other word visible"
+  },
+  {
+   "t": 298.34,
+   "d": 2.82,
+   "text": "were the final words."
+  },
+  {
+   "t": 301.16,
+   "d": 4.15,
+   "text": "At the time I start making this, I never saw a character in a game you could have a dynamic"
+  },
+  {
+   "t": 305.31,
+   "d": 4.09,
+   "text": "relationship with that grew and changed over the course of a novel length story."
+  },
+  {
+   "t": 309.4,
+   "d": 8.03,
+   "text": "I loved games that let you have rich conversations with characters but I wondered what it would"
+  },
+  {
+   "t": 317.43,
+   "d": 4.68,
+   "text": "be like to extend that relationship with a character beyond a single scene."
+  },
+  {
+   "t": 322.11,
+   "d": 4.68,
+   "text": "What I built to enable this was a library of dynamic conversations."
+  },
+  {
+   "t": 326.79,
+   "d": 5.96,
+   "text": "More than a 100 that could be triggered at random or based on the game state."
+  },
+  {
+   "t": 332.75,
+   "d": 4.25,
+   "text": "In each conversation, the player has the chance to make choices that alter their relationship"
+  },
+  {
+   "t": 337.0,
+   "d": 3.79,
+   "text": "with progue."
+  },
+  {
+   "t": 340.79,
+   "d": 6.94,
+   "text": "There was a submission and dominance access and how much control of the relationships"
+  },
+  {
+   "t": 347.73,
+   "d": 5.72,
+   "text": "and conversations he felt you were and axis on one end was having romantic feelings and"
+  },
+  {
+   "t": 353.45,
+   "d": 4.57,
+   "text": "on the other end more paternal father figure feelings towards you."
+  },
+  {
+   "t": 358.02,
+   "d": 5.61,
+   "text": "Based on the position in the axis your system classified your relationship into one of 12"
+  },
+  {
+   "t": 363.63,
+   "d": 1.0,
+   "text": "archetypes."
+  },
+  {
+   "t": 364.63,
+   "d": 6.17,
+   "text": "If he felt paternal but didn't like you and was frustrated of not being in control that"
+  },
+  {
+   "t": 370.8,
+   "d": 4.87,
+   "text": "translated to the bitter dad prototype."
+  },
+  {
+   "t": 375.67,
+   "d": 4.55,
+   "text": "It affects his behavior, the way he talks to you and shifts the direction of the plot"
+  },
+  {
+   "t": 380.22,
+   "d": 8.68,
+   "text": "sometimes unlocking new options or forbidding others."
+  },
+  {
+   "t": 388.9,
+   "d": 14.51,
+   "text": "And then despite that, this effort paid off and drew have the ability in blue lacuna to"
+  },
+  {
+   "t": 403.41,
+   "d": 2.75,
+   "text": "shape what you want the story to be about."
+  },
+  {
+   "t": 406.16,
+   "d": 3.67,
+   "text": "It is about redemption?"
+  },
+  {
+   "t": 409.83,
+   "d": 3.81,
+   "text": "Or the player making the stand?"
+  },
+  {
+   "t": 413.64,
+   "d": 6.41,
+   "text": "Do you inspire him to be a better person or does he inspire you?"
+  },
+  {
+   "t": 420.05,
+   "d": 5.6,
+   "text": "The player can sense that more than the mechanisms behind the simulation of objects and that"
+  },
+  {
+   "t": 425.65,
+   "d": 1.83,
+   "text": "resonated with people."
+  },
+  {
+   "t": 427.48,
+   "d": 6.14,
+   "text": "I haven't made a big immersive game because I am less interested in immersing people in"
+  },
+  {
+   "t": 433.62,
+   "d": 4.79,
+   "text": "an environment than I am to character."
+  },
+  {
+   "t": 438.41,
+   "d": 6.37,
+   "text": "This is a helpful realization because it let me focus energy on creating enhancements of"
+  },
+  {
+   "t": 444.78,
+   "d": 4.08,
+   "text": "the experience."
+  },
+  {
+   "t": 448.86,
+   "d": 8.77,
+   "text": "Remember and respect the player's choices: You saw a lot of blue lacuna's complexity"
+  },
+  {
+   "t": 457.63,
+   "d": 4.21,
+   "text": "but I want to talk about another interactive knowledge called Hollywood visionary."
+  },
+  {
+   "t": 461.84,
+   "d": 11.18,
+   "text": "This is set in 1950s Hollywood where you play a director who gets caught up in non-conformity"
+  },
+  {
+   "t": 473.02,
+   "d": 3.64,
+   "text": "and have to learn what you are willing to sacrifice for your dreams."
+  },
+  {
+   "t": 476.66,
+   "d": 5.46,
+   "text": "I was resistant to the choice based format because I always thought it didn't offer players"
+  },
+  {
+   "t": 482.12,
+   "d": 10.2,
+   "text": "enough power of expression but I realized if enough choices build up over time and the"
+  },
+  {
+   "t": 492.32,
+   "d": 5.85,
+   "text": "game remembers they can adhere to something that feels unique."
+  },
+  {
+   "t": 498.17,
+   "d": 10.59,
+   "text": "You can make your own movie and the choices about genre or character actors and two types"
+  },
+  {
+   "t": 508.76,
+   "d": 4.36,
+   "text": "and shoot in color or black and white and what kind of sound track and how tight you"
+  },
+  {
+   "t": 513.12,
+   "d": 1.45,
+   "text": "want the editing to be."
+  },
+  {
+   "t": 514.57,
+   "d": 4.67,
+   "text": "All these choices get remembered and often they come back in surprising ways whether"
+  },
+  {
+   "t": 519.24,
+   "d": 6.22,
+   "text": "it is just a throw away description of mixed blood in the background or the games vilian"
+  },
+  {
+   "t": 525.46,
+   "d": 5.72,
+   "text": "using your weird editing experience of being subverseive."
+  },
+  {
+   "t": 531.18,
+   "d": 4.77,
+   "text": "One thing I am most proud of is people email me to tell me about the move they made in"
+  },
+  {
+   "t": 535.95,
+   "d": 1.0,
+   "text": "the game."
+  },
+  {
+   "t": 536.95,
+   "d": 3.67,
+   "text": "That's cool to me because when I started the project I didn't know if it was possible to"
+  },
+  {
+   "t": 540.62,
+   "d": 9.37,
+   "text": "give them ownership of that in a choice based game."
+  },
+  {
+   "t": 549.99,
+   "d": 7.14,
+   "text": "The same technique I use in Hollywood visionary for what your character's public persona is"
+  },
+  {
+   "t": 557.13,
+   "d": 7.66,
+   "text": "rather than a list of gender options I wanted you to be making individual choices about"
+  },
+  {
+   "t": 564.79,
+   "d": 4.35,
+   "text": "how you are performing whether it is choosing what your signature fashion stick is but later"
+  },
+  {
+   "t": 569.14,
+   "d": 5.31,
+   "text": "wearing something different to a party, saying what you want your friend to call you but"
+  },
+  {
+   "t": 574.45,
+   "d": 4.75,
+   "text": "your business associates call you something else, picking or rejecting labels and picking"
+  },
+  {
+   "t": 579.2,
+   "d": 1.0,
+   "text": "love interests."
+  },
+  {
+   "t": 580.2,
+   "d": 7.85,
+   "text": "This let's you identify the personality however you want and that's to me better than choosing"
+  },
+  {
+   "t": 588.05,
+   "d": 2.77,
+   "text": "off a list."
+  },
+  {
+   "t": 590.82,
+   "d": 6.49,
+   "text": "It felt better to express yourself even within a stricted system."
+  },
+  {
+   "t": 597.31,
+   "d": 4.04,
+   "text": "Tell stories with players not at them."
+  },
+  {
+   "t": 601.35,
+   "d": 3.54,
+   "text": "I want my players to feel like they are contributing something meaningful."
+  },
+  {
+   "t": 604.89,
+   "d": 8.17,
+   "text": "Blue lacuna did this."
+  },
+  {
+   "t": 613.06,
+   "d": 7.18,
+   "text": "My game 18 cadence you explore a house at the address of 1800 cadence street."
+  },
+  {
+   "t": 620.24,
+   "d": 5.32,
+   "text": "The house is built in the year 1800 and burn do is the ground in 2000."
+  },
+  {
+   "t": 625.56,
+   "d": 4.41,
+   "text": "There is vignettes of the families that lived there."
+  },
+  {
+   "t": 629.97,
+   "d": 4.65,
+   "text": "The oak tree that grows."
+  },
+  {
+   "t": 634.62,
+   "d": 2.87,
+   "text": "Changing fashion and furniture and technology."
+  },
+  {
+   "t": 637.49,
+   "d": 4.57,
+   "text": "You explore by moving through space and time and seeing things happen and object coming"
+  },
+  {
+   "t": 642.06,
+   "d": 1.0,
+   "text": "and going."
+  },
+  {
+   "t": 643.06,
+   "d": 4.91,
+   "text": "You are not a character in the story but you have a God's eye view."
+  },
+  {
+   "t": 647.97,
+   "d": 5.98,
+   "text": "You a work bench you can drag the content on and you can encouraged to assemble or manufacturing"
+  },
+  {
+   "t": 653.95,
+   "d": 2.76,
+   "text": "a story out of this century of raw material."
+  },
+  {
+   "t": 656.71,
+   "d": 7.09,
+   "text": "When you make a story you can share it in the cloud and browse others."
+  },
+  {
+   "t": 663.8,
+   "d": 3.42,
+   "text": "The stories people make are more poem sized."
+  },
+  {
+   "t": 667.22,
+   "d": 3.83,
+   "text": "This project I felt became a success for me when people started making stories I had never"
+  },
+  {
+   "t": 671.05,
+   "d": 5.85,
+   "text": "thought of and I didn't realize could be made out of that source material."
+  },
+  {
+   "t": 676.9,
+   "d": 5.82,
+   "text": "This one is about a disgruntled housewife who is depicted taking actions while the house"
+  },
+  {
+   "t": 682.72,
+   "d": 2.73,
+   "text": "oppressively exists around her."
+  },
+  {
+   "t": 685.45,
+   "d": 4.1,
+   "text": "In this one people used the ability to sort of drag two pieces of text that didn't go"
+  },
+  {
+   "t": 689.55,
+   "d": 4.5,
+   "text": "together on top of each other to make these surreal sentences like a brash ash try -- ashtray"
+  },
+  {
+   "t": 694.05,
+   "d": 6.94,
+   "text": "smokes the last cigarette."
+  },
+  {
+   "t": 700.99,
+   "d": 7.48,
+   "text": "In the 1950s the little girl hides the diary under the floor board and a homeless man finds"
+  },
+  {
+   "t": 708.47,
+   "d": 4.2,
+   "text": "it is takes comfort."
+  },
+  {
+   "t": 712.67,
+   "d": 5.59,
+   "text": "This person is reading books over the house's history."
+  },
+  {
+   "t": 718.26,
+   "d": 5.69,
+   "text": "This person overlaid all the objects found in the kitchen and this suggests the image"
+  },
+  {
+   "t": 723.95,
+   "d": 5.26,
+   "text": "of all this Echo of thousands and thousands of meals made in the kitchen over the years."
+  },
+  {
+   "t": 729.21,
+   "d": 3.0,
+   "text": "This is different from a lot of my other work."
+  },
+  {
+   "t": 732.21,
+   "d": 1.83,
+   "text": "It is not really game by a lot of definitions."
+  },
+  {
+   "t": 734.04,
+   "d": 4.79,
+   "text": "There is no simulation and you don't have a character and you can't change the state"
+  },
+  {
+   "t": 738.83,
+   "d": 5.13,
+   "text": "of the underlying story material but it was a successful edge case experiment enforcing"
+  },
+  {
+   "t": 743.96,
+   "d": 2.52,
+   "text": "the player to make meaning out of there story."
+  },
+  {
+   "t": 746.48,
+   "d": 4.2,
+   "text": "Only by becoming a storytelling can you get to a satisfactory ending."
+  },
+  {
+   "t": 750.68,
+   "d": 3.03,
+   "text": "It is not a story that will tell itself."
+  },
+  {
+   "t": 753.71,
+   "d": 4.88,
+   "text": "You have to collaborate with me to tell it."
+  },
+  {
+   "t": 758.59,
+   "d": 1.0,
+   "text": "Number four."
+  },
+  {
+   "t": 759.59,
+   "d": 4.27,
+   "text": "Limiting the generative space can be more powerful than expanding it."
+  },
+  {
+   "t": 763.86,
+   "d": 3.23,
+   "text": "The tendency I think is to also want more out of our generative system."
+  },
+  {
+   "t": 767.09,
+   "d": 5.01,
+   "text": "In Hollywood visionary it felt like the more options to customize the better."
+  },
+  {
+   "t": 772.1,
+   "d": 5.86,
+   "text": "In blue lacuna the more reactions felt like the goal."
+  },
+  {
+   "t": 777.96,
+   "d": 4.37,
+   "text": "But I realized with more wasn't always better."
+  },
+  {
+   "t": 782.33,
+   "d": 8.84,
+   "text": "With progue I decided paternal feelings should be the same"
+  },
+  {
+   "t": 791.17,
+   "d": 6.62,
+   "text": "but a better example of limiting the generative space is my most recent project called Subcutaneans."
+  },
+  {
+   "t": 797.79,
+   "d": 6.64,
+   "text": "This is also radically procedurally."
+  },
+  {
+   "t": 804.43,
+   "d": 5.36,
+   "text": "It is a hoarder novel and a queer coming of age story about two friends with a complicated"
+  },
+  {
+   "t": 809.79,
+   "d": 5.07,
+   "text": "relationship who get trapped in this infinitely recursive basement that multiplies everything"
+  },
+  {
+   "t": 814.86,
+   "d": 1.25,
+   "text": "that comes into it."
+  },
+  {
+   "t": 816.11,
+   "d": 2.42,
+   "text": "People, emotions and dimensions."
+  },
+  {
+   "t": 818.53,
+   "d": 7.44,
+   "text": "A book about alterinate versions of yourself."
+  },
+  {
+   "t": 825.97,
+   "d": 1.62,
+   "text": "Each copy is different."
+  },
+  {
+   "t": 827.59,
+   "d": 9.28,
+   "text": "When you order the book from my website is a new version is generated and this is laid"
+  },
+  {
+   "t": 836.87,
+   "d": 3.47,
+   "text": "out and uploaded to a print on demand service."
+  },
+  {
+   "t": 840.34,
+   "d": 7.32,
+   "text": "The seed is used and tracked in a database so no two products are alike."
+  },
+  {
+   "t": 847.66,
+   "d": 9.14,
+   "text": "This is much less generative."
+  },
+  {
+   "t": 856.8,
+   "d": 7.04,
+   "text": "I had a specific story I wanted to tell about friendships and coming out and growing up"
+  },
+  {
+   "t": 863.84,
+   "d": 4.65,
+   "text": "and I wanted it to work across every single one."
+  },
+  {
+   "t": 868.49,
+   "d": 6.68,
+   "text": "I didn't want it to feel procedurally assembled."
+  },
+  {
+   "t": 875.17,
+   "d": 4.2,
+   "text": "The difference was I wanted you to share the same feeling as the main character."
+  },
+  {
+   "t": 879.37,
+   "d": 3.43,
+   "text": "There are other possibilities out there you were missing and wondering what was happening"
+  },
+  {
+   "t": 882.8,
+   "d": 1.0,
+   "text": "in them."
+  },
+  {
+   "t": 883.8,
+   "d": 3.8,
+   "text": "The knowledge this isn't the only way the story could turn out."
+  },
+  {
+   "t": 887.6,
+   "d": 2.99,
+   "text": "I exerted really tight control over the output."
+  },
+  {
+   "t": 890.59,
+   "d": 4.79,
+   "text": "No GPT or procedures that might produce unpredictable text."
+  },
+  {
+   "t": 895.38,
+   "d": 6.41,
+   "text": "Instead it was more like hand sculpting the space."
+  },
+  {
+   "t": 901.79,
+   "d": 3.88,
+   "text": "Each time the book is rendered it picks one possible pathway."
+  },
+  {
+   "t": 905.67,
+   "d": 11.08,
+   "text": "The chapters vary with secrets and revelations and different beats of character development"
+  },
+  {
+   "t": 916.75,
+   "d": 3.45,
+   "text": "and overall resolutions."
+  },
+  {
+   "t": 920.2,
+   "d": 3.81,
+   "text": "This was kind of another weird experiment from the sort of games perspective."
+  },
+  {
+   "t": 924.01,
+   "d": 3.33,
+   "text": "The player can't do anything at all."
+  },
+  {
+   "t": 927.34,
+   "d": 1.0,
+   "text": "They don't make decisions."
+  },
+  {
+   "t": 928.34,
+   "d": 3.58,
+   "text": "They are just reading the aftermath of offline procedures."
+  },
+  {
+   "t": 931.92,
+   "d": 4.77,
+   "text": "That forces me to think about how to make those procedures produce something compelling"
+  },
+  {
+   "t": 936.69,
+   "d": 3.1,
+   "text": "even without the allure of getting to operate them yourself."
+  },
+  {
+   "t": 939.79,
+   "d": 5.24,
+   "text": "At first when I started writing this I was writing all kinds of variations of scenes"
+  },
+  {
+   "t": 945.03,
+   "d": 5.08,
+   "text": "because I could and that seemed like the thing you are supposed to do."
+  },
+  {
+   "t": 950.11,
+   "d": 5.21,
+   "text": "The more I revised I trimmed down that possibility space to something cozier and curated."
+  },
+  {
+   "t": 955.32,
+   "d": 6.34,
+   "text": "I became invested in the changes that said meaningful things about the characters and"
+  },
+  {
+   "t": 961.66,
+   "d": 5.53,
+   "text": "the possibility inherent in their personalities and directions."
+  },
+  {
+   "t": 967.19,
+   "d": 5.21,
+   "text": "How does being introduced to a character he was trying to quit smoking versus he kept"
+  },
+  {
+   "t": 972.4,
+   "d": 8.16,
+   "text": "smoking change the perception?"
+  },
+  {
+   "t": 980.56,
+   "d": 3.99,
+   "text": "With most procedural text systems you can get into trillions and trillions of possible"
+  },
+  {
+   "t": 984.55,
+   "d": 1.0,
+   "text": "combinations."
+  },
+  {
+   "t": 985.55,
+   "d": 10.92,
+   "text": "For this project, I realized it was more fine to deploy the procedurality to where it mattered."
+  },
+  {
+   "t": 996.47,
+   "d": 3.04,
+   "text": "Within a highly restrained structure there was still more than enough room for every"
+  },
+  {
+   "t": 999.51,
+   "d": 6.82,
+   "text": "reader to have a unique experience and one that lived up to higher standards."
+  },
+  {
+   "t": 1006.33,
+   "d": 4.13,
+   "text": "Subcutaneans has gotten really good reviews and more are more excited about the story"
+  },
+  {
+   "t": 1010.46,
+   "d": 2.8,
+   "text": "than the system that assembled it which is great."
+  },
+  {
+   "t": 1013.26,
+   "d": 3.99,
+   "text": "It is common in reviews for people to say I can't imagine the story happening any other"
+  },
+  {
+   "t": 1017.25,
+   "d": 7.15,
+   "text": "way even though they know it can and does and I can't think of a greater compliment"
+  },
+  {
+   "t": 1024.4,
+   "d": 2.69,
+   "text": "than that."
+  },
+  {
+   "t": 1027.09,
+   "d": 5.41,
+   "text": "The more you under the text you are printing the more interesting things you can do with"
+  },
+  {
+   "t": 1032.5,
+   "d": 1.72,
+   "text": "it."
+  },
+  {
+   "t": 1034.22,
+   "d": 4.61,
+   "text": "Procedural text people work with a lot with things of text and it is hard to remember"
+  },
+  {
+   "t": 1038.83,
+   "d": 2.89,
+   "text": "these are total gibberish to the systems deploying them."
+  },
+  {
+   "t": 1041.72,
+   "d": 5.84,
+   "text": "It is hard to collaborate with a system that has no idea when it is a joke or politically"
+  },
+  {
+   "t": 1047.56,
+   "d": 3.31,
+   "text": "incorrect or anything about it."
+  },
+  {
+   "t": 1050.87,
+   "d": 5.8,
+   "text": "If your code understanding anything about the text it has that can be a massively useful"
+  },
+  {
+   "t": 1056.67,
+   "d": 2.34,
+   "text": "multiplier."
+  },
+  {
+   "t": 1059.01,
+   "d": 6.35,
+   "text": "Sticking with Subcutaneans, I wrote a lot of minor variations that at first seemed meaningless."
+  },
+  {
+   "t": 1065.36,
+   "d": 3.22,
+   "text": "Why would you care which version of the sentence got picked?"
+  },
+  {
+   "t": 1068.58,
+   "d": 6.03,
+   "text": "I was tempted to cut them and thought of something better to do which was treat them as tools"
+  },
+  {
+   "t": 1074.61,
+   "d": 2.92,
+   "text": "for characterizing a particular narrative."
+  },
+  {
+   "t": 1077.53,
+   "d": 6.04,
+   "text": "I plugged in lexical tools that could tell me one variance has more negative sentiment"
+  },
+  {
+   "t": 1083.57,
+   "d": 9.17,
+   "text": "and I could define a chance for each generated Subcutaneans to have a narrateer who was a"
+  },
+  {
+   "t": 1092.74,
+   "d": 4.15,
+   "text": "pessimist."
+  },
+  {
+   "t": 1096.89,
+   "d": 12.43,
+   "text": "Narrators who like to use or avoid asmile or liked to ram billion on or prefer the shortest"
+  },
+  {
+   "t": 1109.32,
+   "d": 8.03,
+   "text": "way of saying something."
+  },
+  {
+   "t": 1117.35,
+   "d": 10.78,
+   "text": "Assem -- this technique variation is in a lot of my projects."
+  },
+  {
+   "t": 1128.13,
+   "d": 9.52,
+   "text": "In 18 cadence the words have a history."
+  },
+  {
+   "t": 1137.65,
+   "d": 7.99,
+   "text": "When two fragments get close enough to each other it replaces it with a pronoun."
+  },
+  {
+   "t": 1145.64,
+   "d": 6.63,
+   "text": "This system knows how to write sentences about combinations of fragments."
+  },
+  {
+   "t": 1152.27,
+   "d": 6.17,
+   "text": "They have hidden knowledge on the surface they are in and they can be smartly grouped."
+  },
+  {
+   "t": 1158.44,
+   "d": 4.66,
+   "text": "All these things are minor but make the experience of playing with 18 cadence fragments more"
+  },
+  {
+   "t": 1163.1,
+   "d": 4.84,
+   "text": "immediate than dragging around fridge magments and gives the inkling the system is working"
+  },
+  {
+   "t": 1167.94,
+   "d": 5.16,
+   "text": "with you."
+  },
+  {
+   "t": 1173.1,
+   "d": 3.82,
+   "text": "If I can introduce one more to the talk."
+  },
+  {
+   "t": 1176.92,
+   "d": 6.91,
+   "text": "Let me deliver ice bound where you used a physical printed book and digital game to"
+  },
+  {
+   "t": 1183.83,
+   "d": 5.66,
+   "text": "explore the unfinished manuscript of a long-dead author."
+  },
+  {
+   "t": 1189.49,
+   "d": 5.47,
+   "text": "In the game you collaborate with this digital ghost to explore different ways history of"
+  },
+  {
+   "t": 1194.96,
+   "d": 2.21,
+   "text": "doomed pole explorers interested."
+  },
+  {
+   "t": 1197.17,
+   "d": 10.54,
+   "text": "Part of this was dragging them in and making the element provisionally start of the story"
+  },
+  {
+   "t": 1207.71,
+   "d": 1.0,
+   "text": "draft."
+  },
+  {
+   "t": 1208.71,
+   "d": 5.24,
+   "text": "Each were tagged with themes important in your digital collaborators life."
+  },
+  {
+   "t": 1213.95,
+   "d": 4.57,
+   "text": "Dedication, family, fragility, for instance."
+  },
+  {
+   "t": 1218.52,
+   "d": 8.07,
+   "text": "This allowed an intelligent conversations noticing if they were emphasizing a theme"
+  },
+  {
+   "t": 1226.59,
+   "d": 4.94,
+   "text": "using two contrasting themes or ignoring something he thinks is important."
+  },
+  {
+   "t": 1231.53,
+   "d": 3.04,
+   "text": "The player isn't toggling text on and off."
+  },
+  {
+   "t": 1234.57,
+   "d": 11.17,
+   "text": "They are manipulating a narrative machine and that makes the experience much more meaningful."
+  },
+  {
+   "t": 1245.74,
+   "d": 4.24,
+   "text": "Procedural stories don't have to be immersive."
+  },
+  {
+   "t": 1249.98,
+   "d": 11.81,
+   "text": "Part of the mechanics are dragging the symbols around show you how the consequence ripples"
+  },
+  {
+   "t": 1261.79,
+   "d": 4.46,
+   "text": "through whole story."
+  },
+  {
+   "t": 1266.25,
+   "d": 3.3,
+   "text": "Immersion in a fictionalal -- fictional world is always the goal but doesn't have to be"
+  },
+  {
+   "t": 1269.55,
+   "d": 2.65,
+   "text": "the only goal."
+  },
+  {
+   "t": 1272.2,
+   "d": 9.09,
+   "text": "It can make you less able to appreciate the multilinear aspects of an emergent narrative."
+  },
+  {
+   "t": 1281.29,
+   "d": 4.23,
+   "text": "You are engaged with ice bound on a different level."
+  },
+  {
+   "t": 1285.52,
+   "d": 6.56,
+   "text": "For the kind of story we wanted to tell which is a story about stories that was an a good"
+  },
+  {
+   "t": 1292.08,
+   "d": 5.82,
+   "text": "thing."
+  },
+  {
+   "t": 1297.9,
+   "d": 1.82,
+   "text": "I don't think this makes the story less powerful."
+  },
+  {
+   "t": 1299.72,
+   "d": 4.65,
+   "text": "Maybe the reverse because you have this God's eye view of how all these people's lives intersected"
+  },
+  {
+   "t": 1304.37,
+   "d": 5.41,
+   "text": "and echoes each other in a poignant way."
+  },
+  {
+   "t": 1309.78,
+   "d": 9.0,
+   "text": "You can say you are immersed in a different level"
+  },
+  {
+   "t": 1318.78,
+   "d": 3.95,
+   "text": "but I think it is a useful exercise with procedural narrative to think owed as the the box and"
+  },
+  {
+   "t": 1322.73,
+   "d": 5.06,
+   "text": "question whether there are other modalities you can give players interacting with your"
+  },
+  {
+   "t": 1327.79,
+   "d": 1.0,
+   "text": "text."
+  },
+  {
+   "t": 1328.79,
+   "d": 1.35,
+   "text": "Number seven."
+  },
+  {
+   "t": 1330.14,
+   "d": 2.36,
+   "text": "Two to go."
+  },
+  {
+   "t": 1332.5,
+   "d": 2.44,
+   "text": "Give the writer the best tools to write."
+  },
+  {
+   "t": 1334.94,
+   "d": 1.7,
+   "text": "Even if the writer is yourself."
+  },
+  {
+   "t": 1336.64,
+   "d": 2.98,
+   "text": "I am very on board Kate Compton's talk."
+  },
+  {
+   "t": 1339.62,
+   "d": 4.54,
+   "text": "Domain specific languages are definitely the way to interact with text especially combined"
+  },
+  {
+   "t": 1344.16,
+   "d": 4.32,
+   "text": "with other tools that make it easier to deploy."
+  },
+  {
+   "t": 1348.48,
+   "d": 3.44,
+   "text": "This is some of the code for 18 cadence."
+  },
+  {
+   "t": 1351.92,
+   "d": 9.45,
+   "text": "It was almost exactly like writing a manuscript."
+  },
+  {
+   "t": 1361.37,
+   "d": 4.74,
+   "text": "This paragraph I am saying in a year, in a location, and it understands that means these"
+  },
+  {
+   "t": 1366.11,
+   "d": 3.73,
+   "text": "are things that these characters were doing there and then and down here at the bottom"
+  },
+  {
+   "t": 1369.84,
+   "d": 4.86,
+   "text": "I am defining an object that existed at a certain time and place and this just made"
+  },
+  {
+   "t": 1374.7,
+   "d": 4.8,
+   "text": "-- it turned what could have been wrangling with the database into a spreadsheet."
+  },
+  {
+   "t": 1379.5,
+   "d": 5.11,
+   "text": "I didn't have to think about code or structure."
+  },
+  {
+   "t": 1384.61,
+   "d": 5.01,
+   "text": "I was telling it in a way my game could understand."
+  },
+  {
+   "t": 1389.62,
+   "d": 6.16,
+   "text": "Similarly in Subcutaneans, I made this very simple DSL for defining text alternatives"
+  },
+  {
+   "t": 1395.78,
+   "d": 4.17,
+   "text": "where I could spend the vast majority of my time not worrying about syntax and just the"
+  },
+  {
+   "t": 1399.95,
+   "d": 1.79,
+   "text": "words."
+  },
+  {
+   "t": 1401.74,
+   "d": 7.04,
+   "text": "Part of the reason I finished blue lacuna is a language I did not write."
+  },
+  {
+   "t": 1408.78,
+   "d": 6.91,
+   "text": "This is an incredible language I liked so much I wrote a whole book on it."
+  },
+  {
+   "t": 1415.69,
+   "d": 5.53,
+   "text": "One thing that is beautiful is it let's you write very complex logic and character behaviors"
+  },
+  {
+   "t": 1421.22,
+   "d": 5.94,
+   "text": "in this high level natural language syntax and that helped me during blue lacuna to keep"
+  },
+  {
+   "t": 1427.16,
+   "d": 5.59,
+   "text": "my writer brain active while doing complicated coding and debugging."
+  },
+  {
+   "t": 1432.75,
+   "d": 3.48,
+   "text": "DSLs are what you need."
+  },
+  {
+   "t": 1436.23,
+   "d": 5.89,
+   "text": "And finally, number eight, show the seams."
+  },
+  {
+   "t": 1442.12,
+   "d": 4.29,
+   "text": "I wanted the seamless sentences who I started doing this where the curtain was in place"
+  },
+  {
+   "t": 1446.41,
+   "d": 2.39,
+   "text": "and the text magically was right."
+  },
+  {
+   "t": 1448.8,
+   "d": 10.79,
+   "text": "Over time I came to strongly MREEFB believe this is the wrong way to write procedural"
+  },
+  {
+   "t": 1459.59,
+   "d": 1.0,
+   "text": "text."
+  },
+  {
+   "t": 1460.59,
+   "d": 1.69,
+   "text": "You want people to appreciate the scenes."
+  },
+  {
+   "t": 1462.28,
+   "d": 4.93,
+   "text": "In ice bound you can view the text associated with any symbol and a lot of details vary"
+  },
+  {
+   "t": 1467.21,
+   "d": 3.78,
+   "text": "based on whatever symbols are active and themes you have emphasized."
+  },
+  {
+   "t": 1470.99,
+   "d": 5.16,
+   "text": "No one appreciated this until we added a mote that could show the text that varied and let"
+  },
+  {
+   "t": 1476.15,
+   "d": 3.91,
+   "text": "you show a way to tap it."
+  },
+  {
+   "t": 1480.06,
+   "d": 12.44,
+   "text": "This became a window into how your actions were affecting the collaboration."
+  },
+  {
+   "t": 1492.5,
+   "d": 2.61,
+   "text": "Ignore this advice when you don't want to draw attention to the procedurality which"
+  },
+  {
+   "t": 1495.11,
+   "d": 13.72,
+   "text": "is valid but I believe showing the seams is a vital part."
+  },
+  {
+   "t": 1508.83,
+   "d": 4.73,
+   "text": "To conclude, simulate only what the story needs you to simulate."
+  },
+  {
+   "t": 1513.56,
+   "d": 2.27,
+   "text": "Remember and respect the player's choices."
+  },
+  {
+   "t": 1515.83,
+   "d": 3.03,
+   "text": "Tell stories with players not at them."
+  },
+  {
+   "t": 1518.86,
+   "d": 3.51,
+   "text": "Limiting the generative space can be more powerful than expanding it."
+  },
+  {
+   "t": 1522.37,
+   "d": 2.85,
+   "text": "The more you understand the text you were printing the more interesting things you can"
+  },
+  {
+   "t": 1525.22,
+   "d": 1.6,
+   "text": "do with it."
+  },
+  {
+   "t": 1526.82,
+   "d": 7.01,
+   "text": "Procedural stories don't have to be -- and show the seams."
+  },
+  {
+   "t": 1533.83,
+   "d": 1.59,
+   "text": "You can find most of this on my website."
+  },
+  {
+   "t": 1535.42,
+   "d": 11.3,
+   "text": "The website is also the place to find out where you can get your own Subcutaneans."
+  },
+  {
+   "t": 1546.72,
+   "d": 4.94,
+   "text": "I think a lot of people will be super excited by a book I am working on that will be crowd"
+  },
+  {
+   "t": 1551.66,
+   "d": 3.7,
+   "text": "funding early next year about the history of text games."
+  },
+  {
+   "t": 1555.36,
+   "d": 3.21,
+   "text": "Sign up for the mailing list if you want to be the first it hear about that."
+  },
+  {
+   "t": 1558.57,
+   "d": 3.05,
+   "text": "Thank you for having me and I am happy to take questions."
+  },
+  {
+   "t": 1561.62,
+   "d": 4.67,
+   "text": "EMCEE: Yes, we do have some questions."
+  },
+  {
+   "t": 1566.29,
+   "d": 2.19,
+   "text": "People want to add more throw those in."
+  },
+  {
+   "t": 1568.48,
+   "d": 2.04,
+   "text": "We have some right away."
+  },
+  {
+   "t": 1570.52,
+   "d": 3.91,
+   "text": "One is can you say more about the system that goes from an order to a book?"
+  },
+  {
+   "t": 1574.43,
+   "d": 1.83,
+   "text": "What kind of services are you using?"
+  },
+  {
+   "t": 1576.26,
+   "d": 1.83,
+   "text": "Any gotchas there?"
+  },
+  {
+   "t": 1578.09,
+   "d": 4.92,
+   "text": ">> I gave another talk about Subcutaneans at the electronic literature conference and"
+  },
+  {
+   "t": 1583.01,
+   "d": 5.37,
+   "text": "in that I said ironically the hardest part of the project was the distribution and figuring"
+  },
+  {
+   "t": 1588.38,
+   "d": 4.53,
+   "text": "out how to print it and get it into other people's hands."
+  },
+  {
+   "t": 1592.91,
+   "d": 4.55,
+   "text": "The vast majority of print on demand services require human review of any change to a manuscript"
+  },
+  {
+   "t": 1597.46,
+   "d": 9.12,
+   "text": "because they want to avoid the situation where you upload a corrupted PDF."
+  },
+  {
+   "t": 1606.58,
+   "d": 7.91,
+   "text": "Any time someone ordered the book though it would kick the project into human review mode."
+  },
+  {
+   "t": 1614.49,
+   "d": 4.37,
+   "text": "I had a limited subset of services I could use from the beginning."
+  },
+  {
+   "t": 1618.86,
+   "d": 6.29,
+   "text": "There is problems with distribution where so many only cover book on Amazon and Amazon"
+  },
+  {
+   "t": 1625.15,
+   "d": 10.67,
+   "text": "requires an ISBN and you have to get a new one every time you change the text."
+  },
+  {
+   "t": 1635.82,
+   "d": 5.29,
+   "text": "It is not interesting to talk about but that was the hardest part of the project."
+  },
+  {
+   "t": 1641.11,
+   "d": 2.12,
+   "text": "It was quite a journey."
+  },
+  {
+   "t": 1643.23,
+   "d": 6.56,
+   "text": "EMCEE: That ties perfectly almost as if it was planned."
+  },
+  {
+   "t": 1649.79,
+   "d": 2.68,
+   "text": "How do you handle copyright and license?"
+  },
+  {
+   "t": 1652.47,
+   "d": 4.44,
+   "text": "Is the legal apparatus ready for procedural novels?"
+  },
+  {
+   "t": 1656.91,
+   "d": 4.18,
+   "text": ">> Yeah, it is absolutely not."
+  },
+  {
+   "t": 1661.09,
+   "d": 11.74,
+   "text": "I release stuff for me and if you like it I"
+  },
+  {
+   "t": 1672.83,
+   "d": 2.25,
+   "text": "ask you to buy the official version."
+  },
+  {
+   "t": 1675.08,
+   "d": 7.11,
+   "text": "You can read one version all online and I am intending to open source the code so where"
+  },
+  {
+   "t": 1682.19,
+   "d": 5.13,
+   "text": "wasn't super practically worried about it because I didn't think the queer procedurally"
+  },
+  {
+   "t": 1687.32,
+   "d": 6.86,
+   "text": "generated model would be the latest thing people tried to steal from me."
+  },
+  {
+   "t": 1694.18,
+   "d": 6.52,
+   "text": "Anything is possible but the whole legal and book printing ecosystem are still not ready"
+  },
+  {
+   "t": 1700.7,
+   "d": 2.57,
+   "text": "for procedural text even though it has been around for decades now."
+  },
+  {
+   "t": 1703.27,
+   "d": 1.08,
+   "text": "EMCEE: One last question."
+  },
+  {
+   "t": 1704.35,
+   "d": 5.74,
+   "text": "What sort of tools did you use to generate heuristics for narrators making choices on"
+  },
+  {
+   "t": 1710.09,
+   "d": 1.69,
+   "text": "which sentence variant?"
+  },
+  {
+   "t": 1711.78,
+   "d": 5.39,
+   "text": "AARON REED: It was guided mostly by gut instinct."
+  },
+  {
+   "t": 1717.17,
+   "d": 4.51,
+   "text": "I didn't do a lot of science to come up with those."
+  },
+  {
+   "t": 1721.68,
+   "d": 6.44,
+   "text": "It was mostly as I was writing variations I would start noticing things it feels like"
+  },
+  {
+   "t": 1728.12,
+   "d": 3.38,
+   "text": "when I write this I want to be snarky but other times I don't."
+  },
+  {
+   "t": 1731.5,
+   "d": 1.62,
+   "text": "That's the narrator."
+  },
+  {
+   "t": 1733.12,
+   "d": 2.27,
+   "text": "One that plugs into a sarcasm detector."
+  },
+  {
+   "t": 1735.39,
+   "d": 5.37,
+   "text": "I didn't build that windup but it would be the differences I would notice as I was projecting"
+  },
+  {
+   "t": 1740.76,
+   "d": 4.47,
+   "text": "myself into the space of possible ways I could write this and thinking oh, that one would"
+  },
+  {
+   "t": 1745.23,
+   "d": 4.76,
+   "text": "be easy to carve off because there is a Python function in the text analysis library I would"
+  },
+  {
+   "t": 1749.99,
+   "d": 2.13,
+   "text": "use to detect the sentences."
+  },
+  {
+   "t": 1752.12,
+   "d": 4.43,
+   "text": "It is a combination of knowing what tech I had available."
+  },
+  {
+   "t": 1756.55,
+   "d": 5.84,
+   "text": "EMCEE: I am a big fan of the ways where you don't need to build a tool for every heuristic."
+  },
+  {
+   "t": 1762.39,
+   "d": 2.84,
+   "text": "You are involved in that process as a creator."
+  },
+  {
+   "t": 1765.23,
+   "d": 1.0,
+   "text": "Fantastic."
+  },
+  {
+   "t": 1766.23,
+   "d": 1.0,
+   "text": "Wonderful talk."
+  },
+  {
+   "t": 1767.23,
+   "d": 1.0,
+   "text": "Hopefully people can find you in space and ask you more questions."
+  },
+  {
+   "t": 1768.23,
+   "d": 1.0,
+   "text": "ANDREW AVERSA: I will be around."
+  },
+  {
+   "t": 1769.23,
+   "d": 1.0,
+   "text": "EMCEE: OK, folks."
+  },
+  {
+   "t": 1770.23,
+   "d": 1.0,
+   "text": "We have gotten through another bug chunk of talks and we are heading into another break."
+  },
+  {
+   "t": 1771.23,
+   "d": 1.0,
+   "text": "This is not a scheduled break."
+  },
+  {
+   "t": 1772.23,
+   "d": 1.0,
+   "text": "Drink poly morph drink."
+  },
+  {
+   "t": 1773.23,
+   "d": 1.0,
+   "text": "The rooms are available for a face to face chat although we will not have moderator chosen"
+  },
+  {
+   "t": 1774.23,
+   "d": 1.0,
+   "text": "topics."
+  }
+ ],
+ "note": "manual track runs past the end of the video and there is no English auto-generated (en-orig) track to align it with; cut at the video's duration only, so text squeezed in just before the end is unchecked"
+}

@@ -1,0 +1,125 @@
+{
+  "id": "WeRCGy3-uPY",
+  "title": "Allie Signet & Joe Maliksi - SIBR - Sports, Splorts, and Statistics: Why Data Accessibility Matters",
+  "speaker": "Allie Signet & Joe Maliksi",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=WeRCGy3-uPY",
+  "talk_type": "culture",
+  "summary": "Members of SIBR, the fan research society around the procedural baseball simulation Blaseball, argue that procedural systems generate stories that stay impenetrable unless their data is archived and made accessible. They give four lessons: document the raw data and APIs, provide easy access to raw data rather than waiting for a perfect API, aggregate into averages and leaderboards so stories are visible at a glance, and make replays and scrollback easy to view and share. Q&A covers surprising uses (a CD-ROM of Blaseball history, music made from game events), a white paper that found edge cases in a proposed rule, exposing data without user information, and building tools for non-coders.",
+  "games": [
+    "Blaseball"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Procedural systems constantly generate surprising stories that are impenetrable to players unless detailed records exist, so emergent narrative depends on logging.",
+      "detail": "The speakers compare Blaseball, where fans watch an uncontrollable live simulation, to roguelikes where you might review a log to learn why something happened. They call this a double-edged sword of systems interacting with themselves.",
+      "t": 181,
+      "quote": "They are constantly telling interesting, surprising stories that are absolutely inpenetrateable without detailed notes",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "When a system can produce endless factoids, filtering signal from noise is what turns data into narrative.",
+      "detail": "The speakers cite modern sports commentary's hyper-specific factoids as a sign that we can now produce data cheaply; the storytelling problem becomes filtering signal from noise.",
+      "t": 208,
+      "quote": "filtering signal from noise is the answer",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event logging",
+      "kind": "principle",
+      "claim": "An archive of a procedural game should record everything in as raw a form as possible, because data that seems unimportant today may be the core of tomorrow's story.",
+      "detail": "A remarkable player can break out in a single play and you will wish you had recorded that game. Keep the most complete picture before you start carving it down.",
+      "t": 224,
+      "quote": "Data you don't think is important today might be at the core of a story you want to tell tomorrow",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "data accessibility",
+      "kind": "principle",
+      "claim": "Saving game data is not enough; it must be made accessible so people can find the one needle-in-a-haystack event that makes a story.",
+      "detail": "A nightmarishly tall stack of raw data is not enjoyable to work with. Accessibility means different things to JSON-lovers and to people who find JSON terrifying, but both need to find specific events.",
+      "t": 279,
+      "quote": "So the second step is not only saving your data but making it accessible",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "documentation",
+      "kind": "example",
+      "claim": "Community documentation of Blaseball's public API endpoints let fans build new tools and even dig up a long-dead player's ID, kick-starting a major plot event.",
+      "detail": "Fans documented the endpoints on GitHub and the developers never asked them to stop, so later tools like the Discord bot did not start from zero. When the idol mechanic let fans choose a player to bring back, digging through the API found the ID of the first incinerated player. Lesson one: document where you start.",
+      "t": 427,
+      "quote": "Some creative digging for the official Blaseball API fans were able to find the ID and player page",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "data accessibility",
+      "kind": "principle",
+      "claim": "Even with aggregated stats available, raw data access matters because the questions players ask evolve and unknown unknowns only surface from raw data.",
+      "detail": "SIBR built Datablase to turn raw JSON into indexable game objects queryable by SQL and spreadsheets, then an indexed web API, which enabled a hackathon with 58 entries. Lesson two: you do not need a perfect API out of the gate.",
+      "t": 460,
+      "quote": "the questions people ask evolve over time and the only way to surface unknown unknowns is analyzing the raw data",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "statistics as story",
+      "kind": "principle",
+      "claim": "Aggregate statistics, averages and leaderboards tell stories at a glance, letting fans who never watched a game spot standout players and underdog arcs.",
+      "detail": "A graph of a player's stats over time can tell an underdog story. Knowing averages lets a fan know which opposing slugger to fear without watching that team, or notice a lone star hitter on a struggling team. Lesson three: averages and leaderboards make spotting standouts easy.",
+      "t": 681,
+      "quote": "Aggregating data means being able to see a narrative in a single number",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "replays",
+      "kind": "principle",
+      "claim": "Games that generate stories should make replays and event scrollback easy to view and share, because telling a story requires knowing what happened, not just the outcome.",
+      "detail": "Blaseball tools posted notable events to Discord and Reblase made previous games searchable as chronological event logs, so people could share sequences and build shared mythology. Lesson four: make scrollback easy and shareable.",
+      "t": 940,
+      "quote": "make viewing scroll back easy, shareable, Etc. It is another way to build community by sharing the common seeds of inspiration",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "replays",
+      "kind": "technique",
+      "claim": "Roguelike developers can borrow this by adding easy highlight sharing such as GIF export of deaths, or full filterable game logs in strategy games.",
+      "detail": "In Q&A a speaker pointed to Noita's GIF export for sharing fun deaths as the same idea, and wished strategy games offered a full game log that could be filtered into a story.",
+      "t": 1173,
+      "quote": "Sharing replay is like people love to crowd around and see highlights",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "public data",
+      "kind": "technique",
+      "claim": "Developers should identify which game data is safe to expose publicly (no personal or login data) and give it to their community.",
+      "detail": "SIBR draws a hard line against touching user data; the API provides game updates without requiring login. The speaker says communities will do cursed and often blessed things with such data.",
+      "t": 1286,
+      "quote": "Figure out what you have that is safe to expose and give that to your community",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community analysis",
+      "kind": "example",
+      "claim": "With full data access, Blaseball fans simulated a proposed 'double jump' rule on the past season and published a white paper that uncovered edge cases the developers had not anticipated.",
+      "detail": "SIBR ran the numbers before the in-game election; the developers later said they read the paper and realized the community had found edge cases that would have happened.",
+      "t": 1337,
+      "quote": "they read the paper and realized we had uncovered a bunch of edge cases that would have happened",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

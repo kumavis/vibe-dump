@@ -1,0 +1,4150 @@
+{
+ "id": "p48ArjJweSo",
+ "url": "https://www.youtube.com/watch?v=p48ArjJweSo",
+ "title": "Danny Day - Dynamic Event-Listeners in Desktop Dungeons",
+ "speaker": "Danny Day",
+ "talk_title": "Dynamic Event-Listeners in Desktop Dungeons",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1743,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the project"
+  },
+  {
+   "start": 148,
+   "title": "Limitations of inheritance"
+  },
+  {
+   "start": 313,
+   "title": "Dynamic event handler model"
+  },
+  {
+   "start": 491,
+   "title": "Event-driven gameplay flow"
+  },
+  {
+   "start": 623,
+   "title": "Benefits of dynamic handlers"
+  },
+  {
+   "start": 766,
+   "title": "Managing UI and game state"
+  },
+  {
+   "start": 845,
+   "title": "Combat prediction challenges"
+  },
+  {
+   "start": 960,
+   "title": "Level and procedural generation"
+  },
+  {
+   "start": 1107,
+   "title": "Serialization and save games"
+  },
+  {
+   "start": 1204,
+   "title": "Architectural takeaways"
+  },
+  {
+   "start": 1442,
+   "title": "Audience Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5797,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.96,
+   "text": "hi I'm Danny day or dyslexia if you"
+  },
+  {
+   "t": 3.96,
+   "d": 2.16,
+   "text": "prefer and I am from literally the other"
+  },
+  {
+   "t": 6.12,
+   "d": 1.23,
+   "text": "side of the planet"
+  },
+  {
+   "t": 7.35,
+   "d": 1.65,
+   "text": "from a city called Cape Town down on the"
+  },
+  {
+   "t": 9.0,
+   "d": 1.82,
+   "text": "pointy bit of South Africa over there"
+  },
+  {
+   "t": 10.82,
+   "d": 3.88,
+   "text": "and I run a game studio called qcf"
+  },
+  {
+   "t": 14.7,
+   "d": 1.59,
+   "text": "design there and more recently I program"
+  },
+  {
+   "t": 16.29,
+   "d": 2.91,
+   "text": "things for spry Fox UCF's biggest hit is"
+  },
+  {
+   "t": 19.2,
+   "d": 3.33,
+   "text": "a roguelike like upend as many as you"
+  },
+  {
+   "t": 22.53,
+   "d": 2.43,
+   "text": "until you feel comfortable puzzle game"
+  },
+  {
+   "t": 24.96,
+   "d": 2.25,
+   "text": "that one and IGF award in 2011"
+  },
+  {
+   "t": 27.21,
+   "d": 3.78,
+   "text": "usually I describe the game as a quick"
+  },
+  {
+   "t": 30.99,
+   "d": 3.0,
+   "text": "play puzzle roguelike that's all happens"
+  },
+  {
+   "t": 33.99,
+   "d": 1.41,
+   "text": "on a single screen and when people blink"
+  },
+  {
+   "t": 35.4,
+   "d": 3.12,
+   "text": "at me I say it's like minesweeper Meets"
+  },
+  {
+   "t": 38.52,
+   "d": 4.11,
+   "text": "Dark Souls but with this audience I get"
+  },
+  {
+   "t": 42.63,
+   "d": 1.2,
+   "text": "to explain a little bit more detail so"
+  },
+  {
+   "t": 43.83,
+   "d": 2.76,
+   "text": "that's cool desktop dungeons emerged"
+  },
+  {
+   "t": 46.59,
+   "d": 1.77,
+   "text": "from the mind of Raiden Jabbar hardly"
+  },
+  {
+   "t": 48.36,
+   "d": 1.62,
+   "text": "designer who'd gotten frustrated with"
+  },
+  {
+   "t": 49.98,
+   "d": 1.7,
+   "text": "stone zubrin's taking too long and"
+  },
+  {
+   "t": 51.68,
+   "d": 2.11,
+   "text": "wanted to compress that feeling into a"
+  },
+  {
+   "t": 53.79,
+   "d": 2.67,
+   "text": "10-minute session several mechanics came"
+  },
+  {
+   "t": 56.46,
+   "d": 1.77,
+   "text": "together to make that happen there's"
+  },
+  {
+   "t": 58.23,
+   "d": 2.1,
+   "text": "sort of like no resting or food in the"
+  },
+  {
+   "t": 60.33,
+   "d": 2.19,
+   "text": "game we wanted to make everything be a"
+  },
+  {
+   "t": 62.52,
+   "d": 1.53,
+   "text": "meaningful choice or whenever there was"
+  },
+  {
+   "t": 64.05,
+   "d": 1.08,
+   "text": "something where you you know fast"
+  },
+  {
+   "t": 65.13,
+   "d": 1.71,
+   "text": "explore was kind of really boring so we"
+  },
+  {
+   "t": 66.84,
+   "d": 3.6,
+   "text": "just took that out and you end up"
+  },
+  {
+   "t": 70.44,
+   "d": 3.48,
+   "text": "regenerating health in a novel way"
+  },
+  {
+   "t": 73.92,
+   "d": 2.1,
+   "text": "whenever you explore unrevealed terrain"
+  },
+  {
+   "t": 76.02,
+   "d": 1.65,
+   "text": "you regenerate a little bit of health"
+  },
+  {
+   "t": 77.67,
+   "d": 1.74,
+   "text": "and mana depending on your level and"
+  },
+  {
+   "t": 79.41,
+   "d": 2.58,
+   "text": "whatever items you have enemies regen at"
+  },
+  {
+   "t": 81.99,
+   "d": 1.92,
+   "text": "the same time as well so that turns this"
+  },
+  {
+   "t": 83.91,
+   "d": 1.38,
+   "text": "unrevealed space where enemies are"
+  },
+  {
+   "t": 85.29,
+   "d": 2.28,
+   "text": "lurking into kind of like a resource and"
+  },
+  {
+   "t": 87.57,
+   "d": 2.19,
+   "text": "a potential place of danger but that's"
+  },
+  {
+   "t": 89.76,
+   "d": 1.2,
+   "text": "kind of okay because enemies won't"
+  },
+  {
+   "t": 90.96,
+   "d": 1.53,
+   "text": "attack you unless you attack them first"
+  },
+  {
+   "t": 92.49,
+   "d": 1.68,
+   "text": "or at least try to attack them first"
+  },
+  {
+   "t": 94.17,
+   "d": 1.02,
+   "text": "they might be better than you and"
+  },
+  {
+   "t": 95.19,
+   "d": 3.03,
+   "text": "therefore hit you first and there's a"
+  },
+  {
+   "t": 98.22,
+   "d": 3.51,
+   "text": "couple other things we focused on"
+  },
+  {
+   "t": 101.73,
+   "d": 2.04,
+   "text": "turning everything into the game in the"
+  },
+  {
+   "t": 103.77,
+   "d": 1.41,
+   "text": "game into a resource including sort of"
+  },
+  {
+   "t": 105.18,
+   "d": 1.11,
+   "text": "like enemy levels that you're fighting"
+  },
+  {
+   "t": 106.29,
+   "d": 1.26,
+   "text": "if you're fighting a higher-level enemy"
+  },
+  {
+   "t": 107.55,
+   "d": 1.59,
+   "text": "you get more experience when you kill"
+  },
+  {
+   "t": 109.14,
+   "d": 2.85,
+   "text": "them and basically everything turns into"
+  },
+  {
+   "t": 111.99,
+   "d": 1.92,
+   "text": "a resource eventually like items get"
+  },
+  {
+   "t": 113.91,
+   "d": 1.65,
+   "text": "converted and your race traits turn"
+  },
+  {
+   "t": 115.56,
+   "d": 1.71,
+   "text": "those into like bonuses for your current"
+  },
+  {
+   "t": 117.27,
+   "d": 3.24,
+   "text": "class eventually you're kind of like to"
+  },
+  {
+   "t": 120.51,
+   "d": 2.43,
+   "text": "beat the boss of a single dungeon you're"
+  },
+  {
+   "t": 122.94,
+   "d": 1.38,
+   "text": "sort of like taking everything you have"
+  },
+  {
+   "t": 124.32,
+   "d": 2.46,
+   "text": "and throwing the kitchen sink at the"
+  },
+  {
+   "t": 126.78,
+   "d": 1.44,
+   "text": "damn thing hoping you'll beat it and"
+  },
+  {
+   "t": 128.22,
+   "d": 2.1,
+   "text": "that's a really cool feeling unless you"
+  },
+  {
+   "t": 130.32,
+   "d": 1.77,
+   "text": "die in which case you're not tough but"
+  },
+  {
+   "t": 132.09,
+   "d": 1.11,
+   "text": "if you win you get"
+  },
+  {
+   "t": 133.2,
+   "d": 1.23,
+   "text": "take that monsters head back to a"
+  },
+  {
+   "t": 134.43,
+   "d": 1.89,
+   "text": "taxidermist in our overworld Kingdom and"
+  },
+  {
+   "t": 136.32,
+   "d": 2.55,
+   "text": "sell it and retire which is fun and this"
+  },
+  {
+   "t": 138.87,
+   "d": 2.01,
+   "text": "talk is about how disturbed engines"
+  },
+  {
+   "t": 140.88,
+   "d": 2.07,
+   "text": "worked under the hood and a couple of"
+  },
+  {
+   "t": 142.95,
+   "d": 2.07,
+   "text": "decisions we made systems design wise"
+  },
+  {
+   "t": 145.02,
+   "d": 2.28,
+   "text": "and why we did that and what went wrong"
+  },
+  {
+   "t": 147.3,
+   "d": 2.31,
+   "text": "and what went right"
+  },
+  {
+   "t": 149.61,
+   "d": 2.82,
+   "text": "I suspect that roguelikes are usually"
+  },
+  {
+   "t": 152.43,
+   "d": 1.83,
+   "text": "built as sort of these large object"
+  },
+  {
+   "t": 154.26,
+   "d": 1.92,
+   "text": "inheritance structures things like"
+  },
+  {
+   "t": 156.18,
+   "d": 2.51,
+   "text": "Tianjin definitely are mostly because"
+  },
+  {
+   "t": 158.69,
+   "d": 2.17,
+   "text": "polymorphism is a really great way to"
+  },
+  {
+   "t": 160.86,
+   "d": 1.92,
+   "text": "get objects to interact with other"
+  },
+  {
+   "t": 162.78,
+   "d": 1.98,
+   "text": "objects regardless of having to write"
+  },
+  {
+   "t": 164.76,
+   "d": 1.88,
+   "text": "lots of boilerplate code"
+  },
+  {
+   "t": 166.64,
+   "d": 3.07,
+   "text": "so either you end up hard coding that"
+  },
+  {
+   "t": 169.71,
+   "d": 2.1,
+   "text": "you can throw a potion of levitation and"
+  },
+  {
+   "t": 171.81,
+   "d": 2.85,
+   "text": "an enemy to make it fly or all items are"
+  },
+  {
+   "t": 174.66,
+   "d": 1.92,
+   "text": "throwable entities can be targets of"
+  },
+  {
+   "t": 176.58,
+   "d": 2.25,
+   "text": "thrown throwable objects and this"
+  },
+  {
+   "t": 178.83,
+   "d": 2.01,
+   "text": "particular person items on hit method"
+  },
+  {
+   "t": 180.84,
+   "d": 3.66,
+   "text": "calls target quaff this and we end up"
+  },
+  {
+   "t": 184.5,
+   "d": 2.91,
+   "text": "with a flying enemy yay now write a"
+  },
+  {
+   "t": 187.41,
+   "d": 1.47,
+   "text": "portion of stone form and the same thing"
+  },
+  {
+   "t": 188.88,
+   "d": 1.08,
+   "text": "happens we have an enemy that's"
+  },
+  {
+   "t": 189.96,
+   "d": 1.95,
+   "text": "resistant to more damage I don't know"
+  },
+  {
+   "t": 191.91,
+   "d": 0.96,
+   "text": "why you would want to do that but you"
+  },
+  {
+   "t": 192.87,
+   "d": 3.21,
+   "text": "know hey you can that's certainly how"
+  },
+  {
+   "t": 196.08,
+   "d": 1.86,
+   "text": "desktop dungeons was initially built as"
+  },
+  {
+   "t": 197.94,
+   "d": 1.55,
+   "text": "a prototype that's what it looked like"
+  },
+  {
+   "t": 199.49,
+   "d": 4.09,
+   "text": "late in 2010 but we started running into"
+  },
+  {
+   "t": 203.58,
+   "d": 1.86,
+   "text": "issues as the prototype expanded and"
+  },
+  {
+   "t": 205.44,
+   "d": 1.11,
+   "text": "drew more players because we wanted to"
+  },
+  {
+   "t": 206.55,
+   "d": 2.34,
+   "text": "build more game plan and one of the"
+  },
+  {
+   "t": 208.89,
+   "d": 1.74,
+   "text": "things that we really liked was this"
+  },
+  {
+   "t": 210.63,
+   "d": 1.74,
+   "text": "kind of like overarching god system that"
+  },
+  {
+   "t": 212.37,
+   "d": 1.41,
+   "text": "made players change how they were"
+  },
+  {
+   "t": 213.78,
+   "d": 2.1,
+   "text": "approaching the game so certain classes"
+  },
+  {
+   "t": 215.88,
+   "d": 1.92,
+   "text": "would play a specific God in a really"
+  },
+  {
+   "t": 217.8,
+   "d": 1.83,
+   "text": "weird way but that was really fun"
+  },
+  {
+   "t": 219.63,
+   "d": 2.28,
+   "text": "because you have a single screen and"
+  },
+  {
+   "t": 221.91,
+   "d": 2.34,
+   "text": "players would sort of approach what they"
+  },
+  {
+   "t": 224.25,
+   "d": 1.47,
+   "text": "were doing on that screen very very"
+  },
+  {
+   "t": 225.72,
+   "d": 1.23,
+   "text": "differently depending on which god they"
+  },
+  {
+   "t": 226.95,
+   "d": 5.79,
+   "text": "were worshiping that was crap because in"
+  },
+  {
+   "t": 232.74,
+   "d": 2.55,
+   "text": "a big sort of entity like object"
+  },
+  {
+   "t": 235.29,
+   "d": 3.27,
+   "text": "hierarchy gods were sort of spread"
+  },
+  {
+   "t": 238.56,
+   "d": 1.8,
+   "text": "throughout that like fungus they had"
+  },
+  {
+   "t": 240.36,
+   "d": 1.59,
+   "text": "these little tendrils everywhere and we"
+  },
+  {
+   "t": 241.95,
+   "d": 1.92,
+   "text": "had to keep writing special case code"
+  },
+  {
+   "t": 243.87,
+   "d": 1.86,
+   "text": "after special case code in order to"
+  },
+  {
+   "t": 245.73,
+   "d": 1.86,
+   "text": "check in like an individual thing so for"
+  },
+  {
+   "t": 247.59,
+   "d": 1.98,
+   "text": "example if we had a god"
+  },
+  {
+   "t": 249.57,
+   "d": 1.65,
+   "text": "that didn't like throwing items suddenly"
+  },
+  {
+   "t": 251.22,
+   "d": 1.53,
+   "text": "we had to check if you were worshipping"
+  },
+  {
+   "t": 252.75,
+   "d": 1.5,
+   "text": "that God every time you throw an item"
+  },
+  {
+   "t": 254.25,
+   "d": 3.39,
+   "text": "which is bad and if that God liked"
+  },
+  {
+   "t": 257.64,
+   "d": 1.62,
+   "text": "things flying we'd have to do the same"
+  },
+  {
+   "t": 259.26,
+   "d": 1.59,
+   "text": "worship check whenever an entities"
+  },
+  {
+   "t": 260.85,
+   "d": 2.01,
+   "text": "movement attribute change from like you"
+  },
+  {
+   "t": 262.86,
+   "d": 2.16,
+   "text": "know on ground to levitating which again"
+  },
+  {
+   "t": 265.02,
+   "d": 1.59,
+   "text": "is crap because if you want to change"
+  },
+  {
+   "t": 266.61,
+   "d": 2.46,
+   "text": "that and you tend to want to do that in"
+  },
+  {
+   "t": 269.07,
+   "d": 2.34,
+   "text": "a prototyping phase of a game you have"
+  },
+  {
+   "t": 271.41,
+   "d": 3.48,
+   "text": "to rebuild how your gods kind of like"
+  },
+  {
+   "t": 274.89,
+   "d": 2.01,
+   "text": "tendrils spread out throughout the game"
+  },
+  {
+   "t": 276.9,
+   "d": 1.71,
+   "text": "so that was one of our major things that"
+  },
+  {
+   "t": 278.61,
+   "d": 1.5,
+   "text": "we wanted to change when we rebuilt the"
+  },
+  {
+   "t": 280.11,
+   "d": 2.67,
+   "text": "game and releases the prototype started"
+  },
+  {
+   "t": 282.78,
+   "d": 1.41,
+   "text": "taking longer and longer and longer as"
+  },
+  {
+   "t": 284.19,
+   "d": 1.98,
+   "text": "we started like balancing these systems"
+  },
+  {
+   "t": 286.17,
+   "d": 1.77,
+   "text": "and making them more interesting it"
+  },
+  {
+   "t": 287.94,
+   "d": 1.5,
+   "text": "would go from you know sort of like"
+  },
+  {
+   "t": 289.44,
+   "d": 1.29,
+   "text": "having a new release every week to"
+  },
+  {
+   "t": 290.73,
+   "d": 1.11,
+   "text": "having a new release every two months"
+  },
+  {
+   "t": 291.84,
+   "d": 3.72,
+   "text": "and that was just not much fun and so it"
+  },
+  {
+   "t": 295.56,
+   "d": 1.5,
+   "text": "was that sort of like cruft"
+  },
+  {
+   "t": 297.06,
+   "d": 1.74,
+   "text": "that built up over time that we had to"
+  },
+  {
+   "t": 298.8,
+   "d": 1.71,
+   "text": "manually figure out when we wanted to"
+  },
+  {
+   "t": 300.51,
+   "d": 1.95,
+   "text": "change something that just took way too"
+  },
+  {
+   "t": 302.46,
+   "d": 2.58,
+   "text": "long I haven't worked with any ECS"
+  },
+  {
+   "t": 305.04,
+   "d": 2.25,
+   "text": "roguelike systems but I suspect that"
+  },
+  {
+   "t": 307.29,
+   "d": 1.59,
+   "text": "similar kinds of problems will occur"
+  },
+  {
+   "t": 308.88,
+   "d": 3.03,
+   "text": "there but I'd love to be wrong I hope"
+  },
+  {
+   "t": 311.91,
+   "d": 3.81,
+   "text": "I'm wrong so when we rebuilt the game in"
+  },
+  {
+   "t": 315.72,
+   "d": 2.82,
+   "text": "what was then unity 2.5 we chose a"
+  },
+  {
+   "t": 318.54,
+   "d": 2.1,
+   "text": "dynamic event handler model I hadn't"
+  },
+  {
+   "t": 320.64,
+   "d": 1.32,
+   "text": "heard of anybody else doing this for ugh"
+  },
+  {
+   "t": 321.96,
+   "d": 3.63,
+   "text": "lakes but the logic itself was simple if"
+  },
+  {
+   "t": 325.59,
+   "d": 1.86,
+   "text": "the game object hierarchy was just for"
+  },
+  {
+   "t": 327.45,
+   "d": 2.13,
+   "text": "maintaining and storing state so"
+  },
+  {
+   "t": 329.58,
+   "d": 1.83,
+   "text": "information about the health of an enemy"
+  },
+  {
+   "t": 331.41,
+   "d": 1.59,
+   "text": "for example or where it was or what it"
+  },
+  {
+   "t": 333.0,
+   "d": 2.82,
+   "text": "had in its inventory then we could shift"
+  },
+  {
+   "t": 335.82,
+   "d": 1.47,
+   "text": "all of our gameplay functionality to"
+  },
+  {
+   "t": 337.29,
+   "d": 1.74,
+   "text": "handlers that could listen for specific"
+  },
+  {
+   "t": 339.03,
+   "d": 2.31,
+   "text": "gameplay events and make changes to the"
+  },
+  {
+   "t": 341.34,
+   "d": 1.62,
+   "text": "game state recording me so we moved all"
+  },
+  {
+   "t": 342.96,
+   "d": 1.8,
+   "text": "of our state change information or state"
+  },
+  {
+   "t": 344.76,
+   "d": 2.79,
+   "text": "change code into handlers that didn't"
+  },
+  {
+   "t": 347.55,
+   "d": 1.29,
+   "text": "necessarily need to know much about the"
+  },
+  {
+   "t": 348.84,
+   "d": 0.99,
+   "text": "rest of the game they were just sort of"
+  },
+  {
+   "t": 349.83,
+   "d": 2.52,
+   "text": "like there are a bit like components but"
+  },
+  {
+   "t": 352.35,
+   "d": 1.41,
+   "text": "generalized components for the entire"
+  },
+  {
+   "t": 353.76,
+   "d": 6.15,
+   "text": "game so for an example we could do"
+  },
+  {
+   "t": 359.91,
+   "d": 3.0,
+   "text": "something like have a player throw item"
+  },
+  {
+   "t": 362.91,
+   "d": 2.16,
+   "text": "event which an item would emit whenever"
+  },
+  {
+   "t": 365.07,
+   "d": 2.37,
+   "text": "it got thrown that would be listened to"
+  },
+  {
+   "t": 367.44,
+   "d": 1.44,
+   "text": "by a throw handler which would handle"
+  },
+  {
+   "t": 368.88,
+   "d": 1.56,
+   "text": "the logic of actually throwing the item"
+  },
+  {
+   "t": 370.44,
+   "d": 4.2,
+   "text": "and then if that item was a potion we"
+  },
+  {
+   "t": 374.64,
+   "d": 2.76,
+   "text": "could say that throw handler could emit"
+  },
+  {
+   "t": 377.4,
+   "d": 1.8,
+   "text": "a quaff potion event when it hit an"
+  },
+  {
+   "t": 379.2,
+   "d": 3.12,
+   "text": "enemy and then you could have a begin"
+  },
+  {
+   "t": 382.32,
+   "d": 2.4,
+   "text": "levitating event that was thrown when a"
+  },
+  {
+   "t": 384.72,
+   "d": 1.47,
+   "text": "potion handler heard that cough potion"
+  },
+  {
+   "t": 386.19,
+   "d": 2.55,
+   "text": "event and then a god X handler could sit"
+  },
+  {
+   "t": 388.74,
+   "d": 1.89,
+   "text": "and listen to both of those and be like"
+  },
+  {
+   "t": 390.63,
+   "d": 2.97,
+   "text": "Oh a throw happened I like throwing good"
+  },
+  {
+   "t": 393.6,
+   "d": 2.88,
+   "text": "job or hey something started levitating"
+  },
+  {
+   "t": 396.48,
+   "d": 2.19,
+   "text": "I don't like that bad job"
+  },
+  {
+   "t": 398.67,
+   "d": 3.36,
+   "text": "that was pretty cool because it meant"
+  },
+  {
+   "t": 402.03,
+   "d": 1.29,
+   "text": "that we could put all of our special"
+  },
+  {
+   "t": 403.32,
+   "d": 2.1,
+   "text": "case God code into a single area and we"
+  },
+  {
+   "t": 405.42,
+   "d": 1.26,
+   "text": "could change it without affecting the"
+  },
+  {
+   "t": 406.68,
+   "d": 0.9,
+   "text": "rest of the game at all"
+  },
+  {
+   "t": 407.58,
+   "d": 2.82,
+   "text": "so suddenly our God balance like just"
+  },
+  {
+   "t": 410.4,
+   "d": 1.8,
+   "text": "leveled up because we could make loads"
+  },
+  {
+   "t": 412.2,
+   "d": 1.8,
+   "text": "of changes and we could also do things"
+  },
+  {
+   "t": 414.0,
+   "d": 1.68,
+   "text": "like impact the game in ways that we"
+  },
+  {
+   "t": 415.68,
+   "d": 1.41,
+   "text": "hadn't thought of before like what if"
+  },
+  {
+   "t": 417.09,
+   "d": 2.19,
+   "text": "your God was an and wanted to"
+  },
+  {
+   "t": 419.28,
+   "d": 1.62,
+   "text": "transmute the potion that you were"
+  },
+  {
+   "t": 420.9,
+   "d": 2.46,
+   "text": "throwing into something that gave them a"
+  },
+  {
+   "t": 423.36,
+   "d": 1.98,
+   "text": "positive you know something that buff"
+  },
+  {
+   "t": 425.34,
+   "d": 1.29,
+   "text": "the enemy every time you through in"
+  },
+  {
+   "t": 426.63,
+   "d": 1.02,
+   "text": "order to like discourage you from"
+  },
+  {
+   "t": 427.65,
+   "d": 2.6,
+   "text": "throwing stuff that would be interesting"
+  },
+  {
+   "t": 430.25,
+   "d": 3.85,
+   "text": "and so at worst when we had to rewrite a"
+  },
+  {
+   "t": 434.1,
+   "d": 1.41,
+   "text": "god or change balance we would literally"
+  },
+  {
+   "t": 435.51,
+   "d": 2.25,
+   "text": "just like add an event or two as opposed"
+  },
+  {
+   "t": 437.76,
+   "d": 1.8,
+   "text": "to like trolling through all our code to"
+  },
+  {
+   "t": 439.56,
+   "d": 1.65,
+   "text": "figure out where something was which"
+  },
+  {
+   "t": 441.21,
+   "d": 3.42,
+   "text": "made development much faster so this is"
+  },
+  {
+   "t": 444.63,
+   "d": 1.26,
+   "text": "the heart of desktop dungeons this is"
+  },
+  {
+   "t": 445.89,
+   "d": 1.38,
+   "text": "the only actual card I'll be showing you"
+  },
+  {
+   "t": 447.27,
+   "d": 2.07,
+   "text": "you really don't have to understand it"
+  },
+  {
+   "t": 449.34,
+   "d": 2.61,
+   "text": "but it's the core event manager that"
+  },
+  {
+   "t": 451.95,
+   "d": 2.31,
+   "text": "does some reflection to love polymorphic"
+  },
+  {
+   "t": 454.26,
+   "d": 1.62,
+   "text": "events at the correct handlers that's"
+  },
+  {
+   "t": 455.88,
+   "d": 0.6,
+   "text": "literally it"
+  },
+  {
+   "t": 456.48,
+   "d": 2.49,
+   "text": "the more interesting thing is the kind"
+  },
+  {
+   "t": 458.97,
+   "d": 1.56,
+   "text": "of blood that courses through this heart"
+  },
+  {
+   "t": 460.53,
+   "d": 2.58,
+   "text": "which is a series of game events those"
+  },
+  {
+   "t": 463.11,
+   "d": 2.49,
+   "text": "are essentially spawned from an"
+  },
+  {
+   "t": 465.6,
+   "d": 1.65,
+   "text": "interface manager that listens to player"
+  },
+  {
+   "t": 467.25,
+   "d": 2.43,
+   "text": "input so everything happens from player"
+  },
+  {
+   "t": 469.68,
+   "d": 1.53,
+   "text": "input this is a turn-based game there's"
+  },
+  {
+   "t": 471.21,
+   "d": 2.43,
+   "text": "no real-time element at all so once the"
+  },
+  {
+   "t": 473.64,
+   "d": 2.55,
+   "text": "player does something a event gets"
+  },
+  {
+   "t": 476.19,
+   "d": 1.5,
+   "text": "logged into this thing and that causes a"
+  },
+  {
+   "t": 477.69,
+   "d": 1.44,
+   "text": "cascade of other events as handlers"
+  },
+  {
+   "t": 479.13,
+   "d": 1.83,
+   "text": "listen to something and they lot more"
+  },
+  {
+   "t": 480.96,
+   "d": 4.02,
+   "text": "events into the queue and then once"
+  },
+  {
+   "t": 484.98,
+   "d": 1.95,
+   "text": "everything is percolated through this"
+  },
+  {
+   "t": 486.93,
+   "d": 1.77,
+   "text": "queue of events we know that that's the"
+  },
+  {
+   "t": 488.7,
+   "d": 1.56,
+   "text": "frame over and we can carry on with the"
+  },
+  {
+   "t": 490.26,
+   "d": 3.06,
+   "text": "rest of the game so here's an example of"
+  },
+  {
+   "t": 493.32,
+   "d": 2.94,
+   "text": "how that would work this is basic player"
+  },
+  {
+   "t": 496.26,
+   "d": 0.54,
+   "text": "movement"
+  },
+  {
+   "t": 496.8,
+   "d": 3.18,
+   "text": "I hope the gif is playing yes interface"
+  },
+  {
+   "t": 499.98,
+   "d": 2.49,
+   "text": "manager gets a lobs a grid click event"
+  },
+  {
+   "t": 502.47,
+   "d": 1.08,
+   "text": "because the player is like clicked"
+  },
+  {
+   "t": 503.55,
+   "d": 1.35,
+   "text": "somewhere in that space was not in the"
+  },
+  {
+   "t": 504.9,
+   "d": 2.31,
+   "text": "UI it was on a grid click handler"
+  },
+  {
+   "t": 507.21,
+   "d": 2.1,
+   "text": "receives a grid click event and checks"
+  },
+  {
+   "t": 509.31,
+   "d": 1.08,
+   "text": "to see what was on that point in the"
+  },
+  {
+   "t": 510.39,
+   "d": 1.77,
+   "text": "grid and goes cool there's nothing there"
+  },
+  {
+   "t": 512.16,
+   "d": 1.86,
+   "text": "or there's no enemy there I'm in a fire"
+  },
+  {
+   "t": 514.02,
+   "d": 2.07,
+   "text": "I move event the movement handler"
+  },
+  {
+   "t": 516.09,
+   "d": 2.22,
+   "text": "listens for a move event and checks to"
+  },
+  {
+   "t": 518.31,
+   "d": 1.56,
+   "text": "see if there's any space around that"
+  },
+  {
+   "t": 519.87,
+   "d": 1.56,
+   "text": "that hasn't been already revealed if"
+  },
+  {
+   "t": 521.43,
+   "d": 1.89,
+   "text": "that's true for each space the Disney"
+  },
+  {
+   "t": 523.32,
+   "d": 2.25,
+   "text": "are now revealed by the player we issue"
+  },
+  {
+   "t": 525.57,
+   "d": 2.34,
+   "text": "a reveal event and it goes ahead and"
+  },
+  {
+   "t": 527.91,
+   "d": 1.23,
+   "text": "changes the players position in the"
+  },
+  {
+   "t": 529.14,
+   "d": 1.98,
+   "text": "world state then the player region"
+  },
+  {
+   "t": 531.12,
+   "d": 0.84,
+   "text": "handler"
+  },
+  {
+   "t": 531.96,
+   "d": 3.28,
+   "text": "ignoring movement or anything just hears"
+  },
+  {
+   "t": 535.24,
+   "d": 1.89,
+   "text": "there's a reveal event and updates the"
+  },
+  {
+   "t": 537.13,
+   "d": 1.62,
+   "text": "player health and mana accordingly if it"
+  },
+  {
+   "t": 538.75,
+   "d": 1.83,
+   "text": "needs to and then various other things"
+  },
+  {
+   "t": 540.58,
+   "d": 1.68,
+   "text": "happen like you notice stuff moves"
+  },
+  {
+   "t": 542.26,
+   "d": 1.14,
+   "text": "around on the screen so we have some"
+  },
+  {
+   "t": 543.4,
+   "d": 1.35,
+   "text": "animation handlers that listen to both"
+  },
+  {
+   "t": 544.75,
+   "d": 1.92,
+   "text": "of those and a couple of other things"
+  },
+  {
+   "t": 546.67,
+   "d": 1.89,
+   "text": "the game state tends to change almost"
+  },
+  {
+   "t": 548.56,
+   "d": 1.92,
+   "text": "instantaneously and like animations"
+  },
+  {
+   "t": 550.48,
+   "d": 1.32,
+   "text": "happen after the fact so if you like"
+  },
+  {
+   "t": 551.8,
+   "d": 1.02,
+   "text": "click and do a whole bunch of things"
+  },
+  {
+   "t": 552.82,
+   "d": 0.75,
+   "text": "really fast"
+  },
+  {
+   "t": 553.57,
+   "d": 2.0,
+   "text": "the current animations stop and"
+  },
+  {
+   "t": 555.57,
+   "d": 3.16,
+   "text": "basically the game will accept the fact"
+  },
+  {
+   "t": 558.73,
+   "d": 1.44,
+   "text": "that you have decided to move time much"
+  },
+  {
+   "t": 560.17,
+   "d": 3.39,
+   "text": "faster than you want to see it combat"
+  },
+  {
+   "t": 563.56,
+   "d": 1.89,
+   "text": "works very similarly except the click"
+  },
+  {
+   "t": 565.45,
+   "d": 2.19,
+   "text": "hander when it receives a great click"
+  },
+  {
+   "t": 567.64,
+   "d": 2.13,
+   "text": "event goes oh there's an enemy here you"
+  },
+  {
+   "t": 569.77,
+   "d": 1.74,
+   "text": "must want to attack it so it issues an"
+  },
+  {
+   "t": 571.51,
+   "d": 1.92,
+   "text": "attack event attack hander hears that"
+  },
+  {
+   "t": 573.43,
+   "d": 3.09,
+   "text": "and fires usually an enemy deal melee"
+  },
+  {
+   "t": 576.52,
+   "d": 1.65,
+   "text": "damage event because enemies tend to hit"
+  },
+  {
+   "t": 578.17,
+   "d": 1.26,
+   "text": "you first and this you're like a puffed"
+  },
+  {
+   "t": 579.43,
+   "d": 2.46,
+   "text": "up and then attack handle here's the"
+  },
+  {
+   "t": 581.89,
+   "d": 1.38,
+   "text": "same event because it's like okay cool"
+  },
+  {
+   "t": 583.27,
+   "d": 3.99,
+   "text": "whatever and it deals with damage to the"
+  },
+  {
+   "t": 587.26,
+   "d": 3.72,
+   "text": "player by an enemy and if the player is"
+  },
+  {
+   "t": 590.98,
+   "d": 2.91,
+   "text": "still alive it lobs a player deal melee"
+  },
+  {
+   "t": 593.89,
+   "d": 2.46,
+   "text": "damage event right back an enemy damage"
+  },
+  {
+   "t": 596.35,
+   "d": 1.8,
+   "text": "handler hears that and makes the enemy"
+  },
+  {
+   "t": 598.15,
+   "d": 3.51,
+   "text": "take damage simple"
+  },
+  {
+   "t": 601.66,
+   "d": 2.97,
+   "text": "if the enemy dies the enemy damage"
+  },
+  {
+   "t": 604.63,
+   "d": 1.83,
+   "text": "handler lobs an enemy death event and"
+  },
+  {
+   "t": 606.46,
+   "d": 1.98,
+   "text": "drop handler listens to that and spawns"
+  },
+  {
+   "t": 608.44,
+   "d": 1.83,
+   "text": "any items if that enemy has stuff in its"
+  },
+  {
+   "t": 610.27,
+   "d": 2.4,
+   "text": "inventory and also an experienced"
+  },
+  {
+   "t": 612.67,
+   "d": 2.25,
+   "text": "handler hears that and it lobs up their"
+  },
+  {
+   "t": 614.92,
+   "d": 1.29,
+   "text": "experience event depending on whatever"
+  },
+  {
+   "t": 616.21,
+   "d": 1.68,
+   "text": "kind of things are currently affecting"
+  },
+  {
+   "t": 617.89,
+   "d": 1.89,
+   "text": "the experience state in the game and"
+  },
+  {
+   "t": 619.78,
+   "d": 1.41,
+   "text": "then there's a ton of animation events"
+  },
+  {
+   "t": 621.19,
+   "d": 1.2,
+   "text": "and handlers and other things instead on"
+  },
+  {
+   "t": 622.39,
+   "d": 1.25,
+   "text": "top of that as well"
+  },
+  {
+   "t": 623.64,
+   "d": 3.67,
+   "text": "so what that sounds like a lot of effort"
+  },
+  {
+   "t": 627.31,
+   "d": 2.16,
+   "text": "just to do what a basic roguelike gives"
+  },
+  {
+   "t": 629.47,
+   "d": 3.69,
+   "text": "you kind of for free that's true but the"
+  },
+  {
+   "t": 633.16,
+   "d": 1.59,
+   "text": "event system starts earning its keep"
+  },
+  {
+   "t": 634.75,
+   "d": 1.62,
+   "text": "when we realize that we can add handlers"
+  },
+  {
+   "t": 636.37,
+   "d": 0.42,
+   "text": "on-the-fly"
+  },
+  {
+   "t": 636.79,
+   "d": 2.16,
+   "text": "and we can essentially use our handler"
+  },
+  {
+   "t": 638.95,
+   "d": 4.32,
+   "text": "state as a input mediation system for"
+  },
+  {
+   "t": 643.27,
+   "d": 1.53,
+   "text": "what's happening in the game without"
+  },
+  {
+   "t": 644.8,
+   "d": 1.74,
+   "text": "having to add loads and loads of like"
+  },
+  {
+   "t": 646.54,
+   "d": 3.99,
+   "text": "special case ifs and whatever so for"
+  },
+  {
+   "t": 650.53,
+   "d": 2.31,
+   "text": "example enemies also regenerate when the"
+  },
+  {
+   "t": 652.84,
+   "d": 2.61,
+   "text": "player explores new terrain so all that"
+  },
+  {
+   "t": 655.45,
+   "d": 2.04,
+   "text": "happens in order to make that work is"
+  },
+  {
+   "t": 657.49,
+   "d": 3.45,
+   "text": "when an enemy takes damage through enemy"
+  },
+  {
+   "t": 660.94,
+   "d": 2.43,
+   "text": "damage handler it adds an enemy region"
+  },
+  {
+   "t": 663.37,
+   "d": 2.19,
+   "text": "handler specifically for that enemy"
+  },
+  {
+   "t": 665.56,
+   "d": 2.13,
+   "text": "and enemy reagent handlers just listen"
+  },
+  {
+   "t": 667.69,
+   "d": 1.29,
+   "text": "for reveal events the same things that"
+  },
+  {
+   "t": 668.98,
+   "d": 2.1,
+   "text": "regenerate the player and boom your"
+  },
+  {
+   "t": 671.08,
+   "d": 1.98,
+   "text": "enemy gains health as soon as that"
+  },
+  {
+   "t": 673.06,
+   "d": 2.49,
+   "text": "health is back up to full the enemy the"
+  },
+  {
+   "t": 675.55,
+   "d": 2.04,
+   "text": "region handler destroys itself and life"
+  },
+  {
+   "t": 677.59,
+   "d": 1.59,
+   "text": "is good so we don't have to worry about"
+  },
+  {
+   "t": 679.18,
+   "d": 1.74,
+   "text": "passing information back and forth and"
+  },
+  {
+   "t": 680.92,
+   "d": 1.08,
+   "text": "doing like a big loop through all the"
+  },
+  {
+   "t": 682.0,
+   "d": 1.47,
+   "text": "enemy is like hey is this thing damaged"
+  },
+  {
+   "t": 683.47,
+   "d": 3.93,
+   "text": "or not we don't care it just works and"
+  },
+  {
+   "t": 687.4,
+   "d": 2.1,
+   "text": "then another thing that works really"
+  },
+  {
+   "t": 689.5,
+   "d": 1.41,
+   "text": "well is like I said you have this kind"
+  },
+  {
+   "t": 690.91,
+   "d": 1.59,
+   "text": "of like opportunity for a state machine"
+  },
+  {
+   "t": 692.5,
+   "d": 1.59,
+   "text": "with your input based on your current"
+  },
+  {
+   "t": 694.09,
+   "d": 2.85,
+   "text": "handler State so why not just swap out"
+  },
+  {
+   "t": 696.94,
+   "d": 3.51,
+   "text": "click handler so if somebody clicks on"
+  },
+  {
+   "t": 700.45,
+   "d": 2.82,
+   "text": "the UI and say clicks on fireball the"
+  },
+  {
+   "t": 703.27,
+   "d": 2.43,
+   "text": "inventory handler goes cool I'm gonna do"
+  },
+  {
+   "t": 705.7,
+   "d": 1.86,
+   "text": "a check man event and the glyph cost"
+  },
+  {
+   "t": 707.56,
+   "d": 1.77,
+   "text": "handler goes oh you tried to cost this"
+  },
+  {
+   "t": 709.33,
+   "d": 2.61,
+   "text": "thing that's rad I'm gonna say they are"
+  },
+  {
+   "t": 711.94,
+   "d": 2.46,
+   "text": "loaded a fireball and it removes the"
+  },
+  {
+   "t": 714.4,
+   "d": 1.89,
+   "text": "click handler and puts in a fireball"
+  },
+  {
+   "t": 716.29,
+   "d": 1.38,
+   "text": "click handler which listens to all the"
+  },
+  {
+   "t": 717.67,
+   "d": 1.53,
+   "text": "same standard events that have a click"
+  },
+  {
+   "t": 719.2,
+   "d": 1.65,
+   "text": "handler would listen to and I mean it"
+  },
+  {
+   "t": 720.85,
+   "d": 1.47,
+   "text": "inherits from click handler so it has to"
+  },
+  {
+   "t": 722.32,
+   "d": 2.67,
+   "text": "but it behaves differently so suddenly"
+  },
+  {
+   "t": 724.99,
+   "d": 1.71,
+   "text": "now the players main interaction with"
+  },
+  {
+   "t": 726.7,
+   "d": 1.59,
+   "text": "the world is like instead of clicking on"
+  },
+  {
+   "t": 728.29,
+   "d": 1.62,
+   "text": "things and moving around it's hey you"
+  },
+  {
+   "t": 729.91,
+   "d": 1.95,
+   "text": "have a fireball loaded you can cost and"
+  },
+  {
+   "t": 731.86,
+   "d": 1.44,
+   "text": "do damage to which worked quite"
+  },
+  {
+   "t": 733.3,
+   "d": 3.06,
+   "text": "nicely if that fireball hand that click"
+  },
+  {
+   "t": 736.36,
+   "d": 1.71,
+   "text": "handler receives a cryptic event it"
+  },
+  {
+   "t": 738.07,
+   "d": 2.04,
+   "text": "either emits a cost fireball event and"
+  },
+  {
+   "t": 740.11,
+   "d": 2.43,
+   "text": "other things handle that or a moon event"
+  },
+  {
+   "t": 742.54,
+   "d": 1.71,
+   "text": "or it removes itself from the game"
+  },
+  {
+   "t": 744.25,
+   "d": 1.35,
+   "text": "entirely because the tears right clicked"
+  },
+  {
+   "t": 745.6,
+   "d": 1.95,
+   "text": "or canceled in some way and it replaces"
+  },
+  {
+   "t": 747.55,
+   "d": 2.13,
+   "text": "the click handler back so instantly"
+  },
+  {
+   "t": 749.68,
+   "d": 1.14,
+   "text": "there's a whole bunch of stuff that like"
+  },
+  {
+   "t": 750.82,
+   "d": 1.41,
+   "text": "the click handler doesn't have to know"
+  },
+  {
+   "t": 752.23,
+   "d": 1.98,
+   "text": "how fireballs work at all we basically"
+  },
+  {
+   "t": 754.21,
+   "d": 1.95,
+   "text": "just have this is your game interaction"
+  },
+  {
+   "t": 756.16,
+   "d": 3.12,
+   "text": "state is kind of easy to change and"
+  },
+  {
+   "t": 759.28,
+   "d": 1.44,
+   "text": "adding different change to that is also"
+  },
+  {
+   "t": 760.72,
+   "d": 1.38,
+   "text": "really easy like if we add a new spell"
+  },
+  {
+   "t": 762.1,
+   "d": 1.08,
+   "text": "we don't have to make any of the other"
+  },
+  {
+   "t": 763.18,
+   "d": 0.93,
+   "text": "spells care about it"
+  },
+  {
+   "t": 764.11,
+   "d": 1.62,
+   "text": "or any of the other systems care about"
+  },
+  {
+   "t": 765.73,
+   "d": 3.15,
+   "text": "that spell so this worked out pretty"
+  },
+  {
+   "t": 768.88,
+   "d": 2.82,
+   "text": "well especially because we could give"
+  },
+  {
+   "t": 771.7,
+   "d": 2.22,
+   "text": "our UI its own set of handlers and thus"
+  },
+  {
+   "t": 773.92,
+   "d": 2.19,
+   "text": "achieve the dream of fully separating"
+  },
+  {
+   "t": 776.11,
+   "d": 4.4,
+   "text": "your UI from your game logic in theory"
+  },
+  {
+   "t": 780.51,
+   "d": 2.2,
+   "text": "because UI often needed a bunch of"
+  },
+  {
+   "t": 782.71,
+   "d": 1.32,
+   "text": "information from events that require"
+  },
+  {
+   "t": 784.03,
+   "d": 1.59,
+   "text": "other handlers to touch those events"
+  },
+  {
+   "t": 785.62,
+   "d": 1.74,
+   "text": "first to find out like what was the"
+  },
+  {
+   "t": 787.36,
+   "d": 3.12,
+   "text": "final state of something in the game you"
+  },
+  {
+   "t": 790.48,
+   "d": 1.29,
+   "text": "know like how much experience were you"
+  },
+  {
+   "t": 791.77,
+   "d": 1.44,
+   "text": "really earning like if a god is angry"
+  },
+  {
+   "t": 793.21,
+   "d": 1.11,
+   "text": "with you maybe it would dock some"
+  },
+  {
+   "t": 794.32,
+   "d": 1.23,
+   "text": "experience if you listen to that"
+  },
+  {
+   "t": 795.55,
+   "d": 2.49,
+   "text": "experience owned event super early you"
+  },
+  {
+   "t": 798.04,
+   "d": 1.06,
+   "text": "were going to get the wrong amount"
+  },
+  {
+   "t": 799.1,
+   "d": 1.5,
+   "text": "you I was going to be in a mismatched"
+  },
+  {
+   "t": 800.6,
+   "d": 2.37,
+   "text": "state so rather than set up UI specific"
+  },
+  {
+   "t": 802.97,
+   "d": 2.7,
+   "text": "events we implemented a priority system"
+  },
+  {
+   "t": 805.67,
+   "d": 1.8,
+   "text": "for handlers and shoved our UI handlers"
+  },
+  {
+   "t": 807.47,
+   "d": 1.26,
+   "text": "all the way to the back of the queue so"
+  },
+  {
+   "t": 808.73,
+   "d": 1.5,
+   "text": "they would get an event after everything"
+  },
+  {
+   "t": 810.23,
+   "d": 1.17,
+   "text": "had already touched it and then we'd be"
+  },
+  {
+   "t": 811.4,
+   "d": 2.57,
+   "text": "like cool the final value is this yeah"
+  },
+  {
+   "t": 813.97,
+   "d": 3.1,
+   "text": "we also added a bunch of functionality"
+  },
+  {
+   "t": 817.07,
+   "d": 1.56,
+   "text": "to sort of like inject events in two"
+  },
+  {
+   "t": 818.63,
+   "d": 1.41,
+   "text": "different places in the event handling"
+  },
+  {
+   "t": 820.04,
+   "d": 1.95,
+   "text": "queue we could either like interrupt the"
+  },
+  {
+   "t": 821.99,
+   "d": 2.07,
+   "text": "current queue or insert after the"
+  },
+  {
+   "t": 824.06,
+   "d": 2.1,
+   "text": "current event at being finished being"
+  },
+  {
+   "t": 826.16,
+   "d": 1.71,
+   "text": "processed or insert all the way at the"
+  },
+  {
+   "t": 827.87,
+   "d": 1.44,
+   "text": "end of the queue which is quite useful"
+  },
+  {
+   "t": 829.31,
+   "d": 3.99,
+   "text": "so if we knew our UI state was incorrect"
+  },
+  {
+   "t": 833.3,
+   "d": 1.95,
+   "text": "we can add a UI Refresh event all the"
+  },
+  {
+   "t": 835.25,
+   "d": 0.9,
+   "text": "way at the end of the queue and that"
+  },
+  {
+   "t": 836.15,
+   "d": 1.02,
+   "text": "would sort of go through everything and"
+  },
+  {
+   "t": 837.17,
+   "d": 2.1,
+   "text": "make sure that anything that needed to"
+  },
+  {
+   "t": 839.27,
+   "d": 1.71,
+   "text": "do a UI refresh could listen for that"
+  },
+  {
+   "t": 840.98,
+   "d": 2.16,
+   "text": "event and go okay cool I need to make"
+  },
+  {
+   "t": 843.14,
+   "d": 2.66,
+   "text": "sure that my information is correct"
+  },
+  {
+   "t": 845.8,
+   "d": 3.58,
+   "text": "our biggest problem came from UI in the"
+  },
+  {
+   "t": 849.38,
+   "d": 2.85,
+   "text": "end it came from combat prediction the"
+  },
+  {
+   "t": 852.23,
+   "d": 1.17,
+   "text": "event system had this sort of like"
+  },
+  {
+   "t": 853.4,
+   "d": 3.06,
+   "text": "built-in idea of a simulated event which"
+  },
+  {
+   "t": 856.46,
+   "d": 2.88,
+   "text": "we were using to show the player what"
+  },
+  {
+   "t": 859.34,
+   "d": 1.41,
+   "text": "would happen when you clicked on an"
+  },
+  {
+   "t": 860.75,
+   "d": 1.95,
+   "text": "enemy we also wanted to show the player"
+  },
+  {
+   "t": 862.7,
+   "d": 3.27,
+   "text": "what would happen how that combat would"
+  },
+  {
+   "t": 865.97,
+   "d": 1.95,
+   "text": "evolve over time and give you kind of"
+  },
+  {
+   "t": 867.92,
+   "d": 2.25,
+   "text": "like a little bit of a view of like how"
+  },
+  {
+   "t": 870.17,
+   "d": 1.38,
+   "text": "long it'll take you to kill something so"
+  },
+  {
+   "t": 871.55,
+   "d": 1.23,
+   "text": "in that screenshot above you can see"
+  },
+  {
+   "t": 872.78,
+   "d": 2.01,
+   "text": "that like you'll take X amount of damage"
+  },
+  {
+   "t": 874.79,
+   "d": 3.15,
+   "text": "when you attack this guy and there's a"
+  },
+  {
+   "t": 877.94,
+   "d": 1.86,
+   "text": "second little pip there on the Nagas"
+  },
+  {
+   "t": 879.8,
+   "d": 1.59,
+   "text": "health bar which shows you how much"
+  },
+  {
+   "t": 881.39,
+   "d": 1.53,
+   "text": "damage you'll do the second time you"
+  },
+  {
+   "t": 882.92,
+   "d": 2.61,
+   "text": "attack unfortunately you'll be dead"
+  },
+  {
+   "t": 885.53,
+   "d": 1.02,
+   "text": "rather the second time you attack"
+  },
+  {
+   "t": 886.55,
+   "d": 1.29,
+   "text": "because there's no second pip on your"
+  },
+  {
+   "t": 887.84,
+   "d": 2.1,
+   "text": "health bar there's very subtle things"
+  },
+  {
+   "t": 889.94,
+   "d": 1.29,
+   "text": "like that that make people still think"
+  },
+  {
+   "t": 891.23,
+   "d": 1.56,
+   "text": "desktop dungeons requires a huge amount"
+  },
+  {
+   "t": 892.79,
+   "d": 3.72,
+   "text": "of mass I would have designed that"
+  },
+  {
+   "t": 896.51,
+   "d": 1.86,
+   "text": "better had I realized the problem but"
+  },
+  {
+   "t": 898.37,
+   "d": 2.15,
+   "text": "yeah"
+  },
+  {
+   "t": 900.55,
+   "d": 4.54,
+   "text": "so ideally we wanted to have this kind"
+  },
+  {
+   "t": 905.09,
+   "d": 1.65,
+   "text": "of work off the current game state and"
+  },
+  {
+   "t": 906.74,
+   "d": 1.77,
+   "text": "not change anything"
+  },
+  {
+   "t": 908.51,
+   "d": 1.44,
+   "text": "which is why simulated events weren't"
+  },
+  {
+   "t": 909.95,
+   "d": 1.44,
+   "text": "allowed to change the game State at all"
+  },
+  {
+   "t": 911.39,
+   "d": 0.99,
+   "text": "if something was coming into the"
+  },
+  {
+   "t": 912.38,
+   "d": 2.13,
+   "text": "simulated queue it couldn't affect the"
+  },
+  {
+   "t": 914.51,
+   "d": 2.7,
+   "text": "world this was a bit of a mistake"
+  },
+  {
+   "t": 917.21,
+   "d": 1.35,
+   "text": "because it meant that we had to sort of"
+  },
+  {
+   "t": 918.56,
+   "d": 2.79,
+   "text": "like duplicate some elements of the game"
+  },
+  {
+   "t": 921.35,
+   "d": 1.62,
+   "text": "state like how much enemy health you had"
+  },
+  {
+   "t": 922.97,
+   "d": 2.16,
+   "text": "or what debuffs the enemy had put on you"
+  },
+  {
+   "t": 925.13,
+   "d": 1.26,
+   "text": "I mean the the Naga over there will"
+  },
+  {
+   "t": 926.39,
+   "d": 1.5,
+   "text": "weaken you every time you attack you"
+  },
+  {
+   "t": 927.89,
+   "d": 1.56,
+   "text": "attack it so that's one less damage so"
+  },
+  {
+   "t": 929.45,
+   "d": 2.25,
+   "text": "that sort of stacks over time that got"
+  },
+  {
+   "t": 931.7,
+   "d": 0.99,
+   "text": "complicated"
+  },
+  {
+   "t": 932.69,
+   "d": 2.34,
+   "text": "it would have been much easier had we"
+  },
+  {
+   "t": 935.03,
+   "d": 2.73,
+   "text": "focused more on making our game state"
+  },
+  {
+   "t": 937.76,
+   "d": 2.25,
+   "text": "decoupled from a lot of our graphics in"
+  },
+  {
+   "t": 940.01,
+   "d": 1.5,
+   "text": "the game and then we could have had like"
+  },
+  {
+   "t": 941.51,
+   "d": 2.04,
+   "text": "here's a game state so a simulated event"
+  },
+  {
+   "t": 943.55,
+   "d": 1.62,
+   "text": "chain would just start with a game state"
+  },
+  {
+   "t": 945.17,
+   "d": 1.38,
+   "text": "and return a new one at the end of it"
+  },
+  {
+   "t": 946.55,
+   "d": 1.56,
+   "text": "and then you could always get a new game"
+  },
+  {
+   "t": 948.11,
+   "d": 1.92,
+   "text": "state and have your next simulated"
+  },
+  {
+   "t": 950.03,
+   "d": 1.23,
+   "text": "attack event your next imminent attack"
+  },
+  {
+   "t": 951.26,
+   "d": 1.65,
+   "text": "event until one of those game states"
+  },
+  {
+   "t": 952.91,
+   "d": 1.68,
+   "text": "either showed a dead player or a dead"
+  },
+  {
+   "t": 954.59,
+   "d": 1.74,
+   "text": "enemy and then we could just pause that"
+  },
+  {
+   "t": 956.33,
+   "d": 1.98,
+   "text": "back and turn that into some UI"
+  },
+  {
+   "t": 958.31,
+   "d": 4.29,
+   "text": "information which would've been great we"
+  },
+  {
+   "t": 962.6,
+   "d": 1.74,
+   "text": "also ended up using events kind of like"
+  },
+  {
+   "t": 964.34,
+   "d": 1.56,
+   "text": "everywhere I mean this was the backbone"
+  },
+  {
+   "t": 965.9,
+   "d": 2.34,
+   "text": "of the game so every time we added a new"
+  },
+  {
+   "t": 968.24,
+   "d": 1.5,
+   "text": "system we kind of just were like hey how"
+  },
+  {
+   "t": 969.74,
+   "d": 1.44,
+   "text": "can we do that with event handlers yeah"
+  },
+  {
+   "t": 971.18,
+   "d": 2.01,
+   "text": "sometimes that might have been a bad"
+  },
+  {
+   "t": 973.19,
+   "d": 2.64,
+   "text": "idea other times it was really useful in"
+  },
+  {
+   "t": 975.83,
+   "d": 2.25,
+   "text": "level generation we ended up switching"
+  },
+  {
+   "t": 978.08,
+   "d": 3.12,
+   "text": "to an event based system and in safe"
+  },
+  {
+   "t": 981.2,
+   "d": 2.1,
+   "text": "games as well it started off a really"
+  },
+  {
+   "t": 983.3,
+   "d": 1.41,
+   "text": "bad idea but then turned out really"
+  },
+  {
+   "t": 984.71,
+   "d": 3.15,
+   "text": "useful so level generation events"
+  },
+  {
+   "t": 987.86,
+   "d": 1.8,
+   "text": "happened at the beginning of a new game"
+  },
+  {
+   "t": 989.66,
+   "d": 1.26,
+   "text": "you would sort of like enter a dungeon"
+  },
+  {
+   "t": 990.92,
+   "d": 1.8,
+   "text": "and that dungeon would have a standard"
+  },
+  {
+   "t": 992.72,
+   "d": 1.17,
+   "text": "recipe of events that it would squirt"
+  },
+  {
+   "t": 993.89,
+   "d": 2.7,
+   "text": "into the queue we would then change a"
+  },
+  {
+   "t": 996.59,
+   "d": 1.8,
+   "text": "series of handlers that would listen for"
+  },
+  {
+   "t": 998.39,
+   "d": 1.62,
+   "text": "those events so they'd be a terrain"
+  },
+  {
+   "t": 1000.01,
+   "d": 1.71,
+   "text": "generator it'd be like a maze terrain"
+  },
+  {
+   "t": 1001.72,
+   "d": 2.67,
+   "text": "generator and it'd be like a interlocked"
+  },
+  {
+   "t": 1004.39,
+   "d": 1.74,
+   "text": "room generator or a non interlocked room"
+  },
+  {
+   "t": 1006.13,
+   "d": 1.2,
+   "text": "generator and those would will listen to"
+  },
+  {
+   "t": 1007.33,
+   "d": 1.5,
+   "text": "the various events that we wanted so an"
+  },
+  {
+   "t": 1008.83,
+   "d": 1.71,
+   "text": "event would be like how much terrain we"
+  },
+  {
+   "t": 1010.54,
+   "d": 2.4,
+   "text": "wanted in this map how possible that"
+  },
+  {
+   "t": 1012.94,
+   "d": 1.65,
+   "text": "terrain needed to be how many time you"
+  },
+  {
+   "t": 1014.59,
+   "d": 1.82,
+   "text": "lava tiles they were that sort of thing"
+  },
+  {
+   "t": 1016.41,
+   "d": 2.56,
+   "text": "and we would also have a bunch of things"
+  },
+  {
+   "t": 1018.97,
+   "d": 2.34,
+   "text": "like spawn enemies of level n here you"
+  },
+  {
+   "t": 1021.31,
+   "d": 1.62,
+   "text": "know and you just like fire five of them"
+  },
+  {
+   "t": 1022.93,
+   "d": 1.68,
+   "text": "in a row and then like you know five"
+  },
+  {
+   "t": 1024.61,
+   "d": 2.55,
+   "text": "level nine enemies four level eights etc"
+  },
+  {
+   "t": 1027.16,
+   "d": 2.76,
+   "text": "etc etc those events didn't need to know"
+  },
+  {
+   "t": 1029.92,
+   "d": 2.19,
+   "text": "where those enemies were gonna spawn but"
+  },
+  {
+   "t": 1032.11,
+   "d": 2.94,
+   "text": "we would have say like an enemy spawn"
+  },
+  {
+   "t": 1035.05,
+   "d": 2.55,
+   "text": "manager or spawn Handler that were we"
+  },
+  {
+   "t": 1037.6,
+   "d": 1.14,
+   "text": "could swap out so there would be things"
+  },
+  {
+   "t": 1038.74,
+   "d": 2.03,
+   "text": "that would like spawn in clusters or"
+  },
+  {
+   "t": 1040.77,
+   "d": 2.14,
+   "text": "logic that would put enemies very close"
+  },
+  {
+   "t": 1042.91,
+   "d": 0.99,
+   "text": "to the player if they were a low-level"
+  },
+  {
+   "t": 1043.9,
+   "d": 1.56,
+   "text": "to help you out if you've been dying a"
+  },
+  {
+   "t": 1045.46,
+   "d": 3.21,
+   "text": "lot that sort of thing doing that meant"
+  },
+  {
+   "t": 1048.67,
+   "d": 1.68,
+   "text": "that we could have a lot of cool"
+  },
+  {
+   "t": 1050.35,
+   "d": 3.0,
+   "text": "interactions with how our levels are"
+  },
+  {
+   "t": 1053.35,
+   "d": 1.23,
+   "text": "being generated and we could also do"
+  },
+  {
+   "t": 1054.58,
+   "d": 1.92,
+   "text": "things like if you took something in"
+  },
+  {
+   "t": 1056.5,
+   "d": 1.62,
+   "text": "with you from the kingdom that could"
+  },
+  {
+   "t": 1058.12,
+   "d": 1.44,
+   "text": "change the handlers that were waiting"
+  },
+  {
+   "t": 1059.56,
+   "d": 2.4,
+   "text": "for you the events to arrive and you"
+  },
+  {
+   "t": 1061.96,
+   "d": 1.5,
+   "text": "could do things like oh we can make"
+  },
+  {
+   "t": 1063.46,
+   "d": 1.53,
+   "text": "certain gods appear"
+  },
+  {
+   "t": 1064.99,
+   "d": 1.38,
+   "text": "we can make certain things happen much"
+  },
+  {
+   "t": 1066.37,
+   "d": 1.14,
+   "text": "closer to the player or certain things"
+  },
+  {
+   "t": 1067.51,
+   "d": 1.14,
+   "text": "happen much further away from the player"
+  },
+  {
+   "t": 1068.65,
+   "d": 2.04,
+   "text": "if like X God is angry with you that was"
+  },
+  {
+   "t": 1070.69,
+   "d": 2.97,
+   "text": "quite useful and each of these dungeon"
+  },
+  {
+   "t": 1073.66,
+   "d": 3.66,
+   "text": "locations in the game had a basic pool"
+  },
+  {
+   "t": 1077.32,
+   "d": 2.07,
+   "text": "of sort of like I think three or four"
+  },
+  {
+   "t": 1079.39,
+   "d": 2.31,
+   "text": "different handlers per system so three"
+  },
+  {
+   "t": 1081.7,
+   "d": 1.59,
+   "text": "or four handlers for like level"
+  },
+  {
+   "t": 1083.29,
+   "d": 1.59,
+   "text": "generation three or four handlers for"
+  },
+  {
+   "t": 1084.88,
+   "d": 1.68,
+   "text": "enemy placement three or four handlers"
+  },
+  {
+   "t": 1086.56,
+   "d": 2.99,
+   "text": "for item placement and item recipes and"
+  },
+  {
+   "t": 1089.55,
+   "d": 2.77,
+   "text": "we just mist mix and match those and"
+  },
+  {
+   "t": 1092.32,
+   "d": 2.94,
+   "text": "changed the actual recipes of events"
+  },
+  {
+   "t": 1095.26,
+   "d": 1.59,
+   "text": "that went into each of these dungeons"
+  },
+  {
+   "t": 1096.85,
+   "d": 1.71,
+   "text": "and we ended up with like you know a"
+  },
+  {
+   "t": 1098.56,
+   "d": 1.35,
+   "text": "hoard of dungeons that feel very very"
+  },
+  {
+   "t": 1099.91,
+   "d": 1.8,
+   "text": "different but each one is kind of like"
+  },
+  {
+   "t": 1101.71,
+   "d": 2.28,
+   "text": "if you're in sort of the east you know"
+  },
+  {
+   "t": 1103.99,
+   "d": 1.14,
+   "text": "you're in the east because it feels"
+  },
+  {
+   "t": 1105.13,
+   "d": 4.31,
+   "text": "similar desktop functions is save games"
+  },
+  {
+   "t": 1109.44,
+   "d": 2.62,
+   "text": "were something that big were always"
+  },
+  {
+   "t": 1112.06,
+   "d": 3.78,
+   "text": "events and that was complicated at first"
+  },
+  {
+   "t": 1115.84,
+   "d": 1.53,
+   "text": "but end up being really Ryu SFIL for us"
+  },
+  {
+   "t": 1117.37,
+   "d": 1.05,
+   "text": "because you're running this kind of like"
+  },
+  {
+   "t": 1118.42,
+   "d": 1.53,
+   "text": "online beta where people were playing"
+  },
+  {
+   "t": 1119.95,
+   "d": 1.26,
+   "text": "the game in a way in their web client"
+  },
+  {
+   "t": 1121.21,
+   "d": 2.43,
+   "text": "and in two and a half years of doing an"
+  },
+  {
+   "t": 1123.64,
+   "d": 2.43,
+   "text": "early access thing we never did a reset"
+  },
+  {
+   "t": 1126.07,
+   "d": 2.25,
+   "text": "once so players always kept their"
+  },
+  {
+   "t": 1128.32,
+   "d": 2.61,
+   "text": "progress and we changed that Kingdom and"
+  },
+  {
+   "t": 1130.93,
+   "d": 1.73,
+   "text": "we changed the game a lot in that time"
+  },
+  {
+   "t": 1132.66,
+   "d": 3.34,
+   "text": "but because save games were essentially"
+  },
+  {
+   "t": 1136.0,
+   "d": 2.25,
+   "text": "just like serialized strings of events"
+  },
+  {
+   "t": 1138.25,
+   "d": 1.95,
+   "text": "and those events were like player built"
+  },
+  {
+   "t": 1140.2,
+   "d": 1.68,
+   "text": "a building here player finished a run"
+  },
+  {
+   "t": 1141.88,
+   "d": 2.52,
+   "text": "player upgraded this thing if one of"
+  },
+  {
+   "t": 1144.4,
+   "d": 1.77,
+   "text": "those events was no longer handled by a"
+  },
+  {
+   "t": 1146.17,
+   "d": 1.95,
+   "text": "handler when the serialize have played"
+  },
+  {
+   "t": 1148.12,
+   "d": 2.28,
+   "text": "them back D Vinge is fizzled nothing"
+  },
+  {
+   "t": 1150.4,
+   "d": 2.16,
+   "text": "went wrong and you know if that building"
+  },
+  {
+   "t": 1152.56,
+   "d": 1.5,
+   "text": "no longer existed cool that building was"
+  },
+  {
+   "t": 1154.06,
+   "d": 2.28,
+   "text": "no longer upgraded yeh that made life"
+  },
+  {
+   "t": 1156.34,
+   "d": 1.86,
+   "text": "really easy for us and because we only"
+  },
+  {
+   "t": 1158.2,
+   "d": 1.77,
+   "text": "stored events when they were being"
+  },
+  {
+   "t": 1159.97,
+   "d": 2.28,
+   "text": "handled by something in the game and"
+  },
+  {
+   "t": 1162.25,
+   "d": 2.55,
+   "text": "therefore they changed the game state we"
+  },
+  {
+   "t": 1164.8,
+   "d": 1.08,
+   "text": "didn't have to worry about pruning"
+  },
+  {
+   "t": 1165.88,
+   "d": 1.2,
+   "text": "events they were just automatically"
+  },
+  {
+   "t": 1167.08,
+   "d": 2.49,
+   "text": "pruning themselves from a save game at"
+  },
+  {
+   "t": 1169.57,
+   "d": 2.37,
+   "text": "the end of it that was quite useful um"
+  },
+  {
+   "t": 1171.94,
+   "d": 2.94,
+   "text": "we did run into an issue that would have"
+  },
+  {
+   "t": 1174.88,
+   "d": 2.25,
+   "text": "hit us I think the last year the game"
+  },
+  {
+   "t": 1177.13,
+   "d": 2.64,
+   "text": "fully released in 2015 so it took three"
+  },
+  {
+   "t": 1179.77,
+   "d": 4.59,
+   "text": "years for a save game file size bug to"
+  },
+  {
+   "t": 1184.36,
+   "d": 3.33,
+   "text": "hit us and had we not had we done a"
+  },
+  {
+   "t": 1187.69,
+   "d": 1.59,
+   "text": "reset when we released the game we"
+  },
+  {
+   "t": 1189.28,
+   "d": 1.11,
+   "text": "wouldn't have realized that was the"
+  },
+  {
+   "t": 1190.39,
+   "d": 1.5,
+   "text": "thing so that happened like literally"
+  },
+  {
+   "t": 1191.89,
+   "d": 1.83,
+   "text": "like a month after release because we"
+  },
+  {
+   "t": 1193.72,
+   "d": 2.13,
+   "text": "had some players who had huge save games"
+  },
+  {
+   "t": 1195.85,
+   "d": 2.07,
+   "text": "which was quite a useful thing like I"
+  },
+  {
+   "t": 1197.92,
+   "d": 1.23,
+   "text": "really would not have enjoyed"
+  },
+  {
+   "t": 1199.15,
+   "d": 1.86,
+   "text": "having to do support on this thing last"
+  },
+  {
+   "t": 1201.01,
+   "d": 3.0,
+   "text": "year as opposed to you know just after"
+  },
+  {
+   "t": 1204.01,
+   "d": 4.44,
+   "text": "release so advice if you would like to"
+  },
+  {
+   "t": 1208.45,
+   "d": 1.44,
+   "text": "experiment with this kind of system"
+  },
+  {
+   "t": 1209.89,
+   "d": 1.44,
+   "text": "yourself"
+  },
+  {
+   "t": 1211.33,
+   "d": 2.97,
+   "text": "I think event handlers an event list"
+  },
+  {
+   "t": 1214.3,
+   "d": 1.56,
+   "text": "especially if they're dynamic can be"
+  },
+  {
+   "t": 1215.86,
+   "d": 2.15,
+   "text": "really interesting for roguelike games I"
+  },
+  {
+   "t": 1218.01,
+   "d": 2.53,
+   "text": "have to cap it and say I don't think"
+  },
+  {
+   "t": 1220.54,
+   "d": 2.76,
+   "text": "they're very performant you know cache"
+  },
+  {
+   "t": 1223.3,
+   "d": 1.95,
+   "text": "misses and all that you're basically"
+  },
+  {
+   "t": 1225.25,
+   "d": 2.34,
+   "text": "guaranteed to do that all the time so"
+  },
+  {
+   "t": 1227.59,
+   "d": 1.56,
+   "text": "for a real-time game maybe not the best"
+  },
+  {
+   "t": 1229.15,
+   "d": 3.12,
+   "text": "choice for a turn-based game we tested"
+  },
+  {
+   "t": 1232.27,
+   "d": 2.01,
+   "text": "in the beginning of this and logged sort"
+  },
+  {
+   "t": 1234.28,
+   "d": 1.74,
+   "text": "of thousands of events per frame and"
+  },
+  {
+   "t": 1236.02,
+   "d": 2.28,
+   "text": "nothing really cared like we wouldn't"
+  },
+  {
+   "t": 1238.3,
+   "d": 2.61,
+   "text": "have huge drops so that didn't matter so"
+  },
+  {
+   "t": 1240.91,
+   "d": 1.95,
+   "text": "for our purposes I think the largest"
+  },
+  {
+   "t": 1242.86,
+   "d": 1.8,
+   "text": "event queue in desktop engine at the"
+  },
+  {
+   "t": 1244.66,
+   "d": 2.73,
+   "text": "moment is like something like if you're"
+  },
+  {
+   "t": 1247.39,
+   "d": 2.43,
+   "text": "worshiping one God and have a pact and"
+  },
+  {
+   "t": 1249.82,
+   "d": 2.61,
+   "text": "cast a spell and an enemy that's spell"
+  },
+  {
+   "t": 1252.43,
+   "d": 2.91,
+   "text": "immune and it just carries on on I think"
+  },
+  {
+   "t": 1255.34,
+   "d": 2.43,
+   "text": "we had like 50 events so that really"
+  },
+  {
+   "t": 1257.77,
+   "d": 2.04,
+   "text": "doesn't have a big performance hit if"
+  },
+  {
+   "t": 1259.81,
+   "d": 1.44,
+   "text": "there's loads of systems in your game"
+  },
+  {
+   "t": 1261.25,
+   "d": 4.05,
+   "text": "maybe that'll be an issue so yeah this"
+  },
+  {
+   "t": 1265.3,
+   "d": 1.05,
+   "text": "isn't necessarily a massive"
+  },
+  {
+   "t": 1266.35,
+   "d": 1.5,
+   "text": "e-performance system it is however a"
+  },
+  {
+   "t": 1267.85,
+   "d": 2.34,
+   "text": "massively functional system if you want"
+  },
+  {
+   "t": 1270.19,
+   "d": 1.29,
+   "text": "to change your game a lot which is quite"
+  },
+  {
+   "t": 1271.48,
+   "d": 5.82,
+   "text": "fun so if you continuously save events"
+  },
+  {
+   "t": 1277.3,
+   "d": 1.83,
+   "text": "as they change the game state you"
+  },
+  {
+   "t": 1279.13,
+   "d": 2.64,
+   "text": "basically get replays we used a replay"
+  },
+  {
+   "t": 1281.77,
+   "d": 2.25,
+   "text": "system for our save games which was"
+  },
+  {
+   "t": 1284.02,
+   "d": 1.74,
+   "text": "great but we didn't do it in actual"
+  },
+  {
+   "t": 1285.76,
+   "d": 3.75,
+   "text": "gameplay itself if you build a replay"
+  },
+  {
+   "t": 1289.51,
+   "d": 2.37,
+   "text": "system from the word go and so you can"
+  },
+  {
+   "t": 1291.88,
+   "d": 2.76,
+   "text": "basically replay any run that is a"
+  },
+  {
+   "t": 1294.64,
+   "d": 1.98,
+   "text": "really awesome thing that event systems"
+  },
+  {
+   "t": 1296.62,
+   "d": 1.71,
+   "text": "give you basically for free which is"
+  },
+  {
+   "t": 1298.33,
+   "d": 3.87,
+   "text": "super nice I tried to build one after a"
+  },
+  {
+   "t": 1302.2,
+   "d": 1.29,
+   "text": "couple years and it was just a little"
+  },
+  {
+   "t": 1303.49,
+   "d": 2.01,
+   "text": "bit too complicated the other thing is"
+  },
+  {
+   "t": 1305.5,
+   "d": 1.38,
+   "text": "like there are a couple ways of doing"
+  },
+  {
+   "t": 1306.88,
+   "d": 2.52,
+   "text": "undos in a system like this you could"
+  },
+  {
+   "t": 1309.4,
+   "d": 3.15,
+   "text": "either like make sure at initial"
+  },
+  {
+   "t": 1312.55,
+   "d": 2.7,
+   "text": "creation time that all your events that"
+  },
+  {
+   "t": 1315.25,
+   "d": 1.59,
+   "text": "change game state are necessarily"
+  },
+  {
+   "t": 1316.84,
+   "d": 2.7,
+   "text": "reversible you know and then basically"
+  },
+  {
+   "t": 1319.54,
+   "d": 1.59,
+   "text": "you just whenever you have your stack of"
+  },
+  {
+   "t": 1321.13,
+   "d": 1.56,
+   "text": "game events that have changed the state"
+  },
+  {
+   "t": 1322.69,
+   "d": 1.59,
+   "text": "you just pop one back off and reverse it"
+  },
+  {
+   "t": 1324.28,
+   "d": 2.19,
+   "text": "and hey your state's been reversed yeah"
+  },
+  {
+   "t": 1326.47,
+   "d": 2.46,
+   "text": "that's okay but it can get pretty"
+  },
+  {
+   "t": 1328.93,
+   "d": 1.74,
+   "text": "complicated especially if you have long"
+  },
+  {
+   "t": 1330.67,
+   "d": 2.16,
+   "text": "chains of events and you're not"
+  },
+  {
+   "t": 1332.83,
+   "d": 1.86,
+   "text": "100% sure what was the initial stock of"
+  },
+  {
+   "t": 1334.69,
+   "d": 3.0,
+   "text": "that event probably a better way of"
+  },
+  {
+   "t": 1337.69,
+   "d": 1.59,
+   "text": "doing it was what I said before which is"
+  },
+  {
+   "t": 1339.28,
+   "d": 2.01,
+   "text": "that you maintain your game state as a"
+  },
+  {
+   "t": 1341.29,
+   "d": 0.96,
+   "text": "separate thing and you would basically"
+  },
+  {
+   "t": 1342.25,
+   "d": 1.83,
+   "text": "just like maintain a stack of game"
+  },
+  {
+   "t": 1344.08,
+   "d": 2.73,
+   "text": "States and you could even have a you"
+  },
+  {
+   "t": 1346.81,
+   "d": 2.61,
+   "text": "know a game state every like 20 events"
+  },
+  {
+   "t": 1349.42,
+   "d": 1.56,
+   "text": "and just store events in between like"
+  },
+  {
+   "t": 1350.98,
+   "d": 1.77,
+   "text": "basically like replay player clicks from"
+  },
+  {
+   "t": 1352.75,
+   "d": 2.7,
+   "text": "game State X and you have undos"
+  },
+  {
+   "t": 1355.45,
+   "d": 2.34,
+   "text": "basically for free I'm not sure if"
+  },
+  {
+   "t": 1357.79,
+   "d": 2.28,
+   "text": "desktop dungeons would have benefitted"
+  },
+  {
+   "t": 1360.07,
+   "d": 1.86,
+   "text": "from an undo system I'm sure a lot of"
+  },
+  {
+   "t": 1361.93,
+   "d": 1.56,
+   "text": "our players believe it would"
+  },
+  {
+   "t": 1363.49,
+   "d": 3.3,
+   "text": "I'm an so no you if you die you"
+  },
+  {
+   "t": 1366.79,
+   "d": 5.34,
+   "text": "die you don't get a warning so yeah it"
+  },
+  {
+   "t": 1372.13,
+   "d": 1.41,
+   "text": "would have made debugging a couple"
+  },
+  {
+   "t": 1373.54,
+   "d": 1.44,
+   "text": "things a little bit easier but maybe in"
+  },
+  {
+   "t": 1374.98,
+   "d": 1.5,
+   "text": "a different style of game it works out"
+  },
+  {
+   "t": 1376.48,
+   "d": 1.71,
+   "text": "better I mean like what is a roguelike"
+  },
+  {
+   "t": 1378.19,
+   "d": 4.01,
+   "text": "with undo you know it's a cool question"
+  },
+  {
+   "t": 1382.2,
+   "d": 2.14,
+   "text": "yeah it would have definitely made our"
+  },
+  {
+   "t": 1384.34,
+   "d": 1.92,
+   "text": "strict puzzle levels a lot easier and"
+  },
+  {
+   "t": 1386.26,
+   "d": 1.32,
+   "text": "more enjoyable for players like if we'd"
+  },
+  {
+   "t": 1387.58,
+   "d": 1.8,
+   "text": "added a wand of undo for example in"
+  },
+  {
+   "t": 1389.38,
+   "d": 1.76,
+   "text": "there that would have been pretty cool"
+  },
+  {
+   "t": 1391.14,
+   "d": 2.44,
+   "text": "all in all the event system in desktop"
+  },
+  {
+   "t": 1393.58,
+   "d": 1.77,
+   "text": "dungeons does exactly what it was"
+  },
+  {
+   "t": 1395.35,
+   "d": 1.83,
+   "text": "designed to do which was to allow"
+  },
+  {
+   "t": 1397.18,
+   "d": 2.31,
+   "text": "massive gameplay changes with as little"
+  },
+  {
+   "t": 1399.49,
+   "d": 1.65,
+   "text": "friction as possible because I really"
+  },
+  {
+   "t": 1401.14,
+   "d": 1.05,
+   "text": "didn't want to have to be searching"
+  },
+  {
+   "t": 1402.19,
+   "d": 1.35,
+   "text": "through a huge codebase that was only"
+  },
+  {
+   "t": 1403.54,
+   "d": 2.04,
+   "text": "gonna get bigger just to change small"
+  },
+  {
+   "t": 1405.58,
+   "d": 2.43,
+   "text": "little things in our balanced system it"
+  },
+  {
+   "t": 1408.01,
+   "d": 2.4,
+   "text": "meant we tweaked balance for a very long"
+  },
+  {
+   "t": 1410.41,
+   "d": 1.98,
+   "text": "time that's not necessarily a bad thing"
+  },
+  {
+   "t": 1412.39,
+   "d": 3.93,
+   "text": "in her Uglich and my last interaction"
+  },
+  {
+   "t": 1416.32,
+   "d": 2.16,
+   "text": "with the game was building two whole new"
+  },
+  {
+   "t": 1418.48,
+   "d": 1.98,
+   "text": "classes for an update and I did that in"
+  },
+  {
+   "t": 1420.46,
+   "d": 2.58,
+   "text": "a week which felt amazing and was just"
+  },
+  {
+   "t": 1423.04,
+   "d": 1.29,
+   "text": "like this is what the system was"
+  },
+  {
+   "t": 1424.33,
+   "d": 2.16,
+   "text": "designed to do as opposed to the months"
+  },
+  {
+   "t": 1426.49,
+   "d": 2.34,
+   "text": "worth of slog to update the UI for the"
+  },
+  {
+   "t": 1428.83,
+   "d": 1.98,
+   "text": "mobile release of the game that I'd been"
+  },
+  {
+   "t": 1430.81,
+   "d": 2.55,
+   "text": "dealing with before so if you take"
+  },
+  {
+   "t": 1433.36,
+   "d": 1.53,
+   "text": "anything away from this Doggett's that"
+  },
+  {
+   "t": 1434.89,
+   "d": 1.11,
+   "text": "you eyes are bad and you just shouldn't"
+  },
+  {
+   "t": 1436.0,
+   "d": 2.24,
+   "text": "do them"
+  },
+  {
+   "t": 1445.24,
+   "d": 3.67,
+   "text": "thank you so much we have time for some"
+  },
+  {
+   "t": 1448.91,
+   "d": 1.2,
+   "text": "questions if you want to take some"
+  },
+  {
+   "t": 1450.11,
+   "d": 7.16,
+   "text": "questions one sec"
+  },
+  {
+   "t": 1461.1,
+   "d": 1.83,
+   "text": "so when people use this pattern they get"
+  },
+  {
+   "t": 1462.93,
+   "d": 1.86,
+   "text": "this awesome flexibility and decoupling"
+  },
+  {
+   "t": 1464.79,
+   "d": 2.37,
+   "text": "but when they don't use this pattern I"
+  },
+  {
+   "t": 1467.16,
+   "d": 1.95,
+   "text": "find that they have much more following"
+  },
+  {
+   "t": 1469.11,
+   "d": 3.41,
+   "text": "code like you can click on a method and"
+  },
+  {
+   "t": 1472.52,
+   "d": 3.43,
+   "text": "see what actually happens so how do you"
+  },
+  {
+   "t": 1475.95,
+   "d": 1.77,
+   "text": "balance that readability versus the"
+  },
+  {
+   "t": 1477.72,
+   "d": 3.06,
+   "text": "flexibility we built a sort of a"
+  },
+  {
+   "t": 1480.78,
+   "d": 2.58,
+   "text": "debugging system if you switch over to"
+  },
+  {
+   "t": 1483.36,
+   "d": 2.37,
+   "text": "verbose events you can either insert"
+  },
+  {
+   "t": 1485.73,
+   "d": 1.53,
+   "text": "breakpoints whenever a specific event"
+  },
+  {
+   "t": 1487.26,
+   "d": 2.1,
+   "text": "gets handled and passed from one system"
+  },
+  {
+   "t": 1489.36,
+   "d": 2.4,
+   "text": "to another which is useful or you can"
+  },
+  {
+   "t": 1491.76,
+   "d": 1.62,
+   "text": "just get like an output of everything"
+  },
+  {
+   "t": 1493.38,
+   "d": 1.68,
+   "text": "that happened with that specific event"
+  },
+  {
+   "t": 1495.06,
+   "d": 2.4,
+   "text": "plus we have the log of events that have"
+  },
+  {
+   "t": 1497.46,
+   "d": 1.98,
+   "text": "already occurred that we've saved so we"
+  },
+  {
+   "t": 1499.44,
+   "d": 2.37,
+   "text": "get to like step through that series of"
+  },
+  {
+   "t": 1501.81,
+   "d": 1.89,
+   "text": "events one by one in order to see what"
+  },
+  {
+   "t": 1503.7,
+   "d": 3.18,
+   "text": "happened yes you sort of lose your"
+  },
+  {
+   "t": 1506.88,
+   "d": 2.01,
+   "text": "decoupling of like okay this item was"
+  },
+  {
+   "t": 1508.89,
+   "d": 1.65,
+   "text": "throwable it wasn't trouble but if an"
+  },
+  {
+   "t": 1510.54,
+   "d": 2.82,
+   "text": "event happens whatsoever a throw item"
+  },
+  {
+   "t": 1513.36,
+   "d": 1.65,
+   "text": "event happens anywhere you know"
+  },
+  {
+   "t": 1515.01,
+   "d": 2.7,
+   "text": "something was thrown so it if your event"
+  },
+  {
+   "t": 1517.71,
+   "d": 1.47,
+   "text": "naming is good it ends up being"
+  },
+  {
+   "t": 1519.18,
+   "d": 4.29,
+   "text": "reasonably functional a great talk thank"
+  },
+  {
+   "t": 1523.47,
+   "d": 2.28,
+   "text": "you my question is about when you said"
+  },
+  {
+   "t": 1525.75,
+   "d": 2.1,
+   "text": "you like to separate out the graphics"
+  },
+  {
+   "t": 1527.85,
+   "d": 1.5,
+   "text": "and presentation of events and the"
+  },
+  {
+   "t": 1529.35,
+   "d": 2.88,
+   "text": "actual game logic um what do you do when"
+  },
+  {
+   "t": 1532.23,
+   "d": 1.56,
+   "text": "you have an event that takes several"
+  },
+  {
+   "t": 1533.79,
+   "d": 2.88,
+   "text": "frames to resolve such as a monster"
+  },
+  {
+   "t": 1536.67,
+   "d": 1.32,
+   "text": "doesn't attack and it's several frames"
+  },
+  {
+   "t": 1537.99,
+   "d": 1.41,
+   "text": "of animation that something else happens"
+  },
+  {
+   "t": 1539.4,
+   "d": 1.29,
+   "text": "after that do you like queue up the"
+  },
+  {
+   "t": 1540.69,
+   "d": 1.53,
+   "text": "events and then play them back later or"
+  },
+  {
+   "t": 1542.22,
+   "d": 1.89,
+   "text": "how does that work we do have"
+  },
+  {
+   "t": 1544.11,
+   "d": 1.89,
+   "text": "functionality in the game to allow you"
+  },
+  {
+   "t": 1546.0,
+   "d": 2.97,
+   "text": "to add an event to the next frame so you"
+  },
+  {
+   "t": 1548.97,
+   "d": 1.47,
+   "text": "could basically say here's a delayed"
+  },
+  {
+   "t": 1550.44,
+   "d": 1.77,
+   "text": "event and that should happen the next"
+  },
+  {
+   "t": 1552.21,
+   "d": 3.33,
+   "text": "time the game updates that was a little"
+  },
+  {
+   "t": 1555.54,
+   "d": 1.71,
+   "text": "bit hacky i didn't like implementing it"
+  },
+  {
+   "t": 1557.25,
+   "d": 1.89,
+   "text": "very much but as I said in desktop"
+  },
+  {
+   "t": 1559.14,
+   "d": 1.26,
+   "text": "dungeons everything sort of happens"
+  },
+  {
+   "t": 1560.4,
+   "d": 1.59,
+   "text": "instantaneously we update the game state"
+  },
+  {
+   "t": 1561.99,
+   "d": 3.27,
+   "text": "very very quickly so things that needed"
+  },
+  {
+   "t": 1565.26,
+   "d": 3.24,
+   "text": "to happen over time we would probably"
+  },
+  {
+   "t": 1568.5,
+   "d": 2.37,
+   "text": "add in like a handler that would listen"
+  },
+  {
+   "t": 1570.87,
+   "d": 1.74,
+   "text": "for that specific thing so it would be a"
+  },
+  {
+   "t": 1572.61,
+   "d": 1.71,
+   "text": "you know a delayed attack handler and"
+  },
+  {
+   "t": 1574.32,
+   "d": 2.64,
+   "text": "that would take X number of ticks to"
+  },
+  {
+   "t": 1576.96,
+   "d": 1.62,
+   "text": "fire so it would maintain within itself"
+  },
+  {
+   "t": 1578.58,
+   "d": 3.6,
+   "text": "like a this is my state of yeah I have"
+  },
+  {
+   "t": 1582.18,
+   "d": 1.86,
+   "text": "like four frames before I'm supposed to"
+  },
+  {
+   "t": 1584.04,
+   "d": 1.5,
+   "text": "do something and if the player has"
+  },
+  {
+   "t": 1585.54,
+   "d": 1.29,
+   "text": "dodged out of the way of the time of the"
+  },
+  {
+   "t": 1586.83,
+   "d": 5.7,
+   "text": "attack cool I think yeah we didn't"
+  },
+  {
+   "t": 1592.53,
+   "d": 1.34,
+   "text": "really do that for a thing"
+  },
+  {
+   "t": 1593.87,
+   "d": 2.49,
+   "text": "that would affect the player in the game"
+  },
+  {
+   "t": 1596.36,
+   "d": 2.07,
+   "text": "at all our animations and everything"
+  },
+  {
+   "t": 1598.43,
+   "d": 1.8,
+   "text": "like I said we're fully interruptible so"
+  },
+  {
+   "t": 1600.23,
+   "d": 2.1,
+   "text": "if something was like you know you would"
+  },
+  {
+   "t": 1602.33,
+   "d": 1.71,
+   "text": "poison an enemy and fire bullet and"
+  },
+  {
+   "t": 1604.04,
+   "d": 1.26,
+   "text": "whatever unlike maybe a cloud of"
+  },
+  {
+   "t": 1605.3,
+   "d": 1.44,
+   "text": "particles and stuff I got but if you did"
+  },
+  {
+   "t": 1606.74,
+   "d": 1.83,
+   "text": "a lot of that in one frame or if you did"
+  },
+  {
+   "t": 1608.57,
+   "d": 1.47,
+   "text": "a lot of that like before the animation"
+  },
+  {
+   "t": 1610.04,
+   "d": 0.99,
+   "text": "is finished we would just cancel"
+  },
+  {
+   "t": 1611.03,
+   "d": 2.13,
+   "text": "animation and play the next one I know"
+  },
+  {
+   "t": 1613.16,
+   "d": 2.07,
+   "text": "to let the player know and like some"
+  },
+  {
+   "t": 1615.23,
+   "d": 1.98,
+   "text": "people speedrun the game and ludicrous"
+  },
+  {
+   "t": 1617.21,
+   "d": 5.46,
+   "text": "ways now so I guess it worked uh thank"
+  },
+  {
+   "t": 1622.67,
+   "d": 2.79,
+   "text": "you um one thing I'm wondering is say"
+  },
+  {
+   "t": 1625.46,
+   "d": 3.0,
+   "text": "you have a God that likes fire damage"
+  },
+  {
+   "t": 1628.46,
+   "d": 2.04,
+   "text": "and when you get hit with a fireball you"
+  },
+  {
+   "t": 1630.5,
+   "d": 2.91,
+   "text": "take more fire damage how do you keep"
+  },
+  {
+   "t": 1633.41,
+   "d": 4.05,
+   "text": "that replacement effect sequenced with"
+  },
+  {
+   "t": 1637.46,
+   "d": 2.1,
+   "text": "all the like the bush besides you taking"
+  },
+  {
+   "t": 1639.56,
+   "d": 2.43,
+   "text": "fire damage too without like your events"
+  },
+  {
+   "t": 1641.99,
+   "d": 5.67,
+   "text": "getting out of order so that would"
+  },
+  {
+   "t": 1647.66,
+   "d": 1.32,
+   "text": "determine that would be determined by"
+  },
+  {
+   "t": 1648.98,
+   "d": 1.44,
+   "text": "the prior the the priority of the"
+  },
+  {
+   "t": 1650.42,
+   "d": 1.16,
+   "text": "handlers that we're dealing with that"
+  },
+  {
+   "t": 1651.58,
+   "d": 2.56,
+   "text": "God handlers are usually quite high in"
+  },
+  {
+   "t": 1654.14,
+   "d": 2.64,
+   "text": "the queue and basically each time an"
+  },
+  {
+   "t": 1656.78,
+   "d": 2.01,
+   "text": "event is evaluated all the handlers that"
+  },
+  {
+   "t": 1658.79,
+   "d": 1.92,
+   "text": "subscribe to that specific event are"
+  },
+  {
+   "t": 1660.71,
+   "d": 4.11,
+   "text": "evaluated in their priority we've had"
+  },
+  {
+   "t": 1664.82,
+   "d": 3.9,
+   "text": "situations where it was possible for"
+  },
+  {
+   "t": 1668.72,
+   "d": 1.98,
+   "text": "sort of like loops to happen in events"
+  },
+  {
+   "t": 1670.7,
+   "d": 1.86,
+   "text": "and we usually solved that by splitting"
+  },
+  {
+   "t": 1672.56,
+   "d": 1.89,
+   "text": "a handler into two and making one"
+  },
+  {
+   "t": 1674.45,
+   "d": 1.2,
+   "text": "handler high priority and the other hand"
+  },
+  {
+   "t": 1675.65,
+   "d": 2.13,
+   "text": "or low priority so like the low priority"
+  },
+  {
+   "t": 1677.78,
+   "d": 1.47,
+   "text": "handler could never issue an event that"
+  },
+  {
+   "t": 1679.25,
+   "d": 1.47,
+   "text": "the high priority handler would care"
+  },
+  {
+   "t": 1680.72,
+   "d": 4.89,
+   "text": "about generally the order of events was"
+  },
+  {
+   "t": 1685.61,
+   "d": 1.23,
+   "text": "kind of like always in variant because"
+  },
+  {
+   "t": 1686.84,
+   "d": 2.19,
+   "text": "your order of handlers being added was"
+  },
+  {
+   "t": 1689.03,
+   "d": 2.79,
+   "text": "also invariant and that worked out quite"
+  },
+  {
+   "t": 1691.82,
+   "d": 2.73,
+   "text": "well I don't think we ever had"
+  },
+  {
+   "t": 1694.55,
+   "d": 2.9,
+   "text": "situations where things were happening"
+  },
+  {
+   "t": 1697.45,
+   "d": 2.02,
+   "text": "randomly or where events are being"
+  },
+  {
+   "t": 1699.47,
+   "d": 1.59,
+   "text": "processed in random orders and therefore"
+  },
+  {
+   "t": 1701.06,
+   "d": 1.65,
+   "text": "we were getting strange things happening"
+  },
+  {
+   "t": 1702.71,
+   "d": 2.37,
+   "text": "as a result of that mostly we were"
+  },
+  {
+   "t": 1705.08,
+   "d": 1.77,
+   "text": "getting disconnects between our UI and"
+  },
+  {
+   "t": 1706.85,
+   "d": 1.83,
+   "text": "our actual game state so players would"
+  },
+  {
+   "t": 1708.68,
+   "d": 1.53,
+   "text": "think that something had happened and"
+  },
+  {
+   "t": 1710.21,
+   "d": 2.79,
+   "text": "either it had but like 10 times worse or"
+  },
+  {
+   "t": 1713.0,
+   "d": 2.46,
+   "text": "it sort of hadn't or it had happened and"
+  },
+  {
+   "t": 1715.46,
+   "d": 1.53,
+   "text": "undone by something else you know so"
+  },
+  {
+   "t": 1716.99,
+   "d": 1.65,
+   "text": "they've taken the extra fire damage but"
+  },
+  {
+   "t": 1718.64,
+   "d": 1.83,
+   "text": "another God had decided that he wanted"
+  },
+  {
+   "t": 1720.47,
+   "d": 2.61,
+   "text": "to heal him as a result you know or you"
+  },
+  {
+   "t": 1723.08,
+   "d": 1.11,
+   "text": "know they'd had an item that when they"
+  },
+  {
+   "t": 1724.19,
+   "d": 1.86,
+   "text": "gained piety it would heal them a little"
+  },
+  {
+   "t": 1726.05,
+   "d": 0.41,
+   "text": "bit"
+  },
+  {
+   "t": 1726.46,
+   "d": 3.54,
+   "text": "example yeah there it was not very"
+  },
+  {
+   "t": 1730.0,
+   "d": 1.8,
+   "text": "difficult to me maintain sort of like"
+  },
+  {
+   "t": 1731.8,
+   "d": 1.8,
+   "text": "state coherence within the game itself"
+  },
+  {
+   "t": 1733.6,
+   "d": 3.14,
+   "text": "if that makes sense"
+  },
+  {
+   "t": 1736.77,
+   "d": 2.68,
+   "text": "cool thank you so much thanks"
+  },
+  {
+   "t": 1739.45,
+   "d": 3.06,
+   "text": "[Applause]"
+  }
+ ]
+}

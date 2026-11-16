@@ -1,0 +1,6855 @@
+{
+ "id": "H5EU9_Gdu94",
+ "url": "https://www.youtube.com/watch?v=H5EU9_Gdu94",
+ "title": "Alexei Pepers - Designing for System Suspense",
+ "speaker": "Alexei Pepers",
+ "talk_title": "Designing for System Suspense",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-11-14",
+ "duration_s": 2903,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Have you ever been playing a game that took a sudden swerve so surprising that it left you thinking woah, what is this game even going to do next? Even better, did that feeling linger as you tested new hypotheses and re-evaluated your understanding of how the game worked and what was possible within it? If those experiences stick with you, then you'll be in good company as Alexei Pepers shares the work of likeminded designers to define this feeling we call 'system suspense'. She'll share how we can apply the concepts of suspense and surprise to the way that players build mental models of game systems, and then dig into examples of successful techniques for evoking system suspense in games such as Caves of Qud, Blaseball, and Baldur's Gate 3.\n\nThis talk was originally given at GDC 2025, where the recording will be behind a hefty paywall for two years. For the Roguelike Celebration preview event, Alexei is going open source and adapting her talk to share freely!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 147,
+   "title": "Defining system suspense"
+  },
+  {
+   "start": 353,
+   "title": "Suspense versus surprise"
+  },
+  {
+   "start": 429,
+   "title": "Designing for suspense"
+  },
+  {
+   "start": 735,
+   "title": "Balancing clarity and mystery"
+  },
+  {
+   "start": 1067,
+   "title": "Risks of systemic suspense"
+  },
+  {
+   "start": 1395,
+   "title": "Methods of revelation"
+  },
+  {
+   "start": 1571,
+   "title": "Case study: Blaseball"
+  },
+  {
+   "start": 1877,
+   "title": "Development and management"
+  },
+  {
+   "start": 2311,
+   "title": "Case study: Caves of Qud"
+  },
+  {
+   "start": 2600,
+   "title": "System versus content suspense"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 9625,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 9.68,
+   "d": 1.2,
+   "text": "Basically, you know what? I'm just going"
+  },
+  {
+   "t": 10.88,
+   "d": 2.88,
+   "text": "to preview here. This is a talk I gave"
+  },
+  {
+   "t": 13.76,
+   "d": 4.72,
+   "text": "at GDC. Uh, and you are getting it for"
+  },
+  {
+   "t": 18.48,
+   "d": 1.12,
+   "text": "free. That's part of what we're doing"
+  },
+  {
+   "t": 19.6,
+   "d": 2.96,
+   "text": "here is that, uh, I gave this talk at"
+  },
+  {
+   "t": 22.56,
+   "d": 2.4,
+   "text": "the Game Developers Conference"
+  },
+  {
+   "t": 24.96,
+   "d": 3.52,
+   "text": "this last year. And while it was"
+  },
+  {
+   "t": 28.48,
+   "d": 3.6,
+   "text": "recorded, it cost a lot of money if you"
+  },
+  {
+   "t": 32.08,
+   "d": 3.84,
+   "text": "wanted to be actually getting to see it."
+  },
+  {
+   "t": 35.92,
+   "d": 3.36,
+   "text": "And I like people not having to pay a"
+  },
+  {
+   "t": 39.28,
+   "d": 1.84,
+   "text": "lot of money to access useful"
+  },
+  {
+   "t": 41.12,
+   "d": 4.0,
+   "text": "information. And so I'm going to be"
+  },
+  {
+   "t": 45.12,
+   "d": 2.08,
+   "text": "Am I sharing the wrong tab? Is it the"
+  },
+  {
+   "t": 47.2,
+   "d": 2.08,
+   "text": "right tab? Okay, I was over there doing"
+  },
+  {
+   "t": 49.28,
+   "d": 2.08,
+   "text": "back house. So I'm going to be sharing"
+  },
+  {
+   "t": 51.36,
+   "d": 3.44,
+   "text": "that information for free. Okay. Do we"
+  },
+  {
+   "t": 54.8,
+   "d": 2.32,
+   "text": "look all good? Correct. slides are being"
+  },
+  {
+   "t": 57.12,
+   "d": 3.2,
+   "text": "shared. Okay, I'm getting thumbs up. So,"
+  },
+  {
+   "t": 60.32,
+   "d": 2.8,
+   "text": "we'll start this properly. Thank you."
+  },
+  {
+   "t": 63.12,
+   "d": 2.32,
+   "text": "So, this is designing for system"
+  },
+  {
+   "t": 65.44,
+   "d": 2.32,
+   "text": "suspense open source edition because as"
+  },
+  {
+   "t": 67.76,
+   "d": 3.92,
+   "text": "I was saying, this is a talk that was"
+  },
+  {
+   "t": 71.68,
+   "d": 1.84,
+   "text": "given at the game developers conference"
+  },
+  {
+   "t": 73.52,
+   "d": 3.36,
+   "text": "this last year. It was wellreceived. I"
+  },
+  {
+   "t": 76.88,
+   "d": 1.28,
+   "text": "think it's a cool talk. I think it's"
+  },
+  {
+   "t": 78.16,
+   "d": 1.76,
+   "text": "very relevant to the rogike celebration"
+  },
+  {
+   "t": 79.92,
+   "d": 2.24,
+   "text": "community. And while it was recorded, it"
+  },
+  {
+   "t": 82.16,
+   "d": 2.96,
+   "text": "is very expensive to access. And so I am"
+  },
+  {
+   "t": 85.12,
+   "d": 2.4,
+   "text": "presenting the same content but for free"
+  },
+  {
+   "t": 87.52,
+   "d": 1.36,
+   "text": "uh to get it so you don't have to wait"
+  },
+  {
+   "t": 88.88,
+   "d": 2.48,
+   "text": "two years or pay like $700. It was an"
+  },
+  {
+   "t": 91.36,
+   "d": 1.84,
+   "text": "hourong slot. I'm trying my best to fit"
+  },
+  {
+   "t": 93.2,
+   "d": 2.0,
+   "text": "it in 45 minutes. Hopefully we will not"
+  },
+  {
+   "t": 95.2,
+   "d": 1.6,
+   "text": "go over time but that's why I'm the last"
+  },
+  {
+   "t": 96.8,
+   "d": 2.96,
+   "text": "slot today. You've been seeing me as MC"
+  },
+  {
+   "t": 99.76,
+   "d": 1.92,
+   "text": "but other context. So yes, my name is"
+  },
+  {
+   "t": 101.68,
+   "d": 2.48,
+   "text": "Alexi. I am a technical systems designer"
+  },
+  {
+   "t": 104.16,
+   "d": 2.08,
+   "text": "in my day job. I've been making games"
+  },
+  {
+   "t": 106.24,
+   "d": 2.24,
+   "text": "for about a decade now in the industry."
+  },
+  {
+   "t": 108.48,
+   "d": 2.32,
+   "text": "A lot of AAA and a lot of stuff under"
+  },
+  {
+   "t": 110.8,
+   "d": 3.28,
+   "text": "NDA, but I worked as a system designer"
+  },
+  {
+   "t": 114.08,
+   "d": 2.4,
+   "text": "on a world hopping kind of procedural"
+  },
+  {
+   "t": 116.48,
+   "d": 1.6,
+   "text": "survival adventure game called Night and"
+  },
+  {
+   "t": 118.08,
+   "d": 2.72,
+   "text": "Gale. And I also worked on a systemic"
+  },
+  {
+   "t": 120.8,
+   "d": 2.08,
+   "text": "surreal horror sports simulator called"
+  },
+  {
+   "t": 122.88,
+   "d": 1.92,
+   "text": "Blazeball, which I will be talking more"
+  },
+  {
+   "t": 124.8,
+   "d": 3.12,
+   "text": "about later. But also very notable is"
+  },
+  {
+   "t": 127.92,
+   "d": 1.76,
+   "text": "Rogike Celebration. I've been involved"
+  },
+  {
+   "t": 129.68,
+   "d": 1.92,
+   "text": "in speaking at this very conference"
+  },
+  {
+   "t": 131.6,
+   "d": 2.32,
+   "text": "since it started in 2016 when it used to"
+  },
+  {
+   "t": 133.92,
+   "d": 2.0,
+   "text": "look like this. Now you, if you are"
+  },
+  {
+   "t": 135.92,
+   "d": 1.44,
+   "text": "alive, are currently hanging out in a"
+  },
+  {
+   "t": 137.36,
+   "d": 2.32,
+   "text": "place like this. And the conversations"
+  },
+  {
+   "t": 139.68,
+   "d": 1.92,
+   "text": "I've had, the peers that I've gotten to"
+  },
+  {
+   "t": 141.6,
+   "d": 2.08,
+   "text": "know through Rogike Celebration over the"
+  },
+  {
+   "t": 143.68,
+   "d": 2.0,
+   "text": "last 10 years have been very influential"
+  },
+  {
+   "t": 145.68,
+   "d": 3.12,
+   "text": "in my design thinking. But you're here"
+  },
+  {
+   "t": 148.8,
+   "d": 2.88,
+   "text": "for system suspense, a concept that I"
+  },
+  {
+   "t": 151.68,
+   "d": 1.68,
+   "text": "hope you find intriguing. And maybe you"
+  },
+  {
+   "t": 153.36,
+   "d": 1.36,
+   "text": "have a sense of, but I'm going to start"
+  },
+  {
+   "t": 154.72,
+   "d": 1.76,
+   "text": "out by just giving kind of an example of"
+  },
+  {
+   "t": 156.48,
+   "d": 1.68,
+   "text": "the type of thing I'm talking about"
+  },
+  {
+   "t": 158.16,
+   "d": 2.72,
+   "text": "using Caves of Cut as an example. You"
+  },
+  {
+   "t": 160.88,
+   "d": 2.16,
+   "text": "should be familiar with Caves of Cud. If"
+  },
+  {
+   "t": 163.04,
+   "d": 2.0,
+   "text": "you're not, it's kind of a rogike RPG"
+  },
+  {
+   "t": 165.04,
+   "d": 2.48,
+   "text": "video game. It's very cool. So, say"
+  },
+  {
+   "t": 167.52,
+   "d": 1.52,
+   "text": "you're playing Caves of Cud. You're new"
+  },
+  {
+   "t": 169.04,
+   "d": 2.4,
+   "text": "to it. You open it up. Pretty standard"
+  },
+  {
+   "t": 171.44,
+   "d": 2.08,
+   "text": "stuff. You got attribute screen. You've"
+  },
+  {
+   "t": 173.52,
+   "d": 1.84,
+   "text": "got a inventory screen. It's got a"
+  },
+  {
+   "t": 175.36,
+   "d": 1.84,
+   "text": "different layout. Looks like a normal"
+  },
+  {
+   "t": 177.2,
+   "d": 2.64,
+   "text": "RPG, but it's got some special stuff."
+  },
+  {
+   "t": 179.84,
+   "d": 2.64,
+   "text": "You have mutations. You can get a mental"
+  },
+  {
+   "t": 182.48,
+   "d": 2.0,
+   "text": "mutation that lets you dominate another"
+  },
+  {
+   "t": 184.48,
+   "d": 2.64,
+   "text": "creature. Project your brain into its"
+  },
+  {
+   "t": 187.12,
+   "d": 2.32,
+   "text": "body. Okay, sounds pretty cool. So,"
+  },
+  {
+   "t": 189.44,
+   "d": 2.16,
+   "text": "you're a new player. You try it on an"
+  },
+  {
+   "t": 191.6,
+   "d": 1.76,
+   "text": "early game enemy, a Snapjaw. It's kind"
+  },
+  {
+   "t": 193.36,
+   "d": 2.96,
+   "text": "of a hyena person. And one thing that's"
+  },
+  {
+   "t": 196.32,
+   "d": 1.76,
+   "text": "interesting about that, so you dominate"
+  },
+  {
+   "t": 198.08,
+   "d": 2.16,
+   "text": "the Snapjaw. It occurs to you, you could"
+  },
+  {
+   "t": 200.24,
+   "d": 1.68,
+   "text": "open up those same screens. You can"
+  },
+  {
+   "t": 201.92,
+   "d": 1.2,
+   "text": "still open your inventory and your"
+  },
+  {
+   "t": 203.12,
+   "d": 2.08,
+   "text": "attributes. And now they're showing the"
+  },
+  {
+   "t": 205.2,
+   "d": 2.32,
+   "text": "Snap Jaws stats and abilities and"
+  },
+  {
+   "t": 207.52,
+   "d": 1.76,
+   "text": "equipment, which is kind of interesting"
+  },
+  {
+   "t": 209.28,
+   "d": 1.92,
+   "text": "that you actually get to see this"
+  },
+  {
+   "t": 211.2,
+   "d": 1.68,
+   "text": "knowledge that would normally be hidden"
+  },
+  {
+   "t": 212.88,
+   "d": 2.88,
+   "text": "from you. But it's not too weird. Except"
+  },
+  {
+   "t": 215.76,
+   "d": 1.92,
+   "text": "it might occur to you there's a lot of"
+  },
+  {
+   "t": 217.68,
+   "d": 2.32,
+   "text": "very strange creatures in Caves of Cud."
+  },
+  {
+   "t": 220.0,
+   "d": 2.16,
+   "text": "They're not all bipedal even. Like what"
+  },
+  {
+   "t": 222.16,
+   "d": 2.0,
+   "text": "if it's something like a cave spider?"
+  },
+  {
+   "t": 224.16,
+   "d": 1.76,
+   "text": "What would that look like? And so you"
+  },
+  {
+   "t": 225.92,
+   "d": 4.0,
+   "text": "dominate a cave spider and wow. Now, if"
+  },
+  {
+   "t": 229.92,
+   "d": 1.6,
+   "text": "you look at that inventory screen, it's"
+  },
+  {
+   "t": 231.52,
+   "d": 1.52,
+   "text": "very different. You have very different"
+  },
+  {
+   "t": 233.04,
+   "d": 2.8,
+   "text": "body parts. You have pseudopods. And"
+  },
+  {
+   "t": 235.84,
+   "d": 1.76,
+   "text": "that itself might make you think like,"
+  },
+  {
+   "t": 237.6,
+   "d": 1.6,
+   "text": "wait a minute, is every single creature"
+  },
+  {
+   "t": 239.2,
+   "d": 2.16,
+   "text": "in the game going to have like a full"
+  },
+  {
+   "t": 241.36,
+   "d": 1.92,
+   "text": "layout just because maybe I'm going to"
+  },
+  {
+   "t": 243.28,
+   "d": 2.88,
+   "text": "dominate them? But it gets even wilder"
+  },
+  {
+   "t": 246.16,
+   "d": 2.08,
+   "text": "than that. There's an item in the game"
+  },
+  {
+   "t": 248.24,
+   "d": 2.48,
+   "text": "called spray a brain. It does what it"
+  },
+  {
+   "t": 250.72,
+   "d": 2.16,
+   "text": "says. You go up to an inanimate object"
+  },
+  {
+   "t": 252.88,
+   "d": 2.32,
+   "text": "like a door. You spray it. You give it a"
+  },
+  {
+   "t": 255.2,
+   "d": 2.24,
+   "text": "brain. You imbue it with life. You can"
+  },
+  {
+   "t": 257.44,
+   "d": 2.24,
+   "text": "have a conversation with it. Can you"
+  },
+  {
+   "t": 259.68,
+   "d": 4.16,
+   "text": "dominate it? Yes, you now are inhabiting"
+  },
+  {
+   "t": 263.84,
+   "d": 2.16,
+   "text": "a newly sentient door and you can look"
+  },
+  {
+   "t": 266.0,
+   "d": 1.84,
+   "text": "at its inventory and you can equip"
+  },
+  {
+   "t": 267.84,
+   "d": 1.68,
+   "text": "things and you can see how much damage"
+  },
+  {
+   "t": 269.52,
+   "d": 2.8,
+   "text": "it does to cudgle with a door knob. And"
+  },
+  {
+   "t": 272.32,
+   "d": 2.0,
+   "text": "this is where I think you're feeling"
+  },
+  {
+   "t": 274.32,
+   "d": 1.76,
+   "text": "like, well, what is even possible in"
+  },
+  {
+   "t": 276.08,
+   "d": 2.4,
+   "text": "this game? How much can I do with these"
+  },
+  {
+   "t": 278.48,
+   "d": 2.0,
+   "text": "systems? This was just one of like a"
+  },
+  {
+   "t": 280.48,
+   "d": 2.96,
+   "text": "hundred mutations and it ended up doing"
+  },
+  {
+   "t": 283.44,
+   "d": 2.24,
+   "text": "all of this stuff. And that feeling of"
+  },
+  {
+   "t": 285.68,
+   "d": 1.92,
+   "text": "like, wait a minute, what is this game"
+  },
+  {
+   "t": 287.6,
+   "d": 1.52,
+   "text": "even capable of? I don't think I"
+  },
+  {
+   "t": 289.12,
+   "d": 2.0,
+   "text": "understand anymore. The limits is the"
+  },
+  {
+   "t": 291.12,
+   "d": 1.2,
+   "text": "kind of feeling that we're going to be"
+  },
+  {
+   "t": 292.32,
+   "d": 2.72,
+   "text": "talking about today and my favorite kind"
+  },
+  {
+   "t": 295.04,
+   "d": 2.64,
+   "text": "of games honestly. So, I started with"
+  },
+  {
+   "t": 297.68,
+   "d": 1.6,
+   "text": "Caves of Cud for a reason, not just"
+  },
+  {
+   "t": 299.28,
+   "d": 2.16,
+   "text": "because it's amazing. The term system"
+  },
+  {
+   "t": 301.44,
+   "d": 2.4,
+   "text": "suspense originated with Jason Grimblot,"
+  },
+  {
+   "t": 303.84,
+   "d": 1.28,
+   "text": "one of the co-founders of Freehold"
+  },
+  {
+   "t": 305.12,
+   "d": 2.08,
+   "text": "Games, one of the main developers, well,"
+  },
+  {
+   "t": 307.2,
+   "d": 1.76,
+   "text": "like they are the developers of Caves of"
+  },
+  {
+   "t": 308.96,
+   "d": 2.88,
+   "text": "Cud. And Jason wrote a blog post I"
+  },
+  {
+   "t": 311.84,
+   "d": 1.76,
+   "text": "highly recommend called Apologia for"
+  },
+  {
+   "t": 313.6,
+   "d": 1.84,
+   "text": "Game Wiks. And in it shared this"
+  },
+  {
+   "t": 315.44,
+   "d": 1.6,
+   "text": "definition that had come up on the Caves"
+  },
+  {
+   "t": 317.04,
+   "d": 1.92,
+   "text": "of Cud team. this idea that system"
+  },
+  {
+   "t": 318.96,
+   "d": 1.92,
+   "text": "suspense is the experience of"
+  },
+  {
+   "t": 320.88,
+   "d": 2.0,
+   "text": "maneuvering through game systems that do"
+  },
+  {
+   "t": 322.88,
+   "d": 1.6,
+   "text": "not make their boundaries immediately"
+  },
+  {
+   "t": 324.48,
+   "d": 2.24,
+   "text": "known. Instead of deriving theorems from"
+  },
+  {
+   "t": 326.72,
+   "d": 2.32,
+   "text": "their axioms, these games ask players to"
+  },
+  {
+   "t": 329.04,
+   "d": 2.08,
+   "text": "discover the axioms themselves. So in"
+  },
+  {
+   "t": 331.12,
+   "d": 2.16,
+   "text": "other words, learning how to play the"
+  },
+  {
+   "t": 333.28,
+   "d": 2.48,
+   "text": "game is part of the fun. And this gets"
+  },
+  {
+   "t": 335.76,
+   "d": 3.52,
+   "text": "discussed as surprise, as mystery. Uh"
+  },
+  {
+   "t": 339.28,
+   "d": 1.92,
+   "text": "Jim Storm Dancer of Frog Fractions"
+  },
+  {
+   "t": 341.2,
+   "d": 2.48,
+   "text": "referred to this as games as ludic"
+  },
+  {
+   "t": 343.68,
+   "d": 1.68,
+   "text": "mystery. So, it's not just about the"
+  },
+  {
+   "t": 345.36,
+   "d": 2.08,
+   "text": "mechanics are clear and elegant and you"
+  },
+  {
+   "t": 347.44,
+   "d": 1.68,
+   "text": "learn them quickly, then do stuff with"
+  },
+  {
+   "t": 349.12,
+   "d": 1.76,
+   "text": "them. These are games where learning"
+  },
+  {
+   "t": 350.88,
+   "d": 1.6,
+   "text": "what those mechanics are and how to play"
+  },
+  {
+   "t": 352.48,
+   "d": 3.36,
+   "text": "them is a big part of the fun. Now, this"
+  },
+  {
+   "t": 355.84,
+   "d": 2.0,
+   "text": "idea was compelling to many people,"
+  },
+  {
+   "t": 357.84,
+   "d": 3.28,
+   "text": "including myself. And in 2023, a bunch"
+  },
+  {
+   "t": 361.12,
+   "d": 2.32,
+   "text": "all of the people here, including me,"
+  },
+  {
+   "t": 363.44,
+   "d": 1.6,
+   "text": "got together at this think tank"
+  },
+  {
+   "t": 365.04,
+   "d": 2.0,
+   "text": "conference thing called Polaris. And we"
+  },
+  {
+   "t": 367.04,
+   "d": 2.88,
+   "text": "spent a weekend with Jason talking about"
+  },
+  {
+   "t": 369.92,
+   "d": 1.6,
+   "text": "this idea because we all thought it was"
+  },
+  {
+   "t": 371.52,
+   "d": 1.52,
+   "text": "really cool. And these are some of the"
+  },
+  {
+   "t": 373.04,
+   "d": 1.28,
+   "text": "projects that we had all collectively"
+  },
+  {
+   "t": 374.32,
+   "d": 1.76,
+   "text": "worked on. So we were all experienced"
+  },
+  {
+   "t": 376.08,
+   "d": 2.48,
+   "text": "designers found this really compelling."
+  },
+  {
+   "t": 378.56,
+   "d": 2.8,
+   "text": "We took that. We then spent several"
+  },
+  {
+   "t": 381.36,
+   "d": 2.48,
+   "text": "months developing a report, a paper on"
+  },
+  {
+   "t": 383.84,
+   "d": 2.08,
+   "text": "this idea of system suspense. We put it"
+  },
+  {
+   "t": 385.92,
+   "d": 1.28,
+   "text": "out. I'm going to link it at the end."
+  },
+  {
+   "t": 387.2,
+   "d": 2.24,
+   "text": "It's freely available online. It's very"
+  },
+  {
+   "t": 389.44,
+   "d": 2.16,
+   "text": "cool. But then I got permission from the"
+  },
+  {
+   "t": 391.6,
+   "d": 2.4,
+   "text": "group to then convert those findings"
+  },
+  {
+   "t": 394.0,
+   "d": 2.32,
+   "text": "into a talk. And as well I have kind of"
+  },
+  {
+   "t": 396.32,
+   "d": 2.0,
+   "text": "picked different case studies than some"
+  },
+  {
+   "t": 398.32,
+   "d": 1.68,
+   "text": "of the ones in the report so that it's"
+  },
+  {
+   "t": 400.0,
+   "d": 2.4,
+   "text": "not just like a onetoone but that is a"
+  },
+  {
+   "t": 402.4,
+   "d": 1.2,
+   "text": "follow-up. So that's what I'm doing. I"
+  },
+  {
+   "t": 403.6,
+   "d": 1.52,
+   "text": "am presenting the work of all of these"
+  },
+  {
+   "t": 405.12,
+   "d": 2.16,
+   "text": "talented people on this idea that we"
+  },
+  {
+   "t": 407.28,
+   "d": 2.16,
+   "text": "found compelling."
+  },
+  {
+   "t": 409.44,
+   "d": 1.68,
+   "text": "So with that introduction out of the way"
+  },
+  {
+   "t": 411.12,
+   "d": 1.36,
+   "text": "rest of this talk I'm going to talk"
+  },
+  {
+   "t": 412.48,
+   "d": 2.32,
+   "text": "about surprise and suspense. I'm going"
+  },
+  {
+   "t": 414.8,
+   "d": 1.84,
+   "text": "to talk about then how we intentionally"
+  },
+  {
+   "t": 416.64,
+   "d": 2.88,
+   "text": "design for this and some case studies of"
+  },
+  {
+   "t": 419.52,
+   "d": 1.44,
+   "text": "what we have done with this concept"
+  },
+  {
+   "t": 420.96,
+   "d": 2.0,
+   "text": "since writing the paper. And then"
+  },
+  {
+   "t": 422.96,
+   "d": 1.6,
+   "text": "finally, I'm going to do a tiny bit of"
+  },
+  {
+   "t": 424.56,
+   "d": 1.92,
+   "text": "digging into that system part and how we"
+  },
+  {
+   "t": 426.48,
+   "d": 1.76,
+   "text": "could contrast that with a more content"
+  },
+  {
+   "t": 428.24,
+   "d": 2.16,
+   "text": "form of suspense."
+  },
+  {
+   "t": 430.4,
+   "d": 1.92,
+   "text": "Now, I think suspense itself is a"
+  },
+  {
+   "t": 432.32,
+   "d": 1.36,
+   "text": "familiar term. We don't need to spend"
+  },
+  {
+   "t": 433.68,
+   "d": 1.6,
+   "text": "too much time designing. We're used to"
+  },
+  {
+   "t": 435.28,
+   "d": 2.4,
+   "text": "it in like a storytelling sense. And at"
+  },
+  {
+   "t": 437.68,
+   "d": 2.24,
+   "text": "the most basic, suspense is a mix of"
+  },
+  {
+   "t": 439.92,
+   "d": 1.68,
+   "text": "uncertainty. You don't know what's going"
+  },
+  {
+   "t": 441.6,
+   "d": 1.92,
+   "text": "to happen. Is the velociraptor going to"
+  },
+  {
+   "t": 443.52,
+   "d": 2.32,
+   "text": "eat this kid? Probably not. It's a PG-13"
+  },
+  {
+   "t": 445.84,
+   "d": 1.44,
+   "text": "movie. But as long as in the moment"
+  },
+  {
+   "t": 447.28,
+   "d": 1.84,
+   "text": "you're not sure, you can have"
+  },
+  {
+   "t": 449.12,
+   "d": 2.64,
+   "text": "uncertainty. and the other half"
+  },
+  {
+   "t": 451.76,
+   "d": 3.28,
+   "text": "anticipation. You expect a resolution."
+  },
+  {
+   "t": 455.04,
+   "d": 1.76,
+   "text": "You are waiting for a resolution. You"
+  },
+  {
+   "t": 456.8,
+   "d": 2.88,
+   "text": "are aware of the feeling of"
+  },
+  {
+   "t": 459.68,
+   "d": 3.2,
+   "text": "anticipation. You must be aware of that"
+  },
+  {
+   "t": 462.88,
+   "d": 2.24,
+   "text": "waiting in order to be actively feeling"
+  },
+  {
+   "t": 465.12,
+   "d": 1.76,
+   "text": "suspense."
+  },
+  {
+   "t": 466.88,
+   "d": 2.32,
+   "text": "Now, we see plenty of this in games. So,"
+  },
+  {
+   "t": 469.2,
+   "d": 2.4,
+   "text": "for example, Mass Effect 2, very"
+  },
+  {
+   "t": 471.6,
+   "d": 1.92,
+   "text": "narrative series of games, lots of"
+  },
+  {
+   "t": 473.52,
+   "d": 1.6,
+   "text": "narrative moments, including narrative"
+  },
+  {
+   "t": 475.12,
+   "d": 2.64,
+   "text": "suspense. There's a point in Mass Effect"
+  },
+  {
+   "t": 477.76,
+   "d": 2.56,
+   "text": "2 where it's scripted. You are off on a"
+  },
+  {
+   "t": 480.32,
+   "d": 1.92,
+   "text": "mission. You get a cut scene of your"
+  },
+  {
+   "t": 482.24,
+   "d": 1.76,
+   "text": "ship being boarded. Your crew is"
+  },
+  {
+   "t": 484.0,
+   "d": 2.16,
+   "text": "abducted by hostile aliens. You get a"
+  },
+  {
+   "t": 486.16,
+   "d": 1.6,
+   "text": "mission to rescue them. And you don't"
+  },
+  {
+   "t": 487.76,
+   "d": 1.76,
+   "text": "know, are they going to be alive when"
+  },
+  {
+   "t": 489.52,
+   "d": 2.16,
+   "text": "you get there? Are they already dead?"
+  },
+  {
+   "t": 491.68,
+   "d": 2.88,
+   "text": "Suspenseful in a narrative sense. What I"
+  },
+  {
+   "t": 494.56,
+   "d": 2.24,
+   "text": "like about this example is that the way"
+  },
+  {
+   "t": 496.8,
+   "d": 2.48,
+   "text": "it actually resolves leads us closer to"
+  },
+  {
+   "t": 499.28,
+   "d": 2.72,
+   "text": "systemic suspense. Because the thing is"
+  },
+  {
+   "t": 502.0,
+   "d": 2.08,
+   "text": "Mass Effect is a narrative heavy game"
+  },
+  {
+   "t": 504.08,
+   "d": 3.12,
+   "text": "and basically all of the mechanics in"
+  },
+  {
+   "t": 507.2,
+   "d": 1.6,
+   "text": "terms of you know decision points and"
+  },
+  {
+   "t": 508.8,
+   "d": 2.0,
+   "text": "things come down to conversation"
+  },
+  {
+   "t": 510.8,
+   "d": 2.08,
+   "text": "options. You have a wheel, you pick"
+  },
+  {
+   "t": 512.88,
+   "d": 1.92,
+   "text": "things. There are some systems that"
+  },
+  {
+   "t": 514.8,
+   "d": 1.92,
+   "text": "limit what options are on the wheel."
+  },
+  {
+   "t": 516.72,
+   "d": 1.68,
+   "text": "Like there's kind of an alignment system"
+  },
+  {
+   "t": 518.4,
+   "d": 2.08,
+   "text": "and so you maybe can't pick a particular"
+  },
+  {
+   "t": 520.48,
+   "d": 1.68,
+   "text": "option unless your alignment's a certain"
+  },
+  {
+   "t": 522.16,
+   "d": 2.16,
+   "text": "value. But most of the time if something"
+  },
+  {
+   "t": 524.32,
+   "d": 2.08,
+   "text": "happens in the game, it's because at"
+  },
+  {
+   "t": 526.4,
+   "d": 2.0,
+   "text": "some point you picked a dialogue option."
+  },
+  {
+   "t": 528.4,
+   "d": 1.6,
+   "text": "Could be short-term consequence, could"
+  },
+  {
+   "t": 530.0,
+   "d": 1.6,
+   "text": "be long-term consequence, but that's"
+  },
+  {
+   "t": 531.6,
+   "d": 3.04,
+   "text": "what it comes down to. Except this"
+  },
+  {
+   "t": 534.64,
+   "d": 1.6,
+   "text": "particular mission, when your crew is"
+  },
+  {
+   "t": 536.24,
+   "d": 2.32,
+   "text": "kidnapped, whether or not they're dead"
+  },
+  {
+   "t": 538.56,
+   "d": 2.08,
+   "text": "does not depend on a dialogue choice."
+  },
+  {
+   "t": 540.64,
+   "d": 2.72,
+   "text": "What it depends on is literally how fast"
+  },
+  {
+   "t": 543.36,
+   "d": 1.92,
+   "text": "you got there. There is an invisible"
+  },
+  {
+   "t": 545.28,
+   "d": 2.0,
+   "text": "counter that starts ticking up after"
+  },
+  {
+   "t": 547.28,
+   "d": 2.32,
+   "text": "that scene every time you go on a"
+  },
+  {
+   "t": 549.6,
+   "d": 1.68,
+   "text": "different mission. And so, the more time"
+  },
+  {
+   "t": 551.28,
+   "d": 1.44,
+   "text": "you spend flying around doing other"
+  },
+  {
+   "t": 552.72,
+   "d": 2.4,
+   "text": "things, the more likely it is that when"
+  },
+  {
+   "t": 555.12,
+   "d": 2.24,
+   "text": "you get there, all of your crew is dead."
+  },
+  {
+   "t": 557.36,
+   "d": 2.08,
+   "text": "This is very surprising for the player."
+  },
+  {
+   "t": 559.44,
+   "d": 1.84,
+   "text": "Not just because Mass Effect as a series"
+  },
+  {
+   "t": 561.28,
+   "d": 2.24,
+   "text": "so far has never worked this way, but"
+  },
+  {
+   "t": 563.52,
+   "d": 1.76,
+   "text": "because it's a well-known fact that if a"
+  },
+  {
+   "t": 565.28,
+   "d": 1.68,
+   "text": "game tells you, \"Hey, this is super"
+  },
+  {
+   "t": 566.96,
+   "d": 1.92,
+   "text": "urgent.\" That just means go finish your"
+  },
+  {
+   "t": 568.88,
+   "d": 2.88,
+   "text": "side quests and then do it. So, what we"
+  },
+  {
+   "t": 571.76,
+   "d": 3.6,
+   "text": "have here is a mix. There is narrative"
+  },
+  {
+   "t": 575.36,
+   "d": 1.84,
+   "text": "suspense, very straightforwardly. What's"
+  },
+  {
+   "t": 577.2,
+   "d": 2.48,
+   "text": "going to happen to my crew? But if"
+  },
+  {
+   "t": 579.68,
+   "d": 1.6,
+   "text": "especially the player gets the negative"
+  },
+  {
+   "t": 581.28,
+   "d": 1.68,
+   "text": "outcome, their crew is dead. And when"
+  },
+  {
+   "t": 582.96,
+   "d": 1.6,
+   "text": "they dig into, well, wait, why did that"
+  },
+  {
+   "t": 584.56,
+   "d": 1.28,
+   "text": "happen? and they realize it's because"
+  },
+  {
+   "t": 585.84,
+   "d": 1.84,
+   "text": "they wasted time and that is a thing"
+  },
+  {
+   "t": 587.68,
+   "d": 2.56,
+   "text": "that the game mechanically recognized,"
+  },
+  {
+   "t": 590.24,
+   "d": 1.6,
+   "text": "then they can start asking, well, wait a"
+  },
+  {
+   "t": 591.84,
+   "d": 1.92,
+   "text": "minute, what else is the game tracking?"
+  },
+  {
+   "t": 593.76,
+   "d": 2.16,
+   "text": "What other systems might be hiding that"
+  },
+  {
+   "t": 595.92,
+   "d": 1.84,
+   "text": "were not surfaced to me? What other"
+  },
+  {
+   "t": 597.76,
+   "d": 1.52,
+   "text": "assumptions do I have about how this"
+  },
+  {
+   "t": 599.28,
+   "d": 1.76,
+   "text": "game worked that were wrong? And if"
+  },
+  {
+   "t": 601.04,
+   "d": 1.52,
+   "text": "they're pondering that, and if they're"
+  },
+  {
+   "t": 602.56,
+   "d": 2.24,
+   "text": "going forward now worried about, well,"
+  },
+  {
+   "t": 604.8,
+   "d": 1.44,
+   "text": "what matters and what doesn't? How does"
+  },
+  {
+   "t": 606.24,
+   "d": 1.92,
+   "text": "this game work? Then now they're feeling"
+  },
+  {
+   "t": 608.16,
+   "d": 3.2,
+   "text": "suspense about the systems of the game."
+  },
+  {
+   "t": 611.36,
+   "d": 2.0,
+   "text": "And we can see this in different layers."
+  },
+  {
+   "t": 613.36,
+   "d": 1.76,
+   "text": "You know, a single item like spray a"
+  },
+  {
+   "t": 615.12,
+   "d": 2.56,
+   "text": "brain is itself provoking this because"
+  },
+  {
+   "t": 617.68,
+   "d": 1.68,
+   "text": "just the idea that you can put a"
+  },
+  {
+   "t": 619.36,
+   "d": 2.0,
+   "text": "sentient brain onto something makes you"
+  },
+  {
+   "t": 621.36,
+   "d": 1.44,
+   "text": "think about all the inanimate objects"
+  },
+  {
+   "t": 622.8,
+   "d": 1.52,
+   "text": "you've seen and start wondering, well,"
+  },
+  {
+   "t": 624.32,
+   "d": 1.44,
+   "text": "could I give that a brain? What would"
+  },
+  {
+   "t": 625.76,
+   "d": 1.68,
+   "text": "happen? And you can see in certain"
+  },
+  {
+   "t": 627.44,
+   "d": 2.24,
+   "text": "genres, Metroid vanias, it's pretty"
+  },
+  {
+   "t": 629.68,
+   "d": 1.52,
+   "text": "straightforward, but you often have this"
+  },
+  {
+   "t": 631.2,
+   "d": 1.92,
+   "text": "pattern. You see a locked area, it's"
+  },
+  {
+   "t": 633.12,
+   "d": 1.52,
+   "text": "telegraphed that one day you're going to"
+  },
+  {
+   "t": 634.64,
+   "d": 1.52,
+   "text": "unlock it, but you don't know exactly"
+  },
+  {
+   "t": 636.16,
+   "d": 2.08,
+   "text": "how. And you can theorize. Doesn't have"
+  },
+  {
+   "t": 638.24,
+   "d": 1.2,
+   "text": "to be complicated. You know, if it's"
+  },
+  {
+   "t": 639.44,
+   "d": 1.84,
+   "text": "Metroid, it's probably a new gun arm."
+  },
+  {
+   "t": 641.28,
+   "d": 1.68,
+   "text": "But you can spend some time kind of"
+  },
+  {
+   "t": 642.96,
+   "d": 1.92,
+   "text": "being curious and wondering about it and"
+  },
+  {
+   "t": 644.88,
+   "d": 3.36,
+   "text": "get a light sense of system suspense."
+  },
+  {
+   "t": 648.24,
+   "d": 2.4,
+   "text": "On the opposite side, there are very"
+  },
+  {
+   "t": 650.64,
+   "d": 2.72,
+   "text": "notable games that are steeped and"
+  },
+  {
+   "t": 653.36,
+   "d": 2.08,
+   "text": "designed around this feeling. So, for"
+  },
+  {
+   "t": 655.44,
+   "d": 3.36,
+   "text": "example, Tunic is from the moment you"
+  },
+  {
+   "t": 658.8,
+   "d": 2.8,
+   "text": "open the manual filled with things that"
+  },
+  {
+   "t": 661.6,
+   "d": 2.72,
+   "text": "are mysterious and provoking this sense"
+  },
+  {
+   "t": 664.32,
+   "d": 1.84,
+   "text": "of wonder, curiosity, surprise,"
+  },
+  {
+   "t": 666.16,
+   "d": 2.08,
+   "text": "suspense. The development team has"
+  },
+  {
+   "t": 668.24,
+   "d": 2.0,
+   "text": "talked a lot about how this was a goal"
+  },
+  {
+   "t": 670.24,
+   "d": 1.28,
+   "text": "and they were very inspired by"
+  },
+  {
+   "t": 671.52,
+   "d": 1.68,
+   "text": "experiences they had when they were"
+  },
+  {
+   "t": 673.2,
+   "d": 2.0,
+   "text": "younger playing things like Zelda games."
+  },
+  {
+   "t": 675.2,
+   "d": 1.6,
+   "text": "One thing I like, they talk about how"
+  },
+  {
+   "t": 676.8,
+   "d": 2.56,
+   "text": "when you as a, you know, new player"
+  },
+  {
+   "t": 679.36,
+   "d": 2.64,
+   "text": "first find a bombable wall in a Zelda"
+  },
+  {
+   "t": 682.0,
+   "d": 2.8,
+   "text": "game, it's not just exciting because"
+  },
+  {
+   "t": 684.8,
+   "d": 2.64,
+   "text": "that one wall in that one spot can be"
+  },
+  {
+   "t": 687.44,
+   "d": 2.08,
+   "text": "opened with a bomb. It's exciting"
+  },
+  {
+   "t": 689.52,
+   "d": 1.44,
+   "text": "because it makes you realize that all"
+  },
+  {
+   "t": 690.96,
+   "d": 1.68,
+   "text": "the walls you saw that you thought were"
+  },
+  {
+   "t": 692.64,
+   "d": 1.84,
+   "text": "just an end point are actually"
+  },
+  {
+   "t": 694.48,
+   "d": 2.0,
+   "text": "vulnerable and there might be ways to"
+  },
+  {
+   "t": 696.48,
+   "d": 2.8,
+   "text": "convert them into something open."
+  },
+  {
+   "t": 699.28,
+   "d": 2.16,
+   "text": "So there's even this quote I like from"
+  },
+  {
+   "t": 701.44,
+   "d": 2.8,
+   "text": "Andrew Schulus about how not knowing and"
+  },
+  {
+   "t": 704.24,
+   "d": 2.08,
+   "text": "then understanding is wonderful and"
+  },
+  {
+   "t": 706.32,
+   "d": 2.56,
+   "text": "great, but the ultimate thing is the not"
+  },
+  {
+   "t": 708.88,
+   "d": 2.4,
+   "text": "knowing itself, right? Letting your"
+  },
+  {
+   "t": 711.28,
+   "d": 1.92,
+   "text": "imagination run wild and filling in the"
+  },
+  {
+   "t": 713.2,
+   "d": 2.24,
+   "text": "gaps. And so it's that period of not"
+  },
+  {
+   "t": 715.44,
+   "d": 1.76,
+   "text": "knowing that we really wanted to have a"
+  },
+  {
+   "t": 717.2,
+   "d": 2.0,
+   "text": "better way to intentionally aim for as"
+  },
+  {
+   "t": 719.2,
+   "d": 1.84,
+   "text": "designers."
+  },
+  {
+   "t": 721.04,
+   "d": 2.16,
+   "text": "And so what does that mean? How do we do"
+  },
+  {
+   "t": 723.2,
+   "d": 2.88,
+   "text": "it? The go-to explanation is if you were"
+  },
+  {
+   "t": 726.08,
+   "d": 1.44,
+   "text": "ask someone like what's happening, it's"
+  },
+  {
+   "t": 727.52,
+   "d": 2.56,
+   "text": "like, oh well, we subvert expectations."
+  },
+  {
+   "t": 730.08,
+   "d": 2.16,
+   "text": "Well, that's not too helpful because"
+  },
+  {
+   "t": 732.24,
+   "d": 1.84,
+   "text": "it's too broad. So we wanted to break it"
+  },
+  {
+   "t": 734.08,
+   "d": 2.4,
+   "text": "down further. What we found helpful was"
+  },
+  {
+   "t": 736.48,
+   "d": 2.56,
+   "text": "to use the idea of a mental model. This"
+  },
+  {
+   "t": 739.04,
+   "d": 1.92,
+   "text": "is a pretty standard definition, but"
+  },
+  {
+   "t": 740.96,
+   "d": 1.92,
+   "text": "since you know game industry is not"
+  },
+  {
+   "t": 742.88,
+   "d": 2.0,
+   "text": "great at standard definitions, what we"
+  },
+  {
+   "t": 744.88,
+   "d": 1.68,
+   "text": "mean is just it's the player's"
+  },
+  {
+   "t": 746.56,
+   "d": 2.0,
+   "text": "understanding at a particular moment of"
+  },
+  {
+   "t": 748.56,
+   "d": 1.92,
+   "text": "how the game works. You know, what is it"
+  },
+  {
+   "t": 750.48,
+   "d": 1.92,
+   "text": "capable of? What are the rules? It's not"
+  },
+  {
+   "t": 752.4,
+   "d": 1.52,
+   "text": "just discrete memories. It's their"
+  },
+  {
+   "t": 753.92,
+   "d": 1.6,
+   "text": "understanding of how it links together."
+  },
+  {
+   "t": 755.52,
+   "d": 2.56,
+   "text": "If I do a in this game, here's what will"
+  },
+  {
+   "t": 758.08,
+   "d": 2.72,
+   "text": "happen. This builds over time. Every"
+  },
+  {
+   "t": 760.8,
+   "d": 1.92,
+   "text": "time they get new data, see new things,"
+  },
+  {
+   "t": 762.72,
+   "d": 1.6,
+   "text": "try new things. It's constantly"
+  },
+  {
+   "t": 764.32,
+   "d": 3.2,
+   "text": "adjusting and moving. A visual kind of"
+  },
+  {
+   "t": 767.52,
+   "d": 1.6,
+   "text": "way we like to think about this is it's"
+  },
+  {
+   "t": 769.12,
+   "d": 2.48,
+   "text": "like surveying. The player is building a"
+  },
+  {
+   "t": 771.6,
+   "d": 2.8,
+   "text": "map, a mental map of what's inside the"
+  },
+  {
+   "t": 774.4,
+   "d": 2.72,
+   "text": "game and what's outside of it. And the"
+  },
+  {
+   "t": 777.12,
+   "d": 1.84,
+   "text": "useful thing is once we have this kind"
+  },
+  {
+   "t": 778.96,
+   "d": 2.56,
+   "text": "of analogy for what's happening, we can"
+  },
+  {
+   "t": 781.52,
+   "d": 2.4,
+   "text": "think about surprise and suspense as two"
+  },
+  {
+   "t": 783.92,
+   "d": 3.04,
+   "text": "discrete but related concepts. Surprise"
+  },
+  {
+   "t": 786.96,
+   "d": 3.12,
+   "text": "is the moment discreet moment when there"
+  },
+  {
+   "t": 790.08,
+   "d": 2.32,
+   "text": "is a rapid change in the mental model."
+  },
+  {
+   "t": 792.4,
+   "d": 2.0,
+   "text": "It is that instant when something"
+  },
+  {
+   "t": 794.4,
+   "d": 1.76,
+   "text": "happens that's a conflict where you"
+  },
+  {
+   "t": 796.16,
+   "d": 1.92,
+   "text": "expected one thing and you got another"
+  },
+  {
+   "t": 798.08,
+   "d": 1.68,
+   "text": "and you think whoa wait a minute what"
+  },
+  {
+   "t": 799.76,
+   "d": 1.68,
+   "text": "just happened. So it could be that the"
+  },
+  {
+   "t": 801.44,
+   "d": 2.08,
+   "text": "model that map you know it shifts it"
+  },
+  {
+   "t": 803.52,
+   "d": 2.4,
+   "text": "grows it shrinks it's very sudden"
+  },
+  {
+   "t": 805.92,
+   "d": 3.2,
+   "text": "catches your attention. Suspense then is"
+  },
+  {
+   "t": 809.12,
+   "d": 1.92,
+   "text": "a drawn out feeling. It's the one that"
+  },
+  {
+   "t": 811.04,
+   "d": 1.92,
+   "text": "lingers as you become aware of"
+  },
+  {
+   "t": 812.96,
+   "d": 2.08,
+   "text": "uncertainty. And so we like to describe"
+  },
+  {
+   "t": 815.04,
+   "d": 1.92,
+   "text": "this as recognizing that part of your"
+  },
+  {
+   "t": 816.96,
+   "d": 2.4,
+   "text": "mental model is fuzzy. There are lines"
+  },
+  {
+   "t": 819.36,
+   "d": 2.08,
+   "text": "that are not actually solid and you can"
+  },
+  {
+   "t": 821.44,
+   "d": 2.0,
+   "text": "kind of guess at the shape of it, but"
+  },
+  {
+   "t": 823.44,
+   "d": 2.0,
+   "text": "you aren't able to resolve it. Maybe you"
+  },
+  {
+   "t": 825.44,
+   "d": 1.68,
+   "text": "can't test a hypothesis. Maybe the"
+  },
+  {
+   "t": 827.12,
+   "d": 2.0,
+   "text": "results were inconclusive, but you are"
+  },
+  {
+   "t": 829.12,
+   "d": 3.6,
+   "text": "left in an active state of wondering."
+  },
+  {
+   "t": 832.72,
+   "d": 2.24,
+   "text": "So that's what we want to do. And to do"
+  },
+  {
+   "t": 834.96,
+   "d": 1.12,
+   "text": "that, we're going to have to do two"
+  },
+  {
+   "t": 836.08,
+   "d": 2.08,
+   "text": "things. One, we do need to really"
+  },
+  {
+   "t": 838.16,
+   "d": 2.96,
+   "text": "understand and as designers purposefully"
+  },
+  {
+   "t": 841.12,
+   "d": 1.84,
+   "text": "shape the player's mental model so we"
+  },
+  {
+   "t": 842.96,
+   "d": 2.8,
+   "text": "can set it up to make it fuzzy or to,"
+  },
+  {
+   "t": 845.76,
+   "d": 2.0,
+   "text": "you know, change it suddenly. And then"
+  },
+  {
+   "t": 847.76,
+   "d": 1.76,
+   "text": "if we're doing suspense, once we've set"
+  },
+  {
+   "t": 849.52,
+   "d": 1.92,
+   "text": "it up, we need to draw their attention"
+  },
+  {
+   "t": 851.44,
+   "d": 1.52,
+   "text": "to the uncertainty so that they're"
+  },
+  {
+   "t": 852.96,
+   "d": 2.88,
+   "text": "actively in that state of suspense."
+  },
+  {
+   "t": 855.84,
+   "d": 2.24,
+   "text": "Now, for the first part, the important"
+  },
+  {
+   "t": 858.08,
+   "d": 1.84,
+   "text": "thing that's not always intuitive is to"
+  },
+  {
+   "t": 859.92,
+   "d": 1.52,
+   "text": "remember your players are not a blank"
+  },
+  {
+   "t": 861.44,
+   "d": 2.24,
+   "text": "slate before they even come in and sit"
+  },
+  {
+   "t": 863.68,
+   "d": 1.44,
+   "text": "down and, you know, start playing the"
+  },
+  {
+   "t": 865.12,
+   "d": 2.88,
+   "text": "game. They are exposed to promotional"
+  },
+  {
+   "t": 868.0,
+   "d": 3.6,
+   "text": "materials, reviews, clips on Twitch, all"
+  },
+  {
+   "t": 871.6,
+   "d": 1.76,
+   "text": "these expectations. You know, your art"
+  },
+  {
+   "t": 873.36,
+   "d": 2.24,
+   "text": "style conveys certain things about your"
+  },
+  {
+   "t": 875.6,
+   "d": 2.24,
+   "text": "game. And this is all going to form"
+  },
+  {
+   "t": 877.84,
+   "d": 2.08,
+   "text": "their initial idea of what they think"
+  },
+  {
+   "t": 879.92,
+   "d": 1.92,
+   "text": "the game's capable of. Something like if"
+  },
+  {
+   "t": 881.84,
+   "d": 2.16,
+   "text": "they think the game is made by only"
+  },
+  {
+   "t": 884.0,
+   "d": 1.6,
+   "text": "three people, that's probably going to"
+  },
+  {
+   "t": 885.6,
+   "d": 1.84,
+   "text": "inform what they think the scope of the"
+  },
+  {
+   "t": 887.44,
+   "d": 1.84,
+   "text": "game is going to be, which sets you up"
+  },
+  {
+   "t": 889.28,
+   "d": 1.92,
+   "text": "to potentially, you know, manipulate"
+  },
+  {
+   "t": 891.2,
+   "d": 3.2,
+   "text": "that or put it into question. And"
+  },
+  {
+   "t": 894.4,
+   "d": 2.08,
+   "text": "sometimes you can hopefully have an"
+  },
+  {
+   "t": 896.48,
+   "d": 1.6,
+   "text": "influence on this. You either are your"
+  },
+  {
+   "t": 898.08,
+   "d": 1.44,
+   "text": "marketing team or you work with your"
+  },
+  {
+   "t": 899.52,
+   "d": 2.72,
+   "text": "marketing team. Sometimes these are just"
+  },
+  {
+   "t": 902.24,
+   "d": 2.96,
+   "text": "constraints like genre expectations."
+  },
+  {
+   "t": 905.2,
+   "d": 1.36,
+   "text": "someone working at a conference about"
+  },
+  {
+   "t": 906.56,
+   "d": 2.8,
+   "text": "rogue likes. Uh sometimes your"
+  },
+  {
+   "t": 909.36,
+   "d": 2.16,
+   "text": "definition of a genre and the audience"
+  },
+  {
+   "t": 911.52,
+   "d": 2.16,
+   "text": "definition of a genre drift out of"
+  },
+  {
+   "t": 913.68,
+   "d": 2.56,
+   "text": "alignment. You can't make them change"
+  },
+  {
+   "t": 916.24,
+   "d": 1.92,
+   "text": "their mind. So now it is just a"
+  },
+  {
+   "t": 918.16,
+   "d": 1.44,
+   "text": "constraint. You have to be aware if"
+  },
+  {
+   "t": 919.6,
+   "d": 1.76,
+   "text": "that's what you call your game. There"
+  },
+  {
+   "t": 921.36,
+   "d": 1.28,
+   "text": "are certain expectations that are going"
+  },
+  {
+   "t": 922.64,
+   "d": 1.92,
+   "text": "to come with that. You just have to know"
+  },
+  {
+   "t": 924.56,
+   "d": 2.4,
+   "text": "about them, take advantage of them. And"
+  },
+  {
+   "t": 926.96,
+   "d": 1.6,
+   "text": "there are lots of ways like user testing"
+  },
+  {
+   "t": 928.56,
+   "d": 1.52,
+   "text": "that we know how to get an idea of what"
+  },
+  {
+   "t": 930.08,
+   "d": 2.56,
+   "text": "players expect from our games."
+  },
+  {
+   "t": 932.64,
+   "d": 1.68,
+   "text": "And you can be creative about this. You"
+  },
+  {
+   "t": 934.32,
+   "d": 1.84,
+   "text": "know, we saw the tunic manual. Another"
+  },
+  {
+   "t": 936.16,
+   "d": 1.6,
+   "text": "thing I always love to at least mention,"
+  },
+  {
+   "t": 937.76,
+   "d": 2.24,
+   "text": "kesakat achievements. If I look at an"
+  },
+  {
+   "t": 940.0,
+   "d": 1.52,
+   "text": "achievement that says, \"Wear your own"
+  },
+  {
+   "t": 941.52,
+   "d": 2.16,
+   "text": "severed face on your face.\" I already"
+  },
+  {
+   "t": 943.68,
+   "d": 2.08,
+   "text": "start asking questions. Why does that"
+  },
+  {
+   "t": 945.76,
+   "d": 2.4,
+   "text": "mechanic exist? How would I do that? And"
+  },
+  {
+   "t": 948.16,
+   "d": 1.6,
+   "text": "it's putting me in that frame of mind"
+  },
+  {
+   "t": 949.76,
+   "d": 2.72,
+   "text": "that before I even open Caves of Cud is"
+  },
+  {
+   "t": 952.48,
+   "d": 1.44,
+   "text": "making me think in this kind of more"
+  },
+  {
+   "t": 953.92,
+   "d": 2.16,
+   "text": "curious, suspenseful way about what are"
+  },
+  {
+   "t": 956.08,
+   "d": 3.04,
+   "text": "the systems of this game."
+  },
+  {
+   "t": 959.12,
+   "d": 1.92,
+   "text": "Now, once they actually sit down to play"
+  },
+  {
+   "t": 961.04,
+   "d": 1.68,
+   "text": "the game, the main question we're going"
+  },
+  {
+   "t": 962.72,
+   "d": 2.56,
+   "text": "to have to deal with as designers is how"
+  },
+  {
+   "t": 965.28,
+   "d": 2.88,
+   "text": "much do I tell the player? Because"
+  },
+  {
+   "t": 968.16,
+   "d": 2.4,
+   "text": "surprise and suspense inherently require"
+  },
+  {
+   "t": 970.56,
+   "d": 2.0,
+   "text": "the player to have an incorrect"
+  },
+  {
+   "t": 972.56,
+   "d": 2.32,
+   "text": "understanding of the game, at least in a"
+  },
+  {
+   "t": 974.88,
+   "d": 2.4,
+   "text": "particular moment, so that we can then"
+  },
+  {
+   "t": 977.28,
+   "d": 3.04,
+   "text": "correct it. And that can be a problem"
+  },
+  {
+   "t": 980.32,
+   "d": 2.08,
+   "text": "because players need to effectively"
+  },
+  {
+   "t": 982.4,
+   "d": 2.64,
+   "text": "understand the game in order to play it."
+  },
+  {
+   "t": 985.04,
+   "d": 1.84,
+   "text": "So, we're always going to be very"
+  },
+  {
+   "t": 986.88,
+   "d": 1.68,
+   "text": "specific, even more so than in other"
+  },
+  {
+   "t": 988.56,
+   "d": 3.28,
+   "text": "games, to draw that line of when we are"
+  },
+  {
+   "t": 991.84,
+   "d": 1.68,
+   "text": "going to be clear and when we're going"
+  },
+  {
+   "t": 993.52,
+   "d": 3.36,
+   "text": "to be purposefully misleading or opaque."
+  },
+  {
+   "t": 996.88,
+   "d": 2.32,
+   "text": "And this can be things like tutorials."
+  },
+  {
+   "t": 999.2,
+   "d": 1.68,
+   "text": "You should have tutorials. It's not that"
+  },
+  {
+   "t": 1000.88,
+   "d": 2.16,
+   "text": "a game should just be a black box. Dwarf"
+  },
+  {
+   "t": 1003.04,
+   "d": 2.56,
+   "text": "Fortress at this point has a tutorial."
+  },
+  {
+   "t": 1005.6,
+   "d": 1.6,
+   "text": "That does nothing to take away from"
+  },
+  {
+   "t": 1007.2,
+   "d": 2.64,
+   "text": "Dwarf Fortress being a systemically"
+  },
+  {
+   "t": 1009.84,
+   "d": 2.72,
+   "text": "mysterious and extremely deep game, but"
+  },
+  {
+   "t": 1012.56,
+   "d": 2.4,
+   "text": "it helps establish the baseline of how"
+  },
+  {
+   "t": 1014.96,
+   "d": 1.68,
+   "text": "to interact with it, how to do the"
+  },
+  {
+   "t": 1016.64,
+   "d": 1.68,
+   "text": "things that you just need to do to be"
+  },
+  {
+   "t": 1018.32,
+   "d": 2.96,
+   "text": "able to play. And that's crucial because"
+  },
+  {
+   "t": 1021.28,
+   "d": 2.56,
+   "text": "we talked about, you know, working with"
+  },
+  {
+   "t": 1023.84,
+   "d": 1.52,
+   "text": "surprise and suspense, building that"
+  },
+  {
+   "t": 1025.36,
+   "d": 1.84,
+   "text": "mental model as things like hypothesis"
+  },
+  {
+   "t": 1027.2,
+   "d": 3.28,
+   "text": "testing. A player needs to have enough"
+  },
+  {
+   "t": 1030.48,
+   "d": 1.68,
+   "text": "understanding of the game and enough,"
+  },
+  {
+   "t": 1032.16,
+   "d": 1.76,
+   "text": "you know, free cognitive space in their"
+  },
+  {
+   "t": 1033.92,
+   "d": 2.96,
+   "text": "brain to effectively engage with testing"
+  },
+  {
+   "t": 1036.88,
+   "d": 2.8,
+   "text": "hypothesis. If there's too much noise to"
+  },
+  {
+   "t": 1039.68,
+   "d": 2.8,
+   "text": "signal, if they don't know how to even"
+  },
+  {
+   "t": 1042.48,
+   "d": 2.72,
+   "text": "act on a hypothesis, then it's not going"
+  },
+  {
+   "t": 1045.2,
+   "d": 2.24,
+   "text": "to be fun. They're not actually engaging"
+  },
+  {
+   "t": 1047.44,
+   "d": 3.2,
+   "text": "with, you know, a fuzzy area. They're"
+  },
+  {
+   "t": 1050.64,
+   "d": 2.0,
+   "text": "just kind of lost. So, you always need"
+  },
+  {
+   "t": 1052.64,
+   "d": 2.8,
+   "text": "to be uh carefully managing cognitive"
+  },
+  {
+   "t": 1055.44,
+   "d": 2.4,
+   "text": "load. and even more so than other games."
+  },
+  {
+   "t": 1057.84,
+   "d": 1.76,
+   "text": "For the areas that are not meant to be"
+  },
+  {
+   "t": 1059.6,
+   "d": 1.76,
+   "text": "suspenseful, make sure that they are"
+  },
+  {
+   "t": 1061.36,
+   "d": 2.4,
+   "text": "very clear and well understood to leave"
+  },
+  {
+   "t": 1063.76,
+   "d": 1.92,
+   "text": "more mental space to deal with these"
+  },
+  {
+   "t": 1065.68,
+   "d": 3.04,
+   "text": "purposefully uncertain areas."
+  },
+  {
+   "t": 1068.72,
+   "d": 2.24,
+   "text": "An example of where you can see this I"
+  },
+  {
+   "t": 1070.96,
+   "d": 1.68,
+   "text": "think is really cool is in Balders Gate"
+  },
+  {
+   "t": 1072.64,
+   "d": 3.92,
+   "text": "3. Baldersgate 3 has a lot of really"
+  },
+  {
+   "t": 1076.56,
+   "d": 2.88,
+   "text": "clear signposting about mechanics. So,"
+  },
+  {
+   "t": 1079.44,
+   "d": 1.44,
+   "text": "for example, if you look at items in"
+  },
+  {
+   "t": 1080.88,
+   "d": 2.24,
+   "text": "your inventory, when there are parts of"
+  },
+  {
+   "t": 1083.12,
+   "d": 1.6,
+   "text": "that item that have mechanical"
+  },
+  {
+   "t": 1084.72,
+   "d": 1.68,
+   "text": "importance, it's completely separate"
+  },
+  {
+   "t": 1086.4,
+   "d": 2.08,
+   "text": "from the flavor text, it is like"
+  },
+  {
+   "t": 1088.48,
+   "d": 2.0,
+   "text": "capitalized terms. If you hover over"
+  },
+  {
+   "t": 1090.48,
+   "d": 2.0,
+   "text": "them, you get a tool tip. They are like"
+  },
+  {
+   "t": 1092.48,
+   "d": 2.16,
+   "text": "a different color. It's extremely clear."
+  },
+  {
+   "t": 1094.64,
+   "d": 2.0,
+   "text": "If I hover over burn on the cinder"
+  },
+  {
+   "t": 1096.64,
+   "d": 1.44,
+   "text": "shoes, it's going to tell me what burn"
+  },
+  {
+   "t": 1098.08,
+   "d": 4.4,
+   "text": "does. But there are exceptions. There"
+  },
+  {
+   "t": 1102.48,
+   "d": 2.4,
+   "text": "are secret affordances inside Balders"
+  },
+  {
+   "t": 1104.88,
+   "d": 2.56,
+   "text": "Gate 3. So, for example, early in the"
+  },
+  {
+   "t": 1107.44,
+   "d": 2.16,
+   "text": "game, you can run into this patch of"
+  },
+  {
+   "t": 1109.6,
+   "d": 3.04,
+   "text": "disturbed earth, and nearby there's a"
+  },
+  {
+   "t": 1112.64,
+   "d": 2.64,
+   "text": "chest with some lootable stuff in it,"
+  },
+  {
+   "t": 1115.28,
+   "d": 1.92,
+   "text": "including a shovel. The thing you have"
+  },
+  {
+   "t": 1117.2,
+   "d": 1.2,
+   "text": "to know if you haven't played Balders's"
+  },
+  {
+   "t": 1118.4,
+   "d": 3.2,
+   "text": "Gate 3 is the game"
+  },
+  {
+   "t": 1121.6,
+   "d": 2.8,
+   "text": "that just exists to be sold. All of it"
+  },
+  {
+   "t": 1124.4,
+   "d": 2.72,
+   "text": "has flavor text, but it doesn't do"
+  },
+  {
+   "t": 1127.12,
+   "d": 1.68,
+   "text": "anything. It's just there to collect and"
+  },
+  {
+   "t": 1128.8,
+   "d": 1.84,
+   "text": "sell. And so, even in this container,"
+  },
+  {
+   "t": 1130.64,
+   "d": 1.84,
+   "text": "there's a fork, there's a spoon, they"
+  },
+  {
+   "t": 1132.48,
+   "d": 1.68,
+   "text": "have descriptions, they're just to sell."
+  },
+  {
+   "t": 1134.16,
+   "d": 1.92,
+   "text": "Your bag is constantly filled with this"
+  },
+  {
+   "t": 1136.08,
+   "d": 3.92,
+   "text": "kind of trash. But despite having that"
+  },
+  {
+   "t": 1140.0,
+   "d": 1.76,
+   "text": "same flavor text only kind of"
+  },
+  {
+   "t": 1141.76,
+   "d": 2.96,
+   "text": "description, the shovel is special. And"
+  },
+  {
+   "t": 1144.72,
+   "d": 2.72,
+   "text": "only if you have one in your inventory"
+  },
+  {
+   "t": 1147.44,
+   "d": 1.36,
+   "text": "does that pile of dirt become"
+  },
+  {
+   "t": 1148.8,
+   "d": 1.44,
+   "text": "interactable and you can dig up a"
+  },
+  {
+   "t": 1150.24,
+   "d": 1.28,
+   "text": "treasure chest. And then there are"
+  },
+  {
+   "t": 1151.52,
+   "d": 2.24,
+   "text": "several of these throughout the game."
+  },
+  {
+   "t": 1153.76,
+   "d": 2.72,
+   "text": "And so this is a moment of pretty cool"
+  },
+  {
+   "t": 1156.48,
+   "d": 1.68,
+   "text": "surprise. You go from thinking that this"
+  },
+  {
+   "t": 1158.16,
+   "d": 2.72,
+   "text": "is junk to making the logical connection"
+  },
+  {
+   "t": 1160.88,
+   "d": 1.84,
+   "text": "of wait, I could dig something up with a"
+  },
+  {
+   "t": 1162.72,
+   "d": 1.6,
+   "text": "shovel to the game actually recognizing"
+  },
+  {
+   "t": 1164.32,
+   "d": 2.24,
+   "text": "that and you feel smart. You start"
+  },
+  {
+   "t": 1166.56,
+   "d": 1.52,
+   "text": "wondering, well, what about all the"
+  },
+  {
+   "t": 1168.08,
+   "d": 1.76,
+   "text": "other things in my inventory? And that"
+  },
+  {
+   "t": 1169.84,
+   "d": 1.92,
+   "text": "does pay off sometimes. I had a moment"
+  },
+  {
+   "t": 1171.76,
+   "d": 1.76,
+   "text": "where something was on fire I didn't"
+  },
+  {
+   "t": 1173.52,
+   "d": 3.28,
+   "text": "want to be on fire. Gail, my wizard, and"
+  },
+  {
+   "t": 1176.8,
+   "d": 2.0,
+   "text": "I looked at my inventory. I had a bottle"
+  },
+  {
+   "t": 1178.8,
+   "d": 3.12,
+   "text": "of water and that was set up as a food"
+  },
+  {
+   "t": 1181.92,
+   "d": 2.96,
+   "text": "item. It wasn't like a consumable type,"
+  },
+  {
+   "t": 1184.88,
+   "d": 1.52,
+   "text": "but I thought, well, it does say it's"
+  },
+  {
+   "t": 1186.4,
+   "d": 2.16,
+   "text": "water and you can throw anything in this"
+  },
+  {
+   "t": 1188.56,
+   "d": 2.08,
+   "text": "game, so let me try it. And sure enough,"
+  },
+  {
+   "t": 1190.64,
+   "d": 2.24,
+   "text": "it applied water, put out the fire. I"
+  },
+  {
+   "t": 1192.88,
+   "d": 2.4,
+   "text": "felt really smart. And so, I was very"
+  },
+  {
+   "t": 1195.28,
+   "d": 1.36,
+   "text": "excited. It's very cool that Balders's"
+  },
+  {
+   "t": 1196.64,
+   "d": 1.44,
+   "text": "Gate 3, you have to actually look at"
+  },
+  {
+   "t": 1198.08,
+   "d": 1.36,
+   "text": "everything in your inventory. And just"
+  },
+  {
+   "t": 1199.44,
+   "d": 1.84,
+   "text": "because it doesn't look like it has"
+  },
+  {
+   "t": 1201.28,
+   "d": 4.56,
+   "text": "clear affordances, maybe it does. But"
+  },
+  {
+   "t": 1205.84,
+   "d": 2.8,
+   "text": "the downside is that once the game has"
+  },
+  {
+   "t": 1208.64,
+   "d": 1.84,
+   "text": "established the suspense, it's gotten"
+  },
+  {
+   "t": 1210.48,
+   "d": 2.48,
+   "text": "you thinking about this and it's shown"
+  },
+  {
+   "t": 1212.96,
+   "d": 2.16,
+   "text": "that any random piece of loot might have"
+  },
+  {
+   "t": 1215.12,
+   "d": 1.6,
+   "text": "secret benefits. Well, how do you"
+  },
+  {
+   "t": 1216.72,
+   "d": 2.48,
+   "text": "actually test that? The answer is that"
+  },
+  {
+   "t": 1219.2,
+   "d": 2.8,
+   "text": "your inventory becomes always full of"
+  },
+  {
+   "t": 1222.0,
+   "d": 2.16,
+   "text": "tons of trash that's probably going to"
+  },
+  {
+   "t": 1224.16,
+   "d": 2.0,
+   "text": "be mostly useless. If I have a crowbar"
+  },
+  {
+   "t": 1226.16,
+   "d": 2.72,
+   "text": "that weighs 4 lb, how long do I carry"
+  },
+  {
+   "t": 1228.88,
+   "d": 1.84,
+   "text": "that around in my inventory? because I"
+  },
+  {
+   "t": 1230.72,
+   "d": 1.44,
+   "text": "think maybe somewhere there's going to"
+  },
+  {
+   "t": 1232.16,
+   "d": 3.04,
+   "text": "be a door that would pry open. You know,"
+  },
+  {
+   "t": 1235.2,
+   "d": 1.28,
+   "text": "my least favorite, there's an item"
+  },
+  {
+   "t": 1236.48,
+   "d": 1.28,
+   "text": "called a small shovel. And you might"
+  },
+  {
+   "t": 1237.76,
+   "d": 1.76,
+   "text": "think, \"Oh, I'm smart. I'll carry a"
+  },
+  {
+   "t": 1239.52,
+   "d": 1.84,
+   "text": "small shovel.\" No, the small shovel does"
+  },
+  {
+   "t": 1241.36,
+   "d": 2.56,
+   "text": "not let you dig. And if you had gotten"
+  },
+  {
+   "t": 1243.92,
+   "d": 1.28,
+   "text": "rid of your shovel because you thought"
+  },
+  {
+   "t": 1245.2,
+   "d": 1.68,
+   "text": "you were clever, well, now you got to go"
+  },
+  {
+   "t": 1246.88,
+   "d": 2.16,
+   "text": "back to that particular vendor and buy"
+  },
+  {
+   "t": 1249.04,
+   "d": 2.16,
+   "text": "your shovel back. It's a whole thing."
+  },
+  {
+   "t": 1251.2,
+   "d": 2.72,
+   "text": "Not fun. And so, here we see a couple"
+  },
+  {
+   "t": 1253.92,
+   "d": 2.0,
+   "text": "ways that system suspense can turn into"
+  },
+  {
+   "t": 1255.92,
+   "d": 3.12,
+   "text": "frustration and be maybe not worth it."
+  },
+  {
+   "t": 1259.04,
+   "d": 2.0,
+   "text": "One of that is to think when the player"
+  },
+  {
+   "t": 1261.04,
+   "d": 1.76,
+   "text": "is taking actions to test their"
+  },
+  {
+   "t": 1262.8,
+   "d": 2.24,
+   "text": "hypotheses to engage with the, you know,"
+  },
+  {
+   "t": 1265.04,
+   "d": 2.24,
+   "text": "the mysterious parts of the game. If"
+  },
+  {
+   "t": 1267.28,
+   "d": 3.2,
+   "text": "that action is unfun, frictionful, or"
+  },
+  {
+   "t": 1270.48,
+   "d": 1.36,
+   "text": "outside the game loop, you know, I'm"
+  },
+  {
+   "t": 1271.84,
+   "d": 1.6,
+   "text": "trying to be a D and D hero, not"
+  },
+  {
+   "t": 1273.44,
+   "d": 2.72,
+   "text": "micromanage my inventory. These are all"
+  },
+  {
+   "t": 1276.16,
+   "d": 1.68,
+   "text": "things that can make it not worth it"
+  },
+  {
+   "t": 1277.84,
+   "d": 2.24,
+   "text": "because in order to engage with this"
+  },
+  {
+   "t": 1280.08,
+   "d": 2.64,
+   "text": "intriguing suspense, I'm making my"
+  },
+  {
+   "t": 1282.72,
+   "d": 1.76,
+   "text": "experience worse in the like momentto"
+  },
+  {
+   "t": 1284.48,
+   "d": 2.24,
+   "text": "moment play in the game. And the second"
+  },
+  {
+   "t": 1286.72,
+   "d": 1.52,
+   "text": "thing is to think about the cost of"
+  },
+  {
+   "t": 1288.24,
+   "d": 1.92,
+   "text": "being wrong. You know, if there is a"
+  },
+  {
+   "t": 1290.16,
+   "d": 1.84,
+   "text": "high cost associated with getting a"
+  },
+  {
+   "t": 1292.0,
+   "d": 2.48,
+   "text": "hypothesis wrong, but we're also"
+  },
+  {
+   "t": 1294.48,
+   "d": 1.92,
+   "text": "encouraging the players to test out"
+  },
+  {
+   "t": 1296.4,
+   "d": 1.76,
+   "text": "their hypothesis, we've put them in a"
+  },
+  {
+   "t": 1298.16,
+   "d": 1.36,
+   "text": "bad position that can feel really"
+  },
+  {
+   "t": 1299.52,
+   "d": 3.92,
+   "text": "frustrating. So, if you know the way to"
+  },
+  {
+   "t": 1303.44,
+   "d": 1.84,
+   "text": "get something wrong is that I have an"
+  },
+  {
+   "t": 1305.28,
+   "d": 1.76,
+   "text": "extra four pounds in my inventory the"
+  },
+  {
+   "t": 1307.04,
+   "d": 2.16,
+   "text": "whole damn game, I'm going to be grumpy"
+  },
+  {
+   "t": 1309.2,
+   "d": 1.76,
+   "text": "about it. And we see this in rog likes,"
+  },
+  {
+   "t": 1310.96,
+   "d": 1.52,
+   "text": "I think, with the back and forth on the"
+  },
+  {
+   "t": 1312.48,
+   "d": 1.92,
+   "text": "identification game. If I have to use a"
+  },
+  {
+   "t": 1314.4,
+   "d": 2.08,
+   "text": "consumable to find out what it is and"
+  },
+  {
+   "t": 1316.48,
+   "d": 1.52,
+   "text": "that means I might waste a really"
+  },
+  {
+   "t": 1318.0,
+   "d": 2.24,
+   "text": "valuable consumable, a lot of rogikes"
+  },
+  {
+   "t": 1320.24,
+   "d": 2.32,
+   "text": "have decided in modern era especially"
+  },
+  {
+   "t": 1322.56,
+   "d": 3.12,
+   "text": "that that is too punishing. So both of"
+  },
+  {
+   "t": 1325.68,
+   "d": 2.48,
+   "text": "these are problems. And part of why I'm"
+  },
+  {
+   "t": 1328.16,
+   "d": 1.68,
+   "text": "comfortable saying this is that I think"
+  },
+  {
+   "t": 1329.84,
+   "d": 2.4,
+   "text": "the Balders Gate 3 team agrees with me"
+  },
+  {
+   "t": 1332.24,
+   "d": 2.4,
+   "text": "because a funny thing happened when we"
+  },
+  {
+   "t": 1334.64,
+   "d": 1.68,
+   "text": "were writing the original report."
+  },
+  {
+   "t": 1336.32,
+   "d": 2.88,
+   "text": "Baldersgate 3 had just come out and I"
+  },
+  {
+   "t": 1339.2,
+   "d": 1.52,
+   "text": "took that screenshot of the shovel"
+  },
+  {
+   "t": 1340.72,
+   "d": 2.08,
+   "text": "description. When we were getting ready"
+  },
+  {
+   "t": 1342.8,
+   "d": 2.08,
+   "text": "to finalize the paper, the screenshot"
+  },
+  {
+   "t": 1344.88,
+   "d": 1.84,
+   "text": "was kind of bad. So I booted up the game"
+  },
+  {
+   "t": 1346.72,
+   "d": 1.92,
+   "text": "to get a new screenshot and I found out"
+  },
+  {
+   "t": 1348.64,
+   "d": 2.88,
+   "text": "they'd patched the shovel. And so the"
+  },
+  {
+   "t": 1351.52,
+   "d": 2.56,
+   "text": "shovel now has this text description,"
+  },
+  {
+   "t": 1354.08,
+   "d": 2.64,
+   "text": "which does very explicitly tell you that"
+  },
+  {
+   "t": 1356.72,
+   "d": 2.16,
+   "text": "it has this special affordance. It is no"
+  },
+  {
+   "t": 1358.88,
+   "d": 2.0,
+   "text": "longer hidden. It is no longer a moment"
+  },
+  {
+   "t": 1360.88,
+   "d": 3.52,
+   "text": "of surprise or suspense. That's sad, but"
+  },
+  {
+   "t": 1364.4,
+   "d": 2.8,
+   "text": "I think is perfectly reasonable because"
+  },
+  {
+   "t": 1367.2,
+   "d": 2.08,
+   "text": "the negative impact on the experience"
+  },
+  {
+   "t": 1369.28,
+   "d": 1.76,
+   "text": "was just not worth the kind of cool"
+  },
+  {
+   "t": 1371.04,
+   "d": 2.0,
+   "text": "parts. So, not every game's going to"
+  },
+  {
+   "t": 1373.04,
+   "d": 1.52,
+   "text": "benefit. There are still some exceptions"
+  },
+  {
+   "t": 1374.56,
+   "d": 1.6,
+   "text": "even within Balders's Gate 3, but I"
+  },
+  {
+   "t": 1376.16,
+   "d": 2.16,
+   "text": "think it's a clever uh it's a cool"
+  },
+  {
+   "t": 1378.32,
+   "d": 1.76,
+   "text": "example of seeing them go back and"
+  },
+  {
+   "t": 1380.08,
+   "d": 2.48,
+   "text": "forth. Now, we've talked a lot about"
+  },
+  {
+   "t": 1382.56,
+   "d": 1.52,
+   "text": "suspense."
+  },
+  {
+   "t": 1384.08,
+   "d": 2.0,
+   "text": "We need that moment of revelation. You"
+  },
+  {
+   "t": 1386.08,
+   "d": 1.68,
+   "text": "know, we talked about there is"
+  },
+  {
+   "t": 1387.76,
+   "d": 2.32,
+   "text": "potentially the surprise, but like once"
+  },
+  {
+   "t": 1390.08,
+   "d": 2.4,
+   "text": "we've set up this uncertainty, how do we"
+  },
+  {
+   "t": 1392.48,
+   "d": 1.44,
+   "text": "resolve it? How do we have a moment of"
+  },
+  {
+   "t": 1393.92,
+   "d": 1.6,
+   "text": "revelation?"
+  },
+  {
+   "t": 1395.52,
+   "d": 2.08,
+   "text": "It can be really straightforward. It can"
+  },
+  {
+   "t": 1397.6,
+   "d": 2.08,
+   "text": "just be a surprise that we know how to"
+  },
+  {
+   "t": 1399.68,
+   "d": 2.24,
+   "text": "design. So, for example, Resident Evil"
+  },
+  {
+   "t": 1401.92,
+   "d": 2.24,
+   "text": "3, you got safe rooms. They're a break"
+  },
+  {
+   "t": 1404.16,
+   "d": 1.84,
+   "text": "from things trying to kill you. Lots of"
+  },
+  {
+   "t": 1406.0,
+   "d": 1.68,
+   "text": "games have these. They set up that"
+  },
+  {
+   "t": 1407.68,
+   "d": 1.52,
+   "text": "expectation. You have a bunch of safe"
+  },
+  {
+   "t": 1409.2,
+   "d": 2.56,
+   "text": "rooms. It's fine. And then at a specific"
+  },
+  {
+   "t": 1411.76,
+   "d": 2.48,
+   "text": "moment, the big bad breaks into the safe"
+  },
+  {
+   "t": 1414.24,
+   "d": 1.84,
+   "text": "room after you. And it's a big surprise"
+  },
+  {
+   "t": 1416.08,
+   "d": 1.52,
+   "text": "because you've set up to have one"
+  },
+  {
+   "t": 1417.6,
+   "d": 3.44,
+   "text": "expectation. Now it's suddenly different"
+  },
+  {
+   "t": 1421.04,
+   "d": 4.08,
+   "text": "there. Simple. I think very known how to"
+  },
+  {
+   "t": 1425.12,
+   "d": 2.96,
+   "text": "do this kind of thing. But less common"
+  },
+  {
+   "t": 1428.08,
+   "d": 2.8,
+   "text": "is you can get into suspense without"
+  },
+  {
+   "t": 1430.88,
+   "d": 2.08,
+   "text": "having a specifically designed moment of"
+  },
+  {
+   "t": 1432.96,
+   "d": 2.8,
+   "text": "surprise. So for example, I'm sorry to"
+  },
+  {
+   "t": 1435.76,
+   "d": 2.0,
+   "text": "spoil The Witness. It has been out for a"
+  },
+  {
+   "t": 1437.76,
+   "d": 2.16,
+   "text": "long time. The Witness is a game where"
+  },
+  {
+   "t": 1439.92,
+   "d": 1.6,
+   "text": "you are going around solving puzzles"
+  },
+  {
+   "t": 1441.52,
+   "d": 1.92,
+   "text": "that are generally presented to you in a"
+  },
+  {
+   "t": 1443.44,
+   "d": 1.84,
+   "text": "very clear fashion. You go up, there's a"
+  },
+  {
+   "t": 1445.28,
+   "d": 2.08,
+   "text": "puzzle, you solve it. The thing that"
+  },
+  {
+   "t": 1447.36,
+   "d": 1.92,
+   "text": "makes it a very notable special game"
+  },
+  {
+   "t": 1449.28,
+   "d": 2.48,
+   "text": "that people have strong connection to,"
+  },
+  {
+   "t": 1451.76,
+   "d": 2.0,
+   "text": "is that at some point, and it's"
+  },
+  {
+   "t": 1453.76,
+   "d": 1.2,
+   "text": "different for different people because"
+  },
+  {
+   "t": 1454.96,
+   "d": 2.48,
+   "text": "there is not a single moment, you will"
+  },
+  {
+   "t": 1457.44,
+   "d": 1.92,
+   "text": "look around your surroundings and think,"
+  },
+  {
+   "t": 1459.36,
+   "d": 2.4,
+   "text": "\"Hey, doesn't that thing look kind of"
+  },
+  {
+   "t": 1461.76,
+   "d": 2.48,
+   "text": "like those puzzles I've been doing?\" and"
+  },
+  {
+   "t": 1464.24,
+   "d": 1.92,
+   "text": "you'll click it and you'll realize that"
+  },
+  {
+   "t": 1466.16,
+   "d": 2.4,
+   "text": "your surroundings are filled with secret"
+  },
+  {
+   "t": 1468.56,
+   "d": 3.12,
+   "text": "puzzles that were not telegraphed. And"
+  },
+  {
+   "t": 1471.68,
+   "d": 1.76,
+   "text": "what's really cool is like two people"
+  },
+  {
+   "t": 1473.44,
+   "d": 1.44,
+   "text": "could have had this realization at"
+  },
+  {
+   "t": 1474.88,
+   "d": 2.0,
+   "text": "completely different times in different"
+  },
+  {
+   "t": 1476.88,
+   "d": 2.48,
+   "text": "contexts. And it is all the more"
+  },
+  {
+   "t": 1479.36,
+   "d": 2.72,
+   "text": "powerful a moment because it arises"
+  },
+  {
+   "t": 1482.08,
+   "d": 2.32,
+   "text": "naturally. The designer has set up this"
+  },
+  {
+   "t": 1484.4,
+   "d": 2.96,
+   "text": "potential and let players realize it on"
+  },
+  {
+   "t": 1487.36,
+   "d": 2.96,
+   "text": "their own time, which is kind of the"
+  },
+  {
+   "t": 1490.32,
+   "d": 1.84,
+   "text": "suspense without the surprise. The point"
+  },
+  {
+   "t": 1492.16,
+   "d": 1.92,
+   "text": "isn't to be pedantic. This is surprising"
+  },
+  {
+   "t": 1494.08,
+   "d": 2.48,
+   "text": "when it happens. I just mean that when"
+  },
+  {
+   "t": 1496.56,
+   "d": 1.92,
+   "text": "you are as a designer setting things up,"
+  },
+  {
+   "t": 1498.48,
+   "d": 1.92,
+   "text": "you have a range of like, am I going to"
+  },
+  {
+   "t": 1500.4,
+   "d": 2.48,
+   "text": "have a really specific moment that I hit"
+  },
+  {
+   "t": 1502.88,
+   "d": 2.16,
+   "text": "every player with or am I going to set"
+  },
+  {
+   "t": 1505.04,
+   "d": 1.84,
+   "text": "up the groundwork and let it naturally"
+  },
+  {
+   "t": 1506.88,
+   "d": 2.24,
+   "text": "dawn on them? There are downsides. Some"
+  },
+  {
+   "t": 1509.12,
+   "d": 1.6,
+   "text": "people bounce off the witness before"
+  },
+  {
+   "t": 1510.72,
+   "d": 2.56,
+   "text": "this ever happens."
+  },
+  {
+   "t": 1513.28,
+   "d": 1.6,
+   "text": "But for the people who get it, it's"
+  },
+  {
+   "t": 1514.88,
+   "d": 2.08,
+   "text": "really valuable. And there is a middle"
+  },
+  {
+   "t": 1516.96,
+   "d": 1.28,
+   "text": "ground. You know, something I like to"
+  },
+  {
+   "t": 1518.24,
+   "d": 1.6,
+   "text": "mention, Tactical Breach Wizards,"
+  },
+  {
+   "t": 1519.84,
+   "d": 2.88,
+   "text": "fantastic game. It has these optional"
+  },
+  {
+   "t": 1522.72,
+   "d": 1.84,
+   "text": "objectives that are just there. You can"
+  },
+  {
+   "t": 1524.56,
+   "d": 2.48,
+   "text": "get cosmetics with them. So, totally"
+  },
+  {
+   "t": 1527.04,
+   "d": 1.68,
+   "text": "ignorable if you're just trying to, you"
+  },
+  {
+   "t": 1528.72,
+   "d": 2.72,
+   "text": "know, beat the game. But what I like is"
+  },
+  {
+   "t": 1531.44,
+   "d": 2.24,
+   "text": "that often the optional objectives will"
+  },
+  {
+   "t": 1533.68,
+   "d": 2.0,
+   "text": "require you to do something unintuitive"
+  },
+  {
+   "t": 1535.68,
+   "d": 2.08,
+   "text": "with the systems or to kind of hit on an"
+  },
+  {
+   "t": 1537.76,
+   "d": 1.84,
+   "text": "edge case that would be very easy for"
+  },
+  {
+   "t": 1539.6,
+   "d": 1.52,
+   "text": "you to miss if you're just trying to"
+  },
+  {
+   "t": 1541.12,
+   "d": 2.0,
+   "text": "complete the main story. And so what"
+  },
+  {
+   "t": 1543.12,
+   "d": 2.24,
+   "text": "these are is kind of a subtle Easter egg"
+  },
+  {
+   "t": 1545.36,
+   "d": 3.28,
+   "text": "or a breadcrumbming towards these"
+  },
+  {
+   "t": 1548.64,
+   "d": 1.76,
+   "text": "systemic kind of expansions of what's"
+  },
+  {
+   "t": 1550.4,
+   "d": 1.68,
+   "text": "possible in the game. So it's this"
+  },
+  {
+   "t": 1552.08,
+   "d": 1.68,
+   "text": "middle ground of it doesn't force you to"
+  },
+  {
+   "t": 1553.76,
+   "d": 1.76,
+   "text": "engage with it and it also doesn't just"
+  },
+  {
+   "t": 1555.52,
+   "d": 2.16,
+   "text": "wait for you to completely ambiently"
+  },
+  {
+   "t": 1557.68,
+   "d": 2.48,
+   "text": "realize it. They exist to give you these"
+  },
+  {
+   "t": 1560.16,
+   "d": 2.16,
+   "text": "little hints and think, hey, did it ever"
+  },
+  {
+   "t": 1562.32,
+   "d": 1.52,
+   "text": "occur to you that you could maybe"
+  },
+  {
+   "t": 1563.84,
+   "d": 2.88,
+   "text": "combine these two abilities? So there"
+  },
+  {
+   "t": 1566.72,
+   "d": 2.64,
+   "text": "are lots of ranges of how you want to"
+  },
+  {
+   "t": 1569.36,
+   "d": 2.56,
+   "text": "reveal the uncertainty."
+  },
+  {
+   "t": 1571.92,
+   "d": 3.8,
+   "text": "Going to drink water."
+  },
+  {
+   "t": 1576.32,
+   "d": 2.32,
+   "text": "Now one of the things that's cool about"
+  },
+  {
+   "t": 1578.64,
+   "d": 2.24,
+   "text": "this paper being written at this point a"
+  },
+  {
+   "t": 1580.88,
+   "d": 1.84,
+   "text": "couple years ago is that there's been"
+  },
+  {
+   "t": 1582.72,
+   "d": 2.24,
+   "text": "some chance to apply these ideas. And so"
+  },
+  {
+   "t": 1584.96,
+   "d": 1.76,
+   "text": "I want to talk about two little case"
+  },
+  {
+   "t": 1586.72,
+   "d": 1.6,
+   "text": "studies of what it's been like using"
+  },
+  {
+   "t": 1588.32,
+   "d": 2.64,
+   "text": "these ideas in real design work. And the"
+  },
+  {
+   "t": 1590.96,
+   "d": 1.44,
+   "text": "first is I want to talk about some of my"
+  },
+  {
+   "t": 1592.4,
+   "d": 2.32,
+   "text": "time working on baseball. that surreal"
+  },
+  {
+   "t": 1594.72,
+   "d": 2.96,
+   "text": "horror baseball simulator. Baseball ran"
+  },
+  {
+   "t": 1597.68,
+   "d": 4.0,
+   "text": "as a live game from 2020 to 2023. And"
+  },
+  {
+   "t": 1601.68,
+   "d": 1.52,
+   "text": "the important thing to know is that I"
+  },
+  {
+   "t": 1603.2,
+   "d": 2.32,
+   "text": "joined at the end. I joined in the last"
+  },
+  {
+   "t": 1605.52,
+   "d": 2.88,
+   "text": "year. And why that's important is that"
+  },
+  {
+   "t": 1608.4,
+   "d": 1.84,
+   "text": "it wasn't a question of how do we"
+  },
+  {
+   "t": 1610.24,
+   "d": 2.24,
+   "text": "establish system suspense. This was a"
+  },
+  {
+   "t": 1612.48,
+   "d": 2.24,
+   "text": "game that already had it and was doing"
+  },
+  {
+   "t": 1614.72,
+   "d": 2.64,
+   "text": "really well with, you know, the fans"
+  },
+  {
+   "t": 1617.36,
+   "d": 1.68,
+   "text": "engaging with that feeling of suspense"
+  },
+  {
+   "t": 1619.04,
+   "d": 2.48,
+   "text": "and curiosity. So when I joined, the"
+  },
+  {
+   "t": 1621.52,
+   "d": 1.6,
+   "text": "problem was how do you maintain it? How"
+  },
+  {
+   "t": 1623.12,
+   "d": 2.08,
+   "text": "do you keep rewarding that curiosity and"
+  },
+  {
+   "t": 1625.2,
+   "d": 2.48,
+   "text": "investment the players already have? And"
+  },
+  {
+   "t": 1627.68,
+   "d": 1.52,
+   "text": "obviously in this case it was a live"
+  },
+  {
+   "t": 1629.2,
+   "d": 1.76,
+   "text": "game. But even if you were designing a"
+  },
+  {
+   "t": 1630.96,
+   "d": 1.44,
+   "text": "non-live game, you're going to have to"
+  },
+  {
+   "t": 1632.4,
+   "d": 1.6,
+   "text": "think about this in terms of, you know,"
+  },
+  {
+   "t": 1634.0,
+   "d": 1.92,
+   "text": "the moment when you first introduce the"
+  },
+  {
+   "t": 1635.92,
+   "d": 1.68,
+   "text": "suspense and then however long players"
+  },
+  {
+   "t": 1637.6,
+   "d": 1.28,
+   "text": "are going to keep engaging with that"
+  },
+  {
+   "t": 1638.88,
+   "d": 2.48,
+   "text": "game. So I want to talk a bit about how"
+  },
+  {
+   "t": 1641.36,
+   "d": 2.48,
+   "text": "system suspense as a term and as a"
+  },
+  {
+   "t": 1643.84,
+   "d": 2.48,
+   "text": "concept helped us uh solve this design"
+  },
+  {
+   "t": 1646.32,
+   "d": 3.04,
+   "text": "problem. Now I am not going to go deep"
+  },
+  {
+   "t": 1649.36,
+   "d": 2.08,
+   "text": "into explaining BLF. That would take all"
+  },
+  {
+   "t": 1651.44,
+   "d": 2.64,
+   "text": "day. highle overview. You played it in a"
+  },
+  {
+   "t": 1654.08,
+   "d": 2.16,
+   "text": "web browser. It looked like this. You're"
+  },
+  {
+   "t": 1656.24,
+   "d": 1.52,
+   "text": "watching simulated baseball games"
+  },
+  {
+   "t": 1657.76,
+   "d": 2.88,
+   "text": "happen. Minimal UI. You place bets on"
+  },
+  {
+   "t": 1660.64,
+   "d": 2.64,
+   "text": "outcomes of games. You earn currency."
+  },
+  {
+   "t": 1663.28,
+   "d": 2.0,
+   "text": "There'd be a season, which would be one"
+  },
+  {
+   "t": 1665.28,
+   "d": 2.64,
+   "text": "week of real life time. And you'd pick a"
+  },
+  {
+   "t": 1667.92,
+   "d": 1.28,
+   "text": "team that you aligned yourself with,"
+  },
+  {
+   "t": 1669.2,
+   "d": 1.84,
+   "text": "like the Baltimore Crabs, and you would"
+  },
+  {
+   "t": 1671.04,
+   "d": 2.48,
+   "text": "try to use your currency to win them"
+  },
+  {
+   "t": 1673.52,
+   "d": 2.48,
+   "text": "blessings that would make them better."
+  },
+  {
+   "t": 1676.0,
+   "d": 1.68,
+   "text": "Cool."
+  },
+  {
+   "t": 1677.68,
+   "d": 2.08,
+   "text": "Part of to give you an idea of the way"
+  },
+  {
+   "t": 1679.76,
+   "d": 2.64,
+   "text": "that system suspense and that curiosity"
+  },
+  {
+   "t": 1682.4,
+   "d": 1.92,
+   "text": "came into the experience is it's"
+  },
+  {
+   "t": 1684.32,
+   "d": 2.0,
+   "text": "important to know everyone who's playing"
+  },
+  {
+   "t": 1686.32,
+   "d": 2.24,
+   "text": "all the fans engaging with BL baseball"
+  },
+  {
+   "t": 1688.56,
+   "d": 1.76,
+   "text": "they're all engaging with one big"
+  },
+  {
+   "t": 1690.32,
+   "d": 2.32,
+   "text": "simulation that one set of things"
+  },
+  {
+   "t": 1692.64,
+   "d": 2.56,
+   "text": "happens in you all influencing it"
+  },
+  {
+   "t": 1695.2,
+   "d": 1.92,
+   "text": "together. So one of the ways you could"
+  },
+  {
+   "t": 1697.12,
+   "d": 2.08,
+   "text": "use that currency was instead of voting"
+  },
+  {
+   "t": 1699.2,
+   "d": 1.92,
+   "text": "on things just for your team you could"
+  },
+  {
+   "t": 1701.12,
+   "d": 1.52,
+   "text": "vote on something called decrees which"
+  },
+  {
+   "t": 1702.64,
+   "d": 1.44,
+   "text": "would change the rules of how the game"
+  },
+  {
+   "t": 1704.08,
+   "d": 2.16,
+   "text": "itself worked. So, for example, in"
+  },
+  {
+   "t": 1706.24,
+   "d": 1.92,
+   "text": "season 10, it offered these three"
+  },
+  {
+   "t": 1708.16,
+   "d": 2.56,
+   "text": "options to the players, the fans to try"
+  },
+  {
+   "t": 1710.72,
+   "d": 1.84,
+   "text": "and vote on. And only one of them was"
+  },
+  {
+   "t": 1712.56,
+   "d": 2.0,
+   "text": "going to pass. And what that means, as"
+  },
+  {
+   "t": 1714.56,
+   "d": 3.44,
+   "text": "you can see, they are quite mysterious."
+  },
+  {
+   "t": 1718.0,
+   "d": 1.92,
+   "text": "It was not established what a black hole"
+  },
+  {
+   "t": 1719.92,
+   "d": 2.16,
+   "text": "would do. It was not established what a"
+  },
+  {
+   "t": 1722.08,
+   "d": 2.32,
+   "text": "countdown would mean. And because only"
+  },
+  {
+   "t": 1724.4,
+   "d": 2.08,
+   "text": "one of them would pass, what happened is"
+  },
+  {
+   "t": 1726.48,
+   "d": 1.36,
+   "text": "black hole passed. So, we did get to"
+  },
+  {
+   "t": 1727.84,
+   "d": 2.24,
+   "text": "learn what a black hole was. Countdown"
+  },
+  {
+   "t": 1730.08,
+   "d": 2.56,
+   "text": "self-destruct did not pass. So, we will"
+  },
+  {
+   "t": 1732.64,
+   "d": 2.16,
+   "text": "never know what that is. And so the"
+  },
+  {
+   "t": 1734.8,
+   "d": 1.44,
+   "text": "experience of Blissfall would be"
+  },
+  {
+   "t": 1736.24,
+   "d": 1.52,
+   "text": "spending a week discussing with the"
+  },
+  {
+   "t": 1737.76,
+   "d": 2.08,
+   "text": "other fans what do you think these"
+  },
+  {
+   "t": 1739.84,
+   "d": 1.6,
+   "text": "things mean? Which one do you want to"
+  },
+  {
+   "t": 1741.44,
+   "d": 2.08,
+   "text": "try and explore? And after the decision"
+  },
+  {
+   "t": 1743.52,
+   "d": 1.68,
+   "text": "was made, you'd still keep speculating"
+  },
+  {
+   "t": 1745.2,
+   "d": 1.44,
+   "text": "of like, oh, I wonder what would have"
+  },
+  {
+   "t": 1746.64,
+   "d": 1.52,
+   "text": "been possible. So these kinds of"
+  },
+  {
+   "t": 1748.16,
+   "d": 1.6,
+   "text": "questions were a big part of the fan"
+  },
+  {
+   "t": 1749.76,
+   "d": 2.08,
+   "text": "experience."
+  },
+  {
+   "t": 1751.84,
+   "d": 1.6,
+   "text": "And I want to mention one other moment"
+  },
+  {
+   "t": 1753.44,
+   "d": 3.12,
+   "text": "that kind of showcases how the game had"
+  },
+  {
+   "t": 1756.56,
+   "d": 2.16,
+   "text": "set up this pattern of rewarding fans"
+  },
+  {
+   "t": 1758.72,
+   "d": 2.32,
+   "text": "for looking for edge cases and thinking"
+  },
+  {
+   "t": 1761.04,
+   "d": 2.96,
+   "text": "about pushing on the systems. So another"
+  },
+  {
+   "t": 1764.0,
+   "d": 1.84,
+   "text": "mechanic in the game was an idle board."
+  },
+  {
+   "t": 1765.84,
+   "d": 1.44,
+   "text": "It's just a straightforward you could"
+  },
+  {
+   "t": 1767.28,
+   "d": 3.44,
+   "text": "idolize one player of BL baseball and"
+  },
+  {
+   "t": 1770.72,
+   "d": 1.6,
+   "text": "then it was just a big popularity"
+  },
+  {
+   "t": 1772.32,
+   "d": 2.48,
+   "text": "contest of which which players had the"
+  },
+  {
+   "t": 1774.8,
+   "d": 3.12,
+   "text": "most fans and then that could be used to"
+  },
+  {
+   "t": 1777.92,
+   "d": 2.56,
+   "text": "tie into other mechanics. So for example"
+  },
+  {
+   "t": 1780.48,
+   "d": 1.84,
+   "text": "a blessing that says hey if your team"
+  },
+  {
+   "t": 1782.32,
+   "d": 2.24,
+   "text": "wins this they'll get to steal the 14th"
+  },
+  {
+   "t": 1784.56,
+   "d": 1.84,
+   "text": "most idolized player onto their own"
+  },
+  {
+   "t": 1786.4,
+   "d": 3.76,
+   "text": "team. So the idea is popular players are"
+  },
+  {
+   "t": 1790.16,
+   "d": 1.84,
+   "text": "probably good players. you can steal a"
+  },
+  {
+   "t": 1792.0,
+   "d": 2.48,
+   "text": "good player onto your team. But that's"
+  },
+  {
+   "t": 1794.48,
+   "d": 2.48,
+   "text": "not what happened because the fans"
+  },
+  {
+   "t": 1796.96,
+   "d": 2.56,
+   "text": "noticed that you could idolize a"
+  },
+  {
+   "t": 1799.52,
+   "d": 2.24,
+   "text": "baseball player who was dead. Because I"
+  },
+  {
+   "t": 1801.76,
+   "d": 2.08,
+   "text": "said it's a horror baseball game."
+  },
+  {
+   "t": 1803.84,
+   "d": 2.48,
+   "text": "Players could die. And they started"
+  },
+  {
+   "t": 1806.32,
+   "d": 2.16,
+   "text": "wondering, well, if we can idolize dead"
+  },
+  {
+   "t": 1808.48,
+   "d": 2.56,
+   "text": "players, could we actually coordinate to"
+  },
+  {
+   "t": 1811.04,
+   "d": 2.56,
+   "text": "get a dead player into the 14th slot?"
+  },
+  {
+   "t": 1813.6,
+   "d": 1.36,
+   "text": "Because then what would happen if you"
+  },
+  {
+   "t": 1814.96,
+   "d": 3.12,
+   "text": "stole a dead player onto your team? And"
+  },
+  {
+   "t": 1818.08,
+   "d": 1.92,
+   "text": "they cared about that so much that they"
+  },
+  {
+   "t": 1820.0,
+   "d": 2.72,
+   "text": "were able to collectively organize to"
+  },
+  {
+   "t": 1822.72,
+   "d": 2.24,
+   "text": "ensure that a dead player was in that 14"
+  },
+  {
+   "t": 1824.96,
+   "d": 3.36,
+   "text": "slot. And they did a necromancy"
+  },
+  {
+   "t": 1828.32,
+   "d": 1.52,
+   "text": "instead of cutting this off. The"
+  },
+  {
+   "t": 1829.84,
+   "d": 2.08,
+   "text": "developers decided to allow it even"
+  },
+  {
+   "t": 1831.92,
+   "d": 2.48,
+   "text": "though it had not been intended and set"
+  },
+  {
+   "t": 1834.4,
+   "d": 1.6,
+   "text": "up some new mechanics so that when this"
+  },
+  {
+   "t": 1836.0,
+   "d": 1.6,
+   "text": "player came back from the dead, they"
+  },
+  {
+   "t": 1837.6,
+   "d": 1.92,
+   "text": "came back wrong. They started beating in"
+  },
+  {
+   "t": 1839.52,
+   "d": 2.16,
+   "text": "other players with balls and killing"
+  },
+  {
+   "t": 1841.68,
+   "d": 2.56,
+   "text": "them. It was a huge moment for the game"
+  },
+  {
+   "t": 1844.24,
+   "d": 2.48,
+   "text": "and it set up this really intense"
+  },
+  {
+   "t": 1846.72,
+   "d": 2.96,
+   "text": "speculation, curiosity and interest in"
+  },
+  {
+   "t": 1849.68,
+   "d": 2.48,
+   "text": "the fans of exploring the edge cases and"
+  },
+  {
+   "t": 1852.16,
+   "d": 1.52,
+   "text": "thinking about all the ways the systems"
+  },
+  {
+   "t": 1853.68,
+   "d": 3.28,
+   "text": "could interact. And so that left us with"
+  },
+  {
+   "t": 1856.96,
+   "d": 1.92,
+   "text": "the third actual part of our work as"
+  },
+  {
+   "t": 1858.88,
+   "d": 1.76,
+   "text": "designers of once we have done the work"
+  },
+  {
+   "t": 1860.64,
+   "d": 1.92,
+   "text": "of setting up the mental model, drawing"
+  },
+  {
+   "t": 1862.56,
+   "d": 2.08,
+   "text": "attention to uncertainty, how do we pay"
+  },
+  {
+   "t": 1864.64,
+   "d": 2.8,
+   "text": "that off? We need to either sustain it"
+  },
+  {
+   "t": 1867.44,
+   "d": 2.16,
+   "text": "for as long as we can make it feel good"
+  },
+  {
+   "t": 1869.6,
+   "d": 1.52,
+   "text": "to sustain it because we put a lot of"
+  },
+  {
+   "t": 1871.12,
+   "d": 1.92,
+   "text": "work into establishing it to begin with"
+  },
+  {
+   "t": 1873.04,
+   "d": 2.32,
+   "text": "or we needed to resolve in a way that"
+  },
+  {
+   "t": 1875.36,
+   "d": 3.84,
+   "text": "feels satisfying. So I'm going to give a"
+  },
+  {
+   "t": 1879.2,
+   "d": 1.92,
+   "text": "contrived example. The stuff that I"
+  },
+  {
+   "t": 1881.12,
+   "d": 2.48,
+   "text": "worked on didn't end up going live so it"
+  },
+  {
+   "t": 1883.6,
+   "d": 3.92,
+   "text": "is under NDA. I have put together a fake"
+  },
+  {
+   "t": 1887.52,
+   "d": 2.24,
+   "text": "example of the exact type of problem"
+  },
+  {
+   "t": 1889.76,
+   "d": 1.84,
+   "text": "that I was solving and how we went about"
+  },
+  {
+   "t": 1891.6,
+   "d": 2.48,
+   "text": "solving it, but the details are made up"
+  },
+  {
+   "t": 1894.08,
+   "d": 3.2,
+   "text": "for the sake of this talk. So, let's say"
+  },
+  {
+   "t": 1897.28,
+   "d": 2.56,
+   "text": "we're coordinating with Nintendo and"
+  },
+  {
+   "t": 1899.84,
+   "d": 1.36,
+   "text": "we're going to have an arc of a season."
+  },
+  {
+   "t": 1901.2,
+   "d": 1.2,
+   "text": "We'd think, okay, what do we want to"
+  },
+  {
+   "t": 1902.4,
+   "d": 1.52,
+   "text": "happen in this season? Okay, in this"
+  },
+  {
+   "t": 1903.92,
+   "d": 2.4,
+   "text": "one, Masterhand from Smash Bros. is"
+  },
+  {
+   "t": 1906.32,
+   "d": 2.24,
+   "text": "going to come threaten the league and"
+  },
+  {
+   "t": 1908.56,
+   "d": 1.2,
+   "text": "we're going to do a bunch of stuff."
+  },
+  {
+   "t": 1909.76,
+   "d": 1.52,
+   "text": "We'll think about a pattern. We want to"
+  },
+  {
+   "t": 1911.28,
+   "d": 1.76,
+   "text": "like introduce a new player status"
+  },
+  {
+   "t": 1913.04,
+   "d": 2.56,
+   "text": "effect. Uh we're going to set it up kind"
+  },
+  {
+   "t": 1915.6,
+   "d": 1.04,
+   "text": "of like a trap. We're going to"
+  },
+  {
+   "t": 1916.64,
+   "d": 2.24,
+   "text": "purposefully use that idle board again"
+  },
+  {
+   "t": 1918.88,
+   "d": 1.44,
+   "text": "and we're going to use the fact that we"
+  },
+  {
+   "t": 1920.32,
+   "d": 1.92,
+   "text": "know players have this association with"
+  },
+  {
+   "t": 1922.24,
+   "d": 2.08,
+   "text": "the 14 slot and we're going to have a"
+  },
+  {
+   "t": 1924.32,
+   "d": 1.68,
+   "text": "thing multiple times where Master Hand"
+  },
+  {
+   "t": 1926.0,
+   "d": 2.4,
+   "text": "will grab the player in the 14th slot."
+  },
+  {
+   "t": 1928.4,
+   "d": 1.76,
+   "text": "And then what we want is to set up a"
+  },
+  {
+   "t": 1930.16,
+   "d": 2.16,
+   "text": "kind of trap where we've added this new"
+  },
+  {
+   "t": 1932.32,
+   "d": 2.32,
+   "text": "mod and if the player has the mod, it'll"
+  },
+  {
+   "t": 1934.64,
+   "d": 2.24,
+   "text": "trigger this cool thing that'll happen."
+  },
+  {
+   "t": 1936.88,
+   "d": 1.2,
+   "text": "So we do something like this. We'd"
+  },
+  {
+   "t": 1938.08,
+   "d": 2.24,
+   "text": "think, okay, ideally, what's a fun"
+  },
+  {
+   "t": 1940.32,
+   "d": 2.24,
+   "text": "compelling arc that this season could"
+  },
+  {
+   "t": 1942.56,
+   "d": 2.48,
+   "text": "have? And importantly, it involves"
+  },
+  {
+   "t": 1945.04,
+   "d": 1.6,
+   "text": "periods where the fans are going to get"
+  },
+  {
+   "t": 1946.64,
+   "d": 2.64,
+   "text": "to decide things. But then we'd have to"
+  },
+  {
+   "t": 1949.28,
+   "d": 2.0,
+   "text": "think, okay, what will the fans actually"
+  },
+  {
+   "t": 1951.28,
+   "d": 3.36,
+   "text": "do? And because our fans are invested in"
+  },
+  {
+   "t": 1954.64,
+   "d": 1.44,
+   "text": "thinking really hard about the systems"
+  },
+  {
+   "t": 1956.08,
+   "d": 2.16,
+   "text": "and finding edge cases, we would sit"
+  },
+  {
+   "t": 1958.24,
+   "d": 1.92,
+   "text": "down and be like, okay, the fans will"
+  },
+  {
+   "t": 1960.16,
+   "d": 1.84,
+   "text": "hopefully care about the new mod, sure,"
+  },
+  {
+   "t": 1962.0,
+   "d": 1.28,
+   "text": "but we know they're going to care about"
+  },
+  {
+   "t": 1963.28,
+   "d": 1.44,
+   "text": "dead players. As long as they're still"
+  },
+  {
+   "t": 1964.72,
+   "d": 2.08,
+   "text": "allowed to idolize dead players, we know"
+  },
+  {
+   "t": 1966.8,
+   "d": 1.44,
+   "text": "they're going to want to do necromancy"
+  },
+  {
+   "t": 1968.24,
+   "d": 1.2,
+   "text": "again, and they're going to expect"
+  },
+  {
+   "t": 1969.44,
+   "d": 2.16,
+   "text": "something to happen. We could look and"
+  },
+  {
+   "t": 1971.6,
+   "d": 1.2,
+   "text": "say, \"Okay, we're doing stuff with"
+  },
+  {
+   "t": 1972.8,
+   "d": 2.4,
+   "text": "hands. There is a stat on BL players"
+  },
+  {
+   "t": 1975.2,
+   "d": 1.84,
+   "text": "that is how many fingers they have.\""
+  },
+  {
+   "t": 1977.04,
+   "d": 1.36,
+   "text": "There's a chance the fans will get"
+  },
+  {
+   "t": 1978.4,
+   "d": 1.76,
+   "text": "really fixated on the idea of like,"
+  },
+  {
+   "t": 1980.16,
+   "d": 2.4,
+   "text": "\"What if we put in a player with 99"
+  },
+  {
+   "t": 1982.56,
+   "d": 1.68,
+   "text": "fingers? Surely something interesting"
+  },
+  {
+   "t": 1984.24,
+   "d": 3.12,
+   "text": "will happen. There are basic equipment"
+  },
+  {
+   "t": 1987.36,
+   "d": 1.68,
+   "text": "slots including a glove slot because"
+  },
+  {
+   "t": 1989.04,
+   "d": 2.48,
+   "text": "this baseball glove. Master hand is a"
+  },
+  {
+   "t": 1991.52,
+   "d": 1.92,
+   "text": "glove.\" easy to see how the players"
+  },
+  {
+   "t": 1993.44,
+   "d": 1.28,
+   "text": "could start putting that together,"
+  },
+  {
+   "t": 1994.72,
+   "d": 1.44,
+   "text": "especially because there's an item that"
+  },
+  {
+   "t": 1996.16,
+   "d": 1.76,
+   "text": "one particular player has that's"
+  },
+  {
+   "t": 1997.92,
+   "d": 2.08,
+   "text": "described as a literal arm cannon, which"
+  },
+  {
+   "t": 2000.0,
+   "d": 1.52,
+   "text": "kind of implies doesn't even have a"
+  },
+  {
+   "t": 2001.52,
+   "d": 2.96,
+   "text": "hand. So, very easy. Maybe the fans are"
+  },
+  {
+   "t": 2004.48,
+   "d": 1.2,
+   "text": "going to get really excited and say,"
+  },
+  {
+   "t": 2005.68,
+   "d": 1.84,
+   "text": "\"Oh, we got it all put together and make"
+  },
+  {
+   "t": 2007.52,
+   "d": 1.2,
+   "text": "sure that the person with the literal"
+  },
+  {
+   "t": 2008.72,
+   "d": 3.12,
+   "text": "arm cannon gets gets uh chosen because"
+  },
+  {
+   "t": 2011.84,
+   "d": 2.08,
+   "text": "surely something special will happen.\""
+  },
+  {
+   "t": 2013.92,
+   "d": 2.48,
+   "text": "And it's great that they're so engaged,"
+  },
+  {
+   "t": 2016.4,
+   "d": 3.12,
+   "text": "but we have to build this. We don't have"
+  },
+  {
+   "t": 2019.52,
+   "d": 2.4,
+   "text": "a lot of time and we don't have a lot of"
+  },
+  {
+   "t": 2021.92,
+   "d": 1.76,
+   "text": "resources. And so one of the biggest"
+  },
+  {
+   "t": 2023.68,
+   "d": 2.16,
+   "text": "tensions we had as a design team was you"
+  },
+  {
+   "t": 2025.84,
+   "d": 1.12,
+   "text": "had to work with especially the"
+  },
+  {
+   "t": 2026.96,
+   "d": 2.48,
+   "text": "engineers to make sure that we actually"
+  },
+  {
+   "t": 2029.44,
+   "d": 3.2,
+   "text": "ship this thing. And how do we support"
+  },
+  {
+   "t": 2032.64,
+   "d": 2.08,
+   "text": "enough variation to pay off the"
+  },
+  {
+   "t": 2034.72,
+   "d": 2.88,
+   "text": "speculation, keep the suspense going"
+  },
+  {
+   "t": 2037.6,
+   "d": 1.84,
+   "text": "while actually shipping a game because"
+  },
+  {
+   "t": 2039.44,
+   "d": 3.44,
+   "text": "we can't just not do anything, but also"
+  },
+  {
+   "t": 2042.88,
+   "d": 1.6,
+   "text": "we can't do all of these edge cases."
+  },
+  {
+   "t": 2044.48,
+   "d": 1.92,
+   "text": "It's going to be impossible."
+  },
+  {
+   "t": 2046.4,
+   "d": 1.28,
+   "text": "And so the first thing that was useful"
+  },
+  {
+   "t": 2047.68,
+   "d": 2.08,
+   "text": "about having this wording this this idea"
+  },
+  {
+   "t": 2049.76,
+   "d": 2.24,
+   "text": "of system suspense is it let us"
+  },
+  {
+   "t": 2052.0,
+   "d": 2.16,
+   "text": "communicate better the cost value"
+  },
+  {
+   "t": 2054.16,
+   "d": 2.48,
+   "text": "proposition of closing off an edge case."
+  },
+  {
+   "t": 2056.64,
+   "d": 1.76,
+   "text": "So that would be something like saying"
+  },
+  {
+   "t": 2058.4,
+   "d": 1.84,
+   "text": "let's just not let you idolize dead"
+  },
+  {
+   "t": 2060.24,
+   "d": 1.68,
+   "text": "players anymore because we just don't"
+  },
+  {
+   "t": 2061.92,
+   "d": 1.36,
+   "text": "want to have to deal with that extra"
+  },
+  {
+   "t": 2063.28,
+   "d": 2.4,
+   "text": "complexity when you're trying to reduce"
+  },
+  {
+   "t": 2065.68,
+   "d": 1.44,
+   "text": "scope. Often the first thing you want to"
+  },
+  {
+   "t": 2067.12,
+   "d": 1.92,
+   "text": "do is get rid of edge cases, you know,"
+  },
+  {
+   "t": 2069.04,
+   "d": 2.0,
+   "text": "and the more fringe they are, the more"
+  },
+  {
+   "t": 2071.04,
+   "d": 2.48,
+   "text": "likely you just want to cut them off."
+  },
+  {
+   "t": 2073.52,
+   "d": 2.56,
+   "text": "And in arguing for why you might want to"
+  },
+  {
+   "t": 2076.08,
+   "d": 2.0,
+   "text": "keep it, what we were able to do was"
+  },
+  {
+   "t": 2078.08,
+   "d": 2.16,
+   "text": "say, well, when you close off an edge"
+  },
+  {
+   "t": 2080.24,
+   "d": 2.8,
+   "text": "case, that gives you a benefit, saves"
+  },
+  {
+   "t": 2083.04,
+   "d": 2.48,
+   "text": "you time, but it has a cost of closing"
+  },
+  {
+   "t": 2085.52,
+   "d": 2.08,
+   "text": "off player suspense. It creates a hard"
+  },
+  {
+   "t": 2087.6,
+   "d": 2.72,
+   "text": "boundary that had once been fuzzy, and"
+  },
+  {
+   "t": 2090.32,
+   "d": 2.8,
+   "text": "that was something to take into account"
+  },
+  {
+   "t": 2093.12,
+   "d": 1.92,
+   "text": "when figuring out what we should work"
+  },
+  {
+   "t": 2095.04,
+   "d": 2.16,
+   "text": "on, what we shouldn't."
+  },
+  {
+   "t": 2097.2,
+   "d": 1.52,
+   "text": "The other thing that we could do was"
+  },
+  {
+   "t": 2098.72,
+   "d": 1.92,
+   "text": "talk about productive and unproductive"
+  },
+  {
+   "t": 2100.64,
+   "d": 2.0,
+   "text": "uncertainty. Because like I said, you"
+  },
+  {
+   "t": 2102.64,
+   "d": 1.92,
+   "text": "need moments of uncertainty when you"
+  },
+  {
+   "t": 2104.56,
+   "d": 2.4,
+   "text": "want to have areas of suspense. And this"
+  },
+  {
+   "t": 2106.96,
+   "d": 1.76,
+   "text": "can be in conflict that you know, BL had"
+  },
+  {
+   "t": 2108.72,
+   "d": 1.52,
+   "text": "a lot of elements of it that were hard"
+  },
+  {
+   "t": 2110.24,
+   "d": 2.72,
+   "text": "to engage with, hard to understand. And"
+  },
+  {
+   "t": 2112.96,
+   "d": 2.88,
+   "text": "a very normal and often correct, you"
+  },
+  {
+   "t": 2115.84,
+   "d": 1.68,
+   "text": "know, intuition is to say, well, players"
+  },
+  {
+   "t": 2117.52,
+   "d": 1.68,
+   "text": "need to understand the game better. If"
+  },
+  {
+   "t": 2119.2,
+   "d": 2.32,
+   "text": "there is uncertainty in how a mechanic"
+  },
+  {
+   "t": 2121.52,
+   "d": 1.52,
+   "text": "works, what their actions are going to"
+  },
+  {
+   "t": 2123.04,
+   "d": 2.16,
+   "text": "do, most games you would say, well,"
+  },
+  {
+   "t": 2125.2,
+   "d": 2.56,
+   "text": "let's get rid of that uncertainty. But"
+  },
+  {
+   "t": 2127.76,
+   "d": 2.48,
+   "text": "that removes space for suspense and"
+  },
+  {
+   "t": 2130.24,
+   "d": 2.32,
+   "text": "surprise. So we were able to talk about"
+  },
+  {
+   "t": 2132.56,
+   "d": 1.6,
+   "text": "where are the places where we are"
+  },
+  {
+   "t": 2134.16,
+   "d": 2.16,
+   "text": "intentionally preserving uncertainty for"
+  },
+  {
+   "t": 2136.32,
+   "d": 2.08,
+   "text": "particular outcomes and where are we"
+  },
+  {
+   "t": 2138.4,
+   "d": 2.24,
+   "text": "going to correctly remove some"
+  },
+  {
+   "t": 2140.64,
+   "d": 1.92,
+   "text": "uncertainty."
+  },
+  {
+   "t": 2142.56,
+   "d": 1.84,
+   "text": "And just another kind of interesting"
+  },
+  {
+   "t": 2144.4,
+   "d": 1.52,
+   "text": "example of what it would look like"
+  },
+  {
+   "t": 2145.92,
+   "d": 1.52,
+   "text": "behind the scenes working on stuff like"
+  },
+  {
+   "t": 2147.44,
+   "d": 2.16,
+   "text": "this is that so say we have something"
+  },
+  {
+   "t": 2149.6,
+   "d": 1.44,
+   "text": "like that season where there are a bunch"
+  },
+  {
+   "t": 2151.04,
+   "d": 1.92,
+   "text": "of edge cases we've identified that we"
+  },
+  {
+   "t": 2152.96,
+   "d": 1.84,
+   "text": "think are elements the fans will be"
+  },
+  {
+   "t": 2154.8,
+   "d": 1.68,
+   "text": "interested in. We could do something"
+  },
+  {
+   "t": 2156.48,
+   "d": 2.64,
+   "text": "like build a big tree, put in all of the"
+  },
+  {
+   "t": 2159.12,
+   "d": 1.6,
+   "text": "different factors and figure out, okay,"
+  },
+  {
+   "t": 2160.72,
+   "d": 1.68,
+   "text": "what are all the end points of this"
+  },
+  {
+   "t": 2162.4,
+   "d": 1.68,
+   "text": "tree? You know, this one's cut down for"
+  },
+  {
+   "t": 2164.08,
+   "d": 1.76,
+   "text": "size. And then we could think about,"
+  },
+  {
+   "t": 2165.84,
+   "d": 2.64,
+   "text": "okay, all of these end points are"
+  },
+  {
+   "t": 2168.48,
+   "d": 2.32,
+   "text": "outcomes we have to account for. How are"
+  },
+  {
+   "t": 2170.8,
+   "d": 1.6,
+   "text": "we going to actually accomplish this?"
+  },
+  {
+   "t": 2172.4,
+   "d": 1.36,
+   "text": "And there were some tricks that we found"
+  },
+  {
+   "t": 2173.76,
+   "d": 2.56,
+   "text": "really helpful. One was that you need to"
+  },
+  {
+   "t": 2176.32,
+   "d": 2.4,
+   "text": "limit your hypothesis testing. Like I"
+  },
+  {
+   "t": 2178.72,
+   "d": 2.32,
+   "text": "said, this is one simulation and so the"
+  },
+  {
+   "t": 2181.04,
+   "d": 1.28,
+   "text": "players are going to get a certain"
+  },
+  {
+   "t": 2182.32,
+   "d": 2.72,
+   "text": "number of chances to try something. Like"
+  },
+  {
+   "t": 2185.04,
+   "d": 1.36,
+   "text": "I said with the decrees, they only got"
+  },
+  {
+   "t": 2186.4,
+   "d": 2.24,
+   "text": "to pick one decree. So what we could do"
+  },
+  {
+   "t": 2188.64,
+   "d": 2.24,
+   "text": "is say, okay, out of all these options,"
+  },
+  {
+   "t": 2190.88,
+   "d": 1.6,
+   "text": "players are only going to get the chance"
+  },
+  {
+   "t": 2192.48,
+   "d": 1.52,
+   "text": "to do this twice. They're going to be"
+  },
+  {
+   "t": 2194.0,
+   "d": 2.08,
+   "text": "two times that we trigger this idle"
+  },
+  {
+   "t": 2196.08,
+   "d": 2.32,
+   "text": "choice. And that's really useful in a"
+  },
+  {
+   "t": 2198.4,
+   "d": 2.8,
+   "text": "few ways. One is that if the player of"
+  },
+  {
+   "t": 2201.2,
+   "d": 1.92,
+   "text": "the game does not get to look at the"
+  },
+  {
+   "t": 2203.12,
+   "d": 2.32,
+   "text": "exhaustive list of all options, they"
+  },
+  {
+   "t": 2205.44,
+   "d": 2.0,
+   "text": "can't as easily pick up on things like"
+  },
+  {
+   "t": 2207.44,
+   "d": 1.6,
+   "text": "options that are superficially"
+  },
+  {
+   "t": 2209.04,
+   "d": 1.36,
+   "text": "different. you know, if they were able"
+  },
+  {
+   "t": 2210.4,
+   "d": 1.12,
+   "text": "to look at the whole thing, they could"
+  },
+  {
+   "t": 2211.52,
+   "d": 1.44,
+   "text": "see, but if they only get to see a"
+  },
+  {
+   "t": 2212.96,
+   "d": 3.12,
+   "text": "couple, then you don't have knowledge."
+  },
+  {
+   "t": 2216.08,
+   "d": 1.52,
+   "text": "You could have ones that are just kind"
+  },
+  {
+   "t": 2217.6,
+   "d": 2.24,
+   "text": "of uh text different, but are"
+  },
+  {
+   "t": 2219.84,
+   "d": 1.52,
+   "text": "functionally the same, and you can get"
+  },
+  {
+   "t": 2221.36,
+   "d": 2.08,
+   "text": "away with that a lot more easily. The"
+  },
+  {
+   "t": 2223.44,
+   "d": 1.44,
+   "text": "other thing that was important to be"
+  },
+  {
+   "t": 2224.88,
+   "d": 1.92,
+   "text": "able to convey is that even if players"
+  },
+  {
+   "t": 2226.8,
+   "d": 3.28,
+   "text": "never see an option, the fact that it"
+  },
+  {
+   "t": 2230.08,
+   "d": 2.8,
+   "text": "believably did exist and they speculated"
+  },
+  {
+   "t": 2232.88,
+   "d": 2.88,
+   "text": "about it adds to the game because that"
+  },
+  {
+   "t": 2235.76,
+   "d": 2.72,
+   "text": "suspense, that speculation is itself"
+  },
+  {
+   "t": 2238.48,
+   "d": 1.84,
+   "text": "part of the experience. And this could"
+  },
+  {
+   "t": 2240.32,
+   "d": 1.12,
+   "text": "be counterintuitive. Some people would"
+  },
+  {
+   "t": 2241.44,
+   "d": 1.28,
+   "text": "say, well, if it's never going to be"
+  },
+  {
+   "t": 2242.72,
+   "d": 1.28,
+   "text": "hit, if they're not going to actually"
+  },
+  {
+   "t": 2244.0,
+   "d": 2.4,
+   "text": "see this happen, it's wasted time. It"
+  },
+  {
+   "t": 2246.4,
+   "d": 1.68,
+   "text": "wasn't wasted time. It was something"
+  },
+  {
+   "t": 2248.08,
+   "d": 2.32,
+   "text": "that added to the suspense."
+  },
+  {
+   "t": 2250.4,
+   "d": 1.2,
+   "text": "And the other thing that was really"
+  },
+  {
+   "t": 2251.6,
+   "d": 1.36,
+   "text": "helpful when we would do this kind of"
+  },
+  {
+   "t": 2252.96,
+   "d": 2.16,
+   "text": "layout is that we could think about our"
+  },
+  {
+   "t": 2255.12,
+   "d": 2.0,
+   "text": "particular fans and what we expected"
+  },
+  {
+   "t": 2257.12,
+   "d": 2.24,
+   "text": "them to do based on past behavior, based"
+  },
+  {
+   "t": 2259.36,
+   "d": 2.32,
+   "text": "on what we knew they found interesting"
+  },
+  {
+   "t": 2261.68,
+   "d": 1.76,
+   "text": "and we could make the choice to put the"
+  },
+  {
+   "t": 2263.44,
+   "d": 2.24,
+   "text": "more expensive, you know, unique"
+  },
+  {
+   "t": 2265.68,
+   "d": 2.0,
+   "text": "functional differences in the spots that"
+  },
+  {
+   "t": 2267.68,
+   "d": 1.76,
+   "text": "we thought they were most likely to end"
+  },
+  {
+   "t": 2269.44,
+   "d": 2.64,
+   "text": "up and basically fill in the rest with"
+  },
+  {
+   "t": 2272.08,
+   "d": 1.52,
+   "text": "cheaper reactivity. So that something"
+  },
+  {
+   "t": 2273.6,
+   "d": 2.88,
+   "text": "was still there, but the expensive work"
+  },
+  {
+   "t": 2276.48,
+   "d": 1.36,
+   "text": "went in the spots where we thought that"
+  },
+  {
+   "t": 2277.84,
+   "d": 1.6,
+   "text": "we were going to benefit from it."
+  },
+  {
+   "t": 2279.44,
+   "d": 1.6,
+   "text": "Obviously, as a live game, we could look"
+  },
+  {
+   "t": 2281.04,
+   "d": 2.08,
+   "text": "at past choices, but again, even if"
+  },
+  {
+   "t": 2283.12,
+   "d": 1.28,
+   "text": "you're not a live game, you can be"
+  },
+  {
+   "t": 2284.4,
+   "d": 1.36,
+   "text": "looking at play testing. You can be"
+  },
+  {
+   "t": 2285.76,
+   "d": 1.92,
+   "text": "learning what choices players tend to"
+  },
+  {
+   "t": 2287.68,
+   "d": 2.16,
+   "text": "make."
+  },
+  {
+   "t": 2289.84,
+   "d": 1.44,
+   "text": "Now, the second case study I want to"
+  },
+  {
+   "t": 2291.28,
+   "d": 2.32,
+   "text": "talk a bit about is Caves of Cud because"
+  },
+  {
+   "t": 2293.6,
+   "d": 2.08,
+   "text": "um like I said, you know, Jason came up"
+  },
+  {
+   "t": 2295.68,
+   "d": 1.68,
+   "text": "with a lot of these ideas and shared"
+  },
+  {
+   "t": 2297.36,
+   "d": 1.76,
+   "text": "with me some of the ways that they have"
+  },
+  {
+   "t": 2299.12,
+   "d": 2.16,
+   "text": "influenced the work on Caves of Cut work"
+  },
+  {
+   "t": 2301.28,
+   "d": 2.48,
+   "text": "which has been highly successful because"
+  },
+  {
+   "t": 2303.76,
+   "d": 2.08,
+   "text": "you know, shout out to Caves of Cud now"
+  },
+  {
+   "t": 2305.84,
+   "d": 2.56,
+   "text": "Hugo awardwinning as well as IGF"
+  },
+  {
+   "t": 2308.4,
+   "d": 2.08,
+   "text": "excellence at narrative. Great job,"
+  },
+  {
+   "t": 2310.48,
+   "d": 2.96,
+   "text": "Caves of Cut. The first thing that I"
+  },
+  {
+   "t": 2313.44,
+   "d": 1.12,
+   "text": "would like to share because this is one"
+  },
+  {
+   "t": 2314.56,
+   "d": 1.76,
+   "text": "of my favorite things is an example of"
+  },
+  {
+   "t": 2316.32,
+   "d": 2.24,
+   "text": "this not working of where it was a bad"
+  },
+  {
+   "t": 2318.56,
+   "d": 3.12,
+   "text": "idea to use system suspense or a cost"
+  },
+  {
+   "t": 2321.68,
+   "d": 2.4,
+   "text": "associated with it. So caves of cud has"
+  },
+  {
+   "t": 2324.08,
+   "d": 1.76,
+   "text": "a similar type situation to place ball"
+  },
+  {
+   "t": 2325.84,
+   "d": 3.44,
+   "text": "in that it trains its players to look"
+  },
+  {
+   "t": 2329.28,
+   "d": 2.88,
+   "text": "for and find these deeper systems. A lot"
+  },
+  {
+   "t": 2332.16,
+   "d": 3.36,
+   "text": "of code is joyfully full of things that"
+  },
+  {
+   "t": 2335.52,
+   "d": 1.36,
+   "text": "are even more complicated than they"
+  },
+  {
+   "t": 2336.88,
+   "d": 2.4,
+   "text": "appear. The problem once you prime the"
+  },
+  {
+   "t": 2339.28,
+   "d": 1.6,
+   "text": "players to look for that then they are"
+  },
+  {
+   "t": 2340.88,
+   "d": 2.88,
+   "text": "going to be looking for that everywhere."
+  },
+  {
+   "t": 2343.76,
+   "d": 1.44,
+   "text": "And so an interesting example was"
+  },
+  {
+   "t": 2345.2,
+   "d": 2.56,
+   "text": "powered. So in the game you can find"
+  },
+  {
+   "t": 2347.76,
+   "d": 1.36,
+   "text": "some things that are powered. They have"
+  },
+  {
+   "t": 2349.12,
+   "d": 2.48,
+   "text": "like a power source. There used to be"
+  },
+  {
+   "t": 2351.6,
+   "d": 2.4,
+   "text": "way more"
+  },
+  {
+   "t": 2354.0,
+   "d": 2.8,
+   "text": "furniture that was powered and they cut"
+  },
+  {
+   "t": 2356.8,
+   "d": 2.16,
+   "text": "that out. They took out perfectly normal"
+  },
+  {
+   "t": 2358.96,
+   "d": 2.24,
+   "text": "functional stuff that was already in the"
+  },
+  {
+   "t": 2361.2,
+   "d": 1.92,
+   "text": "game. And the reason they did it is that"
+  },
+  {
+   "t": 2363.12,
+   "d": 1.6,
+   "text": "when the system was a bit bigger than it"
+  },
+  {
+   "t": 2364.72,
+   "d": 2.64,
+   "text": "is now, it was big enough that players"
+  },
+  {
+   "t": 2367.36,
+   "d": 1.84,
+   "text": "would start speculating and they'd see"
+  },
+  {
+   "t": 2369.2,
+   "d": 1.52,
+   "text": "all these pieces of powered furniture"
+  },
+  {
+   "t": 2370.72,
+   "d": 2.24,
+   "text": "and say, \"Ooh, I bet this is going to be"
+  },
+  {
+   "t": 2372.96,
+   "d": 1.68,
+   "text": "a whole Minecraft redstone kind of"
+  },
+  {
+   "t": 2374.64,
+   "d": 1.68,
+   "text": "situation. I bet I'm going to be able to"
+  },
+  {
+   "t": 2376.32,
+   "d": 1.68,
+   "text": "build my own base. I bet I'm going to do"
+  },
+  {
+   "t": 2378.0,
+   "d": 2.72,
+   "text": "all this stuff.\" That wasn't true. And"
+  },
+  {
+   "t": 2380.72,
+   "d": 1.2,
+   "text": "so it was setting them up for"
+  },
+  {
+   "t": 2381.92,
+   "d": 1.76,
+   "text": "disappointment. And so the decision that"
+  },
+  {
+   "t": 2383.68,
+   "d": 2.0,
+   "text": "the CUD team made was that they had to"
+  },
+  {
+   "t": 2385.68,
+   "d": 1.84,
+   "text": "actively cut that system back to be"
+  },
+  {
+   "t": 2387.52,
+   "d": 2.08,
+   "text": "smaller so that it did not suggest a"
+  },
+  {
+   "t": 2389.6,
+   "d": 2.4,
+   "text": "bigger system until if there was ever a"
+  },
+  {
+   "t": 2392.0,
+   "d": 2.08,
+   "text": "point that they can fully deliver on it."
+  },
+  {
+   "t": 2394.08,
+   "d": 1.68,
+   "text": "Only then can they add a bit more"
+  },
+  {
+   "t": 2395.76,
+   "d": 2.0,
+   "text": "content. So they kind of ended up in a"
+  },
+  {
+   "t": 2397.76,
+   "d": 1.92,
+   "text": "situation where it had to be a bit all"
+  },
+  {
+   "t": 2399.68,
+   "d": 2.0,
+   "text": "or nothing of you have to keep something"
+  },
+  {
+   "t": 2401.68,
+   "d": 1.76,
+   "text": "really small or you can make it"
+  },
+  {
+   "t": 2403.44,
+   "d": 1.92,
+   "text": "expansive. But once you really leaned"
+  },
+  {
+   "t": 2405.36,
+   "d": 2.24,
+   "text": "into this suspense, this curiosity, it's"
+  },
+  {
+   "t": 2407.6,
+   "d": 1.12,
+   "text": "really hard to have something in"
+  },
+  {
+   "t": 2408.72,
+   "d": 2.08,
+   "text": "between."
+  },
+  {
+   "t": 2410.8,
+   "d": 1.2,
+   "text": "The other thing I want to share because"
+  },
+  {
+   "t": 2412.0,
+   "d": 1.92,
+   "text": "I found it really interesting is that I"
+  },
+  {
+   "t": 2413.92,
+   "d": 2.48,
+   "text": "think that normally a good common"
+  },
+  {
+   "t": 2416.4,
+   "d": 2.16,
+   "text": "philosophy in procedural generated"
+  },
+  {
+   "t": 2418.56,
+   "d": 1.92,
+   "text": "design is that if you are building a"
+  },
+  {
+   "t": 2420.48,
+   "d": 2.24,
+   "text": "generator, something to generate content"
+  },
+  {
+   "t": 2422.72,
+   "d": 1.84,
+   "text": "and you want it to be more reliable,"
+  },
+  {
+   "t": 2424.56,
+   "d": 2.56,
+   "text": "cohesive and just like a good idea is"
+  },
+  {
+   "t": 2427.12,
+   "d": 2.16,
+   "text": "you put some constraints on it. Normally"
+  },
+  {
+   "t": 2429.28,
+   "d": 1.44,
+   "text": "it's not a good idea to just throw"
+  },
+  {
+   "t": 2430.72,
+   "d": 2.08,
+   "text": "everything you have in a big bucket and"
+  },
+  {
+   "t": 2432.8,
+   "d": 2.56,
+   "text": "pull out totally at random. And so"
+  },
+  {
+   "t": 2435.36,
+   "d": 2.0,
+   "text": "that's why I was surprised when I heard"
+  },
+  {
+   "t": 2437.36,
+   "d": 3.36,
+   "text": "that the KAUD team philosophy is by"
+  },
+  {
+   "t": 2440.72,
+   "d": 2.24,
+   "text": "default keep your generators totally"
+  },
+  {
+   "t": 2442.96,
+   "d": 3.04,
+   "text": "unconstrained and only add minimum"
+  },
+  {
+   "t": 2446.0,
+   "d": 2.08,
+   "text": "constraints at the moment that you can"
+  },
+  {
+   "t": 2448.08,
+   "d": 1.52,
+   "text": "prove that there are specific negative"
+  },
+  {
+   "t": 2449.6,
+   "d": 2.96,
+   "text": "impacts that are you trying to address."
+  },
+  {
+   "t": 2452.56,
+   "d": 3.36,
+   "text": "Now what that looks like in practice is"
+  },
+  {
+   "t": 2455.92,
+   "d": 2.24,
+   "text": "first think about creature placement. So"
+  },
+  {
+   "t": 2458.16,
+   "d": 2.08,
+   "text": "when you are going into a world tile"
+  },
+  {
+   "t": 2460.24,
+   "d": 1.76,
+   "text": "it's going to generate the tile and"
+  },
+  {
+   "t": 2462.0,
+   "d": 2.64,
+   "text": "generate what creatures spawn there. If"
+  },
+  {
+   "t": 2464.64,
+   "d": 1.68,
+   "text": "we start from the point of it being"
+  },
+  {
+   "t": 2466.32,
+   "d": 2.8,
+   "text": "completely unbounded, what could happen?"
+  },
+  {
+   "t": 2469.12,
+   "d": 2.08,
+   "text": "Well, the types of creatures in Cud"
+  },
+  {
+   "t": 2471.2,
+   "d": 2.16,
+   "text": "include things like extradimensional"
+  },
+  {
+   "t": 2473.36,
+   "d": 2.24,
+   "text": "mechanical psychic slug cherubs that"
+  },
+  {
+   "t": 2475.6,
+   "d": 2.56,
+   "text": "will just absolutely ruin you in"
+  },
+  {
+   "t": 2478.16,
+   "d": 3.2,
+   "text": "confusing ways. And if you could find"
+  },
+  {
+   "t": 2481.36,
+   "d": 2.0,
+   "text": "that as a fresh character in the"
+  },
+  {
+   "t": 2483.36,
+   "d": 2.4,
+   "text": "starting area, that would be very bad."
+  },
+  {
+   "t": 2485.76,
+   "d": 1.84,
+   "text": "So, for that reason, okay, we add a"
+  },
+  {
+   "t": 2487.6,
+   "d": 2.16,
+   "text": "constraint about difficulty. There's"
+  },
+  {
+   "t": 2489.76,
+   "d": 1.84,
+   "text": "going to be a sense of what areas are"
+  },
+  {
+   "t": 2491.6,
+   "d": 1.76,
+   "text": "difficult to a level that will constrain"
+  },
+  {
+   "t": 2493.36,
+   "d": 3.2,
+   "text": "the choices. Cool. Second thing, there"
+  },
+  {
+   "t": 2496.56,
+   "d": 2.8,
+   "text": "is a world map in Cud. There are biomes"
+  },
+  {
+   "t": 2499.36,
+   "d": 2.48,
+   "text": "and if a place was a kind of fungal"
+  },
+  {
+   "t": 2501.84,
+   "d": 2.24,
+   "text": "forest, you expect to see fungi in it."
+  },
+  {
+   "t": 2504.08,
+   "d": 1.76,
+   "text": "If everything could spawn everywhere, it"
+  },
+  {
+   "t": 2505.84,
+   "d": 1.52,
+   "text": "would hurt that sense of place. So,"
+  },
+  {
+   "t": 2507.36,
+   "d": 2.08,
+   "text": "okay, we'll add a little bit of a biome"
+  },
+  {
+   "t": 2509.44,
+   "d": 1.2,
+   "text": "selection. So, there are some"
+  },
+  {
+   "t": 2510.64,
+   "d": 3.52,
+   "text": "constraints on creature choice. But the"
+  },
+  {
+   "t": 2514.16,
+   "d": 2.16,
+   "text": "sixday stilt is an area of the game"
+  },
+  {
+   "t": 2516.32,
+   "d": 2.08,
+   "text": "that's kind of sight of pilgrimage. And"
+  },
+  {
+   "t": 2518.4,
+   "d": 1.92,
+   "text": "what that means is that in this area,"
+  },
+  {
+   "t": 2520.32,
+   "d": 2.0,
+   "text": "all creatures are neutral. Everyone's"
+  },
+  {
+   "t": 2522.32,
+   "d": 2.32,
+   "text": "come there to be peaceful. And that"
+  },
+  {
+   "t": 2524.64,
+   "d": 2.08,
+   "text": "means it doesn't matter how difficult or"
+  },
+  {
+   "t": 2526.72,
+   "d": 1.52,
+   "text": "scary they are because they're not going"
+  },
+  {
+   "t": 2528.24,
+   "d": 1.52,
+   "text": "to attack you unless you attack them"
+  },
+  {
+   "t": 2529.76,
+   "d": 2.56,
+   "text": "first and then it's your fault. So they"
+  },
+  {
+   "t": 2532.32,
+   "d": 1.36,
+   "text": "are like, \"Oh, well, we can remove the"
+  },
+  {
+   "t": 2533.68,
+   "d": 1.36,
+   "text": "difficulty constraint.\" And that's"
+  },
+  {
+   "t": 2535.04,
+   "d": 1.36,
+   "text": "actually cool because if you see a"
+  },
+  {
+   "t": 2536.4,
+   "d": 2.08,
+   "text": "really late game enemy here as an early"
+  },
+  {
+   "t": 2538.48,
+   "d": 2.72,
+   "text": "game player, that can provoke suspense."
+  },
+  {
+   "t": 2541.2,
+   "d": 1.2,
+   "text": "You can say, \"Well, wait a minute. It's"
+  },
+  {
+   "t": 2542.4,
+   "d": 1.92,
+   "text": "got a force field. What would I even do"
+  },
+  {
+   "t": 2544.32,
+   "d": 2.08,
+   "text": "if I had to fight this thing?\""
+  },
+  {
+   "t": 2546.4,
+   "d": 2.16,
+   "text": "And because it's a place of pilgrimage,"
+  },
+  {
+   "t": 2548.56,
+   "d": 1.28,
+   "text": "lots of things can be there from around"
+  },
+  {
+   "t": 2549.84,
+   "d": 2.08,
+   "text": "the world. They can take out the biome"
+  },
+  {
+   "t": 2551.92,
+   "d": 1.92,
+   "text": "kind of restriction too. And so in the"
+  },
+  {
+   "t": 2553.84,
+   "d": 2.4,
+   "text": "sixday stilt, it is just a grab bag."
+  },
+  {
+   "t": 2556.24,
+   "d": 2.16,
+   "text": "Anything in the game can be here. And"
+  },
+  {
+   "t": 2558.4,
+   "d": 1.28,
+   "text": "that's the kind of thing where they've"
+  },
+  {
+   "t": 2559.68,
+   "d": 2.08,
+   "text": "wanted to give the sneak preview. And"
+  },
+  {
+   "t": 2561.76,
+   "d": 1.52,
+   "text": "you can see this across a lot of their"
+  },
+  {
+   "t": 2563.28,
+   "d": 1.76,
+   "text": "systems where something like crafting,"
+  },
+  {
+   "t": 2565.04,
+   "d": 1.28,
+   "text": "they came to the realization that"
+  },
+  {
+   "t": 2566.32,
+   "d": 2.4,
+   "text": "getting a crafting recipe for a late"
+  },
+  {
+   "t": 2568.72,
+   "d": 3.04,
+   "text": "game item is fine because to actually do"
+  },
+  {
+   "t": 2571.76,
+   "d": 1.52,
+   "text": "anything with it, you need access to the"
+  },
+  {
+   "t": 2573.28,
+   "d": 1.84,
+   "text": "late game materials. you need high level"
+  },
+  {
+   "t": 2575.12,
+   "d": 2.16,
+   "text": "skills. And so for that reason, there"
+  },
+  {
+   "t": 2577.28,
+   "d": 1.92,
+   "text": "aren't really restrictions on how"
+  },
+  {
+   "t": 2579.2,
+   "d": 2.48,
+   "text": "highlevel crafting recipes can be found"
+  },
+  {
+   "t": 2581.68,
+   "d": 2.08,
+   "text": "with merchants. It's possible that you"
+  },
+  {
+   "t": 2583.76,
+   "d": 2.32,
+   "text": "very early on could talk to a merchant"
+  },
+  {
+   "t": 2586.08,
+   "d": 2.08,
+   "text": "and look at or get access to a highle"
+  },
+  {
+   "t": 2588.16,
+   "d": 2.0,
+   "text": "crafting recipe because that just lets"
+  },
+  {
+   "t": 2590.16,
+   "d": 3.12,
+   "text": "you be curious. For more on this, check"
+  },
+  {
+   "t": 2593.28,
+   "d": 1.84,
+   "text": "out another Rogike Celebration talk that"
+  },
+  {
+   "t": 2595.12,
+   "d": 1.92,
+   "text": "Jason gave, Before You Fix a Leak, Ask"
+  },
+  {
+   "t": 2597.04,
+   "d": 2.32,
+   "text": "If It's a Fountain, for many more great"
+  },
+  {
+   "t": 2599.36,
+   "d": 1.52,
+   "text": "examples."
+  },
+  {
+   "t": 2600.88,
+   "d": 2.32,
+   "text": "And finally, as we're coming up on time,"
+  },
+  {
+   "t": 2603.2,
+   "d": 2.56,
+   "text": "I know I'm going very fast, I wanted to"
+  },
+  {
+   "t": 2605.76,
+   "d": 2.08,
+   "text": "talk a bit on system and content. This"
+  },
+  {
+   "t": 2607.84,
+   "d": 1.68,
+   "text": "is something that plagued us as we were"
+  },
+  {
+   "t": 2609.52,
+   "d": 1.84,
+   "text": "working on this topic because we kept"
+  },
+  {
+   "t": 2611.36,
+   "d": 1.6,
+   "text": "asking, are we actually talking about"
+  },
+  {
+   "t": 2612.96,
+   "d": 1.68,
+   "text": "the rules of the game or are we just"
+  },
+  {
+   "t": 2614.64,
+   "d": 2.0,
+   "text": "talking about like how much stuff or"
+  },
+  {
+   "t": 2616.64,
+   "d": 2.72,
+   "text": "what kind of stuff is in the content?"
+  },
+  {
+   "t": 2619.36,
+   "d": 1.52,
+   "text": "And so I want to give a bit of an"
+  },
+  {
+   "t": 2620.88,
+   "d": 2.08,
+   "text": "example of how we tried to feel out the"
+  },
+  {
+   "t": 2622.96,
+   "d": 2.56,
+   "text": "difference here. An example that brought"
+  },
+  {
+   "t": 2625.52,
+   "d": 1.52,
+   "text": "up a lot when we were talking was in"
+  },
+  {
+   "t": 2627.04,
+   "d": 3.68,
+   "text": "Elden Ring. Elder Ring, open world RPG."
+  },
+  {
+   "t": 2630.72,
+   "d": 2.0,
+   "text": "Pretty standard. Early on, you get a"
+  },
+  {
+   "t": 2632.72,
+   "d": 1.6,
+   "text": "tutorial. It says, \"Hey, there's a world"
+  },
+  {
+   "t": 2634.32,
+   "d": 1.68,
+   "text": "map. It works how you expect. You got a"
+  },
+  {
+   "t": 2636.0,
+   "d": 3.36,
+   "text": "fog of war. Cool.\" Except early on in"
+  },
+  {
+   "t": 2639.36,
+   "d": 2.08,
+   "text": "Elden Ring, a lot of players experienced"
+  },
+  {
+   "t": 2641.44,
+   "d": 2.48,
+   "text": "a moment where you open a uh you"
+  },
+  {
+   "t": 2643.92,
+   "d": 1.68,
+   "text": "activate this cleverly placed"
+  },
+  {
+   "t": 2645.6,
+   "d": 2.72,
+   "text": "teleportation trap and it shoots you off"
+  },
+  {
+   "t": 2648.32,
+   "d": 1.92,
+   "text": "way further in the map, which means the"
+  },
+  {
+   "t": 2650.24,
+   "d": 1.28,
+   "text": "next time you open your map, the whole"
+  },
+  {
+   "t": 2651.52,
+   "d": 1.6,
+   "text": "thing zoomed out. It started as the"
+  },
+  {
+   "t": 2653.12,
+   "d": 1.52,
+   "text": "yellow area and now it's this whole"
+  },
+  {
+   "t": 2654.64,
+   "d": 2.08,
+   "text": "thing. You didn't clear the fog of war."
+  },
+  {
+   "t": 2656.72,
+   "d": 1.6,
+   "text": "you've just like revealed this square"
+  },
+  {
+   "t": 2658.32,
+   "d": 2.24,
+   "text": "over here. Very surprising moment. And"
+  },
+  {
+   "t": 2660.56,
+   "d": 1.44,
+   "text": "we kept going back and forth where some"
+  },
+  {
+   "t": 2662.0,
+   "d": 1.12,
+   "text": "people were like, \"No, this feels"
+  },
+  {
+   "t": 2663.12,
+   "d": 1.6,
+   "text": "systemic and some people are like, well,"
+  },
+  {
+   "t": 2664.72,
+   "d": 1.44,
+   "text": "no, it just feels like its contents, how"
+  },
+  {
+   "t": 2666.16,
+   "d": 2.56,
+   "text": "big the map is.\" So, we made a 2 x2 grid"
+  },
+  {
+   "t": 2668.72,
+   "d": 1.84,
+   "text": "because we're designers. We love 2 x2"
+  },
+  {
+   "t": 2670.56,
+   "d": 2.08,
+   "text": "grids. And you can talk about it in both"
+  },
+  {
+   "t": 2672.64,
+   "d": 1.92,
+   "text": "ways. There is a level of just surprise"
+  },
+  {
+   "t": 2674.56,
+   "d": 2.64,
+   "text": "of, whoa, the map got bigger. I wonder"
+  },
+  {
+   "t": 2677.2,
+   "d": 1.6,
+   "text": "how many times this is going to happen."
+  },
+  {
+   "t": 2678.8,
+   "d": 1.84,
+   "text": "How often will that map zoom out and"
+  },
+  {
+   "t": 2680.64,
+   "d": 2.08,
+   "text": "zoom out? But there is also a bit of"
+  },
+  {
+   "t": 2682.72,
+   "d": 2.24,
+   "text": "systemic of like what are the mechanics"
+  },
+  {
+   "t": 2684.96,
+   "d": 2.8,
+   "text": "that let me reach hidden areas and move"
+  },
+  {
+   "t": 2687.76,
+   "d": 2.24,
+   "text": "through the world. And I think what's"
+  },
+  {
+   "t": 2690.0,
+   "d": 2.48,
+   "text": "interesting about this example is that"
+  },
+  {
+   "t": 2692.48,
+   "d": 3.76,
+   "text": "in the from soft from software games"
+  },
+  {
+   "t": 2696.24,
+   "d": 2.4,
+   "text": "they typically have a lot of these"
+  },
+  {
+   "t": 2698.64,
+   "d": 1.84,
+   "text": "exploration mechanics even if they're"
+  },
+  {
+   "t": 2700.48,
+   "d": 1.68,
+   "text": "only used in a few places. So"
+  },
+  {
+   "t": 2702.16,
+   "d": 1.84,
+   "text": "stereotypically the main one illusory"
+  },
+  {
+   "t": 2704.0,
+   "d": 1.68,
+   "text": "walls. If you try and walk into them you"
+  },
+  {
+   "t": 2705.68,
+   "d": 1.68,
+   "text": "can't go through but if you roll they"
+  },
+  {
+   "t": 2707.36,
+   "d": 2.32,
+   "text": "reveal new areas. But the thing is, the"
+  },
+  {
+   "t": 2709.68,
+   "d": 1.6,
+   "text": "original Dark Souls, these are all"
+  },
+  {
+   "t": 2711.28,
+   "d": 3.84,
+   "text": "examples of uh mechanics that let you"
+  },
+  {
+   "t": 2715.12,
+   "d": 2.56,
+   "text": "find secret areas. Each one only used a"
+  },
+  {
+   "t": 2717.68,
+   "d": 2.32,
+   "text": "few times, but taken together gives you"
+  },
+  {
+   "t": 2720.0,
+   "d": 1.84,
+   "text": "this type of feeling of exploration that"
+  },
+  {
+   "t": 2721.84,
+   "d": 2.08,
+   "text": "is very open-ended."
+  },
+  {
+   "t": 2723.92,
+   "d": 1.36,
+   "text": "And if you look at the development of"
+  },
+  {
+   "t": 2725.28,
+   "d": 2.32,
+   "text": "the series, all the games tend to"
+  },
+  {
+   "t": 2727.6,
+   "d": 1.92,
+   "text": "introduce a couple more mechanics like"
+  },
+  {
+   "t": 2729.52,
+   "d": 2.32,
+   "text": "this. And I think taken holistically, it"
+  },
+  {
+   "t": 2731.84,
+   "d": 1.6,
+   "text": "explains why there is a feeling of a"
+  },
+  {
+   "t": 2733.44,
+   "d": 2.88,
+   "text": "systemic uh kind of suspense around how"
+  },
+  {
+   "t": 2736.32,
+   "d": 3.76,
+   "text": "exploration functions that is able to um"
+  },
+  {
+   "t": 2740.08,
+   "d": 1.68,
+   "text": "as the team keeps working on it, they"
+  },
+  {
+   "t": 2741.76,
+   "d": 2.0,
+   "text": "can keep sustaining the suspense, which"
+  },
+  {
+   "t": 2743.76,
+   "d": 1.2,
+   "text": "is important because one of the big"
+  },
+  {
+   "t": 2744.96,
+   "d": 2.0,
+   "text": "questions is is it worth dealing with"
+  },
+  {
+   "t": 2746.96,
+   "d": 1.28,
+   "text": "suspense if it's something you could"
+  },
+  {
+   "t": 2748.24,
+   "d": 2.0,
+   "text": "only do once and so I think this is"
+  },
+  {
+   "t": 2750.24,
+   "d": 1.76,
+   "text": "example of how you can do it over time"
+  },
+  {
+   "t": 2752.0,
+   "d": 2.0,
+   "text": "with a little bit of extra work in this"
+  },
+  {
+   "t": 2754.0,
+   "d": 2.4,
+   "text": "area."
+  },
+  {
+   "t": 2756.4,
+   "d": 1.6,
+   "text": "The very last bit I'm just going to talk"
+  },
+  {
+   "t": 2758.0,
+   "d": 2.48,
+   "text": "a bit about we've really fixated on the"
+  },
+  {
+   "t": 2760.48,
+   "d": 2.24,
+   "text": "system side, but content suspense and"
+  },
+  {
+   "t": 2762.72,
+   "d": 2.24,
+   "text": "surprise is interesting. And the example"
+  },
+  {
+   "t": 2764.96,
+   "d": 1.6,
+   "text": "I want to touch on is just the Yakuza"
+  },
+  {
+   "t": 2766.56,
+   "d": 1.44,
+   "text": "series, which I think does this really"
+  },
+  {
+   "t": 2768.0,
+   "d": 2.16,
+   "text": "well. So volume warning, I think this"
+  },
+  {
+   "t": 2770.16,
+   "d": 3.44,
+   "text": "will be okay, but this is a bit of the"
+  },
+  {
+   "t": 2773.6,
+   "d": 3.76,
+   "text": "opening of the Yakuza, Yakuza Zero. I'm"
+  },
+  {
+   "t": 2777.36,
+   "d": 1.84,
+   "text": "not going to play a lot. Get you the"
+  },
+  {
+   "t": 2779.2,
+   "d": 4.0,
+   "text": "idea. It's melodramatic."
+  },
+  {
+   "t": 2783.2,
+   "d": 2.0,
+   "text": "It's melodramatic. It's emotional. It's"
+  },
+  {
+   "t": 2785.2,
+   "d": 4.16,
+   "text": "mobsters. It is like high octane guitar"
+  },
+  {
+   "t": 2789.36,
+   "d": 2.72,
+   "text": "riffs. It's the same game where there is"
+  },
+  {
+   "t": 2792.08,
+   "d": 1.6,
+   "text": "a bowling miniame where if you score"
+  },
+  {
+   "t": 2793.68,
+   "d": 1.52,
+   "text": "well enough, you get a chicken who you"
+  },
+  {
+   "t": 2795.2,
+   "d": 1.84,
+   "text": "can use in your real estate miniame cuz"
+  },
+  {
+   "t": 2797.04,
+   "d": 2.32,
+   "text": "they're a shrewd negotiator. There is a"
+  },
+  {
+   "t": 2799.36,
+   "d": 2.56,
+   "text": "big difference in tone in the games"
+  },
+  {
+   "t": 2801.92,
+   "d": 1.92,
+   "text": "between the high stakes emotional drama"
+  },
+  {
+   "t": 2803.84,
+   "d": 2.48,
+   "text": "of the main plot and mini games and sub"
+  },
+  {
+   "t": 2806.32,
+   "d": 2.0,
+   "text": "stories which can be equally emotional"
+  },
+  {
+   "t": 2808.32,
+   "d": 3.2,
+   "text": "or can be silly and can be uneven in"
+  },
+  {
+   "t": 2811.52,
+   "d": 1.92,
+   "text": "herbs of depth. So, a lot of them use"
+  },
+  {
+   "t": 2813.44,
+   "d": 2.48,
+   "text": "two verbs. pick a multiple choice option"
+  },
+  {
+   "t": 2815.92,
+   "d": 2.32,
+   "text": "or punch some people. Most sub stories"
+  },
+  {
+   "t": 2818.24,
+   "d": 2.72,
+   "text": "only use these, but there are some sub"
+  },
+  {
+   "t": 2820.96,
+   "d": 1.52,
+   "text": "stories like when you meet Michael"
+  },
+  {
+   "t": 2822.48,
+   "d": 2.48,
+   "text": "Jackson aka Miracle Johnson, who has a"
+  },
+  {
+   "t": 2824.96,
+   "d": 1.6,
+   "text": "completely unique game mode where you"
+  },
+  {
+   "t": 2826.56,
+   "d": 1.6,
+   "text": "are defending him from zombies while he"
+  },
+  {
+   "t": 2828.16,
+   "d": 2.0,
+   "text": "films a music video, and it has"
+  },
+  {
+   "t": 2830.16,
+   "d": 1.84,
+   "text": "completely unique animations that are"
+  },
+  {
+   "t": 2832.0,
+   "d": 2.24,
+   "text": "only used in this one substory, which is"
+  },
+  {
+   "t": 2834.24,
+   "d": 1.84,
+   "text": "not part of the main quest. Nothing"
+  },
+  {
+   "t": 2836.08,
+   "d": 1.68,
+   "text": "draws your attention to it more than the"
+  },
+  {
+   "t": 2837.76,
+   "d": 2.16,
+   "text": "other dozens of sub stories. And so my"
+  },
+  {
+   "t": 2839.92,
+   "d": 1.6,
+   "text": "question is, what producer would allow"
+  },
+  {
+   "t": 2841.52,
+   "d": 2.4,
+   "text": "you to do this? And so what's great is"
+  },
+  {
+   "t": 2843.92,
+   "d": 2.32,
+   "text": "that by having this unevenness, by"
+  },
+  {
+   "t": 2846.24,
+   "d": 1.6,
+   "text": "having this kind of variety and"
+  },
+  {
+   "t": 2847.84,
+   "d": 2.56,
+   "text": "unexpectedness in terms of the content,"
+  },
+  {
+   "t": 2850.4,
+   "d": 2.0,
+   "text": "it leads to a content suspense of not"
+  },
+  {
+   "t": 2852.4,
+   "d": 2.16,
+   "text": "knowing for any given substory how big"
+  },
+  {
+   "t": 2854.56,
+   "d": 1.28,
+   "text": "it's going to be or how it's going to"
+  },
+  {
+   "t": 2855.84,
+   "d": 2.88,
+   "text": "feel. Here are some more articles that"
+  },
+  {
+   "t": 2858.72,
+   "d": 2.8,
+   "text": "talk more about this idea. And you can"
+  },
+  {
+   "t": 2861.52,
+   "d": 1.6,
+   "text": "do that on a small scale. You know,"
+  },
+  {
+   "t": 2863.12,
+   "d": 1.68,
+   "text": "Tactical Breach Wizards to mention it"
+  },
+  {
+   "t": 2864.8,
+   "d": 2.08,
+   "text": "just one more time. It is a much smaller"
+  },
+  {
+   "t": 2866.88,
+   "d": 1.92,
+   "text": "game, much smaller team, but they still"
+  },
+  {
+   "t": 2868.8,
+   "d": 2.0,
+   "text": "have moments of an unexpectedness. You"
+  },
+  {
+   "t": 2870.8,
+   "d": 1.6,
+   "text": "have these things called anxiety dreams"
+  },
+  {
+   "t": 2872.4,
+   "d": 2.56,
+   "text": "where you and a copy of your own self"
+  },
+  {
+   "t": 2874.96,
+   "d": 2.64,
+   "text": "are in a dreamcape having to solve"
+  },
+  {
+   "t": 2877.6,
+   "d": 2.0,
+   "text": "levels, which is both very different"
+  },
+  {
+   "t": 2879.6,
+   "d": 2.56,
+   "text": "narratively and also uh mechanically"
+  },
+  {
+   "t": 2882.16,
+   "d": 1.6,
+   "text": "different since you're playing a"
+  },
+  {
+   "t": 2883.76,
+   "d": 1.92,
+   "text": "character off of themselves versus a set"
+  },
+  {
+   "t": 2885.68,
+   "d": 2.0,
+   "text": "of characters. So be creative. You can"
+  },
+  {
+   "t": 2887.68,
+   "d": 2.72,
+   "text": "do this not just as a AAA game that puts"
+  },
+  {
+   "t": 2890.4,
+   "d": 3.04,
+   "text": "tons of content per content. So that was"
+  },
+  {
+   "t": 2893.44,
+   "d": 1.6,
+   "text": "very fast. Thank you very much for"
+  },
+  {
+   "t": 2895.04,
+   "d": 1.84,
+   "text": "giving me a chance to represent this"
+  },
+  {
+   "t": 2896.88,
+   "d": 2.32,
+   "text": "talk. Here are some links to the things"
+  },
+  {
+   "t": 2899.2,
+   "d": 1.36,
+   "text": "I talked about today, which will be in"
+  },
+  {
+   "t": 2900.56,
+   "d": 2.88,
+   "text": "the description."
+  }
+ ]
+}

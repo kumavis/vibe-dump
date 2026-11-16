@@ -1,0 +1,4278 @@
+{
+ "id": "Gluz5nIplcA",
+ "url": "https://www.youtube.com/watch?v=Gluz5nIplcA",
+ "title": "Andrew Aversa - Tangledeep and the Puzzle of Roguelike Difficulty",
+ "speaker": "Andrew Aversa",
+ "talk_title": "Tangledeep and the Puzzle of Roguelike Difficulty",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-09",
+ "duration_s": 1624,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 126,
+   "title": "\"Good vs. \"Bad Difficulty"
+  },
+  {
+   "start": 228,
+   "title": "Artificial Difficulty"
+  },
+  {
+   "start": 371,
+   "title": "Tangledeep's Difficulty Goals - High Level"
+  },
+  {
+   "start": 406,
+   "title": "The Specifics (Good Intentions)"
+  },
+  {
+   "start": 461,
+   "title": "Tangledeep's Three Modes"
+  },
+  {
+   "start": 508,
+   "title": "Heroic Meta Progress"
+  },
+  {
+   "start": 606,
+   "title": "Why a Non-Permadeath Mode?"
+  },
+  {
+   "start": 742,
+   "title": "Removing the Hunger Clock"
+  },
+  {
+   "start": 788,
+   "title": "Removing Health Regeneration"
+  },
+  {
+   "start": 832,
+   "title": "Solutions: Flask, Food, Campfires"
+  },
+  {
+   "start": 929,
+   "title": "The Job System"
+  },
+  {
+   "start": 970,
+   "title": "The Infinite Mirai"
+  },
+  {
+   "start": 1034,
+   "title": "We Limited Their Hotbars"
+  },
+  {
+   "start": 1282,
+   "title": "Balance Does Matter"
+  },
+  {
+   "start": 1421,
+   "title": "The Dreamcaster Is Awesome"
+  },
+  {
+   "start": 1486,
+   "title": "Difficulty Options (Game Modifiers)"
+  },
+  {
+   "start": 1535,
+   "title": "Options Are Good!"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5320,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.12,
+   "text": "All right. Well, I'm I'm very happy to"
+  },
+  {
+   "t": 2.12,
+   "d": 1.72,
+   "text": "be here. This is my first time at any"
+  },
+  {
+   "t": 3.84,
+   "d": 1.32,
+   "text": "any of the Roguelike events, but I've"
+  },
+  {
+   "t": 5.16,
+   "d": 1.04,
+   "text": "been watching the streams and the"
+  },
+  {
+   "t": 6.2,
+   "d": 1.92,
+   "text": "videos. So,"
+  },
+  {
+   "t": 8.12,
+   "d": 2.08,
+   "text": "yeah, as mentioned, I'm the developer of"
+  },
+  {
+   "t": 10.2,
+   "d": 1.4,
+   "text": "Tangled Depths, which came out earlier"
+  },
+  {
+   "t": 11.6,
+   "d": 1.36,
+   "text": "this year."
+  },
+  {
+   "t": 12.96,
+   "d": 2.84,
+   "text": "It is my first game as a as a game"
+  },
+  {
+   "t": 15.8,
+   "d": 1.56,
+   "text": "developer, although I've been on the"
+  },
+  {
+   "t": 17.36,
+   "d": 2.68,
+   "text": "audio side of things for a while as a as"
+  },
+  {
+   "t": 20.04,
+   "d": 2.0,
+   "text": "a composer. And then after working on"
+  },
+  {
+   "t": 22.04,
+   "d": 0.92,
+   "text": "Dungeons of Fay,"
+  },
+  {
+   "t": 22.96,
+   "d": 2.16,
+   "text": "Jim Shepherd's project, I kind of got"
+  },
+  {
+   "t": 25.12,
+   "d": 2.12,
+   "text": "the Roguelike bug to sort of make my"
+  },
+  {
+   "t": 27.24,
+   "d": 2.12,
+   "text": "dream game. And actually Josh's talk"
+  },
+  {
+   "t": 29.36,
+   "d": 1.72,
+   "text": "really spoke a lot to what I went"
+  },
+  {
+   "t": 31.08,
+   "d": 1.96,
+   "text": "through. So, I think his advice was spot"
+  },
+  {
+   "t": 33.04,
+   "d": 4.04,
+   "text": "on. So, first just to describe briefly"
+  },
+  {
+   "t": 37.08,
+   "d": 1.16,
+   "text": "what Tangled Depths is to give you an"
+  },
+  {
+   "t": 38.24,
+   "d": 2.04,
+   "text": "idea of the the lens that I'm looking at"
+  },
+  {
+   "t": 40.28,
+   "d": 2.44,
+   "text": "difficulty through, I'm going to let a"
+  },
+  {
+   "t": 42.72,
+   "d": 2.08,
+   "text": "writer at PC Gamer"
+  },
+  {
+   "t": 44.8,
+   "d": 1.88,
+   "text": "sum it up. I just want you to"
+  },
+  {
+   "t": 46.68,
+   "d": 2.88,
+   "text": "internalize this description."
+  },
+  {
+   "t": 49.56,
+   "d": 1.88,
+   "text": "I think it it gets slightly worse every"
+  },
+  {
+   "t": 51.44,
+   "d": 2.8,
+   "text": "time I read that."
+  },
+  {
+   "t": 54.52,
+   "d": 2.64,
+   "text": "Quite unusual. Turn-based combat, quite"
+  },
+  {
+   "t": 57.16,
+   "d": 2.64,
+   "text": "unusual. So,"
+  },
+  {
+   "t": 59.8,
+   "d": 1.32,
+   "text": "Yeah, actually they they did like the"
+  },
+  {
+   "t": 61.12,
+   "d": 1.52,
+   "text": "game. It's just it's just funny how the"
+  },
+  {
+   "t": 62.64,
+   "d": 2.24,
+   "text": "term Roguelike and Roguelite sort of"
+  },
+  {
+   "t": 64.88,
+   "d": 2.8,
+   "text": "lost its meaning to the the mainstream."
+  },
+  {
+   "t": 67.68,
+   "d": 1.4,
+   "text": "Anyway, so this is what the game looks"
+  },
+  {
+   "t": 69.08,
+   "d": 3.72,
+   "text": "like. And you can probably intuitively"
+  },
+  {
+   "t": 72.8,
+   "d": 2.12,
+   "text": "tell if you haven't played it the kind"
+  },
+  {
+   "t": 74.92,
+   "d": 1.72,
+   "text": "of"
+  },
+  {
+   "t": 76.64,
+   "d": 1.68,
+   "text": "audience maybe that that we're going for"
+  },
+  {
+   "t": 78.32,
+   "d": 1.08,
+   "text": "is that"
+  },
+  {
+   "t": 79.4,
+   "d": 3.16,
+   "text": "we the idea is to try to appeal to more"
+  },
+  {
+   "t": 82.56,
+   "d": 2.72,
+   "text": "people as opposed to just"
+  },
+  {
+   "t": 85.28,
+   "d": 2.84,
+   "text": "simple character-based graphics."
+  },
+  {
+   "t": 88.12,
+   "d": 1.44,
+   "text": "I really wanted sort of emulate that"
+  },
+  {
+   "t": 89.56,
+   "d": 2.48,
+   "text": "16-bit style. Although it is a"
+  },
+  {
+   "t": 92.04,
+   "d": 1.56,
+   "text": "traditional it is actually not a"
+  },
+  {
+   "t": 93.6,
+   "d": 2.12,
+   "text": "Roguelite at all. It is in fact"
+  },
+  {
+   "t": 95.72,
+   "d": 2.36,
+   "text": "traditional turn-based fantasy dungeon"
+  },
+  {
+   "t": 98.08,
+   "d": 1.84,
+   "text": "crawl. It's a custom setting."
+  },
+  {
+   "t": 99.92,
+   "d": 1.8,
+   "text": "And there's a lot of"
+  },
+  {
+   "t": 101.72,
+   "d": 2.72,
+   "text": "dynamic battlefield kind of stuff. So,"
+  },
+  {
+   "t": 104.44,
+   "d": 1.52,
+   "text": "it is rather than a sort of"
+  },
+  {
+   "t": 105.96,
+   "d": 1.76,
+   "text": "survival-based Roguelike it is the kind"
+  },
+  {
+   "t": 107.72,
+   "d": 1.6,
+   "text": "of a game where"
+  },
+  {
+   "t": 109.32,
+   "d": 2.04,
+   "text": "you have a whole bunch of abilities and"
+  },
+  {
+   "t": 111.36,
+   "d": 1.84,
+   "text": "equipment to switch between."
+  },
+  {
+   "t": 113.2,
+   "d": 1.72,
+   "text": "And so you could kind of compare it more"
+  },
+  {
+   "t": 114.92,
+   "d": 3.16,
+   "text": "to a turn-based Diablo or a"
+  },
+  {
+   "t": 118.08,
+   "d": 2.96,
+   "text": "game like Dungeons of Fay actually a big"
+  },
+  {
+   "t": 121.04,
+   "d": 2.36,
+   "text": "inspiration. So, that's the the angle"
+  },
+  {
+   "t": 123.4,
+   "d": 1.2,
+   "text": "I'm coming from as I talk about"
+  },
+  {
+   "t": 124.6,
+   "d": 1.84,
+   "text": "difficulty here."
+  },
+  {
+   "t": 126.44,
+   "d": 1.24,
+   "text": "So,"
+  },
+  {
+   "t": 127.68,
+   "d": 1.36,
+   "text": "when I was"
+  },
+  {
+   "t": 129.04,
+   "d": 2.16,
+   "text": "when I just had the idea for for Tangled"
+  },
+  {
+   "t": 131.2,
+   "d": 0.92,
+   "text": "Depths to begin with, I was saying,"
+  },
+  {
+   "t": 132.12,
+   "d": 1.16,
+   "text": "well, I want to make something a little"
+  },
+  {
+   "t": 133.28,
+   "d": 2.4,
+   "text": "bit more accessible. And really it comes"
+  },
+  {
+   "t": 135.68,
+   "d": 1.92,
+   "text": "down to this. It comes down to when you"
+  },
+  {
+   "t": 137.6,
+   "d": 1.92,
+   "text": "die, do you feel like, you know, I"
+  },
+  {
+   "t": 139.52,
+   "d": 2.36,
+   "text": "deserve that because I I drank from a"
+  },
+  {
+   "t": 141.88,
+   "d": 1.96,
+   "text": "fountain and I knew it could be, you"
+  },
+  {
+   "t": 143.84,
+   "d": 1.56,
+   "text": "know, set me on fire, but I drank from"
+  },
+  {
+   "t": 145.4,
+   "d": 2.04,
+   "text": "it anyway. Or was it, you know, you"
+  },
+  {
+   "t": 147.44,
+   "d": 1.48,
+   "text": "stepped on an invisible trap that you"
+  },
+  {
+   "t": 148.92,
+   "d": 1.32,
+   "text": "could have had no way of knowing that it"
+  },
+  {
+   "t": 150.24,
+   "d": 2.68,
+   "text": "was there. You just blew up."
+  },
+  {
+   "t": 152.92,
+   "d": 2.16,
+   "text": "So, some of the characteristics it is a"
+  },
+  {
+   "t": 155.08,
+   "d": 1.4,
+   "text": "little subjective, but some of the"
+  },
+  {
+   "t": 156.48,
+   "d": 1.92,
+   "text": "characteristics of that of good"
+  },
+  {
+   "t": 158.4,
+   "d": 2.0,
+   "text": "difficulty are that the challenges are"
+  },
+  {
+   "t": 160.4,
+   "d": 1.64,
+   "text": "understandable."
+  },
+  {
+   "t": 162.04,
+   "d": 1.92,
+   "text": "You can tell what the objective is. You"
+  },
+  {
+   "t": 163.96,
+   "d": 2.12,
+   "text": "can tell get some sense of maybe how"
+  },
+  {
+   "t": 166.08,
+   "d": 1.48,
+   "text": "difficult the monster is even if it's"
+  },
+  {
+   "t": 167.56,
+   "d": 1.64,
+   "text": "just in the name of the monster like a"
+  },
+  {
+   "t": 169.2,
+   "d": 2.12,
+   "text": "dragon versus a cobalt."
+  },
+  {
+   "t": 171.32,
+   "d": 2.6,
+   "text": "The player should feel responsible for"
+  },
+  {
+   "t": 173.92,
+   "d": 1.96,
+   "text": "for what's happened. And then another"
+  },
+  {
+   "t": 175.88,
+   "d": 2.08,
+   "text": "important thing is that your your input"
+  },
+  {
+   "t": 177.96,
+   "d": 1.88,
+   "text": "and your actions should feel ideally"
+  },
+  {
+   "t": 179.84,
+   "d": 2.08,
+   "text": "clear. So, you should have some sense"
+  },
+  {
+   "t": 181.92,
+   "d": 2.0,
+   "text": "of, you know, if I use this potion, I"
+  },
+  {
+   "t": 183.92,
+   "d": 2.44,
+   "text": "have an idea of what it might do."
+  },
+  {
+   "t": 186.36,
+   "d": 1.2,
+   "text": "Obviously, if it's completely"
+  },
+  {
+   "t": 187.56,
+   "d": 1.36,
+   "text": "unidentified and random, that's one"
+  },
+  {
+   "t": 188.92,
+   "d": 2.0,
+   "text": "thing. But if you've identified it and"
+  },
+  {
+   "t": 190.92,
+   "d": 1.28,
+   "text": "it's a healing potion, you know, it"
+  },
+  {
+   "t": 192.2,
+   "d": 2.16,
+   "text": "heals 3D6."
+  },
+  {
+   "t": 194.36,
+   "d": 1.8,
+   "text": "You know, it feels clear. Whereas"
+  },
+  {
+   "t": 196.16,
+   "d": 2.24,
+   "text": "something on maybe the more unfair side"
+  },
+  {
+   "t": 198.4,
+   "d": 2.44,
+   "text": "where it might start to feel bad is if"
+  },
+  {
+   "t": 200.84,
+   "d": 1.6,
+   "text": "you feel like, you know, you use the"
+  },
+  {
+   "t": 202.44,
+   "d": 2.0,
+   "text": "potion and it just fizzled and you had"
+  },
+  {
+   "t": 204.44,
+   "d": 2.56,
+   "text": "no idea it could do that and you die"
+  },
+  {
+   "t": 207.0,
+   "d": 1.84,
+   "text": "because of that. Or there's just a lot"
+  },
+  {
+   "t": 208.84,
+   "d": 1.56,
+   "text": "to memorize. So, there's hidden"
+  },
+  {
+   "t": 210.4,
+   "d": 1.4,
+   "text": "mechanics or things where you have to"
+  },
+  {
+   "t": 211.8,
+   "d": 2.48,
+   "text": "have a wiki open on one screen in order"
+  },
+  {
+   "t": 214.28,
+   "d": 2.04,
+   "text": "to have a any chance at all of beating"
+  },
+  {
+   "t": 216.32,
+   "d": 2.76,
+   "text": "the game. And I'm not saying that a game"
+  },
+  {
+   "t": 219.08,
+   "d": 1.72,
+   "text": "that has a wiki is bad. I mean, Tangled"
+  },
+  {
+   "t": 220.8,
+   "d": 2.4,
+   "text": "Depths has a wiki as well. But"
+  },
+  {
+   "t": 223.2,
+   "d": 1.72,
+   "text": "the more that can be presented in the"
+  },
+  {
+   "t": 224.92,
+   "d": 1.16,
+   "text": "game"
+  },
+  {
+   "t": 226.08,
+   "d": 1.96,
+   "text": "the better ideally."
+  },
+  {
+   "t": 228.04,
+   "d": 2.88,
+   "text": "And then so this is not necessarily good"
+  },
+  {
+   "t": 230.92,
+   "d": 1.4,
+   "text": "or bad difficulty, but then there's"
+  },
+  {
+   "t": 232.32,
+   "d": 1.4,
+   "text": "artificial difficulty. And this is"
+  },
+  {
+   "t": 233.72,
+   "d": 2.8,
+   "text": "something that these are some contrived"
+  },
+  {
+   "t": 236.52,
+   "d": 2.88,
+   "text": "examples, but maybe not as contrived as"
+  },
+  {
+   "t": 239.4,
+   "d": 1.88,
+   "text": "you might think because"
+  },
+  {
+   "t": 241.28,
+   "d": 1.36,
+   "text": "in like the second one there like"
+  },
+  {
+   "t": 242.64,
+   "d": 1.56,
+   "text": "slaying a thousand boars to get to the"
+  },
+  {
+   "t": 244.2,
+   "d": 1.28,
+   "text": "next"
+  },
+  {
+   "t": 245.48,
+   "d": 2.48,
+   "text": "be able to complete the next level."
+  },
+  {
+   "t": 247.96,
+   "d": 2.0,
+   "text": "That's something that there there's a"
+  },
+  {
+   "t": 249.96,
+   "d": 1.24,
+   "text": "surprising number of games out there"
+  },
+  {
+   "t": 251.2,
+   "d": 2.68,
+   "text": "particularly kind of JRPGs, which is"
+  },
+  {
+   "t": 253.88,
+   "d": 2.32,
+   "text": "sort of cut from the same cloth"
+  },
+  {
+   "t": 256.2,
+   "d": 1.52,
+   "text": "as Tangled Depths."
+  },
+  {
+   "t": 257.72,
+   "d": 1.52,
+   "text": "They sort of rely on that where, you"
+  },
+  {
+   "t": 259.24,
+   "d": 1.32,
+   "text": "know, you literally just can't beat this"
+  },
+  {
+   "t": 260.56,
+   "d": 2.96,
+   "text": "boss until you grind a lot. And yes,"
+  },
+  {
+   "t": 263.52,
+   "d": 1.8,
+   "text": "on paper that does make the game hard."
+  },
+  {
+   "t": 265.32,
+   "d": 2.52,
+   "text": "Yes, it's understandable. It's clear and"
+  },
+  {
+   "t": 267.84,
+   "d": 1.52,
+   "text": "all that other stuff, but it's"
+  },
+  {
+   "t": 269.36,
+   "d": 2.24,
+   "text": "artificial. So,"
+  },
+  {
+   "t": 271.6,
+   "d": 2.0,
+   "text": "or some of the other things in terms of"
+  },
+  {
+   "t": 273.6,
+   "d": 3.2,
+   "text": "mechanics like uh talking about fighting"
+  },
+  {
+   "t": 276.8,
+   "d": 1.72,
+   "text": "games or RTS games, there are things"
+  },
+  {
+   "t": 278.52,
+   "d": 1.8,
+   "text": "that test the players'"
+  },
+  {
+   "t": 280.32,
+   "d": 2.52,
+   "text": "mechanical abilities, micromanagement or"
+  },
+  {
+   "t": 282.84,
+   "d": 2.24,
+   "text": "timing in the case of like a Street"
+  },
+  {
+   "t": 285.08,
+   "d": 1.12,
+   "text": "Fighter game where you have to do"
+  },
+  {
+   "t": 286.2,
+   "d": 1.84,
+   "text": "something within one frame in order to"
+  },
+  {
+   "t": 288.04,
+   "d": 2.4,
+   "text": "get maximum damage. I'm not saying these"
+  },
+  {
+   "t": 290.44,
+   "d": 1.88,
+   "text": "things are bad. They're not inherently"
+  },
+  {
+   "t": 292.32,
+   "d": 1.96,
+   "text": "bad. But"
+  },
+  {
+   "t": 294.28,
+   "d": 3.08,
+   "text": "the idea that simple versus complex and"
+  },
+  {
+   "t": 297.36,
+   "d": 1.2,
+   "text": "easy, hard, and good, and bad, these are"
+  },
+  {
+   "t": 298.56,
+   "d": 2.96,
+   "text": "all separate scales. And so it's"
+  },
+  {
+   "t": 301.52,
+   "d": 1.72,
+   "text": "something to keep in mind when we're"
+  },
+  {
+   "t": 303.24,
+   "d": 1.28,
+   "text": "designing Roguelikes is that, you know,"
+  },
+  {
+   "t": 304.52,
+   "d": 2.12,
+   "text": "you can have a game that's simple"
+  },
+  {
+   "t": 306.64,
+   "d": 2.12,
+   "text": "but it's hard. And that was more or less"
+  },
+  {
+   "t": 308.76,
+   "d": 2.28,
+   "text": "what I was going for with um"
+  },
+  {
+   "t": 311.04,
+   "d": 2.68,
+   "text": "Tangled Depths. And it matters because"
+  },
+  {
+   "t": 313.72,
+   "d": 1.76,
+   "text": "when the player feels like things are"
+  },
+  {
+   "t": 315.48,
+   "d": 2.56,
+   "text": "fair and when they feel like,"
+  },
+  {
+   "t": 318.04,
+   "d": 1.64,
+   "text": "you know, their skill and their"
+  },
+  {
+   "t": 319.68,
+   "d": 2.88,
+   "text": "decision-making is what leads them to"
+  },
+  {
+   "t": 322.56,
+   "d": 1.76,
+   "text": "either beat the game or at least get to"
+  },
+  {
+   "t": 324.32,
+   "d": 1.96,
+   "text": "a deeper level of the dungeon or higher"
+  },
+  {
+   "t": 326.28,
+   "d": 1.68,
+   "text": "level of the dungeon."
+  },
+  {
+   "t": 327.96,
+   "d": 0.68,
+   "text": "Um"
+  },
+  {
+   "t": 328.64,
+   "d": 1.4,
+   "text": "Ultimately,"
+  },
+  {
+   "t": 330.04,
+   "d": 1.72,
+   "text": "that's what makes them feel accomplished"
+  },
+  {
+   "t": 331.76,
+   "d": 1.88,
+   "text": "and it enables them to learn the game"
+  },
+  {
+   "t": 333.64,
+   "d": 1.08,
+   "text": "more to feel like they're gaining"
+  },
+  {
+   "t": 334.72,
+   "d": 1.6,
+   "text": "mastery and not just getting further"
+  },
+  {
+   "t": 336.32,
+   "d": 3.84,
+   "text": "because of the RNG. And uh in"
+  },
+  {
+   "t": 340.16,
+   "d": 2.32,
+   "text": "particular, I think with Roguelikes it"
+  },
+  {
+   "t": 342.48,
+   "d": 1.96,
+   "text": "has a special place here because we"
+  },
+  {
+   "t": 344.44,
+   "d": 1.72,
+   "text": "expect that we're going to die a lot"
+  },
+  {
+   "t": 346.16,
+   "d": 1.4,
+   "text": "playing Roguelikes. And and that's part"
+  },
+  {
+   "t": 347.56,
+   "d": 2.8,
+   "text": "of the fun of it. And if you have a fair"
+  },
+  {
+   "t": 350.36,
+   "d": 1.96,
+   "text": "yet stupid death, that can still be a"
+  },
+  {
+   "t": 352.32,
+   "d": 1.56,
+   "text": "very good story."
+  },
+  {
+   "t": 353.88,
+   "d": 2.72,
+   "text": "So, you know, getting headbutted by a"
+  },
+  {
+   "t": 356.6,
+   "d": 2.12,
+   "text": "frog into some lava and then getting"
+  },
+  {
+   "t": 358.72,
+   "d": 1.84,
+   "text": "surrounded by other frogs is like a"
+  },
+  {
+   "t": 360.56,
+   "d": 1.84,
+   "text": "common way of dying in Tangled Depths."
+  },
+  {
+   "t": 362.4,
+   "d": 2.92,
+   "text": "And I think that's good. That's fun."
+  },
+  {
+   "t": 365.32,
+   "d": 2.48,
+   "text": "So, and ultimately, we just want to have"
+  },
+  {
+   "t": 367.8,
+   "d": 2.48,
+   "text": "difficulty in the right places. So,"
+  },
+  {
+   "t": 370.28,
+   "d": 2.28,
+   "text": "with that in mind, so my goals were"
+  },
+  {
+   "t": 372.56,
+   "d": 2.36,
+   "text": "again making a game that is accessible"
+  },
+  {
+   "t": 374.92,
+   "d": 3.0,
+   "text": "to beginners, but not not an easy game."
+  },
+  {
+   "t": 377.92,
+   "d": 2.08,
+   "text": "I wanted people to get to the point"
+  },
+  {
+   "t": 380.0,
+   "d": 1.28,
+   "text": "where they could start making the"
+  },
+  {
+   "t": 381.28,
+   "d": 3.24,
+   "text": "interesting decisions faster. So, what"
+  },
+  {
+   "t": 384.52,
+   "d": 2.24,
+   "text": "skill to use in combat, where to move,"
+  },
+  {
+   "t": 386.76,
+   "d": 2.36,
+   "text": "getting in a situation where as opposed"
+  },
+  {
+   "t": 389.12,
+   "d": 2.08,
+   "text": "to just, you know, bumping one enemy at"
+  },
+  {
+   "t": 391.2,
+   "d": 1.84,
+   "text": "a time, have enemies that are jumping"
+  },
+  {
+   "t": 393.04,
+   "d": 1.4,
+   "text": "around and they're pulling you, they're"
+  },
+  {
+   "t": 394.44,
+   "d": 2.16,
+   "text": "pushing you, they're summoning things."
+  },
+  {
+   "t": 396.6,
+   "d": 2.12,
+   "text": "And at the same time,"
+  },
+  {
+   "t": 398.72,
+   "d": 2.32,
+   "text": "my goal was to eliminate things that"
+  },
+  {
+   "t": 401.04,
+   "d": 1.4,
+   "text": "were adding difficulty, maybe that's"
+  },
+  {
+   "t": 402.44,
+   "d": 1.96,
+   "text": "sort of artificial difficulty,"
+  },
+  {
+   "t": 404.4,
+   "d": 2.12,
+   "text": "but not necessarily adding fun."
+  },
+  {
+   "t": 406.52,
+   "d": 1.6,
+   "text": "So, some of the these are some of the"
+  },
+  {
+   "t": 408.12,
+   "d": 2.12,
+   "text": "specifics. And I said these are the good"
+  },
+  {
+   "t": 410.24,
+   "d": 2.6,
+   "text": "intentions. So, again, it's not all not"
+  },
+  {
+   "t": 412.84,
+   "d": 1.76,
+   "text": "everything worked out as as intended and"
+  },
+  {
+   "t": 414.6,
+   "d": 1.36,
+   "text": "that's part of what I want to talk"
+  },
+  {
+   "t": 415.96,
+   "d": 3.0,
+   "text": "about. But some of the key things were"
+  },
+  {
+   "t": 418.96,
+   "d": 3.2,
+   "text": "making things clear in game to the"
+  },
+  {
+   "t": 422.16,
+   "d": 2.04,
+   "text": "player. So, your actions, your skills,"
+  },
+  {
+   "t": 424.2,
+   "d": 2.88,
+   "text": "items. So, I got rid of things like item"
+  },
+  {
+   "t": 427.08,
+   "d": 1.76,
+   "text": "identification is no longer thing."
+  },
+  {
+   "t": 428.84,
+   "d": 2.04,
+   "text": "Instead, it's more of a Diablo style"
+  },
+  {
+   "t": 430.88,
+   "d": 1.8,
+   "text": "where a piece of equipment could have"
+  },
+  {
+   "t": 432.68,
+   "d": 1.8,
+   "text": "any one of a hundred mods or it could"
+  },
+  {
+   "t": 434.48,
+   "d": 3.36,
+   "text": "have five or six or seven mods."
+  },
+  {
+   "t": 437.84,
+   "d": 2.52,
+   "text": "Reducing the impact of the RNG. So,"
+  },
+  {
+   "t": 440.36,
+   "d": 2.52,
+   "text": "instead of going with a like a D20 or D6"
+  },
+  {
+   "t": 442.88,
+   "d": 1.88,
+   "text": "base system, the damage ranges are"
+  },
+  {
+   "t": 444.76,
+   "d": 2.56,
+   "text": "pretty tight. And then, you know,"
+  },
+  {
+   "t": 447.32,
+   "d": 2.8,
+   "text": "getting rid of deaths due to attrition."
+  },
+  {
+   "t": 450.12,
+   "d": 3.44,
+   "text": "So, dying because you ran out of potions"
+  },
+  {
+   "t": 453.56,
+   "d": 1.2,
+   "text": "on the last floor. So, again, these are"
+  },
+  {
+   "t": 454.76,
+   "d": 3.4,
+   "text": "the ideas that I went in to this uh"
+  },
+  {
+   "t": 458.16,
+   "d": 2.68,
+   "text": "when I first started. So,"
+  },
+  {
+   "t": 460.84,
+   "d": 3.24,
+   "text": "on a on a high level, I decided split"
+  },
+  {
+   "t": 464.08,
+   "d": 1.72,
+   "text": "the game up into three modes that you"
+  },
+  {
+   "t": 465.8,
+   "d": 1.0,
+   "text": "can select when you first start a"
+  },
+  {
+   "t": 466.8,
+   "d": 3.2,
+   "text": "character. The first one is heroic mode,"
+  },
+  {
+   "t": 470.0,
+   "d": 3.52,
+   "text": "which is a meta progress base system."
+  },
+  {
+   "t": 473.52,
+   "d": 1.92,
+   "text": "And so you can transfer items and gold"
+  },
+  {
+   "t": 475.44,
+   "d": 2.2,
+   "text": "between characters. You can plant trees,"
+  },
+  {
+   "t": 477.64,
+   "d": 1.04,
+   "text": "which"
+  },
+  {
+   "t": 478.68,
+   "d": 1.48,
+   "text": "drop food, which can be used to heal"
+  },
+  {
+   "t": 480.16,
+   "d": 1.76,
+   "text": "yourself. You can raise pets, but"
+  },
+  {
+   "t": 481.92,
+   "d": 2.08,
+   "text": "otherwise there's permadeath. So,"
+  },
+  {
+   "t": 484.0,
+   "d": 1.56,
+   "text": "there's no transfer of skills, there's"
+  },
+  {
+   "t": 485.56,
+   "d": 1.6,
+   "text": "no transfer of experience. There's"
+  },
+  {
+   "t": 487.16,
+   "d": 4.72,
+   "text": "hardcore mode, which is traditional"
+  },
+  {
+   "t": 491.88,
+   "d": 2.16,
+   "text": "Roguelike straight up. When you die,"
+  },
+  {
+   "t": 494.04,
+   "d": 1.64,
+   "text": "that's mode, which does not have"
+  },
+  {
+   "t": 495.68,
+   "d": 1.6,
+   "text": "permadeath at all. It's the exact same"
+  },
+  {
+   "t": 497.28,
+   "d": 2.08,
+   "text": "game except when you die, you just lose"
+  },
+  {
+   "t": 499.36,
+   "d": 1.76,
+   "text": "experience, you lose job points, which"
+  },
+  {
+   "t": 501.12,
+   "d": 2.84,
+   "text": "are used to learn skills, and you you"
+  },
+  {
+   "t": 503.96,
+   "d": 2.56,
+   "text": "lose gold. I'll talk about that in just"
+  },
+  {
+   "t": 506.52,
+   "d": 1.08,
+   "text": "a second."
+  },
+  {
+   "t": 507.6,
+   "d": 2.24,
+   "text": "But first on the meta progress side. So,"
+  },
+  {
+   "t": 509.84,
+   "d": 1.6,
+   "text": "this is something that is very"
+  },
+  {
+   "t": 511.44,
+   "d": 1.28,
+   "text": "contentious."
+  },
+  {
+   "t": 512.72,
+   "d": 1.16,
+   "text": "I'm sure all of you actually have"
+  },
+  {
+   "t": 513.88,
+   "d": 3.48,
+   "text": "opinions on meta progress in Roguelikes."
+  },
+  {
+   "t": 517.36,
+   "d": 2.8,
+   "text": "And it's it's challenging to balance"
+  },
+  {
+   "t": 520.16,
+   "d": 3.32,
+   "text": "properly. My my thought process for this"
+  },
+  {
+   "t": 523.48,
+   "d": 1.84,
+   "text": "is that"
+  },
+  {
+   "t": 525.32,
+   "d": 2.36,
+   "text": "when meta progress results in your"
+  },
+  {
+   "t": 527.68,
+   "d": 3.08,
+   "text": "absolute potential increasing with each"
+  },
+  {
+   "t": 530.76,
+   "d": 1.16,
+   "text": "run,"
+  },
+  {
+   "t": 531.92,
+   "d": 1.8,
+   "text": "it's more likely that people are going"
+  },
+  {
+   "t": 533.72,
+   "d": 1.16,
+   "text": "to feel maybe a little bit more"
+  },
+  {
+   "t": 534.88,
+   "d": 2.64,
+   "text": "frustrated by it. For example, Rogue"
+  },
+  {
+   "t": 537.52,
+   "d": 2.12,
+   "text": "Legacy, which is a great game. I'm not"
+  },
+  {
+   "t": 539.64,
+   "d": 2.24,
+   "text": "saying it's a bad game at all. But if"
+  },
+  {
+   "t": 541.88,
+   "d": 1.76,
+   "text": "you find an item, a sword or something"
+  },
+  {
+   "t": 543.64,
+   "d": 1.28,
+   "text": "like that, you can't use it on your"
+  },
+  {
+   "t": 544.92,
+   "d": 2.0,
+   "text": "current character. You have to die in"
+  },
+  {
+   "t": 546.92,
+   "d": 1.44,
+   "text": "order to use it on your next character,"
+  },
+  {
+   "t": 548.36,
+   "d": 1.52,
+   "text": "which some people might find"
+  },
+  {
+   "t": 549.88,
+   "d": 1.84,
+   "text": "frustrating. Or unlocking this awesome"
+  },
+  {
+   "t": 551.72,
+   "d": 2.6,
+   "text": "skill tree, but you know, you have to"
+  },
+  {
+   "t": 554.32,
+   "d": 1.6,
+   "text": "spend your gold and and you can't spend"
+  },
+  {
+   "t": 555.92,
+   "d": 2.08,
+   "text": "your gold until you're dead. So,"
+  },
+  {
+   "t": 558.0,
+   "d": 2.84,
+   "text": "my thought process was, well, rather"
+  },
+  {
+   "t": 560.84,
+   "d": 2.56,
+   "text": "than using meta progress to increase our"
+  },
+  {
+   "t": 563.4,
+   "d": 2.76,
+   "text": "power little by little with each run,"
+  },
+  {
+   "t": 566.16,
+   "d": 2.0,
+   "text": "instead let's use this to just get the"
+  },
+  {
+   "t": 568.16,
+   "d": 1.32,
+   "text": "player through the early game sooner."
+  },
+  {
+   "t": 569.48,
+   "d": 3.24,
+   "text": "So, if over time you've banked items or"
+  },
+  {
+   "t": 572.72,
+   "d": 2.44,
+   "text": "you've raised a really great pet,"
+  },
+  {
+   "t": 575.16,
+   "d": 2.28,
+   "text": "you can get up to the point where you"
+  },
+  {
+   "t": 577.44,
+   "d": 1.44,
+   "text": "found those items to begin with. So, if"
+  },
+  {
+   "t": 578.88,
+   "d": 1.92,
+   "text": "it's like a rank five item, just to use"
+  },
+  {
+   "t": 580.8,
+   "d": 1.96,
+   "text": "an arbitrary number, maybe they'll help"
+  },
+  {
+   "t": 582.76,
+   "d": 1.96,
+   "text": "you get to rank five faster."
+  },
+  {
+   "t": 584.72,
+   "d": 2.88,
+   "text": "And in the case of planting trees and"
+  },
+  {
+   "t": 587.6,
+   "d": 1.68,
+   "text": "raising pets, it makes sense in the"
+  },
+  {
+   "t": 589.28,
+   "d": 1.6,
+   "text": "context of the world. Again, it is sort"
+  },
+  {
+   "t": 590.88,
+   "d": 1.76,
+   "text": "of like a JRPG based game. So, there's a"
+  },
+  {
+   "t": 592.64,
+   "d": 2.28,
+   "text": "whole monster capturing mechanic. And so"
+  },
+  {
+   "t": 594.92,
+   "d": 1.48,
+   "text": "the idea that your monsters are just"
+  },
+  {
+   "t": 596.4,
+   "d": 2.12,
+   "text": "like in a corral somewhere for your next"
+  },
+  {
+   "t": 598.52,
+   "d": 2.24,
+   "text": "character makes sense. So,"
+  },
+  {
+   "t": 600.76,
+   "d": 1.72,
+   "text": "people mostly like this and I think this"
+  },
+  {
+   "t": 602.48,
+   "d": 2.92,
+   "text": "worked out rather well."
+  },
+  {
+   "t": 605.4,
+   "d": 2.32,
+   "text": "But, here's the thing that"
+  },
+  {
+   "t": 607.72,
+   "d": 0.92,
+   "text": "might have caught your attention, which"
+  },
+  {
+   "t": 608.64,
+   "d": 2.36,
+   "text": "is having having a non-permadeath mode."
+  },
+  {
+   "t": 611.0,
+   "d": 3.28,
+   "text": "And based on our analytics, about 30% of"
+  },
+  {
+   "t": 614.28,
+   "d": 1.8,
+   "text": "people play this mode."
+  },
+  {
+   "t": 616.08,
+   "d": 1.96,
+   "text": "But, what's more interesting is that"
+  },
+  {
+   "t": 618.04,
+   "d": 2.4,
+   "text": "some of the most dedicated hardcore"
+  },
+  {
+   "t": 620.44,
+   "d": 2.72,
+   "text": "players exclusively play this adventure"
+  },
+  {
+   "t": 623.16,
+   "d": 0.92,
+   "text": "mode."
+  },
+  {
+   "t": 624.08,
+   "d": 2.52,
+   "text": "And I think that's because essentially"
+  },
+  {
+   "t": 626.6,
+   "d": 2.52,
+   "text": "it turns the game into just a turn-based"
+  },
+  {
+   "t": 629.12,
+   "d": 2.28,
+   "text": "dungeon crawling RPG that has all of the"
+  },
+  {
+   "t": 631.4,
+   "d": 1.52,
+   "text": "trappings of a roguelike except for"
+  },
+  {
+   "t": 632.92,
+   "d": 1.8,
+   "text": "permadeath. So, it has all the same"
+  },
+  {
+   "t": 634.72,
+   "d": 1.96,
+   "text": "stuff we love, the unpredictability, the"
+  },
+  {
+   "t": 636.68,
+   "d": 2.04,
+   "text": "procedural generation, the interesting"
+  },
+  {
+   "t": 638.72,
+   "d": 1.8,
+   "text": "items, the interesting combat scenarios"
+  },
+  {
+   "t": 640.52,
+   "d": 1.56,
+   "text": "you can get into,"
+  },
+  {
+   "t": 642.08,
+   "d": 1.68,
+   "text": "except it's just not as punishing when"
+  },
+  {
+   "t": 643.76,
+   "d": 2.4,
+   "text": "you die. So, personally, I don't play"
+  },
+  {
+   "t": 646.16,
+   "d": 0.92,
+   "text": "it."
+  },
+  {
+   "t": 647.08,
+   "d": 2.88,
+   "text": "And I think Jim"
+  },
+  {
+   "t": 649.96,
+   "d": 1.36,
+   "text": "many points who's another member of the"
+  },
+  {
+   "t": 651.32,
+   "d": 1.88,
+   "text": "Tangled Deep team"
+  },
+  {
+   "t": 653.2,
+   "d": 2.48,
+   "text": "has basically relegated this. He said"
+  },
+  {
+   "t": 655.68,
+   "d": 1.56,
+   "text": "like, \"Oh, this is casual mode.\" And it"
+  },
+  {
+   "t": 657.24,
+   "d": 3.52,
+   "text": "is. It is absolutely casual mode. But,"
+  },
+  {
+   "t": 660.76,
+   "d": 1.56,
+   "text": "I think the interesting thing is that it"
+  },
+  {
+   "t": 662.32,
+   "d": 1.84,
+   "text": "allows people to experience more of the"
+  },
+  {
+   "t": 664.16,
+   "d": 2.64,
+   "text": "content that we've put so much time into"
+  },
+  {
+   "t": 666.8,
+   "d": 1.2,
+   "text": "creating."
+  },
+  {
+   "t": 668.0,
+   "d": 1.64,
+   "text": "If you think about it, these roguelike"
+  },
+  {
+   "t": 669.64,
+   "d": 2.2,
+   "text": "projects that take years and years,"
+  },
+  {
+   "t": 671.84,
+   "d": 2.56,
+   "text": "Tangled Deep only took 2 years to"
+  },
+  {
+   "t": 674.4,
+   "d": 2.24,
+   "text": "release the version 1.0, although we're"
+  },
+  {
+   "t": 676.64,
+   "d": 1.64,
+   "text": "still working on it now."
+  },
+  {
+   "t": 678.28,
+   "d": 1.4,
+   "text": "There's so much content in the game that"
+  },
+  {
+   "t": 679.68,
+   "d": 2.36,
+   "text": "if if I look at the chart of how far"
+  },
+  {
+   "t": 682.04,
+   "d": 1.96,
+   "text": "people have gotten, but the people that"
+  },
+  {
+   "t": 684.0,
+   "d": 2.4,
+   "text": "are making it to the end game is like 2%"
+  },
+  {
+   "t": 686.4,
+   "d": 2.16,
+   "text": "of all runs get to the end game, which"
+  },
+  {
+   "t": 688.56,
+   "d": 2.0,
+   "text": "even that is pretty good."
+  },
+  {
+   "t": 690.56,
+   "d": 3.08,
+   "text": "But, by having a non-permadeath mode,"
+  },
+  {
+   "t": 693.64,
+   "d": 1.92,
+   "text": "it's it's allowing people that would"
+  },
+  {
+   "t": 695.56,
+   "d": 1.32,
+   "text": "otherwise say, \"You know what? I"
+  },
+  {
+   "t": 696.88,
+   "d": 1.36,
+   "text": "wouldn't even touch this game because of"
+  },
+  {
+   "t": 698.24,
+   "d": 1.76,
+   "text": "permadeath.\" Now, not only are they"
+  },
+  {
+   "t": 700.0,
+   "d": 1.08,
+   "text": "getting to play it, but they're also"
+  },
+  {
+   "t": 701.08,
+   "d": 1.44,
+   "text": "getting to experience more. And that's"
+  },
+  {
+   "t": 702.52,
+   "d": 1.04,
+   "text": "pretty cool. And then they can share"
+  },
+  {
+   "t": 703.56,
+   "d": 1.2,
+   "text": "that with other players. So, they can"
+  },
+  {
+   "t": 704.76,
+   "d": 1.12,
+   "text": "share"
+  },
+  {
+   "t": 705.88,
+   "d": 1.36,
+   "text": "you know, interesting encounters or"
+  },
+  {
+   "t": 707.24,
+   "d": 2.36,
+   "text": "legendary items or skill builds that"
+  },
+  {
+   "t": 709.6,
+   "d": 3.12,
+   "text": "maybe somebody that is struggling in"
+  },
+  {
+   "t": 712.72,
+   "d": 2.32,
+   "text": "hardcore heroic mode, that gives them"
+  },
+  {
+   "t": 715.04,
+   "d": 1.6,
+   "text": "now something to look forward to some"
+  },
+  {
+   "t": 716.64,
+   "d": 1.04,
+   "text": "because somebody else has gotten"
+  },
+  {
+   "t": 717.68,
+   "d": 1.56,
+   "text": "further."
+  },
+  {
+   "t": 719.24,
+   "d": 2.0,
+   "text": "And the thing is also without a"
+  },
+  {
+   "t": 721.24,
+   "d": 1.56,
+   "text": "non-permadeath mode, my thought process"
+  },
+  {
+   "t": 722.8,
+   "d": 1.48,
+   "text": "was"
+  },
+  {
+   "t": 724.28,
+   "d": 2.48,
+   "text": "people can just save scum anyway. So,"
+  },
+  {
+   "t": 726.76,
+   "d": 1.16,
+   "text": "they can sort of make their own"
+  },
+  {
+   "t": 727.92,
+   "d": 2.36,
+   "text": "non-permadeath mode really. And I"
+  },
+  {
+   "t": 730.28,
+   "d": 1.24,
+   "text": "figured"
+  },
+  {
+   "t": 731.52,
+   "d": 1.52,
+   "text": "if I put it in there"
+  },
+  {
+   "t": 733.04,
+   "d": 1.68,
+   "text": "and I have it as a as a concession, say"
+  },
+  {
+   "t": 734.72,
+   "d": 1.32,
+   "text": "this isn't the intended way to play."
+  },
+  {
+   "t": 736.04,
+   "d": 3.36,
+   "text": "This is like the baby mode and it's it's"
+  },
+  {
+   "t": 739.4,
+   "d": 2.44,
+   "text": "okay to have."
+  },
+  {
+   "t": 741.84,
+   "d": 2.4,
+   "text": "Now, talking about some of the specific"
+  },
+  {
+   "t": 744.24,
+   "d": 2.28,
+   "text": "difficulty points and this has already"
+  },
+  {
+   "t": 746.52,
+   "d": 2.2,
+   "text": "come up several times already is this"
+  },
+  {
+   "t": 748.72,
+   "d": 1.52,
+   "text": "idea of a hunger clock encouraging"
+  },
+  {
+   "t": 750.24,
+   "d": 2.28,
+   "text": "progress. So, again, the thought process"
+  },
+  {
+   "t": 752.52,
+   "d": 2.68,
+   "text": "was if I get rid of it, then now people"
+  },
+  {
+   "t": 755.2,
+   "d": 1.6,
+   "text": "are not dying due to starvation. We"
+  },
+  {
+   "t": 756.8,
+   "d": 1.72,
+   "text": "remove that mechanic. It's great. It's"
+  },
+  {
+   "t": 758.52,
+   "d": 1.96,
+   "text": "more fun. Artificial difficulty, we got"
+  },
+  {
+   "t": 760.48,
+   "d": 3.52,
+   "text": "rid of it. The problem is"
+  },
+  {
+   "t": 764.0,
+   "d": 1.88,
+   "text": "that when you have regenerating health"
+  },
+  {
+   "t": 765.88,
+   "d": 1.84,
+   "text": "and you have no hunger clock, now the"
+  },
+  {
+   "t": 767.72,
+   "d": 2.56,
+   "text": "optimal strategy is dancing with"
+  },
+  {
+   "t": 770.28,
+   "d": 1.8,
+   "text": "monsters over and over again until your"
+  },
+  {
+   "t": 772.08,
+   "d": 1.64,
+   "text": "health regenerates. You take a ranged"
+  },
+  {
+   "t": 773.72,
+   "d": 1.4,
+   "text": "weapon and you just get a few tiles"
+  },
+  {
+   "t": 775.12,
+   "d": 2.04,
+   "text": "ahead and then eventually you just"
+  },
+  {
+   "t": 777.16,
+   "d": 1.96,
+   "text": "infinite health all the time."
+  },
+  {
+   "t": 779.12,
+   "d": 1.96,
+   "text": "And so, the experienced roguelike"
+  },
+  {
+   "t": 781.08,
+   "d": 1.04,
+   "text": "players that were playing this were"
+  },
+  {
+   "t": 782.12,
+   "d": 1.08,
+   "text": "saying,"
+  },
+  {
+   "t": 783.2,
+   "d": 1.52,
+   "text": "\"The game is just too easy now. There's"
+  },
+  {
+   "t": 784.72,
+   "d": 2.92,
+   "text": "too many cheesy tactics.\" So, solution"
+  },
+  {
+   "t": 787.64,
+   "d": 2.4,
+   "text": "is we get rid of health regeneration, of"
+  },
+  {
+   "t": 790.04,
+   "d": 1.12,
+   "text": "course."
+  },
+  {
+   "t": 791.16,
+   "d": 2.16,
+   "text": "Now, you can't kite"
+  },
+  {
+   "t": 793.32,
+   "d": 1.16,
+   "text": "because eventually you'll just get"
+  },
+  {
+   "t": 794.48,
+   "d": 1.52,
+   "text": "chipped down by monsters, you know,"
+  },
+  {
+   "t": 796.0,
+   "d": 1.32,
+   "text": "you'll get a little bit further in the"
+  },
+  {
+   "t": 797.32,
+   "d": 1.36,
+   "text": "dungeon"
+  },
+  {
+   "t": 798.68,
+   "d": 1.52,
+   "text": "by kiting, but you know, eventually"
+  },
+  {
+   "t": 800.2,
+   "d": 1.12,
+   "text": "you'll die."
+  },
+  {
+   "t": 801.32,
+   "d": 1.76,
+   "text": "Now, players are making tactical"
+  },
+  {
+   "t": 803.08,
+   "d": 1.72,
+   "text": "decisions in theory."
+  },
+  {
+   "t": 804.8,
+   "d": 1.4,
+   "text": "But,"
+  },
+  {
+   "t": 806.2,
+   "d": 2.52,
+   "text": "of course, now we have a problem."
+  },
+  {
+   "t": 808.72,
+   "d": 1.28,
+   "text": "We're actually back to deaths by"
+  },
+  {
+   "t": 810.0,
+   "d": 2.24,
+   "text": "attrition. So, this has made things even"
+  },
+  {
+   "t": 812.24,
+   "d": 2.8,
+   "text": "worse because now not only is there no"
+  },
+  {
+   "t": 815.04,
+   "d": 2.56,
+   "text": "way to easily recover"
+  },
+  {
+   "t": 817.6,
+   "d": 1.4,
+   "text": "because you know, we took out the whole"
+  },
+  {
+   "t": 819.0,
+   "d": 2.0,
+   "text": "food mechanic, but it just feels bad."
+  },
+  {
+   "t": 821.0,
+   "d": 1.44,
+   "text": "So, it's like you know, I'm playing"
+  },
+  {
+   "t": 822.44,
+   "d": 1.24,
+   "text": "well, but I took a hit, you know, I"
+  },
+  {
+   "t": 823.68,
+   "d": 2.08,
+   "text": "can't avoid taking damage. And so now"
+  },
+  {
+   "t": 825.76,
+   "d": 2.32,
+   "text": "I'm dying because eventually I just got"
+  },
+  {
+   "t": 828.08,
+   "d": 2.2,
+   "text": "worn down by monsters. So,"
+  },
+  {
+   "t": 830.28,
+   "d": 2.68,
+   "text": "the solution here was essentially just"
+  },
+  {
+   "t": 832.96,
+   "d": 1.36,
+   "text": "to throw a whole bunch of stuff to the"
+  },
+  {
+   "t": 834.32,
+   "d": 1.92,
+   "text": "wall and see what sticks. So, there are"
+  },
+  {
+   "t": 836.24,
+   "d": 1.52,
+   "text": "a few mechanics and then and I think"
+  },
+  {
+   "t": 837.76,
+   "d": 2.68,
+   "text": "that especially with roguelikes and as"
+  },
+  {
+   "t": 840.44,
+   "d": 1.44,
+   "text": "you've as you saw in Josh's talk,"
+  },
+  {
+   "t": 841.88,
+   "d": 2.6,
+   "text": "there's so many interact uh"
+  },
+  {
+   "t": 844.48,
+   "d": 1.96,
+   "text": "interconnected systems."
+  },
+  {
+   "t": 846.44,
+   "d": 1.76,
+   "text": "Sometimes you need to try adding"
+  },
+  {
+   "t": 848.2,
+   "d": 1.76,
+   "text": "different things and and see what works."
+  },
+  {
+   "t": 849.96,
+   "d": 1.6,
+   "text": "In this case, there's several different"
+  },
+  {
+   "t": 851.56,
+   "d": 2.2,
+   "text": "systems. There is a flask and this is"
+  },
+  {
+   "t": 853.76,
+   "d": 1.48,
+   "text": "sort of like"
+  },
+  {
+   "t": 855.24,
+   "d": 1.68,
+   "text": "a a"
+  },
+  {
+   "t": 856.92,
+   "d": 2.2,
+   "text": "console version of a hunger clock if"
+  },
+  {
+   "t": 859.12,
+   "d": 2.0,
+   "text": "that makes sense. So, rather than saying"
+  },
+  {
+   "t": 861.12,
+   "d": 1.32,
+   "text": "your"
+  },
+  {
+   "t": 862.44,
+   "d": 2.48,
+   "text": "uh your hunger meter is ticking down and"
+  },
+  {
+   "t": 864.92,
+   "d": 1.68,
+   "text": "when it hits zero, you die or you take a"
+  },
+  {
+   "t": 866.6,
+   "d": 2.72,
+   "text": "lot of damage, you have a healing flask"
+  },
+  {
+   "t": 869.32,
+   "d": 2.24,
+   "text": "and the flask slowly depletes as you use"
+  },
+  {
+   "t": 871.56,
+   "d": 2.84,
+   "text": "it and you refill it by exploring."
+  },
+  {
+   "t": 874.4,
+   "d": 0.96,
+   "text": "So, if you think about it, it's"
+  },
+  {
+   "t": 875.36,
+   "d": 1.44,
+   "text": "basically the same sort of thing as a"
+  },
+  {
+   "t": 876.8,
+   "d": 2.32,
+   "text": "hunger clock just named a little bit"
+  },
+  {
+   "t": 879.12,
+   "d": 1.24,
+   "text": "different"
+  },
+  {
+   "t": 880.36,
+   "d": 1.64,
+   "text": "because it has the same effect. If"
+  },
+  {
+   "t": 882.0,
+   "d": 1.36,
+   "text": "you're staying on one floor for too"
+  },
+  {
+   "t": 883.36,
+   "d": 1.44,
+   "text": "long,"
+  },
+  {
+   "t": 884.8,
+   "d": 2.0,
+   "text": "your flask is probably going to start"
+  },
+  {
+   "t": 886.8,
+   "d": 1.32,
+   "text": "emptying because you've been using it to"
+  },
+  {
+   "t": 888.12,
+   "d": 1.48,
+   "text": "heal constantly. But, if you're"
+  },
+  {
+   "t": 889.6,
+   "d": 1.24,
+   "text": "exploring, you're making forward"
+  },
+  {
+   "t": 890.84,
+   "d": 1.52,
+   "text": "progress, then your flask is going to"
+  },
+  {
+   "t": 892.36,
+   "d": 1.96,
+   "text": "stay topped off."
+  },
+  {
+   "t": 894.32,
+   "d": 1.72,
+   "text": "There's a few other mechanics too like"
+  },
+  {
+   "t": 896.04,
+   "d": 1.36,
+   "text": "healing food, which has a shared"
+  },
+  {
+   "t": 897.4,
+   "d": 1.84,
+   "text": "cooldown, so you can't spam it. And then"
+  },
+  {
+   "t": 899.24,
+   "d": 1.4,
+   "text": "campfires, which heal you to full every"
+  },
+  {
+   "t": 900.64,
+   "d": 1.96,
+   "text": "few floors. So,"
+  },
+  {
+   "t": 902.6,
+   "d": 1.32,
+   "text": "this stuff"
+  },
+  {
+   "t": 903.92,
+   "d": 3.04,
+   "text": "mostly worked, but going back to the"
+  },
+  {
+   "t": 906.96,
+   "d": 2.6,
+   "text": "idea of expected difficulty, artificial"
+  },
+  {
+   "t": 909.56,
+   "d": 1.44,
+   "text": "difficulty and that sort of thing,"
+  },
+  {
+   "t": 911.0,
+   "d": 1.96,
+   "text": "there's some players that felt like"
+  },
+  {
+   "t": 912.96,
+   "d": 2.4,
+   "text": "because there's no health regeneration,"
+  },
+  {
+   "t": 915.36,
+   "d": 1.36,
+   "text": "they just couldn't get past that. And"
+  },
+  {
+   "t": 916.72,
+   "d": 1.12,
+   "text": "they said, \"You know what? Tangled Deep"
+  },
+  {
+   "t": 917.84,
+   "d": 1.88,
+   "text": "is just not the game for me because I"
+  },
+  {
+   "t": 919.72,
+   "d": 1.6,
+   "text": "want to be able to rest until healed.\""
+  },
+  {
+   "t": 921.32,
+   "d": 1.32,
+   "text": "And the"
+  },
+  {
+   "t": 922.64,
+   "d": 1.56,
+   "text": "intended experience that they wanted to"
+  },
+  {
+   "t": 924.2,
+   "d": 1.32,
+   "text": "have didn't match up with what we had in"
+  },
+  {
+   "t": 925.52,
+   "d": 1.6,
+   "text": "the game. But, there's a solution to"
+  },
+  {
+   "t": 927.12,
+   "d": 1.88,
+   "text": "that too, which I'll talk about towards"
+  },
+  {
+   "t": 929.0,
+   "d": 1.52,
+   "text": "the end."
+  },
+  {
+   "t": 930.52,
+   "d": 1.92,
+   "text": "So, this other core component was the"
+  },
+  {
+   "t": 932.44,
+   "d": 2.36,
+   "text": "idea of a job system. So, I wanted to"
+  },
+  {
+   "t": 934.8,
+   "d": 1.96,
+   "text": "emulate games like Final Fantasy Tactics"
+  },
+  {
+   "t": 936.76,
+   "d": 2.52,
+   "text": "and 5, which I grew up playing."
+  },
+  {
+   "t": 939.28,
+   "d": 1.84,
+   "text": "So, I thought, \"Well,"
+  },
+  {
+   "t": 941.12,
+   "d": 1.6,
+   "text": "wouldn't it be awesome if you had all"
+  },
+  {
+   "t": 942.72,
+   "d": 2.08,
+   "text": "these like 100 plus skills to choose"
+  },
+  {
+   "t": 944.8,
+   "d": 2.64,
+   "text": "from, 12 unique jobs and you can learn"
+  },
+  {
+   "t": 947.44,
+   "d": 1.36,
+   "text": "as many skills as you want, you just"
+  },
+  {
+   "t": 948.8,
+   "d": 1.36,
+   "text": "have to spend job points. You have to"
+  },
+  {
+   "t": 950.16,
+   "d": 1.72,
+   "text": "fight to get your job points. It's"
+  },
+  {
+   "t": 951.88,
+   "d": 1.44,
+   "text": "great. This is going to be wonderful"
+  },
+  {
+   "t": 953.32,
+   "d": 1.16,
+   "text": "because you have all sorts of build"
+  },
+  {
+   "t": 954.48,
+   "d": 2.44,
+   "text": "variety, you have lots of play styles.\""
+  },
+  {
+   "t": 956.92,
+   "d": 2.56,
+   "text": "And I figured I didn't want it to be"
+  },
+  {
+   "t": 959.48,
+   "d": 3.24,
+   "text": "based on just random drops like uh"
+  },
+  {
+   "t": 962.72,
+   "d": 2.92,
+   "text": "your build being entirely influenced by"
+  },
+  {
+   "t": 965.64,
+   "d": 1.72,
+   "text": "procedural generation."
+  },
+  {
+   "t": 967.36,
+   "d": 1.32,
+   "text": "But,"
+  },
+  {
+   "t": 968.68,
+   "d": 2.84,
+   "text": "as as with the other other problems, so"
+  },
+  {
+   "t": 971.52,
+   "d": 1.72,
+   "text": "this is something is a name that that"
+  },
+  {
+   "t": 973.24,
+   "d": 2.12,
+   "text": "Jim dubbed this particular issue, the"
+  },
+  {
+   "t": 975.36,
+   "d": 1.76,
+   "text": "infinite Mirai, and that's the canonical"
+  },
+  {
+   "t": 977.12,
+   "d": 2.04,
+   "text": "name of the main character of the game."
+  },
+  {
+   "t": 979.16,
+   "d": 1.32,
+   "text": "So, when you have something like"
+  },
+  {
+   "t": 980.48,
+   "d": 1.64,
+   "text": "adventure mode, you have meta progress"
+  },
+  {
+   "t": 982.12,
+   "d": 2.16,
+   "text": "that helps people catch up more."
+  },
+  {
+   "t": 984.28,
+   "d": 1.76,
+   "text": "Eventually, people just learn every"
+  },
+  {
+   "t": 986.04,
+   "d": 2.24,
+   "text": "skill from every job and there's really"
+  },
+  {
+   "t": 988.28,
+   "d": 1.4,
+   "text": "not a whole lot you can do to prevent"
+  },
+  {
+   "t": 989.68,
+   "d": 1.88,
+   "text": "that because"
+  },
+  {
+   "t": 991.56,
+   "d": 1.76,
+   "text": "just over time it'll happen because if"
+  },
+  {
+   "t": 993.32,
+   "d": 1.68,
+   "text": "you play carefully and you and you just"
+  },
+  {
+   "t": 995.0,
+   "d": 2.24,
+   "text": "focus on not dying and amassing more and"
+  },
+  {
+   "t": 997.24,
+   "d": 2.2,
+   "text": "more and more and more skills, you end"
+  },
+  {
+   "t": 999.44,
+   "d": 1.32,
+   "text": "up with every skill in the game that you"
+  },
+  {
+   "t": 1000.76,
+   "d": 2.08,
+   "text": "can use anytime. Even with cooldowns,"
+  },
+  {
+   "t": 1002.84,
+   "d": 1.84,
+   "text": "even with resources,"
+  },
+  {
+   "t": 1004.68,
+   "d": 1.24,
+   "text": "what was happening is you know, a"
+  },
+  {
+   "t": 1005.92,
+   "d": 1.76,
+   "text": "monster would"
+  },
+  {
+   "t": 1007.68,
+   "d": 1.32,
+   "text": "a very difficult monster would approach"
+  },
+  {
+   "t": 1009.0,
+   "d": 1.52,
+   "text": "the player and they'd have like nine"
+  },
+  {
+   "t": 1010.52,
+   "d": 1.56,
+   "text": "different escape abilities to choose"
+  },
+  {
+   "t": 1012.08,
+   "d": 1.44,
+   "text": "from. And by the time they rotated"
+  },
+  {
+   "t": 1013.52,
+   "d": 1.84,
+   "text": "through all nine, the first one was now"
+  },
+  {
+   "t": 1015.36,
+   "d": 2.04,
+   "text": "off cooldown. So, they were effectively"
+  },
+  {
+   "t": 1017.4,
+   "d": 1.2,
+   "text": "invincible."
+  },
+  {
+   "t": 1018.6,
+   "d": 2.36,
+   "text": "And what the veteran players were saying"
+  },
+  {
+   "t": 1020.96,
+   "d": 2.44,
+   "text": "day in and day out was the two hot bars"
+  },
+  {
+   "t": 1023.4,
+   "d": 1.8,
+   "text": "we have is not enough. We have so many"
+  },
+  {
+   "t": 1025.2,
+   "d": 2.48,
+   "text": "abilities, we want more hot bars because"
+  },
+  {
+   "t": 1027.68,
+   "d": 2.48,
+   "text": "it's annoying to go into the the UI to"
+  },
+  {
+   "t": 1030.16,
+   "d": 1.88,
+   "text": "use them from a from a book interface."
+  },
+  {
+   "t": 1032.04,
+   "d": 1.28,
+   "text": "So,"
+  },
+  {
+   "t": 1033.32,
+   "d": 2.08,
+   "text": "what we did was actually limited the hot"
+  },
+  {
+   "t": 1035.4,
+   "d": 2.36,
+   "text": "bars instead. So,"
+  },
+  {
+   "t": 1037.76,
+   "d": 1.96,
+   "text": "and the lesson here is maybe to not"
+  },
+  {
+   "t": 1039.72,
+   "d": 2.28,
+   "text": "necessarily listen to what the players"
+  },
+  {
+   "t": 1042.0,
+   "d": 1.56,
+   "text": "want or maybe sometimes do the opposite."
+  },
+  {
+   "t": 1043.56,
+   "d": 2.12,
+   "text": "Listen to the problem, but then do a"
+  },
+  {
+   "t": 1045.68,
+   "d": 1.2,
+   "text": "different solution. You know, that's a"
+  },
+  {
+   "t": 1046.88,
+   "d": 1.68,
+   "text": "lesson that I learned."
+  },
+  {
+   "t": 1048.56,
+   "d": 1.56,
+   "text": "So, here"
+  },
+  {
+   "t": 1050.12,
+   "d": 2.6,
+   "text": "now only the skills on your hot bar can"
+  },
+  {
+   "t": 1052.72,
+   "d": 1.84,
+   "text": "be used. You can't switch in the dungeon"
+  },
+  {
+   "t": 1054.56,
+   "d": 2.2,
+   "text": "and you can't cheese it by using a skill"
+  },
+  {
+   "t": 1056.76,
+   "d": 2.28,
+   "text": "that's off your hot bar and then you"
+  },
+  {
+   "t": 1059.04,
+   "d": 1.92,
+   "text": "know, sorry, you can't put a skill on"
+  },
+  {
+   "t": 1060.96,
+   "d": 1.96,
+   "text": "your hot bar, let's say summon a pet,"
+  },
+  {
+   "t": 1062.92,
+   "d": 1.16,
+   "text": "and then take it off. So, the pet would"
+  },
+  {
+   "t": 1064.08,
+   "d": 1.72,
+   "text": "just disappear if that happens."
+  },
+  {
+   "t": 1065.8,
+   "d": 1.76,
+   "text": "So, now you have to make decisions about"
+  },
+  {
+   "t": 1067.56,
+   "d": 1.28,
+   "text": "your build. You can't be in the middle"
+  },
+  {
+   "t": 1068.84,
+   "d": 1.4,
+   "text": "of combat and say, \"Oops, I should have"
+  },
+  {
+   "t": 1070.24,
+   "d": 1.88,
+   "text": "brought five more escape abilities"
+  },
+  {
+   "t": 1072.12,
+   "d": 2.2,
+   "text": "instead of five buff abilities.\" And the"
+  },
+  {
+   "t": 1074.32,
+   "d": 1.84,
+   "text": "thing is nobody complained about this,"
+  },
+  {
+   "t": 1076.16,
+   "d": 1.88,
+   "text": "not one person. Everybody, as far as I"
+  },
+  {
+   "t": 1078.04,
+   "d": 1.8,
+   "text": "know, unless everybody just quit when as"
+  },
+  {
+   "t": 1079.84,
+   "d": 2.64,
+   "text": "soon as we put this in,"
+  },
+  {
+   "t": 1082.48,
+   "d": 2.0,
+   "text": "nobody complained about it. So,"
+  },
+  {
+   "t": 1084.48,
+   "d": 1.8,
+   "text": "again, a good lesson in addressing"
+  },
+  {
+   "t": 1086.28,
+   "d": 2.08,
+   "text": "difficulty. Sometimes it's it's the"
+  },
+  {
+   "t": 1088.36,
+   "d": 1.88,
+   "text": "opposite of what players are asking for"
+  },
+  {
+   "t": 1090.24,
+   "d": 1.16,
+   "text": "and listening to their problem is"
+  },
+  {
+   "t": 1091.4,
+   "d": 2.68,
+   "text": "actually the better way to go."
+  },
+  {
+   "t": 1094.08,
+   "d": 1.76,
+   "text": "Now, with the job system, when you can"
+  },
+  {
+   "t": 1095.84,
+   "d": 2.6,
+   "text": "pick your build essentially from the"
+  },
+  {
+   "t": 1098.44,
+   "d": 1.28,
+   "text": "start of the game,"
+  },
+  {
+   "t": 1099.72,
+   "d": 2.08,
+   "text": "you might have"
+  },
+  {
+   "t": 1101.8,
+   "d": 1.4,
+   "text": "a difficulty curve that looks like this."
+  },
+  {
+   "t": 1103.2,
+   "d": 1.68,
+   "text": "This is the the intention. So, you have"
+  },
+  {
+   "t": 1104.88,
+   "d": 1.16,
+   "text": "your your strongest job and you have"
+  },
+  {
+   "t": 1106.04,
+   "d": 1.8,
+   "text": "your weakest job. There are 12 in the"
+  },
+  {
+   "t": 1107.84,
+   "d": 1.28,
+   "text": "game. So, this was what I was thinking"
+  },
+  {
+   "t": 1109.12,
+   "d": 1.24,
+   "text": "in my head, okay,"
+  },
+  {
+   "t": 1110.36,
+   "d": 1.56,
+   "text": "you know, I'm not an expert. I can't"
+  },
+  {
+   "t": 1111.92,
+   "d": 1.28,
+   "text": "balance everything perfectly, but that's"
+  },
+  {
+   "t": 1113.2,
+   "d": 1.4,
+   "text": "okay. It's a single-player game. It's"
+  },
+  {
+   "t": 1114.6,
+   "d": 1.08,
+   "text": "fine."
+  },
+  {
+   "t": 1115.68,
+   "d": 2.56,
+   "text": "This is what actually happened."
+  },
+  {
+   "t": 1118.24,
+   "d": 1.92,
+   "text": "[Music]"
+  },
+  {
+   "t": 1120.16,
+   "d": 1.64,
+   "text": "So,"
+  },
+  {
+   "t": 1121.8,
+   "d": 2.4,
+   "text": "what happened was this job and this is"
+  },
+  {
+   "t": 1124.2,
+   "d": 2.0,
+   "text": "I'm I'm so proud of of of this job"
+  },
+  {
+   "t": 1126.2,
+   "d": 2.52,
+   "text": "design. It is a Floramancer and because"
+  },
+  {
+   "t": 1128.72,
+   "d": 1.4,
+   "text": "Tangled Deep is a game that's supposed"
+  },
+  {
+   "t": 1130.12,
+   "d": 2.28,
+   "text": "to be sort of like storybook and it"
+  },
+  {
+   "t": 1132.4,
+   "d": 1.52,
+   "text": "doesn't really have a lot of death and"
+  },
+  {
+   "t": 1133.92,
+   "d": 2.04,
+   "text": "skeletons and things like that. So,"
+  },
+  {
+   "t": 1135.96,
+   "d": 2.24,
+   "text": "instead of skeletons, you summon plants."
+  },
+  {
+   "t": 1138.2,
+   "d": 1.36,
+   "text": "Instead of blowing up corpses, you blow"
+  },
+  {
+   "t": 1139.56,
+   "d": 2.4,
+   "text": "up vines into like a poof of leaves and"
+  },
+  {
+   "t": 1141.96,
+   "d": 1.96,
+   "text": "poison and all that. You lay down thorn"
+  },
+  {
+   "t": 1143.92,
+   "d": 1.52,
+   "text": "traps instead of bone traps. It's a"
+  },
+  {
+   "t": 1145.44,
+   "d": 2.16,
+   "text": "great concept. Everybody loves it."
+  },
+  {
+   "t": 1147.6,
+   "d": 2.08,
+   "text": "Problem is that it's just completely"
+  },
+  {
+   "t": 1149.68,
+   "d": 2.04,
+   "text": "broken in every possible way mostly"
+  },
+  {
+   "t": 1151.72,
+   "d": 2.76,
+   "text": "because of the of the summonable pet."
+  },
+  {
+   "t": 1154.48,
+   "d": 2.28,
+   "text": "And the pet here is is a specific issue"
+  },
+  {
+   "t": 1156.76,
+   "d": 2.28,
+   "text": "to roguelikes that I think"
+  },
+  {
+   "t": 1159.04,
+   "d": 1.72,
+   "text": "is difficult to balance."
+  },
+  {
+   "t": 1160.76,
+   "d": 1.64,
+   "text": "When you have a pet, it's not it doesn't"
+  },
+  {
+   "t": 1162.4,
+   "d": 1.76,
+   "text": "just give you more offense and more"
+  },
+  {
+   "t": 1164.16,
+   "d": 1.72,
+   "text": "defense like your your let's say your"
+  },
+  {
+   "t": 1165.88,
+   "d": 3.12,
+   "text": "dog or in this case your pet floraconda"
+  },
+  {
+   "t": 1169.0,
+   "d": 1.6,
+   "text": "is I didn't come up with that name by"
+  },
+  {
+   "t": 1170.6,
+   "d": 1.52,
+   "text": "the way."
+  },
+  {
+   "t": 1172.12,
+   "d": 1.64,
+   "text": "It's not just attacking the enemy and"
+  },
+  {
+   "t": 1173.76,
+   "d": 1.76,
+   "text": "taking hits, but also it's giving you"
+  },
+  {
+   "t": 1175.52,
+   "d": 2.12,
+   "text": "more actions. And in roguelikes, which"
+  },
+  {
+   "t": 1177.64,
+   "d": 2.68,
+   "text": "have you know, these discrete turns,"
+  },
+  {
+   "t": 1180.32,
+   "d": 2.92,
+   "text": "having an extra turn where the monster"
+  },
+  {
+   "t": 1183.24,
+   "d": 1.04,
+   "text": "is attacking the pet, the pet is"
+  },
+  {
+   "t": 1184.28,
+   "d": 2.2,
+   "text": "attacking the monster, that is massively"
+  },
+  {
+   "t": 1186.48,
+   "d": 1.52,
+   "text": "powerful because now you can do anything"
+  },
+  {
+   "t": 1188.0,
+   "d": 1.16,
+   "text": "else with that. You can summon another"
+  },
+  {
+   "t": 1189.16,
+   "d": 1.48,
+   "text": "pet. You can drink a potion. You can run"
+  },
+  {
+   "t": 1190.64,
+   "d": 1.2,
+   "text": "away."
+  },
+  {
+   "t": 1191.84,
+   "d": 1.36,
+   "text": "And they're interfering with monster"
+  },
+  {
+   "t": 1193.2,
+   "d": 1.64,
+   "text": "movement. Again, something that when you"
+  },
+  {
+   "t": 1194.84,
+   "d": 3.32,
+   "text": "have a grid-based game is a massive"
+  },
+  {
+   "t": 1198.16,
+   "d": 1.88,
+   "text": "benefit. So, if it were a game where the"
+  },
+  {
+   "t": 1200.04,
+   "d": 1.4,
+   "text": "monster could just sort of squeeze"
+  },
+  {
+   "t": 1201.44,
+   "d": 2.08,
+   "text": "through two tiles to get to you,"
+  },
+  {
+   "t": 1203.52,
+   "d": 1.32,
+   "text": "wouldn't be as much of an issue. But in"
+  },
+  {
+   "t": 1204.84,
+   "d": 1.68,
+   "text": "a grid-based game where pets can"
+  },
+  {
+   "t": 1206.52,
+   "d": 2.4,
+   "text": "literally block the way, um it is just"
+  },
+  {
+   "t": 1208.92,
+   "d": 1.44,
+   "text": "very, very easy to have pets that are"
+  },
+  {
+   "t": 1210.36,
+   "d": 2.0,
+   "text": "far too powerful."
+  },
+  {
+   "t": 1212.36,
+   "d": 1.0,
+   "text": "And the quote there at the bottom,"
+  },
+  {
+   "t": 1213.36,
+   "d": 1.36,
+   "text": "\"Well, it's single player.\" Well, why am"
+  },
+  {
+   "t": 1214.72,
+   "d": 1.28,
+   "text": "I talking about this? Why does Why does"
+  },
+  {
+   "t": 1216.0,
+   "d": 1.52,
+   "text": "balance matter? Who cares, right? It's"
+  },
+  {
+   "t": 1217.52,
+   "d": 1.96,
+   "text": "not a PvP game. There's leader I mean,"
+  },
+  {
+   "t": 1219.48,
+   "d": 1.36,
+   "text": "there are leaderboards, but who really"
+  },
+  {
+   "t": 1220.84,
+   "d": 1.4,
+   "text": "cares about that?"
+  },
+  {
+   "t": 1222.24,
+   "d": 1.16,
+   "text": "And uh"
+  },
+  {
+   "t": 1223.4,
+   "d": 1.84,
+   "text": "this is this is why people care. This is"
+  },
+  {
+   "t": 1225.24,
+   "d": 1.2,
+   "text": "why I care."
+  },
+  {
+   "t": 1226.44,
+   "d": 2.52,
+   "text": "Um these are two Steam reviews from"
+  },
+  {
+   "t": 1228.96,
+   "d": 3.04,
+   "text": "early in uh Tangledeep's post-launch."
+  },
+  {
+   "t": 1232.0,
+   "d": 2.68,
+   "text": "Somebody that says, \"It is"
+  },
+  {
+   "t": 1234.68,
+   "d": 1.64,
+   "text": "far beyond hard difficulty. It is"
+  },
+  {
+   "t": 1236.32,
+   "d": 1.84,
+   "text": "broken, and they can't recommend it.\""
+  },
+  {
+   "t": 1238.16,
+   "d": 1.96,
+   "text": "Negative review, thumbs down."
+  },
+  {
+   "t": 1240.12,
+   "d": 2.44,
+   "text": "And then another guy that said"
+  },
+  {
+   "t": 1242.56,
+   "d": 1.88,
+   "text": "he was trying not to trivialize the"
+  },
+  {
+   "t": 1244.44,
+   "d": 2.76,
+   "text": "game, and he beat it on his first try."
+  },
+  {
+   "t": 1247.2,
+   "d": 1.96,
+   "text": "Incredible. Also gave it a negative"
+  },
+  {
+   "t": 1249.16,
+   "d": 1.76,
+   "text": "review, thumbs down."
+  },
+  {
+   "t": 1250.92,
+   "d": 2.08,
+   "text": "So,"
+  },
+  {
+   "t": 1253.0,
+   "d": 1.64,
+   "text": "you When a developer When you look at"
+  },
+  {
+   "t": 1254.64,
+   "d": 1.96,
+   "text": "these two things, you're like,"
+  },
+  {
+   "t": 1256.6,
+   "d": 1.28,
+   "text": "\"What did I do? What did What did I do"
+  },
+  {
+   "t": 1257.88,
+   "d": 1.24,
+   "text": "wrong? Why am I Why am I a game"
+  },
+  {
+   "t": 1259.12,
+   "d": 1.24,
+   "text": "developer?\""
+  },
+  {
+   "t": 1260.36,
+   "d": 2.32,
+   "text": "So,"
+  },
+  {
+   "t": 1262.68,
+   "d": 1.28,
+   "text": "Yeah, the other Yeah, Jim knows that"
+  },
+  {
+   "t": 1263.96,
+   "d": 2.92,
+   "text": "what this is like. So,"
+  },
+  {
+   "t": 1266.88,
+   "d": 2.8,
+   "text": "this When you have a job that's so"
+  },
+  {
+   "t": 1269.68,
+   "d": 2.08,
+   "text": "unbalanced, or a weapon, or an item, or"
+  },
+  {
+   "t": 1271.76,
+   "d": 3.04,
+   "text": "anything that is so far beyond what"
+  },
+  {
+   "t": 1274.8,
+   "d": 1.68,
+   "text": "everything else is in the game, then it"
+  },
+  {
+   "t": 1276.48,
+   "d": 2.0,
+   "text": "it leads to a drastically different"
+  },
+  {
+   "t": 1278.48,
+   "d": 3.08,
+   "text": "player experience. And so,"
+  },
+  {
+   "t": 1281.56,
+   "d": 1.2,
+   "text": "uh the thing is that balance actually"
+  },
+  {
+   "t": 1282.76,
+   "d": 1.2,
+   "text": "really does matter, even for a"
+  },
+  {
+   "t": 1283.96,
+   "d": 2.12,
+   "text": "single-player game. Um and so, when"
+  },
+  {
+   "t": 1286.08,
+   "d": 1.96,
+   "text": "there's something you can do your best"
+  },
+  {
+   "t": 1288.04,
+   "d": 1.76,
+   "text": "to balance it, obviously. I mean, and"
+  },
+  {
+   "t": 1289.8,
+   "d": 2.72,
+   "text": "balance could be its own entire talk,"
+  },
+  {
+   "t": 1292.52,
+   "d": 1.6,
+   "text": "but uh when you have something that's"
+  },
+  {
+   "t": 1294.12,
+   "d": 2.08,
+   "text": "very weak or very strong, uh it should"
+  },
+  {
+   "t": 1296.2,
+   "d": 2.0,
+   "text": "be marked as such. So, the guy that"
+  },
+  {
+   "t": 1298.2,
+   "d": 1.64,
+   "text": "thought the game was broken, my guess is"
+  },
+  {
+   "t": 1299.84,
+   "d": 1.08,
+   "text": "he was probably playing one of the"
+  },
+  {
+   "t": 1300.92,
+   "d": 2.12,
+   "text": "harder jobs in the game. So, one of the"
+  },
+  {
+   "t": 1303.04,
+   "d": 1.56,
+   "text": "UI changes we did is when you're making"
+  },
+  {
+   "t": 1304.6,
+   "d": 1.04,
+   "text": "a character, now there's like a"
+  },
+  {
+   "t": 1305.64,
+   "d": 3.12,
+   "text": "difficulty rank next to each job."
+  },
+  {
+   "t": 1308.76,
+   "d": 2.24,
+   "text": "Um jobs that are very hard, we also uh"
+  },
+  {
+   "t": 1311.0,
+   "d": 1.72,
+   "text": "lock those. They're not difficult to"
+  },
+  {
+   "t": 1312.72,
+   "d": 1.56,
+   "text": "unlock. It doesn't take too long. If"
+  },
+  {
+   "t": 1314.28,
+   "d": 1.52,
+   "text": "you're an expert, you could do it in an"
+  },
+  {
+   "t": 1315.8,
+   "d": 1.88,
+   "text": "hour or two, probably."
+  },
+  {
+   "t": 1317.68,
+   "d": 1.28,
+   "text": "Um so, when you have stuff like that,"
+  },
+  {
+   "t": 1318.96,
+   "d": 2.36,
+   "text": "you know, maybe don't let a totally new"
+  },
+  {
+   "t": 1321.32,
+   "d": 2.32,
+   "text": "player pick a job like the gambler,"
+  },
+  {
+   "t": 1323.64,
+   "d": 1.76,
+   "text": "which has an escape, but the escape"
+  },
+  {
+   "t": 1325.4,
+   "d": 1.4,
+   "text": "sends you in a random direction, and"
+  },
+  {
+   "t": 1326.8,
+   "d": 1.28,
+   "text": "could just as easily send you into"
+  },
+  {
+   "t": 1328.08,
+   "d": 1.44,
+   "text": "another monster."
+  },
+  {
+   "t": 1329.52,
+   "d": 1.64,
+   "text": "So, just lock that. Let people build up"
+  },
+  {
+   "t": 1331.16,
+   "d": 1.68,
+   "text": "to it. Or, you know, if there's"
+  },
+  {
+   "t": 1332.84,
+   "d": 1.0,
+   "text": "something that's just ridiculously"
+  },
+  {
+   "t": 1333.84,
+   "d": 1.28,
+   "text": "strong or weak, just remove it from the"
+  },
+  {
+   "t": 1335.12,
+   "d": 1.28,
+   "text": "game. So,"
+  },
+  {
+   "t": 1336.4,
+   "d": 1.76,
+   "text": "point is that balance definitely does"
+  },
+  {
+   "t": 1338.16,
+   "d": 1.56,
+   "text": "matter."
+  },
+  {
+   "t": 1339.72,
+   "d": 1.44,
+   "text": "Um"
+  },
+  {
+   "t": 1341.16,
+   "d": 2.12,
+   "text": "another difficulty problem that came up"
+  },
+  {
+   "t": 1343.28,
+   "d": 1.88,
+   "text": "that I tried to address through this"
+  },
+  {
+   "t": 1345.16,
+   "d": 3.16,
+   "text": "mechanic here was the idea of uh"
+  },
+  {
+   "t": 1348.32,
+   "d": 3.48,
+   "text": "sort of selecting the kind of encounters"
+  },
+  {
+   "t": 1351.8,
+   "d": 2.68,
+   "text": "that you want to face. So, for uh"
+  },
+  {
+   "t": 1354.48,
+   "d": 1.72,
+   "text": "Tangledeep's game, where it's a linear"
+  },
+  {
+   "t": 1356.2,
+   "d": 1.8,
+   "text": "dungeon crawl. There's a few side areas,"
+  },
+  {
+   "t": 1358.0,
+   "d": 1.24,
+   "text": "a little bit of branching paths, but for"
+  },
+  {
+   "t": 1359.24,
+   "d": 1.6,
+   "text": "the most part, it's a linear crawl of 20"
+  },
+  {
+   "t": 1360.84,
+   "d": 2.08,
+   "text": "floors. Uh it's not an open-world game."
+  },
+  {
+   "t": 1362.92,
+   "d": 1.28,
+   "text": "It's not a game with a world map with"
+  },
+  {
+   "t": 1364.2,
+   "d": 2.08,
+   "text": "different dungeons to go into."
+  },
+  {
+   "t": 1366.28,
+   "d": 1.0,
+   "text": "So,"
+  },
+  {
+   "t": 1367.28,
+   "d": 1.84,
+   "text": "uh when you have a game like that, where"
+  },
+  {
+   "t": 1369.12,
+   "d": 1.04,
+   "text": "there isn't open world and there are"
+  },
+  {
+   "t": 1370.16,
+   "d": 2.68,
+   "text": "many different places to go, uh then the"
+  },
+  {
+   "t": 1372.84,
+   "d": 1.28,
+   "text": "player can say, \"Well, you know, I'm a"
+  },
+  {
+   "t": 1374.12,
+   "d": 1.32,
+   "text": "little bit under-leveled. I didn't have"
+  },
+  {
+   "t": 1375.44,
+   "d": 1.32,
+   "text": "good drops, so I'm going to go to this"
+  },
+  {
+   "t": 1376.76,
+   "d": 1.48,
+   "text": "area of the world, get a little bit of"
+  },
+  {
+   "t": 1378.24,
+   "d": 1.68,
+   "text": "experience, get some items.\""
+  },
+  {
+   "t": 1379.92,
+   "d": 2.44,
+   "text": "Uh but Tangledeep uh I tried to limit"
+  },
+  {
+   "t": 1382.36,
+   "d": 2.52,
+   "text": "its scope, so I didn't have uh that sort"
+  },
+  {
+   "t": 1384.88,
+   "d": 2.4,
+   "text": "of mechanic in there. And this was my"
+  },
+  {
+   "t": 1387.28,
+   "d": 2.6,
+   "text": "sort of cheat or work-around, maybe, to"
+  },
+  {
+   "t": 1389.88,
+   "d": 0.96,
+   "text": "sort of"
+  },
+  {
+   "t": 1390.84,
+   "d": 2.88,
+   "text": "limitlessly expand the spectrum of"
+  },
+  {
+   "t": 1393.72,
+   "d": 1.72,
+   "text": "difficulty options"
+  },
+  {
+   "t": 1395.44,
+   "d": 2.6,
+   "text": "within the game by allowing you to enter"
+  },
+  {
+   "t": 1398.04,
+   "d": 2.04,
+   "text": "any of your equipment, and each piece of"
+  },
+  {
+   "t": 1400.08,
+   "d": 1.4,
+   "text": "equipment is a mini dungeon. If you"
+  },
+  {
+   "t": 1401.48,
+   "d": 1.96,
+   "text": "played Disgaea, it is literally just a"
+  },
+  {
+   "t": 1403.44,
+   "d": 2.48,
+   "text": "rip-off of item worlds from Disgaea."
+  },
+  {
+   "t": 1405.92,
+   "d": 1.88,
+   "text": "Um and there's this allows us to show"
+  },
+  {
+   "t": 1407.8,
+   "d": 2.12,
+   "text": "off more content, lots of weird stuff,"
+  },
+  {
+   "t": 1409.92,
+   "d": 1.88,
+   "text": "because it's a dream sequence. So, you"
+  },
+  {
+   "t": 1411.8,
+   "d": 1.68,
+   "text": "can put uh you can have monsters that"
+  },
+  {
+   "t": 1413.48,
+   "d": 1.6,
+   "text": "spin around every time they move. You"
+  },
+  {
+   "t": 1415.08,
+   "d": 1.4,
+   "text": "can have monsters that are like three"
+  },
+  {
+   "t": 1416.48,
+   "d": 2.52,
+   "text": "times as big for no reason at all."
+  },
+  {
+   "t": 1419.0,
+   "d": 2.88,
+   "text": "And this proved really effective in"
+  },
+  {
+   "t": 1421.88,
+   "d": 1.92,
+   "text": "addressing that sort of difficulty curve"
+  },
+  {
+   "t": 1423.8,
+   "d": 1.72,
+   "text": "problem, because"
+  },
+  {
+   "t": 1425.52,
+   "d": 1.92,
+   "text": "uh what we were seeing was that players"
+  },
+  {
+   "t": 1427.44,
+   "d": 1.36,
+   "text": "would maybe beat the first boss, and"
+  },
+  {
+   "t": 1428.8,
+   "d": 1.96,
+   "text": "then there was like a dramatic drop-off"
+  },
+  {
+   "t": 1430.76,
+   "d": 2.16,
+   "text": "of people progressing past that, because"
+  },
+  {
+   "t": 1432.92,
+   "d": 1.72,
+   "text": "again, despite my best efforts, I'm not"
+  },
+  {
+   "t": 1434.64,
+   "d": 2.2,
+   "text": "an expert at balance. So, I wasn't able"
+  },
+  {
+   "t": 1436.84,
+   "d": 2.48,
+   "text": "to perfectly balance that transition."
+  },
+  {
+   "t": 1439.32,
+   "d": 2.08,
+   "text": "But with the Dreamcaster, we can say,"
+  },
+  {
+   "t": 1441.4,
+   "d": 1.52,
+   "text": "\"You know, if you're not quite powerful"
+  },
+  {
+   "t": 1442.92,
+   "d": 1.64,
+   "text": "enough, or you didn't get the right"
+  },
+  {
+   "t": 1444.56,
+   "d": 1.12,
+   "text": "Let's say you didn't get a high-rank"
+  },
+  {
+   "t": 1445.68,
+   "d": 2.16,
+   "text": "sword and you're a sword user, you could"
+  },
+  {
+   "t": 1447.84,
+   "d": 1.92,
+   "text": "go and enter your lower-level sword and"
+  },
+  {
+   "t": 1449.76,
+   "d": 1.84,
+   "text": "power it up a little bit more."
+  },
+  {
+   "t": 1451.6,
+   "d": 1.52,
+   "text": "You can target the difficulty that you"
+  },
+  {
+   "t": 1453.12,
+   "d": 2.92,
+   "text": "want to go to.\" And uh roguelikes,"
+  },
+  {
+   "t": 1456.04,
+   "d": 1.8,
+   "text": "again, people are still going to die."
+  },
+  {
+   "t": 1457.84,
+   "d": 1.0,
+   "text": "People are still There's still going to"
+  },
+  {
+   "t": 1458.84,
+   "d": 2.6,
+   "text": "be difficulty spikes. But it's letting"
+  },
+  {
+   "t": 1461.44,
+   "d": 2.04,
+   "text": "people sort of grind, but not really,"
+  },
+  {
+   "t": 1463.48,
+   "d": 1.32,
+   "text": "because it's you're limited in how you"
+  },
+  {
+   "t": 1464.8,
+   "d": 2.44,
+   "text": "can do how often you can do this."
+  },
+  {
+   "t": 1467.24,
+   "d": 1.56,
+   "text": "Um it's proved to be a pretty good"
+  },
+  {
+   "t": 1468.8,
+   "d": 1.56,
+   "text": "solution for that. And people really"
+  },
+  {
+   "t": 1470.36,
+   "d": 1.64,
+   "text": "like it. I also really like it, because"
+  },
+  {
+   "t": 1472.0,
+   "d": 2.68,
+   "text": "it lets me uh get off a little bit more"
+  },
+  {
+   "t": 1474.68,
+   "d": 1.48,
+   "text": "easily on the balance side of things."
+  },
+  {
+   "t": 1476.16,
+   "d": 1.16,
+   "text": "So, if there is a little bit of spiky"
+  },
+  {
+   "t": 1477.32,
+   "d": 2.28,
+   "text": "difficulty at times, I can just say,"
+  },
+  {
+   "t": 1479.6,
+   "d": 1.0,
+   "text": "\"Well, you know, did you go to the"
+  },
+  {
+   "t": 1480.6,
+   "d": 1.64,
+   "text": "Dreamcaster enough and power up your"
+  },
+  {
+   "t": 1482.24,
+   "d": 1.84,
+   "text": "items?\" And so forth. So, that worked"
+  },
+  {
+   "t": 1484.08,
+   "d": 2.16,
+   "text": "out pretty well."
+  },
+  {
+   "t": 1486.24,
+   "d": 1.36,
+   "text": "Uh another thing that we put in"
+  },
+  {
+   "t": 1487.6,
+   "d": 2.24,
+   "text": "post-launch, and this was observed after"
+  },
+  {
+   "t": 1489.84,
+   "d": 2.32,
+   "text": "observing what people were doing and how"
+  },
+  {
+   "t": 1492.16,
+   "d": 1.96,
+   "text": "people were playing the game,"
+  },
+  {
+   "t": 1494.12,
+   "d": 0.92,
+   "text": "um"
+  },
+  {
+   "t": 1495.04,
+   "d": 1.8,
+   "text": "especially listening to all the people"
+  },
+  {
+   "t": 1496.84,
+   "d": 1.68,
+   "text": "that were continuously saying, \"Even"
+  },
+  {
+   "t": 1498.52,
+   "d": 1.4,
+   "text": "with the flask and the campfires and the"
+  },
+  {
+   "t": 1499.92,
+   "d": 2.04,
+   "text": "food, there's no health regeneration.\""
+  },
+  {
+   "t": 1501.96,
+   "d": 0.96,
+   "text": "And and they said, you know, \"We don't"
+  },
+  {
+   "t": 1502.92,
+   "d": 2.32,
+   "text": "want to play it.\" Negative review, etc."
+  },
+  {
+   "t": 1505.24,
+   "d": 1.16,
+   "text": "So,"
+  },
+  {
+   "t": 1506.4,
+   "d": 2.12,
+   "text": "we added in a a slew of options that are"
+  },
+  {
+   "t": 1508.52,
+   "d": 2.2,
+   "text": "essentially just toggles that uh change"
+  },
+  {
+   "t": 1510.72,
+   "d": 2.96,
+   "text": "the difficulty in in uh discrete ways,"
+  },
+  {
+   "t": 1513.68,
+   "d": 1.84,
+   "text": "but they're all individual. So, rather"
+  },
+  {
+   "t": 1515.52,
+   "d": 1.4,
+   "text": "than just picking adventure mode,"
+  },
+  {
+   "t": 1516.92,
+   "d": 1.76,
+   "text": "heroic, hardcore, you could play"
+  },
+  {
+   "t": 1518.68,
+   "d": 1.24,
+   "text": "hardcore mode, but turn on health"
+  },
+  {
+   "t": 1519.92,
+   "d": 1.56,
+   "text": "regeneration. Or you could play"
+  },
+  {
+   "t": 1521.48,
+   "d": 1.88,
+   "text": "adventure mode, but remove gold drops,"
+  },
+  {
+   "t": 1523.36,
+   "d": 1.44,
+   "text": "so now you have to sell your items in"
+  },
+  {
+   "t": 1524.8,
+   "d": 2.12,
+   "text": "order to get gold. Or reduce the food"
+  },
+  {
+   "t": 1526.92,
+   "d": 1.56,
+   "text": "cool-down, or make every monster in the"
+  },
+  {
+   "t": 1528.48,
+   "d": 1.72,
+   "text": "game a champion monster."
+  },
+  {
+   "t": 1530.2,
+   "d": 1.52,
+   "text": "So, this makes the the daily and weekly"
+  },
+  {
+   "t": 1531.72,
+   "d": 1.92,
+   "text": "challenges more interesting."
+  },
+  {
+   "t": 1533.64,
+   "d": 3.2,
+   "text": "But more importantly, um these options"
+  },
+  {
+   "t": 1536.84,
+   "d": 3.04,
+   "text": "are universally liked, and it's because"
+  },
+  {
+   "t": 1539.88,
+   "d": 2.96,
+   "text": "uh I tried to present them in a way that"
+  },
+  {
+   "t": 1542.84,
+   "d": 2.04,
+   "text": "uh it didn't You're not required to go"
+  },
+  {
+   "t": 1544.88,
+   "d": 1.6,
+   "text": "through this list every time you start a"
+  },
+  {
+   "t": 1546.48,
+   "d": 1.28,
+   "text": "new character when you first start the"
+  },
+  {
+   "t": 1547.76,
+   "d": 2.48,
+   "text": "game. They're kind of tucked behind a a"
+  },
+  {
+   "t": 1550.24,
+   "d": 2.6,
+   "text": "menu within character creation."
+  },
+  {
+   "t": 1552.84,
+   "d": 1.24,
+   "text": "And so, it doesn't interfere with normal"
+  },
+  {
+   "t": 1554.08,
+   "d": 3.4,
+   "text": "startup. And it uh it's presented as,"
+  },
+  {
+   "t": 1557.48,
+   "d": 1.52,
+   "text": "you know, this is not the intended way"
+  },
+  {
+   "t": 1559.0,
+   "d": 1.96,
+   "text": "to play the game. This is optional. We"
+  },
+  {
+   "t": 1560.96,
+   "d": 2.24,
+   "text": "encourage you to play it regularly, but"
+  },
+  {
+   "t": 1563.2,
+   "d": 1.72,
+   "text": "if you really want to mess with it, you"
+  },
+  {
+   "t": 1564.92,
+   "d": 1.64,
+   "text": "know, have fun."
+  },
+  {
+   "t": 1566.56,
+   "d": 3.16,
+   "text": "And this is probably most comparable to"
+  },
+  {
+   "t": 1569.72,
+   "d": 2.24,
+   "text": "sort of more old-school features like uh"
+  },
+  {
+   "t": 1571.96,
+   "d": 2.2,
+   "text": "dev console or a wizard mode. I mean, we"
+  },
+  {
+   "t": 1574.16,
+   "d": 2.0,
+   "text": "have a dev console, but it is just like"
+  },
+  {
+   "t": 1576.16,
+   "d": 1.24,
+   "text": "for development stuff, so it's not"
+  },
+  {
+   "t": 1577.4,
+   "d": 2.32,
+   "text": "enabled in the main game."
+  },
+  {
+   "t": 1579.72,
+   "d": 1.68,
+   "text": "Or you can think of the idea of uh"
+  },
+  {
+   "t": 1581.4,
+   "d": 1.72,
+   "text": "insert talking about accessible console"
+  },
+  {
+   "t": 1583.12,
+   "d": 1.84,
+   "text": "games, uh cheat codes."
+  },
+  {
+   "t": 1584.96,
+   "d": 2.32,
+   "text": "So, I mean, many of you probably played"
+  },
+  {
+   "t": 1587.28,
+   "d": 2.44,
+   "text": "games like GoldenEye, maybe, on Nintendo"
+  },
+  {
+   "t": 1589.72,
+   "d": 2.36,
+   "text": "64, and that's an example of game just"
+  },
+  {
+   "t": 1592.08,
+   "d": 2.12,
+   "text": "littered full of cheat codes, or old PC"
+  },
+  {
+   "t": 1594.2,
+   "d": 1.28,
+   "text": "games."
+  },
+  {
+   "t": 1595.48,
+   "d": 2.04,
+   "text": "And even though we knew it was broken to"
+  },
+  {
+   "t": 1597.52,
+   "d": 1.52,
+   "text": "give ourselves infinite life or infinite"
+  },
+  {
+   "t": 1599.04,
+   "d": 0.96,
+   "text": "ammo,"
+  },
+  {
+   "t": 1600.0,
+   "d": 1.4,
+   "text": "it's still fun. It might have increased"
+  },
+  {
+   "t": 1601.4,
+   "d": 2.44,
+   "text": "the longevity of the game for us. So,"
+  },
+  {
+   "t": 1603.84,
+   "d": 2.68,
+   "text": "the moral of the story there is that um"
+  },
+  {
+   "t": 1606.52,
+   "d": 1.12,
+   "text": "uh when you can't figure it out in the"
+  },
+  {
+   "t": 1607.64,
+   "d": 1.76,
+   "text": "difficulty, just let the players do it,"
+  },
+  {
+   "t": 1609.4,
+   "d": 2.12,
+   "text": "and uh they'll probably do a better job."
+  },
+  {
+   "t": 1611.52,
+   "d": 1.16,
+   "text": "So."
+  },
+  {
+   "t": 1612.68,
+   "d": 0.92,
+   "text": "Anyway,"
+  },
+  {
+   "t": 1613.6,
+   "d": 1.56,
+   "text": "uh that is what I want to talk about,"
+  },
+  {
+   "t": 1615.16,
+   "d": 1.72,
+   "text": "and thank you for coming. And if we have"
+  },
+  {
+   "t": 1616.88,
+   "d": 2.14,
+   "text": "time for questions, I'll take a few."
+  },
+  {
+   "t": 1619.02,
+   "d": 7.16,
+   "text": "[Applause]"
+  }
+ ]
+}

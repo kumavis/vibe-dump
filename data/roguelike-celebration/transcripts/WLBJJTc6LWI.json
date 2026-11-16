@@ -1,0 +1,4174 @@
+{
+ "id": "WLBJJTc6LWI",
+ "url": "https://www.youtube.com/watch?v=WLBJJTc6LWI",
+ "title": "Shawn Main - You May Already Be A Roguelike",
+ "speaker": "Shawn Main",
+ "talk_title": "You May Already Be A Roguelike",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1728,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "How to build Roguelike elements into a game that wasn't originally created to be a Roguelike.\n\nSome topics:\n•Motivations for incorporating Roguelike elements\n•Necessary building blocks\n•Procedural setups, challenges, and rewards\n•Where to break the mold\n\nPrincipal designer on Legends of Runeterra, lead for Lab of Legends, our Roguelike deckbuilder mode. 10 year ccg design veteran (formerly a designer on Magic: The Gathering). Owner of the world's roundest tuxedo cat.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 88,
+   "title": "Agenda"
+  },
+  {
+   "start": 108,
+   "title": "Shawn Main"
+  },
+  {
+   "start": 353,
+   "title": "Why Roguelike"
+  },
+  {
+   "start": 605,
+   "title": "Examples"
+  },
+  {
+   "start": 1041,
+   "title": "Run Structure"
+  },
+  {
+   "start": 1318,
+   "title": "Meta Progression"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4317,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.68,
+   "d": 2.96,
+   "text": "and we'll just roll right into the next"
+  },
+  {
+   "t": 6.64,
+   "d": 2.16,
+   "text": "talk which next up we have sean wayne"
+  },
+  {
+   "t": 8.8,
+   "d": 2.32,
+   "text": "hey sean hello"
+  },
+  {
+   "t": 11.12,
+   "d": 1.92,
+   "text": "all right and you're here to say"
+  },
+  {
+   "t": 13.04,
+   "d": 1.84,
+   "text": "that you might already be a roguelike"
+  },
+  {
+   "t": 14.88,
+   "d": 1.28,
+   "text": "following well in this discussion of"
+  },
+  {
+   "t": 16.16,
+   "d": 2.08,
+   "text": "what even is a roguelike or a road light"
+  },
+  {
+   "t": 18.24,
+   "d": 2.16,
+   "text": "a forbidden topic"
+  },
+  {
+   "t": 20.4,
+   "d": 2.4,
+   "text": "i'm going to embrace that and also argue"
+  },
+  {
+   "t": 22.8,
+   "d": 1.76,
+   "text": "with it so excellent that's the only way"
+  },
+  {
+   "t": 24.56,
+   "d": 2.56,
+   "text": "to do it all right take the floor"
+  },
+  {
+   "t": 27.12,
+   "d": 1.44,
+   "text": "thank you"
+  },
+  {
+   "t": 28.56,
+   "d": 1.84,
+   "text": "so um"
+  },
+  {
+   "t": 30.4,
+   "d": 2.08,
+   "text": "my talk today uh you may already be a"
+  },
+  {
+   "t": 32.48,
+   "d": 2.0,
+   "text": "roguelike um"
+  },
+  {
+   "t": 34.48,
+   "d": 1.36,
+   "text": "let me find"
+  },
+  {
+   "t": 35.84,
+   "d": 1.44,
+   "text": "there we go"
+  },
+  {
+   "t": 37.28,
+   "d": 2.16,
+   "text": "uh or more accurately it's about"
+  },
+  {
+   "t": 39.44,
+   "d": 1.68,
+   "text": "applying kind of a roguelike framework"
+  },
+  {
+   "t": 41.12,
+   "d": 1.84,
+   "text": "to add replayability in other game"
+  },
+  {
+   "t": 42.96,
+   "d": 2.16,
+   "text": "genres i will say"
+  },
+  {
+   "t": 45.12,
+   "d": 2.72,
+   "text": "i created this talk uh with kind of game"
+  },
+  {
+   "t": 47.84,
+   "d": 2.16,
+   "text": "devs as the primary audience and"
+  },
+  {
+   "t": 50.0,
+   "d": 1.84,
+   "text": "specifically game devs kind of working"
+  },
+  {
+   "t": 51.84,
+   "d": 2.64,
+   "text": "outside of the roguelike space"
+  },
+  {
+   "t": 54.48,
+   "d": 1.52,
+   "text": "which i realized as i was putting this"
+  },
+  {
+   "t": 56.0,
+   "d": 0.88,
+   "text": "together"
+  },
+  {
+   "t": 56.88,
+   "d": 1.84,
+   "text": "probably this is exactly the wrong"
+  },
+  {
+   "t": 58.72,
+   "d": 2.96,
+   "text": "audience for uh since many of you are"
+  },
+  {
+   "t": 61.68,
+   "d": 2.72,
+   "text": "working explicitly in the space"
+  },
+  {
+   "t": 64.4,
+   "d": 1.92,
+   "text": "and therefore are going to be less"
+  },
+  {
+   "t": 66.32,
+   "d": 3.12,
+   "text": "interested in you know what other"
+  },
+  {
+   "t": 69.44,
+   "d": 1.84,
+   "text": "games and other genres and other devs"
+  },
+  {
+   "t": 71.28,
+   "d": 1.92,
+   "text": "might want to mind from the work we are"
+  },
+  {
+   "t": 73.2,
+   "d": 2.4,
+   "text": "doing um or you all are doing"
+  },
+  {
+   "t": 75.6,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 76.8,
+   "d": 2.48,
+   "text": "but uh i will leave it as a little bit"
+  },
+  {
+   "t": 79.28,
+   "d": 2.08,
+   "text": "of an exercise to you if you want to"
+  },
+  {
+   "t": 81.36,
+   "d": 1.52,
+   "text": "kind of reverse engineer any of the"
+  },
+  {
+   "t": 82.88,
+   "d": 2.16,
+   "text": "elements here and look at kind of"
+  },
+  {
+   "t": 85.04,
+   "d": 2.64,
+   "text": "bringing in other external elements"
+  },
+  {
+   "t": 87.68,
+   "d": 1.2,
+   "text": "but"
+  },
+  {
+   "t": 88.88,
+   "d": 2.88,
+   "text": "um kind of here's my um"
+  },
+  {
+   "t": 91.76,
+   "d": 1.52,
+   "text": "agenda i'm going to talk a little bit"
+  },
+  {
+   "t": 93.28,
+   "d": 1.84,
+   "text": "about who i am and the"
+  },
+  {
+   "t": 95.12,
+   "d": 1.6,
+   "text": "roguelike game that i find myself"
+  },
+  {
+   "t": 96.72,
+   "d": 2.72,
+   "text": "working on i give my definition here of"
+  },
+  {
+   "t": 99.44,
+   "d": 2.32,
+   "text": "kind of what a roguelike might be"
+  },
+  {
+   "t": 101.76,
+   "d": 1.92,
+   "text": "and then get into kind of making"
+  },
+  {
+   "t": 103.68,
+   "d": 2.4,
+   "text": "meaningful player choices challenges and"
+  },
+  {
+   "t": 106.08,
+   "d": 2.64,
+   "text": "kind of a structure for runs"
+  },
+  {
+   "t": 108.72,
+   "d": 1.44,
+   "text": "so um"
+  },
+  {
+   "t": 110.16,
+   "d": 2.64,
+   "text": "i'm sean main uh i've been a game"
+  },
+  {
+   "t": 112.8,
+   "d": 1.92,
+   "text": "designer for 10 years now"
+  },
+  {
+   "t": 114.72,
+   "d": 2.48,
+   "text": "i i worked for most of that time on"
+  },
+  {
+   "t": 117.2,
+   "d": 1.6,
+   "text": "magic the gathering a lot of that was"
+  },
+  {
+   "t": 118.8,
+   "d": 2.24,
+   "text": "kind of working in a multiplayer space"
+  },
+  {
+   "t": 121.04,
+   "d": 0.88,
+   "text": "on"
+  },
+  {
+   "t": 121.92,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 123.12,
+   "d": 3.72,
+   "text": "projects like uh conspiracy um battle"
+  },
+  {
+   "t": 126.84,
+   "d": 2.12,
+   "text": "bond um"
+  },
+  {
+   "t": 128.96,
+   "d": 1.76,
+   "text": "and"
+  },
+  {
+   "t": 130.72,
+   "d": 3.52,
+   "text": "uh for the last four years i've been uh"
+  },
+  {
+   "t": 134.24,
+   "d": 3.04,
+   "text": "working at riot games on uh"
+  },
+  {
+   "t": 137.28,
+   "d": 0.72,
+   "text": "the"
+  },
+  {
+   "t": 138.0,
+   "d": 2.08,
+   "text": "legends of rintera"
+  },
+  {
+   "t": 140.08,
+   "d": 0.88,
+   "text": "a"
+  },
+  {
+   "t": 140.96,
+   "d": 1.44,
+   "text": "ccg as well"
+  },
+  {
+   "t": 142.4,
+   "d": 2.08,
+   "text": "so i've been in this space for a very"
+  },
+  {
+   "t": 144.48,
+   "d": 1.84,
+   "text": "very long time now"
+  },
+  {
+   "t": 146.32,
+   "d": 3.04,
+   "text": "um and about a year ago"
+  },
+  {
+   "t": 149.36,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 150.4,
+   "d": 2.08,
+   "text": "we realized we had kind of a challenge"
+  },
+  {
+   "t": 152.48,
+   "d": 2.4,
+   "text": "on uh legends of runeterra"
+  },
+  {
+   "t": 154.88,
+   "d": 3.04,
+   "text": "there was a little bit unique um where"
+  },
+  {
+   "t": 157.92,
+   "d": 2.4,
+   "text": "players kind of weren't um"
+  },
+  {
+   "t": 160.32,
+   "d": 2.0,
+   "text": "finding kind of like a meaningful power"
+  },
+  {
+   "t": 162.32,
+   "d": 3.68,
+   "text": "progression in exploring the game um"
+  },
+  {
+   "t": 166.0,
+   "d": 2.0,
+   "text": "and kind of if you look"
+  },
+  {
+   "t": 168.0,
+   "d": 2.32,
+   "text": "card games are not always good at this"
+  },
+  {
+   "t": 170.32,
+   "d": 1.76,
+   "text": "with players across their careers but if"
+  },
+  {
+   "t": 172.08,
+   "d": 1.76,
+   "text": "you look at kind of a traditional model"
+  },
+  {
+   "t": 173.84,
+   "d": 1.76,
+   "text": "for a ccg"
+  },
+  {
+   "t": 175.6,
+   "d": 1.84,
+   "text": "you have a"
+  },
+  {
+   "t": 177.44,
+   "d": 2.16,
+   "text": "you know weak card that you put in your"
+  },
+  {
+   "t": 179.6,
+   "d": 0.8,
+   "text": "deck"
+  },
+  {
+   "t": 180.4,
+   "d": 2.0,
+   "text": "you go you acquire some more you open"
+  },
+  {
+   "t": 182.4,
+   "d": 1.68,
+   "text": "some booster packs you trade you buy"
+  },
+  {
+   "t": 184.08,
+   "d": 2.24,
+   "text": "some cards and now you've got better"
+  },
+  {
+   "t": 186.32,
+   "d": 1.84,
+   "text": "cards to replace them and so you get"
+  },
+  {
+   "t": 188.16,
+   "d": 3.28,
+   "text": "this meaningful arc of power growth um"
+  },
+  {
+   "t": 191.44,
+   "d": 1.76,
+   "text": "for your game"
+  },
+  {
+   "t": 193.2,
+   "d": 3.04,
+   "text": "for your career as a player"
+  },
+  {
+   "t": 196.24,
+   "d": 2.0,
+   "text": "and we had a little bit of a unique"
+  },
+  {
+   "t": 198.24,
+   "d": 1.6,
+   "text": "problem because we were very generous"
+  },
+  {
+   "t": 199.84,
+   "d": 1.76,
+   "text": "with cards and this was very much by"
+  },
+  {
+   "t": 201.6,
+   "d": 1.04,
+   "text": "design"
+  },
+  {
+   "t": 202.64,
+   "d": 2.96,
+   "text": "um the players would be have high access"
+  },
+  {
+   "t": 205.6,
+   "d": 1.44,
+   "text": "to different cards we would give them"
+  },
+  {
+   "t": 207.04,
+   "d": 1.52,
+   "text": "out pretty readily players could"
+  },
+  {
+   "t": 208.56,
+   "d": 2.24,
+   "text": "meaningfully expect to collect all the"
+  },
+  {
+   "t": 210.8,
+   "d": 1.6,
+   "text": "cards in the game"
+  },
+  {
+   "t": 212.4,
+   "d": 2.16,
+   "text": "um but as a result you really didn't"
+  },
+  {
+   "t": 214.56,
+   "d": 1.52,
+   "text": "have that feeling that you were"
+  },
+  {
+   "t": 216.08,
+   "d": 1.6,
+   "text": "progressing because it was much more"
+  },
+  {
+   "t": 217.68,
+   "d": 2.24,
+   "text": "about like what do i want to play than"
+  },
+  {
+   "t": 219.92,
+   "d": 2.0,
+   "text": "about you know"
+  },
+  {
+   "t": 221.92,
+   "d": 2.0,
+   "text": "staircasing yourself up to that best"
+  },
+  {
+   "t": 223.92,
+   "d": 1.04,
+   "text": "deck"
+  },
+  {
+   "t": 224.96,
+   "d": 2.96,
+   "text": "so i kind of was tasked with uh looking"
+  },
+  {
+   "t": 227.92,
+   "d": 2.32,
+   "text": "at this problem and i immediately"
+  },
+  {
+   "t": 230.24,
+   "d": 2.64,
+   "text": "suggested we kind of explore creating a"
+  },
+  {
+   "t": 232.88,
+   "d": 2.0,
+   "text": "roguelike mode within the game"
+  },
+  {
+   "t": 234.88,
+   "d": 2.96,
+   "text": "since roguelikes are really uniquely"
+  },
+  {
+   "t": 237.84,
+   "d": 2.56,
+   "text": "set up to kind of give a player a sense"
+  },
+  {
+   "t": 240.4,
+   "d": 2.56,
+   "text": "of power progression"
+  },
+  {
+   "t": 242.96,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 243.76,
+   "d": 2.72,
+   "text": "and i should say um before jumping right"
+  },
+  {
+   "t": 246.48,
+   "d": 2.64,
+   "text": "in we kind of had this like experimental"
+  },
+  {
+   "t": 249.12,
+   "d": 2.32,
+   "text": "structure within the game that was"
+  },
+  {
+   "t": 251.44,
+   "d": 2.56,
+   "text": "labs where we could start kind of"
+  },
+  {
+   "t": 254.0,
+   "d": 2.16,
+   "text": "exploring the notion"
+  },
+  {
+   "t": 256.16,
+   "d": 2.4,
+   "text": "um like running experiments with our"
+  },
+  {
+   "t": 258.56,
+   "d": 1.84,
+   "text": "players"
+  },
+  {
+   "t": 260.4,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 261.52,
+   "d": 1.28,
+   "text": "so"
+  },
+  {
+   "t": 262.8,
+   "d": 0.96,
+   "text": "kind of to"
+  },
+  {
+   "t": 263.76,
+   "d": 1.92,
+   "text": "briefly get into the element the core"
+  },
+  {
+   "t": 265.68,
+   "d": 2.8,
+   "text": "elements that we needed to create kind"
+  },
+  {
+   "t": 268.48,
+   "d": 3.2,
+   "text": "of a roguelike game we have these cards"
+  },
+  {
+   "t": 271.68,
+   "d": 2.08,
+   "text": "uh and"
+  },
+  {
+   "t": 273.76,
+   "d": 1.6,
+   "text": "we"
+  },
+  {
+   "t": 275.36,
+   "d": 2.16,
+   "text": "have now we now added kind of items to"
+  },
+  {
+   "t": 277.52,
+   "d": 2.24,
+   "text": "them that made them stronger so however"
+  },
+  {
+   "t": 279.76,
+   "d": 2.24,
+   "text": "strong as a card uh chem punk uh"
+  },
+  {
+   "t": 282.0,
+   "d": 1.36,
+   "text": "shredder is"
+  },
+  {
+   "t": 283.36,
+   "d": 2.32,
+   "text": "um we now have kind of this barrier"
+  },
+  {
+   "t": 285.68,
+   "d": 2.08,
+   "text": "ability that gets added to it it is a"
+  },
+  {
+   "t": 287.76,
+   "d": 1.52,
+   "text": "little bit stronger"
+  },
+  {
+   "t": 289.28,
+   "d": 2.24,
+   "text": "throughout the course of your run you"
+  },
+  {
+   "t": 291.52,
+   "d": 2.72,
+   "text": "will be presented with"
+  },
+  {
+   "t": 294.24,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 295.12,
+   "d": 1.84,
+   "text": "a series of choices"
+  },
+  {
+   "t": 296.96,
+   "d": 2.32,
+   "text": "uh to upgrade your deck with these"
+  },
+  {
+   "t": 299.28,
+   "d": 1.92,
+   "text": "stronger and stronger cards these are"
+  },
+  {
+   "t": 301.2,
+   "d": 2.08,
+   "text": "kind of the meaningful choices you make"
+  },
+  {
+   "t": 303.28,
+   "d": 1.68,
+   "text": "you're also making meaningful choices"
+  },
+  {
+   "t": 304.96,
+   "d": 2.48,
+   "text": "about selecting powers that are kind of"
+  },
+  {
+   "t": 307.44,
+   "d": 2.4,
+   "text": "these um things that are"
+  },
+  {
+   "t": 309.84,
+   "d": 2.16,
+   "text": "beyond the layer of individual cards and"
+  },
+  {
+   "t": 312.0,
+   "d": 2.24,
+   "text": "provide persistent bonuses across your"
+  },
+  {
+   "t": 314.24,
+   "d": 1.04,
+   "text": "runs"
+  },
+  {
+   "t": 315.28,
+   "d": 2.0,
+   "text": "are across your games and of course this"
+  },
+  {
+   "t": 317.28,
+   "d": 2.56,
+   "text": "was all kind of replacing the human"
+  },
+  {
+   "t": 319.84,
+   "d": 1.12,
+   "text": "opponents"
+  },
+  {
+   "t": 320.96,
+   "d": 1.92,
+   "text": "with ais"
+  },
+  {
+   "t": 322.88,
+   "d": 1.84,
+   "text": "and um"
+  },
+  {
+   "t": 324.72,
+   "d": 1.84,
+   "text": "within and those were given kind of"
+  },
+  {
+   "t": 326.56,
+   "d": 2.0,
+   "text": "distinct personalities so you kind of"
+  },
+  {
+   "t": 328.56,
+   "d": 1.84,
+   "text": "had expectations about what you were"
+  },
+  {
+   "t": 330.4,
+   "d": 2.48,
+   "text": "fighting thematic decks that kind of"
+  },
+  {
+   "t": 332.88,
+   "d": 2.4,
+   "text": "uh grew in power to challenge you"
+  },
+  {
+   "t": 335.28,
+   "d": 1.12,
+   "text": "uniquely"
+  },
+  {
+   "t": 336.4,
+   "d": 2.48,
+   "text": "um across europe"
+  },
+  {
+   "t": 338.88,
+   "d": 2.8,
+   "text": "and uh our initial experiment was very"
+  },
+  {
+   "t": 341.68,
+   "d": 3.04,
+   "text": "very heavily uh roguelike um in a very"
+  },
+  {
+   "t": 344.72,
+   "d": 3.12,
+   "text": "traditional uh way uh saltwater scrooge"
+  },
+  {
+   "t": 347.84,
+   "d": 1.6,
+   "text": "replaced it and that brought in a few"
+  },
+  {
+   "t": 349.44,
+   "d": 2.0,
+   "text": "more rpg elements which i'll touch on"
+  },
+  {
+   "t": 351.44,
+   "d": 2.08,
+   "text": "briefly later"
+  },
+  {
+   "t": 353.52,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 354.88,
+   "d": 2.56,
+   "text": "but so now the question is kind of why"
+  },
+  {
+   "t": 357.44,
+   "d": 2.48,
+   "text": "why am i advocating um"
+  },
+  {
+   "t": 359.92,
+   "d": 3.28,
+   "text": "people in other genres look kind of to"
+  },
+  {
+   "t": 363.2,
+   "d": 1.6,
+   "text": "the unique strengths that roguelikes can"
+  },
+  {
+   "t": 364.8,
+   "d": 2.24,
+   "text": "bring to them so"
+  },
+  {
+   "t": 367.04,
+   "d": 2.0,
+   "text": "essentially you have kind of these"
+  },
+  {
+   "t": 369.04,
+   "d": 1.6,
+   "text": "meaningful choices that the player is"
+  },
+  {
+   "t": 370.64,
+   "d": 2.88,
+   "text": "making that lead to kind of this sharp"
+  },
+  {
+   "t": 373.52,
+   "d": 2.96,
+   "text": "growth in power over the course of a"
+  },
+  {
+   "t": 376.48,
+   "d": 3.04,
+   "text": "short period of time"
+  },
+  {
+   "t": 379.52,
+   "d": 1.28,
+   "text": "and uh"
+  },
+  {
+   "t": 380.8,
+   "d": 2.4,
+   "text": "the combinatorics of that lead to these"
+  },
+  {
+   "t": 383.2,
+   "d": 1.84,
+   "text": "very personal stories"
+  },
+  {
+   "t": 385.04,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 385.84,
+   "d": 2.08,
+   "text": "with live legends that one of the early"
+  },
+  {
+   "t": 387.92,
+   "d": 2.16,
+   "text": "things that really clued us in that some"
+  },
+  {
+   "t": 390.08,
+   "d": 1.52,
+   "text": "things were working"
+  },
+  {
+   "t": 391.6,
+   "d": 3.2,
+   "text": "uh were that people would come back with"
+  },
+  {
+   "t": 394.8,
+   "d": 1.92,
+   "text": "like oh i had this power in this card"
+  },
+  {
+   "t": 396.72,
+   "d": 1.84,
+   "text": "and you know let me tell you about this"
+  },
+  {
+   "t": 398.56,
+   "d": 2.08,
+   "text": "and oh my goodness um and that was like"
+  },
+  {
+   "t": 400.64,
+   "d": 2.16,
+   "text": "great you know it's it's succeeding it's"
+  },
+  {
+   "t": 402.8,
+   "d": 2.08,
+   "text": "succeeding at what we're trying to do"
+  },
+  {
+   "t": 404.88,
+   "d": 2.96,
+   "text": "um the challenges um provide kind of"
+  },
+  {
+   "t": 407.84,
+   "d": 2.56,
+   "text": "unique novelty and an opportunity for"
+  },
+  {
+   "t": 410.4,
+   "d": 2.64,
+   "text": "kind of high skill mastery"
+  },
+  {
+   "t": 413.04,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 414.08,
+   "d": 2.72,
+   "text": "through kind of the parallel learning in"
+  },
+  {
+   "t": 416.8,
+   "d": 2.88,
+   "text": "the inconsistent way you apply the"
+  },
+  {
+   "t": 419.68,
+   "d": 1.6,
+   "text": "lessons that you've learned within the"
+  },
+  {
+   "t": 421.28,
+   "d": 1.44,
+   "text": "games"
+  },
+  {
+   "t": 422.72,
+   "d": 1.92,
+   "text": "and then that run structure"
+  },
+  {
+   "t": 424.64,
+   "d": 2.32,
+   "text": "just leads to a high replayability where"
+  },
+  {
+   "t": 426.96,
+   "d": 0.88,
+   "text": "you"
+  },
+  {
+   "t": 427.84,
+   "d": 2.0,
+   "text": "are expecting to"
+  },
+  {
+   "t": 429.84,
+   "d": 1.28,
+   "text": "be tested"
+  },
+  {
+   "t": 431.12,
+   "d": 4.16,
+   "text": "often fail and jump right in um again"
+  },
+  {
+   "t": 435.28,
+   "d": 1.2,
+   "text": "so"
+  },
+  {
+   "t": 436.48,
+   "d": 2.56,
+   "text": "let me give my my definition here i'm"
+  },
+  {
+   "t": 439.04,
+   "d": 1.36,
+   "text": "going to talk about roguelike as a"
+  },
+  {
+   "t": 440.4,
+   "d": 3.28,
+   "text": "framework rather than a genre um"
+  },
+  {
+   "t": 443.68,
+   "d": 2.0,
+   "text": "so"
+  },
+  {
+   "t": 445.68,
+   "d": 2.64,
+   "text": "uh a game whose core loop embraces"
+  },
+  {
+   "t": 448.32,
+   "d": 2.0,
+   "text": "procedurality to increasingly challenge"
+  },
+  {
+   "t": 450.32,
+   "d": 1.68,
+   "text": "the player as they grow in power across"
+  },
+  {
+   "t": 452.0,
+   "d": 0.96,
+   "text": "our mind"
+  },
+  {
+   "t": 452.96,
+   "d": 2.08,
+   "text": "now i am quite confident that smart"
+  },
+  {
+   "t": 455.04,
+   "d": 1.68,
+   "text": "people can uh"
+  },
+  {
+   "t": 456.72,
+   "d": 2.56,
+   "text": "disagree reasonably with"
+  },
+  {
+   "t": 459.28,
+   "d": 3.12,
+   "text": "every word in this definition"
+  },
+  {
+   "t": 462.4,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 463.6,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 464.48,
+   "d": 1.28,
+   "text": "you know there's parts of it that i"
+  },
+  {
+   "t": 465.76,
+   "d": 2.16,
+   "text": "myself am a little uncertain of but i"
+  },
+  {
+   "t": 467.92,
+   "d": 3.28,
+   "text": "want to use this uh moving forward"
+  },
+  {
+   "t": 471.2,
+   "d": 1.68,
+   "text": "so"
+  },
+  {
+   "t": 472.88,
+   "d": 3.28,
+   "text": "that's uh it at an abstract level if i"
+  },
+  {
+   "t": 476.16,
+   "d": 2.64,
+   "text": "was talking to someone working on a game"
+  },
+  {
+   "t": 478.8,
+   "d": 2.08,
+   "text": "though i would break this down into kind"
+  },
+  {
+   "t": 480.88,
+   "d": 3.12,
+   "text": "of three core components give the player"
+  },
+  {
+   "t": 484.0,
+   "d": 1.6,
+   "text": "inconsistent meaningful choices that"
+  },
+  {
+   "t": 485.6,
+   "d": 3.2,
+   "text": "allow them to grow in power"
+  },
+  {
+   "t": 490.0,
+   "d": 3.44,
+   "text": "this is to say the player um should not"
+  },
+  {
+   "t": 493.44,
+   "d": 1.92,
+   "text": "have access to everything they should"
+  },
+  {
+   "t": 495.36,
+   "d": 2.72,
+   "text": "have mutually exclusive um"
+  },
+  {
+   "t": 498.08,
+   "d": 1.52,
+   "text": "uh decisions that they are making"
+  },
+  {
+   "t": 499.6,
+   "d": 2.32,
+   "text": "decision points within the game"
+  },
+  {
+   "t": 501.92,
+   "d": 1.04,
+   "text": "where"
+  },
+  {
+   "t": 502.96,
+   "d": 1.12,
+   "text": "they are"
+  },
+  {
+   "t": 504.08,
+   "d": 1.36,
+   "text": "choosing"
+  },
+  {
+   "t": 505.44,
+   "d": 2.88,
+   "text": "do i want the sword do i want the shield"
+  },
+  {
+   "t": 508.32,
+   "d": 2.08,
+   "text": "do i want to be"
+  },
+  {
+   "t": 510.4,
+   "d": 2.24,
+   "text": "move left or move right"
+  },
+  {
+   "t": 512.64,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 513.84,
+   "d": 2.08,
+   "text": "and then give the player inconsistent"
+  },
+  {
+   "t": 515.92,
+   "d": 2.0,
+   "text": "escalating challenges that test those"
+  },
+  {
+   "t": 517.92,
+   "d": 1.76,
+   "text": "choices"
+  },
+  {
+   "t": 519.68,
+   "d": 3.2,
+   "text": "uh the key word between these two is uh"
+  },
+  {
+   "t": 522.88,
+   "d": 1.92,
+   "text": "inconsistent obviously which is where"
+  },
+  {
+   "t": 524.8,
+   "d": 2.56,
+   "text": "kind of the procedurality that i think"
+  },
+  {
+   "t": 527.36,
+   "d": 1.76,
+   "text": "of is very core"
+  },
+  {
+   "t": 529.12,
+   "d": 2.32,
+   "text": "uh comes from"
+  },
+  {
+   "t": 531.44,
+   "d": 1.52,
+   "text": "and"
+  },
+  {
+   "t": 532.96,
+   "d": 2.64,
+   "text": "um"
+  },
+  {
+   "t": 535.6,
+   "d": 2.24,
+   "text": "i have a cat that is distracting me"
+  },
+  {
+   "t": 537.84,
+   "d": 2.64,
+   "text": "right here excuse me because i'm looking"
+  },
+  {
+   "t": 540.48,
+   "d": 3.44,
+   "text": "down you there's a cat bring up the cat"
+  },
+  {
+   "t": 543.92,
+   "d": 3.56,
+   "text": "no it's up to you"
+  },
+  {
+   "t": 548.4,
+   "d": 2.32,
+   "text": "yes"
+  },
+  {
+   "t": 551.6,
+   "d": 1.6,
+   "text": "oh my god you mentioned your cat in your"
+  },
+  {
+   "t": 553.2,
+   "d": 2.96,
+   "text": "bio okay anyway i'm sorry to distract"
+  },
+  {
+   "t": 556.16,
+   "d": 1.6,
+   "text": "but i'm sure everyone appreciates no"
+  },
+  {
+   "t": 557.76,
+   "d": 2.88,
+   "text": "words thank you"
+  },
+  {
+   "t": 561.36,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 563.6,
+   "d": 1.36,
+   "text": "so um"
+  },
+  {
+   "t": 564.96,
+   "d": 2.0,
+   "text": "and then all of this is within kind of a"
+  },
+  {
+   "t": 566.96,
+   "d": 2.16,
+   "text": "finite run structure um so that the"
+  },
+  {
+   "t": 569.12,
+   "d": 0.96,
+   "text": "players"
+  },
+  {
+   "t": 570.08,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 571.52,
+   "d": 2.0,
+   "text": "whether they succeed or fail uh they"
+  },
+  {
+   "t": 573.52,
+   "d": 3.04,
+   "text": "have made a series of choices and"
+  },
+  {
+   "t": 576.56,
+   "d": 1.68,
+   "text": "can start a new run"
+  },
+  {
+   "t": 578.24,
+   "d": 2.16,
+   "text": "and make a new series of choices and be"
+  },
+  {
+   "t": 580.4,
+   "d": 2.64,
+   "text": "challenged a new"
+  },
+  {
+   "t": 583.04,
+   "d": 2.24,
+   "text": "uh if you look at you know the very"
+  },
+  {
+   "t": 585.28,
+   "d": 2.56,
+   "text": "classic roguelikes you can see"
+  },
+  {
+   "t": 587.84,
+   "d": 1.92,
+   "text": "exactly how they are doing this how they"
+  },
+  {
+   "t": 589.76,
+   "d": 2.24,
+   "text": "are um"
+  },
+  {
+   "t": 592.0,
+   "d": 1.6,
+   "text": "you are"
+  },
+  {
+   "t": 593.6,
+   "d": 1.2,
+   "text": "choosing"
+  },
+  {
+   "t": 594.8,
+   "d": 2.0,
+   "text": "between different weapons you want to"
+  },
+  {
+   "t": 596.8,
+   "d": 2.08,
+   "text": "wheel wield um"
+  },
+  {
+   "t": 598.88,
+   "d": 1.52,
+   "text": "you are choosing what you want to buy in"
+  },
+  {
+   "t": 600.4,
+   "d": 2.48,
+   "text": "shops do you drink that weird potion do"
+  },
+  {
+   "t": 602.88,
+   "d": 3.44,
+   "text": "you need to and um"
+  },
+  {
+   "t": 606.32,
+   "d": 2.8,
+   "text": "you know you can look at very clearly"
+  },
+  {
+   "t": 609.12,
+   "d": 1.52,
+   "text": "the inconsistent choices and the"
+  },
+  {
+   "t": 610.64,
+   "d": 1.92,
+   "text": "inconsistent challenges that players are"
+  },
+  {
+   "t": 612.56,
+   "d": 3.12,
+   "text": "faced with um to make sure though"
+  },
+  {
+   "t": 615.68,
+   "d": 1.44,
+   "text": "this definition isn't too"
+  },
+  {
+   "t": 617.12,
+   "d": 1.68,
+   "text": "all-encompassing let's look at some"
+  },
+  {
+   "t": 618.8,
+   "d": 1.76,
+   "text": "examples of things that"
+  },
+  {
+   "t": 620.56,
+   "d": 1.84,
+   "text": "don't fit and how"
+  },
+  {
+   "t": 622.4,
+   "d": 3.04,
+   "text": "they have been adapted um to to the the"
+  },
+  {
+   "t": 625.44,
+   "d": 0.96,
+   "text": "genre"
+  },
+  {
+   "t": 626.4,
+   "d": 2.4,
+   "text": "um or the framework"
+  },
+  {
+   "t": 628.8,
+   "d": 1.44,
+   "text": "so um"
+  },
+  {
+   "t": 630.24,
+   "d": 2.24,
+   "text": "take a classic game super mario brothers"
+  },
+  {
+   "t": 632.48,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 633.6,
+   "d": 0.96,
+   "text": "the"
+  },
+  {
+   "t": 634.56,
+   "d": 2.56,
+   "text": "can the runs for the player are"
+  },
+  {
+   "t": 637.12,
+   "d": 2.96,
+   "text": "consistent uh every time you go in"
+  },
+  {
+   "t": 640.08,
+   "d": 1.04,
+   "text": "the"
+  },
+  {
+   "t": 641.12,
+   "d": 1.04,
+   "text": "same"
+  },
+  {
+   "t": 642.16,
+   "d": 1.92,
+   "text": "uh pipe is going to lead to the same"
+  },
+  {
+   "t": 644.08,
+   "d": 3.36,
+   "text": "secret area the same jump is going to be"
+  },
+  {
+   "t": 647.44,
+   "d": 2.48,
+   "text": "there to challenge you anew and that's"
+  },
+  {
+   "t": 649.92,
+   "d": 1.52,
+   "text": "fine you know there's nothing against"
+  },
+  {
+   "t": 651.44,
+   "d": 2.16,
+   "text": "that game usually this means that"
+  },
+  {
+   "t": 653.6,
+   "d": 1.84,
+   "text": "they're kind of built on exhaustible"
+  },
+  {
+   "t": 655.44,
+   "d": 2.16,
+   "text": "content that the player eventually is"
+  },
+  {
+   "t": 657.6,
+   "d": 2.08,
+   "text": "able to make their way through"
+  },
+  {
+   "t": 659.68,
+   "d": 1.68,
+   "text": "the classic one to point to here"
+  },
+  {
+   "t": 661.36,
+   "d": 2.4,
+   "text": "spelunky that takes kind of that"
+  },
+  {
+   "t": 663.76,
+   "d": 2.08,
+   "text": "platformer structure"
+  },
+  {
+   "t": 665.84,
+   "d": 2.24,
+   "text": "and now um applies it more"
+  },
+  {
+   "t": 668.08,
+   "d": 1.52,
+   "text": "inconsistently"
+  },
+  {
+   "t": 669.6,
+   "d": 3.36,
+   "text": "so that um one run to the next the"
+  },
+  {
+   "t": 672.96,
+   "d": 2.48,
+   "text": "player can't anticipate where those"
+  },
+  {
+   "t": 675.44,
+   "d": 2.72,
+   "text": "secrets are they can't anticipate"
+  },
+  {
+   "t": 678.16,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 679.6,
+   "d": 1.52,
+   "text": "exactly what jump they're gonna need to"
+  },
+  {
+   "t": 681.12,
+   "d": 3.6,
+   "text": "make and they're taking on kind of novel"
+  },
+  {
+   "t": 684.72,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 686.0,
+   "d": 0.84,
+   "text": "uh"
+  },
+  {
+   "t": 686.84,
+   "d": 2.68,
+   "text": "power-ups one run you might have a lot"
+  },
+  {
+   "t": 689.52,
+   "d": 2.96,
+   "text": "of bombs and be able to move through um"
+  },
+  {
+   "t": 692.48,
+   "d": 2.32,
+   "text": "the area uh skipping"
+  },
+  {
+   "t": 694.8,
+   "d": 2.48,
+   "text": "past large sections where the next you"
+  },
+  {
+   "t": 697.28,
+   "d": 3.44,
+   "text": "have a shotgun and you are able to"
+  },
+  {
+   "t": 700.72,
+   "d": 2.64,
+   "text": "take on uh enemies a little bit more"
+  },
+  {
+   "t": 703.36,
+   "d": 1.6,
+   "text": "aggressively than you might in another"
+  },
+  {
+   "t": 704.96,
+   "d": 1.52,
+   "text": "game"
+  },
+  {
+   "t": 706.48,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 707.28,
+   "d": 1.6,
+   "text": "again going back to"
+  },
+  {
+   "t": 708.88,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 710.24,
+   "d": 1.68,
+   "text": "collectible card games"
+  },
+  {
+   "t": 711.92,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 712.88,
+   "d": 1.52,
+   "text": "they actually provide a lot of the"
+  },
+  {
+   "t": 714.4,
+   "d": 1.92,
+   "text": "inconsistent challenges because you"
+  },
+  {
+   "t": 716.32,
+   "d": 2.08,
+   "text": "never quite know what your opponent is"
+  },
+  {
+   "t": 718.4,
+   "d": 1.92,
+   "text": "going to be bringing to the table"
+  },
+  {
+   "t": 720.32,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 721.12,
+   "d": 1.12,
+   "text": "but"
+  },
+  {
+   "t": 722.24,
+   "d": 1.68,
+   "text": "you have access to the cards that you"
+  },
+  {
+   "t": 723.92,
+   "d": 3.12,
+   "text": "have access to and can adapt you know"
+  },
+  {
+   "t": 727.04,
+   "d": 1.84,
+   "text": "pretty readily"
+  },
+  {
+   "t": 728.88,
+   "d": 2.48,
+   "text": "in whatever fashion you want so it"
+  },
+  {
+   "t": 731.36,
+   "d": 2.64,
+   "text": "doesn't really have the core um"
+  },
+  {
+   "t": 734.0,
+   "d": 2.72,
+   "text": "meaningful mutually exclusive choices uh"
+  },
+  {
+   "t": 736.72,
+   "d": 2.72,
+   "text": "that defines more roguelikes now the"
+  },
+  {
+   "t": 739.44,
+   "d": 1.6,
+   "text": "first that i know that really kind of"
+  },
+  {
+   "t": 741.04,
+   "d": 2.0,
+   "text": "brought this roguelike deck builder"
+  },
+  {
+   "t": 743.04,
+   "d": 2.4,
+   "text": "genre is a dream quest"
+  },
+  {
+   "t": 745.44,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 746.64,
+   "d": 1.92,
+   "text": "which"
+  },
+  {
+   "t": 748.56,
+   "d": 3.44,
+   "text": "uses a very classic uh dungeon structure"
+  },
+  {
+   "t": 752.0,
+   "d": 1.52,
+   "text": "um to provide the player with these"
+  },
+  {
+   "t": 753.52,
+   "d": 1.76,
+   "text": "meaningful choices"
+  },
+  {
+   "t": 755.28,
+   "d": 2.32,
+   "text": "um and then slay the spire is obviously"
+  },
+  {
+   "t": 757.6,
+   "d": 2.08,
+   "text": "like the probably the big biggest one in"
+  },
+  {
+   "t": 759.68,
+   "d": 2.56,
+   "text": "the genre and then lab of legends"
+  },
+  {
+   "t": 762.24,
+   "d": 3.12,
+   "text": "um our own uh it's kind of building on"
+  },
+  {
+   "t": 765.36,
+   "d": 1.6,
+   "text": "some of the lessons from those other"
+  },
+  {
+   "t": 766.96,
+   "d": 1.84,
+   "text": "games"
+  },
+  {
+   "t": 768.8,
+   "d": 1.6,
+   "text": "um but breaking down kind of these"
+  },
+  {
+   "t": 770.4,
+   "d": 2.32,
+   "text": "individual components what would make a"
+  },
+  {
+   "t": 772.72,
+   "d": 2.4,
+   "text": "good player choice"
+  },
+  {
+   "t": 775.12,
+   "d": 1.6,
+   "text": "uh the top thing i would talk about is"
+  },
+  {
+   "t": 776.72,
+   "d": 1.36,
+   "text": "modularity"
+  },
+  {
+   "t": 778.08,
+   "d": 4.32,
+   "text": "so dicey dungeons is this kind of core"
+  },
+  {
+   "t": 782.56,
+   "d": 3.6,
+   "text": "brings like a yahtzee core mechanic into"
+  },
+  {
+   "t": 786.16,
+   "d": 2.0,
+   "text": "a roguelike space"
+  },
+  {
+   "t": 788.16,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 789.44,
+   "d": 1.6,
+   "text": "and"
+  },
+  {
+   "t": 791.04,
+   "d": 1.44,
+   "text": "dice are great because you can"
+  },
+  {
+   "t": 792.48,
+   "d": 2.56,
+   "text": "manipulate them in finite ways you might"
+  },
+  {
+   "t": 795.04,
+   "d": 2.96,
+   "text": "have an item that translates"
+  },
+  {
+   "t": 798.0,
+   "d": 1.76,
+   "text": "a role into damage another that"
+  },
+  {
+   "t": 799.76,
+   "d": 1.6,
+   "text": "translates into"
+  },
+  {
+   "t": 801.36,
+   "d": 1.44,
+   "text": "um defense"
+  },
+  {
+   "t": 802.8,
+   "d": 2.32,
+   "text": "and then you have kind of um"
+  },
+  {
+   "t": 805.12,
+   "d": 3.04,
+   "text": "you can imagine where different items"
+  },
+  {
+   "t": 808.16,
+   "d": 2.56,
+   "text": "can kind of uh manipulate those dice in"
+  },
+  {
+   "t": 810.72,
+   "d": 4.08,
+   "text": "very finite uh discrete ways"
+  },
+  {
+   "t": 814.8,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 816.08,
+   "d": 3.04,
+   "text": "the choices should be very impactful uh"
+  },
+  {
+   "t": 819.12,
+   "d": 2.32,
+   "text": "so hades is probably a great example of"
+  },
+  {
+   "t": 821.44,
+   "d": 2.0,
+   "text": "this where um"
+  },
+  {
+   "t": 823.44,
+   "d": 2.24,
+   "text": "this dataless hammer is going to change"
+  },
+  {
+   "t": 825.68,
+   "d": 1.92,
+   "text": "the style of your run and based on"
+  },
+  {
+   "t": 827.6,
+   "d": 1.76,
+   "text": "whether or not you get certain"
+  },
+  {
+   "t": 829.36,
+   "d": 1.68,
+   "text": "combinations you are going to have like"
+  },
+  {
+   "t": 831.04,
+   "d": 3.84,
+   "text": "a meaningfully different experience"
+  },
+  {
+   "t": 834.96,
+   "d": 0.96,
+   "text": "good choices are going to"
+  },
+  {
+   "t": 835.92,
+   "d": 2.16,
+   "text": "re-contextualize other choices so coming"
+  },
+  {
+   "t": 838.08,
+   "d": 2.08,
+   "text": "back to lab of legends"
+  },
+  {
+   "t": 840.16,
+   "d": 2.48,
+   "text": "here's this choice of three powers"
+  },
+  {
+   "t": 842.64,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 843.68,
+   "d": 3.52,
+   "text": "one helps your units if they survive"
+  },
+  {
+   "t": 847.2,
+   "d": 1.36,
+   "text": "damage one"
+  },
+  {
+   "t": 848.56,
+   "d": 1.6,
+   "text": "another one helps them you know if"
+  },
+  {
+   "t": 850.16,
+   "d": 2.24,
+   "text": "they're big they deal damage which one"
+  },
+  {
+   "t": 852.4,
+   "d": 2.16,
+   "text": "is better i couldn't really tell you"
+  },
+  {
+   "t": 854.56,
+   "d": 2.4,
+   "text": "definitively it depends on"
+  },
+  {
+   "t": 856.96,
+   "d": 1.52,
+   "text": "the deck that you have been building up"
+  },
+  {
+   "t": 858.48,
+   "d": 1.28,
+   "text": "to this point"
+  },
+  {
+   "t": 859.76,
+   "d": 2.4,
+   "text": "and depending on which one you choose"
+  },
+  {
+   "t": 862.16,
+   "d": 2.56,
+   "text": "you might now um"
+  },
+  {
+   "t": 864.72,
+   "d": 1.76,
+   "text": "your later choices are going to be"
+  },
+  {
+   "t": 866.48,
+   "d": 2.32,
+   "text": "affected by it"
+  },
+  {
+   "t": 868.8,
+   "d": 1.6,
+   "text": "and then uh"
+  },
+  {
+   "t": 870.4,
+   "d": 2.4,
+   "text": "ideally if you are a game looking in"
+  },
+  {
+   "t": 872.8,
+   "d": 1.12,
+   "text": "this space"
+  },
+  {
+   "t": 873.92,
+   "d": 2.72,
+   "text": "i would ask how many unique combinations"
+  },
+  {
+   "t": 876.64,
+   "d": 2.24,
+   "text": "can you provide the player going back to"
+  },
+  {
+   "t": 878.88,
+   "d": 2.08,
+   "text": "this example i"
+  },
+  {
+   "t": 880.96,
+   "d": 1.52,
+   "text": "don't know that i'd ever seen this"
+  },
+  {
+   "t": 882.48,
+   "d": 2.0,
+   "text": "example before i"
+  },
+  {
+   "t": 884.48,
+   "d": 1.76,
+   "text": "you know screenshotted this as part of"
+  },
+  {
+   "t": 886.24,
+   "d": 1.04,
+   "text": "the talk"
+  },
+  {
+   "t": 887.28,
+   "d": 0.88,
+   "text": "but"
+  },
+  {
+   "t": 888.16,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 889.52,
+   "d": 1.84,
+   "text": "the"
+  },
+  {
+   "t": 891.36,
+   "d": 3.2,
+   "text": "50 to 60 different items combining with"
+  },
+  {
+   "t": 894.56,
+   "d": 1.52,
+   "text": "the"
+  },
+  {
+   "t": 896.08,
+   "d": 2.96,
+   "text": "500 600 cards in the game"
+  },
+  {
+   "t": 899.04,
+   "d": 3.36,
+   "text": "um provide you know a lot of opportunity"
+  },
+  {
+   "t": 902.4,
+   "d": 0.72,
+   "text": "to"
+  },
+  {
+   "t": 903.12,
+   "d": 2.72,
+   "text": "have something truly novel come up that"
+  },
+  {
+   "t": 905.84,
+   "d": 3.52,
+   "text": "can surprise delight the player"
+  },
+  {
+   "t": 909.36,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 911.76,
+   "d": 1.36,
+   "text": "good challenges"
+  },
+  {
+   "t": 913.12,
+   "d": 1.92,
+   "text": "uh so"
+  },
+  {
+   "t": 915.04,
+   "d": 2.08,
+   "text": "i would say one of the keys is testing"
+  },
+  {
+   "t": 917.12,
+   "d": 3.44,
+   "text": "the player along multiple axes uh if"
+  },
+  {
+   "t": 920.56,
+   "d": 1.76,
+   "text": "you know you can"
+  },
+  {
+   "t": 922.32,
+   "d": 2.72,
+   "text": "get faster or stronger but faster is"
+  },
+  {
+   "t": 925.04,
+   "d": 1.52,
+   "text": "always better"
+  },
+  {
+   "t": 926.56,
+   "d": 2.32,
+   "text": "in every scenario it's not going to be a"
+  },
+  {
+   "t": 928.88,
+   "d": 2.64,
+   "text": "meaningful um challenge and the player"
+  },
+  {
+   "t": 931.52,
+   "d": 1.28,
+   "text": "is going to learn to make certain"
+  },
+  {
+   "t": 932.8,
+   "d": 1.04,
+   "text": "choices"
+  },
+  {
+   "t": 933.84,
+   "d": 2.56,
+   "text": "um driftlands is a great example of this"
+  },
+  {
+   "t": 936.4,
+   "d": 1.76,
+   "text": "where you literally have two decks of"
+  },
+  {
+   "t": 938.16,
+   "d": 2.72,
+   "text": "cards that you are managing uh one for"
+  },
+  {
+   "t": 940.88,
+   "d": 2.08,
+   "text": "talking one for fighting"
+  },
+  {
+   "t": 942.96,
+   "d": 2.24,
+   "text": "and throughout the game you need to make"
+  },
+  {
+   "t": 945.2,
+   "d": 1.2,
+   "text": "choices of"
+  },
+  {
+   "t": 946.4,
+   "d": 2.16,
+   "text": "which one do i want to make better how"
+  },
+  {
+   "t": 948.56,
+   "d": 2.16,
+   "text": "do i want to engage with this particular"
+  },
+  {
+   "t": 950.72,
+   "d": 3.68,
+   "text": "opponent to either fight or"
+  },
+  {
+   "t": 954.4,
+   "d": 2.72,
+   "text": "talk them out of things and there will"
+  },
+  {
+   "t": 957.12,
+   "d": 2.08,
+   "text": "be different rewards and things and"
+  },
+  {
+   "t": 959.2,
+   "d": 2.88,
+   "text": "different paths depending on which"
+  },
+  {
+   "t": 962.08,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 963.36,
+   "d": 2.64,
+   "text": "did i jump over something okay uh allow"
+  },
+  {
+   "t": 966.0,
+   "d": 2.48,
+   "text": "the player to demonstrate skill um"
+  },
+  {
+   "t": 968.48,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 969.2,
+   "d": 1.92,
+   "text": "this is mostly about like"
+  },
+  {
+   "t": 971.12,
+   "d": 0.45,
+   "text": "um"
+  },
+  {
+   "t": 971.57,
+   "d": 1.31,
+   "text": "[Music]"
+  },
+  {
+   "t": 972.88,
+   "d": 1.68,
+   "text": "make sure that"
+  },
+  {
+   "t": 974.56,
+   "d": 0.88,
+   "text": "even"
+  },
+  {
+   "t": 975.44,
+   "d": 2.4,
+   "text": "smaller challenges that the player can"
+  },
+  {
+   "t": 977.84,
+   "d": 2.0,
+   "text": "readily overcome are going to be"
+  },
+  {
+   "t": 979.84,
+   "d": 2.4,
+   "text": "meaningful and interesting to the player"
+  },
+  {
+   "t": 982.24,
+   "d": 2.0,
+   "text": "a lot of games use kind of persistent"
+  },
+  {
+   "t": 984.24,
+   "d": 1.52,
+   "text": "health um"
+  },
+  {
+   "t": 985.76,
+   "d": 2.24,
+   "text": "to do this to make sure"
+  },
+  {
+   "t": 988.0,
+   "d": 1.12,
+   "text": "you know"
+  },
+  {
+   "t": 989.12,
+   "d": 1.92,
+   "text": "you are fighting the easy enemy but did"
+  },
+  {
+   "t": 991.04,
+   "d": 2.4,
+   "text": "it deal some damage to you you will care"
+  },
+  {
+   "t": 993.44,
+   "d": 2.48,
+   "text": "about that later and therefore"
+  },
+  {
+   "t": 995.92,
+   "d": 2.56,
+   "text": "you know how many of these"
+  },
+  {
+   "t": 998.48,
+   "d": 2.08,
+   "text": "five damages can you take"
+  },
+  {
+   "t": 1000.56,
+   "d": 2.0,
+   "text": "um dungeon beneath is a really"
+  },
+  {
+   "t": 1002.56,
+   "d": 1.76,
+   "text": "interesting game that's"
+  },
+  {
+   "t": 1004.32,
+   "d": 2.64,
+   "text": "kind of in a roguelike um auto battle or"
+  },
+  {
+   "t": 1006.96,
+   "d": 1.12,
+   "text": "space"
+  },
+  {
+   "t": 1008.08,
+   "d": 2.32,
+   "text": "i don't know if the creators would"
+  },
+  {
+   "t": 1010.4,
+   "d": 2.4,
+   "text": "describe it that way but um one of the"
+  },
+  {
+   "t": 1012.8,
+   "d": 2.32,
+   "text": "things that it uniquely does is provides"
+  },
+  {
+   "t": 1015.12,
+   "d": 3.2,
+   "text": "kind of these um distinct bonuses here"
+  },
+  {
+   "t": 1018.32,
+   "d": 2.0,
+   "text": "killing the golden wisp gets you some"
+  },
+  {
+   "t": 1020.32,
+   "d": 1.28,
+   "text": "extra gold"
+  },
+  {
+   "t": 1021.6,
+   "d": 1.44,
+   "text": "so a"
+  },
+  {
+   "t": 1023.04,
+   "d": 3.2,
+   "text": "novice player um could come to this and"
+  },
+  {
+   "t": 1026.24,
+   "d": 2.72,
+   "text": "be happy that they won the battle a"
+  },
+  {
+   "t": 1028.96,
+   "d": 1.84,
+   "text": "medium-skilled player could be happy"
+  },
+  {
+   "t": 1030.8,
+   "d": 2.4,
+   "text": "that they didn't take any damage and a"
+  },
+  {
+   "t": 1033.2,
+   "d": 2.64,
+   "text": "very skilled player has something that"
+  },
+  {
+   "t": 1035.84,
+   "d": 2.32,
+   "text": "they are also able to engage with here"
+  },
+  {
+   "t": 1038.16,
+   "d": 4.08,
+   "text": "by did they get the additional objective"
+  },
+  {
+   "t": 1043.12,
+   "d": 2.64,
+   "text": "and then kind of looking at this"
+  },
+  {
+   "t": 1045.76,
+   "d": 2.72,
+   "text": "structure for a run"
+  },
+  {
+   "t": 1048.48,
+   "d": 1.76,
+   "text": "there's a few things"
+  },
+  {
+   "t": 1050.24,
+   "d": 2.32,
+   "text": "i would argue for uh and one is uh"
+  },
+  {
+   "t": 1052.56,
+   "d": 2.72,
+   "text": "enforced kind of distinct uh novel"
+  },
+  {
+   "t": 1055.28,
+   "d": 2.88,
+   "text": "starting positions"
+  },
+  {
+   "t": 1059.2,
+   "d": 1.6,
+   "text": "so um"
+  },
+  {
+   "t": 1060.8,
+   "d": 1.76,
+   "text": "net hack is probably a good example here"
+  },
+  {
+   "t": 1062.56,
+   "d": 1.44,
+   "text": "or any of the classic ones where you're"
+  },
+  {
+   "t": 1064.0,
+   "d": 2.56,
+   "text": "able to choose a class"
+  },
+  {
+   "t": 1066.56,
+   "d": 1.76,
+   "text": "and"
+  },
+  {
+   "t": 1068.32,
+   "d": 1.92,
+   "text": "especially because they not only have"
+  },
+  {
+   "t": 1070.24,
+   "d": 3.04,
+   "text": "you make kind of this meaningful choice"
+  },
+  {
+   "t": 1073.28,
+   "d": 2.72,
+   "text": "that will contextualize your run"
+  },
+  {
+   "t": 1076.0,
+   "d": 1.36,
+   "text": "but also"
+  },
+  {
+   "t": 1077.36,
+   "d": 1.44,
+   "text": "those"
+  },
+  {
+   "t": 1078.8,
+   "d": 3.2,
+   "text": "in turn have randomized um"
+  },
+  {
+   "t": 1082.0,
+   "d": 2.56,
+   "text": "stats and things associated with them so"
+  },
+  {
+   "t": 1084.56,
+   "d": 2.48,
+   "text": "that um one route to the next you have a"
+  },
+  {
+   "t": 1087.04,
+   "d": 1.76,
+   "text": "little bit of difference"
+  },
+  {
+   "t": 1088.8,
+   "d": 1.68,
+   "text": "from lab of legends we achieve this"
+  },
+  {
+   "t": 1090.48,
+   "d": 1.68,
+   "text": "through having a number of different"
+  },
+  {
+   "t": 1092.16,
+   "d": 1.52,
+   "text": "champions that you can start with with"
+  },
+  {
+   "t": 1093.68,
+   "d": 3.04,
+   "text": "very distinct decks even if the core"
+  },
+  {
+   "t": 1096.72,
+   "d": 1.36,
+   "text": "after that"
+  },
+  {
+   "t": 1098.08,
+   "d": 1.44,
+   "text": "is going to"
+  },
+  {
+   "t": 1099.52,
+   "d": 2.32,
+   "text": "be similar um"
+  },
+  {
+   "t": 1101.84,
+   "d": 1.84,
+   "text": "the fact that you are playing miss"
+  },
+  {
+   "t": 1103.68,
+   "d": 2.48,
+   "text": "fortune versus talia versus braum is"
+  },
+  {
+   "t": 1106.16,
+   "d": 2.32,
+   "text": "going to change things"
+  },
+  {
+   "t": 1108.48,
+   "d": 2.32,
+   "text": "uh hades is a good example where you"
+  },
+  {
+   "t": 1110.8,
+   "d": 1.76,
+   "text": "know you have the weapon but you also"
+  },
+  {
+   "t": 1112.56,
+   "d": 2.32,
+   "text": "have kind of this boon in the first room"
+  },
+  {
+   "t": 1114.88,
+   "d": 2.32,
+   "text": "that is going to"
+  },
+  {
+   "t": 1117.2,
+   "d": 1.68,
+   "text": "immediately set you off with some"
+  },
+  {
+   "t": 1118.88,
+   "d": 2.72,
+   "text": "choices that are impactful"
+  },
+  {
+   "t": 1121.6,
+   "d": 1.36,
+   "text": "uh"
+  },
+  {
+   "t": 1122.96,
+   "d": 2.4,
+   "text": "discourage boring behavior basically if"
+  },
+  {
+   "t": 1125.36,
+   "d": 2.48,
+   "text": "the players can do something that is"
+  },
+  {
+   "t": 1127.84,
+   "d": 2.48,
+   "text": "going to be against their fun"
+  },
+  {
+   "t": 1130.32,
+   "d": 2.16,
+   "text": "but is useful they will probably engage"
+  },
+  {
+   "t": 1132.48,
+   "d": 1.76,
+   "text": "in that"
+  },
+  {
+   "t": 1134.24,
+   "d": 2.0,
+   "text": "nethack is a great example or all the"
+  },
+  {
+   "t": 1136.24,
+   "d": 2.16,
+   "text": "classic ones with their hunger system to"
+  },
+  {
+   "t": 1138.4,
+   "d": 1.84,
+   "text": "kind of press you forward"
+  },
+  {
+   "t": 1140.24,
+   "d": 2.24,
+   "text": "and ensure that"
+  },
+  {
+   "t": 1142.48,
+   "d": 2.48,
+   "text": "you don't you know dig through every"
+  },
+  {
+   "t": 1144.96,
+   "d": 2.8,
+   "text": "nook and cranny of a level um before"
+  },
+  {
+   "t": 1147.76,
+   "d": 2.72,
+   "text": "moving on um you have to kind of press"
+  },
+  {
+   "t": 1150.48,
+   "d": 1.68,
+   "text": "on i particularly bring this one up"
+  },
+  {
+   "t": 1152.16,
+   "d": 2.88,
+   "text": "because a lot of games naturally"
+  },
+  {
+   "t": 1155.04,
+   "d": 1.84,
+   "text": "uh will"
+  },
+  {
+   "t": 1156.88,
+   "d": 2.8,
+   "text": "encourage some conservatism on the part"
+  },
+  {
+   "t": 1159.68,
+   "d": 2.32,
+   "text": "of the player where they learn to be"
+  },
+  {
+   "t": 1162.0,
+   "d": 2.48,
+   "text": "more and more careful about things and"
+  },
+  {
+   "t": 1164.48,
+   "d": 2.0,
+   "text": "that can easily lead to you know"
+  },
+  {
+   "t": 1166.48,
+   "d": 2.24,
+   "text": "optimizing themselves out of fun"
+  },
+  {
+   "t": 1168.72,
+   "d": 1.6,
+   "text": "and um"
+  },
+  {
+   "t": 1170.32,
+   "d": 1.44,
+   "text": "whatever you can do to kind of"
+  },
+  {
+   "t": 1171.76,
+   "d": 1.6,
+   "text": "discourage that and ensure they are"
+  },
+  {
+   "t": 1173.36,
+   "d": 1.92,
+   "text": "pressing forward and doing"
+  },
+  {
+   "t": 1175.28,
+   "d": 2.0,
+   "text": "the things that are the satisfying"
+  },
+  {
+   "t": 1177.28,
+   "d": 4.64,
+   "text": "things um is going to be um powerful"
+  },
+  {
+   "t": 1181.92,
+   "d": 2.16,
+   "text": "um permadeath mossy mostly here i'm kind"
+  },
+  {
+   "t": 1184.08,
+   "d": 1.68,
+   "text": "of um"
+  },
+  {
+   "t": 1185.76,
+   "d": 1.44,
+   "text": "citing"
+  },
+  {
+   "t": 1187.2,
+   "d": 0.96,
+   "text": "or"
+  },
+  {
+   "t": 1188.16,
+   "d": 1.68,
+   "text": "permadeath permanence of consequence"
+  },
+  {
+   "t": 1189.84,
+   "d": 1.52,
+   "text": "there there's a lot of ways to frame"
+  },
+  {
+   "t": 1191.36,
+   "d": 1.04,
+   "text": "this um"
+  },
+  {
+   "t": 1192.4,
+   "d": 2.32,
+   "text": "i i'm mostly kind of citing positive"
+  },
+  {
+   "t": 1194.72,
+   "d": 2.0,
+   "text": "examples i'm going to"
+  },
+  {
+   "t": 1196.72,
+   "d": 2.4,
+   "text": "touch on one that i think was a misstep"
+  },
+  {
+   "t": 1199.12,
+   "d": 1.36,
+   "text": "that we made"
+  },
+  {
+   "t": 1200.48,
+   "d": 1.6,
+   "text": "in lab of legends"
+  },
+  {
+   "t": 1202.08,
+   "d": 1.92,
+   "text": "so we were"
+  },
+  {
+   "t": 1204.0,
+   "d": 2.0,
+   "text": "the the original lab of legends was very"
+  },
+  {
+   "t": 1206.0,
+   "d": 2.4,
+   "text": "roguelike does kind of the classic"
+  },
+  {
+   "t": 1208.4,
+   "d": 2.88,
+   "text": "permadeath thing you know um and you"
+  },
+  {
+   "t": 1211.28,
+   "d": 2.16,
+   "text": "unlock higher higher difficulty tiers as"
+  },
+  {
+   "t": 1213.44,
+   "d": 1.52,
+   "text": "you win runs"
+  },
+  {
+   "t": 1214.96,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1216.16,
+   "d": 2.24,
+   "text": "but we were bringing in these additional"
+  },
+  {
+   "t": 1218.4,
+   "d": 3.52,
+   "text": "roguelike elements map exploration xp"
+  },
+  {
+   "t": 1221.92,
+   "d": 2.72,
+   "text": "system to"
+  },
+  {
+   "t": 1224.64,
+   "d": 1.84,
+   "text": "like gate some of the kind of rewards"
+  },
+  {
+   "t": 1226.48,
+   "d": 1.2,
+   "text": "you were getting"
+  },
+  {
+   "t": 1227.68,
+   "d": 3.2,
+   "text": "and we were kind of nervous that"
+  },
+  {
+   "t": 1230.88,
+   "d": 1.92,
+   "text": "permadeath we think is"
+  },
+  {
+   "t": 1232.8,
+   "d": 2.0,
+   "text": "one of the things that is a turn off to"
+  },
+  {
+   "t": 1234.8,
+   "d": 3.2,
+   "text": "a wider appeal of roguelikes"
+  },
+  {
+   "t": 1238.0,
+   "d": 2.64,
+   "text": "um the notion that you are kind of"
+  },
+  {
+   "t": 1240.64,
+   "d": 2.48,
+   "text": "expected to fail repeatedly"
+  },
+  {
+   "t": 1243.12,
+   "d": 1.84,
+   "text": "um and so"
+  },
+  {
+   "t": 1244.96,
+   "d": 2.08,
+   "text": "we tried kind of"
+  },
+  {
+   "t": 1247.04,
+   "d": 2.48,
+   "text": "embracing we we talked about it a lot as"
+  },
+  {
+   "t": 1249.52,
+   "d": 3.12,
+   "text": "like more of an rpg aesthetic of like"
+  },
+  {
+   "t": 1252.64,
+   "d": 2.4,
+   "text": "you have died um but"
+  },
+  {
+   "t": 1255.04,
+   "d": 2.24,
+   "text": "keep going that's okay you know you have"
+  },
+  {
+   "t": 1257.28,
+   "d": 2.4,
+   "text": "more to do that's not the end"
+  },
+  {
+   "t": 1259.68,
+   "d": 1.84,
+   "text": "um the problem was we kind of have this"
+  },
+  {
+   "t": 1261.52,
+   "d": 2.16,
+   "text": "roguelike core otherwise"
+  },
+  {
+   "t": 1263.68,
+   "d": 1.52,
+   "text": "where"
+  },
+  {
+   "t": 1265.2,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1266.64,
+   "d": 1.84,
+   "text": "you would have those choices that you"
+  },
+  {
+   "t": 1268.48,
+   "d": 2.24,
+   "text": "made tested meaningfully"
+  },
+  {
+   "t": 1270.72,
+   "d": 1.76,
+   "text": "but the"
+  },
+  {
+   "t": 1272.48,
+   "d": 0.37,
+   "text": "um"
+  },
+  {
+   "t": 1272.85,
+   "d": 2.03,
+   "text": "[Music]"
+  },
+  {
+   "t": 1274.88,
+   "d": 3.36,
+   "text": "if you failed those tests and died there"
+  },
+  {
+   "t": 1278.24,
+   "d": 2.56,
+   "text": "was not a consequence to that and so you"
+  },
+  {
+   "t": 1280.8,
+   "d": 2.24,
+   "text": "could easily end up in a position where"
+  },
+  {
+   "t": 1283.04,
+   "d": 1.84,
+   "text": "you'd made a series of choices that were"
+  },
+  {
+   "t": 1284.88,
+   "d": 2.56,
+   "text": "going to continue to cause you to fail"
+  },
+  {
+   "t": 1287.44,
+   "d": 2.16,
+   "text": "and you'd be banging your head against a"
+  },
+  {
+   "t": 1289.6,
+   "d": 2.08,
+   "text": "wall now"
+  },
+  {
+   "t": 1291.68,
+   "d": 3.2,
+   "text": "in a full rpg structure um"
+  },
+  {
+   "t": 1294.88,
+   "d": 1.68,
+   "text": "there is always the ability to kind of"
+  },
+  {
+   "t": 1296.56,
+   "d": 2.0,
+   "text": "grind up and keep going"
+  },
+  {
+   "t": 1298.56,
+   "d": 1.76,
+   "text": "um but here"
+  },
+  {
+   "t": 1300.32,
+   "d": 2.0,
+   "text": "uh when we didn't provide that to the"
+  },
+  {
+   "t": 1302.32,
+   "d": 1.76,
+   "text": "player"
+  },
+  {
+   "t": 1304.08,
+   "d": 2.32,
+   "text": "there was a little bit of difficulty"
+  },
+  {
+   "t": 1306.4,
+   "d": 1.68,
+   "text": "because uh"
+  },
+  {
+   "t": 1308.08,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 1308.96,
+   "d": 2.24,
+   "text": "players needed to be wise enough to"
+  },
+  {
+   "t": 1311.2,
+   "d": 2.08,
+   "text": "enforce it themselves and retire a run"
+  },
+  {
+   "t": 1313.28,
+   "d": 1.44,
+   "text": "or something if they felt like they had"
+  },
+  {
+   "t": 1314.72,
+   "d": 2.16,
+   "text": "made bad choices and weren't going to"
+  },
+  {
+   "t": 1316.88,
+   "d": 2.0,
+   "text": "succeed"
+  },
+  {
+   "t": 1318.88,
+   "d": 1.6,
+   "text": "uh and the last one i'm going to say"
+  },
+  {
+   "t": 1320.48,
+   "d": 2.4,
+   "text": "here is probably the the most"
+  },
+  {
+   "t": 1322.88,
+   "d": 1.92,
+   "text": "controversial talking to a roguelike"
+  },
+  {
+   "t": 1324.8,
+   "d": 2.8,
+   "text": "audience um"
+  },
+  {
+   "t": 1327.6,
+   "d": 2.48,
+   "text": "i would argue that meta progression"
+  },
+  {
+   "t": 1330.08,
+   "d": 2.88,
+   "text": "is a real natural pairing"
+  },
+  {
+   "t": 1332.96,
+   "d": 3.28,
+   "text": "with a roguelike core"
+  },
+  {
+   "t": 1336.24,
+   "d": 2.08,
+   "text": "if the players the players want to be"
+  },
+  {
+   "t": 1338.32,
+   "d": 2.08,
+   "text": "rewarded for"
+  },
+  {
+   "t": 1340.4,
+   "d": 3.44,
+   "text": "their time their investment"
+  },
+  {
+   "t": 1343.84,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 1344.8,
+   "d": 1.76,
+   "text": "if you look at a very traditional"
+  },
+  {
+   "t": 1346.56,
+   "d": 1.68,
+   "text": "roguelike uh"
+  },
+  {
+   "t": 1348.24,
+   "d": 2.56,
+   "text": "the only way that a player is able to"
+  },
+  {
+   "t": 1350.8,
+   "d": 1.68,
+   "text": "improve and get better"
+  },
+  {
+   "t": 1352.48,
+   "d": 1.92,
+   "text": "and get a little bit further into the"
+  },
+  {
+   "t": 1354.4,
+   "d": 1.76,
+   "text": "next dungeon that they run"
+  },
+  {
+   "t": 1356.16,
+   "d": 1.68,
+   "text": "is their own skill"
+  },
+  {
+   "t": 1357.84,
+   "d": 2.8,
+   "text": "and that's very rewarding in a hardcore"
+  },
+  {
+   "t": 1360.64,
+   "d": 1.28,
+   "text": "kind of way"
+  },
+  {
+   "t": 1361.92,
+   "d": 1.76,
+   "text": "but"
+  },
+  {
+   "t": 1363.68,
+   "d": 1.6,
+   "text": "uh the"
+  },
+  {
+   "t": 1365.28,
+   "d": 2.4,
+   "text": "extent to which you can kind of use meta"
+  },
+  {
+   "t": 1367.68,
+   "d": 2.88,
+   "text": "progression to um"
+  },
+  {
+   "t": 1370.56,
+   "d": 1.44,
+   "text": "assist players"
+  },
+  {
+   "t": 1372.0,
+   "d": 3.76,
+   "text": "and it is not purely a matter of like"
+  },
+  {
+   "t": 1375.76,
+   "d": 2.64,
+   "text": "did i as a human player"
+  },
+  {
+   "t": 1378.4,
+   "d": 1.44,
+   "text": "on my"
+  },
+  {
+   "t": 1379.84,
+   "d": 3.52,
+   "text": "10th run my 20th run my 50th run"
+  },
+  {
+   "t": 1383.36,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1384.16,
+   "d": 2.4,
+   "text": "get a little better the game is there to"
+  },
+  {
+   "t": 1386.56,
+   "d": 2.4,
+   "text": "help you out and provide a little bit of"
+  },
+  {
+   "t": 1388.96,
+   "d": 0.64,
+   "text": "a"
+  },
+  {
+   "t": 1389.6,
+   "d": 2.64,
+   "text": "of a boost along the way"
+  },
+  {
+   "t": 1392.24,
+   "d": 2.16,
+   "text": "and uh rug legacy is probably the"
+  },
+  {
+   "t": 1394.4,
+   "d": 1.52,
+   "text": "classic example that comes to mind"
+  },
+  {
+   "t": 1395.92,
+   "d": 2.4,
+   "text": "because so much of the game is about"
+  },
+  {
+   "t": 1398.32,
+   "d": 1.6,
+   "text": "this meta progression"
+  },
+  {
+   "t": 1399.92,
+   "d": 3.2,
+   "text": "but obviously um kitties is the one that"
+  },
+  {
+   "t": 1403.12,
+   "d": 2.72,
+   "text": "is probably top of mind for everyone um"
+  },
+  {
+   "t": 1405.84,
+   "d": 2.08,
+   "text": "because it truly makes an art out of"
+  },
+  {
+   "t": 1407.92,
+   "d": 1.76,
+   "text": "this element of the game"
+  },
+  {
+   "t": 1409.68,
+   "d": 2.4,
+   "text": "and uh"
+  },
+  {
+   "t": 1412.08,
+   "d": 2.96,
+   "text": "a huge portion of the experience"
+  },
+  {
+   "t": 1415.04,
+   "d": 2.32,
+   "text": "is enjoying kind of the narrative"
+  },
+  {
+   "t": 1417.36,
+   "d": 1.68,
+   "text": "elements that exist within the meta"
+  },
+  {
+   "t": 1419.04,
+   "d": 2.48,
+   "text": "progression engaging with that the the"
+  },
+  {
+   "t": 1421.52,
+   "d": 1.92,
+   "text": "loop of the meta progression"
+  },
+  {
+   "t": 1423.44,
+   "d": 2.32,
+   "text": "as a reward"
+  },
+  {
+   "t": 1425.76,
+   "d": 0.72,
+   "text": "for"
+  },
+  {
+   "t": 1426.48,
+   "d": 2.36,
+   "text": "doing well within"
+  },
+  {
+   "t": 1428.84,
+   "d": 6.84,
+   "text": "runs um and that is it uh any questions"
+  },
+  {
+   "t": 1435.68,
+   "d": 2.08,
+   "text": "looks like about six minutes"
+  },
+  {
+   "t": 1437.76,
+   "d": 2.0,
+   "text": "nice we actually have some time for"
+  },
+  {
+   "t": 1439.76,
+   "d": 1.76,
+   "text": "questions excellent"
+  },
+  {
+   "t": 1441.52,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 1442.32,
+   "d": 1.6,
+   "text": "awesome well thank you it's awesome to"
+  },
+  {
+   "t": 1443.92,
+   "d": 1.92,
+   "text": "have the time uh the first question is"
+  },
+  {
+   "t": 1445.84,
+   "d": 1.76,
+   "text": "to a support one i'm afraid what is your"
+  },
+  {
+   "t": 1447.6,
+   "d": 4.24,
+   "text": "cat's name ah yes my cat is max"
+  },
+  {
+   "t": 1451.84,
+   "d": 1.44,
+   "text": "max"
+  },
+  {
+   "t": 1453.28,
+   "d": 1.84,
+   "text": "he is he's now not at a greeting oh"
+  },
+  {
+   "t": 1455.12,
+   "d": 2.24,
+   "text": "there you go oh"
+  },
+  {
+   "t": 1457.36,
+   "d": 2.72,
+   "text": "he is a very sweet cat he is a bit of a"
+  },
+  {
+   "t": 1460.08,
+   "d": 0.88,
+   "text": "goof"
+  },
+  {
+   "t": 1460.96,
+   "d": 0.96,
+   "text": "he is"
+  },
+  {
+   "t": 1461.92,
+   "d": 1.44,
+   "text": "very large"
+  },
+  {
+   "t": 1463.36,
+   "d": 1.84,
+   "text": "um"
+  },
+  {
+   "t": 1465.2,
+   "d": 2.72,
+   "text": "and yeah sometimes gives me a look like"
+  },
+  {
+   "t": 1467.92,
+   "d": 1.68,
+   "text": "he's um"
+  },
+  {
+   "t": 1469.6,
+   "d": 2.32,
+   "text": "like can you believe that what what just"
+  },
+  {
+   "t": 1471.92,
+   "d": 1.76,
+   "text": "happened"
+  },
+  {
+   "t": 1473.68,
+   "d": 2.8,
+   "text": "well we all love max thank you"
+  },
+  {
+   "t": 1476.48,
+   "d": 1.84,
+   "text": "um"
+  },
+  {
+   "t": 1478.32,
+   "d": 2.24,
+   "text": "then you know a serious question uh"
+  },
+  {
+   "t": 1480.56,
+   "d": 1.68,
+   "text": "hypergardens asks could you briefly"
+  },
+  {
+   "t": 1482.24,
+   "d": 2.32,
+   "text": "explain modularity again in terms of"
+  },
+  {
+   "t": 1484.56,
+   "d": 2.0,
+   "text": "good player choices"
+  },
+  {
+   "t": 1486.56,
+   "d": 2.72,
+   "text": "yeah um"
+  },
+  {
+   "t": 1489.28,
+   "d": 2.0,
+   "text": "great question this was one"
+  },
+  {
+   "t": 1491.28,
+   "d": 1.92,
+   "text": "okay i'm not gonna try to find it"
+  },
+  {
+   "t": 1493.2,
+   "d": 1.68,
+   "text": "exactly but um"
+  },
+  {
+   "t": 1494.88,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 1495.6,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1497.04,
+   "d": 3.52,
+   "text": "modularity is the concept um"
+  },
+  {
+   "t": 1500.56,
+   "d": 2.48,
+   "text": "that you're using essentially the same"
+  },
+  {
+   "t": 1503.04,
+   "d": 1.44,
+   "text": "building blocks"
+  },
+  {
+   "t": 1504.48,
+   "d": 0.96,
+   "text": "for"
+  },
+  {
+   "t": 1505.44,
+   "d": 3.04,
+   "text": "all of the um player experience so"
+  },
+  {
+   "t": 1508.48,
+   "d": 2.0,
+   "text": "things systems readily are interacting"
+  },
+  {
+   "t": 1510.48,
+   "d": 1.28,
+   "text": "with each other"
+  },
+  {
+   "t": 1511.76,
+   "d": 1.68,
+   "text": "and um"
+  },
+  {
+   "t": 1513.44,
+   "d": 0.96,
+   "text": "the"
+  },
+  {
+   "t": 1514.4,
+   "d": 1.2,
+   "text": "like i'm trying to think like the"
+  },
+  {
+   "t": 1515.6,
+   "d": 2.32,
+   "text": "negative example would be something like"
+  },
+  {
+   "t": 1517.92,
+   "d": 2.0,
+   "text": "uh you're presented with a choice and"
+  },
+  {
+   "t": 1519.92,
+   "d": 1.44,
+   "text": "you can pick"
+  },
+  {
+   "t": 1521.36,
+   "d": 1.04,
+   "text": "a"
+  },
+  {
+   "t": 1522.4,
+   "d": 2.64,
+   "text": "long sword that will do more damage or"
+  },
+  {
+   "t": 1525.04,
+   "d": 2.24,
+   "text": "ballroom dancing um"
+  },
+  {
+   "t": 1527.28,
+   "d": 3.12,
+   "text": "that you can use to um"
+  },
+  {
+   "t": 1530.4,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 1531.28,
+   "d": 2.24,
+   "text": "go on dates and now like those are going"
+  },
+  {
+   "t": 1533.52,
+   "d": 2.32,
+   "text": "to be like systems that are not like um"
+  },
+  {
+   "t": 1535.84,
+   "d": 1.76,
+   "text": "interacting with each other"
+  },
+  {
+   "t": 1537.6,
+   "d": 1.84,
+   "text": "most likely at all and very intrigued if"
+  },
+  {
+   "t": 1539.44,
+   "d": 2.4,
+   "text": "you are going to create the game that"
+  },
+  {
+   "t": 1541.84,
+   "d": 2.4,
+   "text": "combines those it's called dungeon but"
+  },
+  {
+   "t": 1544.24,
+   "d": 2.32,
+   "text": "yes that's yeah you know that's that's a"
+  },
+  {
+   "t": 1546.56,
+   "d": 2.32,
+   "text": "fair example that i wanted to work into"
+  },
+  {
+   "t": 1548.88,
+   "d": 1.12,
+   "text": "this and"
+  },
+  {
+   "t": 1550.0,
+   "d": 1.76,
+   "text": "there were better examples for most"
+  },
+  {
+   "t": 1551.76,
+   "d": 1.76,
+   "text": "things i didn't didn't get to but sure"
+  },
+  {
+   "t": 1553.52,
+   "d": 2.88,
+   "text": "yeah boyfriend dungeon exactly um"
+  },
+  {
+   "t": 1556.4,
+   "d": 1.76,
+   "text": "but like um"
+  },
+  {
+   "t": 1558.16,
+   "d": 2.24,
+   "text": "yeah like the the extent to which like"
+  },
+  {
+   "t": 1560.4,
+   "d": 2.4,
+   "text": "the choices can have"
+  },
+  {
+   "t": 1562.8,
+   "d": 1.92,
+   "text": "like threads that are going to connect"
+  },
+  {
+   "t": 1564.72,
+   "d": 1.84,
+   "text": "to each other and be like interacting"
+  },
+  {
+   "t": 1566.56,
+   "d": 1.92,
+   "text": "with those same core systems"
+  },
+  {
+   "t": 1568.48,
+   "d": 2.4,
+   "text": "um is going to be kind of"
+  },
+  {
+   "t": 1570.88,
+   "d": 0.76,
+   "text": "uh"
+  },
+  {
+   "t": 1571.64,
+   "d": 1.8,
+   "text": "advantageous"
+  },
+  {
+   "t": 1573.44,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1574.64,
+   "d": 1.44,
+   "text": "and yeah boyfriends under actually a"
+  },
+  {
+   "t": 1576.08,
+   "d": 1.68,
+   "text": "great example because like yes"
+  },
+  {
+   "t": 1577.76,
+   "d": 2.24,
+   "text": "meaningfully the the sword or the"
+  },
+  {
+   "t": 1580.0,
+   "d": 1.52,
+   "text": "ballroom dancing are going to be a"
+  },
+  {
+   "t": 1581.52,
+   "d": 2.16,
+   "text": "meaningful choice um because they both"
+  },
+  {
+   "t": 1583.68,
+   "d": 2.32,
+   "text": "affect your ability to go on dates and"
+  },
+  {
+   "t": 1586.0,
+   "d": 2.08,
+   "text": "explore the dungeon further right versus"
+  },
+  {
+   "t": 1588.08,
+   "d": 1.2,
+   "text": "generally where something like a"
+  },
+  {
+   "t": 1589.28,
+   "d": 1.76,
+   "text": "cosmetic choice and a gameplay choice"
+  },
+  {
+   "t": 1591.04,
+   "d": 2.48,
+   "text": "are completely parallel and so you know"
+  },
+  {
+   "t": 1593.52,
+   "d": 1.2,
+   "text": "you don't get the opportunity for"
+  },
+  {
+   "t": 1594.72,
+   "d": 2.48,
+   "text": "interaction precisely yeah"
+  },
+  {
+   "t": 1597.2,
+   "d": 2.08,
+   "text": "yeah excellent"
+  },
+  {
+   "t": 1599.28,
+   "d": 1.92,
+   "text": "um another"
+  },
+  {
+   "t": 1601.2,
+   "d": 1.52,
+   "text": "fun question from"
+  },
+  {
+   "t": 1602.72,
+   "d": 2.8,
+   "text": "hamlet which i also just like uh has max"
+  },
+  {
+   "t": 1605.52,
+   "d": 1.76,
+   "text": "inspired any content from any of your"
+  },
+  {
+   "t": 1607.28,
+   "d": 2.32,
+   "text": "games we all love max"
+  },
+  {
+   "t": 1609.6,
+   "d": 3.12,
+   "text": "i am sad to say he has not"
+  },
+  {
+   "t": 1612.72,
+   "d": 2.08,
+   "text": "oh he needs to get on that"
+  },
+  {
+   "t": 1614.8,
+   "d": 2.08,
+   "text": "i've had him for about two and a half"
+  },
+  {
+   "t": 1616.88,
+   "d": 1.84,
+   "text": "years now i mean"
+  },
+  {
+   "t": 1618.72,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 1620.0,
+   "d": 0.96,
+   "text": "yet"
+  },
+  {
+   "t": 1620.96,
+   "d": 2.48,
+   "text": "i am inspired by him you know he likes"
+  },
+  {
+   "t": 1623.44,
+   "d": 2.08,
+   "text": "to hang out with me here a lot during"
+  },
+  {
+   "t": 1625.52,
+   "d": 1.04,
+   "text": "the day"
+  },
+  {
+   "t": 1626.56,
+   "d": 1.52,
+   "text": "um"
+  },
+  {
+   "t": 1628.08,
+   "d": 2.0,
+   "text": "but uh"
+  },
+  {
+   "t": 1630.08,
+   "d": 2.64,
+   "text": "no i don't believe there's any"
+  },
+  {
+   "t": 1632.72,
+   "d": 3.28,
+   "text": "yeah i i am i'm sorry he is not well"
+  },
+  {
+   "t": 1636.0,
+   "d": 2.24,
+   "text": "we'll we'll expect an update on that in"
+  },
+  {
+   "t": 1638.24,
+   "d": 2.48,
+   "text": "the future you gotta go to bring it in"
+  },
+  {
+   "t": 1640.72,
+   "d": 3.6,
+   "text": "i will i will admit my"
+  },
+  {
+   "t": 1644.32,
+   "d": 2.08,
+   "text": "boss's cats"
+  },
+  {
+   "t": 1646.4,
+   "d": 2.4,
+   "text": "make an appearance in the game"
+  },
+  {
+   "t": 1648.8,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 1650.08,
+   "d": 0.88,
+   "text": "but"
+  },
+  {
+   "t": 1650.96,
+   "d": 2.64,
+   "text": "but not your own couch not mine for max"
+  },
+  {
+   "t": 1653.6,
+   "d": 2.32,
+   "text": "i think max is the best cat um we do"
+  },
+  {
+   "t": 1655.92,
+   "d": 2.32,
+   "text": "have one other um"
+  },
+  {
+   "t": 1658.24,
+   "d": 2.4,
+   "text": "non-max related question also from hyper"
+  },
+  {
+   "t": 1660.64,
+   "d": 1.92,
+   "text": "gardens thank you hyper gardens"
+  },
+  {
+   "t": 1662.56,
+   "d": 1.84,
+   "text": "what would you suggest for that stage in"
+  },
+  {
+   "t": 1664.4,
+   "d": 2.48,
+   "text": "design where you have a strong core"
+  },
+  {
+   "t": 1666.88,
+   "d": 2.56,
+   "text": "mechanic but a million possibilities for"
+  },
+  {
+   "t": 1669.44,
+   "d": 2.72,
+   "text": "secondary loops"
+  },
+  {
+   "t": 1672.16,
+   "d": 1.92,
+   "text": "oh wow that's"
+  },
+  {
+   "t": 1674.08,
+   "d": 2.32,
+   "text": "that's a big question for two minutes"
+  },
+  {
+   "t": 1676.4,
+   "d": 1.28,
+   "text": "yeah"
+  },
+  {
+   "t": 1677.68,
+   "d": 3.44,
+   "text": "i mean i i have a big philosophy in"
+  },
+  {
+   "t": 1681.12,
+   "d": 4.0,
+   "text": "terms of game design which is um"
+  },
+  {
+   "t": 1685.12,
+   "d": 1.6,
+   "text": "play test early"
+  },
+  {
+   "t": 1686.72,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1687.52,
+   "d": 2.4,
+   "text": "and play test in the roughest shape you"
+  },
+  {
+   "t": 1689.92,
+   "d": 1.92,
+   "text": "can you are going to learn things"
+  },
+  {
+   "t": 1691.84,
+   "d": 2.16,
+   "text": "consistently"
+  },
+  {
+   "t": 1694.0,
+   "d": 1.36,
+   "text": "by"
+  },
+  {
+   "t": 1695.36,
+   "d": 1.52,
+   "text": "uh"
+  },
+  {
+   "t": 1696.88,
+   "d": 3.12,
+   "text": "getting some very rough approximation"
+  },
+  {
+   "t": 1700.0,
+   "d": 1.92,
+   "text": "and kind of squinting"
+  },
+  {
+   "t": 1701.92,
+   "d": 2.24,
+   "text": "imagining like what are the consequences"
+  },
+  {
+   "t": 1704.16,
+   "d": 1.36,
+   "text": "of this um"
+  },
+  {
+   "t": 1705.52,
+   "d": 2.08,
+   "text": "looking at like what people what your"
+  },
+  {
+   "t": 1707.6,
+   "d": 2.0,
+   "text": "playtesters are finding fun"
+  },
+  {
+   "t": 1709.6,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1710.56,
+   "d": 2.48,
+   "text": "and i think you're going to learn a ton"
+  },
+  {
+   "t": 1713.04,
+   "d": 2.08,
+   "text": "from that and that's also going to start"
+  },
+  {
+   "t": 1715.12,
+   "d": 1.76,
+   "text": "teaching you like how do you layer"
+  },
+  {
+   "t": 1716.88,
+   "d": 1.6,
+   "text": "systems together"
+  },
+  {
+   "t": 1718.48,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 1719.92,
+   "d": 1.92,
+   "text": "yes that's probably the best you know"
+  },
+  {
+   "t": 1721.84,
+   "d": 1.92,
+   "text": "one minute version yeah yeah i think"
+  },
+  {
+   "t": 1723.76,
+   "d": 1.68,
+   "text": "that's a solid answer to a very big"
+  },
+  {
+   "t": 1725.44,
+   "d": 4.48,
+   "text": "question for for one minute so"
+  }
+ ]
+}

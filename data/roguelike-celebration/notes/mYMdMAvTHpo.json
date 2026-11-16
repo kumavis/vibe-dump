@@ -1,0 +1,146 @@
+{
+  "id": "mYMdMAvTHpo",
+  "title": "Alexei Pepers - A Guide to Proc Gen Practitioners",
+  "speaker": "Alexei Pepers",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=mYMdMAvTHpo",
+  "talk_type": "culture",
+  "summary": "Alexei Pepers, a technical designer and NetHack enthusiast, offers a humorous taxonomy of procedural generation practitioners mapped onto D&D spellcasting classes. She argues procgen is like fantasy magic: powerful and beguiling but unpredictable, and not something to apply to every problem. Arcane classes (wizard, sorcerer, bard, artificer) treat procgen as rules or as an inner creative medium, while divine classes (cleric, warlock, druid, ranger, paladin) treat the generator as an external entity to have faith in, bargain with, nurture, guide others around, or defend from misconceptions. She closes by urging practitioners to reflect on their own relationship with their generators and to value team compositions that mix perspectives.",
+  "games": [
+    "NetHack",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "procgen as magic",
+      "kind": "warning",
+      "claim": "Procedural generation, like fantasy magic, is powerful but unpredictable, so it should not be used to solve every problem just because it exists.",
+      "detail": "Pepers notes people talk about procgen as a mysterious power, but rarely about magic's downsides: you would not ask a wizard to fix your fence because it might become sentient or turn blue. Procgen likewise can do unexpected and very bad things, especially for newcomers.",
+      "t": 216,
+      "quote": "just because Proc Gen is very powerful does not mean it should be used to solve every problem",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope creep",
+      "kind": "warning",
+      "claim": "Watching a generator spin out content is so absorbing that developers can lose days or years tinkering with it and forget the game they meant to make.",
+      "detail": "Pepers describes the promise of infinite worlds and the feeling of spinning straw into gold while playing with a generator, which can quietly displace actually shipping the game.",
+      "t": 236,
+      "quote": "it feels like spinning straw into gold. It is this very appealing thing, and you can watch your generator and play with it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "practitioner mindsets",
+      "kind": "principle",
+      "claim": "Procgen practitioners split into an arcane mindset that treats generation as a system of rules to master and a divine mindset that treats the generator as an external entity that can surprise them.",
+      "detail": "The wizard studies and specializes, often at the forefront of one technique. Divine classes relate to their generator as if it had some agency; Pepers cites Darren Grey of Roguelike Radio describing procgen as a half-wild horse he tries to steer that often goes somewhere unexpected or runs in circles.",
+      "t": 789,
+      "quote": "Proc Gen is a half wild horse I try to steer in certain directions but often takes me to fun unexpected places",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "procgen as introspection",
+      "kind": "principle",
+      "claim": "A generator can act as a mirror for its creator's own ideas, biases and assumptions, letting them visualize and tweak their thinking (Pepers' 'sorcerer').",
+      "detail": "For this practitioner the power comes from inside them; procgen is the lens that reflects their ideas back in a form they can work with.",
+      "t": 551,
+      "quote": "using Proc Gen to look inward and have a dialogue with yourself through your tools. They are examining their own ideas, biases, and assumptions",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "embracing weirdness",
+      "kind": "principle",
+      "claim": "Rather than hiding procgen so it blends with handcrafted content, some creators deliberately embrace its weirdness as part of their creative process (Pepers' 'bard').",
+      "detail": "Pepers contrasts this with other approaches that try to make generated content indistinguishable from authored content. She names as the bard's nemesis fake 'a bot watched 1,000 hours of ads and wrote this' memes that are actually handwritten.",
+      "t": 617,
+      "quote": "a Proc Gen bard is more willing to embrace the weirdness and strangeness and flavor of procedural generation that other classes might be trying to hide",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "procgen tools",
+      "kind": "principle",
+      "claim": "Wrapping procedural generation in approachable tools with sliders, buttons and labels, so others can use it without rethinking what content is, is a distinct and valuable skill.",
+      "detail": "Pepers' 'artificer' is like a D&D artificer making a wand a peasant can use. Getting procgen to behave for yourself is hard enough; making it friendly for others is a skill in itself, and she calls these people the real MVPs.",
+      "t": 692,
+      "quote": "They take that weirdness and make a tool that people can use in order to have sliders with buttons and labels",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "working with generators",
+      "kind": "technique",
+      "claim": "Many practitioners in practice coax generators by changing inputs and process until the generator 'meets them halfway', becoming skilled at nudging it rather than commanding it.",
+      "detail": "Pepers' 'warlock' bargains with the generator; her 'cleric' keeps rituals like running a rule twice because it works better, or comments saying not to remove code nobody understands. She suggests developers act like clerics more than they admit.",
+      "t": 962,
+      "quote": "the mark then of a good Proc Gen warlock is that they get very talented at knowing how to nudge their generator in the right directions",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "working with generators",
+      "kind": "technique",
+      "claim": "Developing a generator can be treated like tending a bonsai: observing output and pruning unwanted results while it grows organically and surprises you.",
+      "detail": "Pepers' 'druid' sees the generator as a student or child rather than a precisely assembled model. She says this fits evolutionary algorithms best, but she feels it even with transparent tools like Tracery when building Twitter bots.",
+      "t": 1048,
+      "quote": "where a wizard might see creating a generator as like snapping together all these intricate little pieces of a model, a druid sees it more like a bonsai",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "chunk-based maps",
+      "kind": "warning",
+      "claim": "Experienced procgen guides on a team steer others away from approaches like generating an entire map pixel by pixel from terrain up, toward safer ones like snapping together predefined map chunks.",
+      "detail": "Pepers' 'ranger' may not be the deepest expert in any technique but knows which paths lead to ruin, which she calls very important on a team.",
+      "t": 1164,
+      "quote": "generating your entire map from the terrain up pixel by pixel is a very bad idea, but doing something like defining chunks of maps",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "bias in algorithms",
+      "kind": "principle",
+      "claim": "Procgen is not the same as randomness, and algorithms are not neutral: generators carry their makers' biases, and using an algorithm does not absolve creators of ethical obligations.",
+      "detail": "Pepers' 'paladin' corrects claims that procgen cannot be coherent because it is random, or that algorithms cannot be political. She stresses biased input leads to biased output.",
+      "t": 1274,
+      "quote": "biased input leads to biased output, and just because you are using an algorithm as an in-between doesn't absolve you of your ethical obligations as a creator",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "procgen overpromising",
+      "kind": "warning",
+      "claim": "Planning and marketing need someone who understands procgen's real limits, or a team may promise thousands of unique talking NPCs while refusing to hire writers because 'an algorithm will do it'.",
+      "detail": "Pepers says it is especially important to have such defenders in the room for planning and marketing to represent procgen's actual strengths and weaknesses.",
+      "t": 1309,
+      "quote": "your game is going to have thousands of unique NPCs you can talk to and no we won't hire additional writers",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "team composition",
+      "kind": "principle",
+      "claim": "Larger teams need procgen translators and advocates to bridge deep specialists and the rest of the team, while small teams can afford purely specialist compositions.",
+      "detail": "In Q&A Pepers said that in AAA work the support roles matter because deep specialists can be written off as speaking in tongues and lose track of time. She also urged reflecting on your own approach to procgen and trying other perspectives.",
+      "t": 1693,
+      "quote": "The fighter and the wizard will have difficulty speaking to each other whereas having support classes helps bridge the gap",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "black box generators",
+      "kind": "principle",
+      "claim": "Even with opaque black-box generators such as neural nets, practitioners can learn by examining outputs to understand the possibility space their ideas produce.",
+      "detail": "Answering a question about introspectable versus opaque techniques, Pepers said divine-style relationships fit opaque methods more, but people can still glean introspection from output even when internals are hard to know.",
+      "t": 1615,
+      "quote": "people work with black box techniques are still able to look at the outputs and get a sense of the possibility space",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,119 @@
+{
+  "id": "oipNr8RE5bA",
+  "title": "David Dunham - Totally Not a Roguelike Deckbuilder",
+  "speaker": "David Dunham",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=oipNr8RE5bA",
+  "talk_type": "postmortem",
+  "summary": "David Dunham, designer of King of Dragon Pass, describes his procedural-narrative game Thousand Hells, a heist-meets-Orpheus game that assembles quests from missions, hells and side quests and sends a procedurally generated team through a narrative-driven resolution system. He explains why he chose roguelike structure (short runs, permadeath, replayability for sales) and cards (visible, tangible input randomness), why it was never a deckbuilder (iconic heroes don't advance), and how co-designer Robin Laws' exception-based trait system with added dice made it work. The core of the talk is the publisher Kitfox's advice to drop the card presentation because screenshots would set deckbuilder expectations in a saturated market, and the costs and benefits of reskinning cards as tiles with no change to play.",
+  "games": [
+    "Thousand Hells",
+    "King of Dragon Pass",
+    "Six Ages",
+    "I Was a Teenage Exocolonist",
+    "Cultist Simulator"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "principle",
+      "claim": "Thousand Hells adopted roguelike structure to deliver procedural narrative in short, movie-length runs, with permadeath fitting the theme of a lethal trip into hell.",
+      "detail": "Dunham wanted a run of about an hour to an hour and a half, closer to a short story or movie than a TV series or novel trilogy. He also thought a replayable game would be easier to sell and recoup development costs.",
+      "t": 357,
+      "quote": "I wanted a short run as a design goal. Something that would be closer to a movie length, like an hour, an hour and a half",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "input randomness",
+      "kind": "technique",
+      "claim": "Thousand Hells used cards for its resolution system to make randomness visible, shifting from King of Dragon Pass's opaque output randomness (dice) to input randomness (shuffled deck).",
+      "detail": "Dunham wanted characters to try and fail at tasks, with their abilities feeding the deck. Players complained they didn't know what was going on in King of Dragon Pass and Six Ages; with cards they could at least see them. He also says cards are easy to understand because players know them from many games.",
+      "t": 426,
+      "quote": "a switch from King of Dragon Passes output randomness, in other words, there's a dice roll, to input randomness",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "iconic heroes",
+      "kind": "principle",
+      "claim": "Deckbuilding was left out of Thousand Hells because its characters are iconic heroes who do not change over a story spanning only a few weeks, so advancement made no narrative sense.",
+      "detail": "Dunham couldn't see what deck building would represent in the story. He contrasts I Was a Teenage Exocolonist, which follows a protagonist growing up over many years and so suits a changing card set.",
+      "t": 478,
+      "quote": "we're basically portraying iconic heroes who don't change over the course of the story as opposed to dramatic heroes who have a character arc",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "paper prototyping",
+      "kind": "technique",
+      "claim": "Card-based resolution systems can be paper-prototyped cheaply using plastic sleeves stiffened with bulk Magic cards so any paper slip can be inserted.",
+      "detail": "Dunham went through many card-based resolution systems on paper, partly because the final presentation was planned to be cards and partly because cards are easy to prototype.",
+      "t": 523,
+      "quote": "I'm using uh plastic sleeves and I bought bulk Magic cards to have stiffeners and then I can insert whatever pieces of paper I want",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "resolution system",
+      "kind": "technique",
+      "claim": "The working resolution system in Thousand Hells, designed by Robin Laws, is an exception-based card game whose verbs are character-trait adjectives, with dice output randomness added on top.",
+      "detail": "After many failed card systems, Laws added output randomness (dice) and found a way to use all character traits, not only specialised ones, so you play adjectives like 'athletic' and 'poetic'. Exceptions are implemented by scripts behind the scenes, with bonuses depending on whether the final dice roll is won or lost.",
+      "t": 574,
+      "quote": "It basically means that the game's verbs are adjectives like athletic and poetic.",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "digital card mechanics",
+      "kind": "technique",
+      "claim": "A digital card resolution system can do things that are hard with physical cards, such as a card's difficulty depending on how many rounds it has been in play.",
+      "detail": "Dunham gives this as an example of what digital implementation added to the Laws system, alongside script-driven exceptions, making it a powerful and flexible system.",
+      "t": 582,
+      "quote": "we came up with things that you can do digitally that are really hard with physical cards",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "genre expectations",
+      "kind": "warning",
+      "claim": "A game whose screenshots show cards will be read as a roguelike deckbuilder or card battler, disappointing deckbuilder fans and alienating players fatigued by the genre's abundance.",
+      "detail": "Publisher Kitfox raised this with Dunham. He found the Steam roguelike deckbuilder tag had 2,554 games, up about 700 since he proposed the talk.",
+      "t": 667,
+      "quote": "it's going to look like a rogike deck builder, but it won't meet the actual expectations of deck builder fans",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "reskinning",
+      "kind": "warning",
+      "claim": "Reskinning cards as tiles in Thousand Hells cost some clarity: it is obvious how many cards remain in a deck but hard to tell how many tiles remain in a bag, and the solid tiles clashed with the flat UI.",
+      "detail": "After five years with cards, the change was a paradigm shift done in about two weeks. Dunham also notes 'tactical narrative' is a less clean label than 'card game' and might suggest the wrong kind of tactical game.",
+      "t": 824,
+      "quote": "it's hard to tell how many tiles are in a bag yet that you haven't drawn yet",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "reskinning",
+      "kind": "example",
+      "claim": "Moving from vertical cards to horizontal tiles gave Thousand Hells more room for explanatory and flavour text and a distinctive look, with no change to gameplay.",
+      "detail": "Situations at the top of the screen became horizontal text, allowing better explanations of exceptions. Dunham says play is exactly the same; it is a total reskin.",
+      "t": 937,
+      "quote": "Play is exactly the same. It's just a totally reskinning that makes it no longer a rogike deck builder.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "presentation choices",
+      "kind": "principle",
+      "claim": "Whether to hide a card game's cards depends on goals: avoiding cards helps a game stand out, but cards are familiar, signal a specific subgenre, and are easier to make look good without art skills.",
+      "detail": "Dunham cites Cultist Simulator as a case where you might want to look like a specific card subgenre. Overall he is glad Kitfox raised it because it makes the game easier to market.",
+      "t": 952,
+      "quote": "I think for marketing reasons it may be a good idea if you want to stand out, except sometimes, um, you want to look like a specific card game subgenre",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

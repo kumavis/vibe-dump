@@ -1,0 +1,631 @@
+{
+ "id": "6Whz8bvjAKo",
+ "url": "https://www.youtube.com/watch?v=6Whz8bvjAKo",
+ "title": "droqen - The roguelike spirit without procedural generation",
+ "speaker": "droqen",
+ "talk_title": "The roguelike spirit without procedural generation",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 664,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nIn this lighting talk droqen discusses a game he's worked on that adheres to almost all of the 'low value factors' of the Berlin Interpretation, and how he's become tired of procedural generation being the assumed backbone of what makes something rogue-like or rogue-like-like. He discusses the idea of making games that diverge from the Classic Roguelike in a different way than Spelunky did, and how there's so much more to the *feel* of a roguelike than just random levels!\n\nFind him on Twitter: https://twitter.com/droqen",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 30,
+   "title": "Berlin interpretation"
+  },
+  {
+   "start": 84,
+   "title": "Simulation and embodiment"
+  },
+  {
+   "start": 225,
+   "title": "Monolithic challenge"
+  },
+  {
+   "start": 569,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1415,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.86,
+   "d": 2.7,
+   "text": "Our next speaker is droqen."
+  },
+  {
+   "t": 3.56,
+   "d": 4.22,
+   "text": "Take it away."
+  },
+  {
+   "t": 7.78,
+   "d": 8.63,
+   "text": ">> Should I just start talking?"
+  },
+  {
+   "t": 16.41,
+   "d": 6.67,
+   "text": "Hi, I am droqen and this is my talk."
+  },
+  {
+   "t": 23.08,
+   "d": 7.6,
+   "text": "Through the writing of this talk, I started to come up with an alternate name."
+  },
+  {
+   "t": 30.68,
+   "d": 7.64,
+   "text": "If you are familiar with the Berlin interpretation is it a collection of factors kind of used"
+  },
+  {
+   "t": 38.32,
+   "d": 3.05,
+   "text": "to try and define what a Roguelike is."
+  },
+  {
+   "t": 41.37,
+   "d": 8.65,
+   "text": "In a fit of creative rebellion I was thinking what if I took what is assumed to be the core"
+  },
+  {
+   "t": 50.02,
+   "d": 4.97,
+   "text": "of the Roguelike, which is procedural generation, and here in my slides, random environment"
+  },
+  {
+   "t": 54.99,
+   "d": 6.26,
+   "text": "generation and permadeath, what remains about a Roguelike that's beautiful without these"
+  },
+  {
+   "t": 61.25,
+   "d": 1.16,
+   "text": "things?"
+  },
+  {
+   "t": 62.41,
+   "d": 7.59,
+   "text": "And just for simplicities take I will cut it down to the six low value factors and they"
+  },
+  {
+   "t": 70.0,
+   "d": 2.27,
+   "text": "tend to be just in the name."
+  },
+  {
+   "t": 72.27,
+   "d": 1.0,
+   "text": "Low value."
+  },
+  {
+   "t": 73.27,
+   "d": 1.98,
+   "text": "They are presumed to be less important."
+  },
+  {
+   "t": 75.25,
+   "d": 6.67,
+   "text": "And the way I am going to talk about these is I am just going to pair them off and each"
+  },
+  {
+   "t": 81.92,
+   "d": 3.9,
+   "text": "pair is going to make a concept."
+  },
+  {
+   "t": 85.82,
+   "d": 5.22,
+   "text": "The first concept I want to talk about is the feeling of simulation and embodiment I"
+  },
+  {
+   "t": 91.04,
+   "d": 8.15,
+   "text": "get out of having a single character player and the monsters be similar to the players."
+  },
+  {
+   "t": 99.19,
+   "d": 6.0,
+   "text": "What this does is in a game like the sims where I am not really individual in the world,"
+  },
+  {
+   "t": 105.19,
+   "d": 8.63,
+   "text": "I can't feel like I am a part of the world and when I am treated as special as a player"
+  },
+  {
+   "t": 113.82,
+   "d": 3.37,
+   "text": "in the eyes of the world, again, it is not like I am part of the world."
+  },
+  {
+   "t": 117.19,
+   "d": 3.6,
+   "text": "It is like I am above it in some way."
+  },
+  {
+   "t": 120.79,
+   "d": 5.88,
+   "text": "A game I really like that's not a Roguelike that I think does this is ernog unlimited."
+  },
+  {
+   "t": 126.67,
+   "d": 7.86,
+   "text": "In this game it isn't so much the monsters are similar as much as the entities are similar."
+  },
+  {
+   "t": 134.53,
+   "d": 4.84,
+   "text": "There is a teleporter that will transport anything that lands on top of it into the"
+  },
+  {
+   "t": 139.37,
+   "d": 8.72,
+   "text": "save room and the save room is a hub."
+  },
+  {
+   "t": 148.09,
+   "d": 3.91,
+   "text": "The save room is this very important hub and so you can drop a block down there."
+  },
+  {
+   "t": 152.0,
+   "d": 4.4,
+   "text": "There is gems and stuff."
+  },
+  {
+   "t": 156.4,
+   "d": 4.05,
+   "text": "Monsters are similar to blocks in this game and you can drop them into the save room and"
+  },
+  {
+   "t": 160.45,
+   "d": 4.15,
+   "text": "when you go in it is all kinds of trouble because there is monsters in your save room"
+  },
+  {
+   "t": 164.6,
+   "d": 3.46,
+   "text": "that is presumed to be the safe place."
+  },
+  {
+   "t": 168.06,
+   "d": 4.5,
+   "text": "Similar the way you go to the save room is you are just like the monsters and blocks"
+  },
+  {
+   "t": 172.56,
+   "d": 4.11,
+   "text": "and you are a physical block."
+  },
+  {
+   "t": 176.67,
+   "d": 3.56,
+   "text": "It teleports you to the saver room in the same way when you land on it."
+  },
+  {
+   "t": 180.23,
+   "d": 9.32,
+   "text": "I love how this simple interaction of treating everything the same way is such a core concede"
+  },
+  {
+   "t": 189.55,
+   "d": 1.89,
+   "text": "of this game."
+  },
+  {
+   "t": 191.44,
+   "d": 5.12,
+   "text": "This idea of a pure, real simulation where everything is mechanically simulated."
+  },
+  {
+   "t": 196.56,
+   "d": 3.55,
+   "text": "There is no fake walls or doors."
+  },
+  {
+   "t": 200.11,
+   "d": 3.52,
+   "text": "It is all the rules of the game."
+  },
+  {
+   "t": 203.63,
+   "d": 4.73,
+   "text": "This is something although I see in other games and it is something I look for a lot,"
+  },
+  {
+   "t": 208.36,
+   "d": 3.43,
+   "text": "I first noticed it in traditional Roguelikes."
+  },
+  {
+   "t": 211.79,
+   "d": 7.08,
+   "text": "I like looking at the Berlin interpretation because traditional Roguelikes feel like this"
+  },
+  {
+   "t": 218.87,
+   "d": 6.16,
+   "text": "pure expression of a world made up of its mechanics."
+  },
+  {
+   "t": 225.03,
+   "d": 4.44,
+   "text": "Second, I want to talk about the monolithic challenge."
+  },
+  {
+   "t": 229.47,
+   "d": 16.24,
+   "text": "It is ex -- in NetHack for me."
+  },
+  {
+   "t": 245.71,
+   "d": 6.72,
+   "text": "It has been awhile since I played."
+  },
+  {
+   "t": 252.43,
+   "d": 5.24,
+   "text": "You know, all definitions of Roguelikes are you are going to start at the beginning every"
+  },
+  {
+   "t": 257.67,
+   "d": 5.61,
+   "text": "time and you as an individual are going to conquer this singular challenge."
+  },
+  {
+   "t": 263.28,
+   "d": 1.0,
+   "text": "It is a whole thing."
+  },
+  {
+   "t": 264.28,
+   "d": 6.33,
+   "text": "It is not an episodic game you play chapter by chapter."
+  },
+  {
+   "t": 270.61,
+   "d": 6.5,
+   "text": "When you load up an episodic game you don't have to worry about the beginning of the game"
+  },
+  {
+   "t": 277.11,
+   "d": 8.34,
+   "text": "in the middle of the game but when you Roguelike when you come to it you are always starting"
+  },
+  {
+   "t": 285.45,
+   "d": 8.56,
+   "text": "from the beginning and it feels like a whole thing that you are trying to master."
+  },
+  {
+   "t": 294.01,
+   "d": 6.53,
+   "text": "I want to talk about Below because I think it is a game that to me aesthetically is an"
+  },
+  {
+   "t": 300.54,
+   "d": 5.31,
+   "text": "example of this monolithic challenge."
+  },
+  {
+   "t": 305.85,
+   "d": 10.13,
+   "text": "There is a gigantic mountant with a doorway and every time you die you come to the same"
+  },
+  {
+   "t": 315.98,
+   "d": 1.3,
+   "text": "mountain."
+  },
+  {
+   "t": 317.28,
+   "d": 7.42,
+   "text": "It a distinct feeling of this the challenge and you are beginning and at some point there"
+  },
+  {
+   "t": 324.7,
+   "d": 4.96,
+   "text": "is going to be an end and it is just you in the challenge."
+  },
+  {
+   "t": 329.66,
+   "d": 7.32,
+   "text": "I want to talk about dark souls because while procedurely generated there is a way to get"
+  },
+  {
+   "t": 336.98,
+   "d": 2.61,
+   "text": "this monolithic feeling in other games."
+  },
+  {
+   "t": 339.59,
+   "d": 6.94,
+   "text": "There is arcade games where you always start from the beginning and jow to get through"
+  },
+  {
+   "t": 346.53,
+   "d": 1.51,
+   "text": "them with a certain number of lives."
+  },
+  {
+   "t": 348.04,
+   "d": 5.74,
+   "text": "A lot of old games have this monolithic feeling and as that faded away Roguelikes carried"
+  },
+  {
+   "t": 353.78,
+   "d": 1.2,
+   "text": "the torch."
+  },
+  {
+   "t": 354.98,
+   "d": 9.5,
+   "text": "I think there is glimmers of this here."
+  },
+  {
+   "t": 364.48,
+   "d": 7.05,
+   "text": "The unforgiving nature of a run where you start and there is however many enemies laid"
+  },
+  {
+   "t": 371.53,
+   "d": 7.11,
+   "text": "out before you and it is just a singular task that you get to repeat and master until you"
+  },
+  {
+   "t": 378.64,
+   "d": 8.19,
+   "text": "have solved it and although it is not a procedurely generated monolithic challenge in a way an"
+  },
+  {
+   "t": 386.83,
+   "d": 5.86,
+   "text": "entire Roguelike is it still gets at the heart of the aesthetics."
+  },
+  {
+   "t": 392.69,
+   "d": 8.37,
+   "text": "My third concept is this focus and I think all these tie into each other but this one"
+  },
+  {
+   "t": 401.06,
+   "d": 11.82,
+   "text": "ties especially strong into the simulation, ASCII display and numbers are a way to boil"
+  },
+  {
+   "t": 412.88,
+   "d": 5.94,
+   "text": "down the presentation of a game so that as a developer and also as a player of this type"
+  },
+  {
+   "t": 418.82,
+   "d": 7.61,
+   "text": "of game, you are free to focus more on just the mechanics and what they say."
+  },
+  {
+   "t": 426.43,
+   "d": 12.89,
+   "text": "This is a game called signal pals it is extremely Roguelike similar as far as I can tell."
+  },
+  {
+   "t": 439.32,
+   "d": 5.81,
+   "text": "You can see that the player character has three out of five bubbles of health underneath."
+  },
+  {
+   "t": 445.13,
+   "d": 6.44,
+   "text": "This is something that is not a digit that's displayed on a screen but it is still -- it"
+  },
+  {
+   "t": 451.57,
+   "d": 3.67,
+   "text": "has me as the player thinking in the language of numbers."
+  },
+  {
+   "t": 455.24,
+   "d": 3.15,
+   "text": "I am thinking I have 3 out of a 5 health."
+  },
+  {
+   "t": 458.39,
+   "d": 8.71,
+   "text": "The numbers and data are apparent."
+  },
+  {
+   "t": 467.1,
+   "d": 3.26,
+   "text": "I like the ASCII display."
+  },
+  {
+   "t": 470.36,
+   "d": 4.34,
+   "text": "You can see a frog and lizard enemy."
+  },
+  {
+   "t": 474.7,
+   "d": 5.9,
+   "text": "These enemies are not different in the way a frog or a lizard are different in real life."
+  },
+  {
+   "t": 480.6,
+   "d": 1.27,
+   "text": "They are purely iconic."
+  },
+  {
+   "t": 481.87,
+   "d": 3.05,
+   "text": "The frog is just an icon."
+  },
+  {
+   "t": 484.92,
+   "d": 3.79,
+   "text": "It stands in for the enemy with three health points and the lizard is just the enemy with"
+  },
+  {
+   "t": 488.71,
+   "d": 7.07,
+   "text": "two health points and other things about them but nothing about them is frog or lizard like."
+  },
+  {
+   "t": 495.78,
+   "d": 3.39,
+   "text": "I really have a fondness for pixel art."
+  },
+  {
+   "t": 499.17,
+   "d": 4.39,
+   "text": "Really low resolution pixel art is appealing to me in much the same way that ASCII art"
+  },
+  {
+   "t": 503.56,
+   "d": 7.89,
+   "text": "is because of the way -- it is something you interpret."
+  },
+  {
+   "t": 511.45,
+   "d": 2.41,
+   "text": "It shows you only what's necessary."
+  },
+  {
+   "t": 513.86,
+   "d": 8.84,
+   "text": "And in a Roguelike, a G might be a goblin so you interpret that G and learn the language"
+  },
+  {
+   "t": 522.7,
+   "d": 1.0,
+   "text": "of the game."
+  },
+  {
+   "t": 523.7,
+   "d": 7.43,
+   "text": "That is the game telling me a lot of fluff doesn't matter."
+  },
+  {
+   "t": 531.13,
+   "d": 10.77,
+   "text": "It doesn't matter how tall or short the goblin is."
+  },
+  {
+   "t": 541.9,
+   "d": 8.33,
+   "text": "The at symbol representing the player is to me just this perfect example of boiling away"
+  },
+  {
+   "t": 550.23,
+   "d": 3.99,
+   "text": "everything that doesn't matter to the experience."
+  },
+  {
+   "t": 554.22,
+   "d": 6.05,
+   "text": "The at symbol doesn't give me the player an idea of what my Avatar looks like or where"
+  },
+  {
+   "t": 560.27,
+   "d": 3.25,
+   "text": "it comes from."
+  },
+  {
+   "t": 563.52,
+   "d": 6.9,
+   "text": "What matters is what I am capable of and what I do."
+  },
+  {
+   "t": 570.42,
+   "d": 2.54,
+   "text": "That's pretty much the end of the talk."
+  },
+  {
+   "t": 572.96,
+   "d": 6.71,
+   "text": "I went over these concepts and I want to push the idea and I want to make it clear I am"
+  },
+  {
+   "t": 579.67,
+   "d": 5.36,
+   "text": "not saying these things are the only concepts that are beautiful about traditional Roguelikes"
+  },
+  {
+   "t": 585.03,
+   "d": 5.86,
+   "text": "but it was a really fun mental exercise to look at the Roguelikes and something from"
+  },
+  {
+   "t": 590.89,
+   "d": 5.7,
+   "text": "traditional Roguelike fans and everything agrees the procedural generation is at the"
+  },
+  {
+   "t": 596.59,
+   "d": 8.28,
+   "text": "heart of what a Roguelike is but I think there is a lot of fascinating combinitorials that"
+  },
+  {
+   "t": 604.87,
+   "d": 6.19,
+   "text": "come out of the Berlin interpretation."
+  },
+  {
+   "t": 611.06,
+   "d": 3.28,
+   "text": "I am in the theater holding the Berlin interpretation object."
+  },
+  {
+   "t": 614.34,
+   "d": 9.58,
+   "text": "I put up a GIF of a game I am work on which is absolutely not a Roguelike but I loved"
+  },
+  {
+   "t": 623.92,
+   "d": 9.88,
+   "text": "calling it a low-value Roguelike because it captured the essence of what a Roguelike is"
+  },
+  {
+   "t": 633.8,
+   "d": 2.15,
+   "text": "and what I really love about Roguelikes."
+  },
+  {
+   "t": 635.95,
+   "d": 2.34,
+   "text": "It is called hand made death labyrinth."
+  },
+  {
+   "t": 638.29,
+   "d": 4.07,
+   "text": "I made it with my friend who is in the audience."
+  },
+  {
+   "t": 642.36,
+   "d": 8.58,
+   "text": "If you are curious, I will be hanging out at the @ statue sign."
+  },
+  {
+   "t": 650.94,
+   "d": 10.52,
+   "text": "EMCEE: That was awesome."
+  },
+  {
+   "t": 661.46,
+   "d": 2.62,
+   "text": "Cool."
+  }
+ ]
+}

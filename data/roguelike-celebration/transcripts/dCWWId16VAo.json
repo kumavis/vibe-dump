@@ -1,0 +1,584 @@
+{
+ "id": "dCWWId16VAo",
+ "url": "https://www.youtube.com/watch?v=dCWWId16VAo",
+ "title": "Joseph Hewitt: Magic in Game Design: (Mis)Directing the Player's Attention",
+ "speaker": "Joseph Hewitt",
+ "talk_title": "Magic in Game Design: (Mis)Directing the Player's Attention",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 945,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "In addition to the jobs listed above, I've also worked as a theatrical special effects designer and operator. Some of the lessons there carry over to designing Roguelikes. My game series GearHead is known for its procedural narration; I use techniques from stage magic and fortune telling to make the player believe the story. As a gamedev you are also a performer. This talk will focus on tricks game devs can learn from magic to draw the player into your game. Not literally; that'd be witchcraft instead.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 53,
+   "title": "Magic and game design"
+  },
+  {
+   "start": 190,
+   "title": "The card trick demonstration"
+  },
+  {
+   "start": 355,
+   "title": "Directing player attention"
+  },
+  {
+   "start": 464,
+   "title": "Using misdirection"
+  },
+  {
+   "start": 633,
+   "title": "Simulation and suspension"
+  },
+  {
+   "start": 864,
+   "title": "Performance and conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1868,
+ "trimmed": {
+  "segments": 9,
+  "words": 164
+ },
+ "segments": [
+  {
+   "t": 3.66,
+   "d": 3.74,
+   "text": "donut deca behind me. Next up we unfortunately have to play a prerecorded talk because our"
+  },
+  {
+   "t": 7.4,
+   "d": 7.72,
+   "text": "speaker had a last minute emergency come up. Wishing Joe the best but thankfully was"
+  },
+  {
+   "t": 15.12,
+   "d": 7.56,
+   "text": "able to provide us with a recording so we can share this. Next up is Joseph Hewitt who is"
+  },
+  {
+   "t": 23.36,
+   "d": 5.24,
+   "text": "GearHead, Dungeon Monkey, and DeadCold. I am originally from"
+  },
+  {
+   "t": 28.6,
+   "d": 2.48,
+   "text": "Newfoundland but have been living in South Korea since last"
+  },
+  {
+   "t": 31.08,
+   "d": 1.84,
+   "text": "century. In addition to programming, I'm also a"
+  },
+  {
+   "t": 32.92,
+   "d": 5.27,
+   "text": "cartoonist. Founder @ Retora Games,"
+  },
+  {
+   "t": 38.2,
+   "d": 12.82,
+   "text": "They are going to talk about magic. Let's queue up that talk."
+  },
+  {
+   "t": 51.02,
+   "d": 11.9,
+   "text": "JOE: Hi, there. My name is Joseph Hewitt. I am the developer of Gear Head, dungeon monkey and a"
+  },
+  {
+   "t": 62.92,
+   "d": 7.04,
+   "text": "bunch of other projects which you probably have never heard of. Today I am going to talk about"
+  },
+  {
+   "t": 69.96,
+   "d": 12.04,
+   "text": "magic and game development. What is magic? Magic is illusion. It is the act of making your audience"
+  },
+  {
+   "t": 82.0,
+   "d": 9.12,
+   "text": "see something that didn't happen or to conversely to not see something that did happen. As the great"
+  },
+  {
+   "t": 91.12,
+   "d": 11.04,
+   "text": "philosopher said who are you going to believe? Me or your lying eyes. Magic is especially applicable"
+  },
+  {
+   "t": 102.16,
+   "d": 10.12,
+   "text": "to computer games because after all want is a computer game. A computer game is an illusion."
+  },
+  {
+   "t": 114.84,
+   "d": 6.72,
+   "text": "A computer game is nothing but an extremely large number when viewed at certain instances."
+  },
+  {
+   "t": 121.56,
+   "d": 7.04,
+   "text": "With this number, people can experience the illusion of ad venturing in a fantasy world,"
+  },
+  {
+   "t": 128.6,
+   "d": 12.48,
+   "text": "piloting a robot, working on a farm or marrying a dude named Sebastian. This is all make believe"
+  },
+  {
+   "t": 141.08,
+   "d": 13.48,
+   "text": "and an illusion. Being able to craft an illusion is particularly relevant to roguelike development"
+  },
+  {
+   "t": 154.56,
+   "d": 7.96,
+   "text": "especially in terms of procedural generational. Procedural generation is conjuring new worlds"
+  },
+  {
+   "t": 162.52,
+   "d": 12.64,
+   "text": "from thin air making up stuff that did not exist before and technically does not exist now. I am"
+  },
+  {
+   "t": 175.16,
+   "d": 8.48,
+   "text": "going to tell you about four of the principles of stage magic. Attention, misdirection, simulation,"
+  },
+  {
+   "t": 183.64,
+   "d": 10.36,
+   "text": "and performance and show how these can be applied to game development. To do this, I am going to do"
+  },
+  {
+   "t": 194.0,
+   "d": 8.6,
+   "text": "the stupidiest card trick in the world. This card trick is so easy and so stupid that you can even"
+  },
+  {
+   "t": 202.6,
+   "d": 7.24,
+   "text": "program a computer to do it. I am going to ask you to bear with me and play along because I am about"
+  },
+  {
+   "t": 209.84,
+   "d": 10.36,
+   "text": "to do something that's absolutely ludicrously impossible. I am going to read your mind. I have"
+  },
+  {
+   "t": 220.2,
+   "d": 14.16,
+   "text": "this perfectly normal deck of playing cards as you can see. I shuffle them. And then I draw a hand of"
+  },
+  {
+   "t": 234.36,
+   "d": 11.72,
+   "text": "eight cards like that. I have this hand of eight cards. I lay them on the table face down. Doesn't"
+  },
+  {
+   "t": 246.08,
+   "d": 7.32,
+   "text": "matter which cards they are. Any cards will do. In a second I will flip over the cards and show them"
+  },
+  {
+   "t": 253.4,
+   "d": 10.8,
+   "text": "to you. What I want you to do is choose one card and remember it. Focus on your card. The problem"
+  },
+  {
+   "t": 264.2,
+   "d": 9.08,
+   "text": "with this trick is people often forget which card they picked. Got it? All right. Right now,"
+  },
+  {
+   "t": 273.28,
+   "d": 12.08,
+   "text": "I take the cards back and I shuffle them. I want you to think about the card you picked. Think"
+  },
+  {
+   "t": 285.36,
+   "d": 6.48,
+   "text": "really loud because, you know, your thoughts have to reach me all of the way over here in Korea. I"
+  },
+  {
+   "t": 291.84,
+   "d": 9.76,
+   "text": "take one card, randomly selected from the hand, and I discard it. That card gets placed face down"
+  },
+  {
+   "t": 301.6,
+   "d": 12.48,
+   "text": "on the table. Then I drive a wooden stake through the card, douse it with gasoline, set it on fire,"
+  },
+  {
+   "t": 314.08,
+   "d": 8.36,
+   "text": "and scatter the ashes in the Tawai River. That may seem like overkill but as you all know if"
+  },
+  {
+   "t": 322.44,
+   "d": 9.36,
+   "text": "something is worth doing it is worth doing right. I then lay the remaining seven cards on the table"
+  },
+  {
+   "t": 331.8,
+   "d": 13.88,
+   "text": "face up. At this point, you will see that the card picked is the card I removed. Whoa. So right now,"
+  },
+  {
+   "t": 345.68,
+   "d": 5.08,
+   "text": "half of you are going how did he do that, and the other half are going he is right,"
+  },
+  {
+   "t": 350.76,
+   "d": 7.6,
+   "text": "that is the world's stupidest card trick and that's OK. Let's start with the first principle"
+  },
+  {
+   "t": 358.36,
+   "d": 9.24,
+   "text": "of magic. Attention. A magician focuses the audience's attention on what the magician wants"
+  },
+  {
+   "t": 367.6,
+   "d": 11.2,
+   "text": "the audience to see. I asked you to concentrate on just one card in this trick. To focus on that one"
+  },
+  {
+   "t": 378.8,
+   "d": 8.56,
+   "text": "card. This is because if you focused on two cards, if you remembered any other card in that deck,"
+  },
+  {
+   "t": 387.36,
+   "d": 8.8,
+   "text": "the trick would not have worked. Attention has probably the most application to game design"
+  },
+  {
+   "t": 396.16,
+   "d": 10.92,
+   "text": "because it is UI programming, user interface. What do you want the player to know? What do you want"
+  },
+  {
+   "t": 407.08,
+   "d": 8.32,
+   "text": "the player do? You have to direct the player's attention to let them know what they are supposed"
+  },
+  {
+   "t": 415.4,
+   "d": 7.96,
+   "text": "to know and let them do what they are supposed to do. You give them the tools to interact with this"
+  },
+  {
+   "t": 423.36,
+   "d": 24.36,
+   "text": "information and students require a mechanic and the players miss that because they didn't draw"
+  },
+  {
+   "t": 447.72,
+   "d": 10.64,
+   "text": "their attention to it in the way they should have. Be aware of your player's attention and"
+  },
+  {
+   "t": 458.36,
+   "d": 14.2,
+   "text": "point that attention where you want it. Attention and direction are like two sides of the same car."
+  },
+  {
+   "t": 472.56,
+   "d": 6.96,
+   "text": "See what I did there? This is when you get the audience to look over there while you are doing"
+  },
+  {
+   "t": 479.52,
+   "d": 5.84,
+   "text": "something nefarious with your left hand. In the case of the world's stupidest card trick,"
+  },
+  {
+   "t": 485.36,
+   "d": 9.6,
+   "text": "I use misdirection to distract you while I swap out the original eight card hand with a completely"
+  },
+  {
+   "t": 494.96,
+   "d": 5.96,
+   "text": "separate eight card hand that I had prepared before doing the trick. If we were doing it"
+  },
+  {
+   "t": 500.92,
+   "d": 7.4,
+   "text": "face to face. In the digital version I also used misdirection when telling you the story about,"
+  },
+  {
+   "t": 508.32,
+   "d": 6.8,
+   "text": "you know,staking the card and burning it and throwing it in the river. The practical"
+  },
+  {
+   "t": 515.12,
+   "d": 10.04,
+   "text": "practice of that story is to give you time to forget all the other cards you might have seen"
+  },
+  {
+   "t": 525.16,
+   "d": 7.72,
+   "text": "when I turned them all over so you only remember the one card that you were focused on. I hate to"
+  },
+  {
+   "t": 532.88,
+   "d": 7.8,
+   "text": "give you spoilers for a nine-year-old game but one title that uses misdirection brilliantly is"
+  },
+  {
+   "t": 540.68,
+   "d": 10.48,
+   "text": "undertail. At the beginning of the game the player is led to think this will be a normal JRPG type"
+  },
+  {
+   "t": 551.16,
+   "d": 10.2,
+   "text": "adventure when in fact as you get later into the game you realize it is a completely different sort"
+  },
+  {
+   "t": 561.36,
+   "d": 8.0,
+   "text": "of thing. Misdirection is a lot of fun in game design. You can use it to lead to player astray."
+  },
+  {
+   "t": 570.2,
+   "d": 8.84,
+   "text": "You can use it to setup surprises and big reveals. You get the player used to a certain rhythm and"
+  },
+  {
+   "t": 579.04,
+   "d": 6.84,
+   "text": "then you break the expectation and do something unexpected. You are like I never saw that"
+  },
+  {
+   "t": 585.88,
+   "d": 6.92,
+   "text": "coming. Of course, you didn't. I was leading your attention in one direction while I was planning"
+  },
+  {
+   "t": 592.8,
+   "d": 7.72,
+   "text": "something nefarious something else. It can be used to obfuscate the game maw mechanicss you want"
+  },
+  {
+   "t": 600.52,
+   "d": 9.4,
+   "text": "to be serious. Usual in a game we want to give the player all the information but not always."
+  },
+  {
+   "t": 609.92,
+   "d": 9.76,
+   "text": "Sometimes you might like to keep a little bit of that information secret. So, you know, the player"
+  },
+  {
+   "t": 619.68,
+   "d": 6.04,
+   "text": "thinks everything is going the way they think it is going but it is not. It is going to way you"
+  },
+  {
+   "t": 625.72,
+   "d": 8.32,
+   "text": "think it is going because you are the magician and the game designer. That's misdirection. The third"
+  },
+  {
+   "t": 634.04,
+   "d": 7.56,
+   "text": "one. Simulation. This is a big one I could have done the entire talk on simulation and now I am"
+  },
+  {
+   "t": 641.6,
+   "d": 7.24,
+   "text": "speaking so quickly I kind of regret I didn't do it all on simulation. What is simulation? It is"
+  },
+  {
+   "t": 648.84,
+   "d": 8.68,
+   "text": "the idea that in magic at least, it is the idea that what we are seeing is some kind of obelisk"
+  },
+  {
+   "t": 657.52,
+   "d": 7.52,
+   "text": "reality. Of course it isn't. We just covered that. What you are seeing is what the magician wants"
+  },
+  {
+   "t": 665.04,
+   "d": 10.4,
+   "text": "you to see. It is the same in a computer program. Getting back to the world's stupidest card trick."
+  },
+  {
+   "t": 675.44,
+   "d": 9.32,
+   "text": "From the beginning to the end of the trick, I was lying to you. I was lying. That's what magicians"
+  },
+  {
+   "t": 684.76,
+   "d": 10.68,
+   "text": "do. I was creating a false reality to replace the actual reality that was happening. When I drew a"
+  },
+  {
+   "t": 695.44,
+   "d": 6.44,
+   "text": "hand of eight cards, I said oh, these could be any cards. That was a lie. I had prepared the"
+  },
+  {
+   "t": 701.88,
+   "d": 10.08,
+   "text": "eight cards beforehand. I substituted them in for the cards for the deck. When I was discarding a"
+  },
+  {
+   "t": 711.96,
+   "d": 7.56,
+   "text": "card from the original hand it wasn't the original hand. It was the secondhand of cards. I was lying"
+  },
+  {
+   "t": 719.52,
+   "d": 7.92,
+   "text": "to you. I told you this would be the card you picked. That was a lie. The secondhand of cards"
+  },
+  {
+   "t": 727.44,
+   "d": 8.48,
+   "text": "were all different from the firsthand of cards. But your mind, you have a mental simulation of the"
+  },
+  {
+   "t": 735.92,
+   "d": 8.68,
+   "text": "world and you believe things are real. Because of this mental simulation, you assume that the"
+  },
+  {
+   "t": 744.6,
+   "d": 4.84,
+   "text": "cards that I am telling you oh, yeah, these are the cards that were just on the table are"
+  },
+  {
+   "t": 749.44,
+   "d": 7.88,
+   "text": "actually the cards that were just on the table. We do this a lot in daily life. Your brain fills"
+  },
+  {
+   "t": 757.32,
+   "d": 7.84,
+   "text": "in gaps in information when you don't have perfect knowledge or perception of the world"
+  },
+  {
+   "t": 765.16,
+   "d": 7.56,
+   "text": "around you. There is an important point for game design. You may have heard the phrase suspension"
+  },
+  {
+   "t": 772.72,
+   "d": 8.12,
+   "text": "of disbelief. When you are creating a game world, you want to player to suspend their disbelief and"
+  },
+  {
+   "t": 780.84,
+   "d": 9.64,
+   "text": "buy into the illusion you are creating. And this is an important point. The player, just like you,"
+  },
+  {
+   "t": 790.48,
+   "d": 7.44,
+   "text": "knows that it is a lie. The player is working with you. It is the player's imagination that"
+  },
+  {
+   "t": 797.92,
+   "d": 9.0,
+   "text": "is doing a lot of the heavy lifting to build this game world. Because they want to be entertained."
+  },
+  {
+   "t": 806.92,
+   "d": 6.08,
+   "text": "Nobody in the audience, as far as I know, actually believes I can read your mind. I don't look like"
+  },
+  {
+   "t": 813.0,
+   "d": 8.88,
+   "text": "the kind of guy who can read your mind. But many of you bought into that lie because you wanted to"
+  },
+  {
+   "t": 821.88,
+   "d": 10.84,
+   "text": "be entertained and I hope I did entertain you that. Look at games like blood born or amanika"
+  },
+  {
+   "t": 832.72,
+   "d": 6.72,
+   "text": "where very little concrete information is given but the player still constructs"
+  },
+  {
+   "t": 839.44,
+   "d": 8.4,
+   "text": "this elaborate fantasy world from the little scraps of information that they get while playing."
+  },
+  {
+   "t": 847.84,
+   "d": 10.28,
+   "text": "That is the power of simulation. You want to have points in the game that stimulate the imagination"
+  },
+  {
+   "t": 858.12,
+   "d": 9.88,
+   "text": "and let the player do a little bit of the heavy lifting for you. The last point performance."
+  },
+  {
+   "t": 869.16,
+   "d": 8.4,
+   "text": "As game developers we are programmers. Many of us are programmers. We tend to look at things as"
+  },
+  {
+   "t": 877.56,
+   "d": 9.16,
+   "text": "technical problems. This is not always the best way to look at it. The presentation,"
+  },
+  {
+   "t": 886.72,
+   "d": 7.92,
+   "text": "the way drew something can be ad important as what you are doing. Many of the greatest magicians in"
+  },
+  {
+   "t": 894.64,
+   "d": 8.64,
+   "text": "the world don't have any great tricks. They do tricks that are very easy to figure out. But"
+  },
+  {
+   "t": 903.28,
+   "d": 10.6,
+   "text": "their performance elevates the tricks to a new level. So, yeah. One of the main things thinking"
+  },
+  {
+   "t": 913.88,
+   "d": 7.96,
+   "text": "about stage magic and game design is you have to keep the player in your mind at all times. You are"
+  },
+  {
+   "t": 921.84,
+   "d": 9.36,
+   "text": "thinking what do I want the player to experience? How can I give them this esthetic experience?"
+  },
+  {
+   "t": 931.2,
+   "d": 6.16,
+   "text": "And that's all the time I have for today. Thank you very much. Remember, don't believe"
+  },
+  {
+   "t": 937.36,
+   "d": 7.72,
+   "text": "everything you see but have fun game design. ALEXEI: I wanted a card trick and pre-recorded"
+  }
+ ]
+}

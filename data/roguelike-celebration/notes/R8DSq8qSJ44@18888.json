@@ -1,0 +1,161 @@
+{
+  "id": "R8DSq8qSJ44@18888",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 18888,
+    "end": 20706
+  },
+  "title": "Kitbashing & Databending for Proc-Gen",
+  "speaker": "Tyler Coleman",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=18888s",
+  "talk_type": "design",
+  "summary": "Tyler Coleman borrows two ideas from physical modelling and glitch art. Kit bashing means combining parts of similar 'kits', such as several generation algorithms inside one dungeon. Data bending means feeding real-world data into systems it wasn't made for. He shows many prototypes: stock-price histories driving item spawn rates and prices, songs turned into dungeons, PBR texture maps turned into planets, photos and webcam video into levels, adjectives from public-domain books into item modifiers, sonnet stress patterns into boss attacks, and novels into named world maps. He gives practical advice (match the shape of input and output, watch for cherry-picking, ask what your choice of data says and who chooses it) and proposes an ideation card deck for roguelike data sources.",
+  "games": [
+    "Mini Metro",
+    "Scorched Earth"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "combining generators",
+      "kind": "technique",
+      "claim": "Kit-bashing generators means letting each BSP room run a different method (several maze algorithms, cellular automata), switching algorithms partway through generation, and recursing, e.g. using BSP to find the gaps a cellular automaton leaves and filling them with a maze.",
+      "detail": "Coleman's 'endless city of dungeons' project starts with BSP room separation; a maze might do a third of its work with depth-first search and then switch to hunt-and-kill for more interesting combinations. He found wave function collapse needs more content 'flavours' than on/off, so he uses it for items and objects.",
+      "t": 19105,
+      "quote": "it actually changes algorithms sometimes mid generation. So, it might only do like a third of depth first and then switch to hunter",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "data bending",
+      "kind": "principle",
+      "claim": "'Data bending', taken from glitch art, means feeding real-world data into game systems it was not made for to get unexpected output, and Coleman urges designers to get creative and weird with their data sources.",
+      "detail": "In glitch art you might open an image in Audacity and band-pass filter it, or open a song in Photoshop and blur it. Coleman first met the idea in an Aphex Twin track that hides Richard D. James's face in the spectrogram. His question is how games can do the same.",
+      "t": 19268,
+      "quote": "I want you to kind of be creative with your data, do weird stuff, like really just find unexpected ways to take",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "item economy",
+      "kind": "example",
+      "claim": "Mapping the first ten years of a company's stock price onto an item's spawn weight, with the merchant's buy price set to its inverse, makes items more common and cheaper over time and gives players the illusion that they are moving the market.",
+      "detail": "In Coleman's imagined RPG, spawn rates change at narrative beats: Apple stock drives apples, Smucker's strawberries, Nvidia emeralds, Lululemon textile fibres, and Oracle 'divination crystals', which spawn heavily in the endgame. He uses the first decade after IPO because it has more rises and falls; a player who keeps selling apples feels they crashed the price, though it is pre-planned.",
+      "t": 19454,
+      "quote": "it creates the illusion for the player that they are affecting those prices",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "audio-driven generation",
+      "kind": "technique",
+      "claim": "A song can generate a dungeon: room size follows the music's energy and enemy count follows detected kicks, hats and snares, giving levels a build-up, boss rooms at climaxes, and a quieter wind-down before the exit.",
+      "detail": "Coleman's demo used 'In the Hall of the Mountain King'. Each column of rooms covers a fixed slice of time (about six seconds), detection uses the Minim audio library in Processing, and values are normalised across the song, so a uniformly loud track works worse than one with highs and lows. Every level has at least a boss room, and section length and rooms per energy level are tunable.",
+      "t": 19551,
+      "quote": "rooms size is based on energy. The amount of enemies is based on uh frequency detections for kick hat snare",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sonification",
+      "kind": "technique",
+      "claim": "FFT analysis (overall energy plus frequency bands for kick, hat and snare) can turn audio into almost any game parameter, and the reverse, sonification of the game state, is the approach of Mini Metro's music.",
+      "detail": "Coleman says he has not explored image-to-sound himself and recommends Rich Vreeland's talk on Mini Metro, whose music grows bigger as the player's map grows.",
+      "t": 19726,
+      "quote": "FFTs are amazing for turning audio into virtually anything you want",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "texture-driven terrain",
+      "kind": "technique",
+      "claim": "Single-channel PBR texture maps (height, ambient occlusion, roughness) make good planet heightmaps and temperature maps, applying micro-scale surface detail at macro scale, while colour comes from the planet's biomes.",
+      "detail": "Coleman projects a texture, such as white painted wood, onto a sphere and takes only its 0-255 values. In an older experiment he applied the same idea to Scorched Earth, turning any image (Van Gogh's face) into terrain for the tanks to fight over and destroy.",
+      "t": 19835,
+      "quote": "we're taking that like micro and we're applying it to the macro",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "image-driven generation",
+      "kind": "technique",
+      "claim": "Blob detection on an image can lay out a roguelike floor, with hue ranges choosing enemy types; fed live webcam video, the player can physically reshape the level, e.g. using their hand to pinch the space around a boss.",
+      "detail": "Stairs up and down are placed as far apart as possible; red regions spawn red enemies and green ones slimes and poison enemies. The boss spawns in the largest similar region, and Coleman made that space hostile to its movement pattern with his hand. An earlier version used microphone input so yelling made the dungeon respawn or fluctuate.",
+      "t": 19977,
+      "quote": "I'm now using my webcam to create like an interesting challenging map for myself",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "item names",
+      "kind": "technique",
+      "claim": "Adjective-noun pairs mined from public-domain books can generate items: word vectors match the noun to an item type and the adjectives become value modifiers, with a spelling-similarity fallback when no semantic match exists.",
+      "detail": "'Poor little feet' from a Project Gutenberg text becomes boots, and 'little' implies better detection. With no item fitting 'Alice', the fallback picks the closest-looking word, giving 'wise little antidote'.",
+      "t": 20015,
+      "quote": "this is taking adjectives before a noun and then using a a word vector system to kind of apply potential values from a list of items",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "boss patterns",
+      "kind": "example",
+      "claim": "A boss can be scripted from a Shakespearean sonnet: it attacks on stressed syllables, moves on unstressed ones, and selects its attack pattern from the rhyme scheme.",
+      "detail": "Coleman says this gives a boss five or six attack patterns that change as it goes through the sonnet. It is hard-coded around sonnet structure, but there are plenty of sonnets, so plenty of bosses.",
+      "t": 20093,
+      "quote": "attacks happen during stresses. Boss makes movement patterns when uh it's not a stressed syllable",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cherry-picking",
+      "kind": "warning",
+      "claim": "When showing data-driven generation, beware of cherry-picking: an oceanic world map from Moby Dick looks perfect because the input suits the output, and running Alice in Wonderland through the same pipeline reveals how much comes from the base algorithm.",
+      "detail": "The map uses TF-IDF to find distinctive words for place names, descriptor-noun pairs and Markov chains for region descriptions, with region sizes based on chapter lengths. The Alice map shows the same coast, islands and far-off dangerous islands, with only the names changing; an attempt to put negative-sentiment chapters on distant islands didn't quite work.",
+      "t": 20181,
+      "quote": "this is an important one to talk about the idea of cherrypicking because of course you're going to make an oceanic world map for Moby Dick",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "data bending",
+      "kind": "technique",
+      "claim": "For data-driven generation, first understand the shape of input and output (songs and stock charts are both values over time but fluctuate differently), then what the player needs from it, how to keep the source's flavour, and the worst and best cases.",
+      "detail": "Coleman chose 'Mountain King' because its three-act shape with climax and calm suits a dungeon, and admits his song dungeons start to look alike because what distinguishes songs is hard to carry over. He presents data bending as a possible answer to the '10,000 bowls of oatmeal' problem and a way to explore algorithms, comparing it to Jerry's Map, built over years by drawing cards, like cartomancy.",
+      "t": 20240,
+      "quote": "most important thing is you got to understand the shape of your input and your output",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "authorship",
+      "kind": "principle",
+      "claim": "In data-driven generation, both what the chosen data says (Apple stock for apples, Moby Dick for a coast) and who chooses it matter: designer-chosen data can be sculpted or used for ideation, while player-supplied input shifts creative labour to the player.",
+      "detail": "Coleman frames the choice as a 'medium is the message' question. A designer can bake a song into a map, edit it, and sneak in their own taste without players knowing. When players supply inputs, as in the image-based tanks game, play becomes exploring the algorithm, and designers can plant goal patterns that reward particular combinations.",
+      "t": 20398,
+      "quote": "similarly who is making the decision is just as important",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "ideation",
+      "kind": "open-question",
+      "claim": "Coleman proposes a deck of ideation cards for roguelikes that pairs external data sources with game outputs, to push designers past the obvious combinations.",
+      "detail": "He likens it to an existing creative ideation card deck. In Q&A he says he usually starts from the output and searches for a data set, tends towards easy matches like rough rock becoming a planet, and forces himself to try weirder inputs (Van Gogh's face as a planet) to test whether the algorithm and the source's influence hold up.",
+      "t": 20525,
+      "quote": "I think we should build a generos for rogue likes",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "progression curves",
+      "kind": "principle",
+      "claim": "Early stock-price histories suit progression systems because, like progression, the number usually goes up, but with real-world chaos that random number generators or Perlin noise can't provide.",
+      "detail": "Coleman warns the chaos is unpredictable and won't always fit, e.g. apples becoming abundant just as the player reaches the desert, so designers may still need their own modifiers.",
+      "t": 20658,
+      "quote": "nine times out of 10 stock goes up, right? First 10 years especially and progression systems number goes up",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

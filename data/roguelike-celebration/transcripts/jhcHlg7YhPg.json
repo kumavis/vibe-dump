@@ -1,0 +1,1187 @@
+{
+ "id": "jhcHlg7YhPg",
+ "url": "https://www.youtube.com/watch?v=jhcHlg7YhPg",
+ "title": "Brian Cronin: Black Box Sim for Roguelikes",
+ "speaker": "Brian Cronin",
+ "talk_title": "Black Box Sim for Roguelikes",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1834,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Gameplay architecture is vital to the success of a roguelike, but it doesn't get the attention it deserves. In this session, we'll cover the \"Black Box\" approach to running game simulations independently from input, UI, graphics, animation, VFX, and sound. We'll start with an overview of the benefits of rigorously separating your game logic from input and presentation. Then, we’ll dive deep into a specific implementation that has been successfully used in multiple games, both launched and in the works. We'll break down how it's been used to implement replay systems, undo systems, damage preview, save/load, and networking. By the end, you’ll see just how powerful this approach can be for your own games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and context"
+  },
+  {
+   "start": 47,
+   "title": "What is gameplay architecture"
+  },
+  {
+   "start": 133,
+   "title": "Benefits of solid architecture"
+  },
+  {
+   "start": 295,
+   "title": "When architecture matters"
+  },
+  {
+   "start": 344,
+   "title": "Review of previous work"
+  },
+  {
+   "start": 414,
+   "title": "Core principles of the technique"
+  },
+  {
+   "start": 657,
+   "title": "Technical implementation notes"
+  },
+  {
+   "start": 791,
+   "title": "World state management"
+  },
+  {
+   "start": 931,
+   "title": "World commands and logic"
+  },
+  {
+   "start": 1074,
+   "title": "Handling world state changes"
+  },
+  {
+   "start": 1224,
+   "title": "Displaying simulation results"
+  },
+  {
+   "start": 1325,
+   "title": "Sequencing animations"
+  },
+  {
+   "start": 1453,
+   "title": "Achieving advanced features"
+  },
+  {
+   "start": 1695,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3876,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.16,
+   "d": 5.92,
+   "text": "ALEXIE: Next up, another returning Roguelike Celebration speaker. We have Brian Cronin who is"
+  },
+  {
+   "t": 9.08,
+   "d": 4.44,
+   "text": "an engineer and designer who can't stop making roguelikes! He previously spoke at Roguelike"
+  },
+  {
+   "t": 13.52,
+   "d": 7.36,
+   "text": "Celebration in 2021 about Monster Train, a deck building roguelike. Having started on pre-smart"
+  },
+  {
+   "t": 20.88,
+   "d": 4.28,
+   "text": "phone game development, he's been working on games professionally for 20 years. He works full time"
+  },
+  {
+   "t": 25.16,
+   "d": 5.0,
+   "text": "in the educational game space and also works on roguelikes in his free time. He's passionate about"
+  },
+  {
+   "t": 30.16,
+   "d": 5.2,
+   "text": "gameplay architecture, game design, board games, comedy, and Twin Peaks."
+  },
+  {
+   "t": 42.56,
+   "d": 8.4,
+   "text": "BRIAN: I wish I could talk about Twin Peaks for an hour but not the right conference. I am going"
+  },
+  {
+   "t": 50.96,
+   "d": 6.12,
+   "text": "to talk about a specific technique called black box sim. This is my beautiful art work of what"
+  },
+  {
+   "t": 57.08,
+   "d": 11.8,
+   "text": "it is. I am getting over being sick so I might cough a little bit. I am Brian Cronin and game"
+  },
+  {
+   "t": 68.88,
+   "d": 7.76,
+   "text": "engineer and I have been working 20 years in the game industry. Roguelike wise I did monster train"
+  },
+  {
+   "t": 76.64,
+   "d": 6.4,
+   "text": "in 2020. Ink bound contributed for about the first year. It is a multiplayer cooperative."
+  },
+  {
+   "t": 84.88,
+   "d": 6.28,
+   "text": "That one came out in April this year. I am also working on, in full time, I work on"
+  },
+  {
+   "t": 91.16,
+   "d": 5.2,
+   "text": "this game called dojo island in the educational space and I am working on my own roguelike game"
+  },
+  {
+   "t": 96.36,
+   "d": 3.54,
+   "text": "called slumber island which you won't bind find on the internet yet. What is gameplay architecture"
+  },
+  {
+   "t": 99.9,
+   "d": 12.46,
+   "text": "is what I first want to talk about. It is a series of patterns used to construct gameplay."
+  },
+  {
+   "t": 112.36,
+   "d": 6.92,
+   "text": "It is not game engine architecture. So I am not talking about how we organize vertices"
+  },
+  {
+   "t": 120.16,
+   "d": 8.6,
+   "text": "or primitive collision. Those are useful but I am talking about gameplay. The constraints"
+  },
+  {
+   "t": 128.76,
+   "d": 7.24,
+   "text": "of the game engine can influence gameplay architecture. All these games follow different"
+  },
+  {
+   "t": 136.0,
+   "d": 5.32,
+   "text": "types of architecture to support the wide array of gameplay that is available. How you structure"
+  },
+  {
+   "t": 141.32,
+   "d": 8.28,
+   "text": "first person shooter like doom is different from a real-time strategy game or a turn-based roguelike."
+  },
+  {
+   "t": 150.28,
+   "d": 5.48,
+   "text": "Before digging into the theoretical architectural talk it is important to what is important and"
+  },
+  {
+   "t": 155.76,
+   "d": 15.8,
+   "text": "that's delivering value to stock but that's not the right approach in this -- if we build"
+  },
+  {
+   "t": 171.56,
+   "d": 12.36,
+   "text": "the game with great architecture what does that get us? Determinism. That means the same inputs"
+  },
+  {
+   "t": 183.92,
+   "d": 6.36,
+   "text": "result in the same outputs. If you have great solid architecture you can achieve determinism."
+  },
+  {
+   "t": 193.72,
+   "d": 10.36,
+   "text": "I will explain how what I am proposing benefits you and makes it easier to implement save load"
+  },
+  {
+   "t": 204.08,
+   "d": 10.24,
+   "text": "and networking. I will never say it is easy to implement these. Whether you talk about where"
+  },
+  {
+   "t": 214.32,
+   "d": 8.12,
+   "text": "a player can rewatch or developer facing replays on ink bound we had a player that could send us"
+  },
+  {
+   "t": 222.44,
+   "d": 6.28,
+   "text": "a replay file and it was automatically sent in many cases. We could replay their gameplay and"
+  },
+  {
+   "t": 228.72,
+   "d": 9.24,
+   "text": "reproduce bugs. And undo/redo is kind of related. The player in the roguelike can undo their entire"
+  },
+  {
+   "t": 237.96,
+   "d": 8.84,
+   "text": "turn or action. Or previous supplies system. A lot of roguelikes are doing this. You will play"
+  },
+  {
+   "t": 246.8,
+   "d": 7.64,
+   "text": "a card and the player wants to know the outcome of the card. We did this in monster train. It"
+  },
+  {
+   "t": 254.44,
+   "d": 15.56,
+   "text": "was difficult to implement. We didn't have solid architecture. Much easier to test your game if you"
+  },
+  {
+   "t": 270.0,
+   "d": 5.12,
+   "text": "have great architecture at the foundation. Whether that's through automated testing or enhancing"
+  },
+  {
+   "t": 275.12,
+   "d": 8.2,
+   "text": "manual testing. All this leads to fewer bugs and easier reproduction of bugs. I could speak about"
+  },
+  {
+   "t": 283.32,
+   "d": 6.52,
+   "text": "it subjectively with my own experience of working on this style of architecture I am proposing and"
+  },
+  {
+   "t": 290.52,
+   "d": 7.28,
+   "text": "before and after much easier to reproduce bugs and much easier to fix them. It is worth pointing out"
+  },
+  {
+   "t": 297.8,
+   "d": 6.56,
+   "text": "where you don't need to go nuts with gameplay architecture. Throw away prototypes and game"
+  },
+  {
+   "t": 304.36,
+   "d": 17.06,
+   "text": "jams all have something in common. Shout-out pig squad this is a picture in Portland of them. You"
+  },
+  {
+   "t": 321.42,
+   "d": 5.18,
+   "text": "are talking about a few days you are working on a project. Djokovic I don't think it is important"
+  },
+  {
+   "t": 326.6,
+   "d": 7.2,
+   "text": "to spend time thinking about architecture. But if this is nor schedule you are looking at which even"
+  },
+  {
+   "t": 333.8,
+   "d": 7.84,
+   "text": "for smallish roguelike games you might be looking at a schedule like this. It really benefits you"
+  },
+  {
+   "t": 341.64,
+   "d": 8.32,
+   "text": "to consider your gameplay architecture. In 2021, I spoke about monster train. Currently wearing"
+  },
+  {
+   "t": 349.96,
+   "d": 6.6,
+   "text": "the shirt that was designed for that one. In that point, I presented this very vague"
+  },
+  {
+   "t": 356.56,
+   "d": 16.0,
+   "text": "concept of model view controller that might mean something to some people here. Let me do a cough."
+  },
+  {
+   "t": 373.84,
+   "d": 8.16,
+   "text": "I want taxpayer -- to go more in-depth with more specific implementation details. This technique"
+  },
+  {
+   "t": 382.0,
+   "d": 5.4,
+   "text": "has been used several times successfully. Ink bound was built with this architecture."
+  },
+  {
+   "t": 388.08,
+   "d": 6.24,
+   "text": "It is like a multiplayer cooperative roguelike. I worked on a game called ever seed which is a Tower"
+  },
+  {
+   "t": 394.32,
+   "d": 6.24,
+   "text": "defense game that used this. And slumber realm my new project uses this. I spoke to a few other"
+  },
+  {
+   "t": 400.56,
+   "d": 11.08,
+   "text": "developers who are imp implementing a similar architecture. Wonder belly and a couple others"
+  },
+  {
+   "t": 412.28,
+   "d": 20.88,
+   "text": "are using it. Let talk about the four principles. The first is to avoid reentrant code. There is an"
+  },
+  {
+   "t": 433.16,
+   "d": 9.48,
+   "text": "upgrade that says when taking damage discard the top card and apply 10 damage if the effect is 0."
+  },
+  {
+   "t": 442.64,
+   "d": 7.12,
+   "text": "Let's say I play a card. This card manager plays a card. Tells the damage manager to do, you know,"
+  },
+  {
+   "t": 449.76,
+   "d": 5.6,
+   "text": "damage, whatever. The player takes the damage. That tells the upgrade manager that damage was"
+  },
+  {
+   "t": 455.36,
+   "d": 7.44,
+   "text": "applied and this applies the effect. We discard the top card and conditionally apply the damage."
+  },
+  {
+   "t": 462.8,
+   "d": 4.12,
+   "text": "What you will notice is if you focus on the arrows they are just calling all over the"
+  },
+  {
+   "t": 466.92,
+   "d": 9.52,
+   "text": "place. It is very spaghetti like in nature to use a random metaphor. We started with the card"
+  },
+  {
+   "t": 476.44,
+   "d": 5.2,
+   "text": "manager playing the card. The upgrade manager is calling back into the card manager to discard that"
+  },
+  {
+   "t": 481.64,
+   "d": 8.92,
+   "text": "card. These arrows go everywhere. The code is able to reenter. No concept of ownership. Avoid"
+  },
+  {
+   "t": 490.56,
+   "d": 4.68,
+   "text": "global state and singletons almost always. I am very strict about this in me own code. A lot of"
+  },
+  {
+   "t": 495.24,
+   "d": 7.0,
+   "text": "other developers I work with aren't. I found this leads to architecture that's very hard to maintain"
+  },
+  {
+   "t": 502.24,
+   "d": 6.28,
+   "text": "and hard to take advantage or get some benefits I said at the start. To make it more concrete,"
+  },
+  {
+   "t": 508.52,
+   "d": 6.24,
+   "text": "here we have real-time strategy games. Zee we have a barracks class and after a certain amount of"
+  },
+  {
+   "t": 514.76,
+   "d": 7.0,
+   "text": "time in training we tell the unit manager to add a new unit. That could callback into the"
+  },
+  {
+   "t": 521.76,
+   "d": 6.92,
+   "text": "barracks or anywhere else. We have no control or knowledge of what's happening after that point. I"
+  },
+  {
+   "t": 528.68,
+   "d": 5.96,
+   "text": "notice this leads to code that's difficult to maintain and it is hard to get benefits like"
+  },
+  {
+   "t": 534.64,
+   "d": 5.76,
+   "text": "replays and networking. This is probably the most important principle. Strict separation of"
+  },
+  {
+   "t": 540.4,
+   "d": 9.28,
+   "text": "data from state, logic, and presentation. Let's go to this diagram. Data obvious. Doesn't change."
+  },
+  {
+   "t": 549.68,
+   "d": 6.72,
+   "text": "Usually loaded from the hard drive coming from the network. State changes often and stored in RAM."
+  },
+  {
+   "t": 556.4,
+   "d": 9.52,
+   "text": "Let's go back to the real-time strategy. We have a tank defined in data. When we load that in state,"
+  },
+  {
+   "t": 565.92,
+   "d": 4.08,
+   "text": "we might have 10 instances moving around the map. They might have different HP-values."
+  },
+  {
+   "t": 573.48,
+   "d": 6.92,
+   "text": "Logic operates on the state. Player and system driven. The player might press a button. The"
+  },
+  {
+   "t": 580.4,
+   "d": 6.04,
+   "text": "system might decide every 10 seconds all tanks take 10 damage. Whatever. And then"
+  },
+  {
+   "t": 586.44,
+   "d": 6.04,
+   "text": "presentation. That is, you know, driven by in some cases the state or logic directly,"
+  },
+  {
+   "t": 592.48,
+   "d": 6.84,
+   "text": "and we it is UI that shows the player what's happening. It is animation. 3D. 2D. Whatever."
+  },
+  {
+   "t": 600.72,
+   "d": 7.4,
+   "text": "Sounds and effect are all informing and telling the player what happens. We want to keep the"
+  },
+  {
+   "t": 608.12,
+   "d": 9.04,
+   "text": "interfaces strict and clear. Top-down control finally. Related to the reentrant code. We"
+  },
+  {
+   "t": 617.16,
+   "d": 5.56,
+   "text": "have a button to damage the unit on the screen. Input supplies system detects when the players"
+  },
+  {
+   "t": 622.72,
+   "d": 9.2,
+   "text": "presses the mouse and the UI system detects this informing the black box sim the player wants to"
+  },
+  {
+   "t": 631.92,
+   "d": 8.28,
+   "text": "apply damage. This is all top-down. There is never a case where we will callback up so the"
+  },
+  {
+   "t": 640.2,
+   "d": 8.76,
+   "text": "black box never needs community with them and it all flows in one direction. The source of these"
+  },
+  {
+   "t": 648.96,
+   "d": 6.2,
+   "text": "principles is 16 years putting together shotty gameplay architecture and learning from that. A"
+  },
+  {
+   "t": 658.12,
+   "d": 7.08,
+   "text": "couple implementation notes. I am using C# and unity. But this is more of a concept you could"
+  },
+  {
+   "t": 665.2,
+   "d": 5.96,
+   "text": "apply to any language or engine. Don't get too hung up on that. The example is for a turn-base"
+  },
+  {
+   "t": 671.16,
+   "d": 5.52,
+   "text": "game here but it works similarly if you have a frame-base game like a game with an update loop."
+  },
+  {
+   "t": 676.68,
+   "d": 8.56,
+   "text": "You can dapped for this style as well. I have done that in the past. Here we have our black box sim."
+  },
+  {
+   "t": 686.0,
+   "d": 6.2,
+   "text": "Let's get into it. When I talk to the black box sim I am talking about this region. The state and"
+  },
+  {
+   "t": 692.2,
+   "d": 7.12,
+   "text": "the logic. You could think of the black box sim as an API. We give the black box sim the inputs"
+  },
+  {
+   "t": 699.32,
+   "d": 9.72,
+   "text": "generated from the player which gives outputs that we drive our presentation with. That's the mental"
+  },
+  {
+   "t": 709.04,
+   "d": 8.76,
+   "text": "model to think of. And there is very strict inputs and output do is the black box sim. It expects a"
+  },
+  {
+   "t": 717.8,
+   "d": 10.08,
+   "text": "very specific format to give inputs. It gives outputs in a predefined structure way. We are"
+  },
+  {
+   "t": 727.88,
+   "d": 10.68,
+   "text": "not poking at it from every which way. I should mention at this point, ink bound was developed in"
+  },
+  {
+   "t": 738.56,
+   "d": 6.04,
+   "text": "this way. One of the cool things we were able to do with it is the game server ran that black box"
+  },
+  {
+   "t": 744.6,
+   "d": 5.08,
+   "text": "sim without unity at all. So the game was written in unity but we were able to isolate the black box"
+  },
+  {
+   "t": 749.68,
+   "d": 9.56,
+   "text": "sim to be a pure C# executive and run that within the unity runtime or just within a terminal window"
+  },
+  {
+   "t": 759.24,
+   "d": 8.92,
+   "text": "C# program. As a result, it was able to run really efficiently on Amazon EC2 instances. Another just,"
+  },
+  {
+   "t": 768.16,
+   "d": 5.04,
+   "text": "you know, curious thing you could do is write in any language you want. You might be working"
+  },
+  {
+   "t": 773.2,
+   "d": 6.4,
+   "text": "on a unity game or whatever but you could write your black box sim in C++, Ruby or if you want"
+  },
+  {
+   "t": 779.6,
+   "d": 7.6,
+   "text": "to create a visual basic black box sim you could do that because it is an isolated thing. In most"
+  },
+  {
+   "t": 787.2,
+   "d": 5.84,
+   "text": "cases you probably want to do it in the same language but pointing out you can. This is the"
+  },
+  {
+   "t": 793.04,
+   "d": 5.48,
+   "text": "overview of what I am going to talk about in terms of implementation. I did have to scope"
+  },
+  {
+   "t": 798.52,
+   "d": 10.6,
+   "text": "the talk down but I will hint and give you an idea of how you might implement these features."
+  },
+  {
+   "t": 811.4,
+   "d": 8.92,
+   "text": "OK. Let's talk about world state. World state I am talking about this orange box is a single"
+  },
+  {
+   "t": 820.32,
+   "d": 6.52,
+   "text": "structure containing all state and variables for your entire game simulation. This is the"
+  },
+  {
+   "t": 826.84,
+   "d": 7.96,
+   "text": "simplest example I could think of. The player and enemy HP -- that's the world state. Anything"
+  },
+  {
+   "t": 834.8,
+   "d": 4.4,
+   "text": "that is a part of your world state like the literal game simulation would go into this"
+  },
+  {
+   "t": 839.2,
+   "d": 6.96,
+   "text": "single structure. There is all sorts of ways you could organize this. OK. First, I want to"
+  },
+  {
+   "t": 846.16,
+   "d": 5.56,
+   "text": "point out this is a demonstration of principle 3. We have our state completely separate of the"
+  },
+  {
+   "t": 851.72,
+   "d": 8.56,
+   "text": "operations that you use to modify it. Data and presentation. This is highly serializable. That's"
+  },
+  {
+   "t": 860.28,
+   "d": 7.08,
+   "text": "an important point that leads to other benefits. Let's keep it in mind. Here is an example of what"
+  },
+  {
+   "t": 867.36,
+   "d": 4.56,
+   "text": "my world state looks like in my current game. Don't focus on this too much. I want to give a"
+  },
+  {
+   "t": 871.92,
+   "d": 12.0,
+   "text": "demonstration of how I chose to organize it. I have RNG stored in the world save. I have stele"
+  },
+  {
+   "t": 883.92,
+   "d": 16.84,
+   "text": "the staff and equipment. You can do it however you want. This is my state, sorry my stats. HP,"
+  },
+  {
+   "t": 900.76,
+   "d": 10.76,
+   "text": "defense, stored on a per unit basis. Just to give you an idea, ultimately I am storing a bunch of"
+  },
+  {
+   "t": 911.52,
+   "d": 7.16,
+   "text": "integers for the most part. I don't do floating point myself but you can. I am storing integers"
+  },
+  {
+   "t": 918.68,
+   "d": 9.64,
+   "text": "keyed by an entity. I have simple accessors and setters and this read-only interface. That's all"
+  },
+  {
+   "t": 928.32,
+   "d": 7.8,
+   "text": "optional stuff you can layer on top. The second bit of this is the logic center here and what I"
+  },
+  {
+   "t": 936.12,
+   "d": 8.84,
+   "text": "call world command. This is your operation on the state. Self-contained and initiated from player"
+  },
+  {
+   "t": 944.96,
+   "d": 6.56,
+   "text": "action like clicking a button and moving a joy stick. Here is an example that let's the player"
+  },
+  {
+   "t": 951.52,
+   "d": 9.68,
+   "text": "heal a unit once per turn. You can target a team, maybe two different teams, whatever. And an amount"
+  },
+  {
+   "t": 961.2,
+   "d": 6.2,
+   "text": "to heal by. We have this resolve function passed in the world state. This is showing we are not"
+  },
+  {
+   "t": 967.4,
+   "d": 5.64,
+   "text": "using global state. You could pass in any world state. This command doesn't care what world state"
+  },
+  {
+   "t": 973.04,
+   "d": 6.92,
+   "text": "it is operating on. It just needs world state. Here is the target team and we increase the HP."
+  },
+  {
+   "t": 987.84,
+   "d": 8.88,
+   "text": "We would create a shared static function and both world commits would call that. They never"
+  },
+  {
+   "t": 996.72,
+   "d": 5.04,
+   "text": "call into each other. You will never create a world command inside another world command."
+  },
+  {
+   "t": 1004.44,
+   "d": 9.52,
+   "text": "Top-down control. And we can pass in parts of the world state to the static function. We could"
+  },
+  {
+   "t": 1013.96,
+   "d": 22.96,
+   "text": "have a static helper function that just needs to know about equipment. We pass the entire world"
+  },
+  {
+   "t": 1036.92,
+   "d": 8.68,
+   "text": "into a resolve and that can modify any part it wants. We can serialize it. The world command can"
+  },
+  {
+   "t": 1045.6,
+   "d": 4.16,
+   "text": "be serialized. We took advantage of this in ink bound and that's how in -- the networking worked"
+  },
+  {
+   "t": 1049.76,
+   "d": 14.0,
+   "text": "in ink band. For a preview system, you can image imagine copy the entire world state and copying"
+  },
+  {
+   "t": 1064.52,
+   "d": 11.68,
+   "text": "that. So you would modify a copy and not the true monocle state. Let's talk about the presentation"
+  },
+  {
+   "t": 1076.2,
+   "d": 7.68,
+   "text": "side. Here we have the concept of a world state change. This is our output from that black box"
+  },
+  {
+   "t": 1083.88,
+   "d": 11.16,
+   "text": "diagram. A notification from a world command that state has changed. It is used for VFX, animation,"
+  },
+  {
+   "t": 1095.04,
+   "d": 7.4,
+   "text": "sound effects, whatever else. It drives all that output of your game. It is worth pointing out I"
+  },
+  {
+   "t": 1102.44,
+   "d": 9.96,
+   "text": "only use this to emit information flame from the black box. I never read from them inside the black"
+  },
+  {
+   "t": 1112.4,
+   "d": 12.2,
+   "text": "box sim. That's not against the law. I just like to keep things simple and separate. OK. Here is"
+  },
+  {
+   "t": 1124.6,
+   "d": 6.52,
+   "text": "a very simple example of a world state change. We are saying a unit was healed. It could have come"
+  },
+  {
+   "t": 1131.12,
+   "d": 4.44,
+   "text": "from our world command heal or something else in the game could have an effect. You could have an"
+  },
+  {
+   "t": 1135.56,
+   "d": 7.88,
+   "text": "effect like whenever the player take damage they heal from one. We have all of the information"
+  },
+  {
+   "t": 1143.44,
+   "d": 5.4,
+   "text": "we need to know about as a response to the heal. There is one important thing I want to point out."
+  },
+  {
+   "t": 1148.84,
+   "d": 6.76,
+   "text": "It is a hard nuanced to explain but any change you want to be fully encapsulated in the world"
+  },
+  {
+   "t": 1155.6,
+   "d": 8.88,
+   "text": "change. Later on I will show how to sequence these but because the world command operates instantly"
+  },
+  {
+   "t": 1164.48,
+   "d": 12.72,
+   "text": "any change in animation needs to be encapsulated in this world state change. We have world command"
+  },
+  {
+   "t": 1177.2,
+   "d": 5.92,
+   "text": "heal, resolve function, and we added in a list of world state changes. This is the output from the"
+  },
+  {
+   "t": 1183.12,
+   "d": 5.8,
+   "text": "black box sim. After doing the work, we captured more values with the new and previous HP value."
+  },
+  {
+   "t": 1190.32,
+   "d": 8.32,
+   "text": "We are putting these in the world state change and adding them to the list. That's all we are doing."
+  },
+  {
+   "t": 1200.2,
+   "d": 6.8,
+   "text": "This goes back to principle 3. We have the presentation separate from the logic"
+  },
+  {
+   "t": 1211.0,
+   "d": 3.48,
+   "text": "and the state. Also it is worth pointing out the presentation can only know about the world from"
+  },
+  {
+   "t": 1214.48,
+   "d": 5.96,
+   "text": "the world state changes. I have a little asterisk because I have read directly. In some cases I do"
+  },
+  {
+   "t": 1220.44,
+   "d": 16.24,
+   "text": "that and in my current game I don't. But it can be done. Demo time. I will run my simulation."
+  },
+  {
+   "t": 1236.68,
+   "d": 8.16,
+   "text": "OK. I think we forgot something. What happened? Well, we had our inputs and gave them to black"
+  },
+  {
+   "t": 1244.84,
+   "d": 10.32,
+   "text": "box sim and generated them. We didn't do anything with there outputs. We are going to display the"
+  },
+  {
+   "t": 1255.16,
+   "d": 6.72,
+   "text": "results to the player somehow. That wasn't really a good demo but sort of a joke and segue into the"
+  },
+  {
+   "t": 1261.88,
+   "d": 5.68,
+   "text": "next part. Here is how we might display the world state changes. I am kind of weird and"
+  },
+  {
+   "t": 1267.56,
+   "d": 6.64,
+   "text": "a fan of big dumb switch case statements. My code has a huge list of these cases. But you"
+  },
+  {
+   "t": 1274.2,
+   "d": 11.04,
+   "text": "could organize this in different ways. We have a health bar for the player and enemy and the"
+  },
+  {
+   "t": 1285.24,
+   "d": 5.44,
+   "text": "concept of combat. There is a lot of games if the unit take damage we show a red number pop"
+  },
+  {
+   "t": 1290.68,
+   "d": 19.0,
+   "text": "up or if they heal a green number. Imagine this a UI element. And then we show a healing number from"
+  },
+  {
+   "t": 1309.68,
+   "d": 14.32,
+   "text": "the health bar position with the amount heal so they see they gained three hip points. There is a"
+  },
+  {
+   "t": 1324.0,
+   "d": 6.44,
+   "text": "detail that's pretty important. That's animation. All of this stuff right here happens immediately."
+  },
+  {
+   "t": 1330.44,
+   "d": 5.64,
+   "text": "When you call that world command play card and the world state changes are generated that happens you"
+  },
+  {
+   "t": 1336.08,
+   "d": 7.16,
+   "text": "can think of it instantly. There is no concept of time or animation in the black box. It is a"
+  },
+  {
+   "t": 1343.24,
+   "d": 7.92,
+   "text": "computing machine. This stuff down here we need to make it animate over time. The player needs to"
+  },
+  {
+   "t": 1351.16,
+   "d": 27.84,
+   "text": "comprehend what is happening and the animation is important for that. You can get a whole different"
+  },
+  {
+   "t": 1379.0,
+   "d": 7.96,
+   "text": "set of world changes. It is unpredictable what is going to happening. Down here we will sequence"
+  },
+  {
+   "t": 1386.96,
+   "d": 6.92,
+   "text": "these. Card play sequences an animation and it goes to the center of the screen. The unit"
+  },
+  {
+   "t": 1393.88,
+   "d": 14.27,
+   "text": "moved and the character moves across the screen. We will show the attacker swinging a sword. You"
+  },
+  {
+   "t": 1412.0,
+   "d": 7.36,
+   "text": "can sequence them in different ways. This is the way I implemented it. My implementation"
+  },
+  {
+   "t": 1419.36,
+   "d": 6.84,
+   "text": "on the animation side I don't feel hundred 100% great about. I think there is work there to be"
+  },
+  {
+   "t": 1426.2,
+   "d": 18.24,
+   "text": "done. This is showing top down control. It is all unidirectional. By the time the animations"
+  },
+  {
+   "t": 1444.44,
+   "d": 5.6,
+   "text": "are playing, the world command and state changes are long gone and don't exist any more. These"
+  },
+  {
+   "t": 1450.04,
+   "d": 7.48,
+   "text": "animations are self-sufficient. Let's return to if we have really great gameplay architecture what"
+  },
+  {
+   "t": 1457.52,
+   "d": 7.88,
+   "text": "does it give us? The gameplay logic is more predictable. We encapsulated RNG into that."
+  },
+  {
+   "t": 1469.12,
+   "d": 6.16,
+   "text": "Things like animation and player input are often the types of things that the break determinism."
+  },
+  {
+   "t": 1477.84,
+   "d": 5.6,
+   "text": "We don't care about what the player is doing with the mouse or how can an animation takes. That's"
+  },
+  {
+   "t": 1483.44,
+   "d": 10.32,
+   "text": "all output of your black box sim. Save load. World state is centralized and highly serializable. If"
+  },
+  {
+   "t": 1493.76,
+   "d": 5.32,
+   "text": "you want to implement save, you can serialize that entire world state structure to JSON file"
+  },
+  {
+   "t": 1499.08,
+   "d": 5.04,
+   "text": "binary whatever you want to do. And you can load it back up in a similar way. There is still a"
+  },
+  {
+   "t": 1504.12,
+   "d": 5.16,
+   "text": "lot of details with save and load. It is much easier when all your game state is centralized."
+  },
+  {
+   "t": 1520.08,
+   "d": 5.76,
+   "text": "They are highly serializable. I talked about with ink bound and how we would serialize and"
+  },
+  {
+   "t": 1526.72,
+   "d": 6.56,
+   "text": "send the whole world state. We would synchronize world commands back and forth. It was super low"
+  },
+  {
+   "t": 1533.28,
+   "d": 14.2,
+   "text": "bandwidth and efficient. Here is something else. With replay comes back to serializing again. You"
+  },
+  {
+   "t": 1547.48,
+   "d": 6.0,
+   "text": "can serialize the world commands and the initial world state to regenerate the replay or you could"
+  },
+  {
+   "t": 1553.48,
+   "d": 4.92,
+   "text": "do it the opposite way. You could just store the world state changes and serialize those and drive"
+  },
+  {
+   "t": 1558.4,
+   "d": 8.0,
+   "text": "your visuals with that so you don't have a real backing black box sim. I don't know if there is a"
+  },
+  {
+   "t": 1566.4,
+   "d": 4.64,
+   "text": "reason to do it one way or the other. I have done it the way where you save the world commands that"
+  },
+  {
+   "t": 1571.04,
+   "d": 6.72,
+   "text": "generate the world. But you could do it either way. An undo/redo system I implemented this thing"
+  },
+  {
+   "t": 1577.76,
+   "d": 5.92,
+   "text": "before where at the start of the turn you save off the world state and start a turn. If they press"
+  },
+  {
+   "t": 1583.68,
+   "d": 5.92,
+   "text": "the undo button you can copy over the canonical world state with the original world version."
+  },
+  {
+   "t": 1589.6,
+   "d": 11.62,
+   "text": "There is divert effort to sync the game UI so it isn't three. A previous system let's say I"
+  },
+  {
+   "t": 1601.22,
+   "d": 5.46,
+   "text": "am dragging a card to play it, copy the world state, run the play card world command, and"
+  },
+  {
+   "t": 1606.68,
+   "d": 4.88,
+   "text": "read the world state changes. Instead of applying them like I do normally, I parse out the ones I"
+  },
+  {
+   "t": 1611.56,
+   "d": 6.0,
+   "text": "care about. A unit of damage. I could accumulate how much damage that took reading through all the"
+  },
+  {
+   "t": 1617.56,
+   "d": 6.56,
+   "text": "world state changes. I have a special UI layer that shows damage previews and I could use that"
+  },
+  {
+   "t": 1624.12,
+   "d": 5.36,
+   "text": "number to show the previews. It would be entirely accurate considering all game effects. You might"
+  },
+  {
+   "t": 1629.48,
+   "d": 6.24,
+   "text": "have passive relic style effects. It will take all that into account because it is running the"
+  },
+  {
+   "t": 1635.72,
+   "d": 8.92,
+   "text": "normal code. You can create custom world states for test, run commands, and verify state changes"
+  },
+  {
+   "t": 1644.64,
+   "d": 7.32,
+   "text": "emitted in the way you expect. There is all sorts of stuff you can do on the testability side. You"
+  },
+  {
+   "t": 1651.96,
+   "d": 12.48,
+   "text": "get fewer bugs because the gameplay logic is more predictable. I could fix it without having"
+  },
+  {
+   "t": 1664.44,
+   "d": 8.04,
+   "text": "to worry about animation as a separate bug. That separation helps a lot. And then it is"
+  },
+  {
+   "t": 1672.48,
+   "d": 4.6,
+   "text": "much easier to reproduce bugs if you implement a replay system. You can have players send you"
+  },
+  {
+   "t": 1677.08,
+   "d": 6.68,
+   "text": "replays and automate it even so you get replays. They could tell you which GIT commit to go to"
+  },
+  {
+   "t": 1684.88,
+   "d": 7.08,
+   "text": "generate and just a matter of running the black box sim until you generate the same error. Much"
+  },
+  {
+   "t": 1691.96,
+   "d": 8.04,
+   "text": "easier to reproduce bugs. That's it. That's the concept of you know what planning out and having"
+  },
+  {
+   "t": 1700.0,
+   "d": 3.96,
+   "text": "a well planned out game architecture. I was not able to go into depth on all these things but I"
+  },
+  {
+   "t": 1703.96,
+   "d": 6.4,
+   "text": "think you can understand why you would benefit from architecture with all these things. That's"
+  },
+  {
+   "t": 1710.36,
+   "d": 7.48,
+   "text": "my talk. This is my email. I am on social media. I love to talk about gameplay architecture. I nerd"
+  },
+  {
+   "t": 1717.84,
+   "d": 6.36,
+   "text": "out about this stuff so if you have questions or comments, feel free to reach out. I have chatted"
+  },
+  {
+   "t": 1724.2,
+   "d": 8.8,
+   "text": "with a few people over the years from my original talk on monster train. I don't know if there is"
+  },
+  {
+   "t": 1733.0,
+   "d": 9.72,
+   "text": "time for questions. I took all the time. ALEXEI: Certainly, personally, I love the"
+  },
+  {
+   "t": 1742.72,
+   "d": 4.36,
+   "text": "coming back of I talked about something a few years ago, and it has been referenced in a"
+  },
+  {
+   "t": 1747.08,
+   "d": 5.68,
+   "text": "bunch of projects now, and I know how it went for them. Let me talk about what I learned as"
+  },
+  {
+   "t": 1752.76,
+   "d": 6.68,
+   "text": "I continue to apply them in the real world. It is like you have that extra tested in real world"
+  },
+  {
+   "t": 1759.44,
+   "d": 11.92,
+   "text": "circumstances seal of approval. With a -- BRIAN: With a few years behind them."
+  },
+  {
+   "t": 1771.36,
+   "d": 6.2,
+   "text": "ALEXEI: My title has become technical systems designer which is a lot of just doing this."
+  },
+  {
+   "t": 1779.2,
+   "d": 5.12,
+   "text": "When you work on big enough teams, I have to have a name for it. We might have time for one"
+  },
+  {
+   "t": 1784.32,
+   "d": 8.72,
+   "text": "quick question if anyone has one but if not we are going to give Robin another chance. I have"
+  },
+  {
+   "t": 1793.68,
+   "d": 8.28,
+   "text": "it open if anyone wants to throw one out there. But yeah. I know serialization was coming up a"
+  },
+  {
+   "t": 1801.96,
+   "d": 7.12,
+   "text": "lot in terms of lightweight ways to serialize and use information which is a favorite topic."
+  },
+  {
+   "t": 1810.92,
+   "d": 5.88,
+   "text": "It is probably best to follow up in the breakout room so we can try to give Robin another chance."
+  },
+  {
+   "t": 1822.4,
+   "d": 4.28,
+   "text": "If people are able to follow up with you, that will be in the fountain breakout room"
+  },
+  {
+   "t": 1826.68,
+   "d": 5.28,
+   "text": "or you kindly provided your email. BRIAN: Thanks a lot for having me."
+  }
+ ]
+}

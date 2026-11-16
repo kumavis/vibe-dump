@@ -1,0 +1,1418 @@
+{
+ "id": "CE7o3GGif30",
+ "url": "https://www.youtube.com/watch?v=CE7o3GGif30",
+ "title": "Aaron A. Reed: Klingons, Hobbits, and the Oregon Trail",
+ "speaker": "Aaron A. Reed",
+ "talk_title": "Klingons, Hobbits, and the Oregon Trail",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1983,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "The author of \"50 Years of Text Games\" dives into some of the very earliest PCG in games from the 70s and the dawn of home computers, from one-liner simulations of cold weather geography to lossy compression of galactic sector maps far larger than 2K of memory could hold.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Early computer game history"
+  },
+  {
+   "start": 1403,
+   "title": "Book announcement"
+  },
+  {
+   "start": 1422,
+   "title": "Q&A and closing discussion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4840,
+ "trimmed": {
+  "segments": 5,
+  "words": 82
+ },
+ "segments": [
+  {
+   "t": 8.96,
+   "d": 12.52,
+   "text": "on. Aaron is a game designer and a multi-time finalist and spoken about digital storytelling"
+  },
+  {
+   "t": 22.04,
+   "d": 5.0,
+   "text": "from gamer X to GEC. Aaron, welcome. You get to be the first speaker of Roguelike"
+  },
+  {
+   "t": 27.04,
+   "d": 6.92,
+   "text": "Celebration 2023. I know what year it is. AARON: Yeah, it is always interesting to see"
+  },
+  {
+   "t": 33.96,
+   "d": 4.84,
+   "text": "if you can remember that. Are you hearing me OK? Everything going good? Assume you will pop back"
+  },
+  {
+   "t": 38.8,
+   "d": 5.72,
+   "text": "on and stop me if not. Great to be here. It so awesome to be kicking off Roguelike Celebration"
+  },
+  {
+   "t": 44.52,
+   "d": 6.12,
+   "text": "2023 with you all. So I am Aaron A. Reed. A writer and game designer. Here are projects"
+  },
+  {
+   "t": 51.16,
+   "d": 7.28,
+   "text": "you might know me from. I have done a decent amount of system stuff and bounced back and"
+  },
+  {
+   "t": 58.44,
+   "d": 6.52,
+   "text": "forth between amateur and commercial spaces. Y-y have done a number of indie digital games,"
+  },
+  {
+   "t": 65.52,
+   "d": 8.6,
+   "text": "tabletop games, written books about games and books that are not actually games them spells"
+  },
+  {
+   "t": 74.12,
+   "d": 7.36,
+   "text": "and lots in between. I gave an overview of the past work at the 2020 Roguelike Celebration which"
+  },
+  {
+   "t": 81.48,
+   "d": 6.96,
+   "text": "you can find by this name on YouTube. More recently this book game out this year and"
+  },
+  {
+   "t": 88.44,
+   "d": 12.0,
+   "text": "is a look back at games without graphics. I don't talk much about roguelikes in this book because I"
+  },
+  {
+   "t": 100.44,
+   "d": 4.4,
+   "text": "think that's a whole different book for someone else to write and I am mostly looking at games"
+  },
+  {
+   "t": 104.84,
+   "d": 7.0,
+   "text": "where text means interactive prose. There are a few exceptions. What comes up a lot in the book"
+  },
+  {
+   "t": 111.84,
+   "d": 6.32,
+   "text": "that is probably interest to roguelike-y folks is procedural generation and how it has been built"
+  },
+  {
+   "t": 118.16,
+   "d": 7.4,
+   "text": "to build surprising worlds to explore. We think of that as a need for replayability and every run to"
+  },
+  {
+   "t": 125.56,
+   "d": 6.72,
+   "text": "be different but in the earliest days of computer it was more necessity. You couldn't fit a premade"
+  },
+  {
+   "t": 132.28,
+   "d": 4.88,
+   "text": "world big enough to be interesting to explore in the footprint of the earliest computers. You had"
+  },
+  {
+   "t": 137.16,
+   "d": 6.64,
+   "text": "to generate a world to have a game at all. If we flashback to the talk title and it is fine,"
+  },
+  {
+   "t": 143.8,
+   "d": 4.72,
+   "text": "I had already forgotten it too, you recall I promised to talk about the first decade of text"
+  },
+  {
+   "t": 148.52,
+   "d": 7.36,
+   "text": "games and I mean the 1970s for somewhat pedantic reasons and people were mucking around in the"
+  },
+  {
+   "t": 155.88,
+   "d": 9.72,
+   "text": "'60s and earlier than that. Here is the output of a program in 1952 written for a machine so"
+  },
+  {
+   "t": 165.6,
+   "d": 11.12,
+   "text": "new just called the computer or the specifically MUC. The way the program worked was take random"
+  },
+  {
+   "t": 176.72,
+   "d": 9.76,
+   "text": "words from lists of flowery nouns and adjectives and fill in template sentences. The MUC didn't"
+  },
+  {
+   "t": 186.48,
+   "d": 6.88,
+   "text": "have a keyboard you could type words into making creating the list a challenge but also because the"
+  },
+  {
+   "t": 193.36,
+   "d": 4.48,
+   "text": "idea of wasting the time of a million dollar plus computer to do something so trivial as to pretend"
+  },
+  {
+   "t": 197.84,
+   "d": 7.04,
+   "text": "to have feeling was fairly scandalous. Christopher who wrote the program would print the procedural"
+  },
+  {
+   "t": 204.88,
+   "d": 6.24,
+   "text": "love letters out and pin them anonymously to the department message board. He is kind of"
+  },
+  {
+   "t": 211.12,
+   "d": 4.84,
+   "text": "an unsung queer folk hero of early computing history responsible for all kinds of computer"
+  },
+  {
+   "t": 215.96,
+   "d": 6.2,
+   "text": "first and I think should be a lot better known. At the heart of the program is basically just"
+  },
+  {
+   "t": 222.16,
+   "d": 5.56,
+   "text": "this. Although this was a lot harder to do in the 50s and random wasn't a thing you could"
+  },
+  {
+   "t": 227.72,
+   "d": 5.88,
+   "text": "always call as a function. What this program is doing is grabbing random words from a list"
+  },
+  {
+   "t": 233.6,
+   "d": 5.4,
+   "text": "and inserting them into template sentences. It is easy today to think so what but it is"
+  },
+  {
+   "t": 239.0,
+   "d": 13.08,
+   "text": "surprising how little earlier computers made use of randomness. Computerized military war"
+  },
+  {
+   "t": 252.08,
+   "d": 7.56,
+   "text": "games were the first created and ran a bunch of equation for things like missile trajectory,"
+  },
+  {
+   "t": 259.64,
+   "d": 9.96,
+   "text": "troop casualty rates and tank speeds that would spit out a solution. It was totally deterministic."
+  },
+  {
+   "t": 270.16,
+   "d": 3.96,
+   "text": "Kind of a reflection of the earlier 20th century ideal that if you got the math right you could"
+  },
+  {
+   "t": 274.12,
+   "d": 5.44,
+   "text": "predict things perfectly. This is around the time the foundation books are coming out about you can"
+  },
+  {
+   "t": 279.56,
+   "d": 4.92,
+   "text": "accurately guess what people will do thousands of years in the environment and the randomness theory"
+  },
+  {
+   "t": 284.48,
+   "d": 16.04,
+   "text": "wasn't in the zeitgeist yet. You had detailed equations about markets, supply and demand and"
+  },
+  {
+   "t": 300.52,
+   "d": 6.6,
+   "text": "how advertising budgets affected those. If you priced the laundry detergent the same way in the"
+  },
+  {
+   "t": 307.12,
+   "d": 6.88,
+   "text": "same fiscal environment you would get predictable results. This was designed for business executives"
+  },
+  {
+   "t": 314.0,
+   "d": 6.68,
+   "text": "to play and did it by circling options on a worksheet then turned over to a team of competent"
+  },
+  {
+   "t": 320.68,
+   "d": 6.96,
+   "text": "women who can operate the computer to input important manly business decisions. So typical."
+  },
+  {
+   "t": 327.64,
+   "d": 5.52,
+   "text": "When you started seeing educational computer games appear in the 1960s they adopted the same tactic,"
+  },
+  {
+   "t": 333.16,
+   "d": 4.12,
+   "text": "the idea of what computers were really for was running calculations and what the user should"
+  },
+  {
+   "t": 337.28,
+   "d": 6.84,
+   "text": "be doing was supplying the right variable. In the game that later became known as Hammurabi you play"
+  },
+  {
+   "t": 344.12,
+   "d": 5.36,
+   "text": "a Samarian king making decisions about keeping your people fed and you type in numbers and that"
+  },
+  {
+   "t": 349.48,
+   "d": 7.92,
+   "text": "goes into how many bushels of grain of a certain size of population needs to survive and so on."
+  },
+  {
+   "t": 357.4,
+   "d": 8.52,
+   "text": "I think the epitome and lunar lander which is a fun game about doing calculus. You are imputing"
+  },
+  {
+   "t": 365.92,
+   "d": 4.08,
+   "text": "the burn rate of your lander on the right and trying to decelerate quick enough to land at a"
+  },
+  {
+   "t": 370.0,
+   "d": 5.12,
+   "text": "safe speed but not so fast you run out of fuel too early. There is no randomness. The game is"
+  },
+  {
+   "t": 375.12,
+   "d": 5.68,
+   "text": "plugging numbers into the brutal or beautiful if you are that kind of person equation. And games"
+  },
+  {
+   "t": 380.8,
+   "d": 6.56,
+   "text": "in this mode can be fun and were fun for their novelty if nothing else at the time but they feel"
+  },
+  {
+   "t": 387.36,
+   "d": 6.0,
+   "text": "stale. When people started writing programs trying to capture the spark of humanity they"
+  },
+  {
+   "t": 393.36,
+   "d": 13.44,
+   "text": "couldn't help but come back to randomness. Eliza the first chatbot wasn't entirely deterministic"
+  },
+  {
+   "t": 410.88,
+   "d": 4.84,
+   "text": "and made it feel like something was alive in the computer and something interesting"
+  },
+  {
+   "t": 415.72,
+   "d": 6.4,
+   "text": "and vibrant was going on. This brings us to the first game I want to dive into. It the"
+  },
+  {
+   "t": 422.12,
+   "d": 5.92,
+   "text": "game that managed to trick people into thinking it is possible to make a fun educational game."
+  },
+  {
+   "t": 430.32,
+   "d": 5.04,
+   "text": "You might have played a later remake of the Oregon Trail but the original version ran on"
+  },
+  {
+   "t": 435.36,
+   "d": 8.88,
+   "text": "a teletype. This game was created by a student teacher trying to interest his junior high kids"
+  },
+  {
+   "t": 444.24,
+   "d": 6.32,
+   "text": "in a history lass. He was originally going to make a board game but his roommates made a programming"
+  },
+  {
+   "t": 450.56,
+   "d": 5.6,
+   "text": "class and convinced him they could collaborate to make a computer game. Board game ideas like"
+  },
+  {
+   "t": 456.16,
+   "d": 8.07,
+   "text": "drawing a random card from a deck to get an event or rolling a dice influenced the game design. It"
+  },
+  {
+   "t": 464.23,
+   "d": 5.85,
+   "text": "is important to note the opening text includes this word simulates. The vat of a computer game"
+  },
+  {
+   "t": 470.08,
+   "d": 11.04,
+   "text": "over the board game is there can be the mind the scenes. The kids might have to absorb some"
+  },
+  {
+   "t": 481.12,
+   "d": 4.56,
+   "text": "information about what was being simulated. This historical 2,000 mile over land journey"
+  },
+  {
+   "t": 485.68,
+   "d": 8.08,
+   "text": "in order to win. The basics of Oregon Trail is you purchase supplies, your progress is tracked"
+  },
+  {
+   "t": 493.76,
+   "d": 6.88,
+   "text": "by an integer representing miles traveled along the trail. If it meets or exceeds 240 you win."
+  },
+  {
+   "t": 500.64,
+   "d": 6.4,
+   "text": "You have opportunities to hunt for food, trade at forts to replenish supplies and there is a random"
+  },
+  {
+   "t": 507.04,
+   "d": 5.92,
+   "text": "event pulling from a pull of about 20 events in the original version. Many test you have a"
+  },
+  {
+   "t": 512.96,
+   "d": 5.48,
+   "text": "certain of enough resource and if you don't you die although never of dysentery in this version"
+  },
+  {
+   "t": 518.44,
+   "d": 9.28,
+   "text": "and that came 10 years later in a remake. Here is the code for a random event. What's going on here?"
+  },
+  {
+   "t": 527.72,
+   "d": 6.32,
+   "text": "If some variable name M is greater than 950 we will jump to 29 are 35 and print a message about"
+  },
+  {
+   "t": 534.04,
+   "d": 5.64,
+   "text": "cold weather and then we are going to test the C variable which is how much cold weather gear"
+  },
+  {
+   "t": 539.68,
+   "d": 7.08,
+   "text": "you have. If M is less than 950 we continue on to line 2665 and print a message about rain instead"
+  },
+  {
+   "t": 546.76,
+   "d": 7.72,
+   "text": "of frigid cold with. M is tracking the number of miles you traveled -- weather. This is stimulating"
+  },
+  {
+   "t": 555.0,
+   "d": 7.64,
+   "text": "the rocky mountains. About a thousand miles west of Missouri rain turns to snow. The game"
+  },
+  {
+   "t": 562.64,
+   "d": 5.96,
+   "text": "doesn't show landmarks or milestones but you get increasing mileage number but the geography is"
+  },
+  {
+   "t": 568.6,
+   "d": 6.56,
+   "text": "implicitly there in the different ways this event can be presented. A more interesting version is"
+  },
+  {
+   "t": 575.16,
+   "d": 4.64,
+   "text": "this random event where you might get attacked by riders. These were intended by the creators to be"
+  },
+  {
+   "t": 579.8,
+   "d": 6.24,
+   "text": "white bandits because historically settlers were more likely to get attacked by each other than"
+  },
+  {
+   "t": 586.04,
+   "d": 15.08,
+   "text": "Indigenous people. If it is less than a certain amount we skip and jump to line 2500 otherwise we"
+  },
+  {
+   "t": 601.12,
+   "d": 7.68,
+   "text": "move on to the rider attack. What is this equation doing? Well, I plugged it in so you don't have to."
+  },
+  {
+   "t": 608.8,
+   "d": 7.16,
+   "text": "We have seeing M in the horizontal axis and the vertical means what chance in 10 will we"
+  },
+  {
+   "t": 615.96,
+   "d": 7.4,
+   "text": "skip the rider event? Higher on the graph means more likely to see riders. This a cool little"
+  },
+  {
+   "t": 623.36,
+   "d": 6.56,
+   "text": "encoding of the likelihood of bandits striking out. Low in Missouri and strikes in the great"
+  },
+  {
+   "t": 629.92,
+   "d": 6.2,
+   "text": "plains where there is open space and less law. Starts dropping as you get to the Rockies and"
+  },
+  {
+   "t": 636.64,
+   "d": 4.8,
+   "text": "almost 0 on the other side where the hardship of the journey won out most challengers. Pretty neat"
+  },
+  {
+   "t": 641.44,
+   "d": 7.88,
+   "text": "for one line of basic. These events are random but informed by the simulation, right? It is"
+  },
+  {
+   "t": 649.32,
+   "d": 5.48,
+   "text": "randomness constrained by a plausibility space. Making a little universe inside your computer"
+  },
+  {
+   "t": 654.8,
+   "d": 14.24,
+   "text": "that you can't entirely take and control. It is that balance of predictable and unpredict. It"
+  },
+  {
+   "t": 669.04,
+   "d": 6.72,
+   "text": "is cool to trace us back to the early games and see how they started to experiment with that."
+  },
+  {
+   "t": 675.76,
+   "d": 4.68,
+   "text": "The next game I want to talk about was basically the original tactical space sim and it was made"
+  },
+  {
+   "t": 680.44,
+   "d": 12.64,
+   "text": "by a high school senior who missed his favorite TV show. You fly a starship enterprise and hunt down"
+  },
+  {
+   "t": 693.08,
+   "d": 8.12,
+   "text": "Klingons and the galaxy is randomly generated each time you play. I would argue it has a ton"
+  },
+  {
+   "t": 701.2,
+   "d": 12.08,
+   "text": "in common with the genre rogue would name years later. The fun possibility of getting totally"
+  },
+  {
+   "t": 713.28,
+   "d": 8.0,
+   "text": "screwed by the RNG when as it starts you next to a Klingon. Interestingly it was actually way"
+  },
+  {
+   "t": 721.28,
+   "d": 14.8,
+   "text": "too big T. An eight by eight grid of 64 quadrants and each quadrant as a sector. It is hard to see"
+  },
+  {
+   "t": 736.08,
+   "d": 7.28,
+   "text": "but this overlay helps a bit. That's 496 possible grid spaces that might contain star ships, stars,"
+  },
+  {
+   "t": 743.36,
+   "d": 8.4,
+   "text": "basis or Klingons. But in 1971 there was no way to create a data structure with that many entries"
+  },
+  {
+   "t": 751.76,
+   "d": 7.08,
+   "text": "and many computers wouldn't have enough room to hold them. How did he make it work? If we look at"
+  },
+  {
+   "t": 758.84,
+   "d": 11.56,
+   "text": "the quadrant map you see each is represented by a three digit number. As the captain of"
+  },
+  {
+   "t": 770.4,
+   "d": 5.2,
+   "text": "the enterprise you need to learn how to read the secret code which means this quadrant contains one"
+  },
+  {
+   "t": 775.6,
+   "d": 9.6,
+   "text": "Klingon, one star base and eight stars. The sneaky thing is this code was the literal representation"
+  },
+  {
+   "t": 785.2,
+   "d": 4.72,
+   "text": "of the quadrant in the game's memory. When you enter a quadrant it randomly distributes"
+  },
+  {
+   "t": 789.92,
+   "d": 8.88,
+   "text": "the number and you don't have cause to reenter a sector you vised. If you do and there is a Klingon"
+  },
+  {
+   "t": 798.8,
+   "d": 5.12,
+   "text": "there it would make sense they moved around and you would be unlikely to notice the stars moved."
+  },
+  {
+   "t": 805.12,
+   "d": 6.04,
+   "text": "It is lossy compression and an elegant solution for a high school student to have come up with."
+  },
+  {
+   "t": 814.4,
+   "d": 4.72,
+   "text": "When researching this game I did a deep dive in the source code and the flavor of basic it is"
+  },
+  {
+   "t": 819.12,
+   "d": 6.88,
+   "text": "written in. It is a little rough. No distinction between global and local variables. Variables had"
+  },
+  {
+   "t": 826.0,
+   "d": 4.72,
+   "text": "to be a single letter or a letter and a number which did not tend to make it easy to remember"
+  },
+  {
+   "t": 830.72,
+   "d": 5.68,
+   "text": "what each one did. And worse, while support for functions had just been added you could only have"
+  },
+  {
+   "t": 836.4,
+   "d": 8.0,
+   "text": "26 of them and you had to name them FNA up to FNZ and not super great for remembering which one does"
+  },
+  {
+   "t": 844.4,
+   "d": 7.52,
+   "text": "which thing. Mayfield didn't use functions in his \"Star Trek\" game and the code is a cheerfulness"
+  },
+  {
+   "t": 851.92,
+   "d": 10.12,
+   "text": "spaghetti of the best go nightmare. The high school program got cleaned up by adult coders"
+  },
+  {
+   "t": 862.04,
+   "d": 4.76,
+   "text": "and it turns out they kind of broke it. Here is a bit of Mayfield's code happening at the end"
+  },
+  {
+   "t": 866.8,
+   "d": 6.12,
+   "text": "of procedurally generating a galaxy coming up with 64 three digit quadrant codes and"
+  },
+  {
+   "t": 872.92,
+   "d": 12.74,
+   "text": "positioning them in the grid and each quadrant has a chance of having the stars and basis and"
+  },
+  {
+   "t": 885.66,
+   "d": 2.14,
+   "text": "Klingon and it is possible no were generated by the end of the process. Both of those things"
+  },
+  {
+   "t": 887.8,
+   "d": 6.8,
+   "text": "would make the game. What this line 775 is doing is saying that if either of these variables, B 9"
+  },
+  {
+   "t": 894.6,
+   "d": 8.36,
+   "text": "or K9, counting the total number, are still 0, go back to line 490 and start galaxy generation over"
+  },
+  {
+   "t": 902.96,
+   "d": 7.76,
+   "text": "from scratch before reporting the stats online 780. This is the adult's cleanup version of the"
+  },
+  {
+   "t": 910.72,
+   "d": 5.96,
+   "text": "code. They use a different tactic to address this edge case. On their line 790 they are saying if"
+  },
+  {
+   "t": 916.68,
+   "d": 6.24,
+   "text": "there is at least one star base, skip over the next line, otherwise continue to 800. On 800,"
+  },
+  {
+   "t": 922.92,
+   "d": 5.08,
+   "text": "G here is the two dimensional array of quadrant codes so what this line is doing is manually"
+  },
+  {
+   "t": 928.0,
+   "d": 7.04,
+   "text": "overriding whatever was generated for quadrant 63 with magic number 114 turn it into a quadrant"
+  },
+  {
+   "t": 935.04,
+   "d": 7.08,
+   "text": "with one star base, one Klingon and four stars guaranteeing there is one star base in the galaxy."
+  },
+  {
+   "t": 942.12,
+   "d": 7.88,
+   "text": "This might have been made because the solution seemed problematic and could keep generating"
+  },
+  {
+   "t": 950.0,
+   "d": 13.24,
+   "text": "Badal galaxies over and over ever even one do over might run too slow. There alternate solution might"
+  },
+  {
+   "t": 963.24,
+   "d": 9.04,
+   "text": "seem clever, just a single line of code, but it introduces three new bugs into the program. First,"
+  },
+  {
+   "t": 972.28,
+   "d": 11.48,
+   "text": "they are no longer addressing the case of zero Klingons and second they change number of them"
+  },
+  {
+   "t": 983.76,
+   "d": 6.56,
+   "text": "and star basis after showing the lines to the player so the number will be wrong. The reason"
+  },
+  {
+   "t": 990.32,
+   "d": 3.84,
+   "text": "they did advertise is probably to do with line renumbering and the what they worked in basic."
+  },
+  {
+   "t": 994.16,
+   "d": 6.03,
+   "text": "The blog post I wrote gets more into weeds about this. More importantly is the third thing and the"
+  },
+  {
+   "t": 1000.19,
+   "d": 5.89,
+   "text": "worse mistake kind of. They didn't realize crucial thing. Remember how there are no local variables"
+  },
+  {
+   "t": 1006.08,
+   "d": 9.08,
+   "text": "and only global? Turns out these variables B9 and K9 that keep the running total are not just local"
+  },
+  {
+   "t": 1015.16,
+   "d": 4.6,
+   "text": "counters for the purpose of showing this message to the user. Those are how the game tracks how"
+  },
+  {
+   "t": 1019.76,
+   "d": 5.12,
+   "text": "many basis and Klingons exist. This means you might get a state where there are none left in the"
+  },
+  {
+   "t": 1024.88,
+   "d": 6.48,
+   "text": "galaxy but the game doesn't end because the line isn't accurate because line 900 overwrote the code"
+  },
+  {
+   "t": 1031.36,
+   "d": 6.24,
+   "text": "without adjusting it. I thought you might find it reassuring getting the map generation has been a"
+  },
+  {
+   "t": 1037.6,
+   "d": 6.12,
+   "text": "problem since at least the Nixon Administration and I find it funny adults came in to fix high"
+  },
+  {
+   "t": 1043.72,
+   "d": 15.64,
+   "text": "school code and fucked it all up. The next is an interesting game because it is a text adventure"
+  },
+  {
+   "t": 1059.36,
+   "d": 7.4,
+   "text": "that links it is a roguelike although the primary create only played one computer game and that was"
+  },
+  {
+   "t": 1066.76,
+   "d": 10.76,
+   "text": "the original colossal cave adventure they were hired their senior year of college to write a game"
+  },
+  {
+   "t": 1077.52,
+   "d": 6.88,
+   "text": "that was supposed to be quote the best adventure game every made. The pay they were offering was"
+  },
+  {
+   "t": 1084.4,
+   "d": 7.52,
+   "text": "$10 an hour. Go figure. It was the '80s and went a little further then but still. Megler needed"
+  },
+  {
+   "t": 1091.92,
+   "d": 5.56,
+   "text": "cash and took the job and was a person who loved a challenge and threw herself into this one. She"
+  },
+  {
+   "t": 1097.48,
+   "d": 5.16,
+   "text": "decided the biggest problem with adventure she wanted to improve on was it was totally static."
+  },
+  {
+   "t": 1102.64,
+   "d": 4.0,
+   "text": "After she had solved the puzzles they no longer held any interest because they would be exactly"
+  },
+  {
+   "t": 1106.64,
+   "d": 5.24,
+   "text": "the same if you played it game again. She decided her adventure game was going to be different and"
+  },
+  {
+   "t": 1112.76,
+   "d": 5.64,
+   "text": "all the characters would be playing it themselves just like the player was each according to their"
+  },
+  {
+   "t": 1118.4,
+   "d": 5.44,
+   "text": "own little script. A goblin might have a script to wander around and attack everything it sees."
+  },
+  {
+   "t": 1130.08,
+   "d": 6.56,
+   "text": "Gandalf is coded to roam and find interesting objects and put them down when he is bored. The"
+  },
+  {
+   "t": 1136.64,
+   "d": 5.64,
+   "text": "game has a fixed map but areas like the goblin tunnel can change from one area to the next so"
+  },
+  {
+   "t": 1142.28,
+   "d": 6.96,
+   "text": "the map may not be accurate. And objects were dynamic with weight, size and fragility which"
+  },
+  {
+   "t": 1149.24,
+   "d": 6.04,
+   "text": "was and retains atypical for a text style game. You might be able to use a sword to bash down a"
+  },
+  {
+   "t": 1155.28,
+   "d": 5.96,
+   "text": "door but it might break it so you can't use it to slay the dragon later but the game doesn't"
+  },
+  {
+   "t": 1161.24,
+   "d": 9.48,
+   "text": "care how you kill the dragon. It just looking for a state where the dragon is dead here. You might"
+  },
+  {
+   "t": 1170.72,
+   "d": 4.8,
+   "text": "achieve that state by killing the dragon yourself, by convincing another character to follow you to"
+  },
+  {
+   "t": 1175.52,
+   "d": 4.64,
+   "text": "the dragon and killing him for you, a wandering monster might just serendipitously take the dragon"
+  },
+  {
+   "t": 1180.16,
+   "d": 15.8,
+   "text": "out, and -- working with other characters is also a key part of gameplay. A good example comes of"
+  },
+  {
+   "t": 1195.96,
+   "d": 8.4,
+   "text": "bilbo gets imprisoned in the goblin tunnels he might find a friend there and one way to"
+  },
+  {
+   "t": 1204.36,
+   "d": 4.88,
+   "text": "escape is to realize the other characters are taller and ask one to carry you out. A"
+  },
+  {
+   "t": 1209.24,
+   "d": 4.0,
+   "text": "different solution if you mapped the tunnels is to give your companion a sequence of orders to"
+  },
+  {
+   "t": 1213.24,
+   "d": 8.12,
+   "text": "escape and come back to get you. Three options for this. The door opens wait with the companionate,"
+  },
+  {
+   "t": 1223.64,
+   "d": 7.2,
+   "text": "they are back in the dudgeon and got caught or you never see them again because the map is different"
+  },
+  {
+   "t": 1230.84,
+   "d": 8.92,
+   "text": "this time or they got killed. All this made the game extraordinary default -- difficult to debug."
+  },
+  {
+   "t": 1242.32,
+   "d": 6.96,
+   "text": "I will not walk you through this because I have no idea what it is doing. You are doing all kinds of"
+  },
+  {
+   "t": 1249.28,
+   "d": 5.04,
+   "text": "low level stuff and trying to debug the emergent stimulation where characters interact with each"
+  },
+  {
+   "t": 1254.32,
+   "d": 8.04,
+   "text": "other and the only way to debug is squint hard at a memory dump. The poor folks that tried to"
+  },
+  {
+   "t": 1262.36,
+   "d": 6.08,
+   "text": "verify this game is bug free or winnable gave up. There is a great message in the manual saying due"
+  },
+  {
+   "t": 1268.44,
+   "d": 4.4,
+   "text": "to the immense size and complexity of this game it is impossible to guarantee it will ever be"
+  },
+  {
+   "t": 1272.84,
+   "d": 18.28,
+   "text": "completely error-free. Once released it became infamous for these bugs it turns out Elron’s"
+  },
+  {
+   "t": 1291.12,
+   "d": 5.88,
+   "text": "weight property wasn't set and bilbo can pick him up and carry him around and some strategy"
+  },
+  {
+   "t": 1297.0,
+   "d": 10.52,
+   "text": "guides advise to do this. It is possible to meet balm the Bowman and ask you to slay him"
+  },
+  {
+   "t": 1307.52,
+   "d": 10.88,
+   "text": "and for anyone bard to say no before you both get burned to a crisp. The behavior code makes"
+  },
+  {
+   "t": 1318.4,
+   "d": 10.4,
+   "text": "him see like a deranged kleptomaniac. Another hot it tip is track him in the trolls cave as soon as"
+  },
+  {
+   "t": 1328.8,
+   "d": 6.88,
+   "text": "possible to keep him from making off with a vital quest item. This also lent to a certain amount of"
+  },
+  {
+   "t": 1335.68,
+   "d": 7.8,
+   "text": "charm. That joy of never knowing what is going to happen next. It is interesting even though this"
+  },
+  {
+   "t": 1343.48,
+   "d": 3.92,
+   "text": "game was a huge bestseller and might have been the bestselling commercial text adventure of all time"
+  },
+  {
+   "t": 1347.4,
+   "d": 7.6,
+   "text": "depending on the numbers The independent roguelike ideas were not picked up by the roguelike genre"
+  },
+  {
+   "t": 1355.0,
+   "d": 7.28,
+   "text": "that wanted control and probability. They saw all these emerging stories that seemed very un-Tolken"
+  },
+  {
+   "t": 1365.56,
+   "d": 7.6,
+   "text": "as a bug and not a feature. But they resurfaced in decades later and were hanging out in roguelikes"
+  },
+  {
+   "t": 1373.16,
+   "d": 7.36,
+   "text": "all along. To wrap up, I think you can learn a lot by looking at the deep history of the kinds"
+  },
+  {
+   "t": 1380.52,
+   "d": 6.92,
+   "text": "of games you like to play and make. I love how the core ideas and basic techniques have been around"
+  },
+  {
+   "t": 1387.44,
+   "d": 5.48,
+   "text": "and iterated on for half a century of digital games now and counting. Also, you should probably"
+  },
+  {
+   "t": 1392.92,
+   "d": 7.04,
+   "text": "pay game designers more than $10 an hour and don't underestimate those high school hackers because"
+  },
+  {
+   "t": 1399.96,
+   "d": 6.32,
+   "text": "they probably know more about what is going on than you. If you are interested in my book it just"
+  },
+  {
+   "t": 1406.28,
+   "d": 4.64,
+   "text": "made it back into the print today after selling out earlier this year. You can find out how to"
+  },
+  {
+   "t": 1410.92,
+   "d": 5.84,
+   "text": "get it at this URL or searching for the 50 years of text news games newsletter. Thank you so much"
+  },
+  {
+   "t": 1416.76,
+   "d": 6.08,
+   "text": "and have a great Roguelike Celebration. ALEXEI: Excellent. Thank you so much,"
+  },
+  {
+   "t": 1422.84,
+   "d": 5.52,
+   "text": "Aaron. Everyone wants a pocket Elron to dispense lunch to them."
+  },
+  {
+   "t": 1428.36,
+   "d": 4.44,
+   "text": "AARON: Wouldn't that be handy? Little Elvin lunches when you need one."
+  },
+  {
+   "t": 1434.44,
+   "d": 9.24,
+   "text": "ALEXEI: I want to mention everyone really loved your slides. Much appreciation."
+  },
+  {
+   "t": 1444.24,
+   "d": 1.2,
+   "text": "AARON: Thank you. ALEXEI: People in chat,"
+  },
+  {
+   "t": 1445.44,
+   "d": 6.48,
+   "text": "we have time. Please ask questions or up-vote questions. Right now the only questions are"
+  },
+  {
+   "t": 1451.92,
+   "d": 5.48,
+   "text": "things like Alexei do a Gameboy impression and I will not. We have more interesting things to talk"
+  },
+  {
+   "t": 1457.4,
+   "d": 9.68,
+   "text": "about. One thing I will kick off with is that it is amazing to have the gameplay be so open-ended"
+  },
+  {
+   "t": 1467.08,
+   "d": 7.6,
+   "text": "in that period. Like do you feel like there is much else in terms of comparison at the time?"
+  },
+  {
+   "t": 1474.68,
+   "d": 6.16,
+   "text": "Or have you found like at the time were people's minds as blown as ours are or they were like we"
+  },
+  {
+   "t": 1480.84,
+   "d": 7.76,
+   "text": "can do and we don't understand so might as well? AARON: I think it was a moment where the sky felt"
+  },
+  {
+   "t": 1488.6,
+   "d": 9.52,
+   "text": "like the limit with computer games and more stimulation is what people thought. That's"
+  },
+  {
+   "t": 1498.12,
+   "d": 5.88,
+   "text": "what people thought computers were good at doing. A game is better if you simulate more and more"
+  },
+  {
+   "t": 1504.0,
+   "d": 5.8,
+   "text": "of the world clearly. Adventure games moved in a direction that kind of ultimately ended"
+  },
+  {
+   "t": 1509.8,
+   "d": 5.32,
+   "text": "up rejecting that. You did see text adventures are basically assimilationists in a lot of ways"
+  },
+  {
+   "t": 1515.12,
+   "d": 6.6,
+   "text": "because you move around this and have objects but you saw the features be pulled back over"
+  },
+  {
+   "t": 1521.72,
+   "d": 5.4,
+   "text": "time because I think the design ideas that this is about a story and the designer has a specific"
+  },
+  {
+   "t": 1527.12,
+   "d": 5.32,
+   "text": "story they want to tell and if I am trying to tell a story about the nobility of elves picking up and"
+  },
+  {
+   "t": 1532.44,
+   "d": 8.24,
+   "text": "carrying around breaks the version of that. Other game genres were like that's really interesting"
+  },
+  {
+   "t": 1540.68,
+   "d": 9.35,
+   "text": "and maybe that's not the story the designer wanted to tell but you have made a weird little story. It"
+  },
+  {
+   "t": 1550.03,
+   "d": 6.01,
+   "text": "is an interesting bifurcation moment where the hobbit is a look where text adventures"
+  },
+  {
+   "t": 1556.04,
+   "d": 6.68,
+   "text": "were more like roguelikes we didn't get and instead moved in a different direction. You"
+  },
+  {
+   "t": 1562.72,
+   "d": 6.64,
+   "text": "are right. It is very early. Written in '81 so this was right after Rogue. There wasn't a lot"
+  },
+  {
+   "t": 1569.36,
+   "d": 5.28,
+   "text": "of prior art at that level of simulationist detail. It is a really interesting game."
+  },
+  {
+   "t": 1574.64,
+   "d": 4.6,
+   "text": "ALEXEI: Which is interesting the element of people not having preconceived ideas about"
+  },
+  {
+   "t": 1579.24,
+   "d": 6.84,
+   "text": "how it was supposed to work so they could just try something. That's leads to a question from"
+  },
+  {
+   "t": 1586.08,
+   "d": 4.92,
+   "text": "galarsel on do you have thoughts on what the future of text games like?"
+  },
+  {
+   "t": 1591.0,
+   "d": 8.36,
+   "text": "AARON: Yeah, it was really interesting to me writing the book how often when you looked"
+  },
+  {
+   "t": 1599.36,
+   "d": 3.68,
+   "text": "back on people predicting what the future of the genre would be it was all wrong."
+  },
+  {
+   "t": 1603.68,
+   "d": 2.98,
+   "text": "No matter what they are always wrong. ALEXEI: Now it is your chance to be wrong."
+  },
+  {
+   "t": 1606.66,
+   "d": 6.54,
+   "text": "AARON: Now is my chance to be wrong. No, in the moment we are at now, like there is this big,"
+  },
+  {
+   "t": 1613.2,
+   "d": 4.76,
+   "text": "you know, all of this new generative text AI stuff, the last two chapters of the book"
+  },
+  {
+   "t": 1617.96,
+   "d": 11.6,
+   "text": "contrast AI dungeon and look at those two as this maybe a fork in the path, which direction are we"
+  },
+  {
+   "t": 1629.56,
+   "d": 4.72,
+   "text": "going to go in. I think the answer is we will go in both. Different people will take both of those"
+  },
+  {
+   "t": 1634.28,
+   "d": 6.4,
+   "text": "paths and I think it is too early to predict what the long term repercussions of that now"
+  },
+  {
+   "t": 1640.68,
+   "d": 6.2,
+   "text": "technology are going to be. I think it is neat too to see how every time there is a new, you know,"
+  },
+  {
+   "t": 1646.88,
+   "d": 4.96,
+   "text": "piece of hardware or platform invented, no matter how inappropriate it might seem at first glance"
+  },
+  {
+   "t": 1651.84,
+   "d": 8.04,
+   "text": "for reading text on, people will try to write prose for it. Famously lifeline from 2015 was made"
+  },
+  {
+   "t": 1659.88,
+   "d": 4.08,
+   "text": "for the Apple Watch and it is game about texting a fictional astronaut would see stranded and needs"
+  },
+  {
+   "t": 1663.96,
+   "d": 3.6,
+   "text": "your help and you wouldn't think the watch screen would be a great way to read text and"
+  },
+  {
+   "t": 1667.56,
+   "d": 5.96,
+   "text": "they are like people are reading text messages all of time on it. It is fine for that. I think"
+  },
+  {
+   "t": 1675.64,
+   "d": 5.72,
+   "text": "people have been writing for thousands of years. We have had computers for 50 plus at point. And"
+  },
+  {
+   "t": 1681.36,
+   "d": 4.68,
+   "text": "I think people are also interested in telling new ways of telling stories on each new medium"
+  },
+  {
+   "t": 1686.04,
+   "d": 5.4,
+   "text": "and platform coming around. It will be cool to see what happens in the next 50 years."
+  },
+  {
+   "t": 1692.28,
+   "d": 4.04,
+   "text": "ALEXEI: I think that's great. Yeah, that is the unpredictability of you don't know"
+  },
+  {
+   "t": 1696.32,
+   "d": 6.28,
+   "text": "what new kind of technology is going to get in there and push things in new direction. Question"
+  },
+  {
+   "t": 1702.6,
+   "d": 6.72,
+   "text": "from Roark. Do you have interesting stories from playing Oregon Trail or the Hobbit?"
+  },
+  {
+   "t": 1713.84,
+   "d": 7.68,
+   "text": "AARON: When I was a kid I got the hitchhiker's guide to the galaxy text game and I think I got"
+  },
+  {
+   "t": 1721.52,
+   "d": 8.64,
+   "text": "it because I told the guy at the software store I liked quest and wanted more like that. I didn't"
+  },
+  {
+   "t": 1730.16,
+   "d": 6.52,
+   "text": "know anything about the books. It was baffling. I was probably too young and it had a lot of"
+  },
+  {
+   "t": 1736.68,
+   "d": 15.16,
+   "text": "British' isms in it. I originally read the book to try to get hints for the game which did not work"
+  },
+  {
+   "t": 1751.84,
+   "d": 7.56,
+   "text": "very well because they are fairly different. Yeah, that was sort of a weird experience. You know,"
+  },
+  {
+   "t": 1759.4,
+   "d": 6.76,
+   "text": "it ended up becoming a favorite book of mine. Yeah. It is always funny how personal everyone's"
+  },
+  {
+   "t": 1766.16,
+   "d": 4.84,
+   "text": "interaction is with particular medias like that. Everyone kind of has their own pathway"
+  },
+  {
+   "t": 1771.0,
+   "d": 6.36,
+   "text": "to discovering stuff which is delightful. ALEXEI: My mom played those text adventure games"
+  },
+  {
+   "t": 1777.36,
+   "d": 5.8,
+   "text": "and passed it on to me and she found a health line for hitcher hiker's guide and that told"
+  },
+  {
+   "t": 1783.16,
+   "d": 4.2,
+   "text": "her did you look under the bed and she is like I didn't Thank you. And it is like wait, you can't"
+  },
+  {
+   "t": 1787.36,
+   "d": 7.4,
+   "text": "look under the bed. That's the kind of thing you need to do which is great answer and she is like"
+  },
+  {
+   "t": 1794.76,
+   "d": 3.72,
+   "text": "thanks for helping. AARON: Meta help."
+  },
+  {
+   "t": 1798.48,
+   "d": 6.52,
+   "text": "ALEXEI: Another question from the chat. Do you have any idea how much physical paper a game of"
+  },
+  {
+   "t": 1805.0,
+   "d": 8.04,
+   "text": "Oregon Trail took up on one of those printers? AARON: When it originally debuted there was the"
+  },
+  {
+   "t": 1813.04,
+   "d": 7.56,
+   "text": "one teletype and access to the whole computer in the school. He would have kids get into groups of"
+  },
+  {
+   "t": 1820.6,
+   "d": 5.84,
+   "text": "4-6 and run through it together with one sitting at the keyboard and other people like shouting"
+  },
+  {
+   "t": 1826.44,
+   "d": 5.12,
+   "text": "ideas. One person designated to keep track of supplies on a piece of paper and things like"
+  },
+  {
+   "t": 1831.56,
+   "d": 6.96,
+   "text": "that. There is some cool stuff they actually did with the physical hardware of that. The teletype"
+  },
+  {
+   "t": 1838.52,
+   "d": 3.06,
+   "text": "had a bell on it like how a typewriter when you get the end of the line ring a bell and you could"
+  },
+  {
+   "t": 1841.58,
+   "d": 7.26,
+   "text": "programmatically ring a bell so if you made a good shot in the hunting game it would ring a"
+  },
+  {
+   "t": 1848.84,
+   "d": 11.0,
+   "text": "well and I can imagine all these kids like yeah, we got em. A lot of that, yeah, I don't know. It"
+  },
+  {
+   "t": 1859.84,
+   "d": 5.0,
+   "text": "would have been, you know, probably one play three -- play through works out to be like"
+  },
+  {
+   "t": 1864.84,
+   "d": 13.92,
+   "text": "10-15 pages so a decent amount of paper. ALEXEI: That's really cool. Here is another"
+  },
+  {
+   "t": 1878.76,
+   "d": 5.6,
+   "text": "question. I think this is really interesting from josh G. You talked about the early games"
+  },
+  {
+   "t": 1884.36,
+   "d": 7.92,
+   "text": "being varied, do you feel like there was a moment when genre became a thing and calcified it down?"
+  },
+  {
+   "t": 1892.28,
+   "d": 7.32,
+   "text": "AARON: Calcified is a good way to say it. The first half of the 1980s there is so many weird"
+  },
+  {
+   "t": 1899.6,
+   "d": 6.04,
+   "text": "computer games and it is funny to look at them today because so many don't fit into the boxes we"
+  },
+  {
+   "t": 1905.64,
+   "d": 6.24,
+   "text": "have made around genre. In multiple categories, trying to do weird experimental things. I think"
+  },
+  {
+   "t": 1911.88,
+   "d": 7.2,
+   "text": "it was around that time, the middle of the '80s, '85/'87 you started to see things get"
+  },
+  {
+   "t": 1919.08,
+   "d": 6.04,
+   "text": "more locked down. An of that was business and marketing and they found out people will pay"
+  },
+  {
+   "t": 1925.12,
+   "d": 9.08,
+   "text": "X amount of money for Y games so we need 20 Y games for the Christmas season this year. This"
+  },
+  {
+   "t": 1934.2,
+   "d": 4.24,
+   "text": "doesn't mean this was the end of the experimental period but I think it is interesting looking back"
+  },
+  {
+   "t": 1938.44,
+   "d": 5.04,
+   "text": "on games from that time because it was just the wild west. People were trying all kinds of weird"
+  },
+  {
+   "t": 1943.48,
+   "d": 7.92,
+   "text": "things to see what would stick. Yeah. There is so many fascinating like abandoned like threads"
+  },
+  {
+   "t": 1951.4,
+   "d": 4.92,
+   "text": "and weird little experiments from that type. It is super worth like firing up an emulator"
+  },
+  {
+   "t": 1956.32,
+   "d": 5.64,
+   "text": "and playing through some of these games. ALEXEI: I think that's a nice note to end"
+  },
+  {
+   "t": 1961.96,
+   "d": 9.8,
+   "text": "on. Go play these games. I want to play it Hobbit bad because I want my pocket lunch Elron and bard"
+  },
+  {
+   "t": 1971.76,
+   "d": 10.0,
+   "text": "to tell me sorry, no. Excellent. Thank you so much, Aaron. Fantastic and wonderful way"
+  }
+ ]
+}

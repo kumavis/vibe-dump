@@ -1,0 +1,155 @@
+{
+  "id": "3vSCncV5hkI",
+  "title": "Tom Francis - Generating boring levels for fresh experiences in Heat Signature",
+  "speaker": "Tom Francis",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=3vSCncV5hkI",
+  "talk_type": "design",
+  "summary": "Tom Francis explains how Heat Signature, a roguelike about boarding spaceships across a galaxy, ended up with deliberately simple, boring generated levels: a chain of rectangular security zones each with a key, guards and a locked door. His earlier intricate gate-and-key layouts were annoying to navigate and could not fit on screen. His solution: if you can't make the shuffle interesting, make more interesting cards. Freshness comes from player tools, enemy traits and global filters, each designed around constraints and freedoms that interact with exactly what the generator shuffles. He illustrates with three teleporters, enemy traits like heat sensors, glitch dash and trackers, and filters such as mission clauses, alarm types and character traits.",
+  "games": [
+    "Heat Signature"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "level structure",
+      "kind": "principle",
+      "claim": "Francis argues generated spaces must feel like levels, not just places, and the backbone of a level is chunked progression toward an objective.",
+      "detail": "For Heat Signature's spaceships, this means progress toward the objective in chunks: getting closer without reaching it immediately and without being completely stuck. He implemented this as a series of gates and keys.",
+      "t": 101,
+      "quote": "the progression you make toward the objective is what makes it feel like a level. Make progression in chunks",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "gates and keys",
+      "kind": "warning",
+      "claim": "Heat Signature's early intricate gate-and-key ship layouts were worse than boring: players had to puzzle out where each zone was, which felt like a chore.",
+      "detail": "Francis hoped intricate tessellations would make ships differ interestingly, but working out how to reach zone 8 when zone 4 wasn't where you expected was not interesting gameplay. Odd-shaped zones also required zooming out so far that players could not see enemies.",
+      "t": 183,
+      "quote": "That's not interesting gameplay. That's a chore. They are not just boring but they are actively annoying",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "screen-sized zones",
+      "kind": "technique",
+      "claim": "Heat Signature simplifies each security zone into a self-contained rectangle that fits on screen at a readable zoom, containing only a key, guards and a locked door.",
+      "detail": "Because players need to keep their current zone in view at all times, the zone must fit the screen. Francis calls the result absolutely miserable and boring but says it solves all his structural design problems.",
+      "t": 219,
+      "quote": "Each zone is self contained and it is basically a rectangle so it fits on the screen",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "boring generators",
+      "kind": "open-question",
+      "claim": "Heat Signature's constrained generator yields levels whose differences are trivial, raising the question of how to make a game fresh when level variation is minimal.",
+      "detail": "Francis describes a boring tapestry of smaller boring elements: rooms, corridors and guards in different orders. The structure works but leaves little room to generate interesting differences.",
+      "t": 301,
+      "quote": "how we do make the game fresh when the differences between the levels are this trivial nonsense",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "shuffle-friendly design",
+      "kind": "principle",
+      "claim": "If you can't make the shuffle interesting, make more interesting cards: freshness in a roguelike can come from rich elements being rearranged rather than from a clever generator.",
+      "detail": "Card games are made interesting not by smarter shuffles that place the king where you want it, but by giving cards meaning and new rules. Francis applies this to a generator that can only shuffle walls around.",
+      "t": 343,
+      "quote": "If you can't make the shuffle interesting, make more interesting cards",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cards",
+      "kind": "technique",
+      "claim": "Heat Signature's 'cards' are player tools, enemy traits and global filters, the three layers varied on top of shuffled levels.",
+      "detail": "Tools are the player's abilities; enemy traits include shields, armour and ways to push back against or detect the player; filters are global changes explained later in the talk.",
+      "t": 394,
+      "quote": "the three kinds of cards in that context are player tools, enemy traits, and global filters",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "constraints and freedoms",
+      "kind": "principle",
+      "claim": "Shuffle-friendly player tools should have constraints and freedoms that relate directly to what the generator shuffles, such as paths, walls, guard positions and line of sight.",
+      "detail": "A teleporter whose only freedom is passing walls and only constraint is range relates to the layout but doesn't really interact with it, so it's boring.",
+      "t": 456,
+      "quote": "A teleporter without constraint and freedom is quite boring because those two things, sure, relate to the layout of the level but they don't really interact with it",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "teleporters",
+      "kind": "example",
+      "claim": "Heat Signature has three teleporters each with distinct constraints and bypasses: the Sidewinder needs a path, the Swapper depends on guard positions, and the Visitor goes anywhere but returns you after three seconds.",
+      "detail": "Sidewinder passes guards instantly but needs a path and line of sight; Swapper bypasses pathing but depends on where people are; Visitor's constraint is time. Combined with a key cloner (short-range, through walls), a Visitor can grab a guarded key and snap back.",
+      "t": 545,
+      "quote": "It really does just take you to exactly where you click and its own constraint is time",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "enemy traits",
+      "kind": "example",
+      "claim": "Heat Signature's enemy traits follow the same bypass-and-constraint logic: heat sensors see through walls at short range, glitch dash teleports guards to suspicious sounds, and trackers path methodically but need no detection.",
+      "detail": "Glitch dash is always surprising: five guards teleporting in the second you make noise. Trackers walk the ship slowly, and since their path is visible, players can dodge, trick and trap them.",
+      "t": 605,
+      "quote": "So for enemy traits, really the same philosophy, bypasses and constraints",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "global filters",
+      "kind": "principle",
+      "claim": "Francis defines a filter as a global change that warps the player's experience of the same content, making the same kind of level play differently.",
+      "detail": "Filters are the third kind of card in Heat Signature, alongside tools and enemy traits.",
+      "t": 700,
+      "quote": "I define a filter as a global change that warps the player's experience of the same content and in this case same level",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "mission clauses",
+      "kind": "example",
+      "claim": "Heat Signature's high-paying missions add clauses like no kills, no witnesses or ghost, which transforms a level because with ghost even the weakest guard is as dangerous as a boss.",
+      "detail": "Under the ghost clause, being seen is failure, so threat assessment of every guard changes completely.",
+      "t": 745,
+      "quote": "Even the least armored guard is just as bad of a threat as the nastiest boss because seeing is failure",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "alarm types",
+      "kind": "example",
+      "claim": "Each Heat Signature ship has its own alarm type, a timed escape, a fleeing target, or no alarm at all, and each radically changes stealth considerations on the same layout.",
+      "detail": "A time limit turns play into speed stealth. A fleeing target runs to a teleporter pad, so reaching the pad first lets you trap them. With no alarm, detection is risky but has no long-term consequence, enabling luring tactics.",
+      "t": 766,
+      "quote": "Adding a time constraint to a game that doesn't normally have it radically changes all considerations",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character traits",
+      "kind": "example",
+      "claim": "Heat Signature's randomly generated characters gained traits that filter a whole run, like Glitch-sick (teleporting knocks you out), Technophobe (nothing recharges) and Shaky (guns are inaccurate).",
+      "detail": "Glitch-sick forces teleporting to empty rooms to recover; Technophobe makes self-charging gear worthless and forces varied tactics; Shaky pushes players to gadgets, with an inverse trait pushing toward guns.",
+      "t": 851,
+      "quote": "Later we added these traits and that will filter the run",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "shuffle-friendly design",
+      "kind": "principle",
+      "claim": "Francis summarises shuffle-friendly design as making elements that produce something interesting merely by being rearranged, with tools whose constraints and freedoms relate closely to what gets shuffled.",
+      "detail": "Varying tools, traits and filters is cheap and they combine with each other and with shuffled levels, so the levels themselves can remain boring.",
+      "t": 945,
+      "quote": "Design tools with different constraints and freedoms that relate closely to what gets shuffled when a level is generated",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

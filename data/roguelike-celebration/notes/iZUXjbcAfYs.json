@@ -1,0 +1,331 @@
+{
+  "id": "iZUXjbcAfYs",
+  "title": "Thomas Biskup - The Future of ADOM",
+  "speaker": "Thomas Biskup",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=iZUXjbcAfYs",
+  "talk_type": "technical",
+  "summary": "Thomas Biskup gives five announcements about ADOM (Ancient Domains of Mystery): the feature-complete ADOM 3.0 pre-release, the end of the five-year crowdfunding obligations, the Rogue League community server with shared high scores, an investment letting the team work full-time for two years, and Ultimate ADOM, a new game rather than ADOM 2. He argues ADOM's 25-year-old code, especially a user interface woven through all the code, makes mobile and many new ideas impossible, so Ultimate ADOM will be a Unity-based family of games set in a shattered multiverse of the ADOM world, sharing one data-driven rules engine with platform-specific UIs and configurations, mobile-first design and eventual modding. Most of the technical content shows how an entity component system makes previously impossible effects (soul swapping, possession, severing and grafting limbs, animating walls) a few lines of code, enabling crafting, a 'grafting' system and highly interactive magic with emergent behaviour. Q&A touches on legends carried from ADOM into Ultimate ADOM, the importance of graphics for reach, and surprising C# performance.",
+  "games": [
+    "ADOM (Ancient Domains of Mystery)",
+    "Ultimate ADOM",
+    "ADOM II",
+    "Dungeon Crawl Stone Soup",
+    "Caves of Qud",
+    "Cogmind",
+    "Middle-earth: Shadow of Mordor"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "shared high scores",
+      "kind": "principle",
+      "claim": "ADOM launched the Rogue League server with global high scores because challenge modes only make sense when players can compare their results with others, not just discuss them in a forum.",
+      "detail": "The initial alpha only shares high scores; statistics and reports were to follow over about 12 months, inspired by the Dungeon Crawl Stone Soup talk at the same conference.",
+      "t": 220,
+      "quote": "things like the challenge mode in Atom and other things only make sense if you can compare your scores and your results with others",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mainstream appeal",
+      "kind": "principle",
+      "claim": "ADOM's team believes there is still room for highly detailed roguelikes in the mainstream and wants to help make roguelike gaming more mainstream.",
+      "detail": "Biskup observes that mainstream games increasingly adopt roguelike patterns and enjoyment, though the mainstream has not fully accepted roguelikes. This motivates both the investment and Ultimate ADOM.",
+      "t": 262,
+      "quote": "we believe that there still is room for highly detailed roguelike games in the mainstream",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "full-time development",
+      "kind": "example",
+      "claim": "Once an investor let the ADOM team work full-time, release frequency jumped from about one per quarter or year to nine in six weeks.",
+      "detail": "Biskup, CEO of an IT company working about 10 hours a day, had always developed ADOM as a hobby. The investment covers at least 24 months and lets him delegate company work; he says it is the first time in 25 years he can work on ADOM full-time.",
+      "t": 332,
+      "quote": "the number of releases quickly increased from like one every quarter or year to like nine in the past six weeks",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "new player onboarding",
+      "kind": "warning",
+      "claim": "ADOM is still much too hard for newcomers who do not know how roguelikes work, so UI and UX improvements to bring in new players are a priority.",
+      "detail": "Biskup lists this first among the areas for ADOM's continued development, saying the graphical user interface offers a lot of room to make the game more accessible to new players.",
+      "t": 397,
+      "quote": "ADOM still is much too hard for new gamers who don't know how a roguelike works",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "veteran players",
+      "kind": "principle",
+      "claim": "ADOM's team promised its existing community no more groundbreaking UI overhauls that force veterans to unlearn what they learned, while still improving accessibility.",
+      "detail": "Having changed the interface substantially over previous years, Biskup tells the 'old guard' they are done totally changing it; further improvements will make it more accessible without disrupting established habits.",
+      "t": 411,
+      "quote": "There won't be more groundbreaking changes that force you to unlearn all the things you learned over the past couple of years.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "engine limits",
+      "kind": "warning",
+      "claim": "After 25 years of code, many ideas for ADOM are technically almost impossible or not justifiable in effort, which is why the team chose to build a new game, Ultimate ADOM, rather than keep extending ADOM.",
+      "detail": "Over five years players suggested many cool ideas the team wanted but could not implement; they tried some and hit the limits of the ADOM engine. Biskup stresses Ultimate ADOM is not ADOM 2 but something different.",
+      "t": 535,
+      "quote": "there are many things we can't do in ADEM because they are technically almost impossible or just not justifiable in effort",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "ui separation",
+      "kind": "warning",
+      "claim": "ADOM's biggest technical problem is that its user interface is not separated from game logic but runs through all the code, which makes a viable mobile version practically impossible.",
+      "detail": "Biskup says trying to change that 'you're going to die'; the team tried some things and concluded it was too hard, motivating a new architecture. He later credits the graphical interface layer they used for teaching them to separate engine from graphics cleanly.",
+      "t": 564,
+      "quote": "the user interface is completely non-separated, it runs through all the code and if you try to change that to get a really viable mobile version",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "multiverse setting",
+      "kind": "technique",
+      "claim": "Ultimate ADOM continues ADOM's story: a champion's fight with the chaos lord (one of ADOM's ultra endings) triggers a cosmic chain reaction that shatters the world of Ancardia into a multiverse of similar but varied worlds.",
+      "detail": "Nobody in-world knows exactly what happened. The resulting many Ancardian worlds share a common rule system, engine and monsters but vary in certain aspects, giving a story reason for multiple games and platform-optimised variants.",
+      "t": 631,
+      "quote": "the world changed forever by completely shattering reality and the one world of Ankadia turned into a multiverse of Ankadian worlds",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "mobile complexity",
+      "kind": "principle",
+      "claim": "ADOM's team learned there is not one way to play such a game: players asking for mobile do not want ADOM's full complexity there, so mobile versions should be distinct variants.",
+      "detail": "Biskup says players devise their own kinds of games, and he has yet to see one good mobile game with ADOM's complexity. This drives the plan for platform-specific Ultimate ADOM variants.",
+      "t": 676,
+      "quote": "When they ask for mobile, they don't want the full complexity of an ADOM on mobile",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "shared engine variants",
+      "kind": "principle",
+      "claim": "Ultimate ADOM uses its story as a reason to build variants for different platforms and play styles on one unified engine, so players learn the rules once and reuse that knowledge across games.",
+      "detail": "Biskup argues this yields more enjoyment than requiring players to learn new rule systems and new games all the time. Rogue League is meant to connect this multi-game, multi-platform play.",
+      "t": 684,
+      "quote": "use the story to have a good reason to create variants of ADEM games on certain platforms for various styles of plays with the advantage of having one unified engine",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "engine choice",
+      "kind": "technique",
+      "claim": "Ultimate ADOM is built in Unity because the team judged it the best platform for a multi-platform approach, after finding their own hand-written ports of ADOM very hard and buggy.",
+      "detail": "Plans: a detailed desktop game in the classic roguelike style with a much better interface, plus mobile versions for iOS and Android designed mobile-first, with consoles and other platforms later as time allows. Preliminary prototypes looked okay.",
+      "t": 818,
+      "quote": "we decided to do the new ADOM in Unity because according to our estimate, it's the best platform for the multi-platform approach we are going for",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "principle",
+      "claim": "Ultimate ADOM aims for an overarching metaplot and meta-abilities connecting its games and platforms, with a smooth curve rather than power creep.",
+      "detail": "Biskup credits a talk the previous day about metaplot, meta-knowledge and meta-powers for reminding the team to do it the right way. He says he thinks power creep does not work very well.",
+      "t": 873,
+      "quote": "We really want to have an overarching story that connects those platforms, those worlds, those game experiences without making it a power creep",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "sustainable pace",
+      "kind": "principle",
+      "claim": "Even 20% of a full-time team's effort gives ADOM more steady development than years of sporadic hobby time, enabling a sustainable pace of perhaps monthly releases.",
+      "detail": "The plan splits time 20% ADOM, 80% Ultimate ADOM. Biskup says regular work beats working only 'when time allows and nobody is sick'.",
+      "t": 904,
+      "quote": "20% full-time is much more than we had in the past years",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's architecture is a core rules engine driven by external configuration describing items, monsters and quests, with platform-specific UIs and platform configurations layered on top.",
+      "detail": "The engine knows all rules, interactions and subsystems; the external configuration format was already prototyped. Platform UIs may share reusable parts, and platform configurations customise the experience, for example mobile versus desktop.",
+      "t": 958,
+      "quote": "that game engine will use an external configuration that we already have prototyped, to describe the items, monsters, quests and other stuff",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "platform configuration",
+      "kind": "example",
+      "claim": "Ultimate ADOM's per-platform configuration could drop systems like item identification or status effects in a mobile variant where they would be too fiddly, while keeping the same engine.",
+      "detail": "Biskup imagines one mobile variant without identification or statuses and another keeping part of them. The point is the base engine stays the same while details are tuned for each platform's play experience.",
+      "t": 990,
+      "quote": "I could imagine that you won't even have things like item identification or statuses because it can get very fiddly in a certain mobile setting",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Because Ultimate ADOM's engine interprets configurations, modding comes as a side effect, and opening it to the community is offered as a compromise in the debate over open-sourcing ADOM.",
+      "detail": "Modding will first be internal to stabilise the game, then opened after the first releases. Biskup also dreams of a mod area on the Rogue League server where mods can be listed, downloaded, rated and discussed.",
+      "t": 1049,
+      "quote": "this is a quite, let's say, a compromise for the discussion about open sourcing ADOM",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component system",
+      "kind": "history",
+      "claim": "Ultimate ADOM adopted an entity component system, modified to handle very large numbers of entities, after its creator's discussion with Josh Ge of Cogmind at the previous Roguelike Celebration.",
+      "detail": "Biskup had not heard of ECS until the previous year. He explains it as entities (anything in the world), components (behaviours, properties or markers) and systems that interpret what they mean in the game.",
+      "t": 1098,
+      "quote": "had a very good discussion with Josh at last roguelike celebration that inspired me quite a bit to think about that",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component system",
+      "kind": "technique",
+      "claim": "In Ultimate ADOM's ECS, swapping the player's soul with an orc's takes a few lines: remove the UI-control component from the player entity and add it to the orc.",
+      "detail": "Biskup says this was impossible in ADOM and would have taken hundreds or even a thousand lines in ADOM 2. The systems already interpret the components, so moving control is enough. He demonstrated it later with a troll in a Java ASCII prototype.",
+      "t": 1180,
+      "quote": "Orc, you now are controlled by the UI. And based on the setup we have in the systems that interpret this, we are done.",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "inheritance vs components",
+      "kind": "warning",
+      "claim": "ADOM 2's object-oriented design made turning one type of thing into another very hard because they sat in different inheritance hierarchies, whereas components let a possessed player's body simply become an item.",
+      "detail": "For possession, the ECS moves UI control to the orc, removes the 'being' aspect from the lifeless player and adds an item flag, so the body can lie on the map or be picked up. Biskup admits the complex item (with equipment, slots and body parts) raises interaction questions, but says setup is simple.",
+      "t": 1283,
+      "quote": "due to its object oriented structure has quite a lot of problems turning let's say one type of thing into another type of thing",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "dismemberment",
+      "kind": "principle",
+      "claim": "Ultimate ADOM's limb severing should be rare (special weapons, special circumstances) because if every one of thousands of fights could hack off limbs, the player would soon be crippled.",
+      "detail": "Implementation in the ECS: find the orc's left arm in its body structure, remove it from the orc entity, add an item component and place it on the map.",
+      "t": 1306,
+      "quote": "if you have thousands of fights and everyone can hack off everything, the player probably very soon will be quite crippled",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "body part grafting",
+      "kind": "example",
+      "claim": "In Ultimate ADOM's ECS a necromancer can graft a severed orc arm onto themselves as a third arm by removing its item component and adding it to the player's body parts, which the body system then interprets.",
+      "detail": "The player picks the arm up, casts dark magic, the arm stops being an item and becomes a living body part. Biskup says this opens many cool magical effects and spells.",
+      "t": 1391,
+      "quote": "Then we remove that Item component from the Arm because it's now turned again into a living part of a body.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "environment interaction",
+      "kind": "example",
+      "claim": "Ultimate ADOM's ECS lets an earth elementalist animate a wall into a monster with one line, by making the wall entity a being.",
+      "detail": "Biskup imagines combining this with control or domination spells, or traps that animate the environment, for a new kind of magical experience. A brief demo of wall animation in the prototype misbehaved.",
+      "t": 1451,
+      "quote": "Then we turn the wall into a being with one line, make it a being, and that's it.",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "crafting and grafting",
+      "kind": "technique",
+      "claim": "Ultimate ADOM plans an extensive crafting system for building and modifying items and a 'grafting system' for building and modifying living beings, both made easy by components.",
+      "detail": "Biskup says the term 'grafting system' may be their own coinage. Both were things impossible in ADOM and very hard in ADOM 2.",
+      "t": 1502,
+      "quote": "we call it a grafting system. So a system so that you can build and modify living beings and work on them.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interactive magic",
+      "kind": "principle",
+      "claim": "Ultimate ADOM aims to expand magic far beyond detection, hiding and damage spells into highly interactive systems that produce emergent behaviour and strategies the designers never imagined.",
+      "detail": "Biskup cites the ADOM 2 'dust powder' demo, where players laid out powder chains, turned things into magma and exploded villages. He also nods to Caves of Qud's interacting mutations and subsystems as inspiration.",
+      "t": 1547,
+      "quote": "kind of emerging behavior in the game so that hopefully the players will come up with ideas we never have dreamt of",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "content modules",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's moddable setup allows optional content modules, such as a time-travel extension, that do not clutter the main game but are choices for players wanting a particular specialization.",
+      "detail": "Both the team and, once opened, the community could build such modules. Planned worlds include a large surface world plus world variants exploiting the cosmic cataclysm.",
+      "t": 1578,
+      "quote": "so that they not necessarily clutter up the main game but become choices for players who want a certain specialization",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "mobile-first design",
+      "kind": "principle",
+      "claim": "Ultimate ADOM designs its UI mobile-first and controller-first, then adds power-user tools, because reducing an already complex interface to simplicity later, as in ADOM, is a constant struggle.",
+      "detail": "The initial interface should be as easy as possible, then expanded so power players can be fast and specialized. Biskup says ADOM's code is too complex to simplify the interface after the fact.",
+      "t": 1629,
+      "quote": "this way around is much better than the current Atom way where you are struggling all the time to get things reduced to simplicity",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "cross-game unlocks",
+      "kind": "open-question",
+      "claim": "ADOM's team considered treating ADOM as a prequel whose achievements feed into a player's meta-abilities in Ultimate ADOM, for example unlocking an item in ADOM that can then be found in Ultimate ADOM.",
+      "detail": "Biskup presents this as theory. In Q&A he said porting characters directly is unlikely because the data structures are completely different.",
+      "t": 1681,
+      "quote": "certain achievements or things you manage to do in ADOM reflect in your meta abilities in the future world of Ultimate ADOM",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "performance",
+      "kind": "example",
+      "claim": "An early Java ECS prototype for Ultimate ADOM ran a single dungeon level ten times the size of all ADOM's levels combined, with millions of entities, efficiently.",
+      "detail": "It was built just to see if it could be done; Biskup doubts players want levels that large except in a special game type. The demo showed auto-exploration and soul swapping into a troll.",
+      "t": 1755,
+      "quote": "This single dungeon level is about ten times the size of all the levels combined in ADOM.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "persistent legends",
+      "kind": "open-question",
+      "claim": "ADOM's team was considering letting play generate content across games, such as a monster that killed your ADOM character resurfacing in Ultimate ADOM as a named nemesis with special abilities.",
+      "detail": "Answering a question about winning characters becoming rumours, Biskup calls creating content through playing very interesting and cites Shadow of Mordor as a model, with legends or effects arising from former experiences. It was on the to-do list.",
+      "t": 1974,
+      "quote": "the idea of being able to create content through playing is a very interesting one",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "graphics vs ascii",
+      "kind": "principle",
+      "claim": "A good graphical version is Ultimate ADOM's prime focus because ASCII alone does not enlarge the audience; ASCII is used mainly for fast prototyping.",
+      "detail": "Biskup says the ASCII version will probably remain in some form but will be less of a focus than in the current game.",
+      "t": 2043,
+      "quote": "That's our prime focus because we want to enlarge the audience and ASCII alone doesn't do it.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "performance",
+      "kind": "warning",
+      "claim": "Ultimate ADOM's team found their Java prototype with millions of objects ran about a hundred times faster than the C# version, and worry more about engine complexity in Unity than about graphics.",
+      "detail": "Biskup did not know why and attributes it to their inexperience with C# performance. He expects few graphical problems because their graphical-interface work taught them to separate the game engine cleanly from graphical interpretation.",
+      "t": 2063,
+      "quote": "our Java version with a couple of million objects runs like a hundred times faster than the C-sharp version",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,44 @@
+Max Sahin - Stuff: the behavioral science of inventory
+Speaker: Max Sahin
+https://www.youtube.com/watch?v=Tll23vq6j1s
+Year: 2025   Kind: talk   Captions: manual (en)
+
+## Introduction to research
+
+[0:00:15] MAX: Hi, I am a behavioral scientist and I study people and what people do with computers. We are going to take a look at what people do with their stuff in games and how and why it matters. My scholarly research is mostly in how humans study other humans and how we get that information. I study research behavior in academia versus industry for product designers in the tech industry and how we make knowledge about how people do things on the internet. I am really interested in the edges of what we know and what's difficult to study which is why I picked this topic. It turns out stuff for roguelikes pushes on the edge of a lot of different paradoxes about behavior and what makes things fun. My professional career is a product designer and researcher mostly for early stage startups. I worked for Microsoft and a bunch of
+
+[0:01:20] other companies usually in areas where traditional product design methods don't get you there. I work from first principles. The technology changes but people don't. We are still running the same hunter gather brains we were thousands of years ago. Specific research about how we think
+
+## Research challenges
+
+[0:01:40] and feel about inventory is rare and generally low quality. Not because the researchers are bad but because people can't be trusted to tell you how they think or feel. If you ask a player do you like this menu? Or how do you feel? You will get an it is nice or something there of. People are bad at naming their experience. It is a skill and interviewing is a skill. To get people to not just tell you an answer but a useful answer takes a lot of training. It is really expensive. It creates a small research pool especially for games and small gaming companies. There are biases into what information can get out there at all. General research about people and how we relate to stuff is also in its infancy. It was dominated by Freudian theory until the 2010. Freud isn't as awful as everyone says he is. He uses the same outrage engine
+
+[0:02:41] that social media does. In his letters, he says he was shocking on purse. It is not all but not something you can rely on especially since what happened since 2010 is a lot of paradoxes. Our current research shows we value digital goods less than physical goods except when it is in a game. Gaming changes everything. When you can only die once in real life, this muddies the research, general research a lot. You can't apply that to a roguelike. And then gaming research itself is
+
+## Roguelike research paradoxes
+
+[0:03:21] tricky to apply to a roguelike. If you ask about meaning, fun, and games people about narrative and the digital self hood and that is because research is done in MMORPG talking about relational and narrative derived meaning. People are storytellers and we make meaning by creating a narrative one thing happens after another and another. We explain backwards why and create stories. A lot of how that is done in highly relational or social games or games where we build and tell stories doesn't apply or the same words mean the same thing or means slightly different things. The same words don't mean the same things. So the nuance becomes lost. It is easy to turn to research and end up worse off than you started if you are trying to understand roguelikes specifically in how people interact with inventory. There is also the fact that if narrative creation and social
+
+[0:04:23] connections were what people wanted out of the game they would not choose roguelikes. If people want complex social interaction they can by world of war craft. Roguelikes have interesting things
+
+## The psychology of objects
+
+[0:04:36] in common with all human experiences in that they are defined by death and with stuff. We manipulate objects to keep us live. We use them to act on our world. It is why we are successful as a species and a defining factor of humanity. We used to say we were the only tool wielding animals and that has been disproved but we are the only ones who used tools in the complex ways we do that are absolutely necessary to our survival. It takes an enormous amount of brain power. We use them to represent ourselves. For us a thing is never just a thing. A cup gifted to you at your wedding handed to your friend warm with coffee morning after morning washed and put away takes on the patina of every interaction and not just external but internal interactions. When
+
+[0:05:39] you think of that cup it resonates between your idea of that particular cup, your thoughts about cups like that in general, your implicit beliefs about the kind of people who might use that cup, the reconciliation of the cup in front of you with your memory of a whole cup, and there is a chip you didn't see before, and your feelings about breaking the cup you got at your wedding and handed to your friend warm with coffee. Is this the last time? It feels like yesterday. It is a wonder that we function day to day when teacups can make us think of dying. A thing is never just a thing for us. How cups connect to dying is called mortality science. It is also why
+
+## Mortality and excitement
+
+[0:06:37] roguelikes are so much fun. And many things are so much fun. We love fear especially when you divorce it from danger. The fear is a biological level to prevent death. Our brain pumps chemicals into our system to fight. We take in more data and it is all that. We refocus and sort. And remember the best that we ever do and react the fastest. This chemical cocktail is based on what is developing PTSD. We get jumpy even if there is nothing to be fear of. Humans love that edge. We feel alive there. Research durably shows that anything that taps on the glass to remind us we are mortal makes
+
+[0:07:38] our lives more meaningful. In video games, books, anything that reminds us of this is temporary and we will die enhances meaning. But much of complex play involves hijacking that system that dumps those chemicals in. Permadeath changes what parts of a game are carrying the meaning-making load.
+
+## Objects in roguelikes
+
+[0:08:07] It is not just about the fun and that creation of meaning we might die. It is how we construct meaning internally. Generated maps and a lack of sense of place also alter how we make meaning within these games. Normally when you go through a game it is like you do in the normal world. You move through space and see things that remind you of where you were before and hook backward in all the negative and positive experiences you have had in that location. It echoes backward and not just in that time and space but in to you. You don't get that in a roguelike. What you do get is objects. This hook changes fundamentally the relationship with objects in these games. Inventory is not just inventory and stuff isn't just stuff. They are relational tools and act said of agency. We act in the world -- you take out the thing, the thing creates an action. But
+
+[0:09:19] there are also vessels of memory and meaning. And this is because they persist despite the death and physical constraints of these games. They focus as constants. And the sense of familiarity. It is like taking only the fun parts of death because ultimately the game will only be new to you once. All these vessels that die and the great meaningful inventory for players. It is important
+
+## Designing meaningful inventory
+
+[0:10:30] to remember that the cup is never just the cup. When you approach, finding the emotion handles for ultimately the people you want to have fun. Creating a sense of safety amidst danger and creating a sense of meaning, something they can look back on, and have every positive interaction that they have ever had in your world come back to them when they interact with it empowers them to take the best parts, forgive what it means and what it means to die and have fun with that.

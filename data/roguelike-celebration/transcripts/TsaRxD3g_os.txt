@@ -1,0 +1,40 @@
+Josh Grams - Turn-based Space Flight?
+Speaker: Josh Grams
+https://www.youtube.com/watch?v=TsaRxD3g_os
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## The concept of space games
+
+[0:00:00] We are right on time. Our next speaker is Josh Grams. Take it away. >> I have always liked games that shoot this way and that way to avoid getting hit by a rock but these games aren't approachable. They drop you right in the action with little opportunity to experiment and get comfortable. It is a weird set of motion and sometimes they are just too fast. You can modify the mechanics but those tend to backfire. The space ship drives like a car and then people drive fast and don't engage. I wondered if you could make a turn-base game. For the 2017-2018 Roguelike I prototyped this.
+
+## Building the core mechanics
+
+[0:01:07] I was being a smart ass about the Berlin interpretation so I used ASCII characters on a grid but on a hex grid. I like hex grids and they give you the problem without some being longer than the others. It uses astroid mechanics. One hit and you are dead. How do you show your velocity? With whole grid cells your speed have to range from moving one cell over three turns do you move three cells every turn. I subdivided the grid and made a grid that took four steps to go from one hex to the next. I made shadows that go ahead of you. First I made a line of shadows and they look cool but they also look like they should be trailing behind you. A lot of people I found out later thought each shadow was a turn instead of the whole
+
+[0:02:08] line of shadows being a single turn.
+
+## Controls and level design
+
+[0:02:13] In a real-time game you can turn and accelerate and shoot all at the same time but in turn base that's kind of an UX nightmare. How do you tell the game if you are going to turn or accelerate or shoot or all three? How do you cancel just one part of the motion? Do you have to confirm the turn to make it go? That makes it feel slow and we want it to be snappy. I just gave each direction a key and you just tap the key and you can turn from any direction to that direction and it just takes a turn. Yeah. What else? You know, also, like, rotating. If you only rotate one step at a time then that's have expensive. It takes three turns to turn all the way around. I threw in this random walk dungeon generator. You stamp out a room, turn to a random exit, repeat and facility off another walker occasionally.
+
+[0:03:15] It creates all your floor tiles and you know they are connected. It creates more organic shapes than the other algorithms and it is pretty easy to drastically change the character of the space by choosing how you change the rooms and the exits although I didn't do a lot with that. There are only two enemies in the game.
+
+## Enemy design and balancing
+
+[0:03:34] The runs with the rotating you and occasionally they shoot. The other is an acid jelly when you shoot it splits into two smaller jellies and they kill you on contact. They accelerate towards you and I thought they don't steer well and maybe eight is a good number to start with. They are terrifying. You shoot them and the little ones explode. I backed off the number and made them only steer every five ranges and cut their site in half. I added money to pick up and that was the 7-day version. It was all right. But the thing that struck me when I was writing this talk was how little each of the individual changes I made was.
+
+## Refining the user experience
+
+[0:04:27] Version 2 I added a story and renamed it and there is a search about the legendary root vegetable. I replaced the money with root vej vegetables and put the yam on the bottom. Then I had friends test it. I changed the colors of the wall to make them more comfortable and there are site lines here which are pretty much invisible and ridiculous screen shake which is always good. Also, the level generation starts here on the stairs and my second try at the control to use the W key to grab an item or use the stairs for the next level and yeah.
+
+[0:05:33] It turns out that if you hit W right off the bat it gives you this losing message and, you know, turns out that that's a pretty bad thing to do to a new player who is just trying to accelbrate with WASD especially if that's Jupiter hadly playing all of the games. So that was -- I ended up disabling the original exit stairs just to make sure you couldn't lose the game off the bat. You have to wait until you leave the level and come back. Version 4 was mostly UI. I added mouse over tool tips. I added this endgame control help. And then I, yeah, the last two versions were game pet support.
+
+## Gamepad and control polish
+
+[0:06:17] I made this nifty little overlay to show where you are pointing the stick and when it will trigger your turn. You know, at first I thought you tap the key in the direction to aim that direction and that's perfect. You just point the stick but you hold the stick. If you wiggle it a little bit sometime you will turn by mistake and that will cost you a turn and didn't work well. I combined consecutive aiming turns so if you aim and aim again it takes a turn but not enough. I flounders awhile until my cousin suggested having a move button that would accelerate if you were turning forward and pointing another direction and coast if you were not holding it at all. It simplified the controls to the point where I could have the face buttons and the stick.
+
+## Final reflections
+
+[0:07:11] And yeah, that's pretty much where it stands. You know, it is still a jam game. It is probably a little hard and kind of weird. There is not much there but it was a really neat experiment and fun watching people make the exact same mistakes they do in a real-time space game. They will start off, accelerate too fast and not be able to stop and crash into a wall or they will get into a tight space and just panic and start pounding the keys until they die and it is fun to be there and be like no, take your hands off the keyboard and you can stop and think and seeing that realization so, yeah, I would love to do more in-depth take on this and maybe something more adventure and less shooty shooty bang-bang. If you have an Improbable idea that's been brewing in the back of your head for a year or two they are worth prototyping. Worst thing is you find out it doesn't have legs and best case you might come up with something really cool. That's me. Thanks for listening.
+
+[0:08:13] EMCEE: Thank you so much. That was super cool. That game looks great. I really want to play it. I love the idea of a turn-base game.

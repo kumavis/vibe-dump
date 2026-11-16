@@ -1,0 +1,150 @@
+{
+  "id": "SdQxLThAbs8",
+  "title": "Xalavier Nelson Jr. - Building an Economic Flesh Simulation Will Make You Disassociate from Reality",
+  "speaker": "Xalavier Nelson Jr.",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=SdQxLThAbs8",
+  "talk_type": "design",
+  "summary": "Xalavier Nelson Jr. recounts making Space Warlord Organ Trading Simulator, a game about buying and selling organs, which began as a joke premised on organs being easy to systematise. Every 'objective' systemic decision (what counts as an organ, whether size affects value, whether skin or the soul can be sold, what sound plays on quest completion) turned out to carry moral and cultural implications. A stock-market simulation felt real only when it embraced randomness rather than correlated structure. He argues that game numbers and categories convey a worldview more than writing does (examples: the Barrett .50 cal in Modern Warfare 2, RimWorld's gendered attraction, Oblivion's racial traits, Doom's shotgun), and urges developers to decide what fun is rather than follow it, owning the implications of their choices.",
+  "games": [
+    "Space Warlord Organ Trading Simulator",
+    "Airport for Aliens Currently Run by Dogs",
+    "Call of Duty: Modern Warfare 2",
+    "RimWorld",
+    "The Elder Scrolls IV: Oblivion",
+    "Doom"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systemisation",
+      "kind": "example",
+      "claim": "Space Warlord Organ Trading Simulator's premise seemed ideal because organs are easily systematised: a fixed set with known traits and modifiers like blood type, rarity and size.",
+      "detail": "Nelson says the thesis was that an organs-and-economics game could use accessible procedural generation and systemic elements to create a lot from a little, making each bit matter. The idea started as a late-2019 joke about the booming simulator genre on Steam.",
+      "t": 191,
+      "quote": "there's a given number of organs with known traits and modifiers you can add to them blood type rarity size etc",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systems as worldview",
+      "kind": "example",
+      "claim": "Even deciding what counts as an organ in Space Warlord Organ Trading Simulator was an arbitrary choice that players would read as an objective truth about the game's reality.",
+      "detail": "Nelson spent 48 hours on questions like whether nerves, teeth or eardrums are organs. Skin is an organ, raising whether selling it is okay and the possibility of valuing skin tones differently, which he calls deeply messed up and a glimpse of real cultural biases.",
+      "t": 331,
+      "quote": "what was in fact an arbitrary decision on our part that meant everything",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "value modelling",
+      "kind": "warning",
+      "claim": "Making an organ's value depend on size would have meant the developers deciding which bodies are healthier or better, edging into 'eugenics the video game', so they rejected it.",
+      "detail": "Some people genetically have smaller organs, and game developers are not qualified to declare a big heart better than a small one. The team narrowed to about 20 organs and decided not to determine value by size.",
+      "t": 403,
+      "quote": "if we decide the value of an organ uh as being partially determined by its size we're suddenly making decisions about health",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systemic implications",
+      "kind": "example",
+      "claim": "A single seemingly simple systemic question, such as whether the soul is a sellable organ, can spiral into a chain of implications about the whole fictional world.",
+      "detail": "Programmer Sam Chet asked whether the soul is an organ, raising questions about afterlife, who has souls, soul quality, where they're harvested, and whether aliens have souls. The team decided aliens do have souls and that souls are inherently human; Nelson saw this as emblematic of the range of decisions developers make.",
+      "t": 468,
+      "quote": "from a single seemingly simple or arbitrary systemic decision there's a spiraling series of implications",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "finding the fun",
+      "kind": "principle",
+      "claim": "Pursuing 'finding the fun' can turn into following a chain of beliefs and implications rather than deciding on them, so suboptimal design decisions are valid when the 'most fun' option doesn't match your world or values.",
+      "detail": "Nelson acknowledges finding the fun is seen as among the most important parts of development, but argues that if the objectively most fun choice creates something you couldn't justify or don't want to bring into existence, a suboptimal decision is not just valid but important.",
+      "t": 649,
+      "quote": "we aren't finding the fund anymore we're following the fun and assuming the responsibility for a chain of beliefs and implications rather than deciding upon them",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "market simulation",
+      "kind": "example",
+      "claim": "In Space Warlord Organ Trading Simulator, tying each stock to overall market movement made tickers converge, which hurt gameplay and felt unrealistic; embracing true randomness made players believe the market.",
+      "detail": "Internal and external QA called the correlated tickers not true to life. The more the team tried to make the market make sense and clamp it into structure, the less it worked. Nelson links this to the GameStop surge and a single tweet moving Tesla's stock as evidence markets rest on mutual human faith.",
+      "t": 975,
+      "quote": "it was actually when we embraced true randomness and pattern finding the madness of the market that people believed it to be true",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "feedback sounds",
+      "kind": "example",
+      "claim": "Even the choice of which sound plays when a quest is fulfilled carries moral weight, as Space Warlord Organ Trading Simulator found with quests for philanthropic hospital administrators.",
+      "detail": "There are positive, neutral and negative completion sounds; the neutral sounds like an error, so most default to positive. But the player is a cutthroat participant in an exploitative market, so a positive sound endorses a view, while a negative one says something about the character and the world's attitude to helping anything but misanthropic aims.",
+      "t": 1020,
+      "quote": "we have one of three sounds that can play when you fulfill a quest one that's positive one that's neutral one that is negative",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systems as worldview",
+      "kind": "principle",
+      "claim": "A game's generation systems, statistics and base numbers say more about its fictional world than its writing or marketing ever will.",
+      "detail": "Nelson, experienced with writing and with authored and procedural work, says this realisation shook him: the little integers players actually experience mean more than his words.",
+      "t": 1124,
+      "quote": "the generation systems the statistics the base numbers that build up this reality said more about our fictional world than the writing and marketing ever might",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design audit",
+      "kind": "technique",
+      "claim": "Go through every category, number and value in your game and draw out its social, moral, cultural and physical implications, checking whether you can stand by each.",
+      "detail": "Nelson notes it can be bad faith to dig through a game's systems and bugs to call out developers who may have had little agency, but all systems can reflect something concrete. For his team this audit became a necessity as well as an opportunity to say intentional things.",
+      "t": 1200,
+      "quote": "looking at every decision that you've made in your game every category every set of numbers and values and drawing out the social moral uh cultural",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systems as worldview",
+      "kind": "example",
+      "claim": "Game stats shape players' real-world beliefs: Modern Warfare 2's Barrett .50 cal acted as weapon advertising, and Doom made the double-barrelled shotgun a standard power weapon decades on.",
+      "detail": "Nelson cites Simon Parkin's Eurogamer investigation into arms manufacturers and game studios; the company spoke to the impact on sales. Departing from the Doom shotgun standard is itself a statement.",
+      "t": 1243,
+      "quote": "game design decisions can be and are advertising",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "racial traits",
+      "kind": "example",
+      "claim": "Racial stat traits embed beliefs: in Oblivion, Redguards are combat-strong and pain-resistant while lighter-skinned Imperials get social traits, so a Black player wanting a talk-and-lockpick playstyle must pick a character who doesn't look like him.",
+      "detail": "Nelson also notes a -5 starting disposition toward Redguards, which could be satire, bias, a bug or arbitrary. He cites a 2016 Rock Paper Shotgun article on RimWorld modelling attraction differently for male and female NPCs: any differentiation makes the differences meaningful and invites players to read patterns into them.",
+      "t": 1410,
+      "quote": "if i want to pursue my chosen play style i have to choose someone who doesn't look like me",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "worldview",
+      "kind": "example",
+      "claim": "Designers' own perspectives surface in their worlds: in Airport for Aliens Currently Run by Dogs, Nelson made free healthcare a punchline because in a utopia charging for care would be absurd.",
+      "detail": "Having just aged out of his healthcare, Nelson wrote a clinic NPC (the save point) whose punchline, if asked what you owe, is 'I'm a doctor, not a monster'.",
+      "t": 1550,
+      "quote": "the reflection of it based upon my perspective and my fears was health care treatment that was free",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "intentionality",
+      "kind": "principle",
+      "claim": "Games are not exempt from conveying a perspective, so developers should decide what fun is and own the implications of their choices rather than hyper-fixating to the point of paralysis.",
+      "detail": "Nelson says games don't have a special responsibility to be respectful, but they always convey a perspective. In Q&A on 'realistic' sexism and racism in historical settings, he called it a decision like any other: if you want to make players uncomfortable, be sure you say it well; the host noted historical arguments often sidestep ownership.",
+      "t": 1647,
+      "quote": "they're not exempt from conveying a perspective through their creative process and through the final product",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

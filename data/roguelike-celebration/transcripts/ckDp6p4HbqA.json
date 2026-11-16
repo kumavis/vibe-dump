@@ -1,0 +1,1479 @@
+{
+ "id": "ckDp6p4HbqA",
+ "url": "https://www.youtube.com/watch?v=ckDp6p4HbqA",
+ "title": "Patrick Devine - 2D Sprites with Unicode and Golang",
+ "speaker": "Patrick Devine",
+ "talk_title": "2D Sprites with Unicode and Golang",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 811,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nPatrick is a long time roguelike player and a lead Functional Architect at Docker.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to terminal art"
+  },
+  {
+   "start": 115,
+   "title": "Creating a sprite library"
+  },
+  {
+   "start": 207,
+   "title": "Terminal Tetris recreation"
+  },
+  {
+   "start": 354,
+   "title": "Unicode and graphics tricks"
+  },
+  {
+   "start": 531,
+   "title": "Space Invaders demo"
+  },
+  {
+   "start": 634,
+   "title": "Mario level recreation"
+  },
+  {
+   "start": 715,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2146,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 3.06,
+   "text": "all right hi my name is Patrick Devine"
+  },
+  {
+   "t": 3.09,
+   "d": 2.91,
+   "text": "and I actually am a functional architect"
+  },
+  {
+   "t": 6.0,
+   "d": 3.06,
+   "text": "at daugher talk about 2d sprites with"
+  },
+  {
+   "t": 9.06,
+   "d": 2.7,
+   "text": "with Unicode and going but I realized"
+  },
+  {
+   "t": 11.76,
+   "d": 2.7,
+   "text": "after I kind of put these this"
+  },
+  {
+   "t": 14.46,
+   "d": 1.92,
+   "text": "presentation together it probably would"
+  },
+  {
+   "t": 16.38,
+   "d": 2.43,
+   "text": "have been better called aka stupid"
+  },
+  {
+   "t": 18.81,
+   "d": 2.76,
+   "text": "terminal tricks um so I'm gonna talk a"
+  },
+  {
+   "t": 21.57,
+   "d": 2.07,
+   "text": "lot about things that you could do on"
+  },
+  {
+   "t": 23.64,
+   "d": 1.56,
+   "text": "the terminal if you have a text-based"
+  },
+  {
+   "t": 25.2,
+   "d": 2.91,
+   "text": "roguelike hopefully they were"
+  },
+  {
+   "t": 28.11,
+   "d": 4.26,
+   "text": "interesting so I think probably everyone"
+  },
+  {
+   "t": 32.37,
+   "d": 2.61,
+   "text": "here knows what a sprite is but just the"
+  },
+  {
+   "t": 34.98,
+   "d": 3.42,
+   "text": "15 second primer on that if it moves on"
+  },
+  {
+   "t": 38.4,
+   "d": 1.71,
+   "text": "the screen and it's in 2d then it's"
+  },
+  {
+   "t": 40.11,
+   "d": 4.86,
+   "text": "probably a sprite Mario pac-man Qbert"
+  },
+  {
+   "t": 44.97,
+   "d": 2.43,
+   "text": "the little sausage guy and Burger Time"
+  },
+  {
+   "t": 47.4,
+   "d": 1.8,
+   "text": "they're all sprites if it's moving"
+  },
+  {
+   "t": 49.2,
+   "d": 4.08,
+   "text": "around its prey anyone know what this"
+  },
+  {
+   "t": 53.28,
+   "d": 3.84,
+   "text": "game is this is the very first roguelike"
+  },
+  {
+   "t": 57.12,
+   "d": 2.64,
+   "text": "that I ever played and from I think it"
+  },
+  {
+   "t": 59.76,
+   "d": 4.04,
+   "text": "came out at 1984 it was called DMD"
+  },
+  {
+   "t": 63.8,
+   "d": 2.92,
+   "text": "actually is capital D capital and"
+  },
+  {
+   "t": 66.72,
+   "d": 1.95,
+   "text": "capital D not to be confused with the"
+  },
+  {
+   "t": 68.67,
+   "d": 2.52,
+   "text": "lowercase D lower case and lower case D"
+  },
+  {
+   "t": 71.19,
+   "d": 2.91,
+   "text": "this was this was came out and I think"
+  },
+  {
+   "t": 74.1,
+   "d": 5.31,
+   "text": "1984 and it was for ms-dos and I played"
+  },
+  {
+   "t": 79.41,
+   "d": 1.17,
+   "text": "the hell out of this game because I"
+  },
+  {
+   "t": 80.58,
+   "d": 3.89,
+   "text": "didn't have any other games on the PC"
+  },
+  {
+   "t": 84.47,
+   "d": 3.7,
+   "text": "yeah I mean you can see it's I mean the"
+  },
+  {
+   "t": 88.17,
+   "d": 1.92,
+   "text": "people that wrote their word the guy"
+  },
+  {
+   "t": 90.09,
+   "d": 2.64,
+   "text": "that really who's trying to it's like a"
+  },
+  {
+   "t": 92.73,
+   "d": 1.8,
+   "text": "character sheet and it kind of looks"
+  },
+  {
+   "t": 94.53,
+   "d": 2.61,
+   "text": "like Dungeons and Dragons and he was"
+  },
+  {
+   "t": 97.14,
+   "d": 2.49,
+   "text": "trying to also show like a little"
+  },
+  {
+   "t": 99.63,
+   "d": 2.85,
+   "text": "dungeon crawl or map type thing up in"
+  },
+  {
+   "t": 102.48,
+   "d": 2.46,
+   "text": "the corner and you know this did not use"
+  },
+  {
+   "t": 104.94,
+   "d": 2.34,
+   "text": "sprites but he was still trying to"
+  },
+  {
+   "t": 107.28,
+   "d": 2.97,
+   "text": "convey a story or trying to convey what"
+  },
+  {
+   "t": 110.25,
+   "d": 1.59,
+   "text": "it would be like to play Dena you could"
+  },
+  {
+   "t": 111.84,
+   "d": 2.16,
+   "text": "kind of like move around the dungeon and"
+  },
+  {
+   "t": 114.0,
+   "d": 3.54,
+   "text": "do stuff so my job actually is a"
+  },
+  {
+   "t": 117.54,
+   "d": 2.28,
+   "text": "functional architect I what I do is I"
+  },
+  {
+   "t": 119.82,
+   "d": 2.91,
+   "text": "look at things like api's CL eyes and"
+  },
+  {
+   "t": 122.73,
+   "d": 3.03,
+   "text": "it's docker it's in containers so I have"
+  },
+  {
+   "t": 125.76,
+   "d": 1.89,
+   "text": "to deal with them I big constraint is it"
+  },
+  {
+   "t": 127.65,
+   "d": 1.6,
+   "text": "has to work in the container"
+  },
+  {
+   "t": 129.25,
+   "d": 4.05,
+   "text": "to work in terminal and so well how do"
+  },
+  {
+   "t": 133.3,
+   "d": 1.8,
+   "text": "you convey story or how do you tell a"
+  },
+  {
+   "t": 135.1,
+   "d": 2.85,
+   "text": "story in a terminal which of course the"
+  },
+  {
+   "t": 137.95,
+   "d": 1.53,
+   "text": "first thing you do as an engineer's you"
+  },
+  {
+   "t": 139.48,
+   "d": 3.63,
+   "text": "write your own sprite library so I'm"
+  },
+  {
+   "t": 143.11,
+   "d": 2.7,
+   "text": "gonna give you a quick little demo of"
+  },
+  {
+   "t": 145.81,
+   "d": 6.69,
+   "text": "the I thought you guys can do all this"
+  },
+  {
+   "t": 152.5,
+   "d": 1.47,
+   "text": "if you have darker on your machines this"
+  },
+  {
+   "t": 153.97,
+   "d": 3.89,
+   "text": "should all work and they'll pull it down"
+  },
+  {
+   "t": 158.49,
+   "d": 2.32,
+   "text": "yeah so this was like the first kind of"
+  },
+  {
+   "t": 160.81,
+   "d": 2.42,
+   "text": "like test sprite stuff that I wrote"
+  },
+  {
+   "t": 163.23,
+   "d": 1.6,
+   "text": "following the terminal"
+  },
+  {
+   "t": 164.83,
+   "d": 2.55,
+   "text": "that's Moby they're the whale bouncing"
+  },
+  {
+   "t": 167.38,
+   "d": 6.09,
+   "text": "around we can add a few more movies it's"
+  },
+  {
+   "t": 173.47,
+   "d": 1.38,
+   "text": "actually the only thing that that kind"
+  },
+  {
+   "t": 174.85,
+   "d": 1.68,
+   "text": "of like stops there makes it a little"
+  },
+  {
+   "t": 176.53,
+   "d": 3.3,
+   "text": "bit laggy is kind of like the size of"
+  },
+  {
+   "t": 179.83,
+   "d": 2.79,
+   "text": "the terminal itself so and if you're"
+  },
+  {
+   "t": 182.62,
+   "d": 6.99,
+   "text": "using certain terminals yeah so that"
+  },
+  {
+   "t": 189.61,
+   "d": 1.83,
+   "text": "that's kind of like the first first"
+  },
+  {
+   "t": 191.44,
+   "d": 2.1,
+   "text": "thing that I wrote was to to get that"
+  },
+  {
+   "t": 193.54,
+   "d": 1.35,
+   "text": "that working and what's going on behind"
+  },
+  {
+   "t": 194.89,
+   "d": 2.07,
+   "text": "the scenes I'm the way that any kind of"
+  },
+  {
+   "t": 196.96,
+   "d": 1.8,
+   "text": "animation works relates just three steps"
+  },
+  {
+   "t": 198.76,
+   "d": 2.31,
+   "text": "clearing the screen they're updating the"
+  },
+  {
+   "t": 201.07,
+   "d": 1.65,
+   "text": "sprites removing all those mobis around"
+  },
+  {
+   "t": 202.72,
+   "d": 1.89,
+   "text": "and then you're just drawing them and"
+  },
+  {
+   "t": 204.61,
+   "d": 3.78,
+   "text": "you just keep doing it forever well so"
+  },
+  {
+   "t": 208.39,
+   "d": 1.08,
+   "text": "the first thing you do after you've"
+  },
+  {
+   "t": 209.47,
+   "d": 1.53,
+   "text": "written your own sprite libraries you"
+  },
+  {
+   "t": 211.0,
+   "d": 2.58,
+   "text": "got a ready game and I started thinking"
+  },
+  {
+   "t": 213.58,
+   "d": 2.31,
+   "text": "of what was like the most famous text"
+  },
+  {
+   "t": 215.89,
+   "d": 2.1,
+   "text": "game that was ever written and I"
+  },
+  {
+   "t": 217.99,
+   "d": 1.62,
+   "text": "actually don't know if most people"
+  },
+  {
+   "t": 219.61,
+   "d": 2.25,
+   "text": "realized that that Tetris was written in"
+  },
+  {
+   "t": 221.86,
+   "d": 3.15,
+   "text": "as a terminal game so this was written"
+  },
+  {
+   "t": 225.01,
+   "d": 3.59,
+   "text": "in 1984 by Alexey Pajitnov"
+  },
+  {
+   "t": 228.6,
+   "d": 4.84,
+   "text": "this was written for like a Soviet"
+  },
+  {
+   "t": 233.44,
+   "d": 2.94,
+   "text": "knockoff of the pdp-11 mainframe so it"
+  },
+  {
+   "t": 236.38,
+   "d": 3.24,
+   "text": "was electronica 60 I think is what it"
+  },
+  {
+   "t": 239.62,
+   "d": 3.33,
+   "text": "was called and it's pretty cool yeah so"
+  },
+  {
+   "t": 242.95,
+   "d": 3.84,
+   "text": "I went I went ahead and decided to write"
+  },
+  {
+   "t": 246.79,
+   "d": 3.92,
+   "text": "a game you guys again you can try this"
+  },
+  {
+   "t": 254.71,
+   "d": 4.48,
+   "text": "so this is my homage to to to Tetris on"
+  },
+  {
+   "t": 259.19,
+   "d": 6.3,
+   "text": "the electronica 60 and I wrote this on"
+  },
+  {
+   "t": 265.49,
+   "d": 3.57,
+   "text": "the Caltrain I was commuting to and from"
+  },
+  {
+   "t": 269.06,
+   "d": 2.79,
+   "text": "work it's really hard to play when"
+  },
+  {
+   "t": 271.85,
+   "d": 5.01,
+   "text": "you're trying to as well but yeah it's"
+  },
+  {
+   "t": 276.86,
+   "d": 1.52,
+   "text": "pretty good actually"
+  },
+  {
+   "t": 278.38,
+   "d": 4.81,
+   "text": "yeah so I wrote this thing and I was"
+  },
+  {
+   "t": 283.19,
+   "d": 1.74,
+   "text": "kind of like what I don't know if people"
+  },
+  {
+   "t": 284.93,
+   "d": 1.89,
+   "text": "have seen the classic Tetris World"
+  },
+  {
+   "t": 286.82,
+   "d": 1.5,
+   "text": "Championships they're coming up right"
+  },
+  {
+   "t": 288.32,
+   "d": 2.82,
+   "text": "now up in Oregon I was really obsessed"
+  },
+  {
+   "t": 291.14,
+   "d": 2.16,
+   "text": "with this like this is the best eSport"
+  },
+  {
+   "t": 293.3,
+   "d": 1.79,
+   "text": "that's probably ever been invented"
+  },
+  {
+   "t": 295.09,
+   "d": 1.78,
+   "text": "you guys haven't seen it you should"
+  },
+  {
+   "t": 296.87,
+   "d": 3.3,
+   "text": "totally check out so I was really"
+  },
+  {
+   "t": 300.17,
+   "d": 1.62,
+   "text": "obsessed with that and what I did was I"
+  },
+  {
+   "t": 301.79,
+   "d": 2.88,
+   "text": "actually timed all the frames to be"
+  },
+  {
+   "t": 304.67,
+   "d": 3.0,
+   "text": "exactly the same as the frames in NES"
+  },
+  {
+   "t": 307.67,
+   "d": 1.95,
+   "text": "Tetris but running on the terminal of"
+  },
+  {
+   "t": 309.62,
+   "d": 2.37,
+   "text": "course so and actually if you get to the"
+  },
+  {
+   "t": 311.99,
+   "d": 1.98,
+   "text": "higher levels there's like the ASCII st."
+  },
+  {
+   "t": 313.97,
+   "d": 1.97,
+   "text": "Peter's Basilica and a whole bit and"
+  },
+  {
+   "t": 315.94,
+   "d": 3.31,
+   "text": "yeah it's pretty cool so check it out if"
+  },
+  {
+   "t": 319.25,
+   "d": 6.06,
+   "text": "you get a chance let's see so to get"
+  },
+  {
+   "t": 325.31,
+   "d": 3.03,
+   "text": "that to get those frames to be the same"
+  },
+  {
+   "t": 328.34,
+   "d": 3.24,
+   "text": "as they were inside of Tetris itself"
+  },
+  {
+   "t": 331.58,
+   "d": 1.26,
+   "text": "there's only a few more tricks that you"
+  },
+  {
+   "t": 332.84,
+   "d": 1.89,
+   "text": "need to do it's just the same thing"
+  },
+  {
+   "t": 334.73,
+   "d": 1.59,
+   "text": "you're going to be clearing screen"
+  },
+  {
+   "t": 336.32,
+   "d": 1.86,
+   "text": "updating the sprites drawing them but"
+  },
+  {
+   "t": 338.18,
+   "d": 1.43,
+   "text": "you also are going to introduce a timer"
+  },
+  {
+   "t": 339.61,
+   "d": 2.02,
+   "text": "there's other ways of doing this of"
+  },
+  {
+   "t": 341.63,
+   "d": 1.44,
+   "text": "course if you're if you're working with"
+  },
+  {
+   "t": 343.07,
+   "d": 1.68,
+   "text": "sprites but when you're dealing with the"
+  },
+  {
+   "t": 344.75,
+   "d": 2.55,
+   "text": "terminal since it's kind of blocky as"
+  },
+  {
+   "t": 347.3,
+   "d": 1.86,
+   "text": "things are moving I find that this is"
+  },
+  {
+   "t": 349.16,
+   "d": 2.22,
+   "text": "the best way so I just set it up for 60"
+  },
+  {
+   "t": 351.38,
+   "d": 3.17,
+   "text": "frames a second and it works pretty well"
+  },
+  {
+   "t": 354.55,
+   "d": 2.8,
+   "text": "so so what about Angie what we just I"
+  },
+  {
+   "t": 357.35,
+   "d": 2.88,
+   "text": "was showing you ASCII graphics and we"
+  },
+  {
+   "t": 360.23,
+   "d": 1.56,
+   "text": "saw play skee I was like totally blown"
+  },
+  {
+   "t": 361.79,
+   "d": 3.26,
+   "text": "away by play skee it was so so awesome"
+  },
+  {
+   "t": 365.05,
+   "d": 4.57,
+   "text": "I'm I'm a child of the eighties I grew"
+  },
+  {
+   "t": 369.62,
+   "d": 5.52,
+   "text": "up in the 80s and I first was BBS's and"
+  },
+  {
+   "t": 375.14,
+   "d": 2.01,
+   "text": "dealing with anji graphics and I still"
+  },
+  {
+   "t": 377.15,
+   "d": 2.82,
+   "text": "love them a lot to this day and I"
+  },
+  {
+   "t": 379.97,
+   "d": 1.95,
+   "text": "started thinking about how I could go"
+  },
+  {
+   "t": 381.92,
+   "d": 2.73,
+   "text": "and do things with Unicode"
+  },
+  {
+   "t": 384.65,
+   "d": 2.43,
+   "text": "with this this particular sprint library"
+  },
+  {
+   "t": 387.08,
+   "d": 1.62,
+   "text": "and then I what I realized was there"
+  },
+  {
+   "t": 388.7,
+   "d": 3.21,
+   "text": "actually are even more unicode code"
+  },
+  {
+   "t": 391.91,
+   "d": 2.04,
+   "text": "points that you can use to go and do"
+  },
+  {
+   "t": 393.95,
+   "d": 2.16,
+   "text": "cool stuff with and what I realized but"
+  },
+  {
+   "t": 396.11,
+   "d": 1.53,
+   "text": "there were these quadrants and if you"
+  },
+  {
+   "t": 397.64,
+   "d": 2.28,
+   "text": "think of this thing on on the left as"
+  },
+  {
+   "t": 399.92,
+   "d": 1.77,
+   "text": "being a character you can actually light"
+  },
+  {
+   "t": 401.69,
+   "d": 2.16,
+   "text": "up different quadrants of that character"
+  },
+  {
+   "t": 403.85,
+   "d": 2.43,
+   "text": "itself and there's 16 values and you can"
+  },
+  {
+   "t": 406.28,
+   "d": 1.26,
+   "text": "actually light them up in different"
+  },
+  {
+   "t": 407.54,
+   "d": 2.4,
+   "text": "parts so if one part of it is you can"
+  },
+  {
+   "t": 409.94,
+   "d": 1.98,
+   "text": "imagine these days now pixels so I have"
+  },
+  {
+   "t": 411.92,
+   "d": 2.46,
+   "text": "4 pixels that can can go inside of every"
+  },
+  {
+   "t": 414.38,
+   "d": 1.74,
+   "text": "every character and you can light them"
+  },
+  {
+   "t": 416.12,
+   "d": 1.08,
+   "text": "up as the foreground or background"
+  },
+  {
+   "t": 417.2,
+   "d": 3.72,
+   "text": "characters so that's pretty neat this"
+  },
+  {
+   "t": 420.92,
+   "d": 2.7,
+   "text": "little guy on the right he is actually 6"
+  },
+  {
+   "t": 423.62,
+   "d": 4.95,
+   "text": "characters wide 6 by 6 I think I'm a"
+  },
+  {
+   "t": 428.57,
+   "d": 2.58,
+   "text": "terrible artist and I didn't go and"
+  },
+  {
+   "t": 431.15,
+   "d": 4.62,
+   "text": "write a way of going and drawing the"
+  },
+  {
+   "t": 435.77,
+   "d": 2.43,
+   "text": "stuff so I just do everything in ASCII"
+  },
+  {
+   "t": 438.2,
+   "d": 1.95,
+   "text": "and I create all this stuff as text in"
+  },
+  {
+   "t": 440.15,
+   "d": 1.98,
+   "text": "than I do interpolation where it's"
+  },
+  {
+   "t": 442.13,
+   "d": 1.83,
+   "text": "really hard to go and draw each one of"
+  },
+  {
+   "t": 443.96,
+   "d": 2.67,
+   "text": "those individual characters but it still"
+  },
+  {
+   "t": 446.63,
+   "d": 1.02,
+   "text": "works pretty well if you read in an"
+  },
+  {
+   "t": 447.65,
+   "d": 4.68,
+   "text": "interpolator here's the thing I actually"
+  },
+  {
+   "t": 452.33,
+   "d": 2.7,
+   "text": "I use Linux on my home laptop I don't I"
+  },
+  {
+   "t": 455.03,
+   "d": 2.67,
+   "text": "I used I don't use Linux at work except"
+  },
+  {
+   "t": 457.7,
+   "d": 3.03,
+   "text": "for it and in a terminal most of this"
+  },
+  {
+   "t": 460.73,
+   "d": 1.68,
+   "text": "stuff kind of works"
+  },
+  {
+   "t": 462.41,
+   "d": 2.52,
+   "text": "it all works on Linux this is where the"
+  },
+  {
+   "t": 464.93,
+   "d": 1.32,
+   "text": "Linux users are kind of like up in their"
+  },
+  {
+   "t": 466.25,
+   "d": 1.92,
+   "text": "ivory towers like looking down on"
+  },
+  {
+   "t": 468.17,
+   "d": 4.13,
+   "text": "everyone else it doesn't work as well in"
+  },
+  {
+   "t": 472.3,
+   "d": 3.22,
+   "text": "Mac OS or in Windows but it still can"
+  },
+  {
+   "t": 475.52,
+   "d": 4.46,
+   "text": "work and the kind of the key here yeah"
+  },
+  {
+   "t": 479.98,
+   "d": 2.8,
+   "text": "so the key here is that you need a good"
+  },
+  {
+   "t": 482.78,
+   "d": 2.76,
+   "text": "font a good monospaced font you got to"
+  },
+  {
+   "t": 485.54,
+   "d": 1.79,
+   "text": "change the line spacing in order to get"
+  },
+  {
+   "t": 487.33,
+   "d": 3.16,
+   "text": "usually what Mac OS when Windows is they"
+  },
+  {
+   "t": 490.49,
+   "d": 1.98,
+   "text": "kind of make the line spacing not work"
+  },
+  {
+   "t": 492.47,
+   "d": 3.66,
+   "text": "quite right I term 2 is really cool the"
+  },
+  {
+   "t": 496.13,
+   "d": 1.17,
+   "text": "first stuff I showed you it was just"
+  },
+  {
+   "t": 497.3,
+   "d": 1.35,
+   "text": "normal Mac terminal but item 2 is"
+  },
+  {
+   "t": 498.65,
+   "d": 2.82,
+   "text": "actually GPU accelerated terminal so we"
+  },
+  {
+   "t": 501.47,
+   "d": 2.4,
+   "text": "have GPU accelerated text which is kind"
+  },
+  {
+   "t": 503.87,
+   "d": 2.24,
+   "text": "of fun"
+  },
+  {
+   "t": 506.24,
+   "d": 2.47,
+   "text": "windows yeah you kind of just do the"
+  },
+  {
+   "t": 508.71,
+   "d": 2.04,
+   "text": "same I don't know windows as well so I'm"
+  },
+  {
+   "t": 510.75,
+   "d": 1.47,
+   "text": "kind of like the wrong person asked here"
+  },
+  {
+   "t": 512.22,
+   "d": 1.59,
+   "text": "I think they're doing a lot better stuff"
+  },
+  {
+   "t": 513.81,
+   "d": 2.82,
+   "text": "now but yeah there's this thing called"
+  },
+  {
+   "t": 516.63,
+   "d": 2.1,
+   "text": "Unicode code points and the thing about"
+  },
+  {
+   "t": 518.73,
+   "d": 1.32,
+   "text": "them is you have to kind of use as"
+  },
+  {
+   "t": 520.05,
+   "d": 2.64,
+   "text": "utf-16 instead of utf-8 and it gets kind"
+  },
+  {
+   "t": 522.69,
+   "d": 2.55,
+   "text": "of weird so you're a little bit on your"
+  },
+  {
+   "t": 525.24,
+   "d": 1.65,
+   "text": "own you can ask me if you have like"
+  },
+  {
+   "t": 526.89,
+   "d": 1.5,
+   "text": "problems getting this working I can try"
+  },
+  {
+   "t": 528.39,
+   "d": 3.72,
+   "text": "to help but let's see so here is my my"
+  },
+  {
+   "t": 532.11,
+   "d": 7.14,
+   "text": "next demo using this code I term or even"
+  },
+  {
+   "t": 539.25,
+   "d": 2.76,
+   "text": "have it up here so this is this is text"
+  },
+  {
+   "t": 542.01,
+   "d": 1.98,
+   "text": "invaders this is all in the terminal"
+  },
+  {
+   "t": 543.99,
+   "d": 2.61,
+   "text": "just using straight straight unicode"
+  },
+  {
+   "t": 546.6,
+   "d": 5.01,
+   "text": "characters and it's playable space"
+  },
+  {
+   "t": 551.61,
+   "d": 2.13,
+   "text": "invaders the kind of the neat thing"
+  },
+  {
+   "t": 553.74,
+   "d": 1.59,
+   "text": "about this you can actually like cut and"
+  },
+  {
+   "t": 555.33,
+   "d": 13.95,
+   "text": "paste yeah welcome to 1979 so yeah okay"
+  },
+  {
+   "t": 569.28,
+   "d": 3.47,
+   "text": "so yeah 1970 we had we had it all in in"
+  },
+  {
+   "t": 572.75,
+   "d": 2.38,
+   "text": "black and white but we can do this in"
+  },
+  {
+   "t": 575.13,
+   "d": 2.55,
+   "text": "color because we have color terminals as"
+  },
+  {
+   "t": 577.68,
+   "d": 3.24,
+   "text": "well too now so what's funny is you can"
+  },
+  {
+   "t": 580.92,
+   "d": 1.35,
+   "text": "do four different foreground and"
+  },
+  {
+   "t": 582.27,
+   "d": 1.71,
+   "text": "background colors and you can change"
+  },
+  {
+   "t": 583.98,
+   "d": 5.04,
+   "text": "these and also if you're using most"
+  },
+  {
+   "t": 589.02,
+   "d": 1.83,
+   "text": "terminals use the x11 color palettes so"
+  },
+  {
+   "t": 590.85,
+   "d": 2.4,
+   "text": "you get 256 colors that's actually a lot"
+  },
+  {
+   "t": 593.25,
+   "d": 2.67,
+   "text": "more than 8-bit machines back in the"
+  },
+  {
+   "t": 595.92,
+   "d": 1.89,
+   "text": "mid-80s so you can actually do a lot"
+  },
+  {
+   "t": 597.81,
+   "d": 3.99,
+   "text": "more colors than like NES or like a Sega"
+  },
+  {
+   "t": 601.8,
+   "d": 3.72,
+   "text": "Master System problem with this though"
+  },
+  {
+   "t": 605.52,
+   "d": 2.37,
+   "text": "is that you can only do in one of those"
+  },
+  {
+   "t": 607.89,
+   "d": 2.58,
+   "text": "four pixel characters you can only do"
+  },
+  {
+   "t": 610.47,
+   "d": 2.31,
+   "text": "two character or two colors that are"
+  },
+  {
+   "t": 612.78,
+   "d": 1.47,
+   "text": "inside of that so you kind of get like"
+  },
+  {
+   "t": 614.25,
+   "d": 2.42,
+   "text": "we're artifacting and stuff like that"
+  },
+  {
+   "t": 616.67,
+   "d": 2.14,
+   "text": "the other weird thing I didn't put this"
+  },
+  {
+   "t": 618.81,
+   "d": 1.2,
+   "text": "in the slide but the other weird thing"
+  },
+  {
+   "t": 620.01,
+   "d": 1.83,
+   "text": "is and you probably couldn't notice it"
+  },
+  {
+   "t": 621.84,
+   "d": 1.14,
+   "text": "that much in the last one you kind of"
+  },
+  {
+   "t": 622.98,
+   "d": 2.85,
+   "text": "get these like elongated pixels as well"
+  },
+  {
+   "t": 625.83,
+   "d": 1.92,
+   "text": "too because it's it's higher than than"
+  },
+  {
+   "t": 627.75,
+   "d": 8.19,
+   "text": "it is wide alright so this is the other"
+  },
+  {
+   "t": 635.94,
+   "d": 2.1,
+   "text": "stuff that I showed you you can pull it"
+  },
+  {
+   "t": 638.04,
+   "d": 1.32,
+   "text": "from docker hub it should just all work"
+  },
+  {
+   "t": 639.36,
+   "d": 2.01,
+   "text": "out of the box and so I haven't put in"
+  },
+  {
+   "t": 641.37,
+   "d": 2.01,
+   "text": "in the docker hub because I'm there's a"
+  },
+  {
+   "t": 643.38,
+   "d": 2.31,
+   "text": "similar project that people were working"
+  },
+  {
+   "t": 645.69,
+   "d": 4.2,
+   "text": "on with the c64 and the lawyers like"
+  },
+  {
+   "t": 649.89,
+   "d": 1.95,
+   "text": "yeah they're like circling around the"
+  },
+  {
+   "t": 651.84,
+   "d": 1.29,
+   "text": "building like sharks I'm sure right now"
+  },
+  {
+   "t": 653.13,
+   "d": 3.3,
+   "text": "so I didn't put it out but if people are"
+  },
+  {
+   "t": 656.43,
+   "d": 2.1,
+   "text": "interested I can I can try to get you"
+  },
+  {
+   "t": 658.53,
+   "d": 4.05,
+   "text": "something so this is this is this is"
+  },
+  {
+   "t": 662.58,
+   "d": 4.65,
+   "text": "level one one in a terminal so you can"
+  },
+  {
+   "t": 667.23,
+   "d": 1.5,
+   "text": "see a little bit of the jaggies there"
+  },
+  {
+   "t": 668.73,
+   "d": 3.09,
+   "text": "where he's or maybe you can't how close"
+  },
+  {
+   "t": 671.82,
+   "d": 2.25,
+   "text": "you are and I haven't finished this game"
+  },
+  {
+   "t": 674.07,
+   "d": 1.5,
+   "text": "because I really I didn't want to get"
+  },
+  {
+   "t": 675.57,
+   "d": 2.4,
+   "text": "sued and so he he just kind of walks"
+  },
+  {
+   "t": 677.97,
+   "d": 3.6,
+   "text": "through the whole level but Conan goes"
+  },
+  {
+   "t": 681.57,
+   "d": 5.4,
+   "text": "over pits but but it works right like"
+  },
+  {
+   "t": 686.97,
+   "d": 2.94,
+   "text": "the way that I wrote this was again"
+  },
+  {
+   "t": 689.91,
+   "d": 4.53,
+   "text": "everything I'm using 16 by Supreme REO"
+  },
+  {
+   "t": 694.44,
+   "d": 2.55,
+   "text": "you can't go through anything"
+  },
+  {
+   "t": 696.99,
+   "d": 6.38,
+   "text": "so he yeah it's it's a 16 by 16 pixels"
+  },
+  {
+   "t": 703.37,
+   "d": 3.07,
+   "text": "inside of it and each of it is again"
+  },
+  {
+   "t": 706.44,
+   "d": 2.07,
+   "text": "it's all interpolated and I have the"
+  },
+  {
+   "t": 708.51,
+   "d": 2.64,
+   "text": "entire map of one one is is just like in"
+  },
+  {
+   "t": 711.15,
+   "d": 6.98,
+   "text": "a text file and it kind of works so yeah"
+  },
+  {
+   "t": 718.13,
+   "d": 3.36,
+   "text": "yeah thank you"
+  },
+  {
+   "t": 722.12,
+   "d": 2.57,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 724.69,
+   "d": 2.15,
+   "text": "[Music]"
+  },
+  {
+   "t": 726.84,
+   "d": 2.5,
+   "text": "if you want if you want to get you're"
+  },
+  {
+   "t": 729.34,
+   "d": 2.91,
+   "text": "gonna like test out the this all I"
+  },
+  {
+   "t": 732.25,
+   "d": 1.59,
+   "text": "mentioned that it was in go lying before"
+  },
+  {
+   "t": 733.84,
+   "d": 2.97,
+   "text": "this is a guy golang a ski sprite"
+  },
+  {
+   "t": 736.81,
+   "d": 1.35,
+   "text": "library can get it all off on I'll"
+  },
+  {
+   "t": 738.16,
+   "d": 1.92,
+   "text": "github and most of the stuff like the"
+  },
+  {
+   "t": 740.08,
+   "d": 1.53,
+   "text": "examples were all in there as well too"
+  },
+  {
+   "t": 741.61,
+   "d": 2.45,
+   "text": "if you want to check"
+  },
+  {
+   "t": 752.42,
+   "d": 2.52,
+   "text": "cool we have time for maybe one question"
+  },
+  {
+   "t": 754.94,
+   "d": 3.12,
+   "text": "while we switch over laptops say I have"
+  },
+  {
+   "t": 758.06,
+   "d": 15.03,
+   "text": "a question so I noticed you're clearing"
+  },
+  {
+   "t": 773.09,
+   "d": 1.95,
+   "text": "the screen each time instead of using"
+  },
+  {
+   "t": 775.04,
+   "d": 2.91,
+   "text": "the terminal capabilities to go and you"
+  },
+  {
+   "t": 777.95,
+   "d": 1.59,
+   "text": "know minimize the amount of information"
+  },
+  {
+   "t": 779.54,
+   "d": 2.67,
+   "text": "sent over a telnet session have you"
+  },
+  {
+   "t": 782.21,
+   "d": 1.98,
+   "text": "thought about expanding the library to"
+  },
+  {
+   "t": 784.19,
+   "d": 2.94,
+   "text": "do screen refreshes rather than complete"
+  },
+  {
+   "t": 787.13,
+   "d": 5.04,
+   "text": "read rules actually so I rely on T MUX"
+  },
+  {
+   "t": 792.17,
+   "d": 1.35,
+   "text": "to go and do that for me"
+  },
+  {
+   "t": 793.52,
+   "d": 4.82,
+   "text": "so am I actually not doing a full draw"
+  },
+  {
+   "t": 802.15,
+   "d": 4.56,
+   "text": "cool thank you so much right thanks"
+  },
+  {
+   "t": 807.18,
+   "d": 2.96,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 810.14,
+   "d": 2.47,
+   "text": "[Music]"
+  }
+ ]
+}

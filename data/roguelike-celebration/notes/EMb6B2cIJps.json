@@ -1,0 +1,155 @@
+{
+  "id": "EMb6B2cIJps",
+  "title": "Martin Pichlmair - Ancient Roguelikes: The Pre-History of Roguelike Games",
+  "speaker": "Martin Pichlmair",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=EMb6B2cIJps",
+  "talk_type": "history",
+  "summary": "Game developer and researcher Martin Pichlmair takes a deliberately meandering walk through pre-digital ancestors of roguelike ingredients: controlled randomness, grid-based movement, maps and procedural composition. He traces Mahjong's lineage through Rummy, Canasta, Rummikub and Mahjong solitaire to argue that games have always evolved by global borrowing, then connects Tracery-style text grammars to the Fünffacher Denckring word wheel and Burroughs-style cut-ups, Senet's grid, rhetorical and fantasy maps, and Mozart-attributed musical dice games. His lessons: pre-digital procedural systems were lightweight, delight comes from the gap between expectation and outcome, and the recipe of constraints, controlled randomness and a human activity of selection is what makes generative play rich.",
+  "games": [
+    "Mahjong",
+    "Rummy",
+    "Canasta",
+    "Rummikub",
+    "Mahjong solitaire",
+    "Senet",
+    "Nine Men's Morris",
+    "Caves of Qud",
+    "The Quiet Year",
+    "The Legend of Zelda",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike definition",
+      "kind": "principle",
+      "claim": "Pichlmair lists the canonical roguelike traits as controlled randomness, grid-based movement, turn-based play and permadeath, noting permadeath implies no meta-progression and that the game must be beatable in a single run.",
+      "detail": "He notes randomness 'can't be all over the random but has to be some random'. He sets permadeath aside for his pre-digital survey because before legacy games, tabletop games simply had permadeath by default, and meta-games such as league structures sat outside the core game.",
+      "t": 164,
+      "quote": "permadeath which implies automatically that you have no meta progression because how would you if the death is permanent",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "game lineage",
+      "kind": "history",
+      "claim": "Mahjong's lineage shows games have always evolved by global borrowing: from a 1600s Chinese ancestor through the Philippines and Mexico into Rummy, Canasta (Uruguay, 1935), American Mahjong, Rummikub and finally the unrelated digital Mahjong solitaire (1981).",
+      "detail": "Pichlmair traces the shedding-game DNA across continents; Rummy mixed with Machiavelli in Europe became Rummikub, putting card numbers back on tiles. Mahjong solitaire by Brodie Lockard has very little to do with the original game. He uses this to argue that games referencing and versioning each other is not new and is more worldwide than we think.",
+      "t": 1487,
+      "quote": "games have always enjoyed revolutionary development. This means they have always been connected",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "grammars",
+      "kind": "technique",
+      "claim": "Tracery is a grammar tool that recombines words and phrases with small operations to generate procedural text, used by Pichlmair for a recipe Twitter bot and by games like Caves of Qud.",
+      "detail": "Kate Compton made Tracery (mis-captioned as 'sorcery'); Pichlmair co-made a hosting tool and later a more accessible front end. His bot 'Five Sparrows on a Vampire' generated recipes. He notes generating grammatical sentences is a known difficulty that Caves of Qud somehow handles.",
+      "t": 729,
+      "quote": "It is a nice tool for writing procedural text and recombines words to make new words or sentences so it is a grammar",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "pre-digital generators",
+      "kind": "history",
+      "claim": "The Fünffacher Denckring of the German language, a stack of rotating paper disks for composing words, was a pre-digital text grammar intended as a social toy where players invented meanings for generated words.",
+      "detail": "Pichlmair compares it to 1980s copy-protection code wheels. He stresses that it was meant as a playful, even theatrical, social game rather than a research tool; the activity of using it was the interesting part.",
+      "t": 786,
+      "quote": "It was meant as a toy or social game. You would make a word and have to come up with the meaning",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "human curation",
+      "kind": "principle",
+      "claim": "The delightful generative recipe is a few rules plus controlled randomness plus a human who performs an activity and selects the result, as in the cut-up technique; generators that just hand you results without activity are boring.",
+      "detail": "Discussing cut-ups (invented in the 1920s, popularised by Burroughs in the 1960s), Pichlmair argues the activity is key. He finds neural language models boring partly because the activity is boring and you just get results.",
+      "t": 894,
+      "quote": "you take some kind of controlled random and then had human comes into the picture and selects something, and you get something delightful",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "surprise",
+      "kind": "principle",
+      "claim": "Constrained, rule-bound randomness creates delight because the player builds an expectation of the outcome, and the gap between that expectation and the unpredictable actual outcome produces surprise.",
+      "detail": "Pichlmair, whose PhD was on this topic, says fully random output would not create expectations; rules around randomness plus an activity let you anticipate, and the difference is the source of delight. He repeats in his lessons that delight comes from surprise as comparison of expected and actual outcome.",
+      "t": 924,
+      "quote": "you build up an expectation for what you will get and then you have the actual outcome that happens that you cannot fully predict",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "grid movement",
+      "kind": "history",
+      "claim": "Grid-based movement is at least 5,000 years old, as shown by the ancient Egyptian race game Senet, whose tokens fit a grid on the board though its rules are largely lost.",
+      "detail": "Pichlmair also mentions Nine Men's Morris among old grid board games. Senet appears to be a two-player racing game with two kinds of tokens and possibly a religious purpose.",
+      "t": 1000,
+      "quote": "It is very clear it is grid based movement because the tokens fit nicely in the grid that is on the box",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "maps",
+      "kind": "principle",
+      "claim": "Maps can only show what their makers know, like fog of war: the 1490 Behaim globe filled undiscovered regions out of proportion, illustrating how maps reflect a distribution of knowledge.",
+      "detail": "Pichlmair also notes maps are political, since someone decides what gets mapped and how; the map is not the territory.",
+      "t": 1051,
+      "quote": "the map can only show what you know",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "rhetorical maps",
+      "kind": "example",
+      "claim": "Rhetorical maps, such as fantasy utopias, maps of Dante's hell or a Tenochtitlan map showing what places mean rather than geography, underlie map-drawing games like The Quiet Year where making the map together is the main gameplay.",
+      "detail": "Pichlmair says these maps serve storytelling purposes, showing that one thing is behind another and what places mean, rather than accurate positions. Games like The Quiet Year tap into this old tradition.",
+      "t": 1150,
+      "quote": "But it is mostly a rhetorical map. It shows you that a thing is behind a thing and what different places mean",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "history",
+      "claim": "Musical dice games attributed to Mozart were an early form of controlled-random composition: two dice select pre-written fragments from a table, which are assembled and played live.",
+      "detail": "Pichlmair notes Mozart had no hand in it; the name was branding. Music and dice were a playful pastime, with people taking turns composing and performing. He says Tracery could equally assemble musical pieces.",
+      "t": 1241,
+      "quote": "You would use two dice, roll them, and look up a number, and a number would reference a piece of existing composition",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "example",
+      "claim": "The Legend of Zelda uses procedural, sequenced audio rather than prerecorded tracks, which allows rule-based melody transitions, timing to events and raising intensity by adding structure or instruments, at the cost of never sounding as full as an orchestra.",
+      "detail": "Pichlmair (cited on Zelda's Wikipedia page) says there is likely no randomization, but because the player's influence on the music is so indirect it still feels random to them.",
+      "t": 1352,
+      "quote": "You can increase intensity just by actually adding more structure to the music and things like that or more instruments",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "simplicity",
+      "kind": "warning",
+      "claim": "Pre-digital procedural systems like dice and turning wheels were necessarily lightweight and simple, whereas computers make it easy to make generators too complicated and we have lost the habit of straightforward design.",
+      "detail": "This is the first of Pichlmair's lessons from history, followed by delight from surprise, games' interconnected evolution, and the importance of the bodily activity of making.",
+      "t": 1452,
+      "quote": "Sometimes I think the computer made it easy to make things complicated. We lost the habit of making things straightforward",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "embodied play",
+      "kind": "principle",
+      "claim": "Physical activity matters in games: host Alexei says memorising NetHack's whole-keyboard commands makes him feel wizard-like, and Pichlmair agrees that automating actions into the body brings the player closer to the game.",
+      "detail": "In Q&A, host Alexei compares NetHack keys (q is quaff) to fighting-game combos modelling martial training; Pichlmair agrees that video games involve the body more than we credit and that getting the body to do work like opening the inventory deepens the activity. He also notes rituals around family games as social bonding.",
+      "t": 1810,
+      "quote": "That brings you closer to the game and the activity and just automating that by getting more and more of your body to doing the work",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

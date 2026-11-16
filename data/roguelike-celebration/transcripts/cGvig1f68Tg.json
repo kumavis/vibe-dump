@@ -1,0 +1,1201 @@
+{
+ "id": "cGvig1f68Tg",
+ "url": "https://www.youtube.com/watch?v=cGvig1f68Tg",
+ "title": "Adrian Herbez - Let's get Physical: 3d Printing for Roguelikes",
+ "speaker": "Adrian Herbez",
+ "talk_title": "Let's get Physical: 3d Printing for Roguelikes",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 843,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nAdrian Herbez has been working in the game and virtual worlds industries for over a decade. He also runs a side business, Zanzas Toys (zanzastoys.com) creating and selling 3d printed action figure accessories. In his free time, he keeps busy with various side projects, usually related to game programming and/or 3d printing. His various experiments are documented at adrianherbez.net",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 40,
+   "title": "What does this mean"
+  },
+  {
+   "start": 119,
+   "title": "What I wanted"
+  },
+  {
+   "start": 174,
+   "title": "What I made"
+  },
+  {
+   "start": 224,
+   "title": "How it works"
+  },
+  {
+   "start": 289,
+   "title": "Gameplay"
+  },
+  {
+   "start": 388,
+   "title": "How does it work"
+  },
+  {
+   "start": 483,
+   "title": "JavaScript"
+  },
+  {
+   "start": 613,
+   "title": "OpenCAD"
+  },
+  {
+   "start": 648,
+   "title": "FDM"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2272,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.12,
+   "d": 3.88,
+   "text": "ADRIAN HERBEZ: Hi, everybody."
+  },
+  {
+   "t": 4.0,
+   "d": 4.37,
+   "text": "So, as Noah mentioned, I am Adrian Herbez."
+  },
+  {
+   "t": 8.37,
+   "d": 2.05,
+   "text": "I make games and interactive stuff."
+  },
+  {
+   "t": 10.42,
+   "d": 3.25,
+   "text": "Much of which has some amount of procedural generation to it."
+  },
+  {
+   "t": 13.67,
+   "d": 2.3,
+   "text": "I also make 3d printed toys."
+  },
+  {
+   "t": 15.97,
+   "d": 3.81,
+   "text": "I mainly work in action figure accessories."
+  },
+  {
+   "t": 19.78,
+   "d": 4.6,
+   "text": "Everything other than the figure and the floor and the walls are things I have designed using"
+  },
+  {
+   "t": 24.38,
+   "d": 1.27,
+   "text": "open source tools."
+  },
+  {
+   "t": 25.65,
+   "d": 1.09,
+   "text": "Some of it is procedural."
+  },
+  {
+   "t": 26.74,
+   "d": 7.01,
+   "text": "It is hard to see but there is wire shelves and wooden crates."
+  },
+  {
+   "t": 33.75,
+   "d": 5.34,
+   "text": "They are actually procedurally generated so you can have any size of that you want."
+  },
+  {
+   "t": 39.09,
+   "d": 3.1,
+   "text": "About a year ago, I came to this really awesome conference."
+  },
+  {
+   "t": 42.19,
+   "d": 4.78,
+   "text": "I started thinking about 3D printing and roguelikes, what would they look like if you mashed them"
+  },
+  {
+   "t": 46.97,
+   "d": 1.0,
+   "text": "together?"
+  },
+  {
+   "t": 47.97,
+   "d": 1.0,
+   "text": "What does that mean?"
+  },
+  {
+   "t": 48.97,
+   "d": 3.71,
+   "text": "There are a couple things I think it does not mean."
+  },
+  {
+   "t": 52.68,
+   "d": 6.88,
+   "text": "I am sure a lot of people are into table top role-playing and there is a huge amount of"
+  },
+  {
+   "t": 59.56,
+   "d": 3.56,
+   "text": "awesome work going into the 3D printed table top terrain."
+  },
+  {
+   "t": 63.12,
+   "d": 5.12,
+   "text": "There is a ton of talented people making great stuff but definitely not a roguelike."
+  },
+  {
+   "t": 68.24,
+   "d": 1.94,
+   "text": "It is just thematically related."
+  },
+  {
+   "t": 70.18,
+   "d": 1.78,
+   "text": "This is Dragonlock tiles."
+  },
+  {
+   "t": 71.96,
+   "d": 2.07,
+   "text": "It is a whole set and cool."
+  },
+  {
+   "t": 74.03,
+   "d": 4.78,
+   "text": "If you haven't looked into that stuff, check it out."
+  },
+  {
+   "t": 78.81,
+   "d": 4.32,
+   "text": "Getting a little closer is 3D printed board games."
+  },
+  {
+   "t": 83.13,
+   "d": 7.59,
+   "text": "This is Pocket Tactics by - a Dutch mobile company called Ill-Gotten GAmes."
+  },
+  {
+   "t": 90.72,
+   "d": 4.0,
+   "text": "What is cool about this is it a 3D printable tactics game."
+  },
+  {
+   "t": 94.72,
+   "d": 6.08,
+   "text": "It has a bunch of factions, and each comes with a set of hex tiles you 3D print and some"
+  },
+  {
+   "t": 100.8,
+   "d": 1.73,
+   "text": "number of figures."
+  },
+  {
+   "t": 102.53,
+   "d": 2.68,
+   "text": "Each player brings their own figures and tiles."
+  },
+  {
+   "t": 105.21,
+   "d": 4.12,
+   "text": "You kind of procedurally construct the level you are going to play in by laying out the"
+  },
+  {
+   "t": 109.33,
+   "d": 3.42,
+   "text": "hex tiles and you have a strategic game."
+  },
+  {
+   "t": 112.75,
+   "d": 9.21,
+   "text": "That is cool but it's still a 3D printed board game, not really Roguelike."
+  },
+  {
+   "t": 121.96,
+   "d": 5.99,
+   "text": "Things I wanted to get at were single player - mainly just to distance from 3D printed"
+  },
+  {
+   "t": 127.95,
+   "d": 6.35,
+   "text": "board games, of course procedurally generated, I wanted hidden information -- which is harder"
+  },
+  {
+   "t": 134.3,
+   "d": 1.0,
+   "text": "to do."
+  },
+  {
+   "t": 135.3,
+   "d": 5.84,
+   "text": "It is something you take for granted with digital systems but in the physical world"
+  },
+  {
+   "t": 141.14,
+   "d": 3.05,
+   "text": "it might be more complex."
+  },
+  {
+   "t": 144.19,
+   "d": 3.62,
+   "text": "And then I really wanted 3D printing to be integral to the experience."
+  },
+  {
+   "t": 147.81,
+   "d": 1.54,
+   "text": "That means a couple of things."
+  },
+  {
+   "t": 149.35,
+   "d": 4.34,
+   "text": "First off, I wanted the physicality of the product to matter."
+  },
+  {
+   "t": 153.69,
+   "d": 4.58,
+   "text": "The gameplay had to be tied to the physicality."
+  },
+  {
+   "t": 158.27,
+   "d": 5.84,
+   "text": "Another aspect is I wanted to make sure what got generated was something that really needed"
+  },
+  {
+   "t": 164.11,
+   "d": 2.42,
+   "text": "to be done with 3d printing."
+  },
+  {
+   "t": 166.53,
+   "d": 2.29,
+   "text": "Not a stand in for injection molding."
+  },
+  {
+   "t": 168.82,
+   "d": 3.67,
+   "text": "Not just something that would really be better if it were made some other way."
+  },
+  {
+   "t": 172.49,
+   "d": 2.16,
+   "text": "Something where you really need 3D printer."
+  },
+  {
+   "t": 174.65,
+   "d": 1.58,
+   "text": "So what I made was this!"
+  },
+  {
+   "t": 176.23,
+   "d": 4.38,
+   "text": "This is Plarl the 3D Roguelike."
+  },
+  {
+   "t": 180.61,
+   "d": 5.75,
+   "text": "I was looking for another name, but this one was delightfully weird, so I went with it."
+  },
+  {
+   "t": 186.36,
+   "d": 3.56,
+   "text": "To unpack it fully - It is the polylactic acid Roguelike."
+  },
+  {
+   "t": 189.92,
+   "d": 5.64,
+   "text": "PLA is a plastic and that's what I use."
+  },
+  {
+   "t": 195.56,
+   "d": 2.89,
+   "text": "It is made from renewable sources."
+  },
+  {
+   "t": 198.45,
+   "d": 3.14,
+   "text": "Don't feel too bad about the wastefulness."
+  },
+  {
+   "t": 201.59,
+   "d": 5.79,
+   "text": "This is a dungeon level in Plarl."
+  },
+  {
+   "t": 207.38,
+   "d": 3.91,
+   "text": "The bottom row, one from the left, there is an icon there."
+  },
+  {
+   "t": 211.29,
+   "d": 4.4,
+   "text": "It's hard to see in the photo, but that's the door where you start."
+  },
+  {
+   "t": 215.69,
+   "d": 3.9,
+   "text": "Each one of these cells is a room in a dungeon."
+  },
+  {
+   "t": 219.59,
+   "d": 2.6,
+   "text": "You kick down doors and stuff happens."
+  },
+  {
+   "t": 222.19,
+   "d": 4.89,
+   "text": "The way that works is - I will go to this cut away."
+  },
+  {
+   "t": 227.08,
+   "d": 6.26,
+   "text": "What gets generated is one object, one contiguous model but there are three key components."
+  },
+  {
+   "t": 233.34,
+   "d": 4.16,
+   "text": "The base level in red here is what tells you where it had exits are."
+  },
+  {
+   "t": 237.5,
+   "d": 5.09,
+   "text": "That is a conventional maze-like generation which I will talk about in a minute but it's"
+  },
+  {
+   "t": 242.59,
+   "d": 3.73,
+   "text": "not really a Roguelike if stuff can't happen to you."
+  },
+  {
+   "t": 246.32,
+   "d": 4.17,
+   "text": "Above that is the green layers and the blue layers."
+  },
+  {
+   "t": 250.49,
+   "d": 3.03,
+   "text": "And both of these are things you can physically pop off."
+  },
+  {
+   "t": 253.52,
+   "d": 2.14,
+   "text": "I'll show you that in a minute."
+  },
+  {
+   "t": 255.66,
+   "d": 6.16,
+   "text": "The green layer is a substrate for having iconography for stuff that happens to you."
+  },
+  {
+   "t": 261.82,
+   "d": 7.47,
+   "text": "So at least in this version, there's between 1 and 6 pips of 2 different icons, either"
+  },
+  {
+   "t": 269.29,
+   "d": 5.97,
+   "text": "a square or dot signifying you take that amount of damage or gain that amount of health points"
+  },
+  {
+   "t": 275.26,
+   "d": 1.0,
+   "text": "back."
+  },
+  {
+   "t": 276.26,
+   "d": 5.28,
+   "text": "So very simple - I was limited in size and I will talk about why that is the case in"
+  },
+  {
+   "t": 281.54,
+   "d": 1.13,
+   "text": "a minute."
+  },
+  {
+   "t": 282.67,
+   "d": 1.84,
+   "text": "It had to be simple."
+  },
+  {
+   "t": 284.51,
+   "d": 5.08,
+   "text": "The blue is the door you break off to get to the room."
+  },
+  {
+   "t": 289.59,
+   "d": 2.34,
+   "text": "This is a playthrough of a Plarl level."
+  },
+  {
+   "t": 291.93,
+   "d": 3.72,
+   "text": "I'm starting by kicking down the first door."
+  },
+  {
+   "t": 295.65,
+   "d": 3.44,
+   "text": "You can see there's exists to the west and east."
+  },
+  {
+   "t": 299.09,
+   "d": 1.82,
+   "text": "I am choosing to go west."
+  },
+  {
+   "t": 300.91,
+   "d": 5.87,
+   "text": "It is easier to pop it off but I was holding it in an awkward way."
+  },
+  {
+   "t": 306.78,
+   "d": 2.94,
+   "text": "Maybe skip a little bit."
+  },
+  {
+   "t": 309.72,
+   "d": 2.5,
+   "text": "Here I am kicking down another door."
+  },
+  {
+   "t": 312.22,
+   "d": 1.95,
+   "text": "This room actually has contents."
+  },
+  {
+   "t": 314.17,
+   "d": 6.32,
+   "text": "What I am about to get in a second is - there we go."
+  },
+  {
+   "t": 320.49,
+   "d": 1.83,
+   "text": "Now I take four damage."
+  },
+  {
+   "t": 322.32,
+   "d": 1.0,
+   "text": "Ah!"
+  },
+  {
+   "t": 323.32,
+   "d": 2.17,
+   "text": "But I have dealt with that."
+  },
+  {
+   "t": 325.49,
+   "d": 3.33,
+   "text": "Let's say I survived that encounter."
+  },
+  {
+   "t": 328.82,
+   "d": 4.86,
+   "text": "There is still a theater of the mind aspect to this, right?"
+  },
+  {
+   "t": 333.68,
+   "d": 4.12,
+   "text": "[Laughter] ADRIAN HERBEZ: Everyone imagine your favorite"
+  },
+  {
+   "t": 337.8,
+   "d": 3.05,
+   "text": "level 1 monster."
+  },
+  {
+   "t": 340.85,
+   "d": 5.15,
+   "text": "Now we see this is a dead end and I have to back track."
+  },
+  {
+   "t": 346.0,
+   "d": 1.41,
+   "text": "That keeps going for a while."
+  },
+  {
+   "t": 347.41,
+   "d": 1.56,
+   "text": "I will skip ahead."
+  },
+  {
+   "t": 348.97,
+   "d": 2.26,
+   "text": "I kick down additional doors."
+  },
+  {
+   "t": 351.23,
+   "d": 3.73,
+   "text": "In this case, I gained six health points."
+  },
+  {
+   "t": 354.96,
+   "d": 5.96,
+   "text": "It is a little hard to distinguish between damage and health but that's room for future"
+  },
+  {
+   "t": 360.92,
+   "d": 1.0,
+   "text": "improvement."
+  },
+  {
+   "t": 361.92,
+   "d": 2.59,
+   "text": "You will notice this is very small."
+  },
+  {
+   "t": 364.51,
+   "d": 4.53,
+   "text": "Each one of these cells is one centimeter and that's for a very important reason - it"
+  },
+  {
+   "t": 369.04,
+   "d": 2.31,
+   "text": "is to make the popping off work."
+  },
+  {
+   "t": 371.35,
+   "d": 3.2,
+   "text": "That can be stretched a bit and I will come back to that shortly."
+  },
+  {
+   "t": 374.55,
+   "d": 10.04,
+   "text": "I keep going, keep going, keep going, and at the end I find the stairway down."
+  },
+  {
+   "t": 384.59,
+   "d": 3.93,
+   "text": "I pick up another Plarl level, right?"
+  },
+  {
+   "t": 388.52,
+   "d": 2.01,
+   "text": "How does this work?"
+  },
+  {
+   "t": 390.53,
+   "d": 5.35,
+   "text": "What makes all this possible -- so far I could have made that in Blender or Fusion 360 or"
+  },
+  {
+   "t": 395.88,
+   "d": 2.01,
+   "text": "any other quality 3D tool."
+  },
+  {
+   "t": 397.89,
+   "d": 3.76,
+   "text": "But it won't really be what we're talking about."
+  },
+  {
+   "t": 401.65,
+   "d": 7.91,
+   "text": "OpenSCAD is the programmers' solid 3D CAD modeller and so it must be the Roguelike developers'"
+  },
+  {
+   "t": 409.56,
+   "d": 5.15,
+   "text": "3D CAD modeller and the proc gen practitioners modeller."
+  },
+  {
+   "t": 414.71,
+   "d": 1.01,
+   "text": "It is pretty unique."
+  },
+  {
+   "t": 415.72,
+   "d": 4.64,
+   "text": "It is all about writing code to directly generate 3D models."
+  },
+  {
+   "t": 420.36,
+   "d": 2.18,
+   "text": "Here is a little flavor of that."
+  },
+  {
+   "t": 422.54,
+   "d": 2.25,
+   "text": "I am starting with making a cube."
+  },
+  {
+   "t": 424.79,
+   "d": 2.39,
+   "text": "A kind of misnamed cube because it is just a box."
+  },
+  {
+   "t": 427.18,
+   "d": 1.39,
+   "text": "It can be any size."
+  },
+  {
+   "t": 428.57,
+   "d": 2.4,
+   "text": "I make another cube."
+  },
+  {
+   "t": 430.97,
+   "d": 2.59,
+   "text": "And then I do a little bit more."
+  },
+  {
+   "t": 433.56,
+   "d": 4.91,
+   "text": "I am adding a translate to move the second cube up and I will wrap everything in a different"
+  },
+  {
+   "t": 438.47,
+   "d": 5.04,
+   "text": "separation to subtract one from the other and now I have a 3D model, this low shallow"
+  },
+  {
+   "t": 443.51,
+   "d": 1.0,
+   "text": "tray."
+  },
+  {
+   "t": 444.51,
+   "d": 4.63,
+   "text": "Two things that are awesome about openSCAD is - one, these numbers are millimeters so"
+  },
+  {
+   "t": 449.14,
+   "d": 2.3,
+   "text": "it's very easy to make something of a very specific size."
+  },
+  {
+   "t": 451.44,
+   "d": 5.47,
+   "text": "And the other thing that is cool is the output is an STL file, a stereolithography file,"
+  },
+  {
+   "t": 456.91,
+   "d": 2.53,
+   "text": "the commonly used 3D printing file."
+  },
+  {
+   "t": 459.44,
+   "d": 5.38,
+   "text": "That's basically the secret to this, right?"
+  },
+  {
+   "t": 464.82,
+   "d": 2.24,
+   "text": "But there are some limitations in openSCAD."
+  },
+  {
+   "t": 467.06,
+   "d": 1.74,
+   "text": "It is an odd language."
+  },
+  {
+   "t": 468.8,
+   "d": 3.77,
+   "text": "One of the things that's strange about it is that variables are all constant."
+  },
+  {
+   "t": 472.57,
+   "d": 4.34,
+   "text": "If you want to do anything substantial it is quite a headache a headache."
+  },
+  {
+   "t": 476.91,
+   "d": 5.45,
+   "text": "What's preferable is - There are ways to use openSCAD with other stuff."
+  },
+  {
+   "t": 482.36,
+   "d": 5.9,
+   "text": "What I'm doing for this is, I wrote JavaScript here to generate the maze data."
+  },
+  {
+   "t": 488.26,
+   "d": 5.15,
+   "text": "I'm basically lifting directly from this excellent book many of you may be familiar with, \"Mazes"
+  },
+  {
+   "t": 493.41,
+   "d": 1.79,
+   "text": "for Programmers\"."
+  },
+  {
+   "t": 495.2,
+   "d": 3.11,
+   "text": "If you haven't checked it out, definitely check it out."
+  },
+  {
+   "t": 498.31,
+   "d": 1.0,
+   "text": "It is great."
+  },
+  {
+   "t": 499.31,
+   "d": 3.08,
+   "text": "If you are at this conference, you will enjoy it, I am sure."
+  },
+  {
+   "t": 502.39,
+   "d": 1.59,
+   "text": "That's what's giving me the base maze."
+  },
+  {
+   "t": 503.98,
+   "d": 3.35,
+   "text": "It was a pretty simple algorithm and worked great for this case."
+  },
+  {
+   "t": 507.33,
+   "d": 5.25,
+   "text": "I wanted to make sure I totally filled the rectangular region, the rectangular grid,"
+  },
+  {
+   "t": 512.58,
+   "d": 3.77,
+   "text": "and I didn't want anything to be given away by the shape of the 3D printed artifact."
+  },
+  {
+   "t": 516.35,
+   "d": 6.04,
+   "text": "And I don't want to waste plastic, because plastic is print time which always takes longer"
+  },
+  {
+   "t": 522.39,
+   "d": 1.22,
+   "text": "than you want it to."
+  },
+  {
+   "t": 523.61,
+   "d": 1.85,
+   "text": "There are two things going on."
+  },
+  {
+   "t": 525.46,
+   "d": 2.25,
+   "text": "One, here, you'll see the output."
+  },
+  {
+   "t": 527.71,
+   "d": 1.71,
+   "text": "These are path vals."
+  },
+  {
+   "t": 529.42,
+   "d": 3.65,
+   "text": "This is an array of numbers that represent where the exits are."
+  },
+  {
+   "t": 533.07,
+   "d": 3.44,
+   "text": "Using a simple system where it is just bits."
+  },
+  {
+   "t": 536.51,
+   "d": 6.45,
+   "text": "If there is a passage to the north, that's one and then two for the east, four for south,"
+  },
+  {
+   "t": 542.96,
+   "d": 1.52,
+   "text": "and eight for west."
+  },
+  {
+   "t": 544.48,
+   "d": 3.6,
+   "text": "I get 0-15 represents that."
+  },
+  {
+   "t": 548.08,
+   "d": 5.19,
+   "text": "There also needs to be and this is what the strange numbers are there needs to be an entrance,"
+  },
+  {
+   "t": 553.27,
+   "d": 2.25,
+   "text": "exit, and various types of stuff in the rooms."
+  },
+  {
+   "t": 555.52,
+   "d": 4.13,
+   "text": "You will see that there is a one representing the start position in the bottom row."
+  },
+  {
+   "t": 559.65,
+   "d": 4.76,
+   "text": "In the top row there is a two representing the end."
+  },
+  {
+   "t": 564.41,
+   "d": 2.74,
+   "text": "All of these are setup to basically go north."
+  },
+  {
+   "t": 567.15,
+   "d": 4.03,
+   "text": "You might have to figure out how to get there but that's the general idea."
+  },
+  {
+   "t": 571.18,
+   "d": 6.3,
+   "text": "What I am using is -- in one third of the rooms there is nothing."
+  },
+  {
+   "t": 577.48,
+   "d": 2.93,
+   "text": "And another third there is something that helps you and another third there is something"
+  },
+  {
+   "t": 580.41,
+   "d": 1.8,
+   "text": "that harms you."
+  },
+  {
+   "t": 582.21,
+   "d": 2.81,
+   "text": "Help or harm is 1-6 points."
+  },
+  {
+   "t": 585.02,
+   "d": 5.68,
+   "text": "What I am doing here is just 11-16 means it is something that harms you and 21-26 means"
+  },
+  {
+   "t": 590.7,
+   "d": 2.1,
+   "text": "it is something that helps you."
+  },
+  {
+   "t": 592.8,
+   "d": 5.63,
+   "text": "I tweak the generation a little bit so the maximum range or the random value goes up"
+  },
+  {
+   "t": 598.43,
+   "d": 1.0,
+   "text": "as you go north."
+  },
+  {
+   "t": 599.43,
+   "d": 3.88,
+   "text": "Theoretically you make your way through the dungeon, and at first you are getting like"
+  },
+  {
+   "t": 603.31,
+   "d": 4.86,
+   "text": "one or two points of damage but you might get all the way up to like six as you get"
+  },
+  {
+   "t": 608.17,
+   "d": 2.07,
+   "text": "closer to the exit."
+  },
+  {
+   "t": 610.24,
+   "d": 1.33,
+   "text": "That's pretty much it."
+  },
+  {
+   "t": 611.57,
+   "d": 4.2,
+   "text": "From there, I drop that back in the openSCAD."
+  },
+  {
+   "t": 615.77,
+   "d": 1.61,
+   "text": "This is the file."
+  },
+  {
+   "t": 617.38,
+   "d": 6.36,
+   "text": "It goes down quite a bit but you can see up here that's the generation, the data that"
+  },
+  {
+   "t": 623.74,
+   "d": 2.31,
+   "text": "was generated from the JavaScript."
+  },
+  {
+   "t": 626.05,
+   "d": 2.98,
+   "text": "It is definitely a little bit of a two-step process right now."
+  },
+  {
+   "t": 629.03,
+   "d": 2.48,
+   "text": "There are ways to make it better."
+  },
+  {
+   "t": 631.51,
+   "d": 7.12,
+   "text": "There is Python bindings for openSCAD and open JSCAD is a pure JavaScript version of"
+  },
+  {
+   "t": 638.63,
+   "d": 1.0,
+   "text": "openSCAD."
+  },
+  {
+   "t": 639.63,
+   "d": 3.65,
+   "text": "I would like to eventually move this to it but that hasn't happened yet."
+  },
+  {
+   "t": 643.28,
+   "d": 5.38,
+   "text": "That's most of it, but there's one extra little bit of secret sauce here."
+  },
+  {
+   "t": 648.66,
+   "d": 4.2,
+   "text": "It is important to design for failure."
+  },
+  {
+   "t": 652.86,
+   "d": 4.93,
+   "text": "In order for this to work and have the satisfying popping off a door to break it down, I needed"
+  },
+  {
+   "t": 657.79,
+   "d": 6.89,
+   "text": "to make sure it was printable, work and be solid and not too fragile but also fragile"
+  },
+  {
+   "t": 664.68,
+   "d": 3.05,
+   "text": "in just the right place."
+  },
+  {
+   "t": 667.73,
+   "d": 3.57,
+   "text": "The way 3D printers work -- there is a lot of technology for 3D printing."
+  },
+  {
+   "t": 671.3,
+   "d": 3.23,
+   "text": "This project is all about FDM, your typical hobbyist 3D printer."
+  },
+  {
+   "t": 674.53,
+   "d": 2.5,
+   "text": "This is a high precision glue gun."
+  },
+  {
+   "t": 677.03,
+   "d": 3.2,
+   "text": "There are two numbers you need to keep in mind."
+  },
+  {
+   "t": 680.23,
+   "d": 6.21,
+   "text": "There is the nozzle width that extrudes the plastic, which determines the X and Y resolution."
+  },
+  {
+   "t": 686.44,
+   "d": 2.57,
+   "text": "Then there is your layer height."
+  },
+  {
+   "t": 689.01,
+   "d": 2.63,
+   "text": "You have to take these numbers into account."
+  },
+  {
+   "t": 691.64,
+   "d": 6.12,
+   "text": "A typical printer is a .4 nozzle diameter so you can print any multiple of .4 you want,"
+  },
+  {
+   "t": 697.76,
+   "d": 4.47,
+   "text": "but you can't print .5 or it will not work out well."
+  },
+  {
+   "t": 702.23,
+   "d": 4.13,
+   "text": "When you have your model, you take it into another program called Slicer that generates"
+  },
+  {
+   "t": 706.36,
+   "d": 1.62,
+   "text": "paths for the printer."
+  },
+  {
+   "t": 707.98,
+   "d": 4.27,
+   "text": "This is a preview of what your printer does."
+  },
+  {
+   "t": 712.25,
+   "d": 4.22,
+   "text": "This is printing a 2x3 Plarl level."
+  },
+  {
+   "t": 716.47,
+   "d": 4.97,
+   "text": "We laid down plastic to have a base, here we lay down plastic to indicate where the"
+  },
+  {
+   "t": 721.44,
+   "d": 2.83,
+   "text": "exits are, all pretty standard."
+  },
+  {
+   "t": 724.27,
+   "d": 3.12,
+   "text": "The interesting part is the next bit."
+  },
+  {
+   "t": 727.39,
+   "d": 3.94,
+   "text": "These are the supports for the contents of a room."
+  },
+  {
+   "t": 731.33,
+   "d": 4.37,
+   "text": "What I am doing is printing up with as little plastic as I can get away with."
+  },
+  {
+   "t": 735.7,
+   "d": 6.33,
+   "text": "I am making sure I am using exactly two nozzle width's thick for the tabs that are going"
+  },
+  {
+   "t": 742.03,
+   "d": 1.16,
+   "text": "up."
+  },
+  {
+   "t": 743.19,
+   "d": 2.07,
+   "text": "And just a little bit across."
+  },
+  {
+   "t": 745.26,
+   "d": 5.48,
+   "text": "The other thing that's kind of tricky about 3D printing is you can't print in midair."
+  },
+  {
+   "t": 750.74,
+   "d": 4.34,
+   "text": "You lay down a layer, then you lay another on top."
+  },
+  {
+   "t": 755.08,
+   "d": 5.13,
+   "text": "The previous layers support the next layer - but you kind of can if you are careful."
+  },
+  {
+   "t": 760.21,
+   "d": 2.69,
+   "text": "This is why all the rooms are a centimeter by a centimeter."
+  },
+  {
+   "t": 762.9,
+   "d": 5.19,
+   "text": "There is a technique called bridging where you can print in midair which can work if"
+  },
+  {
+   "t": 768.09,
+   "d": 2.08,
+   "text": "you don't go very far."
+  },
+  {
+   "t": 770.17,
+   "d": 4.34,
+   "text": "Every printer has different settings where you can determine how much of that you can"
+  },
+  {
+   "t": 774.51,
+   "d": 1.53,
+   "text": "get away with."
+  },
+  {
+   "t": 776.04,
+   "d": 2.12,
+   "text": "All of this is tuned to work this way."
+  },
+  {
+   "t": 778.16,
+   "d": 3.13,
+   "text": "The next layer that goes down is - here I am bridging."
+  },
+  {
+   "t": 781.29,
+   "d": 4.65,
+   "text": "So those supports that were going up, I go across, and this is only like a centimeter,"
+  },
+  {
+   "t": 785.94,
+   "d": 2.0,
+   "text": "so you can get away with it."
+  },
+  {
+   "t": 787.94,
+   "d": 5.0,
+   "text": "Now I have connected one direction of support."
+  },
+  {
+   "t": 792.94,
+   "d": 8.14,
+   "text": "Next, I lay in what supports the iconography."
+  },
+  {
+   "t": 801.08,
+   "d": 1.0,
+   "text": "This is standard."
+  },
+  {
+   "t": 802.08,
+   "d": 2.64,
+   "text": "Now I need to provide some room."
+  },
+  {
+   "t": 804.72,
+   "d": 4.65,
+   "text": "Now I need to provide layers and separation."
+  },
+  {
+   "t": 809.37,
+   "d": 3.98,
+   "text": "Next thing is this is bridging again to support the door."
+  },
+  {
+   "t": 813.35,
+   "d": 6.05,
+   "text": "You can see there is a big space but there is two lines that are very thin."
+  },
+  {
+   "t": 819.4,
+   "d": 5.07,
+   "text": "That gives me something to print on to once again to make the door happen."
+  },
+  {
+   "t": 824.47,
+   "d": 4.1,
+   "text": "Once I have done all of that, you kind of get things that pop off in a satisfying and"
+  },
+  {
+   "t": 828.57,
+   "d": 4.41,
+   "text": "fun way."
+  },
+  {
+   "t": 832.98,
+   "d": 1.41,
+   "text": "That's pretty much it."
+  },
+  {
+   "t": 834.39,
+   "d": 0.89,
+   "text": "[Applause]"
+  }
+ ]
+}

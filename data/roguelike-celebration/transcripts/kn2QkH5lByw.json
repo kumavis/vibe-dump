@@ -1,0 +1,1728 @@
+{
+ "id": "kn2QkH5lByw",
+ "url": "https://www.youtube.com/watch?v=kn2QkH5lByw",
+ "title": "Andrew Aversa - The End of Permadeath",
+ "speaker": "Andrew Aversa",
+ "talk_title": "The End of Permadeath",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1754,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAndrew Aversa is the developer of Tangledeep, a traditional roguelike for PC & Nintendo Switch. Though he considers himself a full-time programmer and designer, his background is in music production and composition, where he made a career for over 10 years before pursuing a lifelong dream of making games.\n\nIn this talk, Andrew questions the premise built into roguelikes of trying to beat the game across many attempts. Beating any classic roguelike is a badge of honour - but Andrew asks us to consider what happens when permadeath is optional? Does traditional roguelike game design break down? And how does this change player's expectations of the game?\n\nFind him on Twitter: https://twitter.com/ImpactGameworks\nTangledeep: https://store.steampowered.com/app/628770/Tangledeep/\nAndrew at Roguelike Celebration 2018 talking about Tangledeep and difficulty: https://www.youtube.com/watch?v=Gluz5nIplcA",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the topic"
+  },
+  {
+   "start": 69,
+   "title": "Defining optional permadeath"
+  },
+  {
+   "start": 228,
+   "title": "Context and definitions"
+  },
+  {
+   "start": 350,
+   "title": "The psychology of presentation"
+  },
+  {
+   "start": 444,
+   "title": "Implementing choice in games"
+  },
+  {
+   "start": 582,
+   "title": "Examples of UI implementation"
+  },
+  {
+   "start": 737,
+   "title": "Designing player expectations"
+  },
+  {
+   "start": 907,
+   "title": "Endgame and story balance"
+  },
+  {
+   "start": 984,
+   "title": "Designing for both modes"
+  },
+  {
+   "start": 1074,
+   "title": "Analyzing player feedback"
+  },
+  {
+   "start": 1225,
+   "title": "Alternatives to permadeath"
+  },
+  {
+   "start": 1397,
+   "title": "Conclusion on design choice"
+  },
+  {
+   "start": 1513,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3897,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.48,
+   "d": 1.75,
+   "text": "MODERATOR: Welcome back from the break."
+  },
+  {
+   "t": 2.23,
+   "d": 2.62,
+   "text": "It was encouraging for me to see everyone chatting."
+  },
+  {
+   "t": 4.85,
+   "d": 1.0,
+   "text": "If there is questions, ask a moderator and explore the space."
+  },
+  {
+   "t": 5.85,
+   "d": 1.0,
+   "text": "The topics were awesome."
+  },
+  {
+   "t": 6.85,
+   "d": 1.0,
+   "text": "I ended up sipping a cup of coffee because I was tired."
+  },
+  {
+   "t": 7.85,
+   "d": 1.0,
+   "text": "We will have more unconferencing later."
+  },
+  {
+   "t": 8.85,
+   "d": 1.0,
+   "text": "Let's get back into it."
+  },
+  {
+   "t": 9.85,
+   "d": 1.0,
+   "text": "Thank you for everyone tweeting."
+  },
+  {
+   "t": 10.85,
+   "d": 1.0,
+   "text": "I loved seeing the pancakes."
+  },
+  {
+   "t": 11.85,
+   "d": 1.0,
+   "text": "They were beautiful."
+  },
+  {
+   "t": 12.85,
+   "d": 1.0,
+   "text": "Without further a do, I would like to introduce our next speaker."
+  },
+  {
+   "t": 13.85,
+   "d": 1.0,
+   "text": "Hello."
+  },
+  {
+   "t": 14.85,
+   "d": 1.0,
+   "text": "Andrew Aversa, developer of tangle deep."
+  },
+  {
+   "t": 15.85,
+   "d": 1.0,
+   "text": "He considers himself a full time programmer his background is in music and composition"
+  },
+  {
+   "t": 16.85,
+   "d": 1.61,
+   "text": "where he made a career for 10 years before pursuing a life long career of making games"
+  },
+  {
+   "t": 18.46,
+   "d": 7.29,
+   "text": "which I find interesting."
+  },
+  {
+   "t": 25.75,
+   "d": 2.89,
+   "text": "Tangle deep is a fantastic game."
+  },
+  {
+   "t": 28.64,
+   "d": 2.73,
+   "text": "ANDREW AVERSA: You think have having me."
+  },
+  {
+   "t": 31.37,
+   "d": 4.98,
+   "text": "Last time I was here was in 2018 in person, of course."
+  },
+  {
+   "t": 36.35,
+   "d": 6.06,
+   "text": "Pleasure to be back."
+  },
+  {
+   "t": 42.41,
+   "d": 4.52,
+   "text": "So that introduction basically covered everything I would want to say about myself except for"
+  },
+  {
+   "t": 46.93,
+   "d": 7.49,
+   "text": "the fact that this talk, which I intentionally named to be ever so slightly clickbait the"
+  },
+  {
+   "t": 54.42,
+   "d": 1.98,
+   "text": "tend of permadeath."
+  },
+  {
+   "t": 56.4,
+   "d": 6.87,
+   "text": "This is not about tangle deep at all so if you are hoping to hear about that, unfortunately,"
+  },
+  {
+   "t": 63.27,
+   "d": 6.14,
+   "text": "it won't be about that but it will be a about a topic I care very much about."
+  },
+  {
+   "t": 69.41,
+   "d": 5.46,
+   "text": "The reactions that I was expecting when I made that title and I am sure people are wondering"
+  },
+  {
+   "t": 74.87,
+   "d": 1.85,
+   "text": "what it will be about."
+  },
+  {
+   "t": 76.72,
+   "d": 6.17,
+   "text": "I want to give an outline of what I am hoping to cover and what I am not really covering."
+  },
+  {
+   "t": 82.89,
+   "d": 7.1,
+   "text": "This isn't a topic about is permadeath good or bad because I think that's subjective."
+  },
+  {
+   "t": 89.99,
+   "d": 7.01,
+   "text": "It is not about accessibility or difficulty either."
+  },
+  {
+   "t": 97.0,
+   "d": 7.9,
+   "text": "I talked about that in 2018 and balance and Roguelikes and how that is a unique challenge."
+  },
+  {
+   "t": 104.9,
+   "d": 7.62,
+   "text": "I also don't want to get into the nature of what a Roguelike is for the sake of this talk"
+  },
+  {
+   "t": 112.52,
+   "d": 5.45,
+   "text": "it is just not super pertinent because I am talking about a specific mechanic even though"
+  },
+  {
+   "t": 117.97,
+   "d": 6.19,
+   "text": "that mechanic is core to many roguelikes there are certainly games that use it that we would"
+  },
+  {
+   "t": 124.16,
+   "d": 5.27,
+   "text": "consider not to be Roguelikes and classic ones that don't rely on permadeath that we"
+  },
+  {
+   "t": 129.43,
+   "d": 1.75,
+   "text": "do consider Roguelikes."
+  },
+  {
+   "t": 131.18,
+   "d": 9.74,
+   "text": "This is an evaluation and high-level view of how permadeath changes how we design games,"
+  },
+  {
+   "t": 140.92,
+   "d": 7.64,
+   "text": "developers, how players play the game, and how we shape their expectations and how their"
+  },
+  {
+   "t": 148.56,
+   "d": 6.38,
+   "text": "expectations could either be met or how we could fail to meet them and how it is a tricky"
+  },
+  {
+   "t": 154.94,
+   "d": 6.62,
+   "text": "thing but we can see, and I will go into some of the optional permadeath optional games"
+  },
+  {
+   "t": 161.56,
+   "d": 6.04,
+   "text": "and alternatives and how that shapes out ultimately."
+  },
+  {
+   "t": 167.6,
+   "d": 5.75,
+   "text": "You might be thinking Berlin interpretation, you take out permadeath and it is not a Roguelike"
+  },
+  {
+   "t": 173.35,
+   "d": 2.27,
+   "text": "any more but, no."
+  },
+  {
+   "t": 175.62,
+   "d": 2.93,
+   "text": "It doesn't matter."
+  },
+  {
+   "t": 178.55,
+   "d": 4.67,
+   "text": "This is something people really want to talk about even in our Roguelikes."
+  },
+  {
+   "t": 183.22,
+   "d": 5.07,
+   "text": "I frequent that subreddit quite a bit and you can see I made this collage of the different"
+  },
+  {
+   "t": 188.29,
+   "d": 5.52,
+   "text": "topics I made and people saying I want to play Roguelikes without permadeath."
+  },
+  {
+   "t": 193.81,
+   "d": 1.83,
+   "text": "Is it necessary?"
+  },
+  {
+   "t": 195.64,
+   "d": 3.37,
+   "text": "Is it wrong of me to hate permadeath?"
+  },
+  {
+   "t": 199.01,
+   "d": 7.31,
+   "text": "And in the bottom right I had a couple topics coming up."
+  },
+  {
+   "t": 206.32,
+   "d": 3.91,
+   "text": "Defense of saves is coming."
+  },
+  {
+   "t": 210.23,
+   "d": 4.36,
+   "text": "Saves coming is sort of interesting because it is like your game doesn't have permadeath"
+  },
+  {
+   "t": 214.59,
+   "d": 1.0,
+   "text": "optional?"
+  },
+  {
+   "t": 215.59,
+   "d": 2.0,
+   "text": "Well, I will make it optional."
+  },
+  {
+   "t": 217.59,
+   "d": 8.09,
+   "text": "That speaks to what I am talking about here which is how players' expectations and the"
+  },
+  {
+   "t": 225.68,
+   "d": 4.69,
+   "text": "options you present can have a big impact on the ultimate experience."
+  },
+  {
+   "t": 230.37,
+   "d": 3.23,
+   "text": "First, where is permadeath optional?"
+  },
+  {
+   "t": 233.6,
+   "d": 1.0,
+   "text": "What kind of games?"
+  },
+  {
+   "t": 234.6,
+   "d": 6.0,
+   "text": "I was as surprised as maybe you might be looking at this and there are actually quite a few"
+  },
+  {
+   "t": 240.6,
+   "d": 5.88,
+   "text": "games in the traditional canon I new releases where it is optional."
+  },
+  {
+   "t": 246.48,
+   "d": 4.57,
+   "text": "Sometimes it is the default and there is no permadeath."
+  },
+  {
+   "t": 251.05,
+   "d": 7.59,
+   "text": "In particular, stone shard was one that caught my attention because that is a fairly major"
+  },
+  {
+   "t": 258.64,
+   "d": 4.78,
+   "text": "kind of newcomer, I guess, in terms of the age of Roguelikes in general."
+  },
+  {
+   "t": 263.42,
+   "d": 7.43,
+   "text": "Stone shard is a game that has blown up on steam, made an enormous impact for a game"
+  },
+  {
+   "t": 270.85,
+   "d": 6.02,
+   "text": "that permadeath is optional and I believe it is currently not the default."
+  },
+  {
+   "t": 276.87,
+   "d": 6.9,
+   "text": "I am sure things could change as things shift around but all these other games they are"
+  },
+  {
+   "t": 283.77,
+   "d": 22.73,
+   "text": "from small to large Roguelikes and all have varying degrees and a spectrum of ways permadeath."
+  },
+  {
+   "t": 306.5,
+   "d": 6.64,
+   "text": "Any mode or option where the player is not necessarily doomed to lose all their progress"
+  },
+  {
+   "t": 313.14,
+   "d": 1.84,
+   "text": "upon dying."
+  },
+  {
+   "t": 314.98,
+   "d": 5.45,
+   "text": "The implications of this definition is there could be situations where you do die permanently."
+  },
+  {
+   "t": 320.43,
+   "d": 4.42,
+   "text": "It doesn't mean death is on or off and a binary."
+  },
+  {
+   "t": 324.85,
+   "d": 4.58,
+   "text": "You could lose some of your progress like maybe lose all of your weapons or experience"
+  },
+  {
+   "t": 329.43,
+   "d": 2.62,
+   "text": "but keep your weapons or something in between."
+  },
+  {
+   "t": 332.05,
+   "d": 6.18,
+   "text": "There could be some kind of a buffer like a life system or saves or rewinds or checkpoints"
+  },
+  {
+   "t": 338.23,
+   "d": 6.12,
+   "text": "where it is permanent in the sense that that particular point in time is lost."
+  },
+  {
+   "t": 344.35,
+   "d": 3.92,
+   "text": "It is a dead end and you can go back to an earlier point."
+  },
+  {
+   "t": 348.27,
+   "d": 3.47,
+   "text": "The point is there is no penalty."
+  },
+  {
+   "t": 351.74,
+   "d": 6.03,
+   "text": "It doesn't mean the option is default, prominent or hidden."
+  },
+  {
+   "t": 357.77,
+   "d": 5.67,
+   "text": "There is no that is its own thing which I am about to get into which is how this is"
+  },
+  {
+   "t": 363.44,
+   "d": 1.0,
+   "text": "presented."
+  },
+  {
+   "t": 364.44,
+   "d": 6.97,
+   "text": "How we define the default experience of a game as developers is monumentally important"
+  },
+  {
+   "t": 371.41,
+   "d": 9.89,
+   "text": "and affects how the game is perceived this is true not just for games but general psychology."
+  },
+  {
+   "t": 381.3,
+   "d": 2.42,
+   "text": "This has been studied at great lengths by other people."
+  },
+  {
+   "t": 383.72,
+   "d": 2.0,
+   "text": "A classic example is organ donation."
+  },
+  {
+   "t": 385.72,
+   "d": 8.89,
+   "text": "They are looked at similar people and rates of people and looked at the organ donor rates"
+  },
+  {
+   "t": 394.61,
+   "d": 12.44,
+   "text": "of opt-in versus opt-out where you are signed up by default and have to specifically say"
+  },
+  {
+   "t": 407.05,
+   "d": 2.74,
+   "text": "no, I don't want that."
+  },
+  {
+   "t": 409.79,
+   "d": 7.43,
+   "text": "If all things were equal and people were a 100% rational and the brains worked differently"
+  },
+  {
+   "t": 417.22,
+   "d": 4.79,
+   "text": "it shouldn't matter whether it is opt-in or opt-out if it is the same general population."
+  },
+  {
+   "t": 422.01,
+   "d": 6.46,
+   "text": "The opposite is true and has an enormous impact on how people behave."
+  },
+  {
+   "t": 428.47,
+   "d": 5.83,
+   "text": "We are already setting the stage for how people might play the game."
+  },
+  {
+   "t": 434.3,
+   "d": 4.89,
+   "text": "This is before we even get into the implementation of these options, the difficulty of the game,"
+  },
+  {
+   "t": 439.19,
+   "d": 1.0,
+   "text": "the balance."
+  },
+  {
+   "t": 440.19,
+   "d": 1.0,
+   "text": "Forget all of that."
+  },
+  {
+   "t": 441.19,
+   "d": 3.13,
+   "text": "We are just talking about the title screen and character creation."
+  },
+  {
+   "t": 444.32,
+   "d": 11.96,
+   "text": "I think there are a few ways that the permadeath option that is on or off or switching the"
+  },
+  {
+   "t": 456.28,
+   "d": 4.38,
+   "text": "number of lives you have the way it can be displayed it be set-up into a few different"
+  },
+  {
+   "t": 460.66,
+   "d": 1.07,
+   "text": "categories."
+  },
+  {
+   "t": 461.73,
+   "d": 2.51,
+   "text": "One is no options."
+  },
+  {
+   "t": 464.24,
+   "d": 8.48,
+   "text": "You start the game and the only way to enable or disable a permadeath mode is by using a"
+  },
+  {
+   "t": 472.72,
+   "d": 4.86,
+   "text": "console or going into the a settings menu accessible only after character creation."
+  },
+  {
+   "t": 477.58,
+   "d": 5.13,
+   "text": "This is the strongest statement we can make as a developer to say this is the way you"
+  },
+  {
+   "t": 482.71,
+   "d": 4.74,
+   "text": "play our game and anything else is just that's not really the intended experience."
+  },
+  {
+   "t": 487.45,
+   "d": 7.31,
+   "text": "A preselected toggle is like a big psychological nudge to say here is the default, we are highlighting"
+  },
+  {
+   "t": 494.76,
+   "d": 7.0,
+   "text": "it in big text and there are other things on the screen or in a drop down but it is"
+  },
+  {
+   "t": 501.76,
+   "d": 4.03,
+   "text": "a fairly big indicator that is what you should be doing."
+  },
+  {
+   "t": 505.79,
+   "d": 8.67,
+   "text": "You could nestle the option where you have to go to a separate screen, let's say character"
+  },
+  {
+   "t": 514.46,
+   "d": 5.94,
+   "text": "creation, there is a cog in the bottom left or right corner, or a submenu you don't have"
+  },
+  {
+   "t": 520.4,
+   "d": 2.5,
+   "text": "to pass through."
+  },
+  {
+   "t": 522.9,
+   "d": 1.64,
+   "text": "You could put many options in there."
+  },
+  {
+   "t": 524.54,
+   "d": 1.0,
+   "text": "Many games."
+  },
+  {
+   "t": 525.54,
+   "d": 4.05,
+   "text": "We will get into some examples that obviously that is significantly downplaying the importance"
+  },
+  {
+   "t": 529.59,
+   "d": 1.22,
+   "text": "of that option."
+  },
+  {
+   "t": 530.81,
+   "d": 4.37,
+   "text": "And then hidden would be there basically isn't any option."
+  },
+  {
+   "t": 535.18,
+   "d": 5.57,
+   "text": "The only way you can possibly accessing it is by editing game files and that is the developer"
+  },
+  {
+   "t": 540.75,
+   "d": 2.7,
+   "text": "saying no, you cannot do this."
+  },
+  {
+   "t": 543.45,
+   "d": 4.95,
+   "text": "If you want to, add at the code or memory or whatever."
+  },
+  {
+   "t": 548.4,
+   "d": 8.28,
+   "text": "Finally, the most equitable option such as permadeath on or off, is equal selection."
+  },
+  {
+   "t": 556.68,
+   "d": 6.84,
+   "text": "You show option ABC in a vertical or horizontal list and nothing is prehighlighted and you"
+  },
+  {
+   "t": 563.52,
+   "d": 3.29,
+   "text": "have do hover over what you want and click on it."
+  },
+  {
+   "t": 566.81,
+   "d": 5.65,
+   "text": "There aside from your eyes from the left to the center of the screen because of the way"
+  },
+  {
+   "t": 572.46,
+   "d": 4.46,
+   "text": "the text is rendered this will probably provide the most even results."
+  },
+  {
+   "t": 576.92,
+   "d": 3.94,
+   "text": "If people see three options in front of them and they are not highlighted in any particular"
+  },
+  {
+   "t": 580.86,
+   "d": 5.07,
+   "text": "way they will probably evaluate them roughly eveningly."
+  },
+  {
+   "t": 585.93,
+   "d": 4.69,
+   "text": "These are examples and not are Roguelikes or RPGs."
+  },
+  {
+   "t": 590.62,
+   "d": 12.22,
+   "text": "Both wolfenstein and doom show everything but the way they are labeled tells the player"
+  },
+  {
+   "t": 602.84,
+   "d": 2.08,
+   "text": "this isn't the real mode."
+  },
+  {
+   "t": 604.92,
+   "d": 2.91,
+   "text": "If you play this, you are weak."
+  },
+  {
+   "t": 607.83,
+   "d": 2.12,
+   "text": "We only through that in."
+  },
+  {
+   "t": 609.95,
+   "d": 5.07,
+   "text": "The opposite, I didn't get a screenshot, but there are games that have something like normal"
+  },
+  {
+   "t": 615.02,
+   "d": 5.56,
+   "text": "mode, hard mode and story mode and story mode is literally the complete opposite of this"
+  },
+  {
+   "t": 620.58,
+   "d": 5.62,
+   "text": "screen where you are saying well, we don't think any less of you for picking this mode"
+  },
+  {
+   "t": 626.2,
+   "d": 3.54,
+   "text": "and if you pick it, it is because you want to focus on the story not the difficulty and"
+  },
+  {
+   "t": 629.74,
+   "d": 2.25,
+   "text": "that's fine."
+  },
+  {
+   "t": 631.99,
+   "d": 9.37,
+   "text": "Celeste is an example where this is a menu with a wonderful option for players not interested"
+  },
+  {
+   "t": 641.36,
+   "d": 5.47,
+   "text": "in sort of the traditional mode and in fact this is the ultimate permadeath off in a way."
+  },
+  {
+   "t": 646.83,
+   "d": 5.37,
+   "text": "Not that the game has true permadeath but you can say you cannot die invincibility but"
+  },
+  {
+   "t": 652.2,
+   "d": 4.92,
+   "text": "in order to get to this menu you have to pass through essentially a warning screen that"
+  },
+  {
+   "t": 657.12,
+   "d": 2.53,
+   "text": "says we are about to show you options."
+  },
+  {
+   "t": 659.65,
+   "d": 5.1,
+   "text": "We recommend you play the game as it is first but if you want, here are your options."
+  },
+  {
+   "t": 664.75,
+   "d": 4.75,
+   "text": "They are not hidden but it is definitely dissuedeing the player from picking these things and here"
+  },
+  {
+   "t": 669.5,
+   "d": 6.56,
+   "text": "is ADOM and here I think is a fairly equitable presentation where someone can look at standard"
+  },
+  {
+   "t": 676.06,
+   "d": 6.32,
+   "text": "and hard mode, the first two things your eyes would be drawn to, and Roguelike mode is not"
+  },
+  {
+   "t": 682.38,
+   "d": 7.72,
+   "text": "the one at the top and if somebody doesn't want to play a harder experience then having"
+  },
+  {
+   "t": 690.1,
+   "d": 5.21,
+   "text": "that labeling is beneficial and also beneficial to people that do want that experience."
+  },
+  {
+   "t": 695.31,
+   "d": 4.56,
+   "text": "This is an equitable way of saying you can play it either way."
+  },
+  {
+   "t": 699.87,
+   "d": 8.72,
+   "text": "I am not sure if this is a bug or not but I was watching a streamer play this as a recording"
+  },
+  {
+   "t": 708.59,
+   "d": 3.56,
+   "text": "and he had picked standard mode but then it started doing this."
+  },
+  {
+   "t": 712.15,
+   "d": 3.72,
+   "text": "It said this is the best mode to get accustomed to in the game."
+  },
+  {
+   "t": 715.87,
+   "d": 7.43,
+   "text": "In the text there it says if you feel more comfortable with it, you can progress to like,"
+  },
+  {
+   "t": 723.3,
+   "d": 1.78,
+   "text": "classic mode, the real mode."
+  },
+  {
+   "t": 725.08,
+   "d": 4.78,
+   "text": "It is a developer statement, a literal statement written in text."
+  },
+  {
+   "t": 729.86,
+   "d": 4.69,
+   "text": "This is one way to communicate your intentions to the player and set their expectation for"
+  },
+  {
+   "t": 734.55,
+   "d": 3.24,
+   "text": "what you intend for them to be playing."
+  },
+  {
+   "t": 737.79,
+   "d": 3.75,
+   "text": "I keep talking about expectations."
+  },
+  {
+   "t": 741.54,
+   "d": 2.14,
+   "text": "What does that actually mean?"
+  },
+  {
+   "t": 743.68,
+   "d": 7.27,
+   "text": "And this is where I get into these weird shapes and basically what these are are on the Y"
+  },
+  {
+   "t": 750.95,
+   "d": 7.26,
+   "text": "axis we have the amount of time the player has put into the game in a single run."
+  },
+  {
+   "t": 758.21,
+   "d": 4.06,
+   "text": "From early game to late game, at the very top, you have beaten the game."
+  },
+  {
+   "t": 762.27,
+   "d": 3.61,
+   "text": "The X axis is the amount of content."
+  },
+  {
+   "t": 765.88,
+   "d": 2.87,
+   "text": "Content we can very broadly define it."
+  },
+  {
+   "t": 768.75,
+   "d": 5.84,
+   "text": "Options for characters, gear, monsters, layouts, maps."
+  },
+  {
+   "t": 774.59,
+   "d": 5.44,
+   "text": "And so when you have permadeath and that is the default mode and this is what people expect"
+  },
+  {
+   "t": 780.03,
+   "d": 5.25,
+   "text": "you are basically guaranteeing that early content is going to be seen over and over"
+  },
+  {
+   "t": 785.28,
+   "d": 1.0,
+   "text": "and over."
+  },
+  {
+   "t": 786.28,
+   "d": 5.08,
+   "text": "You are making a promise to the player that you are going to die and so we going to make,"
+  },
+  {
+   "t": 791.36,
+   "d": 3.67,
+   "text": "as developers, a wide variety of content for you at the beginning of the game."
+  },
+  {
+   "t": 795.03,
+   "d": 2.59,
+   "text": "We are going to give you different starting points."
+  },
+  {
+   "t": 797.62,
+   "d": 6.94,
+   "text": "Monster types, locations, all sorts of interesting creation options in the character creator,"
+  },
+  {
+   "t": 804.56,
+   "d": 3.65,
+   "text": "and if we don't do that, if we don't hold up our side of the bargain, and you are coming"
+  },
+  {
+   "t": 808.21,
+   "d": 4.47,
+   "text": "in expecting a permadeath experience and we give you the same five floors in the same"
+  },
+  {
+   "t": 812.68,
+   "d": 6.74,
+   "text": "layout, monsters even if procedurally generated, people will get bored and might leave a negative"
+  },
+  {
+   "t": 819.42,
+   "d": 1.8,
+   "text": "review and that's bad."
+  },
+  {
+   "t": 821.22,
+   "d": 5.06,
+   "text": "It also has a side implications of the story."
+  },
+  {
+   "t": 826.28,
+   "d": 5.91,
+   "text": "It is saying if you are going to be playing this early game repeatedly then we can't really"
+  },
+  {
+   "t": 832.19,
+   "d": 2.23,
+   "text": "make an intrusive story."
+  },
+  {
+   "t": 834.42,
+   "d": 4.95,
+   "text": "When I say intrusive I don't mean to downplay the existence of story and games in general."
+  },
+  {
+   "t": 839.37,
+   "d": 7.86,
+   "text": "I mean to contrast it with a JRPG style game or a traditional cinematic game where you"
+  },
+  {
+   "t": 847.23,
+   "d": 5.21,
+   "text": "start the game, there is a five minute sequence before you actually get to control your character"
+  },
+  {
+   "t": 852.44,
+   "d": 4.08,
+   "text": "and obviously if you are going to die a lot and see the beginning of the game a lot and"
+  },
+  {
+   "t": 856.52,
+   "d": 6.38,
+   "text": "even the most opening in cinematic and setup is going to become very stale very quickly."
+  },
+  {
+   "t": 862.9,
+   "d": 5.99,
+   "text": "We are saying we can't have a traditional cinematic story approach."
+  },
+  {
+   "t": 868.89,
+   "d": 9.01,
+   "text": "Without perma death we are making the most."
+  },
+  {
+   "t": 877.9,
+   "d": 5.89,
+   "text": "If your character is not going to die or it is hard or rare it will be past that."
+  },
+  {
+   "t": 883.79,
+   "d": 5.93,
+   "text": "You will breeze and be into the mid game and in fact there is a question of are you guaranteed"
+  },
+  {
+   "t": 889.72,
+   "d": 3.66,
+   "text": "to reach the endgame?"
+  },
+  {
+   "t": 893.38,
+   "d": 11.1,
+   "text": "Aside from things where you can have a vexing puzzle, people expect I will beat the game"
+  },
+  {
+   "t": 904.48,
+   "d": 2.87,
+   "text": "and get to the end."
+  },
+  {
+   "t": 907.35,
+   "d": 6.41,
+   "text": "That brings up player expectations and the final boss better be good."
+  },
+  {
+   "t": 913.76,
+   "d": 5.06,
+   "text": "There better be a lot of options at the end and I want to gear up my character and fight"
+  },
+  {
+   "t": 918.82,
+   "d": 6.24,
+   "text": "hidden bosses and in the case of a very loot driven game and many Roguelikes are and many"
+  },
+  {
+   "t": 925.06,
+   "d": 5.5,
+   "text": "Roguelike derivatives, we might expect there to be some kind of gear treadmill and I know"
+  },
+  {
+   "t": 930.56,
+   "d": 9.2,
+   "text": "that's a little bit of a pejorative term but in the sense I want to keep getting upgrades."
+  },
+  {
+   "t": 939.76,
+   "d": 10.08,
+   "text": "Story, also, is probably going to be a little bit of an expectation."
+  },
+  {
+   "t": 949.84,
+   "d": 4.66,
+   "text": "If you invest all this time and explore a bigger and bigger world with all this interesting"
+  },
+  {
+   "t": 954.5,
+   "d": 5.15,
+   "text": "stuff and there is no story or payoff it might come off as a little weird."
+  },
+  {
+   "t": 959.65,
+   "d": 4.42,
+   "text": "Even games that are not necessarily super story driven."
+  },
+  {
+   "t": 964.07,
+   "d": 2.47,
+   "text": "Example being the Diablo series."
+  },
+  {
+   "t": 966.54,
+   "d": 6.47,
+   "text": "Diablo3 was malaligned because the story didn't go the way people thought it was."
+  },
+  {
+   "t": 973.01,
+   "d": 5.78,
+   "text": "It is not a default permadeath game and something where you expect to see the whole story and"
+  },
+  {
+   "t": 978.79,
+   "d": 5.45,
+   "text": "if it doesn't deliver you are let down."
+  },
+  {
+   "t": 984.24,
+   "d": 5.28,
+   "text": "Can you design for both?"
+  },
+  {
+   "t": 989.52,
+   "d": 3.33,
+   "text": "Not a pyramid at all but a straight line?"
+  },
+  {
+   "t": 992.85,
+   "d": 1.0,
+   "text": "This is possible."
+  },
+  {
+   "t": 993.85,
+   "d": 1.99,
+   "text": "The thing is we are all human."
+  },
+  {
+   "t": 995.84,
+   "d": 1.83,
+   "text": "We have 24 hours in the day."
+  },
+  {
+   "t": 997.67,
+   "d": 4.48,
+   "text": "We don't have big budgets and are Roguelikes developers so it is not going to be possible"
+  },
+  {
+   "t": 1002.15,
+   "d": 5.34,
+   "text": "to put maximum effort and time and money into every stage of the game."
+  },
+  {
+   "t": 1007.49,
+   "d": 4.95,
+   "text": "We have to make decisions and concessions."
+  },
+  {
+   "t": 1012.44,
+   "d": 6.46,
+   "text": "It can make things harder when you are trying to balance and weigh both equally."
+  },
+  {
+   "t": 1018.9,
+   "d": 5.72,
+   "text": "Something that may be perfectly acceptable in a non-permadeath mode for oh, this monster"
+  },
+  {
+   "t": 1024.62,
+   "d": 6.63,
+   "text": "hits half your HP and an invisible trap."
+  },
+  {
+   "t": 1031.25,
+   "d": 8.05,
+   "text": "Some people might say that is completely unfair."
+  },
+  {
+   "t": 1039.3,
+   "d": 9.16,
+   "text": "If you look at reviews for many range of motion, you will see this is unfair."
+  },
+  {
+   "t": 1048.46,
+   "d": 1.12,
+   "text": "I didn't see this coming."
+  },
+  {
+   "t": 1049.58,
+   "d": 2.98,
+   "text": "I lost my progress and I am mad and leave a negative review."
+  },
+  {
+   "t": 1052.56,
+   "d": 6.05,
+   "text": "Yes, they are salty but depending on how the developer was thinking about this were they"
+  },
+  {
+   "t": 1058.61,
+   "d": 7.77,
+   "text": "thinking they would not have it on and it wouldn't be an issue?"
+  },
+  {
+   "t": 1066.38,
+   "d": 13.26,
+   "text": "If it doesn't align it becomes tricky."
+  },
+  {
+   "t": 1079.64,
+   "d": 4.94,
+   "text": "Here are examples I pulled of traditional Roguelikes."
+  },
+  {
+   "t": 1084.58,
+   "d": 4.86,
+   "text": "I am not saying which is which but this is to show completely different expectations"
+  },
+  {
+   "t": 1089.44,
+   "d": 1.32,
+   "text": "people have."
+  },
+  {
+   "t": 1090.76,
+   "d": 3.74,
+   "text": "The first one, the summary is playing without permadeath on is awesome."
+  },
+  {
+   "t": 1094.5,
+   "d": 2.73,
+   "text": "There are always new things to do."
+  },
+  {
+   "t": 1097.23,
+   "d": 5.25,
+   "text": "Permadeath on is fun until you realize you have to go through the early game slog again"
+  },
+  {
+   "t": 1102.48,
+   "d": 1.53,
+   "text": "to get back to where you were."
+  },
+  {
+   "t": 1104.01,
+   "d": 5.1,
+   "text": "This is somebody that feels like this game did not meet their expectation when perma"
+  },
+  {
+   "t": 1109.11,
+   "d": 4.84,
+   "text": "death was on but they loved it when permadeath was off."
+  },
+  {
+   "t": 1113.95,
+   "d": 6.04,
+   "text": "Should permadeath have been an option if the game was designed that way?"
+  },
+  {
+   "t": 1119.99,
+   "d": 5.01,
+   "text": "The next one someone is saying there was this awesome endgame and why do I have to play"
+  },
+  {
+   "t": 1125.0,
+   "d": 2.09,
+   "text": "13 hours of the game to get to that part."
+  },
+  {
+   "t": 1127.09,
+   "d": 15.54,
+   "text": "A similar complaint basically saying it was"
+  },
+  {
+   "t": 1142.63,
+   "d": 3.16,
+   "text": "the cleat opposite."
+  },
+  {
+   "t": 1145.79,
+   "d": 4.69,
+   "text": "The further you go, it is more just like patients and preparation."
+  },
+  {
+   "t": 1150.48,
+   "d": 6.41,
+   "text": "They are saying, well, I would rather spend all my time in the early game and this is"
+  },
+  {
+   "t": 1156.89,
+   "d": 4.17,
+   "text": "something they would prefer the straightforward permadeath experience."
+  },
+  {
+   "t": 1161.06,
+   "d": 8.9,
+   "text": "They want to see that and see the rich content at the beginning and once again going back"
+  },
+  {
+   "t": 1169.96,
+   "d": 4.62,
+   "text": "to the opposite."
+  },
+  {
+   "t": 1174.58,
+   "d": 4.47,
+   "text": "This was a para phrase because I couldn't find where I read this but someone said the"
+  },
+  {
+   "t": 1179.05,
+   "d": 7.19,
+   "text": "first half is where all the fun happens and by the end my gear and strategy always converges."
+  },
+  {
+   "t": 1186.24,
+   "d": 9.13,
+   "text": "Saying it got too thin and squeezed by the end and it is interesting because maybe if"
+  },
+  {
+   "t": 1195.37,
+   "d": 5.26,
+   "text": "the game was designed differently, or they had presented the options different, that"
+  },
+  {
+   "t": 1200.63,
+   "d": 5.2,
+   "text": "player might have a different expectation."
+  },
+  {
+   "t": 1205.83,
+   "d": 11.31,
+   "text": "The 1-50 times you get there, rather than feeling I am so bored and I am just using"
+  },
+  {
+   "t": 1217.14,
+   "d": 4.86,
+   "text": "the same strategy versus I made it to the endgame."
+  },
+  {
+   "t": 1222.0,
+   "d": 1.0,
+   "text": "This is crazy."
+  },
+  {
+   "t": 1223.0,
+   "d": 2.16,
+   "text": "I can't believe I am here."
+  },
+  {
+   "t": 1225.16,
+   "d": 10.61,
+   "text": "That's two different experiences."
+  },
+  {
+   "t": 1235.77,
+   "d": 9.75,
+   "text": "The most options and I gave examples of both but having a permadeath off option is sort"
+  },
+  {
+   "t": 1245.52,
+   "d": 1.35,
+   "text": "of the simplest approach."
+  },
+  {
+   "t": 1246.87,
+   "d": 4.59,
+   "text": "You die, lose resources and that's it."
+  },
+  {
+   "t": 1251.46,
+   "d": 14.52,
+   "text": "Then there is the life system which is an interesting compromise."
+  },
+  {
+   "t": 1265.98,
+   "d": 5.85,
+   "text": "It gives the designer a lot more room to say yes, we can do a few unfair things and push"
+  },
+  {
+   "t": 1271.83,
+   "d": 5.03,
+   "text": "the limits a little bit of what might be considered fair."
+  },
+  {
+   "t": 1276.86,
+   "d": 8.48,
+   "text": "We can also open up new rewards and maybe you are willing to do this thing."
+  },
+  {
+   "t": 1285.34,
+   "d": 22.63,
+   "text": "Then you have a wizard mode that says look we don't care."
+  },
+  {
+   "t": 1307.97,
+   "d": 1.59,
+   "text": "Or the reverse."
+  },
+  {
+   "t": 1309.56,
+   "d": 11.43,
+   "text": "You can turn it on but it is saying we have no guarantee this is going to be fun."
+  },
+  {
+   "t": 1320.99,
+   "d": 10.44,
+   "text": "Like with a classic RPG or JRPG, you might have the option of saving any time or only"
+  },
+  {
+   "t": 1331.43,
+   "d": 7.23,
+   "text": "the option of saving at checkpoints like ends or literal rotating save points but this is"
+  },
+  {
+   "t": 1338.66,
+   "d": 6.62,
+   "text": "not necessarily easier than permadeath off or lives because you could potentially save"
+  },
+  {
+   "t": 1345.28,
+   "d": 3.2,
+   "text": "the game in a situation where you cannot recover."
+  },
+  {
+   "t": 1348.48,
+   "d": 7.26,
+   "text": "You could be deep in a dudgeon and save your game and don't have enough healing files and"
+  },
+  {
+   "t": 1355.74,
+   "d": 3.75,
+   "text": "that can be potentially doomed."
+  },
+  {
+   "t": 1359.49,
+   "d": 11.67,
+   "text": "This can be more frustrating because if the player feels like it is an impossible puzzle"
+  },
+  {
+   "t": 1371.16,
+   "d": 6.95,
+   "text": "it is like walking into a room and the door locks and you will starve to death."
+  },
+  {
+   "t": 1378.11,
+   "d": 7.85,
+   "text": "It isn't fun and a heroic way of dying."
+  },
+  {
+   "t": 1385.96,
+   "d": 7.73,
+   "text": "But it has other benefits which is it is somewhere between having literally no permadeath and"
+  },
+  {
+   "t": 1393.69,
+   "d": 5.86,
+   "text": "having it as the default thing that happens when you die."
+  },
+  {
+   "t": 1399.55,
+   "d": 7.69,
+   "text": "In conclusion, people have strong feelings about permadeath."
+  },
+  {
+   "t": 1407.24,
+   "d": 11.46,
+   "text": "Fans are interested in exploring options but how we present those options will affect their"
+  },
+  {
+   "t": 1418.7,
+   "d": 2.32,
+   "text": "expectations when we play the game."
+  },
+  {
+   "t": 1421.02,
+   "d": 8.3,
+   "text": "Also a problem for developers is these sort of rules or modes of play can actually cause"
+  },
+  {
+   "t": 1429.32,
+   "d": 2.77,
+   "text": "us to completely allocate our resources differently."
+  },
+  {
+   "t": 1432.09,
+   "d": 13.85,
+   "text": "We have to very carefully think about we like messing around with map generators and procedural"
+  },
+  {
+   "t": 1445.94,
+   "d": 5.72,
+   "text": "conversations and fun stuff."
+  },
+  {
+   "t": 1451.66,
+   "d": 18.42,
+   "text": "We need something to doom the player but without a you are dead and files erased immediately."
+  },
+  {
+   "t": 1470.08,
+   "d": 4.85,
+   "text": "As developers, we should think about why we are including permadeath in the game and if"
+  },
+  {
+   "t": 1474.93,
+   "d": 7.3,
+   "text": "we are willing to fulfill the promise that permadeath is stating to the player."
+  },
+  {
+   "t": 1482.23,
+   "d": 2.99,
+   "text": "Are you ready to promise that that early game is going to be fun?"
+  },
+  {
+   "t": 1485.22,
+   "d": 4.23,
+   "text": "You are not going to have a story that's going to be too heavy for the beginning?"
+  },
+  {
+   "t": 1489.45,
+   "d": 4.14,
+   "text": "You are going to have enough variation and character creation?"
+  },
+  {
+   "t": 1493.59,
+   "d": 4.07,
+   "text": "If you are thinking to yourself I want to make this RPG and I want to have fighting"
+  },
+  {
+   "t": 1497.66,
+   "d": 6.89,
+   "text": "dragons on a neutron star that's like the experience I want to promise you might want"
+  },
+  {
+   "t": 1504.55,
+   "d": 4.01,
+   "text": "to think about maybe permadeath should not be there default because you want people to"
+  },
+  {
+   "t": 1508.56,
+   "d": 5.94,
+   "text": "get to that point of epic cosmic battles sooner rather than later."
+  },
+  {
+   "t": 1514.5,
+   "d": 1.77,
+   "text": "Thus ends the talk."
+  },
+  {
+   "t": 1516.27,
+   "d": 7.89,
+   "text": "Happy to be back and you can also email me at thedries on the screen."
+  },
+  {
+   "t": 1524.16,
+   "d": 11.57,
+   "text": "MODERATOR: I have to say the chat is popping off."
+  },
+  {
+   "t": 1535.73,
+   "d": 14.9,
+   "text": "People have a lot"
+  },
+  {
+   "t": 1550.63,
+   "d": 3.91,
+   "text": "of opinions about perma death."
+  },
+  {
+   "t": 1554.54,
+   "d": 4.27,
+   "text": "The first ranked question is how do you feel about metaproinvestigation and how it relates"
+  },
+  {
+   "t": 1558.81,
+   "d": 1.41,
+   "text": "to permadeath?"
+  },
+  {
+   "t": 1560.22,
+   "d": 6.25,
+   "text": "ANDREW AVERSA: I talked about that in my talk two years ago and that's why I didn't want"
+  },
+  {
+   "t": 1566.47,
+   "d": 1.0,
+   "text": "to retread it."
+  },
+  {
+   "t": 1567.47,
+   "d": 2.76,
+   "text": "MODERATOR: Go back and watch that talk is the answer."
+  },
+  {
+   "t": 1570.23,
+   "d": 9.31,
+   "text": "ANDREW AVERSA: I will say that is another way of bridging the gap a little bit."
+  },
+  {
+   "t": 1579.54,
+   "d": 7.04,
+   "text": "If you want to say I want to balance around permadeath in terms of the feeling of danger"
+  },
+  {
+   "t": 1586.58,
+   "d": 4.94,
+   "text": "but don't want to scare off the people that are discourages."
+  },
+  {
+   "t": 1591.52,
+   "d": 8.55,
+   "text": "I think there is a lot of implementations of meta progress that can make people feel"
+  },
+  {
+   "t": 1600.07,
+   "d": 5.84,
+   "text": "frustrated like I have to die to build up my character versus metaprogress and now I"
+  },
+  {
+   "t": 1605.91,
+   "d": 3.8,
+   "text": "am actually excited."
+  },
+  {
+   "t": 1609.71,
+   "d": 3.71,
+   "text": "Even if I die I get to pick another starting location, cool."
+  },
+  {
+   "t": 1613.42,
+   "d": 1.89,
+   "text": "It can go either way."
+  },
+  {
+   "t": 1615.31,
+   "d": 8.05,
+   "text": "MODERATOR: Another question to get your thoughts is what do you think about user choice at"
+  },
+  {
+   "t": 1623.36,
+   "d": 1.0,
+   "text": "death?"
+  },
+  {
+   "t": 1624.36,
+   "d": 4.21,
+   "text": "Is this the end of your story at that point giving a choice to the user?"
+  },
+  {
+   "t": 1628.57,
+   "d": 6.56,
+   "text": "Ank ANDREW AVERSA: That's interesting."
+  },
+  {
+   "t": 1635.13,
+   "d": 12.07,
+   "text": "I would to think about that more."
+  },
+  {
+   "t": 1647.2,
+   "d": 14.09,
+   "text": "MODERATOR: Some people talk about this as perma failure or permadeath makes this no"
+  },
+  {
+   "t": 1661.29,
+   "d": 2.24,
+   "text": "different from board games where mistakes matter."
+  },
+  {
+   "t": 1663.53,
+   "d": 3.04,
+   "text": "Any thoughts?"
+  },
+  {
+   "t": 1666.57,
+   "d": 1.17,
+   "text": "Permanent consequence."
+  },
+  {
+   "t": 1667.74,
+   "d": 10.18,
+   "text": "ANDREW AVERSA: Yeah, I guess, I think it definitely is like an expectations thing."
+  },
+  {
+   "t": 1677.92,
+   "d": 6.3,
+   "text": "It is just like what you were saying, the framing expectations, it is too sides of the"
+  },
+  {
+   "t": 1684.22,
+   "d": 1.0,
+   "text": "same coin."
+  },
+  {
+   "t": 1685.22,
+   "d": 6.27,
+   "text": "If you are presenting something as of yes, you have to -- you might die a lot but you"
+  },
+  {
+   "t": 1691.49,
+   "d": 5.18,
+   "text": "are going to gain experience as a player and this is part of the player and the consequences"
+  },
+  {
+   "t": 1696.67,
+   "d": 5.67,
+   "text": "are relatively unimportant for any single run that's OK."
+  },
+  {
+   "t": 1702.34,
+   "d": 4.23,
+   "text": "Also, I think the length of the play session can also change a little bit the framing from"
+  },
+  {
+   "t": 1706.57,
+   "d": 6.32,
+   "text": "the developer and the player if your average run is 10-15 hours versus more of a coffee"
+  },
+  {
+   "t": 1712.89,
+   "d": 1.0,
+   "text": "break Roguelike."
+  },
+  {
+   "t": 1713.89,
+   "d": 5.04,
+   "text": "That's definitely going to change the way people feel when they get spikes in 80% of"
+  },
+  {
+   "t": 1718.93,
+   "d": 4.98,
+   "text": "their health and board games are on the short end of the spectrum."
+  },
+  {
+   "t": 1723.91,
+   "d": 11.89,
+   "text": "MODERATOR: Though that is why games like monopoly are terrible to play."
+  },
+  {
+   "t": 1735.8,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1736.8,
+   "d": 2.97,
+   "text": "There are other questions, unfortunately, we don't have time for."
+  },
+  {
+   "t": 1739.77,
+   "d": 3.76,
+   "text": "A topic that brings about a lot of conversation."
+  },
+  {
+   "t": 1743.53,
+   "d": 5.25,
+   "text": "Thank you so much for sharing your thoughts and good luck in trying to find you and have"
+  },
+  {
+   "t": 1748.78,
+   "d": 4.87,
+   "text": "more discussion about that later."
+  }
+ ]
+}

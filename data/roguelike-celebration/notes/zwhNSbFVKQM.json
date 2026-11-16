@@ -1,0 +1,135 @@
+{
+  "id": "zwhNSbFVKQM",
+  "title": "Adrian Zeyfang: Probably Impossible: NecroDancer's network code",
+  "speaker": "Adrian Zeyfang",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=zwhNSbFVKQM",
+  "talk_type": "technical",
+  "summary": "Adrian Zeyfang, lead developer of the Crypt of the NecroDancer Synchrony DLC, explains how a fan project added online multiplayer to a rhythm roguelike that its developers had called impossible to network. He covers state replication, deterministic lockstep and rollback netcode, then the NecroDancer-specific requirements: zero local input delay, client authority over the beat, and each player feeling like they play single-player. The solution uses a sparse action buffer keyed by turn IDs so rhythm characters, double-tempo characters and the beat-free Bard can coexist, plus rollback-aware animation and sound systems. He ends with design changes made for netcode feel: removing player collisions and adding invisible 'tombstones' where monsters die.",
+  "games": [
+    "Crypt of the NecroDancer"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "rollback netcode",
+      "kind": "technique",
+      "claim": "Rollback netcode lets a turn-based game run local inputs instantly by snapshotting the full game state every tick and resimulating when late remote inputs arrive.",
+      "detail": "Zeyfang describes rollback as an undo/redo system for the entire game: snapshots must include globals, RNG seeds, tiles, positions, health, timers and items. Effectively it is a save/load system that must be extremely fast because it runs many times per second; snapshots are stored alongside inputs so the game can return to a past turn, adjust inputs and fast-forward.",
+      "t": 270,
+      "quote": "roback net code can be thought of as an undo redo system that affects the entire game",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "netcode models",
+      "kind": "technique",
+      "claim": "Authoritative-server state replication and deterministic lockstep both add round-trip input lag, which is unacceptable for a rhythm roguelike like Crypt of the NecroDancer.",
+      "detail": "State replication sends inputs to a server that propagates object updates, so a key press only shows after a round trip. Deterministic lockstep relays inputs and simulates locally, which only works without outside dependencies or randomness, but is also called 'delay netcode' because inputs still wait for the round trip and ordering is final.",
+      "t": 183,
+      "quote": "if the simulation doesn't have any outside dependencies or Randomness then all clients should end up with the same game state",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiplayer time",
+      "kind": "principle",
+      "claim": "In NecroDancer's Synchrony multiplayer, every player should feel like they are playing single-player: local actions are never delayed and distant players must not affect nearby interactions.",
+      "detail": "Unlike typical fighting-game rollback that falls back to delay at high ping, Synchrony requires all local actions to happen instantly so players can keep the beat, and network hiccups should never cause missed beats. Monsters around a player should interact with only that player, unaffected by someone 'dancing at light speed' elsewhere on the map.",
+      "t": 406,
+      "quote": "every player should feel like they're playing the game in single player locally",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "action buffer",
+      "kind": "warning",
+      "claim": "Indexing NecroDancer's multiplayer action buffer by beat number broke down when the beat-free Bard character could act any time, causing massive rollbacks and teleporting objects.",
+      "detail": "Frame-based buffers were mostly empty because only key presses matter, so the team switched to beat indices. Bard ignores the beat (an easy mode for newcomers), so a fast Bard builds a lead, and a rhythm player's input lands in a slot far before Bard's actions, invalidating many snapshots and causing performance problems and visual teleportation.",
+      "t": 602,
+      "quote": "beat numbers are just not flexible enough to support um having variance in in Rhythm modes between different",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "turn ids",
+      "kind": "technique",
+      "claim": "Synchrony stores actions in a sparse map keyed by time-derived turn IDs, so rhythm players snap to beat-aligned IDs while beat-free and double-tempo characters get IDs in between.",
+      "detail": "Rhythm players' beats snap to the beat's ideal timing so simultaneous beats share one turn ID; Bard's IDs come directly from the timestamp. Out-of-order arrivals shift subsequent actions right and roll back to weave the new action in. Bolt, at double tempo, generates twice as many turn IDs, acting alone on off-beats.",
+      "t": 629,
+      "quote": "the action buffer is no longer a dense list of frames but a sparse map that Associates these turn IDs with player inputs",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiplayer time",
+      "kind": "technique",
+      "claim": "When a NecroDancer player does not act on a given turn ID, time simply does not pass for them, so turns inserted by other players are invisible locally.",
+      "detail": "Nearby monsters do not move and countdowns and status effects do not tick for a character that didn't act on that turn ID. This is how a single-tempo Cadence far from a double-tempo Bolt ideally never notices that Bolt is in the game.",
+      "t": 704,
+      "quote": "time doesn't actually pass for them at all nearby monsters don't move countdowns and status effects do not take down",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "client authority",
+      "kind": "technique",
+      "claim": "Synchrony keeps beat-timing judgement fully client-authoritative and outside rollback snapshots so network issues can never make a player miss a beat.",
+      "detail": "Each beat has a window of acceptable timing; hitting it advances the expected beat, missing it inserts an idle turn giving enemies a free move, and double-tapping inserts a sub-beat action that drops the multiplier. This beat map state is not part of snapshots, so rollback never affects it.",
+      "t": 871,
+      "quote": "this Beat Map state is not part of snapshots or rollback so rollback is um never going to affect the Beat Map",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "animation under rollback",
+      "kind": "technique",
+      "claim": "To keep movement animations smooth under rollback, Synchrony gives each animation a stable identity (entity, turn ID, animation name) and preserves its start time across resimulations.",
+      "detail": "Idle animations are stateless, computed from local music time. Moves copy a global animation timer into a per-turn animation buffer and interpolate from it; when a move is resimulated, the existing start time is kept instead of restarted. A global move counter would not work as an ID because rollback shifts it and scrambles animations.",
+      "t": 1070,
+      "quote": "we have to assign unique identities to each animation event which uh typically consists of the entity being moved and the turn ID",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sound under rollback",
+      "kind": "technique",
+      "claim": "Synchrony tracks sound effects per turn so rollback neither duplicates sounds that recur nor lets sounds play for events that were undone.",
+      "detail": "On rollback each sound in the turn's list is marked 'for stop or awaiting recurrence'; recurring sounds keep playing without being retriggered, new ones play, and any still-marked sounds are cut at the end of the turn. In his example, Arya's hurt sound is cut because her earlier attack killed the skeleton first. This matters most for long sounds like player deaths or boss phase transitions.",
+      "t": 1243,
+      "quote": "we don't want players to have any misleading audio feedback if rollback changed the outcome of a significant event",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "player collision",
+      "kind": "example",
+      "claim": "Synchrony removed player-to-player collision because rollback made contested tiles look like players were shoved off squares they had already moved onto.",
+      "detail": "Original local co-op had collisions, with early-on-beat players prioritized; under rollback the loser's move was reverted after a delay, which was disorienting and occurred too often in playtests. They chose the simplest fix of disabling collisions, also seeing it as quality of life since narrow procedural corridors make it hard to get out of each other's way.",
+      "t": 1373,
+      "quote": "players don't collide with each other we just disabled this mechanic altogether",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "rollback mispredictions",
+      "kind": "technique",
+      "claim": "Synchrony drops an invisible 'tombstone' blocker on a slain monster's tile for the rest of the turn so a second player's late attack doesn't retroactively become a move onto that tile.",
+      "detail": "When two players attack a one-hit slime, rollback could turn the slower player's attack into a move, appearing to teleport them. With the tombstone, the slower player attacks the tombstone instead, which looks like attacking thin air; it despawns at the end of the turn. He frames this as part of a general aim to minimize the impact of mispredictions and direct player interactions in the same turn.",
+      "t": 1468,
+      "quote": "we actually introduced a special invisible object that is dropped by any slain monsters and we call this a tombstone",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "fan projects",
+      "kind": "history",
+      "claim": "Crypt of the NecroDancer's Synchrony DLC began as a fan-made multiplayer clone after the developers said online multiplayer was impossible, and was later adopted by the studio.",
+      "detail": "Zeyfang saw a Steam forum thread where the dev team said online multiplayer couldn't happen, took it as a challenge, and built a prototype with community friends over weeks, months and years until the studio noticed. At launch players bypassed the eight-player design limit to run 16-player lobbies.",
+      "t": 70,
+      "quote": "the dev team responded that this is just impossible it's not going to happen how could you add online multiplayer to game like this",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

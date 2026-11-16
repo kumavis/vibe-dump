@@ -1,0 +1,4058 @@
+{
+ "id": "ClGAApZYIvI",
+ "url": "https://www.youtube.com/watch?v=ClGAApZYIvI",
+ "title": "Jason Grinblat - Procedural History in Caves of Qud",
+ "speaker": "Jason Grinblat",
+ "talk_title": "Procedural History in Caves of Qud",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1908,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Jason Grinblat talks about procedural history generation in Caves of Qud.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Caves of Qud"
+  },
+  {
+   "start": 284,
+   "title": "Discovering Sultan Histories"
+  },
+  {
+   "start": 366,
+   "title": "Instantiating Lore in the World"
+  },
+  {
+   "start": 489,
+   "title": "Sultan Domains and Themes"
+  },
+  {
+   "start": 565,
+   "title": "Generating Narrative Events"
+  },
+  {
+   "start": 693,
+   "title": "Legendary Items and Quests"
+  },
+  {
+   "start": 803,
+   "title": "Factions and Social Systems"
+  },
+  {
+   "start": 941,
+   "title": "Sultan Cults and Followings"
+  },
+  {
+   "start": 1012,
+   "title": "History Generation Mechanics"
+  },
+  {
+   "start": 1164,
+   "title": "Unscripted Narrative Arcs"
+  },
+  {
+   "start": 1276,
+   "title": "Macro-Variation in Society"
+  },
+  {
+   "start": 1371,
+   "title": "Case Study: Polydeities"
+  },
+  {
+   "start": 1595,
+   "title": "Q&A Session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5629,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 4.86,
+   "text": "hi good morning"
+  },
+  {
+   "t": 4.86,
+   "d": 2.4,
+   "text": "okay so I'm Jason well this is great"
+  },
+  {
+   "t": 7.26,
+   "d": 0.75,
+   "text": "loud okay"
+  },
+  {
+   "t": 8.01,
+   "d": 2.07,
+   "text": "I'm Jason Grimley and I'm the co-creator"
+  },
+  {
+   "t": 10.08,
+   "d": 2.94,
+   "text": "of rogue Lake old caves of God and today"
+  },
+  {
+   "t": 13.02,
+   "d": 0.77,
+   "text": "I'm gonna be telling you about"
+  },
+  {
+   "t": 13.79,
+   "d": 2.2,
+   "text": "procedurally generated histories in"
+  },
+  {
+   "t": 15.99,
+   "d": 2.13,
+   "text": "caves that cut through the stories of"
+  },
+  {
+   "t": 18.12,
+   "d": 3.36,
+   "text": "five ancient leaders that were generated"
+  },
+  {
+   "t": 21.48,
+   "d": 3.18,
+   "text": "in across multiple games of God leaders"
+  },
+  {
+   "t": 24.66,
+   "d": 2.4,
+   "text": "that we call Sultan's and in the game"
+  },
+  {
+   "t": 27.06,
+   "d": 3.78,
+   "text": "world so let me tell you a bit about"
+  },
+  {
+   "t": 30.84,
+   "d": 1.41,
+   "text": "kaizo cut first if you're not familiar"
+  },
+  {
+   "t": 32.25,
+   "d": 1.92,
+   "text": "with it so it's an open-world roguelike"
+  },
+  {
+   "t": 34.17,
+   "d": 2.4,
+   "text": "it's very heavily inspired by Adam so"
+  },
+  {
+   "t": 36.57,
+   "d": 2.82,
+   "text": "I'm very happy to follow Thomas it's"
+  },
+  {
+   "t": 39.39,
+   "d": 2.13,
+   "text": "also a science fantasy RPG so the"
+  },
+  {
+   "t": 41.52,
+   "d": 2.16,
+   "text": "tagline is chiseled through a layer cake"
+  },
+  {
+   "t": 43.68,
+   "d": 1.94,
+   "text": "of thousand-year-old civilizations"
+  },
+  {
+   "t": 45.62,
+   "d": 3.27,
+   "text": "I'm gonna be reading a lot it's okay"
+  },
+  {
+   "t": 48.89,
+   "d": 3.13,
+   "text": "it's inspired largely by a pen and paper"
+  },
+  {
+   "t": 52.02,
+   "d": 2.13,
+   "text": "RPG called gamma world which was a"
+  },
+  {
+   "t": 54.15,
+   "d": 1.74,
+   "text": "derivative of Dungeons & Dragons and"
+  },
+  {
+   "t": 55.89,
+   "d": 3.0,
+   "text": "it's this sort of pulpy science fiction"
+  },
+  {
+   "t": 58.89,
+   "d": 2.25,
+   "text": "setting that set in like a"
+  },
+  {
+   "t": 61.14,
+   "d": 2.4,
+   "text": "post-apocalyptic future where nuclear"
+  },
+  {
+   "t": 63.54,
+   "d": 2.76,
+   "text": "radiation has uplifted animals and"
+  },
+  {
+   "t": 66.3,
+   "d": 3.23,
+   "text": "plants to human level intelligence"
+  },
+  {
+   "t": 70.28,
+   "d": 3.43,
+   "text": "there's a handcrafted narrative of the"
+  },
+  {
+   "t": 73.71,
+   "d": 1.59,
+   "text": "sort you might expect to find in like a"
+  },
+  {
+   "t": 75.3,
+   "d": 1.74,
+   "text": "traditional RPG or like if you think of"
+  },
+  {
+   "t": 77.04,
+   "d": 1.95,
+   "text": "like an open-world but does the game but"
+  },
+  {
+   "t": 78.99,
+   "d": 2.01,
+   "text": "we've sort of tried to weave it around a"
+  },
+  {
+   "t": 81.0,
+   "d": 2.22,
+   "text": "bunch of simulative system so simulative"
+  },
+  {
+   "t": 83.22,
+   "d": 2.22,
+   "text": "systems like physical systems taking a"
+  },
+  {
+   "t": 85.44,
+   "d": 2.85,
+   "text": "page from Dwarf Fortress you can dig a"
+  },
+  {
+   "t": 88.29,
+   "d": 1.74,
+   "text": "tunnel anywhere in the world you can"
+  },
+  {
+   "t": 90.03,
+   "d": 2.43,
+   "text": "like every wall as a melting point there"
+  },
+  {
+   "t": 92.46,
+   "d": 1.68,
+   "text": "are social systems there's a complex"
+  },
+  {
+   "t": 94.14,
+   "d": 2.25,
+   "text": "network of NPCs and factions that you"
+  },
+  {
+   "t": 96.39,
+   "d": 1.65,
+   "text": "could interact with and gain reputation"
+  },
+  {
+   "t": 98.04,
+   "d": 2.64,
+   "text": "with and then most recently there's this"
+  },
+  {
+   "t": 100.68,
+   "d": 2.43,
+   "text": "historical system so like at the start"
+  },
+  {
+   "t": 103.11,
+   "d": 2.49,
+   "text": "of every game we generate a new history"
+  },
+  {
+   "t": 105.6,
+   "d": 5.52,
+   "text": "and we sort of use that to see the world"
+  },
+  {
+   "t": 111.12,
+   "d": 2.1,
+   "text": "generation and like those locations from"
+  },
+  {
+   "t": 113.22,
+   "d": 2.4,
+   "text": "the history end up being instantiated in"
+  },
+  {
+   "t": 115.62,
+   "d": 1.26,
+   "text": "the world and they're places that you"
+  },
+  {
+   "t": 116.88,
+   "d": 5.0,
+   "text": "could explore so if you could imagine"
+  },
+  {
+   "t": 121.88,
+   "d": 3.34,
+   "text": "with me if you will that you're a lore"
+  },
+  {
+   "t": 125.22,
+   "d": 2.25,
+   "text": "seeker in a wild and fractured world"
+  },
+  {
+   "t": 127.47,
+   "d": 3.09,
+   "text": "you've just arrived on the"
+  },
+  {
+   "t": 130.56,
+   "d": 2.16,
+   "text": "on the edge of this strange place called"
+  },
+  {
+   "t": 132.72,
+   "d": 3.45,
+   "text": "cud we're poison jungles strangle chrome"
+  },
+  {
+   "t": 136.17,
+   "d": 2.25,
+   "text": "steeples and rusted archways to the"
+  },
+  {
+   "t": 138.42,
+   "d": 3.0,
+   "text": "earth your first stop is the oasis"
+  },
+  {
+   "t": 141.42,
+   "d": 3.48,
+   "text": "hamlet of Joppa which is a small village"
+  },
+  {
+   "t": 144.9,
+   "d": 2.91,
+   "text": "on the edge of a great salt desert so"
+  },
+  {
+   "t": 147.81,
+   "d": 1.74,
+   "text": "you arrive at Joba and you notice in the"
+  },
+  {
+   "t": 149.55,
+   "d": 3.06,
+   "text": "northeast corner there's this ancient"
+  },
+  {
+   "t": 152.61,
+   "d": 3.36,
+   "text": "stone vine swath shrine so your"
+  },
+  {
+   "t": 155.97,
+   "d": 1.95,
+   "text": "curiosity piqued you make your way over"
+  },
+  {
+   "t": 157.92,
+   "d": 3.09,
+   "text": "you make your way there and you approach"
+  },
+  {
+   "t": 161.01,
+   "d": 3.69,
+   "text": "the shrine to examine it so it's a"
+  },
+  {
+   "t": 164.7,
+   "d": 2.7,
+   "text": "shrine to oh say the telev magenta"
+  },
+  {
+   "t": 167.4,
+   "d": 3.03,
+   "text": "sorrow of cape cabinet it's trying to"
+  },
+  {
+   "t": 170.43,
+   "d": 1.71,
+   "text": "fix a significant event from the life of"
+  },
+  {
+   "t": 172.14,
+   "d": 2.19,
+   "text": "the ancient Sultan oh say after"
+  },
+  {
+   "t": 174.33,
+   "d": 2.4,
+   "text": "conferring with trees OC convinced them"
+  },
+  {
+   "t": 176.73,
+   "d": 2.16,
+   "text": "to help him found a hermitage in the in"
+  },
+  {
+   "t": 178.89,
+   "d": 2.25,
+   "text": "mammer hall for the purpose of chanting"
+  },
+  {
+   "t": 181.14,
+   "d": 2.25,
+   "text": "and devotion of rubies they named it the"
+  },
+  {
+   "t": 183.39,
+   "d": 2.52,
+   "text": "hermitage of the radiant okay so this is"
+  },
+  {
+   "t": 185.91,
+   "d": 3.32,
+   "text": "the story of oh say obsessed with gems"
+  },
+  {
+   "t": 189.23,
+   "d": 2.05,
+   "text": "okay so what we do when we generate"
+  },
+  {
+   "t": 191.28,
+   "d": 2.43,
+   "text": "every time you start a game of caves of"
+  },
+  {
+   "t": 193.71,
+   "d": 3.09,
+   "text": "cod we generate a new history and to"
+  },
+  {
+   "t": 196.8,
+   "d": 2.75,
+   "text": "constrain the sort of colossal scope of"
+  },
+  {
+   "t": 199.55,
+   "d": 2.5,
+   "text": "generating a full-blown history what"
+  },
+  {
+   "t": 202.05,
+   "d": 2.37,
+   "text": "we've decided to is is Center the"
+  },
+  {
+   "t": 204.42,
+   "d": 3.27,
+   "text": "history around these five great Sultan's"
+  },
+  {
+   "t": 207.69,
+   "d": 2.13,
+   "text": "who are these leaders from this sort of"
+  },
+  {
+   "t": 209.82,
+   "d": 5.16,
+   "text": "pre-fall past of the world of cod and we"
+  },
+  {
+   "t": 214.98,
+   "d": 1.83,
+   "text": "have a lot of sort of handwritten Laura"
+  },
+  {
+   "t": 216.81,
+   "d": 1.98,
+   "text": "that we've developed in it for the game"
+  },
+  {
+   "t": 218.79,
+   "d": 2.52,
+   "text": "before we added the system so the idea"
+  },
+  {
+   "t": 221.31,
+   "d": 2.79,
+   "text": "is that we're the the sort of time"
+  },
+  {
+   "t": 224.1,
+   "d": 2.19,
+   "text": "period where this these histories are"
+  },
+  {
+   "t": 226.29,
+   "d": 1.74,
+   "text": "being generated are from this kind of"
+  },
+  {
+   "t": 228.03,
+   "d": 2.04,
+   "text": "this Sultanate from this Arab that took"
+  },
+  {
+   "t": 230.07,
+   "d": 1.68,
+   "text": "place before a lot of the handwritten"
+  },
+  {
+   "t": 231.75,
+   "d": 4.44,
+   "text": "Laura was was is set so here's that"
+  },
+  {
+   "t": 236.19,
+   "d": 1.53,
+   "text": "shrine so like I said when we generate"
+  },
+  {
+   "t": 237.72,
+   "d": 1.53,
+   "text": "we generate a history it's different"
+  },
+  {
+   "t": 239.25,
+   "d": 1.5,
+   "text": "every game if you use a different world"
+  },
+  {
+   "t": 240.75,
+   "d": 1.62,
+   "text": "seed you'll get a different history and"
+  },
+  {
+   "t": 242.37,
+   "d": 1.44,
+   "text": "a different set a different set of five"
+  },
+  {
+   "t": 243.81,
+   "d": 4.08,
+   "text": "Sultan's but you never really have like"
+  },
+  {
+   "t": 247.89,
+   "d": 2.1,
+   "text": "direct insight into the history there's"
+  },
+  {
+   "t": 249.99,
+   "d": 1.92,
+   "text": "no like legends mode like doors indoor"
+  },
+  {
+   "t": 251.91,
+   "d": 1.44,
+   "text": "fortress where you can just kind of read"
+  },
+  {
+   "t": 253.35,
+   "d": 2.43,
+   "text": "the history line by line instead it's"
+  },
+  {
+   "t": 255.78,
+   "d": 1.92,
+   "text": "always filtered through the lens of the"
+  },
+  {
+   "t": 257.7,
+   "d": 2.04,
+   "text": "of the present of the game the game"
+  },
+  {
+   "t": 259.74,
+   "d": 1.44,
+   "text": "worlds present which means you could"
+  },
+  {
+   "t": 261.18,
+   "d": 1.44,
+   "text": "only learn about the history through"
+  },
+  {
+   "t": 262.62,
+   "d": 0.86,
+   "text": "interacting with"
+  },
+  {
+   "t": 263.48,
+   "d": 1.68,
+   "text": "world and the cultural artifacts in the"
+  },
+  {
+   "t": 265.16,
+   "d": 1.71,
+   "text": "world so those cultural artifacts"
+  },
+  {
+   "t": 266.87,
+   "d": 1.74,
+   "text": "include things like these shrines that"
+  },
+  {
+   "t": 268.61,
+   "d": 3.27,
+   "text": "you find around the world that that kind"
+  },
+  {
+   "t": 271.88,
+   "d": 3.05,
+   "text": "of cultures have built up in in"
+  },
+  {
+   "t": 274.93,
+   "d": 3.31,
+   "text": "veneration of these Sultan's it's also"
+  },
+  {
+   "t": 278.24,
+   "d": 1.53,
+   "text": "things like okay so there's this is a"
+  },
+  {
+   "t": 279.77,
+   "d": 1.65,
+   "text": "mace right it's an object in the world"
+  },
+  {
+   "t": 281.42,
+   "d": 2.01,
+   "text": "you can pick it up you can wield it you"
+  },
+  {
+   "t": 283.43,
+   "d": 2.07,
+   "text": "can also look at it so this is an"
+  },
+  {
+   "t": 285.5,
+   "d": 3.78,
+   "text": "engraved mace it's engraved with a scene"
+  },
+  {
+   "t": 289.28,
+   "d": 1.65,
+   "text": "from the life of the ancient Sultan oh"
+  },
+  {
+   "t": 290.93,
+   "d": 1.8,
+   "text": "say so let's read this on the night of"
+  },
+  {
+   "t": 292.73,
+   "d": 2.55,
+   "text": "the full moon a babe was found swaddled"
+  },
+  {
+   "t": 295.28,
+   "d": 1.83,
+   "text": "with emeralds on its eyes by a group of"
+  },
+  {
+   "t": 297.11,
+   "d": 2.52,
+   "text": "tortoises and Taiwan palace they took"
+  },
+  {
+   "t": 299.63,
+   "d": 2.01,
+   "text": "him into her their fold and fostered him"
+  },
+  {
+   "t": 301.64,
+   "d": 2.37,
+   "text": "and he be known as oh say shining sign"
+  },
+  {
+   "t": 304.01,
+   "d": 4.32,
+   "text": "of tortoises okay this is a glass bottle"
+  },
+  {
+   "t": 308.33,
+   "d": 1.62,
+   "text": "it's filled with wine you could drink"
+  },
+  {
+   "t": 309.95,
+   "d": 2.58,
+   "text": "from it it's a liquid container I it"
+  },
+  {
+   "t": 312.53,
+   "d": 1.89,
+   "text": "also is a cultural artifact sometimes"
+  },
+  {
+   "t": 314.42,
+   "d": 1.8,
+   "text": "they're painted with scenes from these"
+  },
+  {
+   "t": 316.22,
+   "d": 2.4,
+   "text": "histories so this one okay let's read"
+  },
+  {
+   "t": 318.62,
+   "d": 1.86,
+   "text": "this deep in Taiwan Palace I was a"
+  },
+  {
+   "t": 320.48,
+   "d": 1.86,
+   "text": "stumbled upon a clan of cats performing"
+  },
+  {
+   "t": 322.34,
+   "d": 1.71,
+   "text": "a secret ritual because of his"
+  },
+  {
+   "t": 324.05,
+   "d": 1.53,
+   "text": "reputation for murdering someone by"
+  },
+  {
+   "t": 325.58,
+   "d": 2.28,
+   "text": "trapping him in a jewel they furiously"
+  },
+  {
+   "t": 327.86,
+   "d": 1.56,
+   "text": "rebuked him and declared him a villain"
+  },
+  {
+   "t": 329.42,
+   "d": 4.2,
+   "text": "to their kind okay so as you accrue more"
+  },
+  {
+   "t": 333.62,
+   "d": 3.09,
+   "text": "and more of these snippets of history"
+  },
+  {
+   "t": 336.71,
+   "d": 1.89,
+   "text": "about a sultan they get inscribed in a"
+  },
+  {
+   "t": 338.6,
+   "d": 1.98,
+   "text": "player journal in chronological order"
+  },
+  {
+   "t": 340.58,
+   "d": 3.09,
+   "text": "and as you accrue more of it more and"
+  },
+  {
+   "t": 343.67,
+   "d": 1.77,
+   "text": "more of them as sort of narrative starts"
+  },
+  {
+   "t": 345.44,
+   "d": 5.1,
+   "text": "to cohere around the Sultan's life so we"
+  },
+  {
+   "t": 350.54,
+   "d": 2.22,
+   "text": "can see like oh say seems to be like"
+  },
+  {
+   "t": 352.76,
+   "d": 1.2,
+   "text": "obsessed with jewels right there's a"
+  },
+  {
+   "t": 353.96,
+   "d": 2.43,
+   "text": "there's a theme running in his life like"
+  },
+  {
+   "t": 356.39,
+   "d": 2.81,
+   "text": "he was born with emeralds on his eyes he"
+  },
+  {
+   "t": 359.2,
+   "d": 2.53,
+   "text": "trapped someone in a jewel in order to"
+  },
+  {
+   "t": 361.73,
+   "d": 1.86,
+   "text": "murder them and then he founded a"
+  },
+  {
+   "t": 363.59,
+   "d": 3.14,
+   "text": "workshop to chant and devotion of rubies"
+  },
+  {
+   "t": 366.73,
+   "d": 3.75,
+   "text": "so that's that's cool"
+  },
+  {
+   "t": 370.48,
+   "d": 2.29,
+   "text": "so let's go back to this glass bottle"
+  },
+  {
+   "t": 372.77,
+   "d": 2.1,
+   "text": "right we it mentions a location here"
+  },
+  {
+   "t": 374.87,
+   "d": 2.16,
+   "text": "deep in Taiwan Palace"
+  },
+  {
+   "t": 377.03,
+   "d": 2.55,
+   "text": "so taewon palace whenever a location is"
+  },
+  {
+   "t": 379.58,
+   "d": 2.49,
+   "text": "mentioned in these histories it's a"
+  },
+  {
+   "t": 382.07,
+   "d": 1.68,
+   "text": "location that was generated during the"
+  },
+  {
+   "t": 383.75,
+   "d": 1.47,
+   "text": "course of the history and then that we"
+  },
+  {
+   "t": 385.22,
+   "d": 1.98,
+   "text": "take and we instantiate in the world in"
+  },
+  {
+   "t": 387.2,
+   "d": 3.36,
+   "text": "some way and in fact when with the first"
+  },
+  {
+   "t": 390.56,
+   "d": 1.74,
+   "text": "time you discover one of these cultural"
+  },
+  {
+   "t": 392.3,
+   "d": 1.77,
+   "text": "artifacts that mentions one of these"
+  },
+  {
+   "t": 394.07,
+   "d": 1.92,
+   "text": "places you get this little message you"
+  },
+  {
+   "t": 395.99,
+   "d": 0.37,
+   "text": "just"
+  },
+  {
+   "t": 396.36,
+   "d": 3.45,
+   "text": "location of Taiwan you inscribe it in"
+  },
+  {
+   "t": 399.81,
+   "d": 2.13,
+   "text": "your journal and you actually get a"
+  },
+  {
+   "t": 401.94,
+   "d": 1.8,
+   "text": "procedurally generated quest to visit it"
+  },
+  {
+   "t": 403.74,
+   "d": 4.56,
+   "text": "so new quests go visit Taiwan okay so"
+  },
+  {
+   "t": 408.3,
+   "d": 1.92,
+   "text": "this is the world map Taiwan becomes"
+  },
+  {
+   "t": 410.22,
+   "d": 1.83,
+   "text": "like an actual physically instantiated"
+  },
+  {
+   "t": 412.05,
+   "d": 1.86,
+   "text": "place in the world the rich build"
+  },
+  {
+   "t": 413.91,
+   "d": 1.74,
+   "text": "opulent monuments to themselves and the"
+  },
+  {
+   "t": 415.65,
+   "d": 1.8,
+   "text": "extinct district whose ruins lie under"
+  },
+  {
+   "t": 417.45,
+   "d": 1.74,
+   "text": "the chrome carcasses of giants so these"
+  },
+  {
+   "t": 419.19,
+   "d": 1.89,
+   "text": "descriptions are also partially"
+  },
+  {
+   "t": 421.08,
+   "d": 1.92,
+   "text": "procedurally generated based on the"
+  },
+  {
+   "t": 423.0,
+   "d": 1.77,
+   "text": "properties of the location that were"
+  },
+  {
+   "t": 424.77,
+   "d": 3.36,
+   "text": "that were generated as part of history"
+  },
+  {
+   "t": 428.13,
+   "d": 3.69,
+   "text": "generation so let's say we travel there"
+  },
+  {
+   "t": 431.82,
+   "d": 2.55,
+   "text": "we complete a request we got our xB and"
+  },
+  {
+   "t": 434.37,
+   "d": 2.9,
+   "text": "this is actually like a dungeon level"
+  },
+  {
+   "t": 437.27,
+   "d": 3.34,
+   "text": "from the location and so some of the"
+  },
+  {
+   "t": 440.61,
+   "d": 1.73,
+   "text": "prop the dungeon builder like is"
+  },
+  {
+   "t": 442.34,
+   "d": 2.59,
+   "text": "informed by the properties that were"
+  },
+  {
+   "t": 444.93,
+   "d": 2.01,
+   "text": "generated during history generation so"
+  },
+  {
+   "t": 446.94,
+   "d": 1.89,
+   "text": "Taiwan palace was a pit a place where"
+  },
+  {
+   "t": 448.83,
+   "d": 2.09,
+   "text": "the rich lived there are still some"
+  },
+  {
+   "t": 450.92,
+   "d": 2.23,
+   "text": "vestiges of this or these little kind of"
+  },
+  {
+   "t": 453.15,
+   "d": 2.16,
+   "text": "like garden alcoves that were generated"
+  },
+  {
+   "t": 455.31,
+   "d": 2.13,
+   "text": "as a result of that there's also this"
+  },
+  {
+   "t": 457.44,
+   "d": 1.38,
+   "text": "place in the center that's called the"
+  },
+  {
+   "t": 458.82,
+   "d": 1.92,
+   "text": "becoming nook and what this is it's a"
+  },
+  {
+   "t": 460.74,
+   "d": 2.64,
+   "text": "place where the ancient aristocrats"
+  },
+  {
+   "t": 463.38,
+   "d": 2.52,
+   "text": "would go and install cybernetic implants"
+  },
+  {
+   "t": 465.9,
+   "d": 1.98,
+   "text": "and we know that this is kind of a place"
+  },
+  {
+   "t": 467.88,
+   "d": 1.32,
+   "text": "where the wealthy lived because only"
+  },
+  {
+   "t": 469.2,
+   "d": 2.19,
+   "text": "this this technology was only really"
+  },
+  {
+   "t": 471.39,
+   "d": 1.83,
+   "text": "accessible to the wealthy so if there"
+  },
+  {
+   "t": 473.22,
+   "d": 2.19,
+   "text": "was this becoming up here or is likely"
+  },
+  {
+   "t": 475.41,
+   "d": 2.36,
+   "text": "that some wealthy aristocrats lived here"
+  },
+  {
+   "t": 477.77,
+   "d": 2.44,
+   "text": "unfortunately right now it's infested"
+  },
+  {
+   "t": 480.21,
+   "d": 3.15,
+   "text": "with teleporting spiders but if you're"
+  },
+  {
+   "t": 483.36,
+   "d": 3.86,
+   "text": "able to if you're able to clear them out"
+  },
+  {
+   "t": 487.22,
+   "d": 2.26,
+   "text": "you could actually approach this place"
+  },
+  {
+   "t": 489.48,
+   "d": 1.83,
+   "text": "and you can like access the rack and the"
+  },
+  {
+   "t": 491.31,
+   "d": 1.92,
+   "text": "becoming nook and there's a weird"
+  },
+  {
+   "t": 493.23,
+   "d": 1.77,
+   "text": "artifact there and you can examine it"
+  },
+  {
+   "t": 495.0,
+   "d": 2.97,
+   "text": "and okay it's it's a cybernetic implants"
+  },
+  {
+   "t": 497.97,
+   "d": 1.56,
+   "text": "it's motorized treads so you could"
+  },
+  {
+   "t": 499.53,
+   "d": 1.71,
+   "text": "actually replace your legs with"
+  },
+  {
+   "t": 501.24,
+   "d": 2.22,
+   "text": "motorized treads which was fashionable"
+  },
+  {
+   "t": 503.46,
+   "d": 6.21,
+   "text": "among aristocrats at the time okay so"
+  },
+  {
+   "t": 509.67,
+   "d": 2.88,
+   "text": "one like last thing about oh say is that"
+  },
+  {
+   "t": 512.55,
+   "d": 2.19,
+   "text": "why is Osei obsessed with gems right is"
+  },
+  {
+   "t": 514.74,
+   "d": 2.04,
+   "text": "this a coincidence that they were born"
+  },
+  {
+   "t": 516.78,
+   "d": 2.34,
+   "text": "with emeralds on their eyes and then had"
+  },
+  {
+   "t": 519.12,
+   "d": 1.56,
+   "text": "a bunch of other like interesting"
+  },
+  {
+   "t": 520.68,
+   "d": 2.49,
+   "text": "interactions with gems so it's not so"
+  },
+  {
+   "t": 523.17,
+   "d": 3.5,
+   "text": "one thing we wanted to do to kind of"
+  },
+  {
+   "t": 526.67,
+   "d": 2.62,
+   "text": "make each of the Sultan's sort of"
+  },
+  {
+   "t": 529.29,
+   "d": 0.57,
+   "text": "memorable"
+  },
+  {
+   "t": 529.86,
+   "d": 1.86,
+   "text": "and blur the lines between history and"
+  },
+  {
+   "t": 531.72,
+   "d": 1.68,
+   "text": "myth is that we sorted wanted to like"
+  },
+  {
+   "t": 533.4,
+   "d": 2.25,
+   "text": "assign them a archetypical unit of"
+  },
+  {
+   "t": 535.65,
+   "d": 2.16,
+   "text": "culture that we call a domain so a"
+  },
+  {
+   "t": 537.81,
+   "d": 2.45,
+   "text": "domain could be it's sort of like a"
+  },
+  {
+   "t": 540.26,
+   "d": 2.95,
+   "text": "culturally resident physical object or"
+  },
+  {
+   "t": 543.21,
+   "d": 2.28,
+   "text": "phenomenon so things like jewels or ice"
+  },
+  {
+   "t": 545.49,
+   "d": 2.01,
+   "text": "or starlight it could also be more"
+  },
+  {
+   "t": 547.5,
+   "d": 2.88,
+   "text": "abstract concepts like scholarship or"
+  },
+  {
+   "t": 550.38,
+   "d": 1.98,
+   "text": "might and they sort of function like"
+  },
+  {
+   "t": 552.36,
+   "d": 2.97,
+   "text": "epithets do an epic poetry right to"
+  },
+  {
+   "t": 555.33,
+   "d": 2.46,
+   "text": "associate this character with some sort"
+  },
+  {
+   "t": 557.79,
+   "d": 4.2,
+   "text": "of like resonant cultural meme and so"
+  },
+  {
+   "t": 561.99,
+   "d": 1.62,
+   "text": "that's what happened heroes they became"
+  },
+  {
+   "t": 563.61,
+   "d": 5.31,
+   "text": "obsessed with Jools okay we do the many"
+  },
+  {
+   "t": 568.92,
+   "d": 3.48,
+   "text": "spouse so when we generate history in"
+  },
+  {
+   "t": 572.4,
+   "d": 2.16,
+   "text": "caves of code we do it one event at a"
+  },
+  {
+   "t": 574.56,
+   "d": 3.0,
+   "text": "time we so like an example the vent from"
+  },
+  {
+   "t": 577.56,
+   "d": 1.86,
+   "text": "the previous slides was you know there's"
+  },
+  {
+   "t": 579.42,
+   "d": 2.04,
+   "text": "the birth event where the sultan is born"
+  },
+  {
+   "t": 581.46,
+   "d": 2.67,
+   "text": "and something happens or there's um an"
+  },
+  {
+   "t": 584.13,
+   "d": 1.89,
+   "text": "example event is like sieges a city the"
+  },
+  {
+   "t": 586.02,
+   "d": 1.53,
+   "text": "Sultan might decide to see just City if"
+  },
+  {
+   "t": 587.55,
+   "d": 2.07,
+   "text": "you imagine reading the biography of an"
+  },
+  {
+   "t": 589.62,
+   "d": 1.68,
+   "text": "ancient king or queen an event might"
+  },
+  {
+   "t": 591.3,
+   "d": 2.31,
+   "text": "correspond to us like a chapter in that"
+  },
+  {
+   "t": 593.61,
+   "d": 2.49,
+   "text": "biography so one of the events that we"
+  },
+  {
+   "t": 596.1,
+   "d": 2.19,
+   "text": "added fairly recently was a marriage"
+  },
+  {
+   "t": 598.29,
+   "d": 2.19,
+   "text": "event so the Sultan gets married they"
+  },
+  {
+   "t": 600.48,
+   "d": 2.52,
+   "text": "cement alliances with factions they have"
+  },
+  {
+   "t": 603.0,
+   "d": 1.74,
+   "text": "a nice wedding unfortunately when we"
+  },
+  {
+   "t": 604.74,
+   "d": 2.43,
+   "text": "added this event there was a bug that"
+  },
+  {
+   "t": 607.17,
+   "d": 1.95,
+   "text": "caused it to be the only event that"
+  },
+  {
+   "t": 609.12,
+   "d": 2.04,
+   "text": "occurred and so the result of that was"
+  },
+  {
+   "t": 611.16,
+   "d": 2.37,
+   "text": "that we had this really like polyamorous"
+  },
+  {
+   "t": 613.53,
+   "d": 1.68,
+   "text": "Sultanate where all the Sultan's all"
+  },
+  {
+   "t": 615.21,
+   "d": 2.61,
+   "text": "they did was get married so we could see"
+  },
+  {
+   "t": 617.82,
+   "d": 1.71,
+   "text": "here like inside a colossal brick of a"
+  },
+  {
+   "t": 619.53,
+   "d": 1.71,
+   "text": "block of ice duduk cemented her"
+  },
+  {
+   "t": 621.24,
+   "d": 1.86,
+   "text": "friendship with cats by marrying shallop"
+  },
+  {
+   "t": 623.1,
+   "d": 2.4,
+   "text": "or waist-deep in a lake of frost duduk"
+  },
+  {
+   "t": 625.5,
+   "d": 0.93,
+   "text": "cemented her friendship with"
+  },
+  {
+   "t": 626.43,
+   "d": 2.28,
+   "text": "electricians by marrying a marouk"
+  },
+  {
+   "t": 628.71,
+   "d": 2.34,
+   "text": "way sneaking up deep in a lake of rhyme"
+  },
+  {
+   "t": 631.05,
+   "d": 1.44,
+   "text": "hoodoo cemented her friendship with"
+  },
+  {
+   "t": 632.49,
+   "d": 6.06,
+   "text": "baboons by marrying who that's a baboon"
+  },
+  {
+   "t": 638.55,
+   "d": 1.42,
+   "text": "[Music]"
+  },
+  {
+   "t": 639.97,
+   "d": 3.91,
+   "text": "and you might have liked the fact that"
+  },
+  {
+   "t": 643.88,
+   "d": 2.25,
+   "text": "you do seems to be so interested in like"
+  },
+  {
+   "t": 646.13,
+   "d": 2.73,
+   "text": "she gets like her wedding location is a"
+  },
+  {
+   "t": 648.86,
+   "d": 1.98,
+   "text": "colossal block of ice or lake of frost"
+  },
+  {
+   "t": 650.84,
+   "d": 1.95,
+   "text": "or like stark naked and freezing"
+  },
+  {
+   "t": 652.79,
+   "d": 2.28,
+   "text": "temperatures you may have surmised that"
+  },
+  {
+   "t": 655.07,
+   "d": 2.19,
+   "text": "like her domain is ice that's that's"
+  },
+  {
+   "t": 657.26,
+   "d": 4.77,
+   "text": "like where as Osage was Jules yeah"
+  },
+  {
+   "t": 662.03,
+   "d": 2.88,
+   "text": "that's all I okay um so this is an"
+  },
+  {
+   "t": 664.91,
+   "d": 2.49,
+   "text": "engraved bronze dagger from from who"
+  },
+  {
+   "t": 667.4,
+   "d": 1.95,
+   "text": "Dukes life this is like representing her"
+  },
+  {
+   "t": 669.35,
+   "d": 1.47,
+   "text": "death event so every Sultan ultimately"
+  },
+  {
+   "t": 670.82,
+   "d": 1.95,
+   "text": "dies and there's an event sort of"
+  },
+  {
+   "t": 672.77,
+   "d": 3.33,
+   "text": "recounting that history so in 507 702"
+  },
+  {
+   "t": 676.1,
+   "d": 2.43,
+   "text": "spouse avowed bazi companion of tara"
+  },
+  {
+   "t": 678.53,
+   "d": 2.4,
+   "text": "crab mate the shell pub or partner of a"
+  },
+  {
+   "t": 680.93,
+   "d": 3.6,
+   "text": "maru wife of hui wife of Shirou wife of"
+  },
+  {
+   "t": 684.53,
+   "d": 2.82,
+   "text": "a zona six a six error missing hex"
+  },
+  {
+   "t": 687.35,
+   "d": 1.65,
+   "text": "values partner that's a robot she"
+  },
+  {
+   "t": 689.0,
+   "d": 7.62,
+   "text": "married a robot etc etc okay sixer see"
+  },
+  {
+   "t": 696.62,
+   "d": 5.46,
+   "text": "loved by dogs so let's let's read some"
+  },
+  {
+   "t": 702.08,
+   "d": 2.1,
+   "text": "events from sixer sees life so during an"
+  },
+  {
+   "t": 704.18,
+   "d": 2.07,
+   "text": "expedition around garrison quarter beal"
+  },
+  {
+   "t": 706.25,
+   "d": 2.64,
+   "text": "up sixer she lost control of her chariot"
+  },
+  {
+   "t": 708.89,
+   "d": 2.34,
+   "text": "and drove it off a cliff by chance a"
+  },
+  {
+   "t": 711.23,
+   "d": 1.83,
+   "text": "group of nearby dogs came to her rescue"
+  },
+  {
+   "t": 713.06,
+   "d": 2.22,
+   "text": "for the rest of her life six years he"
+  },
+  {
+   "t": 715.28,
+   "d": 3.78,
+   "text": "was indebted to dogs at the Battle of"
+  },
+  {
+   "t": 719.06,
+   "d": 2.34,
+   "text": "heart Shuba den sixer she fought to"
+  },
+  {
+   "t": 721.4,
+   "d": 2.7,
+   "text": "liberate dogs she wielded a freezing axe"
+  },
+  {
+   "t": 724.1,
+   "d": 1.83,
+   "text": "with such prowess that it became forever"
+  },
+  {
+   "t": 725.93,
+   "d": 3.81,
+   "text": "known as freezing against the boon of"
+  },
+  {
+   "t": 729.74,
+   "d": 3.27,
+   "text": "dogs some of these named generators"
+  },
+  {
+   "t": 733.01,
+   "d": 3.12,
+   "text": "could work you some work but um so just"
+  },
+  {
+   "t": 736.13,
+   "d": 2.34,
+   "text": "like when we're generating the history"
+  },
+  {
+   "t": 738.47,
+   "d": 2.43,
+   "text": "and we end up taking the locations that"
+  },
+  {
+   "t": 740.9,
+   "d": 2.1,
+   "text": "we generated and instantiating them the"
+  },
+  {
+   "t": 743.0,
+   "d": 3.02,
+   "text": "real world we do the same with items so"
+  },
+  {
+   "t": 746.02,
+   "d": 3.04,
+   "text": "here's another event okay so really"
+  },
+  {
+   "t": 749.06,
+   "d": 1.68,
+   "text": "quickly in five oh five six Cersei won a"
+  },
+  {
+   "t": 750.74,
+   "d": 1.8,
+   "text": "decisive battle against the combined"
+  },
+  {
+   "t": 752.54,
+   "d": 2.04,
+   "text": "forces of the hippodrome quarter of"
+  },
+  {
+   "t": 754.58,
+   "d": 2.01,
+   "text": "meager ook at the bloody battle of I"
+  },
+  {
+   "t": 756.59,
+   "d": 2.88,
+   "text": "tera though she lost her prize freezing"
+  },
+  {
+   "t": 759.47,
+   "d": 1.29,
+   "text": "against the boon of dogs during the"
+  },
+  {
+   "t": 760.76,
+   "d": 1.65,
+   "text": "course of the conflict okay so this"
+  },
+  {
+   "t": 762.41,
+   "d": 1.71,
+   "text": "means that like like I said like"
+  },
+  {
+   "t": 764.12,
+   "d": 1.59,
+   "text": "Hippodrome quarter meter ook it's an"
+  },
+  {
+   "t": 765.71,
+   "d": 1.53,
+   "text": "actual place that gets instantiated the"
+  },
+  {
+   "t": 767.24,
+   "d": 3.24,
+   "text": "world and because six Cersei lost this"
+  },
+  {
+   "t": 770.48,
+   "d": 1.89,
+   "text": "artifact there we can expect to actually"
+  },
+  {
+   "t": 772.37,
+   "d": 0.93,
+   "text": "travel there"
+  },
+  {
+   "t": 773.3,
+   "d": 4.35,
+   "text": "find it so we read this this historical"
+  },
+  {
+   "t": 777.65,
+   "d": 2.61,
+   "text": "snippet on a shrine we get a quest the"
+  },
+  {
+   "t": 780.26,
+   "d": 1.89,
+   "text": "procedural quest to visit the Hippodrome"
+  },
+  {
+   "t": 782.15,
+   "d": 2.46,
+   "text": "zuv me guru we also get a procedural"
+  },
+  {
+   "t": 784.61,
+   "d": 2.88,
+   "text": "quest to recover freezing just a bit of"
+  },
+  {
+   "t": 787.49,
+   "d": 2.37,
+   "text": "dogs so let's remember that for a minute"
+  },
+  {
+   "t": 789.86,
+   "d": 1.74,
+   "text": "let's put it aside but so what does it"
+  },
+  {
+   "t": 791.6,
+   "d": 3.24,
+   "text": "mean that okay so like sixer C was loved"
+  },
+  {
+   "t": 794.84,
+   "d": 3.06,
+   "text": "by dogs right she seems to be fond of"
+  },
+  {
+   "t": 797.9,
+   "d": 1.68,
+   "text": "dogs herself like what does that mean in"
+  },
+  {
+   "t": 799.58,
+   "d": 2.85,
+   "text": "terms of the experience that you might"
+  },
+  {
+   "t": 802.43,
+   "d": 2.13,
+   "text": "have in the game well dogs are actually"
+  },
+  {
+   "t": 804.56,
+   "d": 2.37,
+   "text": "one of several factions and caves of cut"
+  },
+  {
+   "t": 806.93,
+   "d": 3.72,
+   "text": "there are like over 60 factions dogs are"
+  },
+  {
+   "t": 810.65,
+   "d": 1.77,
+   "text": "actually a unique faction they have the"
+  },
+  {
+   "t": 812.42,
+   "d": 1.44,
+   "text": "distinction of being the only faction"
+  },
+  {
+   "t": 813.86,
+   "d": 1.71,
+   "text": "that you start with positive reputation"
+  },
+  {
+   "t": 815.57,
+   "d": 1.92,
+   "text": "with every other faction in the game"
+  },
+  {
+   "t": 817.49,
+   "d": 2.55,
+   "text": "either like doesn't like you at all or"
+  },
+  {
+   "t": 820.04,
+   "d": 3.42,
+   "text": "at best feels sort of ambivalently about"
+  },
+  {
+   "t": 823.46,
+   "d": 2.13,
+   "text": "you but dogs like you so what does it"
+  },
+  {
+   "t": 825.59,
+   "d": 1.95,
+   "text": "mean for that dogs like you right well"
+  },
+  {
+   "t": 827.54,
+   "d": 1.92,
+   "text": "dogs favor you aggressive ones won't"
+  },
+  {
+   "t": 829.46,
+   "d": 1.86,
+   "text": "attack you you're welcome in their holy"
+  },
+  {
+   "t": 831.32,
+   "d": 2.94,
+   "text": "places dogs are interested in trading"
+  },
+  {
+   "t": 834.26,
+   "d": 1.83,
+   "text": "secrets about locations of humanoid"
+  },
+  {
+   "t": 836.09,
+   "d": 2.31,
+   "text": "settlements and Sultan's they admire"
+  },
+  {
+   "t": 838.4,
+   "d": 1.92,
+   "text": "despise they're also interested in"
+  },
+  {
+   "t": 840.32,
+   "d": 1.35,
+   "text": "hearing gossip that's about that"
+  },
+  {
+   "t": 841.67,
+   "d": 3.99,
+   "text": "naturally so what does it mean that a"
+  },
+  {
+   "t": 845.66,
+   "d": 3.27,
+   "text": "dog wants to hear wants to trade secrets"
+  },
+  {
+   "t": 848.93,
+   "d": 1.89,
+   "text": "about Sultan's they admire despised"
+  },
+  {
+   "t": 850.82,
+   "d": 2.43,
+   "text": "right we knows that Sultan's admires it"
+  },
+  {
+   "t": 853.25,
+   "d": 1.68,
+   "text": "seriously what that means is that if you"
+  },
+  {
+   "t": 854.93,
+   "d": 2.58,
+   "text": "find her a particularly smart dog not"
+  },
+  {
+   "t": 857.51,
+   "d": 2.64,
+   "text": "every dog can speak but some dogs can so"
+  },
+  {
+   "t": 860.15,
+   "d": 1.71,
+   "text": "if you if you find a particularly smart"
+  },
+  {
+   "t": 861.86,
+   "d": 2.73,
+   "text": "dog then you can share this information"
+  },
+  {
+   "t": 864.59,
+   "d": 1.44,
+   "text": "that you've learned from exploring the"
+  },
+  {
+   "t": 866.03,
+   "d": 2.67,
+   "text": "world and like reading this history on a"
+  },
+  {
+   "t": 868.7,
+   "d": 5.31,
+   "text": "shrine so meet no alb he's a legendary"
+  },
+  {
+   "t": 874.01,
+   "d": 4.11,
+   "text": "dog he's loved by dogs"
+  },
+  {
+   "t": 878.12,
+   "d": 2.61,
+   "text": "he's disliked by antelopes for slaying"
+  },
+  {
+   "t": 880.73,
+   "d": 2.43,
+   "text": "one of their leaders and he's disliked"
+  },
+  {
+   "t": 883.16,
+   "d": 2.07,
+   "text": "by tortoises for questioning the origins"
+  },
+  {
+   "t": 885.23,
+   "d": 3.45,
+   "text": "of the moon he howled at the moon one"
+  },
+  {
+   "t": 888.68,
+   "d": 5.52,
+   "text": "too many times each when we up kind of"
+  },
+  {
+   "t": 894.2,
+   "d": 2.1,
+   "text": "any creature in the game couldn't become"
+  },
+  {
+   "t": 896.3,
+   "d": 1.92,
+   "text": "a legendary version of itself and what"
+  },
+  {
+   "t": 898.22,
+   "d": 1.77,
+   "text": "it does it gets kind of uplifted and it"
+  },
+  {
+   "t": 899.99,
+   "d": 1.71,
+   "text": "gets this procedural backstory and"
+  },
+  {
+   "t": 901.7,
+   "d": 3.15,
+   "text": "relationships with other factions so if"
+  },
+  {
+   "t": 904.85,
+   "d": 1.83,
+   "text": "you're able to find a ledger"
+  },
+  {
+   "t": 906.68,
+   "d": 4.26,
+   "text": "Hallel you can go up to him and talk to"
+  },
+  {
+   "t": 910.94,
+   "d": 2.61,
+   "text": "him he's growling softly so that's fine"
+  },
+  {
+   "t": 913.55,
+   "d": 1.83,
+   "text": "but there's also this extra option here"
+  },
+  {
+   "t": 915.38,
+   "d": 2.01,
+   "text": "which is you see here your thirst is by"
+  },
+  {
+   "t": 917.39,
+   "d": 3.39,
+   "text": "my waters yours this is um so water has"
+  },
+  {
+   "t": 920.78,
+   "d": 2.04,
+   "text": "a particular significance in case of cut"
+  },
+  {
+   "t": 922.82,
+   "d": 1.95,
+   "text": "it's also the currency of the game I"
+  },
+  {
+   "t": 924.77,
+   "d": 1.08,
+   "text": "mean you have to drink it to stay alive"
+  },
+  {
+   "t": 925.85,
+   "d": 1.68,
+   "text": "there's like a survival mechanic but"
+  },
+  {
+   "t": 927.53,
+   "d": 1.47,
+   "text": "it's also the currency of the world and"
+  },
+  {
+   "t": 929.0,
+   "d": 3.0,
+   "text": "it's rare fresh water and so the act of"
+  },
+  {
+   "t": 932.0,
+   "d": 2.28,
+   "text": "sharing fresh water with someone is sort"
+  },
+  {
+   "t": 934.28,
+   "d": 2.25,
+   "text": "of like this this cultural ritual that's"
+  },
+  {
+   "t": 936.53,
+   "d": 3.48,
+   "text": "that's sacred and when you do so you can"
+  },
+  {
+   "t": 940.01,
+   "d": 2.72,
+   "text": "get these special dialogue options so"
+  },
+  {
+   "t": 942.73,
+   "d": 2.2,
+   "text": "living drink friend and now you can"
+  },
+  {
+   "t": 944.93,
+   "d": 2.73,
+   "text": "actually share a secret with Noel and"
+  },
+  {
+   "t": 947.66,
+   "d": 2.19,
+   "text": "gain some reputation with dogs and this"
+  },
+  {
+   "t": 949.85,
+   "d": 1.47,
+   "text": "would only work if it's a secret that"
+  },
+  {
+   "t": 951.32,
+   "d": 2.28,
+   "text": "Noel cares about but we know that since"
+  },
+  {
+   "t": 953.6,
+   "d": 3.09,
+   "text": "dogs love Cersei that no albs gonna care"
+  },
+  {
+   "t": 956.69,
+   "d": 2.34,
+   "text": "about secrets about sixer see so you can"
+  },
+  {
+   "t": 959.03,
+   "d": 3.48,
+   "text": "share one of these and and gain some"
+  },
+  {
+   "t": 962.51,
+   "d": 1.05,
+   "text": "reputation with dogs"
+  },
+  {
+   "t": 963.56,
+   "d": 2.25,
+   "text": "okay so dogs love six irse right we've"
+  },
+  {
+   "t": 965.81,
+   "d": 1.92,
+   "text": "established that some dogs love six"
+  },
+  {
+   "t": 967.73,
+   "d": 2.4,
+   "text": "searcy so much that they've started a"
+  },
+  {
+   "t": 970.13,
+   "d": 3.45,
+   "text": "cult to worship her so we're back on the"
+  },
+  {
+   "t": 973.58,
+   "d": 2.7,
+   "text": "faction screen we see dogs here but"
+  },
+  {
+   "t": 976.28,
+   "d": 1.32,
+   "text": "right above dogs you see there's the"
+  },
+  {
+   "t": 977.6,
+   "d": 2.31,
+   "text": "cult of six Cersei right so most of"
+  },
+  {
+   "t": 979.91,
+   "d": 2.61,
+   "text": "these factions are statically or like"
+  },
+  {
+   "t": 982.52,
+   "d": 2.01,
+   "text": "handwritten they appear every game dogs"
+  },
+  {
+   "t": 984.53,
+   "d": 1.89,
+   "text": "cats but then some of them are"
+  },
+  {
+   "t": 986.42,
+   "d": 1.29,
+   "text": "procedurally generated because they"
+  },
+  {
+   "t": 987.71,
+   "d": 2.7,
+   "text": "spawn up around these Sultan's from the"
+  },
+  {
+   "t": 990.41,
+   "d": 2.45,
+   "text": "from the procedurally generated history"
+  },
+  {
+   "t": 992.86,
+   "d": 2.23,
+   "text": "and they often take the name of the"
+  },
+  {
+   "t": 995.09,
+   "d": 1.89,
+   "text": "Sultan but not always sometimes like"
+  },
+  {
+   "t": 996.98,
+   "d": 3.36,
+   "text": "this EKOS or sorrow folk this is another"
+  },
+  {
+   "t": 1000.34,
+   "d": 2.16,
+   "text": "cult 'his ponder up around another"
+  },
+  {
+   "t": 1002.5,
+   "d": 1.71,
+   "text": "sultan who at some point during their"
+  },
+  {
+   "t": 1004.21,
+   "d": 1.71,
+   "text": "history got the cognate or the the"
+  },
+  {
+   "t": 1005.92,
+   "d": 2.76,
+   "text": "nickname of the eCos or sorrow and so"
+  },
+  {
+   "t": 1008.68,
+   "d": 1.89,
+   "text": "the cult sort of decided to name"
+  },
+  {
+   "t": 1010.57,
+   "d": 2.31,
+   "text": "themselves after him so again if we"
+  },
+  {
+   "t": 1012.88,
+   "d": 1.92,
+   "text": "remember this quest here we got the"
+  },
+  {
+   "t": 1014.8,
+   "d": 3.66,
+   "text": "quest to recover for zinging cos we were"
+  },
+  {
+   "t": 1018.46,
+   "d": 1.95,
+   "text": "going to the Hippodrome of me group"
+  },
+  {
+   "t": 1020.41,
+   "d": 1.5,
+   "text": "which again is a real location in the"
+  },
+  {
+   "t": 1021.91,
+   "d": 1.98,
+   "text": "world and when we get there sure enough"
+  },
+  {
+   "t": 1023.89,
+   "d": 2.82,
+   "text": "there's a dog cultist there's a feral"
+  },
+  {
+   "t": 1026.71,
+   "d": 1.65,
+   "text": "dog and member of the cult or six-year"
+  },
+  {
+   "t": 1028.36,
+   "d": 1.95,
+   "text": "see this place will be populated with"
+  },
+  {
+   "t": 1030.31,
+   "d": 2.97,
+   "text": "dark dog cultists"
+  },
+  {
+   "t": 1033.28,
+   "d": 2.58,
+   "text": "they're generally aggressive so in if"
+  },
+  {
+   "t": 1035.86,
+   "d": 1.8,
+   "text": "you can like kill them all or maybe you"
+  },
+  {
+   "t": 1037.66,
+   "d": 2.38,
+   "text": "know find some other way to endear"
+  },
+  {
+   "t": 1040.04,
+   "d": 2.28,
+   "text": "yourself to them which is possible they"
+  },
+  {
+   "t": 1042.32,
+   "d": 1.86,
+   "text": "might let you pass through there the"
+  },
+  {
+   "t": 1044.18,
+   "d": 1.95,
+   "text": "halls of Miku can end up actually"
+  },
+  {
+   "t": 1046.13,
+   "d": 2.49,
+   "text": "finding freezing it yes so this is the"
+  },
+  {
+   "t": 1048.62,
+   "d": 2.49,
+   "text": "actual artifact it's an axe a wooden"
+  },
+  {
+   "t": 1051.11,
+   "d": 2.22,
+   "text": "shaft with a leather handhold topped"
+  },
+  {
+   "t": 1053.33,
+   "d": 1.86,
+   "text": "with a wickedly curved metal blade it's"
+  },
+  {
+   "t": 1055.19,
+   "d": 2.52,
+   "text": "carpet with tiny tiny images of icicles"
+  },
+  {
+   "t": 1057.71,
+   "d": 1.8,
+   "text": "there's an engraving of dogs being"
+  },
+  {
+   "t": 1059.51,
+   "d": 4.23,
+   "text": "lifted up on chairs and this is like"
+  },
+  {
+   "t": 1063.74,
+   "d": 1.95,
+   "text": "it's procedurally generated it's"
+  },
+  {
+   "t": 1065.69,
+   "d": 3.0,
+   "text": "informed by the parameters you know from"
+  },
+  {
+   "t": 1068.69,
+   "d": 1.95,
+   "text": "the history so when power does plus-5"
+  },
+  {
+   "t": 1070.64,
+   "d": 1.95,
+   "text": "cold damage and it gives you +200"
+  },
+  {
+   "t": 1072.59,
+   "d": 5.34,
+   "text": "reputation with dogs okay let me I want"
+  },
+  {
+   "t": 1077.93,
+   "d": 1.77,
+   "text": "to point out one more thing about sixer"
+  },
+  {
+   "t": 1079.7,
+   "d": 2.52,
+   "text": "say so and the history generation so we"
+  },
+  {
+   "t": 1082.22,
+   "d": 2.79,
+   "text": "have these two events in her life right"
+  },
+  {
+   "t": 1085.01,
+   "d": 2.61,
+   "text": "she lost control of her chariot almost"
+  },
+  {
+   "t": 1087.62,
+   "d": 1.68,
+   "text": "drove it off a cliff but was saved by"
+  },
+  {
+   "t": 1089.3,
+   "d": 1.86,
+   "text": "dogs and then the very next event in her"
+  },
+  {
+   "t": 1091.16,
+   "d": 3.81,
+   "text": "life she fought to liberate dogs so"
+  },
+  {
+   "t": 1094.97,
+   "d": 1.86,
+   "text": "there's a pretty like straight forward"
+  },
+  {
+   "t": 1096.83,
+   "d": 2.85,
+   "text": "causation here right saved by dogs okay"
+  },
+  {
+   "t": 1099.68,
+   "d": 1.65,
+   "text": "my life has been turned around I'm going"
+  },
+  {
+   "t": 1101.33,
+   "d": 1.62,
+   "text": "to go and fight for the liberation dogs"
+  },
+  {
+   "t": 1102.95,
+   "d": 2.16,
+   "text": "this is actually a trick though of the"
+  },
+  {
+   "t": 1105.11,
+   "d": 1.98,
+   "text": "history generation so the way that"
+  },
+  {
+   "t": 1107.09,
+   "d": 2.88,
+   "text": "history is generated the occurrence of"
+  },
+  {
+   "t": 1109.97,
+   "d": 4.83,
+   "text": "event has no does not dictate the the"
+  },
+  {
+   "t": 1114.8,
+   "d": 1.65,
+   "text": "next event to follow so what happened"
+  },
+  {
+   "t": 1116.45,
+   "d": 2.55,
+   "text": "here was sick Circe was driven off a"
+  },
+  {
+   "t": 1119.0,
+   "d": 2.28,
+   "text": "cliff or you know was saved by dogs"
+  },
+  {
+   "t": 1121.28,
+   "d": 2.13,
+   "text": "then we chose a totally random event"
+  },
+  {
+   "t": 1123.41,
+   "d": 2.37,
+   "text": "from the bag of event types that we have"
+  },
+  {
+   "t": 1125.78,
+   "d": 2.94,
+   "text": "that event happened to be like sieges"
+  },
+  {
+   "t": 1128.72,
+   "d": 2.88,
+   "text": "City that's what this is this is but"
+  },
+  {
+   "t": 1131.6,
+   "d": 1.92,
+   "text": "then in order to rationalize the event"
+  },
+  {
+   "t": 1133.52,
+   "d": 1.59,
+   "text": "to create a cause for it when we're"
+  },
+  {
+   "t": 1135.11,
+   "d": 1.68,
+   "text": "generating a description of it we look"
+  },
+  {
+   "t": 1136.79,
+   "d": 2.67,
+   "text": "at previous events in sixer C's life and"
+  },
+  {
+   "t": 1139.46,
+   "d": 2.13,
+   "text": "ask for essentially like query for"
+  },
+  {
+   "t": 1141.59,
+   "d": 2.16,
+   "text": "reasons why she might be seating a city"
+  },
+  {
+   "t": 1143.75,
+   "d": 2.61,
+   "text": "and what the the system found in this"
+  },
+  {
+   "t": 1146.36,
+   "d": 1.41,
+   "text": "case was that oh well she has a"
+  },
+  {
+   "t": 1147.77,
+   "d": 3.36,
+   "text": "relationship with dogs and so we want to"
+  },
+  {
+   "t": 1151.13,
+   "d": 2.13,
+   "text": "we'll say that she was fighting to"
+  },
+  {
+   "t": 1153.26,
+   "d": 1.32,
+   "text": "liberate dodd so it's kind of like this"
+  },
+  {
+   "t": 1154.58,
+   "d": 3.51,
+   "text": "this like there's no actual inherent"
+  },
+  {
+   "t": 1158.09,
+   "d": 1.62,
+   "text": "cause and effect to the system we're"
+  },
+  {
+   "t": 1159.71,
+   "d": 2.13,
+   "text": "just picking events randomly and then"
+  },
+  {
+   "t": 1161.84,
+   "d": 5.85,
+   "text": "like rationalizing their causes okay so"
+  },
+  {
+   "t": 1167.69,
+   "d": 5.76,
+   "text": "along those same lines we like to"
+  },
+  {
+   "t": 1173.45,
+   "d": 1.56,
+   "text": "kind of an aesthetic principle we have"
+  },
+  {
+   "t": 1175.01,
+   "d": 1.41,
+   "text": "with a lot of our procedural generation"
+  },
+  {
+   "t": 1176.42,
+   "d": 2.52,
+   "text": "is that we we like to be very hands-off"
+  },
+  {
+   "t": 1178.94,
+   "d": 1.38,
+   "text": "we kind of let light to let our"
+  },
+  {
+   "t": 1180.32,
+   "d": 3.09,
+   "text": "generators want run wild so we didn't"
+  },
+  {
+   "t": 1183.41,
+   "d": 2.88,
+   "text": "want to prescribe any sort of narrative"
+  },
+  {
+   "t": 1186.29,
+   "d": 1.86,
+   "text": "arc for the lives of the sultan's right"
+  },
+  {
+   "t": 1188.15,
+   "d": 1.59,
+   "text": "we didn't want to have a sort of hero's"
+  },
+  {
+   "t": 1189.74,
+   "d": 0.6,
+   "text": "journey"
+  },
+  {
+   "t": 1190.34,
+   "d": 2.13,
+   "text": "or say that you have a formative event"
+  },
+  {
+   "t": 1192.47,
+   "d": 2.67,
+   "text": "in your childhood and then you have like"
+  },
+  {
+   "t": 1195.14,
+   "d": 2.16,
+   "text": "a you know struggle and you overcome it"
+  },
+  {
+   "t": 1197.3,
+   "d": 2.13,
+   "text": "we want it to kind of just let the"
+  },
+  {
+   "t": 1199.43,
+   "d": 1.65,
+   "text": "system go while and see what happened"
+  },
+  {
+   "t": 1201.08,
+   "d": 2.25,
+   "text": "and we sort of afforded ourselves this"
+  },
+  {
+   "t": 1203.33,
+   "d": 1.68,
+   "text": "freedom because this whole system is a"
+  },
+  {
+   "t": 1205.01,
+   "d": 1.98,
+   "text": "little tertiary it's not like along the"
+  },
+  {
+   "t": 1206.99,
+   "d": 2.04,
+   "text": "critical path so we don't need to have"
+  },
+  {
+   "t": 1209.03,
+   "d": 2.19,
+   "text": "an exciting life result and if it's"
+  },
+  {
+   "t": 1211.22,
+   "d": 1.52,
+   "text": "sultan has like a sort of bizarre"
+  },
+  {
+   "t": 1212.74,
+   "d": 2.89,
+   "text": "strange life that's fine you'll generate"
+  },
+  {
+   "t": 1215.63,
+   "d": 3.09,
+   "text": "another one next game anyway so the one"
+  },
+  {
+   "t": 1218.72,
+   "d": 2.37,
+   "text": "we place very few restrictions on the"
+  },
+  {
+   "t": 1221.09,
+   "d": 1.62,
+   "text": "lives of the Sultan's one of the few"
+  },
+  {
+   "t": 1222.71,
+   "d": 1.98,
+   "text": "restrictions replace is that some at"
+  },
+  {
+   "t": 1224.69,
+   "d": 2.01,
+   "text": "some point during your life as a sultan"
+  },
+  {
+   "t": 1226.7,
+   "d": 2.63,
+   "text": "you have to become the Sultan right so"
+  },
+  {
+   "t": 1229.33,
+   "d": 4.15,
+   "text": "this is this is esa is a shrine to Issei"
+  },
+  {
+   "t": 1233.48,
+   "d": 2.04,
+   "text": "an early one oh one Issei assassinated"
+  },
+  {
+   "t": 1235.52,
+   "d": 1.44,
+   "text": "the Sultan have cut over the rights of"
+  },
+  {
+   "t": 1236.96,
+   "d": 2.07,
+   "text": "crabs he won and seized the gilded"
+  },
+  {
+   "t": 1239.03,
+   "d": 1.86,
+   "text": "scepter he was a hundred years old and"
+  },
+  {
+   "t": 1240.89,
+   "d": 3.09,
+   "text": "then the very next event in 101 Issei -"
+  },
+  {
+   "t": 1243.98,
+   "d": 2.34,
+   "text": "born the terror of Dane more husband"
+  },
+  {
+   "t": 1246.32,
+   "d": 2.76,
+   "text": "descendants and it's a significant new"
+  },
+  {
+   "t": 1249.08,
+   "d": 2.7,
+   "text": "crab died of natural causes he was 100"
+  },
+  {
+   "t": 1251.78,
+   "d": 1.95,
+   "text": "years old so he waited a hundred years"
+  },
+  {
+   "t": 1253.73,
+   "d": 1.41,
+   "text": "in his life and then he became Sultan"
+  },
+  {
+   "t": 1255.14,
+   "d": 2.7,
+   "text": "and then the following day he died which"
+  },
+  {
+   "t": 1257.84,
+   "d": 2.58,
+   "text": "another so a thing that that about this"
+  },
+  {
+   "t": 1260.42,
+   "d": 1.5,
+   "text": "that I find kind of funny is that like"
+  },
+  {
+   "t": 1261.92,
+   "d": 2.1,
+   "text": "it turns out that the Sultan he"
+  },
+  {
+   "t": 1264.02,
+   "d": 4.07,
+   "text": "assassinated was actually his father and"
+  },
+  {
+   "t": 1268.09,
+   "d": 2.14,
+   "text": "there's also this kind of like mini"
+  },
+  {
+   "t": 1270.23,
+   "d": 1.89,
+   "text": "narrative that's Crowe heared here to"
+  },
+  {
+   "t": 1272.12,
+   "d": 2.61,
+   "text": "write because he he assassinated his"
+  },
+  {
+   "t": 1274.73,
+   "d": 1.65,
+   "text": "father over the rights of crabs but then"
+  },
+  {
+   "t": 1276.38,
+   "d": 1.17,
+   "text": "we find out here there was actually"
+  },
+  {
+   "t": 1277.55,
+   "d": 3.09,
+   "text": "married to a crab so I have this funny"
+  },
+  {
+   "t": 1280.64,
+   "d": 2.07,
+   "text": "image in my head of like a hundred year"
+  },
+  {
+   "t": 1282.71,
+   "d": 2.19,
+   "text": "old man arguing with his dad about his"
+  },
+  {
+   "t": 1284.9,
+   "d": 8.52,
+   "text": "crab in law's okay here's where things"
+  },
+  {
+   "t": 1293.42,
+   "d": 2.45,
+   "text": "get weird"
+  },
+  {
+   "t": 1297.12,
+   "d": 2.16,
+   "text": "but before we talk about poly daddies I"
+  },
+  {
+   "t": 1299.28,
+   "d": 2.34,
+   "text": "wanna I want to kind of touch on"
+  },
+  {
+   "t": 1301.62,
+   "d": 1.08,
+   "text": "something that was talked about"
+  },
+  {
+   "t": 1302.7,
+   "d": 3.36,
+   "text": "yesterday so I think Darius talked about"
+  },
+  {
+   "t": 1306.06,
+   "d": 1.89,
+   "text": "the oatmeal problem right this idea that"
+  },
+  {
+   "t": 1307.95,
+   "d": 1.41,
+   "text": "you can generate things that are somehow"
+  },
+  {
+   "t": 1309.36,
+   "d": 2.07,
+   "text": "actually structurally distinct but not"
+  },
+  {
+   "t": 1311.43,
+   "d": 2.49,
+   "text": "really interesting to to someone reading"
+  },
+  {
+   "t": 1313.92,
+   "d": 3.39,
+   "text": "about them is also like so there's this"
+  },
+  {
+   "t": 1317.31,
+   "d": 1.59,
+   "text": "property of things that you'd like to"
+  },
+  {
+   "t": 1318.9,
+   "d": 1.29,
+   "text": "generate where they're characterful"
+  },
+  {
+   "t": 1320.19,
+   "d": 1.86,
+   "text": "right where they're like different in a"
+  },
+  {
+   "t": 1322.05,
+   "d": 2.16,
+   "text": "meaningful way so in order to add some"
+  },
+  {
+   "t": 1324.21,
+   "d": 2.16,
+   "text": "character fulness to our history"
+  },
+  {
+   "t": 1326.37,
+   "d": 2.64,
+   "text": "generation in a distance to just like"
+  },
+  {
+   "t": 1329.01,
+   "d": 2.34,
+   "text": "procedurally varying that the sultan's"
+  },
+  {
+   "t": 1331.35,
+   "d": 1.62,
+   "text": "that we're generating we also like to do"
+  },
+  {
+   "t": 1332.97,
+   "d": 2.52,
+   "text": "some higher level like macro variation"
+  },
+  {
+   "t": 1335.49,
+   "d": 2.76,
+   "text": "on the structure of society that we're"
+  },
+  {
+   "t": 1338.25,
+   "d": 2.61,
+   "text": "generating so a couple instances of this"
+  },
+  {
+   "t": 1340.86,
+   "d": 3.48,
+   "text": "like sometimes we set the successor rate"
+  },
+  {
+   "t": 1344.34,
+   "d": 1.89,
+   "text": "really high so the five Sultan's"
+  },
+  {
+   "t": 1346.23,
+   "d": 1.74,
+   "text": "you can see here in this history four of"
+  },
+  {
+   "t": 1347.97,
+   "d": 1.8,
+   "text": "the five Sultan's are named poly deities"
+  },
+  {
+   "t": 1349.77,
+   "d": 1.62,
+   "text": "and like or come from this this one"
+  },
+  {
+   "t": 1351.39,
+   "d": 3.3,
+   "text": "dynasty another way we do this is that"
+  },
+  {
+   "t": 1354.69,
+   "d": 2.31,
+   "text": "we saw from a previous slide this place"
+  },
+  {
+   "t": 1357.0,
+   "d": 1.5,
+   "text": "taiwan palace or sometimes the way we"
+  },
+  {
+   "t": 1358.5,
+   "d": 3.21,
+   "text": "organize the locations in the historical"
+  },
+  {
+   "t": 1361.71,
+   "d": 3.78,
+   "text": "past is by wealth so here there were"
+  },
+  {
+   "t": 1365.49,
+   "d": 2.34,
+   "text": "palaces there were also slum districts"
+  },
+  {
+   "t": 1367.83,
+   "d": 1.23,
+   "text": "and there are middle-class districts"
+  },
+  {
+   "t": 1369.06,
+   "d": 2.19,
+   "text": "sometimes we change the organizing"
+  },
+  {
+   "t": 1371.25,
+   "d": 1.98,
+   "text": "principle entirely so sometimes it's by"
+  },
+  {
+   "t": 1373.23,
+   "d": 1.98,
+   "text": "function so here there's like a garrison"
+  },
+  {
+   "t": 1375.21,
+   "d": 1.56,
+   "text": "corridor there would also be a museum"
+  },
+  {
+   "t": 1376.77,
+   "d": 2.16,
+   "text": "quarter or we have like the Hippodrome"
+  },
+  {
+   "t": 1378.93,
+   "d": 1.28,
+   "text": "zuv meter up"
+  },
+  {
+   "t": 1380.21,
+   "d": 3.22,
+   "text": "so yeah I mean I this is sort of an"
+  },
+  {
+   "t": 1383.43,
+   "d": 2.85,
+   "text": "important part of creating meaningful"
+  },
+  {
+   "t": 1386.28,
+   "d": 3.06,
+   "text": "variation I think ok so back to Polly"
+  },
+  {
+   "t": 1389.34,
+   "d": 2.13,
+   "text": "daddy's life so one auspicious day a"
+  },
+  {
+   "t": 1391.47,
+   "d": 1.83,
+   "text": "babe was found swaddled in a floating"
+  },
+  {
+   "t": 1393.3,
+   "d": 1.89,
+   "text": "platform of polished chrome with its"
+  },
+  {
+   "t": 1395.19,
+   "d": 3.27,
+   "text": "mouth full of the fabric of time that"
+  },
+  {
+   "t": 1398.46,
+   "d": 1.98,
+   "text": "babe came to be known as poly date he's"
+  },
+  {
+   "t": 1400.44,
+   "d": 2.52,
+   "text": "the fourth acting against the"
+  },
+  {
+   "t": 1402.96,
+   "d": 1.65,
+   "text": "prohibition on the practice of stopping"
+  },
+  {
+   "t": 1404.61,
+   "d": 2.13,
+   "text": "time poly date he's led an army to the"
+  },
+  {
+   "t": 1406.74,
+   "d": 2.55,
+   "text": "gates of dam amir spire she freed it"
+  },
+  {
+   "t": 1409.29,
+   "d": 1.47,
+   "text": "says the citizens and they crowned her"
+  },
+  {
+   "t": 1410.76,
+   "d": 2.13,
+   "text": "Sultan's a cut in her honor they changed"
+  },
+  {
+   "t": 1412.89,
+   "d": 2.63,
+   "text": "the name of dabber spire to poly deities"
+  },
+  {
+   "t": 1415.52,
+   "d": 2.2,
+   "text": "okay one more while wandering around"
+  },
+  {
+   "t": 1417.72,
+   "d": 2.07,
+   "text": "Havana ha poly date he stumbled upon a"
+  },
+  {
+   "t": 1419.79,
+   "d": 2.16,
+   "text": "clan of bears performing a secret ritual"
+  },
+  {
+   "t": 1421.95,
+   "d": 1.98,
+   "text": "because of her reputation for murdering"
+  },
+  {
+   "t": 1423.93,
+   "d": 1.65,
+   "text": "some was a dagger made of tiny gears"
+  },
+  {
+   "t": 1425.58,
+   "d": 2.52,
+   "text": "they accepted her into their fold inside"
+  },
+  {
+   "t": 1428.1,
+   "d": 1.65,
+   "text": "her sacred so poly deities"
+  },
+  {
+   "t": 1429.75,
+   "d": 3.71,
+   "text": "was living her best life clearly"
+  },
+  {
+   "t": 1434.04,
+   "d": 2.49,
+   "text": "here's another clay picture painted with"
+  },
+  {
+   "t": 1436.53,
+   "d": 1.68,
+   "text": "a scene from her life so at a remote dig"
+  },
+  {
+   "t": 1438.21,
+   "d": 2.22,
+   "text": "site poly date he's met with a group of"
+  },
+  {
+   "t": 1440.43,
+   "d": 1.35,
+   "text": "geologists and commissioned that"
+  },
+  {
+   "t": 1441.78,
+   "d": 1.8,
+   "text": "artifact that evoked the presence of a"
+  },
+  {
+   "t": 1443.58,
+   "d": 2.13,
+   "text": "periodic moment in time chosen"
+  },
+  {
+   "t": 1445.71,
+   "d": 2.25,
+   "text": "arbitrarily she named it the star of"
+  },
+  {
+   "t": 1447.96,
+   "d": 2.37,
+   "text": "moment and again it's this is a named"
+  },
+  {
+   "t": 1450.33,
+   "d": 1.62,
+   "text": "artifact so that means it really existed"
+  },
+  {
+   "t": 1451.95,
+   "d": 1.53,
+   "text": "we can go and find it here it is the"
+  },
+  {
+   "t": 1453.48,
+   "d": 2.04,
+   "text": "starved moment tiny glyphs are inscribed"
+  },
+  {
+   "t": 1455.52,
+   "d": 1.92,
+   "text": "on each exterior face of this handheld"
+  },
+  {
+   "t": 1457.44,
+   "d": 2.34,
+   "text": "box it's embossed with beautiful atomic"
+  },
+  {
+   "t": 1459.78,
+   "d": 2.58,
+   "text": "clocks and on activation it obliterates"
+  },
+  {
+   "t": 1462.36,
+   "d": 2.82,
+   "text": "all visible members of a chosen faction"
+  },
+  {
+   "t": 1465.18,
+   "d": 3.54,
+   "text": "from the Sultanate so so she"
+  },
+  {
+   "t": 1468.72,
+   "d": 2.22,
+   "text": "commissioned an artifact that evoked the"
+  },
+  {
+   "t": 1470.94,
+   "d": 2.04,
+   "text": "presence of a periodic moment in time"
+  },
+  {
+   "t": 1472.98,
+   "d": 1.98,
+   "text": "chosen arbitrarily and that moment was"
+  },
+  {
+   "t": 1474.96,
+   "d": 6.75,
+   "text": "death let's see here oh we skipped one"
+  },
+  {
+   "t": 1481.71,
+   "d": 1.59,
+   "text": "ok this was this is pretty good"
+  },
+  {
+   "t": 1483.3,
+   "d": 1.98,
+   "text": "so after striking a deal with cannibals"
+  },
+  {
+   "t": 1485.28,
+   "d": 1.65,
+   "text": "poly deities convinced them to help her"
+  },
+  {
+   "t": 1486.93,
+   "d": 2.28,
+   "text": "found a workshop and the Turkish Barry"
+  },
+  {
+   "t": 1489.21,
+   "d": 1.59,
+   "text": "Oh for the purpose of assembling"
+  },
+  {
+   "t": 1490.8,
+   "d": 1.95,
+   "text": "contraptions based on forgotten seconds"
+  },
+  {
+   "t": 1492.75,
+   "d": 2.79,
+   "text": "of one's life that's cool"
+  },
+  {
+   "t": 1495.54,
+   "d": 2.28,
+   "text": "here's another artifact that light came"
+  },
+  {
+   "t": 1497.82,
+   "d": 2.7,
+   "text": "about as a result of her life it's"
+  },
+  {
+   "t": 1500.52,
+   "d": 2.61,
+   "text": "called the orbital joy poly day TSP it's"
+  },
+  {
+   "t": 1503.13,
+   "d": 2.58,
+   "text": "a helmet and the descriptions of these"
+  },
+  {
+   "t": 1505.71,
+   "d": 2.94,
+   "text": "are like mixes of there's sort of"
+  },
+  {
+   "t": 1508.65,
+   "d": 2.25,
+   "text": "hybrids of hand hand written"
+  },
+  {
+   "t": 1510.9,
+   "d": 1.59,
+   "text": "descriptions that are parameterize by"
+  },
+  {
+   "t": 1512.49,
+   "d": 2.51,
+   "text": "some of the procedural and so like"
+  },
+  {
+   "t": 1515.0,
+   "d": 1.99,
+   "text": "earlier so the name of the old"
+  },
+  {
+   "t": 1516.99,
+   "d": 2.04,
+   "text": "aristocrats from the pre-fall past that"
+  },
+  {
+   "t": 1519.03,
+   "d": 1.56,
+   "text": "we call them eater so early ators had"
+  },
+  {
+   "t": 1520.59,
+   "d": 1.5,
+   "text": "enlarged their skulls for cosmetic"
+  },
+  {
+   "t": 1522.09,
+   "d": 1.98,
+   "text": "reasons but the time of pala date is the"
+  },
+  {
+   "t": 1524.07,
+   "d": 1.65,
+   "text": "fourth the high minaret dwellers took to"
+  },
+  {
+   "t": 1525.72,
+   "d": 2.22,
+   "text": "wearing them as helms okay this one is"
+  },
+  {
+   "t": 1527.94,
+   "d": 1.62,
+   "text": "exquisitely decorated it's painted with"
+  },
+  {
+   "t": 1529.56,
+   "d": 1.53,
+   "text": "beautiful forgotten seconds of one life"
+  },
+  {
+   "t": 1531.09,
+   "d": 1.77,
+   "text": "so when you wear it it gives you plus"
+  },
+  {
+   "t": 1532.86,
+   "d": 2.73,
+   "text": "one you go and it also gives you a grant"
+  },
+  {
+   "t": 1535.59,
+   "d": 2.19,
+   "text": "you this mutation temporal fugue and"
+  },
+  {
+   "t": 1537.78,
+   "d": 2.55,
+   "text": "this is actually this is very very"
+  },
+  {
+   "t": 1540.33,
+   "d": 1.56,
+   "text": "powerful mutation in caves Akkad what it"
+  },
+  {
+   "t": 1541.89,
+   "d": 1.17,
+   "text": "means is that if you're walking around"
+  },
+  {
+   "t": 1543.06,
+   "d": 2.88,
+   "text": "as like a traveler and the world of cut"
+  },
+  {
+   "t": 1545.94,
+   "d": 2.46,
+   "text": "you can multiply yourself and create"
+  },
+  {
+   "t": 1548.4,
+   "d": 2.31,
+   "text": "some clones of yourself that will fight"
+  },
+  {
+   "t": 1550.71,
+   "d": 1.98,
+   "text": "for you and they're like they have all"
+  },
+  {
+   "t": 1552.69,
+   "d": 1.65,
+   "text": "your abilities and they have all of your"
+  },
+  {
+   "t": 1554.34,
+   "d": 2.43,
+   "text": "equipment as well now this is kind of"
+  },
+  {
+   "t": 1556.77,
+   "d": 2.01,
+   "text": "dangerous like if you're watching the"
+  },
+  {
+   "t": 1558.78,
+   "d": 1.44,
+   "text": "caves will play through yesterday you"
+  },
+  {
+   "t": 1560.22,
+   "d": 2.4,
+   "text": "know there's a defect in caves of cod"
+  },
+  {
+   "t": 1562.62,
+   "d": 2.82,
+   "text": "called evil twin where occasionally at"
+  },
+  {
+   "t": 1565.44,
+   "d": 1.98,
+   "text": "some parallel version of yourself"
+  },
+  {
+   "t": 1567.42,
+   "d": 1.77,
+   "text": "from across space and time tracks you"
+  },
+  {
+   "t": 1569.19,
+   "d": 1.83,
+   "text": "down to destroy you so your evil twin"
+  },
+  {
+   "t": 1571.02,
+   "d": 1.71,
+   "text": "here and if you're wielding an artifact"
+  },
+  {
+   "t": 1572.73,
+   "d": 2.55,
+   "text": "that gives you temporal few that means"
+  },
+  {
+   "t": 1575.28,
+   "d": 2.16,
+   "text": "your twin will also have that artifact"
+  },
+  {
+   "t": 1577.44,
+   "d": 1.59,
+   "text": "and they'll create their own clones and"
+  },
+  {
+   "t": 1579.03,
+   "d": 1.92,
+   "text": "that means you're in danger of like"
+  },
+  {
+   "t": 1580.95,
+   "d": 1.95,
+   "text": "starting an epic battle with all of your"
+  },
+  {
+   "t": 1582.9,
+   "d": 4.62,
+   "text": "time clones but on the other hand on the"
+  },
+  {
+   "t": 1587.52,
+   "d": 2.1,
+   "text": "upside if you were to start an epic"
+  },
+  {
+   "t": 1589.62,
+   "d": 2.34,
+   "text": "battle with all of your time clones you"
+  },
+  {
+   "t": 1591.96,
+   "d": 2.25,
+   "text": "might be inscribed in the annals of"
+  },
+  {
+   "t": 1594.21,
+   "d": 4.02,
+   "text": "history as the next sultan of cod so"
+  },
+  {
+   "t": 1598.23,
+   "d": 7.7,
+   "text": "thank you alright"
+  },
+  {
+   "t": 1605.93,
+   "d": 2.32,
+   "text": "this i don't ever will be posting the"
+  },
+  {
+   "t": 1608.25,
+   "d": 2.04,
+   "text": "actual slides but this is a link here"
+  },
+  {
+   "t": 1610.29,
+   "d": 1.47,
+   "text": "that i can link somewhere else but this"
+  },
+  {
+   "t": 1611.76,
+   "d": 2.28,
+   "text": "is a paper we wrote for the foundations"
+  },
+  {
+   "t": 1614.04,
+   "d": 1.32,
+   "text": "of digital games conference this year"
+  },
+  {
+   "t": 1615.36,
+   "d": 1.59,
+   "text": "that actually describes how we're"
+  },
+  {
+   "t": 1616.95,
+   "d": 1.38,
+   "text": "generating the history so if you're"
+  },
+  {
+   "t": 1618.33,
+   "d": 2.4,
+   "text": "interested in that check that out cool"
+  },
+  {
+   "t": 1620.73,
+   "d": 5.72,
+   "text": "we have time for a few questions I think"
+  },
+  {
+   "t": 1626.45,
+   "d": 4.41,
+   "text": "my question was very curious about the"
+  },
+  {
+   "t": 1637.28,
+   "d": 3.88,
+   "text": "yes right so very shortly it's kind of a"
+  },
+  {
+   "t": 1641.16,
+   "d": 3.24,
+   "text": "combination between a grammar so if"
+  },
+  {
+   "t": 1644.4,
+   "d": 1.74,
+   "text": "you're familiar tracery was was"
+  },
+  {
+   "t": 1646.14,
+   "d": 1.41,
+   "text": "mentioned a few times yesterday it's"
+  },
+  {
+   "t": 1647.55,
+   "d": 2.16,
+   "text": "like a tracer a lights like system to"
+  },
+  {
+   "t": 1649.71,
+   "d": 2.31,
+   "text": "generate these descriptive text snippets"
+  },
+  {
+   "t": 1652.02,
+   "d": 1.56,
+   "text": "of the history and then there's sort of"
+  },
+  {
+   "t": 1653.58,
+   "d": 1.83,
+   "text": "like an internal state machine that is"
+  },
+  {
+   "t": 1655.41,
+   "d": 2.67,
+   "text": "looking at the like what we'll do is if"
+  },
+  {
+   "t": 1658.08,
+   "d": 2.28,
+   "text": "a sultan is liked by a faction like like"
+  },
+  {
+   "t": 1660.36,
+   "d": 3.75,
+   "text": "by dogs right that state has will kind"
+  },
+  {
+   "t": 1664.11,
+   "d": 2.73,
+   "text": "of hook up to a rule in the grammar that"
+  },
+  {
+   "t": 1666.84,
+   "d": 2.19,
+   "text": "will say like have some things to"
+  },
+  {
+   "t": 1669.03,
+   "d": 2.46,
+   "text": "generate like would like reasons for"
+  },
+  {
+   "t": 1671.49,
+   "d": 2.52,
+   "text": "seeking a city would be liberate faction"
+  },
+  {
+   "t": 1674.01,
+   "d": 1.5,
+   "text": "and that faction is replaced by dogs"
+  },
+  {
+   "t": 1675.51,
+   "d": 3.03,
+   "text": "yeah you could read the paper it has all"
+  },
+  {
+   "t": 1678.54,
+   "d": 2.87,
+   "text": "the details about it"
+  },
+  {
+   "t": 1684.65,
+   "d": 3.93,
+   "text": "for your I guess you could call it maybe"
+  },
+  {
+   "t": 1688.58,
+   "d": 2.34,
+   "text": "natural language processing of your own"
+  },
+  {
+   "t": 1690.92,
+   "d": 1.5,
+   "text": "languages that you're creating for the"
+  },
+  {
+   "t": 1692.42,
+   "d": 1.98,
+   "text": "names of people do you find that those"
+  },
+  {
+   "t": 1694.4,
+   "d": 2.67,
+   "text": "and your designs evolve over time and"
+  },
+  {
+   "t": 1697.07,
+   "d": 2.73,
+   "text": "does the player impact having anything"
+  },
+  {
+   "t": 1699.8,
+   "d": 2.0,
+   "text": "to do with how people become named or"
+  },
+  {
+   "t": 1701.8,
+   "d": 3.19,
+   "text": "not with language changes well so"
+  },
+  {
+   "t": 1704.99,
+   "d": 1.5,
+   "text": "there's not yeah we don't really have"
+  },
+  {
+   "t": 1706.49,
+   "d": 2.49,
+   "text": "much in the way of like simulating"
+  },
+  {
+   "t": 1708.98,
+   "d": 3.63,
+   "text": "linked linguistic drift or anything we"
+  },
+  {
+   "t": 1712.61,
+   "d": 2.4,
+   "text": "have these no I guess I would say that"
+  },
+  {
+   "t": 1715.01,
+   "d": 4.41,
+   "text": "most of that is is static we have we"
+  },
+  {
+   "t": 1719.42,
+   "d": 2.13,
+   "text": "have like our name generation and our"
+  },
+  {
+   "t": 1721.55,
+   "d": 1.89,
+   "text": "it's kind of like done in a similar way"
+  },
+  {
+   "t": 1723.44,
+   "d": 1.98,
+   "text": "as we do the text generation via the"
+  },
+  {
+   "t": 1725.42,
+   "d": 1.92,
+   "text": "grammar and then that all happens at"
+  },
+  {
+   "t": 1727.34,
+   "d": 2.19,
+   "text": "world generation and from there the"
+  },
+  {
+   "t": 1729.53,
+   "d": 3.03,
+   "text": "history is kind of set although like"
+  },
+  {
+   "t": 1732.56,
+   "d": 1.23,
+   "text": "certain things you can do throughout the"
+  },
+  {
+   "t": 1733.79,
+   "d": 2.97,
+   "text": "game affect other pieces of the text"
+  },
+  {
+   "t": 1736.76,
+   "d": 1.65,
+   "text": "generation the name generations but not"
+  },
+  {
+   "t": 1738.41,
+   "d": 7.53,
+   "text": "really the history yeah hey so as a semi"
+  },
+  {
+   "t": 1745.94,
+   "d": 2.04,
+   "text": "casual cut player often I find like the"
+  },
+  {
+   "t": 1747.98,
+   "d": 3.03,
+   "text": "just the sheer diversity of procedurally"
+  },
+  {
+   "t": 1751.01,
+   "d": 1.17,
+   "text": "generated content to be a little bit"
+  },
+  {
+   "t": 1752.18,
+   "d": 0.66,
+   "text": "overwhelming"
+  },
+  {
+   "t": 1752.84,
+   "d": 3.78,
+   "text": "I guess there's two ways to approach the"
+  },
+  {
+   "t": 1756.62,
+   "d": 2.1,
+   "text": "question like as a player what would you"
+  },
+  {
+   "t": 1758.72,
+   "d": 2.04,
+   "text": "like me to do to be able to better keep"
+  },
+  {
+   "t": 1760.76,
+   "d": 3.06,
+   "text": "track of sort of the the hints of these"
+  },
+  {
+   "t": 1763.82,
+   "d": 1.44,
+   "text": "lineages that you're procedurally"
+  },
+  {
+   "t": 1765.26,
+   "d": 2.42,
+   "text": "generating slash what could you imagine"
+  },
+  {
+   "t": 1767.68,
+   "d": 2.59,
+   "text": "building in terms of new UI elements to"
+  },
+  {
+   "t": 1770.27,
+   "d": 2.25,
+   "text": "help me help me better sort of reinforce"
+  },
+  {
+   "t": 1772.52,
+   "d": 1.26,
+   "text": "like oh this thing must be related to"
+  },
+  {
+   "t": 1773.78,
+   "d": 1.26,
+   "text": "this other thing because there's a dog"
+  },
+  {
+   "t": 1775.04,
+   "d": 1.71,
+   "text": "connection and isolation over here and"
+  },
+  {
+   "t": 1776.75,
+   "d": 2.73,
+   "text": "so on okay let me so have you a question"
+  },
+  {
+   "t": 1779.48,
+   "d": 1.29,
+   "text": "for you have you played since this"
+  },
+  {
+   "t": 1780.77,
+   "d": 2.67,
+   "text": "update where we added the journal where"
+  },
+  {
+   "t": 1783.44,
+   "d": 1.98,
+   "text": "the history gets inscribed no actually"
+  },
+  {
+   "t": 1785.42,
+   "d": 1.56,
+   "text": "hasn't seen that until now yeah okay so"
+  },
+  {
+   "t": 1786.98,
+   "d": 2.52,
+   "text": "so the problem you're describing was"
+  },
+  {
+   "t": 1789.5,
+   "d": 2.4,
+   "text": "like very real and present so we had"
+  },
+  {
+   "t": 1791.9,
+   "d": 1.77,
+   "text": "this generated history you could read"
+  },
+  {
+   "t": 1793.67,
+   "d": 1.71,
+   "text": "these cultural artifacts but we didn't"
+  },
+  {
+   "t": 1795.38,
+   "d": 1.62,
+   "text": "actually have a journal at the time so"
+  },
+  {
+   "t": 1797.0,
+   "d": 1.95,
+   "text": "you had to like either be taking very"
+  },
+  {
+   "t": 1798.95,
+   "d": 2.55,
+   "text": "diligent notes or just kind of remember"
+  },
+  {
+   "t": 1801.5,
+   "d": 1.71,
+   "text": "them off the cuff so now we actually"
+  },
+  {
+   "t": 1803.21,
+   "d": 2.91,
+   "text": "like do the inscription and the journal"
+  },
+  {
+   "t": 1806.12,
+   "d": 1.86,
+   "text": "for you and so you could just reference"
+  },
+  {
+   "t": 1807.98,
+   "d": 1.77,
+   "text": "there's a sultan tab in your journal you"
+  },
+  {
+   "t": 1809.75,
+   "d": 2.31,
+   "text": "could look at all of the like snippets"
+  },
+  {
+   "t": 1812.06,
+   "d": 2.28,
+   "text": "of history that you that you found in"
+  },
+  {
+   "t": 1814.34,
+   "d": 0.85,
+   "text": "order"
+  },
+  {
+   "t": 1815.19,
+   "d": 2.07,
+   "text": "and like you can sort of just once you"
+  },
+  {
+   "t": 1817.26,
+   "d": 1.56,
+   "text": "actually accrue a bunch of them you can"
+  },
+  {
+   "t": 1818.82,
+   "d": 1.53,
+   "text": "sort of just read them as a story and"
+  },
+  {
+   "t": 1820.35,
+   "d": 1.26,
+   "text": "that they're supposed to read that way"
+  },
+  {
+   "t": 1821.61,
+   "d": 7.62,
+   "text": "so yeah hi so this is kind of two things"
+  },
+  {
+   "t": 1829.23,
+   "d": 2.58,
+   "text": "so first I was wondering to what degree"
+  },
+  {
+   "t": 1831.81,
+   "d": 3.36,
+   "text": "those histories that generated histories"
+  },
+  {
+   "t": 1835.17,
+   "d": 3.69,
+   "text": "can intersect or inform each other since"
+  },
+  {
+   "t": 1838.86,
+   "d": 3.18,
+   "text": "you had sort of like time spans for them"
+  },
+  {
+   "t": 1842.04,
+   "d": 4.8,
+   "text": "and second if they do if there's any"
+  },
+  {
+   "t": 1846.84,
+   "d": 1.77,
+   "text": "system in place to make sure that there"
+  },
+  {
+   "t": 1848.61,
+   "d": 1.68,
+   "text": "aren't some sort of like contradictions"
+  },
+  {
+   "t": 1850.29,
+   "d": 2.25,
+   "text": "like a soul Sultan gets assassinated by"
+  },
+  {
+   "t": 1852.54,
+   "d": 1.86,
+   "text": "like two different other Sultan's or"
+  },
+  {
+   "t": 1854.4,
+   "d": 3.54,
+   "text": "something like that yeah so for given"
+  },
+  {
+   "t": 1857.94,
+   "d": 2.4,
+   "text": "history which again happens per game"
+  },
+  {
+   "t": 1860.34,
+   "d": 1.92,
+   "text": "right so if I start a history in a game"
+  },
+  {
+   "t": 1862.26,
+   "d": 1.44,
+   "text": "and then I started a new game it's a"
+  },
+  {
+   "t": 1863.7,
+   "d": 2.01,
+   "text": "totally different history unless you say"
+  },
+  {
+   "t": 1865.71,
+   "d": 1.74,
+   "text": "we have like world seed so you could use"
+  },
+  {
+   "t": 1867.45,
+   "d": 1.68,
+   "text": "the same world seed but for a given"
+  },
+  {
+   "t": 1869.13,
+   "d": 2.1,
+   "text": "history yes they do influence each other"
+  },
+  {
+   "t": 1871.23,
+   "d": 1.14,
+   "text": "we kind of generate them along a"
+  },
+  {
+   "t": 1872.37,
+   "d": 2.34,
+   "text": "timeline so the early Sultan's"
+  },
+  {
+   "t": 1874.71,
+   "d": 2.43,
+   "text": "might I think you might have noticed"
+  },
+  {
+   "t": 1877.14,
+   "d": 1.5,
+   "text": "somewhere like sometimes the Sultan will"
+  },
+  {
+   "t": 1878.64,
+   "d": 1.77,
+   "text": "have a battle and like it'll be so epic"
+  },
+  {
+   "t": 1880.41,
+   "d": 2.22,
+   "text": "that they'll rename the location to the"
+  },
+  {
+   "t": 1882.63,
+   "d": 2.28,
+   "text": "to a new name like the freezing waist or"
+  },
+  {
+   "t": 1884.91,
+   "d": 2.73,
+   "text": "whatever and yeah like later Sultan's in"
+  },
+  {
+   "t": 1887.64,
+   "d": 2.76,
+   "text": "their world the location is called the"
+  },
+  {
+   "t": 1890.4,
+   "d": 2.82,
+   "text": "freezing waist and they can so so it's"
+  },
+  {
+   "t": 1893.22,
+   "d": 1.47,
+   "text": "all happening along a single timeline"
+  },
+  {
+   "t": 1894.69,
+   "d": 3.96,
+   "text": "and there is sort of like a progression"
+  },
+  {
+   "t": 1898.65,
+   "d": 5.19,
+   "text": "of influence that way yeah cool thank"
+  },
+  {
+   "t": 1903.84,
+   "d": 2.91,
+   "text": "you so much Jay Sam thank you"
+  },
+  {
+   "t": 1906.75,
+   "d": 3.51,
+   "text": "[Applause]"
+  }
+ ]
+}

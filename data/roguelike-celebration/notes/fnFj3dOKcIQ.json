@@ -1,0 +1,145 @@
+{
+  "id": "fnFj3dOKcIQ",
+  "title": "Brian Bucklew - Dungeon Generation via Wave Function Collapse",
+  "speaker": "Brian Bucklew",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=fnFj3dOKcIQ",
+  "talk_type": "technical",
+  "summary": "Brian Bucklew of Freehold Games explains how Caves of Qud uses Maxim Gumin's wave function collapse (WFC) in texture mode to generate very different map types (compounds, aqueducts, towers, villages) from the same code with tiny hand-drawn training images. He gives an intuition for the algorithm as piles of overlapping 3x3 'cards' collapsed lowest-entropy-first, shows how colour choices in the input control output (e.g. marking building interiors), and describes its practical limits: homogeneous output at large scale and overfitting on detailed inputs. Caves of Qud solves these with a pre-pass that segments the map into large shapes filled with different WFC outputs and a post-pass that uses weighted A* to punch doors and add details.",
+  "games": [
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "example",
+      "claim": "Caves of Qud generates maps with very different character (walled compounds, aqueducts, salt towers, villages) using one wave function collapse routine fed different tiny training images.",
+      "detail": "Bucklew says for 20 years he would have written a bespoke algorithm for each map type. WFC, released by Maxim Gumin in 2016, replaced that, and Caves of Qud was its first commercial use.",
+      "t": 126,
+      "quote": "All of these maps are produced by the exact same technique, literally the same block of code with some tiny different little training inputs",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "principle",
+      "claim": "WFC's texture mode lets a designer draw a tiny input in a paint program and get arbitrarily large outputs that are locally similar to it, replacing several unrelated generation algorithms.",
+      "detail": "Bucklew shows rooms-and-halls, squiggly caverns, and a 5x5 line-and-dots input; traditionally these would need a recursive builder, cellular automata and a custom line drawer. You can ask a designer for an 8x8 tile and generate maps of any size with that character.",
+      "t": 273,
+      "quote": "You can give that to a designer and say, \"Draw me a little 8x8 tile, and I'll generate maps of an arbitrary size with that character.\"",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "WFC cuts the input into every overlapping NxN patch (3x3 in Caves of Qud, multiplied by rotations and reflections), places the full set on each output pixel, then repeatedly collapses the smallest set to one random patch and removes incompatible overlapping patches nearby.",
+      "detail": "Bucklew's 'pile of cards' intuition: a 10x10 image yields 100 cards, up to 800 with symmetry. Each collapse shrinks neighbouring stacks, and the process recurses until the image resolves; he likens it to Markov chaining words but in 2D.",
+      "t": 401,
+      "quote": "Find the shortest stack that's left. Pick a random card out of it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "In WFC, adding a distinct colour for building interiors constrains the output: marking the inside of a square with red pixels made every turn around red clockwise, producing enclosed buildings.",
+      "detail": "A plain black square input produced shapes with no clear interior or exterior. Encoding interior as a separate colour made the algorithm 'extremely controllable', a couple of hours into experimenting.",
+      "t": 730,
+      "quote": "What if I just told it what the inside of the building was, by giving it a different color?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "example",
+      "claim": "A five-minute MS Paint sketch of a temple or garden fed to WFC produced layouts Bucklew says would take a week to approximate with BSP trees and noise maps.",
+      "detail": "Output included interesting central pillars, turning walls, and mixed organic and inorganic forest shapes. A star-shape input gave less variety, which he later explains as overfitting.",
+      "t": 789,
+      "quote": "I would sit there for a week, trying to make something look like that. And I literally just scribbled something up in MS Paint in five minutes",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Using the reference WFC implementation takes about three lines of code and a few parameters: input image, output size, whether to tile at edges, and a symmetry value from 0 to 8.",
+      "detail": "Implementations exist in around 25 languages. Bucklew advises starting with symmetry at the maximum for non-oriented results, then lowering it once you want specific orientations.",
+      "t": 900,
+      "quote": "So, when you're first messing around with it, just set the symmetry to the max, and it'll produce non-orientated results",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "warning",
+      "claim": "WFC output is homogeneous at large scales, repeating on the scale of the input, and its cost grows with input size, so a large input is impractical.",
+      "detail": "It runs quickly on small inputs but becomes very slow with large inputs and outputs. A huge locally similar map is not necessarily one you want to play.",
+      "t": 930,
+      "quote": "it's locally similar, which means you get repeating output on the scale of your input",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "warning",
+      "claim": "WFC overfits highly detailed inputs: with many colours there is only one way tiles can overlap, so the input is just repeated, and trying to encode doors or furniture narrows the output's variety.",
+      "detail": "Bucklew first tried building door and furniture placement into WFC inputs, but the interesting combinatorial complexity of the results dropped.",
+      "t": 981,
+      "quote": "instead of getting interesting combinatorial results from your input, you get just your input repeated over and over again",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Caves of Qud pairs WFC with a pre-pass that segments the map into large shapes, each filled by a different WFC output, and a post-pass for details like doors and furniture.",
+      "detail": "The pre-pass fixes homogeneous large-scale structure by laying down a few circles or rectangles; the post-pass handles things WFC overfits on, letting WFC focus on interior architecture. A village was two stacked rectangles each filled with a building WFC.",
+      "t": 1009,
+      "quote": "The solution in Caves of Qud to homogenous output was to do a pre-process pass, where we figure out some large scale structure",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "connectivity",
+      "kind": "technique",
+      "claim": "Caves of Qud connects disconnected WFC regions by running A* from the map centre to each region and placing a door wherever the path punches through a wall, with walls weighted high to minimise doors.",
+      "detail": "A low wall weight makes paths smash through many walls; a high weight makes paths wind around until they must break through, producing the few doors a naturalistic village has. Bucklew says WFC cannot itself be forced to make connections, and in caves he uses noise-guided pathfinding to carve passages.",
+      "t": 1541,
+      "quote": "in the door punching system, the wall weight is really high. So it will tend to wind its way around",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cave connectivity",
+      "kind": "technique",
+      "claim": "To make WFC caves traversable, Caves of Qud overlays passages via noise-based pathfinding from scattered seeds, widening the path in noise-controlled areas so it blends with the caves.",
+      "detail": "Bucklew acknowledges this is extra work but far less than handcrafting each output and its connections, so net it is a huge time saving.",
+      "t": 1405,
+      "quote": "do things like noise-based pathfinding, where you drop a bunch of seeds and let the pathfinder kind of wind its way through",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "warning",
+      "claim": "Large-scale ordered structures like Greco-Roman temples with big columns need a large WFC window, which drives memory use too high for mobile targets.",
+      "detail": "Caves of Qud therefore uses WFC mostly where the window can be small, such as ruins and small villages; the algorithm could conceptually do larger order but the technical requirements are prohibitive.",
+      "t": 1337,
+      "quote": "as you increase the size of that window, memory use gets really high",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "WFC is not a complete solver and occasionally reaches contradictions, but in practice failures are rare enough that Caves of Qud simply retries until success.",
+      "detail": "Bucklew says the inventor worried about unsolvable states but found they essentially do not happen with reasonable input; maps usually generate in a fraction of a millisecond. He adds that more advanced WFC variants can fill in around hand-placed seeds, such as cities dropped into an overworld.",
+      "t": 1449,
+      "quote": "It fails internally and just force retries until it gets a success, because in practice, failures are very rare",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

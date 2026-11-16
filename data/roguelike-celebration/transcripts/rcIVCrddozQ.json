@@ -1,0 +1,1951 @@
+{
+ "id": "rcIVCrddozQ",
+ "url": "https://www.youtube.com/watch?v=rcIVCrddozQ",
+ "title": "Nat Alison- In Defense of Hand-Crafted Sudoku",
+ "speaker": "Nat Alison",
+ "talk_title": "In Defense of Hand-Crafted Sudoku",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1793,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Ah Sudoku--the logic puzzle where you fill a 9x9 grid with numbers. While most sudoku are computer-generated randomly, there is a growing community of variant sudoku constructors that make beautiful and brain-bending puzzles--all by hand. Let's explore the history of \"hand-crafted vs computer-generated\" from the perspective of this puzzle community. We'll cover the motivation, the beauty, and the tools of the trade of hand-crafted puzzles, and show how \"hand-crafted vs computer-generated\" is more of a spectrum than a binary.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 71,
+   "title": "The case for handcrafted Sudoku"
+  },
+  {
+   "start": 218,
+   "title": "Growth of the puzzle scene"
+  },
+  {
+   "start": 372,
+   "title": "Variety and creativity"
+  },
+  {
+   "start": 535,
+   "title": "Logic, flow, and storytelling"
+  },
+  {
+   "start": 699,
+   "title": "How to craft a puzzle"
+  },
+  {
+   "start": 920,
+   "title": "Live construction demo"
+  },
+  {
+   "start": 1073,
+   "title": "Using tools with intention"
+  },
+  {
+   "start": 1307,
+   "title": "Procedural vs. handcrafted"
+  },
+  {
+   "start": 1454,
+   "title": "Community and conclusion"
+  },
+  {
+   "start": 1678,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4107,
+ "trimmed": {
+  "segments": 28,
+  "words": 266
+ },
+ "segments": [
+  {
+   "t": 10.62,
+   "d": 1.0,
+   "text": "so this is Nat Allison."
+  },
+  {
+   "t": 11.62,
+   "d": 1.64,
+   "text": "She is a developer who makes weird math"
+  },
+  {
+   "t": 13.26,
+   "d": 1.82,
+   "text": "apps."
+  },
+  {
+   "t": 15.08,
+   "d": 5.3,
+   "text": "I also enjoy solving and constructing variant sudoku"
+  },
+  {
+   "t": 20.38,
+   "d": 1.0,
+   "text": "puzzles."
+  },
+  {
+   "t": 21.38,
+   "d": 3.46,
+   "text": "I am excited to hear what you have to say."
+  },
+  {
+   "t": 24.84,
+   "d": 5.12,
+   "text": "NAT: Welcome to the stage."
+  },
+  {
+   "t": 29.96,
+   "d": 2.12,
+   "text": ">> Qristy: Your audio is robotic?"
+  },
+  {
+   "t": 32.08,
+   "d": 3.77,
+   "text": "Y'all hearing that too?"
+  },
+  {
+   "t": 35.85,
+   "d": 3.77,
+   "text": "NAT: Is this working?"
+  },
+  {
+   "t": 39.62,
+   "d": 2.83,
+   "text": "Am I good?"
+  },
+  {
+   "t": 42.45,
+   "d": 1.0,
+   "text": "Hello?"
+  },
+  {
+   "t": 43.45,
+   "d": 6.85,
+   "text": ">> Qristy: Yeah, it sounds weird."
+  },
+  {
+   "t": 50.3,
+   "d": 4.14,
+   "text": "Like it is not plugged incompletely or something?"
+  },
+  {
+   "t": 54.44,
+   "d": 4.79,
+   "text": "NAT: Let me try to change."
+  },
+  {
+   "t": 59.23,
+   "d": 1.0,
+   "text": "Sorry."
+  },
+  {
+   "t": 60.23,
+   "d": 4.02,
+   "text": "NAT: Is this better?"
+  },
+  {
+   "t": 64.25,
+   "d": 2.77,
+   "text": ">> Qristy: That's perfect."
+  },
+  {
+   "t": 67.02,
+   "d": 3.09,
+   "text": "NAT: All right."
+  },
+  {
+   "t": 70.11,
+   "d": 1.02,
+   "text": "Thanks."
+  },
+  {
+   "t": 71.13,
+   "d": 2.06,
+   "text": "All right."
+  },
+  {
+   "t": 73.19,
+   "d": 8.26,
+   "text": "So, guys, gals, and non-binary pals of Roguelike Celebration, my name is gnat -- Nat Allison"
+  },
+  {
+   "t": 81.45,
+   "d": 4.82,
+   "text": "and I am here to present to you In Defense of Hand-Crafted Sudoku"
+  },
+  {
+   "t": 86.27,
+   "d": 10.32,
+   "text": ". As many of you know, Sudoku is the logic puzzle where you place the digits from 1-9"
+  },
+  {
+   "t": 96.59,
+   "d": 5.28,
+   "text": "in a 3x3 grid so each digit repeats once in every row, column and box."
+  },
+  {
+   "t": 101.87,
+   "d": 4.98,
+   "text": "It is known as the ultimate procedural puzzle."
+  },
+  {
+   "t": 106.85,
+   "d": 7.04,
+   "text": "A lot of newspapers, the \"New York Times,\" publish Sudokus daily."
+  },
+  {
+   "t": 113.89,
+   "d": 6.09,
+   "text": "A lot of publishers have collated giant books of computer generated summit for people to"
+  },
+  {
+   "t": 119.98,
+   "d": 4.89,
+   "text": "do -- Sudoku -- when they are bored at the airport or sitting on the toilet."
+  },
+  {
+   "t": 124.87,
+   "d": 8.29,
+   "text": "It is a puzzle genre that has kind of a very predefined set of rules that you can work"
+  },
+  {
+   "t": 133.16,
+   "d": 1.0,
+   "text": "for it."
+  },
+  {
+   "t": 134.16,
+   "d": 5.78,
+   "text": "For most of these puzzles you have a specific set of instructions and algorithms and can"
+  },
+  {
+   "t": 139.94,
+   "d": 5.79,
+   "text": "go this digit appears in this row and not in this row so you can put it in and it gets"
+  },
+  {
+   "t": 145.73,
+   "d": 2.14,
+   "text": "really boring really quickly."
+  },
+  {
+   "t": 147.87,
+   "d": 7.63,
+   "text": "In fact, Jack last year made another Sudoku talk at Roguelike Celebration called your"
+  },
+  {
+   "t": 155.5,
+   "d": 7.5,
+   "text": "puzzle is a secret dungeon and goes through the process of generating these computer-generated"
+  },
+  {
+   "t": 163.0,
+   "d": 7.19,
+   "text": "Sudoku and how to do that well and relate that to a roguelike and it is very good talk"
+  },
+  {
+   "t": 170.19,
+   "d": 3.85,
+   "text": "but I am hear today to present a sort of counter example."
+  },
+  {
+   "t": 174.04,
+   "d": 6.41,
+   "text": "What if I told you even though Sudoku is kind of this super procedural puzzle, there was"
+  },
+  {
+   "t": 180.45,
+   "d": 8.64,
+   "text": "a growing thriving community of puzzle solvers and constructors that enjoy very hand-crafted"
+  },
+  {
+   "t": 189.09,
+   "d": 1.0,
+   "text": "Sudoku?"
+  },
+  {
+   "t": 190.09,
+   "d": 3.31,
+   "text": "I myself being among them."
+  },
+  {
+   "t": 193.4,
+   "d": 1.73,
+   "text": "So this is what this talk is going to be about."
+  },
+  {
+   "t": 195.13,
+   "d": 6.51,
+   "text": "I am going to try to convince you all procedural fans what is so special about these hand-crafted"
+  },
+  {
+   "t": 201.64,
+   "d": 1.36,
+   "text": "Sudoku."
+  },
+  {
+   "t": 203.0,
+   "d": 3.35,
+   "text": "Second how do constructors like myself make these Sudoku?"
+  },
+  {
+   "t": 206.35,
+   "d": 2.97,
+   "text": "And finally, you know, the question is Sudoku a roguelike?"
+  },
+  {
+   "t": 209.32,
+   "d": 3.89,
+   "text": "We will figure out how that all ties back in."
+  },
+  {
+   "t": 213.21,
+   "d": 5.25,
+   "text": "So let's get started within the rich history of this current puzzle boom."
+  },
+  {
+   "t": 218.46,
+   "d": 7.59,
+   "text": "Sudoku was kind of popularized by the Japanese publisher who is known for actually created"
+  },
+  {
+   "t": 226.05,
+   "d": 3.23,
+   "text": "handcrafted pencil puzzles of a variety of john genres."
+  },
+  {
+   "t": 229.28,
+   "d": 7.84,
+   "text": "It became popular in the United States and UK newspapers using these computer-generated"
+  },
+  {
+   "t": 237.12,
+   "d": 6.95,
+   "text": "methods because it is easy to generate one number and one number, does it break or not"
+  },
+  {
+   "t": 244.07,
+   "d": 1.16,
+   "text": "and so on."
+  },
+  {
+   "t": 245.23,
+   "d": 6.97,
+   "text": "In fact, there has been an existing puzzle community that loves solving these logic puzzles"
+  },
+  {
+   "t": 252.2,
+   "d": 1.57,
+   "text": "and like competitively."
+  },
+  {
+   "t": 253.77,
+   "d": 1.94,
+   "text": "This is the world Sudoku championship."
+  },
+  {
+   "t": 255.71,
+   "d": 3.18,
+   "text": "It just happened a few days ago."
+  },
+  {
+   "t": 258.89,
+   "d": 12.21,
+   "text": "Out of this scene, two British gentlemen decided to start a YouTube blog where they solved"
+  },
+  {
+   "t": 271.1,
+   "d": 7.48,
+   "text": "first cryptic crosswords which are these British really hard puzzle crosswords and then they"
+  },
+  {
+   "t": 278.58,
+   "d": 6.05,
+   "text": "branched out into other puzzle types including Sudoku first doing computer-generated Sudoku"
+  },
+  {
+   "t": 284.63,
+   "d": 9.87,
+   "text": "from newspapers like the Times and then branching out into doing puzzles from currently known"
+  },
+  {
+   "t": 294.5,
+   "d": 3.79,
+   "text": "doing variance and hand-crafted ones like that."
+  },
+  {
+   "t": 298.29,
+   "d": 5.31,
+   "text": "And then in 2019, or sorry, 2020 something happened to the world that meant a lot of"
+  },
+  {
+   "t": 303.6,
+   "d": 5.88,
+   "text": "us were stuck indoors with nothing to do but watch YouTube and a lot of people for some"
+  },
+  {
+   "t": 309.48,
+   "d": 7.77,
+   "text": "reason or another got sent by the YouTube algorithm to these two dudes solving Sudoku."
+  },
+  {
+   "t": 317.25,
+   "d": 5.79,
+   "text": "A sort of feedback loop happened where people look at the puzzle and see the logic and people"
+  },
+  {
+   "t": 323.04,
+   "d": 3.4,
+   "text": "think this is cool."
+  },
+  {
+   "t": 326.44,
+   "d": 5.22,
+   "text": "Maybe I can solve these puzzles myself."
+  },
+  {
+   "t": 331.66,
+   "d": 8.75,
+   "text": "And then asking the cryptic people to try the puzzle and for some people that ended"
+  },
+  {
+   "t": 340.41,
+   "d": 5.44,
+   "text": "up being a dream come true and their puzzle gets featured and those puzzles end up inspiring"
+  },
+  {
+   "t": 345.85,
+   "d": 3.85,
+   "text": "other people to join the community to create puzzles by themselves."
+  },
+  {
+   "t": 349.7,
+   "d": 3.0,
+   "text": "I among them."
+  },
+  {
+   "t": 352.7,
+   "d": 2.64,
+   "text": "This community has grown from that."
+  },
+  {
+   "t": 355.34,
+   "d": 4.19,
+   "text": "Other people making their only channels or streams."
+  },
+  {
+   "t": 359.53,
+   "d": 4.29,
+   "text": "Making Discords in order to discuss puzzles and fun stuff like that."
+  },
+  {
+   "t": 363.82,
+   "d": 9.55,
+   "text": "And now that you know why this kind of community ended up taking place and all that, now I"
+  },
+  {
+   "t": 373.37,
+   "d": 3.19,
+   "text": "wanted to ask the question, why hand-crafted Sudoku?"
+  },
+  {
+   "t": 376.56,
+   "d": 4.6,
+   "text": "What's so special about these puzzles that this group has kind of blossomed from this"
+  },
+  {
+   "t": 381.16,
+   "d": 1.59,
+   "text": "YouTube channel?"
+  },
+  {
+   "t": 382.75,
+   "d": 3.04,
+   "text": "There is a couple reasons."
+  },
+  {
+   "t": 385.79,
+   "d": 3.19,
+   "text": "The first being the pure variety of puzzles."
+  },
+  {
+   "t": 388.98,
+   "d": 4.39,
+   "text": "We aren't just talking about the standard Sudoku."
+  },
+  {
+   "t": 393.37,
+   "d": 2.54,
+   "text": "There are a lot of variances that's people use."
+  },
+  {
+   "t": 395.91,
+   "d": 8.53,
+   "text": "There are different chess variants where the digits can't go into a nice move away and"
+  },
+  {
+   "t": 404.44,
+   "d": 1.31,
+   "text": "this is called anti-knight."
+  },
+  {
+   "t": 405.75,
+   "d": 7.51,
+   "text": "There are killer cages where the digits have to at add up to a sum."
+  },
+  {
+   "t": 413.26,
+   "d": 10.28,
+   "text": "Thermos ascend from the term thermal bulb to the tip like a mercury thermometer."
+  },
+  {
+   "t": 423.54,
+   "d": 6.37,
+   "text": "And these were the different dots or Xs or Vs have to sum to different amounts or be"
+  },
+  {
+   "t": 429.91,
+   "d": 2.46,
+   "text": "in ratios or sequence."
+  },
+  {
+   "t": 432.37,
+   "d": 6.29,
+   "text": "There are different lines where the digits have to form a consecutive set or differ by"
+  },
+  {
+   "t": 438.66,
+   "d": 1.46,
+   "text": "five or more."
+  },
+  {
+   "t": 440.12,
+   "d": 6.8,
+   "text": "There are irregular Sudokus that don't have 3X3 but whatever regions."
+  },
+  {
+   "t": 446.92,
+   "d": 5.11,
+   "text": "There are chaos constructions where the regions aren't given and you have to figure them out"
+  },
+  {
+   "t": 452.03,
+   "d": 1.13,
+   "text": "using logic."
+  },
+  {
+   "t": 453.16,
+   "d": 9.43,
+   "text": "There are digits from 0-9 and two of the digits are in a cell together in each row and column"
+  },
+  {
+   "t": 462.59,
+   "d": 1.04,
+   "text": "and box."
+  },
+  {
+   "t": 463.63,
+   "d": 6.96,
+   "text": "And there are pencil puzzle combinations that mix in other pencil puzzles for example this"
+  },
+  {
+   "t": 470.59,
+   "d": 6.47,
+   "text": "is called the Yin yang and you have the shade the cells in black or green depending on a"
+  },
+  {
+   "t": 477.06,
+   "d": 6.81,
+   "text": "specific rule and they also added fog of war to Sudoku where the digits that you put in"
+  },
+  {
+   "t": 483.87,
+   "d": 4.97,
+   "text": "if they are correct reveal more fog and reveal more clues and such."
+  },
+  {
+   "t": 488.84,
+   "d": 8.19,
+   "text": "The Sudoku world has kind of gone very far from that very standard 1-9 and we aren't"
+  },
+  {
+   "t": 497.03,
+   "d": 1.0,
+   "text": "restricted to that."
+  },
+  {
+   "t": 498.03,
+   "d": 4.34,
+   "text": "It is literally whatever you can think of in order to make a puzzle."
+  },
+  {
+   "t": 502.37,
+   "d": 6.64,
+   "text": "While a computer generator may be able to generate this sixtillion classic Sudoku grids"
+  },
+  {
+   "t": 509.01,
+   "d": 5.81,
+   "text": "only a human can have the ingenuity to come up with something completely brand new and"
+  },
+  {
+   "t": 514.82,
+   "d": 6.27,
+   "text": "interesting although I know some of you procgen people will want to try."
+  },
+  {
+   "t": 521.09,
+   "d": 4.88,
+   "text": "It is not just having these rules and creating something off of them."
+  },
+  {
+   "t": 525.97,
+   "d": 7.04,
+   "text": "For example, killer cages have been in newspaper puzzles for years with kind of the same sort"
+  },
+  {
+   "t": 533.01,
+   "d": 2.88,
+   "text": "of randomized, really basic constraints."
+  },
+  {
+   "t": 535.89,
+   "d": 5.11,
+   "text": "You also need to have the ingenuity of the constructor in order to create these puzzles."
+  },
+  {
+   "t": 541.0,
+   "d": 6.02,
+   "text": "For example, this is a pure killer puzzle called I believe it is called leapfrog by"
+  },
+  {
+   "t": 547.02,
+   "d": 8.14,
+   "text": "jovial and echoes and the idea is complicated where you have to really keep track of the"
+  },
+  {
+   "t": 555.16,
+   "d": 4.44,
+   "text": "what they certain digits appear in the first five rows and you know certain digits have"
+  },
+  {
+   "t": 559.6,
+   "d": 4.86,
+   "text": "to be in certain cages and that restricts where they appear in the grid."
+  },
+  {
+   "t": 564.46,
+   "d": 5.55,
+   "text": "And that leap frogs into deductions about other digits and you have to fill in the Sudoku"
+  },
+  {
+   "t": 570.01,
+   "d": 2.32,
+   "text": "grid that way."
+  },
+  {
+   "t": 572.33,
+   "d": 7.89,
+   "text": "Even in classic Sudoku, people have been able to make like new interesting deductions that"
+  },
+  {
+   "t": 580.22,
+   "d": 5.25,
+   "text": "even a computer needs to be able to root force but a human will be able to solve logically."
+  },
+  {
+   "t": 585.47,
+   "d": 5.19,
+   "text": "This is a puzzle called arbitrary code execution where in the middle rows you have 7, 8, 9"
+  },
+  {
+   "t": 590.66,
+   "d": 5.5,
+   "text": "triples and you can color them and based on the coloring you can figure out which one"
+  },
+  {
+   "t": 596.16,
+   "d": 8.41,
+   "text": "is a 7 based on how it appears -- where it can appear on the third row."
+  },
+  {
+   "t": 604.57,
+   "d": 8.9,
+   "text": "So even in these really defined genres people have been able to come up with new and exciting"
+  },
+  {
+   "t": 613.47,
+   "d": 1.0,
+   "text": "things."
+  },
+  {
+   "t": 614.47,
+   "d": 1.53,
+   "text": "New and exciting logic."
+  },
+  {
+   "t": 616.0,
+   "d": 2.99,
+   "text": "There is a Sudoku meta game."
+  },
+  {
+   "t": 618.99,
+   "d": 1.91,
+   "text": "People come up with new theorems all of the time."
+  },
+  {
+   "t": 620.9,
+   "d": 4.33,
+   "text": "People build up on the theorems that other people have created."
+  },
+  {
+   "t": 625.23,
+   "d": 4.64,
+   "text": "Interfacing and being aspired by other people's puzzles which brings up us to the third thing"
+  },
+  {
+   "t": 629.87,
+   "d": 2.84,
+   "text": "I wanted to talk about which is the community."
+  },
+  {
+   "t": 632.71,
+   "d": 3.95,
+   "text": "The communication between puzzles."
+  },
+  {
+   "t": 636.66,
+   "d": 3.94,
+   "text": "In a computer-generated Sudoku there is not really a set path."
+  },
+  {
+   "t": 640.6,
+   "d": 4.07,
+   "text": "You kind of just stumble upon other places and maybe something will work and something"
+  },
+  {
+   "t": 644.67,
+   "d": 1.96,
+   "text": "won't."
+  },
+  {
+   "t": 646.63,
+   "d": 1.18,
+   "text": "There is not really a story there."
+  },
+  {
+   "t": 647.81,
+   "d": 2.21,
+   "text": "Puzzles by humans have a flow to them."
+  },
+  {
+   "t": 650.02,
+   "d": 4.6,
+   "text": "There is a sort of break in the core thing that you want people to realize about the"
+  },
+  {
+   "t": 654.62,
+   "d": 5.51,
+   "text": "puzzle, a core deduction, and from there it develops into a story about a flow from where"
+  },
+  {
+   "t": 660.13,
+   "d": 4.61,
+   "text": "that initial break-in leads you, and ending up in a situation where you have to resolve"
+  },
+  {
+   "t": 664.74,
+   "d": 3.95,
+   "text": "the final digits in."
+  },
+  {
+   "t": 668.69,
+   "d": 1.33,
+   "text": "It a form of storytelling."
+  },
+  {
+   "t": 670.02,
+   "d": 3.95,
+   "text": "Every puzzle made by a human has a story the person wants to tell."
+  },
+  {
+   "t": 673.97,
+   "d": 6.91,
+   "text": "Maybe the story is this seemingly impossible scenario has a solution."
+  },
+  {
+   "t": 680.88,
+   "d": 4.01,
+   "text": "Maybe the story is I have discovered a new theorem and this puzzle is my way of showing"
+  },
+  {
+   "t": 684.89,
+   "d": 6.77,
+   "text": "everyone interactively how to use the theorem or the story can be I want to troll my friends"
+  },
+  {
+   "t": 691.66,
+   "d": 5.97,
+   "text": "into solving a puzzle, a Sudoku, with square roots in it."
+  },
+  {
+   "t": 697.63,
+   "d": 4.29,
+   "text": "Because who would ever do that."
+  },
+  {
+   "t": 701.92,
+   "d": 4.3,
+   "text": "And this is not just the story within puzzle but the overall communication within the community"
+  },
+  {
+   "t": 706.22,
+   "d": 1.44,
+   "text": "as well."
+  },
+  {
+   "t": 707.66,
+   "d": 7.38,
+   "text": "People work off of each other, create puzzles and are inspired by others in the community."
+  },
+  {
+   "t": 715.04,
+   "d": 4.46,
+   "text": "Make puzzles because they want to see other types of puzzles that other people create"
+  },
+  {
+   "t": 719.5,
+   "d": 4.02,
+   "text": "in kind of procedural spaces."
+  },
+  {
+   "t": 723.52,
+   "d": 5.27,
+   "text": "You look toward the procedurality as a way to generate more content and more play time"
+  },
+  {
+   "t": 728.79,
+   "d": 6.05,
+   "text": "but in like our hand hand-crafted community we have essentially like hundreds of hours"
+  },
+  {
+   "t": 734.84,
+   "d": 5.83,
+   "text": "of play time because the community is so big and everyone just makes new and interesting"
+  },
+  {
+   "t": 740.67,
+   "d": 3.2,
+   "text": "things and works off of each other and communicates that way."
+  },
+  {
+   "t": 743.87,
+   "d": 4.53,
+   "text": "So, hopefully, now I have convinced you all and that this is cool."
+  },
+  {
+   "t": 748.4,
+   "d": 4.73,
+   "text": "You want to join the puzzle community and start solving and making puzzles."
+  },
+  {
+   "t": 753.13,
+   "d": 5.53,
+   "text": "How do you make a handcrafted Sudoku?"
+  },
+  {
+   "t": 758.66,
+   "d": 5.97,
+   "text": "For one thing it is a lot of watching, solving and looking up videos and trying to figure"
+  },
+  {
+   "t": 764.63,
+   "d": 1.0,
+   "text": "it out."
+  },
+  {
+   "t": 765.63,
+   "d": 3.58,
+   "text": "I think this is one of the first cracking the cryptic videos I have seen and tried to"
+  },
+  {
+   "t": 769.21,
+   "d": 1.59,
+   "text": "solve myself."
+  },
+  {
+   "t": 770.8,
+   "d": 5.6,
+   "text": "Following along, trying to figure out bits of logic that you can, and then referencing"
+  },
+  {
+   "t": 776.4,
+   "d": 7.91,
+   "text": "the video to see the parts that you can figure out, and once you kind of have built intuition"
+  },
+  {
+   "t": 784.31,
+   "d": 5.44,
+   "text": "for what works and what doesn't, you build logical intuition, you have to have an idea."
+  },
+  {
+   "t": 789.75,
+   "d": 5.4,
+   "text": "This can be what happens if I draw this with this type of line constraints?"
+  },
+  {
+   "t": 795.15,
+   "d": 4.47,
+   "text": "What happens if I combine these two types of constraints?"
+  },
+  {
+   "t": 799.62,
+   "d": 6.29,
+   "text": "Can I take this puzzle, this constraint someone else made, and modify it in a way that leads"
+  },
+  {
+   "t": 805.91,
+   "d": 2.24,
+   "text": "to a more complex or interesting puzzle?"
+  },
+  {
+   "t": 808.15,
+   "d": 5.35,
+   "text": "Once you have the idea, you have to follow through."
+  },
+  {
+   "t": 813.5,
+   "d": 13.69,
+   "text": "You have to -- how do you make the break you created and turn it into interesting deductions"
+  },
+  {
+   "t": 827.19,
+   "d": 1.79,
+   "text": "based around that theme?"
+  },
+  {
+   "t": 828.98,
+   "d": 9.69,
+   "text": "If you have made a couple of different contraptions of different digits, how do you arrange those?"
+  },
+  {
+   "t": 838.67,
+   "d": 5.49,
+   "text": "Sometimes you put something in and it breaks and you have to realize maybe the logic does"
+  },
+  {
+   "t": 844.16,
+   "d": 3.97,
+   "text": "something interesting and that's something you want people to find."
+  },
+  {
+   "t": 848.13,
+   "d": 4.44,
+   "text": "But in the end it is always the question of what do I want to see and what kinds of puzzles"
+  },
+  {
+   "t": 852.57,
+   "d": 6.33,
+   "text": "do I want to create and see people solve and that directs a lot of what you create in a"
+  },
+  {
+   "t": 858.9,
+   "d": 1.62,
+   "text": "puzzle."
+  },
+  {
+   "t": 860.52,
+   "d": 3.88,
+   "text": "And there is this really interesting thing that happens because of the way that math"
+  },
+  {
+   "t": 864.4,
+   "d": 5.32,
+   "text": "and logic works where sometimes is t doesn't feel like you are creating a puzzle but it"
+  },
+  {
+   "t": 869.72,
+   "d": 2.19,
+   "text": "feels like you are discovering it."
+  },
+  {
+   "t": 871.91,
+   "d": 6.12,
+   "text": "You kind of set the rules for the world and then the universe just generates all the possible"
+  },
+  {
+   "t": 878.03,
+   "d": 5.43,
+   "text": "worlds and you are traversing those generated worlds to find something that works and it"
+  },
+  {
+   "t": 883.46,
+   "d": 1.19,
+   "text": "is pleasing for others to look like."
+  },
+  {
+   "t": 884.65,
+   "d": 6.44,
+   "text": "It is like finding a planet that's interesting and telling other people about it or a Minecraft"
+  },
+  {
+   "t": 891.09,
+   "d": 3.31,
+   "text": "world sea that's interesting and telling people about it."
+  },
+  {
+   "t": 894.4,
+   "d": 1.48,
+   "text": "I don't know how this works."
+  },
+  {
+   "t": 895.88,
+   "d": 4.32,
+   "text": "I have never played."
+  },
+  {
+   "t": 900.2,
+   "d": 4.89,
+   "text": "You are kind of co-constructing with the universe and that's one cool they I think it really"
+  },
+  {
+   "t": 905.09,
+   "d": 2.55,
+   "text": "goes back to roguelikes."
+  },
+  {
+   "t": 907.64,
+   "d": 4.53,
+   "text": "Because of the way logic works and because a lot of these things are hard to see for"
+  },
+  {
+   "t": 912.17,
+   "d": 8.81,
+   "text": "a human sometimes constructors rely on tools in order to help them make good puzzles."
+  },
+  {
+   "t": 920.98,
+   "d": 3.98,
+   "text": "This is a tool called F puzzles that has a bunch of constraints build into it that a"
+  },
+  {
+   "t": 924.96,
+   "d": 8.66,
+   "text": "lot of constructors use along with a script called the ranked Sudoku solver made by the"
+  },
+  {
+   "t": 933.62,
+   "d": 4.23,
+   "text": "constructor ranks which has a lot of logic for a lot of different clues in it."
+  },
+  {
+   "t": 937.85,
+   "d": 4.93,
+   "text": "What I am going to do now is a live demo and we are going to construct a Sudoku together"
+  },
+  {
+   "t": 942.78,
+   "d": 1.0,
+   "text": "in F puzzles."
+  },
+  {
+   "t": 943.78,
+   "d": 5.94,
+   "text": "We are going to connect and we are going to -- I am going to make these whisper clues"
+  },
+  {
+   "t": 949.72,
+   "d": 6.54,
+   "text": "which are these lines where the digits have to differ by at least five and I am going"
+  },
+  {
+   "t": 956.26,
+   "d": 6.51,
+   "text": "to try make an @ sign like the roguelike convention symbol."
+  },
+  {
+   "t": 962.77,
+   "d": 1.04,
+   "text": "Let's see."
+  },
+  {
+   "t": 963.81,
+   "d": 2.46,
+   "text": "That goes here."
+  },
+  {
+   "t": 966.27,
+   "d": 2.35,
+   "text": "And let's see."
+  },
+  {
+   "t": 968.62,
+   "d": 1.78,
+   "text": "This isn't breaking so far."
+  },
+  {
+   "t": 970.4,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 971.4,
+   "d": 1.29,
+   "text": "This breaks so I am not going to do that."
+  },
+  {
+   "t": 972.69,
+   "d": 1.34,
+   "text": "Let's see here."
+  },
+  {
+   "t": 974.03,
+   "d": 1.0,
+   "text": "All right."
+  },
+  {
+   "t": 975.03,
+   "d": 2.12,
+   "text": "There is an at sign."
+  },
+  {
+   "t": 977.15,
+   "d": 2.73,
+   "text": "I think there is an exclamation mark."
+  },
+  {
+   "t": 979.88,
+   "d": 4.06,
+   "text": "I will use the thermometer for that."
+  },
+  {
+   "t": 983.94,
+   "d": 1.0,
+   "text": "That breaks."
+  },
+  {
+   "t": 984.94,
+   "d": 5.59,
+   "text": "Maybe a small one."
+  },
+  {
+   "t": 990.53,
+   "d": 1.92,
+   "text": "It doesn't like that."
+  },
+  {
+   "t": 992.45,
+   "d": 4.84,
+   "text": "Let's do a couple of things."
+  },
+  {
+   "t": 997.29,
+   "d": 1.74,
+   "text": "That resolves a lot."
+  },
+  {
+   "t": 999.03,
+   "d": 1.18,
+   "text": "Can I make this work?"
+  },
+  {
+   "t": 1000.21,
+   "d": 1.75,
+   "text": "That resolves it more."
+  },
+  {
+   "t": 1001.96,
+   "d": 2.31,
+   "text": "Let's see."
+  },
+  {
+   "t": 1004.27,
+   "d": 2.32,
+   "text": "Yeah, OK."
+  },
+  {
+   "t": 1006.59,
+   "d": 1.0,
+   "text": "We did it."
+  },
+  {
+   "t": 1007.59,
+   "d": 1.0,
+   "text": "We made a Sudoku."
+  },
+  {
+   "t": 1008.59,
+   "d": 4.65,
+   "text": "I am going to share this in the obelisk."
+  },
+  {
+   "t": 1013.24,
+   "d": 2.17,
+   "text": "So we did it."
+  },
+  {
+   "t": 1015.41,
+   "d": 1.73,
+   "text": "We made the hand-crafted Sudoku."
+  },
+  {
+   "t": 1017.14,
+   "d": 3.15,
+   "text": "It took two minutes of my talk."
+  },
+  {
+   "t": 1020.29,
+   "d": 3.4,
+   "text": "Well, there is something kind of wrong here."
+  },
+  {
+   "t": 1023.69,
+   "d": 2.77,
+   "text": "This Sudoku kind of feels procedural."
+  },
+  {
+   "t": 1026.46,
+   "d": 3.59,
+   "text": "Like I didn't go through the logic and it didn't have anything that I said about an"
+  },
+  {
+   "t": 1030.05,
+   "d": 3.64,
+   "text": "intended solution path."
+  },
+  {
+   "t": 1033.69,
+   "d": 4.76,
+   "text": "Like I kind of just doodled in the grid and was like OK, the computer said this result."
+  },
+  {
+   "t": 1038.45,
+   "d": 1.32,
+   "text": "It feels procedural."
+  },
+  {
+   "t": 1039.77,
+   "d": 5.15,
+   "text": "There are like small Xs I added that don't meaningfully add to the logic."
+  },
+  {
+   "t": 1044.92,
+   "d": 4.72,
+   "text": "They are just there because I needed to resolve at the end."
+  },
+  {
+   "t": 1049.64,
+   "d": 5.55,
+   "text": "It is possible to make hand-crafted puzzles that feel procedural even though I drew everything"
+  },
+  {
+   "t": 1055.19,
+   "d": 6.37,
+   "text": "in the grid and decided wherever it goes it feels like one of those -- I bet if you solved"
+  },
+  {
+   "t": 1061.56,
+   "d": 6.66,
+   "text": "it, it would solve like one of those newspaper Sudokus that you would find in the airport"
+  },
+  {
+   "t": 1068.22,
+   "d": 2.26,
+   "text": "gift shop."
+  },
+  {
+   "t": 1070.48,
+   "d": 4.6,
+   "text": "If that's not how we use tools, how do we actually use them?"
+  },
+  {
+   "t": 1075.08,
+   "d": 5.21,
+   "text": "One way that I have seen tools use and I have used myself is the shortcutting of bad paths."
+  },
+  {
+   "t": 1080.29,
+   "d": 4.67,
+   "text": "This a chaos construction that I have made get up on the hydras back."
+  },
+  {
+   "t": 1084.96,
+   "d": 8.19,
+   "text": "You draw them in the region and there are specific cells that determine how many of"
+  },
+  {
+   "t": 1093.15,
+   "d": 6.35,
+   "text": "a certain type of like polymer region appears in the grid."
+  },
+  {
+   "t": 1099.5,
+   "d": 5.9,
+   "text": "I created the regions while making this and I need to resolve the final pieces of logic,"
+  },
+  {
+   "t": 1105.4,
+   "d": 7.54,
+   "text": "the final region logic, and ended up using this F-puzzle generator to try out a couple"
+  },
+  {
+   "t": 1112.94,
+   "d": 5.09,
+   "text": "of possible combinations and figure out which ones worked and which ones didn't."
+  },
+  {
+   "t": 1118.03,
+   "d": 6.1,
+   "text": "But I eventually had to make the logic myself to make sure that the solver is steered towards"
+  },
+  {
+   "t": 1124.13,
+   "d": 8.29,
+   "text": "the combination, regional logic that made sense and actually worked to a solution and"
+  },
+  {
+   "t": 1132.42,
+   "d": 2.33,
+   "text": "made sure that was unique."
+  },
+  {
+   "t": 1134.75,
+   "d": 7.59,
+   "text": "Another way that people, that constructors explore the problem space, and there is nothing"
+  },
+  {
+   "t": 1142.34,
+   "d": 8.01,
+   "text": "with drawing and doodling on the grid as long as you --"
+  },
+  {
+   "t": 1150.35,
+   "d": 5.53,
+   "text": "this is another puzzle that got featured called too many arrows spoil the box."
+  },
+  {
+   "t": 1155.88,
+   "d": 6.32,
+   "text": "The con seat is there are all these arrows that point to the central Sudoku because I"
+  },
+  {
+   "t": 1162.2,
+   "d": 4.15,
+   "text": "thought it would be a funny thing to make."
+  },
+  {
+   "t": 1166.35,
+   "d": 10.68,
+   "text": "I added an anti-knight move."
+  },
+  {
+   "t": 1177.03,
+   "d": 7.56,
+   "text": "This inner square being even and on the orthogonal cells being odd."
+  },
+  {
+   "t": 1184.59,
+   "d": 2.09,
+   "text": "I was like wait this is weird."
+  },
+  {
+   "t": 1186.68,
+   "d": 1.0,
+   "text": "Why does this happen?"
+  },
+  {
+   "t": 1187.68,
+   "d": 6.14,
+   "text": "I went back and Intuited out the reason of why it happened and it turned out to be cool"
+  },
+  {
+   "t": 1193.82,
+   "d": 8.08,
+   "text": "logic involving the way digits circle around the grid and how they had to be placed."
+  },
+  {
+   "t": 1201.9,
+   "d": 5.39,
+   "text": "So I decided to turn it foe a full puzzle and to resolve it I used the resolver to try"
+  },
+  {
+   "t": 1207.29,
+   "d": 9.15,
+   "text": "out a bunch of combinations and the one I ended up going with I had to go back and figure"
+  },
+  {
+   "t": 1216.44,
+   "d": 4.22,
+   "text": "out this is interesting logic for a human to solve."
+  },
+  {
+   "t": 1220.66,
+   "d": 5.41,
+   "text": "It turns out that the two digits that are highlighted in red have to be the same."
+  },
+  {
+   "t": 1226.07,
+   "d": 3.36,
+   "text": "If you put the arrow there and because they have to be the same the only way they work"
+  },
+  {
+   "t": 1229.43,
+   "d": 4.89,
+   "text": "for the way the arrow sums worked they both have to be a three instead of resolving the"
+  },
+  {
+   "t": 1234.32,
+   "d": 1.45,
+   "text": "entire grid."
+  },
+  {
+   "t": 1235.77,
+   "d": 6.53,
+   "text": "At this point, I talked about how I personally have used these tools, it is time to talk"
+  },
+  {
+   "t": 1242.3,
+   "d": 1.84,
+   "text": "about the miracle Sudoku."
+  },
+  {
+   "t": 1244.14,
+   "d": 6.33,
+   "text": "This was a puzzle that was towards the earlier run of cracking the cryptic popularity and"
+  },
+  {
+   "t": 1250.47,
+   "d": 6.87,
+   "text": "the second most popularly watched video and it is a Sudoku with only two digits, a one"
+  },
+  {
+   "t": 1257.34,
+   "d": 11.2,
+   "text": "and two, and they can't be a kings move away and can't be consecutive."
+  },
+  {
+   "t": 1268.54,
+   "d": 7.26,
+   "text": "These restrictions are more restrictive than you led on and you can whittle down from the"
+  },
+  {
+   "t": 1275.8,
+   "d": 7.38,
+   "text": "1, 2, 3 and 4s and counting up how the digits have to be arranged in the grid and whittle"
+  },
+  {
+   "t": 1283.18,
+   "d": 3.4,
+   "text": "down where they go."
+  },
+  {
+   "t": 1286.58,
+   "d": 5.17,
+   "text": "If you have never watched the cracking the cryptic solve of it, please, do it."
+  },
+  {
+   "t": 1291.75,
+   "d": 6.47,
+   "text": "It is an amazing video and the solver Simon goes through an entire hero's journey like"
+  },
+  {
+   "t": 1298.22,
+   "d": 6.39,
+   "text": "the refusal of the call to I am closing this video and wait this might be able to solve"
+  },
+  {
+   "t": 1304.61,
+   "d": 3.37,
+   "text": "and filling everything in."
+  },
+  {
+   "t": 1307.98,
+   "d": 8.09,
+   "text": "So I am going to give another demo and I am going to re-create the miracle Sudoku."
+  },
+  {
+   "t": 1316.07,
+   "d": 2.33,
+   "text": "We are going to -- whoops connect."
+  },
+  {
+   "t": 1318.4,
+   "d": 6.53,
+   "text": "We are going to use it solver to include all the different constraints in the miracle Sudoku"
+  },
+  {
+   "t": 1324.93,
+   "d": 1.0,
+   "text": "and pick two numbers."
+  },
+  {
+   "t": 1325.93,
+   "d": 4.47,
+   "text": "A 6 here and there we go."
+  },
+  {
+   "t": 1330.4,
+   "d": 1.51,
+   "text": "This is a miracle Sudoku."
+  },
+  {
+   "t": 1331.91,
+   "d": 1.0,
+   "text": "We just made that."
+  },
+  {
+   "t": 1332.91,
+   "d": 6.31,
+   "text": "We can submit it to cracking the cryptic and get millions of views and puzzle game."
+  },
+  {
+   "t": 1339.22,
+   "d": 2.91,
+   "text": "But that's not exactly correct."
+  },
+  {
+   "t": 1342.13,
+   "d": 4.96,
+   "text": "Because turns out that there are really only one or two different possible solution for"
+  },
+  {
+   "t": 1347.09,
+   "d": 5.93,
+   "text": "the miracle Sudoku up to morphism for you math people out there."
+  },
+  {
+   "t": 1353.02,
+   "d": 5.51,
+   "text": "So the idea of the puzzle isn't any particular combination is interesting it is the fact"
+  },
+  {
+   "t": 1358.53,
+   "d": 5.07,
+   "text": "this puzzle can exist at all."
+  },
+  {
+   "t": 1363.6,
+   "d": 6.98,
+   "text": "The first person to figure it out capitalized on it and showed people that that's an interesting"
+  },
+  {
+   "t": 1370.58,
+   "d": 1.0,
+   "text": "fact."
+  },
+  {
+   "t": 1371.58,
+   "d": 11.02,
+   "text": "178 is another example by a constructor and this pulls, all the question marks are killer"
+  },
+  {
+   "t": 1382.6,
+   "d": 5.12,
+   "text": "clues that sum the digits in the diagonal and the only rule in the puzzle is the sum"
+  },
+  {
+   "t": 1387.72,
+   "d": 3.77,
+   "text": "of all the question marks add to 178."
+  },
+  {
+   "t": 1391.49,
+   "d": 4.33,
+   "text": "That seems like an impossible thing until you realize that you can just highlight all"
+  },
+  {
+   "t": 1395.82,
+   "d": 6.06,
+   "text": "the cells that are part of that diagonal counting the ones that are double counted and minimize"
+  },
+  {
+   "t": 1401.88,
+   "d": 7.49,
+   "text": "them and that adds up to 178 and you can fill in the digits and entire Sudoku from there."
+  },
+  {
+   "t": 1409.37,
+   "d": 9.72,
+   "text": "There is a really interesting challenger who interviews a lot of other setters and he interviewed"
+  },
+  {
+   "t": 1419.09,
+   "d": 7.94,
+   "text": "clypeal who talks about the way he set his puzzle and that is using F puzzle solver to"
+  },
+  {
+   "t": 1427.03,
+   "d": 3.56,
+   "text": "try a bunch of combinations."
+  },
+  {
+   "t": 1430.59,
+   "d": 9.26,
+   "text": "When he got to a situation where it was almost -- he almost got it to work but didn't feel"
+  },
+  {
+   "t": 1439.85,
+   "d": 6.28,
+   "text": "it wasn't just right, so he ended up writing a program to generate a bunch of different"
+  },
+  {
+   "t": 1446.13,
+   "d": 1.9,
+   "text": "combinations."
+  },
+  {
+   "t": 1448.03,
+   "d": 4.12,
+   "text": "Ended up with like four different solutions that worked and picked the one that had the"
+  },
+  {
+   "t": 1452.15,
+   "d": 1.46,
+   "text": "most beautiful solve path."
+  },
+  {
+   "t": 1453.61,
+   "d": 7.44,
+   "text": "In this case, in these two cases, these are essentially procedural puzzles that feel hand-crafted."
+  },
+  {
+   "t": 1461.05,
+   "d": 4.75,
+   "text": "They are puzzles that are essentially generated by a computer for the most part but a human"
+  },
+  {
+   "t": 1465.8,
+   "d": 7.47,
+   "text": "editor had to go write the program themselves, and two, have to curate which of those puzzles"
+  },
+  {
+   "t": 1473.27,
+   "d": 8.93,
+   "text": "actually they wanted to show to the world and show this very constrained thing had a"
+  },
+  {
+   "t": 1482.2,
+   "d": 1.22,
+   "text": "solution."
+  },
+  {
+   "t": 1483.42,
+   "d": 4.13,
+   "text": "What I am getting at is hand-crafted verse procedural isn't a binary."
+  },
+  {
+   "t": 1487.55,
+   "d": 1.25,
+   "text": "It is a spectrum."
+  },
+  {
+   "t": 1488.8,
+   "d": 7.12,
+   "text": "You can create hand-crafted puzzles that feel procedural that don't have interesting logic"
+  },
+  {
+   "t": 1495.92,
+   "d": 1.51,
+   "text": "or intuition in there."
+  },
+  {
+   "t": 1497.43,
+   "d": 6.84,
+   "text": "You can make puzzles on a computer using procedural generation and then because of the way that"
+  },
+  {
+   "t": 1504.27,
+   "d": 4.58,
+   "text": "you do it, curate that in order to have a puzzle that has an extra thing in the solve"
+  },
+  {
+   "t": 1508.85,
+   "d": 1.0,
+   "text": "path."
+  },
+  {
+   "t": 1509.85,
+   "d": 3.25,
+   "text": "I think this goes into games as well."
+  },
+  {
+   "t": 1513.1,
+   "d": 4.84,
+   "text": "In the end, humans don't want -- humans want to communicate with other humans."
+  },
+  {
+   "t": 1517.94,
+   "d": 9.46,
+   "text": "They want to tell a story and listen to a story and experience the art created by other"
+  },
+  {
+   "t": 1527.4,
+   "d": 5.37,
+   "text": "people whether that art is through the medium of books or movies or games or puzzles in"
+  },
+  {
+   "t": 1532.77,
+   "d": 2.74,
+   "text": "this case."
+  },
+  {
+   "t": 1535.51,
+   "d": 7.12,
+   "text": "And whether that story is look at this cool theorem I found, the story is this is a set"
+  },
+  {
+   "t": 1542.63,
+   "d": 4.96,
+   "text": "storyline with a beginning and ending that I want everyone to go through, or even if"
+  },
+  {
+   "t": 1547.59,
+   "d": 6.58,
+   "text": "that story is this is a wild experience that anything can happen and you have to adjust"
+  },
+  {
+   "t": 1554.17,
+   "d": 2.1,
+   "text": "to it."
+  },
+  {
+   "t": 1556.27,
+   "d": 10.05,
+   "text": "And I think the puzzle community brings an interesting microcosm of a world that is increasingly"
+  },
+  {
+   "t": 1566.32,
+   "d": 8.96,
+   "text": "faced with the big questions about the role of automation and AI in their lives."
+  },
+  {
+   "t": 1575.28,
+   "d": 9.32,
+   "text": "Sudoku is kind of this genre, this subset where computer generated essentially chaff"
+  },
+  {
+   "t": 1584.6,
+   "d": 5.09,
+   "text": "floods the market and that's how most people know it."
+  },
+  {
+   "t": 1589.69,
+   "d": 10.24,
+   "text": "Even in that bleak reality there are people that seek out art and experiences made by"
+  },
+  {
+   "t": 1599.93,
+   "d": 5.63,
+   "text": "other people but at the same time it is a sad reality because while many publishers"
+  },
+  {
+   "t": 1605.56,
+   "d": 8.97,
+   "text": "can turn a quick buck while publishing a book of hundreds of Sudoku and many of us do it"
+  },
+  {
+   "t": 1614.53,
+   "d": 13.76,
+   "text": "on the side and are trying to make ends meet using Patreon and other things."
+  },
+  {
+   "t": 1628.29,
+   "d": 3.08,
+   "text": "Is Sudoku a roguelike is the ultimate question?"
+  },
+  {
+   "t": 1631.37,
+   "d": 3.39,
+   "text": "To which the answer is no, not really."
+  },
+  {
+   "t": 1634.76,
+   "d": 4.91,
+   "text": "But I think there is a lot the roguelike and procedural community can learn about why people"
+  },
+  {
+   "t": 1639.67,
+   "d": 6.67,
+   "text": "like these hand-crafted puzzles which is why this has been a defense of hand-crafted Sudoku."
+  },
+  {
+   "t": 1646.34,
+   "d": 1.38,
+   "text": "Yup."
+  },
+  {
+   "t": 1647.72,
+   "d": 2.03,
+   "text": "My name is Nat Allison."
+  },
+  {
+   "t": 1649.75,
+   "d": 3.04,
+   "text": "That's my website and BlueSky handle."
+  },
+  {
+   "t": 1652.79,
+   "d": 8.63,
+   "text": "I am @ tesseralis on all social media."
+  },
+  {
+   "t": 1661.42,
+   "d": 1.9,
+   "text": "Please check out the puzzle community."
+  },
+  {
+   "t": 1663.32,
+   "d": 3.23,
+   "text": "I would love for more people to go into it."
+  },
+  {
+   "t": 1666.55,
+   "d": 4.7,
+   "text": "Check out cracking the cryptic and the other channels."
+  },
+  {
+   "t": 1671.25,
+   "d": 4.96,
+   "text": "Check out Discord."
+  },
+  {
+   "t": 1676.21,
+   "d": 2.55,
+   "text": "That has been my defense."
+  },
+  {
+   "t": 1678.76,
+   "d": 2.13,
+   "text": ">> Qristy: Wow."
+  },
+  {
+   "t": 1680.89,
+   "d": 4.02,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1684.91,
+   "d": 1.51,
+   "text": "This was really cool."
+  },
+  {
+   "t": 1686.42,
+   "d": 7.53,
+   "text": "Like I had no idea -- this is Sudoku in a fundamentally different way than I have ever"
+  },
+  {
+   "t": 1693.95,
+   "d": 3.21,
+   "text": "experienced it and I am here for it."
+  },
+  {
+   "t": 1697.16,
+   "d": 1.34,
+   "text": "OK."
+  },
+  {
+   "t": 1698.5,
+   "d": 5.84,
+   "text": "So we have time for one question."
+  },
+  {
+   "t": 1704.34,
+   "d": 3.7,
+   "text": "And then we got to head off to the Breakout rooms."
+  },
+  {
+   "t": 1708.04,
+   "d": 7.9,
+   "text": "How about what was the most interesting message that you received from solving a puzzle?"
+  },
+  {
+   "t": 1715.94,
+   "d": 4.68,
+   "text": "NAT: Oh, my God."
+  },
+  {
+   "t": 1720.62,
+   "d": 1.02,
+   "text": "That's a really hard one."
+  },
+  {
+   "t": 1721.64,
+   "d": 4.83,
+   "text": ">> Qristy: May be difficult to come up with off the cuff."
+  },
+  {
+   "t": 1726.47,
+   "d": 8.79,
+   "text": "NAT: I think the most interesting ones are ones that like -- there is a sort of genre"
+  },
+  {
+   "t": 1735.26,
+   "d": 7.45,
+   "text": "of like -- those are the messages that reveal something fundamental and I learn new theorems"
+  },
+  {
+   "t": 1742.71,
+   "d": 4.82,
+   "text": "of mathematics from solving a Sudoku puzzle."
+  },
+  {
+   "t": 1747.53,
+   "d": 3.38,
+   "text": "The digits from 1-9 have an interesting property."
+  },
+  {
+   "t": 1750.91,
+   "d": 6.37,
+   "text": "For example there is like a certain set of puzzles that have different cages but all"
+  },
+  {
+   "t": 1757.28,
+   "d": 3.44,
+   "text": "sum to 14."
+  },
+  {
+   "t": 1760.72,
+   "d": 5.41,
+   "text": "And you actually have to learn stuff about the number of ways that you can sum to 14"
+  },
+  {
+   "t": 1766.13,
+   "d": 6.0,
+   "text": "using digits 1-9 that is really interesting and cool and like you sort of figure that"
+  },
+  {
+   "t": 1772.13,
+   "d": 4.07,
+   "text": "out from like determining how the different sums interplay."
+  },
+  {
+   "t": 1776.2,
+   "d": 1.0,
+   "text": "I will share it in the obelisk."
+  },
+  {
+   "t": 1783.6,
+   "d": 1.0,
+   "text": "Those are the things I like to see and I find are really cool."
+  },
+  {
+   "t": 1790.68,
+   "d": 1.0,
+   "text": ">> Qristy: Thank you, again."
+  },
+  {
+   "t": 1791.98,
+   "d": 1.0,
+   "text": "Thank you so much."
+  }
+ ],
+ "note": "re-timed 3 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 13 s off the audio)"
+}

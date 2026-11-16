@@ -1,0 +1,166 @@
+{
+  "id": "QV57CYrIZow",
+  "title": "Alan Malloy - Data Driven Crawl Development",
+  "speaker": "Alan Malloy",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=QV57CYrIZow",
+  "talk_type": "technical",
+  "summary": "Dungeon Crawl Stone Soup developer Alan Malloy argues that offering online play benefits a roguelike's players and its developers. Online servers give players access from any device and automatic updates, while every game produces morgue files, frame-by-frame ttyrec replays and machine-readable milestones that feed a queryable database (via the IRC bot Sequell). The team uses this data to help players, reproduce and find bugs, and balance content against how games actually go rather than how designers think they go. He also covers social features (spectating, chat, scorekeeping, automated release tournaments) and, in Q&A, Crawl's codified design philosophy against powerful-but-tedious mechanics.",
+  "games": [
+    "Dungeon Crawl Stone Soup",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "online play",
+      "kind": "principle",
+      "claim": "Dungeon Crawl Stone Soup argues that offering online play alongside the downloadable game benefits players and developers, and other roguelikes could gain the same advantages.",
+      "detail": "Malloy says most roguelikes are downloaded single-player games, but Crawl gets unique benefits from online support: reaching more players, collecting game data for analysis without spyware-like agents, a social space, events and better feedback. He frames even developer-process gains as ultimately making the game better for players.",
+      "t": 30,
+      "quote": "dungeon crawl gets a lot of unique benefits from its online support that that I think a lot of other roguelikes could benefit from",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "tiles vs ascii",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup offers both a character-based display and a tiles interface, which broadens its appeal to players unwilling to read ASCII.",
+      "detail": "Malloy shows the ASCII 'soup' display and a tiles view drawn by volunteer artists. He says many people are not willing to look at the ASCII version but would love to play the tiles one.",
+      "t": 185,
+      "quote": "you get a lot more people who who are not really willing to look at at this but but but would love to play something like this",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "online play",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup's online servers let players play over SSH or in-browser WebTiles from any device, carry one game across machines, and receive updates automatically.",
+      "detail": "WebTiles sends tiles to the browser as if playing locally, so anything with a browser works, and phone ports talk to the WebTiles server. Players can choose old versions that still get severe bug fixes backported, and can continue the same game from home or work.",
+      "t": 395,
+      "quote": "you can play from pretty much any device that like has an internet connection you don't have to download anything",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "morgue files",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup saves a morgue file (a text snapshot of the character and key events) for every online game, and a community norm of attaching morgues makes help requests answerable.",
+      "detail": "Morgues are stored on death or win and can be generated mid-game on request. Malloy says when players ask for help, the morgue usually reveals many basic mistakes rather than the one problem the player suspected, which advisers could not diagnose without it.",
+      "t": 575,
+      "quote": "there's this culture of when you ask for help you should provide a morgue file",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "replays",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup keeps frame-by-frame ttyrec replays of every online game, which lets players and developers explain surprising deaths and reproduce bugs.",
+      "detail": "Malloy used a replay to explain a player dropping from 230 health in one turn via two stacked damage multipliers. Another player watched a replay to prove magic mapping failed in the Realm of Zot after the player had forgotten the map, revealing a real bug Malloy then fixed instead of closing it as unreproducible.",
+      "t": 728,
+      "quote": "having a TTY rack made that possible where before I would've said no can't reproduce clothes",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "telemetry",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup has every online game emit machine-readable milestones with rich properties into a database that an IRC bot (Sequell) can query with a Crawl-specific query language.",
+      "detail": "Milestones fire on events like entering a new area, killing a unique or changing god, and record race, god, level, top skill, killer and its weapon. Since morgues and replays suit humans rather than programs, the milestone database lets anyone ask targeted questions about any subset of online games without writing SQL.",
+      "t": 775,
+      "quote": "every game played online also reports what are called milestones the game has a lot of things that notes as important",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player statistics",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup players can query aggregate data to learn, for example finding the experience level at which entering the optional Elven Halls stops being deadly.",
+      "detail": "Malloy queried recent trunk games entering the Elven Halls by experience level and the share who died there, concluding around level 19 is a reasonable estimate. He also showed querying his own win rate by god to see what he is good at, noting small sample sizes and query imperfections.",
+      "t": 1028,
+      "quote": "list for all players recently on a trunk version when they entered elf sorted by their experience level and tell me what percent of them died",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "data-driven balance",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup's tournament win-rate data exposed a bug that doubled all player damage, which might otherwise have gone unnoticed for a long time.",
+      "detail": "The 0.15 tournament win rate was about 1.5 percent and 0.16's was almost twice as high; someone noticed a week in and the fix commit was to stop doubling player damage. Malloy contrasts this with an exploit unnoticed since 0.8 because no milestone tracked it.",
+      "t": 1104,
+      "quote": "someone made this commit to github stop doubling all damage dealt by the player but that put the win right back where it was supposed to be",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "data-driven balance",
+      "kind": "principle",
+      "claim": "Dungeon Crawl Stone Soup checks player complaints about new content against death statistics and replays, adjusting based on how games actually go rather than how designers expect.",
+      "detail": "When players called the new iron giants oppressive, developers compared death rates across the Hell branches, found Dis deadliest with iron giants among its top killers, and could watch replays to judge whether the deaths were fun. Malloy says dying is fine if players have fun and feel they deserved it.",
+      "t": 1194,
+      "quote": "it's okay if players die as long as they have fun and feel like they deserved it",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "spectating",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup's scorekeeping pages and cross-mode spectating give online players ways to socialize, brag and get help.",
+      "detail": "Scorekeepers show per-player tables of combos played, streaks, win rates and global high scores without needing queries. Anyone can spectate any online game in console or tiles regardless of how it is played, so a console-only helper can read a tiles player's problem.",
+      "t": 1254,
+      "quote": "anyone who's playing online you can spectate whether they're playing console or tiles you can spectate them in console or tiles",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "crash reporting",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup's online servers post every crash to the developer IRC channel with the morgue, stack trace and save file, and auto-update trunk so a fixed bug never recurs for players.",
+      "detail": "Malloy jokes 'who needs tests when you have players' but says trunk is stable. Because crashes arrive with everything needed to reproduce them, debugging is far easier than persuading offline players to send data.",
+      "t": 1387,
+      "quote": "whenever a crash happens online it gets pasted to the dev IRC",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "tournaments",
+      "kind": "technique",
+      "claim": "Dungeon Crawl Stone Soup's automated release tournaments devalue the most-won combos and offer bonus challenges for rarely played ones, steering players toward variety.",
+      "detail": "For about two weeks after each release, all online games on the new version count. As popular easy combos like Minotaur Berserker of Trog get won, they award fewer points; a rotating 'Nemelex choice' rarely played combo gives big bonuses to its first eight winners, and challenge goals like winning without potions or scrolls are tracked automatically. Malloy personally feels the scoring rewards playing a lot more than playing well.",
+      "t": 1721,
+      "quote": "you're rewarded for winning things that are one less often and this is all done automatically",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "design philosophy",
+      "kind": "principle",
+      "claim": "Dungeon Crawl Stone Soup keeps a codified design philosophy that excludes mechanics which are powerful but tedious, so optimal play never requires boring grinding.",
+      "detail": "Malloy cites the motto 'when in doubt do the opposite of NetHack' (not because NetHack is bad but because it is very different) and a prior talk on the hypothetically optimal player. His example is 'victory dancing': experience gained from a kill went into skills used afterward, so the optimal play was swinging at air after each kill.",
+      "t": 1855,
+      "quote": "don't include mechanics that are powerful but frustrating",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fair death",
+      "kind": "principle",
+      "claim": "A fun death in a roguelike is one with a tactical lesson — something interesting the player could have done — rather than one avoidable only by grinding or not avoidable at all.",
+      "detail": "Asked how to quantify a fun death, Malloy says Crawl has no metric: if you laugh watching it, it was probably fun. Deaths where the game kills you for no good reason, or that only grinding like casting fireball at a wall 80 times would have prevented, are not fun.",
+      "t": 1926,
+      "quote": "if there's something you could have done to prevent it that's interesting then it's sort of a fun useful death",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "branch balance",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup players' queries showed the Shoals is the deadliest of the four Lair sub-branches, so developers avoid making it harder.",
+      "detail": "Each game gets two of four Lair sub-branches (Spider, Snake, Swamp, Shoals); a canned query comparing deaths across them always shows the Shoals on top. Malloy says only a small number of players, often the best ones, use this data-driven approach.",
+      "t": 2101,
+      "quote": "which of these four do players die in most often and like it's always shoals of course so we try not to make shoals harder",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

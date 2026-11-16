@@ -1,0 +1,152 @@
+{
+  "id": "RDWt6RGN9wM",
+  "title": "Mark Johnson - Generating Riddles for a Generated World",
+  "speaker": "Mark Johnson",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=RDWt6RGN9wM",
+  "talk_type": "design",
+  "summary": "Mark Johnson, developer of Ultima Ratio Regum, explains how to procedurally generate cryptic multi-step riddles of the kind found in La-Mulana. He first walks through La-Mulana's gem-scales puzzle, whose clues are scattered across hundreds of hours and demand many kinds of attention. He then plays through a pilgrimage puzzle in his own game, revealing that every part (books, priest, note, inscription, reward goblet) was procedurally generated. He explains the methods: tracking abstract descriptions of not-yet-generated features so clues can reference them, maximising visual variation and the number of ways to refer to things, cross-referencing and many lead-ins so players can always enter a riddle chain, and cheap tuple-based triggers to detect solutions. He closes on difficulty scaling via chain length and the open problems of debugging and destroyed clues.",
+  "games": [
+    "Ultima Ratio Regum",
+    "La-Mulana",
+    "NetHack",
+    "Riven",
+    "Fez",
+    "Environmental Station Alpha",
+    "Outer Wilds",
+    "Tunic"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "cryptic puzzles",
+      "kind": "example",
+      "claim": "La-Mulana's gem-scales puzzle requires combining clues found hours apart across the world (gem colours, weights, a decipherable numeral system, the player's own weight) before the puzzle can be solved.",
+      "detail": "Johnson walks through tablets giving gem colours and weights, a clue mentioning sapphire, and a hidden pair of scales reporting the player's weight in the game's fictional language, which must be decoded by toggling the auto-translation and comparing numerals. Only then can the gems and player be split to balance at 244 per side.",
+      "t": 223,
+      "quote": "the clues might be seen hours or 10 hours apart is an another clue to realize is part of the same puzzle",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "cryptic puzzles",
+      "kind": "principle",
+      "claim": "Cryptic riddle puzzles are compelling because each demands a new kind of attention to the game world, unlike iterating a single puzzle type over and over.",
+      "detail": "Some need maths, some the game's language, the map layout, room names, NPC dialogue or obscure room details. Johnson cites Riven, Fez, Environmental Station Alpha, Outer Wilds and Tunic as games in this style.",
+      "t": 531,
+      "quote": "This is quite different, I think, from having a single puzzle type and then iterating on that puzzle type over and over and over",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "quest markers",
+      "kind": "principle",
+      "claim": "In Ultima Ratio Regum, riddle leads are never flagged with quest markers or logs, because organically noticing something and trusting the game that it will lead somewhere is more rewarding.",
+      "detail": "His example begins with the player reading a generated holy book that mentions two saints who left sacred pottery at meditation spots, with no explicit prompt to follow up.",
+      "t": 683,
+      "quote": "discovery of noticing something and having learned that confidence in the game to know that if you explore it further it will go somewhere",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural puzzles",
+      "kind": "example",
+      "claim": "Ultima Ratio Regum generates a complete multi-step pilgrimage riddle, including holy book, priest, wall inscription, cryptic note, history book and reward relic, unique to each playthrough.",
+      "detail": "In the demo, the priest points to an inscription and a swordsmith's note; deciphering them leads to a granary in a town named for the sky and a tavern basement wall facing the slum in a city named for a cold hand. Johnson reveals that every component, including the goblet from a system of tens of thousands, was generated rather than hand made.",
+      "t": 1208,
+      "quote": "every single component of this quest in air quotes was completely unique to a given play through and will never be created again",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "lazy generation",
+      "kind": "technique",
+      "claim": "To let clues reference places not yet generated, Ultima Ratio Regum tracks detailed abstract descriptions of every future feature so the generated thing matches the clue when the player arrives.",
+      "detail": "The huge world is generated only when needed for performance and memory, but the game already knows e.g. that a cathedral with certain properties will exist in a district. The result seems as if it had always been there.",
+      "t": 1330,
+      "quote": "the game can create clues that reference the abstract of something and when the player arrives, low and behold, the thing being talked about in that clue is there",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "referability",
+      "kind": "technique",
+      "claim": "Procedural riddles need maximal variation in describable features (e.g. statues with billions of permutations) plus many alternative names and references for each thing, so clues can point to it indirectly.",
+      "detail": "Johnson shows the city from the demo referred to in many ways in clues, and notes references can span multiple levels, like the king's 'bane' clue that requires reading another book rather than guessing synonyms.",
+      "t": 1386,
+      "quote": "This is an image generated which has several billion permutations of what statutes of gods and historical figures",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "cross-referencing",
+      "kind": "technique",
+      "claim": "Generated worlds with riddles should be heavily cross-referenced, with consistent civilisation aesthetics and books and NPCs that mention other people, places and books, so players can deduce rather than be told.",
+      "detail": "Johnson says this maximises how much the player can figure out and gives as many options as possible to break into each riddle chain, while ensuring every required piece is actually accessible and generated.",
+      "t": 1500,
+      "quote": "when you read books the books talk about people and with you talk to NPCs they talk about other NPCs and places and books",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "puzzle structure",
+      "kind": "technique",
+      "claim": "In a vast generated world, riddles should have many scattered lead-ins (NPCs, books, places, times) converging on mutually referencing pieces, rather than a single linear chain the player might never find.",
+      "detail": "Ultima Ratio Regum has around 2.5 billion tiles with dozens of nations and hundreds of settlements. New games start with simple clues about the home nation, but beyond that multiple ways in are 'extremely important'.",
+      "t": 1565,
+      "quote": "you have a large number of different lead ins to the same puzzle scattered all over the place",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "procedural triggers",
+      "kind": "technique",
+      "claim": "Generated riddle solutions can be stored as tuples keyed first by action type, then exact coordinates and optional modifiers, indexed per map zone, so checking them on each action is computationally cheap.",
+      "detail": "When the player acts, only triggers for that zone with a matching action type are inspected further. Johnson's example: holding up a sword at specific coordinates at night under a full moon, with the sword needing particular properties.",
+      "t": 1625,
+      "quote": "triggers stored ad a tuple where the first part causes what action this trigger should be looked at",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "puzzle difficulty",
+      "kind": "principle",
+      "claim": "Procedural riddle chains scale difficulty easily because both the complexity of each step and the number of steps can be increased indefinitely.",
+      "detail": "Johnson rates his demo puzzle about 2-3 on a 0-10 scale, being all within one nation with fairly clear clues, and plans harder multi-faceted puzzles as the player gets more skilled. He teases letter- and symbol-based clues whose meanings vary per playthrough.",
+      "t": 1744,
+      "quote": "we can have any number of steps from the start of one of these cryptic riddles to the end of it means that there is very easy scaling of difficulty",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "debugging generators",
+      "kind": "technique",
+      "claim": "Ultima Ratio Regum's riddle generator is debugged by generating riddles in isolation thousands of times and manually checking an illustrative subset.",
+      "detail": "Johnson admits it is done 'with tremendous difficulty' and is not perfect, noting a recent release with over 200 bug fixes.",
+      "t": 1924,
+      "quote": "allowing them to just create themselves over and over and over, you know, a thousand times, and then checking a kind of illustrative subset",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "clue destruction",
+      "kind": "open-question",
+      "claim": "In a simulated world, required riddle clues can be destroyed (books burned, NPCs killed, walls broken), and a higher-level system that tracks surviving clues and fakes new ones may be needed.",
+      "detail": "Johnson says nothing prevents this yet; many lead-ins mitigate it, but if all are destroyed he would need a system to create a new clue that looks like it was always there.",
+      "t": 2012,
+      "quote": "some higher level system which keeps track of how many clues still exist and with one of them is destroyed",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "puzzle structure",
+      "kind": "technique",
+      "claim": "Riddles are generated as a chain of 'checkpoints' (points where the player has enough information to move on), and then each checkpoint's clues are distributed into media such as inscriptions, books, dialogue, statues or secret rooms.",
+      "detail": "Johnson admits the generator does not yet check that links are logical, e.g. why a priest would point to a merchant, and wants a more logical chain in future.",
+      "t": 2092,
+      "quote": "So it creates a chain of those and once it has created those it thinks how can I distribute those clues for each part of the chain",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

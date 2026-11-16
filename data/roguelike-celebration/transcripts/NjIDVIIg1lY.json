@@ -1,0 +1,1959 @@
+{
+ "id": "NjIDVIIg1lY",
+ "url": "https://www.youtube.com/watch?v=NjIDVIIg1lY",
+ "title": "Jasmine Otto - Cyclic Plot Generation in a Narrative Instrument",
+ "speaker": "Jasmine Otto",
+ "talk_title": "Cyclic Plot Generation in a Narrative Instrument",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 866,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I am developing 'druid game', a narrative instrument which explores the 'clinamen' of plot between mages, priests, and cultists all fighting to control a dangerous and ultimately unknowable world, hurting each other badly in the process. Rather than taking the perspective of any one player in this game, I ask that the querent read through and with the narrative instrument, which proposes a dramatic plot and a sequence of scenes (one of many possible) through which it is articulated. I will argue that this approach maximizes the value of the system to creative player retellings while minimizing content burden on the narrative designer (also me for now).",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 106,
+   "title": "Druid Game"
+  },
+  {
+   "start": 136,
+   "title": "Social World"
+  },
+  {
+   "start": 165,
+   "title": "Sim Rival"
+  },
+  {
+   "start": 188,
+   "title": "Game Studio"
+  },
+  {
+   "start": 224,
+   "title": "Genre"
+  },
+  {
+   "start": 243,
+   "title": "The Current"
+  },
+  {
+   "start": 328,
+   "title": "Generic Story"
+  },
+  {
+   "start": 395,
+   "title": "Other Prototypes"
+  },
+  {
+   "start": 415,
+   "title": "Early Prototypes"
+  },
+  {
+   "start": 479,
+   "title": "Learning from Other Characters"
+  },
+  {
+   "start": 534,
+   "title": "Murders"
+  },
+  {
+   "start": 613,
+   "title": "Cyclic Generation"
+  },
+  {
+   "start": 702,
+   "title": "Pacing"
+  },
+  {
+   "start": 794,
+   "title": "Multiscale"
+  },
+  {
+   "start": 820,
+   "title": "Conclusion"
+  },
+  {
+   "start": 828,
+   "title": "Outro"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1896,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.68,
+   "d": 3.16,
+   "text": "And so, um, moving along, a little bit"
+  },
+  {
+   "t": 6.84,
+   "d": 1.88,
+   "text": "early, but nothing wrong with that. Next"
+  },
+  {
+   "t": 8.72,
+   "d": 2.36,
+   "text": "up, we are going to have Jasmine Otto,"
+  },
+  {
+   "t": 11.08,
+   "d": 1.68,
+   "text": "who is talking about cyclic plot"
+  },
+  {
+   "t": 12.76,
+   "d": 1.68,
+   "text": "generation in a mixed initiative"
+  },
+  {
+   "t": 14.44,
+   "d": 3.08,
+   "text": "narrative instrument. Um, very exciting."
+  },
+  {
+   "t": 17.52,
+   "d": 1.84,
+   "text": "Jasmine creates and studies software"
+  },
+  {
+   "t": 19.36,
+   "d": 3.0,
+   "text": "instruments, which I find a really, um,"
+  },
+  {
+   "t": 22.36,
+   "d": 2.28,
+   "text": "just evocative phrase. So, without"
+  },
+  {
+   "t": 24.64,
+   "d": 1.76,
+   "text": "getting too into it, I think I'll just"
+  },
+  {
+   "t": 26.4,
+   "d": 3.24,
+   "text": "let you take the floor."
+  },
+  {
+   "t": 32.08,
+   "d": 2.08,
+   "text": "Uh-oh, we got some issues with your mic"
+  },
+  {
+   "t": 34.16,
+   "d": 1.64,
+   "text": "quality there. I don't know if there's"
+  },
+  {
+   "t": 35.8,
+   "d": 2.64,
+   "text": "like jiggle the connectors."
+  },
+  {
+   "t": 38.44,
+   "d": 1.48,
+   "text": "One moment."
+  },
+  {
+   "t": 39.92,
+   "d": 1.28,
+   "text": "You sound really cool. You sound like a"
+  },
+  {
+   "t": 41.2,
+   "d": 3.12,
+   "text": "really cool robot, but it's, uh,"
+  },
+  {
+   "t": 44.32,
+   "d": 1.44,
+   "text": "not an understandable robot,"
+  },
+  {
+   "t": 45.76,
+   "d": 2.96,
+   "text": "unfortunately."
+  },
+  {
+   "t": 54.44,
+   "d": 1.92,
+   "text": "I have switched to my default mic."
+  },
+  {
+   "t": 56.36,
+   "d": 1.68,
+   "text": "There you go. You sound great. All"
+  },
+  {
+   "t": 58.04,
+   "d": 1.36,
+   "text": "right."
+  },
+  {
+   "t": 59.4,
+   "d": 2.24,
+   "text": "All right. Hello, and"
+  },
+  {
+   "t": 61.64,
+   "d": 3.08,
+   "text": "I'm really excited to be going on after"
+  },
+  {
+   "t": 64.72,
+   "d": 1.48,
+   "text": "uh,"
+  },
+  {
+   "t": 66.2,
+   "d": 3.32,
+   "text": "Brenda's amazing talks, uh, because I'm"
+  },
+  {
+   "t": 69.52,
+   "d": 2.88,
+   "text": "really interested, uh, in sort of"
+  },
+  {
+   "t": 72.4,
+   "d": 3.8,
+   "text": "exposing these social worlds and taking"
+  },
+  {
+   "t": 76.2,
+   "d": 2.28,
+   "text": "the interface, what I'm calling the"
+  },
+  {
+   "t": 78.48,
+   "d": 3.28,
+   "text": "narrative instrument, as your, uh, point"
+  },
+  {
+   "t": 81.76,
+   "d": 4.48,
+   "text": "of contact with the player, as a way to,"
+  },
+  {
+   "t": 86.24,
+   "d": 1.84,
+   "text": "sort of, uh,"
+  },
+  {
+   "t": 88.08,
+   "d": 3.36,
+   "text": "suggest as much as you can, uh,"
+  },
+  {
+   "t": 91.44,
+   "d": 2.2,
+   "text": "without having to"
+  },
+  {
+   "t": 93.64,
+   "d": 0.68,
+   "text": "do"
+  },
+  {
+   "t": 94.32,
+   "d": 2.72,
+   "text": "do all the heavy lifting back in this,"
+  },
+  {
+   "t": 97.04,
+   "d": 0.6,
+   "text": "uh,"
+  },
+  {
+   "t": 97.64,
+   "d": 1.6,
+   "text": "behind the scenes. I'll get into what"
+  },
+  {
+   "t": 99.24,
+   "d": 2.52,
+   "text": "that means. Uh, I'm Jasmine. I'm"
+  },
+  {
+   "t": 101.76,
+   "d": 2.04,
+   "text": "Jasmine.com on Twitter."
+  },
+  {
+   "t": 103.8,
+   "d": 1.88,
+   "text": "Uh,"
+  },
+  {
+   "t": 105.68,
+   "d": 1.04,
+   "text": "doot."
+  },
+  {
+   "t": 106.72,
+   "d": 2.12,
+   "text": "Uh, and the game I've been making, it's"
+  },
+  {
+   "t": 108.84,
+   "d": 1.72,
+   "text": "actually a series of prototypes. It's"
+  },
+  {
+   "t": 110.56,
+   "d": 1.88,
+   "text": "called Druid game."
+  },
+  {
+   "t": 112.44,
+   "d": 4.8,
+   "text": "Uh, this is, uh, a social simulation"
+  },
+  {
+   "t": 117.24,
+   "d": 1.72,
+   "text": "that I've"
+  },
+  {
+   "t": 118.96,
+   "d": 3.32,
+   "text": "been trying several different backends"
+  },
+  {
+   "t": 122.28,
+   "d": 1.12,
+   "text": "for"
+  },
+  {
+   "t": 123.4,
+   "d": 1.16,
+   "text": "uh"
+  },
+  {
+   "t": 124.56,
+   "d": 3.92,
+   "text": "to make these faction games happen"
+  },
+  {
+   "t": 128.48,
+   "d": 1.64,
+   "text": "without necessarily using a trait"
+  },
+  {
+   "t": 130.12,
+   "d": 3.56,
+   "text": "system. We'll talk about uh how I'm"
+  },
+  {
+   "t": 133.68,
+   "d": 3.64,
+   "text": "mounting the story lets. Uh"
+  },
+  {
+   "t": 137.32,
+   "d": 2.64,
+   "text": "I'm going to go through the background a"
+  },
+  {
+   "t": 139.96,
+   "d": 3.24,
+   "text": "little fast here. Uh"
+  },
+  {
+   "t": 143.2,
+   "d": 2.64,
+   "text": "So, the social world most of that"
+  },
+  {
+   "t": 145.84,
+   "d": 2.6,
+   "text": "there's always the danger that all the"
+  },
+  {
+   "t": 148.44,
+   "d": 1.32,
+   "text": "things your characters are doing to each"
+  },
+  {
+   "t": 149.76,
+   "d": 1.96,
+   "text": "other and maybe there's hundreds of"
+  },
+  {
+   "t": 151.72,
+   "d": 2.16,
+   "text": "characters, you can't put that all on"
+  },
+  {
+   "t": 153.88,
+   "d": 2.2,
+   "text": "the screen at once and have the player"
+  },
+  {
+   "t": 156.08,
+   "d": 1.84,
+   "text": "be expected to follow it. You really"
+  },
+  {
+   "t": 157.92,
+   "d": 2.76,
+   "text": "have to carefully"
+  },
+  {
+   "t": 160.68,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 161.72,
+   "d": 3.04,
+   "text": "pick where the where attention is."
+  },
+  {
+   "t": 164.76,
+   "d": 1.0,
+   "text": "Uh"
+  },
+  {
+   "t": 165.76,
+   "d": 1.92,
+   "text": "you're going to give them an interface"
+  },
+  {
+   "t": 167.68,
+   "d": 3.6,
+   "text": "that allows them to very cleverly point"
+  },
+  {
+   "t": 171.28,
+   "d": 1.88,
+   "text": "their attention at different parts of"
+  },
+  {
+   "t": 173.16,
+   "d": 2.24,
+   "text": "the simulation that are relevant to them"
+  },
+  {
+   "t": 175.4,
+   "d": 2.2,
+   "text": "because say they're playing a specific"
+  },
+  {
+   "t": 177.6,
+   "d": 3.32,
+   "text": "Sim and that Sim has a particular rival"
+  },
+  {
+   "t": 180.92,
+   "d": 2.04,
+   "text": "and now they're going to go over and"
+  },
+  {
+   "t": 182.96,
+   "d": 2.2,
+   "text": "check out what the rival is doing and 80"
+  },
+  {
+   "t": 185.16,
+   "d": 1.44,
+   "text": "other Sims are just going about their"
+  },
+  {
+   "t": 186.6,
+   "d": 1.28,
+   "text": "day."
+  },
+  {
+   "t": 187.88,
+   "d": 1.6,
+   "text": "Uh"
+  },
+  {
+   "t": 189.48,
+   "d": 1.44,
+   "text": "So,"
+  },
+  {
+   "t": 190.92,
+   "d": 4.64,
+   "text": "I'm I do not have the resources of Maxis"
+  },
+  {
+   "t": 195.56,
+   "d": 0.76,
+   "text": "uh"
+  },
+  {
+   "t": 196.32,
+   "d": 2.92,
+   "text": "of game studio. It's just me. So,"
+  },
+  {
+   "t": 199.24,
+   "d": 4.44,
+   "text": "I'm building for these prose games uh"
+  },
+  {
+   "t": 203.68,
+   "d": 1.96,
+   "text": "I started thinking this would be a"
+  },
+  {
+   "t": 205.64,
+   "d": 2.16,
+   "text": "parser game. Then I was thinking, oh,"
+  },
+  {
+   "t": 207.8,
+   "d": 2.08,
+   "text": "it's in the browser. It's an idle game."
+  },
+  {
+   "t": 209.88,
+   "d": 1.36,
+   "text": "And now I'm all the way around to"
+  },
+  {
+   "t": 211.24,
+   "d": 2.88,
+   "text": "thinking this is really a a bunch of"
+  },
+  {
+   "t": 214.12,
+   "d": 2.92,
+   "text": "decks of cards that have some narrative"
+  },
+  {
+   "t": 217.04,
+   "d": 3.32,
+   "text": "instruments that I don't that I'm still"
+  },
+  {
+   "t": 220.36,
+   "d": 2.12,
+   "text": "trying to figure out what kind of genre"
+  },
+  {
+   "t": 222.48,
+   "d": 1.36,
+   "text": "it is."
+  },
+  {
+   "t": 223.84,
+   "d": 1.36,
+   "text": "Uh"
+  },
+  {
+   "t": 225.2,
+   "d": 3.72,
+   "text": "I'm presenting this using"
+  },
+  {
+   "t": 228.92,
+   "d": 4.48,
+   "text": "a lot of inspiration from tarot. Uh"
+  },
+  {
+   "t": 233.4,
+   "d": 1.4,
+   "text": "so that's a"
+  },
+  {
+   "t": 234.8,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 235.68,
+   "d": 1.44,
+   "text": "way to uh"
+  },
+  {
+   "t": 237.12,
+   "d": 0.56,
+   "text": "uh"
+  },
+  {
+   "t": 237.68,
+   "d": 2.2,
+   "text": "experience the"
+  },
+  {
+   "t": 239.88,
+   "d": 1.96,
+   "text": "uh"
+  },
+  {
+   "t": 241.84,
+   "d": 2.4,
+   "text": "the story of the world from more than"
+  },
+  {
+   "t": 244.24,
+   "d": 3.04,
+   "text": "one perspective, specifically that of"
+  },
+  {
+   "t": 247.28,
+   "d": 2.24,
+   "text": "the querent"
+  },
+  {
+   "t": 249.52,
+   "d": 1.32,
+   "text": "and"
+  },
+  {
+   "t": 250.84,
+   "d": 2.36,
+   "text": "that of the reader, uh"
+  },
+  {
+   "t": 253.2,
+   "d": 1.64,
+   "text": "as the"
+  },
+  {
+   "t": 254.84,
+   "d": 3.72,
+   "text": "querent, I'm playing the game in sort of"
+  },
+  {
+   "t": 258.56,
+   "d": 3.36,
+   "text": "the traditional way, uh"
+  },
+  {
+   "t": 261.92,
+   "d": 4.88,
+   "text": "but as the reader, I am uh"
+  },
+  {
+   "t": 266.8,
+   "d": 3.68,
+   "text": "cons- I am taking the deck that's"
+  },
+  {
+   "t": 270.48,
+   "d": 1.44,
+   "text": "all the story elements that exist in the"
+  },
+  {
+   "t": 271.92,
+   "d": 1.12,
+   "text": "game"
+  },
+  {
+   "t": 273.04,
+   "d": 4.24,
+   "text": "and manipulating those, uh"
+  },
+  {
+   "t": 277.28,
+   "d": 2.68,
+   "text": "and sort of stacking the deck in certain"
+  },
+  {
+   "t": 279.96,
+   "d": 1.28,
+   "text": "ways,"
+  },
+  {
+   "t": 281.24,
+   "d": 1.28,
+   "text": "the uh"
+  },
+  {
+   "t": 282.52,
+   "d": 3.92,
+   "text": "to lead myself as the querent through"
+  },
+  {
+   "t": 286.44,
+   "d": 1.96,
+   "text": "the narrativization"
+  },
+  {
+   "t": 288.4,
+   "d": 1.12,
+   "text": "of"
+  },
+  {
+   "t": 289.52,
+   "d": 2.12,
+   "text": "these cards, which don't have any"
+  },
+  {
+   "t": 291.64,
+   "d": 2.32,
+   "text": "artificial intelligence, there's no way"
+  },
+  {
+   "t": 293.96,
+   "d": 2.16,
+   "text": "there can be bugs in there, but funny"
+  },
+  {
+   "t": 296.12,
+   "d": 2.0,
+   "text": "surprises happen any midway, and that's"
+  },
+  {
+   "t": 298.12,
+   "d": 1.28,
+   "text": "great."
+  },
+  {
+   "t": 299.4,
+   "d": 1.36,
+   "text": "Uh"
+  },
+  {
+   "t": 300.76,
+   "d": 3.2,
+   "text": "Most of the surprises come from the card"
+  },
+  {
+   "t": 303.96,
+   "d": 1.36,
+   "text": "having"
+  },
+  {
+   "t": 305.32,
+   "d": 3.56,
+   "text": "uh many many features I could latch onto"
+  },
+  {
+   "t": 308.88,
+   "d": 1.68,
+   "text": "and only a few that I'm actually going"
+  },
+  {
+   "t": 310.56,
+   "d": 3.16,
+   "text": "to latch onto in the moment,"
+  },
+  {
+   "t": 313.72,
+   "d": 2.8,
+   "text": "and I really want to"
+  },
+  {
+   "t": 316.52,
+   "d": 2.16,
+   "text": "I've done this with illustration, but"
+  },
+  {
+   "t": 318.68,
+   "d": 2.12,
+   "text": "now I really want to"
+  },
+  {
+   "t": 320.8,
+   "d": 1.68,
+   "text": "try"
+  },
+  {
+   "t": 322.48,
+   "d": 3.16,
+   "text": "and see if Prose has the same polysemous"
+  },
+  {
+   "t": 325.64,
+   "d": 1.4,
+   "text": "quality,"
+  },
+  {
+   "t": 327.04,
+   "d": 2.44,
+   "text": "uh"
+  },
+  {
+   "t": 329.52,
+   "d": 4.12,
+   "text": "so this works less well in generic story"
+  },
+  {
+   "t": 333.64,
+   "d": 1.48,
+   "text": "worlds, uh"
+  },
+  {
+   "t": 335.12,
+   "d": 2.68,
+   "text": "this is sort of an early attempt where"
+  },
+  {
+   "t": 337.8,
+   "d": 2.96,
+   "text": "I'm really focused on getting the plot"
+  },
+  {
+   "t": 340.76,
+   "d": 0.72,
+   "text": "to"
+  },
+  {
+   "t": 341.48,
+   "d": 2.08,
+   "text": "out getting the beats to out of the"
+  },
+  {
+   "t": 343.56,
+   "d": 1.76,
+   "text": "source of"
+  },
+  {
+   "t": 345.32,
+   "d": 3.12,
+   "text": "uh randomness activity"
+  },
+  {
+   "t": 348.44,
+   "d": 3.84,
+   "text": "and dropping it to into a context"
+  },
+  {
+   "t": 352.28,
+   "d": 1.52,
+   "text": "uh,"
+  },
+  {
+   "t": 353.8,
+   "d": 3.04,
+   "text": "that is going to"
+  },
+  {
+   "t": 356.84,
+   "d": 2.6,
+   "text": "show uh,"
+  },
+  {
+   "t": 359.44,
+   "d": 2.44,
+   "text": "exactly what happened in this world of"
+  },
+  {
+   "t": 361.88,
+   "d": 2.6,
+   "text": "three characters. Uh, it just prints it"
+  },
+  {
+   "t": 364.48,
+   "d": 3.12,
+   "text": "out to the screen. I"
+  },
+  {
+   "t": 367.6,
+   "d": 2.2,
+   "text": "don't like that. Give me another telling"
+  },
+  {
+   "t": 369.8,
+   "d": 2.96,
+   "text": "of this story. Or make a new story and"
+  },
+  {
+   "t": 372.76,
+   "d": 1.64,
+   "text": "tell me that one."
+  },
+  {
+   "t": 374.4,
+   "d": 1.08,
+   "text": "Uh,"
+  },
+  {
+   "t": 375.48,
+   "d": 2.16,
+   "text": "and that lets me have the conversation"
+  },
+  {
+   "t": 377.64,
+   "d": 2.68,
+   "text": "with the deck that gives me the sense of"
+  },
+  {
+   "t": 380.32,
+   "d": 2.52,
+   "text": "whether it's it's making principal"
+  },
+  {
+   "t": 382.84,
+   "d": 2.12,
+   "text": "decisions or it's starting to contradict"
+  },
+  {
+   "t": 384.96,
+   "d": 1.96,
+   "text": "itself."
+  },
+  {
+   "t": 386.92,
+   "d": 1.56,
+   "text": "Uh,"
+  },
+  {
+   "t": 388.48,
+   "d": 2.8,
+   "text": "so I want to get into some of the other"
+  },
+  {
+   "t": 391.28,
+   "d": 1.6,
+   "text": "prototypes"
+  },
+  {
+   "t": 392.88,
+   "d": 4.0,
+   "text": "uh, before I get into the cues uh,"
+  },
+  {
+   "t": 396.88,
+   "d": 2.4,
+   "text": "and the main decision here is that all"
+  },
+  {
+   "t": 399.28,
+   "d": 2.28,
+   "text": "of these are connected by the idea that"
+  },
+  {
+   "t": 401.56,
+   "d": 3.44,
+   "text": "all your agents in these are druids. Uh,"
+  },
+  {
+   "t": 405.0,
+   "d": 2.52,
+   "text": "they're magic, they're"
+  },
+  {
+   "t": 407.52,
+   "d": 1.88,
+   "text": "uh,"
+  },
+  {
+   "t": 409.4,
+   "d": 2.48,
+   "text": "really mean to each other. There's lots"
+  },
+  {
+   "t": 411.88,
+   "d": 1.36,
+   "text": "of drama."
+  },
+  {
+   "t": 413.24,
+   "d": 2.04,
+   "text": "Uh,"
+  },
+  {
+   "t": 415.28,
+   "d": 5.0,
+   "text": "so I one of my early prototypes was this"
+  },
+  {
+   "t": 420.28,
+   "d": 2.96,
+   "text": "idea that people will play Sims 3 in a"
+  },
+  {
+   "t": 423.24,
+   "d": 2.84,
+   "text": "wolf run. They'll let the Sims uh,"
+  },
+  {
+   "t": 426.08,
+   "d": 3.88,
+   "text": "do their thing for tens of generations"
+  },
+  {
+   "t": 429.96,
+   "d": 3.32,
+   "text": "without laying a hand on the simulation."
+  },
+  {
+   "t": 433.28,
+   "d": 2.28,
+   "text": "And that's going to ideally produce"
+  },
+  {
+   "t": 435.56,
+   "d": 2.16,
+   "text": "these interesting family trees that you"
+  },
+  {
+   "t": 437.72,
+   "d": 2.44,
+   "text": "can then go into your Sims panel and"
+  },
+  {
+   "t": 440.16,
+   "d": 2.32,
+   "text": "look at that. So I put together just"
+  },
+  {
+   "t": 442.48,
+   "d": 2.72,
+   "text": "that module and I decided to make it a"
+  },
+  {
+   "t": 445.2,
+   "d": 1.96,
+   "text": "little more interesting"
+  },
+  {
+   "t": 447.16,
+   "d": 1.08,
+   "text": "uh,"
+  },
+  {
+   "t": 448.24,
+   "d": 2.16,
+   "text": "that you have long-lived vampires in"
+  },
+  {
+   "t": 450.4,
+   "d": 3.0,
+   "text": "town who can cause other"
+  },
+  {
+   "t": 453.4,
+   "d": 1.48,
+   "text": "uh, characters in town to become"
+  },
+  {
+   "t": 454.88,
+   "d": 2.08,
+   "text": "long-lived vampires."
+  },
+  {
+   "t": 456.96,
+   "d": 3.08,
+   "text": "And it makes these really fun trees that"
+  },
+  {
+   "t": 460.04,
+   "d": 2.28,
+   "text": "you can tab around using the panel of"
+  },
+  {
+   "t": 462.32,
+   "d": 2.12,
+   "text": "all the characters here, but it's not"
+  },
+  {
+   "t": 464.44,
+   "d": 3.12,
+   "text": "that fun to just sit down with it and"
+  },
+  {
+   "t": 467.56,
+   "d": 1.44,
+   "text": "watch it go for a little bit. This is"
+  },
+  {
+   "t": 469.0,
+   "d": 1.88,
+   "text": "really something I would be coming into"
+  },
+  {
+   "t": 470.88,
+   "d": 3.76,
+   "text": "the artifact at the end and trying to"
+  },
+  {
+   "t": 474.64,
+   "d": 2.32,
+   "text": "piece it together. This wasn't a prose"
+  },
+  {
+   "t": 476.96,
+   "d": 1.44,
+   "text": "game."
+  },
+  {
+   "t": 478.4,
+   "d": 1.52,
+   "text": "Uh"
+  },
+  {
+   "t": 479.92,
+   "d": 3.08,
+   "text": "So, I took another shot at uh"
+  },
+  {
+   "t": 483.0,
+   "d": 1.12,
+   "text": "characters learning from other"
+  },
+  {
+   "t": 484.12,
+   "d": 1.36,
+   "text": "characters."
+  },
+  {
+   "t": 485.48,
+   "d": 1.32,
+   "text": "Uh"
+  },
+  {
+   "t": 486.8,
+   "d": 1.2,
+   "text": "They're"
+  },
+  {
+   "t": 488.0,
+   "d": 3.16,
+   "text": "Now they've got these text descriptions,"
+  },
+  {
+   "t": 491.16,
+   "d": 1.76,
+   "text": "and the text descriptions keep getting"
+  },
+  {
+   "t": 492.92,
+   "d": 2.44,
+   "text": "longer because they"
+  },
+  {
+   "t": 495.36,
+   "d": 2.56,
+   "text": "go to other characters and gain aspects"
+  },
+  {
+   "t": 497.92,
+   "d": 1.64,
+   "text": "from them, and a few of these are"
+  },
+  {
+   "t": 499.56,
+   "d": 1.64,
+   "text": "special characters"
+  },
+  {
+   "t": 501.2,
+   "d": 3.4,
+   "text": "who can invent new aspects."
+  },
+  {
+   "t": 504.6,
+   "d": 1.4,
+   "text": "Uh"
+  },
+  {
+   "t": 506.0,
+   "d": 4.12,
+   "text": "And I have another file uh here that"
+  },
+  {
+   "t": 510.12,
+   "d": 1.64,
+   "text": "that just contains the text tree of all"
+  },
+  {
+   "t": 511.76,
+   "d": 1.44,
+   "text": "the aspects that each of these"
+  },
+  {
+   "t": 513.2,
+   "d": 2.12,
+   "text": "characters can have, and then I let them"
+  },
+  {
+   "t": 515.32,
+   "d": 1.64,
+   "text": "bounce off of each other and figure out"
+  },
+  {
+   "t": 516.96,
+   "d": 2.2,
+   "text": "what descriptions they end up having"
+  },
+  {
+   "t": 519.16,
+   "d": 2.96,
+   "text": "with this really story-full history."
+  },
+  {
+   "t": 522.12,
+   "d": 2.56,
+   "text": "This was fun. I I'm rolling this back"
+  },
+  {
+   "t": 524.68,
+   "d": 1.96,
+   "text": "into the game, but since it's forward"
+  },
+  {
+   "t": 526.64,
+   "d": 3.0,
+   "text": "simulation, they have no idea how to"
+  },
+  {
+   "t": 529.64,
+   "d": 1.92,
+   "text": "stop. They just accumulate more"
+  },
+  {
+   "t": 531.56,
+   "d": 3.0,
+   "text": "description text forever."
+  },
+  {
+   "t": 534.56,
+   "d": 3.36,
+   "text": "So, I decided to allow murders to happen"
+  },
+  {
+   "t": 537.92,
+   "d": 1.84,
+   "text": "because eventually"
+  },
+  {
+   "t": 539.76,
+   "d": 1.36,
+   "text": "uh most of the characters will be"
+  },
+  {
+   "t": 541.12,
+   "d": 2.24,
+   "text": "murdered, and I can say, \"Okay, this is"
+  },
+  {
+   "t": 543.36,
+   "d": 4.08,
+   "text": "a new start condition. Reset.\" Uh"
+  },
+  {
+   "t": 547.44,
+   "d": 1.8,
+   "text": "I wanted them to be able to reason about"
+  },
+  {
+   "t": 549.24,
+   "d": 2.8,
+   "text": "who had murdered each other in kind of a"
+  },
+  {
+   "t": 552.04,
+   "d": 1.48,
+   "text": "clumsy way."
+  },
+  {
+   "t": 553.52,
+   "d": 1.2,
+   "text": "Uh"
+  },
+  {
+   "t": 554.72,
+   "d": 2.12,
+   "text": "So, now there's a system where all of"
+  },
+  {
+   "t": 556.84,
+   "d": 1.88,
+   "text": "them belong to this faction, and the"
+  },
+  {
+   "t": 558.72,
+   "d": 2.36,
+   "text": "faction is allowed to attack the other"
+  },
+  {
+   "t": 561.08,
+   "d": 2.16,
+   "text": "faction uh"
+  },
+  {
+   "t": 563.24,
+   "d": 1.76,
+   "text": "and they're allowed to accuse each"
+  },
+  {
+   "t": 565.0,
+   "d": 2.96,
+   "text": "other, but I was having a a really bad"
+  },
+  {
+   "t": 567.96,
+   "d": 4.0,
+   "text": "time debugging it to figure out, \"Okay,"
+  },
+  {
+   "t": 571.96,
+   "d": 2.12,
+   "text": "I want this event ultimately to fire"
+  },
+  {
+   "t": 574.08,
+   "d": 2.16,
+   "text": "where somebody is dramatically accused"
+  },
+  {
+   "t": 576.24,
+   "d": 1.96,
+   "text": "of doing a murder,"
+  },
+  {
+   "t": 578.2,
+   "d": 1.16,
+   "text": "uh"
+  },
+  {
+   "t": 579.36,
+   "d": 2.2,
+   "text": "and it's"
+  },
+  {
+   "t": 581.56,
+   "d": 3.36,
+   "text": "There's just so many people"
+  },
+  {
+   "t": 584.92,
+   "d": 3.48,
+   "text": "uh going tit-for-tat or tap-tap-tap in"
+  },
+  {
+   "t": 588.4,
+   "d": 1.52,
+   "text": "this case."
+  },
+  {
+   "t": 589.92,
+   "d": 1.2,
+   "text": "Uh"
+  },
+  {
+   "t": 591.12,
+   "d": 1.32,
+   "text": "that"
+  },
+  {
+   "t": 592.44,
+   "d": 2.88,
+   "text": "it's it's really interesting, but the"
+  },
+  {
+   "t": 595.32,
+   "d": 1.24,
+   "text": "game"
+  },
+  {
+   "t": 596.56,
+   "d": 2.48,
+   "text": "uh isn't giving me the leverage I need"
+  },
+  {
+   "t": 599.04,
+   "d": 1.36,
+   "text": "here."
+  },
+  {
+   "t": 600.4,
+   "d": 1.48,
+   "text": "Uh"
+  },
+  {
+   "t": 601.88,
+   "d": 2.16,
+   "text": "So, this is how I came to this idea of"
+  },
+  {
+   "t": 604.04,
+   "d": 1.6,
+   "text": "cyclic uh"
+  },
+  {
+   "t": 605.64,
+   "d": 1.12,
+   "text": "story"
+  },
+  {
+   "t": 606.76,
+   "d": 1.32,
+   "text": "uh"
+  },
+  {
+   "t": 608.08,
+   "d": 2.56,
+   "text": "generation."
+  },
+  {
+   "t": 610.64,
+   "d": 1.32,
+   "text": "And that's the"
+  },
+  {
+   "t": 611.96,
+   "d": 1.44,
+   "text": "very much the idea of cyclic dungeon"
+  },
+  {
+   "t": 613.4,
+   "d": 2.32,
+   "text": "generation that we know from level"
+  },
+  {
+   "t": 615.72,
+   "d": 1.44,
+   "text": "design,"
+  },
+  {
+   "t": 617.16,
+   "d": 1.2,
+   "text": "uh"
+  },
+  {
+   "t": 618.36,
+   "d": 2.44,
+   "text": "from the games like Unexplored."
+  },
+  {
+   "t": 620.8,
+   "d": 0.68,
+   "text": "Uh"
+  },
+  {
+   "t": 621.48,
+   "d": 3.12,
+   "text": "But now, instead of trying to guarantee"
+  },
+  {
+   "t": 624.6,
+   "d": 1.4,
+   "text": "there's a key and a door, we're"
+  },
+  {
+   "t": 626.0,
+   "d": 1.44,
+   "text": "guaranteeing"
+  },
+  {
+   "t": 627.44,
+   "d": 2.2,
+   "text": "I when I set up a plot element, it will"
+  },
+  {
+   "t": 629.64,
+   "d": 1.88,
+   "text": "pay off."
+  },
+  {
+   "t": 631.52,
+   "d": 3.04,
+   "text": "So, I'm going to stick with the social"
+  },
+  {
+   "t": 634.56,
+   "d": 2.08,
+   "text": "graph abstraction, but I'm going to make"
+  },
+  {
+   "t": 636.64,
+   "d": 2.64,
+   "text": "this coloring on it, and I'm going to"
+  },
+  {
+   "t": 639.28,
+   "d": 3.44,
+   "text": "read off the coloring in a certain way."
+  },
+  {
+   "t": 642.72,
+   "d": 1.88,
+   "text": "Uh"
+  },
+  {
+   "t": 644.6,
+   "d": 3.0,
+   "text": "So, in this case, that's red character"
+  },
+  {
+   "t": 647.6,
+   "d": 2.44,
+   "text": "uh is that heir"
+  },
+  {
+   "t": 650.04,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 651.08,
+   "d": 2.04,
+   "text": "who has this"
+  },
+  {
+   "t": 653.12,
+   "d": 2.72,
+   "text": "who has generated this verb"
+  },
+  {
+   "t": 655.84,
+   "d": 1.4,
+   "text": "uh"
+  },
+  {
+   "t": 657.24,
+   "d": 1.32,
+   "text": "and"
+  },
+  {
+   "t": 658.56,
+   "d": 2.24,
+   "text": "with respect to that uh"
+  },
+  {
+   "t": 660.8,
+   "d": 3.16,
+   "text": "target who's the yellow character."
+  },
+  {
+   "t": 663.96,
+   "d": 3.56,
+   "text": "We also have have a helper in this one."
+  },
+  {
+   "t": 667.52,
+   "d": 3.28,
+   "text": "Uh who can also uh fire a"
+  },
+  {
+   "t": 670.8,
+   "d": 2.84,
+   "text": "verb, and that has a certain storylet"
+  },
+  {
+   "t": 673.64,
+   "d": 1.28,
+   "text": "which"
+  },
+  {
+   "t": 674.92,
+   "d": 2.32,
+   "text": "uh is the prose gloss."
+  },
+  {
+   "t": 677.24,
+   "d": 1.24,
+   "text": "And"
+  },
+  {
+   "t": 678.48,
+   "d": 2.28,
+   "text": "we have I'm trying to find the boundary"
+  },
+  {
+   "t": 680.76,
+   "d": 4.2,
+   "text": "between the verb which has which might"
+  },
+  {
+   "t": 684.96,
+   "d": 2.36,
+   "text": "have this stateful consequence in the"
+  },
+  {
+   "t": 687.32,
+   "d": 2.36,
+   "text": "world and the storylet which doesn't"
+  },
+  {
+   "t": 689.68,
+   "d": 1.96,
+   "text": "have any consequences in the world of"
+  },
+  {
+   "t": 691.64,
+   "d": 2.52,
+   "text": "the game, but only in the mind of the"
+  },
+  {
+   "t": 694.16,
+   "d": 3.2,
+   "text": "reader, which is where we want to create"
+  },
+  {
+   "t": 697.36,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 698.32,
+   "d": 2.24,
+   "text": "the sense of interaction"
+  },
+  {
+   "t": 700.56,
+   "d": 2.76,
+   "text": "in the end anyway."
+  },
+  {
+   "t": 703.32,
+   "d": 1.24,
+   "text": "So,"
+  },
+  {
+   "t": 704.56,
+   "d": 2.12,
+   "text": "the some of the tricks that"
+  },
+  {
+   "t": 706.68,
+   "d": 3.6,
+   "text": "one more trick here uh to do the pacing"
+  },
+  {
+   "t": 710.28,
+   "d": 2.0,
+   "text": "so that characters aren't paying off"
+  },
+  {
+   "t": 712.28,
+   "d": 1.92,
+   "text": "each other in random order, we're"
+  },
+  {
+   "t": 714.2,
+   "d": 2.32,
+   "text": "actually going to"
+  },
+  {
+   "t": 716.52,
+   "d": 1.2,
+   "text": "we're not going to select edges at"
+  },
+  {
+   "t": 717.72,
+   "d": 2.84,
+   "text": "random. We're going to walk this edge."
+  },
+  {
+   "t": 720.56,
+   "d": 1.68,
+   "text": "Now, both of those characters are in in"
+  },
+  {
+   "t": 722.24,
+   "d": 1.76,
+   "text": "the scene. We're going to walk the next"
+  },
+  {
+   "t": 724.0,
+   "d": 2.92,
+   "text": "edge. Now, maybe a third character"
+  },
+  {
+   "t": 726.92,
+   "d": 2.8,
+   "text": "entered the scene, or maybe we started a"
+  },
+  {
+   "t": 729.72,
+   "d": 2.04,
+   "text": "new scene with two characters. And"
+  },
+  {
+   "t": 731.76,
+   "d": 2.88,
+   "text": "that's a cut, and the cuts start to"
+  },
+  {
+   "t": 734.64,
+   "d": 2.28,
+   "text": "create the feeling that"
+  },
+  {
+   "t": 736.92,
+   "d": 2.92,
+   "text": "maybe this is a chapter of prose rather"
+  },
+  {
+   "t": 739.84,
+   "d": 2.6,
+   "text": "than the a raw event trace. They're"
+  },
+  {
+   "t": 742.44,
+   "d": 2.64,
+   "text": "acting like"
+  },
+  {
+   "t": 745.08,
+   "d": 3.96,
+   "text": "they're separating out the floors of the"
+  },
+  {
+   "t": 749.04,
+   "d": 1.56,
+   "text": "this game."
+  },
+  {
+   "t": 750.6,
+   "d": 1.16,
+   "text": "Uh"
+  },
+  {
+   "t": 751.76,
+   "d": 2.24,
+   "text": "and that kind of chunking is going to"
+  },
+  {
+   "t": 754.0,
+   "d": 3.36,
+   "text": "support a lot more complexity"
+  },
+  {
+   "t": 757.36,
+   "d": 0.6,
+   "text": "uh"
+  },
+  {
+   "t": 757.96,
+   "d": 2.04,
+   "text": "in the prose hopefully."
+  },
+  {
+   "t": 760.0,
+   "d": 1.84,
+   "text": "Uh"
+  },
+  {
+   "t": 761.84,
+   "d": 3.24,
+   "text": "we're not allowed to uh"
+  },
+  {
+   "t": 765.08,
+   "d": 3.44,
+   "text": "remove characters uh completely because"
+  },
+  {
+   "t": 768.52,
+   "d": 0.96,
+   "text": "it's"
+  },
+  {
+   "t": 769.48,
+   "d": 3.64,
+   "text": "cyclic generation. We They They might"
+  },
+  {
+   "t": 773.12,
+   "d": 2.6,
+   "text": "have actions they still have to do, but"
+  },
+  {
+   "t": 775.72,
+   "d": 3.08,
+   "text": "we can stack their deck and change it so"
+  },
+  {
+   "t": 778.8,
+   "d": 2.24,
+   "text": "that if they got killed, now they're a"
+  },
+  {
+   "t": 781.04,
+   "d": 3.28,
+   "text": "ghost, and people are appropriately uh"
+  },
+  {
+   "t": 784.32,
+   "d": 2.04,
+   "text": "distressed when they are interacting"
+  },
+  {
+   "t": 786.36,
+   "d": 2.8,
+   "text": "with this ghost."
+  },
+  {
+   "t": 789.16,
+   "d": 2.76,
+   "text": "That's a fun thing to uh"
+  },
+  {
+   "t": 791.92,
+   "d": 3.24,
+   "text": "be able to author for."
+  },
+  {
+   "t": 795.16,
+   "d": 3.44,
+   "text": "And this has extensions uh"
+  },
+  {
+   "t": 798.6,
+   "d": 3.28,
+   "text": "to more faction-based games."
+  },
+  {
+   "t": 801.88,
+   "d": 0.96,
+   "text": "Uh"
+  },
+  {
+   "t": 802.84,
+   "d": 1.72,
+   "text": "there's a lot of potential if you"
+  },
+  {
+   "t": 804.56,
+   "d": 3.68,
+   "text": "multi-scale it if I can get this cyclic"
+  },
+  {
+   "t": 808.24,
+   "d": 2.48,
+   "text": "library to be nice and modular so that"
+  },
+  {
+   "t": 810.72,
+   "d": 1.32,
+   "text": "you can have the faction game that's"
+  },
+  {
+   "t": 812.04,
+   "d": 2.48,
+   "text": "triggering these uh"
+  },
+  {
+   "t": 814.52,
+   "d": 2.44,
+   "text": "peer-to-peer interactions and then zooms"
+  },
+  {
+   "t": 816.96,
+   "d": 3.08,
+   "text": "back out to the larger picture."
+  },
+  {
+   "t": 820.04,
+   "d": 1.52,
+   "text": "Uh"
+  },
+  {
+   "t": 821.56,
+   "d": 1.36,
+   "text": "so"
+  },
+  {
+   "t": 822.92,
+   "d": 3.36,
+   "text": "that's my goal. These are my tricks."
+  },
+  {
+   "t": 826.28,
+   "d": 1.2,
+   "text": "Uh"
+  },
+  {
+   "t": 827.48,
+   "d": 1.24,
+   "text": "and"
+  },
+  {
+   "t": 828.72,
+   "d": 1.76,
+   "text": "yeah, I'm"
+  },
+  {
+   "t": 830.48,
+   "d": 2.6,
+   "text": "really excited to"
+  },
+  {
+   "t": 833.08,
+   "d": 1.24,
+   "text": "uh"
+  },
+  {
+   "t": 834.32,
+   "d": 3.24,
+   "text": "just talk about things we want to make"
+  },
+  {
+   "t": 837.56,
+   "d": 2.88,
+   "text": "with these kinds of affordances."
+  },
+  {
+   "t": 840.44,
+   "d": 1.12,
+   "text": "Uh"
+  },
+  {
+   "t": 841.56,
+   "d": 2.4,
+   "text": "ask me anything about the tech stack or"
+  },
+  {
+   "t": 843.96,
+   "d": 2.24,
+   "text": "libraries or other work in like some"
+  },
+  {
+   "t": 846.2,
+   "d": 3.4,
+   "text": "story sifting. That's uh"
+  },
+  {
+   "t": 849.6,
+   "d": 2.52,
+   "text": "I'll ask without the scope of this talk,"
+  },
+  {
+   "t": 852.12,
+   "d": 2.32,
+   "text": "but it's really exciting stuff."
+  },
+  {
+   "t": 854.44,
+   "d": 1.56,
+   "text": "Yeah, thank you. That's a lot to fit"
+  },
+  {
+   "t": 856.0,
+   "d": 2.08,
+   "text": "into 15 minutes, so thank you for"
+  },
+  {
+   "t": 858.08,
+   "d": 2.44,
+   "text": "cramming so much knowledge in."
+  },
+  {
+   "t": 860.52,
+   "d": 1.52,
+   "text": "Uh everyone, I think yeah, really"
+  },
+  {
+   "t": 862.04,
+   "d": 1.36,
+   "text": "enjoyed it. Looks like people got some"
+  },
+  {
+   "t": 863.4,
+   "d": 4.56,
+   "text": "cool ideas for some work themselves. So"
+  }
+ ]
+}

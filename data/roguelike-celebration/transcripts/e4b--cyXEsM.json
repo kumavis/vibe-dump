@@ -1,0 +1,1533 @@
+{
+ "id": "e4b--cyXEsM",
+ "url": "https://www.youtube.com/watch?v=e4b--cyXEsM",
+ "title": "Andrew Clifton - Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)",
+ "speaker": "Andrew Clifton",
+ "talk_title": "Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 647,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAndrew is a professor of computer science at a southern California community college. He's been working on a roguelike called \"A World Like This One\" for a few years; you haven't heard of it.\n\nIn this talk he proposes that often when we reach for a traditional PRNG we should actually be using a hash function, and he offers up the SplitMix64 PRNG as something that can do both.\n\nAndrew's notes: http://twicetwo.com/files/generate-hash-notes.md",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 40,
+   "title": "Generate vs Hash"
+  },
+  {
+   "start": 500,
+   "title": "SplitMix64"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1633,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.32,
+   "d": 3.12,
+   "text": "andrew clifton welcome to the stage"
+  },
+  {
+   "t": 3.44,
+   "d": 3.04,
+   "text": "hello uh yes i'm andrew clifton he him"
+  },
+  {
+   "t": 6.48,
+   "d": 2.32,
+   "text": "i teach computer science at a community"
+  },
+  {
+   "t": 8.8,
+   "d": 1.36,
+   "text": "college in socal"
+  },
+  {
+   "t": 10.16,
+   "d": 1.6,
+   "text": "and i'm building a roguelite called a"
+  },
+  {
+   "t": 11.76,
+   "d": 1.68,
+   "text": "world like this one but you haven't"
+  },
+  {
+   "t": 13.44,
+   "d": 0.56,
+   "text": "heard of it"
+  },
+  {
+   "t": 14.0,
+   "d": 1.44,
+   "text": "i was hoping to have like a website and"
+  },
+  {
+   "t": 15.44,
+   "d": 2.56,
+   "text": "stuff done in time for this but it turns"
+  },
+  {
+   "t": 18.0,
+   "d": 0.32,
+   "text": "out"
+  },
+  {
+   "t": 18.32,
+   "d": 2.32,
+   "text": "you might not know this having a baby"
+  },
+  {
+   "t": 20.64,
+   "d": 1.52,
+   "text": "does not actually give you"
+  },
+  {
+   "t": 22.16,
+   "d": 2.4,
+   "text": "more free time i mean you want to talk"
+  },
+  {
+   "t": 24.56,
+   "d": 1.52,
+   "text": "about a hunger clock jeez"
+  },
+  {
+   "t": 26.08,
+   "d": 2.24,
+   "text": "uh anyway so i'm here to tell you a"
+  },
+  {
+   "t": 28.32,
+   "d": 1.2,
+   "text": "little bit about a technique that i"
+  },
+  {
+   "t": 29.52,
+   "d": 0.32,
+   "text": "found"
+  },
+  {
+   "t": 29.84,
+   "d": 1.76,
+   "text": "useful in getting the sort of like"
+  },
+  {
+   "t": 31.6,
+   "d": 1.76,
+   "text": "randomness that is a part of most"
+  },
+  {
+   "t": 33.36,
+   "d": 2.16,
+   "text": "roguelikes a bit under control so that"
+  },
+  {
+   "t": 35.52,
+   "d": 1.84,
+   "text": "things like testing and debugging become"
+  },
+  {
+   "t": 37.36,
+   "d": 1.44,
+   "text": "a little bit earth"
+  },
+  {
+   "t": 38.8,
+   "d": 2.48,
+   "text": "easier if you want the like the five"
+  },
+  {
+   "t": 41.28,
+   "d": 0.8,
+   "text": "second summary"
+  },
+  {
+   "t": 42.08,
+   "d": 2.88,
+   "text": "up front i'm going to suggest sort of"
+  },
+  {
+   "t": 44.96,
+   "d": 1.44,
+   "text": "two things here"
+  },
+  {
+   "t": 46.4,
+   "d": 2.16,
+   "text": "one is that a lot of the places where"
+  },
+  {
+   "t": 48.56,
+   "d": 0.88,
+   "text": "you're currently like"
+  },
+  {
+   "t": 49.44,
+   "d": 2.32,
+   "text": "generating a random value you could be"
+  },
+  {
+   "t": 51.76,
+   "d": 1.36,
+   "text": "hashing something"
+  },
+  {
+   "t": 53.12,
+   "d": 5.12,
+   "text": "and using the hash value instead"
+  },
+  {
+   "t": 58.24,
+   "d": 3.52,
+   "text": "value hash and then the second thing"
+  },
+  {
+   "t": 61.76,
+   "d": 2.48,
+   "text": "is that whether you choose to do that or"
+  },
+  {
+   "t": 64.24,
+   "d": 0.56,
+   "text": "not"
+  },
+  {
+   "t": 64.8,
+   "d": 3.52,
+   "text": "the split mix 64 random number generator"
+  },
+  {
+   "t": 68.32,
+   "d": 1.44,
+   "text": "is a really good one to sort of have in"
+  },
+  {
+   "t": 69.76,
+   "d": 1.44,
+   "text": "your wheelhouse it has some"
+  },
+  {
+   "t": 71.2,
+   "d": 1.84,
+   "text": "interesting features that are"
+  },
+  {
+   "t": 73.04,
+   "d": 1.6,
+   "text": "particularly useful in a roguelike"
+  },
+  {
+   "t": 74.64,
+   "d": 0.94,
+   "text": "context"
+  },
+  {
+   "t": 75.58,
+   "d": 3.2,
+   "text": "[Music]"
+  },
+  {
+   "t": 81.28,
+   "d": 1.76,
+   "text": "okay so let's talk about generating"
+  },
+  {
+   "t": 83.04,
+   "d": 4.8,
+   "text": "versus hashing"
+  },
+  {
+   "t": 87.84,
+   "d": 2.56,
+   "text": "so like like most of us when we start"
+  },
+  {
+   "t": 90.4,
+   "d": 0.48,
+   "text": "writing"
+  },
+  {
+   "t": 90.88,
+   "d": 1.76,
+   "text": "a roguelike the the first thing you"
+  },
+  {
+   "t": 92.64,
+   "d": 2.16,
+   "text": "probably start out by doing"
+  },
+  {
+   "t": 94.8,
+   "d": 1.6,
+   "text": "is you just use whatever your"
+  },
+  {
+   "t": 96.4,
+   "d": 1.76,
+   "text": "programming environments random number"
+  },
+  {
+   "t": 98.16,
+   "d": 1.44,
+   "text": "generator is so like in c"
+  },
+  {
+   "t": 99.6,
+   "d": 1.12,
+   "text": "plus that would be like rand or"
+  },
+  {
+   "t": 100.72,
+   "d": 1.76,
+   "text": "something and you sort of like call it"
+  },
+  {
+   "t": 102.48,
+   "d": 2.72,
+   "text": "all over the place"
+  },
+  {
+   "t": 107.6,
+   "d": 2.16,
+   "text": "that doesn't really work for very long"
+  },
+  {
+   "t": 109.76,
+   "d": 1.12,
+   "text": "so you start"
+  },
+  {
+   "t": 110.88,
+   "d": 2.8,
+   "text": "spinning up like individual rng"
+  },
+  {
+   "t": 113.68,
+   "d": 0.77,
+   "text": "instances"
+  },
+  {
+   "t": 114.45,
+   "d": 9.31,
+   "text": "[Music]"
+  },
+  {
+   "t": 125.12,
+   "d": 2.24,
+   "text": "so maybe you have like an rng instance"
+  },
+  {
+   "t": 127.36,
+   "d": 1.84,
+   "text": "for you know monsters that they use for"
+  },
+  {
+   "t": 129.2,
+   "d": 1.36,
+   "text": "their ai and then you have another"
+  },
+  {
+   "t": 130.56,
+   "d": 1.12,
+   "text": "instance for"
+  },
+  {
+   "t": 131.68,
+   "d": 2.0,
+   "text": "dungeon generation and another one for"
+  },
+  {
+   "t": 133.68,
+   "d": 1.47,
+   "text": "combat damage"
+  },
+  {
+   "t": 135.15,
+   "d": 3.13,
+   "text": "[Music]"
+  },
+  {
+   "t": 139.12,
+   "d": 3.84,
+   "text": "let's say monster ai benjen gen"
+  },
+  {
+   "t": 142.96,
+   "d": 2.96,
+   "text": "et cetera if you were to sort of like"
+  },
+  {
+   "t": 145.92,
+   "d": 1.2,
+   "text": "carry this process"
+  },
+  {
+   "t": 147.12,
+   "d": 3.12,
+   "text": "on to an extreme every time you needed a"
+  },
+  {
+   "t": 150.24,
+   "d": 0.96,
+   "text": "random number"
+  },
+  {
+   "t": 151.2,
+   "d": 2.56,
+   "text": "you would spin up a new rng instance"
+  },
+  {
+   "t": 153.76,
+   "d": 0.88,
+   "text": "seated with"
+  },
+  {
+   "t": 154.64,
+   "d": 1.92,
+   "text": "some like information that uniquely"
+  },
+  {
+   "t": 156.56,
+   "d": 2.88,
+   "text": "identified that particular situation"
+  },
+  {
+   "t": 159.44,
+   "d": 1.76,
+   "text": "you would generate one random number"
+  },
+  {
+   "t": 161.2,
+   "d": 1.52,
+   "text": "from it and then"
+  },
+  {
+   "t": 162.72,
+   "d": 1.28,
+   "text": "you would throw it away so you would"
+  },
+  {
+   "t": 164.0,
+   "d": 6.72,
+   "text": "only use each instance once there"
+  },
+  {
+   "t": 170.72,
+   "d": 1.76,
+   "text": "[Music]"
+  },
+  {
+   "t": 172.48,
+   "d": 2.88,
+   "text": "ah my fingers are faster than my mind"
+  },
+  {
+   "t": 175.36,
+   "d": 5.12,
+   "text": "[Music]"
+  },
+  {
+   "t": 180.48,
+   "d": 1.28,
+   "text": "but if you did that you would"
+  },
+  {
+   "t": 181.76,
+   "d": 2.88,
+   "text": "effectively have an invented a probably"
+  },
+  {
+   "t": 184.64,
+   "d": 0.48,
+   "text": "not"
+  },
+  {
+   "t": 185.12,
+   "d": 1.86,
+   "text": "great hash function"
+  },
+  {
+   "t": 186.98,
+   "d": 5.5,
+   "text": "[Music]"
+  },
+  {
+   "t": 192.48,
+   "d": 2.08,
+   "text": "so to sort of summarize a hash function"
+  },
+  {
+   "t": 194.56,
+   "d": 2.0,
+   "text": "the the quick either review or whatever"
+  },
+  {
+   "t": 196.56,
+   "d": 2.24,
+   "text": "you want to think of it as"
+  },
+  {
+   "t": 198.8,
+   "d": 2.24,
+   "text": "the sort of number one requirement that"
+  },
+  {
+   "t": 201.04,
+   "d": 1.76,
+   "text": "it has is first of all it's a pure"
+  },
+  {
+   "t": 202.8,
+   "d": 2.4,
+   "text": "function"
+  },
+  {
+   "t": 205.36,
+   "d": 2.08,
+   "text": "meaning that the output depends only on"
+  },
+  {
+   "t": 207.44,
+   "d": 2.56,
+   "text": "the input"
+  },
+  {
+   "t": 211.76,
+   "d": 1.6,
+   "text": "so this isn't anything that you can"
+  },
+  {
+   "t": 213.36,
+   "d": 1.84,
+   "text": "involve like sort of internal state"
+  },
+  {
+   "t": 215.2,
+   "d": 1.6,
+   "text": "and then the other requirement is that"
+  },
+  {
+   "t": 216.8,
+   "d": 1.44,
+   "text": "the output"
+  },
+  {
+   "t": 218.24,
+   "d": 2.05,
+   "text": "over many inputs"
+  },
+  {
+   "t": 220.29,
+   "d": 2.03,
+   "text": "[Music]"
+  },
+  {
+   "t": 222.32,
+   "d": 2.08,
+   "text": "should appear to be random should look"
+  },
+  {
+   "t": 224.4,
+   "d": 1.36,
+   "text": "like a like a uniform random"
+  },
+  {
+   "t": 225.76,
+   "d": 2.64,
+   "text": "distribution"
+  },
+  {
+   "t": 229.2,
+   "d": 9.87,
+   "text": "[Music]"
+  },
+  {
+   "t": 239.12,
+   "d": 1.36,
+   "text": "the only thing i'm going to assume about"
+  },
+  {
+   "t": 240.48,
+   "d": 2.24,
+   "text": "like a hash function that"
+  },
+  {
+   "t": 242.72,
+   "d": 1.52,
+   "text": "you might not like have in your"
+  },
+  {
+   "t": 244.24,
+   "d": 1.36,
+   "text": "programming environment is the ability"
+  },
+  {
+   "t": 245.6,
+   "d": 0.64,
+   "text": "to hash"
+  },
+  {
+   "t": 246.24,
+   "d": 1.6,
+   "text": "multiple objects together so i'm going"
+  },
+  {
+   "t": 247.84,
+   "d": 1.52,
+   "text": "to assume that your hash function works"
+  },
+  {
+   "t": 249.36,
+   "d": 1.68,
+   "text": "something like this you have you know"
+  },
+  {
+   "t": 251.04,
+   "d": 3.36,
+   "text": "whatever and then you can give it"
+  },
+  {
+   "t": 254.4,
+   "d": 1.84,
+   "text": "multiple parameters i work in c"
+  },
+  {
+   "t": 256.24,
+   "d": 2.8,
+   "text": "plus there if you only have like a hash"
+  },
+  {
+   "t": 259.04,
+   "d": 0.8,
+   "text": "function that takes"
+  },
+  {
+   "t": 259.84,
+   "d": 2.32,
+   "text": "one input you can either take all of"
+  },
+  {
+   "t": 262.16,
+   "d": 1.76,
+   "text": "your parameters and sort of smash them"
+  },
+  {
+   "t": 263.92,
+   "d": 0.48,
+   "text": "together"
+  },
+  {
+   "t": 264.4,
+   "d": 2.0,
+   "text": "into a single big buffer and then hash"
+  },
+  {
+   "t": 266.4,
+   "d": 1.92,
+   "text": "that or there are ways to sort of like"
+  },
+  {
+   "t": 268.32,
+   "d": 1.52,
+   "text": "take multiple hash values and then"
+  },
+  {
+   "t": 269.84,
+   "d": 1.84,
+   "text": "combine them into a"
+  },
+  {
+   "t": 271.68,
+   "d": 2.16,
+   "text": "new hash value there so anyway how do we"
+  },
+  {
+   "t": 273.84,
+   "d": 1.2,
+   "text": "replace rng"
+  },
+  {
+   "t": 275.04,
+   "d": 2.88,
+   "text": "with hashing"
+  },
+  {
+   "t": 280.72,
+   "d": 2.56,
+   "text": "well all you really have to do is hash"
+  },
+  {
+   "t": 283.28,
+   "d": 2.24,
+   "text": "the information that identifies"
+  },
+  {
+   "t": 285.52,
+   "d": 2.48,
+   "text": "the situation that you need a number in"
+  },
+  {
+   "t": 288.0,
+   "d": 2.0,
+   "text": "and then use the hash value"
+  },
+  {
+   "t": 290.0,
+   "d": 3.12,
+   "text": "as your random output there"
+  },
+  {
+   "t": 293.12,
+   "d": 1.68,
+   "text": "so since the output of your hash"
+  },
+  {
+   "t": 294.8,
+   "d": 2.0,
+   "text": "function looks like a random number you"
+  },
+  {
+   "t": 296.8,
+   "d": 1.84,
+   "text": "can use it anywhere that you could use"
+  },
+  {
+   "t": 298.64,
+   "d": 13.2,
+   "text": "another random number"
+  },
+  {
+   "t": 314.4,
+   "d": 2.0,
+   "text": "the only thing you need to figure out is"
+  },
+  {
+   "t": 316.4,
+   "d": 1.76,
+   "text": "what do i need to hash"
+  },
+  {
+   "t": 318.16,
+   "d": 2.72,
+   "text": "in order to like get that particular"
+  },
+  {
+   "t": 320.88,
+   "d": 3.2,
+   "text": "random value"
+  },
+  {
+   "t": 324.08,
+   "d": 3.05,
+   "text": "[Music]"
+  },
+  {
+   "t": 328.48,
+   "d": 2.56,
+   "text": "the inputs need to be enough to uniquely"
+  },
+  {
+   "t": 331.04,
+   "d": 1.04,
+   "text": "identify"
+  },
+  {
+   "t": 332.08,
+   "d": 2.0,
+   "text": "this particular situation of like i'm"
+  },
+  {
+   "t": 334.08,
+   "d": 2.16,
+   "text": "generating a monster on dungeon level"
+  },
+  {
+   "t": 336.24,
+   "d": 0.8,
+   "text": "whatever"
+  },
+  {
+   "t": 337.04,
+   "d": 1.6,
+   "text": "but typically you don't want to put more"
+  },
+  {
+   "t": 338.64,
+   "d": 1.68,
+   "text": "information into it and make it sort of"
+  },
+  {
+   "t": 340.32,
+   "d": 1.04,
+   "text": "like too specific"
+  },
+  {
+   "t": 341.36,
+   "d": 1.84,
+   "text": "so for example let's say that we're"
+  },
+  {
+   "t": 343.2,
+   "d": 1.84,
+   "text": "trying to decide whether or not to"
+  },
+  {
+   "t": 345.04,
+   "d": 1.6,
+   "text": "generate a pile of gold at some"
+  },
+  {
+   "t": 346.64,
+   "d": 7.11,
+   "text": "particular location"
+  },
+  {
+   "t": 353.75,
+   "d": 3.21,
+   "text": "[Music]"
+  },
+  {
+   "t": 356.96,
+   "d": 2.8,
+   "text": "so we know like the coordinates and we"
+  },
+  {
+   "t": 359.76,
+   "d": 0.32,
+   "text": "know"
+  },
+  {
+   "t": 360.08,
+   "d": 3.88,
+   "text": "our dungeon level let's call it l"
+  },
+  {
+   "t": 363.96,
+   "d": 1.16,
+   "text": "[Music]"
+  },
+  {
+   "t": 365.12,
+   "d": 2.88,
+   "text": "if we just hash the coordinates that's"
+  },
+  {
+   "t": 368.0,
+   "d": 0.32,
+   "text": "not"
+  },
+  {
+   "t": 368.32,
+   "d": 2.4,
+   "text": "enough"
+  },
+  {
+   "t": 373.79,
+   "d": 3.18,
+   "text": "[Music]"
+  },
+  {
+   "t": 377.6,
+   "d": 2.8,
+   "text": "because if you do that what will happen"
+  },
+  {
+   "t": 380.4,
+   "d": 0.24,
+   "text": "is"
+  },
+  {
+   "t": 380.64,
+   "d": 2.32,
+   "text": "every dungeon level will have or not"
+  },
+  {
+   "t": 382.96,
+   "d": 1.76,
+   "text": "have a pile of gold at that particular"
+  },
+  {
+   "t": 384.72,
+   "d": 1.76,
+   "text": "location there"
+  },
+  {
+   "t": 386.48,
+   "d": 1.84,
+   "text": "you probably at a minimum want to"
+  },
+  {
+   "t": 388.32,
+   "d": 2.08,
+   "text": "include the dungeon level in in your"
+  },
+  {
+   "t": 390.4,
+   "d": 4.4,
+   "text": "sort of hash calculation"
+  },
+  {
+   "t": 394.8,
+   "d": 2.48,
+   "text": "and unless you want every dungeon to be"
+  },
+  {
+   "t": 397.28,
+   "d": 1.76,
+   "text": "identical across all of your games"
+  },
+  {
+   "t": 399.04,
+   "d": 1.6,
+   "text": "the final piece of information you"
+  },
+  {
+   "t": 400.64,
+   "d": 1.44,
+   "text": "probably want to include"
+  },
+  {
+   "t": 402.08,
+   "d": 2.64,
+   "text": "is your your overall game seed the thing"
+  },
+  {
+   "t": 404.72,
+   "d": 1.2,
+   "text": "that sort of determines what this"
+  },
+  {
+   "t": 405.92,
+   "d": 3.52,
+   "text": "particular game like looks like"
+  },
+  {
+   "t": 409.44,
+   "d": 1.68,
+   "text": "the only reason why you wouldn't include"
+  },
+  {
+   "t": 411.12,
+   "d": 1.36,
+   "text": "that would be if you wanted some"
+  },
+  {
+   "t": 412.48,
+   "d": 1.76,
+   "text": "elements to be identical across"
+  },
+  {
+   "t": 414.24,
+   "d": 2.24,
+   "text": "all possible games there so you'd end up"
+  },
+  {
+   "t": 416.48,
+   "d": 3.11,
+   "text": "with something that looks like this"
+  },
+  {
+   "t": 419.59,
+   "d": 1.25,
+   "text": "[Music]"
+  },
+  {
+   "t": 420.84,
+   "d": 1.96,
+   "text": "has"
+  },
+  {
+   "t": 422.8,
+   "d": 3.04,
+   "text": "pile equals so we would hash together"
+  },
+  {
+   "t": 425.84,
+   "d": 1.84,
+   "text": "the coordinates the dungeon level and"
+  },
+  {
+   "t": 427.68,
+   "d": 1.36,
+   "text": "the game seed"
+  },
+  {
+   "t": 429.04,
+   "d": 1.36,
+   "text": "and then the output of that i can use"
+  },
+  {
+   "t": 430.4,
+   "d": 1.6,
+   "text": "like any other random number here so"
+  },
+  {
+   "t": 432.0,
+   "d": 1.84,
+   "text": "let's say we'll take it from"
+  },
+  {
+   "t": 433.84,
+   "d": 2.96,
+   "text": "uh 0 to 99 and then we'll say there's a"
+  },
+  {
+   "t": 436.8,
+   "d": 0.56,
+   "text": "10"
+  },
+  {
+   "t": 437.36,
+   "d": 3.36,
+   "text": "chance of generating a gold pile there"
+  },
+  {
+   "t": 440.72,
+   "d": 2.72,
+   "text": "uh and aside i am aware that whether"
+  },
+  {
+   "t": 443.44,
+   "d": 1.68,
+   "text": "you're using hashing or random numbers"
+  },
+  {
+   "t": 445.12,
+   "d": 1.28,
+   "text": "using modulo is"
+  },
+  {
+   "t": 446.4,
+   "d": 1.44,
+   "text": "not the best way to reduce it to a"
+  },
+  {
+   "t": 447.84,
+   "d": 2.48,
+   "text": "particular range and this will introduce"
+  },
+  {
+   "t": 450.32,
+   "d": 1.84,
+   "text": "a bias in the low end of it there"
+  },
+  {
+   "t": 452.16,
+   "d": 1.68,
+   "text": "the thing is i've never noticed that"
+  },
+  {
+   "t": 453.84,
+   "d": 1.84,
+   "text": "having any in-game effect"
+  },
+  {
+   "t": 455.68,
+   "d": 2.88,
+   "text": "so my personal philosophy at least"
+  },
+  {
+   "t": 458.56,
+   "d": 0.56,
+   "text": "regards"
+  },
+  {
+   "t": 459.12,
+   "d": 2.8,
+   "text": "games is if it's fun and wrong then it's"
+  },
+  {
+   "t": 461.92,
+   "d": 1.28,
+   "text": "not fun so i don't"
+  },
+  {
+   "t": 463.2,
+   "d": 2.64,
+   "text": "excuse me that it's not wrong so i don't"
+  },
+  {
+   "t": 465.84,
+   "d": 1.44,
+   "text": "particularly worry about like"
+  },
+  {
+   "t": 467.28,
+   "d": 1.76,
+   "text": "sort of like academic issues like that"
+  },
+  {
+   "t": 469.04,
+   "d": 1.28,
+   "text": "there so"
+  },
+  {
+   "t": 470.32,
+   "d": 1.92,
+   "text": "that would be how you would sort of"
+  },
+  {
+   "t": 472.24,
+   "d": 2.8,
+   "text": "replace your your rng with a hash system"
+  },
+  {
+   "t": 475.04,
+   "d": 1.44,
+   "text": "here but sometimes"
+  },
+  {
+   "t": 476.48,
+   "d": 1.92,
+   "text": "you need more than one random value"
+  },
+  {
+   "t": 478.4,
+   "d": 1.52,
+   "text": "there you need like if you're generating"
+  },
+  {
+   "t": 479.92,
+   "d": 0.72,
+   "text": "an object"
+  },
+  {
+   "t": 480.64,
+   "d": 1.44,
+   "text": "in a particular location you need to"
+  },
+  {
+   "t": 482.08,
+   "d": 1.6,
+   "text": "know not only is there an object"
+  },
+  {
+   "t": 483.68,
+   "d": 2.8,
+   "text": "there but also like you know what kind"
+  },
+  {
+   "t": 486.48,
+   "d": 1.6,
+   "text": "of object and its attributes and stuff"
+  },
+  {
+   "t": 488.08,
+   "d": 1.76,
+   "text": "there and that's where split mix 64"
+  },
+  {
+   "t": 489.84,
+   "d": 1.92,
+   "text": "comes in"
+  },
+  {
+   "t": 491.76,
+   "d": 5.2,
+   "text": "so split mix 64 is a streamable rng"
+  },
+  {
+   "t": 496.96,
+   "d": 3.12,
+   "text": "that looks like this"
+  },
+  {
+   "t": 500.08,
+   "d": 1.76,
+   "text": "see if i can go over its implementation"
+  },
+  {
+   "t": 501.84,
+   "d": 2.72,
+   "text": "real quick here"
+  },
+  {
+   "t": 504.56,
+   "d": 2.0,
+   "text": "so this this value of gamma here is the"
+  },
+  {
+   "t": 506.56,
+   "d": 2.24,
+   "text": "stream id so like pcg and some other"
+  },
+  {
+   "t": 508.8,
+   "d": 2.96,
+   "text": "rngs it has uh you know a notion of"
+  },
+  {
+   "t": 511.76,
+   "d": 1.76,
+   "text": "different random streams here and of"
+  },
+  {
+   "t": 513.52,
+   "d": 2.48,
+   "text": "course it has an internal state"
+  },
+  {
+   "t": 516.0,
+   "d": 2.16,
+   "text": "the state when you ask for a new random"
+  },
+  {
+   "t": 518.16,
+   "d": 1.36,
+   "text": "number is just"
+  },
+  {
+   "t": 519.52,
+   "d": 2.16,
+   "text": "added with the the gamma value there so"
+  },
+  {
+   "t": 521.68,
+   "d": 1.36,
+   "text": "this is all that it takes to sort of"
+  },
+  {
+   "t": 523.04,
+   "d": 1.52,
+   "text": "update the internal state which isn't"
+  },
+  {
+   "t": 524.56,
+   "d": 1.04,
+   "text": "very random"
+  },
+  {
+   "t": 525.6,
+   "d": 2.64,
+   "text": "so all of the randomness comes up from"
+  },
+  {
+   "t": 528.24,
+   "d": 3.04,
+   "text": "this mixing function or finalizer here"
+  },
+  {
+   "t": 531.28,
+   "d": 1.68,
+   "text": "the the gamma you can pick different"
+  },
+  {
+   "t": 532.96,
+   "d": 1.68,
+   "text": "values and you get different streams not"
+  },
+  {
+   "t": 534.64,
+   "d": 1.76,
+   "text": "all values work equally well but there's"
+  },
+  {
+   "t": 536.4,
+   "d": 1.6,
+   "text": "i'll post a link to the paper that tells"
+  },
+  {
+   "t": 538.0,
+   "d": 1.6,
+   "text": "you how to pick good streams one minute"
+  },
+  {
+   "t": 539.6,
+   "d": 1.44,
+   "text": "warning"
+  },
+  {
+   "t": 541.04,
+   "d": 2.0,
+   "text": "these values here are sort of like"
+  },
+  {
+   "t": 543.04,
+   "d": 1.12,
+   "text": "specially selected"
+  },
+  {
+   "t": 544.16,
+   "d": 1.52,
+   "text": "so you do have to sort of pick those"
+  },
+  {
+   "t": 545.68,
+   "d": 1.84,
+   "text": "carefully and again i'll post a link to"
+  },
+  {
+   "t": 547.52,
+   "d": 0.48,
+   "text": "a"
+  },
+  {
+   "t": 548.0,
+   "d": 2.0,
+   "text": "source for other ones there one"
+  },
+  {
+   "t": 550.0,
+   "d": 1.2,
+   "text": "important thing to note"
+  },
+  {
+   "t": 551.2,
+   "d": 3.2,
+   "text": "is that because we are just adding to"
+  },
+  {
+   "t": 554.4,
+   "d": 2.0,
+   "text": "the state that means that we can advance"
+  },
+  {
+   "t": 556.4,
+   "d": 1.12,
+   "text": "the state"
+  },
+  {
+   "t": 557.52,
+   "d": 1.6,
+   "text": "easily here so for example let's say we"
+  },
+  {
+   "t": 559.12,
+   "d": 2.16,
+   "text": "want to skip forward uh by i"
+  },
+  {
+   "t": 561.28,
+   "d": 2.55,
+   "text": "states"
+  },
+  {
+   "t": 563.83,
+   "d": 2.81,
+   "text": "[Music]"
+  },
+  {
+   "t": 566.64,
+   "d": 5.12,
+   "text": "well all you have to do is just do"
+  },
+  {
+   "t": 573.28,
+   "d": 3.2,
+   "text": "state plus i times gamma"
+  },
+  {
+   "t": 576.48,
+   "d": 2.08,
+   "text": "this works even if i is negative so you"
+  },
+  {
+   "t": 578.56,
+   "d": 1.12,
+   "text": "can go back"
+  },
+  {
+   "t": 579.68,
+   "d": 3.04,
+   "text": "in time with split mix 64. you can sort"
+  },
+  {
+   "t": 582.72,
+   "d": 2.08,
+   "text": "of reverse the course of the rng"
+  },
+  {
+   "t": 584.8,
+   "d": 1.68,
+   "text": "generation which opens up the"
+  },
+  {
+   "t": 586.48,
+   "d": 2.96,
+   "text": "possibility of generating random numbers"
+  },
+  {
+   "t": 589.44,
+   "d": 2.24,
+   "text": "in a more hash kind of way without any"
+  },
+  {
+   "t": 591.68,
+   "d": 1.76,
+   "text": "state here so i can build a version that"
+  },
+  {
+   "t": 593.44,
+   "d": 0.4,
+   "text": "works"
+  },
+  {
+   "t": 593.84,
+   "d": 3.6,
+   "text": "like this so here this"
+  },
+  {
+   "t": 597.44,
+   "d": 2.08,
+   "text": "has no state at all you just give it the"
+  },
+  {
+   "t": 599.52,
+   "d": 1.36,
+   "text": "seed the index"
+  },
+  {
+   "t": 600.88,
+   "d": 2.64,
+   "text": "into the random stream and the stream id"
+  },
+  {
+   "t": 603.52,
+   "d": 1.44,
+   "text": "and it generates the value at that"
+  },
+  {
+   "t": 604.96,
+   "d": 1.44,
+   "text": "particular location"
+  },
+  {
+   "t": 606.4,
+   "d": 2.24,
+   "text": "so you can use this sort of form of"
+  },
+  {
+   "t": 608.64,
+   "d": 1.04,
+   "text": "split mix before"
+  },
+  {
+   "t": 609.68,
+   "d": 1.92,
+   "text": "in combined with hashing for a"
+  },
+  {
+   "t": 611.6,
+   "d": 1.92,
+   "text": "completely stateless"
+  },
+  {
+   "t": 613.52,
+   "d": 2.16,
+   "text": "random number generation system there"
+  },
+  {
+   "t": 615.68,
+   "d": 0.88,
+   "text": "you just pull in"
+  },
+  {
+   "t": 616.56,
+   "d": 1.92,
+   "text": "random numbers at different indexes for"
+  },
+  {
+   "t": 618.48,
+   "d": 1.52,
+   "text": "whatever you particularly need"
+  },
+  {
+   "t": 620.0,
+   "d": 1.76,
+   "text": "to know there so it's a kind of"
+  },
+  {
+   "t": 621.76,
+   "d": 1.68,
+   "text": "interesting approach i'm curious to sort"
+  },
+  {
+   "t": 623.44,
+   "d": 0.56,
+   "text": "of like"
+  },
+  {
+   "t": 624.0,
+   "d": 2.08,
+   "text": "experiment more with like how far can i"
+  },
+  {
+   "t": 626.08,
+   "d": 1.44,
+   "text": "carry this idea of"
+  },
+  {
+   "t": 627.52,
+   "d": 2.0,
+   "text": "randomness without state but thanks a"
+  },
+  {
+   "t": 629.52,
+   "d": 1.52,
+   "text": "lot for your time everybody"
+  },
+  {
+   "t": 631.04,
+   "d": 1.6,
+   "text": "uh stay safe out there and wear your"
+  },
+  {
+   "t": 632.64,
+   "d": 1.52,
+   "text": "masks"
+  },
+  {
+   "t": 634.16,
+   "d": 2.32,
+   "text": "excellent thank you so much andrew uh"
+  },
+  {
+   "t": 636.48,
+   "d": 1.36,
+   "text": "definitely lots of talk in the chat"
+  },
+  {
+   "t": 637.84,
+   "d": 1.2,
+   "text": "sounds like plenty of people would like"
+  },
+  {
+   "t": 639.04,
+   "d": 1.52,
+   "text": "to learn more about it so hopefully"
+  },
+  {
+   "t": 640.56,
+   "d": 0.88,
+   "text": "people can"
+  },
+  {
+   "t": 641.44,
+   "d": 2.48,
+   "text": "uh track you down ask some more"
+  },
+  {
+   "t": 643.92,
+   "d": 1.36,
+   "text": "questions find you on twitter"
+  },
+  {
+   "t": 645.28,
+   "d": 3.36,
+   "text": "something like that"
+  }
+ ]
+}

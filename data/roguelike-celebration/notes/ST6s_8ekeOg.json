@@ -1,0 +1,137 @@
+{
+  "id": "ST6s_8ekeOg",
+  "title": "Todd Furmanski- Mysty Roguelikes: 1st Person Point&Click Paradigms with Realtime Graphics/Simulation",
+  "speaker": "Todd Furmanski",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=ST6s_8ekeOg",
+  "talk_type": "design",
+  "summary": "Todd Furmanski explores combining two 'archaic' paradigms, Myst's first-person point-and-click still-image navigation and Rogue's procedural, turn-based permadeath play, using modern real-time engines. His Unity sandbox Forska renders a procedurally generated real-time world but presents it to the player as still images on click, with post-processing filters (mosaic, oil painting, ASCII, even pure text description). He argues that dropping real-time animation and frame-rate obsessions frees a small developer to focus on procedural generation, simulation and interface, and that turn-based still-image play creates a distinctive tension.",
+  "games": [
+    "Myst",
+    "Rogue",
+    "Forska"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "principle",
+      "claim": "Presenting a game as clicked still images rather than real-time animation lets a small developer skip expensive work like character animation and 60 FPS performance tuning and focus on generation and interface.",
+      "detail": "Furmanski said he did not want to spend three weeks teaching a character to lean over and pick up an object when text can say 'pick up this object', nor have performance as a constant development priority. He noted Myst was made by two people and was the best-selling game of the decade, which shapes his thoughts on scoping.",
+      "t": 293,
+      "quote": "I don't want to spend three weeks having a character learn to lean over and pick up an object",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "revisiting old paradigms",
+      "kind": "principle",
+      "claim": "Old game disciplines defined by technical limits (like Myst's CD-ROM still images) are worth revisiting now that those limits are gone, to see what they become with modern simulation.",
+      "detail": "Furmanski likes looking at passed technical disciplines that were both enabled and disabled by their technology, such as CD-ROM games where real-time graphics at that fidelity were a pipe dream, and asking what they look like decades later.",
+      "t": 241,
+      "quote": "now, decades later, what do these often considered obsolete disciplines look like when such limitations were nonexistent",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "time budget",
+      "kind": "technique",
+      "claim": "In Forska, clicking raycasts to a point and renders a static image from the real-time scene graph, so the game has fractions of a second rather than a 60th of a second to run simulation and AI.",
+      "detail": "Furmanski noted the Myst creators targeted 1-2 seconds per click, citing IBM guidance that users need about a second. Not being bound to frame-rate deadlines, streaming or multithreading he called really liberating.",
+      "t": 561,
+      "quote": "Instead of having do to everything in a 60th of a second, I have, you know, fractions of a second which run any simulation, AI, anything like that.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "travel and navigation",
+      "kind": "warning",
+      "claim": "In a large open world a single walking speed fails both ways: travel to distant places is boring and fine movement near objects is awkward; click-to-go navigation in Forska addresses this.",
+      "detail": "In Forska the player can click a far island or a nearby tree's shadow and be placed there directly, and magenta portals lead to other islands.",
+      "t": 457,
+      "quote": "if you walk at the same rate you are always bored if you are walking to a far away place or if you are close it is hard to move",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "post-processing styles",
+      "kind": "technique",
+      "claim": "Forska applies post-processing filters to its real-time render so the same procedural world can look like a Roman mosaic, an oil painting or ASCII art, escaping the look-alike of plain polygon rendering.",
+      "detail": "Furmanski argued that for a long time everything looked alike, and with today's computing power more is possible. He demonstrated in Unity layering a mosaic effect, depth separation of background and foreground, and blended overlays, noting this can hit limits of legibility.",
+      "t": 631,
+      "quote": "What if you want to make it look like a Roman mosaic?",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "text as graphics",
+      "kind": "technique",
+      "claim": "A fully simulated 3D space can be presented only as a textual description with a simple examine parser, because text can be one of the best graphics.",
+      "detail": "Furmanski described this as one of his ideas, running the whole 3D scene but showing only text, and pointed out that abstracting space is nothing new for roguelikes, where a letter D is a dragon. He also generated printed maps and outbound books of islands to gauge how well his generators worked.",
+      "t": 658,
+      "quote": "what if that's all running but all you see is a textual description",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "combinatorial variety",
+      "kind": "technique",
+      "claim": "To avoid Kate Compton's '10,000 bowls of oatmeal' sameness, Forska multiplies independent categories, e.g. four geology types times four island shapes, to get more variety per unit of work.",
+      "detail": "Furmanski added themes or multiple possibilities, such as glacier geology, so that combinations multiply. Dynamic lighting and time of day are trivial since even static images are re-rendered from a live scene.",
+      "t": 870,
+      "quote": "if I had four types of geology and four types of general island shape that multiply together and you get more bang for your buck",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "paths",
+      "kind": "technique",
+      "claim": "Forska leads players to points of interest with pathfound trails, which give switchbacks up mountainsides for free, with added noise so they are not too straight and contrast that helps them read in painterly styles.",
+      "detail": "Furmanski used pathfinding to lay paths from portals to ruins; the path naturally switchbacks up slopes. Noise breaks straightness, and the path adds contrast to follow even on a noon snowy landscape.",
+      "t": 953,
+      "quote": "I was trying to figure out ways to lead players to points of interests. You end getting automatic switch backs for free.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input devices",
+      "kind": "principle",
+      "claim": "Interface design is a matter of 'pick your poison': controllers make mundane actions hard to teach, mobile is a flat glass surface, and both too much and no interface can be bad.",
+      "detail": "Furmanski said anyone who claims UI is easy is lying. He noted teaching a 16-button controller is harder than it sounds, a reason he favours simple, elegant interfaces for accessibility.",
+      "t": 1024,
+      "quote": "Everybody is going to tell you it is hard. If anybody who says it is easy is lying. A lot of it is pick your poison.",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn-based tension",
+      "kind": "principle",
+      "claim": "Combining Myst-style first-person stills with roguelike turn-based play creates a peculiar tension: dozens of possible actions, one of which decides life or death, with unlimited time to decide.",
+      "detail": "Furmanski said field of view becomes front and centre with a first-person camera, and the turn-based structure both Myst and Rogue share lets the player pause, go make coffee, and wonder whether a found coupon or bottle cap will help.",
+      "t": 1196,
+      "quote": "You come to point where the next action you will take will mean your life or death.",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural monsters",
+      "kind": "example",
+      "claim": "Furmanski's planned dungeon crawler generates its monster procedurally so the player, like a horror-movie character, must discover what works against it.",
+      "detail": "He described a small proof-of-concept to get the UI right without being distracted by a different game; the monster's weaknesses are unknown, e.g. whether bullets work on a vampire visible only in mirrors.",
+      "t": 1265,
+      "quote": "The monter is procedurally generated so you need to be as informed and stupid as a typical scary movie character.",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "machine learning",
+      "kind": "warning",
+      "claim": "Machine-learning generation can produce output that looks right but does not function, like a marble car that cannot drive, making it hard to work with afterwards.",
+      "detail": "In Q&A Furmanski described a love-hate relationship with machine learning, having tried style transfer; he finds post-hoc work with ML output tricky, though it remains on his list.",
+      "t": 1444,
+      "quote": "You have a perfectly looking marble car but it won't be able to drive.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

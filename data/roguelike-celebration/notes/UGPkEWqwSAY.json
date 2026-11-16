@@ -1,0 +1,174 @@
+{
+  "id": "UGPkEWqwSAY",
+  "title": "Bruno Dias - Procedural Text in Voyageur",
+  "speaker": "Bruno Dias",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=UGPkEWqwSAY",
+  "talk_type": "design",
+  "summary": "Bruno Dias explains how his text-based space exploration RPG Voyageur procedurally generates planet descriptions. He contrasts three approaches to procedural prose (machine learning, Dwarf Fortress-style plain text over a rich world model, and assemblage) and describes his assemblage method: a Tracery-like grammar of authored sentences, filtered by an evolving model of the planet as in Emily Short's Annals of the Parrigues, with six symbolic alignments for thematic consistency. He argues text is excellent at creating perceptual difference but procedural generation is labor-intensive, not a force multiplier. Finally he shows how forward motion, limited information and modular trait-based storylets make procedural planets narratively viable, concluding that PCG must be integral to the design.",
+  "games": [
+    "Voyageur",
+    "Dwarf Fortress",
+    "The Annals of the Parrigues",
+    "Elite: Dangerous",
+    "X series",
+    "EVE Online",
+    "Sunless Sea",
+    "80 Days",
+    "Fallen London",
+    "Rogue Legacy"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural prose",
+      "kind": "principle",
+      "claim": "Prose resists the simplifying abstractions used in terrain generation, because players find simplified terrain charming but feel talked down to by simplified language.",
+      "detail": "Dias notes terrain can be reduced to stylized one-meter blocks with simple rules, but language has no comparable simplification. So the normal simplifying approach to procedural generation doesn't work well for prose.",
+      "t": 251,
+      "quote": "with pros it's hard to find those simplifications and it's hard to find straightforward rules",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural prose",
+      "kind": "technique",
+      "claim": "There are three historical approaches to generated prose: machine learning, using plain matter-of-fact text to expose a rich world model as Dwarf Fortress does, and assemblage of authored chunks.",
+      "detail": "Machine learning was at the time resource-intensive, hard to control and mostly experimental. In the Dwarf Fortress approach the world model is the star and text is just a cheap way to show what's going on, yet can be surprising or poignant through content. Dias chose assemblage as pragmatic and shippable.",
+      "t": 349,
+      "quote": "this is basically the approach that more fortress uses there's a lot of textual descriptions of things in blood fortress but they all fit basically the same format",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "grammars",
+      "kind": "technique",
+      "claim": "Voyageur builds descriptions from large human-written chunks, mostly sentences, using a Tracery-like recursive grammar that picks paragraph structure, then sentences, then words.",
+      "detail": "Tracery, Kate Compton's library, expands phrases that contain symbols referencing other phrases. Most of Voyageur's text is not variable down to the word level; generators mainly assemble sentences with some inner variations.",
+      "t": 392,
+      "quote": "what i mean by assemblage is building text out of relatively large human written chunks mostly sentences",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "model-filtered grammar",
+      "kind": "technique",
+      "claim": "Voyageur filters grammar choices against an evolving model of the planet, an approach from Emily Short's Annals of the Parrigues, preferring phrases that raise unmentioned aspects or a randomly chosen focal aspect.",
+      "detail": "In Short's system the generator makes statements as it goes and sticks to them, building an increasingly detailed internal model. Voyageur first picks baseline facts, some inherited from region templates and some random, then picks phrases by priority rules.",
+      "t": 453,
+      "quote": "voyager is filtering the phrases that it can choose based on a model of what it's describing",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic consistency",
+      "kind": "technique",
+      "claim": "Voyageur keeps generated planets thematically consistent with six symbolic ideological and aesthetic alignments that permeate the content.",
+      "detail": "Dias names alignments such as Chrysalis, Hammer, Star, Dome and Ladder (as transcribed). He calls this symbolic system an important step for thematic consistency.",
+      "t": 517,
+      "quote": "an important step in making those planets thematically consistent is using a symbolic system",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text as lens",
+      "kind": "principle",
+      "claim": "Generated text can act as a lens on the world model that picks a different angle each time, so planets identical in their underlying factors still read as distinct.",
+      "detail": "Voyageur has roughly ten thousand combinations of its six most important factors, but a city world might come out as a foreboding rainy gothic metropolis or a utopian place depending on the text.",
+      "t": 574,
+      "quote": "it's a lens to which the player can look at the world model and it picks a different angle each time",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "perceptual difference",
+      "kind": "technique",
+      "claim": "Text is very good at creating perceptual difference, avoiding Kate Compton's '10,000 bowls of oatmeal' problem, and small background generators like Voyageur's fusion-food generator add distinctive detail cheaply.",
+      "detail": "The food generator draws from a simple word corpus yet outputs things like 'salted stuffed octopus fritters', helping paint a picture of a planet's culture. Dias's goal is not infinite longevity but a weird unique universe of digestible glimpses where each planet has a detail you haven't seen.",
+      "t": 598,
+      "quote": "the text is really great at creating perceptual difference because it's so expressive and so easy to recombine",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "authoring cost",
+      "kind": "warning",
+      "claim": "Procedural generation is not a force multiplier for cheap content; assemblage-based prose requires comprehensive tagging and handwritten content, and its real value is surprise and replayability.",
+      "detail": "Phrases must be tagged so they appear in the right places at the right frequency. Dias says the goal is letting players go in blind because content can't be known beforehand, which roguelikes need for their dive-and-retry cycle.",
+      "t": 709,
+      "quote": "too often we think of procedural generation as a force multiplier as a way of getting a lot of content for very little later",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "space sims",
+      "kind": "principle",
+      "claim": "Traditional space sims undercut their own sense of serendipity by rewarding players for settling on a profitable trade route, so Voyageur randomizes and pushes the player toward the unknown.",
+      "detail": "Dias cites the X series drifting into management strategy and EVE as a spreadsheet simulator. Voyageur takes after Sunless Sea's randomized map so players lack a clear idea where things are.",
+      "t": 750,
+      "quote": "traditional space sims don't really encourage that kind of play they incentivize finding a",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "forward motion",
+      "kind": "technique",
+      "claim": "Perpetual forward motion, borrowed from 80 Days, makes procedural places viable because no single generated planet has to carry much narrative weight.",
+      "detail": "Players can't revisit places, so they constantly pick up story threads, play with them briefly and abandon them. Generating new planets continually also sustains the illusion of vast space; reshuffling pregenerated planets would make players question repeats.",
+      "t": 850,
+      "quote": "procedural planets are actually feasible because no individual planet has the obligation of carrying that much narrative weight",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "limited information",
+      "kind": "technique",
+      "claim": "Voyageur offers a few next destinations with only one or two facts each, which makes players juggle multiple interests and raises the chance a rumor is relevant to them.",
+      "detail": "Dias lists this limited information as the third mechanic working with procedural generation and forward motion to produce serendipity.",
+      "t": 862,
+      "quote": "players get an option of a few planets they might visit next and they're given pretty limited information about those planets",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "storylets",
+      "kind": "technique",
+      "claim": "Voyageur uses Fallen London-style storylets, modular authored chunks gated by planet and player traits, whose outcomes change traits that act as stats, meters and spendable resources.",
+      "detail": "Finding a stowaway, spacing them raises ruthlessness and lowers kindness; taking them in does the opposite, affecting crew loyalty and options later. An alien expedition storyline uses a depth trait and resource traits that can be cashed in elsewhere.",
+      "t": 917,
+      "quote": "the outcome of entering those starlets is dynamic sometimes random and it's often based on the traits themselves and this outcome is expressed and trade changes",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "transparent state",
+      "kind": "principle",
+      "claim": "Voyageur keeps a design contract that it never tracks hidden state: every trait influencing outcomes is visible to the player, even if how it influences them is not.",
+      "detail": "Dias describes traits as inherently transparent with explicit state changes, and likens the trait model to a physics engine, a toolbox for building game mechanics.",
+      "t": 968,
+      "quote": "at no point is the game tracking hidden state everything about your character that influences game outcomes is visible to you",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "brief evocative writing",
+      "kind": "principle",
+      "claim": "Modular procedural narrative needs brief, evocative, not overly detailed writing that lets players fill in gaps and build their own arcs.",
+      "detail": "Because everything is modular, Dias can generate planets one at a time without fitting them into an overarching narrative. He wants to give small morsels that lead players on.",
+      "t": 1042,
+      "quote": "this requires a particular style of writing where you're trying to be brief evocative and not overly detailed",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "pcg as design",
+      "kind": "principle",
+      "claim": "Procedural generation must be integral to the design; you can't swap authored content for procedural content and expect it to work without systems built around it.",
+      "detail": "Dias's takeaway: procedural generation must be demystified, taken 'out of the grimoire and into the toolbox'. Both the systems and the writing style must fit PCG.",
+      "t": 1073,
+      "quote": "you can't substitute authored content with procedural content and expect it to just work out",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

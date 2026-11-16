@@ -1,0 +1,2123 @@
+{
+ "id": "FV_0rmqxbxw",
+ "url": "https://www.youtube.com/watch?v=FV_0rmqxbxw",
+ "title": "Jurie Horneman- Why Dynamic Content Selection Is Hard",
+ "speaker": "Jurie Horneman",
+ "talk_title": "Why Dynamic Content Selection Is Hard",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1803,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "My talk is about the difficulties you can encounter when building dynamic content selection systems for procedural dungeons, dynamic missions, and similar features.\n\nOvercomplicating these systems is deceptively easy, but making them good enough to ship is hard.\n\nI will be talking about the two core questions of any game feature or system (Does it work at all? and Is it good?), the advantages but also the limits of static analysis, the dangers of highly dynamic systems, and ideas for future directions for all this.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 63,
+   "title": "Defining dynamic content"
+  },
+  {
+   "start": 161,
+   "title": "Tag-based level generation"
+  },
+  {
+   "start": 359,
+   "title": "Quest location selection"
+  },
+  {
+   "start": 513,
+   "title": "Solving technical challenges"
+  },
+  {
+   "start": 857,
+   "title": "Quality and metrics"
+  },
+  {
+   "start": 1171,
+   "title": "Conclusion and takeaways"
+  },
+  {
+   "start": 1378,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4397,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.67,
+   "d": 11.52,
+   "text": "ALEXEI: Jurie Horneman has been making games since 1991, starting with"
+  },
+  {
+   "t": 17.19,
+   "d": 4.13,
+   "text": "programming role-playing games in 68K assembly with the 16-bit"
+  },
+  {
+   "t": 21.32,
+   "d": 2.94,
+   "text": "demoscene legends at Thalion Software."
+  },
+  {
+   "t": 24.26,
+   "d": 8.89,
+   "text": "He was the co-designer and main programmer of the cult"
+  },
+  {
+   "t": 33.15,
+   "d": 1.74,
+   "text": "CRPG Albion."
+  },
+  {
+   "t": 34.89,
+   "d": 4.95,
+   "text": "His area of expertise is the interaction of"
+  },
+  {
+   "t": 39.84,
+   "d": 3.45,
+   "text": "game design, AI, and storytelling, and he has spoken"
+  },
+  {
+   "t": 43.29,
+   "d": 2.56,
+   "text": "and written on procedural content generation, narrative"
+  },
+  {
+   "t": 45.85,
+   "d": 1.3,
+   "text": "design, and game AI."
+  },
+  {
+   "t": 47.15,
+   "d": 2.18,
+   "text": "Most recently he helped ship Watch"
+  },
+  {
+   "t": 49.33,
+   "d": 1.16,
+   "text": "Dogs: Legion."
+  },
+  {
+   "t": 50.49,
+   "d": 3.54,
+   "text": "He lives in Toronto, waiting for the dark"
+  },
+  {
+   "t": 54.03,
+   "d": 1.64,
+   "text": "mode fad to blow over."
+  },
+  {
+   "t": 55.67,
+   "d": 3.14,
+   "text": "Which is a wonderfully provocative statement."
+  },
+  {
+   "t": 58.81,
+   "d": 4.82,
+   "text": "JURIE: Especially at this conference, I guess."
+  },
+  {
+   "t": 63.63,
+   "d": 2.76,
+   "text": "ALEXEI: Go ahead, Jurie."
+  },
+  {
+   "t": 66.39,
+   "d": 1.42,
+   "text": "JURIE: My name is Jurie."
+  },
+  {
+   "t": 67.81,
+   "d": 7.06,
+   "text": "When I pitched this, or thought of, I thought it was going to be technical talk."
+  },
+  {
+   "t": 74.87,
+   "d": 4.74,
+   "text": "This is a production talk."
+  },
+  {
+   "t": 79.61,
+   "d": 5.4,
+   "text": "I am talk about dynamic content selection which is when you select content from a pool"
+  },
+  {
+   "t": 85.01,
+   "d": 5.63,
+   "text": "or runtime so it fixes statically before the game runs."
+  },
+  {
+   "t": 90.64,
+   "d": 4.61,
+   "text": "I need to stress that here I am not necessarily talking about procedural content generation"
+  },
+  {
+   "t": 95.25,
+   "d": 2.14,
+   "text": "the way you would see it in your typical roguelike."
+  },
+  {
+   "t": 97.39,
+   "d": 3.06,
+   "text": "Not like there is a seed and now you have a beautiful dungeon."
+  },
+  {
+   "t": 100.45,
+   "d": 8.94,
+   "text": "I am talking about barks or storylets or what have you."
+  },
+  {
+   "t": 109.39,
+   "d": 4.84,
+   "text": "My thesis is that you need to approach dynamic content differently from static content."
+  },
+  {
+   "t": 114.23,
+   "d": 6.0,
+   "text": "There are two questions I found useful to think about when working with dynamic content."
+  },
+  {
+   "t": 120.23,
+   "d": 5.76,
+   "text": "These questions are not unique to dynamic content but how you answer them S. I am going"
+  },
+  {
+   "t": 125.99,
+   "d": 4.12,
+   "text": "to look at for examples from the perspective of two questions."
+  },
+  {
+   "t": 130.11,
+   "d": 8.25,
+   "text": "Does it work is question number one or can you prove your dynamic content won't break"
+  },
+  {
+   "t": 138.36,
+   "d": 1.0,
+   "text": "the game?"
+  },
+  {
+   "t": 139.36,
+   "d": 2.56,
+   "text": "And question two is about quality."
+  },
+  {
+   "t": 141.92,
+   "d": 8.21,
+   "text": "Does dynamic content do what you want it to do?"
+  },
+  {
+   "t": 150.13,
+   "d": 5.31,
+   "text": "This is easier because you can probably ship a game that has even quality but typically"
+  },
+  {
+   "t": 155.44,
+   "d": 4.16,
+   "text": "you can't ship a broken game but it is harder because it is trickier to define what good"
+  },
+  {
+   "t": 159.6,
+   "d": 3.94,
+   "text": "means."
+  },
+  {
+   "t": 163.54,
+   "d": 5.09,
+   "text": "I made up the examples just for the talks but they are based on real examples."
+  },
+  {
+   "t": 168.63,
+   "d": 2.59,
+   "text": "Let's talk about level generation using tags."
+  },
+  {
+   "t": 171.22,
+   "d": 5.8,
+   "text": "Imagine you have a level definition that is a simple grid that represents a room with"
+  },
+  {
+   "t": 177.02,
+   "d": 2.33,
+   "text": "a bunch of tags in it."
+  },
+  {
+   "t": 179.35,
+   "d": 1.97,
+   "text": "Imagine you have a bunch of tagged rooms."
+  },
+  {
+   "t": 181.32,
+   "d": 3.27,
+   "text": "Going to sound like a joke."
+  },
+  {
+   "t": 184.59,
+   "d": 9.13,
+   "text": "Player walks into the room and we see the text es medieval corridor and the game puts"
+  },
+  {
+   "t": 193.72,
+   "d": 5.17,
+   "text": "it in there and there is a room."
+  },
+  {
+   "t": 198.89,
+   "d": 8.54,
+   "text": "Medieval corridor and you will guess stands for whether -- where the exits are."
+  },
+  {
+   "t": 207.43,
+   "d": 3.5,
+   "text": "You keep doing that and you will have a whole level."
+  },
+  {
+   "t": 210.93,
+   "d": 3.43,
+   "text": "What's nice about this is level creation becomes fast."
+  },
+  {
+   "t": 214.36,
+   "d": 4.03,
+   "text": "To make a level you fill a grid with some tags."
+  },
+  {
+   "t": 218.39,
+   "d": 4.98,
+   "text": "So this kind of level creation is great for a low budget game and that is actually where"
+  },
+  {
+   "t": 223.37,
+   "d": 3.99,
+   "text": "I worked with this approach."
+  },
+  {
+   "t": 227.36,
+   "d": 4.39,
+   "text": "It is also great because it decouples level creation from room creation."
+  },
+  {
+   "t": 231.75,
+   "d": 5.17,
+   "text": "You can have people cranking out levels and other people cranking out rooms with very"
+  },
+  {
+   "t": 236.92,
+   "d": 5.5,
+   "text": "little coordination so it is not like your typical level workflow where you have a level"
+  },
+  {
+   "t": 242.42,
+   "d": 4.09,
+   "text": "designer who needs to coordinate with a level artist and make sure they don't destroy the"
+  },
+  {
+   "t": 246.51,
+   "d": 1.42,
+   "text": "work and have to wait."
+  },
+  {
+   "t": 247.93,
+   "d": 2.0,
+   "text": "This is all decoupled."
+  },
+  {
+   "t": 249.93,
+   "d": 1.5,
+   "text": "It goes away."
+  },
+  {
+   "t": 251.43,
+   "d": 6.67,
+   "text": "The dependency between the two is sort of broken for production purposes."
+  },
+  {
+   "t": 258.1,
+   "d": 3.19,
+   "text": "The third point is this is not procedural level generation."
+  },
+  {
+   "t": 261.29,
+   "d": 3.09,
+   "text": "This is more like rendering a declarative level description."
+  },
+  {
+   "t": 264.38,
+   "d": 5.15,
+   "text": "A high level this is what I want the level to be like and the computer figures out the"
+  },
+  {
+   "t": 269.53,
+   "d": 1.0,
+   "text": "details."
+  },
+  {
+   "t": 270.53,
+   "d": 6.27,
+   "text": "I could do a whole talk on decoupling and production but it isn't this talk so I will"
+  },
+  {
+   "t": 276.8,
+   "d": 1.71,
+   "text": "move on."
+  },
+  {
+   "t": 278.51,
+   "d": 3.71,
+   "text": "Can we prove that level generation using tags won't break the game?"
+  },
+  {
+   "t": 282.22,
+   "d": 3.06,
+   "text": "I discovered the card game you can break the COMBAM -- game with this approach."
+  },
+  {
+   "t": 285.28,
+   "d": 10.75,
+   "text": "The player walks in with these tags and there is no room and the game crashes."
+  },
+  {
+   "t": 296.03,
+   "d": 4.41,
+   "text": "You can make some tags optional."
+  },
+  {
+   "t": 300.44,
+   "d": 2.89,
+   "text": "If you only have a normal corridor, fine."
+  },
+  {
+   "t": 303.33,
+   "d": 6.84,
+   "text": "You could have placeholders so a gray box room for all exit combinations."
+  },
+  {
+   "t": 310.17,
+   "d": 2.82,
+   "text": "Remember not to ship with those, right?"
+  },
+  {
+   "t": 312.99,
+   "d": 1.69,
+   "text": "You can manually assess every room."
+  },
+  {
+   "t": 314.68,
+   "d": 5.09,
+   "text": "This is not procedural -- we are not generating an infinite amount of levels."
+  },
+  {
+   "t": 319.77,
+   "d": 3.84,
+   "text": "This is a finite set of levels you will be running through them and you could manually"
+  },
+  {
+   "t": 323.61,
+   "d": 5.3,
+   "text": "test this but you would have to do it again and again every time anyone added a level,"
+  },
+  {
+   "t": 328.91,
+   "d": 1.0,
+   "text": "right?"
+  },
+  {
+   "t": 329.91,
+   "d": 3.67,
+   "text": "The most powerful solution I found was to statically analyze the level data and room"
+  },
+  {
+   "t": 333.58,
+   "d": 3.14,
+   "text": "list and to identify room requests without a matching room."
+  },
+  {
+   "t": 336.72,
+   "d": 6.73,
+   "text": "I wrote a Python script that loads those files and, you know, cross references them and then,"
+  },
+  {
+   "t": 343.45,
+   "d": 1.57,
+   "text": "you know, outputs an error."
+  },
+  {
+   "t": 345.02,
+   "d": 5.82,
+   "text": "If you then hook that Python script into something like Jenkins you can guarantee bad data will"
+  },
+  {
+   "t": 350.84,
+   "d": 1.8,
+   "text": "never be checked in."
+  },
+  {
+   "t": 352.64,
+   "d": 5.05,
+   "text": "We can prove level generation using tags won't break the game."
+  },
+  {
+   "t": 357.69,
+   "d": 4.41,
+   "text": "What about quality question?"
+  },
+  {
+   "t": 362.1,
+   "d": 6.39,
+   "text": "You can just play through levels and see certain rooms."
+  },
+  {
+   "t": 368.49,
+   "d": 4.28,
+   "text": "We did not have a lot of time or a big team and would be playing for the levels all of"
+  },
+  {
+   "t": 372.77,
+   "d": 1.32,
+   "text": "the time anyway."
+  },
+  {
+   "t": 374.09,
+   "d": 1.52,
+   "text": "I think that was OK."
+  },
+  {
+   "t": 375.61,
+   "d": 4.19,
+   "text": "However, I do think, you know, some of that could have been automated to make it easier"
+  },
+  {
+   "t": 379.8,
+   "d": 4.01,
+   "text": "to see where content is scarce and players might keep seeing the same room."
+  },
+  {
+   "t": 383.81,
+   "d": 4.61,
+   "text": "I will get back to that during the conclusion."
+  },
+  {
+   "t": 388.42,
+   "d": 2.45,
+   "text": "Let's talk about a second example."
+  },
+  {
+   "t": 390.87,
+   "d": 2.17,
+   "text": "Let's say you are making a fancy role-playing game."
+  },
+  {
+   "t": 393.04,
+   "d": 5.16,
+   "text": "This is a screenshot from one of the role-playing games I did early in my career."
+  },
+  {
+   "t": 398.2,
+   "d": 5.48,
+   "text": "You know, you have a fancy role-play game with a big world, fights, classes, all the"
+  },
+  {
+   "t": 403.68,
+   "d": 1.0,
+   "text": "classical elements."
+  },
+  {
+   "t": 404.68,
+   "d": 4.21,
+   "text": "Let's say you have a class like debard who doesn't shine in combat."
+  },
+  {
+   "t": 408.89,
+   "d": 5.01,
+   "text": "You want to give a cool thing they can do to avoid fights."
+  },
+  {
+   "t": 413.9,
+   "d": 5.46,
+   "text": "Let's say that they can get a quest to avoid a fight and something that involves charisma,"
+  },
+  {
+   "t": 419.36,
+   "d": 2.0,
+   "text": "songs and diplomacy."
+  },
+  {
+   "t": 421.36,
+   "d": 9.25,
+   "text": "You are going to have a lot more fights tan you can make quests so you make a pool of"
+  },
+  {
+   "t": 430.61,
+   "d": 1.91,
+   "text": "quest you can pick from."
+  },
+  {
+   "t": 432.52,
+   "d": 13.26,
+   "text": "You might request the player to get ointment from a healer and whichever situation makes"
+  },
+  {
+   "t": 445.78,
+   "d": 3.63,
+   "text": "sense in the role-playing game."
+  },
+  {
+   "t": 449.41,
+   "d": 4.71,
+   "text": "Then because you have a big world you need to adapt to the current location."
+  },
+  {
+   "t": 454.12,
+   "d": 4.2,
+   "text": "You can't have a quest that sends you to the same location because they will say there"
+  },
+  {
+   "t": 458.32,
+   "d": 7.3,
+   "text": "is an ogre and I hate that ogre."
+  },
+  {
+   "t": 465.62,
+   "d": 6.0,
+   "text": "You want to dynamically pick nearby locations and use those based for that quest."
+  },
+  {
+   "t": 471.62,
+   "d": 5.63,
+   "text": "When players need to be friendly to get the extra dialogue and pick that option it selects"
+  },
+  {
+   "t": 477.25,
+   "d": 5.3,
+   "text": "the quest based on whether they are trying to sweet talk an ogre or goblin and adapts"
+  },
+  {
+   "t": 482.55,
+   "d": 6.17,
+   "text": "to locations based on where the player is in the world."
+  },
+  {
+   "t": 488.72,
+   "d": 5.4,
+   "text": "Two kinds of dynamic selection one for the quest and one for the quest locations."
+  },
+  {
+   "t": 494.12,
+   "d": 3.58,
+   "text": "So let's look at the location picking for the functionality question."
+  },
+  {
+   "t": 497.7,
+   "d": 9.01,
+   "text": "Can we prove dynamic location will not break the game?"
+  },
+  {
+   "t": 506.71,
+   "d": 4.35,
+   "text": "It doesn't matter if the player has seen the location a thousands times on the other side"
+  },
+  {
+   "t": 511.06,
+   "d": 3.04,
+   "text": "of the world because those are quality issues and not functionality."
+  },
+  {
+   "t": 514.1,
+   "d": 8.11,
+   "text": "If the quest goes I need a tavern and all the other taverns are taken by other systems"
+  },
+  {
+   "t": 522.21,
+   "d": 3.26,
+   "text": "then your quest stops and that is bad."
+  },
+  {
+   "t": 525.47,
+   "d": 6.48,
+   "text": "Can we use static data level analysis here and yes, we can."
+  },
+  {
+   "t": 531.95,
+   "d": 4.59,
+   "text": "It is just that, you know, in the real situation the example is based on -- this turned out"
+  },
+  {
+   "t": 536.54,
+   "d": 1.3,
+   "text": "to be significantly harder."
+  },
+  {
+   "t": 537.84,
+   "d": 1.97,
+   "text": "This happened on a pretty big project."
+  },
+  {
+   "t": 539.81,
+   "d": 6.18,
+   "text": "I am going to go through some of the problems and steps I had to go through and some of"
+  },
+  {
+   "t": 545.99,
+   "d": 2.13,
+   "text": "the problems I encountered."
+  },
+  {
+   "t": 548.12,
+   "d": 4.85,
+   "text": "So first I needed to, you know, deeply understand the system I was trying to analyze."
+  },
+  {
+   "t": 552.97,
+   "d": 5.79,
+   "text": "I had not written the location reservation or picking system and multiple years of effort"
+  },
+  {
+   "t": 558.76,
+   "d": 4.32,
+   "text": "have gone into that so it was sort of step one."
+  },
+  {
+   "t": 563.08,
+   "d": 7.86,
+   "text": "Then I needed the quest and location data in a form I could work and many pipelines"
+  },
+  {
+   "t": 570.94,
+   "d": 11.87,
+   "text": "are not set-up for this analysis so I had to write C++ code and then Python."
+  },
+  {
+   "t": 582.81,
+   "d": 2.23,
+   "text": "Then I had to deal with false negative."
+  },
+  {
+   "t": 585.04,
+   "d": 7.35,
+   "text": "QA found a few cases where there was a real life occurrence of this problem, right?"
+  },
+  {
+   "t": 592.39,
+   "d": 3.02,
+   "text": "So like you know you start this quest and this quest and then boom."
+  },
+  {
+   "t": 595.41,
+   "d": 2.58,
+   "text": "The game locks up."
+  },
+  {
+   "t": 597.99,
+   "d": 5.89,
+   "text": "I had made it if that happened it would show a dialogue box that was there in non-debug"
+  },
+  {
+   "t": 603.88,
+   "d": 5.86,
+   "text": "builds and talk to Jurie do not ignore this to make it obvious."
+  },
+  {
+   "t": 609.74,
+   "d": 1.59,
+   "text": "We had a couple of examples like that."
+  },
+  {
+   "t": 611.33,
+   "d": 5.4,
+   "text": "I had to make sure that the XL file I was working on would say this was a problem also."
+  },
+  {
+   "t": 616.73,
+   "d": 6.92,
+   "text": "If QA says this breaks and the XL file says it is fine I have a false negative."
+  },
+  {
+   "t": 623.65,
+   "d": 1.0,
+   "text": "And that's bad."
+  },
+  {
+   "t": 624.65,
+   "d": 1.89,
+   "text": "I also had to deal with false positives."
+  },
+  {
+   "t": 626.54,
+   "d": 6.91,
+   "text": "If the XL file says this combination will break the game I had to create a synthetic"
+  },
+  {
+   "t": 633.45,
+   "d": 4.1,
+   "text": "game and verify it would break the game."
+  },
+  {
+   "t": 637.55,
+   "d": 4.13,
+   "text": "Make sure I was doing my logic correctly."
+  },
+  {
+   "t": 641.68,
+   "d": 3.39,
+   "text": "Then I had to work with content designers to come up with allocation rules and implement"
+  },
+  {
+   "t": 645.07,
+   "d": 4.7,
+   "text": "those and I will get to those in the next slides and I had to rerun that analysis regularly"
+  },
+  {
+   "t": 649.77,
+   "d": 6.9,
+   "text": "whenever the data changed and I had to -- I don't trust my own programming to the degree"
+  },
+  {
+   "t": 656.67,
+   "d": 7.21,
+   "text": "I felt was necessary I had to program a fallback so even if it did happen, there was, you know,"
+  },
+  {
+   "t": 663.88,
+   "d": 3.04,
+   "text": "something actually I forget what I did."
+  },
+  {
+   "t": 666.92,
+   "d": 6.55,
+   "text": "Something to make sure the players safe game isn't like broken forever because that's frowned"
+  },
+  {
+   "t": 673.47,
+   "d": 3.23,
+   "text": "upon."
+  },
+  {
+   "t": 676.7,
+   "d": 5.64,
+   "text": "The pattern I found in the quest and in the location where -- the requests that are like"
+  },
+  {
+   "t": 682.34,
+   "d": 5.05,
+   "text": "give me any old building or street corner and then requests like I need whatever is"
+  },
+  {
+   "t": 687.39,
+   "d": 5.76,
+   "text": "aligned with the guild in the city."
+  },
+  {
+   "t": 693.15,
+   "d": 3.56,
+   "text": "You have non-picky quests and you have picky quests in other words."
+  },
+  {
+   "t": 696.71,
+   "d": 5.04,
+   "text": "The quest from the example being reusable and a bit more generic are typically less"
+  },
+  {
+   "t": 701.75,
+   "d": 3.05,
+   "text": "picky and that's kind of the point."
+  },
+  {
+   "t": 704.8,
+   "d": 4.91,
+   "text": "At the same time the core story quest may need that one specific location, like we need"
+  },
+  {
+   "t": 709.71,
+   "d": 6.07,
+   "text": "the big fight in the fortress but only once and never again because core story quests"
+  },
+  {
+   "t": 715.78,
+   "d": 6.49,
+   "text": "are showing new things and moving the player forward through the world and usually only"
+  },
+  {
+   "t": 722.27,
+   "d": 1.16,
+   "text": "need the location once."
+  },
+  {
+   "t": 723.43,
+   "d": 6.51,
+   "text": "One thing you can do is put the quest and location to two pulls places like the fortress"
+  },
+  {
+   "t": 729.94,
+   "d": 6.73,
+   "text": "you need for that one story quest they are in the story-only pool and once that quest"
+  },
+  {
+   "t": 736.67,
+   "d": 8.79,
+   "text": "is done that location moves to the general pulls and the bar quest can use them and suddenly"
+  },
+  {
+   "t": 745.46,
+   "d": 4.92,
+   "text": "you have some healer is in the fortress or something."
+  },
+  {
+   "t": 750.38,
+   "d": 2.62,
+   "text": "Whatever make sense for your game."
+  },
+  {
+   "t": 753.0,
+   "d": 3.42,
+   "text": "That can help a little with solving the problem because it ensures the special locations are"
+  },
+  {
+   "t": 756.42,
+   "d": 1.05,
+   "text": "never taken."
+  },
+  {
+   "t": 757.47,
+   "d": 4.64,
+   "text": "Like when the story quest comes along it has the location it feeds -- needs and that's"
+  },
+  {
+   "t": 762.11,
+   "d": 1.26,
+   "text": "good."
+  },
+  {
+   "t": 763.37,
+   "d": 10.53,
+   "text": "It makes them freshens them up over time is what I want to say."
+  },
+  {
+   "t": 773.9,
+   "d": 2.21,
+   "text": "That doesn't prove you will always get a location."
+  },
+  {
+   "t": 776.11,
+   "d": 5.4,
+   "text": "I don't want to go too deep into the allocation problem and each game and each set of data"
+  },
+  {
+   "t": 781.51,
+   "d": 4.6,
+   "text": "is different but in the end I wend ended up with the following rule."
+  },
+  {
+   "t": 786.11,
+   "d": 4.42,
+   "text": "If at a given point in the game, you know which quest can be active, and you have one"
+  },
+  {
+   "t": 790.53,
+   "d": 2.58,
+   "text": "that needs a green tree."
+  },
+  {
+   "t": 793.11,
+   "d": 5.27,
+   "text": "And four happy with any location, all quests FWOUSHG if you have at least five green taverns"
+  },
+  {
+   "t": 798.38,
+   "d": 1.82,
+   "text": "available."
+  },
+  {
+   "t": 800.2,
+   "d": 9.42,
+   "text": "I hope you can infer the set manipulation I had to do and the -- the things I had to"
+  },
+  {
+   "t": 809.62,
+   "d": 6.26,
+   "text": "do in Excel and Python to present the data."
+  },
+  {
+   "t": 815.88,
+   "d": 8.2,
+   "text": "That is sort of what allowed me to prove that the game would never run out of locations."
+  },
+  {
+   "t": 824.08,
+   "d": 4.06,
+   "text": "As far as I know, it never did."
+  },
+  {
+   "t": 828.14,
+   "d": 4.54,
+   "text": "By the way, knowing which quest can be active at a given time is actually hard."
+  },
+  {
+   "t": 832.68,
+   "d": 6.95,
+   "text": "What's harder is knowing the likelihood that all the quests that could be active are active."
+  },
+  {
+   "t": 839.63,
+   "d": 6.7,
+   "text": "Like that, you know, that is really tough problem."
+  },
+  {
+   "t": 846.33,
+   "d": 5.92,
+   "text": "We just sort of assumed the worst case that the player grabs all the optional quests and"
+  },
+  {
+   "t": 852.25,
+   "d": 5.13,
+   "text": "never closes them and keeps plowing through the game."
+  },
+  {
+   "t": 857.38,
+   "d": 1.04,
+   "text": "Yeah."
+  },
+  {
+   "t": 858.42,
+   "d": 4.89,
+   "text": "So yes, you can prove dynamically picking the location won't break the game."
+  },
+  {
+   "t": 863.31,
+   "d": 3.7,
+   "text": "What about the quality questions?"
+  },
+  {
+   "t": 867.01,
+   "d": 2.77,
+   "text": "Are the bard players having a good time?"
+  },
+  {
+   "t": 869.78,
+   "d": 3.91,
+   "text": "Remember, we said we want to dynamically pick a quest based on who the player is trying"
+  },
+  {
+   "t": 873.69,
+   "d": 2.75,
+   "text": "to avoid fighting."
+  },
+  {
+   "t": 876.44,
+   "d": 6.19,
+   "text": "We have some quests good for certain opponents and some for any points."
+  },
+  {
+   "t": 882.63,
+   "d": 8.2,
+   "text": "Probably use a tag based because tags are developer constraints solver."
+  },
+  {
+   "t": 890.83,
+   "d": 4.37,
+   "text": "But that means you can end up if a situation that I talked about with the level example"
+  },
+  {
+   "t": 895.2,
+   "d": 2.73,
+   "text": "where the player gets a room but it is always the same room."
+  },
+  {
+   "t": 897.93,
+   "d": 4.3,
+   "text": "In this example, your bark layer may keep getting the quest where they need to find"
+  },
+  {
+   "t": 902.23,
+   "d": 4.49,
+   "text": "the ointment for a comment complaint or something."
+  },
+  {
+   "t": 906.72,
+   "d": 5.06,
+   "text": "And so the reason for that can be as simple as you having tagged that quest and just happen"
+  },
+  {
+   "t": 911.78,
+   "d": 3.25,
+   "text": "to be at a place with a ton of bears."
+  },
+  {
+   "t": 915.03,
+   "d": 2.36,
+   "text": "Apple keynote doesn't come with all shapes."
+  },
+  {
+   "t": 917.39,
+   "d": 3.04,
+   "text": "I used squirrels."
+  },
+  {
+   "t": 920.43,
+   "d": 3.04,
+   "text": "Prove me wrong."
+  },
+  {
+   "t": 923.47,
+   "d": 2.41,
+   "text": "It is good wrong."
+  },
+  {
+   "t": 925.88,
+   "d": 6.93,
+   "text": "They are spread out over space and how the quest constraints are setup and those result"
+  },
+  {
+   "t": 932.81,
+   "d": 3.03,
+   "text": "in a high likelihood of one quest repeating."
+  },
+  {
+   "t": 935.84,
+   "d": 2.18,
+   "text": "That is much harder to analyze from data."
+  },
+  {
+   "t": 938.02,
+   "d": 5.38,
+   "text": "I will talk a little about that towards the end."
+  },
+  {
+   "t": 943.4,
+   "d": 3.0,
+   "text": "Let's look at the quality of location picking."
+  },
+  {
+   "t": 946.4,
+   "d": 2.85,
+   "text": "Let's make our lives interesting by adding addition factors."
+  },
+  {
+   "t": 949.25,
+   "d": 5.34,
+   "text": "We don't just want one fitting were the quest but a location the player hasn't seen in a"
+  },
+  {
+   "t": 954.59,
+   "d": 7.23,
+   "text": "while and that is not too far away from where the player is."
+  },
+  {
+   "t": 961.82,
+   "d": 6.35,
+   "text": "We don't want to force the player to cross continents."
+  },
+  {
+   "t": 968.17,
+   "d": 4.09,
+   "text": "And let's assume that means we have relative ways to both factors."
+  },
+  {
+   "t": 972.26,
+   "d": 2.63,
+   "text": "Recency and proximity."
+  },
+  {
+   "t": 974.89,
+   "d": 10.53,
+   "text": "Anyway, a huge problem here is that proximity and recency are not things you can extract"
+  },
+  {
+   "t": 985.42,
+   "d": 3.85,
+   "text": "from static data."
+  },
+  {
+   "t": 989.27,
+   "d": 3.2,
+   "text": "They are inherently dynamic factors only known at run-time."
+  },
+  {
+   "t": 992.47,
+   "d": 3.56,
+   "text": "You cannot use static data analysis here."
+  },
+  {
+   "t": 996.03,
+   "d": 4.64,
+   "text": "Whereas you could do that for the level generation by calculating the scarcity of things."
+  },
+  {
+   "t": 1000.67,
+   "d": 2.22,
+   "text": "Here is a lot harder."
+  },
+  {
+   "t": 1002.89,
+   "d": 5.81,
+   "text": "Through some combination of how the quests are setup it is possible the players get sent"
+  },
+  {
+   "t": 1008.7,
+   "d": 4.16,
+   "text": "again to the one tavern in the district and maybe it is because it is the closest one"
+  },
+  {
+   "t": 1012.86,
+   "d": 4.28,
+   "text": "and you said proximity is slightly more important than recency and there are perfectly good"
+  },
+  {
+   "t": 1017.14,
+   "d": 6.93,
+   "text": "taverns on the other end of the city but you set it up that way."
+  },
+  {
+   "t": 1024.07,
+   "d": 6.45,
+   "text": "That is extremely hard to debug."
+  },
+  {
+   "t": 1030.52,
+   "d": 3.32,
+   "text": "Let me -- the technical slide here."
+  },
+  {
+   "t": 1033.84,
+   "d": 7.21,
+   "text": "Let me go through roughly algorithms that work."
+  },
+  {
+   "t": 1041.05,
+   "d": 1.73,
+   "text": "You have a list of all your locations, right?"
+  },
+  {
+   "t": 1042.78,
+   "d": 4.5,
+   "text": "We are talking about a given part of a quest in the location."
+  },
+  {
+   "t": 1047.28,
+   "d": 5.12,
+   "text": "You take all the locations and then you calculate like a bunch of metrics or values."
+  },
+  {
+   "t": 1052.4,
+   "d": 7.38,
+   "text": "Here, you know, in this made up example, saliency which is how well suited is it for this quest"
+  },
+  {
+   "t": 1059.78,
+   "d": 8.02,
+   "text": "and like the harvest is better suited for whatever reason."
+  },
+  {
+   "t": 1067.8,
+   "d": 2.71,
+   "text": "We have recency and distance."
+  },
+  {
+   "t": 1070.51,
+   "d": 6.11,
+   "text": "We take those numbers and make it so we can smash them together into one number for the"
+  },
+  {
+   "t": 1076.62,
+   "d": 4.05,
+   "text": "total score."
+  },
+  {
+   "t": 1080.67,
+   "d": 4.98,
+   "text": "We can say recency is more important than distance."
+  },
+  {
+   "t": 1085.65,
+   "d": 3.21,
+   "text": "We can do arbitrary math on these values."
+  },
+  {
+   "t": 1088.86,
+   "d": 7.37,
+   "text": "You add it together and pick like the location with the highest score or you take something"
+  },
+  {
+   "t": 1096.23,
+   "d": 1.0,
+   "text": "from the top five."
+  },
+  {
+   "t": 1097.23,
+   "d": 5.32,
+   "text": "There is all kinds of variations but you know, you pick based on that score."
+  },
+  {
+   "t": 1102.55,
+   "d": 7.67,
+   "text": "And because you have all these those values, it is very cheap to display them as a debug"
+  },
+  {
+   "t": 1110.22,
+   "d": 1.98,
+   "text": "tool."
+  },
+  {
+   "t": 1112.2,
+   "d": 5.52,
+   "text": "You print them all through the log and you can see the log like oh, location request"
+  },
+  {
+   "t": 1117.72,
+   "d": 1.0,
+   "text": "23."
+  },
+  {
+   "t": 1118.72,
+   "d": 5.84,
+   "text": "Let's look at the values or a debug window and go why did this quest pick this particular"
+  },
+  {
+   "t": 1124.56,
+   "d": 1.9,
+   "text": "thing."
+  },
+  {
+   "t": 1126.46,
+   "d": 4.17,
+   "text": "What I am saying is like that is not enough because each individual selection can be fine"
+  },
+  {
+   "t": 1130.63,
+   "d": 3.47,
+   "text": "but it is over time they add up to a bad experience."
+  },
+  {
+   "t": 1134.1,
+   "d": 5.81,
+   "text": "I think you need to lock the data that goes into the content selection through your analytic"
+  },
+  {
+   "t": 1139.91,
+   "d": 3.69,
+   "text": "system and analyze it over time maybe you can spot cause -- problems and root causes"
+  },
+  {
+   "t": 1143.6,
+   "d": 9.95,
+   "text": "and maybe retroactively change the waiting and say would this have given me better selections."
+  },
+  {
+   "t": 1153.55,
+   "d": 4.43,
+   "text": "I say maybe here because I have run into these problems but I have never found a better solution"
+  },
+  {
+   "t": 1157.98,
+   "d": 4.3,
+   "text": "than changing some weight and hoping the problem knows away because we did not have this data"
+  },
+  {
+   "t": 1162.28,
+   "d": 6.69,
+   "text": "overtime and did not have the data to make a better decision than that."
+  },
+  {
+   "t": 1168.97,
+   "d": 2.51,
+   "text": "So those were the two examples."
+  },
+  {
+   "t": 1171.48,
+   "d": 1.0,
+   "text": "Conclusions."
+  },
+  {
+   "t": 1172.48,
+   "d": 2.59,
+   "text": "So, this is what I said at the start."
+  },
+  {
+   "t": 1175.07,
+   "d": 3.27,
+   "text": "I hope I sort of convinced you."
+  },
+  {
+   "t": 1178.34,
+   "d": 1.21,
+   "text": "Dynamic content selection not that different."
+  },
+  {
+   "t": 1179.55,
+   "d": 3.42,
+   "text": "The two questions are the same it is how you answer them that's different."
+  },
+  {
+   "t": 1182.97,
+   "d": 7.93,
+   "text": "If you add a rock to a level, you want to make sure that didn't somehow break the game"
+  },
+  {
+   "t": 1190.9,
+   "d": 3.75,
+   "text": "which is rare but we all have stories."
+  },
+  {
+   "t": 1194.65,
+   "d": 3.48,
+   "text": "And also the rock made the level a little bit better, right?"
+  },
+  {
+   "t": 1198.13,
+   "d": 2.74,
+   "text": "That is such a common thing we don't think about."
+  },
+  {
+   "t": 1200.87,
+   "d": 4.17,
+   "text": "I am going to look at it in a 3D view."
+  },
+  {
+   "t": 1205.04,
+   "d": 4.69,
+   "text": "That's answering the two questions for adding a rock, right?"
+  },
+  {
+   "t": 1209.73,
+   "d": 4.2,
+   "text": "My point is that answering those two questions is very different when you are doing something"
+  },
+  {
+   "t": 1213.93,
+   "d": 5.82,
+   "text": "like tag based level generation or my other example."
+  },
+  {
+   "t": 1219.75,
+   "d": 5.15,
+   "text": "Static data validation is generally useful and I am a big proponent of this but particularly"
+  },
+  {
+   "t": 1224.9,
+   "d": 5.27,
+   "text": "when independent assets need to work together."
+  },
+  {
+   "t": 1230.17,
+   "d": 4.07,
+   "text": "Levels need rooms, situations feed -- need quests and those are independent things that"
+  },
+  {
+   "t": 1234.24,
+   "d": 10.69,
+   "text": "come together in a system and especially when the bits come from people with different disciplines."
+  },
+  {
+   "t": 1244.93,
+   "d": 4.11,
+   "text": "Someone making level definition and someone making rooms is great."
+  },
+  {
+   "t": 1249.04,
+   "d": 7.21,
+   "text": "They don't need to coordinate to create their stuff but, you know, the integration problem"
+  },
+  {
+   "t": 1256.25,
+   "d": 2.63,
+   "text": "and the risk is higher there."
+  },
+  {
+   "t": 1258.88,
+   "d": 3.71,
+   "text": "That's why it is particular important to use static data validation."
+  },
+  {
+   "t": 1262.59,
+   "d": 6.44,
+   "text": "And I am implying here that this is automated static validation so you have the computer"
+  },
+  {
+   "t": 1269.03,
+   "d": 6.12,
+   "text": "do the work and ideally every time you submit data it is done."
+  },
+  {
+   "t": 1275.15,
+   "d": 4.75,
+   "text": "One thing that I sort of discovered while writing these slides, it wasn't clear to me"
+  },
+  {
+   "t": 1279.9,
+   "d": 8.06,
+   "text": "but static analysis is data mining."
+  },
+  {
+   "t": 1287.96,
+   "d": 5.01,
+   "text": "You somehow get the data and massage the data until it has the shape you want, you analyze"
+  },
+  {
+   "t": 1292.97,
+   "d": 6.4,
+   "text": "it, form hypothesis, and confirm them and make the process repeatable and that takes"
+  },
+  {
+   "t": 1299.37,
+   "d": 2.48,
+   "text": "time and effort."
+  },
+  {
+   "t": 1301.85,
+   "d": 1.56,
+   "text": "You may need engine or tool support."
+  },
+  {
+   "t": 1303.41,
+   "d": 5.88,
+   "text": "Because the engine may not be able to give you the data that you really need."
+  },
+  {
+   "t": 1309.29,
+   "d": 4.07,
+   "text": "Another fun thing I discovered is sometimes you cannot start the analysis until the data"
+  },
+  {
+   "t": 1313.36,
+   "d": 1.0,
+   "text": "is close to done."
+  },
+  {
+   "t": 1314.36,
+   "d": 6.67,
+   "text": "We knew about the location project but knew we couldn't pick the right way to solve it."
+  },
+  {
+   "t": 1321.03,
+   "d": 8.32,
+   "text": "We didn't have the whole world setup and the locations and quests."
+  },
+  {
+   "t": 1329.35,
+   "d": 6.71,
+   "text": "So we sort of had to keep waiting and go we are not going to answer this until data."
+  },
+  {
+   "t": 1336.06,
+   "d": 5.16,
+   "text": "Which was sort of, you know, difficult in some ways."
+  },
+  {
+   "t": 1341.22,
+   "d": 3.08,
+   "text": "You can answer the quality question by -- you cannot."
+  },
+  {
+   "t": 1344.3,
+   "d": 8.55,
+   "text": "We ended up not automating or supporting the quality question in the two examples I gave."
+  },
+  {
+   "t": 1352.85,
+   "d": 1.4,
+   "text": "We eyeballed it."
+  },
+  {
+   "t": 1354.25,
+   "d": 2.72,
+   "text": "It a risk and it could have gone wrong."
+  },
+  {
+   "t": 1356.97,
+   "d": 5.63,
+   "text": "I feel like to do it right you need analytics or a time-based logger system and analyze"
+  },
+  {
+   "t": 1362.6,
+   "d": 1.42,
+   "text": "the data over time."
+  },
+  {
+   "t": 1364.02,
+   "d": 3.13,
+   "text": "My final what is the opposite of take away?"
+  },
+  {
+   "t": 1367.15,
+   "d": 1.42,
+   "text": "Bring along."
+  },
+  {
+   "t": 1368.57,
+   "d": 4.69,
+   "text": "When you use dynamic content don't forget to budget time to figure out how you will"
+  },
+  {
+   "t": 1373.26,
+   "d": 1.0,
+   "text": "answer these questions."
+  },
+  {
+   "t": 1374.26,
+   "d": 1.37,
+   "text": "It takes real work."
+  },
+  {
+   "t": 1375.63,
+   "d": 1.29,
+   "text": "It is a particular skill."
+  },
+  {
+   "t": 1376.92,
+   "d": 6.52,
+   "text": "I hope if you takeaway one thing it is that."
+  },
+  {
+   "t": 1383.44,
+   "d": 5.59,
+   "text": "So thanks."
+  },
+  {
+   "t": 1389.03,
+   "d": 2.09,
+   "text": "Great projects from Itch."
+  },
+  {
+   "t": 1391.12,
+   "d": 1.0,
+   "text": "My employer is hiring."
+  },
+  {
+   "t": 1392.12,
+   "d": 2.88,
+   "text": "We shipped a roguelike this year."
+  },
+  {
+   "t": 1395.0,
+   "d": 1.7,
+   "text": "Wink-wink."
+  },
+  {
+   "t": 1396.7,
+   "d": 2.6,
+   "text": "If you want to reach me you can reach me here."
+  },
+  {
+   "t": 1399.3,
+   "d": 1.06,
+   "text": "ALEXEI: Excellent."
+  },
+  {
+   "t": 1400.36,
+   "d": 2.12,
+   "text": "Thank you very much."
+  },
+  {
+   "t": 1402.48,
+   "d": 2.65,
+   "text": "That was a great talk."
+  },
+  {
+   "t": 1405.13,
+   "d": 2.68,
+   "text": "I am very much looking forward to referencing it."
+  },
+  {
+   "t": 1407.81,
+   "d": 7.76,
+   "text": "I think like your takeaway says it is so crucial to have that time to actually make the content"
+  },
+  {
+   "t": 1415.57,
+   "d": 4.23,
+   "text": "good and you need to take that time again if you change the content."
+  },
+  {
+   "t": 1419.8,
+   "d": 8.02,
+   "text": "Having also worked on these types of systems in big triple A context."
+  },
+  {
+   "t": 1427.82,
+   "d": 5.74,
+   "text": "JURIE: Especially in this case."
+  },
+  {
+   "t": 1433.56,
+   "d": 3.14,
+   "text": "I didn't know at the start that I am going to have to do these things."
+  },
+  {
+   "t": 1436.7,
+   "d": 3.21,
+   "text": "This is more like something is on fire let's fix it."
+  },
+  {
+   "t": 1439.91,
+   "d": 1.32,
+   "text": "ALEXEI: Absolutely."
+  },
+  {
+   "t": 1441.23,
+   "d": 10.18,
+   "text": "I think the point I liked knowing the problem exists doesn't mean you can solve it right"
+  },
+  {
+   "t": 1451.41,
+   "d": 1.0,
+   "text": "away."
+  },
+  {
+   "t": 1452.41,
+   "d": 6.76,
+   "text": "You have to wait until the data is there and that's great insight that resonated with me."
+  },
+  {
+   "t": 1459.17,
+   "d": 2.61,
+   "text": "We have time for a few questions."
+  },
+  {
+   "t": 1461.78,
+   "d": 4.62,
+   "text": "Go ahead and submit them or up-vote them."
+  },
+  {
+   "t": 1466.4,
+   "d": 2.31,
+   "text": "We have one question."
+  },
+  {
+   "t": 1468.71,
+   "d": 5.89,
+   "text": "With dynamic content selection, does make t make sense to generate randomized player"
+  },
+  {
+   "t": 1474.6,
+   "d": 2.8,
+   "text": "path and choices to create test data?"
+  },
+  {
+   "t": 1477.4,
+   "d": 3.22,
+   "text": "That kind of test player version."
+  },
+  {
+   "t": 1480.62,
+   "d": 2.43,
+   "text": "Is that something you ever used?"
+  },
+  {
+   "t": 1483.05,
+   "d": 1.06,
+   "text": "JURIE: It definitely does."
+  },
+  {
+   "t": 1484.11,
+   "d": 4.89,
+   "text": "It is not something I did for the quality of the levels but for the same game there"
+  },
+  {
+   "t": 1489.0,
+   "d": 5.78,
+   "text": "level generation example is based on I kind of used that for progressive balancing so"
+  },
+  {
+   "t": 1494.78,
+   "d": 6.31,
+   "text": "doing three analysis through a level and if the player sees all the rooms and they hit"
+  },
+  {
+   "t": 1501.09,
+   "d": 3.15,
+   "text": "so many enemies and only a few they do this."
+  },
+  {
+   "t": 1504.24,
+   "d": 7.63,
+   "text": "And what is the probability distribution of those thing you can go into."
+  },
+  {
+   "t": 1511.87,
+   "d": 1.0,
+   "text": "Definitely."
+  },
+  {
+   "t": 1512.87,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1513.87,
+   "d": 1.0,
+   "text": "ALEXEI: Yeah."
+  },
+  {
+   "t": 1514.87,
+   "d": 5.38,
+   "text": "I am curious, did you ever go down further layers?"
+  },
+  {
+   "t": 1520.25,
+   "d": 3.75,
+   "text": "You talked about the relationship between locations and quests and sometimes that keeps"
+  },
+  {
+   "t": 1524.0,
+   "d": 5.59,
+   "text": "piling on and the quests have different quest rewards and the different rewards feed into"
+  },
+  {
+   "t": 1529.59,
+   "d": 1.82,
+   "text": "different types of progression."
+  },
+  {
+   "t": 1531.41,
+   "d": 6.01,
+   "text": "So you get that version of now depending on which quests get generated the rewards are"
+  },
+  {
+   "t": 1537.42,
+   "d": 2.81,
+   "text": "going to be different then you are looking at the progression."
+  },
+  {
+   "t": 1540.23,
+   "d": 5.73,
+   "text": "How do you start then balancing that like, yeah, the quality and the like correctness"
+  },
+  {
+   "t": 1545.96,
+   "d": 5.81,
+   "text": "of you know, is it possible to get in a situation where like there is no way to get elf feather"
+  },
+  {
+   "t": 1551.77,
+   "d": 5.11,
+   "text": "because it generates none of those requests that have the award?"
+  },
+  {
+   "t": 1556.88,
+   "d": 5.86,
+   "text": "JURIE: That's a great point and maybe the bigger takeaway."
+  },
+  {
+   "t": 1562.74,
+   "d": 8.96,
+   "text": "It is very easy to design a system that sounds good and that is untunable or uncontrollable."
+  },
+  {
+   "t": 1571.7,
+   "d": 1.27,
+   "text": "Certainly we have progression."
+  },
+  {
+   "t": 1572.97,
+   "d": 2.46,
+   "text": "These two examples were from two different games."
+  },
+  {
+   "t": 1575.43,
+   "d": 5.54,
+   "text": "In the level generation example the quest, we had quests, you had to go through levels"
+  },
+  {
+   "t": 1580.97,
+   "d": 3.21,
+   "text": "one by one, but that was pretty linear."
+  },
+  {
+   "t": 1584.18,
+   "d": 6.27,
+   "text": "The non-linearity did not really harm or like did not make it more difficult to balance"
+  },
+  {
+   "t": 1590.45,
+   "d": 1.55,
+   "text": "sort of the progression."
+  },
+  {
+   "t": 1592.0,
+   "d": 4.49,
+   "text": "And the other game, you know, if you have a role-playing game, the player can go anywhere"
+  },
+  {
+   "t": 1596.49,
+   "d": 1.0,
+   "text": "any time."
+  },
+  {
+   "t": 1597.49,
+   "d": 4.99,
+   "text": "So it is difficult to control that and simulate that."
+  },
+  {
+   "t": 1602.48,
+   "d": 7.32,
+   "text": "Also like I said with the location picking, it is easy to make a system that is great"
+  },
+  {
+   "t": 1609.8,
+   "d": 6.16,
+   "text": "and, you know, is complicated but then you need to, you know, answer that question like"
+  },
+  {
+   "t": 1615.96,
+   "d": 1.49,
+   "text": "well, is this our game?"
+  },
+  {
+   "t": 1617.45,
+   "d": 1.86,
+   "text": "Like that's it."
+  },
+  {
+   "t": 1619.31,
+   "d": 3.61,
+   "text": "Sort of an additional use case we had not thought of in the beginning."
+  },
+  {
+   "t": 1622.92,
+   "d": 5.08,
+   "text": "Yeah, you can end up with like I said untunable or uncontrollable games if you are not careful."
+  },
+  {
+   "t": 1628.0,
+   "d": 7.1,
+   "text": "ALEXEI: Yeah, you get into that almost second order problem of rarely is a single piece"
+  },
+  {
+   "t": 1635.1,
+   "d": 1.83,
+   "text": "of content just a single piece of content."
+  },
+  {
+   "t": 1636.93,
+   "d": 2.02,
+   "text": "A level has a bunch of stuff coming with it."
+  },
+  {
+   "t": 1638.95,
+   "d": 3.91,
+   "text": "A quest has a bunch of stuff coming with it."
+  },
+  {
+   "t": 1642.86,
+   "d": 5.31,
+   "text": "It gets more interesting the more layers and it gets harder and harder."
+  },
+  {
+   "t": 1648.17,
+   "d": 3.03,
+   "text": "JURIE: It is like in the first question."
+  },
+  {
+   "t": 1651.2,
+   "d": 2.57,
+   "text": "Generating random paths, yes, that's super cool."
+  },
+  {
+   "t": 1653.77,
+   "d": 1.32,
+   "text": "I would love to do that."
+  },
+  {
+   "t": 1655.09,
+   "d": 2.9,
+   "text": "Do I have the time to do that, right?"
+  },
+  {
+   "t": 1657.99,
+   "d": 1.05,
+   "text": "That's the other question."
+  },
+  {
+   "t": 1659.04,
+   "d": 2.58,
+   "text": "In the case of one game we did not."
+  },
+  {
+   "t": 1661.62,
+   "d": 4.11,
+   "text": "Actually in the case of both games we did not."
+  },
+  {
+   "t": 1665.73,
+   "d": 5.31,
+   "text": "ALEXEI: I appreciate talks like this because there are plenty of people in this type of"
+  },
+  {
+   "t": 1671.04,
+   "d": 6.02,
+   "text": "group especially that can make games solo so the answer can be that's all in your head"
+  },
+  {
+   "t": 1677.06,
+   "d": 7.63,
+   "text": "but if you have bigger ambitious and you work on bigger teams it is like QA needs to have"
+  },
+  {
+   "t": 1684.69,
+   "d": 5.26,
+   "text": "certain things they need to check and producers need to know things and your artists want"
+  },
+  {
+   "t": 1689.95,
+   "d": 4.95,
+   "text": "to work on assets without all being blocked."
+  },
+  {
+   "t": 1694.9,
+   "d": 6.1,
+   "text": "JURIE: Or you are a programmer and would love to get data from analytics but there is several"
+  },
+  {
+   "t": 1701.0,
+   "d": 4.45,
+   "text": "departments involved and they want to under what these bytes are you want to send across"
+  },
+  {
+   "t": 1705.45,
+   "d": 1.05,
+   "text": "their network."
+  },
+  {
+   "t": 1706.5,
+   "d": 3.48,
+   "text": "ALEXEI: Interesting provocative question."
+  },
+  {
+   "t": 1709.98,
+   "d": 15.33,
+   "text": "Would you ever design a system specifically to be easy to test first and interesting second?"
+  },
+  {
+   "t": 1725.31,
+   "d": 11.01,
+   "text": "JURIE: Um."
+  },
+  {
+   "t": 1736.32,
+   "d": 6.56,
+   "text": "I can imagine myself saying this is easy to test and then trying to make it interesting,"
+  },
+  {
+   "t": 1742.88,
+   "d": 1.63,
+   "text": "right?"
+  },
+  {
+   "t": 1744.51,
+   "d": 4.5,
+   "text": "As opposed to trying to, you know, solve both things at the same time or going for interesting"
+  },
+  {
+   "t": 1749.01,
+   "d": 4.16,
+   "text": "first and then hopefully going can I actually ship this?"
+  },
+  {
+   "t": 1753.17,
+   "d": 1.0,
+   "text": "Right."
+  },
+  {
+   "t": 1754.17,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1755.17,
+   "d": 1.0,
+   "text": "I don't know."
+  },
+  {
+   "t": 1756.17,
+   "d": 8.56,
+   "text": "ALEXEI: We can take something and make it interesting because we have that skill set."
+  },
+  {
+   "t": 1764.73,
+   "d": 6.25,
+   "text": "Do you have the technical capacity to take something that is interesting but untestable"
+  },
+  {
+   "t": 1770.98,
+   "d": 4.65,
+   "text": "and build engineering tools to make it testable?"
+  },
+  {
+   "t": 1775.63,
+   "d": 2.29,
+   "text": "Maybe you don't."
+  },
+  {
+   "t": 1777.92,
+   "d": 7.95,
+   "text": "JURIE: I also wonder if we hear about the games that were not interesting and thought"
+  },
+  {
+   "t": 1785.87,
+   "d": 1.0,
+   "text": "they would get their -- some do ship."
+  },
+  {
+   "t": 1786.87,
+   "d": 1.0,
+   "text": "I don't know."
+  },
+  {
+   "t": 1787.87,
+   "d": 1.0,
+   "text": "It is a hard question."
+  },
+  {
+   "t": 1788.87,
+   "d": 1.0,
+   "text": "ALEXEI: Interesting."
+  },
+  {
+   "t": 1789.87,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1790.87,
+   "d": 1.0,
+   "text": "That takes us to the end of the time."
+  },
+  {
+   "t": 1791.87,
+   "d": 3.73,
+   "text": "It is wonderful and I think it will be a referenceable talk which is fantastic."
+  },
+  {
+   "t": 1795.6,
+   "d": 2.38,
+   "text": "JURIE: Thanks for having me."
+  },
+  {
+   "t": 1797.98,
+   "d": 1.0,
+   "text": "ALEXEI: All right."
+  },
+  {
+   "t": 1798.98,
+   "d": 1.0,
+   "text": "Wow."
+  },
+  {
+   "t": 1799.98,
+   "d": 2.62,
+   "text": "This has been a long but wonderful day of so many talks"
+  }
+ ]
+}

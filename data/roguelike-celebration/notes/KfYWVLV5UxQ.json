@@ -1,0 +1,95 @@
+{
+  "id": "KfYWVLV5UxQ",
+  "title": "droqen - Making Sudoku Poems Using Tools",
+  "speaker": "droqen",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=KfYWVLV5UxQ",
+  "talk_type": "technical",
+  "summary": "droqen describes an exploratory project to make 'Sudoku poems': valid Sudoku puzzles whose givens encode a message, first digits of pi and then phrases written in a nine-letter alphabet. Hand-placing the message produced aesthetic choices but usually unsolvable puzzles, so he wrote a Python tool that searches word placements and runs an off-the-shelf Sudoku solver, pruning the search by placing the most constrained word first. Valid results turned out to be rare. The second half is a live demo in which the audience suggests words, he composes phrases in their alphabets, and the tool finds several valid puzzles.",
+  "games": [
+    "Sudoku"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "puzzle as medium",
+      "kind": "example",
+      "claim": "droqen treats Sudoku as an expressive format by encoding a message in a puzzle's givens, noting that solving a Sudoku 'destroys' it into a meaningless block of numbers.",
+      "detail": "After copying a puzzle from Sudoku for Dummies and filling it in pen, he liked that the finished grid hid where the puzzle had started. He first tried cramming the digits of pi (learned from a song whose word lengths encode them) into the grid, caring more about doing something with the format than about how it would be solved.",
+      "t": 270,
+      "quote": "solving a Sudoku puzzle like destroys it. You end up with with just a a block of numbers that that has no meaning",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "principle",
+      "claim": "Even under strict constraints like Sudoku's rules, encoding a message leaves real aesthetic choices about placement, such as where numbers go to form nicer runs or shapes.",
+      "detail": "Placing pi's digits naively in the first available slot is not necessarily the tightest packing; droqen moved a five to create a nicer chunk, and preferred stacking digits vertically over a diagonal relationship. Different encodings of the same message gave visibly different shapes.",
+      "t": 363,
+      "quote": "What what what kind of was interesting to me was that I had a decision here, like an aesthetic decision. Where do I want the numbers to go?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "example",
+      "claim": "Adding a content constraint (the givens must spell a message) removes the usual puzzle-designer fix of inserting extra clues, so most hand-encoded messages yielded unsolvable or non-unique Sudokus.",
+      "detail": "A real Sudoku needs exactly one solution. A normal designer seeing two ambiguous fives could hard-code another five as a clue, but droqen could not because there is no extra five in pi. He calls himself a puzzle designer following a weird rule of also making a sentence.",
+      "t": 508,
+      "quote": "if I put that five there, there's no five in pi. So the the moves that I'm allowed to make",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "technique",
+      "claim": "Replacing digits with a nine-letter alphabet lets Sudoku givens spell words, so a phrase can become a puzzle, and the phrase must use every letter so the alphabet is fully defined and the solution unique.",
+      "detail": "The phrase 'kill gameplay' happened to have exactly nine distinct letters, so after trying ciphers he placed letters directly on the grid and wrote 'Magpie pay me my image like I am a gleam' from that alphabet. In the demo he notes that, unlike a numeric Sudoku, every letter must appear or there will be multiple solutions.",
+      "t": 1362,
+      "quote": "the puzzle also has to properly define the alphabet or there's going to be multiple solutions",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "search pruning",
+      "kind": "technique",
+      "claim": "To make a brute-force placement search feasible, droqen's tool first places the word with the fewest immediately viable positions, branching from it, and rejects placements cheaply (e.g. a repeated letter in one row) before running the full solver.",
+      "detail": "Trying every permutation of word positions with a Sudoku solver was far too slow. Noticing that 'kill' only works where its double L straddles a row seam, he generalised this into a 'find least promising new index' function that picks the word with the fewest viable placements, then iterates over the remaining words' positions in a branching tree.",
+      "t": 841,
+      "quote": "it's looking for which word has the smallest number of immediately viable placements",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "search pruning",
+      "kind": "technique",
+      "claim": "Starting the search with a long word works much better because it greatly reduces the search space.",
+      "detail": "During the demo droqen uses a word-frequency library to list words formed from a nine-letter alphabet, filtering by minimum frequency and length, and says he looks for really long words to place first.",
+      "t": 1170,
+      "quote": "a really long word um that it can that it can place to start with cuz it just reduces the search space",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator rarity",
+      "kind": "example",
+      "claim": "Once the tool existed, droqen found that phrases producing a valid Sudoku are rare; most phrases yield no working placements at all.",
+      "detail": "His Magpie poem produced ten valid variants, but most phrases he tried returned nothing, so he isn't sure how to recapture that luck. The Magpie poem became his benchmark for phrase length when composing new ones.",
+      "t": 1247,
+      "quote": "since building this tool, I have discovered how rare this actually is. Like most phrases they do the same thing",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "solver as evaluator",
+      "kind": "technique",
+      "claim": "droqen uses an off-the-shelf Sudoku solver both to validate generated puzzles and to grade them by reporting which solving strategies they require, keeping only those solvable without brute force.",
+      "detail": "The strategy list came for free with the solver library he used. Live-demo puzzles needed only basic strategies, while he chose a Magpie variant that required a slightly more complex technique such as hidden pairs.",
+      "t": 1496,
+      "quote": "I only look for solutions that don't require brute forcing",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

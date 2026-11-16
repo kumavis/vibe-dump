@@ -1,0 +1,2141 @@
+{
+ "id": "_vf3HO3wn20",
+ "url": "https://www.youtube.com/watch?v=_vf3HO3wn20",
+ "title": "Brenda Romero - Dynamic Relationships and Traits in Empire of Sin",
+ "speaker": "Brenda Romero",
+ "talk_title": "Dynamic Relationships and Traits in Empire of Sin",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 927,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Brenda Romero is a BAFTA award-winning game director, entrepreneur, artist and Fulbright award recipient and is presently game director and creator of the Empire of Sin franchise. As a game director, she has worked on 50 games and contributed to many seminal titles, including the Wizardry and Jagged Alliance series and titles in the Ghost Recon, Dungeons & Dragons and Def Jam franchises. Away from the machine, her analog series of six games, The Mechanic is the Message, has drawn national and international acclaim, particularly Train and Siochán Leat, a game about her family’s history, which is presently housed in the National Museum of Play. In addition to a BAFTA and a Fulbright, Romero is the recipient of multiple lifetime achievement awards, a Grace Hopper Award, a GDC Ambassador Award, and many of the games she has contributed to have won numerous awards. Romero is CEO and co-founder of Romero Games based in Galway, Ireland.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 161,
+   "title": "Early influences"
+  },
+  {
+   "start": 334,
+   "title": "Traits in Empire of Sin"
+  },
+  {
+   "start": 575,
+   "title": "System design process"
+  },
+  {
+   "start": 743,
+   "title": "Bugs and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2809,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.92,
+   "d": 1.76,
+   "text": "though part of my reason for starting"
+  },
+  {
+   "t": 5.68,
+   "d": 1.6,
+   "text": "early is that i wanted to have the"
+  },
+  {
+   "t": 7.28,
+   "d": 2.08,
+   "text": "proper time to introduce in particular"
+  },
+  {
+   "t": 9.36,
+   "d": 2.56,
+   "text": "our first lightning talk speaker um"
+  },
+  {
+   "t": 11.92,
+   "d": 2.0,
+   "text": "because i'm very excited that our first"
+  },
+  {
+   "t": 13.92,
+   "d": 3.44,
+   "text": "speaker is going to be brenda romero who"
+  },
+  {
+   "t": 17.36,
+   "d": 1.28,
+   "text": "i would hope that a lot of people are"
+  },
+  {
+   "t": 18.64,
+   "d": 1.76,
+   "text": "familiar with but she's a bafta"
+  },
+  {
+   "t": 20.4,
+   "d": 3.2,
+   "text": "award-winning game director entrepreneur"
+  },
+  {
+   "t": 23.6,
+   "d": 2.4,
+   "text": "artist and fulbright award recipient"
+  },
+  {
+   "t": 26.0,
+   "d": 1.44,
+   "text": "she's presently the game director and"
+  },
+  {
+   "t": 27.44,
+   "d": 2.96,
+   "text": "creator the empire of sin franchise and"
+  },
+  {
+   "t": 30.4,
+   "d": 2.08,
+   "text": "working out of ireland and she's worked"
+  },
+  {
+   "t": 32.48,
+   "d": 3.04,
+   "text": "on 50 games contributed to many seminal"
+  },
+  {
+   "t": 35.52,
+   "d": 2.16,
+   "text": "titles like wizardry jagged alliance"
+  },
+  {
+   "t": 37.68,
+   "d": 1.68,
+   "text": "titles in ghost recon dungeons and"
+  },
+  {
+   "t": 39.36,
+   "d": 3.12,
+   "text": "dragons and def jam franchises um and"
+  },
+  {
+   "t": 42.48,
+   "d": 2.24,
+   "text": "away from machines her analog series of"
+  },
+  {
+   "t": 44.72,
+   "d": 1.6,
+   "text": "six games the mechanic is the message"
+  },
+  {
+   "t": 46.32,
+   "d": 1.6,
+   "text": "has drawn national and international"
+  },
+  {
+   "t": 47.92,
+   "d": 2.72,
+   "text": "acclaim particularly um"
+  },
+  {
+   "t": 50.64,
+   "d": 2.24,
+   "text": "train and sean lay a game about her"
+  },
+  {
+   "t": 52.88,
+   "d": 1.6,
+   "text": "family's history which was presented at"
+  },
+  {
+   "t": 54.48,
+   "d": 2.0,
+   "text": "the national museum of play"
+  },
+  {
+   "t": 56.48,
+   "d": 1.92,
+   "text": "in addition to a bafta and a fulbright"
+  },
+  {
+   "t": 58.4,
+   "d": 1.84,
+   "text": "if that's not enough uh she's gotten"
+  },
+  {
+   "t": 60.24,
+   "d": 1.68,
+   "text": "multiple lifetime achievement awards"
+  },
+  {
+   "t": 61.92,
+   "d": 2.72,
+   "text": "grace hopper award ddc ambassador um"
+  },
+  {
+   "t": 64.64,
+   "d": 1.92,
+   "text": "basically just all-around extremely"
+  },
+  {
+   "t": 66.56,
+   "d": 2.4,
+   "text": "inspiring person who i personally look"
+  },
+  {
+   "t": 68.96,
+   "d": 2.96,
+   "text": "up to and was very excited to"
+  },
+  {
+   "t": 71.92,
+   "d": 2.32,
+   "text": "have with us so"
+  },
+  {
+   "t": 74.24,
+   "d": 2.8,
+   "text": "and there we go very top of the hour so"
+  },
+  {
+   "t": 77.04,
+   "d": 1.76,
+   "text": "if you're ready we'll bring you on"
+  },
+  {
+   "t": 78.8,
+   "d": 2.48,
+   "text": "bretta"
+  },
+  {
+   "t": 84.72,
+   "d": 1.76,
+   "text": "there we go"
+  },
+  {
+   "t": 86.48,
+   "d": 1.84,
+   "text": "all right hang on a second"
+  },
+  {
+   "t": 88.32,
+   "d": 0.8,
+   "text": "oh"
+  },
+  {
+   "t": 89.12,
+   "d": 4.24,
+   "text": "we got some duplicated audio right now"
+  },
+  {
+   "t": 98.88,
+   "d": 2.08,
+   "text": "figured it out here folks can you guys"
+  },
+  {
+   "t": 100.96,
+   "d": 1.36,
+   "text": "hear me"
+  },
+  {
+   "t": 102.32,
+   "d": 4.0,
+   "text": "yes i can hear you all right i had to um"
+  },
+  {
+   "t": 106.32,
+   "d": 3.04,
+   "text": "i put up two different uh and i'm"
+  },
+  {
+   "t": 109.36,
+   "d": 1.52,
+   "text": "guessing you're looking at a slide right"
+  },
+  {
+   "t": 110.88,
+   "d": 1.92,
+   "text": "now is that right yes we have the slide"
+  },
+  {
+   "t": 112.8,
+   "d": 1.52,
+   "text": "it looks like your video right now is a"
+  },
+  {
+   "t": 114.32,
+   "d": 1.92,
+   "text": "black screen i don't know if you want to"
+  },
+  {
+   "t": 116.24,
+   "d": 1.2,
+   "text": "try and fix that or if that's just"
+  },
+  {
+   "t": 117.44,
+   "d": 1.92,
+   "text": "technology being what technology is my"
+  },
+  {
+   "t": 119.36,
+   "d": 3.28,
+   "text": "video meaning my camera yeah your camera"
+  },
+  {
+   "t": 122.64,
+   "d": 1.52,
+   "text": "okay well let's just pretend i'm sitting"
+  },
+  {
+   "t": 124.16,
+   "d": 2.8,
+   "text": "in the dark because we've got this"
+  },
+  {
+   "t": 126.96,
+   "d": 1.6,
+   "text": "actually let me see if i can fix that"
+  },
+  {
+   "t": 128.56,
+   "d": 2.72,
+   "text": "hold on two seconds stop"
+  },
+  {
+   "t": 131.28,
+   "d": 1.36,
+   "text": "start cam"
+  },
+  {
+   "t": 132.64,
+   "d": 2.48,
+   "text": "um isn't that weird"
+  },
+  {
+   "t": 135.12,
+   "d": 1.44,
+   "text": "yeah i don't know why you know what i"
+  },
+  {
+   "t": 136.56,
+   "d": 1.6,
+   "text": "said all right"
+  },
+  {
+   "t": 138.16,
+   "d": 2.88,
+   "text": "i suspect it's doing that just because i"
+  },
+  {
+   "t": 141.04,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 142.4,
+   "d": 1.68,
+   "text": "anyway we've got the slides and the"
+  },
+  {
+   "t": 144.08,
+   "d": 1.6,
+   "text": "slides won't matter as long as you won't"
+  },
+  {
+   "t": 145.68,
+   "d": 1.68,
+   "text": "be eaten by a groove it's all right you"
+  },
+  {
+   "t": 147.36,
+   "d": 2.32,
+   "text": "can yeah we'll darken your screens if"
+  },
+  {
+   "t": 149.68,
+   "d": 2.88,
+   "text": "you have screams that's what it is so"
+  },
+  {
+   "t": 152.56,
+   "d": 2.24,
+   "text": "yeah i changed over um from firefox to"
+  },
+  {
+   "t": 154.8,
+   "d": 1.6,
+   "text": "chrome because firefox wasn't working"
+  },
+  {
+   "t": 156.4,
+   "d": 1.68,
+   "text": "anyway but that's not what we're here to"
+  },
+  {
+   "t": 158.08,
+   "d": 2.8,
+   "text": "hear we all know about tech problems so"
+  },
+  {
+   "t": 160.88,
+   "d": 2.16,
+   "text": "um thank you for that great introduction"
+  },
+  {
+   "t": 163.04,
+   "d": 2.48,
+   "text": "uh as you mentioned i'm brenda romero"
+  },
+  {
+   "t": 165.52,
+   "d": 1.52,
+   "text": "and i'm going to talk about dynamic"
+  },
+  {
+   "t": 167.04,
+   "d": 2.0,
+   "text": "relationships and traits in empire of"
+  },
+  {
+   "t": 169.04,
+   "d": 2.32,
+   "text": "sin so i"
+  },
+  {
+   "t": 171.36,
+   "d": 2.08,
+   "text": "i got interested in dynamic"
+  },
+  {
+   "t": 173.44,
+   "d": 2.32,
+   "text": "relationships and traits and games uh in"
+  },
+  {
+   "t": 175.76,
+   "d": 3.52,
+   "text": "1981 with this specific game which was"
+  },
+  {
+   "t": 179.28,
+   "d": 1.36,
+   "text": "called proving grounds of the mad"
+  },
+  {
+   "t": 180.64,
+   "d": 2.24,
+   "text": "overlord it was the very first wizardry"
+  },
+  {
+   "t": 182.88,
+   "d": 1.76,
+   "text": "and in this game you could create a"
+  },
+  {
+   "t": 184.64,
+   "d": 2.56,
+   "text": "party of six characters and truthfully"
+  },
+  {
+   "t": 187.2,
+   "d": 2.16,
+   "text": "the characters actually did not develop"
+  },
+  {
+   "t": 189.36,
+   "d": 2.56,
+   "text": "dynamic relationships at all"
+  },
+  {
+   "t": 191.92,
+   "d": 2.64,
+   "text": "however in my head they did and i took"
+  },
+  {
+   "t": 194.56,
+   "d": 1.92,
+   "text": "these characters and their personalities"
+  },
+  {
+   "t": 196.48,
+   "d": 2.48,
+   "text": "and their interactions way further than"
+  },
+  {
+   "t": 198.96,
+   "d": 2.96,
+   "text": "the game ever intended them to go"
+  },
+  {
+   "t": 201.92,
+   "d": 2.56,
+   "text": "and then this fascination might actually"
+  },
+  {
+   "t": 204.48,
+   "d": 2.72,
+   "text": "go back even further to my tabletop days"
+  },
+  {
+   "t": 207.2,
+   "d": 3.28,
+   "text": "so i started playing d and d in 1978 and"
+  },
+  {
+   "t": 210.48,
+   "d": 2.48,
+   "text": "when i think about my original d d group"
+  },
+  {
+   "t": 212.96,
+   "d": 1.68,
+   "text": "it was interesting to watch how"
+  },
+  {
+   "t": 214.64,
+   "d": 2.64,
+   "text": "relationships formed dynamically amongst"
+  },
+  {
+   "t": 217.28,
+   "d": 2.16,
+   "text": "the characters and then the players"
+  },
+  {
+   "t": 219.44,
+   "d": 2.24,
+   "text": "acting out those characters and then the"
+  },
+  {
+   "t": 221.68,
+   "d": 2.8,
+   "text": "dm and i was well aware"
+  },
+  {
+   "t": 224.48,
+   "d": 1.92,
+   "text": "i mean i was a kid i was a pretty young"
+  },
+  {
+   "t": 226.4,
+   "d": 2.4,
+   "text": "kid at the time i was 11. um and i was"
+  },
+  {
+   "t": 228.8,
+   "d": 1.68,
+   "text": "really aware that there was"
+  },
+  {
+   "t": 230.48,
+   "d": 2.72,
+   "text": "relationships that were forming between"
+  },
+  {
+   "t": 233.2,
+   "d": 2.4,
+   "text": "the characters and i watched characters"
+  },
+  {
+   "t": 235.6,
+   "d": 2.88,
+   "text": "fall in love and get married and then in"
+  },
+  {
+   "t": 238.48,
+   "d": 1.68,
+   "text": "as i kept playing d and d throughout my"
+  },
+  {
+   "t": 240.16,
+   "d": 2.08,
+   "text": "life i've seen people meet in the game"
+  },
+  {
+   "t": 242.24,
+   "d": 2.32,
+   "text": "and fall in love and i i knew that on"
+  },
+  {
+   "t": 244.56,
+   "d": 2.0,
+   "text": "the surface level that this was this"
+  },
+  {
+   "t": 246.56,
+   "d": 1.76,
+   "text": "thing about relationships and how"
+  },
+  {
+   "t": 248.32,
+   "d": 2.08,
+   "text": "relationships forming in the game"
+  },
+  {
+   "t": 250.4,
+   "d": 2.4,
+   "text": "affected the game itself"
+  },
+  {
+   "t": 252.8,
+   "d": 2.88,
+   "text": "so things really take off for me um when"
+  },
+  {
+   "t": 255.68,
+   "d": 2.6,
+   "text": "i worked on this game jagged alliance in"
+  },
+  {
+   "t": 258.28,
+   "d": 3.08,
+   "text": "1995. so the game itself is designed by"
+  },
+  {
+   "t": 261.36,
+   "d": 2.56,
+   "text": "ian curry sean ling and linda curry and"
+  },
+  {
+   "t": 263.92,
+   "d": 1.76,
+   "text": "in the game you select a group of"
+  },
+  {
+   "t": 265.68,
+   "d": 1.76,
+   "text": "mercenaries to work with"
+  },
+  {
+   "t": 267.44,
+   "d": 2.4,
+   "text": "so the mercenaries had relationships"
+  },
+  {
+   "t": 269.84,
+   "d": 2.24,
+   "text": "with one another and it affected who"
+  },
+  {
+   "t": 272.08,
+   "d": 1.76,
+   "text": "would work with whom"
+  },
+  {
+   "t": 273.84,
+   "d": 2.16,
+   "text": "the relationships also developed"
+  },
+  {
+   "t": 276.0,
+   "d": 2.4,
+   "text": "dynamically over the course of the game"
+  },
+  {
+   "t": 278.4,
+   "d": 2.16,
+   "text": "and it was these relationships that"
+  },
+  {
+   "t": 280.56,
+   "d": 2.48,
+   "text": "really made jagged alliance stand out"
+  },
+  {
+   "t": 283.04,
+   "d": 2.72,
+   "text": "from all other tactical turn-based games"
+  },
+  {
+   "t": 285.76,
+   "d": 1.52,
+   "text": "at the time"
+  },
+  {
+   "t": 287.28,
+   "d": 2.88,
+   "text": "so the mercenaries had basically a web"
+  },
+  {
+   "t": 290.16,
+   "d": 2.64,
+   "text": "of likes and dislikes and hatreds"
+  },
+  {
+   "t": 292.8,
+   "d": 1.92,
+   "text": "obviously hatreds means there's no way"
+  },
+  {
+   "t": 294.72,
+   "d": 1.44,
+   "text": "they're going to work with them"
+  },
+  {
+   "t": 296.16,
+   "d": 1.76,
+   "text": "and it really determined who would work"
+  },
+  {
+   "t": 297.92,
+   "d": 3.12,
+   "text": "with whom but it wasn't just that simple"
+  },
+  {
+   "t": 301.04,
+   "d": 2.08,
+   "text": "so some relationship types could"
+  },
+  {
+   "t": 303.12,
+   "d": 2.88,
+   "text": "override other relationship types so for"
+  },
+  {
+   "t": 306.0,
+   "d": 1.12,
+   "text": "instance"
+  },
+  {
+   "t": 307.12,
+   "d": 1.68,
+   "text": "the death rate meaning the amount of"
+  },
+  {
+   "t": 308.8,
+   "d": 2.8,
+   "text": "people you were killing um and the game"
+  },
+  {
+   "t": 311.6,
+   "d": 1.92,
+   "text": "tracked that whether you had developed a"
+  },
+  {
+   "t": 313.52,
+   "d": 2.56,
+   "text": "bad reputation if they had a buddy on"
+  },
+  {
+   "t": 316.08,
+   "d": 2.56,
+   "text": "the team everybody got fired if a buddy"
+  },
+  {
+   "t": 318.64,
+   "d": 2.16,
+   "text": "died due to your poor management and a"
+  },
+  {
+   "t": 320.8,
+   "d": 1.52,
+   "text": "bunch of others so"
+  },
+  {
+   "t": 322.32,
+   "d": 3.04,
+   "text": "it was a web that mostly excited uh and"
+  },
+  {
+   "t": 325.36,
+   "d": 2.24,
+   "text": "interested players and it gave depth to"
+  },
+  {
+   "t": 327.6,
+   "d": 2.48,
+   "text": "the characters as they reacted"
+  },
+  {
+   "t": 330.08,
+   "d": 2.08,
+   "text": "dynamically to the things that you were"
+  },
+  {
+   "t": 332.16,
+   "d": 1.68,
+   "text": "doing in the game"
+  },
+  {
+   "t": 333.84,
+   "d": 3.6,
+   "text": "so fast forward to empire sin and"
+  },
+  {
+   "t": 337.44,
+   "d": 1.68,
+   "text": "knowing that it would feature a diverse"
+  },
+  {
+   "t": 339.12,
+   "d": 2.24,
+   "text": "cast of characters specifically in the"
+  },
+  {
+   "t": 341.36,
+   "d": 2.96,
+   "text": "game we had 14 bosses and 60 different"
+  },
+  {
+   "t": 344.32,
+   "d": 2.72,
+   "text": "gangsters i really wanted dynamic"
+  },
+  {
+   "t": 347.04,
+   "d": 2.72,
+   "text": "relationships to be a part of this"
+  },
+  {
+   "t": 349.76,
+   "d": 2.88,
+   "text": "also it was a paradox game so if you've"
+  },
+  {
+   "t": 352.64,
+   "d": 2.0,
+   "text": "played paradox games specifically if you"
+  },
+  {
+   "t": 354.64,
+   "d": 2.32,
+   "text": "pray played the crusader king series you"
+  },
+  {
+   "t": 356.96,
+   "d": 2.0,
+   "text": "know that it goes way further than"
+  },
+  {
+   "t": 358.96,
+   "d": 1.92,
+   "text": "jagged alliance did in fact it even"
+  },
+  {
+   "t": 360.88,
+   "d": 2.08,
+   "text": "takes into account who your father was"
+  },
+  {
+   "t": 362.96,
+   "d": 1.92,
+   "text": "and who your mother was and there's"
+  },
+  {
+   "t": 364.88,
+   "d": 1.52,
+   "text": "loads of traits that the characters"
+  },
+  {
+   "t": 366.4,
+   "d": 2.56,
+   "text": "develop throughout the course of play"
+  },
+  {
+   "t": 368.96,
+   "d": 2.16,
+   "text": "so when it came to empire sin which is"
+  },
+  {
+   "t": 371.12,
+   "d": 1.52,
+   "text": "what you're looking at here"
+  },
+  {
+   "t": 372.64,
+   "d": 2.48,
+   "text": "i wanted there to be something similar"
+  },
+  {
+   "t": 375.12,
+   "d": 2.16,
+   "text": "and i wanted those traits to reflect the"
+  },
+  {
+   "t": 377.28,
+   "d": 2.24,
+   "text": "time period as well as the potential of"
+  },
+  {
+   "t": 379.52,
+   "d": 1.04,
+   "text": "gameplay"
+  },
+  {
+   "t": 380.56,
+   "d": 1.92,
+   "text": "uh here you can see a majority of the"
+  },
+  {
+   "t": 382.48,
+   "d": 2.56,
+   "text": "characters available um"
+  },
+  {
+   "t": 385.04,
+   "d": 2.24,
+   "text": "and in the game as well as a hint about"
+  },
+  {
+   "t": 387.28,
+   "d": 2.4,
+   "text": "the relationships with one another so"
+  },
+  {
+   "t": 389.68,
+   "d": 2.16,
+   "text": "you know who hates who obviously here"
+  },
+  {
+   "t": 391.84,
+   "d": 1.76,
+   "text": "some characters are dead or injured some"
+  },
+  {
+   "t": 393.6,
+   "d": 2.0,
+   "text": "are out on mole missions but you get a"
+  },
+  {
+   "t": 395.6,
+   "d": 2.56,
+   "text": "sense of how these characters feel about"
+  },
+  {
+   "t": 398.16,
+   "d": 1.76,
+   "text": "one another and just hovering over one"
+  },
+  {
+   "t": 399.92,
+   "d": 1.76,
+   "text": "we'll we'll show it to you"
+  },
+  {
+   "t": 401.68,
+   "d": 2.72,
+   "text": "and uh in addition to their"
+  },
+  {
+   "t": 404.4,
+   "d": 2.72,
+   "text": "relationships with one another i wanted"
+  },
+  {
+   "t": 407.12,
+   "d": 3.12,
+   "text": "to focus on your performance in the game"
+  },
+  {
+   "t": 410.24,
+   "d": 1.92,
+   "text": "meaning your performance as the boss and"
+  },
+  {
+   "t": 412.16,
+   "d": 3.04,
+   "text": "then the gangster traits specifically"
+  },
+  {
+   "t": 415.2,
+   "d": 1.84,
+   "text": "for this i'm going to focus on gangster"
+  },
+  {
+   "t": 417.04,
+   "d": 2.8,
+   "text": "traits so gangster traits can affect"
+  },
+  {
+   "t": 419.84,
+   "d": 1.68,
+   "text": "many things in the game but if"
+  },
+  {
+   "t": 421.52,
+   "d": 2.56,
+   "text": "individually they tend to affect or"
+  },
+  {
+   "t": 424.08,
+   "d": 2.88,
+   "text": "trigger just one or two things um"
+  },
+  {
+   "t": 426.96,
+   "d": 1.84,
+   "text": "sometimes they might affect more but if"
+  },
+  {
+   "t": 428.8,
+   "d": 2.16,
+   "text": "they ended up doing too many it ended up"
+  },
+  {
+   "t": 430.96,
+   "d": 2.32,
+   "text": "just being way too complicated and it"
+  },
+  {
+   "t": 433.28,
+   "d": 1.68,
+   "text": "was a spider web for players to get"
+  },
+  {
+   "t": 434.96,
+   "d": 1.44,
+   "text": "their head around"
+  },
+  {
+   "t": 436.4,
+   "d": 3.2,
+   "text": "so uh we divided traits into several"
+  },
+  {
+   "t": 439.6,
+   "d": 2.72,
+   "text": "categories uh the first of which was the"
+  },
+  {
+   "t": 442.32,
+   "d": 2.32,
+   "text": "historical traits so these traits"
+  },
+  {
+   "t": 444.64,
+   "d": 2.0,
+   "text": "players sorry gangsters come into the"
+  },
+  {
+   "t": 446.64,
+   "d": 1.84,
+   "text": "game with these and they simply cannot"
+  },
+  {
+   "t": 448.48,
+   "d": 2.8,
+   "text": "be changed um there are examples like"
+  },
+  {
+   "t": 451.28,
+   "d": 2.64,
+   "text": "some examples our character is a an"
+  },
+  {
+   "t": 453.92,
+   "d": 1.84,
+   "text": "immigrant or the character fell on hard"
+  },
+  {
+   "t": 455.76,
+   "d": 2.48,
+   "text": "times so whatever they are they this is"
+  },
+  {
+   "t": 458.24,
+   "d": 2.08,
+   "text": "how they arrive to you"
+  },
+  {
+   "t": 460.32,
+   "d": 2.8,
+   "text": "so then we had a life lesson traits now"
+  },
+  {
+   "t": 463.12,
+   "d": 2.16,
+   "text": "not all gangsters actually had a life"
+  },
+  {
+   "t": 465.28,
+   "d": 2.4,
+   "text": "lesson the really young gangsters or the"
+  },
+  {
+   "t": 467.68,
+   "d": 2.16,
+   "text": "gangsters who didn't have a lot going on"
+  },
+  {
+   "t": 469.84,
+   "d": 2.8,
+   "text": "upstairs um they didn't haven't really"
+  },
+  {
+   "t": 472.64,
+   "d": 1.84,
+   "text": "been around enough to learn a life"
+  },
+  {
+   "t": 474.48,
+   "d": 2.32,
+   "text": "lesson but a lot of the gangsters did"
+  },
+  {
+   "t": 476.8,
+   "d": 1.92,
+   "text": "and this sort of filled out their"
+  },
+  {
+   "t": 478.72,
+   "d": 2.4,
+   "text": "personality for the players they could"
+  },
+  {
+   "t": 481.12,
+   "d": 1.52,
+   "text": "get these as well during the course of"
+  },
+  {
+   "t": 482.64,
+   "d": 1.84,
+   "text": "the game if something very significant"
+  },
+  {
+   "t": 484.48,
+   "d": 1.12,
+   "text": "happened"
+  },
+  {
+   "t": 485.6,
+   "d": 2.72,
+   "text": "there was also physical attribute traits"
+  },
+  {
+   "t": 488.32,
+   "d": 1.84,
+   "text": "likewise these are only held by some"
+  },
+  {
+   "t": 490.16,
+   "d": 2.56,
+   "text": "gangsters and physical attribute traits"
+  },
+  {
+   "t": 492.72,
+   "d": 2.08,
+   "text": "uh some some people came into the game"
+  },
+  {
+   "t": 494.8,
+   "d": 2.24,
+   "text": "with like giant uh others people could"
+  },
+  {
+   "t": 497.04,
+   "d": 2.0,
+   "text": "get like hair trigger they could get"
+  },
+  {
+   "t": 499.04,
+   "d": 1.44,
+   "text": "that during the course of the game and"
+  },
+  {
+   "t": 500.48,
+   "d": 1.2,
+   "text": "turns out hair triggers one of the"
+  },
+  {
+   "t": 501.68,
+   "d": 1.76,
+   "text": "favorite traits in the game"
+  },
+  {
+   "t": 503.44,
+   "d": 2.24,
+   "text": "um then last there was personality"
+  },
+  {
+   "t": 505.68,
+   "d": 2.24,
+   "text": "traits these were the most"
+  },
+  {
+   "t": 507.92,
+   "d": 2.4,
+   "text": "are the most malleable of the bunch so"
+  },
+  {
+   "t": 510.32,
+   "d": 1.76,
+   "text": "gangsters earned these traits during"
+  },
+  {
+   "t": 512.08,
+   "d": 2.72,
+   "text": "gameplay and i wanted them to act with"
+  },
+  {
+   "t": 514.8,
+   "d": 1.92,
+   "text": "interact with one another and affect the"
+  },
+  {
+   "t": 516.72,
+   "d": 2.8,
+   "text": "game in positive and negative ways and i"
+  },
+  {
+   "t": 519.52,
+   "d": 2.32,
+   "text": "guess critically i wanted to make sure"
+  },
+  {
+   "t": 521.84,
+   "d": 2.0,
+   "text": "that the player never felt stuck with a"
+  },
+  {
+   "t": 523.84,
+   "d": 1.36,
+   "text": "bad trait"
+  },
+  {
+   "t": 525.2,
+   "d": 2.72,
+   "text": "there should always be a way around the"
+  },
+  {
+   "t": 527.92,
+   "d": 2.08,
+   "text": "situation otherwise nobody would ever"
+  },
+  {
+   "t": 530.0,
+   "d": 1.52,
+   "text": "choose that character"
+  },
+  {
+   "t": 531.52,
+   "d": 2.0,
+   "text": "or a combination of characters if they"
+  },
+  {
+   "t": 533.52,
+   "d": 2.64,
+   "text": "performed those actions together so"
+  },
+  {
+   "t": 536.16,
+   "d": 2.32,
+   "text": "critically for me the characters needed"
+  },
+  {
+   "t": 538.48,
+   "d": 2.4,
+   "text": "to evolve with the gameplay and with the"
+  },
+  {
+   "t": 540.88,
+   "d": 1.92,
+   "text": "player because they didn't that it was"
+  },
+  {
+   "t": 542.8,
+   "d": 1.6,
+   "text": "literally just the same play every time"
+  },
+  {
+   "t": 544.4,
+   "d": 2.64,
+   "text": "and nobody wanted that so some gangsters"
+  },
+  {
+   "t": 547.04,
+   "d": 1.84,
+   "text": "like grover so you can see you know"
+  },
+  {
+   "t": 548.88,
+   "d": 2.48,
+   "text": "grover's uh he's he's an older gangster"
+  },
+  {
+   "t": 551.36,
+   "d": 1.68,
+   "text": "and he was pretty much near the end of"
+  },
+  {
+   "t": 553.04,
+   "d": 2.88,
+   "text": "his career um and so he was who he was"
+  },
+  {
+   "t": 555.92,
+   "d": 1.52,
+   "text": "and he comes with like most of his"
+  },
+  {
+   "t": 557.44,
+   "d": 2.24,
+   "text": "traits pretty well said uh the younger"
+  },
+  {
+   "t": 559.68,
+   "d": 2.0,
+   "text": "and more malleable gangs the younger and"
+  },
+  {
+   "t": 561.68,
+   "d": 1.92,
+   "text": "the more malleable a gangster was the"
+  },
+  {
+   "t": 563.6,
+   "d": 1.6,
+   "text": "more the player could affect their"
+  },
+  {
+   "t": 565.2,
+   "d": 0.96,
+   "text": "growth"
+  },
+  {
+   "t": 566.16,
+   "d": 2.32,
+   "text": "so i've managed to effectively create"
+  },
+  {
+   "t": 568.48,
+   "d": 2.32,
+   "text": "this whole potential web for the player"
+  },
+  {
+   "t": 570.8,
+   "d": 2.0,
+   "text": "of traits and personality types and who"
+  },
+  {
+   "t": 572.8,
+   "d": 1.28,
+   "text": "likes whom"
+  },
+  {
+   "t": 574.08,
+   "d": 2.32,
+   "text": "but that's not actually where i start so"
+  },
+  {
+   "t": 576.4,
+   "d": 1.52,
+   "text": "when i'm actually"
+  },
+  {
+   "t": 577.92,
+   "d": 2.8,
+   "text": "starting a game i i am trying to think"
+  },
+  {
+   "t": 580.72,
+   "d": 2.48,
+   "text": "of what things would be suggested by"
+  },
+  {
+   "t": 583.2,
+   "d": 2.0,
+   "text": "this specific time period and when i'm"
+  },
+  {
+   "t": 585.2,
+   "d": 2.24,
+   "text": "doing this i actually start with the"
+  },
+  {
+   "t": 587.44,
+   "d": 2.56,
+   "text": "systems because uh if i'm going to be"
+  },
+  {
+   "t": 590.0,
+   "d": 2.08,
+   "text": "working if i'm building traits and"
+  },
+  {
+   "t": 592.08,
+   "d": 1.84,
+   "text": "trying to create something dynamic i"
+  },
+  {
+   "t": 593.92,
+   "d": 1.6,
+   "text": "need to make sure that it works"
+  },
+  {
+   "t": 595.52,
+   "d": 2.24,
+   "text": "dynamically in the time period and in"
+  },
+  {
+   "t": 597.76,
+   "d": 2.08,
+   "text": "the in the systems i have"
+  },
+  {
+   "t": 599.84,
+   "d": 2.96,
+   "text": "so for um so for this specific game i"
+  },
+  {
+   "t": 602.8,
+   "d": 1.68,
+   "text": "just start listing up the systems the"
+  },
+  {
+   "t": 604.48,
+   "d": 1.76,
+   "text": "obvious ones there's alcohol there's"
+  },
+  {
+   "t": 606.24,
+   "d": 2.0,
+   "text": "bosses there's the crew that you're"
+  },
+  {
+   "t": 608.24,
+   "d": 1.76,
+   "text": "going to hire the businesses that you"
+  },
+  {
+   "t": 610.0,
+   "d": 2.0,
+   "text": "run the clients that you have the"
+  },
+  {
+   "t": 612.0,
+   "d": 1.44,
+   "text": "citizens who are in the city and might"
+  },
+  {
+   "t": 613.44,
+   "d": 1.44,
+   "text": "be ticked off about everything that's"
+  },
+  {
+   "t": 614.88,
+   "d": 2.48,
+   "text": "going on there's the police there's the"
+  },
+  {
+   "t": 617.36,
+   "d": 1.92,
+   "text": "feds and then there's all the other"
+  },
+  {
+   "t": 619.28,
+   "d": 2.0,
+   "text": "systems that are there and so in doing"
+  },
+  {
+   "t": 621.28,
+   "d": 2.88,
+   "text": "this um i'm really thinking about the"
+  },
+  {
+   "t": 624.16,
+   "d": 2.08,
+   "text": "intersections of these things all the"
+  },
+  {
+   "t": 626.24,
+   "d": 1.84,
+   "text": "items they have how they move around the"
+  },
+  {
+   "t": 628.08,
+   "d": 2.72,
+   "text": "collisions in the conflict and with this"
+  },
+  {
+   "t": 630.8,
+   "d": 1.92,
+   "text": "when i set the systems for the game i"
+  },
+  {
+   "t": 632.72,
+   "d": 2.88,
+   "text": "really get a sense about how i can do"
+  },
+  {
+   "t": 635.6,
+   "d": 1.76,
+   "text": "certain things that will dynamically"
+  },
+  {
+   "t": 637.36,
+   "d": 3.2,
+   "text": "affect many systems so for instance"
+  },
+  {
+   "t": 640.56,
+   "d": 2.16,
+   "text": "suppose you had a character who had the"
+  },
+  {
+   "t": 642.72,
+   "d": 2.4,
+   "text": "trade cheapskate and that was like a"
+  },
+  {
+   "t": 645.12,
+   "d": 1.76,
+   "text": "boss trait that you had"
+  },
+  {
+   "t": 646.88,
+   "d": 2.48,
+   "text": "so immediately those interactions you"
+  },
+  {
+   "t": 649.36,
+   "d": 2.24,
+   "text": "can see how that could dynamically"
+  },
+  {
+   "t": 651.6,
+   "d": 1.84,
+   "text": "affect many different things and"
+  },
+  {
+   "t": 653.44,
+   "d": 1.68,
+   "text": "understanding the systems"
+  },
+  {
+   "t": 655.12,
+   "d": 2.72,
+   "text": "gives me an idea of how powerful or"
+  },
+  {
+   "t": 657.84,
+   "d": 2.48,
+   "text": "underpowered a specific trait might be"
+  },
+  {
+   "t": 660.32,
+   "d": 1.36,
+   "text": "in the world"
+  },
+  {
+   "t": 661.68,
+   "d": 3.28,
+   "text": "so getting the system set um also gives"
+  },
+  {
+   "t": 664.96,
+   "d": 2.16,
+   "text": "me a good idea um"
+  },
+  {
+   "t": 667.12,
+   "d": 1.84,
+   "text": "of the world and the tension in the"
+  },
+  {
+   "t": 668.96,
+   "d": 2.4,
+   "text": "conflict and it may show me things that"
+  },
+  {
+   "t": 671.36,
+   "d": 2.48,
+   "text": "i want to change dynamically"
+  },
+  {
+   "t": 673.84,
+   "d": 2.48,
+   "text": "and instead of looking at a character uh"
+  },
+  {
+   "t": 676.32,
+   "d": 2.24,
+   "text": "or a wish that is like as a prescribed"
+  },
+  {
+   "t": 678.56,
+   "d": 2.24,
+   "text": "set of relationships already baked into"
+  },
+  {
+   "t": 680.8,
+   "d": 0.8,
+   "text": "them"
+  },
+  {
+   "t": 681.6,
+   "d": 1.84,
+   "text": "i'm really trying to think about"
+  },
+  {
+   "t": 683.44,
+   "d": 2.32,
+   "text": "something brand new where lots of"
+  },
+  {
+   "t": 685.76,
+   "d": 2.88,
+   "text": "different dynamic interactions can occur"
+  },
+  {
+   "t": 688.64,
+   "d": 2.0,
+   "text": "and i'm not so much cared at this point"
+  },
+  {
+   "t": 690.64,
+   "d": 1.84,
+   "text": "in time about the who what where when"
+  },
+  {
+   "t": 692.48,
+   "d": 2.4,
+   "text": "why all of this stuff i'm really just"
+  },
+  {
+   "t": 694.88,
+   "d": 2.16,
+   "text": "looking at the systems the dynamic"
+  },
+  {
+   "t": 697.04,
+   "d": 2.16,
+   "text": "interactions and how these things can"
+  },
+  {
+   "t": 699.2,
+   "d": 2.4,
+   "text": "change um if the player wanted to play"
+  },
+  {
+   "t": 701.6,
+   "d": 2.4,
+   "text": "as the feds the untouchables you know i"
+  },
+  {
+   "t": 704.0,
+   "d": 1.84,
+   "text": "can start thinking about"
+  },
+  {
+   "t": 705.84,
+   "d": 1.6,
+   "text": "what would be the things that would have"
+  },
+  {
+   "t": 707.44,
+   "d": 2.4,
+   "text": "the most likelihood to respond to"
+  },
+  {
+   "t": 709.84,
+   "d": 3.52,
+   "text": "dynamic trait change um also"
+  },
+  {
+   "t": 713.36,
+   "d": 3.04,
+   "text": "i it allows me to emphasize one system"
+  },
+  {
+   "t": 716.4,
+   "d": 2.4,
+   "text": "over another and give it priority thus"
+  },
+  {
+   "t": 718.8,
+   "d": 2.4,
+   "text": "changing the whole nature of the game"
+  },
+  {
+   "t": 721.2,
+   "d": 2.48,
+   "text": "and the balance of any dynamic elements"
+  },
+  {
+   "t": 723.68,
+   "d": 2.48,
+   "text": "so you know if combat is in the four"
+  },
+  {
+   "t": 726.16,
+   "d": 2.08,
+   "text": "obviously this is a very different game"
+  },
+  {
+   "t": 728.24,
+   "d": 2.32,
+   "text": "than if it's about a pure purely"
+  },
+  {
+   "t": 730.56,
+   "d": 2.0,
+   "text": "building your empire"
+  },
+  {
+   "t": 732.56,
+   "d": 2.24,
+   "text": "and through this process i'm really able"
+  },
+  {
+   "t": 734.8,
+   "d": 2.8,
+   "text": "to see the possibility space afforded by"
+  },
+  {
+   "t": 737.6,
+   "d": 2.4,
+   "text": "the systems and new opportunities for"
+  },
+  {
+   "t": 740.0,
+   "d": 1.92,
+   "text": "dynamic play and that's what i'm always"
+  },
+  {
+   "t": 741.92,
+   "d": 2.16,
+   "text": "looking for so i'll leave you with a"
+  },
+  {
+   "t": 744.08,
+   "d": 1.92,
+   "text": "couple of my absolute favorite bugs that"
+  },
+  {
+   "t": 746.0,
+   "d": 1.68,
+   "text": "came out of this because this it's"
+  },
+  {
+   "t": 747.68,
+   "d": 1.36,
+   "text": "probably the best thing about having a"
+  },
+  {
+   "t": 749.04,
+   "d": 2.16,
+   "text": "dynamic system so this is the cleaner"
+  },
+  {
+   "t": 751.2,
+   "d": 1.44,
+   "text": "and the cleaner was a loner and a"
+  },
+  {
+   "t": 752.64,
+   "d": 2.96,
+   "text": "narcissist it turns out he fell in love"
+  },
+  {
+   "t": 755.6,
+   "d": 2.08,
+   "text": "with himself and so that when anybody"
+  },
+  {
+   "t": 757.68,
+   "d": 2.08,
+   "text": "else fell in love with him he got"
+  },
+  {
+   "t": 759.76,
+   "d": 2.72,
+   "text": "jealous um and this actually went one"
+  },
+  {
+   "t": 762.48,
+   "d": 1.76,
+   "text": "step further when he did fall in love"
+  },
+  {
+   "t": 764.24,
+   "d": 2.08,
+   "text": "with himself because anybody else who"
+  },
+  {
+   "t": 766.32,
+   "d": 1.44,
+   "text": "fell in love with him was a threat to"
+  },
+  {
+   "t": 767.76,
+   "d": 2.48,
+   "text": "him loving himself he would kill them"
+  },
+  {
+   "t": 770.24,
+   "d": 2.08,
+   "text": "there was also mama dunbar and this is"
+  },
+  {
+   "t": 772.32,
+   "d": 2.48,
+   "text": "the same exact bug we had relationships"
+  },
+  {
+   "t": 774.8,
+   "d": 3.04,
+   "text": "in the game she um she platonically"
+  },
+  {
+   "t": 777.84,
+   "d": 2.56,
+   "text": "loved all her children and so"
+  },
+  {
+   "t": 780.4,
+   "d": 2.8,
+   "text": "when we switched it over um her children"
+  },
+  {
+   "t": 783.2,
+   "d": 1.92,
+   "text": "ended up getting jealous of one another"
+  },
+  {
+   "t": 785.12,
+   "d": 1.68,
+   "text": "in killing each other and we call it the"
+  },
+  {
+   "t": 786.8,
+   "d": 2.72,
+   "text": "great dunbar family feud so we obviously"
+  },
+  {
+   "t": 789.52,
+   "d": 2.08,
+   "text": "fix those and launch but that's an uh a"
+  },
+  {
+   "t": 791.6,
+   "d": 2.64,
+   "text": "quick look at um dynamic relationships"
+  },
+  {
+   "t": 794.24,
+   "d": 2.4,
+   "text": "and traits in empire of sin and if you"
+  },
+  {
+   "t": 796.64,
+   "d": 1.92,
+   "text": "want to contact me that's my contact"
+  },
+  {
+   "t": 798.56,
+   "d": 3.52,
+   "text": "info down there thank you that's amazing"
+  },
+  {
+   "t": 802.08,
+   "d": 2.08,
+   "text": "thank you so much uh"
+  },
+  {
+   "t": 804.16,
+   "d": 2.0,
+   "text": "love ending on the point of bugs i know"
+  },
+  {
+   "t": 806.16,
+   "d": 1.76,
+   "text": "that yeah jason grimlot has to talk"
+  },
+  {
+   "t": 807.92,
+   "d": 3.12,
+   "text": "later just about those kind of stories"
+  },
+  {
+   "t": 811.04,
+   "d": 2.48,
+   "text": "yeah they're so good yeah and it's"
+  },
+  {
+   "t": 813.52,
+   "d": 1.52,
+   "text": "amazing to get you know a look at the"
+  },
+  {
+   "t": 815.04,
+   "d": 2.24,
+   "text": "process um i don't know if people have"
+  },
+  {
+   "t": 817.28,
+   "d": 2.72,
+   "text": "any questions in the note wall um oh we"
+  },
+  {
+   "t": 820.0,
+   "d": 1.68,
+   "text": "got just one so huge fan of your work"
+  },
+  {
+   "t": 821.68,
+   "d": 1.36,
+   "text": "thanks for the really fruitful talk this"
+  },
+  {
+   "t": 823.04,
+   "d": 2.8,
+   "text": "is from uh cataclypto or kat manning i"
+  },
+  {
+   "t": 825.84,
+   "d": 1.68,
+   "text": "know who it is uh can you talk a bit"
+  },
+  {
+   "t": 827.52,
+   "d": 1.6,
+   "text": "more about what systems you find most"
+  },
+  {
+   "t": 829.12,
+   "d": 2.56,
+   "text": "fruitful to surface or transform the"
+  },
+  {
+   "t": 831.68,
+   "d": 3.04,
+   "text": "players understanding via traits"
+  },
+  {
+   "t": 834.72,
+   "d": 3.12,
+   "text": "um what systems you know like empire sin"
+  },
+  {
+   "t": 837.84,
+   "d": 2.0,
+   "text": "is pretty combat heavy at the moment"
+  },
+  {
+   "t": 839.84,
+   "d": 3.44,
+   "text": "right so uh a lot of the traits surface"
+  },
+  {
+   "t": 843.28,
+   "d": 2.24,
+   "text": "as a result of combat"
+  },
+  {
+   "t": 845.52,
+   "d": 1.68,
+   "text": "um so"
+  },
+  {
+   "t": 847.2,
+   "d": 2.24,
+   "text": "that's in in the outcomes of combat like"
+  },
+  {
+   "t": 849.44,
+   "d": 1.44,
+   "text": "if they end up getting sent to the"
+  },
+  {
+   "t": 850.88,
+   "d": 1.68,
+   "text": "hospital and something weird happens in"
+  },
+  {
+   "t": 852.56,
+   "d": 2.96,
+   "text": "the hospital one of the one of the great"
+  },
+  {
+   "t": 855.52,
+   "d": 1.76,
+   "text": "uh i want to call it a cheat but it's"
+  },
+  {
+   "t": 857.28,
+   "d": 1.2,
+   "text": "not really because you can't show"
+  },
+  {
+   "t": 858.48,
+   "d": 2.0,
+   "text": "everything but one of the great things"
+  },
+  {
+   "t": 860.48,
+   "d": 2.96,
+   "text": "if you take characters away like out of"
+  },
+  {
+   "t": 863.44,
+   "d": 2.16,
+   "text": "the player's agency they're injured"
+  },
+  {
+   "t": 865.6,
+   "d": 1.6,
+   "text": "they're in the hospital they're away"
+  },
+  {
+   "t": 867.2,
+   "d": 2.56,
+   "text": "they've been they've they're a mole um"
+  },
+  {
+   "t": 869.76,
+   "d": 1.76,
+   "text": "if once or they were employed by"
+  },
+  {
+   "t": 871.52,
+   "d": 1.84,
+   "text": "somebody else when the characters go"
+  },
+  {
+   "t": 873.36,
+   "d": 2.4,
+   "text": "away from player control you can do so"
+  },
+  {
+   "t": 875.76,
+   "d": 2.24,
+   "text": "much cool stuff they can come back with"
+  },
+  {
+   "t": 878.0,
+   "d": 2.24,
+   "text": "like i don't know a fear of plants now"
+  },
+  {
+   "t": 880.24,
+   "d": 1.36,
+   "text": "we don't have that i don't know why"
+  },
+  {
+   "t": 881.6,
+   "d": 1.76,
+   "text": "you'd ever have a fear of plants but"
+  },
+  {
+   "t": 883.36,
+   "d": 2.48,
+   "text": "it's a wonderful opportunity as a game"
+  },
+  {
+   "t": 885.84,
+   "d": 3.36,
+   "text": "designer to do anything you want to do"
+  },
+  {
+   "t": 889.2,
+   "d": 1.76,
+   "text": "right that's really interesting yeah"
+  },
+  {
+   "t": 890.96,
+   "d": 2.24,
+   "text": "taking advantage of the the you know"
+  },
+  {
+   "t": 893.2,
+   "d": 1.92,
+   "text": "being off the main screen"
+  },
+  {
+   "t": 895.12,
+   "d": 1.6,
+   "text": "yeah like you don't even know without a"
+  },
+  {
+   "t": 896.72,
+   "d": 1.92,
+   "text": "screen here what traits i will have"
+  },
+  {
+   "t": 898.64,
+   "d": 1.84,
+   "text": "after this"
+  },
+  {
+   "t": 900.48,
+   "d": 1.44,
+   "text": "i will be going through all kinds of"
+  },
+  {
+   "t": 901.92,
+   "d": 1.6,
+   "text": "terrible things i might be calling you"
+  },
+  {
+   "t": 903.52,
+   "d": 1.84,
+   "text": "from the middle ages you have no idea"
+  },
+  {
+   "t": 905.36,
+   "d": 2.24,
+   "text": "who knows yeah or we might all leave"
+  },
+  {
+   "t": 907.6,
+   "d": 1.52,
+   "text": "this with a fear of plants i think that"
+  },
+  {
+   "t": 909.12,
+   "d": 1.72,
+   "text": "we're going to have feelings about juice"
+  },
+  {
+   "t": 910.84,
+   "d": 2.76,
+   "text": "after earlier discussions why you know"
+  },
+  {
+   "t": 913.6,
+   "d": 1.52,
+   "text": "what i'll be sitting here all night"
+  },
+  {
+   "t": 915.12,
+   "d": 1.84,
+   "text": "thinking could i have not come up with a"
+  },
+  {
+   "t": 916.96,
+   "d": 2.56,
+   "text": "better example on the fly but nope pure"
+  },
+  {
+   "t": 919.52,
+   "d": 2.0,
+   "text": "plants is what it was and i'm sticking"
+  },
+  {
+   "t": 921.52,
+   "d": 1.52,
+   "text": "buy it i mean there are some scary"
+  },
+  {
+   "t": 923.04,
+   "d": 3.12,
+   "text": "plants out there well thank you so much"
+  },
+  {
+   "t": 926.16,
+   "d": 2.64,
+   "text": "and yeah we"
+  }
+ ]
+}

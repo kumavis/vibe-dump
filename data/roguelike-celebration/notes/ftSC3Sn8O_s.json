@@ -1,0 +1,66 @@
+{
+  "id": "ftSC3Sn8O_s",
+  "title": "Randy Lubin & Raph D'Amico - Dungeon Court",
+  "speaker": "Randy Lubin & Raph D'Amico",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=ftSC3Sn8O_s",
+  "talk_type": "performance",
+  "summary": "Randy Lubin and Raph D'Amico run the debut of Dungeon Court, a live audience LARP adapted from Jason Morningstar's Ghost Court (Bully Pulpit Games), framed as Judge Judy for dungeon monsters and heroes. They pick a setting with Azgaar's fantasy map generator, then audience members play randomly drawn monster and hero characters in short scripted-premise cases before rotating judges (an arch-lich, then a city magistrate). The cases riff on roguelike tropes: dungeon hazards as workplace safety, riddle-asking guards, a mandatory shop per level, unidentified potions that turn an ally into a rat, and an undead neighbour. It is a performance with little explicit design commentary; the few insights concern its structure as a light improv game.",
+  "games": [
+    "Dungeon Court",
+    "Ghost Court"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "larp adaptation",
+      "kind": "example",
+      "claim": "Dungeon Court adapts Bully Pulpit Games' Ghost Court, a Judge Judy-style comedic court game, into a live LARP where audience members argue ridiculous cases between monsters and heroes.",
+      "detail": "Lubin describes Ghost Court as Judge Judy with ghosts, telling ridiculous cases between ghosts and humans. Dungeon Court reskins it with monster-versus-monster, human-versus-monster and human-versus-human cases across a dungeon, a city and a temple.",
+      "t": 26,
+      "quote": "it is Judge Judy but with ghosts where you tell a series of very ridiculous cases between ghosts and humans",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "improv structure",
+      "kind": "technique",
+      "claim": "Dungeon Court keeps cases short and structured: the plaintiff gets one minute, the defendant one minute, and the judge about three minutes to question, rule and sentence.",
+      "detail": "While one case plays on stage, the next volunteers are set up offstage by Raph, so cases run back to back.",
+      "t": 108,
+      "quote": "the plaintiff is going to have one minute to state their case the defendant is then gonna have one minute to respond",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "random characters",
+      "kind": "technique",
+      "claim": "Dungeon Court randomly pairs plaintiffs and defendants from a printed deck of monsters and heroes with pre-written cases, each player getting a card describing their side.",
+      "detail": "Each card gives a short case description from one side and the drawn character gives traits (e.g. a smelly, gregarious blob or a voracious, miserly swamp worm). Lubin says this gives players scaffolding so they don't come to the case cold.",
+      "t": 334,
+      "quote": "we're giving you some scaffolding you're not coming to these cases",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "map generator",
+      "kind": "example",
+      "claim": "To set Dungeon Court's scene in the spirit of the event, the hosts randomly generated a world with Azgaar's fantasy map generator and zoomed in to pick a border region and city.",
+      "detail": "They chose a fraught border region and foothills likely to hold ancient dungeons as the locale, then invented the 'Dungeon of Infinite Depths', which actually only has 26 depths.",
+      "t": 143,
+      "quote": "we're gonna use as gars fantasy map generator or they think this is very much in the spirit of roguelike celebration",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "A Dungeon Court case dramatizes the roguelike trope of handing an ally an unidentified potion, which polymorphed her into a rat that could not carry her treasure.",
+      "detail": "The wizard defendant argued an unidentified potion could well have been useful; the judge ordered that for the next five unidentified potions they find, they split and both drink them to share the consequences.",
+      "t": 2425,
+      "quote": "for the next five times and the two of you encounter a potion of a dungeon you must split it equally into two bottles",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

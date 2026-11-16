@@ -1,0 +1,1070 @@
+{
+ "id": "5_UET-rUtGU",
+ "url": "https://www.youtube.com/watch?v=5_UET-rUtGU",
+ "title": "Nat Alison: Procedurality and the Primes",
+ "speaker": "Nat Alison",
+ "talk_title": "Procedurality and the Primes",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1669,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "What makes mathematics interesting? What makes mathematicians obsessed over things like prime numbers or Fibonacci sequences? It turns out, a lot of times, that it is the same properties that make procedural generation fun: a balance of chaos and order, complex behaviors from simple rules, and unexpected emergent behavior. Allow me to present a gallery of my favorite mathematical visualizations, from classic mainstays like Ulam spirals to my own work on colorful Fibonacci quilts, and analyze them to get to the heart what truly makes procedurality amazing.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to math"
+  },
+  {
+   "start": 178,
+   "title": "Math as a roguelike"
+  },
+  {
+   "start": 283,
+   "title": "Complexity from simplicity"
+  },
+  {
+   "start": 726,
+   "title": "Balance of order and chaos"
+  },
+  {
+   "start": 1103,
+   "title": "Surprise, joy, and discovery"
+  },
+  {
+   "start": 1474,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3660,
+ "trimmed": {
+  "segments": 1,
+  "words": 18
+ },
+ "segments": [
+  {
+   "t": 1.76,
+   "d": 5.88,
+   "text": "ALEXEI: All right. And yes, as promised numerology talk. Yeah,"
+  },
+  {
+   "t": 7.64,
+   "d": 5.26,
+   "text": "Nat Alison who I spoke last year is the reason I am still playing cryptic sudoku. Game"
+  },
+  {
+   "t": 12.9,
+   "d": 10.86,
+   "text": "For UMA Games. In my spare time I try to turn numbers into art."
+  },
+  {
+   "t": 23.76,
+   "d": 18.08,
+   "text": "NAT: I am Nat Alison. I am currently a game developer at Uma games. We are working on a"
+  },
+  {
+   "t": 41.84,
+   "d": 8.68,
+   "text": "project game called project marble. It is sandbox game aimed at young players aiming to teach them"
+  },
+  {
+   "t": 50.52,
+   "d": 6.0,
+   "text": "creative problem solving and mathematical reasoning. My official title is math designer"
+  },
+  {
+   "t": 56.52,
+   "d": 6.16,
+   "text": "and I like to say my job is to try trick kids into liking math. What this means functionally is"
+  },
+  {
+   "t": 62.68,
+   "d": 6.8,
+   "text": "designing systems and puzzles to show why math is fun. It is not all the memorizing multiplication"
+  },
+  {
+   "t": 69.48,
+   "d": 10.24,
+   "text": "tables. It is reasoning and deduction. Because we have the world's toughest questions I started"
+  },
+  {
+   "t": 79.72,
+   "d": 8.16,
+   "text": "asking myself a question a lot which is what makes mathematics interesting? Why have mathematicians"
+  },
+  {
+   "t": 87.88,
+   "d": 7.56,
+   "text": "been fascinating with these equations and proofs? Why do people spend years of life compiling books"
+  },
+  {
+   "t": 95.44,
+   "d": 6.64,
+   "text": "listing the first million prime numbers? This is a particular question to me because my claim"
+  },
+  {
+   "t": 102.08,
+   "d": 7.64,
+   "text": "to fame before all this is in math patical -- mathematical visualization and taking a group"
+  },
+  {
+   "t": 109.72,
+   "d": 6.0,
+   "text": "and making it a visual and animated for a wide audience that might not know as much about math."
+  },
+  {
+   "t": 115.72,
+   "d": 8.48,
+   "text": "The more and more I thought about this question is I started thinking about what makes procedurality"
+  },
+  {
+   "t": 124.2,
+   "d": 19.96,
+   "text": "interesting. And I can think of kind of three things that result in this and probably have"
+  },
+  {
+   "t": 144.16,
+   "d": 6.52,
+   "text": "been talked about in other talks as well. This idea of complexity from simplicity and taking"
+  },
+  {
+   "t": 150.68,
+   "d": 7.0,
+   "text": "simple rules and getting way more complex out of it. Having a balance of order and chaos, having"
+  },
+  {
+   "t": 157.68,
+   "d": 8.96,
+   "text": "results that are fascinating to humans that aren't just content oatmeal or alphabet soup. And also,"
+  },
+  {
+   "t": 166.64,
+   "d": 9.84,
+   "text": "surprise and joy. Having unexpected things happen which has also been talked about. But my wager and"
+  },
+  {
+   "t": 176.48,
+   "d": 7.28,
+   "text": "claim is that these three criteria are also what make mathematics interesting. Or to put it in,"
+  },
+  {
+   "t": 183.76,
+   "d": 6.48,
+   "text": "you know, formal mathematical language, math is a roguelike. This theorem is what I am going to"
+  },
+  {
+   "t": 190.24,
+   "d": 8.44,
+   "text": "spend the rest of my talk proving. And before I get into that, I have to make an aside not"
+  },
+  {
+   "t": 198.68,
+   "d": 5.68,
+   "text": "to confuse this theorem with the converse theorem which is that roguelikes are math which is a with"
+  },
+  {
+   "t": 204.36,
+   "d": 7.2,
+   "text": "well known theorem. We use mathematics a lot when we do procedural generation and there is a lot of"
+  },
+  {
+   "t": 211.56,
+   "d": 6.8,
+   "text": "overlap. Some of the first things we considered procedure generated were named aftermath -- after"
+  },
+  {
+   "t": 218.36,
+   "d": 15.76,
+   "text": "mathematicians. But there is a subtle distinct. You are using the mathematics a as a tool and"
+  },
+  {
+   "t": 234.12,
+   "d": 5.6,
+   "text": "interested into tool of a picture or a game world that's fun to traverse."
+  },
+  {
+   "t": 243.84,
+   "d": 19.16,
+   "text": "When you talk about pure math you are talking about the underlying model. Are you using fractals"
+  },
+  {
+   "t": 263.0,
+   "d": 14.6,
+   "text": "because it is a cool image you can use for the climax of your sci-fi horror film? But anyways,"
+  },
+  {
+   "t": 277.6,
+   "d": 8.0,
+   "text": "with that caveat put to the side, let's get on with our proof. And with every great math proof,"
+  },
+  {
+   "t": 285.6,
+   "d": 6.68,
+   "text": "we will split it up into subsections which we call limits. The first one being from complexity from"
+  },
+  {
+   "t": 292.28,
+   "d": 6.88,
+   "text": "simplicity. From having simple rules you will try to generate a universe. This can be everything in"
+  },
+  {
+   "t": 299.16,
+   "d": 7.56,
+   "text": "procedure generation from taking some sort of string and having a string to create trees,"
+  },
+  {
+   "t": 306.72,
+   "d": 8.96,
+   "text": "having Tracery grammar and melding words together and switching them up to create an infinite amount"
+  },
+  {
+   "t": 315.68,
+   "d": 8.04,
+   "text": "of synthesis and funny Twitter bots. This idea, this core of taking some sort of small set of"
+  },
+  {
+   "t": 323.72,
+   "d": 6.04,
+   "text": "rules, and seeing what comes out of them is true in math as well. In math these are called axioms."
+  },
+  {
+   "t": 329.76,
+   "d": 7.32,
+   "text": "One famous old example is the postulates. The ideas you can draw lines between them,"
+  },
+  {
+   "t": 337.08,
+   "d": 8.2,
+   "text": "you can draw circles and from that triangles, squares, Pentagons and prove theorems about"
+  },
+  {
+   "t": 345.28,
+   "d": 11.2,
+   "text": "angles. One other example that I particularly like is group theory which is the study of ways"
+  },
+  {
+   "t": 356.48,
+   "d": 8.0,
+   "text": "thing can be symmetric. I have my handy dandy rose cube here. The moves of a rubics cube follow a set"
+  },
+  {
+   "t": 364.48,
+   "d": 9.36,
+   "text": "of rules. You can take any sequence of turns and chain them together. If you do up left right you"
+  },
+  {
+   "t": 373.84,
+   "d": 11.08,
+   "text": "can do up right and left. Or you can do nothing. Those will all still be sequences of moves on a"
+  },
+  {
+   "t": 384.92,
+   "d": 6.6,
+   "text": "rubiks cube. You can identify similar rule sets for a lot of other things such as the way you can"
+  },
+  {
+   "t": 391.52,
+   "d": 8.8,
+   "text": "rotate or reflect a tetrahedron or the number of ways you can permute and rearrange a deck of cards"
+  },
+  {
+   "t": 400.32,
+   "d": 7.36,
+   "text": "which we call a permutation group. Just by having these rules that all these different objects seem"
+  },
+  {
+   "t": 407.68,
+   "d": 7.96,
+   "text": "to have and abstracting them, you can generate an entire zoo of these types of symmetries. Some of"
+  },
+  {
+   "t": 415.64,
+   "d": 7.68,
+   "text": "them are for common geometric objects such as a tetrahedra. Things you can find in the world"
+  },
+  {
+   "t": 423.32,
+   "d": 7.24,
+   "text": "or in nature. Some are related to like I said fundamental particles in quantum theory. And some"
+  },
+  {
+   "t": 431.52,
+   "d": 5.56,
+   "text": "shake out as a result of the rules and don't have real world equivalent. It is fun to see where the"
+  },
+  {
+   "t": 437.08,
+   "d": 11.76,
+   "text": "rules go and where they lead. These are called the sporadic groups which show up. It is hard"
+  },
+  {
+   "t": 448.84,
+   "d": 11.32,
+   "text": "to explain in the short amount of time I have but these are like what if -- and Eldridge gods atomic"
+  },
+  {
+   "t": 460.16,
+   "d": 15.2,
+   "text": "elements. Moving on another example is counting numbers. 1, 2, 3, and so on. You can formalize"
+  },
+  {
+   "t": 475.36,
+   "d": 7.88,
+   "text": "these into the axioms saying zero is a natural number and any natural number has a next number"
+  },
+  {
+   "t": 485.0,
+   "d": 5.64,
+   "text": "and there is a couple related to what numbers are equivalent which I won't get into because"
+  },
+  {
+   "t": 490.64,
+   "d": 5.6,
+   "text": "they are kind of boring. But the idea is you can take a small set of rules and start defining"
+  },
+  {
+   "t": 496.24,
+   "d": 6.88,
+   "text": "operations on top of it. You can define addition which is just a repeated sequential operator."
+  },
+  {
+   "t": 503.12,
+   "d": 8.16,
+   "text": "Multiplication which is repeated addition. And you can start to ask things like what are the ways a"
+  },
+  {
+   "t": 511.28,
+   "d": 4.76,
+   "text": "number can be multiplied together and you get the concept of factoring numbers and splitting it up"
+  },
+  {
+   "t": 516.04,
+   "d": 7.48,
+   "text": "into smaller parts by multiplication. You realize all numbers can be composed of atoms called prime"
+  },
+  {
+   "t": 523.52,
+   "d": 6.52,
+   "text": "numbers. You look at this sequence and think this is a weird sequence. It isn't like repeating the"
+  },
+  {
+   "t": 530.04,
+   "d": 9.56,
+   "text": "sequence in a nice way. You start wandering how often they occur in pairs separated by two"
+  },
+  {
+   "t": 539.6,
+   "d": 5.36,
+   "text": "or ask how often they occur in general. If you pick a random number what are the odds it will"
+  },
+  {
+   "t": 544.96,
+   "d": 5.92,
+   "text": "be prime and it turns out the result is it is going to be prime proportional to the number of"
+  },
+  {
+   "t": 550.88,
+   "d": 6.56,
+   "text": "digits that it has. You can find the intersection of prime numbers with other sequences of groups"
+  },
+  {
+   "t": 557.44,
+   "d": 7.96,
+   "text": "such as those that are close to a multiple of two. You can ask questions about how do prime numbers"
+  },
+  {
+   "t": 565.4,
+   "d": 5.6,
+   "text": "and numbers in general relate to other branches of mathematics such as group theory or complex"
+  },
+  {
+   "t": 571.0,
+   "d": 13.88,
+   "text": "analysis. This is the famous one. This rabbit hole goes on and on. There is like an infinite"
+  },
+  {
+   "t": 584.88,
+   "d": 7.12,
+   "text": "amount of ways to slice this concept of taking and defining numbers and defining the basic operations"
+  },
+  {
+   "t": 592.0,
+   "d": 8.32,
+   "text": "of them. It leads to this whole big well of theory. I need to discuss this counter claim"
+  },
+  {
+   "t": 600.32,
+   "d": 4.84,
+   "text": "which is that math is complicated. Like what are all these words? I don't understand half of what"
+  },
+  {
+   "t": 605.16,
+   "d": 7.0,
+   "text": "you said. There are all these words and theorems and equations that I don't really understand."
+  },
+  {
+   "t": 612.16,
+   "d": 6.2,
+   "text": "A lot of jargon. As an analogy to address this counter claim I would like to think of the board"
+  },
+  {
+   "t": 618.36,
+   "d": 7.0,
+   "text": "game Go. Go has a simple rule. You take turns placing stones on the grid. There are rules about"
+  },
+  {
+   "t": 626.24,
+   "d": 5.64,
+   "text": "if a group of stones surrounded by stones with the opposite color they are captured. But underlying"
+  },
+  {
+   "t": 631.88,
+   "d": 7.24,
+   "text": "these simple rules is an entire meta game built up over thousands of years. A complex theory and rich"
+  },
+  {
+   "t": 639.12,
+   "d": 10.16,
+   "text": "vocabulary endgame and complicated words created to describe these simple rules that are generated"
+  },
+  {
+   "t": 649.28,
+   "d": 7.36,
+   "text": "by placing stones. I think it is the same way with math. The axioms, the rules, are just"
+  },
+  {
+   "t": 656.64,
+   "d": 7.4,
+   "text": "starting from things like counting of one plus one equals two. Or just counting the ways you can turn"
+  },
+  {
+   "t": 664.04,
+   "d": 9.8,
+   "text": "a rubic's cube. You get an entire world of complex mechanics from mathematicians trying to understand"
+  },
+  {
+   "t": 673.84,
+   "d": 7.04,
+   "text": "why they behave the way they do. This is the famous hypothesis which says that the equation I"
+  },
+  {
+   "t": 680.88,
+   "d": 8.52,
+   "text": "showed earlier can somehow like predict where the crimes occur. This is an unsolved problem and if"
+  },
+  {
+   "t": 689.4,
+   "d": 7.2,
+   "text": "you solve it you get a million dollars. But the point is that math, this complicatedness"
+  },
+  {
+   "t": 696.6,
+   "d": 11.04,
+   "text": "in math is the emergence. You might be inspired by reality such as flipping cards or polyhedral,"
+  },
+  {
+   "t": 707.64,
+   "d": 12.08,
+   "text": "and you see where there reality take you and where you leave reality and play with those rules and"
+  },
+  {
+   "t": 719.72,
+   "d": 7.84,
+   "text": "see what shakes out. How do you actually determine what rules are good? This is where the second part"
+  },
+  {
+   "t": 727.56,
+   "d": 6.84,
+   "text": "of our proof comes in which is balance of chaos and order. We have three samples here. One is a"
+  },
+  {
+   "t": 734.4,
+   "d": 7.24,
+   "text": "completely uniform grid. The other on the right is complete white noise and chaotic. In the middle we"
+  },
+  {
+   "t": 741.64,
+   "d": 10.2,
+   "text": "have pearly noise. It isn't chaotic or ordered. You can see patterns that feel naturalistic."
+  },
+  {
+   "t": 751.84,
+   "d": 6.64,
+   "text": "You might be able to see a face or nose. This is one renes reason it is used in thing like terrain"
+  },
+  {
+   "t": 758.48,
+   "d": 11.0,
+   "text": "generation. Complete symmetry is boring whereas complete chaos is in tractable. We like to see"
+  },
+  {
+   "t": 769.48,
+   "d": 4.44,
+   "text": "something and figure out where have we seen this. How does it match up with the current view of"
+  },
+  {
+   "t": 773.92,
+   "d": 9.88,
+   "text": "the world? We like to be challenged. If we notice something and understand this, if something is too"
+  },
+  {
+   "t": 783.8,
+   "d": 5.8,
+   "text": "repeatable, even something like infinite tiling can be squashed down to a point. If something is"
+  },
+  {
+   "t": 789.6,
+   "d": 6.76,
+   "text": "too chaotic our mind gives up and goes somewhere else. If you strike a balance between the two,"
+  },
+  {
+   "t": 796.36,
+   "d": 5.64,
+   "text": "the mind goes wild and tries to really needle at it and tries to find the pattern that you think is"
+  },
+  {
+   "t": 802.0,
+   "d": 7.0,
+   "text": "almost just there. In the idea of sequences, like the even numbers, they are kind of boring and you"
+  },
+  {
+   "t": 809.0,
+   "d": 7.8,
+   "text": "realize they all are separated by two. A randomly generated list also boring. Maybe you might try to"
+  },
+  {
+   "t": 816.8,
+   "d": 4.64,
+   "text": "see if there is a pattern but eventually you give up when you realize there isn't any. Something"
+  },
+  {
+   "t": 821.44,
+   "d": 5.64,
+   "text": "like the prime, something where you can almost see that there is a pattern, for example, besides two,"
+  },
+  {
+   "t": 827.08,
+   "d": 7.32,
+   "text": "all of them are odd. There are instances where they seem to be separated by two like element 13,"
+  },
+  {
+   "t": 834.4,
+   "d": 6.76,
+   "text": "17 and 19. You might be able to find some patterns and then you might not. This is the famous wong"
+  },
+  {
+   "t": 841.16,
+   "d": 9.64,
+   "text": "spiral where you draw numbers in a square spiral starting with 1-9 and so on in spiral and tally up"
+  },
+  {
+   "t": 850.8,
+   "d": 8.0,
+   "text": "all the primes. For some reason the primes seem to go along certainly diagonals and not others. This"
+  },
+  {
+   "t": 858.8,
+   "d": 6.12,
+   "text": "is a fascinating property of them. This kind of is just like the pearling noise. This is somewhere in"
+  },
+  {
+   "t": 864.92,
+   "d": 6.56,
+   "text": "between order and chaos. It fits in between where there are some patterns we see as not so easy like"
+  },
+  {
+   "t": 871.48,
+   "d": 5.24,
+   "text": "a checker board that we are like I understand this it is time to move on. In fact, primes and"
+  },
+  {
+   "t": 876.72,
+   "d": 6.52,
+   "text": "divisibility are great for this behavior. This is a visualization I made and call a modular Mandela"
+  },
+  {
+   "t": 883.24,
+   "d": 6.24,
+   "text": "where you compare each number, comparing pairs of numbers, and drawing a circle if they don't"
+  },
+  {
+   "t": 889.48,
+   "d": 6.08,
+   "text": "share any prime factors. For example, 14 and are 15. Each strand represents the numbers that are"
+  },
+  {
+   "t": 895.56,
+   "d": 4.28,
+   "text": "what we call co-prime or relative prime to each number. If you look at each strand, you can see"
+  },
+  {
+   "t": 899.84,
+   "d": 8.6,
+   "text": "a clear repeating pattern like dot dot blank and so on. If you look at each pattern in secession,"
+  },
+  {
+   "t": 908.44,
+   "d": 4.76,
+   "text": "there is not really an easy way to predict what the next one will be. And even though it is hard"
+  },
+  {
+   "t": 913.2,
+   "d": 10.0,
+   "text": "to predict, they all seem to line up in particular instances where they all have dots or no dots."
+  },
+  {
+   "t": 924.52,
+   "d": 6.76,
+   "text": "This is another example that I call the prime logs where you take the prime factors of each number,"
+  },
+  {
+   "t": 931.28,
+   "d": 10.84,
+   "text": "for example, four is 2 times 2 and 6 is three time three. You take the log and stack them up. This is"
+  },
+  {
+   "t": 942.12,
+   "d": 8.12,
+   "text": "a compact way to view prime numbers, prime factors of a log numbers. You see there doesn't seem to be"
+  },
+  {
+   "t": 950.24,
+   "d": 7.72,
+   "text": "a pattern. The color that represent the different prime numbers seem to go randomly. If we scroll"
+  },
+  {
+   "t": 957.96,
+   "d": 16.44,
+   "text": "to the right you see these numbers appear that have to do with ways the small prime intersect."
+  },
+  {
+   "t": 975.56,
+   "d": 6.12,
+   "text": "We also have to discuss the counter claim which is that this balance doesn't last forever. When"
+  },
+  {
+   "t": 981.68,
+   "d": 7.32,
+   "text": "I was playing, I decided the red deck is my favorite deck so I would go for them and then"
+  },
+  {
+   "t": 989.0,
+   "d": 20.44,
+   "text": "it got boring. You learn strategies and the chaos becomes team and the patterns are wrote. The trees"
+  },
+  {
+   "t": 1009.44,
+   "d": 6.6,
+   "text": "all start looking the same. Everything just kind of blends into noise. This happens in math as"
+  },
+  {
+   "t": 1016.04,
+   "d": 7.0,
+   "text": "well. You can ask what is the difference between two and three. Two is even, three is odd. Two"
+  },
+  {
+   "t": 1023.04,
+   "d": 6.52,
+   "text": "dimensions feel different than three dimensions. Two is associated with binary operators, three is"
+  },
+  {
+   "t": 1029.56,
+   "d": 4.08,
+   "text": "associated with the rule of three and threeness and triangles. There is a lot of different ways"
+  },
+  {
+   "t": 1033.64,
+   "d": 10.2,
+   "text": "where they feel different. If you take large primes such as 131, 071 they are really hard to"
+  },
+  {
+   "t": 1043.84,
+   "d": 7.6,
+   "text": "tell apart. How do we fix this? In roguelikes you can do challenge runs. Self-imposed challenges,"
+  },
+  {
+   "t": 1051.44,
+   "d": 6.92,
+   "text": "speed running, mods, there are a lot of ways where you can amend the current content and shake up the"
+  },
+  {
+   "t": 1058.36,
+   "d": 7.04,
+   "text": "balance and find something new. And you can do the same in math as well. You can make numbers"
+  },
+  {
+   "t": 1065.4,
+   "d": 4.84,
+   "text": "like whatever we want them to be and make them as interesting as we want them to be. For example the"
+  },
+  {
+   "t": 1070.24,
+   "d": 10.04,
+   "text": "first number is a marsine number and those happen to be easy to calculate for computers. The largest"
+  },
+  {
+   "t": 1080.28,
+   "d": 7.0,
+   "text": "prime is always going to be an example of this. The other is a fibonacci number that is related"
+  },
+  {
+   "t": 1087.28,
+   "d": 9.4,
+   "text": "to prime as well. In math, as in roguelikes, you can be the Avatar and restore balance to the world"
+  },
+  {
+   "t": 1096.68,
+   "d": 7.08,
+   "text": "of math or any game you are playing. You can carve out our own path and find the fun yourself. Let's"
+  },
+  {
+   "t": 1103.76,
+   "d": 10.72,
+   "text": "talk the third which is surprise and joy. Proc gen succeeds best when you create things that are"
+  },
+  {
+   "t": 1114.48,
+   "d": 8.24,
+   "text": "surprising. Things that are surprisingly poignant or beautiful and funny. This like in Slay the"
+  },
+  {
+   "t": 1122.72,
+   "d": 11.04,
+   "text": "Spire you get the sense of dopamine that you are cheating somehow and all the stars are aligning"
+  },
+  {
+   "t": 1133.76,
+   "d": 7.76,
+   "text": "in this moment. And this happens in mathematics as well. This is a famous oiler identity. It is kind"
+  },
+  {
+   "t": 1141.52,
+   "d": 8.84,
+   "text": "of this weird occasion where E is exponentials and pi is related to circles and 1 complex"
+  },
+  {
+   "t": 1150.36,
+   "d": 9.6,
+   "text": "numbers. Somehow they equal 0. What are they doing together? It feels like magical like this"
+  },
+  {
+   "t": 1159.96,
+   "d": 6.92,
+   "text": "can't be happening. But it is true. This happens a lot in my own work. One recent example is when"
+  },
+  {
+   "t": 1166.88,
+   "d": 10.64,
+   "text": "I was investigating the Fibonacci numbers and just taking the remainders of them. Essentially taking"
+  },
+  {
+   "t": 1177.52,
+   "d": 17.12,
+   "text": "the last digit this forms a repeating sequence. I just decided to take pairs of them and plot them"
+  },
+  {
+   "t": 1194.64,
+   "d": 6.52,
+   "text": "into grid and see what happens and doing that for every type of F sequence. What I get is this. This"
+  },
+  {
+   "t": 1201.16,
+   "d": 8.48,
+   "text": "is the sequence for using a base of 89. Defined by 89. It has this weird cross over and looks"
+  },
+  {
+   "t": 1209.64,
+   "d": 6.44,
+   "text": "like a little hashtag for cep reason. I try this with other numbers. With 90 it is almost red and"
+  },
+  {
+   "t": 1216.08,
+   "d": 8.32,
+   "text": "yellow. And there are these four things, one mls in a rotational pattern. With 98 you get even more"
+  },
+  {
+   "t": 1224.4,
+   "d": 14.6,
+   "text": "intricate. With 102 you get the repeated symbol. With 125 this ends for some reason. I never"
+  },
+  {
+   "t": 1239.0,
+   "d": 5.04,
+   "text": "expected this to happen. I was amazed when I found this. It was really interesting. There is also"
+  },
+  {
+   "t": 1244.04,
+   "d": 4.8,
+   "text": "something we need to address here which is what if this is just a coincidence? There is a famous"
+  },
+  {
+   "t": 1248.84,
+   "d": 7.12,
+   "text": "example where people that like math joke the golden spiral fits with everything. You can take"
+  },
+  {
+   "t": 1255.96,
+   "d": 10.88,
+   "text": "any picture and overlay it on it. The idea is most of it is fake and a coincidence. This is asking"
+  },
+  {
+   "t": 1266.84,
+   "d": 10.88,
+   "text": "what if this is just a fluke? Am I wrong? But then maybe you watch a lot of Roguelike Celebration"
+  },
+  {
+   "t": 1277.72,
+   "d": 6.28,
+   "text": "talks and you realize this is part of the plan all along. Game developers intended for you to find"
+  },
+  {
+   "t": 1284.0,
+   "d": 13.92,
+   "text": "those synergize. A similar thing happens in math. This thing where a lot of things coincide don't"
+  },
+  {
+   "t": 1297.92,
+   "d": 9.48,
+   "text": "happen out of the blue and it comes from studying complex numbers and you lead up to this equation"
+  },
+  {
+   "t": 1307.4,
+   "d": 5.08,
+   "text": "eventually. I am not the best person to explain this. You can plug in oiler's identity on YouTube"
+  },
+  {
+   "t": 1312.48,
+   "d": 7.68,
+   "text": "and a lot of math people will give you a lot of good explanations and visualizations. But the idea"
+  },
+  {
+   "t": 1320.16,
+   "d": 6.48,
+   "text": "is that you can analyze this equation, you can study it until the point where it feels as natural"
+  },
+  {
+   "t": 1326.64,
+   "d": 6.76,
+   "text": "and obvious as one plus one equals two. This magic property or something that once feels magic can"
+  },
+  {
+   "t": 1333.4,
+   "d": 8.8,
+   "text": "feel as natural as something that you learned in primary school. Someone with what I call Posani"
+  },
+  {
+   "t": 1342.2,
+   "d": 13.64,
+   "text": "quilts because that's another name for Fibonacci . I want to know it isn't a fluke. I have researched"
+  },
+  {
+   "t": 1355.84,
+   "d": 6.72,
+   "text": "this. It turns out that wherever you plug in an F number you always get this kind of cross pattern"
+  },
+  {
+   "t": 1362.56,
+   "d": 8.48,
+   "text": "in it. It is this reoccurring fractal sequence. It has to do with whenever you take an F number,"
+  },
+  {
+   "t": 1371.04,
+   "d": 6.52,
+   "text": "the F sequence, and then the module is also an F number, the sequence will also cross to 0 and"
+  },
+  {
+   "t": 1377.56,
+   "d": 6.72,
+   "text": "that's what yields these diagonal lines. Whenever you have a multiple of five, in this color scheme,"
+  },
+  {
+   "t": 1384.28,
+   "d": 6.12,
+   "text": "it will show up as yellow, orange, red-ish and that's because the sequences and the periods"
+  },
+  {
+   "t": 1390.4,
+   "d": 6.72,
+   "text": "modified are especially long. This has something to do with the fact that the F numbers are closely"
+  },
+  {
+   "t": 1397.12,
+   "d": 6.28,
+   "text": "related to the golden ratio and the golden ratio has the score of five in it. I honestly still have"
+  },
+  {
+   "t": 1403.4,
+   "d": 5.28,
+   "text": "no idea what is going on with these. I still need to try other things and do calculations"
+  },
+  {
+   "t": 1408.68,
+   "d": 7.16,
+   "text": "and experiments. But like I won't rest until I know what's going on which is why I haven't really"
+  },
+  {
+   "t": 1415.84,
+   "d": 5.64,
+   "text": "talked about them as much. But this is really fun for me to figure out and try something new"
+  },
+  {
+   "t": 1421.48,
+   "d": 5.16,
+   "text": "in math and seeing what shakes out and figuring out why it happens. This joy of discovery is kind"
+  },
+  {
+   "t": 1426.64,
+   "d": 6.64,
+   "text": "of at the heart of mathematics. Treading a path of your own and mastering it. It isn't memorizing"
+  },
+  {
+   "t": 1433.28,
+   "d": 6.56,
+   "text": "equations and even while proof is important it is just a tool to facilitate this discovery. It is"
+  },
+  {
+   "t": 1439.84,
+   "d": 7.16,
+   "text": "the language and mechanics of what this discovery has done. This is what we are trying to teach in"
+  },
+  {
+   "t": 1447.0,
+   "d": 7.52,
+   "text": "the game at work and are working really hard on. In both procedural generation and math you have"
+  },
+  {
+   "t": 1454.52,
+   "d": 5.44,
+   "text": "this idea of taking simple rules and in math we call them axioms and bringing force an entire"
+  },
+  {
+   "t": 1459.96,
+   "d": 6.28,
+   "text": "universe from them. You try to find the universe's where there is a balance between order and chaos."
+  },
+  {
+   "t": 1466.24,
+   "d": 8.04,
+   "text": "If you do that you will find a surprising result that will give you great joy. And to sum it up,"
+  },
+  {
+   "t": 1475.48,
+   "d": 7.8,
+   "text": "therefore math is a roguelike. I will end this talk like all great math lectures which is with"
+  },
+  {
+   "t": 1483.28,
+   "d": 7.36,
+   "text": "an exercise to the viewer. We talked about the theorem that roguelikes are math. I talked about"
+  },
+  {
+   "t": 1490.64,
+   "d": 5.76,
+   "text": "the distinction where oftentimes in the work we dine this community we are often using math as"
+  },
+  {
+   "t": 1496.4,
+   "d": 6.76,
+   "text": "a tool to get to some sort of result. I would encourage you as an exercise to kind of think"
+  },
+  {
+   "t": 1503.16,
+   "d": 7.32,
+   "text": "about it the other way. Taking the tools that you are used to working with and trying to figure out"
+  },
+  {
+   "t": 1510.48,
+   "d": 5.92,
+   "text": "how they tick. And just wondering about what things they generate but sitting with them and"
+  },
+  {
+   "t": 1517.84,
+   "d": 4.2,
+   "text": "prodding them in different areas and seeing what shakes out. Take the math you use every day and"
+  },
+  {
+   "t": 1522.04,
+   "d": 9.2,
+   "text": "figuring out is the deal with trigonometry. When does the cellular atonotom lead to interesting"
+  },
+  {
+   "t": 1531.24,
+   "d": 10.08,
+   "text": "things? What is the game theory strategy you end up using when you do a deck builder run. Find a"
+  },
+  {
+   "t": 1541.32,
+   "d": 7.76,
+   "text": "math object you find pretty and ask yourself the math behind it and why you feel that way. Why do"
+  },
+  {
+   "t": 1553.68,
+   "d": 5.8,
+   "text": "these fractals have these source of patterns within them? What has similar properties? What"
+  },
+  {
+   "t": 1559.48,
+   "d": 11.48,
+   "text": "doesn't? And then make up new rules and see what shakes up. Start asking what if four is equal to"
+  },
+  {
+   "t": 1570.96,
+   "d": 7.88,
+   "text": "0. What if the numbers don't end and there is some sort of infinity at the end of it. I promise by"
+  },
+  {
+   "t": 1578.84,
+   "d": 5.56,
+   "text": "undergoing this process, by doing this discomfort, by not thinking about what you can get out of it"
+  },
+  {
+   "t": 1584.4,
+   "d": 5.52,
+   "text": "but letting the math tell you what it wants to tell you, you will learn wonderful things and"
+  },
+  {
+   "t": 1589.92,
+   "d": 14.2,
+   "text": "beautiful universes will await you. Thank you. ALEXEI: I love it. Even though it is the end of"
+  },
+  {
+   "t": 1604.12,
+   "d": 16.64,
+   "text": "the day and you think the chat would be ending but everyone is excited. I think it is great"
+  },
+  {
+   "t": 1620.76,
+   "d": 12.36,
+   "text": "thinking about Mandelbrot as a visual thinker. I gave a lightning talk on chaos theory and how"
+  },
+  {
+   "t": 1633.12,
+   "d": 9.4,
+   "text": "the visualization of different numeric things led to detecting different types of patterns. Yeah. I"
+  },
+  {
+   "t": 1642.52,
+   "d": 4.0,
+   "text": "love this kind of topic. And the connection to computation and like we are talking about"
+  },
+  {
+   "t": 1646.52,
+   "d": 5.76,
+   "text": "visualizing generators which is just about visualizing different algorithms and pattern"
+  },
+  {
+   "t": 1652.28,
+   "d": 11.32,
+   "text": "seeking. Yeah. Excellent. All right. Well, I think that we will break and then, hopefully,"
+  },
+  {
+   "t": 1663.6,
+   "d": 6.62,
+   "text": "people can ask some follow ups or talk more about numbers in the breakout room. Thank you so much,"
+  }
+ ]
+}

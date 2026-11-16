@@ -1,0 +1,199 @@
+{
+  "id": "LKCRim02opc",
+  "title": "Jim Shepard - Blooming on the Battlefield: Relationships, Rivals, and Romance in Gameplay",
+  "speaker": "Jim Shepard",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=LKCRim02opc",
+  "talk_type": "design",
+  "summary": "Jim Shepard (Dungeonmans) proposes replacing single-axis faction reputation with per-NPC relationship values that drive procedural stories during gameplay. He separates 'like' from 'respect' into a two-axis grid, applies it to foes as well as allies, and shows how each quadrant changes how NPCs answer requests and behave at critical moments, using The Princess Bride and a Paladin/Rogue party as examples. NPC personality flags interpret game events to move these values. He then adds an opt-in romance axis, defines love for gameplay, proposes a combat-partner payoff and continuation after death, and warns that guesswork is not gameplay. Q&A covers magic charm effects, communicating hidden states with emoji, and pruning noisy events.",
+  "games": [
+    "Dungeonmans",
+    "Tangledeep",
+    "Autofire",
+    "Fallout: New Vegas",
+    "Tyranny"
+  ],
+  "insights": [
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc relationships",
+      "kind": "principle",
+      "claim": "Per-NPC relationship systems are fuel for procedural generation and let relationship stories happen during gameplay rather than outside it.",
+      "detail": "Shepard frames the talk around techniques for defining NPC relationships and their effects on the player, which he believes wholeheartedly are useful input to procgen systems.",
+      "t": 98,
+      "quote": "The reason for this is because it is really cool fuel for your procgen systems. I believe that wholeheartedly.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "faction reputation",
+      "kind": "warning",
+      "claim": "Standard faction reputation is a single linear number that takes NPCs from not knowing you to adoring you through grinding, which is simple but silly.",
+      "detail": "Shepard says games keep this simple because they track dozens of factions, so tracking multiple numbers per faction seemed too much; he believes we can do better.",
+      "t": 156,
+      "quote": "So typically these are straight lines, one exciting dimension of travel and it's simple. I do believe we can do a little bit better.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "enemy opinion",
+      "kind": "principle",
+      "claim": "Like/dislike values should apply to foes as well as allies: an enemy with opposing goals can still like you, and an ally can think you are a jerk.",
+      "detail": "Shepard uses The Princess Bride: Westley likes Inigo Montoya and shows mercy, is indifferent to Vizzini, and loses his cool against Humperdinck's men. A foe who hates you acts irrationally and aggressively, which players can exploit.",
+      "t": 202,
+      "quote": "Just because somebody has an opposite goal from you they can still like you. Also your allies can think you are a jerk",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "enemy opinion",
+      "kind": "technique",
+      "claim": "Foes can form opinions of the player during combat from fighting style, taunts, critical choices like showing mercy or rescuing hostages, and even impressive gear; outside combat, reputation precedes you.",
+      "detail": "Shepard lists ways a foe's like or dislike can move during and outside a fight.",
+      "t": 355,
+      "quote": "During a conflict when you are fighting them the things you do in the fight, your style, your technique choices might impress them, might not.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "like and respect",
+      "kind": "technique",
+      "claim": "Model NPC relationships with two independent axes, like and respect, forming a grid whose quadrants produce distinct behaviours.",
+      "detail": "Respect asks whether the NPC thinks you are good at your job and handle difficulty; default starting respect depends on personality. The two values move independently but interact.",
+      "t": 446,
+      "quote": "These two values can move alongside each other but we have to remember that they are two different distinct values that are not linked.",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "like and respect",
+      "kind": "example",
+      "claim": "In the like/respect grid, an ally who likes but does not respect you gives small help but not valuable gear, while a foe who likes and respects you may take risks to help or become a true rival.",
+      "detail": "Shepard's mission example: a liker-non-respecter gives gold but not a +1 assault rifle, which would end up in an enemy's inventory. A foe who likes you might drug the guards' soup so you survive. A foe who likes and respects you may switch sides or seek to prove they can beat you, making a great rivalry.",
+      "t": 574,
+      "quote": "if you build up a true rival as a foe who likes and respects you and great conflict on the mountain top somewhere, that's boss",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "like and respect",
+      "kind": "example",
+      "claim": "An ally who respects but dislikes you supports the mission but not you, while a foe who neither likes nor respects you underestimates you, which the player can exploit.",
+      "detail": "Shepard: the respecting-but-disliking ally doesn't care if you die so long as the mission succeeds. A foe holding you beneath contempt ignores you, so you can surprise them.",
+      "t": 605,
+      "quote": "So an ally here is supporting the mission, but not you.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "personality flags",
+      "kind": "technique",
+      "claim": "NPCs view gameplay events through personality flags to adjust like and respect, which then determine their responses to requests and behaviour during critical events.",
+      "detail": "Splitting treasure: the traditionalist Paladin respects you more, the selfish Rogue likes the gold but thinks you are a sucker. Overhealing the Paladin with a powerful scroll insults and angers him, but the survival-first Rogue respects it.",
+      "t": 862,
+      "quote": "personality flags on NPCs. Respond to gameplay values to adjust like and respect values.",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent story",
+      "kind": "example",
+      "claim": "Relationship values let scripted-feeling moments emerge procedurally, such as an ally who likes but doesn't respect you tossing a potion and abandoning you, or a shopkeeper who hates but respects you selling his best gear at four times the price.",
+      "detail": "Shepard says events usually scripted with hardcoded NPCs can instead come from personality flags reacting to game events.",
+      "t": 896,
+      "quote": "Usually, when you think about neat game events, there are things we may end up scripting with maybe, you know, hard coded NPCs. This stuff can be procedural.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "romance",
+      "kind": "principle",
+      "claim": "Romance in a roguelike should be opt-in because it brings high stakes and some players don't want it; once they opt in, misfortunes are fair game.",
+      "detail": "Shepard defines love for gameplay as a desire for long-term intimacy of any type paired with a need to feel desired in return, distinct from casual hookups.",
+      "t": 1022,
+      "quote": "I believe you should require players to opt-in checkbox",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "romance",
+      "kind": "technique",
+      "claim": "A roguelike romance payoff can be a top-tier side-by-side combat ally of player-character strength, which also inspires your followers and adds to procedural history.",
+      "detail": "Shepard contrasts this with typical game romance rewards (scripted tender cutscenes or fan service). A couple's deeds can be recorded in the procedural history, not just dragon kills.",
+      "t": 1062,
+      "quote": "It's the highest tier of side by side combat ally.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "character succession",
+      "kind": "technique",
+      "claim": "Romantic partners can provide continuity after death: if player A dies, partner B can carry on the story.",
+      "detail": "Shepard acknowledges this departs from permadeath. B could keep playing and perhaps marry again, or never remarry.",
+      "t": 1121,
+      "quote": "maybe one of the pair gets killed, and the other one can pick up the pieces",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "romance",
+      "kind": "technique",
+      "claim": "Affection can be modelled as a single float from no attraction to maximum, built up when an NPC inclined toward you sees you act in ways that raise like or respect, including how you treat others.",
+      "detail": "Shepard collapses varied emotions into an average value; long-term relationships rank higher than new excitement. NPCs judge how you interact with others, like being rude to a waiter on a date.",
+      "t": 1217,
+      "quote": "if they are inclined to fall for you they might a little more every time they have an opportunity to like you or respect you",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "transparency",
+      "kind": "warning",
+      "claim": "When players must woo NPCs, the game must make clear what they want, because guesswork is not gameplay and arbitrary failure is no fun.",
+      "detail": "Shepard warns against an NPC rejecting flowers because their mother died of 'floweritis', ruining the chance unfairly.",
+      "t": 1279,
+      "quote": "You have to make it clear what they are looking for. Guesswork is not gameplay and be careful when they fail.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "romance",
+      "kind": "technique",
+      "claim": "Unrequited affection should have gameplay consequences, both for NPCs into the player (distracting behaviour) and for the player character falling for someone (combat debuffs, stuttering).",
+      "detail": "Shepard rejects the parade-of-suitors model. Players may need to cut someone from the party or match them with someone else; this is unfair like starvation or misread scrolls, and opting in means 'you asked for this'.",
+      "t": 1317,
+      "quote": "If an NPC's into you and you're not returning it they may behave differently.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "emotion display",
+      "kind": "technique",
+      "claim": "NPC relationship states can be communicated cheaply with emoji like hearts, question marks and frowns instead of large amounts of writing.",
+      "detail": "In Q&A Shepard says he favours transparency because it makes player choices easier; emoji convey reactions regardless of dialect. Deceptive NPCs need clever hints, e.g. via a charisma check.",
+      "t": 1567,
+      "quote": "You could do this with emoji. Hearts pop up. Question marks. Frowns. Angry.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "event tuning",
+      "kind": "warning",
+      "claim": "Personality-flag event lists are a possibility set to prune: drop events irrelevant to your game or that players trigger so often they skew values.",
+      "detail": "Asked about thousands of tiny events per adventure, Shepard says refine to the events that matter and find a way around constantly tripped ones.",
+      "t": 1645,
+      "quote": "If there's something a player does all the time that is always sending the numbers to be screwy, you don't do that",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "charm effects",
+      "kind": "technique",
+      "claim": "Magic like charm can move like, respect and affection values temporarily, swinging back the other way when it wears off.",
+      "detail": "Answering an audience question about charm spells and succubi, Shepard says if these values are open to the procedural engine, magic can affect them.",
+      "t": 1464,
+      "quote": "When it wears off, it swings in the other direction.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

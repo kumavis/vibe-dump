@@ -1,0 +1,392 @@
+{
+ "id": "GMkBT4UbvAs",
+ "url": "https://www.youtube.com/watch?v=GMkBT4UbvAs",
+ "title": "Nicholas Feinberg - ??learndb's silliest corners",
+ "speaker": "Nicholas Feinberg",
+ "talk_title": "??learndb's silliest corners",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 595,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nNicholas Feinberg is a sometimes-retired Dungeon Crawl Stone Soup developer, who in this talk goes over some of the silliest and strangest corners of Dungeon Crawl Stone Soup's 20+ year-long history, guided by the player-made learndb.\n\nNicholas Feinberg on Twitter: https://twitter.com/pleasingfungus\nlearndb database: http://crawl.develz.org/learndb/index.html\nQuery learndb: https://crawl.develz.org/info/\nDungeon Crawl Stone Soup: https://crawl.develz.org/\nNicholas Feinberg at Roguelike Celebration 2016 discussing DCSS: https://www.youtube.com/watch?v=-MGNS39D0B0",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 69,
+   "title": "Bad Ideas"
+  },
+  {
+   "start": 142,
+   "title": "History"
+  },
+  {
+   "start": 180,
+   "title": "Arena"
+  },
+  {
+   "start": 224,
+   "title": "Probability"
+  },
+  {
+   "start": 269,
+   "title": "Bugs"
+  },
+  {
+   "start": 300,
+   "title": "Slimes"
+  },
+  {
+   "start": 364,
+   "title": "Plurals"
+  },
+  {
+   "start": 417,
+   "title": "Special Cases"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1063,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 5.2,
+   "text": "MODERATOR: All right. Moving right along, we have Nicholas Feinberg. Back after many years,"
+  },
+  {
+   "t": 5.2,
+   "d": 4.35,
+   "text": "you were here in the first year. >> I got the shirt."
+  },
+  {
+   "t": 9.55,
+   "d": 2.61,
+   "text": "MODERATOR: I am wearing my 2016 shirt as well. Wonderful."
+  },
+  {
+   "t": 16.24,
+   "d": 5.84,
+   "text": "Talk about learndb. Very excited. >> Today I am going to tell stories about the"
+  },
+  {
+   "t": 22.08,
+   "d": 7.76,
+   "text": "goofest things mentioned in the Dungeon Crawl Stone Soup learnbd. This is for people new to"
+  },
+  {
+   "t": 29.84,
+   "d": 15.76,
+   "text": "crawl and meant to be nostalgic to those who know it. That's dudgeon crawl in the middle."
+  },
+  {
+   "t": 47.84,
+   "d": 5.92,
+   "text": "Tragically Google Slides doesn't support orb retrieval by web. Here are experts from the"
+  },
+  {
+   "t": 54.48,
+   "d": 11.76,
+   "text": "Learndb. There are well over 10,000 entries. There is drama, there is vanity entries, procedurally"
+  },
+  {
+   "t": 66.24,
+   "d": 14.0,
+   "text": "generated obscenities. Players have curated a set of thousands of other player suggestions"
+  },
+  {
+   "t": 80.24,
+   "d": 4.8,
+   "text": "for the game all of which they dislike. A few of the more comprehensible suggestions,"
+  },
+  {
+   "t": 85.68,
+   "d": 3.68,
+   "text": "if the player character doesn't eat fruits often enough they should get scurvy."
+  },
+  {
+   "t": 90.08,
+   "d": 5.44,
+   "text": "When vampire characters are in bat form they should have to navigate via Echo location."
+  },
+  {
+   "t": 96.48,
+   "d": 9.6,
+   "text": "Allow the player to write a mystical ward on the floor to prevent attacking. Crawl has been around"
+  },
+  {
+   "t": 106.08,
+   "d": 6.96,
+   "text": "for awhile and it is inevitable a few of those bad ideas would eventually make it into the game."
+  },
+  {
+   "t": 114.32,
+   "d": 6.8,
+   "text": "There is a learndb entry for those implemented bad ideas. A Cat race that gets nine lives."
+  },
+  {
+   "t": 121.76,
+   "d": 5.44,
+   "text": "That's a very silly idea obviously which is why Crawl added it 10 years ago. A Chester class that"
+  },
+  {
+   "t": 127.2,
+   "d": 6.0,
+   "text": "starts with a book of party tricks and this one was only included as an April fool's joke but made"
+  },
+  {
+   "t": 133.2,
+   "d": 5.44,
+   "text": "it into the game. A graphical tile interface so players don't need to read to play Crawl."
+  },
+  {
+   "t": 139.76,
+   "d": 9.92,
+   "text": "The game has gone through many hand and changed a lot over time. There is a real history to the"
+  },
+  {
+   "t": 149.68,
+   "d": 6.48,
+   "text": "game and learndb preserves that. You can learn at the learndb for the wraith monster and see"
+  },
+  {
+   "t": 156.16,
+   "d": 11.84,
+   "text": "how seven years ago it would drain the player's experience. The ankus is described as a weapon"
+  },
+  {
+   "t": 168.0,
+   "d": 8.0,
+   "text": "existing in crawl in a time before time about 10 years ago. People talk about the game as if"
+  },
+  {
+   "t": 176.0,
+   "d": 6.48,
+   "text": "it was an artifact from Roman times and it amazes me. Let's zoom in on one particular."
+  },
+  {
+   "t": 185.44,
+   "d": 8.16,
+   "text": "A spell that turns items into flowers was stolen from book's but this is a game about fighting"
+  },
+  {
+   "t": 193.6,
+   "d": 8.64,
+   "text": "monsters and getting treasures. Why would you want flowers? Learndb users were similarly mystified."
+  },
+  {
+   "t": 203.52,
+   "d": 17.76,
+   "text": "It could turn into food for herbivores. What a world where people are doing research in the past"
+  },
+  {
+   "t": 221.28,
+   "d": 6.56,
+   "text": "of a game about dragons and elves. Over the years, one thing that roguelikedevs run into again and"
+  },
+  {
+   "t": 227.84,
+   "d": 6.0,
+   "text": "again is misunderstandings of probability. Improbable events will sometimes happen."
+  },
+  {
+   "t": 233.84,
+   "d": 5.44,
+   "text": "Sometimes you will miss five attacks in a row. Sometimes rare and valuable gold dragon armor"
+  },
+  {
+   "t": 239.28,
+   "d": 5.04,
+   "text": "will show up on the third floor of the dudgeon and show up again in the next game. Players will"
+  },
+  {
+   "t": 244.32,
+   "d": 10.32,
+   "text": "say this is broken and you will have to say maybe but probably it is isn't. Maim -- here is a great"
+  },
+  {
+   "t": 254.64,
+   "d": 6.72,
+   "text": "example. My summoned ice beasts are not doing damage any more player says and developers says"
+  },
+  {
+   "t": 261.36,
+   "d": 9.6,
+   "text": "sorry, pal, stuff happens. It is unlikely the game would be broken in this subtle way. But,"
+  },
+  {
+   "t": 270.96,
+   "d": 11.6,
+   "text": "of course, sometimes unlikely events do happen. Sometimes there is a bug and the game printed"
+  },
+  {
+   "t": 282.56,
+   "d": 7.76,
+   "text": "damage for elemental attacks why not doing damage. The ice beast freezes except it wasn't."
+  },
+  {
+   "t": 292.08,
+   "d": 7.2,
+   "text": "Sometimes the dev takes a full year longer to notice the bug than one particular player did."
+  },
+  {
+   "t": 300.72,
+   "d": 9.44,
+   "text": "But while on the subject of bugs let's talk about slimes. The royal jelly here."
+  },
+  {
+   "t": 311.76,
+   "d": 3.36,
+   "text": "Battling as dangerous but if you win the treasure volts open up."
+  },
+  {
+   "t": 318.8,
+   "d": 21.36,
+   "text": "Let's say the player poly morphes the jelly. If that happens that unlocks the treasure vaults"
+  },
+  {
+   "t": 341.68,
+   "d": 10.96,
+   "text": "too. What if they die, leave and kill their own ghost in a later game? These day learndb"
+  },
+  {
+   "t": 352.64,
+   "d": 5.52,
+   "text": "reports that Crawl does have code to not open the slime treasure vaults in that case and I"
+  },
+  {
+   "t": 358.16,
+   "d": 4.96,
+   "text": "wish I had been a fly on the wall for the conversation that made the devs put that code in."
+  },
+  {
+   "t": 364.48,
+   "d": 5.12,
+   "text": "On the subject of special cases, let's talk about plurals. Traditional Roguelikes are text"
+  },
+  {
+   "t": 369.6,
+   "d": 11.36,
+   "text": "heavy games. To print the messages correctly, the game needs to know not just how to describe"
+  },
+  {
+   "t": 380.96,
+   "d": 11.92,
+   "text": "individual monsters but how to talk about groups. One goblin and two goblins. If it ends with"
+  },
+  {
+   "t": 394.32,
+   "d": 11.76,
+   "text": "s there is a plural and then you have hippogriffes and the plural is hippogrives but it should be"
+  },
+  {
+   "t": 406.08,
+   "d": 23.44,
+   "text": "hippogriffs. It goes on and on and on. Catoblepae and others. There are hundreds of lines of code."
+  },
+  {
+   "t": 429.52,
+   "d": 12.32,
+   "text": "Dozens of special cases just for correctly pluralizing dudgeon crawl monster names. I would"
+  },
+  {
+   "t": 441.84,
+   "d": 10.72,
+   "text": "like to end this talk on the entry for boris. The first is a slightly dated but accurate description"
+  },
+  {
+   "t": 452.56,
+   "d": 9.92,
+   "text": "of Boris. The second entry, on the other hand, iron bolt, Crystal sphere. It is enthusiastic and"
+  },
+  {
+   "t": 462.48,
+   "d": 10.08,
+   "text": "over the top and wrong. Boris doesn't have those spells. The second entry is many years old but not"
+  },
+  {
+   "t": 472.56,
+   "d": 7.12,
+   "text": "out of date. It has never been right but it is having an absolute blast. If there is anything"
+  },
+  {
+   "t": 479.68,
+   "d": 5.52,
+   "text": "that the learndb and Crawl in general should be about it is that. Do we have time for questions?"
+  },
+  {
+   "t": 487.2,
+   "d": 5.01,
+   "text": "MODERATOR: We have a little bit of bonus time so we can probably take one question."
+  },
+  {
+   "t": 492.21,
+   "d": 0.91,
+   "text": "Let's me what people have added."
+  },
+  {
+   "t": 496.16,
+   "d": 3.76,
+   "text": "I don't see a learn db question. Someone quick. Throw a question out."
+  },
+  {
+   "t": 519.92,
+   "d": 12.78,
+   "text": "What is your favorite entry in learndb? >> It is the gool guide because it is perfect"
+  },
+  {
+   "t": 532.7,
+   "d": 5.06,
+   "text": "and everything in it is completely wrong. MODERATOR: Is there learndb"
+  },
+  {
+   "t": 537.76,
+   "d": 4.24,
+   "text": "or the wiki more accurate? >> That's controversial but I would say"
+  },
+  {
+   "t": 542.72,
+   "d": 8.08,
+   "text": "generally learndb but I have to because that's the tribe I'm in in the two groups."
+  },
+  {
+   "t": 552.72,
+   "d": 7.92,
+   "text": "MODERATOR: How do you get into learndb? >> If you say something funny and someone is"
+  },
+  {
+   "t": 560.64,
+   "d": 6.32,
+   "text": "on IRC we can ad you. Some way we need to add support to discorded learning of learn DB."
+  },
+  {
+   "t": 566.96,
+   "d": 6.56,
+   "text": ">> Can you not just store the plural with the creature name?"
+  },
+  {
+   "t": 573.52,
+   "d": 6.48,
+   "text": ">> You could but there are hundreds of creature names and the same code handles pluralization"
+  },
+  {
+   "t": 580.0,
+   "d": 8.24,
+   "text": "of item names. There is a lot going on. MODERATOR: I think we will move on so we"
+  },
+  {
+   "t": 588.24,
+   "d": 4.4,
+   "text": "don't end up with too much extra time. Thank you so much. Fantastic talk."
+  }
+ ]
+}

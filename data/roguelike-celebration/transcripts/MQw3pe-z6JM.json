@@ -1,0 +1,903 @@
+{
+ "id": "MQw3pe-z6JM",
+ "url": "https://www.youtube.com/watch?v=MQw3pe-z6JM",
+ "title": "Florence Smith Nicholls- Another Stupid Date: Love Island as a Roguelike",
+ "speaker": "Florence Smith Nicholls",
+ "talk_title": "Another Stupid Date: Love Island as a Roguelike",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 842,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "The British dating game show Love Island is as notorious as it is popular. The format involves contestants living in an isolated villa and forming heterosexual couples, with the overall winning couple at the end receiving a cash prize. In this experimental lighting talk, I will make comparisons between the design and game mechanics of Love Island and roguelikes. For example, the heavily produced nature of the show, with plotlines and archetypal characters, is much akin to a live game with a dungeon master, a format which roguelikes heavily draw upon. Furthermore, Love Island arguably contains turn-based, procedural and permadeath mechanics in how challenges, recouplings and dumplings are orchestrated.\n\nThe talk will conclude with a reflective segment on how Love Island could learn from dating roguelikes such as Boyfriend Dungeon in embracing queer relationships and discussions around consent and mental health.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 31,
+   "title": "Love Island as a roguelike"
+  },
+  {
+   "start": 191,
+   "title": "Archetypes and curation"
+  },
+  {
+   "start": 269,
+   "title": "Retellings and narratives"
+  },
+  {
+   "start": 379,
+   "title": "Glitches in systems"
+  },
+  {
+   "start": 450,
+   "title": "Audience participation"
+  },
+  {
+   "start": 522,
+   "title": "Confessionals and voyeurism"
+  },
+  {
+   "start": 600,
+   "title": "Uniqueness and authenticity"
+  },
+  {
+   "start": 741,
+   "title": "Results and conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1969,
+ "trimmed": {
+  "segments": 24,
+  "words": 187
+ },
+ "segments": [
+  {
+   "t": 10.06,
+   "d": 1.0,
+   "text": "I don't want to take more time away from the next talk which is one of the ones I am most"
+  },
+  {
+   "t": 13.05,
+   "d": 1.0,
+   "text": "excited about to be honest."
+  },
+  {
+   "t": 22.67,
+   "d": 1.0,
+   "text": "Let's welcome Florence Smith Nicholls."
+  },
+  {
+   "t": 23.67,
+   "d": 1.0,
+   "text": "FLORENCE: Hello."
+  },
+  {
+   "t": 24.67,
+   "d": 1.44,
+   "text": "ALEXEI: Want to get right into it?"
+  },
+  {
+   "t": 26.11,
+   "d": 3.22,
+   "text": "FLORENCE: I can just go for it."
+  },
+  {
+   "t": 29.33,
+   "d": 4.98,
+   "text": "Welcome to Another Stupid Date: Love Island as a Roguelike."
+  },
+  {
+   "t": 34.31,
+   "d": 6.17,
+   "text": "I am your host, Florence Smith Nicholls and I am a PhD researchers in games AI specifically"
+  },
+  {
+   "t": 40.48,
+   "d": 2.81,
+   "text": "archeology approaches to procedural generation content."
+  },
+  {
+   "t": 43.29,
+   "d": 7.31,
+   "text": "Today I am going to be talking about reality TV and let's play Love Island because it is"
+  },
+  {
+   "t": 50.6,
+   "d": 2.47,
+   "text": "a game."
+  },
+  {
+   "t": 53.07,
+   "d": 6.76,
+   "text": "The way it works is you get couples and even though honestly an at symbol doesn't have"
+  },
+  {
+   "t": 59.83,
+   "d": 6.73,
+   "text": "a gender in love island there are two genders, men and women, and heterosexual couples."
+  },
+  {
+   "t": 66.56,
+   "d": 5.24,
+   "text": "I represent this with these abstract symbols."
+  },
+  {
+   "t": 71.8,
+   "d": 6.18,
+   "text": "As you expect, a lot of tension in Love Island comes from the idea that islanders want to"
+  },
+  {
+   "t": 77.98,
+   "d": 1.7,
+   "text": "explore their connection."
+  },
+  {
+   "t": 79.68,
+   "d": 2.8,
+   "text": "This happens in our version."
+  },
+  {
+   "t": 82.48,
+   "d": 5.1,
+   "text": "Equal wants to join in with divide and plus because they are all bonding over their love"
+  },
+  {
+   "t": 87.58,
+   "d": 5.64,
+   "text": "of the Ed Sheren album."
+  },
+  {
+   "t": 93.22,
+   "d": 4.07,
+   "text": "They want to get with alpha."
+  },
+  {
+   "t": 97.29,
+   "d": 7.19,
+   "text": "And then sons start a romance and then they get a chance to enter the house and break"
+  },
+  {
+   "t": 104.48,
+   "d": 3.91,
+   "text": "up a couple and what happens?"
+  },
+  {
+   "t": 108.39,
+   "d": 4.8,
+   "text": "We get the recoupling ritual that Love Island has."
+  },
+  {
+   "t": 113.19,
+   "d": 9.1,
+   "text": "If you watch, you know the order in which people get to choose which person they want"
+  },
+  {
+   "t": 122.29,
+   "d": 1.14,
+   "text": "to couple up with is important."
+  },
+  {
+   "t": 123.43,
+   "d": 7.91,
+   "text": "In this case, they decide they want to be with omega and that leads the at sign to get"
+  },
+  {
+   "t": 131.34,
+   "d": 2.16,
+   "text": "what they want which is to be of alpha."
+  },
+  {
+   "t": 133.5,
+   "d": 1.29,
+   "text": "The moon saves equals."
+  },
+  {
+   "t": 134.79,
+   "d": 4.15,
+   "text": "They can still be around even with a divide and plus."
+  },
+  {
+   "t": 138.94,
+   "d": 6.0,
+   "text": "And then our sun and the coffin do end up together but sadly that does mean umbrella"
+  },
+  {
+   "t": 144.94,
+   "d": 2.65,
+   "text": "is dumped and that's permadeath in Love Island."
+  },
+  {
+   "t": 147.59,
+   "d": 3.6,
+   "text": "That's the end of the game for the umbrella."
+  },
+  {
+   "t": 151.19,
+   "d": 4.23,
+   "text": "This is essentially the core game loop of Love Island."
+  },
+  {
+   "t": 155.42,
+   "d": 6.88,
+   "text": "As you can kind of see with each run or week, the dating landscape changes each time."
+  },
+  {
+   "t": 162.3,
+   "d": 5.98,
+   "text": "It is through this I wanted to show in kind of a simple way how the core game mechanics"
+  },
+  {
+   "t": 168.28,
+   "d": 2.73,
+   "text": "of Love Island feel like a roguelike to me."
+  },
+  {
+   "t": 171.01,
+   "d": 8.41,
+   "text": "In that spirit, I want you to vote for your favorite couple so you can scan this QR Code"
+  },
+  {
+   "t": 179.42,
+   "d": 5.31,
+   "text": "or go to Menti and at the end I will reveal the winner."
+  },
+  {
+   "t": 184.73,
+   "d": 4.97,
+   "text": "Don't worry, this is on other slides in case you miss it right now."
+  },
+  {
+   "t": 189.7,
+   "d": 5.3,
+   "text": "I am going to go through a few themes which I think are interesting to think about in"
+  },
+  {
+   "t": 195.0,
+   "d": 1.79,
+   "text": "comparing Love Island with roguelikes."
+  },
+  {
+   "t": 196.79,
+   "d": 3.53,
+   "text": "First of all is archetypes."
+  },
+  {
+   "t": 200.32,
+   "d": 5.16,
+   "text": "In Love Island and many reality TV shows you get archetype characters."
+  },
+  {
+   "t": 205.48,
+   "d": 7.27,
+   "text": "It could be the every man, the joker, the girl next door or maybe the vixen."
+  },
+  {
+   "t": 212.75,
+   "d": 4.58,
+   "text": "As you can see from the headline a lot of these are gendered and become toxic and I"
+  },
+  {
+   "t": 217.33,
+   "d": 5.22,
+   "text": "think that's a useful thing to think about in general in terms of how we use archetypes"
+  },
+  {
+   "t": 222.55,
+   "d": 6.37,
+   "text": "in different media forms including roguelikes and games in general."
+  },
+  {
+   "t": 228.92,
+   "d": 4.09,
+   "text": "Of course, with roguelikes they are influenced by TTRPG and that's why you have different"
+  },
+  {
+   "t": 233.01,
+   "d": 4.96,
+   "text": "class and things like this."
+  },
+  {
+   "t": 237.97,
+   "d": 6.98,
+   "text": "Love Island is heavily edited so in that sense the content generated is highly curated."
+  },
+  {
+   "t": 244.95,
+   "d": 6.33,
+   "text": "A good example of this is Love Island's spin off of the main show that happens everything"
+  },
+  {
+   "t": 251.28,
+   "d": 1.0,
+   "text": "week."
+  },
+  {
+   "t": 252.28,
+   "d": 4.53,
+   "text": "It is kind of like usually the more lighthearted stuff which is kind of interesting enough"
+  },
+  {
+   "t": 256.81,
+   "d": 4.3,
+   "text": "to get into the unseen bits which maybe not as many people watch on a Sunday evening."
+  },
+  {
+   "t": 261.11,
+   "d": 4.06,
+   "text": "But it is somehow isn't interesting enough to be in the canonical Love Island."
+  },
+  {
+   "t": 265.17,
+   "d": 4.34,
+   "text": "It is interesting there are different degrees of curation."
+  },
+  {
+   "t": 269.51,
+   "d": 3.43,
+   "text": "I thought an interesting comparison would be Bad News."
+  },
+  {
+   "t": 272.94,
+   "d": 5.1,
+   "text": "I won't go into too much detail about what this is I am sure lots in the community know"
+  },
+  {
+   "t": 278.04,
+   "d": 6.09,
+   "text": "about it but it has a simulation of an American town and here is a picture of James Ryan acting"
+  },
+  {
+   "t": 284.13,
+   "d": 6.24,
+   "text": "as the wizard which is a role where he would curate in real-time how an actor would sort"
+  },
+  {
+   "t": 290.37,
+   "d": 4.54,
+   "text": "of reacting to a participant."
+  },
+  {
+   "t": 294.91,
+   "d": 6.78,
+   "text": "And then I can also identify what I called, oh I have hosted retellings in terms of Love"
+  },
+  {
+   "t": 301.69,
+   "d": 2.88,
+   "text": "Island and Blaze ball as well."
+  },
+  {
+   "t": 304.57,
+   "d": 10.41,
+   "text": "The term retellings is an instrument for critique of an interactive fair TV."
+  },
+  {
+   "t": 314.98,
+   "d": 6.33,
+   "text": "It is the idea if players are motivated to retell their gameplay experience, then that"
+  },
+  {
+   "t": 321.31,
+   "d": 4.23,
+   "text": "is an indicator they found something interesting or memorable."
+  },
+  {
+   "t": 325.54,
+   "d": 7.46,
+   "text": "Love Island tries to generate this itself through the spin off show and after each week"
+  },
+  {
+   "t": 333.0,
+   "d": 6.09,
+   "text": "they will have a panel of people to talk about the previous week's activities."
+  },
+  {
+   "t": 339.09,
+   "d": 8.19,
+   "text": "And I think an interesting example of like an official game round up is the Blaseball"
+  },
+  {
+   "t": 347.28,
+   "d": 9.41,
+   "text": "round up and Blaseball being this brilliant horror baseball simulation game that's my"
+  },
+  {
+   "t": 356.69,
+   "d": 3.1,
+   "text": "kind of short summary of that."
+  },
+  {
+   "t": 359.79,
+   "d": 7.59,
+   "text": "And like I think it is really interesting how it is kind of this taxonomy of different"
+  },
+  {
+   "t": 367.38,
+   "d": 5.66,
+   "text": "eras and how you can see in both these examples they both lend themselves well to different"
+  },
+  {
+   "t": 373.04,
+   "d": 4.75,
+   "text": "types of retellings but especially hosted retellings."
+  },
+  {
+   "t": 377.79,
+   "d": 5.75,
+   "text": "Kind of related to retellings, something I found in research looking at procedural generation"
+  },
+  {
+   "t": 383.54,
+   "d": 6.52,
+   "text": "architectural storytelling is players are compelled to reflect on their experience with"
+  },
+  {
+   "t": 390.06,
+   "d": 3.41,
+   "text": "glitches because it is unexpected and weird things that happen."
+  },
+  {
+   "t": 393.47,
+   "d": 8.16,
+   "text": "There are so many examples of glitches and roguelikes especially in Dwarf Fortress one"
+  },
+  {
+   "t": 401.63,
+   "d": 6.23,
+   "text": "I picked is the example of an artifact that showed like a history -- an entire history"
+  },
+  {
+   "t": 407.86,
+   "d": 4.24,
+   "text": "of the world and not only that but several versions of itself which is almost fractal"
+  },
+  {
+   "t": 412.1,
+   "d": 1.0,
+   "text": "in nature."
+  },
+  {
+   "t": 413.1,
+   "d": 5.71,
+   "text": "The was like a mind warping kind of glitch that happened that I think is really cool."
+  },
+  {
+   "t": 418.81,
+   "d": 5.57,
+   "text": "You get glitches in Love Island which makes sense because there is a high turnover of"
+  },
+  {
+   "t": 424.38,
+   "d": 6.09,
+   "text": "content and it is inevitable you will get the weird editing glitches."
+  },
+  {
+   "t": 430.47,
+   "d": 4.87,
+   "text": "On the screen you can see the contestant in the foreground and background at the same"
+  },
+  {
+   "t": 435.34,
+   "d": 1.0,
+   "text": "time."
+  },
+  {
+   "t": 436.34,
+   "d": 4.74,
+   "text": "If you look this up, there is a few articles about this online."
+  },
+  {
+   "t": 441.08,
+   "d": 3.03,
+   "text": "People found it funny or interesting."
+  },
+  {
+   "t": 444.11,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 445.11,
+   "d": 4.67,
+   "text": "I think, again, good example of similarity between the two."
+  },
+  {
+   "t": 449.78,
+   "d": 6.7,
+   "text": "I have kind of mentioned audience participation and the most obvious example is people can"
+  },
+  {
+   "t": 456.48,
+   "d": 6.32,
+   "text": "vote for their favorite couples on the island but also social media plays a huge role in"
+  },
+  {
+   "t": 462.8,
+   "d": 6.53,
+   "text": "the editing of Love Island to the extent a social media team is on site in New York where"
+  },
+  {
+   "t": 469.33,
+   "d": 3.88,
+   "text": "it is filmed informing the editing in real-time."
+  },
+  {
+   "t": 473.21,
+   "d": 3.77,
+   "text": "I didn't realize this until recently."
+  },
+  {
+   "t": 476.98,
+   "d": 9.33,
+   "text": "I think a good comparison with this is the game necrocracy because they had a bespoke"
+  },
+  {
+   "t": 486.31,
+   "d": 5.74,
+   "text": "conspiracy board tool allowing players to visualize their own ideas of what a was happening"
+  },
+  {
+   "t": 492.05,
+   "d": 10.01,
+   "text": "and this got the developers and writers to inform the weekly live game design."
+  },
+  {
+   "t": 502.06,
+   "d": 10.46,
+   "text": "I had to give a shout-out to cuboid which is the AI host of the reality TV show and"
+  },
+  {
+   "t": 512.52,
+   "d": 4.76,
+   "text": "has a vision by Lee Alexander who is giving a talk about reality TV and roguelikes which"
+  },
+  {
+   "t": 517.28,
+   "d": 2.81,
+   "text": "I am looking forward to so it seemed appropriate to shout-out."
+  },
+  {
+   "t": 520.09,
+   "d": 9.81,
+   "text": "A kind of stylistic device of reality TV and specifically Love Island is the confessional."
+  },
+  {
+   "t": 529.9,
+   "d": 6.55,
+   "text": "It is this thing where they will cut away to an islander giving their perspective on"
+  },
+  {
+   "t": 536.45,
+   "d": 3.68,
+   "text": "events happening because it is like recorded at a different time."
+  },
+  {
+   "t": 540.13,
+   "d": 5.74,
+   "text": "In the case of Love Island it is in a specific physical place within the set of Love Island"
+  },
+  {
+   "t": 545.87,
+   "d": 1.42,
+   "text": "and the beach home."
+  },
+  {
+   "t": 547.29,
+   "d": 8.4,
+   "text": "I found the Intimate behavior of this is interesting."
+  },
+  {
+   "t": 555.69,
+   "d": 6.45,
+   "text": "You know things that others don't know."
+  },
+  {
+   "t": 562.14,
+   "d": 5.33,
+   "text": "And I was trying to think about how this might translate to a digital game and I think it"
+  },
+  {
+   "t": 567.47,
+   "d": 5.49,
+   "text": "is quite difficult to imagine that especially because the heightened voyeurism of reality"
+  },
+  {
+   "t": 572.96,
+   "d": 4.01,
+   "text": "TV in general is because these are real people and that's also high risk."
+  },
+  {
+   "t": 576.97,
+   "d": 6.91,
+   "text": "It is not to be taken for granted but I think the kind of interesting comparison in terms"
+  },
+  {
+   "t": 583.88,
+   "d": 6.27,
+   "text": "of the intimate setting is the installation of bad news as you can see in this picture."
+  },
+  {
+   "t": 590.15,
+   "d": 7.54,
+   "text": "I think the confessional would lend well to live game design or kind of hybrid game design"
+  },
+  {
+   "t": 597.69,
+   "d": 2.93,
+   "text": "as well."
+  },
+  {
+   "t": 600.62,
+   "d": 2.55,
+   "text": "And conceptual uniqueness."
+  },
+  {
+   "t": 603.17,
+   "d": 7.69,
+   "text": "Something that is a concern for roguelikes and reality TV is conceptual uniqueness."
+  },
+  {
+   "t": 610.86,
+   "d": 6.15,
+   "text": "You will generate a lot of content and will it be interesting and with roguelikes is the"
+  },
+  {
+   "t": 617.01,
+   "d": 2.92,
+   "text": "replayability still there?"
+  },
+  {
+   "t": 619.93,
+   "d": 3.42,
+   "text": "This is something that is actually funny and I have talked about in this YouTube video"
+  },
+  {
+   "t": 623.35,
+   "d": 2.12,
+   "text": "with the writers of Love Island."
+  },
+  {
+   "t": 625.47,
+   "d": 6.31,
+   "text": "Given for the fact at the beginning of the series there was a lot of controversy around"
+  },
+  {
+   "t": 631.78,
+   "d": 5.65,
+   "text": "the lack of racial diversity on Love Island and maybe arguably that's better there is"
+  },
+  {
+   "t": 637.43,
+   "d": 5.3,
+   "text": "still limited diversity in lots of other ways, right?"
+  },
+  {
+   "t": 642.73,
+   "d": 6.84,
+   "text": "This is seen as a reason some people are getting bored with the format and a concern for game"
+  },
+  {
+   "t": 649.57,
+   "d": 1.04,
+   "text": "design as well."
+  },
+  {
+   "t": 650.61,
+   "d": 4.34,
+   "text": "It is interesting to kind of compare this so maybe games like boyfriend dungeon and"
+  },
+  {
+   "t": 654.95,
+   "d": 8.38,
+   "text": "Hades which do for sure have the possibility for queer relationships but in the case of"
+  },
+  {
+   "t": 663.33,
+   "d": 6.72,
+   "text": "Hades that's been critiqued as not having much diversity as well."
+  },
+  {
+   "t": 670.05,
+   "d": 5.79,
+   "text": "I wanted to end on kind of the irony of this like phrase that gets used a lot in reality"
+  },
+  {
+   "t": 675.84,
+   "d": 6.52,
+   "text": "TV and especially Love Island where if a contestant is seen as being fake they will get accused"
+  },
+  {
+   "t": 682.36,
+   "d": 5.2,
+   "text": "of playing the game which is so ironic because they are all playing a game."
+  },
+  {
+   "t": 687.56,
+   "d": 1.3,
+   "text": "That's kind of the point."
+  },
+  {
+   "t": 688.86,
+   "d": 6.35,
+   "text": "This kind of links in with a quote from a book which I love called Patricia wants to"
+  },
+  {
+   "t": 695.21,
+   "d": 5.75,
+   "text": "cuddle which if you like reality TV encrypted you should read this book."
+  },
+  {
+   "t": 700.96,
+   "d": 7.1,
+   "text": "One of the characters says this line which is about a reality TV show that's in the book"
+  },
+  {
+   "t": 708.06,
+   "d": 5.15,
+   "text": "and she says it is just everything fake about the real world elucidate, exaggerated and"
+  },
+  {
+   "t": 713.21,
+   "d": 8.53,
+   "text": "laid bare and what I find compelling about reality TV is there is almost an honesty to"
+  },
+  {
+   "t": 721.74,
+   "d": 9.44,
+   "text": "the fakeness and the fact it shows how constructed ideas about relationships are and forms and"
+  },
+  {
+   "t": 731.18,
+   "d": 6.28,
+   "text": "I think that's an interesting thing to reflect on how we approach simulations in roguelikes"
+  },
+  {
+   "t": 737.46,
+   "d": 3.57,
+   "text": "and other games as well."
+  },
+  {
+   "t": 741.03,
+   "d": 6.94,
+   "text": "And now, hopefully, I will find the result if I can get this to work on my phone."
+  },
+  {
+   "t": 747.97,
+   "d": 4.23,
+   "text": "But while I am doing that, I also recently found out that there is going to be a new"
+  },
+  {
+   "t": 752.2,
+   "d": 5.61,
+   "text": "version of Love Island called Love Island Gales which I think is funny given the nature"
+  },
+  {
+   "t": 757.81,
+   "d": 1.5,
+   "text": "of this talk."
+  },
+  {
+   "t": 759.31,
+   "d": 3.99,
+   "text": "And getting this to work."
+  },
+  {
+   "t": 763.3,
+   "d": 2.25,
+   "text": "Our result is..."
+  },
+  {
+   "t": 765.55,
+   "d": 4.17,
+   "text": "I think that the winner is sun and coffin."
+  },
+  {
+   "t": 769.72,
+   "d": 4.8,
+   "text": "Clearly you all love a forbidden romance is what we have learned from this."
+  },
+  {
+   "t": 774.52,
+   "d": 3.87,
+   "text": "Thank you very much for watching my talk."
+  },
+  {
+   "t": 778.39,
+   "d": 2.26,
+   "text": "ALEXEI: Thank you."
+  },
+  {
+   "t": 780.65,
+   "d": 1.68,
+   "text": "That was wonderful."
+  },
+  {
+   "t": 782.33,
+   "d": 4.93,
+   "text": "Yes, and I love the element of like you captured with sun and coffin."
+  },
+  {
+   "t": 787.26,
+   "d": 7.74,
+   "text": "If it is a strong culturally metaphor it doesn't matter if it is just a coffin and a sun."
+  },
+  {
+   "t": 795.0,
+   "d": 1.95,
+   "text": "I have feels about this."
+  },
+  {
+   "t": 796.95,
+   "d": 1.0,
+   "text": "-- metaphor."
+  },
+  {
+   "t": 797.95,
+   "d": 4.53,
+   "text": "FLORENCE: I am happy that was the result."
+  },
+  {
+   "t": 802.48,
+   "d": 7.33,
+   "text": "It would be interesting to do it again and see if the result changes."
+  },
+  {
+   "t": 809.81,
+   "d": 5.17,
+   "text": "ALEXEI: Did you have a guess of who you thought would be the favorite?"
+  },
+  {
+   "t": 814.98,
+   "d": 3.35,
+   "text": "FLORENCE: I think I assumed maybe that one."
+  },
+  {
+   "t": 818.33,
+   "d": 3.73,
+   "text": "ALEXEI: I voted for the at sign."
+  },
+  {
+   "t": 822.06,
+   "d": 6.67,
+   "text": "FLORENCE: It would be interesting to see if you changed -- you could change the narrative"
+  },
+  {
+   "t": 828.73,
+   "d": 1.73,
+   "text": "so easily, right?"
+  },
+  {
+   "t": 830.46,
+   "d": 2.4,
+   "text": "Suddenly, oh, the coffin is the villain."
+  },
+  {
+   "t": 832.86,
+   "d": 2.13,
+   "text": "Maybe people would really like that."
+  },
+  {
+   "t": 834.99,
+   "d": 1.71,
+   "text": "ALEXEI: Maybe they like the spooky vibe of a coffin for Halloween."
+  },
+  {
+   "t": 836.7,
+   "d": 1.0,
+   "text": "FLORENCE: True."
+  },
+  {
+   "t": 837.7,
+   "d": 1.0,
+   "text": "It is Halloween."
+  }
+ ],
+ "note": "re-timed 2 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 11 s off the audio)"
+}

@@ -1,0 +1,170 @@
+{
+  "id": "oV5PjvcVky8",
+  "title": "Jongwoo Kim - Subjective Simulation Design: Ludonarrative Congruence in the Shrouded Isle",
+  "speaker": "Jongwoo Kim",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=oV5PjvcVky8",
+  "talk_type": "design",
+  "summary": "Jongwoo Kim of Kitfox Games explains the design of The Shrouded Isle, a human-sacrifice cult simulator set in a randomly generated village, and argues for 'subjective simulation design': systems that model a group's psychological reality rather than objective material reality, so the narrative is told through gameplay. He describes three substitutions: psychological resources (religious virtues and house opinion) instead of physical ones, character-oriented mechanics instead of abstract processes, and progression through information instead of expansion or tech upgrades. Together these make players adopt the cult's values, create stories of betrayal from unpredictable advisors, and reward foresight under hidden information.",
+  "games": [
+    "The Shrouded Isle",
+    "Reigns",
+    "Crusader Kings II",
+    "Shattered Planet",
+    "Moon Hunters",
+    "Boyfriend Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "ludonarrative congruence",
+      "kind": "principle",
+      "claim": "Kim argues for 'subjective simulation design', modelling a community's psychological reality and values rather than objective material reality, so a game like The Shrouded Isle can tell its narrative through gameplay without ludonarrative dissonance.",
+      "detail": "The jam theme 'you are the monster' led Kitfox to ask why a leader makes monstrous choices that harm their community. They wanted to depict the cult's subjective reality, which may not match the player's values. He finds this more impactful than scripted content or walls of text because the player actively participates in decisions and is personally responsible for outcomes.",
+      "t": 237,
+      "quote": "we wanted to tell the game narrative through the gameplay as opposed to the most much more common occurrence of looting narrative dissonance",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "materialist simulation",
+      "kind": "warning",
+      "claim": "Most simulation-design references assume objective, materialist realities and economic growth, which undermine a narrative about spiritual belief, cultural virtue and moral decay.",
+      "detail": "Kitfox wanted a spiritualist worldview where people believe a god will return to judge them, but most sims focus on manipulating physical resources. They wanted to explore virtues and vices but found questions about maximising economic value, and wanted to depict moral decay and desperate control but found messages of growth and prosperity.",
+      "t": 287,
+      "quote": "most simulation games are materialists focusing on physical resources and how to manipulate those resources",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "psychological resources",
+      "kind": "technique",
+      "claim": "The Shrouded Isle replaced physical resources like food and shelter with psychological ones (five religious virtues and each noble house's opinion), because a full food bar implied prosperity and a cult leader wouldn't manage those directly.",
+      "detail": "The game-jam version had food and shelter, which created survival pressure but sent the wrong message. The final game tracks ignorance, fervour, discipline, penitence and obedience, raised or lowered by townspeople acting virtuously or sinfully; staying below a bar's threshold too long ends the game. House opinion depends on which families you favour as advisors and whose members you sacrifice.",
+      "t": 438,
+      "quote": "having us like fully stocked food bar which you could do it seems like it had a message of prosperity",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "implicit values",
+      "kind": "principle",
+      "claim": "Making the cult's values the game's resources forces players to implicitly embrace those values to survive, and because those resources are divorced from villagers' wellbeing, players willingly make Machiavellian decisions.",
+      "detail": "Even a player who does not want to promote ignorance must accept the town's ignorance must be maintained to succeed. Since the values are dissociated from objective reality or survival, the player's interests split from the villagers' interests.",
+      "t": 559,
+      "quote": "the players interests are completely dissociated from the villagers interests and this creates scenarios in which the player will willingly make Machiavellian decisions",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "volatile stagnation",
+      "kind": "technique",
+      "claim": "The Shrouded Isle keeps its economy in 'volatile stagnation': the overall size stays roughly constant while individual resources swing widely, producing cascading crises without spiralling up or down.",
+      "detail": "Kim presents this as an alternative to sustained economic growth. Picking one advisor can raise ignorance (her family's duty), raise fervour (she is a sadist), lower obedience (she is rebellious), please her house and push another house into plotting against you. He says psychological resources make such cross-effects easier to justify than food somehow affecting shelter.",
+      "t": 580,
+      "quote": "the overall size of the economy is somewhat stagnant but individual resources can fluctuate greatly and as a result you",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "dual-meaning resources",
+      "kind": "example",
+      "claim": "Reigns makes each resource represent both a faction's material strength and its political influence, so both bottoming out and maxing out are fatal (too few troops, or a coup by the general).",
+      "detail": "Kim praises this as clever, but notes Reigns' economy is more fragile than The Shrouded Isle's, leading to sudden deaths that are hard to prevent without memorising card effects. He says that is fine for Reigns because it embraces whimsical death and builds meta-progression around kings dying.",
+      "t": 702,
+      "quote": "the sword is simultaneously the Army's strength as well as how much the army influences the country",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "character-oriented mechanics",
+      "kind": "technique",
+      "claim": "The Shrouded Isle replaced aggregate, process-oriented house orders with character-oriented mechanics: every action involves a specific character whom the player can order but cannot directly control.",
+      "detail": "Early on, orders were given at the house level and calculated in aggregate, which felt unsatisfying because a cult leader cares about whether people behave virtuously or sinfully. The game also needed reasons for the player to want to sacrifice someone. The goal was to humanise resource management with unpredictable characters.",
+      "t": 823,
+      "quote": "we wanted to humanize resource management by having unpredictable characters and to do so all actions involve characters in some way",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent betrayal",
+      "kind": "example",
+      "claim": "When a hand-picked advisor in The Shrouded Isle fails badly, players feel betrayed rather than self-blaming, which gives narrative context to an otherwise banal resource action.",
+      "detail": "Kim appointed Chesa expecting her to raise ignorance; instead she lowered it and her severe vice drained obedience. Because he was engaged in appointing and instructing her, he implicitly trusted her, and the mismatched expectation felt like betrayal; with a pure process he would only blame himself.",
+      "t": 931,
+      "quote": "because I had a mismatched expectation her failure creates a sense of betrayal whereas if this were entirely a process then I'd only have myself to blame",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "character-oriented mechanics",
+      "kind": "example",
+      "claim": "Crusader Kings II gets much of its richness from character-oriented mechanics: you play a dynasty head who depends on vassal loyalty, heirs and marriages, and relationships tied to a ruler may not pass to the heir.",
+      "detail": "You can't go to war without an army, which vassals supply only if they like you; dynasty survival depends on negotiating marriages with rival kingdoms. Kim notes this all rests on relatively straightforward military gameplay.",
+      "t": 1019,
+      "quote": "a lot of the richness of Crusader Kings 2 comes from its character oriented mechanics",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "progression through information",
+      "kind": "technique",
+      "claim": "The Shrouded Isle replaces spatial expansion and tech upgrades, which clashed with an isolated, declining island, with progression through information: the player inquires to reveal villagers' hidden virtues and vices.",
+      "detail": "Traits start unknown; inquiring once reveals a rumour (partial information), twice reveals the full effect (e.g. obedience +5). The characters never change; only the player's perception does, so they become effectively more intelligent and plan better.",
+      "t": 1051,
+      "quote": "we chose to go with progression through information gathering instead",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "sacrifice justification",
+      "kind": "example",
+      "claim": "In The Shrouded Isle, fully revealing that a villager is a major sinner before sacrificing them softens their house's anger and restores the related virtue, rewarding investigation.",
+      "detail": "After Chesa's failure, Kim revealed she was rebellious, then chose her as the seasonal sacrifice to 'make an example of her'. House Cagney grudgingly accepted it and the obedience bar was restored. Revealing high virtue or sin gives greater sacrifice bonuses.",
+      "t": 1163,
+      "quote": "they will grudgingly accept the decision because I fully revealed that she is a rebellious person",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden information",
+      "kind": "principle",
+      "claim": "Progression through information rewards prudence and foresight: skilled Shrouded Isle players learn to make reasonable assumptions and rely on less and less information, while needing information encourages getting to know characters.",
+      "detail": "Kim notes this design allows good intentions to go wrong, supporting the character-oriented mechanics. Because information is critical, it pushes players to know the characters.",
+      "t": 1228,
+      "quote": "it actually rewards having hidden information rewards paid of prudence and foresight because if skilled players can make reasonable assumptions",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "fair randomness",
+      "kind": "principle",
+      "claim": "Unpredictable outcomes feel fun rather than frustrating when consistent rules sit under the hidden information and players can investigate afterward to learn why something failed.",
+      "detail": "Answering a question, Kim says completely random, opaque outcomes are frustration without purpose; the inquiry system lets players immediately reveal why someone failed and know how many major sinners exist. He calls it a balancing grey area and would seed more revealed information at the start for an easier mode.",
+      "t": 1423,
+      "quote": "if it was completely random and opaque than it is frustration without a purpose but as long as the player has some means of gaining more information",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player psychology",
+      "kind": "example",
+      "claim": "In The Shrouded Isle playtests, players first tried to act on their own morality and emotions, but after about one season adopted an 'inner tyrant' mindset as they learned what the systems reward.",
+      "detail": "Asked whether betrayal provokes bad emotional decisions, Kim says some players act emotionally in the first couple of turns, which isn't optimal, but as they understand what is rewarded versus punished they respond appropriately to betrayals.",
+      "t": 1495,
+      "quote": "after the first season or so they kind of adopt this you know inner tyrant mindset",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "economy balancing",
+      "kind": "technique",
+      "claim": "Kim balanced The Shrouded Isle's economy to match the intended mindset of sustained or slow decline, keeping trades at about even or slightly worse, through trial and error and beta analytics.",
+      "detail": "Without reference games to borrow tuning from, he stayed true to the represented paradigm: growth has nothing to do with it. Beta analytics helped a bit, but it was mostly trial and error. He also says the theme need not be violent, as long as psychological resources at the core represent the thought process being modelled.",
+      "t": 1605,
+      "quote": "ensuring that the balance like economic balance comes out to about even trade off or slightly worse than even trade off was what was necessary",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

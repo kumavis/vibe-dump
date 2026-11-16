@@ -1,0 +1,723 @@
+{
+ "id": "SMQuoI_M-kk",
+ "url": "https://www.youtube.com/watch?v=SMQuoI_M-kk",
+ "title": "Adrian Herbez - Make a thing to make a thing: 3d-printable Procedural Content in the Browser",
+ "speaker": "Adrian Herbez",
+ "talk_title": "Make a thing to make a thing: 3d-printable Procedural Content in the Browser",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 602,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAdrian Herbez has been working in the game and virtual worlds industries for over a decade. He also runs a side business, Zanzas Toys (zanzastoys.com) creating and selling 3d printed action figure accessories. In his free time, he keeps busy with various side projects, usually related to game programming and/or 3d printing. His various experiments are documented at adrianherbez.net.\n\nIn this lightning talk he presents his web-based parametric modeler for making 3d-printable collections of “greebles” / “nurnies” (random bits of tech detailing). He walks through how easy it is to make your own 3d modeling tool that runs in a browser, and to generate procedural meshes that can be 3d printed. This includes the basics of using ThreeJS and Javascript to make tools to generate models, and producing 3d-printable files. \n\nAdditional info and files: http://adrianherbez.net/greebles/doc/\nAdrian at Roguelike Celebration 2019 discussing 3D printed for roguelikes: https://www.youtube.com/watch?v=cGvig1f68Tg",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 10,
+   "title": "Demo"
+  },
+  {
+   "start": 171,
+   "title": "Hello World"
+  },
+  {
+   "start": 217,
+   "title": "Box Geometry"
+  },
+  {
+   "start": 239,
+   "title": "MakeGeo"
+  },
+  {
+   "start": 258,
+   "title": "Geometry"
+  },
+  {
+   "start": 321,
+   "title": "Vertex"
+  },
+  {
+   "start": 348,
+   "title": "Faces"
+  },
+  {
+   "start": 452,
+   "title": "Face Order"
+  },
+  {
+   "start": 486,
+   "title": "Cube"
+  },
+  {
+   "start": 501,
+   "title": "Arbitrary Dimensions"
+  },
+  {
+   "start": 538,
+   "title": "Github repo"
+  },
+  {
+   "start": 562,
+   "title": "Outro"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1271,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.09,
+   "d": 1.19,
+   "text": "I got the order mixed up so the next talk will be Adrian Herbez talk about 3D printed"
+  },
+  {
+   "t": 1.28,
+   "d": 1.0,
+   "text": "dudgeons."
+  },
+  {
+   "t": 2.28,
+   "d": 1.0,
+   "text": "It is a follow-up from a talk he had previously at the Roguelike celebration about generating"
+  },
+  {
+   "t": 3.28,
+   "d": 1.0,
+   "text": "these cool little dungeon toys with a 3D printer."
+  },
+  {
+   "t": 4.28,
+   "d": 1.0,
+   "text": "As soon as that's ready, let's kick it off."
+  },
+  {
+   "t": 5.28,
+   "d": 4.21,
+   "text": ">> What I want to talk about today is how I made a web based semi procedural cad mad"
+  },
+  {
+   "t": 9.49,
+   "d": 1.88,
+   "text": "modler."
+  },
+  {
+   "t": 11.37,
+   "d": 1.09,
+   "text": "I make toys."
+  },
+  {
+   "t": 12.46,
+   "d": 4.36,
+   "text": "A lot of what I make is action figures."
+  },
+  {
+   "t": 16.82,
+   "d": 15.75,
+   "text": "I make accessories and what I wanted to make was a greeblies which is tech that makes things"
+  },
+  {
+   "t": 32.57,
+   "d": 1.0,
+   "text": "more interesting."
+  },
+  {
+   "t": 33.57,
+   "d": 11.89,
+   "text": "I wanted to fill a room full of tech pals and greeblies."
+  },
+  {
+   "t": 45.46,
+   "d": 3.32,
+   "text": "Demo time."
+  },
+  {
+   "t": 48.78,
+   "d": 3.87,
+   "text": "This is all running in a browser."
+  },
+  {
+   "t": 52.65,
+   "d": 1.0,
+   "text": "I can rotate around."
+  },
+  {
+   "t": 53.65,
+   "d": 1.8,
+   "text": "I can drag."
+  },
+  {
+   "t": 55.45,
+   "d": 1.67,
+   "text": "I can zoom in and out."
+  },
+  {
+   "t": 57.12,
+   "d": 1.69,
+   "text": "All things you would expect."
+  },
+  {
+   "t": 58.81,
+   "d": 3.04,
+   "text": "I can add semi procedural parametric details."
+  },
+  {
+   "t": 61.85,
+   "d": 10.01,
+   "text": "I have to hold the space and drag the rectangle and that is filled in with whatever feature"
+  },
+  {
+   "t": 71.86,
+   "d": 2.22,
+   "text": "it is."
+  },
+  {
+   "t": 74.08,
+   "d": 3.6,
+   "text": "We are extruding and I will extrude out more."
+  },
+  {
+   "t": 77.68,
+   "d": 3.75,
+   "text": "I can also set this to negative and extrude in."
+  },
+  {
+   "t": 81.43,
+   "d": 4.07,
+   "text": "We will make a divot here."
+  },
+  {
+   "t": 85.5,
+   "d": 2.71,
+   "text": "That's extrusion."
+  },
+  {
+   "t": 88.21,
+   "d": 1.26,
+   "text": "I can also add buttons."
+  },
+  {
+   "t": 89.47,
+   "d": 7.3,
+   "text": "This will add an array of buttons that will fill in the rectangle."
+  },
+  {
+   "t": 96.77,
+   "d": 1.37,
+   "text": "Let's just put a bunch of buttons there."
+  },
+  {
+   "t": 98.14,
+   "d": 1.59,
+   "text": "We have got some buttons."
+  },
+  {
+   "t": 99.73,
+   "d": 7.89,
+   "text": "I can add handles to what you see in equipment."
+  },
+  {
+   "t": 107.62,
+   "d": 1.4,
+   "text": "And finally there is dials."
+  },
+  {
+   "t": 109.02,
+   "d": 5.84,
+   "text": "You will see we have got this indicator dial with a needle set at a random position."
+  },
+  {
+   "t": 114.86,
+   "d": 10.28,
+   "text": "Let's add some more to see how that works."
+  },
+  {
+   "t": 125.14,
+   "d": 1.0,
+   "text": "That's the tool."
+  },
+  {
+   "t": 126.14,
+   "d": 7.1,
+   "text": "Once I have something I like I can download an STL and download and 3D print it."
+  },
+  {
+   "t": 133.24,
+   "d": 7.02,
+   "text": "We can see an example of one of the panels printed out."
+  },
+  {
+   "t": 140.26,
+   "d": 6.23,
+   "text": "That works by three.js which is a fantastic library."
+  },
+  {
+   "t": 146.49,
+   "d": 3.05,
+   "text": "It has been around for years and it is really great."
+  },
+  {
+   "t": 149.54,
+   "d": 2.1,
+   "text": "It does all sorts of stuff."
+  },
+  {
+   "t": 151.64,
+   "d": 5.94,
+   "text": "It is very powerful and out of the box you get a lot of great stuff but there is also"
+  },
+  {
+   "t": 157.58,
+   "d": 2.6,
+   "text": "add-ons that give you more great stuff."
+  },
+  {
+   "t": 160.18,
+   "d": 5.2,
+   "text": "What I am using here is orbit controls and there is STL export."
+  },
+  {
+   "t": 165.38,
+   "d": 2.07,
+   "text": "Let's look at how to make something with that."
+  },
+  {
+   "t": 167.45,
+   "d": 4.8,
+   "text": "We will do hello world which is hello cube for 3D."
+  },
+  {
+   "t": 172.25,
+   "d": 1.0,
+   "text": "I got some boilerplate."
+  },
+  {
+   "t": 173.25,
+   "d": 4.89,
+   "text": "I tried to make it as simple as possible so at the end of the talk I will have a link"
+  },
+  {
+   "t": 178.14,
+   "d": 1.97,
+   "text": "to the GitHub repo."
+  },
+  {
+   "t": 180.11,
+   "d": 8.75,
+   "text": "It is definitely not best practices for JavaScript in 2020 but it is, hopefully, the most straightforward"
+  },
+  {
+   "t": 188.86,
+   "d": 4.94,
+   "text": "and easiest to use to jump into this kind of stuff if you want."
+  },
+  {
+   "t": 193.8,
+   "d": 6.28,
+   "text": "The key thing is this is pretty much the whole file and what is important here is that this"
+  },
+  {
+   "t": 200.08,
+   "d": 5.04,
+   "text": "make geo function."
+  },
+  {
+   "t": 205.12,
+   "d": 5.83,
+   "text": "That's where all the of magic will happen and you will get something that gives a render"
+  },
+  {
+   "t": 210.95,
+   "d": 8.47,
+   "text": "context and use the orb controls and gives you a button to export the stl."
+  },
+  {
+   "t": 219.42,
+   "d": 3.31,
+   "text": "The easiest way to do it is to the built-in."
+  },
+  {
+   "t": 222.73,
+   "d": 9.5,
+   "text": "Three.js comes with the box geometry."
+  },
+  {
+   "t": 232.23,
+   "d": 8.88,
+   "text": "We want the artisan, handcrafted, 100% organic way."
+  },
+  {
+   "t": 241.11,
+   "d": 6.81,
+   "text": "In the make geofunction we want to make a new geometry object and add stuff to that."
+  },
+  {
+   "t": 247.92,
+   "d": 6.45,
+   "text": "We get a blank geometry object and we can put stuff in it."
+  },
+  {
+   "t": 254.37,
+   "d": 1.25,
+   "text": "Let's talk about geometry."
+  },
+  {
+   "t": 255.62,
+   "d": 1.56,
+   "text": "Here is our cube."
+  },
+  {
+   "t": 257.18,
+   "d": 6.97,
+   "text": "All 3d geometry is vertices."
+  },
+  {
+   "t": 264.15,
+   "d": 6.56,
+   "text": "We will number them in some order."
+  },
+  {
+   "t": 270.71,
+   "d": 1.23,
+   "text": "Here is an ordering."
+  },
+  {
+   "t": 271.94,
+   "d": 2.89,
+   "text": "There is a number of different orderings we could have."
+  },
+  {
+   "t": 274.83,
+   "d": 1.93,
+   "text": "You want to do something sensible."
+  },
+  {
+   "t": 276.76,
+   "d": 6.4,
+   "text": "For me I am thinking of a cube as a flat plain that's been extruded up."
+  },
+  {
+   "t": 283.16,
+   "d": 4.6,
+   "text": "Clock wise around the bottom and the top."
+  },
+  {
+   "t": 287.76,
+   "d": 2.05,
+   "text": "We have an ordering."
+  },
+  {
+   "t": 289.81,
+   "d": 4.31,
+   "text": "Now let's actually figure out where the points lived."
+  },
+  {
+   "t": 294.12,
+   "d": 9.08,
+   "text": "The important thing is to the left you get a negative"
+  },
+  {
+   "t": 303.2,
+   "d": 11.52,
+   "text": "X and to the right has a positive XKS and front and back for Z and up and down for Y."
+  },
+  {
+   "t": 314.72,
+   "d": 2.33,
+   "text": "We have an ordering and specific locations."
+  },
+  {
+   "t": 317.05,
+   "d": 6.43,
+   "text": "Putting those together, we can add vertices."
+  },
+  {
+   "t": 323.48,
+   "d": 7.37,
+   "text": "A geometry object in 3d has a number of attribute and one is the vertices list."
+  },
+  {
+   "t": 330.85,
+   "d": 1.6,
+   "text": "It is just a straight array."
+  },
+  {
+   "t": 332.45,
+   "d": 3.41,
+   "text": "We can push stuff to it."
+  },
+  {
+   "t": 335.86,
+   "d": 8.39,
+   "text": "In this case we want to push vertex data which is represented by a three dimensional vector."
+  },
+  {
+   "t": 344.25,
+   "d": 3.4,
+   "text": "We have the eight vertices once we do that."
+  },
+  {
+   "t": 347.65,
+   "d": 2.56,
+   "text": "Now we need faces."
+  },
+  {
+   "t": 350.21,
+   "d": 4.68,
+   "text": "They don't hold positional data at all."
+  },
+  {
+   "t": 354.89,
+   "d": 3.73,
+   "text": "They reference existing points."
+  },
+  {
+   "t": 358.62,
+   "d": 5.43,
+   "text": "The other thing you have to know about-faces is there is a weird thing where faces only"
+  },
+  {
+   "t": 364.05,
+   "d": 1.25,
+   "text": "exist from one side."
+  },
+  {
+   "t": 365.3,
+   "d": 9.2,
+   "text": "There is something called a normal which is a line that's perpendicular to that."
+  },
+  {
+   "t": 374.5,
+   "d": 6.45,
+   "text": "If you have a flat surface with a line that perpendicular it could point up or down."
+  },
+  {
+   "t": 380.95,
+   "d": 10.6,
+   "text": "Either one is equally valid for something that's perpendicular to the surface."
+  },
+  {
+   "t": 391.55,
+   "d": 6.13,
+   "text": "You can render things double sided but it is better if you think of faces only existing"
+  },
+  {
+   "t": 397.68,
+   "d": 4.75,
+   "text": "from one side because the normals matter when you go to 3d print."
+  },
+  {
+   "t": 402.43,
+   "d": 3.41,
+   "text": "Your slicing software will complain."
+  },
+  {
+   "t": 405.84,
+   "d": 1.82,
+   "text": "You need to care about it, trust me."
+  },
+  {
+   "t": 407.66,
+   "d": 6.95,
+   "text": "The way we specify which side we want because either side could be valid is with the order"
+  },
+  {
+   "t": 414.61,
+   "d": 1.28,
+   "text": "in which we specify faces."
+  },
+  {
+   "t": 415.89,
+   "d": 6.76,
+   "text": "What we need to do is let's say we are making one of the triangles for our front face."
+  },
+  {
+   "t": 422.65,
+   "d": 5.92,
+   "text": "We need to make sure that the indices we give are given in counter clockwise order."
+  },
+  {
+   "t": 428.57,
+   "d": 9.36,
+   "text": "From the front counter clockwise is 4, 0, 3."
+  },
+  {
+   "t": 437.93,
+   "d": 6.8,
+   "text": "If we were to look from the interior of the cube and had 4, 0, 3 that would be clockwise."
+  },
+  {
+   "t": 444.73,
+   "d": 6.98,
+   "text": "We have our numbered vertices and are ready to add them in."
+  },
+  {
+   "t": 451.71,
+   "d": 1.91,
+   "text": "Let's see what that looks like."
+  },
+  {
+   "t": 453.62,
+   "d": 9.29,
+   "text": "Just like the geometry object has the list it has a list of faces also."
+  },
+  {
+   "t": 462.91,
+   "d": 6.17,
+   "text": "Each face of the cube since it is a four sided face, we need two triangles."
+  },
+  {
+   "t": 469.08,
+   "d": 8.3,
+   "text": "We are just going to push and use the constructor which takes three integers and these are positional"
+  },
+  {
+   "t": 477.38,
+   "d": 3.05,
+   "text": "data and indices into the vertices."
+  },
+  {
+   "t": 480.43,
+   "d": 4.97,
+   "text": "The vertices are what hold the actual positions."
+  },
+  {
+   "t": 485.4,
+   "d": 2.96,
+   "text": "We get a cube."
+  },
+  {
+   "t": 488.36,
+   "d": 1.17,
+   "text": "That's cool and all."
+  },
+  {
+   "t": 489.53,
+   "d": 2.82,
+   "text": "But it is a little stack."
+  },
+  {
+   "t": 492.35,
+   "d": 5.29,
+   "text": "Let's get at least some sort of flavor of some Proc Gen going on."
+  },
+  {
+   "t": 497.64,
+   "d": 6.25,
+   "text": "It is not exactly procedurally but at least we will get input."
+  },
+  {
+   "t": 503.89,
+   "d": 5.34,
+   "text": "This is basically the same as what we had before it adds an ability for arbitrary dimensions."
+  },
+  {
+   "t": 509.23,
+   "d": 5.16,
+   "text": "What I am doing is pretty simple."
+  },
+  {
+   "t": 514.39,
+   "d": 6.47,
+   "text": "Three vanilla HTML inputs with IDs for height and depth I grabbed the value and parsed it"
+  },
+  {
+   "t": 520.86,
+   "d": 1.02,
+   "text": "and divide by two."
+  },
+  {
+   "t": 521.88,
+   "d": 7.8,
+   "text": "What I have done is have the place with the variables and I have all of the same stuff"
+  },
+  {
+   "t": 529.68,
+   "d": 4.45,
+   "text": "and just replaced all of the ones with the variables for the width and depth."
+  },
+  {
+   "t": 534.13,
+   "d": 8.08,
+   "text": "If we do that, we have got this."
+  },
+  {
+   "t": 542.21,
+   "d": 2.21,
+   "text": "So here is a simple thing."
+  },
+  {
+   "t": 544.42,
+   "d": 4.2,
+   "text": "This is what's in the GitHub repo if you want to grab it."
+  },
+  {
+   "t": 548.62,
+   "d": 7.05,
+   "text": "We can change these values and update geometry and we are back to the 10 by 10 cube."
+  },
+  {
+   "t": 555.67,
+   "d": 1.12,
+   "text": "Let's make it flat."
+  },
+  {
+   "t": 556.79,
+   "d": 5.63,
+   "text": "We have a nice flat surface."
+  },
+  {
+   "t": 562.42,
+   "d": 1.48,
+   "text": "Yeah, that's about it."
+  },
+  {
+   "t": 563.9,
+   "d": 1.8,
+   "text": "I have got links here."
+  },
+  {
+   "t": 565.7,
+   "d": 4.82,
+   "text": "You can grab the repo if you want to play with our little box example."
+  },
+  {
+   "t": 570.52,
+   "d": 5.3,
+   "text": "You can play with the greeblie modeler as well."
+  },
+  {
+   "t": 575.82,
+   "d": 13.16,
+   "text": "Hopefully this seems more straightforward and my hope is all you lovely people will"
+  },
+  {
+   "t": 588.98,
+   "d": 7.59,
+   "text": "take your Proc Gen ability and go out and make awesome web based modeling tools and"
+  },
+  {
+   "t": 596.57,
+   "d": 2.32,
+   "text": "3d content creation stuff."
+  },
+  {
+   "t": 598.89,
+   "d": 1.7,
+   "text": "Thanks a lot."
+  },
+  {
+   "t": 600.59,
+   "d": 1.13,
+   "text": "Hope you enjoyed it."
+  }
+ ]
+}

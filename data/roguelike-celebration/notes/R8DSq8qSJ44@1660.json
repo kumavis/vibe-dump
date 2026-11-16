@@ -1,0 +1,111 @@
+{
+  "id": "R8DSq8qSJ44@1660",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 1660,
+    "end": 2680
+  },
+  "title": "Stealing roguelike mechanics from Microsoft Word",
+  "speaker": "Nick Bush",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=1660s",
+  "talk_type": "design",
+  "summary": "A lightning talk asking what a roguelike would look like if the first one had been made by someone who only knew a word processor rather than a Unix terminal. Nick Bush treats the blinking text cursor as the hero, derives its movement rules and weaknesses from ordinary document navigation, and shows his 7DRL entry Word Processor, in which a white-hat hacker unredacts text while dodging mouse-using enemies. Because the game has no combat, its tactics come entirely from navigation shortcuts. He closes by pointing at text reflow and Vi/Emacs commands as untapped sources of mechanics, and argues designers should start from mechanics players already find intuitive on their platform.",
+  "games": [
+    "Word Processor",
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "intuitive controls",
+      "kind": "principle",
+      "claim": "A roguelike can borrow its core mechanics from controls players already know on their platform, as Word Processor does by turning word-processor cursor navigation into roguelike movement.",
+      "detail": "Bush starts from the observation that Rogue was shaped by the Unix terminal and asks what a roguelike would be if its creator had only used a word processor, with the same keyboard and cursor but different conventions. His first takeaway is to ask which game mechanics are already intuitive for players, or potential players, on a given platform; in this case a computer with a keyboard.",
+      "t": 2554,
+      "quote": "what are the game mechanics that are already intuitive for players? It's kind of where I started or potential players on a given platform",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "movement",
+      "kind": "example",
+      "claim": "In Word Processor the hero is the blinking text cursor, whose ordinary document behaviours become movement rules: it wraps from line end to line start, cannot travel through untyped white space, and cannot move diagonally.",
+      "detail": "Bush jokingly frames the blinking as the cursor being a ghost with built-in intangibility. Navigating his own talk script, he shows that the cursor jumps over empty space it cannot touch, which he frames as a wall or vacuum, while line wrapping works as a kind of teleport.",
+      "t": 1872,
+      "quote": "You could you could kind of frame this that emptiness is kind of a wall or a vacuum that you can't travel through",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "consumable powers",
+      "kind": "example",
+      "claim": "Word Processor turns keyboard shortcuts (return, tab, Ctrl+arrow warps to line start or end, jump to document bottom) into consumable, collectible powers found by unredacting text.",
+      "detail": "The player is a white-hat hacker in pre-release documents mid-redaction. Walking over blacked-out text reveals it, raises an 'intel' progress counter and can yield more power charges; the end-of-document symbol works like the stairs to the next document, and deeper documents bring more and stronger enemies.",
+      "t": 2065,
+      "quote": "So they are consumable and collectible. We'll find more by unredacting blacked out text.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "enemy design",
+      "kind": "example",
+      "claim": "Word Processor's enemies are defined by using a mouse: they can cross white space the cursor cannot, but they cannot warp, and they escalate from snitching OSINT operatives to mods who can end the run to admins who move twice as fast.",
+      "detail": "OSINT operatives are peers who are often distracted, are too cowardly to unredact anything themselves and cannot harm the player directly, but when they catch the player they summon a mod. Admins have all rights, move anywhere at double speed, and the goal is to gather enough intel to unmask them.",
+      "t": 2162,
+      "quote": "the fact that they're using a mouse means that they can't warp. So, that's important to keep in mind. They can cross whites space",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "non-combat tactics",
+      "kind": "technique",
+      "claim": "A roguelike with no combat at all can still produce tactics from movement alone, as Word Processor's 'warp strafing' shows: lure a mouse-bound enemy to a line edge, then warp to the other side.",
+      "detail": "Bush stresses the game implements only navigation, so the player can only run. Warp strafing is a built-in move he likens to circle strafing in action games; 'orphan awareness' means watching for typographic orphans and runts on the next line, because a wrap can land you mid-column next to an enemy.",
+      "t": 2297,
+      "quote": "it's luring an enemy to the edge of a line or to the start of a document and then immediately warping to the other side",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "endgame",
+      "kind": "example",
+      "claim": "Tabs in Word Processor seem useless early but become essential in the endgame, because tabbing is the only way to outrun a double-speed admin horizontally to reach the final redacted text.",
+      "detail": "Since the player can warp anywhere much of the time, moving by tab looks pointless; the endgame's fast admins change the value of the power.",
+      "t": 2350,
+      "quote": "tab management becomes really important at the endame because it's the only way to outspeed horizontally an admin",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "deformable maps",
+      "kind": "open-question",
+      "claim": "If a word-processor roguelike let text reflow, the player could reshape the map at will, giving them a weapon and creating predictive puzzles about how the level will shift.",
+      "detail": "In Bush's game the text deliberately does not reflow, partly because he did it by hand with rot.js. With reflow, returns and tabs would become far stronger, enemies could be trapped on hostile unredacted text, and players would have to predict reflow the way Tetris or match-three games reflow their maps.",
+      "t": 2400,
+      "quote": "You could shift the map at will. So you could trap enemies on hostile unredacted text by kind of shifting it under them",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "text editor mechanics",
+      "kind": "open-question",
+      "claim": "Vi and Emacs command sets read as a ready-made list of roguelike mechanics: display-relative movement, blank-space hopping, marks as teleport points, and insert mode as an arsenal of offensive tools.",
+      "detail": "Bush admits he did not know Vi or Emacs before making the game, and says he would never have finished it if he had. Text selection, which changes how the space can be interacted with, is another untapped source.",
+      "t": 2485,
+      "quote": "I hope after this talk you don't see a bunch of shortcuts. You see a huge list of rogike gameplay mechanics",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "history",
+      "claim": "Word Processor began from the image of redacted documents, then grew once its author realised document navigation is an established set of movement mechanics that people use daily.",
+      "detail": "Answering a question about how long it took to go from idea to game, Bush says the spark was redacted documents; the practical question of what moving in a document looks like then made the design come together.",
+      "t": 2633,
+      "quote": "the core idea started from kind of just redacted documents. You can imagine what was going on at the time",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,748 @@
+{
+ "id": "c6FQeo5n0Bc",
+ "url": "https://www.youtube.com/watch?v=c6FQeo5n0Bc",
+ "title": "Tanya X. Short - A Procedure for Changing Culture",
+ "speaker": "Tanya X. Short",
+ "talk_title": "A Procedure for Changing Culture",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 995,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nTanya is the Captain of Kitfox Games, the studio behind Boyfriend Dungeon, Moon Hunters, and more, based in Montreal, Canada. She's also a co-founder and co-director of Pixelles, a feminist non-profit aiming to change game culture. She discusses the way her experience leading Pixelles and status as a game designer informs how she thinks about culture in a way that lets us actually change minds and improve the world around us. Society is like a buggy heap of legacy code, and this talk offers an approach to altering a procedure that's already running.\n\nPixelles: https://pixelles.ca/\nKitfox Games: https://www.kitfoxgames.com/\nFind her on Twitter: https://twitter.com/tanyaxshort\n\nTanya, along with Tarn Adams, has edited two books collecting essays about procedural generation techniques:\nProcedural Generation in Game Design: https://www.routledge.com/Procedural-Generation-in-Game-Design/Short-Adams/p/book/9781498799195\nProcedural Storytelling in Game Design: https://www.routledge.com/Procedural-Storytelling-in-Game-Design/Short-Adams/p/book/9781138595309",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 60,
+   "title": "Speaker background and framing"
+  },
+  {
+   "start": 135,
+   "title": "Society as a live simulation"
+  },
+  {
+   "start": 254,
+   "title": "System bugs and legacy code"
+  },
+  {
+   "start": 346,
+   "title": "Centralization vs. decentralization"
+  },
+  {
+   "start": 445,
+   "title": "Grassroots culture change"
+  },
+  {
+   "start": 626,
+   "title": "Patience and personal impact"
+  },
+  {
+   "start": 778,
+   "title": "Q&A and concluding thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2281,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.32,
+   "d": 4.32,
+   "text": "MODERATOR: I have to mention it is not official but listen."
+  },
+  {
+   "t": 4.64,
+   "d": 6.64,
+   "text": "We talked about official Roguelike booty shorts. We didn't do it but you have want to do it."
+  },
+  {
+   "t": 11.28,
+   "d": 4.64,
+   "text": "I think that's hilarious. Full moon tonight. We talked a lot about custom booty shorts."
+  },
+  {
+   "t": 19.92,
+   "d": 4.05,
+   "text": "Not officially endorsed by Roguelike Celebration but there are places you can get it and I think it"
+  },
+  {
+   "t": 23.97,
+   "d": 15.07,
+   "text": "is hilarious. Now we have Tanya Short. Welcome. >> I don't have booty shorts yet so maybe it is"
+  },
+  {
+   "t": 39.04,
+   "d": 5.12,
+   "text": "a good time. The moon is on my side. MODERATOR: I am sure there would be a"
+  },
+  {
+   "t": 44.16,
+   "d": 6.88,
+   "text": "good boyfriend dudgeon or moon hunters on the back of your booty shorts."
+  },
+  {
+   "t": 51.04,
+   "d": 3.92,
+   "text": ">> Absolutely. Or boyfriend dudgeon. MODERATOR: You."
+  },
+  {
+   "t": 57.76,
+   "d": 6.0,
+   "text": "Very good. Take it away, Tanya. >> Thank you, Alexei. I can't see"
+  },
+  {
+   "t": 63.76,
+   "d": 7.84,
+   "text": "the chat or anything, I am flying blind, so I don't know what I will do if I mess"
+  },
+  {
+   "t": 71.6,
+   "d": 4.56,
+   "text": "up. Just say something if I end up muting. MODERATOR: I will say something. I can come"
+  },
+  {
+   "t": 76.16,
+   "d": 5.68,
+   "text": "back whenever I need to. >> Hello, I am Tania short."
+  },
+  {
+   "t": 81.84,
+   "d": 12.08,
+   "text": "You probably know me from kitfox games. We have also developed various games the most well known"
+  },
+  {
+   "t": 94.96,
+   "d": 8.96,
+   "text": "at the moment is boyfriend dudgeon but if you are into digital exorcism lucifer is for you."
+  },
+  {
+   "t": 107.52,
+   "d": 9.28,
+   "text": "I coedited two books on procedural generation and it is a personal interest of mine. That's"
+  },
+  {
+   "t": 116.8,
+   "d": 9.04,
+   "text": "what I am talking about. I founded Pixelles and I have been thinking about how systemic"
+  },
+  {
+   "t": 125.84,
+   "d": 6.16,
+   "text": "thinking is essential when working with pixels and I am realizing how much overlap there is."
+  },
+  {
+   "t": 135.6,
+   "d": 5.92,
+   "text": "A big question we all wonder when we look especially at the mess that is 2020 is how"
+  },
+  {
+   "t": 141.52,
+   "d": 8.56,
+   "text": "do you change culture? Culture seems like this giant -- it is not a monolith but a chaotic mess"
+  },
+  {
+   "t": 150.08,
+   "d": 8.8,
+   "text": "of people saying and doing things. Because things are changing but also staying the same. It can be"
+  },
+  {
+   "t": 158.88,
+   "d": 7.76,
+   "text": "overwhelming to change anything at all. When you are seeing people hurting or dying and you feel"
+  },
+  {
+   "t": 166.64,
+   "d": 7.12,
+   "text": "this need to change something it can feel feel very helpless and the answer is things can change."
+  },
+  {
+   "t": 173.76,
+   "d": 5.12,
+   "text": "One thing I think is helpful to is think of this as a live game and think of the world"
+  },
+  {
+   "t": 179.52,
+   "d": 6.72,
+   "text": "as a game that's very, very old. Nobody real agrees on what the purpose of the game is. Some"
+  },
+  {
+   "t": 186.24,
+   "d": 6.56,
+   "text": "seem to play it more cooperative and others more competitively and it has been in live ops for so"
+  },
+  {
+   "t": 192.8,
+   "d": 5.52,
+   "text": "long that everyone debates who the game developers are but rather than seeing yourself as a player I"
+  },
+  {
+   "t": 198.32,
+   "d": 6.64,
+   "text": "think it is helpful to see yourself as a part of the simulation. This can be empowering for reasons"
+  },
+  {
+   "t": 204.96,
+   "d": 5.76,
+   "text": "I will explain in a moment but in this metaphor you are a thread and you have various functions"
+  },
+  {
+   "t": 210.72,
+   "d": 5.2,
+   "text": "that you go about mostly for self-preservation but sometimes for preservation or enhancement of"
+  },
+  {
+   "t": 215.92,
+   "d": 6.16,
+   "text": "other parts of the simulation. You have your own database, separate from everybody else's that"
+  },
+  {
+   "t": 222.08,
+   "d": 7.68,
+   "text": "you can access and your own local variables that matter only to you and the way you see"
+  },
+  {
+   "t": 229.76,
+   "d": 6.16,
+   "text": "the world is changed by your local, you know, tastes and disposition and things like that."
+  },
+  {
+   "t": 237.52,
+   "d": 6.48,
+   "text": "Whoops. And there are global variables. They exist. You can show variables to the world"
+  },
+  {
+   "t": 244.0,
+   "d": 8.32,
+   "text": "and others will access and see them and it can be related to your internal local variables thought"
+  },
+  {
+   "t": 252.32,
+   "d": 9.12,
+   "text": "that's another talk. The point is some bugs in the system seem to be deep in the legacy code. Humans"
+  },
+  {
+   "t": 262.16,
+   "d": 6.72,
+   "text": "are buggy and some of that code we probably won't be able to change in our life times. We don't"
+  },
+  {
+   "t": 268.88,
+   "d": 7.36,
+   "text": "write that programming language any more or yet. You know? I don't know why we can't breathe"
+  },
+  {
+   "t": 276.24,
+   "d": 4.8,
+   "text": "underwater if we are on a water based planet. That doesn't seem to make sense to me but that's where"
+  },
+  {
+   "t": 281.04,
+   "d": 6.96,
+   "text": "we are. If we were to design a creature or robot we would probably try to avoid including these"
+  },
+  {
+   "t": 288.0,
+   "d": 6.32,
+   "text": "flaws but as it is, you know, we are stuck with them and that's how it is. Other bugs seem to"
+  },
+  {
+   "t": 294.32,
+   "d": 8.32,
+   "text": "be less permanent, more solvable since they are behavior based it feels like we should be able to"
+  },
+  {
+   "t": 302.64,
+   "d": 8.0,
+   "text": "fix things like inefficient resource distribution where some of our threads are starving and others"
+  },
+  {
+   "t": 310.64,
+   "d": 3.92,
+   "text": "have too much food and there is racism and sexism and all these sorts of things. We have tried"
+  },
+  {
+   "t": 315.84,
+   "d": 5.04,
+   "text": "patching in fixes over the last few 1,000 years but we are still working on it and"
+  },
+  {
+   "t": 320.88,
+   "d": 8.48,
+   "text": "there is a lot of legacy code messing things up as we go. How do you tend to edit legacy code"
+  },
+  {
+   "t": 329.92,
+   "d": 6.32,
+   "text": "as it is running? There is no such thing as taking the server down or a reboot, hopefully, please."
+  },
+  {
+   "t": 337.28,
+   "d": 4.56,
+   "text": "And instead we want to keep the servers up, we want to keep all of your threads"
+  },
+  {
+   "t": 341.84,
+   "d": 6.72,
+   "text": "running, and we don't want at a kill any of them. How do we do this? Typically, you know, when we"
+  },
+  {
+   "t": 348.56,
+   "d": 4.4,
+   "text": "think about things like changing culture, people automatically think of the central authority. They"
+  },
+  {
+   "t": 352.96,
+   "d": 6.48,
+   "text": "think of the centralized database built up through civilizations, code of law dictating what's proper"
+  },
+  {
+   "t": 359.44,
+   "d": 4.4,
+   "text": "and improper and what people like to think of it as what's allowed and not allowed and that's"
+  },
+  {
+   "t": 363.84,
+   "d": 6.32,
+   "text": "something else entirely, of course. But between documents and having very, very tight"
+  },
+  {
+   "t": 370.96,
+   "d": 7.12,
+   "text": "user restrictions, you know, hopefully, these things are somewhat permanent. A little bit more"
+  },
+  {
+   "t": 378.08,
+   "d": 6.88,
+   "text": "consistent and these can be absolutely powerful. I don't mean to downplay the power of a centralized"
+  },
+  {
+   "t": 384.96,
+   "d": 5.6,
+   "text": "database such as law and order. Obviously laws are very important. As we know from if maternity leave"
+  },
+  {
+   "t": 390.56,
+   "d": 11.04,
+   "text": "were required in the workplace in the U.S. that would have a huge impact. There are"
+  },
+  {
+   "t": 404.24,
+   "d": 5.52,
+   "text": "cons with a centralized database. It takes forever for laws to be passed and"
+  },
+  {
+   "t": 409.76,
+   "d": 8.88,
+   "text": "a lot of resources for society to maintain these in a way that is safe and maintain authority."
+  },
+  {
+   "t": 418.64,
+   "d": 5.84,
+   "text": "That is usual Lee the problem with central authority. It is clearer and consistent but"
+  },
+  {
+   "t": 424.48,
+   "d": 11.2,
+   "text": "needs to defend its claim to legitimacy often and it is inaccessible. When you have a problem that"
+  },
+  {
+   "t": 435.68,
+   "d": 8.24,
+   "text": "is too centralized you start having peer-to-peer and the good news is in this particular simulation"
+  },
+  {
+   "t": 443.92,
+   "d": 8.88,
+   "text": "we are not just threads. We are learning machines. We are changing somewhat. Some of our hard code is"
+  },
+  {
+   "t": 452.8,
+   "d": 4.72,
+   "text": "staying the same but we are improving ourselves and learn from each other and follow each other"
+  },
+  {
+   "t": 458.24,
+   "d": 8.56,
+   "text": "and have various overlapping networks. So the ripple effect is when you approach changing"
+  },
+  {
+   "t": 466.8,
+   "d": 6.72,
+   "text": "culture more from a grassroots type approach and it is becoming more and more effective over time,"
+  },
+  {
+   "t": 473.52,
+   "d": 8.24,
+   "text": "I believe, because our networks are more and more overlapping and our flocks of other agents we"
+  },
+  {
+   "t": 481.76,
+   "d": 4.24,
+   "text": "take our cues from and get normalized to are becoming more and moreover -- more and more"
+  },
+  {
+   "t": 486.0,
+   "d": 9.76,
+   "text": "overlapped and that's dangerous when it has no oversight but it is also massively powerful"
+  },
+  {
+   "t": 495.76,
+   "d": 6.4,
+   "text": "because globalization means the ideas you have can change culture across the world quickly."
+  },
+  {
+   "t": 505.36,
+   "d": 7.44,
+   "text": "That is part of what empowered us for the Pixelles work we do. We call it the ripple effect taken"
+  },
+  {
+   "t": 512.8,
+   "d": 13.6,
+   "text": "from the difference in addition -- initiative. Our approach is to put the tools in the hands of women"
+  },
+  {
+   "t": 526.4,
+   "d": 6.56,
+   "text": "and other marginalized genders over the years and see how they affect their communities rather than"
+  },
+  {
+   "t": 532.96,
+   "d": 5.52,
+   "text": "try to teach them something we empower them which I think the Roguelike Celebration is a"
+  },
+  {
+   "t": 538.48,
+   "d": 4.64,
+   "text": "really good example of doing something similar. You try to give people the tools they have"
+  },
+  {
+   "t": 543.12,
+   "d": 7.36,
+   "text": "to ripple out and inspire and educate more people. The power of decentralized communication is"
+  },
+  {
+   "t": 551.68,
+   "d": 6.56,
+   "text": "similar to the opposite of centralized authority, right? We are faster, stronger, and of course,"
+  },
+  {
+   "t": 559.12,
+   "d": 5.28,
+   "text": "as we know, Twitter, for example, is prone to error and sabotage but we have another"
+  },
+  {
+   "t": 564.4,
+   "d": 8.64,
+   "text": "bug that comes and goes in hardware which is we want to simplify things and don't like dealing"
+  },
+  {
+   "t": 573.04,
+   "d": 5.2,
+   "text": "with the complexities of millions of threads running around us. We elevate credible sources"
+  },
+  {
+   "t": 578.24,
+   "d": 4.8,
+   "text": "and give them a platform and they get louder and louder until they become central authority"
+  },
+  {
+   "t": 583.04,
+   "d": 4.4,
+   "text": "again and wind up with the same problems as the old one. This isn't really a bug but more"
+  },
+  {
+   "t": 587.44,
+   "d": 6.88,
+   "text": "of a feature in my opinion. When we allow credibility to flow organically and become"
+  },
+  {
+   "t": 594.32,
+   "d": 5.52,
+   "text": "more flexible it better serves the purposes of rewriting our code on the fly in my opinion"
+  },
+  {
+   "t": 599.84,
+   "d": 6.56,
+   "text": "rather than having one authorized user over 20 years. The fact we can say yes,"
+  },
+  {
+   "t": 606.4,
+   "d": 7.6,
+   "text": "this user can dictate culture and tell us what is normal and acceptable for even a few months"
+  },
+  {
+   "t": 615.12,
+   "d": 5.04,
+   "text": "and we will find someone who is better qualified. I think that's totally legitimate."
+  },
+  {
+   "t": 626.16,
+   "d": 7.6,
+   "text": "So the point here of thinking of changing culture as this long running live ops"
+  },
+  {
+   "t": 634.48,
+   "d": 10.16,
+   "text": "is there is a huge amount of enertia to overcome just like with Python in a deep Roguelike."
+  },
+  {
+   "t": 651.52,
+   "d": 6.48,
+   "text": "If all of the threads -- if all of the dwarves in the fortress are trying to normalize"
+  },
+  {
+   "t": 659.36,
+   "d": 7.6,
+   "text": "defriending the elves, maybe Dwarf Fortress would look different. The first thing is when you are"
+  },
+  {
+   "t": 666.96,
+   "d": 6.16,
+   "text": "communicating with as many people as possible and exchanging real ideas you have to get used to the"
+  },
+  {
+   "t": 673.12,
+   "d": 6.56,
+   "text": "idea that other people may not be comfortable with your ideas yet. If you are changing things, if you"
+  },
+  {
+   "t": 679.68,
+   "d": 5.04,
+   "text": "are saying things that aren't normal yet, then, of course, people are going to be unhappy at first"
+  },
+  {
+   "t": 684.72,
+   "d": 4.64,
+   "text": "because it is the first time they have thought of it that way. That's something to get used to."
+  },
+  {
+   "t": 690.72,
+   "d": 4.72,
+   "text": "And you know, all the global variables that are in play are a little bit much to keep in mind"
+  },
+  {
+   "t": 695.44,
+   "d": 4.72,
+   "text": "all of the time. You can try to learn from other people's code and try to get inspiration. You can"
+  },
+  {
+   "t": 700.16,
+   "d": 6.32,
+   "text": "only edit one piece at a time. You only really have influence over one little file. Think of"
+  },
+  {
+   "t": 706.48,
+   "d": 9.04,
+   "text": "it that way. Your local neighborhood or even your family is one safe place where you can act and try"
+  },
+  {
+   "t": 715.52,
+   "d": 5.28,
+   "text": "to improve the world in your little corner. If we all do that then the simulation gets better."
+  },
+  {
+   "t": 721.6,
+   "d": 5.76,
+   "text": "And you would not expect to rewrite all the legacy code for something as offered as world of"
+  },
+  {
+   "t": 727.36,
+   "d": 8.72,
+   "text": "war craft. It is normal to get excited and want to change culture quickly you should expect a change"
+  },
+  {
+   "t": 736.08,
+   "d": 6.16,
+   "text": "in real life to take a lot of time. It takes years. Be patient with yourself, be patient with"
+  },
+  {
+   "t": 742.96,
+   "d": 4.48,
+   "text": "what results you see and don't burn yourself out. You can't approach it like a game jam."
+  },
+  {
+   "t": 748.16,
+   "d": 6.48,
+   "text": "This is a game that takes your whole lifetime to build and it will take that long to play too."
+  },
+  {
+   "t": 757.12,
+   "d": 7.92,
+   "text": "Culture can and does change. It takes patience, perseverance and visibility. When you have the"
+  },
+  {
+   "t": 765.04,
+   "d": 5.12,
+   "text": "time and energy, take care of yourself first, but when you can, do share your code reviews"
+  },
+  {
+   "t": 770.16,
+   "d": 8.0,
+   "text": "with everyone you can. Thank you for listening. MODERATOR: Thank you so much. That's a really,"
+  },
+  {
+   "t": 778.8,
+   "d": 4.48,
+   "text": "really cool way to think about things. Yeah, just another great inspirational way"
+  },
+  {
+   "t": 784.56,
+   "d": 4.48,
+   "text": "to do this emotional block of Roguelike celebration in the morning."
+  },
+  {
+   "t": 793.04,
+   "d": 4.24,
+   "text": "We have time for a couple questions potentially. Let me check the question bored."
+  },
+  {
+   "t": 799.52,
+   "d": 2.32,
+   "text": "Mostly there is lots of clapping. >> Oh, good."
+  },
+  {
+   "t": 804.0,
+   "d": 5.28,
+   "text": "I know it was a little bit rambly but I hope some people got inspired to do something even if it is"
+  },
+  {
+   "t": 809.28,
+   "d": 5.84,
+   "text": "just volunteering at their local whatever. MODERATOR: Yeah. Local thing."
+  },
+  {
+   "t": 815.12,
+   "d": 3.6,
+   "text": ">> Local thing. MODERATOR: Anyone got questions?"
+  },
+  {
+   "t": 818.72,
+   "d": 4.64,
+   "text": ">> You can ask me about Boyfriend Dungeon. We don't have booty shorts at the moment."
+  },
+  {
+   "t": 823.36,
+   "d": 5.12,
+   "text": "Although the Avatar is so small the booty is mostly in your head."
+  },
+  {
+   "t": 828.48,
+   "d": 4.56,
+   "text": "MODERATOR: It is a mental booty meaning it can be any booty material we want."
+  },
+  {
+   "t": 833.04,
+   "d": 15.04,
+   "text": ">> I am the last lightning talk person, right? MODERATOR: What's -- we are going to have a game"
+  },
+  {
+   "t": 848.08,
+   "d": 13.36,
+   "text": "showcase of the game rift wizards. It is going to be exciting. The people are popping off in chat."
+  },
+  {
+   "t": 863.12,
+   "d": 5.68,
+   "text": "Here we go. Found some questions. >> How does asymmetry and opposition"
+  },
+  {
+   "t": 868.8,
+   "d": 7.28,
+   "text": "play into this metaphor? How do you change culture when doing so will materially make"
+  },
+  {
+   "t": 876.08,
+   "d": 4.96,
+   "text": "powerfully people's lives worse? >> It is an excellent question. The"
+  },
+  {
+   "t": 881.04,
+   "d": 8.88,
+   "text": "metaphor is not perfect. I am admit that. I think that you have to keep in mind"
+  },
+  {
+   "t": 889.92,
+   "d": 6.56,
+   "text": "who is benefiting from how you are changing culture and like for example, I know when I first"
+  },
+  {
+   "t": 896.48,
+   "d": 7.12,
+   "text": "got into feminist nonprofit work, I noticed and I was concerned that a lot of people brought up a"
+  },
+  {
+   "t": 903.6,
+   "d": 6.0,
+   "text": "lot of feminist stuff only benefits white women and that's a major problem and keeping in mind"
+  },
+  {
+   "t": 909.6,
+   "d": 6.0,
+   "text": "you are not just elevating already privileged voices. There is lots of considerations in any"
+  },
+  {
+   "t": 916.8,
+   "d": 7.12,
+   "text": "small change to culture is where I am going. I could rant on that all day but some basic answer"
+  },
+  {
+   "t": 923.92,
+   "d": 7.2,
+   "text": "is it depends on what you are trying to change about culture and what aspect for whom but I think"
+  },
+  {
+   "t": 931.12,
+   "d": 9.84,
+   "text": "overall helping people see the things that you are seeing can benefit because often we have our own"
+  },
+  {
+   "t": 940.96,
+   "d": 9.04,
+   "text": "unique experiences and we have our insights and I think that it is about having real"
+  },
+  {
+   "t": 950.0,
+   "d": 4.72,
+   "text": "conversations with people because they are not going to have their mind changed by a sign"
+  },
+  {
+   "t": 954.72,
+   "d": 6.24,
+   "text": "or a slogan. That can rally and inspire people but a sign isn't going to change someone's mind. It is"
+  },
+  {
+   "t": 960.96,
+   "d": 9.6,
+   "text": "going to be a conversation and open dialogue. MODERATOR: We will end with a light hearted"
+  },
+  {
+   "t": 970.56,
+   "d": 3.44,
+   "text": "question which is if there were booty shorts for the game what would they say?"
+  },
+  {
+   "t": 983.6,
+   "d": 3.36,
+   "text": "You have to get Victoria to tweet out choice collections later."
+  },
+  {
+   "t": 986.96,
+   "d": 3.98,
+   "text": ">> Thank you very much, Roguelike Celebration. Have a good weekend."
+  },
+  {
+   "t": 990.94,
+   "d": 4.02,
+   "text": "MODERATOR: Thank you so much for coming. All right."
+  }
+ ]
+}

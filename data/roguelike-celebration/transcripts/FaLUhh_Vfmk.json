@@ -1,0 +1,1109 @@
+{
+ "id": "FaLUhh_Vfmk",
+ "url": "https://www.youtube.com/watch?v=FaLUhh_Vfmk",
+ "title": "Loren Schmidt: Inverse Terrain Solver",
+ "speaker": "Loren Schmidt",
+ "talk_title": "Inverse Terrain Solver",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 2004,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "a lightweight, flexible way to generate landscapes for games and other projects.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and motivations"
+  },
+  {
+   "start": 107,
+   "title": "Conceptualizing terrain"
+  },
+  {
+   "start": 184,
+   "title": "The definition of reading"
+  },
+  {
+   "start": 336,
+   "title": "Landscape interpretation"
+  },
+  {
+   "start": 438,
+   "title": "Interior space design"
+  },
+  {
+   "start": 524,
+   "title": "Game mechanics and scale"
+  },
+  {
+   "start": 690,
+   "title": "Simulation and noise"
+  },
+  {
+   "start": 841,
+   "title": "Developing the solver"
+  },
+  {
+   "start": 926,
+   "title": "Live demo of core algorithm"
+  },
+  {
+   "start": 1178,
+   "title": "Evaluating the system"
+  },
+  {
+   "start": 1344,
+   "title": "Cellular automata application"
+  },
+  {
+   "start": 1532,
+   "title": "Advanced implementation details"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3552,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.0,
+   "d": 10.04,
+   "text": ">> Next up is Loren talking about their inverse terrain solver. I Googled and shared this talk"
+  },
+  {
+   "t": 15.28,
+   "d": 7.92,
+   "text": "to my jam friends. It was so valuable. Thank you for sharing it with us. Take it away."
+  },
+  {
+   "t": 31.04,
+   "d": 24.4,
+   "text": "LOREN: I will be primarily presenting here. But if you see one of these characters in"
+  },
+  {
+   "t": 55.44,
+   "d": 14.92,
+   "text": "the background here is a character guide. One is hiding in a box behind me. Before I start,"
+  },
+  {
+   "t": 70.36,
+   "d": 4.8,
+   "text": "I wanted to say that I am going to be thinking about a fairly technical approach"
+  },
+  {
+   "t": 75.16,
+   "d": 9.4,
+   "text": "for generating -- I am offering this in the hope it will be useful for others. If anyone here"
+  },
+  {
+   "t": 84.56,
+   "d": 5.36,
+   "text": "is not from a technical background, please, be aware this talk was constructed with you in mind."
+  },
+  {
+   "t": 91.04,
+   "d": 17.88,
+   "text": "I hope this is useful as a design window or a look into someone else's process. The first half of the"
+  },
+  {
+   "t": 108.92,
+   "d": 6.8,
+   "text": "talk will be about the design anesthetics side of this. I will go through some of the motivations"
+  },
+  {
+   "t": 115.72,
+   "d": 6.24,
+   "text": "that brought me to developing this system. And then the second half will be about the algorithm"
+  },
+  {
+   "t": 121.96,
+   "d": 8.76,
+   "text": "itself. Broadly, I am making a roguelike with an emphasis on the terrain scale of business."
+  },
+  {
+   "t": 130.72,
+   "d": 5.48,
+   "text": "I went through the technique which offers space for expressive range and fine-tuning of important"
+  },
+  {
+   "t": 136.2,
+   "d": 6.08,
+   "text": "details particularly fine details which can be challenging with certain techniques. I want to"
+  },
+  {
+   "t": 142.28,
+   "d": 7.56,
+   "text": "produce terrain which is more about design than geoology but evokes and is inspired by geology."
+  },
+  {
+   "t": 152.08,
+   "d": 15.12,
+   "text": "I would like it to feel organic and be consistent and support inland bodies of water and waterways."
+  },
+  {
+   "t": 167.2,
+   "d": 4.44,
+   "text": "A technical note -- I will tap back and forth between a live demo of the software and slides."
+  },
+  {
+   "t": 171.64,
+   "d": 8.2,
+   "text": "Part of me if there is minor hiccups here. I will go into more detail about procedural generation"
+  },
+  {
+   "t": 181.08,
+   "d": 6.08,
+   "text": "and why I want to design for flexibility in this realm. I think a good place to begin is working"
+  },
+  {
+   "t": 187.16,
+   "d": 5.92,
+   "text": "at a particular definition of the term reading. The idea of reading comes from traditional board"
+  },
+  {
+   "t": 193.08,
+   "d": 9.08,
+   "text": "games. Any environmental state implies a set of possible futures branching courses to run. This"
+  },
+  {
+   "t": 202.16,
+   "d": 8.32,
+   "text": "here is an example of a single sequence of play in the corner of an opening of a game of go. We see"
+  },
+  {
+   "t": 210.48,
+   "d": 7.12,
+   "text": "a local structure has developed there if we look at runs 1-6. Reading applies to softer situations"
+  },
+  {
+   "t": 217.6,
+   "d": 7.28,
+   "text": "where particulars are less known or more numerous. This is also in the opening of the game go. If you"
+  },
+  {
+   "t": 224.88,
+   "d": 6.12,
+   "text": "follow the numbers, you see this starts sparse and becomes more defined over time. The first stones"
+  },
+  {
+   "t": 231.0,
+   "d": 11.04,
+   "text": "are placed incompletely different corners of the bord. -- board. This is an empty go board. If"
+  },
+  {
+   "t": 242.04,
+   "d": 4.88,
+   "text": "you are familiar with this set of rules, even in situations where the environment contains no data,"
+  },
+  {
+   "t": 248.0,
+   "d": 6.64,
+   "text": "a known set of rules saturates the reading space. If any of you have played go you are probably"
+  },
+  {
+   "t": 254.64,
+   "d": 5.6,
+   "text": "imaging where you will open and where you will go with your opponent plays in the opposite corner."
+  },
+  {
+   "t": 262.68,
+   "d": 7.32,
+   "text": "What I am trying to introduce is there is a lot of mental process latent in perception and that"
+  },
+  {
+   "t": 270.0,
+   "d": 8.48,
+   "text": "applies to good base games in an interesting way -- grid. They have a cadence and an environment"
+  },
+  {
+   "t": 278.48,
+   "d": 10.12,
+   "text": "speaks to lines of sight, presence and absence of pillars and corridors. This is a screenshot"
+  },
+  {
+   "t": 289.84,
+   "d": 6.08,
+   "text": "in the early development of the game I am doing now. A player character could move but there was"
+  },
+  {
+   "t": 295.92,
+   "d": 6.0,
+   "text": "no erasing yet. What we are seeing is one single course of action constrained by how the player,"
+  },
+  {
+   "t": 301.92,
+   "d": 9.04,
+   "text": "character, and environment interact. On looking at a broader view of an environment,"
+  },
+  {
+   "t": 310.96,
+   "d": 6.36,
+   "text": "we sequentially read out the possible threads of future states. For instance, near the player"
+  },
+  {
+   "t": 317.32,
+   "d": 5.92,
+   "text": "character in this screenshot are rooms with pillars. If anyone is familiar with Angband or"
+  },
+  {
+   "t": 323.24,
+   "d": 6.68,
+   "text": "related games the space could be identified as something concealed or a place where one could"
+  },
+  {
+   "t": 329.92,
+   "d": 9.84,
+   "text": "return to as a place of refugee. One way we might choose to think about landscapes is in terms of"
+  },
+  {
+   "t": 339.76,
+   "d": 11.12,
+   "text": "reading. If we look at terrain of a game, what interesting ambiguity does it present and how"
+  },
+  {
+   "t": 350.88,
+   "d": 12.64,
+   "text": "are we engaged as parsing or interpreting it as a result. I was in agony here because there was"
+  },
+  {
+   "t": 363.52,
+   "d": 10.76,
+   "text": "a much higher detailed version of this. When we are looking at a specific representation"
+  },
+  {
+   "t": 374.28,
+   "d": 7.96,
+   "text": "of a landscape what is it spurring us to imagine? We have some sort of habitation in the background"
+  },
+  {
+   "t": 384.24,
+   "d": 38.96,
+   "text": "but if you look at the midline basically half of it is covered by a giant bolder. How is the"
+  },
+  {
+   "t": 423.2,
+   "d": 6.24,
+   "text": "presentation or form of it evoking interesting possible futures? What places are we imaging"
+  },
+  {
+   "t": 429.44,
+   "d": 9.12,
+   "text": "visiting and what experiences and what choices does that presentation cause us to consider? As"
+  },
+  {
+   "t": 438.56,
+   "d": 6.04,
+   "text": "I am looking around for concrete design examples that approach this type of thinking, one thing"
+  },
+  {
+   "t": 444.6,
+   "d": 5.32,
+   "text": "that comes to the forefront of my mind isn't landscapes but procedurally generated anterior"
+  },
+  {
+   "t": 449.92,
+   "d": 9.64,
+   "text": "spaces. Within this context, the bandwidth we have for designing that type of deep reading is"
+  },
+  {
+   "t": 459.56,
+   "d": 6.16,
+   "text": "the flexibility of our techniques. Over time we have collectively developed a set of piece wise"
+  },
+  {
+   "t": 465.72,
+   "d": 6.12,
+   "text": "projections for generating anterior spaces. This is an example of a creative realm where"
+  },
+  {
+   "t": 471.84,
+   "d": 7.08,
+   "text": "we achieved excellent final grain control. We can type individual routines for hallways and changing"
+  },
+  {
+   "t": 480.0,
+   "d": 6.24,
+   "text": "the number of turns, how long they are, how often they lead to dead ends, how wide or narrow they"
+  },
+  {
+   "t": 486.24,
+   "d": 10.4,
+   "text": "are. Any number of different algorithms we might choose for types of labyrinths and rooms. We have"
+  },
+  {
+   "t": 496.64,
+   "d": 9.36,
+   "text": "a great deal of bandwidth for interacting directly with how we read environments. This algorithm is"
+  },
+  {
+   "t": 506.0,
+   "d": 5.64,
+   "text": "intended to work in a variety of games. It will work for things that are turn-based, things that"
+  },
+  {
+   "t": 511.64,
+   "d": 13.53,
+   "text": "aren't grid. And oh, my God this little one by three in this connector is going to kill me. I"
+  },
+  {
+   "t": 525.17,
+   "d": 8.19,
+   "text": "will dig into the structural specifics of the game to design my thinking. The player character is in"
+  },
+  {
+   "t": 533.36,
+   "d": 6.32,
+   "text": "a rectangular screen and each individual screen has an immobile camera framing it. If we perceive"
+  },
+  {
+   "t": 539.68,
+   "d": 5.96,
+   "text": "to any of the sides we enter into an adjacent screen and each screen maps to a single pixel"
+  },
+  {
+   "t": 545.64,
+   "d": 7.16,
+   "text": "in the world map. This is called flick screen if you are a horrible nerd. One might stay in"
+  },
+  {
+   "t": 552.8,
+   "d": 4.08,
+   "text": "a small portion of the world but there is potential here for long distance travel"
+  },
+  {
+   "t": 556.88,
+   "d": 8.36,
+   "text": "in this game. This interactwise -- interacts with the particulars of navigating this space."
+  },
+  {
+   "t": 576.6,
+   "d": 1.02,
+   "text": "Some of the structure is natural. There is forests and areas of bolder and Bedrock. Some"
+  },
+  {
+   "t": 577.62,
+   "d": 6.74,
+   "text": "of the structures are built including things like cities and roads. There are non-physical"
+  },
+  {
+   "t": 584.36,
+   "d": 7.88,
+   "text": "components to this. Immaterial roots that progress along bodies of water, migration roots,"
+  },
+  {
+   "t": 593.4,
+   "d": 8.64,
+   "text": "place names and borders. Now roads and open areas are guaranteed traverseable. You have a reasonable"
+  },
+  {
+   "t": 602.04,
+   "d": 7.84,
+   "text": "expectation of being able to proceed in one side of any screen and into one of the neighbors. But"
+  },
+  {
+   "t": 609.88,
+   "d": 9.4,
+   "text": "the forest and stoniers that I mentioned before are not guaranteed to be trevesable. They may"
+  },
+  {
+   "t": 621.68,
+   "d": 6.16,
+   "text": "take longer. Roads are quicker to travel along per cell and are a function of a way to go from town"
+  },
+  {
+   "t": 627.84,
+   "d": 5.24,
+   "text": "to town or travel long distances. But depending on where you are going, what you are doing,"
+  },
+  {
+   "t": 633.08,
+   "d": 5.92,
+   "text": "or the experience you may want to have a road Nate may not be an ideal route. When you are"
+  },
+  {
+   "t": 639.0,
+   "d": 11.4,
+   "text": "traveling around and reading the details the maps take quite a bit of meaning. The distance"
+  },
+  {
+   "t": 651.32,
+   "d": 9.04,
+   "text": "and cluster of islands, \"The Shape of Water\" features is important for inland. When you"
+  },
+  {
+   "t": 660.36,
+   "d": 6.48,
+   "text": "travel along the waterway the land is a barrier. If you are traveling by land instead the water is"
+  },
+  {
+   "t": 666.84,
+   "d": 7.92,
+   "text": "the barrier. These shapes must work in negative and positive. As in so many areas of game design,"
+  },
+  {
+   "t": 674.76,
+   "d": 5.32,
+   "text": "there is no separation between function and aesthetics. Bodies of water and other elements"
+  },
+  {
+   "t": 680.08,
+   "d": 5.04,
+   "text": "such as hills, mountains, and cliffs provide structure and design the largest scale elements."
+  },
+  {
+   "t": 694.16,
+   "d": 6.68,
+   "text": "Physical soft consistency is simple enough. For my project, I wanted to world to feel magical"
+  },
+  {
+   "t": 700.84,
+   "d": 6.64,
+   "text": "and also make sense as a physical object one could hold in the mind. Specific technical details shook"
+  },
+  {
+   "t": 707.48,
+   "d": 5.4,
+   "text": "out of this. These aren't important to consider but when you see important is steles an intimate"
+  },
+  {
+   "t": 712.88,
+   "d": 12.88,
+   "text": "relationship of how the algorithm functions and the constraints we chose. We will talk about"
+  },
+  {
+   "t": 725.76,
+   "d": 9.88,
+   "text": "each individual part of this later. I wanted to have bodies of waters like alpine lakes and"
+  },
+  {
+   "t": 735.64,
+   "d": 9.64,
+   "text": "large seas and these sorts of structures can be difficult to generate procedurally. In terms of"
+  },
+  {
+   "t": 745.28,
+   "d": 5.68,
+   "text": "considering options, generally speaking I wanted to have a certain amount of agency over the shapes"
+  },
+  {
+   "t": 750.96,
+   "d": 12.52,
+   "text": "rather than hoping the shapes I want will form happenstantial. I am at heart a simulationist. I"
+  },
+  {
+   "t": 763.48,
+   "d": 9.68,
+   "text": "like designing and generating specific artifacts. I think one thing to consider here however is the"
+  },
+  {
+   "t": 773.16,
+   "d": 6.04,
+   "text": "locus of control when working with simulation techniques is very particular. We are editing"
+  },
+  {
+   "t": 779.2,
+   "d": 6.6,
+   "text": "things such as physical processes, tuning sets of parameters and materials for physical forces,"
+  },
+  {
+   "t": 785.8,
+   "d": 4.48,
+   "text": "and then all of the particular structures, which we do in fact have a really intimate esthetic"
+  },
+  {
+   "t": 790.28,
+   "d": 8.04,
+   "text": "relationship with shake out of that project. Should it produce island end three pixels wide"
+  },
+  {
+   "t": 798.32,
+   "d": 8.12,
+   "text": "and we want four pixels wide gaps six pixels between them there is no real lever within that"
+  },
+  {
+   "t": 806.44,
+   "d": 6.44,
+   "text": "process that let's us directly affect the result we want. Instead we are left to do something like"
+  },
+  {
+   "t": 812.88,
+   "d": 29.6,
+   "text": "adjust the rate at which magna is excreted by volcanos. So another thing I really love"
+  },
+  {
+   "t": 842.48,
+   "d": 20.2,
+   "text": "for generating terrain is noise-based approaches. This video of the old game called Nocitous. Among"
+  },
+  {
+   "t": 862.68,
+   "d": 5.24,
+   "text": "other challenges I anticipated one problem with noise-based approaches is they aren't terrible"
+  },
+  {
+   "t": 867.92,
+   "d": 7.8,
+   "text": "at piece transition. It is hard to transition from one piece of terrain to the other. I am"
+  },
+  {
+   "t": 875.72,
+   "d": 4.92,
+   "text": "working against the grain in this project even getting clustered craters and multiple types of"
+  },
+  {
+   "t": 880.64,
+   "d": 6.88,
+   "text": "terrain. It would be hard to do something like naturally vary between several types of geology"
+  },
+  {
+   "t": 887.52,
+   "d": 24.04,
+   "text": "with different features. It might be best if they lead but I didn't know low to generate"
+  },
+  {
+   "t": 911.56,
+   "d": 13.52,
+   "text": "terrain that way. That landed me at working backwards. Pardm -- pardoned me. I am having"
+  },
+  {
+   "t": 925.08,
+   "d": 8.48,
+   "text": "multiple device issues. The simplest version is walking up hill. We will switch to a live demo."
+  },
+  {
+   "t": 934.96,
+   "d": 6.64,
+   "text": "We have a square patch of terrain in the mild of the ocean. If we start with the shores next to"
+  },
+  {
+   "t": 941.6,
+   "d": 8.96,
+   "text": "water which is sea level and work inward and walk up hill each time we take a step we get this which"
+  },
+  {
+   "t": 950.56,
+   "d": 8.36,
+   "text": "is a pyramid. That's perfectly self-consistent with this map. Now, if we want an end moon lake"
+  },
+  {
+   "t": 959.72,
+   "d": 8.0,
+   "text": "we run into a question of how high is the lake. We can detect the lake and hide it. We are doing"
+  },
+  {
+   "t": 967.72,
+   "d": 5.12,
+   "text": "like a topological island tester here labeling every pixel in the world and flood filling them"
+  },
+  {
+   "t": 972.84,
+   "d": 5.76,
+   "text": "outward. If you got 37 in the corner of your island here, the whole island is going end"
+  },
+  {
+   "t": 978.6,
+   "d": 7.84,
+   "text": "up being 37 and you can go how big is number 37, like under this threshold so that's not an ocean."
+  },
+  {
+   "t": 986.44,
+   "d": 7.72,
+   "text": "That's a really easy way you can detect all your lakes. What we can do is solve the initial pass"
+  },
+  {
+   "t": 994.16,
+   "d": 18.8,
+   "text": "on the terrain. We have a height value for every pixel of the lake. We place the terrain at that"
+  },
+  {
+   "t": 1012.96,
+   "d": 6.32,
+   "text": "height vertically and we know it won't ever be proud or too high for the terrain at any"
+  },
+  {
+   "t": 1019.28,
+   "d": 7.16,
+   "text": "given point. We end up with cliffs along the uphillside. Let's reconcile that. What we will"
+  },
+  {
+   "t": 1026.44,
+   "d": 7.28,
+   "text": "do here is run the process. From sea level and the lake at the same time. What we end up with"
+  },
+  {
+   "t": 1033.72,
+   "d": 7.36,
+   "text": "is these wave fronts that meet and that creates interest composite structures like crescents and"
+  },
+  {
+   "t": 1041.08,
+   "d": 11.24,
+   "text": "peeks where the wave fronts collide. If I were to slice this island in half, one issue with this"
+  },
+  {
+   "t": 1052.32,
+   "d": 7.76,
+   "text": "technique is that all of the slopes currently look something like this in cross. One simple"
+  },
+  {
+   "t": 1060.08,
+   "d": 8.96,
+   "text": "way is instead of stepping uniformly each time we walk inward into the terrain we can use a random"
+  },
+  {
+   "t": 1069.04,
+   "d": 9.8,
+   "text": "range and a random value in a range. I am going to run the same demo here with noise applied."
+  },
+  {
+   "t": 1087.84,
+   "d": 18.24,
+   "text": "This is a really simple addition. We have done two really important things here. We"
+  },
+  {
+   "t": 1122.52,
+   "d": 9.76,
+   "text": "will start with random breaks of noise and run cellular autonomy on them. If you have ever done"
+  },
+  {
+   "t": 1132.28,
+   "d": 7.12,
+   "text": "procedural roguelike generation this is classic approach to the generating caverns. I am going to"
+  },
+  {
+   "t": 1139.4,
+   "d": 8.8,
+   "text": "present something much more complex after this. I endorse simple interpretations of this. Now we"
+  },
+  {
+   "t": 1148.2,
+   "d": 24.0,
+   "text": "will run our body of water finder. Now, the core of the algorithm is completely functional. There"
+  },
+  {
+   "t": 1172.2,
+   "d": 6.84,
+   "text": "are a lot of ways I could improve upon this. This is basically the heart of things. Let's go back to"
+  },
+  {
+   "t": 1179.04,
+   "d": 15.2,
+   "text": "our initial aspirations. We have a technique that allows us as much leeway as we want to generate"
+  },
+  {
+   "t": 1194.24,
+   "d": 7.32,
+   "text": "different types of shapes. We decoupled the one bitmap from the terrain generation part of it."
+  },
+  {
+   "t": 1206.88,
+   "d": 5.68,
+   "text": "We have added some interesting lateral space in which to inject different types of organic"
+  },
+  {
+   "t": 1212.56,
+   "d": 6.44,
+   "text": "texture into the it in the slope solver which is a noisy pyramid but we can socket other things"
+  },
+  {
+   "t": 1219.0,
+   "d": 9.44,
+   "text": "into freely. And finally, the bodies of water are completely free in terms of the shapes they can"
+  },
+  {
+   "t": 1228.44,
+   "d": 9.96,
+   "text": "have and the terrain is guaranteed to be retrofit to that in a way that's physically coherent."
+  },
+  {
+   "t": 1238.4,
+   "d": 5.8,
+   "text": "Now we are at a good part. We have essentially done everything we set out to do. We get decide"
+  },
+  {
+   "t": 1244.2,
+   "d": 6.44,
+   "text": "all the things that will give our individual implementation personality and character. What"
+  },
+  {
+   "t": 1250.64,
+   "d": 7.84,
+   "text": "initial shapes do we want to feed into the system? Zee a lot of flexibility. What do we want to do"
+  },
+  {
+   "t": 1258.48,
+   "d": 8.8,
+   "text": "with the slope solver? Now we are going to dip into project solver particulars. Everything after"
+  },
+  {
+   "t": 1267.28,
+   "d": 7.56,
+   "text": "this point is implementation. The strength of the algorithm is here in the map generation. There is"
+  },
+  {
+   "t": 1274.84,
+   "d": 4.08,
+   "text": "no right way to do this. Please feel free to get really aggressively weird with this. I am hoping"
+  },
+  {
+   "t": 1278.92,
+   "d": 5.4,
+   "text": "it will open doors for other people's project. You can generate the initial map using a fairly"
+  },
+  {
+   "t": 1284.32,
+   "d": 6.0,
+   "text": "conventional technique and use an inverse solver to fill in the particulars of the detail. You can"
+  },
+  {
+   "t": 1290.32,
+   "d": 6.0,
+   "text": "make the whole map or patches of it by hand and then shake out details procedurally. That would be"
+  },
+  {
+   "t": 1296.32,
+   "d": 5.04,
+   "text": "interesting because people could learn the large features and then be surprised by particulars each"
+  },
+  {
+   "t": 1301.36,
+   "d": 6.0,
+   "text": "time we played. I think one really interesting application for this which isn't necessarily a"
+  },
+  {
+   "t": 1307.36,
+   "d": 6.4,
+   "text": "good fit with more traditional techniques is you could start with basic shapes created using one"
+  },
+  {
+   "t": 1313.76,
+   "d": 6.04,
+   "text": "technique and mix in special algorithms or hand made patches of terrain for special features."
+  },
+  {
+   "t": 1320.96,
+   "d": 7.56,
+   "text": "You can find a nice peninsula that has a nice shape and place a village on it. Or identify a"
+  },
+  {
+   "t": 1328.52,
+   "d": 36.8,
+   "text": "nice out of the way island and place a shrine on it. The initial map is generated and formed by"
+  },
+  {
+   "t": 1365.32,
+   "d": 8.68,
+   "text": "randomly placing points propagated out into space until they fill space. Once I have my patches,"
+  },
+  {
+   "t": 1374.0,
+   "d": 7.8,
+   "text": "I apply a CA rule to each of them. These are eight neighbor totalistic which is in the same"
+  },
+  {
+   "t": 1381.8,
+   "d": 11.8,
+   "text": "category of rules. Curating and wrangling CA is a joy of mine. I ended up with at last count 201"
+  },
+  {
+   "t": 1393.6,
+   "d": 5.84,
+   "text": "different rules in just the set that is actually like in the main array. I have a bunch more in my"
+  },
+  {
+   "t": 1399.44,
+   "d": 8.28,
+   "text": "notes. So to bring in some, all of these are run in parallel. The edges interact live as they are"
+  },
+  {
+   "t": 1407.72,
+   "d": 5.48,
+   "text": "developing. For instance, this interesting green rule over here, which you also see on this first"
+  },
+  {
+   "t": 1413.2,
+   "d": 17.04,
+   "text": "screenshot is assigned to that patch of geology. This is a core screen and a different aesthetics."
+  },
+  {
+   "t": 1433.36,
+   "d": 5.68,
+   "text": "I am going to go into the sort of large scale process going on a little more. The heart of"
+  },
+  {
+   "t": 1439.04,
+   "d": 27.0,
+   "text": "it is applying different patches. It offers flexibility. I am using piece wise approaches"
+  },
+  {
+   "t": 1466.04,
+   "d": 8.4,
+   "text": "to govern regional variation which I will talk about during the live demo. It is well suited for"
+  },
+  {
+   "t": 1474.44,
+   "d": 5.8,
+   "text": "governing local particulars such as the clustering of islands, and the gaps of certain formations."
+  },
+  {
+   "t": 1481.48,
+   "d": 21.32,
+   "text": "Gives us expressive range. I will call out doing three state totalistic rules would be lovely"
+  },
+  {
+   "t": 1502.8,
+   "d": 7.52,
+   "text": "here. Another thing that could be interesting to work with is multiple neighborhood rules. I"
+  },
+  {
+   "t": 1510.32,
+   "d": 6.8,
+   "text": "have experimented using two neighborhoods have to an awareness of the difference between diagonal"
+  },
+  {
+   "t": 1517.12,
+   "d": 7.36,
+   "text": "and orthogonal neighborhood relationships which is extremely good for context specific shaping"
+  },
+  {
+   "t": 1524.48,
+   "d": 9.28,
+   "text": "formation. I will briefly go into implementation specific terrain solver ideas as well. As you"
+  },
+  {
+   "t": 1533.76,
+   "d": 7.32,
+   "text": "may recall we left our map with basically noisy slopes. This is a really like simple version of"
+  },
+  {
+   "t": 1541.08,
+   "d": 8.64,
+   "text": "this. Imagine if you build a more robust system here. To briefly summarize one approach and there"
+  },
+  {
+   "t": 1549.72,
+   "d": 23.72,
+   "text": "are many such approaches. We had uniform noise across all slopes. A simple way we might vary this"
+  },
+  {
+   "t": 1573.44,
+   "d": 4.56,
+   "text": "is changing the amount of noise we have on a per patch basis. That would give us a little regional"
+  },
+  {
+   "t": 1578.0,
+   "d": 8.6,
+   "text": "variation. To build on that basic idea, one other idea is we could look at the way the wave solver"
+  },
+  {
+   "t": 1586.6,
+   "d": 6.72,
+   "text": "works and figure out different aspects of that which could be parameterized. I ended up going"
+  },
+  {
+   "t": 1593.32,
+   "d": 6.88,
+   "text": "different directions and trying lots of things. I will pause during the live demo and explain a"
+  },
+  {
+   "t": 1600.2,
+   "d": 21.0,
+   "text": "couple of these. This is the same run as before. There are a number of sets curating different"
+  },
+  {
+   "t": 1621.2,
+   "d": 40.72,
+   "text": "geology here. To do our patches of terrain, actually, I am just start it over here. To do our"
+  },
+  {
+   "t": 1661.92,
+   "d": 6.2,
+   "text": "patches of terrain, we are running a voting rule and seeding continents and oceans and using voting"
+  },
+  {
+   "t": 1668.12,
+   "d": 7.76,
+   "text": "to create cohesive land masses. Then we will procedurally place things that would not survive"
+  },
+  {
+   "t": 1675.88,
+   "d": 8.64,
+   "text": "voting like inland lakes or chains of islands in the ocean. We are detecting the types of terrain."
+  },
+  {
+   "t": 1691.56,
+   "d": 9.36,
+   "text": "We want to populate regions within each of those. That gives us more feeling of intentionality and"
+  },
+  {
+   "t": 1700.92,
+   "d": 8.52,
+   "text": "local geography and flavor. As you can see, there is some regions that have pretty distinct feelings"
+  },
+  {
+   "t": 1709.44,
+   "d": 21.72,
+   "text": "like an interesting large island over here pretty far off of this very spongy continent. I am going"
+  },
+  {
+   "t": 1731.16,
+   "d": 8.04,
+   "text": "to pause here briefly. We have got an edge glitch on the right side. That's fun. If we look at the"
+  },
+  {
+   "t": 1739.2,
+   "d": 6.12,
+   "text": "wave fronts, though, some of these wave fronts are relatively clean and some are extremely noisy such"
+  },
+  {
+   "t": 1745.32,
+   "d": 6.08,
+   "text": "as on the rocky region over here and on the sea floor. If you look at the shapes forming behind"
+  },
+  {
+   "t": 1751.4,
+   "d": 6.04,
+   "text": "each wave front they are quite different. A couple parameters I am playing with for the terrain"
+  },
+  {
+   "t": 1757.44,
+   "d": 6.2,
+   "text": "solver are the speed at which each type of terrain propagates and the noisyness of the wave front."
+  },
+  {
+   "t": 1763.64,
+   "d": 7.96,
+   "text": "This linear wave front is propagating information here in parallel. You get an interesting fluting"
+  },
+  {
+   "t": 1771.6,
+   "d": 6.24,
+   "text": "and I am using that to create the bones of hill systems and gullies and such. It has got some"
+  },
+  {
+   "t": 1777.84,
+   "d": 7.12,
+   "text": "crisp features but it is very low slope compared to some of the other terrain types. I am using a"
+  },
+  {
+   "t": 1784.96,
+   "d": 6.88,
+   "text": "much noisier wave front in some of these regions to create fine hills or small mountain ranges."
+  },
+  {
+   "t": 1791.84,
+   "d": 5.8,
+   "text": "Another thing I am going here is -- I think I just broke it. That's going to mess up my time."
+  },
+  {
+   "t": 1799.48,
+   "d": 6.28,
+   "text": "Sorry. We are restarting here. I am going to point out the voting process. These matches of colors"
+  },
+  {
+   "t": 1805.76,
+   "d": 14.96,
+   "text": "are individual rules. When we get back to our wave solver, I wanted to point out one other thing. One"
+  },
+  {
+   "t": 1820.72,
+   "d": 5.28,
+   "text": "of the two rules for generating mountains is deliberately overpiling the terrain a little"
+  },
+  {
+   "t": 1826.0,
+   "d": 7.56,
+   "text": "bit stow is above the stable and angle pose. We are running a simple process on top which settles"
+  },
+  {
+   "t": 1833.56,
+   "d": 9.0,
+   "text": "it out to match the pose specified by the terrain type. This region here, for instance, is overpiled"
+  },
+  {
+   "t": 1842.56,
+   "d": 5.6,
+   "text": "and probably some of this mountain range down here as soon as we finish the lake solver pass."
+  },
+  {
+   "t": 1848.16,
+   "d": 10.04,
+   "text": "You will see that running and what it does. One of the motivating design principles here is frequency"
+  },
+  {
+   "t": 1858.2,
+   "d": 5.4,
+   "text": "distribution. If you are looking at a large undifferentiated image where the frequency"
+  },
+  {
+   "t": 1863.6,
+   "d": 7.84,
+   "text": "is the same everywhere it is often jarring to look at. Your eye doesn't have places to catch"
+  },
+  {
+   "t": 1871.44,
+   "d": 7.48,
+   "text": "or rest. So it is often I find quite useful to have a variety of either large jestural"
+  },
+  {
+   "t": 1878.92,
+   "d": 8.28,
+   "text": "curves square Fe or finally detailed higher frequency curves similar to have patches of"
+  },
+  {
+   "t": 1887.2,
+   "d": 16.16,
+   "text": "hills that are higher frequency and lower areas that are slow. If you have regions that are shaped"
+  },
+  {
+   "t": 1903.36,
+   "d": 7.24,
+   "text": "primarily by the slope selling in this phase, you get large facets and huge well formed cones"
+  },
+  {
+   "t": 1910.6,
+   "d": 18.0,
+   "text": "and those catch the eye if you are glancing at a map. We are running waterways and here is our"
+  },
+  {
+   "t": 1928.6,
+   "d": 14.4,
+   "text": "finished output. This is currently in progress. I am working on some particulars we will be posting"
+  },
+  {
+   "t": 1943.0,
+   "d": 16.48,
+   "text": "about in the near futures. Follow me on these social medias run by horrible cooperation's or"
+  },
+  {
+   "t": 1959.48,
+   "d": 7.64,
+   "text": "on Mastodon and if you would like to support me personally please consider supporting me"
+  },
+  {
+   "t": 1967.12,
+   "d": 8.52,
+   "text": "on Patreon. Thank you all very much. HAYLEE: Loren, Thank you so much. That"
+  },
+  {
+   "t": 1975.64,
+   "d": 8.28,
+   "text": "was very cool. I love when a talk dove tails into a previous talk. I am seeing synthesis with Max's"
+  },
+  {
+   "t": 1983.92,
+   "d": 4.6,
+   "text": "talk about clustering and art assets. LOREN: Yeah, there is definitely a lot"
+  },
+  {
+   "t": 1988.52,
+   "d": 4.32,
+   "text": "of overlap there. A lot of these features apply at different scales."
+  }
+ ]
+}

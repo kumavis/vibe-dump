@@ -1,0 +1,3770 @@
+{
+ "id": "blXH5pO8GA4",
+ "url": "https://www.youtube.com/watch?v=blXH5pO8GA4",
+ "title": "Nick Montfort - Concrete Poems",
+ "speaker": "Nick Montfort",
+ "talk_title": "Concrete Poems",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1540,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021. The audio for the introduction on the stream was cut off by music; audio begins at 2:21.\n\nLevels of Rogue are virtual spaces, but also typographical grids that relate to a 1st century Latin word square, typewriters from the 19th century, concrete poetry and visual art in the 20th century, and preceding computer games. By considering the history of monospace type, character sets, and the visual arrangement of punctuation and letters, along with the ways language has been inscribed by hand, by machine, and digitally, it's possible to see new genealogies for roguelikes and new contributions these games have made.\n\nNick Montfort works in creative computing, particularly as it relates to language and text. He develops computational art and poetry, often collaboratively. He studies video and computer games, popular and obfuscated programming, digital poetry and other electronic literature, demoscene productions, and aspects of computing that are less easily classified. He is professor of digital media at MIT and lives in New York and Boston.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 553,
+   "title": "Tables of Logarithms"
+  },
+  {
+   "start": 761,
+   "title": "History of the Grid"
+  },
+  {
+   "start": 869,
+   "title": "Steve Mccaffrey"
+  },
+  {
+   "start": 891,
+   "title": "Dirty Concrete"
+  },
+  {
+   "start": 1107,
+   "title": "Ascii Art"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4439,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 141.12,
+   "d": 1.44,
+   "text": "it was to be uh"
+  },
+  {
+   "t": 142.56,
+   "d": 1.84,
+   "text": "it could be used you know using simple"
+  },
+  {
+   "t": 144.4,
+   "d": 1.28,
+   "text": "messaging service on your phone"
+  },
+  {
+   "t": 145.68,
+   "d": 1.6,
+   "text": "how many people use twitter this way or"
+  },
+  {
+   "t": 147.28,
+   "d": 1.84,
+   "text": "some people tweeting this way"
+  },
+  {
+   "t": 149.12,
+   "d": 3.84,
+   "text": "right now uh two two of us okay um"
+  },
+  {
+   "t": 152.96,
+   "d": 1.36,
+   "text": "i this is the first time anyone's"
+  },
+  {
+   "t": 154.32,
+   "d": 1.04,
+   "text": "anyone's raised their hand for that"
+  },
+  {
+   "t": 155.36,
+   "d": 0.64,
+   "text": "question"
+  },
+  {
+   "t": 156.0,
+   "d": 3.04,
+   "text": "um but uh of course uh"
+  },
+  {
+   "t": 159.04,
+   "d": 1.84,
+   "text": "we didn't we don't need that constraint"
+  },
+  {
+   "t": 160.88,
+   "d": 2.0,
+   "text": "if we uh go using the web if we use"
+  },
+  {
+   "t": 162.88,
+   "d": 1.84,
+   "text": "smartphones and uh have apps"
+  },
+  {
+   "t": 164.72,
+   "d": 3.52,
+   "text": "um but we have a 160 character limit"
+  },
+  {
+   "t": 168.24,
+   "d": 3.68,
+   "text": "on sms and uh of course that's more than"
+  },
+  {
+   "t": 171.92,
+   "d": 1.92,
+   "text": "140 characters but we have a 15"
+  },
+  {
+   "t": 173.84,
+   "d": 2.0,
+   "text": "character maximum that we can have for"
+  },
+  {
+   "t": 175.84,
+   "d": 2.32,
+   "text": "a a twitter handle and then there's a"
+  },
+  {
+   "t": 178.16,
+   "d": 1.36,
+   "text": "colon and a space"
+  },
+  {
+   "t": 179.52,
+   "d": 1.28,
+   "text": "um and then there's actually a little"
+  },
+  {
+   "t": 180.8,
+   "d": 2.32,
+   "text": "bit of room left that's only 157"
+  },
+  {
+   "t": 183.12,
+   "d": 1.04,
+   "text": "characters"
+  },
+  {
+   "t": 184.16,
+   "d": 2.72,
+   "text": "but early on some of the messages when"
+  },
+  {
+   "t": 186.88,
+   "d": 1.52,
+   "text": "you use the sms interface and you wanted"
+  },
+  {
+   "t": 188.4,
+   "d": 1.6,
+   "text": "before twitter search when you wanted to"
+  },
+  {
+   "t": 190.0,
+   "d": 0.88,
+   "text": "follow a tweet"
+  },
+  {
+   "t": 190.88,
+   "d": 2.56,
+   "text": "you'd put parentheses around a handle so"
+  },
+  {
+   "t": 193.44,
+   "d": 1.76,
+   "text": "that brought it up to 159 so there was a"
+  },
+  {
+   "t": 195.2,
+   "d": 0.72,
+   "text": "little"
+  },
+  {
+   "t": 195.92,
+   "d": 1.92,
+   "text": "room in there to do extra stuff of"
+  },
+  {
+   "t": 197.84,
+   "d": 1.36,
+   "text": "course it wasn't until many years later"
+  },
+  {
+   "t": 199.2,
+   "d": 1.44,
+   "text": "that people thought about putting three"
+  },
+  {
+   "t": 200.64,
+   "d": 1.84,
+   "text": "pairs of parentheses around a twitter"
+  },
+  {
+   "t": 202.48,
+   "d": 3.04,
+   "text": "name but i'm not going to get into that"
+  },
+  {
+   "t": 205.52,
+   "d": 2.4,
+   "text": "so then that question arises as to well"
+  },
+  {
+   "t": 207.92,
+   "d": 2.24,
+   "text": "why is it that we have"
+  },
+  {
+   "t": 210.16,
+   "d": 2.56,
+   "text": "you know a 160 character limit on sms"
+  },
+  {
+   "t": 212.72,
+   "d": 1.68,
+   "text": "and this is the guy who's responsible"
+  },
+  {
+   "t": 214.4,
+   "d": 0.48,
+   "text": "for that"
+  },
+  {
+   "t": 214.88,
+   "d": 3.2,
+   "text": "freedom hellebrand and he actually um"
+  },
+  {
+   "t": 218.08,
+   "d": 1.68,
+   "text": "determined with you know one"
+  },
+  {
+   "t": 219.76,
+   "d": 1.52,
+   "text": "collaborator what the uh"
+  },
+  {
+   "t": 221.28,
+   "d": 3.12,
+   "text": "protocol for um sms was and"
+  },
+  {
+   "t": 224.4,
+   "d": 2.48,
+   "text": "uh they worked for a while they had 128"
+  },
+  {
+   "t": 226.88,
+   "d": 1.52,
+   "text": "uh characters they could get they"
+  },
+  {
+   "t": 228.4,
+   "d": 0.88,
+   "text": "figured out how to get"
+  },
+  {
+   "t": 229.28,
+   "d": 1.76,
+   "text": "you know a little bit more room uh of"
+  },
+  {
+   "t": 231.04,
+   "d": 1.44,
+   "text": "course the the"
+  },
+  {
+   "t": 232.48,
+   "d": 1.76,
+   "text": "bandwidth the amount that they could get"
+  },
+  {
+   "t": 234.24,
+   "d": 1.92,
+   "text": "into the signal was significant to this"
+  },
+  {
+   "t": 236.16,
+   "d": 1.36,
+   "text": "but they also wanted to know i mean if"
+  },
+  {
+   "t": 237.52,
+   "d": 1.52,
+   "text": "this was a worthless amount if no one"
+  },
+  {
+   "t": 239.04,
+   "d": 1.2,
+   "text": "was actually going to be able to write"
+  },
+  {
+   "t": 240.24,
+   "d": 1.04,
+   "text": "anything worthwhile"
+  },
+  {
+   "t": 241.28,
+   "d": 1.28,
+   "text": "then they wouldn't bother you know"
+  },
+  {
+   "t": 242.56,
+   "d": 1.76,
+   "text": "putting this uh protocol in place"
+  },
+  {
+   "t": 244.32,
+   "d": 2.0,
+   "text": "so they needed to figure out like well"
+  },
+  {
+   "t": 246.32,
+   "d": 1.36,
+   "text": "is i you know"
+  },
+  {
+   "t": 247.68,
+   "d": 1.68,
+   "text": "what's going to work is 160 characters"
+  },
+  {
+   "t": 249.36,
+   "d": 1.68,
+   "text": "going to work how can we justify it and"
+  },
+  {
+   "t": 251.04,
+   "d": 0.8,
+   "text": "so to do this"
+  },
+  {
+   "t": 251.84,
+   "d": 1.28,
+   "text": "hillary brown went and you know he"
+  },
+  {
+   "t": 253.12,
+   "d": 1.76,
+   "text": "looked at postcards and people wrote"
+  },
+  {
+   "t": 254.88,
+   "d": 1.76,
+   "text": "postcards that used fewer than 160"
+  },
+  {
+   "t": 256.64,
+   "d": 1.44,
+   "text": "characters very often"
+  },
+  {
+   "t": 258.08,
+   "d": 2.48,
+   "text": "he also uh you know looked at telex"
+  },
+  {
+   "t": 260.56,
+   "d": 1.68,
+   "text": "exchanges this is a late model print"
+  },
+  {
+   "t": 262.24,
+   "d": 1.68,
+   "text": "terminal"
+  },
+  {
+   "t": 263.92,
+   "d": 1.84,
+   "text": "and and saw that when people actually"
+  },
+  {
+   "t": 265.76,
+   "d": 1.44,
+   "text": "wrote to each other they wrote things"
+  },
+  {
+   "t": 267.2,
+   "d": 1.76,
+   "text": "that were often of less than two lines"
+  },
+  {
+   "t": 268.96,
+   "d": 1.84,
+   "text": "it's 80 column lines on here which"
+  },
+  {
+   "t": 270.8,
+   "d": 1.52,
+   "text": "we'll certainly talk about some more and"
+  },
+  {
+   "t": 272.32,
+   "d": 1.84,
+   "text": "then he typed out messages trying to see"
+  },
+  {
+   "t": 274.16,
+   "d": 0.4,
+   "text": "like"
+  },
+  {
+   "t": 274.56,
+   "d": 1.44,
+   "text": "would it be meaningful to write a very"
+  },
+  {
+   "t": 276.0,
+   "d": 1.36,
+   "text": "short message of this sort and he did"
+  },
+  {
+   "t": 277.36,
+   "d": 1.76,
+   "text": "that on"
+  },
+  {
+   "t": 279.12,
+   "d": 1.76,
+   "text": "not this very typewriter but some type"
+  },
+  {
+   "t": 280.88,
+   "d": 1.52,
+   "text": "of typewriter like it uh this is a"
+  },
+  {
+   "t": 282.4,
+   "d": 1.36,
+   "text": "selectrix"
+  },
+  {
+   "t": 283.76,
+   "d": 2.16,
+   "text": "and and so he had 80 columns here as"
+  },
+  {
+   "t": 285.92,
+   "d": 2.4,
+   "text": "well which is half of 160."
+  },
+  {
+   "t": 288.32,
+   "d": 2.32,
+   "text": "and looking at these you know this also"
+  },
+  {
+   "t": 290.64,
+   "d": 1.2,
+   "text": "helps to explain"
+  },
+  {
+   "t": 291.84,
+   "d": 2.32,
+   "text": "uh the regularity with which we see a"
+  },
+  {
+   "t": 294.16,
+   "d": 2.32,
+   "text": "terminal like the vt100 here offering"
+  },
+  {
+   "t": 296.48,
+   "d": 3.44,
+   "text": "you know um also 80 characters with um"
+  },
+  {
+   "t": 299.92,
+   "d": 1.6,
+   "text": "now where does why is why are all these"
+  },
+  {
+   "t": 301.52,
+   "d": 1.84,
+   "text": "things 80 characters and that may be"
+  },
+  {
+   "t": 303.36,
+   "d": 1.6,
+   "text": "factored into this 160 character"
+  },
+  {
+   "t": 304.96,
+   "d": 0.48,
+   "text": "decision"
+  },
+  {
+   "t": 305.44,
+   "d": 3.04,
+   "text": "with sms well it actually goes back"
+  },
+  {
+   "t": 308.48,
+   "d": 2.72,
+   "text": "to the punch card um uh 80 column punch"
+  },
+  {
+   "t": 311.2,
+   "d": 0.48,
+   "text": "card"
+  },
+  {
+   "t": 311.68,
+   "d": 2.4,
+   "text": "and this is an example of the ibm card"
+  },
+  {
+   "t": 314.08,
+   "d": 1.68,
+   "text": "which uh was developed in"
+  },
+  {
+   "t": 315.76,
+   "d": 3.36,
+   "text": "1928. uh if you think about that that's"
+  },
+  {
+   "t": 319.12,
+   "d": 2.08,
+   "text": "before computers of the sort that we"
+  },
+  {
+   "t": 321.2,
+   "d": 1.04,
+   "text": "think about today general purpose"
+  },
+  {
+   "t": 322.24,
+   "d": 1.84,
+   "text": "digital electronic computers right"
+  },
+  {
+   "t": 324.08,
+   "d": 1.92,
+   "text": "um but punch cards were used in"
+  },
+  {
+   "t": 326.0,
+   "d": 2.08,
+   "text": "tabulation they were used in the 1890"
+  },
+  {
+   "t": 328.08,
+   "d": 1.68,
+   "text": "census in fact earlier than this"
+  },
+  {
+   "t": 329.76,
+   "d": 2.64,
+   "text": "and it was in 1928 that uh you could"
+  },
+  {
+   "t": 332.4,
+   "d": 1.2,
+   "text": "take a punch card"
+  },
+  {
+   "t": 333.6,
+   "d": 1.92,
+   "text": "of this sort and first use the the full"
+  },
+  {
+   "t": 335.52,
+   "d": 2.0,
+   "text": "80 column rectangular hole version that"
+  },
+  {
+   "t": 337.52,
+   "d": 0.48,
+   "text": "was developed"
+  },
+  {
+   "t": 338.0,
+   "d": 1.36,
+   "text": "by ibm and of course it could store"
+  },
+  {
+   "t": 339.36,
+   "d": 2.08,
+   "text": "anything it could store numeric data"
+  },
+  {
+   "t": 341.44,
+   "d": 1.92,
+   "text": "computer programs or pornography as we"
+  },
+  {
+   "t": 343.36,
+   "d": 1.44,
+   "text": "have here"
+  },
+  {
+   "t": 344.8,
+   "d": 4.0,
+   "text": "um this is the uh this is a type of"
+  },
+  {
+   "t": 348.8,
+   "d": 1.92,
+   "text": "machine that you'd use in 1928 doesn't"
+  },
+  {
+   "t": 350.72,
+   "d": 0.96,
+   "text": "look much like"
+  },
+  {
+   "t": 351.68,
+   "d": 1.44,
+   "text": "a computer or you know computer"
+  },
+  {
+   "t": 353.12,
+   "d": 2.4,
+   "text": "peripheral and uh this is a system that"
+  },
+  {
+   "t": 355.52,
+   "d": 0.48,
+   "text": "uh"
+  },
+  {
+   "t": 356.0,
+   "d": 1.84,
+   "text": "would actually you know allow you to key"
+  },
+  {
+   "t": 357.84,
+   "d": 2.08,
+   "text": "punch these cards enter data into them"
+  },
+  {
+   "t": 359.92,
+   "d": 1.6,
+   "text": "and these machines and there's a lot of"
+  },
+  {
+   "t": 361.52,
+   "d": 2.24,
+   "text": "this this long you know mechanical"
+  },
+  {
+   "t": 363.76,
+   "d": 2.64,
+   "text": "uh profile leading up to the computing"
+  },
+  {
+   "t": 366.4,
+   "d": 1.84,
+   "text": "that we had in the batch processing era"
+  },
+  {
+   "t": 368.24,
+   "d": 1.68,
+   "text": "and these machines you know were all set"
+  },
+  {
+   "t": 369.92,
+   "d": 1.6,
+   "text": "up and manufactured to take cards of a"
+  },
+  {
+   "t": 371.52,
+   "d": 1.04,
+   "text": "certain size"
+  },
+  {
+   "t": 372.56,
+   "d": 1.76,
+   "text": "so in fact when that 1928 card was"
+  },
+  {
+   "t": 374.32,
+   "d": 2.24,
+   "text": "developed it was based on the size of an"
+  },
+  {
+   "t": 376.56,
+   "d": 2.16,
+   "text": "earlier card one that uh herman"
+  },
+  {
+   "t": 378.72,
+   "d": 1.84,
+   "text": "hollerith developed in 1890"
+  },
+  {
+   "t": 380.56,
+   "d": 3.68,
+   "text": "and originally this card only had 45"
+  },
+  {
+   "t": 384.24,
+   "d": 2.88,
+   "text": "holes uh wide it was only 45 holes wide"
+  },
+  {
+   "t": 387.12,
+   "d": 1.28,
+   "text": "and it had round holes"
+  },
+  {
+   "t": 388.4,
+   "d": 1.92,
+   "text": "but they wanted to keep the card size"
+  },
+  {
+   "t": 390.32,
+   "d": 1.52,
+   "text": "because the machines were set up to use"
+  },
+  {
+   "t": 391.84,
+   "d": 1.04,
+   "text": "this but they wanted to increase the"
+  },
+  {
+   "t": 392.88,
+   "d": 1.28,
+   "text": "amount of data"
+  },
+  {
+   "t": 394.16,
+   "d": 3.04,
+   "text": "okay so we're now back around"
+  },
+  {
+   "t": 397.2,
+   "d": 1.6,
+   "text": "1890 but we could actually go back"
+  },
+  {
+   "t": 398.8,
+   "d": 2.64,
+   "text": "earlier because we might also ask like"
+  },
+  {
+   "t": 401.44,
+   "d": 2.88,
+   "text": "where did this card uh size come from"
+  },
+  {
+   "t": 404.32,
+   "d": 1.92,
+   "text": "why is the card this you know particular"
+  },
+  {
+   "t": 406.24,
+   "d": 2.08,
+   "text": "dimension in this particular size well"
+  },
+  {
+   "t": 408.32,
+   "d": 1.68,
+   "text": "it's not known exactly but it's very"
+  },
+  {
+   "t": 410.0,
+   "d": 1.28,
+   "text": "close to the size of a"
+  },
+  {
+   "t": 411.28,
+   "d": 3.6,
+   "text": "us dollar bill this is 1898 at this 1869"
+  },
+  {
+   "t": 414.88,
+   "d": 1.2,
+   "text": "series bill"
+  },
+  {
+   "t": 416.08,
+   "d": 1.52,
+   "text": "and so that would be handy because you"
+  },
+  {
+   "t": 417.6,
+   "d": 1.36,
+   "text": "could use the same sort of trays and"
+  },
+  {
+   "t": 418.96,
+   "d": 0.88,
+   "text": "machinery"
+  },
+  {
+   "t": 419.84,
+   "d": 2.08,
+   "text": "and containers that you might use to"
+  },
+  {
+   "t": 421.92,
+   "d": 1.68,
+   "text": "contain currency to also"
+  },
+  {
+   "t": 423.6,
+   "d": 3.04,
+   "text": "uh sort this so we could also ask why"
+  },
+  {
+   "t": 426.64,
+   "d": 1.6,
+   "text": "the dollar bill is this size but for now"
+  },
+  {
+   "t": 428.24,
+   "d": 2.56,
+   "text": "the buck stops here um"
+  },
+  {
+   "t": 430.8,
+   "d": 2.16,
+   "text": "and and so here you know we've gone back"
+  },
+  {
+   "t": 432.96,
+   "d": 1.76,
+   "text": "uh more than a century to look at issues"
+  },
+  {
+   "t": 434.72,
+   "d": 0.72,
+   "text": "like this"
+  },
+  {
+   "t": 435.44,
+   "d": 1.84,
+   "text": "and i would just say that you know"
+  },
+  {
+   "t": 437.28,
+   "d": 1.44,
+   "text": "tracing this back to the us dollar bill"
+  },
+  {
+   "t": 438.72,
+   "d": 1.2,
+   "text": "makes it very appropriate that when we"
+  },
+  {
+   "t": 439.92,
+   "d": 2.0,
+   "text": "open up a terminal window nowadays"
+  },
+  {
+   "t": 441.92,
+   "d": 2.24,
+   "text": "right and of course it's going to be 80"
+  },
+  {
+   "t": 444.16,
+   "d": 1.52,
+   "text": "characters wide and then"
+  },
+  {
+   "t": 445.68,
+   "d": 2.88,
+   "text": "cha-ching we also get the dollar sign um"
+  },
+  {
+   "t": 448.56,
+   "d": 1.6,
+   "text": "so this question of you know why is a"
+  },
+  {
+   "t": 450.16,
+   "d": 1.2,
+   "text": "tweet limited to a"
+  },
+  {
+   "t": 451.36,
+   "d": 2.24,
+   "text": "140 characters like obviously you know"
+  },
+  {
+   "t": 453.6,
+   "d": 1.52,
+   "text": "somebody made that decision we could ask"
+  },
+  {
+   "t": 455.12,
+   "d": 1.2,
+   "text": "the people who are involved and figure"
+  },
+  {
+   "t": 456.32,
+   "d": 1.68,
+   "text": "out like what their thinking was"
+  },
+  {
+   "t": 458.0,
+   "d": 1.76,
+   "text": "but there's actually a long story and"
+  },
+  {
+   "t": 459.76,
+   "d": 1.52,
+   "text": "this this huge"
+  },
+  {
+   "t": 461.28,
+   "d": 1.84,
+   "text": "you know sort of iceberg of paper in"
+  },
+  {
+   "t": 463.12,
+   "d": 1.6,
+   "text": "this case right and the way that"
+  },
+  {
+   "t": 464.72,
+   "d": 1.6,
+   "text": "information is transmitted the way text"
+  },
+  {
+   "t": 466.32,
+   "d": 1.12,
+   "text": "is inscribed"
+  },
+  {
+   "t": 467.44,
+   "d": 1.68,
+   "text": "so that's that that's what i'm going to"
+  },
+  {
+   "t": 469.12,
+   "d": 1.52,
+   "text": "be exploring today with"
+  },
+  {
+   "t": 470.64,
+   "d": 3.36,
+   "text": "uh relation to rogue and roguelike games"
+  },
+  {
+   "t": 474.0,
+   "d": 2.0,
+   "text": "and so one of the questions that i think"
+  },
+  {
+   "t": 476.0,
+   "d": 1.76,
+   "text": "is an interesting one to consider is"
+  },
+  {
+   "t": 477.76,
+   "d": 1.68,
+   "text": "you know well look at we look at this"
+  },
+  {
+   "t": 479.44,
+   "d": 1.2,
+   "text": "and rogue consists of these characters"
+  },
+  {
+   "t": 480.64,
+   "d": 1.68,
+   "text": "arranging a rectangular grid"
+  },
+  {
+   "t": 482.32,
+   "d": 1.12,
+   "text": "obviously and that's that's pretty"
+  },
+  {
+   "t": 483.44,
+   "d": 2.72,
+   "text": "standard for all roguelikes but why why"
+  },
+  {
+   "t": 486.16,
+   "d": 1.12,
+   "text": "a grid"
+  },
+  {
+   "t": 487.28,
+   "d": 1.6,
+   "text": "because if we go back to the 15th"
+  },
+  {
+   "t": 488.88,
+   "d": 2.08,
+   "text": "century we see johannes gutenberg"
+  },
+  {
+   "t": 490.96,
+   "d": 1.6,
+   "text": "right actually putting together a 42"
+  },
+  {
+   "t": 492.56,
+   "d": 1.76,
+   "text": "line bible"
+  },
+  {
+   "t": 494.32,
+   "d": 1.68,
+   "text": "these aren't this isn't in a grid he has"
+  },
+  {
+   "t": 496.0,
+   "d": 1.6,
+   "text": "proportional type"
+  },
+  {
+   "t": 497.6,
+   "d": 1.28,
+   "text": "some of these letters are smaller and"
+  },
+  {
+   "t": 498.88,
+   "d": 1.12,
+   "text": "some of them are you know some of them"
+  },
+  {
+   "t": 500.0,
+   "d": 1.68,
+   "text": "are whiter and some of them are narrower"
+  },
+  {
+   "t": 501.68,
+   "d": 2.56,
+   "text": "right so and it's not just a given that"
+  },
+  {
+   "t": 504.24,
+   "d": 1.84,
+   "text": "like oh that's how it was in the olden"
+  },
+  {
+   "t": 506.08,
+   "d": 1.12,
+   "text": "days no actually"
+  },
+  {
+   "t": 507.2,
+   "d": 2.64,
+   "text": "um you know initially type was"
+  },
+  {
+   "t": 509.84,
+   "d": 0.96,
+   "text": "proportional and then"
+  },
+  {
+   "t": 510.8,
+   "d": 2.64,
+   "text": "somehow it had to become gridlike one of"
+  },
+  {
+   "t": 513.44,
+   "d": 0.8,
+   "text": "the ways was"
+  },
+  {
+   "t": 514.24,
+   "d": 2.88,
+   "text": "around 1800 people decided this is this"
+  },
+  {
+   "t": 517.12,
+   "d": 1.76,
+   "text": "is digital type this isn't a letterpress"
+  },
+  {
+   "t": 518.88,
+   "d": 1.12,
+   "text": "type but"
+  },
+  {
+   "t": 520.0,
+   "d": 3.04,
+   "text": "a similar idea people decided that yeah"
+  },
+  {
+   "t": 523.04,
+   "d": 0.4,
+   "text": "you know"
+  },
+  {
+   "t": 523.44,
+   "d": 1.6,
+   "text": "it'd be really handy if these numbers"
+  },
+  {
+   "t": 525.04,
+   "d": 1.44,
+   "text": "that we are using to like"
+  },
+  {
+   "t": 526.48,
+   "d": 1.68,
+   "text": "try to put things in tables express you"
+  },
+  {
+   "t": 528.16,
+   "d": 2.16,
+   "text": "know mathematical"
+  },
+  {
+   "t": 530.32,
+   "d": 2.88,
+   "text": "sums what if they actually lined up like"
+  },
+  {
+   "t": 533.2,
+   "d": 0.8,
+   "text": "you know because it's"
+  },
+  {
+   "t": 534.0,
+   "d": 1.84,
+   "text": "a real pain to to like stick those"
+  },
+  {
+   "t": 535.84,
+   "d": 1.68,
+   "text": "little pieces of metal in you know"
+  },
+  {
+   "t": 537.52,
+   "d": 3.04,
+   "text": "to to get this spacing right um"
+  },
+  {
+   "t": 540.56,
+   "d": 1.36,
+   "text": "so they said well we could just make"
+  },
+  {
+   "t": 541.92,
+   "d": 1.76,
+   "text": "let's just cast this type uh"
+  },
+  {
+   "t": 543.68,
+   "d": 2.32,
+   "text": "lining type tabular lining type such"
+  },
+  {
+   "t": 546.0,
+   "d": 1.44,
+   "text": "that all of the numbers are the same"
+  },
+  {
+   "t": 547.44,
+   "d": 1.12,
+   "text": "with"
+  },
+  {
+   "t": 548.56,
+   "d": 2.8,
+   "text": "and then you get to do really exciting"
+  },
+  {
+   "t": 551.36,
+   "d": 1.52,
+   "text": "stuff like this"
+  },
+  {
+   "t": 552.88,
+   "d": 2.08,
+   "text": "okay there's tables of logarithms which"
+  },
+  {
+   "t": 554.96,
+   "d": 2.08,
+   "text": "um actually were very important to 20th"
+  },
+  {
+   "t": 557.04,
+   "d": 0.64,
+   "text": "century"
+  },
+  {
+   "t": 557.68,
+   "d": 2.4,
+   "text": "uh communication and and and 19th"
+  },
+  {
+   "t": 560.08,
+   "d": 1.04,
+   "text": "century um"
+  },
+  {
+   "t": 561.12,
+   "d": 1.92,
+   "text": "communication uh the way that a lot of"
+  },
+  {
+   "t": 563.04,
+   "d": 1.52,
+   "text": "scientific work was done in fact"
+  },
+  {
+   "t": 564.56,
+   "d": 1.76,
+   "text": "early computers you what did the eniac"
+  },
+  {
+   "t": 566.32,
+   "d": 1.36,
+   "text": "do the eniac"
+  },
+  {
+   "t": 567.68,
+   "d": 1.6,
+   "text": "first job was doing artillery firing"
+  },
+  {
+   "t": 569.28,
+   "d": 1.68,
+   "text": "tables like this actually computing"
+  },
+  {
+   "t": 570.96,
+   "d": 1.52,
+   "text": "these that would later be printed and"
+  },
+  {
+   "t": 572.48,
+   "d": 1.52,
+   "text": "that people would look at so it's"
+  },
+  {
+   "t": 574.0,
+   "d": 1.76,
+   "text": "it's ties into the history of computing"
+  },
+  {
+   "t": 575.76,
+   "d": 2.08,
+   "text": "in a lot of different ways"
+  },
+  {
+   "t": 577.84,
+   "d": 1.52,
+   "text": "and if we really want to say you know"
+  },
+  {
+   "t": 579.36,
+   "d": 1.84,
+   "text": "what is to credit or blame for the grid"
+  },
+  {
+   "t": 581.2,
+   "d": 0.88,
+   "text": "being present"
+  },
+  {
+   "t": 582.08,
+   "d": 2.24,
+   "text": "in computing i have to look at this"
+  },
+  {
+   "t": 584.32,
+   "d": 1.6,
+   "text": "familiar device"
+  },
+  {
+   "t": 585.92,
+   "d": 2.32,
+   "text": "right here the typewriter okay so this"
+  },
+  {
+   "t": 588.24,
+   "d": 1.44,
+   "text": "is a system that"
+  },
+  {
+   "t": 589.68,
+   "d": 2.24,
+   "text": "mechanically it just is not plausible to"
+  },
+  {
+   "t": 591.92,
+   "d": 2.0,
+   "text": "have wider and narrower"
+  },
+  {
+   "t": 593.92,
+   "d": 1.76,
+   "text": "type for each individual key everything"
+  },
+  {
+   "t": 595.68,
+   "d": 2.64,
+   "text": "needs to advance by the same amount"
+  },
+  {
+   "t": 598.32,
+   "d": 1.84,
+   "text": "the the system needs to work uniformly"
+  },
+  {
+   "t": 600.16,
+   "d": 1.84,
+   "text": "and this type of industrial production"
+  },
+  {
+   "t": 602.0,
+   "d": 1.92,
+   "text": "you know that mark twain a famous early"
+  },
+  {
+   "t": 603.92,
+   "d": 1.76,
+   "text": "user of it frederick nietzsche another"
+  },
+  {
+   "t": 605.68,
+   "d": 1.2,
+   "text": "like this type of system of the"
+  },
+  {
+   "t": 606.88,
+   "d": 1.84,
+   "text": "typewriter is what brought"
+  },
+  {
+   "t": 608.72,
+   "d": 2.88,
+   "text": "into ordinary use um a regularized"
+  },
+  {
+   "t": 611.6,
+   "d": 1.12,
+   "text": "monospace grid"
+  },
+  {
+   "t": 612.72,
+   "d": 1.68,
+   "text": "beforehand people had proportional type"
+  },
+  {
+   "t": 614.4,
+   "d": 1.36,
+   "text": "that they were looking at in books"
+  },
+  {
+   "t": 615.76,
+   "d": 2.08,
+   "text": "they were writing notes that you know"
+  },
+  {
+   "t": 617.84,
+   "d": 1.92,
+   "text": "had letters that were wider and narrower"
+  },
+  {
+   "t": 619.76,
+   "d": 2.24,
+   "text": "but the typewriter actually uh changed"
+  },
+  {
+   "t": 622.0,
+   "d": 2.24,
+   "text": "that"
+  },
+  {
+   "t": 625.2,
+   "d": 3.92,
+   "text": "okay so um um so you know the typewriter"
+  },
+  {
+   "t": 629.12,
+   "d": 1.76,
+   "text": "is it's it's it's this interesting"
+  },
+  {
+   "t": 630.88,
+   "d": 2.08,
+   "text": "system of of uniformity but then within"
+  },
+  {
+   "t": 632.96,
+   "d": 1.44,
+   "text": "that uniformity there's transgression"
+  },
+  {
+   "t": 634.4,
+   "d": 1.12,
+   "text": "there's variation"
+  },
+  {
+   "t": 635.52,
+   "d": 3.12,
+   "text": "it's a system that worked in office"
+  },
+  {
+   "t": 638.64,
+   "d": 1.84,
+   "text": "environments and situations and then"
+  },
+  {
+   "t": 640.48,
+   "d": 1.44,
+   "text": "also you know um"
+  },
+  {
+   "t": 641.92,
+   "d": 1.76,
+   "text": "it's a situation that was a very very"
+  },
+  {
+   "t": 643.68,
+   "d": 1.52,
+   "text": "important computing because typewriters"
+  },
+  {
+   "t": 645.2,
+   "d": 1.2,
+   "text": "were the interfaces"
+  },
+  {
+   "t": 646.4,
+   "d": 2.4,
+   "text": "to computers for many many years just as"
+  },
+  {
+   "t": 648.8,
+   "d": 0.72,
+   "text": "punch cards"
+  },
+  {
+   "t": 649.52,
+   "d": 1.84,
+   "text": "invented before computing right were"
+  },
+  {
+   "t": 651.36,
+   "d": 2.48,
+   "text": "also used in uh batch mode processing"
+  },
+  {
+   "t": 653.84,
+   "d": 3.6,
+   "text": "so a system like this an asr 33 teletype"
+  },
+  {
+   "t": 657.44,
+   "d": 2.0,
+   "text": "teletype is a brand name the generic"
+  },
+  {
+   "t": 659.44,
+   "d": 0.72,
+   "text": "would be"
+  },
+  {
+   "t": 660.16,
+   "d": 4.0,
+   "text": "teletypewriter so a system like this"
+  },
+  {
+   "t": 664.16,
+   "d": 1.52,
+   "text": "is what well it would allow you to"
+  },
+  {
+   "t": 665.68,
+   "d": 1.6,
+   "text": "program offline and you could punch that"
+  },
+  {
+   "t": 667.28,
+   "d": 1.36,
+   "text": "paper tape and you could take the paper"
+  },
+  {
+   "t": 668.64,
+   "d": 1.04,
+   "text": "tape and if you wanted"
+  },
+  {
+   "t": 669.68,
+   "d": 1.76,
+   "text": "you could also connect you could go"
+  },
+  {
+   "t": 671.44,
+   "d": 1.76,
+   "text": "online and actually use"
+  },
+  {
+   "t": 673.2,
+   "d": 2.88,
+   "text": "a computer um and you would get of"
+  },
+  {
+   "t": 676.08,
+   "d": 0.96,
+   "text": "course"
+  },
+  {
+   "t": 677.04,
+   "d": 2.32,
+   "text": "the output uh printed out for you and"
+  },
+  {
+   "t": 679.36,
+   "d": 1.12,
+   "text": "you would be able to type"
+  },
+  {
+   "t": 680.48,
+   "d": 2.32,
+   "text": "on the typewriter keys now interestingly"
+  },
+  {
+   "t": 682.8,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 683.76,
+   "d": 2.32,
+   "text": "you can play adventure like this and"
+  },
+  {
+   "t": 686.08,
+   "d": 1.2,
+   "text": "people did"
+  },
+  {
+   "t": 687.28,
+   "d": 3.04,
+   "text": "but you can't play rogue right so this"
+  },
+  {
+   "t": 690.32,
+   "d": 1.12,
+   "text": "is this is here"
+  },
+  {
+   "t": 691.44,
+   "d": 2.16,
+   "text": "we're seeing like the reason that cursor"
+  },
+  {
+   "t": 693.6,
+   "d": 1.12,
+   "text": "addressability"
+  },
+  {
+   "t": 694.72,
+   "d": 2.24,
+   "text": "was a novelty at one point historically"
+  },
+  {
+   "t": 696.96,
+   "d": 1.36,
+   "text": "like that was it was it was a"
+  },
+  {
+   "t": 698.32,
+   "d": 2.08,
+   "text": "an idea that was so exciting is because"
+  },
+  {
+   "t": 700.4,
+   "d": 1.68,
+   "text": "people have been using this all the less"
+  },
+  {
+   "t": 702.08,
+   "d": 0.96,
+   "text": "fortunate"
+  },
+  {
+   "t": 703.04,
+   "d": 1.76,
+   "text": "um who didn't have access to these uh"
+  },
+  {
+   "t": 704.8,
+   "d": 1.28,
+   "text": "fancy video terminals"
+  },
+  {
+   "t": 706.08,
+   "d": 1.68,
+   "text": "right we're still connecting sometimes"
+  },
+  {
+   "t": 707.76,
+   "d": 1.44,
+   "text": "you know through the 1970s"
+  },
+  {
+   "t": 709.2,
+   "d": 3.12,
+   "text": "with uh with systems like this um"
+  },
+  {
+   "t": 712.32,
+   "d": 1.84,
+   "text": "and then if you're lucky of course you"
+  },
+  {
+   "t": 714.16,
+   "d": 1.44,
+   "text": "got to use one of these"
+  },
+  {
+   "t": 715.6,
+   "d": 1.84,
+   "text": "which like the teletype was also going"
+  },
+  {
+   "t": 717.44,
+   "d": 2.48,
+   "text": "to be 80 columns wide"
+  },
+  {
+   "t": 719.92,
+   "d": 2.24,
+   "text": "but had additional capabilities to to"
+  },
+  {
+   "t": 722.16,
+   "d": 1.44,
+   "text": "address the cursor and then home"
+  },
+  {
+   "t": 723.6,
+   "d": 1.92,
+   "text": "computers also"
+  },
+  {
+   "t": 725.52,
+   "d": 3.28,
+   "text": "would have 80 column displays and grid"
+  },
+  {
+   "t": 728.8,
+   "d": 1.92,
+   "text": "displays often they'd be 40 column"
+  },
+  {
+   "t": 730.72,
+   "d": 1.68,
+   "text": "displays because they'd be designed to"
+  },
+  {
+   "t": 732.4,
+   "d": 1.04,
+   "text": "work with home"
+  },
+  {
+   "t": 733.44,
+   "d": 2.0,
+   "text": "television sets and the resolution was"
+  },
+  {
+   "t": 735.44,
+   "d": 2.96,
+   "text": "not good enough"
+  },
+  {
+   "t": 738.4,
+   "d": 2.64,
+   "text": "even though sometimes i put my apple 2"
+  },
+  {
+   "t": 741.04,
+   "d": 1.28,
+   "text": "into 80 column mode"
+  },
+  {
+   "t": 742.32,
+   "d": 2.24,
+   "text": "excited that i had this capability you"
+  },
+  {
+   "t": 744.56,
+   "d": 2.24,
+   "text": "can't read it for very long on a tv you"
+  },
+  {
+   "t": 746.8,
+   "d": 1.52,
+   "text": "need you actually need a monochrome"
+  },
+  {
+   "t": 748.32,
+   "d": 1.04,
+   "text": "monitor like this"
+  },
+  {
+   "t": 749.36,
+   "d": 2.08,
+   "text": "so people are all excited that we got to"
+  },
+  {
+   "t": 751.44,
+   "d": 1.6,
+   "text": "you know do this in 1984 we have"
+  },
+  {
+   "t": 753.04,
+   "d": 1.52,
+   "text": "macintoshes we get to do this"
+  },
+  {
+   "t": 754.56,
+   "d": 1.84,
+   "text": "you could do this in the 15th century"
+  },
+  {
+   "t": 756.4,
+   "d": 2.24,
+   "text": "it's not new right"
+  },
+  {
+   "t": 758.64,
+   "d": 2.96,
+   "text": "it's okay um all right so this is a"
+  },
+  {
+   "t": 761.6,
+   "d": 1.2,
+   "text": "little bit about you know the history of"
+  },
+  {
+   "t": 762.8,
+   "d": 1.44,
+   "text": "the grid and the typewriter is one of"
+  },
+  {
+   "t": 764.24,
+   "d": 1.12,
+   "text": "the major components"
+  },
+  {
+   "t": 765.36,
+   "d": 2.08,
+   "text": "so related to this typewriter then i"
+  },
+  {
+   "t": 767.44,
+   "d": 1.36,
+   "text": "want to talk about"
+  },
+  {
+   "t": 768.8,
+   "d": 1.52,
+   "text": "a little about ascii art but mostly"
+  },
+  {
+   "t": 770.32,
+   "d": 2.08,
+   "text": "about concrete poetry"
+  },
+  {
+   "t": 772.4,
+   "d": 2.56,
+   "text": "um and which is very tied into the"
+  },
+  {
+   "t": 774.96,
+   "d": 0.88,
+   "text": "typewriter"
+  },
+  {
+   "t": 775.84,
+   "d": 1.76,
+   "text": "and what what this means you know sort"
+  },
+  {
+   "t": 777.6,
+   "d": 1.92,
+   "text": "of in relation to rogue what"
+  },
+  {
+   "t": 779.52,
+   "d": 1.76,
+   "text": "what people were doing as concrete poets"
+  },
+  {
+   "t": 781.28,
+   "d": 2.08,
+   "text": "that in any way was similar"
+  },
+  {
+   "t": 783.36,
+   "d": 2.4,
+   "text": "to uh the development of of computer"
+  },
+  {
+   "t": 785.76,
+   "d": 0.64,
+   "text": "gaming"
+  },
+  {
+   "t": 786.4,
+   "d": 3.84,
+   "text": "on uh cursor-addressable ascii terminals"
+  },
+  {
+   "t": 790.24,
+   "d": 3.68,
+   "text": "so um aguila paliner uh developed you"
+  },
+  {
+   "t": 793.92,
+   "d": 0.48,
+   "text": "know"
+  },
+  {
+   "t": 794.4,
+   "d": 2.48,
+   "text": "an early example of what you know what's"
+  },
+  {
+   "t": 796.88,
+   "d": 0.8,
+   "text": "uh uh"
+  },
+  {
+   "t": 797.68,
+   "d": 2.32,
+   "text": "understood as concrete poetry where the"
+  },
+  {
+   "t": 800.0,
+   "d": 2.0,
+   "text": "rain is being described but also the"
+  },
+  {
+   "t": 802.0,
+   "d": 1.28,
+   "text": "text is actually showing this"
+  },
+  {
+   "t": 803.28,
+   "d": 1.36,
+   "text": "representation of the rain"
+  },
+  {
+   "t": 804.64,
+   "d": 1.6,
+   "text": "but the people who are most famous as"
+  },
+  {
+   "t": 806.24,
+   "d": 1.6,
+   "text": "concrete poets probably there's"
+  },
+  {
+   "t": 807.84,
+   "d": 2.24,
+   "text": "there's three brazilians and then uh the"
+  },
+  {
+   "t": 810.08,
+   "d": 1.44,
+   "text": "author of this poem"
+  },
+  {
+   "t": 811.52,
+   "d": 2.48,
+   "text": "um uh eugene gambringer from uh from"
+  },
+  {
+   "t": 814.0,
+   "d": 1.04,
+   "text": "bolivia"
+  },
+  {
+   "t": 815.04,
+   "d": 2.0,
+   "text": "um and so it would present something"
+  },
+  {
+   "t": 817.04,
+   "d": 1.44,
+   "text": "like something like this"
+  },
+  {
+   "t": 818.48,
+   "d": 1.84,
+   "text": "and here you can see one of the aspects"
+  },
+  {
+   "t": 820.32,
+   "d": 1.52,
+   "text": "of concrete poetry which is"
+  },
+  {
+   "t": 821.84,
+   "d": 2.4,
+   "text": "um you can you can read it in many cases"
+  },
+  {
+   "t": 824.24,
+   "d": 1.36,
+   "text": "you can read it in a certain way"
+  },
+  {
+   "t": 825.6,
+   "d": 2.48,
+   "text": "but if i read this out loud to you you"
+  },
+  {
+   "t": 828.08,
+   "d": 0.96,
+   "text": "really wouldn't be"
+  },
+  {
+   "t": 829.04,
+   "d": 2.16,
+   "text": "getting the poem right you missed the"
+  },
+  {
+   "t": 831.2,
+   "d": 1.52,
+   "text": "point here so it's something that"
+  },
+  {
+   "t": 832.72,
+   "d": 0.88,
+   "text": "visually like"
+  },
+  {
+   "t": 833.6,
+   "d": 1.52,
+   "text": "you need to apprehend you know what's"
+  },
+  {
+   "t": 835.12,
+   "d": 1.68,
+   "text": "going on and this is in fact"
+  },
+  {
+   "t": 836.8,
+   "d": 1.52,
+   "text": "though reading it out loud might be"
+  },
+  {
+   "t": 838.32,
+   "d": 1.68,
+   "text": "pretty interesting because then you"
+  },
+  {
+   "t": 840.0,
+   "d": 1.36,
+   "text": "everywhere it says silence you'd be"
+  },
+  {
+   "t": 841.36,
+   "d": 1.68,
+   "text": "speaking and the places where it doesn't"
+  },
+  {
+   "t": 843.04,
+   "d": 1.12,
+   "text": "say silence"
+  },
+  {
+   "t": 844.16,
+   "d": 2.96,
+   "text": "you'd be silent um so so this is an"
+  },
+  {
+   "t": 847.12,
+   "d": 0.56,
+   "text": "interesting"
+  },
+  {
+   "t": 847.68,
+   "d": 1.76,
+   "text": "way of engaging with language engaging"
+  },
+  {
+   "t": 849.44,
+   "d": 1.6,
+   "text": "with the regularity and shape"
+  },
+  {
+   "t": 851.04,
+   "d": 1.76,
+   "text": "of the page and so this is this is one"
+  },
+  {
+   "t": 852.8,
+   "d": 1.92,
+   "text": "of the ways that um"
+  },
+  {
+   "t": 854.72,
+   "d": 3.12,
+   "text": "that's that um the noigandes and and"
+  },
+  {
+   "t": 857.84,
+   "d": 2.0,
+   "text": "other people working uh in concrete"
+  },
+  {
+   "t": 859.84,
+   "d": 2.24,
+   "text": "poetry created these very regular"
+  },
+  {
+   "t": 862.08,
+   "d": 3.6,
+   "text": "uh appearances now uh however uh this"
+  },
+  {
+   "t": 865.68,
+   "d": 1.2,
+   "text": "wasn't the only thing that was done so"
+  },
+  {
+   "t": 866.88,
+   "d": 0.48,
+   "text": "i'm gonna give"
+  },
+  {
+   "t": 867.36,
+   "d": 2.32,
+   "text": "an example of of a canadian concrete"
+  },
+  {
+   "t": 869.68,
+   "d": 1.92,
+   "text": "poet steve mccaffrey this work that he"
+  },
+  {
+   "t": 871.6,
+   "d": 2.96,
+   "text": "did around 1970"
+  },
+  {
+   "t": 874.56,
+   "d": 3.28,
+   "text": "and this is one uh one page of his"
+  },
+  {
+   "t": 877.84,
+   "d": 3.36,
+   "text": "carnival a 16 page piece that"
+  },
+  {
+   "t": 881.2,
+   "d": 2.96,
+   "text": "can be assembled into a panel like this"
+  },
+  {
+   "t": 884.16,
+   "d": 0.8,
+   "text": "one"
+  },
+  {
+   "t": 884.96,
+   "d": 2.64,
+   "text": "right and in this in this piece this is"
+  },
+  {
+   "t": 887.6,
+   "d": 2.24,
+   "text": "entirely created on a typewriter"
+  },
+  {
+   "t": 889.84,
+   "d": 2.08,
+   "text": "but uh it's an example of what we call"
+  },
+  {
+   "t": 891.92,
+   "d": 1.52,
+   "text": "dirty concrete"
+  },
+  {
+   "t": 893.44,
+   "d": 2.4,
+   "text": "so he moves the page around well it's"
+  },
+  {
+   "t": 895.84,
+   "d": 1.36,
+   "text": "actually on the platen"
+  },
+  {
+   "t": 897.2,
+   "d": 2.4,
+   "text": "and he types in different orientations"
+  },
+  {
+   "t": 899.6,
+   "d": 1.12,
+   "text": "he masks"
+  },
+  {
+   "t": 900.72,
+   "d": 2.24,
+   "text": "and only types part of the letter now"
+  },
+  {
+   "t": 902.96,
+   "d": 1.6,
+   "text": "these are obviously things that"
+  },
+  {
+   "t": 904.56,
+   "d": 2.0,
+   "text": "we can't do in a straightforward way on"
+  },
+  {
+   "t": 906.56,
+   "d": 1.52,
+   "text": "you know cursor dressable ascii terminal"
+  },
+  {
+   "t": 908.08,
+   "d": 1.28,
+   "text": "like a vt-100"
+  },
+  {
+   "t": 909.36,
+   "d": 2.48,
+   "text": "right but what he's doing is he's using"
+  },
+  {
+   "t": 911.84,
+   "d": 1.76,
+   "text": "the capabilities"
+  },
+  {
+   "t": 913.6,
+   "d": 2.24,
+   "text": "of the typewriter to and the standard"
+  },
+  {
+   "t": 915.84,
+   "d": 1.44,
+   "text": "you know red and black"
+  },
+  {
+   "t": 917.28,
+   "d": 2.56,
+   "text": "uh ribbons right to do something really"
+  },
+  {
+   "t": 919.84,
+   "d": 1.36,
+   "text": "quite spectacular"
+  },
+  {
+   "t": 921.2,
+   "d": 1.6,
+   "text": "if you um if you actually look i mean"
+  },
+  {
+   "t": 922.8,
+   "d": 2.32,
+   "text": "carnival is a beautiful work if you"
+  },
+  {
+   "t": 925.12,
+   "d": 1.76,
+   "text": "if you look at it so many people look at"
+  },
+  {
+   "t": 926.88,
+   "d": 1.44,
+   "text": "it and think well this is a work of"
+  },
+  {
+   "t": 928.32,
+   "d": 1.76,
+   "text": "visual art it's not it's not a poem it's"
+  },
+  {
+   "t": 930.08,
+   "d": 0.56,
+   "text": "just it's"
+  },
+  {
+   "t": 930.64,
+   "d": 1.84,
+   "text": "something to hang on the wall but"
+  },
+  {
+   "t": 932.48,
+   "d": 2.56,
+   "text": "actually you can read it it's legible if"
+  },
+  {
+   "t": 935.04,
+   "d": 0.8,
+   "text": "you if you"
+  },
+  {
+   "t": 935.84,
+   "d": 1.52,
+   "text": "pursue it closely and you see this you"
+  },
+  {
+   "t": 937.36,
+   "d": 2.4,
+   "text": "know eve's ending ever they're actually"
+  },
+  {
+   "t": 939.76,
+   "d": 2.08,
+   "text": "they're these characters adam and eve"
+  },
+  {
+   "t": 941.84,
+   "d": 1.28,
+   "text": "it's about the"
+  },
+  {
+   "t": 943.12,
+   "d": 2.48,
+   "text": "you know uh eviction from the garden"
+  },
+  {
+   "t": 945.6,
+   "d": 1.2,
+   "text": "it's about uh gaining"
+  },
+  {
+   "t": 946.8,
+   "d": 2.48,
+   "text": "language and knowledge and and then you"
+  },
+  {
+   "t": 949.28,
+   "d": 1.52,
+   "text": "start to look and you say oh"
+  },
+  {
+   "t": 950.8,
+   "d": 1.84,
+   "text": "maybe the reason that like the letters"
+  },
+  {
+   "t": 952.64,
+   "d": 1.68,
+   "text": "you know a and e"
+  },
+  {
+   "t": 954.32,
+   "d": 1.28,
+   "text": "are the ones that are occurring in all"
+  },
+  {
+   "t": 955.6,
+   "d": 1.28,
+   "text": "these shapes has something to do with"
+  },
+  {
+   "t": 956.88,
+   "d": 1.28,
+   "text": "the fact that adam and eve are"
+  },
+  {
+   "t": 958.16,
+   "d": 1.28,
+   "text": "characters in here"
+  },
+  {
+   "t": 959.44,
+   "d": 1.84,
+   "text": "you know and in fact later on the i"
+  },
+  {
+   "t": 961.28,
+   "d": 2.16,
+   "text": "comes in maybe the serpent"
+  },
+  {
+   "t": 963.44,
+   "d": 2.16,
+   "text": "right so very in a very intriguing work"
+  },
+  {
+   "t": 965.6,
+   "d": 1.84,
+   "text": "and it's also creating these sorts of"
+  },
+  {
+   "t": 967.44,
+   "d": 0.64,
+   "text": "spaces"
+  },
+  {
+   "t": 968.08,
+   "d": 1.68,
+   "text": "i mean obviously you can't you know run"
+  },
+  {
+   "t": 969.76,
+   "d": 1.76,
+   "text": "around in them and collect potions but"
+  },
+  {
+   "t": 971.52,
+   "d": 1.84,
+   "text": "um but there are these sorts of spaces"
+  },
+  {
+   "t": 973.36,
+   "d": 2.08,
+   "text": "that are very strongly suggested"
+  },
+  {
+   "t": 975.44,
+   "d": 1.36,
+   "text": "and when you put all this together you"
+  },
+  {
+   "t": 976.8,
+   "d": 1.6,
+   "text": "know some of these spaces are more"
+  },
+  {
+   "t": 978.4,
+   "d": 1.92,
+   "text": "architectural some of them you know"
+  },
+  {
+   "t": 980.32,
+   "d": 3.2,
+   "text": "more undulate um but uh this"
+  },
+  {
+   "t": 983.52,
+   "d": 2.08,
+   "text": "looks like a dungeon map to me and as of"
+  },
+  {
+   "t": 985.6,
+   "d": 2.16,
+   "text": "a certain of a certain sort right"
+  },
+  {
+   "t": 987.76,
+   "d": 2.0,
+   "text": "so i think i think carnival is a pretty"
+  },
+  {
+   "t": 989.76,
+   "d": 1.6,
+   "text": "amazing example"
+  },
+  {
+   "t": 991.36,
+   "d": 2.32,
+   "text": "um and you know the challenge i think"
+  },
+  {
+   "t": 993.68,
+   "d": 0.72,
+   "text": "for for"
+  },
+  {
+   "t": 994.4,
+   "d": 1.76,
+   "text": "roguelike developers you know would be"
+  },
+  {
+   "t": 996.16,
+   "d": 1.28,
+   "text": "like what what is it"
+  },
+  {
+   "t": 997.44,
+   "d": 2.72,
+   "text": "how can you take your your display"
+  },
+  {
+   "t": 1000.16,
+   "d": 1.44,
+   "text": "technology the computer"
+  },
+  {
+   "t": 1001.6,
+   "d": 2.0,
+   "text": "you know and do what steve mccaffrey did"
+  },
+  {
+   "t": 1003.6,
+   "d": 2.08,
+   "text": "to the typewriter"
+  },
+  {
+   "t": 1005.68,
+   "d": 2.8,
+   "text": "so another uh this is an interesting uh"
+  },
+  {
+   "t": 1008.48,
+   "d": 1.2,
+   "text": "this is actually not a concrete problem"
+  },
+  {
+   "t": 1009.68,
+   "d": 1.6,
+   "text": "this is just the beginning of a letter"
+  },
+  {
+   "t": 1011.28,
+   "d": 2.8,
+   "text": "uh this is how dom sylvester huidar you"
+  },
+  {
+   "t": 1014.08,
+   "d": 0.96,
+   "text": "know wrote to"
+  },
+  {
+   "t": 1015.04,
+   "d": 4.16,
+   "text": "edwin morgan another concrete poet um"
+  },
+  {
+   "t": 1019.2,
+   "d": 1.84,
+   "text": "and uh he did some amazing work in fact"
+  },
+  {
+   "t": 1021.04,
+   "d": 1.52,
+   "text": "this is prior this is from the 60s"
+  },
+  {
+   "t": 1022.56,
+   "d": 1.68,
+   "text": "earlier than steve mccaffrey's work"
+  },
+  {
+   "t": 1024.24,
+   "d": 1.6,
+   "text": "so you can see this this work of his"
+  },
+  {
+   "t": 1025.84,
+   "d": 1.92,
+   "text": "george and the name the name george is"
+  },
+  {
+   "t": 1027.76,
+   "d": 0.56,
+   "text": "in here"
+  },
+  {
+   "t": 1028.32,
+   "d": 1.36,
+   "text": "again you can see the type of dirty"
+  },
+  {
+   "t": 1029.68,
+   "d": 2.48,
+   "text": "concrete technique that's being used"
+  },
+  {
+   "t": 1032.16,
+   "d": 3.04,
+   "text": "um a really remarkable um innovative"
+  },
+  {
+   "t": 1035.2,
+   "d": 1.68,
+   "text": "concrete poet and he also created you"
+  },
+  {
+   "t": 1036.88,
+   "d": 1.92,
+   "text": "know even um"
+  },
+  {
+   "t": 1038.8,
+   "d": 3.6,
+   "text": "uh works like this you know entirely on"
+  },
+  {
+   "t": 1042.4,
+   "d": 1.28,
+   "text": "a typewriter in fact i don't believe"
+  },
+  {
+   "t": 1043.68,
+   "d": 0.24,
+   "text": "this"
+  },
+  {
+   "t": 1043.92,
+   "d": 3.76,
+   "text": "this involves turning or you know um uh"
+  },
+  {
+   "t": 1047.68,
+   "d": 1.6,
+   "text": "or changing the regularity of spacing"
+  },
+  {
+   "t": 1049.28,
+   "d": 2.0,
+   "text": "although there's these microspaces you"
+  },
+  {
+   "t": 1051.28,
+   "d": 1.2,
+   "text": "know left to right"
+  },
+  {
+   "t": 1052.48,
+   "d": 1.68,
+   "text": "he's typing he's typing left to right"
+  },
+  {
+   "t": 1054.16,
+   "d": 2.32,
+   "text": "much much closer in some cases"
+  },
+  {
+   "t": 1056.48,
+   "d": 3.04,
+   "text": "but this is more i mean more fez like"
+  },
+  {
+   "t": 1059.52,
+   "d": 0.4,
+   "text": "than"
+  },
+  {
+   "t": 1059.92,
+   "d": 3.12,
+   "text": "than uh than roguelike i think uh it's"
+  },
+  {
+   "t": 1063.04,
+   "d": 0.8,
+   "text": "an amazing"
+  },
+  {
+   "t": 1063.84,
+   "d": 2.08,
+   "text": "sort of view of three-dimensionality you"
+  },
+  {
+   "t": 1065.92,
+   "d": 1.76,
+   "text": "using i think two characters"
+  },
+  {
+   "t": 1067.68,
+   "d": 2.64,
+   "text": "on the typewriter so and also by the way"
+  },
+  {
+   "t": 1070.32,
+   "d": 0.96,
+   "text": "huidar"
+  },
+  {
+   "t": 1071.28,
+   "d": 2.8,
+   "text": "uh was a monk he's a benedictine monk uh"
+  },
+  {
+   "t": 1074.08,
+   "d": 1.68,
+   "text": "quite quite devoted to his uh his"
+  },
+  {
+   "t": 1075.76,
+   "d": 0.72,
+   "text": "vocation"
+  },
+  {
+   "t": 1076.48,
+   "d": 1.2,
+   "text": "you know so while he's doing all this"
+  },
+  {
+   "t": 1077.68,
+   "d": 2.32,
+   "text": "work maybe a different uh"
+  },
+  {
+   "t": 1080.0,
+   "d": 1.92,
+   "text": "not a not not of the wizard character"
+  },
+  {
+   "t": 1081.92,
+   "d": 1.44,
+   "text": "class that we would expect but"
+  },
+  {
+   "t": 1083.36,
+   "d": 1.68,
+   "text": "you know a different type of uh"
+  },
+  {
+   "t": 1085.04,
+   "d": 1.52,
+   "text": "different type of figure"
+  },
+  {
+   "t": 1086.56,
+   "d": 2.32,
+   "text": "so so concrete poetry is has already"
+  },
+  {
+   "t": 1088.88,
+   "d": 1.36,
+   "text": "been exploring by the time you know we"
+  },
+  {
+   "t": 1090.24,
+   "d": 1.76,
+   "text": "get up to the late 1970s the development"
+  },
+  {
+   "t": 1092.0,
+   "d": 1.6,
+   "text": "of dungeon crawl and roguelike games"
+  },
+  {
+   "t": 1093.6,
+   "d": 1.52,
+   "text": "has already been exploring these really"
+  },
+  {
+   "t": 1095.12,
+   "d": 2.32,
+   "text": "radical ways to engage with uh"
+  },
+  {
+   "t": 1097.44,
+   "d": 2.88,
+   "text": "how type and letters and characters can"
+  },
+  {
+   "t": 1100.32,
+   "d": 1.44,
+   "text": "be made into these"
+  },
+  {
+   "t": 1101.76,
+   "d": 1.6,
+   "text": "things that at least look like"
+  },
+  {
+   "t": 1103.36,
+   "d": 2.32,
+   "text": "architectural spaces or you know or or"
+  },
+  {
+   "t": 1105.68,
+   "d": 2.56,
+   "text": "strange environments and landscapes so"
+  },
+  {
+   "t": 1108.24,
+   "d": 1.2,
+   "text": "ascii art i think"
+  },
+  {
+   "t": 1109.44,
+   "d": 2.88,
+   "text": "um ascii art is you know more focused on"
+  },
+  {
+   "t": 1112.32,
+   "d": 2.16,
+   "text": "the particular representation it's more"
+  },
+  {
+   "t": 1114.48,
+   "d": 1.76,
+   "text": "um in the visual art category there's"
+  },
+  {
+   "t": 1116.24,
+   "d": 1.92,
+   "text": "you know on the one hand we have"
+  },
+  {
+   "t": 1118.16,
+   "d": 2.16,
+   "text": "um ascii art that's handcrafted where"
+  },
+  {
+   "t": 1120.32,
+   "d": 1.52,
+   "text": "people select these characters by hand"
+  },
+  {
+   "t": 1121.84,
+   "d": 0.96,
+   "text": "and put them together"
+  },
+  {
+   "t": 1122.8,
+   "d": 2.0,
+   "text": "you know to symbolize certain things and"
+  },
+  {
+   "t": 1124.8,
+   "d": 1.76,
+   "text": "in another case you know we oh there's"
+  },
+  {
+   "t": 1126.56,
+   "d": 0.96,
+   "text": "the dollar bill again"
+  },
+  {
+   "t": 1127.52,
+   "d": 3.04,
+   "text": "um we have uh we have you know uh ascii"
+  },
+  {
+   "t": 1130.56,
+   "d": 0.64,
+   "text": "art that is"
+  },
+  {
+   "t": 1131.2,
+   "d": 2.32,
+   "text": "maybe uh computer generated right and is"
+  },
+  {
+   "t": 1133.52,
+   "d": 1.76,
+   "text": "the characters used to render things"
+  },
+  {
+   "t": 1135.28,
+   "d": 1.2,
+   "text": "but i don't think there's the same"
+  },
+  {
+   "t": 1136.48,
+   "d": 2.4,
+   "text": "engagement with the with space and the"
+  },
+  {
+   "t": 1138.88,
+   "d": 1.76,
+   "text": "the letters being different being given"
+  },
+  {
+   "t": 1140.64,
+   "d": 1.52,
+   "text": "different meaning you know"
+  },
+  {
+   "t": 1142.16,
+   "d": 3.12,
+   "text": "um so when we move up we see things"
+  },
+  {
+   "t": 1145.28,
+   "d": 2.8,
+   "text": "you know that are happening in um in"
+  },
+  {
+   "t": 1148.08,
+   "d": 1.36,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1149.44,
+   "d": 1.76,
+   "text": "uh we see some of this depiction of"
+  },
+  {
+   "t": 1151.2,
+   "d": 1.76,
+   "text": "space you know in a more rectilinear"
+  },
+  {
+   "t": 1152.96,
+   "d": 1.28,
+   "text": "more gritted way even than the"
+  },
+  {
+   "t": 1154.24,
+   "d": 0.88,
+   "text": "typewriter"
+  },
+  {
+   "t": 1155.12,
+   "d": 3.2,
+   "text": "projects that come earlier but you know"
+  },
+  {
+   "t": 1158.32,
+   "d": 1.68,
+   "text": "one of the things we we get to do"
+  },
+  {
+   "t": 1160.0,
+   "d": 1.84,
+   "text": "of course in rogue that we don't have"
+  },
+  {
+   "t": 1161.84,
+   "d": 1.68,
+   "text": "the literal capability to do a concrete"
+  },
+  {
+   "t": 1163.52,
+   "d": 0.64,
+   "text": "poem"
+  },
+  {
+   "t": 1164.16,
+   "d": 2.48,
+   "text": "is to explore to navigate right to move"
+  },
+  {
+   "t": 1166.64,
+   "d": 1.04,
+   "text": "around in this space"
+  },
+  {
+   "t": 1167.68,
+   "d": 1.12,
+   "text": "and that's something you know we did"
+  },
+  {
+   "t": 1168.8,
+   "d": 2.56,
+   "text": "have a way of doing that in an adventure"
+  },
+  {
+   "t": 1171.36,
+   "d": 2.32,
+   "text": "i think if we had a roguelike"
+  },
+  {
+   "t": 1173.68,
+   "d": 1.44,
+   "text": "if we were to develop some some"
+  },
+  {
+   "t": 1175.12,
+   "d": 1.6,
+   "text": "roguelike command shells"
+  },
+  {
+   "t": 1176.72,
+   "d": 1.68,
+   "text": "you know the adventure shell would be"
+  },
+  {
+   "t": 1178.4,
+   "d": 1.6,
+   "text": "sort of one model for this"
+  },
+  {
+   "t": 1180.0,
+   "d": 1.76,
+   "text": "um because the navigability of that"
+  },
+  {
+   "t": 1181.76,
+   "d": 2.0,
+   "text": "space and the understanding of"
+  },
+  {
+   "t": 1183.76,
+   "d": 1.92,
+   "text": "information in spatial terms is very"
+  },
+  {
+   "t": 1185.68,
+   "d": 1.36,
+   "text": "critical to it"
+  },
+  {
+   "t": 1187.04,
+   "d": 1.76,
+   "text": "and then another actually another point"
+  },
+  {
+   "t": 1188.8,
+   "d": 1.52,
+   "text": "even though it's not"
+  },
+  {
+   "t": 1190.32,
+   "d": 2.64,
+   "text": "rendered in ascii graphics you know um a"
+  },
+  {
+   "t": 1192.96,
+   "d": 0.88,
+   "text": "fusion"
+  },
+  {
+   "t": 1193.84,
+   "d": 3.12,
+   "text": "uh this you know um that's a unix system"
+  },
+  {
+   "t": 1196.96,
+   "d": 0.96,
+   "text": "i know this"
+  },
+  {
+   "t": 1197.92,
+   "d": 2.4,
+   "text": "um uh is you know is also an example"
+  },
+  {
+   "t": 1200.32,
+   "d": 1.44,
+   "text": "where it's the rendering of this is"
+  },
+  {
+   "t": 1201.76,
+   "d": 1.6,
+   "text": "landscape and making that landscape"
+  },
+  {
+   "t": 1203.36,
+   "d": 1.68,
+   "text": "operable and connecting it to the"
+  },
+  {
+   "t": 1205.04,
+   "d": 1.76,
+   "text": "things that you do with a computer is is"
+  },
+  {
+   "t": 1206.8,
+   "d": 1.76,
+   "text": "essential"
+  },
+  {
+   "t": 1208.56,
+   "d": 3.44,
+   "text": "so um so you know"
+  },
+  {
+   "t": 1212.0,
+   "d": 1.52,
+   "text": "one of the points here is that if we"
+  },
+  {
+   "t": 1213.52,
+   "d": 1.76,
+   "text": "look sort of at visual art and we look"
+  },
+  {
+   "t": 1215.28,
+   "d": 0.4,
+   "text": "through"
+  },
+  {
+   "t": 1215.68,
+   "d": 1.76,
+   "text": "the accomplishments that people have"
+  },
+  {
+   "t": 1217.44,
+   "d": 1.76,
+   "text": "done in concrete poetry and so on"
+  },
+  {
+   "t": 1219.2,
+   "d": 1.52,
+   "text": "there are certainly precedents you know"
+  },
+  {
+   "t": 1220.72,
+   "d": 2.8,
+   "text": "even pre-computer precedence"
+  },
+  {
+   "t": 1223.52,
+   "d": 1.28,
+   "text": "ones that don't involve computers are"
+  },
+  {
+   "t": 1224.8,
+   "d": 2.32,
+   "text": "involved games in how space is"
+  },
+  {
+   "t": 1227.12,
+   "d": 0.8,
+   "text": "represented"
+  },
+  {
+   "t": 1227.92,
+   "d": 2.88,
+   "text": "but i think rogue's unique contributions"
+  },
+  {
+   "t": 1230.8,
+   "d": 0.88,
+   "text": "are"
+  },
+  {
+   "t": 1231.68,
+   "d": 2.88,
+   "text": "that we have the possibility for a"
+  },
+  {
+   "t": 1234.56,
+   "d": 1.2,
+   "text": "boundless generation"
+  },
+  {
+   "t": 1235.76,
+   "d": 1.68,
+   "text": "for creating you know not just not just"
+  },
+  {
+   "t": 1237.44,
+   "d": 2.56,
+   "text": "a very bizarre handmade"
+  },
+  {
+   "t": 1240.0,
+   "d": 3.2,
+   "text": "panel that presents a landscape but"
+  },
+  {
+   "t": 1243.2,
+   "d": 2.16,
+   "text": "endlessly generated landscapes that"
+  },
+  {
+   "t": 1245.36,
+   "d": 2.32,
+   "text": "intrigues that make us think about"
+  },
+  {
+   "t": 1247.68,
+   "d": 2.8,
+   "text": "underlying rules and an interactive and"
+  },
+  {
+   "t": 1250.48,
+   "d": 1.68,
+   "text": "explorable architecture"
+  },
+  {
+   "t": 1252.16,
+   "d": 2.56,
+   "text": "so i would look at that as um you know"
+  },
+  {
+   "t": 1254.72,
+   "d": 1.6,
+   "text": "what what rogue has done"
+  },
+  {
+   "t": 1256.32,
+   "d": 1.76,
+   "text": "uh uniquely and interestingly but then"
+  },
+  {
+   "t": 1258.08,
+   "d": 1.68,
+   "text": "also i would say you know maybe there's"
+  },
+  {
+   "t": 1259.76,
+   "d": 1.52,
+   "text": "some challenges maybe we could step up"
+  },
+  {
+   "t": 1261.28,
+   "d": 1.84,
+   "text": "to look you know can we can we"
+  },
+  {
+   "t": 1263.12,
+   "d": 3.12,
+   "text": "make a roguelike that is um as amazing"
+  },
+  {
+   "t": 1266.24,
+   "d": 1.84,
+   "text": "and stunning a work for the computer as"
+  },
+  {
+   "t": 1268.08,
+   "d": 1.6,
+   "text": "carnival is for the typewriter"
+  },
+  {
+   "t": 1269.68,
+   "d": 2.0,
+   "text": "you know an interesting thing to"
+  },
+  {
+   "t": 1271.68,
+   "d": 1.44,
+   "text": "consider"
+  },
+  {
+   "t": 1273.12,
+   "d": 4.48,
+   "text": "so thanks um be glad to take questions"
+  },
+  {
+   "t": 1277.6,
+   "d": 8.43,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1291.44,
+   "d": 2.4,
+   "text": "just curious uh if you're aware of any"
+  },
+  {
+   "t": 1293.84,
+   "d": 0.96,
+   "text": "roguelikes that"
+  },
+  {
+   "t": 1294.8,
+   "d": 1.92,
+   "text": "are particularly pushing the boundary in"
+  },
+  {
+   "t": 1296.72,
+   "d": 2.32,
+   "text": "terms of visual representation using"
+  },
+  {
+   "t": 1299.04,
+   "d": 2.48,
+   "text": "ascii and if you'd call attention to any"
+  },
+  {
+   "t": 1301.52,
+   "d": 2.72,
+   "text": "in particular"
+  },
+  {
+   "t": 1304.24,
+   "d": 2.0,
+   "text": "so i guess i don't i can't think of any"
+  },
+  {
+   "t": 1306.24,
+   "d": 1.76,
+   "text": "that are doing it in the same way"
+  },
+  {
+   "t": 1308.0,
+   "d": 2.24,
+   "text": "that concrete poets of the 20th century"
+  },
+  {
+   "t": 1310.24,
+   "d": 0.8,
+   "text": "have"
+  },
+  {
+   "t": 1311.04,
+   "d": 2.4,
+   "text": "but you know one of the things that all"
+  },
+  {
+   "t": 1313.44,
+   "d": 0.72,
+   "text": "sorts of"
+  },
+  {
+   "t": 1314.16,
+   "d": 3.04,
+   "text": "uh um uh roguelike"
+  },
+  {
+   "t": 1317.2,
+   "d": 2.24,
+   "text": "games and and all sorts of systems that"
+  },
+  {
+   "t": 1319.44,
+   "d": 2.0,
+   "text": "that appropriate"
+  },
+  {
+   "t": 1321.44,
+   "d": 1.92,
+   "text": "you know the ascii character set and"
+  },
+  {
+   "t": 1323.36,
+   "d": 1.76,
+   "text": "make it stand for something different"
+  },
+  {
+   "t": 1325.12,
+   "d": 0.64,
+   "text": "than it's"
+  },
+  {
+   "t": 1325.76,
+   "d": 2.4,
+   "text": "normally intended to do um they're"
+  },
+  {
+   "t": 1328.16,
+   "d": 1.28,
+   "text": "suggesting like these"
+  },
+  {
+   "t": 1329.44,
+   "d": 1.92,
+   "text": "these dual levels they're making us you"
+  },
+  {
+   "t": 1331.36,
+   "d": 1.92,
+   "text": "know question"
+  },
+  {
+   "t": 1333.28,
+   "d": 1.84,
+   "text": "uh various things about the language we"
+  },
+  {
+   "t": 1335.12,
+   "d": 1.92,
+   "text": "use why why is you know what like"
+  },
+  {
+   "t": 1337.04,
+   "d": 2.24,
+   "text": "what's that at sign doing as one of the"
+  },
+  {
+   "t": 1339.28,
+   "d": 1.92,
+   "text": "standard i mean it wasn't even widely"
+  },
+  {
+   "t": 1341.2,
+   "d": 0.56,
+   "text": "used"
+  },
+  {
+   "t": 1341.76,
+   "d": 2.16,
+   "text": "uh early in the 20th century when it was"
+  },
+  {
+   "t": 1343.92,
+   "d": 1.76,
+   "text": "divided when it was added to murray code"
+  },
+  {
+   "t": 1345.68,
+   "d": 3.76,
+   "text": "right so um why is it you know"
+  },
+  {
+   "t": 1349.44,
+   "d": 2.72,
+   "text": "how is it that we uh normal you know we"
+  },
+  {
+   "t": 1352.16,
+   "d": 1.28,
+   "text": "normally don't associate these"
+  },
+  {
+   "t": 1353.44,
+   "d": 2.64,
+   "text": "these characters you know the letters a"
+  },
+  {
+   "t": 1356.08,
+   "d": 0.88,
+   "text": "through z with"
+  },
+  {
+   "t": 1356.96,
+   "d": 2.72,
+   "text": "with characters with monsters right um"
+  },
+  {
+   "t": 1359.68,
+   "d": 0.32,
+   "text": "so"
+  },
+  {
+   "t": 1360.0,
+   "d": 1.92,
+   "text": "i think that all sorts of systems that"
+  },
+  {
+   "t": 1361.92,
+   "d": 1.52,
+   "text": "tend to de-familiarize"
+  },
+  {
+   "t": 1363.44,
+   "d": 2.8,
+   "text": "the alphabet are making and then the"
+  },
+  {
+   "t": 1366.24,
+   "d": 0.8,
+   "text": "other characters"
+  },
+  {
+   "t": 1367.04,
+   "d": 0.96,
+   "text": "are making some interesting"
+  },
+  {
+   "t": 1368.0,
+   "d": 1.36,
+   "text": "contributions and they don't they don't"
+  },
+  {
+   "t": 1369.36,
+   "d": 1.2,
+   "text": "have to be"
+  },
+  {
+   "t": 1370.56,
+   "d": 3.12,
+   "text": "as spectacular although it would be cool"
+  },
+  {
+   "t": 1373.68,
+   "d": 3.04,
+   "text": "if sometimes they were"
+  },
+  {
+   "t": 1376.72,
+   "d": 4.64,
+   "text": "um well we're sort of out of time"
+  },
+  {
+   "t": 1381.36,
+   "d": 2.96,
+   "text": "but uh you can ask your questions to"
+  },
+  {
+   "t": 1384.32,
+   "d": 0.32,
+   "text": "nick"
+  },
+  {
+   "t": 1384.64,
+   "d": 2.72,
+   "text": "in person he'll be around huge round of"
+  },
+  {
+   "t": 1387.36,
+   "d": 2.8,
+   "text": "applause for nick"
+  },
+  {
+   "t": 1395.76,
+   "d": 2.32,
+   "text": "um actually you can probably answer that"
+  },
+  {
+   "t": 1398.08,
+   "d": 1.68,
+   "text": "question while we change over the laptop"
+  },
+  {
+   "t": 1399.76,
+   "d": 1.76,
+   "text": "so we have to set up a new laptop"
+  },
+  {
+   "t": 1401.52,
+   "d": 3.28,
+   "text": "but i think yeah yeah behind you to"
+  },
+  {
+   "t": 1404.8,
+   "d": 2.24,
+   "text": "sorry"
+  },
+  {
+   "t": 1408.32,
+   "d": 1.52,
+   "text": "i'm just curious about uh computer"
+  },
+  {
+   "t": 1409.84,
+   "d": 1.76,
+   "text": "generated poetry so when you"
+  },
+  {
+   "t": 1411.6,
+   "d": 1.84,
+   "text": "when you uh design an algorithm for"
+  },
+  {
+   "t": 1413.44,
+   "d": 1.6,
+   "text": "generating content and then you look at"
+  },
+  {
+   "t": 1415.04,
+   "d": 1.2,
+   "text": "the content and said"
+  },
+  {
+   "t": 1416.24,
+   "d": 1.84,
+   "text": "yeah that's the thing i wanted or no i"
+  },
+  {
+   "t": 1418.08,
+   "d": 1.52,
+   "text": "need to go fix my algorithm because it"
+  },
+  {
+   "t": 1419.6,
+   "d": 1.76,
+   "text": "doesn't make the thing that i wanted"
+  },
+  {
+   "t": 1421.36,
+   "d": 1.68,
+   "text": "what do you say about the poetry it's"
+  },
+  {
+   "t": 1423.04,
+   "d": 2.24,
+   "text": "like yes that's satisfying because"
+  },
+  {
+   "t": 1425.28,
+   "d": 2.4,
+   "text": "because it's like the text or because it"
+  },
+  {
+   "t": 1427.68,
+   "d": 1.52,
+   "text": "is different than the text just"
+  },
+  {
+   "t": 1429.2,
+   "d": 2.32,
+   "text": "talk about that for a second thanks yeah"
+  },
+  {
+   "t": 1431.52,
+   "d": 1.2,
+   "text": "i mean ultimately i wanted"
+  },
+  {
+   "t": 1432.72,
+   "d": 1.84,
+   "text": "to give some new perspective on reading"
+  },
+  {
+   "t": 1434.56,
+   "d": 1.44,
+   "text": "and on and on text"
+  },
+  {
+   "t": 1436.0,
+   "d": 2.4,
+   "text": "and in fact i don't you know i i very"
+  },
+  {
+   "t": 1438.4,
+   "d": 1.2,
+   "text": "seldom think about"
+  },
+  {
+   "t": 1439.6,
+   "d": 3.68,
+   "text": "what i'm doing as generating um content"
+  },
+  {
+   "t": 1443.28,
+   "d": 2.56,
+   "text": "you know uh but rather as i think of"
+  },
+  {
+   "t": 1445.84,
+   "d": 2.32,
+   "text": "that i think of that text as material"
+  },
+  {
+   "t": 1448.16,
+   "d": 1.6,
+   "text": "you know and so sometimes it's an"
+  },
+  {
+   "t": 1449.76,
+   "d": 1.76,
+   "text": "interesting material um"
+  },
+  {
+   "t": 1451.52,
+   "d": 2.48,
+   "text": "to to not just to see not just for to"
+  },
+  {
+   "t": 1454.0,
+   "d": 1.12,
+   "text": "scroll by"
+  },
+  {
+   "t": 1455.12,
+   "d": 1.6,
+   "text": "but sometimes it's an interesting"
+  },
+  {
+   "t": 1456.72,
+   "d": 2.0,
+   "text": "material to you know to"
+  },
+  {
+   "t": 1458.72,
+   "d": 2.72,
+   "text": "comprehend in this to to see in a mass"
+  },
+  {
+   "t": 1461.44,
+   "d": 1.52,
+   "text": "but also to to"
+  },
+  {
+   "t": 1462.96,
+   "d": 2.4,
+   "text": "sample and to look at sometimes you know"
+  },
+  {
+   "t": 1465.36,
+   "d": 1.52,
+   "text": "i mean i have different i have different"
+  },
+  {
+   "t": 1466.88,
+   "d": 1.52,
+   "text": "goals sometimes i try to"
+  },
+  {
+   "t": 1468.4,
+   "d": 2.4,
+   "text": "i have i have tried to create you know a"
+  },
+  {
+   "t": 1470.8,
+   "d": 1.28,
+   "text": "computer computer-generated book"
+  },
+  {
+   "t": 1472.08,
+   "d": 3.52,
+   "text": "uh made with one page of"
+  },
+  {
+   "t": 1475.6,
+   "d": 1.68,
+   "text": "standalone python code and no external"
+  },
+  {
+   "t": 1477.28,
+   "d": 2.48,
+   "text": "data that is"
+  },
+  {
+   "t": 1479.76,
+   "d": 1.6,
+   "text": "good to read that's worth that's"
+  },
+  {
+   "t": 1481.36,
+   "d": 2.24,
+   "text": "actually worth reading um but it's not"
+  },
+  {
+   "t": 1483.6,
+   "d": 0.48,
+   "text": "always"
+  },
+  {
+   "t": 1484.08,
+   "d": 1.44,
+   "text": "my goal to create something that's worth"
+  },
+  {
+   "t": 1485.52,
+   "d": 1.2,
+   "text": "reading sometimes i might try to"
+  },
+  {
+   "t": 1486.72,
+   "d": 1.52,
+   "text": "exaggerate things about"
+  },
+  {
+   "t": 1488.24,
+   "d": 2.96,
+   "text": "you know existing texts samuel beckett's"
+  },
+  {
+   "t": 1491.2,
+   "d": 1.84,
+   "text": "second novel watt is incredible because"
+  },
+  {
+   "t": 1493.04,
+   "d": 0.64,
+   "text": "he did"
+  },
+  {
+   "t": 1493.68,
+   "d": 2.08,
+   "text": "i sometimes you know explain to people"
+  },
+  {
+   "t": 1495.76,
+   "d": 1.28,
+   "text": "that computers had to be invented"
+  },
+  {
+   "t": 1497.04,
+   "d": 1.92,
+   "text": "because samuel beckett wrote what"
+  },
+  {
+   "t": 1498.96,
+   "d": 2.08,
+   "text": "uh because he has these permutational"
+  },
+  {
+   "t": 1501.04,
+   "d": 1.44,
+   "text": "and very very bizarre"
+  },
+  {
+   "t": 1502.48,
+   "d": 1.52,
+   "text": "constructions it's amazing to think"
+  },
+  {
+   "t": 1504.0,
+   "d": 2.08,
+   "text": "someone you know going through and doing"
+  },
+  {
+   "t": 1506.08,
+   "d": 0.64,
+   "text": "that"
+  },
+  {
+   "t": 1506.72,
+   "d": 3.12,
+   "text": "by hand or at all actually so"
+  },
+  {
+   "t": 1509.84,
+   "d": 2.0,
+   "text": "so sometimes i'm computer generating"
+  },
+  {
+   "t": 1511.84,
+   "d": 1.12,
+   "text": "text to"
+  },
+  {
+   "t": 1512.96,
+   "d": 1.68,
+   "text": "exaggerate that even further and make it"
+  },
+  {
+   "t": 1514.64,
+   "d": 1.92,
+   "text": "even more outrageous but"
+  },
+  {
+   "t": 1516.56,
+   "d": 2.88,
+   "text": "but i think there's um uh uh i think"
+  },
+  {
+   "t": 1519.44,
+   "d": 1.52,
+   "text": "there's a variety of points you know i'm"
+  },
+  {
+   "t": 1520.96,
+   "d": 1.36,
+   "text": "also trying to do things that that"
+  },
+  {
+   "t": 1522.32,
+   "d": 1.36,
+   "text": "people are not"
+  },
+  {
+   "t": 1523.68,
+   "d": 2.08,
+   "text": "people would would never do in their"
+  },
+  {
+   "t": 1525.76,
+   "d": 1.68,
+   "text": "human authored poetry i'm not trying to"
+  },
+  {
+   "t": 1527.44,
+   "d": 1.92,
+   "text": "imitate like oh here's a nice haiku"
+  },
+  {
+   "t": 1529.36,
+   "d": 1.52,
+   "text": "isn't it isn't this beautiful i'm trying"
+  },
+  {
+   "t": 1530.88,
+   "d": 2.24,
+   "text": "to expand maybe the frontier of what"
+  },
+  {
+   "t": 1533.12,
+   "d": 0.88,
+   "text": "writing"
+  },
+  {
+   "t": 1534.0,
+   "d": 2.88,
+   "text": "and poetry could do"
+  },
+  {
+   "t": 1537.76,
+   "d": 4.4,
+   "text": "great thank you so much nick"
+  }
+ ]
+}

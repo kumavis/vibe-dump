@@ -1,0 +1,216 @@
+{
+  "id": "fGLJC5UY2o4",
+  "title": "Thomas Biskup - There be dragons: Entity Component Systems for Roguelikes",
+  "speaker": "Thomas Biskup",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=fGLJC5UY2o4",
+  "talk_type": "technical",
+  "summary": "Thomas Biskup explains the entity component system (ECS) architecture behind Ultimate ADOM's content engine, deliberately departing from 'pure' ECS: entities hold data, components carry both data initialization and simple behavior, and systems are reserved for complex reusable operations. He argues ECS enables data-driven design, easy modding, much faster content creation, and emergent gameplay through combinatorial plugging-together of components. He walks through JSON entity templates with multiple inheritance, 'slots' for materials, races and professions, flyweight templates for memory, an event-routed movement system, and the battle axe of sharpness amputation effect. He closes with amusing emergent bugs and a warning that implementing a full ECS took about nine months and should not be underestimated.",
+  "games": [
+    "Ultimate ADOM",
+    "ADOM"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component systems",
+      "kind": "principle",
+      "claim": "Ultimate ADOM departs from pure ECS: entities are both identifiers and data containers, components hold data plus simple related behavior, and systems handle only complex reusable logic.",
+      "detail": "Biskup says the pure definition makes the entity just a UID, the component pure data and the system all behavior, but for roguelikes he disagrees. Because Ultimate ADOM has a fixed core rule set (attributes, dodge value, protection value), it puts data into entities, and e.g. a hit point component also knows how to react to damage. He reports this gives better modularization and easier modding.",
+      "t": 110,
+      "quote": "Personally, for the roguelike use case, I totally disagree with that. So I'm doing it slightly different for Ultimate Atom",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity component systems",
+      "kind": "principle",
+      "claim": "Ultimate ADOM deliberately fixes a middle level of core RPG rules rather than allowing arbitrary rules to be injected, because the more generic an engine gets the more complicated it becomes.",
+      "detail": "The team assumes certain core rules (attributes, dodge, protection) that content must cope with. Knowing these rules lets them store data directly in entities, making lookup and changes easier.",
+      "t": 142,
+      "quote": "our intention never was to allow arbitrary rules to be injected into Ultimate ADOM. That's a slightly more generic level.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "principle",
+      "claim": "ECS enables data-driven design in which game rules live in external configuration instead of special cases buried in code, which also makes modding much easier.",
+      "detail": "Biskup contrasts externalized data with rules hidden deep in code behind if-then-else special cases. External configurations drive the engine and so allow easy modding.",
+      "t": 230,
+      "quote": "don't have to hide the rules of how your game works somewhere deep in code with special cases and if then else",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "developer productivity",
+      "kind": "example",
+      "claim": "In Ultimate ADOM's data-driven ECS, adding a soul-exchange spell took about eight minutes once the underlying pentagram feature existed, and each new component suggests many reuses.",
+      "detail": "Building the pentagram that allowed possessing other bodies took about a day; the spell reusing it took eight minutes because of the external configuration. Biskup says every new component or behavior sparks around 20 ideas for items, features, spells and monsters that could reuse it.",
+      "t": 289,
+      "quote": "Adding the spell that allowed us to do this took us like eight minutes, just because this kind of external configuration made it so easy.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "combinatorial components",
+      "kind": "principle",
+      "claim": "Externalized components can be plugged together like Lego pieces, producing a combinatorial explosion of possibilities and emergent strategies players invent beyond the designers' plans.",
+      "detail": "Biskup says once features are externalized rather than hard-coded, combining components yields powerful new things. For Ultimate ADOM he is excited about emergent gameplay: players will do things the developers did not think about and new strategies will emerge that a less flexible system would not allow.",
+      "t": 333,
+      "quote": "You suddenly get a combinatorial explosion of possibilities of what you can do because you have all those nice components.",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "ui decoupling",
+      "kind": "technique",
+      "claim": "Ultimate ADOM runs its game engine on a separate thread from the Unity UI and sends minimal 'UI signals' carrying the needed data, so the renderer never touches entities that may already be dead.",
+      "detail": "The engine (which Biskup calls 'AGE') is fully decoupled from the Unity UI layer. Since two threads cause synchronization problems, e.g. the UI trying to show damage on an orc the engine already killed, signals carry the data instead. The UI otherwise has only a few specifically synchronized queries; he found little data actually needs exchanging.",
+      "t": 458,
+      "quote": "we introduced this UI signal layer to prevent data access problems there. It's not trivial, but it was worth it",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event routing",
+      "kind": "technique",
+      "claim": "Inside Ultimate ADOM's engine, components call systems directly for complex operations like amputation, while everything else is event-driven, and the event routing subsystem was the hardest part to build.",
+      "detail": "An amputation component delegates to an amputation system because the operation is complex and reused. Systems send events to entities, entities to components, and so on. Routing took the most time because of caching, performance, and dynamic state changes: adding or removing a component changes event routes. Once working it is a stable base that decouples components.",
+      "t": 533,
+      "quote": "So the event routing part is a pretty complex subsystem in this. And actually the one that took us most of the time",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "entity templates",
+      "kind": "technique",
+      "claim": "An ECS needs a typing mechanism; Ultimate ADOM uses named, pre-configured 'entity templates' with multiple inheritance so an orc warrior or orc shaman still counts as an orc.",
+      "detail": "Biskup says defining an orc as 'having these 37 components with certain values' (e.g. for orc slaying) is crazy. Templates are named component collections applied to other templates; the type system tracks inheritance. Smart inheritance also means few definitions are needed for 400-500 monsters each needing 20-30 components.",
+      "t": 591,
+      "quote": "So you need to introduce some kind of typing mechanism. We call that in our system entity templates",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "flyweight pattern",
+      "kind": "technique",
+      "claim": "Because a single Ultimate ADOM orc warrior can be 30-40 entities (race, profession, body parts, items, materials), entities reference a shared template and copy only changed data locally, flyweight-style.",
+      "detail": "An uninjured orc warrior is just an ID plus a template reference; when hit points change, only that one piece of data is stored on the instance. A thousand uninjured orc warriors therefore use little memory, and creation is fast.",
+      "t": 724,
+      "quote": "we decided to introduce is a kind of flyweight pattern implementation, which means that our entities refer to a singleton template for as long as they can",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "runtime type extension",
+      "kind": "warning",
+      "claim": "Structural transformations like animating a wall into a living being require changing an entity's type hierarchy at runtime in Ultimate ADOM, which is complex and wide-reaching.",
+      "detail": "Casting Animate Object on a wall makes a tile that is a wall also become a being with new data and components. Biskup says this is quite complicated but can be handled, and should be kept in mind by anyone planning such transformations.",
+      "t": 837,
+      "quote": "if you want to do such structural transformations in the game, they are wide reaching, that's a complex object to take into consideration",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "slots",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's 'slots' plug grouped features (race, profession, material) onto entities as swappable sub-entities, originally so alchemy could turn an iron sword into a mithril one by swapping the material slot.",
+      "detail": "A dwarven warrior gets a Dwarf slot and a Warrior slot whose components are attached without explicit definition, a kind of runtime class extension. Slots began with materials and were extended to professions and races; each slot is itself an entity. Separately, containers hold other entities such as backpack, equipment, and spell and skill knowledge.",
+      "t": 921,
+      "quote": "We just could take out the iron material slot, remove it from the sword, and add a new mithril material slot",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "json configuration",
+      "kind": "technique",
+      "claim": "Ultimate ADOM defines content in JSON templates (thing, tile, wall, orc warrior) with inheritance, parameterized components and slots, chosen because modding then needs only a text editor.",
+      "detail": "A wall inherits from tile (which inherits from thing), has a relative-size component, a parameterless 'solid' component that blocks movement, and a Material slot set to stone carrying resistances and hit point formulas. An orc warrior is a being with default equipment, a warrior profession slot, an orc race slot, and a default goal of killing the player that level definitions can override.",
+      "t": 1005,
+      "quote": "we said, okay, we take that because later modding and extensions will become very easy because you just need a text editor",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "relative size",
+      "kind": "example",
+      "claim": "Ultimate ADOM gives items a relative size within their size class so a fire giant wields a hugely sized longsword rather than a medium one, affecting damage and weight.",
+      "detail": "A medium longsword suits an orc, but a huge fire giant would find it a toothpick, so it wields a relatively huge longsword with different damage and weight. Walls are likewise medium but relatively huge since they fill the space.",
+      "t": 1152,
+      "quote": "He is wielding a huge, relatively, hugely-sized longsword. That has, in turn, effects on damage and weight and other things",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "race templates",
+      "kind": "example",
+      "claim": "Ultimate ADOM race entities define body structure, names, the nine attributes as dice expressions rolled per instance, and a separate type hierarchy so receiving a race slot does not make a being a race.",
+      "detail": "The orc race is a humanoid (arms, legs, neck, head), with strength like 2d3+7 (9 to 13) rolled when an instance is created, medium size, unaffected by darkness, and a racial attribute used to name severed limbs ('left arm of an orc').",
+      "t": 1317,
+      "quote": "whenever a specific instance is created of the AUG, then the dice will be rolled",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "body parts",
+      "kind": "example",
+      "claim": "In Ultimate ADOM capabilities come from body parts: a hand grants the ability to handle doors and permit melee, so losing hands stops door opening and six arms give six melee attacks with no special code.",
+      "detail": "The door system just asks whether an entity can handle doors. A hand's volume is used to randomly select which body part an amputation removes. A humanoid hand extends hand with a slot that can take melee weapons or shields.",
+      "t": 1399,
+      "quote": "if your hands get hacked off, you no longer will be able to open doors or close them. That's just implicitly defined",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event-driven movement",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's movement system knows nothing about solidity or spells; it fires events at six to eight phases (alter direction, bump interactions, leave old cell, enter new cell, finish) that any component can intercept.",
+      "detail": "Confusion or drunkenness can alter direction; bumping opens doors or attacks hostiles; bear traps, glue or charms can block leaving; a cell spell might deal 1d6 damage on leaving and kill you; force fields can block entry. Both the entity and the map cell are asked. None of this is if-else code in the movement system.",
+      "t": 1745,
+      "quote": "all those steps, because because they are event-based, can be intercepted by components.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "effects and modding",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's battle axe of sharpness inherits from battleaxe and adds an 'of sharpness' suffix slot whose triggered-effect component reacts to the melee damage event by running a list of reusable effects.",
+      "detail": "The triggered effect listens for the inflict-melee-combat-damage event routed to the weapon and runs effects like amputation (100% for the demo); fire or paralysis could be added to the list. The reflection-based JSON parser maps names to C# classes, so a modder can drop in a new class implementing a one-method effect interface (actor, cause, target position, target).",
+      "t": 1979,
+      "quote": "This here is a list of effects, so you could combine arbitrary things to additionally let it cause fire or freeze things, paralyze them",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "systems",
+      "kind": "example",
+      "claim": "Ultimate ADOM's amputation effect is about ten lines because it delegates to shared systems: grafting picks and removes the body part, item management drops it, and a blood system handles bleeding.",
+      "detail": "The effect rolls the probability, asks the grafting system for an amputatable part, signals the UI, removes the part, drops it in front of the being (destroying it if impossible) and asks the blood system about bleeding.",
+      "t": 2126,
+      "quote": "So it's in the end like 10 lines of code to do this imputation thing.",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "emergent bugs",
+      "kind": "warning",
+      "claim": "ECS power brings weird emergent bugs: in Ultimate ADOM a severed spider part granted web spinning, a picked-up orc arm became a third attack, and opening an animated door killed it.",
+      "detail": "Mis-routed events let a player standing on a spider's hacked-off part spin webs. A backpacked arm still holding a club gave three melee attacks. Opening an animated door replaced the entity and lost its animation. A typing bug made a sword made from iron itself become a material.",
+      "t": 2158,
+      "quote": "The bad thing is they can create all kinds of weird bugs",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "ecs cost",
+      "kind": "warning",
+      "claim": "Implementing a full ECS is not trivial; Ultimate ADOM's took nine months with 10-15% still to do, though Biskup still recommends it for games that push interaction boundaries.",
+      "detail": "He calls ECS awesome and says he is in love with it, but warns against underestimating the complexity of building it and getting it to run at reasonable speed.",
+      "t": 2264,
+      "quote": "You shouldn't underestimate the complexity of implementing such a thing and getting into work in a reasonable speed. For us it took us nine months",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

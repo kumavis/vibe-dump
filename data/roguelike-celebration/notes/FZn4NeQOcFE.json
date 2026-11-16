@@ -1,0 +1,226 @@
+{
+  "id": "FZn4NeQOcFE",
+  "title": "Jim Shepard - Metaprogression and You",
+  "speaker": "Jim Shepard",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=FZn4NeQOcFE",
+  "talk_type": "design",
+  "summary": "Jim Shepard, developer of Dungeonmans, defines metaprogression as anything that persists past a game over and splits it into three types: meta knowledge (what the player remembers), meta power (stats, unlocks and gear carried between runs) and meta presence (world changes that acknowledge past runs without altering gameplay). He argues meta power softens permadeath and encourages experimentation but must be balanced to avoid becoming a crutch or a grind. His main thesis is that metaprogression is really a set of storytelling tools: players tie their runs together into personal stories, and games should help them do so. Q&A covers unlocking content rather than power, how Dungeonmans caps meta power, leaderboard resets, and spoilers as meta knowledge.",
+  "games": [
+    "Dungeonmans",
+    "Tangledeep",
+    "Caves of Qud",
+    "Angband",
+    "Darkest Dungeon",
+    "Magic: The Gathering",
+    "Shinobi",
+    "1942",
+    "Diablo II",
+    "NetHack",
+    "World of Warcraft",
+    "Overwatch"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta progression",
+      "kind": "principle",
+      "claim": "Metaprogression is anything that persists outside the game-over state, which resets the game as if no one had touched it; tries (lives) degrade until game over.",
+      "detail": "Shepard defines a 'try' (Nintendo's term) as one attempt that ends on conditions like running out of HP, and game over as the full reset. Anything that survives game over counts as metaprogression. Long between-adventure structures like Darkest Dungeon's hamlet are not metaprogression in his sense; they are just one long try.",
+      "t": 218,
+      "quote": "anything that lives outside that game over state we look at as meta progression",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta progression",
+      "kind": "principle",
+      "claim": "Metaprogression comes in three types: meta knowledge, meta power and meta presence.",
+      "detail": "Shepard's framework (knowledge, power, presence) structures the whole talk. He covers knowledge first because it is the type designers rarely think of as progression.",
+      "t": 320,
+      "quote": "here are the three types of meta progress right power progression and knowledge",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "meta knowledge",
+      "kind": "principle",
+      "claim": "In permadeath games the character restarts fresh but the player does not: knowledge of monsters, puzzle solutions, static map areas and hidden counters carries over and is itself a form of progression.",
+      "detail": "His example: a player is killed by an arrow-shooting horse-bottomed man and next time ducks behind a hallway on sight; or dies to a 'fart monster' and returns with beeswax in her nose. Developers cannot control this, so they should embrace it.",
+      "t": 339,
+      "quote": "every game you start fresh with that fresh character but does the player start fresh and we know that's not true",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "monster memory",
+      "kind": "example",
+      "claim": "Angband stores monster knowledge for the player in a lookup dictionary, so meta knowledge is not always held only in the player's head.",
+      "detail": "Shepard notes the asterisk on 'player-stored' information: sometimes the game kindly records what you learned about monsters so you can look it up later.",
+      "t": 372,
+      "quote": "egg band had a dictionary right so when you started fighting monsters you've got information and they stored it for you",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta power",
+      "kind": "technique",
+      "claim": "Meta power can be kinetic (direct stat boosts carried into the next run) or soft/potential (unlocking shop items or classes that widen future choices).",
+      "detail": "Kinetic power means you walk out the door swinging harder than your predecessor. Soft power is e.g. bringing back diamonds so the shop starts selling a new item, or unlocking a class; these typically add more interesting choices rather than raw strength.",
+      "t": 491,
+      "quote": "that's what kinetic power is but we also have soft power potential energy",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta power",
+      "kind": "principle",
+      "claim": "Meta power softens the edge of permadeath and lets players experiment with silly builds without feeling they wasted their time.",
+      "detail": "Designers want pressure sometimes, not constantly, or players get anxious. If a player tries an odd build and dies early but still brings something back, they aren't punished for playing around. Shepard also notes more players will stick with (and not refund) a game if something cool happens after death.",
+      "t": 564,
+      "quote": "meta power in particular softens the edge of game over and perma death",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "continues",
+      "kind": "warning",
+      "claim": "Arcade continues that grant extra power (e.g. Shinobi's ninja magic, 1942's extra bombs) were a 'dark use' of meta power designed to extract more quarters at the hard parts.",
+      "detail": "Games earn more quarters per minute when they are harder, so power-on-continue kept players paying. The Japanese one-credit-finish culture of declining continues arose partly in response.",
+      "t": 688,
+      "quote": "the arcade and the dirty arcade owners want you to keep putting coins in that's kind of a dark use of meta power",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta power balance",
+      "kind": "warning",
+      "claim": "Meta power adds a variable set to game balance: too much makes the early game a boring walkover, while tuning late content for players who have died many times makes it a grind wall for first-run players.",
+      "detail": "Shepard says if done wrong, meta power is seen as a crutch or a grind, 'two different sides of a sad spectrum'. Monsters given extra fangs because the designer assumes 20 deaths force players to suicide-farm bonuses, which makes people genuinely unhappy.",
+      "t": 744,
+      "quote": "and you do make meta progress you've got to do it right or people will see it as a crutch or Grimes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "meta presence",
+      "kind": "principle",
+      "claim": "Meta presence means world elements that respond to the player's past runs without changing gameplay difficulty, giving players ownership of the adventure.",
+      "detail": "Shepard calls this 'the good stuff'. It suits purists who don't want power carryover: the world grows with the player and tells a repeatedly-dying player that the things she does matter.",
+      "t": 818,
+      "quote": "elements of the game that are affected by your actions as a player but don't necessarily change the gameplay",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "meta presence",
+      "kind": "example",
+      "claim": "In Caves of Qud, after a run solves the Joppa water-well quest, a new character hears the same quest from scratch; Shepard proposes the mayor could acknowledge what past characters discovered without changing the gameplay.",
+      "detail": "The player knows why the water tastes bad, but the world doesn't. A meta-presence version would have the NPC mention the creatures in the well, same place, same monsters, as a nod to the player. This makes the world less static, which is a design choice, but is harmless to gameplay.",
+      "t": 963,
+      "quote": "mitte presence is the idea that the mayor would say hey adventurer girl how you doing listen we had a problem",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "meta presence",
+      "kind": "technique",
+      "claim": "Meta presence ideas include tavern drinks named after past heroes, town tributes, and NPCs whose backstory ties to a previous character while their gameplay role stays the same.",
+      "detail": "A barkeep might remember a hero who saved his son; a mayor might be named after or seeking revenge for a previous character but still just 'cleans up the city'. Shepard cautions that player-chosen names can break a world's theme.",
+      "t": 1026,
+      "quote": "NPC's show up who say they're related to things you did now their job is the same",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "persistent world",
+      "kind": "example",
+      "claim": "In Dungeonmans, when a hero dies a dungeon appears in which the monster that killed them is the boss, making the game feel like a campaign the player is part of.",
+      "detail": "Shepard admits it is 'kind of broken': a scrappy level 2 monster that landed the last hit becomes king over stronger monsters. He wants players to have some meta power but also feel part of an ongoing campaign that rises and falls with their heroes.",
+      "t": 1090,
+      "quote": "when they die in the field a dungeon shows up and the person who killed your hero is now the boss",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player stories",
+      "kind": "principle",
+      "claim": "Metaprogression is really a set of storytelling tools, because players tie their runs together into highlight-reel stories that they tell each other.",
+      "detail": "Players don't recount every dull death; they share the crazy highlights across many runs, which is a meta story. Shepard argues storytelling is best when the player contributes to the output, and roguelike developers, unconstrained by static AAA assets, are uniquely placed to do this.",
+      "t": 1158,
+      "quote": "the tools that met a progression give us our tools of storytelling all of it",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player stories",
+      "kind": "principle",
+      "claim": "Storytelling in games is only at its best when the player contributes to the output; developers should provide seeds and listen.",
+      "detail": "Shepard says game makers are storytellers, but players are too: they tell each other and themselves stories. No matter how elaborate the authored content, missing player contribution means missing something.",
+      "t": 1322,
+      "quote": "storytelling is only the best when the player contributes to the output",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "high scores",
+      "kind": "history",
+      "claim": "Arcade high-score tables, persisting since Space Invaders, are early metaprogression that changed how people played when near a rival's score.",
+      "detail": "Using a Seattle pinball arcade where 'Kev' holds the grand champion slot, Shepard says players near the score got tense and played 'for blood'. This tension is created by players, not dictated by developers.",
+      "t": 1402,
+      "quote": "high score tables persist between game overs which means since Space Invader we've had meta progression",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "content unlocks",
+      "kind": "technique",
+      "claim": "Rather than locking fun content behind progress, a game can use meta presence to offer struggling players access to new areas out of pity, giving new content without power creep.",
+      "detail": "Answering a question about unlocks gating fun, Shepard imagines an NPC who has watched your pile of dead characters and hands you a ticket to a new dungeon. Giving players new content free of power creep is something he sees as powerful.",
+      "t": 1538,
+      "quote": "giving players the opportunity to experience new content especially if it's free of power creep is really powerful",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta power balance",
+      "kind": "example",
+      "claim": "Dungeonmans limits meta power by capping carried-over gear and making later enemies deal escalating elemental damage that requires mitigation found in the world, plus an Ironman mode with no carryover.",
+      "detail": "Carryover usually means a few stat points and slightly better gear that gives confidence early. Skills early take a lot of work. Elemental damage cannot be shaken off with stats alone; mitigation gear and scrolls must be found, preserving a mid-game challenge even for strong starts.",
+      "t": 1659,
+      "quote": "enemies get higher and higher elemental damage powers",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "leaderboards",
+      "kind": "technique",
+      "claim": "When balance patches change the meta, resetting leaderboards with seasons (as Diablo's ladder does) and giving cosmetic rewards to past champions keeps competition fair.",
+      "detail": "Asked about meta power in multiplayer or leaderboard contexts, Shepard calls the 'nuclear option' wiping leaderboards on big patches. If a patch accidentally makes something too strong that is a developer mistake; give the previous champion a special powerless hat and start over.",
+      "t": 1749,
+      "quote": "the nuclear option is when you make a big patch nukes leaderboards right that's fair enough",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "Roguelike bosses should not be so complex that players must learn them by dying repeatedly, as in MMO raids, nor require spoilers; spoilers can optionally reveal broken builds for players who want them.",
+      "detail": "Unlike WoW where you wipe repeatedly, a roguelike can't demand death-based learning. Shepard says spoilers shouldn't be mandatory; he admits Dungeonmans has some near-mandatory spoiler content (clues exist in-game) and he did 'a bad job' there.",
+      "t": 1901,
+      "quote": "we can't make them so ridiculous that you have to learn by dying because screw that",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "warning",
+      "claim": "Players should never need to go online to figure out how to progress in a roguelike.",
+      "detail": "Shepard says he doesn't believe spoilers should be mandatory and that he learned from Dungeonmans' near-mandatory spoiler content.",
+      "t": 1954,
+      "quote": "I don't believe that spoilers should be mandatory",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,3345 @@
+{
+ "id": "0jFzBf0mCRY",
+ "url": "https://www.youtube.com/watch?v=0jFzBf0mCRY",
+ "title": "Alexander Birke: Practical procedural world & story generation in Sea Of Rifts, naval roguelike RPG",
+ "speaker": "Alexander Birke",
+ "talk_title": "Practical procedural world & story generation in Sea Of Rifts, naval roguelike RPG",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1615,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Learn how to use ProcGen techniques in a commercial game context, where how long it takes to write your generator, and how easy it is for non-technical persons on the team to integrate content into it, matters as much as the quality of the output. Alexander will give you advice on how to structure your generation so it is easy to expand, and how to create a good test workflow so the whole team can test their content. He will also show how iterating on the level generation led to use signed distance fields for island generation to fit with the requirements for the gameplay. The talk will end with a showcase of the custom tools and workflows he has created for his team to put art and story content into the game's generation.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 47,
+   "title": "Game overview"
+  },
+  {
+   "start": 155,
+   "title": "Procedural best practices"
+  },
+  {
+   "start": 301,
+   "title": "State management"
+  },
+  {
+   "start": 387,
+   "title": "Visuals and debugging"
+  },
+  {
+   "start": 517,
+   "title": "Debug console and tools"
+  },
+  {
+   "start": 618,
+   "title": "World generation"
+  },
+  {
+   "start": 738,
+   "title": "Island generation"
+  },
+  {
+   "start": 831,
+   "title": "Signed distance fields"
+  },
+  {
+   "start": 932,
+   "title": "Scenery distribution"
+  },
+  {
+   "start": 1022,
+   "title": "City generation"
+  },
+  {
+   "start": 1073,
+   "title": "Narrative generation"
+  },
+  {
+   "start": 1132,
+   "title": "Choice-based narrative"
+  },
+  {
+   "start": 1204,
+   "title": "Development workflow"
+  },
+  {
+   "start": 1307,
+   "title": "Character generation"
+  },
+  {
+   "start": 1364,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4802,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.28,
+   "d": 2.88,
+   "text": "and for our final talk of this chunk and"
+  },
+  {
+   "t": 6.16,
+   "d": 2.28,
+   "text": "after this we'll do breakout discussions"
+  },
+  {
+   "t": 8.44,
+   "d": 3.72,
+   "text": "uh welcome Alex yes Alex Burke"
+  },
+  {
+   "t": 12.16,
+   "d": 1.48,
+   "text": "programmer and designer been in the"
+  },
+  {
+   "t": 13.64,
+   "d": 1.8,
+   "text": "industry for 14 years and worked in"
+  },
+  {
+   "t": 15.44,
+   "d": 2.52,
+   "text": "Denmark and the UK uh work at the"
+  },
+  {
+   "t": 17.96,
+   "d": 1.6,
+   "text": "intersection of procedural generation"
+  },
+  {
+   "t": 19.56,
+   "d": 1.56,
+   "text": "Graphics programming and how to create"
+  },
+  {
+   "t": 21.12,
+   "d": 1.76,
+   "text": "fun and expressive workflows for Debs"
+  },
+  {
+   "t": 22.88,
+   "d": 2.0,
+   "text": "and players alike uh you've worked on"
+  },
+  {
+   "t": 24.88,
+   "d": 2.44,
+   "text": "things like 111 memories retold power"
+  },
+  {
+   "t": 27.32,
+   "d": 3.2,
+   "text": "wash simulator and uh lead level TR on"
+  },
+  {
+   "t": 30.52,
+   "d": 3.28,
+   "text": "what the car which I think is great and"
+  },
+  {
+   "t": 33.8,
+   "d": 3.44,
+   "text": "yeah here to talk about sea of Rifts yes"
+  },
+  {
+   "t": 37.24,
+   "d": 2.16,
+   "text": "um that's what I'm uh about to talk"
+  },
+  {
+   "t": 39.4,
+   "d": 1.84,
+   "text": "about and uh I did have a slide"
+  },
+  {
+   "t": 41.24,
+   "d": 1.6,
+   "text": "presenting all of that stuff but since"
+  },
+  {
+   "t": 42.84,
+   "d": 1.36,
+   "text": "we are a bit short on time I'm just"
+  },
+  {
+   "t": 44.2,
+   "d": 2.2,
+   "text": "going to skip that and go straight"
+  },
+  {
+   "t": 46.4,
+   "d": 4.76,
+   "text": "to the game so um I'm going to talk"
+  },
+  {
+   "t": 51.16,
+   "d": 3.16,
+   "text": "about the Sea of Rifts which is a Rog"
+  },
+  {
+   "t": 54.32,
+   "d": 0.96,
+   "text": "like"
+  },
+  {
+   "t": 55.28,
+   "d": 3.64,
+   "text": "combining uh with the like mechanics of"
+  },
+  {
+   "t": 58.92,
+   "d": 1.52,
+   "text": "a storage generator"
+  },
+  {
+   "t": 60.44,
+   "d": 2.84,
+   "text": "um in the game you take on the role of"
+  },
+  {
+   "t": 63.28,
+   "d": 2.6,
+   "text": "Captain heading out into this hostile"
+  },
+  {
+   "t": 65.88,
+   "d": 2.08,
+   "text": "world that is slowly being torn apart by"
+  },
+  {
+   "t": 67.96,
+   "d": 2.44,
+   "text": "these Rifts into other dimensions on"
+  },
+  {
+   "t": 70.4,
+   "d": 2.48,
+   "text": "your journey you take a crew of proced"
+  },
+  {
+   "t": 72.88,
+   "d": 4.0,
+   "text": "generated characters and uh horrible"
+  },
+  {
+   "t": 76.88,
+   "d": 2.68,
+   "text": "things and interesting stuff happens uh"
+  },
+  {
+   "t": 79.56,
+   "d": 2.32,
+   "text": "along the way to both you and your"
+  },
+  {
+   "t": 81.88,
+   "d": 3.88,
+   "text": "crew um when you uh are not out"
+  },
+  {
+   "t": 85.76,
+   "d": 1.96,
+   "text": "exploring this hostile world you return"
+  },
+  {
+   "t": 87.72,
+   "d": 3.28,
+   "text": "back to port and in Port you can repair"
+  },
+  {
+   "t": 91.0,
+   "d": 2.2,
+   "text": "your ship and upgrade it and this is"
+  },
+  {
+   "t": 93.2,
+   "d": 3.6,
+   "text": "also where you hire on crew members crew"
+  },
+  {
+   "t": 96.8,
+   "d": 2.2,
+   "text": "members are also generated from a bunch"
+  },
+  {
+   "t": 99.0,
+   "d": 2.92,
+   "text": "of uh character traits we pick at random"
+  },
+  {
+   "t": 101.92,
+   "d": 1.72,
+   "text": "they both Define like how the character"
+  },
+  {
+   "t": 103.64,
+   "d": 2.04,
+   "text": "personality is but also what the"
+  },
+  {
+   "t": 105.68,
+   "d": 3.04,
+   "text": "capabilities are what is not generated"
+  },
+  {
+   "t": 108.72,
+   "d": 3.76,
+   "text": "is um my own crew uh we are quite small"
+  },
+  {
+   "t": 112.48,
+   "d": 2.0,
+   "text": "uh group of people making this game and"
+  },
+  {
+   "t": 114.48,
+   "d": 2.24,
+   "text": "I'm also the main programmer on the game"
+  },
+  {
+   "t": 116.72,
+   "d": 2.72,
+   "text": "as part as well as being like the uh"
+  },
+  {
+   "t": 119.44,
+   "d": 0.96,
+   "text": "creat"
+  },
+  {
+   "t": 120.4,
+   "d": 2.76,
+   "text": "director on the project so it's um like"
+  },
+  {
+   "t": 123.16,
+   "d": 4.16,
+   "text": "I have to be quite uh like efficient and"
+  },
+  {
+   "t": 127.32,
+   "d": 2.56,
+   "text": "practical in how I make the game and uh"
+  },
+  {
+   "t": 129.88,
+   "d": 1.56,
+   "text": "also trying to get like as much of the"
+  },
+  {
+   "t": 131.44,
+   "d": 2.08,
+   "text": "team to uh like contribute into it"
+  },
+  {
+   "t": 133.52,
+   "d": 1.72,
+   "text": "directly so that's what I'm going to"
+  },
+  {
+   "t": 135.24,
+   "d": 2.44,
+   "text": "talk about today so the agenda is going"
+  },
+  {
+   "t": 137.68,
+   "d": 2.72,
+   "text": "to be uh best practices for using"
+  },
+  {
+   "t": 140.4,
+   "d": 2.16,
+   "text": "procedural generation in a commercial"
+  },
+  {
+   "t": 142.56,
+   "d": 3.28,
+   "text": "game it's how we generate the world and"
+  },
+  {
+   "t": 145.84,
+   "d": 2.2,
+   "text": "level in the game and then I'm also"
+  },
+  {
+   "t": 148.04,
+   "d": 1.44,
+   "text": "going to talk about story and character"
+  },
+  {
+   "t": 149.48,
+   "d": 1.68,
+   "text": "generation and a little bit more"
+  },
+  {
+   "t": 151.16,
+   "d": 2.52,
+   "text": "Pipeline and editor specific"
+  },
+  {
+   "t": 153.68,
+   "d": 2.24,
+   "text": "stuff all right so first I'm going to"
+  },
+  {
+   "t": 155.92,
+   "d": 2.44,
+   "text": "talk about random number generators or"
+  },
+  {
+   "t": 158.36,
+   "d": 2.44,
+   "text": "rather that we don't actually use them"
+  },
+  {
+   "t": 160.8,
+   "d": 2.76,
+   "text": "um I found that hash and noise uh"
+  },
+  {
+   "t": 163.56,
+   "d": 2.6,
+   "text": "methods are way better than traditional"
+  },
+  {
+   "t": 166.16,
+   "d": 2.72,
+   "text": "RS they produce a higher quality of uh"
+  },
+  {
+   "t": 168.88,
+   "d": 2.72,
+   "text": "output than like for example the random"
+  },
+  {
+   "t": 171.6,
+   "d": 1.92,
+   "text": "number generator you can find in unity"
+  },
+  {
+   "t": 173.52,
+   "d": 1.88,
+   "text": "uh it has no state which is super"
+  },
+  {
+   "t": 175.4,
+   "d": 1.56,
+   "text": "beneficial because it means that you can"
+  },
+  {
+   "t": 176.96,
+   "d": 1.68,
+   "text": "always get the same number out if you"
+  },
+  {
+   "t": 178.64,
+   "d": 2.6,
+   "text": "just have the same same uh like position"
+  },
+  {
+   "t": 181.24,
+   "d": 2.96,
+   "text": "into your noise method um that means"
+  },
+  {
+   "t": 184.2,
+   "d": 1.64,
+   "text": "that they're threat safe and that means"
+  },
+  {
+   "t": 185.84,
+   "d": 1.32,
+   "text": "that you can also like put them over on"
+  },
+  {
+   "t": 187.16,
+   "d": 1.6,
+   "text": "the GPU really easily if you need to"
+  },
+  {
+   "t": 188.76,
+   "d": 1.64,
+   "text": "some point at some point like Port some"
+  },
+  {
+   "t": 190.4,
+   "d": 3.08,
+   "text": "of your code over to run there and it's"
+  },
+  {
+   "t": 193.48,
+   "d": 1.6,
+   "text": "also easy to extend into multiple"
+  },
+  {
+   "t": 195.08,
+   "d": 2.88,
+   "text": "dimensions and I don't really see a a"
+  },
+  {
+   "t": 197.96,
+   "d": 1.6,
+   "text": "use case for why you would use"
+  },
+  {
+   "t": 199.56,
+   "d": 1.8,
+   "text": "traditional ints maybe there is one but"
+  },
+  {
+   "t": 201.36,
+   "d": 5.92,
+   "text": "I I don't know so yeah noce is"
+  },
+  {
+   "t": 207.56,
+   "d": 1.96,
+   "text": "noce another thing that's also super"
+  },
+  {
+   "t": 209.52,
+   "d": 2.0,
+   "text": "important is that you need to make sure"
+  },
+  {
+   "t": 211.52,
+   "d": 3.24,
+   "text": "that your generation is deterministic um"
+  },
+  {
+   "t": 214.76,
+   "d": 1.52,
+   "text": "you might have a player that will"
+  },
+  {
+   "t": 216.28,
+   "d": 2.32,
+   "text": "encounter a buck when we are generating"
+  },
+  {
+   "t": 218.6,
+   "d": 2.2,
+   "text": "a whole world and like narrative and"
+  },
+  {
+   "t": 220.8,
+   "d": 2.8,
+   "text": "characters it's bound to happen and if"
+  },
+  {
+   "t": 223.6,
+   "d": 1.96,
+   "text": "you can't recreate the like the same"
+  },
+  {
+   "t": 225.56,
+   "d": 2.28,
+   "text": "state of the game that your player is in"
+  },
+  {
+   "t": 227.84,
+   "d": 2.08,
+   "text": "then it's impossible to track down what"
+  },
+  {
+   "t": 229.92,
+   "d": 4.4,
+   "text": "actually happened and that is um also"
+  },
+  {
+   "t": 234.32,
+   "d": 2.04,
+   "text": "tied into this concept I call layer"
+  },
+  {
+   "t": 236.36,
+   "d": 2.56,
+   "text": "caking it's similar to like composition"
+  },
+  {
+   "t": 238.92,
+   "d": 1.32,
+   "text": "in um"
+  },
+  {
+   "t": 240.24,
+   "d": 1.8,
+   "text": "like object oriented programming uh"
+  },
+  {
+   "t": 242.04,
+   "d": 1.56,
+   "text": "patterns it's it's basically that you"
+  },
+  {
+   "t": 243.6,
+   "d": 1.8,
+   "text": "have a generator for each aspect of the"
+  },
+  {
+   "t": 245.4,
+   "d": 2.52,
+   "text": "game this means that you can take out a"
+  },
+  {
+   "t": 247.92,
+   "d": 2.04,
+   "text": "generator and you can like tweak it uh"
+  },
+  {
+   "t": 249.96,
+   "d": 1.48,
+   "text": "it also makes it easier to read because"
+  },
+  {
+   "t": 251.44,
+   "d": 1.4,
+   "text": "like the responsibility of what the"
+  },
+  {
+   "t": 252.84,
+   "d": 1.72,
+   "text": "generator does is much more like well"
+  },
+  {
+   "t": 254.56,
+   "d": 2.12,
+   "text": "defined than if it was just like one big"
+  },
+  {
+   "t": 256.68,
+   "d": 2.64,
+   "text": "smudge of spaghetti code that did all"
+  },
+  {
+   "t": 259.32,
+   "d": 2.12,
+   "text": "the the"
+  },
+  {
+   "t": 261.44,
+   "d": 2.48,
+   "text": "generation in our game it looks like"
+  },
+  {
+   "t": 263.92,
+   "d": 3.44,
+   "text": "this we have the world generator that uh"
+  },
+  {
+   "t": 267.36,
+   "d": 1.68,
+   "text": "has like the Master Seat of the whole"
+  },
+  {
+   "t": 269.04,
+   "d": 3.44,
+   "text": "world and that in turn then seeds each"
+  },
+  {
+   "t": 272.48,
+   "d": 2.32,
+   "text": "uh sub generator and we have two types"
+  },
+  {
+   "t": 274.8,
+   "d": 1.92,
+   "text": "of generators we have the those that"
+  },
+  {
+   "t": 276.72,
+   "d": 1.52,
+   "text": "generate like cells in the world and we"
+  },
+  {
+   "t": 278.24,
+   "d": 3.12,
+   "text": "also just have like the concept of uh a"
+  },
+  {
+   "t": 281.36,
+   "d": 2.04,
+   "text": "generator in in a more abstract sense"
+  },
+  {
+   "t": 283.4,
+   "d": 1.72,
+   "text": "that's used for stuff for example like"
+  },
+  {
+   "t": 285.12,
+   "d": 3.64,
+   "text": "uh like names in the game and um this"
+  },
+  {
+   "t": 288.76,
+   "d": 1.36,
+   "text": "means that it's actually quite easy for"
+  },
+  {
+   "t": 290.12,
+   "d": 2.64,
+   "text": "us to like add more generators into the"
+  },
+  {
+   "t": 292.76,
+   "d": 1.76,
+   "text": "game without changing the output of what"
+  },
+  {
+   "t": 294.52,
+   "d": 2.64,
+   "text": "was done"
+  },
+  {
+   "t": 298.48,
+   "d": 2.72,
+   "text": "before I I also want to touch a bit on"
+  },
+  {
+   "t": 301.2,
+   "d": 3.84,
+   "text": "state um so I would say like the hottest"
+  },
+  {
+   "t": 305.04,
+   "d": 2.64,
+   "text": "thing in proced generation uh right now"
+  },
+  {
+   "t": 307.68,
+   "d": 2.48,
+   "text": "seems to be a wave function collapse"
+  },
+  {
+   "t": 310.16,
+   "d": 1.64,
+   "text": "where it's basically like a constraint"
+  },
+  {
+   "t": 311.8,
+   "d": 3.72,
+   "text": "solver and I think it's it has its"
+  },
+  {
+   "t": 315.52,
+   "d": 2.52,
+   "text": "problems like uh making games this way"
+  },
+  {
+   "t": 318.04,
+   "d": 3.2,
+   "text": "um like in our case uh we can't really"
+  },
+  {
+   "t": 321.24,
+   "d": 2.0,
+   "text": "use it because we want to always be able"
+  },
+  {
+   "t": 323.24,
+   "d": 2.2,
+   "text": "to like teleport to an arbitrary point"
+  },
+  {
+   "t": 325.44,
+   "d": 2.08,
+   "text": "in the world that's both for like uh"
+  },
+  {
+   "t": 327.52,
+   "d": 1.68,
+   "text": "debugging purposes it's really nice to"
+  },
+  {
+   "t": 329.2,
+   "d": 1.52,
+   "text": "just be able to say I'm going to spawn"
+  },
+  {
+   "t": 330.72,
+   "d": 3.68,
+   "text": "in here um but we also have gameplay uh"
+  },
+  {
+   "t": 334.4,
+   "d": 1.84,
+   "text": "that takes uh like where the player can"
+  },
+  {
+   "t": 336.24,
+   "d": 2.8,
+   "text": "teleport around and uh the problem with"
+  },
+  {
+   "t": 339.04,
+   "d": 1.92,
+   "text": "something like wave function collapse is"
+  },
+  {
+   "t": 340.96,
+   "d": 3.64,
+   "text": "that you uh need to like start from an"
+  },
+  {
+   "t": 344.6,
+   "d": 2.12,
+   "text": "initial State um and then like your"
+  },
+  {
+   "t": 346.72,
+   "d": 2.88,
+   "text": "generation basically like uh like grows"
+  },
+  {
+   "t": 349.6,
+   "d": 2.96,
+   "text": "out from outwards from that point um and"
+  },
+  {
+   "t": 352.56,
+   "d": 1.64,
+   "text": "that's not something that really fits uh"
+  },
+  {
+   "t": 354.2,
+   "d": 3.48,
+   "text": "our use case I've also seen um like"
+  },
+  {
+   "t": 357.68,
+   "d": 2.8,
+   "text": "procedural games in the past uh like"
+  },
+  {
+   "t": 360.48,
+   "d": 2.52,
+   "text": "like take a long time to basically"
+  },
+  {
+   "t": 363.0,
+   "d": 2.0,
+   "text": "generate the the world before you can"
+  },
+  {
+   "t": 365.0,
+   "d": 3.08,
+   "text": "start playing in it um we do have like a"
+  },
+  {
+   "t": 368.08,
+   "d": 3.08,
+   "text": "world generation like uh State uh when"
+  },
+  {
+   "t": 371.16,
+   "d": 2.32,
+   "text": "you start up an instance of the game but"
+  },
+  {
+   "t": 373.48,
+   "d": 1.32,
+   "text": "it's super short because it doesn't"
+  },
+  {
+   "t": 374.8,
+   "d": 1.72,
+   "text": "generate that much data and then most of"
+  },
+  {
+   "t": 376.52,
+   "d": 2.36,
+   "text": "the the the data is actually generated"
+  },
+  {
+   "t": 378.88,
+   "d": 2.48,
+   "text": "each time you enter a cell and that just"
+  },
+  {
+   "t": 381.36,
+   "d": 2.88,
+   "text": "makes it much much easier for us to"
+  },
+  {
+   "t": 384.24,
+   "d": 2.64,
+   "text": "iterate on the"
+  },
+  {
+   "t": 388.0,
+   "d": 2.16,
+   "text": "game so"
+  },
+  {
+   "t": 390.16,
+   "d": 3.32,
+   "text": "as uh I was being introduced um I really"
+  },
+  {
+   "t": 393.48,
+   "d": 2.12,
+   "text": "like uh like Graphics programming I"
+  },
+  {
+   "t": 395.6,
+   "d": 1.36,
+   "text": "think it's super fun and that's also"
+  },
+  {
+   "t": 396.96,
+   "d": 2.12,
+   "text": "something we're using a lot in like how"
+  },
+  {
+   "t": 399.08,
+   "d": 3.8,
+   "text": "we make the game so for example for um"
+  },
+  {
+   "t": 402.88,
+   "d": 1.96,
+   "text": "like stuff that is static in the"
+  },
+  {
+   "t": 404.84,
+   "d": 1.76,
+   "text": "environment we have this Shader that"
+  },
+  {
+   "t": 406.6,
+   "d": 2.08,
+   "text": "allows us to easily do some color"
+  },
+  {
+   "t": 408.68,
+   "d": 2.08,
+   "text": "randomization on them because we have a"
+  },
+  {
+   "t": 410.76,
+   "d": 2.2,
+   "text": "streaming World setup the x and z"
+  },
+  {
+   "t": 412.96,
+   "d": 2.08,
+   "text": "coordinates of everything can like shift"
+  },
+  {
+   "t": 415.04,
+   "d": 2.4,
+   "text": "around so the only two constants we have"
+  },
+  {
+   "t": 417.44,
+   "d": 3.12,
+   "text": "is the uh rotation of the object and the"
+  },
+  {
+   "t": 420.56,
+   "d": 1.52,
+   "text": "the height so we take those and"
+  },
+  {
+   "t": 422.08,
+   "d": 2.36,
+   "text": "basically generate a like randomized"
+  },
+  {
+   "t": 424.44,
+   "d": 2.8,
+   "text": "value um like static randomized value of"
+  },
+  {
+   "t": 427.24,
+   "d": 1.76,
+   "text": "each object and we then use that to like"
+  },
+  {
+   "t": 429.0,
+   "d": 3.48,
+   "text": "add some like color variation this is uh"
+  },
+  {
+   "t": 432.48,
+   "d": 2.56,
+   "text": "a little bit fake like real pine trees"
+  },
+  {
+   "t": 435.04,
+   "d": 1.56,
+   "text": "for example like they actually have the"
+  },
+  {
+   "t": 436.6,
+   "d": 2.36,
+   "text": "same color uh but uh it helps like"
+  },
+  {
+   "t": 438.96,
+   "d": 1.52,
+   "text": "giving that perceptual difference to"
+  },
+  {
+   "t": 440.48,
+   "d": 2.08,
+   "text": "them that we didn't otherwise"
+  },
+  {
+   "t": 442.56,
+   "d": 3.32,
+   "text": "have for um more like uh human made"
+  },
+  {
+   "t": 445.88,
+   "d": 2.76,
+   "text": "objects uh we have this HSV system where"
+  },
+  {
+   "t": 448.64,
+   "d": 2.12,
+   "text": "we can take an asset that had wasn't"
+  },
+  {
+   "t": 450.76,
+   "d": 1.56,
+   "text": "initially like created for procedural"
+  },
+  {
+   "t": 452.32,
+   "d": 1.92,
+   "text": "generation so that includes stuff from"
+  },
+  {
+   "t": 454.24,
+   "d": 2.24,
+   "text": "that asset store and then we can Define"
+  },
+  {
+   "t": 456.48,
+   "d": 2.68,
+   "text": "this uh texture map where like a given"
+  },
+  {
+   "t": 459.16,
+   "d": 1.8,
+   "text": "area of the model for example like the"
+  },
+  {
+   "t": 460.96,
+   "d": 2.76,
+   "text": "hall on the ship will get one uh"
+  },
+  {
+   "t": 463.72,
+   "d": 2.2,
+   "text": "specific HSV offset so we basically"
+  },
+  {
+   "t": 465.92,
+   "d": 2.92,
+   "text": "convert convert from RGB over to HSV"
+  },
+  {
+   "t": 468.84,
+   "d": 1.52,
+   "text": "apply the offset and then convert back"
+  },
+  {
+   "t": 470.36,
+   "d": 3.44,
+   "text": "to RGB again and this allows us to again"
+  },
+  {
+   "t": 473.8,
+   "d": 2.04,
+   "text": "like get a lot more visual variation out"
+  },
+  {
+   "t": 475.84,
+   "d": 3.88,
+   "text": "of a few amount of assets"
+  },
+  {
+   "t": 481.2,
+   "d": 1.36,
+   "text": "I would also say like one of the first"
+  },
+  {
+   "t": 482.56,
+   "d": 1.52,
+   "text": "things you should do if you if you're"
+  },
+  {
+   "t": 484.08,
+   "d": 1.56,
+   "text": "doing any kind of game but especially"
+  },
+  {
+   "t": 485.64,
+   "d": 2.08,
+   "text": "something that's like systemic um you"
+  },
+  {
+   "t": 487.72,
+   "d": 2.8,
+   "text": "need like a uh debug menu where you can"
+  },
+  {
+   "t": 490.52,
+   "d": 3.48,
+   "text": "easily add in uh commands that uh like"
+  },
+  {
+   "t": 494.0,
+   "d": 2.6,
+   "text": "benefits the team so we have this where"
+  },
+  {
+   "t": 496.6,
+   "d": 3.2,
+   "text": "we can basically put in a path and then"
+  },
+  {
+   "t": 499.8,
+   "d": 1.4,
+   "text": "uh like all of the commands is like"
+  },
+  {
+   "t": 501.2,
+   "d": 2.2,
+   "text": "structured into this like tree structure"
+  },
+  {
+   "t": 503.4,
+   "d": 3.24,
+   "text": "um or like yeah all the the debug uh"
+  },
+  {
+   "t": 506.64,
+   "d": 1.92,
+   "text": "options are like basically put inside"
+  },
+  {
+   "t": 508.56,
+   "d": 2.84,
+   "text": "like these buttons with folders and you"
+  },
+  {
+   "t": 511.4,
+   "d": 3.36,
+   "text": "can um like we can very easily add more"
+  },
+  {
+   "t": 514.76,
+   "d": 3.96,
+   "text": "commands that way into uh the"
+  },
+  {
+   "t": 518.76,
+   "d": 2.72,
+   "text": "game because it's a procedural game we"
+  },
+  {
+   "t": 521.48,
+   "d": 1.32,
+   "text": "don't actually have a scene to really"
+  },
+  {
+   "t": 522.8,
+   "d": 2.56,
+   "text": "inspect so if something goes wrong it's"
+  },
+  {
+   "t": 525.36,
+   "d": 2.16,
+   "text": "uh quite like quite handy to be able to"
+  },
+  {
+   "t": 527.52,
+   "d": 2.56,
+   "text": "visualize it uh like what the generation"
+  },
+  {
+   "t": 530.08,
+   "d": 4.4,
+   "text": "is actually doing and um I like needed a"
+  },
+  {
+   "t": 534.48,
+   "d": 1.76,
+   "text": "place to like basically like show this"
+  },
+  {
+   "t": 536.24,
+   "d": 2.04,
+   "text": "to us as we were developing we have a"
+  },
+  {
+   "t": 538.28,
+   "d": 2.44,
+   "text": "map in the game My as well use that so"
+  },
+  {
+   "t": 540.72,
+   "d": 1.6,
+   "text": "uh that's what you see here sometimes it"
+  },
+  {
+   "t": 542.32,
+   "d": 1.72,
+   "text": "corresponds to the player's position and"
+  },
+  {
+   "t": 544.04,
+   "d": 1.76,
+   "text": "sometimes it's just completely arbitary"
+  },
+  {
+   "t": 545.8,
+   "d": 2.92,
+   "text": "what uh what is being"
+  },
+  {
+   "t": 549.0,
+   "d": 2.72,
+   "text": "shown a recent Edition I'm really"
+  },
+  {
+   "t": 551.72,
+   "d": 3.2,
+   "text": "excited about is we have a debug console"
+  },
+  {
+   "t": 554.92,
+   "d": 2.0,
+   "text": "in the game now so we can text take text"
+  },
+  {
+   "t": 556.92,
+   "d": 4.72,
+   "text": "input um and that also um talks together"
+  },
+  {
+   "t": 561.64,
+   "d": 2.48,
+   "text": "to this uh console input component that"
+  },
+  {
+   "t": 564.12,
+   "d": 3.04,
+   "text": "we can add onto game objects uh inside"
+  },
+  {
+   "t": 567.16,
+   "d": 2.2,
+   "text": "our Unity scene when that uh comp"
+  },
+  {
+   "t": 569.36,
+   "d": 1.76,
+   "text": "component gets enabled it just injects"
+  },
+  {
+   "t": 571.12,
+   "d": 3.2,
+   "text": "all of that text into the debug console"
+  },
+  {
+   "t": 574.32,
+   "d": 2.4,
+   "text": "and um that allows us to basically rerun"
+  },
+  {
+   "t": 576.72,
+   "d": 1.56,
+   "text": "the same conditions again and again if"
+  },
+  {
+   "t": 578.28,
+   "d": 2.2,
+   "text": "we are like fixing a bug or iterating on"
+  },
+  {
+   "t": 580.48,
+   "d": 2.92,
+   "text": "a system um what I think is is even more"
+  },
+  {
+   "t": 583.4,
+   "d": 2.28,
+   "text": "exciting is because we can take text"
+  },
+  {
+   "t": 585.68,
+   "d": 3.16,
+   "text": "input now we can actually uh use the"
+  },
+  {
+   "t": 588.84,
+   "d": 2.52,
+   "text": "Elgato stream deck um that has the"
+  },
+  {
+   "t": 591.36,
+   "d": 2.12,
+   "text": "ability to send in text as a like a"
+  },
+  {
+   "t": 593.48,
+   "d": 2.08,
+   "text": "macro command when you click a button"
+  },
+  {
+   "t": 595.56,
+   "d": 2.8,
+   "text": "and this has allowed the like individual"
+  },
+  {
+   "t": 598.36,
+   "d": 2.16,
+   "text": "um team members to basically make their"
+  },
+  {
+   "t": 600.52,
+   "d": 4.08,
+   "text": "own debug menu outside of the game and I"
+  },
+  {
+   "t": 604.6,
+   "d": 3.12,
+   "text": "find that it's um like on a given task I"
+  },
+  {
+   "t": 607.72,
+   "d": 2.84,
+   "text": "will actually like um create a little"
+  },
+  {
+   "t": 610.56,
+   "d": 1.6,
+   "text": "like customized workflow depending on"
+  },
+  {
+   "t": 612.16,
+   "d": 2.12,
+   "text": "what I'm doing right now and um yeah"
+  },
+  {
+   "t": 614.28,
+   "d": 2.72,
+   "text": "it's super"
+  },
+  {
+   "t": 617.32,
+   "d": 3.68,
+   "text": "handy all right then we have world and"
+  },
+  {
+   "t": 621.0,
+   "d": 2.2,
+   "text": "land"
+  },
+  {
+   "t": 623.2,
+   "d": 4.08,
+   "text": "generation so uh to start with we did a"
+  },
+  {
+   "t": 627.28,
+   "d": 2.36,
+   "text": "very standard thing of um like having"
+  },
+  {
+   "t": 629.64,
+   "d": 1.92,
+   "text": "layers of pearing noise that created a"
+  },
+  {
+   "t": 631.56,
+   "d": 3.0,
+   "text": "height map and we did this in two like"
+  },
+  {
+   "t": 634.56,
+   "d": 2.2,
+   "text": "magnitudes we had World cells and we"
+  },
+  {
+   "t": 636.76,
+   "d": 2.84,
+   "text": "also had like the the lands Contour when"
+  },
+  {
+   "t": 639.6,
+   "d": 1.8,
+   "text": "you're inside like a cell of the"
+  },
+  {
+   "t": 641.4,
+   "d": 3.04,
+   "text": "Generation Um this worked okay like we"
+  },
+  {
+   "t": 644.44,
+   "d": 4.12,
+   "text": "got some uh like islands and uh like uh"
+  },
+  {
+   "t": 648.56,
+   "d": 2.88,
+   "text": "continents that looked fairly realistic"
+  },
+  {
+   "t": 651.44,
+   "d": 2.04,
+   "text": "but I think like if you know what you're"
+  },
+  {
+   "t": 653.48,
+   "d": 1.4,
+   "text": "looking at like you always be like yeah"
+  },
+  {
+   "t": 654.88,
+   "d": 1.84,
+   "text": "I can definitely see like two layers of"
+  },
+  {
+   "t": 656.72,
+   "d": 2.36,
+   "text": "pearly noise on top of each other here"
+  },
+  {
+   "t": 659.08,
+   "d": 3.28,
+   "text": "and it also had some other not so good"
+  },
+  {
+   "t": 662.36,
+   "d": 3.52,
+   "text": "uh uh effects um we had lakes and"
+  },
+  {
+   "t": 665.88,
+   "d": 1.92,
+   "text": "sometimes you would get stuck in a lake"
+  },
+  {
+   "t": 667.8,
+   "d": 3.12,
+   "text": "um which was like a very sad way of both"
+  },
+  {
+   "t": 670.92,
+   "d": 1.4,
+   "text": "starting and then very quickly ending"
+  },
+  {
+   "t": 672.32,
+   "d": 0.92,
+   "text": "your your"
+  },
+  {
+   "t": 673.24,
+   "d": 3.08,
+   "text": "run also you couldn't really balance the"
+  },
+  {
+   "t": 676.32,
+   "d": 1.8,
+   "text": "generation very well because it was just"
+  },
+  {
+   "t": 678.12,
+   "d": 2.0,
+   "text": "based on like layers of noise there"
+  },
+  {
+   "t": 680.12,
+   "d": 1.8,
+   "text": "wasn't any concept of what actually"
+  },
+  {
+   "t": 681.92,
+   "d": 2.84,
+   "text": "makes the level good to play um so here"
+  },
+  {
+   "t": 684.76,
+   "d": 1.32,
+   "text": "for example like the player stuck in the"
+  },
+  {
+   "t": 686.08,
+   "d": 1.2,
+   "text": "middle of nowhere and can't really"
+  },
+  {
+   "t": 687.28,
+   "d": 3.72,
+   "text": "easily progress in the game"
+  },
+  {
+   "t": 691.0,
+   "d": 2.44,
+   "text": "and that's kind of like a a takeaway I"
+  },
+  {
+   "t": 693.44,
+   "d": 1.88,
+   "text": "want you to have from this talk is that"
+  },
+  {
+   "t": 695.32,
+   "d": 2.24,
+   "text": "like you need to understand um the"
+  },
+  {
+   "t": 697.56,
+   "d": 1.64,
+   "text": "pattern of what you're generating like"
+  },
+  {
+   "t": 699.2,
+   "d": 2.44,
+   "text": "how should it play what should it look"
+  },
+  {
+   "t": 701.64,
+   "d": 2.04,
+   "text": "like and just as important where can you"
+  },
+  {
+   "t": 703.68,
+   "d": 2.36,
+   "text": "cheat like you don't need to like"
+  },
+  {
+   "t": 706.04,
+   "d": 2.48,
+   "text": "generate the like a real world in order"
+  },
+  {
+   "t": 708.52,
+   "d": 1.72,
+   "text": "to to make your game work or like your"
+  },
+  {
+   "t": 710.24,
+   "d": 1.88,
+   "text": "visuals work you just have to like"
+  },
+  {
+   "t": 712.12,
+   "d": 2.24,
+   "text": "figure out what is actually like the key"
+  },
+  {
+   "t": 714.36,
+   "d": 1.64,
+   "text": "part of the experience or the key part"
+  },
+  {
+   "t": 716.0,
+   "d": 2.84,
+   "text": "of the the visuals um that we need and"
+  },
+  {
+   "t": 718.84,
+   "d": 2.32,
+   "text": "uh I have an example of that later but"
+  },
+  {
+   "t": 721.16,
+   "d": 1.2,
+   "text": "and if it's something that you think is"
+  },
+  {
+   "t": 722.36,
+   "d": 2.24,
+   "text": "interesting then uh the Timeless way of"
+  },
+  {
+   "t": 724.6,
+   "d": 3.24,
+   "text": "building um if you have read uh J"
+  },
+  {
+   "t": 727.84,
+   "d": 2.72,
+   "text": "Shell's um game design book on on like"
+  },
+  {
+   "t": 730.56,
+   "d": 2.44,
+   "text": "lenses and also like software patterns"
+  },
+  {
+   "t": 733.0,
+   "d": 2.04,
+   "text": "all of that is actually based on this"
+  },
+  {
+   "t": 735.04,
+   "d": 3.6,
+   "text": "book um super interesting"
+  },
+  {
+   "t": 738.92,
+   "d": 4.24,
+   "text": "read okay so what did we re replace the"
+  },
+  {
+   "t": 743.16,
+   "d": 2.16,
+   "text": "perly noise with um the first thing is"
+  },
+  {
+   "t": 745.32,
+   "d": 2.48,
+   "text": "that we needed a better like player goal"
+  },
+  {
+   "t": 747.8,
+   "d": 1.84,
+   "text": "so it ended up being that have to get to"
+  },
+  {
+   "t": 749.64,
+   "d": 2.4,
+   "text": "the center of the world that's where it"
+  },
+  {
+   "t": 752.04,
+   "d": 3.6,
+   "text": "fell apart and um that also lend itself"
+  },
+  {
+   "t": 755.64,
+   "d": 1.76,
+   "text": "well to having this like basically"
+  },
+  {
+   "t": 757.4,
+   "d": 2.2,
+   "text": "organizing the whole world as a big uh"
+  },
+  {
+   "t": 759.6,
+   "d": 3.44,
+   "text": "Circle and we uh then generate these uh"
+  },
+  {
+   "t": 763.04,
+   "d": 2.64,
+   "text": "like zones uh green zones can contain"
+  },
+  {
+   "t": 765.68,
+   "d": 2.56,
+   "text": "islands with Harbors Blues can contain"
+  },
+  {
+   "t": 768.24,
+   "d": 3.6,
+   "text": "these Rifts into other dimensions and"
+  },
+  {
+   "t": 771.84,
+   "d": 2.12,
+   "text": "the red circles they will always contain"
+  },
+  {
+   "t": 773.96,
+   "d": 2.2,
+   "text": "a rift and this structure structure"
+  },
+  {
+   "t": 776.16,
+   "d": 2.4,
+   "text": "means that every time the player wants"
+  },
+  {
+   "t": 778.56,
+   "d": 1.64,
+   "text": "to progress first further to their like"
+  },
+  {
+   "t": 780.2,
+   "d": 1.96,
+   "text": "main objective of getting to the center"
+  },
+  {
+   "t": 782.16,
+   "d": 1.68,
+   "text": "they will have to at some point sail"
+  },
+  {
+   "t": 783.84,
+   "d": 2.92,
+   "text": "through uh Rift in in order to succeed"
+  },
+  {
+   "t": 786.76,
+   "d": 2.44,
+   "text": "in that and that allows us to also"
+  },
+  {
+   "t": 789.2,
+   "d": 1.84,
+   "text": "control the like the difficulty it's"
+  },
+  {
+   "t": 791.04,
+   "d": 1.32,
+   "text": "basically just a question of like how"
+  },
+  {
+   "t": 792.36,
+   "d": 3.56,
+   "text": "close to the center of the world is the"
+  },
+  {
+   "t": 795.92,
+   "d": 1.8,
+   "text": "player"
+  },
+  {
+   "t": 797.72,
+   "d": 3.84,
+   "text": "oops as you can see it's also easier for"
+  },
+  {
+   "t": 801.56,
+   "d": 2.72,
+   "text": "like a lot easier to actually adjust the"
+  },
+  {
+   "t": 804.28,
+   "d": 2.56,
+   "text": "like how the map looks like and all the"
+  },
+  {
+   "t": 806.84,
+   "d": 2.4,
+   "text": "parameters for how the map is generated"
+  },
+  {
+   "t": 809.24,
+   "d": 2.56,
+   "text": "is tied into gam playay um like what is"
+  },
+  {
+   "t": 811.8,
+   "d": 3.08,
+   "text": "the distance between the the harbors"
+  },
+  {
+   "t": 814.88,
+   "d": 2.84,
+   "text": "like how big are like these Island zones"
+  },
+  {
+   "t": 817.72,
+   "d": 2.4,
+   "text": "how big are the rift zones and like is"
+  },
+  {
+   "t": 820.12,
+   "d": 2.0,
+   "text": "like what is the progression in like"
+  },
+  {
+   "t": 822.12,
+   "d": 1.64,
+   "text": "length of getting through those Rift"
+  },
+  {
+   "t": 823.76,
+   "d": 2.36,
+   "text": "zones as you get closer to the center um"
+  },
+  {
+   "t": 826.12,
+   "d": 1.36,
+   "text": "instead of just being like layers of"
+  },
+  {
+   "t": 827.48,
+   "d": 1.32,
+   "text": "pearing noise this actually has"
+  },
+  {
+   "t": 828.8,
+   "d": 3.2,
+   "text": "something to do with the"
+  },
+  {
+   "t": 832.0,
+   "d": 3.4,
+   "text": "game okay so that takes care of the like"
+  },
+  {
+   "t": 835.4,
+   "d": 3.44,
+   "text": "the worlds now let's talk about Islands"
+  },
+  {
+   "t": 838.84,
+   "d": 2.96,
+   "text": "so so the my main goal was that I we"
+  },
+  {
+   "t": 841.8,
+   "d": 1.84,
+   "text": "needed to have a clear boundary between"
+  },
+  {
+   "t": 843.64,
+   "d": 2.12,
+   "text": "Land and Sea like uh sea is where the"
+  },
+  {
+   "t": 845.76,
+   "d": 2.2,
+   "text": "player can move land is basically like"
+  },
+  {
+   "t": 847.96,
+   "d": 2.8,
+   "text": "uh like blocking uh areas we don't want"
+  },
+  {
+   "t": 850.76,
+   "d": 5.08,
+   "text": "any sea Pockets inside of U like land"
+  },
+  {
+   "t": 855.84,
+   "d": 2.2,
+   "text": "and we also wanted to be so harbers are"
+  },
+  {
+   "t": 858.04,
+   "d": 2.32,
+   "text": "actually the the like the data that"
+  },
+  {
+   "t": 860.36,
+   "d": 1.68,
+   "text": "determines where there is land because"
+  },
+  {
+   "t": 862.04,
+   "d": 3.48,
+   "text": "we like Harbors are key gameplay objects"
+  },
+  {
+   "t": 865.52,
+   "d": 3.04,
+   "text": "uh land is like just for Mo for the most"
+  },
+  {
+   "t": 868.56,
+   "d": 4.08,
+   "text": "part just there to sell the the fiction"
+  },
+  {
+   "t": 872.64,
+   "d": 2.84,
+   "text": "um and we also want to it so Harbor"
+  },
+  {
+   "t": 875.48,
+   "d": 1.76,
+   "text": "cells are always connected with at least"
+  },
+  {
+   "t": 877.24,
+   "d": 1.56,
+   "text": "one Edge to a water cell so they are"
+  },
+  {
+   "t": 878.8,
+   "d": 1.92,
+   "text": "traversible for the"
+  },
+  {
+   "t": 880.72,
+   "d": 2.68,
+   "text": "player and what we do is that we"
+  },
+  {
+   "t": 883.4,
+   "d": 3.08,
+   "text": "basically uh take a random direction"
+  },
+  {
+   "t": 886.48,
+   "d": 2.48,
+   "text": "from the harbor cell and we we denote"
+  },
+  {
+   "t": 888.96,
+   "d": 2.84,
+   "text": "that as the like entrance Corridor so no"
+  },
+  {
+   "t": 891.8,
+   "d": 2.64,
+   "text": "land can be placed there then based on"
+  },
+  {
+   "t": 894.44,
+   "d": 3.24,
+   "text": "the size of the Harper we say a certain"
+  },
+  {
+   "t": 897.68,
+   "d": 1.96,
+   "text": "amount of cells Sur surounding it should"
+  },
+  {
+   "t": 899.64,
+   "d": 2.0,
+   "text": "be land and then we basically grow out"
+  },
+  {
+   "t": 901.64,
+   "d": 2.4,
+   "text": "from from the harbor cell like land"
+  },
+  {
+   "t": 904.04,
+   "d": 3.2,
+   "text": "cells and then at the very end we we"
+  },
+  {
+   "t": 907.24,
+   "d": 2.28,
+   "text": "then take cells that are at a certain"
+  },
+  {
+   "t": 909.52,
+   "d": 2.28,
+   "text": "distance away from those land or Harbor"
+  },
+  {
+   "t": 911.8,
+   "d": 2.8,
+   "text": "cell and turn that into Coastal Waters"
+  },
+  {
+   "t": 914.6,
+   "d": 2.2,
+   "text": "which is like the biome that like close"
+  },
+  {
+   "t": 916.8,
+   "d": 1.0,
+   "text": "to"
+  },
+  {
+   "t": 917.8,
+   "d": 4.2,
+   "text": "land and um yeah that that kind of like"
+  },
+  {
+   "t": 922.0,
+   "d": 1.96,
+   "text": "leads us to the last part and that is"
+  },
+  {
+   "t": 923.96,
+   "d": 1.24,
+   "text": "how do we then like create an"
+  },
+  {
+   "t": 925.2,
+   "d": 2.68,
+   "text": "interesting like contour for the islands"
+  },
+  {
+   "t": 927.88,
+   "d": 2.84,
+   "text": "and um I came up with this idea of using"
+  },
+  {
+   "t": 930.72,
+   "d": 2.48,
+   "text": "signed distance Fields based on"
+  },
+  {
+   "t": 933.2,
+   "d": 6.28,
+   "text": "splines so basically we um we take the"
+  },
+  {
+   "t": 939.48,
+   "d": 2.8,
+   "text": "the the world seat and the the"
+  },
+  {
+   "t": 942.28,
+   "d": 3.28,
+   "text": "coordinates uh of each cell and we look"
+  },
+  {
+   "t": 945.56,
+   "d": 1.88,
+   "text": "at uh how it's connected to its"
+  },
+  {
+   "t": 947.44,
+   "d": 1.76,
+   "text": "neighbors and based on that we then"
+  },
+  {
+   "t": 949.2,
+   "d": 3.68,
+   "text": "generate these um uh bious blindes that"
+  },
+  {
+   "t": 952.88,
+   "d": 1.84,
+   "text": "uh connect up so we also make sure that"
+  },
+  {
+   "t": 954.72,
+   "d": 3.08,
+   "text": "there's uh continuity between the spines"
+  },
+  {
+   "t": 957.8,
+   "d": 3.84,
+   "text": "that uh goes from from uh one cell and"
+  },
+  {
+   "t": 961.64,
+   "d": 5.56,
+   "text": "uh into the next and um yeah uh this was"
+  },
+  {
+   "t": 967.2,
+   "d": 1.6,
+   "text": "by far like the trickiest part to"
+  },
+  {
+   "t": 968.8,
+   "d": 2.48,
+   "text": "actually figure out um I'll see if I"
+  },
+  {
+   "t": 971.28,
+   "d": 1.2,
+   "text": "have some more time to go into it"
+  },
+  {
+   "t": 972.48,
+   "d": 3.28,
+   "text": "afterwards but uh yeah um it ended up"
+  },
+  {
+   "t": 975.76,
+   "d": 2.32,
+   "text": "working in end something that's way"
+  },
+  {
+   "t": 978.08,
+   "d": 2.6,
+   "text": "simpler is how we spawn uh scenery in"
+  },
+  {
+   "t": 980.68,
+   "d": 4.72,
+   "text": "the game so we basically just use uh as"
+  },
+  {
+   "t": 985.4,
+   "d": 2.52,
+   "text": "like standard blue noise distribution we"
+  },
+  {
+   "t": 987.92,
+   "d": 1.84,
+   "text": "generate a grits and inside the each"
+  },
+  {
+   "t": 989.76,
+   "d": 2.32,
+   "text": "grid cell we have a like a randomized"
+  },
+  {
+   "t": 992.08,
+   "d": 1.84,
+   "text": "offset"
+  },
+  {
+   "t": 993.92,
+   "d": 3.88,
+   "text": "um what makes it look good is that we um"
+  },
+  {
+   "t": 997.8,
+   "d": 1.72,
+   "text": "have like a layered approach so again"
+  },
+  {
+   "t": 999.52,
+   "d": 2.12,
+   "text": "like here we have like this layer kiing"
+  },
+  {
+   "t": 1001.64,
+   "d": 2.56,
+   "text": "inside each of our biome uh setting"
+  },
+  {
+   "t": 1004.2,
+   "d": 2.76,
+   "text": "files we have a list of scenery rules"
+  },
+  {
+   "t": 1006.96,
+   "d": 2.28,
+   "text": "that are applied in sequence and then"
+  },
+  {
+   "t": 1009.24,
+   "d": 3.88,
+   "text": "each sequence rules uh have um like a"
+  },
+  {
+   "t": 1013.12,
+   "d": 1.88,
+   "text": "specific algorithm that it uses to spawn"
+  },
+  {
+   "t": 1015.0,
+   "d": 3.08,
+   "text": "and then like a specific uh like set of"
+  },
+  {
+   "t": 1018.08,
+   "d": 3.52,
+   "text": "data for how the algorithm should be"
+  },
+  {
+   "t": 1021.6,
+   "d": 2.88,
+   "text": "used the most interesting like scenery"
+  },
+  {
+   "t": 1024.48,
+   "d": 2.16,
+   "text": "rule we have is definitely like for for"
+  },
+  {
+   "t": 1026.64,
+   "d": 4.12,
+   "text": "cities uh and like harbers um what I do"
+  },
+  {
+   "t": 1030.76,
+   "d": 1.88,
+   "text": "there and and this is like where it"
+  },
+  {
+   "t": 1032.64,
+   "d": 1.16,
+   "text": "comes down to like actually"
+  },
+  {
+   "t": 1033.8,
+   "d": 1.12,
+   "text": "understanding the pattern and and where"
+  },
+  {
+   "t": 1034.92,
+   "d": 2.96,
+   "text": "you can cheat I just generate a GD and"
+  },
+  {
+   "t": 1037.88,
+   "d": 3.12,
+   "text": "then I offset each uh grid Point uh by a"
+  },
+  {
+   "t": 1041.0,
+   "d": 3.52,
+   "text": "random amount and it's it's inspired a"
+  },
+  {
+   "t": 1044.52,
+   "d": 2.0,
+   "text": "little bit by like how like real cities"
+  },
+  {
+   "t": 1046.52,
+   "d": 1.96,
+   "text": "look like I don't have that like fractal"
+  },
+  {
+   "t": 1048.48,
+   "d": 2.28,
+   "text": "ism that you see in a real City where"
+  },
+  {
+   "t": 1050.76,
+   "d": 1.84,
+   "text": "like smaller like bigger streets lead"
+  },
+  {
+   "t": 1052.6,
+   "d": 1.88,
+   "text": "into smaller streets that leads to even"
+  },
+  {
+   "t": 1054.48,
+   "d": 2.6,
+   "text": "like smaller streets but the thing is"
+  },
+  {
+   "t": 1057.08,
+   "d": 1.28,
+   "text": "because of the camera we have in the"
+  },
+  {
+   "t": 1058.36,
+   "d": 3.28,
+   "text": "game you we don't really need that level"
+  },
+  {
+   "t": 1061.64,
+   "d": 2.36,
+   "text": "of detail in the generation it's it's"
+  },
+  {
+   "t": 1064.0,
+   "d": 2.04,
+   "text": "good enough uh like if the player can"
+  },
+  {
+   "t": 1066.04,
+   "d": 2.16,
+   "text": "read it as a city and also if they can"
+  },
+  {
+   "t": 1068.2,
+   "d": 2.0,
+   "text": "start to see that each Harper city is"
+  },
+  {
+   "t": 1070.2,
+   "d": 1.72,
+   "text": "different then that's that's good enough"
+  },
+  {
+   "t": 1071.92,
+   "d": 2.4,
+   "text": "for for what we"
+  },
+  {
+   "t": 1074.32,
+   "d": 4.0,
+   "text": "need okay then uh we come to uh how we"
+  },
+  {
+   "t": 1078.32,
+   "d": 3.68,
+   "text": "generate n ative um this is like the"
+  },
+  {
+   "t": 1082.0,
+   "d": 2.36,
+   "text": "area where we are trying to be very"
+  },
+  {
+   "t": 1084.36,
+   "d": 2.12,
+   "text": "efficient and also you reusing a lot of"
+  },
+  {
+   "t": 1086.48,
+   "d": 2.44,
+   "text": "existing Solutions out there um so for"
+  },
+  {
+   "t": 1088.92,
+   "d": 2.8,
+   "text": "example for uh conversation topics that"
+  },
+  {
+   "t": 1091.72,
+   "d": 1.28,
+   "text": "can happen between the crew as you're"
+  },
+  {
+   "t": 1093.0,
+   "d": 1.8,
+   "text": "sailing around we we are just picking"
+  },
+  {
+   "t": 1094.8,
+   "d": 3.28,
+   "text": "from like long lists of topics uh you"
+  },
+  {
+   "t": 1098.08,
+   "d": 2.2,
+   "text": "can probably guess that it's all the"
+  },
+  {
+   "t": 1100.28,
+   "d": 3.76,
+   "text": "insults on the the right um and this is"
+  },
+  {
+   "t": 1104.04,
+   "d": 1.4,
+   "text": "good enough because they don't happen"
+  },
+  {
+   "t": 1105.44,
+   "d": 1.76,
+   "text": "like that often to create that sense of"
+  },
+  {
+   "t": 1107.2,
+   "d": 1.72,
+   "text": "like the crew is actually like engaging"
+  },
+  {
+   "t": 1108.92,
+   "d": 1.0,
+   "text": "with each"
+  },
+  {
+   "t": 1109.92,
+   "d": 3.52,
+   "text": "other for ship names we uh combine an"
+  },
+  {
+   "t": 1113.44,
+   "d": 2.16,
+   "text": "adjective with one of these names we"
+  },
+  {
+   "t": 1115.6,
+   "d": 3.04,
+   "text": "found in uh on Wikipedia from uh the"
+  },
+  {
+   "t": 1118.64,
+   "d": 2.84,
+   "text": "Royal British Navy um especially a thing"
+  },
+  {
+   "t": 1121.48,
+   "d": 2.52,
+   "text": "I love is like it took them a while to"
+  },
+  {
+   "t": 1124.0,
+   "d": 3.04,
+   "text": "apparently get the the HMS impregnable"
+  },
+  {
+   "t": 1127.04,
+   "d": 1.44,
+   "text": "to live up to its name so they had to"
+  },
+  {
+   "t": 1128.48,
+   "d": 2.4,
+   "text": "like do a couple of tries but uh I I"
+  },
+  {
+   "t": 1130.88,
+   "d": 2.56,
+   "text": "guess they got the in"
+  },
+  {
+   "t": 1133.44,
+   "d": 3.8,
+   "text": "end we also use uh Tracer uh which I'm"
+  },
+  {
+   "t": 1137.24,
+   "d": 2.8,
+   "text": "sure many of you know um we do use some"
+  },
+  {
+   "t": 1140.04,
+   "d": 2.68,
+   "text": "custom macros that allows us to inject"
+  },
+  {
+   "t": 1142.72,
+   "d": 1.68,
+   "text": "more of the game State into the"
+  },
+  {
+   "t": 1144.4,
+   "d": 3.56,
+   "text": "generated text and we also use pH name"
+  },
+  {
+   "t": 1147.96,
+   "d": 2.0,
+   "text": "generators where we have basically taken"
+  },
+  {
+   "t": 1149.96,
+   "d": 3.4,
+   "text": "a bunch of Danish city names Cho them up"
+  },
+  {
+   "t": 1153.36,
+   "d": 1.96,
+   "text": "and then we concatenate them and that"
+  },
+  {
+   "t": 1155.32,
+   "d": 2.76,
+   "text": "creates uh that that works surprisingly"
+  },
+  {
+   "t": 1158.08,
+   "d": 2.92,
+   "text": "well for generating um names that feels"
+  },
+  {
+   "t": 1161.0,
+   "d": 2.88,
+   "text": "Scandinavian in"
+  },
+  {
+   "t": 1164.36,
+   "d": 3.52,
+   "text": "nature for choice-based uh like"
+  },
+  {
+   "t": 1167.88,
+   "d": 4.36,
+   "text": "narrative we use uh Inc um open source"
+  },
+  {
+   "t": 1172.24,
+   "d": 0.96,
+   "text": "great"
+  },
+  {
+   "t": 1173.2,
+   "d": 2.76,
+   "text": "tool what we've then added on top is"
+  },
+  {
+   "t": 1175.96,
+   "d": 3.56,
+   "text": "this uh in-house data structure uh and"
+  },
+  {
+   "t": 1179.52,
+   "d": 2.24,
+   "text": "an editor inside Unity that basically"
+  },
+  {
+   "t": 1181.76,
+   "d": 2.8,
+   "text": "layers or like like exists next to the"
+  },
+  {
+   "t": 1184.56,
+   "d": 3.04,
+   "text": "in file and that allows us to affect the"
+  },
+  {
+   "t": 1187.6,
+   "d": 1.92,
+   "text": "game State based on the choices the"
+  },
+  {
+   "t": 1189.52,
+   "d": 3.36,
+   "text": "player make but it also allows us to uh"
+  },
+  {
+   "t": 1192.88,
+   "d": 2.6,
+   "text": "turn choices off if for example the"
+  },
+  {
+   "t": 1195.48,
+   "d": 1.96,
+   "text": "player doesn't have the right uh crew on"
+  },
+  {
+   "t": 1197.44,
+   "d": 2.44,
+   "text": "board and it also allow to pick like a"
+  },
+  {
+   "t": 1199.88,
+   "d": 2.76,
+   "text": "random choice or a choice based on a"
+  },
+  {
+   "t": 1202.64,
+   "d": 2.28,
+   "text": "skill"
+  },
+  {
+   "t": 1205.08,
+   "d": 3.32,
+   "text": "check in general I really like using Uh"
+  },
+  {
+   "t": 1208.4,
+   "d": 2.16,
+   "text": "custom editors in unity it's super easy"
+  },
+  {
+   "t": 1210.56,
+   "d": 2.64,
+   "text": "to write them and they have the the"
+  },
+  {
+   "t": 1213.2,
+   "d": 3.0,
+   "text": "benefit that like the tool itself like"
+  },
+  {
+   "t": 1216.2,
+   "d": 1.84,
+   "text": "shows more of like the structure of how"
+  },
+  {
+   "t": 1218.04,
+   "d": 2.56,
+   "text": "you should actually do it um like if we"
+  },
+  {
+   "t": 1220.6,
+   "d": 2.72,
+   "text": "had it so our narrative designer and I"
+  },
+  {
+   "t": 1223.32,
+   "d": 3.36,
+   "text": "had to put in the data in XML it would"
+  },
+  {
+   "t": 1226.68,
+   "d": 3.16,
+   "text": "be much more error prone because um any"
+  },
+  {
+   "t": 1229.84,
+   "d": 2.16,
+   "text": "data kind of like goes into text but if"
+  },
+  {
+   "t": 1232.0,
+   "d": 2.04,
+   "text": "it's a goey like there is a structure to"
+  },
+  {
+   "t": 1234.04,
+   "d": 2.24,
+   "text": "it and you can like enforce what kind of"
+  },
+  {
+   "t": 1236.28,
+   "d": 3.68,
+   "text": "uh like input a given field takes um so"
+  },
+  {
+   "t": 1239.96,
+   "d": 3.96,
+   "text": "yeah it's um something I I really enjoy"
+  },
+  {
+   "t": 1243.92,
+   "d": 3.44,
+   "text": "doing so uh this is also where we have a"
+  },
+  {
+   "t": 1247.36,
+   "d": 4.16,
+   "text": "like a quite simple uh workflow um but"
+  },
+  {
+   "t": 1251.52,
+   "d": 1.84,
+   "text": "like quite effective and that is we in"
+  },
+  {
+   "t": 1253.36,
+   "d": 1.4,
+   "text": "order to make sure that we don't have"
+  },
+  {
+   "t": 1254.76,
+   "d": 2.28,
+   "text": "any merge conflicts um we have the"
+  },
+  {
+   "t": 1257.04,
+   "d": 1.88,
+   "text": "problem that the whole game takes place"
+  },
+  {
+   "t": 1258.92,
+   "d": 3.24,
+   "text": "in one scene in unity and uh the way we"
+  },
+  {
+   "t": 1262.16,
+   "d": 1.84,
+   "text": "get around that is that we uh we all"
+  },
+  {
+   "t": 1264.0,
+   "d": 2.28,
+   "text": "work in separate branches uh I work in"
+  },
+  {
+   "t": 1266.28,
+   "d": 1.76,
+   "text": "the main branch and I have the like the"
+  },
+  {
+   "t": 1268.04,
+   "d": 2.08,
+   "text": "game scene to myself and then everyone"
+  },
+  {
+   "t": 1270.12,
+   "d": 1.68,
+   "text": "else in the project takes a copy of the"
+  },
+  {
+   "t": 1271.8,
+   "d": 2.28,
+   "text": "game scene like at regular intervals and"
+  },
+  {
+   "t": 1274.08,
+   "d": 2.44,
+   "text": "like name it after themselves and then"
+  },
+  {
+   "t": 1276.52,
+   "d": 2.88,
+   "text": "if their game scene is uh out of sync"
+  },
+  {
+   "t": 1279.4,
+   "d": 1.92,
+   "text": "like it's it's too old uh they will get"
+  },
+  {
+   "t": 1281.32,
+   "d": 4.04,
+   "text": "a warning um in the console and it may"
+  },
+  {
+   "t": 1285.36,
+   "d": 1.24,
+   "text": "or may not be a problem but if they are"
+  },
+  {
+   "t": 1286.6,
+   "d": 1.2,
+   "text": "encountering problems then they know"
+  },
+  {
+   "t": 1287.8,
+   "d": 2.12,
+   "text": "that they need to override that scene"
+  },
+  {
+   "t": 1289.92,
+   "d": 2.04,
+   "text": "with the the canonical version of the"
+  },
+  {
+   "t": 1291.96,
+   "d": 2.96,
+   "text": "game scene we're also making sure to"
+  },
+  {
+   "t": 1294.92,
+   "d": 3.28,
+   "text": "split our assets up as much as possible"
+  },
+  {
+   "t": 1298.2,
+   "d": 2.24,
+   "text": "uh inside Unity that also reduces merge"
+  },
+  {
+   "t": 1300.44,
+   "d": 2.56,
+   "text": "conflicts and means that team team"
+  },
+  {
+   "t": 1303.0,
+   "d": 1.6,
+   "text": "members from different disciplines are"
+  },
+  {
+   "t": 1304.6,
+   "d": 3.4,
+   "text": "less likely to touch the same"
+  },
+  {
+   "t": 1308.16,
+   "d": 3.6,
+   "text": "assets so for characters we uh also have"
+  },
+  {
+   "t": 1311.76,
+   "d": 3.48,
+   "text": "this uh kind of like paper doll system"
+  },
+  {
+   "t": 1315.24,
+   "d": 2.96,
+   "text": "where um we have like a set of uh like"
+  },
+  {
+   "t": 1318.2,
+   "d": 2.4,
+   "text": "color gradients we can pick colors from"
+  },
+  {
+   "t": 1320.6,
+   "d": 3.48,
+   "text": "and we have a set of um Sprites for ears"
+  },
+  {
+   "t": 1324.08,
+   "d": 1.84,
+   "text": "noses and so on that are added on top of"
+  },
+  {
+   "t": 1325.92,
+   "d": 2.56,
+   "text": "it and even though we don't have a huge"
+  },
+  {
+   "t": 1328.48,
+   "d": 2.36,
+   "text": "amount of Sprites because of the color"
+  },
+  {
+   "t": 1330.84,
+   "d": 3.48,
+   "text": "variation uh we are surprised ourselves"
+  },
+  {
+   "t": 1334.32,
+   "d": 1.68,
+   "text": "like how much variation we actually get"
+  },
+  {
+   "t": 1336.0,
+   "d": 3.28,
+   "text": "in our crew portraits and uh the reason"
+  },
+  {
+   "t": 1339.28,
+   "d": 2.28,
+   "text": "why we also have this like a more"
+  },
+  {
+   "t": 1341.56,
+   "d": 1.92,
+   "text": "datadriven approach to how the portraits"
+  },
+  {
+   "t": 1343.48,
+   "d": 1.92,
+   "text": "look is that as you are progressing in"
+  },
+  {
+   "t": 1345.4,
+   "d": 2.56,
+   "text": "the game your crew can be affected by"
+  },
+  {
+   "t": 1347.96,
+   "d": 3.6,
+   "text": "all the strange energies uh that are in"
+  },
+  {
+   "t": 1351.56,
+   "d": 3.0,
+   "text": "the world and slowly like change and"
+  },
+  {
+   "t": 1354.56,
+   "d": 3.04,
+   "text": "become more and more shaped by the the"
+  },
+  {
+   "t": 1357.6,
+   "d": 6.04,
+   "text": "weird um energies of traversing the seaf"
+  },
+  {
+   "t": 1364.12,
+   "d": 4.32,
+   "text": "Rifts okay so to summarize um noise"
+  },
+  {
+   "t": 1368.44,
+   "d": 1.96,
+   "text": "methods are super nice I encourage you"
+  },
+  {
+   "t": 1370.4,
+   "d": 3.4,
+   "text": "to use them if you do uh using a proen"
+  },
+  {
+   "t": 1373.8,
+   "d": 1.36,
+   "text": "in a production make sure that it's"
+  },
+  {
+   "t": 1375.16,
+   "d": 1.48,
+   "text": "deterministic make sure that it's"
+  },
+  {
+   "t": 1376.64,
+   "d": 1.88,
+   "text": "layered and make sure that it's flexible"
+  },
+  {
+   "t": 1378.52,
+   "d": 2.04,
+   "text": "so you can easily change stuff based on"
+  },
+  {
+   "t": 1380.56,
+   "d": 2.84,
+   "text": "player feedback uh ride your generators"
+  },
+  {
+   "t": 1383.4,
+   "d": 2.64,
+   "text": "with a focus on the player experience"
+  },
+  {
+   "t": 1386.04,
+   "d": 2.4,
+   "text": "and also a simple solution with good"
+  },
+  {
+   "t": 1388.44,
+   "d": 2.56,
+   "text": "design and good content is always better"
+  },
+  {
+   "t": 1391.0,
+   "d": 1.52,
+   "text": "than having like some kind of like"
+  },
+  {
+   "t": 1392.52,
+   "d": 1.56,
+   "text": "clever algorithm but like not actually"
+  },
+  {
+   "t": 1394.08,
+   "d": 2.44,
+   "text": "having for of like what goes into it um"
+  },
+  {
+   "t": 1396.52,
+   "d": 2.36,
+   "text": "use existing tools where you can like if"
+  },
+  {
+   "t": 1398.88,
+   "d": 1.28,
+   "text": "you're making a commercial game like you"
+  },
+  {
+   "t": 1400.16,
+   "d": 1.12,
+   "text": "need to think about actually like"
+  },
+  {
+   "t": 1401.28,
+   "d": 2.04,
+   "text": "shipping at some points and you need"
+  },
+  {
+   "t": 1403.32,
+   "d": 3.04,
+   "text": "good workflow and development tools uh"
+  },
+  {
+   "t": 1406.36,
+   "d": 2.16,
+   "text": "for yourself but also to enable your"
+  },
+  {
+   "t": 1408.52,
+   "d": 2.48,
+   "text": "whole team to contribute to the"
+  },
+  {
+   "t": 1411.0,
+   "d": 2.72,
+   "text": "game I have a bunch of resources that"
+  },
+  {
+   "t": 1413.72,
+   "d": 2.48,
+   "text": "you can also check out uh that inspired"
+  },
+  {
+   "t": 1416.2,
+   "d": 3.28,
+   "text": "uh this talk um I posted on the operis"
+  },
+  {
+   "t": 1419.48,
+   "d": 2.4,
+   "text": "uh so you can check it out there and uh"
+  },
+  {
+   "t": 1421.88,
+   "d": 2.64,
+   "text": "yeah thanks for listening and um thanks"
+  },
+  {
+   "t": 1424.52,
+   "d": 2.64,
+   "text": "for Rog like celebration for uh letting"
+  },
+  {
+   "t": 1427.16,
+   "d": 2.6,
+   "text": "me speak and including us in the the"
+  },
+  {
+   "t": 1429.76,
+   "d": 3.88,
+   "text": "Steam Sale um we have a playable demo up"
+  },
+  {
+   "t": 1433.64,
+   "d": 1.24,
+   "text": "on Steam right now so if you're"
+  },
+  {
+   "t": 1434.88,
+   "d": 1.6,
+   "text": "interested in trying out the game uh"
+  },
+  {
+   "t": 1436.48,
+   "d": 3.96,
+   "text": "please uh yeah follow the link"
+  },
+  {
+   "t": 1441.28,
+   "d": 3.0,
+   "text": "excellent thank you so much uh yeah"
+  },
+  {
+   "t": 1444.28,
+   "d": 2.4,
+   "text": "fantastic I think it was kind of like a"
+  },
+  {
+   "t": 1446.68,
+   "d": 2.6,
+   "text": "an Allstar like so many of the topics"
+  },
+  {
+   "t": 1449.28,
+   "d": 1.8,
+   "text": "and algorithms and techniques we have"
+  },
+  {
+   "t": 1451.08,
+   "d": 2.48,
+   "text": "had at some point over celebration talk"
+  },
+  {
+   "t": 1453.56,
+   "d": 2.56,
+   "text": "just on that but it's so cool to see all"
+  },
+  {
+   "t": 1456.12,
+   "d": 2.64,
+   "text": "of them come into context of how all of"
+  },
+  {
+   "t": 1458.76,
+   "d": 2.4,
+   "text": "this information can be brought together"
+  },
+  {
+   "t": 1461.16,
+   "d": 3.04,
+   "text": "to make cohesive interesting game thanks"
+  },
+  {
+   "t": 1464.2,
+   "d": 2.16,
+   "text": "so yeah we have time probably for a"
+  },
+  {
+   "t": 1466.36,
+   "d": 1.48,
+   "text": "question or two if anyone wants to get"
+  },
+  {
+   "t": 1467.84,
+   "d": 2.48,
+   "text": "one up one was just clarifying in the"
+  },
+  {
+   "t": 1470.32,
+   "d": 2.92,
+   "text": "GitHub uh example so is it you're able"
+  },
+  {
+   "t": 1473.24,
+   "d": 2.48,
+   "text": "to avoid merge conflicts because"
+  },
+  {
+   "t": 1475.72,
+   "d": 1.52,
+   "text": "everything has to kind of be handled in"
+  },
+  {
+   "t": 1477.24,
+   "d": 1.0,
+   "text": "separate"
+  },
+  {
+   "t": 1478.24,
+   "d": 2.6,
+   "text": "copies most of the time yeah so"
+  },
+  {
+   "t": 1480.84,
+   "d": 1.68,
+   "text": "basically"
+  },
+  {
+   "t": 1482.52,
+   "d": 2.52,
+   "text": "um if you take the case that your whole"
+  },
+  {
+   "t": 1485.04,
+   "d": 2.0,
+   "text": "game was like one big file like you"
+  },
+  {
+   "t": 1487.04,
+   "d": 1.36,
+   "text": "would have merch conflicts all the time"
+  },
+  {
+   "t": 1488.4,
+   "d": 2.84,
+   "text": "when you tried to to push to the repo"
+  },
+  {
+   "t": 1491.24,
+   "d": 1.48,
+   "text": "the more you split it up into separate"
+  },
+  {
+   "t": 1492.72,
+   "d": 1.6,
+   "text": "files the less likely you are to have"
+  },
+  {
+   "t": 1494.32,
+   "d": 1.88,
+   "text": "like collisions on having worked on the"
+  },
+  {
+   "t": 1496.2,
+   "d": 2.52,
+   "text": "same file um and especially if though"
+  },
+  {
+   "t": 1498.72,
+   "d": 2.08,
+   "text": "that file structure is based on the role"
+  },
+  {
+   "t": 1500.8,
+   "d": 2.72,
+   "text": "of each team member like so most of the"
+  },
+  {
+   "t": 1503.52,
+   "d": 3.28,
+   "text": "narrative uh content is like in separate"
+  },
+  {
+   "t": 1506.8,
+   "d": 4.08,
+   "text": "um scriptable object aset files so that"
+  },
+  {
+   "t": 1510.88,
+   "d": 1.52,
+   "text": "means that our narrative designer"
+  },
+  {
+   "t": 1512.4,
+   "d": 2.56,
+   "text": "doesn't have to touch our prefabs unit"
+  },
+  {
+   "t": 1514.96,
+   "d": 3.28,
+   "text": "Unity terminology um and that means that"
+  },
+  {
+   "t": 1518.24,
+   "d": 1.28,
+   "text": "like in terms of like doing the the"
+  },
+  {
+   "t": 1519.52,
+   "d": 2.56,
+   "text": "gameplay and the generation we we don't"
+  },
+  {
+   "t": 1522.08,
+   "d": 2.84,
+   "text": "step on each other's toes great no that"
+  },
+  {
+   "t": 1524.92,
+   "d": 4.16,
+   "text": "makes to sense yeah thank you um yeah I"
+  },
+  {
+   "t": 1529.08,
+   "d": 2.24,
+   "text": "guess I am curious you know you"
+  },
+  {
+   "t": 1531.32,
+   "d": 3.56,
+   "text": "mentioned some issues with uh WFC or"
+  },
+  {
+   "t": 1534.88,
+   "d": 1.68,
+   "text": "actually you know what you're a pretty"
+  },
+  {
+   "t": 1536.56,
+   "d": 1.64,
+   "text": "small team so I'm curious you use all"
+  },
+  {
+   "t": 1538.2,
+   "d": 2.12,
+   "text": "these different techniques how do you"
+  },
+  {
+   "t": 1540.32,
+   "d": 2.28,
+   "text": "make how do you have people who know all"
+  },
+  {
+   "t": 1542.6,
+   "d": 2.08,
+   "text": "these techniques well enough to apply"
+  },
+  {
+   "t": 1544.68,
+   "d": 1.36,
+   "text": "them is it because since you're not"
+  },
+  {
+   "t": 1546.04,
+   "d": 1.84,
+   "text": "having to go to like expert is it just"
+  },
+  {
+   "t": 1547.88,
+   "d": 1.68,
+   "text": "because you personally love them all so"
+  },
+  {
+   "t": 1549.56,
+   "d": 3.96,
+   "text": "much it's it's just me it's it's just"
+  },
+  {
+   "t": 1553.52,
+   "d": 3.44,
+   "text": "me um yeah we are starting to have like"
+  },
+  {
+   "t": 1556.96,
+   "d": 2.12,
+   "text": "more programmers SE like on and off but"
+  },
+  {
+   "t": 1559.08,
+   "d": 3.68,
+   "text": "then they focus on like um parts of the"
+  },
+  {
+   "t": 1562.76,
+   "d": 1.4,
+   "text": "game that hasn't to do with the"
+  },
+  {
+   "t": 1564.16,
+   "d": 3.12,
+   "text": "Generation Um so the generation is just"
+  },
+  {
+   "t": 1567.28,
+   "d": 2.6,
+   "text": "me it does also help that Fergus Doyle"
+  },
+  {
+   "t": 1569.88,
+   "d": 2.24,
+   "text": "my narrative designer is also quite good"
+  },
+  {
+   "t": 1572.12,
+   "d": 2.72,
+   "text": "on the technical side so like I he had"
+  },
+  {
+   "t": 1574.84,
+   "d": 1.88,
+   "text": "already done some tracery and he' done"
+  },
+  {
+   "t": 1576.72,
+   "d": 3.08,
+   "text": "some some ink so like all of that stuff"
+  },
+  {
+   "t": 1579.8,
+   "d": 1.68,
+   "text": "like it was basic that that's also like"
+  },
+  {
+   "t": 1581.48,
+   "d": 1.4,
+   "text": "the benefit of using something that's"
+  },
+  {
+   "t": 1582.88,
+   "d": 1.28,
+   "text": "already existing right like there's a"
+  },
+  {
+   "t": 1584.16,
+   "d": 2.0,
+   "text": "good chance that the rest of the team"
+  },
+  {
+   "t": 1586.16,
+   "d": 2.6,
+   "text": "can can already know about it yeah no"
+  },
+  {
+   "t": 1588.76,
+   "d": 1.24,
+   "text": "it's a great Point that's something I"
+  },
+  {
+   "t": 1590.0,
+   "d": 2.08,
+   "text": "run into a lot of if you write a custom"
+  },
+  {
+   "t": 1592.08,
+   "d": 2.68,
+   "text": "solution you can't hire anyone who knows"
+  },
+  {
+   "t": 1594.76,
+   "d": 3.44,
+   "text": "how to use your custom solution so uh"
+  },
+  {
+   "t": 1598.2,
+   "d": 1.68,
+   "text": "excellent well thank you so much Alex"
+  },
+  {
+   "t": 1599.88,
+   "d": 2.04,
+   "text": "and uh yeah I'm I'm looking forward to"
+  },
+  {
+   "t": 1601.92,
+   "d": 2.12,
+   "text": "checking out sea of Rifts I saw you also"
+  },
+  {
+   "t": 1604.04,
+   "d": 2.12,
+   "text": "have procedurally generated sea shanties"
+  },
+  {
+   "t": 1606.16,
+   "d": 2.2,
+   "text": "which I don't think came up but uh was"
+  },
+  {
+   "t": 1608.36,
+   "d": 2.4,
+   "text": "enough to tell me on the game personally"
+  },
+  {
+   "t": 1610.76,
+   "d": 2.36,
+   "text": "awesome all right thank you so much for"
+  },
+  {
+   "t": 1613.12,
+   "d": 3.36,
+   "text": "joining us"
+  }
+ ]
+}

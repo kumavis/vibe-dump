@@ -1,0 +1,60 @@
+Isaac Io Schankler: Orb Pondering Simulator LIVE!
+Speaker: Isaac Io Schankler
+https://www.youtube.com/watch?v=M6t5W5PPVW0
+Year: 2024   Kind: talk   Captions: auto (en)
+
+## Introduction to Isaac IO
+
+[0:00:03] uh let me introduce Isaac iio schankler um Isaac is a composer and audio designer whose work Bridges the worlds of concert music and interactive media they have written music for several aclaimed independent video games including Lady Killer and a bind analog a Hate Story red shirt depression Quest and the upcoming poly rhythm game the onebody problem shanker's recent album because patterns released on arade music has been loed beautiful algorithmic organic dystopian those are some of my favorite adjectives I don't know about you um and schankler is also an artistic director of concert series people inside electronics and an associate professor of Music at Cal Poly pona thank you so much for joining us thank you thank you for that great introduction um I just want to ask everyone if they can see and hear me and also see and hear the orb in front of
+
+[0:01:05] them okay
+
+## Orb pondering demonstration
+
+[0:01:08] wonderful so welcome everyone I'm really glad you're here my name is Isaac IO and I will be your guide through the world of orb pondering simulator um orb pondering simulator is based on scientifically proven breathing exercises that help calm and focus your mind so you'll notice there is an orb in front of you you can see that the orb is growing and shrinking gradually and you'll notice there's a sound that gets louder as the orb grows and quieter as the orb shrinks and there's also period where the orb doesn't do anything where it holds its shape and the sound is steady so what I want us to do together is to breathe with the orb we'll breathe in as the orb grows we'll hold our breath while the orb holds its shape and then we'll breathe out as the orb shrinks so we're
+
+[0:02:09] going to try that a couple times and we're just going to wait for the orb to get back to its get back to the beginning here we go so let's breathe in [Music] hold and breathe out good are we not hearing the orb it's a little quiet yeah this is related to box breathing so one more time breathe in [Music]
+
+[0:03:11] hold and breathe out okay great just do that a few more times breathe in okay um hold on sorry about that one second okay um that's weird that hasn't happened before okay
+
+## Live chat interaction
+
+[0:03:55] um okay I have an idea um so it appears I'm not um I'm locked out for some reason but we have a backup plan so if you were in the chat right now in the theater um I could use some help um there's some debug commands that we can access so if one of you could type into chat exclamation point then spawn then orb um exclamation point no space s p a w n oh there we okay um okay now we have a few orbs um that's okay but um really it's orb pondering simulator not orbs pondering simulator right so
+
+[0:04:58] um oh um okay so I'm going to teach you another command which is kill okay interesting not even an orb um okay so yeah exclamation point kill space orb don't don't worry it's just a figure of speech [Music] um okay we're getting there we're getting [Music] there okay maybe maybe just focus on one orb and [Music]
+
+[0:05:58] breathe okay we're getting closer just make sure you don't kill anything that doesn't exist I haven't tested that so I don't know what will happen [Music] okay let's see if we can get rid of all the things that aren't orbs getting there just don't kill something when there's like zero orbs or zero oh okay
+
+[0:07:04] I guess that's what happens when you try and kill something with do oh oh dear [Music] [Music] okay um I think we can get rid of those if you do exclamation point kill okay just ignore that if you type exclamation point cck kill don't pay any attention to that um
+
+[0:08:07] yeah [Applause] um okay so yeah so exclamation point kill error and error is in all caps okay I'll see okay yeah we're doing it we're doing it we're killing the [Music] errors most of them much better [Music]
+
+[0:09:09] but come [Music] on okay seriously [Music] very funny very [Music] funny okay you know what fine I wasn't going to tell you about this but there's one one more keyword that will um get rid of everything all at once this is kind of like a last resort nuclear option just to speak uh so to speak um uh and that's the word everybody um so if you type exclamation
+
+[0:10:11] point kill every not everything um oh no oh no what did you [Music] do that's it I'm shutting this down down I'm shutting this [Music] down how do I shut it [Music] down okay well uh um thanks I guess um that didn't go exactly as planned but I hope you got something out of it um uh that's orb pondering
+
+[0:11:13] simulator um I don't know if it will ever exist again but I'm glad you were here for possibly the only iteration of orb pondering simulator so thank you very much
+
+## Q&A session
+
+[0:11:35] thank you so much Isaac that was really really wonderful it seems like we've got plenty of time for questions if anyone um wants to type those in chat I found that very relaxing so thank you for that um while we're waiting for questions to come in I do have one was there any particular inspiration you had for that experience it seems rather unique um many many different things um one is doing uh concerts with um electronic music everything is bound to go wrong in a way that it that it never has before so it's partly inspired by that um are there any adverse effects from pondering orbs that's a good question um yes uh no comment no comment on that one okay none we found yet Perhaps uh is
+
+[0:12:39] there any way that people can like play this on their own or is this truly that unique U one of a kind of or partnering experience it won't be exactly like this but there will be a version of for obvious reasons it won't be exactly like this but there will be a version that you can kind of play around with um that I will probably release on itch um soon not sure exactly when but yeah awesome one remember you can put questions on the question board if you want me to read them um yeah that was really wonderful um so the errors uh what is it that originally spawn the errors killing something that wasn't there yeah so if you if there are no orbs and you're try and spawn an orb that's what that's what creates an error gotta one thing that really impressed me about this was how you were able to use um a limited like supply of keywords to
+
+[0:13:42] do very interesting things like that like um having not being able to do something be a separate input I think that's really cool and reminds me a lot of like creative inputs in text games um I saw a couple spawn ye flask Etc yeah I I got to look through at the there was some really uh great uh command attempts that uh that I need to go back and look at just to see what um what people tried to do I I will say one other um in answer your question before one other inspiration uh for This was um a few years ago I think it was in 2020 or 2021 you know when I was trying to do lots of like uh trying to reimagine you know how can we possibly do a musical performance and um feeling ambivalent about streaming and um uh so I did a project called the public modular that was basically you could play a modular synth remotely uh through twitch chat commands so that was
+
+[0:14:44] kind of an initial inspiration for this um but that had like very intricate kind of complicated commands and it ended up being fun but it ended up just being that kind of like only a handful of people could were like able to like get a handle on it and actually participate in it um so for this what for this I tried to like really um uh yeah strip down the the commands to like a really simple set awesome kind of along those lines um Travis asks were there any commands that were not tight that people missed oh well um there are as you may have guessed two kind of alternate endings um spawn everybody and kill everybody and um it's just kind of a matter of uh what people get to first and so I was curious what what people would do first um and I was kind of happy that the that people figured out the the spawn
+
+[0:15:46] everybody command and went with that first yes I that was my first thought on as soon as he'd give us new keyword I was very excited to use other verbs um Alexi asks if I want to start exploring more electronic experiences like orb simulator where should I start to look for those um uh well there's uh there's another um uh experience created in um an Unreal Engine recently that I'm trying to remember the name of I will I will look it up um uh but then also you know there are um visual uh programming languages for audio like um one called Max MSP um one called Pure data and if you look up uh stuff about the communities um for those kinds of software there's a lot of um uh
+
+[0:16:46] patches that people share and stuff like that um so that might be that might be a good window into that um and let me just find the name of the uh Cycles is the name of the the other one I was thinking of um so it's on Steam if you look up Cycles um someone else did a a a generative music project um or a procedural music project um that's pretty cool that's awesome um we've got some related questions in chat about what do you think the implications are of Errors also being in harmony with breathing and did error gain sentience um that's a good question so uh the um so I don't know how apparent it was but um uh the erors have a very diff have a different um uh or at least some of them have a different breathing rate um than most of the other objects so if you were trying
+
+[0:17:49] to breathe along with something with some of those you might end up like hyperventilating um might not be recommended um and [Music] um I will I I'll say this the um in terms of what's going on in terms of The Narrative of the game um the orbs didn't become sentient they were already sentient and there's there's a reason for that interesting well could we maybe
+
+## Final simulation demonstration
+
+[0:18:25] fire it back up um and see if we can see the other ending as well oh sure it's it's much less exciting um but yeah alternate ending here we go uh whoops did I not oh no it's there so I think you might have to oops um so I it's I don't know if it's appearing it's in it's backstage but I don't know if you if the people in the theater can see it uh I think we'll probably need to yes add it to the screen there um okay so if we make a whole bunch of objects
+
+[0:19:27] [Music] text on means oh wait hold [Music] on okay now it should work if someone types kill [Music] everything it's like we did get to kill everything in chat oh sorry everybody kill everybody right yeah so that's probably what you would think of as the bad [Music] ending so let me check the question board yeah it would be very ominous if
+
+[0:20:29] the commands worked after closing during L I would say that is a true are um awesome so we do have some extra time in the middle here um we had a talk we had to cancel that's why we've got like a 15 minute Gap here um if anyone does have any more questions that's great otherwise um we'll probably take a brief uh break to SP some time exploring this space and then come back maybe a little bit early for 's talk thank you so much Isaac that was a really awesome experience thank you and thanks everybody this was really fun thanks for being the guinea pigs yeah I think this is one that will be remembered for sure

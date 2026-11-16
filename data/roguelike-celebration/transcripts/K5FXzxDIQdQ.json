@@ -1,0 +1,752 @@
+{
+ "id": "K5FXzxDIQdQ",
+ "url": "https://www.youtube.com/watch?v=K5FXzxDIQdQ",
+ "title": "Seth Cooper - Building a Roguelike with a Tile Rewrite Language",
+ "speaker": "Seth Cooper",
+ "talk_title": "Building a Roguelike with a Tile Rewrite Language",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 1032,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "In this talk I'll discuss developing a simple Roguelike in a new tile rewrite-based programming language. Tile rewrites are a way to express changes in state by replacing one arrangement of tiles with another. For example, the player tile \"P\" moving right onto a blank tile \"_\" could be represented by replacing the tiles \"P _\" with \"_ P\".\n\nBased on the tile rewriting concept, myself and a team of collaborators are developing a new visual game programming language, along with a with an editor and game engine with debugging tools. In this system, the game state is the 2D game board, changes are rewrites of tile patterns, and conditional checks are based on matching tile patterns. Players make choices by selecting from available rewrites. General logic flow is handled by a behavior-tree like language of nodes that succeed or fail based on the result of the nodes they call.\n\nUsing this system, we are working on a Roguelike with dungeon generation, exploration, treasure, enemies, and combat. We hope that the visual, direct nature of rewrite rules in the editor and engine could make them a fun and approachable way to develop small tile- and turn-based games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 60,
+   "title": "Tile rewrite language basics"
+  },
+  {
+   "start": 198,
+   "title": "Mechanics of the language"
+  },
+  {
+   "start": 327,
+   "title": "Creating a simple game"
+  },
+  {
+   "start": 419,
+   "title": "Developing Trogue"
+  },
+  {
+   "start": 526,
+   "title": "Implementation details"
+  },
+  {
+   "start": 768,
+   "title": "Code structure and future"
+  },
+  {
+   "start": 818,
+   "title": "Summary and acknowledgments"
+  },
+  {
+   "start": 911,
+   "title": "Q&A and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2422,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.44,
+   "d": 10.24,
+   "text": "ALEXEI: We are going to do a lot of topics and we'll be starting with Seth Cooper who earned"
+  },
+  {
+   "t": 17.68,
+   "d": 6.4,
+   "text": "their PhD in Computer Science and Engineering at the University of Washington. My work focuses on"
+  },
+  {
+   "t": 24.08,
+   "d": 3.68,
+   "text": "video games, procedural content generation, citizen science, and crowdsourcing. I am"
+  },
+  {
+   "t": 27.76,
+   "d": 6.48,
+   "text": "co-creator of Foldit, a video game that has allowed players to contribute to"
+  },
+  {
+   "t": 34.24,
+   "d": 4.88,
+   "text": "scientific research in biochemistry. I have previously worked at Square Enix,"
+  },
+  {
+   "t": 39.12,
+   "d": 4.32,
+   "text": "Electronic Arts, and Pixar Animation Studios, and as the Creative Director of the Center for"
+  },
+  {
+   "t": 43.44,
+   "d": 3.12,
+   "text": "Game Science. Associate Professor they are here to talk about a tile rewrite language"
+  },
+  {
+   "t": 46.56,
+   "d": 10.08,
+   "text": "for building roguelikes. Welcome, Seth. SETH: Hello. Thanks. Can you hear me OK?"
+  },
+  {
+   "t": 61.2,
+   "d": 5.36,
+   "text": "I am Seth Cooper from Northeastern University and I am going to be talking a little bit about"
+  },
+  {
+   "t": 66.56,
+   "d": 5.92,
+   "text": "Building a Roguelike with a Tile rewrite language. This is like a new language that"
+  },
+  {
+   "t": 72.48,
+   "d": 14.0,
+   "text": "I have been developing with some collaborators. We are calling it TRRBT. This is a language intended"
+  },
+  {
+   "t": 86.48,
+   "d": 7.92,
+   "text": "for programming and grid and turn-base games. We lope that maybe the language will make programming"
+  },
+  {
+   "t": 94.4,
+   "d": 3.84,
+   "text": "a little bit different and approachable and like a different way of thinking about programming"
+  },
+  {
+   "t": 98.24,
+   "d": 6.8,
+   "text": "games that might make it kind of interesting in a different way. We are really trying to make things"
+  },
+  {
+   "t": 105.04,
+   "d": 7.36,
+   "text": "in the language able to be done visually. The game stay for a game is represented essentially as a"
+  },
+  {
+   "t": 112.4,
+   "d": 6.08,
+   "text": "layered 2D board of tiles sort of like a grid. You know, you can see everything that's going on in"
+  },
+  {
+   "t": 118.48,
+   "d": 6.48,
+   "text": "the game right there on the board essentially. And then the changes in the state -- so the game state"
+  },
+  {
+   "t": 124.96,
+   "d": 5.92,
+   "text": "is a 2D grid of tiles and the changes in the state are accomplished by using tile rewrites which are"
+  },
+  {
+   "t": 130.88,
+   "d": 5.12,
+   "text": "essentially a visual representation of replacing one arrangement of tiles with another arrangement."
+  },
+  {
+   "t": 136.56,
+   "d": 6.8,
+   "text": "You can see the rules and how things change in the game as well visually. The control flow,"
+  },
+  {
+   "t": 143.36,
+   "d": 7.52,
+   "text": "the way that the logic is handled for the game, you know, loops, and things like that,"
+  },
+  {
+   "t": 150.88,
+   "d": 8.88,
+   "text": "is handled by behavior trees which are sort of a popular approach for visual programming usually"
+  },
+  {
+   "t": 159.76,
+   "d": 5.6,
+   "text": "for like agent behavior in games but in this case we are using the behavior trees to control"
+  },
+  {
+   "t": 165.36,
+   "d": 5.92,
+   "text": "sort of like the logic of the entire game. We are taking the rewriting rules, tile rewrite rules,"
+  },
+  {
+   "t": 171.28,
+   "d": 6.8,
+   "text": "and behavior trees, putting them together and making domain-specific language for games we are"
+  },
+  {
+   "t": 178.08,
+   "d": 6.16,
+   "text": "calling tile rewrite behavioral trees. And we are interested in seeing what kind of games we"
+  },
+  {
+   "t": 184.24,
+   "d": 7.92,
+   "text": "could develop in this language. We were looking at can we build a roguelike using this tile rewrite."
+  },
+  {
+   "t": 202.64,
+   "d": 7.6,
+   "text": "Tile rewriting is a main thing in the game. This is taking a lefthand side and replacing it with a"
+  },
+  {
+   "t": 210.24,
+   "d": 5.68,
+   "text": "right-hand side of tiles. So something is replaced with something else. That's how things change"
+  },
+  {
+   "t": 216.56,
+   "d": 10.0,
+   "text": "in the game state. We could take a player and blank tile and reflates and that would be a way"
+  },
+  {
+   "t": 226.56,
+   "d": 9.44,
+   "text": "of representing player movement and moving into a blank spot. We could take a rectangle of solid"
+  },
+  {
+   "t": 236.0,
+   "d": 6.0,
+   "text": "tiles and replace that with sort of empty space in the mild. And this is like placing a room"
+  },
+  {
+   "t": 242.0,
+   "d": 6.8,
+   "text": "essentially, an empty room. We can represent various different things with tile rewrites."
+  },
+  {
+   "t": 252.0,
+   "d": 4.63,
+   "text": "We can examine the state to see what is in it. If we want to see if the player found the gem"
+  },
+  {
+   "t": 256.63,
+   "d": 10.17,
+   "text": "we can check to see if there is a gem tile on the board and that would be like matching a"
+  },
+  {
+   "t": 266.8,
+   "d": 9.52,
+   "text": "tile pattern and seeing if it is there and we can use that for further logic in the game. This is"
+  },
+  {
+   "t": 276.32,
+   "d": 8.24,
+   "text": "all tied together through behavior trees. These are often used for programming agents in games."
+  },
+  {
+   "t": 284.56,
+   "d": 8.32,
+   "text": "We used similar concepts. Some of the nodes are not the same as the standard ones that people use."
+  },
+  {
+   "t": 292.88,
+   "d": 6.8,
+   "text": "They are a tree of nodes, the nodes can run, they succeed or fail, and depending on the type of node"
+  },
+  {
+   "t": 299.68,
+   "d": 5.04,
+   "text": "they customize their behavior depending on whether the children of these particular node succeed or"
+  },
+  {
+   "t": 304.72,
+   "d": 6.64,
+   "text": "fail. Here is a simple start of a behavioral tree where have an order node with two children"
+  },
+  {
+   "t": 311.36,
+   "d": 6.96,
+   "text": "which one is another order node and a loop and there order node runs the children in order once"
+  },
+  {
+   "t": 318.32,
+   "d": 5.52,
+   "text": "and they will loop until it loops through running the children over and over again until all of the"
+  },
+  {
+   "t": 323.84,
+   "d": 7.6,
+   "text": "children fail and then it will be done running. Here is expanding that a little bit on the"
+  },
+  {
+   "t": 331.44,
+   "d": 4.32,
+   "text": "left hand side. We have the order node with its children and basically going to go through those"
+  },
+  {
+   "t": 335.76,
+   "d": 7.44,
+   "text": "in order. Set the board to be all solid tiles. One rewrite to make an empty room somewhere. Then"
+  },
+  {
+   "t": 343.2,
+   "d": 4.32,
+   "text": "rewrite one of those blank tiles with the player and one are a door to put the player in the door"
+  },
+  {
+   "t": 347.52,
+   "d": 8.96,
+   "text": "and exit in some random place in the room. And then you know, they will loop until all node has a"
+  },
+  {
+   "t": 356.48,
+   "d": 6.64,
+   "text": "little bit more involved set of children. But the X span says everything under here is -- doesn't"
+  },
+  {
+   "t": 363.12,
+   "d": 6.88,
+   "text": "matter which order it happens in and the player node means the person playing the game gets"
+  },
+  {
+   "t": 370.0,
+   "d": 8.4,
+   "text": "to decide which rewrite and they can move to an empty space or a door and that will turn it into a"
+  },
+  {
+   "t": 378.4,
+   "d": 9.76,
+   "text": "gem and make the gem appear. Going further to the right the player wins if there is an image of the"
+  },
+  {
+   "t": 388.16,
+   "d": 6.64,
+   "text": "gem somewhere on the board. That's basically when the player wins if there is one of those anywhere."
+  },
+  {
+   "t": 395.44,
+   "d": 7.92,
+   "text": "With that behavioral tree, that TRB -- you get a simple room like this and the player walks to"
+  },
+  {
+   "t": 403.36,
+   "d": 16.56,
+   "text": "the exit and finds the gem. We started with this and wanted to build up and add more features. One"
+  },
+  {
+   "t": 419.92,
+   "d": 9.36,
+   "text": "thing that inspired was this thing called Rogueal which is every day a different dungeon to explore."
+  },
+  {
+   "t": 429.28,
+   "d": 7.04,
+   "text": "It is emoji based so the tiles and things are all emoji based. This was part of the inspiration for"
+  },
+  {
+   "t": 436.32,
+   "d": 7.6,
+   "text": "the game that we were working on which we are calling Trogue which is a simple roguelike"
+  },
+  {
+   "t": 443.92,
+   "d": 7.6,
+   "text": "with dungeon generation, exploration, combat, collectible items, and using emoji tile rewrites."
+  },
+  {
+   "t": 451.52,
+   "d": 8.24,
+   "text": "We will look at the implementation of these features and in particular a debugging view with"
+  },
+  {
+   "t": 459.76,
+   "d": 5.52,
+   "text": "more animation and more tiles visible than what the player sees while they are playing. This is"
+  },
+  {
+   "t": 465.28,
+   "d": 5.68,
+   "text": "like a little video. I don't think you can play. Collecting a wand, and exploring the dungeon,"
+  },
+  {
+   "t": 470.96,
+   "d": 7.12,
+   "text": "and the enemies can cast fireballs to fight the enemies and if you get too close they damage"
+  },
+  {
+   "t": 478.08,
+   "d": 9.2,
+   "text": "as well. There is health in the bottom left as well. The game makes pretty extensive use of the"
+  },
+  {
+   "t": 487.28,
+   "d": 7.28,
+   "text": "language of layers and hidden tiles. Layers lets you stack tiles one on top of each other so you"
+  },
+  {
+   "t": 494.56,
+   "d": 6.56,
+   "text": "can show more than one thing at the same place, or keeps things associated with each other. And also,"
+  },
+  {
+   "t": 501.92,
+   "d": 4.64,
+   "text": "if you put a larger tile above a smaller one you can use that to hide them during gameplay. And"
+  },
+  {
+   "t": 506.56,
+   "d": 7.52,
+   "text": "there are tiles completely hidden from the player that are tagged with this underscore and you can"
+  },
+  {
+   "t": 514.08,
+   "d": 5.88,
+   "text": "only see them when debugging and we use those for tracking hidden states and things that should"
+  },
+  {
+   "t": 519.96,
+   "d": 7.24,
+   "text": "not be visible to the player but are useful for tracking and to see when you are debugging. One"
+  },
+  {
+   "t": 527.2,
+   "d": 5.84,
+   "text": "of the first things we wanted to do was generate a random dungeon for the player to explore and"
+  },
+  {
+   "t": 533.04,
+   "d": 6.0,
+   "text": "doing this essentially only with being able to rewrite tiles and control the logic of them with"
+  },
+  {
+   "t": 539.04,
+   "d": 12.24,
+   "text": "the behavior tree. So it is the first thing it does is stamp out the rooms. They have a C tile"
+  },
+  {
+   "t": 551.28,
+   "d": 8.4,
+   "text": "Marking in the center and we can pick one of those rooms and path find out of the room by rewriting"
+  },
+  {
+   "t": 561.04,
+   "d": 5.76,
+   "text": "empty tiles in a particular layer with arrows pointing in toward the center of the room or"
+  },
+  {
+   "t": 566.8,
+   "d": 3.52,
+   "text": "pointing in towards the other arrows that are pointing in towards the center of the room and"
+  },
+  {
+   "t": 570.32,
+   "d": 7.12,
+   "text": "iteratively growing this path finding structure out until we hit the center of another room and"
+  },
+  {
+   "t": 577.44,
+   "d": 9.04,
+   "text": "then just follow it along to a clear pathway. We end up with some rooms and hallways between them."
+  },
+  {
+   "t": 586.48,
+   "d": 7.76,
+   "text": "There is also an HUD or heads up display that has the elements to show the player's health and"
+  },
+  {
+   "t": 594.24,
+   "d": 6.24,
+   "text": "inventory which is the hearts and wand. Because everything is just somewhere on the board the way"
+  },
+  {
+   "t": 600.48,
+   "d": 6.72,
+   "text": "we get them in the right place is drop them, move them over and down until they get in the right"
+  },
+  {
+   "t": 607.2,
+   "d": 9.12,
+   "text": "place, and expand out the health and inventory meter from there. Everything has to be spatially"
+  },
+  {
+   "t": 616.32,
+   "d": 9.76,
+   "text": "located somewhere on the grid. We have exploration in fog. So there is a layer essentially on top of"
+  },
+  {
+   "t": 626.08,
+   "d": 6.56,
+   "text": "everything else with the big square emojis that will visually hide everything underneath them. And"
+  },
+  {
+   "t": 632.64,
+   "d": 8.08,
+   "text": "then every time the player moves, we sort of do a similar approach before where we iteratively find"
+  },
+  {
+   "t": 640.72,
+   "d": 6.48,
+   "text": "by rewriting, you know, tiles next to the player, or tiles to the tile we found, the locations that"
+  },
+  {
+   "t": 647.2,
+   "d": 4.72,
+   "text": "are near to the player, and then we can use this to clear away the darkness tiles and the"
+  },
+  {
+   "t": 651.92,
+   "d": 6.16,
+   "text": "fog tiles. The fog refills every time the player moves but the darkness doesn't. The fog follows"
+  },
+  {
+   "t": 658.08,
+   "d": 7.68,
+   "text": "them around and you can see stuff happening in areas far away from you. There is enemy"
+  },
+  {
+   "t": 665.76,
+   "d": 4.96,
+   "text": "movement. There is two types of enemies that move differently. The bats move randomly and the snakes"
+  },
+  {
+   "t": 670.72,
+   "d": 6.48,
+   "text": "patrol back and forth. The snakes have these you can see the underscore. They have hidden arrow"
+  },
+  {
+   "t": 677.2,
+   "d": 5.2,
+   "text": "tiles underneath them that keep track of which direction they are moving. There is a special"
+  },
+  {
+   "t": 682.4,
+   "d": 5.04,
+   "text": "layer to sort of keep track of the information about the enemies like if they have moved this"
+  },
+  {
+   "t": 687.44,
+   "d": 7.52,
+   "text": "turn and which direction they are going and that kind of thing. And then when the enemies do attack"
+  },
+  {
+   "t": 694.96,
+   "d": 4.56,
+   "text": "and do damage, we need to remove the health from the player. The bats with do one damage and snakes"
+  },
+  {
+   "t": 699.52,
+   "d": 7.84,
+   "text": "to two damage. The way we do this here is whenever damage is done to a player we randomly remove the"
+  },
+  {
+   "t": 707.36,
+   "d": 8.56,
+   "text": "appropriate number of cards from the health meter there at the bottom and shift everything down so"
+  },
+  {
+   "t": 715.92,
+   "d": 6.56,
+   "text": "that the health meter is still continuous. This is sort of the -- the player doesn't see this."
+  },
+  {
+   "t": 722.48,
+   "d": 4.88,
+   "text": "This is slowed down for demonstration. If the player doesn't have any hearts left, they lose"
+  },
+  {
+   "t": 727.36,
+   "d": 8.48,
+   "text": "the game. And then the player can also attack and fight enemies. If they have a wand they can cast a"
+  },
+  {
+   "t": 735.84,
+   "d": 7.52,
+   "text": "fireball. For the way the game works, you have the arrow keys to move the player and there is also"
+  },
+  {
+   "t": 743.36,
+   "d": 5.36,
+   "text": "an action button and when you press the action button that tracks that OK, now the player has"
+  },
+  {
+   "t": 748.72,
+   "d": 6.96,
+   "text": "cast a fireball and if they have done that, the next time you press the arrow key that launches"
+  },
+  {
+   "t": 755.68,
+   "d": 6.88,
+   "text": "the fireball in a particular direction and one of these extra auxiliary layers keeps track of"
+  },
+  {
+   "t": 762.56,
+   "d": 14.88,
+   "text": "the direction the fireball is going. Here is some screen shots of the behavior tree that is how it"
+  },
+  {
+   "t": 777.44,
+   "d": 6.8,
+   "text": "is currently. It has like the simpler example at the beginning. Two main subtrees and one"
+  },
+  {
+   "t": 784.24,
+   "d": 6.08,
+   "text": "for generating the dungeon and one for sort of the player playing. If you expand it all out, it looks"
+  },
+  {
+   "t": 790.32,
+   "d": 8.24,
+   "text": "like that one down there at the bottom. Quite a lot of nodes but they can visually be collapsed"
+  },
+  {
+   "t": 798.56,
+   "d": 5.52,
+   "text": "and hidden so it is relatively straightforward to focus on the particular area one is working"
+  },
+  {
+   "t": 804.08,
+   "d": 5.92,
+   "text": "on at the time. They also have comments and that kind of thing that can help navigate through it."
+  },
+  {
+   "t": 811.92,
+   "d": 9.68,
+   "text": "That's kind of all of the code basically for the game itself essentially right there. In summary,"
+  },
+  {
+   "t": 822.48,
+   "d": 5.92,
+   "text": "we have been developing Trogue which is a simple roguelike implemented using this new domain"
+  },
+  {
+   "t": 828.4,
+   "d": 5.12,
+   "text": "specific language we have been developing called tile rewrite behavioral trees or TRBTs. There is"
+  },
+  {
+   "t": 837.44,
+   "d": 4.96,
+   "text": "more item types, spells, different types of enemies, enemies having maybe more than one"
+  },
+  {
+   "t": 842.4,
+   "d": 6.08,
+   "text": "wealth, different mechanics like locks and keys, teleporters, tracking progress between floors."
+  },
+  {
+   "t": 849.44,
+   "d": 5.44,
+   "text": "You get to the exit and start over essentially now. And some balancing between maybe how many"
+  },
+  {
+   "t": 854.88,
+   "d": 6.24,
+   "text": "enemies there are and how many wands there are and that kind of thing to make it easier or harder."
+  },
+  {
+   "t": 864.0,
+   "d": 7.36,
+   "text": "That's it for what I was going to present. Thank for inviting me and listening to my talk. I am"
+  },
+  {
+   "t": 871.36,
+   "d": 21.36,
+   "text": "Seth Cooper. I want to thank those for their help and the Corey college for their research grant"
+  },
+  {
+   "t": 894.48,
+   "d": 6.8,
+   "text": "and help developing the underlying language. There is a couple papers too that you can take"
+  },
+  {
+   "t": 901.28,
+   "d": 6.72,
+   "text": "a look at if you are interested in finding out a little bit more details and that kind of thing."
+  },
+  {
+   "t": 909.28,
+   "d": 10.16,
+   "text": "ALEXEI: Thank you. I am going to sneak in a quick question. Dr. G"
+  },
+  {
+   "t": 919.44,
+   "d": 9.12,
+   "text": "asked about did you do any dev studies to see how people find this rewriting based"
+  },
+  {
+   "t": 928.56,
+   "d": 4.8,
+   "text": "programming compared to traditional imperative programming of like is it"
+  },
+  {
+   "t": 933.36,
+   "d": 4.64,
+   "text": "more accessible? Just creative and fun? Works for some people and not others?"
+  },
+  {
+   "t": 938.0,
+   "d": 3.36,
+   "text": "Is that something that comes up in the paper? >> Yeah, we did a small scale user study in the"
+  },
+  {
+   "t": 941.36,
+   "d": 13.2,
+   "text": "second paper. One of the interesting things we found is it is different from other kinds of"
+  },
+  {
+   "t": 954.56,
+   "d": 6.16,
+   "text": "programming in that the -- you know the tiles don't really have an identity so to speak. The"
+  },
+  {
+   "t": 960.72,
+   "d": 6.64,
+   "text": "little player tile doesn't have -- it as it just an emoji of the player. Anything that"
+  },
+  {
+   "t": 967.36,
+   "d": 8.88,
+   "text": "you -- any rewrites that have that tile in it could apply to any tile with the player in it,"
+  },
+  {
+   "t": 976.24,
+   "d": 7.36,
+   "text": "right? It is not like an object of the player or something like that existing on the board. It is,"
+  },
+  {
+   "t": 983.6,
+   "d": 3.84,
+   "text": "you know, it is just the tile and then the rewrites and things like that can apply to"
+  },
+  {
+   "t": 987.44,
+   "d": 8.4,
+   "text": "it just as they could, you know, a fog tile, or a wand tile, or a fireball tile. There is"
+  },
+  {
+   "t": 995.84,
+   "d": 11.04,
+   "text": "some indication maybe that it is a different way of thinking about how to structure the things."
+  },
+  {
+   "t": 1008.24,
+   "d": 5.2,
+   "text": "ALEXEI: That's a good point. That's a very base level assumption to have,"
+  },
+  {
+   "t": 1014.08,
+   "d": 4.24,
+   "text": "no, even the player character is not a special object. It is just another tile. Everything is"
+  },
+  {
+   "t": 1018.32,
+   "d": 7.28,
+   "text": "tiles. Thank you so much for fitting that into 15 minutes. I am looking forward to going and"
+  },
+  {
+   "t": 1025.6,
+   "d": 6.21,
+   "text": "following up on that paper. Thank you so much for coming to Roguelike Celebration. Excellent."
+  }
+ ]
+}

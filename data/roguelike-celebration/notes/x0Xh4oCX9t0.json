@@ -1,0 +1,169 @@
+{
+  "id": "x0Xh4oCX9t0",
+  "title": "Aaron A  Reed - Cadences, Lacunae, and Subcutaneans: Ten Years of Procedural Novels",
+  "speaker": "Aaron A. Reed",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=x0Xh4oCX9t0",
+  "talk_type": "design",
+  "summary": "Writer and designer Aaron A. Reed distills a decade of novel-length procedural text projects (Blue Lacuna, Hollywood Visionary, 18 Cadence, Ice-Bound, Subcutanean) into eight personal lessons. He argues for simulating only what the story needs, remembering player choices, co-authoring stories with players, deliberately limiting generative space, giving the generator semantic knowledge of its text, considering non-immersive modes of interaction, writing with domain-specific languages, and showing the seams of procedural systems. The Q&A covers the practical difficulty of printing and distributing a uniquely generated book per order.",
+  "games": [
+    "Blue Lacuna",
+    "Hollywood Visionary",
+    "18 Cadence",
+    "Ice-Bound",
+    "Subcutanean"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "simulation scope",
+      "kind": "principle",
+      "claim": "Procedural story projects should simulate only what the story needs, because players rarely notice environmental simulation detail that does not serve the narrative.",
+      "detail": "Reed says simulating things for their own sake can distract from shaping the narrative experience. In his text adventure Blue Lacuna he built time-of-day room descriptions, realistic moon phases driving tides, weather and ambient messages, and players noticed almost none of it; a room is just a stage for something interesting to happen.",
+      "t": 135,
+      "quote": "stimulating things for the sake of it can be a distraction from focusing on what's going to best shape the narrative experience",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "simulation scope",
+      "kind": "example",
+      "claim": "Blue Lacuna's elaborate environmental simulation (twilight variants, moon phases, tides, weather) went largely unnoticed by players.",
+      "detail": "Reed describes rooms described differently at twilight, sunrise and mid-morning, a moon that changed the tides and room descriptions, and weather-triggered ambient messages. Players did not realize or care that a description had 18 variants or that trees swayed because a storm was coming.",
+      "t": 255,
+      "quote": "People noticed almost none of that or if they did it wasn't what they remembered",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "relationship systems",
+      "kind": "technique",
+      "claim": "Blue Lacuna models the player's relationship with the character Progue on two axes that classify it into one of 12 archetypes, which change his behaviour, dialogue and the plot.",
+      "detail": "A library of more than 100 dynamic conversations could trigger at random or from game state, each offering choices that moved the relationship along a submission/dominance axis and a romantic/paternal axis. A paternal but frustrated, disliking Progue became the 'bitter dad' archetype; archetypes unlock or forbid plot options. This character simulation, not the environment, was what players remembered.",
+      "t": 358,
+      "quote": "Based on the position in the axis your system classified your relationship into one of 12 archetypes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character focus",
+      "kind": "principle",
+      "claim": "Investing simulation effort in a dynamic character relationship pays off more than environmental immersion because players sense and value it.",
+      "detail": "Reed says players could shape what Blue Lacuna's story was about (redemption, inspiring Progue or being inspired) and sensed that more than object simulation. He concluded he is less interested in immersing people in an environment than in a character, which let him focus his energy.",
+      "t": 420,
+      "quote": "The player can sense that more than the mechanisms behind the simulation of objects and that resonated with people",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player choice memory",
+      "kind": "principle",
+      "claim": "Choice-based games can give players a sense of unique ownership if many small choices accumulate and the game remembers them and calls them back in surprising ways.",
+      "detail": "In Hollywood Visionary the player makes a movie, choosing genre, actors, color or black and white, soundtrack and editing tightness; these return later, from throwaway background descriptions to the villain citing your editing as subversive. Players email Reed about the movie they made.",
+      "t": 482,
+      "quote": "if enough choices build up over time and the game remembers they can adhere to something that feels unique",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character identity",
+      "kind": "technique",
+      "claim": "Hollywood Visionary builds the character's public persona from many individual expressive choices rather than a pick-from-a-list identity menu.",
+      "detail": "Instead of a list of gender options, players choose a signature fashion item then wear something different to a party, choose what friends versus business associates call them, pick or reject labels and choose love interests. Reed finds this better than choosing off a list, even within a restricted system.",
+      "t": 557,
+      "quote": "rather than a list of gender options I wanted you to be making individual choices about how you are performing",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "co-authored story",
+      "kind": "example",
+      "claim": "18 Cadence asks players to assemble their own stories from a century of fragments about one house, and succeeded when players made stories the author never imagined.",
+      "detail": "Players move through space and time in a house that exists from 1800 to 2000, then drag fragments onto a workbench to compose and share stories. Examples include a disgruntled housewife oppressed by the house, surreal collisions like an ashtray smoking the last cigarette, and an overlay of all kitchen objects evoking thousands of meals. Reed calls it 'tell stories with players, not at them'.",
+      "t": 667,
+      "quote": "This project I felt became a success for me when people started making stories I had never thought of",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "constrained generation",
+      "kind": "principle",
+      "claim": "Limiting the generative space can be more powerful than expanding it, letting every output meet a higher authored standard while still feeling unique.",
+      "detail": "Reed says the tendency is to want ever more from generative systems, but more was not always better. For Subcutanean he trimmed scene variations into a cozier, curated space focused on changes that said meaningful things about the characters, noting most procedural text systems produce trillions of combinations while a restrained structure still gave each reader a unique experience.",
+      "t": 759,
+      "quote": "Limiting the generative space can be more powerful than expanding it",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural novel",
+      "kind": "example",
+      "claim": "Subcutanean generates a unique print-on-demand novel for every order, with tightly hand-sculpted variation rather than unpredictable text generation.",
+      "detail": "Each order generates a new version from a seed tracked in a database and uploads it to a print service. Reed avoided GPT-style generation and hand-sculpted a space where chapters vary in secrets, revelations, character beats and resolutions, so readers share the protagonist's feeling that other possibilities exist. Reviewers say they cannot imagine the story happening any other way.",
+      "t": 887,
+      "quote": "I exerted really tight control over the output. No GPT or procedures that might produce unpredictable text",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "semantic text tagging",
+      "kind": "technique",
+      "claim": "Giving a text generator knowledge about its own fragments (sentiment, length, themes) turns trivial variations into tools for characterization.",
+      "detail": "Reed notes procedural text is gibberish to the system deploying it. In Subcutanean he ran lexical tools over minor sentence variants to detect negative sentiment, then gave each generated book a chance of a pessimist narrator, or narrators who favour or avoid similes, ramble, or prefer the shortest phrasing. In Q&A he says these heuristics came mostly from gut instinct plus available text-analysis functions.",
+      "t": 1050,
+      "quote": "If your code understanding anything about the text it has that can be a massively useful multiplier",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "semantic text tagging",
+      "kind": "example",
+      "claim": "18 Cadence fragments carry hidden knowledge so the system can merge them grammatically, and Ice-Bound tags story elements with themes so an AI collaborator can comment on the player's choices.",
+      "detail": "In 18 Cadence, fragments know their history, replace repeated nouns with pronouns when combined, and can be grouped smartly, making them feel more alive than fridge magnets. In Ice-Bound, elements are tagged with themes like dedication, family and fragility, letting the digital ghost notice when the player emphasizes, contrasts or ignores a theme.",
+      "t": 1208,
+      "quote": "Each were tagged with themes important in your digital collaborators life. Dedication, family, fragility, for instance",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "non-immersive narrative",
+      "kind": "principle",
+      "claim": "Procedural stories need not be immersive; a god's-eye view of a narrative machine can make multilinear story structure more meaningful.",
+      "detail": "In Ice-Bound players manipulate symbols and see consequences ripple through the whole story rather than toggling text. Reed argues immersion can make players less able to appreciate multilinear aspects of emergent narrative, and encourages thinking outside the box about other modalities for interacting with text.",
+      "t": 1245,
+      "quote": "Procedural stories don't have to be immersive",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "domain specific languages",
+      "kind": "principle",
+      "claim": "Writers of procedural text should get domain-specific languages that feel like writing a manuscript, keeping their writer brain active instead of wrangling databases.",
+      "detail": "18 Cadence's content format let Reed write paragraphs tagged with a year and location and define objects existing at a time and place, close to writing a manuscript. Subcutanean used a simple DSL for text alternatives. He credits a natural-language programming language for helping him finish Blue Lacuna while debugging complex logic.",
+      "t": 1332,
+      "quote": "Give the writer the best tools to write. Even if the writer is yourself",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "showing procedurality",
+      "kind": "principle",
+      "claim": "Procedural text systems should usually show their seams, because players only appreciate variation once they can see what changed and why.",
+      "detail": "Reed initially wanted seamless text but came to believe that is wrong. In Ice-Bound nobody appreciated how text varied with active symbols and emphasized themes until a mode was added that showed which text varied, which became a window into how player actions affected the collaboration. He allows hiding procedurality when that is the intent.",
+      "t": 1470,
+      "quote": "No one appreciated this until we added a mote that could show the text that varied",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "print on demand",
+      "kind": "warning",
+      "claim": "Distributing a uniquely generated physical book per order is hard because print-on-demand services and retailers assume a fixed manuscript.",
+      "detail": "In Q&A Reed says distribution was the hardest part of Subcutanean: most print-on-demand services require human review of any manuscript change, which every order triggered, and Amazon requires a new ISBN whenever the text changes. He adds the legal and printing ecosystem is not ready for procedural text.",
+      "t": 1592,
+      "quote": "The vast majority of print on demand services require human review of any change to a manuscript",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

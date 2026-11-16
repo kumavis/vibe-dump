@@ -1,0 +1,63 @@
+{
+  "id": "e4b--cyXEsM",
+  "title": "Andrew Clifton - Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)",
+  "speaker": "Andrew Clifton",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=e4b--cyXEsM",
+  "talk_type": "technical",
+  "summary": "Andrew Clifton, building a roguelite, proposes replacing many stateful random number draws with hashes of the information that identifies a situation (coordinates, dungeon level, game seed), which makes randomness reproducible and easier to test and debug. He explains choosing hash inputs that are specific enough but not too specific, and introduces the SplitMix64 generator, whose additive state update allows jumping forward or backward in a stream. Combining SplitMix64 indexing with hashing yields a fully stateless random number system.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "hash-based randomness",
+      "kind": "technique",
+      "claim": "Many random draws in a roguelike can be replaced by hashing the information that uniquely identifies the situation and using the hash as the random value.",
+      "detail": "Clifton traces the usual progression from one global rand() to separate RNG instances for monster AI, dungeon generation and combat; taken to the extreme, seeding a fresh RNG per decision and drawing once is just a poor hash function. A hash is a pure function whose outputs look uniformly random, so it can replace RNG calls and makes testing and debugging easier.",
+      "t": 46,
+      "quote": "a lot of the places where you're currently like generating a random value you could be hashing something and using the hash value instead",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "hash-based randomness",
+      "kind": "technique",
+      "claim": "Hash inputs must uniquely identify the situation without being over-specific; e.g. a gold-pile roll should hash the coordinates, dungeon level and game seed.",
+      "detail": "Hashing only coordinates would put or omit gold at the same spot on every level; adding the level fixes that, and adding the overall game seed prevents every game being identical. Omit the seed only if you want something identical across all games. The result is then compared, e.g. 10% chance of a pile.",
+      "t": 365,
+      "quote": "if we just hash the coordinates that's not enough",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "random bias",
+      "kind": "principle",
+      "claim": "Small statistical biases, such as using modulo to reduce a random value to a range, are acceptable in games if they have no noticeable in-game effect.",
+      "detail": "Clifton acknowledges modulo introduces low-end bias but says he has never noticed any effect, so he does not worry about such academic issues for games.",
+      "t": 452,
+      "quote": "i've never noticed that having any in-game effect so my personal philosophy at least regards games is if it's fun",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "splitmix64",
+      "kind": "technique",
+      "claim": "SplitMix64 is a streamable RNG whose state update is just adding a stream constant, so it can jump forward or backward by any number of steps instantly.",
+      "detail": "The gamma value acts as a stream id (good values must be chosen carefully), and all randomness comes from a mixing finalizer. Skipping ahead i states is state plus i times gamma, which works for negative i too, letting you reverse the generator.",
+      "t": 566,
+      "quote": "all you have to do is just do state plus i times gamma this works even if i is negative",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "stateless rng",
+      "kind": "technique",
+      "claim": "Combining hashing with an indexed SplitMix64 gives completely stateless randomness: given seed, stream id and index, it returns the value at that position.",
+      "detail": "When a situation needs several values, such as whether an object exists plus its type and attributes, you hash to a seed and pull numbers at different indexes. Clifton is interested in exploring how far randomness without state can go.",
+      "t": 606,
+      "quote": "you can use this sort of form of split mix before in combined with hashing for a completely stateless random number generation system",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

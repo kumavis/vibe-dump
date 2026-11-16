@@ -1,0 +1,146 @@
+{
+  "id": "5y_IAdOwaYs",
+  "title": "Alexei Pepers - Nethack: Tech Tourist Mode",
+  "speaker": "Alexei Pepers",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=5y_IAdOwaYs",
+  "talk_type": "technical",
+  "summary": "Alexei Pepers gives a light-technical tour of the NetHack C source code, highlighting funny function names (strkitten, 'hug' attacks, dog functions), traces of the code's 1980s origins and community history, and the unusually thorough plain-English comments. She argues the codebase is accessible even to non-C readers and is a goldmine of design reasoning, pointing to the eating and stethoscope comments, the body-part substitution system, the 'You' message function, ASCII-diagram comments, and defensive handling of impossible cases. She encourages developers to read the source of their favourite roguelikes, and in Q&A describes her accessibility work adding feature-list auto-travel for blind players.",
+  "games": [
+    "NetHack",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "code comments",
+      "kind": "principle",
+      "claim": "NetHack's source is heavily commented in plain English, so developers can learn its design and implementation from the comments even without knowing C.",
+      "detail": "Pepers found the commenting shocking compared with typical code: files like display.c open with long paragraphs describing exactly what the display code does, and inline comments run through whole functions such as sacrifice handling. She argues this makes the codebase a learning resource for people using other languages.",
+      "t": 541,
+      "quote": "net hack has entire paragraphs and paragraphs of description of how the code works in plain English",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "eating",
+      "kind": "example",
+      "claim": "NetHack makes eating any non-food item take a single turn so the code never has to model a partially eaten metal object.",
+      "detail": "Comments in the eating code explain that while normal food can take multiple turns, metal objects eaten by e.g. a polymorphed rust monster always take one move. The stated reason is avoiding having to handle what happens if you eat half a piece of plate mail.",
+      "t": 590,
+      "quote": "they didn't want to have code dealing with what happens if you eat half of a piece of plate mail",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item usefulness",
+      "kind": "example",
+      "claim": "NetHack's stethoscope takes no time to use despite that being unrealistic, because the developers judged a timed stethoscope would be nearly useless.",
+      "detail": "The code comment notes it doesn't make sense for stethoscope use to be free, but if it took time it would become quite useless. Pepers presents this as one of many 'nuggets of design wisdom' recorded in the source that explain why the game is the way it is.",
+      "t": 600,
+      "quote": "it doesn't really make sense for stethoscope usage to not take any amount of time but they were worried that if it took time then it becomes quite useless",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "bones-like corpses",
+      "kind": "example",
+      "claim": "NetHack places dead adventurers killed by traps on early dungeon levels carrying useful items, with the choices of items and traps justified for both balance and narrative.",
+      "detail": "Pepers points to a very long comment explaining the thought process behind this feature: which items the corpses can carry, which traps were included and which excluded, from a game-balance and a narrative perspective. She calls such comments a goldmine of lessons for roguelike developers.",
+      "t": 666,
+      "quote": "what decisions went into what kind of items you could find on them what kind of traps they decide to include and which ones not to include",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "body parts",
+      "kind": "technique",
+      "claim": "NetHack generates creature-appropriate text by mapping each humanoid body part to an equivalent per creature type, so messages like a bear trap closing on your 'foot' adapt to jellies, animals or steeds.",
+      "detail": "A humanoid list (arm, eye, face...) is paired with parallel arrays for other body plans: a jelly has a pseudopod for an arm and a dark spot for an eye, animals have forelimbs and claws. A simple body-part function takes the humanoid term plus the creature and returns the right word, so a polymorphed player or a steed gets correct text; there are also special exceptions such as sharks having skin rather than scales. In Q&A Pepers named this her favourite technique: very specific output handled generically.",
+      "t": 815,
+      "quote": "they have a very simple body part function where you put in what the humanoid equivalent would be and then you pass in an actual reference",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "artificial dungeon master",
+      "kind": "principle",
+      "claim": "Generic systems that produce highly specific messages make a roguelike feel like an all-knowing dungeon master that understands whatever odd state the player is in.",
+      "detail": "Answering what inspired her, Pepers says NetHack seems to always know what you are doing no matter what creature you've become, e.g. telling a floating eye it got cream pie in its eye. Seeing that this comes from one easy-to-read body-part function, rather than countless special cases, inspired her.",
+      "t": 1768,
+      "quote": "it seems like it always knows what you're doing you know no matter what kind of creature you've been turned into no matter what action you're taking",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "readable code",
+      "kind": "technique",
+      "claim": "NetHack wraps its message output in a function named 'You' so that message calls read as plain English sentences in the source.",
+      "detail": "Because so much output is phrased as 'You feel hungry' or 'You float imperceptibly', the 'You' function handles the formatting around a pline call, letting code read naturally. Pepers calls this clever naming that abstracts away cruft; other similar helpers exist.",
+      "t": 876,
+      "quote": "they have a function called you that handles that type of output and so when you're reading it in the code you read you move very quietly",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "ascii diagrams",
+      "kind": "technique",
+      "claim": "NetHack's comments use ASCII grid diagrams to document spatial behaviour such as boomerang flight paths, polearm range and ball-and-chain movement.",
+      "detail": "The boomerang code shows its traversal pattern as a grid (reverse the rows for clockwise), which is far more readable than prose about diagonals and directions. The polearm code shows distances in a numbered grid, and ball.c contains diagrams of how ball and chain should move. Pepers suggests any grid-based game can steal this technique.",
+      "t": 951,
+      "quote": "taking advantage of the fact that the game itself is using an ASCII grid to have that in the comments",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "defensive coding",
+      "kind": "principle",
+      "claim": "NetHack's code handles cases the developers believe cannot happen, which is part of why the game stays robust under bizarre player actions.",
+      "detail": "Comments note situations like two-weaponing a corpse that can't occur, yet code exists to handle them. Pepers credits this with NetHack's flexibility and rarity of crashes even when players do crazy things.",
+      "t": 1025,
+      "quote": "nethack handles things that can't even happen there's code that explicitly says in the comments that this you know this could ever happen",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "extensibility",
+      "kind": "technique",
+      "claim": "NetHack provides an equip hook for every armour slot, including shields that currently need no special behaviour, so future features or mods can slot in consistently.",
+      "detail": "Equipping items like boots of levitation runs a per-slot function for special behaviour. A shield function exists even though, as the comment notes, no shield uses it yet, keeping the format uniform and saving future work. Pepers calls writing code further than strictly needed 'a really brilliant way' of saving future problems.",
+      "t": 1099,
+      "quote": "there's a function for when you equip a shield even though as the comment notes there are currently no shields that have this type of special handling code",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "code archaeology",
+      "kind": "history",
+      "claim": "NetHack's source preserves its decades of history, from a date function hard-coded to the 1900s to special code for the devnull tournament's unique-deaths competition.",
+      "detail": "The original year-month-day function assumed years began with 19 and has been commented out. Code prevents spoofing slime mold fruit names to fake interesting deaths for the devnull tournament, showing community events integrated into the source. Pepers compares NetHack's iteration to an artist repainting the same work over a lifetime.",
+      "t": 394,
+      "quote": "there's special code to handle the most unique deaths competition at Devon all specifically not letting you spoof slime mold fruit names",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "reading source code",
+      "kind": "principle",
+      "claim": "Developers should read the source code of their favourite open-source roguelikes because comments alone teach techniques and design reasoning.",
+      "detail": "Pepers notes NetHack is easily accessible on git, and Dungeon Crawl Stone Soup and others also have available source. The NetHack wiki footnotes link directly into source files, giving an entry point from which to follow interesting threads.",
+      "t": 1408,
+      "quote": "take your favorite roguelikes look around see if the source code is out there and give them a look",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "screen readers",
+      "kind": "technique",
+      "claim": "ASCII roguelikes are baseline screen-reader accessible, but blind players mainly struggle with positional movement, which can be eased by listing seen features and auto-travelling to them.",
+      "detail": "In Q&A Pepers describes her thesis work: listening to 'dot dot dot hash' is awful, and combat text is fine but positional information is hard. Following Dungeon Crawl Stone Soup's time-saving auto-path functions, she added NetHack functions to list notable seen features and path to them; the dev team later implemented their own version of some of those changes.",
+      "t": 1536,
+      "quote": "adding similar functions tuna hack that would let you get a list of notable features in the dungeon that you've seen already ways to path to those",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

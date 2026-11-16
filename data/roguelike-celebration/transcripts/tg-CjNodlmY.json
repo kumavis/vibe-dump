@@ -1,0 +1,3327 @@
+{
+ "id": "tg-CjNodlmY",
+ "url": "https://www.youtube.com/watch?v=tg-CjNodlmY",
+ "title": "bhauth - What makes Dungeon Crawl Stone Soup a good game?",
+ "speaker": "bhauth",
+ "talk_title": "What makes Dungeon Crawl Stone Soup a good game?",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-20",
+ "duration_s": 1481,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nbhauth is the developer for bcrawl, a fork of Dungeon Crawl Stone Soup which is currently played about 4% as much. He's also one of the better DCSS players, with a 20-streak of tournament game wins as well as 2 wins in 2 hours. He has been interested in game design and procedural generation for a long time. As a child, he designed questionable board games, and more recently he made a program that automatically generates music. He's worked as a programmer, chemical engineering consultant, and tutor.\n\nIn this talk he discusses his view of:\n- Why DCSS is worth playing\n- What the core mechanics of DCSS are\n- How those mechanics are similar to or different from other genres and other roguelikes\n\nDungeon Crawl Stone Soup: https://crawl.develz.org/\nbcrawl: https://github.com/b-crawl/bcrawl\n\n(This is a reupload to reflect the correct version of the video played during the event.)",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 45,
+   "title": "Welcome"
+  },
+  {
+   "start": 58,
+   "title": "Who am I"
+  },
+  {
+   "start": 70,
+   "title": "Starting a game"
+  },
+  {
+   "start": 711,
+   "title": "Introduction"
+  },
+  {
+   "start": 736,
+   "title": "Permadeath"
+  },
+  {
+   "start": 799,
+   "title": "Randomness"
+  },
+  {
+   "start": 829,
+   "title": "Replayability"
+  },
+  {
+   "start": 887,
+   "title": "Strategies"
+  },
+  {
+   "start": 941,
+   "title": "Consumables"
+  },
+  {
+   "start": 959,
+   "title": "Features"
+  },
+  {
+   "start": 994,
+   "title": "Content"
+  },
+  {
+   "start": 1021,
+   "title": "Design Philosophy"
+  },
+  {
+   "start": 1088,
+   "title": "Cons"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3545,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.28,
+   "d": 2.0,
+   "text": "um our next talk"
+  },
+  {
+   "t": 3.28,
+   "d": 3.36,
+   "text": "is by b house uh"
+  },
+  {
+   "t": 6.64,
+   "d": 2.64,
+   "text": "he is a developer of b-crawl which is a"
+  },
+  {
+   "t": 9.28,
+   "d": 2.48,
+   "text": "fork of dungeon crawl stone soup"
+  },
+  {
+   "t": 11.76,
+   "d": 2.0,
+   "text": "uh which is actually played a lot it's"
+  },
+  {
+   "t": 13.76,
+   "d": 1.6,
+   "text": "played almost four percent as much"
+  },
+  {
+   "t": 15.36,
+   "d": 3.04,
+   "text": "as dungeon crawls to ensue the original"
+  },
+  {
+   "t": 18.4,
+   "d": 3.04,
+   "text": "um he's also a really impressive dcss"
+  },
+  {
+   "t": 21.44,
+   "d": 0.64,
+   "text": "player"
+  },
+  {
+   "t": 22.08,
+   "d": 3.12,
+   "text": "with a 20-game win streak"
+  },
+  {
+   "t": 25.2,
+   "d": 3.44,
+   "text": "in tournaments and two wins in two hours"
+  },
+  {
+   "t": 28.64,
+   "d": 2.56,
+   "text": "so his talk is going to be pre-recorded"
+  },
+  {
+   "t": 31.2,
+   "d": 1.28,
+   "text": "but then he's going to be around"
+  },
+  {
+   "t": 32.48,
+   "d": 1.12,
+   "text": "afterwards to answer"
+  },
+  {
+   "t": 33.6,
+   "d": 3.2,
+   "text": "questions um so feel free to put any"
+  },
+  {
+   "t": 36.8,
+   "d": 1.12,
+   "text": "questions you have"
+  },
+  {
+   "t": 37.92,
+   "d": 3.28,
+   "text": "in the social space without further ado"
+  },
+  {
+   "t": 41.2,
+   "d": 2.24,
+   "text": "here is what makes dungeon crawlstone"
+  },
+  {
+   "t": 43.44,
+   "d": 2.56,
+   "text": "soup a good game"
+  },
+  {
+   "t": 46.0,
+   "d": 2.08,
+   "text": "hello everyone i'm here today to talk"
+  },
+  {
+   "t": 48.08,
+   "d": 2.32,
+   "text": "about dungeon crawl stone soup"
+  },
+  {
+   "t": 50.4,
+   "d": 2.24,
+   "text": "why i think it's a good game and what we"
+  },
+  {
+   "t": 52.64,
+   "d": 2.08,
+   "text": "can learn from it about game design"
+  },
+  {
+   "t": 54.72,
+   "d": 1.76,
+   "text": "this part is recorded but i'll be"
+  },
+  {
+   "t": 56.48,
+   "d": 2.88,
+   "text": "answering questions afterwards"
+  },
+  {
+   "t": 59.36,
+   "d": 2.08,
+   "text": "i run b-crawl which has been the most"
+  },
+  {
+   "t": 61.44,
+   "d": 2.64,
+   "text": "popular fork of dcss"
+  },
+  {
+   "t": 64.08,
+   "d": 3.44,
+   "text": "i'm also a decent dcss player only 5"
+  },
+  {
+   "t": 67.52,
+   "d": 3.84,
+   "text": "people have won a game in fewer turns"
+  },
+  {
+   "t": 71.52,
+   "d": 2.24,
+   "text": "well first let's start a game and see"
+  },
+  {
+   "t": 73.76,
+   "d": 2.08,
+   "text": "what dcss looks like"
+  },
+  {
+   "t": 75.84,
+   "d": 1.84,
+   "text": "let's be something straightforward and"
+  },
+  {
+   "t": 77.68,
+   "d": 1.84,
+   "text": "easy like a minotaur"
+  },
+  {
+   "t": 79.52,
+   "d": 2.72,
+   "text": "fighter with an axe which has worse"
+  },
+  {
+   "t": 82.24,
+   "d": 1.84,
+   "text": "damage output than other weapons but can"
+  },
+  {
+   "t": 84.08,
+   "d": 0.72,
+   "text": "hit everything"
+  },
+  {
+   "t": 84.8,
+   "d": 2.32,
+   "text": "around the player minotaur is our"
+  },
+  {
+   "t": 87.12,
+   "d": 2.64,
+   "text": "species which has permanent effects"
+  },
+  {
+   "t": 89.76,
+   "d": 2.0,
+   "text": "and fighter determines our starting"
+  },
+  {
+   "t": 91.76,
+   "d": 1.84,
+   "text": "equipment and skills"
+  },
+  {
+   "t": 93.6,
+   "d": 1.84,
+   "text": "dividing things up like that gives a lot"
+  },
+  {
+   "t": 95.44,
+   "d": 1.84,
+   "text": "of starting combinations without making"
+  },
+  {
+   "t": 97.28,
+   "d": 0.64,
+   "text": "the game"
+  },
+  {
+   "t": 97.92,
+   "d": 3.04,
+   "text": "too hard to balance when in doubt a"
+  },
+  {
+   "t": 100.96,
+   "d": 1.28,
+   "text": "one-handed axe a"
+  },
+  {
+   "t": 102.24,
+   "d": 2.56,
+   "text": "shield and heavy armor is usually a good"
+  },
+  {
+   "t": 104.8,
+   "d": 0.8,
+   "text": "plan"
+  },
+  {
+   "t": 105.6,
+   "d": 2.64,
+   "text": "and this is related to how shields work"
+  },
+  {
+   "t": 108.24,
+   "d": 1.92,
+   "text": "looking at our inventory we have an"
+  },
+  {
+   "t": 110.16,
+   "d": 3.04,
+   "text": "axe which is our main attack body armor"
+  },
+  {
+   "t": 113.2,
+   "d": 1.28,
+   "text": "that provides ac"
+  },
+  {
+   "t": 114.48,
+   "d": 2.8,
+   "text": "which reduces damage from hits and a"
+  },
+  {
+   "t": 117.28,
+   "d": 0.56,
+   "text": "shield"
+  },
+  {
+   "t": 117.84,
+   "d": 3.36,
+   "text": "that provides sh that can block attacks"
+  },
+  {
+   "t": 121.2,
+   "d": 1.92,
+   "text": "you can see those values near the corner"
+  },
+  {
+   "t": 123.12,
+   "d": 2.24,
+   "text": "here but sh becomes"
+  },
+  {
+   "t": 125.36,
+   "d": 1.76,
+   "text": "less effective the more attacks you take"
+  },
+  {
+   "t": 127.12,
+   "d": 2.64,
+   "text": "per turn so being surrounded is really"
+  },
+  {
+   "t": 129.76,
+   "d": 1.68,
+   "text": "bad if you're using a big shield"
+  },
+  {
+   "t": 131.44,
+   "d": 2.08,
+   "text": "and using an axe helps you deal with"
+  },
+  {
+   "t": 133.52,
+   "d": 1.28,
+   "text": "that"
+  },
+  {
+   "t": 134.8,
+   "d": 1.76,
+   "text": "this kind of interaction between"
+  },
+  {
+   "t": 136.56,
+   "d": 2.16,
+   "text": "strategic and tactical layers is"
+  },
+  {
+   "t": 138.72,
+   "d": 2.56,
+   "text": "part of what makes dcss an interesting"
+  },
+  {
+   "t": 141.28,
+   "d": 1.68,
+   "text": "game"
+  },
+  {
+   "t": 142.96,
+   "d": 2.4,
+   "text": "the strategic layer creates a link"
+  },
+  {
+   "t": 145.36,
+   "d": 0.64,
+   "text": "between"
+  },
+  {
+   "t": 146.0,
+   "d": 1.84,
+   "text": "all the encounters in a game and"
+  },
+  {
+   "t": 147.84,
+   "d": 1.52,
+   "text": "effectively"
+  },
+  {
+   "t": 149.36,
+   "d": 3.28,
+   "text": "makes things bigger in this case the"
+  },
+  {
+   "t": 152.64,
+   "d": 2.32,
+   "text": "tactical layer is exploiting the ability"
+  },
+  {
+   "t": 154.96,
+   "d": 1.44,
+   "text": "to hit multiple enemies"
+  },
+  {
+   "t": 156.4,
+   "d": 3.04,
+   "text": "and maximizing your shield effectiveness"
+  },
+  {
+   "t": 159.44,
+   "d": 1.84,
+   "text": "and the strategic layer includes"
+  },
+  {
+   "t": 161.28,
+   "d": 1.2,
+   "text": "choosing an axe"
+  },
+  {
+   "t": 162.48,
+   "d": 2.32,
+   "text": "using a shield and also accounting for"
+  },
+  {
+   "t": 164.8,
+   "d": 2.08,
+   "text": "the experience points needed to train"
+  },
+  {
+   "t": 166.88,
+   "d": 1.68,
+   "text": "for those"
+  },
+  {
+   "t": 168.56,
+   "d": 2.32,
+   "text": "you see before we start fighting stuff"
+  },
+  {
+   "t": 170.88,
+   "d": 1.36,
+   "text": "we want to set our skill"
+  },
+  {
+   "t": 172.24,
+   "d": 2.8,
+   "text": "training here's the menu where we can"
+  },
+  {
+   "t": 175.04,
+   "d": 2.72,
+   "text": "set what experience points go into"
+  },
+  {
+   "t": 177.76,
+   "d": 1.44,
+   "text": "these are the skills we can train right"
+  },
+  {
+   "t": 179.2,
+   "d": 2.0,
+   "text": "now and here are"
+  },
+  {
+   "t": 181.2,
+   "d": 2.64,
+   "text": "all of the skills we can look at the"
+  },
+  {
+   "t": 183.84,
+   "d": 1.6,
+   "text": "correct cost of each skill"
+  },
+  {
+   "t": 185.44,
+   "d": 2.72,
+   "text": "and say right now we want more axes"
+  },
+  {
+   "t": 188.16,
+   "d": 0.96,
+   "text": "skill"
+  },
+  {
+   "t": 189.12,
+   "d": 4.88,
+   "text": "so let's go for maybe seven axes"
+  },
+  {
+   "t": 194.16,
+   "d": 3.12,
+   "text": "all right let's get going now if i was"
+  },
+  {
+   "t": 197.28,
+   "d": 2.08,
+   "text": "going for a win streak i'd explore"
+  },
+  {
+   "t": 199.36,
+   "d": 0.8,
+   "text": "carefully"
+  },
+  {
+   "t": 200.16,
+   "d": 2.16,
+   "text": "revealing as few tiles at a time as"
+  },
+  {
+   "t": 202.32,
+   "d": 0.96,
+   "text": "possible"
+  },
+  {
+   "t": 203.28,
+   "d": 2.24,
+   "text": "because each tile revealed could be a"
+  },
+  {
+   "t": 205.52,
+   "d": 1.44,
+   "text": "new enemy"
+  },
+  {
+   "t": 206.96,
+   "d": 2.08,
+   "text": "i would also want to maintain clear"
+  },
+  {
+   "t": 209.04,
+   "d": 2.4,
+   "text": "paths for retreating"
+  },
+  {
+   "t": 211.44,
+   "d": 3.92,
+   "text": "but instead i'm going to auto explore"
+  },
+  {
+   "t": 215.36,
+   "d": 2.4,
+   "text": "as soon as i kill this hobgoblin and"
+  },
+  {
+   "t": 217.76,
+   "d": 1.92,
+   "text": "wear this cloak"
+  },
+  {
+   "t": 219.68,
+   "d": 3.92,
+   "text": "alright here's the auto explorer in dcss"
+  },
+  {
+   "t": 223.6,
+   "d": 2.08,
+   "text": "a lot of common activities have some"
+  },
+  {
+   "t": 225.68,
+   "d": 1.28,
+   "text": "automation available"
+  },
+  {
+   "t": 226.96,
+   "d": 2.16,
+   "text": "and that's because whenever players got"
+  },
+  {
+   "t": 229.12,
+   "d": 2.48,
+   "text": "annoyed by something repetitive"
+  },
+  {
+   "t": 231.6,
+   "d": 2.0,
+   "text": "somebody usually submitted a fix for"
+  },
+  {
+   "t": 233.6,
+   "d": 1.28,
+   "text": "that and"
+  },
+  {
+   "t": 234.88,
+   "d": 3.12,
+   "text": "dcss has been around for a while now"
+  },
+  {
+   "t": 238.0,
+   "d": 2.64,
+   "text": "it also has a disproportionate number of"
+  },
+  {
+   "t": 240.64,
+   "d": 1.92,
+   "text": "programmers playing it"
+  },
+  {
+   "t": 242.56,
+   "d": 2.08,
+   "text": "you can also set the auto explorer to"
+  },
+  {
+   "t": 244.64,
+   "d": 1.12,
+   "text": "happen instantly"
+  },
+  {
+   "t": 245.76,
+   "d": 1.52,
+   "text": "which is part of how real-time"
+  },
+  {
+   "t": 247.28,
+   "d": 1.76,
+   "text": "speedrunners can average"
+  },
+  {
+   "t": 249.04,
+   "d": 3.2,
+   "text": "20 moves a second in fact"
+  },
+  {
+   "t": 252.24,
+   "d": 2.24,
+   "text": "i'd like to talk about permadeath as a"
+  },
+  {
+   "t": 254.48,
+   "d": 1.52,
+   "text": "mechanic at some point so"
+  },
+  {
+   "t": 256.0,
+   "d": 2.0,
+   "text": "rather than being as careful as possible"
+  },
+  {
+   "t": 258.0,
+   "d": 1.12,
+   "text": "i guess i'll just"
+  },
+  {
+   "t": 259.12,
+   "d": 2.0,
+   "text": "play recklessly and see if i can manage"
+  },
+  {
+   "t": 261.12,
+   "d": 2.8,
+   "text": "to lose in the time i have here"
+  },
+  {
+   "t": 263.92,
+   "d": 2.72,
+   "text": "now this is a bit complicated right"
+  },
+  {
+   "t": 266.64,
+   "d": 2.16,
+   "text": "there's a bit of a learning curve"
+  },
+  {
+   "t": 268.8,
+   "d": 2.16,
+   "text": "so why would you invest time into"
+  },
+  {
+   "t": 270.96,
+   "d": 2.16,
+   "text": "figuring out dcss instead of"
+  },
+  {
+   "t": 273.12,
+   "d": 4.24,
+   "text": "some other game well most people don't"
+  },
+  {
+   "t": 277.36,
+   "d": 2.64,
+   "text": "fortnite has a couple thousand times as"
+  },
+  {
+   "t": 280.0,
+   "d": 2.88,
+   "text": "many players as dcss"
+  },
+  {
+   "t": 282.88,
+   "d": 1.92,
+   "text": "but the same is true for traditional"
+  },
+  {
+   "t": 284.8,
+   "d": 1.76,
+   "text": "roguelikes in general"
+  },
+  {
+   "t": 286.56,
+   "d": 1.84,
+   "text": "and if you're watching this you're"
+  },
+  {
+   "t": 288.4,
+   "d": 3.28,
+   "text": "probably interested in those"
+  },
+  {
+   "t": 291.68,
+   "d": 2.16,
+   "text": "while traditional roguelikes don't have"
+  },
+  {
+   "t": 293.84,
+   "d": 2.0,
+   "text": "as many players as the really popular"
+  },
+  {
+   "t": 295.84,
+   "d": 1.12,
+   "text": "games i would say"
+  },
+  {
+   "t": 296.96,
+   "d": 3.92,
+   "text": "they're disproportionately influential"
+  },
+  {
+   "t": 300.88,
+   "d": 2.8,
+   "text": "for example a blizzard employee is over"
+  },
+  {
+   "t": 303.68,
+   "d": 0.72,
+   "text": "a hundred"
+  },
+  {
+   "t": 304.4,
+   "d": 2.8,
+   "text": "times as likely to play dcss as the"
+  },
+  {
+   "t": 307.2,
+   "d": 2.08,
+   "text": "average gamer"
+  },
+  {
+   "t": 309.28,
+   "d": 2.4,
+   "text": "looking back nethack and angband were"
+  },
+  {
+   "t": 311.68,
+   "d": 1.04,
+   "text": "probably the most"
+  },
+  {
+   "t": 312.72,
+   "d": 2.08,
+   "text": "influential traditional roguelikes for a"
+  },
+  {
+   "t": 314.8,
+   "d": 1.04,
+   "text": "while"
+  },
+  {
+   "t": 315.84,
+   "d": 2.08,
+   "text": "but now i would say that position has"
+  },
+  {
+   "t": 317.92,
+   "d": 2.96,
+   "text": "been taken by dcss"
+  },
+  {
+   "t": 320.88,
+   "d": 2.32,
+   "text": "lists of top roguelikes are obviously"
+  },
+  {
+   "t": 323.2,
+   "d": 1.92,
+   "text": "made by people who play a lot of games"
+  },
+  {
+   "t": 325.12,
+   "d": 0.4,
+   "text": "and"
+  },
+  {
+   "t": 325.52,
+   "d": 3.12,
+   "text": "dcss is usually near the top of those"
+  },
+  {
+   "t": 328.64,
+   "d": 1.44,
+   "text": "it's also played by a number of"
+  },
+  {
+   "t": 330.08,
+   "d": 2.24,
+   "text": "streamers like quill 18"
+  },
+  {
+   "t": 332.32,
+   "d": 2.96,
+   "text": "moon moon and solarity they don't"
+  },
+  {
+   "t": 335.28,
+   "d": 1.6,
+   "text": "generally stream it because it doesn't"
+  },
+  {
+   "t": 336.88,
+   "d": 2.48,
+   "text": "get many viewers but my point is that"
+  },
+  {
+   "t": 339.36,
+   "d": 2.32,
+   "text": "people who have played video games all"
+  },
+  {
+   "t": 341.68,
+   "d": 0.8,
+   "text": "the time"
+  },
+  {
+   "t": 342.48,
+   "d": 2.88,
+   "text": "professionally for much of their life"
+  },
+  {
+   "t": 345.36,
+   "d": 3.36,
+   "text": "those people often like dcss"
+  },
+  {
+   "t": 348.72,
+   "d": 1.52,
+   "text": "it's also played by a lot of game"
+  },
+  {
+   "t": 350.24,
+   "d": 2.24,
+   "text": "designers like mike donais"
+  },
+  {
+   "t": 352.48,
+   "d": 3.04,
+   "text": "the lead designer of hearthstone who has"
+  },
+  {
+   "t": 355.52,
+   "d": 1.76,
+   "text": "a win streak with octopodes"
+  },
+  {
+   "t": 357.28,
+   "d": 3.92,
+   "text": "that's a relatively difficult species"
+  },
+  {
+   "t": 361.2,
+   "d": 2.64,
+   "text": "let's uh wear these boots here and of"
+  },
+  {
+   "t": 363.84,
+   "d": 2.32,
+   "text": "course anyone making a roguelike has"
+  },
+  {
+   "t": 366.16,
+   "d": 3.2,
+   "text": "probably played it i also know a"
+  },
+  {
+   "t": 369.36,
+   "d": 3.04,
+   "text": "number of good dcss players and"
+  },
+  {
+   "t": 372.4,
+   "d": 2.32,
+   "text": "in my experience they tend to be"
+  },
+  {
+   "t": 374.72,
+   "d": 1.28,
+   "text": "interesting people"
+  },
+  {
+   "t": 376.0,
+   "d": 4.08,
+   "text": "more so than good players of other games"
+  },
+  {
+   "t": 380.08,
+   "d": 3.76,
+   "text": "we have a somewhat dangerous situation"
+  },
+  {
+   "t": 383.84,
+   "d": 2.48,
+   "text": "but you know that's okay let's just uh"
+  },
+  {
+   "t": 386.32,
+   "d": 2.88,
+   "text": "walk away for a bit here"
+  },
+  {
+   "t": 389.2,
+   "d": 2.8,
+   "text": "one way i like to evaluate games is by"
+  },
+  {
+   "t": 392.0,
+   "d": 1.68,
+   "text": "looking at the differences between"
+  },
+  {
+   "t": 393.68,
+   "d": 2.88,
+   "text": "what new players do and what very good"
+  },
+  {
+   "t": 396.56,
+   "d": 1.92,
+   "text": "players do"
+  },
+  {
+   "t": 398.48,
+   "d": 3.36,
+   "text": "and one thing one thing new players"
+  },
+  {
+   "t": 401.84,
+   "d": 2.72,
+   "text": "don't do is walk away and go upstairs"
+  },
+  {
+   "t": 404.56,
+   "d": 3.12,
+   "text": "but another thing they don't do"
+  },
+  {
+   "t": 407.68,
+   "d": 3.84,
+   "text": "is identify their consumables"
+  },
+  {
+   "t": 411.52,
+   "d": 2.32,
+   "text": "that difference between what new players"
+  },
+  {
+   "t": 413.84,
+   "d": 1.92,
+   "text": "do and what good players do is basically"
+  },
+  {
+   "t": 415.76,
+   "d": 1.68,
+   "text": "what the game teaches which"
+  },
+  {
+   "t": 417.44,
+   "d": 3.36,
+   "text": "in some sense is the essence of gameplay"
+  },
+  {
+   "t": 420.8,
+   "d": 2.48,
+   "text": "so let's id some stuff deciding what to"
+  },
+  {
+   "t": 423.28,
+   "d": 2.48,
+   "text": "id first can be complicated"
+  },
+  {
+   "t": 425.76,
+   "d": 3.44,
+   "text": "and sometimes you want to read single"
+  },
+  {
+   "t": 429.2,
+   "d": 1.6,
+   "text": "stacks of scrolls but the"
+  },
+  {
+   "t": 430.8,
+   "d": 1.68,
+   "text": "really important thing is just to get"
+  },
+  {
+   "t": 432.48,
+   "d": 3.84,
+   "text": "some stuff identified the"
+  },
+  {
+   "t": 436.32,
+   "d": 2.0,
+   "text": "general principle the game is teaching"
+  },
+  {
+   "t": 438.32,
+   "d": 2.64,
+   "text": "here is i suppose to plan ahead for what"
+  },
+  {
+   "t": 440.96,
+   "d": 1.92,
+   "text": "resources you might need in the future"
+  },
+  {
+   "t": 442.88,
+   "d": 0.88,
+   "text": "which i think"
+  },
+  {
+   "t": 443.76,
+   "d": 3.84,
+   "text": "is a fine principle for a game to teach"
+  },
+  {
+   "t": 447.6,
+   "d": 3.2,
+   "text": "you explore you find an enemy you melee"
+  },
+  {
+   "t": 450.8,
+   "d": 1.68,
+   "text": "attack you level up people tend to get"
+  },
+  {
+   "t": 452.48,
+   "d": 0.88,
+   "text": "stuck in"
+  },
+  {
+   "t": 453.36,
+   "d": 2.08,
+   "text": "patterns like that but if you don't"
+  },
+  {
+   "t": 455.44,
+   "d": 2.64,
+   "text": "think about what else you could do"
+  },
+  {
+   "t": 458.08,
+   "d": 1.92,
+   "text": "you might not be ready when something"
+  },
+  {
+   "t": 460.0,
+   "d": 1.68,
+   "text": "new comes along"
+  },
+  {
+   "t": 461.68,
+   "d": 2.8,
+   "text": "to try to get players to id stuff i made"
+  },
+  {
+   "t": 464.48,
+   "d": 2.16,
+   "text": "id scrolls always be identified in b"
+  },
+  {
+   "t": 466.64,
+   "d": 0.88,
+   "text": "crawl i'm"
+  },
+  {
+   "t": 467.52,
+   "d": 1.84,
+   "text": "not sure how effective that's been"
+  },
+  {
+   "t": 469.36,
+   "d": 1.52,
+   "text": "though"
+  },
+  {
+   "t": 470.88,
+   "d": 2.0,
+   "text": "new players also tend not to use"
+  },
+  {
+   "t": 472.88,
+   "d": 2.16,
+   "text": "consumables in combat and to use them"
+  },
+  {
+   "t": 475.04,
+   "d": 1.84,
+   "text": "too late if they do"
+  },
+  {
+   "t": 476.88,
+   "d": 2.16,
+   "text": "so i guess the game also teaches players"
+  },
+  {
+   "t": 479.04,
+   "d": 1.92,
+   "text": "to consider all their options more"
+  },
+  {
+   "t": 480.96,
+   "d": 2.48,
+   "text": "carefully in dangerous situations"
+  },
+  {
+   "t": 483.44,
+   "d": 3.12,
+   "text": "in the distant past a hunter-gatherer"
+  },
+  {
+   "t": 486.56,
+   "d": 2.4,
+   "text": "encountering a lion didn't have a lot of"
+  },
+  {
+   "t": 488.96,
+   "d": 1.6,
+   "text": "time to react"
+  },
+  {
+   "t": 490.56,
+   "d": 2.4,
+   "text": "but in the modern world panic and fast"
+  },
+  {
+   "t": 492.96,
+   "d": 0.72,
+   "text": "decisions"
+  },
+  {
+   "t": 493.68,
+   "d": 2.4,
+   "text": "aren't usually very helpful in stressful"
+  },
+  {
+   "t": 496.08,
+   "d": 1.6,
+   "text": "situations"
+  },
+  {
+   "t": 497.68,
+   "d": 2.0,
+   "text": "so i think it's good to have some games"
+  },
+  {
+   "t": 499.68,
+   "d": 1.36,
+   "text": "that encourage people to"
+  },
+  {
+   "t": 501.04,
+   "d": 2.48,
+   "text": "slow down and stay calm when something"
+  },
+  {
+   "t": 503.52,
+   "d": 2.48,
+   "text": "goes wrong"
+  },
+  {
+   "t": 506.0,
+   "d": 3.2,
+   "text": "on our third level of the dungeon now"
+  },
+  {
+   "t": 509.2,
+   "d": 2.72,
+   "text": "players will typically visit 40 to 90"
+  },
+  {
+   "t": 511.92,
+   "d": 1.76,
+   "text": "levels in a winning game and they also"
+  },
+  {
+   "t": 513.68,
+   "d": 0.72,
+   "text": "get bigger"
+  },
+  {
+   "t": 514.4,
+   "d": 3.04,
+   "text": "as you go now"
+  },
+  {
+   "t": 517.44,
+   "d": 3.12,
+   "text": "i was kind of hyping up dcss as a smart"
+  },
+  {
+   "t": 520.56,
+   "d": 1.68,
+   "text": "game for smart people"
+  },
+  {
+   "t": 522.24,
+   "d": 2.48,
+   "text": "but these early levels with a strong"
+  },
+  {
+   "t": 524.72,
+   "d": 1.12,
+   "text": "melee character"
+  },
+  {
+   "t": 525.84,
+   "d": 2.16,
+   "text": "that i'm trying to play while talking"
+  },
+  {
+   "t": 528.0,
+   "d": 1.92,
+   "text": "don't really live up to that"
+  },
+  {
+   "t": 529.92,
+   "d": 3.44,
+   "text": "unless i get into subtle optimizations"
+  },
+  {
+   "t": 533.36,
+   "d": 3.12,
+   "text": "so while we haven't gotten very far i'd"
+  },
+  {
+   "t": 536.48,
+   "d": 2.32,
+   "text": "like to show you some medium complexity"
+  },
+  {
+   "t": 538.8,
+   "d": 2.0,
+   "text": "gameplay from a later area"
+  },
+  {
+   "t": 540.8,
+   "d": 2.72,
+   "text": "and then go through some slides so i'll"
+  },
+  {
+   "t": 543.52,
+   "d": 2.96,
+   "text": "just end this game here"
+  },
+  {
+   "t": 546.48,
+   "d": 2.8,
+   "text": "let's quit and here's what you see at"
+  },
+  {
+   "t": 549.28,
+   "d": 0.88,
+   "text": "the end of the game"
+  },
+  {
+   "t": 550.16,
+   "d": 4.0,
+   "text": "your inventory and your score"
+  },
+  {
+   "t": 554.32,
+   "d": 3.04,
+   "text": "this is an ogre air elementalist run the"
+  },
+  {
+   "t": 557.36,
+   "d": 3.12,
+   "text": "seventh game in a series of wins so uh"
+  },
+  {
+   "t": 560.48,
+   "d": 1.84,
+   "text": "how are we gonna do this well"
+  },
+  {
+   "t": 562.32,
+   "d": 2.8,
+   "text": "i'm gonna start off with finesse and"
+  },
+  {
+   "t": 565.12,
+   "d": 1.68,
+   "text": "obviously we've been noticed by the"
+  },
+  {
+   "t": 566.8,
+   "d": 1.76,
+   "text": "royal jelly"
+  },
+  {
+   "t": 568.56,
+   "d": 3.04,
+   "text": "now i'm going to throw a net"
+  },
+  {
+   "t": 571.6,
+   "d": 3.12,
+   "text": "it misses that's a little bit surprising"
+  },
+  {
+   "t": 574.72,
+   "d": 3.92,
+   "text": "let's go again and we get it"
+  },
+  {
+   "t": 578.64,
+   "d": 2.4,
+   "text": "so now what am i going to do i'm going"
+  },
+  {
+   "t": 581.04,
+   "d": 1.68,
+   "text": "to"
+  },
+  {
+   "t": 582.72,
+   "d": 5.76,
+   "text": "heroism i'm going to swap to my blow gun"
+  },
+  {
+   "t": 588.48,
+   "d": 3.28,
+   "text": "and i'm going to quiver the"
+  },
+  {
+   "t": 591.76,
+   "d": 2.88,
+   "text": "silver javelins they do extra damage"
+  },
+  {
+   "t": 594.64,
+   "d": 1.76,
+   "text": "against the royal jelly"
+  },
+  {
+   "t": 596.4,
+   "d": 3.12,
+   "text": "so they should be pretty effective"
+  },
+  {
+   "t": 599.52,
+   "d": 2.08,
+   "text": "i do have a haste potion here but just"
+  },
+  {
+   "t": 601.6,
+   "d": 2.48,
+   "text": "the one so i'm going to try to do this"
+  },
+  {
+   "t": 604.08,
+   "d": 3.44,
+   "text": "without haste all right let's shoot a"
+  },
+  {
+   "t": 607.52,
+   "d": 2.88,
+   "text": "silver javelin here"
+  },
+  {
+   "t": 610.4,
+   "d": 4.08,
+   "text": "and let's portal projectile"
+  },
+  {
+   "t": 616.84,
+   "d": 1.4,
+   "text": "and"
+  },
+  {
+   "t": 618.24,
+   "d": 3.28,
+   "text": "hmm let's go again"
+  },
+  {
+   "t": 621.52,
+   "d": 2.72,
+   "text": "and now let's quiver the needles of"
+  },
+  {
+   "t": 624.24,
+   "d": 1.6,
+   "text": "frenzy"
+  },
+  {
+   "t": 625.84,
+   "d": 2.56,
+   "text": "and i'm going to frenzy one of these"
+  },
+  {
+   "t": 628.4,
+   "d": 2.88,
+   "text": "azure jellies"
+  },
+  {
+   "t": 631.6,
+   "d": 4.32,
+   "text": "misses that's unusual let's go again"
+  },
+  {
+   "t": 635.92,
+   "d": 4.72,
+   "text": "uh resists let's go again and we got it"
+  },
+  {
+   "t": 640.64,
+   "d": 2.56,
+   "text": "okay let's shoot our last one at this"
+  },
+  {
+   "t": 643.2,
+   "d": 1.64,
+   "text": "jelly"
+  },
+  {
+   "t": 644.84,
+   "d": 3.56,
+   "text": "um didn't work"
+  },
+  {
+   "t": 648.4,
+   "d": 1.84,
+   "text": "that's okay though let's go ahead and"
+  },
+  {
+   "t": 650.24,
+   "d": 4.16,
+   "text": "read a scroll of immolation"
+  },
+  {
+   "t": 655.92,
+   "d": 2.88,
+   "text": "and there we go"
+  },
+  {
+   "t": 659.04,
+   "d": 2.56,
+   "text": "let's maybe go with a javelin of"
+  },
+  {
+   "t": 661.6,
+   "d": 2.16,
+   "text": "penetration here"
+  },
+  {
+   "t": 663.76,
+   "d": 2.88,
+   "text": "take out these guys and cancel portal"
+  },
+  {
+   "t": 666.64,
+   "d": 1.12,
+   "text": "projectile"
+  },
+  {
+   "t": 667.76,
+   "d": 3.44,
+   "text": "which is instant let's"
+  },
+  {
+   "t": 671.2,
+   "d": 5.2,
+   "text": "shoot like this yes"
+  },
+  {
+   "t": 677.55,
+   "d": 1.73,
+   "text": "[Music]"
+  },
+  {
+   "t": 679.28,
+   "d": 3.68,
+   "text": "go again and we can just finish these"
+  },
+  {
+   "t": 682.96,
+   "d": 1.84,
+   "text": "guys off with some large rocks"
+  },
+  {
+   "t": 684.8,
+   "d": 5.04,
+   "text": "if we want"
+  },
+  {
+   "t": 690.88,
+   "d": 4.08,
+   "text": "there we go that's a pretty clean kill"
+  },
+  {
+   "t": 694.96,
+   "d": 2.24,
+   "text": "we can just finish these guys off i"
+  },
+  {
+   "t": 697.2,
+   "d": 0.88,
+   "text": "guess i'll"
+  },
+  {
+   "t": 698.08,
+   "d": 4.56,
+   "text": "walk out of the flame cloud"
+  },
+  {
+   "t": 702.64,
+   "d": 2.48,
+   "text": "yeah throw some more large rocks and"
+  },
+  {
+   "t": 705.12,
+   "d": 1.04,
+   "text": "there we go"
+  },
+  {
+   "t": 706.16,
+   "d": 3.12,
+   "text": "that's a clean kill okay then"
+  },
+  {
+   "t": 709.28,
+   "d": 3.76,
+   "text": "time for the slides now to talk about"
+  },
+  {
+   "t": 713.04,
+   "d": 2.24,
+   "text": "what makes dcss a good game"
+  },
+  {
+   "t": 715.28,
+   "d": 2.08,
+   "text": "i also have to talk about what makes"
+  },
+  {
+   "t": 717.36,
+   "d": 1.76,
+   "text": "roguelikes in general good"
+  },
+  {
+   "t": 719.12,
+   "d": 2.56,
+   "text": "so we can consider why dcss does a good"
+  },
+  {
+   "t": 721.68,
+   "d": 2.88,
+   "text": "job of implementing those patterns"
+  },
+  {
+   "t": 724.56,
+   "d": 1.68,
+   "text": "different people mean different things"
+  },
+  {
+   "t": 726.24,
+   "d": 1.52,
+   "text": "by the word roguelike so"
+  },
+  {
+   "t": 727.76,
+   "d": 3.12,
+   "text": "here's what i mean permadeath procedural"
+  },
+  {
+   "t": 730.88,
+   "d": 0.8,
+   "text": "generation"
+  },
+  {
+   "t": 731.68,
+   "d": 2.8,
+   "text": "consumable resources discrete actions"
+  },
+  {
+   "t": 734.48,
+   "d": 0.32,
+   "text": "and"
+  },
+  {
+   "t": 734.8,
+   "d": 3.68,
+   "text": "randomness in results these roguelike"
+  },
+  {
+   "t": 738.48,
+   "d": 1.76,
+   "text": "design elements are to me"
+  },
+  {
+   "t": 740.24,
+   "d": 3.76,
+   "text": "a package based around permadeath"
+  },
+  {
+   "t": 744.0,
+   "d": 1.76,
+   "text": "permadeath means playing the start"
+  },
+  {
+   "t": 745.76,
+   "d": 1.36,
+   "text": "repeatedly"
+  },
+  {
+   "t": 747.12,
+   "d": 2.0,
+   "text": "and procedural generation is needed to"
+  },
+  {
+   "t": 749.12,
+   "d": 2.4,
+   "text": "keep that from being repetitive"
+  },
+  {
+   "t": 751.52,
+   "d": 2.08,
+   "text": "permadeath also means difficulty can't"
+  },
+  {
+   "t": 753.6,
+   "d": 2.08,
+   "text": "be smoothed out by players replaying"
+  },
+  {
+   "t": 755.68,
+   "d": 1.36,
+   "text": "hard parts more"
+  },
+  {
+   "t": 757.04,
+   "d": 2.16,
+   "text": "and procedural generation tends to lead"
+  },
+  {
+   "t": 759.2,
+   "d": 1.6,
+   "text": "to uneven difficulty"
+  },
+  {
+   "t": 760.8,
+   "d": 2.16,
+   "text": "because there's less thought and testing"
+  },
+  {
+   "t": 762.96,
+   "d": 1.12,
+   "text": "going into any"
+  },
+  {
+   "t": 764.08,
+   "d": 3.92,
+   "text": "particular level consumable resources"
+  },
+  {
+   "t": 768.0,
+   "d": 2.48,
+   "text": "smooth out that difficulty and can add"
+  },
+  {
+   "t": 770.48,
+   "d": 2.16,
+   "text": "more tactical depth"
+  },
+  {
+   "t": 772.64,
+   "d": 2.32,
+   "text": "then turn based games give players time"
+  },
+  {
+   "t": 774.96,
+   "d": 0.72,
+   "text": "to consider"
+  },
+  {
+   "t": 775.68,
+   "d": 3.04,
+   "text": "using a variety of consumable items"
+  },
+  {
+   "t": 778.72,
+   "d": 1.92,
+   "text": "and they smooth out difficulty a little"
+  },
+  {
+   "t": 780.64,
+   "d": 1.68,
+   "text": "bit because players can play"
+  },
+  {
+   "t": 782.32,
+   "d": 3.04,
+   "text": "hard parts more slowly"
+  },
+  {
+   "t": 785.36,
+   "d": 2.96,
+   "text": "so why is permadeath worth designing"
+  },
+  {
+   "t": 788.32,
+   "d": 1.2,
+   "text": "around"
+  },
+  {
+   "t": 789.52,
+   "d": 2.0,
+   "text": "that's because it forces players to"
+  },
+  {
+   "t": 791.52,
+   "d": 2.72,
+   "text": "consider probabilities"
+  },
+  {
+   "t": 794.24,
+   "d": 2.64,
+   "text": "imagine poker with saves and reloads"
+  },
+  {
+   "t": 796.88,
+   "d": 3.68,
+   "text": "that would be pretty boring wouldn't it"
+  },
+  {
+   "t": 800.56,
+   "d": 2.0,
+   "text": "when you're heading into the unknown in"
+  },
+  {
+   "t": 802.56,
+   "d": 2.08,
+   "text": "a randomly generated world"
+  },
+  {
+   "t": 804.64,
+   "d": 2.72,
+   "text": "your game state is this huge universe of"
+  },
+  {
+   "t": 807.36,
+   "d": 2.32,
+   "text": "possibility which is much bigger than"
+  },
+  {
+   "t": 809.68,
+   "d": 2.48,
+   "text": "any particular result"
+  },
+  {
+   "t": 812.16,
+   "d": 2.32,
+   "text": "permadeath and randomness forces players"
+  },
+  {
+   "t": 814.48,
+   "d": 1.12,
+   "text": "to engage with that"
+  },
+  {
+   "t": 815.6,
+   "d": 3.12,
+   "text": "and effectively makes games bigger"
+  },
+  {
+   "t": 818.72,
+   "d": 1.92,
+   "text": "but remember it is possible to take"
+  },
+  {
+   "t": 820.64,
+   "d": 1.84,
+   "text": "things too far and to dilute"
+  },
+  {
+   "t": 822.48,
+   "d": 1.68,
+   "text": "possibilities until they aren't even"
+  },
+  {
+   "t": 824.16,
+   "d": 1.92,
+   "text": "worth considering"
+  },
+  {
+   "t": 826.08,
+   "d": 4.0,
+   "text": "now let's talk about dcss specifically"
+  },
+  {
+   "t": 830.08,
+   "d": 3.28,
+   "text": "roguelikes need replayability and dcss"
+  },
+  {
+   "t": 833.36,
+   "d": 3.04,
+   "text": "has a lot of replayability"
+  },
+  {
+   "t": 836.4,
+   "d": 1.92,
+   "text": "it doesn't just have many many"
+  },
+  {
+   "t": 838.32,
+   "d": 2.4,
+   "text": "combinations of species and background"
+  },
+  {
+   "t": 840.72,
+   "d": 1.12,
+   "text": "and deity"
+  },
+  {
+   "t": 841.84,
+   "d": 2.4,
+   "text": "it's also refined to those over time to"
+  },
+  {
+   "t": 844.24,
+   "d": 1.76,
+   "text": "give distinct gameplay"
+  },
+  {
+   "t": 846.0,
+   "d": 1.84,
+   "text": "more so than most other games with"
+  },
+  {
+   "t": 847.84,
+   "d": 3.44,
+   "text": "multiple character options"
+  },
+  {
+   "t": 851.28,
+   "d": 2.56,
+   "text": "it also has hundreds of item types and"
+  },
+  {
+   "t": 853.84,
+   "d": 1.44,
+   "text": "hundreds of spells"
+  },
+  {
+   "t": 855.28,
+   "d": 2.0,
+   "text": "so there's a lot of variety even with"
+  },
+  {
+   "t": 857.28,
+   "d": 1.84,
+   "text": "the same combo"
+  },
+  {
+   "t": 859.12,
+   "d": 2.32,
+   "text": "this is especially true for casters"
+  },
+  {
+   "t": 861.44,
+   "d": 1.84,
+   "text": "there are hundreds of distinct and"
+  },
+  {
+   "t": 863.28,
+   "d": 2.24,
+   "text": "viable strategies based around some"
+  },
+  {
+   "t": 865.52,
+   "d": 1.92,
+   "text": "combination of three spell schools with"
+  },
+  {
+   "t": 867.44,
+   "d": 1.68,
+   "text": "a bit of other stuff"
+  },
+  {
+   "t": 869.12,
+   "d": 2.72,
+   "text": "and that's because there are hundreds of"
+  },
+  {
+   "t": 871.84,
+   "d": 0.64,
+   "text": "spells"
+  },
+  {
+   "t": 872.48,
+   "d": 3.04,
+   "text": "but also because their combinations are"
+  },
+  {
+   "t": 875.52,
+   "d": 1.52,
+   "text": "interesting"
+  },
+  {
+   "t": 877.04,
+   "d": 1.92,
+   "text": "the game also changes to some extent"
+  },
+  {
+   "t": 878.96,
+   "d": 2.16,
+   "text": "depending on what resistances you find"
+  },
+  {
+   "t": 881.12,
+   "d": 1.84,
+   "text": "if you have poison resistance but not"
+  },
+  {
+   "t": 882.96,
+   "d": 1.92,
+   "text": "fire resistance or vice versa that"
+  },
+  {
+   "t": 884.88,
+   "d": 1.6,
+   "text": "changes which enemies are really"
+  },
+  {
+   "t": 886.48,
+   "d": 2.24,
+   "text": "threatening"
+  },
+  {
+   "t": 888.72,
+   "d": 3.12,
+   "text": "if the cost of skills or items is linear"
+  },
+  {
+   "t": 891.84,
+   "d": 1.04,
+   "text": "with power"
+  },
+  {
+   "t": 892.88,
+   "d": 1.84,
+   "text": "players will tend to focus all their"
+  },
+  {
+   "t": 894.72,
+   "d": 2.64,
+   "text": "upgrades on one or two things"
+  },
+  {
+   "t": 897.36,
+   "d": 2.08,
+   "text": "that's what happens in brogue and partly"
+  },
+  {
+   "t": 899.44,
+   "d": 1.92,
+   "text": "because of that brogue only has a few"
+  },
+  {
+   "t": 901.36,
+   "d": 1.92,
+   "text": "viable strategies"
+  },
+  {
+   "t": 903.28,
+   "d": 1.76,
+   "text": "on the other hand if costs are"
+  },
+  {
+   "t": 905.04,
+   "d": 1.28,
+   "text": "exponential then"
+  },
+  {
+   "t": 906.32,
+   "d": 1.6,
+   "text": "players tend to get about the same"
+  },
+  {
+   "t": 907.92,
+   "d": 2.08,
+   "text": "amount of everything"
+  },
+  {
+   "t": 910.0,
+   "d": 2.8,
+   "text": "but with polynomial costs players will"
+  },
+  {
+   "t": 912.8,
+   "d": 2.32,
+   "text": "tend to get a good mix of upgrades"
+  },
+  {
+   "t": 915.12,
+   "d": 2.48,
+   "text": "and that means there are more viable"
+  },
+  {
+   "t": 917.6,
+   "d": 1.44,
+   "text": "combinations"
+  },
+  {
+   "t": 919.04,
+   "d": 2.4,
+   "text": "that's what dcss has and i actually"
+  },
+  {
+   "t": 921.44,
+   "d": 2.4,
+   "text": "think the skill system in dcss is a"
+  },
+  {
+   "t": 923.84,
+   "d": 1.84,
+   "text": "pretty interesting design"
+  },
+  {
+   "t": 925.68,
+   "d": 2.4,
+   "text": "it's definitely a concept you might want"
+  },
+  {
+   "t": 928.08,
+   "d": 2.4,
+   "text": "to copy in new games"
+  },
+  {
+   "t": 930.48,
+   "d": 2.24,
+   "text": "dcss actually has enough viable"
+  },
+  {
+   "t": 932.72,
+   "d": 2.08,
+   "text": "strategies that you can see distinct"
+  },
+  {
+   "t": 934.8,
+   "d": 0.72,
+   "text": "styles"
+  },
+  {
+   "t": 935.52,
+   "d": 3.36,
+   "text": "across the very best players the top 20"
+  },
+  {
+   "t": 938.88,
+   "d": 0.32,
+   "text": "or"
+  },
+  {
+   "t": 939.2,
+   "d": 3.28,
+   "text": "top 10 or whatever"
+  },
+  {
+   "t": 942.48,
+   "d": 2.24,
+   "text": "consumables are important for roguelikes"
+  },
+  {
+   "t": 944.72,
+   "d": 2.64,
+   "text": "and dcss has a particularly well"
+  },
+  {
+   "t": 947.36,
+   "d": 0.56,
+   "text": "designed"
+  },
+  {
+   "t": 947.92,
+   "d": 2.24,
+   "text": "set i'm not going to go through all of"
+  },
+  {
+   "t": 950.16,
+   "d": 1.76,
+   "text": "them but some of my favorites"
+  },
+  {
+   "t": 951.92,
+   "d": 2.16,
+   "text": "are ones of digging scrolls of"
+  },
+  {
+   "t": 954.08,
+   "d": 1.28,
+   "text": "immolation"
+  },
+  {
+   "t": 955.36,
+   "d": 2.16,
+   "text": "scrolls of fear and potions of"
+  },
+  {
+   "t": 957.52,
+   "d": 2.56,
+   "text": "lignification"
+  },
+  {
+   "t": 960.08,
+   "d": 3.52,
+   "text": "dcss has a lot of features it has a"
+  },
+  {
+   "t": 963.6,
+   "d": 2.4,
+   "text": "similar amount of programming work in it"
+  },
+  {
+   "t": 966.0,
+   "d": 1.2,
+   "text": "to a modern"
+  },
+  {
+   "t": 967.2,
+   "d": 2.72,
+   "text": "aaa game but it all went into the kind"
+  },
+  {
+   "t": 969.92,
+   "d": 1.68,
+   "text": "of stuff that hardcore players and"
+  },
+  {
+   "t": 971.6,
+   "d": 2.56,
+   "text": "programmers tend to care about"
+  },
+  {
+   "t": 974.16,
+   "d": 2.0,
+   "text": "you can play it online you can play it"
+  },
+  {
+   "t": 976.16,
+   "d": 2.08,
+   "text": "offline online games have"
+  },
+  {
+   "t": 978.24,
+   "d": 1.52,
+   "text": "player statistics and logs and"
+  },
+  {
+   "t": 979.76,
+   "d": 1.92,
+   "text": "leaderboards and you can spectate them"
+  },
+  {
+   "t": 981.68,
+   "d": 0.88,
+   "text": "too"
+  },
+  {
+   "t": 982.56,
+   "d": 2.8,
+   "text": "there's lua scripting macros search"
+  },
+  {
+   "t": 985.36,
+   "d": 2.0,
+   "text": "functions for stuff you've seen and so"
+  },
+  {
+   "t": 987.36,
+   "d": 1.04,
+   "text": "on"
+  },
+  {
+   "t": 988.4,
+   "d": 2.48,
+   "text": "overall more development work has gone"
+  },
+  {
+   "t": 990.88,
+   "d": 2.64,
+   "text": "into dcss than any other traditional"
+  },
+  {
+   "t": 993.52,
+   "d": 1.92,
+   "text": "roguelike"
+  },
+  {
+   "t": 995.44,
+   "d": 2.8,
+   "text": "that also means it has a lot of content"
+  },
+  {
+   "t": 998.24,
+   "d": 2.4,
+   "text": "over 500 creature types"
+  },
+  {
+   "t": 1000.64,
+   "d": 2.64,
+   "text": "hundreds of items and spells pixel art"
+  },
+  {
+   "t": 1003.28,
+   "d": 1.36,
+   "text": "for all that"
+  },
+  {
+   "t": 1004.64,
+   "d": 3.04,
+   "text": "and that increases replayability it"
+  },
+  {
+   "t": 1007.68,
+   "d": 2.32,
+   "text": "increases depth by adding more choices"
+  },
+  {
+   "t": 1010.0,
+   "d": 2.4,
+   "text": "for things like equipment and consumable"
+  },
+  {
+   "t": 1012.4,
+   "d": 0.96,
+   "text": "usage"
+  },
+  {
+   "t": 1013.36,
+   "d": 2.72,
+   "text": "and it also lets players find a style"
+  },
+  {
+   "t": 1016.08,
+   "d": 1.12,
+   "text": "they like"
+  },
+  {
+   "t": 1017.2,
+   "d": 2.08,
+   "text": "which makes the game appeal to more"
+  },
+  {
+   "t": 1019.28,
+   "d": 2.4,
+   "text": "people"
+  },
+  {
+   "t": 1022.48,
+   "d": 2.64,
+   "text": "dcss has been developed by a group and"
+  },
+  {
+   "t": 1025.12,
+   "d": 2.4,
+   "text": "everyone has their own perspective"
+  },
+  {
+   "t": 1027.52,
+   "d": 1.76,
+   "text": "it's also been tested by a bunch of"
+  },
+  {
+   "t": 1029.28,
+   "d": 2.24,
+   "text": "smart people over a fairly long period"
+  },
+  {
+   "t": 1031.52,
+   "d": 1.28,
+   "text": "of time"
+  },
+  {
+   "t": 1032.8,
+   "d": 1.52,
+   "text": "this means it's been considered from"
+  },
+  {
+   "t": 1034.32,
+   "d": 2.16,
+   "text": "multiple angles and the result is that"
+  },
+  {
+   "t": 1036.48,
+   "d": 0.4,
+   "text": "its"
+  },
+  {
+   "t": 1036.88,
+   "d": 2.08,
+   "text": "design philosophy isn't a single"
+  },
+  {
+   "t": 1038.96,
+   "d": 1.52,
+   "text": "conceptual framework"
+  },
+  {
+   "t": 1040.48,
+   "d": 1.76,
+   "text": "so much as points where the different"
+  },
+  {
+   "t": 1042.24,
+   "d": 3.2,
+   "text": "philosophies of different people overlap"
+  },
+  {
+   "t": 1045.44,
+   "d": 2.64,
+   "text": "for example eliminating or automating"
+  },
+  {
+   "t": 1048.08,
+   "d": 2.16,
+   "text": "no-brainer decisions where one option is"
+  },
+  {
+   "t": 1050.24,
+   "d": 1.92,
+   "text": "strictly better than another but perhaps"
+  },
+  {
+   "t": 1052.16,
+   "d": 1.12,
+   "text": "more annoying"
+  },
+  {
+   "t": 1053.28,
+   "d": 3.12,
+   "text": "is part of the official dcss philosophy"
+  },
+  {
+   "t": 1056.4,
+   "d": 1.92,
+   "text": "but personally i consider that an"
+  },
+  {
+   "t": 1058.32,
+   "d": 1.36,
+   "text": "intersection point"
+  },
+  {
+   "t": 1059.68,
+   "d": 4.16,
+   "text": "of game psychology ui design principles"
+  },
+  {
+   "t": 1063.84,
+   "d": 2.96,
+   "text": "philosophy of games and game design"
+  },
+  {
+   "t": 1066.8,
+   "d": 1.12,
+   "text": "theory"
+  },
+  {
+   "t": 1067.92,
+   "d": 2.0,
+   "text": "you could say that the philosophy of"
+  },
+  {
+   "t": 1069.92,
+   "d": 1.68,
+   "text": "dcss is"
+  },
+  {
+   "t": 1071.6,
+   "d": 3.36,
+   "text": "do stuff that people who like dcss like"
+  },
+  {
+   "t": 1074.96,
+   "d": 3.28,
+   "text": "which is circular but it works"
+  },
+  {
+   "t": 1078.24,
+   "d": 2.48,
+   "text": "a blend of heuristics like this is"
+  },
+  {
+   "t": 1080.72,
+   "d": 1.76,
+   "text": "usually better than one"
+  },
+  {
+   "t": 1082.48,
+   "d": 2.56,
+   "text": "and games have multiple goals to meet so"
+  },
+  {
+   "t": 1085.04,
+   "d": 1.2,
+   "text": "if you're making a game"
+  },
+  {
+   "t": 1086.24,
+   "d": 3.28,
+   "text": "don't be ideological"
+  },
+  {
+   "t": 1089.52,
+   "d": 3.44,
+   "text": "of course dcss isn't perfect so"
+  },
+  {
+   "t": 1092.96,
+   "d": 3.28,
+   "text": "what does it lack well it doesn't have"
+  },
+  {
+   "t": 1096.24,
+   "d": 1.84,
+   "text": "modern 3d graphics"
+  },
+  {
+   "t": 1098.08,
+   "d": 3.76,
+   "text": "and it doesn't have sounds sure dcss has"
+  },
+  {
+   "t": 1101.84,
+   "d": 0.32,
+   "text": "a"
+  },
+  {
+   "t": 1102.16,
+   "d": 2.0,
+   "text": "pretty good tile set but it's not really"
+  },
+  {
+   "t": 1104.16,
+   "d": 1.92,
+   "text": "a visually impressive game by modern"
+  },
+  {
+   "t": 1106.08,
+   "d": 1.28,
+   "text": "standards"
+  },
+  {
+   "t": 1107.36,
+   "d": 1.92,
+   "text": "plus there are all those unseemly"
+  },
+  {
+   "t": 1109.28,
+   "d": 1.92,
+   "text": "numbers on the screen"
+  },
+  {
+   "t": 1111.2,
+   "d": 2.4,
+   "text": "we could instead play something like"
+  },
+  {
+   "t": 1113.6,
+   "d": 1.36,
+   "text": "ghosts of tsushima"
+  },
+  {
+   "t": 1114.96,
+   "d": 2.64,
+   "text": "which has a much simpler interface and"
+  },
+  {
+   "t": 1117.6,
+   "d": 1.76,
+   "text": "far fewer numbers"
+  },
+  {
+   "t": 1119.36,
+   "d": 1.76,
+   "text": "just look at this clean minimalist"
+  },
+  {
+   "t": 1121.12,
+   "d": 2.32,
+   "text": "overlay it's almost like there's nothing"
+  },
+  {
+   "t": 1123.44,
+   "d": 0.96,
+   "text": "at all"
+  },
+  {
+   "t": 1124.4,
+   "d": 2.64,
+   "text": "nothing at all and that really shows off"
+  },
+  {
+   "t": 1127.04,
+   "d": 1.76,
+   "text": "these sexy graphics but"
+  },
+  {
+   "t": 1128.8,
+   "d": 2.56,
+   "text": "to a roguelike player these are stupid"
+  },
+  {
+   "t": 1131.36,
+   "d": 1.52,
+   "text": "sexy graphics because"
+  },
+  {
+   "t": 1132.88,
+   "d": 1.68,
+   "text": "it's such a waste to use the whole"
+  },
+  {
+   "t": 1134.56,
+   "d": 2.24,
+   "text": "screen to show the player character in"
+  },
+  {
+   "t": 1136.8,
+   "d": 2.48,
+   "text": "grass or whatever when all you need is a"
+  },
+  {
+   "t": 1139.28,
+   "d": 3.52,
+   "text": "little grass icon on a little tile right"
+  },
+  {
+   "t": 1142.8,
+   "d": 2.64,
+   "text": "but i personally don't think aesthetics"
+  },
+  {
+   "t": 1145.44,
+   "d": 1.84,
+   "text": "and information density are"
+  },
+  {
+   "t": 1147.28,
+   "d": 2.72,
+   "text": "directly in conflict i'd instead say"
+  },
+  {
+   "t": 1150.0,
+   "d": 2.0,
+   "text": "that it's harder to do both than to just"
+  },
+  {
+   "t": 1152.0,
+   "d": 0.32,
+   "text": "do"
+  },
+  {
+   "t": 1152.32,
+   "d": 3.2,
+   "text": "one and doing one well is already pretty"
+  },
+  {
+   "t": 1155.52,
+   "d": 2.24,
+   "text": "hard"
+  },
+  {
+   "t": 1157.76,
+   "d": 2.36,
+   "text": "dcss also doesn't have very good"
+  },
+  {
+   "t": 1160.12,
+   "d": 1.72,
+   "text": "discoverability"
+  },
+  {
+   "t": 1161.84,
+   "d": 1.76,
+   "text": "people can play it for years without"
+  },
+  {
+   "t": 1163.6,
+   "d": 2.64,
+   "text": "learning about useful features"
+  },
+  {
+   "t": 1166.24,
+   "d": 3.12,
+   "text": "and dcss doesn't guide new players very"
+  },
+  {
+   "t": 1169.36,
+   "d": 1.12,
+   "text": "much"
+  },
+  {
+   "t": 1170.48,
+   "d": 2.24,
+   "text": "it has lots of information available in"
+  },
+  {
+   "t": 1172.72,
+   "d": 0.88,
+   "text": "game but"
+  },
+  {
+   "t": 1173.6,
+   "d": 1.84,
+   "text": "unlike some games it doesn't really"
+  },
+  {
+   "t": 1175.44,
+   "d": 1.84,
+   "text": "guide you towards some set of"
+  },
+  {
+   "t": 1177.28,
+   "d": 3.12,
+   "text": "standard good strategies really rather"
+  },
+  {
+   "t": 1180.4,
+   "d": 1.68,
+   "text": "than reading the manual or doing the"
+  },
+  {
+   "t": 1182.08,
+   "d": 0.88,
+   "text": "tutorial"
+  },
+  {
+   "t": 1182.96,
+   "d": 1.76,
+   "text": "you're probably better off watching a"
+  },
+  {
+   "t": 1184.72,
+   "d": 2.16,
+   "text": "good player on youtube"
+  },
+  {
+   "t": 1186.88,
+   "d": 3.28,
+   "text": "so while dcss has tons of replayability"
+  },
+  {
+   "t": 1190.16,
+   "d": 1.44,
+   "text": "and tons of content"
+  },
+  {
+   "t": 1191.6,
+   "d": 2.0,
+   "text": "if you're a new player and all you do is"
+  },
+  {
+   "t": 1193.6,
+   "d": 1.84,
+   "text": "play a melee character and die on the"
+  },
+  {
+   "t": 1195.44,
+   "d": 2.16,
+   "text": "first few levels over and over"
+  },
+  {
+   "t": 1197.6,
+   "d": 2.16,
+   "text": "you'll never get to see it and that's"
+  },
+  {
+   "t": 1199.76,
+   "d": 3.68,
+   "text": "exactly what happens a lot of the time"
+  },
+  {
+   "t": 1203.44,
+   "d": 2.48,
+   "text": "personally i'd rather play a flawed but"
+  },
+  {
+   "t": 1205.92,
+   "d": 1.84,
+   "text": "sometimes great game than a game that's"
+  },
+  {
+   "t": 1207.76,
+   "d": 1.76,
+   "text": "mediocre at everything"
+  },
+  {
+   "t": 1209.52,
+   "d": 2.8,
+   "text": "and despite its flaws i consider dcss"
+  },
+  {
+   "t": 1212.32,
+   "d": 2.08,
+   "text": "one of the best games of all time"
+  },
+  {
+   "t": 1214.4,
+   "d": 3.04,
+   "text": "so give it a try if you haven't"
+  },
+  {
+   "t": 1217.44,
+   "d": 2.32,
+   "text": "well that's all thanks for watching my"
+  },
+  {
+   "t": 1219.76,
+   "d": 2.32,
+   "text": "talk"
+  },
+  {
+   "t": 1223.36,
+   "d": 4.08,
+   "text": "wonderful thanks for that great talk"
+  },
+  {
+   "t": 1227.44,
+   "d": 3.2,
+   "text": "glad you liked it uh i think we have"
+  },
+  {
+   "t": 1230.64,
+   "d": 2.2,
+   "text": "some questions for you"
+  },
+  {
+   "t": 1232.84,
+   "d": 2.92,
+   "text": "excellent um alexi"
+  },
+  {
+   "t": 1235.76,
+   "d": 3.28,
+   "text": "asks um have you considered any in-game"
+  },
+  {
+   "t": 1239.04,
+   "d": 2.48,
+   "text": "ways to encourage players to try"
+  },
+  {
+   "t": 1241.52,
+   "d": 1.6,
+   "text": "more builds or combinations of"
+  },
+  {
+   "t": 1243.12,
+   "d": 1.76,
+   "text": "characters instead of starting"
+  },
+  {
+   "t": 1244.88,
+   "d": 1.44,
+   "text": "instead of sort of staying with what"
+  },
+  {
+   "t": 1246.32,
+   "d": 2.4,
+   "text": "they're comfortable with"
+  },
+  {
+   "t": 1248.72,
+   "d": 1.6,
+   "text": "that is something i've thought about i"
+  },
+  {
+   "t": 1250.32,
+   "d": 2.16,
+   "text": "haven't implemented anything yet"
+  },
+  {
+   "t": 1252.48,
+   "d": 2.48,
+   "text": "because it's a difficult problem but a"
+  },
+  {
+   "t": 1254.96,
+   "d": 1.12,
+   "text": "couple things i was"
+  },
+  {
+   "t": 1256.08,
+   "d": 2.72,
+   "text": "considering were an official series of"
+  },
+  {
+   "t": 1258.8,
+   "d": 2.72,
+   "text": "video tutorials for different archetypes"
+  },
+  {
+   "t": 1261.52,
+   "d": 2.48,
+   "text": "and another is having a set of"
+  },
+  {
+   "t": 1264.0,
+   "d": 1.68,
+   "text": "well-designed mid-game"
+  },
+  {
+   "t": 1265.68,
+   "d": 2.96,
+   "text": "character saves characters in progress"
+  },
+  {
+   "t": 1268.64,
+   "d": 0.88,
+   "text": "that players can"
+  },
+  {
+   "t": 1269.52,
+   "d": 2.56,
+   "text": "unlock as they make progress and then"
+  },
+  {
+   "t": 1272.08,
+   "d": 0.8,
+   "text": "play"
+  },
+  {
+   "t": 1272.88,
+   "d": 2.16,
+   "text": "so that new players can see how some"
+  },
+  {
+   "t": 1275.04,
+   "d": 2.88,
+   "text": "good players build their characters"
+  },
+  {
+   "t": 1277.92,
+   "d": 3.68,
+   "text": "i'm open to suggestions though"
+  },
+  {
+   "t": 1282.16,
+   "d": 3.28,
+   "text": "cool and then cabo was curious how your"
+  },
+  {
+   "t": 1285.44,
+   "d": 5.6,
+   "text": "fork of dcss differs from core dcss"
+  },
+  {
+   "t": 1291.04,
+   "d": 2.16,
+   "text": "well the change log is quite long you"
+  },
+  {
+   "t": 1293.2,
+   "d": 2.0,
+   "text": "can see it on the b crawl site but i can"
+  },
+  {
+   "t": 1295.2,
+   "d": 2.4,
+   "text": "break things into a few categories"
+  },
+  {
+   "t": 1297.6,
+   "d": 2.4,
+   "text": "i added some new species and spells to"
+  },
+  {
+   "t": 1300.0,
+   "d": 1.36,
+   "text": "try to support"
+  },
+  {
+   "t": 1301.36,
+   "d": 2.64,
+   "text": "more strategies and play styles there"
+  },
+  {
+   "t": 1304.0,
+   "d": 1.2,
+   "text": "were a few"
+  },
+  {
+   "t": 1305.2,
+   "d": 3.44,
+   "text": "holes where you could uh you could go"
+  },
+  {
+   "t": 1308.64,
+   "d": 1.52,
+   "text": "for something and the game wouldn't"
+  },
+  {
+   "t": 1310.16,
+   "d": 0.96,
+   "text": "catch you"
+  },
+  {
+   "t": 1311.12,
+   "d": 2.4,
+   "text": "the game wouldn't uh you know follow up"
+  },
+  {
+   "t": 1313.52,
+   "d": 1.76,
+   "text": "with your planned strategy"
+  },
+  {
+   "t": 1315.28,
+   "d": 3.28,
+   "text": "i tried to fill those in i also adjusted"
+  },
+  {
+   "t": 1318.56,
+   "d": 1.44,
+   "text": "some things that i thought were a bit"
+  },
+  {
+   "t": 1320.0,
+   "d": 2.88,
+   "text": "unfair or overly random for example i"
+  },
+  {
+   "t": 1322.88,
+   "d": 1.84,
+   "text": "reduced the max duration of player"
+  },
+  {
+   "t": 1324.72,
+   "d": 0.8,
+   "text": "paralysis"
+  },
+  {
+   "t": 1325.52,
+   "d": 3.04,
+   "text": "and replaced shaft traps i also"
+  },
+  {
+   "t": 1328.56,
+   "d": 1.76,
+   "text": "buffed or reworked some enemies that"
+  },
+  {
+   "t": 1330.32,
+   "d": 2.8,
+   "text": "were weak or boring in my opinion"
+  },
+  {
+   "t": 1333.12,
+   "d": 1.84,
+   "text": "and i added a few things to try to help"
+  },
+  {
+   "t": 1334.96,
+   "d": 2.16,
+   "text": "new players like a warning when a"
+  },
+  {
+   "t": 1337.12,
+   "d": 2.16,
+   "text": "dangerous enemy comes into view and also"
+  },
+  {
+   "t": 1339.28,
+   "d": 3.76,
+   "text": "a game mode with multiple lives"
+  },
+  {
+   "t": 1343.52,
+   "d": 3.36,
+   "text": "cool um"
+  },
+  {
+   "t": 1346.88,
+   "d": 2.96,
+   "text": "hypergardens wants to know uh if you"
+  },
+  {
+   "t": 1349.84,
+   "d": 1.6,
+   "text": "enjoy the early game"
+  },
+  {
+   "t": 1351.44,
+   "d": 2.48,
+   "text": "or if you find it tedious and how do you"
+  },
+  {
+   "t": 1353.92,
+   "d": 0.88,
+   "text": "get out of"
+  },
+  {
+   "t": 1354.8,
+   "d": 3.68,
+   "text": "sort of death tilt spirals um"
+  },
+  {
+   "t": 1358.48,
+   "d": 3.2,
+   "text": "when you lose well"
+  },
+  {
+   "t": 1361.68,
+   "d": 2.72,
+   "text": "the early game sets up your character it"
+  },
+  {
+   "t": 1364.4,
+   "d": 0.4,
+   "text": "is"
+  },
+  {
+   "t": 1364.8,
+   "d": 3.36,
+   "text": "certainly simpler in many ways than"
+  },
+  {
+   "t": 1368.16,
+   "d": 2.4,
+   "text": "the later game but if you're on a win"
+  },
+  {
+   "t": 1370.56,
+   "d": 1.84,
+   "text": "streak it's also"
+  },
+  {
+   "t": 1372.4,
+   "d": 1.84,
+   "text": "the most dangerous part of the game for"
+  },
+  {
+   "t": 1374.24,
+   "d": 1.6,
+   "text": "a good player and"
+  },
+  {
+   "t": 1375.84,
+   "d": 3.04,
+   "text": "um you can look up some people on"
+  },
+  {
+   "t": 1378.88,
+   "d": 0.88,
+   "text": "youtube"
+  },
+  {
+   "t": 1379.76,
+   "d": 2.16,
+   "text": "who've done long streaks and you can see"
+  },
+  {
+   "t": 1381.92,
+   "d": 1.92,
+   "text": "they play the first couple levels"
+  },
+  {
+   "t": 1383.84,
+   "d": 1.92,
+   "text": "very very carefully and there are a"
+  },
+  {
+   "t": 1385.76,
+   "d": 1.44,
+   "text": "number of uh there are a number of"
+  },
+  {
+   "t": 1387.2,
+   "d": 1.12,
+   "text": "subtle tricks you can"
+  },
+  {
+   "t": 1388.32,
+   "d": 2.4,
+   "text": "bring into play that said i do"
+  },
+  {
+   "t": 1390.72,
+   "d": 1.28,
+   "text": "personally enjoy the"
+  },
+  {
+   "t": 1392.0,
+   "d": 3.6,
+   "text": "mid game and late game a bit more"
+  },
+  {
+   "t": 1396.96,
+   "d": 3.04,
+   "text": "um someone wants to"
+  },
+  {
+   "t": 1400.0,
+   "d": 2.56,
+   "text": "hear three reasons why the spriggans of"
+  },
+  {
+   "t": 1402.56,
+   "d": 0.72,
+   "text": "qazal"
+  },
+  {
+   "t": 1403.28,
+   "d": 3.44,
+   "text": "are the best uh"
+  },
+  {
+   "t": 1406.72,
+   "d": 2.08,
+   "text": "well they're they're fast and they"
+  },
+  {
+   "t": 1408.8,
+   "d": 1.2,
+   "text": "they're loud and they"
+  },
+  {
+   "t": 1410.0,
+   "d": 3.12,
+   "text": "they just don't care about anything"
+  },
+  {
+   "t": 1413.12,
+   "d": 3.12,
+   "text": "i mean that's that's kind of a"
+  },
+  {
+   "t": 1416.24,
+   "d": 4.4,
+   "text": "you know that's a meme question but yeah"
+  },
+  {
+   "t": 1420.64,
+   "d": 3.92,
+   "text": "uh that's a great answer though um"
+  },
+  {
+   "t": 1424.56,
+   "d": 3.12,
+   "text": "someone else asks what do you think that"
+  },
+  {
+   "t": 1427.68,
+   "d": 1.04,
+   "text": "dcs"
+  },
+  {
+   "t": 1428.72,
+   "d": 2.8,
+   "text": "s lacks most immediately and strongly"
+  },
+  {
+   "t": 1431.52,
+   "d": 1.84,
+   "text": "like what should be"
+  },
+  {
+   "t": 1433.36,
+   "d": 3.28,
+   "text": "uh popularity but"
+  },
+  {
+   "t": 1436.64,
+   "d": 2.96,
+   "text": "uh personally i think that it should"
+  },
+  {
+   "t": 1439.6,
+   "d": 0.48,
+   "text": "have"
+  },
+  {
+   "t": 1440.08,
+   "d": 2.24,
+   "text": "a mode with multiple lives like i added"
+  },
+  {
+   "t": 1442.32,
+   "d": 2.08,
+   "text": "to b crawl"
+  },
+  {
+   "t": 1444.4,
+   "d": 1.52,
+   "text": "that is something the devs have said"
+  },
+  {
+   "t": 1445.92,
+   "d": 3.28,
+   "text": "they probably won't do though"
+  },
+  {
+   "t": 1450.4,
+   "d": 3.28,
+   "text": "um doc eon asks how do you feel about"
+  },
+  {
+   "t": 1453.68,
+   "d": 0.4,
+   "text": "the"
+  },
+  {
+   "t": 1454.08,
+   "d": 1.92,
+   "text": "decision-making process behind new"
+  },
+  {
+   "t": 1456.0,
+   "d": 2.08,
+   "text": "features in dcss"
+  },
+  {
+   "t": 1458.08,
+   "d": 2.56,
+   "text": "uh you know i haven't really been"
+  },
+  {
+   "t": 1460.64,
+   "d": 1.76,
+   "text": "involved enough in that to really want"
+  },
+  {
+   "t": 1462.4,
+   "d": 1.12,
+   "text": "to comment"
+  },
+  {
+   "t": 1463.52,
+   "d": 2.72,
+   "text": "so you should ask you should ask"
+  },
+  {
+   "t": 1466.24,
+   "d": 2.0,
+   "text": "pleasing fungus tomorrow"
+  },
+  {
+   "t": 1468.24,
+   "d": 3.04,
+   "text": "okay uh and that might be"
+  },
+  {
+   "t": 1471.28,
+   "d": 2.8,
+   "text": "all of the questions that we have okay"
+  },
+  {
+   "t": 1474.08,
+   "d": 1.44,
+   "text": "that gives us some extra time for the"
+  },
+  {
+   "t": 1475.52,
+   "d": 1.52,
+   "text": "next person then"
+  },
+  {
+   "t": 1477.04,
+   "d": 1.52,
+   "text": "cool well thank you so much for your"
+  },
+  {
+   "t": 1478.56,
+   "d": 4.32,
+   "text": "talk thanks for having me"
+  }
+ ]
+}

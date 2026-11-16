@@ -1,0 +1,80 @@
+Nifflas - Music algorithm showcase
+Speaker: Nifflas
+https://www.youtube.com/watch?v=WbgdXalXPus
+Year: 2025   Kind: talk   Captions: manual (en)
+
+## Introduction to Rhythm Doggo
+
+[0:00:38] NIFFLAS: Hey, my name is Nifflas and I made my own algorithm music software. And I am making a game about my dog. This is hot dog. She is a very good dog. I am making a game about her that looks like this. You can hold the dog and the dog can compose music using this drum machine interface like this. And yeah, you can see the level reacting to the music now. Now I have to compete the channels are the music I just composed. I notice all the music changes in intensity as I proceed.
+
+[0:02:14] That's kind of how the game starts. I will start with showing the steps of the algorithm and this
+
+## Step sequencer mechanics
+
+[0:02:27] is the most normal one you will see in the software. It plays drums from the top to the bottom. It plays like this. But as you can see the cursor that's actually a plane is jumping around a little bit randomly. That's because there is an expression saying it will take the cursor above or below. Let's drag a node for example. And connect the node to the Step Sequencer and just plug the node in here instead. And now I have a node where I can control the chaos. At 0 no chaos and at 1 full jumping around like crazy. And what is neat about that is that if
+
+[0:03:36] I create a group here and name it something like fish. Now I have the name fish and I can reference this in my game itself. Next instrument I want to show is the rainbow/page editor? So what is
+
+## Rainbow arpeggiator
+
+[0:03:59] it? It is an on the synthesizer and you play a number of notes at the same time but instead of hearing all of the notes at the same time it will alternate -- automatically between the notes. A Commodore 64 does that to preserve the sounds it can play at the same time. You can see it going up. But what's interesting about the rainbow device is this can do real-time sorting one at a time on this array. Soon it will start sorting this in reverse. And starting now.
+
+[0:05:07] And now we have a rehearsal. I sometimes use stuff device when I have a melody playing on repeat and every time you walk through the door you end up with a slightly changed variation of the melody. Things that manipulate the music as you go by doing this weird sorting thing. Next up
+
+## The desire device
+
+[0:05:37] I want to show the desire device. This is a device that plays -- it has five different triggers like notes it wants to take. And there is like this bar you are going do is it when I start. This bar starts going in this direction. And the bigger one of these bars are the stronger, the desire is to trigger that melt, and that's a nice way to control. You get more controlled randomness where things that haven't happened for a while are more likely to happen over time. But also another aspect is I can control when these desires are active and build up and when they don't.
+
+[0:06:58] You have periods where it is playing many notes and period where it isn't playing many at all. It kind of goes back and forth. I should show the reflector.
+
+## The reflector device
+
+[0:07:16] What this device does is that it spawns two cursors in here. It is a cursor until it collides with something and swaps direction. When it collides with a white square it always reflects but when it collides with one in between there is a chance it will collide or proceed in the same direction. This pattern I improvised and this one sounds like this.
+
+## Railway device algorithm
+
+[0:08:36] So that's how the percussion works. I have some more percussion also in the regular device. I made this when I was going to go on train trip. This is based on the Step Sequencer but has different behavior. One second, check number one is here. You have this cursor there but for every note it plays there is a chance it will jump to the next track. You try this thing where you get more variation by the train just changing
+
+[0:09:40] tracks. This one sounds like this. Now you can see the cursor traveling down and changing tracks. That's that device. Then I want to show this little drum weird thing I made. The way I made
+
+## Democracy and train stop
+
+[0:10:35] this was I asked on Twitter. This was back before Twitter was really terrible. Compose a drum loop together. People got to vote for what goes into the different steps of the drum loop. And then I -- yeah. Combined all the different weights into these arrays. So those are like all the average results from this different pull results. Back in the music soft wear, it sounds like this with these specific weights you see over here, this is the drumbeat we get out of it. There is a second device connected to this instrument inspired by trains which is the train
+
+[0:11:41] stop device which are these two things here. The way they work is that you have a railroad and here you have station. And every time the device wants to play a note, it decides which train and the train carries the note information. And then when I was stuck in train traffic when I wrote this algorithm and I didn't know because I was three hours and nothing was happening. A whole series of trains were stuck because of some accident thing. Yeah. None of the trains are allowed to reach the station and they start cuing up more and more of them and suddenly the trains are allowed
+
+[0:12:42] to go again. And now the trains have sort of a catching up to do and now they start going back super, super fast. That's how I took a real life situation and just turned it into this algorithm. Actually it is a train stop now. You get these weird feels. And next up, the tweet randomizer.
+
+## Tweet randomizer
+
+[0:13:22] This is a very chaotic device. One second. I needed random values and the fact is random values aren't that random. Even computer generated random values, like look at this. This is a sequence of random numbers I just got from the internet and got a website to generate. You can't really go like look at the 61 that's so random. So, the 61 isn't random at all. None of this looks random. It is just numbers that are super evenly distributed and it looks like white noise. So I wanted to have real random numbers. I tapped into the most random thing which is the
+
+[0:14:26] human mind. I asked on Twitter, again, back when Twitter was not horrible, please give me sequences of random numbers that you can come up with in your head. And look at this, here we have 7, 7, 7, and 4. That is random. 9, 100 -- this absolutely massive number. This sequence has a negative number. There is just one I believe in all these different sequences. One negative number that is completely random. And I used it to drive this instrument. It sounds like this. Then I can try somebody else's sequence instead and I get completely different result. Now you got something that sticks more to the same notes. And that is because this specific
+
+[0:15:38] note sequence I just played is based on this instead which is 0-1, 0-1 and a bit later some other values come up. And then I want to talk about the Monty Hall Problem. The Monty Hall
+
+## Monte Hall problem music
+
+[0:16:04] Problem is a logic statistics kind of problem. Very classic. In case you haven't heard of it, it works like this. There are three doors. One, two, and three. There is here and there is a host which is Monty. There are two goats and one car behind the doors but you don't know which one has the car. Say you pick door number one and Monty goes and opens door number two and this has a goat. You choose should you stick to door one or change to door three? It sounds like it should be a 50% chance. But you double your chances if you switch to the other door. Or that would be
+
+[0:17:08] the case under standard assumptions. But why would you make the standard assumptions? There is a few questions here. Is the host evil? Does the host know which door has the car? Does the host think that the player knows the problem? Is the host in a hurry? Does the host have to open another door? And can the host open another door intentionally or can they just -- yeah, can you open the car door intentionally and just show the car and let the player switch. And yeah. For example, under the standard assumptions, we can get this melody. This is based on 14 iterations of this particular configuration. Let's randomly change it around. We get a completely different melody
+
+[0:18:12] because the outcome becomes completely different. We change it some more. And you might ask why use the Monty Hall Problem to compose algorithmic music and I think it is best if I show you in the game the reason. I am not sure it is a good reason but it is definitely a reason. Let's see. Let's teleport over there. So you meet another dog. The picture of the dog is the placeholder.
+
+[0:19:35] It is also good. I will try again. The funny thing is when the car position is randomized, the algorithm you hear playing the music is the Monty Hall Problem itself. And why exactly did I do this? The best answer is why not. But let's see here. I think I might have been a little faster than I intended. Now I want to do a performance of music
+
+## Live performance demo
+
+[0:20:19] using my adaptive music software. I will just put together the different algorithms I showed and other algorithms too and you can hear what it sounds like. Every control I will press or change is also a control that the game has the possibility to modify. yeah, so that's what
+
+[0:25:57] my music software can do when you change all the parameters. And I think I should end with -- yeah,
+
+## Q&A and conclusion
+
+[0:26:10] I should tell you that for the first time the game now has a Steam page. It would be super nice if you would want to wishlist it. This nice key art is by an artist who I want to credit. 1 neila1. HAYLEE: Thank you for giving us a demo at the end. We have a live Roguelike Celebration set. Reminds me of people playing modular synths but actually know what they are doing. There is a little more structure there where I know what you are doing and I can parse it. >> It is mostly signals but my modular software is for making decisions instead. HAYLEE: That's why I feel like it is so much more parsable to especially a lay-person. That
+
+[0:27:15] was so cool. We had so many great comments the entire video. Definitely going to be checking it out again and sending to a bunch of people that I know will love it. We have a bunch of questions here. I think we have time for one or two. We saw the atwater music symbol but too much abstraction asked do you have any director systems that try to manage tension or intensity over the course of longer time periods? NIFFLAS: That part is built into the level rather than the music software. I place a lot of different songs all over the level in my level editor so as soon as you progress in any way you pretty much enter a new stage of the music. There are even variations just when you can run over a platform, for example, I might increase intensity of the music while you are on top of that platform.
+
+[0:28:21] HAYLEE: It makes sense the dynamic of the editor allows gameplay elements that reflect what is happening in the music as well. Something I am curious and one of the top rated questions here, do you plan to make that tool available after the game is out? Tyriq mentioned it looks like an absolute joy to work with. NIFFLAS: It is incredibly difficult to use. I don't have there skill in myself. I want to but I would need funding and I would need to work together with someone who is really good at actually making the software easier to understand for someone who isn't me. HAYLEE: Sure. I feel like we have a lot of tinkers that don't need documentation and will click things until they figure it out. But makes sense when you release something you want it to be usable. NIFFLAS: It is mostly done through expressions. Most of the writing is writing expressions and
+
+[0:29:29] they aren't documented. So you don't know what they are unless you know the software inside out. At least I would have to document it somehow. HAYLEE: Yeah, I was also reminded of these Instagram videos I have been served recently of this woman who is doing like live coding. It is like literally writing code but it does some autocompletion and has loops built into each block but I think the digital interface and being able to link things like that is powerful. I hope everyone goes out and wishlists Rhythm Doggo. Thank you so much for presenting here. NIFFLAS: Thank you for having me.

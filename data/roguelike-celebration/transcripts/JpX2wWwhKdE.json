@@ -1,0 +1,990 @@
+{
+ "id": "JpX2wWwhKdE",
+ "url": "https://www.youtube.com/watch?v=JpX2wWwhKdE",
+ "title": "Michael Brough - The Roots of Roguelikes in Fantasy Fiction",
+ "speaker": "Michael Brough",
+ "talk_title": "The Roots of Roguelikes in Fantasy Fiction",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-11-20",
+ "duration_s": 1972,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Let's take a journey into the past, before Rogue itself, back even before Dungeons and Dragons, into the tales of mystery and wonder that inspired these adventures. We'll delve into fragments of text from ancient scrolls and discuss how specific game mechanics derived from these sources.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 64,
+   "title": "Literary roots of mechanics"
+  },
+  {
+   "start": 488,
+   "title": "Dungeons and Dragons history"
+  },
+  {
+   "start": 759,
+   "title": "Short stories and genre"
+  },
+  {
+   "start": 1053,
+   "title": "Evolution of cultural themes"
+  },
+  {
+   "start": 1325,
+   "title": "Vancian magic and rogues"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3313,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 13.6,
+   "d": 39.28,
+   "text": "MICHAEL: Can I be bigger to the image be smaller?"
+  },
+  {
+   "t": 66.24,
+   "d": 8.64,
+   "text": "And by the flood of the one whom it is death to look upon, so invoke the masa as with eyes closed"
+  },
+  {
+   "t": 74.88,
+   "d": 6.88,
+   "text": "and arms out stretched, he cast the roon giving him by the eyeless space which would destroy"
+  },
+  {
+   "t": 81.76,
+   "d": 7.84,
+   "text": "all sorcery of an undetermined distance around the casting point. Shilling for a few miles. So"
+  },
+  {
+   "t": 89.6,
+   "d": 14.48,
+   "text": "smiting. I am reading to you from lords of camel from the story of feathered and the great mouser."
+  },
+  {
+   "t": 104.08,
+   "d": 6.4,
+   "text": "In this story, the two heroes have traveled separate ways and coincidently both come into"
+  },
+  {
+   "t": 110.48,
+   "d": 14.88,
+   "text": "service of one of two brothers, and the older brother employs 24 wizard of the second order"
+  },
+  {
+   "t": 125.36,
+   "d": 6.16,
+   "text": "who are casting evil spells to kill the brother. And the brother has 12 wizard of the first order"
+  },
+  {
+   "t": 131.52,
+   "d": 10.88,
+   "text": "defending him. The brothers are evenly matched. The 24 wizards are half as good more or less as"
+  },
+  {
+   "t": 142.4,
+   "d": 9.2,
+   "text": "this one. These guys have been in conflict for a long time. They have each had a hero and the"
+  },
+  {
+   "t": 151.6,
+   "d": 9.12,
+   "text": "heroes feel evenly matched because they are friends. It is a fun little story. What is"
+  },
+  {
+   "t": 160.72,
+   "d": 8.32,
+   "text": "happening is the master is casting a spell from a scroll that was given to him by - who is a quest"
+  },
+  {
+   "t": 169.04,
+   "d": 8.48,
+   "text": "of a character who he meets with sometimes. And the scroll allegedly destroys all sorcerers of"
+  },
+  {
+   "t": 177.52,
+   "d": 5.04,
+   "text": "less than first rank which is quite convenient on this quest when he is working for the guy who"
+  },
+  {
+   "t": 182.56,
+   "d": 10.4,
+   "text": "has supposedly first rank ones. He is hoping by casting the spell, he will destroy all his"
+  },
+  {
+   "t": 192.96,
+   "d": 8.0,
+   "text": "opponents wizards and keep all this employer wizards. Whether his great spell worked or not,"
+  },
+  {
+   "t": 204.32,
+   "d": 5.2,
+   "text": "they were pleased with the performance they were given. He doubt others could have done"
+  },
+  {
+   "t": 209.52,
+   "d": 12.48,
+   "text": "better. What magnificent homes. He wished he could open his eyes for a moment to note the effect the"
+  },
+  {
+   "t": 222.0,
+   "d": 10.4,
+   "text": "performance was having on the magicians. At this point point the instructions were adamant. Eyes"
+  },
+  {
+   "t": 232.4,
+   "d": 7.6,
+   "text": "tightly shut while the great forbidden words were spoken and even the tiniest blink would nullify"
+  },
+  {
+   "t": 240.0,
+   "d": 10.96,
+   "text": "the spell. What a bore. All of a sudden on the back of the head he felt contact with another and"
+  },
+  {
+   "t": 250.96,
+   "d": 9.44,
+   "text": "a larger darkness which light itself is only the absence. He shivered, hair swirled, and cold sweat"
+  },
+  {
+   "t": 260.4,
+   "d": 10.56,
+   "text": "prickled his face, he almost stumbled mid way but finished without flaw. When the last echoing note"
+  },
+  {
+   "t": 271.68,
+   "d": 9.76,
+   "text": "seized to the bound, the master slipped open one eye and glanced about him. One glance and"
+  },
+  {
+   "t": 281.44,
+   "d": 5.68,
+   "text": "the other eye flew open into fullness. He was too surprised to speak. Who he had spoken to had he"
+  },
+  {
+   "t": 287.12,
+   "d": 8.16,
+   "text": "not been surprised was a question. The long table was empty of occupants and moments before set 11"
+  },
+  {
+   "t": 295.28,
+   "d": 15.01,
+   "text": "of the greatest magicians and now was only space. This seen as really interesting to me because it"
+  },
+  {
+   "t": 310.29,
+   "d": 10.51,
+   "text": "is the great master is a rogue character. He and Feathered travel, they steal things,"
+  },
+  {
+   "t": 320.8,
+   "d": 9.04,
+   "text": "they live by their words. They are rogues. And this as an example in some of the fiction"
+  },
+  {
+   "t": 329.84,
+   "d": 14.24,
+   "text": "that was inspiring Dungeons and Dragons. A thing that happens all of the time in the game Rogue,"
+  },
+  {
+   "t": 344.08,
+   "d": 9.04,
+   "text": "and when I read this, having already played Rogue and NetHack and so forth, I went, ah,"
+  },
+  {
+   "t": 353.12,
+   "d": 8.0,
+   "text": "this is weird that came from -- this is weird that game mechanic originated. This is why a rogue can"
+  },
+  {
+   "t": 361.12,
+   "d": 11.92,
+   "text": "cast spells. And reading more of the series, you find out that the master before he is becoming a"
+  },
+  {
+   "t": 373.04,
+   "d": 11.76,
+   "text": "traveling thief, he trained as a magician but that went poorly, and -- well, read the stories if you"
+  },
+  {
+   "t": 384.8,
+   "d": 13.12,
+   "text": "want to know what happened. This particular rogue character has a background as a magician affects"
+  },
+  {
+   "t": 398.96,
+   "d": 9.12,
+   "text": "what he was then doing later in this career, and then in making the game Dungeons and Dragons,"
+  },
+  {
+   "t": 408.08,
+   "d": 7.76,
+   "text": "more or less they were drawing from this body of fantasy fiction and wanted the kinds of scenes"
+  },
+  {
+   "t": 415.84,
+   "d": 7.84,
+   "text": "and adventures that happen in it to be things that could happen in the game. And one example of the"
+  },
+  {
+   "t": 423.68,
+   "d": 7.12,
+   "text": "scene that happened is a rogue casting a spell on the spot? This, in my opinion, is how to came to"
+  },
+  {
+   "t": 430.8,
+   "d": 9.6,
+   "text": "pass that the Dungeons and Dragons rogue character has the use metric device ability whereas say the"
+  },
+  {
+   "t": 441.12,
+   "d": 5.76,
+   "text": "fighter of a barbarian character doesn't because in the stories that they were referencing,"
+  },
+  {
+   "t": 446.88,
+   "d": 8.48,
+   "text": "a rogue will sometimes figure out how to use a medical wand, or in this case, be able to use a"
+  },
+  {
+   "t": 455.36,
+   "d": 9.12,
+   "text": "spell that's written on a scroll. Dungeons and Dragons had that mechanic for the rogue class,"
+  },
+  {
+   "t": 464.48,
+   "d": 6.0,
+   "text": "and following that we get the game Rogue in which a thief travels for a dungeon and picks up lots"
+  },
+  {
+   "t": 470.48,
+   "d": 11.28,
+   "text": "of devices, figures out how to use them, and so on and so forth. And like, this scene, and these"
+  },
+  {
+   "t": 481.76,
+   "d": 13.68,
+   "text": "stories, have kind of shaped our genre. Yeah, so Dungeons and Dragons -- so this story was first"
+  },
+  {
+   "t": 495.44,
+   "d": 8.32,
+   "text": "published in -- I wrote it down here. Mid-'60s or might be earlier. It is hard to tell with some of"
+  },
+  {
+   "t": 503.76,
+   "d": 7.44,
+   "text": "these stories because the publication date might be when there was a book that it was published in"
+  },
+  {
+   "t": 511.2,
+   "d": 6.08,
+   "text": "but a lot of them were originally published in magazines. So I am not sure when the story was"
+  },
+  {
+   "t": 517.28,
+   "d": 7.92,
+   "text": "first published but at least a decade or so before Dungeons and Dragons happened in 1974. Dungeons"
+  },
+  {
+   "t": 525.2,
+   "d": 13.2,
+   "text": "and Dragons has two main branches of ancestry. It was based on a fantasy -- like a miniature"
+  },
+  {
+   "t": 538.4,
+   "d": 12.4,
+   "text": "war game called Chain Mail and that is throwing swords and fires. Chain Mail was inspired by"
+  },
+  {
+   "t": 550.8,
+   "d": 8.64,
+   "text": "previous miniature war games which were generally less offensive and more enacting actual historical"
+  },
+  {
+   "t": 559.44,
+   "d": 11.44,
+   "text": "wars. And the idea for those games kind of come from wargaming as a way of planning strategies"
+  },
+  {
+   "t": 570.88,
+   "d": 8.8,
+   "text": "for actual war. People would get little pieces and try and think and imagine if we put out calvary"
+  },
+  {
+   "t": 579.68,
+   "d": 7.68,
+   "text": "here and practiced this way. Move the pieces around and play out the game to plan the battle."
+  },
+  {
+   "t": 587.36,
+   "d": 4.32,
+   "text": "And you know, obviously this is inspired by the actual practice of actually finding and"
+  },
+  {
+   "t": 591.68,
+   "d": 12.4,
+   "text": "killing people. Our games have ruins in actual horrific violence but also the other culture"
+  },
+  {
+   "t": 604.08,
+   "d": 8.32,
+   "text": "that has emerged that from history. And the other main root for Dungeons and Dragons is the fantasy"
+  },
+  {
+   "t": 612.4,
+   "d": 14.08,
+   "text": "fiction of early to mid 20th century which was mainly -- uh, can I... yeah, I will share. Here"
+  },
+  {
+   "t": 626.48,
+   "d": 12.4,
+   "text": "we go. I hope you can see this now. This is from the master's guide. Inspiration for all"
+  },
+  {
+   "t": 638.88,
+   "d": 8.24,
+   "text": "the fantasy work stems from the love my father showed me when I was a lad. He spent many hours"
+  },
+  {
+   "t": 647.12,
+   "d": 10.4,
+   "text": "telling me stories he made up. Tales of cloaked old men who could grant wishes and to account"
+  },
+  {
+   "t": 657.52,
+   "d": 7.44,
+   "text": "hundreds of -- the long gone -- science fiction fantasy in movies were a big influence. All of"
+  },
+  {
+   "t": 664.96,
+   "d": 9.2,
+   "text": "us tend to get ample help from fairies tales from when we were young, reading books of mythology,"
+  },
+  {
+   "t": 675.04,
+   "d": 10.0,
+   "text": "compilations of myths, and on such a base being an avid reader of all fantasy science since 1950."
+  },
+  {
+   "t": 685.04,
+   "d": 13.28,
+   "text": "The following authors were specific influence to me. In some cases I cite specific works. Mid way"
+  },
+  {
+   "t": 698.32,
+   "d": 8.64,
+   "text": "down the list he shows he is reading from the one I read at the beginning. This list is pretty good."
+  },
+  {
+   "t": 706.96,
+   "d": 6.16,
+   "text": "I would honestly recommend -- I haven't read everything on this list but what I have"
+  },
+  {
+   "t": 713.12,
+   "d": 29.68,
+   "text": "[Naming the books from the list] There is amazing writing here. Um."
+  },
+  {
+   "t": 742.8,
+   "d": 19.52,
+   "text": "Yeah. I will leave that up for now. A lot of -- some are listed as novels but a lot are short"
+  },
+  {
+   "t": 762.32,
+   "d": 10.64,
+   "text": "stories. In the first half of the 20th century, there was an accessible market for short stories"
+  },
+  {
+   "t": 772.96,
+   "d": 9.52,
+   "text": "because they were magazines called the pokes where they published individual short stories because"
+  },
+  {
+   "t": 782.48,
+   "d": 5.2,
+   "text": "they did a few in a magazine and they recalled -- they would pay for them and anybody could post in"
+  },
+  {
+   "t": 787.68,
+   "d": 9.04,
+   "text": "a story and maybe it would be accepted and maybe you would pay money for it. Like it is actually"
+  },
+  {
+   "t": 796.72,
+   "d": 10.96,
+   "text": "kind of rare that there is really a way to make money doing art that is this accessible. And like"
+  },
+  {
+   "t": 807.68,
+   "d": 10.32,
+   "text": "we have seen that in like the flash games marker. They were briefly accessible spaces where a huge"
+  },
+  {
+   "t": 818.0,
+   "d": 7.6,
+   "text": "amount of creatively flourished and then it kind of days as it gets more -- that's what happened"
+  },
+  {
+   "t": 825.6,
+   "d": 7.76,
+   "text": "here. A huge amount of creatively flourished in terms of writing short stories and then these"
+  },
+  {
+   "t": 833.36,
+   "d": 9.04,
+   "text": "magazines died out and the marker was dominated -- and in the last half of the century pretty"
+  },
+  {
+   "t": 842.4,
+   "d": 18.88,
+   "text": "much anything you find is a trillogy trying to be lord of the rings. Novels and like epic trillgies"
+  },
+  {
+   "t": 861.28,
+   "d": 12.56,
+   "text": "have epic heroes but short stories are much more suited to rogues. That's why this particular era I"
+  },
+  {
+   "t": 873.84,
+   "d": 8.24,
+   "text": "find quite interesting in reference to roguelikes because people were writing brief adventures that"
+  },
+  {
+   "t": 882.08,
+   "d": 14.72,
+   "text": "happened across a dozen pages with often quite roguish characteristics -- like having an ark"
+  },
+  {
+   "t": 896.8,
+   "d": 15.44,
+   "text": "of discovery, adventure, success and failure. And yeah, it's... it is just very roguelike. And also,"
+  },
+  {
+   "t": 914.48,
+   "d": 5.04,
+   "text": "obviously Dungeons and Dragons inspired both by these short stories and the novels but"
+  },
+  {
+   "t": 920.88,
+   "d": 11.2,
+   "text": "I think in the format of we wereal gathering a group of people together, say once a week,"
+  },
+  {
+   "t": 932.08,
+   "d": 11.28,
+   "text": "and then each session needs to be -- needs to have a satisfying arc within itself,"
+  },
+  {
+   "t": 944.4,
+   "d": 12.72,
+   "text": "so the mode of storytelling in the short stories is a -- it was more of an inspiration for how"
+  },
+  {
+   "t": 957.12,
+   "d": 6.56,
+   "text": "a play session is structured to make that work. If you have an epic story that goes"
+  },
+  {
+   "t": 963.68,
+   "d": 8.96,
+   "text": "across many sessions, you still have to have each session have a self-contained ark where"
+  },
+  {
+   "t": 975.44,
+   "d": 5.52,
+   "text": "it feels satisfied to do that or people aren't going to keep coming back every week for a session"
+  },
+  {
+   "t": 980.96,
+   "d": 21.44,
+   "text": "to work. I find this era of fiction a primary source for like the rogue characters so it is"
+  },
+  {
+   "t": 1002.4,
+   "d": 6.08,
+   "text": "really interesting to look at in developing roguelikes. Now with how expensive the genre"
+  },
+  {
+   "t": 1008.48,
+   "d": 15.28,
+   "text": "has become always feature characters who fit this model but still it is just important to"
+  },
+  {
+   "t": 1025.92,
+   "d": 8.4,
+   "text": "look at the roots, right? How the ideas developed over time. If there is something that you like,"
+  },
+  {
+   "t": 1035.28,
+   "d": 4.96,
+   "text": "look at the things that inspired it, and you will probably like them as well, or at least"
+  },
+  {
+   "t": 1040.24,
+   "d": 10.56,
+   "text": "find something of interest to you and learn something, and deepen your appreciation for the"
+  },
+  {
+   "t": 1050.8,
+   "d": 7.6,
+   "text": "work you were interested in in the first place. If someone has take an source and been inspired by it"
+  },
+  {
+   "t": 1058.4,
+   "d": 4.88,
+   "text": "and expanded something of their own, you don't know what they personal edited unless you know"
+  },
+  {
+   "t": 1063.28,
+   "d": 6.88,
+   "text": "the source material as well. If you look at the source material, what has been derived from it,"
+  },
+  {
+   "t": 1070.16,
+   "d": 5.36,
+   "text": "you can tell this thing that I was really impressed with this person's work but it"
+  },
+  {
+   "t": 1075.52,
+   "d": 6.56,
+   "text": "is derivative of this source material then you know. Yes, this person has drawn from the source"
+  },
+  {
+   "t": 1082.08,
+   "d": 6.08,
+   "text": "but they added so much of their own, and they really brought something new, then you know. And"
+  },
+  {
+   "t": 1088.16,
+   "d": 11.36,
+   "text": "like beyond that curve, like the specifics, and the mechanics of how an idea develops over time,"
+  },
+  {
+   "t": 1099.52,
+   "d": 9.84,
+   "text": "how an idea adapts to fit into different context. Yeah. But like this is why I always advocate for"
+  },
+  {
+   "t": 1109.36,
+   "d": 7.12,
+   "text": "people who are interested in roguelikes to go back and play Rogue because we are giving the"
+  },
+  {
+   "t": 1116.48,
+   "d": 9.68,
+   "text": "game a place of honor by naming the genre after it but it is weird to say this is my inspiration,"
+  },
+  {
+   "t": 1126.16,
+   "d": 8.88,
+   "text": "this is what I am honoring, if you don't actually know the details. That's what I think. I don't"
+  },
+  {
+   "t": 1135.04,
+   "d": 8.32,
+   "text": "want to get into any arguments but yeah. Yeah, I strongly recommend reading some of this early"
+  },
+  {
+   "t": 1143.36,
+   "d": 4.96,
+   "text": "20th century fantasy that Dungeons and Dragons was based on and I recommend having familiarity"
+  },
+  {
+   "t": 1148.32,
+   "d": 6.64,
+   "text": "of Dungeons and Dragons and the other table top games of the '70s and '80s because that's what"
+  },
+  {
+   "t": 1154.96,
+   "d": 6.8,
+   "text": "rogue -- Rogue and what many other video games came out of and there is so much creative heritage"
+  },
+  {
+   "t": 1161.76,
+   "d": 13.28,
+   "text": "that we owe to the work in those times that we are building upon. And I guess sometimes people when"
+  },
+  {
+   "t": 1175.04,
+   "d": 7.2,
+   "text": "they read these older stories they -- because they are written in a different time, and in a"
+  },
+  {
+   "t": 1182.24,
+   "d": 10.88,
+   "text": "different cultural context, sometimes people find the different aspects of the culture difficult"
+  },
+  {
+   "t": 1193.12,
+   "d": 6.56,
+   "text": "because there is a culture clash because it is written during a time when the culture norms"
+  },
+  {
+   "t": 1199.68,
+   "d": 15.04,
+   "text": "were different and I find that sad when it stops someone from being able to engage with a work but"
+  },
+  {
+   "t": 1214.72,
+   "d": 6.0,
+   "text": "like if that's you, and that's the case, if that discomfort is so much that you certainly can't,"
+  },
+  {
+   "t": 1222.08,
+   "d": 9.84,
+   "text": "that's a decision you make but to me, looking at the developments across time. If you"
+  },
+  {
+   "t": 1231.92,
+   "d": 11.28,
+   "text": "look at the night land of 1912, I think, it is a visionary work. The way it evokes a fantastical"
+  },
+  {
+   "t": 1243.2,
+   "d": 10.8,
+   "text": "landscape is just incredible but it has one female character who is depicted as completely helpless"
+  },
+  {
+   "t": 1254.0,
+   "d": 9.84,
+   "text": "to to anything by herself and it is absolutely embarrassing to read those things. If you have"
+  },
+  {
+   "t": 1263.84,
+   "d": 11.28,
+   "text": "that contrast, and you research something from the '40s or the '60s and the female characters are,"
+  },
+  {
+   "t": 1275.12,
+   "d": 10.16,
+   "text": "sometimes throwing daggers, and able to hold themselves in a fight. Even though there is"
+  },
+  {
+   "t": 1285.28,
+   "d": 10.59,
+   "text": "still cultural objectives that are uncomfortable if you trace it from the time to the present it"
+  },
+  {
+   "t": 1295.87,
+   "d": 10.37,
+   "text": "is way of seeing the change that has happened and that gives a lot of hope. Yeah. If you just look"
+  },
+  {
+   "t": 1306.24,
+   "d": 5.28,
+   "text": "at the problems that there are in society at a particular point in time, even if you look at"
+  },
+  {
+   "t": 1311.52,
+   "d": 7.04,
+   "text": "today, it is easy to despair. But if you have the picture of the development that happened over time"
+  },
+  {
+   "t": 1318.56,
+   "d": 12.24,
+   "text": "then you really -- it gives hope. It is nice. The next author I want to talk about is Jack Vance."
+  },
+  {
+   "t": 1338.88,
+   "d": 11.12,
+   "text": "When people talk about Jack Vance in reference to inspiration of games what they usually talk"
+  },
+  {
+   "t": 1350.0,
+   "d": 17.28,
+   "text": "about is Vancian magic. Some of these games like especially the characters in the book, if you"
+  },
+  {
+   "t": 1367.28,
+   "d": 5.84,
+   "text": "know the names by reading you don't necessarily know the original intended pronunciation, so if"
+  },
+  {
+   "t": 1373.12,
+   "d": 8.32,
+   "text": "I get some of that wrong, just make up your own pronunciation and we will be fine. Vancian magic"
+  },
+  {
+   "t": 1385.36,
+   "d": 11.52,
+   "text": "describes how magic spells work in basically those four books I am holding in one hand here. I will"
+  },
+  {
+   "t": 1396.88,
+   "d": 9.6,
+   "text": "read a section that more or less explains it. An age is gone as the eyes fixed on the -- a thousand"
+  },
+  {
+   "t": 1406.48,
+   "d": 7.52,
+   "text": "spells were known to sorcery and the wizards affected their wills. Today as earth dies,"
+  },
+  {
+   "t": 1414.0,
+   "d": 8.8,
+   "text": "a 100 spells remain to man's knowledge coming to us through the ancient books but there is one who"
+  },
+  {
+   "t": 1422.8,
+   "d": 16.4,
+   "text": "knows all the ones that have ever held space. He went silent, where is this person? He dwells in"
+  },
+  {
+   "t": 1439.2,
+   "d": 11.2,
+   "text": "a land that no one knows where it lies. How does one find this person? The sage smiled."
+  },
+  {
+   "t": 1451.44,
+   "d": 8.56,
+   "text": "If it were never necessary, a spell exist do is take one there. Having been silent for a moment,"
+  },
+  {
+   "t": 1460.0,
+   "d": 10.08,
+   "text": "the sage spoken starring out over the forest, one may ask anything and they will answer provided"
+  },
+  {
+   "t": 1470.08,
+   "d": 10.64,
+   "text": "that the seeker performs a service they require. And they draw a bargain and the spell in question,"
+  },
+  {
+   "t": 1480.72,
+   "d": 6.56,
+   "text": "which he had discovered in an ancient portfolio and kept secret from all of the world. Remembering"
+  },
+  {
+   "t": 1487.28,
+   "d": 9.52,
+   "text": "this conversation, descended to the study, a long hall with stone walls and a floor -- sorry. In the"
+  },
+  {
+   "t": 1496.8,
+   "d": 6.24,
+   "text": "context of the short story, that time would have been clearer. They have had a problem,"
+  },
+  {
+   "t": 1503.04,
+   "d": 6.32,
+   "text": "he doesn't know -- nothing in his books, nothing can fix it. So then he was rem Fe remembering what"
+  },
+  {
+   "t": 1509.92,
+   "d": 21.36,
+   "text": "was being said about the origin of spells and -- volumes compiled of several wizards from the past."
+  },
+  {
+   "t": 1535.28,
+   "d": 7.52,
+   "text": "The syllables of a hundred powerful spells. So powerful only the brain could know four at a time."
+  },
+  {
+   "t": 1542.8,
+   "d": 6.56,
+   "text": "They found a portfolio and turned the heavy pages to spells as the sage showed him. The"
+  },
+  {
+   "t": 1549.36,
+   "d": 7.76,
+   "text": "call to the violent cloud. He starred down and they burned with a powder pressing off the page"
+  },
+  {
+   "t": 1557.12,
+   "d": 9.76,
+   "text": "trying to leave the book. He closed the book and forced the spell back into oblivion. He tucked"
+  },
+  {
+   "t": 1566.88,
+   "d": 6.8,
+   "text": "a blade into his belt, put on a cape, and then he sat down and chose the spells he would take"
+  },
+  {
+   "t": 1573.68,
+   "d": 8.24,
+   "text": "with them, he selected free spells of general application. The excellent pragmatic spray,"
+  },
+  {
+   "t": 1583.04,
+   "d": 7.2,
+   "text": "stealth, and the spell of the slow hower. He climbed and stood and breathing the air,"
+  },
+  {
+   "t": 1592.24,
+   "d": 5.84,
+   "text": "how many times has this air been breathed before him? What cries of pain had this air experienced?"
+  },
+  {
+   "t": 1598.08,
+   "d": 10.48,
+   "text": "What size washouts, and cries, and gasps? The night was wearing on. A blue light waved in the"
+  },
+  {
+   "t": 1608.56,
+   "d": 7.6,
+   "text": "forest, squared himself and added the call to the violent cloud. All was quiet. Then came a"
+  },
+  {
+   "t": 1616.16,
+   "d": 13.44,
+   "text": "whisp of white appeared and black smoke and a deep issued from the turbulence. Your disturbing powers"
+  },
+  {
+   "t": 1629.6,
+   "d": 11.44,
+   "text": "as instrument comes. Where will you go? Four directions. Then one. Alive has been brought to,"
+  },
+  {
+   "t": 1642.56,
+   "d": 6.08,
+   "text": "the cloud whirled down, far up and away he was snatched and sent over an uncalculated distance,"
+  },
+  {
+   "t": 1648.64,
+   "d": 18.32,
+   "text": "four directions thrusted, and then he was brought in. He looked up at him. So like this is more"
+  },
+  {
+   "t": 1666.96,
+   "d": 7.92,
+   "text": "or less gives the picture of how imageic -- magic works in this Vancian systems. Spells"
+  },
+  {
+   "t": 1674.88,
+   "d": 11.28,
+   "text": "are explicit -- if you think about the range of different ways magic has been depicted in fiction,"
+  },
+  {
+   "t": 1686.16,
+   "d": 6.96,
+   "text": "it is a little weird. Like magicians could just call forth spirit of natures and command them"
+  },
+  {
+   "t": 1693.12,
+   "d": 13.28,
+   "text": "what to do with sentences. There is depictions of magic as science that exists within engineering."
+  },
+  {
+   "t": 1706.4,
+   "d": 7.2,
+   "text": "Magic can be shared mystery that is never explained. There is many ways that magic could"
+  },
+  {
+   "t": 1713.6,
+   "d": 13.76,
+   "text": "operate and this way is with discreet affects that come in a particular chunk. And in times past,"
+  },
+  {
+   "t": 1727.36,
+   "d": 12.16,
+   "text": "magicians had the ability to create these spells. A 100 spells were crafted and that lore is largely"
+  },
+  {
+   "t": 1739.52,
+   "d": 8.24,
+   "text": "lost because these stories are set in the time when many situations -- three minute warning? Oh,"
+  },
+  {
+   "t": 1747.76,
+   "d": 27.44,
+   "text": "really? Spells must be memorized to cast them and in the act of casting them,"
+  },
+  {
+   "t": 1775.2,
+   "d": 14.56,
+   "text": "they burnout of your brain, and this was super flavorful, and it is a storytelling mechanic."
+  },
+  {
+   "t": 1789.76,
+   "d": 18.16,
+   "text": "It enables time -- stories are a form where a character collects a series -- this is a common"
+  },
+  {
+   "t": 1807.92,
+   "d": 8.24,
+   "text": "story format that happens in fairy tells where a character has a set of items and then they go"
+  },
+  {
+   "t": 1816.16,
+   "d": 12.88,
+   "text": "off and face a few different challenges, and then each challenge is solved with one of these items."
+  },
+  {
+   "t": 1829.04,
+   "d": 7.28,
+   "text": "And yeah, this story mechanic enables telling stories where this kind of format happens but"
+  },
+  {
+   "t": 1836.32,
+   "d": 5.68,
+   "text": "it is about a wizard. It is hard to tell stories about wizards. In lord of the rings, gandolph"
+  },
+  {
+   "t": 1842.0,
+   "d": 15.36,
+   "text": "is never around at the moment needed. This is a story mechanic which became a game mechanic. But"
+  },
+  {
+   "t": 1862.4,
+   "d": 10.8,
+   "text": "in reference to roguelikes it perhaps not the most interesting thing to talk about. It is"
+  },
+  {
+   "t": 1873.2,
+   "d": 14.0,
+   "text": "only a smart part of what happens in these books. Sorry. I had gotten my time confused. I am sorry."
+  },
+  {
+   "t": 1887.2,
+   "d": 11.6,
+   "text": "I wanted to talk about a bunch more stuff which I can't fit in. OK. I will -- the middle section of"
+  },
+  {
+   "t": 1898.8,
+   "d": 14.08,
+   "text": "this book is the tales of Kugal and that is much more interesting. We are introduced to a character"
+  },
+  {
+   "t": 1912.88,
+   "d": 7.52,
+   "text": "who is a wizard. He had a bunch of medic items. For his trickery, he comes into possession of"
+  },
+  {
+   "t": 1920.4,
+   "d": 13.76,
+   "text": "these items and says behold I am a powerful wizard and blue concentrate. And when I first read this,"
+  },
+  {
+   "t": 1934.16,
+   "d": 7.2,
+   "text": "I thought Kugal, brought up with the real wizard, they are pretending to be a wizard. Then I thought"
+  },
+  {
+   "t": 1941.36,
+   "d": 6.56,
+   "text": "about it more like they both did exactly the same things. There being a wizard is defined by having"
+  },
+  {
+   "t": 1947.92,
+   "d": 13.76,
+   "text": "this collection of magic items. That's really the magic of a roguelikes. They collect the items,"
+  },
+  {
+   "t": 1961.68,
+   "d": 6.4,
+   "text": "and at the end you are making more decisions of a wizard than a rogue."
+  }
+ ]
+}

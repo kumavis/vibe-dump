@@ -1,0 +1,2218 @@
+{
+ "id": "TlLIOgWYVpI",
+ "url": "https://www.youtube.com/watch?v=TlLIOgWYVpI",
+ "title": "Herbert Wolverson - Procedural Map Generation Techniques",
+ "speaker": "Herbert Wolverson",
+ "talk_title": "Procedural Map Generation Techniques",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1648,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nHerbert has been a hobby game developer since the 1990s, and is the developer of Nox Futura, One Knight in the Dungeon, and several 7DRL projects. Author of the Rust Roguelike Tutorial, and upcoming book with the working title Learn Rust by Making a Game book (Pragmatic Bookshelf, expected release this winter). He's a regular contributor to the subreddit r/roguelikedev.\n\nThis talk is a detailed survey of procedural map generation, including integration of hand-crafted \"prefabs\"/vaults. While the source material is written in Rust, it's readily abstracted to psuedocode and presented in a language agnostic fashion. Techniques include: Simple room placement, BSP room placement, BSP interiors, cellular automata, drunkard's walk, mazes, diffusion-limited aggregation, voronoi, wave function collapse, and prefabs. Sprinkle in a little spice by adding symmetry, layering/combining generators, different corridor algorithms, and doors placement.\n\nFind him on Twitter: https://twitter.com/herberticus\nRoguelike Tutorial section 3 techniques and illustrations: http://bfnightly.bracketproductions.com/rustbook/chapter23-prefix.html\nRust Roguelike Tutorial: http://bfnightly.bracketproductions.com/rustbook/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 157,
+   "title": "Dwarf Fortress (2086 - Present)"
+  },
+  {
+   "start": 243,
+   "title": "Simple Room-Placement"
+  },
+  {
+   "start": 266,
+   "title": "Room Placement - Animated"
+  },
+  {
+   "start": 342,
+   "title": "Animated BSP"
+  },
+  {
+   "start": 408,
+   "title": "Animated Cellular Automata"
+  },
+  {
+   "start": 427,
+   "title": "Drunkard's Walk"
+  },
+  {
+   "start": 473,
+   "title": "Animated Drunken Umber Hulks"
+  },
+  {
+   "start": 496,
+   "title": "Diffusion Limited Aggregation"
+  },
+  {
+   "start": 541,
+   "title": "DLA with a Central Attractor"
+  },
+  {
+   "start": 593,
+   "title": "Voronoi Diagrams"
+  },
+  {
+   "start": 686,
+   "title": "Find the edges"
+  },
+  {
+   "start": 748,
+   "title": "Perlin/Simplex Noise"
+  },
+  {
+   "start": 839,
+   "title": "Overworld by Altitude"
+  },
+  {
+   "start": 877,
+   "title": "Mix in a second noise layer"
+  },
+  {
+   "start": 933,
+   "title": "You can use more than one technique"
+  },
+  {
+   "start": 995,
+   "title": "Combine Techniques - DLA for erosion"
+  },
+  {
+   "start": 1015,
+   "title": "Placing Prefabs"
+  },
+  {
+   "start": 1077,
+   "title": "Algorithm: Dijkstra Maps"
+  },
+  {
+   "start": 1156,
+   "title": "Removing Unreachable Areas"
+  },
+  {
+   "start": 1190,
+   "title": "Finding a Starting point"
+  },
+  {
+   "start": 1227,
+   "title": "Find an Endpoint - using distance to target"
+  },
+  {
+   "start": 1258,
+   "title": "Endpoint - Dijkstra to find farthest point"
+  },
+  {
+   "start": 1288,
+   "title": "The \"Hot Path\""
+  },
+  {
+   "start": 1327,
+   "title": "Culling based on the hot path Hate branching?"
+  },
+  {
+   "start": 1349,
+   "title": "Hot Path for Rooms"
+  },
+  {
+   "start": 1388,
+   "title": "Telling a Story"
+  },
+  {
+   "start": 1500,
+   "title": "Questions?"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4752,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.89,
+   "d": 3.69,
+   "text": "Noah: Our next speaker is Herbert Wolverson."
+  },
+  {
+   "t": 4.58,
+   "d": 5.53,
+   "text": "Herbert is a hobby game developer, and he has been since the 1990s."
+  },
+  {
+   "t": 10.11,
+   "d": 4.6,
+   "text": "He developed Nox Futura, One Night in the Dungeon,"
+  },
+  {
+   "t": 14.71,
+   "d": 4.25,
+   "text": "and a bunch of 7DRLs. He also wrote a book"
+  },
+  {
+   "t": 18.95,
+   "d": 7.93,
+   "text": "about Rust roguelike game development, and he's currently writing another book"
+  },
+  {
+   "t": 26.88,
+   "d": 2.87,
+   "text": "about learning Rust through making games."
+  },
+  {
+   "t": 29.75,
+   "d": 2.98,
+   "text": "This talk is called Procedural Map Generation Techniques,"
+  },
+  {
+   "t": 32.73,
+   "d": 3.43,
+   "text": "and this is acctually something I'm super excited about, as I've always"
+  },
+  {
+   "t": 36.17,
+   "d": 2.53,
+   "text": "wanted someone to give a talk about this topic."
+  },
+  {
+   "t": 38.7,
+   "d": 2.31,
+   "text": "So without further ado, here's Herbert."
+  },
+  {
+   "t": 42.0,
+   "d": 3.03,
+   "text": "Herbert: Hi. Welcome to Procedural Map Generation."
+  },
+  {
+   "t": 45.03,
+   "d": 2.6,
+   "text": "I'm Herbert Wolverson of Bracket Productions,"
+  },
+  {
+   "t": 47.63,
+   "d": 3.2,
+   "text": "which is really just my consulting company."
+  },
+  {
+   "t": 50.83,
+   "d": 2.82,
+   "text": "I'm gonna be talking to you about using algorithms to generate"
+  },
+  {
+   "t": 53.65,
+   "d": 3.37,
+   "text": "maps, and then using more algorithms to fix the maps you"
+  },
+  {
+   "t": 57.01,
+   "d": 2.53,
+   "text": "just created and find out if they're even usable."
+  },
+  {
+   "t": 60.4,
+   "d": 2.68,
+   "text": "There's a lot of content to cover, so I'm gonna be going on"
+  },
+  {
+   "t": 63.08,
+   "d": 2.33,
+   "text": "at quite a rate of knots."
+  },
+  {
+   "t": 65.41,
+   "d": 2.87,
+   "text": "So, who am I? As Noah just said, I'm the author"
+  },
+  {
+   "t": 68.28,
+   "d": 3.25,
+   "text": "of the Rust Roguelike Tutorial, on the address on the screen there."
+  },
+  {
+   "t": 71.53,
+   "d": 3.8,
+   "text": "I talk way too much on Twitter @herberticus. If you ever want to"
+  },
+  {
+   "t": 75.33,
+   "d": 3.81,
+   "text": "get in touch with me, /u/thebracket on Reddit is the best way to find me."
+  },
+  {
+   "t": 79.14,
+   "d": 3.97,
+   "text": "I love hanging out on the roguelike dev forums, answering short answer"
+  },
+  {
+   "t": 83.11,
+   "d": 5.44,
+   "text": "questions with SAS. I do have a book coming out very soon, Hands-on Rust:"
+  },
+  {
+   "t": 88.55,
+   "d": 3.35,
+   "text": "Effective Learning through 2D Game Development and Play,"
+  },
+  {
+   "t": 91.9,
+   "d": 3.18,
+   "text": "which will be out on PragProg.com."
+  },
+  {
+   "t": 95.08,
+   "d": 3.55,
+   "text": "I promise I won't keep promoting that, but I really wanted to mention it,"
+  },
+  {
+   "t": 98.63,
+   "d": 2.71,
+   "text": "and all the sourcecode that goes with this talk can be found on GitHub"
+  },
+  {
+   "t": 101.35,
+   "d": 4.14,
+   "text": "at that address. That'll be repeated on the final slide of this presentation."
+  },
+  {
+   "t": 108.28,
+   "d": 3.72,
+   "text": "So we're gonna give a quick shoutout to Rogue, from 1980,"
+  },
+  {
+   "t": 112.0,
+   "d": 3.57,
+   "text": "because we really wouldn't be here without it. It's one of the"
+  },
+  {
+   "t": 115.57,
+   "d": 4.18,
+   "text": "seminal and first uses of procedural generation that really defined"
+  },
+  {
+   "t": 119.75,
+   "d": 4.18,
+   "text": "the genre. It splats out up to nine rooms, connected randomly."
+  },
+  {
+   "t": 123.93,
+   "d": 3.7,
+   "text": "It's been said that they did that because they needed to keep"
+  },
+  {
+   "t": 127.63,
+   "d": 3.25,
+   "text": "the game small and really couldn't fit in 50 beautifully hand-designed"
+  },
+  {
+   "t": 130.88,
+   "d": 3.43,
+   "text": "levels, but really that created one of the strengths of the genre"
+  },
+  {
+   "t": 134.31,
+   "d": 3.83,
+   "text": "in the first place. When you start a new game, you have a different"
+  },
+  {
+   "t": 138.15,
+   "d": 4.8,
+   "text": "map every time. So every time you play, instead of memorizing that"
+  },
+  {
+   "t": 142.94,
+   "d": 3.92,
+   "text": "I need to go up, up, up, right, you're learning instead that"
+  },
+  {
+   "t": 146.86,
+   "d": 2.72,
+   "text": "I should interact this way with different monsters, and interact"
+  },
+  {
+   "t": 149.58,
+   "d": 3.37,
+   "text": "this way with rooms, navigate like this, learning the system rather"
+  },
+  {
+   "t": 152.95,
+   "d": 3.9,
+   "text": "than learning the game itself, giving you effectively infinite replay."
+  },
+  {
+   "t": 157.76,
+   "d": 3.08,
+   "text": "Also, any talk on procgen really has to mention Dwarf Fortress,"
+  },
+  {
+   "t": 160.85,
+   "d": 2.78,
+   "text": "because no other procgen game has ever managed to cram this"
+  },
+  {
+   "t": 163.63,
+   "d": 3.3,
+   "text": "much procedural generation into one binary."
+  },
+  {
+   "t": 166.93,
+   "d": 3.37,
+   "text": "If you haven't played it, go out and do so."
+  },
+  {
+   "t": 170.29,
+   "d": 4.18,
+   "text": "Support them on Steam, and tell them how awesome they are."
+  },
+  {
+   "t": 174.47,
+   "d": 3.98,
+   "text": "They generate everything from a massive overworld with"
+  },
+  {
+   "t": 178.45,
+   "d": 3.04,
+   "text": "sweeping mountain ranges, dense forests, volcanoes,"
+  },
+  {
+   "t": 181.49,
+   "d": 4.1,
+   "text": "demon-infested fortresses, fill it up with procedurally-generated"
+  },
+  {
+   "t": 185.59,
+   "d": 3.12,
+   "text": "civilizations who either like or hate each other, and then"
+  },
+  {
+   "t": 188.71,
+   "d": 3.07,
+   "text": "you can drill all the way down to Urist and find out which"
+  },
+  {
+   "t": 191.77,
+   "d": 3.58,
+   "text": "proedurally-generated deity he worships, which procedurally-generated"
+  },
+  {
+   "t": 195.35,
+   "d": 3.72,
+   "text": "tavern he drinks in, and learn all about his quest to cross the land"
+  },
+  {
+   "t": 199.07,
+   "d": 2.05,
+   "text": "and find the perfect sock."
+  },
+  {
+   "t": 202.19,
+   "d": 3.58,
+   "text": "At the mid-scale, you can zoom in to any particular land block on the map,"
+  },
+  {
+   "t": 205.77,
+   "d": 4.38,
+   "text": "find out that it is beautifully rendered, still matches the overall shape"
+  },
+  {
+   "t": 210.15,
+   "d": 4.5,
+   "text": "of the overall world above it, the trees gain foliage, lose foliage,"
+  },
+  {
+   "t": 214.65,
+   "d": 3.63,
+   "text": "depending on their type and the type spawns appropriate to the biome."
+  },
+  {
+   "t": 218.28,
+   "d": 2.85,
+   "text": "In other words, there is pretty much every procgen technique that you"
+  },
+  {
+   "t": 221.13,
+   "d": 3.37,
+   "text": "can think of in this game. Hang out in the Bay 12 forums"
+  },
+  {
+   "t": 224.5,
+   "d": 2.27,
+   "text": "and that is a great place to learn about them."
+  },
+  {
+   "t": 227.61,
+   "d": 2.42,
+   "text": "So one thing that's clear from both of these games is that,"
+  },
+  {
+   "t": 230.03,
+   "d": 3.15,
+   "text": "while they're random, their randomness doesn't define the game."
+  },
+  {
+   "t": 233.18,
+   "d": 3.41,
+   "text": "The randomness is fed into an algorithm that generates something"
+  },
+  {
+   "t": 236.59,
+   "d": 3.34,
+   "text": "that approximates what you want to get, but ensures that it is different"
+  },
+  {
+   "t": 239.93,
+   "d": 3.15,
+   "text": "every time. So, we're gonna start looking at some algorithms"
+  },
+  {
+   "t": 243.08,
+   "d": 2.15,
+   "text": "for doing that."
+  },
+  {
+   "t": 245.23,
+   "d": 1.95,
+   "text": "A simple room placement. If you've done any of the"
+  },
+  {
+   "t": 247.18,
+   "d": 2.9,
+   "text": "roguelike development tutorials, then you've seen this one."
+  },
+  {
+   "t": 250.08,
+   "d": 4.45,
+   "text": "You start with a solid map. You pick a random rectangle."
+  },
+  {
+   "t": 254.53,
+   "d": 4.12,
+   "text": "If there isn't a room already there, you fill in the rectangle."
+  },
+  {
+   "t": 258.65,
+   "d": 3.38,
+   "text": "You keep adding rooms until you meet whatever criteria you've"
+  },
+  {
+   "t": 262.03,
+   "d": 2.7,
+   "text": "come up with for enough, and then you join the rooms"
+  },
+  {
+   "t": 264.72,
+   "d": 2.63,
+   "text": "together with corridors. Let's watch this in action."
+  },
+  {
+   "t": 268.76,
+   "d": 3.27,
+   "text": "As you can see, it's placing rooms randomly. When you see the"
+  },
+  {
+   "t": 272.03,
+   "d": 3.3,
+   "text": "red rectangles with the exclamation marks, they tried to generate one"
+  },
+  {
+   "t": 275.33,
+   "d": 2.95,
+   "text": "that overlaps, so you have to discard it and try again."
+  },
+  {
+   "t": 278.27,
+   "d": 3.22,
+   "text": "And then it joins them together with corridors. In this case, they went"
+  },
+  {
+   "t": 281.49,
+   "d": 3.33,
+   "text": "with a simple dog leg algorithm, that randomly switches between"
+  },
+  {
+   "t": 284.82,
+   "d": 2.73,
+   "text": "being either vertical first or horizontal first."
+  },
+  {
+   "t": 287.56,
+   "d": 3.04,
+   "text": "That's pretty much exactly the algorithm from the Python"
+  },
+  {
+   "t": 290.59,
+   "d": 6.53,
+   "text": "roguelike dev tutorial that the roguelike dev subreddit recommends"
+  },
+  {
+   "t": 297.12,
+   "d": 2.04,
+   "text": "that you start with."
+  },
+  {
+   "t": 299.16,
+   "d": 4.95,
+   "text": "So a good refinement of that is Binary Space Partition rooms, or BSP."
+  },
+  {
+   "t": 304.1,
+   "d": 4.75,
+   "text": "Binary Space Partition is fancy developer talk for chopping in half."
+  },
+  {
+   "t": 308.85,
+   "d": 3.5,
+   "text": "It gives a similar result to random room placement,"
+  },
+  {
+   "t": 312.36,
+   "d": 3.08,
+   "text": "but it pretty much guarantees that everything is better spaced out."
+  },
+  {
+   "t": 315.44,
+   "d": 2.98,
+   "text": "You'll find that it's used in Nethack, amongst other games."
+  },
+  {
+   "t": 318.84,
+   "d": 4.35,
+   "text": "So to do BSP, you divide your map in half, and you randomly decide"
+  },
+  {
+   "t": 323.19,
+   "d": 5.42,
+   "text": "whether you want to divide vertically or horizontally, and divide that half in half."
+  },
+  {
+   "t": 328.6,
+   "d": 3.26,
+   "text": "Then you keep dividing your halves all the way down until you have"
+  },
+  {
+   "t": 331.86,
+   "d": 3.47,
+   "text": "a space that's roughly the right size you want to use for a room."
+  },
+  {
+   "t": 335.33,
+   "d": 3.32,
+   "text": "And I personally like to then add a gutter of one tile around it,"
+  },
+  {
+   "t": 338.65,
+   "d": 2.53,
+   "text": "to ensure that you don't get rooms joining together, unless that's"
+  },
+  {
+   "t": 341.19,
+   "d": 2.78,
+   "text": "what you want. So watching that in action,"
+  },
+  {
+   "t": 343.97,
+   "d": 3.77,
+   "text": "you see that there's absolutely no rejections, the rooms are nicely"
+  },
+  {
+   "t": 347.73,
+   "d": 4.1,
+   "text": "spaced out, and you wind up with a pretty usable map."
+  },
+  {
+   "t": 351.83,
+   "d": 4.87,
+   "text": "So complete change of gear, Cellular Automata."
+  },
+  {
+   "t": 356.7,
+   "d": 4.3,
+   "text": "I personally love this one, because it involves an ordered-looking"
+  },
+  {
+   "t": 361.0,
+   "d": 3.9,
+   "text": "natural map from complete chaos. You know, I said you don't always"
+  },
+  {
+   "t": 364.9,
+   "d": 2.95,
+   "text": "start with complete random? Well, this one, you do."
+  },
+  {
+   "t": 367.85,
+   "d": 4.43,
+   "text": "You can literally make half your map walls half your map floors,"
+  },
+  {
+   "t": 372.28,
+   "d": 3.55,
+   "text": "randomly picked, no chance of getting through it,"
+  },
+  {
+   "t": 375.83,
+   "d": 2.59,
+   "text": "and you'll end up with something you can use."
+  },
+  {
+   "t": 378.42,
+   "d": 4.06,
+   "text": "If you played Conway's Game of Life or seen articles about it,"
+  },
+  {
+   "t": 382.48,
+   "d": 4.17,
+   "text": "it's the same principle here. So once you've got your map,"
+  },
+  {
+   "t": 386.65,
+   "d": 3.4,
+   "text": "you make a copy of it, you iterate every tile that isn't"
+  },
+  {
+   "t": 390.05,
+   "d": 3.75,
+   "text": "on the edge, and you count the number of neighbors, including diagonals."
+  },
+  {
+   "t": 393.8,
+   "d": 6.43,
+   "text": "If there are no neighbors, then it becomes a wall. If there's one to"
+  },
+  {
+   "t": 400.23,
+   "d": 3.4,
+   "text": "four neighbors, it becomes empty. Five or more neighbors, it becomes"
+  },
+  {
+   "t": 403.63,
+   "d": 4.95,
+   "text": "a wall. Now, you can and should tweak these rules to suit your game."
+  },
+  {
+   "t": 408.58,
+   "d": 4.06,
+   "text": "Let's watch this in action. Completely random soup quickly turns into a"
+  },
+  {
+   "t": 412.65,
+   "d": 5.56,
+   "text": "far more natural looking structure that can actually be turned into a"
+  },
+  {
+   "t": 418.21,
+   "d": 5.55,
+   "text": "pretty useful map. And it's a really simple algorithm, really fast,"
+  },
+  {
+   "t": 423.76,
+   "d": 3.08,
+   "text": "and given the same seed, you get the same result every time."
+  },
+  {
+   "t": 427.68,
+   "d": 4.23,
+   "text": "Next one to talk about is Drunkard's Walk. This is another popular one for beginners."
+  },
+  {
+   "t": 431.91,
+   "d": 5.28,
+   "text": "So the basic principle of Drunkard's Walk is that you start with a solid map, find one"
+  },
+  {
+   "t": 437.19,
+   "d": 4.07,
+   "text": "Umber Hulk, and ply it with beer until he's staggering randomly."
+  },
+  {
+   "t": 441.26,
+   "d": 3.28,
+   "text": "Place him somewhere on the map. As he staggers, he randomly smashes"
+  },
+  {
+   "t": 444.54,
+   "d": 4.4,
+   "text": "through walls, and carving out a map. Don't bother worrying about whether"
+  },
+  {
+   "t": 448.94,
+   "d": 5.23,
+   "text": "he backtracks. Let him stagger wherever he wants. Pick a maximum distance for him"
+  },
+  {
+   "t": 454.17,
+   "d": 4.58,
+   "text": "to travel, or her. I'm really not sure how Umber Hulk's gender works."
+  },
+  {
+   "t": 458.75,
+   "d": 3.88,
+   "text": "If they travel too far, they pass out, and you can pick another"
+  },
+  {
+   "t": 462.63,
+   "d": 5.13,
+   "text": "Umber Hulk, spawn them somewhere within the open map, and let them smash."
+  },
+  {
+   "t": 467.76,
+   "d": 3.4,
+   "text": "Then you stop spawning Hulks when enough of your map is open."
+  },
+  {
+   "t": 471.16,
+   "d": 2.5,
+   "text": "In this case, I've used one-third of the map."
+  },
+  {
+   "t": 473.66,
+   "d": 3.52,
+   "text": "So watching this in action, you can see that each Hulk is staggering"
+  },
+  {
+   "t": 477.18,
+   "d": 3.7,
+   "text": "completely randomly, carving out more and more of the map."
+  },
+  {
+   "t": 480.88,
+   "d": 3.47,
+   "text": "One big advantage of this is that you can guarantee that your map will"
+  },
+  {
+   "t": 484.34,
+   "d": 3.88,
+   "text": "be contiguous. It won't generate any areas that your player"
+  },
+  {
+   "t": 488.22,
+   "d": 3.58,
+   "text": "can't reach. It tends to give you maps that looks like it was"
+  },
+  {
+   "t": 491.81,
+   "d": 5.28,
+   "text": "carved out by water, ideal for creating limestone caverns and similar."
+  },
+  {
+   "t": 497.34,
+   "d": 3.13,
+   "text": "Another algorithm, Diffusion Limited Aggregation."
+  },
+  {
+   "t": 500.48,
+   "d": 3.15,
+   "text": "I highly recommend the RogueBasin article on this one."
+  },
+  {
+   "t": 503.62,
+   "d": 3.03,
+   "text": "So for the simple version of this, you start by digging out a small"
+  },
+  {
+   "t": 506.66,
+   "d": 4.67,
+   "text": "target seed, and then you pick a random point anywhere on the map, a random"
+  },
+  {
+   "t": 511.32,
+   "d": 3.62,
+   "text": "direction, and shoot a particle. If you're really lucky, the particle"
+  },
+  {
+   "t": 514.94,
+   "d": 3.8,
+   "text": "will hit one of the already open areas. If it doesn't, you keep shooting until it"
+  },
+  {
+   "t": 518.74,
+   "d": 4.98,
+   "text": "hits something. Something I've heard from a lot of military friends."
+  },
+  {
+   "t": 523.72,
+   "d": 4.5,
+   "text": "In the event that you do hit a target area, then you carve out the last solid"
+  },
+  {
+   "t": 528.22,
+   "d": 3.98,
+   "text": "area that you passed through. This tends to give you a very winding,"
+  },
+  {
+   "t": 532.21,
+   "d": 3.87,
+   "text": "open map. Again, it's guaranteed to be contiguous."
+  },
+  {
+   "t": 536.86,
+   "d": 2.78,
+   "text": "And there's a lot of ways that you can tweak the algorithm to make something"
+  },
+  {
+   "t": 539.64,
+   "d": 1.62,
+   "text": "more interesting."
+  },
+  {
+   "t": 541.25,
+   "d": 3.8,
+   "text": "So the Central Attractor is much more likely to always hit the target."
+  },
+  {
+   "t": 545.05,
+   "d": 3.97,
+   "text": "You randomly spawn your starting point and then shoot the particle directly"
+  },
+  {
+   "t": 549.02,
+   "d": 3.18,
+   "text": "at the middle of the map. This pretty much ensures that you"
+  },
+  {
+   "t": 552.2,
+   "d": 2.97,
+   "text": "get an open space in the middle, ideal, for example, for you to put"
+  },
+  {
+   "t": 555.17,
+   "d": 4.13,
+   "text": "a dragon with his hoard, and then a more interesting pattern forming"
+  },
+  {
+   "t": 559.3,
+   "d": 4.05,
+   "text": "around the edges, which could be where the hobbit would lurk while he"
+  },
+  {
+   "t": 563.35,
+   "d": 5.02,
+   "text": "torments the poor dragon. On the right, you can see what happens if we"
+  },
+  {
+   "t": 568.37,
+   "d": 3.1,
+   "text": "use the same Central Attractor algorithm, but simply apply"
+  },
+  {
+   "t": 571.46,
+   "d": 3.85,
+   "text": "a symmetry down the vertical. You start to get maps that look"
+  },
+  {
+   "t": 575.31,
+   "d": 3.37,
+   "text": "a lot like they either want to eat you, or maybe it's a butterfly,"
+  },
+  {
+   "t": 578.68,
+   "d": 4.33,
+   "text": "maybe it's a Space Invaders character."
+  },
+  {
+   "t": 583.01,
+   "d": 4.6,
+   "text": "I recommend using this one sparingly, but a bit of symmetry like that can be"
+  },
+  {
+   "t": 587.61,
+   "d": 2.87,
+   "text": "applied to any algorithm when you want to produce something"
+  },
+  {
+   "t": 590.48,
+   "d": 3.57,
+   "text": "that looks a lot less random."
+  },
+  {
+   "t": 594.04,
+   "d": 5.51,
+   "text": "Another algorithm that everyone should have in their toolkit is the"
+  },
+  {
+   "t": 599.56,
+   "d": 2.07,
+   "text": "Voronoi Diagram."
+  },
+  {
+   "t": 601.62,
+   "d": 4.03,
+   "text": "So to make one of these, I do recommend Googling it."
+  },
+  {
+   "t": 605.66,
+   "d": 3.8,
+   "text": "You randomly or deliberately place seeds all over your map."
+  },
+  {
+   "t": 609.46,
+   "d": 4.95,
+   "text": "You randomly place them if you just want to produce something random."
+  },
+  {
+   "t": 614.41,
+   "d": 3.15,
+   "text": "If you place them very deliberately - for example, you can equally space"
+  },
+  {
+   "t": 617.55,
+   "d": 3.04,
+   "text": "them all over the map - you can produce something that looks"
+  },
+  {
+   "t": 620.59,
+   "d": 4.37,
+   "text": "very, very much like a beehive."
+  },
+  {
+   "t": 624.95,
+   "d": 4.41,
+   "text": "And then you iterate every point on the map, and it joins the"
+  },
+  {
+   "t": 629.37,
+   "d": 6.35,
+   "text": "area belonging to the closest seed. There are various fancy algorithms,"
+  },
+  {
+   "t": 635.72,
+   "d": 4.01,
+   "text": "like Delaunay triangulations, to do this quickly. In the source code I've"
+  },
+  {
+   "t": 639.73,
+   "d": 3.78,
+   "text": "provided, I just brute forced it and did it the hard way."
+  },
+  {
+   "t": 643.52,
+   "d": 4.98,
+   "text": "Now, one neat trick for customizing what you get is that you can"
+  },
+  {
+   "t": 648.5,
+   "d": 5.05,
+   "text": "use a different distance algorithm to determine which group"
+  },
+  {
+   "t": 653.55,
+   "d": 4.75,
+   "text": "every tile joins. So on the left, I've used Pythagoras, and it gives you"
+  },
+  {
+   "t": 658.3,
+   "d": 7.43,
+   "text": "relatively smooth edges. Using Manhattan distance, which is the same distance"
+  },
+  {
+   "t": 665.73,
+   "d": 4.52,
+   "text": "that you get if you ask a New York taxi driver how far it is to get to"
+  },
+  {
+   "t": 670.25,
+   "d": 3.74,
+   "text": "somewhere, a number of blocks north plus number of blocks east,"
+  },
+  {
+   "t": 673.99,
+   "d": 5.87,
+   "text": "it gives you a much more manmade-looking, sharp-edged structure. And Chebychev"
+  },
+  {
+   "t": 679.87,
+   "d": 4.0,
+   "text": "is a similar distance algorithm, and tends to give you somewhere in between"
+  },
+  {
+   "t": 683.86,
+   "d": 5.2,
+   "text": "the two. So what do you do with Voronoi diagrams? Well,"
+  },
+  {
+   "t": 689.06,
+   "d": 6.07,
+   "text": "the first thing you can do with them is find the edges, place walls there,"
+  },
+  {
+   "t": 695.13,
+   "d": 5.96,
+   "text": "and wind up with an alien cell structure. Another good thing to do is"
+  },
+  {
+   "t": 701.09,
+   "d": 4.33,
+   "text": "decide that when you're spawning monsters, you'll spawn the monsters together"
+  },
+  {
+   "t": 705.42,
+   "d": 2.21,
+   "text": "within a Voronoi cell."
+  },
+  {
+   "t": 707.64,
+   "d": 3.67,
+   "text": "So, for example, you've decided that the orc king should always be"
+  },
+  {
+   "t": 711.31,
+   "d": 3.38,
+   "text": "seated with his retinue. Then, you should probably spawn them"
+  },
+  {
+   "t": 714.69,
+   "d": 4.0,
+   "text": "in the same cell together, if possible. Likewise, if you decided that orcs"
+  },
+  {
+   "t": 718.69,
+   "d": 3.93,
+   "text": "must never, in fact, be near dark elves, make sure that you spawn them in"
+  },
+  {
+   "t": 722.62,
+   "d": 5.08,
+   "text": "far away cells. You can also use this for very effective city generation."
+  },
+  {
+   "t": 727.71,
+   "d": 6.86,
+   "text": "In my PROCJAM game, Apocalypse Taxi, I used the edges of Voronoi cells to"
+  },
+  {
+   "t": 734.57,
+   "d": 4.62,
+   "text": "determine where the roads went, and then randomly populated the content of each"
+  },
+  {
+   "t": 739.19,
+   "d": 6.6,
+   "text": "cell with something like heavy industrial city, light industrial, and it worked pretty well."
+  },
+  {
+   "t": 745.79,
+   "d": 3.57,
+   "text": "Combined with other techniques, this can be extremely useful."
+  },
+  {
+   "t": 749.35,
+   "d": 5.3,
+   "text": "The next one up is Perlin/Simplex Noise, which is used all over the place,"
+  },
+  {
+   "t": 754.65,
+   "d": 2.87,
+   "text": "more than you might think."
+  },
+  {
+   "t": 757.52,
+   "d": 5.06,
+   "text": "So Perlin/Simplex Noise are basically a bunch of gradients combined together"
+  },
+  {
+   "t": 762.58,
+   "d": 3.87,
+   "text": "with a few variables we'll talk about in a moment."
+  },
+  {
+   "t": 766.45,
+   "d": 5.43,
+   "text": "You can generate it in either two or three dimensions. If you look in X/Y value,"
+  },
+  {
+   "t": 771.88,
+   "d": 4.34,
+   "text": "it gives you a number between -1 and 1."
+  },
+  {
+   "t": 776.23,
+   "d": 4.45,
+   "text": "And the nice thing is, if you look at an adjacent one, it will be smoothly"
+  },
+  {
+   "t": 780.68,
+   "d": 5.42,
+   "text": "moving either up or down, relative to the neighboring squares."
+  },
+  {
+   "t": 786.1,
+   "d": 6.85,
+   "text": "It's also continuous, so if you decide to look from X 1 through 2,"
+  },
+  {
+   "t": 792.95,
+   "d": 3.35,
+   "text": "and then decide to zoom in to 1.5 through 2, you'll actually get"
+  },
+  {
+   "t": 796.3,
+   "d": 3.88,
+   "text": "exactly the same shape as you saw on the right-hand side in the first one."
+  },
+  {
+   "t": 800.18,
+   "d": 3.0,
+   "text": "So what do the variables mean? Now, the number of octaves"
+  },
+  {
+   "t": 803.18,
+   "d": 4.8,
+   "text": "give how many different gradients it's mixing in. Gain is how long the various"
+  },
+  {
+   "t": 807.98,
+   "d": 6.3,
+   "text": "gradients last. Lacunarity adds in randomness, and as you can see,"
+  },
+  {
+   "t": 814.28,
+   "d": 6.5,
+   "text": "from the picture on the right-hand side, which I guess is my left, this starts"
+  },
+  {
+   "t": 820.77,
+   "d": 3.2,
+   "text": "to feather it in and make it look a lot more random."
+  },
+  {
+   "t": 823.98,
+   "d": 3.12,
+   "text": "Now, frequency is how frequently each of the various octaves"
+  },
+  {
+   "t": 827.09,
+   "d": 6.25,
+   "text": "peaks. So, what I recommend you do is find a Perlin/Simplex Noise tool"
+  },
+  {
+   "t": 833.34,
+   "d": 3.35,
+   "text": "and simply play with these values until you get something that you like."
+  },
+  {
+   "t": 836.69,
+   "d": 3.23,
+   "text": "So what can you do with them? The answer is actually quite a lot."
+  },
+  {
+   "t": 839.92,
+   "d": 5.38,
+   "text": "The most common use is to make an overworld. Because Perlin"
+  },
+  {
+   "t": 845.31,
+   "d": 3.88,
+   "text": "is deterministic by random seed, every time you use the same seed,"
+  },
+  {
+   "t": 849.19,
+   "d": 3.28,
+   "text": "you get the same map. Now, what I've done here is"
+  },
+  {
+   "t": 852.47,
+   "d": 6.67,
+   "text": "altitudes from -1 to 0 blued out as water, altitudes from 0 to .75"
+  },
+  {
+   "t": 859.14,
+   "d": 4.65,
+   "text": "are in green, shaded as terrain, altitudes above that are marked"
+  },
+  {
+   "t": 863.79,
+   "d": 4.6,
+   "text": "as mountains. And this is very common. You'll find this used in a lot of games."
+  },
+  {
+   "t": 868.39,
+   "d": 3.77,
+   "text": "And as I mentioned, you can zoom in. So as you zoom in, you start to see more"
+  },
+  {
+   "t": 872.15,
+   "d": 3.87,
+   "text": "of the gradient. The problem is that the gradients are actually"
+  },
+  {
+   "t": 876.02,
+   "d": 2.08,
+   "text": "kind of dull."
+  },
+  {
+   "t": 878.1,
+   "d": 3.61,
+   "text": "Now, you can fix that. The best way to fix that is to make a second layer"
+  },
+  {
+   "t": 881.72,
+   "d": 4.03,
+   "text": "of noise. So in this case, we've got a second layer of noise that is much more"
+  },
+  {
+   "t": 885.75,
+   "d": 3.83,
+   "text": "bumpy, has much more fine-grained detail, but looks terrible as"
+  },
+  {
+   "t": 889.58,
+   "d": 4.25,
+   "text": "a continent as a whole. And then as you zoom in,"
+  },
+  {
+   "t": 893.83,
+   "d": 2.62,
+   "text": "you change the percentage of each of the two gradients that you're"
+  },
+  {
+   "t": 896.45,
+   "d": 4.57,
+   "text": "mixing together. So when you're zoomed all the way out like that, you're seeing"
+  },
+  {
+   "t": 901.02,
+   "d": 3.72,
+   "text": "the relatively coherent overworld. As you start to zoom in, you see"
+  },
+  {
+   "t": 904.73,
+   "d": 3.83,
+   "text": "bays, peaks, valleys, troughs. And the great thing is, this is"
+  },
+  {
+   "t": 908.56,
+   "d": 3.29,
+   "text": "actually really easy to implement. There's a lot of really good"
+  },
+  {
+   "t": 911.85,
+   "d": 4.97,
+   "text": "Perlin/Simplex libraries out there. I highly recommend it."
+  },
+  {
+   "t": 916.81,
+   "d": 3.21,
+   "text": "You can use it for anything from making a pirate game with cool seas"
+  },
+  {
+   "t": 920.03,
+   "d": 3.53,
+   "text": "to sail around, or just building the overworld for your map."
+  },
+  {
+   "t": 923.56,
+   "d": 6.23,
+   "text": "You can also use it if you want to generate realistic-looking"
+  },
+  {
+   "t": 929.79,
+   "d": 4.28,
+   "text": "clouds, particles. You can even make wood grain with it, with the right values."
+  },
+  {
+   "t": 934.89,
+   "d": 3.63,
+   "text": "And that brings me to one point that I can't emphasize enough."
+  },
+  {
+   "t": 938.53,
+   "d": 5.82,
+   "text": "You very rarely need to use just one technique on a map."
+  },
+  {
+   "t": 944.34,
+   "d": 5.25,
+   "text": "So here, on the top left, we've used WSP technique to produce a"
+  },
+  {
+   "t": 949.59,
+   "d": 4.65,
+   "text": "pretty linear-looking dwarven fortress. On the right, Cellular Automata"
+  },
+  {
+   "t": 954.24,
+   "d": 4.98,
+   "text": "has made a really open-looking sort of cavern system. It might"
+  },
+  {
+   "t": 959.23,
+   "d": 3.31,
+   "text": "be a dangerous underworld. So running with that theme,"
+  },
+  {
+   "t": 962.54,
+   "d": 4.28,
+   "text": "I simply took the left half of the dwarven fortress and the right half"
+  },
+  {
+   "t": 966.82,
+   "d": 4.8,
+   "text": "of the Cellular Automata, and you have what looks like a fortress"
+  },
+  {
+   "t": 971.62,
+   "d": 5.14,
+   "text": "that suddenly breaks out into a nasty underworld. Well, I thought,"
+  },
+  {
+   "t": 976.77,
+   "d": 3.85,
+   "text": "a better theme for that might be that the dwarves were digging, they"
+  },
+  {
+   "t": 980.62,
+   "d": 2.7,
+   "text": "came to the underworld, and they needed to protect themselves."
+  },
+  {
+   "t": 983.32,
+   "d": 4.68,
+   "text": "So I added a prefab, a predesigned section in the middle, adding fortifications."
+  },
+  {
+   "t": 988.0,
+   "d": 3.85,
+   "text": "And so, with two very simple techniques, you've produced a map that actually"
+  },
+  {
+   "t": 991.85,
+   "d": 4.23,
+   "text": "tells a story, rather than just being a bunch of random rooms."
+  },
+  {
+   "t": 996.09,
+   "d": 4.24,
+   "text": "Another popular combination is take a map and then use DLA"
+  },
+  {
+   "t": 1000.32,
+   "d": 3.38,
+   "text": "to fire particles at it, and blast parts of the map away."
+  },
+  {
+   "t": 1003.7,
+   "d": 3.23,
+   "text": "This starts to look like dwarves failed to pay their maintenance bill,"
+  },
+  {
+   "t": 1006.93,
+   "d": 5.44,
+   "text": "or had a serious water problem, as the map becomes more and more"
+  },
+  {
+   "t": 1012.37,
+   "d": 3.56,
+   "text": "organic-looking while keeping its basic structure."
+  },
+  {
+   "t": 1015.93,
+   "d": 4.68,
+   "text": "I mentioned prefabs before. Prefabs are a great idea."
+  },
+  {
+   "t": 1020.62,
+   "d": 4.4,
+   "text": "So you can make a massively random map, but if you start injecting"
+  },
+  {
+   "t": 1025.02,
+   "d": 3.3,
+   "text": "human design elements into it, then you get the chance to really make the game"
+  },
+  {
+   "t": 1028.31,
+   "d": 1.6,
+   "text": "your own."
+  },
+  {
+   "t": 1029.91,
+   "d": 3.32,
+   "text": "So I've got a prefab here that is definitely not a trap. It's death"
+  },
+  {
+   "t": 1033.23,
+   "d": 3.85,
+   "text": "traps surrounding a treasure chest. You've probably seen that in a lot"
+  },
+  {
+   "t": 1037.08,
+   "d": 3.43,
+   "text": "of console RPGs. You enter a room, you see a chest,"
+  },
+  {
+   "t": 1040.51,
+   "d": 2.4,
+   "text": "with nothing guarding it. You can be pretty sure that"
+  },
+  {
+   "t": 1042.91,
+   "d": 2.52,
+   "text": "something bad's about to happen to you."
+  },
+  {
+   "t": 1045.43,
+   "d": 4.83,
+   "text": "So the room structure makes it relatively easy to place a prefab. You can go"
+  },
+  {
+   "t": 1050.26,
+   "d": 3.96,
+   "text": "through the room list, find a room that's bigger than the prefab, and you know"
+  },
+  {
+   "t": 1054.22,
+   "d": 1.87,
+   "text": "the prefab fits there."
+  },
+  {
+   "t": 1056.09,
+   "d": 3.2,
+   "text": "On a map that doesn't have rooms, it can be a little more tricky."
+  },
+  {
+   "t": 1059.29,
+   "d": 3.7,
+   "text": "What I usually do is I pick random locations, look and see if the prefab"
+  },
+  {
+   "t": 1062.99,
+   "d": 4.66,
+   "text": "will fit, and place them. If it won't, then I don't place it there."
+  },
+  {
+   "t": 1067.66,
+   "d": 5.05,
+   "text": "If I've got a nice, big list of prefabs, then I'll keep going until I've added"
+  },
+  {
+   "t": 1072.71,
+   "d": 3.32,
+   "text": "a few of them and been careful not to add all of them, so the game is"
+  },
+  {
+   "t": 1076.02,
+   "d": 2.28,
+   "text": "different next time I play."
+  },
+  {
+   "t": 1078.31,
+   "d": 3.3,
+   "text": "Very quick change of gears, because the next set of algorithms"
+  },
+  {
+   "t": 1081.61,
+   "d": 4.03,
+   "text": "all are going to rely on this one, the Dijkstra maps."
+  },
+  {
+   "t": 1085.64,
+   "d": 3.05,
+   "text": "I highly recommend that you go to RogueBasin and read"
+  },
+  {
+   "t": 1088.69,
+   "d": 5.13,
+   "text": "The Incredible Power of Dijkstra Maps on there. It is an excellent article."
+  },
+  {
+   "t": 1093.82,
+   "d": 5.0,
+   "text": "And Dijkstra maps are a very powerful tool if you're into making roguelikes."
+  },
+  {
+   "t": 1098.82,
+   "d": 2.52,
+   "text": "I recommend that you learn about them."
+  },
+  {
+   "t": 1101.34,
+   "d": 3.9,
+   "text": "To make them, you start with one or more starting points."
+  },
+  {
+   "t": 1105.23,
+   "d": 4.53,
+   "text": "In this case, the blue knight. The rest of the map gets marked to a sentinel"
+  },
+  {
+   "t": 1109.77,
+   "d": 4.23,
+   "text": "value, meaning you can't go there. And then you look at all the tiles"
+  },
+  {
+   "t": 1114.0,
+   "d": 3.35,
+   "text": "adjacent to your starting point. If you can walk into them, you put"
+  },
+  {
+   "t": 1117.35,
+   "d": 4.72,
+   "text": "a 1 on them. You can get there in one step away from the starting point."
+  },
+  {
+   "t": 1122.07,
+   "d": 4.46,
+   "text": "Then you keep going. So every walkable tile that's next to a 1"
+  },
+  {
+   "t": 1126.53,
+   "d": 3.02,
+   "text": "gets a 2, and a 3, and a 4, and a 5."
+  },
+  {
+   "t": 1129.55,
+   "d": 4.91,
+   "text": "Eventually, you have a complete map that tells you, first of all,"
+  },
+  {
+   "t": 1134.46,
+   "d": 11.7,
+   "text": "the sentinel value means that you can't go there. So now, you've got"
+  },
+  {
+   "t": 1146.16,
+   "d": 5.83,
+   "text": "a list of all the cells you can't use. Likewise, the numbered tiles tell"
+  },
+  {
+   "t": 1151.99,
+   "d": 4.57,
+   "text": "you how far away you are from a starting point."
+  },
+  {
+   "t": 1156.56,
+   "d": 3.58,
+   "text": "So the first big use for this is when you've generated something like"
+  },
+  {
+   "t": 1160.14,
+   "d": 3.81,
+   "text": "Cellular Automata, that can give you chunks of a map that you can't get to."
+  },
+  {
+   "t": 1163.96,
+   "d": 3.72,
+   "text": "Pick a central point, find one that's open, generate a"
+  },
+  {
+   "t": 1167.68,
+   "d": 4.66,
+   "text": "Dijkstra map, and then all of the tiles that are open that have the"
+  },
+  {
+   "t": 1172.34,
+   "d": 3.68,
+   "text": "sentinel value on your Dijkstra map can't be reached, and I've highlighted"
+  },
+  {
+   "t": 1176.01,
+   "d": 3.14,
+   "text": "those in red on the map. You can delete those, because"
+  },
+  {
+   "t": 1179.25,
+   "d": 3.65,
+   "text": "nobody can get there. Or, if you've got a game system"
+  },
+  {
+   "t": 1182.9,
+   "d": 3.62,
+   "text": "that encourages tunneling, then go ahead and hide the stuff that needs"
+  },
+  {
+   "t": 1186.52,
+   "d": 3.92,
+   "text": "to be reached with tunneling in those areas."
+  },
+  {
+   "t": 1190.43,
+   "d": 3.31,
+   "text": "This can also help you with placing a starting point on your map."
+  },
+  {
+   "t": 1193.75,
+   "d": 5.27,
+   "text": "Making sure that you cull the unreachable areas before"
+  },
+  {
+   "t": 1199.02,
+   "d": 4.23,
+   "text": "you pick a starting point ensures that you won't place the player"
+  },
+  {
+   "t": 1203.25,
+   "d": 2.93,
+   "text": "somewhere that they can't get out of, and it avoids the"
+  },
+  {
+   "t": 1206.18,
+   "d": 3.77,
+   "text": "always embarassing case of the map that's only got two tiles"
+  },
+  {
+   "t": 1209.95,
+   "d": 2.75,
+   "text": "that you can actually walk on."
+  },
+  {
+   "t": 1212.7,
+   "d": 2.15,
+   "text": "That has happened to me."
+  },
+  {
+   "t": 1214.85,
+   "d": 3.2,
+   "text": "So typically, to place a starting point, if I know that I want to be on the"
+  },
+  {
+   "t": 1218.04,
+   "d": 3.9,
+   "text": "left, I'll place somewhere in the middle on the left, and then I'll"
+  },
+  {
+   "t": 1221.95,
+   "d": 4.07,
+   "text": "simply look around for a neighboring tile that is open and hasn't been culled"
+  },
+  {
+   "t": 1226.01,
+   "d": 2.08,
+   "text": "by the Dijkstra map."
+  },
+  {
+   "t": 1228.1,
+   "d": 2.48,
+   "text": "To find an endpoint, you can use the same thing, if you want"
+  },
+  {
+   "t": 1230.58,
+   "d": 4.6,
+   "text": "to go left to right. A lot of games prefer to have more of a"
+  },
+  {
+   "t": 1235.18,
+   "d": 4.4,
+   "text": "structured progression. Once you've culled the map,"
+  },
+  {
+   "t": 1239.58,
+   "d": 5.05,
+   "text": "you know that anywhere on the map can be - that is still open after you've"
+  },
+  {
+   "t": 1244.63,
+   "d": 3.4,
+   "text": "removed the areas you can't get to, it's safe to place an exit."
+  },
+  {
+   "t": 1248.03,
+   "d": 6.33,
+   "text": "So you find the rough area you want to put the exit and you place on a nearby"
+  },
+  {
+   "t": 1254.36,
+   "d": 5.29,
+   "text": "open tile. I've gone ahead and marked the optimal route through that map."
+  },
+  {
+   "t": 1260.59,
+   "d": 3.58,
+   "text": "You can also, if you really dislike your player, use Dijkstra to find"
+  },
+  {
+   "t": 1264.18,
+   "d": 3.32,
+   "text": "the least accessible part of the map and put the exit there."
+  },
+  {
+   "t": 1267.49,
+   "d": 2.93,
+   "text": "If they're starting in the middle, this is a really bad idea,"
+  },
+  {
+   "t": 1270.43,
+   "d": 5.73,
+   "text": "because three-quarters of the map is basically irrelevant."
+  },
+  {
+   "t": 1276.16,
+   "d": 3.54,
+   "text": "However, if you want to hide something, this is a great way to do it."
+  },
+  {
+   "t": 1279.7,
+   "d": 2.54,
+   "text": "Find the starting point, then find the least accessible point on"
+  },
+  {
+   "t": 1282.24,
+   "d": 3.6,
+   "text": "the map, hide something there, and you force the player to go on a"
+  },
+  {
+   "t": 1285.84,
+   "d": 3.23,
+   "text": "treasure hunt, if they're gonna get the bonus item."
+  },
+  {
+   "t": 1289.62,
+   "d": 3.13,
+   "text": "That leads to one of my favorite techniques for refining a map,"
+  },
+  {
+   "t": 1292.76,
+   "d": 2.61,
+   "text": "once you've generated it. I call it the \"Hot Path.\""
+  },
+  {
+   "t": 1295.37,
+   "d": 3.15,
+   "text": "Once you've got your start point and your end point, you generate"
+  },
+  {
+   "t": 1298.52,
+   "d": 3.21,
+   "text": "the path between the two. I use ASTAR. In this case,"
+  },
+  {
+   "t": 1301.74,
+   "d": 5.89,
+   "text": "I think I used a Dijkstra map and just walked the distance between the two."
+  },
+  {
+   "t": 1307.62,
+   "d": 4.43,
+   "text": "Then you make another Dijkstra map, using all the points on the path as"
+  },
+  {
+   "t": 1312.06,
+   "d": 5.55,
+   "text": "your hot path. Then, on that Dijkstra map, everything with a tile value of under,"
+  },
+  {
+   "t": 1317.61,
+   "d": 5.54,
+   "text": "say ten, is the hot path and is close, but not necessarily directly"
+  },
+  {
+   "t": 1323.15,
+   "d": 3.5,
+   "text": "on the best path through the dungeon."
+  },
+  {
+   "t": 1326.65,
+   "d": 4.13,
+   "text": "So what can you do with this? Well, if you prefer a less-branchy game,"
+  },
+  {
+   "t": 1330.78,
+   "d": 3.62,
+   "text": "you can use it to remove the parts of the map that are completely irrelevant."
+  },
+  {
+   "t": 1334.4,
+   "d": 6.13,
+   "text": "If your game involves a great deal of progression from, say, left to right,"
+  },
+  {
+   "t": 1340.53,
+   "d": 4.25,
+   "text": "this is a good way to do it, and a good way to not force the player"
+  },
+  {
+   "t": 1344.78,
+   "d": 5.08,
+   "text": "to explore huge, winding labyrinths with no real purpose to them."
+  },
+  {
+   "t": 1349.86,
+   "d": 4.4,
+   "text": "If you're using a room-based generation, then this can be even more useful."
+  },
+  {
+   "t": 1354.26,
+   "d": 3.05,
+   "text": "I've marked in yellow the rooms that are on the hot path that go directly"
+  },
+  {
+   "t": 1357.31,
+   "d": 3.35,
+   "text": "from point A to point B. Also, that means the grey"
+  },
+  {
+   "t": 1360.66,
+   "d": 3.33,
+   "text": "rooms aren't really necessary. Or are they?"
+  },
+  {
+   "t": 1363.99,
+   "d": 4.94,
+   "text": "Maybe the grey rooms could be culled, if you just want to have a go to room,"
+  },
+  {
+   "t": 1368.92,
+   "d": 3.62,
+   "text": "go to room, go to room type of game. Or, the grey rooms could be where"
+  },
+  {
+   "t": 1372.54,
+   "d": 4.05,
+   "text": "you hide bonus things. You might have the yellow rooms mark some breadcrumbs"
+  },
+  {
+   "t": 1376.59,
+   "d": 4.26,
+   "text": "to give the player a clue as to where to go, and teach them by putting"
+  },
+  {
+   "t": 1380.85,
+   "d": 3.15,
+   "text": "really scary things in the grey area that are off the beaten path"
+  },
+  {
+   "t": 1384.01,
+   "d": 3.83,
+   "text": "and only to be done once you're a little more experienced."
+  },
+  {
+   "t": 1388.87,
+   "d": 6.03,
+   "text": "You can also use this knowledge to order the progression of the story."
+  },
+  {
+   "t": 1394.9,
+   "d": 3.45,
+   "text": "So you know that if the player's gonna go through this dungeon, they're"
+  },
+  {
+   "t": 1398.35,
+   "d": 3.87,
+   "text": "probably gonna go through one to nine."
+  },
+  {
+   "t": 1402.22,
+   "d": 5.23,
+   "text": "And that's okay. If you're telling a story, let's say your grandfather"
+  },
+  {
+   "t": 1407.45,
+   "d": 5.18,
+   "text": "tells you that it is your destiny to go out and save the world, he's probably"
+  },
+  {
+   "t": 1412.63,
+   "d": 3.38,
+   "text": "going to want to tell you that somewhere around room one, so you can't avoid"
+  },
+  {
+   "t": 1416.02,
+   "d": 3.98,
+   "text": "the old windbag. Somewhere around two, somebody should show up and"
+  },
+  {
+   "t": 1420.0,
+   "d": 3.68,
+   "text": "tell you that your destiny is futile, you should abandon it,"
+  },
+  {
+   "t": 1423.68,
+   "d": 5.32,
+   "text": "give up, and the whole adventuring thing isn't for you, and so on."
+  },
+  {
+   "t": 1429.6,
+   "d": 3.2,
+   "text": "Alternatively, you might have decided that you wanted to do the old"
+  },
+  {
+   "t": 1432.8,
+   "d": 3.4,
+   "text": "saw of the locked door that has a key somewhere on the map."
+  },
+  {
+   "t": 1436.2,
+   "d": 4.82,
+   "text": "Supposing that you've decided that room five is gonna be where the locked"
+  },
+  {
+   "t": 1441.01,
+   "d": 4.12,
+   "text": "door shall be, it would be a good choice because you can do a flood-fill and"
+  },
+  {
+   "t": 1445.13,
+   "d": 4.1,
+   "text": "discover that there's nowhere else, there's no alternates to going through"
+  },
+  {
+   "t": 1449.23,
+   "d": 2.53,
+   "text": "the exit from room five."
+  },
+  {
+   "t": 1451.76,
+   "d": 4.08,
+   "text": "So you place a locked door there, and now you absolutely know that the key"
+  },
+  {
+   "t": 1455.85,
+   "d": 3.21,
+   "text": "has to be somewhere between rooms one and four, for this to be a"
+  },
+  {
+   "t": 1459.06,
+   "d": 3.85,
+   "text": "solvable puzzle. It would really suck if you decided to spawn the key"
+  },
+  {
+   "t": 1462.91,
+   "d": 4.6,
+   "text": "in room six, and leave yourself with a map that cannot be solved"
+  },
+  {
+   "t": 1467.51,
+   "d": 2.92,
+   "text": "without finding some other way to open the door. You know, unless"
+  },
+  {
+   "t": 1470.43,
+   "d": 4.67,
+   "text": "of course that's your point. And really, that is the point"
+  },
+  {
+   "t": 1475.09,
+   "d": 3.47,
+   "text": "of what I've been trying to say, is guide your randomness"
+  },
+  {
+   "t": 1478.56,
+   "d": 3.12,
+   "text": "and then use algorithms to check your randomness, to make sure that"
+  },
+  {
+   "t": 1481.67,
+   "d": 2.88,
+   "text": "it matches what you want."
+  },
+  {
+   "t": 1484.56,
+   "d": 2.26,
+   "text": "I've written quite a bit about other algorithms on my"
+  },
+  {
+   "t": 1486.82,
+   "d": 4.28,
+   "text": "roguelike tutorial, tried really hard to be language-agnostic, even though"
+  },
+  {
+   "t": 1491.11,
+   "d": 4.13,
+   "text": "all the examples are in Rust. So, I do recommend checking there"
+  },
+  {
+   "t": 1495.24,
+   "d": 3.45,
+   "text": "for a few more. I wanted to talk about Wave Form Collapse, and realized"
+  },
+  {
+   "t": 1498.69,
+   "d": 2.33,
+   "text": "that I needed another 30 minutes."
+  },
+  {
+   "t": 1501.82,
+   "d": 5.08,
+   "text": "Alright, so like I said before, the source code for this talk is all up on my GitHub."
+  },
+  {
+   "t": 1506.9,
+   "d": 3.4,
+   "text": "That repost should have gone public a few minutes ago."
+  },
+  {
+   "t": 1510.3,
+   "d": 4.41,
+   "text": "And just to be a terrible shill one more time, my book"
+  },
+  {
+   "t": 1514.72,
+   "d": 3.58,
+   "text": "Hands-on Rust: Effective Learning through 2D Game Development and Play"
+  },
+  {
+   "t": 1518.3,
+   "d": 5.54,
+   "text": "will be in beta on PragProg relatively soon, next few weeks, as long as"
+  },
+  {
+   "t": 1523.84,
+   "d": 3.83,
+   "text": "I get off my butt and finish editing it, and in your favorite bookstore"
+  },
+  {
+   "t": 1527.67,
+   "d": 3.6,
+   "text": "pretty soon. If there's any questions, I'd be happy to take them."
+  },
+  {
+   "t": 1533.17,
+   "d": 2.21,
+   "text": "Noah: Wonderful. Thank you so much for that talk."
+  },
+  {
+   "t": 1535.38,
+   "d": 4.54,
+   "text": "Herbert: Thanks for having me. Noah: Yeah. We have a few questions."
+  },
+  {
+   "t": 1540.56,
+   "d": 3.69,
+   "text": "The first one is from Darren Gray, who asks, \"How do you make"
+  },
+  {
+   "t": 1544.25,
+   "d": 4.2,
+   "text": "generated maps not look very samey?\" For example, he says that"
+  },
+  {
+   "t": 1548.45,
+   "d": 4.17,
+   "text": "he can always notice when an overworld is generated with"
+  },
+  {
+   "t": 1552.62,
+   "d": 2.57,
+   "text": "Perlin noise."
+  },
+  {
+   "t": 1555.18,
+   "d": 3.82,
+   "text": "Herbert: Yeah, that's actually a fun one, and I play spot the Perlin."
+  },
+  {
+   "t": 1559.0,
+   "d": 4.18,
+   "text": "One of the best things to do is to generate multiple noise maps"
+  },
+  {
+   "t": 1563.18,
+   "d": 4.55,
+   "text": "and mix them together. So if you've decided that this region is mountains,"
+  },
+  {
+   "t": 1567.73,
+   "d": 9.33,
+   "text": "start mixing in height values from another more mountainous-looking height map."
+  },
+  {
+   "t": 1577.06,
+   "d": 3.08,
+   "text": "That gets you something that is, as well as just going up,"
+  },
+  {
+   "t": 1580.14,
+   "d": 2.85,
+   "text": "actually goes up and down, up and down, and starts to look more like"
+  },
+  {
+   "t": 1582.99,
+   "d": 2.72,
+   "text": "mountains and less like a boring little gradient."
+  },
+  {
+   "t": 1585.71,
+   "d": 3.45,
+   "text": "You can also have a lot of fun generating your Perlin, and then"
+  },
+  {
+   "t": 1589.16,
+   "d": 3.47,
+   "text": "run something like a Russian on it. Running a simpler"
+  },
+  {
+   "t": 1592.63,
+   "d": 3.48,
+   "text": "Russian simluator, especially if you decide that some rocks are"
+  },
+  {
+   "t": 1596.11,
+   "d": 2.81,
+   "text": "harder than others, gives you a beautiful map in no time."
+  },
+  {
+   "t": 1598.92,
+   "d": 2.47,
+   "text": "I think that's how World Machine works."
+  },
+  {
+   "t": 1602.34,
+   "d": 4.6,
+   "text": "Noah: Cool. Our next question is do you know any techniques for"
+  },
+  {
+   "t": 1606.94,
+   "d": 4.67,
+   "text": "generating vertical structures, or Z levels in map generation?"
+  },
+  {
+   "t": 1612.32,
+   "d": 2.98,
+   "text": "Herbert: That is something I am honestly terrible at."
+  },
+  {
+   "t": 1615.31,
+   "d": 3.25,
+   "text": "I've seen Wave Form Collapse used to make some absolutely"
+  },
+  {
+   "t": 1618.56,
+   "d": 4.46,
+   "text": "amazing Voxel-based cities. I can't honestly pretend that I know how"
+  },
+  {
+   "t": 1623.02,
+   "d": 2.43,
+   "text": "to do that."
+  },
+  {
+   "t": 1626.35,
+   "d": 3.44,
+   "text": "Noah: Cool. That looks like all of the questions that people have"
+  },
+  {
+   "t": 1629.79,
+   "d": 2.6,
+   "text": "put in."
+  },
+  {
+   "t": 1632.38,
+   "d": 3.24,
+   "text": "But thank you so much, and then I'm sure if you hang out"
+  },
+  {
+   "t": 1635.62,
+   "d": 3.77,
+   "text": "somewhere in the social space, people will come and ask you more questions."
+  },
+  {
+   "t": 1639.39,
+   "d": 2.96,
+   "text": "Herbert: Yes, I should be around there and on the Discord tonight."
+  },
+  {
+   "t": 1642.35,
+   "d": 4.05,
+   "text": "I'll be editing my book and alternating between the two. Thank you."
+  },
+  {
+   "t": 1646.4,
+   "d": 1.76,
+   "text": "Noah: Cool, thanks so much."
+  }
+ ]
+}

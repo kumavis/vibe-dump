@@ -1,0 +1,85 @@
+{
+  "id": "GMkBT4UbvAs",
+  "title": "Nicholas Feinberg - ??learndb's silliest corners",
+  "speaker": "Nicholas Feinberg",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=GMkBT4UbvAs",
+  "talk_type": "culture",
+  "summary": "A light lightning talk touring the silliest entries in the Dungeon Crawl Stone Soup learndb, the community-curated IRC knowledge base of well over 10,000 entries. Feinberg covers player-curated bad ideas (some of which got implemented), how the learndb preserves the game's history, player misunderstandings of probability versus genuine bugs, odd special cases like the slime vaults and monster-name pluralization, and the learndb's joyful inaccuracy. It is mostly community culture with a few developer lessons.",
+  "games": [
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "community knowledge base",
+      "kind": "history",
+      "claim": "Dungeon Crawl Stone Soup's learndb is a player-curated knowledge base of over 10,000 entries that includes drama, vanity entries and a curated list of rejected player suggestions.",
+      "detail": "Feinberg describes players curating thousands of other players' suggestions, all of which they dislike, such as scurvy for not eating fruit or echolocation navigation for vampires in bat form.",
+      "t": 66,
+      "quote": "Players have curated a set of thousands of other player suggestions",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "long-running development",
+      "kind": "example",
+      "claim": "Long-lived roguelikes like Crawl inevitably implement some ideas that sound like bad suggestions, such as a cat race with nine lives or an April Fools' class.",
+      "detail": "The learndb has an entry for implemented bad ideas: the cat race with nine lives (added ten years earlier), a class starting with a book of party tricks that began as an April Fools' joke, and, jokingly, a graphical tile interface.",
+      "t": 96,
+      "quote": "Crawl has been around for awhile and it is inevitable a few of those bad ideas would eventually make it into the game",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "community archives",
+      "kind": "history",
+      "claim": "A community knowledge base like Crawl's learndb preserves the history of a game that changes heavily over time, recording how monsters and items used to work.",
+      "detail": "Entries record that the wraith used to drain experience seven years earlier, and that the ankus weapon existed about ten years ago; Feinberg is amused that people discuss old versions like Roman artifacts.",
+      "t": 139,
+      "quote": "The game has gone through many hand and changed a lot over time. There is a real history to the",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "warning",
+      "claim": "Roguelike developers repeatedly face player misunderstandings of probability: streaks like missing five attacks in a row or a rare item appearing in consecutive games feel broken but usually aren't.",
+      "detail": "Feinberg's examples include rare gold dragon armour showing up on the third floor in back-to-back games. Developers usually have to answer that the game is probably not broken.",
+      "t": 221,
+      "quote": "one thing that roguelikedevs run into again and again is misunderstandings of probability. Improbable events will sometimes happen",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "bug reports",
+      "kind": "warning",
+      "claim": "Developers who dismiss probability complaints can be wrong: in Crawl a player correctly noticed summoned ice beasts doing no damage a full year before the developers did.",
+      "detail": "A player reported their summoned ice beasts no longer did damage, and the developer said stuff happens; in fact a bug meant the elemental damage was printed but not applied.",
+      "t": 292,
+      "quote": "Sometimes the dev takes a full year longer to notice the bug than one particular player did",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "edge cases",
+      "kind": "example",
+      "claim": "Crawl's Slime Pits vault, which opens when the Royal Jelly dies, needed special-case code for unusual ways the jelly can be removed, such as polymorph or the player's own ghost.",
+      "detail": "Polymorphing the jelly also unlocks the vaults; and Crawl now has code to not open the vaults if the player dies, returns in a later game and kills their own ghost there.",
+      "t": 352,
+      "quote": "Crawl does have code to not open the slime treasure vaults in that case",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "message text",
+      "kind": "technique",
+      "claim": "Text-heavy roguelikes need extensive special-case code to pluralize monster and item names correctly in messages; Crawl has hundreds of lines for it.",
+      "detail": "Simple rules like adding s fail for names like hippogriff or catoblepas. Asked in Q&A why plurals aren't just stored with names, Feinberg notes there are hundreds of creatures and the same code handles item names.",
+      "t": 369,
+      "quote": "To print the messages correctly, the game needs to know not just how to describe individual monsters but how to talk about groups",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

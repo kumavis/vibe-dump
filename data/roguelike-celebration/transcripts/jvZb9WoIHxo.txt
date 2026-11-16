@@ -1,0 +1,54 @@
+Linas Gabrielaitis - Fictions of Infinity in Geological Finitudes
+Speaker: Linas Gabrielaitis
+https://www.youtube.com/watch?v=jvZb9WoIHxo
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Introduction to speaker
+
+[0:00:09] We are going to head into a couple lightning talks to wrap up this morning's clot which is exciting. These interactive speakers are going to try to go fast. You don't have to go super fast. Get through some exciting ideas. Our first lightning speaker is Linas who is starting a PhD at the intersection of game studies and literature exploring the geological perspectives within game mechanics which is very interesting. I want to give you time to get right into your talk, Linas. LINAS: Hello. Thank you. Hopefully everything is OK with my microphone. My name is Linas. I am doing a PhD at the gamification group in Finland. The title of my talk is Fictions of Infinity in Geological
+
+## Defining fictions of infinity
+
+[0:01:03] Finitudes which is a complicated title. In the talk I will explain what I mean by the title and what the concepts are implied in it so hopefully I can inspire maybe new ideas and game mechanics. First of all, what do I mean by finesses of if -- fictions of infinity? I am talking about roguelikes. They make use of procedurality for emergent content and also death is an inevitable and central part of the experience. So I see a lot of similarities and that's what I am going to be doing in the presentation and going back and forth between roguelikes and geology and geological layers are working with logic and death is also central in geology. Some levels are made up of
+
+[0:02:03] death or previously alive matter, sedimentary rock is made up of skeletons and shells that have been squeezed and formed into a rock. So besides death, I will also be talking a lot about depth which is also present in roguelikes as I hope to show. Let's get into the deaths and the depths.
+
+## Death and depth in gaming
+
+[0:02:34] This is a diagram of how a roguelike game might look like. We have a town where you do your upgrades, shopping and then you dive deep into the dungeon where with each layer you kind of get progressively more complicated. This diagram is from the Diablo Pitch in 1994 where they first proposed how a Diablo game could look like in the roguelike format. Something interesting is we were talking already about death and how to position death in roguelike-ness. I am going to read the sentence. If one of the errors kill the fighter, the character will be completely e raced from the hard drive and the player must start from scratch. Besides death, something I am picking apart is the deepness and depth. Deeper levels will
+
+[0:03:34] contain progressively more difficult creatures and hazards. A character's quest ends with locating Diablo deep in the dungeon. Now I annotated the dungeon with a death and brings you back to the depth which you progressively dive deeper. This is how a dungeon might look like after. After you complete it, you then dive deeper. Here I am going to get into the start of
+
+## Geological time and science
+
+[0:04:05] geology or what we now call geology. This is the first geologist. He was digging around and noticed the deepening you go the older everything gets so that cause kind of the first spatialization of time and vertical diagraming of time. And that also kind of kicked off a whole other branch of I guess deep sciences or deep sciences of depth. So for example, before psychology became psychology there was depth psychology so for example the deeper you go to someone the more traumatic things are and interpersonal relationships, the longer you stay with someone, the deeper you go into them. Depth is time related.
+
+[0:05:12] And of course, dwarfs in Dwarf Fortress are great. Deep sciences of the depth. They use mines which are vertically constructed. Something that's similar to mines is oil wells. They are also very vertical structures. So it is interesting that oil has also natural tendency to move upwards. So it seeps through layers that have tiny holes but then gets trapped by this kind of layer of rock which it cannot pass. So it I guess here I am seeing roguelikeness in the way oil is working in the sense it always tries to go up. It is also roguelikeness a little bit because oil is something that has -- it used to be organic. It used to be alive but now it is kind of undead organic matter which FWHAUTZ was not allowed to die or fossilize properly
+
+[0:06:18] so it is a kind of a trapped bundle of energy which we are now helping bring vertically up.
+
+## Literary explorations of depth
+
+[0:06:30] Another vertical science is the study of holes and this book has no offer and no dates. It is just a collection of holes. Don DeLillo wrote about holes. Holes are interesting. There are books about holes. Now I am going to dive deeper into another story called Ratner star. There they explore or predict this great hole which is kind of described as a descent to a geological driver or maybe a geological fetish. This need to go deeper. At a certain depth, they discover that ancient artifacts actually begin to grow more complex which is interesting because well, real geology works the opposite way. Things
+
+[0:07:32] get more primitive the deeper you go. Here are some diagrams or some quotes to illustrate this. Humans are more advanced the deeper we dig. We could say the larvae are tastier the deeper I dig. And the deeper we went -- I am reminded of the way progression works in roguelikes where the deeper you go, the more complex everything is, the more you progress. Now going back to the story, it ends, the story ends with an event where they find out they have been receiving these messages which they thought came from space but later find out it came from deep time below. Here is another inversion of space. At the time it was the space race
+
+## Procedurality and infinities
+
+[0:08:31] where everyone was obsessed with the verticality upward of the space. But then DeLillo was writing about the downwards verticality’s. I have been using this friction or comparison between there two concepts -- the two. I think it is a bad example to do this comparison but I think it also illustrates something about the way star bound for example was using procedurality to also kind of promise an infinite amount of stars or Infinite amount of planets to explore. While there was a contradicted and constrained and you know there is an ocean on the left and lava at the bottom. Of course, no man's sky had this road on the promise of procedural generation to generate that the deep infinity. I think someone calculated you
+
+[0:09:33] need 600,000 real life years to explore all the planets so, of course, nobody has time for that. This reminds me of another story by Borges this time. He wrote about the library of babel. It is a library that has every conceivable book that can be written. Not only books that have been written but books that can be possibly written. So it is an infinitely deep library. I am going to read out the quote. The universe which others call the library is composed of an indefinite and perhaps infinite number of hexagonal galleries vast airshafts. And they talk about the books being unique. Here is a quote. And then kind of the story
+
+[0:10:41] goes that actually the characters are lost in this infinity. They continuously talk about this lack of meaning in the end results of people jumping down these railings.
+
+## Folding as game mechanics
+
+[0:10:57] Now that I am getting to this deep space promises some sort of infinite procedurality with a question mark. What is then the deep time of procedurality? Here I am kind of well provoking in some way. I am trying to look for these deep procedurality. And so I am going to draw from like is the science of how mountains are moving and in some way they are not moving but then they are moving in place. So they are not moving but actually moving in on themselves or turning over themselves. So that's a mechanism of folding. My provocation here, I guess I am trying to propose folding as a mechanism of how maybe a deep procedurality could look like.
+
+[0:12:07] But then it is proposing with a question mark could even procedural layers look like that? Also because of folding you have these mountains that kind of get cut off in the middle. So, yeah, folding. Folding for roguelikes or for deep roguelikes. And yeah, so Thank you. Thank you very much. Thank you for organizing and, hopefully, you enjoyed. ALEXEI: Thank you. No, that was great. Yeah, people really enjoyed it. You had a lot of
+
+## Q&A and closing remarks
+
+[0:13:00] quotable like what do you mean oil goes up? Like we had to think about the concept of depth. Yeah, I think that that's really interesting. I loved to see -- we talk a lot about map generation but I have never seen the idea of map generation taking inspiration from layers and thinking about those in a geological and dime related sense -- time. That is really interesting. We might have time for one like one question if anyone wants to get one up there. We do. It is kind of a comment but I think it is interesting. There is a sense in which NetHack's bones levels are kind of a proto folding. You get previous experiences kind of folded into future games. I know bones is another concept you considered getting into it. LINAS: Yeah, I would like to see a diagram of how that folding works in NetHack I think most of this works on a diagram level and
+
+[0:14:06] sketching is an important part of making games so I would like to see a drawing. ALEXEI: I know with NetHack there is not a lot of thought of where in the layers it should fit. It is just the extra piece. Cool. Thank you. I think I will let you go since I want to make sure we get to the next lightning talk but we will have breakout discussion. All these talks are recorded. A few people have asked about that so you can preference them in the future. Excellent.

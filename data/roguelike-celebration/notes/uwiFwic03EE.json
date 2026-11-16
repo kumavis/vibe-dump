@@ -1,0 +1,140 @@
+{
+  "id": "uwiFwic03EE",
+  "title": "Alexander King - Don't Pick Just One: Set-Based Card Mechanics in Roguelike-Deckbuilders",
+  "speaker": "Alexander King",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=uwiFwic03EE",
+  "talk_type": "design",
+  "summary": "Alexander King contrasts the dominant 'singleton' deckbuilding pattern (add one card at a time, often pick one of three) with an under-used alternative: set-based deckbuilding, where cards enter the deck in groups, usually tied to equipment. He lays out the design affordances each structure pushes toward: singleton drafting needs simple, mutually balanced cards, a large pool and pruning, while sets mean fewer but richer decisions, thematic and synergistic groupings, more viable archetypes, less need for pruning, more balance levers and more focus on playing the deck. Examples include Card Hunter, Card Quest, Star Trek Fleet Captains, Star Wars: The Card Game, Deep Sky Derelicts and Trials of Fire; Q&A connects the idea to dice-builders.",
+  "games": [
+    "Card Hunter",
+    "Card Quest",
+    "Star Wars: The Card Game",
+    "Deep Sky Derelicts",
+    "Trials of Fire",
+    "Monster Train"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "deckbuilders",
+      "kind": "principle",
+      "claim": "Nearly all roguelike deckbuilders centre on adding or removing single cards, usually as a pick-one-of-three choice, and this structure pushes the whole design in particular directions.",
+      "detail": "King calls choice-of-three almost a cliché because it works so well. He argues these affordances are neither good nor bad, but the structure of the mechanic lends itself to certain designs, and a given game can embrace or push against each one.",
+      "t": 214,
+      "quote": "most all deck builders are about adding and removing single cards from a deck",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "card drafting",
+      "kind": "principle",
+      "claim": "Singleton card drafting is high-friction, so deckbuilding must be spread across the run and each card must stay simple enough to evaluate individually.",
+      "detail": "Because the player adds cards one by one, many decisions are needed, which favours building over a whole run rather than all at once. Every card must be assessed individually and the deck keeps changing, which caps how complex any single card can be.",
+      "t": 287,
+      "quote": "the player needs to evaluate every single card individually. And so there's an upper limit on how complex any given card can be",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "card pool balance",
+      "kind": "principle",
+      "claim": "Singleton drafting forces designers to balance every card against all others, build a large pool of viable cards, and provide pruning to remove bad ones.",
+      "detail": "If cards were not balanced within a tier, add-or-skip decisions would be too easy. Since players see many cards they do not take, the game needs a big universe of good cards, plus trashing to filter out starter cards or picks that stopped being useful.",
+      "t": 339,
+      "quote": "the game needs a high quantity of viable cards even if the player isn't immediately using them",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "set-based deckbuilding",
+      "kind": "example",
+      "claim": "Card Hunter makes each hero's 36-card deck manageable by having each equipped item contribute a group of cards, so a full deck takes about 10 picks instead of 36.",
+      "detail": "Three heroes with 36-card decks would mean 108 cards, far too fiddly to manage card by card. Each item adds three cards (six for weapons), and the UI shows what an item gives, what it replaces and the resulting deck.",
+      "t": 505,
+      "quote": "To fill out a 36-card deck here, we're making 10 picks instead of 36",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "set-based deckbuilding",
+      "kind": "example",
+      "claim": "Tabletop set-based deckbuilders let a player assemble a viable 40-card deck by picking four themed sets of ten, rather than making 40 separate choices.",
+      "detail": "King cites a Star Trek fleet card game from 2011 as possibly the first set-based deckbuilder and Star Wars: The Card Game, an Android: Netrunner-like game, where sets are themed around characters.",
+      "t": 599,
+      "quote": "you're making four choices to assemble this this deck of 40 cards instead of needing to make 40 choices",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "complexity budget",
+      "kind": "principle",
+      "claim": "A game has a fixed complexity budget, and set-based deckbuilding spends it on fewer but more agonising decisions instead of many quick ones.",
+      "detail": "Instead of swapping one card for one card, a player may compare six cards against six others. King considers these heavier, more agonising choices a good thing.",
+      "t": 626,
+      "quote": "a game has a fixed complexity budget and it's about how you you can allocate that",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "thematic card groups",
+      "kind": "technique",
+      "claim": "Grouping cards into sets lets cards take meaning contextually, enabling thematic bundles and pre-built mini-combos that don't need to stand alone.",
+      "detail": "A huge pickaxe in Card Hunter gives an armour-ignoring impale card, powerful cards with drawbacks, and an 'unwieldy' drawback card. Card Quest's cursed dagger gives two sets of cards, unique to that item, that build up and use a resource that eventually hurts you, giving players working parts for distinctive decks.",
+      "t": 654,
+      "quote": "you can make synergistic or thematic groupings of cards because the cards don't need to stand alone",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "deck archetypes",
+      "kind": "principle",
+      "claim": "Set-based deckbuilding gives designers enough control over deck composition to support more viable archetypes and to reduce the need for pruning.",
+      "detail": "In Card Hunter, too many movement cards would be a problem, but since typically only the boots slot gives movement cards, the player ends up with roughly the right number. Complex strategies are easier to support than when cards arrive one by one at random.",
+      "t": 743,
+      "quote": "pruning and filtering mechanics aren't really needed as much because the designer has so much more control over the card combinations",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balancing",
+      "kind": "technique",
+      "claim": "Balancing sets of cards gives more tuning levers than balancing single cards: you can weaken the good card, soften the bad one, or change the set's composition.",
+      "detail": "King's example is a Staff of the Inferno item: Ember Burst could be made less good, Combustible less bad, or a Firestorm card swapped for something else. It is the composition of the item that is balanced.",
+      "t": 778,
+      "quote": "because you're balancing sets of cards together rather than build balancing individual cards, you have a lot more levers in the tuning",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "set-based deckbuilding",
+      "kind": "principle",
+      "claim": "Set-based deckbuilding shifts focus from building the deck to playing it: singleton building is assembling an engine from parts, sets are building a fun car from working parts.",
+      "detail": "Players are not agonising over each card added, so they focus more on playing the cards they have. King suggests it may suit roguelike deckbuilders where deckbuilding is not the overwhelming focus; Deep Sky Derelicts and Trials of Fire show sets can still be assembled over a run.",
+      "t": 861,
+      "quote": "you're finding working parts and you're trying to build a car that is fun to drive",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "deckbuilders",
+      "kind": "open-question",
+      "claim": "Set-based deckbuilding is under-explored because no knockout hit has used it, leaving an open opportunity for designers.",
+      "detail": "King presents the talk as a 'selfish' pitch for a mechanic he wants to see more of, arguing it enables different play styles and that a successful game would spawn iterations.",
+      "t": 927,
+      "quote": "there aren't that many examples of this because there hasn't been like a knockout hit using it but that's just an opportunity",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "bad cards",
+      "kind": "technique",
+      "claim": "Sets solve how to get bad cards into a player's deck voluntarily: players accept an item or die with harmful parts for its strong parts, planning to mitigate the downside.",
+      "detail": "In Q&A, the host compares dice-builders, where a die is like six cards with some good, blank or negative faces. King contrasts Monster Train events that force bad cards in with Card Hunter, where choosing an item mixing good and bad cards is a deliberate player decision.",
+      "t": 1115,
+      "quote": "the big problem it solves is how to get bad cards into the player's deck",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

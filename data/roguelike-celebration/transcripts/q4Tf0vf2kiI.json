@@ -1,0 +1,998 @@
+{
+ "id": "q4Tf0vf2kiI",
+ "url": "https://www.youtube.com/watch?v=q4Tf0vf2kiI",
+ "title": "Spencer Egart - Procedurally Generated Ritual Spell Systems",
+ "speaker": "Spencer Egart",
+ "talk_title": "Procedurally Generated Ritual Spell Systems",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-22",
+ "duration_s": 908,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nSpencer currently works at Monomi Park as a Game Engineer. Outside of work, he likes to dabble in procedural generation, game tooling, and roguelike development.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 63,
+   "title": "Defining game rituals"
+  },
+  {
+   "start": 116,
+   "title": "Procedural generation"
+  },
+  {
+   "start": 185,
+   "title": "Inspiration and design"
+  },
+  {
+   "start": 262,
+   "title": "Avoiding menu reliance"
+  },
+  {
+   "start": 351,
+   "title": "Building the generator"
+  },
+  {
+   "start": 486,
+   "title": "Data and associations"
+  },
+  {
+   "start": 520,
+   "title": "Execution flow"
+  },
+  {
+   "start": 627,
+   "title": "Interpreting actions"
+  },
+  {
+   "start": 729,
+   "title": "Context and narrative value"
+  },
+  {
+   "start": 806,
+   "title": "Conclusion"
+  },
+  {
+   "start": 813,
+   "title": "Q&A session"
+  },
+  {
+   "start": 847,
+   "title": "Refining failures"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2180,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.24,
+   "d": 2.2,
+   "text": "I just said most of this."
+  },
+  {
+   "t": 2.44,
+   "d": 3.0,
+   "text": "I am a dabbler in roguelikes."
+  },
+  {
+   "t": 5.44,
+   "d": 6.74,
+   "text": "I have many unfinished prototype projects as I am sure some of you might be able to"
+  },
+  {
+   "t": 12.18,
+   "d": 1.79,
+   "text": "relate."
+  },
+  {
+   "t": 13.97,
+   "d": 5.27,
+   "text": "My day job is at Monomi Park, I work on Slime Rancher as a game engineer."
+  },
+  {
+   "t": 19.24,
+   "d": 10.33,
+   "text": "My social and Itch things are there if you want to check anything out or give me a follow."
+  },
+  {
+   "t": 29.57,
+   "d": 1.08,
+   "text": "That's the who."
+  },
+  {
+   "t": 30.65,
+   "d": 6.14,
+   "text": "This is the what, how, when, where, and why that I'm going to be talking about."
+  },
+  {
+   "t": 36.79,
+   "d": 1.48,
+   "text": "What do I mean by rituals?"
+  },
+  {
+   "t": 38.27,
+   "d": 1.82,
+   "text": "What do we do with them?"
+  },
+  {
+   "t": 40.09,
+   "d": 6.49,
+   "text": "How can we generate them and use them within a game, specifically within a Roguelike context"
+  },
+  {
+   "t": 46.58,
+   "d": 4.97,
+   "text": "and when where and why I grouped together."
+  },
+  {
+   "t": 51.55,
+   "d": 4.57,
+   "text": "When do we want to use this, within where the structure of the game does it make sense"
+  },
+  {
+   "t": 56.12,
+   "d": 6.59,
+   "text": "and why it is interesting from a developer and from a player perspective."
+  },
+  {
+   "t": 62.71,
+   "d": 7.99,
+   "text": "First, a working definition for rituals for the context of the talk."
+  },
+  {
+   "t": 70.7,
+   "d": 9.63,
+   "text": "A ritual is a repeatable set of actions that cause some effect within the game world indirectly"
+  },
+  {
+   "t": 80.33,
+   "d": 6.48,
+   "text": "and the indirectly is important because you might say if I hit a goblin with my sword"
+  },
+  {
+   "t": 86.81,
+   "d": 4.98,
+   "text": "five times it dies, is that the ritual of goblin slaying?"
+  },
+  {
+   "t": 91.79,
+   "d": 1.72,
+   "text": "No."
+  },
+  {
+   "t": 93.51,
+   "d": 3.58,
+   "text": "For you it can be, sure."
+  },
+  {
+   "t": 97.09,
+   "d": 4.02,
+   "text": "But for the purposes of this talk let's say no."
+  },
+  {
+   "t": 101.11,
+   "d": 6.54,
+   "text": "Really what we are looking at is you do the series of actions and some external force"
+  },
+  {
+   "t": 107.65,
+   "d": 7.27,
+   "text": "or system is what will drive the effect you want to happen to actually occur."
+  },
+  {
+   "t": 114.92,
+   "d": 5.55,
+   "text": "This is something I looked into last year during Proc Jam."
+  },
+  {
+   "t": 120.47,
+   "d": 10.78,
+   "text": "I made a system for generating some rituals just to create endless spellbooks so they"
+  },
+  {
+   "t": 131.25,
+   "d": 4.79,
+   "text": "have proc gen contents, proc gen icons and proc gen text."
+  },
+  {
+   "t": 136.04,
+   "d": 4.88,
+   "text": "I'll read one of these because the font is a bit flowery."
+  },
+  {
+   "t": 140.92,
+   "d": 4.11,
+   "text": "So I have \"A CHARM TO BRING FORTUNE TO YOUR ALLY.\""
+  },
+  {
+   "t": 145.03,
+   "d": 5.36,
+   "text": "It says to shatter a pearl upon the earth, and then shout the name of your ally and look"
+  },
+  {
+   "t": 150.39,
+   "d": 6.56,
+   "text": "toward the west and chant the holy verse and burn a stick of thyme and draw the Bet rune"
+  },
+  {
+   "t": 156.95,
+   "d": 3.72,
+   "text": "in the air to complete the ritual."
+  },
+  {
+   "t": 160.67,
+   "d": 5.51,
+   "text": "The idea is you would be able to do this within a game and it would bring fortune to your"
+  },
+  {
+   "t": 166.18,
+   "d": 2.11,
+   "text": "ally, for whatever that might mean."
+  },
+  {
+   "t": 168.29,
+   "d": 3.55,
+   "text": "Maybe it gives a Bless buff or something like that."
+  },
+  {
+   "t": 171.84,
+   "d": 8.23,
+   "text": "I have one to bless a hammer which is a similar kind of almost hokey-poky esque system for"
+  },
+  {
+   "t": 180.07,
+   "d": 6.0,
+   "text": "doing a particular set of steps to bring about a certain effect."
+  },
+  {
+   "t": 186.07,
+   "d": 5.27,
+   "text": "Some inspiration for this, of course, there is, you know, for as long as humans have existed"
+  },
+  {
+   "t": 191.34,
+   "d": 6.84,
+   "text": "there has been real life practices of various rituals, whether it be magic, or the real"
+  },
+  {
+   "t": 198.18,
+   "d": 4.03,
+   "text": "life study of alchemy, or throughout various religiouns."
+  },
+  {
+   "t": 202.21,
+   "d": 3.68,
+   "text": "But also within roguelikes there is Elbereth."
+  },
+  {
+   "t": 205.89,
+   "d": 4.69,
+   "text": "There's a real life Elbereth there over by the statue."
+  },
+  {
+   "t": 210.58,
+   "d": 7.89,
+   "text": "This is a real ritual that works within Nethack, you can write a magic word on the ground and"
+  },
+  {
+   "t": 218.47,
+   "d": 2.38,
+   "text": "protect yourself from harm."
+  },
+  {
+   "t": 220.85,
+   "d": 8.3,
+   "text": "And in a meta sense, if you look at speed running or glitch techniques within games,"
+  },
+  {
+   "t": 229.15,
+   "d": 6.82,
+   "text": "you might see, you know, players who have discovered \"if I open up this menu, and then"
+  },
+  {
+   "t": 235.97,
+   "d": 7.56,
+   "text": "move in a certain way, and then select this and drop that, I can pass through a wall.\""
+  },
+  {
+   "t": 243.53,
+   "d": 6.06,
+   "text": "Those are rituals that exist between the real world and the game world."
+  },
+  {
+   "t": 249.59,
+   "d": 5.87,
+   "text": "They are not intentional, usually, but they have the same kind of power in that you are"
+  },
+  {
+   "t": 255.46,
+   "d": 7.16,
+   "text": "taking a set of actions and then using it to create a magical effect within a world."
+  },
+  {
+   "t": 262.62,
+   "d": 10.4,
+   "text": "In game terms, I am looking at a system for building these rituals procedurally and interpreting"
+  },
+  {
+   "t": 273.02,
+   "d": 2.36,
+   "text": "them so they can be actually used within a game."
+  },
+  {
+   "t": 275.38,
+   "d": 4.63,
+   "text": "An important thing I wanted to have here is it is not just accessed through a menu."
+  },
+  {
+   "t": 280.01,
+   "d": 5.76,
+   "text": "So you're not going into your 'rituals' menu and hitting Do Bless Ritual, because at that"
+  },
+  {
+   "t": 285.77,
+   "d": 4.94,
+   "text": "point it is no different than any other spell system in a game."
+  },
+  {
+   "t": 290.71,
+   "d": 7.39,
+   "text": "I wanted to cut out all the UI interactions you would have to directly cast this."
+  },
+  {
+   "t": 298.1,
+   "d": 5.82,
+   "text": "Even if you are doing a Bless ritual, you would not get a pop up UI saying \"who do you"
+  },
+  {
+   "t": 303.92,
+   "d": 2.27,
+   "text": "want to cast this on?\""
+  },
+  {
+   "t": 306.19,
+   "d": 4.39,
+   "text": "I think it's important that information is contained within the ritual itself."
+  },
+  {
+   "t": 310.58,
+   "d": 6.69,
+   "text": "That is one of the challenges when you are generating a set of steps to do these things,"
+  },
+  {
+   "t": 317.27,
+   "d": 9.15,
+   "text": "you need to be aware of what are the requirements that this effect has that I need to satisfy"
+  },
+  {
+   "t": 326.42,
+   "d": 2.31,
+   "text": "through doing the ritual."
+  },
+  {
+   "t": 328.73,
+   "d": 5.26,
+   "text": "So, if the spell needs a target, something that I am doing in this ritual has to say"
+  },
+  {
+   "t": 333.99,
+   "d": 1.98,
+   "text": "who the target is."
+  },
+  {
+   "t": 335.97,
+   "d": 7.02,
+   "text": "If I am blessing you, you know, against certain elements, or if I am, you know, enchanting"
+  },
+  {
+   "t": 342.99,
+   "d": 8.63,
+   "text": "my weapon with a particular type of energy, I need to specify that within the ritual itself."
+  },
+  {
+   "t": 351.62,
+   "d": 2.97,
+   "text": "How do we do that?"
+  },
+  {
+   "t": 354.59,
+   "d": 2.3,
+   "text": "We make a generator."
+  },
+  {
+   "t": 356.89,
+   "d": 8.3,
+   "text": "The generator that I came up with takes a, you know, a big list of all of the verbs and"
+  },
+  {
+   "t": 365.19,
+   "d": 5.57,
+   "text": "nouns that it is interested in, and this list within a game might already exist in some"
+  },
+  {
+   "t": 370.76,
+   "d": 4.56,
+   "text": "form, if you are using some kind of action pattern, you might have all your verbs enumerated"
+  },
+  {
+   "t": 375.32,
+   "d": 5.52,
+   "text": "in some way along with the nouns that they can be associated with."
+  },
+  {
+   "t": 380.84,
+   "d": 5.13,
+   "text": "Basically, we are going to use these to generate our set of steps."
+  },
+  {
+   "t": 385.97,
+   "d": 6.48,
+   "text": "The effects we are interested in, they might require a target, or might require an element,"
+  },
+  {
+   "t": 392.45,
+   "d": 6.45,
+   "text": "or a magnitude which is like how powerful is the effect I am doing."
+  },
+  {
+   "t": 398.9,
+   "d": 5.99,
+   "text": "First what I want to do is create associations between certain types of nouns or verbs and"
+  },
+  {
+   "t": 404.89,
+   "d": 4.95,
+   "text": "these elements or magnitude or what have you."
+  },
+  {
+   "t": 409.84,
+   "d": 1.33,
+   "text": "Some of this might be preauthored."
+  },
+  {
+   "t": 411.17,
+   "d": 5.4,
+   "text": "I might say hey, when I go to generate this, the fire rune is always going to be associated"
+  },
+  {
+   "t": 416.57,
+   "d": 4.98,
+   "text": "with fire because if it is associated with water, nobody is going to understand why that"
+  },
+  {
+   "t": 421.55,
+   "d": 1.81,
+   "text": "is."
+  },
+  {
+   "t": 423.36,
+   "d": 3.57,
+   "text": "Some of it might be something we come up with on the fly, though."
+  },
+  {
+   "t": 426.93,
+   "d": 7.63,
+   "text": "So if you have a whole alphabet of runes, you could say OK, the foo rune is associated"
+  },
+  {
+   "t": 434.56,
+   "d": 7.28,
+   "text": "with water and the thark rune is associated with air and that is a system that can change"
+  },
+  {
+   "t": 441.84,
+   "d": 6.86,
+   "text": "between each run of the game or however often you are generating these."
+  },
+  {
+   "t": 448.7,
+   "d": 8.12,
+   "text": "The cool thing about this is players will learn this over time so you can create parallel"
+  },
+  {
+   "t": 456.82,
+   "d": 1.91,
+   "text": "rituals."
+  },
+  {
+   "t": 458.73,
+   "d": 6.36,
+   "text": "You know, if they find a scrap of paper containing the fire bless ritual that says use the foo"
+  },
+  {
+   "t": 465.09,
+   "d": 5.83,
+   "text": "rune and they know the thark rune is associated with that water they might be able to figure"
+  },
+  {
+   "t": 470.92,
+   "d": 6.91,
+   "text": "it out, if they swap them out they can get a different effect."
+  },
+  {
+   "t": 477.83,
+   "d": 7.08,
+   "text": "Part of what we need to do is create associations and pick steps to satisfy the effects for"
+  },
+  {
+   "t": 484.91,
+   "d": 1.93,
+   "text": "the generator."
+  },
+  {
+   "t": 486.84,
+   "d": 1.0,
+   "text": "This is some of my data."
+  },
+  {
+   "t": 487.84,
+   "d": 1.84,
+   "text": "It is hard to read."
+  },
+  {
+   "t": 489.68,
+   "d": 1.91,
+   "text": "I work in Unity."
+  },
+  {
+   "t": 491.59,
+   "d": 8.55,
+   "text": "I have the different verbs and nouns and they're just tagged with strings to determine what"
+  },
+  {
+   "t": 500.14,
+   "d": 3.46,
+   "text": "can associate with what and I have a whole listing of everything."
+  },
+  {
+   "t": 503.6,
+   "d": 2.9,
+   "text": "This is a very small list."
+  },
+  {
+   "t": 506.5,
+   "d": 6.46,
+   "text": "For any big generator like this, the larger your combination possibility between your"
+  },
+  {
+   "t": 512.96,
+   "d": 8.7,
+   "text": "verbs and nouns, the more interesting and diverse rituals you can come up with."
+  },
+  {
+   "t": 521.66,
+   "d": 6.12,
+   "text": "We start with, you know, we have an effect we want to do like cause protection from some"
+  },
+  {
+   "t": 527.78,
+   "d": 7.59,
+   "text": "element and that is going to require what element and who we are protecting."
+  },
+  {
+   "t": 535.37,
+   "d": 7.67,
+   "text": "We might say hey, our verb is to draw and we want to draw the fire rune and that's establishing"
+  },
+  {
+   "t": 543.04,
+   "d": 5.59,
+   "text": "the element we are going to protect from fire because we have created that association ahead"
+  },
+  {
+   "t": 548.63,
+   "d": 1.97,
+   "text": "of time."
+  },
+  {
+   "t": 550.6,
+   "d": 5.83,
+   "text": "Then we might say hey, you are going to speak the target's name and that will establish"
+  },
+  {
+   "t": 556.43,
+   "d": 1.0,
+   "text": "the target."
+  },
+  {
+   "t": 557.43,
+   "d": 5.06,
+   "text": "So within the context of actually running this within a game world, you would have some"
+  },
+  {
+   "t": 562.49,
+   "d": 6.6,
+   "text": "kind of look up for determining which actual actor game object is associated with each"
+  },
+  {
+   "t": 569.09,
+   "d": 1.0,
+   "text": "name."
+  },
+  {
+   "t": 570.09,
+   "d": 2.59,
+   "text": "You might already have that or you might have some way to do that."
+  },
+  {
+   "t": 572.68,
+   "d": 7.42,
+   "text": "But this speak targets name could just as easily be, you know, burn a scrap of their"
+  },
+  {
+   "t": 580.1,
+   "d": 5.93,
+   "text": "hair or something if you have systems for grabbing those and creating those associations"
+  },
+  {
+   "t": 586.03,
+   "d": 5.7,
+   "text": "between different actions the player can take and entities within your game world."
+  },
+  {
+   "t": 591.73,
+   "d": 9.43,
+   "text": "And, of course, because this is a boring ritual on its own, we pad it out with some structure"
+  },
+  {
+   "t": 601.16,
+   "d": 7.7,
+   "text": "to give it kind of more of a ritualistic flavor rather than just doing two things and an effect"
+  },
+  {
+   "t": 608.86,
+   "d": 2.11,
+   "text": "happens."
+  },
+  {
+   "t": 610.97,
+   "d": 5.35,
+   "text": "You know, in this case, the ritual is step north and draw the fire rune and step south"
+  },
+  {
+   "t": 616.32,
+   "d": 6.66,
+   "text": "and speak the target's name and draw a circle and step to the west and then, magically,"
+  },
+  {
+   "t": 622.98,
+   "d": 6.12,
+   "text": "you have protected your target from fire."
+  },
+  {
+   "t": 629.1,
+   "d": 4.02,
+   "text": "How do we go from that to actually interpreting this within the game world?"
+  },
+  {
+   "t": 633.12,
+   "d": 3.71,
+   "text": "The interpreter system that I built for this is really simple."
+  },
+  {
+   "t": 636.83,
+   "d": 8.09,
+   "text": "It is just taking the list of things in the previous slide and, you know, every action"
+  },
+  {
+   "t": 644.92,
+   "d": 4.23,
+   "text": "that you do within the game you report up to this interpreter saying hey, the player"
+  },
+  {
+   "t": 649.15,
+   "d": 5.75,
+   "text": "stepped north, hey the player did this or that, and we just track progress along each"
+  },
+  {
+   "t": 654.9,
+   "d": 2.14,
+   "text": "of these lists."
+  },
+  {
+   "t": 657.04,
+   "d": 6.88,
+   "text": "I add a bit of fudging for, you know, allowing things in between because you may have to"
+  },
+  {
+   "t": 663.92,
+   "d": 3.98,
+   "text": "do a few intervening actions in order to draw something."
+  },
+  {
+   "t": 667.9,
+   "d": 4.66,
+   "text": "If you need to like take out chalk or something it wouldn't make sense for that to disrupt"
+  },
+  {
+   "t": 672.56,
+   "d": 2.48,
+   "text": "the ritual."
+  },
+  {
+   "t": 675.04,
+   "d": 6.1,
+   "text": "Also, not allowing it to go forever so that you can kind of distinguish between when a"
+  },
+  {
+   "t": 681.14,
+   "d": 4.31,
+   "text": "player is intentionally doing this, or if they happen to accidentally hit all of the"
+  },
+  {
+   "t": 685.45,
+   "d": 6.27,
+   "text": "milestones throughout their 10-hour run and then, you know, suddenly a spell pops off"
+  },
+  {
+   "t": 691.72,
+   "d": 4.26,
+   "text": "and they have no idea why."
+  },
+  {
+   "t": 695.98,
+   "d": 6.31,
+   "text": "From there, we just notify whatever system you already have for doing spells to actually"
+  },
+  {
+   "t": 702.29,
+   "d": 1.6,
+   "text": "do the thing."
+  },
+  {
+   "t": 703.89,
+   "d": 4.15,
+   "text": "So presumably you have been passing up this information to your interpreter."
+  },
+  {
+   "t": 708.04,
+   "d": 4.63,
+   "text": "It says hey, the player has achieved doing this ritual."
+  },
+  {
+   "t": 712.67,
+   "d": 3.55,
+   "text": "We know the information because we have been gathering it through the stuff that they have"
+  },
+  {
+   "t": 716.22,
+   "d": 1.0,
+   "text": "done."
+  },
+  {
+   "t": 717.22,
+   "d": 5.94,
+   "text": "Now, you know, call your action thing to do whatever spell happens and let the player"
+  },
+  {
+   "t": 723.16,
+   "d": 2.39,
+   "text": "know that it happened."
+  },
+  {
+   "t": 725.55,
+   "d": 3.41,
+   "text": "That's the what and the how."
+  },
+  {
+   "t": 728.96,
+   "d": 3.99,
+   "text": "I think the more interesting is when, where, why."
+  },
+  {
+   "t": 732.95,
+   "d": 4.94,
+   "text": "Probably not combat because if you have to do a dance to cast a fireball, you are probably"
+  },
+  {
+   "t": 737.89,
+   "d": 3.47,
+   "text": "not going to live very long in most games but maybe."
+  },
+  {
+   "t": 741.36,
+   "d": 4.49,
+   "text": "Depending on your game maybe that's viable."
+  },
+  {
+   "t": 745.85,
+   "d": 3.51,
+   "text": "I think longer-term effects this makes sense."
+  },
+  {
+   "t": 749.36,
+   "d": 5.85,
+   "text": "Enchanting equipment, applying buffs, healing, doing things - you might do the rituals before"
+  },
+  {
+   "t": 755.21,
+   "d": 3.83,
+   "text": "you go into the a dangerous room if you know there is a boss on the other side of the door"
+  },
+  {
+   "t": 759.04,
+   "d": 5.98,
+   "text": "and have a ritual that will protect you maybe that's worth doing."
+  },
+  {
+   "t": 765.02,
+   "d": 5.18,
+   "text": "You can provide magic effects to characters who would not otherwise have them."
+  },
+  {
+   "t": 770.2,
+   "d": 4.21,
+   "text": "Maybe you can allow fighter class to do the rituals."
+  },
+  {
+   "t": 774.41,
+   "d": 6.01,
+   "text": "They don't normally have access to enchanting but because they found a book with the spells"
+  },
+  {
+   "t": 780.42,
+   "d": 5.37,
+   "text": "in it they can do some of it."
+  },
+  {
+   "t": 785.79,
+   "d": 5.88,
+   "text": "You can embed a textual representation of the rules within in-game books, or dialogue,"
+  },
+  {
+   "t": 791.67,
+   "d": 6.12,
+   "text": "or - players can find these things throughout the world and then use that knowledge."
+  },
+  {
+   "t": 797.79,
+   "d": 4.79,
+   "text": "It is tricking people into the reading your in-game text because you are providing value"
+  },
+  {
+   "t": 802.58,
+   "d": 1.27,
+   "text": "there."
+  },
+  {
+   "t": 803.85,
+   "d": 3.46,
+   "text": "I think that's really neat."
+  },
+  {
+   "t": 807.31,
+   "d": 1.34,
+   "text": "So that's my talk."
+  },
+  {
+   "t": 808.65,
+   "d": 2.07,
+   "text": "Thank you all for listening."
+  },
+  {
+   "t": 810.72,
+   "d": 6.79,
+   "text": "Please give me a follow."
+  },
+  {
+   "t": 817.51,
+   "d": 5.51,
+   "text": "[Applause] >> We have time for one question."
+  },
+  {
+   "t": 823.02,
+   "d": 4.75,
+   "text": ">> There are two questions."
+  },
+  {
+   "t": 827.77,
+   "d": 4.74,
+   "text": "Maybe we have time."
+  },
+  {
+   "t": 832.51,
+   "d": 1.19,
+   "text": "OK."
+  },
+  {
+   "t": 833.7,
+   "d": 6.04,
+   "text": "AUDIENCE: Have you thought about, like, what happens when someone flubs a ritual?"
+  },
+  {
+   "t": 839.74,
+   "d": 4.84,
+   "text": "Or you know, like is there failure?"
+  },
+  {
+   "t": 844.58,
+   "d": 2.58,
+   "text": "Or does weird shit happen?"
+  },
+  {
+   "t": 847.16,
+   "d": 7.74,
+   "text": "SPENCER EGART: If you flub a ritual, I think it is definitely something you could pretty"
+  },
+  {
+   "t": 854.9,
+   "d": 1.0,
+   "text": "easily track."
+  },
+  {
+   "t": 855.9,
+   "d": 5.44,
+   "text": "You know, if we want to say -- because we don't want it to be the case that the first"
+  },
+  {
+   "t": 861.34,
+   "d": 4.32,
+   "text": "step of doing ritual A is that you step to the North."
+  },
+  {
+   "t": 865.66,
+   "d": 3.39,
+   "text": "We don't want to consider it a failure if the player steps to the north and goes north"
+  },
+  {
+   "t": 869.05,
+   "d": 7.04,
+   "text": "again because they are walking north but maybe you can reach a point where you are 90% through"
+  },
+  {
+   "t": 876.09,
+   "d": 5.03,
+   "text": "a ritual, or some percentage that makes sense, where we can say with certainty the player"
+  },
+  {
+   "t": 881.12,
+   "d": 3.3,
+   "text": "is trying to do this thing and sure, yeah."
+  },
+  {
+   "t": 884.42,
+   "d": 5.98,
+   "text": "Maybe they flub a ritual and instead of protecting someone from fire, they set them on fire."
+  },
+  {
+   "t": 890.4,
+   "d": 3.49,
+   "text": "And maybe that's even something we can do intentionally."
+  },
+  {
+   "t": 893.89,
+   "d": 5.42,
+   "text": "Like, now they know, hey, if I tweak this ritual, now I can set people on fire."
+  },
+  {
+   "t": 899.31,
+   "d": 1.81,
+   "text": "Yeah, that would be awesome."
+  },
+  {
+   "t": 901.12,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 902.12,
+   "d": 1.4,
+   "text": "AUDIENCE: Thank you so much."
+  },
+  {
+   "t": 903.52,
+   "d": 0.34,
+   "text": "[Applause]"
+  }
+ ]
+}

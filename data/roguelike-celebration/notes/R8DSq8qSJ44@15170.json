@@ -1,0 +1,167 @@
+{
+  "id": "R8DSq8qSJ44@15170",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 15170,
+    "end": 17040
+  },
+  "title": "Cellular automata in Roguelikes",
+  "speaker": "Scott Anderson",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=15170s",
+  "talk_type": "technical",
+  "summary": "Scott Anderson, a senior graphics engineer at Unity, surveys cellular automata in games, focusing on falling-sand simulation. He traces the lineage from the Falling Sand Game to Noita and the current wave of Noita-likes, explains the common neighbourhoods (von Neumann, Moore, Margolus block updates) and why update order matters, touches on CA map generation, and walks through about fifteen element rules: powders, liquids, gases, fire, electricity, plants and 'alchemy' interactions. The last part covers performance (cache-friendly layouts, parallel block updates, dirty chunks, GPU, compression and a speculative 'hash sand'), deterministic multiplayer, and in Q&A the unsolved interface problem of 3D sand.",
+  "games": [
+    "Noita",
+    "The Falling Sand Game",
+    "The Powder Toy",
+    "Sandspiel",
+    "Minecraft",
+    "Brogue",
+    "Dwarf Fortress",
+    "Sandustry"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "falling sand games",
+      "kind": "history",
+      "claim": "Falling-sand cellular automata were popularised as sandbox toys by the 2005 Falling Sand Game and popularised in games by the roguelite Noita (2019), which is now spawning 'Noita-likes'.",
+      "detail": "Anderson lists sandbox successors (Powder Toy, Powder Game, Sandspiel, Lu Wilson's SandPond and tutorials, Sandboxels) and recent Noita-likes including the factory game Sandustry and a 3D, voxel 'Grimmorium' whose technical complexity he calls insane. Cellular automata also appear elsewhere (Brogue uses them for gases and fire), and competitive sand games predate the Falling Sand Game, e.g. an Atari ST game from 1993 where you drop sand to fill your opponent's screen.",
+      "t": 15274,
+      "quote": "Noto which is a game a rog light roguelike game that you know popularized the usage of these kind of systems in games",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "fluid simulation",
+      "kind": "example",
+      "claim": "Cellular automata already drive fluid and fire in established games: Minecraft and Dwarf Fortress use them for fluids and Brogue for gases and fire, typically tracking how full each cell is.",
+      "detail": "Anderson notes these fluid systems use different density levels. Dwarf Fortress adds extra flood-fill rules that try to keep water at an even level, and the 'slow water' technique uses two states, one moving left and one right.",
+      "t": 15349,
+      "quote": "Broke uses it for gases and fire. Um Dwarf Fortress also uses it for fluid",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Falling-sand games favour the Margolus neighbourhood, a block cellular automaton that updates each small block in isolation and then offsets the block grid by one on the next update to propagate changes to neighbours.",
+      "detail": "Anderson contrasts it with von Neumann (cardinal neighbours, rarely used for sand) and Moore (all surrounding cells, very common). Margolus touches a smaller area and updates fewer cells. He also mentions multi-neighbourhood CA (MNCA), used for organic-looking automata, and the Movable Feast Machine's CA-based programming model.",
+      "t": 15506,
+      "quote": "Margolus which a lot of the talk is going to start talking about this. It's a specifically used for block cellular automa like falling sand",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "update order",
+      "kind": "technique",
+      "claim": "A Moore-neighbourhood falling-sand update must iterate from the bottom up, because a top-down pass in one frame would carry a grain all the way to the floor instead of one cell per update; rising gases then need an inverted, top-down pass.",
+      "detail": "Anderson notes the whole grid is iterated every frame, so iteration order directly determines how far material moves per tick. The Margolus version avoids overlapping neighbourhoods within one pass, letting the overlap happen in the offset second pass.",
+      "t": 15624,
+      "quote": "it would move the sand all the way down to the bottom in a single uh update um and you don't really want that",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cellular automata",
+      "kind": "example",
+      "claim": "Cellular automata generate roguelike maps beyond the classic cave pass: Lauren Smith's method produces traditional-looking roguelike maps from CA alone, and a Game of Life variant that records where cells have lived yields island-like terrain.",
+      "detail": "Anderson describes the 'history' Game of Life experiment as his own from about 20 years ago: each live cell writes a value underneath it, which accumulates into islands. The third example is the classic CA cave generation many roguelikes use.",
+      "t": 15690,
+      "quote": "it generates like kind of more traditional uh looking rogike maps using cellular automa only",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "probabilistic rules",
+      "kind": "technique",
+      "claim": "Cellular automaton rules usually make decisions with random percentage chances, and tuning those probabilities (how fast things burn or freeze, whether sand goes left or right) changes the system's behaviour dramatically.",
+      "detail": "Cells also store extra state such as temperature or lifetime. A paper on probabilistic cellular automata in games introduces a modified Margolus update that alternates its offset to reduce directional bias. In Q&A Anderson says emergent behaviour is often not what you want, so he tunes the probabilities by hand and tests, like any game-feel work.",
+      "t": 15745,
+      "quote": "adjusting the probability an event happens can significantly change how the system behaves like um uh changing how fast things burn or freeze",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "density",
+      "kind": "technique",
+      "claim": "The simple way to make heavy particles sink in a falling-sand liquid is to treat the liquid as empty space for heavier elements and swap the two cells.",
+      "detail": "Some games have full density systems ordering many materials, but swapping is enough to make dropped sand sink to the bottom of water instead of landing on top; some elements can likewise be made lighter so they float.",
+      "t": 15976,
+      "quote": "the simple way to do it is just say let's treat liquids as um empty and swap them",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "element interactions",
+      "kind": "technique",
+      "claim": "Material interactions in sand games are 'alchemy': a cell changes state based on the type of its neighbours, which covers fire, acid, ice, snow, plants and more, while fire and electricity borrow rules from the forest-fire and Wireworld automata.",
+      "detail": "Fire moves randomly upward, ignites flammable neighbours and turns to smoke; electricity uses Wireworld's head, tail and conductor states, modified to work with Margolus updates; plants grow by consuming water; acid destroys neighbours; ice and snow freeze water; wood, oil and magma burn. Animals such as flies and ants can move randomly to consume food like fire does.",
+      "t": 16292,
+      "quote": "alchemy is a change state based on neighboring cell type",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "element rules",
+      "kind": "principle",
+      "claim": "Falling-sand games with hundreds of materials are built mostly from variations on a handful of base movement rules: empty, solid, falling, powder, liquid and gas.",
+      "detail": "Empty space matters because most movement rules move elements into it; solids block movement; falling elements drop; powders also slide diagonally when blocked; liquids additionally slide sideways when the whole row below is occupied; Anderson's gas is an inverted powder rule that randomly dissipates. He says Noita and The Powder Toy each have around 400 elements.",
+      "t": 16383,
+      "quote": "they each have like 400 something elements. So, you can and a lot of them are just kind of variations on those basic rules",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "performance",
+      "kind": "technique",
+      "claim": "Making a cellular automaton fast on modern hardware is mostly about small cell sizes and cache-friendly memory layouts such as Morton (Z-order) curves, since memory, not arithmetic, is the bottleneck.",
+      "detail": "Anderson notes that Z-order layouts are common on GPUs because they linearise the grid while keeping neighbours close in memory.",
+      "t": 16403,
+      "quote": "thinking about like small size elements uh on and um cache friendly layouts because on modern hardware those tend to be the biggest bottlenecks",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "parallelism",
+      "kind": "technique",
+      "claim": "Block cellular automata are embarrassingly parallel because blocks share no data within one update, so they can run across threads (Noita uses a checkerboard of blocks) or one block per GPU thread, and unchanged chunks can be skipped entirely.",
+      "detail": "Other implementations use atomic operations. Anderson first saw the parallel block idea in a Haskell sand implementation. Dirty rectangles or chunks skip regions that cannot change next tick, such as all-empty or all-solid ones; he suggests GPU group-shared memory or wave operations could do both passes in one dispatch.",
+      "t": 16465,
+      "quote": "block cellular automter have this nice property of being like embarrassingly uh parallel",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "compression",
+      "kind": "open-question",
+      "claim": "Falling-sand worlds could be stored sparsely and compressed, with homogeneous chunks as a single value, and even memoised HashLife-style ('hash sand') to save both memory and computation, though Anderson has not seen it tried.",
+      "detail": "He suggests sparse grids in hash tables, quadtrees or octrees, and per-chunk bit depths (1, 4 or 8 bits) depending on how many element types a chunk contains. HashLife, a Game of Life algorithm described in a 1990s Dr. Dobb's article, memoises already computed quadtree states for reuse.",
+      "t": 16664,
+      "quote": "this is an even wilder idea hash sand",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "multiplayer",
+      "kind": "technique",
+      "claim": "Multiplayer falling-sand games should network inputs, not state: keep the simulation, including its random number generation, deterministic and use lockstep or rollback like fighting and RTS games.",
+      "detail": "Rollback re-simulates when inputs disagree, which is expensive for sand unless well optimised; lockstep waits for inputs and adds latency but may suit a sandbox game. Full state sync might only be possible with extreme compression, something like lossless video compression.",
+      "t": 16724,
+      "quote": "for multiplayer send um as long as this the simulation is deterministic. It can beworked, right?",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "3d simulation",
+      "kind": "open-question",
+      "claim": "3D or top-down falling-sand games remain a hard, unsolved interface problem: volumes are small because of memory and compute costs, and it is hard for players to see into a volume.",
+      "detail": "Answering a question about top-down powder games, Anderson says he knows of none that work well, even though his own CPU-side voxel prototype attempts it. His volumes are around 512 cells per side, and he wonders whether VR's volumetric interaction might help.",
+      "t": 16871,
+      "quote": "I actually think it's it's a really hard interface problem",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

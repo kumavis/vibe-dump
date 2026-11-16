@@ -1,0 +1,962 @@
+{
+ "id": "O78uYtUZKYs",
+ "url": "https://www.youtube.com/watch?v=O78uYtUZKYs",
+ "title": "Everest Pipkin-The Fortunate Isles-Fragment Worlds, Walled Gardens & the games that are played there",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1575,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Every game is a fragment world– bordered by the rules of its logic. These boundaries may be spoken out loud (don’t step on the cracks! the floor is lava!) or may be programmed (the end of traversable ground, the rim of the map, an invisible wall that plays a bonk sound effect when you walk into it). Such edges, encircling, make the space of play. These worlds are defined by their boundaries– they exist floating. This talk takes as its center the concept of the walled garden, expanding it out to include games and games spaces. It looks at ornamental gardens, cloisters and isolate spaces, and even mythological or utopian fantasies of worlds apart, and seeks to connect the logic of potent isolation to the games we make and play. By examining historical narratives of boundaries, walls, and edges as applied to constructed spaces, this talk thinks about processes of worldbuilding and systems design as a methodology of gardening, with all of its attendant violences (against the slugs, yes, but also in their construction out of the world)– and looks as well beyond the boundary, where the garden stops and a wildness of bugs, errors, logical failures and edge cases begin.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to world play"
+  },
+  {
+   "start": 120,
+   "title": "The unicorn tapestries"
+  },
+  {
+   "start": 329,
+   "title": "Architecture as enclosure"
+  },
+  {
+   "start": 509,
+   "title": "Utopian hodgepodge spaces"
+  },
+  {
+   "start": 735,
+   "title": "Game worlds as islands"
+  },
+  {
+   "start": 874,
+   "title": "Borders and control"
+  },
+  {
+   "start": 1055,
+   "title": "Ruins and resistance"
+  },
+  {
+   "start": 1197,
+   "title": "Out of bounds play"
+  },
+  {
+   "start": 1391,
+   "title": "Surface and concluding"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3013,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 6.52,
+   "d": 5.96,
+   "text": "Next up we have Everest Pipkin here to tell us about \"The Fortunate Isles:"
+  },
+  {
+   "t": 12.48,
+   "d": 4.36,
+   "text": "Fragment Worlds, Walled Gardens, and the games that are played there\"."
+  },
+  {
+   "t": 16.84,
+   "d": 2.84,
+   "text": "Everest Pipkin is a game developer, writer, and artist"
+  },
+  {
+   "t": 19.68,
+   "d": 3.32,
+   "text": "from central Texas who lives and works on a sheep farm in"
+  },
+  {
+   "t": 23.0,
+   "d": 4.0,
+   "text": "southern New Mexico. I am very excited to hear what this is"
+  },
+  {
+   "t": 27.0,
+   "d": 9.24,
+   "text": "all about. Everest, welcome to the celebration. >> Everest: I am Everest Pipkin and I am a game"
+  },
+  {
+   "t": 36.24,
+   "d": 6.46,
+   "text": "designer and artist and I have been lucky enough to speak at Roguelike Celebration once before. I"
+  },
+  {
+   "t": 42.7,
+   "d": 6.82,
+   "text": "am excited to be back and where have an even more esoteric talk than last time which I didn't know"
+  },
+  {
+   "t": 49.52,
+   "d": 5.96,
+   "text": "was PAUFBLT -- possible. I am going to talk about game world and the varied borders of"
+  },
+  {
+   "t": 57.52,
+   "d": 6.72,
+   "text": "play and borrow from the language of the garden and garden architectures particularly western,"
+  },
+  {
+   "t": 64.24,
+   "d": 9.8,
+   "text": "ornamental and ideal representations of those spaces. We will look at games as isolated worlds,"
+  },
+  {
+   "t": 74.04,
+   "d": 5.52,
+   "text": "fragments of worlds that sit inside of our own, we will also consider the bounding from"
+  },
+  {
+   "t": 79.56,
+   "d": 5.32,
+   "text": "outside that changes the logic of that inside and think about the kind of play"
+  },
+  {
+   "t": 84.88,
+   "d": 5.2,
+   "text": "that requires the circle. Over the course of the talk I will examine three surfaces."
+  },
+  {
+   "t": 90.08,
+   "d": 5.84,
+   "text": "One the social edge or boundary of playing like don't step on the cracks. The floor is lava."
+  },
+  {
+   "t": 95.92,
+   "d": 5.76,
+   "text": "That's not fair. The magic circle that's talked about a lot. Two is the bounded space of playing"
+  },
+  {
+   "t": 101.68,
+   "d": 5.36,
+   "text": "so edges of game worlds -- invisible walls, frames, the rim of the map. And finally the"
+  },
+  {
+   "t": 107.04,
+   "d": 5.8,
+   "text": "surface of play, the screen that hides that anterior logic which is to say I promise we"
+  },
+  {
+   "t": 112.84,
+   "d": 7.32,
+   "text": "will loop back through to games but bear with pea -- me as I talk about garden for a while."
+  },
+  {
+   "t": 120.16,
+   "d": 5.72,
+   "text": "About six months ago I went to New York City with two goals. To visit family and friends and to go"
+  },
+  {
+   "t": 134.28,
+   "d": 8.92,
+   "text": "to this tapestry and first through the museum doors in the morning. The hunt of the unicorn"
+  },
+  {
+   "t": 143.2,
+   "d": 5.88,
+   "text": "is not the only precious object at the time met although it is perhaps the most famous. I made"
+  },
+  {
+   "t": 149.08,
+   "d": 7.28,
+   "text": "good measures of the paintings and miniatures. This museum of medieval devotion acquired through"
+  },
+  {
+   "t": 156.36,
+   "d": 7.0,
+   "text": "private devotion, theft, and the power of the institution but when I turned the corner into"
+  },
+  {
+   "t": 163.36,
+   "d": 11.64,
+   "text": "the room that houses the tapestries they took all the color. The thread woven not embroidered. The"
+  },
+  {
+   "t": 175.0,
+   "d": 6.72,
+   "text": "instructions drawn up in Paris and produced in Brussels. Worn and labored by so many centuries"
+  },
+  {
+   "t": 181.72,
+   "d": 8.8,
+   "text": "of movement and power and want. Lost, assembled, repair poorly, the sheer size, the beauty,"
+  },
+  {
+   "t": 190.52,
+   "d": 9.2,
+   "text": "cost of them, the cut sections, the severing. The hunters enter the forest, the start of the hunt,"
+  },
+  {
+   "t": 199.72,
+   "d": 8.16,
+   "text": "the unicorn at the fountain, the unicorn attacked, defending himself and captured by the virgin and"
+  },
+  {
+   "t": 207.88,
+   "d": 6.8,
+   "text": "the unicorn killed and brought to the castle and the unicorn in captivity. I am moved by"
+  },
+  {
+   "t": 214.68,
+   "d": 7.68,
+   "text": "the violence seeped in beauty, richness and the luscious treasures of the world but violence all"
+  },
+  {
+   "t": 222.36,
+   "d": 10.32,
+   "text": "the same. The red thread, the dogs, the wounded creature, it is blood drunk, head tilted up by"
+  },
+  {
+   "t": 232.68,
+   "d": 6.16,
+   "text": "a man who holds it like a trophy. I am also here because of the cyclical nature of the set. No real"
+  },
+  {
+   "t": 238.84,
+   "d": 9.68,
+   "text": "beginning or end. The unicorn is now living and wild and surrounded by the forest and now dead,"
+  },
+  {
+   "t": 248.52,
+   "d": 11.64,
+   "text": "bleeding and spitted upon the spears and now resurrected but caged. By the caller,"
+  },
+  {
+   "t": 260.16,
+   "d": 5.92,
+   "text": "the agreement, the captivity itself. A social holding. The floor is lava and floating of"
+  },
+  {
+   "t": 266.08,
+   "d": 7.8,
+   "text": "course in a sea of flowers. In the center of the room is a book of flower studies also medieval"
+  },
+  {
+   "t": 273.88,
+   "d": 17.72,
+   "text": "florals picked out. It was open to a study of irises. The thousand flowers background style"
+  },
+  {
+   "t": 291.6,
+   "d": 7.04,
+   "text": "of isolated botanical elements arranged in this blooming artificial spring. Artificial because"
+  },
+  {
+   "t": 298.64,
+   "d": 7.88,
+   "text": "we see them in this compressed year. Seasons where every flower blooming from winter to fall"
+  },
+  {
+   "t": 306.52,
+   "d": 7.68,
+   "text": "is instead blooming now. This too cast the unreal cycle of the unicorn. Where he walks time doesn't"
+  },
+  {
+   "t": 314.2,
+   "d": 11.8,
+   "text": "past. It is a violent lovely eternity. This is set in a Latin term for an enclosed garden."
+  },
+  {
+   "t": 326.0,
+   "d": 6.28,
+   "text": "It was an important touch stone in medieval and renaissance poetry. It was a metaphor and"
+  },
+  {
+   "t": 332.28,
+   "d": 8.72,
+   "text": "built thing. All gardens are enclosed even if just demarcation of steps. Don't step on the"
+  },
+  {
+   "t": 341.0,
+   "d": 7.44,
+   "text": "cracks as with literal stone walls around them. The modern words like garden and yard are from"
+  },
+  {
+   "t": 348.44,
+   "d": 8.8,
+   "text": "the old English word yard and paradise enters a long train of adoptions including French,"
+  },
+  {
+   "t": 357.24,
+   "d": 13.04,
+   "text": "Latin, old Iranian and Persian, and the meaning is wall enclosure and a round to form a wall or"
+  },
+  {
+   "t": 370.28,
+   "d": 10.24,
+   "text": "build. So the walled gardens of European medieval life are particularly pointed keeping animals and"
+  },
+  {
+   "t": 380.52,
+   "d": 5.84,
+   "text": "the public out and forming symbolic patterns of medication and resonance with not just the garden"
+  },
+  {
+   "t": 386.36,
+   "d": 8.08,
+   "text": "but the garden. The biblical garden. Perhaps the most clear example is the Benedictine monasteries"
+  },
+  {
+   "t": 394.44,
+   "d": 10.76,
+   "text": "which were reconstructed Roman villas and in the fount on of life were symbols meant to resonate"
+  },
+  {
+   "t": 405.2,
+   "d": 5.6,
+   "text": "the garden with the religious life and sites of functionality with their many used plant"
+  },
+  {
+   "t": 410.8,
+   "d": 7.72,
+   "text": "and flowers. The met cloister where the hunt of the unicorn tapestry blooms boist one of these"
+  },
+  {
+   "t": 418.52,
+   "d": 12.16,
+   "text": "gardens. Built from five separate abbeys purchased by an American painter who made a living by buying"
+  },
+  {
+   "t": 430.68,
+   "d": 12.72,
+   "text": "and selling artifact. These were reconstructed stone by stone. They sit in the upper Manhattan."
+  },
+  {
+   "t": 449.36,
+   "d": 6.56,
+   "text": "Boulders are moved, dirt is mounded, a mountain is made which the castle can be viewed. Inside"
+  },
+  {
+   "t": 455.92,
+   "d": 4.72,
+   "text": "the stairs are worn by centuries of movements and benedict nuns and the stone is pressed away"
+  },
+  {
+   "t": 460.64,
+   "d": 7.64,
+   "text": "by devotion but the logic of the transient has been loss. In one spot a stair step has"
+  },
+  {
+   "t": 468.28,
+   "d": 7.84,
+   "text": "been installed backwards. What is it about the monastery the world apart and vision that makes"
+  },
+  {
+   "t": 476.12,
+   "d": 6.04,
+   "text": "the construction beckoning to commit the violence of relocation. What is is it about the garden wall"
+  },
+  {
+   "t": 482.16,
+   "d": 5.76,
+   "text": "that is deconstructed and packed into stones and shipped across an ocean so it can be formed into"
+  },
+  {
+   "t": 487.92,
+   "d": 10.08,
+   "text": "a new circling. One no less functional for it. Is it simply this want to cut a world from the world?"
+  },
+  {
+   "t": 498.0,
+   "d": 6.0,
+   "text": "Own last week I walked with a friend in the chapel of the chimes in Oakland discussing resonance with"
+  },
+  {
+   "t": 504.0,
+   "d": 5.76,
+   "text": "game dungeons. We both have a healthy practice of architectural theft where appropriate. We"
+  },
+  {
+   "t": 509.76,
+   "d": 7.84,
+   "text": "reminded me Julia Morgan designed the chapel of the chimes. Many compounding rooms are called"
+  },
+  {
+   "t": 517.6,
+   "d": 12.76,
+   "text": "gardens. Resting places. Garden of Solitude and all under a constant threat of landscaping since"
+  },
+  {
+   "t": 530.36,
+   "d": 8.32,
+   "text": "the last time I visited. I didn't recognize a single indoor tree. This architecture made"
+  },
+  {
+   "t": 538.68,
+   "d": 9.24,
+   "text": "her name in reinforcement concrete which is a rare material used for bridges maybe not but buildings."
+  },
+  {
+   "t": 547.92,
+   "d": 9.6,
+   "text": "She was tapped to design a bell Tower in this style as California and still now want to do."
+  },
+  {
+   "t": 557.52,
+   "d": 9.2,
+   "text": "She was skyrocketed into if not fame at least notoriety when it remained standing after the"
+  },
+  {
+   "t": 566.72,
+   "d": 6.76,
+   "text": "1906 earthquake. Two decades later she began construction on the hurst castle which is the"
+  },
+  {
+   "t": 574.92,
+   "d": 5.8,
+   "text": "manage of publishing tycoon William Randolph hurst. That project took up decades of her"
+  },
+  {
+   "t": 580.72,
+   "d": 9.32,
+   "text": "life and never saw completion. It was built in a Spanish colonial revival style. A hodgepodge. In"
+  },
+  {
+   "t": 590.04,
+   "d": 15.6,
+   "text": "1919 hurst wrote the San Diego expedition, a renaissance of that from the southern part of"
+  },
+  {
+   "t": 605.64,
+   "d": 10.12,
+   "text": "Spain. Borrowed piecemeal from whatever piece of history he was interested in at the moment."
+  },
+  {
+   "t": 615.76,
+   "d": 9.12,
+   "text": "As much a hodgepodge as the cluster is. Under construction 30 years and never finished. 42"
+  },
+  {
+   "t": 624.88,
+   "d": 7.76,
+   "text": "bedrooms, 61 bathrooms, 19 sitting rooms, 127 acres of garden and private zoo all walled."
+  },
+  {
+   "t": 633.2,
+   "d": 11.72,
+   "text": "A pleasure palace. A built utopia for one. In it hangs the hunting scene woven in the 15th century"
+  },
+  {
+   "t": 644.92,
+   "d": 8.72,
+   "text": "and over the pool tables, all those thousands of flowers. Julia Morgan was not remotely an"
+  },
+  {
+   "t": 653.64,
+   "d": 6.2,
+   "text": "outsider architect. The hurst castle was founded to the tune of $10 million and that's 1920s money."
+  },
+  {
+   "t": 665.16,
+   "d": 4.24,
+   "text": "There is play in her buildings. A clobbering together and full scale theft of styles that"
+  },
+  {
+   "t": 669.4,
+   "d": 7.12,
+   "text": "has resonance with later experience and outside architecture. Structures and community spaces"
+  },
+  {
+   "t": 677.72,
+   "d": 7.8,
+   "text": "like these structures and community spaces of kind of the urban experimental laboratory. Port Marion,"
+  },
+  {
+   "t": 685.52,
+   "d": 11.48,
+   "text": "the seaside village in Wales used for the filming of the 1966 prisoner. The somewhat terrifying"
+  },
+  {
+   "t": 697.0,
+   "d": 9.2,
+   "text": "platforms of the principality of sea land or the proposed floating sphere cities in cloud 9. These"
+  },
+  {
+   "t": 706.2,
+   "d": 6.96,
+   "text": "types of architectures range from libertarian to socialist urban design but they are all versions"
+  },
+  {
+   "t": 713.16,
+   "d": 6.0,
+   "text": "of utopias even if they are utopias for a very small group of people. Each are their own border"
+  },
+  {
+   "t": 719.16,
+   "d": 8.44,
+   "text": "world one with literal bounding’s of sea or sky or desert but also with their social bounding of"
+  },
+  {
+   "t": 727.6,
+   "d": 5.04,
+   "text": "like we are up to something here, you know? This is an idea not just a building. This is a version"
+  },
+  {
+   "t": 732.64,
+   "d": 18.36,
+   "text": "of what the world could be. A mythological utopias are often islands. The Greek Isles were in the"
+  },
+  {
+   "t": 751.0,
+   "d": 15.48,
+   "text": "Atlantic Ocean and a site of a winterless paradise inhabited by the heroes of Greek mythology. We see"
+  },
+  {
+   "t": 766.48,
+   "d": 9.68,
+   "text": "the resonance of the game world and fictive edges. The number of games that take floating"
+  },
+  {
+   "t": 776.16,
+   "d": 10.84,
+   "text": "city or island world as their city is beyond listing. The setting is compelling in fiction,"
+  },
+  {
+   "t": 787.0,
+   "d": 9.48,
+   "text": "touches are the historical references, and they are often ideological dense spaces bordered in a"
+  },
+  {
+   "t": 796.48,
+   "d": 10.84,
+   "text": "way that let the rules be different. The border space is controlled. And I mean it is a control"
+  },
+  {
+   "t": 807.84,
+   "d": 9.56,
+   "text": "to the narrative structures and a controllable space which is kind to a game designer who is"
+  },
+  {
+   "t": 817.4,
+   "d": 9.96,
+   "text": "dealing with where does game space end and what is a more natural edge than an island? Why not build"
+  },
+  {
+   "t": 827.36,
+   "d": 6.08,
+   "text": "the edge of the world and someone can then build a garden inside. This is a shot through of my own"
+  },
+  {
+   "t": 833.44,
+   "d": 8.12,
+   "text": "work as subject and restraint. In the barnacle goose experiment you play as a research studying"
+  },
+  {
+   "t": 842.68,
+   "d": 6.04,
+   "text": "the creation of new and living things out of raw and non-living matter and in order to undertake"
+  },
+  {
+   "t": 848.72,
+   "d": 4.04,
+   "text": "this work without experimental contamination you are locked inside this hermetically sealed"
+  },
+  {
+   "t": 852.76,
+   "d": 10.76,
+   "text": "dome and the only raw material is that of your own buddy. This clicking and thriving thing that grows"
+  },
+  {
+   "t": 863.52,
+   "d": 11.68,
+   "text": "out of your body and becomes more than you within the locked dome. Despite being a 2D game. It is"
+  },
+  {
+   "t": 875.2,
+   "d": 6.16,
+   "text": "fundamental to the break out genre the battle royale and dropped on an island with edges closing"
+  },
+  {
+   "t": 881.36,
+   "d": 10.52,
+   "text": "in and forcing you into constraint spaces. It is pushed by the literal wall of death. These spaces"
+  },
+  {
+   "t": 891.88,
+   "d": 10.72,
+   "text": "are garden like. In a Fortnite pastoral robin stone describes the aftermath of the two day worm"
+  },
+  {
+   "t": 902.6,
+   "d": 7.52,
+   "text": "hole where in the island map was replaced by a few version of itself. He says after loading into the"
+  },
+  {
+   "t": 910.12,
+   "d": 9.44,
+   "text": "new fantasy world, the new islands geography is softer and natural. Hills flatten in the meadows,"
+  },
+  {
+   "t": 921.4,
+   "d": 6.44,
+   "text": "the new environment is plain pastoral. The farms are more detailed with Apple orchids and"
+  },
+  {
+   "t": 929.64,
+   "d": 8.68,
+   "text": "butterflies dance in the meadows. Fortnite made much players first drop into an unknown island"
+  },
+  {
+   "t": 938.32,
+   "d": 8.36,
+   "text": "and the experience was breath taking. From the first wash of pixels this new place was sensitive,"
+  },
+  {
+   "t": 946.68,
+   "d": 10.08,
+   "text": "softer, wide open, unburdened. It is a fantasy and a good one. Despite the propensity of imagineation"
+  },
+  {
+   "t": 956.76,
+   "d": 9.4,
+   "text": "for floating islands they are not common outside the realm of fantasy. More have been built and"
+  },
+  {
+   "t": 966.16,
+   "d": 10.68,
+   "text": "far more winning design cases. The vast majority of the sites in reality are offshore oil wells or"
+  },
+  {
+   "t": 976.84,
+   "d": 8.08,
+   "text": "military installations and an advantage they being like the clock Tower are immune to seismic shock."
+  },
+  {
+   "t": 986.92,
+   "d": 8.8,
+   "text": "I am not call an oil platform a garden but it is a walled and constructed and a world border with"
+  },
+  {
+   "t": 995.72,
+   "d": 6.32,
+   "text": "different physical rules than the place around it and in the sake of military installation and in"
+  },
+  {
+   "t": 1002.04,
+   "d": 5.76,
+   "text": "corporate space this is true in legal statue and the required behavior of those that inhabit these"
+  },
+  {
+   "t": 1007.8,
+   "d": 7.32,
+   "text": "spaces outside of space which is of course to say that borders are violent. They are disruptions to"
+  },
+  {
+   "t": 1015.12,
+   "d": 5.88,
+   "text": "the world even when essentially harmless. You are out. I tagged you. That's against the rules. They"
+  },
+  {
+   "t": 1021.0,
+   "d": 4.72,
+   "text": "are still the disruption. But they are most often not harmless. The border of a nation is held up"
+  },
+  {
+   "t": 1025.72,
+   "d": 11.28,
+   "text": "by threat of violence. The wall of death of the battle of royal isn't funny. The miserable living"
+  },
+  {
+   "t": 1037.0,
+   "d": 7.88,
+   "text": "under a state that can we'll violence in this way. The esthetic of the garden is web weaponize. The"
+  },
+  {
+   "t": 1047.32,
+   "d": 12.88,
+   "text": "walls and houses and the lines that until recently kept flames families warm. It requires maintenance"
+  },
+  {
+   "t": 1060.2,
+   "d": 12.44,
+   "text": "that includes Echo -- it is place of import plants and approved types of growing. Weeding and pruning"
+  },
+  {
+   "t": 1072.64,
+   "d": 5.76,
+   "text": "and harvest in the prime. A place where power flexes and colonial power collect and show"
+  },
+  {
+   "t": 1078.4,
+   "d": 11.76,
+   "text": "treasures under the guise of simple growing. Agnus dena knows this and titles her 1982 performance in"
+  },
+  {
+   "t": 1090.16,
+   "d": 10.28,
+   "text": "the battery park pan field and grows a two acre field of wheat. The world is walled out. The"
+  },
+  {
+   "t": 1100.44,
+   "d": 20.28,
+   "text": "gardens confined, isolated, domesticated and used. The garden is political. Heto sterile attempts to"
+  },
+  {
+   "t": 1120.72,
+   "d": 7.84,
+   "text": "take on the subject in her 2019 power plants. Named for the family that runs Purdue pharma if"
+  },
+  {
+   "t": 1128.56,
+   "d": 10.92,
+   "text": "not responsible for the Opioid epidemic singly at least prompting from it. Medicinal plants"
+  },
+  {
+   "t": 1139.48,
+   "d": 11.28,
+   "text": "that grow out of the waste ground. The videos are uninteresting. Sterile says she was meant to be"
+  },
+  {
+   "t": 1150.76,
+   "d": 5.88,
+   "text": "showing completely different world. About a friend who not to grow a garden in jail. Female prisoners"
+  },
+  {
+   "t": 1156.64,
+   "d": 9.48,
+   "text": "did anything to access seeds and the guards tried to destroy the seeds and take them away and power"
+  },
+  {
+   "t": 1166.12,
+   "d": 9.52,
+   "text": "plants were last minute substitution for the gallery. The truly wonderful games critic Em Reed"
+  },
+  {
+   "t": 1175.64,
+   "d": 22.6,
+   "text": "comes to the came conclusion and writes this. [Reading from the screen]"
+  },
+  {
+   "t": 1205.4,
+   "d": 9.68,
+   "text": "In the realm of the political border, as for the game border, the edge of the island, invisible"
+  },
+  {
+   "t": 1215.08,
+   "d": 7.04,
+   "text": "wall, the breaking out or into is well represented in out of bands areas in no clip modes and wall"
+  },
+  {
+   "t": 1222.12,
+   "d": 8.28,
+   "text": "hacks in pushing the limit of the edge. This is an over generous application of what rural gardening"
+  },
+  {
+   "t": 1230.4,
+   "d": 6.6,
+   "text": "might mean to society in general but the power of this to the right person at the right time should"
+  },
+  {
+   "t": 1237.0,
+   "d": 5.92,
+   "text": "thought be written off. I remember, for instance, all the best parties I attended online as a"
+  },
+  {
+   "t": 1242.92,
+   "d": 10.12,
+   "text": "teenager and all the secret pressure -- precious things. Here is how you get here. Welcome. Cripped"
+  },
+  {
+   "t": 1253.04,
+   "d": 7.0,
+   "text": "through the floor in world of war craft and forming impossible architecture over head. All"
+  },
+  {
+   "t": 1260.04,
+   "d": 7.16,
+   "text": "the normal maps inverted. Transparent. Baroque. Nesting. The thrill of inserting your body into"
+  },
+  {
+   "t": 1267.2,
+   "d": 6.44,
+   "text": "a middle space and breaking through on to a plane that was suddenly yours. A home built temporarily"
+  },
+  {
+   "t": 1273.64,
+   "d": 5.64,
+   "text": "out of a world that didn't quite hold me. The rules change sometimes due to errors and code"
+  },
+  {
+   "t": 1279.28,
+   "d": 10.08,
+   "text": "but often the social situation built on top of them. There will not be fighting here. Someone is"
+  },
+  {
+   "t": 1289.36,
+   "d": 4.64,
+   "text": "playing music over a mic from a book box in their bedroom and the Echo is terrible but we are going"
+  },
+  {
+   "t": 1294.0,
+   "d": 14.76,
+   "text": "to dance. I watched the grammy's featuring the out of bounds exploits as they navigate through the"
+  },
+  {
+   "t": 1308.76,
+   "d": 13.56,
+   "text": "far spaces of redemption online. It is minimalist, serene textures and geometry clashing. The"
+  },
+  {
+   "t": 1322.32,
+   "d": 4.68,
+   "text": "physical violence of getting over the invisible wall is notable. A pushing and twisting of the"
+  },
+  {
+   "t": 1327.0,
+   "d": 12.2,
+   "text": "rag doll body or a quicker version dragged across the ground. I am reminded to the Minecraft player"
+  },
+  {
+   "t": 1339.2,
+   "d": 10.16,
+   "text": "dedicated to walking to the end of the world. The far lands of Minecraft where the rules of"
+  },
+  {
+   "t": 1349.36,
+   "d": 7.92,
+   "text": "a procgen world begin to falter a glitch and fail. 58% through the way of Minecraft after 12 years of"
+  },
+  {
+   "t": 1357.28,
+   "d": 11.12,
+   "text": "walking. The techniques for breakage are readily exhibited in the speed running community. Clipping"
+  },
+  {
+   "t": 1368.4,
+   "d": 5.32,
+   "text": "through walls and launching over physical geometry and allowing shortcutting of stage and levels."
+  },
+  {
+   "t": 1373.72,
+   "d": 4.72,
+   "text": "Speed runners engage with the architecture of game levels not so much as a series of"
+  },
+  {
+   "t": 1378.44,
+   "d": 8.8,
+   "text": "platform or walls but pockets of outside inside, averting, applying rules from one to the other,"
+  },
+  {
+   "t": 1387.24,
+   "d": 8.68,
+   "text": "shortcuts and impossibility turned into memorized routes. The manipulation of the game data,"
+  },
+  {
+   "t": 1396.56,
+   "d": 11.32,
+   "text": "less dancing through game space and more material rearrangement. This is apparent in TAZ. The human"
+  },
+  {
+   "t": 1407.88,
+   "d": 10.28,
+   "text": "player is replaced -- and this can be seen in all kinds of play including casual play."
+  },
+  {
+   "t": 1418.16,
+   "d": 5.76,
+   "text": "Whether the use of glitches and cheats like the item overflow glitches of the early Pokémon,"
+  },
+  {
+   "t": 1423.92,
+   "d": 7.6,
+   "text": "or the wealth of mods in Skyrim or pieces of game that edit and break a game intentionally."
+  },
+  {
+   "t": 1434.64,
+   "d": 14.52,
+   "text": "Which bring us to the third boundary. The surface. Returning to the room we are in, and the invisible"
+  },
+  {
+   "t": 1449.16,
+   "d": 6.88,
+   "text": "wall borders a game world or what is outside and inside the borders of the frame, the border"
+  },
+  {
+   "t": 1456.04,
+   "d": 13.2,
+   "text": "of the surface is where logic is obfuscated. Code drives the visual user interface but it is involve"
+  },
+  {
+   "t": 1471.64,
+   "d": 9.08,
+   "text": "in other play. The boundary of the surface is how they were made. The labor and wealth. The threads"
+  },
+  {
+   "t": 1481.36,
+   "d": 9.32,
+   "text": "spun and dyed and design and weaving. All this clarifies an image when you stand back and it is"
+  },
+  {
+   "t": 1490.68,
+   "d": 5.64,
+   "text": "in the tapestry relationship to time and outside time. The thousand flowers in their perpetual"
+  },
+  {
+   "t": 1496.32,
+   "d": 9.12,
+   "text": "spring. I wrote about this specifically in soft corrupter about atomic structures and Ghosts."
+  },
+  {
+   "t": 1505.44,
+   "d": 7.04,
+   "text": "It considers out of bounds and the surface of the game world, this other border. A skinned"
+  },
+  {
+   "t": 1512.48,
+   "d": 7.88,
+   "text": "materiality that is not playable but play full nonetheless. This play of material is also like"
+  },
+  {
+   "t": 1520.36,
+   "d": 4.56,
+   "text": "the eternal spring of the flowers because to view underneath the surface of a thing"
+  },
+  {
+   "t": 1524.92,
+   "d": 5.84,
+   "text": "is to see it outside of time. Not running but all potential folded inside it. This is why I"
+  },
+  {
+   "t": 1530.76,
+   "d": 7.88,
+   "text": "work in the browser. It wears its own surface, only skin deep, you can view source, touch it,"
+  },
+  {
+   "t": 1538.64,
+   "d": 10.76,
+   "text": "it is tangibly there, the logic and rule of the bounding surface becomes transparent, readable"
+  },
+  {
+   "t": 1549.4,
+   "d": 7.88,
+   "text": "and permissible. In that way, it is also what it is to pass your head and to see all the thousand"
+  },
+  {
+   "t": 1557.28,
+   "d": 10.6,
+   "text": "flower blooming there. That's it for me. I think I will hand off. I think I hit time exactly. I will"
+  },
+  {
+   "t": 1567.88,
+   "d": 7.0,
+   "text": "see you in the breakout room and Thank you. QRISTY: Thank you so much. Masterfully done."
+  },
+  {
+   "t": 1574.88,
+   "d": 4.14,
+   "text": "I feel like I need to take a minute. I don't want to talk after that."
+  }
+ ]
+}

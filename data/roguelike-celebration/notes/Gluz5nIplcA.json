@@ -1,0 +1,189 @@
+{
+  "id": "Gluz5nIplcA",
+  "title": "Andrew Aversa - Tangledeep and the Puzzle of Roguelike Difficulty",
+  "speaker": "Andrew Aversa",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=Gluz5nIplcA",
+  "talk_type": "postmortem",
+  "summary": "Andrew Aversa, developer of the turn-based 16-bit-styled roguelike Tangledeep, distinguishes good (understandable, fair, player-responsible) difficulty from bad and artificial difficulty, and walks through his attempts to make the game accessible but not easy. He covers the three run modes (meta-progression heroic, hardcore, and non-permadeath adventure), the cascade of problems from removing the hunger clock and then health regeneration, the flask/food/campfire fixes, the 'infinite Mirai' skill-hoarding problem solved by limiting hotbars, job balance and overpowered pets, the item-world Dreamcaster for player-selected difficulty, and post-launch modular difficulty toggles. His closing lesson is that when you cannot solve difficulty yourself, let players configure it.",
+  "games": [
+    "Tangledeep",
+    "Dungeons of Fay",
+    "Rogue Legacy",
+    "Final Fantasy Tactics",
+    "Disgaea"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fairness",
+      "kind": "principle",
+      "claim": "Good roguelike difficulty means challenges are understandable, the player feels responsible for their death, and the effects of their actions are clear.",
+      "detail": "Aversa contrasts dying after knowingly drinking from a fountain that could set you on fire with stepping on an invisible trap you had no way to know about. A monster's danger can be signalled even by its name (dragon vs kobold), and an identified healing potion should do something predictable. Bad difficulty includes unexplained failures and hidden mechanics that require a wiki open on another screen.",
+      "t": 171,
+      "quote": "The player should feel responsible for for what's happened. And then another important thing is that your your input and your actions should feel ideally clear.",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden mechanics",
+      "kind": "warning",
+      "claim": "Roguelikes that require memorising hidden mechanics from a wiki create unfair-feeling difficulty; as much as possible should be presented in the game itself.",
+      "detail": "Aversa says having a wiki is not bad (Tangledeep has one), but needing it open to have any chance of winning is a sign of bad difficulty. The more information is presented in-game, the better.",
+      "t": 223,
+      "quote": "the more that can be presented in the game the better ideally",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "artificial difficulty",
+      "kind": "principle",
+      "claim": "Simple vs complex, easy vs hard, and good vs bad are separate axes, so a roguelike can be simple yet hard without relying on artificial difficulty like grinding gates or twitch execution.",
+      "detail": "Aversa cites JRPG bosses that require grinding (e.g. slaying a thousand boars) and fighting-game frame-perfect inputs as artificial difficulty: understandable but not the right kind. He aimed for Tangledeep to be simple but hard, so that players' skill and decisions, not the RNG, drive progress and a sense of mastery.",
+      "t": 294,
+      "quote": "simple versus complex and easy, hard, and good, and bad, these are all separate scales",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Because roguelike players expect to die often, a fair but silly death can still be a good story and part of the fun.",
+      "detail": "Aversa's example is a common Tangledeep death: getting headbutted by a frog into lava and then surrounded by more frogs. He considers this good and fun; the goal is difficulty in the right places.",
+      "t": 347,
+      "quote": "if you have a fair yet stupid death, that can still be a very good story",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "rng variance",
+      "kind": "technique",
+      "claim": "Tangledeep reduced RNG impact and opacity by replacing item identification with Diablo-style visible affixes and using tight damage ranges instead of dice rolls.",
+      "detail": "Aversa's initial 'good intentions' were to make actions, skills and items clear, so identification was removed in favour of equipment with visible random mods. Damage ranges were kept narrow rather than D20/D6-style, and he aimed to remove deaths from attrition such as running out of potions.",
+      "t": 424,
+      "quote": "I got rid of things like item identification is no longer thing. Instead, it's more of a Diablo style",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "principle",
+      "claim": "Meta-progression should get the player through the early game faster rather than raise their absolute power ceiling each run.",
+      "detail": "Aversa argues power-increasing meta-progression like Rogue Legacy's, where a found sword or skill tree only benefits the next character after death, can frustrate. Tangledeep's heroic mode lets you bank items and gold, plant trees and raise pets for future characters, which helps you reach the rank of gear you had already found sooner; skills and experience don't transfer. Pets kept in a corral also make sense in the world. He says players mostly liked it.",
+      "t": 558,
+      "quote": "rather than using meta progress to increase our power little by little with each run, instead let's use this to just get the player through the early game sooner",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "non-permadeath mode",
+      "kind": "example",
+      "claim": "Tangledeep's optional non-permadeath adventure mode is played by about 30% of players, including some of the most dedicated, and lets far more people see content that only around 2% of runs reach.",
+      "detail": "Adventure mode keeps everything but permadeath: dying costs experience, job points and gold. Aversa notes it turns the game into a turn-based dungeon-crawl RPG with roguelike trappings, lets players who would avoid permadeath play, and lets them share encounters, items and builds that motivate hardcore players. Since players could save-scum anyway, he included it as an explicitly non-intended 'casual' concession.",
+      "t": 618,
+      "quote": "some of the most dedicated hardcore players exclusively play this adventure mode",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "warning",
+      "claim": "Removing the hunger clock while keeping health regeneration made Tangledeep trivially easy, because players could kite and wait to regenerate indefinitely.",
+      "detail": "Aversa removed hunger as artificial difficulty, but experienced players found the optimal strategy became dancing with monsters, staying a few tiles ahead with a ranged weapon until health regenerated. They reported the game was too easy and full of cheesy tactics.",
+      "t": 764,
+      "quote": "when you have regenerating health and you have no hunger clock, now the optimal strategy is dancing with monsters over and over again",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "attrition",
+      "kind": "warning",
+      "claim": "Removing health regeneration to stop kiting brought back the deaths by attrition Tangledeep had tried to eliminate, which felt worse than before.",
+      "detail": "Without regeneration players could no longer kite, but with food also gone there was no easy way to recover, and unavoidable chip damage wore players down even when they played well. Aversa says this made things even worse.",
+      "t": 808,
+      "quote": "We're actually back to deaths by attrition. So, this has made things even worse",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "healing flask",
+      "kind": "technique",
+      "claim": "Tangledeep replaces the hunger clock with a healing flask that drains as you heal and refills as you explore, which pushes progress the same way hunger does.",
+      "detail": "Staying too long on a floor empties the flask through constant healing, while exploring keeps it topped off. It is supplemented by healing food on a shared cooldown and campfires that fully heal every few floors. Aversa says this mostly worked, though some players still rejected the lack of rest-to-heal.",
+      "t": 866,
+      "quote": "you have a healing flask and the flask slowly depletes as you use it and you refill it by exploring",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill hoarding",
+      "kind": "warning",
+      "claim": "In Tangledeep, letting players learn unlimited skills across jobs led to the 'infinite Mirai' problem, where accumulated escape abilities made characters effectively invincible.",
+      "detail": "With 100+ skills across 12 jobs bought with job points, plus adventure mode and meta-progression, careful players eventually learned everything. Facing a dangerous monster they could rotate through nine escape abilities until the first came off cooldown, and veterans asked for more hotbars.",
+      "t": 1012,
+      "quote": "by the time they rotated through all nine, the first one was now off cooldown. So, they were effectively invincible",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "loadout limits",
+      "kind": "technique",
+      "claim": "Tangledeep fixed skill hoarding by restricting usable skills to the hotbar and forbidding swaps in the dungeon, forcing real build decisions.",
+      "detail": "Only hotbar skills can be used; you cannot change them mid-dungeon, and removing a summon skill from the bar dismisses the pet, preventing cheese. You can no longer realise mid-fight you should have brought more escapes. Aversa says not one person complained.",
+      "t": 1050,
+      "quote": "now only the skills on your hot bar can be used. You can't switch in the dungeon",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "When addressing difficulty, listen to the problem players describe but not necessarily the solution they ask for; sometimes the opposite works better.",
+      "detail": "Veterans asked for more hotbars; Tangledeep instead limited hotbars, and nobody complained. Aversa presents this as the lesson he learned from the infinite-skills problem.",
+      "t": 1043,
+      "quote": "Listen to the problem, but then do a different solution",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "pets",
+      "kind": "warning",
+      "claim": "Pets are especially hard to balance in grid-based turn-based roguelikes because they effectively grant extra actions and physically block monster movement.",
+      "detail": "Tangledeep's Floramancer job, with its summonable floraconda, turned out broken. While the pet and monster trade attacks, the player gets free turns to summon more, drink potions or flee, and on a grid pets can wall off enemies; in a game where monsters could squeeze past, this would matter less.",
+      "t": 1173,
+      "quote": "it's giving you more actions. And in roguelikes, which have you know, these discrete turns, having an extra turn where the monster is attacking the pet",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "class balance",
+      "kind": "principle",
+      "claim": "Balance matters even in single-player roguelikes, because a far-too-strong or too-weak job, weapon or item produces a drastically different player experience, which Aversa ties to contrasting negative reviews.",
+      "detail": "Tangledeep received one Steam review calling it impossibly hard and broken and another from a player who beat it first try; both were negative. Aversa guesses the first player was probably on one of the harder jobs. His response was to show a difficulty rank next to each job, lock very hard jobs (like the Gambler, whose escape goes in a random direction) behind a short unlock, and remove things that are absurdly strong or weak.",
+      "t": 1292,
+      "quote": "when you have something that's very weak or very strong, uh it should be marked as such",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curve",
+      "kind": "technique",
+      "claim": "Tangledeep's Dreamcaster lets players enter any piece of equipment as a mini-dungeon, letting them choose an encounter difficulty and power up gear in an otherwise linear 20-floor crawl.",
+      "detail": "Borrowed from Disgaea's item worlds, it compensates for the lack of an open world where under-levelled players could go elsewhere. Analytics showed a sharp drop-off after the first boss; the Dreamcaster lets players target the difficulty they want, in a limited form of grinding, and as dream sequences these dungeons can show off strange content like spinning or giant monsters.",
+      "t": 1395,
+      "quote": "allowing you to enter any of your equipment, and each piece of equipment is a mini dungeon",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty options",
+      "kind": "technique",
+      "claim": "Tangledeep added individual difficulty toggles, like enabling health regeneration in hardcore or making every monster a champion, tucked into a character-creation menu and framed as optional.",
+      "detail": "Added post-launch after players kept rejecting the lack of regeneration, the toggles mix with any mode (e.g. adventure mode with no gold drops). They don't interfere with normal startup and are presented as not the intended way to play, comparable to cheat codes or wizard mode. Aversa says they are universally liked and also enrich daily and weekly challenges.",
+      "t": 1606,
+      "quote": "when you can't figure it out in the difficulty, just let the players do it, and uh they'll probably do a better job",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

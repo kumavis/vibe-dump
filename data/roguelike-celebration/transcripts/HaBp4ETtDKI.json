@@ -1,0 +1,1998 @@
+{
+ "id": "HaBp4ETtDKI",
+ "url": "https://www.youtube.com/watch?v=HaBp4ETtDKI",
+ "title": "Roguelike Trivia",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1387,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and rules"
+  },
+  {
+   "start": 28,
+   "title": "Game setup and mechanics"
+  },
+  {
+   "start": 97,
+   "title": "First round of questions"
+  },
+  {
+   "start": 264,
+   "title": "Intermediate questions"
+  },
+  {
+   "start": 403,
+   "title": "Advanced roguelike trivia"
+  },
+  {
+   "start": 529,
+   "title": "Mid-game scores and trivia"
+  },
+  {
+   "start": 842,
+   "title": "Final board questions"
+  },
+  {
+   "start": 1198,
+   "title": "Final jeopardy and conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2635,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.24,
+   "d": 2.31,
+   "text": "I have here the four best contestants we"
+  },
+  {
+   "t": 2.55,
+   "d": 2.61,
+   "text": "could find in the most recent five"
+  },
+  {
+   "t": 5.16,
+   "d": 1.86,
+   "text": "minutes they are separated into two"
+  },
+  {
+   "t": 7.02,
+   "d": 2.43,
+   "text": "distinct teams like and respect"
+  },
+  {
+   "t": 9.45,
+   "d": 3.48,
+   "text": "wait no what's your team name over here"
+  },
+  {
+   "t": 12.93,
+   "d": 3.06,
+   "text": "team unidentified team unidentified"
+  },
+  {
+   "t": 15.99,
+   "d": 1.95,
+   "text": "starring left and right I don't know"
+  },
+  {
+   "t": 17.94,
+   "d": 1.22,
+   "text": "what their names are there unidentified"
+  },
+  {
+   "t": 19.16,
+   "d": 3.19,
+   "text": "who's over here we are team strange mood"
+  },
+  {
+   "t": 22.35,
+   "d": 3.09,
+   "text": "team strange mood that's apoplexy and"
+  },
+  {
+   "t": 25.44,
+   "d": 3.21,
+   "text": "Sade great very good so here's how it's"
+  },
+  {
+   "t": 28.65,
+   "d": 1.71,
+   "text": "gonna work we are using can you guys see"
+  },
+  {
+   "t": 30.36,
+   "d": 2.85,
+   "text": "that this is a non commercially licensed"
+  },
+  {
+   "t": 33.21,
+   "d": 1.53,
+   "text": "jeopardy board because of that we are"
+  },
+  {
+   "t": 34.74,
+   "d": 2.55,
+   "text": "legally forbidden to give prizes gosh"
+  },
+  {
+   "t": 37.29,
+   "d": 2.25,
+   "text": "that's too bad also the questions were"
+  },
+  {
+   "t": 39.54,
+   "d": 2.16,
+   "text": "all given to us by John Harris are you"
+  },
+  {
+   "t": 41.7,
+   "d": 4.35,
+   "text": "here still right on right on"
+  },
+  {
+   "t": 46.05,
+   "d": 2.19,
+   "text": "damn you Tom Harris oh okay it's not"
+  },
+  {
+   "t": 48.24,
+   "d": 1.56,
+   "text": "actual jeopardy because someone would"
+  },
+  {
+   "t": 49.8,
+   "d": 1.53,
+   "text": "run away with it then we'd all be sad so"
+  },
+  {
+   "t": 51.33,
+   "d": 1.32,
+   "text": "we're just gonna go back and forth and"
+  },
+  {
+   "t": 52.65,
+   "d": 2.34,
+   "text": "y'all can pick whatever you want if you"
+  },
+  {
+   "t": 54.99,
+   "d": 2.07,
+   "text": "are stumped and you want to ask the"
+  },
+  {
+   "t": 57.06,
+   "d": 1.98,
+   "text": "audience for advice all you have to do"
+  },
+  {
+   "t": 59.04,
+   "d": 2.67,
+   "text": "is drink one of the potions now those"
+  },
+  {
+   "t": 61.71,
+   "d": 2.16,
+   "text": "have been cleaned out and replaced with"
+  },
+  {
+   "t": 63.87,
+   "d": 2.52,
+   "text": "fresh fizzy water and harmless flavoring"
+  },
+  {
+   "t": 66.39,
+   "d": 2.25,
+   "text": "and most of them are not cursed so all"
+  },
+  {
+   "t": 68.64,
+   "d": 1.56,
+   "text": "you have to do is drink one and then you"
+  },
+  {
+   "t": 70.2,
+   "d": 2.55,
+   "text": "can ask the audience for advice how does"
+  },
+  {
+   "t": 72.75,
+   "d": 1.98,
+   "text": "that sound team left you're going first"
+  },
+  {
+   "t": 74.73,
+   "d": 24.66,
+   "text": "give me a category a value in DCSS the"
+  },
+  {
+   "t": 99.39,
+   "d": 1.74,
+   "text": "goal is collect to collect runes of zot"
+  },
+  {
+   "t": 101.13,
+   "d": 1.89,
+   "text": "what are the minimum number of runes"
+  },
+  {
+   "t": 103.02,
+   "d": 3.36,
+   "text": "needed to enter the realm of zaas three"
+  },
+  {
+   "t": 106.38,
+   "d": 6.24,
+   "text": "three you want a hungry for $10 very"
+  },
+  {
+   "t": 112.62,
+   "d": 10.73,
+   "text": "good our other team you roguelikes for"
+  },
+  {
+   "t": 123.35,
+   "d": 3.28,
+   "text": "hundreds four hundred rogue lights for"
+  },
+  {
+   "t": 126.63,
+   "d": 1.53,
+   "text": "one hundred dollars this rogue light"
+  },
+  {
+   "t": 128.16,
+   "d": 2.49,
+   "text": "named after a Bible story involves"
+  },
+  {
+   "t": 130.65,
+   "d": 2.93,
+   "text": "crying enemies"
+  },
+  {
+   "t": 134.0,
+   "d": 2.65,
+   "text": "what is binding of issac binding of"
+  },
+  {
+   "t": 136.65,
+   "d": 1.35,
+   "text": "issac care let's see is that correct"
+  },
+  {
+   "t": 138.0,
+   "d": 2.58,
+   "text": "sorry here we go $100 great fantastic"
+  },
+  {
+   "t": 140.58,
+   "d": 1.83,
+   "text": "cool that was these are soft balls you"
+  },
+  {
+   "t": 142.41,
+   "d": 1.53,
+   "text": "guys come on let's get down to the real"
+  },
+  {
+   "t": 143.94,
+   "d": 4.23,
+   "text": "stuff I went rogue lights for 500 rope"
+  },
+  {
+   "t": 148.17,
+   "d": 3.69,
+   "text": "lights for $500 which spelunky player"
+  },
+  {
+   "t": 151.86,
+   "d": 2.7,
+   "text": "one of the best was the first to break"
+  },
+  {
+   "t": 154.56,
+   "d": 3.23,
+   "text": "the three million dollars for"
+  },
+  {
+   "t": 157.85,
+   "d": 2.98,
+   "text": "bananasaurus rex holy yeah that's"
+  },
+  {
+   "t": 160.83,
+   "d": 2.15,
+   "text": "correct"
+  },
+  {
+   "t": 168.64,
+   "d": 3.07,
+   "text": "[Applause]"
+  },
+  {
+   "t": 172.22,
+   "d": 3.52,
+   "text": "you do let's I don't want to do the"
+  },
+  {
+   "t": 175.74,
+   "d": 7.46,
+   "text": "biggest one sure now 500 for 500 okay"
+  },
+  {
+   "t": 183.2,
+   "d": 2.05,
+   "text": "hallucination in nethack is mostly a"
+  },
+  {
+   "t": 185.25,
+   "d": 1.86,
+   "text": "harmfully a funny condition but there is"
+  },
+  {
+   "t": 187.11,
+   "d": 1.89,
+   "text": "one kind of enemy attack it protects"
+  },
+  {
+   "t": 189.0,
+   "d": 2.85,
+   "text": "from what is it if I drink a potion can"
+  },
+  {
+   "t": 191.85,
+   "d": 2.16,
+   "text": "i phone a friend if you drink a potion"
+  },
+  {
+   "t": 194.01,
+   "d": 2.79,
+   "text": "you can ask the audience all right I am"
+  },
+  {
+   "t": 196.8,
+   "d": 3.12,
+   "text": "gonna ask the audience and which one is"
+  },
+  {
+   "t": 199.92,
+   "d": 7.25,
+   "text": "it the tallest one alright drink it down"
+  },
+  {
+   "t": 208.84,
+   "d": 2.17,
+   "text": "[Music]"
+  },
+  {
+   "t": 211.01,
+   "d": 2.95,
+   "text": "that is a potion of knowledge you may"
+  },
+  {
+   "t": 213.96,
+   "d": 1.41,
+   "text": "ask the audience audience you have an"
+  },
+  {
+   "t": 215.37,
+   "d": 9.72,
+   "text": "answer for this shout it out it I'll"
+  },
+  {
+   "t": 225.09,
+   "d": 6.0,
+   "text": "give you a hint yeah let's see the hint"
+  },
+  {
+   "t": 231.09,
+   "d": 2.4,
+   "text": "is it is an effect that would be"
+  },
+  {
+   "t": 233.49,
+   "d": 3.06,
+   "text": "SuperDuper bad otherwise and might make"
+  },
+  {
+   "t": 236.55,
+   "d": 9.51,
+   "text": "you start again Medusa's gaze let's see"
+  },
+  {
+   "t": 246.06,
+   "d": 2.28,
+   "text": "I'm gonna give them partial credit $250"
+  },
+  {
+   "t": 248.34,
+   "d": 2.37,
+   "text": "for that because the answer is actually"
+  },
+  {
+   "t": 250.71,
+   "d": 3.24,
+   "text": "come on sting blows dude touch of death"
+  },
+  {
+   "t": 253.95,
+   "d": 1.02,
+   "text": "spells you're told you have an"
+  },
+  {
+   "t": 254.97,
+   "d": 2.52,
+   "text": "out-of-body experience but nobody in the"
+  },
+  {
+   "t": 257.49,
+   "d": 1.47,
+   "text": "whole world knew that so you still get"
+  },
+  {
+   "t": 258.96,
+   "d": 1.74,
+   "text": "half credit for taking my hands and"
+  },
+  {
+   "t": 260.7,
+   "d": 0.47,
+   "text": "running with"
+  },
+  {
+   "t": 261.17,
+   "d": 4.89,
+   "text": "cool alright category and dollar value"
+  },
+  {
+   "t": 266.06,
+   "d": 3.0,
+   "text": "please grab grab bag for 100 grab bag"
+  },
+  {
+   "t": 269.06,
+   "d": 4.02,
+   "text": "for $100 in games with item discovery"
+  },
+  {
+   "t": 273.08,
+   "d": 7.26,
+   "text": "what item can you come on drop what what"
+  },
+  {
+   "t": 280.34,
+   "d": 1.65,
+   "text": "item can usually be found to inform you"
+  },
+  {
+   "t": 281.99,
+   "d": 4.08,
+   "text": "what things do can we steal a potion of"
+  },
+  {
+   "t": 286.07,
+   "d": 7.83,
+   "text": "knowledge I heard a soul of identify our"
+  },
+  {
+   "t": 293.9,
+   "d": 1.89,
+   "text": "real out of steel how does this work you"
+  },
+  {
+   "t": 295.79,
+   "d": 1.47,
+   "text": "are not allowed to steal this is a"
+  },
+  {
+   "t": 297.26,
+   "d": 4.05,
+   "text": "civilization ok so we wait for them and"
+  },
+  {
+   "t": 301.31,
+   "d": 1.53,
+   "text": "then we go I won't let you know when"
+  },
+  {
+   "t": 302.84,
+   "d": 7.23,
+   "text": "it's your turn to correct them ok ok no"
+  },
+  {
+   "t": 310.07,
+   "d": 7.11,
+   "text": "it's fine uh nethack for 100 many"
+  },
+  {
+   "t": 317.18,
+   "d": 1.89,
+   "text": "outside references a one of the minions"
+  },
+  {
+   "t": 319.07,
+   "d": 1.92,
+   "text": "is what the currency is called which is"
+  },
+  {
+   "t": 320.99,
+   "d": 2.07,
+   "text": "usually gold pieces but a few places it"
+  },
+  {
+   "t": 323.06,
+   "d": 1.83,
+   "text": "has given an actual name what is it Zork"
+  },
+  {
+   "t": 324.89,
+   "d": 3.3,
+   "text": "needs a very good there are 100 dollars"
+  },
+  {
+   "t": 328.19,
+   "d": 1.86,
+   "text": "that you hardly deserve that's so easy"
+  },
+  {
+   "t": 330.05,
+   "d": 5.3,
+   "text": "ok you see what we got classics for $300"
+  },
+  {
+   "t": 335.35,
+   "d": 2.56,
+   "text": "baroque abandoned experience points and"
+  },
+  {
+   "t": 337.91,
+   "d": 1.83,
+   "text": "levels a lot of what replaced them has"
+  },
+  {
+   "t": 339.74,
+   "d": 1.8,
+   "text": "to do with a specific versatile kind of"
+  },
+  {
+   "t": 341.54,
+   "d": 1.68,
+   "text": "magic item that can be used to upgrade"
+  },
+  {
+   "t": 343.22,
+   "d": 4.76,
+   "text": "many other items what item is this"
+  },
+  {
+   "t": 351.48,
+   "d": 4.23,
+   "text": "hammer clocks clocks tickin"
+  },
+  {
+   "t": 355.71,
+   "d": 4.92,
+   "text": "uh-oh I'm sorry drink yeah"
+  },
+  {
+   "t": 362.58,
+   "d": 3.67,
+   "text": "chugga-chugga-chugga whoo oh it's a"
+  },
+  {
+   "t": 366.25,
+   "d": 2.21,
+   "text": "purple potion you should know better"
+  },
+  {
+   "t": 368.46,
+   "d": 2.38,
+   "text": "unfortunately that's a cursed potion of"
+  },
+  {
+   "t": 370.84,
+   "d": 4.56,
+   "text": "knowledge the audience has to lie so"
+  },
+  {
+   "t": 375.4,
+   "d": 6.69,
+   "text": "audience what magic item is that I'm"
+  },
+  {
+   "t": 382.09,
+   "d": 1.56,
+   "text": "sorry the audience is all dead does"
+  },
+  {
+   "t": 383.65,
+   "d": 7.62,
+   "text": "anyone else have any false truths potion"
+  },
+  {
+   "t": 391.27,
+   "d": 2.85,
+   "text": "of Revelation so close that answer is is"
+  },
+  {
+   "t": 394.12,
+   "d": 2.7,
+   "text": "incorrect I'm sorry and nobody gets to"
+  },
+  {
+   "t": 396.82,
+   "d": 1.95,
+   "text": "steal it because I'm stealing it I get"
+  },
+  {
+   "t": 398.77,
+   "d": 2.55,
+   "text": "$300 it doesn't roll of enchantments put"
+  },
+  {
+   "t": 401.32,
+   "d": 2.09,
+   "text": "on the board all right"
+  },
+  {
+   "t": 403.41,
+   "d": 3.76,
+   "text": "next up what do youse guys rogue lights"
+  },
+  {
+   "t": 407.17,
+   "d": 6.48,
+   "text": "for rogue lights for 300 in the rogue"
+  },
+  {
+   "t": 413.65,
+   "d": 2.01,
+   "text": "lights risk of rain and it's 3d sequel"
+  },
+  {
+   "t": 415.66,
+   "d": 2.34,
+   "text": "risk of Wayne the second for some reason"
+  },
+  {
+   "t": 418.0,
+   "d": 1.41,
+   "text": "a certain musical instrument item"
+  },
+  {
+   "t": 419.41,
+   "d": 3.71,
+   "text": "attacks foes with lightning what is it"
+  },
+  {
+   "t": 423.12,
+   "d": 4.3,
+   "text": "is it an electric guitar it is not an"
+  },
+  {
+   "t": 427.42,
+   "d": 2.61,
+   "text": "electric guitar unfortunately it is a"
+  },
+  {
+   "t": 430.03,
+   "d": 4.5,
+   "text": "not-so electric string device I will"
+  },
+  {
+   "t": 434.53,
+   "d": 1.62,
+   "text": "ward you 13 cents for being in the"
+  },
+  {
+   "t": 436.15,
+   "d": 4.47,
+   "text": "correct category of strings and other"
+  },
+  {
+   "t": 440.62,
+   "d": 8.19,
+   "text": "team rogue lights for $400 what rogue"
+  },
+  {
+   "t": 448.81,
+   "d": 1.86,
+   "text": "light game available on windows and the"
+  },
+  {
+   "t": 450.67,
+   "d": 2.16,
+   "text": "Nintendo switch while a real-time game"
+  },
+  {
+   "t": 452.83,
+   "d": 2.07,
+   "text": "takes closer inspiration to roguelikes"
+  },
+  {
+   "t": 454.9,
+   "d": 1.65,
+   "text": "than many other games your default"
+  },
+  {
+   "t": 456.55,
+   "d": 1.35,
+   "text": "character's name is Rodney and you're"
+  },
+  {
+   "t": 457.9,
+   "d": 2.28,
+   "text": "looking for the amulet of the end or if"
+  },
+  {
+   "t": 460.18,
+   "d": 1.53,
+   "text": "it's a roguelike on switch why isn't"
+  },
+  {
+   "t": 461.71,
+   "d": 1.26,
+   "text": "entangled EEP I don't know why you guys"
+  },
+  {
+   "t": 462.97,
+   "d": 3.72,
+   "text": "sweat it ever fly in the tangled EEP no"
+  },
+  {
+   "t": 466.69,
+   "d": 2.27,
+   "text": "it's not"
+  },
+  {
+   "t": 475.99,
+   "d": 2.47,
+   "text": "especially shameful for none of us to"
+  },
+  {
+   "t": 478.46,
+   "d": 6.24,
+   "text": "know given the talking question okay so"
+  },
+  {
+   "t": 484.7,
+   "d": 1.86,
+   "text": "do you guys know or are we use it"
+  },
+  {
+   "t": 486.56,
+   "d": 5.46,
+   "text": "bottoms up who's question was it you"
+  },
+  {
+   "t": 492.02,
+   "d": 0.48,
+   "text": "guys"
+  },
+  {
+   "t": 492.5,
+   "d": 9.12,
+   "text": "okay well congratulations drink up drink"
+  },
+  {
+   "t": 501.62,
+   "d": 4.92,
+   "text": "up nice very good that was the last"
+  },
+  {
+   "t": 506.54,
+   "d": 2.24,
+   "text": "cursed potion"
+  },
+  {
+   "t": 508.78,
+   "d": 2.53,
+   "text": "it is a potion of annihilation and"
+  },
+  {
+   "t": 511.31,
+   "d": 2.07,
+   "text": "unfortunately all the $400 questions"
+  },
+  {
+   "t": 513.38,
+   "d": 4.35,
+   "text": "have been destroyed in genocide fire you"
+  },
+  {
+   "t": 517.73,
+   "d": 1.38,
+   "text": "don't get anything for knowing it's"
+  },
+  {
+   "t": 519.11,
+   "d": 4.62,
+   "text": "unexplored what sorry as you wish okay"
+  },
+  {
+   "t": 523.73,
+   "d": 7.29,
+   "text": "great it's vertical okay let's do"
+  },
+  {
+   "t": 531.02,
+   "d": 1.86,
+   "text": "classics for I don't know what's open"
+  },
+  {
+   "t": 532.88,
+   "d": 2.66,
+   "text": "300 do you love it"
+  },
+  {
+   "t": 535.54,
+   "d": 2.5,
+   "text": "if you remember we can do it again if"
+  },
+  {
+   "t": 538.04,
+   "d": 2.46,
+   "text": "you do it for two hundred five hundred"
+  },
+  {
+   "t": 540.5,
+   "d": 2.28,
+   "text": "dollars what's the only magic item"
+  },
+  {
+   "t": 542.78,
+   "d": 1.68,
+   "text": "random magic item in the original Road"
+  },
+  {
+   "t": 544.46,
+   "d": 1.98,
+   "text": "you can identify without having picked"
+  },
+  {
+   "t": 546.44,
+   "d": 7.98,
+   "text": "up anything we're all such embarrassment"
+  },
+  {
+   "t": 554.42,
+   "d": 7.44,
+   "text": "so this is a scroll that monsters won't"
+  },
+  {
+   "t": 561.86,
+   "d": 2.16,
+   "text": "walk on but I can't remember what that's"
+  },
+  {
+   "t": 564.02,
+   "d": 1.8,
+   "text": "it you got it scroll of scare monster"
+  },
+  {
+   "t": 565.82,
+   "d": 3.15,
+   "text": "I'm gonna give it to you very good very"
+  },
+  {
+   "t": 568.97,
+   "d": 2.15,
+   "text": "good"
+  },
+  {
+   "t": 575.52,
+   "d": 4.86,
+   "text": "what's available we're sorry two three"
+  },
+  {
+   "t": 580.38,
+   "d": 5.07,
+   "text": "and four oh my goodness"
+  },
+  {
+   "t": 585.45,
+   "d": 2.55,
+   "text": "no someone asked about the the rooms is"
+  },
+  {
+   "t": 588.0,
+   "d": 4.35,
+   "text": "I in the realm of Zod and dungeon crawl"
+  },
+  {
+   "t": 592.35,
+   "d": 0.72,
+   "text": "Stone Soup"
+  },
+  {
+   "t": 593.07,
+   "d": 1.62,
+   "text": "what jovial creatures will nonetheless"
+  },
+  {
+   "t": 594.69,
+   "d": 2.7,
+   "text": "do their best to murder their killer"
+  },
+  {
+   "t": 597.39,
+   "d": 0.57,
+   "text": "Klowns"
+  },
+  {
+   "t": 597.96,
+   "d": 3.66,
+   "text": "killer Klowns survey says okay killer"
+  },
+  {
+   "t": 601.62,
+   "d": 2.1,
+   "text": "clown there you go"
+  },
+  {
+   "t": 603.72,
+   "d": 3.72,
+   "text": "five hundred dollars what's happening"
+  },
+  {
+   "t": 607.44,
+   "d": 4.08,
+   "text": "over here classics for four classics for"
+  },
+  {
+   "t": 611.52,
+   "d": 3.21,
+   "text": "four hundred included as a joke if you"
+  },
+  {
+   "t": 614.73,
+   "d": 1.65,
+   "text": "accidentally miss type of which in a"
+  },
+  {
+   "t": 616.38,
+   "d": 2.04,
+   "text": "dumb what small dwarf might appear to"
+  },
+  {
+   "t": 618.42,
+   "d": 3.86,
+   "text": "accompany you you said you knew hey Dom"
+  },
+  {
+   "t": 626.18,
+   "d": 4.09,
+   "text": "I played that to Eggman dungeon of"
+  },
+  {
+   "t": 630.27,
+   "d": 1.29,
+   "text": "monsters isn't that what that stands for"
+  },
+  {
+   "t": 631.56,
+   "d": 9.99,
+   "text": "yeah I think so what's not in work minor"
+  },
+  {
+   "t": 641.55,
+   "d": 2.1,
+   "text": "paper company Rumpelstiltskin one of the"
+  },
+  {
+   "t": 643.65,
+   "d": 2.13,
+   "text": "Seven Dwarves like no that's the wrong"
+  },
+  {
+   "t": 645.78,
+   "d": 1.44,
+   "text": "twice you want to keep stacking the pit"
+  },
+  {
+   "t": 647.22,
+   "d": 3.08,
+   "text": "no thank you unfortunately the answer is"
+  },
+  {
+   "t": 650.3,
+   "d": 3.19,
+   "text": "glad a misspelling of dog oil which"
+  },
+  {
+   "t": 653.49,
+   "d": 3.69,
+   "text": "people wish for all the time what else"
+  },
+  {
+   "t": 657.18,
+   "d": 6.84,
+   "text": "we got the classics category only five"
+  },
+  {
+   "t": 664.02,
+   "d": 8.19,
+   "text": "hundred so that's when you're taking the"
+  },
+  {
+   "t": 672.21,
+   "d": 1.59,
+   "text": "dungeon in the game Eggman goes down"
+  },
+  {
+   "t": 673.8,
+   "d": 2.43,
+   "text": "very far a hundred levels are more wavy"
+  },
+  {
+   "t": 676.23,
+   "d": 2.01,
+   "text": "on level 99 is Sauron who must be"
+  },
+  {
+   "t": 678.24,
+   "d": 1.47,
+   "text": "defeated in order to descend further"
+  },
+  {
+   "t": 679.71,
+   "d": 2.19,
+   "text": "what monster awaits on level 100 who"
+  },
+  {
+   "t": 681.9,
+   "d": 3.41,
+   "text": "must be destroyed to win the game"
+  },
+  {
+   "t": 686.9,
+   "d": 4.62,
+   "text": "Oh somebody in the audience knows and I"
+  },
+  {
+   "t": 691.52,
+   "d": 1.35,
+   "text": "can guarantee you the potions are"
+  },
+  {
+   "t": 692.87,
+   "d": 5.12,
+   "text": "uncursed this is a this is a potion"
+  },
+  {
+   "t": 697.99,
+   "d": 6.7,
+   "text": "uncursed no it's fine okay audience you"
+  },
+  {
+   "t": 704.69,
+   "d": 4.05,
+   "text": "have any answers shut about more gauze I"
+  },
+  {
+   "t": 708.74,
+   "d": 1.26,
+   "text": "hear more goth why everything anything"
+  },
+  {
+   "t": 710.0,
+   "d": 2.91,
+   "text": "else you can tell something wrong it's"
+  },
+  {
+   "t": 712.91,
+   "d": 1.95,
+   "text": "when I miss them up okay what you think"
+  },
+  {
+   "t": 714.86,
+   "d": 6.36,
+   "text": "Morgan oh my gosh so except melkor no"
+  },
+  {
+   "t": 721.22,
+   "d": 2.33,
+   "text": "Valdez house war was never ending story"
+  },
+  {
+   "t": 723.55,
+   "d": 2.58,
+   "text": "all right what's next"
+  },
+  {
+   "t": 726.13,
+   "d": 3.7,
+   "text": "let's go nethack for 400 nethack for"
+  },
+  {
+   "t": 729.83,
+   "d": 2.82,
+   "text": "$400 prior to version preview to version"
+  },
+  {
+   "t": 732.65,
+   "d": 1.59,
+   "text": "three point six win which guaranteed"
+  },
+  {
+   "t": 734.24,
+   "d": 1.41,
+   "text": "attack enemy was notorious for being"
+  },
+  {
+   "t": 735.65,
+   "d": 5.49,
+   "text": "easy to cue the drug not try killed the"
+  },
+  {
+   "t": 741.14,
+   "d": 13.86,
+   "text": "vampire vlad you're right this is Wow"
+  },
+  {
+   "t": 755.0,
+   "d": 5.81,
+   "text": "okay that's notorious for his wimpiness"
+  },
+  {
+   "t": 760.81,
+   "d": 1.74,
+   "text": "what's next"
+  },
+  {
+   "t": 762.55,
+   "d": 2.14,
+   "text": "nobody's taking it in grab bag right"
+  },
+  {
+   "t": 764.69,
+   "d": 3.03,
+   "text": "grab bags for hundreds when taken the"
+  },
+  {
+   "t": 767.72,
+   "d": 3.33,
+   "text": "hundreds are all gone 500 grab bag 500"
+  },
+  {
+   "t": 771.05,
+   "d": 4.02,
+   "text": "grab bag which classic roguelike does"
+  },
+  {
+   "t": 775.07,
+   "d": 4.59,
+   "text": "diablo credit for inspiration wow that"
+  },
+  {
+   "t": 779.66,
+   "d": 1.17,
+   "text": "was fast"
+  },
+  {
+   "t": 780.83,
+   "d": 2.79,
+   "text": "the answer sheet says you're wrong but"
+  },
+  {
+   "t": 783.62,
+   "d": 1.35,
+   "text": "it's a really hard question so I'll give"
+  },
+  {
+   "t": 784.97,
+   "d": 3.27,
+   "text": "the other team a try Moorea Moorea can"
+  },
+  {
+   "t": 788.24,
+   "d": 4.11,
+   "text": "you be more clear you Moria oh my god"
+  },
+  {
+   "t": 792.35,
+   "d": 3.42,
+   "text": "yes you are yes correct"
+  },
+  {
+   "t": 795.77,
+   "d": 6.57,
+   "text": "very good very good let's go with my"
+  },
+  {
+   "t": 802.34,
+   "d": 2.88,
+   "text": "teammates $500 for me because of my"
+  },
+  {
+   "t": 805.22,
+   "d": 8.73,
+   "text": "generosity the most that question will"
+  },
+  {
+   "t": 813.95,
+   "d": 1.14,
+   "text": "go back to you pick something else you"
+  },
+  {
+   "t": 815.09,
+   "d": 1.62,
+   "text": "to know you guys here because they stole"
+  },
+  {
+   "t": 816.71,
+   "d": 1.08,
+   "text": "your question cuz I gave it to them"
+  },
+  {
+   "t": 817.79,
+   "d": 3.45,
+   "text": "nobody steals what's wrong here an"
+  },
+  {
+   "t": 821.24,
+   "d": 1.59,
+   "text": "update I'll just give an update on where"
+  },
+  {
+   "t": 822.83,
+   "d": 2.37,
+   "text": "we are in the game I'll give the scores"
+  },
+  {
+   "t": 825.2,
+   "d": 5.28,
+   "text": "and so we have four nethack we have 200"
+  },
+  {
+   "t": 830.48,
+   "d": 2.79,
+   "text": "and 300 open for DCSS we have 200 300"
+  },
+  {
+   "t": 833.27,
+   "d": 3.51,
+   "text": "400 open and 200 300 400 open for"
+  },
+  {
+   "t": 836.78,
+   "d": 0.45,
+   "text": "grab-bag"
+  },
+  {
+   "t": 837.23,
+   "d": 3.89,
+   "text": "the scores our team unidentified has"
+  },
+  {
+   "t": 841.12,
+   "d": 6.13,
+   "text": "$900 points correct team strange mood"
+  },
+  {
+   "t": 847.25,
+   "d": 4.17,
+   "text": "has 1100 dollars and 13 cents correct"
+  },
+  {
+   "t": 851.42,
+   "d": 11.88,
+   "text": "and Jim has all right you two what do we"
+  },
+  {
+   "t": 863.3,
+   "d": 5.52,
+   "text": "got grab bag for $400 in the mystery"
+  },
+  {
+   "t": 868.82,
+   "d": 1.68,
+   "text": "dungeon games including pokemon mystery"
+  },
+  {
+   "t": 870.5,
+   "d": 1.53,
+   "text": "dungeon sure in the wanderer and many"
+  },
+  {
+   "t": 872.03,
+   "d": 3.09,
+   "text": "others oops we're produced by Japanese"
+  },
+  {
+   "t": 875.12,
+   "d": 2.49,
+   "text": "developer chunsoft of what famous JRPG"
+  },
+  {
+   "t": 877.61,
+   "d": 1.53,
+   "text": "series did they also have a hand in the"
+  },
+  {
+   "t": 879.14,
+   "d": 13.86,
+   "text": "creation Dragon Quest services good not"
+  },
+  {
+   "t": 893.0,
+   "d": 8.96,
+   "text": "being the only JRPG moving on cool uh"
+  },
+  {
+   "t": 901.96,
+   "d": 3.55,
+   "text": "nethack for whatever is highest instill"
+  },
+  {
+   "t": 905.51,
+   "d": 3.57,
+   "text": "open 300 nethack for 300 if you die on"
+  },
+  {
+   "t": 909.08,
+   "d": 1.32,
+   "text": "the way off out of the dungeon in"
+  },
+  {
+   "t": 910.4,
+   "d": 1.5,
+   "text": "nethack but happen to leave a bones"
+  },
+  {
+   "t": 911.9,
+   "d": 2.79,
+   "text": "level what happens to the amulet of yen"
+  },
+  {
+   "t": 914.69,
+   "d": 4.2,
+   "text": "door in your inventory it's replaced by"
+  },
+  {
+   "t": 918.89,
+   "d": 2.55,
+   "text": "a fake it is replaced by a fake survey"
+  },
+  {
+   "t": 921.44,
+   "d": 3.03,
+   "text": "says yes that is correct and it's"
+  },
+  {
+   "t": 924.47,
+   "d": 1.43,
+   "text": "correct"
+  },
+  {
+   "t": 925.9,
+   "d": 3.34,
+   "text": "while you are you are on fire team"
+  },
+  {
+   "t": 929.24,
+   "d": 2.67,
+   "text": "unknown we're not identified you guys"
+  },
+  {
+   "t": 931.91,
+   "d": 2.4,
+   "text": "are you guys are strange modes okay"
+  },
+  {
+   "t": 934.31,
+   "d": 3.36,
+   "text": "unidentified okay four three grab back"
+  },
+  {
+   "t": 937.67,
+   "d": 1.2,
+   "text": "$300"
+  },
+  {
+   "t": 938.87,
+   "d": 1.98,
+   "text": "what popular graphical roguelike to"
+  },
+  {
+   "t": 940.85,
+   "d": 1.8,
+   "text": "recently come to steam early access has"
+  },
+  {
+   "t": 942.65,
+   "d": 1.98,
+   "text": "gun-wielding players fighting demons in"
+  },
+  {
+   "t": 944.63,
+   "d": 1.8,
+   "text": "a sci-fi setting and it's likely"
+  },
+  {
+   "t": 946.43,
+   "d": 4.13,
+   "text": "inspired by do more likely inspired by"
+  },
+  {
+   "t": 950.98,
+   "d": 2.74,
+   "text": "Jupiter hell the answer is everyone by"
+  },
+  {
+   "t": 953.72,
+   "d": 3.42,
+   "text": "Jupiter hell yes very good very good"
+  },
+  {
+   "t": 957.14,
+   "d": 4.71,
+   "text": "what else let's do the last grab bag"
+  },
+  {
+   "t": 961.85,
+   "d": 5.61,
+   "text": "last grab bag for $200 what is the"
+  },
+  {
+   "t": 967.46,
+   "d": 2.01,
+   "text": "community name for regenerating a random"
+  },
+  {
+   "t": 969.47,
+   "d": 1.53,
+   "text": "level repeatedly in the hopes of finding"
+  },
+  {
+   "t": 971.0,
+   "d": 1.59,
+   "text": "good items that having to descend to"
+  },
+  {
+   "t": 972.59,
+   "d": 5.67,
+   "text": "more challenging dungeon levels stairs"
+  },
+  {
+   "t": 978.26,
+   "d": 6.87,
+   "text": "coming very specific let's see yes very"
+  },
+  {
+   "t": 985.13,
+   "d": 0.27,
+   "text": "good"
+  },
+  {
+   "t": 985.4,
+   "d": 11.66,
+   "text": "$200 basically 13 cents"
+  },
+  {
+   "t": 1006.96,
+   "d": 11.08,
+   "text": "okay great knack for 200 there are three"
+  },
+  {
+   "t": 1018.04,
+   "d": 1.86,
+   "text": "tools in net act akin unlock doors"
+  },
+  {
+   "t": 1019.9,
+   "d": 1.77,
+   "text": "besides the skeleton key in the lock"
+  },
+  {
+   "t": 1021.67,
+   "d": 2.01,
+   "text": "pick what is the other what is the"
+  },
+  {
+   "t": 1023.68,
+   "d": 1.92,
+   "text": "Platinum the Andorian express covered"
+  },
+  {
+   "t": 1025.6,
+   "d": 1.98,
+   "text": "the planet enduring an ExpressCard"
+  },
+  {
+   "t": 1027.58,
+   "d": 1.44,
+   "text": "survey says"
+  },
+  {
+   "t": 1029.02,
+   "d": 5.66,
+   "text": "yes it's the credit card $200 all right"
+  },
+  {
+   "t": 1035.34,
+   "d": 5.59,
+   "text": "so we got DCSS for 400 DCSS for 400 one"
+  },
+  {
+   "t": 1040.93,
+   "d": 1.23,
+   "text": "of the more entertaining ways to plea"
+  },
+  {
+   "t": 1042.16,
+   "d": 2.16,
+   "text": "dungeon crawl Stone Soup is a hill or"
+  },
+  {
+   "t": 1044.32,
+   "d": 1.98,
+   "text": "following the orcish god who will start"
+  },
+  {
+   "t": 1046.3,
+   "d": 1.47,
+   "text": "awarding you with followers as you play"
+  },
+  {
+   "t": 1047.77,
+   "d": 1.79,
+   "text": "eventually building up a sizable army"
+  },
+  {
+   "t": 1049.56,
+   "d": 2.53,
+   "text": "what is its name in the current versions"
+  },
+  {
+   "t": 1052.09,
+   "d": 5.13,
+   "text": "I think it means the orcish god i'll"
+  },
+  {
+   "t": 1057.22,
+   "d": 1.34,
+   "text": "drink a potion"
+  },
+  {
+   "t": 1058.56,
+   "d": 2.16,
+   "text": "but hopefully someone knows drink don't"
+  },
+  {
+   "t": 1060.72,
+   "d": 2.43,
+   "text": "let me down the last one forever to"
+  },
+  {
+   "t": 1063.15,
+   "d": 0.99,
+   "text": "drink it was terrible"
+  },
+  {
+   "t": 1064.14,
+   "d": 6.75,
+   "text": "down the hatch very good art audience"
+  },
+  {
+   "t": 1070.89,
+   "d": 22.76,
+   "text": "shout something either booing you bow"
+  },
+  {
+   "t": 1093.65,
+   "d": 6.85,
+   "text": "bow well what's it thank you very much"
+  },
+  {
+   "t": 1100.5,
+   "d": 2.01,
+   "text": "I was gonna call it off right like be"
+  },
+  {
+   "t": 1102.51,
+   "d": 3.48,
+   "text": "off isn't that the G H is like like"
+  },
+  {
+   "t": 1105.99,
+   "d": 2.1,
+   "text": "Gaelic and it's pronounced Joe I don't"
+  },
+  {
+   "t": 1108.09,
+   "d": 5.28,
+   "text": "speak nice nice we have DCSS for 300 or"
+  },
+  {
+   "t": 1113.37,
+   "d": 5.06,
+   "text": "200 300 300 dungeon crawl Stone Soup"
+  },
+  {
+   "t": 1118.43,
+   "d": 2.47,
+   "text": "dungeon crawl Stone Soup has a lot of"
+  },
+  {
+   "t": 1120.9,
+   "d": 1.92,
+   "text": "weird and interesting races which race"
+  },
+  {
+   "t": 1122.82,
+   "d": 4.5,
+   "text": "gets multiple lives feelings that it's"
+  },
+  {
+   "t": 1127.32,
+   "d": 3.9,
+   "text": "correct to a very good alright last"
+  },
+  {
+   "t": 1131.22,
+   "d": 2.73,
+   "text": "question DCSS for 200 I'm gonna throw it"
+  },
+  {
+   "t": 1133.95,
+   "d": 0.6,
+   "text": "at you guys"
+  },
+  {
+   "t": 1134.55,
+   "d": 1.74,
+   "text": "what killer plants and dungeon crawl"
+  },
+  {
+   "t": 1136.29,
+   "d": 1.74,
+   "text": "stone super node for spitting strong"
+  },
+  {
+   "t": 1138.03,
+   "d": 3.27,
+   "text": "acid I mean I know"
+  },
+  {
+   "t": 1141.3,
+   "d": 2.34,
+   "text": "the caves are cut spitting plants but"
+  },
+  {
+   "t": 1143.64,
+   "d": 1.41,
+   "text": "that's not good help me here you're out"
+  },
+  {
+   "t": 1145.05,
+   "d": 8.27,
+   "text": "of consumables why didn't you say that I"
+  },
+  {
+   "t": 1153.32,
+   "d": 3.28,
+   "text": "don't know it just gets like pitcher"
+  },
+  {
+   "t": 1156.6,
+   "d": 3.08,
+   "text": "plants pitcher plants hits your plants"
+  },
+  {
+   "t": 1159.68,
+   "d": 3.22,
+   "text": "that depends is oak lob the orcish word"
+  },
+  {
+   "t": 1162.9,
+   "d": 4.56,
+   "text": "for pitcher yes I think not so that is"
+  },
+  {
+   "t": 1167.46,
+   "d": 2.9,
+   "text": "that is incorrect"
+  },
+  {
+   "t": 1171.98,
+   "d": 4.12,
+   "text": "do I get to make it up because I wanted"
+  },
+  {
+   "t": 1176.1,
+   "d": 1.59,
+   "text": "to ask which one is the best final"
+  },
+  {
+   "t": 1177.69,
+   "d": 1.87,
+   "text": "fantasy"
+  },
+  {
+   "t": 1179.56,
+   "d": 2.13,
+   "text": "fine then we'll click the final Jeopardy"
+  },
+  {
+   "t": 1181.69,
+   "d": 2.12,
+   "text": "question I click the question you guys"
+  },
+  {
+   "t": 1183.81,
+   "d": 2.02,
+   "text": "have to bet first or they know the"
+  },
+  {
+   "t": 1185.83,
+   "d": 10.68,
+   "text": "category the category all but I click"
+  },
+  {
+   "t": 1196.51,
+   "d": 1.2,
+   "text": "this and it's gonna show in the category"
+  },
+  {
+   "t": 1197.71,
+   "d": 0.89,
+   "text": "not the question"
+  },
+  {
+   "t": 1198.6,
+   "d": 4.27,
+   "text": "ok topic Elder Gods so then you think"
+  },
+  {
+   "t": 1202.87,
+   "d": 1.23,
+   "text": "really hard about how much of your"
+  },
+  {
+   "t": 1204.1,
+   "d": 1.37,
+   "text": "hard-earned Zork means you want to wager"
+  },
+  {
+   "t": 1205.47,
+   "d": 7.42,
+   "text": "and then I mean how elder is elder man I"
+  },
+  {
+   "t": 1212.89,
+   "d": 1.5,
+   "text": "mean none of us are warlocks don't be"
+  },
+  {
+   "t": 1214.39,
+   "d": 1.44,
+   "text": "cheap are they older not alone doesn't"
+  },
+  {
+   "t": 1215.83,
+   "d": 2.76,
+   "text": "matter yeah okay so now you're writing"
+  },
+  {
+   "t": 1218.59,
+   "d": 1.53,
+   "text": "down the numbers they're wagering behind"
+  },
+  {
+   "t": 1220.12,
+   "d": 1.92,
+   "text": "the board they'll tell you they would"
+  },
+  {
+   "t": 1222.04,
+   "d": 2.49,
+   "text": "okay so whisper to Noah how many of your"
+  },
+  {
+   "t": 1224.53,
+   "d": 1.38,
+   "text": "dollars you're gonna wager on the topic"
+  },
+  {
+   "t": 1225.91,
+   "d": 8.85,
+   "text": "of Elder Gods we wish your money well"
+  },
+  {
+   "t": 1234.76,
+   "d": 1.23,
+   "text": "you were supposed to whisper that's fine"
+  },
+  {
+   "t": 1235.99,
+   "d": 8.37,
+   "text": "okay so team unidentified shoves for"
+  },
+  {
+   "t": 1244.36,
+   "d": 10.65,
+   "text": "everything I I already know the best"
+  },
+  {
+   "t": 1255.01,
+   "d": 1.08,
+   "text": "Final Fantasy is 12"
+  },
+  {
+   "t": 1256.09,
+   "d": 6.3,
+   "text": "I'm off-limits I can't do this yeah no"
+  },
+  {
+   "t": 1262.39,
+   "d": 1.59,
+   "text": "was all-in he shoves oh you didn't know"
+  },
+  {
+   "t": 1263.98,
+   "d": 2.46,
+   "text": "the answer okay what ancient God is"
+  },
+  {
+   "t": 1266.44,
+   "d": 1.23,
+   "text": "featured prominently in the movie"
+  },
+  {
+   "t": 1267.67,
+   "d": 2.64,
+   "text": "metropolis and given its own sanctum in"
+  },
+  {
+   "t": 1270.31,
+   "d": 2.16,
+   "text": "the lower levels of nethack audience if"
+  },
+  {
+   "t": 1272.47,
+   "d": 2.83,
+   "text": "you sing the final Jeopardy song"
+  },
+  {
+   "t": 1275.3,
+   "d": 4.42,
+   "text": "wow that's good someone delivered yes"
+  },
+  {
+   "t": 1279.72,
+   "d": 0.75,
+   "text": "sir in the back"
+  },
+  {
+   "t": 1280.47,
+   "d": 2.99,
+   "text": "nice"
+  },
+  {
+   "t": 1285.95,
+   "d": 30.61,
+   "text": "[Music]"
+  },
+  {
+   "t": 1321.02,
+   "d": 2.25,
+   "text": "I thought this was a time limit kind of"
+  },
+  {
+   "t": 1323.27,
+   "d": 2.46,
+   "text": "can you dance can you swing like on"
+  },
+  {
+   "t": 1325.73,
+   "d": 8.04,
+   "text": "YouTube wait wait for the drop okay okay"
+  },
+  {
+   "t": 1333.77,
+   "d": 1.89,
+   "text": "so I'm gonna trust your integrity and"
+  },
+  {
+   "t": 1335.66,
+   "d": 2.4,
+   "text": "when you say your answer first they're"
+  },
+  {
+   "t": 1338.06,
+   "d": 2.91,
+   "text": "not gonna just change their I believe it"
+  },
+  {
+   "t": 1340.97,
+   "d": 2.01,
+   "text": "so so what ancient goddess featured"
+  },
+  {
+   "t": 1342.98,
+   "d": 2.4,
+   "text": "prominently moving metropolis and giving"
+  },
+  {
+   "t": 1345.38,
+   "d": 1.08,
+   "text": "its own sanctum the lower levels of"
+  },
+  {
+   "t": 1346.46,
+   "d": 4.92,
+   "text": "nethack door for all right for that is"
+  },
+  {
+   "t": 1351.38,
+   "d": 2.85,
+   "text": "four letter word and over here orcas"
+  },
+  {
+   "t": 1354.23,
+   "d": 3.78,
+   "text": "orcas orcas from like well we pits orcas"
+  },
+  {
+   "t": 1358.01,
+   "d": 13.77,
+   "text": "I'm gonna poop myself at everything and"
+  },
+  {
+   "t": 1371.78,
+   "d": 1.98,
+   "text": "now you have nothing so trooper medev"
+  },
+  {
+   "t": 1373.76,
+   "d": 1.65,
+   "text": "has approached you both and you have"
+  },
+  {
+   "t": 1375.41,
+   "d": 2.4,
+   "text": "zero dollars and may God have mercy on"
+  },
+  {
+   "t": 1377.81,
+   "d": 2.4,
+   "text": "your souls right yeah hey thank y'all"
+  },
+  {
+   "t": 1380.21,
+   "d": 0.62,
+   "text": "very much"
+  },
+  {
+   "t": 1380.83,
+   "d": 2.95,
+   "text": "everybody from all of this rolling we're"
+  },
+  {
+   "t": 1383.78,
+   "d": 1.86,
+   "text": "talking for all your creativity and"
+  },
+  {
+   "t": 1385.64,
+   "d": 3.47,
+   "text": "inspiration thank you so much"
+  }
+ ]
+}

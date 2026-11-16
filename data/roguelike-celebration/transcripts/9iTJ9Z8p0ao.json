@@ -1,0 +1,4410 @@
+{
+ "id": "9iTJ9Z8p0ao",
+ "url": "https://www.youtube.com/watch?v=9iTJ9Z8p0ao",
+ "title": "Lachlan Kingsford - Exploring the Monte Carlo Forest: Using MCTS to Balance your Game",
+ "speaker": "Lachlan Kingsford",
+ "talk_title": "Exploring the Monte Carlo Forest: Using MCTS to Balance your Game",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1886,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "How do you make sure that the herd of integrated systems that you've gently shepherded into a roguelike game work together into a winnable, playable, balanced, stable experience? Playtesting is expensive, LLMs are expensive and ill-suited, and do you really want to spend your limited time writing a single-use bot?\n\nThere is an option that has been used in the board game and simulation world for a long time: the Monte Carlo Tree Search. We'll explore how the surprisingly simple, practical, elegant and scalable algorithm that powers AlphaGo can run thousands of simulations to emulate the smartest character in your dungeon: the player, and show you how your game performs at scale.\n\nWe will look at using MCTS simulations to:\n\n    prove how winnable our game is;\n    test how hard our game is;\n    find the kind of bugs that only appear once in ten thousand games; and\n    maybe even apply a scientific approach to balance.\n\nAnd maybe, we'll see how to turn your Wizard of Yendor into a chess-master: ready to respond to your adventures most underhanded strategies, instead of a mere overpowered goblin who happened upon a massive magical axe.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5282,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.5,
+   "d": 3.4,
+   "text": "Hello, hello friends. Welcome, welcome"
+  },
+  {
+   "t": 8.9,
+   "d": 2.6,
+   "text": "back uh Roguelikers, Roguelike"
+  },
+  {
+   "t": 11.5,
+   "d": 1.9,
+   "text": "Roguelikians."
+  },
+  {
+   "t": 13.4,
+   "d": 1.3,
+   "text": "Uh"
+  },
+  {
+   "t": 14.7,
+   "d": 1.7,
+   "text": "if you are following us along on Twitch"
+  },
+  {
+   "t": 16.4,
+   "d": 1.7,
+   "text": "or YouTube, just if we're talking about"
+  },
+  {
+   "t": 18.1,
+   "d": 2.2,
+   "text": "the social space, you can buy a ticket"
+  },
+  {
+   "t": 20.3,
+   "d": 1.7,
+   "text": "uh or uh"
+  },
+  {
+   "t": 22.0,
+   "d": 2.6,
+   "text": "have one for free uh rogelike.club um to"
+  },
+  {
+   "t": 24.6,
+   "d": 1.6,
+   "text": "follow along and explore the space and"
+  },
+  {
+   "t": 26.2,
+   "d": 2.3,
+   "text": "have all that fun stuff. But we've got"
+  },
+  {
+   "t": 28.5,
+   "d": 2.2,
+   "text": "two more talks before we wrap up with"
+  },
+  {
+   "t": 30.7,
+   "d": 2.5,
+   "text": "the social space and more social space"
+  },
+  {
+   "t": 33.2,
+   "d": 2.2,
+   "text": "and some unconferencing."
+  },
+  {
+   "t": 35.4,
+   "d": 4.2,
+   "text": "But I am happy to welcome to the stage"
+  },
+  {
+   "t": 39.6,
+   "d": 3.1,
+   "text": "uh Lochlan uh talking about exploring"
+  },
+  {
+   "t": 42.7,
+   "d": 3.4,
+   "text": "the Monte Carlo Forest using MCTS to"
+  },
+  {
+   "t": 46.1,
+   "d": 1.8,
+   "text": "balance your game and enlighten your"
+  },
+  {
+   "t": 47.9,
+   "d": 1.5,
+   "text": "monsters"
+  },
+  {
+   "t": 49.4,
+   "d": 2.8,
+   "text": "um which I'm very excited about. Uh so"
+  },
+  {
+   "t": 52.2,
+   "d": 1.6,
+   "text": "Lochlan"
+  },
+  {
+   "t": 53.8,
+   "d": 2.1,
+   "text": "welcome, welcome."
+  },
+  {
+   "t": 55.9,
+   "d": 1.7,
+   "text": ">> Thank you."
+  },
+  {
+   "t": 57.6,
+   "d": 1.4,
+   "text": ">> And we've got a we've got a moving This"
+  },
+  {
+   "t": 59.0,
+   "d": 2.3,
+   "text": "is an actual conference talk. Lochlan's"
+  },
+  {
+   "t": 61.3,
+   "d": 2.4,
+   "text": "going to be moving around as we go."
+  },
+  {
+   "t": 63.7,
+   "d": 1.1,
+   "text": ">> Well, I figured what better way to deal"
+  },
+  {
+   "t": 64.8,
+   "d": 1.3,
+   "text": "with the nerves, right?"
+  },
+  {
+   "t": 66.1,
+   "d": 2.1,
+   "text": ">> Yeah, it's perfect."
+  },
+  {
+   "t": 68.2,
+   "d": 2.3,
+   "text": "And uh if we can get it get his slides"
+  },
+  {
+   "t": 70.5,
+   "d": 2.1,
+   "text": "up, there we go. All right, take it away"
+  },
+  {
+   "t": 72.6,
+   "d": 1.0,
+   "text": "Lochlan."
+  },
+  {
+   "t": 73.6,
+   "d": 0.8,
+   "text": ">> Cool."
+  },
+  {
+   "t": 74.4,
+   "d": 3.6,
+   "text": "So wizards, tourists, space marine"
+  },
+  {
+   "t": 78.0,
+   "d": 1.5,
+   "text": "I guess true keen enough played enough"
+  },
+  {
+   "t": 79.5,
+   "d": 1.6,
+   "text": "card to know you'd be irritated if I"
+  },
+  {
+   "t": 81.1,
+   "d": 1.7,
+   "text": "didn't call you out."
+  },
+  {
+   "t": 82.8,
+   "d": 1.6,
+   "text": "Like most of you, I've been reflecting a"
+  },
+  {
+   "t": 84.4,
+   "d": 2.5,
+   "text": "lot on AI. I thought, huh"
+  },
+  {
+   "t": 86.9,
+   "d": 1.5,
+   "text": "you know what"
+  },
+  {
+   "t": 88.4,
+   "d": 1.6,
+   "text": "computers might finally be powerful"
+  },
+  {
+   "t": 90.0,
+   "d": 2.3,
+   "text": "enough to write a feasible talk about AI"
+  },
+  {
+   "t": 92.3,
+   "d": 3.3,
+   "text": "using AI. In fact, could I write my talk"
+  },
+  {
+   "t": 95.6,
+   "d": 3.3,
+   "text": "using a Monte Carlo tree search?"
+  },
+  {
+   "t": 98.9,
+   "d": 1.6,
+   "text": "Well, no, it is not the right tool for"
+  },
+  {
+   "t": 100.5,
+   "d": 1.2,
+   "text": "that job."
+  },
+  {
+   "t": 101.7,
+   "d": 2.3,
+   "text": "So thank you for the introduction. Yep,"
+  },
+  {
+   "t": 104.0,
+   "d": 1.3,
+   "text": "I'm Lochlan and I'm going to talk to you"
+  },
+  {
+   "t": 105.3,
+   "d": 3.0,
+   "text": "about what jobs MCTS is the right tool"
+  },
+  {
+   "t": 108.3,
+   "d": 0.9,
+   "text": "for."
+  },
+  {
+   "t": 109.2,
+   "d": 2.2,
+   "text": "Firstly, I should quickly note anything"
+  },
+  {
+   "t": 111.4,
+   "d": 2.0,
+   "text": "I say here is of my own accord and it is"
+  },
+  {
+   "t": 113.4,
+   "d": 2.2,
+   "text": "not on behalf of or representation of"
+  },
+  {
+   "t": 115.6,
+   "d": 3.0,
+   "text": "the views of my employer."
+  },
+  {
+   "t": 121.1,
+   "d": 1.79,
+   "text": "And naturally the clicker just doesn't"
+  },
+  {
+   "t": 122.89,
+   "d": 1.4,
+   "text": "work as soon as I'm actually finally"
+  },
+  {
+   "t": 124.29,
+   "d": 2.2,
+   "text": "here."
+  },
+  {
+   "t": 127.49,
+   "d": 2.7,
+   "text": "Okay. So here is Emu Bay Railway"
+  },
+  {
+   "t": 130.19,
+   "d": 2.5,
+   "text": "Company. So you'll notice it is not a"
+  },
+  {
+   "t": 132.69,
+   "d": 2.7,
+   "text": "roguelike or a roguelite. It is a cube"
+  },
+  {
+   "t": 135.39,
+   "d": 1.8,
+   "text": "rail game I've been working on about the"
+  },
+  {
+   "t": 137.19,
+   "d": 2.6,
+   "text": "various railroads in Tasmania who loaded"
+  },
+  {
+   "t": 139.79,
+   "d": 2.3,
+   "text": "themselves up with debt, failed, and"
+  },
+  {
+   "t": 142.09,
+   "d": 1.7,
+   "text": "went bankrupt in the vein of John"
+  },
+  {
+   "t": 143.79,
+   "d": 4.1,
+   "text": "Borre's excellent Chicago Express."
+  },
+  {
+   "t": 152.19,
+   "d": 2.1,
+   "text": "And here is a placeholder for my child."
+  },
+  {
+   "t": 154.29,
+   "d": 2.2,
+   "text": "He is extremely loved in that sort of"
+  },
+  {
+   "t": 156.49,
+   "d": 1.8,
+   "text": "way that means I struggle to play test"
+  },
+  {
+   "t": 158.29,
+   "d": 2.7,
+   "text": "with other people."
+  },
+  {
+   "t": 213.99,
+   "d": 3.0,
+   "text": ">> All right, Lachlan had a laptop"
+  },
+  {
+   "t": 216.99,
+   "d": 2.5,
+   "text": "difficulty. It appears to have moved"
+  },
+  {
+   "t": 219.49,
+   "d": 3.9,
+   "text": "without his consent or desire."
+  },
+  {
+   "t": 223.39,
+   "d": 1.3,
+   "text": "So"
+  },
+  {
+   "t": 224.69,
+   "d": 4.7,
+   "text": "he'll be sorting that out shortly."
+  },
+  {
+   "t": 229.69,
+   "d": 2.8,
+   "text": "I like that we had a placeholder child"
+  },
+  {
+   "t": 232.49,
+   "d": 1.9,
+   "text": "that looked very well loved, wearing a"
+  },
+  {
+   "t": 234.39,
+   "d": 2.9,
+   "text": "very cute shirt."
+  },
+  {
+   "t": 238.09,
+   "d": 3.6,
+   "text": "We might also"
+  },
+  {
+   "t": 241.69,
+   "d": 2.9,
+   "text": "want to get the"
+  },
+  {
+   "t": 244.59,
+   "d": 2.9,
+   "text": "the recorded presentation"
+  },
+  {
+   "t": 247.49,
+   "d": 4.6,
+   "text": "loaded into StreamYard perhaps."
+  },
+  {
+   "t": 256.49,
+   "d": 3.0,
+   "text": "All right, I see"
+  },
+  {
+   "t": 259.69,
+   "d": 4.2,
+   "text": "he's jumping back in."
+  },
+  {
+   "t": 265.29,
+   "d": 2.0,
+   "text": "Monte Carlo trees."
+  },
+  {
+   "t": 267.29,
+   "d": 2.4,
+   "text": "What can they tell us?"
+  },
+  {
+   "t": 269.69,
+   "d": 3.2,
+   "text": "I am excited to find out."
+  },
+  {
+   "t": 277.99,
+   "d": 3.7,
+   "text": "All righty. Oh, I see a Lachlan."
+  },
+  {
+   "t": 281.69,
+   "d": 3.3,
+   "text": "I think we're back in action."
+  },
+  {
+   "t": 285.19,
+   "d": 2.3,
+   "text": ">> I am so sorry about that."
+  },
+  {
+   "t": 287.49,
+   "d": 1.8,
+   "text": "Clicker wasn't working, panicked, and"
+  },
+  {
+   "t": 289.29,
+   "d": 1.7,
+   "text": "here we go."
+  },
+  {
+   "t": 290.99,
+   "d": 1.3,
+   "text": ">> All right, one second if you get your"
+  },
+  {
+   "t": 292.29,
+   "d": 2.5,
+   "text": "slides back up"
+  },
+  {
+   "t": 294.79,
+   "d": 1.9,
+   "text": "and then we'll be"
+  },
+  {
+   "t": 296.69,
+   "d": 3.1,
+   "text": "there we go."
+  },
+  {
+   "t": 299.79,
+   "d": 0.7,
+   "text": "All right."
+  },
+  {
+   "t": 300.49,
+   "d": 2.3,
+   "text": ">> Okay."
+  },
+  {
+   "t": 302.79,
+   "d": 1.7,
+   "text": "No, clicker is still not working, but"
+  },
+  {
+   "t": 304.49,
+   "d": 1.1,
+   "text": "we're not going to fall off the screen"
+  },
+  {
+   "t": 305.59,
+   "d": 1.8,
+   "text": "again."
+  },
+  {
+   "t": 307.39,
+   "d": 2.5,
+   "text": "I promise."
+  },
+  {
+   "t": 311.39,
+   "d": 2.8,
+   "text": "Get back to Okay."
+  },
+  {
+   "t": 314.49,
+   "d": 2.1,
+   "text": "I'm so sorry. So here is a placeholder"
+  },
+  {
+   "t": 316.59,
+   "d": 1.5,
+   "text": "for my child."
+  },
+  {
+   "t": 318.09,
+   "d": 1.7,
+   "text": "He's extremely loved in that way that"
+  },
+  {
+   "t": 319.79,
+   "d": 1.6,
+   "text": "means I struggle to play test with other"
+  },
+  {
+   "t": 321.39,
+   "d": 1.1,
+   "text": "people."
+  },
+  {
+   "t": 322.49,
+   "d": 2.9,
+   "text": "So what does a software engineer to do?"
+  },
+  {
+   "t": 325.39,
+   "d": 1.8,
+   "text": "The problem with most of us is that if"
+  },
+  {
+   "t": 327.19,
+   "d": 1.6,
+   "text": "there is a problem we can try to solve"
+  },
+  {
+   "t": 328.79,
+   "d": 2.0,
+   "text": "with code, we try to solve it with code."
+  },
+  {
+   "t": 330.79,
+   "d": 1.4,
+   "text": "So naturally I tried to solve it with"
+  },
+  {
+   "t": 332.19,
+   "d": 1.3,
+   "text": "code."
+  },
+  {
+   "t": 333.49,
+   "d": 3.0,
+   "text": "I tried a online implementation, but it"
+  },
+  {
+   "t": 336.49,
+   "d": 1.6,
+   "text": "was tough to actually end up with"
+  },
+  {
+   "t": 338.09,
+   "d": 1.6,
+   "text": "playing with people and I wanted to, you"
+  },
+  {
+   "t": 339.69,
+   "d": 2.5,
+   "text": "know, get it as balanced as I could"
+  },
+  {
+   "t": 342.19,
+   "d": 1.3,
+   "text": "before"
+  },
+  {
+   "t": 343.49,
+   "d": 1.7,
+   "text": "I got other humans to really play and I"
+  },
+  {
+   "t": 345.19,
+   "d": 1.7,
+   "text": "thought, huh,"
+  },
+  {
+   "t": 346.89,
+   "d": 1.4,
+   "text": "what if I could get a computer to be my"
+  },
+  {
+   "t": 348.29,
+   "d": 1.3,
+   "text": "opponent?"
+  },
+  {
+   "t": 349.59,
+   "d": 1.8,
+   "text": "Which quickly led to, well, what if I"
+  },
+  {
+   "t": 351.39,
+   "d": 1.9,
+   "text": "could get a computer to play itself over"
+  },
+  {
+   "t": 353.29,
+   "d": 1.4,
+   "text": "and over again and get me some"
+  },
+  {
+   "t": 354.69,
+   "d": 1.9,
+   "text": "statistics I can work off?"
+  },
+  {
+   "t": 356.59,
+   "d": 1.7,
+   "text": "Which led to"
+  },
+  {
+   "t": 358.29,
+   "d": 1.6,
+   "text": "Look, we'll get there."
+  },
+  {
+   "t": 359.89,
+   "d": 2.6,
+   "text": "It did not lead to any baby being ready"
+  },
+  {
+   "t": 362.49,
+   "d": 2.6,
+   "text": "yet, but But who took years to beat a"
+  },
+  {
+   "t": 365.1,
+   "d": 2.7,
+   "text": "DOM, isn't the journey part of the fun?"
+  },
+  {
+   "t": 367.8,
+   "d": 2.6,
+   "text": "So I did look at machine learning and I"
+  },
+  {
+   "t": 370.39,
+   "d": 1.9,
+   "text": "concluded it wasn't for me. It's this"
+  },
+  {
+   "t": 372.3,
+   "d": 2.4,
+   "text": "big black box full of dot products and I"
+  },
+  {
+   "t": 374.69,
+   "d": 1.8,
+   "text": "wanted something I could understand and"
+  },
+  {
+   "t": 376.5,
+   "d": 2.3,
+   "text": "I found MCTS, the Monte Carlo Tree"
+  },
+  {
+   "t": 378.8,
+   "d": 1.1,
+   "text": "Search."
+  },
+  {
+   "t": 379.89,
+   "d": 2.5,
+   "text": "You can do it by hand on a whiteboard."
+  },
+  {
+   "t": 382.39,
+   "d": 1.7,
+   "text": "Now we are going for a bit of a"
+  },
+  {
+   "t": 384.1,
+   "d": 2.0,
+   "text": "whirlwind tour, a wizard mode as it"
+  },
+  {
+   "t": 386.1,
+   "d": 2.3,
+   "text": "were, to quickly give you enough to"
+  },
+  {
+   "t": 388.39,
+   "d": 2.0,
+   "text": "start implementing or using MCTS"
+  },
+  {
+   "t": 390.39,
+   "d": 1.9,
+   "text": "yourself."
+  },
+  {
+   "t": 392.3,
+   "d": 1.2,
+   "text": "I'm going to give you some ideas of"
+  },
+  {
+   "t": 393.5,
+   "d": 2.1,
+   "text": "different ways it can help in or while"
+  },
+  {
+   "t": 395.6,
+   "d": 2.5,
+   "text": "developing your game and the sanity cost"
+  },
+  {
+   "t": 398.1,
+   "d": 2.5,
+   "text": "you are going to pay while you cast it."
+  },
+  {
+   "t": 400.6,
+   "d": 1.4,
+   "text": "I do have the slides available for"
+  },
+  {
+   "t": 402.0,
+   "d": 1.1,
+   "text": "download. They're over on the"
+  },
+  {
+   "t": 403.1,
+   "d": 1.6,
+   "text": "inscription and there's going to be a"
+  },
+  {
+   "t": 404.69,
+   "d": 2.7,
+   "text": "very few specific tips and tricks"
+  },
+  {
+   "t": 407.39,
+   "d": 2.0,
+   "text": "that might help you implement it and I'm"
+  },
+  {
+   "t": 409.39,
+   "d": 1.5,
+   "text": "going to be happy to talk to you here or"
+  },
+  {
+   "t": 410.89,
+   "d": 2.7,
+   "text": "via the links at the end."
+  },
+  {
+   "t": 413.6,
+   "d": 0.9,
+   "text": "So"
+  },
+  {
+   "t": 414.5,
+   "d": 1.8,
+   "text": "we're going to start our exploration"
+  },
+  {
+   "t": 416.3,
+   "d": 2.0,
+   "text": "with a typical item identification"
+  },
+  {
+   "t": 418.3,
+   "d": 1.56,
+   "text": "problem."
+  },
+  {
+   "t": 419.86,
+   "d": 0.54,
+   "text": "[snorts]"
+  },
+  {
+   "t": 420.39,
+   "d": 2.5,
+   "text": "So you have four swords."
+  },
+  {
+   "t": 422.89,
+   "d": 1.8,
+   "text": "You don't know how good each of them is."
+  },
+  {
+   "t": 424.69,
+   "d": 1.3,
+   "text": "You're going in an early level. You've"
+  },
+  {
+   "t": 426.0,
+   "d": 2.0,
+   "text": "got no ID scrolls. They look the same,"
+  },
+  {
+   "t": 428.0,
+   "d": 1.8,
+   "text": "sound the same. NetHack probably lets"
+  },
+  {
+   "t": 429.8,
+   "d": 2.0,
+   "text": "you check if they taste the same. Which"
+  },
+  {
+   "t": 431.8,
+   "d": 1.7,
+   "text": "one are you going to use?"
+  },
+  {
+   "t": 433.5,
+   "d": 1.6,
+   "text": "If you think about it,"
+  },
+  {
+   "t": 435.1,
+   "d": 1.3,
+   "text": "you probably want to have a bit of a go"
+  },
+  {
+   "t": 436.39,
+   "d": 2.1,
+   "text": "at all of them. So"
+  },
+  {
+   "t": 438.5,
+   "d": 1.7,
+   "text": "with the curse of randomness, a great"
+  },
+  {
+   "t": 440.19,
+   "d": 2.2,
+   "text": "sword might start with a couple of bad"
+  },
+  {
+   "t": 442.39,
+   "d": 2.4,
+   "text": "hits. A bad sword might start with a"
+  },
+  {
+   "t": 444.8,
+   "d": 2.0,
+   "text": "crit hit. And remember here we're still"
+  },
+  {
+   "t": 446.8,
+   "d": 1.8,
+   "text": "getting attacked by coyotes and sewer"
+  },
+  {
+   "t": 448.6,
+   "d": 2.3,
+   "text": "rats. So you're probably going to give a"
+  },
+  {
+   "t": 450.89,
+   "d": 1.6,
+   "text": "few tries to each of them and you're"
+  },
+  {
+   "t": 452.5,
+   "d": 1.9,
+   "text": "going to give the better one equipped as"
+  },
+  {
+   "t": 454.39,
+   "d": 2.2,
+   "text": "you get more confident."
+  },
+  {
+   "t": 456.6,
+   "d": 2.2,
+   "text": "So this little bit of maths, sorry"
+  },
+  {
+   "t": 458.8,
+   "d": 1.6,
+   "text": "there's going to be a little bit, is a"
+  },
+  {
+   "t": 460.39,
+   "d": 1.9,
+   "text": "way we can think about this."
+  },
+  {
+   "t": 462.3,
+   "d": 1.2,
+   "text": "This is called the upper confidence"
+  },
+  {
+   "t": 463.5,
+   "d": 1.6,
+   "text": "bound formula. I'm going to keep"
+  },
+  {
+   "t": 465.1,
+   "d": 3.4,
+   "text": "referring to it as the UCB."
+  },
+  {
+   "t": 468.5,
+   "d": 1.3,
+   "text": "So"
+  },
+  {
+   "t": 469.8,
+   "d": 1.9,
+   "text": "an easy way to think of it is a way of"
+  },
+  {
+   "t": 471.69,
+   "d": 1.9,
+   "text": "balancing how sure we are about an"
+  },
+  {
+   "t": 473.6,
+   "d": 2.4,
+   "text": "outcome, how good the outcome is, and"
+  },
+  {
+   "t": 476.0,
+   "d": 2.1,
+   "text": "whether we've explored it enough."
+  },
+  {
+   "t": 478.1,
+   "d": 1.7,
+   "text": "So this helps us pick which, in this"
+  },
+  {
+   "t": 479.8,
+   "d": 2.4,
+   "text": "case sword, we hit with next. So we do"
+  },
+  {
+   "t": 482.19,
+   "d": 1.9,
+   "text": "the maths on each option. The biggest"
+  },
+  {
+   "t": 484.1,
+   "d": 1.7,
+   "text": "result is the one that you're going to"
+  },
+  {
+   "t": 485.8,
+   "d": 3.1,
+   "text": "explore this time."
+  },
+  {
+   "t": 489.3,
+   "d": 1.2,
+   "text": "By the way, when you're searching for"
+  },
+  {
+   "t": 490.5,
+   "d": 1.4,
+   "text": "this later,"
+  },
+  {
+   "t": 491.9,
+   "d": 1.3,
+   "text": "you [snorts] look for the one-armed"
+  },
+  {
+   "t": 493.2,
+   "d": 1.2,
+   "text": "bandit problem."
+  },
+  {
+   "t": 494.4,
+   "d": 1.6,
+   "text": "I thought I would make it a bit more"
+  },
+  {
+   "t": 496.0,
+   "d": 2.2,
+   "text": "roguey, but a one-armed bandit does, I"
+  },
+  {
+   "t": 498.2,
+   "d": 2.6,
+   "text": "guess, sound pretty roguey too."
+  },
+  {
+   "t": 500.8,
+   "d": 3.3,
+   "text": "That UCB is at the heart of the MCTS."
+  },
+  {
+   "t": 504.1,
+   "d": 1.7,
+   "text": "So what we're doing is we're using that"
+  },
+  {
+   "t": 505.8,
+   "d": 2.1,
+   "text": "UCB to pick the next sword that we're"
+  },
+  {
+   "t": 507.9,
+   "d": 2.4,
+   "text": "going to explore, and at the end"
+  },
+  {
+   "t": 510.3,
+   "d": 1.8,
+   "text": "we pick the one that we visited the most"
+  },
+  {
+   "t": 512.1,
+   "d": 1.3,
+   "text": "times."
+  },
+  {
+   "t": 513.4,
+   "d": 1.5,
+   "text": "It's the one that we're most sure is"
+  },
+  {
+   "t": 514.9,
+   "d": 3.2,
+   "text": "going to give us a good result."
+  },
+  {
+   "t": 519.5,
+   "d": 3.1,
+   "text": "So there you can see it."
+  },
+  {
+   "t": 522.8,
+   "d": 2.4,
+   "text": "So let's go from what does the most"
+  },
+  {
+   "t": 525.2,
+   "d": 1.9,
+   "text": "damage to, well, how do I get the"
+  },
+  {
+   "t": 527.1,
+   "d": 2.5,
+   "text": "furthest in this game?"
+  },
+  {
+   "t": 529.6,
+   "d": 3.2,
+   "text": "So to make the full state clearer, I've"
+  },
+  {
+   "t": 532.8,
+   "d": 1.9,
+   "text": "shaved a yak and made a little tiny"
+  },
+  {
+   "t": 534.7,
+   "d": 3.0,
+   "text": "unplayable roguelite spire like here."
+  },
+  {
+   "t": 537.7,
+   "d": 1.9,
+   "text": "It's currently the player's turn."
+  },
+  {
+   "t": 539.6,
+   "d": 1.4,
+   "text": "There's a bunch of monsters that they"
+  },
+  {
+   "t": 541.0,
+   "d": 2.1,
+   "text": "can attack for either one, two, or three"
+  },
+  {
+   "t": 543.1,
+   "d": 2.2,
+   "text": "damage using different amounts of time."
+  },
+  {
+   "t": 545.3,
+   "d": 1.5,
+   "text": "They can defend, they can move forward,"
+  },
+  {
+   "t": 546.8,
+   "d": 2.0,
+   "text": "or they can move back. This is less"
+  },
+  {
+   "t": 548.8,
+   "d": 1.5,
+   "text": "possibilities than you would get in a"
+  },
+  {
+   "t": 550.3,
+   "d": 1.3,
+   "text": "turn of NetHack,"
+  },
+  {
+   "t": 551.6,
+   "d": 1.0,
+   "text": "but it's enough to be able to"
+  },
+  {
+   "t": 552.6,
+   "d": 3.1,
+   "text": "demonstrate and be realistic."
+  },
+  {
+   "t": 555.7,
+   "d": 1.3,
+   "text": "Now"
+  },
+  {
+   "t": 557.0,
+   "d": 2.2,
+   "text": "we can't just play every possibility"
+  },
+  {
+   "t": 559.2,
+   "d": 0.9,
+   "text": "out,"
+  },
+  {
+   "t": 560.1,
+   "d": 1.6,
+   "text": "but just to skip to the, well, why"
+  },
+  {
+   "t": 561.7,
+   "d": 2.3,
+   "text": "should I care? I'm making a traditional"
+  },
+  {
+   "t": 564.0,
+   "d": 2.3,
+   "text": "roguelike. Well, TL;DR"
+  },
+  {
+   "t": 566.3,
+   "d": 1.4,
+   "text": "you do what we're doing here, but you"
+  },
+  {
+   "t": 567.7,
+   "d": 2.3,
+   "text": "just do it with a bigger tree, more RAM,"
+  },
+  {
+   "t": 570.0,
+   "d": 1.7,
+   "text": "more compute, potentially a few"
+  },
+  {
+   "t": 571.7,
+   "d": 1.8,
+   "text": "shortcuts I'm going to talk about, and"
+  },
+  {
+   "t": 573.5,
+   "d": 2.4,
+   "text": "it actually works really well. It just"
+  },
+  {
+   "t": 575.9,
+   "d": 1.5,
+   "text": "visualizes"
+  },
+  {
+   "t": 577.4,
+   "d": 3.6,
+   "text": "like a little bit of a mess. Now"
+  },
+  {
+   "t": 581.0,
+   "d": 1.6,
+   "text": "before we get started, we're going to"
+  },
+  {
+   "t": 582.6,
+   "d": 2.0,
+   "text": "have to pay the first sanity points, and"
+  },
+  {
+   "t": 584.6,
+   "d": 2.3,
+   "text": "I warn you, this one's a doozy."
+  },
+  {
+   "t": 586.9,
+   "d": 2.1,
+   "text": "Do you like functional programming? The"
+  },
+  {
+   "t": 589.0,
+   "d": 2.4,
+   "text": "kind that you have a state in memory and"
+  },
+  {
+   "t": 591.4,
+   "d": 2.2,
+   "text": "you've got actions as methods on that"
+  },
+  {
+   "t": 593.6,
+   "d": 1.6,
+   "text": "state that just return a new state with"
+  },
+  {
+   "t": 595.2,
+   "d": 1.9,
+   "text": "no side effects."
+  },
+  {
+   "t": 597.1,
+   "d": 2.0,
+   "text": "To do a tree search effectively, you"
+  },
+  {
+   "t": 599.1,
+   "d": 1.9,
+   "text": "need to have your state and be able to"
+  },
+  {
+   "t": 601.0,
+   "d": 1.5,
+   "text": "quickly get the outcomes of those"
+  },
+  {
+   "t": 602.5,
+   "d": 2.2,
+   "text": "potential outcomes."
+  },
+  {
+   "t": 604.7,
+   "d": 2.2,
+   "text": "And the easiest way to do that is with"
+  },
+  {
+   "t": 606.9,
+   "d": 2.7,
+   "text": "purely functional functions."
+  },
+  {
+   "t": 609.6,
+   "d": 1.1,
+   "text": "We're going to have a little bit of a"
+  },
+  {
+   "t": 610.7,
+   "d": 2.6,
+   "text": "think about the ramifications."
+  },
+  {
+   "t": 613.3,
+   "d": 1.4,
+   "text": "So,"
+  },
+  {
+   "t": 614.7,
+   "d": 2.1,
+   "text": "once we've got started, we can start"
+  },
+  {
+   "t": 616.8,
+   "d": 1.9,
+   "text": "using the MCTS once we've got our"
+  },
+  {
+   "t": 618.7,
+   "d": 2.7,
+   "text": "functions. At a very high level, and if"
+  },
+  {
+   "t": 621.4,
+   "d": 1.5,
+   "text": "you walk away with"
+  },
+  {
+   "t": 622.9,
+   "d": 2.1,
+   "text": "four words today, they should be select,"
+  },
+  {
+   "t": 625.0,
+   "d": 1.3,
+   "text": "expand,"
+  },
+  {
+   "t": 626.3,
+   "d": 4.1,
+   "text": "evaluate, propagate. So one,"
+  },
+  {
+   "t": 630.4,
+   "d": 2.5,
+   "text": "we select the next we select the next"
+  },
+  {
+   "t": 632.9,
+   "d": 1.2,
+   "text": "node that we're going to look at. We"
+  },
+  {
+   "t": 634.1,
+   "d": 1.6,
+   "text": "start at the root and we recursively"
+  },
+  {
+   "t": 635.7,
+   "d": 3.7,
+   "text": "pick the nodes with the highest UCB."
+  },
+  {
+   "t": 639.4,
+   "d": 2.6,
+   "text": "We expand the node that we just"
+  },
+  {
+   "t": 642.0,
+   "d": 1.9,
+   "text": "selected."
+  },
+  {
+   "t": 643.9,
+   "d": 2.0,
+   "text": "We simulate or we evaluate the node to"
+  },
+  {
+   "t": 645.9,
+   "d": 1.9,
+   "text": "figure out how good it is,"
+  },
+  {
+   "t": 647.8,
+   "d": 1.4,
+   "text": "and"
+  },
+  {
+   "t": 649.2,
+   "d": 3.1,
+   "text": "we back propagate. So we get our reward"
+  },
+  {
+   "t": 652.3,
+   "d": 2.2,
+   "text": "function, and we copy that evaluation"
+  },
+  {
+   "t": 654.5,
+   "d": 2.2,
+   "text": "back up the tree to the root."
+  },
+  {
+   "t": 656.7,
+   "d": 1.4,
+   "text": "And then we loop"
+  },
+  {
+   "t": 658.1,
+   "d": 3.0,
+   "text": "ad nauseam, so until we're sick of it."
+  },
+  {
+   "t": 661.1,
+   "d": 1.6,
+   "text": "At that point, again, just like with the"
+  },
+  {
+   "t": 662.7,
+   "d": 1.0,
+   "text": "swords,"
+  },
+  {
+   "t": 663.7,
+   "d": 1.7,
+   "text": "we pick the choice that our algorithm"
+  },
+  {
+   "t": 665.4,
+   "d": 2.2,
+   "text": "visited the most times."
+  },
+  {
+   "t": 667.6,
+   "d": 1.9,
+   "text": "So we're going to go through this"
+  },
+  {
+   "t": 669.5,
+   "d": 2.2,
+   "text": "together a couple of times. Firstly,"
+  },
+  {
+   "t": 671.7,
+   "d": 1.0,
+   "text": "we're going to start with the graph"
+  },
+  {
+   "t": 672.7,
+   "d": 1.7,
+   "text": "nearly empty, and then I'm going to go a"
+  },
+  {
+   "t": 674.4,
+   "d": 2.6,
+   "text": "bit deeper in and sneak in some less"
+  },
+  {
+   "t": 677.0,
+   "d": 2.0,
+   "text": "pure, more practical hints. You're not"
+  },
+  {
+   "t": 679.0,
+   "d": 2.7,
+   "text": "here to pass your CS exams."
+  },
+  {
+   "t": 681.7,
+   "d": 2.2,
+   "text": "If you are here to pass your CS exams,"
+  },
+  {
+   "t": 683.9,
+   "d": 0.9,
+   "text": "you should be listening to your"
+  },
+  {
+   "t": 684.8,
+   "d": 2.2,
+   "text": "professor instead of a former lawyer who"
+  },
+  {
+   "t": 687.0,
+   "d": 1.4,
+   "text": "accidentally became a professional"
+  },
+  {
+   "t": 688.4,
+   "d": 1.5,
+   "text": "programmer."
+  },
+  {
+   "t": 689.9,
+   "d": 2.3,
+   "text": "Instead, you're here to make cool things"
+  },
+  {
+   "t": 692.2,
+   "d": 2.8,
+   "text": "and I'm here to help you."
+  },
+  {
+   "t": 697.0,
+   "d": 3.1,
+   "text": "So we've got an expanded root node."
+  },
+  {
+   "t": 700.1,
+   "d": 1.4,
+   "text": "We've got a few possible actions we can"
+  },
+  {
+   "t": 701.5,
+   "d": 1.9,
+   "text": "talk, and actually right now we don't"
+  },
+  {
+   "t": 703.4,
+   "d": 1.7,
+   "text": "know anything about any of them. Those"
+  },
+  {
+   "t": 705.1,
+   "d": 1.8,
+   "text": "are all those dotted lines around the"
+  },
+  {
+   "t": 706.9,
+   "d": 1.3,
+   "text": "circle."
+  },
+  {
+   "t": 708.2,
+   "d": 1.7,
+   "text": "If only we knew a bit of maths that"
+  },
+  {
+   "t": 709.9,
+   "d": 1.6,
+   "text": "could help us select which one we're"
+  },
+  {
+   "t": 711.5,
+   "d": 2.0,
+   "text": "going to look at."
+  },
+  {
+   "t": 713.5,
+   "d": 2.3,
+   "text": "So we're going to start by picking the"
+  },
+  {
+   "t": 715.8,
+   "d": 1.8,
+   "text": "one with the highest UCB to explore, but"
+  },
+  {
+   "t": 717.6,
+   "d": 1.7,
+   "text": "we haven't explored any yet."
+  },
+  {
+   "t": 719.3,
+   "d": 2.8,
+   "text": "So we pick the first one, or we randomly"
+  },
+  {
+   "t": 722.1,
+   "d": 1.9,
+   "text": "pick and expand it. You can see the"
+  },
+  {
+   "t": 724.0,
+   "d": 1.9,
+   "text": "unexplored options there, again, all"
+  },
+  {
+   "t": 725.9,
+   "d": 2.2,
+   "text": "dotted out."
+  },
+  {
+   "t": 728.1,
+   "d": 2.3,
+   "text": "So now we've expanded it. We've left"
+  },
+  {
+   "t": 730.4,
+   "d": 1.4,
+   "text": "placeholders for the player's choice of"
+  },
+  {
+   "t": 731.8,
+   "d": 2.9,
+   "text": "actions, and we're simulating."
+  },
+  {
+   "t": 734.7,
+   "d": 2.7,
+   "text": "In a traditional MCTS, we literally go"
+  },
+  {
+   "t": 737.4,
+   "d": 2.0,
+   "text": "and randomly play through until the game"
+  },
+  {
+   "t": 739.4,
+   "d": 1.8,
+   "text": "ends. We just loop through time and time"
+  },
+  {
+   "t": 741.2,
+   "d": 2.7,
+   "text": "again for the next possible move."
+  },
+  {
+   "t": 743.9,
+   "d": 1.9,
+   "text": "We assign a reward to each player, so it"
+  },
+  {
+   "t": 745.8,
+   "d": 1.6,
+   "text": "might be as simple as one for the win,"
+  },
+  {
+   "t": 747.4,
+   "d": 1.9,
+   "text": "minus one for the loss. It could be more"
+  },
+  {
+   "t": 749.3,
+   "d": 3.0,
+   "text": "complex. The final score, if the score"
+  },
+  {
+   "t": 752.3,
+   "d": 2.0,
+   "text": "game has one, the final score with a"
+  },
+  {
+   "t": 754.3,
+   "d": 2.0,
+   "text": "modifier for the win or loss, but we"
+  },
+  {
+   "t": 756.3,
+   "d": 3.0,
+   "text": "warned, your MCTS is going to optimize"
+  },
+  {
+   "t": 759.3,
+   "d": 1.3,
+   "text": "towards whatever you tell it to look"
+  },
+  {
+   "t": 760.6,
+   "d": 1.0,
+   "text": "for."
+  },
+  {
+   "t": 761.6,
+   "d": 1.6,
+   "text": "Traditionally though, this is why we"
+  },
+  {
+   "t": 763.2,
+   "d": 2.1,
+   "text": "need to think a bit about rewards."
+  },
+  {
+   "t": 765.3,
+   "d": 1.8,
+   "text": "Chess is normally done in about 45"
+  },
+  {
+   "t": 767.1,
+   "d": 2.9,
+   "text": "moves. Go, about 250."
+  },
+  {
+   "t": 770.0,
+   "d": 3.0,
+   "text": "NetHack, about 80,000 turns in or like"
+  },
+  {
+   "t": 773.0,
+   "d": 2.8,
+   "text": "me losing after 150."
+  },
+  {
+   "t": 775.8,
+   "d": 1.6,
+   "text": "We can get a bit more efficiency by"
+  },
+  {
+   "t": 777.4,
+   "d": 2.5,
+   "text": "waiting those moves. So, quickly culling"
+  },
+  {
+   "t": 779.9,
+   "d": 1.6,
+   "text": "the moves that result in an instant"
+  },
+  {
+   "t": 781.5,
+   "d": 2.8,
+   "text": "loss, only playing say a thousand turns"
+  },
+  {
+   "t": 784.3,
+   "d": 1.6,
+   "text": "and figuring out how good you are based"
+  },
+  {
+   "t": 785.9,
+   "d": 1.7,
+   "text": "on some metrics like how much health you"
+  },
+  {
+   "t": 787.6,
+   "d": 2.0,
+   "text": "have."
+  },
+  {
+   "t": 789.6,
+   "d": 2.1,
+   "text": "Now, depending on what you're using the"
+  },
+  {
+   "t": 791.7,
+   "d": 1.8,
+   "text": "MCTS for and what you're willing to"
+  },
+  {
+   "t": 793.5,
+   "d": 3.3,
+   "text": "maintain. So,"
+  },
+  {
+   "t": 797.1,
+   "d": 1.6,
+   "text": "you can combine that with giving rewards"
+  },
+  {
+   "t": 798.7,
+   "d": 1.2,
+   "text": "through the game. Instead of just"
+  },
+  {
+   "t": 799.9,
+   "d": 1.5,
+   "text": "waiting at the end, you can give it some"
+  },
+  {
+   "t": 801.4,
+   "d": 2.1,
+   "text": "positive reinforcement as it's getting"
+  },
+  {
+   "t": 803.5,
+   "d": 2.0,
+   "text": "closer to the staircase."
+  },
+  {
+   "t": 805.5,
+   "d": 1.5,
+   "text": "Because"
+  },
+  {
+   "t": 807.0,
+   "d": 2.7,
+   "text": "in 80,000 random turns,"
+  },
+  {
+   "t": 809.7,
+   "d": 1.3,
+   "text": "you're going to reach the heat death of"
+  },
+  {
+   "t": 811.0,
+   "d": 1.8,
+   "text": "the universe before you randomly get a"
+  },
+  {
+   "t": 812.8,
+   "d": 2.1,
+   "text": "win. So, if all you're giving is zeros"
+  },
+  {
+   "t": 814.9,
+   "d": 1.3,
+   "text": "and ones, you're going to learn"
+  },
+  {
+   "t": 816.2,
+   "d": 2.7,
+   "text": "absolutely nothing. Instead, we need to"
+  },
+  {
+   "t": 818.9,
+   "d": 3.0,
+   "text": "look towards what tends towards a win."
+  },
+  {
+   "t": 821.9,
+   "d": 1.1,
+   "text": "Now,"
+  },
+  {
+   "t": 823.0,
+   "d": 1.9,
+   "text": "figuring out those rewards is one of the"
+  },
+  {
+   "t": 824.9,
+   "d": 2.38,
+   "text": "more art things here."
+  },
+  {
+   "t": 827.27,
+   "d": 0.52,
+   "text": "[snorts]"
+  },
+  {
+   "t": 827.8,
+   "d": 2.3,
+   "text": "And achieving what you're wanting to do"
+  },
+  {
+   "t": 830.1,
+   "d": 1.9,
+   "text": "is going to take trial and error."
+  },
+  {
+   "t": 832.0,
+   "d": 2.2,
+   "text": "So, like I said, these are optimization"
+  },
+  {
+   "t": 834.2,
+   "d": 1.5,
+   "text": "engines. They give zero craps about"
+  },
+  {
+   "t": 835.7,
+   "d": 1.8,
+   "text": "pretending to be optimizing what you"
+  },
+  {
+   "t": 837.5,
+   "d": 1.7,
+   "text": "wanted it for."
+  },
+  {
+   "t": 839.2,
+   "d": 1.3,
+   "text": "Look, many of you will be software"
+  },
+  {
+   "t": 840.5,
+   "d": 1.5,
+   "text": "engineers, and at least your Scrum teams"
+  },
+  {
+   "t": 842.0,
+   "d": 1.9,
+   "text": "have the courtesy to pretend that"
+  },
+  {
+   "t": 843.9,
+   "d": 1.6,
+   "text": "they're trying to not abuse the estimate"
+  },
+  {
+   "t": 845.5,
+   "d": 1.6,
+   "text": "rules, right?"
+  },
+  {
+   "t": 847.1,
+   "d": 1.3,
+   "text": "What's suitable for you is going to"
+  },
+  {
+   "t": 848.4,
+   "d": 1.9,
+   "text": "depend on why you're using it. Something"
+  },
+  {
+   "t": 850.3,
+   "d": 3.0,
+   "text": "like AlphaGo uses um uses neural"
+  },
+  {
+   "t": 853.3,
+   "d": 2.2,
+   "text": "networks. It won't help you play test,"
+  },
+  {
+   "t": 855.5,
+   "d": 1.6,
+   "text": "but it could make your wizard of Yendor"
+  },
+  {
+   "t": 857.1,
+   "d": 2.7,
+   "text": "feel like Bobby Fischer."
+  },
+  {
+   "t": 859.8,
+   "d": 2.6,
+   "text": "So back to straightforward algorithms."
+  },
+  {
+   "t": 862.4,
+   "d": 2.2,
+   "text": "We get that reward from the simulation"
+  },
+  {
+   "t": 864.6,
+   "d": 1.4,
+   "text": "and we pop it back up the tree to our"
+  },
+  {
+   "t": 866.0,
+   "d": 1.7,
+   "text": "root. So you're going to see those two"
+  },
+  {
+   "t": 867.7,
+   "d": 2.6,
+   "text": "little numbers. The N is the first"
+  },
+  {
+   "t": 870.3,
+   "d": 1.4,
+   "text": "number before the slash. That's the"
+  },
+  {
+   "t": 871.7,
+   "d": 2.2,
+   "text": "amount of times the algorithm's visited."
+  },
+  {
+   "t": 873.9,
+   "d": 2.9,
+   "text": "And the Q, which is our estimated value,"
+  },
+  {
+   "t": 876.8,
+   "d": 1.5,
+   "text": "is the second one. In this case, it's"
+  },
+  {
+   "t": 878.3,
+   "d": 2.4,
+   "text": "just an average of all of the rewards"
+  },
+  {
+   "t": 880.7,
+   "d": 3.1,
+   "text": "that have come up before it."
+  },
+  {
+   "t": 886.2,
+   "d": 3.0,
+   "text": "And that's uh it. Suddenly, all of our"
+  },
+  {
+   "t": 889.2,
+   "d": 2.0,
+   "text": "UCBs are ready for our next select"
+  },
+  {
+   "t": 891.2,
+   "d": 2.4,
+   "text": "cycle."
+  },
+  {
+   "t": 894.0,
+   "d": 2.2,
+   "text": "So it's so simple you can just"
+  },
+  {
+   "t": 896.2,
+   "d": 1.6,
+   "text": "whiteboard it, right?"
+  },
+  {
+   "t": 897.8,
+   "d": 2.9,
+   "text": "Here we're going to loop over and over"
+  },
+  {
+   "t": 900.7,
+   "d": 1.8,
+   "text": "over multiple threads."
+  },
+  {
+   "t": 902.5,
+   "d": 2.4,
+   "text": "The more we loop, the stronger it gets."
+  },
+  {
+   "t": 904.9,
+   "d": 1.3,
+   "text": "And that's the great thing here. It's"
+  },
+  {
+   "t": 906.2,
+   "d": 2.3,
+   "text": "not all or nothing, but it gets better"
+  },
+  {
+   "t": 908.5,
+   "d": 1.8,
+   "text": "with more resources, particularly with"
+  },
+  {
+   "t": 910.3,
+   "d": 2.6,
+   "text": "more loops. So again, get ready for more"
+  },
+  {
+   "t": 912.9,
+   "d": 2.8,
+   "text": "sanity points. Who here loves working in"
+  },
+  {
+   "t": 915.7,
+   "d": 2.8,
+   "text": "Python, Lua, or Ruby?"
+  },
+  {
+   "t": 918.5,
+   "d": 1.8,
+   "text": "Yes, sorry, no you don't. At least not"
+  },
+  {
+   "t": 920.3,
+   "d": 2.1,
+   "text": "here. You need fast loops and that's our"
+  },
+  {
+   "t": 922.4,
+   "d": 2.5,
+   "text": "second big caveat. You might really need"
+  },
+  {
+   "t": 924.9,
+   "d": 1.7,
+   "text": "your program to be in a compiled"
+  },
+  {
+   "t": 926.6,
+   "d": 2.3,
+   "text": "language. I mean, I learned Rust to get"
+  },
+  {
+   "t": 928.9,
+   "d": 2.3,
+   "text": "this done because that 10 times speed"
+  },
+  {
+   "t": 931.2,
+   "d": 2.3,
+   "text": "increase really paid off"
+  },
+  {
+   "t": 933.5,
+   "d": 2.2,
+   "text": "when I was paying AWS for a bunch of"
+  },
+  {
+   "t": 935.7,
+   "d": 2.0,
+   "text": "compute to help me play test. I'm going"
+  },
+  {
+   "t": 937.7,
+   "d": 2.0,
+   "text": "to loop through about 150 times, which"
+  },
+  {
+   "t": 939.7,
+   "d": 3.0,
+   "text": "is what you can see now."
+  },
+  {
+   "t": 945.1,
+   "d": 1.3,
+   "text": "So"
+  },
+  {
+   "t": 946.4,
+   "d": 1.3,
+   "text": "since we've fleshed it out, I want to"
+  },
+  {
+   "t": 947.7,
+   "d": 1.5,
+   "text": "show you how this now looks a bit deeper"
+  },
+  {
+   "t": 949.2,
+   "d": 1.9,
+   "text": "in. So we're going to start by looking"
+  },
+  {
+   "t": 951.1,
+   "d": 1.6,
+   "text": "at the selection. We've got a bit more"
+  },
+  {
+   "t": 952.7,
+   "d": 1.8,
+   "text": "data in our tree and here is where the"
+  },
+  {
+   "t": 954.5,
+   "d": 2.4,
+   "text": "magic happens."
+  },
+  {
+   "t": 956.9,
+   "d": 2.6,
+   "text": "So firstly, we select. That means"
+  },
+  {
+   "t": 959.5,
+   "d": 1.7,
+   "text": "we've picked the first step with the"
+  },
+  {
+   "t": 961.2,
+   "d": 2.9,
+   "text": "highest UCB."
+  },
+  {
+   "t": 964.4,
+   "d": 1.5,
+   "text": "We're going to select again. Now this"
+  },
+  {
+   "t": 965.9,
+   "d": 1.8,
+   "text": "time you'll notice it's the lowest UCB"
+  },
+  {
+   "t": 967.7,
+   "d": 2.0,
+   "text": "because it's the bad guys' turn. They're"
+  },
+  {
+   "t": 969.7,
+   "d": 2.2,
+   "text": "trying to optimize to minimize your"
+  },
+  {
+   "t": 971.9,
+   "d": 2.3,
+   "text": "reward."
+  },
+  {
+   "t": 974.2,
+   "d": 3.2,
+   "text": "Then we're going to select again."
+  },
+  {
+   "t": 981.7,
+   "d": 2.1,
+   "text": ">> Until eventually we hit a node that we"
+  },
+  {
+   "t": 983.8,
+   "d": 1.5,
+   "text": "haven't actually expanded yet, so one"
+  },
+  {
+   "t": 985.3,
+   "d": 1.3,
+   "text": "that we haven't"
+  },
+  {
+   "t": 986.6,
+   "d": 2.0,
+   "text": "set out."
+  },
+  {
+   "t": 988.6,
+   "d": 2.1,
+   "text": "We expand it, as you can see. That's the"
+  },
+  {
+   "t": 990.7,
+   "d": 3.0,
+   "text": "bunch of dotted lines."
+  },
+  {
+   "t": 996.3,
+   "d": 1.6,
+   "text": "And just like we did in the previous"
+  },
+  {
+   "t": 997.9,
+   "d": 1.0,
+   "text": "turn,"
+  },
+  {
+   "t": 998.9,
+   "d": 1.2,
+   "text": "we simulate it."
+  },
+  {
+   "t": 1000.1,
+   "d": 1.4,
+   "text": "Now I'm just going to"
+  },
+  {
+   "t": 1001.5,
+   "d": 2.8,
+   "text": "skip through to the end."
+  },
+  {
+   "t": 1004.4,
+   "d": 2.0,
+   "text": "And then we back propagate. So we get"
+  },
+  {
+   "t": 1006.4,
+   "d": 1.9,
+   "text": "that reward,"
+  },
+  {
+   "t": 1008.3,
+   "d": 1.7,
+   "text": "which was"
+  },
+  {
+   "t": 1010.0,
+   "d": 1.9,
+   "text": "minus one."
+  },
+  {
+   "t": 1011.9,
+   "d": 3.3,
+   "text": "And we pass it backwards."
+  },
+  {
+   "t": 1015.4,
+   "d": 1.3,
+   "text": "We can see the numbers changing each"
+  },
+  {
+   "t": 1016.7,
+   "d": 2.0,
+   "text": "time,"
+  },
+  {
+   "t": 1018.7,
+   "d": 3.5,
+   "text": "which will update those UCBs."
+  },
+  {
+   "t": 1024.6,
+   "d": 1.3,
+   "text": "Now word to the wise, when you're"
+  },
+  {
+   "t": 1025.9,
+   "d": 2.8,
+   "text": "multi-threading this as you will be,"
+  },
+  {
+   "t": 1028.7,
+   "d": 1.2,
+   "text": "and you're multi-threading over one"
+  },
+  {
+   "t": 1029.9,
+   "d": 1.6,
+   "text": "tree, you're going to find yourself"
+  },
+  {
+   "t": 1031.5,
+   "d": 2.5,
+   "text": "where cafes misspell my name in lock"
+  },
+  {
+   "t": 1034.0,
+   "d": 1.0,
+   "text": "land."
+  },
+  {
+   "t": 1035.0,
+   "d": 1.4,
+   "text": "There are ways to help, but we're"
+  },
+  {
+   "t": 1036.4,
+   "d": 1.8,
+   "text": "getting a bit deeper in the rough and"
+  },
+  {
+   "t": 1038.2,
+   "d": 1.1,
+   "text": "you're just going to have to look up"
+  },
+  {
+   "t": 1039.3,
+   "d": 2.2,
+   "text": "this slide. It's going to be quicker."
+  },
+  {
+   "t": 1041.5,
+   "d": 1.8,
+   "text": "We're going to simulate another 50 or so"
+  },
+  {
+   "t": 1043.3,
+   "d": 1.1,
+   "text": "turns."
+  },
+  {
+   "t": 1044.4,
+   "d": 1.6,
+   "text": "Normally though, you'll be using"
+  },
+  {
+   "t": 1046.0,
+   "d": 2.0,
+   "text": "thousands, tens of thousands, possibly"
+  },
+  {
+   "t": 1048.0,
+   "d": 2.2,
+   "text": "hundreds of thousands of simulations,"
+  },
+  {
+   "t": 1050.2,
+   "d": 1.6,
+   "text": "but the more time you give it, the"
+  },
+  {
+   "t": 1051.8,
+   "d": 2.2,
+   "text": "better it gets, but it does perform"
+  },
+  {
+   "t": 1054.0,
+   "d": 3.5,
+   "text": "fairly well at lower iteration counts."
+  },
+  {
+   "t": 1057.5,
+   "d": 1.8,
+   "text": "We pick the option with the highest N,"
+  },
+  {
+   "t": 1059.3,
+   "d": 2.4,
+   "text": "just like I said."
+  },
+  {
+   "t": 1061.7,
+   "d": 2.0,
+   "text": "And congratulations, this is the best"
+  },
+  {
+   "t": 1063.7,
+   "d": 3.1,
+   "text": "thing your character can do."
+  },
+  {
+   "t": 1067.6,
+   "d": 1.2,
+   "text": "So"
+  },
+  {
+   "t": 1068.8,
+   "d": 1.7,
+   "text": "we've got a graph with some increasingly"
+  },
+  {
+   "t": 1070.5,
+   "d": 2.5,
+   "text": "optimal possible futures. What can we do"
+  },
+  {
+   "t": 1073.0,
+   "d": 1.3,
+   "text": "with it? I'm going to show you three"
+  },
+  {
+   "t": 1074.3,
+   "d": 2.3,
+   "text": "things."
+  },
+  {
+   "t": 1076.8,
+   "d": 1.7,
+   "text": "So"
+  },
+  {
+   "t": 1078.5,
+   "d": 1.8,
+   "text": "this feels like the most natural use. We"
+  },
+  {
+   "t": 1080.3,
+   "d": 2.2,
+   "text": "can get the MCTS to make our opponents"
+  },
+  {
+   "t": 1082.5,
+   "d": 0.9,
+   "text": "smarter."
+  },
+  {
+   "t": 1083.4,
+   "d": 2.3,
+   "text": "It's really the best known use of the"
+  },
+  {
+   "t": 1085.7,
+   "d": 1.7,
+   "text": "MCTS algorithm."
+  },
+  {
+   "t": 1087.4,
+   "d": 2.3,
+   "text": "So at its most naive, we take two"
+  },
+  {
+   "t": 1089.7,
+   "d": 2.3,
+   "text": "players, our human and our dungeon."
+  },
+  {
+   "t": 1092.0,
+   "d": 1.6,
+   "text": "Our dungeon player is rewarded if it"
+  },
+  {
+   "t": 1093.6,
+   "d": 1.4,
+   "text": "kills the human,"
+  },
+  {
+   "t": 1095.0,
+   "d": 1.9,
+   "text": "but if we wanted to do things the easy"
+  },
+  {
+   "t": 1096.9,
+   "d": 1.9,
+   "text": "way, we would define our dungeons by"
+  },
+  {
+   "t": 1098.8,
+   "d": 1.7,
+   "text": "hard code rather than build procedural"
+  },
+  {
+   "t": 1100.5,
+   "d": 1.7,
+   "text": "generators, wouldn't we? Damn it, we are"
+  },
+  {
+   "t": 1102.2,
+   "d": 2.7,
+   "text": "roguelike developers. We would never"
+  },
+  {
+   "t": 1104.9,
+   "d": 1.7,
+   "text": "turn down an opportunity to go full"
+  },
+  {
+   "t": 1106.6,
+   "d": 3.0,
+   "text": "time, Brian, other Brian, Derek,"
+  },
+  {
+   "t": 1109.6,
+   "d": 1.9,
+   "text": "and invite in emergent complexity, would"
+  },
+  {
+   "t": 1111.5,
+   "d": 1.0,
+   "text": "we?"
+  },
+  {
+   "t": 1112.5,
+   "d": 1.7,
+   "text": "What is the feeling that you're trying"
+  },
+  {
+   "t": 1114.2,
+   "d": 1.6,
+   "text": "to evoke in your game?"
+  },
+  {
+   "t": 1115.8,
+   "d": 1.9,
+   "text": "If you want it to be chessy, take that"
+  },
+  {
+   "t": 1117.7,
+   "d": 2.2,
+   "text": "naive approach. It's not bad, but you've"
+  },
+  {
+   "t": 1119.9,
+   "d": 2.0,
+   "text": "got to lean into it. Your monsters have"
+  },
+  {
+   "t": 1121.9,
+   "d": 1.6,
+   "text": "perfect information because they're all"
+  },
+  {
+   "t": 1123.5,
+   "d": 2.4,
+   "text": "being according to one reward. So maybe"
+  },
+  {
+   "t": 1125.9,
+   "d": 1.5,
+   "text": "pretend that there is a big brother and"
+  },
+  {
+   "t": 1127.4,
+   "d": 2.3,
+   "text": "omniscient AI, some brain-controlling"
+  },
+  {
+   "t": 1129.7,
+   "d": 1.2,
+   "text": "wizard."
+  },
+  {
+   "t": 1130.9,
+   "d": 1.5,
+   "text": "They have to be a presence and not just"
+  },
+  {
+   "t": 1132.4,
+   "d": 3.6,
+   "text": "a system, otherwise it feels abstract."
+  },
+  {
+   "t": 1136.0,
+   "d": 1.1,
+   "text": "You're probably still going to need to"
+  },
+  {
+   "t": 1137.1,
+   "d": 1.1,
+   "text": "look at your rewards to optimize"
+  },
+  {
+   "t": 1138.2,
+   "d": 2.1,
+   "text": "efficiency. Now my suggestion is you"
+  },
+  {
+   "t": 1140.3,
+   "d": 1.8,
+   "text": "treat the dungeon level as a game for"
+  },
+  {
+   "t": 1142.1,
+   "d": 2.1,
+   "text": "the sake of simulation and you tailor"
+  },
+  {
+   "t": 1144.2,
+   "d": 2.1,
+   "text": "that reward to just prefer, you know,"
+  },
+  {
+   "t": 1146.3,
+   "d": 2.1,
+   "text": "levels that they did better."
+  },
+  {
+   "t": 1148.4,
+   "d": 1.8,
+   "text": "But enemy AI aren't supposed to be"
+  },
+  {
+   "t": 1150.2,
+   "d": 2.0,
+   "text": "perfect. They're supposed to feel human"
+  },
+  {
+   "t": 1152.2,
+   "d": 1.4,
+   "text": "or like characters."
+  },
+  {
+   "t": 1153.6,
+   "d": 1.8,
+   "text": "So you can start optimizing rewards for"
+  },
+  {
+   "t": 1155.4,
+   "d": 2.3,
+   "text": "different monsters. You can have a"
+  },
+  {
+   "t": 1157.7,
+   "d": 1.9,
+   "text": "apprentice whose reward loss function is"
+  },
+  {
+   "t": 1159.6,
+   "d": 2.4,
+   "text": "nothing about does their master survive."
+  },
+  {
+   "t": 1162.0,
+   "d": 1.8,
+   "text": "You can have a robot mum whose entire"
+  },
+  {
+   "t": 1163.8,
+   "d": 2.0,
+   "text": "reward function is does the player have"
+  },
+  {
+   "t": 1165.8,
+   "d": 2.1,
+   "text": "food. You can even screw around with the"
+  },
+  {
+   "t": 1167.9,
+   "d": 2.5,
+   "text": "algorithm. A master goblin might have"
+  },
+  {
+   "t": 1170.4,
+   "d": 2.1,
+   "text": "more iterations than his apprentice, so"
+  },
+  {
+   "t": 1172.5,
+   "d": 1.9,
+   "text": "it behaves cleverer."
+  },
+  {
+   "t": 1174.4,
+   "d": 1.0,
+   "text": "Uh"
+  },
+  {
+   "t": 1175.4,
+   "d": 2.3,
+   "text": "scared guard might run the simulation"
+  },
+  {
+   "t": 1177.7,
+   "d": 2.0,
+   "text": "thinking that there's more HP on the"
+  },
+  {
+   "t": 1179.7,
+   "d": 1.7,
+   "text": "other player, so it's more likely to run"
+  },
+  {
+   "t": 1181.4,
+   "d": 2.0,
+   "text": "away, but it will still take, you know,"
+  },
+  {
+   "t": 1183.4,
+   "d": 2.1,
+   "text": "an opportunistic attack."
+  },
+  {
+   "t": 1185.5,
+   "d": 1.5,
+   "text": "You get some emergent behavior that will"
+  },
+  {
+   "t": 1187.0,
+   "d": 1.5,
+   "text": "make it more challenging, but it"
+  },
+  {
+   "t": 1188.5,
+   "d": 2.1,
+   "text": "actually makes the monster manual feel"
+  },
+  {
+   "t": 1190.6,
+   "d": 1.7,
+   "text": "like it has a purpose other than move"
+  },
+  {
+   "t": 1192.3,
+   "d": 4.1,
+   "text": "towards, attack, run, my HP is low."
+  },
+  {
+   "t": 1196.4,
+   "d": 2.1,
+   "text": "It gets cooler. It actually keeps up"
+  },
+  {
+   "t": 1198.5,
+   "d": 1.3,
+   "text": "with the changes in the game's rule for"
+  },
+  {
+   "t": 1199.8,
+   "d": 2.4,
+   "text": "free. So you add a new spell to your"
+  },
+  {
+   "t": 1202.2,
+   "d": 1.6,
+   "text": "wizard, then congratulations, that"
+  },
+  {
+   "t": 1203.8,
+   "d": 1.8,
+   "text": "wizard is going to actually use that new"
+  },
+  {
+   "t": 1205.6,
+   "d": 2.7,
+   "text": "spell when it's optimized."
+  },
+  {
+   "t": 1208.3,
+   "d": 1.2,
+   "text": "This is good for our monsters, but we're"
+  },
+  {
+   "t": 1209.5,
+   "d": 3.9,
+   "text": "about to see what else it can enable."
+  },
+  {
+   "t": 1213.4,
+   "d": 1.9,
+   "text": "So the difference between a human player"
+  },
+  {
+   "t": 1215.3,
+   "d": 2.8,
+   "text": "and an opponent is for most of us"
+  },
+  {
+   "t": 1218.1,
+   "d": 1.4,
+   "text": "the actor is being controlled by a"
+  },
+  {
+   "t": 1219.5,
+   "d": 1.2,
+   "text": "human,"
+  },
+  {
+   "t": 1220.7,
+   "d": 1.7,
+   "text": "which means once we've got that big game"
+  },
+  {
+   "t": 1222.4,
+   "d": 3.5,
+   "text": "as a function and the MCTS,"
+  },
+  {
+   "t": 1225.9,
+   "d": 2.3,
+   "text": "we can use it to help us play test. So,"
+  },
+  {
+   "t": 1228.2,
+   "d": 1.6,
+   "text": "the most useful questions you can answer"
+  },
+  {
+   "t": 1229.81,
+   "d": 1.6,
+   "text": "when you're pushing updates to a game"
+  },
+  {
+   "t": 1231.4,
+   "d": 1.7,
+   "text": "that you're developing is is this"
+  },
+  {
+   "t": 1233.11,
+   "d": 1.0,
+   "text": "winnable?"
+  },
+  {
+   "t": 1234.11,
+   "d": 1.9,
+   "text": "Closely following by those of us who"
+  },
+  {
+   "t": 1236.01,
+   "d": 3.0,
+   "text": "care about quality is is this breakable?"
+  },
+  {
+   "t": 1239.01,
+   "d": 1.4,
+   "text": "You've got a system that is optimized"
+  },
+  {
+   "t": 1240.4,
+   "d": 2.3,
+   "text": "towards playing your game, why not use"
+  },
+  {
+   "t": 1242.7,
+   "d": 0.7,
+   "text": "it?"
+  },
+  {
+   "t": 1243.4,
+   "d": 3.4,
+   "text": "Again, the naive way with Evil Bob, the"
+  },
+  {
+   "t": 1246.81,
+   "d": 2.8,
+   "text": "MCTS controlled villain, is it plays"
+  },
+  {
+   "t": 1249.61,
+   "d": 1.3,
+   "text": "through to the end of the game each"
+  },
+  {
+   "t": 1250.9,
+   "d": 1.5,
+   "text": "simulation, but you're not going to get"
+  },
+  {
+   "t": 1252.4,
+   "d": 1.2,
+   "text": "very far."
+  },
+  {
+   "t": 1253.61,
+   "d": 1.3,
+   "text": "Your player will normally have multiple"
+  },
+  {
+   "t": 1254.9,
+   "d": 1.5,
+   "text": "of orders more magnitude of turns"
+  },
+  {
+   "t": 1256.4,
+   "d": 2.1,
+   "text": "remaining to get that far. So, to be"
+  },
+  {
+   "t": 1258.51,
+   "d": 2.3,
+   "text": "effective, we can massage the simulation"
+  },
+  {
+   "t": 1260.81,
+   "d": 2.0,
+   "text": "and the rewards, which again is going to"
+  },
+  {
+   "t": 1262.81,
+   "d": 3.2,
+   "text": "take your judgment and trial and error."
+  },
+  {
+   "t": 1266.01,
+   "d": 1.2,
+   "text": "I'll give you hints though, and I am"
+  },
+  {
+   "t": 1267.2,
+   "d": 1.5,
+   "text": "sorry I'm racing through. I feel like I"
+  },
+  {
+   "t": 1268.7,
+   "d": 1.8,
+   "text": "wasted a little time earlier."
+  },
+  {
+   "t": 1270.51,
+   "d": 1.7,
+   "text": "You can't"
+  },
+  {
+   "t": 1272.2,
+   "d": 2.1,
+   "text": "simulate full games."
+  },
+  {
+   "t": 1274.31,
+   "d": 1.9,
+   "text": "I often, like I said, simulate until I'm"
+  },
+  {
+   "t": 1276.2,
+   "d": 1.6,
+   "text": "getting to the end of the level or hit a"
+  },
+  {
+   "t": 1277.81,
+   "d": 2.4,
+   "text": "sensible turn limit or die,"
+  },
+  {
+   "t": 1280.2,
+   "d": 2.3,
+   "text": "waiting towards random moves towards the"
+  },
+  {
+   "t": 1282.51,
+   "d": 2.0,
+   "text": "theirs."
+  },
+  {
+   "t": 1284.51,
+   "d": 2.4,
+   "text": "You then think of the rewards, but you"
+  },
+  {
+   "t": 1286.9,
+   "d": 1.7,
+   "text": "want general rewards, like a fixed"
+  },
+  {
+   "t": 1288.61,
+   "d": 1.3,
+   "text": "reward for getting to the next level,"
+  },
+  {
+   "t": 1289.9,
+   "d": 2.4,
+   "text": "penalty for lost health, because"
+  },
+  {
+   "t": 1292.31,
+   "d": 1.8,
+   "text": "the closer that you tie that reward to"
+  },
+  {
+   "t": 1294.11,
+   "d": 1.3,
+   "text": "the current rules, the less it's going"
+  },
+  {
+   "t": 1295.4,
+   "d": 2.3,
+   "text": "to help you as you modify those rules."
+  },
+  {
+   "t": 1297.7,
+   "d": 2.2,
+   "text": "But if you want something really cool,"
+  },
+  {
+   "t": 1299.9,
+   "d": 1.6,
+   "text": "if you want to start writing like this"
+  },
+  {
+   "t": 1301.51,
+   "d": 1.8,
+   "text": "from scratch, every time you save your"
+  },
+  {
+   "t": 1303.31,
+   "d": 2.5,
+   "text": "file, you can have your game continually"
+  },
+  {
+   "t": 1305.81,
+   "d": 1.9,
+   "text": "attempting a win in the background. Can"
+  },
+  {
+   "t": 1307.7,
+   "d": 1.3,
+   "text": "you imagine how cool that is when you're"
+  },
+  {
+   "t": 1309.01,
+   "d": 2.1,
+   "text": "making a 7-day RL"
+  },
+  {
+   "t": 1311.11,
+   "d": 2.0,
+   "text": "and right from day one, yeah, it's a"
+  },
+  {
+   "t": 1313.11,
+   "d": 1.8,
+   "text": "minimal win, but you can see the little"
+  },
+  {
+   "t": 1314.9,
+   "d": 1.8,
+   "text": "at sign working its way through to a"
+  },
+  {
+   "t": 1316.7,
+   "d": 1.6,
+   "text": "win."
+  },
+  {
+   "t": 1318.31,
+   "d": 1.1,
+   "text": "And that helps you find if it's"
+  },
+  {
+   "t": 1319.4,
+   "d": 1.2,
+   "text": "winnable, but what about if it is"
+  },
+  {
+   "t": 1320.61,
+   "d": 1.4,
+   "text": "broken?"
+  },
+  {
+   "t": 1322.01,
+   "d": 2.1,
+   "text": "You don't need to use your MCTS every"
+  },
+  {
+   "t": 1324.11,
+   "d": 2.0,
+   "text": "turn. You can get it to play to a"
+  },
+  {
+   "t": 1326.11,
+   "d": 2.3,
+   "text": "certain point, and since they're pure"
+  },
+  {
+   "t": 1328.4,
+   "d": 1.6,
+   "text": "functions, you can get to a certain"
+  },
+  {
+   "t": 1330.01,
+   "d": 2.0,
+   "text": "point and then just keep randomly"
+  },
+  {
+   "t": 1332.01,
+   "d": 1.3,
+   "text": "hitting it from there to see if it"
+  },
+  {
+   "t": 1333.31,
+   "d": 1.1,
+   "text": "breaks."
+  },
+  {
+   "t": 1334.4,
+   "d": 2.0,
+   "text": "You can play simulations of random turns"
+  },
+  {
+   "t": 1336.4,
+   "d": 2.3,
+   "text": "from every possible next turn. You can"
+  },
+  {
+   "t": 1338.7,
+   "d": 1.9,
+   "text": "do it in parallel. You can fuzz the crap"
+  },
+  {
+   "t": 1340.61,
+   "d": 1.5,
+   "text": "out of the thing,"
+  },
+  {
+   "t": 1342.11,
+   "d": 1.8,
+   "text": "making sure you're exception free since"
+  },
+  {
+   "t": 1343.9,
+   "d": 1.3,
+   "text": "turn three,"
+  },
+  {
+   "t": 1345.2,
+   "d": 2.2,
+   "text": "but it's not human."
+  },
+  {
+   "t": 1347.41,
+   "d": 1.6,
+   "text": "It is only going to optimize for the"
+  },
+  {
+   "t": 1349.01,
+   "d": 1.7,
+   "text": "reward you give it. It means it's not"
+  },
+  {
+   "t": 1350.71,
+   "d": 1.6,
+   "text": "going to play like a human."
+  },
+  {
+   "t": 1352.31,
+   "d": 2.2,
+   "text": "We don't always do the optimal thing. We"
+  },
+  {
+   "t": 1354.51,
+   "d": 2.0,
+   "text": "do the fun thing."
+  },
+  {
+   "t": 1356.51,
+   "d": 1.3,
+   "text": "How many of you have fallen into the"
+  },
+  {
+   "t": 1357.81,
+   "d": 2.3,
+   "text": "hero trap because you are having fun"
+  },
+  {
+   "t": 1360.11,
+   "d": 2.0,
+   "text": "with this ridiculous weapon you found?"
+  },
+  {
+   "t": 1362.11,
+   "d": 1.9,
+   "text": "How many of you dumb players rescue the"
+  },
+  {
+   "t": 1364.01,
+   "d": 4.3,
+   "text": "cute puppy against all logic every time?"
+  },
+  {
+   "t": 1369.81,
+   "d": 3.2,
+   "text": "So it's going to reward"
+  },
+  {
+   "t": 1373.01,
+   "d": 1.4,
+   "text": "Sorry, I've disappeared. Is my"
+  },
+  {
+   "t": 1374.41,
+   "d": 2.8,
+   "text": "presentation still working?"
+  },
+  {
+   "t": 1377.41,
+   "d": 2.3,
+   "text": ">> It looks like your slides"
+  },
+  {
+   "t": 1379.71,
+   "d": 4.0,
+   "text": "are no longer part of the stream."
+  },
+  {
+   "t": 1385.11,
+   "d": 1.5,
+   "text": ">> I did not think this was such a cursed"
+  },
+  {
+   "t": 1386.61,
+   "d": 1.36,
+   "text": "setup."
+  },
+  {
+   "t": 1387.96,
+   "d": 1.05,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1389.01,
+   "d": 2.7,
+   "text": ">> It's just the day. Apparently, there's"
+  },
+  {
+   "t": 1391.71,
+   "d": 1.9,
+   "text": "probably the moon is probably doing"
+  },
+  {
+   "t": 1393.61,
+   "d": 2.0,
+   "text": "something."
+  },
+  {
+   "t": 1395.61,
+   "d": 2.4,
+   "text": "We've had multiple"
+  },
+  {
+   "t": 1398.01,
+   "d": 3.5,
+   "text": "multiple tech issues today."
+  },
+  {
+   "t": 1401.51,
+   "d": 3.6,
+   "text": "Oh, yeah. Look, I see. Okay."
+  },
+  {
+   "t": 1405.11,
+   "d": 1.0,
+   "text": ">> Okay."
+  },
+  {
+   "t": 1406.11,
+   "d": 0.7,
+   "text": "Better?"
+  },
+  {
+   "t": 1406.81,
+   "d": 1.1,
+   "text": ">> There we go."
+  },
+  {
+   "t": 1407.91,
+   "d": 2.0,
+   "text": ">> Okay. So"
+  },
+  {
+   "t": 1409.91,
+   "d": 1.5,
+   "text": "you can improve this a bit by adding"
+  },
+  {
+   "t": 1411.41,
+   "d": 2.1,
+   "text": "rewards for the fun kind of behavior you"
+  },
+  {
+   "t": 1413.51,
+   "d": 2.0,
+   "text": "want to see, like"
+  },
+  {
+   "t": 1415.51,
+   "d": 2.0,
+   "text": "how many of you picked the BFG out of"
+  },
+  {
+   "t": 1417.51,
+   "d": 1.4,
+   "text": "novelty when you first find it"
+  },
+  {
+   "t": 1418.91,
+   "d": 1.6,
+   "text": "regardless of whether it's a good idea"
+  },
+  {
+   "t": 1420.51,
+   "d": 2.4,
+   "text": "or not? Well, if you give a reward for"
+  },
+  {
+   "t": 1422.91,
+   "d": 0.9,
+   "text": "that,"
+  },
+  {
+   "t": 1423.81,
+   "d": 2.0,
+   "text": "then congratulations, your automated"
+  },
+  {
+   "t": 1425.81,
+   "d": 2.3,
+   "text": "play tester will do the fun things like"
+  },
+  {
+   "t": 1428.11,
+   "d": 1.2,
+   "text": "pick up a"
+  },
+  {
+   "t": 1429.31,
+   "d": 1.4,
+   "text": "BFG."
+  },
+  {
+   "t": 1430.71,
+   "d": 1.5,
+   "text": "But none of this can tell you if your"
+  },
+  {
+   "t": 1432.21,
+   "d": 2.1,
+   "text": "game is fun or if it feels good. But"
+  },
+  {
+   "t": 1434.31,
+   "d": 2.2,
+   "text": "play tester time is valuable. You can at"
+  },
+  {
+   "t": 1436.51,
+   "d": 1.5,
+   "text": "least make sure that the people who can"
+  },
+  {
+   "t": 1438.01,
+   "d": 2.3,
+   "text": "tell you it's fun"
+  },
+  {
+   "t": 1440.31,
+   "d": 2.9,
+   "text": "are not wasting their time."
+  },
+  {
+   "t": 1443.21,
+   "d": 1.0,
+   "text": "So"
+  },
+  {
+   "t": 1444.21,
+   "d": 1.6,
+   "text": "we spent all this time exploring"
+  },
+  {
+   "t": 1445.81,
+   "d": 2.0,
+   "text": "possibilities."
+  },
+  {
+   "t": 1447.81,
+   "d": 1.8,
+   "text": "I mean, look at this tree. Isn't it"
+  },
+  {
+   "t": 1449.61,
+   "d": 1.6,
+   "text": "pretty? What a shame that we just rely"
+  },
+  {
+   "t": 1451.21,
+   "d": 1.8,
+   "text": "on its root system."
+  },
+  {
+   "t": 1453.01,
+   "d": 1.8,
+   "text": "When I first thought I could use this"
+  },
+  {
+   "t": 1454.81,
+   "d": 2.1,
+   "text": "algorithm to help me balance,"
+  },
+  {
+   "t": 1456.91,
+   "d": 1.6,
+   "text": "I started by playing whole games out"
+  },
+  {
+   "t": 1458.51,
+   "d": 2.0,
+   "text": "which generated useful data. But then I"
+  },
+  {
+   "t": 1460.51,
+   "d": 2.7,
+   "text": "looked at that big, beautiful tree."
+  },
+  {
+   "t": 1463.21,
+   "d": 1.4,
+   "text": "The only reason that we can get any"
+  },
+  {
+   "t": 1464.61,
+   "d": 1.8,
+   "text": "useful information out of that first"
+  },
+  {
+   "t": 1466.41,
+   "d": 1.4,
+   "text": "layer of branches is that the tree"
+  },
+  {
+   "t": 1467.81,
+   "d": 2.3,
+   "text": "becomes an increasingly rich sample of"
+  },
+  {
+   "t": 1470.11,
+   "d": 3.2,
+   "text": "what is feasible states of the game."
+  },
+  {
+   "t": 1473.31,
+   "d": 1.6,
+   "text": "And I think what I'm saying might be"
+  },
+  {
+   "t": 1474.91,
+   "d": 1.2,
+   "text": "novel because I haven't been able to"
+  },
+  {
+   "t": 1476.11,
+   "d": 2.1,
+   "text": "find anyone else who's used an MCTS like"
+  },
+  {
+   "t": 1478.21,
+   "d": 1.1,
+   "text": "this, but"
+  },
+  {
+   "t": 1479.31,
+   "d": 1.4,
+   "text": "surely I'm not the first. I would"
+  },
+  {
+   "t": 1480.71,
+   "d": 1.5,
+   "text": "actually really value if anyone else has"
+  },
+  {
+   "t": 1482.21,
+   "d": 1.9,
+   "text": "seen it."
+  },
+  {
+   "t": 1484.11,
+   "d": 2.0,
+   "text": "Remember Emu Bay Railway Company that"
+  },
+  {
+   "t": 1486.11,
+   "d": 2.4,
+   "text": "failed Tasmania Railroad? Check this"
+  },
+  {
+   "t": 1488.51,
+   "d": 1.2,
+   "text": "out."
+  },
+  {
+   "t": 1489.71,
+   "d": 1.8,
+   "text": "The big issue I saw was that there's"
+  },
+  {
+   "t": 1491.51,
+   "d": 1.7,
+   "text": "this big important rail link between"
+  },
+  {
+   "t": 1493.21,
+   "d": 2.0,
+   "text": "Hobart and Launceston that was never"
+  },
+  {
+   "t": 1495.21,
+   "d": 1.3,
+   "text": "getting built,"
+  },
+  {
+   "t": 1496.51,
+   "d": 1.4,
+   "text": "which is a hint that there was a huge"
+  },
+  {
+   "t": 1497.91,
+   "d": 1.4,
+   "text": "balance problem."
+  },
+  {
+   "t": 1499.31,
+   "d": 2.1,
+   "text": "Not as in this player is better than"
+  },
+  {
+   "t": 1501.41,
+   "d": 1.5,
+   "text": "this one, but the game wasn't being"
+  },
+  {
+   "t": 1502.91,
+   "d": 2.4,
+   "text": "shaped the way I wanted it to be."
+  },
+  {
+   "t": 1505.31,
+   "d": 1.2,
+   "text": "And do you know how long it would have"
+  },
+  {
+   "t": 1506.51,
+   "d": 1.6,
+   "text": "taken to find that if I was just playing"
+  },
+  {
+   "t": 1508.11,
+   "d": 2.7,
+   "text": "with human beings? So as I varied rules"
+  },
+  {
+   "t": 1510.81,
+   "d": 2.3,
+   "text": "and figures in the game,"
+  },
+  {
+   "t": 1513.11,
+   "d": 1.6,
+   "text": "I was able to generate heat maps of"
+  },
+  {
+   "t": 1514.71,
+   "d": 2.3,
+   "text": "tracks and get"
+  },
+  {
+   "t": 1517.01,
+   "d": 3.5,
+   "text": "statistics on winning moves."
+  },
+  {
+   "t": 1522.71,
+   "d": 2.7,
+   "text": "Balancing the economy was non-trivial,"
+  },
+  {
+   "t": 1525.41,
+   "d": 1.3,
+   "text": "but"
+  },
+  {
+   "t": 1526.71,
+   "d": 2.5,
+   "text": "I've got 10,000 terminal states. I've"
+  },
+  {
+   "t": 1529.21,
+   "d": 3.0,
+   "text": "got 10,000 games of feasible information"
+  },
+  {
+   "t": 1532.21,
+   "d": 2.9,
+   "text": "that I can analyze."
+  },
+  {
+   "t": 1535.21,
+   "d": 2.0,
+   "text": "I've even had mixed success using them"
+  },
+  {
+   "t": 1537.21,
+   "d": 2.3,
+   "text": "to directly optimize my game's balance."
+  },
+  {
+   "t": 1539.51,
+   "d": 2.7,
+   "text": "I mean I used Optima Optuna, which is a"
+  },
+  {
+   "t": 1542.21,
+   "d": 1.6,
+   "text": "optimization framework material"
+  },
+  {
+   "t": 1543.81,
+   "d": 2.3,
+   "text": "scientists use. Thank you, Google."
+  },
+  {
+   "t": 1546.11,
+   "d": 2.2,
+   "text": "Then I cursed it repeatedly,"
+  },
+  {
+   "t": 1548.31,
+   "d": 1.7,
+   "text": "but I got it to modify constants in my"
+  },
+  {
+   "t": 1550.01,
+   "d": 1.7,
+   "text": "game to try to get it to tend towards"
+  },
+  {
+   "t": 1551.71,
+   "d": 3.0,
+   "text": "the shape I wanted it to be. So all that"
+  },
+  {
+   "t": 1554.71,
+   "d": 3.8,
+   "text": "data is there for the taking. Use it."
+  },
+  {
+   "t": 1558.91,
+   "d": 1.0,
+   "text": "Now"
+  },
+  {
+   "t": 1559.91,
+   "d": 1.2,
+   "text": "I wouldn't have come here and talked to"
+  },
+  {
+   "t": 1561.11,
+   "d": 2.3,
+   "text": "you for so far 25 minutes on one laptop"
+  },
+  {
+   "t": 1563.41,
+   "d": 1.6,
+   "text": "drop"
+  },
+  {
+   "t": 1565.01,
+   "d": 1.1,
+   "text": "without thinking that these are a"
+  },
+  {
+   "t": 1566.11,
+   "d": 1.6,
+   "text": "powerful tool, but they are not without"
+  },
+  {
+   "t": 1567.71,
+   "d": 1.5,
+   "text": "fault. I've touched on those"
+  },
+  {
+   "t": 1569.21,
+   "d": 2.2,
+   "text": "difficulties already, but I do need to"
+  },
+  {
+   "t": 1571.41,
+   "d": 3.1,
+   "text": "tell you a few things. One,"
+  },
+  {
+   "t": 1574.51,
+   "d": 2.1,
+   "text": "the if there's one thing this LLM"
+  },
+  {
+   "t": 1576.61,
+   "d": 1.9,
+   "text": "revolution has given us, it's ample"
+  },
+  {
+   "t": 1578.51,
+   "d": 3.0,
+   "text": "access to cheap computing RAM Actually"
+  },
+  {
+   "t": 1581.51,
+   "d": 2.0,
+   "text": "no, it's quite the opposite."
+  },
+  {
+   "t": 1583.51,
+   "d": 1.3,
+   "text": "Because you're running simulations of"
+  },
+  {
+   "t": 1584.81,
+   "d": 1.9,
+   "text": "actual game logic, you are going to need"
+  },
+  {
+   "t": 1586.71,
+   "d": 2.2,
+   "text": "access to multi-threading CPUs to be"
+  },
+  {
+   "t": 1588.91,
+   "d": 2.8,
+   "text": "effective. I know theoretically that"
+  },
+  {
+   "t": 1591.71,
+   "d": 1.8,
+   "text": "simulation might be able to be moved to"
+  },
+  {
+   "t": 1593.51,
+   "d": 1.8,
+   "text": "a GPU if you're the kind of person with"
+  },
+  {
+   "t": 1595.31,
+   "d": 2.2,
+   "text": "Donald Knuth on speed dial who can make"
+  },
+  {
+   "t": 1597.51,
+   "d": 1.9,
+   "text": "your game logic branchless, but this"
+  },
+  {
+   "t": 1599.41,
+   "d": 2.1,
+   "text": "really is a computationally heavy"
+  },
+  {
+   "t": 1601.51,
+   "d": 1.6,
+   "text": "process."
+  },
+  {
+   "t": 1603.11,
+   "d": 1.1,
+   "text": "And if you're using traditional"
+  },
+  {
+   "t": 1604.21,
+   "d": 1.9,
+   "text": "simulation, it requires traditional"
+  },
+  {
+   "t": 1606.11,
+   "d": 1.6,
+   "text": "computation."
+  },
+  {
+   "t": 1607.71,
+   "d": 2.0,
+   "text": "And also means you have to figure out"
+  },
+  {
+   "t": 1609.71,
+   "d": 0.9,
+   "text": "how [snorts] you're applying it"
+  },
+  {
+   "t": 1610.61,
+   "d": 2.1,
+   "text": "carefully. If you're using it for every"
+  },
+  {
+   "t": 1612.71,
+   "d": 1.4,
+   "text": "monster and every turn, then without"
+  },
+  {
+   "t": 1614.11,
+   "d": 2.0,
+   "text": "some efficiency improvements, it's"
+  },
+  {
+   "t": 1616.11,
+   "d": 1.5,
+   "text": "probably going to feel slow to your"
+  },
+  {
+   "t": 1617.61,
+   "d": 1.8,
+   "text": "player. Now, I don't think this is"
+  },
+  {
+   "t": 1619.41,
+   "d": 1.6,
+   "text": "fatal, but it should influence your"
+  },
+  {
+   "t": 1621.01,
+   "d": 1.3,
+   "text": "design."
+  },
+  {
+   "t": 1622.31,
+   "d": 2.1,
+   "text": "You probably want more inspiration from"
+  },
+  {
+   "t": 1624.41,
+   "d": 2.2,
+   "text": "roguelikes like 86 Hat than you do from"
+  },
+  {
+   "t": 1626.61,
+   "d": 1.4,
+   "text": "Angband if you're wanting deep"
+  },
+  {
+   "t": 1628.01,
+   "d": 2.5,
+   "text": "simulation."
+  },
+  {
+   "t": 1630.51,
+   "d": 2.7,
+   "text": "Look, as in all things, they are a tool."
+  },
+  {
+   "t": 1633.21,
+   "d": 2.2,
+   "text": "Use them thoughtfully rather than in"
+  },
+  {
+   "t": 1635.41,
+   "d": 1.8,
+   "text": "exclusivity."
+  },
+  {
+   "t": 1637.21,
+   "d": 1.4,
+   "text": "Add them to your toolbox, and you're"
+  },
+  {
+   "t": 1638.61,
+   "d": 1.5,
+   "text": "going to have a really cool way to"
+  },
+  {
+   "t": 1640.11,
+   "d": 2.6,
+   "text": "improve your game in multiple ways."
+  },
+  {
+   "t": 1642.71,
+   "d": 1.5,
+   "text": "But uh"
+  },
+  {
+   "t": 1644.21,
+   "d": 2.5,
+   "text": "still not helpful for writing a speech."
+  },
+  {
+   "t": 1646.71,
+   "d": 3.0,
+   "text": "Thank you all so much."
+  },
+  {
+   "t": 1649.71,
+   "d": 2.8,
+   "text": "Cool, that's me."
+  },
+  {
+   "t": 1653.61,
+   "d": 1.9,
+   "text": ">> Awesome. Thank you, Lachlan. And And"
+  },
+  {
+   "t": 1655.51,
+   "d": 1.6,
+   "text": "yeah, you made it under time, which is"
+  },
+  {
+   "t": 1657.11,
+   "d": 2.9,
+   "text": "great because we do have uh two lovely"
+  },
+  {
+   "t": 1660.01,
+   "d": 4.2,
+   "text": "questions uh from Hyper Gardens."
+  },
+  {
+   "t": 1664.21,
+   "d": 2.6,
+   "text": "Um the first one I have here, is there a"
+  },
+  {
+   "t": 1666.81,
+   "d": 2.8,
+   "text": "way to quantify how winnable a game is"
+  },
+  {
+   "t": 1669.61,
+   "d": 3.2,
+   "text": "if you use MCTS? Like 2% versus 1%"
+  },
+  {
+   "t": 1672.81,
+   "d": 2.9,
+   "text": "winnable and whatnot?"
+  },
+  {
+   "t": 1675.71,
+   "d": 1.4,
+   "text": ">> I don't"
+  },
+  {
+   "t": 1677.11,
+   "d": 2.1,
+   "text": "depends what you mean by winnable. So"
+  },
+  {
+   "t": 1679.21,
+   "d": 2.4,
+   "text": "what you can turn figure out is"
+  },
+  {
+   "t": 1681.61,
+   "d": 3.1,
+   "text": "is it winnable at all? So by using your"
+  },
+  {
+   "t": 1684.71,
+   "d": 2.1,
+   "text": "reward function relatively well, you can"
+  },
+  {
+   "t": 1686.81,
+   "d": 2.1,
+   "text": "get it to play out repeatedly and see"
+  },
+  {
+   "t": 1688.91,
+   "d": 2.0,
+   "text": "well if it never gets a win."
+  },
+  {
+   "t": 1690.91,
+   "d": 1.4,
+   "text": "One thing I've done is I added an"
+  },
+  {
+   "t": 1692.31,
+   "d": 2.3,
+   "text": "explore mode. So"
+  },
+  {
+   "t": 1694.61,
+   "d": 2.3,
+   "text": "the bits that you saw from the Art Weird"
+  },
+  {
+   "t": 1696.91,
+   "d": 1.6,
+   "text": "prototype that were playing in the"
+  },
+  {
+   "t": 1698.51,
+   "d": 2.1,
+   "text": "background, I've got an explore that I"
+  },
+  {
+   "t": 1700.61,
+   "d": 1.5,
+   "text": "can make bits of the game more difficult"
+  },
+  {
+   "t": 1702.11,
+   "d": 2.0,
+   "text": "and it's going to loop through."
+  },
+  {
+   "t": 1704.11,
+   "d": 2.5,
+   "text": "But I'm not quite sure what you mean by"
+  },
+  {
+   "t": 1706.61,
+   "d": 3.0,
+   "text": "a 1 or 2%. You can prove it is possible"
+  },
+  {
+   "t": 1709.61,
+   "d": 1.2,
+   "text": "to win it."
+  },
+  {
+   "t": 1710.81,
+   "d": 2.3,
+   "text": "How winnable it is is always going to be"
+  },
+  {
+   "t": 1713.11,
+   "d": 1.1,
+   "text": "a challenge."
+  },
+  {
+   "t": 1714.21,
+   "d": 2.4,
+   "text": ">> Sure, sure. Yeah, I think I I really"
+  },
+  {
+   "t": 1716.61,
+   "d": 1.9,
+   "text": "liked your your point about uh"
+  },
+  {
+   "t": 1718.51,
+   "d": 2.1,
+   "text": "optimizing different reward functions"
+  },
+  {
+   "t": 1720.61,
+   "d": 1.8,
+   "text": "for different NPCs based on like their"
+  },
+  {
+   "t": 1722.41,
+   "d": 2.6,
+   "text": "behavior or their type. Um I think that"
+  },
+  {
+   "t": 1725.01,
+   "d": 3.4,
+   "text": "can also probably, you know, change how"
+  },
+  {
+   "t": 1728.41,
+   "d": 2.8,
+   "text": "uh how winnable a game becomes. Uh"
+  },
+  {
+   "t": 1731.21,
+   "d": 1.1,
+   "text": ">> Quite considerably."
+  },
+  {
+   "t": 1732.31,
+   "d": 2.6,
+   "text": ">> Yeah. The the other question uh they had"
+  },
+  {
+   "t": 1734.91,
+   "d": 2.3,
+   "text": "was does this work better or worse for"
+  },
+  {
+   "t": 1737.21,
+   "d": 1.9,
+   "text": "deterministic/seeded"
+  },
+  {
+   "t": 1739.11,
+   "d": 2.2,
+   "text": "random games? And does it take the fun"
+  },
+  {
+   "t": 1741.31,
+   "d": 3.8,
+   "text": "out of board games if you MCT S them?"
+  },
+  {
+   "t": 1745.11,
+   "d": 2.7,
+   "text": ">> It works far better when there is no"
+  },
+  {
+   "t": 1747.81,
+   "d": 1.7,
+   "text": "randomness. So the more deterministic,"
+  },
+  {
+   "t": 1749.51,
+   "d": 1.6,
+   "text": "the better it is."
+  },
+  {
+   "t": 1751.11,
+   "d": 2.5,
+   "text": "That said, um"
+  },
+  {
+   "t": 1753.61,
+   "d": 2.5,
+   "text": "there is some randomness in"
+  },
+  {
+   "t": 1756.11,
+   "d": 2.6,
+   "text": "Emu Bay, particularly in its setup. So"
+  },
+  {
+   "t": 1758.71,
+   "d": 2.5,
+   "text": "what I've done, and I've seen a couple"
+  },
+  {
+   "t": 1761.21,
+   "d": 3.0,
+   "text": "of different approaches, is like I had"
+  },
+  {
+   "t": 1764.21,
+   "d": 2.4,
+   "text": "player nodes and dungeon nodes there,"
+  },
+  {
+   "t": 1766.61,
+   "d": 2.2,
+   "text": "I actually sometimes have"
+  },
+  {
+   "t": 1768.81,
+   "d": 3.7,
+   "text": "game nodes. So every random possibility"
+  },
+  {
+   "t": 1772.51,
+   "d": 3.5,
+   "text": "can result in a new node. And you wait"
+  },
+  {
+   "t": 1776.01,
+   "d": 1.6,
+   "text": "the random possibility instead of using"
+  },
+  {
+   "t": 1777.61,
+   "d": 2.5,
+   "text": "a UCB to pick the next one,"
+  },
+  {
+   "t": 1780.11,
+   "d": 3.5,
+   "text": "you wait it so it randomly moves between"
+  },
+  {
+   "t": 1783.61,
+   "d": 1.1,
+   "text": "Sorry."
+  },
+  {
+   "t": 1784.71,
+   "d": 2.0,
+   "text": "Um is that microphone at me?"
+  },
+  {
+   "t": 1786.71,
+   "d": 1.4,
+   "text": "Um"
+  },
+  {
+   "t": 1788.11,
+   "d": 2.8,
+   "text": "so for instance, if you're rolling two"
+  },
+  {
+   "t": 1790.91,
+   "d": 3.2,
+   "text": "dice, you'll weight the area using that"
+  },
+  {
+   "t": 1794.11,
+   "d": 2.5,
+   "text": "binary distribution."
+  },
+  {
+   "t": 1796.61,
+   "d": 2.1,
+   "text": "Now, does it make games less fun? Look,"
+  },
+  {
+   "t": 1798.71,
+   "d": 1.9,
+   "text": "I don't know about you, but"
+  },
+  {
+   "t": 1800.61,
+   "d": 1.9,
+   "text": "I believe checkers and backgammon are"
+  },
+  {
+   "t": 1802.51,
+   "d": 2.8,
+   "text": "both solved games, and my head isn't big"
+  },
+  {
+   "t": 1805.31,
+   "d": 1.5,
+   "text": "enough to keep that big of a tree in"
+  },
+  {
+   "t": 1806.81,
+   "d": 1.8,
+   "text": "them."
+  },
+  {
+   "t": 1808.61,
+   "d": 1.7,
+   "text": "Question is again, though, are you"
+  },
+  {
+   "t": 1810.31,
+   "d": 2.0,
+   "text": "making an optimized game or a fun game?"
+  },
+  {
+   "t": 1812.31,
+   "d": 3.6,
+   "text": "So for me, Emu Bay, I'm trying to use it"
+  },
+  {
+   "t": 1815.91,
+   "d": 1.8,
+   "text": "to help me figure out whether"
+  },
+  {
+   "t": 1817.71,
+   "d": 2.4,
+   "text": "the outcomes I want to see are feasible."
+  },
+  {
+   "t": 1820.11,
+   "d": 1.6,
+   "text": "It doesn't tell me whether it's fun or"
+  },
+  {
+   "t": 1821.71,
+   "d": 2.2,
+   "text": "not. The problem is that particularly"
+  },
+  {
+   "t": 1823.91,
+   "d": 2.0,
+   "text": "among train gamers, a bunch of them uh"
+  },
+  {
+   "t": 1825.91,
+   "d": 2.9,
+   "text": "min-maxers who will go looking for those"
+  },
+  {
+   "t": 1828.81,
+   "d": 1.5,
+   "text": "same broken states. So at the very"
+  },
+  {
+   "t": 1830.31,
+   "d": 1.6,
+   "text": "least, I'm meaning that somebody's not"
+  },
+  {
+   "t": 1831.91,
+   "d": 1.1,
+   "text": "going to be able to go through and"
+  },
+  {
+   "t": 1833.01,
+   "d": 1.4,
+   "text": "figure out that, hey, if I do this, I"
+  },
+  {
+   "t": 1834.41,
+   "d": 1.9,
+   "text": "win every time."
+  },
+  {
+   "t": 1836.31,
+   "d": 0.7,
+   "text": ">> Yeah. Yeah, I"
+  },
+  {
+   "t": 1837.01,
+   "d": 0.8,
+   "text": ">> answer?"
+  },
+  {
+   "t": 1837.81,
+   "d": 1.4,
+   "text": ">> Yeah, I I think, you know, when I play a"
+  },
+  {
+   "t": 1839.21,
+   "d": 1.2,
+   "text": "board game,"
+  },
+  {
+   "t": 1840.41,
+   "d": 2.1,
+   "text": "Monte Carloing myself with a reward"
+  },
+  {
+   "t": 1842.51,
+   "d": 1.1,
+   "text": "function, I'm like, I'm going to try"
+  },
+  {
+   "t": 1843.61,
+   "d": 1.4,
+   "text": "playing this way or like I'm going to"
+  },
+  {
+   "t": 1845.01,
+   "d": 1.5,
+   "text": "try playing this way."
+  },
+  {
+   "t": 1846.51,
+   "d": 2.8,
+   "text": "But uh I could see the allure of uh"
+  },
+  {
+   "t": 1849.31,
+   "d": 2.4,
+   "text": "doing it programmatically uh and setting"
+  },
+  {
+   "t": 1851.71,
+   "d": 2.8,
+   "text": "up that type of simulation."
+  },
+  {
+   "t": 1854.51,
+   "d": 1.5,
+   "text": "Especially if you're losing."
+  },
+  {
+   "t": 1856.01,
+   "d": 2.3,
+   "text": ">> Exactly. [laughter]"
+  },
+  {
+   "t": 1858.61,
+   "d": 1.5,
+   "text": ">> Uh well, great. Thank you so much,"
+  },
+  {
+   "t": 1860.11,
+   "d": 2.8,
+   "text": "Lachlan. Uh we we got in uh right on"
+  },
+  {
+   "t": 1862.91,
+   "d": 3.4,
+   "text": "time uh even with uh the uh moon-based"
+  },
+  {
+   "t": 1866.31,
+   "d": 1.3,
+   "text": "difficulties."
+  },
+  {
+   "t": 1867.61,
+   "d": 1.6,
+   "text": ">> I'm so sorry about that."
+  },
+  {
+   "t": 1869.21,
+   "d": 1.7,
+   "text": ">> No, it's no problem at all. It's made"
+  },
+  {
+   "t": 1870.91,
+   "d": 1.9,
+   "text": "today very interesting."
+  },
+  {
+   "t": 1872.81,
+   "d": 1.9,
+   "text": ">> I'll join you in the room in a second"
+  },
+  {
+   "t": 1874.71,
+   "d": 1.7,
+   "text": "after I find the keys from my keyboard"
+  },
+  {
+   "t": 1876.41,
+   "d": 1.3,
+   "text": "that fell off when everything fell off"
+  },
+  {
+   "t": 1877.71,
+   "d": 1.9,
+   "text": "when everything fell off my desk."
+  },
+  {
+   "t": 1879.61,
+   "d": 3.4,
+   "text": ">> Okay, good luck resetting."
+  },
+  {
+   "t": 1883.01,
+   "d": 1.4,
+   "text": ">> But thank you so much."
+  },
+  {
+   "t": 1884.41,
+   "d": 2.9,
+   "text": ">> Yeah yeah, of course."
+  }
+ ]
+}

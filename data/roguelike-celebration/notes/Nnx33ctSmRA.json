@@ -1,0 +1,170 @@
+{
+  "id": "Nnx33ctSmRA",
+  "title": "Phenry Ewing: A Million Little Players: Monte Carlo Simulations for Game Design",
+  "speaker": "Phenry Ewing",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=Nnx33ctSmRA",
+  "talk_type": "design",
+  "summary": "Phenry Ewing demystifies Monte Carlo simulation for game designers: model a complex system, then sample it thousands of times with weighted random variables to predict outcomes too complex to calculate. After a short history (Stanislaw Ulam's solitaire question run on ENIAC, later used in the Manhattan Project), he gives three case studies: balancing the hidden-role game Werewolf across player counts and roles, tuning question sequencing and difficulty in Netflix's interactive trivia show Cat Burglar using data from 5,000 test players, and balancing the fuel/money/rating economy of the narrative game Neo Cab by driving its ink script headlessly. His takeaways: decide the desired player experience first, feed simulations real-world data or informed weighted guesses, and use good tooling.",
+  "games": [
+    "Werewolf (Mafia)",
+    "Cat Burglar",
+    "Neo Cab",
+    "Firewatch",
+    "Solitaire",
+    "Magic: The Gathering"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo simulation",
+      "kind": "technique",
+      "claim": "Monte Carlo simulation means modelling a complex game system and sampling it thousands of times with RNG and weighted random variables to predict outcomes that are too complex to calculate analytically.",
+      "detail": "Ewing frames it as a surprisingly deep method for making predictions about complex systems. The model and the sampling both have pitfalls, but at its core it uses randomness to solve problems that may be deterministic yet too complex to solve directly.",
+      "t": 182,
+      "quote": "you are going to be modeling complex systems and then sampling it thousands of times are RNG and weighted random variables",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "monte carlo origins",
+      "kind": "history",
+      "claim": "The Monte Carlo method began with a mathematician asking the odds of a winning solitaire deal, finding them too complex to compute, and brute-forcing the answer by simulating hands on the ENIAC.",
+      "detail": "Bedridden after brain surgery, the scientist (Ulam) played lots of solitaire and tried to calculate the odds of a perfect initial hand. Analytical methods failed, so he proposed dealing repeatedly and dividing wins by attempts; hand-dealing was impractical, so von Neumann's ENIAC ran it. The same idea was later used in the Manhattan Project.",
+      "t": 347,
+      "quote": "wait until I find the winning one and divide by the number of times I tried",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo simulation",
+      "kind": "warning",
+      "claim": "A Monte Carlo simulation only predicts reality if the model is fairly accurate, the sample is large enough and the sampling is truly representative of how real players behave.",
+      "detail": "Using a pachinko analogy, Ewing says you drop balls where a real player would; dropping them only in the middle or perfectly evenly would not represent the population. A random sample lets you infer about the whole population only if it exhibits the population's tendencies.",
+      "t": 563,
+      "quote": "You don't want too small of a sample size and you want it to be truly random",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "balancing tabletop games",
+      "kind": "example",
+      "claim": "To balance Werewolf for every combination of roles and player counts, Ewing coded a basic model of the game and ran it thousands of times across weighted variables, producing an interactive rules document that reported win probabilities.",
+      "detail": "The model covered round sequence, day/night cycle, end conditions and very basic player behaviour such as the seer randomly checking a player. Results were recorded and sliced by input, and the rules document let you set player count and roles to see recommended werewolf counts and win odds.",
+      "t": 730,
+      "quote": "run that model thousands of time with every possible -- variables",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance",
+      "kind": "example",
+      "claim": "Simulating Werewolf revealed non-obvious balance effects, such as adding a seer boosting the villagers' win chance by roughly 25-30 percent in some scenarios.",
+      "detail": "Ewing says every time they changed a variable they saw a surprising result, even though the model ignored player skill and human psychology such as people accidentally giving away their roles.",
+      "t": 894,
+      "quote": "adding a seer could boost the chances of the villagers winning in some scenario for like 25-30 percent more",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo simulation",
+      "kind": "principle",
+      "claim": "Simulation is less elegant than pure analytical math, but analytical models of complex games tend to simplify away the hardest parts, so for complex systems you cannot just ignore variables.",
+      "detail": "An MIT professor suggested an analytical approach to Werewolf; when Ewing asked how he modelled the seer, the hardest part, the answer was that he had ignored it completely. Ewing argues games like Werewolf are complicated, as was the original Los Alamos problem.",
+      "t": 1000,
+      "quote": "The systems are complicated and that's why you can't just ignore variables",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curves",
+      "kind": "example",
+      "claim": "For Netflix's Cat Burglar, the team play-tested trivia questions on 5,000 adults and used the measured success rates to sort question sets into six difficulty brackets for the simulation.",
+      "detail": "Each participant answered 25 questions in a watered-down version of the service. Success on triple-question sets ranged from about 12% to almost 90%, giving solid data on question difficulty to feed into the Monte Carlo model.",
+      "t": 1214,
+      "quote": "We put them in front of 5,000 U.S. adults. 25 per participant",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "learning effect",
+      "kind": "technique",
+      "claim": "Cat Burglar's simulation modelled a measured learning effect, where players' success rate rose with each playthrough, so difficulty could be tuned against improving players.",
+      "detail": "Test data showed success rising over repeated playthroughs as players understood the triple-question format and improved reaction time. Ewing calls such measured ranges and weighted randomness what makes a good Monte Carlo simulation.",
+      "t": 1362,
+      "quote": "there was a learning effect in the game we could model",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curves",
+      "kind": "technique",
+      "claim": "Cat Burglar orders questions by difficulty bracket while randomizing within each bracket, so the first playthrough feels punishingly hard and the game feels gradually easier on repeat plays, adjusted for the learning effect.",
+      "detail": "Netflix wanted a game that felt hard like a classic Nintendo game but not so punishing that players dropped off after the first episode, ideally getting 2-3 playthroughs. Without simulation, Ewing says, sequencing the random trials would have been guesswork.",
+      "t": 1437,
+      "quote": "We were able to custom order the questions while still being randomized within that bracket",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "economy",
+      "kind": "example",
+      "claim": "Neo Cab's economy of driver rating, emotional state and money/fuel could produce an unrecoverable game over (out of fuel and money at once), which the team needed to balance without knowing how.",
+      "detail": "Low ratings for too long get you fired, the emotional 'feel grid' affects customer interactions, and cryptocurrency pays for fuel and a place to sleep. Running out of fuel and money simultaneously is a game over because you can't drive to get more fuel.",
+      "t": 1571,
+      "quote": "if you ever ran out of fuel and money at the same time this is game over state",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "automated playtesting",
+      "kind": "technique",
+      "claim": "Because Neo Cab's whole design was written in the ink narrative language, the team could run the actual game headlessly from the command line with a random-choice JavaScript runner thousands of times instead of building a separate model.",
+      "detail": "At the end of each run they output core variables and the inputs used, then sliced the data into meta-game reports: how many runs finished, and how often game overs came from running out of fuel and money.",
+      "t": 1616,
+      "quote": "instead of building a model of the game we had one and could drive it",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "economy",
+      "kind": "principle",
+      "claim": "Simulation let the Neo Cab team confidently tune core economy variables they would otherwise have been too scared to touch, such as fuel cost, starting money, fuel per mile and firing rules.",
+      "detail": "The automated runs showed how changes affected completion and failure causes, so they could tweak without breaking the game.",
+      "t": 1670,
+      "quote": "tune the core variables we had otherwise be way too terrified to change like the cost of fuel",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance",
+      "kind": "principle",
+      "claim": "Before simulating, decide the desired player experience, because balance means different things for different games: even odds for Werewolf, hard-but-quickly-rewarding for Cat Burglar, constant near-precarity for Neo Cab.",
+      "detail": "For Neo Cab they wanted players to always feel about to run out of money or fuel or get fired, but almost never actually run aground, making precarity the most likely case. Monte Carlo helps hit that target before real players see the game.",
+      "t": 1740,
+      "quote": "First decide what you are designing for and Monte Carlo can help you achieve that before you launch real players",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo simulation",
+      "kind": "warning",
+      "claim": "Feed simulations real-world data or informed weighted guesses rather than treating every free variable as equally likely, which is unrealistic.",
+      "detail": "Werewolf required guesses; Cat Burglar used measured player data. Ewing advises measuring what people do and using informed ranges.",
+      "t": 1777,
+      "quote": "treat every free variable as equally likely as every other one. That's obviously not realistic",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo simulation",
+      "kind": "open-question",
+      "claim": "Monte Carlo works best for games with limited player actions, and player psychology remains guesswork unless thousands of real people are tested.",
+      "detail": "Host Alexei suggested that more possible actions make simulation harder. Ewing noted people simulate Magic: The Gathering, but said that without running real people through it, psychology is just guesswork.",
+      "t": 1882,
+      "quote": "if you don't run real people through it and lots of them, thousands of them, you are just guess work",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

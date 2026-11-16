@@ -1,0 +1,137 @@
+{
+  "id": "UNBAoc0TJSs",
+  "title": "Tyriq Plummer - Scrubbin' Trubble: The Journey to Multiplayer Roguelikery",
+  "speaker": "Tyriq Plummer",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=UNBAoc0TJSs",
+  "talk_type": "postmortem",
+  "summary": "Tyriq Plummer describes developing Scrubbin' Trubble, a cleaning-themed multiplayer traditional roguelike that grew out of his Clean Sweep prototype. The goal was to keep turn-based roguelike pacing with multiple players while keeping turns snappy through small inventories, distinct enemies, telegraphed threats, small stages and limited cascading effects. Fully independent per-player turns proved too chaotic with 3-4 players, so the team pivoted to queued simultaneous actions inside dynamically defined 'combat zones', while players outside combat move freely. He also covers dropping rollback netcode for a deterministic lockstep model, stage voting, and a death rule where only a total party wipe ends the run.",
+  "games": [
+    "Scrubbin' Trubble",
+    "Clean Sweep",
+    "Crypt of the NecroDancer"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiplayer turns",
+      "kind": "technique",
+      "claim": "Clean Sweep, the prototype behind Scrubbin' Trubble, let players act fully independently while each enemy acted on the schedule of the player it was targeting.",
+      "detail": "If an enemy targets player one, player two can move freely, so multiple players and enemies coexist in the same space on their own turn schedules. It was fun with two players but left open whether it scaled to three or more.",
+      "t": 199,
+      "quote": "players could act fully independently and enemies would act based on which player they were targeting",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "fast turns",
+      "kind": "principle",
+      "claim": "To keep a multiplayer turn-based roguelike snappy, Scrubbin' Trubble limits decision space with small inventories, distinct enemies and a clearly readable game state.",
+      "detail": "Plummer notes roguelike players can deliberate a long time; with friends waiting that kills the pace. The team wanted players to glance at the board and resolve actions quickly, so they avoided menu diving and colour-swap enemy variants whose differences must be memorised.",
+      "t": 326,
+      "quote": "Limited decision space so players could observe the game field and resolve their actions quickly and have a clearly readable game state",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "telegraphing",
+      "kind": "technique",
+      "claim": "Scrubbin' Trubble shows enemy threatened zones and actions so players can make informed decisions quickly.",
+      "detail": "This was one of the design requirements listed for keeping multiplayer turns fast, alongside small inventories and distinct enemies.",
+      "t": 406,
+      "quote": "show threatened enemy zones and actions so you can be able to make informed decisions quickly",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "stage size",
+      "kind": "principle",
+      "claim": "Scrubbin' Trubble uses small stages with explicit goals so cooperating players stay close instead of scattering across sprawling maps.",
+      "detail": "Plummer says massive maps make players go off alone so it feels like a game where you merely might encounter other players. Small, goal-focused stages focus attention and encourage working together.",
+      "t": 414,
+      "quote": "Small stages with explicit goals will help focus player attention to encourage people sticking close another and working together",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cascading effects",
+      "kind": "warning",
+      "claim": "In multiplayer roguelikes, overly complex cascading effects stall play because everyone must stop to parse what just happened.",
+      "detail": "Scrubbin' Trubble limited cascades for this reason: a burst of simultaneous effects forces the group to work out all that occurred, which brings gameplay to a halt.",
+      "t": 436,
+      "quote": "limit overly complex cascading effects because otherwise that's another reason that the gameplay could really like come to a stop quickly",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "netcode",
+      "kind": "warning",
+      "claim": "Plummer spent two months failing to implement rollback netcode for Scrubbin' Trubble before realising most online games, especially turn-based ones, don't need it.",
+      "detail": "Inspired by a 2024 Roguelike Celebration talk on Crypt of the NecroDancer's online netcode, he tried to copy rollback with no prior netcode experience. He concluded it is a specific technology for a specific subset of games, and scrapped it.",
+      "t": 527,
+      "quote": "realizing I guess most online games don't need rollback",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "deterministic lockstep",
+      "kind": "technique",
+      "claim": "Scrubbin' Trubble runs in lockstep: clients send actions to the server, wait for confirmation, and simulate locally, so the game must be strictly deterministic.",
+      "detail": "Because everything is simulated client-side, the server does not need to send game state. Plummer also found the internet was faster than he expected for this approach.",
+      "t": 550,
+      "quote": "Clients send their action to the server and wait for conformation from the server before applying events to the game world",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiplayer turns",
+      "kind": "warning",
+      "claim": "Fully independent per-player turns did not work with 3-4 players in Scrubbin' Trubble: play was too fast, chaotic and unpredictable to cooperate.",
+      "detail": "Players had to talk constantly and telegraph every action, and they frequently stepped on each other's moves, e.g. one player moving while another targeted an enemy that was targeting them, causing desyncs as actions were confirmed.",
+      "t": 604,
+      "quote": "the answer is no. It was too fast, too chaotic, too unpredictable",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "combat zones",
+      "kind": "technique",
+      "claim": "Scrubbin' Trubble's pivot: actions are queued and resolve only when every player in the same dynamically defined combat zone has committed, while players outside combat move freely.",
+      "detail": "Plummer had built a contingency queueing mechanic and promoted it to the core. Combat zones are defined by who is fighting whom; the game automatically slows down when it makes sense, so players can see each other's plans without constant talking. It sacrificed the original goal of never waiting for others.",
+      "t": 684,
+      "quote": "it waits until all players within the same combat zone all have their actions queued up",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "encounter boundaries",
+      "kind": "example",
+      "claim": "Combat zones give Scrubbin' Trubble fights definite start and end points, enabling end-of-fight quips and score bonuses for no-damage encounters.",
+      "detail": "Once all enemies are dead the zone ends and players are free again. New problems arose: defining edge cases for which nearby players share a zone, and slow deciders now hold up everyone in the fight.",
+      "t": 824,
+      "quote": "combat has definitive start and end points",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "cooperative abilities",
+      "kind": "example",
+      "claim": "Scrubbin' Trubble's level-up abilities and healing encourage grouping, e.g. an ability that pulls allies close before you drink a healing potion so all benefit.",
+      "detail": "Players also vote on the next room of the house to clean between levels. Other healing sources, like cleaning certain props, reward having teammates nearby.",
+      "t": 994,
+      "quote": "call all our allies to come close to you before you use a healing potion on yourself so everyone benefits",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "multiplayer permadeath",
+      "kind": "technique",
+      "claim": "In Scrubbin' Trubble only a total party wipe ends the run; fallen players return next floor at a growing score penalty, and the party can exit a level early.",
+      "detail": "Since the game is mostly score-based, dying still matters. Dead players cheer from the sidelines, and a party in a tough spot can leave the level, take the penalty and continue together.",
+      "t": 1022,
+      "quote": "game overs only occur in the event of a TPK on a floor. Fallen PCs return on the next floor",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}
