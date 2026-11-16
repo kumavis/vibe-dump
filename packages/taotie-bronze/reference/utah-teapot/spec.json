@@ -1,0 +1,15 @@
+{
+  "note": "Utah teapot (Newell 1975, Blinn's squashed proportions) dressed with the Taotie Kit; a showpiece, not a museum object. Size chosen: spout tip -> handle back 240 mm on the undecorated surface (37.30 mm per Newell unit). The form itself is proved against three.js TeapotGeometry by reference/utah-teapot/check-form.mjs (< 0.2 mm); these ratios only check that the build keeps that frame: spout tip at Newell x 3.434, handle back at x -3.0 plus its 1.5 mm back band, knob top 117.5 mm plus the 2.1 mm whorl, body standing on y 0, belly diameter 149.2 (r 2.0 Newell units, relief faded to 0 at the +-X seams). Parts: body (all body registers + inner wall), lid (dome, knob, skirt), spout (tube, lip, bore), handles (tube), flanges (2 body + 2 lid), heads (the ram head biting the handle).",
+  "dimensions": { "w": 240, "h": 117.5, "d": 149.2, "chosen": true },
+  "ratios": {
+    "spoutTip":      { "expr": "parts.spout.max.0",      "expected": 128.1, "tol": 0.6 },
+    "handleBack":    { "expr": "parts.handles.min.0",    "expected": -113.4, "tol": 1.2 },
+    "width":         { "expr": "overall.w",              "expected": 241.5, "tol": 2.0 },
+    "height":        { "expr": "overall.h",              "expected": 119.6, "tol": 1.2 },
+    "bodyFromGround":{ "expr": "parts.body.min.1",       "expected": 0,     "tol": 0.2 },
+    "bellyDiameter": { "expr": "parts.body.w",           "expected": 149.2, "tol": 1.0 },
+    "squash":        { "expr": "overall.h / overall.w",  "expected": 0.495, "tol": 0.012 },
+    "flangeCount":   { "expr": "parts.flanges.count",    "expected": 4,     "tol": 0 },
+    "headCount":     { "expr": "parts.heads.count",      "expected": 1,     "tol": 0 }
+  }
+}

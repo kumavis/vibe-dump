@@ -15,7 +15,11 @@ const cm = (mm) => {
 /** "The Metropolitan Museum of Art, New York — Purchase, …" → the institution and city. */
 export const shortCollection = (a) => String(a.collection || '').split(/\s+—\s+|\s+-\s+/)[0]
 const knownAccession = (s) => s && !/^(unknown|not published|n\/a|none)$/i.test(String(s).trim())
-export const isTestPiece = (a) => (a.order ?? 0) >= 90
+/** artifact `group` (KIT.md § Artifact contract): 'vessels' (default) | 'classics' (CG test models dressed with the kit) */
+export const isClassic = (a) => (a.group ?? 'vessels') === 'classics'
+export const isTestPiece = (a) => !isClassic(a) && (a.order ?? 0) >= 90
+// list sections: museum vessels, then classics, then kit test pieces (each in catalog order)
+const listRank = (a) => (isClassic(a) ? 1 : isTestPiece(a) ? 2 : 0)
 
 export function createVessels({ stage, catalog, quality, cacheMax = 2, progress, listEl, labelEl, onShown, onPick }) {
   const cache = new Map() // id → { promise, result? }
@@ -31,11 +35,16 @@ export function createVessels({ stage, catalog, quality, cacheMax = 2, progress,
   // ------------------------------------------------------------- switcher
   const rows = new Map() // id → { btn, sub }
   function renderList() {
-    const arts = catalog.loaded
+    const arts = catalog.loaded.slice().sort((x, y) => listRank(x) - listRank(y))
     const pending = catalog.ids.filter((id) => !catalog.get(id))
     listEl.replaceChildren()
     let sep = false
+    let sepClassics = false
     for (const a of arts) {
+      if (isClassic(a) && !sepClassics) {
+        sepClassics = true
+        listEl.append(el('li', { class: 'sep', 'aria-hidden': 'true' }, el('span', { class: 'cap', text: 'Classics' })))
+      }
       if (isTestPiece(a) && !sep) {
         sep = true
         listEl.append(el('li', { class: 'sep', 'aria-hidden': 'true' }, el('span', { class: 'cap', text: 'Kit test piece' })))
@@ -59,7 +68,7 @@ export function createVessels({ stage, catalog, quality, cacheMax = 2, progress,
     if (!r) return
     const a = r.a
     const acc = knownAccession(a.accession) && String(a.accession).length <= 18 ? ' · ' + a.accession : ''
-    r.sub.textContent = text ?? (isTestPiece(a) ? 'Procedural · not an excavated object' : shortCollection(a) + acc)
+    r.sub.textContent = text ?? (isTestPiece(a) ? 'Procedural · not an excavated object' : isClassic(a) ? 'Classic CG model · dressed with the kit' : shortCollection(a) + acc)
     r.sub.classList.toggle('busy', text != null)
   }
   function markCurrent() {
@@ -105,6 +114,7 @@ export function createVessels({ stage, catalog, quality, cacheMax = 2, progress,
         ),
         a.blurb ? el('p', { class: 'blurb', text: a.blurb }) : null,
         isTestPiece(a) ? el('p', { class: 'note', text: 'A procedural test piece for the Taotie Kit — not a copy of any one object.' }) : null,
+        isClassic(a) ? el('p', { class: 'note', text: 'A classic computer-graphics test model dressed with the Taotie Kit — not a museum object.' }) : null,
       ),
     )
     labelEl.classList.toggle('open', labelOpen)

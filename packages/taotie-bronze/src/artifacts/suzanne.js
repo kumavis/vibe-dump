@@ -1,0 +1,191 @@
+// Suzanne as a taotie — projected relief on a polygon cage the kit did not make.
+//
+// Not a museum object: Blender's monkey head (the Blender Foundation's mascot), from the Khronos glTF
+// Sample Assets (CC0, © 2017 UX3D; reference/suzanne/SOURCES.md), committed as a 25 kB quantised cage by
+// tools/classics.mjs and Loop-subdivided at load. Her own features BECOME the mask (suzanne/decor.js):
+// the eyes — already convex bosses — get a slit pupil and a fat lid pinched to pointed canthi, the brows
+// turn into fat C-horns sweeping back over the forehead, a notched flange (kit.flange on a path sliced off
+// her centre line) runs down from the crown to the top of the nose, the ears carry big coiled bands, and
+// the forehead, crown and cheeks a fine leiwen ground with a kui on each cheek. The muzzle and mouth stay
+// hers. Relief arrives through kit.skin: a spherical projector for the face, a planar one per ear (the
+// left mirrored), the mesh refined only where a band displaces it; the bare head keeps a cavity-driven
+// patina. She sits on a short cast neck ring (a socle), her chin just clear of the plinth.
+// Units mm, Y up, front +Z.
+
+import * as THREE from 'three'
+import cageUrl from './suzanne/suzanne.bin?url'
+import { FACE, EAR, drawFace, drawEar } from './suzanne/decor.js'
+
+const HEIGHT = 220 // the head, chin to crown
+const LIFT = 16 // the chin's clearance above the plinth (the socle carries her)
+
+export default {
+  id: 'suzanne',
+  group: 'classics',
+  order: 62,
+  title: 'Suzanne as a Taotie',
+  type: 'computer-graphics test model, recast in bronze',
+  date: 'Blender mascot 2002 · glTF sample 2017 · recast 2026',
+  period: 'Computer-graphics test model (polygon cage)',
+  findspot: '',
+  collection: 'Mesh: Khronos glTF Sample Assets (CC0, © 2017 UX3D) — Suzanne is the Blender Foundation’s mascot',
+  accession: '',
+  dimensions: { h: HEIGHT + LIFT, w: 306, d: 184 },
+  blurb:
+    'Suzanne is the monkey head built into the Blender 3D software as its test model and mascot; this cage is the CC0 copy UX3D made for the Khronos glTF sample models. ' +
+    'The Taotie Kit subdivided her and projected relief onto her own features, so her face becomes the mask: slit-pupilled eyes with pointed corners, brows turned into fat C-horns, a notched flange down the nose, spirals in her ears, and a fine leiwen ground — her muzzle and mouth left as they were.',
+  defaultPatina: 'suzanne',
+  views: {
+    front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.05 },
+    'three-quarter': { azimuth: -35, elevation: 10, fov: 26, fit: 1.05 },
+    back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.05 },
+    side: { azimuth: 90, elevation: 4, fov: 26, fit: 1.08 },
+    top: { azimuth: 0, elevation: 80, fov: 26, fit: 1.0 },
+    'detail-eye': { azimuth: -12, elevation: 8, fov: 16, fit: 0.3, target: [-38, LIFT + 150, 80] },
+    'detail-ear': { azimuth: 28, elevation: 6, fov: 16, fit: 0.27, target: [126, LIFT + 135, -42] },
+  },
+
+  async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
+    const q = Math.max(0.25, quality)
+    await onProgress(0.02, 'loading the cage')
+    const res = await fetch(cageUrl)
+    if (!res.ok) throw new Error('suzanne: mesh asset ' + res.status)
+    let m = kit.decodeMesh(await res.arrayBuffer())
+    // glTF: Y up, she faces +Z → mm, chin on y = LIFT, centred
+    const b0 = kit.meshBounds(m)
+    const k = HEIGHT / b0.size[1]
+    const P0 = m.positions
+    for (let i = 0; i < P0.length; i += 3) {
+      P0[i] = (P0[i] - b0.center[0]) * k
+      P0[i + 1] = (P0[i + 1] - b0.min[1]) * k + LIFT
+      P0[i + 2] = (P0[i + 2] - b0.center[2]) * k
+    }
+    await onProgress(0.06, 'subdividing')
+    m = kit.loopSubdivide(m, q >= 0.75 ? 2 : 1)
+
+    // ---- panels (drawn in the projectors' own mm, suzanne/decor.js)
+    await onProgress(0.12, 'face panel')
+    const ppmm = 6.5 * Math.sqrt(q)
+    const facePanel = new kit.ReliefPanel({ width: FACE.width, height: FACE.height, ppmm, seed: 2002 })
+    drawFace(kit, facePanel, { seed: 3 })
+    await onProgress(0.42, 'baking the face')
+    const faceMap = facePanel.bake()
+    await onProgress(0.5, 'ear panel')
+    const earPanel = new kit.ReliefPanel({ width: EAR.width, height: EAR.height, ppmm: ppmm * 1.1, seed: 2017 })
+    drawEar(kit, earPanel, { seed: 5 })
+    const earMap = earPanel.bake()
+
+    const lift = (c) => [c[0], c[1] + LIFT, c[2]]
+    const face = kit.sphericalProjector({ ...FACE.projector, center: lift(FACE.projector.center), width: FACE.width, height: FACE.height })
+    const er = EAR.projector
+    const earR = kit.planarProjector({ ...er, center: lift(er.center), width: EAR.width, height: EAR.height })
+    const earL = kit.planarProjector({ ...er, center: lift([-er.center[0], er.center[1], er.center[2]]), normal: [-er.normal[0], er.normal[1], er.normal[2]], mirror: true, width: EAR.width, height: EAR.height })
+    const regions = [
+      { relief: faceMap, projectors: [face] },
+      { relief: earMap, projectors: [earR, earL] },
+    ]
+
+    // ---- refine where a band displaces her, to the macro spacing
+    await onProgress(0.58, 'refining')
+    const edge = q >= 1.5 ? 0.75 : q >= 1 ? 1.0 : 1.7
+    m = kit.refineMesh(m, { edge, where: kit.reliefWhere(regions, { size: 3, threshold: 0.06 }), maxVerts: q >= 1 ? 190000 : 80000 })
+    await onProgress(0.7, 'cavity')
+    kit.vertexNormals(m)
+    const cavity = kit.meshCavity(m, { obscurance: 1.4, curvature: 0.6, gamma: 1.2 })
+    await onProgress(0.8, 'dressing')
+    const head = kit.skin(m, { regions, cavity, spacing: edge, part: 'body' })
+    head.name = 'suzanne'
+
+    // ---- the flange down her centre line, crown → top of the nose
+    await onProgress(0.88, 'flange')
+    const flange = centreFlange(kit, m, q)
+
+    // ---- the socle
+    await onProgress(0.94, 'socle')
+    const socle = neckRing(kit, q)
+
+    const object = new THREE.Group()
+    object.name = 'suzanne'
+    if (typeof location !== 'undefined' && /paneldebug/.test(location.search)) { // TEMP-DEBUG
+      const W = FACE.width, Hh = FACE.height
+      const g = kit.buildSurface({ surface: kit.quadSurface([-W / 2, 0, 0], [W / 2, 0, 0], [-W / 2, Hh, 0], [W / 2, Hh, 0]), segments: { density: 1 }, relief: faceMap })
+      const pm = new THREE.Mesh(g, new kit.PatinaMaterial({ relief: faceMap }))
+      object.add(pm)
+      return { object, parts: { body: pm }, panels: { face: faceMap } }
+    }
+    object.add(socle, head)
+    if (flange) object.add(flange)
+    await onProgress(1, 'done')
+    const parts = { body: head, foot: socle }
+    if (flange) parts.flanges = flange
+    return { object, parts, panels: { face: faceMap, ear: earMap } }
+  },
+}
+
+/** a notched flange on the path sliced off her centre plane (x = 0), from the crown down to the top of the nose */
+function centreFlange(kit, m, q) {
+  const lines = kit.sliceMesh(m, { point: [0, 0, 0], normal: [1, 0, 0] })
+  // the head shell's centre line is the longest chain; keep its front-top part
+  const line = lines.sort((a, b) => b.length - a.length)[0]
+  if (!line) return null
+  const yTop = LIFT + 214, yBot = LIFT + 101
+  let pts = line.filter((p) => p[1] <= yTop && p[1] >= yBot && p[2] > -25)
+  // order bottom → top along the chain (the chain may start anywhere): sort by the arc of the front profile
+  pts = orderChain(pts)
+  if (pts[0][1] > pts[pts.length - 1][1]) pts.reverse()
+  const path = pathFrame(pts, [0, LIFT + 140, -15])
+  return kit.flange({
+    path, height: (f) => 6.5 + 1.5 * Math.sin(Math.PI * f), thickness: 6, taper: 4, waver: 0.35, seed: 11,
+    notches: { shape: 'square', pitch: 17, depth: 0.45, width: 3.2 }, ends: { start: 'taper', end: 'taper' },
+    material: new kit.PatinaMaterial({ cavity: 0.85 }), part: 'flanges',
+  })
+}
+
+function orderChain(pts) {
+  // the slice points come chained already; drop jumps (a broken chain) by keeping the longest run
+  const runs = [[]]
+  for (let i = 0; i < pts.length; i++) {
+    const r = runs[runs.length - 1]
+    if (r.length && Math.hypot(pts[i][0] - r[r.length - 1][0], pts[i][1] - r[r.length - 1][1], pts[i][2] - r[r.length - 1][2]) > 6) runs.push([])
+    runs[runs.length - 1].push(pts[i])
+  }
+  return runs.sort((a, b) => b.length - a.length)[0]
+}
+
+/** a path { length, frame(σ) } through points in the x = 0 plane; n points away from `inner` */
+function pathFrame(pts, inner) {
+  const cum = [0]
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][1] - pts[i - 1][1], pts[i][2] - pts[i - 1][2]))
+  const L = cum[cum.length - 1]
+  const at = (s) => {
+    s = Math.max(0, Math.min(L, s))
+    let i = 1
+    while (i < cum.length - 1 && cum[i] < s) i++
+    const t = (s - cum[i - 1]) / Math.max(cum[i] - cum[i - 1], 1e-9)
+    return [0, pts[i - 1][1] + t * (pts[i][1] - pts[i - 1][1]), pts[i - 1][2] + t * (pts[i][2] - pts[i - 1][2])]
+  }
+  return {
+    length: L,
+    frame(s) {
+      const h = 3
+      const a = at(s - h), b = at(s + h), p = at(s)
+      const d = new THREE.Vector3(0, b[1] - a[1], b[2] - a[2]).normalize()
+      let n = new THREE.Vector3(0, -d.z, d.y)
+      if (n.y * (p[1] - inner[1]) + n.z * (p[2] - inner[2]) < 0) n.negate()
+      const bb = new THREE.Vector3().crossVectors(d, n)
+      return { p: new THREE.Vector3(...p), n, d, b: bb }
+    },
+  }
+}
+
+/** a short cast neck ring (socle) under her skull: flared foot, a waist, two bowstrings */
+function neckRing(kit, q) {
+  const top = LIFT + 92 // inside the skull
+  const profile = [
+    [50, 0], [50, 3], [47, 6, 'corner'], [42, 14], [39.5, 30], [39, LIFT + 34], [40.6, LIFT + 37], [39, LIFT + 40], [39, LIFT + 46], [40.6, LIFT + 49], [39, LIFT + 52], [37, top - 12], [34, top],
+  ]
+  const ring = kit.lathe({ profile, material: new kit.PatinaMaterial({ cavity: 0.8 }), part: 'foot', segments: { density: q >= 1 ? 0.6 : 0.35 } })
+  ring.position.z = -22
+  ring.name = 'socle'
+  return ring
+}

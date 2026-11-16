@@ -37,8 +37,9 @@ partly hidden (≈ ±10 %); **[inferred]** not visible, typological or a repeat 
 3. **Half widths (x) [measured]**: foot 62.5; belly 66.5 @21.5, 69.5 @35, 75.5 @50.5, 85.5 @70, 98.8 @101, 110.5
    @125, 120.5 @150, 127.2 @178, 129.8 @215, 130.4 @245, 130.3 @263 (widest just under the shoulder: the upper
    belly is nearly straight, the lower belly tapers fast); shoulder 130.6 @276, 128 @294, 122 @310, 116 @319,
-   108.5 @325; collar 85.5; lid skirt 85.5, eave 88, ridge half 38 [est: the hip-flange ears at x ≈ ±33–40]; knob
-   eave 19.5 × 15 [est], post 17 × 15 [est]. Depths (z) = 0.75 × these.
+   108.5 @325; collar 85.5; lid skirt 85.5, eave 88, ridge half 44 [est; round 8: face-lid's field is still ±43 mm at 90 %
+   of the slope and photo-36's ridge reads ≈ 45–48; was 38]; knob eave 19.5 × 15 [est], post 17 × 15 [est], knob cap ≈ 21 tall
+   with a ≈ 7 mm vertical fascia (photo-37). Depths (z) = 0.75 × these.
 4. **Flanges [measured / est]**: belly corners: thick slabs (≈ 8 mm) projecting ≈ 23 mm on the 45° bisector,
    17 slots cut in from the crest (≈ 2.8 mm wide, ≈ 9 deep, ≈ 13 mm pitch, counted on the right flange of photo-37),
    a squared cap standing above the belly top, ⊥ marks incised on the flanks; shoulder corners: separate slotted
@@ -47,12 +48,14 @@ partly hidden (≈ ±10 %); **[inferred]** not visible, typological or a repeat 
    [inferred]; collar corners ≈ 8.5 mm with 2 slots, collar centres ≈ 6 mm; foot corners and centres short tabs;
    lid hips ≈ 11 mm, 7 slots, the tops rising as ears past the ridge, the lower ends stabbing past the eave corners;
    a plain bar down the centre of every roof slope.
-5. **Sculpture [est]**: two loop handles on the ±X shoulders (strap ≈ 22 mm across, ≈ 11 thick, bowed out to
-   x ≈ 163, head ≈ 30 mm long thrusting out and up with laid-back C horns); a frontal head on the front shoulder
-   (trapezoid block 58 → 30 mm wide, y 272–322, ≈ 13–15 mm proud, C horns curling out and down, eyes, nose ridge);
+5. **Sculpture [est]**: two loop handles on the ±X shoulders (round 8 re-read of photo-37 / photo-36: a flat-topped
+   head lying nearly level on the shoulder top, ≈ 45 mm out from the wall, ≈ 25 mm across, spiral horns incised on its top;
+   under its outer end a broad flat strap ≈ 23 mm across, ≈ 11 mm thick, curling back into the wall at y ≈ 284); a frontal head on the front shoulder
+   (trapezoid ≈ 55 → 32 mm wide, y 276–324: two massive rounded-square C horns with spiral cores over its upper half,
+   bulging eyes, small coils, a zigzag tooth row and a projecting flat-faced chin block);
    the back shoulder head [inferred: repeated]; the low lug on the front only: a round-section ring standing
-   ≈ 43 mm out of the wall (photo-36) carrying a bovine mask 61 mm across its C horns whose toothed snout hangs to
-   y ≈ 33 (photo-37).
+   ≈ 43 mm out of the wall (photo-36) carrying a narrow mask ≈ 48 mm across its C horns (round 8; was 61), hooks on its face, and a long snout with a
+   zigzag row of fangs hanging to y ≈ 33 (photo-37).
 6. **Not visible**: the back face, the left (−X) face, the inside, the underside, the knob's back, the
    inscription if any. The back repeats the front (without a lug) and the left repeats the right — **inferred**.
 
@@ -81,6 +84,12 @@ hole ≈ 4.8 mm Ø; leiwen ground ≈ 0.95 mm pitch.
 - **Foot**: S-snakes with eye dots [est].
 - **Lid slopes**: upright mask per half: C horn on top, pillow eye with a slit, brow, a band under the eye, a G
   below, bodies along the hips, three small bosses. The triangular end slopes carry a smaller mask (photo-36) [est].
+
+**Round 8 (fix pass) band language.** Belly bands widened to 7.5–9.6 mm with round outer corners (0.8 × w), one sunk
+contour line plus parallel incised lines on the tops (no spiral chains), horn ends rolled into spirals, big coil blocks
+inside the main G horn and the ear (≈ 21 × 18.5 and 15.5 × 16 mm); the strips beside the centre flange are columns of
+small hooks (photo-37), not spiral chains; the ground is a ROUND leiwen at ≈ 0.8 mm pitch. The lid mask was re-read on
+face-lid (bosses at x ±6 / ±31 / ±50, U horn at x 12–29, hip bodies running outer-bottom → inner-top).
 
 ## d. Patina (photographs)
 

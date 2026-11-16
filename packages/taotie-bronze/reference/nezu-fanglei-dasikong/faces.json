@@ -1,0 +1,462 @@
+{
+ "vessel": "nezu-fanglei-dasikong",
+ "note": "Flat faces of the Nezu Dasikong square lei from the project owner's photo-34 (front, near head-on, ≈ 3.3 px/mm on the belly). Points are [photo px, vessel mm x, y, z]: each zone's chord-plane corners and centre line projected through an ASSUMED pinhole camera (.work/r8-dsk/solve/cam.py: az 3.5°, el 10°, 900 mm from (0, 250, 0), f 2983 px; fitted only to the knob top and the foot's front edge, the shape back-projected through it). They are a consistent flattening of the photograph under that camera, not an independent measurement.",
+ "blur": 0.9,
+ "sources": {
+  "p34": {
+   "file": "photo-34.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "the project owner's photograph, Nezu Museum, Tokyo, 2026; the committed file is the original"
+  }
+ },
+ "faces": {
+  "face-lid": {
+   "label": "front (+Z) lid dome y 400–466: mask with a centre flange over a row of five whorl bosses — chord plane",
+   "source": "p34",
+   "center": [
+    0,
+    433.0,
+    59.62
+   ],
+   "normal": [
+    0,
+    0.5188,
+    0.8549
+   ],
+   "up": [
+    0,
+    0.8549,
+    -0.5188
+   ],
+   "width": 168,
+   "height": 81.2,
+   "ppmm": 6,
+   "points": [
+    [
+     361.9,
+     395.2,
+     -82,
+     400,
+     79.65
+    ],
+    [
+     666.8,
+     395.3,
+     0,
+     400,
+     79.65
+    ],
+    [
+     975.4,
+     395.5,
+     82,
+     400,
+     79.65
+    ],
+    [
+     381.6,
+     153.1,
+     -82,
+     466,
+     39.6
+    ],
+    [
+     676.2,
+     151.8,
+     0,
+     466,
+     39.6
+    ],
+    [
+     974.4,
+     150.4,
+     82,
+     466,
+     39.6
+    ],
+    [
+     371.9,
+     272.0,
+     -82,
+     433.0,
+     59.62
+    ],
+    [
+     671.6,
+     271.4,
+     0,
+     433.0,
+     59.62
+    ],
+    [
+     974.9,
+     270.8,
+     82,
+     433.0,
+     59.62
+    ]
+   ],
+   "trust": "",
+   "fit": ""
+  },
+  "face-collar": {
+   "label": "front (+Z) collar y 348–397.5: flush kui frieze either side of a centre strip — vertical plane",
+   "source": "p34",
+   "center": [
+    0,
+    372.75,
+    78.3
+   ],
+   "normal": [
+    0,
+    -0.0,
+    1.0
+   ],
+   "up": [
+    0,
+    1.0,
+    0.0
+   ],
+   "width": 174,
+   "height": 53.5,
+   "ppmm": 6,
+   "points": [
+    [
+     355.4,
+     589.0,
+     -85,
+     348,
+     78.3
+    ],
+    [
+     667.3,
+     590.4,
+     0,
+     348,
+     78.3
+    ],
+    [
+     983.2,
+     591.8,
+     85,
+     348,
+     78.3
+    ],
+    [
+     351.9,
+     404.5,
+     -85,
+     397.5,
+     78.3
+    ],
+    [
+     667.1,
+     404.8,
+     0,
+     397.5,
+     78.3
+    ],
+    [
+     986.4,
+     405.0,
+     85,
+     397.5,
+     78.3
+    ],
+    [
+     353.7,
+     497.3,
+     -85,
+     372.75,
+     78.3
+    ],
+    [
+     667.2,
+     498.1,
+     0,
+     372.75,
+     78.3
+    ],
+    [
+     984.8,
+     498.9,
+     85,
+     372.75,
+     78.3
+    ]
+   ],
+   "trust": "",
+   "fit": ""
+  },
+  "face-shoulder": {
+   "label": "front (+Z) shoulder y 284–346: kui frieze over the whorl-boss band, the head at the centre — chord plane",
+   "source": "p34",
+   "center": [
+    0,
+    315.0,
+    108.61
+   ],
+   "normal": [
+    0,
+    0.5054,
+    0.8629
+   ],
+   "up": [
+    0,
+    0.8629,
+    -0.5054
+   ],
+   "width": 228,
+   "height": 75.9,
+   "ppmm": 6,
+   "points": [
+    [
+     225.7,
+     848.6,
+     -112,
+     284,
+     126.77
+    ],
+    [
+     655.0,
+     852.8,
+     0,
+     284,
+     126.77
+    ],
+    [
+     1091.9,
+     857.0,
+     112,
+     284,
+     126.77
+    ],
+    [
+     248.2,
+     599.3,
+     -112,
+     346,
+     90.45
+    ],
+    [
+     664.3,
+     601.2,
+     0,
+     346,
+     90.45
+    ],
+    [
+     1087.4,
+     603.2,
+     112,
+     346,
+     90.45
+    ],
+    [
+     237.1,
+     722.0,
+     -112,
+     315.0,
+     108.61
+    ],
+    [
+     659.7,
+     725.0,
+     0,
+     315.0,
+     108.61
+    ],
+    [
+     1089.7,
+     728.1,
+     112,
+     315.0,
+     108.61
+    ]
+   ],
+   "trust": "",
+   "fit": ""
+  },
+  "face-main": {
+   "label": "front (+Z) main register y 210–280: the big mask with its centre strip — chord plane",
+   "source": "p34",
+   "center": [
+    0,
+    245.0,
+    124.42
+   ],
+   "normal": [
+    0,
+    -0.0749,
+    0.9972
+   ],
+   "up": [
+    0,
+    0.9972,
+    0.0749
+   ],
+   "width": 240,
+   "height": 74.2,
+   "ppmm": 6,
+   "points": [
+    [
+     214.8,
+     1119.9,
+     -118,
+     210,
+     121.79
+    ],
+    [
+     656.8,
+     1126.6,
+     0,
+     210,
+     121.79
+    ],
+    [
+     1106.9,
+     1133.5,
+     118,
+     210,
+     121.79
+    ],
+    [
+     203.0,
+     863.7,
+     -118,
+     280,
+     127.05
+    ],
+    [
+     654.9,
+     868.2,
+     0,
+     280,
+     127.05
+    ],
+    [
+     1115.3,
+     872.9,
+     118,
+     280,
+     127.05
+    ],
+    [
+     209.0,
+     993.2,
+     -118,
+     245.0,
+     124.42
+    ],
+    [
+     655.9,
+     998.9,
+     0,
+     245.0,
+     124.42
+    ],
+    [
+     1111.0,
+     1004.6,
+     118,
+     245.0,
+     124.42
+    ]
+   ],
+   "trust": "",
+   "fit": ""
+  },
+  "face-blades": {
+   "label": "front (+Z) lower belly y 24–214: the hanging blades (centre blade with the lug; half blades at the corners) — chord plane",
+   "source": "p34",
+   "center": [
+    0,
+    119.0,
+    99.16
+   ],
+   "normal": [
+    0,
+    -0.2385,
+    0.9711
+   ],
+   "up": [
+    0,
+    0.9711,
+    0.2385
+   ],
+   "width": 236,
+   "height": 199.6,
+   "ppmm": 5,
+   "points": [
+    [
+     272.9,
+     1699.8,
+     -116,
+     24,
+     75.83
+    ],
+    [
+     669.0,
+     1710.5,
+     0,
+     24,
+     75.83
+    ],
+    [
+     1071.6,
+     1721.4,
+     116,
+     24,
+     75.83
+    ],
+    [
+     221.2,
+     1106.0,
+     -116,
+     214,
+     122.5
+    ],
+    [
+     656.6,
+     1112.5,
+     0,
+     214,
+     122.5
+    ],
+    [
+     1099.8,
+     1119.2,
+     116,
+     214,
+     122.5
+    ],
+    [
+     248.3,
+     1417.0,
+     -116,
+     119.0,
+     99.16
+    ],
+    [
+     663.1,
+     1425.8,
+     0,
+     119.0,
+     99.16
+    ],
+    [
+     1085.0,
+     1434.8,
+     116,
+     119.0,
+     99.16
+    ]
+   ],
+   "trust": "",
+   "fit": ""
+  }
+ }
+}

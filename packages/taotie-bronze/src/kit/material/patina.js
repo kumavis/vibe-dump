@@ -322,6 +322,20 @@ export const PATINA_PRESETS = {
     crustIsles: 0.04, crustScale: 5, crustColor: '#6f8a72', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
     pustuleColor: '#4f7a62', lowerBody: 0.35, lowerHeight: 0.2, lowerColor: '#b8c4b0', plainTone: 0.8, grain: 0.6,
   },
+  // Nezu Dasikong square lei 90079 (owner's photographs 34/03): a dark grey-olive bronze skin, the raised bands worn to
+  // a silvery grey-brown; broad bright malachite blotches across belly and shoulder, a little red-brown cuprite in the
+  // ground; the plain lower body between the blades pale grey-beige mottled with green; lid and collar near-black olive
+  'nezu-fanglei-dasikong': {
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.35, tarnish: 0.55, cuprite: 0.6, cupriteTone: 0.35, tinOxide: 0.85,
+    tinOxideTone: 1.1, malachite: 0.55, carbonate: 0.15, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.45,
+    turquoiseTone: 0.6, islands: 0.45, malachiteScale: 1.2, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.9,
+    patchScale: 45, mottleScale: 7, patchiness: 0.75, softness: 0.55, drift: 0.3, earth: 0.12, earthColor: '#7a6650',
+    calcite: 0.03, streaks: 0.05, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.45, wax: 0, inlay: 0.2, inlayGround: 0.1,
+    wear: 0.15, dulling: 0.35, tops: 0.85, nobleWarmth: 0.3, matte: 1, topsTone: 0.7, ledgeMatte: 1, nobleRelief: 0.7,
+    tint: '#c8cabd', upperTone: 0.55, upperHeight: 0.68, speckle: 0.08, speckleScale: 1.0, speckleColor: '#2f9a64',
+    speckleDecor: 0.4, crustIsles: 0.12, crustScale: 6, crustColor: '#3a9a6e', crustPlace: 0.5, pustules: 0.05,
+    pustuleScale: 2.5, pustuleColor: '#22a060', lowerBody: 0.55, lowerHeight: 0.3, lowerColor: '#d8d2c0', grain: 0.6,
+  },
 
   // Nezu you 90086 (owner's photographs 31/32): a dark grey-green bronze skin with the raised bands worn to a pale
   // grey-beige, bright malachite in broad soft territories over belly, lid and foot (green powder packed into the
@@ -396,13 +410,70 @@ export const PATINA_PRESETS = {
     crustScale: 5, crustColor: '#6fae86', crustPlace: 0.6, pustules: 0.05, pustuleScale: 2.2, pustuleColor: '#2fa070',
     lowerBody: 0.8, lowerHeight: 0.46, lowerColor: '#e8d4bc', grain: 0.75,
   },
+  // Nezu bu 90082 (owner's photo-06): a grey-green skin, the raised bands of mask and dragons worn to a pale
+  // grey-green, the fine ground darker; bright malachite powder packed in the belly's pockets and grooves (green
+  // flecks thickest on the mask), reddish-brown cuprite patches on the plain shoulder; the lid and knob a darker
+  // near-black olive; the foot's plain base band pale grey-green
+  'nezu-bu': {
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.55, cuprite: 0.7, cupriteTone: 0.35, tinOxide: 0.9,
+    tinOxideTone: 1.1, malachite: 0.4, carbonate: 0.14, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
+    turquoiseTone: 0.5, islands: 0.3, malachiteScale: 1.1, crust: 0.15, chloride: 0, soot: 0.03, crevice: 0.95,
+    patchScale: 45, mottleScale: 7, patchiness: 0.7, softness: 0.65, drift: 0.3, earth: 0.08, earthColor: '#6a4c38',
+    calcite: 0.02, streaks: 0.05, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.45, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.2, dulling: 0.35, tops: 1, nobleWarmth: 0.35, matte: 1, topsTone: 0.85, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#d6d8c8', upperTone: 0.55, upperHeight: 0.66, speckle: 0.1, speckleScale: 0.9, speckleColor: '#2f9a64',
+    speckleDecor: 0.6, crustIsles: 0.1, crustScale: 5, crustColor: '#4fa078', crustPlace: 0.5, pustules: 0.06,
+    pustuleScale: 2.4, pustuleColor: '#25a066', lowerBody: 0.3, lowerHeight: 0.1, lowerColor: '#c8d0bc', grain: 0.6,
+  },
+  // the Stanford dragon (a scan dressed by geometry/skin.js): a showcase of cavity-driven corrosion — bright
+  // malachite packed into every scale groove and the coils' creases, cuprite under a thin dark noble skin on
+  // the open flanks, the crests of scales, spines and whiskers rubbed back to warm metal, pale crust islands
+  // lodged on the up-facing back
+  'stanford-dragon': {
+    age: 1, tin: 0.14, lead: 0.04, polish: 0.55, tarnish: 0.55, cuprite: 0.85, cupriteTone: 0.2, tinOxide: 0.7,
+    tinOxideTone: 0.85, malachite: 0.5, carbonate: 0.18, azurite: 0.03, azuriteScale: 8, blueHabitat: 0.2,
+    turquoiseTone: 0.35, malachiteHue: 0.4, malachiteTone: 0.45, islands: 0.7, malachiteScale: 1.2, crust: 0.7,
+    chloride: 0.04, soot: 0, crevice: 1, patchScale: 160, mottleScale: 4, patchiness: 1, softness: 0.3, drift: 0.2,
+    earth: 0.15, earthColor: '#6e5a40', calcite: 0.05, streaks: 0.05, burialSide: 0.15, recessDirt: 0.5,
+    interiorTone: 0.3, wax: 0.05, inlay: 0, wear: 0.9, dulling: 0.3, tops: 0.5, topsTone: 0.2, nobleWarmth: 0.35,
+    matte: 0.75, ledgeMatte: 0.6, nobleRelief: 0.8, crustIsles: 0.06, crustScale: 7, crustColor: '#8e927a',
+    crustPlace: 0.85, pustules: 0.03, pustuleScale: 3, pustuleColor: '#2e8a58', speckle: 0, speckleScale: 1.2,
+    speckleColor: '#7a4634', grain: 0.6,
+  },
+  // Suzanne as a taotie (projected relief on a polygon cage): a classic excavated Anyang skin — dark olive noble
+  // sheet, the raised bands worn paler and silvery, pale green malachite packed into the leiwen ground and her
+  // creases (eye sockets, round the muzzle, the ears' bowls), a little red-brown cuprite through the worn crests
+  'suzanne': {
+    age: 1, tin: 0.15, lead: 0.05, polish: 0.4, tarnish: 0.6, cuprite: 0.7, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.0, malachite: 0.42, carbonate: 0.12, azurite: 0.02, azuriteScale: 10, blueHabitat: 0.3,
+    turquoiseTone: 0.4, malachiteHue: 0.38, malachiteTone: 0.55, islands: 0.4, malachiteScale: 1.4, crust: 0.25,
+    chloride: 0.02, soot: 0, crevice: 1, patchScale: 90, mottleScale: 9, patchiness: 0.85, softness: 0.6, drift: 0.3,
+    earth: 0.1, earthColor: '#6a5440', calcite: 0.03, streaks: 0.08, burialSide: 0.1, recessDirt: 0.6,
+    interiorTone: 0.4, wax: 0.05, inlay: 0, inlayGround: 0, wear: 0.25, dulling: 0.35, tops: 0.8, topsTone: 0.7,
+    nobleWarmth: 0.35, matte: 1, ledgeMatte: 1, nobleRelief: 0.7, tint: '#d8dccc', speckle: 0.03, speckleScale: 1.4,
+    speckleColor: '#7a4634', crustIsles: 0.06, crustScale: 6, crustColor: '#6f9a80', crustPlace: 0.5,
+    pustules: 0.03, pustuleScale: 3, pustuleColor: '#2f9a64', grain: 0.6,
+  },
+  // the Utah teapot as a Shang he (a kit showpiece): a dark olive-brown noble skin, malachite packed into the
+  // leiwen and the recesses round the masks, a few azurite islands, relief tops rubbed a little paler and smoother
+  // so the masks read at a glance
+  'utah-teapot': {
+    age: 1, tin: 0.15, lead: 0.05, polish: 0.55, tarnish: 0.85, cuprite: 0.55, cupriteTone: 0.3, tinOxide: 0.9,
+    tinOxideTone: 0.8, nobleWarmth: 0.62, malachite: 0.32, carbonate: 0.1, azurite: 0.08, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0.3, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.42, islands: 0.42,
+    malachiteScale: 1.3, crust: 0.35, chloride: 0.02, soot: 0, crevice: 1, patchScale: 55, mottleScale: 9,
+    patchiness: 0.7, softness: 0.45, drift: 0.15, earth: 0.05, earthColor: '#6b5a42', calcite: 0.04, streaks: 0.06,
+    burialSide: 0.1, recessDirt: 0.45, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.22, dulling: 0.22,
+    tops: 0.6, topsTone: 0.4, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.8, grain: 0.5,
+  },
 }
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
+  Classics: ['stanford-dragon', 'suzanne', 'utah-teapot'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)
@@ -479,11 +550,13 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
    * @param {object} o
    * @param {import('../relief/bake.js').ReliefMap|null} [o.relief]
    * @param {boolean} [o.cavityAttribute] read a per-vertex `cavity` attribute (0 recess → 1 exposed)
+   * @param {boolean} [o.skin] with cavityAttribute: a mesh dressed by geometry/skin.js — the attribute also deepens the
+   *   relief's own recesses, marks ridges as arrises (wear) and stands in for relief height on bare regions
    * @param {number} [o.cavity] constant cavity for plain meshes (0 recess → 1 exposed), default 0.8
    * @param {number} [o.interior] 0..1: this mesh is an inside surface (bowl, inner wall): one calm corroded skin (interiorTone), no speckle, no wear
    * @param {number} [o.normalStrength] scales the relief normal map
    */
-  constructor({ relief = null, cavityAttribute = false, cavity = 0.8, interior = 0, normalStrength = 1, ...params } = {}) {
+  constructor({ relief = null, cavityAttribute = false, cavity = 0.8, interior = 0, normalStrength = 1, skin = false, ...params } = {}) {
     super({ color: 0xffffff, roughness: 0.5, metalness: 1, envMapIntensity: 1, ...params })
     this.isPatinaMaterial = true
     this.relief = relief
@@ -495,6 +568,8 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
       this.defines.PATINA_RELIEF = ''
     }
     if (cavityAttribute) this.defines.PATINA_CAVITY_ATTR = ''
+    this.skin = !!(skin && cavityAttribute)
+    if (this.skin) this.defines.PATINA_SKIN = ''
     this.local = {
       uReliefData: { value: relief ? relief.dataTexture : null },
       uReliefRange: { value: new THREE.Vector2(relief ? relief.min : 0, relief ? relief.max : 1) },
@@ -505,7 +580,7 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
   }
 
   customProgramCacheKey() {
-    return 'patina2:' + (this.relief ? 'R' : '') + (this.cavityAttribute ? 'C' : '')
+    return 'patina2:' + (this.relief ? 'R' : '') + (this.cavityAttribute ? 'C' : '') + (this.skin ? 'S' : '')
   }
 }
 
@@ -800,7 +875,22 @@ float ttF0 = 0.04;
       S.calm = max(S.calm, 0.7);
     #endif
   }
+  #ifdef PATINA_SKIN
+    // (the per-triangle screen-space curvature of a dense scan is facet noise: the attribute carries curvature)
+    gEdge *= 0.2; gCrease *= 0.2;
+  #endif
   S.edge = max(S.edge, gEdge);
+  #ifdef PATINA_SKIN
+  {
+    // a mesh dressed by geometry/skin.js: its cavity attribute is the mesh-scale recess (eye sockets, the
+    // grooves between a scan's scales). It deepens the relief's own cavity, marks crests as arrises (wear →
+    // bare metal) and, where there is no panel, stands in for relief height (noble paler on crests, tops rubbed)
+    float vc = clamp(vCavity, 0.0, 1.0);
+    if (!plain) S.cav = min(S.cav, clamp(vc * 1.3, 0.0, 1.0));
+    S.edge = max(S.edge, tt_ss(0.8, 0.97, vc));
+    if (plain) S.h01 = clamp(0.5 + 0.9 * (vc - 0.72), 0.0, 1.0);
+  }
+  #endif
   S.cav = clamp(S.cav - 0.45 * gCrease - 0.25 * max(-S.up, 0.0) - 0.3 * S.inside, 0.0, 1.0);
   S.rec = clamp((1.0 - S.cav) * mix(0.55, 1.35, uCrevice), 0.0, 1.0);
   S.burial = dot(S.n, normalize(vec3(0.3, -0.2, 0.93)));

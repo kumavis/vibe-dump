@@ -41,16 +41,18 @@ export default {
     // the photographs' own camera stations (fitted to the outlines, dossier §b.1): photo-26 ≈ 0.67 m from the axis,
     // ≈ 110 mm above the plinth (below the shoulder: the flare is seen from underneath); photo-28 ≈ 1.03 m out at
     // about rim height (the lip nearly edge-on), turned 55° to look at a divider flange between two heads
-    front: { azimuth: 0.5, elevation: -4.9, fov: 49.32, fit: 0.785, target: [23, 156, 139], ref: 'front.jpg' },
+    // (the stage clamps elevation to ≥ ≈ 1.15°, so photo-26's 5° upward look cannot be had: the camera is put at its
+    // height, ≈ 111 mm, looking level — the same surfaces show, the subject sits a little high in the frame)
+    front: { azimuth: 2.4, elevation: 1.2, fov: 56, fit: 1.145, target: [0, 97, 0], ref: 'front.jpg' },
     'three-quarter': { azimuth: 53.8, elevation: 11.3, fov: 24.91, fit: 0.632, target: [125, 195, 72], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 6, fov: 30, fit: 1.12, target: [0, 175, 0] },
     top: { azimuth: 0, elevation: 82, fov: 30, fit: 1.1, target: [0, 200, 0] },
     // details: the crop boxes of SOURCES.md re-projected through the same stations
     'detail-head': { azimuth: 47.6, elevation: 8.7, fov: 4.72, fit: 0.131, target: [138, 219, -80], ref: 'detail-head.jpg' },
-    'detail-head-front': { azimuth: 2.4, elevation: -11.8, fov: 7.31, fit: 0.1, target: [8, 209, 192], ref: 'detail-head-front.jpg' },
-    'detail-mask': { azimuth: 2.3, elevation: -3.7, fov: 15.32, fit: 0.231, target: [7, 145, 137], ref: 'detail-mask.jpg' },
-    'detail-eye': { azimuth: -1, elevation: -2.8, fov: 3.85, fit: 0.058, target: [37, 137, 129], ref: 'detail-eye.jpg' },
-    'detail-circles': { azimuth: -1.9, elevation: -7.4, fov: 6.54, fit: 0.098, target: [45, 179, 138], ref: 'detail-circles.jpg' },
+    'detail-head-front': { azimuth: 2.4, elevation: 1.2, fov: 7.31, fit: 0.1, target: [8, 209, 192], ref: 'detail-head-front.jpg' },
+    'detail-mask': { azimuth: 2.3, elevation: 1.2, fov: 15.32, fit: 0.231, target: [7, 145, 137], ref: 'detail-mask.jpg' },
+    'detail-eye': { azimuth: -1, elevation: 1.2, fov: 3.85, fit: 0.058, target: [37, 137, 129], ref: 'detail-eye.jpg' },
+    'detail-circles': { azimuth: -1.9, elevation: 1.2, fov: 6.54, fit: 0.098, target: [45, 179, 138], ref: 'detail-circles.jpg' },
     'detail-foot': { azimuth: 2.2, elevation: 6.3, fov: 13.42, fit: 0.222, target: [6, 48, 86], ref: 'detail-foot.jpg' },
     'detail-opening': { azimuth: 60, elevation: 4, fov: 24, fit: 0.1, target: [72, 82, 42] },
     // flat faces (KIT.md § Flat faces; reference/nezu-zun/faces.json): chord planes down the photographs' lines of sight

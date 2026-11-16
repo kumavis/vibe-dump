@@ -34,6 +34,7 @@ export { uprightHandle, handleLayout } from './geometry/handles.js'
 export { hippedLid, hippedLidLayout, roofKnob } from './geometry/lid.js'
 export { plate } from './geometry/plate.js'
 export { lobe, lobedBody, lobeSection, lobePanelSize } from './geometry/lobes.js'
+export { meshFromGeometry, meshBounds, transformMesh, weldMesh, decimateMesh, orientFaces, vertexNormals, loopSubdivide, refineMesh, meshNeighbours, meshCavity, planarProjector, cylindricalProjector, sphericalProjector, skinWeight, reliefWhere, skinGeometry, skin, sliceMesh, decodeMesh, encodeMesh } from './geometry/skin.js'
 
 export {
   PatinaMaterial,

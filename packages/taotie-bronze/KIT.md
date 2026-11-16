@@ -785,6 +785,8 @@ export default {
   (R = half the bbox diagonal) around it instead of the whole bbox. Azimuth 0 =
   front (+Z), positive turns toward +X; `fit` 1 puts the bbox exactly at the frame edge.
 - `order` (optional number) sorts the vessel list; the demo uses 99.
+- `group` (optional, default `'vessels'`): `'classics'` marks a classic CG test model dressed with the kit (Utah
+  teapot …); the list shows them under a "Classics" heading after the museum vessels and before the kit test pieces (order ≥ 90).
 - Registration: one line in `src/artifacts/index.js`, alphabetical:
   `export { default as houmuwuDing } from './houmuwu-ding.js'`.
 - Reference material lives in `reference/<id>/`: photos named by each view's `ref`, and `spec.json`.

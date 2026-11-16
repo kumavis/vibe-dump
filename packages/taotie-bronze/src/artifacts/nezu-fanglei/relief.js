@@ -18,7 +18,7 @@ import { LV, RHO, halfAt } from './form.js'
 // leiwen ground (≈ 0.8 mm pitch); no spiral chains on the field borders (the photographs show hook columns there).
 const RELIEF = { band: 2.4, shoulder: 1.5, groove: 0.42, eye: 3.0, leiwen: 0.36 }
 const CONTOUR = { inset: 0.8, line: 0.45 }
-const NEST = { kind: 'lines', line: 0.42, pitch: 1.7 }
+const NEST = { kind: 'lines', line: 0.4, pitch: 2.5 }
 const NOFILL = { kind: 'none' }
 const GROUND = { pitch: 0.8, line: 0.5, cell: [2.6, 4.4], roundness: 0.7, jitter: 0.06, turns: 'auto', pairs: 0.3, maxAspect: 1.4, fillers: true }
 const ROUND = { round: 0.8, inner: 0.3 }
