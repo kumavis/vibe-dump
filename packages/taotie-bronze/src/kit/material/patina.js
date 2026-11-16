@@ -332,7 +332,7 @@ export const PATINA_PRESETS = {
     patchScale: 45, mottleScale: 7, patchiness: 0.8, softness: 0.55, drift: 0.3, earth: 0.3, earthColor: '#b3aa94',
     calcite: 0.12, streaks: 0.05, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.25, inlayGround: 0.15,
     wear: 0.12, dulling: 0.4, tops: 0.6, nobleWarmth: 0.55, matte: 1, topsTone: 0.3, ledgeMatte: 1, nobleRelief: 0.35,
-    tint: '#cdc9ba', upperTone: 0.6, upperHeight: 0.69, plainTone: 1.5, speckle: 0.03, speckleScale: 1.0, speckleColor: '#2f9a64',
+    tint: '#b8b4a5', upperTone: 0.45, upperHeight: 0.7, plainTone: 1.5, speckle: 0.03, speckleScale: 1.0, speckleColor: '#2f9a64',
     speckleDecor: 0.3, crustIsles: 0.14, crustScale: 6, crustColor: '#3f9a70', crustPlace: 0.5, pustules: 0,
     pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
   },

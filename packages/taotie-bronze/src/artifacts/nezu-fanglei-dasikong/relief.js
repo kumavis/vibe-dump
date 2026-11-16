@@ -262,7 +262,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     // the low lug's hole (photo-34 / photo-03: a dark opening above the pendant head): a deep pocket in the wall
     // behind the lug's strap, so the cavity patina darkens it as the photographs show. The panel without it is the
     // back face (no lug: inferred), the same décor baked twice.
-    p.sink((ctx) => { const a = M([-17, 85.5]), b = M([17, 100]); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(a[0], a[1], b[0] - a[0], b[1] - a[1], 4) : ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.fill() }, { depth: 6, shoulder: 1.5, profile: 'u' })
+    p.sink((ctx) => { const a = M([-17, 85.5]), b = M([17, 100]); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(a[0], a[1], b[0] - a[0], b[1] - a[1], 4) : ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.fill() }, { depth: 9, shoulder: 1.8, profile: 'u' })
     lugRelief = p.bake()
   }
   lap('bake')

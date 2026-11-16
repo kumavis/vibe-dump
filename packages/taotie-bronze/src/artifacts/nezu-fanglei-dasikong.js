@@ -201,6 +201,8 @@ export default {
     const hGeo = kit.meshSDF(handleSDF(), { voxel })
     const handles = [mesh(hGeo, 'handles'), mesh(hGeo.clone().applyMatrix4(turn), 'handles')]
     const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
+    // detail-head against photo-34: the sculpted head reads ≈ 0.85 × the first reading — scale it about its seat
+    headGeo.translate(0, -320, -120).scale(0.85, 0.85, 0.85).translate(0, 320, 120)
     const heads = [mesh(headGeo, 'heads'), mesh(headGeo.clone().applyMatrix4(turn), 'heads')] // back: inferred
     const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.8 }), 'lug')
 
