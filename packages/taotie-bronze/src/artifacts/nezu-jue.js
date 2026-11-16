@@ -44,6 +44,8 @@ export default {
     'detail-band': { azimuth: 150, elevation: 8, fov: 20, fit: 0.32, target: [0, 132, -20] },
     'detail-post-cap': { azimuth: 110, elevation: 30, fov: 20, fit: 0.14, target: [16.4, 208, 32.3] },
     'detail-handle-head': { azimuth: 120, elevation: 14, fov: 20, fit: 0.2, target: [52, 140, 0] },
+    'face-band': { face: { center: [27.11, 120.75, -21.18], normal: [0.8295, 0.2079, -0.5183], up: [-0.1763, 0.9781, 0.1102], width: 62, height: 48 }, ref: 'faces/face-band.jpg' },
+    'face-upper': { face: { center: [27.11, 152, -21.18], normal: [0.8295, 0.2079, -0.5183], up: [-0.1763, 0.9781, 0.1102], width: 62, height: 30 }, ref: 'faces/face-upper.jpg' },
     'detail-leg': { azimuth: 130, elevation: 6, fov: 22, fit: 0.42, target: [36, 55, 0] },
   },
 

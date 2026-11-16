@@ -29,7 +29,7 @@ export const CUP = [
   [0, 77.5], [8, 77.9], [15, 79.4], [21, 82.0], [26, 85.6], [29.8, 89.9], [32.4, 94.4], [33.8, 98.4], [34.2, 100.6],
   [34.3, 102.2], [34.4, 121.0], [34.7, 140.0],
 ]
-export const REG = { band: [102, 139.5], upper: [140, 163] } // décor registers, y mm
+export const REG = { band: [101, 140], upper: [140.5, 163] } // décor registers, y mm
 export const Y_C = 140 // where the swept upper wall starts (top of the band's upper fillet)
 export const RIM = {
   r0: 44, y0: 163, // side rim (θ ±60…±120): a gently flared lip

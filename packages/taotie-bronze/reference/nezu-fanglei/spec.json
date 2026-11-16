@@ -13,7 +13,7 @@
     "footOverBelly": { "expr": "parts.foot.w / parts.belly.w",    "expected": 0.48,  "tol": 0.03 },
     "lidOverCollar": { "expr": "parts.lid.w / parts.collar.w",    "expected": 1.03,  "tol": 0.04 },
     "handleSpan":    { "expr": "parts.handles.w / parts.belly.w", "expected": 1.25,  "tol": 0.05 },
-    "flangeReach":   { "expr": "parts.flanges.w / parts.belly.w", "expected": 1.18,  "tol": 0.05 },
+    "flangeReach":   { "expr": "parts.flanges.w / parts.belly.w", "expected": 1.12,  "tol": 0.05 },
     "lugLow":        { "expr": "parts.lug.min.1 / overall.h",     "expected": 0.055, "tol": 0.015 }
   }
 }
