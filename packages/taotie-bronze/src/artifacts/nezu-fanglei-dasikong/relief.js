@@ -55,13 +55,30 @@ function blade(kit, M, { ax, hw, y0, y1, k = 1, mask = true, nose = [0, 0] }) {
   const strip0 = ring(5.2)
   const els = []
   const lines = []
+  const scrolls = []
   for (const d of [1.35, 2.6, 3.85]) {
     for (const side of [-1, 1]) lines.push(edge(side, d).filter((p) => p[1] > y1 + d * 1.6).map(M))
   }
   // C-scroll strips: one raised band per side, a spiral chain cut on it
   for (const side of [-1, 1]) {
     const pts = edge(side, 8.6).filter((p) => p[1] > y1 + 13 && p[1] < y0 - 1.5)
-    if (pts.length > 2) els.push(kit.roundStroke([pts[pts.length - 1], pts[Math.floor(pts.length / 2)], pts[0]].map(M), { width: 5.6, round: 0.6, inner: 0.2, end: 'round', start: 'flat', contour: { inset: 0.6, line: 0.38 }, fill: { kind: 'spirals', line: 0.38, pitch: 0.85, gap: 0.5, square: 0, tail: 'merge', min: 3.0 } }))
+    if (pts.length > 2) {
+      els.push(kit.roundStroke([pts[pts.length - 1], pts[Math.floor(pts.length / 2)], pts[0]].map(M), { width: 5.6, round: 0.6, inner: 0.2, end: 'round', start: 'flat', contour: { inset: 0.6, line: 0.38 }, fill: NOFILL }))
+      // the C-scrolls cut on it: small round spirals every ≈ 6.2 mm, alternating hand (cheaper than a spiral chain)
+      const a = pts[0], b = pts[pts.length - 1]
+      const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.floor((L - 4) / 6.2))
+      for (let i = 0; i < n; i++) {
+        const t = (i + 0.5) / n
+        const c = M([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t])
+        const hand = (i % 2 ? 1 : -1) * side, ph = Math.atan2(b[1] - a[1], b[0] - a[0])
+        const sp = []
+        for (let u = 0; u <= 1.0001; u += 0.06) {
+          const ang = ph + hand * u * Math.PI * 3.2, r = 0.35 + 2.0 * u
+          sp.push([c[0] + r * Math.cos(ang), c[1] + r * Math.sin(ang)])
+        }
+        scrolls.push(sp)
+      }
+    }
   }
   // nose strip on the axis
   if (nose[1] > nose[0]) {
@@ -82,7 +99,7 @@ function blade(kit, M, { ax, hw, y0, y1, k = 1, mask = true, nose = [0, 0] }) {
       els.push(kit.roundPlate({ c: U(s * 16.5, -64), w: 24 * k, h: 23, round: 0.42, fill: { ...COIL, hand: s > 0 ? 'left' : 'right' } }))
     }
   }
-  return { outline, inner, strip0, lines, els }
+  return { outline, inner, strip0, lines, els, scrolls }
 }
 
 // ------------------------------------------------------------------ main register (y 213–271)
@@ -160,6 +177,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   const W = 2 * Qh(270) + 2
   const Hp = arc(Hmax)
   const p = new kit.ReliefPanel({ width: W, height: Hp, ppmm, seed })
+  const t0 = performance.now(), lap = (l) => console.info(`  panel ${l} ${Math.round(performance.now() - t0)}`)
   const M = ([x, y]) => [W / 2 + x, arc(y)]
   const strip = (y) => [[-Qh(y), y], [Qh(y), y]]
   void strip
@@ -181,14 +199,19 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     ctx.lineWidth = 0.42; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
     for (const b of blades) for (const l of b.lines) { if (l.length < 2) continue; ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
   }, { depth: 0.35, shoulder: 0.15, profile: 'u' })
+  lap('borders')
   // ----- main register + shoulder elements
-  const els = blades.flatMap((b) => b.els)
-  const eyes = []
+  const eyes = [], mainEls = [], kuiEls = []
   for (const s of [1, -1]) {
     const m = mainDesign(kit, M, s, kx, Qh), k = kuiDesign(kit, M, s, kx)
-    els.push(...m.els, ...k.els); eyes.push(...m.eyes, ...k.eyes)
+    mainEls.push(...m.els); kuiEls.push(...k.els); eyes.push(...m.eyes, ...k.eyes)
   }
-  kit.carve(p, els, { height: RELIEF.band, shoulder: RELIEF.shoulder, depth: RELIEF.groove, contour: CONTOUR, irregularity: 1, seed })
+  kit.carve(p, [...blades.flatMap((b) => b.els), ...mainEls, ...kuiEls], { height: RELIEF.band, shoulder: RELIEF.shoulder, depth: RELIEF.groove, contour: CONTOUR, irregularity: 1, seed })
+  p.sink((ctx) => {
+    ctx.lineWidth = 0.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+    for (const b of blades) for (const l of b.scrolls) { ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
+  }, { depth: 0.38, shoulder: 0.15, profile: 'u' })
+  lap('carve')
   for (const e of eyes) kit.pillowBoss(p, { slit: false, ...e })
   // ----- whorl-boss band (285–306)
   const xs = [0, 37, 74, 111].map((x) => x * kx)
@@ -204,6 +227,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   p.raise((ctx) => {
     for (const y of [340.2, 343.4]) { const a = M([-Qh(y) - 2, y - 0.8]), b = M([Qh(y) + 2, y + 0.8]); ctx.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]) }
   }, { height: 0.9, profile: 'ridge' })
+  lap('bosses+fillets')
   // ----- grounds: leiwen in every field, kept off a 1.4 mm strip either side of the corner lines (seam agreement)
   const seamFree = (y0, y1) => {
     const pts = []
@@ -213,11 +237,20 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     return [...pts, ...L].map(M)
   }
   const fill = (y0, y1, include, extra = {}) => kit.leiwenFill(p, { rect: { x: 0, y: arc(y0), w: W, h: arc(y1) - arc(y0) }, include, margin: 0.55 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + Math.round(y0), ...extra })
-  for (const b of blades) fill(28, TOP - 0.5, polyDraw(b.inner))
+  for (const b of blades) {
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
+    for (const [x, y] of b.inner) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y) }
+    x0 = Math.max(0, x0); x1 = Math.min(W, x1)
+    if (x1 - x0 > 2) kit.leiwenFill(p, { rect: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, include: polyDraw(b.inner), margin: 0.55 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + Math.round(x0) })
+  }
+  lap('blade leiwen')
   fill(212, 271, polyDraw(seamFree(205, 280)))
   fill(287, 304.5, polyDraw(seamFree(280, 340)), { cell: [4.5, 8] })
   fill(307, 336.4, polyDraw(seamFree(300, 345)), { cell: [5, 9] })
-  return { relief: p.bake(), panelW: W, panelH: Hp }
+  lap('leiwen')
+  const relief = p.bake()
+  lap('bake')
+  return { relief, panelW: W, panelH: Hp }
 }
 
 /** collar (y 348–397.5): a flush frieze of thin kui either side of a plain centre strip */

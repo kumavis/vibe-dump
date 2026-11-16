@@ -445,7 +445,7 @@ export const PATINA_PRESETS = {
   // creases (eye sockets, round the muzzle, the ears' bowls), a little red-brown cuprite through the worn crests
   'suzanne': {
     age: 1, tin: 0.15, lead: 0.05, polish: 0.4, tarnish: 0.6, cuprite: 0.7, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.0, malachite: 0.42, carbonate: 0.12, azurite: 0.02, azuriteScale: 10, blueHabitat: 0.3,
+    tinOxideTone: 1.0, malachite: 0.32, carbonate: 0.12, azurite: 0.02, azuriteScale: 10, blueHabitat: 0.3,
     turquoiseTone: 0.4, malachiteHue: 0.38, malachiteTone: 0.55, islands: 0.4, malachiteScale: 1.4, crust: 0.25,
     chloride: 0.02, soot: 0, crevice: 1, patchScale: 90, mottleScale: 9, patchiness: 0.85, softness: 0.6, drift: 0.3,
     earth: 0.1, earthColor: '#6a5440', calcite: 0.03, streaks: 0.08, burialSide: 0.1, recessDirt: 0.6,

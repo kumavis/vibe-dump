@@ -35,10 +35,21 @@ export default {
     'Reconstructed from one of the project owner’s photographs: the size is inferred, and the back repeats the front.',
   defaultPatina: 'nezu-bu',
   views: {
-    front: { azimuth: 0, elevation: 9, fov: 24, fit: 1.08 },
-    'three-quarter': { azimuth: 40, elevation: 14, fov: 24, fit: 1.08 },
-    side: { azimuth: 90, elevation: 6, fov: 24, fit: 1.1 },
-    top: { azimuth: 0, elevation: 82, fov: 24, fit: 1.1 },
+    // photo-06's own camera station (fitted to the outline, dossier §b.1): ≈ 0.61 m from the axis at ≈ 180 mm above
+    // the plinth (about the lid's ledge), looking slightly down; the frame is the photograph cropped to 4:3
+    front: { azimuth: -3.5, elevation: 4.1, fov: 31.34, fit: 0.799, target: [37, 137, 2], ref: 'front.jpg' },
+    'three-quarter': { azimuth: 45, elevation: 10, fov: 28, fit: 1.08, target: [0, 140, 0] },
+    side: { azimuth: 90, elevation: 6, fov: 28, fit: 1.08, target: [0, 140, 0] },
+    back: { azimuth: 180, elevation: 6, fov: 28, fit: 1.08, target: [0, 140, 0] },
+    top: { azimuth: 0, elevation: 82, fov: 28, fit: 1.1, target: [0, 140, 0] },
+    // details: the crop boxes of SOURCES.md re-projected through the same station (the knob view is lifted to the
+    // stage's lowest elevation, 1.2°: the photograph looks up at it by ≈ 5°)
+    'detail-knob': { azimuth: -2.7, elevation: 1.2, fov: 10.02, fit: 0.25, target: [29, 238, 1], ref: 'detail-knob.jpg' },
+    'detail-shoulder': { azimuth: -4.4, elevation: 3.1, fov: 9.4, fit: 0.2, target: [40, 152, 89], ref: 'detail-shoulder.jpg' },
+    'detail-mask': { azimuth: -5.1, elevation: 8, fov: 8.57, fit: 0.182, target: [45, 107, 94], ref: 'detail-mask.jpg' },
+    'detail-eye': { azimuth: -5.8, elevation: 7.6, fov: 3.77, fit: 0.081, target: [52, 110, 91], ref: 'detail-eye.jpg' },
+    'detail-flange': { azimuth: 9.8, elevation: 6, fov: 11.4, fit: 0.276, target: [-100, 118, 30], ref: 'detail-flange.jpg' },
+    'detail-foot': { azimuth: -1.7, elevation: 15.3, fov: 10.85, fit: 0.245, target: [15, 34, 77], ref: 'detail-foot.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -95,9 +106,11 @@ export default {
     }
     // foot (0°, 90°, 180°, 270°): four teeth each
     for (const az of AZ.all4) {
+      // photo-06: the side ones show four teeth over the upper half (y ≈ 34–63); the front one runs on, low, to the
+      // base band (seen end-on)
       const [s0, s1] = info.range({ y0: 21, y1: 63 })
       const path = info.meridian(az, { s0, s1 })
-      addFlange(path, { outline: hookTeeth(path.length, { height: 7.5, pitch: 10.5, embed: 2, depth: 0.55 }), thickness: 5, seed: seed + 11 + az })
+      addFlange(path, { outline: hookTeeth(path.length, { height: 7.5, pitch: 7.6, embed: 2, depth: 0.55, startPlain: 13.5, lowHeight: 2.6 }), thickness: 5, seed: seed + 11 + az })
     }
 
     // ---------------------------------------------------------------- lid
@@ -115,9 +128,10 @@ export default {
     object.add(lid)
     const lidFlanges = []
     for (const az of AZ.all4) {
-      const s0 = lidP.sAtY(195.4), s1 = lidP.sAtY(226.6)
+      // photo-06 (the right one in profile): three chunky teeth, each topped by a bird head whose beak points to the knob
+      const s0 = lidP.sAtY(195.2), s1 = lidP.sAtY(224.4)
       const path = meridianPath(lidP, az, s0, s1)
-      const f = kit.flange({ path, outline: hookTeeth(path.length, { height: 9, pitch: 12.5, embed: 2, depth: 0.62, nick: 0.32 }), thickness: 5, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: plain, part: 'flanges' })
+      const f = kit.flange({ path, outline: hookTeeth(path.length, { height: 10, pitch: 15, slot: 0.36, embed: 2, depth: 0.8, nick: 0.36, nickW: 0.3 }), thickness: 5, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: plain, part: 'flanges' })
       object.add(f)
       flanges.push(f)
       lidFlanges.push(f)

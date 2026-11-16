@@ -260,9 +260,6 @@ function smoothFade(x, w) {
 
 /** a revolved (r, y) polyline (true circle), u = azimuth −180 → 180; inward: normals toward the axis */
 export function revolvePolyline(pts, { inward = false } = {}) {
-  const cum = [0]
-  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]))
-  const L = cum[cum.length - 1]
   // segments = pts.length − 1 rows: sample exactly at the vertices (v = i / (n − 1))
   const P = (u, v, o) => {
     const x = v * (pts.length - 1)
@@ -273,6 +270,5 @@ export function revolvePolyline(pts, { inward = false } = {}) {
     o[0] = r * Math.sin(az); o[1] = y; o[2] = r * Math.cos(az)
     return o
   }
-  void L
   return withNormals(P)
 }

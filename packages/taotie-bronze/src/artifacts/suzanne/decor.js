@@ -41,28 +41,33 @@ const lerpW = (stops) => (t) => {
 }
 
 /** the décor field's outer edge (left half, panel mm): over the crown, down the temple, along under the cheek */
-const FIELD = [[128, 168], [96, 167], [62, 160], [32, 146], [16, 120], [12, 84], [13, 44], [18, 18], [30, 10], [60, 9], [90, 10]]
+const FIELD = [[128, 168], [96, 167], [62, 160], [32, 146], [16, 120], [12, 84], [13, 44], [16, 18], [27, 8.5], [60, 8], [90, 9]]
 
 /** the face: C-horn brows, pointed canthi and a slit pupil, a kui on the cheek, a leiwen field with a bowstring edge */
 export function drawFace(kit, panel, { seed = 1 } = {}) {
-  const H = 3.4 // band height (mm): FAT and proud
+  const H = 4.2 // band height (mm): FAT and proud
   const els = [
     // the brow becomes a fat C-horn: it leaves the centre notch along her brow ridge over the eye, turns up at
     // the temple, sweeps back across the forehead and rolls in on itself
     smoothBand(kit, [[121, 89], [108, 99], [90, 104], [70, 103], [54, 101], [42, 112], [40, 129], [49, 145], [68, 154], [90, 155], [106, 147], [110, 134]],
       lerpW([[0, 8], [0.12, 13], [0.38, 16], [0.55, 17.5], [0.8, 15], [1, 12.5]]),
-      { start: 'point', end: 'spiral', spiral: { turns: 1.05, dir: -1, R: 6.5 }, fill: { kind: 'spirals', line: 0.55, pitch: 1.05, gap: 0.45, square: 0.2, tail: false, min: 5 } }),
+      { start: 'point', end: 'spiral', spiral: { turns: 1.05, dir: -1, R: 6.5 }, contour: { inset: 1.8, line: 0.6 }, ticks: { side: 'right', pitch: 5.5, line: 0.6, skipEnds: 2 } }),
     // an inner hook inside the C, rolled up toward the horn's curl
     smoothBand(kit, [[97, 119], [80, 117], [66, 123], [64, 134]], lerpW([[0, 6], [0.4, 9], [1, 8]]),
       { start: 'blunt', end: 'spiral', spiral: { turns: 0.85, dir: -1, R: 4 } }),
     // the canthi: fat spurs pinched to points, leaving the eyeball's rim — the inner one hooks down toward the nose
-    smoothBand(kit, [[112, 69], [119, 57], [121, 44], [117, 31]], lerpW([[0, 9], [0.45, 7.5], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
-    smoothBand(kit, [[65, 70], [53, 73], [38, 69]], lerpW([[0, 9], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
+    smoothBand(kit, [[114, 53], [120, 45], [119, 33]], lerpW([[0, 8.5], [0.4, 7], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
+    smoothBand(kit, [[64, 57], [50, 60], [36, 57]], lerpW([[0, 9], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
+    // the kui on the cheek, facing the nose: a long body rolled up at the tail, a leg, the jaws
+    smoothBand(kit, [[27, 20], [46, 21.5], [66, 21], [76, 20.5]], lerpW([[0, 5.6], [1, 6.4]]), { start: 'spiral', startSpiral: { turns: 1, dir: -1, R: 3.6 }, end: 'blunt' }),
+    smoothBand(kit, [[76, 25.5], [87, 26.5], [94, 23.5]], lerpW([[0, 4.6], [1, 3.8]]), { end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 2.4 }, contour: false }),
+    smoothBand(kit, [[78, 15], [91, 13.5]], lerpW([[0, 3.8], [1, 0.6]]), { end: 'point', contour: false }),
+    smoothBand(kit, [[55, 18], [53.5, 12.5], [47, 12]], lerpW([[0, 3.8], [1, 0.6]]), { end: 'point', contour: false }),
   ]
   kit.carve(panel, els, { height: H, shoulder: H * 0.6, depth: 0.45, seed, irregularity: 1, contour })
 
-  // the kui on the cheek, facing the nose (a profile dragon in the free field under the eye)
-  kit.drawMotif(panel, 'kui', { x: 20, y: 11, w: 66, h: 19 }, { arrangement: 'single', facing: 'right', bandWidth: 0.32, carving: 'sparse', seed: seed + 3, relief: { motif: 2.2, boss: 3, groove: 0.42 } }, { preset: 'single', ground: false })
+  // the kui's round eye
+  kit.pillowBoss(panel, { c: [79, 20.5], w: 6.4, h: 6.4, round: 1, height: H + 1.2, crown: 0.8, slit: false, ring: false })
 
   // the slit pupil, sunk across her raised pupil disk
   const E = FACE.eye

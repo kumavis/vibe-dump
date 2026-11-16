@@ -70,21 +70,22 @@ export const LID = [
   [81.0, 190.6],
   [80.5, 192.8],
   [78.4, 193.8, 'corner'],
-  [77.2, 194.6],
-  [74.2, 197.6],
-  [68.5, 203.4],
-  [61, 210.4],
-  [52.7, 216.4],
-  [42, 221.4],
-  [32.6, 224.6],
-  [22, 227.4],
-  [12, 228.9],
-  [0.01, 229.4],
+  [76.4, 194.6],
+  [73.4, 196.8],
+  [67.5, 203.4],
+  [58.7, 211.6],
+  [50, 216.6],
+  [41.4, 220],
+  [33, 222.6],
+  [25.6, 224.4],
+  [16, 226.2],
+  [7.4, 227.2],
+  [0.01, 227.6],
 ]
 
 /** the bud knob in the round: [r, y] bottom → tip (photo-06: stem Ø ≈ 13 mm, bud Ø ≈ 24 mm widest a third up) */
 export const KNOB = [
-  [0.01, 226], [7.6, 226], [7.0, 228.6], [6.4, 232], [6.2, 240], [6.4, 248], [7.2, 251.4], [9.4, 253.6],
+  [0.01, 224.6], [7.6, 224.6], [7.0, 227.6], [6.4, 232], [6.2, 240], [6.4, 248], [7.2, 251.4], [9.4, 253.6],
   [11.4, 257.4], [12.1, 261.4], [11.6, 265.6], [10.0, 270], [7.4, 274.6], [4.2, 278.6], [1.6, 281], [0.01, 281.5],
 ]
 
@@ -111,17 +112,18 @@ export function rAt(y, P = BODY) {
  * below the slot) so the row reads as the "bird-head" crenellation of the photograph.
  * → CCW polygon [σ, t] for kit.flange({ outline }), σ 0 → L along the path (upward), t outward, root at −embed.
  */
-export function hookTeeth(L, { height = 12, pitch = 9.5, slot = 0.3, depth = 0.6, nick = 0.28, nickW = 0.24, embed = 2, startPlain = 0, phase = 0.5 } = {}) {
+export function hookTeeth(L, { height = 12, pitch = 9.5, slot = 0.3, depth = 0.6, nick = 0.28, nickW = 0.24, embed = 2, startPlain = 0, lowHeight = 2.5, phase = 0.5 } = {}) {
   const H = height
   const n = Math.max(1, Math.round((L - startPlain) / pitch))
   const p = (L - startPlain) / n
   const w = Math.max(1.2, p * slot)
   const top = []
   // crest from σ = 0 upward
-  top.push([0, H * 0.82])
+  if (startPlain > 0) top.push([0, lowHeight], [startPlain - 0.8, lowHeight])
+  else top.push([0, H * 0.82])
   for (let k = 0; k < n; k++) {
     const a = startPlain + k * p, b = a + p
-    const sa = k === 0 ? a + p * 0.12 : a
+    const sa = k === 0 ? a + (startPlain > 0 ? 0 : p * 0.12) : a
     top.push([sa, H])
     // the nick under the beak
     const n0 = b - w - (phase + nickW * 0.5) * p * 0.6, n1 = n0 + nickW * p * 0.55

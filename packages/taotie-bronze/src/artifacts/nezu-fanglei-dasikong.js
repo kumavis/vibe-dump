@@ -56,7 +56,7 @@ export default {
   defaultPatina: 'nezu-fanglei-dasikong',
   views: {
     // photo-34: az ≈ 3.5°, el ≈ 10°, ≈ 0.9 m (vfov ≈ 38°) — an ASSUMED camera, .work/r8-dsk/solve/cam.py
-    front: { azimuth: 3.5, elevation: 10, fov: 38, fit: 1.0, target: [0, 250, 0], ref: 'front.jpg' },
+    front: { azimuth: 3.5, elevation: 10, fov: 38, fit: 0.92, target: [0, 250, 0], ref: 'front.jpg' },
     'front-high': { azimuth: -14, elevation: 22, fov: 38, fit: 1.05, target: [0, 245, 0], ref: 'front-high.jpg' },
     'three-quarter': { azimuth: 40, elevation: 12, fov: 26, fit: 1.08 },
     side: { azimuth: 90, elevation: 8, fov: 26, fit: 1.08 },
@@ -79,7 +79,7 @@ export default {
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
     const q = Math.max(0.25, quality)
-    const ppmm = 4.6 * Math.sqrt(q)
+    const ppmm = 4.0 * Math.sqrt(q)
     const dens = 0.62 * Math.sqrt(q)
     const seed = 90079
     const plain = new kit.PatinaMaterial()
@@ -88,6 +88,7 @@ export default {
     object.name = 'nezu-fanglei-dasikong'
     const panels = {}
     const V = (x, y, z) => new THREE.Vector3(x, y, z)
+    const t0 = performance.now(), lap = (l) => console.info(`dsk ${l} ${Math.round(performance.now() - t0)} ms`)
     const group = (part) => { const g = new THREE.Group(); g.userData.part = part; object.add(g); return g }
 
     // ---------------------------------------------------------------- body (rounded square, one panel per side)
@@ -98,9 +99,11 @@ export default {
     await onProgress(0.03, 'belly · broad faces (traced)')
     const pf = bodyPanel(kit, { ppmm, seed, Qh: Qh(0), arc: arcB, kx: 1, lug: true, Hmax: LV.shoulder })
     panels.bodyLong = pf.relief
+    lap('body front')
     await onProgress(0.3, 'belly · narrow faces')
-    const ps = bodyPanel(kit, { ppmm: ppmm * 0.85, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: true, Hmax: LV.shoulder })
+    const ps = bodyPanel(kit, { ppmm: ppmm * 0.8, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: true, Hmax: LV.shoulder })
     panels.bodyShort = ps.relief
+    lap('body side')
     await onProgress(0.55, 'collar and lid')
     const collarW = (k) => quarterLen(COLLAR, RHO * COLLAR, 3, k) + 2
     panels.collarLong = collarPanel(kit, { ppmm, seed: seed + 2, W: collarW(0), y0: 348, y1: LV.collar })
@@ -114,6 +117,7 @@ export default {
     panels.lidLong = pl.relief
     panels.lidShort = plS.relief
 
+    lap('collar+lid panels')
     // ---------------------------------------------------------------- casting
     await onProgress(0.72, 'casting')
     const mat = (relief) => new kit.PatinaMaterial({ relief })
@@ -159,7 +163,7 @@ export default {
 
     // lid centre flanges: a plain thick bar down the middle of each slope from under the knob (photo-34)
     const flanges = []
-    for (let k = 0; k < 4; k++) {
+    for (const k of [0, 2]) { // front and back only: the side slopes' silhouettes in photo-34 show none
       const pts = [], outs = []
       for (let i = 0; i <= 16; i++) {
         const y = 424 + (463.5 - 424) * (i / 16)
@@ -178,6 +182,7 @@ export default {
       flanges.push(m); object.add(m)
     }
 
+    lap('meshes')
     // ---------------------------------------------------------------- sculpture
     await onProgress(0.86, 'handles and heads')
     const voxel = Math.max(0.6, 0.8 / Math.sqrt(q))
@@ -196,6 +201,7 @@ export default {
     const heads = [mesh(headGeo, 'heads'), mesh(headGeo.clone().applyMatrix4(turn), 'heads')] // back: inferred
     const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.8 }), 'lug')
 
+    lap('sculpture')
     await onProgress(1, 'done')
     void H
     return { object, parts: { body: bodyG, collar: collarG, lid: lidG, knob, flanges, handles, heads, lug }, panels }

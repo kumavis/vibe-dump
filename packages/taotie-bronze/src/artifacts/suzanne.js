@@ -17,7 +17,7 @@ import cageUrl from './suzanne/suzanne.bin?url'
 import { FACE, EAR, drawFace, drawEar } from './suzanne/decor.js'
 
 const HEIGHT = 220 // the head, chin to crown
-const LIFT = 16 // the chin's clearance above the plinth (the socle carries her)
+const LIFT = 6 // the chin's clearance above the plinth (the socle carries her)
 
 export default {
   id: 'suzanne',
@@ -125,31 +125,51 @@ export default {
 /** a notched flange on the path sliced off her centre plane (x = 0), from the crown down to the top of the nose */
 function centreFlange(kit, m, q) {
   const lines = kit.sliceMesh(m, { point: [0, 0, 0], normal: [1, 0, 0] })
-  // the head shell's centre line is the longest chain; keep its front-top part
-  const line = lines.sort((a, b) => b.length - a.length)[0]
-  if (!line) return null
-  const yTop = LIFT + 214, yBot = LIFT + 101
-  let pts = line.filter((p) => p[1] <= yTop && p[1] >= yBot && p[2] > -25)
-  // order bottom → top along the chain (the chain may start anywhere): sort by the arc of the front profile
-  pts = orderChain(pts)
+  // the head shell's centre section is the longest loop; keep its front-top part (one contiguous run)
+  const loop = lines.sort((a, b) => b.length - a.length)[0]
+  if (!loop) return null
+  const yTop = LIFT + 214, yBot = LIFT + 96
+  const keep = (p) => p[1] <= yTop && p[1] >= yBot && p[2] > -25
+  const k0 = loop.findIndex((p) => !keep(p))
+  const rot = k0 > 0 ? loop.slice(k0).concat(loop.slice(0, k0)) : loop
+  let pts = rot.filter(keep)
+  if (pts.length < 8) return null
   if (pts[0][1] > pts[pts.length - 1][1]) pts.reverse()
+  // ease the brow notch's sharp step: resample every 1.5 mm and smooth over ≈ 9 mm
+  pts = smoothPath(resamplePath(pts, 1.5), 3)
   const path = pathFrame(pts, [0, LIFT + 140, -15])
   return kit.flange({
-    path, height: (f) => 6.5 + 1.5 * Math.sin(Math.PI * f), thickness: 6, taper: 4, waver: 0.35, seed: 11,
-    notches: { shape: 'square', pitch: 17, depth: 0.45, width: 3.2 }, ends: { start: 'taper', end: 'taper' },
+    path, height: (f) => 7 + 2 * Math.sin(Math.PI * Math.min(1, f * 1.4)), thickness: 6.5, taper: 4, waver: 0.3, seed: 11,
+    notches: { shape: 'square', pitch: 16, depth: 0.45, width: 3.4 }, ends: { start: 'taper', end: 'taper' },
     material: new kit.PatinaMaterial({ cavity: 0.85 }), part: 'flanges',
   })
 }
 
-function orderChain(pts) {
-  // the slice points come chained already; drop jumps (a broken chain) by keeping the longest run
-  const runs = [[]]
-  for (let i = 0; i < pts.length; i++) {
-    const r = runs[runs.length - 1]
-    if (r.length && Math.hypot(pts[i][0] - r[r.length - 1][0], pts[i][1] - r[r.length - 1][1], pts[i][2] - r[r.length - 1][2]) > 6) runs.push([])
-    runs[runs.length - 1].push(pts[i])
+function resamplePath(pts, step) {
+  const out = [pts[0]]
+  let acc = 0
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i]
+    const d = Math.hypot(b[1] - a[1], b[2] - a[2])
+    acc += d
+    while (acc >= step) {
+      acc -= step
+      const t = 1 - acc / Math.max(d, 1e-9)
+      out.push([0, a[1] + t * (b[1] - a[1]), a[2] + t * (b[2] - a[2])])
+    }
   }
-  return runs.sort((a, b) => b.length - a.length)[0]
+  out.push(pts[pts.length - 1])
+  return out
+}
+
+function smoothPath(pts, r) {
+  return pts.map((p, i) => {
+    let y = 0, z = 0, n = 0
+    for (let j = Math.max(0, i - r); j <= Math.min(pts.length - 1, i + r); j++) { y += pts[j][1]; z += pts[j][2]; n++ }
+    // pull the smoothed point back out to the surface side (smoothing cuts corners inward): keep the outermost
+    const sy = y / n, sz = z / n
+    return [0, sy, Math.max(sz, p[2] - 0.5)]
+  })
 }
 
 /** a path { length, frame(σ) } through points in the x = 0 plane; n points away from `inner` */
@@ -178,14 +198,15 @@ function pathFrame(pts, inner) {
   }
 }
 
-/** a short cast neck ring (socle) under her skull: flared foot, a waist, two bowstrings */
+/** a short cast neck ring (socle) under her skull: a stepped, flared foot, a concave waist, a collar of two
+ *  bowstrings, the top lost inside the head */
 function neckRing(kit, q) {
-  const top = LIFT + 92 // inside the skull
+  const top = LIFT + 90
   const profile = [
-    [50, 0], [50, 3], [47, 6, 'corner'], [42, 14], [39.5, 30], [39, LIFT + 34], [40.6, LIFT + 37], [39, LIFT + 40], [39, LIFT + 46], [40.6, LIFT + 49], [39, LIFT + 52], [37, top - 12], [34, top],
+    [52, 0], [52, 3.5, 'corner'], [48.5, 4.2, 'corner'], [48, 7], [44.5, 13], [41.5, 24], [41, 36], [42.5, 41], [41, 44.5], [42.5, 48], [41, 51.5], [40.5, 58], [37, top - 8], [33, top],
   ]
-  const ring = kit.lathe({ profile, material: new kit.PatinaMaterial({ cavity: 0.8 }), part: 'foot', segments: { density: q >= 1 ? 0.6 : 0.35 } })
-  ring.position.z = -22
+  const ring = kit.lathe({ profile, material: new kit.PatinaMaterial({ cavity: 0.8 }), part: 'foot', segments: { density: q >= 1 ? 0.7 : 0.4 } })
+  ring.position.z = -28
   ring.name = 'socle'
   return ring
 }
