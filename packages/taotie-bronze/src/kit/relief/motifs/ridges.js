@@ -27,11 +27,15 @@ export const DASIKONG_WARPS = {
 }
 const FY = (fy) => 119 + (fy - 99.8) * 0.9711 // face-blades y (mm) → vessel y (the face's up is tilted 13.8°)
 
-// ridge classes (× the work's base profile: pitch 1.4 / width 0.78 unless overridden)
+// ridge classes (× the work's base profile: pitch 1.4 / width 0.91 / height 0.75). The FIGURES (border bundles,
+// brow, horn, nose) are fatter ridges standing on a low plateau ringed by a sunk channel; the spirals lie lower,
+// between them. That two-level build and the 65 : 35 ridge : groove ratio are what make it read fat, not fine.
+const FIGURE_PLATEAU = { height: 1.0, margin: 0.45, channel: 0.9, channelDepth: 0.7 }
 const CLASSES = {
   spiral: { pitch: 1, width: 1 },
-  bundle: { pitch: 1.15, width: 1.1 },
-  brow: { pitch: 1.43, width: 1.38, height: 1.15 },
+  bundle: { pitch: 1.36, width: 1.36, height: 1.2, plateau: FIGURE_PLATEAU },
+  figure: { pitch: 1.5, width: 1.5, height: 1.33, plateau: FIGURE_PLATEAU },
+  brow: { pitch: 1.71, width: 1.71, height: 1.33, plateau: FIGURE_PLATEAU },
 }
 
 /**
@@ -48,7 +52,7 @@ export function dasikongBlade(work, { variant = 'centre', lug = true, warp = nul
   const b = ridgeProfile({ ...work.profile, ...base })
   const cls = (name, extra = {}) => {
     const c = CLASSES[name]
-    return { pitch: b.pitch * c.pitch, width: b.width * c.width, height: b.height * (c.height ?? 1), groove: b.groove, ...extra }
+    return { pitch: b.pitch * c.pitch, width: b.width * c.width, height: b.height * (c.height ?? 1), groove: b.groove, ...(c.plateau ? { plateau: c.plateau } : {}), ...extra }
   }
   const F = (x, fy) => [x, FY(fy)]
   const E = (d, fy) => [ref.edgeX(-1, d, FY(fy)), FY(fy)]
@@ -57,61 +61,63 @@ export function dasikongBlade(work, { variant = 'centre', lug = true, warp = nul
   const C = [] // on the axis: drawn once
   const add = (list, kind, name, geom, o) => list.push({ kind, name, geom, o })
 
+  // a fat, round-ended kui-like hooked band (G) for the top frieze
+  const G = (x0, x1, top, bot, inner) => [F(x0, top), F(x1, top), F(x1, bot), F(inner, bot), F(inner, (top + bot) / 2 + 0.6)]
   if (variant === 'centre') {
     const top = 207
-    // ---- edge strips (edge-relative): a 5-ridge border bundle, a column of S-scrolls from under the eye to the tip,
-    // and below the cheek a 4-ridge inner bundle
-    add(L, 'ridgeBand', 'border bundle', ref.edge(-1, 4.2, top - 3.7, 37, 2), { ...cls('bundle'), ridges: 5, start: 'square', end: 'round' })
-    add(L, 'scrollChain', 'scroll column', edge(13.2, 150, 44), { ...cls('spiral'), strip: 8.6, spacing: 9.2, alternate: true, turns: 1.5 })
-    add(L, 'ridgeBand', 'inner bundle', edge(21.5, 111.5, 55), { ...cls('bundle'), ridges: 4, start: 'round', end: 'round' })
-    // ---- top frieze (fy 173.5–186.5): two squared spirals per half under a two-ridge top border
-    add(C, 'ridgeBand', 'top border', [[ref.edgeX(-1, 1.6, 205.6), 205.6], [ref.edgeX(1, 1.6, 205.6), 205.6]], { ...cls('bundle'), ridges: 2, start: 'square', end: 'square' })
-    add(L, 'quadSpiral', 'frieze spiral (outer)', [E(9, 186.5), F(-32, 186.5), F(-32, 173.5), E(9, 173.5)], { ...cls('spiral'), start: 0 })
-    add(L, 'quadSpiral', 'frieze spiral (inner)', [F(-32, 186.5), F(-10.6, 186.5), F(-10.6, 173.5), F(-32, 173.5)], { ...cls('spiral'), start: 1, dir: -1 })
-    add(C, 'ridgeBand', 'frieze nose', [F(0, 186.8), F(0, 172.5)], { ...cls('spiral'), ridges: 2, start: 'round', end: 'round' })
-    add(L, 'hookEye', 'frieze coil', F(-5.8, 179.6), { ...cls('spiral'), w: 6.4, h: 9, shape: 'O', slit: false })
-    // ---- the brow: a fat ridge pair right across under the frieze
-    add(L, 'ridgeBand', 'brow', [E(9, 171), F(-3.2, 171)], { ...cls('brow'), ridges: 2, start: 'square', end: 'round' })
-    // ---- the horn: a broad 5-ridge band out from the nose, down the outer side and back in under the upper spiral
-    // (an inverted C open to the axis); the hooked eye at its outer end
-    add(L, 'ridgeBand', 'horn band', [F(-4.6, 164.2), F(-36, 164.2), F(-36, 143.6), F(-10, 143.6)], { ...cls('spiral'), pitch: b.pitch * 1.07, ridges: 5, start: 'square', end: 'round', bend: 1.2 })
-    add(L, 'hookEye', 'eye', F(-47, 160.5), { ...cls('spiral'), w: 9.2, h: 8, shape: 'D', angle: -8 })
-    add(L, 'quadSpiral', 'upper spiral', [F(-32, 160.4), F(-4.6, 160.4), F(-4.6, 147.4), F(-32, 147.4)], { ...cls('spiral'), start: 1, dir: -1 })
-    // ---- the cheek: the big leaning spiral, then the jaw spiral under it
-    add(L, 'quadSpiral', 'cheek spiral', [E(18.6, 139.3), F(-4.4, 139.3), F(-4.4, 113.6), E(18.6, 113.6)], { ...cls('spiral'), start: 0 })
-    add(L, 'quadSpiral', 'jaw spiral', [E(24.8, 112.2), F(-4.4, 112.2), F(-4.4, 100.4), E(24.8, 100.4)], { ...cls('spiral'), start: 1, dir: -1 })
-    // ---- the nose ridge bundle
-    add(C, 'ridgeBand', 'nose', [F(0, 168.2), F(0, lug ? 100.5 : 30)], { ...cls('spiral'), pitch: b.pitch * 1.07, ridges: 3, start: 'round', end: 'round' })
+    // ---- edge figures (edge-relative): a 4-ridge border bundle on its plateau, a column of interlocking S-hooks from
+    // under the eye to near the tip, and below the cheek a 3-ridge inner bundle
+    add(L, 'ridgeBand', 'border bundle', ref.edge(-1, 4.5, top - 3.7, 37, 2), { ...cls('bundle'), ridges: 4, start: 'square', end: 'round' })
+    add(L, 'scrollChain', 'scroll column', edge(13.8, 150, 44), { ...cls('spiral'), strip: 8.4, spacing: 9, alternate: true, turns: 1.6, form: 'S', vary: 0.14, seed: 3 })
+    add(L, 'ridgeBand', 'inner bundle', edge(22.2, 102, 55), { ...cls('bundle'), ridges: 3, start: 'round', end: 'round' })
+    // ---- top frieze (fy 174.3–185.8): per half a squared spiral and a hooked G band under a 2-ridge top border
+    add(C, 'ridgeBand', 'top border', [[ref.edgeX(-1, 1.6, 205.2), 205.2], [ref.edgeX(1, 1.6, 205.2), 205.2]], { ...cls('bundle'), ridges: 2, start: 'square', end: 'square' })
+    add(L, 'quadSpiral', 'frieze spiral', [E(9.6, 185.8), F(-33, 185.8), F(-33, 174.3), E(9.6, 174.3)], { ...cls('spiral'), start: 0 })
+    add(L, 'ridgeBand', 'frieze hook band', G(-10.5, -30.5, 184.4, 176.2, -15), { ...cls('spiral'), ridges: 2, start: 'round', end: 'round', bend: 0.9 })
+    add(C, 'ridgeBand', 'frieze nose', [F(0, 186.3), F(0, 173.8)], { ...cls('spiral'), ridges: 2, start: 'round', end: 'round' })
+    add(L, 'hookEye', 'frieze coil', F(-5.8, 180), { ...cls('spiral'), w: 6.2, h: 9, shape: 'O', slit: false })
+    // ---- the brow: a fat ridge pair right across under the frieze, on its plateau
+    add(C, 'ridgeBand', 'brow', [E(9.6, 170.6), [ref.edgeX(1, 9.6, FY(170.6)), FY(170.6)]], { ...cls('brow'), ridges: 2, start: 'round', end: 'round' })
+    // ---- the horn: a broad 4-ridge figure out from the nose, down the outer side and back in under the upper spiral
+    add(L, 'ridgeBand', 'horn band', [F(-9.3, 162.7), F(-31, 162.7), F(-31, 134), F(-12, 134)], { ...cls('figure'), ridges: 4, start: 'round', end: 'round', bend: 1.2 })
+    add(L, 'hookEye', 'eye', F(-42.6, 160.2), { ...cls('spiral'), w: 8.6, h: 8, shape: 'D', angle: -8 })
+    add(L, 'quadSpiral', 'upper spiral', [F(-25.5, 157.4), F(-4.6, 157.4), F(-4.6, 139.3), F(-25.5, 139.3)], { ...cls('spiral'), start: 1, dir: -1 })
+    // ---- the cheek: the big squared spiral leaning with the edge, then the jaw spiral
+    add(L, 'quadSpiral', 'cheek spiral', [E(18.4, 128.6), F(-4.6, 128.6), F(-4.6, 104.2), E(18.4, 104.2)], { ...cls('spiral'), start: 0, corner: b.pitch * 1.4 })
+    add(L, 'quadSpiral', 'jaw spiral', [E(26.3, 103.2), F(-4.6, 103.2), F(-4.6, 96), E(26.3, 96)], { ...cls('spiral'), start: 1, dir: -1 })
+    // ---- the nose figure
+    add(C, 'ridgeBand', 'nose', [F(0, 162.5), F(0, lug ? 99 : 30)], { ...cls('figure'), ridges: 3, start: 'round', end: 'round' })
     // ---- above the lug's hole: one spiral cell per half
-    add(L, 'quadSpiral', 'lug-top spiral', [E(24.8, 97.8), F(-1.0, 97.8), F(-1.0, 83), E(24.8, 83)], { ...cls('spiral'), start: 0 })
+    add(L, 'quadSpiral', 'lug-top spiral', [E(26.3, 94.6), F(-1.0, 94.6), F(-1.0, 83), E(26.3, 83)], { ...cls('spiral'), start: 0 })
   } else {
     const top = 207
-    add(L, 'ridgeBand', 'border bundle', ref.edge(-1, 4.2, top - 3.7, 47, 2), { ...cls('bundle'), ridges: 5, start: 'square', end: 'round' })
+    add(L, 'ridgeBand', 'border bundle', ref.edge(-1, 4.5, top - 3.7, 47, 2), { ...cls('bundle'), ridges: 4, start: 'square', end: 'round' })
     // a column of tall squared spirals (nested rectangles) just inside the border
     for (const [t, bt] of [[165, 147.5], [145.5, 129], [127, 112], [110, 95], [93, 78], [76, 61]]) {
-      add(L, 'quadSpiral', 'column spiral', [E(8.8, t), E(16.6, t), E(16.6, bt), E(8.8, bt)], { ...cls('spiral'), start: 0 })
+      add(L, 'quadSpiral', 'column spiral', [E(9.7, t), E(17.6, t), E(17.6, bt), E(9.7, bt)], { ...cls('spiral'), start: 0 })
     }
-    add(L, 'ridgeBand', 'hook bundle', edge(21.2, 148, 101), { ...cls('bundle'), ridges: 3, start: 'round', end: 'round' })
-    add(L, 'scrollChain', 'scroll column', edge(21.7, 99, 62), { ...cls('spiral'), strip: 8.2, spacing: 8.8, alternate: true })
-    add(C, 'ridgeBand', 'top border', [[ref.edgeX(-1, 1.6, 205.6), 205.6], [ref.edgeX(1, 1.6, 205.6), 205.6]], { ...cls('bundle'), ridges: 2, start: 'square', end: 'square' })
-    add(L, 'quadSpiral', 'frieze spiral (outer)', [E(9, 186.5), F(-22, 186.5), F(-22, 173.5), E(9, 173.5)], { ...cls('spiral'), start: 0 })
-    add(L, 'quadSpiral', 'frieze spiral (inner)', [F(-22, 186.5), F(-3, 186.5), F(-3, 173.5), F(-22, 173.5)], { ...cls('spiral'), start: 1, dir: -1 })
-    add(C, 'ridgeBand', 'frieze nose', [F(0, 186.8), F(0, 172.5)], { ...cls('spiral'), ridges: 1, start: 'square', end: 'square' })
-    add(L, 'ridgeBand', 'brow', [E(8.8, 171), F(-3.6, 171)], { ...cls('brow'), ridges: 2, start: 'square', end: 'round' })
-    add(L, 'ridgeBand', 'horn band', [F(-3.4, 164.5), E(30, 164.5), E(30, 143), F(-8, 143)], { ...cls('spiral'), pitch: b.pitch * 1.07, ridges: 4, start: 'square', end: 'round', bend: 1.2 })
-    add(L, 'hookEye', 'eye', E(22, 160), { ...cls('spiral'), w: 7.5, h: 7.5, shape: 'D', angle: -8 })
-    add(L, 'quadSpiral', 'upper spiral', [E(33, 160.8), F(-3.4, 160.8), F(-3.4, 146.6), E(33, 146.6)], { ...cls('spiral'), start: 1, dir: -1 })
-    add(L, 'quadSpiral', 'cheek spiral', [E(26.5, 139.6), F(-3.5, 139.6), F(-3.5, 118), E(26.5, 118)], { ...cls('spiral'), start: 0 })
-    add(L, 'quadSpiral', 'jaw spiral', [E(27.5, 115.6), F(-3.5, 115.6), F(-3.5, 102), E(27.5, 102)], { ...cls('spiral'), start: 1, dir: -1 })
-    add(L, 'quadSpiral', 'low spiral', [E(27, 99.5), F(-3.5, 99.5), F(-3.5, 89), E(27, 89)], { ...cls('spiral'), start: 0 })
-    add(L, 'quadSpiral', 'lowest spiral', [E(27, 86.5), F(-3.5, 86.5), F(-3.5, 76), E(27, 76)], { ...cls('spiral'), start: 1, dir: -1 })
-    add(C, 'ridgeBand', 'nose', [F(0, 166), F(0, 62)], { ...cls('spiral'), ridges: 3, start: 'round', end: 'round' })
+    add(L, 'ridgeBand', 'hook bundle', edge(21.6, 127, 101), { ...cls('bundle'), ridges: 3, start: 'round', end: 'round' })
+    add(L, 'scrollChain', 'scroll column', edge(22, 99, 62), { ...cls('spiral'), strip: 8.2, spacing: 8.8, alternate: true, form: 'S', vary: 0.14, seed: 5 })
+    add(C, 'ridgeBand', 'top border', [[ref.edgeX(-1, 1.6, 205.2), 205.2], [ref.edgeX(1, 1.6, 205.2), 205.2]], { ...cls('bundle'), ridges: 2, start: 'square', end: 'square' })
+    add(L, 'quadSpiral', 'frieze spiral', [E(9.6, 185.8), F(-22, 185.8), F(-22, 174.3), E(9.6, 174.3)], { ...cls('spiral'), start: 0 })
+    add(L, 'ridgeBand', 'frieze hook band', G(-4.8, -20, 184.4, 176.2, -9), { ...cls('spiral'), ridges: 2, start: 'round', end: 'round', bend: 0.9 })
+    add(C, 'ridgeBand', 'brow', [E(9.6, 170.6), [ref.edgeX(1, 9.6, FY(170.6)), FY(170.6)]], { ...cls('brow'), ridges: 2, start: 'round', end: 'round' })
+    add(L, 'ridgeBand', 'horn band', [F(-9.3, 162.7), E(30, 162.7), E(30, 134), F(-12, 134)], { ...cls('figure'), ridges: 4, start: 'round', end: 'round', bend: 1.2 })
+    add(L, 'hookEye', 'eye', E(21, 160), { ...cls('spiral'), w: 6.5, h: 7, shape: 'D', angle: -8 })
+    add(L, 'quadSpiral', 'upper spiral', [E(35.5, 157.4), F(-4.6, 157.4), F(-4.6, 139.3), E(35.5, 139.3)], { ...cls('spiral'), start: 1, dir: -1 })
+    add(L, 'quadSpiral', 'cheek spiral', [E(26.2, 128.6), F(-4.6, 128.6), F(-4.6, 111), E(26.2, 111)], { ...cls('spiral'), start: 0, corner: b.pitch * 1.4 })
+    add(L, 'quadSpiral', 'jaw spiral', [E(26.4, 110), F(-4.6, 110), F(-4.6, 99.5), E(26.4, 99.5)], { ...cls('spiral'), start: 1, dir: -1 })
+    add(L, 'quadSpiral', 'low spiral', [E(26.5, 98.5), F(-4.6, 98.5), F(-4.6, 88), E(26.5, 88)], { ...cls('spiral'), start: 0 })
+    add(L, 'quadSpiral', 'lowest spiral', [E(26.5, 87), F(-4.6, 87), F(-4.6, 76), E(26.5, 76)], { ...cls('spiral'), start: 1, dir: -1 })
+    add(C, 'ridgeBand', 'nose', [F(0, 162), F(0, 62)], { ...cls('figure'), ridges: 3, start: 'round', end: 'round' })
   }
   const run = (w, el) => w[el.kind](el.geom, el.o)
   const mir = view.mirror(0)
   for (const el of L) { run(view, el); run(mir, el) }
   for (const el of C) run(view, el)
-  return { elements: [...L, ...C].map(({ kind, name }) => ({ kind, name })), warp: W || ref }
+  const Wb = W || ref
+  // the blade outline in panel mm (through the caller's transform): the include region for kit.ridgeGround
+  return { elements: [...L, ...C].map(({ kind, name }) => ({ kind, name })), warp: Wb, outline: Wb.outline(2).map((p) => work.T(p)) }
 }
 
 // ------------------------------------------------------------------ atlas

@@ -147,8 +147,8 @@ export default {
     panels.lidShort = lidPanel(kit, lidL.faces.right, { ...ctx, seed: seed + 9, kind: 'short' })
     await onProgress(0.62, 'knob')
     const knobOpts = {
-      width: 2 * PLAN.knob.eave, depth: 2 * PLAN.knob.depth, rise: LV.top - LV.knobEave - 7.5, ridge: PLAN.knob.ridge,
-      skirt: { height: 0.5, fascia: 7 }, // (kit.roofKnob lofts the fascia only when skirt.height > 0)
+      width: 2 * PLAN.knob.eave, depth: 2 * PLAN.knob.depth, rise: LV.top - LV.knobEave - 5.5, ridge: PLAN.knob.ridge,
+      skirt: { height: 0.5, fascia: 5 }, // (kit.roofKnob lofts the fascia only when skirt.height > 0)
       post: { height: LV.knobEave - LV.ridge, width: 2 * PLAN.knob.post[0], depth: 2 * PLAN.knob.post[1], waist: 0 }, // photo-37: a thick vertical-sided cap (≈ 1/3 of its height) with a low hipped top, on a straight square post
     }
     const knobL = kit.hippedLidLayout(knobOpts)
@@ -278,9 +278,10 @@ export default {
       const from = hip[0], to = hip[hip.length - 1]
       const out = slopeN(k).add(slopeN((k + 1) % 4)).normalize()
       const L = from.distanceTo(to)
-      // round 10 (photo-36 at the fitted camera): heavy slabs ≈ 16 mm deep, ≈ 10.5 thick, 8 slots; the lower end runs
-      // ≈ 12 mm past the eave corner and turns up as a tip, the top rises past the ridge as an ear
-      F({ from, to, out, ...slotted(L, 16, 8, { w: 3, dep: 7.5, top: { over: 2, up: 6, len: 10 }, bottom: { over: 12, up: 3.5, len: 8 } }), thickness: 10.5, bevel: 0.6, embed: 3 })
+      // round 10 (photo-36 at the fitted camera): heavy slabs ≈ 13.5 mm deep and ≈ 10.5 thick, cut by 7 WIDE shallow
+      // notches into crenellated blocks (not a comb of thin slots); the lower end runs ≈ 8 mm past the eave corner and
+      // turns up as a tip, the top rises past the ridge as an ear. (16 mm / 12 mm overshot photo-36's silhouette.)
+      F({ from, to, out, ...slotted(L, 13.5, 7, { w: 4.2, dep: 4.8, top: { over: 2, up: 6, len: 10 }, bottom: { over: 8, up: 3, len: 8 } }), thickness: 10.5, bevel: 0.6, embed: 3 })
       const mid = lid.userData.midlines[SIDES[k]].map((p) => p.clone().add(V(0, LV.collar, 0)))
       const mf = mid[0], mt = mid[mid.length - 1]
       const Lm = mf.distanceTo(mt)

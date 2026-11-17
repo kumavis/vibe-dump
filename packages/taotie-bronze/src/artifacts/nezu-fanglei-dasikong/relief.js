@@ -70,7 +70,9 @@ function maker(kit, M, s, kx = 1) {
 // ≈ 1.35 mm pitch (spirals), ridge ≈ groove. The composition — border bundles, scroll columns, the squared spirals in
 // slanted cells, horn bands, hooked eyes — is kit.dasikongBlade (src/kit/relief/motifs/ridges.js), authored in BLADE
 // space (x from the blade's axis, vessel y) off faces/face-blades.jpg; here it is only placed on the panel.
-const RIDGE = { width: 0.78, pitch: 1.4, height: 0.75, groove: 0.35 }
+// second pass: ridge : groove 65 : 35, spiral threads 0.75 mm high; the figures (border bundles, brow, horn, nose) are
+// fatter (1.9–2.4 mm pitch, ≈ 1 mm high) on a 1 mm plateau inside a sunk channel (classes in the kit's motif sheet)
+const RIDGE = { width: 0.91, pitch: 1.4, height: 0.75, groove: 0.35 }
 
 // ------------------------------------------------------------------ whorl bosses (shoulder 285–306, lid 404–419)
 
@@ -116,9 +118,18 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   // ----- blades: the centre blade (scaled by kx on the narrow sides) and a blade on each corner line, both halves
   // drawn on both panels that meet there (identical, so the seam agrees)
   const ridges = kit.ridgeWork(p, RIDGE)
-  kit.dasikongBlade(ridges.view(([x, y]) => M([x * kx, y])), { variant: 'centre', lug })
-  for (const sd of [-1, 1]) kit.dasikongBlade(ridges.view(([x, y]) => M([sd * Qh(y) + x, y])), { variant: 'corner' })
+  const bladeOutlines = [kit.dasikongBlade(ridges.view(([x, y]) => M([x * kx, y])), { variant: 'centre', lug }).outline]
+  for (const sd of [-1, 1]) bladeOutlines.push(kit.dasikongBlade(ridges.view(([x, y]) => M([sd * Qh(y) + x, y])), { variant: 'corner' }).outline)
   ridges.flush()
+  // no plain ground inside a blade: pack whatever the figures leave with small spirals of the same ridge
+  // (the centre blade's lower middle behind the lug stays plain where the lug sits)
+  for (const [i, o] of bladeOutlines.entries()) {
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
+    for (const [x, y] of o) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y) }
+    x0 = Math.max(0, x0); x1 = Math.min(W, x1)
+    const lugFree = (ctx) => { polyDraw(o)(ctx); if (lug && i === 0) { ctx.globalCompositeOperation = 'destination-out'; const a = M([-19, 30]), b = M([19, 101]); ctx.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.globalCompositeOperation = 'source-over' } }
+    if (x1 - x0 > 2) kit.ridgeGround(p, { rect: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, include: lugFree }, { ...RIDGE, seed: seed + i })
+  }
   // ----- main register + shoulder kui: traced plates (face-main, face-shoulder)
   traced(kit, p, M, [{ face: 'face-main', data: MAIN_PLATES, kx }], { seed })
   // the kui bodies (photo-34): 6–7 mm bands each carrying a chain of C-hooks — one contour line and a packed top

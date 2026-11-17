@@ -24,7 +24,7 @@ export const LV = {
   fascia: 4, // lid eave edge
   rise: 70, // eave (388) → ridge: photo-37's flattened slope ends at ≈ 455–458 (photo-36 alone would read ≈ 90; dossier §b.2)
   ridge: 458,
-  knobEave: 482, // knob roof eave (post 458 → 482); round 8: photo-37 shows the cap ≈ 0.55 × its width tall, a third of it vertical fascia
+  knobEave: 478, // knob roof eave (post 458 → 478); round 10: photo-36 at the fitted camera shows a steep near-pyramid cap ≈ 25 mm tall over a thin ≈ 5 mm fascia (round 8 had 21 mm with a 7 mm fascia, from photo-37 alone)
   top: 503,
 }
 
@@ -38,7 +38,7 @@ export const PLAN = {
   skirt: 85.5,
   eave: 88,
   ridgeHalf: 36, // round 10: photo-37 puts the hip-flange ears' roots at ±27–35 mm round the post (the ridge ends), photo-36 at the fitted camera a steeper end triangle; was 44 (round 8), 38 before
-  knob: { eave: 19.5, depth: 15, post: [8.5, 7.5], ridge: 0.3 },
+  knob: { eave: 19.5, depth: 15, post: [7.5, 6.5], ridge: 0.12 },
 }
 
 // half width of the belly and shoulder (front face plane z = half) — dossier §b.3, read off photo-37

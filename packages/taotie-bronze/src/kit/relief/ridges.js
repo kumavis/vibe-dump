@@ -14,6 +14,7 @@
 // ridge width with a round crown profile + one sink for eye slits. Deterministic: no randomness at all.
 
 import { leiwenFill } from './leiwen.js'
+import { Rng } from '../util/rng.js'
 
 const TAU = Math.PI * 2
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1]]
@@ -192,6 +193,7 @@ export class RidgeWork {
     this.lines = []
     this.slits = []
     this.bosses = []
+    this.plateaus = []
     this.stats = { lines: 0, ms: 0 }
   }
 
@@ -266,7 +268,15 @@ export class RidgeWork {
       const off = (i - (n - 1) / 2) * pitch
       R.push(off === 0 ? C.map((p) => p.slice()) : offsetPath(C, (s) => off * scale(s)))
     }
-    if (o.closed) { for (const r of R) this._push(r, P); return R }
+    let PL = P
+    if (o.plateau) {
+      // a FIGURE: the bundle stands on its own low plateau, ringed by a sunk channel; its ridges are cut into the top
+      const pl = { height: 1, margin: P.pitch - P.width, shoulder: null, channel: P.pitch * 0.6, channelDepth: 0.5, ...(o.plateau === true ? {} : o.plateau) }
+      const Wp = 2 * half + P.width + 2 * pl.margin
+      this.plateaus.push({ pts: C, width: Wp, height: pl.height, shoulder: pl.shoulder ?? Math.min(Wp / 2, Math.max(0.35, pl.height * 0.5)), channel: pl.channel, channelDepth: pl.channelDepth, cap: o.closed ? 'round' : [start, end].every((e) => e === 'square' || e === 'flat') ? 'butt' : 'round' })
+      PL = { ...P, mode: 'add' }
+    }
+    if (o.closed) { for (const r of R) this._push(r, PL); return R }
     const dEnd = unit(sub(C[C.length - 1], C[C.length - 2])), dStart = unit(sub(C[0], C[1]))
     const roundEnd = end !== 'square' && end !== 'flat', roundStart = start !== 'square' && start !== 'flat'
     const out = []
@@ -285,7 +295,7 @@ export class RidgeWork {
         out.push([...b.slice().reverse(), ...uTurn(b[0], a[0], dStart), ...a])
       } else { out.push(a, b) }
     }
-    for (const r of out) this._push(r, P)
+    for (const r of out) this._push(r, PL)
     return out
   }
 
@@ -460,8 +470,11 @@ export class RidgeWork {
     if (count < 1 || R <= rp) return []
     const s0 = (L - count * step) / 2 + step / 2
     const out = []
+    const rng = new Rng(o.seed ?? 7), vary = o.vary ?? 0
+    const R0 = R
     for (let i = 0; i < count; i++) {
-      const s = s0 + i * step
+      const R = R0 * (1 - vary * rng.next()), turnsI = Math.max(0.6, Math.min(turns, (R - rp * 0.55) / rp))
+      const s = s0 + i * step + vary * (rng.next() - 0.5) * (step - 2 * R0) * 0.8
       const p = pointAt(pts, cum, s)
       const t = unit(sub(pointAt(pts, cum, s + 0.5), pointAt(pts, cum, s - 0.5))), nl = left(t)
       const hs = (o.side ?? 1) * det * (o.alternate === false || i % 2 === 0 ? 1 : -1)
@@ -469,9 +482,16 @@ export class RidgeWork {
       const line = []
       const a0 = -(step - R) + rp * 0.75
       if (o.tail !== false && i > 0 && a0 < -0.3) for (let a = a0; a < 0; a += 0.4) line.push(Lp(a, -hs * R))
-      const k = Math.ceil((turns * TAU * R) / 0.3)
+      if (o.form === 'S' && i > 0 && a0 < -0.3) {
+        // the S: the tail leaves the previous unit with a counter-curl, so neighbours interlock
+        const rc = rp * 0.95, cc = [a0, -hs * (R - rc)]
+        const hook = []
+        for (let ph = Math.PI * 0.75; ph >= 0; ph -= 0.3 / rc) hook.push(Lp(cc[0] - rc * Math.sin(ph), cc[1] - hs * rc * Math.cos(ph)))
+        line.unshift(...hook)
+      }
+      const k = Math.ceil((turnsI * TAU * R) / 0.3)
       for (let j = 0; j <= k; j++) {
-        const ph = (turns * TAU * j) / k
+        const ph = (turnsI * TAU * j) / k
         const r = R - (rp * ph) / TAU, th = -hs * Math.PI / 2 + hs * ph
         line.push(Lp(r * Math.cos(th), r * Math.sin(th)))
       }
@@ -486,6 +506,23 @@ export class RidgeWork {
     const t0 = performance.now()
     const panel = this.panel, lines = this.lines
     const stroke = (ctx, l) => { ctx.beginPath(); l.pts.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.stroke() }
+    const pls = this.plateaus
+    if (pls.length) {
+      // the channel round every figure (one sink), then the plateaus (one raise per height/shoulder)
+      const chW = Math.max(...pls.map((q) => q.channel)), chD = Math.max(...pls.map((q) => q.channelDepth))
+      if (chD > 0 && chW > 0) panel.sink((ctx) => {
+        ctx.lineJoin = 'round'
+        for (const q of pls) { ctx.lineCap = q.cap; ctx.lineWidth = q.width + 2 * q.channel; stroke(ctx, q) }
+        ctx.globalCompositeOperation = 'destination-out'
+        for (const q of pls) { ctx.lineCap = q.cap; ctx.lineWidth = q.width; stroke(ctx, q) }
+        ctx.globalCompositeOperation = 'source-over'
+      }, { depth: chD, shoulder: chW / 2, profile: 'u' })
+      const pg = new Map()
+      for (const q of pls) { const k = `${q.height}|${q.shoulder}`; if (!pg.has(k)) pg.set(k, []); pg.get(k).push(q) }
+      for (const g of pg.values()) {
+        panel.raise((ctx) => { ctx.lineJoin = 'round'; for (const q of g) { ctx.lineCap = q.cap; ctx.lineWidth = q.width; stroke(ctx, q) } }, { height: g[0].height, shoulder: g[0].shoulder, profile: 'plateau' })
+      }
+    }
     const grooved = lines.filter((l) => l.groove > 0)
     if (grooved.length) {
       let depth = 0, sh = Infinity
@@ -528,6 +565,7 @@ export class RidgeWork {
     lines.length = 0
     this.slits.length = 0
     this.bosses.length = 0
+    this.plateaus.length = 0
     return res
   }
 }

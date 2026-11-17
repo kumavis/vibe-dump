@@ -108,8 +108,8 @@ export function handleHeadSDF() {
       d = smin(d, cHorn(x - 138, z - sg * 5, h, 2.8, 0.95, 1.4, 0, 0.8), 0.3)
       // a curl on each cheek of the muzzle's flank
       d = smin(d, cHorn(x - 158, y - 305, (Math.abs(z) - 14.5) * sg * sg, 3.4, 1.1, 1.4, Math.PI / 2, 0.9), 0.4)
-      // nostrils on the muzzle front (x ≈ 170)
-      d = smax(d, -(len3(x - 172, y - 311, z - sg * 5.5) - 1.9), 0.5)
+      // the muzzle front (x ≈ 171): a pair of raised scrolls curling in toward the centre, not holes
+      d = smin(d, cHorn(z - sg * 6.5, y - 305, x - 170.8, 4.2, 1.35, 1.5, sg > 0 ? -2.3 : -0.84, 0.75), 0.4)
       // fangs: two short downward teeth at the mouth corners, either side of the ring
       d = smin(d, sdRBox3(x - 166, y - 286, z - sg * 10, 2.2, 3.4, 1.9, 0.9), 0.8)
     }

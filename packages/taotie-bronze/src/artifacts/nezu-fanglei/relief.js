@@ -328,9 +328,11 @@ export function lidPanel(kit, f, { ppmm, seed, kind }) {
   const M = ([x, y]) => [f.w / 2 + x, ((y - y0) / rise) * f.h]
   const include = polyDraw(f.outline)
   const els = [], eyes = [], slits = []
-  if (kind === 'long' && TRACED.lid) {
-    // the long slopes: traced plates (face-lid); the triangular end slopes keep the hand-drawn mask below
-    tracedRegisters(kit, p, M, ['lid'], seed)
+  if (TRACED.lid) {
+    // round 10: EVERY slope carries the traced face-lid mask (photo-36: the triangular end slope shows the same bold mask —
+    // pillow eyes, U horns, the G — as the long ones); on the end slopes compressed in x by the face width ratio
+    const kx = kind === 'long' ? 1 : Math.min(1, (0.92 * f.w) / FACES.faces['face-lid'].width)
+    tracedRegisters(kit, p, kind === 'long' ? M : ([x, y]) => M([kx * x, y]), ['lid'], seed)
     kit.leiwenFill(p, { include, margin: 0.6 }, { ...GROUND, depth: RELIEF.leiwen, seed })
     return p.bake()
   }
