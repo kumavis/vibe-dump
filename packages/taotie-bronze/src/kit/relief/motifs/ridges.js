@@ -12,7 +12,7 @@
 // (5 photo px; autocorrelation / FFT of the cheek spirals 1.2–1.5 mm), bright ridge ≈ dark groove; the edge bundles
 // are a little coarser (≈ 1.6–1.7 mm), the brow pair fatter still (≈ 2 mm).
 
-import { RidgeWork, bladeWarp, ridgeProfile } from '../ridges.js'
+import { RidgeWork, bladeWarp, ridgeProfile, ridgeGround } from '../ridges.js'
 
 const E_ = (options, def, label) => ({ type: 'enum', options, default: def, label })
 const R_ = (min, max, step, def, label, unit) => ({ type: 'range', min, max, step, default: def, label, ...(unit ? { unit } : {}) })
@@ -52,7 +52,9 @@ export function dasikongBlade(work, { variant = 'centre', lug = true, warp = nul
   const b = ridgeProfile({ ...work.profile, ...base })
   const cls = (name, extra = {}) => {
     const c = CLASSES[name]
-    return { pitch: b.pitch * c.pitch, width: b.width * c.width, height: b.height * (c.height ?? 1), groove: b.groove, ...(c.plateau ? { plateau: c.plateau } : {}), ...extra }
+    const k = base.plateauScale ?? 1
+    const plateau = c.plateau && k > 0 ? { ...c.plateau, height: c.plateau.height * k } : null
+    return { pitch: b.pitch * c.pitch, width: b.width * c.width, height: b.height * (c.height ?? 1), groove: b.groove, ...(plateau ? { plateau } : {}), ...extra }
   }
   const F = (x, fy) => [x, FY(fy)]
   const E = (d, fy) => [ref.edgeX(-1, d, FY(fy)), FY(fy)]
@@ -124,14 +126,15 @@ export function dasikongBlade(work, { variant = 'centre', lug = true, warp = nul
 
 export const schema = {
   unit: E_(['vocabulary', 'quad-spiral', 'ridge-band', 'hook-eye', 'slit-eye', 'scroll-chain', 'ridge-border', 'dasikong-blade', 'dasikong-corner'], 'vocabulary', 'Unit'),
-  width: R_(0.3, 2, 0.02, 0.78, 'Ridge width', 'mm'),
+  width: R_(0.3, 2, 0.02, 0.91, 'Ridge width', 'mm'),
   pitch: R_(0.6, 3.5, 0.05, 1.4, 'Pitch (ridge + groove)', 'mm'),
-  height: R_(0.15, 1.6, 0.05, 0.6, 'Ridge height', 'mm'),
-  groove: R_(0, 0.8, 0.02, 0.3, 'Groove below ground', 'mm'),
+  height: R_(0.15, 1.6, 0.05, 0.75, 'Ridge height', 'mm'),
+  groove: R_(0, 0.8, 0.02, 0.35, 'Groove below ground', 'mm'),
   crown: R_(0, 1, 0.05, 1, 'Crown (parabolic → round)'),
   turns: R_(1, 9, 0.5, 5, 'Spiral turns'),
   lean: R_(-35, 35, 1, 14, 'Lean', '°'),
   ridges: R_(1, 7, 1, 3, 'Ridges per band'),
+  plateau: R_(0, 2, 0.05, 1, 'Figure plateau', 'mm'),
   taper: R_(0.3, 1, 0.05, 1, 'Band taper (end spacing ×)'),
 }
 
@@ -168,16 +171,16 @@ export function draw(panel, rect, p) {
   // one primitive alone, in a cell of the plaque; lean shears its geometry
   const cellQuad = (cx, cy, cw, ch) => [[cx - cw / 2 + (sh * ch) / 2, cy + ch / 2], [cx + cw / 2 + (sh * ch) / 2, cy + ch / 2], [cx + cw / 2 - (sh * ch) / 2 - cw * 0.12, cy - ch / 2], [cx - cw / 2 - (sh * ch) / 2 + cw * 0.06, cy - ch / 2]]
   const spiral = (cx, cy, cw, ch) => work.quadSpiral(cellQuad(cx, cy, cw, ch), { turns: p.turns, pitch: undefined })
-  const band = (cx, cy, s) => work.ridgeBand([[cx - 14 * s, cy + 10 * s], [cx + 10 * s + sh * 20 * s, cy + 10 * s], [cx + 10 * s, cy - 12 * s], [cx - 4 * s, cy - 12 * s]], { ridges: p.ridges, start: 'round', end: 'spiral', dir: 1, turns: 0.7, taper: [1, p.taper] })
+  const band = (cx, cy, s) => work.ridgeBand([[cx - 14 * s, cy + 10 * s], [cx + 10 * s + sh * 20 * s, cy + 10 * s], [cx + 10 * s, cy - 12 * s], [cx - 4 * s, cy - 12 * s]], { ridges: p.ridges, start: 'round', end: 'spiral', dir: 1, turns: 0.7, taper: [1, p.taper], pitch: p.pitch * 1.5, width: p.width * 1.5, height: p.height * 1.33, plateau: p.plateau > 0 ? { height: p.plateau, channel: 0.9, channelDepth: 0.7 } : null })
   const eye = (cx, cy) => work.hookEye([cx, cy], { w: 11, h: 8.5, angle: p.lean * 0.5 })
   const slit = (cx, cy) => work.slitEye([cx, cy], { w: 16, h: 8.5, squareness: 0.55, angle: -p.lean * 0.3, ring: { ridges: 1 } })
-  const scrolls = (cx, y0, y1) => work.scrollChain([[cx + (sh * (y1 - y0)) / 2, y1], [cx - (sh * (y1 - y0)) / 2, y0]], { strip: 9, alternate: true })
-  const border = (cx, cy, bw, bh) => work.ridgeBorder(cellQuad(cx, cy, bw, bh), { ridges: p.ridges, closed: true, bend: 1.5 })
+  const scrolls = (cx, y0, y1) => work.scrollChain([[cx + (sh * (y1 - y0)) / 2, y1], [cx - (sh * (y1 - y0)) / 2, y0]], { strip: 9, alternate: true, form: 'S', vary: 0.14 })
+  const border = (cx, cy, bw, bh) => work.ridgeBorder(cellQuad(cx, cy, bw, bh), { ridges: p.ridges, closed: true, bend: 1.5, pitch: p.pitch * 1.36, width: p.width * 1.36, plateau: p.plateau > 0 ? { height: p.plateau, channel: 0.9, channelDepth: 0.7 } : null })
   switch (p.unit) {
     case 'vocabulary': {
       const cy = y + h / 2
       spiral(x + 20, cy, 30, 40)
-      band(x + 60, cy, 1.25)
+      band(x + 60, cy + 4, 1.0)
       eye(x + 92, cy + 12); slit(x + 92, cy - 12)
       scrolls(x + 118, y + 6, y + h - 6)
       border(x + 160, cy, 46, 44)
@@ -185,7 +188,7 @@ export function draw(panel, rect, p) {
       break
     }
     case 'quad-spiral': spiral(x + w / 2, y + h / 2, w - 16, h - 6); break
-    case 'ridge-band': band(x + w / 2 - 2, y + h / 2 + 5, 1.15); break
+    case 'ridge-band': band(x + w / 2 - 2, y + h / 2 + 7, 0.92); break
     case 'hook-eye': eye(x + w / 2, y + h / 2); break
     case 'slit-eye': slit(x + w / 2, y + h / 2); break
     case 'scroll-chain': scrolls(x + w / 2, y + 4, y + h - 4); break
@@ -196,8 +199,10 @@ export function draw(panel, rect, p) {
       const ref = DASIKONG_WARPS[variant]
       const v = work.view(([bx, by]) => [x + w / 2 + bx, y + by - (variant === 'centre' ? 23 : 41)])
       const lean = tanD(p.lean) * (ref.y0 - ref.tip[1])
-      dasikongBlade(v, { variant, lug: false, warp: p.lean ? { tip: [lean, ref.tip[1]] } : null })
-      break
+      const r = dasikongBlade(v, { variant, lug: false, warp: p.lean ? { tip: [lean, ref.tip[1]] } : null, base: { plateauScale: p.plateau } })
+      work.flush()
+      ridgeGround(panel, { rect, include: (ctx) => { ctx.beginPath(); r.outline.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.closePath(); ctx.fill() } }, { width: p.width, pitch: p.pitch, height: p.height })
+      return
     }
   }
   work.flush()

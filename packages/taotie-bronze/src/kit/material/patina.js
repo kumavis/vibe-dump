@@ -330,15 +330,16 @@ export const PATINA_PRESETS = {
     // round r8-dsk-fix (photo-34): a dark grey-olive skin with silvery grey-brown wear on the raised bands, BROAD
     // malachite blotches (belly right, shoulder, lid right), cuprite red-brown in the ground, a pale grey-beige
     // mottled lower wall between the blades (crust islands placed on the plain lower body); collar and lid are
-    // darkened per mesh in the artifact
+    // darkened per mesh in the artifact. Ridge pass: dark grooves (recess dirt + inlay), pale worn ridge tops,
+    // a paler plain wall, so the blades' ridge work reads by contrast as on photo-34
     age: 1, tin: 0.15, lead: 0.08, polish: 0.3, tarnish: 0.6, cuprite: 0.7, cupriteTone: 0.3, tinOxide: 0.85,
     tinOxideTone: 1.45, malachite: 0.5, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
     turquoiseTone: 0.6, islands: 0.75, malachiteScale: 2.2, crust: 0.3, chloride: 0, soot: 0.05, crevice: 0.95,
     patchScale: 95, mottleScale: 12, patchiness: 1, softness: 0.7, drift: 0.4, earth: 0.3, earthColor: '#8a6a52',
-    calcite: 0.08, streaks: 0.05, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.25, inlayGround: 0.15,
-    wear: 0.16, dulling: 0.35, tops: 0.85, nobleWarmth: 0.45, matte: 1, topsTone: 0.45, ledgeMatte: 1, nobleRelief: 0.6,
-    tint: '#94958a', upperTone: 0.7, upperHeight: 0.7, plainTone: 1.3, speckle: 0.015, speckleScale: 1.0, speckleColor: '#2f9a64',
-    speckleDecor: 0.15, crustIsles: 0.2, crustScale: 18, crustColor: '#a9a491', crustPlace: 1, pustules: 0,
+    calcite: 0.08, streaks: 0.05, burialSide: 0.1, recessDirt: 1, interiorTone: 0.45, wax: 0, inlay: 0.55, inlayGround: 0.15,
+    wear: 0.3, dulling: 0.35, tops: 0.85, nobleWarmth: 0.45, matte: 1, topsTone: 0.8, ledgeMatte: 1, nobleRelief: 0.6,
+    tint: '#94958a', upperTone: 0.7, upperHeight: 0.7, plainTone: 1.5, speckle: 0.015, speckleScale: 1.0, speckleColor: '#2f9a64',
+    speckleDecor: 0.15, crustIsles: 0.38, crustScale: 18, crustColor: '#b3ad98', crustPlace: 1, pustules: 0,
     pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
   },
   // Nezu square hu with phoenix design 90097-98 (owner's photographs 08/09): a mottled grey-green skin — dark olive

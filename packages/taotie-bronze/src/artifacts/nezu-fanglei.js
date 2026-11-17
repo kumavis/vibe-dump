@@ -241,7 +241,7 @@ export default {
       {
         // photo-37: a separate slab with a clear gap above the belly flange's squared cap, standing further out, 3 slots, its top hooking up past the ledge
         const path = wallPath(shoulder, k, 1, LV.main + 7, LV.shoulder, diag(k), 12)
-        F({ path, ...slotted(path.length, 22, 3, { w: 2.6, dep: 9, bottom: { over: 0, up: 0, len: 5 }, top: { over: 4, up: 7, len: 14 } }), thickness: 8, embed: 2.5 })
+        F({ path, ...slotted(path.length, 22, 3, { w: 2.6, dep: 9, bottom: { over: 0, up: 0, len: 5 }, top: { over: 0, up: 3, len: 10 } }), thickness: 8, embed: 2.5 }) // round 10: a squared top just proud of the ledge — no cap running in over it (it crossed in front of the handle)
       }
       // collar corners and centres
       {

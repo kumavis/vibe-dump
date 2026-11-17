@@ -225,7 +225,8 @@ export class RidgeWork {
 
   /**
    * n parallel ridges swept along a polyline, corners NESTED (each ridge's arc concentric; the innermost has radius
-   * `bend`), ends 'square' | 'round' (nested U-turns: ridge i joins ridge n−1−i) | 'hook' (the bundle turns
+   * `bend`), plateau: { height 1, margin (one groove), channel (0.6 pitch), channelDepth 0.5, shoulder } | true —
+   * the bundle becomes a FIGURE standing on its own plateau inside a sunk channel, ridges cut into its top —; ends 'square' | 'round' (nested U-turns: ridge i joins ridge n−1−i) | 'hook' (the bundle turns
    * `hookAngle`° toward `dir` and ends in U-turns) | 'spiral' (the bundle rolls `turns` into a coil and ends in U-turns).
    * dir +1 curls to the LEFT of travel in design space. taper: [a, b] scales the spacing from start to end (ridge
    * width stays; spacing never drops under 1.2 × width). closed: true closes the path. → panel-space centre lines.
@@ -455,7 +456,9 @@ export class RidgeWork {
   /**
    * A chain of S/C scrolls along a path (the strip's centre line, design space): `strip` = the strip width (mm, 8), one curled hook every `spacing` mm,
    * each a round spiral of the ridge (`turns`, turns one pitch apart) entered by a tail from
-   * the previous unit (ridge width / pitch are the profile's, as everywhere); alternate (true): the hooks curl to alternate sides — an S chain;
+   * the previous unit (ridge width / pitch are the profile's, as everywhere); form 'C' (default) | 'S' (each tail
+   * leaves the previous unit with a counter-curl, so neighbours interlock); vary 0..0.3: deterministic variation of
+   * size and spacing per unit (seed); alternate (true): the hooks curl to alternate sides — an S chain;
    * side ±1: which side the first one curls from.
    */
   scrollChain(path, o = {}) {

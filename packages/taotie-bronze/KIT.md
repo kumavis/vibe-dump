@@ -554,7 +554,7 @@ recorded, so inlay paste / cavity patina land in the grooves), ONE `raise` (or `
 crown, bosses, one sink for slits. Deterministic (no randomness). All mm, panel frame, y up.
 
 ```js
-const work = kit.ridgeWork(panel, { width: 0.78, pitch: 1.4, height: 0.6, groove: 0.3, crown: 1, mode: 'raise', transform })
+const work = kit.ridgeWork(panel, { width: 0.91, pitch: 1.4, height: 0.75, groove: 0.35, crown: 1, mode: 'raise', transform })
 // profile: width = ridge foot, pitch = ridge + groove (centre to centre; width clamped ≤ 0.85 pitch), height = crest above
 //   the ground, groove = groove floor BELOW the ground (0: ridges on plain ground), crown 1 semicircular … 0 parabolic,
 //   mode 'raise' (max) | 'add' (on top of a plateau). Every call takes per-call overrides of these + `transform`
@@ -562,12 +562,13 @@ const work = kit.ridgeWork(panel, { width: 0.78, pitch: 1.4, height: 0.6, groove
 const half = work.view(f)            // a view whose transform is work.T ∘ f (shares the batch)
 const mir = work.mirror(axisX = 0)  // the same, mirrored: draw a half through `work`, then again through `mir`
 work.quadSpiral(quad, { turns | pitch, dir: ±1, start: 0..3, corner: mm | [4], cornerMin, margin, hook, hole, tail })
-work.ridgeBand(path, { ridges: 3, bend, start, end: 'square' | 'round' | 'hook' | 'spiral', dir: ±1, turns, hookAngle, taper: [a, b], closed })
+work.ridgeBand(path, { ridges: 3, bend, start, end: 'square' | 'round' | 'hook' | 'spiral', dir: ±1, turns, hookAngle, taper: [a, b], closed,
+                        plateau: { height: 1, margin, channel, channelDepth, shoulder } | true })   // plateau: a FIGURE (below)
 work.ridgeBorder(path, { ridges: 3, closed })      // = ridgeBand with square ends
 work.line(path, o)                                   // one ridge
 work.hookEye(at, { w, h, angle, shape: 'D' | 'C' | 'O', turns, slit: { len, width, depth } | false, tail })
 work.slitEye(at, { w, h, squareness: 0.6, angle, height, crown: 0.8, slit: { length, width, depth } | false, ring: { ridges: 1, gap } | false })
-work.scrollChain(path, { strip: 8, spacing: 1.08 × strip, turns: 1.5, alternate: true, side: ±1, tail: true })
+work.scrollChain(path, { strip: 8, spacing: 1.08 × strip, turns: 1.5, alternate: true, side: ±1, tail: true, form: 'C' | 'S', vary: 0..0.3, seed })
 work.flush() → { lines, slits, ms }
 kit.ridgeGround(panel, region, { …profile, leiwen }) // AFTER flush: pack the leftovers with small squared spirals of the same ridge
 kit.quadSpiral(panelOrWork, quad, o) … kit.slitEye(…)  // one-shot forms: a ReliefPanel draws + flushes at once, a RidgeWork collects
@@ -575,7 +576,7 @@ const W = kit.bladeWarp({ top: [x0, x1], tip: [x, y] | bottom: [x0, x1], y0, y1,
 // upright design rect → tapering blade: W(p), W.inverse(p), W.hw(y), W.cx(y), W.scale(y), W.edgeX(side, inset, y),
 // W.edge(side, inset, ya, yb, step) (blade-space points `inset` mm in from an edge, square to it), W.outline(step).
 // power < 1 = an ogive (fuller low down); a tip off the top centre leans the blade.
-kit.dasikongBlade(work, { variant: 'centre' | 'corner', lug: true, warp: bladeWarpParams | null, base: profile })   // the specimen
+kit.dasikongBlade(work, { variant: 'centre' | 'corner', lug: true, warp: bladeWarpParams | null, base: profile }) → { elements, warp, outline (panel mm) }
 kit.roundPath(pts, cornerFlags, radius)   kit.offsetPath(pts, offset | s → offset)   // the geometry underneath
 ```
 
@@ -596,25 +597,42 @@ kit.roundPath(pts, cornerFlags, radius)   kit.offsetPath(pts, offset | s → off
 - **scrollChain** — curled hooks stacked along a strip, each a round spiral entered by a tail from the previous; with
   `alternate` they curl to alternate sides: the S-scroll columns down blade edges, the C-hook fills of bands.
 
+**What makes it read FAT, not fine** (learned on the Dasikong blade: one level of thin threads on a flat ground
+reads as engraved line-work, a fingerprint, at any pitch):
+1. TWO LEVELS. The main figures — border bundles, brow, horn / body bands, nose — are raised as groups on a low plateau
+   (`ridgeBand(…, { plateau })`: ≈ 1 mm above the spiral field, margin ≈ one groove, ringed by a sunk channel ≈ 0.9 mm
+   wide and 0.7 mm deep), their ridges cut into the plateau top (they are `add`ed on it). The fine spirals lie lower,
+   between them. The channel's dark line round each figure is what gives the bronze its bold shapes.
+2. FAT ridges: ridge : groove ≈ 65 : 35 (width = 0.65 × pitch), crown 1 (fully round, a small half-pipe), height
+   ≈ 0.75 mm on spirals at 1.4 mm pitch and ≈ 1 mm on the figures, whose ridges are coarser (border bundles 1.9 mm,
+   horn / nose 2.1 mm, brow 2.4 mm pitch at H = 500 mm). Grooves 0.35 mm below the ground.
+3. NO PLAIN GROUND inside a unit: after `flush()`, `kit.ridgeGround(panel, { rect, include: outline })` packs every gap
+   with small spirals of the same ridge.
+4. CONTRAST in the patina: dark grooves (`recessDirt` ≈ 1, `inlay` ≈ 0.5), pale worn tops (`tops` 0.85, `topsTone` ≈ 0.8,
+   `wear` ≈ 0.3), a paler plain wall (`plainTone`, crust islands) — preset `nezu-fanglei-dasikong`.
+The Dasikong classes (kit `motifs/ridges.js`, `CLASSES`): spiral 1.4 / 0.91 / 0.75; bundle ×1.36 pitch and width, ×1.2
+height; figure ×1.5, ×1.33; brow ×1.71, ×1.33; FIGURE_PLATEAU { height 1, margin 0.45, channel 0.9, channelDepth 0.7 }.
+
 **Composing a mask or a dragon.** (1) Pick the frame you read the photograph in (a flattened face, x from the axis, y up)
 and author in it; give the work a transform from that frame to panel mm (`work.view`). (2) Lay the EDGE first:
 border bundles and strips by inset from the outline (`W.edge(side, inset, …)` on a blade; a closed `ridgeBand` round any
-cartouche). (3) Lay the FIGURE as bands: horn / brow / jaw / dragon body = `ridgeBand` with 3–5 ridges along its centre
-line, corners where the bronze turns, 'round' or 'spiral' ends; an open jaw = two bands from the head, each ending
+cartouche). (3) Lay the FIGURE as bands ON PLATEAUS: horn / brow / jaw / dragon body = `ridgeBand` with 3–5 fat ridges and `plateau`
+along its centre line, corners where the bronze turns, 'round' or 'spiral' ends; an open jaw = two bands from the head, each ending
 'hook'. (4) Fill every cell the bands leave with `quadSpiral` — read the cell's four corners off the photograph,
 let its sides lean with whatever bounds it; leave one pitch between cells (`margin`). (5) Eyes (`hookEye` / `slitEye`),
 scroll strips. (6) Draw the left half and again through `work.mirror(axis)` (handedness flips with it), then `flush()`;
-`ridgeGround` mops up any leftover ground. Keep neighbouring figures ≈ one groove apart (pitch − width): two ridges
+then `ridgeGround` over the unit's outline: no plain ground left. Keep neighbouring figures ≈ one groove apart (pitch − width): two ridges
 that touch inside one raise merge into a flat plateau. On a lathe body the panel is the developed band (x = arc length
 round the body, y = height or meridian arc): author flat, and let the transform carry the band's own width law, as the
 Dasikong body does with `M([x·kx, y])` and the corner blade with `M([sd·Qh(y) + x, y])`. A narrow strap: a band panel
 with one `ridgeBand` / `scrollChain` along its centre line.
 
-Atlas `ridges` (sliders: ridge width, pitch, height, groove, crown, turns, lean, ridges per band, taper): presets
+Atlas `ridges` (sliders: ridge width, pitch, height, groove, crown, turns, lean, ridges per band, taper, figure plateau): presets
 `vocabulary` (each primitive alone), `quad-spiral`, `ridge-band`, `hook-eye`, `slit-eye`, `scroll-chain`, `ridge-border`,
-`dasikong-blade` (the whole centre blade as a plaque, 1:1 vessel mm; lean shears it), `dasikong-corner`.
+`dasikong-blade` (the whole centre blade as a plaque, 1:1 vessel mm, figures on plateaus + ridgeGround; lean shears it),
+`dasikong-corner`; slider `plateau` (figure plateau height, 0 = one level).
 **Cost**: vector work ≈ 0.05–0.1 s per blade; one sink + one raise per ridge width over the bbox of the work. Resolution:
-the ridge is ≈ 0.78 mm — 3 px at 4 px/mm (the Dasikong body at q 1), 2.2 px at q 0.5 (ridges still separate, the
+the spiral ridge is ≈ 0.91 mm — 3.6 px at 4 px/mm (the Dasikong body at q 1), 2.6 px at q 0.5 (ridges still separate, the
 crown is a 2-pixel bump: the normal map shows them as lines, not as rounded threads).
 
 ### Woven interlace — ribbons of n ribs with a real over-under (relief/weave.js)

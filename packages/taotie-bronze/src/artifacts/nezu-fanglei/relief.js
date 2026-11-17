@@ -52,7 +52,7 @@ function faceToVessel(face, M) {
 }
 
 /** every traced register of a panel in ONE tracedPlates call (one raise, one sink, one top fill): outlines mapped first */
-function tracedRegisters(kit, panel, M, regs, seed) {
+function tracedRegisters(kit, panel, M, regs, seed, over = {}) {
   const plates = [], bosses = []
   for (const r of regs) {
     const t = TRACED[r], map = faceToVessel(t.face, M)
@@ -62,7 +62,7 @@ function tracedRegisters(kit, panel, M, regs, seed) {
       bosses.push({ ...b, c, r: Math.hypot(e[0] - c[0], e[1] - c[1]) })
     }
   }
-  return kit.tracedPlates(panel, plates, { ...PLATES, bosses, seed })
+  return kit.tracedPlates(panel, plates, { ...PLATES, ...over, bosses, seed })
 }
 
 // Round 8 (fix pass): the bronze's band language — FAT bands (7.5–9.5 mm on the belly) with round outer corners,
@@ -332,7 +332,8 @@ export function lidPanel(kit, f, { ppmm, seed, kind }) {
     // round 10: EVERY slope carries the traced face-lid mask (photo-36: the triangular end slope shows the same bold mask —
     // pillow eyes, U horns, the G — as the long ones); on the end slopes compressed in x by the face width ratio
     const kx = kind === 'long' ? 1 : Math.min(1, (0.92 * f.w) / FACES.faces['face-lid'].width)
-    tracedRegisters(kit, p, kind === 'long' ? M : ([x, y]) => M([kx * x, y]), ['lid'], seed)
+    // the lid's plates stand higher and rounder than the belly's (photo-37 / photo-36: fat pillowed bands throwing shadows)
+    tracedRegisters(kit, p, kind === 'long' ? M : ([x, y]) => M([kx * x, y]), ['lid'], seed, { height: 3.2, shoulder: 1.2, pillow: 0.5 })
     kit.leiwenFill(p, { include, margin: 0.6 }, { ...GROUND, depth: RELIEF.leiwen, seed })
     return p.bake()
   }

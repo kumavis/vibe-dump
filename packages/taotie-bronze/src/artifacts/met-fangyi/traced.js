@@ -349,6 +349,7 @@ export const FRIEZE_LONG = [
         [105.3, 24.4, 3.6, 1], [110.4, 24.4, 3.6, -1], // head plate
         [92.0, 28.8, 2.4, 1], [97.6, 28.8, 2.4, -1], // crest
         [90.6, 18.6, 2.6, 1], [88.4, 7.2, 2.6, 1], [106.4, 7.6, 2.6, -1], // lower jaw lobe, leg curl, hook
+        [93.6, 13.1, 3.2, 1], // the front column's spiral lobe
       ],
       lines: [
         [[101.0, 16.9], [124.8, 16.9]], // the ridge over the spiral chain
