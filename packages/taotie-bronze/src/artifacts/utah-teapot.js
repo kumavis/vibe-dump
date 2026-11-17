@@ -44,6 +44,7 @@ export default {
     'detail-mask': { azimuth: 8, elevation: 6, fov: 20, fit: 0.42, target: [0, 45, 60] },
     'detail-spout': { azimuth: 55, elevation: 22, fov: 20, fit: 0.42, target: [85, 62, 0] },
     'detail-handle': { azimuth: -55, elevation: 18, fov: 20, fit: 0.45, target: [-80, 66, 0] },
+    'detail-head': { azimuth: -115, elevation: 34, fov: 20, fit: 0.26, target: [-68, 86, 0] },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {

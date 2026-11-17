@@ -348,8 +348,8 @@ export const PATINA_PRESETS = {
     age: 1, tin: 0.15, lead: 0.07, polish: 0.25, tarnish: 0.6, cuprite: 0.6, cupriteTone: 0.55, tinOxide: 0.85,
     tinOxideTone: 1.15, malachite: 0.7, carbonate: 0.2, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
     turquoiseTone: 0.55, islands: 0.45, malachiteScale: 1.0, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.95,
-    patchScale: 60, mottleScale: 9, patchiness: 1, softness: 0.55, drift: 0.9, earth: 0.6, earthColor: '#b07e64',
-    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.9, interiorTone: 0.3, wax: 0, inlay: 0, inlayGround: 0,
+    patchScale: 60, mottleScale: 9, patchiness: 1, softness: 0.55, drift: 0.9, earth: 0.75, earthColor: '#b07e64',
+    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.65, interiorTone: 0.3, wax: 0, inlay: 0, inlayGround: 0,
     wear: 0.12, dulling: 0.35, tops: 0.5, nobleWarmth: 0.35, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.4,
     // r8 fix (photo-08): ≈ 30 % darker than the first pass, large dark olive / brown-black territories (patchScale up),
     // pale crust islands; the emerald accents as soft clustered blooms, not pinpoint dots
@@ -526,12 +526,24 @@ export const PATINA_PRESETS = {
   // so the masks read at a glance
   'utah-teapot': {
     age: 1, tin: 0.15, lead: 0.05, polish: 0.55, tarnish: 0.85, cuprite: 0.55, cupriteTone: 0.3, tinOxide: 0.9,
-    tinOxideTone: 0.8, nobleWarmth: 0.62, malachite: 0.32, carbonate: 0.1, azurite: 0.08, azuriteDepth: 0.7,
-    azuriteScale: 9, blueHabitat: 0.3, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.42, islands: 0.42,
-    malachiteScale: 1.3, crust: 0.35, chloride: 0.02, soot: 0, crevice: 1, patchScale: 55, mottleScale: 9,
-    patchiness: 0.7, softness: 0.45, drift: 0.15, earth: 0.05, earthColor: '#6b5a42', calcite: 0.04, streaks: 0.06,
-    burialSide: 0.1, recessDirt: 0.45, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.22, dulling: 0.22,
-    tops: 0.6, topsTone: 0.4, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.8, grain: 0.5,
+    tinOxideTone: 0.8, nobleWarmth: 0.85, malachite: 0.15, carbonate: 0.1, azurite: 0.04, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0.3, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.3, islands: 0.42,
+    malachiteScale: 1.3, crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 55, mottleScale: 9,
+    patchiness: 0.7, softness: 0.45, drift: 0.15, earth: 0.06, earthColor: '#5e4a36', calcite: 0.04, streaks: 0.06,
+    burialSide: 0.1, recessDirt: 0.55, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.22, dulling: 0.22,
+    tops: 0.6, topsTone: 0.4, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.8, grain: 0.5, tint: '#ece3d2',
+  },
+  // the CRT desktop as a Shang bronze (a kit showpiece): a dark olive-brown noble skin, malachite gathered in the
+  // leiwen, the vent slots and the recesses round the masks; relief tops rubbed paler so the face reads at thumbnail
+  // size. The mirror screen is kept bright by its own material (PatinaMaterial meshAge / meshPolish), not here.
+  'crt-computer': {
+    age: 1, tin: 0.16, lead: 0.05, polish: 0.5, tarnish: 0.85, cuprite: 0.5, cupriteTone: 0.25, tinOxide: 0.9,
+    tinOxideTone: 0.85, nobleWarmth: 0.7, malachite: 0.3, carbonate: 0.08, azurite: 0.03, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0.2, turquoiseTone: 0.4, malachiteHue: 0.4, malachiteTone: 0.38, islands: 0.35,
+    malachiteScale: 1.4, crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 70, mottleScale: 10,
+    patchiness: 0.6, softness: 0.5, drift: 0.15, earth: 0.05, earthColor: '#5e4a36', calcite: 0.03, streaks: 0.05,
+    burialSide: 0.1, recessDirt: 0.5, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.24, dulling: 0.2,
+    tops: 0.65, topsTone: 0.5, matte: 0.4, ledgeMatte: 0.6, nobleRelief: 0.85, grain: 0.5, tint: '#ebe2d0',
   },
 }
 
@@ -540,7 +552,7 @@ export const PATINA_PRESET_GROUPS = {
   Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu', 'nezu-hu', 'nezu-bo'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
-  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot'],
+  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot', 'crt-computer'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)
@@ -623,8 +635,11 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
    * @param {number} [o.interior] 0..1: this mesh is an inside surface (bowl, inner wall): one calm corroded skin (interiorTone), no speckle, no wear
    * @param {number} [o.normalStrength] scales the relief normal map
    * @param {THREE.ColorRepresentation} [o.meshTint] optional: multiplies this mesh's beauty colour (e.g. cuprite-red flanges); default none
+   * @param {number} [o.meshAge] optional: multiplies the shared `age` dial for this mesh only (0.2 = a part kept bright and
+   *   cleaned — a polished mirror face — while the rest of the vessel is fully aged); default none (compiled out)
+   * @param {number} [o.meshPolish] optional: this mesh's own `polish` (0..1) in place of the shared one; needs meshAge
    */
-  constructor({ relief = null, cavityAttribute = false, cavity = 0.8, interior = 0, normalStrength = 1, skin = false, meshTint = null, ...params } = {}) {
+  constructor({ relief = null, cavityAttribute = false, cavity = 0.8, interior = 0, normalStrength = 1, skin = false, meshTint = null, meshAge = null, meshPolish = null, ...params } = {}) {
     super({ color: 0xffffff, roughness: 0.5, metalness: 1, envMapIntensity: 1, ...params })
     this.isPatinaMaterial = true
     this.relief = relief
@@ -645,11 +660,18 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
       uInterior: { value: interior },
       uMeshTint: { value: new THREE.Color(meshTint ?? 0xffffff) }, // optional per-mesh multiply, beauty only (default white = unchanged)
     }
+    // optional per-mesh age / polish (compile-time: materials without them build the same shader as before)
+    this.meshAge = meshAge != null
+    if (this.meshAge) {
+      this.defines.PATINA_MESH_AGE = ''
+      this.local.uMeshAge = { value: meshAge }
+      this.local.uMeshPolish = { value: meshPolish ?? -1 }
+    }
     this.onBeforeCompile = (shader) => patchShader(shader, this)
   }
 
   customProgramCacheKey() {
-    return 'patina2:' + (this.relief ? 'R' : '') + (this.cavityAttribute ? 'C' : '') + (this.skin ? 'S' : '')
+    return 'patina2:' + (this.relief ? 'R' : '') + (this.cavityAttribute ? 'C' : '') + (this.skin ? 'S' : '') + (this.meshAge ? 'A' : '')
   }
 }
 
@@ -703,6 +725,10 @@ uniform vec2 uReliefRange;
 uniform float uConstCavity;
 uniform float uInterior;
 uniform vec3 uMeshTint;
+#ifdef PATINA_MESH_AGE
+uniform float uMeshAge;
+uniform float uMeshPolish;
+#endif
 uniform vec3 uVesselMin;
 uniform vec3 uVesselSize;
 varying vec3 vPatinaPos;
@@ -1019,7 +1045,11 @@ float ttF0 = 0.04;
   S.st *= 1.0 - S.calm;
 
   // ---- the master dial: each layer arrives at its own point in the burial
+#ifdef PATINA_MESH_AGE
+  float a = clamp(uAge * uMeshAge, 0.0, 1.0);
+#else
   float a = clamp(uAge, 0.0, 1.0);
+#endif
   float aT = tt_ss(0.0, 0.25, a);    // use-life tarnish
   float aC = tt_ss(0.08, 0.5, a);    // early cuprite
   float aN = tt_ss(0.3, 0.8, a);     // noble sheet
@@ -1099,6 +1129,9 @@ float ttF0 = 0.04;
   vec3 col = F0m * mix(vec3(1.0), vec3(0.78, 0.60, 0.45), tarn);
   col *= 1.0 - 0.35 * tarn * S.rec; // the film is darker where it is not polished off
   float polishR = mix(0.40, 0.12, uPolish);
+#ifdef PATINA_MESH_AGE
+  if (uMeshPolish >= 0.0) polishR = mix(0.40, 0.08, uMeshPolish);
+#endif
   float rough = mix(polishR, 0.47, tt_ss(0.25, 0.8, S.rec)) + 0.06 * tarn;
   // burnished by handling where wear reached the metal; micro-pitted elsewhere once corroded
   rough = mix(rough, 0.24, tt_ss(0.7, 1.0, e) * (1.0 - uPolish * 0.5));

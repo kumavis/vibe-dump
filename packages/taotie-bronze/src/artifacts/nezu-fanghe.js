@@ -14,7 +14,7 @@
 // on the creases of the three faces without the handle.
 
 import * as THREE from 'three'
-import { D, SPOUT, lobeSectionAt, upperProfile } from './nezu-fanghe/form.js'
+import { D, SPOUT, HOLE, lobeSectionAt, upperProfile } from './nezu-fanghe/form.js'
 import * as R from './nezu-fanghe/relief.js'
 import * as P from './nezu-fanghe/parts.js'
 
@@ -44,12 +44,16 @@ export default {
     'side-left': { azimuth: -90, elevation: 12, fov: 26, fit: 1.04, ref: 'side-left.jpg' },
     back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
     'three-quarter': { azimuth: -40, elevation: 22, fov: 26, fit: 0.66, target: [-20, 330, 40], ref: 'three-quarter.jpg' },
-    top: { azimuth: -20, elevation: 70, fov: 26, fit: 0.8, target: [0, 470, 0] },
+    // straight down on the closed top: the face's axis vertical, the spout at the top of the frame, the mouth (filling
+    // hole) toward the bottom, the handle face (+Z) below it; raking key from the upper left
+    top: { face: { center: [0, 470, 0], normal: [0, 1, 0], up: [0, 0, -1], width: 350, height: 350 } },
+    // photo 15 (VESSEL B, the set's twin — same top scheme): from the handle end along the axis toward the spout
+    'lid-axis': { azimuth: 0, elevation: 30, fov: 20, fit: 0.42, target: [0, 470, 10], ref: 'lid-axis.jpg' },
     'detail-handle-head': { azimuth: 0, elevation: -2, fov: 20, fit: 0.2, target: [0, 385, 160], ref: 'detail-handle-head.jpg' },
     'detail-handle-side': { azimuth: -90, elevation: 10, fov: 20, fit: 0.28, target: [0, 330, 150], ref: 'detail-handle-side.jpg' },
     'detail-lobe': { azimuth: 22, elevation: 8, fov: 20, fit: 0.15, target: [62, 205, 110], ref: 'detail-lobe.jpg' },
     'detail-spout': { azimuth: 90, elevation: 16, fov: 20, fit: 0.3, target: [0, 600, -150], ref: 'detail-spout.jpg' },
-    'detail-lid': { azimuth: 48, elevation: 42, fov: 20, fit: 0.36, target: [-5, 470, 15], ref: 'detail-lid.jpg' }, // photo 44: over the handle-right corner
+    'detail-lid': { azimuth: 54, elevation: 45, fov: 27, fit: 0.376, target: [39, 470, 45], ref: 'detail-lid.jpg' }, // photo 44 over the handle-right corner (camera fitted to the eave corners)
     'detail-leg': { azimuth: 90, elevation: 10, fov: 20, fit: 0.32, target: [0, 90, 0], ref: 'detail-leg.jpg' },
     'face-front': { face: { center: [0, 212.5, 105], normal: [0, 0, 1], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-front.jpg' },
     'face-side': { face: { center: [105, 212.5, 0], normal: [1, 0, 0], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-side.jpg' },
@@ -115,11 +119,8 @@ export default {
     const fascia = R.fasciaPanel(kit, { w: 2 * D.eaveA, h: D.eaveT }, { ppmm: 5 * sq, seed: seed + 4 })
     const eave = P.eave(kit, { fascia, material: plain, q })
     object.add(eave)
-    const slopeSize = { w: 2 * D.capA, h: Math.hypot(D.capTop - D.capBase - D.capSkirt, D.capA - D.topA) }
-    const slopeA = R.capSlopePanel(kit, slopeSize, { ppmm: 3.2 * sq, seed: seed + 10 })
-    const slopes = [slopeA, slopeA, slopeA, slopeA] // a leiwen border all round
-    const topMap = R.capTopPanel(kit, { w: 2 * D.topA, h: 2 * D.topA }, { ppmm: 3.6 * sq, seed: seed + 20 })
-    const lid = P.cap(kit, { slopes, top: topMap, material: plain, q })
+    const faceMap = R.capFacePanel(kit, { A: D.capA, hole: HOLE }, { ppmm: 3.6 * sq, seed: seed + 20 })
+    const lid = P.cap(kit, { face: faceMap, material: plain, q })
     const ridge = P.ridge(kit, { material: plain, seed: seed + 21 })
     lid.add(ridge)
     object.add(lid)
@@ -148,7 +149,7 @@ export default {
     return {
       object,
       parts: { lobes: body, body: upper, eave, lid, spout, handles: handle, flanges, heads },
-      panels: { lobe: lobeMap, collar: collarMap, friezeFront: friezeMaps.front, friezeSide: friezeMaps.side, fascia, top: topMap, spout: spoutMap },
+      panels: { lobe: lobeMap, collar: collarMap, friezeFront: friezeMaps.front, friezeSide: friezeMaps.side, fascia, top: faceMap, spout: spoutMap },
     }
   },
 }

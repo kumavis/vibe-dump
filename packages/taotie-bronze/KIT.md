@@ -48,6 +48,7 @@ src/kit/
     plates.js           tracedPlates: traced OUTLINES (tools/trace.py) → solid plates: shoulder, contour lines, sunk centre, top fill, bosses (§ Traced plates)
     ribbon.js           cutRibbons: the Western Zhou CUT style — channel centre lines, spiral hollows, ringed eyes cut into one flat level (§ Ribbon relief)
     panchi.js           panchiBand: Eastern Zhou stamped interlace — one pattern-block unit tiled in rows of round ribs + knobs; plainCord, ropeCord (§ Panchi interlace)
+    ridges.js           RidgeWork: décor in fat round RIDGES — quadSpiral (any slanted cell), ridgeBand (nested corners), hookEye, slitEye, scrollChain, ridgeBorder, ridgeGround; bladeWarp (§ Ridge work)
     motifs/
       taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
       ground.js         leiwen on its own (atlas entry 'leiwen')
@@ -57,6 +58,7 @@ src/kit/
       rounded.js lozenge.js pillow.js   atlas sheets of the traced vocabulary (§ Rounded bands)
       phoenix.js straps.js              Western Zhou: the ribbon bird (cutRibbons) and crossing straps with pyramidal studs (§ Ribbon relief)
       panchi.js         Eastern Zhou: tiled panchi interlace between twisted / plain cords (§ Panchi interlace)
+      ridges.js         atlas sheet of relief/ridges.js + dasikongBlade (the Dasikong lei's blade, composed from the primitives)
       frieze.js         composed friezes & registers as atlas plaques (compose.js demos)
       list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
       schema.js         motifDefaults(schema)
@@ -71,7 +73,7 @@ src/kit/
     heads.js            sculpted animal heads in the round (SDF → surface nets), mounted on a lathe wall
     legs.js             columnLeg (taper, entasis, rings, collar, wrapped relief, hollow, splay), bladeLeg
     handles.js          uprightHandle 立耳 (relief on outer face / edge / root blocks, channel, lean)
-    lid.js              hippedLid (four relief slopes, skirt, seat) + roofKnob
+    lid.js              hippedLid (four relief slopes, skirt, seat; measured `section`, `pillow`) + roofKnob + hippedRoof (the surface as a model)
     parts.js            legacy columnarLeg / loopHandle, ringFoot; re-exports legs/handles/lid
     plate.js            plate(): flat cast plates (yue / ge blades, plaques): outline + true through-holes, thickness, relief both faces
     lobes.js            lobe() / lobedBody(): lobed bodies (li, he, jia): rounded-rect sock lofted into the legs, lobes overlap → real creases; one 1:1 panel over each lobe's two outer sides
@@ -506,6 +508,86 @@ each row then holds a whole number of cells per half turn and both sectors share
 raise for all ribs + ONE for the knobs; the hu's 535 × 180 mm body band at 5 px/mm ≈ 1 s. Atlas: `panchi` (presets
 `nezu-hu`, `nezu-hu-band`, `thin-ribs`). Worked example: `src/artifacts/nezu-hu/decor.js`.
 
+### Ridge work — décor drawn in fat round ridges (relief/ridges.js)
+
+Some Anyang bronzes draw a whole unit in RAISED ROUND-TOPPED THREADS about as wide as the grooves between them, every
+figure several ridges running parallel: squared spirals filling slanted cells, multi-ridge bands with nested corners,
+hooked coil eyes, columns of S/C scrolls, border bundles — no plates, no incised contour lines, no empty ground. Type
+specimen: the hanging blade of nezu-fanglei-dasikong (photo-34: spiral ridges 1.35 ± 0.1 mm pitch at H = 500 mm,
+ridge ≈ groove; edge bundles ≈ 1.6–1.7 mm; the brow pair ≈ 2 mm). Same language: nezu-bu belly mask, nezu-you, nezu-jue band.
+
+**How it works.** Everything is vector work on CENTRE LINES. A primitive maps its control geometry through the work's
+point transform (design space → panel mm: a blade warp, a mirror, a vessel's arc / developed-width mapping) and THEN
+builds the ridges in panel space — offsets, spiral rings, scroll radii — so ridges stay round-topped and of constant
+width and spacing however the layout is warped (warp the paths, not the pixels). Ridges collect in a `RidgeWork`;
+`flush()` writes them: ONE `panel.sink` for all grooves (footprint of every ridge minus the ridges: the groove channel is
+recorded, so inlay paste / cavity patina land in the grooves), ONE `raise` (or `add`) per ridge width with a round
+crown, bosses, one sink for slits. Deterministic (no randomness). All mm, panel frame, y up.
+
+```js
+const work = kit.ridgeWork(panel, { width: 0.78, pitch: 1.4, height: 0.6, groove: 0.3, crown: 1, mode: 'raise', transform })
+// profile: width = ridge foot, pitch = ridge + groove (centre to centre; width clamped ≤ 0.85 pitch), height = crest above
+//   the ground, groove = groove floor BELOW the ground (0: ridges on plain ground), crown 1 semicircular … 0 parabolic,
+//   mode 'raise' (max) | 'add' (on top of a plateau). Every call takes per-call overrides of these + `transform`
+//   (null = points already in panel mm).
+const half = work.view(f)            // a view whose transform is work.T ∘ f (shares the batch)
+const mir = work.mirror(axisX = 0)  // the same, mirrored: draw a half through `work`, then again through `mir`
+work.quadSpiral(quad, { turns | pitch, dir: ±1, start: 0..3, corner: mm | [4], cornerMin, margin, hook, hole, tail })
+work.ridgeBand(path, { ridges: 3, bend, start, end: 'square' | 'round' | 'hook' | 'spiral', dir: ±1, turns, hookAngle, taper: [a, b], closed })
+work.ridgeBorder(path, { ridges: 3, closed })      // = ridgeBand with square ends
+work.line(path, o)                                   // one ridge
+work.hookEye(at, { w, h, angle, shape: 'D' | 'C' | 'O', turns, slit: { len, width, depth } | false, tail })
+work.slitEye(at, { w, h, squareness: 0.6, angle, height, crown: 0.8, slit: { length, width, depth } | false, ring: { ridges: 1, gap } | false })
+work.scrollChain(path, { strip: 8, spacing: 1.08 × strip, turns: 1.5, alternate: true, side: ±1, tail: true })
+work.flush() → { lines, slits, ms }
+kit.ridgeGround(panel, region, { …profile, leiwen }) // AFTER flush: pack the leftovers with small squared spirals of the same ridge
+kit.quadSpiral(panelOrWork, quad, o) … kit.slitEye(…)  // one-shot forms: a ReliefPanel draws + flushes at once, a RidgeWork collects
+const W = kit.bladeWarp({ top: [x0, x1], tip: [x, y] | bottom: [x0, x1], y0, y1, power: 1, design: [x0, x1] })
+// upright design rect → tapering blade: W(p), W.inverse(p), W.hw(y), W.cx(y), W.scale(y), W.edgeX(side, inset, y),
+// W.edge(side, inset, ya, yb, step) (blade-space points `inset` mm in from an edge, square to it), W.outline(step).
+// power < 1 = an ogive (fuller low down); a tip off the top centre leans the blade.
+kit.dasikongBlade(work, { variant: 'centre' | 'corner', lug: true, warp: bladeWarpParams | null, base: profile })   // the specimen
+kit.roundPath(pts, cornerFlags, radius)   kit.offsetPath(pts, offset | s → offset)   // the geometry underneath
+```
+
+- **quadSpiral** — a squared spiral filling ANY convex quadrilateral (corners in design space, in order round the
+  outline). Every ring is the cell inset by whole pitches, so the turns stay parallel to the cell's own slanted sides
+  (a trapezoid cell gives a trapezoid spiral); corners are arcs whose radius (`corner`, default 2 pitches, per quad
+  corner with an array) shrinks one pitch per ring down to `cornerMin`, and the spiral ends in a short inward `hook`.
+  The first ring sits `margin` (pitch/2) inside the quad, so two cells SHARING a side come out exactly one pitch apart:
+  tile a region with cells that share edges and the whole field reads as one ridge fabric. `turns` with no pitch fits
+  the pitch to the cell. A long cell fills to a long final run (the nested-rectangle columns).
+- **ridgeBand** — n ridges along a polyline; at each corner every ridge gets a concentric arc (innermost radius `bend`),
+  so the bundle turns like contour lines. Ends: 'round' joins ridge i to ridge n−1−i with nested U-turns (the usual
+  Shang band end), 'hook' / 'spiral' first curl the whole bundle (`dir` +1 = to the left of travel, `turns`).
+  `closed: true` = a closed loop (cartouche borders, an eye ring, a body outline). `taper` narrows the spacing.
+- **hookEye** — the C/D coil eye: a rounded-rect spiral (D: flat toward the local +x) round a sunk slit.
+- **slitEye** — the pillowed squircle eye (nezu-bu): a superellipse boss (round-topped, `crown`), a sunk slit along its
+  long axis, optionally ringed by ridges following the same outline (in the work's ridge profile).
+- **scrollChain** — curled hooks stacked along a strip, each a round spiral entered by a tail from the previous; with
+  `alternate` they curl to alternate sides: the S-scroll columns down blade edges, the C-hook fills of bands.
+
+**Composing a mask or a dragon.** (1) Pick the frame you read the photograph in (a flattened face, x from the axis, y up)
+and author in it; give the work a transform from that frame to panel mm (`work.view`). (2) Lay the EDGE first:
+border bundles and strips by inset from the outline (`W.edge(side, inset, …)` on a blade; a closed `ridgeBand` round any
+cartouche). (3) Lay the FIGURE as bands: horn / brow / jaw / dragon body = `ridgeBand` with 3–5 ridges along its centre
+line, corners where the bronze turns, 'round' or 'spiral' ends; an open jaw = two bands from the head, each ending
+'hook'. (4) Fill every cell the bands leave with `quadSpiral` — read the cell's four corners off the photograph,
+let its sides lean with whatever bounds it; leave one pitch between cells (`margin`). (5) Eyes (`hookEye` / `slitEye`),
+scroll strips. (6) Draw the left half and again through `work.mirror(axis)` (handedness flips with it), then `flush()`;
+`ridgeGround` mops up any leftover ground. Keep neighbouring figures ≈ one groove apart (pitch − width): two ridges
+that touch inside one raise merge into a flat plateau. On a lathe body the panel is the developed band (x = arc length
+round the body, y = height or meridian arc): author flat, and let the transform carry the band's own width law, as the
+Dasikong body does with `M([x·kx, y])` and the corner blade with `M([sd·Qh(y) + x, y])`. A narrow strap: a band panel
+with one `ridgeBand` / `scrollChain` along its centre line.
+
+Atlas `ridges` (sliders: ridge width, pitch, height, groove, crown, turns, lean, ridges per band, taper): presets
+`vocabulary` (each primitive alone), `quad-spiral`, `ridge-band`, `hook-eye`, `slit-eye`, `scroll-chain`, `ridge-border`,
+`dasikong-blade` (the whole centre blade as a plaque, 1:1 vessel mm; lean shears it), `dasikong-corner`.
+**Cost**: vector work ≈ 0.05–0.1 s per blade; one sink + one raise per ridge width over the bbox of the work. Resolution:
+the ridge is ≈ 0.78 mm — 3 px at 4 px/mm (the Dasikong body at q 1), 2.2 px at q 0.5 (ridges still separate, the
+crown is a 2-pixel bump: the normal map shows them as lines, not as rounded threads).
+
 ## relief/compose.js — laying out a mould section
 
 All rects in panel mm. Every helper draws the LEFT half and mirrors where the Shang rule says so.
@@ -722,6 +804,16 @@ kit.hippedLid({ width, depth (eave line), rise | slope, ridge (≤ 1 frac | mm),
   → Group 'lid' standing on y = 0 (put it at body.userData.rim.y); userData { hips: [pts]×4, midlines[side], ridge, top, knob }
 kit.hippedLidLayout(opts) → { faces[side] = { w, h, outline, shape }, rise, top, ridge }
 kit.roofKnob({ width, depth, rise | slope, ridge, concave, skirt, post: { height, width, depth, waist }, faces })
+//   optional on all three (and hippedRoof), defaults = the plain loft above:
+//   section: [[h, y]…] from [0, 0] (eave) to [1, 1] (ridge line) | (v) => [h, y]   the measured cross-section: h = how far in
+//     (a: A → ridge half, b: B → 0), y = fraction of the rise. Any curve: an OGIVAL cushion roof (steep at the eave,
+//     flat at the ridge — the Met fangyi: 75° → 28°) or a bell-cast. Points go through a monotone cubic and are re-sampled
+//     at uniform slant, so mesh rows stay even on a near-vertical eave; `concave` is then ignored.
+//   pillow: mm | { long, short, front, … }   each slope swells out horizontally by this much at mid-length and half-way
+//     up (4s(1 − s) · sin πh; 0 on hips, eave and ridge — watertight); panels stay 1:1 along the swollen centre line
+kit.hippedRoof(opts) → { A, B, rh, rise, y0, top, level(v) → {a, b, y}, arc(k, v), point(k, s, v), normal(k, s, v) }
+//   the outer roof surface those parts build, in the lid frame — map décor by height / slant and run path flanges
+//   along hips (point(k, 1, v)) and slope midlines (point(k, 0.5, v)) without replicating the loft (src/artifacts/met-fangyi.js roofModel)
 ```
 Flanges along lid hips / leg axes / corners currently use the straight `flange()`; curved
 (concave hip, bulged corner) anchors are returned as polylines for the path flange when it lands.

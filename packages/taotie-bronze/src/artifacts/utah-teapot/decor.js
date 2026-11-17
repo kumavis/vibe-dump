@@ -14,6 +14,8 @@
 // outside: panel x = W/2 − X), Y mm up from the panel bottom. Every panel draws its left half,
 // lays the leiwen on it and mirrors (ReliefPanel.mirrorX), as kit.drawMotif does.
 
+import { HEAD_SLEEVE_END } from './sculpture.js'
+
 const LINE = 0.42 // every hand groove on a plateau top, mm
 const H1 = 1.7 // L1 plateau height on the belly (mm proud of the ground)
 const H2 = 2.5 // L2 eye bosses
@@ -217,7 +219,12 @@ export function capPanel(kit, size, { ppmm, seed }) {
 export function spoutPanel(kit, size, { ppmm, seed }) {
   const W = size.w, H = size.h
   const panel = panelOf(kit, W, H, ppmm, seed)
-  const { cx, P, Ps } = frame(W)
+  // the whole programme sits DY mm out along the spout from its root: the first ~9 mm of the tube are
+  // still inside / against the body wall, which hid the mask's root half from the front
+  const DY = 4.5
+  const cx = W / 2
+  const P = ([X, Y]) => [cx - X, Y + DY]
+  const Ps = (pts) => pts.map(P)
   // the mask, upside down in panel terms (horns toward the root, jaws toward the mouth); its nose on the top
   // meridian and its eyes on the two flanks (±Z), where the front and back views see them
   const els = [
@@ -231,9 +238,9 @@ export function spoutPanel(kit, size, { ppmm, seed }) {
     kit.roundStroke(Ps([[8.2, 26.0], [31.0, 26.0], [31.0, 21.6]]), { width: [4.2, 4.4, 3.4], round: 0.85, inner: 0.3, end: 'round', contour: contour(0.5), fill: spiralsFill({ min: 2.0 }) }),
   ]
   kit.carve(panel, els, { height: 1.6, shoulder: 0.5, depth: 0.28, irregularity: 0.8, seed })
-  kit.pillowBoss(panel, { c: P([19.4, 18.4]), w: 10.6, h: 7.4, round: 0.55, height: 2.4, crown: 0.9, slit: { len: 3.6, width: 0.7, depth: 0.55 } })
+  kit.pillowBoss(panel, { c: P([19.4, 18.4]), w: 11.8, h: 8.2, round: 0.55, height: 2.4, crown: 0.9, slit: { len: 3.6, width: 0.7, depth: 0.55 } })
   // collar: two bowstrings all round, then the blade pointing to the mouth
-  kit.bowstrings(panel, { x: -1, y: 29.6, w: W + 2, h: 4.6 }, { count: 2, width: 1.3, height: 0.8, spacing: 2.3 })
+  kit.bowstrings(panel, { x: -1, y: 29.6 + DY, w: W + 2, h: 4.6 }, { count: 2, width: 1.3, height: 0.8, spacing: 2.3 })
   const bl = kit.roundPoly(Ps([[-1, 34.0], [19.5, 34.0], [0.8, 48.4], [-1, 48.4]]), { round: [0, 2.0, 1.4, 0], contour: { inset: 1.2, line: LINE } })
   kit.carve(panel, [bl], { height: 1.0, shoulder: 0.4, depth: 0.28, seed: seed + 1 })
   // inside the blade: a cicada, its head with two eyes at the broad end, its body tapering to the tip
@@ -247,14 +254,14 @@ export function spoutPanel(kit, size, { ppmm, seed }) {
   kit.leiwenFill(panel, {
     include: (ctx) => {
       ctx.beginPath()
-      ctx.moveTo(cx, 6.0)
-      for (let y = 6; y <= 29; y += 1) ctx.lineTo(cx - Math.max(0, size.halfWidthAt(y) - 2.4), y)
-      ctx.lineTo(cx, 29); ctx.closePath(); ctx.fill()
+      ctx.moveTo(cx, 6.0 + DY)
+      for (let y = 6 + DY; y <= 29 + DY; y += 1) ctx.lineTo(cx - Math.max(0, size.halfWidthAt(y) - 2.4), y)
+      ctx.lineTo(cx, 29 + DY); ctx.closePath(); ctx.fill()
       // and round the blade, up to where the lip begins
       ctx.beginPath()
-      ctx.moveTo(cx, 33.6)
-      for (let y = 33.6; y <= 48.6; y += 1) ctx.lineTo(cx - Math.max(0, size.halfWidthAt(y) - 2.4), y)
-      ctx.lineTo(cx, 48.6); ctx.closePath(); ctx.fill()
+      ctx.moveTo(cx, 33.6 + DY)
+      for (let y = 33.6 + DY; y <= 48.6 + DY; y += 1) ctx.lineTo(cx - Math.max(0, size.halfWidthAt(y) - 2.4), y)
+      ctx.lineTo(cx, 48.6 + DY); ctx.closePath(); ctx.fill()
     },
     margin: 0.45,
   }, { ...GROUND, pitch: 0.72, echo: 0, seed })
@@ -268,14 +275,16 @@ export function handlePanel(kit, size, { ppmm, seed }) {
   const W = size.w, H = size.h
   const panel = panelOf(kit, W, H, ppmm, seed)
   const cx = W / 2
-  const back = kit.roundStroke([[cx, 15.0], [cx, 104.0], [cx, 113.0]], {
+  // the band starts blunt 2 mm inside the sleeve under the ram's jaw (sculpture.js), so it issues from it
+  const y0 = HEAD_SLEEVE_END - 2.0
+  const back = kit.roundStroke([[cx, y0], [cx, 104.0], [cx, 113.0]], {
     width: [19.6, 18.4, 11.0], round: 0.5, inner: 0.15, start: 'blunt', end: 'spiral', spiral: { turns: 1.0, dir: 1, gap: 0.8, taper: 0.6 },
     contour: { inset: 1.2, line: LINE }, fill: { kind: 'scales', line: 0.4, pitch: 3.0 },
   })
   kit.carve(panel, [back], { height: 1.5, shoulder: 0.5, depth: 0.3, irregularity: 0.8, seed })
   // ladder of thin ridges on the handle's flanks, either side of the back band
   panel.raise((ctx) => {
-    for (const s of [-1, 1]) { ctx.beginPath(); ctx.rect(cx + s * 12.6 - 0.55, 18, 1.1, 88); ctx.fill() }
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.rect(cx + s * 12.6 - 0.55, y0 + 0.5, 1.1, 106 - (y0 + 0.5)); ctx.fill() }
   }, { height: 0.7, profile: 'plateau', shoulder: 0.3 })
   return panel.bake()
 }

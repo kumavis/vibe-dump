@@ -2,76 +2,50 @@
 //
 // Each boss is a disc footprint lying ON the bell's wall (sampled through form.js, so it follows the oval's
 // curvature), displaced along the wall normal by a small ReliefMap drawn with kit.coilBoss (dome, coiled body,
-// hatching, head): silhouette and cast shadow from the mesh, all slope from the full-res normal map, one map shared
-// by every boss of a variant. Three variants (the head turned a little differently, the body wound either way) are
-// dealt round the rows so neighbours differ, as the photographs show.
+// hatching, head): silhouette and cast shadow from the mesh, all slope from the full-res normal map, ONE map shared by
+// all 36.
 
 import * as THREE from 'three'
 import { halfLength, ARC_END, PANEL_W, faceTheta, pointAt, normalAt, LAYOUT } from './form.js'
 
-// one map per ROW: the apron of each row runs down to just past the top of the ledge (or border) under it
-// (photo-18 / 19: every boss is a drop — the coiled dome with a smooth tongue hanging to the ledge, lapping it)
-const ROW_BOTTOM = [160.6, 266, 369] // body y where each row's apron ends
-const ROWS = [
-  { hand: 1, start: 268, rot: 0 },
-  { hand: 1, start: 272, rot: 0 },
-  { hand: 1, start: 270, rot: 0 },
-]
+// ONE boss design, placed 36 times (bo-fix, from photo-18 / 19 at full resolution): a ROUND stepped dome. The earlier
+// reading of a tall drop was boss + its own cast shadow under the top light: the lit outline is a circle (Ø ≈ 37 mm on
+// faces/face-bosses.jpg, 36–39 across the rows), the dark tongue under it changes length with the boss's distance from
+// the light, and the bosses seen in profile on photo-18's silhouette are symmetric top and bottom (≈ 13 mm proud). The
+// renderer casts the shadow. The creature: a serpent wound ≈ 2 stepped turns (the inner turn and the tail hatched by
+// close oblique ribs), its eared tiger head upright on the crown, offset toward the top (photo-18: +0.15 … +0.27 r).
+export const BOSS = { r: 18.5, height: 13 }
 
 export function bossMaps(kit, { quality = 1, seed = 1 } = {}) {
-  const B = LAYOUT.bosses
   const ppmm = 12 * Math.sqrt(quality)
-  return ROWS.map((v, i) => {
-    const depth = (B.y[i] - ROW_BOTTOM[i]) / B.r
-    const W = 2 * B.r + 2, Hp = B.r * (1 + depth) + 2
-    const panel = new kit.ReliefPanel({ width: W, height: Hp, ppmm, seed: seed + i })
-    const c = [W / 2, 1 + B.r * depth]
-    kit.coilBoss(panel, {
-      c, r: B.r, height: B.height, turns: 2.0, rot: v.rot, hand: v.hand, start: v.start, gap: 0.12, ridge: 0.12,
-      foot: 'plain', apron: { depth, end: 0.8, drop: 0.5 },
-      striate: { pitch: 1.05, depth: 0.32, slant: 1.1, from: 0.05 },
-      head: { style: 'tiger', at: [0, 0.0], w: 0.66, h: 0.58, height: 0.42 },
-    })
-    // the foot of a 13 mm dome reads as a deep recess to the default cavity measure (a pale ring of earth round every
-    // boss); the photographs show clean metal there: a gentler large-scale cavity
-    const map = panel.bake({ cavity: { kSmall: 0.6, kLarge: 5 } })
-    map.userData = { c, depth }
-    return map
+  const R = BOSS.r, W = 2 * R + 2
+  const panel = new kit.ReliefPanel({ width: W, height: W, ppmm, seed })
+  const c = [W / 2, W / 2]
+  kit.coilBoss(panel, {
+    c, r: R, height: BOSS.height, turns: 2.0, rot: 0, hand: 1, start: 250, gap: 0.16, ridge: 0.17,
+    foot: 'plain',
+    striate: { pitch: 1.0, depth: 0.32, slant: 1.1, from: 0.35 },
+    head: { style: 'tiger', at: [0, 0.2], w: 0.54, h: 0.5, height: 0.36 },
   })
-}
-
-/** the boss outline (unit radius, centre origin, y up): the dome and its apron — inside test */
-function insideDrop(x, y, depth, end) {
-  if (x * x + y * y < 1) return true
-  if (y > 0.2) return false
-  const Dc = depth - end
-  for (let k = 0; k <= 16; k++) {
-    const t = k / 16, rr = 1 + (end - 1) * t
-    if (Math.hypot(x, y + t * Dc) < rr) return true
-  }
-  return false
+  // the foot of a 13 mm dome reads as a deep recess to the default cavity measure (a pale ring of earth round every
+  // boss); the photographs show clean metal there: a gentler large-scale cavity
+  const map = panel.bake({ cavity: { kSmall: 0.6, kLarge: 5 } })
+  map.userData = { c }
+  return [map]
 }
 
 /**
  * One boss: panel coordinates (px from the face centre line, body y), face ±1, side ±1.
  * The footprint is laid in TRUE mm round its centre: Δpx = Δx_true · PANEL_W / (A(y) · ARC_END). It is a polar grid
- * out to the drop's outline, sunk 1.2 mm into the wall so the zero-height rim never shows as a seam.
+ * out to the circle, sunk 1.2 mm into the wall so the zero-height rim never shows as a seam.
  */
 export function bossMesh(kit, { face, side, px, y, map, material, quality = 1, mirror = false }) {
-  const B = LAYOUT.bosses
   const W = map.widthMM, Hp = map.heightMM
-  const { c, depth } = map.userData
+  const { c } = map.userData
   const mx = mirror ? -1 : 1
-  const nA = Math.round(80 * Math.sqrt(quality)), nR = Math.round(28 * Math.sqrt(quality))
-  // outline radius per angle (unit r), a little outside the drop so the foot is caught
-  const rMax = new Float64Array(nA + 1)
-  for (let i = 0; i <= nA; i++) {
-    const a = (i / nA) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a)
-    let lo = 0.5, hi = depth + 0.2
-    for (let k = 0; k < 24; k++) { const m = (lo + hi) / 2; if (insideDrop(m * ca, m * sa, depth, 0.8)) lo = m; else hi = m }
-    rMax[i] = lo + 0.6 / B.r
-  }
-  const radiusAt = (u) => { const f = u * nA, i = Math.min(nA - 1, Math.floor(f)), t = f - i; return (rMax[i] * (1 - t) + rMax[i + 1] * t) * B.r }
+  const nA = Math.round(96 * Math.sqrt(quality)), nR = Math.round(30 * Math.sqrt(quality))
+  // a circle a little outside the dome's foot, so the foot is caught
+  const radiusAt = () => BOSS.r + 0.6
   const sinkMM = 1.2
   const posAt = (dx, dy) => {
     const yy = y + dy
@@ -123,9 +97,8 @@ export function buildBosses(kit, { maps, materials, quality = 1 }) {
     for (const side of [1, -1]) {
       B.y.forEach((by, ri) => {
         B.x.forEach((px, ci) => {
-          // each row has its own map (apron length); neighbours alternate the coil's hand by mirroring it
-          const mirror = (ci + (side > 0 ? 0 : 1)) % 2 === 1
-          const m = bossMesh(kit, { face, side, px, y: by, map: maps[ri], material: materials[ri], quality, mirror })
+          // one design, the same way up everywhere (the bosses were cast from one model)
+          const m = bossMesh(kit, { face, side, px, y: by, map: maps[0], material: materials[0], quality })
           group.add(m)
           n++
         })

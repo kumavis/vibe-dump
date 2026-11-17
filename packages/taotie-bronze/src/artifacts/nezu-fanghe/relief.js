@@ -124,44 +124,60 @@ export function fasciaPanel(kit, { w, h }, { ppmm, seed }) {
   return panel.bake()
 }
 
-/** cap slopes (k = 0 front … 3 left): a fat hooked band pair with pillow eyes either side of the centre line
- *  (photos 41, 43, 44: big rolled hooks and oval plates; approximate — the slopes are seen obliquely only) */
-export function capSlopePanel(kit, { w, h }, { ppmm, seed }) {
-  // the cap's short steep border: a leiwen band only (44 — the creature is all on the domed plateau)
-  const panel = new kit.ReliefPanel({ width: w, height: h, ppmm, seed, maxSize: 2048 })
-  kit.leiwenFill(panel, { rect: { x: 2, y: 3, w: w - 4, h: h - 6 }, margin: 0.6, avoid: null }, { pitch: 1.1, line: 0.5, depth: 0.32, cell: [5.5, 8], pairs: 0.4, seed })
-  return panel.bake()
-}
-
-/** plateau (plate frame: x = world x, y = −world z): ONE asymmetric creature in high relief (photos 41–44): a big
- *  raised oval pillow plate by the spout root, a ringed eye boss with a central dot, a jaw plate with teeth, a
- *  crested beaked head toward +X, fat rolled C-hooks round the hole and a scaly crested body along −X (left of the
- *  ridge); leiwen ground. The ridge and the hole are geometry (parts.js). */
-export function capTopPanel(kit, { w, h }, { ppmm, seed }) {
-  const panel = new kit.ReliefPanel({ width: w, height: h, ppmm, seed, maxSize: 2048 })
-  const X = (x) => x + w / 2, Y = (y) => y + h / 2
-  const Q = (pts) => pts.map(([x, y]) => [X(x), Y(y)])
-  // positions read off photo 44 (camera over the handle-right corner), world (x, z) → plate (x, −z). The masses
-  // are FAT and high (bands 20–30 mm, 8 mm proud): the creature covers most of the plateau.
-  const els = [
-    // the head: brow band from the eye out to a beak hooking down toward the +X −Z corner, a rolled crest above it
-    kit.roundStroke(Q([[2, 30], [38, 42], [68, 44], [88, 26]]), { width: [24, 26, 20, 10], round: 0.8, inner: 0.25, end: 'point', contour: { inset: 1.4, line: 0.7 } }),
-    kit.roundStroke(Q([[14, 58], [34, 72], [58, 70]]), { width: [12, 12, 10], round: 0.8, end: 'spiral', spiral: { turns: 0.9, R: 5, dir: -1, gap: 1.6 } }),
-    // jaw plate (teeth cut below)
-    kit.roundPlate({ c: [X(34), Y(10)], w: 60, h: 26, r: 10, contour: { inset: 1.4, line: 0.7 } }),
-    // the scaly body from the jaw round toward the handle side, its tail rolled
-    kit.roundStroke(Q([[64, -4], [74, -36], [60, -70], [26, -86]]), { width: [24, 26, 22, 16], round: 0.8, inner: 0.25, end: 'spiral', spiral: { turns: 1, R: 9, dir: -1, gap: 2.4 },
-      contour: { inset: 1.4, line: 0.7 }, fill: { kind: 'scales', pitch: 6, line: 0.6 } }),
-    // fat rolled C-hooks (limbs) between the body and the hole
-    kit.roundStroke(Q([[24, -22], [24, -50], [8, -64]]), { width: [18, 20, 15], round: 0.85, inner: 0.25, end: 'spiral', spiral: { turns: 1, R: 7, dir: -1, gap: 2.2 }, contour: { inset: 1.2, line: 0.6 } }),
-    kit.roundStroke(Q([[-44, 40], [-50, 6], [-70, -8]]), { width: [16, 17, 13], round: 0.85, end: 'spiral', spiral: { turns: 0.9, R: 6, dir: 1, gap: 2 } }),
+/** THE TOP: one animal face looking up, symmetric about the spout → handle axis (dossier § The top: a face).
+ *  Panel = the cushion seen from above, 2·capA square, panel x = world x + capA, panel y = capA − world z (the spout
+ *  end up, the mouth / handle end down). Drawn on the −X half in "face mm" (xo = distance out from the axis,
+ *  z = world z, + toward the mouth) and mirrored, ground included, so both halves are the same bronze.
+ *  The mouth (the filling hole) and its rolled lip, and the ridge (nose) are geometry (parts.js). */
+export function capFacePanel(kit, { A, hole }, { ppmm, seed }) {
+  const w = 2 * A
+  const panel = new kit.ReliefPanel({ width: w, height: w, ppmm, seed, maxSize: 2048 })
+  const P = ([xo, z]) => [A - xo, A - z]
+  const Q = (pts) => pts.map(P)
+  const line = { inset: 1.7, line: 0.75 }
+  // keep the ground off the mouth's lip (geometry): a hair-thin raise the ground packer avoids
+  panel.raise((ctx) => {
+    ctx.beginPath(); ctx.ellipse(A - hole.c[0], A - hole.c[1], hole.rx + 13, hole.rz + 13, 0, 0, Math.PI * 2); ctx.fill()
+    ctx.fillRect(A - 9, A - 60, 18, 120) // the ridge's foot
+  }, { height: 0.06, profile: 'plateau', shoulder: 0.3 })
+  // ---- the main masses, ≈ 5 mm proud, round-shouldered (photos 41, 44: fat bands with deep shadow between)
+  const main = [
+    // horn: broad band from beside the spout root out along the back, turning back at the outer corner, hooked
+    kit.roundStroke(Q([[13, -50], [90, -54], [99, -88], [84, -101]]), { width: [16, 16, 13, 11], round: 0.7, inner: 0.2, end: 'spiral',
+      spiral: { turns: 1.15, R: 11, dir: -1, gap: 2 }, contour: { inset: 2.2, line: 0.8 } }),
+    // brow over the eye, from the nose outward, its outer end rolled forward
+    kit.roundStroke(Q([[9, -21], [62, -24], [82, -17]]), { width: [12, 13, 11], round: 0.7, inner: 0.2, end: 'spiral',
+      spiral: { turns: 1.1, R: 10, dir: 1, gap: 1.8 }, contour: line }),
+    // upper lip: from the nose's foot round the back of the mouth, hooking in at its side
+    kit.roundStroke(Q([[9, 59], [38, 55], [53, 68], [51, 86]]), { width: [10, 11, 11, 10], round: 0.8, inner: 0.25, end: 'spiral',
+      spiral: { turns: 1.1, R: 8.5, dir: 1, gap: 1.6 }, contour: line }),
+    // lower jaw: down the outside of the mouth and in under it, the two hooks meeting below the mouth
+    kit.roundStroke(Q([[67, 50], [69, 103], [55, 123], [22, 127]]), { width: [11, 12, 12, 10], round: 0.8, inner: 0.25, end: 'spiral',
+      spiral: { turns: 1.1, R: 9, dir: 1, gap: 1.6 }, contour: line }),
+    // cheek curl between the eye and the mouth (41: a C beside the nose's foot)
+    kit.roundStroke(Q([[58, 31], [16, 35]]), { width: [9, 9], round: 0.8, end: 'spiral', spiral: { turns: 1.1, R: 7, dir: -1, gap: 1.4 }, contour: { inset: 1.4, line: 0.6 } }),
+    // back corner hook behind the horn (44: a hook at the corner of the cushion)
+    kit.roundStroke(Q([[40, -114], [104, -115], [119, -98]]), { width: [10, 11, 10], round: 0.7, end: 'spiral', spiral: { turns: 1.1, R: 8.5, dir: 1, gap: 1.6 }, contour: line }),
+    // the spout's root clasped by the face: a rounded plate the tube rises from
+    kit.roundPlate({ c: P([0, -64]), w: 72, h: 46, r: 18, contour: { inset: 2, line: 0.8 } }),
+    // eye socket surround
+    kit.roundPlate({ c: P([48, 4]), w: 48, h: 41, r: 17, contour: { inset: 1.5, line: 0.7 } }),
   ]
-  kit.carve(panel, els, { height: 7.5, shoulder: 5, depth: 0.7, seed, irregularity: 1.5 })
-  panel.sink((ctx) => { ctx.lineWidth = 2; for (let i = 0; i < 5; i++) { const x = X(14 + i * 10); ctx.beginPath(); ctx.moveTo(x, Y(-1)); ctx.lineTo(x, Y(18)); ctx.stroke() } }, { depth: 2, profile: 'v' })
-  kit.pillowBoss(panel, { c: [X(0), Y(76)], w: 92, h: 42, rot: -4, round: 0.7, height: 12, crown: 0.5, slit: false })
-  kit.pillowBoss(panel, { c: [X(-4), Y(14)], w: 28, h: 27, round: 1, height: 9, crown: 1, slit: false, ring: { gap: 1.6, line: 1.3, depth: 1 } })
-  panel.sink((ctx) => { ctx.beginPath(); ctx.arc(X(-4), Y(14), 3.2, 0, Math.PI * 2); ctx.fill() }, { depth: 2, profile: 'u' })
-  kit.leiwenFill(panel, { rect: { x: 2, y: 2, w: w - 4, h: h - 4 }, margin: 0.8 }, { pitch: 1.2, line: 0.5, depth: 0.3, cell: [5, 8], pairs: 0.4, seed })
+  kit.carve(panel, main, { height: 5.5, shoulder: 2.6, depth: 0.7, seed, irregularity: 0.6 })
+  // ---- the cheek / ear plate down the outer slope: the highest flat plate (44: a thick slab with an incised hook)
+  const ear = [kit.roundPlate({ c: P([110, 4]), w: 36, h: 92, r: 13, contour: { inset: 2, line: 0.8 }, fill: { kind: 'coil', pitch: 3.4, line: 1.1 } })]
+  kit.carve(panel, ear, { height: 7, shoulder: 2.6, depth: 0.9, seed: seed + 1 })
+  // ---- comb rows: quills along the outer foot and teeth along the front foot (15: a row of hooks under the jaws)
+  const teeth = []
+  for (let z = -80; z <= 64; z += 12) teeth.push(kit.roundPlate({ c: P([133.5, z]), w: 6.5, h: 7, r: 1.8 }))
+  for (let xo = 24; xo <= 112; xo += 13) teeth.push(kit.roundPlate({ c: P([xo, 134]), w: 7.5, h: 6, r: 1.8 }))
+  kit.carve(panel, teeth, { height: 3.4, shoulder: 1.4, depth: 0.4, seed: seed + 2, contour: false })
+  // ---- the eye: a domed boss in its socket, a sunk ring round it and a pupil dot (41, 44)
+  kit.pillowBoss(panel, { c: P([48, 4]), w: 32, h: 28, round: 0.9, height: 5.5, crown: 0.85, base: 'field', slit: false, ring: { gap: 1.4, line: 1.4, depth: 1.2 } })
+  panel.sink((ctx) => { ctx.beginPath(); ctx.arc(...P([45, 0]), 2.6, 0, Math.PI * 2); ctx.fill() }, { depth: 1.6, profile: 'u' })
+  // ---- fine leiwen ground on the −X half, then mirror the whole half (ground included)
+  kit.leiwenFill(panel, { rect: { x: 1.5, y: 1.5, w: A - 1.5, h: w - 3 }, margin: 0.8 }, { pitch: 1.15, line: 0.5, depth: 0.35, cell: [5, 8], pairs: 0.4, seed })
+  panel.mirrorX()
   return panel.bake()
 }
 

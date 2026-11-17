@@ -107,6 +107,10 @@ function placeUnit(U, x0, y0, sx, sy, mirror, flip, dx, dy, hand = null) {
  *   rib 1.5 (mm)  height 1.0 (mm)  profile 'dome' (ribs' section; 'plateau' = flat top, round shoulder)  shoulder (rib/2: a round section; less = a flatter top)  knob 1.25 (radius mm)  knobHeight 1.3  gap: rows' top/bottom margin scale (1)
  *   jitter 0.12 (mm per impression)  wobble 0 (mm: each rib's centre line drifts, per impression) wavelength 7 (mm)
  *   swell 0 (± fraction of the rib width, per rib and impression)  seed
+ *   median (optional, default none = unchanged output): { width 0.45, depth 0.3, inset 0.5, profile 'v' | 'u',
+ *     eye: { r: 0.35 } | false } — a fine groove cut down the centre line of every rib (the Nezu hu's "double line"
+ *     bands), stopping `inset` mm (+ the knob radius) short of knobbed / rounded free ends, running on through flat
+ *     ends and joins and stopping at pellets; `eye` sinks a dot (same depth) in every knob. ONE extra sink.
  */
 export function panchiBand(panel, rect, o = {}) {
   const t0 = performance.now()
@@ -182,7 +186,66 @@ export function panchiBand(panel, rect, o = {}) {
     ctx.fill()
     ctx.restore()
   }, { height: knobHeight, profile: 'dome', shoulder: knob })
+  if (o.median) medianGrooves(panel, ribs, beads, o.median, { knob, clip: o.clip !== false ? clipRows : null })
   return { rows, ms: performance.now() - t0 }
+}
+
+/** polyline with `a` mm cut off its start and `b` mm off its end (null if nothing is left) */
+function trimEnds(pts, a, b) {
+  const L = []
+  let tot = 0
+  for (let i = 1; i < pts.length; i++) { tot += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); L.push(tot) }
+  if (tot <= a + b + 0.2) return null
+  const at = (s) => {
+    let i = 0
+    while (i < L.length - 1 && L[i] < s) i++
+    const s0 = i ? L[i - 1] : 0, f = (s - s0) / Math.max(1e-9, L[i] - s0)
+    return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * f, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * f]
+  }
+  const out = [at(a)]
+  for (let i = 0; i < L.length - 1; i++) if (L[i] > a && L[i] < tot - b) out.push(pts[i + 1])
+  out.push(at(tot - b))
+  return out
+}
+
+/** the median incision down every rib (panchiBand's `median` option) */
+function medianGrooves(panel, ribs, beads, m, { knob, clip }) {
+  const width = m.width ?? 0.45, depth = m.depth ?? 0.3, inset = m.inset ?? 0.5
+  panel.sink((ctx) => {
+    ctx.save()
+    if (clip) clip(ctx)
+    // pellets stay whole: the groove stops at their rim
+    if (beads.length) {
+      ctx.beginPath()
+      ctx.rect(-1e4, -1e4, 2e4, 2e4)
+      for (const [x, y, r] of beads) { const rr = (r || knob * 0.9) * 0.85; ctx.moveTo(x + rr, y); ctx.arc(x, y, rr, 0, Math.PI * 2) }
+      ctx.clip('evenodd')
+    }
+    ctx.lineWidth = width
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'butt'
+    ctx.beginPath()
+    for (const s of ribs) {
+      const cut = (c) => (c === 'knob' ? knob + inset : c === 'round' ? inset : 0)
+      const p = trimEnds(s.pts, cut(s.caps[0]), cut(s.caps[1]))
+      if (!p) continue
+      ctx.moveTo(p[0][0], p[0][1])
+      for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1])
+    }
+    ctx.stroke()
+    if (m.eye) {
+      const r = m.eye.r ?? 0.35
+      ctx.beginPath()
+      for (const s of ribs) {
+        for (const [k, i] of [[0, 0], [1, s.pts.length - 1]]) {
+          if (s.caps[k] !== 'knob') continue
+          ctx.moveTo(s.pts[i][0] + r, s.pts[i][1]); ctx.arc(s.pts[i][0], s.pts[i][1], r, 0, Math.PI * 2)
+        }
+      }
+      ctx.fill()
+    }
+    ctx.restore()
+  }, { depth, profile: m.profile ?? 'v', shoulder: width / 2 })
 }
 
 /** a plain round cord (弦纹) along y from x0 to x1 */

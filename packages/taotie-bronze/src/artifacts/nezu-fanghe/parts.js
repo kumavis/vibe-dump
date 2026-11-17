@@ -2,7 +2,7 @@
 // filling hole, crenellated ridge, spout, handle sculpture, flanges, the small frieze heads.
 
 import * as THREE from 'three'
-import { D, SPOUT, HOLE, RIDGE, HANDLE, creaseDepth, collarHalf, polyPath, handleSDF, friezeHeadSDF, plateauY } from './form.js'
+import { D, SPOUT, HOLE, RIDGE, HANDLE, creaseDepth, collarHalf, polyPath, handleSDF, friezeHeadSDF, capTopY, cushionY, holeOutline, holeDist } from './form.js'
 
 const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]] // front, right, back, left
 const ST = [[1, 0, 0], [0, 0, -1], [-1, 0, 0], [0, 0, 1]] // left → right seen from outside
@@ -43,82 +43,84 @@ export function eave(kit, { fascia, material, q }) {
   return g
 }
 
-/** the cap: a short vertical skirt, four hipped slopes (panels), the plateau plate with the hole */
-export function cap(kit, { slopes, top, material, q }) {
+/** the cap: ONE swelling cushion (a kit.plate lying flat, its thickness the cushion's height, symmetric about a
+ *  mid plane hidden inside the collar) carrying the whole face in one panel; the mouth is cut through it with a
+ *  soft rolled lip, and a dark sleeve and floor inside the opening make it read as a hole into the vessel. */
+export function cap(kit, { face, material, q }) {
   const g = new THREE.Group()
   g.userData.part = 'lid'
-  const a0 = D.capA, y0 = D.capBase, y1 = y0 + D.capSkirt, a1 = D.topA, y2 = D.capTop
-  for (let k = 0; k < 4; k++) {
-    const n = SN[k], t = ST[k]
-    const P = (A, s, y) => [n[0] * A + t[0] * s, y, n[2] * A + t[2] * s]
-    g.add(quad(kit, P(a0, -a0, y0), P(a0, a0, y0), P(a0, -a0, y1), P(a0, a0, y1), { material, part: 'lid', name: 'skirt-' + k }))
-    const S = slopes[k]
-    // cushion: steep at the skirt, rounding over to the plateau — a loft of squares, so the hips stay shared
-    const lv = (v) => ({ A: a0 - (a0 - a1) * Math.pow(v, 1.9), y: y1 + (y2 - y1) * Math.sin((Math.PI / 2) * Math.min(1, v * 1.04)) })
-    const geo = kit.buildSurface({
-      surface: (u, v, out) => { const L = lv(v); const sx = (2 * u - 1) * L.A; out.pos.set(n[0] * L.A + t[0] * sx, L.y, n[2] * L.A + t[2] * sx) },
-      segments: { density: 0.75 * Math.sqrt(q) }, relief: S, fade: 0.8,
-      panelMap: (u, v, pm) => { const L = lv(v); pm[0] = 0.5 + ((2 * u - 1) * L.A) / (2 * a0); pm[1] = v; pm[2] = 1 },
-    })
-    const sm = new THREE.Mesh(geo, S ? new kit.PatinaMaterial({ relief: S }) : material)
-    sm.userData.part = 'lid'; sm.name = 'slope-' + k; sm.castShadow = sm.receiveShadow = true
-    g.add(sm)
+  const A = D.capA
+  const YM = D.eaveTop - 10 // plate mid plane: the underside lies inside the collar (collar half width 158 > capA)
+  // outline: the cushion foot (superellipse, soft corners), plate frame (x, y) = world (x, −z)
+  const outline = []
+  const n = D.capN
+  for (let i = 0; i < 160; i++) {
+    const th = (i / 160) * Math.PI * 2
+    const c = Math.cos(th), s = Math.sin(th)
+    const k = A / Math.pow(Math.pow(Math.abs(c), n) + Math.pow(Math.abs(s), n), 1 / n)
+    outline.push([c * k, s * k])
   }
-  // plateau: a plate in XY rotated flat (plate +y → world −z), hole cut through
-  const hole = []
-  for (let i = 0; i < 40; i++) {
-    const th = (i / 40) * Math.PI * 2
-    // kidney: a little pinched at the back (photo 15: a two-lobed opening)
-    const pinch = 1 - 0.12 * Math.pow(Math.max(0, Math.sin(th)), 6)
-    hole.push([HOLE.c[0] + HOLE.rx * Math.cos(th), -(HOLE.c[1] + HOLE.rz * Math.sin(th) * pinch)])
-  }
-  const A = a1
+  const hole = holeOutline(72).map(([x, z]) => [x, -z]).reverse()
+  const top = (x, y) => Math.max(capTopY(x, -y), D.eaveTop + 0.4)
   const plate = kit.plate({
-    outline: [[-A, -A], [A, -A], [A, A], [-A, A]],
+    outline,
     holes: [hole],
-    // domed: the plate thickens toward the centre (symmetric, the underside is hidden in the cap), so the top swells
-    thickness: (x, y) => { const u = Math.min(1, Math.abs(x) / A), v = Math.min(1, Math.abs(y) / A); return 6 + 2 * D.dome * (1 - u * u * u) * (1 - v * v * v) },
-    front: top ? { relief: top, rect: { x: -A, y: -A, w: 2 * A, h: 2 * A } } : undefined,
-    spacing: 10,
-    reliefSpacing: q >= 1 ? 3 : 4,
-    maxTriangles: Math.round(80000 * q),
-    material: top ? new kit.PatinaMaterial({ relief: top }) : material,
+    thickness: (x, y) => 2 * (top(x, y) - YM),
+    front: face ? { relief: face, rect: { x: -A, y: -A, w: 2 * A, h: 2 * A } } : undefined,
+    spacing: 9,
+    reliefSpacing: q >= 1 ? 2.2 : 3.2,
+    refine: (x, y) => (holeDist(x, -y) < 14 ? 1.1 : Infinity), // the rolled lip: a fine ring
+    maxTriangles: Math.round(110000 * q),
+    material: face ? new kit.PatinaMaterial({ relief: face }) : material,
     part: 'lid',
   })
   plate.rotation.x = -Math.PI / 2
-  plate.position.y = y2 - 3
-  plate.name = 'plateau'
+  plate.position.y = YM
+  plate.name = 'cushion'
+  plate.castShadow = plate.receiveShadow = true
   g.add(plate)
-  // a raised rolled rim round the hole (photos 43, 44)
-  const hy = plateauY(HOLE.c[0], HOLE.c[1])
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(20, 4.2, 12, 48), material)
-  rim.rotation.x = -Math.PI / 2
-  rim.scale.set((HOLE.rx + 2.5) / 20, (HOLE.rz + 2.5) / 20, 1)
-  rim.position.set(HOLE.c[0], hy + 0.6, HOLE.c[1])
-  rim.userData.part = 'lid'; rim.castShadow = rim.receiveShadow = true
-  g.add(rim)
-  // the bore under the hole: a short dark tube so the opening reads as one (the vessel is hollow)
-  const bore = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 40, 32, 1, true), new kit.PatinaMaterial({ interior: 1 }))
-  bore.scale.set(HOLE.rx - 0.5, 1, HOLE.rz - 0.5)
-  bore.material.side = THREE.BackSide
-  bore.position.set(HOLE.c[0], hy - 20, HOLE.c[1])
-  bore.userData.part = 'lid'
-  g.add(bore)
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(1, 32).rotateX(-Math.PI / 2), new kit.PatinaMaterial({ interior: 1 }))
+  // darkness inside the mouth: a sleeve just inside the cut wall (faces wound inward: seen from inside the opening)
+  // and a floor far below. Interior patina: one calm, dark corroded skin.
+  const inner = new kit.PatinaMaterial({ interior: 1 })
+  const ring = holeOutline(72)
+  const yTop = capTopY(HOLE.c[0], HOLE.c[1] + HOLE.rz) - 6, yBot = YM - 70
+  const pos = [], idx = []
+  for (const [x, z] of ring) {
+    const dx = x - HOLE.c[0], dz = z - HOLE.c[1], l = Math.hypot(dx, dz) || 1
+    const ix = x - (dx / l) * 0.8, iz = z - (dz / l) * 0.8
+    pos.push(ix, yTop, iz, ix, yBot, iz)
+  }
+  const N = ring.length
+  for (let i = 0; i < N; i++) {
+    const a0 = 2 * i, a1 = a0 + 1, b0 = 2 * ((i + 1) % N), b1 = b0 + 1
+    // ring runs +x → +z → −x (clockwise seen from above); this winding faces the hole's axis (normals inward)
+    idx.push(a0, a1, b0, a1, b1, b0)
+  }
+  const sg = new THREE.BufferGeometry()
+  sg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  sg.setIndex(idx)
+  sg.computeVertexNormals()
+  const sleeve = new THREE.Mesh(sg, inner)
+  sleeve.userData.part = 'lid'; sleeve.name = 'mouth-sleeve'; sleeve.receiveShadow = true
+  g.add(sleeve)
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(1, 40).rotateX(-Math.PI / 2), inner)
   floor.scale.set(HOLE.rx, 1, HOLE.rz)
-  floor.position.set(HOLE.c[0], hy - 40, HOLE.c[1])
+  floor.position.set(HOLE.c[0], yBot + 0.5, HOLE.c[1])
+  floor.userData.part = 'lid'; floor.name = 'mouth-floor'; floor.receiveShadow = true
   g.add(floor)
   return g
 }
 
-/** the crenellated ridge: five massive blocks along Z from the spout root, off the spine (39, 42, 43, 44) */
+/** the crenellated ridge: the face's nose, five massive blocks on the axis from the spout root to the mouth's back
+ *  rim (39, 42: five blocks, ≈ 20 mm tall, ≈ 1.6 × the eave slab) */
 export function ridge(kit, { material, seed }) {
   const pts = []
-  for (let z = RIDGE.z0; z <= RIDGE.z1 + 0.01; z += 3) pts.push(new THREE.Vector3(RIDGE.x, plateauY(RIDGE.x, z) - 1, z))
+  for (let z = RIDGE.z0; z <= RIDGE.z1 + 0.01; z += 2.5) pts.push(new THREE.Vector3(RIDGE.x, cushionY(RIDGE.x, z) - 1.5, z))
+  const L = RIDGE.z1 - RIDGE.z0
   return kit.flange({
     path: polyPath(pts, () => new THREE.Vector3(0, 1, 0)),
-    height: RIDGE.height, thickness: RIDGE.thickness, embed: 3, taper: 2, bevel: 2.2,
-    notches: { shape: 'square', pitch: 18, depth: 0.42, width: 4.4 }, waver: 0.5, seed, material, part: 'lid',
+    height: RIDGE.height, thickness: RIDGE.thickness, embed: 4, taper: 2, bevel: 2.4,
+    notches: { shape: 'square', pitch: L / RIDGE.blocks, depth: 0.5, width: 6 }, waver: 0.4, seed, material, part: 'lid',
   })
 }
 

@@ -8,19 +8,18 @@
 // Relief language (photo-08, Western Zhou ribbon style): ONE flat level for strap, cartouche and bird; the drawing
 // CUT into it as wide round-shouldered channels (kit.cutRibbons), hollows packed with fine spirals, round eye bosses.
 
-import LOW from '../../../reference/nezu-fanghu/faces/dev-low.trace.json'
-import UP from '../../../reference/nezu-fanghu/faces/dev-up.trace.json'
-import FRIEZE from '../../../reference/nezu-fanghu/faces/dev-frieze.trace.json'
 import FOOT from '../../../reference/nezu-fanghu/faces/dev-foot.trace.json'
-import LID from '../../../reference/nezu-fanghu/faces/dev-lid.trace.json'
 import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.ribbons.json'
+import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.ribbons.json'
+import FRIEZE_RIB from '../../../reference/nezu-fanghu/faces/dev-frieze.ribbons.json'
+import LID_RIB from '../../../reference/nezu-fanghu/faces/dev-lid.ribbons.json'
 import { LV } from './form.js'
 
 // SUNK-THEN-EMBOSSED (photo-08/09): each bird's cartouche is cut ≈ 1.4 mm below the wall, its edge stepping down
-// through two ribs at 1.3 mm pitch; the bird is raised back up as flat-topped ribbons (3–6 mm wide) flush with the wall,
+// through three ribs at 1.25 mm pitch; the bird is raised back up as flat-topped ribbons (3–6 mm wide) flush with the wall,
 // soft 0.7 mm shoulders; ring eyes with a domed centre in their own recess; round spirals (≈ 1 mm) sunk into the floor
 // left between the ribbons (kit.sunkCartouche; ribbons traced by reference/nezu-fanghu/ribbons.py)
-const SUNK = { depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 2, pitch: 1.3 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
+const SUNK = { depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
   ground: { pitch: 0.95, line: 0.5, depth: 0.3, cell: [2.4, 6], roundness: 0.9, pairs: 0.25, maxAspect: 1.5, jitter: 0.04, fillers: true }, groundMargin: 0.35 }
 
 /** a ribbons.json tracing (developed mm, the RIGHT bird) and its mirror image about s = 0 (the confronted left bird) */
@@ -185,21 +184,11 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   const map = ([s, y]) => [panelW / 2 + s * (Qh(y) / Qf(y)), arc(y) - a0]
   const mapOwn = ([s, y]) => [panelW / 2 + s, arc(y) - a0] // already in this side's own mm
   const common = { map, mirror: true, axis: 0, seed, leiwen: GROUND }
-  // fields (cartouches of the belly): lower, upper; neck frieze; foot frieze
-  // the two belly registers: the photograph's own groove network (grooves.py), not a hand-stroked paraphrase
-  const belly = { ...common, leiwen: false, depth: 1.8, shoulder: 0.5, widen: 1.75, minW: 1.5, lift: { h: 1.1, shoulder: 1.6 }, border: { w: 2.8, d: 2.2 }, hollow: { d: 1.2, shoulder: 0.5 } }
-  // fat bands: before the channels are cut, every band edge is rolled down over ≈ 1 mm (a wide shallow sink along
-  // each channel), so the flat ribbons between the channels swell into them like the cast bands do, not a flat field
-  // with lines engraved in it
-  const roll = { ...common, leiwen: false, border: false, lift: null, boss: false, depth: 0.55, shoulder: 0.5, widen: 1.75, minW: 1.5 }
-  const rollSpec = (S) => ({ channels: S.channels.map((c) => ({ ...c, w: (c.w ?? 1.4) + 1.3, d: undefined })) })
-  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, map, seed })
-  kit.cutRibbons(p, UP, { ...belly, seed: seed + 1, boss: { height: 3.2, crown: 0.85, dot: 0.7 } })
-  kit.cutRibbons(p, rollSpec(UP), roll) // after the lift (raise = max would undo it)
-  spiralFill(p, hollowPolys(UP, map))
-  void LOW
-  kit.cutRibbons(p, FRIEZE, { ...common, seed: seed + 2, depth: 1.6, shoulder: 0.5, widen: 1.55, minW: 1.4, lift: { h: 1.0, shoulder: 1.2 }, border: { w: 2.2, d: 1.8 }, leiwen: false, boss: { height: 2.8, crown: 0.85, dot: 0.6 } })
-  spiralFill(p, hollowPolys(FRIEZE, map), { rMax: 2.8 })
+  // fields: the belly cartouches (sunk, the birds embossed in them); neck frieze; foot frieze
+  // the four body cartouches of this side in ONE call: lower pair (confronted), upper pair
+  kit.sunkCartouche(p, [...cartouchePair(LOW_RIB), ...cartouchePair(UP_RIB)], { ...SUNK, map, seed })
+  // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
+  kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })
   kit.cutRibbons(p, FOOT, { ...common, seed: seed + 3, depth: 1.3, shoulder: 0.5, widen: 1.4, minW: 1.4, border: false, boss: false })
   // neck triangles: units at ±Qh/3 and the corner halves at ±Qh (laid in this side's own developed mm)
   const qn = Qh(388), hb = qn / 3
@@ -224,7 +213,6 @@ export function lidPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1 }) {
   const a0 = arc(y0)
   const p = new kit.ReliefPanel({ width: panelW, height: arc(y1) - a0, ppmm, seed })
   const map = ([s, y]) => [panelW / 2 + s * (Qh(y) / Qf(y)), arc(y) - a0]
-  kit.cutRibbons(p, LID, { map, mirror: true, axis: 0, seed, depth: 1.4, shoulder: 0.5, widen: 1.5, minW: 1.3, lift: { h: 0.9, shoulder: 1.0 }, border: { w: 2.2, d: 1.7 }, leiwen: false, hollow: { d: 1.0, shoulder: 0.4 }, boss: { height: 2.4, crown: 0.85, dot: 0.5 } })
-  spiralFill(p, hollowPolys(LID, map), { rMax: 2.6 })
+  kit.sunkCartouche(p, cartouchePair(LID_RIB), { ...SUNK, depth: 1.0, shoulder: 0.5, rim: { ribs: 2, pitch: 0.8 }, eye: { ring: 0.8, ringTop: 0, gap: 0.35, dome: 0.4 }, map, seed })
   return { relief: p.bake(), panelW }
 }

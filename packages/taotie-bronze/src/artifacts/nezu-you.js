@@ -143,7 +143,7 @@ export default {
     const voxel = Math.max(0.45, 0.6 / Math.sqrt(q))
     const sculpt = new kit.PatinaMaterial()
     const knobGeo = kit.meshSDF(knobSDF(), { voxel: voxel * 0.9 })
-    knobGeo.translate(0, LV.apex - 2.5, 0)
+    knobGeo.translate(0, LV.apex, 0)
     const knob = new THREE.Mesh(knobGeo, sculpt)
     knob.userData.part = 'knob'
     object.add(knob)
@@ -158,7 +158,7 @@ export default {
       object.add(m)
       horns.push(m)
     }
-    const headGeo = kit.meshSDF(pivotHeadSDF(), { voxel: voxel * 0.8 })
+    const headGeo = kit.meshSDF(pivotHeadSDF(), { voxel: voxel * 0.9 })
     const heads = []
     for (const az of [0, 180]) {
       const h = new THREE.Mesh(headGeo, sculpt)

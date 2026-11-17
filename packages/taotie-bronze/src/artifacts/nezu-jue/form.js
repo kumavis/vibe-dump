@@ -41,8 +41,12 @@ export const REG = { band: [101, 140], upper: [140.5, 163] } // décor registers
 export const Y_C = 140 // where the swept upper wall starts (top of the band's upper fillet)
 export const RIM = {
   r0: 44, y0: 161, // side rim (θ ±60…±120): a gently flared lip
-  // the spout tongue narrows toward its tip (half-width halfRoot at the cup → half at the tip round); high walls
-  spout: { half: 9.5, halfRoot: 13.5, tip: 95, y: 189, depth: 13, dip: 6.5, wall: 5, pow: 0.65 },
+  // jue-fix: the spout is a broad open trough that FLARES toward its end (half-width halfRoot at the cup → half at
+  // the tip round, wider), longer and its lip higher, the channel shallower at the mouth than at the root
+  // (photo-02 through the refitted side camera: outer width ≈ 24 at the root → ≈ 30 near the end (was 27 → 19), tip
+  // ρ 97.5, lip ≈ 187.5–189 at the end, 8 mm deep there; the edge rises fast off the cup and runs nearly level to
+  // the end (rise 2.2: ease-out), dropping `droop` over the last 12 mm into the rounded end)
+  spout: { half: 16, halfRoot: 12, tip: 97.5, y: 189, depth: 8, dip: 5, wall: 5, rise: 2.2, droop: 1.5, roll: 1.9 },
   tail: { tip: 77, y: 193, baseAz: 13, pow: 1.15 },
   soft: 12, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
   lip: 3.0, // wall thickness at the rim: a flat, slightly thickened edge (no rolled tube: fix pass r8)
@@ -86,7 +90,10 @@ export function rimHeight(az, rho) {
   const S = RIM.spout, T = RIM.tail
   let y = RIM.y0
   // a smooth saddle: lowest at the sides (θ ±90), rising into spout and tail
-  if (z > 0) y += (S.y - RIM.y0) * Math.pow(clamp((z - 6) / (S.tip - 6), 0, 1), S.pow)
+  if (z > 0) {
+    const t = clamp((z - 6) / (S.tip - 6), 0, 1)
+    y += (S.y - RIM.y0) * (1 - Math.pow(1 - t, S.rise)) - S.droop * smooth((z - (S.tip - 12)) / 12)
+  }
   if (z < 0) y += (T.y - RIM.y0) * Math.pow(clamp((-z - 4) / (T.tip - 4), 0, 1), T.pow)
   return y + 0 * x
 }
@@ -345,32 +352,38 @@ export const HANDLE_PATH = (() => {
 })()
 
 // ----------------------------------------------------------------------------------------------------- LIP
-// The rim is a thick rounded lip (photo-02: a rolled edge ≈ 4 mm across on the spout walls and the tail), not the
-// cut edge of a 2.6 mm sheet: a tube swept along the wall's top, centred on its mid-thickness.
-export function buildLip(kit, { q = 1, material, thickness = 2.6, radius = 2.0 }) {
-  const P = new THREE.Vector3()
+// jue-fix: the spout's thick ROLLED rim (photo-02: a rounded edge ≈ 4 mm across along both spout walls and round the
+// end; the rest of the rim is the wall's own flat 3 mm edge, fix pass r8). A tube swept along the wall's top over the
+// spout azimuths, centred on the wall's mid-thickness, swelling in from nothing where the spout leaves the side rim
+// (θ ±SPOUT_LIP.az) so its ends close to points buried in the lip.
+export const SPOUT_LIP = { az: 36, ramp: 14 }
+export function buildSpoutLip(kit, { q = 1, material }) {
+  const S = RIM.spout, L = SPOUT_LIP
   const o = { pos: new THREE.Vector3(), nrm: new THREE.Vector3() }
-  const t = new THREE.Vector3(), b = new THREE.Vector3(), a1 = new THREE.Vector3(), a2 = new THREE.Vector3()
-  const nu = Math.round(420 * Math.sqrt(q)), nv = 10
+  const P = new THREE.Vector3(), d = new THREE.Vector3(), a1 = new THREE.Vector3(), a2 = new THREE.Vector3()
+  const t = new THREE.Vector3(), b = new THREE.Vector3()
+  const nu = Math.round(260 * Math.sqrt(q)), nv = 12
+  // u: θ from −az to +az (CCW round +Y, left → right seen from outside); v round the tube, from out over the top
   const geo = kit.buildSurface({
     surface: (u, v, out) => {
-      bodySurface(u, 1, o)
-      // centre: half the wall in from the outer top edge, then up the wall's own direction a little
-      bodyPoint(u, 1, a1); bodyPoint(u, 0.995, a2)
-      const d = a1.clone().sub(a2).normalize() // up the wall
-      P.copy(o.pos).addScaledVector(o.nrm, -thickness / 2).addScaledVector(d, radius * 0.2)
-      // ring in the plane (nrm, d)
+      const az = -L.az + 2 * L.az * u, bu = uOfAz(az)
+      bodySurface(bu, 1, o)
+      bodyPoint(bu, 1, a1); bodyPoint(bu, 0.995, a2)
+      d.copy(a1).sub(a2).normalize() // up the wall
+      const w = smooth((L.az - Math.abs(az)) / L.ramp) // 0 at the ends → 1
+      const r = S.roll * Math.sqrt(w)
+      P.copy(o.pos).addScaledVector(o.nrm, -RIM.lip / 2).addScaledVector(d, -r * 0.35)
       const th = v * Math.PI * 2
-      const r = radius * (1 + 0.15 * Math.max(0, Math.cos(th)))
-      t.copy(o.nrm).multiplyScalar(Math.cos(th) * r)
-      b.copy(d).multiplyScalar(Math.sin(th) * r * 0.9)
+      t.copy(o.nrm).multiplyScalar(Math.cos(th) * r * 1.05)
+      b.copy(d).multiplyScalar(Math.sin(th) * r)
       out.pos.copy(P).add(t).add(b)
-      out.nrm.copy(o.nrm).multiplyScalar(Math.cos(th)).addScaledVector(d, Math.sin(th)).normalize()
     },
     segments: [nu, nv],
+    normals: 'displaced',
   })
+  geo.computeVertexNormals()
   const m = new THREE.Mesh(geo, material)
-  m.name = 'lip'; m.userData.part = 'body'; m.castShadow = m.receiveShadow = true
+  m.name = 'spout-lip'; m.userData.part = 'body'; m.castShadow = m.receiveShadow = true
   return m
 }
 

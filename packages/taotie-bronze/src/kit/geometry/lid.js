@@ -242,6 +242,9 @@ export function hippedLidLayout(o) {
  * @param {number} [o.rise]          eave → ridge height (mm), or `slope` (deg, long faces; research 30–40°)
  * @param {number} [o.ridge]         ridge length, fraction of width (≤ 1) or mm; 0 = pyramid
  * @param {number} [o.concave]       0 straight slopes … 0.4 bell-cast (flatter at the eaves)
+ * @param {Array|Function} [o.section]  measured cross-section [[h, y]…] (fractions, eave [0,0] → ridge [1,1]) or v → [h, y];
+ *        replaces `concave` (an ogival cushion roof, a bell-cast…). Default: the straight / `concave` loft
+ * @param {number|object} [o.pillow]  mm each slope swells out at mid-length, half-way up ({ long, short } per side); default 0
  * @param {{height, overhang?, fascia?}} [o.skirt]   vertical band below the eaves (sits on the body rim);
  *        overhang = eaves project beyond the skirt (mm), fascia = vertical eave edge height (mm)
  * @param {number} [o.thickness]     shell thickness (mm)

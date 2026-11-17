@@ -58,54 +58,74 @@ const rough = (x, y, z, amp, f = 0.35) => amp * (0.65 * vnoise(x * f, y * f, z *
 
 // ------------------------------------------------------------------ shoulder head (front; back inferred)
 
+/** rounded box, half sizes b, corner radius r */
+function sdRBox3(px, py, pz, bx, by, bz, r) {
+  const qx = Math.abs(px) - bx + r, qy = Math.abs(py) - by + r, qz = Math.abs(pz) - bz + r
+  return len3(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0) - r
+}
+
 /**
- * Round r8-dsk-fix, read off detail-head (photo-34 at ≈ 11 px/mm): a horned beast mask lying on the centre of the
- * shoulder, ≈ 58 mm across its crown. The crown is TWO FAT COILED HORNS (a thick rolled ring each, Ø ≈ 18 mm, centres
- * ±17 mm, y ≈ 334, a domed boss in each coil) joined over the brow; under them two round BULGING eyes (Ø ≈ 7 mm, ±10.5,
- * y 324.5) in rims under a heavy brow ridge; between and below them a short nose bridge and a big blunt, knobbly
- * SNOUT (≈ 27 mm wide) thrust out and down to y ≈ 297. The face plate under it all tapers from the crown to the snout
- * (a shield). The surface is corroded and lumpy (value noise, ≈ 0.6 mm).
+ * Round dsk-lug (after r8-dsk-fix; reviewers: "should be a short squared snout ending above the boss row … with crisp
+ * curled horns"), read off detail-head and the photo-34 / photo-03 crops: a horned beast mask on the centre of the
+ * shoulder, ≈ 56 mm across its crown. The crown is TWO COILED HORNS (a rolled ring each, Ø ≈ 18 mm, centres ±17.5 mm,
+ * y ≈ 333, a spiral groove running into the coil) joined over the brow; under them two round BULGING eyes (±10,
+ * y 327.5) in rims; between them the SNOUT: a short SQUARED block ≈ 23 mm wide, its front face flat and near vertical,
+ * ≈ 14 mm proud, ending in a flat underside at y ≈ 312 — clear above the whorl-boss band (top 306.5) — with two
+ * nostrils and a lip line low on its front. The surface is corroded (value noise, ≈ 0.3 mm), not lumpy.
  */
 export function shoulderHeadSDF() {
   const sd = (x, y, z) => {
     const wz = wallZ(y)
     // shield-shaped face plate lying on the slope, back sunk in the wall
-    const hwS = 12 + 15 * clamp((y - 302) / 32, 0, 1)
-    let d = smax(Math.abs(x) - hwS, Math.abs(y - 321) - 15, 3)
-    d = smax(d, z - (wz + 6.5 + 2 * Math.cos(x / 14)), 2)
+    const hwS = 12 + 15 * clamp((y - 310) / 26, 0, 1)
+    let d = smax(Math.abs(x) - hwS, Math.abs(y - 325) - 14, 3)
+    d = smax(d, z - (wz + 6 + 2 * Math.cos(x / 14)), 2)
     d = Math.max(d, wz - 6 - z)
     for (const sg of [-1, 1]) {
-      // fat coiled horn: a rolled ring tipped back with the slope, a boss in its centre, a groove round the roll
-      const hc = [sg * 17.5, 333.5, wallZ(333.5) + 8.5]
+      // coiled horn: a rolled ring tipped back with the slope, a spiral groove winding into its sunk eye
+      const hc = [sg * 17.5, 333, wallZ(333) + 8.5]
       const n = [sg * 0.12, 0.5, 0.86]
       const nl = len3(n[0], n[1], n[2])
       const nn = [n[0] / nl, n[1] / nl, n[2] / nl]
-      d = smin(d, sdTorus(x, y, z, hc, nn, 5.6, 3.6), 1.4)
-      d = smax(d, -(len3(x - hc[0], y - hc[1], z - hc[2] - 3.4) - 2.2), 0.6) // the coil's eye, sunk
-      d = smin(d, len3(x - hc[0], y - hc[1], z - hc[2] - 0.5) - 3.0, 1.2)
-      // eyes: round bulging domes in a raised rim, under the brow
-      const ec = [sg * 10.5, 328, wallZ(328) + 10]
-      d = smin(d, sdTorus(x, y, z, [ec[0], ec[1], ec[2] - 0.6], [0, 0.3, 0.954], 3.9, 1.3), 0.7)
-      d = smax(d, -(len3(x - ec[0], y - ec[1], z - ec[2] + 0.6) - 3.3), 0.5) // the socket
-      d = smin(d, len3(x - ec[0], y - ec[1], (z - ec[2]) * 1.2) - 2.7, 0.5)
+      d = smin(d, sdTorus(x, y, z, hc, nn, 5.4, 3.7), 1.0)
+      d = smin(d, len3(x - hc[0], y - hc[1], z - hc[2] - 0.6) - 3.2, 0.8) // the coil's core
+      {
+        // spiral groove on the coil's face: radius growing with the angle round the coil (in its plane)
+        const px = x - hc[0], py = y - hc[1], pz = z - hc[2]
+        const h = px * nn[0] + py * nn[1] + pz * nn[2]
+        const ux = sg, uy = 0, uz = 0 // in-plane axes (approximate: x and the slope direction)
+        const vx = 0, vy = nn[2], vz = -nn[1]
+        const a = px * ux + py * uy + pz * uz, b = px * vx + py * vy + pz * vz
+        const r = len2(a, b), th = Math.atan2(b, a) + Math.PI
+        const pitch = 2.6
+        const k = Math.round((r - 1.4 - (pitch * th) / (2 * Math.PI)) / pitch)
+        const rs = 1.4 + (pitch * th) / (2 * Math.PI) + k * pitch
+        if (r < 9.6 && h > 1) d = smax(d, -(len2(r - rs, h - 5.4) - 0.55), 0.3)
+      }
+      // eyes: round bulging domes in a raised rim, under the horns
+      const ec = [sg * 10, 327.5, wallZ(327.5) + 10]
+      d = smin(d, sdTorus(x, y, z, [ec[0], ec[1], ec[2] - 0.6], [0, 0.3, 0.954], 3.6, 1.2), 0.6)
+      d = smax(d, -(len3(x - ec[0], y - ec[1], z - ec[2] + 0.6) - 3.0), 0.4) // the socket
+      d = smin(d, len3(x - ec[0], y - ec[1], (z - ec[2]) * 1.2) - 2.6, 0.4)
     }
-    // the crown: a fat band across the top joining the two horn coils (photo: one continuous rough crown)
-    d = smin(d, sdTube(x, y, z, [[-12, 339.5, wallZ(339.5) + 6.5, 3.2], [0, 340.5, wallZ(340.5) + 7, 3.5], [12, 339.5, wallZ(339.5) + 6.5, 3.2]]), 2.5)
-    // heavy brow ridge across under the horns
-    d = smin(d, sdTube(x, y, z, [[-14, 332.5, wallZ(332.5) + 9, 2.6], [0, 333.5, wallZ(333.5) + 10, 3.0], [14, 332.5, wallZ(332.5) + 9, 2.6]]), 2.5)
-    // nose bridge from the brow down to the snout
-    d = smin(d, sdTube(x, y, z, [[0, 329, wallZ(329) + 11, 4.0], [0, 316, wallZ(316) + 14, 5.8]]), 3)
-    // the snout: a big blunt bulb thrust out and down
-    const sz = wallZ(310.5) + 14.5
-    d = smin(d, sdEllipsoid(x, y - 310.5, z - sz, 13.4, 8.6, 9.5), 4)
-    // nostrils and the mouth line under the snout
-    for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 5.5, y - 307, z - (sz + 8.4)) - 1.4), 0.8)
-    d = smax(d, -smax(Math.abs(y - 303) - 0.8, Math.abs(x) - 9.5, 0.5), 0.5)
-    // a corroded, knobbly skin
-    d += rough(x, y, z, 0.75, 0.3)
+    // the crown: a band across the top joining the two coils
+    d = smin(d, sdTube(x, y, z, [[-12, 339, wallZ(339) + 6, 2.8], [0, 340, wallZ(340) + 6.5, 3.1], [12, 339, wallZ(339) + 6, 2.8]]), 2.0)
+    // brow ridge under the horns, running into the snout's top
+    d = smin(d, sdTube(x, y, z, [[-13, 332, wallZ(332) + 8.5, 2.2], [0, 332.5, wallZ(332.5) + 9.5, 2.6], [13, 332, wallZ(332) + 8.5, 2.2]]), 2.0)
+    // the snout: a short squared block, flat near-vertical front (z ≈ 136.5), flat underside at y ≈ 312
+    const zb = 118, zf = 136.5 - 0.12 * (y - 312)
+    const hwSn = 10.6 + 1.2 * clamp((326 - y) / 14, 0, 1)
+    let sn = sdRBox3(x / (hwSn / 11.5), y - 319.5, z - (zb + zf) / 2, 11.5, 7.5, (zf - zb) / 2, 3.2)
+    d = smin(d, sn, 2.2)
+    // nostrils and the lip line on the snout's front, low
+    const zF = zf
+    for (const sg of [-1, 1]) d = smax(d, -(sdEllipsoid(x - sg * 5, y - 316, z - zF, 2.0, 1.4, 1.6)), 0.5)
+    d = smax(d, -Math.max(Math.abs(y - 313.4) - 0.45, Math.abs(x) - 8.5, zF - 1.0 - z), 0.3)
+    // a corroded skin
+    d += rough(x, y, z, 0.32, 0.35)
     return d
   }
-  return { sd, bounds: { min: [-36, 290, 90], max: [36, 348, 160] } }
+  return { sd, bounds: { min: [-31, 305, 88], max: [31, 348, 140] } }
 }
 
 // ------------------------------------------------------------------ shoulder loop handle (+X)
@@ -189,13 +209,13 @@ function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
  *    cavity (lugCavity) that darkens the gap, as an occlusion term the plain wall panel cannot have.
  */
 export function lugSDF() {
-  const YC = 90, RL = 9.5, TL = 2.8, XL = 15.6 // loop: centre, centre-line radius, half thickness, half width
-  const back = (x, y) => 9.5 - 2 * clamp((66 - y) / 26, 0, 1) + 1.5 * Math.min(1, (x / 15) ** 2)
+  const YC = 80, RL = 8.5, TL = 3.0, XL = 6.2 // loop: centre, centre-line radius, half thickness, half width
+  const back = (x, y) => 9 + 2.5 * clamp((y - 45) / 30, 0, 1) + 2.5 * clamp((y - 78) / 6, 0, 1) + 1.3 * Math.min(1, (x / 15) ** 2)
   // the head's front surface (w): a dome rolling back over the top and in to the chin; the muzzle's bulge
   const S = (x, y) => {
     const dy = y - 60, L = dy > 0 ? 31 : 24
     const g = Math.sqrt(Math.max(0, 1 - (x / 18.5) ** 2 - (dy / L) ** 2))
-    return 9.5 + 11 * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
+    return 9 + 4 * clamp((y - 45) / 33, 0, 1) + (12 - 2.5 * clamp((y - 45) / 33, 0, 1)) * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
   }
   const hwAt = (y) => (y > 62 ? 12 + 3.6 * clamp((y - 62) / 4.5, 0, 1) : 8 + 4 * Math.pow(clamp((y - 44) / 18, 0, 1), 0.85))
   const outline = (x, y) => {
@@ -207,11 +227,15 @@ export function lugSDF() {
   const sd = (x, y, z) => {
     const w = z - wallZ(y)
     const ax = Math.abs(x)
-    // ---- the loop: a broad strap arched out of the wall, grooves along both edges of its outer face
+    // ---- the loop: a round-cornered ring standing out of the wall, the rope's way running sideways through it
     const rr = len2(y - YC, w) - RL
     const qx = ax - XL + 2.0, qr = Math.abs(rr) - TL + 1.6
     let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 1.8
-    if (d < 1.5 && rr > 0) for (const gx of [10.6, 12.6]) d = smax(d, -len2(ax - gx, rr - TL - 0.15) + 0.5, 0.3)
+    // ---- the root pad on the wall behind the head: the floor of the gap, flush at its edges (it carries the occlusion)
+    {
+      const e = Math.max(ax / 13, Math.abs(y - 75) / 13)
+      d = Math.min(d, Math.max(ax - 13, Math.abs(y - 75) - 13, w - (0.7 - 1.2 * e * e)))
+    }
     // ---- the head
     const s0 = S(x, y), wb = back(x, y)
     let h = smax(smax(outline(x, y), w - s0, 2.6), wb - w, 1.6)
@@ -256,11 +280,11 @@ export function lugSDF() {
     // curled side ears tucked under the horn tips
     raise(sdCurl2(ax, y, 13.6, 62.4, 1.9, 0.6, 2.6, 0.7), 1.0, 0.45)
     h += rough(x, y, z, 0.12, 0.6)
-    d = smin(d, h, 1.0)
+    d = smin(d, h, 2.0)
     // embedded 2.5 mm in the wall, no deeper
     return Math.max(d, -2.5 - w)
   }
-  return { sd, bounds: { min: [-20, 35, 84], max: [20, 106, 114.5] } }
+  return { sd, bounds: { min: [-20, 35, 80], max: [20, 95.5, 116.5] } }
 }
 
 /**

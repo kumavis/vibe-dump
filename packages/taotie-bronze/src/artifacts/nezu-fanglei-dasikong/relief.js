@@ -70,7 +70,7 @@ function maker(kit, M, s, kx = 1) {
 // ≈ 1.35 mm pitch (spirals), ridge ≈ groove. The composition — border bundles, scroll columns, the squared spirals in
 // slanted cells, horn bands, hooked eyes — is kit.dasikongBlade (src/kit/relief/motifs/ridges.js), authored in BLADE
 // space (x from the blade's axis, vessel y) off faces/face-blades.jpg; here it is only placed on the panel.
-const RIDGE = { width: 0.8, pitch: 1.4, height: 0.62, groove: 0.32 }
+const RIDGE = { width: 0.78, pitch: 1.4, height: 0.75, groove: 0.35 }
 
 // ------------------------------------------------------------------ whorl bosses (shoulder 285–306, lid 404–419)
 

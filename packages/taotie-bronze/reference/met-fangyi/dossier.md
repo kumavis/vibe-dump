@@ -158,6 +158,33 @@ ends. Its eave edge is a thick plain fillet with no flanges.
   - The tops of the body flanges do **not** rise above the rim.
 - Slot floors and flank grooves hold the strongest **cuprite red** on the vessel (see §d).
 
+### b.7 Form re-measurement (2026-11, after "it reads too squarish")
+
+Measured by overlaying the model's silhouette on the chroma-segmented originals (`.work/fy-form/py/overlay.py`) and by
+a pinhole solve of three-quarter.jpg (`.work/fy-form/py/solve.py`). Supersedes b.3–b.5 where they differ.
+
+- **Camera (three-quarter.jpg).** 10 landmarks (long-face rim / base corners and centre, end-face back edge at rim and
+  ground, end notch jamb, knob ridge), solved jointly with the long-axis wall half-widths at rim and ground: camera
+  ≈ 1.0 m from the axis, 270 mm above the ground, az 26.8°, el 8.2°, full-frame vertical fov 23°, 11 px rms (≈ 1.1 mm).
+  The earlier view (az 26, el 10, fov 19, ≈ 1.07 m) was already within 7 % of that distance: **perspective explains
+  almost none of the "slant"**; the dossier's 0.81 m / fov 26 is not supported (rms rises 2 px at 0.8 m, 5 px at 0.7 m).
+- **Long-axis lean 1.4° confirmed** (1.35–1.47° for any fixed distance 0.7–1.6 m). **Short-axis lean is 1.8°**, not 1.4:
+  side.jpg's flange-tip outline rises 6.2 mm over y 8–152 against 5.15 mm for the 1.4° model shot through the same camera.
+  Rim plan kept (139 × 102); the end-face wall is 93.8 deep at the foot top, 91.7 at the ground.
+- **Walls are straight**, not bowed: the outline is linear within ±0.7 mm on both photographs, if anything 0.5 mm
+  concave at mid-height. Face panels show no measurable pillowing (straight register borders and silhouettes).
+- **Lid.** The slope starts on a **2 mm lip** (162.8–164.8) flush with the rim, not on a 4.8 mm skirt; its long-slope
+  section is an **ogive**, b = B (1 − t^1.325)^0.8: 75° at the eave, 49° mid-slope, 28° at the ridge (side.jpg outline,
+  rms 0.2 mm). Slopes swell ≈ 1 mm along their length (three-quarter shading; side.jpg outline ≈ 1 mm fuller than an
+  unswollen slope). Ridge length 100 stands (the knob ridge is not short either: ≈ 16 mm).
+- **Knob roof** is the same ogive (end outline 0.85 / 0.67 / 0.46 / 0.19 of the half-depth at t 0.24 / 0.47 / 0.71 / 0.94);
+  the post is slightly waisted (6.8 → ≈ 6.2 mm).
+- **Foot notch** corners: r ≈ 4 mm (side.jpg), the notch 14.2 × 14 on the end face.
+- **Open:** in three-quarter.jpg the body reads 2–3 mm per side WIDER than the model (photo-mm, scale by height) and the
+  camera solve puts the long wall at ≈ 145–146 mm at the rim against 139 — i.e. W including flanges ≈ 158–160 vs the
+  published 152 (6 in). Either the published W is low by ~4 % or the corner flanges reach further along x than at 45°.
+  Not changed: the published figure and the end view (which does not see W) cannot settle it.
+
 ## c. DÉCOR MAP
 
 Global rules:
@@ -353,8 +380,8 @@ How the cameras were solved:
 
 | view (ref) | azimuth | elevation | fov | fit | target [x,y,z] mm | conf |
 |---|---|---|---|---|---|---|
-| `three-quarter` (three-quarter.jpg) | 21 | 8 | 26 | 1.08 | — | az ±3, el ±4, fov ±6 |
-| `side` (side.jpg) | 90 | 5 | 26 | 1.08 | — | az ±2, el ±4 |
+| `three-quarter` (three-quarter.jpg) | 26.8 | 8.2 | 23 | 1.29 | [0, 129.6, 0] | 2026-11 solve (§b.7): az ±1, el ±1, distance 0.9–1.1 m |
+| `side` (side.jpg) | 90 | 5 | 20 | 1.3 | — | az ±2, el ±4; distance assumed = the three-quarter's (≈ 1 m) |
 | `detail-face-short` | 90 | 3 | 26 | 0.33 | [68, 81, 0] | |
 | `detail-frieze-short` | 90 | 3 | 26 | 0.26 | [69, 145, 0] | |
 | `detail-foot-short` | 90 | 4 | 26 | 0.26 | [66, 18, 0] | |

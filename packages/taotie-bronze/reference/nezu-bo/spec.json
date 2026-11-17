@@ -7,6 +7,6 @@
     "sectionRatio":    { "expr": "parts.body.d / parts.body.w", "expected": 0.92, "tol": 0.08 },
     "crownWidth":      { "expr": "parts.crown.w / parts.body.w", "expected": 0.635, "tol": 0.04 },
     "crownTop":        { "expr": "parts.crown.h / overall.h", "expected": 0.208, "tol": 0.02 },
-    "bossZoneLow":     { "expr": "parts.bosses.min.1 / overall.h", "expected": 0.286, "tol": 0.02, "note": "round-8 fix: the bosses are drops whose aprons run down to the ledge below (photo-18 / 19); the bottom row's apron reaches the top of the broad border, body y ≈ 161 of 563 (was 0.301: the round dome's foot)" }
+    "bossZoneLow":     { "expr": "parts.bosses.min.1 / overall.h", "expected": 0.302, "tol": 0.02, "note": "bo-fix: the bosses are ROUND domes (Ø 37 mm); the round-8 'drop' was the boss plus its own cast shadow under the top light. The bottom row's foot: body y 189 − 18.5 ≈ 170 of 563 (photo-18 face-bosses: the lit circle closes ≈ 19 mm under the centre)" }
   }
 }

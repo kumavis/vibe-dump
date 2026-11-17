@@ -12,7 +12,7 @@
 // whorls on the cap tops.
 
 import * as THREE from 'three'
-import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildTailRibs, V_SPLIT } from './nezu-jue/form.js'
+import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildTailRibs, buildSpoutLip, V_SPLIT } from './nezu-jue/form.js'
 import { buildHandle, buildPost } from './nezu-jue/sculpture.js'
 import { bandPanel, whorlPanel, PANEL } from './nezu-jue/relief.js'
 
@@ -36,7 +36,7 @@ export default {
   defaultPatina: 'nezu-jue',
   views: {
     // the photograph's station (solved on 8 landmarks, dossier § Camera): θ 122, 12° up, ≈ 1.33 m, a 10° lens
-    side: { azimuth: 122, elevation: 12, fov: 10, fit: 0.8, target: [8.6, 101.9, 0], ref: 'side.jpg' },
+    side: { azimuth: 123.5, elevation: 15, fov: 10, fit: 0.8, target: [9.9, 99.8, 0], ref: 'side.jpg' },
     front: { azimuth: 0, elevation: 10, fov: 26, fit: 1.05, target: [0, 104, 0] },
     'three-quarter': { azimuth: 45, elevation: 14, fov: 26, fit: 1.05, target: [0, 104, 0] },
     handle: { azimuth: 90, elevation: 8, fov: 26, fit: 1.05, target: [0, 104, 0] },
@@ -89,6 +89,8 @@ export default {
     object.add(body)
     // the lip is the wall's own flat edge (RIM.lip thick); the tail carries a rib along each side (fix pass r8)
     for (const m of buildTailRibs(kit, { material: plain, q })) body.add(m)
+    // jue-fix: the spout's rolled rim
+    body.add(buildSpoutLip(kit, { material: plain, q }))
 
     await onProgress(0.6, 'flanges')
     const flanges = []

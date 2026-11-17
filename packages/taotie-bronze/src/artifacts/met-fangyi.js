@@ -2,10 +2,11 @@
 // Reconstruction from reference/met-fangyi/dossier.md (measured from the Met's
 // three photographs) and profile.json. Units mm, Y up, front (+Z) = a long face.
 //
-// Form: a straight-walled box leaning out 1.4°/side, the foot band flush with
-// the wall and notched on every face; a convex hipped lid with a long ridge and
-// near-gable ends; a miniature hipped-roof knob on a plain post; 18 comb flanges
-// (4 pitch slots) running unbroken through the registers.
+// Form: a straight-walled box leaning out 1.4°/side on the long axis and 1.8° on the short one, the foot
+// band flush with the wall and notched on every face (r 4 corners); an OGIVAL cushion lid (kit hippedLid
+// `section` + `pillow`) rising off a 2 mm lip flush with the rim, long ridge, near-gable ends; a miniature
+// ogival roof knob on a waisted post; 18 comb flanges (4 pitch slots) running unbroken through the registers.
+// Measurements: reference/met-fangyi/dossier.md § b.7.
 // Décor (round 5): TRACED off the flattened photographs (reference/met-fangyi/faces/) in face mm and
 // drawn with the kit's rounded vocabulary — met-fangyi/traced.js; the knob's line work is decor.js.
 

@@ -12,7 +12,7 @@
 
 import * as THREE from 'three'
 import { H, K, WALL, TOP, LAYOUT, PANEL_W, halfLength, sectionXZ, faceTheta, pointAt, normalAt } from './nezu-bo/form.js'
-import { upperPanel, lowerPanel } from './nezu-bo/decor.js'
+import { upperPanels, lowerPanels } from './nezu-bo/decor.js'
 import { bossMaps, buildBosses } from './nezu-bo/bosses.js'
 import { buildCrown } from './nezu-bo/crown.js'
 
@@ -107,21 +107,27 @@ export default {
     object.name = 'nezu-bo'
     const panels = {}
 
+    // two panels per zone: the mirrored zones are shared, the repeated ones (top band, central panel, field) differ
+    // between the right (R) and left (L) half-faces (nezu-bo/decor.js)
     await onProgress(0.05, 'upper décor')
-    panels.upper = upperPanel(kit, { ppmm, seed, y0: LAYOUT.split }).bake()
+    const up = upperPanels(kit, { ppmm, seed, y0: LAYOUT.split })
+    panels.upper = up.R.bake()
+    panels.upperL = up.L.bake()
     await onProgress(0.35, 'lower field')
-    panels.lower = lowerPanel(kit, { ppmm, seed: seed + 1, height: LAYOUT.split }).bake()
+    const lo = lowerPanels(kit, { ppmm, seed: seed + 1, height: LAYOUT.split })
+    panels.lower = lo.R.bake()
+    panels.lowerL = lo.L.bake()
     await onProgress(0.55, 'body')
 
     const body = new THREE.Group()
     body.userData.part = 'body'
-    const matU = new kit.PatinaMaterial({ relief: panels.upper })
-    const matL = new kit.PatinaMaterial({ relief: panels.lower })
+    const mats = Object.fromEntries(['upper', 'upperL', 'lower', 'lowerL'].map((k) => [k, new kit.PatinaMaterial({ relief: panels[k] })]))
     const density = 0.62 * Math.sqrt(q)
     for (const face of [1, -1]) {
       for (const side of [1, -1]) {
-        body.add(facePatch(kit, { face, side, y0: LAYOUT.split, y1: H, relief: panels.upper, material: matU, density }))
-        body.add(facePatch(kit, { face, side, y0: 0, y1: LAYOUT.split, relief: panels.lower, material: matL, density }))
+        const u = side > 0 ? 'upper' : 'upperL', l = side > 0 ? 'lower' : 'lowerL'
+        body.add(facePatch(kit, { face, side, y0: LAYOUT.split, y1: H, relief: panels[u], material: mats[u], density }))
+        body.add(facePatch(kit, { face, side, y0: 0, y1: LAYOUT.split, relief: panels[l], material: mats[l], density }))
       }
     }
     // inside: wall, mouth rim, ceiling; outside: the flat top

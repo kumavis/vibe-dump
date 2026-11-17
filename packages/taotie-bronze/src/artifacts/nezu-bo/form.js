@@ -118,13 +118,15 @@ export const LAYOUT = {
   mouth: [0, 18], // plain margin above the mouth (the lowest row of the field is worn almost flat)
   field: [18, 144.5], // the broad lower field (鼓部): large interlace
   border: [147.5, 161.5], // the broad raised border over the field
-  rows: [[161.5, 215], [267, 319], [370, 432]], // three rows of three coiled bosses per half-face (枚)
+  rows: [[161.5, 215], [267, 319], [370, 424.5]], // three rows of three coiled bosses per half-face (枚)
   bands: [[222, 261], [326, 361.5]], // two bands of interlace between them (篆)
-  ledges: [[215, 222], [261, 267], [319, 326], [361.5, 370], [432, 437.5]], // raised strips framing them (with their shadowed foot)
-  topBand: [437.5, 450], // the band of twisted pairs round the top
-  panel: { top: 30.5, bottom: 32, y: [161.5, 432] }, // the central panel (钲): frame outer edge, panel mm
+  ledges: [[215, 222], [261, 267], [319, 326], [361.5, 370], [424.5, 431.5]], // raised strips framing them (with their shadowed foot)
+  // bo-fix: the top band is ≈ 18.5 mm wide, not 12.5 (dev-upper-18 / 19: band 431–449, the dark ledge 421–431 under it,
+  // the panel's frame starting ≈ 421), so the top ledge comes down 7 mm; the reviewer's 25 mm / −10 mm is too much
+  topBand: [431.5, 450], // the band of interlocked rings round the top
+  panel: { top: 30.5, bottom: 32, y: [161.5, 424.5] }, // the central panel (钲): frame outer edge, panel mm
   frame: 4.8, // the raised frame strips (mm): the panel's dark side frames ≈ 5 mm (face-panel)
   end: [243, PANEL_W], // the vertical strip along the edge (panel x)
-  bosses: { x: [59.5, 139.5, 213], y: [189, 293, 401], r: 19, height: 13 },
+  bosses: { x: [59.5, 139.5, 213], y: [189, 293, 401], r: 18.5, height: 13 }, // round domes Ø 37 (bo-fix; nezu-bo/bosses.js)
   split: 146, // lower patch [0, split] (field + mouth), upper patch [split, H]: the seam lies in the plain gap under the border
 }

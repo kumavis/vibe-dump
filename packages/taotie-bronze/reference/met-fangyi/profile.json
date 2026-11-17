@@ -296,38 +296,38 @@
   ]
  },
  "bodyFaces": {
-  "note": "wall surface between flanges (no flanges), estimated; linear taper, walls lean OUT going up",
+  "note": "wall surface between flanges (no flanges); linear taper, walls lean OUT going up. Short axis (z, 'short' column) re-measured 2026-11: 1.8 deg/side from side.jpg (flange tips 52.2 -> 58.4 mm, compared through the same camera with the model), rim plan kept; long axis 1.4 deg confirmed by a pinhole solve of three-quarter.jpg (1.35-1.47 deg for any camera distance 0.7-1.6 m). Outline is straight within +/-0.7 mm (if anything 0.5 mm concave mid-height, i.e. NOT bowed).",
   "table": [
    {
     "y": 0,
     "long": 131,
-    "short": 94
+    "short": 91.7
    },
    {
     "y": 33,
     "long": 132.6,
-    "short": 95.6
+    "short": 93.8
    },
    {
     "y": 129,
     "long": 137.4,
-    "short": 100.4
+    "short": 99.8
    },
    {
     "y": 162.2,
     "long": 139,
-    "short": 102
+    "short": 101.9
    }
   ],
   "tolerance_mm": 3,
   "taperDegPerSide": {
    "x": 1.4,
-   "z": 1.4,
-   "tol": 0.7
+   "z": 1.8,
+   "tol": 0.4
   }
  },
  "lidSection": {
-  "note": "long-slope cross-section across the short axis (seen from the end), [halfWidth, y]; silhouette includes ~6 mm of flange, surface = silhouette offset 6 mm inward along the normal. Convex roof: ~62 deg at the eave, ~45 deg mid-slope, ~35 deg at the ridge.",
+  "note": "long-slope cross-section across the short axis (seen from the end), [halfWidth, y]; silhouette includes ~6 mm of flange, surface = silhouette offset 6 mm inward along the normal. Convex roof: ~62 deg at the eave, ~45 deg mid-slope, ~35 deg at the ridge. NB: the 6 mm offset used for 'surface' is too large near mid-slope (the model, built through the same camera, needs ~8 mm there): 'surface' reads ~2.5 mm too wide at y 190-212; use lidSection.model.",
   "silhouette": [
    [
     54.6,
@@ -611,7 +611,18 @@
     4.2,
     224.1
    ]
-  ]
+  ],
+  "model": {
+   "note": "what the model builds (src/artifacts/met-fangyi.js SECTION): lip 162.8-164.8 (2 mm, flush), then the long-slope surface b = 50.96 (1 - t^1.325)^0.8, t = (y - 164.8)/59.3: 75 deg at the eave, 57 / 49 / 41 at 1/4, 1/2, 3/4, 28 at the ridge; fitted to the end-view silhouette (rms 0.2 mm on the silhouette-minus-model-offset samples y 176-218), slopes pillowed 1.0 mm (long) / 0.8 mm (end) at mid-length",
+   "eaveY": 164.8,
+   "ridgeY": 224.1,
+   "alpha": 1.325,
+   "beta": 0.8,
+   "pillow": {
+    "long": 1.0,
+    "short": 0.8
+   }
+  }
  },
  "registers": [
   {
@@ -680,6 +691,9 @@
    "h": 14.0,
    "tol": 3
   },
-  "shape": "rectangular, top corners filleted r~2 mm"
+  "shape": "rectangular, top corners rounded r ~4 mm (side.jpg: 14.2 wide x 14 high, corner arcs 40-50 px at 0.09 mm/px)"
+ },
+ "knob": {
+  "note": "end-view outline of the knob roof (from endViewSilhouette y 238-254) follows the same ogive: half-width/half-depth 0.85 / 0.67 / 0.46 / 0.19 at t 0.24 / 0.47 / 0.71 / 0.94; model (1 - t^1.3)^0.8, pillow 0.4 mm, post waist 0.1 (side.jpg: 6.8 mm at the top, ~6.2 mm mid-height)"
  }
 }

@@ -18,37 +18,88 @@ export const D = {
   eaveT: 12, //         slab thickness (M)
   eaveA: 166, //        half eave width (M ≈ 1.5 × the lobe width, side photos)
   collarA: 158, //      half collar width where it meets the eave (a cavetto: near-vertical below, flaring hard under the slab; 39, 42)
-  capA: 130, //         half cap width at its skirt (M 0.78 × eave)
-  //                    the slopes are a short steep leiwen border; the creature fills the domed plateau (44)
-  capSkirt: 6,
-  capTop: 468, //       cap plateau edge (M/I: a cushion; the plateau itself domes a further D.dome at its centre)
-  dome: 44, //          plateau crown above its edge (photos 39, 42: the cap reads as one swelling cushion)
-  topA: 104, //         half plateau width (44: the plateau is nearly the whole cap)
+  // THE TOP (dossier § The top: a face): one swelling cushion over a plain eave border, the face in high relief
+  capA: 140, //         half width of the cushion foot on the eave top (M 41/44 rectified: field edge ≈ ±140; 39: 0.84 of the eave)
+  capTop: 488, //       cushion shoulder / plateau edge (M 39: ≈ 46 mm above the eave top, steep sides rounding over)
+  dome: 6, //           plateau crown above its edge (the top reads nearly flat in 15, 39, 42)
+  topA: 106, //         half width of the plateau at the shoulder (M 41/44)
+  capN: 5, //           superellipse exponent of the cushion plan (soft rounded corners, 41/44)
   crease: { c: 10, r: 40 }, // lobe overlap past the centre plane and front-inner corner radius: crease ≈ 13 mm deep
   bulge: 7, //          lobe face bow (mm, at mid face)
 }
 D.eaveTop = D.eave + D.eaveT
 D.capBase = D.eaveTop
 
-// the spout: root inside the cap, axis tilted back 25° from vertical, outer Ø 46, bore Ø 30
-// root a little off the spine toward −X, at the end of the ridge (43, 44); 65° from horizontal (39: ≈ 60–64°, 42: 58–62°)
-export const SPOUT = { root: [-22, 470, -62], angle: 65, r: 23, bore: 15, length: 276 }
+// the spout: root inside the cap ON THE AXIS (x = 0) behind the face's eyes, rising out of the face like a crest;
+// axis tilted back 25° from vertical, outer Ø 46, bore Ø 30; 65° from horizontal (39: ≈ 60–64°, 42: 58–62°)
+export const SPOUT = { root: [0, 470, -60], angle: 65, r: 23, bore: 15, length: 276 }
 {
   const a = (SPOUT.angle * Math.PI) / 180
   SPOUT.axis = new THREE.Vector3(0, Math.sin(a), -Math.cos(a))
   SPOUT.tip = new THREE.Vector3(...SPOUT.root).addScaledVector(SPOUT.axis, SPOUT.length)
 }
-// filling hole (a real opening, kidney-shaped, raised rolled rim) beyond the ridge's handle-side end, off the spine
-// (photos 43, 44); the crenellated ridge runs along Z from the spout root (39, 42, 43, 44: five massive blocks)
-export const HOLE = { c: [-22, 64], rx: 24, rz: 15.5 } // world x, z
-export const RIDGE = { x: -28, z0: -60, z1: 32, height: 22, thickness: 13 }
+// The top is ONE face looking up, symmetric about x = 0 (the spout → handle axis; 15, 41 + 44 as mirror halves).
+// The filling hole is its MOUTH: an oval on the axis toward the handle end, a little pinched at the back (15, 41, 44),
+// with a soft rolled lip; the crenellated ridge (five blocks, 39 / 42) is the nose, running on the axis from the
+// spout root to the mouth's back rim. World x, z.
+export const HOLE = { c: [0, 84], rx: 35, rz: 23, pinch: 0.16, lip: 5.5 }
+export const RIDGE = { x: 0, z0: -46, z1: 55, height: 20, thickness: 18, blocks: 5 }
 
-/** plateau top surface height at world (x, z) (the domed plate; relief not included) */
-export function plateauY(x, z) {
-  const a = D.topA
-  const u = Math.min(1, Math.abs(x) / a), v = Math.min(1, Math.abs(z) / a)
-  return D.capTop + D.dome * (1 - u * u * u) * (1 - v * v * v)
+const smooth01 = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t))
+
+/** superellipse radius of the cushion plan at (x, z) */
+export function capR(x, z) {
+  const n = D.capN
+  return Math.pow(Math.pow(Math.abs(x), n) + Math.pow(Math.abs(z), n), 1 / n)
 }
+
+/** signed distance (mm, ≈) outside the mouth's outline (negative inside) */
+export function holeDist(x, z) {
+  const dx = x - HOLE.c[0], dz = z - HOLE.c[1]
+  const rz = dz < 0 ? HOLE.rz * (1 - HOLE.pinch * Math.exp(-(dx * dx) / 120)) : HOLE.rz
+  const q = Math.hypot(dx / HOLE.rx, dz / rz)
+  return (q - 1) * (q < 1 ? Math.min(HOLE.rx, rz) : (HOLE.rx + rz) / 2)
+}
+
+/** the mouth's outline (world x, z), CCW seen from above */
+export function holeOutline(n = 64) {
+  const pts = []
+  for (let i = 0; i < n; i++) {
+    const th = (i / n) * Math.PI * 2
+    const dx = HOLE.rx * Math.cos(th)
+    let dz = HOLE.rz * Math.sin(th)
+    if (dz < 0) dz *= 1 - HOLE.pinch * Math.exp(-(dx * dx) / 120)
+    pts.push([HOLE.c[0] + dx, HOLE.c[1] + dz])
+  }
+  return pts
+}
+
+/** the bare cushion (no lip, no relief) at world (x, z): eave top at the foot, steep sides rounding over to a
+ *  nearly flat plateau */
+export function cushionY(x, z) {
+  const r = capR(x, z)
+  const base = D.eaveTop
+  if (r >= D.capA) return base
+  const top = D.capTop
+  if (r > D.topA) {
+    const t = (D.capA - r) / (D.capA - D.topA)
+    return base + (top - base) * (1 - Math.pow(1 - t, 2.2))
+  }
+  const u = r / D.topA
+  return top + D.dome * (1 - u * u) * (1 - u * u)
+}
+
+/** cushion + the mouth's soft rolled lip (relief not included) */
+export function capTopY(x, z) {
+  let y = cushionY(x, z)
+  const d = holeDist(x, z)
+  if (d < 22) {
+    y += HOLE.lip * Math.exp(-(((d - 5.5) / 4.6) ** 2)) // the rolled lip
+    if (d < 6) y -= 0.3 * (6 - Math.max(0, d)) ** 2 // rolling over into the opening
+  }
+  return y
+}
+export const plateauY = capTopY
 
 const smooth = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t))
 const lerp = (a, b, t) => a + (b - a) * t

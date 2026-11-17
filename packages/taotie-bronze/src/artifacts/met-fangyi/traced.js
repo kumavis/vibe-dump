@@ -19,6 +19,7 @@
 
 import { carveSpirals } from './relief.js'
 import FOOT_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-foot.plates.json'
+import MAIN_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-main.plates.json'
 import FRIEZE_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-frieze.plates.json'
 import END_PLATES from '../../../reference/met-fangyi/faces/face-end.plates.json'
 
@@ -32,7 +33,7 @@ const LINE = 0.6 // every hand groove on a plateau top, mm (research/04: 0.4–0
  * Main mask, long face, left half — face-long-main.jpg mm (vessel y = fy + 31, x = fx − 76).
  * Read from .work/r5-met-fangyi/grid/{mainL,hornL,lowL,midL}.png.
  */
-export const MAIN_LONG = [
+export const MAIN_LONG_R5 = [
   // H1 horn: ONE plateau, a fat G — the column by the axis (x 40–55, two Ø 10 spirals), the top band
   // (three Ø 5.5–6 spirals), the outer column, the return along the bottom that rolls into the curl
   // (a squared coil whose eye sits up and out at 25.4, 72.4); a slot rises from the bottom between
@@ -280,6 +281,47 @@ export const FOOT_LONG = [
     // the eye (right-half face mm, mirrored): rounded-square boss, a small sunk pupil low toward the snout
     pillows: [{ c: [101.0, 18.25], w: 5.6, h: 5.9, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.2, width: 0.9, depth: 0.6, offset: [-0.4, -0.5], rot: 60 } }],
     refit: () => FOOT_END, // the end face has its own tracing
+  },
+]
+
+/**
+ * Main mask, long face — face-long-main.jpg mm (vessel y = fy + 31), face-long-main.trace.json. The horn is ONE
+ * band: the column beside the axis strip rising into a generous curve, the ticked top band, the outer column,
+ * the return along the bottom rolling inward on itself into the curl, a slot rising between curl and column;
+ * the brow Γ, the eye boss (≈ 15 × 13 mm), the ear C and tail S on the outer edge, the jaw G rolled in round its
+ * own curl, and the axial strip (upper column, Γ arm, lower column with its foot lobe). Spirals at the bronze's
+ * 1.3 mm pitch, rounded-square (detail-face-long).
+ */
+export const MAIN_HEIGHT = 3.0 // band tops above the ground (detail-face-long: the horn's wall ≈ 10–13 px at az 21°, ≈ 9.8 px/mm → ≈ 3 mm)
+export const MAIN_LONG = [
+  {
+    kind: 'plates', name: 'main', data: MAIN_LONG_PLATES, axis: 76,
+    opts: { height: MAIN_HEIGHT, shoulder: 1.0, contour: { inset: 1.4, line: 0.62 }, depth: 0.55 },
+    line: 0.62, lineDepth: 0.5, spiral: { pitch: 1.3, ex: 3.0, rIn: 0.3 },
+    deco: {
+      spirals: [
+        [105.5, 77.2, 7.4, 1], [104.8, 66.4, 7.0, -1], [113.8, 80.8, 4.2, 1], [118.7, 81.2, 4.2, -1], [123.9, 81.2, 4.2, 1], [128.6, 81.0, 4.0, -1], // horn
+        [124.2, 69.8, 5.6, -1], // the horn's curl
+        [130.3, 50.2, 5.6, 1], [129.6, 41.6, 3.2, -1], // ear
+        [128.6, 26.8, 5.0, 1], [125.8, 9.0, 4.6, -1], // tail
+        [101.4, 21.0, 3.8, 1], [105.8, 21.2, 3.8, -1], [110.4, 21.2, 3.8, 1], [115.0, 21.0, 3.6, -1], [109.6, 12.2, 6.8, 1], // jaw row + curl
+        [82.8, 80.4, 6.2, 1], [82.8, 71.6, 6.2, -1], [82.8, 63.2, 6.2, 1], [88.6, 52.6, 4.6, 1], // axial strip
+        [82.6, 41.4, 6.0, -1], [82.6, 34.0, 6.0, 1], [82.6, 26.6, 6.0, -1], [82.6, 19.4, 6.0, 1], [83.2, 10.0, 6.4, -1],
+      ],
+      lines: [
+        [[101.0, 85.0], [133.0, 85.0], [133.0, 64.8], [120.6, 64.8]], // the horn band's inner edge, round to the curl
+        ...[106, 110, 114, 118, 122, 126, 130].map((x) => [[x, 86.4], [x, 88.4]]), // ticks on the top band
+        [[101.6, 52.6], [114.6, 52.6], [114.6, 47.6]], // brow
+        ...[88.4, 89.8].map((y) => [[79.8, y], [86.2, y]]), // the axial strip's scored cap
+      ],
+      pockets: [
+        { pts: [[119.6, 64.4], [129.8, 64.4], [129.8, 75.4], [119.6, 75.4]], round: [2.4, 2.4, 3.0, 3.0], depth: 0.5 },
+        { pts: [[103.0, 7.2], [116.2, 7.2], [116.2, 17.4], [103.0, 17.4]], round: [2.4, 2.4, 2.4, 2.8], depth: 0.5 },
+      ],
+    },
+    pillows: [{ c: [107.35, 35.1], w: 15.3, h: 13.3, round: 0.55, height: 3.9, crown: 0.9, slit: { len: 4.8, width: 1.0, depth: 0.8, offset: [0, -0.5] } }],
+    // the end face and the lid keep round 5's elements (re-fitted) until they are traced
+    refit: (fits, o) => refit(MAIN_LONG_R5.filter((e) => fits !== LID_END_FIT || !LID_END_DROP.includes(e.name)), fits, o),
   },
 ]
 
