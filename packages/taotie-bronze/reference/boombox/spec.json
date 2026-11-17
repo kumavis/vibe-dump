@@ -1,0 +1,17 @@
+{
+  "note": "A generic 1980s portable radio-cassette player dressed with the Taotie Kit; a showpiece, not a museum object. Sizes chosen (reference/boombox/SOURCES.md): faceplate 464 x 209 (the box behind it 456 wide), 124 deep, on 12 mm feet; speaker openings 120 mm across at +/-148 mm; cassette door 120 x 74; handle bar centre line 296 mm above the floor. These ratios check that the build keeps those proportions.",
+  "dimensions": { "w": 464, "h": 221, "d": 124, "chosen": true },
+  "ratios": {
+    "bodyWidth":     { "expr": "parts.body.w",                     "expected": 464,   "tol": 1.5 },
+    "bodyAspect":    { "expr": "parts.body.w / parts.body.h",      "expected": 2.22,  "tol": 0.03 },
+    "speakerSpan":   { "expr": "parts.speakers.w / parts.body.w",  "expected": 0.90,  "tol": 0.02 },
+    "speakerCount":  { "expr": "parts.speakers.count",             "expected": 2,     "tol": 0 },
+    "doorWidth":     { "expr": "parts.door.w",                     "expected": 120,   "tol": 1 },
+    "doorOverBody":  { "expr": "parts.door.w / parts.body.w",      "expected": 0.259, "tol": 0.01 },
+    "handleTop":     { "expr": "parts.handles.max.1",              "expected": 302,   "tol": 2 },
+    "standsOnFeet":  { "expr": "parts.legs.min.1",                 "expected": 0,     "tol": 0.3 },
+    "legCount":      { "expr": "parts.legs.count",                 "expected": 4,     "tol": 0 },
+    "knobCount":     { "expr": "parts.knobs.count",                "expected": 3,     "tol": 0 },
+    "headCount":     { "expr": "parts.heads.count",                "expected": 2,     "tol": 0 }
+  }
+}

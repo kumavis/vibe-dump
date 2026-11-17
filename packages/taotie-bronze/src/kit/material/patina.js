@@ -366,16 +366,18 @@ export const PATINA_PRESETS = {
   // grey-beige, bright malachite in broad soft territories over belly, lid and foot (green powder packed into the
   // leiwen), small red-brown earth in the deep pockets, the lid top and neck darker and greener
   'nezu-you': {
+    // ridge pass: the review found the green too saturated and speckled — paler, earthier malachite in broader, softer
+    // fields, almost no specks, darker grooves (inlay paste), paler worn relief tops over a greyer skin
     // round r8-fix (photos 31/32): large connected malachite fields (lid top, left neck, left belly lobe) over a
     // grey-brown metal skin, pale grey-tan worn band tops, earthy rust-brown in the ground and recesses; no confetti
     age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.55, cuprite: 0.7, cupriteTone: 0.35, tinOxide: 0.9,
-    tinOxideTone: 1.2, malachite: 0.74, carbonate: 0.08, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.36,
-    islands: 0.6, malachiteScale: 1.6, crust: 0.2, chloride: 0, soot: 0, crevice: 0.95, patchScale: 95,
-    mottleScale: 16, patchiness: 1, softness: 0.45, drift: 0.4, earth: 0.24, earthColor: '#6e5236', calcite: 0.02,
-    streaks: 0.05, burialSide: 0.1, recessDirt: 0.8, interiorTone: 0.5, wax: 0, inlay: 0, inlayGround: 0,
-    wear: 0.22, dulling: 0.36, tops: 1, nobleWarmth: 0.55, matte: 1, topsTone: 0.6, ledgeMatte: 1, nobleRelief: 1,
-    tint: '#c8c2ac', speckle: 0.012, speckleScale: 1.4, speckleColor: '#2f9a64', speckleDecor: 0.1, crustIsles: 0,
-    crustScale: 7, crustColor: '#3aa070', crustPlace: 0.4, pustules: 0.012, pustuleScale: 3, pustuleColor: '#22a060', grain: 0.6,
+    tinOxideTone: 1.2, malachite: 0.62, carbonate: 0.08, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.52,
+    islands: 0.4, malachiteScale: 1.6, crust: 0.2, chloride: 0, soot: 0, crevice: 0.95, patchScale: 120,
+    mottleScale: 22, patchiness: 0.85, softness: 0.7, drift: 0.4, earth: 0.24, earthColor: '#6e5236', calcite: 0.02,
+    streaks: 0.05, burialSide: 0.1, recessDirt: 1, interiorTone: 0.5, wax: 0, inlay: 0.45, inlayGround: 0,
+    wear: 0.32, dulling: 0.36, tops: 1, nobleWarmth: 0.55, matte: 1, topsTone: 0.7, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#b8b2a0', speckle: 0.003, speckleScale: 1.4, speckleColor: '#2f9a64', speckleDecor: 0.1, crustIsles: 0,
+    crustScale: 7, crustColor: '#3aa070', crustPlace: 0.4, pustules: 0.003, pustuleScale: 3, pustuleColor: '#22a060', grain: 0.6,
   },
 
   // Nezu jia 90067 (owner's photographs 21/22): a dark grey-olive skin densely freckled with bright malachite and
@@ -565,6 +567,30 @@ export const PATINA_PRESETS = {
     crustIsles: 0.1, crustScale: 9, crustColor: '#9fb8a0', crustPlace: 0.9, pustules: 0.012, pustuleScale: 3,
     pustuleColor: '#2f9a64', grain: 0.6,
   },
+  // the boombox (a kit showpiece): a dark olive-brown noble skin, malachite gathered in the speaker sockets, the leiwen
+  // and every recess (groove-bound, not open crust), relief tops rubbed paler so the mask reads at thumbnail size; the
+  // tuner needle is turquoise inlay by its own material (meshTint), not here
+  'boombox': {
+    age: 1, tin: 0.16, lead: 0.05, polish: 0.5, tarnish: 0.85, cuprite: 0.45, cupriteTone: 0.25, tinOxide: 0.9,
+    tinOxideTone: 0.8, nobleWarmth: 0.6, malachite: 0.22, carbonate: 0.04, azurite: 0, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.35, islands: 0.22,
+    malachiteScale: 1.3, crust: 0.18, chloride: 0.02, soot: 0, crevice: 1, patchScale: 80, mottleScale: 9,
+    patchiness: 0.6, softness: 0.5, drift: 0.15, earth: 0.06, earthColor: '#5e4a36', calcite: 0.03, streaks: 0.04,
+    burialSide: 0.1, recessDirt: 0.6, interiorTone: 0.25, wax: 0.1, inlay: 0, wear: 0.28, dulling: 0.2,
+    tops: 0.8, topsTone: 0.7, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.9, grain: 0.5, tint: '#ebe2d0',
+  },
+  // the portal gun (a kit showpiece): a dark olive-brown noble skin, malachite packed into the ridge grooves, the
+  // portal steps and every recess, ridge and relief tops worn paler so the mask's ridge work reads at thumbnail size;
+  // the turquoise inlay (core lenses, dial stone, cell windows) is its own stone material, clean against it
+  'portal-gun': {
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.4, tarnish: 0.9, cuprite: 0.45, cupriteTone: 0.2, tinOxide: 0.92,
+    tinOxideTone: 0.7, nobleWarmth: 0.8, malachite: 0.3, carbonate: 0.04, azurite: 0, azuriteScale: 9,
+    blueHabitat: 0, turquoiseTone: 0.4, malachiteHue: 0.45, malachiteTone: 0.4, islands: 0, malachiteScale: 2.2,
+    crust: 0.05, chloride: 0.01, soot: 0, crevice: 1, patchScale: 90, mottleScale: 10, patchiness: 1, softness: 0.9,
+    drift: 0.2, earth: 0.05, earthColor: '#4e3e2e', calcite: 0.01, streaks: 0.02, burialSide: 0.05, recessDirt: 0.8,
+    interiorTone: 0.3, wax: 0.08, inlay: 0.3, wear: 0.3, dulling: 0.15, tops: 0.9, topsTone: 0.8, matte: 0.55,
+    ledgeMatte: 0.6, nobleRelief: 0.95, grain: 0.5, speckle: 0, crustIsles: 0, pustules: 0, tint: '#a89c84',
+  },
 }
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
@@ -572,7 +598,7 @@ export const PATINA_PRESET_GROUPS = {
   Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu', 'nezu-hu', 'nezu-bo'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
-  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot', 'crt-computer', 'airship'],
+  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot', 'crt-computer', 'airship', 'boombox', 'portal-gun'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)

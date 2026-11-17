@@ -8,7 +8,7 @@
 // overhangs the foot, a straight neck, a lid with a decorated skirt, a flaring eave, a low conical top with
 // notched ridge flanges along the long axis, a mushroom knob (a spirally grooved cap on a short stalk) and an upturned
 // horn at each end. The bail is a flat strap pivoting on two ram heads in the round, standing ≈ 30 mm proud at the centres of the broad faces' necks (nezu-you/shell.js).
-// Décor (nezu-you/decor.js) is TRACED from the flattened faces of photo-31 (reference/nezu-you/faces/).
+// Décor (nezu-you/decor.js → belly / friezes / strap / lid): photo-31 developed onto each register, redrawn in fat banded relief.
 
 import * as THREE from 'three'
 import { OVAL, RK, LV, BODY, LID, BAIL, bailHalfLength, knobSDF, hornSDF, pivotHeadSDF } from './nezu-you/form.js'

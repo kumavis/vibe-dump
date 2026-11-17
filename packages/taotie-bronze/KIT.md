@@ -450,6 +450,9 @@ kit.tracedPlates(panel, PLATES, {
   bosses: null, boss: { height: 2.6, crown: 0.65, hole: { depth: 1.2 }, ring: false },   // default: PLATES.bosses (pillow eyes)
   ground: false, groundRegion: null,   // leiwen opts → pack the ground (everything that is not plate) here
   clip: null, seed: 0 })        // → { plates, area (mm² raised), bosses, ground, ms }
+// union: true (optional, additive; default false = even-odd as before): overlapping outlines MERGE (nonzero fill, outers
+//   rewound CCW, holes CW) instead of cancelling — draw a creature as overlapping roundStroke / roundPoly outlines
+//   (kit.elementContour(el, 0)) and get one plate with its contour lines round the union (src/artifacts/nezu-you/*.js)
 kit.faceMap({ cx, ox, kx, y })  // helper: (x, y) ↦ (ox + kx·(x − cx), y(y))
 ```
 One `panel.raise` (a shoulder/pillow profile of the edge distance) + one `panel.sink` (every contour line and sunk

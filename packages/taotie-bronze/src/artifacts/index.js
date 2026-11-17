@@ -1,6 +1,7 @@
 // The artifact registry: one line per artifact, alphabetical by file name.
 // Each module's default export follows the artifact contract in KIT.md.
 export { default as airship } from './airship.js'
+export { default as boombox } from './boombox.js'
 export { default as crtComputer } from './crt-computer.js'
 export { default as demoFangding } from './demo-fangding.js'
 export { default as houmuwuDing } from './houmuwu-ding.js'
@@ -21,6 +22,7 @@ export { default as nezuJia } from './nezu-jia.js'
 export { default as nezuJue } from './nezu-jue.js'
 export { default as nezuYou } from './nezu-you.js'
 export { default as nezuZun } from './nezu-zun.js'
+export { default as portalGun } from './portal-gun.js'
 export { default as stanfordDragon } from './stanford-dragon.js'
 export { default as suzanne } from './suzanne.js'
 export { default as utahTeapot } from './utah-teapot.js'
