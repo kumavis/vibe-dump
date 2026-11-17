@@ -218,19 +218,20 @@ function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
  *    cavity (lugCavity) that the plain wall panel cannot carry.
  */
 export function lugSDF() {
-  const YC = 71.5, RL = 9, TL = 3.3, XL = 6.4 // loop: centre, centre-line radius, half thickness, half width
-  const back = (x, y) => 12 - 2 * clamp((52 - y) / 13, 0, 1) + 1.3 * Math.min(1, (x / 15) ** 2)
+  const YC = 66, RL = 9, TL = 3.3, XL = 6.4 // loop: centre, centre-line radius, half thickness, half width
+  // the back: 12 mm off the wall, leaning forward under the crown so the top is a thin crest with the gap open behind it
+  const back = (x, y) => 12 - 2 * clamp((52 - y) / 13, 0, 1) + 3.5 * clamp((y - 74) / 10, 0, 1) * Math.max(0, 1 - (x / 17) ** 2) + 1.3 * Math.min(1, (x / 15) ** 2)
   // the head's front surface (w): a dome rolling back over the top and in to the chin; the muzzle's bulge
   const S = (x, y) => {
     const dy = y - 58, L = dy > 0 ? 40 : 24
     const g = Math.sqrt(Math.max(0, 1 - (x / 18.5) ** 2 - (dy / L) ** 2))
-    return 12 - 2 * clamp((52 - y) / 13, 0, 1) + 10.5 * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
+    return 12 - 2 * clamp((52 - y) / 13, 0, 1) + 10.5 * g + 1.3 * Math.exp(-((x / 6.5) ** 2) - ((y - 42) / 4) ** 2)
   }
-  const hwAt = (y) => (y > 62 ? 12 + 3.6 * clamp((y - 62) / 4.5, 0, 1) : 8 + 4 * Math.pow(clamp((y - 44) / 18, 0, 1), 0.85))
+  const hwAt = (y) => (y > 62 ? 12 + 3.6 * clamp((y - 62) / 4.5, 0, 1) : 7 + 5 * Math.pow(clamp((y - 44) / 18, 0, 1), 0.85))
   const outline = (x, y) => {
     const top = sdEllipse2(x, y - 70, 16.2, 14.5)
     const mid = Math.max((Math.abs(x) - hwAt(y)) * 0.95, y - 68, 45 - y)
-    const chin = sdEllipse2(x, y - 46.5, 8.0, 7.5)
+    const chin = sdEllipse2(x, y - 44, 7.0, 7.5)
     return smin(Math.max(top, 62 - y), smin(mid, chin, 2.5), 2.5)
   }
   const sd = (x, y, z) => {
@@ -248,7 +249,7 @@ export function lugSDF() {
     }
     // ---- the head
     const s0 = S(x, y), wb = back(x, y)
-    let h = smax(smax(outline(x, y), w - s0, 2.6), wb - w, 1.6)
+    let h = smax(smax(outline(x, y), w - s0, 2.2), wb - w, 1.0)
     const raise = (f, ht, k = 0.5) => { h = smin(h, Math.max(f, w - (s0 + ht), wb + 1 - w), k) }
     const cut = (f, base, depth, k = 0.25) => { h = smax(h, -Math.max(f, base - depth - w), k) }
     // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 66
@@ -280,13 +281,13 @@ export function lugSDF() {
     raise((ax + Math.abs(y - 57.6) - 2.9) * 0.707, 1.4, 0.5)
     cut(len2(x, y - 57.6) - 0.75, s0 + 1.4, 0.5)
     // eyes: round domes set wide, in curled lids whose tails flick up and out
-    const ex = 6.6, ey = 51.8
-    const lid = Math.min(sdCurl2(ax, y, ex, ey, 3.0, 0.55, -2.2, 0.55), sdSeg2(ax, y, ex + 2.6, ey + 1.4, ex + 4.0, ey + 4.0, 0.55))
+    const ex = 6.0, ey = 51.6
+    const lid = Math.min(sdCurl2(ax, y, ex, ey, 2.7, 0.5, -2.2, 0.55), sdSeg2(ax, y, ex + 2.3, ey + 1.3, ex + 3.8, ey + 4.0, 0.5))
     raise(lid, 1.1, 0.45)
-    h = smin(h, sdEllipsoid(ax - ex, y - ey, w - (S(ex, ey) + 0.3), 2.2, 2.1, 1.9), 0.5)
+    h = smin(h, sdEllipsoid(ax - ex, y - ey, w - (S(ex, ey) + 0.3), 2.0, 1.9, 1.8), 0.5)
     // nostril scrolls on the muzzle and a mouth line under it
-    raise(sdCurl2(ax, y, 3.7, 44.6, 1.6, 0.5, -1.2, 0.75), 0.9, 0.35)
-    cut(Math.max(Math.abs(y - 40.6 - 0.03 * x * x) - 0.35, ax - 5.2), s0, 0.7)
+    raise(sdCurl2(ax, y, 3.3, 43.6, 1.5, 0.48, -1.2, 0.75), 0.9, 0.35)
+    cut(Math.max(Math.abs(y - 39.4 - 0.03 * x * x) - 0.35, ax - 4.6), s0, 0.7)
     // curled side ears tucked under the horn tips
     raise(sdCurl2(ax, y, 13.6, 62.4, 1.9, 0.6, 2.6, 0.7), 1.0, 0.45)
     h += rough(x, y, z, 0.12, 0.6)
@@ -302,7 +303,7 @@ export function lugSDF() {
     const head = Math.max(outline(x, y), w - S(x, y), back(x, y) - w)
     return Math.min(ring, head) + 1.2 // shrunk: the décor and the soft unions stand proud of it
   }
-  return { sd, proxy, bounds: { min: [-20, 35, 77], max: [20, 92, 118] } }
+  return { sd, proxy, bounds: { min: [-20, 32.5, 77], max: [20, 92, 118] } }
 }
 
 /**

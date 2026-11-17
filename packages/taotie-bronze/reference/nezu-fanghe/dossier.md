@@ -141,11 +141,11 @@ constraints (lip at 720, 58–64° rise, lip ≈ 10–38 mm beyond the eave in 3
 | mouth (filling hole) | oval 70 × 46 mm, centre z = +84, a little pinched at the back; rolled lip ≈ +5.5 mm, rolling over into the opening; dark sleeve inside | M (41/44 rectified: 72–79 × 44–50, centre z +88…+115; 15: wider than the eye spacing) — the old 48 × 31 was too small |
 | eyes | domed boss 32 × 28 at x = ±48, z = +4, in a 48 × 41 socket, ≈ 12.5 mm proud | M (41: ±45, z +4; 44: ±54, z +37 — averaged toward 41, the sharper view) |
 | brow / horn | two broad bands behind the eyes, out to ±82 / ±99, the horn turning back at the outer corner and hooked | M 41 (two parallel incised bands); 44 shows the same mass as one glossy pillow (the light washes its lines out) |
-| ear plates + quills | thick plate down each outer slope; a row of teeth along the outer and front foot | M 44 (the high "jaw plate"), 41; 15 (row of hooks under the jaws) |
+| ear plates + comb | thick plate down each outer slope; a bar with short hanging teeth along the outer and front foot | M 44 (the high "jaw plate"), 41; 15 (row of hooks under the jaws) |
 | ridge (nose) | 5 blocks, z −46 … +55, 20 mm above the top, 18 thick | M 39 / 42 (5 blocks ≈ 85–90 mm, ≈ 1.6–2 × the 12 mm slab); length I |
 | spout root | on the axis, z ≈ −60, clasped by a raised plate | I (spout constraints above); 41/44 show the tube rising from the back of the face |
-| cushion | foot ±140 on the eave top (plain eave border 26 mm), steep sides rounding over to a plateau edge at 488 (+46 over the eave top, 0.14 of the eave), crown +6, soft superellipse corners | M 39 (≈ 46–50 mm), 41/44 (field edge ≈ ±140); reviewers' 0.12 |
-| relief | main bands and the eye socket 6.5 mm proud, ear plates 8.5, eye dome a further 6 (≈ 12.5 over the ground), teeth 4; fine leiwen ground | M/I: the shadowed sides of the masses in 41/44 read ≈ 0.5–0.7 of the 12 mm eave slab |
+| cushion | foot ±140 on the eave top (plain eave border 26 mm), steep sides rounding over to a plateau edge at 482 (+40 over the eave top, 0.12 of the eave), crown +6, soft superellipse corners | M 39 (≈ 40–50 mm), 40, 41/44 (field edge ≈ ±140); reviewers' 0.12 |
+| relief | main bands and the eye socket 6.5 mm proud, ear plates 8.5, eye dome a further 6 (≈ 12.5 over the ground), comb bars and teeth 3.6; fine leiwen ground | M/I: the shadowed sides of the masses in 41/44 read ≈ 0.5–0.7 of the 12 mm eave slab |
 
 Built (round 9): the whole cushion is one kit.plate whose thickness is the cushion; ONE 280 × 280 mm panel carries the
 face, drawn on the −X half and mirrored (ground included), so the halves are identical. Not symmetric on the bronze

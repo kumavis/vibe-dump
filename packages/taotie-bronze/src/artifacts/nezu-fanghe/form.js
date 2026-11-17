@@ -20,7 +20,7 @@ export const D = {
   collarA: 158, //      half collar width where it meets the eave (a cavetto: near-vertical below, flaring hard under the slab; 39, 42)
   // THE TOP (dossier § The top: a face): one swelling cushion over a plain eave border, the face in high relief
   capA: 140, //         half width of the cushion foot on the eave top (M 41/44 rectified: field edge ≈ ±140; 39: 0.84 of the eave)
-  capTop: 488, //       cushion shoulder / plateau edge (M 39: ≈ 46 mm above the eave top, steep sides rounding over)
+  capTop: 482, //       cushion shoulder / plateau edge: 40 mm over the eave top = 0.12 of the eave (reviewers; 39 reads 40–50)
   dome: 6, //           plateau crown above its edge (the top reads nearly flat in 15, 39, 42)
   topA: 106, //         half width of the plateau at the shoulder (M 41/44)
   capN: 5, //           superellipse exponent of the cushion plan (soft rounded corners, 41/44)
@@ -83,7 +83,7 @@ export function cushionY(x, z) {
   const top = D.capTop
   if (r > D.topA) {
     const t = (D.capA - r) / (D.capA - D.topA)
-    return base + (top - base) * (1 - Math.pow(1 - t, 2.2))
+    return base + (top - base) * (1 - Math.pow(1 - t, 1.7))
   }
   const u = r / D.topA
   return top + D.dome * (1 - u * u) * (1 - u * u)

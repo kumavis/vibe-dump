@@ -167,11 +167,14 @@ export function capFacePanel(kit, { A, hole }, { ppmm, seed }) {
   // ---- the cheek / ear plate down the outer slope: the highest flat plate (44: a thick slab with an incised hook)
   const ear = [kit.roundPlate({ c: P([110, 4]), w: 36, h: 92, r: 13, contour: { inset: 2, line: 0.8 }, fill: { kind: 'coil', pitch: 3.4, line: 1.1 } })]
   kit.carve(panel, ear, { height: 8.5, shoulder: 3, depth: 0.9, seed: seed + 1 })
-  // ---- comb rows: quills along the outer foot and teeth along the front foot (15: a row of hooks under the jaws)
-  const teeth = []
-  for (let z = -80; z <= 64; z += 12) teeth.push(kit.roundPlate({ c: P([133.5, z]), w: 6.5, h: 7, r: 1.8 }))
-  for (let xo = 24; xo <= 112; xo += 13) teeth.push(kit.roundPlate({ c: P([xo, 134]), w: 7.5, h: 6, r: 1.8 }))
-  kit.carve(panel, teeth, { height: 4, shoulder: 1.4, depth: 0.4, seed: seed + 2, contour: false })
+  // ---- comb rows: a bar with short teeth hanging off it along the outer and front foot (15: a row of hooks under the jaws)
+  const comb = [
+    kit.roundStroke(Q([[131, -84], [131, 66]]), { width: 5.5, round: 0.5, start: 'round', end: 'round', contour: false }),
+    kit.roundStroke(Q([[12, 130], [114, 130]]), { width: 5.5, round: 0.5, start: 'round', end: 'round', contour: false }),
+  ]
+  for (let z = -78; z <= 60; z += 14) comb.push(kit.roundPlate({ c: P([136, z]), w: 6, h: 6, r: 1.6 }))
+  for (let xo = 22; xo <= 110; xo += 15) comb.push(kit.roundPlate({ c: P([xo, 135]), w: 6.5, h: 5, r: 1.6 }))
+  kit.carve(panel, comb, { height: 3.6, shoulder: 1.4, depth: 0.4, seed: seed + 2, contour: false })
   // ---- the eye: a domed boss in its socket, a sunk ring round it and a pupil dot (41, 44)
   kit.pillowBoss(panel, { c: P([48, 4]), w: 32, h: 28, round: 0.9, height: 6, crown: 0.85, base: 'field', slit: false, ring: { gap: 1.4, line: 1.4, depth: 1.2 } })
   panel.sink((ctx) => { ctx.beginPath(); ctx.arc(...P([45, 0]), 2.6, 0, Math.PI * 2); ctx.fill() }, { depth: 1.6, profile: 'u' })
