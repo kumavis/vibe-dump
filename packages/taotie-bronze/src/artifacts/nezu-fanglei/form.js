@@ -28,8 +28,10 @@ export const LV = {
   top: 503,
 }
 
-/** plan: depth (z) : width (x) — photo-36 solved at azimuth ≈ 69° (dossier §b.1); the ±X faces are the narrow ones */
-export const RHO = 0.75
+/** plan: depth (z) : width (x). Round 10b: 0.65 ± 0.05 — photo-36 refitted with the plan ratio free (camera ≈ 0.73 m, az ≈ 68–70°,
+ * collar near / far / left corners, foot, knob: 0.645–0.651; dossier §e). Was 0.75, a guess from the same photo read with a
+ * long-lens camera. The ±X faces are the narrow ones. One ratio for the whole stack (foot, belly, collar, lid, knob). */
+export const RHO = 0.65
 
 /** plan half WIDTHS (x); every half depth (z) is RHO × these */
 export const PLAN = {
@@ -38,7 +40,7 @@ export const PLAN = {
   skirt: 85.5,
   eave: 88,
   ridgeHalf: 36, // round 10: photo-37 puts the hip-flange ears' roots at ±27–35 mm round the post (the ridge ends), photo-36 at the fitted camera a steeper end triangle; was 44 (round 8), 38 before
-  knob: { eave: 19.5, depth: 15, post: [7.5, 6.5], ridge: 0.12 },
+  knob: { eave: 19.5, depth: 13, post: [7.5, 6], ridge: 0.12 },
 }
 
 // half width of the belly and shoulder (front face plane z = half) — dossier §b.3, read off photo-37

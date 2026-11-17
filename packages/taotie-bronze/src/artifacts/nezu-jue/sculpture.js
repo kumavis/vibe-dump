@@ -64,22 +64,24 @@ export function handleSDF() {
 
 /** the head on the loop's top (jue-fix, photo-02 crop 'handle' enlarged): a RAM's face looking outward over the loop's
  *  top outer corner — a compact rounded skull ≈ 11.6 mm across (the strap is 11), sitting ≈ 4 mm proud of the strap's
- *  top; ram's horns coiling down each side (≈ 18 mm over the coils); a low flat pad on the poll between their roots
- *  (the flat oval "plate" the photograph shows on top); a brow ridge, two domed eyes and a muzzle running down into the
- *  strap's outer face, with two nostril pits. Frame: x = ρ (out), y up, z across the strap. */
+ *  top; ram's horns coiling down each side (≈ 19 mm over the coils); a low flat pad on the poll between their roots
+ *  (the flat oval "plate" the photograph shows on top); a forehead, small brows over two domed eyes in sockets and a
+ *  long snout running down over the strap's outer corner, ≈ 3 mm proud of it, with nostril pits and a mouth groove. Frame: x = ρ (out), y up, z across the strap. */
 // (photo-02 vs the side render: the head's mass sits ≈ 2 mm further in over the top arm and its poll ≈ 1.5 mm higher
 // than a first try; the face — brow, eyes, muzzle — stays on the loop's outer corner)
 const HEAD = {
   skull: [42.0, 141.3, 0], skullR: [5.6, 5.0, 5.8],
   poll: [40.9, 146.9, 0], pollR: [4.0, 1.3, 4.6],
-  // each horn coils round an axis turned 30° forward of the side (so the coil reads from the front and from the
-  // photograph's three-quarter station): up over the poll → back → down → forward under the eye, shrinking
-  horn: { c: [40.8, 141.9, 4.6], axis: [0.5, 0, 0.866], r0: 3.9, r1: 1.2, t0: 2.0, t1: 0.75, a1: 300, adv: 1.6, n: 22 },
-  brow: [[48.6, 143.7, 0.9], [47.9, 143.3, 4.4]], browR: 0.8,
-  eye: [48.7, 141.7, 3.0], eyeR: 1.2, socket: [1.7, 0.4],
-  muzzle: [49.3, 137.9, 0], muzzleHalf: [1.6, 3.3, 2.6],
-  nose: [50.2, 135.1, 0], noseR: [1.6, 1.4, 2.7],
-  nostril: [51.6, 135.2, 1.2], nostrilR: 0.55,
+  // each horn coils round an axis turned 45° forward of the side (so the coil reads from the front and from the
+  // photograph's three-quarter station): up over the poll → back → down → forward beside the eye, shrinking
+  horn: { c: [43.2, 141.6, 5.2], axis: [0.7, 0, 0.714], r0: 3.7, r1: 1.2, t0: 2.0, t1: 0.75, a1: 300, adv: 1.4, n: 22 },
+  // the face: a forehead running down into a long snout that stands proud of the strap's outer corner
+  brow: [[49.3, 142.9, 2.3], [48.4, 142.6, 4.9]], browR: 0.65,
+  forehead: [47.4, 142.4, 0], foreheadR: [2.6, 3.2, 4.2],
+  eye: [48.9, 141.0, 3.6], eyeR: 1.15, socket: [1.65, 0.38],
+  snout: [50.7, 137.6, 0], snoutR: [2.4, 4.0, 3.1],
+  nose: [51.6, 134.4, 0], noseR: [2.0, 2.0, 2.8],
+  nostril: [53.4, 134.6, 1.2], nostrilR: 0.55,
 }
 // the horns as chains of capsules along a shrinking coil (authored on the +z side, mirrored to −z)
 const HORNS = (() => {
@@ -106,13 +108,14 @@ function sdEllipsoid(x, y, z, r) {
 }
 function head(x, y, z) {
   const H = HEAD
-  // cheap reject: the head lives in x 34…54, y 131…150, |z| < 11.5 (a lower bound of the distance outside it)
-  const far = Math.max(34 - x, x - 54, 131 - y, y - 150, Math.abs(z) - 11.5)
+  // cheap reject: the head lives in x 34…57, y 129…150, |z| < 11.5 (a lower bound of the distance outside it)
+  const far = Math.max(34 - x, x - 57, 129 - y, y - 150, Math.abs(z) - 11.5)
   if (far > 2) return far
   let d = sdEllipsoid(x - H.skull[0], y - H.skull[1], z - H.skull[2], H.skullR)
   d = smin(d, sdEllipsoid(x - H.poll[0], y - H.poll[1], z - H.poll[2], H.pollR), 1.2)
-  d = smin(d, sdRBox3(x - H.muzzle[0], y - H.muzzle[1], z, H.muzzleHalf[0], H.muzzleHalf[1], H.muzzleHalf[2], 1.4), 1.6)
-  d = smin(d, sdEllipsoid(x - H.nose[0], y - H.nose[1], z - H.nose[2], H.noseR), 1.0)
+  d = smin(d, sdEllipsoid(x - H.forehead[0], y - H.forehead[1], z, H.foreheadR), 1.4)
+  d = smin(d, sdEllipsoid(x - H.snout[0], y - H.snout[1], z, H.snoutR), 1.3)
+  d = smin(d, sdEllipsoid(x - H.nose[0], y - H.nose[1], z, H.noseR), 0.9)
   for (const P of HORNS) {
     let hd = 1e9
     for (let i = 0; i < P.length - 1; i++) hd = Math.min(hd, sdCapsule(x, y, z, P[i], P[i + 1], P[i][3], P[i + 1][3]))
@@ -120,14 +123,16 @@ function head(x, y, z) {
   }
   for (const s of [-1, 1]) {
     const [b0, b1] = H.brow
-    d = smin(d, sdCapsule(x, y, z, [b0[0], b0[1], s * b0[2]], [b1[0], b1[1], s * b1[2]], H.browR, H.browR * 0.8), 0.6)
-    // the eye: a sunk ring (socket) round a domed ball
+    d = smin(d, sdCapsule(x, y, z, [b0[0], b0[1], s * b0[2]], [b1[0], b1[1], s * b1[2]], H.browR, H.browR * 0.8), 0.5)
+    // the eye: a sunk ring (socket) round a domed ball, looking out and a little sideways
     const ex = x - H.eye[0], ey = y - H.eye[1], ez = z - s * H.eye[2]
     const ring = len2(len2(ey, ez) - H.socket[0], ex) - H.socket[1]
     d = smax(d, -ring, 0.3)
-    d = smin(d, len3(ex, ey, ez) - H.eyeR, 0.35)
+    d = smin(d, len3(ex, ey, ez) - H.eyeR, 0.3)
     d = smax(d, -(len3(x - H.nostril[0], y - H.nostril[1], z - s * H.nostril[2]) - H.nostrilR), 0.3)
   }
+  // the mouth: a short groove across under the nose
+  d = smax(d, -sdCapsule(x, y, z, [53.0, 132.7, -1.8], [53.0, 132.7, 1.8], 0.35, 0.35), 0.25)
   return d
 }
 

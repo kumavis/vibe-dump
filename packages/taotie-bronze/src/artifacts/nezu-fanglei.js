@@ -52,7 +52,7 @@ export default {
   collection: 'Nezu Museum, Tokyo',
   accession: '90081 (number on the gallery label; exhibit 13)',
   designation: 'none stated on the label',
-  dimensions: { h: 503, w: 261, d: 196, inferred: true, note: 'INFERRED: H assumed 503 mm (typical square lei 45–60 cm); proportions solved from the two photographs; w, d = body without flanges and handles' },
+  dimensions: { h: 503, w: 261, d: 170, inferred: true, note: 'INFERRED: H assumed 503 mm (typical square lei 45–60 cm); proportions solved from the two photographs (depth : width 0.65 ± 0.05 from photo-36, round 10b); w, d = body without flanges and handles' },
   blurb:
     'A tall square wine jar whose walls swell from a narrow foot to broad shoulders, closed by a hipped-roof lid with a little roof on a post for its knob. ' +
     'Slotted flanges run down every corner and face; masks with round boss eyes and fat hooked horns fill the belly in two registers over a fine thunder-pattern ground, ' +
@@ -71,16 +71,16 @@ export default {
     side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
     top: { azimuth: 20, elevation: 70, fov: 28, fit: 1.05 },
-    'detail-shoulder-head': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 297, 100], ref: 'detail-shoulder-head.jpg' },
-    'detail-belly-mask': { azimuth: 0, elevation: 10, fov: 12, fit: 0.42, target: [0, 222, 97], ref: 'detail-belly-mask.jpg' },
-    'detail-eye': { azimuth: 0, elevation: 10, fov: 12, fit: 0.08, target: [-37, 205, 98], ref: 'detail-eye.jpg' },
+    'detail-shoulder-head': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 297, 86.7], ref: 'detail-shoulder-head.jpg' },
+    'detail-belly-mask': { azimuth: 0, elevation: 10, fov: 12, fit: 0.42, target: [0, 222, 84.1], ref: 'detail-belly-mask.jpg' },
+    'detail-eye': { azimuth: 0, elevation: 10, fov: 12, fit: 0.08, target: [-37, 205, 84.9], ref: 'detail-eye.jpg' },
     'detail-handle': { azimuth: 0, elevation: 10, fov: 12, fit: 0.15, target: [138, 306, 0], ref: 'detail-handle.jpg' },
-    'detail-lug': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 66, 100], ref: 'detail-lug.jpg' },
-    'detail-lid-face': { azimuth: 0, elevation: 10, fov: 12, fit: 0.32, target: [0, 425, 40], ref: 'detail-lid-face.jpg' },
+    'detail-lug': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 66, 86.7], ref: 'detail-lug.jpg' },
+    'detail-lid-face': { azimuth: 0, elevation: 10, fov: 12, fit: 0.32, target: [0, 425, 34.7], ref: 'detail-lid-face.jpg' },
     'detail-knob': { azimuth: 0, elevation: 10, fov: 12, fit: 0.1, target: [0, 488, 0], ref: 'detail-knob.jpg' },
-    'detail-flange': { azimuth: 0, elevation: 10, fov: 12, fit: 0.26, target: [-118, 165, 92], ref: 'detail-flange.jpg' },
-    'detail-foot': { azimuth: 0, elevation: 10, fov: 12, fit: 0.2, target: [0, 18, 50], ref: 'detail-foot.jpg' },
-    'detail-collar': { azimuth: 0, elevation: 10, fov: 12, fit: 0.24, target: [0, 352, 64], ref: 'detail-collar.jpg' },
+    'detail-flange': { azimuth: 0, elevation: 10, fov: 12, fit: 0.26, target: [-118, 165, 79.7], ref: 'detail-flange.jpg' },
+    'detail-foot': { azimuth: 0, elevation: 10, fov: 12, fit: 0.2, target: [0, 18, 43.3], ref: 'detail-foot.jpg' },
+    'detail-collar': { azimuth: 0, elevation: 10, fov: 12, fit: 0.24, target: [0, 352, 55.5], ref: 'detail-collar.jpg' },
     // flat faces (KIT.md § Flat faces): head-on on a register's chord plane; ref = the flattened photo-37
     // (reference/nezu-fanglei/faces.json → tools/faces.mjs --rectify). The tracing instrument for relief.js.
     'face-shoulder': { face: { center: [0, 294, 89.55], normal: [0, 0.255, 0.9669], up: [0, 0.9669, -0.255], width: 265, height: 66.1 }, ref: 'faces/face-shoulder.jpg' },
@@ -128,7 +128,9 @@ export default {
 
     // ---------------------------------------------------------------- relief panels (traced, nezu-fanglei/relief.js)
     const ctx = { ppmm, seed, q }
-    const side = { ...ctx, kx: RHO, ppmm: ppmm * 0.7 } // the narrow faces: seen less, a lighter panel
+    // the narrow ±X faces: seen less, a lighter panel. Round 10b: the front design at its TRUE size in a narrower field —
+    // elements that do not fit the narrow face are dropped (not squashed in x as before)
+    const side = { ...ctx, side: true, ppmm: ppmm * 0.7 }
     await onProgress(0.02, 'belly · broad face (traced)')
     panels.bellyLong = await bellyPanel(kit, bellyL.sides.front.cells[0][0], { ...ctx, relief })
     await onProgress(0.2, 'belly · narrow face')
