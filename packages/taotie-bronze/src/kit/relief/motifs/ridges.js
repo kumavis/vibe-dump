@@ -179,7 +179,7 @@ export function draw(panel, rect, p) {
       break
     }
     case 'quad-spiral': spiral(x + w / 2, y + h / 2, w - 16, h - 6); break
-    case 'ridge-band': band(x + w / 2, y + h / 2, 1.6); break
+    case 'ridge-band': band(x + w / 2 - 2, y + h / 2 + 5, 1.15); break
     case 'hook-eye': eye(x + w / 2, y + h / 2); break
     case 'slit-eye': slit(x + w / 2, y + h / 2); break
     case 'scroll-chain': scrolls(x + w / 2, y + 4, y + h - 4); break
