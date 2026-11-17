@@ -107,8 +107,9 @@ export default {
 
     await onProgress(0.8, 'posts')
     const capMat = new kit.PatinaMaterial({ relief: panels.whorl })
-    // the near cap (θ +50) is a plain dome in photo-02; the far one (θ −50) carries the whorl
-    const posts = AZ.posts.map((az) => { const g = buildPost(kit, { az, q, material: plain, capMaterial: capMat, whorl: az < 0 ? panels.whorl : null }); object.add(g); return g })
+    // jue-fix: the two posts are one design (the owner: "the mushroom bits should match"): the same geometry, whorl
+    // on both caps (photo-02 shows it on the far cap; the near cap's dome is worn smooth in the light)
+    const posts = AZ.posts.map((az) => { const g = buildPost(kit, { az, q, material: plain, capMaterial: capMat, whorl: panels.whorl }); object.add(g); return g })
 
     await onProgress(0.9, 'handle')
     const handle = buildHandle(kit, { q, material: new kit.PatinaMaterial() })

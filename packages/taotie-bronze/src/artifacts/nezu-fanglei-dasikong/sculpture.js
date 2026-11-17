@@ -189,80 +189,78 @@ function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
  *    cavity (lugCavity) that darkens the gap, as an occlusion term the plain wall panel cannot have.
  */
 export function lugSDF() {
-  const YC = 91, RL = 10, TL = 3.2, XL = 7.0 // loop: centre, centre-line radius, half thickness, half width
-  const back = (x, y) => 9 - 1.5 * clamp((70 - y) / 33, 0, 1) + 1.2 * Math.min(1, (x / 16) ** 2)
-  // the head's front surface (w), a dome; plus the muzzle's bulge
+  const YC = 90, RL = 9.5, TL = 2.8, XL = 15.6 // loop: centre, centre-line radius, half thickness, half width
+  const back = (x, y) => 9.5 - 2 * clamp((66 - y) / 26, 0, 1) + 1.5 * Math.min(1, (x / 15) ** 2)
+  // the head's front surface (w): a dome rolling back over the top and in to the chin; the muzzle's bulge
   const S = (x, y) => {
-    const dy = y - 60, L = dy > 0 ? 40 : 27
-    const g = Math.sqrt(Math.max(0, 1 - (x / 19) ** 2 - (dy / L) ** 2))
-    return 9 + 11.5 * g + 1.4 * Math.exp(-((x / 8) ** 2) - ((y - 42.5) / 4.2) ** 2)
+    const dy = y - 60, L = dy > 0 ? 31 : 24
+    const g = Math.sqrt(Math.max(0, 1 - (x / 18.5) ** 2 - (dy / L) ** 2))
+    return 9.5 + 11 * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
   }
+  const hwAt = (y) => (y > 62 ? 12 + 3.6 * clamp((y - 62) / 4.5, 0, 1) : 8 + 4 * Math.pow(clamp((y - 44) / 18, 0, 1), 0.85))
   const outline = (x, y) => {
-    const top = sdEllipse2(x, y - 69, 16.2, 15.5)
-    const hw = 9 + 6.5 * Math.pow(clamp((y - 44) / 25, 0, 1), 0.8)
-    const mid = Math.max((Math.abs(x) - hw) * 0.96, y - 70, 44 - y)
-    const chin = sdEllipse2(x, y - 45.5, 9.4, 8.5)
-    return smin(top, smin(mid, chin, 3), 4)
+    const top = sdEllipse2(x, y - 70, 16.2, 14.5)
+    const mid = Math.max((Math.abs(x) - hwAt(y)) * 0.95, y - 68, 45 - y)
+    const chin = sdEllipse2(x, y - 46.5, 8.0, 7.5)
+    return smin(Math.max(top, 62 - y), smin(mid, chin, 2.5), 2.5)
   }
   const sd = (x, y, z) => {
     const w = z - wallZ(y)
     const ax = Math.abs(x)
-    // ---- the loop
+    // ---- the loop: a broad strap arched out of the wall, grooves along both edges of its outer face
     const rr = len2(y - YC, w) - RL
-    const qx = ax - XL + 2.2, qr = Math.abs(rr) - TL + 2.2
-    let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 2.2
-    // ---- the root pad on the wall
-    d = Math.min(d, Math.max(len2(Math.max(ax - 14.5 + 2, 0), Math.max(Math.abs(y - 83) - 10 + 2, 0)) - 2, w - 1.0))
+    const qx = ax - XL + 2.0, qr = Math.abs(rr) - TL + 1.6
+    let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 1.8
+    if (d < 1.5 && rr > 0) for (const gx of [10.6, 12.6]) d = smax(d, -len2(ax - gx, rr - TL - 0.15) + 0.5, 0.3)
     // ---- the head
     const s0 = S(x, y), wb = back(x, y)
-    let h = smax(smax(outline(x, y), w - s0, 1.6), wb - w, 1.4)
+    let h = smax(smax(outline(x, y), w - s0, 2.6), wb - w, 1.6)
     const raise = (f, ht, k = 0.5) => { h = smin(h, Math.max(f, w - (s0 + ht), wb + 1 - w), k) }
     const cut = (f, base, depth, k = 0.25) => { h = smax(h, -Math.max(f, base - depth - w), k) }
-    // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 65.5
-    const eOut = sdEllipse2(x, y - 69, 16.2, 15.5), eIn = sdEllipse2(x, y - 72.8, 11.0, 9.6)
-    const cres = Math.max(eOut + 0.5, -eIn, 65.5 - y)
-    raise(cres, 1.7, 0.6)
+    // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 66
+    const eOut = sdEllipse2(x, y - 70, 16.2, 14.5), eIn = sdEllipse2(x, y - 73.5, 10.6, 8.6)
+    const cres = Math.max(eOut + 0.6, -eIn, 65.8 - y)
+    raise(cres, 1.6, 0.6)
     // the horns' inner ends sweep down into a stem on the axis
-    const stem = Math.min(sdSeg2(ax, y, 10.6, 66.4, 1.2, 61.5, 1.25), sdSeg2(ax, y, 0, 72, 0, 60.5, 1.0))
-    raise(stem, 1.4, 0.6)
+    const stem = Math.min(sdSeg2(ax, y, 10.0, 67.0, 1.2, 62.0, 1.2), sdSeg2(ax, y, 0, 72, 0, 60.8, 0.95))
+    raise(stem, 1.3, 0.6)
     // short strokes across the horn arms
     if (cres < 1) {
       let st = Infinity
-      for (const t of [-0.42, -0.14, 0.14, 0.42, 0.7]) {
+      for (const t of [-0.45, -0.17, 0.11, 0.39]) {
         const c = Math.cos(t), sn = Math.sin(t)
-        const px = 13.5 * c, py = 70.6 + 12.4 * sn
-        const nx = c / 13.5, ny = sn / 12.4, nl = len2(nx, ny)
-        st = Math.min(st, sdSeg2(ax, y, px - (nx / nl) * 1.5, py - (ny / nl) * 1.5, px + (nx / nl) * 1.2, py + (ny / nl) * 1.2, 0.32))
+        const px = 13.4 * c, py = 71.6 + 11.6 * sn
+        const nx = c / 13.4, ny = sn / 11.6, nl = len2(nx, ny)
+        st = Math.min(st, sdSeg2(ax, y, px - (nx / nl) * 1.4, py - (ny / nl) * 1.4, px + (nx / nl) * 1.1, py + (ny / nl) * 1.1, 0.33))
       }
-      cut(st, s0 + 1.7, 0.55)
+      cut(st, s0 + 1.6, 0.55)
     }
-    // the panel inside the crescent: slightly sunk, small hooks incised on it
-    if (eIn < 1 && y > 68) {
-      cut(Math.max(eIn + 0.6, 70 - y), s0, 0.35, 0.4)
+    // the panel inside the crescent: small hooks incised on it
+    if (eIn < 1) {
       const hook = Math.min(
-        sdCurl2(ax, y, 3.6, 78.6, 1.7, 0.3, -2.4, 0.9), sdCurl2(ax, y, 7.3, 75.2, 1.6, 0.3, -0.7, 0.9),
-        sdSeg2(ax, y, 0, 81.5, 0, 73, 0.3), sdSeg2(ax, y, 1.5, 81.6, 5.5, 81.4, 0.3), sdSeg2(ax, y, 5.4, 78.4, 8.6, 79.4, 0.3))
-      cut(hook, s0 - 0.35, 0.5)
+        sdCurl2(ax, y, 3.4, 78.4, 1.6, 0.3, -2.4, 0.9), sdCurl2(ax, y, 6.9, 74.6, 1.5, 0.3, -0.7, 0.9),
+        sdSeg2(ax, y, 0, 81, 0, 72, 0.3), sdSeg2(ax, y, 1.4, 81.2, 5.2, 81.0, 0.3), sdSeg2(ax, y, 5.2, 78.0, 8.2, 78.8, 0.3))
+      cut(hook, s0, 0.5)
     }
     // lozenge on the brow
-    raise((ax + Math.abs(y - 57.4) - 3.1) * 0.707, 1.5, 0.5)
-    cut(len2(x, y - 57.4) - 0.8, s0 + 1.5, 0.5)
+    raise((ax + Math.abs(y - 57.6) - 2.9) * 0.707, 1.4, 0.5)
+    cut(len2(x, y - 57.6) - 0.75, s0 + 1.4, 0.5)
     // eyes: round domes set wide, in curled lids whose tails flick up and out
-    const ex = 7.2, ey = 50.2
-    const lid = Math.min(sdCurl2(ax, y, ex, ey, 3.5, 0.62, -2.2, 0.55), sdSeg2(ax, y, ex + 3.0, ey + 1.6, ex + 5.0, ey + 4.6, 0.6))
-    raise(lid, 1.2, 0.45)
-    h = smin(h, sdEllipsoid(ax - ex, y - ey, w - (S(ex, ey) + 0.3), 2.4, 2.3, 2.0), 0.5)
+    const ex = 6.6, ey = 51.8
+    const lid = Math.min(sdCurl2(ax, y, ex, ey, 3.0, 0.55, -2.2, 0.55), sdSeg2(ax, y, ex + 2.6, ey + 1.4, ex + 4.0, ey + 4.0, 0.55))
+    raise(lid, 1.1, 0.45)
+    h = smin(h, sdEllipsoid(ax - ex, y - ey, w - (S(ex, ey) + 0.3), 2.2, 2.1, 1.9), 0.5)
     // nostril scrolls on the muzzle and a mouth line under it
-    raise(sdCurl2(ax, y, 4.2, 44.0, 1.75, 0.55, -1.2, 0.75), 0.9, 0.35)
-    cut(Math.max(Math.abs(y - 38.6 - 0.02 * x * x) - 0.35, ax - 6), s0, 0.7)
-    // curled side ears standing off the head's flanks at the horn tips
-    h = smin(h, sdTorus(ax, y, z, [17.0, 62.5, wallZ(62.5) + 12.2], [0.25, 0, 0.97], 2.3, 1.05), 0.8)
+    raise(sdCurl2(ax, y, 3.7, 44.6, 1.6, 0.5, -1.2, 0.75), 0.9, 0.35)
+    cut(Math.max(Math.abs(y - 40.6 - 0.03 * x * x) - 0.35, ax - 5.2), s0, 0.7)
+    // curled side ears tucked under the horn tips
+    raise(sdCurl2(ax, y, 13.6, 62.4, 1.9, 0.6, 2.6, 0.7), 1.0, 0.45)
     h += rough(x, y, z, 0.12, 0.6)
-    d = smin(d, h, 1.2)
+    d = smin(d, h, 1.0)
     // embedded 2.5 mm in the wall, no deeper
     return Math.max(d, -2.5 - w)
   }
-  return { sd, bounds: { min: [-25, 31, 82], max: [25, 110, 119] } }
+  return { sd, bounds: { min: [-20, 35, 84], max: [20, 106, 114.5] } }
 }
 
 /**

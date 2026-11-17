@@ -19,6 +19,7 @@
 
 import { carveSpirals } from './relief.js'
 import FOOT_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-foot.plates.json'
+import FRIEZE_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-frieze.plates.json'
 import END_PLATES from '../../../reference/met-fangyi/faces/face-end.plates.json'
 
 export const L1 = 1.4 // plateau height above the ground, mm (dossier 1.2 ± 0.3)
@@ -115,7 +116,7 @@ export const MAIN_LONG = [
  * pillow eye under a crest bar, the upper jaw hooking down at the flange, the lower jaw / neck block.
  * Read from .work/r5-met-fangyi/grid/fr{L,R}.png.
  */
-export const FRIEZE_LONG = [
+export const FRIEZE_LONG_R5 = [
   // the tail G and the long lower band (tail + body) are one plateau: the G's hook ends at y 20.3 over a
   // ground gap; its curl is a stepped pocket; the band carries the jointed spiral chain
   {
@@ -279,6 +280,38 @@ export const FOOT_LONG = [
     // the eye (right-half face mm, mirrored): rounded-square boss, a small sunk pupil low toward the snout
     pillows: [{ c: [101.0, 18.25], w: 5.6, h: 5.9, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.2, width: 0.9, depth: 0.6, offset: [-0.4, -0.5], rot: 60 } }],
     refit: () => FOOT_END, // the end face has its own tracing
+  },
+]
+
+/**
+ * Top frieze, long face — face-long-frieze.jpg mm (vessel y = fy + 126), face-long-frieze.trace.json: confronted
+ * kui, heads at the flange. (1) upper jaw: a band along the top from under the eye to the flange, turning down
+ * and hooking; (2) the crest block over the head; (3) the lower jaw lobe; (4) the crested head plate behind the
+ * eye (two spirals); (5) the body: the ridge running from behind the eye out into the coil, the spiral chain
+ * under it and the front column dropping to the ground line; (6) the coil in the outer upper corner, its column
+ * down the outer edge; (7) the hooked claw; (8) the leg curling forward under the jaw; (9) a small hook.
+ */
+export const FRIEZE_LONG = [
+  {
+    ...FOOT_LONG[0], data: FRIEZE_LONG_PLATES, axis: 76, groups: [], ground: null,
+    deco: {
+      spirals: [
+        [99.4, 14.6, 3.6, 1], [106.3, 14.6, 3.8, -1], [111.0, 14.6, 3.8, 1], [127.4, 13.8, 3.6, 1], [132.0, 13.8, 3.4, -1], // body chain
+        [99.4, 8.6, 3.2, -1], // front column
+        [128.4, 21.9, 3.2, -1], // the coil's sunk eye
+        [105.3, 24.4, 3.6, 1], [110.4, 24.4, 3.6, -1], // head plate
+        [92.0, 28.8, 2.4, 1], [97.6, 28.8, 2.4, -1], // crest
+        [90.6, 18.6, 2.6, 1], [88.4, 7.2, 2.6, 1], [106.4, 7.6, 2.6, -1], // lower jaw lobe, leg curl, hook
+      ],
+      lines: [
+        [[101.0, 16.9], [124.8, 16.9]], // the ridge over the spiral chain
+        [[134.1, 12.2], [134.1, 26.6], [124.6, 26.6], [124.6, 21.2]], // the coil's middle ridge
+        [[94.4, 24.9], [85.2, 24.9], [85.2, 18.8]], // the jaw's centre line
+      ],
+      pockets: [{ pts: [[125.6, 19.8], [131.6, 19.8], [131.6, 24.2], [125.6, 24.2]], round: [1.4, 1.2, 1.2, 1.6], depth: 1.0 }],
+    },
+    pillows: [{ c: [97.9, 21.8], w: 6.1, h: 5.6, round: 0.55, height: 3.4, crown: 0.85, slit: { len: 1.9, width: 0.8, depth: 0.6 } }],
+    refit: (fits, o) => refit(FRIEZE_LONG_R5, fits, o), // the end face keeps round 5 until it is traced
   },
 ]
 

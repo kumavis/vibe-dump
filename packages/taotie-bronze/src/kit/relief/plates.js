@@ -161,3 +161,203 @@ function polyDraw(pts) {
     ctx.closePath()
   }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+// sunkCartouche — the Western Zhou SUNK-THEN-EMBOSSED field (KIT.md § Traced plates › Sunk cartouches). Additive: a new
+// function; tracedPlates above is untouched.
+//
+// The field is cut DOWN below the wall (its edge stepping down through `rim.ribs` parallel ribs that follow the
+// outline), and the figure is raised back UP inside it as flat-topped ribbons with soft shoulders, normally to the
+// wall's own level; ring eyes (a raised ring round a domed centre) stand in their own recess, fine ground spirals are
+// sunk into the floor that is left. Heights are written RELATIVE to what the panel holds (field += h, h ≤ level), in
+// ONE pass over the fields' bbox from two masks and two distance transforms, whatever the number of cartouches.
+
+const CARTOUCHE_DEFAULTS = {
+  depth: 1.4, // mm: the floor below the wall
+  level: 0, // mm: ribbon tops relative to the wall (0 = flush with it, > 0 a little proud)
+  shoulder: 0.7, // mm: the ribbons' rounded shoulder (from the floor up to the top)
+  rim: { ribs: 2, pitch: 1.3, riser: 0.3, rib: 0.55, ribHeight: 0.18 }, // stepped edge: ribs × pitch mm wide | false
+  eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.4 }, // ring width, its top / the dome's top (mm rel. the wall), sunk gap
+  ground: false, // leiwen options → spirals sunk into the floor between the ribbons | false
+  groundMargin: 0.35, // mm kept clear of ribbons, rim and eyes
+  groundMinPx: 2.8, // skip the ground when its pitch is under this many px (phones, low quality): the floor stays plain
+  map: null, // ([x, y]) → [x, y] panel mm (default identity)
+  seed: 0,
+}
+
+/**
+ * Sink cartouches and emboss their ribbons.
+ * @param panel ReliefPanel
+ * @param cartouches [{ field: [[x, y]…] | { rrect: [x0, y0, x1, y1], r: mm | [TL, TR, BR, BL] } | { poly },
+ *                      plates: [{ outer, holes }] | [[x, y]…] (the ribbons' footprints on the floor),
+ *                      eyes: [{ c: [x, y], r }] }] — or one such object
+ * @param opts see CARTOUCHE_DEFAULTS; mm
+ * @returns { cartouches, fieldArea, ribbonArea, coverage (ribbons + eye rings / field), ground, ms }
+ */
+export function sunkCartouche(panel, cartouches, opts = {}) {
+  const t0 = typeof performance !== 'undefined' ? performance.now() : 0
+  const D = CARTOUCHE_DEFAULTS
+  const o = { ...D, ...opts, rim: opts.rim === false ? false : { ...D.rim, ...(opts.rim || {}) }, eye: { ...D.eye, ...(opts.eye || {}) } }
+  const map = o.map || ((p) => p)
+  const list = Array.isArray(cartouches) ? cartouches : [cartouches]
+  const fields = [], loops = [], eyes = []
+  for (const c of list) {
+    const f = c.field
+    const F = Array.isArray(f) ? f : f.rrect ? rrectLoop(f.rrect, f.r ?? 0) : f.poly
+    fields.push(densifyLoop(F, 2).map(map))
+    for (const p of c.plates || []) {
+      const P = Array.isArray(p) ? { outer: p, holes: [] } : p
+      if (P.outer && P.outer.length >= 3) loops.push(densifyLoop(P.outer, 2).map(map))
+      for (const h of P.holes || []) if (h.length >= 3) loops.push(densifyLoop(h, 2).map(map))
+    }
+    for (const e of c.eyes || []) {
+      const cc = map(e.c), ex = map([e.c[0] + e.r, e.c[1]]), ey = map([e.c[0], e.c[1] + e.r])
+      eyes.push({ c: cc, r: e.r, rx: Math.hypot(ex[0] - cc[0], ex[1] - cc[1]), ry: Math.hypot(ey[0] - cc[0], ey[1] - cc[1]) })
+    }
+  }
+  const path = (ctx, Ls) => {
+    for (const L of Ls) {
+      ctx.moveTo(L[0][0], L[0][1])
+      for (let i = 1; i < L.length; i++) ctx.lineTo(L[i][0], L[i][1])
+      ctx.closePath()
+    }
+  }
+  const fieldDraw = (ctx) => { ctx.beginPath(); path(ctx, fields); ctx.fill('evenodd') }
+  const ribDraw = (ctx) => {
+    ctx.save(); ctx.beginPath(); path(ctx, fields); ctx.clip()
+    ctx.beginPath(); path(ctx, loops); ctx.fill('evenodd'); ctx.restore()
+  }
+  const { cols, rows, ppmm } = panel
+  const FM = panel.mask(fieldDraw)
+  let x0 = cols, y0 = rows, x1 = -1, y1 = -1
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) if (FM.data[y * cols + x] > 0) {
+    if (x < x0) x0 = x
+    if (x > x1) x1 = x
+    if (y < y0) y0 = y
+    if (y > y1) y1 = y
+  }
+  const out = { cartouches: list.length, fieldArea: 0, ribbonArea: 0, coverage: 0, ground: null, ms: 0 }
+  if (x1 < 0) return out
+  x0 = Math.max(0, x0 - 3); y0 = Math.max(0, y0 - 3); x1 = Math.min(cols - 1, x1 + 3); y1 = Math.min(rows - 1, y1 + 3)
+  const bw = x1 - x0 + 1, bh = y1 - y0 + 1
+  const RM = loops.length ? panel.mask(ribDraw) : null
+  const crop = (M) => {
+    const c = new Float32Array(bw * bh)
+    for (let y = 0; y < bh; y++) c.set(M.data.subarray((y0 + y) * cols + x0, (y0 + y) * cols + x0 + bw), y * bw)
+    return c
+  }
+  const sdF = signedDistance(crop(FM), bw, bh)
+  const sdR = RM ? signedDistance(crop(RM), bw, bh) : null
+  const inv = 1 / ppmm
+  const depth = o.depth, top = o.level
+  // the stepped rim: ribs k = 0…n−1, each a tread at −depth·(k+1)/(n+1) carrying a rounded rib, then the floor
+  const rim = o.rim
+  const n = rim ? Math.max(0, Math.round(rim.ribs)) : 0
+  const pitch = rim ? rim.pitch : 0
+  const rimW = n * pitch
+  const ease = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t))
+  const riser = rim ? rim.riser : 0.3
+  const floorAt = (s) => {
+    if (!n) return -depth * ease(s / riser)
+    const k = Math.floor(s / pitch)
+    if (k > n) return -depth
+    const f = s - k * pitch
+    const prev = k === 0 ? 0 : (-depth * k) / (n + 1)
+    const cur = k >= n ? -depth : (-depth * (k + 1)) / (n + 1)
+    let h = prev + (cur - prev) * ease(f / riser)
+    if (k < n) {
+      const t = (f - riser * 0.5) / (rim.rib * pitch)
+      if (t > 0 && t < 1) h += rim.ribHeight * Math.sin(Math.PI * t)
+    }
+    return h
+  }
+  const sh = Math.max(1e-3, o.shoulder)
+  const ribbonAt = (s) => {
+    if (s <= 0) return -Infinity
+    const t = Math.min(1, s / sh)
+    const u = 1 - t
+    return -depth + (depth + top) * (1 - u * u * Math.sqrt(u))
+  }
+  const E = o.eye
+  const eyeAt = (rho, r) => {
+    const rI = Math.max(0.3, r - E.ring), rd = Math.max(0.2, rI - E.gap)
+    if (rho <= rd) return -depth + (depth + E.dome) * Math.sqrt(Math.sqrt(Math.max(0, 1 - (rho / rd) ** 2)))
+    if (rho < rI) return -depth
+    if (rho <= r) return -depth + (depth + E.ringTop) * Math.sqrt(Math.sin((Math.PI * (rho - rI)) / Math.max(1e-3, r - rI)))
+    return -Infinity
+  }
+  const wantGround = !!o.ground && ppmm * (o.ground.pitch ?? 0.9) >= o.groundMinPx
+  const inc = wantGround ? new Float32Array(cols * rows) : null
+  const field = panel.field, groove = panel.groove
+  let nF = 0, nR = 0
+  for (let y = 0; y < bh; y++) {
+    const py = (y0 + y + 0.5) * inv
+    for (let x = 0; x < bw; x++) {
+      const j = y * bw + x
+      const s = sdF[j] * inv
+      if (s <= 0) continue
+      nF++
+      let h = floorAt(s)
+      const sr = sdR ? sdR[j] * inv : -1
+      const hr = ribbonAt(sr)
+      if (hr > h) { h = hr; if (sr > sh * 0.5) nR++ }
+      let nearEye = false
+      if (eyes.length) {
+        const px = (x0 + x + 0.5) * inv
+        for (const e of eyes) {
+          const dx = (px - e.c[0]) / e.rx, dy = (py - e.c[1]) / e.ry
+          const q = Math.sqrt(dx * dx + dy * dy)
+          if (q * e.r > e.r + o.groundMargin) continue
+          nearEye = true
+          const he = eyeAt(q * e.r, e.r)
+          if (he > h) { h = he; if (q * e.r > e.r - E.ring) nR++ }
+        }
+      }
+      const i = (y0 + y) * cols + x0 + x
+      field[i] += h
+      const g = Math.min(1, Math.max(0, -h / depth))
+      if (g > groove[i]) groove[i] = g
+      if (inc && s > rimW + 0.05 && sr < 0 && !nearEye) inc[i] = 1
+    }
+  }
+  const px2 = inv * inv
+  out.fieldArea = nF * px2
+  out.ribbonArea = nR * px2
+  out.coverage = nF ? nR / nF : 0
+  if (inc) {
+    const { pitch: gp, ...lo } = o.ground
+    out.ground = leiwenFill(panel, { rect: { x: x0 * inv, y: y0 * inv, w: bw * inv, h: bh * inv }, include: { data: inc }, avoid: null, margin: o.groundMargin },
+      { echo: 0, eyes: 0, seed: o.seed, pitch: gp ?? 0.9, ...lo })
+  }
+  out.ms = Math.round((typeof performance !== 'undefined' ? performance.now() : 0) - t0)
+  return out
+}
+
+function rrectLoop([x0, y0, x1, y1], r = 0, step = 10) {
+  const R = Array.isArray(r) ? r : [r, r, r, r]
+  const lim = (v) => Math.max(0, Math.min(v, (x1 - x0) / 2, (y1 - y0) / 2))
+  const [rTL, rTR, rBR, rBL] = R.map(lim)
+  const pts = []
+  const arc = (cx, cy, rr, a0, a1) => {
+    for (let i = 0; i <= step; i++) {
+      const a = a0 + ((a1 - a0) * i) / step
+      pts.push([cx + rr * Math.cos(a), cy + rr * Math.sin(a)])
+    }
+  }
+  const h = Math.PI / 2
+  arc(x1 - rBR, y0 + rBR, rBR, -h, 0)
+  arc(x1 - rTR, y1 - rTR, rTR, 0, h)
+  arc(x0 + rTL, y1 - rTL, rTL, h, 2 * h)
+  arc(x0 + rBL, y0 + rBL, rBL, 2 * h, 3 * h)
+  return pts
+}
+
+function densifyLoop(pts, step) {
+  const out = []
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length]
+    const k = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / step))
+    for (let j = 0; j < k; j++) out.push([a[0] + ((b[0] - a[0]) * j) / k, a[1] + ((b[1] - a[1]) * j) / k])
+  }
+  return out
+}

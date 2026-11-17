@@ -906,7 +906,7 @@ Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
 Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue`, `nezu-bu`, `nezu-fanglei-dasikong`, `nezu-fanghu`, `nezu-hu`, `nezu-bo` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
-`blue-green-excavated`, `azurite-bloom` · Classics `stanford-dragon` (cavity-driven corrosion on a scan),
+`blue-green-excavated`, `azurite-bloom` · Examples `stanford-dragon` (cavity-driven corrosion on a scan),
 `suzanne`. A preset is applied over the PATINA_PARAMS defaults.
 
 Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
@@ -970,8 +970,9 @@ export default {
   (R = half the bbox diagonal) around it instead of the whole bbox. Azimuth 0 =
   front (+Z), positive turns toward +X; `fit` 1 puts the bbox exactly at the frame edge.
 - `order` (optional number) sorts the vessel list; the demo uses 99.
-- `group` (optional, default `'vessels'`): `'classics'` marks a classic CG test model dressed with the kit (Utah
-  teapot …); the list shows them under a "Classics" heading after the museum vessels and before the kit test pieces (order ≥ 90).
+- `group` (optional, default `'vessels'`): `'examples'` marks a design-system example — a familiar non-museum object dressed with the kit (Utah
+  teapot, Stanford dragon …); the list shows them under a "Cast with the kit" heading after the museum vessels and before the kit test pieces (order ≥ 90).
+  New examples add their patina preset to the `Examples` group of `PATINA_PRESET_GROUPS`.
 - Registration: one line in `src/artifacts/index.js`, alphabetical:
   `export { default as houmuwuDing } from './houmuwu-ding.js'`.
 - Reference material lives in `reference/<id>/`: photos named by each view's `ref`, and `spec.json`.

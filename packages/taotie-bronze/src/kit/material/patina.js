@@ -540,7 +540,7 @@ export const PATINA_PRESET_GROUPS = {
   Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu', 'nezu-hu', 'nezu-bo'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
-  Classics: ['stanford-dragon', 'suzanne', 'utah-teapot'],
+  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)

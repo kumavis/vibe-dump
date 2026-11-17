@@ -231,12 +231,13 @@ export function bodySamples(q = 1) {
 // ----------------------------------------------------------------------------------------------------- LEGS
 // Three straight blade legs of triangular section, sharp edge outward, splayed ≈ 17°, tips nearly pointed
 // (photo-02: the near leg under the handle and the right leg at θ 210; the third, θ 330, is hidden behind them).
-export const LEG = { topY: 88, rhoTop: 24, rhoTip: 44, depthTop: 19, depthTip: 4.6, chordTop: 25, chordTip: 6.0, bow: 2.0, embed: 12, seat: 1.4 }
+// jue-fix: tapering steadily (near-linear) to a point (photo-02 crop: both visible tips ≈ 3 mm across), was 6 × 4.6 mm
+export const LEG = { topY: 88, rhoTop: 24, rhoTip: 44, depthTop: 19, depthTip: 2.4, chordTop: 25, chordTip: 2.8, taper: 0.92, bow: 2.0, embed: 12, seat: 1.4, point: 2.2 }
 export function legSection(y) {
   const t = clamp(y / LEG.topY, 0, 1.2)
   const a = lerp(LEG.rhoTip, LEG.rhoTop, t) + LEG.bow * Math.sin(Math.PI * clamp(t, 0, 1))
-  const d = lerp(LEG.depthTip, LEG.depthTop, Math.pow(Math.min(1, t), 0.7))
-  const c = lerp(LEG.chordTip, LEG.chordTop, Math.pow(Math.min(1, t), 0.75))
+  const d = lerp(LEG.depthTip, LEG.depthTop, Math.pow(Math.min(1, t), LEG.taper))
+  const c = lerp(LEG.chordTip, LEG.chordTop, Math.pow(Math.min(1, t), LEG.taper))
   return { apex: a + d * 0.45, back: a - d * 0.55, half: c / 2 }
 }
 const dirOut = (az) => new THREE.Vector3(Math.sin(az * DEG), 0, Math.cos(az * DEG))
@@ -271,13 +272,16 @@ export function buildLeg(kit, { az, material, q = 1 }) {
   // never shows through into the cup, fix pass r8)
   const at = (u, y) => {
     const R = ring(legSection(y))
-    const t = (1 - u) * nr, i = Math.floor(t) % nr, f = t - Math.floor(t)
+    // u runs CCW round +Y (apex → +lat → −lat), i.e. left → right seen from outside, so the grid's winding and
+    // the normals derived from it point OUT (jue-fix: this was (1 − u): every leg face was wound inward, rendered
+    // see-through from outside and lit from inside)
+    const t = u * nr, i = Math.floor(t) % nr, f = t - Math.floor(t)
     const A = R[i], B = R[(i + 1) % nr]
     return [lerp(A[0], B[0], f), lerp(A[1], B[1], f)]
   }
   const geo = kit.buildSurface({
     surface: (u, v, o) => {
-      let y = v * yTop
+      let y = LEG.point + v * (yTop - LEG.point) // the blade from the point's foot up; the point (cap) below
       let [rho, l] = at(u, y)
       for (let k = 0; k < 3; k++) {
         const yb = bowlY(Math.hypot(rho, l)) + LEG.seat
@@ -293,12 +297,15 @@ export function buildLeg(kit, { az, material, q = 1 }) {
   const m = new THREE.Mesh(geo, material)
   m.name = 'leg'; m.userData.part = 'legs'; m.castShadow = m.receiveShadow = true
   g.add(m)
-  // tip cap
-  const s0 = legSection(0)
+  // the point: a short pyramid fanned from the blade's own bottom ring (y = LEG.point) down to the ground, set toward
+  // the arris; ring order is CCW round +Y, so (c, R[k+1], R[k]) faces out and down
+  const yp = LEG.point, s0 = legSection(yp), R0 = ring(s0)
   const tip = new THREE.BufferGeometry()
-  const c = P((s0.apex + 2 * s0.back) / 3, 0, -0.6, new THREE.Vector3())
-  const a1 = P(s0.apex, 0, 0, new THREE.Vector3()), a2 = P(s0.back, s0.half, 0, new THREE.Vector3()), a3 = P(s0.back, -s0.half, 0, new THREE.Vector3())
-  tip.setAttribute('position', new THREE.Float32BufferAttribute([c, a1, a2, c, a2, a3, c, a3, a1].flatMap((v) => [v.x, v.y, v.z]), 3))
+  const c = P((2 * s0.apex + s0.back) / 3 + 0.4, 0, 0, new THREE.Vector3())
+  const tv = []
+  const pv = (k) => P(R0[k % nr][0], R0[k % nr][1], yp, new THREE.Vector3())
+  for (let k = 0; k < nr; k++) tv.push(c, pv(k + 1), pv(k))
+  tip.setAttribute('position', new THREE.Float32BufferAttribute(tv.flatMap((v) => [v.x, v.y, v.z]), 3))
   tip.computeVertexNormals()
   const tm = new THREE.Mesh(tip, material)
   tm.userData.part = 'legs'
@@ -307,15 +314,19 @@ export function buildLeg(kit, { az, material, q = 1 }) {
 }
 
 // ----------------------------------------------------------------------------------------------------- POSTS
-// Two posts on the rim at the spout root: round stems Ø 9 standing 33 mm, umbrella caps Ø 23 with a little knob
-// (photo-02: the near post's cap is a plain cone, the far one shows a whorl on its top — modelled alike, the whorl
-// on both).
+// Two IDENTICAL posts on the rim at the spout root (jue-fix: one geometry placed twice, each turned to its azimuth):
+// a round stem, a domed mushroom cap that overhangs it with an undercut and a thin rolled edge, a flat-topped button
+// finial, a whorl on the dome. Measured on photo-02 (posts crop, both caps, through the side camera): cap Ø ≈ 22.6
+// (far 22.0 / near 23.4 mm: the model's 24.8 read 6–10 % too big on both), dome ≈ 0.27 Ø from the edge's underside to
+// the finial's foot, finial Ø ≈ 0.27 Ø and ≈ 0.15 Ø tall. Stem Ø 10 (the far stem reads ≈ 11.8 against the wall, the
+// near one ≈ 7.5 against the spout's inside of the same colour: the mean, as the type and the owner say they match).
 export const POST = {
-  rho: 40.5, stemR: 4.9, base: 159, capY: 195.6,
-  // fix pass r8: a LOW DOME (convex top, a thin rolled edge) and a short cylindrical flat-topped knob Ø 6.4 (photo-02)
-  cap: [[0, 0.2], [4.0, 0.2], [8.0, 0.0], [11.4, -0.5], [12.3, -0.2], [12.4, 0.5], [11.9, 1.4], [10.9, 2.5], [9.5, 3.5], [7.7, 4.4], [5.6, 5.0], [3.6, 5.35], [3.25, 5.4], [3.2, 8.4], [2.9, 8.9], [0.03, 9.0]],
+  rho: 40.5, stemR: 5.0, base: 159, capY: 195.8,
+  // [r, y] from the axis under the cap (inside the stem) out along the undercut, round the edge, up the dome, the finial
+  cap: [[0, -2.0], [4.6, -2.0], [5.4, -1.85], [6.8, -1.2], [8.6, -0.75], [10.1, -0.6], [10.9, -0.75], [11.3, -0.25], [11.3, 0.55],
+    [10.9, 1.35], [10.0, 2.1], [8.6, 3.05], [7.0, 3.95], [5.4, 4.75], [3.9, 5.25], [3.1, 5.4], [3.0, 5.9], [3.0, 8.3], [2.75, 8.65], [2.2, 8.8], [0.03, 8.8]],
 }
-export function postTop() { return POST.capY + 9.0 }
+export function postTop() { return POST.capY + 8.8 }
 
 // ----------------------------------------------------------------------------------------------------- HANDLE
 // The loop handle at θ 90: a flat strap ≈ 11 mm wide and 4.6 thick leaves the upper band at y ≈ 146, runs out

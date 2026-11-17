@@ -19,7 +19,7 @@ const TOP = BASE.h
 
 export default {
   id: 'stanford-dragon',
-  group: 'classics',
+  group: 'examples',
   order: 61,
   title: 'The Stanford Dragon',
   type: 'computer-graphics test model, recast in bronze',

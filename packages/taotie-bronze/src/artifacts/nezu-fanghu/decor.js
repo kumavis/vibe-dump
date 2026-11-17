@@ -13,7 +13,25 @@ import UP from '../../../reference/nezu-fanghu/faces/dev-up.trace.json'
 import FRIEZE from '../../../reference/nezu-fanghu/faces/dev-frieze.trace.json'
 import FOOT from '../../../reference/nezu-fanghu/faces/dev-foot.trace.json'
 import LID from '../../../reference/nezu-fanghu/faces/dev-lid.trace.json'
+import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.ribbons.json'
 import { LV } from './form.js'
+
+// SUNK-THEN-EMBOSSED (photo-08/09): each bird's cartouche is cut ≈ 1.4 mm below the wall, its edge stepping down
+// through two ribs at 1.3 mm pitch; the bird is raised back up as flat-topped ribbons (3–6 mm wide) flush with the wall,
+// soft 0.7 mm shoulders; ring eyes with a domed centre in their own recess; round spirals (≈ 1 mm) sunk into the floor
+// left between the ribbons (kit.sunkCartouche; ribbons traced by reference/nezu-fanghu/ribbons.py)
+const SUNK = { depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 2, pitch: 1.3 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
+  ground: { pitch: 0.95, line: 0.5, depth: 0.3, cell: [2.4, 6], roundness: 0.9, pairs: 0.25, maxAspect: 1.5, jitter: 0.04, fillers: true }, groundMargin: 0.35 }
+
+/** a ribbons.json tracing (developed mm, the RIGHT bird) and its mirror image about s = 0 (the confronted left bird) */
+function cartouchePair(R) {
+  const one = { field: R.field, plates: R.plates, eyes: R.eyes }
+  const f = ([x, y]) => [-x, y]
+  const F = R.field
+  const field = F.rrect ? { rrect: [-F.rrect[2], F.rrect[1], -F.rrect[0], F.rrect[3]], r: Array.isArray(F.r) ? [F.r[1], F.r[0], F.r[3], F.r[2]] : F.r } : { poly: F.poly.map(f) }
+  const two = { field, plates: R.plates.map((p) => ({ outer: p.outer.map(f), holes: (p.holes || []).map((h) => h.map(f)) })), eyes: R.eyes.map((e) => ({ ...e, c: f(e.c) })) }
+  return [one, two]
+}
 
 const GROUND = { pitch: 0.85, line: 0.5, depth: 0.32, cell: [3.6, 6.5], roundness: 0.3, pairs: 0.3, maxAspect: 1.6, jitter: 0.05 }
 // the photograph's spiral ground is ROUND (云纹-like coils at ≈ 0.9 mm pitch), packed in the earth-filled hollows
@@ -175,11 +193,11 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   // with lines engraved in it
   const roll = { ...common, leiwen: false, border: false, lift: null, boss: false, depth: 0.55, shoulder: 0.5, widen: 1.75, minW: 1.5 }
   const rollSpec = (S) => ({ channels: S.channels.map((c) => ({ ...c, w: (c.w ?? 1.4) + 1.3, d: undefined })) })
-  kit.cutRibbons(p, LOW, { ...belly, boss: { height: 3.4, crown: 0.85, dot: 0.8 } })
+  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, map, seed })
   kit.cutRibbons(p, UP, { ...belly, seed: seed + 1, boss: { height: 3.2, crown: 0.85, dot: 0.7 } })
-  kit.cutRibbons(p, rollSpec(LOW), roll) // after both lifts (raise = max would undo it)
-  kit.cutRibbons(p, rollSpec(UP), roll)
-  spiralFill(p, [...hollowPolys(LOW, map), ...hollowPolys(UP, map)])
+  kit.cutRibbons(p, rollSpec(UP), roll) // after the lift (raise = max would undo it)
+  spiralFill(p, hollowPolys(UP, map))
+  void LOW
   kit.cutRibbons(p, FRIEZE, { ...common, seed: seed + 2, depth: 1.6, shoulder: 0.5, widen: 1.55, minW: 1.4, lift: { h: 1.0, shoulder: 1.2 }, border: { w: 2.2, d: 1.8 }, leiwen: false, boss: { height: 2.8, crown: 0.85, dot: 0.6 } })
   spiralFill(p, hollowPolys(FRIEZE, map), { rMax: 2.8 })
   kit.cutRibbons(p, FOOT, { ...common, seed: seed + 3, depth: 1.3, shoulder: 0.5, widen: 1.4, minW: 1.4, border: false, boss: false })

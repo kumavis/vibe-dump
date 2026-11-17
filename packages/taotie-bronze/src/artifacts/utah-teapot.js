@@ -19,7 +19,7 @@ import * as SC from './utah-teapot/sculpture.js'
 
 export default {
   id: 'utah-teapot',
-  group: 'classics',
+  group: 'examples',
   order: 90,
   title: 'Utah Teapot',
   titleZh: '犹他茶壶',

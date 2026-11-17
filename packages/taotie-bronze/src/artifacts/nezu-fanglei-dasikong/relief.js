@@ -10,7 +10,8 @@
 //
 // Relief language (photo-34): FAT flat-topped bands ≈ 2.2 mm proud with round outer corners, a sunk contour line
 // inside each edge, chains of small spirals cut on the bodies; big raised coil plates (concentric squared-round
-// spirals) as the blades' eyes and cheeks; convex pillow eyes; whorl bosses; a fine leiwen ground (≈ 1.6 mm pitch).
+// spirals); convex pillow eyes; whorl bosses; a fine leiwen ground (≈ 1.6 mm pitch). The hanging blades are a different
+// language: fat round ridges ≈ 1.4 mm pitch, everything multi-ridge (kit § Ridge work, kit.dasikongBlade).
 
 import FACES from '../../../reference/nezu-fanglei-dasikong/faces.json'
 import MAIN_PLATES from '../../../reference/nezu-fanglei-dasikong/faces/face-main.plates.json'
@@ -18,11 +19,7 @@ import SHOULDER_PLATES from '../../../reference/nezu-fanglei-dasikong/faces/face
 import LID_PLATES from '../../../reference/nezu-fanglei-dasikong/faces/face-lid.plates.json'
 
 const RELIEF = { band: 2.3, shoulder: 1.0, groove: 0.42, leiwen: 0.42 }
-const CONTOUR = { inset: 0.75, line: 0.42 }
-const SPIRALS = { kind: 'spirals', line: 0.4, pitch: 0.95, gap: 0.35, square: 0.25, tail: 'merge', min: 2.6 }
 const NOFILL = { kind: 'none' }
-const ROUND = { round: 0.7, inner: 0.22 }
-const COIL = { kind: 'coil', line: 0.45, pitch: 1.25 }
 const GROUND = { pitch: 1.2, line: 0.5, cell: [8, 13], roundness: 0.2, jitter: 0.06, pairs: 0.4, maxAspect: 1.5, fillers: true }
 
 // Round r8-dsk-fix: the main mask, the shoulder kui and the lid mask are TRACED PLATES — outlines drawn band by band
@@ -67,79 +64,13 @@ function maker(kit, M, s, kx = 1) {
   }
 }
 
-// ------------------------------------------------------------------ blades (lower belly, y 28–207)
+// ------------------------------------------------------------------ blades (lower belly, y 27–207)
 
-/**
- * A hanging blade (face-blades): axis ax(y), half width hw(y), top y0, tip y1. Raised line-border strip with three
- * grooves, a strip of C-scrolls inside it (a raised band with a spiral chain cut on it), a plain nose strip on the
- * axis, and in its upper part a mask: a frieze of two bands, a "7" horn per half with a coil plate (eye) inside it
- * and a big coil plate (cheek) below. Everything else inside is leiwen. Returns { outline, inner, els, sinks }.
- */
-function blade(kit, M, { ax, hw, y0, y1, k = 1, mask = true, nose = [0, 0] }) {
-  const ys = []
-  for (let y = y1; y <= y0 + 1e-6; y += 2) ys.push(y)
-  if (ys[ys.length - 1] < y0) ys.push(y0)
-  const edge = (side, inset) => ys.map((y) => [ax(y) + side * Math.max(0, hw(y) - inset * (y - y1 < 8 ? (y - y1) / 8 : 1)), y])
-  const ring = (inset) => {
-    const r = edge(1, inset), l = edge(-1, inset).reverse()
-    return [...r, ...l].map(M)
-  }
-  const outline = ring(0), inner = ring(14.5)
-  const strip0 = ring(5.2)
-  const els = []
-  const lines = []
-  const scrolls = []
-  const coils = []
-  const dots = []
-  for (const d of [1.35, 2.6, 3.85]) {
-    for (const side of [-1, 1]) lines.push(edge(side, d).filter((p) => p[1] > y1 + d * 1.6).map(M))
-  }
-  // C-scroll strips: one raised band per side, a spiral chain cut on it
-  for (const side of [-1, 1]) {
-    const pts = edge(side, 9.0).filter((p) => p[1] > y1 + 13 && p[1] < y0 - 1.5)
-    if (pts.length > 2) {
-      els.push(kit.roundStroke([pts[pts.length - 1], pts[Math.floor(pts.length / 2)], pts[0]].map(M), { width: 6.6, round: 0.6, inner: 0.2, end: 'round', start: 'flat', contour: { inset: 0.6, line: 0.38 }, fill: NOFILL }))
-      // the C-scrolls cut on it: small round spirals every ≈ 6.2 mm, alternating hand (cheaper than a spiral chain)
-      const a = pts[0], b = pts[pts.length - 1]
-      const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.floor((L - 4) / 7))
-      for (let i = 0; i < n; i++) {
-        const t = (i + 0.5) / n
-        const c = M([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t])
-        const hand = (i % 2 ? 1 : -1) * side, ph = Math.atan2(b[1] - a[1], b[0] - a[0])
-        const sp = []
-        for (let u = 0; u <= 1.0001; u += 0.06) {
-          const ang = ph + hand * u * Math.PI * 2.6, r = 0.4 + 2.5 * u
-          sp.push([c[0] + r * Math.cos(ang), c[1] + r * Math.sin(ang)])
-        }
-        scrolls.push(sp)
-      }
-    }
-  }
-  // nose strip on the axis
-  if (nose[1] > nose[0]) {
-    els.push(kit.roundStroke([[ax(nose[1]), nose[1]], [ax(nose[0]), nose[0]]].map(M), { width: 3.6 * Math.max(0.8, k), round: 0.4, inner: 0.1, start: 'flat', end: 'round', contour: false, fill: NOFILL }))
-  }
-  if (mask) {
-    // the mask, traced on the centre blade (face-blades): u from the axis (× k), y relative to the top y0 = 207
-    const U = (u, y) => M([ax(y0 + y) + u * k, y0 + y])
-    for (const s of [-1, 1]) {
-      const Sx = (ctrl, o) => kit.roundStroke(ctrl.map(([u, y]) => U(s * u, y)), { ...o, spiral: o.spiral && { ...o.spiral, dir: o.spiral.dir * s } })
-      // top frieze (y 186–204): two stacked bands, the upper turning down at its outer end, the lower rolled
-      els.push(Sx([[5.5, -7.5], [44, -7.5], [44, -14]], { width: 4.6, ...ROUND, end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 2.2 }, fill: NOFILL }))
-      els.push(Sx([[50, -18.5], [12, -18.5]], { width: 4.6, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: 1, R: 2.4 }, fill: k > 0.95 ? { ...SPIRALS, min: 3.0 } : NOFILL }))
-      // the "7" horn: across under the frieze, down the outer side, the end curling in
-      // round r8-dsk-fix (face-blades, flattened): the horn runs across from the OUTER side, turns down beside the
-      // nose and curls out under the eye coil, WRAPPING it on the axis side; its top is cut with parallel lines
-      // that follow the coil (fine-line relief, not a spiral chain). A small ringed eye sits at its outer end.
-      els.push(Sx([[44, -26.5], [8.5, -26.5], [8.5, -49], [20, -52]], { width: [6.4, 6.8, 6.4, 5.2], round: 0.85, inner: 0.35, end: 'spiral', spiral: { turns: 0.7, dir: -1, R: 2.6 }, fill: { kind: 'lines', line: 0.36, pitch: 1.3 } }))
-      dots.push(U(s * 41.5, -31))
-      // eye coil inside the horn, cheek coil below it (low plates: the squared spirals read as cut into the ground)
-      coils.push(kit.roundPlate({ c: U(s * 18.5, -40.5), w: 21 * k, h: 17, round: 0.5, fill: { ...COIL, hand: s > 0 ? 'right' : 'left' } }))
-      coils.push(kit.roundPlate({ c: U(s * 15.5, -63.5), w: 24 * k, h: 22, round: 0.45, fill: { ...COIL, hand: s > 0 ? 'left' : 'right' } }))
-    }
-  }
-  return { outline, inner, strip0, lines, els, scrolls, coils, dots }
-}
+// Round ridges: the blades are drawn entirely in fat round-topped threads (kit § Ridge work), measured on photo-34 at
+// ≈ 1.35 mm pitch (spirals), ridge ≈ groove. The composition — border bundles, scroll columns, the squared spirals in
+// slanted cells, horn bands, hooked eyes — is kit.dasikongBlade (src/kit/relief/motifs/ridges.js), authored in BLADE
+// space (x from the blade's axis, vessel y) off faces/face-blades.jpg; here it is only placed on the panel.
+const RIDGE = { width: 0.8, pitch: 1.4, height: 0.62, groove: 0.32 }
 
 // ------------------------------------------------------------------ whorl bosses (shoulder 285–306, lid 404–419)
 
@@ -182,26 +113,13 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
   const Hp = arc(Hmax)
   const p = new kit.ReliefPanel({ width: W, height: Hp, ppmm, seed })
   const M = ([x, y]) => [W / 2 + x, arc(y)]
-  // ----- blades
-  const TOP = 207
-  const centre = blade(kit, M, { ax: () => 0, hw: (y) => 65 * kx * Math.pow(Math.max(0, (y - 28) / (TOP - 28)), 0.92), y0: TOP, y1: 28, k: kx, nose: [lug ? 116 : 40, 186] })
-  const corners = [-1, 1].map((sd) => blade(kit, M, { ax: (y) => sd * Qh(y), hw: (y) => 57 * Math.pow(Math.max(0, (y - 45) / (TOP - 45)), 0.95), y0: TOP, y1: 45, k: 0.88, nose: [52, 186] }))
-  const blades = [centre, ...corners]
-  // raised border strips (outline minus its 5.2 mm inset), grooves cut after
-  p.raise((ctx) => {
-    for (const b of blades) {
-      ctx.beginPath()
-      b.outline.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath()
-      b.strip0.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath()
-      ctx.fill('evenodd')
-    }
-  }, { height: 1.3, shoulder: 0.5, profile: 'plateau' })
-  p.sink((ctx) => {
-    ctx.lineWidth = 0.42; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
-    for (const b of blades) for (const l of b.lines) { if (l.length < 2) continue; ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
-  }, { depth: 0.35, shoulder: 0.15, profile: 'u' })
+  // ----- blades: the centre blade (scaled by kx on the narrow sides) and a blade on each corner line, both halves
+  // drawn on both panels that meet there (identical, so the seam agrees)
+  const ridges = kit.ridgeWork(p, RIDGE)
+  kit.dasikongBlade(ridges.view(([x, y]) => M([x * kx, y])), { variant: 'centre', lug })
+  for (const sd of [-1, 1]) kit.dasikongBlade(ridges.view(([x, y]) => M([sd * Qh(y) + x, y])), { variant: 'corner' })
+  ridges.flush()
   // ----- main register + shoulder kui: traced plates (face-main, face-shoulder)
-  kit.carve(p, blades.flatMap((b) => b.els), { height: RELIEF.band, shoulder: RELIEF.shoulder, depth: RELIEF.groove, contour: CONTOUR, irregularity: 1, seed })
   traced(kit, p, M, [{ face: 'face-main', data: MAIN_PLATES, kx }], { seed })
   // the kui bodies (photo-34): 6–7 mm bands each carrying a chain of C-hooks — one contour line and a packed top
   traced(kit, p, M, [{ face: 'face-shoulder', data: SHOULDER_PLATES, kx }], { seed: seed + 3, contour2: null, fill: { ...PLATES.fill, inset: 1.5, cell: [2.2, 4.2], pitch: 0.75 } })
@@ -211,13 +129,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     eyes.push({ c: M([s * 25.4 * kx, 232.6]), w: 15.2 * kx, h: 11.6, round: 1, height: 3.4, crown: 0.95, slit: { len: 5.0, width: 0.9, depth: 0.6 }, ring: { gap: 0.7, line: 0.7, depth: 0.5 } })
     eyes.push({ c: M([s * 61.5 * kx, 325.4]), w: 6.6 * kx, h: 6.6, round: 1, height: 2.8, crown: 0.95, slit: false, ring: { gap: 0.5, line: 0.5, depth: 0.4 } })
   }
-  kit.carve(p, blades.flatMap((b) => b.coils), { height: 0.7, shoulder: 0.4, depth: 0.42, contour: { inset: 0.5, line: 0.42 }, irregularity: 1, seed: seed + 7 })
-  p.sink((ctx) => {
-    ctx.lineWidth = 0.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
-    for (const b of blades) for (const l of b.scrolls) { ctx.beginPath(); l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }
-  }, { depth: 0.38, shoulder: 0.15, profile: 'u' })
   for (const e of eyes) kit.pillowBoss(p, { slit: false, ...e })
-  for (const b of blades) for (const c of b.dots) kit.pillowBoss(p, { c, w: 4.2, h: 4.2, round: 1, height: 1.6, crown: 0.9, slit: false, ring: { gap: 0.5, line: 0.5, depth: 0.35 } })
   // ----- whorl-boss band (285–306)
   const xs = [0, 37, 74, 111].map((x) => x * kx)
   for (const x of xs) for (const s of x === 0 ? [1] : [1, -1]) whorl(kit, p, M([s * x, 295.5]), 20.5, { hand: s })
@@ -241,12 +153,6 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     return [...pts, ...L].map(M)
   }
   const fill = (y0, y1, include, extra = {}) => kit.leiwenFill(p, { rect: { x: 0, y: arc(y0), w: W, h: arc(y1) - arc(y0) }, include, margin: 0.55 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + Math.round(y0), ...extra })
-  for (const b of blades) {
-    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
-    for (const [x, y] of b.inner) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y) }
-    x0 = Math.max(0, x0); x1 = Math.min(W, x1)
-    if (x1 - x0 > 2) kit.leiwenFill(p, { rect: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, include: polyDraw(b.inner), margin: 0.55 }, { ...GROUND, depth: RELIEF.leiwen, seed: seed + Math.round(x0) })
-  }
   fill(212, 271, polyDraw(seamFree(205, 280)))
   fill(287, 304.5, polyDraw(seamFree(280, 340)), { cell: [4.5, 8] })
   fill(307, 336.4, polyDraw(seamFree(300, 345)), { cell: [5, 9] })

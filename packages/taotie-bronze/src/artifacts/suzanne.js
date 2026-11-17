@@ -21,7 +21,7 @@ const LIFT = 6 // the chin's clearance above the plinth (the socle carries her)
 
 export default {
   id: 'suzanne',
-  group: 'classics',
+  group: 'examples',
   order: 62,
   title: 'Suzanne as a Taotie',
   type: 'computer-graphics test model, recast in bronze',

@@ -61,7 +61,7 @@ export function dasikongBlade(work, { variant = 'centre', lug = true, warp = nul
     const top = 207
     // ---- edge strips (edge-relative): a 7-ridge border bundle, a column of S-scrolls, a 4-ridge inner bundle
     add(L, 'ridgeBand', 'border bundle', ref.edge(-1, 6.2, top - 3.7, 41, 2), { ...cls('bundle'), ridges: 7, start: 'square', end: 'round' })
-    add(L, 'scrollChain', 'scroll column', edge(16.7, 149.5, 34), { ...cls('spiral'), strip: 8.6, spacing: 9.2, alternate: true, turns: 1.5 })
+    add(L, 'scrollChain', 'scroll column', edge(16.7, 149.5, 48), { ...cls('spiral'), strip: 8.6, spacing: 9.2, alternate: true, turns: 1.5 })
     add(L, 'ridgeBand', 'inner bundle', edge(24.6, 148, 55), { ...cls('bundle'), ridges: 4, start: 'round', end: 'round' })
     // ---- top frieze (fy 173.5–186.5): two squared spirals per half under a two-ridge top border
     add(C, 'ridgeBand', 'top border', [[ref.edgeX(-1, 1.6, 205.6), 205.6], [ref.edgeX(1, 1.6, 205.6), 205.6]], { ...cls('bundle'), ridges: 2, start: 'square', end: 'square' })
