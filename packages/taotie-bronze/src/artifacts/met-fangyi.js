@@ -17,18 +17,34 @@ const H = 254
 const FOOT_H = 33 // foot band (its own part): ground → top of the lower separator's middle
 const RIM_Y = 162.2
 const LID_Y = 162.8 // ~0.6 mm hairline between body rim and lid skirt
-const W0 = 132.6, D0 = 95.6 // wall surface at the foot top (y 33)
-const TAPER = 1.4 // deg per side, walls lean out going up
+// walls lean out going up, deg per side. Long axis (x, the end faces): 1.4° — a pinhole camera solved on
+// three-quarter.jpg jointly with the wall half-widths gives 1.35–1.47° for any camera distance 0.7–1.6 m.
+// Short axis (z, the long faces): 1.8° — side.jpg (near-orthographic) shows the end-view outline 0.4°/side
+// steeper than a 1.4° model shot through the same camera (flange tips 52.2 → 58.4 mm, foot → rim).
+// The rim plan (139 × 102 mm) is kept: the lid sits flush on it.
+const TAPER_X = 1.4, TAPER_Z = 1.8
+const W0 = 132.6 // long-face wall at the foot top (y 33)
+const D0 = 101.916 - 2 * (RIM_Y - FOOT_H) * Math.tan((TAPER_Z * Math.PI) / 180) // end-face wall at the foot top (93.8)
 const WALL_H = RIM_Y - FOOT_H
 const WALL = 3
-const SKIRT = 4.8
-const RISE = 56.5 // eave line (167.6) → ridge line
-const CONVEX = -0.5 // kit `concave` < 0: steep at the eave (≈ 59°), ≈ 29° at the ridge — the cushion roof
+// lid: a thin lip (2 mm) on the hairline seam, then an ogival cushion roof — measured off side.jpg's end
+// outline (reference/met-fangyi/profile.json lidSection): b = B (1 − t^1.325)^0.8, t = height fraction;
+// 73° at the eave, 53° mid-slope, 30° at the ridge (the old quadratic was 59° → 29° from 4.8 mm higher)
+const SKIRT = 2.0
+const EAVE_Y = LID_Y + SKIRT // 164.8
+const RISE = 224.1 - EAVE_Y // eave line → ridge line (59.3)
+const OGIVE = (alpha, beta, n = 16) => Array.from({ length: n + 1 }, (_, i) => { const t = i / n; return [1 - Math.pow(1 - Math.pow(t, alpha), beta), t] })
+const SECTION = OGIVE(1.325, 0.8)
+const PILLOW = { long: 1.5, short: 1.0 } // mm: each slope swells along its length (three-quarter.jpg; side.jpg outline +1 mm)
+const CONVEX = -0.5 // legacy `concave` (unused once `section` is given)
 const RIDGE = 100 // ridge length (mm)
-const KNOB = { width: 27, depth: 21.7, ridge: 16, rise: 15.4, skirt: 3.1, convex: -0.25, post: { height: 10.9, width: 12, depth: 7.2, waist: 0.04 }, embed: 2.6 }
+// knob: side.jpg end outline (profile.json, y 238 → 254) is the same ogive as the lid: 9.2 / 7.3 / 5.0 / 2.1 mm
+// half-width at t 0.24 / 0.47 / 0.71 / 0.94 (model 9.5 / 7.4 / 4.8 / 1.4); post slightly waisted (side.jpg 6.8 → 6.2 mm)
+const KNOB = { width: 27, depth: 21.7, ridge: 16, rise: 15.4, skirt: 3.1, convex: -0.25, section: OGIVE(1.3, 0.8), pillow: 0.4, post: { height: 10.9, width: 12, depth: 7.2, waist: 0.1 }, embed: 2.6 }
 const FLANGE_NOTCH = { shape: 'score', pitch: 4, depth: 0.7, width: 1.2 }
 
-const tanT = Math.tan((TAPER * Math.PI) / 180)
+const tanT = Math.tan((TAPER_X * Math.PI) / 180) // long-axis lean (end faces)
+const tanZ = Math.tan((TAPER_Z * Math.PI) / 180) // short-axis lean (long faces)
 
 export default {
   id: 'met-fangyi',
@@ -48,9 +64,13 @@ export default {
     'Reconstructed from the Met’s three photographs: the walls, lid, flanges and décor are measured, but the inside (floor height, lid seat, the cast clan sign) and the hidden back faces are inferred.',
   defaultPatina: 'met-fangyi',
   views: {
-    // pinhole fit to 7 landmarks of three-quarter.jpg (rim and base corners, knob top): az 25.6, el 7.8, camera ≈ 1.3 m
-    'three-quarter': { azimuth: 26, elevation: 10, fov: 19, fit: 1.3, ref: 'three-quarter.jpg' },
+    // pinhole camera solved on 10 landmarks of the 2882 × 3842 original (rim / base corners of the long face, end-face
+    // back edge and notch jamb, knob top), jointly with the long-axis wall widths: camera ≈ 1.0 m from the axis at
+    // 270 mm above the ground (el 8.2° toward the target), az 26.8°, full-frame vertical fov 23° (11 px rms)
+    'three-quarter': { azimuth: 26.8, elevation: 8.2, fov: 23, fit: 1.29, target: [0, 129.6, 0], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 5, fov: 26, fit: 1.3, ref: 'side.jpg' },
+    'side-x8': { azimuth: 90, elevation: 5, fov: 8, fit: 1.3, ref: 'side.jpg' },
+    'side-x14': { azimuth: 90, elevation: 4, fov: 14, fit: 1.3, ref: 'side.jpg' },
     front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.25 },
     top: { azimuth: 20, elevation: 62, fov: 26, fit: 1.25 },
     'detail-face-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.33, target: [68, 81, 0], ref: 'detail-face-short.jpg' },
@@ -83,11 +103,11 @@ export default {
 
     // ---------------------------------------------------------------- layout
     const bodyOpts = {
-      width: W0, depth: D0, height: WALL_H, at: 'bottom', taper: { x: TAPER, z: TAPER },
+      width: W0, depth: D0, height: WALL_H, at: 'bottom', taper: { x: TAPER_X, z: TAPER_Z },
       wall: WALL, floor: { thickness: WALL, round: 2 }, rim: { kind: 'plain', inner: 0.6 },
       foot: {
-        height: FOOT_H, flare: -FOOT_H * tanT, thickness: WALL,
-        notch: { long: { width: 18, height: 15, shape: 'rect', round: 3 }, short: { width: 15, height: 14.8, shape: 'rect', round: 3 } },
+        height: FOOT_H, flare: (-FOOT_H * (tanT + tanZ)) / 2, thickness: WALL, // the kit foot takes one flare: the mean lean (0.1 mm off either axis)
+        notch: { long: { width: 18, height: 15, shape: 'rect', round: 4 }, short: { width: 15, height: 14.8, shape: 'rect', round: 4 } }, // side.jpg: top corners r ≈ 4 mm
       },
       cast: { seed: 11, sag: 0, wave: 0, rim: 0.5, skew: 0.25 },
       material: plain, density: 1.25 * Math.sqrt(q),
@@ -102,7 +122,7 @@ export default {
       const hw = cell.w / 2
       const long = side === 'front'
       const half0 = (long ? W0 : D0) / 2
-      const halfAt = (Y) => half0 + (Y - FOOT_H) * tanT
+      const halfAt = (Y) => half0 + (Y - FOOT_H) * (long ? tanT : tanZ)
       const face = (faceW, dy) => bodyFace({ faceW, dy, halfAt, hw, y0: FOOT_H }).P
       // the end face: the same elements, each re-fitted to its box on face-end.jpg (traced.js END_FIT);
       // its frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body and tail
@@ -134,7 +154,7 @@ export default {
       const long = side === 'front'
       const n = f.notch
       const half0 = (long ? W0 : D0) / 2
-      const halfAt = (Y) => half0 + (Y - FOOT_H) * tanT
+      const halfAt = (Y) => half0 + (Y - FOOT_H) * (long ? tanT : tanZ)
       // face-long-foot.jpg: the field runs from y 3.8 to 29.6 (vessel), stepping over the notch and its frame
       const nh = n.w / 2 + 1.4, nv = n.h + 1.4
       const field = [[3.3, 3.8], [hw - nh, 3.8], [hw - nh, nv], [hw - 3.2, nv], [hw - 3.2, 29.6], [3.3, 29.6]]
@@ -152,8 +172,8 @@ export default {
     // ---------------------------------------------------------------- lid panels
     const top = { a: kit.fangSection(bodyOpts)(WALL_H).a, b: kit.fangSection(bodyOpts)(WALL_H).b }
     const LW = 2 * top.a, LD = 2 * top.b
-    const lidOpts = { width: LW, depth: LD, rise: RISE, ridge: RIDGE, concave: CONVEX, skirt: { height: SKIRT } }
-    const roof = roofModel(LW, LD, RIDGE, RISE, CONVEX, SKIRT)
+    const lidOpts = { width: LW, depth: LD, rise: RISE, ridge: RIDGE, concave: CONVEX, section: SECTION, pillow: PILLOW, skirt: { height: SKIRT } }
+    const roof = roofModel(kit, lidOpts)
     const ll = kit.hippedLidLayout(lidOpts)
     await onProgress(0.5, 'lid slopes')
     // lid slopes: the traced body mask, upside down, re-fitted to the flattened lid faces (traced.js
@@ -208,7 +228,7 @@ export default {
       }, { depth: 0.35, profile: 'u' })
       return p.bake()
     }
-    const kr = roofModel(KNOB.width, KNOB.depth, KNOB.ridge, KNOB.rise, KNOB.convex, 0)
+    const kr = roofModel(kit, { width: KNOB.width, depth: KNOB.depth, ridge: KNOB.ridge, rise: KNOB.rise, concave: KNOB.convex, section: KNOB.section, pillow: KNOB.pillow })
     panels.knobLong = knobPanel(KNOB.width, kr.arc(0, 1), true, seed + 7, KNOB.ridge / 2)
     panels.knobEnd = knobPanel(KNOB.depth, kr.arc(1, 1), true, seed + 8, 0) // side.jpg: a two-eyed micro-mask on the ends
 
@@ -240,7 +260,7 @@ export default {
     lid.position.y = LID_Y
     object.add(lid)
     const knob = kit.roofKnob({
-      width: KNOB.width, depth: KNOB.depth, rise: KNOB.rise, ridge: KNOB.ridge / KNOB.width, concave: KNOB.convex, skirt: { height: KNOB.skirt },
+      width: KNOB.width, depth: KNOB.depth, rise: KNOB.rise, ridge: KNOB.ridge / KNOB.width, concave: KNOB.convex, section: KNOB.section, pillow: KNOB.pillow, skirt: { height: KNOB.skirt },
       post: KNOB.post, embed: KNOB.embed, material: plain, part: 'knob',
       faces: { long: { relief: panels.knobLong, density: 3 * Math.sqrt(q), fade: 0.4 }, short: { relief: panels.knobEnd, density: 3 * Math.sqrt(q), fade: 0.4 } },
     })
@@ -323,27 +343,13 @@ function combOutline(L, H, embed, { pitch = 4, w = 1.0, depth = 0.66, hook = 1.1
 }
 
 /**
- * Replica of the kit's hipped-roof loft (lid.js resolveRoof), so the lid décor can be authored
- * in world heights and the lid flanges can follow the CONVEX hips and midlines as curved paths.
+ * The lid's (or knob's) roof surface — kit.hippedRoof, the very loft hippedLid builds (ogival section, pillowed
+ * slopes) — plus what this file needs on top: v ↔ slant / height inversions for the lid décor, and hip /
+ * slope-midline paths so the lid flanges follow the curved hips and the swelling slopes.
  */
-function roofModel(W, D, ridge, rise, c, y0) {
-  const A = W / 2, B = D / 2
-  const rh = Math.min((ridge <= 1 ? ridge * W : ridge) / 2, A - 1e-3)
-  const g = (v) => (1 - c) * v + c * v * v
-  const dg = (v) => (1 - c) + 2 * c * v
-  const level = (v) => ({ a: A + (rh - A) * v, b: B * (1 - v), y: y0 + rise * g(v) })
-  const N = 48
-  const arcF = [0], arcS = [0]
-  for (let i = 1; i <= N; i++) {
-    const p = level((i - 1) / N), qq = level(i / N)
-    arcF.push(arcF[i - 1] + Math.hypot(qq.b - p.b, qq.y - p.y))
-    arcS.push(arcS[i - 1] + Math.hypot(qq.a - p.a, qq.y - p.y))
-  }
-  const arc = (k, v) => {
-    const t = k % 2 === 0 ? arcF : arcS
-    const f = Math.min(N, Math.max(0, v * N)), i = Math.min(N - 1, Math.floor(f))
-    return t[i] + (t[i + 1] - t[i]) * (f - i)
-  }
+function roofModel(kit, opts) {
+  const R = kit.hippedRoof(opts)
+  const { A, B, rh, level, arc } = R
   const invert = (fn, target) => {
     let lo = 0, hi = 1
     for (let i = 0; i < 40; i++) {
@@ -353,20 +359,7 @@ function roofModel(W, D, ridge, rise, c, y0) {
     }
     return (lo + hi) / 2
   }
-  const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
-  const ST = [[1, 0, 0], [0, 0, -1], [-1, 0, 0], [0, 0, 1]]
-  const point = (k, v, s) => {
-    const L = level(v)
-    const even = k % 2 === 0
-    const Dd = even ? L.b : L.a, Hh = even ? L.a : L.b
-    const x = (2 * s - 1) * Hh
-    return new THREE.Vector3(SN[k][0] * Dd + ST[k][0] * x, L.y, SN[k][2] * Dd + ST[k][2] * x)
-  }
-  const normal = (k, v) => {
-    const h = rise * dg(v)
-    const up = k % 2 === 0 ? B : A - rh
-    return new THREE.Vector3(SN[k][0] * h, up, SN[k][2] * h).normalize()
-  }
+  const point = (k, v, s) => R.point(k, s, v)
   const path = (pts, outs) => {
     const cum = [0]
     for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]))
@@ -389,7 +382,7 @@ function roofModel(W, D, ridge, rise, c, y0) {
   }
   const M = 40
   return {
-    A, B, rh, top: y0 + rise, level, arc,
+    A, B, rh, top: R.top, level, arc,
     vOfS: (k, s) => invert((v) => arc(k, v), s),
     vOfY: (y) => invert((v) => level(v).y, y),
     hipPath(k, xf) {
@@ -397,7 +390,7 @@ function roofModel(W, D, ridge, rise, c, y0) {
       for (let i = 0; i <= M; i++) {
         const v = i / M
         pts.push(xf(point(k, v, 1)))
-        outs.push(normal(k, v).add(normal((k + 1) % 4, v)).normalize())
+        outs.push(R.normal(k, 1, v).add(R.normal((k + 1) % 4, 0, v)).normalize())
       }
       return path(pts, outs)
     },
@@ -406,7 +399,7 @@ function roofModel(W, D, ridge, rise, c, y0) {
       for (let i = 0; i <= M; i++) {
         const v = (i / M) * vEnd
         pts.push(xf(point(k, v, 0.5)))
-        outs.push(normal(k, v))
+        outs.push(R.normal(k, 0.5, v))
       }
       return path(pts, outs)
     },
