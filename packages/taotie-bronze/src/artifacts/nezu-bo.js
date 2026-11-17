@@ -27,7 +27,9 @@ function facePatch(kit, { face, side, y0, y1, relief, material, density }) {
     out.nrm.set(n[0], n[1], n[2])
   }
   const nu = Math.ceil(PANEL_W * density), nv = Math.ceil((y1 - y0) * density)
-  const geo = kit.buildSurface({ surface, segments: [nu, nv], relief, fade: 1.5, maxVerts: 2e6 })
+  // no fade on the centre line (u 0): the right and left panels carry the same relief there, so the two patches meet
+  // displaced alike (a fade drew a groove down the middle of every face)
+  const geo = kit.buildSurface({ surface, segments: [nu, nv], relief, fade: { u0: 0, u1: 1.5, v0: 1.5, v1: 1.5 }, maxVerts: 2e6 })
   return new THREE.Mesh(geo, material)
 }
 

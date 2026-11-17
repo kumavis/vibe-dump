@@ -655,14 +655,17 @@ kit.weaveFill(panel, rect, { unit: 'dragon' | 'scroll' | 'ring' | 'chain' | fn(L
   shift (half-drop, × w per row), row0 (row parity offset), gapY (mm between rows), links: true (S-links between the
   ports of cells one above the other: a column), map: ([x, y]) → panel (after tiling: true mm → panel, a mirrored side),
   ribs: 3, rib: 1.7, groove: 0.55 (mm; ribbon width = ribs·rib + (ribs−1)·groove), height: 1.1, depth: 0.45 (groove),
-  gap: 0.55 (the shadow gap at a crossing), shoulder: 0.4,
+  gap: 0.55 (the shadow gap at a crossing), shoulder: 0.4, crown: 1 (rib section), ribStyle: 'ridge' | 'cut',
+  ground: { depth, shoulder } (everything in the clip that is not raised steps DOWN: the sunk, earth-packed ground),
   params: { nest 0–2 (ribbons nested inside a frame), head (scale), headX, headY, crest 'stalk'|'hook',
             closed (the frame runs on over the top and the crest crosses OVER it), link, two (scroll: two-start) },
   clip: (ctx) => path }) → { cells, pitch, count, ms }
 kit.weaveTile(rect, sameOpts) → { els, cells, pitch, count }      // the elements only (draw them yourself, e.g. on two panels)
 kit.renderWeave(panel, els, { ribs, groove, height, depth, gap, shoulder, clip })   // any element list in panel mm
 kit.weaveCell(unit, L, T, params) → els          // one cell, local mm, origin bottom-left, y up (params.face −1: snout right)
-kit.dragonHead({ crest, crestLen, neckLen, z }) // the solid head in its 30 × 20 box, snout left
+kit.dragonHead({ crest, crestLen, neckLen, z, variant: 'band' | 'panel' | 'field', eye })   // a SOLID head in its 30 × 20 box, snout left
+//   band: profile head, snout rolled in a C, ear hook, crest stalk or hook, eye r 2.6 · panel: squarer, squared jaw
+//   hooks, '?' crest hook, eye r 2.3 · field: compact, two squared jaw hooks, crest hooked over, eye r 2.1
 kit.weaveEls() / weaveMerge(a, b) / weaveMap(els, f) / sLink(a, b, w) / ribbonWidth(ribs, rib, groove)
 kit.WEAVE_UNITS  kit.WEAVE_PRESETS  kit.WEAVE_DEFAULTS
 // els = { ribbons: [{ pts, w, z, ribs?, group? }], solids: [{ pts, w, z }], masses: [{ pts, z }], knobs: [{ c, r, z }],
@@ -675,7 +678,9 @@ raised, and its ribs are cut as nested strokes (sink the middle band, raise its 
 grooves). Cost per layer: one raise, one clamp if anything crosses, ⌈(n−1)/2⌉ sink + raise pairs; plus one sink for all
 eyes and incised lines. The bo's upper half-face (258 × 304 mm at 6 px/mm, ≈ 240 ribbons) takes ≈ 0.4 s per panel.
 
-**Units.** `dragon`: the head in a G-frame. The body ribbon runs round the cell, open at the top for the crest (or
+**Units.** `field`: the bo's lower field along a row — a solid head, its body rolled into a SQUARED spiral, a squared
+G-hook, and an H-LINK: a vertical ribbon through the whole row height (it runs on into the rows above and below:
+the rows hang together) with a crossbar to the next head. `dragon`: the head in a G-frame. The body ribbon runs round the cell, open at the top for the crest (or
 `closed`, crossed by it), with `nest` narrower ribbons inside along the bottom and one side that end in hooks, and the
 neck stalk OVER them. In link mode the innermost ribbon leaves through the bottom OVER the frame, toward the next cell.
 `scroll`: a ribbon rolled ≈ 1.05 turns round a knob (`two`: a second ribbon from the opposite corner into the same eye).
@@ -683,7 +688,7 @@ neck stalk OVER them. In link mode the innermost ribbon leaves through the botto
 interlocked C-rings. Its left ring is fed along the top edge, its right ring leaves along the bottom, and squared hooks
 fill the corners. Tiled with `x: 'flip'`, every ribbon becomes an S-link from site to site.
 
-**Presets (the Nezu bo; KIT units = true mm).** The atlas sheet `weave` has each as a preset at its matched size, plus
+**Presets (the Nezu bo; KIT units = true mm; all at height 1.5, depth 0.55, gap 0.7, ground 0.5 unless stated).** The atlas sheet `weave` has each as a preset at its matched size, plus
 sliders for cell size, rib count, rib width, groove, relief, gap, density (nest) and head size.
 
 | preset | zone | unit cell | tiling | ribbon |
@@ -691,8 +696,17 @@ sliders for cell size, rib count, rib width, groove, relief, gap, density (nest)
 | `bo-top-band` | band round the top (431.5–450) | chain site 40 × 16.9 (measured 39–42): two rings R 5.5 interlocked (2e = 1.16 R) | x flip; a whole EVEN number of sites per face (the bo: 12 × 38.5) | 3 × 1.4 + 2 × 0.5 = 5.2 |
 | `bo-centre-panel` | the vertical panel (钲), each half one column ≈ 24 mm wide | 8 cells: scroll, 4 dragons, scroll (two-start), 2 dragons; gaps 6.5 | y rotate 180°, S-links; the two columns REPEAT (not mirrored) | 3 × 1.7 + 2 × 0.55 = 6.2 |
 | `bo-band` | strips between the boss rows (篆) | dragon ≈ 25–46 × 34.4 (cell borders traced), crossed ring 16 | mirrored about the face centre (snouts inward) | 3 × 1.75 + 2 × 0.6 = 6.45 |
-| `bo-field` | lower field (鼓) | dragon 62 × 31.6, 1 nested ribbon, crest hooked back over the head | y flip; straight repeat round the bell | 3 × 1.6 + 2 × 0.55 = 5.9 |
-| `bo-base-band` | the field's worn lowest row | as bo-field | (row0 = 3 to keep the flip) | 0.55 mm high, softer |
+| `bo-field` | lower field (鼓) | field 62 × 31.6 (on the bo 8 × 64.6 per face): head, squared spiral, G-hook, H-link | y flip; straight repeat round the bell | 3 × 1.6 + 2 × 0.55 = 5.9 |
+| `bo-base-band` | the field's worn lowest row | as bo-field | (row0 = 3 to keep the flip) | worn: 0.8 high, ribs 0.32, ground 0.3 |
+
+**What makes it read BOLD** (bo round 2: the first pass read as faint embossing, and in beauty the décor barely differed from
+the plain wall). (1) Height: ribbons 1.5 mm above the wall, built as a 0.95 mm plateau with 0.55 mm round-crowned ribs
+(`height: 1.5, depth: 0.55, crown: 1`). (2) A real STEP of sunk ground: `ground: { depth: 0.5 }`, so a ribbon stands
+≈ 2 mm above the floor of its cell. The step is recorded in the groove channel, so the patina packs it with earth.
+(3) Shadow gaps at crossings `gap: 0.7`, cleared to the sunk floor. (4) Patina: pale earth in recesses against dark
+rubbed tops (the bo preset: `earth` 0.62, `earthColor` pale grey, `recessDirt` 0.5, `tops` 1, `topsTone` 0). On the
+bronze the rib TOPS and the heads are dark metal and the grooves and ground pale earth; it reads as dark bodies drawn in
+pale line.
 
 **On a vessel.** Tile in TRUE mm and `map` into the panel (an angle-proportional panel: x · PANEL_W / (A(y) · arc)).
 For a straight repeat round a body whose left half-face mirrors one panel, draw a second panel for the left half with

@@ -21,6 +21,8 @@ import NECK_T from '../../../reference/nezu-you/trace/neck.json'
 import SKIRT_T from '../../../reference/nezu-you/trace/skirt.json'
 import FOOT_T from '../../../reference/nezu-you/trace/foot.json'
 import LID_T from '../../../reference/nezu-you/trace/lid.json'
+import { drawBelly } from './belly.js'
+import { drawFrieze, NECK_FRIEZE, SKIRT_FRIEZE, FOOT_FRIEZE } from './friezes.js'
 
 const FILLS = {
   spirals: (min = 3.2) => ({ kind: 'spirals', line: 0.5, pitch: 0.9, gap: 0.35, square: 0.25, tail: false, min }),
@@ -214,22 +216,22 @@ const panelOf = (kit, size, ppmm, seed) => new kit.ReliefPanel({ width: size.wid
 
 export function bellyPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderTrace(kit, p, BELLY, { height: 3.0, shoulder: 1.0, seed, contour: { inset: 1.3, line: 0.6 }, ground: { pitch: 1.2, cell: [5.4, 9.6], pairs: 0.2, roundness: 0.6 } })
+  drawBelly(kit, p, size, { seed })
   return p.bake()
 }
 export function neckPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderTrace(kit, p, NECK, { widen: 1.15, round: 1.3, inner: 0.5, height: 2.0, shoulder: 0.75, seed, contour: { inset: 0.95, line: 0.45 }, ground: { pitch: 1.0, cell: [4.6, 8], roundness: 0.5, pairs: 0.3 } })
+  drawFrieze(kit, p, size, NECK_FRIEZE, { seed })
   return p.bake()
 }
 export function skirtPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderTrace(kit, p, SKIRT, { widen: 1.15, round: 1.3, inner: 0.5, height: 1.9, shoulder: 0.7, seed, contour: { inset: 0.9, line: 0.42 }, ground: { pitch: 0.95, cell: [4.4, 7.6], roundness: 0.5, pairs: 0.3, depth: 0.5 } })
+  drawFrieze(kit, p, size, SKIRT_FRIEZE, { seed })
   return p.bake()
 }
 export function footPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderTrace(kit, p, FOOT, { round: 1.1, inner: 0.45, height: 1.8, shoulder: 0.7, seed, contour: { inset: 0.9, line: 0.42 }, ground: { pitch: 0.95, cell: [4.4, 7.6], roundness: 0.5, pairs: 0.3 } })
+  drawFrieze(kit, p, size, FOOT_FRIEZE, { seed })
   return p.bake()
 }
 export function lidPanel(kit, size, { ppmm, seed }) {

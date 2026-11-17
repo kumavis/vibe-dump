@@ -220,7 +220,7 @@ export function renderWeave(panel, els, o = {}) {
       for (const r of strokes) if (r.kind === 'ribbon') ends.push(r.pts[0], r.pts[r.pts.length - 1])
       const joined = (p, self) => ends.some((q) => q !== self && Math.hypot(q[0] - p[0], q[1] - p[1]) < 3.2) // cells overlap their neighbours by 2 × 1.5 mm
       for (const { n, rib, list } of groups.values()) {
-        const work = new RidgeWork(panel, { width: rib, pitch: rib + g, height: d, groove: 0, crown: P.crown ?? 0.6, mode: 'add' })
+        const work = new RidgeWork(panel, { width: rib, pitch: rib + g, height: d, groove: 0, crown: P.crown ?? 1, mode: 'add' })
         for (const r of list) {
           if (n < 2) { work.line(r.pts, { mode: 'raise', height: h }); continue }
           const p0 = r.pts[0], p1 = r.pts[r.pts.length - 1]
@@ -250,6 +250,18 @@ export function renderWeave(panel, els, o = {}) {
       for (const l of els.lines) { ctx.lineWidth = l.w ?? 0.6; ctx.beginPath(); pathPts(ctx, l.pts, l.closed); ctx.stroke() }
     }), { depth: d * (P.eyeDepth ?? 1.1), shoulder: 0.22, profile: 'u' })
   }
+  // 5. the sunk ground (ground: { depth, shoulder }): everything inside the clip that is not raised steps DOWN — the
+  //    pale earth-packed ground of the bronze, a real step and not a shading; the foot of every raised element keeps
+  //    its shoulder. Recorded in the groove channel (patina: recess / earth).
+  if (P.ground && clip) {
+    const gd = P.ground.depth ?? 0.5, f = panel.field, gr = panel.groove
+    panel._apply((ctx) => { ctx.beginPath(); clip(ctx); ctx.fill() }, 'plateau', P.ground.shoulder ?? 0.35, 0.35, (i, p) => {
+      const t = Math.max(0, Math.min(1, (0.3 - f[i]) / 0.3))
+      if (t <= 0) return
+      f[i] -= gd * p * t
+      if (p * t > gr[i]) gr[i] = p * t
+    }, PROFILES.plateau)
+  }
   return { cuts, ms: performance.now() - t0 }
 }
 
@@ -261,8 +273,32 @@ export function renderWeave(panel, els, o = {}) {
  * curl at the back, a crest stalk rising (or a hook turning back over the head), a neck stalk with a knob dropping).
  * crest: 'stalk' (runs on `crestLen` mm above the box) | 'hook'
  */
-export function dragonHead({ crest = 'stalk', crestLen = 12, neckLen = 9, z = 1 } = {}) {
+export function dragonHead({ crest = 'stalk', crestLen = 12, neckLen = 9, z = 1, variant = 'band', eye } = {}) {
   const E = emptyEls()
+  if (variant === 'panel') {
+    // the central panel's head (photo-18 at 3×): a squarer mass, squared jaw hooks down and back, a '?' crest hook
+    E.masses.push({ z, pts: roundCorners([[6, 4], [26, 4], [28.5, 8], [28.5, 16], [24, 19.5], [8, 19.5], [4, 15], [4, 8], [6, 4]], 2.2) })
+    E.solids.push({ z, pts: roundCorners([[7, 7], [1.4, 7], [1.4, 1.2], [6.4, 1.2]], 1.4), w: 3.4 })
+    E.solids.push({ z, pts: roundCorners([[11, 18], [11, 24.5], [18.5, 25], [19.5, 21.2]], [0, 2.2, 1.6, 0]), w: 3.4 })
+    E.solids.push({ z, pts: roundCorners([[25, 13.5], [30.5, 13.5], [30.5, 9.5]], 1.2), w: 2.8 })
+    if (crest === 'stalk') E.solids.push({ z, pts: [[22, 19], [22, 20 + crestLen]], w: 3.4 })
+    E.solids.push({ z, pts: [[14, 5], [14, -neckLen]], w: 3.4 })
+    E.knobs.push({ z, c: [14, 1.2], r: 2.3 })
+    E.eyes.push({ c: [17.4, 11.6], r: eye ?? 2.3, line: 0.85 })
+    E.lines.push({ pts: curlPts([8.4, 12.4], 2.4, 0.5, 90, 1.0, 20), w: 0.65 })
+    return E
+  }
+  if (variant === 'field') {
+    // the field's head (photo-18 at 4×): compact, the jaw two squared hooks down and back, the crest hooked up and
+    // over toward the body, a small ringed eye
+    E.masses.push({ z, pts: roundCorners([[5, 5], [24, 4], [29, 9], [28.5, 17], [20, 19.5], [9, 19], [4, 14], [5, 5]], 2.6) })
+    E.solids.push({ z, pts: roundCorners([[6, 8.5], [1, 8.5], [1, 2.2], [6.5, 2.2]], 1.4), w: 3.2 })
+    E.solids.push({ z, pts: [[11, 5], [11, -neckLen]], w: 3.2 })
+    E.solids.push({ z, pts: roundCorners([[17, 18.5], [17, 24.5], [26, 24.5], [26, 20.5]], 1.8), w: 3.2 })
+    E.eyes.push({ c: [15, 12], r: eye ?? 2.1, line: 0.8 })
+    E.lines.push({ pts: roundCorners([[22, 7], [25.5, 7], [25.5, 12]], 1.2), w: 0.6 })
+    return E
+  }
   E.masses.push({ z, pts: roundCorners([[7, 4.2], [15, 3], [24, 3.4], [29, 7], [29.4, 13.6], [25.4, 18.6], [16, 19.6], [9.6, 18.4], [6.4, 15], [5, 9.6], [7, 4.2]], 2.4) })
   E.solids.push({ z, pts: roundCorners([[9.6, 17.2], [2.2, 17.4], [1.4, 9.4], [6.4, 6.2], [9.4, 8.6], [7.8, 11.6]], [0, 3.6, 3.4, 2.4, 1.6, 0]), w: 3.8 })
   E.solids.push({ z, pts: roundCorners([[24.6, 9], [29.4, 9.4], [30.4, 14.4], [27, 15.8], [25.6, 13.2]], [0, 2, 2, 1.4, 0]), w: 2.8 })
@@ -270,7 +306,7 @@ export function dragonHead({ crest = 'stalk', crestLen = 12, neckLen = 9, z = 1 
   else { E.solids.push({ z, pts: [[16.6, 18], [16.6, 20 + crestLen]], w: 3.8 }); E.knobs.push({ z, c: [11.8, 23.2], r: 2.2 }) }
   E.solids.push({ z, pts: [[10.6, 6], [10.6, -neckLen]], w: 3.6 })
   E.knobs.push({ z, c: [10.6, 1.0], r: 2.5 })
-  E.eyes.push({ c: [16.8, 11.6], r: 2.6, line: 0.85 })
+  E.eyes.push({ c: [16.8, 11.6], r: eye ?? 2.6, line: 0.85 })
   E.lines.push({ pts: curlPts([21.6, 7.2], 2.8, 0.6, 180, -1.1, 24), w: 0.7 })
   E.lines.push({ pts: roundCorners([[3.6, 15.4], [3.6, 10.6], [6.4, 9.4]], 1.6), w: 0.6 })
   return E
@@ -316,7 +352,7 @@ function dragon(L, T, p) {
   const ox = (p.headX ?? 0.2) * L + 0.58 * L * (1 - hs) * 0.5, oy = (p.headY ?? 0.22) * T + 0.56 * T * (1 - hs) * 0.6
   const crestLen = (T + 1.2 - (oy + 20 * sy)) / sy
   const neckLen = Math.max(2, (oy - h + w / 2 - 1) / sy)
-  mergeEls(E, mapEls(dragonHead({ crest: p.crest ?? 'stalk', crestLen, neckLen, z: p.link ? 2 : 1 }), ([x, y]) => [ox + x * sx, oy + y * sy]))
+  mergeEls(E, mapEls(dragonHead({ crest: p.crest ?? 'stalk', crestLen, neckLen, z: p.link ? 2 : 1, variant: p.headVariant, eye: p.eye }), ([x, y]) => [ox + x * sx, oy + y * sy]))
   E.ports = { a: [L - h, T + 1], b: out ?? [h, -1] }
   return E
 }
@@ -395,6 +431,38 @@ function chain(L, T, p) {
   return E
 }
 
+/**
+ * field — the bo's lower field (photo-18 at 4×), one repeat along a row: a solid head (variant 'field') on the left,
+ * its body running along the bottom and rolling up into a squared spiral, a squared G-hook, and the H-LINK: a vertical
+ * ribbon through the whole row height (continuing into the rows above and below, so the rows hang together) with a
+ * crossbar running on to the next repeat's head.
+ */
+function field(L, T, p) {
+  const w = p.w, E = emptyEls(), h = w / 2 + 0.3
+  const hs = p.head ?? 1
+  const sx = (0.27 * L * hs) / 30, sy = (0.6 * T * hs) / 20, ox = 0.015 * L, oy = 0.22 * T
+  const neckLen = (oy + 5 * sy - h + 0.5) / sy
+  mergeEls(E, mapEls(dragonHead({ variant: p.headVariant ?? 'field', neckLen, eye: p.eye }), ([x, y]) => [ox + x * sx, oy + y * sy]))
+  // the body: from the back of the head down to the bottom edge, then rolled into a SQUARED spiral (the bronze's field
+  // is squared hooks, not round curls) turning inward a pitch at a time
+  const x0 = ox + 26 * sx, pitch = w + 0.9
+  const xl = x0 + 0.5, xr = Math.max(xl + 2 * pitch + 1, 0.62 * L)
+  const sq = [[x0, oy + 8 * sy], [x0, h], [xr, h], [xr, T - h], [xl + pitch * 0.5, T - h]]
+  for (let k = 1; ; k++) {
+    const a0 = xl + pitch * (k - 0.5), b0 = h + pitch * k, a1 = xr - pitch * k, b1 = T - h - pitch * k
+    if (a1 - a0 < 1.2 || b1 - b0 < 0.6) { sq.push([a0, Math.max(b0, (h + T - h) / 2)]); break }
+    sq.push([a0, b0], [a1, b0], [a1, b1])
+    if (k > 2) break
+  }
+  E.ribbons.push({ pts: roundCorners(sq, sq.map((_, i) => (i < 2 ? (i ? 2.6 : 0) : 2.2))), w, z: 0 })
+  const gx0 = xr + w + 0.9, gx1 = Math.max(gx0 + w + 1.2, 0.86 * L - w - 1.6)
+  E.ribbons.push({ pts: roundCorners([[gx1, T - h], [gx0, T - h], [gx0, h], [gx1, h], [gx1, 0.44 * T], [gx1 - Math.min(3, (gx1 - gx0) * 0.4), 0.44 * T]], [0, 2.2, 2.2, 2.2, 1.2, 0]), w, z: 0 })
+  const hx = 0.915 * L
+  E.ribbons.push({ pts: [[hx, -1.5], [hx, T + 1.5]], w, z: 0 })
+  E.ribbons.push({ pts: [[hx, 0.5 * T], [L + ox + 3 * sx, 0.5 * T]], w: w * 0.85, z: 0 })
+  return E
+}
+
 /** link — an S-link ribbon between two ports (the column tiler calls it; exported for hand layouts) */
 export function sLink(a, b, w, z = 0) {
   const dy = Math.abs(a[1] - b[1]) * 0.65
@@ -402,7 +470,7 @@ export function sLink(a, b, w, z = 0) {
   return { pts: bezier(a, [a[0], a[1] + down * dy], [b[0], b[1] - down * dy], b, 28), w, z }
 }
 
-export const WEAVE_UNITS = { dragon, scroll, ring, chain }
+export const WEAVE_UNITS = { dragon, scroll, ring, chain, field }
 
 /** one unit cell, local mm (origin bottom-left, y up). params.w = ribbon width (mm) */
 export function weaveCell(unit, L, T, params = {}) {
@@ -495,7 +563,7 @@ export function weaveFill(panel, rect, o = {}) {
   const T = weaveTile(rect, o)
   const clip = o.clip ?? ((ctx) => ctx.rect(rect.x, rect.y, rect.w, rect.h))
   const R = {}
-  for (const k of ['ribs', 'groove', 'height', 'depth', 'gap', 'shoulder']) if (o[k] != null) R[k] = o[k]
+  for (const k of ['ribs', 'groove', 'height', 'depth', 'gap', 'shoulder', 'ground', 'crown']) if (o[k] != null) R[k] = o[k]
   renderWeave(panel, T.els, { ...R, ...o.render, clip })
   return { cells: T.cells, pitch: T.pitch, count: T.count, ms: performance.now() - t0 }
 }
@@ -511,18 +579,18 @@ export const WEAVE_PRESETS = {
   // the band round the top: interlocked C-rings, a site every ≈ 39–42 mm (two rings ≈ 20 mm; round the bo: 12 sites of
   // 38.5 mm per face — an even number, as the flip needs), flipped by turns so the
   // links run top and bottom alternately; 3 ribs, ribbon ≈ 5.2 mm (the top band's ribbons are a little narrower)
-  'bo-top-band': { unit: 'chain', cell: [40, 17], tiling: { x: 'flip' }, ribs: 3, rib: 1.4, groove: 0.5, plaque: { w: 168, h: 21 } },
+  'bo-top-band': { unit: 'chain', cell: [40, 17], tiling: { x: 'flip' }, height: 1.5, depth: 0.55, gap: 0.7, ground: { depth: 0.5 }, ribs: 3, rib: 1.4, groove: 0.5, plaque: { w: 168, h: 21 } },
   // the panel down the centre: one column of cells ≈ 27 mm wide — a big scroll on top, four dragons, a scroll, two
   // dragons — every second cell turned 180°, S-links between; the two columns are the same column REPEATED (not mirrored)
   'bo-centre-panel': {
     sequence: [{ unit: 'scroll', h: 0.62 }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'scroll', h: 0.62, params: { two: true } }, { unit: 'dragon' }, { unit: 'dragon' }],
-    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, params: { link: true, nest: 1, head: 1.0, headX: 0.16 }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
+    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, height: 1.5, depth: 0.55, gap: 0.7, ground: { depth: 0.5 }, params: { link: true, nest: 1, head: 1.0, headX: 0.16, headVariant: 'panel' }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
   },
   // the strips between the boss rows: dragons in G-frames ≈ 35 × 34 mm facing the centre, the crest over the frame
-  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, params: { nest: 1, head: 0.95, headY: 0.2, closed: false }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
+  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, height: 1.5, depth: 0.55, gap: 0.7, ground: { depth: 0.5 }, params: { nest: 1, head: 0.95, headY: 0.2, closed: false, headVariant: 'band' }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
   // the field: dragons in G-frames, cells 62 × 31.6 mm, the crest hooked back over the head (no stalk: the rows' stalks
   // would line up into spines the bronze does not have), rows flipped by turns, a straight repeat round the bell
-  'bo-field': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 1, head: 0.92, headX: 0.16, closed: true, crest: 'hook' }, ribs: 3, rib: 1.6, groove: 0.55, plaque: { w: 186, h: 63 } },
+  'bo-field': { unit: 'field', cell: [62, 31.6], tiling: { y: 'flip' }, height: 1.5, depth: 0.55, gap: 0.7, ground: { depth: 0.5 }, params: { head: 1.15 }, ribs: 3, rib: 1.6, groove: 0.55, plaque: { w: 186, h: 63 } },
   // the band round the base = the field's lowest row, worn almost flat on the bronze: lower and softer
-  'bo-base-band': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 1, head: 0.92, headX: 0.16, closed: true, crest: 'hook' }, ribs: 3, rib: 1.6, groove: 0.55, height: 0.55, depth: 0.28, shoulder: 0.5, plaque: { w: 186, h: 32 } },
+  'bo-base-band': { unit: 'field', cell: [62, 31.6], tiling: { y: 'flip' }, params: { head: 1.15 }, ribs: 3, rib: 1.6, groove: 0.55, height: 0.8, depth: 0.32, shoulder: 0.5, ground: { depth: 0.3 }, plaque: { w: 186, h: 32 } },
 }

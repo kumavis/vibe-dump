@@ -41,14 +41,6 @@ export const BODY = scaleR([
   [91, 169.2], [90.6, 188], [90.5, 205.8, 'corner'], [89.8, 207.5], [89.6, 213],
 ])
 
-/**
- * Décor panel sizes (mm) pinned where the form has moved under them: the belly register measured 384.86 × 122.71
- * (developed width at mid-arc × arc height) on the outline the décor was traced for. The slimmer belly is ≈ 365 × 119:
- * the panel keeps its size and is laid 1:1 across (mapWidth), so its outer ≈ 10 mm per side runs past the sector edge
- * under the end flanges, and its 122.71 mm are laid over the 119.1 mm of arc (≈ 3 % shorter). Remove an entry when
- * the décor is redrawn for the new outline.
- */
-export const DECOR_SIZE = { belly: { width: 384.86, height: 122.71 } }
 
 /** lid outline (outer), bottom of the skirt → apex; the skirt sits over the mouth */
 export const LID = scaleR([

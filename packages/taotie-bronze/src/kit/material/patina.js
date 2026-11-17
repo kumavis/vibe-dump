@@ -482,14 +482,16 @@ export const PATINA_PRESETS = {
   // lines on pale), a few bright green malachite spots and warm red-brown cuprite patches on the boss-row grounds and
   // in the bands, the bosses and the crown dark and glossy-dull
   'nezu-bo': {
+    // bo-fix round 2: the weave's sunk ground and grooves packed with PALE grey earth against dark rubbed rib tops and
+    // heads (photo-18 / 19), so the décor reads at vessel distance: more and paler earth, less recess dirt, tops darker.
     // round-8 fix: darker and greyer (photo-18 / 19: dark grey-olive metal, pale GREY earth in the grooves, a few broad
     // malachite patches low on the boss rows and the panel foot, faint cuprite in the bands) — less warmth, no ochre
     age: 1, tin: 0.14, lead: 0.12, polish: 0.35, tarnish: 0.45, cuprite: 0.5, cupriteTone: 0.2, tinOxide: 0.95,
     tinOxideTone: 1.15, malachite: 0.2, carbonate: 0.18, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
     turquoiseTone: 0.5, islands: 0.75, malachiteScale: 1.6, crust: 0.1, chloride: 0, soot: 0.03, crevice: 0.95,
-    patchScale: 90, mottleScale: 7, patchiness: 0.95, softness: 0.6, drift: 0.3, earth: 0.36, earthColor: '#aaa89e',
-    calcite: 0.04, streaks: 0.04, burialSide: 0.1, recessDirt: 0.95, interiorTone: 0.4, wax: 0, inlay: 0, inlayGround: 0,
-    wear: 0.2, dulling: 0.38, tops: 1, nobleWarmth: 0.18, matte: 0.85, topsTone: 0.1, ledgeMatte: 1, nobleRelief: -0.5,
+    patchScale: 90, mottleScale: 7, patchiness: 0.95, softness: 0.6, drift: 0.3, earth: 0.62, earthColor: '#b6b2a4',
+    calcite: 0.04, streaks: 0.04, burialSide: 0.1, recessDirt: 0.5, interiorTone: 0.4, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.2, dulling: 0.38, tops: 1, nobleWarmth: 0.18, matte: 0.85, topsTone: 0, ledgeMatte: 1, nobleRelief: -0.5,
     tint: '#9b978d', upperTone: 0.4, upperHeight: 0.8, plainTone: 0.75, speckle: 0.012, speckleScale: 0.7,
     speckleColor: '#3a9a5e', speckleDecor: 0.3, crustIsles: 0.06, crustScale: 7, crustColor: '#b0b0a6', crustPlace: 0.6,
     pustules: 0.006, pustuleScale: 3, pustuleColor: '#2fa060', lowerBody: 0.2, lowerHeight: 0.08, lowerColor: '#9a988e',

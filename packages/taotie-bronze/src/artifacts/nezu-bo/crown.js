@@ -44,9 +44,9 @@ export const CROWN = {
   loop: { outer: [53, 110], inner: [30, 85], r: [13, 5], foot: 44 },
   straps: [
     // A: foot beside the axis, up, over outward into its curl
-    { pts: [[-12, -4], [-12, 22], [-12.6, 30], [-14.5, 38], [-18, 45], [-23.5, 51], [-30, 54.5]], w: [17, 17, 16.5, 16, 15, 14] },
+    { pts: [[-12, -4], [-12, 22], [-12.6, 30], [-14.5, 38], [-18, 45], [-23.5, 51], [-30, 54.5]], w: [16, 17, 18.5, 19, 17.5, 14.5] }, // swelling at the shoulder: a '?'-hook (photo-19)
     // B: foot outside the opening (wide where it meets D), up into its curl
-    { pts: [[-60, -4], [-60, 24], [-59.5, 38], [-57, 46]], w: [20, 18.5, 16] },
+    { pts: [[-60, -4], [-60, 24], [-59.5, 38], [-57, 46]], w: [18.5, 20.5, 17.5] },
     // C: the S's stem, from under the top curl down onto the lower curl
     { pts: [[-68.5, 76], [-68.5, 62], [-70, 55], [-73, 52]], w: [11, 11, 11] },
     // ties: D to B's foot, D to C's lower curl

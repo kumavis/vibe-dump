@@ -107,7 +107,7 @@ export function upperPanels(kit, { ppmm, seed, y0 }) {
     }
   }
   const bandClip = (ctx) => { for (const [b0, b1] of LAYOUT.bands) ctx.rect(pHalf(b1) + 0.2, Y(b0) + 0.2, xEnd0 - pHalf(b1) - 0.4, b1 - b0 - 0.4) }
-  kit.renderWeave(panel, bandEls, { ribs: band.ribs, groove: band.groove, height: 1.1, depth: 0.45, clip: bandClip })
+  kit.renderWeave(panel, bandEls, { ribs: band.ribs, groove: band.groove, height: band.height, depth: band.depth, gap: band.gap, ground: band.ground, clip: bandClip })
 
   // --- the edge strip: twisted pairs (mirrored zone)
   const xs0 = xEnd0 + F + 0.4, xs1 = xEnd1 - 0.4
@@ -125,7 +125,7 @@ export function upperPanels(kit, { ppmm, seed, y0 }) {
     ctx.moveTo(1.6, Y(LAYOUT.border[1]) + 0.2); ctx.lineTo(pHalf(P.y[0]) - F - 0.2, Y(LAYOUT.border[1]) + 0.2)
     ctx.lineTo(pHalf(P.y[1]) - F - 0.2, Y(topLedge[0]) - 0.2); ctx.lineTo(1.6, Y(topLedge[0]) - 0.2); ctx.closePath()
   }
-  const colR = { ribs: cp.ribs, groove: cp.groove, height: 1.1, depth: 0.45, clip: colClip }
+  const colR = { ribs: cp.ribs, groove: cp.groove, height: cp.height, depth: cp.depth, gap: cp.gap, ground: cp.ground, clip: colClip }
   kit.renderWeave(R, col.els, colR)
   kit.renderWeave(L, kit.weaveMap(col.els, ([x, y]) => [xa + xb - x, y]), colR) // the same column, repeated on the bronze
   // the top band (preset bo-top-band): tiled in TRUE mm round the face, a whole even number of sites per face
@@ -134,7 +134,7 @@ export function upperPanels(kit, { ppmm, seed, y0 }) {
   const Wt = (xEnd1 + 1.6) / k // true half-face width at the band
   const tRect = { x: 0, y: Y(tb[0]) + 0.3, w: Wt, h: tb[1] - tb[0] - 1.6 }
   const tClip = (ctx) => ctx.rect(1.0, Y(tb[0]) + 0.2, xEnd1 - 1.0, tb[1] - tb[0] - 1.4)
-  const tR = { ribs: tp.ribs, groove: tp.groove, height: 1.05, depth: 0.42, clip: tClip }
+  const tR = { ribs: tp.ribs, groove: tp.groove, height: tp.height, depth: tp.depth, gap: tp.gap, ground: tp.ground, clip: tClip }
   const chainR = kit.weaveTile(tRect, { ...tp, cell: [tp.cell[0], tRect.h], wrap: 2 * Wt, phase: 0, map: ([x, y]) => [x * k, y] })
   kit.renderWeave(R, chainR.els, tR)
   const chainL = kit.weaveTile(tRect, { ...tp, cell: [tp.cell[0], tRect.h], wrap: 2 * Wt, phase: -Wt, map: ([x, y]) => [(Wt - x) * k, y] })
@@ -154,15 +154,14 @@ export function lowerPanels(kit, { ppmm, seed, height }) {
   const rowH = (f1 - f0) / 4
   // the phase puts a head column ≈ 35 mm right of the centre line (faces/dev-lower-19.jpg: eyes at s ≈ 35, 95, 157)
   const phase0 = 62 - 35 + 7.4
-  const clip = (ctx) => ctx.rect(1.6, f0, PANEL_W - 3.2, f1 - f0)
   for (const [P, side] of [[R, 1], [L, -1]]) {
     const map = side > 0 ? ([x, y]) => [x * k, y] : ([x, y]) => [(Wt - x) * k, y]
     const phase = side > 0 ? phase0 : phase0 - Wt
     const cell = [fp.cell[0], rowH]
     const fresh = kit.weaveTile({ x: 0, y: f0 + rowH, w: Wt, h: 3 * rowH }, { ...fp, cell, count: [0, 3], wrap: 2 * Wt, phase, map })
-    kit.renderWeave(P, fresh.els, { ribs: fp.ribs, groove: fp.groove, height: 1.0, depth: 0.42, clip })
+    kit.renderWeave(P, fresh.els, { ribs: fp.ribs, groove: fp.groove, height: fp.height, depth: fp.depth, gap: fp.gap, ground: fp.ground, clip: (ctx) => ctx.rect(1.6, f0 + rowH, PANEL_W - 3.2, f1 - f0 - rowH) })
     const worn = kit.weaveTile({ x: 0, y: f0, w: Wt, h: rowH }, { ...bp, cell, count: [0, 1], row0: 3, wrap: 2 * Wt, phase, map })
-    kit.renderWeave(P, worn.els, { ribs: bp.ribs, groove: bp.groove, height: bp.height, depth: bp.depth, shoulder: bp.shoulder, clip })
+    kit.renderWeave(P, worn.els, { ribs: bp.ribs, groove: bp.groove, height: bp.height, depth: bp.depth, shoulder: bp.shoulder, ground: bp.ground, clip: (ctx) => ctx.rect(1.6, f0, PANEL_W - 3.2, rowH) })
     if (side > 0) R.userData = { fieldRepeats: fresh.count, fieldPitch: fresh.pitch }
   }
   return { R, L }

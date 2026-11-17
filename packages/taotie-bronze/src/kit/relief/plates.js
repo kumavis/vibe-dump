@@ -38,6 +38,7 @@ const DEFAULTS = {
   map: null, // ([x, y]) → [x, y] panel mm (default identity): face mm → panel
   clip: null, // draw(ctx) | [[x, y]…]: only inside this
   seed: 0,
+  union: false, // true: overlapping plates MERGE (nonzero fill; outers wound CCW, holes CW) instead of cancelling (even-odd)
 }
 
 /**
@@ -53,10 +54,11 @@ export function tracedPlates(panel, plates, opts = {}) {
   const list = (Array.isArray(plates) ? plates : plates?.plates || []).map((p) => (Array.isArray(p) ? { outer: p, holes: [] } : p))
   const map = o.map || ((p) => p)
   const loops = []
+  const wind = (L, ccw) => (o.union && (signedArea(L) > 0) !== ccw ? L.slice().reverse() : L)
   for (const p of list) {
     if (!p.outer || p.outer.length < 3) continue
-    loops.push(p.outer.map(map))
-    for (const h of p.holes || []) if (h.length >= 3) loops.push(h.map(map))
+    loops.push(wind(p.outer.map(map), true))
+    for (const h of p.holes || []) if (h.length >= 3) loops.push(wind(h.map(map), false))
   }
   const clip = typeof o.clip === 'function' ? o.clip : Array.isArray(o.clip) ? polyDraw(o.clip) : null
   const draw = (ctx) => {
@@ -67,7 +69,7 @@ export function tracedPlates(panel, plates, opts = {}) {
       for (let i = 1; i < L.length; i++) ctx.lineTo(L[i][0], L[i][1])
       ctx.closePath()
     }
-    ctx.fill('evenodd')
+    ctx.fill(o.union ? 'nonzero' : 'evenodd')
     if (clip) ctx.restore()
   }
   let area = 0
@@ -152,6 +154,12 @@ export function tracedPlates(panel, plates, opts = {}) {
 /** plates.json face mm → a panel: (x, y) ↦ (ox + kx·(x − cx), f(y)) — the usual flat-face mapping helper. */
 export function faceMap({ cx = 0, ox = 0, kx = 1, y = (v) => v } = {}) {
   return ([px, py]) => [ox + kx * (px - cx), y(py)]
+}
+
+function signedArea(L) {
+  let a = 0
+  for (let i = 0; i < L.length; i++) { const p = L[i], q = L[(i + 1) % L.length]; a += p[0] * q[1] - q[0] * p[1] }
+  return a / 2
 }
 
 function polyDraw(pts) {

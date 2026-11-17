@@ -11,7 +11,7 @@
 // Décor (nezu-you/decor.js) is TRACED from the flattened faces of photo-31 (reference/nezu-you/faces/).
 
 import * as THREE from 'three'
-import { OVAL, RK, LV, BODY, LID, BAIL, DECOR_SIZE, bailHalfLength, knobSDF, hornSDF, pivotHeadSDF } from './nezu-you/form.js'
+import { OVAL, RK, LV, BODY, LID, BAIL, bailHalfLength, knobSDF, hornSDF, pivotHeadSDF } from './nezu-you/form.js'
 import { ovalShell, bailStrap } from './nezu-you/shell.js'
 import { bellyPanel, neckPanel, footPanel, skirtPanel, lidPanel, strapPanel } from './nezu-you/decor.js'
 
@@ -74,11 +74,10 @@ export default {
     const registers = {}
     for (let i = 0; i < jobs.length; i++) {
       const [name, fn] = jobs[i]
-      const pin = DECOR_SIZE[name] // the décor's panel as it was before the form changed (form.js): same mm, laid 1:1 across
       registers[name] = {
-        y0: regs[name][0], y1: regs[name][1], map: 'true', fade: 1.0, ...(pin ? { mapWidth: pin.width } : {}),
+        y0: regs[name][0], y1: regs[name][1], map: 'true', fade: 1.0,
         relief: (k, size) => {
-          if (!panels[name]) panels[name] = fn(kit, pin || { width: Math.max(size.widthBottom, size.widthTop, size.width), height: size.height }, { ppmm, seed: seed + i })
+          if (!panels[name]) panels[name] = fn(kit, { width: Math.max(size.widthBottom, size.widthTop, size.width), height: size.height, widthAt: size.widthAt }, { ppmm, seed: seed + i })
           return panels[name]
         },
       }
