@@ -169,27 +169,30 @@ export function bandPanel(kit, { ppmm, seed }) {
   }
   // the eye (on its slab): a sunk oval pit over a raised lower-lid bar with a slit, two lines incised across the top
   const E = SLABS.eye
-  for (const [X, g] of copies) {
-    if (g !== 'mask') continue
-    const kx = (u) => Math.abs(X([u + 0.5, 0])[0] - X([u - 0.5, 0])[0])
-    const pc = X(E.pit.c)
-    p.sink((ctx) => { ctx.beginPath(); ctx.ellipse(pc[0], pc[1], E.pit.r[0] * kx(E.pit.c[0]), E.pit.r[1] / 0.978, 0, 0, Math.PI * 2); ctx.fill() }, { depth: SLAB.height - 0.25, shoulder: 0.5, profile: 'u' })
-    const [l0, l1] = [X(E.lid.box[0]), X(E.lid.box[1])]
-    p.raise((ctx) => { ctx.beginPath(); rrect(ctx, Math.min(l0[0], l1[0]), Math.min(l0[1], l1[1]), Math.abs(l1[0] - l0[0]), Math.abs(l1[1] - l0[1]), 0.6); ctx.fill() }, { height: SLAB.height + 0.3, shoulder: 0.35, profile: 'plateau' })
-    p.sink((ctx) => {
-      ctx.lineCap = 'round'
+  const masks = copies.filter(([, g]) => g === 'mask').map(([X]) => X)
+  const kx = (X, u) => Math.abs(X([u + 0.5, 0])[0] - X([u - 0.5, 0])[0])
+  p.sink((ctx) => {
+    ctx.beginPath()
+    for (const X of masks) { const pc = X(E.pit.c), rx = E.pit.r[0] * kx(X, E.pit.c[0]); ctx.moveTo(pc[0] + rx, pc[1]); ctx.ellipse(pc[0], pc[1], rx, E.pit.r[1] / 0.978, 0, 0, Math.PI * 2) }
+    ctx.fill()
+  }, { depth: SLAB.height - 0.25, shoulder: 0.5, profile: 'u' })
+  p.raise((ctx) => {
+    ctx.beginPath()
+    for (const X of masks) { const [l0, l1] = [X(E.lid.box[0]), X(E.lid.box[1])]; rrect(ctx, Math.min(l0[0], l1[0]), Math.min(l0[1], l1[1]), Math.abs(l1[0] - l0[0]), Math.abs(l1[1] - l0[1]), 0.6) }
+    ctx.fill()
+  }, { height: SLAB.height + 0.3, shoulder: 0.35, profile: 'plateau' })
+  p.sink((ctx) => {
+    ctx.lineCap = 'round'
+    for (const X of masks) {
       ctx.lineWidth = 0.42; strokePath(ctx, E.slit.map(X))
       ctx.lineWidth = SLAB.line; for (const L of E.lines) strokePath(ctx, L.map(X))
-    }, { depth: 0.38, shoulder: 0.15, profile: 'u' })
+    }
     // notches cut into the nose column (photo: dark nicks down its inner edge)
-    p.sink((ctx) => { for (const c of SLABS.notches.c) { const q = X(c); ctx.beginPath(); ctx.arc(q[0], q[1], SLABS.notches.r, 0, Math.PI * 2); ctx.fill() } }, { depth: SLABS.notches.depth, shoulder: 0.2, profile: 'u' })
-  }
+    for (const X of masks) for (const c of SLABS.notches.c) { const q = X(c); ctx.beginPath(); ctx.arc(q[0], q[1], SLABS.notches.r, 0, Math.PI * 2); ctx.fill() }
+  }, { depth: 0.42, shoulder: 0.15, profile: 'u' })
   // the small round boss under the arch, with its pit
-  for (const [X, g] of copies) if (g === 'mask') for (const b of SLABS.bosses) {
-    const c = X(b.c)
-    kit.pillowBoss(p, { c, w: 2 * b.r, h: 2 * b.r / 0.978, round: 1, height: SLAB.boss, crown: 0.6, slit: false })
-    p.sink((ctx) => { ctx.beginPath(); ctx.arc(c[0], c[1], b.hole, 0, Math.PI * 2); ctx.fill() }, { depth: 1.1, shoulder: 0.25, profile: 'u' })
-  }
+  for (const X of masks) for (const b of SLABS.bosses) kit.pillowBoss(p, { c: X(b.c), w: 2 * b.r, h: 2 * b.r / 0.978, round: 1, height: SLAB.boss, crown: 0.6, slit: false })
+  p.sink((ctx) => { ctx.beginPath(); for (const X of masks) for (const b of SLABS.bosses) { const c = X(b.c); ctx.moveTo(c[0] + b.hole, c[1]); ctx.arc(c[0], c[1], b.hole, 0, Math.PI * 2) } ctx.fill() }, { depth: 1.1, shoulder: 0.25, profile: 'u' })
   // the fine ground: squared spirals packed into everything the slabs leave inside the band (not into the pockets)
   const pocketList = []
   for (const [X, g] of copies) for (const k of SLABS.pockets) if ((k.c[0] < -9) === (g === 'filler')) {
