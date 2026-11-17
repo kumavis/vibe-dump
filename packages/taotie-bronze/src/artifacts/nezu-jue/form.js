@@ -42,18 +42,17 @@ export const Y_C = 140 // where the swept upper wall starts (top of the band's u
 export const RIM = {
   r0: 44, y0: 161, // side rim (θ ±60…±120): a gently flared lip
   // jue-fix: the spout is a broad open trough that FLARES toward its end (half-width halfRoot at the cup → half at
-  // the tip round, wider: outer width ≈ 26 at the root → 38 at the mouth, was 27 → 19: the far wall's top stands
-  // ≈ 10 mm higher in photo-02 than a 31 mm mouth puts it), the channel shallower at the
-  // mouth (8 mm, was 13) than at the root. Both wall tops climb STEADILY from the side rim at z ≈ z0 to the level end
+  // the tip round, wider: outer width ≈ 30 where it leaves the cup → 36 at the mouth, was 27 → 19), the channel
+  // shallower at the mouth (8 mm, was 13) than at the root. Both wall tops climb STEADILY from the side rim at z ≈ z0 to the level end
   // (≈ 0.5 mm per mm of z: the near wall's top back-projected from photo-02 through the refitted side camera; the old
   // fast-rising pow 0.65 sat ≈ 8 mm too high at the posts' feet) — reaching S.y at z = tip − 10, `droop` mm lower
   // at the very end; a thick rolled rim along both walls (buildSpoutLip).
-  spout: { half: 21, halfRoot: 18, tip: 97, y: 188, depth: 8, dip: 5, wall: 5, z0: 28, rise: 1, droop: 0.6, roll: 1.9 },
+  spout: { half: 18, halfRoot: 14, tip: 97, y: 188.5, depth: 8, dip: 5, wall: 5, z0: 28, rise: 1, droop: 0.6, roll: 1.9 },
   // jue-fix (photo-02 through the refitted side camera): tip 2.5 mm lower; the far wall of the tail shows ≈ 8 mm beyond
   // the old silhouette below its top edge: a broader base (±18°, was ±13) and a fuller, less hollowed underside (full)
   tail: { tip: 77, y: 190.5, baseAz: 18, pow: 1.15, full: 1 },
   soft: 12, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
-  lip: 3.0, // wall thickness at the rim: a flat, slightly thickened edge (no rolled tube: fix pass r8)
+  lip: 3.0, // wall thickness at the rim: a flat, slightly thickened edge (fix pass r8); the spout alone carries a rolled rim (jue-fix)
 }
 
 // ---- plan outline of the rim: ρ(θ) as a soft union of circle, spout stadium and tail triangle
@@ -292,15 +291,24 @@ export function buildLeg(kit, { az, material, q = 1 }) {
     const A = R[i], B = R[(i + 1) % nr]
     return [lerp(A[0], B[0], f), lerp(A[1], B[1], f)]
   }
+  const _cut = new Map()
+  const yCut = (u) => {
+    const key = Math.round(u * 1e6)
+    if (_cut.has(key)) return _cut.get(key)
+    const f = (y) => { const [rho, l] = at(u, y); return y - (bowlY(Math.hypot(rho, l)) + LEG.seat) }
+    let a = LEG.point, b = yTop
+    if (f(b) <= 0) { _cut.set(key, b); return b }
+    for (let k = 0; k < 40; k++) { const m = (a + b) / 2; if (f(m) <= 0) a = m; else b = m }
+    _cut.set(key, a)
+    return a
+  }
   const geo = kit.buildSurface({
     surface: (u, v, o) => {
-      let y = LEG.point + v * (yTop - LEG.point) // the blade from the point's foot up; the point (cap) below
-      let [rho, l] = at(u, y)
-      for (let k = 0; k < 3; k++) {
-        const yb = bowlY(Math.hypot(rho, l)) + LEG.seat
-        if (y <= yb) break
-        y = yb; [rho, l] = at(u, y)
-      }
+      // jue-fix: each column runs from the point's foot up to where IT meets the bowl (bisection), rows spread evenly
+      // in between, so the grid never folds (the old per-vertex clamp collapsed and flipped the top rows into
+      // flaps — the "pale wedge plates" where the leg tops were cut by the body)
+      const y = LEG.point + v * (yCut(u) - LEG.point)
+      const [rho, l] = at(u, y)
       P(rho, l, y, o.pos)
     },
     segments: [nr * 2, nv],

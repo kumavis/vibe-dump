@@ -254,7 +254,9 @@ export function lugSDF() {
     const cut = (f, base, depth, k = 0.25) => { h = smax(h, -Math.max(f, base - depth - w), k) }
     // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 66
     const eOut = sdEllipse2(x, y - 70, 16.2, 14.5), eIn = sdEllipse2(x, y - 76, 8.4, 6.6)
-    const cres = Math.max(eOut + 0.6, -eIn, 65.8 - y)
+    // between the arms, under the panel, a V opens down to the stem: the horns are two arms, not a cap
+    const wedge = Math.max(ax - (1.4 + (y - 62) * 0.5), y - 72)
+    const cres = Math.max(eOut + 0.6, -Math.min(eIn, wedge), 65.8 - y)
     raise(cres, 1.6, 0.6)
     // the horns' inner ends sweep down into a stem on the axis
     const stem = Math.min(sdSeg2(ax, y, 8.5, 68.5, 1.2, 62.0, 1.3), sdSeg2(ax, y, 0, 70, 0, 60.8, 1.0))

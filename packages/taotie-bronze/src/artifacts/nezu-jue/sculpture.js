@@ -76,7 +76,7 @@ const HEAD = {
   // photograph's three-quarter station): up over the poll → back → down → forward under the eye, shrinking
   horn: { c: [40.8, 141.9, 4.6], axis: [0.5, 0, 0.866], r0: 3.9, r1: 1.2, t0: 2.0, t1: 0.75, a1: 300, adv: 1.6, n: 22 },
   brow: [[48.6, 143.7, 0.9], [47.9, 143.3, 4.4]], browR: 0.8,
-  eye: [48.7, 141.7, 3.0], eyeR: 1.45, socket: [1.95, 0.42],
+  eye: [48.7, 141.7, 3.0], eyeR: 1.2, socket: [1.7, 0.4],
   muzzle: [49.3, 137.9, 0], muzzleHalf: [1.6, 3.3, 2.6],
   nose: [50.2, 135.1, 0], noseR: [1.6, 1.4, 2.7],
   nostril: [51.6, 135.2, 1.2], nostrilR: 0.55,
