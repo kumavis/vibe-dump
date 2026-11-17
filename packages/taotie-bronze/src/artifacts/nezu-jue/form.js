@@ -5,8 +5,8 @@
 // handle side. The camera of the photograph stands at θ ≈ 130: it sees the handle on the left of the cup, the
 // spout running away to the upper left, the tail coming toward it on the right.
 //
-//   spout   θ 0, a U channel, tip ρ 106 at y 189         tail   θ 180, pointed, tip ρ 76 at y 212
-//   posts   θ ±27 on the rim at the spout root            handle θ 90 (loop, head at its top)
+//   spout   θ 0, a broad flaring U channel, tip ρ 97 at y 188.5    tail   θ 180, pointed, tip ρ 77 at y 190.5
+//   posts   θ ±50 on the rim at the spout root (one design, twice)  handle θ 90 (loop, ram's head at its top)
 //   legs    θ 90 (under the handle), 210, 330             flanges θ 0 and 180 on the band (the masks' noses)
 //
 // The cup is NOT a lathe: below the band top it is a body of revolution; above it every meridian runs from the

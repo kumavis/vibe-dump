@@ -15,6 +15,7 @@ The card names a jue and photo-02 shows a jue, and no other jue is in the upload
   spout running away to the upper left; plain grey wall, white plinth, no other object or person in frame.
 - Camera solved (least squares, pinhole, .work/r8-jue/scripts/solve.py + facepts.py) on 8 landmarks: the near and
   right leg tips, the two post caps, the spout and tail tips, the top and bottom of the tail flange.
+  (Superseded in the jue-fix pass: θ 123.5, 15° up — see the end of this file.)
   Result: azimuth θ ≈ 122° (0 = the spout, 90 = the handle), **elevation ≈ 12°**, distance ≈ 1.33 m with a ≈ 10°
   vertical lens (the owner zoomed; a wide 0.4 m camera fits 3–5× worse), rms ≈ 16 px (≈ 2 mm).
   Elevation is the weakest number: the near/right leg tips (only 44 px apart vertically) argue for 9–12°, the view
@@ -106,3 +107,32 @@ the fit only checks consistency: the real error is the camera's ≈ 2 mm). Trust
   Triangle: one heavy border and a thick cross figure.
 - The dark hole over the handle (θ ≈ 93–109, y ≈ 146–154) is now modelled as a deep pocket; the preset keeps earth out
   of grooves and pockets (patina soilGroove), so it and the curl pockets read dark.
+
+## Fix pass jue-fix (owner: "inverted surfaces on the legs; top of handle is ram face; mushroom bits should match; spout end more open")
+- Legs, a BUG: the leg's swept section was read with `u → (1 − u)`, so its grid ran clockwise round +Y (right → left
+  seen from outside); buildSurface derives normals and winding from the grid, so every leg face was wound and lit
+  INWARD (front faces culled: the legs rendered see-through, their far insides showing as dark facets and as pale
+  "wedge plates" where the tops were cut by the bowl). The three-facet tip cap was wound upward too. Fixed in
+  nezu-jue/form.js (no kit change, no double-sided material); the top cut is now a per-column bisection against the
+  bowl (the old per-vertex clamp folded the top rows into flaps). A ray-parity check over every mesh (faces buried
+  inside another part skipped): legs 228/285 sampled faces inward before → 0/300 after; normal-vs-winding 36 → 0
+  per leg; tip caps 3/3 wound inward → 0. Posts, caps, handle, flanges, body (outside and inside) were already
+  consistent. Legs now taper near-linearly to a point (tip ≈ 2.8 × 2.4 mm, was 6 × 4.6).
+- Camera refitted on 5 landmarks (leg tips 588,1946 / 1210,1832 — the r8 solve had the right leg tip 66 px low on its
+  shadow —, finial tops 483,122 / 765,40, the upper-wall triangle's apex 842,585): θ 123.5, 15° up, 1.33 m, 10° lens,
+  ≈ 14 px rms (≈ 1.6 mm). 6–14° lenses fit about as well (rms 14–15 px). The detail views now share that station.
+- Handle: a ram's head (horns coiled down each side, poll pad, brow, eyes in sockets, snout proud of the strap's
+  outer corner, nostrils, mouth groove) replaces the plate-and-stubs block. ≈ 11.6 mm skull, ≈ 19 mm over the horns.
+- Posts: ONE design placed twice (turned to ±50): cap Ø 22.6 (was 24.8), dome ≈ 6 mm over a 0.6 mm undercut, rolled
+  edge, finial Ø 6.0 × 3.3, whorl on both caps; stems Ø 10 seated on the lip (they hung 4 mm below it). The
+  photograph shows the far stem ≈ 11.8 mm and the near one ≈ 7.5 mm across; the near one is read against the spout's
+  inside of the same colour, so the difference is not trusted; the near cap reads plain (worn) where the far one shows
+  the whorl.
+- Spout: a broad U channel flaring from ≈ 30 mm outside where it leaves the cup to ≈ 36 mm at the mouth (was 27 → 19,
+  pinched), tip ρ 97 (was 95), lip y 188.5 (was 189), 8 mm deep at the mouth (was 13), wall tops climbing steadily
+  ≈ 0.5 mm per mm (the near wall's top back-projected through the camera), a thick rolled rim (Ø ≈ 3.8) along both
+  walls. Through the refitted camera the old tip was NOT 8 mm low (that read came from the 12° camera).
+- Tail: tip 2.5 mm lower (y 190.5), base ±18° (was ±13), fuller underside (its far wall stood ≈ 8 mm outside the old
+  silhouette).
+- Still off (through this camera): the spout's far wall top stands ≈ 7 mm higher in the photograph than in the model at
+  mid-spout; the bowl hangs ≈ 2–3 mm lower; the loop's outer face ≈ 2–3 mm too far out.

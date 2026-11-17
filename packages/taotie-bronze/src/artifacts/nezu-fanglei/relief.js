@@ -53,15 +53,16 @@ function faceToVessel(face, M) {
 
 /** every traced register of a panel in ONE tracedPlates call (one raise, one sink, one top fill): outlines mapped first */
 /**
- * keep(x, y): optional, in face-centred mm (x from the axis, VESSEL y): a plate is drawn only if every outline point
- * passes — the narrow ±X faces repeat the front design at true size and DROP what does not fit (round 10b)
+ * keep(x, y): optional, in face-centred mm (x from the axis, VESSEL y): a plate is drawn only if ≥ 60 % of its outline
+ * passes — the narrow ±X faces repeat the front design at true size, DROP what mostly lies outside and SHORTEN (clip,
+ * `over.clip`) what crosses the edge (round 10b)
  */
 function tracedRegisters(kit, panel, M, regs, seed, over = {}, keep = null) {
   const plates = [], bosses = []
   for (const r of regs) {
     const t = TRACED[r], map = faceToVessel(t.face, M)
     const F = FACES.faces[t.face], ky = (F.up || [0, 1, 0])[1] / Math.hypot(...(F.up || [0, 1, 0]))
-    const fits = (pts) => !keep || pts.every(([x, y]) => keep(x - F.width / 2, F.center[1] + (y - F.height / 2) * ky))
+    const fits = (pts) => !keep || pts.filter(([x, y]) => keep(x - F.width / 2, F.center[1] + (y - F.height / 2) * ky)).length >= 0.6 * pts.length
     for (const p of t.data.plates) if (fits(p.outer)) plates.push({ outer: p.outer.map(map), holes: (p.holes || []).map((h) => h.map(map)) })
     for (const b of t.data.bosses || []) {
       if (!fits([[b.c[0] - b.r, b.c[1]], [b.c[0] + b.r, b.c[1]]])) continue
@@ -187,6 +188,10 @@ function bellyDesign(kit, panel, M, s, skip = new Set()) {
 }
 
 /** a fang cell panel ('true' map): x = W/2 + kx · x_face, y = arc length from the cell's body bottom */
+/** the cell outline pulled in from its sides by m mm (panel mm): where a narrow face's décor is cut off */
+function insetSides(outline, W, m) {
+  return outline.map(([x, y]) => [x < W / 2 ? Math.max(x, 0) + m : Math.min(x, W) - m, y])
+}
 function fangPanel(kit, cell, { ppmm, seed, y0, half, kx }) {
   const W = cell.wMax, Hh = cell.h
   const p = new kit.ReliefPanel({ width: W, height: Hh, ppmm, seed })
@@ -234,7 +239,7 @@ export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1, side = false, 
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.foot, half, kx })
   const photo = PHOTO_RELIEF[relief] ? relief : null
   const traced = ['main', 'second', 'low', 'narrow'].filter((r) => TRACED[r] && !(photo && r === 'main'))
-  tracedRegisters(kit, p, M, traced, seed, {}, keep)
+  tracedRegisters(kit, p, M, traced, seed, side ? { clip: insetSides(cell.outline, W, 2.5) } : {}, keep)
   const skip = new Set(traced)
   const d1 = bellyDesign(kit, p, M, 1, skip), d2 = bellyDesign(kit, p, M, -1, skip)
   finish(kit, p, { els: [...d1.els, ...d2.els], eyes: [...d1.eyes, ...d2.eyes], slits: [...d1.slits, ...d2.slits] }, { seed })
@@ -279,7 +284,7 @@ export function shoulderPanel(kit, cell, { ppmm, seed, kx = 1, side = false }) {
   const half = side ? (y) => halfAt(y) : kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
   const keep = side ? (x, y) => Math.abs(x) <= RHO * halfAt(y) - 2.5 : null
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.main, half, kx })
-  if (TRACED.shoulder) tracedRegisters(kit, p, M, ['shoulder'], seed, {}, keep)
+  if (TRACED.shoulder) tracedRegisters(kit, p, M, ['shoulder'], seed, side ? { clip: insetSides(cell.outline, W, 2.5) } : {}, keep)
   else {
     const a = shoulderDesign(kit, M, 1), b = shoulderDesign(kit, M, -1)
     finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
@@ -307,7 +312,7 @@ function collarDesign(kit, M, s) {
 export function collarPanel(kit, cell, { ppmm, seed, kx = 1, side = false }) {
   const keep = side ? (x) => Math.abs(x) <= RHO * halfAt(LV.collar) - 2.5 : null
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.shoulder, half: () => 0, kx })
-  if (TRACED.collar) tracedRegisters(kit, p, M, ['collar'], seed, {}, keep)
+  if (TRACED.collar) tracedRegisters(kit, p, M, ['collar'], seed, side ? { clip: insetSides(cell.outline, W, 2.5) } : {}, keep)
   else {
     const a = collarDesign(kit, M, 1), b = collarDesign(kit, M, -1)
     finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })

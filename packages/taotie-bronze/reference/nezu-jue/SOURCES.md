@@ -36,5 +36,6 @@ No bystander or other object is in photo-02, so no crop needed masking.
 | `faces/face-band.jpg` | flat face: the band, homography from 8 points (faces.json) | photo-02.jpg | warp, 8 px/mm |
 | `faces/face-upper.jpg` | flat face: the upper wall over the band (triangle, hole) | photo-02.jpg | warp, 8 px/mm |
 
-The detail views are shot from the photograph's solved station (θ 122, 12° up, 10° lens), so each crop is a
+The detail views are shot from the photograph's solved station (θ 123.5, 15° up, 1.33 m — refitted in the jue-fix
+pass; was θ 122, 12° up — with a lens narrowed to each crop), so each crop is a
 like-for-like reference.

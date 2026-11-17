@@ -316,12 +316,12 @@ export const PATINA_PRESETS = {
     // round 10b (lei-mid): the body DARKER — a dark grey-olive skin rather than pale grey-green (both photographs), paler
     // worn relief tops, sparse green; lid and collar near-black (upperTone over the collar's height, 0.646 H)
     age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.55, cuprite: 0.8, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.3, malachite: 0.1, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.45,
+    tinOxideTone: 1.25, malachite: 0.15, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.45,
     islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.9, patchScale: 70,
     mottleScale: 12, patchiness: 0.85, softness: 0.8, drift: 0.3, earth: 0.05, earthColor: '#5a4c3a', calcite: 0.01,
     streaks: 0.06, burialSide: 0.1, recessDirt: 0.95, interiorTone: 0.45, wax: 0, inlay: 0.45, inlayGround: 0.35,
-    wear: 0.18, dulling: 0.4, tops: 0.8, nobleWarmth: 0.3, matte: 1, topsTone: 0.75, ledgeMatte: 1, nobleRelief: 0.65,
-    tint: '#a0a497', upperTone: 0.17, upperHeight: 0.645, speckle: 0.04, speckleScale: 1.4, speckleColor: '#7a4634',
+    wear: 0.2, dulling: 0.4, tops: 0.85, nobleWarmth: 0.3, matte: 1, topsTone: 0.9, ledgeMatte: 1, nobleRelief: 0.8,
+    tint: '#b0b8a6', upperTone: 0.11, upperHeight: 0.645, speckle: 0.04, speckleScale: 1.4, speckleColor: '#7a4634',
     crustIsles: 0.02, crustScale: 5, crustColor: '#61786a', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
     pustuleColor: '#4f7a62', lowerBody: 0.25, lowerHeight: 0.2, lowerColor: '#9ca490', plainTone: 0.7, grain: 0.6,
   },
