@@ -15,7 +15,8 @@
 // spout mask repeats the tail mask (not in the photograph: INFERRED); the filler strips by the handle and opposite
 // it are read off the dark, foreshortened area behind the handle and repeated (INFERRED opposite it).
 import { REG } from './form.js'
-import { BAND, FILLER, TRIANGLE } from './trace.js'
+import { TRIANGLE } from './trace.js'
+import SLABS from '../../../reference/nezu-jue/slabs.json'
 
 export const PANEL = { r: 34.4, y0: 98, y1: 164 }
 PANEL.w = 2 * Math.PI * PANEL.r
@@ -43,6 +44,11 @@ export const PLATE = {
 export const SP = { width: 0.42, pitch: 0.65, height: 0.32, groove: 0.1, crown: 1, mode: 'add' }
 export const LN = { width: 0.47, pitch: 0.7, height: 0.36, groove: 0.1, crown: 1, mode: 'add' }
 const BEND = 0.2
+/** slab pass: the band's figures are fat slabs on a fine spiral ground (heights from the photograph's cast shadows:
+ *  ≈ 8–12 px dark crescents under the slabs at ≈ 15° elevation → ≈ 1.5–2 mm proud; INFERRED ± 0.5 mm) */
+export const SLAB = { height: 2.2, shoulder: 0.5, contourInset: 0.62, line: 0.38, lineDepth: 0.3, boss: 2.1, channel: 0.5, channelDepth: 0.55 }
+/** the fine ground: squared spirals, ≈ 2–3 mm cells of ≈ 1.5 turns in the photograph (pink columns, bottom border) */
+export const GROUND = { pitch: 0.6, line: 0.46, depth: 0.26, roundness: 0.08, cell: [1.9, 3.0], jitter: 0.04, fillers: true, pairs: 0.5, mode: 'sunk' }
 
 // ------------------------------------------------------------------ helpers (panel mm)
 
@@ -133,31 +139,64 @@ export function bandPanel(kit, { ppmm, seed }) {
   const yb0 = REG.band[0] - PANEL.y0, yb1 = REG.band[1] - PANEL.y0
   // plain fillets just outside the field (the photograph's narrow plain rings above and below the band)
   p.raise((ctx) => { ctx.fillRect(-2, yb0 - 1.9, W + 4, 1.3); ctx.fillRect(-2, yb1 + 0.6, W + 4, 1.3) }, { height: 0.55, shoulder: 0.35 })
-  // the field: one low plate over the whole band
-  p.raise((ctx) => ctx.fillRect(-2, yb0, W + 4, yb1 - yb0), { height: PLATE.field, shoulder: PLATE.shoulder, profile: 'plateau' })
-
-  const figs = [], channels = [], pockets = []
-  // masks: the traced half and its mirror about each nose
-  for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) {
-    const X = ([u, v]) => [cx - side * (NOSE.tail - FX(u)), FY(v)]
-    for (const f of BAND.figures) figs.push(mapFigure(f, X, true))
-    for (const c of BAND.channels) channels.push({ pts: c.c.map(X), w: c.w })
-    for (const k of BAND.pockets) pockets.push({ c: X(k.c), w: k.w * KX(k.c[0]), h: k.h / 0.978, r: k.r })
+  // SLAB PASS (.work/slab-nezu-jue/NOTES.md; reference/nezu-jue/slabs.json): every figure of the band is ONE fat
+  // raised slab with rounded-square corners (the owner's own tracing: a crook and two J hooks), standing on a ground
+  // packed with fine squared spirals; deep pockets in the curls; a few slabs carry an incised line / notches / the eye.
+  const outline = (L, X) => L.map(X)
+  const copies = [] // [X, group]
+  for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) copies.push([([u, v]) => [cx - side * (NOSE.tail - FX(u)), FY(v)], 'mask'])
+  for (const [cx, side] of [[0, 1], [W, -1], [xOfAz(270), 1], [xOfAz(270), -1]]) copies.push([([u, v]) => [cx + side * FX(u), FY(v)], 'filler'])
+  const wide = [], narrow = []
+  for (const [X, g] of copies) for (const s of SLABS.slabs) if (s.group === g) (s.incised === 'contour' ? wide : narrow).push({ outer: outline(s.face_mm, X), holes: [] })
+  const slabOpts = { height: SLAB.height, shoulder: SLAB.shoulder, union: true, seed }
+  kit.tracedPlates(p, wide, { ...slabOpts, contour: { inset: SLAB.contourInset, line: SLAB.line }, depth: SLAB.lineDepth })
+  kit.tracedPlates(p, narrow, { ...slabOpts, contour: false })
+  // a narrow dark channel round every slab (the photograph's dark outline between slab and ground)
+  const allSlabs = [...wide, ...narrow]
+  p.sink((ctx) => {
+    ctx.lineJoin = 'round'; ctx.lineWidth = 2 * SLAB.channel
+    ctx.beginPath(); for (const s of allSlabs) { s.outer.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.closePath() }
+    ctx.stroke()
+    ctx.globalCompositeOperation = 'destination-out'; ctx.fill('nonzero'); ctx.globalCompositeOperation = 'source-over'
+  }, { depth: SLAB.channelDepth, shoulder: 0.2, profile: 'u' })
+  // the eye (on its slab): a sunk oval pit over a raised lower-lid bar with a slit, two lines incised across the top
+  const E = SLABS.eye
+  for (const [X, g] of copies) {
+    if (g !== 'mask') continue
+    const kx = (u) => Math.abs(X([u + 0.5, 0])[0] - X([u - 0.5, 0])[0])
+    const pc = X(E.pit.c)
+    p.sink((ctx) => { ctx.beginPath(); ctx.ellipse(pc[0], pc[1], E.pit.r[0] * kx(E.pit.c[0]), E.pit.r[1] / 0.978, 0, 0, Math.PI * 2); ctx.fill() }, { depth: SLAB.height - 0.25, shoulder: 0.5, profile: 'u' })
+    const [l0, l1] = [X(E.lid.box[0]), X(E.lid.box[1])]
+    p.raise((ctx) => { ctx.beginPath(); rrect(ctx, Math.min(l0[0], l1[0]), Math.min(l0[1], l1[1]), Math.abs(l1[0] - l0[0]), Math.abs(l1[1] - l0[1]), 0.6); ctx.fill() }, { height: SLAB.height + 0.3, shoulder: 0.35, profile: 'plateau' })
+    p.sink((ctx) => {
+      ctx.lineCap = 'round'
+      ctx.lineWidth = 0.42; strokePath(ctx, E.slit.map(X))
+      ctx.lineWidth = SLAB.line; for (const L of E.lines) strokePath(ctx, L.map(X))
+    }, { depth: 0.38, shoulder: 0.15, profile: 'u' })
+    // notches cut into the nose column (photo: dark nicks down its inner edge)
+    p.sink((ctx) => { for (const c of SLABS.notches.c) { const q = X(c); ctx.beginPath(); ctx.arc(q[0], q[1], SLABS.notches.r, 0, Math.PI * 2); ctx.fill() } }, { depth: SLABS.notches.depth, shoulder: 0.2, profile: 'u' })
   }
-  // fillers: by the handle (both sides of the seam) and opposite it (both sides of θ 270)
-  for (const [cx, sides] of [[0, [1]], [W, [-1]], [xOfAz(270), [1, -1]]]) for (const side of sides) {
-    const X = ([x, v]) => [cx + side * x, FY(v)]
-    for (const f of FILLER.figures) figs.push(mapFigure(f, X, false))
-    for (const k of FILLER.pockets) pockets.push({ c: X(k.c), w: k.w, h: k.h / 0.978, r: k.r })
+  // the small round boss under the arch, with its pit
+  for (const [X, g] of copies) if (g === 'mask') for (const b of SLABS.bosses) {
+    const c = X(b.c)
+    kit.pillowBoss(p, { c, w: 2 * b.r, h: 2 * b.r / 0.978, round: 1, height: SLAB.boss, crown: 0.6, slit: false })
+    p.sink((ctx) => { ctx.beginPath(); ctx.arc(c[0], c[1], b.hole, 0, Math.PI * 2); ctx.fill() }, { depth: 1.1, shoulder: 0.25, profile: 'u' })
   }
-  drawFigures(kit, p, figs, { channels })
-  sinkPockets(p, pockets, PLATE.pocket)
-  // the eyeball in each socket
-  for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) for (const e of BAND.eyes) {
-    kit.pillowBoss(p, {
-      c: [cx - side * (NOSE.tail - FX(e.c[0])), FY(e.c[1])], w: e.w * KX(e.c[0]), h: e.h, round: e.round, height: PLATE.field + e.height, crown: e.crown,
-      slit: { len: e.slit.len, width: e.slit.width, depth: e.slit.depth },
-    })
+  // the fine ground: squared spirals packed into everything the slabs leave inside the band (not into the pockets)
+  const pocketList = []
+  for (const [X, g] of copies) for (const k of SLABS.pockets) if ((k.c[0] < -9) === (g === 'filler')) {
+    const c = X(k.c), w = Math.abs(X([k.c[0] + k.r[0], 0])[0] - X([k.c[0] - k.r[0], 0])[0]) / 2
+    pocketList.push([c, w, k.r[1] / 0.978, k.depth])
+  }
+  const pocketPath = (ctx) => { ctx.beginPath(); for (const [c, rx, ry] of pocketList) { ctx.moveTo(c[0] + rx, c[1]); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, Math.PI * 2) } }
+  kit.leiwenFill(p, {
+    rect: { x: 0, y: yb0 + 0.2, w: W, h: yb1 - yb0 - 0.4 },
+    include: (ctx) => { ctx.fillRect(-1, yb0, W + 2, yb1 - yb0); ctx.globalCompositeOperation = 'destination-out'; pocketPath(ctx); ctx.fill(); ctx.globalCompositeOperation = 'source-over' },
+    avoid: 'raised', margin: 0.62,
+  }, { ...GROUND, seed })
+  // deep pockets in the curls (dark in the photograph)
+  for (const dep of [...new Set(pocketList.map((k) => k[3]))]) {
+    p.sink((ctx) => { ctx.beginPath(); for (const [c, rx, ry, d] of pocketList) if (d === dep) { ctx.moveTo(c[0] + rx, c[1]); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, Math.PI * 2) } ctx.fill() }, { depth: dep, shoulder: 0.45, profile: 'u' })
   }
 
   // upper wall: four triangles at θ 51, 129, 231, 309 (the photograph shows the one at 129; the others follow the
