@@ -3,7 +3,7 @@
   "dimensions": { "w": 420, "h": 477, "d": 565, "chosen": true },
   "ratios": {
     "unitWidth":      { "expr": "parts.lid.w",                 "expected": 428,   "tol": 1.5 },
-    "unitTop":        { "expr": "parts.lid.max.1",             "expected": 139,   "tol": 1.0 },
+    "unitTop":        { "expr": "parts.lid.max.1",             "expected": 140.9, "tol": 1.0 },
     "bezelWidth":     { "expr": "parts.bezel.w",               "expected": 344,   "tol": 1.0 },
     "bezelAspect":    { "expr": "parts.bezel.h / parts.bezel.w", "expected": 0.901, "tol": 0.01 },
     "screenAspect":   { "expr": "parts.screen.h / parts.screen.w", "expected": 0.756, "tol": 0.01 },

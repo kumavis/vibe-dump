@@ -404,16 +404,16 @@ export function cablePath(head) {
   const ctrl = [
     [head.x, head.y, head.z],
     [head.x - 6, 12, zb - 15],
-    [head.x - 40, CABLE_R + 0.6, zb - 22],
-    [-200, CABLE_R + 0.6, zb - 20],
-    [-238, CABLE_R + 0.6, zb - 30],
-    [-252, CABLE_R + 0.6, 150],
-    [-236, CABLE_R + 0.6, 92],
-    [-246, CABLE_R + 0.6, 20],
-    [-236, CABLE_R + 0.6, -50],
-    [-246, CABLE_R + 0.6, -118],
-    [-232, CABLE_R + 0.6, -168],
-    [-214, CABLE_R + 0.6, -196],
+    [head.x - 40, CABLE_R + 1.4, zb - 22],
+    [-200, CABLE_R + 1.4, zb - 20],
+    [-238, CABLE_R + 1.4, zb - 30],
+    [-252, CABLE_R + 1.4, 150],
+    [-236, CABLE_R + 1.4, 92],
+    [-246, CABLE_R + 1.4, 20],
+    [-236, CABLE_R + 1.4, -50],
+    [-246, CABLE_R + 1.4, -118],
+    [-232, CABLE_R + 1.4, -168],
+    [-214, CABLE_R + 1.4, -196],
   ].map((p) => new THREE.Vector3(...p))
   return new THREE.CatmullRomCurve3(ctrl, false, 'centripetal')
 }
