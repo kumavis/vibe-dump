@@ -75,14 +75,12 @@ const zig = (t, p) => Math.abs(((((t / p) % 1) + 1) % 1) - 0.5) * 2 // 0..1 tria
 const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t) }
 
 /**
- * Shoulder handle on +X — round 10 (.work/lei-mid), re-read with a camera FITTED to photo-36 (az 68°, el 13°, ≈ 0.75 m,
- * vfov 41° on the crop) and photo-37: a beast head HOLDING A RING (衔环). The head lies almost level on the shoulder,
- * its flat top at y ≈ 321 (level with the ledge and the shoulder corner-flange tops in photo-37, not above them),
- * from the wall out to a blunt muzzle at x ≈ 163, ≈ 40 mm across at the brow, ≈ 30 at the muzzle, a flat slab ≈ 13 mm thick
- * whose snout drops to y ≈ 299. Its top is carved: two big spiral horns at the back, hooked ears, bulging
- * eyes, a nose ridge, nostrils. From the mouth hangs a heavy ROUND-SECTION ring (section ≈ 12.6 mm, outer Ø ≈ 63 mm)
- * hanging to y ≈ 239 over the belly top, its plane turned ≈ 32° from the side face toward the front: seen nearly face-on
- * from three-quarters (photo-36: the dark D under the head) and as a narrow loop you can see through from the front.
+ * Shoulder handle on +X — rounds 10/10b (.work/lei-mid), read with a camera FITTED to photo-36 (az 68°, el 13°, ≈ 0.75 m,
+ * vfov 41° on the crop) and photo-37: a broad flat-topped beast head lying almost level on the shoulder (top y ≈ 326 at
+ * the ledge → 321 at the snout, level with the shoulder corner-flange tops in photo-37), out to a blunt snout at x ≈ 163,
+ * ≈ 40 mm across at the brow and 30 at the snout, ≈ 13 mm thick, the snout dropping to y ≈ 299, two horn-ears rising
+ * ≈ 9 mm off its outer end; its top carved (spiral horns, hooked ears, bulging eyes, brow hooks, nose ridge, snout
+ * scrolls). Under the snout a short THICK loop in the radial (XY) plane, rooted in the wall (HANDLE_RING below).
  * Two fields, meshed separately with tight bounds (cheaper than one box round both). −X = this turned 180° about Y.
  */
 export function handleHeadSDF() {
@@ -114,6 +112,15 @@ export function handleHeadSDF() {
       // fangs: two short downward teeth at the mouth corners, either side of the ring
       d = smin(d, sdRBox3(x - 167, y - (yt - 23.5), z - sg * 9.5, 2.2, 3.2, 1.9, 0.9), 0.8)
     }
+    // the upturned horn-ears at the snout end that give the head its outline from three-quarters (photo-36: two hooks
+    // rising off the outer end of the top, curling outward; photo-37: the end of the head lifts)
+    for (const sg of [-1, 1]) {
+      const ax = 155, ay = yt - 1, az = sg * 11, bx = 161, by = yt + 8.5, bz = sg * 16.5
+      const px = x - ax, py = y - ay, pz = z - az, ex = bx - ax, ey = by - ay, ez = bz - az
+      const t = clamp((px * ex + py * ey + pz * ez) / (ex * ex + ey * ey + ez * ez), 0, 1)
+      d = smin(d, len3(px - ex * t, py - ey * t, pz - ez * t) - (3.0 - 0.6 * t), 1.2)
+      d = smin(d, len3(x - (bx + 2.2), y - (by + 0.6), z - (bz + sg * 1.4)) - 2.1, 0.8) // the curled tip
+    }
     // nose ridge down the centre of the muzzle
     d = smin(d, sdRBox3(x - 152, h - 0.7, z, 15, 1.1, 1.6, 0.8), 0.5)
     // the mouth: a groove across the muzzle front, the ring passes through it
@@ -122,21 +129,23 @@ export function handleHeadSDF() {
     d = Math.max(d, 88 - x)
     return d
   }
-  return { sd, bounds: { min: [78, 289, -24], max: [169, 333, 24] } }
+  return { sd, bounds: { min: [78, 289, -26], max: [169, 337, 26] } }
 }
-// the ring hangs from the mouth and swings freely: photo-37 (head-on) sees THROUGH it (an opening ≈ 12 × 18 mm in a loop
-// ≈ 34 mm wide spanning x ≈ 124–160) and photo-36 (az 68°) sees it almost face-on, so its plane is the side face's
-// (YZ) turned ≈ 32° about the vertical toward the front: normal (cos 32°, 0, sin 32°). −X: the same turned 180°.
-export const HANDLE_RING = { c: [147, 270, 0], R: 25, r: 6.3, yaw: 32 }
+// round 10b — the LOOP under the head, re-derived from both photographs: photo-37 (head-on) sees it face-on as a D you can
+// see through: outer ≈ 36 mm wide (x ≈ 124 → 160) and ≈ 45–50 tall, opening ≈ 12 × 18 mm, so a round section ≈ 12 mm
+// on a centre line ≈ 24 × 37 mm; photo-36 (az 68°) sees the same loop obliquely — a short, thick, dark loop hardly wider
+// than the head, its bottom at y ≈ 249 (the fitted camera's ray onto z = 0). Its plane is XY (radial), rooted in the
+// shoulder wall at its inner side, hanging close under the snout.
+export const HANDLE_RING = { c: [142, 275, 0], Rx: 12, Ry: 19.5, r: 6.1 }
 export function handleRingSDF() {
-  const { c, R, r, yaw } = HANDLE_RING
-  const t = (yaw * Math.PI) / 180, sy = Math.sin(t), cy = Math.cos(t)
+  const { c, Rx, Ry, r } = HANDLE_RING
   const sd = (x, y, z) => {
-    const px = x - c[0], py = y - c[1], pz = z - c[2]
-    const b = -px * sy + pz * cy, n = px * cy + pz * sy // in-plane horizontal, plane normal
-    return len2(len2(py, b) - R, n) - r
+    const u = (x - c[0]) / Rx, v = (y - c[1]) / Ry
+    const q = len2(u, v)
+    const k = Rx + (Ry - Rx) * Math.abs(v / (q || 1))
+    return len2((q - 1) * k, z) - r
   }
-  return { sd, bounds: { min: [124, 235, -33], max: [169, 305, 33] } }
+  return { sd, bounds: { min: [120, 246, -9], max: [164, 304, 9] } }
 }
 /** legacy: head and ring in one field */
 export function handleSDF() {
@@ -155,8 +164,11 @@ export function handleSDF() {
 export function shoulderHeadSDF() {
   const yc = 300, he = 24
   const zf = (y) => 99 + (322 - y) * 0.27 // the face leans out toward the chin
+  // authored for a plan ratio of 0.75; the front wall now stands at RHO·half: carry the head in with it
+  const DZ = (RHO - 0.75) * 125.5
   const sd = (x, y, z) => {
-    const wall = RHO * shoulderHalf(clamp(y, 263, 325))
+    z -= DZ
+    const wall = 0.75 * shoulderHalf(clamp(y, 263, 325))
     const zt = zf(y)
     let d2 = sdTrapezoid(x, y - yc, 14, 25, he) - 1.5
     let d = smax(d2, Math.max(z - zt, wall - 5 - z), 2.2)
@@ -174,7 +186,7 @@ export function shoulderHeadSDF() {
     d = smin(d, sdRBox3(x, y - 277, z - (zf(277) + 2.5), 15.5, 6.5, 5.2, 1.4), 1.0)
     return d
   }
-  return { sd, bounds: { min: [-30, 268, 74], max: [30, 330, 124] } }
+  return { sd, bounds: { min: [-30, 268, 74 + DZ], max: [30, 330, 124 + DZ] } }
 }
 
 // ------------------------------------------------------------------ low lug (front)
@@ -187,9 +199,12 @@ export function shoulderHeadSDF() {
  * filling the upper third, a crest down the centre, a brow, round eyes, a face packed with hooks and curls narrowing to
  * ≈ 30 mm, then a snout whose mouth is a zigzag of interlocking fangs in real relief over a rounded lower lip.
  */
-const lugFace = (y) => 114 + (101 - y) * 0.06 // face plane z, leaning out toward the snout
+// authored for a plan ratio of 0.75 (wall z = 0.75·half); everything z below is carried in with the wall by LUG_DZ
+const LUG_DZ = (RHO - 0.75) * 85.5
+const lugFace = (y) => 114 + (101 - y) * 0.06 // face plane z (authoring frame), leaning out toward the snout
 export function lugHeadSDF() {
   const sd = (x, y, z) => {
+    z -= LUG_DZ
     const zf = lugFace(y), h = z - zf
     // the mask plate: a trapezoid, 24 mm half width at the horns → 15 at the cheeks, ≈ 14 mm thick
     let d = smax(sdTrapezoid(x, y - 74, 15, 24, 27) - 1.5, Math.abs(z - (zf - 7)) - 7, 2.4)
@@ -226,19 +241,20 @@ export function lugHeadSDF() {
     for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 5, y - 47.6, z - (zs + 5.2)) - 1.7), 0.5)
     return d
   }
-  return { sd, bounds: { min: [-28, 28, 97], max: [28, 105, 128] } }
+  return { sd, bounds: { min: [-28, 28, 97 + LUG_DZ], max: [28, 105, 128 + LUG_DZ] } }
 }
 export const LUG_RING = { yc: 60, zc: 84, Ry: 20, Rz: 21, r: 6 }
 export function lugRingSDF() {
   const { yc, zc, Ry, Rz, r } = LUG_RING
   const sd = (x, y, z) => {
+    z -= LUG_DZ
     const u = (z - zc) / Rz, v = (y - yc) / Ry
     const q = len2(u, v)
     const k = Rz + (Ry - Rz) * Math.abs(v / (q || 1))
     let d = len2((q - 1) * k, x) - r
-    return Math.max(d, RHO * bellyHalf(clamp(y, 21.5, 263)) - 4 - z)
+    return Math.max(d, 0.75 * bellyHalf(clamp(y, 21.5, 263)) - 4 - z)
   }
-  return { sd, bounds: { min: [-9, yc - Ry - r - 3, 50], max: [9, yc + Ry + r + 3, zc + Rz + r + 3] } }
+  return { sd, bounds: { min: [-9, yc - Ry - r - 3, 50 + LUG_DZ], max: [9, yc + Ry + r + 3, zc + Rz + r + 3 + LUG_DZ] } }
 }
 /** legacy: the lug as one field */
 export function lugSDF() {

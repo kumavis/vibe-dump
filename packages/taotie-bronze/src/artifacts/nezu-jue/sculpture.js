@@ -76,9 +76,9 @@ const HEAD = {
   // photograph's three-quarter station): up over the poll → back → down → forward beside the eye, shrinking
   horn: { c: [43.2, 141.6, 5.2], axis: [0.7, 0, 0.714], r0: 3.7, r1: 1.2, t0: 2.0, t1: 0.75, a1: 300, adv: 1.4, n: 22 },
   // the face: a forehead running down into a long snout that stands proud of the strap's outer corner
-  brow: [[49.3, 142.9, 2.3], [48.4, 142.6, 4.9]], browR: 0.65,
+  brow: [[48.9, 142.9, 2.2], [48.0, 142.5, 4.9]], browR: 0.85,
   forehead: [47.4, 142.4, 0], foreheadR: [2.6, 3.2, 4.2],
-  eye: [48.9, 141.0, 3.6], eyeR: 1.15, socket: [1.65, 0.38],
+  eye: [48.5, 141.0, 3.6], eyeR: 1.15, socket: [1.6, 0.36],
   snout: [50.7, 137.6, 0], snoutR: [2.4, 4.0, 3.1],
   nose: [51.6, 134.4, 0], noseR: [2.0, 2.0, 2.8],
   nostril: [53.4, 134.6, 1.2], nostrilR: 0.55,
@@ -122,13 +122,13 @@ function head(x, y, z) {
     d = smin(d, hd, 0.7)
   }
   for (const s of [-1, 1]) {
-    const [b0, b1] = H.brow
-    d = smin(d, sdCapsule(x, y, z, [b0[0], b0[1], s * b0[2]], [b1[0], b1[1], s * b1[2]], H.browR, H.browR * 0.8), 0.5)
-    // the eye: a sunk ring (socket) round a domed ball, looking out and a little sideways
+    // the eye: a sunk ring (socket) round a domed ball; the brow over it added after, so the socket never nicks it
     const ex = x - H.eye[0], ey = y - H.eye[1], ez = z - s * H.eye[2]
     const ring = len2(len2(ey, ez) - H.socket[0], ex) - H.socket[1]
     d = smax(d, -ring, 0.3)
     d = smin(d, len3(ex, ey, ez) - H.eyeR, 0.3)
+    const [b0, b1] = H.brow
+    d = smin(d, sdCapsule(x, y, z, [b0[0], b0[1], s * b0[2]], [b1[0], b1[1], s * b1[2]], H.browR, H.browR * 0.75), 0.6)
     d = smax(d, -(len3(x - H.nostril[0], y - H.nostril[1], z - s * H.nostril[2]) - H.nostrilR), 0.3)
   }
   // the mouth: a short groove across under the nose

@@ -52,12 +52,19 @@ function faceToVessel(face, M) {
 }
 
 /** every traced register of a panel in ONE tracedPlates call (one raise, one sink, one top fill): outlines mapped first */
-function tracedRegisters(kit, panel, M, regs, seed, over = {}) {
+/**
+ * keep(x, y): optional, in face-centred mm (x from the axis, VESSEL y): a plate is drawn only if every outline point
+ * passes — the narrow ±X faces repeat the front design at true size and DROP what does not fit (round 10b)
+ */
+function tracedRegisters(kit, panel, M, regs, seed, over = {}, keep = null) {
   const plates = [], bosses = []
   for (const r of regs) {
     const t = TRACED[r], map = faceToVessel(t.face, M)
-    for (const p of t.data.plates) plates.push({ outer: p.outer.map(map), holes: (p.holes || []).map((h) => h.map(map)) })
+    const F = FACES.faces[t.face], ky = (F.up || [0, 1, 0])[1] / Math.hypot(...(F.up || [0, 1, 0]))
+    const fits = (pts) => !keep || pts.every(([x, y]) => keep(x - F.width / 2, F.center[1] + (y - F.height / 2) * ky))
+    for (const p of t.data.plates) if (fits(p.outer)) plates.push({ outer: p.outer.map(map), holes: (p.holes || []).map((h) => h.map(map)) })
     for (const b of t.data.bosses || []) {
+      if (!fits([[b.c[0] - b.r, b.c[1]], [b.c[0] + b.r, b.c[1]]])) continue
       const c = map(b.c), e = map([b.c[0] + b.r, b.c[1]])
       bosses.push({ ...b, c, r: Math.hypot(e[0] - c[0], e[1] - c[1]) })
     }
@@ -220,12 +227,14 @@ async function photoMain(kit, p, M, which) {
   return kit.imageRelief(p, img, { rect: { x: xl, y: yb, w: xr - xl, h: yt - yb }, mirror: true, crop: { x0: 0, y0: box[1], x1: img.width, y1: box[3] }, feather: 1 })
 }
 
-export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1, relief = null }) {
-  const half = kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
+export async function bellyPanel(kit, cell, { ppmm, seed, kx = 1, side = false, relief = null }) {
+  // the panel's arc runs up the wall profile seen from the side: the front face's wall is z = RHO·half(y), a side face's x = half(y)
+  const half = side ? (y) => halfAt(y) : kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
+  const keep = side ? (x, y) => Math.abs(x) <= RHO * halfAt(y) - 2.5 : null
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.foot, half, kx })
   const photo = PHOTO_RELIEF[relief] ? relief : null
   const traced = ['main', 'second', 'low', 'narrow'].filter((r) => TRACED[r] && !(photo && r === 'main'))
-  tracedRegisters(kit, p, M, traced, seed)
+  tracedRegisters(kit, p, M, traced, seed, {}, keep)
   const skip = new Set(traced)
   const d1 = bellyDesign(kit, p, M, 1, skip), d2 = bellyDesign(kit, p, M, -1, skip)
   finish(kit, p, { els: [...d1.els, ...d2.els], eyes: [...d1.eyes, ...d2.eyes], slits: [...d1.slits, ...d2.slits] }, { seed })
@@ -266,10 +275,11 @@ function shoulderDesign(kit, M, s) {
   }
 }
 
-export function shoulderPanel(kit, cell, { ppmm, seed, kx = 1 }) {
-  const half = kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
+export function shoulderPanel(kit, cell, { ppmm, seed, kx = 1, side = false }) {
+  const half = side ? (y) => halfAt(y) : kx === 1 ? (y) => RHO * halfAt(y) : (y) => halfAt(y)
+  const keep = side ? (x, y) => Math.abs(x) <= RHO * halfAt(y) - 2.5 : null
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.main, half, kx })
-  if (TRACED.shoulder) tracedRegisters(kit, p, M, ['shoulder'], seed)
+  if (TRACED.shoulder) tracedRegisters(kit, p, M, ['shoulder'], seed, {}, keep)
   else {
     const a = shoulderDesign(kit, M, 1), b = shoulderDesign(kit, M, -1)
     finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
@@ -294,9 +304,10 @@ function collarDesign(kit, M, s) {
   }
 }
 
-export function collarPanel(kit, cell, { ppmm, seed, kx = 1 }) {
+export function collarPanel(kit, cell, { ppmm, seed, kx = 1, side = false }) {
+  const keep = side ? (x) => Math.abs(x) <= RHO * halfAt(LV.collar) - 2.5 : null
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: LV.shoulder, half: () => 0, kx })
-  if (TRACED.collar) tracedRegisters(kit, p, M, ['collar'], seed)
+  if (TRACED.collar) tracedRegisters(kit, p, M, ['collar'], seed, {}, keep)
   else {
     const a = collarDesign(kit, M, 1), b = collarDesign(kit, M, -1)
     finish(kit, p, { els: [...a.els, ...b.els], eyes: [...a.eyes, ...b.eyes] }, { seed })
@@ -305,7 +316,8 @@ export function collarPanel(kit, cell, { ppmm, seed, kx = 1 }) {
   return p.bake()
 }
 
-export function footPanel(kit, cell, { ppmm, seed, kx = 1 }) {
+export function footPanel(kit, cell, { ppmm, seed, kx = 1, side = false }) {
+  void side // the side faces' running snakes are simply cut at the corner (true size)
   const { p, M, include, W, arc } = fangPanel(kit, cell, { ppmm, seed, y0: 0, half: () => 0, kx })
   const all = []
   const eyes = []
@@ -330,10 +342,14 @@ export function lidPanel(kit, f, { ppmm, seed, kind }) {
   const els = [], eyes = [], slits = []
   if (TRACED.lid) {
     // round 10: EVERY slope carries the traced face-lid mask (photo-36: the triangular end slope shows the same bold mask —
-    // pillow eyes, U horns, the G — as the long ones); on the end slopes compressed in x by the face width ratio
-    const kx = kind === 'long' ? 1 : Math.min(1, (0.92 * f.w) / FACES.faces['face-lid'].width)
+    // pillow eyes, U horns, the G — as the long ones). Round 10b: on the triangular end slopes the mask is scaled UNIFORMLY
+    // (across and up the slope alike, from the eave centre) to fit — smaller, not squashed — and what still leaves the
+    // triangle is dropped
+    const su = kind === 'long' ? 1 : 0.62
+    const Ms = kind === 'long' ? M : ([x, y]) => M([su * x, y0 + su * (y - y0)])
+    const keep = kind === 'long' ? null : (x, y) => Math.abs(su * x) <= (f.w / 2) * (1 - (su * (y - y0)) / rise) - 2
     // the lid's plates stand higher and rounder than the belly's (photo-37 / photo-36: fat pillowed bands throwing shadows)
-    tracedRegisters(kit, p, kind === 'long' ? M : ([x, y]) => M([kx * x, y]), ['lid'], seed, { height: 3.2, shoulder: 1.2, pillow: 0.5 })
+    tracedRegisters(kit, p, Ms, ['lid'], seed, { height: 3.2, shoulder: 1.2, pillow: 0.5 }, keep)
     kit.leiwenFill(p, { include, margin: 0.6 }, { ...GROUND, depth: RELIEF.leiwen, seed })
     return p.bake()
   }

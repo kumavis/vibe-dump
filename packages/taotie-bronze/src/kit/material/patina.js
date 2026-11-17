@@ -313,15 +313,17 @@ export const PATINA_PRESETS = {
   // silvery-green, the leiwen ground darker grey-green), rust-brown cuprite patches across the upper belly and
   // shoulder, small emerald specks low on the body; collar, lid and knob much darker, a near-black olive-brown
   'nezu-fanglei': {
-    age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.5, cuprite: 0.9, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.1, malachite: 0.2, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.6,
-    islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.85, patchScale: 70,
-    mottleScale: 12, patchiness: 0.85, softness: 0.8, drift: 0.3, earth: 0.06, earthColor: '#6a5a44', calcite: 0.02,
-    streaks: 0.08, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.35, inlayGround: 0.3,
-    wear: 0.15, dulling: 0.4, tops: 0.55, nobleWarmth: 0.2, matte: 1, topsTone: 0.6, ledgeMatte: 1, nobleRelief: 0.55,
-    tint: '#dde4d6', upperTone: 0.22, upperHeight: 0.64, speckle: 0.06, speckleScale: 1.4, speckleColor: '#7a4634',
-    crustIsles: 0.04, crustScale: 5, crustColor: '#6f8a72', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
-    pustuleColor: '#4f7a62', lowerBody: 0.35, lowerHeight: 0.2, lowerColor: '#b8c4b0', plainTone: 0.8, grain: 0.6,
+    // round 10b (lei-mid): the body DARKER — a dark grey-olive skin rather than pale grey-green (both photographs), paler
+    // worn relief tops, sparse green; lid and collar near-black (upperTone over the collar's height, 0.646 H)
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.55, cuprite: 0.8, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.3, malachite: 0.1, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.45,
+    islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.9, patchScale: 70,
+    mottleScale: 12, patchiness: 0.85, softness: 0.8, drift: 0.3, earth: 0.05, earthColor: '#5a4c3a', calcite: 0.01,
+    streaks: 0.06, burialSide: 0.1, recessDirt: 0.95, interiorTone: 0.45, wax: 0, inlay: 0.45, inlayGround: 0.35,
+    wear: 0.18, dulling: 0.4, tops: 0.8, nobleWarmth: 0.3, matte: 1, topsTone: 0.75, ledgeMatte: 1, nobleRelief: 0.65,
+    tint: '#a0a497', upperTone: 0.17, upperHeight: 0.645, speckle: 0.04, speckleScale: 1.4, speckleColor: '#7a4634',
+    crustIsles: 0.02, crustScale: 5, crustColor: '#61786a', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
+    pustuleColor: '#4f7a62', lowerBody: 0.25, lowerHeight: 0.2, lowerColor: '#9ca490', plainTone: 0.7, grain: 0.6,
   },
   // Nezu Dasikong square lei 90079 (owner's photographs 34/03): a dark grey-olive bronze skin, the raised bands worn to
   // a silvery grey-brown; broad bright malachite blotches across belly and shoulder, a little red-brown cuprite in the

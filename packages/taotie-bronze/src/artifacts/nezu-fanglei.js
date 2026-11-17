@@ -83,13 +83,13 @@ export default {
     'detail-collar': { azimuth: 0, elevation: 10, fov: 12, fit: 0.24, target: [0, 352, 55.5], ref: 'detail-collar.jpg' },
     // flat faces (KIT.md § Flat faces): head-on on a register's chord plane; ref = the flattened photo-37
     // (reference/nezu-fanglei/faces.json → tools/faces.mjs --rectify). The tracing instrument for relief.js.
-    'face-shoulder': { face: { center: [0, 294, 89.55], normal: [0, 0.255, 0.9669], up: [0, 0.9669, -0.255], width: 265, height: 66.1 }, ref: 'faces/face-shoulder.jpg' },
-    'face-main': { face: { center: [0, 220.5, 96.56], normal: [0, -0.0273, 0.9996], up: [0, 0.9996, 0.0273], width: 265, height: 87 }, ref: 'faces/face-main.jpg' },
-    'face-second': { face: { center: [0, 139.5, 84.75], normal: [0, -0.2666, 0.9638], up: [0, 0.9638, 0.2666], width: 258, height: 81.9 }, ref: 'faces/face-second.jpg' },
-    'face-low': { face: { center: [0, 68, 63.11], normal: [0, -0.3159, 0.9488], up: [0, 0.9488, 0.3159], width: 202, height: 71.6 }, ref: 'faces/face-low.jpg' },
-    'face-foot': { face: { center: [0, 10.75, 46.88], normal: [0, 0, 1], up: [0, 1, 0], width: 129, height: 23.5 }, ref: 'faces/face-foot.jpg' },
-    'face-collar': { face: { center: [0, 350.5, 64.12], normal: [0, 0, 1], up: [0, 1, 0], width: 175, height: 53 }, ref: 'faces/face-collar.jpg' },
-    'face-lid': { face: { center: [0, 423, 33], normal: [0, 0.686, 0.7276], up: [0, 0.7276, -0.686], width: 180, height: 98.2 }, ref: 'faces/face-lid.jpg' },
+    'face-shoulder': { face: { center: [0, 294, 77.61], normal: [0, 0.2228, 0.9749], up: [0, 0.9749, -0.2228], width: 265, height: 66.1 }, ref: 'faces/face-shoulder.jpg' },
+    'face-main': { face: { center: [0, 220.5, 83.69], normal: [0, -0.0237, 0.9997], up: [0, 0.9997, 0.0237], width: 265, height: 87 }, ref: 'faces/face-main.jpg' },
+    'face-second': { face: { center: [0, 139.5, 73.45], normal: [0, -0.2331, 0.9724], up: [0, 0.9724, 0.2331], width: 258, height: 81.9 }, ref: 'faces/face-second.jpg' },
+    'face-low': { face: { center: [0, 68, 54.7], normal: [0, -0.2772, 0.9608], up: [0, 0.9608, 0.2772], width: 202, height: 71.6 }, ref: 'faces/face-low.jpg' },
+    'face-foot': { face: { center: [0, 10.75, 40.63], normal: [0, 0, 1], up: [0, 1, 0], width: 129, height: 23.5 }, ref: 'faces/face-foot.jpg' },
+    'face-collar': { face: { center: [0, 350.5, 55.57], normal: [0, 0, 1], up: [0, 1, 0], width: 175, height: 53 }, ref: 'faces/face-collar.jpg' },
+    'face-lid': { face: { center: [0, 423, 28.6], normal: [0, 0.6327, 0.7744], up: [0, 0.7744, -0.6327], width: 180, height: 98.2 }, ref: 'faces/face-lid.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {}, params = {} } = {}) {
