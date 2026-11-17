@@ -174,7 +174,7 @@ export function lugSDF() {
     for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 4.4, y - 38, z - zf - 7.6) - 1.8), 0.5) // nostrils
     return d
   }
-  return { sd, bounds: { min: [-28, 26, 46], max: [28, 112, 118] } }
+  return { sd, bounds: { min: [-28, 26, 46], max: [28, 112, 126] } } // z: the snout front reaches ≈ 119.5
 }
 
 void halfAt
