@@ -3,6 +3,7 @@
 // front (its pendant mask is relief on the body panel). Signed distance fields in VESSEL mm (Y up, front +Z),
 // meshed with kit.meshSDF. Read off photo-34 (front) and photo-03 (front-left, higher).
 
+import * as THREE from 'three'
 import { bodyW, RHO } from './form.js'
 
 const len2 = (x, y) => Math.sqrt(x * x + y * y)
@@ -142,42 +143,151 @@ export function handleSDF() {
 
 // ------------------------------------------------------------------ low lug (front)
 
+/** 2D ellipse, approximate signed distance (iq) */
+function sdEllipse2(px, py, rx, ry) {
+  const k0 = len2(px / rx, py / ry)
+  const k1 = len2(px / (rx * rx), py / (ry * ry))
+  return k1 > 1e-9 ? (k0 * (k0 - 1)) / k1 : -Math.min(rx, ry)
+}
+/** 2D capsule from a to b, radius r */
+function sdSeg2(px, py, ax, ay, bx, by, r) {
+  const qx = px - ax, qy = py - ay, ux = bx - ax, uy = by - ay
+  const h = clamp((qx * ux + qy * uy) / (ux * ux + uy * uy), 0, 1)
+  return len2(qx - ux * h, qy - uy * h) - r
+}
+/** 2D C-ring: an annulus (radius R, half width w) open over the sector centred on angle `gap` (rad), half-angle `ga` */
+function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
+  const dx = px - cx, dy = py - cy
+  const ring = Math.abs(len2(dx, dy) - R) - w
+  const a = Math.atan2(dy, dx) - gap
+  const da = Math.abs(Math.atan2(Math.sin(a), Math.cos(a)))
+  // outside the gap the ring; inside it, distance to the ring's cut ends
+  if (da > ga) return ring
+  const e1 = [cx + R * Math.cos(gap + ga), cy + R * Math.sin(gap + ga)], e2 = [cx + R * Math.cos(gap - ga), cy + R * Math.sin(gap - ga)]
+  return Math.min(len2(px - e1[0], py - e1[1]), len2(px - e2[0], py - e2[1])) - w
+}
+
 /**
- * Round r8-dsk-fix, read off detail-lug (photo-34): under the black opening (a 13 mm pocket in the front body panel,
- * relief.js) hangs a rounded SHIELD-shaped beast head, ≈ 36 mm across its U-shaped top at y ≈ 86, tapering to a point
- * at y ≈ 31. Its top stands ≈ 9 mm out of the wall and curves back into it at the point (no shelf). On it: a raised
- * rim round the U, two ARCHING C-horns over the brow, small round eyes, a nose ridge down the middle.
+ * Round dsk-lug, re-read off photo-34 and photo-03 at full resolution (.work/dsk-lug): there is NO hole in the wall.
+ * The dark patch above the head is the shade of a LOOP standing out of the wall and the gap behind the head it
+ * carries: its upper edge is soft (a terminator rolling round the loop's top, lit and green above it — the plain
+ * patch the photographs show between the blade's border strips), its lower edge is the head's crisp top; in photo-03
+ * (camera further right and higher) the band shrinks and a dark crevice opens behind the head's right cheek, and
+ * the head overlaps the blade's border strips, which run on behind it — the head stands ≈ 9 mm off the wall, its
+ * face ≈ 18–21 mm out.
+ *
+ * Built in a frame sheared onto the wall: (x, y, w = z − wallZ(y)), w = depth out of the wall (the wall here leans
+ * back ≈ 16° as it descends; the error of the shear on distances is < 4 %).
+ *  - the LOOP: a half ring standing on the wall, axis along x (the rope runs sideways), centre y 91, centre-line
+ *    radius 10, a rounded strap ≈ 14 mm wide × 6.4 mm thick; it springs from the wall at y ≈ 104 and returns into it
+ *    behind the head at y ≈ 78; its outer face stands 13 mm out.
+ *  - the HEAD on the loop's lower front: ≈ 32 mm across its round top (y 84.5), tapering to a blunt muzzle and chin
+ *    at y ≈ 37; a convex dome (back ≈ 9 mm, face to 20.5 mm out). A broad ∩ CRESCENT of horns over the top, cut with
+ *    short strokes, a panel of small hooks inside it; the horns' inner ends sweep down into a stem; a lozenge on the
+ *    brow, curled side ears, round domed eyes with curled lids set wide, curled nostril scrolls, a blunt muzzle.
+ *  - a 1 mm root PAD on the wall behind the head and under the loop (the loop's cast root) — it carries the per-vertex
+ *    cavity (lugCavity) that darkens the gap, as an occlusion term the plain wall panel cannot have.
  */
 export function lugSDF() {
-  const zc = wallZ(91) - 2
-  const T = (y) => clamp((y - 31) / 55, 0, 1)
-  const zf = (y) => wallZ(y) + 1.2 + 8 * Math.pow(T(y), 1.1)
-  const hw = (y) => 16.5 * Math.sqrt(T(y)) * (1 - 0.35 * Math.pow(clamp((y - 78) / 8.5, 0, 1), 2.2))
-  const sd = (x, y, z) => {
-    const wz = wallZ(y)
-    // the pendant: a domed shield sloping back into the wall to its point; the U top rounded over
-    const dome = zf(y) + 1.6 * (1 - Math.pow(Math.abs(x) / Math.max(1, hw(y)), 2))
-    let d = smax(Math.abs(x) - hw(y), z - dome, 1.6)
-    d = smax(d, Math.max(31 - y, y - 86.5), 2.2)
-    d = Math.max(d, wz - 3 - z)
-    const zs = (yy, xx = 0) => zf(yy) + 1.6 * (1 - Math.pow(Math.abs(xx) / Math.max(1, hw(yy)), 2))
-    // rim round the top
-    d = smin(d, sdTube(x, y, z, [[-14.5, 80, zs(80, 14.5), 1.3], [-11, 84.6, zs(84.6, 11), 1.3], [0, 85.4, zs(85.4), 1.3], [11, 84.6, zs(84.6, 11), 1.3], [14.5, 80, zs(80, 14.5), 1.3]]), 0.6)
-    for (const sg of [-1, 1]) {
-      // arching C-horns: a band from the centre up and out, curling down at the side
-      d = smin(d, len3(x - sg * 6.2, y - 66, (z - zs(66, 6.2)) * 1.4) - 2.4, 0.7) // eyes
-      d = smin(d, sdTube(x, y, z, [[sg * 3, 57, zs(57, 3), 1.0], [sg * 8, 62, zs(62, 8), 1.0]]), 0.5) // cheek hooks
-    }
-    // the arching C-horns (photo): a FAT ∪ crescent under the U top, raised ≈ 1.3 mm, its inner edge rising to the corners
-    {
-      const cres = Math.max(len2(x, (y - 88) * 1.05) - 15.8, -(len2(x, (y - 91.5) * 1.15) - 11.2), y - 84.2)
-      const top = zs(clamp(y, 31, 86), Math.min(Math.abs(x), 15))
-      d = smin(d, Math.max(cres, z - (top + 1.3), top - 2.5 - z), 0.5)
-      d = smax(d, -Math.max(Math.abs(len2(x, (y - 88) * 1.05) - 13.3) - 0.35, -cres - 0.2, z - top - 2), 0.2) // a groove along it
-    }
-    d = smin(d, sdTube(x, y, z, [[0, 74, zs(74) + 0.3, 1.5], [0, 40, zs(40) + 0.2, 1.1]]), 0.7) // nose ridge
-    d += rough(x, y, z, 0.25, 0.5)
-    return d
+  const YC = 91, RL = 10, TL = 3.2, XL = 7.0 // loop: centre, centre-line radius, half thickness, half width
+  const back = (x, y) => 9 - 1.5 * clamp((70 - y) / 33, 0, 1) + 1.2 * Math.min(1, (x / 16) ** 2)
+  // the head's front surface (w), a dome; plus the muzzle's bulge
+  const S = (x, y) => {
+    const dy = y - 60, L = dy > 0 ? 40 : 27
+    const g = Math.sqrt(Math.max(0, 1 - (x / 19) ** 2 - (dy / L) ** 2))
+    return 9 + 11.5 * g + 1.4 * Math.exp(-((x / 8) ** 2) - ((y - 42.5) / 4.2) ** 2)
   }
-  return { sd, bounds: { min: [-23, 26, zc - 6], max: [23, 92, zc + 18] } }
+  const outline = (x, y) => {
+    const top = sdEllipse2(x, y - 69, 16.2, 15.5)
+    const hw = 9 + 6.5 * Math.pow(clamp((y - 44) / 25, 0, 1), 0.8)
+    const mid = Math.max((Math.abs(x) - hw) * 0.96, y - 70, 44 - y)
+    const chin = sdEllipse2(x, y - 45.5, 9.4, 8.5)
+    return smin(top, smin(mid, chin, 3), 4)
+  }
+  const sd = (x, y, z) => {
+    const w = z - wallZ(y)
+    const ax = Math.abs(x)
+    // ---- the loop
+    const rr = len2(y - YC, w) - RL
+    const qx = ax - XL + 2.2, qr = Math.abs(rr) - TL + 2.2
+    let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 2.2
+    // ---- the root pad on the wall
+    d = Math.min(d, Math.max(len2(Math.max(ax - 14.5 + 2, 0), Math.max(Math.abs(y - 83) - 10 + 2, 0)) - 2, w - 1.0))
+    // ---- the head
+    const s0 = S(x, y), wb = back(x, y)
+    let h = smax(smax(outline(x, y), w - s0, 1.6), wb - w, 1.4)
+    const raise = (f, ht, k = 0.5) => { h = smin(h, Math.max(f, w - (s0 + ht), wb + 1 - w), k) }
+    const cut = (f, base, depth, k = 0.25) => { h = smax(h, -Math.max(f, base - depth - w), k) }
+    // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 65.5
+    const eOut = sdEllipse2(x, y - 69, 16.2, 15.5), eIn = sdEllipse2(x, y - 72.8, 11.0, 9.6)
+    const cres = Math.max(eOut + 0.5, -eIn, 65.5 - y)
+    raise(cres, 1.7, 0.6)
+    // the horns' inner ends sweep down into a stem on the axis
+    const stem = Math.min(sdSeg2(ax, y, 10.6, 66.4, 1.2, 61.5, 1.25), sdSeg2(ax, y, 0, 72, 0, 60.5, 1.0))
+    raise(stem, 1.4, 0.6)
+    // short strokes across the horn arms
+    if (cres < 1) {
+      let st = Infinity
+      for (const t of [-0.42, -0.14, 0.14, 0.42, 0.7]) {
+        const c = Math.cos(t), sn = Math.sin(t)
+        const px = 13.5 * c, py = 70.6 + 12.4 * sn
+        const nx = c / 13.5, ny = sn / 12.4, nl = len2(nx, ny)
+        st = Math.min(st, sdSeg2(ax, y, px - (nx / nl) * 1.5, py - (ny / nl) * 1.5, px + (nx / nl) * 1.2, py + (ny / nl) * 1.2, 0.32))
+      }
+      cut(st, s0 + 1.7, 0.55)
+    }
+    // the panel inside the crescent: slightly sunk, small hooks incised on it
+    if (eIn < 1 && y > 68) {
+      cut(Math.max(eIn + 0.6, 70 - y), s0, 0.35, 0.4)
+      const hook = Math.min(
+        sdCurl2(ax, y, 3.6, 78.6, 1.7, 0.3, -2.4, 0.9), sdCurl2(ax, y, 7.3, 75.2, 1.6, 0.3, -0.7, 0.9),
+        sdSeg2(ax, y, 0, 81.5, 0, 73, 0.3), sdSeg2(ax, y, 1.5, 81.6, 5.5, 81.4, 0.3), sdSeg2(ax, y, 5.4, 78.4, 8.6, 79.4, 0.3))
+      cut(hook, s0 - 0.35, 0.5)
+    }
+    // lozenge on the brow
+    raise((ax + Math.abs(y - 57.4) - 3.1) * 0.707, 1.5, 0.5)
+    cut(len2(x, y - 57.4) - 0.8, s0 + 1.5, 0.5)
+    // eyes: round domes set wide, in curled lids whose tails flick up and out
+    const ex = 7.2, ey = 50.2
+    const lid = Math.min(sdCurl2(ax, y, ex, ey, 3.5, 0.62, -2.2, 0.55), sdSeg2(ax, y, ex + 3.0, ey + 1.6, ex + 5.0, ey + 4.6, 0.6))
+    raise(lid, 1.2, 0.45)
+    h = smin(h, sdEllipsoid(ax - ex, y - ey, w - (S(ex, ey) + 0.3), 2.4, 2.3, 2.0), 0.5)
+    // nostril scrolls on the muzzle and a mouth line under it
+    raise(sdCurl2(ax, y, 4.2, 44.0, 1.75, 0.55, -1.2, 0.75), 0.9, 0.35)
+    cut(Math.max(Math.abs(y - 38.6 - 0.02 * x * x) - 0.35, ax - 6), s0, 0.7)
+    // curled side ears standing off the head's flanks at the horn tips
+    h = smin(h, sdTorus(ax, y, z, [17.0, 62.5, wallZ(62.5) + 12.2], [0.25, 0, 0.97], 2.3, 1.05), 0.8)
+    h += rough(x, y, z, 0.12, 0.6)
+    d = smin(d, h, 1.2)
+    // embedded 2.5 mm in the wall, no deeper
+    return Math.max(d, -2.5 - w)
+  }
+  return { sd, bounds: { min: [-25, 31, 82], max: [25, 110, 119] } }
+}
+
+/**
+ * Per-vertex `cavity` (0 recess → 1 exposed) for a mesh of `sdf` standing on the front wall: occlusion sampled along
+ * each vertex normal and two tilted rays against the solid AND the wall (z = wallZ(y)). For a PatinaMaterial with
+ * `cavityAttribute: true`: the gap behind the lug's head, the loop's underside and the root pad go dark by themselves.
+ */
+export function lugCavity(geo, sdf) {
+  const P = geo.attributes.position.array, N = geo.attributes.normal.array
+  const occ = (x, y, z) => Math.min(sdf.sd(x, y, z), (z - wallZ(y)) * 0.96)
+  const cav = new Float32Array(P.length / 3)
+  const steps = [1.5, 3.5, 7, 11.5]
+  for (let i = 0, v = 0; i < P.length; i += 3, v++) {
+    const x = P[i], y = P[i + 1], z = P[i + 2]
+    let o = 0, wsum = 0
+    for (const [tx, ty] of [[0, 0], [0, 0.5], [0, -0.5]]) {
+      let nx = N[i] + tx, ny = N[i + 1] + ty, nz = N[i + 2]
+      const l = len3(nx, ny, nz); nx /= l; ny /= l; nz /= l
+      for (const s of steps) {
+        const d = occ(x + nx * s, y + ny * s, z + nz * s)
+        o += Math.max(0, (s - d) / s) * (1 / s ** 0.3); wsum += 1 / s ** 0.3
+      }
+    }
+    cav[v] = clamp(1 - 1.6 * (o / wsum), 0, 1)
+  }
+  geo.setAttribute('cavity', new THREE.BufferAttribute(cav, 1))
+  return geo
 }

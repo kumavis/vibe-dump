@@ -252,7 +252,7 @@ export const FOOT_LONG = [
   {
     kind: 'plates', name: 'foot', data: FOOT_LONG_PLATES, axis: 76,
     opts: { height: FOOT_HEIGHT, shoulder: 0.8, contour: { inset: 1.2, line: 0.62 }, depth: 0.6 },
-    line: 0.66, lineDepth: 0.62, // the bands' incised lines (detail-foot-long: as bold as the contour line)
+    line: 0.66, lineDepth: 0.62, spiral: { pitch: 0.82, ex: 2.4, rIn: 0.25 }, // spirals of 2–2.5 turns, round (the bronze's chain) // the bands' incised lines (detail-foot-long: as bold as the contour line)
     ground: { cell: [3.8, 6.4], maxAspect: 1.6, pitch: 0.74 }, // face-long-foot: small near-square leiwen cells, 3–4 turns
     groups: [{ box: [104, 18.5, 115, 28.5], height: 3.2, shoulder: 1.6, pillow: 0.6, pillowWidth: 2.4, contour: false }],
     deco: {
@@ -531,7 +531,7 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
     for (const g of groups) if (g.items.length) kit.tracedPlates(panel, g.items, { ...base, ...g.o })
     const d = mirrorDeco(s.deco || {}, ax)
     const g = []
-    for (const [x, y, dd, hd = 1, a0] of d.spirals) g.push(spiralPts(P([x, y]), dd * ds, hd, a0 ?? (hd > 0 ? 90 : 270)))
+    for (const [x, y, dd, hd = 1, a0] of d.spirals) g.push(spiralPts(P([x, y]), dd * ds, hd, a0 ?? (hd > 0 ? 90 : 270), s.spiral))
     for (const l of d.lines) g.push(kit.shapes.fillet(l.map(P), 0.8, { step: 0.2 }))
     if (g.length) plateHand.push({ clipLoops: list.flatMap((pl) => [pl.outer, ...(pl.holes || [])]).map((L) => L.map(P)), g, line: s.line ?? LINE, depth: s.lineDepth ?? 0.42 })
     if (s.ground) groundOpts = { ...groundOpts, ...s.ground }

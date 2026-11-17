@@ -14,7 +14,7 @@
 import * as THREE from 'three'
 import { H, LV, RHO, COLLAR, bodyW, bodyR, lidW, lidR, quarterLen, arcTable, loftSide, ringLoft, capMesh } from './nezu-fanglei-dasikong/form.js'
 import { bodyPanel, collarPanel, lidPanel } from './nezu-fanglei-dasikong/relief.js'
-import { shoulderHeadSDF, handleSDF, lugSDF } from './nezu-fanglei-dasikong/sculpture.js'
+import { shoulderHeadSDF, handleSDF, lugSDF, lugCavity } from './nezu-fanglei-dasikong/sculpture.js'
 
 /** a flange path through world points (bottom → top) with an outward direction per point */
 function polyPath(pts, outs) {
@@ -99,7 +99,8 @@ export default {
     const kxSide = Qh(1)(270) / Qh(0)(270)
     await onProgress(0.03, 'belly · broad faces (traced)')
     const pf = bodyPanel(kit, { ppmm, seed, Qh: Qh(0), arc: arcB, kx: 1, lug: true, Hmax: LV.shoulder })
-    panels.bodyLong = pf.lugRelief
+    // (round dsk-lug: NO pocket under the lug — the dark patch is the shade of the loop and the gap behind its head)
+    panels.bodyLong = pf.relief
     panels.bodyBack = pf.relief
     await onProgress(0.3, 'belly · narrow faces')
     const ps = bodyPanel(kit, { ppmm: ppmm * 0.8, seed: seed + 1, Qh: Qh(1), arc: arcB, kx: kxSide, lug: false, Hmax: LV.shoulder })
@@ -123,10 +124,10 @@ export default {
     // photo-34 / photo-03: the collar is near-black, the lid and knob darker than the body (per-mesh tints, beauty only)
     const TINT = { collar: '#4c4d49', lid: '#8d8e88' }
     const bodyG = group('body')
-    const matB = [mat(pf.lugRelief), mat(ps.relief), mat(pf.relief)]
+    const matB = [mat(pf.relief), mat(ps.relief), mat(pf.relief)]
     for (let k = 0; k < 4; k++) {
       const p = k % 2 ? ps : pf
-      bodyG.add(loftSide(kit, { k, y0: LV.base, y1: LV.shoulder, W: bodyW, R: Rb, relief: k === 0 ? pf.lugRelief : p.relief, arc: arcB, panelW: p.panelW, material: k % 2 ? matB[1] : matB[k === 2 ? 2 : 0], density: dens, fade: 1.0 }))
+      bodyG.add(loftSide(kit, { k, y0: LV.base, y1: LV.shoulder, W: bodyW, R: Rb, relief: p.relief, arc: arcB, panelW: p.panelW, material: k % 2 ? matB[1] : matB[k === 2 ? 2 : 0], density: dens, fade: 1.0 }))
     }
     bodyG.add(capMesh({ y: 0, a: bodyW(0), b: RHO * bodyW(0), r: Rb(0) }, plain, false))
     // the ledge: from the shoulder top in to the collar, a small round at its outer edge
@@ -202,15 +203,11 @@ export default {
     const handles = [mesh(hGeo, 'handles'), mesh(hGeo.clone().applyMatrix4(turn), 'handles')]
     const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
     const heads = [mesh(headGeo, 'heads'), mesh(headGeo.clone().applyMatrix4(turn), 'heads')] // back: inferred
-    const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.8 }), 'lug')
-    // the lug's opening: the photographs show it BLACK (a hole into shadow). The pocket in the front panel gives the
-    // form; a black-tinted floor just above its bottom gives the tone in beauty (clay shows the pocket's honest floor)
-    {
-      const yC = 93.3, zW = RHO * bodyW(yC), n = new THREE.Vector3(0, -0.24, 0.97).normalize()
-      const floor = new THREE.Mesh(new THREE.PlaneGeometry(35, 12.4).rotateX(Math.asin(0.24)), new kit.PatinaMaterial({ meshTint: '#070605' }))
-      floor.position.set(0, yC, zW).addScaledVector(n, -11.6)
-      bodyG.add(floor)
-    }
+    // the low lug: a loop standing out of the wall carrying a head (no hole in the wall: the photographs' dark patch is
+    // the loop's shade and the gap behind the head). Its own occlusion as a per-vertex cavity; malachite-green tint.
+    const lugSdf = lugSDF()
+    const lug = mesh(lugCavity(kit.meshSDF(lugSdf, { voxel: voxel * 0.8 }), lugSdf), 'lug')
+    lug.material = new kit.PatinaMaterial({ cavityAttribute: true, meshTint: '#b4d2a6' })
 
     await onProgress(1, 'done')
     void H
