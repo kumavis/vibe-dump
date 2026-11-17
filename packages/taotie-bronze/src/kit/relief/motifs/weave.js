@@ -23,6 +23,7 @@ export const schema = {
   gap: R(0, 1.5, 0.05, 0.55, 'Shadow gap at a crossing', 'mm'),
   density: R(0, 2, 1, 1, 'Density (nested ribbons in a frame)'),
   head: R(0.4, 1.4, 0.02, 1, 'Head size'),
+  ribStyle: E(['ridge', 'cut'], 'ridge', 'Rib section (round ridges on a plateau | flat ribbon, grooves cut)'),
 }
 
 // each bell zone as an atlas preset: the zone's layout + its ribbon numbers
@@ -43,7 +44,7 @@ export const presetPlaques = Object.fromEntries(Object.keys(WEAVE_PRESETS).map((
 
 export function draw(panel, rect, p) {
   const k = p.scale
-  const common = { ribs: p.ribs, rib: p.rib * k, groove: p.groove * k, height: p.height, depth: p.depth, gap: p.gap }
+  const common = { ribs: p.ribs, rib: p.rib * k, groove: p.groove * k, height: p.height, depth: p.depth, gap: p.gap, render: { ribStyle: p.ribStyle } }
   if (p.zone !== 'custom' && WEAVE_PRESETS[p.zone]) {
     const z = WEAVE_PRESETS[p.zone]
     const cell = z.cell.map((v) => v * k)

@@ -25,7 +25,7 @@ partly hidden (≈ ±10 %); **[inferred]** not visible, typological or a repeat 
    roll ≈ −1°, f ≈ 13 000 px at ≈ 3.7 m** — a long lens, so perspective is weak and the 12° elevation is what had
    to be corrected (a feature set back by Δz shows Δz·sin 12° higher). rms 9 px ≈ 2.5 mm. **photo-36: az ≈ 69°,
    el ≈ 5°** from the collar box and eave corners. The collar's two visible faces (220 px front, 430 px side, same
-   180 px height) give the **plan ratio depth : width = 0.75 [measured, ±0.05]**: the ±X faces (with the handles)
+   180 px height) give the **plan ratio depth : width = 0.75 [measured, ±0.05]** — superseded in round 10b: 0.65 ± 0.05, §e.1: the ±X faces (with the handles)
    are the narrow ones.
 2. **Levels [measured]** (y): foot 0–21.5 (plain base strip 0–4); belly 21.5–263: plain border 21.5–35, narrow frieze
    35–50.5, low register 50.5–101 (lozenge band 51–62), second register 101–≈169, main register ≈169–253, plain top
@@ -39,7 +39,7 @@ partly hidden (≈ ±10 %); **[inferred]** not visible, typological or a repeat 
    belly is nearly straight, the lower belly tapers fast); shoulder 130.6 @276, 128 @294, 122 @310, 116 @319,
    108.5 @325; collar 85.5; lid skirt 85.5, eave 88, ridge half 44 [est; round 8: face-lid's field is still ±43 mm at 90 %
    of the slope and photo-36's ridge reads ≈ 45–48; was 38]; knob eave 19.5 × 15 [est], post 17 × 15 [est], knob cap ≈ 21 tall
-   with a ≈ 7 mm vertical fascia (photo-37). Depths (z) = 0.75 × these.
+   with a ≈ 7 mm vertical fascia (photo-37). Depths (z) = 0.65 × these (round 10b; was 0.75).
 4. **Flanges [measured / est]**: belly corners: thick slabs (≈ 8 mm) projecting ≈ 23 mm on the 45° bisector,
    17 slots cut in from the crest (≈ 2.8 mm wide, ≈ 9 deep, ≈ 13 mm pitch, counted on the right flange of photo-37),
    a squared cap standing above the belly top, ⊥ marks incised on the flanks; shoulder corners: separate slotted
@@ -103,9 +103,17 @@ cuprite patches across the upper belly and shoulder; emerald specks low; collar,
    rms on the knob tip, near collar corner top/bottom, far-left collar corner, near foot corner): the phone stood
    **≈ 0.73 m from the axis at y ≈ 404 mm** (about lid-skirt height), **az 67.6°**, looking down ≈ 13°, f ≈ 2520 px
    (vfov 41° over the `three-quarter.jpg` crop) — not the long lens (fov 10° at 3.6 m) the view used. The
-   `three-quarter` view now reproduces it. A fit with the plan ratio free and the far (back-right) collar corner
-   included prefers **depth : width ≈ 0.65** instead of 0.75 [est; the far corner is read off a dark flange, ±15 px];
-   ρ was NOT changed (it moves every face and panel) — see the round-10 report.
+   `three-quarter` view now reproduces it.
+   **Plan ratio (round 10b): depth : width = 0.65 ± 0.05 [measured, photo-36], was 0.75.** With the ratio free and the
+   far (back-right) collar corner included the fit gives 0.645–0.651 (12 px rms, `.work/lei-mid/fit36rho.py`); without
+   that corner it falls back to ≈ 0.75 because nothing else constrains depth, so 0.75 was never a measurement (the first
+   builders read photo-36 with a long-lens camera). Photo-37 fixes the widths only. The same ratio is used for the whole
+   stack: foot, belly, shoulder, collar, lid (front-slope run 57 mm, 51°; end slope run 52 mm) and knob (39 × 26) —
+   photo-36's lid and collar corners sit on the same solution within the reading error. Depth without flanges 196 → 170 mm.
+   faces.json: every z scaled by 0.65/0.75 and the slanted chord planes re-tilted; all seven faces re-rectified.
+   The ±X faces now carry the front design at TRUE size in their narrower field: plates mostly outside are dropped, plates
+   crossing the edge clipped 2.5 mm inside it (was: squashed in x by 0.75); the lid's triangular end slopes carry the
+   same mask scaled uniformly by 0.62.
 2. **Lid**: photo-37 (near-orthographic) shows NO eave overhang beyond the fascia/collar (eave line ≈ fascia box ≈ collar
    body, ±1 mm); photo-36's back corner shows ≈ 4–6 mm of eave plate over the fascia [est] — kept at 2.5. Rise 70 confirmed
    (photo-37: ridge at the projected 458 within 3 mm; photo-36 at the fitted camera: the end hip line within ≈ 15 px).
@@ -116,11 +124,14 @@ cuprite patches across the upper belly and shoulder; emerald specks low; collar,
 3. **Collar**: proportions confirmed (175 × 51, same width as the fascia). Added a plain stepped plinth (2.8 mm proud,
    3.2 tall) round its foot and three turned step-lines on the ledge (photo-36). Frieze redrawn band by band
    (`faces/face-collar.trace.json`).
-4. **Shoulder handles = a beast head holding a ring (衔环)**: a flat-topped head (≈ 13 mm thick, ≈ 40 mm across at the
-   brow, top y ≈ 326 → 321) from the ledge out to a snout at x ≈ 163 (photo-37), carved top (spiral horns, ears, eyes,
-   nose ridge, scrolls on the snout); from its mouth a round-section ring (section 12.6, outer Ø 63, bottom y ≈ 239)
-   whose plane is turned ≈ 32° from the side face toward the front — photo-37 sees through it (≈ 12 × 18 mm opening),
-   photo-36 sees it nearly face-on. The ±X belly centre flanges stop at y 230, under the ring.
+4. **Shoulder handles** (round 10b): a broad flat-topped head (≈ 48 mm across at the brow, 38 at the snout, ≈ 15 mm
+   thick, top y ≈ 324 at the ledge lifting to 327 at the snout, snout end at x ≈ 163 and dropping to y ≈ 301, two low
+   horn-ears swept out off its outer corners), carved top (spiral horns, ears, eyes, brow hooks, nose ridge, snout
+   scrolls); under the snout a short thick D-loop in the RADIAL (XY) plane, rooted in the wall: photo-37 sees it face-on
+   (outer ≈ 36 × 45 mm, x 124 → 160, opening ≈ 12 × 18 → section 12.2 on a 24 × 39 mm centre line), photo-36 obliquely
+   (bottom y ≈ 249–251). (Round 10's free-hanging 63 mm ring was wrong.) The ±X belly centre flanges stop at y 230.
 5. **Low lug**: D-ring (section 12, 54 × 52 mm, in the YZ plane, centre y 60 / z 84) behind a mask 49 mm across: two C
    horns of two nested fat bands with domed cores, crest, brow, eyes with slits, cheek hooks and curls, a snout with
    interlocking upper and lower fangs in relief over a rounded lip.
+6. **Patina** (round 10b): the `nezu-fanglei` preset darkened to a grey-olive body with paler worn relief tops and sparse
+   green; lid and collar near-black (upperTone 0.11 above 0.645 H, the collar's foot).

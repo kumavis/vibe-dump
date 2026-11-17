@@ -43,7 +43,7 @@ export function bossMesh(kit, { face, side, px, y, map, material, quality = 1, m
   const W = map.widthMM, Hp = map.heightMM
   const { c } = map.userData
   const mx = mirror ? -1 : 1
-  const nA = Math.round(96 * Math.sqrt(quality)), nR = Math.round(30 * Math.sqrt(quality))
+  const nA = Math.round(88 * Math.sqrt(quality)), nR = Math.round(27 * Math.sqrt(quality))
   // a circle a little outside the dome's foot, so the foot is caught
   const radiusAt = () => BOSS.r + 0.6
   const sinkMM = 1.2

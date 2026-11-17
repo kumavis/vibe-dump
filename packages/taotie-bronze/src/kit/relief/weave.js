@@ -23,6 +23,7 @@
 // pair of grooves (n = 3: one), plus one sink for all eyes and lines.
 
 import { PROFILES } from './panel.js'
+import { RidgeWork } from './ridges.js'
 
 export const WEAVE_DEFAULTS = { ribs: 3, rib: 1.7, groove: 0.55, height: 1.1, depth: 0.45, gap: 0.55, shoulder: 0.4 }
 
@@ -134,11 +135,23 @@ function windowAround(pts, i, t, half) {
 
 // ------------------------------------------------------------------ the renderer
 
+/** flush a RidgeWork with every draw it makes clipped to `clip` (a path builder in panel mm) */
+function clipFlush(panel, work, clip) {
+  const wrap = (fn) => (draw, o) => fn.call(panel, (ctx) => { ctx.save(); ctx.beginPath(); clip(ctx); ctx.clip(); draw(ctx); ctx.restore() }, o)
+  const view = Object.create(panel)
+  view.raise = wrap(panel.raise); view.sink = wrap(panel.sink); view.add = wrap(panel.add)
+  const keep = work.panel
+  work.panel = view
+  try { return work.flush() } finally { work.panel = keep }
+}
+
 /**
  * @param {import('./panel.js').ReliefPanel} panel
  * @param els element list in panel mm
- * @param o { height 1.1, depth 0.45 (groove depth), groove 0.55 (mm), ribs 3, gap 0.55 (shadow gap at a crossing, mm),
- *   shoulder 0.4, clip: (ctx) => path (limits all drawing), eyeDepth (× depth, 1.1) }
+ * @param o { height 1.1, depth 0.45 (groove depth: how far the ribs stand on the ribbon's plateau), groove 0.55 (mm),
+ *   ribs 3, gap 0.55 (shadow gap at a crossing, mm), shoulder 0.4, ribStyle 'ridge' (round ribs by relief/ridges.js on a
+ *   plateau) | 'cut' (flat ribbon, grooves cut), crown 0.6 (ridge section, 1 = semicircular), clip: (ctx) => path
+ *   (limits all drawing), eyeDepth (× depth, 1.1) }
  */
 export function renderWeave(panel, els, o = {}) {
   const t0 = performance.now()
@@ -180,16 +193,39 @@ export function renderWeave(panel, els, o = {}) {
     }
     // 2. raise everything of this layer
     const masses = els.masses.filter((m) => (m.z ?? 1) === z), knobs = els.knobs.filter((k) => (k.z ?? 1) === z)
+    const ridgeRibs = (P.ribStyle ?? 'ridge') === 'ridge'
     panel.raise(withClip((ctx) => {
-      for (const s of layer) { ctx.lineWidth = s.w; ctx.beginPath(); pathPts(ctx, s.pts, s.closed); ctx.stroke() }
+      for (const s of layer) { if (ridgeRibs && s.kind === 'ribbon') continue; ctx.lineWidth = s.w; ctx.beginPath(); pathPts(ctx, s.pts, s.closed); ctx.stroke() }
       ctx.beginPath()
       for (const m of masses) pathPts(ctx, m.pts, true)
       for (const k of knobs) { ctx.moveTo(k.c[0] + k.r, k.c[1]); ctx.arc(k.c[0], k.c[1], k.r, 0, Math.PI * 2) }
       ctx.fill()
     }), { height: h, shoulder: P.shoulder })
-    // 3. the ribs: n ribs = n − 1 grooves, cut as nested strokes from the outside in (sink a band, raise its middle back)
+    // 3. the ribs. 'ridge' (default): each ribbon is a low plateau (height − depth) with n round-crowned ridges
+    //    ADDED on its top by the kit's ridge work (relief/ridges.js ridgeBand: corners nested, the ribs of an end joined
+    //    in U-turns); 'cut': the ribbon raised flat and its n − 1 grooves cut as nested strokes (sink the middle band,
+    //    raise its middle back).
     const rbs = layer.filter((s) => s.kind === 'ribbon')
-    if (rbs.length) {
+    if (rbs.length && (P.ribStyle ?? 'ridge') === 'ridge') {
+      const groups = new Map()
+      for (const r of rbs) {
+        const n = r.ribs ?? P.ribs, rib = (r.w - (n - 1) * g) / n
+        const key = n + '|' + rib.toFixed(3)
+        if (!groups.has(key)) groups.set(key, { n, rib, list: [] })
+        groups.get(key).list.push(r)
+      }
+      for (const { n, rib, list } of groups.values()) {
+        const work = new RidgeWork(panel, { width: rib, pitch: rib + g, height: d, groove: 0, crown: P.crown ?? 0.6, mode: 'add' })
+        for (const r of list) {
+          if (n < 2) { work.line(r.pts, { mode: 'raise', height: h }); continue }
+          work.ridgeBand(r.pts, { ridges: n, start: 'round', end: 'round', bend: Math.max(0.2, rib * 0.25), closed: !!r.closed,
+            plateau: { height: h - d, margin: 0.12, channel: 0, channelDepth: 0, shoulder: P.shoulder } })
+        }
+        // the clip limits the ridge work too: run it against a clipped view of the panel
+        if (clip) clipFlush(panel, work, clip)
+        else work.flush()
+      }
+    } else if (rbs.length) {
       for (let k = 1; ; k++) {
         const S = (r) => { const n = r.ribs ?? P.ribs, rib = (r.w - (n - 1) * g) / n; return r.w - 2 * k * rib - 2 * (k - 1) * g }
         const live = rbs.filter((r) => S(r) > 0.05 && (r.ribs ?? P.ribs) > 1)
