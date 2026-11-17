@@ -1,1 +1,383 @@
-{"field": {"box": [14.6, 5.6, 137.2, 31.2]}, "mask": [{"poly": [[62.4, 0], [87.0, 0], [86.4, 17.2], [84.5, 19.6], [78.5, 19.8], [78.5, 38], [70, 38], [70, 19.8], [65.4, 19.6], [63.4, 17.2]]}], "params": {"texture": -1.0, "brightness": 0.0, "valley": -1.5, "window": 0.55, "minWidth": 1.4, "close": 0.25, "grow": 0.0, "bias": 0.3}}
+{
+ "note": "face-long-foot: one kui per half, drawn BY ELEMENT on the sharper RIGHT half (x > 76) and mirrored about the field axis x 76 (field edges 14.6 / 137.3 are symmetric there; the photographed creatures sit \u2248 1.5 mm left of it, the left one cramped against its frame). Auto classifier OFF: plates and ground share tone and both carry line work, so it reads the leiwen blocks (or, inverted, bleeds into them).",
+ "field": {
+  "box": [
+   14.6,
+   5.6,
+   137.3,
+   31.2
+  ]
+ },
+ "mask": [
+  {
+   "poly": [
+    [
+     64.0,
+     0
+    ],
+    [
+     88.0,
+     0
+    ],
+    [
+     87.6,
+     18.2
+    ],
+    [
+     86.0,
+     19.6
+    ],
+    [
+     66.0,
+     19.6
+    ],
+    [
+     64.4,
+     18.2
+    ]
+   ]
+  }
+ ],
+ "symmetry": {
+  "axis": 76,
+  "keep": "right"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    152,
+    38
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "poly": [
+    [
+     103.4,
+     24.7
+    ],
+    [
+     102.2,
+     26.6
+    ],
+    [
+     86.6,
+     27.0
+    ],
+    [
+     85.0,
+     26.4
+    ],
+    [
+     84.9,
+     23.6
+    ],
+    [
+     86.2,
+     21.4
+    ],
+    [
+     88.0,
+     20.9
+    ],
+    [
+     94.4,
+     20.9
+    ],
+    [
+     95.3,
+     19.8
+    ],
+    [
+     95.4,
+     16.6
+    ],
+    [
+     92.6,
+     16.5
+    ],
+    [
+     91.5,
+     16.2
+    ],
+    [
+     91.3,
+     9.6
+    ],
+    [
+     92.4,
+     8.5
+    ],
+    [
+     100.4,
+     8.5
+    ],
+    [
+     104.4,
+     9.4
+    ],
+    [
+     104.6,
+     14.2
+    ],
+    [
+     103.8,
+     14.9
+    ],
+    [
+     98.2,
+     14.9
+    ],
+    [
+     97.6,
+     16.0
+    ],
+    [
+     97.7,
+     20.7
+    ],
+    [
+     98.6,
+     21.9
+    ],
+    [
+     102.4,
+     22.3
+    ]
+   ],
+   "round": 0.8,
+   "snap": 0.5,
+   "label": "(1) upper jaw: snout band (spiral row) round its notch end into the lower lip, down the limb beside the eye and into the hooked lower jaw + ring-spiral lobe"
+  },
+  {
+   "poly": [
+    [
+     104.8,
+     22.6
+    ],
+    [
+     105.6,
+     25.9
+    ],
+    [
+     108.3,
+     27.0
+    ],
+    [
+     110.4,
+     26.1
+    ],
+    [
+     111.6,
+     27.3
+    ],
+    [
+     113.7,
+     27.6
+    ],
+    [
+     114.1,
+     26.4
+    ],
+    [
+     114.0,
+     20.2
+    ],
+    [
+     112.6,
+     19.4
+    ],
+    [
+     110.8,
+     21.5
+    ],
+    [
+     108.2,
+     20.4
+    ],
+    [
+     105.8,
+     20.9
+    ]
+   ],
+   "round": 0.8,
+   "snap": 0.5,
+   "label": "(2) bottle horn: bulb by the eye, neck, flared cap outward"
+  },
+  {
+   "poly": [
+    [
+     104.4,
+     12.8
+    ],
+    [
+     115.0,
+     12.6
+    ],
+    [
+     123.6,
+     12.3
+    ],
+    [
+     133.0,
+     12.3
+    ],
+    [
+     134.8,
+     13.8
+    ],
+    [
+     134.8,
+     18.8
+    ],
+    [
+     129.6,
+     18.8
+    ],
+    [
+     104.4,
+     18.8
+    ]
+   ],
+   "round": 1.0,
+   "snap": 0.4,
+   "label": "(3) body band (spiral chain) from behind the eye to the outer column"
+  },
+  {
+   "poly": [
+    [
+     129.8,
+     19.4
+    ],
+    [
+     121.6,
+     19.4
+    ],
+    [
+     119.8,
+     21.4
+    ],
+    [
+     119.8,
+     27.4
+    ],
+    [
+     122.2,
+     29.8
+    ],
+    [
+     132.0,
+     29.8
+    ],
+    [
+     134.8,
+     27.0
+    ],
+    [
+     134.8,
+     18.8
+    ]
+   ],
+   "round": 2.2,
+   "snap": 0.5,
+   "label": "(4) the coil: three-ridged band up the outer column, along the top, down and in round a sunk spiral"
+  },
+  {
+   "band": [
+    [
+     122.2,
+     14.0
+    ],
+    [
+     122.2,
+     8.6
+    ],
+    [
+     117.2,
+     8.6
+    ],
+    [
+     117.2,
+     11.4
+    ]
+   ],
+   "width": 2.8,
+   "bend": 0.8,
+   "end": {
+    "coil": {
+     "turns": 0.6,
+     "R": 1.4,
+     "dir": -1,
+     "gap": 0.4
+    }
+   },
+   "label": "(5) lower limb: hooked claw"
+  },
+  {
+   "band": [
+    [
+     107.6,
+     13.4
+    ],
+    [
+     107.6,
+     9.4
+    ],
+    [
+     110.2,
+     9.4
+    ]
+   ],
+   "width": [
+    4.6,
+    4.2,
+    2.6
+   ],
+   "bend": 0.8,
+   "label": "(6) leg with hooked foot"
+  },
+  {
+   "poly": [
+    [
+     91.6,
+     27.0
+    ],
+    [
+     91.4,
+     28.8
+    ],
+    [
+     92.6,
+     30.0
+    ],
+    [
+     94.6,
+     29.9
+    ],
+    [
+     95.2,
+     28.6
+    ],
+    [
+     95.0,
+     27.0
+    ]
+   ],
+   "round": 1.0,
+   "label": "(7) lip curl on the snout"
+  }
+ ],
+ "bosses": [
+  {
+   "c": [
+    101.0,
+    18.25
+   ],
+   "r": 2.9
+  }
+ ]
+}
