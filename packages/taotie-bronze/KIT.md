@@ -1432,3 +1432,23 @@ drops threads under `minWidth`) reads photographs with tonal separation — a da
 vessels) it does not: switch it off (`regions: [{ box: whole face, mode: 'off' }]`) and DRAW the outlines off the grid
 with `snap`; that is still faster than stroking, and it is the outline that matters.
 
+### Paint and snap (`tools/snap.py`) — the owner's reading first
+
+Deciding WHAT is one raised figure is the step machines and hasty readers get wrong (a horn drawn as five thin
+bands when the bronze has one fat slab). So the figure/ground decision is made by eye, roughly, and the machine
+only supplies precision:
+
+1. Paint over each raised shape with a fat brush (or outline it) on an enlarged crop of the photograph — the
+   owner does this on the Motif Tracer page and pastes `MOTIF-TRACER {json}`; a builder can write the same JSON
+   by hand (`strokes: [{ k: 'raised', w: <brush px>, c: 0, p: 'x,y;x,y;…' }]`, sheet px).
+2. `snap.py <drawing.json> <crop.jpg> <out> [reach] [sigma]` unions the paint, then lets every point of each
+   silhouette slide along its normal (± reach px) to the slab's edge — the edge where the picture gets DARKER going
+   outward, true on the lit side and the shadow side alike, which keeps it off the far edge of the cast shadow —
+   with a smoothness cost round the loop. Output: `<out>.json` (`outlines`, sheet px), `<out>.svg`, and a sheet
+   (photo | paint | paint and snapped | shape) to LOOK at. Keep reach under about half the narrowest bar.
+3. Outlines → face mm → `kit.tracedPlates` / a plateau; the incised lines on top are drawn afterwards, inside it.
+
+Owner-drawn shapes are filed as `reference/<id>/owner-trace-*.json` (raw strokes, snapped outlines in sheet and
+photo px). They are ground truth for the language of that register: match their bar widths, corner radii and
+hook shapes when drawing the elements the owner did not paint.
+
