@@ -366,17 +366,19 @@ export const PATINA_PRESETS = {
   // grey-beige, bright malachite in broad soft territories over belly, lid and foot (green powder packed into the
   // leiwen), small red-brown earth in the deep pockets, the lid top and neck darker and greener
   'nezu-you': {
-    // ridge pass: the review found the green too saturated and speckled — paler, earthier malachite in broader, softer
+    // ridge pass 2 (lead): tops grey-tan / olive, not cream; the green stronger and more varied (whole areas and the
+    // recesses), less an even wash.
+    // ridge pass 1: the review found the green too saturated and speckled — paler, earthier malachite in broader, softer
     // fields, almost no specks, darker grooves (inlay paste), paler worn relief tops over a greyer skin
     // round r8-fix (photos 31/32): large connected malachite fields (lid top, left neck, left belly lobe) over a
     // grey-brown metal skin, pale grey-tan worn band tops, earthy rust-brown in the ground and recesses; no confetti
     age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.55, cuprite: 0.7, cupriteTone: 0.35, tinOxide: 0.9,
-    tinOxideTone: 1.2, malachite: 0.62, carbonate: 0.08, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.52,
-    islands: 0.4, malachiteScale: 1.6, crust: 0.2, chloride: 0, soot: 0, crevice: 0.95, patchScale: 120,
-    mottleScale: 22, patchiness: 0.85, softness: 0.7, drift: 0.4, earth: 0.24, earthColor: '#6e5236', calcite: 0.02,
-    streaks: 0.05, burialSide: 0.1, recessDirt: 1, interiorTone: 0.5, wax: 0, inlay: 0.45, inlayGround: 0,
-    wear: 0.32, dulling: 0.36, tops: 1, nobleWarmth: 0.55, matte: 1, topsTone: 0.7, ledgeMatte: 1, nobleRelief: 1,
-    tint: '#b8b2a0', speckle: 0.003, speckleScale: 1.4, speckleColor: '#2f9a64', speckleDecor: 0.1, crustIsles: 0,
+    tinOxideTone: 1.2, malachite: 0.95, carbonate: 0.08, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.4,
+    islands: 0.55, malachiteScale: 2.2, crust: 0.2, chloride: 0, soot: 0, crevice: 1, patchScale: 80,
+    mottleScale: 13, patchiness: 1, softness: 0.5, drift: 0.4, earth: 0.12, earthColor: '#6e5236', calcite: 0.02,
+    streaks: 0.05, burialSide: 0.1, recessDirt: 1, interiorTone: 0.5, wax: 0, inlay: 0.8, inlayGround: 0.35,
+    wear: 0.32, dulling: 0.36, tops: 1, nobleWarmth: 0.3, matte: 1, topsTone: 0.55, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#a6a28c', speckle: 0.003, speckleScale: 1.4, speckleColor: '#2f9a64', speckleDecor: 0.1, crustIsles: 0,
     crustScale: 7, crustColor: '#3aa070', crustPlace: 0.4, pustules: 0.003, pustuleScale: 3, pustuleColor: '#22a060', grain: 0.6,
   },
 
@@ -437,16 +439,18 @@ export const PATINA_PRESETS = {
   // over a pale buff earthy ground packed in the sunk field; legs and lower bowl buff-brown with green flecks; the
   // far post's cap dark olive-grey
   'nezu-jue': {
+    // ridge pass: dark channels and pockets (recess dirt, less carbonate in the crevices), crust onto the plain
+    // parts, a darker interior (the photograph's cup inside is a dull grey-green, not pale).
     // fix pass r8: broad mottled grey-green crusts over a pale buff skin (no confetti speckle), pale legs, a redder
     // band top over a pale earthy ground, more of the pale blue-green phase (the spout's turquoise crust)
     age: 1, tin: 0.15, lead: 0.08, polish: 0.2, tarnish: 0.45, cuprite: 0.9, cupriteTone: 0.6, tinOxide: 0.55,
     tinOxideTone: 1.05, malachite: 0.75, carbonate: 0.3, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.6,
-    turquoiseTone: 0.45, islands: 0.25, malachiteScale: 1.2, crust: 0.3, chloride: 0, soot: 0.02, crevice: 0.75,
+    turquoiseTone: 0.45, islands: 0.25, malachiteScale: 1.2, crust: 0.3, chloride: 0, soot: 0.02, crevice: 0.45,
     patchScale: 34, mottleScale: 6, patchiness: 0.85, softness: 0.7, drift: 0.3, earth: 0.65, earthColor: '#ad9c84',
-    calcite: 0.05, streaks: 0.03, burialSide: 0.1, recessDirt: 0.3, interiorTone: 0.75, wax: 0, inlay: 1, inlayGround: 0, soilGroove: 1,
+    calcite: 0.05, streaks: 0.03, burialSide: 0.1, recessDirt: 0.9, interiorTone: 0.5, wax: 0, inlay: 1, inlayGround: 0, soilGroove: 1,
     wear: 0.15, dulling: 0.3, tops: 1, nobleWarmth: 0.85, matte: 1, topsTone: 0, ledgeMatte: 1, nobleRelief: -0.4,
     tint: '#eaeee0', speckle: 0.03, speckleScale: 0.8, speckleColor: '#4a9a72', speckleDecor: 0.2, crustIsles: 0.18,
-    crustScale: 11, crustColor: '#97ad8f', crustPlace: 0.55, pustules: 0.012, pustuleScale: 2.6, pustuleColor: '#2fa070',
+    crustScale: 11, crustColor: '#97ad8f', crustPlace: 0.8, pustules: 0.012, pustuleScale: 2.6, pustuleColor: '#2fa070',
     lowerBody: 0, lowerHeight: 0.4, lowerColor: '#e6dccb', upperTone: 0.86, upperHeight: 0.68, grain: 0.75,
   },
   // Nezu bu 90082 (owner's photo-06): a grey-green skin, the raised bands of mask and dragons worn to a pale

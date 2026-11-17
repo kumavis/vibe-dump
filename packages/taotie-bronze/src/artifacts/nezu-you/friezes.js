@@ -83,7 +83,7 @@ export function drawFrieze(kit, panel, size, spec, { seed = 0 } = {}) {
   for (const [y0, y1] of spec.borders || []) panel.raise((ctx) => ctx.fillRect(0, y0, W, y1 - y0), { height: 1.0, shoulder: (y1 - y0) * 0.45, profile: 'plateau' })
   for (const c of spec.cords || []) kit.plainCord(panel, { x0: 0, x1: W, y: c.y, width: c.width ?? 1.8, height: c.height ?? 1.0 })
   kit.tracedPlates(panel, plates, {
-    union: true, height: spec.height ?? 2.2, shoulder: 1.15, pillow: 0.35, pillowWidth: 2.4,
+    union: true, height: spec.height ?? 2.2, shoulder: 1.8, pillow: 0.55, pillowWidth: 2.6,
     contour: { inset: 1.05, line: 0.72 }, depth: 0.5, seed,
   })
   // the coils' dark eyes: a deep round pit at each curl's centre

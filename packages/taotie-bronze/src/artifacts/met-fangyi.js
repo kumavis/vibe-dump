@@ -12,6 +12,7 @@
 
 import * as THREE from 'three'
 import { knobLines } from './met-fangyi/decor.js'
+import { renderRidge, footDragon, friezeDragon, FOOT, FOOT_LONG_K, FOOT_END_K, FRIEZE_LONG_K } from './met-fangyi/ridge.js'
 import { renderTraced, bodyFace, refit, MAIN_LONG, FRIEZE_LONG, FOOT_LONG, END_FIT, END_EYE, END_HORN, LID_LONG_FIT, LID_LONG_EYE, LID_END_FIT, LID_END_EYE, LID_END_DROP } from './met-fangyi/traced.js'
 
 const H = 254
@@ -130,6 +131,13 @@ export default {
       // (×0.6 outward of the eye: tail edge at u 48 against 62.4) — face-end.jpg, grid/s-endfr.png
       const endMain = refit(MAIN_LONG, END_FIT, { pillow: END_EYE }).map((e) => (e.name === 'horn' ? END_HORN : e))
       const endFrieze = refit(FRIEZE_LONG, {}, { rest: ([x, y]) => { const u = 76 - x; return [59 - (u <= 22.7 ? 24 - (22.7 - u) * 0.95 : 24 + (u - 22.7) * 0.6), y + 128] } })
+      const fields = [[3.3, 34.0 - FOOT_H, hw - 6.5, 93.7], [3.3, 129.8 - FOOT_H, hw - 6.5, 27.6]]
+      if (long) {
+        renderRidge(kit, p, [
+          { draw: friezeDragon(FRIEZE_LONG_K), P: face(152, 126), axis: 76 },
+        ], { G: FOOT.G, seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h }, fields })
+        return p.bake()
+      }
       renderTraced(kit, p, long ? [
         { specs: MAIN_LONG, P: face(152, 31) },
         { specs: FRIEZE_LONG, P: face(152, 126) },
@@ -159,11 +167,9 @@ export default {
       // face-long-foot.jpg: the field runs from y 3.8 to 29.6 (vessel), stepping over the notch and its frame
       const nh = n.w / 2 + 1.4, nv = n.h + 1.4
       const field = [[3.3, 3.8], [hw - nh, 3.8], [hw - nh, nv], [hw - 3.2, nv], [hw - 3.2, 29.6], [3.3, 29.6]]
-      // the end face: the same kui closed up outward of the notch jaw (u ≤ 12 kept)
-      const specs = long ? FOOT_LONG : refit(FOOT_LONG, {}, { rest: ([x, y]) => { const u = 76 - x; return [59 - (u <= 12 ? u : 12 + (u - 12) * 0.7), y] } })
-      renderTraced(kit, p, [{ specs, P: bodyFace({ faceW: long ? 152 : 118, dy: -2, halfAt, hw, y0: 0 }).P }], {
-        seed: s, halfRect: { x: 0, y: 0, w: hw, h: FOOT_H }, fields: [field],
-      })
+      const P = bodyFace({ faceW: long ? 152 : 118, dy: -2, halfAt, hw, y0: 0 }).P
+      const K = long ? FOOT_LONG_K : FOOT_END_K
+      renderRidge(kit, p, [{ draw: footDragon(K), P, axis: K.axis }], { G: FOOT.G, seed: s, halfRect: { x: 0, y: 0, w: hw, h: FOOT_H }, fields: [field] })
       return p.bake()
     }
     await onProgress(0.36, 'foot')

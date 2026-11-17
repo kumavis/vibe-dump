@@ -31,7 +31,7 @@ function smooth(c, w, n = 5) {
 export function lidDesign(kit) {
   // a band: smoothed centre line, optional coiled end (R, dir, sweep), widths held through the coil
   const B = (c, w, curl, o = {}) => {
-    const wk = (v) => v * 1.15 // detail-lid.jpg: the bands are fatter than the earlier tracing's widths
+    const wk = (v) => v * 1.3 // detail-lid.jpg: the bands are fatter than the earlier tracing's widths
     const W0 = Array.isArray(w) ? w.map(wk) : wk(w)
     const s = o.sharp ? { pts: c, ws: Array.isArray(W0) ? W0 : c.map(() => W0) } : smooth(c, W0)
     let pts = s.pts, ws = s.ws
@@ -46,14 +46,14 @@ export function lidDesign(kit) {
   return {
     bands: [
       B([[24, 45], [12, 41], [9, 23], [14, 8], [36, 6], [50, 14], [50.5, 28], [41, 33.5], [34, 31.5]], [6.6, 7.4, 8, 8, 8, 7.6, 7, 6.6, 6.2], { R: 4.4, dir: 1, sweep: 320 }), // the big G rolling in
-      B([[16, 52.5], [44, 51.5], [70, 47.5]], [6, 6.6, 5]), // the long band over the G toward the boss
+      B([[16, 54.2], [44, 53.2], [70, 49]], [6, 6.6, 5]), // the long band over the G toward the boss
       B([[48, 41.5], [64, 43], [72, 38.5]], [6, 6.4, 5.6], { R: 3.0, dir: -1, sweep: 290 }), // upper hook beside the boss
       B(rev([[92, 12.5], [110, 13.5], [124, 17], [128.5, 25]]), [5.6, 6.6, 7.4, 7], { R: 4.2, dir: -1, sweep: 320 }), // outer hook, rolled low
       B([[56, 5.5], [71, 6], [77, 11.5]], [5.4, 5.8, 5], { R: 2.6, dir: 1, sweep: 280 }), // low hook between
       B([[112, 36], [96, 38.5], [86, 36], [84.5, 31.5]], [5.6, 6.2, 6, 5.4], { R: 2.6, dir: 1, sweep: 280 }), // hook over the boss, outer
-      B([[5.5, 6], [5.5, 33]], 6, null, { sharp: true }), // nose under the strap
-      B([[12, 57], [12, 68], [36, 68.4], [40, 62]], [6, 6.6, 6.4, 6], { R: 3.0, dir: 1, sweep: 300 }, { sharp: true }), // high G toward the knob
-      B([[50, 56], [62, 61], [69, 57.5]], [5.6, 6, 5], { R: 2.6, dir: -1, sweep: 280 }), // high hook outer
+      B([[5.2, 6], [5.2, 33]], 4, null, { sharp: true }), // nose under the strap
+      B([[12, 59], [12, 70], [36, 70.4], [40, 64]], [6, 6.6, 6.4, 6], { R: 3.0, dir: 1, sweep: 300 }, { sharp: true }), // high G toward the knob
+      B([[50, 58], [62, 63], [69, 59.5]], [5.6, 6, 5], { R: 2.6, dir: -1, sweep: 280 }), // high hook outer
     ],
     eye: { c: [79, 24], d: 15, pupil: 2.8 },
     pits: [{ c: [31.5, 23.5], r: 1.4 }], // the deep hole at the G's centre
@@ -66,7 +66,7 @@ export function drawLid(kit, panel, { seed = 0, y1 } = {}) {
   const plates = []
   for (const side of [1, -1]) for (const el of D.bands) plates.push({ outer: kit.elementContour(el, 0).map(([x, y]) => [cx + side * x, y]) })
   panel.raise((ctx) => ctx.fillRect(0, 0.8, W, 1.8), { height: 1.0, shoulder: 0.8, profile: 'plateau' }) // the border at the slope's foot
-  kit.tracedPlates(panel, plates, { union: true, height: 2.4, shoulder: 1.5, pillow: 0.6, pillowWidth: 3.2, contour: { inset: 1.2, line: 0.7 }, depth: 0.5, seed })
+  kit.tracedPlates(panel, plates, { union: true, height: 3.2, shoulder: 1.7, pillow: 0.8, pillowWidth: 3.6, contour: { inset: 1.2, line: 0.7 }, depth: 0.5, seed })
   for (const side of [1, -1]) {
     const c = [cx + side * D.eye.c[0], D.eye.c[1]]
     panel.sink((ctx) => { ctx.beginPath(); ctx.arc(c[0], c[1], D.eye.d / 2 + 1.0, 0, Math.PI * 2); ctx.arc(c[0], c[1], D.eye.d / 2 + 0.3, 0, Math.PI * 2, true); ctx.fill() }, { depth: 0.6, shoulder: 0.3, profile: 'u' })

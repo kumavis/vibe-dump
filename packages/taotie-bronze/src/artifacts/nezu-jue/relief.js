@@ -1,12 +1,19 @@
-// Nezu jue — the décor panels, rendered from the traced data in trace.js with the kit's traced vocabulary
-// (roundStroke / roundPlate → carve with squared spiral chains on the band tops, pillowBoss, sinks).
+// Nezu jue — the décor panels, drawn from the traced data in trace.js.
+//
+// Ridge pass (.work/ridge-nezu-jue/NOTES.md). The band is a PAVEMENT of square-cornered flat plates, not bands on a
+// ground: the whole field is raised as one low plate (PLATE.field), every figure gets a narrow sunk channel round it
+// and stands a step higher on its own plateau (PLATE.figure), and its top carries RIDGE WORK — a chain of small
+// squared spirals (kit quadSpiral, one cell per band width) or two / three parallel lines (kit ridgeBand) — added on
+// the plateau. What the figures leave is plain plate one step lower (pale in the photograph); deep pockets sink into
+// the curls and the eye socket. Corners are SQUARE (mitred strokes, a 0.3 mm shoulder; ridge corners bend 0.2 mm):
+// the bronze has none of the round arcs other vessels have.
 //
 // ONE panel wraps the whole cup: x = developed mm at r 34.4 from θ 90 (the handle: the seam hides under it),
 // y = height − PANEL.y0; it covers the band (y 101 … 140) and the side parts of the upper wall up to the rim.
 // Layout round the cup (θ → panel x): handle 90 → 0 · tail mask nose 180 → 54.0 · opposite the handle 270 → 108.1 ·
 // spout mask nose 0/360 → 162.1. The traced half (handle side of the tail mask) is mirrored about each nose; the
-// spout mask repeats the tail mask (not visible in the photograph: INFERRED from the type); the filler strips by
-// the handle and opposite it are inferred from the dark, foreshortened area behind the handle.
+// spout mask repeats the tail mask (not in the photograph: INFERRED); the filler strips by the handle and opposite
+// it are read off the dark, foreshortened area behind the handle and repeated (INFERRED opposite it).
 import { REG } from './form.js'
 import { BAND, FILLER, TRIANGLE } from './trace.js'
 
@@ -16,182 +23,170 @@ PANEL.h = PANEL.y1 - PANEL.y0
 const R = PANEL.r
 const DEGMM = (R * Math.PI) / 180
 export const xOfAz = (az) => ((((az - 90) % 360) + 360) % 360) * DEGMM
-const NOSE = { tail: xOfAz(180), spout: xOfAz(360) - 0 }
-NOSE.spout = 270 * DEGMM
+const NOSE = { tail: xOfAz(180), spout: 270 * DEGMM }
 // face-band (u, v) → developed panel (x on the traced, handle-side half of the tail mask; y)
 const FX = (u) => R * Math.asin(Math.max(-0.999, Math.min(0.999, u / R))) + 38 * DEGMM
 const FY = (v) => 120.75 + v / 0.978 - PANEL.y0
 const KX = (u) => 1 / Math.sqrt(1 - Math.min(0.9, (u / R) ** 2)) // developed mm per face mm across the wall
 
-// the photograph's bands fill the field: the plain ground between them is only 1.5–2.5 mm wide; traced centre-line
-// widths came out ≈ 35 % thin against the flattened face, so they are widened here (checked on face-band-compare)
-const WIDEN = 1.15
-const CONTOUR = { inset: 0.4, line: 0.3 }
-// fix pass r8: the band tops carry chains of SQUARED spirals (雷纹, ≈ 2.5–3 mm cells, ≈ 2 turns) — drawn here as true
-// right-angled spirals (kit.shapes.sqSpiral) along each band's centre line, not carve's round '@' spirals
-const SQ = { pitch: 0.58, line: 0.29, gap: 0.3, depth: 0.32, min: 1.4, max: 3.4, along: 0.8 }
+/** Levels (mm above the plain wall). Band ≈ 2 mm proud overall (dossier, from the shadows). */
+export const PLATE = {
+  field: 1.15,       // the plain plates (the pale cells)
+  figure: 1.95,      // figure plateau top; ridges stand on it
+  channel: 0.62,     // channel width each side of a figure (mm); a gap narrower than 2× is all channel
+  channelDepth: 1.6, // channels cut through the plate to ≈ 0.35 mm under the wall (the photograph's dark crescents)
+  shoulder: 0.3,     // plate shoulders: crisp, square-looking edges
+  pocket: 2.3,       // pockets sink this far below the plate (≈ 1 mm under the wall: they read black)
+}
+/** ridge profiles. SP: the squared spirals on the figure tops (photo: ≈ 3 mm cells of ≈ 2 turns → ≈ 0.65 mm pitch);
+ *  LN: the parallel lines of the multi-line figures (photo: 3 lines in ≈ 2.2 mm). ridge : groove ≈ 65 : 35. */
+export const SP = { width: 0.42, pitch: 0.65, height: 0.32, groove: 0.1, crown: 1, mode: 'add' }
+export const LN = { width: 0.47, pitch: 0.7, height: 0.36, groove: 0.1, crown: 1, mode: 'add' }
+const BEND = 0.2
 
-/** the traced half → kit elements for both halves of a mask centred at cx; `chains` collects spiral carriers */
-export function maskElements(kit, cx, chains) {
-  const els = []
-  for (const side of [1, -1]) {
-    // traced side: x = cx − (NOSE.tail − FX(u)) (handle side of the tail mask); side −1 mirrors it
-    const X = ([u, v]) => [cx - side * (NOSE.tail - FX(u)), FY(v)]
-    for (const b of BAND.bands) {
-      const um = b.c.reduce((s, q) => s + q[0], 0) / b.c.length
-      const k = Math.sqrt(KX(um)) * WIDEN
-      const el = kit.roundStroke(b.c.map(X), {
-        width: Array.isArray(b.w) ? b.w.map((w) => w * k) : b.w * k,
-        round: b.round ?? 0.6, inner: b.inner ?? 0.25, start: b.start ?? 'blunt', end: b.end ?? 'blunt', capRound: 0.45,
-        spiral: b.spiral && { ...b.spiral, dir: b.spiral.dir * side },
-      })
-      els.push(el)
-      if (b.spirals !== false) chains.push({ el, ends: [b.start ?? 'blunt', b.end ?? 'blunt'] })
-    }
-    for (const q of BAND.plates) {
-      const pl = kit.roundPlate({ c: X(q.c), w: q.w * KX(q.c[0]) + 0.6, h: q.h / 0.978 + 0.6, r: q.r })
-      els.push(pl)
-      chains.push({ plate: { c: X(q.c), w: q.w * KX(q.c[0]) + 0.6, h: q.h / 0.978 + 0.6 } })
-    }
-  }
-  return els
+// ------------------------------------------------------------------ helpers (panel mm)
+
+/** face-mm figure → panel figure through X (axis-aligned paths map exactly); width per segment orientation */
+function mapFigure(f, X, xScale) {
+  const pts = f.c.map(X)
+  const vertical = f.c.length === 2 && f.c[0][0] === f.c[1][0]
+  const um = f.c.reduce((s, q) => s + q[0], 0) / f.c.length
+  const w = vertical && xScale ? Math.abs(X([f.c[0][0] + f.w / 2, 0])[0] - X([f.c[0][0] - f.w / 2, 0])[0])
+    : f.c.length === 2 ? f.w / 0.978
+    : f.w * (xScale ? Math.sqrt(KX(um)) : 1)
+  return { ...f, pts, w }
 }
 
-function fillerElements(kit, cx, sides, chains) {
-  const els = []
-  for (const side of sides) {
-    const X = ([x, y]) => [cx + side * x, FY(y)]
-    for (const b of FILLER.bands) {
-      const el = kit.roundStroke(b.c.map(X), {
-        width: Array.isArray(b.w) ? b.w.map((w) => w * WIDEN) : b.w * WIDEN, round: 0.75, inner: 0.25, start: b.start ?? 'blunt', end: b.end ?? 'blunt', capRound: 0.45,
-      })
-      els.push(el)
-      chains.push({ el, ends: [b.start ?? 'blunt', b.end ?? 'blunt'] })
-    }
-  }
-  return els
+const strokePath = (ctx, pts, closed) => {
+  ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])))
+  if (closed) ctx.closePath()
+  ctx.stroke()
+}
+const rrect = (ctx, x, y, w, h, r) => {
+  r = Math.min(r, w / 2, h / 2)
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r); ctx.lineTo(x + w, y + h - r)
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r); ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r)
+  ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.closePath()
 }
 
-/** squared spirals along every carrier's centre line (one cell per band width), and in a grid on plates */
-export function squaredChains(kit, chains) {
-  const strokes = [], placed = []
-  const free = (c, r) => placed.every((p) => Math.hypot(p.c[0] - c[0], p.c[1] - c[1]) > (p.r + r) * 0.9)
-  const cell = (c, size, heading, dir, along = 1) => {
-    const n = Math.max(3, 2 * Math.round(size / SQ.pitch) - 1)
-    let pts = kit.shapes.sqSpiral([0, 0], { pitch: SQ.pitch, turns: n / 4, dir, rCorner: 0.12, startHeading: 0, step: 0.2 })
-    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
-    for (const [x, y] of pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y) }
-    const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, a = heading, ca = Math.cos(a), sa = Math.sin(a)
-    strokes.push(pts.map(([x, y]) => { const X = (x - mx) * along, Y = y - my; return [c[0] + X * ca - Y * sa, c[1] + X * sa + Y * ca] }))
-    placed.push({ c, r: (size * (1 + along)) / 4 })
+/** squared-spiral cells along a straight figure: square-ish quads that share edges (one pitch apart), hands alternating */
+function spiralCells(work, f, hand0) {
+  const [a, b] = [f.pts[0], f.pts[f.pts.length - 1]]
+  const L = Math.hypot(b[0] - a[0], b[1] - a[1]), d = [(b[0] - a[0]) / L, (b[1] - a[1]) / L], n = [-d[1], d[0]]
+  const inset = 0.22, wi = f.w - 2 * inset, target = f.cell ?? 3.2
+  const across = Math.max(1, Math.round(wi / target)), cw = wi / across
+  const along = Math.max(1, Math.round((L - 2 * inset) / cw)), cl = (L - 2 * inset) / along
+  let hand = hand0
+  for (let i = 0; i < along; i++) for (let j = 0; j < across; j++) {
+    const s0 = inset + i * cl, s1 = s0 + cl, t0 = -wi / 2 + j * cw, t1 = t0 + cw
+    const P = (s, t) => [a[0] + d[0] * s + n[0] * t, a[1] + d[1] * s + n[1] * t]
+    work.quadSpiral([P(s0, t0), P(s1, t0), P(s1, t1), P(s0, t1)], { ...SP, transform: null, dir: hand, start: (i + j) % 4, corner: 0.35, cornerMin: 0.2, margin: 0.36, turns: 1.5, pitch: undefined })
+    hand = -hand
   }
+  return hand
+}
+
+/**
+ * Figures on plateaus inside channels, ridge work on top. figs: panel figures ({ pts, w, deco, n, closed }).
+ * base: the level the channels cut down to is (plate − channelDepth); on the band the plate is PLATE.field and the
+ * channel cuts to the wall; on the upper wall there is no field plate.
+ */
+function drawFigures(kit, p, figs, { channels = [], plateau = PLATE.figure, channelDepth = PLATE.channelDepth } = {}) {
+  // 1 channels: every figure's outline grown by PLATE.channel, minus the figures (one sink), plus the extra lines
+  p.sink((ctx) => {
+    ctx.lineJoin = 'miter'; ctx.miterLimit = 4
+    for (const f of figs) { ctx.lineCap = f.closed ? 'butt' : 'square'; ctx.lineWidth = f.w + 2 * PLATE.channel; strokePath(ctx, f.pts, f.closed) }
+    ctx.lineCap = 'butt'
+    for (const c of channels) { ctx.lineWidth = c.w; strokePath(ctx, c.pts) }
+    ctx.globalCompositeOperation = 'destination-out'
+    for (const f of figs) { ctx.lineCap = 'butt'; ctx.lineWidth = f.w; strokePath(ctx, f.pts, f.closed) }
+    ctx.globalCompositeOperation = 'source-over'
+  }, { depth: channelDepth, shoulder: 0.22, profile: 'u' })
+  // 2 the plateaus (one raise; max, so overlapping figures merge)
+  p.raise((ctx) => {
+    ctx.lineJoin = 'miter'; ctx.miterLimit = 4; ctx.lineCap = 'butt'
+    for (const f of figs) { ctx.lineWidth = f.w; strokePath(ctx, f.pts, f.closed) }
+  }, { height: plateau, shoulder: PLATE.shoulder, profile: 'plateau' })
+  // 3 ridge work on the tops (one batch: one groove sink + one add per ridge width)
+  const work = kit.ridgeWork(p, { ...LN })
   let hand = 1
-  for (const ch of chains) {
-    if (ch.plate) {
-      const { c, w, h } = ch.plate
-      const inner = [w - 2 * (CONTOUR.inset + CONTOUR.line) - 0.5, h - 2 * (CONTOUR.inset + CONTOUR.line) - 0.5]
-      const nx = Math.max(1, Math.round(inner[0] / SQ.max)), ny = Math.max(1, Math.round(inner[1] / SQ.max))
-      const sz = Math.min(SQ.max, inner[0] / nx - SQ.gap, inner[1] / ny - SQ.gap)
-      if (sz < SQ.min) continue
-      for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
-        const cc = [c[0] - inner[0] / 2 + (i + 0.5) * (inner[0] / nx), c[1] - inner[1] / 2 + (j + 0.5) * (inner[1] / ny)]
-        if (free(cc, sz / 2)) { cell(cc, sz, 0, hand); hand = -hand }
-      }
-      continue
-    }
-    const { spine, widths } = ch.el
-    const cum = [0]
-    for (let i = 1; i < spine.length; i++) cum.push(cum[i - 1] + Math.hypot(spine[i][0] - spine[i - 1][0], spine[i][1] - spine[i - 1][1]))
-    const L = cum[cum.length - 1]
-    const at = (s) => {
-      let i = 1
-      while (i < cum.length - 1 && cum[i] < s) i++
-      const f = (s - cum[i - 1]) / Math.max(1e-6, cum[i] - cum[i - 1])
-      const p = [spine[i - 1][0] + (spine[i][0] - spine[i - 1][0]) * f, spine[i - 1][1] + (spine[i][1] - spine[i - 1][1]) * f]
-      return { p, w: widths[i - 1] + (widths[i] - widths[i - 1]) * f, h: Math.atan2(spine[i][1] - spine[i - 1][1], spine[i][0] - spine[i - 1][0]) }
-    }
-    let s = 0
-    // skip the first half cell (plus a land) at each end; round / point ends a little more
-    const endPad = (e, w) => (e === 'flat' ? 0.2 : e === 'round' || e === 'point' ? 0.3 * w : 0.3) + CONTOUR.inset + CONTOUR.line
-    const w0 = at(0).w
-    s = endPad(ch.ends[0], w0)
-    while (s < L) {
-      const q = at(Math.min(L, s + 1.2))
-      const size = Math.min(SQ.max, q.w - 2 * (CONTOUR.inset + CONTOUR.line) - 0.25)
-      if (size < SQ.min) { s += 0.6; continue }
-      const len = size * SQ.along // cells are a little shorter along the band than across it (photo-02 columns)
-      const c = at(s + len / 2)
-      if (s + len + endPad(ch.ends[1], c.w) > L) break
-      // square the spiral to the frame on near-axis runs (the bronze's are upright squares)
-      const hd = Math.round(c.h / (Math.PI / 2)) * (Math.PI / 2)
-      if (free(c.p, len / 2)) { cell(c.p, size, Math.abs(hd - c.h) < 0.25 ? hd : c.h, hand, SQ.along); hand = -hand }
-      s += len + SQ.gap
+  for (const f of figs) {
+    if (f.deco === 'sp') hand = spiralCells(work, f, hand)
+    else if (f.deco === 'ln') {
+      const n = f.n ?? 2
+      const pitch = Math.min(LN.pitch, (f.w - 0.5) / Math.max(1, n - 1 + LN.width / LN.pitch))
+      work.ridgeBand(f.pts, { ...LN, pitch, width: Math.min(LN.width, pitch * 0.68), transform: null, ridges: n, bend: BEND, closed: f.closed, start: 'square', end: 'square' })
     }
   }
-  return strokes
+  work.flush()
 }
+
+function sinkPockets(p, list, depth) {
+  p.sink((ctx) => { for (const k of list) { ctx.beginPath(); rrect(ctx, k.c[0] - k.w / 2, k.c[1] - k.h / 2, k.w, k.h, k.r); ctx.fill() } }, { depth, shoulder: 0.45, profile: 'u' })
+}
+
+// ------------------------------------------------------------------ the band
 
 export function bandPanel(kit, { ppmm, seed }) {
   const p = new kit.ReliefPanel({ width: PANEL.w, height: PANEL.h, ppmm, seed })
   const W = PANEL.w
-  // plain fillets just outside the field (the photograph's narrow plain rings above and below the band)
   const yb0 = REG.band[0] - PANEL.y0, yb1 = REG.band[1] - PANEL.y0
+  // plain fillets just outside the field (the photograph's narrow plain rings above and below the band)
   p.raise((ctx) => { ctx.fillRect(-2, yb0 - 1.9, W + 4, 1.3); ctx.fillRect(-2, yb1 + 0.6, W + 4, 1.3) }, { height: 0.55, shoulder: 0.35 })
+  // the field: one low plate over the whole band
+  p.raise((ctx) => ctx.fillRect(-2, yb0, W + 4, yb1 - yb0), { height: PLATE.field, shoulder: PLATE.shoulder, profile: 'plateau' })
 
-  // the masks and the fillers: ONE carve (one raise + one sink for every contour groove); fat, round-shouldered bands
-  const chains = []
-  const els = [...maskElements(kit, NOSE.tail, chains), ...maskElements(kit, NOSE.spout, chains)]
-  els.push(...fillerElements(kit, 0, [1], chains), ...fillerElements(kit, W, [-1], chains), ...fillerElements(kit, xOfAz(270), [1, -1], chains))
-  kit.carve(p, els, { height: BAND.height, shoulder: 0.85, depth: 0.32, irregularity: 0.6, seed, contour: CONTOUR, fill: { kind: 'none' } })
-  // squared spirals on the band tops: ONE sink
-  const sq = squaredChains(kit, chains)
-  p.sink((ctx) => {
-    ctx.lineWidth = SQ.line; ctx.lineCap = 'square'; ctx.lineJoin = 'miter'
-    for (const pts of sq) { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke() }
-  }, { depth: SQ.depth, shoulder: 0.12, profile: 'u' })
-
-  // deep pockets inside the curls and the eye socket (well below the ground: they read dark in the photograph)
-  p.sink((ctx) => {
-    for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) for (const k of BAND.pockets) {
-      const x = cx - side * (NOSE.tail - FX(k.c[0]))
-      ctx.beginPath(); ctx.ellipse(x, FY(k.c[1]), k.rx * KX(k.c[0]), k.ry, 0, 0, Math.PI * 2); ctx.fill()
-    }
-    for (const [cx, sides] of [[0, [1]], [W, [-1]], [xOfAz(270), [1, -1]]]) for (const side of sides) for (const k of FILLER.pockets) {
-      ctx.beginPath(); ctx.ellipse(cx + side * k.c[0], FY(k.c[1]), k.rx, k.ry, 0, 0, Math.PI * 2); ctx.fill()
-    }
-  }, { depth: 1.5, shoulder: 0.55, profile: 'u' })
-  // eyes
+  const figs = [], channels = [], pockets = []
+  // masks: the traced half and its mirror about each nose
+  for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) {
+    const X = ([u, v]) => [cx - side * (NOSE.tail - FX(u)), FY(v)]
+    for (const f of BAND.figures) figs.push(mapFigure(f, X, true))
+    for (const c of BAND.channels) channels.push({ pts: c.c.map(X), w: c.w })
+    for (const k of BAND.pockets) pockets.push({ c: X(k.c), w: k.w * KX(k.c[0]), h: k.h / 0.978, r: k.r })
+  }
+  // fillers: by the handle (both sides of the seam) and opposite it (both sides of θ 270)
+  for (const [cx, sides] of [[0, [1]], [W, [-1]], [xOfAz(270), [1, -1]]]) for (const side of sides) {
+    const X = ([x, v]) => [cx + side * x, FY(v)]
+    for (const f of FILLER.figures) figs.push(mapFigure(f, X, false))
+    for (const k of FILLER.pockets) pockets.push({ c: X(k.c), w: k.w, h: k.h / 0.978, r: k.r })
+  }
+  drawFigures(kit, p, figs, { channels })
+  sinkPockets(p, pockets, PLATE.pocket)
+  // the eyeball in each socket
   for (const cx of [NOSE.tail, NOSE.spout]) for (const side of [1, -1]) for (const e of BAND.eyes) {
     kit.pillowBoss(p, {
-      c: [cx - side * (NOSE.tail - FX(e.c[0])), FY(e.c[1])], w: e.w * KX(e.c[0]), h: e.h, round: e.round, height: e.height, crown: e.crown,
+      c: [cx - side * (NOSE.tail - FX(e.c[0])), FY(e.c[1])], w: e.w * KX(e.c[0]), h: e.h, round: e.round, height: PLATE.field + e.height, crown: e.crown,
       slit: { len: e.slit.len, width: e.slit.width, depth: e.slit.depth },
     })
   }
 
-  // upper wall: four decorated triangles at θ 51, 129, 231, 309 (the photograph shows the one at 129; the others
-  // follow the cup's two mirror planes — inferred)
-  const tri = []
-  const ty0 = yb1 + 1.9
-  const T = TRIANGLE
+  // upper wall: four triangles at θ 51, 129, 231, 309 (the photograph shows the one at 129; the others follow the
+  // cup's mirror planes — INFERRED). A double-lined border (two ridges on a raised band, mitred corners), a central
+  // stem, squared brows over two eye pockets, foot hooks round two lower pockets; the interior is the plain wall.
+  const T = TRIANGLE, ty0 = yb1 + 1.9
+  const tfigs = [], tpockets = []
+  const hw = T.base / 2, bw = T.border.w
+  // the border's centre line: the triangle shrunk about its incentre by bw/2 (every side moves in by the same amount)
+  const rin = (hw * T.h) / (hw + Math.hypot(hw, T.h)), sk = (rin - bw / 2) / rin
+  const inner = [[-hw, 0], [0, T.h], [hw, 0]].map(([x, y]) => [x * sk, rin + (y - rin) * sk])
   for (const az of [51, 129, 231, 309]) {
     const cx = xOfAz(az)
-    for (const [k, inset] of T.outlines.entries()) {
-      const hw = T.base / 2 - inset * 1.6, top = T.h - inset * 2.2, y0 = ty0 + inset * 0.9
-      tri.push(kit.roundStroke([[cx - hw, y0], [cx, ty0 + top], [cx + hw, y0], [cx - hw, y0]], { width: T.outlineW[k], round: 0.3, inner: 0.3, start: 'flat', end: 'flat' }))
-    }
-    for (const b of T.bands) tri.push(kit.roundStroke(b.c.map(([x, y]) => [cx + x, ty0 + y]), { width: b.w, round: 0.5, inner: 0.2, start: b.start ?? 'blunt', end: b.end ?? 'blunt' }))
+    const P = ([x, y]) => [cx + x, ty0 + y]
+    tfigs.push({ pts: inner.map(P), w: bw, deco: 'ln', n: T.border.n, closed: true })
+    for (const f of T.figures) tfigs.push({ ...f, pts: f.c.map(P) })
+    for (const q of T.pockets) tpockets.push({ ...q, c: P(q.c) })
   }
-  kit.carve(p, tri, { height: 1.1, shoulder: 0.45, depth: 0.25, contour: { inset: 0.4, line: 0.26 }, fill: { kind: 'none' }, seed: seed + 5 })
-  // the dark hole in the upper wall over the handle (photo-02, θ ≈ 98–110, y ≈ 146–154: a loss or casting flaw).
-  // Fix pass r8: modelled as a deep sunk pocket (not a through-cut); the preset's soilGroove keeps the pale earth out of
-  // it, so it reads dark as in the photograph
+  drawFigures(kit, p, tfigs, { plateau: 1.1, channelDepth: 0.35 })
+  sinkPockets(p, tpockets, 1.2)
+  // the dark hole in the upper wall over the handle (photo-02, θ ≈ 98–110, y ≈ 146–154: a loss or casting flaw):
+  // a deep sunk pocket; the preset's soilGroove keeps the pale earth out of it, so it reads dark as in the photograph
   p.sink((ctx) => { ctx.beginPath(); ctx.ellipse(xOfAz(101), 150 - PANEL.y0, 7.6, 4.0, 0, 0, Math.PI * 2); ctx.fill() }, { depth: 2.2, shoulder: 0.9, profile: 'u' })
   return p.bake()
 }
 
-/** the whorl on the FAR cap's top (photo-02: a whorl of thick raised comma ridges round the knob; the near cap is plain):
- *  square panel over the cap seen from above (polar-mapped in sculpture.js). Fix pass r8: four fat commas, each a round
- *  head at r ≈ 6 sweeping out into a tapering tail, raised ≈ 1 mm with round shoulders, instead of incised slits. */
+/** the whorl on the cap tops (photo-02: a whorl of thick raised comma ridges round the knob, legible on the far
+ *  cap): square panel over the cap seen from above (polar-mapped in sculpture.js). Four fat commas, each a round
+ *  head at r ≈ 6 sweeping out into a tapering tail, raised ≈ 1 mm with round shoulders. */
 export const WHORL = { S: 25.6 }
 export function whorlPanel(kit, { ppmm, seed }) {
   const S = WHORL.S, c = S / 2

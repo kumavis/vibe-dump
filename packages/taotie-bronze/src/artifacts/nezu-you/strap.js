@@ -45,10 +45,10 @@ export function strapDesign(kit, L) {
     return coilAbout(pts, [E[0] + n[0] * R, E[1] + n[1] * R], { sweep, shrink })
   }
   const lower = [
-    S(coilAbout([[8.6, 79], [7.2, 70], [8.2, 60], [12.4, 49], [14.6, 37.5], [13.2, 28.5], [9.8, 22]], [7.6, 18], { sweep: 310, shrink: 6.4 }),
-      widthBy([[0, 6.4], [0.15, 7.6], [0.6, 7.8], [0.74, 5.6], [1, 4.4]])), // body → tail coil
-    S(curl([[14.6, 44], [19.4, 46.6]], 2.9, 1, 290, 5.6), 4.2), // quill rolled out to the right in the bend
-    kit.roundPoly([[3.2, 79.6], [12, 77.2], [15.8, 82.6], [14.6, 90.4], [9.4, 93], [3.4, 90.6]], { round: [3.6, 3.4, 4, 4, 3.4, 3.6] }), // head
+    S(coilAbout([[10.4, 79], [9.6, 70], [10.2, 60], [12.8, 49], [14.2, 37.5], [13.6, 29.5], [12.6, 23.4]], [10.8, 17.6], { sweep: 300, shrink: 7.6 }),
+      widthBy([[0, 7.6], [0.12, 9.6], [0.6, 10], [0.76, 6.6], [1, 5]])), // body → tail coil
+    S(curl([[16.4, 44], [20.4, 46.2]], 2.4, 1, 260, 5.8), 4.6), // quill rolled out to the right in the bend
+    kit.roundPoly([[10.6, 75.4], [17.6, 81.6], [18.4, 88], [15.6, 93], [12.2, 92.6], [10.8, 89.8], [8.8, 93], [4.2, 92.4], [2.6, 87.4], [4, 81.4]], { round: [2, 3, 3.4, 3, 1.6, 0.6, 1.6, 3, 3.4, 3] }), // heart-shaped head: two lobes, the body entering at its point
   ]
   const mask = [
     S([[13.5, 103.6], [13.5, 124.5]], 3.8, { start: 'round', end: 'flat' }), // nose bar
@@ -57,14 +57,15 @@ export function strapDesign(kit, L) {
     S([[3.6, 127.4], [23.4, 127.4]], 3.4), // bar across the top
   ]
   const upper = [
-    S(coilAbout([[13.6, L - 14.5], [15.6, 222], [17.6, 204], [18.4, 186], [17.4, 168], [16.2, 154.5], [15.4, 148.6]], [11.2, 143.4], { sweep: 320, shrink: 6.6 }),
-      widthBy([[0, 6.4], [0.3, 7.6], [0.72, 7.6], [0.82, 5.6], [1, 4.4]])), // body → tail coil
+    S(coilAbout([[13.6, L - 14.5], [15.6, 222], [17.6, 204], [18.4, 186], [17.4, 168], [16.2, 154.5], [15.4, 148.6]], [11.2, 143.4], { sweep: 300, shrink: 7.6 }),
+      widthBy([[0, 7.6], [0.3, 9.4], [0.72, 9.4], [0.82, 6.6], [1, 5]])), // body → tail coil
     S(curl([[14.6, 160.6], [7.6, 161.6]], 2.4, 1, 270, 5.6), 4.2), // quill rolled down to the left
     S(curl([[16.6, 181], [8.6, 184]], 2.2, 1, 250, 5.4), 4.2), // quill
     S(curl([[17.4, 205], [9.4, 208.4]], 2.2, 1, 250, 5.4), 4.2), // quill
     kit.roundPoly([[7.6, L - 15], [20.6, L - 15], [20.6, L - 0.6], [7.6, L - 0.6]], { round: [3, 3, 1.5, 1.5] }), // head at the crown (inferred)
   ]
-  return { lower, mask, upper, eyes: [{ c: [11.4, 97.2], w: 8.6, h: 7.4 }, { c: [14.1, L - 7.6], w: 6.6, h: 5.6 }] }
+  const lines = [[[10.8, 89.6], [10.8, 83.6]]] // the cleft between the head's lobes
+  return { lower, mask, upper, lines, eyes: [{ c: [11.4, 97.2], w: 8.6, h: 7.4 }, { c: [14.1, L - 7.6], w: 6.6, h: 5.6 }] }
 }
 
 export function drawStrap(kit, panel, { seed = 0 } = {}) {
@@ -73,10 +74,11 @@ export function drawStrap(kit, panel, { seed = 0 } = {}) {
   const contour = kit.elementContour.bind(kit)
   // the rims along both edges
   panel.raise((ctx) => { ctx.fillRect(0, 0, 1.5, L); ctx.fillRect(W - 1.5, 0, 1.5, L) }, { height: 1.2, shoulder: 0.6, profile: 'plateau' })
-  const opts = { union: true, height: 2.0, shoulder: 1.4, pillow: 0.7, pillowWidth: 2.8, contour: { inset: 1.0, line: 0.62 }, depth: 0.48 }
+  const opts = { union: true, height: 2.4, shoulder: 1.5, pillow: 0.8, pillowWidth: 2.8, contour: { inset: 1.0, line: 0.62 }, depth: 0.48 }
   for (const [k, g] of [['lower', D.lower], ['mask', D.mask], ['upper', D.upper]]) {
     kit.tracedPlates(panel, g.map((el) => ({ outer: contour(el, 0) })), { ...opts, seed: seed + k.length })
   }
+  panel.sink((ctx) => { ctx.lineCap = 'round'; ctx.lineWidth = 1.1; ctx.beginPath(); for (const l of D.lines) l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }, { depth: 1.0, shoulder: 0.4, profile: 'u' })
   for (const e of D.eyes) {
     panel.sink((ctx) => { ctx.beginPath(); ctx.ellipse(e.c[0], e.c[1], e.w / 2 + 0.8, e.h / 2 + 0.8, 0, 0, Math.PI * 2); ctx.fill() }, { depth: 0.8, shoulder: 0.35, profile: 'u' })
     kit.pillowBoss(panel, { c: e.c, w: e.w, h: e.h, round: 0.6, height: 2.8, crown: 0.75, slit: { len: e.w * 0.42, width: 0.8, depth: 0.7 }, ring: false })

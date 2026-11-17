@@ -13,12 +13,12 @@
 // kit.pillowBoss for the eye, kit.ridgeGround (fat round threads) for the ground.
 //
 // Elements (RIGHT half, mirrored; mm in the developed frame):
-//   horn   one G mass — the inner block hooks down from the top bar, the bar runs out, down the outer column, back
-//          along the bottom and up into the coiled island; the deep slot parts the bar from the island; a ground
-//          notch between the block and the island. Island: three concentric incised rings; block: a hooked line.
+//   horn   two interlocking blocks: A hooks down from the long top bar (a deep hook cut inside it), B stands under the
+//          bar's end with its column rising beside it (a deep G-channel coiling in); the deep slot runs between them
 //   brow   the long banded band under the horns, from the centre to the end flange
 //   eye    Ø 38 disc boss, pupil pit Ø 9.4, sunk socket ring
-//   cheek  three nested lancet bands sweeping down beside the centre (the face's banded cheek)
+//   cheek  three broad (≈ 8.5 mm) nested bands sweeping down beside the centre; the eye's socket rim; the C-hook over
+//          the brow; a row of small crest hooks over the horn
 //   jaw    two banded bands under the eye, the inner one hooked up at its outer end
 //   post   the upright plate between the eye and the outer C-block
 //   C-block the outer G-block beside the eye: a rounded block with a deep pocket and a coiled curl
