@@ -1,12 +1,12 @@
 {
   "note": "Rigid airship dressed with the Taotie Kit; a showpiece, not a museum object. Size chosen: hull 420 mm long (nose +X), 64 mm across before relief and flanges, axis 150 mm above the plinth. Parts: body (hull, both halves × registers + nose cap), fins (4 plates), flanges (keels + sides), gondola (control car), engines (4 cars with struts and propellers), mooring (nose cone + tail knob), stand (foot, mast, dragon, cradle).",
-  "dimensions": { "l": 433, "h": 192, "w": 129, "chosen": true },
+  "dimensions": { "l": 433, "h": 185, "w": 129, "chosen": true },
   "ratios": {
     "hullLength":     { "expr": "parts.body.w",              "expected": 420,   "tol": 3 },
-    "fineness":       { "expr": "parts.body.w / parts.body.d", "expected": 6.4, "tol": 0.3 },
+    "fineness":       { "expr": "parts.body.w / parts.body.d", "expected": 6.25, "tol": 0.2 },
     "clearance":      { "expr": "parts.body.min.1",          "expected": 117,   "tol": 3 },
     "standOnPlinth":  { "expr": "parts.stand.min.1",         "expected": 0,     "tol": 0.2 },
-    "finSpan":        { "expr": "parts.fins.h / parts.body.h", "expected": 1.0, "tol": 0.08 },
+    "finSpan":        { "expr": "parts.fins.h / parts.body.h", "expected": 0.92, "tol": 0.04 },
     "finCount":       { "expr": "parts.fins.count",          "expected": 4,     "tol": 0 },
     "engineCount":    { "expr": "parts.engines.count",       "expected": 4,     "tol": 0 },
     "overallLength":  { "expr": "overall.w",                 "expected": 433,   "tol": 4 }

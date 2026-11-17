@@ -214,11 +214,17 @@ export function renderWeave(panel, els, o = {}) {
         if (!groups.has(key)) groups.set(key, { n, rib, list: [] })
         groups.get(key).list.push(r)
       }
+      // an end that meets another ribbon's end (a cell joining its neighbour, the two halves of a ring) runs on square:
+      // only a FREE end closes its ribs in U-turns
+      const ends = []
+      for (const r of strokes) if (r.kind === 'ribbon') ends.push(r.pts[0], r.pts[r.pts.length - 1])
+      const joined = (p, self) => ends.some((q) => q !== self && Math.hypot(q[0] - p[0], q[1] - p[1]) < 3.2) // cells overlap their neighbours by 2 × 1.5 mm
       for (const { n, rib, list } of groups.values()) {
         const work = new RidgeWork(panel, { width: rib, pitch: rib + g, height: d, groove: 0, crown: P.crown ?? 0.6, mode: 'add' })
         for (const r of list) {
           if (n < 2) { work.line(r.pts, { mode: 'raise', height: h }); continue }
-          work.ridgeBand(r.pts, { ridges: n, start: 'round', end: 'round', bend: Math.max(0.2, rib * 0.25), closed: !!r.closed,
+          const p0 = r.pts[0], p1 = r.pts[r.pts.length - 1]
+          work.ridgeBand(r.pts, { ridges: n, start: joined(p0, p0) ? 'square' : 'round', end: joined(p1, p1) ? 'square' : 'round', bend: Math.max(0.2, rib * 0.25), closed: !!r.closed,
             plateau: { height: h - d, margin: 0.12, channel: 0, channelDepth: 0, shoulder: P.shoulder } })
         }
         // the clip limits the ridge work too: run it against a clipped view of the panel

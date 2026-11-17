@@ -230,7 +230,7 @@ export function meridianPath(THREE, psi, side, x0, x1, step = 1) {
 // ------------------------------------------------------------------ fins
 
 /** fin stations (x) */
-export const FIN = { lead: -84, tip: -150, hinge: -184, back: -208.5, outer: 32, rudderOuter: 26.5, droop: 0.12, embed: 3.2, thick: 4.2 }
+export const FIN = { lead: -108, tip: -158, hinge: -185, back: -208.5, outer: 27, rudderOuter: 22.5, droop: 0.1, embed: 3.2, thick: 4.2 }
 
 /**
  * One fin's outline in its own plate frame: x = hull x, y = distance from the hull axis. The root
@@ -293,7 +293,7 @@ export function finHoles() {
 }
 
 /** the panel rectangle laid over the fin (plate mm) */
-export const FIN_RECT = { x: -216, y: 0, w: 136, h: 38 }
+export const FIN_RECT = { x: -216, y: 0, w: 112, h: 33 }
 
 // ------------------------------------------------------------------ hung parts: stations
 

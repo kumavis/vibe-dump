@@ -28,7 +28,7 @@ export default {
   date: 'c. 1930 / cast c. 1200 BC in spirit',
   period: 'Interwar aviation — dressed as late Shang, Anyang style',
   collection: 'A classic rigid airship of no particular ship: no registration, flags or insignia',
-  dimensions: { l: 433, h: 200, w: 128, chosen: true, note: 'hull 420 mm long, 64 mm across — size chosen, not measured' },
+  dimensions: { l: 433, h: 185, w: 129, chosen: true, note: 'hull 420 mm long, 64 mm across — size chosen, not measured' },
   blurb:
     'A rigid airship of the great Zeppelin years — faceted hull on its girders, cruciform fins, a control car under the bow and four engine cars on struts — re-imagined as a Shang bronze moored on a dragon-wound mast. ' +
     'The hull is a gu laid on its side: its décor runs in rings, a taotie at the fullest part whose nose is the side girder, kui and cloud scrolls fore and aft, cicada blades on the tapers, a face looking forward round the mooring cone; the girders become notched flanges and the fins hooked fangyi flanges grown large. ' +

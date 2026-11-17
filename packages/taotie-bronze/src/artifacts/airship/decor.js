@@ -291,12 +291,12 @@ export function finPanel(kit, size, { ppmm, seed }) {
     ctx.beginPath(); ctx.rect(hx - 2.6, 4, 5.2, R.h - 10); ctx.fill()
   }, { height: 1.2, profile: 'plateau', shoulder: 0.45 })
   // a kui flying forward on the fin's field: head toward the nose (+x), body and rolled tail aft
-  const k = 0.8, xHead = -151.5, y0 = 12.4
+  const k = 0.62, xHead = -160.5, y0 = 11.2
   const Q = (pts) => pts.map(([X, Y]) => T([xHead - X * k, y0 + Y * k]))
-  const els = kuiElements(kit, Q, 0, 31.5, k)
+  const els = kuiElements(kit, Q, 0, 28, k)
   // the rudder: a scaled ladder band down the leaf
   const rx = (size.hinge + size.back) / 2
-  els.push(kit.roundStroke([T([rx, 7]), T([rx, 20])], { width: [8.2, 7.2], round: 0.5, end: 'round', start: 'blunt', contour: contour(0.8), fill: { kind: 'scales', line: 0.4, pitch: 2.8 } }))
+  els.push(kit.roundStroke([T([rx, 6]), T([rx, 16])], { width: [7.6, 6.8], round: 0.5, end: 'round', start: 'blunt', contour: contour(0.8), fill: { kind: 'scales', line: 0.4, pitch: 2.8 } }))
   kit.carve(panel, els, { height: 1.4, shoulder: 0.5, depth: 0.3, irregularity: 0.7, seed })
   kit.pillowBoss(panel, { c: T([xHead - 5.2 * k, y0 + 10.6 * k]), w: 4.8 * k, h: 4.4 * k, round: 0.55, height: 2.1, crown: 0.9, slit: { len: 2.6, width: 0.6, depth: 0.45 } })
   kit.leiwenFill(panel, {

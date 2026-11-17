@@ -553,13 +553,13 @@ export const PATINA_PRESETS = {
   // the stand, the relief tops rubbed a little bright so the rings of masks and blades read at thumbnail size
   'airship': {
     age: 1, tin: 0.15, lead: 0.06, polish: 0.45, tarnish: 0.6, cuprite: 0.45, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.05, nobleWarmth: 0.25, malachite: 0.4, carbonate: 0.05, azurite: 0, azuriteScale: 10,
-    blueHabitat: 0.3, turquoiseTone: 0.45, malachiteHue: 0.4, malachiteTone: 0.6, islands: 0.5, malachiteScale: 1.4,
+    tinOxideTone: 1.05, nobleWarmth: 0.25, malachite: 0.3, carbonate: 0.05, azurite: 0, azuriteScale: 10,
+    blueHabitat: 0.3, turquoiseTone: 0.45, malachiteHue: 0.4, malachiteTone: 0.6, islands: 0.35, malachiteScale: 1.4,
     crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 110, mottleScale: 7, patchiness: 0.85, softness: 0.55,
     drift: 0.25, earth: 0.08, earthColor: '#7a7466', calcite: 0.04, streaks: 0.06, burialSide: 0, recessDirt: 0.55,
     interiorTone: 0.4, wax: 0.05, inlay: 0, inlayGround: 0, wear: 0.3, dulling: 0.3, tops: 0.75, topsTone: 0.65,
-    matte: 0.85, ledgeMatte: 0.9, nobleRelief: 0.75, tint: '#dfe3d6', upperTone: 1.1, upperHeight: 0.8,
-    lowerBody: 0.6, lowerHeight: 0.7, lowerColor: '#6f7468', speckle: 0.02, speckleScale: 1.2, speckleColor: '#6e4636',
+    matte: 0.85, ledgeMatte: 0.9, nobleRelief: 0.75, tint: '#e6e8de', upperTone: 1.1, upperHeight: 0.8,
+    lowerBody: 0.85, lowerHeight: 0.72, lowerColor: '#626a5e', speckle: 0.02, speckleScale: 1.2, speckleColor: '#6e4636',
     crustIsles: 0.1, crustScale: 9, crustColor: '#9fb8a0', crustPlace: 0.9, pustules: 0.012, pustuleScale: 3,
     pustuleColor: '#2f9a64', grain: 0.6,
   },
