@@ -350,9 +350,9 @@ export const PATINA_PRESETS = {
   'nezu-fanghu': {
     age: 1, tin: 0.15, lead: 0.07, polish: 0.25, tarnish: 0.6, cuprite: 0.6, cupriteTone: 0.55, tinOxide: 0.85,
     tinOxideTone: 1.15, malachite: 0.7, carbonate: 0.2, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
-    turquoiseTone: 0.55, islands: 0.45, malachiteScale: 1.0, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.95,
-    patchScale: 60, mottleScale: 9, patchiness: 1, softness: 0.55, drift: 0.9, earth: 0.75, earthColor: '#b07e64',
-    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.65, interiorTone: 0.3, wax: 0, inlay: 0, inlayGround: 0,
+    turquoiseTone: 0.55, islands: 0.45, malachiteScale: 1.0, crust: 0.22, chloride: 0, soot: 0.05, crevice: 0.8,
+    patchScale: 60, mottleScale: 9, patchiness: 1, softness: 0.55, drift: 0.9, earth: 0.85, earthColor: '#b48470',
+    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.45, interiorTone: 0.3, wax: 0, inlay: 0, inlayGround: 0,
     wear: 0.12, dulling: 0.35, tops: 0.5, nobleWarmth: 0.35, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.4,
     // r8 fix (photo-08): ≈ 30 % darker than the first pass, large dark olive / brown-black territories (patchScale up),
     // pale crust islands; the emerald accents as soft clustered blooms, not pinpoint dots

@@ -472,9 +472,14 @@ any number of cartouches (2 masks + 2 distance transforms over their bbox, + one
 kit.sunkCartouche(panel, [{ field: { rrect: [20, 71, 115, 162], r: [24, 12, 14, 10] },   // or [[x, y]…] | { poly }
   plates: RIB.plates, eyes: [{ c: [59, 129], r: 4.1 }] }, /* …more cartouches */], {
   map, depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 } /* | false */,
-  eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 }, ground: { pitch: 0.95, roundness: 0.9 } /* | false */ })
+  eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 }, ground: { pitch: 0.95, roundness: 0.9 } /* | false */,
+  contour: { inset: 0.8, line: 0.55, depth: 0.2, maxHalf: 3.0 } /* default null: none */ })
 // → { fieldArea, ribbonArea, coverage (ribbon tops + eye rings / field), ground, ms }
 ```
+`contour` (optional, default off): a fine sunk line on each ribbon top, `inset` mm in from its edge, only on ribbons whose
+local half-width (the largest edge distance within `maxHalf` + 0.6 mm, read off a 4 px block-max grid) lies between
+`inset + line` and `maxHalf` — narrow ribbons and broad plates stay plain. Keep `line` ≥ 0.55 mm so it stays ≥ 2 px on
+phone-capped panels (Nezu fanghu body: 2.6 px at q 1, 1.9 px at q 0.5).
 Worked example: `src/artifacts/nezu-fanghu/decor.js` (`SUNK`, `cartouchePair`); the ribbons are traced as `band`
 hints by `reference/nezu-fanghu/ribbons.py` (faces/dev-*.bird.json → dev-*.ribbons.json).
 

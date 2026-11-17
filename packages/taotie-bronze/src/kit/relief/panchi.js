@@ -110,7 +110,8 @@ function placeUnit(U, x0, y0, sx, sy, mirror, flip, dx, dy, hand = null) {
  *   median (optional, default none = unchanged output): { width 0.45, depth 0.3, inset 0.5, profile 'v' | 'u',
  *     eye: { r: 0.35 } | false } — a fine groove cut down the centre line of every rib (the Nezu hu's "double line"
  *     bands), stopping `inset` mm (+ the knob radius) short of knobbed / rounded free ends, running on through flat
- *     ends and joins and stopping at pellets; `eye` sinks a dot (same depth) in every knob. ONE extra sink.
+ *     ends and joins and stopping at pellets; `eye` sinks a dot (same depth) in every knob that does not lie on another
+ *     band. ONE extra sink.
  */
 export function panchiBand(panel, rect, o = {}) {
   const t0 = performance.now()
@@ -186,7 +187,7 @@ export function panchiBand(panel, rect, o = {}) {
     ctx.fill()
     ctx.restore()
   }, { height: knobHeight, profile: 'dome', shoulder: knob })
-  if (o.median) medianGrooves(panel, ribs, beads, o.median, { knob, clip: o.clip !== false ? clipRows : null })
+  if (o.median) medianGrooves(panel, ribs, beads, o.median, { knob, rib, clip: o.clip !== false ? clipRows : null })
   return { rows, ms: performance.now() - t0 }
 }
 
@@ -209,7 +210,7 @@ function trimEnds(pts, a, b) {
 }
 
 /** the median incision down every rib (panchiBand's `median` option) */
-function medianGrooves(panel, ribs, beads, m, { knob, clip }) {
+function medianGrooves(panel, ribs, beads, m, { knob, rib = 1.5, clip }) {
   const width = m.width ?? 0.45, depth = m.depth ?? 0.3, inset = m.inset ?? 0.5
   panel.sink((ctx) => {
     ctx.save()
@@ -235,13 +236,31 @@ function medianGrooves(panel, ribs, beads, m, { knob, clip }) {
     ctx.stroke()
     if (m.eye) {
       const r = m.eye.r ?? 0.35
+      // a knob that lies on ANOTHER band (a head tucked against a frame) gets no eye: the dot would pit that band
+      const cellS = 4, grid = new Map(), keyOf = (x, y) => Math.floor(x / cellS) + ',' + Math.floor(y / cellS)
+      ribs.forEach((s, j) => { for (let i = 1; i < s.pts.length; i++) {
+        const [ax, ay] = s.pts[i - 1], [bx, by] = s.pts[i]
+        const k = keyOf((ax + bx) / 2, (ay + by) / 2)
+        if (Math.hypot(bx - ax, by - ay) < cellS) { if (!grid.has(k)) grid.set(k, []); grid.get(k).push([j, ax, ay, bx, by]) }
+        else for (let t = 0; t <= 1.0001; t += cellS / 2 / Math.hypot(bx - ax, by - ay)) {
+          const kk = keyOf(ax + (bx - ax) * t, ay + (by - ay) * t); if (!grid.has(kk)) grid.set(kk, []); grid.get(kk).push([j, ax, ay, bx, by]) }
+      } })
+      const onOther = (x, y, j) => {
+        const gx = Math.floor(x / cellS), gy = Math.floor(y / cellS)
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (const [jj, ax, ay, bx, by] of grid.get((gx + dx) + ',' + (gy + dy)) || []) {
+          if (jj === j) continue
+          const vx = bx - ax, vy = by - ay, t = Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / (vx * vx + vy * vy || 1)))
+          if (Math.hypot(x - ax - vx * t, y - ay - vy * t) < rib * (ribs[jj].w || 1) / 2 + knob * 0.3) return true
+        }
+        return false
+      }
       ctx.beginPath()
-      for (const s of ribs) {
+      ribs.forEach((s, j) => {
         for (const [k, i] of [[0, 0], [1, s.pts.length - 1]]) {
-          if (s.caps[k] !== 'knob') continue
+          if (s.caps[k] !== 'knob' || onOther(s.pts[i][0], s.pts[i][1], j)) continue
           ctx.moveTo(s.pts[i][0] + r, s.pts[i][1]); ctx.arc(s.pts[i][0], s.pts[i][1], r, 0, Math.PI * 2)
         }
-      }
+      })
       ctx.fill()
     }
     ctx.restore()

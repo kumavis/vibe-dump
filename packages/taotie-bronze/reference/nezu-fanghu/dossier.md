@@ -111,3 +111,12 @@ still drive the foot frieze and the triangles, which keep the cut-ribbon languag
 read off a ≈ 3.2 px/mm photograph (± 0.5 mm, and the lid ± 1.5 mm: soft and foreshortened); the ribbon tops carry no
 incised contour lines; the upper birds' crest plumes and tail bars are simplified; the floor spirals are the kit's
 packed leiwen (rounded), not the photograph's individual coils.
+
+Round 9b (fanghu-bird follow-up): the foot frieze (a sunk band between its cut border lines: roundel = rounded-square
+ribbon round a ring-and-dome eye, hooked S-ribbons either side; faces/dev-foot.bird.json, low trust) and the rising
+triangles (one unit traced at s 23.5 on faces/dev-tri.jpg — a double-ribbed sunk triangle, two C-scrolls rolling up
+from the base centre into their eyes, a stem to the apex with a small ring bud — laid at ±Qh/3 and ±Qh of each side)
+now use the same sunk-and-embossed construction, so the whole vessel speaks one language. Body and neck-frieze ribbons
+carry the photograph's fine contour line (0.55 mm, 0.8 mm in from the edge, ribbons 2.7–6 mm wide only). Upper bird
+and lid ribbons thickened: raised inside the rim upper 57 → 59 %, lid 51 → 60 %. Recesses: preset crevice 0.8, earth
+0.85 '#b48470', recessDirt 0.45 (photo-08 earth in the lower cartouche: median RGB 120 / 102 / 79).

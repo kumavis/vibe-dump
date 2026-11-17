@@ -13,6 +13,8 @@ import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.ribbons.json'
 import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.ribbons.json'
 import FRIEZE_RIB from '../../../reference/nezu-fanghu/faces/dev-frieze.ribbons.json'
 import LID_RIB from '../../../reference/nezu-fanghu/faces/dev-lid.ribbons.json'
+import FOOT_RIB from '../../../reference/nezu-fanghu/faces/dev-foot.ribbons.json'
+import TRI_RIB from '../../../reference/nezu-fanghu/faces/dev-tri.ribbons.json'
 import { LV } from './form.js'
 
 // SUNK-THEN-EMBOSSED (photo-08/09): each bird's cartouche is cut ≈ 1.4 mm below the wall, its edge stepping down
@@ -20,7 +22,17 @@ import { LV } from './form.js'
 // soft 0.7 mm shoulders; ring eyes with a domed centre in their own recess; round spirals (≈ 1 mm) sunk into the floor
 // left between the ribbons (kit.sunkCartouche; ribbons traced by reference/nezu-fanghu/ribbons.py)
 const SUNK = { depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
-  ground: { pitch: 0.95, line: 0.5, depth: 0.3, cell: [2.4, 6], roundness: 0.9, pairs: 0.25, maxAspect: 1.5, jitter: 0.04, fillers: true }, groundMargin: 0.35 }
+  ground: { pitch: 0.95, line: 0.5, depth: 0.3, cell: [2.4, 6], roundness: 0.9, pairs: 0.25, maxAspect: 1.5, jitter: 0.04, fillers: true }, groundMargin: 0.35,
+  // the fine line set ≈ 0.8 mm in from the edge of every ribbon 2.7–6 mm wide (photo-08: the ribbons are double-outlined;
+  // the broad head plates are not): 0.55 mm ≈ 2.6 px at q 1, 1.9 px at q 0.5
+  contour: { inset: 0.8, line: 0.55, depth: 0.2, maxHalf: 3.0 } }
+
+/** a ribbons.json tracing moved in s: x ↦ c + k·(x − c0) (one triangle unit traced at s = c0, laid at s = c) */
+function shiftTracing(R, c0, c, k) {
+  const f = ([x, y]) => [c + k * (x - c0), y]
+  const F = R.field
+  return { field: { poly: F.poly.map(f) }, plates: R.plates.map((p) => ({ outer: p.outer.map(f), holes: (p.holes || []).map((h) => h.map(f)) })), eyes: R.eyes.map((e) => ({ ...e, c: f(e.c), r: e.r * k })) }
+}
 
 /** a ribbons.json tracing (developed mm, the RIGHT bird) and its mirror image about s = 0 (the confronted left bird) */
 function cartouchePair(R) {
@@ -97,80 +109,6 @@ export function spiralFill(p, polys, { pitch = 0.9, line = 0.42, depth = 0.45, r
   return circles.length
 }
 
-/** the spiral hollows of a ribbon spec, mapped (and mirrored) into panel mm */
-function hollowPolys(spec, map, reflect = ([x, y]) => [-x, y]) {
-  const out = []
-  for (const h of spec.hollows || []) {
-    if (!h.leiwen) continue
-    const D = denseLoop(h.poly, 1)
-    out.push(D.map(map))
-    if (reflect) out.push(D.map((q) => map(reflect(q))))
-  }
-  return out
-}
-
-/** densify a closed loop (author mm) so the non-linear map bends it */
-function denseLoop(pts, step = 2) {
-  const out = []
-  for (let i = 0; i < pts.length; i++) {
-    const a = pts[i], b = pts[(i + 1) % pts.length]
-    const k = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / step))
-    for (let j = 0; j < k; j++) out.push([a[0] + ((b[0] - a[0]) * j) / k, a[1] + ((b[1] - a[1]) * j) / k])
-  }
-  return out
-}
-
-
-/** the rising triangles of the neck (y 359–416): one unit centred at c (developed mm), half base hb */
-function triangleUnit(c, hb, y0 = 359.6, y1 = 415.5) {
-  const H = y1 - y0, L = Math.hypot(hb, H)
-  const edge = (side, inset) => {
-    // the straight edge base corner → tip, moved `inset` mm inward and trimmed to stay inside the band
-    const B = [c + side * hb, y0], Tp = [c, y1]
-    const n = [(-side * H) / L, -hb / L], d = [(-side * hb) / L, H / L]
-    const a = [B[0] + n[0] * inset + d[0] * inset * 1.2, B[1] + n[1] * inset + d[1] * inset * 1.2]
-    const b = [Tp[0] + n[0] * inset - d[0] * inset * 1.6, Tp[1] + n[1] * inset - d[1] * inset * 1.6]
-    return [a, b]
-  }
-  const channels = []
-  for (const side of [-1, 1]) {
-    for (const [inset, w] of [[0.6, 1.1], [2.6, 0.8]]) {
-      const [a, b] = edge(side, inset)
-      channels.push({ line: [a, b], w })
-    }
-  }
-  // the scroll pair in the foot of the triangle (photo-08: two C-spirals facing, over a leiwen hollow)
-  const sp = (cx, cy, hand) => {
-    const pts = []
-    for (let t = 0; t <= 1.0001; t += 0.08) {
-      const a = Math.PI * (0.5 + hand * 2.2 * t), r = 3.4 * (1 - 0.72 * t)
-      pts.push([cx + r * Math.cos(a) * hand, cy + r * Math.sin(a)])
-    }
-    return pts
-  }
-  // r8 fix (photo-08): the pair of scrolls fills the lower ≈ 40 % of the triangle — two fat C-spirals facing, a roof
-  // ribbon arching over them, a stem rising to the apex, the spiral ground packed between and beside them
-  const R0 = Math.min(5.8, hb * 0.24)
-  const spB = (cx, cy, hand) => {
-    const pts = []
-    for (let t = 0; t <= 1.0001; t += 0.05) {
-      const a = Math.PI * (0.5 + hand * 2.4 * t), r = R0 * (1 - 0.7 * t)
-      pts.push([cx + r * Math.cos(a) * hand, cy + r * Math.sin(a)])
-    }
-    return pts
-  }
-  channels.push({ line: spB(c - hb * 0.4, 369.4, 1), w: 1.1 })
-  channels.push({ line: spB(c + hb * 0.4, 369.4, -1), w: 1.1 })
-  channels.push({ line: [[c - hb * 0.66, 376.4], [c - hb * 0.3, 380.6], [c, 381.8], [c + hb * 0.3, 380.6], [c + hb * 0.66, 376.4]], w: 1.1 })
-  channels.push({ line: [[c, 384.6], [c, 404]], w: 1.0 })
-  const hollows = [
-    { poly: [[c - hb * 0.15, 361.2], [c + hb * 0.15, 361.2], [c + hb * 0.12, 377.4], [c - hb * 0.12, 377.4]], d: 1.0, leiwen: true },
-    { poly: [[c - hb * 0.8, 361.2], [c - hb * 0.62, 361.2], [c - hb * 0.66, 372], [c - hb * 0.84, 362.6]], d: 1.0, leiwen: true },
-    { poly: [[c + hb * 0.62, 361.2], [c + hb * 0.8, 361.2], [c + hb * 0.84, 362.6], [c + hb * 0.66, 372]], d: 1.0, leiwen: true },
-  ]
-  return { channels, hollows }
-}
-
 /**
  * The body panel of one side (y LV.plateTop → LV.neck): { relief, panelW }.
  * ctx: { ppmm, seed, Qh(y) this side's half developed width, Qf(y) the FRONT's, arc(y) this side's meridian arc }
@@ -189,19 +127,19 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   kit.sunkCartouche(p, [...cartouchePair(LOW_RIB), ...cartouchePair(UP_RIB)], { ...SUNK, map, seed })
   // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
   kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })
-  kit.cutRibbons(p, FOOT, { ...common, seed: seed + 3, depth: 1.3, shoulder: 0.5, widen: 1.4, minW: 1.4, border: false, boss: false })
-  // neck triangles: units at ±Qh/3 and the corner halves at ±Qh (laid in this side's own developed mm)
-  const qn = Qh(388), hb = qn / 3
-  const tri = { channels: [], hollows: [] }
-  for (const c of [hb, qn]) {
-    const u = triangleUnit(c, hb)
-    tri.channels.push(...u.channels); tri.hollows.push(...u.hollows)
-  }
+  // the foot frieze: the band between its plain border lines (still cut, FOOT channels 0–3) sunk, the roundel and the
+  // hooked S-ribbons embossed in it
+  kit.cutRibbons(p, { channels: FOOT.channels.slice(0, 4) }, { ...common, seed: seed + 3, depth: 1.0, shoulder: 0.5, widen: 1.2, minW: 1.2, border: false, boss: false })
+  kit.sunkCartouche(p, cartouchePair(FOOT_RIB), { ...SUNK, depth: 1.1, rim: { ribs: 2, pitch: 1.0 }, eye: { ring: 1.2, ringTop: 0, gap: 0.5, dome: 0.4 }, contour: null, map, seed: seed + 3 })
+  // neck triangles: the traced unit (centred at s 23.5 on the front) laid at ±Qh/3 and on the corners ±Qh, in this
+  // side's own developed mm, scaled to its third of the width; each a sunk field with a ribbed edge, scrolls embossed
+  const qn = Qh(388), hb = qn / 3, kt = hb / 23.5
+  const tris = []
+  for (const c of [hb, qn]) tris.push(...cartouchePair(shiftTracing(TRI_RIB, 23.5, c, kt)))
+  kit.sunkCartouche(p, tris, { ...SUNK, depth: 1.1, shoulder: 0.5, rim: { ribs: 2, pitch: 1.1 }, eye: { ring: 0.7, ringTop: 0, gap: 0.3, dome: 0.3 }, contour: null, map: mapOwn, seed: seed + 4 })
   // the band's borders: under the triangles (frieze top) and the fillet under the lid lip
-  tri.channels.push({ line: [[0, 358.2], [qn + 1, 358.2]], w: 1.1 })
-  tri.channels.push({ line: [[0, 416.6], [qn + 1, 416.6]], w: 0.9 })
-  kit.cutRibbons(p, tri, { map: mapOwn, mirror: true, axis: 0, seed: seed + 4, depth: 1.3, shoulder: 0.5, widen: 1.4, minW: 1.2, border: false, leiwen: false })
-  spiralFill(p, hollowPolys(tri, mapOwn), { rMax: 2.6 })
+  const tri = { channels: [{ line: [[0, 358.2], [qn + 1, 358.2]], w: 1.1 }, { line: [[0, 416.6], [qn + 1, 416.6]], w: 0.9 }] }
+  kit.cutRibbons(p, tri, { map: mapOwn, mirror: true, axis: 0, seed: seed + 4, depth: 1.0, shoulder: 0.5, widen: 1.4, minW: 1.2, border: false, leiwen: false })
   // the edges of the straps: the shoulder band's lower line and the strap/field shoulder (photo-08: a crisp step line)
   void side
   return { relief: p.bake(), panelW }
@@ -213,6 +151,6 @@ export function lidPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1 }) {
   const a0 = arc(y0)
   const p = new kit.ReliefPanel({ width: panelW, height: arc(y1) - a0, ppmm, seed })
   const map = ([s, y]) => [panelW / 2 + s * (Qh(y) / Qf(y)), arc(y) - a0]
-  kit.sunkCartouche(p, cartouchePair(LID_RIB), { ...SUNK, depth: 1.0, shoulder: 0.5, rim: { ribs: 2, pitch: 0.8 }, eye: { ring: 0.8, ringTop: 0, gap: 0.35, dome: 0.4 }, map, seed })
+  kit.sunkCartouche(p, cartouchePair(LID_RIB), { ...SUNK, depth: 1.0, shoulder: 0.5, rim: { ribs: 2, pitch: 0.8 }, eye: { ring: 0.8, ringTop: 0, gap: 0.35, dome: 0.4 }, contour: null, map, seed })
   return { relief: p.bake(), panelW }
 }

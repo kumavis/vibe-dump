@@ -126,9 +126,6 @@ export default {
       const half0 = (long ? W0 : D0) / 2
       const halfAt = (Y) => half0 + (Y - FOOT_H) * (long ? tanT : tanZ)
       const face = (faceW, dy) => bodyFace({ faceW, dy, halfAt, hw, y0: FOOT_H }).P
-      // the end face: the same elements, each re-fitted to its box on face-end.jpg (traced.js END_FIT);
-      // its frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body and tail
-      // (×0.6 outward of the eye: tail edge at u 48 against 62.4) — face-end.jpg, grid/s-endfr.png
       const fields = [[3.3, 34.0 - FOOT_H, hw - 6.5, 93.7], [3.3, 129.8 - FOOT_H, hw - 6.5, 27.6]]
       // the end face: the long face's frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body
       // and tail (×0.6 outward of the eye: face-end.jpg, grid/s-endfr.png); the main mask element by element

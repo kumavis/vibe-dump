@@ -189,6 +189,8 @@ const CARTOUCHE_DEFAULTS = {
   ground: false, // leiwen options → spirals sunk into the floor between the ribbons | false
   groundMargin: 0.35, // mm kept clear of ribbons, rim and eyes
   groundMinPx: 2.8, // skip the ground when its pitch is under this many px (phones, low quality): the floor stays plain
+  contour: null, // { inset: 0.8, line: 0.55, depth: 0.2, maxHalf: 3.4 }: a fine sunk line on each ribbon top, `inset` mm in
+  //               from its edge, only on ribbons at least 2·(inset + line) wide and at most 2·maxHalf (not on broad plates) | null
   map: null, // ([x, y]) → [x, y] panel mm (default identity)
   seed: 0,
 }
@@ -258,6 +260,31 @@ export function sunkCartouche(panel, cartouches, opts = {}) {
   const sdR = RM ? signedDistance(crop(RM), bw, bh) : null
   const inv = 1 / ppmm
   const depth = o.depth, top = o.level
+  // ribbon-top contour lines: the local ribbon half-width = the largest edge distance within maxHalf + 0.6 mm, read
+  // off a 4 px block-max grid (cheap); the line goes only where that half-width is in [inset + line, maxHalf]
+  const CT = o.contour && sdR ? { inset: 0.8, line: 0.55, depth: 0.2, maxHalf: 3.4, ...o.contour } : null
+  let halfW = null, bwB = 0
+  if (CT) {
+    bwB = Math.ceil(bw / 4)
+    const bhB = Math.ceil(bh / 4), B = new Float32Array(bwB * bhB)
+    for (let y = 0; y < bh; y++) for (let x = 0; x < bw; x++) {
+      const v = sdR[y * bw + x], k = (y >> 2) * bwB + (x >> 2)
+      if (v > B[k]) B[k] = v
+    }
+    const R = Math.max(1, Math.ceil(((CT.maxHalf + 0.6) * ppmm) / 4))
+    const T = new Float32Array(B.length)
+    for (let y = 0; y < bhB; y++) for (let x = 0; x < bwB; x++) {
+      let m = 0
+      for (let d = Math.max(0, x - R); d <= Math.min(bwB - 1, x + R); d++) if (B[y * bwB + d] > m) m = B[y * bwB + d]
+      T[y * bwB + x] = m
+    }
+    halfW = new Float32Array(B.length)
+    for (let y = 0; y < bhB; y++) for (let x = 0; x < bwB; x++) {
+      let m = 0
+      for (let d = Math.max(0, y - R); d <= Math.min(bhB - 1, y + R); d++) if (T[d * bwB + x] > m) m = T[d * bwB + x]
+      halfW[y * bwB + x] = m * inv
+    }
+  }
   // the stepped rim: ribs k = 0…n−1, each a tread at −depth·(k+1)/(n+1) carrying a rounded rib, then the floor
   const rim = o.rim
   const n = rim ? Math.max(0, Math.round(rim.ribs)) : 0
@@ -308,7 +335,15 @@ export function sunkCartouche(panel, cartouches, opts = {}) {
       let h = floorAt(s)
       const sr = sdR ? sdR[j] * inv : -1
       const hr = ribbonAt(sr)
-      if (hr > h) { h = hr; if (sr > sh * 0.5) nR++ }
+      if (hr > h) {
+        h = hr
+        if (sr > sh * 0.5) nR++
+        if (CT) {
+          const hw = halfW[(y >> 2) * bwB + (x >> 2)]
+          const t = Math.abs(sr - CT.inset) / (CT.line * 0.5)
+          if (t < 1 && hw >= CT.inset + CT.line && hw <= CT.maxHalf) h -= CT.depth * Math.sqrt(1 - t * t)
+        }
+      }
       let nearEye = false
       if (eyes.length) {
         const px = (x0 + x + 0.5) * inv
