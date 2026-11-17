@@ -22,8 +22,9 @@ export const LV = {
   frieze: 357, //       neck frieze 310–356: confronted birds either side of a centre line
   neck: 419, //         triangle band 359–416, then a fillet to the neck top
   lip: 421, //          lid lip 419–421: a crisp thin overhanging edge (photo-08: no plain band under the cartouches)
-  lid: 464, //          lid band (domed) 421–464: bird cartouches, rising straight off the lip
-  top: 500, //          crown (open, flaring) 464–500
+  lid: 457.5, //        lid band (domed) 421–457.5: bird cartouches on its swelling front (r9 layout fix: photo-08's silhouette
+  //                    shows the crown from y ≈ 455 and the dome's front from ≈ 460: the crown is ≈ 42 mm tall, it was 36)
+  top: 500, //          crown (open, flaring) 457.5–500
 }
 
 // half widths (x) of the body from the plate top to the neck top, back-projected silhouette of photo-08
@@ -32,9 +33,12 @@ const BODY = [[13, 107.5], [20, 106.2], [35, 104.4], [50, 103.4], [62, 103.6], [
   [237, 101.6], [252, 95.8], [267, 90.2], [282, 85.6], [297, 81.6], [310, 78.6], [325, 76.4], [340, 75.1], [358, 74.6],
   [373, 75.3], [388, 76.8], [403, 78.6], [413, 79.6], [419, 79.9]]
 // the lid: lip ring + domed band (W at the outer surface)
-const LID = [[421, 81.6], [424, 81.3], [428, 80.6], [434, 78.9], [440, 76.4], [448, 71.5], [455, 64], [460, 56], [463, 50], [464.5, 47.5]]
+// r9 layout fix (photo-08 silhouette rows, front.jpg at 3.29 px/mm, ÷ 0.98 for the lens): half widths 79.7 @422.5,
+// 77.9 @431.6, 73.5 @440.7, 68.9 @446.8, 59.6 @452.9, then the crown — a fuller dome rolling over in a tight round
+const LID = [[421, 81.6], [424, 81.2], [430, 80.0], [436, 77.8], [441, 74.8], [446, 70.6], [450, 65.8], [453.5, 60], [456, 53.5], [457.5, 47.5]]
 export const PLATE = { w: 117, d: 0.564 * 117, r: 12, h: 13 }
-export const CROWN = { y0: 464, y1: 500, w0: 45.5, w1: 50.2, wall: 3.6, r: 0.42 }
+// crown silhouette (same rows): waist 46.5 @459, 49.2 @465, 50.8 @471, 51.9 @474–480, its top corners rounding from ≈ 489
+export const CROWN = { y0: 457.5, y1: 500, w0: 46.2, w1: 51.6, wall: 3.6, r: 0.42 }
 
 function monotone(rows) {
   const xs = rows.map((r) => r[0]), ys = rows.map((r) => r[1])

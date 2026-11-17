@@ -17,15 +17,38 @@ import FOOT_RIB from '../../../reference/nezu-fanghu/faces/dev-foot.ribbons.json
 import TRI_RIB from '../../../reference/nezu-fanghu/faces/dev-tri.ribbons.json'
 import { LV } from './form.js'
 
-// SUNK-THEN-EMBOSSED (photo-08/09): each bird's cartouche is cut ≈ 1.4 mm below the wall, its edge stepping down
+// SUNK-THEN-EMBOSSED (photo-08/09): each bird's cartouche is cut ≈ 1.6 mm below the wall (the straps stand that proud of it; r9: 1.4 → 1.6, upper end of the 1.2–1.8 shadow read), its edge stepping down
 // through three ribs at 1.25 mm pitch; the bird is raised back up as flat-topped ribbons (3–6 mm wide) flush with the wall,
 // soft 0.7 mm shoulders; ring eyes with a domed centre in their own recess; round spirals (≈ 1 mm) sunk into the floor
 // left between the ribbons (kit.sunkCartouche; ribbons traced by reference/nezu-fanghu/ribbons.py)
-const SUNK = { depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
+const SUNK = { depth: 1.6, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 }, eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 },
   ground: { pitch: 0.95, line: 0.5, depth: 0.3, cell: [2.4, 6], roundness: 0.9, pairs: 0.25, maxAspect: 1.5, jitter: 0.04, fillers: true }, groundMargin: 0.35,
   // the fine line set ≈ 0.8 mm in from the edge of every ribbon 2.7–6 mm wide (photo-08: the ribbons are double-outlined;
   // the broad head plates are not): 0.55 mm ≈ 2.6 px at q 1, 1.9 px at q 0.5
   contour: { inset: 0.8, line: 0.55, depth: 0.2, maxHalf: 3.0 } }
+
+// r9 LAYOUT (measured on the rectified faces face-lower / face-upper and photo-09): each body cartouche runs from the
+// central strap to the corner, where it meets the narrow side's cartouche with only their rims between (≈ 3 mm of wall
+// at the diagonal). The tracings stop short of that (photo-08 cannot see round the corner): the lower field ended at
+// s 114.6 (the diagonal is at 106–120), the upper one 20 mm short at its foot (s 89.6 at y 203, diagonal 109.5). So each
+// bird is REFITTED in s: its traced span [inner, outer(y)] is stretched linearly to [INNER, Qh(y) − CORNER] of the side
+// it is laid on (the ribbons widen with it). INNER: the strap's half width + gap — 17 / 18 mm on the broad faces
+// (photo: ±17 lower, ±18 upper; it was 19.6 / 20.4) and 0.85 × that on the narrow sides (their studs are 0.85 as wide).
+const CORNER = 1.5
+const UP_OUTER = [[198.6, 87], [203, 89.6], [220, 89.4], [252, 86.2], [275, 82.4], [280.2, 80.4], [282.3, 76]]
+const lerpY = (T, y) => {
+  if (y <= T[0][0]) return T[0][1]
+  for (let i = 1; i < T.length; i++) if (y <= T[i][0]) { const [y0, v0] = T[i - 1], [y1, v1] = T[i]; return v0 + ((v1 - v0) * (y - y0)) / (y1 - y0) }
+  return T[T.length - 1][1]
+}
+/** traced s → this side's s, for one cartouche register */
+function refitter(Qh, inner, oldInner, oldOuter) {
+  return (s, y) => {
+    const a = Math.abs(s), sg = s < 0 ? -1 : 1
+    const o = oldOuter(y), n = Qh(y) - CORNER
+    return sg * (inner + ((a - oldInner) * (n - inner)) / (o - oldInner))
+  }
+}
 
 /** a ribbons.json tracing moved in s: x ↦ c + k·(x − c0) (one triangle unit traced at s = c0, laid at s = c) */
 function shiftTracing(R, c0, c, k) {
@@ -124,7 +147,11 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   const common = { map, mirror: true, axis: 0, seed, leiwen: GROUND }
   // fields: the belly cartouches (sunk, the birds embossed in them); neck frieze; foot frieze
   // the four body cartouches of this side in ONE call: lower pair (confronted), upper pair
-  kit.sunkCartouche(p, [...cartouchePair(LOW_RIB), ...cartouchePair(UP_RIB)], { ...SUNK, map, seed })
+  const nar = side ? 0.85 : 1
+  const fitLow = refitter(Qh, 17 * nar, 19.6, () => 114.6), fitUp = refitter(Qh, 18 * nar, 20.6, (y) => lerpY(UP_OUTER, y))
+  const mapLow = ([s, y]) => [panelW / 2 + fitLow(s, y), arc(y) - a0], mapUp = ([s, y]) => [panelW / 2 + fitUp(s, y), arc(y) - a0]
+  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, map: mapLow, seed })
+  kit.sunkCartouche(p, cartouchePair(UP_RIB), { ...SUNK, map: mapUp, seed: seed + 1 })
   // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
   kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })
   // the foot frieze: the band between its plain border lines (still cut, FOOT channels 0–3) sunk, the roundel and the
@@ -150,7 +177,9 @@ export function lidPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1 }) {
   const panelW = 2 * Qh(y0) + 2
   const a0 = arc(y0)
   const p = new kit.ReliefPanel({ width: panelW, height: arc(y1) - a0, ppmm, seed })
-  const map = ([s, y]) => [panelW / 2 + s * (Qh(y) / Qf(y)), arc(y) - a0]
+  // the tracing was made on a 421–464 band; the measured dome now ends at y1 (460.5): compress it in y
+  const yk = (y1 - y0) / (464 - y0)
+  const map = ([s, y]) => { const yy = y0 + (y - y0) * yk; return [panelW / 2 + s * (Qh(yy) / Qf(yy)), arc(yy) - a0] }
   kit.sunkCartouche(p, cartouchePair(LID_RIB), { ...SUNK, depth: 1.0, shoulder: 0.5, rim: { ribs: 2, pitch: 0.8 }, eye: { ring: 0.8, ringTop: 0, gap: 0.35, dome: 0.4 }, contour: null, map, seed })
   return { relief: p.bake(), panelW }
 }

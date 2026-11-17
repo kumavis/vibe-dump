@@ -120,3 +120,18 @@ now use the same sunk-and-embossed construction, so the whole vessel speaks one 
 carry the photograph's fine contour line (0.55 mm, 0.8 mm in from the edge, ribbons 2.7–6 mm wide only). Upper bird
 and lid ribbons thickened: raised inside the rim upper 57 → 59 %, lid 51 → 60 %. Recesses: preset crevice 0.8, earth
 0.85 '#b48470', recessDirt 0.45 (photo-08 earth in the lower cartouche: median RGB 120 / 102 / 79).
+
+Round 9c (fanghu-bird, layout): MEASURED on the rectified faces (face-lower, face-upper, same mm grid as the model's
+face renders), on photo-08's silhouette rows and on photo-09. Body cartouches: on the broad face the model already
+sat within ≈ 2–3 mm of the photograph (inner edges ±19.6 / ±20.4 against ±17 / ±18; tops 162.2 / ≈ 281 against
+162.8 / ≈ 280), but the tracings stopped where photo-08 stops seeing: the lower field 2–5 mm, the upper field's foot
+20 mm (s 89.6 at y 203 against the corner diagonal at 109.5) short of the corner, and photo-09 shows the broad-face and
+narrow-face cartouches meeting AT the corner with only their rims between. Now each traced bird is refitted in s
+(decor.js `refitter`): inner edge 17 / 18 mm (× 0.85 on the narrow sides), outer edge 1.5 mm short of each side's
+corner diagonal at every height, the ribbons widened with it (lower × 1.07; upper × 1.03 at its head to × 1.30 at its
+foot). Straps = everything the fields leave: vertical 34 / 36 mm on the broad faces (was 39 / 41), 29 / 31 on the
+narrow ones, horizontal 165–196; the fields are sunk 1.6 mm (was 1.4) so the straps stand proud with a stronger step.
+Lid and crown (photo-08 silhouette rows ÷ 0.98): dome half widths 79.7 @422.5, 77.9 @431.6, 73.5 @440.7, 68.9 @446.8,
+59.6 @452.9; the crown shows from y ≈ 455, waist 46.5 @459, 51.9 @474–480, its top corners rounding from ≈ 489. Model:
+lid band 421–457.5 (was 464), crown 457.5–500 (42.5 tall, was 36), waist 46.2 → 51.6 at the rim, the flare in its
+lower half. The crown is plain on both photographs (no relief can be read on it).

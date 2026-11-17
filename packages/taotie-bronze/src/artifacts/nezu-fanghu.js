@@ -147,8 +147,8 @@ export default {
       return mesh
     }
     lidG.add(ringLoft([ring(LV.lid, lidW(LV.lid), Rl(LV.lid)), cr(LV.lid + 0.4, CROWN.w0 + 0.8), cr(CROWN.y0 + 1.5, CROWN.w0)], plain))
-    lidG.add(crownSaddle(ringLoft([cr(CROWN.y0 + 1.5, CROWN.w0), cr(CROWN.y0 + 8, CROWN.w0 + 1.4), cr(CROWN.y0 + 14, CROWN.w0 + 2.6), cr(CROWN.y0 + 22, CROWN.w0 + 3.6), cr(CROWN.y1 - 1.2, CROWN.w1), cr(CROWN.y1, CROWN.w1 - 0.8), cr(CROWN.y1, wIn(CROWN.w1) + 0.6)], crownMat)))
-    lidG.add(crownSaddle(ringLoft([cr(CROWN.y1, wIn(CROWN.w1) + 0.6), cr(CROWN.y1 - 1, wIn(CROWN.w1)), cr(CROWN.y0 + 22, wIn(CROWN.w0 + 3.6)), cr(CROWN.y0 + 8, wIn(CROWN.w0 + 1.4)), cr(CROWN.y0 + 3, wIn(CROWN.w0))], crownIn)))
+    lidG.add(crownSaddle(ringLoft([cr(CROWN.y0 + 1.5, CROWN.w0), cr(CROWN.y0 + 8, CROWN.w0 + 2.0), cr(CROWN.y0 + 14, CROWN.w0 + 3.8), cr(CROWN.y0 + 22, CROWN.w0 + 5.0), cr(CROWN.y1 - 1.2, CROWN.w1), cr(CROWN.y1, CROWN.w1 - 0.8), cr(CROWN.y1, wIn(CROWN.w1) + 0.6)], crownMat)))
+    lidG.add(crownSaddle(ringLoft([cr(CROWN.y1, wIn(CROWN.w1) + 0.6), cr(CROWN.y1 - 1, wIn(CROWN.w1)), cr(CROWN.y0 + 22, wIn(CROWN.w0 + 5.0)), cr(CROWN.y0 + 8, wIn(CROWN.w0 + 2.0)), cr(CROWN.y0 + 3, wIn(CROWN.w0))], crownIn)))
     lidG.add(capMesh({ y: CROWN.y0 + 3, a: wIn(CROWN.w0), b: RHO * wIn(CROWN.w0), r: CROWN.r * RHO * wIn(CROWN.w0) }, crownIn, true))
     lap('meshes')
 

@@ -7,8 +7,10 @@
 // `section` + `pillow`) rising off a 2 mm lip flush with the rim, long ridge, near-gable ends; a miniature
 // ogival roof knob on a waisted post; 18 comb flanges (4 pitch slots) running unbroken through the registers.
 // Measurements: reference/met-fangyi/dossier.md § b.7.
-// Décor (round 5): TRACED off the flattened photographs (reference/met-fangyi/faces/) in face mm and
-// drawn with the kit's rounded vocabulary — met-fangyi/traced.js; the knob's line work is decor.js.
+// Décor (ridge pass): every register in RIDGE WORK — fat bands of 2–4 parallel ridges on plateaus, coils rolling in
+// as nested multi-ridge paths, squared spirals in the cells, round spirals on the band tops, sunk G mm below the
+// border so the band tops are flush with it — met-fangyi/ridge.js (layouts from the traced faces); the face maps and
+// the end-face / lid re-fit boxes are met-fangyi/traced.js; the knob's line work is decor.js.
 
 import * as THREE from 'three'
 import { knobLines } from './met-fangyi/decor.js'
@@ -102,7 +104,6 @@ export default {
     const plain = new kit.PatinaMaterial()
     const seed = 19742682
     const panels = {}
-    const __T = (globalThis.__fyT = []); let __t = performance.now(); const tick = (n) => { const t = performance.now(); __T.push([n, Math.round(t - __t)]); __t = t } // TEMP
 
     // ---------------------------------------------------------------- layout
     const bodyOpts = {
@@ -144,9 +145,9 @@ export default {
       return p.bake()
     }
     await onProgress(0.02, 'long face')
-    tick('pre'); panels.long = bodyPanel('front', seed + 1); tick('long') // TEMP
+    panels.long = bodyPanel('front', seed + 1)
     await onProgress(0.2, 'end face')
-    panels.short = bodyPanel('right', seed + 2); tick('short') // TEMP
+    panels.short = bodyPanel('right', seed + 2)
 
     // ---------------------------------------------------------------- foot panels
     const footPanel = (side, s) => {
@@ -167,7 +168,7 @@ export default {
     }
     await onProgress(0.36, 'foot')
     panels.footLong = footPanel('front', seed + 3)
-    panels.footShort = footPanel('right', seed + 4); tick('feet') // TEMP
+    panels.footShort = footPanel('right', seed + 4)
 
     // ---------------------------------------------------------------- lid panels
     const top = { a: kit.fangSection(bodyOpts)(WALL_H).a, b: kit.fangSection(bodyOpts)(WALL_H).b }
@@ -200,7 +201,7 @@ export default {
       renderRidge(kit, p, [{ draw: mainMask(MAIN_LONG_K, LG, { fit }), P: lidFace(0, f, { cy: 195.85, upY: 0.742, fyc: 41, xc: 73 }), axis: 73, ground: MAIN.ground }], {
         G: LG.G, seed: seed + 5, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
       })
-      panels.lidLong = p.bake(); tick('lidLong') // TEMP
+      panels.lidLong = p.bake()
     }
     await onProgress(0.6, 'lid ends')
     {
@@ -212,7 +213,7 @@ export default {
       renderRidge(kit, p, [{ draw: mainMask(MAIN_LONG_K, LG, { fit, drop: LID_END_DROP }), P: lidFace(1, f, { cy: 195.85, upY: 0.945, fyc: 33, xc: 54 }), axis: 54, ground: MAIN.ground }], {
         G: LG.G, seed: seed + 6, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
       })
-      panels.lidEnd = p.bake(); tick('lidEnd') // TEMP
+      panels.lidEnd = p.bake()
     }
     await onProgress(0.68, 'knob')
     // knob roof (detail-knob): flush line work only — a plain face with incised scrolls and ring eyes
@@ -311,7 +312,6 @@ export default {
       F({ from: sx > 0 ? a : b, to: sx > 0 ? b : a, out: new THREE.Vector3(0, 1, 0), height: 4.8, thickness: 5, taper: 4, embed: 2.6, comb: { nick: 0.6, depth: 0.5, hook: 1.4 } }) // detail-knob: blocks ≈ 4–5 mm proud of the ridge // detail-knob: a near-continuous block, narrow notches, incised faces
     }
 
-    tick('rest') // TEMP
     await onProgress(1, 'done')
     return { object, parts: { body, foot, lid, knob, flanges }, panels }
   },
