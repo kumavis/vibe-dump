@@ -46,16 +46,27 @@ function rectPoint(k, L, s, p) {
   return p.set(n[0] * D + t[0] * x, L.y, n[2] * D + t[2] * x)
 }
 
-/** Build the 4 side patches of a rectangle loft. level(v) → {a, b, y}. */
-function loft(group, level, { material, part, name, segV = 1, segU = 4, faces = null, map = null, density = 0.6 }) {
+/** Build the 4 side patches of a rectangle loft. level(v) → {a, b, y}.
+ *  bulge(k, v, s) (optional): mm the patch stands out horizontally (along its side normal) at (s, v). */
+function loft(group, level, { material, part, name, segV = 1, segU = 4, faces = null, map = null, density = 0.6, bulge = null }) {
   const out = []
   for (let k = 0; k < 4; k++) {
     const L = { a: 0, b: 0, y: 0 }
-    const pos = (u, v, p) => {
-      const l = level(v)
-      L.a = l.a; L.b = l.b; L.y = l.y
-      return rectPoint(k, L, u, p)
-    }
+    const pos = bulge
+      ? (u, v, p) => {
+          const l = level(v)
+          L.a = l.a; L.b = l.b; L.y = l.y
+          rectPoint(k, L, u, p)
+          const e = bulge(k, v, u)
+          p.x += SN[k][0] * e
+          p.z += SN[k][2] * e
+          return p
+        }
+      : (u, v, p) => {
+          const l = level(v)
+          L.a = l.a; L.b = l.b; L.y = l.y
+          return rectPoint(k, L, u, p)
+        }
     const sp = faces ? pick(faces, k) : null
     const spec = sp ? (sp.macro ? { relief: sp } : sp) : null
     const mat = spec ? spec.material || matCache(spec.relief) : material
@@ -81,6 +92,59 @@ function matCache(relief) {
   return _mats.get(relief)
 }
 
+/** Monotone cubic (Fritsch–Carlson) through [t, f] samples, t strictly increasing → f(t). */
+function pchip(ts, fs) {
+  const n = ts.length
+  const d = new Array(n - 1), m = new Array(n)
+  for (let i = 0; i < n - 1; i++) d[i] = (fs[i + 1] - fs[i]) / (ts[i + 1] - ts[i])
+  m[0] = d[0]; m[n - 1] = d[n - 2]
+  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (2 * d[i - 1] * d[i]) / (d[i - 1] + d[i]) // harmonic mean
+  return (t) => {
+    let i = 0
+    while (i < n - 2 && t > ts[i + 1]) i++
+    const h = ts[i + 1] - ts[i], s = Math.min(1, Math.max(0, (t - ts[i]) / h))
+    const s2 = s * s, s3 = s2 * s
+    return (2 * s3 - 3 * s2 + 1) * fs[i] + (s3 - 2 * s2 + s) * h * m[i] + (-2 * s3 + 3 * s2) * fs[i + 1] + (s3 - s2) * h * m[i + 1]
+  }
+}
+
+/**
+ * Optional measured cross-section (`o.section`): [[h, y]…] fractions from [0, 0] (eave) to [1, 1] (ridge
+ * line), h = how far in toward the ridge line (a: A → ridge half, b: B → 0), y = fraction of the rise — or a
+ * function v → [h, y]. A point list is passed through a monotone cubic in its chord length and re-sampled so
+ * that the loft parameter v runs at uniform slant length up the long faces' centre line (even mesh rows on a
+ * steep eave). Returns { H(v), Y(v) } or null.
+ */
+function sectionCurve(sec, run, rise) {
+  if (!sec) return null
+  if (typeof sec === 'function') {
+    return { H: (v) => sec(v)[0], Y: (v) => sec(v)[1] }
+  }
+  const pts = sec.map(([h, y]) => [h, y])
+  const ts = [0]
+  for (let i = 1; i < pts.length; i++) ts.push(ts[i - 1] + Math.hypot((pts[i][0] - pts[i - 1][0]) * run, (pts[i][1] - pts[i - 1][1]) * rise))
+  const fh = pchip(ts, pts.map((p) => p[0])), fy = pchip(ts, pts.map((p) => p[1]))
+  const M = 256, T = ts[ts.length - 1]
+  const hs = [], ys = [], cum = [0]
+  for (let i = 0; i <= M; i++) {
+    hs.push(fh((T * i) / M)); ys.push(fy((T * i) / M))
+    if (i) cum.push(cum[i - 1] + Math.hypot((hs[i] - hs[i - 1]) * run, (ys[i] - ys[i - 1]) * rise))
+  }
+  const L = cum[M]
+  const at = (arr, v) => {
+    const s = Math.min(1, Math.max(0, v)) * L
+    let lo = 0, hi = M
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1
+      if (cum[mid] <= s) lo = mid
+      else hi = mid
+    }
+    const f = (s - cum[lo]) / (cum[hi] - cum[lo] || 1)
+    return lerp(arr[lo], arr[hi], f)
+  }
+  return { H: (v) => (v <= 0 ? 0 : v >= 1 ? 1 : at(hs, v)), Y: (v) => (v <= 0 ? 0 : v >= 1 ? 1 : at(ys, v)) }
+}
+
 function resolveRoof(o) {
   const W = o.width, D = o.depth
   const A = W / 2, B = D / 2
@@ -91,21 +155,62 @@ function resolveRoof(o) {
   const g = (v) => (1 - c) * v + c * v * v
   const sk = { height: 0, overhang: 0, fascia: 0, ...(o.skirt || {}) }
   const y0 = sk.height + (sk.fascia ?? 0)
-  const level = (v) => ({ a: lerp(A, rh, v), b: lerp(B, 0, v), y: y0 + rise * g(v) })
+  const S = sectionCurve(o.section, B, rise)
+  const level = S
+    ? (v) => {
+        const h = S.H(v)
+        return { a: lerp(A, rh, h), b: lerp(B, 0, h), y: y0 + rise * S.Y(v) }
+      }
+    : (v) => ({ a: lerp(A, rh, v), b: lerp(B, 0, v), y: y0 + rise * g(v) })
+  // pillow: each slope swells out horizontally by `pillow` mm at the middle of its eave length and half-way up
+  // (0 on the hips, the eave and the ridge): 4s(1 − s) · sin(π h)
+  const pv = o.pillow ?? 0
+  const pil = typeof pv === 'number' ? [pv, pv, pv, pv] : [0, 1, 2, 3].map((k) => pick(pv, k) ?? 0)
+  const hOf = S ? S.H : (v) => v
+  const bulge = pil.some((x) => x) ? (k, v, s) => pil[k] * 4 * s * (1 - s) * Math.sin(Math.PI * Math.min(1, Math.max(0, hOf(v)))) : null
   // slant length up each face's centre line
   const N = 48
   const arcF = new Float32Array(N + 1), arcS = new Float32Array(N + 1)
+  const cF = (v) => (bulge ? bulge(0, v, 0.5) : 0), cS = (v) => (bulge ? bulge(1, v, 0.5) : 0)
   for (let i = 1; i <= N; i++) {
     const p = level((i - 1) / N), q = level(i / N)
-    arcF[i] = arcF[i - 1] + Math.hypot(q.b - p.b, q.y - p.y)
-    arcS[i] = arcS[i - 1] + Math.hypot(q.a - p.a, q.y - p.y)
+    arcF[i] = arcF[i - 1] + Math.hypot(q.b + cF(i / N) - p.b - cF((i - 1) / N), q.y - p.y)
+    arcS[i] = arcS[i - 1] + Math.hypot(q.a + cS(i / N) - p.a - cS((i - 1) / N), q.y - p.y)
   }
   const arc = (k, v) => {
     const t = (k & 1) === 0 ? arcF : arcS
     const f = v * N, i = Math.min(N - 1, Math.floor(f))
     return lerp(t[i], t[i + 1], f - i)
   }
-  return { A, B, rh, rise, level, arc, y0, sk, top: y0 + rise }
+  return { A, B, rh, rise, level, arc, y0, sk, top: y0 + rise, bulge, section: S, g }
+}
+
+/**
+ * The outer roof surface of hippedLid / roofKnob as a model, for décor mapping and flanges along hips and
+ * midlines: { A, B, rh, rise, y0, top, level(v) → {a, b, y}, arc(k, v) (slant mm up side k's centre line),
+ * point(k, s, v, out?) (s 0 → 1 left → right seen from outside, pillow included), normal(k, s, v, out?) (outward) }.
+ * Lid frame (stands on y = 0); the same options as hippedLid.
+ */
+export function hippedRoof(o) {
+  const R = resolveRoof(o)
+  const point = (k, s, v, out = new THREE.Vector3()) => {
+    rectPoint(k, R.level(v), s, out)
+    if (R.bulge) {
+      const e = R.bulge(k, v, s)
+      out.x += SN[k][0] * e
+      out.z += SN[k][2] * e
+    }
+    return out
+  }
+  const normal = (k, s, v, out = new THREE.Vector3()) => {
+    const e = 1e-3
+    const v0 = Math.max(0, v - e), v1 = Math.min(1, v + e), s0 = Math.max(0, s - e), s1 = Math.min(1, s + e)
+    const dv = point(k, s, v1).sub(point(k, s, v0))
+    const ds = point(k, s1, v).sub(point(k, s0, v))
+    if (ds.lengthSq() < 1e-12) ds.set(ST[k][0], 0, ST[k][2]) // triangle apex
+    return out.crossVectors(ds, dv).normalize()
+  }
+  return { A: R.A, B: R.B, rh: R.rh, rise: R.rise, y0: R.y0, top: R.top, level: R.level, arc: R.arc, point, normal }
 }
 
 /** Panel sizes for the four slopes (mm), before building. */
@@ -181,7 +286,7 @@ export function hippedLid(o) {
       out[2] = ramp((half - Math.abs(x)) * kap, fade)
     }
   }
-  loft(g, level, { material, part, name: 'lid-roof', segV: roofSegV, faces: o.faces, map, density })
+  loft(g, level, { material, part, name: 'lid-roof', segV: roofSegV, faces: o.faces, map, density, bulge: R.bulge })
   // fascia, soffit, skirt
   if ((sk.fascia ?? 0) > 0) loft(g, (v) => lev(A, B, lerp(hs, fy, v)), { material, part, name: 'lid-fascia', segV: 1 })
   if (ov > 0) loft(g, (v) => lev(lerp(as, A, v), lerp(bs, B, v), hs), { material, part, name: 'lid-soffit', segV: 1 })
@@ -194,11 +299,17 @@ export function hippedLid(o) {
   if (yi > 0) loft(g, (v) => lev(ai, bi, lerp(yi, 0, v)), { material: interiorMaterial, part, name: 'lid-inner-skirt', segV: 1 })
   const topI = R.top - t * 1.6
   const rhi = Math.max(0, rh - t)
-  loft(g, (v) => {
-    const w = 1 - v
-    const c = o.concave ?? 0
-    return lev(lerp(ai, rhi, w), lerp(bi, 0, w), yi + (topI - yi) * ((1 - c) * w + c * w * w))
-  }, { material: interiorMaterial, part, name: 'lid-underside', segV: 8 })
+  const Su = R.section
+  loft(g, Su
+    ? (v) => {
+        const w = 1 - v, h = Su.H(w)
+        return lev(lerp(ai, rhi, h), lerp(bi, 0, h), yi + (topI - yi) * Su.Y(w))
+      }
+    : (v) => {
+        const w = 1 - v
+        const c = o.concave ?? 0
+        return lev(lerp(ai, rhi, w), lerp(bi, 0, w), yi + (topI - yi) * ((1 - c) * w + c * w * w))
+      }, { material: interiorMaterial, part, name: 'lid-underside', segV: Su ? 16 : 8 })
   // seat lip
   if (o.seat) {
     const sd = o.seat.depth ?? 8
@@ -212,7 +323,7 @@ export function hippedLid(o) {
   void segU
 
   // anchors for flanges (hips, slope midlines, ridge) — polylines on the outer roof
-  const P = (k, s, v) => rectPoint(k, level(v), s, new THREE.Vector3())
+  const P = R.bulge ? (k, s, v) => hippedRoof(o).point(k, s, v) : (k, s, v) => rectPoint(k, level(v), s, new THREE.Vector3())
   const hips = []
   const midlines = {}
   for (let k = 0; k < 4; k++) {
@@ -266,7 +377,7 @@ export function roofKnob(o) {
     const l = R.level(v)
     return { a: l.a, b: l.b, y: l.y + yb }
   }
-  loft(g, lv, { material, part, name: 'knob-roof', segV: 10, faces: o.faces })
+  loft(g, lv, { material, part, name: 'knob-roof', segV: R.section ? 16 : 10, faces: o.faces, bulge: R.bulge })
   if (sk.height > 0) {
     const ov = sk.overhang ?? 0
     loft(g, (v) => ({ a: R.A - ov, b: R.B - ov, y: yb + v * sk.height }), { material, part, name: 'knob-skirt', segV: 1 })

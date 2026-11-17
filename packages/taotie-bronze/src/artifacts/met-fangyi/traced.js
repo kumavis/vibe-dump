@@ -18,6 +18,7 @@
 // A pillow: { kind: 'pillow', c, w, h, round, height, crown, slit }
 
 import { carveSpirals } from './relief.js'
+import FOOT_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-foot.plates.json'
 
 export const L1 = 1.4 // plateau height above the ground, mm (dossier 1.2 ± 0.3)
 
@@ -168,7 +169,7 @@ export const FRIEZE_LONG = [
  * spiral, the eye, the upper jaw bar running to the flange (its outer end hooked down), a small crest,
  * the lower jaw block and a short band under the eye. Read from .work/r5-met-fangyi/grid/ft{L,R}.png.
  */
-export const FOOT_LONG = [
+export const FOOT_LONG_R5 = [
   {
     kind: 'poly', name: 'tail-body',
     pts: [[18.0, 11.6], [45.5, 11.6], [45.5, 17.6], [29.0, 17.6], [29.0, 20.2], [32.0, 20.2], [32.0, 28.6], [18.0, 28.6]],
@@ -210,6 +211,74 @@ export const FOOT_LONG = [
   },
 ]
 
+// ------------------------------------------------------------------ round 6: TRACED PLATES (tools/trace.py → kit.tracedPlates)
+
+/**
+ * A plates layer: the bronze's raised plates as OUTLINES (reference/met-fangyi/faces/<face>.plates.json, face mm,
+ * both halves), raised by kit.tracedPlates (shoulder, contour line), then the line work the photograph shows
+ * cut into them by hand: `deco` = { spirals: [[x, y, Ø, hand]], lines: [[[x, y]…]], pockets: [{ pts, round, depth }] }
+ * in face mm, read off the RIGHT half (the sharper one) and mirrored about `axis` into the left half, which is the
+ * half renderTraced keeps (panel.mirrorX copies it over the right). `groups`: [{ box: [x0, y0, x1, y1] (right-half
+ * face mm, mirrored too), …tracedPlates opts }] — a plate whose centroid falls in a box is raised with that
+ * group's options (the bottle horn: pillowed, higher); the rest with `opts`.
+ */
+const mirrorDeco = (deco, axis) => {
+  const m = ([x, y]) => [2 * axis - x, y]
+  return {
+    spirals: (deco.spirals || []).flatMap(([x, y, d, h = 1, a0]) => [[x, y, d, h, a0], [2 * axis - x, y, d, -h, a0 == null ? undefined : 180 - a0]]),
+    lines: (deco.lines || []).flatMap((l) => [l, l.map(m)]),
+    pockets: (deco.pockets || []).flatMap((k) => [k, { ...k, pts: k.pts.map(m).reverse(), round: Array.isArray(k.round) ? [...k.round].reverse() : k.round }]),
+  }
+}
+function centroid(poly) {
+  let x = 0, y = 0
+  for (const p of poly) { x += p[0]; y += p[1] }
+  return [x / poly.length, y / poly.length]
+}
+const inBox = ([x, y], [x0, y0, x1, y1]) => x >= x0 && x <= x1 && y >= y0 && y <= y1
+
+/**
+ * Foot register, long face — face-long-foot.jpg mm (vessel y = fy − 2), traced by element in
+ * face-long-foot.trace.json: ONE kui per half, head at the notch. (1) the upper jaw: a snout band carrying a
+ * spiral row, rounded at the notch end into the lower lip, which runs back under it, drops beside the eye as
+ * a limb and turns into the hooked lower jaw with its ring-spiral lobe; (2) the bottle horn behind and above
+ * the eye (bulb, neck, flared cap outward); (3) the body band with its spiral chain, from behind the eye to
+ * the outer column; (4) the coil: a three-ridged band up the outer column, along the top and down round a
+ * sunk spiral; (5) the lower limb's hooked claw; (6) the leg dropping from the belly; (7) a small lip curl.
+ * The eye is a rounded-square boss with a small sunk pupil.
+ */
+export const FOOT_HEIGHT = 2.6 // plate tops above the ground (detail-foot-long: ≈ 2.5–3 mm walls at 9° elevation)
+export const FOOT_LONG = [
+  {
+    kind: 'plates', name: 'foot', data: FOOT_LONG_PLATES, axis: 76,
+    opts: { height: FOOT_HEIGHT, shoulder: 0.8, contour: { inset: 1.15, line: 0.5 }, depth: 0.45 },
+    groups: [{ box: [104, 18.5, 115, 28.5], height: 3.2, shoulder: 1.6, pillow: 0.6, pillowWidth: 2.4, contour: false }],
+    deco: {
+      spirals: [
+        [86.9, 24.2, 3.3, 1], [90.7, 24.2, 3.3, 1], [94.1, 24.2, 3.0, 1], // snout row
+        [101.6, 12.4, 3.6, -1], // jaw lobe
+        [107.2, 15.4, 3.9, 1], [112.1, 15.3, 3.9, -1], [125.7, 15.2, 3.9, 1], [130.4, 15.3, 3.6, -1], // body chain
+        [107.4, 11.0, 2.9, 1], // leg
+        [126.2, 21.9, 3.2, -1], // the coil's sunk eye
+        [106.4, 24.1, 2.6, 1], // horn bulb
+        [93.2, 28.5, 2.2, 1], // lip curl
+      ],
+      lines: [
+        [[96.6, 25.2], [102.0, 25.2]], [[96.6, 23.7], [102.4, 23.7]], // snout: parallel ridges toward the horn
+        [[93.0, 14.4], [97.2, 14.4], [97.2, 11.6], [94.6, 11.6]], [[92.9, 10.2], [99.6, 10.2]], // the lower jaw's hook
+        [[105.2, 17.6], [129.6, 17.6], [129.6, 24.6], [123.4, 24.6]], // the body's top ridge, turning up into the coil's inner turn
+        [[132.2, 13.6], [132.2, 27.2], [122.4, 27.2], [122.4, 20.2]], // the coil's middle ridge
+        [[115.6, 14.4], [120.4, 14.4]], // the claw's arm
+        [[108.4, 23.0], [110.2, 23.9], [108.6, 25.0]], [[111.6, 20.6], [111.6, 26.6]], // horn: the beak-like nick, the cap's rim
+      ],
+      pockets: [{ pts: [[123.6, 20.0], [129.0, 20.0], [129.0, 24.0], [123.6, 24.0]], round: [1.6, 1.4, 1.4, 1.8], depth: 0.6 }],
+    },
+    // the eye (right-half face mm, mirrored): rounded-square boss, a small sunk pupil low toward the snout
+    pillows: [{ c: [101.0, 18.25], w: 5.6, h: 5.9, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.2, width: 0.9, depth: 0.6, offset: [-0.4, -0.5], rot: 60 } }],
+    refit: (fits, o) => refit(FOOT_LONG_R5, fits, o), // the end face keeps round 5 until it is traced
+  },
+]
+
 // ------------------------------------------------------------------ the end face (face-end.jpg)
 
 /**
@@ -244,7 +313,9 @@ export const END_HORN = {
 
 /** Re-fit traced specs element by element: fits[name] = [fromBox, toBox]; others go through `rest` (pt → pt). */
 export function refit(specs, fits, { rest = (p) => p, pillow = null } = {}) {
-  return specs.map((s) => {
+  return specs.flatMap((s) => {
+    // a traced-plates layer is face-specific: it says what replaces it on another face (default: itself)
+    if (s.kind === 'plates') return s.refit ? s.refit(fits, { rest, pillow }) : [s]
     if (s.kind === 'pillow') return pillow ? { ...s, ...pillow } : { ...s, c: rest(s.c) }
     const f = fits[s.name]
     let M = rest, k = 1
@@ -413,8 +484,10 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
   const els = []
   const hand = [] // { clip, pts[] }
   const pillows = []
+  const plateLayers = []
   for (const { specs, P, ws = 1, ds = 1 } of layers) {
     for (const s of specs) {
+      if (s.kind === 'plates') { plateLayers.push({ s, P, ds }); continue }
       if (s.kind === 'pillow') {
         const c = P(s.c), e = P([s.c[0] + s.w / 2, s.c[1]])
         pillows.push({ ...s, c, w: 2 * Math.abs(e[0] - c[0]) })
@@ -436,8 +509,38 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
     }
   }
   if (els.length) kit.carve(panel, els, { height: L1, shoulder: 0.55, depth: 0.42, seed, irregularity: 0.8, contour: { inset: 0.8, line: 0.5 } })
-  // stepped pockets: the rolled curl of a G sits a step below its band (the shadowed edge on the photographs)
+  // traced plates (round 6): outlines → kit.tracedPlates, one call per group; hand line work clipped to the plates
   const pockets = []
+  for (const { s, P, ds } of plateLayers) {
+    const ax = s.axis ?? 0
+    const mbox = ([x0, y0, x1, y1]) => [2 * ax - x1, y0, 2 * ax - x0, y1]
+    const groups = (s.groups || []).map(({ box, ...o }) => ({ boxes: [box, mbox(box)], o, items: [] }))
+    const rest = []
+    const list = s.data.plates || []
+    for (const pl of list) {
+      const c = centroid(pl.outer)
+      const g = groups.find((q) => q.boxes.some((b) => inBox(c, b)))
+      ;(g ? g.items : rest).push(pl)
+    }
+    const base = { ...s.opts, map: P, bosses: [], ground: false, seed }
+    if (rest.length) kit.tracedPlates(panel, rest, base)
+    for (const g of groups) if (g.items.length) kit.tracedPlates(panel, g.items, { ...base, ...g.o })
+    const d = mirrorDeco(s.deco || {}, ax)
+    const g = []
+    for (const [x, y, dd, hd = 1, a0] of d.spirals) g.push(spiralPts(P([x, y]), dd * ds, hd, a0 ?? (hd > 0 ? 90 : 270)))
+    for (const l of d.lines) g.push(kit.shapes.fillet(l.map(P), 0.8, { step: 0.2 }))
+    if (g.length) hand.push({ clipLoops: list.flatMap((pl) => [pl.outer, ...(pl.holes || [])]).map((L) => L.map(P)), g })
+    for (const k of d.pockets) pockets.push({ pts: k.pts.map(P), round: k.round, depth: k.depth ?? 0.3 })
+    for (const pw of s.pillows || []) {
+      for (const sx of [1, -1]) {
+        const c0 = sx > 0 ? pw.c : [2 * ax - pw.c[0], pw.c[1]]
+        const c = P(c0), e = P([c0[0] + pw.w / 2, c0[1]])
+        const slit = pw.slit ? { ...pw.slit, offset: [sx * (pw.slit.offset?.[0] ?? 0), pw.slit.offset?.[1] ?? 0], rot: sx * (pw.slit.rot ?? 0) } : false
+        pillows.push({ ...pw, c, w: 2 * Math.abs(e[0] - c[0]), slit })
+      }
+    }
+  }
+  // stepped pockets: the rolled curl of a G sits a step below its band (the shadowed edge on the photographs)
   for (const { specs, P } of layers) for (const s of specs) for (const k of s.pockets || []) pockets.push({ pts: k.pts.map(P), round: k.round, depth: k.depth ?? 0.3 })
   if (pockets.length) {
     for (const k of pockets) {
@@ -449,15 +552,16 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
       ctx.lineWidth = LINE
-      for (const { clip, g } of hand) {
+      for (const { clip, clipLoops, g } of hand) {
         if (clip) { ctx.save(); ctx.beginPath(); pathPoly(ctx, clip, true); ctx.clip() }
+        else if (clipLoops) { ctx.save(); ctx.beginPath(); for (const L of clipLoops) pathPoly(ctx, L, true); ctx.clip('evenodd') }
         for (const pts of g) {
           if (pts.length < 2) continue
           ctx.beginPath()
           pathPoly(ctx, pts, false)
           ctx.stroke()
         }
-        if (clip) ctx.restore()
+        if (clip || clipLoops) ctx.restore()
       }
     }, { depth: 0.42, shoulder: LINE * 0.45, profile: 'u' })
   }
@@ -466,7 +570,7 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
   const packs = []
   for (let i = 0, k = 0; i < layers.length; i++) {
     for (const s of layers[i].specs) {
-      if (s.kind === 'pillow') continue
+      if (s.kind === 'pillow' || s.kind === 'plates') continue
       const el = els[k++]
       if (s.pack !== false) packs.push({ is: { pts: el.outline, r: 0, spirals: s.pack }, P: (q) => q })
     }
