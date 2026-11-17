@@ -253,7 +253,7 @@ export class RidgeWork {
       const out = []
       for (let ph = 0.25 / R0; ph <= sweep; ph += 0.3 / R0) {
         const r = kind === 'spiral' ? R0 - (n * pitch * ph) / TAU : R0
-        if (r < half + pitch * 0.7) break
+        if (kind === 'spiral' && r < half + pitch * 0.7) break // a hook keeps its radius; only a tightening spiral stops here
         out.push([c[0] + Math.cos(th0 + sg * ph) * r, c[1] + Math.sin(th0 + sg * ph) * r])
       }
       return out

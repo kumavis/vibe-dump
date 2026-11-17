@@ -14,22 +14,43 @@
 // clearly; the second (outer) kui of each half is seen only obliquely in photo-32 (on the neck) or not at all — it
 // REPEATS the first; the back face repeats the front.
 
+/**
+ * Roll the end of a centre line into a coil: from its last point, turning toward `dir` (+1 = left of travel), radius R0
+ * shrinking `shrink` mm per turn (band width + gap keeps the turns apart), through `sweep` degrees. → the extended path.
+ */
+export function curlPath(pts, { R = 4.5, sweep = 270, dir = 1, shrink = 5.6, step = 0.5 } = {}) {
+  const E = pts[pts.length - 1], F = pts[pts.length - 2]
+  const l = Math.hypot(E[0] - F[0], E[1] - F[1]) || 1
+  const d = [(E[0] - F[0]) / l, (E[1] - F[1]) / l], nl = [-d[1] * dir, d[0] * dir]
+  const c = [E[0] + nl[0] * R, E[1] + nl[1] * R]
+  const th0 = Math.atan2(E[1] - c[1], E[0] - c[0])
+  const out = pts.slice()
+  const sw = (sweep * Math.PI) / 180
+  for (let ph = step / R; ph <= sw; ph += step / Math.max(1, R)) {
+    const r = R - (shrink * ph) / (2 * Math.PI)
+    if (r < 0.6) break
+    out.push([c[0] + Math.cos(th0 + dir * ph) * r, c[1] + Math.sin(th0 + dir * ph) * r])
+  }
+  return out
+}
+
 /** one kui in its canonical 62 × 26 mm frame: head at u = 0 facing −u, v = 0 at the frieze bottom */
 export function kuiUnit(kit, map, ky = 1, o = {}) {
   const M = (pts) => pts.map(map)
-  const S = (pts, w, opt = {}) => kit.roundStroke(M(pts), { width: Array.isArray(w) ? w.map((v) => v * ky) : w * ky, round: 0.8, inner: 0.35, start: 'flat', ...opt })
-  const tailR = o.tailR ?? 2.8
+  const S = (pts, w, opt = {}) => kit.roundStroke(M(pts), { width: Array.isArray(w) ? w.map((v) => v * ky) : w * ky, round: 0.8, inner: 0.35, start: 'flat', end: 'round', ...opt })
+  const C = (pts, curl, w) => curlPath(pts, { shrink: w + 1.5, ...curl }) // a coiled end (design frame)
+  const tailR = o.tailR ?? 5.3
   return {
     plates: [
-      { outer: kit.roundPoly(M([[0.6, 6.4], [13.6, 6.4], [13.6, 22.9], [0.6, 22.9]]), { round: [2.6, 2, 3.6, 3] }) }, // head
-      { outer: S([[3.4, 7.4], [3.4, 2.7], [11, 2.7]], 3.8, { end: 'spiral', spiral: { turns: 0.7, dir: 1, R: 1.5 } }) }, // jaw
-      { outer: S([[12.5, 21.4], [36.5, 21.4], [36.5, 14.3], [27, 14.3]], 4.4, { end: 'spiral', spiral: { turns: 0.8, dir: -1, R: 2.1 } }) }, // crest
-      { outer: S([[13, 9.9], [46, 9.9], [54.5, 11.4], [57.5, 16.8]], [5.2, 5.2, 4.8, 4.4], { end: 'spiral', spiral: { turns: 1, dir: 1, R: tailR, taper: 0.75 } }) }, // body → tail
-      { outer: S([[22, 8], [22, 2.9], [28.5, 2.9]], 3.5, { end: 'spiral', spiral: { turns: 0.6, dir: 1, R: 1.3 } }) }, // quill
-      { outer: S([[37, 8], [37, 2.9], [43.5, 2.9]], 3.5, { end: 'spiral', spiral: { turns: 0.6, dir: 1, R: 1.3 } }) }, // quill
-      { outer: S([[41.5, 21.4], [52, 21.4], [52, 16]], 3.9, { end: 'spiral', spiral: { turns: 0.6, dir: -1, R: 1.5 } }) }, // dorsal fin
+      { outer: kit.roundPoly(M([[0.4, 6.2], [13.8, 6.2], [13.8, 25.2], [0.4, 25.2]]), { round: [2.4, 2, 3.8, 3.4] }) }, // tall squared head
+      { outer: S(C([[10.4, 6.8], [10.4, 3.0], [5.6, 3.0]], { R: 1.9, sweep: 170, dir: -1 }, 4.2), 4.2) }, // jaw: down and forward, rolled up
+      { outer: S(C([[13.2, 15.6], [25.5, 15.6]], { R: 3.8, sweep: 300, dir: 1 }, 5), 5) }, // crest: back from the head, rolled up and over
+      { outer: S(C([[13.2, 8.8], [43.5, 8.8]], { R: tailR, sweep: 300, dir: 1 }, 5.8), 5.8) }, // body → tail rolled up and over (the G)
+      { outer: S(C([[44.5, 21.6], [55.5, 22.3]], { R: 2.2, sweep: 170, dir: -1 }, 4), 4) }, // dorsal quill off the tail, hooked down
+      { outer: S(C([[30.5, 6], [30.5, 2.7], [18, 2.7]], { R: 1.7, sweep: 170, dir: -1 }, 4), 4) }, // leg, hooked up at its front
+      { outer: S([[47.5, 6.4], [47.5, 2.7], [58.5, 2.7]], 4) }, // claw under the tail
     ],
-    eyes: [{ c: map([7.1, 15.2]), d: 5.6 * ky }],
+    eyes: [{ c: map([6.9, 16.2]), w: 7.2 * ky, h: 5.8 * ky }],
   }
 }
 
@@ -57,13 +78,12 @@ export function drawFrieze(kit, panel, size, spec, { seed = 0 } = {}) {
   for (const [y0, y1] of spec.borders || []) panel.raise((ctx) => ctx.fillRect(0, y0, W, y1 - y0), { height: 1.0, shoulder: (y1 - y0) * 0.45, profile: 'plateau' })
   for (const c of spec.cords || []) kit.plainCord(panel, { x0: 0, x1: W, y: c.y, width: c.width ?? 1.8, height: c.height ?? 1.0 })
   kit.tracedPlates(panel, plates, {
-    union: true, height: spec.height ?? 2.0, shoulder: 1.0, pillow: 0.3, pillowWidth: 2.2,
-    contour: { inset: 0.95, line: 0.62 }, depth: 0.45, seed,
+    union: true, height: spec.height ?? 2.2, shoulder: 1.15, pillow: 0.35, pillowWidth: 2.4,
+    contour: { inset: 1.05, line: 0.72 }, depth: 0.5, seed,
   })
-  for (const e of eyes) {
-    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(e.c[0], e.c[1], e.d / 2 + 0.75, 0, Math.PI * 2); ctx.fill() }, { depth: 0.9, shoulder: 0.4, profile: 'u' })
-    kit.pillowBoss(panel, { c: e.c, w: e.d, h: e.d, round: 1, height: 2.6, crown: 0.7, slit: false, ring: false })
-    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(e.c[0], e.c[1], e.d * 0.2, 0, Math.PI * 2); ctx.fill() }, { depth: 1.4, shoulder: 0.4, profile: 'u' })
+  for (const e of eyes) { // the kui eye: a rounded-oblong boss in a sunk socket, a slit pupil (photo: neck, foot)
+    panel.sink((ctx) => { ctx.beginPath(); ctx.ellipse(e.c[0], e.c[1], e.w / 2 + 0.8, e.h / 2 + 0.8, 0, 0, Math.PI * 2); ctx.fill() }, { depth: 0.9, shoulder: 0.4, profile: 'u' })
+    kit.pillowBoss(panel, { c: e.c, w: e.w, h: e.h, round: 0.55, height: 2.5, crown: 0.75, slit: { len: e.w * 0.5, width: 0.8, depth: 0.7 }, ring: false })
   }
   const inside = (ctx) => {
     ctx.beginPath()
@@ -78,6 +98,6 @@ export function drawFrieze(kit, panel, size, spec, { seed = 0 } = {}) {
 }
 
 // the three friezes (right half; panel x from the centre line)
-export const NECK_FRIEZE = { band: [8.6, 33.9], borders: [[7.2, 8.5], [34, 35.2]], cords: [{ y: 2.6, width: 1.7 }, { y: 5.2, width: 1.7 }], units: [[15, 78], [81, 143.5]] }
-export const SKIRT_FRIEZE = { band: [2.3, 24.9], borders: [[0.9, 2.2], [25, 26.3]], units: [[14.5, 81], [84, 148]], tailR: 3.6, height: 1.9 }
-export const FOOT_FRIEZE = { band: [2.4, 23.8], borders: [[0.9, 2.3], [23.9, 25.3]], units: [[4.5, 67], [69.5, 129.5]], height: 1.8, ground: { pitch: 1.0, width: 0.65, height: 0.48 } }
+export const NECK_FRIEZE = { band: [8.6, 33.9], borders: [[7.2, 8.5], [34, 35.2]], cords: [{ y: 2.6, width: 1.7 }, { y: 5.2, width: 1.7 }], units: [[21.5, 82], [84, 144.5]] }
+export const SKIRT_FRIEZE = { band: [2.3, 24.9], borders: [[0.9, 2.2], [25, 26.3]], units: [[14.5, 81], [84, 148]], tailR: 5.3, height: 2.1 }
+export const FOOT_FRIEZE = { band: [2.4, 23.8], borders: [[0.9, 2.3], [23.9, 25.3]], units: [[4.5, 67], [69.5, 129.5]], height: 2.0, ground: { pitch: 1.0, width: 0.65, height: 0.48 } }
