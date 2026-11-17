@@ -175,3 +175,17 @@ hairline: band ≈ 2.3–2.8 mm (≈ 8–10 px), groove ≈ 0.4–0.5 mm (≈ 1.
 (dark like the cast shadows: ≈ 0.3 mm assumed). The groove follows each band round its corners and through the joins,
 stops short of the knobbed heads; a few heads show a dark centre (an eye dot) [est]. The same on the shoulder rows and
 the belly rows; the cords and ropes are not split. Modelled with `kit.panchiBand(… median)` (KIT.md § Panchi).
+
+### Belly interlace unit, re-read (hu-fix round 2) [good for repeat and scale, est for the drawing inside a frame]
+
+The belly does NOT carry the shoulder's unit. Developed onto the belly at 8 px/mm (`.work/hu-fix/dev/body8-raw.png`) its
+2D autocorrelation repeats every **47.2 mm** along a row (no half-block peak); rows are **17.9 mm**, and the next row
+matches best ≈ 3.4 mm to the right, not mirrored — a STRAIGHT repeat, each row stamped at its own phase. One block holds
+**three frames of ≈ 15.7 mm, each the full row height**: a squared C with a nested C and a tongue ending in a swollen
+comma head; a ∩ with a nested U hanging from its top bar, its right leg ending in a head; a U with an inner ∩ hook
+rising from its bottom bar, the bottom bar running on into the next block. The top and bottom bars run on from frame to
+frame ≈ 2 mm inside the row borders, so the rows nearly touch; frames share their verticals across ≈ 0.6 mm channels;
+bands ≈ 2.6–3 mm, split by the median line; pellets at bar joints and between rows. Drawing:
+`.work/hu-fix/unit-body.png`; data `panchi-units.json` (`belly`); per-row phases fitted on rows 1–5 of the photograph.
+The SHOULDER keeps the r8 unit (`kit.PANCHI_UNITS['nezu-hu']`, drawing `.work/hu-fix/unit-shoulder.png`): it fits the
+shoulder rows better than the belly's unit does (band-mask correlation .10 / .08 / .11 against .07 / .03 / −.04).

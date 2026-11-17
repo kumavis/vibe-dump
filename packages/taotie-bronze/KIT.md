@@ -540,7 +540,8 @@ raise for all ribs + ONE for the knobs; the hu's 535 × 180 mm body band at 5 px
 depth 0.3, inset 0.5, profile 'v' | 'u', eye: { r 0.35 } | false }` cuts a fine groove down the centre line of every
 rib, so each band reads as a double line (the Nezu hu: band ≈ 2.4–2.8 mm, groove ≈ 0.45 mm). It follows each rib's own
 (filleted, wobbled) path, runs on through flat ends and joins, stops `inset` mm short of rounded ends and `knob + inset`
-short of knobs, and stays out of the pellets (beads); `eye` sinks a dot of the same depth in every knob. ONE extra sink
+short of knobs, and stays out of the pellets (beads); `eye` sinks a dot of the same depth in every knob that does not
+lie on another band (a head tucked against a frame would otherwise pit that band). ONE extra sink
 for the whole band (≈ +0.3 s on the hu's body band). Resolution: keep the groove ≥ ≈ 1.5 px — 0.45 mm is 2.3 px at
 5 px/mm and 1.6 px on a 2048-capped phone panel; under that, widen it or leave it out. The geometry is displaced by the
 low-passed field, so the line lives in the normal map and the cavity / groove channels only.

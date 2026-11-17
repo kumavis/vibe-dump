@@ -122,8 +122,10 @@ export function renderRidge(kit, panel, layers, { fields, G, ground = {}, prof =
     }
   }
   const cuts = outs.flatMap(({ cuts, M }) => cuts.map((k) => ({ ...k, pts: k.pts.map(M) })))
-  for (const k of cuts) {
-    panel.sink((ctx) => { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = k.line; ctx.beginPath(); k.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }, { depth: k.depth, shoulder: k.line * 0.45, profile: 'u' })
+  const byCut = new Map() // one sink per line width and depth
+  for (const k of cuts) { const key = `${k.line}|${k.depth}`; if (!byCut.has(key)) byCut.set(key, []); byCut.get(key).push(k) }
+  for (const g of byCut.values()) {
+    panel.sink((ctx) => { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = g[0].line; for (const k of g) { ctx.beginPath(); k.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() } }, { depth: g[0].depth, shoulder: g[0].line * 0.45, profile: 'u' })
   }
   // 4. the ground: squared leiwen packed into what is left of the left half (per layer: its own rect and cell sizes)
   const hr = halfRect ?? { x: 0, y: 0, w: W / 2, h: H }

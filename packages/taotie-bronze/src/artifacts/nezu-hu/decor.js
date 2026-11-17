@@ -1,4 +1,5 @@
-// Nezu hu — the décor panels. Both bands are rows of ONE stamped panchi unit (kit.panchiBand, unit 'nezu-hu',
+// Nezu hu — the décor panels. [hu-fix round 2: the BELLY now has its own unit, panchi-units.json `belly`; the text below
+// describes the shoulder.] Both bands are rows of ONE stamped panchi unit (kit.panchiBand, unit 'nezu-hu',
 // traced off photo-11 developed onto the shoulder: reference/nezu-hu/faces/dev-shoulder.jpg); the cords between
 // them are plain round cords and a twisted rope (kit.plainCord / kit.ropeCord). Panels are laid 1:1 ('true' map)
 // on two sectors centred on the front and the back (seams under the handles, ±90°); the pattern is periodic over
