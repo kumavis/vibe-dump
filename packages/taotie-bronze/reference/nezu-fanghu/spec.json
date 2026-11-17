@@ -1,0 +1,18 @@
+{
+  "note": "Nezu Museum square hu with phoenix design 鳳文方壺 (90097-98, one of a pair). NO published dimension: H = 500 mm is INFERRED (dossier §a.3); every ratio below is measured on the owner's photographs — photo-08 back-projected through an ASSUMED camera (az 4.4°, el 6°, 965 mm, f 3000 px; .work/r8-fanghu/solve/fit08.py), the plan depth from photo-09 (fit09.py). Axes: front (+Z) = the broad face of photo-08; handles on the narrow ±X sides. Parts: body (the four lofted sides, plate top to neck top), foot (the foot plate), lid (lip, domed band, crown), handles (2 heads), rings (2), studs (4 diamonds + 4 triangles).",
+  "dimensions": { "h": 500, "w": 254, "d": 140, "inferred": true },
+  "ratios": {
+    "bellyWidth":   { "expr": "parts.body.w / overall.h",     "expected": 0.507, "tol": 0.02 },
+    "plan":         { "expr": "parts.body.d / parts.body.w",  "expected": 0.55,  "tol": 0.04 },
+    "neckTop":      { "expr": "parts.body.max.1 / overall.h", "expected": 0.838, "tol": 0.015 },
+    "lidHeight":    { "expr": "parts.lid.h / overall.h",      "expected": 0.162, "tol": 0.015 },
+    "lidOverBody":  { "expr": "parts.lid.w / parts.body.w",   "expected": 0.64,  "tol": 0.03 },
+    "plateOverBody":{ "expr": "parts.foot.w / parts.body.w",  "expected": 0.93,  "tol": 0.03 },
+    "plateHeight":  { "expr": "parts.foot.h / overall.h",     "expected": 0.026, "tol": 0.01 },
+    "handleSpan":   { "expr": "parts.handles.w / overall.h",  "expected": 0.446, "tol": 0.025 },
+    "handleTop":    { "expr": "parts.handles.max.1 / overall.h", "expected": 0.728, "tol": 0.02 },
+    "ringBottom":   { "expr": "parts.rings.min.1 / overall.h", "expected": 0.512, "tol": 0.02 },
+    "ringSize":     { "expr": "parts.rings.h / overall.h",    "expected": 0.155, "tol": 0.02 },
+    "studCount":    { "expr": "parts.studs.count",            "expected": 1,     "tol": 0 }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "note": "Nezu Museum bo 蟠螭文鎛 (90120), Spring and Autumn period, 6th–5th c. BC. Proportions MEASURED on the owner's two photographs (photo-18 head-on, photo-19 ≈ 30° round) through two pinhole cameras fitted together with the section shape, the central panel's corners and 25 boss centres (dossier §b.1, 9.5 px rms); ABSOLUTE SIZE INFERRED (body height 450 mm, ±20 %; dossier §b.3). Expected values are the measurements, not read off the model. Part names: body (two broad faces of four half-face patches each pair, inner wall, mouth rim, top), bosses (36 coiled-serpent bosses, one group), crown (the openwork loop and dragons, one plate). See dossier.md.",
+  "dimensions": { "h": 563, "w": 353, "d": 325, "inferred": true },
+  "ratios": {
+    "widthOverHeight": { "expr": "overall.w / overall.h",   "expected": 0.632, "tol": 0.03 },
+    "bodyShare":       { "expr": "parts.body.h / overall.h",       "expected": 0.799, "tol": 0.02 },
+    "sectionRatio":    { "expr": "parts.body.d / parts.body.w", "expected": 0.92, "tol": 0.08 },
+    "crownWidth":      { "expr": "parts.crown.w / parts.body.w", "expected": 0.635, "tol": 0.04 },
+    "crownTop":        { "expr": "parts.crown.h / overall.h", "expected": 0.208, "tol": 0.02 },
+    "bossZoneLow":     { "expr": "parts.bosses.min.1 / overall.h", "expected": 0.302, "tol": 0.02, "note": "bo-fix: the bosses are ROUND domes (Ø 37 mm); the round-8 'drop' was the boss plus its own cast shadow under the top light. The bottom row's foot: body y 189 − 18.5 ≈ 170 of 563 (photo-18 face-bosses: the lit circle closes ≈ 19 mm under the centre)" }
+  }
+}

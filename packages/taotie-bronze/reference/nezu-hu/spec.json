@@ -1,0 +1,12 @@
+{
+  "note": "Nezu Museum hu 蟠螭文壺 (90099), Spring and Autumn, 7th–6th c. BC. Proportions MEASURED on the owner's single photograph (photo-11) through a camera fitted to its outline (rim far edge, base near edge, neck / belly / foot-ring silhouette rings: ≈ 5 px rms; the fit runs to an almost orthographic camera 7.8° above the rim). ABSOLUTE SIZE INFERRED (1 fitted unit = 1.2 mm, ±20 %, dossier §b.2). Expected values are the measurements (dossier §b), not read off the model. Part names: body (foot + belly + shoulder + neck + lip, one lathe), handles (two sculpted feline dragons at ±90°). See dossier.md.",
+  "dimensions": { "h": 448.3, "w": 340.8, "d": 340.8, "inferred": true },
+  "ratios": {
+    "bellyWidth":    { "expr": "overall.w / overall.h",         "expected": 0.760, "tol": 0.025 },
+    "bodyWidth":     { "expr": "parts.body.w / parts.body.h",   "expected": 0.760, "tol": 0.025 },
+    "handleSpan":    { "expr": "parts.handles.w / overall.h",   "expected": 0.674, "tol": 0.03 },
+    "handleTop":     { "expr": "parts.handles.max.1 / overall.h", "expected": 0.754, "tol": 0.02 },
+    "handleFoot":    { "expr": "parts.handles.min.1 / overall.h", "expected": 0.546, "tol": 0.02, "note": "r8 fix: re-read on photo-11 (5 mm handle-plane grid): the squared tail loop runs down to y ≈ 245 mm on the shoulder, not 252" },
+    "handleCount":   { "expr": "parts.handles.count",           "expected": 2, "tol": 0 }
+  }
+}

@@ -1,0 +1,297 @@
+{
+ "note": "face-shoulder (photo-37, seen ≈ 10° from above, the head hides x 105–160). Round 2: drawn BY BAND on the RIGHT half, mirrored. The kui: (a) its crest, ONE band along the top whose two ends drop into solid curl blocks (a sunk coil cut in each: the top fill); (b) the body band carrying the eye, running to the corner and running into the tail's curl block; (c) the big C jaw wrapped round its coil block; (d) small curls and a hook in the gaps.",
+ "field": {
+  "box": [
+   0,
+   1,
+   265,
+   47
+  ]
+ },
+ "mask": [
+  {
+   "box": [
+    104,
+    0,
+    161,
+    66.1
+   ]
+  },
+  {
+   "poly": [
+    [
+     244,
+     66.1
+    ],
+    [
+     265,
+     66.1
+    ],
+    [
+     265,
+     0
+    ],
+    [
+     262,
+     0
+    ]
+   ]
+  },
+  {
+   "poly": [
+    [
+     21,
+     66.1
+    ],
+    [
+     0,
+     66.1
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     3,
+     0
+    ]
+   ]
+  }
+ ],
+ "symmetry": {
+  "axis": 132.5,
+  "keep": "right"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    265,
+    66.1
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "band": [
+    [
+     172,
+     42.5
+    ],
+    [
+     201,
+     42.5
+    ]
+   ],
+   "width": 5.4,
+   "label": "(a) crest band"
+  },
+  {
+   "poly": [
+    [
+     169.5,
+     29.5
+    ],
+    [
+     183.5,
+     29.5
+    ],
+    [
+     183.5,
+     41.5
+    ],
+    [
+     169.5,
+     41.5
+    ]
+   ],
+   "round": 4.5,
+   "snap": 0.7,
+   "label": "(a) its left curl block"
+  },
+  {
+   "poly": [
+    [
+     188.5,
+     29.8
+    ],
+    [
+     202.5,
+     29.8
+    ],
+    [
+     202.5,
+     41.5
+    ],
+    [
+     188.5,
+     41.5
+    ]
+   ],
+   "round": 4.5,
+   "snap": 0.7,
+   "label": "(a) its right curl block"
+  },
+  {
+   "band": [
+    [
+     166.5,
+     23.8
+    ],
+    [
+     200,
+     23.8
+    ],
+    [
+     222,
+     24
+    ],
+    [
+     231,
+     24.6
+    ]
+   ],
+   "width": [
+    8,
+    8.6,
+    8.4,
+    7.6
+   ],
+   "label": "(b) body"
+  },
+  {
+   "poly": [
+    [
+     229,
+     25.6
+    ],
+    [
+     242,
+     25.6
+    ],
+    [
+     242,
+     38.6
+    ],
+    [
+     229,
+     38.6
+    ]
+   ],
+   "round": 4.5,
+   "snap": 0.7,
+   "label": "(b) tail curl block"
+  },
+  {
+   "band": [
+    [
+     190.5,
+     15.9
+    ],
+    [
+     171.4,
+     15.9
+    ],
+    [
+     171.4,
+     4
+    ]
+   ],
+   "width": [
+    3.6,
+    3.8,
+    3.8
+   ],
+   "bend": 0.9,
+   "label": "(c) jaw C"
+  },
+  {
+   "poly": [
+    [
+     174.5,
+     3
+    ],
+    [
+     189.5,
+     3
+    ],
+    [
+     189.5,
+     13.3
+    ],
+    [
+     174.5,
+     13.3
+    ]
+   ],
+   "round": 4.5,
+   "snap": 0.7,
+   "label": "(c) its coil block"
+  },
+  {
+   "poly": [
+    [
+     160,
+     5.5
+    ],
+    [
+     168.6,
+     5.5
+    ],
+    [
+     168.6,
+     13.5
+    ],
+    [
+     160,
+     13.5
+    ]
+   ],
+   "round": 3,
+   "snap": 0.8,
+   "label": "(d) curl by the head"
+  },
+  {
+   "circle": [
+    206.4,
+    7.4,
+    3.8
+   ],
+   "label": "(d) lower curl"
+  },
+  {
+   "band": [
+    [
+     239.5,
+     11
+    ],
+    [
+     250,
+     11
+    ]
+   ],
+   "width": 5,
+   "label": "(d) hook"
+  }
+ ],
+ "bosses": [
+  {
+   "c": [
+    182,
+    23.6
+   ],
+   "r": 2.7,
+   "snap": true
+  },
+  {
+   "c": [
+    194.1,
+    16.6
+   ],
+   "r": 2.3,
+   "snap": true
+  }
+ ]
+}

@@ -1,0 +1,330 @@
+{
+ "note": "face-lid (photo-37, the long slope ≈ 35° off its normal). Round 10: redrawn BAND BY BAND from a local-contrast-enhanced grid of the flattened photograph (.work/lei-mid/gridface.py), RIGHT half, mirrored: the bold upright mask — a fat U horn open upward over the pillow eye with its slit, the long brow, the big G (fat C open to the centre, hooked end) with a spiral block inside, the hook column beside the centre flange, two long bodies running down along the hip, three bosses. The ridge ends and the hip strips are hidden by the hip flanges.",
+ "field": {
+  "poly": [
+   [
+    6,
+    2
+   ],
+   [
+    174,
+    2
+   ],
+   [
+    143,
+    94
+   ],
+   [
+    37,
+    94
+   ]
+  ]
+ },
+ "mask": [
+  {
+   "box": [
+    87,
+    0,
+    93,
+    98.2
+   ]
+  }
+ ],
+ "symmetry": {
+  "axis": 90,
+  "keep": "right"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    180,
+    98.2
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "poly": [
+    [
+     103,
+     46
+    ],
+    [
+     125.5,
+     46
+    ],
+    [
+     125.5,
+     58.2
+    ],
+    [
+     103,
+     58.2
+    ]
+   ],
+   "round": 5.5,
+   "snap": 0.8,
+   "label": "eye plate"
+  },
+  {
+   "poly": [
+    [
+     110.5,
+     51.3
+    ],
+    [
+     117.5,
+     51.3
+    ],
+    [
+     117.5,
+     53.5
+    ],
+    [
+     110.5,
+     53.5
+    ]
+   ],
+   "round": 1,
+   "cut": true,
+   "label": "its slit"
+  },
+  {
+   "band": [
+    [
+     105.5,
+     80.5
+    ],
+    [
+     105.5,
+     66
+    ],
+    [
+     109.5,
+     63.3
+    ],
+    [
+     120.5,
+     63.3
+    ],
+    [
+     123.8,
+     66
+    ],
+    [
+     123.8,
+     73.5
+    ]
+   ],
+   "width": [
+    5.2,
+    5.6,
+    5.6,
+    5.6,
+    5.4,
+    5
+   ],
+   "bend": 0.8,
+   "end": "round",
+   "label": "U horn, open upward"
+  },
+  {
+   "band": [
+    [
+     98,
+     42.4
+    ],
+    [
+     151,
+     42.4
+    ]
+   ],
+   "width": 3.6,
+   "bend": 0.5,
+   "end": "round",
+   "label": "brow"
+  },
+  {
+   "band": [
+    [
+     100.5,
+     33.8
+    ],
+    [
+     129.5,
+     33.8
+    ],
+    [
+     129.5,
+     15.2
+    ],
+    [
+     108,
+     15.2
+    ],
+    [
+     108,
+     22.5
+    ]
+   ],
+   "width": [
+    6.0,
+    6.8,
+    7.2,
+    8.2,
+    6.0
+   ],
+   "bend": 0.75,
+   "end": {
+    "coil": {
+     "turns": 0.75,
+     "R": 2.3,
+     "dir": -1,
+     "gap": 0.9
+    }
+   },
+   "label": "the big G"
+  },
+  {
+   "poly": [
+    [
+     112,
+     19
+    ],
+    [
+     124.5,
+     19
+    ],
+    [
+     124.5,
+     29.8
+    ],
+    [
+     112,
+     29.8
+    ]
+   ],
+   "round": 3.5,
+   "snap": 0.6,
+   "label": "spiral block inside the G"
+  },
+  {
+   "band": [
+    [
+     96.5,
+     5
+    ],
+    [
+     96.5,
+     37
+    ]
+   ],
+   "width": 5.2,
+   "bend": 0.5,
+   "end": "round",
+   "label": "hook column beside the flange (lower)"
+  },
+  {
+   "band": [
+    [
+     96.5,
+     47
+    ],
+    [
+     96.5,
+     84
+    ]
+   ],
+   "width": 4.6,
+   "bend": 0.5,
+   "end": "round",
+   "label": "hook column beside the flange (upper)"
+  },
+  {
+   "band": [
+    [
+     131,
+     72
+    ],
+    [
+     137.5,
+     54
+    ],
+    [
+     145.5,
+     31
+    ],
+    [
+     151.5,
+     11
+    ]
+   ],
+   "width": [
+    4.6,
+    5.0,
+    5.0,
+    4.6
+   ],
+   "bend": 0.5,
+   "start": {
+    "coil": {
+     "turns": 0.9,
+     "R": 2.4,
+     "dir": 1,
+     "gap": 0.8
+    }
+   },
+   "end": "round",
+   "label": "body along the hip (inner)"
+  },
+  {
+   "band": [
+    [
+     149.5,
+     44
+    ],
+    [
+     155.5,
+     28
+    ],
+    [
+     160.5,
+     11
+    ]
+   ],
+   "width": 4.2,
+   "bend": 0.5,
+   "end": "round",
+   "label": "body along the hip (outer)"
+  }
+ ],
+ "bosses": [
+  {
+   "c": [
+    100.6,
+    72.7
+   ],
+   "r": 2.5,
+   "snap": true
+  },
+  {
+   "c": [
+    126.7,
+    57.6
+   ],
+   "r": 2.5,
+   "snap": true
+  },
+  {
+   "c": [
+    145.4,
+    48.2
+   ],
+   "r": 2.5,
+   "snap": true
+  }
+ ]
+}

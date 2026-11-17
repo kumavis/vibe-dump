@@ -1,0 +1,182 @@
+{
+ "vessel": "met-gui",
+ "blur": 0.6,
+ "note": "Flat faces of the Met gui (KIT.md \u00a7 Flat faces). The vessel is ROUND: each face is the plane seen down the photograph's own line of sight (normal tilted 4\u00b0 up, the camera's elevation fitted from the rim and foot ellipses, dossier \u00a7b.1), so the flattened photo is the photograph's orthographic projection, and the model is rendered down the same normal: both show the curved wall foreshortened identically. Points are landmarks on the rim, foot and centre line with their true 3D positions; perspective (camera \u2248 2 m) is the residual. Trust the centre third most (|x| < 50 mm); beyond |x| \u2248 65 mm the wall turns away (foreshortening > 2:1).",
+ "sources": {
+  "DP218261": {
+   "file": "front.jpg",
+   "original": "https://images.metmuseum.org/CRDImages/as/original/DP218261.jpg",
+   "size": [
+    4000,
+    3001
+   ],
+   "note": "face A head-on, camera \u2248 4\u00b0 above the rim centre"
+  }
+ },
+ "faces": {
+  "face-front": {
+   "label": "face A, whole vessel rim to ground (chord view down the camera axis)",
+   "source": "DP218261",
+   "center": [
+    0,
+    58.5,
+    60
+   ],
+   "normal": [
+    0,
+    0.0698,
+    0.9976
+   ],
+   "up": [
+    0,
+    0.9976,
+    -0.0698
+   ],
+   "width": 250,
+   "height": 126,
+   "ppmm": 6,
+   "points": [
+    [
+     1057.8,
+     1002.2,
+     -79.7,
+     116.4,
+     0
+    ],
+    [
+     2968.9,
+     1002.2,
+     79.7,
+     116.4,
+     0
+    ],
+    [
+     2011.1,
+     1051.1,
+     0,
+     116.6,
+     79.7
+    ],
+    [
+     1995.6,
+     2495.6,
+     0,
+     0,
+     60.5
+    ],
+    [
+     2011.1,
+     1435.6,
+     0,
+     85.5,
+     78.4
+    ],
+    [
+     2006.7,
+     2000.0,
+     0,
+     41.4,
+     70.3
+    ],
+    [
+     2000.0,
+     2055.6,
+     0,
+     37.0,
+     59.5
+    ],
+    [
+     1284.4,
+     2311.1,
+     -60.6,
+     10,
+     0
+    ],
+    [
+     2711.1,
+     2311.1,
+     60.6,
+     10,
+     0
+    ]
+   ],
+   "trust": "layout: good in the centre third, foreshortened toward the handles; the handles stand 40 mm off the wall and are projected, not flattened.",
+   "fit": "least-squares fit of the points: rms 0.86 mm, max 1.4 mm (tools/faces.mjs --rectify prints it)"
+  },
+  "face-mask": {
+   "label": "face A, main mask register (y 41\u201386)",
+   "source": "DP218261",
+   "points": "face-front",
+   "center": [
+    0,
+    63.5,
+    78
+   ],
+   "normal": [
+    0,
+    0.0698,
+    0.9976
+   ],
+   "up": [
+    0,
+    0.9976,
+    -0.0698
+   ],
+   "width": 150,
+   "height": 52,
+   "ppmm": 8,
+   "trust": "the tracing face: centre third \u00b11 mm; at |x| 60\u201375 the wall is at 40\u201370\u00b0 to the view, read it on the developed images instead (dossier \u00a7d).",
+   "fit": "least-squares fit of the points: rms 0.86 mm, max 1.4 mm (tools/faces.mjs --rectify prints it)"
+  },
+  "face-neck": {
+   "label": "face A, rising blades + dragon frieze with the frontal head (y 85\u2013112)",
+   "source": "DP218261",
+   "points": "face-front",
+   "center": [
+    0,
+    99,
+    76
+   ],
+   "normal": [
+    0,
+    0.0698,
+    0.9976
+   ],
+   "up": [
+    0,
+    0.9976,
+    -0.0698
+   ],
+   "width": 150,
+   "height": 30,
+   "ppmm": 8,
+   "trust": "as face-mask; the frontal head stands \u2248 5 mm proud and is projected.",
+   "fit": "least-squares fit of the points: rms 0.86 mm, max 1.4 mm (tools/faces.mjs --rectify prints it)"
+  },
+  "face-foot": {
+   "label": "face A, foot frieze and base ring (y 0\u201338)",
+   "source": "DP218261",
+   "points": "face-front",
+   "center": [
+    0,
+    23,
+    58
+   ],
+   "normal": [
+    0,
+    0.0698,
+    0.9976
+   ],
+   "up": [
+    0,
+    0.9976,
+    -0.0698
+   ],
+   "width": 124,
+   "height": 46,
+   "ppmm": 8,
+   "trust": "fair: the foot is near the image bottom, where the camera looks down more steeply than 4\u00b0 (perspective), so its borders bow by \u2248 1 mm.",
+   "fit": "least-squares fit of the points: rms 0.86 mm, max 1.4 mm (tools/faces.mjs --rectify prints it)"
+  }
+ }
+}

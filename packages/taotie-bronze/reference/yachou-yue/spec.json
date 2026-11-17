@@ -1,0 +1,11 @@
+{
+  "note": "Shandong Museum 亚醜钺 (Subutun M1, 1965). No dimensions could be read from an accessible source in this sandbox; the model takes H 327 × W 345 mm (tang top → lowest point of the edge; tip to tip), the figures commonly published for this axe (unverified here), and the photographs' own proportion agrees to 1.5 % (dossier § a, b). Parts: body = the plate (both faces + every cut wall); stand = the museum mount (clear bar across the front above the shoulders, two clear uprights behind the plate, clear block under the blade). The plate stands with its lowest edge point 12 mm above the plinth.",
+  "dimensions": { "h": 327, "w": 345, "thickness": 8.5, "lift": 12 },
+  "ratios": {
+    "plateAspect":  { "expr": "parts.body.w / parts.body.h", "expected": 1.055, "tol": 0.015 },
+    "plateHeight":  { "expr": "parts.body.h",                "expected": 327,   "tol": 2 },
+    "plateLift":    { "expr": "parts.body.min.1",            "expected": 12,    "tol": 1 },
+    "plateDepth":   { "expr": "parts.body.d",                "expected": 24,    "tol": 2 },
+    "standInside":  { "expr": "parts.stand.w / parts.body.w", "expected": 0.61, "tol": 0.04 }
+  }
+}

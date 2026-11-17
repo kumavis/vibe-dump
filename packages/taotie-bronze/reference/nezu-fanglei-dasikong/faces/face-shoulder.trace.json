@@ -1,0 +1,16 @@
+{
+  "note": "face-shoulder (photo-34 flattened). Round r8-dsk-fix: the kui frieze drawn BY BAND off the illumination-flattened face with a 5 mm grid on the LEFT half, mirrored about the shoulder head (axis x 114.5). One kui per half, facing the centre head: (a) the crest/back band with a curl at its head end, (b) the body band (C-hooks cut on its top), (c) the leg/tail band, (d) the head: a fat C jaw, (e) its round eye (a boss), (f) the crest curling over in front of the head, (g) the hook below it. Between the crest and the head the photo shows a field of large squared spirals (ground). Head region masked (sculpture).",
+  "field": { "box": [0, 26.5, 228, 61] },
+  "mask": [{ "box": [88, 0, 141, 75.9] }],
+  "symmetry": { "axis": 114.5, "keep": "left" },
+  "regions": [{ "box": [0, 0, 228, 75.9], "mode": "off" }],
+  "draw": [
+    { "band": [[3, 52.6], [45, 52.6]], "width": 6.4, "bend": 0.5, "end": { "coil": { "turns": 0.9, "R": 2.8, "dir": -1, "gap": 0.7, "tip": 0.6 } }, "label": "(a) crest/back band" },
+    { "band": [[2, 44.2], [38, 44.2]], "width": [6.6, 7.0], "bend": 0.5, "label": "(b) body band" },
+    { "band": [[3, 32.8], [33, 32.8], [37, 29.2]], "width": [7.4, 7.0, 5.4], "bend": 0.6, "end": { "coil": { "turns": 0.8, "R": 2.4, "dir": 1, "gap": 0.6, "tip": 0.6 } }, "label": "(c) leg / tail band" },
+    { "band": [[14, 29.8], [14, 27.6], [21, 27.6]], "width": 3.2, "bend": 0.5, "label": "(c) claw hook" },
+    { "band": [[52.5, 45], [42.2, 45], [42.2, 30.4], [53.5, 30.4], [53.5, 36]], "width": [5.6, 6.2, 6.2, 5.8, 5.0], "bend": 0.5, "end": { "coil": { "turns": 0.8, "R": 2.4, "dir": 1, "gap": 0.6, "tip": 0.6 } }, "label": "(d) the head: fat C jaw" },
+    { "band": [[56.5, 55.2], [69.5, 55.2], [69.5, 46.5]], "width": [5.6, 5.6, 4.8], "bend": 0.5, "end": { "coil": { "turns": 1.0, "R": 3.0, "dir": -1, "gap": 0.7, "tip": 0.6 } }, "label": "(f) crest curling over in front of the head" },
+    { "band": [[57.5, 36.5], [68, 36.5], [68, 30]], "width": 4.6, "bend": 0.5, "end": { "coil": { "turns": 1.0, "R": 2.8, "dir": -1, "gap": 0.6, "tip": 0.6 } }, "label": "(g) hook below the crest" }
+  ]
+}

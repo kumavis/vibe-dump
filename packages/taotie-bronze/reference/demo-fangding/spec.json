@@ -1,0 +1,9 @@
+{
+  "note": "Self-check for the placeholder: the numbers are the demo's own design, not a real vessel's.",
+  "ratios": {
+    "legShare": { "expr": "parts.legs.h / overall.h", "expected": 0.386, "tol": 0.02 },
+    "handleRise": { "expr": "parts.handles.h / overall.h", "expected": 0.19, "tol": 0.02 },
+    "plan": { "expr": "parts.body.d / parts.body.w", "expected": 0.77, "tol": 0.03 },
+    "legCount": { "expr": "parts.legs.count", "expected": 4, "tol": 0 }
+  }
+}

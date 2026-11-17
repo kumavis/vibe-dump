@@ -1,0 +1,124 @@
+{
+ "vessel": "nezu-jue",
+ "blur": 0.7,
+ "note": "Flat faces of the Nezu jue (KIT.md § Flat faces). ONE photograph (photo-02), a three-quarter from behind the handle. The cup is ROUND: each face is a plane through the band at θ 128 seen down the photograph's own line of sight (camera θ 122, 12° up, ≈ 1.3 m, 10° lens — solved from 8 landmarks: two leg tips, two post caps, spout and tail tips, the θ 180 flange's ends; rms ≈ 16 px), so the flattened photo is close to an orthographic projection and the model is rendered down the same normal: both foreshorten the curved wall alike. Points are model surface points (band borders at θ 95 / 122 / 150 / 178) projected through that camera and slid along the line of sight onto the plane. Scale is INFERRED (band height 37.5 mm, cup Ø 69 mm).",
+ "sources": {
+  "photo-02": {
+   "file": "photo-02.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "owner's photograph: three-quarter from behind the handle (camera θ ≈ 122), ≈ 12° above the band"
+  }
+ },
+ "faces": {
+  "face-band": {
+   "label": "the band from the handle (θ 90) to the tail flange (θ 180): half of the tail-side mask (photo-02)",
+   "source": "photo-02",
+   "center": [
+    27.11,
+    120.75,
+    -21.18
+   ],
+   "normal": [
+    0.8295,
+    0.2079,
+    -0.5183
+   ],
+   "up": [
+    -0.1763,
+    0.9781,
+    0.1102
+   ],
+   "width": 62,
+   "height": 48,
+   "ppmm": 8,
+   "points": [
+    [
+     668.7,
+     1066.2,
+     40.39,
+     103.53,
+     -6.82
+    ],
+    [
+     669.6,
+     735.9,
+     33.92,
+     139.41,
+     -2.78
+    ],
+    [
+     808.7,
+     1073.9,
+     32.25,
+     102.77,
+     -20.15
+    ],
+    [
+     810.5,
+     742.7,
+     25.79,
+     138.65,
+     -16.11
+    ],
+    [
+     953.3,
+     1066.9,
+     23.55,
+     103.59,
+     -33.76
+    ],
+    [
+     955.9,
+     736.7,
+     17.08,
+     139.47,
+     -29.72
+    ],
+    [
+     1061.7,
+     1046.5,
+     16.59,
+     105.86,
+     -43.99
+    ],
+    [
+     1064.9,
+     718.9,
+     10.12,
+     141.73,
+     -39.95
+    ]
+   ],
+   "trust": "good from θ 105 to 170 (the wall within ±11 mm of the plane, foreshortening < 1.6:1); beyond θ 170 the wall turns away (the flange half and the nose column are squeezed ≈ 3:1) and under the handle (θ 90–100) it is hidden. Camera solve ≈ 16 px rms ≈ 2 mm.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-upper": {
+   "label": "upper wall over the band: the decorated triangle, the hole (a casting flaw?) over the handle, the plain field under the tail (photo-02)",
+   "source": "photo-02",
+   "center": [
+    27.11,
+    152,
+    -21.18
+   ],
+   "normal": [
+    0.8295,
+    0.2079,
+    -0.5183
+   ],
+   "up": [
+    -0.1763,
+    0.9781,
+    0.1102
+   ],
+   "width": 62,
+   "height": 30,
+   "ppmm": 8,
+   "points": "face-band",
+   "trust": "fair: the upper wall flares out from r 34.7 to ≈ 44 at the rim, so its top leans ≈ 25° back from the band's plane; positions near the rim are a few mm off.",
+   "fit": "shares face-band's points"
+  }
+ }
+}

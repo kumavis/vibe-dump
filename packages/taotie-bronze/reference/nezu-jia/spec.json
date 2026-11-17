@@ -1,0 +1,47 @@
+{
+ "note": "Nezu jia 90067. Proportions measured on the owner's photographs (photo-21 near elevation, photo-22 three-quarter) in units of the rim diameter D, which is the only scale: D = 176 mm is INFERRED (no dimension on the label; dossier § Scale). Part names: body (lathe: drum + upper wall + lip), legs (3, incl. 7 mm embedded in the bottom), posts (2: stem from inside the lip + bell cap), handles (strap + head), flanges (slabs, noses, wall flanges). Tolerances are wide because both photographs are close-range phone pictures (perspective ≈ ±8 %).",
+ "dimensions": {
+  "h": 417,
+  "w": 202,
+  "d": 198,
+  "rimDiameter": 176,
+  "inferred": true
+ },
+ "ratios": {
+  "bodyOverRim": {
+   "expr": "parts.body.h / parts.body.w",
+   "expected": 0.86,
+   "tol": 0.06
+  },
+  "legsOverRim": {
+   "expr": "parts.legs.h / parts.body.w",
+   "expected": 1.02,
+   "tol": 0.09
+  },
+  "postsOverRim": {
+   "expr": "parts.posts.h / parts.body.w",
+   "expected": 0.6,
+   "tol": 0.06
+  },
+  "legSpread": {
+   "expr": "parts.legs.w / parts.body.w",
+   "expected": 0.85,
+   "tol": 0.09
+  },
+  "handleOverBody": {
+   "expr": "parts.handles.h / parts.body.h",
+   "expected": 0.77,
+   "tol": 0.07
+  },
+  "bodyTop": {
+   "expr": "parts.body.max.1 / overall.h",
+   "expected": 0.775,
+   "tol": 0.03
+  },
+  "silhouette": {
+   "expr": "overall.w / overall.h",
+   "expected": 0.49,
+   "tol": 0.06
+  }
+ }
+}

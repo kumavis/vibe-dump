@@ -1,0 +1,316 @@
+{
+ "note": "face-collar (photo-37, in deep shade under the eave). Round 10: redrawn BAND BY BAND from the photograph, read off a local-contrast-enhanced grid (.work/lei-mid/gridface.py) on the RIGHT half and checked against the left: per half an upper row of two big rounded C-blocks (x 103-128.6 and 141-163, y 29-45) joined by a base line, a small spiral stack between them, a hook at the centre flange; a lower row of a Γ, a U, an S-curl and a C hook in fat bands; three bosses. ± 1 mm.",
+ "field": {
+  "box": [
+   0,
+   2,
+   175,
+   48
+  ]
+ },
+ "mask": [
+  {
+   "box": [
+    84.5,
+    0,
+    90.5,
+    53
+   ]
+  },
+  {
+   "box": [
+    0,
+    0,
+    9,
+    53
+   ]
+  },
+  {
+   "box": [
+    166,
+    0,
+    175,
+    53
+   ]
+  }
+ ],
+ "symmetry": {
+  "axis": 87.5,
+  "keep": "right"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    175,
+    53
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "poly": [
+    [
+     103,
+     29.6
+    ],
+    [
+     128.6,
+     29.6
+    ],
+    [
+     128.6,
+     44.6
+    ],
+    [
+     103,
+     44.6
+    ]
+   ],
+   "round": 4,
+   "snap": 0.6,
+   "label": "C-block A"
+  },
+  {
+   "band": [
+    [
+     95.5,
+     29.3
+    ],
+    [
+     141.5,
+     29.0
+    ],
+    [
+     141.5,
+     41.5
+    ],
+    [
+     145,
+     44.6
+    ]
+   ],
+   "width": 2.7,
+   "bend": 0.7,
+   "label": "base line, rising into block B"
+  },
+  {
+   "poly": [
+    [
+     141,
+     29.2
+    ],
+    [
+     163,
+     29.2
+    ],
+    [
+     163,
+     44.8
+    ],
+    [
+     141,
+     44.8
+    ]
+   ],
+   "round": 4,
+   "snap": 0.6,
+   "label": "C-block B"
+  },
+  {
+   "poly": [
+    [
+     130.3,
+     30.8
+    ],
+    [
+     139.6,
+     30.8
+    ],
+    [
+     139.6,
+     42.2
+    ],
+    [
+     130.3,
+     42.2
+    ]
+   ],
+   "round": 3,
+   "label": "spiral stack"
+  },
+  {
+   "band": [
+    [
+     104,
+     40.6
+    ],
+    [
+     98,
+     40.6
+    ],
+    [
+     95.2,
+     37.5
+    ],
+    [
+     95.2,
+     32.5
+    ]
+   ],
+   "width": 2.5,
+   "bend": 0.8,
+   "end": "round",
+   "label": "hook at the flange"
+  },
+  {
+   "band": [
+    [
+     112.5,
+     21
+    ],
+    [
+     100.6,
+     21
+    ],
+    [
+     100.6,
+     8.2
+    ]
+   ],
+   "width": 2.7,
+   "bend": 0.6,
+   "end": "round",
+   "label": "Γ"
+  },
+  {
+   "band": [
+    [
+     108.6,
+     20.5
+    ],
+    [
+     108.6,
+     11.6
+    ],
+    [
+     120.6,
+     11.6
+    ],
+    [
+     120.6,
+     15.5
+    ]
+   ],
+   "width": 2.7,
+   "bend": 0.7,
+   "end": {
+    "coil": {
+     "turns": 0.8,
+     "R": 2.0,
+     "dir": 1,
+     "gap": 0.8
+    }
+   },
+   "label": "U"
+  },
+  {
+   "band": [
+    [
+     142.5,
+     16.8
+    ],
+    [
+     137,
+     15
+    ],
+    [
+     133.5,
+     12.4
+    ]
+   ],
+   "width": 2.6,
+   "bend": 0.7,
+   "end": {
+    "coil": {
+     "turns": 1.0,
+     "R": 2.2,
+     "dir": -1,
+     "gap": 0.8
+    }
+   },
+   "label": "S-curl"
+  },
+  {
+   "band": [
+    [
+     160.5,
+     20.2
+    ],
+    [
+     149.6,
+     20.2
+    ],
+    [
+     149.6,
+     13
+    ],
+    [
+     158,
+     13
+    ]
+   ],
+   "width": 2.6,
+   "bend": 0.7,
+   "end": {
+    "coil": {
+     "turns": 0.7,
+     "R": 1.9,
+     "dir": 1,
+     "gap": 0.8
+    }
+   },
+   "label": "C hook"
+  },
+  {
+   "band": [
+    [
+     143.5,
+     23.2
+    ],
+    [
+     152.5,
+     23.2
+    ]
+   ],
+   "width": 2.2,
+   "end": "round",
+   "label": "short bar"
+  }
+ ],
+ "bosses": [
+  {
+   "c": [
+    117.5,
+    25.5
+   ],
+   "r": 2.2
+  },
+  {
+   "c": [
+    124.5,
+    20.6
+   ],
+   "r": 2.1
+  },
+  {
+   "c": [
+    95.3,
+    13.2
+   ],
+   "r": 2.4
+  }
+ ]
+}

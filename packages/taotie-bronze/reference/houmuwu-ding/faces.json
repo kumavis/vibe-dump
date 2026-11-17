@@ -1,0 +1,127 @@
+{
+  "vessel": "houmuwu-ding",
+  "note": "Flat faces of the Houmuwu ding (KIT.md § Flat faces). Points are [photo px in the ORIGINAL (Commons full size), vessel mm x, y, z]; the committed 1800-px copies are used (scaled) until `tools/faces.mjs --rectify --fetch` can download the originals (Commons answered 429 when these were made), so today every flattened face is an upsampled ≈ 0.9–1.7 px/mm source. Landmarks are IN-PLANE: the four corners of the recessed plain field (inner frame corners: u = ±(half-wall − 120 mm column), y 857 / 591 per the dossier), the mid-wall flange axis at the wall top (y 985) and wall bottom (y 465). The corner flanges stand ≈ 28 mm out of the wall plane and were not used. ppmm 2 = what the originals support (≈ 2.4 px/mm); the leiwen (1.9 mm pitch) is NOT resolved in any of these faces.",
+  "blur": 1.2,
+  "sources": {
+    "front": {
+      "file": "front.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/4/46/Late_Shang_bronze_%22Hou_Mu_Wu%22_ding_%289835235495%29.jpg",
+      "size": [4752, 3168],
+      "note": "+Z long face, straight on, 21 mm lens"
+    },
+    "short-wall": {
+      "file": "detail-short-wall.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Late_Shang_bronze_%22Hou_Mu_Wu%22_ding_%289835173414%29.jpg",
+      "size": [4752, 3168],
+      "note": "+X short (handle) face, near head-on from slightly left"
+    },
+    "rubbing": {
+      "file": "rubbing-long-face.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/35/%E5%8F%B8%E6%AF%8D%E6%88%8A%E6%96%B9%E9%BC%8E%E6%8B%93%E6%9C%AC.jpg",
+      "size": [3930, 5000],
+      "note": "ink rubbing of one long face, flat by construction (≈ 1.05 px/mm in the committed copy)"
+    }
+  },
+  "faces": {
+    "face-long": {
+      "label": "long face (+Z), whole wall y 452–998",
+      "fit": "least-squares fit of the points: rms 4.57 mm, max 6.59 mm (tools/faces.mjs --rectify prints it)",
+      "source": "front",
+      "center": [0, 725, 357.2],
+      "normal": [0, -0.0087, 1],
+      "up": [0, 1, 0.0087],
+      "width": 1100,
+      "height": 545,
+      "ppmm": 2,
+      "points": [
+        [1438.8, 1182.7, -390, 857, 358.4],
+        [3175.9, 1180.1, 390, 857, 358.4],
+        [1446.7, 1763.5, -380, 591, 356.1],
+        [3175.9, 1750.3, 380, 591, 356.1],
+        [2275.7, 887.0, 0, 985, 359.5],
+        [2312.6, 2046.0, 0, 465, 355]
+      ],
+      "trust": "good geometry, poor resolution: a straight-on photograph, so the flattening is close to a pure scale; the source is ≈ 0.9 px/mm (committed copy), so only motif layout and island sizes are comparable, not line work."
+    },
+    "face-long-top-frieze": {
+      "label": "long face, top frieze (y 850–990)",
+      "fit": "least-squares fit of the points: rms 4.57 mm, max 6.59 mm (tools/faces.mjs --rectify prints it)",
+      "source": "front",
+      "points": "face-long",
+      "center": [0, 920, 358.9],
+      "normal": [0, -0.0087, 1],
+      "up": [0, 1, 0.0087],
+      "width": 1100,
+      "height": 140,
+      "ppmm": 2,
+      "trust": "as face-long"
+    },
+    "face-long-bottom-frieze": {
+      "label": "long face, bottom frieze (y 458–598)",
+      "fit": "least-squares fit of the points: rms 4.57 mm, max 6.59 mm (tools/faces.mjs --rectify prints it)",
+      "source": "front",
+      "points": "face-long",
+      "center": [0, 528, 355.5],
+      "normal": [0, -0.0087, 1],
+      "up": [0, 1, 0.0087],
+      "width": 1100,
+      "height": 140,
+      "ppmm": 2,
+      "trust": "as face-long"
+    },
+    "face-long-column": {
+      "label": "long face, left side column (x −535…−375)",
+      "fit": "least-squares fit of the points: rms 4.57 mm, max 6.59 mm (tools/faces.mjs --rectify prints it)",
+      "source": "front",
+      "points": "face-long",
+      "center": [-455, 725, 357.2],
+      "normal": [0, -0.0087, 1],
+      "up": [0, 1, 0.0087],
+      "width": 160,
+      "height": 545,
+      "ppmm": 2,
+      "trust": "as face-long; the corner flange beside it is out of plane and smears outward"
+    },
+    "face-short": {
+      "label": "short (handle) face (+X), whole wall",
+      "fit": "least-squares fit of the points: rms 5.55 mm, max 6.39 mm (tools/faces.mjs --rectify prints it)",
+      "source": "short-wall",
+      "center": [506.9, 725, 0],
+      "normal": [1, -0.0385, 0],
+      "up": [0.0385, 1, 0],
+      "width": 800,
+      "height": 545,
+      "ppmm": 2,
+      "points": [
+        [1238.2, 1034.9, 512.0, 857, 239.5],
+        [3529.7, 1050.7, 512.0, 857, -239.5],
+        [1238.2, 2323.2, 501.7, 591, 236],
+        [3529.7, 2323.2, 501.7, 591, -236],
+        [2299.4, 427.7, 516.9, 985, 0],
+        [2323.2, 2951.5, 496.9, 465, 0]
+      ],
+      "trust": "good: near head-on at ≈ 1.7 px/mm (committed copy); the best-resolved Houmuwu face. BUT the right side column comes out ≈ 35 mm wider than the left (157 vs 122 mm): either a plain strip runs along the field's right edge in this photograph or the right field corners are misplaced; treat horizontal positions in the right third as ± 15–35 mm until a second photograph or the full-size original settles it."
+    },
+    "face-rubbing-long": {
+      "label": "ink rubbing of a long face, registered to the long wall",
+      "fit": "least-squares fit of the points: rms 5.43 mm, max 7.9 mm (tools/faces.mjs --rectify prints it)",
+      "source": "rubbing",
+      "flat": true,
+      "center": [0, 725, 357.2],
+      "normal": [0, -0.0087, 1],
+      "up": [0, 1, 0.0087],
+      "width": 1100,
+      "height": 545,
+      "ppmm": 2,
+      "points": [
+        [711.1, 2058.3, -390, 132],
+        [2980.6, 2058.3, 390, 132],
+        [711.1, 2808.3, -380, -134],
+        [2980.6, 2808.3, 380, -134],
+        [1866.7, 1655.6, 0, 260],
+        [1866.7, 3194.4, 0, -260]
+      ],
+      "trust": "the rubbing is a developed (true-size) image of the wall, but paper stretch and the mounting make it ±1–2 %; registered on the field corners and the mid-flange ends. Black = raised, white = recessed; the field reads as mottled grey."
+    }
+  }
+}
