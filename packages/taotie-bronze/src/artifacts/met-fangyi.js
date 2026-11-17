@@ -12,8 +12,8 @@
 
 import * as THREE from 'three'
 import { knobLines } from './met-fangyi/decor.js'
-import { renderRidge, footDragon, friezeDragon, FOOT, FOOT_LONG_K, FOOT_END_K, FRIEZE_LONG_K } from './met-fangyi/ridge.js'
-import { renderTraced, bodyFace, refit, MAIN_LONG, FRIEZE_LONG, FOOT_LONG, END_FIT, END_EYE, END_HORN, LID_LONG_FIT, LID_LONG_EYE, LID_END_FIT, LID_END_EYE, LID_END_DROP } from './met-fangyi/traced.js'
+import { renderRidge, footDragon, friezeDragon, mainMask, boxFit, FOOT, MAIN, FOOT_LONG_K, FOOT_END_K, FRIEZE_LONG_K, MAIN_LONG_K } from './met-fangyi/ridge.js'
+import { bodyFace, END_FIT, LID_LONG_FIT, LID_END_FIT, LID_END_DROP } from './met-fangyi/traced.js'
 
 const H = 254
 const FOOT_H = 33 // foot band (its own part): ground → top of the lower separator's middle
@@ -129,25 +129,20 @@ export default {
       // the end face: the same elements, each re-fitted to its box on face-end.jpg (traced.js END_FIT);
       // its frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body and tail
       // (×0.6 outward of the eye: tail edge at u 48 against 62.4) — face-end.jpg, grid/s-endfr.png
-      const endMain = refit(MAIN_LONG, END_FIT, { pillow: END_EYE }).map((e) => (e.name === 'horn' ? END_HORN : e))
-      const endFrieze = refit(FRIEZE_LONG, {}, { rest: ([x, y]) => { const u = 76 - x; return [59 - (u <= 22.7 ? 24 - (22.7 - u) * 0.95 : 24 + (u - 22.7) * 0.6), y + 128] } })
       const fields = [[3.3, 34.0 - FOOT_H, hw - 6.5, 93.7], [3.3, 129.8 - FOOT_H, hw - 6.5, 27.6]]
-      if (long) {
-        renderRidge(kit, p, [
-          { draw: friezeDragon(FRIEZE_LONG_K), P: face(152, 126), axis: 76 },
-        ], { G: FOOT.G, seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h }, fields })
-        return p.bake()
-      }
-      renderTraced(kit, p, long ? [
-        { specs: MAIN_LONG, P: face(152, 31) },
-        { specs: FRIEZE_LONG, P: face(152, 126) },
+      // the end face: the long face's frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body
+      // and tail (×0.6 outward of the eye: face-end.jpg, grid/s-endfr.png); the main mask element by element
+      // (traced.js END_FIT boxes, the eye re-read whole)
+      const endFrieze = ([x, y]) => { const u = x - 76; return [59 + (u <= 22.7 ? 24 - (22.7 - u) * 0.95 : 24 + (u - 22.7) * 0.6), y + 128] }
+      const mainFit = (fits, eye, axis) => Object.fromEntries([...Object.entries(fits), ['eye', [[37.0, 28.45, 52.3, 41.75], eye]]].map(([k, b]) => [k, boxFit(b, axis)]))
+      const yF = 129.8 - FOOT_H - 1.5
+      renderRidge(kit, p, long ? [
+        { draw: mainMask(MAIN_LONG_K), P: face(152, 31), axis: 76, groundRect: { x: 0, y: 0, w: hw, h: yF }, ground: MAIN.ground },
+        { draw: friezeDragon(FRIEZE_LONG_K), P: face(152, 126), axis: 76, groundRect: { x: 0, y: yF, w: hw, h: cell.h - yF } },
       ] : [
-        { specs: endMain, P: face(118, -2) },
-        { specs: endFrieze, P: face(118, -2) },
-      ], {
-        seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h },
-        fields: [[3.3, 34.0 - FOOT_H, hw - 6.5, 93.7], [3.3, 129.8 - FOOT_H, hw - 6.5, 27.6]],
-      })
+        { draw: mainMask(MAIN_LONG_K, MAIN, { fit: mainFit(END_FIT, [28.55, 64.2, 43.05, 76.4], 59) }), P: face(118, -2), axis: 59, groundRect: { x: 0, y: 0, w: hw, h: yF }, ground: MAIN.ground },
+        { draw: friezeDragon(FRIEZE_LONG_K), P: face(118, -2), axis: 59, pre: endFrieze, groundRect: { x: 0, y: yF, w: hw, h: cell.h - yF } },
+      ], { G: MAIN.G, seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h }, fields })
       return p.bake()
     }
     await onProgress(0.02, 'long face')
@@ -202,9 +197,10 @@ export default {
       const f = ll.faces.front
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 5 })
       const halfAt = (s) => roof.level(roof.vOfS(0, s)).a
-      const specs = refit(MAIN_LONG, LID_LONG_FIT, { pillow: LID_LONG_EYE })
-      renderTraced(kit, p, [{ specs, P: lidFace(0, f, { cy: 195.85, upY: 0.742, fyc: 41, xc: 73 }) }], {
-        seed: seed + 5, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
+      const LG = { ...MAIN, G: 1.9, eyeHeight: 1.9 + 1.2 }
+      const fit = Object.fromEntries([...Object.entries(LID_LONG_FIT), ['eye', [[37.0, 28.45, 52.3, 41.75], [40.6, 53.2, 53.6, 42.0]]]].map(([k, b]) => [k, boxFit(b, 73)]))
+      renderRidge(kit, p, [{ draw: mainMask(MAIN_LONG_K, LG, { fit }), P: lidFace(0, f, { cy: 195.85, upY: 0.742, fyc: 41, xc: 73 }), axis: 73, ground: MAIN.ground }], {
+        G: LG.G, seed: seed + 5, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
       })
       panels.lidLong = p.bake()
     }
@@ -213,9 +209,10 @@ export default {
       const f = ll.faces.right
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 6 })
       const halfAt = (s) => roof.level(roof.vOfS(1, s)).b
-      const specs = refit(MAIN_LONG.filter((e) => !LID_END_DROP.includes(e.name)), LID_END_FIT, { pillow: LID_END_EYE })
-      renderTraced(kit, p, [{ specs, P: lidFace(1, f, { cy: 195.85, upY: 0.945, fyc: 33, xc: 54 }) }], {
-        seed: seed + 6, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
+      const LG = { ...MAIN, G: 1.9, eyeHeight: 2.6 }
+      const fit = Object.fromEntries([...Object.entries(LID_END_FIT), ['eye', [[37.0, 28.45, 52.3, 41.75], [39.95, 39.3, 47.55, 33.3]]]].map(([k, b]) => [k, boxFit(b, 54)]))
+      renderRidge(kit, p, [{ draw: mainMask(MAIN_LONG_K, LG, { fit, drop: LID_END_DROP }), P: lidFace(1, f, { cy: 195.85, upY: 0.945, fyc: 33, xc: 54 }), axis: 54, ground: MAIN.ground }], {
+        G: LG.G, seed: seed + 6, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
       })
       panels.lidEnd = p.bake()
     }

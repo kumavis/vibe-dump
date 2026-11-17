@@ -445,8 +445,8 @@ export const PATINA_PRESETS = {
     // band top over a pale earthy ground, more of the pale blue-green phase (the spout's turquoise crust)
     age: 1, tin: 0.15, lead: 0.08, polish: 0.2, tarnish: 0.45, cuprite: 0.9, cupriteTone: 0.6, tinOxide: 0.55,
     tinOxideTone: 1.05, malachite: 0.75, carbonate: 0.3, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.6,
-    turquoiseTone: 0.45, islands: 0.25, malachiteScale: 1.2, crust: 0.3, chloride: 0, soot: 0.02, crevice: 0.45,
-    patchScale: 34, mottleScale: 6, patchiness: 0.85, softness: 0.7, drift: 0.3, earth: 0.65, earthColor: '#ad9c84',
+    turquoiseTone: 0.45, islands: 0.25, malachiteScale: 1.2, crust: 0.3, chloride: 0, soot: 0.02, crevice: 0.15,
+    patchScale: 34, mottleScale: 6, patchiness: 0.85, softness: 0.7, drift: 0.3, earth: 0.8, earthColor: '#ad9c84',
     calcite: 0.05, streaks: 0.03, burialSide: 0.1, recessDirt: 0.9, interiorTone: 0.5, wax: 0, inlay: 1, inlayGround: 0, soilGroove: 1,
     wear: 0.15, dulling: 0.3, tops: 1, nobleWarmth: 0.85, matte: 1, topsTone: 0, ledgeMatte: 1, nobleRelief: -0.4,
     tint: '#eaeee0', speckle: 0.03, speckleScale: 0.8, speckleColor: '#4a9a72', speckleDecor: 0.2, crustIsles: 0.18,

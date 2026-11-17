@@ -8,9 +8,10 @@
 // tail); three blade legs of triangular section tapering to points; two identical posts with domed, whorled caps at
 // the spout root; a strap loop handle crowned by a ram's head (nezu-jue/sculpture.js); a notched flange on the band
 // at the spout and tail axes.
-// Décor (nezu-jue/relief.js + trace.js): one band of two masks (noses on the flanges, θ 0 and 180) in broad raised
-// bands carrying leiwen on their tops over a plain sunk ground; a decorated triangle on the upper wall either side;
-// whorls on both cap tops.
+// Décor (nezu-jue/relief.js + trace.js; ridge pass): one band of two masks (noses on the flanges, θ 0 and 180) laid as
+// a pavement of square-cornered flat plates parted by narrow dark channels: the figures stand a step higher and carry
+// ridge work (small squared spirals or two / three parallel lines), deep pockets in the curls and the eye socket; a
+// triangle with a double-lined border and a small face on the upper wall either side; whorls on both cap tops.
 
 import * as THREE from 'three'
 import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildTailRibs, buildSpoutLip, V_SPLIT } from './nezu-jue/form.js'
@@ -32,7 +33,7 @@ export default {
   dimensions: { h: 205, w: 174, d: 103, inferred: true, note: 'inferred: no dimension on the label; scale set by an assumed cup (band) Ø of 69 mm (dossier § Scale), proportions measured on the one photograph; h to the post caps, w spout tip → tail tip' },
   blurb:
     'A tripod pouring cup for warmed wine: a deep round-bottomed cup that sweeps up into a long open spout on one side and a pointed tail on the other, two capped posts at the root of the spout, a loop handle crowned by an animal head, and three splayed blade legs. ' +
-    'Round the cup runs one band of masks drawn in broad raised bands that carry fine spirals on their tops, over a plain sunk ground; notched flanges mark their noses under the spout and the tail. ' +
+    'Round the cup runs one band of masks built of interlocking square-cornered plates parted by narrow dark channels; the raised figures carry small squared spirals or parallel lines, and notched flanges mark the noses under the spout and the tail. ' +
     'Reconstructed from a single photograph by the project owner: the size is inferred, and the far side and the inside repeat the visible ones.',
   defaultPatina: 'nezu-jue',
   views: {

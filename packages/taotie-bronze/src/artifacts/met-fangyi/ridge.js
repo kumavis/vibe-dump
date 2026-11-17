@@ -90,14 +90,24 @@ export function renderRidge(kit, panel, layers, { fields, G, ground = {}, prof =
     }
     ctx.fill('evenodd')
   }, { height: G, shoulder: 0.3 })
-  // 2. the figures: ridge work through the mirrored views
+  // 2. the figures: ridge work through the mirrored views; traced outlines as plates under it
   const work = kit.ridgeWork(panel, prof)
   const outs = []
   for (const L of layers) {
-    const M = ([x, y]) => L.P([2 * L.axis - x, y])
-    const out = { bosses: [], masses: [], cuts: [], M }
+    const pre = L.pre ?? ((q) => q)
+    const M = (q) => { const [x, y] = pre(q); return L.P([2 * L.axis - x, y]) }
+    const out = { bosses: [], masses: [], cuts: [], plates: [], M }
     L.draw(work.view(M), out)
     outs.push(out)
+  }
+  const plates = outs.flatMap(({ plates, M }) => plates.map((q) => ({ ...q, pts: kit.shapes.fillet(q.poly, q.round ?? 1.2, { closed: true, step: 0.3 }).map(M) })))
+  if (plates.length) {
+    // the sunk channel round every plate (its inner half is covered again by the plate), then the plates
+    const ch = plates[0].channel ?? { w: 0.75, d: 0.42 }
+    panel.sink((ctx) => { ctx.lineJoin = 'round'; ctx.lineWidth = 2 * ch.w; for (const q of plates) { ctx.beginPath(); pathPoly(ctx, q.pts); ctx.stroke() } }, { depth: ch.d, shoulder: ch.w / 2, profile: 'u' })
+    const byH = new Map()
+    for (const q of plates) { const k = `${q.height}|${q.shoulder}`; if (!byH.has(k)) byH.set(k, []); byH.get(k).push(q) }
+    for (const g of byH.values()) kit.tracedPlates(panel, g.map((q) => q.pts), { height: g[0].height, shoulder: g[0].shoulder ?? 0.9, pillow: g[0].pillow ?? 0, pillowWidth: g[0].pillowWidth ?? 3, contour: false, bosses: [], ground: false, union: true, seed })
   }
   work.flush()
   // 3. pillowed masses (the bottle horn), bosses (eyes), sunk lines on them
@@ -106,22 +116,43 @@ export function renderRidge(kit, panel, layers, { fields, G, ground = {}, prof =
   }
   for (const { bosses, M } of outs) {
     for (const b of bosses) {
-      const c = M(b.c), e = M([b.c[0] + b.w / 2, b.c[1]])
+      const c = M(b.c), e = M([b.c[0] + b.w / 2, b.c[1]]), t = M([b.c[0], b.c[1] + b.h / 2])
       const slit = b.slit ? { ...b.slit, offset: [-(b.slit.offset?.[0] ?? 0), b.slit.offset?.[1] ?? 0], rot: -(b.slit.rot ?? 0) } : false
-      kit.pillowBoss(panel, { ...b, c, w: 2 * Math.abs(e[0] - c[0]), slit })
+      kit.pillowBoss(panel, { ...b, c, w: 2 * Math.hypot(e[0] - c[0], e[1] - c[1]), h: 2 * Math.hypot(t[0] - c[0], t[1] - c[1]), slit })
     }
   }
   const cuts = outs.flatMap(({ cuts, M }) => cuts.map((k) => ({ ...k, pts: k.pts.map(M) })))
   for (const k of cuts) {
     panel.sink((ctx) => { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = k.line; ctx.beginPath(); k.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke() }, { depth: k.depth, shoulder: k.line * 0.45, profile: 'u' })
   }
-  // 4. the ground: squared leiwen packed into what is left of the left half
+  // 4. the ground: squared leiwen packed into what is left of the left half (per layer: its own rect and cell sizes)
   const hr = halfRect ?? { x: 0, y: 0, w: W / 2, h: H }
-  kit.leiwenFill(panel, { rect: hr, avoid: 'raised', margin: 0.45 }, { ...FOOT.ground, seed, ...ground })
+  const rects = layers.filter((L) => L.groundRect)
+  if (rects.length) for (const L of rects) kit.leiwenFill(panel, { rect: L.groundRect, avoid: 'raised', margin: 0.45 }, { ...FOOT.ground, seed, ...ground, ...L.ground })
+  else kit.leiwenFill(panel, { rect: hr, avoid: 'raised', margin: 0.45 }, { ...FOOT.ground, seed, ...ground })
   panel.mirrorX()
   const f = panel.field
   for (let i = 0; i < f.length; i++) f[i] -= G
   return panel
+}
+
+/** a closed ridge following a traced outline `inset` mm inside it (the rounded rim of a plate) */
+export function rim(h, poly, inset, prof, o = {}) {
+  const sa = poly.reduce((a, p, i) => { const q = poly[(i + 1) % poly.length]; return a + p[0] * q[1] - q[0] * p[1] }, 0)
+  const s = Math.sign(sa) || 1, n = poly.length
+  const pts = poly.map((p, k) => {
+    const a = poly[(k - 1 + n) % n], b = poly[(k + 1) % n]
+    const e1 = [p[0] - a[0], p[1] - a[1]], e2 = [b[0] - p[0], b[1] - p[1]]
+    const l1 = Math.hypot(...e1) || 1, l2 = Math.hypot(...e2) || 1
+    const n1 = s > 0 ? [-e1[1] / l1, e1[0] / l1] : [e1[1] / l1, -e1[0] / l1]
+    const n2 = s > 0 ? [-e2[1] / l2, e2[0] / l2] : [e2[1] / l2, -e2[0] / l2]
+    let mx = n1[0] + n2[0], my = n1[1] + n2[1]
+    const ml = Math.hypot(mx, my) || 1
+    mx /= ml; my /= ml
+    const c = Math.max(0.35, mx * n2[0] + my * n2[1])
+    return [p[0] + (mx * inset) / c, p[1] + (my * inset) / c]
+  })
+  return h.ridgeBand(pts, { ...prof, ridges: 1, mode: 'add', closed: true, bend: o.bend ?? 1.6, ...o })
 }
 
 // ------------------------------------------------------------------ the foot dragon (face-long-foot / face-end)
@@ -297,5 +328,134 @@ export function friezeDragon(K, R = FOOT) {
     for (const l of K.lobes) { plateau(h, l.path, l.w, { PL: R.PL }); spiral(h, l.spiral, -1, 90) }
     // 4 the eye
     out.bosses.push({ c: K.eye.c, w: K.eye.w, h: K.eye.h, round: 0.55, height: R.G + 1.0, crown: 0.85, slit: K.eye.slit })
+  }
+}
+
+// ------------------------------------------------------------------ the main mask (face-long-main / face-end)
+
+/** ridge classes of the main mask (detail-face-long at 2×): a fat rounded RIM round every part (≈ 1.5 mm), nested
+ *  figure ridges inside it (≈ 1.45 mm pitch: the horn's three rolling into the curl, the brow pair), bold squared
+ *  spirals filling the cells (≈ 1.1 mm pitch, 4 turns in a 9 mm cell), round spirals on the columns */
+export const MAIN = {
+  G: 2.3,
+  plate: { height: 1.45, shoulder: 0.8, round: 1.4 },
+  RIM: { width: 1.5, pitch: 2.1, height: 0.85, groove: 0.3 },
+  FIG: { width: 1.0, pitch: 1.45, height: 0.85, groove: 0.3 },
+  CELL: { width: 0.74, pitch: 1.1, height: 0.8, groove: 0.26 },
+  SPI: { width: 0.62, pitch: 0.95, height: 0.75, groove: 0.24 },
+  ground: { pitch: 0.72, line: 0.5, depth: 0.34, roundness: 0.08, jitter: 0.04, cell: [6, 11], pairs: 0, maxAspect: 1.35 },
+}
+
+/**
+ * The great mask, long face (face-long-main.jpg, vessel y = fy + 31; detail-face-long.jpg). Element list (right half):
+ *  1 horn — ONE fat G: the rim runs round the whole outline (ticked along the top); inside it the left column holds two
+ *    big squared spirals, the top band a row of four, and three nested ridges run down the outer column, back along
+ *    the bottom and ROLL IN as a squared coil — the curl; the slot rises between curl and column
+ *  2 brow — a two-ridge Γ over the eye, its outer end hooked down
+ *  3 eye — the big rounded-square pillow boss, slit pupil
+ *  4 ear — a C on the outer edge: rim, a squared spiral in each lobe
+ *  5 tail — an S below it: rim, a squared spiral in each loop
+ *  6 jaw — a G: rim, a row of four round spirals along its top, the squared coil it rolls into
+ *  7 axial strip — the upper column (three round spirals, a scored cap), the Γ arm, the lower column (four spirals, a
+ *    foot lobe) beside the centre flange
+ * K: traced outlines (face-long-main.trace.json, unchanged layout) and the cells measured inside them.
+ */
+export const MAIN_LONG_K = {
+  axis: 76,
+  horn: {
+    poly: [[97.0, 61.6], [98.6, 58.4], [111.6, 58.4], [113.4, 60.2], [113.6, 71.4], [115.1, 72.6], [116.6, 71.4], [116.8, 62.4], [118.8, 60.6], [133.6, 60.6], [137.2, 63.6], [137.4, 86.6], [135.2, 89.4], [104.4, 89.4], [99.2, 87.0], [97.0, 82.6]],
+    cells: [[[99.6, 72.6], [111.6, 72.6], [111.6, 86.4], [100.8, 86.4]], [[99.6, 60.9], [111.4, 60.9], [111.4, 71.8], [99.6, 71.8]]],
+    row: { x0: 112.4, x1: 132.0, y0: 78.6, y1: 85.2, n: 4 },
+    coil: [[133.55, 85.4], [133.55, 64.5], [120.9, 64.5], [120.9, 75.6], [129.2, 75.6], [129.2, 68.85], [125.0, 68.85]],
+    ticks: { x0: 105.5, x1: 133, step: 3.7, y0: 87.7, y1: 89.4 },
+  },
+  brow: { poly: [[100.6, 51.2], [100.6, 53.2], [101.6, 54.2], [115.4, 54.2], [116.6, 53.0], [116.6, 46.8], [115.6, 45.8], [113.4, 45.8], [112.6, 46.8], [112.6, 51.2]], path: [[101.8, 52.7], [114.6, 52.7], [114.6, 46.6]] },
+  eye: { c: [107.35, 35.1], w: 15.3, h: 13.3, slit: { len: 4.8, width: 1.0, depth: 0.8, offset: [0, -0.5] } },
+  ear: { poly: [[124.8, 47.8], [124.6, 53.2], [126.2, 54.8], [135.6, 54.8], [137.0, 53.2], [137.0, 40.0], [135.4, 38.2], [127.0, 38.2], [124.6, 40.2], [124.6, 43.4], [128.2, 43.8], [128.4, 47.4]],
+    cells: [[[127.0, 45.9], [134.9, 45.9], [134.9, 52.8], [126.8, 52.8]], [[129.6, 40.2], [134.9, 40.2], [134.9, 45.1], [129.6, 45.1]]] },
+  tail: { poly: [[124.0, 23.0], [124.0, 29.4], [125.4, 30.8], [134.8, 30.8], [136.2, 29.4], [136.2, 17.4], [133.6, 14.8], [133.4, 5.8], [131.8, 4.4], [122.4, 4.4], [120.8, 6.0], [120.8, 13.0], [122.4, 14.8], [130.4, 15.2], [130.4, 21.6], [128.6, 23.0]],
+    cells: [[[126.0, 23.9], [134.2, 23.9], [134.2, 28.8], [126.0, 28.8]], [[122.8, 6.4], [131.4, 6.4], [131.4, 12.9], [122.8, 12.9]], [[132.2, 16.6], [134.2, 18.0], [134.2, 23.1], [132.2, 23.1]]] },
+  jaw: { poly: [[95.8, 8.0], [98.0, 4.4], [116.8, 4.4], [119.2, 6.6], [119.2, 22.0], [116.8, 24.8], [99.6, 24.8], [95.8, 21.2]],
+    row: { x0: 98.6, x1: 117.2, y: 20.3, d: 4.2, n: 4 }, cell: [[98.4, 6.6], [117.0, 6.6], [117.0, 17.9], [98.4, 17.9]] },
+  axial: [
+    { poly: [[78.6, 58.6], [87.4, 58.6], [87.4, 92.0], [78.6, 92.0]], spirals: [[83.0, 80.6, 6.4], [83.0, 72.0, 6.4], [83.0, 63.4, 6.4]], cap: [87.0, 89.8] },
+    { poly: [[78.6, 48.4], [93.6, 48.4], [94.8, 49.6], [94.8, 55.6], [93.6, 56.8], [78.6, 56.8]], spirals: [[89.4, 52.6, 5.4]], cells: [[[79.6, 49.6], [86.4, 49.6], [86.4, 55.6], [79.6, 55.6]]] },
+    { poly: [[78.2, 5.0], [87.6, 5.0], [88.6, 6.4], [88.6, 14.0], [87.4, 15.0], [87.4, 47.2], [78.2, 47.2]], spirals: [[82.8, 41.7, 6.2], [82.8, 34.3, 6.2], [82.8, 26.9, 6.2], [82.8, 19.5, 6.2], [83.4, 10.0, 6.8]] },
+  ],
+}
+
+/**
+ * Box re-fit for another face (the end face, the lid slopes): an element's box on the long face → its box on that
+ * face, both given as LEFT-half face mm the way traced.js END_FIT / LID_*_FIT record them (a reversed y range flips
+ * the element). Returns a map on RIGHT-half design points: long (axis 76) → target face (axis `axis`).
+ */
+export function boxFit([[a0, b0, a1, b1], [c0, d0, c1, d1]], axis) {
+  const sx = (c1 - c0) / (a1 - a0), sy = (d1 - d0) / (b1 - b0)
+  return ([x, y]) => { const xl = 152 - x; return [2 * axis - (c0 + (xl - a0) * sx), d0 + (y - b0) * sy] }
+}
+
+export function mainMask(K, R = MAIN, { fit = null, drop = [] } = {}) {
+  const PL0 = (poly, o = {}) => ({ poly, ...R.plate, ...o })
+  const spiral = (h, [x, y, d], hand = 1, a0 = 90, o = {}) => h.line(spiralLine([x, y], d / 2 - R.SPI.width / 2, { pitch: R.SPI.pitch, hand, a0, sq: 0.45, ...o }), { ...R.SPI, mode: 'add' })
+  const cell = (h, q, o = {}) => h.quadSpiral(q, { ...R.CELL, mode: 'add', margin: 0.5, corner: 2.4, cornerMin: 0.5, ...o })
+  const rimIn = R.RIM.width / 2 + 0.55
+  return (h0, out0) => {
+    // each element through its own re-fit (identity on the long face)
+    let PL = PL0, h = h0, out = out0
+    const use = (name) => {
+      const f = fit && fit[name]
+      h = f ? h0.view(f) : h0
+      const F = f ?? ((q) => q)
+      PL = (poly, o) => PL0(poly.map(F), o)
+      out = {
+        plates: out0.plates,
+        cuts: { push: (k) => out0.cuts.push({ ...k, pts: k.pts.map(F) }) },
+        bosses: { push: (b) => { const c = F(b.c), e = F([b.c[0] + b.w / 2, b.c[1]]), t = F([b.c[0], b.c[1] + b.h / 2]); out0.bosses.push({ ...b, c, w: 2 * Math.hypot(e[0] - c[0], e[1] - c[1]), h: 2 * Math.hypot(t[0] - c[0], t[1] - c[1]) }) } },
+      }
+      return !drop.includes(name)
+    }
+    // 1 horn
+    use('horn')
+    const Ho = K.horn
+    out.plates.push(PL(Ho.poly))
+    rim(h, Ho.poly, rimIn, R.RIM, { bend: 3.2 })
+    Ho.cells.forEach((q, i) => cell(h, q, { dir: i % 2 ? -1 : 1 }))
+    const r = Ho.row, wr = (r.x1 - r.x0) / r.n
+    for (let i = 0; i < r.n; i++) cell(h, [[r.x0 + i * wr, r.y0], [r.x0 + (i + 1) * wr, r.y0], [r.x0 + (i + 1) * wr, r.y1], [r.x0 + i * wr, r.y1]], { dir: i % 2 ? -1 : 1, corner: 1.6 })
+    h.ridgeBand(Ho.coil, { ...R.FIG, ridges: 3, mode: 'add', start: 'round', end: 'round', bend: 1.0 })
+    for (let x = Ho.ticks.x0; x <= Ho.ticks.x1; x += Ho.ticks.step) out.cuts.push({ pts: [[x, Ho.ticks.y0], [x, Ho.ticks.y1]], line: 0.5, depth: 0.5 })
+    // 2 brow
+    if (use('brow')) {
+      out.plates.push(PL(K.brow.poly, { round: 1.0 }))
+      h.ridgeBand(K.brow.path, { ...R.FIG, ridges: 2, mode: 'add', start: 'round', end: 'round', bend: 0.9 })
+    }
+    // 4 ear, 5 tail
+    for (const [name, part] of [['ear', K.ear], ['tail', K.tail]]) {
+      if (!use(name)) continue
+      out.plates.push(PL(part.poly))
+      rim(h, part.poly, rimIn, R.RIM, { bend: 2.0 })
+      part.cells.forEach((q, i) => cell(h, q, { dir: i % 2 ? -1 : 1, corner: 1.8 }))
+    }
+    // 6 jaw
+    if (use('jaw')) {
+      const J = K.jaw
+      out.plates.push(PL(J.poly))
+      rim(h, J.poly, rimIn, R.RIM, { bend: 2.4 })
+      const wj = (J.row.x1 - J.row.x0) / J.row.n
+      for (let i = 0; i < J.row.n; i++) spiral(h, [J.row.x0 + (i + 0.5) * wj, J.row.y, J.row.d], i % 2 ? -1 : 1, 90)
+      h.quadSpiral(J.cell, { ...R.FIG, mode: 'add', margin: 0.72, corner: 2.6, cornerMin: 0.6, dir: -1 })
+    }
+    // 7 axial strip
+    K.axial.forEach((a, k) => {
+      if (!use(['column-up', 'gamma', 'column-down'][k])) return
+      out.plates.push(PL(a.poly, { round: 1.0 }))
+      rim(h, a.poly, rimIn, R.RIM, { bend: 1.8 })
+      a.spirals.forEach((s, i) => spiral(h, s, i % 2 ? -1 : 1, 90))
+      ;(a.cells || []).forEach((q) => cell(h, q, { corner: 1.6 }))
+      if (a.cap) for (const y of a.cap) out.cuts.push({ pts: [[80.2, y], [85.8, y]], line: 0.55, depth: 0.5 })
+    })
+    // 3 the eye
+    use('eye')
+    out.bosses.push({ c: K.eye.c, w: K.eye.w, h: K.eye.h, round: 0.55, height: R.eyeHeight ?? R.G + 1.6, crown: 0.9, slit: K.eye.slit })
   }
 }
