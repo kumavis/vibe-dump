@@ -263,8 +263,8 @@ export default {
       {
         const y0 = k === 0 ? LV.low - 2 : LV.narrow
         // round 10: on the narrow ±X faces the centre flange stops under the handle's ring (photo-36: the ring's lower arc
-        // hangs over the belly top at y ≈ 248 with plain décor behind it, no flange)
-        const y1 = k % 2 ? 238 : LV.main + 1
+        // hangs over the belly top at y ≈ 239 with plain décor behind it, no flange)
+        const y1 = k % 2 ? 230 : LV.main + 1
         const path = wallPath(belly, k, 0.5, y0, y1, face(k))
         F({ path, ...slotted(path.length, 7, Math.round(path.length / 13), { w: 1.8, dep: 2.4, marks: false }), thickness: 6.5, embed: 2 })
       }
@@ -301,14 +301,14 @@ export default {
       return m
     }
     // the shoulder handles: a head holding a ring (sculpture.js), two fields with tight bounds merged into one mesh per side
-    const hGeo = mergeGeos([kit.meshSDF(handleHeadSDF(), { voxel }), kit.meshSDF(handleRingSDF(), { voxel: voxel * 1.1 })])
+    const hGeo = mergeGeos([kit.meshSDF(handleHeadSDF(), { voxel: voxel * 1.2 }), kit.meshSDF(handleRingSDF(), { voxel: voxel * 1.6 })])
     const handles = [mesh(hGeo, 'handles')]
     const hGeo2 = hGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI))
     handles.push(mesh(hGeo2, 'handles'))
     const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
     const heads = [mesh(headGeo, 'heads')]
     heads.push(mesh(headGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI)), 'heads')) // back: inferred
-    const lug = mesh(mergeGeos([kit.meshSDF(lugHeadSDF(), { voxel: voxel * 0.8 }), kit.meshSDF(lugRingSDF(), { voxel })]), 'lug')
+    const lug = mesh(mergeGeos([kit.meshSDF(lugHeadSDF(), { voxel: voxel * 0.88 }), kit.meshSDF(lugRingSDF(), { voxel: voxel * 1.35 })]), 'lug')
 
     await onProgress(1, 'done')
     void H; void face

@@ -341,11 +341,11 @@ export const MAIN_LONG = [
 export const FRIEZE_LONG = [
   {
     ...FOOT_LONG[0], data: FRIEZE_LONG_PLATES, axis: 76, groups: [], ground: null,
+    pack: { rMin: 1.3, rMax: 2.3 }, packOpts: { pitch: 0.85, line: 0.6 }, // detail-frieze-long: every band top carries small spirals
     deco: {
       spirals: [
         [99.4, 14.6, 3.6, 1], [106.3, 14.6, 3.8, -1], [111.0, 14.6, 3.8, 1], [127.4, 13.8, 3.6, 1], [132.0, 13.8, 3.4, -1], // body chain
         [99.4, 8.6, 3.2, -1], // front column
-        [128.4, 21.9, 3.2, -1], // the coil's sunk eye
         [105.3, 24.4, 3.6, 1], [110.4, 24.4, 3.6, -1], // head plate
         [92.0, 28.8, 2.4, 1], [97.6, 28.8, 2.4, -1], // crest
         [90.6, 18.6, 2.6, 1], [88.4, 7.2, 2.6, 1], [106.4, 7.6, 2.6, -1], // lower jaw lobe, leg curl, hook
@@ -355,7 +355,8 @@ export const FRIEZE_LONG = [
         [[134.1, 12.2], [134.1, 26.6], [124.6, 26.6], [124.6, 21.2]], // the coil's middle ridge
         [[94.4, 24.9], [85.2, 24.9], [85.2, 18.8]], // the jaw's centre line
       ],
-      pockets: [{ pts: [[125.6, 19.8], [131.6, 19.8], [131.6, 24.2], [125.6, 24.2]], round: [1.4, 1.2, 1.2, 1.6], depth: 1.0 }],
+      coils: [{ box: [125.6, 19.8, 131.6, 24.4], c: [128.2, 22.0], pitch: 0.95, hand: -1, a0: 0 }],
+      pockets: [{ pts: [[125.2, 19.5], [132.0, 19.5], [132.0, 24.7], [125.2, 24.7]], round: [2.0, 1.8, 1.8, 2.2], depth: 0.9 }],
     },
     pillows: [{ c: [97.9, 21.8], w: 6.1, h: 5.6, round: 0.55, height: 3.4, crown: 0.85, slit: { len: 1.9, width: 0.8, depth: 0.6 } }],
     refit: (fits, o) => refit(FRIEZE_LONG_R5, fits, o), // the end face keeps round 5 until it is traced

@@ -369,6 +369,27 @@
    ],
    "round": 1.0,
    "label": "(7) lip curl on the snout"
+  },
+  {
+   "poly": [
+    [
+     130.6,
+     17.0
+    ],
+    [
+     134.8,
+     17.0
+    ],
+    [
+     134.8,
+     22.0
+    ],
+    [
+     130.6,
+     22.0
+    ]
+   ],
+   "label": "(4b) the coil's column running down into the body (one band)"
   }
  ],
  "bosses": [

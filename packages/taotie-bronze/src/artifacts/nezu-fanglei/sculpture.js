@@ -78,10 +78,10 @@ const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t 
  * Shoulder handle on +X — round 10 (.work/lei-mid), re-read with a camera FITTED to photo-36 (az 68°, el 13°, ≈ 0.75 m,
  * vfov 41° on the crop) and photo-37: a beast head HOLDING A RING (衔环). The head lies almost level on the shoulder,
  * its flat top at y ≈ 321 (level with the ledge and the shoulder corner-flange tops in photo-37, not above them),
- * from the wall (x ≈ 92) out to a blunt muzzle at x ≈ 170, ≈ 34 mm across at the brow, ≈ 24 at the muzzle, whose
- * front drops as a vertical face to y ≈ 293. Its top is carved: two big spiral horns at the back, hooked ears, bulging
- * eyes, a nose ridge, nostrils. From the mouth hangs a heavy ROUND-SECTION ring (section ≈ 12 mm, outer Ø ≈ 57 mm)
- * whose plane is the side face's (YZ), swung 12° so its bottom (y ≈ 248, over the belly top) stands ≈ 6 mm off the
+ * from the wall (x ≈ 92) out to a blunt muzzle at x ≈ 171, ≈ 40 mm across at the brow, ≈ 30 at the muzzle, whose
+ * front drops as a vertical face to y ≈ 287. Its top is carved: two big spiral horns at the back, hooked ears, bulging
+ * eyes, a nose ridge, nostrils. From the mouth hangs a heavy ROUND-SECTION ring (section ≈ 12.6 mm, outer Ø ≈ 63 mm)
+ * whose plane is the side face's (YZ), swung 12° so its bottom (y ≈ 239, over the belly top) stands ≈ 6 mm off the
  * wall: seen nearly face-on from three-quarters (photo-36: the dark D under the head), edge-on from the front.
  * Two fields, meshed separately with tight bounds (cheaper than one box round both). −X = this turned 180° about Y.
  */
@@ -89,39 +89,41 @@ export function handleHeadSDF() {
   const top = (x) => 326.2 - 0.075 * (x - 100) // emerges from the ledge (325) at the collar, ≈ 321 at the muzzle
   const sd = (x, y, z) => {
     const yt = top(x)
-    const hz = 13 + 4 * sstep(96, 128, x) - 5 * sstep(146, 166, x) // half width: wall → brow → muzzle
+    const hz = 15 + 5 * sstep(96, 128, x) - 5 * sstep(146, 168, x) // half width: wall → brow (≈ 40 across) → muzzle (≈ 30)
     // the slab: flat top, rounded edges, bottom resting on the shoulder slope
     let d = sdRBox3(x - 131, y - (yt - 9), z, 42, 9, hz, 3.2)
     // the muzzle: a block dropping in front to y ≈ 293, its face slightly undercut
-    d = smin(d, sdRBox3(x - 160, y - 306.5, z, 10, 14, 11.5, 4.5), 3)
+    d = smin(d, sdRBox3(x - 160, y - 303.5, z, 11, 17, 14.5, 4.5), 3) // ≈ 34 mm deep at the front (photo-36: the dark muzzle face)
     // carved top: everything below in (u, v) = (x, z) on the plane y = top(x), h = height above it
     const h = y - yt
     for (const sg of [-1, 1]) {
       // the big spiral horns (photo-36: two fat curls behind the eyes, filling the back half of the top)
-      d = smin(d, fatHorn(x - 113, z - sg * 8.8, h, 7.2, 2.7, 2.4, sg > 0 ? 2.6 : -2.6, 0.75), 0.6)
+      d = smin(d, fatHorn(x - 114, z - sg * 10, h, 8.4, 3.0, 2.6, sg > 0 ? 2.6 : -2.6, 0.75), 0.6)
       // hooked ears at the outer edge, opening backward
-      d = smin(d, cHorn(x - 128, z - sg * 13.5, h, 3.6, 1.2, 1.6, Math.PI, 0.9), 0.4)
+      d = smin(d, cHorn(x - 129, z - sg * 16, h, 4.0, 1.3, 1.8, Math.PI, 0.9), 0.4)
       // bulging eyes with a sunk pupil ring
-      d = smin(d, sdEllipsoid(x - 140, h + 0.6, z - sg * 9.6, 4.2, 3.2, 3.4), 0.8)
-      d = smax(d, -(Math.abs(len2(x - 140, z - sg * 9.6) - 1.9) - 0.35 + Math.max(0, 2.2 - h) * 4), 0.2)
+      d = smin(d, sdEllipsoid(x - 141, h + 0.6, z - sg * 11, 4.6, 3.4, 3.8), 0.8)
+      d = smax(d, -(Math.abs(len2(x - 141, z - sg * 11) - 2.1) - 0.35 + Math.max(0, 2.4 - h) * 4), 0.2)
       // brow hook over each eye
-      d = smin(d, cHorn(x - 137.5, z - sg * 4.4, h, 2.6, 0.9, 1.3, 0, 0.8), 0.3)
+      d = smin(d, cHorn(x - 138, z - sg * 5, h, 2.8, 0.95, 1.4, 0, 0.8), 0.3)
+      // a curl on each cheek of the muzzle's flank
+      d = smin(d, cHorn(x - 158, y - 305, (Math.abs(z) - 14.5) * sg * sg, 3.4, 1.1, 1.4, Math.PI / 2, 0.9), 0.4)
       // nostrils on the muzzle front (x ≈ 170)
-      d = smax(d, -(len3(x - 170.5, y - 309, z - sg * 5.2) - 2.6), 0.6)
+      d = smax(d, -(len3(x - 172, y - 311, z - sg * 5.5) - 1.9), 0.5)
       // fangs: two short downward teeth at the mouth corners, either side of the ring
-      d = smin(d, sdRBox3(x - 165, y - 292, z - sg * 8.2, 2.2, 3.4, 1.8, 0.9), 0.8)
+      d = smin(d, sdRBox3(x - 166, y - 286, z - sg * 10, 2.2, 3.4, 1.9, 0.9), 0.8)
     }
     // nose ridge down the centre of the muzzle
     d = smin(d, sdRBox3(x - 152, h - 0.7, z, 15, 1.1, 1.6, 0.8), 0.5)
     // the mouth: a groove across the muzzle front, the ring passes through it
-    d = smax(d, -sdRBox3(x - 168, y - 298, z, 4, 1, 9.5, 0.5), 0.4)
+    d = smax(d, -sdRBox3(x - 169, y - 292, z, 4, 1.1, 12, 0.5), 0.4)
     // its back end stops at the collar face
     d = Math.max(d, 88 - x)
     return d
   }
-  return { sd, bounds: { min: [86, 284, -22], max: [176, 333, 22] } }
+  return { sd, bounds: { min: [86, 278, -26], max: [177, 334, 26] } }
 }
-export const HANDLE_RING = { c: [149, 276, 0], R: 22.5, r: 6.1, tilt: 12 }
+export const HANDLE_RING = { c: [150, 270, 0], R: 25, r: 6.3, tilt: 12 }
 export function handleRingSDF() {
   const { c, R, r, tilt } = HANDLE_RING
   const t = (tilt * Math.PI) / 180, st = Math.sin(t), ct = Math.cos(t)
@@ -130,7 +132,7 @@ export function handleRingSDF() {
     const a = px * st + py * ct, n = px * ct - py * st // in-plane up, plane normal
     return len2(len2(a, pz) - R, n) - r
   }
-  return { sd, bounds: { min: [130, 244, -31], max: [166, 307, 31] } }
+  return { sd, bounds: { min: [130, 235, -34], max: [168, 305, 34] } }
 }
 /** legacy: head and ring in one field */
 export function handleSDF() {
@@ -220,7 +222,7 @@ export function lugHeadSDF() {
     for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 5, y - 47.6, z - (zs + 5.2)) - 1.7), 0.5)
     return d
   }
-  return { sd, bounds: { min: [-30, 27, 94], max: [30, 106, 128] } }
+  return { sd, bounds: { min: [-28, 28, 97], max: [28, 105, 128] } }
 }
 export const LUG_RING = { yc: 60, zc: 84, Ry: 20, Rz: 21, r: 6 }
 export function lugRingSDF() {
