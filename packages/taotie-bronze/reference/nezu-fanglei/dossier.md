@@ -96,3 +96,31 @@ face-lid (bosses at x ±6 / ±31 / ±50, U horn at x 12–29, hip bodies running
 Pale grey-green body, the raised tops paler and silvery-green, the leiwen ground darker grey-green; rust-brown
 cuprite patches across the upper belly and shoulder; emerald specks low; collar, lid and knob much darker
 (near-black olive). Preset `nezu-fanglei` (src/kit/material/patina.js).
+
+## e. Round 10 (mid-level details at the three-quarter angle; .work/lei-mid)
+
+1. **photo-36's camera, re-fitted** (`.work/lei-mid/fit36e.py`, pinhole with the principal point at the image centre, 8 px
+   rms on the knob tip, near collar corner top/bottom, far-left collar corner, near foot corner): the phone stood
+   **≈ 0.73 m from the axis at y ≈ 404 mm** (about lid-skirt height), **az 67.6°**, looking down ≈ 13°, f ≈ 2520 px
+   (vfov 41° over the `three-quarter.jpg` crop) — not the long lens (fov 10° at 3.6 m) the view used. The
+   `three-quarter` view now reproduces it. A fit with the plan ratio free and the far (back-right) collar corner
+   included prefers **depth : width ≈ 0.65** instead of 0.75 [est; the far corner is read off a dark flange, ±15 px];
+   ρ was NOT changed (it moves every face and panel) — see the round-10 report.
+2. **Lid**: photo-37 (near-orthographic) shows NO eave overhang beyond the fascia/collar (eave line ≈ fascia box ≈ collar
+   body, ±1 mm); photo-36's back corner shows ≈ 4–6 mm of eave plate over the fascia [est] — kept at 2.5. Rise 70 confirmed
+   (photo-37: ridge at the projected 458 within 3 mm; photo-36 at the fitted camera: the end hip line within ≈ 15 px).
+   **Ridge half 44 → 36** (photo-37: hip-flange ear roots at ±27–35 mm round the post). Hip flanges: ≈ 13.5 mm deep,
+   10.5 thick, 7 wide shallow notches (crenellated), the lower end ≈ 8 mm past the eave as an upturned tip. Slope centre
+   flanges: 9 mm proud, 5 slots, running 8 mm past the eave (photo-36). Knob: a steeper cap ≈ 25 mm tall (post 458 → 478,
+   5 mm fascia, ridge 0.12), post 15 × 13 mm.
+3. **Collar**: proportions confirmed (175 × 51, same width as the fascia). Added a plain stepped plinth (2.8 mm proud,
+   3.2 tall) round its foot and three turned step-lines on the ledge (photo-36). Frieze redrawn band by band
+   (`faces/face-collar.trace.json`).
+4. **Shoulder handles = a beast head holding a ring (衔环)**: a flat-topped head (≈ 13 mm thick, ≈ 40 mm across at the
+   brow, top y ≈ 326 → 321) from the ledge out to a snout at x ≈ 163 (photo-37), carved top (spiral horns, ears, eyes,
+   nose ridge, scrolls on the snout); from its mouth a round-section ring (section 12.6, outer Ø 63, bottom y ≈ 239)
+   whose plane is turned ≈ 32° from the side face toward the front — photo-37 sees through it (≈ 12 × 18 mm opening),
+   photo-36 sees it nearly face-on. The ±X belly centre flanges stop at y 230, under the ring.
+5. **Low lug**: D-ring (section 12, 54 × 52 mm, in the YZ plane, centre y 60 / z 84) behind a mask 49 mm across: two C
+   horns of two nested fat bands with domed cores, crest, brow, eyes with slits, cheek hooks and curls, a snout with
+   interlocking upper and lower fangs in relief over a rounded lip.
