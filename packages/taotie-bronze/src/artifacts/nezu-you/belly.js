@@ -73,6 +73,9 @@ export function bellyDesign(kit, hw) {
     // post between the eye and the C-block
     { outer: P([[77.5, 30.5], [88, 32.5], [88, 62.4], [78.5, 63.4]], [2.5, 3, 3, 2.5]) },
   ]
+  // the eye's socket rim: a plate ring round the disc (the cheek and jaw bands run into it)
+  const ring = (c, r) => Array.from({ length: 72 }, (_, i) => [c[0] + r * Math.cos((i * Math.PI) / 36), c[1] + r * Math.sin((i * Math.PI) / 36)])
+  bands.push({ outer: kit.roundPoly(M(ring([55, 39.6], 24.2)), { round: 0 }), holes: [kit.roundPoly(M(ring([55, 39.6], 20.4)), { round: 0 })] })
   // the outer C-block: a rounded block with a deep pocket and a coiled curl
   const cblock = [{
     outer: P([[90.5, 36.5], [122, 36.5], [122, 62.6], [90.5, 62.6]], [4, 5, 5, 4]),
