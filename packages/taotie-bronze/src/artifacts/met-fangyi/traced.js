@@ -251,7 +251,9 @@ export const FOOT_HEIGHT = 2.6 // plate tops above the ground (detail-foot-long:
 export const FOOT_LONG = [
   {
     kind: 'plates', name: 'foot', data: FOOT_LONG_PLATES, axis: 76,
-    opts: { height: FOOT_HEIGHT, shoulder: 0.8, contour: { inset: 1.15, line: 0.5 }, depth: 0.45 },
+    opts: { height: FOOT_HEIGHT, shoulder: 0.8, contour: { inset: 1.2, line: 0.62 }, depth: 0.6 },
+    line: 0.66, lineDepth: 0.62, // the bands' incised lines (detail-foot-long: as bold as the contour line)
+    ground: { cell: [3.8, 6.4], maxAspect: 1.6, pitch: 0.74 }, // face-long-foot: small near-square leiwen cells, 3–4 turns
     groups: [{ box: [104, 18.5, 115, 28.5], height: 3.2, shoulder: 1.6, pillow: 0.6, pillowWidth: 2.4, contour: false }],
     deco: {
       spirals: [
@@ -271,7 +273,7 @@ export const FOOT_LONG = [
         [[115.6, 14.4], [120.4, 14.4]], // the claw's arm
         [[108.4, 23.0], [110.2, 23.9], [108.6, 25.0]], [[111.6, 20.6], [111.6, 26.6]], // horn: the beak-like nick, the cap's rim
       ],
-      pockets: [{ pts: [[123.6, 20.0], [129.0, 20.0], [129.0, 24.0], [123.6, 24.0]], round: [1.6, 1.4, 1.4, 1.8], depth: 0.6 }],
+      pockets: [{ pts: [[123.6, 20.0], [129.0, 20.0], [129.0, 24.0], [123.6, 24.0]], round: [1.6, 1.4, 1.4, 1.8], depth: 1.1 }],
     },
     // the eye (right-half face mm, mirrored): rounded-square boss, a small sunk pupil low toward the snout
     pillows: [{ c: [101.0, 18.25], w: 5.6, h: 5.9, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.2, width: 0.9, depth: 0.6, offset: [-0.4, -0.5], rot: 60 } }],
@@ -511,6 +513,8 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
   if (els.length) kit.carve(panel, els, { height: L1, shoulder: 0.55, depth: 0.42, seed, irregularity: 0.8, contour: { inset: 0.8, line: 0.5 } })
   // traced plates (round 6): outlines → kit.tracedPlates, one call per group; hand line work clipped to the plates
   const pockets = []
+  const plateHand = [] // their own sink: the line work on a traced plate is bolder than the island grooves
+  let groundOpts = {}
   for (const { s, P, ds } of plateLayers) {
     const ax = s.axis ?? 0
     const mbox = ([x0, y0, x1, y1]) => [2 * ax - x1, y0, 2 * ax - x0, y1]
@@ -529,7 +533,8 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
     const g = []
     for (const [x, y, dd, hd = 1, a0] of d.spirals) g.push(spiralPts(P([x, y]), dd * ds, hd, a0 ?? (hd > 0 ? 90 : 270)))
     for (const l of d.lines) g.push(kit.shapes.fillet(l.map(P), 0.8, { step: 0.2 }))
-    if (g.length) hand.push({ clipLoops: list.flatMap((pl) => [pl.outer, ...(pl.holes || [])]).map((L) => L.map(P)), g })
+    if (g.length) plateHand.push({ clipLoops: list.flatMap((pl) => [pl.outer, ...(pl.holes || [])]).map((L) => L.map(P)), g, line: s.line ?? LINE, depth: s.lineDepth ?? 0.42 })
+    if (s.ground) groundOpts = { ...groundOpts, ...s.ground }
     for (const k of d.pockets) pockets.push({ pts: k.pts.map(P), round: k.round, depth: k.depth ?? 0.3 })
     for (const pw of s.pillows || []) {
       for (const sx of [1, -1]) {
@@ -565,6 +570,21 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
       }
     }, { depth: 0.42, shoulder: LINE * 0.45, profile: 'u' })
   }
+  for (const { clipLoops, g, line, depth } of plateHand) {
+    panel.sink((ctx) => {
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.lineWidth = line
+      ctx.save(); ctx.beginPath(); for (const L of clipLoops) pathPoly(ctx, L, true); ctx.clip('evenodd')
+      for (const pts of g) {
+        if (pts.length < 2) continue
+        ctx.beginPath()
+        pathPoly(ctx, pts, false)
+        ctx.stroke()
+      }
+      ctx.restore()
+    }, { depth, shoulder: line * 0.45, profile: 'u' })
+  }
   // 2b. whatever plateau top is still bare gets round spirals packed largest-first (the bronze leaves
   //     no blank top: detail-face-long) — the packer reads the field, so it avoids every groove cut above
   const packs = []
@@ -583,7 +603,7 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
   // 4. the ground: big near-square squared spirals (research/04 G1), left half only
   const hr = halfRect ?? { x: 0, y: 0, w: W / 2, h: H }
   kit.leiwenFill(panel, { rect: hr, avoid: 'raised', margin: 0.5 }, {
-    pitch: 0.72, line: 0.5, depth: 0.34, roundness: 0.08, jitter: 0.04, cell: [6, 11], pairs: 0, maxAspect: 1.35, seed, ...ground,
+    pitch: 0.72, line: 0.5, depth: 0.34, roundness: 0.08, jitter: 0.04, cell: [6, 11], pairs: 0, maxAspect: 1.35, seed, ...ground, ...groundOpts,
   })
   if (mirror) panel.mirrorX()
   const f = panel.field
