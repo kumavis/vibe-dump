@@ -176,7 +176,7 @@ export function bandPanel(kit, { ppmm, seed }) {
     for (const f of T.figures) tfigs.push({ ...f, pts: f.c.map(P) })
     for (const q of T.pockets) tpockets.push({ ...q, c: P(q.c) })
   }
-  drawFigures(kit, p, tfigs, { plateau: 1.1, channelDepth: 0.35 })
+  drawFigures(kit, p, tfigs, { plateau: 1.4, channelDepth: 0.5 })
   sinkPockets(p, tpockets, 1.2)
   // the dark hole in the upper wall over the handle (photo-02, θ ≈ 98–110, y ≈ 146–154: a loss or casting flaw):
   // a deep sunk pocket; the preset's soilGroove keeps the pale earth out of it, so it reads dark as in the photograph

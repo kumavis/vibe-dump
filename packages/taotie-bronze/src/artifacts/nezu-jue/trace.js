@@ -80,7 +80,7 @@ export const FILLER = {
 // lower pockets held in the foot hooks; the interior is the plain wall.
 export const TRIANGLE = {
   base: 18.4, h: 16.4,
-  border: { w: 1.9, n: 2 },
+  border: { w: 2.2, n: 2 },
   figures: [
     { c: [[0, 0.9], [0, 13.2]], w: 1.7, deco: 'ln', n: 2 },
     { c: [[1.15, 7.2], [2.9, 7.2]], w: 1.2, deco: 'pl' },
