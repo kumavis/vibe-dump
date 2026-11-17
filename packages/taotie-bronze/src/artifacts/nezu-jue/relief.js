@@ -1,19 +1,21 @@
 // Nezu jue — the décor panels, drawn from the traced data in trace.js.
 //
-// Ridge pass (.work/ridge-nezu-jue/NOTES.md). The band is a PAVEMENT of square-cornered flat plates, not bands on a
-// ground: the whole field is raised as one low plate (PLATE.field), every figure gets a narrow sunk channel round it
-// and stands a step higher on its own plateau (PLATE.figure), and its top carries RIDGE WORK — a chain of small
-// squared spirals (kit quadSpiral, one cell per band width) or two / three parallel lines (kit ridgeBand) — added on
-// the plateau. What the figures leave is plain plate one step lower (pale in the photograph); deep pockets sink into
-// the curls and the eye socket. Corners are SQUARE (mitred strokes, a 0.3 mm shoulder; ridge corners bend 0.2 mm):
-// the bronze has none of the round arcs other vessels have.
+// Slab pass (.work/slab-nezu-jue/NOTES.md, reference/nezu-jue/slabs.json): the owner TRACED the band over photo-02
+// (owner-trace-band.json): every figure is ONE fat raised slab with rounded-square corners — a crook curling in round
+// a pocket, J hooks — standing clearly proud of a fine ground of squared spirals. The earlier ridge pass (a pavement
+// of square-cornered plates with spirals on the figure tops) read the photograph inside out and was rejected. Now:
+// each slab is an OUTLINE (the owner's three as drawn; the rest painted roughly and snapped to the photograph's edges
+// with tools/snap.py), raised with kit.tracedPlates; a narrow dark channel round each; the eye's frame line, its pit,
+// lid bar and slit, and the nose column's notches are cut INTO their slabs; deep pockets in the curls; everything
+// else in the band is packed with fine squared spirals (kit.leiwenFill). drawFigures / spiralCells below now serve
+// only the upper-wall triangle.
 //
 // ONE panel wraps the whole cup: x = developed mm at r 34.4 from θ 90 (the handle: the seam hides under it),
 // y = height − PANEL.y0; it covers the band (y 101 … 140) and the side parts of the upper wall up to the rim.
 // Layout round the cup (θ → panel x): handle 90 → 0 · tail mask nose 180 → 54.0 · opposite the handle 270 → 108.1 ·
 // spout mask nose 0/360 → 162.1. The traced half (handle side of the tail mask) is mirrored about each nose; the
-// spout mask repeats the tail mask (not in the photograph: INFERRED); the filler strips by the handle and opposite
-// it are read off the dark, foreshortened area behind the handle and repeated (INFERRED opposite it).
+// spout mask repeats the tail mask (not in the photograph: INFERRED); the filler hooks by the handle (slabs 9, 10:
+// dark, foreshortened, guessed) are mirrored about the handle seam and repeated opposite it (INFERRED).
 import { REG } from './form.js'
 import { TRIANGLE } from './trace.js'
 import SLABS from '../../../reference/nezu-jue/slabs.json'
@@ -159,6 +161,12 @@ export function bandPanel(kit, { ppmm, seed }) {
     ctx.stroke()
     ctx.globalCompositeOperation = 'destination-out'; ctx.fill('nonzero'); ctx.globalCompositeOperation = 'source-over'
   }, { depth: SLAB.channelDepth, shoulder: 0.2, profile: 'u' })
+  // never let a pocket bite a slab (the owner's outlines stay as drawn)
+  const slabCut = (ctx) => {
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.beginPath(); for (const s of allSlabs) { s.outer.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.closePath() }
+    ctx.fill('nonzero'); ctx.globalCompositeOperation = 'source-over'
+  }
   // the eye (on its slab): a sunk oval pit over a raised lower-lid bar with a slit, two lines incised across the top
   const E = SLABS.eye
   for (const [X, g] of copies) {
@@ -196,7 +204,7 @@ export function bandPanel(kit, { ppmm, seed }) {
   }, { ...GROUND, seed })
   // deep pockets in the curls (dark in the photograph)
   for (const dep of [...new Set(pocketList.map((k) => k[3]))]) {
-    p.sink((ctx) => { ctx.beginPath(); for (const [c, rx, ry, d] of pocketList) if (d === dep) { ctx.moveTo(c[0] + rx, c[1]); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, Math.PI * 2) } ctx.fill() }, { depth: dep, shoulder: 0.45, profile: 'u' })
+    p.sink((ctx) => { ctx.beginPath(); for (const [c, rx, ry, d] of pocketList) if (d === dep) { ctx.moveTo(c[0] + rx, c[1]); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, Math.PI * 2) } ctx.fill(); slabCut(ctx) }, { depth: dep, shoulder: 0.45, profile: 'u' })
   }
 
   // upper wall: four triangles at θ 51, 129, 231, 309 (the photograph shows the one at 129; the others follow the
