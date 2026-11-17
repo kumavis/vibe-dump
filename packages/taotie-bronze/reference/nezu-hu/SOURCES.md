@@ -41,4 +41,16 @@ rectifications / developments) of `photo-11.jpg`, saved with PIL without EXIF/XM
 | `detail-neck.jpg` | the neck with its incised inscription (not a view ref) | `photo-11.jpg` | (380, 150, 1180, 620) |
 | `faces/face-shoulder.jpg` `face-body.jpg` `face-neck.jpg` | flat faces (KIT.md § Flat faces) | `photo-11.jpg` | warped by `faces.json` (`node tools/faces.mjs --a nezu-hu --rectify`) |
 | `faces/dev-shoulder.jpg` `dev-body.jpg` `dev-neck.jpg` | the photograph DEVELOPED onto each band (x = arc mm from the front centre line, y = arc mm up the wall from the band's foot; 6 px/mm) through the fitted camera — the tracing images | `photo-11.jpg` | resampled, `.work/r8-hu/develop.py` |
-| `inscription.json` | the neck inscription as a 0.25 mm raster of incised strokes (not a transcription), modelled as sunk lines on the front of the neck | `photo-11.jpg` | developed onto the neck (x −110…110 mm, y 318…422 mm) and filtered, `.work/r8-hu-fix/inscr.py` |
+| `detail-inscription.jpg` | view `detail-inscription`: the engraved inscription on the front of the neck | `photo-11.jpg` | (420, 200, 1060, 680) |
+| `inscription.json` | the neck inscription HAND-TRACED stroke by stroke (hu-fix): 7 columns, 25 graphs, 130 polylines in developed neck mm; what is visible only, NOT a transcription | `photo-11.jpg` | developed onto the neck (x −110…110 mm, y 318…422 mm, `.work/r8-hu-fix/develop.py`), local-contrast stretched and traced on a 1 mm grid (`.work/hu-fix/colgrid.py`) |
+
+## The inscription — what is read, seen, uncertain (hu-fix)
+
+- **Read with confidence:** none.
+- **Seen, not read:** ≈ 25 graphs in seven columns on the front of the neck (developed x ≈ +64 … −77 mm, y 320–418 mm),
+  engraved hairlines, pale-filled. Every stroke on the model is one the photograph shows; none was completed.
+- **Uncertain candidates:** right column, 2nd graph: a cross (bronze-script 七 "seven", or a late 十); 2nd column, top:
+  two horizontals joined by strokes meeting at the top (not 五); 6th column, top: 子-like with a forked head.
+- **Lost:** the lower right of the inscription under lime; a possible eighth column at the far right.
+- No outside reading or rubbing of this inscription was consulted (none was available); nothing was borrowed from
+  another vessel.

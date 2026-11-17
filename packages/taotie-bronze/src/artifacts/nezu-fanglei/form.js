@@ -37,7 +37,7 @@ export const PLAN = {
   collar: 85.5,
   skirt: 85.5,
   eave: 88,
-  ridgeHalf: 44, // round 8: face-lid's field still ±43 mm at 90 % of the slope, photo-36's ridge half ≈ 45–48 [est]
+  ridgeHalf: 36, // round 10: photo-37 puts the hip-flange ears' roots at ±27–35 mm round the post (the ridge ends), photo-36 at the fitted camera a steeper end triangle; was 44 (round 8), 38 before
   knob: { eave: 19.5, depth: 15, post: [8.5, 7.5], ridge: 0.3 },
 }
 

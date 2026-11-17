@@ -33,11 +33,22 @@ export function eave(kit, { fascia, material, q }) {
     g.add(quad(kit, P(-a, y0), P(a, y0), P(-a, y1), P(a, y1), { relief: fascia, material, density: 0.9 * Math.sqrt(q), fade: 0.4, part: 'eave', name: 'fascia-' + k }))
   }
   // top (between the fascia and the cap) and underside (between the fascia and the collar)
-  const topGeo = new THREE.PlaneGeometry(2 * a, 2 * a)
-  topGeo.rotateX(-Math.PI / 2)
+  // both are FRAMES: open inside the cushion's foot, so the filling hole looks down into the vessel, not onto the slab
+  const shape = new THREE.Shape([new THREE.Vector2(-a, -a), new THREE.Vector2(a, -a), new THREE.Vector2(a, a), new THREE.Vector2(-a, a)])
+  const inner = []
+  const n = D.capN, ri = D.capA - 4
+  for (let i = 0; i < 160; i++) {
+    const th = (-i / 160) * Math.PI * 2 // clockwise: a hole
+    const c = Math.cos(th), s = Math.sin(th)
+    const k = ri / Math.pow(Math.pow(Math.abs(c), n) + Math.pow(Math.abs(s), n), 1 / n)
+    inner.push(new THREE.Vector2(c * k, s * k))
+  }
+  shape.holes.push(new THREE.Path(inner))
+  const topGeo = new THREE.ShapeGeometry(shape, 1)
+  topGeo.rotateX(-Math.PI / 2) // normal +Y
   const top = new THREE.Mesh(topGeo, material)
   top.position.y = y1
-  const under = new THREE.Mesh(topGeo.clone().rotateX(Math.PI), material)
+  const under = new THREE.Mesh(new THREE.ShapeGeometry(shape, 1).rotateX(Math.PI / 2), material) // normal −Y
   under.position.y = y0
   for (const m of [top, under]) { m.userData.part = 'eave'; m.receiveShadow = m.castShadow = true; g.add(m) }
   return g
@@ -68,9 +79,9 @@ export function cap(kit, { face, material, q }) {
     thickness: (x, y) => 2 * (top(x, y) - YM),
     front: face ? { relief: face, rect: { x: -A, y: -A, w: 2 * A, h: 2 * A } } : undefined,
     spacing: 9,
-    reliefSpacing: q >= 1 ? 2.2 : 3.2,
-    refine: (x, y) => (holeDist(x, -y) < 14 ? 1.1 : Infinity), // the rolled lip: a fine ring
-    maxTriangles: Math.round(110000 * q),
+    reliefSpacing: q >= 1 ? 2.7 : 3.6,
+    refine: (x, y) => (holeDist(x, -y) < 12 ? 1.7 : Infinity), // the rolled lip: a fine ring
+    maxTriangles: Math.round(72000 * q),
     material: face ? new kit.PatinaMaterial({ relief: face }) : material,
     part: 'lid',
   })
@@ -103,7 +114,8 @@ export function cap(kit, { face, material, q }) {
   const sleeve = new THREE.Mesh(sg, inner)
   sleeve.userData.part = 'lid'; sleeve.name = 'mouth-sleeve'; sleeve.receiveShadow = true
   g.add(sleeve)
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(1, 40).rotateX(-Math.PI / 2), inner)
+  // the floor far below is the vessel's dark inside: unlit, so the opening reads as a hole in every mode
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(1, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x0a0907 }))
   floor.scale.set(HOLE.rx, 1, HOLE.rz)
   floor.position.set(HOLE.c[0], yBot + 0.5, HOLE.c[1])
   floor.userData.part = 'lid'; floor.name = 'mouth-floor'; floor.receiveShadow = true

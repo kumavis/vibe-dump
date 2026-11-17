@@ -57,33 +57,54 @@ large Spring and Autumn bo). Body height **450 mm**, total 563 mm, length across
 
 ### b.4 Crown [good in outline, est in depth]
 
-Traced on `faces/face-crown.jpg` (photo-18 rectified onto the crown's own plane, 4 px/mm): a plain bar loop (outer
-104 × 113 mm, window 60 × 87 mm, bar ≈ 22 mm in the plane, ≈ 16 mm thick from photo-19), flanked per side by a
-round-topped arched dragon (strap ≈ 20 mm) carrying two curled heads, and a chain of three fat pierced curls
-(Ø 18, 25, 32 mm) climbing to the loop's shoulder; overall width 224 mm. Plate thickness ≈ 13 mm (photo-19). The
-foot is hidden behind the front of the top in both photographs: taken to stand straight on the top.
+Re-read in bo-fix on `faces/face-crown.jpg` (photo-18 rectified onto the crown's own plane, 10 mm grid) and on
+photo-19 at 2×: a plain bar loop (outer 106 × 110 mm, window 60 × 85 mm, ≈ 16 mm thick) standing on a pair of
+confronted openwork dragons — CURLS and S-SHAPES, not arches. Per side, from the axis: crook A (foot X −4…−20, rises,
+arches outward over a ≈ 29 × 18 mm opening and rolls down into a curl under the loop leg's inner side), crook B (its
+confronted twin, foot X −50…−70, rolling inward into a curl under the leg's outer side: the two curls flank the leg's
+foot), an S (a small curl hung on the loop's shoulder, the stem dropping onto B and rolling outward into a fat curl
+with a pierced eye), the big foot curl (Ø 42, pierced eye Ø 10) and a small curl on the floor of the opening. One
+plane of openwork, ≈ 13 mm thick (photo-19); flat-faced straps with rounded edges, an incised line inside every edge,
+a spiral line cut on each curl. The feet are hidden behind the front of the top below Y ≈ 16 in both photographs:
+taken to land straight on the top; the back is the mirror of the front **[guess]**; overall width 230 mm.
 
 ## c. Décor (all from the developed images `faces/dev-*.jpg`)
 
 Layout (body y, mm) **[good]**: mouth margin 0–18 (plain; the lowest row of the field is worn almost flat) · lower
 field 18–144.5 · broad raised border 147.5–161.5 · boss row 161.5–215 · ledge · band 222–261 · ledge · boss row
-267–319 · ledge · band 326–361.5 · ledge · boss row 370–432 · ledge · top band 437.5–450. Ledges ≈ 5 mm raised
+267–319 · ledge · band 326–361.5 · ledge · boss row 370–424.5 · ledge 424.5–431.5 · top band 431.5–450 (bo-fix: the
+top band widened from 12.5 to 18.5 mm and the top ledge lowered 7 mm, measured on dev-upper-18 / 19). Ledges ≈ 5 mm raised
 strips with a shadowed foot. Central panel (钲): a trapezoid, half-width 30.5 mm at the top → 32 mm at the foot
-(panel mm), 161.5–432. Edge strip: panel x 243 → edge.
+(panel mm), 161.5–424.5. Edge strip: panel x 243 → edge.
 
 - **Bosses** [firm count, good position]: three rows × three per half-face, 36 in all; centres at panel x 59.5 /
-  139.5 / 213, rows y 189 / 293 / 401; Ø ≈ 38 mm, ≈ 13 mm proud **[est]**. Each a serpent coiled ≈ 2 turns into a
-  dome, inner turns hatched, a small beast head on the crown (kit `coilBoss`).
+  139.5 / 213, rows y 189 / 293 / 401. **ROUND** (bo-fix): Ø ≈ 37 mm **[good]** (the lit outline on
+  `faces/face-bosses.jpg`, 36–39 across a row), ≈ 13 mm proud **[est]** (the bosses on photo-18's silhouette, seen in
+  profile, are symmetric top and bottom). The dark tongue under each — read in round 8 as a drop-shaped apron — is the
+  boss's own cast shadow under the top light: it changes length with the boss's place, and its edge is soft. Each a
+  serpent coiled ≈ 2 stepped turns into the dome, the inner turn hatched by oblique ribs, an eared tiger head upright
+  on the crown a little above and left of the centre (kit `coilBoss`, one design for all 36).
 - **Ribbons** [firm]: every body is a flat raised ribbon ≈ 6.5–7 mm wide cut by two grooves into three equal ribs;
   ribs dark polished metal, grooves and ground packed with pale grey earth. Heads are solid masses with a ringed eye.
 - **Bands** (traced on `faces/dev-band.jpg`, band 1, left half; band 2 repeats it): from the panel outward five
   units — x 33–79, 79.5–113, (the O ring, centre 121), 129–170.5, 171–217, 217.5–242 — each a G-frame open at the
-  top round a head whose crest runs up to the ledge; snouts face the centre except the second and fifth.
-- **Central panel** (`faces/dev-upper-18.jpg`): two mirrored columns of seven cells; the top cell and the fifth are
-  big round scrolls, the others G-framed heads.
-- **Lower field** (`faces/dev-lower-19.jpg`): a lattice of interlocking G-hooks with heads in the bays, units ≈ 45 ×
-  41 mm in three rows and a worn fourth **[est: the photographs are soft here; no single mask axis could be read]**.
-- **Top band and edge strip**: twisted pairs of ribbons (guilloche) **[est in detail]**.
+  top round a head whose crest runs up to the ledge; snouts face the centre except the second and fifth. MIRRORED
+  about the face centre (photo-18: [edge][A][O][B][C][panel] reads back to front on the right half, each cell
+  mirrored). The O ring is two bodies crossing, over at one crossing and under at the other.
+- **Central panel** (`faces/dev-upper-18.jpg`, re-read in bo-fix): two columns, one per half, ≈ 24 mm inside the
+  frame, of EIGHT cells (scroll 421–399, heads with eyes at ≈ 384, 347, 315, 273, scroll 257–239, heads at ≈ 222,
+  192); the head cells turn 180° by turns, S-links between. The two columns are the same column REPEATED, not
+  mirrored **[firm: photo-18 at 3×]**.
+- **Lower field** (`faces/dev-lower-19.jpg`, re-read in bo-fix): ringed eyes on a lattice 62 mm across × 31.6 mm
+  down (eyes at s ≈ 35, 95, 157; rows 131, 98, 66, 36), four rows, the lowest worn almost flat; a straight repeat
+  (the eyes are not symmetric about the face centre), alternate rows flipped **[good on the lattice, est on the
+  cell's drawing]**.
+- **Top band** (re-read in bo-fix, photo-18 at 6×): 18.5 mm wide (431.5–450; the round-8 layout had 12.5 under a
+  ledge at 432–437.5), a chain of interlocked C-rings of three-ribbed ribbon, two rings per site, a site every ≈ 39–42
+  mm, ribbons running along the top and bottom edges by turns, squared hooks between the sites **[good]**. Edge
+  strip: twisted pairs (guilloche) **[est in detail]**.
+- The ribbon, everywhere: three ribs (≈ 1.6–1.75 mm) parted by two grooves (≈ 0.55 mm), ≈ 6–6.5 mm; the top band's
+  ≈ 5.2 mm. Unit-cell drawings: KIT.md § Woven interlace.
 
 ## d. Not visible
 

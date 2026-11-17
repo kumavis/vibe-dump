@@ -86,26 +86,25 @@ export function hullPoint(x, psi, side, o = [0, 0, 0]) {
   return o
 }
 
-const _a = [0, 0, 0], _b = [0, 0, 0], _c = [0, 0, 0], _d = [0, 0, 0]
-/** outward unit normal at (arc s, psi, side), by central differences (exact axis at the poles) */
+/** outward unit normal at (arc s, psi, side): analytic from r(x), its slope and the facet law (axis at the poles) */
 export function hullNormal(s, psi, side, o = [0, 0, 0]) {
-  const ds = 0.05, dp = 2e-3
-  const s0 = Math.max(0, s - ds), s1 = Math.min(ARC_TOTAL, s + ds)
-  hullPoint(xAtArc(s0), psi, side, _a); hullPoint(xAtArc(s1), psi, side, _b)
-  hullPoint(xAtArc(s), psi - dp, side, _c); hullPoint(xAtArc(s), psi + dp, side, _d)
-  const ex = _b[0] - _a[0], ey = _b[1] - _a[1], ez = _b[2] - _a[2] // toward the tail
-  const fx = _d[0] - _c[0], fy = _d[1] - _c[1], fz = _d[2] - _c[2] // round
-  let nx = ey * fz - ez * fy, ny = ez * fx - ex * fz, nz = ex * fy - ey * fx
-  let l = Math.hypot(nx, ny, nz)
-  if (l < 1e-9) { // a pole
-    o[0] = s < ARC_TOTAL / 2 ? 1 : -1; o[1] = 0; o[2] = 0
-    return o
-  }
-  // outward: away from the axis, or along ±X near the poles
-  const ry = Math.cos(psi), rz = side * Math.sin(psi)
   const x = xAtArc(s)
-  const out = ny * ry + nz * rz + nx * (x > 0 ? 0.3 : -0.3)
-  if (out < 0) { nx = -nx; ny = -ny; nz = -nz }
+  const h = 0.05
+  const r = rAt(x)
+  if (r < 1e-3) { o[0] = x > 0 ? 1 : -1; o[1] = 0; o[2] = 0; return o }
+  const dr = (rAt(Math.min(HULL.nose, x + h)) - rAt(Math.max(HULL.tail, x - h))) / (Math.min(HULL.nose, x + h) - Math.max(HULL.tail, x - h))
+  const n2 = HULL.girders / 2
+  const sk = Math.sin(n2 * psi)
+  const g = 1 - HULL.facet * sk * sk
+  const gp = -HULL.facet * n2 * Math.sin(2 * n2 * psi) // dg/dpsi
+  const c = Math.cos(psi), sn = Math.sin(psi)
+  // P = (x, YC + r g c, side r g s):  Px = (1, dr g c, side dr g s);  Ppsi = r (0, gp c − g s, side (gp s + g c))
+  const ax = 1, ay = dr * g * c, az = side * dr * g * sn
+  const by = gp * c - g * sn, bz = side * (gp * sn + g * c)
+  // n = Ppsi × Px (scaled by 1/r): (by·az − bz·ay, bz·ax − 0·az, 0·ay − by·ax)
+  let nx = by * az - bz * ay, ny = bz * ax, nz = -by * ax
+  if (ny * c + nz * side * sn < 0) { nx = -nx; ny = -ny; nz = -nz }
+  const l = Math.hypot(nx, ny, nz) || 1
   o[0] = nx / l; o[1] = ny / l; o[2] = nz / l
   return o
 }
@@ -231,7 +230,7 @@ export function meridianPath(THREE, psi, side, x0, x1, step = 1) {
 // ------------------------------------------------------------------ fins
 
 /** fin stations (x) */
-export const FIN = { lead: -98, hinge: -183, back: -209, outer: 50, rudderOuter: 47.5, embed: 3.2, thick: 4.2 }
+export const FIN = { lead: -84, tip: -150, hinge: -184, back: -208.5, outer: 32, rudderOuter: 26.5, droop: 0.12, embed: 3.2, thick: 4.2 }
 
 /**
  * One fin's outline in its own plate frame: x = hull x, y = distance from the hull axis. The root
@@ -245,31 +244,33 @@ export function finOutline() {
   for (let x = FIN.back + 2; x <= FIN.lead; x += 2) pts.push([x, Math.max(0.8, rAt(x) - e)])
   // leading edge: up and back, a gentle concave sweep
   const L0 = [FIN.lead, rAt(FIN.lead) - e]
-  const L1 = [-133.5, FIN.outer - 6.5]
-  for (let i = 1; i <= 10; i++) {
-    const t = i / 10
-    const sag = Math.sin(Math.PI * t) * 3.0
-    pts.push([L0[0] + (L1[0] - L0[0]) * t - sag * 0.6, L0[1] + (L1[1] - L0[1]) * t + sag * 0.5])
+  // a long low sweep, slightly convex, up to the beak at the outer leading corner
+  const o = FIN.outer, xt = FIN.tip
+  const L1 = [xt + 3.5, o - 5.0]
+  for (let i = 1; i <= 12; i++) {
+    const t = i / 12
+    const bow = Math.sin(Math.PI * t) * 2.2
+    pts.push([L0[0] + (L1[0] - L0[0]) * t + bow * 0.25, L0[1] + (L1[1] - L0[1]) * t + bow])
   }
-  // the beak at the leading outer corner: forward over the leading edge, its tip turned down, back over the top
-  const o = FIN.outer
-  pts.push([-131.0, o - 4.4], [-128.2, o - 2.6], [-127.4, o - 4.6], [-125.6, o - 3.2], [-125.8, o + 0.2], [-128.0, o + 2.6], [-131.6, o + 3.6], [-135.6, o + 2.9], [-139.2, o + 0.6])
+  // the beak: forward over the leading edge, its tip turned down, back over the top
+  pts.push([xt + 5.6, o - 3.6], [xt + 7.8, o - 2.2], [xt + 8.4, o - 4.2], [xt + 10.0, o - 2.8], [xt + 9.8, o + 0.4], [xt + 7.8, o + 2.6], [xt + 4.4, o + 3.4], [xt + 0.8, o + 2.6], [xt - 1.8, o + 0.4])
   // the notched outer edge, fore → aft, to the hinge
-  const notchP = 9.5, notchW = 2.6, notchD = 2.6
-  let x = -143.5
-  pts.push([-141.5, o])
+  const notchP = 8.4, notchW = 2.4, notchD = 2.4
+  let x = xt - 4.2
+  const yo = (xx) => o - (xt - 3.0 - xx) * FIN.droop // the outer edge droops a little toward the tail
+  pts.push([xt - 3.0, o])
   while (x - notchP > FIN.hinge + 4) {
     const xn = x - notchP
-    pts.push([xn + notchW, FIN.outer], [xn + notchW, FIN.outer - notchD], [xn, FIN.outer - notchD], [xn, FIN.outer])
+    pts.push([xn + notchW, yo(xn + notchW)], [xn + notchW, yo(xn + notchW) - notchD], [xn, yo(xn) - notchD], [xn, yo(xn)])
     x = xn
   }
-  pts.push([FIN.hinge + 0.6, FIN.outer])
+  pts.push([FIN.hinge + 0.6, yo(FIN.hinge + 0.6)])
   // step down to the rudder's outer edge (the rudder is a separate leaf behind the hinge)
   pts.push([FIN.hinge - 0.6, FIN.rudderOuter])
   // rudder outer edge aft, its trailing corner hooking back and down
-  pts.push([FIN.back + 6, FIN.rudderOuter], [FIN.back + 1.5, FIN.rudderOuter + 2.2], [FIN.back - 3.2, FIN.rudderOuter + 1.2], [FIN.back - 4.4, FIN.rudderOuter - 2.6], [FIN.back - 2.2, FIN.rudderOuter - 2.0], [FIN.back - 0.6, FIN.rudderOuter - 4.5])
+  pts.push([FIN.back + 6, FIN.rudderOuter - 2.0], [FIN.back + 1.5, FIN.rudderOuter + 0.2], [FIN.back - 3.2, FIN.rudderOuter - 0.8], [FIN.back - 4.4, FIN.rudderOuter - 4.6], [FIN.back - 2.2, FIN.rudderOuter - 4.0], [FIN.back - 0.6, FIN.rudderOuter - 6.5])
   // trailing edge down to the root
-  for (let y = FIN.rudderOuter - 7; y > 6; y -= 5) pts.push([FIN.back + (FIN.rudderOuter - y) * 0.04, y])
+  for (let y = FIN.rudderOuter - 9; y > 6; y -= 5) pts.push([FIN.back + (FIN.rudderOuter - y) * 0.04, y])
   pts.push([FIN.back + 0.6, 2.0])
   return pts
 }
@@ -292,10 +293,10 @@ export function finHoles() {
 }
 
 /** the panel rectangle laid over the fin (plate mm) */
-export const FIN_RECT = { x: -216, y: 0, w: 124, h: 58 }
+export const FIN_RECT = { x: -216, y: 0, w: 136, h: 38 }
 
 // ------------------------------------------------------------------ hung parts: stations
 
-export const GONDOLA = { x0: 106, x1: 160, w: 15.5, h: 12 } // control car under the bow
+export const GONDOLA = { x0: 110, x1: 157, w: 15.5, h: 14 } // control car under the bow
 export const ENGINES = [{ x: 4, psi: (135 * Math.PI) / 180 }, { x: -58, psi: (135 * Math.PI) / 180 }]
 export const CRADLE = { x: 30, half: 0.85 } // the stand's cradle at x, ±half rad round the bottom keel

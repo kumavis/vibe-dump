@@ -140,7 +140,7 @@ export function capFacePanel(kit, { A, hole }, { ppmm, seed }) {
     ctx.beginPath(); ctx.ellipse(A - hole.c[0], A - hole.c[1], hole.rx + 13, hole.rz + 13, 0, 0, Math.PI * 2); ctx.fill()
     ctx.fillRect(A - 9, A - 60, 18, 120) // the ridge's foot
   }, { height: 0.06, profile: 'plateau', shoulder: 0.3 })
-  // ---- the main masses, ≈ 5 mm proud, round-shouldered (photos 41, 44: fat bands with deep shadow between)
+  // ---- the main masses, ≈ 6.5 mm proud (41/44: their shadowed sides ≈ 0.5–0.7 of the 12 mm eave slab), round-shouldered (photos 41, 44: fat bands with deep shadow between)
   const main = [
     // horn: broad band from beside the spout root out along the back, turning back at the outer corner, hooked
     kit.roundStroke(Q([[13, -50], [90, -54], [99, -88], [84, -101]]), { width: [16, 16, 13, 11], round: 0.7, inner: 0.2, end: 'spiral',
@@ -163,17 +163,17 @@ export function capFacePanel(kit, { A, hole }, { ppmm, seed }) {
     // eye socket surround
     kit.roundPlate({ c: P([48, 4]), w: 48, h: 41, r: 17, contour: { inset: 1.5, line: 0.7 } }),
   ]
-  kit.carve(panel, main, { height: 5.5, shoulder: 2.6, depth: 0.7, seed, irregularity: 0.6 })
+  kit.carve(panel, main, { height: 6.5, shoulder: 2.8, depth: 0.7, seed, irregularity: 0.6 })
   // ---- the cheek / ear plate down the outer slope: the highest flat plate (44: a thick slab with an incised hook)
   const ear = [kit.roundPlate({ c: P([110, 4]), w: 36, h: 92, r: 13, contour: { inset: 2, line: 0.8 }, fill: { kind: 'coil', pitch: 3.4, line: 1.1 } })]
-  kit.carve(panel, ear, { height: 7, shoulder: 2.6, depth: 0.9, seed: seed + 1 })
+  kit.carve(panel, ear, { height: 8.5, shoulder: 3, depth: 0.9, seed: seed + 1 })
   // ---- comb rows: quills along the outer foot and teeth along the front foot (15: a row of hooks under the jaws)
   const teeth = []
   for (let z = -80; z <= 64; z += 12) teeth.push(kit.roundPlate({ c: P([133.5, z]), w: 6.5, h: 7, r: 1.8 }))
   for (let xo = 24; xo <= 112; xo += 13) teeth.push(kit.roundPlate({ c: P([xo, 134]), w: 7.5, h: 6, r: 1.8 }))
-  kit.carve(panel, teeth, { height: 3.4, shoulder: 1.4, depth: 0.4, seed: seed + 2, contour: false })
+  kit.carve(panel, teeth, { height: 4, shoulder: 1.4, depth: 0.4, seed: seed + 2, contour: false })
   // ---- the eye: a domed boss in its socket, a sunk ring round it and a pupil dot (41, 44)
-  kit.pillowBoss(panel, { c: P([48, 4]), w: 32, h: 28, round: 0.9, height: 5.5, crown: 0.85, base: 'field', slit: false, ring: { gap: 1.4, line: 1.4, depth: 1.2 } })
+  kit.pillowBoss(panel, { c: P([48, 4]), w: 32, h: 28, round: 0.9, height: 6, crown: 0.85, base: 'field', slit: false, ring: { gap: 1.4, line: 1.4, depth: 1.2 } })
   panel.sink((ctx) => { ctx.beginPath(); ctx.arc(...P([45, 0]), 2.6, 0, Math.PI * 2); ctx.fill() }, { depth: 1.6, profile: 'u' })
   // ---- fine leiwen ground on the −X half, then mirror the whole half (ground included)
   kit.leiwenFill(panel, { rect: { x: 1.5, y: 1.5, w: A - 1.5, h: w - 3 }, margin: 0.8 }, { pitch: 1.15, line: 0.5, depth: 0.35, cell: [5, 8], pairs: 0.4, seed })

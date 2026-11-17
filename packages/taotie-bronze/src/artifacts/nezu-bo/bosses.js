@@ -13,7 +13,7 @@ import { halfLength, ARC_END, PANEL_W, faceTheta, pointAt, normalAt, LAYOUT } fr
 // faces/face-bosses.jpg, 36–39 across the rows), the dark tongue under it changes length with the boss's distance from
 // the light, and the bosses seen in profile on photo-18's silhouette are symmetric top and bottom (≈ 13 mm proud). The
 // renderer casts the shadow. The creature: a serpent wound ≈ 2 stepped turns (the inner turn and the tail hatched by
-// close oblique ribs), its eared tiger head upright on the crown, offset toward the top (photo-18: +0.15 … +0.27 r).
+// close oblique ribs), its eared tiger head upright on the crown, a little above and left of the centre (photo-18 / detail-boss: +0.1 … +0.27 r).
 export const BOSS = { r: 18.5, height: 13 }
 
 export function bossMaps(kit, { quality = 1, seed = 1 } = {}) {
@@ -24,8 +24,8 @@ export function bossMaps(kit, { quality = 1, seed = 1 } = {}) {
   kit.coilBoss(panel, {
     c, r: R, height: BOSS.height, turns: 2.0, rot: 0, hand: 1, start: 250, gap: 0.16, ridge: 0.17,
     foot: 'plain',
-    striate: { pitch: 1.0, depth: 0.32, slant: 1.1, from: 0.35 },
-    head: { style: 'tiger', at: [0, 0.2], w: 0.54, h: 0.5, height: 0.36 },
+    striate: { pitch: 1.0, depth: 0.32, slant: 1.1, from: 0.55 },
+    head: { style: 'tiger', at: [-0.06, 0.12], w: 0.56, h: 0.5, height: 0.36 },
   })
   // the foot of a 13 mm dome reads as a deep recess to the default cavity measure (a pale ring of earth round every
   // boss); the photographs show clean metal there: a gentler large-scale cavity

@@ -48,12 +48,18 @@ const smax = (a, b, k) => -smin(-a, -b, k)
 /** a kit head field placed at `at`, looking along `fwd` (unit, in the XZ or any plane), up +Y-ish */
 function placedHead(kit, params, at, fwd, up = [0, 1, 0]) {
   const H = kit.headSDF(params)
+  // a bounding sphere: far from it the field is only a lower bound (cheap), never inside smin's reach
+  const bc = H.bounds.min.map((v, i) => (v + H.bounds.max[i]) / 2)
+  const br = 0.5 * Math.hypot(...H.bounds.max.map((v, i) => v - H.bounds.min[i]))
   // head frame: z = fwd, y = up ⟂ fwd, x = y × z
   const z = new THREE.Vector3(...fwd).normalize()
   const y = new THREE.Vector3(...up).addScaledVector(z, -new THREE.Vector3(...up).dot(z)).normalize()
   const x = new THREE.Vector3().crossVectors(y, z)
   return (px, py, pz) => {
     const dx = px - at[0], dy = py - at[1], dz = pz - at[2]
+    const hx = dx * x.x + dy * x.y + dz * x.z, hy = dx * y.x + dy * y.y + dz * y.z, hz = dx * z.x + dy * z.y + dz * z.z
+    const far = Math.hypot(hx - bc[0], hy - bc[1], hz - bc[2]) - br
+    if (far > 3) return far
     return H.sd(dx * x.x + dy * x.y + dz * x.z, dx * y.x + dy * y.y + dz * y.z, dx * z.x + dy * z.y + dz * z.z)
   }
 }
@@ -73,23 +79,23 @@ export function gondola(kit, { q = 1, material, seed = 1 }) {
   const xc = (G.x0 + G.x1) / 2, hl = (G.x1 - G.x0) / 2
   const yTop = YC - rAt(xc) // hull bottom over the car's middle (local y 0)
   const hw = G.w / 2
-  const prow = placedHead(kit, { kind: 'tiger', width: 10.5, projection: 0.42, droop: 18, eyeSize: 1.15, hornSize: 0.9, embed: 3, seed }, [hl + 1.2, -6.4, 0], [1, 0, 0])
-  const stern = placedHead(kit, { kind: 'bovine', width: 9, projection: 0.3, droop: 26, hornSize: 0.8, hornCurl: 0.6, embed: 3, seed: seed + 1 }, [-hl - 0.4, -6.0, 0], [-1, 0, 0])
+  const prow = placedHead(kit, { kind: 'tiger', width: 10.5, projection: 0.42, droop: 18, eyeSize: 1.15, hornSize: 0.9, embed: 3, seed }, [hl + 1.4, -7.2, 0], [1, 0, 0])
+  const stern = placedHead(kit, { kind: 'bovine', width: 9, projection: 0.3, droop: 26, hornSize: 0.8, hornCurl: 0.6, embed: 3, seed: seed + 1 }, [-hl - 0.4, -7.0, 0], [-1, 0, 0])
   const pitch = 4.3 // window spacing
   const sd = (x, y, z) => {
     // cabin: a long rounded box, the lower hull an ellipsoid keel, a pointed prow and a rounded stern
-    let d = sdRoundBox(x, y + 6.6, z, hl - 3, 5.6, hw, 3.2)
-    d = smin(d, sdEllipsoid(x + 0.5, y + 8.4, z, hl, 5.4, hw * 0.92), 2.0)
-    d = smin(d, sdCone(x, y, z, [hl - 6, -6.8, 0], [hl + 1.0, -6.4, 0], hw * 0.9, 2.6), 2.4)
+    let d = sdRoundBox(x, y + 7.2, z, hl - 3, 6.4, hw, 3.2)
+    d = smin(d, sdEllipsoid(x + 0.5, y + 10.0, z, hl, 5.6, hw * 0.92), 2.0)
+    d = smin(d, sdCone(x, y, z, [hl - 6, -7.6, 0], [hl + 1.0, -7.2, 0], hw * 0.9, 2.8), 2.4)
     // a belt (bowstring) round the cabin under the windows
-    d = smin(d, sdRoundBox(x, y + 9.4, z, hl - 3.4, 0.55, hw + 0.55, 0.5), 0.4)
+    d = smin(d, sdRoundBox(x, y + 10.4, z, hl - 3.4, 0.6, hw + 0.6, 0.5), 0.4)
     // the neck into the hull: a low block running up inside the hull, closed under the bounds
     d = smin(d, sdRoundBox(x, y - 1.6, z, hl - 6, 6.4, hw * 0.62, 2.0), 2.0)
     d = smax(d, y - 9.0, 0.5)
     // windows: a row of square recesses along both sides and round the prow
-    if (y > -6.6 && y < -1.2 && x > -hl + 6 && x < hl - 4) {
+    if (y > -7.8 && y < -1.6 && x > -hl + 6 && x < hl - 4) {
       const qx = ((x % pitch) + pitch * 1.5) % pitch - pitch / 2
-      const w = sdRoundBox(qx, y + 3.9, Math.abs(z) - hw, 1.25, 1.55, 1.3, 0.35)
+      const w = sdRoundBox(qx, y + 4.7, Math.abs(z) - hw, 1.3, 1.9, 1.3, 0.35)
       d = smax(d, -w, 0.35)
     }
     // the beast heads at prow and stern
@@ -97,8 +103,8 @@ export function gondola(kit, { q = 1, material, seed = 1 }) {
     d = smin(d, stern(x, y, z), 1.6)
     return d
   }
-  const bounds = { min: [-hl - 12, -18, -hw - 6], max: [hl + 14, 10, hw + 6] }
-  const voxel = 0.42 / Math.sqrt(q)
+  const bounds = { min: [-hl - 12, -20, -hw - 6], max: [hl + 14, 10, hw + 6] }
+  const voxel = 0.62 / Math.sqrt(q)
   const m = meshOf(kit, sd, bounds, voxel, material, 'gondola')
   m.position.set(xc, yTop, 0)
   m.name = 'gondola'
@@ -152,7 +158,7 @@ function engineGeometry(kit, { q, seed }) {
     return d
   }
   const bounds = { min: [-18, cy - 11, -11], max: [16, -(r0 - 7.5), 11] }
-  const voxel = 0.33 / Math.sqrt(q)
+  const voxel = 0.54 / Math.sqrt(q)
   return kit.meshSDF({ bounds, sd }, { voxel })
 }
 
@@ -196,7 +202,7 @@ export function noseAndTail(kit, { q = 1, material }) {
     d = smin(d, sdTorusX(x - HULL.tail - 2.0, yy, z, 2.6, 0.7), 0.5)
     return smax(d, x - (HULL.tail + 14), 0.3)
   }
-  const vox = 0.3 / Math.sqrt(q)
+  const vox = 0.42 / Math.sqrt(q)
   const n = meshOf(kit, nose, { min: [HULL.nose - 9, YC - 7, -7], max: [HULL.nose + 10, YC + 7, 7] }, vox, material, 'mooring')
   const t = meshOf(kit, tail, { min: [HULL.tail - 7, YC - 6, -6], max: [HULL.tail + 16, YC + 6, 6] }, vox, material, 'mooring')
   n.name = 'mooring-cone'; t.name = 'tail-knob'
@@ -209,7 +215,7 @@ export function flanges(kit, { material, seed = 1 }) {
   const out = []
   const spec = (psi, side, x0, x1, i, h = 3.4) => kit.flange({
     path: meridianPath(THREE, psi, side, x0, x1), height: h, thickness: 3.0, embed: 1.8, taper: 3, bevel: 0.5, waver: 0.35,
-    notches: { shape: 'T', pitch: 10, depth: 0.45, width: 2.2 }, ends: { start: 'taper', end: { type: 'beak', length: 3.2 } },
+    notches: { shape: 'T', pitch: 10, depth: 0.45, width: 2.2 }, ends: { start: 'taper', end: 'taper' },
     seed: seed + i, material, part: 'flanges',
   })
   const xf = REG.bow[1] - 4 // forward end: behind the nose cap
@@ -229,7 +235,7 @@ export function fins(kit, { q = 1, relief, outline, holes, rect, material }) {
   const geo = kit.plate({
     outline, holes, thickness: 4.2,
     front: { relief, rect }, back: { relief: 'front', mirror: false },
-    spacing: 7, reliefSpacing: q >= 1 ? 1.7 : 2.6, material, part: 'fins',
+    spacing: 7, reliefSpacing: q >= 1 ? 2.1 : 3.0, material, part: 'fins',
   }).geometry
   const out = []
   // plate frame: x = hull x, y = out from the axis. Rotate about X so +y points at each keel / side.
@@ -330,7 +336,7 @@ export function dragonHead(kit, { q = 1, material, seed = 1 }) {
   const sd = (x, y, z) => smin(head(x, y, z), sdTube(x, y, z, neck), 1.6)
   const R = 14
   const bounds = { min: [at[0] - R, at[1] - R, at[2] - R], max: [at[0] + R, at[1] + R, at[2] + R] }
-  const m = meshOf(kit, sd, bounds, 0.36 / Math.sqrt(q), material, 'stand')
+  const m = meshOf(kit, sd, bounds, 0.45 / Math.sqrt(q), material, 'stand')
   m.name = 'dragon-head'
   return m
 }
@@ -365,7 +371,7 @@ export function cradle(kit, { q = 1, material, seed = 1 }) {
   }
   const ext = (rOut + 12)
   const bounds = { min: [x0 - 14, STAND.colTop - 6, -ext], max: [x0 + 14, YC - rh * Math.cos(B) + 16, ext] }
-  const m = meshOf(kit, sd, bounds, 0.42 / Math.sqrt(q), material, 'stand')
+  const m = meshOf(kit, sd, bounds, 0.7 / Math.sqrt(q), material, 'stand')
   m.name = 'cradle'
   return m
 }

@@ -42,12 +42,16 @@ export const Y_C = 140 // where the swept upper wall starts (top of the band's u
 export const RIM = {
   r0: 44, y0: 161, // side rim (θ ±60…±120): a gently flared lip
   // jue-fix: the spout is a broad open trough that FLARES toward its end (half-width halfRoot at the cup → half at
-  // the tip round, wider), longer and its lip higher, the channel shallower at the mouth than at the root
-  // (photo-02 through the refitted side camera: outer width ≈ 24 at the root → ≈ 30 near the end (was 27 → 19), tip
-  // ρ 97.5, lip ≈ 187.5–189 at the end, 8 mm deep there; the edge rises fast off the cup and runs nearly level to
-  // the end (rise 2.2: ease-out), dropping `droop` over the last 12 mm into the rounded end)
-  spout: { half: 16, halfRoot: 12, tip: 97.5, y: 189, depth: 8, dip: 5, wall: 5, rise: 2.2, droop: 1.5, roll: 1.9 },
-  tail: { tip: 77, y: 193, baseAz: 13, pow: 1.15 },
+  // the tip round, wider: outer width ≈ 26 at the root → 38 at the mouth, was 27 → 19: the far wall's top stands
+  // ≈ 10 mm higher in photo-02 than a 31 mm mouth puts it), the channel shallower at the
+  // mouth (8 mm, was 13) than at the root. Both wall tops climb STEADILY from the side rim at z ≈ z0 to the level end
+  // (≈ 0.5 mm per mm of z: the near wall's top back-projected from photo-02 through the refitted side camera; the old
+  // fast-rising pow 0.65 sat ≈ 8 mm too high at the posts' feet) — reaching S.y at z = tip − 10, `droop` mm lower
+  // at the very end; a thick rolled rim along both walls (buildSpoutLip).
+  spout: { half: 21, halfRoot: 18, tip: 97, y: 188, depth: 8, dip: 5, wall: 5, z0: 28, rise: 1, droop: 0.6, roll: 1.9 },
+  // jue-fix (photo-02 through the refitted side camera): tip 2.5 mm lower; the far wall of the tail shows ≈ 8 mm beyond
+  // the old silhouette below its top edge: a broader base (±18°, was ±13) and a fuller, less hollowed underside (full)
+  tail: { tip: 77, y: 190.5, baseAz: 18, pow: 1.15, full: 1 },
   soft: 12, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
   lip: 3.0, // wall thickness at the rim: a flat, slightly thickened edge (no rolled tube: fix pass r8)
 }
@@ -91,8 +95,8 @@ export function rimHeight(az, rho) {
   let y = RIM.y0
   // a smooth saddle: lowest at the sides (θ ±90), rising into spout and tail
   if (z > 0) {
-    const t = clamp((z - 6) / (S.tip - 6), 0, 1)
-    y += (S.y - RIM.y0) * (1 - Math.pow(1 - t, S.rise)) - S.droop * smooth((z - (S.tip - 12)) / 12)
+    const t = clamp((z - S.z0) / (S.tip - 10 - S.z0), 0, 1)
+    y += (S.y - RIM.y0) * Math.pow(t, S.rise) - S.droop * smooth((z - (S.tip - 12)) / 12)
   }
   if (z < 0) y += (T.y - RIM.y0) * Math.pow(clamp((-z - 4) / (T.tip - 4), 0, 1), T.pow)
   return y + 0 * x
@@ -131,7 +135,9 @@ export function meridian(az) {
   const re = rimPlan(az), ye = rimHeight(az, re)
   const dx = re - rc, dy = ye - Y_C
   // tail / sides: vertical at the band top, sweeping out (concave) into the rim
-  const F = resample(bez([rc, Y_C], [rc + 0.08 * dx, Y_C + 0.45 * dy], [rc + 0.4 * dx, Y_C + 0.86 * dy], [re, ye], 40), N_UP)
+  // the tail's meridians are fuller (straighter from the band top to the tip): blend by how far the rim runs out
+  const tw = Math.cos(az * DEG) < 0 ? RIM.tail.full * smooth((re - RIM.r0) / 14) : 0
+  const F = resample(bez([rc, Y_C], [rc + lerp(0.08, 0.22, tw) * dx, Y_C + lerp(0.45, 0.34, tw) * dy], [rc + lerp(0.4, 0.6, tw) * dx, Y_C + lerp(0.86, 0.76, tw) * dy], [re, ye], 40), N_UP)
   // spout: a U channel. Every spout meridian runs up out of the band, out along the sloping floor (the chin
   // seen from outside) and then climbs its wall into the rim; side walls fall out of meridians whose rim point
   // lies close in, the rounded end out of those that reach the tip.

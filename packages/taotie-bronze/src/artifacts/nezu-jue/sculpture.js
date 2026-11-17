@@ -59,37 +59,39 @@ export function handleSDF() {
     d = smin(d, head(x, y, z), 1.4)
     return d
   }
-  return { sd, bounds: { min: [30, 96, -12], max: [70, 154, 12] } }
+  return { sd, bounds: { min: [30, 96, -14.5], max: [70, 154, 14.5] } } // ≥ 3 mm of air round the head's horns (jue-fix)
 }
 
 /** the head on the loop's top (jue-fix, photo-02 crop 'handle' enlarged): a RAM's face looking outward over the loop's
- *  top outer corner — a compact rounded skull ≈ 13.6 mm across (the strap is 11), sitting ≈ 4.5 mm proud of the strap's
- *  top; ram's horns coiling down each side (≈ 17 mm over the coils); a low flat pad on the poll between their roots
+ *  top outer corner — a compact rounded skull ≈ 11.6 mm across (the strap is 11), sitting ≈ 4 mm proud of the strap's
+ *  top; ram's horns coiling down each side (≈ 18 mm over the coils); a low flat pad on the poll between their roots
  *  (the flat oval "plate" the photograph shows on top); a brow ridge, two domed eyes and a muzzle running down into the
  *  strap's outer face, with two nostril pits. Frame: x = ρ (out), y up, z across the strap. */
+// (photo-02 vs the side render: the head's mass sits ≈ 2 mm further in over the top arm and its poll ≈ 1.5 mm higher
+// than a first try; the face — brow, eyes, muzzle — stays on the loop's outer corner)
 const HEAD = {
-  skull: [43.0, 141.0, 0], skullR: [6.0, 5.2, 6.8],
-  poll: [42.0, 147.3, 0], pollHalf: [4.2, 0.9, 5.2],
-  horn: { axis: [42.0, 142.2], r0: 3.6, r1: 1.4, z0: 3.0, z1: 7.4, t0: 1.9, t1: 0.9, a0: 90, a1: 375, n: 18 },
-  brow: [48.3, 143.6, 0], browHalf: [0.9, 0.9, 4.6],
-  eye: [48.4, 141.6, 3.0], eyeR: 1.35,
-  muzzle: [49.6, 137.5, 0], muzzleHalf: [1.7, 3.4, 3.0],
-  nostril: [51.2, 135.3, 1.3], nostrilR: 0.55,
+  skull: [42.0, 141.3, 0], skullR: [5.6, 5.0, 5.8],
+  poll: [40.9, 146.9, 0], pollR: [4.0, 1.3, 4.6],
+  // each horn coils round an axis turned 30° forward of the side (so the coil reads from the front and from the
+  // photograph's three-quarter station): up over the poll → back → down → forward under the eye, shrinking
+  horn: { c: [40.8, 141.9, 4.6], axis: [0.5, 0, 0.866], r0: 3.9, r1: 1.2, t0: 2.0, t1: 0.75, a1: 300, adv: 1.6, n: 22 },
+  brow: [[48.6, 143.7, 0.9], [47.9, 143.3, 4.4]], browR: 0.8,
+  eye: [48.7, 141.7, 3.0], eyeR: 1.45, socket: [1.95, 0.42],
+  muzzle: [49.3, 137.9, 0], muzzleHalf: [1.6, 3.3, 2.6],
+  nose: [50.2, 135.1, 0], noseR: [1.6, 1.4, 2.7],
+  nostril: [51.6, 135.2, 1.2], nostrilR: 0.55,
 }
-// the horns as chains of capsules along a shrinking coil: top of the head → back → down → forward round the axis
+// the horns as chains of capsules along a shrinking coil (authored on the +z side, mirrored to −z)
 const HORNS = (() => {
-  const H = HEAD.horn, out = []
-  for (const side of [-1, 1]) {
-    const pts = []
-    for (let i = 0; i <= H.n; i++) {
-      const s = i / H.n, a = (H.a0 + (H.a1 - H.a0) * s) * DEG
-      const r = H.r0 + (H.r1 - H.r0) * s
-      // angle from +x (out): 90 up → 180 back (toward the cup) → 270 down → 360 out → 375, the tip turning up
-      pts.push([H.axis[0] + r * Math.cos(a), H.axis[1] + r * Math.sin(a), side * (H.z0 + (H.z1 - H.z0) * Math.pow(s, 0.6)), H.t0 + (H.t1 - H.t0) * s])
-    }
-    out.push(pts)
+  const H = HEAD.horn, ax = H.axis
+  const e2 = [-ax[2], 0, ax[0]] // in the coil plane, horizontal: back (−x) and a little out
+  const pts = []
+  for (let i = 0; i <= H.n; i++) {
+    const s = i / H.n, a = H.a1 * s * DEG
+    const r = H.r0 + (H.r1 - H.r0) * s, k = H.adv * s
+    pts.push([H.c[0] + r * Math.sin(a) * e2[0] + k * ax[0], H.c[1] + r * Math.cos(a), H.c[2] + r * Math.sin(a) * e2[2] + k * ax[2], H.t0 + (H.t1 - H.t0) * s])
   }
-  return out
+  return [pts, pts.map(([x, y, z, t]) => [x, y, -z, t])]
 })()
 function sdCapsule(px, py, pz, a, b, ra, rb) {
   const bax = b[0] - a[0], bay = b[1] - a[1], baz = b[2] - a[2]
@@ -104,20 +106,26 @@ function sdEllipsoid(x, y, z, r) {
 }
 function head(x, y, z) {
   const H = HEAD
-  // cheap reject: the head lives in x 34…53, y 132…150, |z| < 10
-  const far = Math.max(34 - x, x - 53, 132 - y, y - 150, Math.abs(z) - 10)
+  // cheap reject: the head lives in x 34…54, y 131…150, |z| < 11.5 (a lower bound of the distance outside it)
+  const far = Math.max(34 - x, x - 54, 131 - y, y - 150, Math.abs(z) - 11.5)
   if (far > 2) return far
   let d = sdEllipsoid(x - H.skull[0], y - H.skull[1], z - H.skull[2], H.skullR)
-  d = smin(d, sdRBox3(x - H.poll[0], y - H.poll[1], z, H.pollHalf[0], H.pollHalf[1], H.pollHalf[2], 0.8), 1.2)
+  d = smin(d, sdEllipsoid(x - H.poll[0], y - H.poll[1], z - H.poll[2], H.pollR), 1.2)
+  d = smin(d, sdRBox3(x - H.muzzle[0], y - H.muzzle[1], z, H.muzzleHalf[0], H.muzzleHalf[1], H.muzzleHalf[2], 1.4), 1.6)
+  d = smin(d, sdEllipsoid(x - H.nose[0], y - H.nose[1], z - H.nose[2], H.noseR), 1.0)
   for (const P of HORNS) {
     let hd = 1e9
     for (let i = 0; i < P.length - 1; i++) hd = Math.min(hd, sdCapsule(x, y, z, P[i], P[i + 1], P[i][3], P[i + 1][3]))
-    d = smin(d, hd, 0.8)
+    d = smin(d, hd, 0.7)
   }
-  d = smin(d, sdRBox3(x - H.brow[0], y - H.brow[1], z, H.browHalf[0], H.browHalf[1], H.browHalf[2], 0.8), 0.9)
-  d = smin(d, sdRBox3(x - H.muzzle[0], y - H.muzzle[1], z, H.muzzleHalf[0], H.muzzleHalf[1], H.muzzleHalf[2], 1.5), 1.6)
   for (const s of [-1, 1]) {
-    d = smin(d, len3(x - H.eye[0], y - H.eye[1], z - s * H.eye[2]) - H.eyeR, 0.5)
+    const [b0, b1] = H.brow
+    d = smin(d, sdCapsule(x, y, z, [b0[0], b0[1], s * b0[2]], [b1[0], b1[1], s * b1[2]], H.browR, H.browR * 0.8), 0.6)
+    // the eye: a sunk ring (socket) round a domed ball
+    const ex = x - H.eye[0], ey = y - H.eye[1], ez = z - s * H.eye[2]
+    const ring = len2(len2(ey, ez) - H.socket[0], ex) - H.socket[1]
+    d = smax(d, -ring, 0.3)
+    d = smin(d, len3(ex, ey, ez) - H.eyeR, 0.35)
     d = smax(d, -(len3(x - H.nostril[0], y - H.nostril[1], z - s * H.nostril[2]) - H.nostrilR), 0.3)
   }
   return d
@@ -141,7 +149,7 @@ function postGeometry(kit, { q, whorl, base }) {
   if (_postGeo.has(key)) return _postGeo.get(key)
   const seg = Math.max(16, Math.round(32 * Math.sqrt(q)))
   // stem with a slight foot swelling where it grows out of the rim; it runs up inside the cap
-  const stemPts = [[0, base - 1.5], [POST.stemR + 0.9, base - 1.5], [POST.stemR + 0.7, base + 2.5], [POST.stemR + 0.2, base + 7], [POST.stemR, base + 12], [POST.stemR, POST.capY - 1.0], [POST.stemR - 0.4, POST.capY + 1], [0, POST.capY + 1]]
+  const stemPts = [[0, base], [POST.stemR + 0.9, base], [POST.stemR + 0.7, base + 2.5], [POST.stemR + 0.2, base + 7], [POST.stemR, base + 12], [POST.stemR, POST.capY - 1.0], [POST.stemR - 0.4, POST.capY + 1], [0, POST.capY + 1]]
   const stem = new THREE.LatheGeometry(stemPts.map(([r, y]) => new THREE.Vector2(r, y)), seg)
   // cap: revolved profile; its dome carries the whorl panel (polar mapping)
   const P = POST.cap
@@ -184,10 +192,11 @@ function postGeometry(kit, { q, whorl, base }) {
 export function buildPost(kit, { az, q = 1, material, capMaterial, whorl }) {
   const g = new THREE.Group()
   g.name = 'post'; g.userData.part = 'posts'
-  // the stem stands on the lip, set a little inside it (its foot swells into the rim); rimPlan / rimHeight are
-  // mirror-symmetric about the spout axis, so both posts get the same base
-  const rho = rimPlan(az) - 3.2
-  const base = Math.round((rimHeight(az, rho + 3.2) - 2.6) * 1000) / 1000
+  // the stem stands ON the lip, its axis 2.4 mm in from the rim's outer edge, its swollen foot sunk 1.2 mm into the lip top (jue-fix: it
+  // hung 4 mm below the rim, a cut-off column end visible inside the cup); rimPlan / rimHeight are mirror-symmetric
+  // about the spout axis, so both posts get the same base
+  const rho = rimPlan(az) - 2.4
+  const base = Math.round((rimHeight(az, rho + 2.4) - 1.2) * 1000) / 1000
   const geo = postGeometry(kit, { q, whorl, base })
   for (const [name, gg, mat] of [['stem', geo.stem, material], ['cap', geo.cap, whorl ? capMaterial : material]]) {
     const m = new THREE.Mesh(gg, mat)

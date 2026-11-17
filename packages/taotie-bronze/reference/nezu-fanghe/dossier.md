@@ -51,10 +51,8 @@ face plane (corner-flange roots) and ignoring the lid and eave silhouettes, whos
 - **Frieze** 255–297, **collar** 297–430: concave, flaring to ≈ 304 mm under the eave; notched flanges on its
   corners run out under the eave corners into hooks (41: the hook rises at the corner).
 - **Eave**: flat slab 12 mm thick (M on 45), 332 mm square, a row of squared spirals on the fascia (45).
-- **Cap**: a cushion, steep at a short skirt, rounding to a broad plateau ≈ 58 mm above the eave (I: the far edge
-  rides up in every view). **Filling hole** (real opening): a kidney-shaped oval ≈ 48 × 31 mm on the spine near
-  the handle side (15 — vessel B, 41/43/44 — A). **Ridge**: a crenellated ridge of ≈ 4–5 blocks on the spine
-  between the hole and the spout root (42, 39, 44), ≈ 17 mm tall.
+- **Cap**: ONE animal face on a swelling cushion — see **The top: a face** below (supersedes the round-8 reading of
+  one asymmetric creature with the hole off to one side).
 - **Spout**: hollow tube Ø ≈ 46 mm (M 42), bore ≈ 30 (I), lip at 720 (I via H), a ladder flange along its
   upper side (42, 44), one capped peg on the upper side ≈ 44 % up (39, 42, 44), a dragon in relief on its sides (44).
 - **Handle**: loop ≈ 46 mm wide (45), standing ≈ 60–70 mm off the lobe face (39), from under the eave to the
@@ -71,8 +69,7 @@ the bottom into a large rolled coil centred ≈ (47, 211) with a deep pocket; a 
 turns down; a C-hook with a pocket at ≈ 165; a domed eye ≈ 19 × 16 at ≈ (80, 151); a round boss ≈ (56, 140).
 Bands stand ≈ 5 mm proud with rounded shoulders (I). Ground: squared spirals, ≈ 6–9 mm cells (45, left strip).
 Frieze: one fat-bodied kui per half (body ≈ 15 mm), head at the centre line, tail rolled up at the corner.
-Collar: N (deep shade in every frame of A): left plain; only its flanges are built. Cap and plateau: rolled C-hooks, oval pillow
-plates and a ringed boss (41, 44) — approximate (I), the lid is only seen obliquely. Spout: jointed dragon
+Collar: N (deep shade in every frame of A): left plain; only its flanges are built. Cap: § The top: a face. Spout: jointed dragon
 bodies on both sides (44) — approximate.
 
 ## Not visible (N)
@@ -100,3 +97,56 @@ Vessel A's spout face head-on; the inside; the underside; the far halves of the 
   (82, 167), boss round ≈ 15 mm; ground leiwen shallower.
 - **spec.json**: `spoutReach` expected −8 → −24 (± 25): the 65° spout (photos 39/42 measure 58–64°) puts the lip
   ≈ 34 mm beyond the eave edge; photo 39 shows ≈ 10 mm, photo 42 ≈ 38 mm.
+
+## The top: a face (round 9 — the owner: "top should be symmetrical and represent a face with hole as mouth")
+
+**Reading.** The closed top is ONE animal face in high relief looking straight up, bilaterally symmetric about the
+vessel's centre line x = 0, which runs from the spout (−Z) to the handle (+Z). The filling hole is its MOUTH.
+Evidence: photos 41 and 44 (vessel A) were shot from the two handle-side corners (41 over −X+Z, the handle at the
+frame's lower right; 44 over +X+Z, handle at lower left). Each shows the near half of the top, and the two halves are
+mirror images: eye boss, brow / horn bands, ear plate, hooked jaw bands round the hole. In BOTH the ridge and the hole
+lie on the far side of the spine, so that is parallax (they stand high) and they sit on the axis. The round-8
+"lid conflict" (40/41 mirrored against 43/44) was this symmetry misread. Photo 15 (vessel B, from the handle end
+along the axis) shows the same scheme head-on: the hole centred, mirror hooked bands sweeping down from it to both
+sides, a row of hooks along the foot of the slope. Side photos 39 / 42 put the five-block ridge on the top's centre line.
+
+**Method (M).** A pinhole camera was fitted to the eave-top corners of 41 and 44 (f ≈ 1900–2260 px, el ≈ 36–44°,
+21 px rms: one corner per photo is extrapolated from the edges, so ± 10–25 mm, worst along Z), and each photograph
+was resampled onto horizontal planes y = 442 / 495 (top-down rectification, `.work/he-lid/`, not committed). The two
+half-views were read separately and averaged; heights from the side photos 39 / 42 (≈ 2.6 px/mm, eave slab 12 mm).
+Positions along Z disagree between the two rectifications by ≈ 25 mm; the spout root is placed by the spout's own
+constraints (lip at 720, 58–64° rise, lip ≈ 10–38 mm beyond the eave in 39 / 42), not by the rectifications.
+
+```
+           spout leans back over −Z (the face's crest / trunk)
+   z(mm)                    ┌──┐
+   −115  ╭─hook──────────── │  │ ────────────hook─╮      back-corner hooks (xo 40…119)
+   −101  │ ╭──────horn──────┤sp├──────horn──────╮ │      horn band 16 → 11 wide, out from the spout root to xo ≈ 99,
+    −64  │ │ (spout-root plate 72 × 46, the tube rises from it)    turning back (−Z) and rolled in
+    −50  ╰─╯               ║▌║               ╰─╯       ridge = nose: x 0, z −46 … +55, 5 blocks, 20 high, 18 thick
+    −22    ═══brow═══╮     ║▌║     ╭═══brow═══         brow 12–13 wide, xo 9 → 82, rolled forward at the end
+  ┃ear┃     ╭────╮   ║     ║▌║     ║   ╭────╮    ┃ear┃  ear plate xo 92 … 128, z −42 … +50, 8.5 high, coiled
+  ┃   ┃     │ ◉  │ EYE xo 48, z +4    │  ◉ │    ┃   ┃  eye: socket 48 × 41, domed boss 32 × 28, pupil dot
+  ┃   ┃     ╰────╯   cheek curl xo 16…58, z +33      ┃  quills along the outer foot (xo 133, every 12 mm)
+    +55          ╭─upper lip──╮═╧═╭──upper lip─╮       upper lip from the nose foot round the back of the mouth,
+    +84   jaw │  ╰╮  (  MOUTH  )  ╭╯  │ jaw          hooking in at its sides (xo 51)
+              │      70 × 46, z +61…+107             lower jaw: down the outside (xo 67–69) and in under the mouth,
+   +127       ╰──────hook   hook──────╯              the two hooks meeting below it
+   +134    ▪ ▪ ▪ ▪ ▪ ▪ ▪   ▪ ▪ ▪ ▪ ▪ ▪ ▪            teeth along the front foot (xo 24 … 112)
+   +140   ── cushion foot ── plain eave border to ±166 ──             (handle face, +Z)
+```
+| element | value | basis |
+| --- | --- | --- |
+| axis | x = 0, spout (−Z) → handle (+Z) | M: 41 + 44 mirror halves, 15 (B), 39 / 42 ridge on the centre line |
+| mouth (filling hole) | oval 70 × 46 mm, centre z = +84, a little pinched at the back; rolled lip ≈ +5.5 mm, rolling over into the opening; dark sleeve inside | M (41/44 rectified: 72–79 × 44–50, centre z +88…+115; 15: wider than the eye spacing) — the old 48 × 31 was too small |
+| eyes | domed boss 32 × 28 at x = ±48, z = +4, in a 48 × 41 socket, ≈ 12.5 mm proud | M (41: ±45, z +4; 44: ±54, z +37 — averaged toward 41, the sharper view) |
+| brow / horn | two broad bands behind the eyes, out to ±82 / ±99, the horn turning back at the outer corner and hooked | M 41 (two parallel incised bands); 44 shows the same mass as one glossy pillow (the light washes its lines out) |
+| ear plates + quills | thick plate down each outer slope; a row of teeth along the outer and front foot | M 44 (the high "jaw plate"), 41; 15 (row of hooks under the jaws) |
+| ridge (nose) | 5 blocks, z −46 … +55, 20 mm above the top, 18 thick | M 39 / 42 (5 blocks ≈ 85–90 mm, ≈ 1.6–2 × the 12 mm slab); length I |
+| spout root | on the axis, z ≈ −60, clasped by a raised plate | I (spout constraints above); 41/44 show the tube rising from the back of the face |
+| cushion | foot ±140 on the eave top (plain eave border 26 mm), steep sides rounding over to a plateau edge at 488 (+46 over the eave top, 0.14 of the eave), crown +6, soft superellipse corners | M 39 (≈ 46–50 mm), 41/44 (field edge ≈ ±140); reviewers' 0.12 |
+| relief | main bands and the eye socket 6.5 mm proud, ear plates 8.5, eye dome a further 6 (≈ 12.5 over the ground), teeth 4; fine leiwen ground | M/I: the shadowed sides of the masses in 41/44 read ≈ 0.5–0.7 of the 12 mm eave slab |
+
+Built (round 9): the whole cushion is one kit.plate whose thickness is the cushion; ONE 280 × 280 mm panel carries the
+face, drawn on the −X half and mirrored (ground included), so the halves are identical. Not symmetric on the bronze
+and not modelled: the casting's small irregularities; 44's glossy brow pillow (read as the incised bands of 41).

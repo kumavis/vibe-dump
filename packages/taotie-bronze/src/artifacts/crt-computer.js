@@ -33,7 +33,7 @@ export default {
     'Its size (a 420 mm wide unit) is chosen, not measured; no such bronze was ever cast.',
   defaultPatina: 'crt-computer',
   views: {
-    'three-quarter': { azimuth: -32, elevation: 20, fov: 26, fit: 1.06 },
+    'three-quarter': { azimuth: -38, elevation: 20, fov: 26, fit: 1.06 },
     front: { azimuth: 0, elevation: 8, fov: 26, fit: 1.08 },
     side: { azimuth: -90, elevation: 8, fov: 26, fit: 1.08 },
     back: { azimuth: 160, elevation: 14, fov: 26, fit: 1.08 },
@@ -49,34 +49,40 @@ export default {
     const sq = Math.sqrt(q)
     const plain = new kit.PatinaMaterial()
     const panels = {}
-    const step = async (f, label, fn) => { await onProgress(f, label); return fn() }
+    let tLast = performance.now()
+    const lap = (label) => { const t = performance.now(); if (globalThis.__crtDebug) console.info(`[crt] ${label} ${Math.round(t - tLast)} ms`); tLast = t }
+    const step = async (f, label, fn) => { await onProgress(f, label); const r = fn(); lap(label); return r }
 
     // ---- relief panels
-    panels.bezel = await step(0.02, 'bezel: the face', () => D.bezelPanel(kit, { ppmm: 5.4 * sq, seed: SEED + 1 }))
+    panels.bezel = await step(0.02, 'bezel: the face', () => D.bezelPanel(kit, { ppmm: 4.8 * sq, seed: SEED + 1 }))
     panels.unitFront = await step(0.16, 'unit front', () => D.unitFrontPanel(kit, { ppmm: 4.8 * sq, seed: SEED + 2 }))
     panels.unitSide = await step(0.24, 'unit sides', () => D.unitSidePanel(kit, { ppmm: 4 * sq, seed: SEED + 3 }))
     panels.lid = await step(0.3, 'cover', () => D.unitLidPanel(kit, { ppmm: 2.4 * sq, seed: SEED + 4 }))
     panels.bay = await step(0.32, 'drive bay', () => D.bayPanel(kit, { ppmm: 6 * sq, seed: SEED + 5 }))
     const ML = F.monitorLayout(kit)
-    const mon = await step(0.34, 'monitor housing', () => D.monitorPanels(kit, ML, { ppmm: 4 * sq, seed: SEED + 10 }))
+    const mon = await step(0.34, 'monitor housing', () => D.monitorPanels(kit, ML, { ppmm: 3.4 * sq, seed: SEED + 10 }))
     panels.backCap = await step(0.5, 'back cover', () => D.backCapPanel(kit, { ppmm: 3.2 * sq, seed: SEED + 6 }))
-    panels.keyboard = await step(0.54, 'keyboard', () => D.keyboardPanel(kit, { ppmm: 5 * sq, seed: SEED + 7 }))
+    panels.keyboard = await step(0.54, 'keyboard', () => D.keyboardPanel(kit, { ppmm: 4.2 * sq, seed: SEED + 7 }))
 
     // ---- cast parts
+    lap('keyboard panel')
     await onProgress(0.68, 'system unit')
     const unit = F.buildUnit(kit, { front: panels.unitFront, side: panels.unitSide, back: null, lid: panels.lid, bay: panels.bay }, { q, seed: SEED, plain })
+    lap('unit cast')
     await onProgress(0.76, 'monitor')
     const monitor = F.buildMonitor(kit, { top: mon.top, right: mon.right, left: mon.left, bezel: panels.bezel, backCap: panels.backCap }, { q, seed: SEED, plain })
+    lap('monitor cast')
     await onProgress(0.84, 'keyboard')
     const kb = F.buildKeyboard(kit, panels.keyboard, { q, plain })
 
     // ---- the cable: a snake whose head bites the keyboard's back edge
+    lap('keyboard cast')
     await onProgress(0.88, 'cable')
     const bite = F.keyboardTop(kb.group, kb.plate, -112, KEYB.d / 2 - 2)
-    const headW = 26
+    const headW = 34
     const head = kit.animalHead({
       kind: 'tiger', width: headW, projection: 0.75, droop: 30, eyeSize: 1.15, ears: true, embed: 6,
-      seed: SEED + 40, quality: q, material: plain, part: 'heads',
+      seed: SEED + 40, quality: q, detail: 0.95 / Math.sqrt(q), material: plain, part: 'heads',
     })
     // the head looks forward (+Z) over the keyboard edge, pitched down so its jaws close on it
     head.rotation.x = (24 * Math.PI) / 180
@@ -88,6 +94,8 @@ export default {
     panels.cable = D.cablePanel(kit, L, circ, { ppmm: Math.min(3.6 * sq, 2040 / L), seed: SEED + 8 })
     const cable = F.buildCable(kit, curve, panels.cable, { q, plain })
 
+    lap('cable + head')
+    if (globalThis.__crtDebug) globalThis.__crtPanels = panels
     const object = new THREE.Group()
     object.name = 'crt-computer'
     const add = (o) => { object.add(o); return o }

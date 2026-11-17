@@ -72,40 +72,70 @@ const zig = (t, p) => Math.abs(((((t / p) % 1) + 1) % 1) - 0.5) * 2 // 0..1 tria
 
 // ------------------------------------------------------------------ shoulder loop handle (+X)
 
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t) }
+
 /**
- * Loop handle on the +X shoulder (photo-37 right edge, photo-36 centre), re-read in round 8: a FLAT-TOPPED beast head
- * lying nearly horizontal on the shoulder top, thrusting ≈ 45 mm out from the wall (x ≈ 104 → 164, y ≈ 326–337,
- * ≈ 25 mm across) with spiral horns incised on its flat top; under its outer end a BROAD FLAT strap (≈ 23 mm across,
- * ≈ 6.5 mm thick) curls down and back into the wall at y ≈ 284. The −X handle is this one turned 180° about Y.
+ * Shoulder handle on +X — round 10 (.work/lei-mid), re-read with a camera FITTED to photo-36 (az 68°, el 13°, ≈ 0.75 m,
+ * vfov 41° on the crop) and photo-37: a beast head HOLDING A RING (衔环). The head lies almost level on the shoulder,
+ * its flat top at y ≈ 321 (level with the ledge and the shoulder corner-flange tops in photo-37, not above them),
+ * from the wall (x ≈ 92) out to a blunt muzzle at x ≈ 170, ≈ 34 mm across at the brow, ≈ 24 at the muzzle, whose
+ * front drops as a vertical face to y ≈ 293. Its top is carved: two big spiral horns at the back, hooked ears, bulging
+ * eyes, a nose ridge, nostrils. From the mouth hangs a heavy ROUND-SECTION ring (section ≈ 12 mm, outer Ø ≈ 57 mm)
+ * whose plane is the side face's (YZ), swung 12° so its bottom (y ≈ 248, over the belly top) stands ≈ 6 mm off the
+ * wall: seen nearly face-on from three-quarters (photo-36: the dark D under the head), edge-on from the front.
+ * Two fields, meshed separately with tight bounds (cheaper than one box round both). −X = this turned 180° about Y.
  */
-export function handleSDF() {
-  const cx = 126, cy = 306, rx = 29, ry = 21 // strap centre line: half ellipse on the outer side
+export function handleHeadSDF() {
+  const top = (x) => 326.2 - 0.075 * (x - 100) // emerges from the ledge (325) at the collar, ≈ 321 at the muzzle
   const sd = (x, y, z) => {
-    const u = (x - cx) / rx, v = (y - cy) / ry
-    const r = len2(u, v)
-    const k = rx + (ry - rx) * Math.abs(v / (r || 1))
-    const dr = (r - 1) * k
-    let d = sdRBox2(dr, z, 5.4, 11.5, 2.4)
-    d = Math.max(d, shoulderHalf(clamp(y, 263, 325)) - 4 - x, cx - 6 - x)
-    // the head: a flat slab, top face nearly level (tilted 6° up toward the snout), slightly wider at the muzzle
-    const hx = x - 135, hy = y - 331.5
-    const ca = Math.cos(0.1), sa = Math.sin(0.1)
-    const ax = hx * ca + hy * sa, ay = -hx * sa + hy * ca
-    const halfZ = 11.6 + 1.2 * clamp((ax + 25) / 55, 0, 1)
-    let head = sdRBox3(ax + 2, ay, z, 26, 6.4, halfZ, 2.4)
-    // muzzle: the outer end drops into a blunt snout
-    head = smin(head, sdRBox3(ax - 22, ay + 4, z, 5.5, 7, halfZ - 1.5, 2.6), 1.6)
-    // flat top: two spiral horns (raised rings) and eyes, all low relief on the top face
+    const yt = top(x)
+    const hz = 13 + 4 * sstep(96, 128, x) - 5 * sstep(146, 166, x) // half width: wall → brow → muzzle
+    // the slab: flat top, rounded edges, bottom resting on the shoulder slope
+    let d = sdRBox3(x - 131, y - (yt - 9), z, 42, 9, hz, 3.2)
+    // the muzzle: a block dropping in front to y ≈ 293, its face slightly undercut
+    d = smin(d, sdRBox3(x - 160, y - 306.5, z, 10, 14, 11.5, 4.5), 3)
+    // carved top: everything below in (u, v) = (x, z) on the plane y = top(x), h = height above it
+    const h = y - yt
     for (const sg of [-1, 1]) {
-      head = smin(head, cHorn(ax + 14, z - sg * 6.2, ay - 5.6, 4.6, 1.3, 1.3, sg > 0 ? -1.2 : 1.2, 0.9), 0.4)
-      head = smin(head, len3(ax - 6, ay - 5.0, z - sg * 7.2) - 2.4, 0.6)
-      head = smin(head, cHorn(ax + 1, z - sg * 6.5, ay - 5.6, 2.6, 0.9, 1.0, 0, 0.6), 0.3)
+      // the big spiral horns (photo-36: two fat curls behind the eyes, filling the back half of the top)
+      d = smin(d, fatHorn(x - 113, z - sg * 8.8, h, 7.2, 2.7, 2.4, sg > 0 ? 2.6 : -2.6, 0.75), 0.6)
+      // hooked ears at the outer edge, opening backward
+      d = smin(d, cHorn(x - 128, z - sg * 13.5, h, 3.6, 1.2, 1.6, Math.PI, 0.9), 0.4)
+      // bulging eyes with a sunk pupil ring
+      d = smin(d, sdEllipsoid(x - 140, h + 0.6, z - sg * 9.6, 4.2, 3.2, 3.4), 0.8)
+      d = smax(d, -(Math.abs(len2(x - 140, z - sg * 9.6) - 1.9) - 0.35 + Math.max(0, 2.2 - h) * 4), 0.2)
+      // brow hook over each eye
+      d = smin(d, cHorn(x - 137.5, z - sg * 4.4, h, 2.6, 0.9, 1.3, 0, 0.8), 0.3)
+      // nostrils on the muzzle front (x ≈ 170)
+      d = smax(d, -(len3(x - 170.5, y - 309, z - sg * 5.2) - 2.6), 0.6)
+      // fangs: two short downward teeth at the mouth corners, either side of the ring
+      d = smin(d, sdRBox3(x - 165, y - 292, z - sg * 8.2, 2.2, 3.4, 1.8, 0.9), 0.8)
     }
-    head = Math.max(head, shoulderHalf(clamp(y, 263, 325)) - 10 - x)
-    d = smin(d, head, 2.0)
+    // nose ridge down the centre of the muzzle
+    d = smin(d, sdRBox3(x - 152, h - 0.7, z, 15, 1.1, 1.6, 0.8), 0.5)
+    // the mouth: a groove across the muzzle front, the ring passes through it
+    d = smax(d, -sdRBox3(x - 168, y - 298, z, 4, 1, 9.5, 0.5), 0.4)
+    // its back end stops at the collar face
+    d = Math.max(d, 88 - x)
     return d
   }
-  return { sd, bounds: { min: [96, 278, -16], max: [170, 345, 16] } }
+  return { sd, bounds: { min: [86, 284, -22], max: [176, 333, 22] } }
+}
+export const HANDLE_RING = { c: [149, 276, 0], R: 22.5, r: 6.1, tilt: 12 }
+export function handleRingSDF() {
+  const { c, R, r, tilt } = HANDLE_RING
+  const t = (tilt * Math.PI) / 180, st = Math.sin(t), ct = Math.cos(t)
+  const sd = (x, y, z) => {
+    const px = x - c[0], py = y - c[1], pz = z - c[2]
+    const a = px * st + py * ct, n = px * ct - py * st // in-plane up, plane normal
+    return len2(len2(a, pz) - R, n) - r
+  }
+  return { sd, bounds: { min: [130, 244, -31], max: [166, 307, 31] } }
+}
+/** legacy: head and ring in one field */
+export function handleSDF() {
+  const a = handleHeadSDF(), b = handleRingSDF()
+  return { sd: (x, y, z) => Math.min(a.sd(x, y, z), b.sd(x, y, z)), bounds: { min: [92, 244, -31], max: [176, 330, 31] } }
 }
 
 // ------------------------------------------------------------------ frontal shoulder head (front; back inferred)
@@ -144,37 +174,70 @@ export function shoulderHeadSDF() {
 // ------------------------------------------------------------------ low lug (front)
 
 /**
- * The tilting lug low on the front (photo-37, photo-36 lower left), re-read in round 8: a round-section ring standing
- * out from the wall and on its outer face a NARROW mask ≈ 48 mm across its horns: two C horns curling down toward the
- * centre (nested lines), a face narrowing from ≈ 34 to ≈ 22 mm covered in hooks, small eyes, then a long snout with a
- * zigzag row of fangs hanging to y ≈ 33.
+ * The tilting lug low on the front — round 10, re-read on photo-37 (1:1 at ≈ 3.6 px/mm, its face) and photo-36 (the ring,
+ * nearly face-on from three-quarters): a heavy D-RING (round section ≈ 12 mm, ≈ 54 mm front-to-back, ≈ 52 mm tall)
+ * standing out of the wall in the YZ plane, its lower arc below and behind the head; on its front a mask 49 mm across
+ * the horns (y 33 → 101): two big C horns each drawn as TWO NESTED FAT BANDS rolling inward round a domed core and
+ * filling the upper third, a crest down the centre, a brow, round eyes, a face packed with hooks and curls narrowing to
+ * ≈ 30 mm, then a snout whose mouth is a zigzag of interlocking fangs in real relief over a rounded lower lip.
  */
-export function lugSDF() {
-  const yc = 72, zc = 83, R = 20, rr = 5.6
+const lugFace = (y) => 114 + (101 - y) * 0.06 // face plane z, leaning out toward the snout
+export function lugHeadSDF() {
   const sd = (x, y, z) => {
-    const wall = RHO * bellyHalf(clamp(y, 21.5, 263))
-    const q = len2(y - yc, z - zc) - R
-    let d = len2(q, x) - rr
-    d = Math.max(d, wall - 4 - z)
-    const zf = 106 + (102 - y) * 0.09
-    const plate = smax(sdTrapezoid(x, y - 72, 10, 18, 25) - 2, Math.abs(z - (zf - 5.5)) - 5.5, 2.4)
-    d = smin(d, plate, 2)
+    const zf = lugFace(y), h = z - zf
+    // the mask plate: a trapezoid, 24 mm half width at the horns → 15 at the cheeks, ≈ 14 mm thick
+    let d = smax(sdTrapezoid(x, y - 74, 15, 24, 27) - 1.5, Math.abs(z - (zf - 7)) - 7, 2.4)
     for (const sg of [-1, 1]) {
-      d = smin(d, fatHorn(x - sg * 12.8, y - 88.5, z - zf, 7.8, 3.8, 3.8, sg > 0 ? -2.25 : -0.89, 0.6), 0.8)
-      d = smin(d, len3(x - sg * 7, y - 73, z - zf - 0.6) - 2.4, 0.8) // eyes
-      d = smin(d, cHorn(x - sg * 12, y - 66, z - zf, 3.0, 1.0, 1.5, sg > 0 ? 2.4 : 0.7, 0.8), 0.5) // cheek hooks
-      d = smin(d, cHorn(x - sg * 6, y - 60, z - zf, 2.4, 0.9, 1.3, 1.57, 0.8), 0.5)
+      const cx = sg * 12.6, cy = 86.5, open = sg > 0 ? -2.36 : -0.785
+      d = smin(d, cHorn(x - cx, y - cy, h, 9.4, 2.1, 2.7, open, 0.62, 3), 0.7) // outer horn band
+      d = smin(d, cHorn(x - cx, y - cy, h, 4.9, 1.75, 2.4, open, 0.7, 3), 0.6) // the nested inner band
+      d = smin(d, smax(len2(x - cx, y - cy) - 2.2, Math.abs(h - 1.4) - 1.4, 0.6), 0.6) // domed core
+      // brow band over the eye
+      d = smin(d, smax(sdRBox2(x - sg * 12.5, y - 74.5, 7.5, 1.4, 1.2), Math.abs(h - 0.9) - 0.9, 0.5), 0.5)
+      // round eyes with a sunk slit
+      d = smin(d, sdEllipsoid(x - sg * 11.5, y - 68, h - 0.4, 3.4, 2.8, 2.4), 0.7)
+      d = smax(d, -sdRBox3(x - sg * 11.5, y - 68, h - 2.6, 1.5, 0.45, 1.2, 0.3), 0.2)
+      // hooks and curls packed on the cheeks
+      d = smin(d, cHorn(x - sg * 15.5, y - 59.5, h, 3.6, 1.25, 2.0, sg > 0 ? 0.6 : 2.54, 0.8), 0.4)
+      d = smin(d, cHorn(x - sg * 7.2, y - 57.5, h, 3.0, 1.15, 1.9, sg > 0 ? 2.3 : 0.84, 0.8), 0.4)
+      d = smin(d, cHorn(x - sg * 18.5, y - 68.5, h, 2.4, 0.95, 1.6, sg > 0 ? 3.14 : 0, 0.9), 0.4)
+      d = smin(d, cHorn(x - sg * 11, y - 51, h, 2.4, 0.95, 1.6, Math.PI / 2, 0.9), 0.4)
     }
-    d = smin(d, sdRBox3(x, y - 76, z - zf - 0.5, 1.3, 12, 1.2, 0.6), 0.5) // nose ridge
-    // the snout: a long block projecting further out, a zigzag row of fangs across it, rounded muzzle at y ≈ 33
-    let sn = sdRBox3(x, y - 43.5, z - zf - 1.5, 10.5, 10, 6.4, 3.4)
-    d = smin(d, sn, 2)
-    const fang = 47.5 - 3.4 * zig(x + 1.75, 3.5)
-    d = smax(d, -smax(Math.abs(y - fang) - 0.55, zf + 4.2 - z, 0.3), 0.3)
-    for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 4.4, y - 38, z - zf - 7.6) - 1.8), 0.5) // nostrils
+    // the crest down the centre between the horns, and the nose bridge below it
+    d = smin(d, smax(sdRBox2(x, y - 85, 2.1, 15, 1.4), Math.abs(h - 1.1) - 1.1, 0.5), 0.5)
+    d = smin(d, smax(sdRBox2(x, y - 61, 2.6, 9, 1.6), Math.abs(h - 1.3) - 1.3, 0.5), 0.5)
+    // the snout: a block projecting further, y 33 → 49
+    const zs = lugFace(41)
+    d = smin(d, sdRBox3(x, y - 41.5, z - (zs - 3), 13, 8.5, 7.5, 3.6), 2)
+    // the mouth: upper fangs pointing down, lower fangs pointing up, interlocking, in relief on the snout front
+    const hs = z - (zs + 4.5)
+    const upper = Math.max(Math.abs(x) - 11.5, y - 47.5, 43.2 + 3.2 * zig(x + 1.6, 3.2) - y)
+    const lower = Math.max(Math.abs(x) - 10.5, 39.6 - y, y - (43.0 - 3.0 * zig(x, 3.2)))
+    d = smin(d, smax(Math.min(upper, lower), Math.abs(hs - 0.8) - 1.5, 0.3), 0.4)
+    d = smax(d, -smax(Math.abs(y - 43.1) - 0.45, -hs - 0.4, 0.2), 0.2) // the dark mouth line between them
+    // rounded lower lip with two nostril pits above the fangs
+    d = smin(d, sdEllipsoid(x, y - 36.2, z - (zs + 3), 11.5, 4.2, 4.6), 1.2)
+    for (const sg of [-1, 1]) d = smax(d, -(len3(x - sg * 5, y - 47.6, z - (zs + 5.2)) - 1.7), 0.5)
     return d
   }
-  return { sd, bounds: { min: [-28, 26, 46], max: [28, 112, 126] } } // z: the snout front reaches ≈ 119.5
+  return { sd, bounds: { min: [-30, 27, 94], max: [30, 106, 128] } }
+}
+export const LUG_RING = { yc: 60, zc: 84, Ry: 20, Rz: 21, r: 6 }
+export function lugRingSDF() {
+  const { yc, zc, Ry, Rz, r } = LUG_RING
+  const sd = (x, y, z) => {
+    const u = (z - zc) / Rz, v = (y - yc) / Ry
+    const q = len2(u, v)
+    const k = Rz + (Ry - Rz) * Math.abs(v / (q || 1))
+    let d = len2((q - 1) * k, x) - r
+    return Math.max(d, RHO * bellyHalf(clamp(y, 21.5, 263)) - 4 - z)
+  }
+  return { sd, bounds: { min: [-9, yc - Ry - r - 3, 50], max: [9, yc + Ry + r + 3, zc + Rz + r + 3] } }
+}
+/** legacy: the lug as one field */
+export function lugSDF() {
+  const a = lugHeadSDF(), b = lugRingSDF()
+  return { sd: (x, y, z) => Math.min(a.sd(x, y, z), b.sd(x, y, z)), bounds: { min: [-30, 27, 50], max: [30, 106, 128] } }
 }
 
 void halfAt

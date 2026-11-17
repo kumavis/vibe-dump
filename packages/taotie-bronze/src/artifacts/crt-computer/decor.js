@@ -139,34 +139,26 @@ export function bezelPanel(kit, { ppmm, seed }) {
     ctx.beginPath(); pathPts(ctx, rrect([cx, H / 2], W - 2 * 4.6, H - 2 * 4.6, BEZEL.r - 4.6, 10)); pathPts(ctx, rrect([cx, H / 2], W - 2 * 7.8, H - 2 * 7.8, BEZEL.r - 7.8, 10).reverse()); ctx.fill()
   }, { height: 1.6, profile: 'dome' })
 
-  const yHorn = H - 25 // forehead band centre line
   const xSide = holeX + 20.5 // centre line of the side strips
+  const yEye = H - 22 // the eyes sit on the forehead, either side of the crest, over the mouth
   const els = [
-    // crest on the axis between the horn tips: a shield with a ladder of ticks
-    kit.roundPoly(Ps([[-1, yHorn - 13], [9, yHorn - 13], [11, yHorn + 3], [5, H - 9.6], [-1, H - 9.6]]), { round: [0, 3, 3, 2, 0], contour: contour(1.1), ticks: { side: 'outer', pitch: 3.2, line: 0.5, length: 1.4 } }),
-    // the horn: a fat G — up the outer column from above the eye, across the forehead, rolled in at the crest
-    kit.roundStroke(Ps([[xSide, holeTop - 4], [xSide, yHorn], [24, yHorn]]), {
-      width: [14, 15, 13], round: 0.8, inner: 0.3, start: 'blunt', end: 'spiral', spiral: { turns: 1.05, dir: 1, gap: 1.4, R: 7.4 },
-      contour: { inset: [1.1, 2.0], line: LINE }, ticks: { side: 'outer', pitch: 3.6, line: 0.5 }, fill: sfill({ min: 4.2 }),
+    // crest on the axis between the eyes: a shield with a ladder of ticks
+    kit.roundPoly(Ps([[-1, holeTop + 12], [8, holeTop + 12], [10.5, yEye + 2], [6, H - 9.6], [-1, H - 9.6]]), { round: [0, 3, 3, 2, 0], contour: contour(1.1), ticks: { side: 'outer', pitch: 3.2, line: 0.5, length: 1.4 } }),
+    // the horn: up beside the eye, out along the forehead, down the outer column, rolled in toward the mouth
+    kit.roundStroke(Ps([[69, yEye - 8], [69, yEye + 5.5], [xSide, yEye + 5.5], [xSide, holeTop - 22]]), {
+      width: [10, 11, 11.5, 10.5], round: 0.85, inner: 0.3, start: 'blunt', end: 'spiral', spiral: { turns: 1.0, dir: 1, gap: 1.3 },
+      contour: { inset: [1.0, 1.8], line: LINE }, ticks: { side: 'outer', pitch: 3.6, line: 0.5 }, fill: sfill({ min: 4.0 }),
     }),
-    // inner horn spur: a short hooked band under the forehead, pointing back to the eye
-    kit.roundStroke(Ps([[44, yHorn - 13.5], [100, yHorn - 13.5], [108, holeTop + 13]]), {
-      width: [6.4, 6.4, 4.6], round: 0.8, inner: 0.3, end: 'point', contour: contour(0.8),
+    // the brow under the horn's run, its outer end hooking down: a fat bar over the eye's outer corner
+    kit.roundStroke(Ps([[76, yEye - 5.5], [124, yEye - 5.5], [131, holeTop + 12.5]]), {
+      width: [7.4, 7.4, 5.2], round: 0.85, inner: 0.3, end: 'point', contour: contour(0.8), fill: sfill({ min: 3.4 }),
     }),
-    // brow over the eye, its outer end turning down
-    kit.roundStroke(Ps([[holeX + 3, holeTop - 22], [holeX + 33, holeTop - 22], [holeX + 36, holeTop - 32]]), {
-      width: [6.0, 6.6, 4.4], round: 0.85, inner: 0.3, end: 'round', contour: contour(0.8),
-    }),
-    // the upper jaw: down the side strip from under the eye, a fang hooking in at the mouth's lower corner
-    kit.roundStroke(Ps([[xSide + 2, holeTop - 74], [xSide + 2, holeBot - 2], [holeX - 4, holeBot - 14]]), {
+    // the cheek / ear: a rounded block cut with a coil, on the side strip under the horn's curl
+    kit.roundPlate({ c: P([xSide + 1, holeTop - 62]), w: 23, h: 19, r: 7.5, contour: contour(0.9), fill: { kind: 'coil', pitch: 1.4, line: LINE } }),
+    // the upper jaw: down the side strip, a fang hooking in at the mouth's lower corner
+    kit.roundStroke(Ps([[xSide + 2, holeTop - 82], [xSide + 2, holeBot - 2], [holeX - 4, holeBot - 14]]), {
       width: [13, 12.5, 7], round: 0.85, inner: 0.3, start: 'blunt', end: 'point',
       contour: { inset: [1.0, 1.6], line: LINE }, fill: sfill({ joints: true, min: 4 }),
-    }),
-    // the cheek: a rounded block cut with a coil, between eye and jaw
-    kit.roundPlate({ c: P([xSide + 1, holeTop - 59]), w: 22, h: 17, r: 7, contour: contour(0.9), fill: { kind: 'coil', pitch: 1.4, line: LINE } }),
-    // ear: a C curl outside the eye at the top corner
-    kit.roundStroke(Ps([[holeX + 30, holeTop - 41], [holeX + 33, holeTop - 50], [holeX + 22, holeTop - 52]]), {
-      width: [5, 5, 4], round: 0.85, inner: 0.3, end: 'spiral', spiral: { turns: 0.6, dir: -1, gap: 0.7 }, contour: false,
     }),
   ]
   // the chin: a kui on each side facing the knob row (head toward the axis)
@@ -175,7 +167,7 @@ export function bezelPanel(kit, { ppmm, seed }) {
   els.push(...K.els)
   kit.carve(panel, els, { height: H1, shoulder: 0.7, depth: 0.45, irregularity: 0.8, seed })
   // the eyes: big pillow bosses with slit pupils, the highest relief on the face
-  kit.pillowBoss(panel, { c: P([xSide + 0.5, holeTop - 36]), w: 29, h: 21, round: 0.5, height: 6.2, crown: 0.9, rot: 0, slit: { len: 11, width: 1.6, depth: 1.4, offset: [-0.8, -0.4] }, ring: { gap: 1.0, line: 0.9, depth: 0.7 } })
+  kit.pillowBoss(panel, { c: P([40, yEye]), w: 36, h: 23, round: 0.58, height: 6.8, crown: 0.9, rot: 0, slit: { len: 13, width: 1.8, depth: 1.5, offset: [-0.8, -0.4] }, ring: { gap: 1.0, line: 0.9, depth: 0.7 } })
   kuiEye(kit, panel, K.eye, 3.6)
   // the knobs' collars: a sunk ring round each and a raised ring outside it (the knobs themselves are cast bosses)
   panel.raise((ctx) => {
@@ -456,14 +448,12 @@ export function keyboardPanel(kit, { ppmm, seed }) {
   const W = KEYB.w, H = KEYB.d
   const panel = newPanel(kit, W, H, ppmm, seed)
   const { keys, lamps } = keyLayout()
-  // the key-caps: pillow bosses, gently domed, a nipple on each ordinary key
-  for (const k of keys) {
-    kit.pillowBoss(panel, { c: [k.x, k.y], w: k.w, h: k.h, round: k.kind === 'space' ? 0.2 : 0.3, height: 5.4, crown: k.kind === 'space' ? 0.2 : 0.45, slit: false })
-  }
-  for (const k of keys) {
-    if (k.kind !== 'key') continue
-    kit.pillowBoss(panel, { c: [k.x, k.y + 0.4], w: 4.6, h: 4.6, round: 1, height: 1.5, crown: 1, base: 'field', slit: false })
-  }
+  // the key-caps are cast bosses (form.js keycaps); here each sits in a sunk seat, so the corrosion gathers round its foot
+  panel.sink((ctx) => {
+    ctx.beginPath()
+    for (const k of keys) pathPts(ctx, rrect([k.x, k.y], k.w + 2.6, k.h + 2.6, 3.4, 3))
+    ctx.fill()
+  }, { depth: 0.9, profile: 'u', shoulder: 0.5 })
   for (const [x, y] of lamps) kit.drawMotif(panel, 'whorl', { x: x - 6.5, y: y - 6.5, w: 13, h: 13 }, { relief: { motif: 1.2, boss: 2.4, groove: 0.3 } }, { preset: 'four-spokes', ground: false })
   // twisted-rope border
   const m = 7.5
@@ -472,7 +462,7 @@ export function keyboardPanel(kit, { ppmm, seed }) {
   rope(panel, [m, m], [m, H - m])
   rope(panel, [W - m, m], [W - m, H - m])
   // the ground between the keys: lozenges with spirals
-  kit.lozengeFill(panel, { rect: { x: m + 3, y: m + 3, w: W - 2 * m - 6, h: H - 2 * m - 6 }, margin: 0.55 }, { size: [11, 8.5], fill: 'spiral', pitch: 0.95, levels: 1, depth: 0.45, seed })
+  kit.lozengeFill(panel, { rect: { x: m + 3, y: m + 3, w: W - 2 * m - 6, h: H - 2 * m - 6 }, avoid: (ctx) => { ctx.beginPath(); for (const k of keys) pathPts(ctx, rrect([k.x, k.y], k.w + 2.6, k.h + 2.6, 3.4, 3)); ctx.fill() }, margin: 0.55 }, { size: [11, 8.5], fill: 'spiral', pitch: 0.95, levels: 1, depth: 0.45, seed })
   return panel.bake()
 }
 

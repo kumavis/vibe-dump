@@ -14,7 +14,7 @@ Confidence tags: **[label]** read off the card · **[firm]** read directly and r
 | ---- | ---------- |
 | `body` | foot, belly, neck as one lathe (ring foot with its plain flared base band and frieze, the pear-shaped belly, the straight neck) |
 | `lid` | the lid shell: skirt with its frieze, the flaring eave, the domed top |
-| `knob` | the ribbed bud on its stem |
+| `knob` | the mushroom knob: a grooved cap on a short stalk |
 | `horns` | the two upturned prongs at the lid's ends (±X) |
 | `heads` | the two animal heads at the bail's pivots (front and back neck centres) |
 | `handles` | the bail strap |
@@ -153,3 +153,32 @@ renders them). Corrections to §b–§c, each from the photographs:
   no incised T on the faces; the face-centre strip narrower (5 mm) with small slits.
 - **Strap:** the lower dragon's body ≈ 8–9 mm, plain-topped, swinging once across, a tail rolled low on the left; a
   leaf-shaped head under the boss at ≈ 110 mm along the strap (y ≈ 310); the ground there is ROUND spirals.
+
+## g. Round you-form: the knob, the pivot heads, the outline (owner: "more mushroom", "heads need to protrude")
+
+Read by blending the model's clay render on photo-32 through a REFITTED three-quarter camera and on photo-31 through
+the front camera (`.work/you-form/`), so positions are compared in the photograph's own perspective.
+
+- **Three-quarter camera refitted:** azimuth 37.5° (was 42°), elevation 9° (was 16°), fov and distance unchanged (the
+  landmarks — foot rim low point and limbs, eye boss, register lines on the facing meridian, horn tips — cannot separate
+  distance from lens). At 42°/16° the foot ellipse and register curvature were too deep and the left pivot head
+  landed ≈ 60 px low. `detail-lid` moved with it (37.5° / 9°). `front` (0°, 5.5°) was confirmed (rms ≈ 7 px on the
+  outline landmarks, elevation 3–8° all equivalent) and left alone.
+- **Knob: a mushroom**, not a bud. Cap Ø ≈ 37, stalk Ø ≈ 22 (cap ≈ 0.18 of the lid, stalk ≈ 0.6 of the cap), cap ≈ 23 mm tall, widest
+  ≈ 18.5 mm below the crown, under-cut back to the stalk over ≈ 4 mm (≈ 7 mm overhang all round); the stalk shows only
+  ≈ 10 mm above the lid; broad round crown. Grooves: one helical wavy groove, pitch 3.3 mm, ≈ 8 turns visible from
+  the rim to the crown, 1.5 mm deep. Top at 343 mm (was 358). **[good]** from photo-32 only (photo-31 hides it).
+- **Pivot heads: a ram head in the round.** The face plane stands ≈ 30 mm proud of the neck wall, the muzzle ≈ 35
+  (was ≈ 16 / 18 — behind the strap's outer face); the head is 10–14 mm in front of the strap face and masks its end.
+  47 × 35 mm (horn tops 205 → snout 171), C-horns now spiral tubes in the round with a slot in each curl, brow ridge,
+  lozenge 185.5, bulging eyes 181 at ± 10.3, a projecting muzzle with nostrils and a mouth slit. How the strap meets
+  the body is NOT visible in either photograph (the head covers it); the strap simply runs into the skull. **[good]**
+  front / projection **[est]** (photo-32 is ≈ 50° off the head's axis).
+- **Outline:** lower belly ≈ 5–6 mm slimmer per side (widest r ≈ 119 instead of 124), shoulder a straight slope from
+  y ≈ 124 into the neck; both overlays now sit on the bronze's outline within a few mm. The belly décor panel is
+  pinned at its old size (384.86 × 122.71 mm, `DECOR_SIZE` in form.js) and laid 1:1, so it overruns the slimmer
+  register by ≈ 10 mm per side under the end flanges and ≈ 3 % in height — to be resolved when the décor is redrawn.
+- **Lid horns:** pulled ≈ 5.5 mm in and their tips ≈ 3 mm lower (both tips stood outside the bronze's in photo-31).
+- **Not changed:** the lid's top (the overlay of photo-31 puts its ridge flanges on the bronze's within ≈ 2 mm, so
+  the "lower cone" note is not borne out by the photographs at this camera; changing it would also resize the lid
+  décor panel).

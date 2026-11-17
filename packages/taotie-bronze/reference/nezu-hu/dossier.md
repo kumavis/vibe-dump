@@ -91,9 +91,7 @@ sides [firm, simplified in the model]. **Thickness across is not visible** (both
   and the spacing, not for a line-for-line tracing of one block]
 - **Cords**: plain round cords ≈ 2.4 mm; the twisted ropes ≈ 3–3.6 mm with strands every ≈ 2.4 mm slanting
   ≈ 50° [good].
-- **Inscription** on the front of the neck: ≈ 9 columns of 3–4 characters, ≈ 15 mm tall, incised and pale-filled,
-  partly under lime patches [firm that it exists; NOT transcribed — the photograph does not read reliably]. Not
-  modelled in this round.
+- **Inscription** on the front of the neck: see § hu-fix below (7 columns, ≈ 25 graphs, engraved; traced, not read).
 
 ## d. Patina (photo-11)
 
@@ -126,3 +124,54 @@ pattern-block interlace: its relief grammar (flat plateaus, leiwen ground) does 
 - **Inscription.** About 8 columns at ≈ 22 mm on the front of the neck, characters ≈ 8–12 mm. Modelled from
   `inscription.json`, a raster extracted from the photograph (not transcribed; some false strokes from patina edges,
   some strokes lost where the photograph is soft, mostly in the lowest 25 mm).
+
+## hu-fix pass — the owner's three points (photo-11 at full resolution; crops in `.work/hu-fix/crops/`)
+
+### Handles: the animal's hind quarter and its horns [good in profile, guess across]
+
+Re-read at 3–4× on a handle-plane grid (both handles; the left mirrored). Each handle is ONE small beast in the round:
+the neck arches off the vessel's neck into the head (looking out, snout down); under the chin the chest carries a
+C-volute from which the FORELEG (ribbed across) runs down-in to a paw pressed on the shoulder (≈ x 109, y 281); the BODY
+runs down the outer side, transverse ribs on its back, into a round HAUNCH (≈ 141, 261) marked by an incised spiral on
+its flank (the hip; the tail is rolled tight at the rump's outer lower corner — not separable from the hip volute on
+the photograph [est]); a broad dark strap (the thigh / belly side) drops from under the chest straight onto the foot.
+From the haunch the shank drops to the HOCK at the bottom outer corner (≈ 137, 248) and the FOOT lies flat along the
+shoulder, heel to toes, up-inward to the toes at ≈ (118, 265), a contour line round its side and a curled toe. The
+r8 model's "squared tail loop with a hole" (x 116–137, y 244–267) WAS this foot: its "hole" is the incised toe curl,
+it is not pierced. Open ground shows only in the small triangle under the foreleg (x 113–122, y 268–277). On the
+photograph the foot's outer edge lies ≈ 5 mm farther out than the model's shoulder at z = 0 (the silhouette there is
+the shoulder's far side, seen from 7.8° above): the sole is set ON the model's wall.
+
+**Horns**: a PAIR, side by side across the crown (left and right of the mid-line), short stout bottle horns — a stalk
+with two rings swelling to a rounded knob ≈ 4.5–5 mm across — tips at y ≈ 336–338, leaning a little back. The left
+handle (seen from its other side) shows one knob in profile, the near horn hiding the far one; the right handle shows
+two tips ≈ 5 mm apart (the pair seen with a slight turn of the head) [good for shape and height, est for the splay
+across, which the photograph cannot show]. The r8 model's three horns in a row were wrong.
+
+### The neck inscription [firm that it exists and where; NOT read]
+
+- **Where**: the front of the plain neck, between the lip band and the rope, from ≈ 2 mm above the neck's foot (arc
+  y ≈ 320 mm) to ≈ 100 mm above it (y ≈ 418), across ≈ 145 mm of developed width (x ≈ −85 … +68 mm from the front
+  centre line). Nothing shows on the shoulder or in the décor bands.
+- **Layout**: SEVEN columns read with confidence, at developed x ≈ +64, +42, +20, −2, −25, −49, −77 mm (pitch ≈ 22–26
+  mm), each with 3–5 graphs, ≈ 25 graphs visible in all; graphs ≈ 10–15 mm tall. Read, as usual, right to left. An
+  eighth column may lie further right (x ≈ +80 … +95) under a lime patch: only blotches show there.
+- **Technique**: ENGRAVED after casting, not cast: the strokes are hairlines of even width (≈ 0.5–0.7 mm, ≈ 2 px on the
+  photograph), pale-filled, with sharp ends; they cut across corrosion and wander slightly, nothing of the rounded,
+  sunk, wide-shouldered stroke of a mould-cast inscription [good].
+- **What is read**: nothing with confidence. Candidates, all uncertain: c1g2 (right column, 2nd graph) is a cross with
+  a swelling at the crossing — in bronze script the form of 七 "seven" (or a late 十 "ten"); c2g1 is two horizontals
+  joined by two strokes meeting at the top (NOT 五: the strokes do not cross); c6g1 resembles 子 but has a forked head;
+  c5g3 is two bars over two tree-like elements (林-like). Several graphs are lost under lime in the lower right.
+- **What is modelled**: the strokes as seen, hand-traced on the developed photograph (`inscription.json`: 25 graphs,
+  130 polylines, columns numbered from the right), cut as 0.6 mm × 0.3 mm V-lines; no stroke was completed, guessed or
+  borrowed from another vessel. Lime-hidden parts are left blank. The r8 raster (with false strokes from lime edges) is
+  replaced. View `detail-inscription` (ref `detail-inscription.jpg`).
+
+### Body décor: the median line [good]
+
+At 6× (crops b1, s1: belly and shoulder) every raised band of the interlace reads as TWO pale crests split by a dark
+hairline: band ≈ 2.3–2.8 mm (≈ 8–10 px), groove ≈ 0.4–0.5 mm (≈ 1.5 px on the photograph), depth not measurable
+(dark like the cast shadows: ≈ 0.3 mm assumed). The groove follows each band round its corners and through the joins,
+stops short of the knobbed heads; a few heads show a dark centre (an eye dot) [est]. The same on the shoulder rows and
+the belly rows; the cords and ropes are not split. Modelled with `kit.panchiBand(… median)` (KIT.md § Panchi).

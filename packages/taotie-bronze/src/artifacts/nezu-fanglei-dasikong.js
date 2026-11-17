@@ -51,7 +51,7 @@ export default {
   dimensions: { h: 500, w: 284, d: 256, inferred: true, note: 'INFERRED: H assumed 500 mm (the label gives none; square lei run 40–55 cm, and the leiwen then measures ≈ 1.6 mm pitch); proportions back-projected from photo-34; w, d = body without handles; the depth is not visible in either photograph (assumed 0.9 × width)' },
   blurb:
     'A tall wine jar of rounded-square section with broad shoulders and a body that narrows toward its base, closed by a four-sided domed lid with a small roof-shaped knob. ' +
-    'Masks with fat hooked horns run round the upper belly over a fine thunder-pattern ground, long blades hang from it over the plain lower body and straddle the corners, a horned head and a band of whorl bosses ride the shoulder, beast-headed loop handles stand on the sides and a lug hangs low on the front. ' +
+    'Masks with fat hooked horns run round the upper belly over a fine thunder-pattern ground, long blades hang from it over the plain lower body and straddle the corners, a horned head and a band of whorl bosses ride the shoulder, beast-headed loop handles stand on the sides, and low on the front a small beast head stands out from the wall on a loop. ' +
     'Reconstructed from two of the project owner’s photographs of the front: the height is inferred, and the sides and back repeat the front.',
   defaultPatina: 'nezu-fanglei-dasikong',
   views: {

@@ -8,8 +8,8 @@
 // Form: four lobes that run down into four legs (kit.lobedBody — a square-plan lobed solid, the lobes
 // overlapping above the crotch so the creases are real intersections, parting below it into the arch
 // between the legs); a square frieze band and a concave flaring collar (kit.fangBody with a profile); a
-// thick square eave slab; a hipped cap whose plateau is a real plate with the filling hole cut through
-// (kit.plate); a crenellated ridge; the slanted hollow spout with its notched flange and two side pegs;
+// thick square eave slab; the closed top, one swelling cushion (kit.plate) carrying one symmetric face whose mouth is
+// the filling hole, cut through; a crenellated ridge (its nose); the slanted hollow spout with its notched flange and two side pegs;
 // the handle as one sculpture (signed distance field → kit.meshSDF); notched flanges on every corner and
 // on the creases of the three faces without the handle.
 
@@ -33,7 +33,7 @@ export default {
   dimensions: { h: 720, w: 332, d: 437, inferred: true }, // h to the spout lip; inferred, not on the label
   blurb:
     'A tall covered pouring vessel whose square body is four bulging lobes running down into four legs; each lobe carries half a taotie mask in fat, high bands — a double horn rolled into a deep coil, a brow bar, a domed eye — under a frieze of kui dragons. ' +
-    'A slanted tube spout rises from the cushion-shaped lid beside the filling hole; opposite it the loop handle is a whole dragon, its horned head under the eave. ' +
+    'The closed top is one more face, looking up: two domed eyes under broad horns, a crenellated ridge for its nose, and the filling hole as its open mouth, ringed by hooked jaws; the slanted tube spout rises out of its brow like a crest. Opposite the spout the loop handle is a whole dragon, its horned head under the eave. ' +
     'One of three he shown together at the Nezu Museum; the size is inferred from the owner’s photographs (the label gives none), and the faces the photographs do not show repeat the ones they do.',
   defaultPatina: 'nezu-fanghe',
   views: {
@@ -48,12 +48,12 @@ export default {
     // hole) toward the bottom, the handle face (+Z) below it; raking key from the upper left
     top: { face: { center: [0, 470, 0], normal: [0, 1, 0], up: [0, 0, -1], width: 350, height: 350 } },
     // photo 15 (VESSEL B, the set's twin — same top scheme): from the handle end along the axis toward the spout
-    'lid-axis': { azimuth: 0, elevation: 30, fov: 20, fit: 0.42, target: [0, 470, 10], ref: 'lid-axis.jpg' },
+    'lid-axis': { azimuth: 0, elevation: 26, fov: 24, fit: 0.27, target: [0, 470, 40], ref: 'lid-axis.jpg' },
     'detail-handle-head': { azimuth: 0, elevation: -2, fov: 20, fit: 0.2, target: [0, 385, 160], ref: 'detail-handle-head.jpg' },
     'detail-handle-side': { azimuth: -90, elevation: 10, fov: 20, fit: 0.28, target: [0, 330, 150], ref: 'detail-handle-side.jpg' },
     'detail-lobe': { azimuth: 22, elevation: 8, fov: 20, fit: 0.15, target: [62, 205, 110], ref: 'detail-lobe.jpg' },
     'detail-spout': { azimuth: 90, elevation: 16, fov: 20, fit: 0.3, target: [0, 600, -150], ref: 'detail-spout.jpg' },
-    'detail-lid': { azimuth: 54, elevation: 45, fov: 27, fit: 0.376, target: [39, 470, 45], ref: 'detail-lid.jpg' }, // photo 44 over the handle-right corner (camera fitted to the eave corners)
+    'detail-lid': { azimuth: 54, elevation: 45, fov: 27, fit: 0.33, target: [30, 470, 40], ref: 'detail-lid.jpg' }, // photo 44 over the handle-right corner (camera fitted to the eave corners)
     'detail-leg': { azimuth: 90, elevation: 10, fov: 20, fit: 0.32, target: [0, 90, 0], ref: 'detail-leg.jpg' },
     'face-front': { face: { center: [0, 212.5, 105], normal: [0, 0, 1], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-front.jpg' },
     'face-side': { face: { center: [105, 212.5, 0], normal: [1, 0, 0], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-side.jpg' },

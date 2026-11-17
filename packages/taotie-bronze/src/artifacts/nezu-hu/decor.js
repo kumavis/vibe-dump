@@ -11,8 +11,14 @@
 import { LV } from './form.js'
 import INSCRIPTION from '../../../reference/nezu-hu/inscription.json'
 
+// hu-fix: every band carries a fine incised MEDIAN LINE down its centre (photo-11 at 6×, .work/hu-fix/crops/b1-s.png,
+// s1-s.png: each band reads as two pale crests split by a dark hairline — band ≈ 2.3–2.8 mm, groove ≈ 0.4–0.5 mm,
+// running unbroken round the corners and through the joins, stopping short of the knobbed heads; a few heads show
+// a dark centre, an eye). At 5 px/mm (q 1) the groove is ≈ 2.3 px, at the phone cap (q 0.5, 2048 px) ≈ 1.6 px;
+// the geometry is displaced by the low-passed field, so the line lives in the normal map and the cavity channel.
+export const MEDIAN = { width: 0.46, depth: 0.32, inset: 0.45, profile: 'v', eye: { r: 0.38 } }
 // strands ≈ 2.1 mm, round-shouldered with a narrow flat top, ≈ 1.4 mm proud; knobs and pellets a little prouder
-const RIB = { rib: 2.35, height: 1.7, profile: 'plateau', shoulder: 0.8, knob: 1.35, knobHeight: 2.0, jitter: 0.35, wobble: 0.14, wavelength: 16, swell: 0.08 }
+const RIB = { median: MEDIAN, rib: 2.35, height: 1.7, profile: 'plateau', shoulder: 0.8, knob: 1.35, knobHeight: 2.0, jitter: 0.35, wobble: 0.14, wavelength: 16, swell: 0.08 }
 
 /** a flat-topped ledge (plateau section, crisp shoulders) */
 function flatCord(panel, x0, x1, y, width, height) {
@@ -63,23 +69,29 @@ export function shoulderPanel(kit, P, size, { ppmm, seed }) {
 }
 
 /**
- * The neck, front sector only: the incised inscription (≈ 8 columns over the front half of the neck), a 0.25 mm
- * raster extracted from photo-11 developed onto the neck (reference/nezu-hu/inscription.json — NOT a transcription,
- * the strokes as the photograph shows them). Register y 316 → 422; the raster's frame starts at y 318.
+ * The neck, front sector only: the incised inscription — seven columns on the front of the neck, ≈ 25 graphs,
+ * HAND-TRACED stroke by stroke off photo-11 developed onto the neck (reference/nezu-hu/inscription.json, hu-fix): only
+ * the strokes the photograph shows, none completed or guessed; graphs under lime are left incomplete. Thin, even
+ * V-cut lines (≈ 0.6 mm wide, 0.3 mm deep): the strokes are hairlines that cut across the surface — engraved, not
+ * cast (dossier §c). Register y 316 → 422; the tracing's frame starts at y 318.
  */
 export function neckPanel(kit, P, size, { ppmm, seed, y0 = 316 }) {
   const W = size.width, H = size.height
   const panel = new kit.ReliefPanel({ width: W, height: H, ppmm, seed })
   const I = INSCRIPTION
   const off = P.sAtY(I.y0) - P.sAtY(y0)
-  const px = 1 / I.ppmm
   panel.sink((ctx) => {
+    ctx.lineWidth = I.stroke.width
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
     ctx.beginPath()
-    for (const [r, c, n] of I.runs) {
-      const x = W / 2 + I.x0 + c * px, y = off + I.ymax - (r + 1) * px
-      ctx.rect(x, y, n * px, px * 1.02)
+    for (const g of Object.values(I.graphs)) {
+      for (const s of g.s) {
+        ctx.moveTo(W / 2 + s[0][0], off + s[0][1])
+        for (let i = 1; i < s.length; i++) ctx.lineTo(W / 2 + s[i][0], off + s[i][1])
+      }
     }
-    ctx.fill()
-  }, { depth: 0.4, profile: 'u', shoulder: 0.18 })
+    ctx.stroke()
+  }, { depth: I.stroke.depth, profile: 'v', shoulder: I.stroke.width / 2 })
   return panel.bake()
 }

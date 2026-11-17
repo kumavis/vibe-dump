@@ -30,8 +30,8 @@
     },
     "capOverEave": {
       "expr": "parts.lid.w / parts.eave.w",
-      "expected": 0.78,
-      "tol": 0.06
+      "expected": 0.84,
+      "tol": 0.05
     },
     "spoutTop": {
       "expr": "parts.spout.max.1 / overall.h",

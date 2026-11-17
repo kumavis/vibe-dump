@@ -12,10 +12,32 @@
 
 import * as THREE from 'three'
 import { H, LV, PLAN, RHO, bellyHalf, shoulderHalf, polyPath, toothed, slotRow, flankMarks } from './nezu-fanglei/form.js'
-import { handleSDF, shoulderHeadSDF, lugSDF } from './nezu-fanglei/sculpture.js'
+import { handleHeadSDF, handleRingSDF, shoulderHeadSDF, lugHeadSDF, lugRingSDF } from './nezu-fanglei/sculpture.js'
 import { bellyPanel, shoulderPanel, collarPanel, footPanel, lidPanel, knobPanel } from './nezu-fanglei/relief.js'
 
 const SIDES = ['front', 'right', 'back', 'left']
+
+/** concatenate indexed geometries with the same attributes (meshSDF output: position, normal, uv) */
+function mergeGeos(geos) {
+  const names = Object.keys(geos[0].attributes)
+  const out = new THREE.BufferGeometry()
+  for (const n of names) {
+    const size = geos[0].attributes[n].itemSize
+    const arr = new Float32Array(geos.reduce((a, g) => a + g.attributes[n].array.length, 0))
+    let o = 0
+    for (const g of geos) { arr.set(g.attributes[n].array, o); o += g.attributes[n].array.length }
+    out.setAttribute(n, new THREE.BufferAttribute(arr, size))
+  }
+  const idx = []
+  let base = 0
+  for (const g of geos) {
+    const I = g.index.array
+    for (let i = 0; i < I.length; i++) idx.push(I[i] + base)
+    base += g.attributes.position.count
+  }
+  out.setIndex(idx)
+  return out
+}
 const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
 
 export default {
@@ -38,10 +60,14 @@ export default {
     'Reconstructed from two of the project owner’s photographs: the height is inferred, and the back and left faces repeat the visible ones.',
   defaultPatina: 'nezu-fanglei',
   views: {
-    // solved from the photographs (.work/r7-lei/solve): photo-37 az ≈ 3°, el ≈ 10°, ≈ 3.8 m (long lens: fov ≈ 9°);
-    // photo-36 az ≈ 69°, el ≈ 5–7°
+    // solved from the photographs (.work/r7-lei/solve): photo-37 az ≈ 3°, el ≈ 10°, ≈ 3.8 m (long lens: fov ≈ 9°).
+    // three-quarter, round 10 (.work/lei-mid/fit36e.py): photo-36 is NOT a long-lens shot — a pinhole fitted to the
+    // knob tip, the near collar corner (top, bottom), the far-left collar corner and the near foot corner (principal point
+    // at the image centre, 8 px rms) puts the phone ≈ 0.73 m from the axis at y ≈ 404 (lid-skirt height), az 67.6°,
+    // looking down ≈ 13° at the belly, f ≈ 2520 px (vfov 41° over the three-quarter.jpg crop). These numbers reproduce
+    // that camera (target = the crop centre's ray at the axis, fov = the crop's vertical angle).
     front: { azimuth: 3, elevation: 10, fov: 10, fit: 0.98, target: [0, 252, 0], ref: 'front.jpg' },
-    'three-quarter': { azimuth: 69, elevation: 6, fov: 10, fit: 0.98, target: [0, 252, 0], ref: 'three-quarter.jpg' },
+    'three-quarter': { azimuth: 67.64, elevation: 13.1, fov: 40.9, fit: 0.867, target: [5.1, 233.9, -12.3], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
     top: { azimuth: 20, elevation: 70, fov: 28, fit: 1.05 },
@@ -142,6 +168,26 @@ export default {
     const collar = kit.fangBody({ ...collarOpts, cells: cells('collar') })
     collar.position.y = LV.shoulder
     object.add(foot, belly, shoulder, collar)
+    // round 10 (photo-36 / photo-37): where the collar meets the shoulder a plain stepped plinth runs round the collar's
+    // foot, and turned step-lines ring the flat ledge outside it. Flat rectangular frames lying on the ledge (y 325).
+    const frame = (inset, width, height, name) => {
+      const hw = PLAN.collar + inset, hd = RHO * PLAN.collar + inset
+      const sh = new THREE.Shape([new THREE.Vector2(-hw, -hd), new THREE.Vector2(hw, -hd), new THREE.Vector2(hw, hd), new THREE.Vector2(-hw, hd)])
+      const iw = hw - width, id = hd - width
+      sh.holes.push(new THREE.Path([new THREE.Vector2(-iw, -id), new THREE.Vector2(-iw, id), new THREE.Vector2(iw, id), new THREE.Vector2(iw, -id)]))
+      const g = new THREE.ExtrudeGeometry(sh, { depth: height + 0.6, bevelEnabled: true, bevelThickness: Math.min(0.5, height * 0.4), bevelSize: Math.min(0.5, width * 0.25), bevelSegments: 1, curveSegments: 1 })
+      g.rotateX(-Math.PI / 2)
+      const m = new THREE.Mesh(g, plain)
+      m.position.y = LV.shoulder - 0.6
+      m.name = name
+      m.userData.part = 'shoulder'
+      m.castShadow = m.receiveShadow = true
+      object.add(m)
+    }
+    frame(2.8, 3.2, 3.2, 'collar-plinth') // the plain step at the collar's foot: 2.8 mm proud, 3.2 tall
+    frame(6.6, 1.6, 0.9, 'ledge-line-1')
+    frame(10.8, 1.6, 0.9, 'ledge-line-2')
+    frame(15.0, 1.6, 0.9, 'ledge-line-3')
 
     const lid = kit.hippedLid({
       ...lidOpts, material: plain, density: dens,
@@ -195,7 +241,7 @@ export default {
       {
         // photo-37: a separate slab with a clear gap above the belly flange's squared cap, standing further out, 3 slots, its top hooking up past the ledge
         const path = wallPath(shoulder, k, 1, LV.main + 7, LV.shoulder, diag(k), 12)
-        F({ path, ...slotted(path.length, 22, 3, { w: 2.6, dep: 9, bottom: { over: 0, up: 0, len: 5 }, top: { over: 16, up: 4, len: 12 } }), thickness: 8, embed: 2.5 })
+        F({ path, ...slotted(path.length, 22, 3, { w: 2.6, dep: 9, bottom: { over: 0, up: 0, len: 5 }, top: { over: 4, up: 7, len: 14 } }), thickness: 8, embed: 2.5 })
       }
       // collar corners and centres
       {
@@ -216,7 +262,10 @@ export default {
       // the others run on through the low register (inferred)
       {
         const y0 = k === 0 ? LV.low - 2 : LV.narrow
-        const path = wallPath(belly, k, 0.5, y0, LV.main + 1, face(k))
+        // round 10: on the narrow ±X faces the centre flange stops under the handle's ring (photo-36: the ring's lower arc
+        // hangs over the belly top at y ≈ 248 with plain décor behind it, no flange)
+        const y1 = k % 2 ? 238 : LV.main + 1
+        const path = wallPath(belly, k, 0.5, y0, y1, face(k))
         F({ path, ...slotted(path.length, 7, Math.round(path.length / 13), { w: 1.8, dep: 2.4, marks: false }), thickness: 6.5, embed: 2 })
       }
     }
@@ -229,11 +278,15 @@ export default {
       const from = hip[0], to = hip[hip.length - 1]
       const out = slopeN(k).add(slopeN((k + 1) % 4)).normalize()
       const L = from.distanceTo(to)
-      F({ from, to, out, ...slotted(L, 13, 7, { w: 2.6, dep: 6, top: { over: 2, up: 6, len: 9 }, bottom: { over: 7, up: 0, len: 6 } }), thickness: 9.5, bevel: 0.5, embed: 3 })
+      // round 10 (photo-36 at the fitted camera): heavy slabs ≈ 16 mm deep, ≈ 10.5 thick, 8 slots; the lower end runs
+      // ≈ 12 mm past the eave corner and turns up as a tip, the top rises past the ridge as an ear
+      F({ from, to, out, ...slotted(L, 16, 8, { w: 3, dep: 7.5, top: { over: 2, up: 6, len: 10 }, bottom: { over: 12, up: 3.5, len: 8 } }), thickness: 10.5, bevel: 0.6, embed: 3 })
       const mid = lid.userData.midlines[SIDES[k]].map((p) => p.clone().add(V(0, LV.collar, 0)))
       const mf = mid[0], mt = mid[mid.length - 1]
       const Lm = mf.distanceTo(mt)
-      F({ from: mf, to: mt, out: slopeN(k), outline: toothed(Lm, 3.6, { slots: slotRow(8, Lm - 6, 5), w: 1.6, dep: 1.4, bottom: { over: 3, up: 0, len: 4 } }), thickness: 8.5, bevel: 0.5, embed: 2.5, grooves: [] }) // a flat slotted bar (photo-37)
+      // round 10: a real notched flange down the middle of every slope (photo-36: a thick slab standing ≈ 9 mm off the
+      // end slope, its lower end running past the eave); seen head-on in photo-37 it is the pale bar on the axis
+      F({ from: mf, to: mt, out: slopeN(k), outline: toothed(Lm, 9, { slots: slotRow(8, Lm - 6, 5), w: 2.2, dep: 4, bottom: { over: 8, up: 2.5, len: 6 } }), thickness: 7.5, bevel: 0.5, embed: 2.5, grooves: [] })
     }
 
     // ---------------------------------------------------------------- sculpture
@@ -247,14 +300,15 @@ export default {
       object.add(m)
       return m
     }
-    const hGeo = kit.meshSDF(handleSDF(), { voxel })
+    // the shoulder handles: a head holding a ring (sculpture.js), two fields with tight bounds merged into one mesh per side
+    const hGeo = mergeGeos([kit.meshSDF(handleHeadSDF(), { voxel }), kit.meshSDF(handleRingSDF(), { voxel: voxel * 1.1 })])
     const handles = [mesh(hGeo, 'handles')]
     const hGeo2 = hGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI))
     handles.push(mesh(hGeo2, 'handles'))
     const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
     const heads = [mesh(headGeo, 'heads')]
     heads.push(mesh(headGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI)), 'heads')) // back: inferred
-    const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.85 }), 'lug')
+    const lug = mesh(mergeGeos([kit.meshSDF(lugHeadSDF(), { voxel: voxel * 0.8 }), kit.meshSDF(lugRingSDF(), { voxel })]), 'lug')
 
     await onProgress(1, 'done')
     void H; void face

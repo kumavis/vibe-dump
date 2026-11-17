@@ -35,7 +35,7 @@ camera (≈ ±3 % of H); **[est]** read obliquely, partly hidden or worn (≈ ±
    (z = 0.9 × its half width) before its height is read. Check: the model rendered from the same camera overlays the
    photograph's silhouette within ≈ 2–4 % except where noted in §e.
 2. **Levels [measured]** (y): base 0; centre blade tip 28 (the lug's pendant point 31); corner blades end ≈ 45;
-   lug hole 86–100, the pendant's lip ≈ 86; blade register top 207, fillet 207–212; main register 213–271 (border 271–275,
+   lug: loop 66–90 (no hole in the wall), the head's top ≈ 84.5, chin ≈ 39; blade register top 207, fillet 207–212; main register 213–271 (border 271–275,
    plain band 275–285); whorl-boss band 285–306.5; kui frieze 307–336 on the shoulder slope; two bowstrings 338–345;
    shoulder top 346, flat ledge to the collar 348; collar 348–397.5; lid lip 397.5–400; lid dome 400–466 (boss row
    403–420, mask 422–462); knob post 466–469, knob cap 469–485 (vertical sides), its low hipped top to ≈ 500.
@@ -49,14 +49,25 @@ camera (≈ ±3 % of H); **[est]** read obliquely, partly hidden or worn (≈ ±
    (r ≈ 3); the lid dome's corners round from ≈ 7 at the eave to ≈ 31 at the crown. **No flanges anywhere** except a
    plain bar down the centre of the front lid slope, ≈ 8–10 mm proud, rising to the knob (photo-34); the lid's side
    silhouettes show none, the back one is inferred.
-5. **Sculpture [est]**: a horned head on the centre of the front shoulder (y ≈ 294–345, ≈ 55 mm across its horns:
-   two fat curled horns form its crown, round bulging eyes under a brow, a heavy blunt snout thrusting out and down);
+5. **Sculpture [est]**: a horned head on the centre of the front shoulder (y ≈ 310–344, ≈ 55 mm across its horns:
+   two curled coil horns form its crown, round bulging eyes under a brow, a short squared snout ending at y ≈ 311
+   above the boss row);
    the back head [inferred]. Two loop handles on ±X (photo-34 edges, photo-03 right): a beast head lying along the
    handle top, snout out to x ≈ 160 at y ≈ 330, short horns at its back; a round bar ≈ 11 mm thick loops down into
-   the wall at y ≈ 300. The low lug on the front (photo-34, photo-03): a pendant head ≈ 34 mm across whose top lip
-   stands ≈ 17 mm out at y ≈ 86, under a dark opening (the lug's hole, y 86–100: modelled as a 6 mm pocket in the
-   wall), tapering back into the wall to a point at y ≈ 31 (C horns, eyes, a nose ridge). How the hole runs behind
-   the head is not visible [inferred: vertically, between head and wall].
+   the wall at y ≈ 300. The low lug on the front (photo-34, photo-03; round dsk-lug, see §e): a LOOP standing out
+   of the wall carrying a beast head on its lower front; **there is no hole in the wall**. [seen] The dark patch above
+   the head (y ≈ 85–96) has a crisp lower edge — the head's top — and a SOFT upper edge that fades into a plain lit
+   patch flanked by ribbed strips (the loop's top, y ≈ 96–105); in photo-03 (camera further right, higher) the band is
+   thinner and a dark crevice opens behind the head's right cheek, and in both photographs the blade's border strips
+   run on behind the head's flanks. [inferred] The head stands well off the wall: back ≈ 12 mm out (10 at the chin),
+   face ≈ 20 (top) to 22.5 mm (brow) out (from the crevice's growth between the two views, ≈ 10–15 mm, ± 50 %, and
+   from the band's height: ≈ 8 mm seen from ≈ 22° above needs ≈ 20 mm of depth behind the head's top edge); the patch
+   is the shadowed gap between the head's back and the wall, seen over the head's top. Loop or solid stalk: the
+   photographs cannot decide (the carrier is hidden behind the head); a loop is the type's norm and the sister
+   nezu-fanglei's, so a loop is built [low–medium confidence on the carrier, high on the stand-off]. Head [seen, detail-lug]: ≈ 32 mm across a round top, tapering to a
+   blunt muzzle at y ≈ 39; a broad ∩ crescent of horns cut with short strokes, a panel of small hooks inside it, a
+   stem where the horns' inner ends meet, a lozenge on the brow, curled side ears, round eyes set wide (± 6.6) in
+   curled lids, curled nostril scrolls; malachite green against the brown wall.
 6. **Not visible**: both sides (±X faces), the back, the inside, the underside, the knob's back, any inscription.
    Sides and back repeat the front (without the lug) — **inferred**.
 
@@ -112,4 +123,16 @@ sides and back are inferred repeats, the depth is inferred, the head and handles
 - **Handles** re-placed against `detail-handle`: top ≈ 332 (was ≈ 346), snout x ≈ 156 (was ≈ 164); bar Ø ≈ 10 mm.
   The reviewer's "14 mm too high" was read off a silhouette overlay scaled on knob and foot; the 1:1 detail crop
   gives ≈ 11 mm.
-- **Lug opening**: a 38 × 14.5 mm pocket, 13 mm deep, plain-floored, plus a black-tinted floor quad (beauty only).
+- ~~**Lug opening**: a 38 × 14.5 mm pocket, 13 mm deep, plain-floored, plus a black-tinted floor quad (beauty only).~~
+  Withdrawn in round dsk-lug: the front panel no longer carries the pocket (the artifact uses `pf.relief`, not
+  `pf.lugRelief`), the black quad is gone.
+- **Low lug (round dsk-lug)**: a ring (≈ 13 mm wide, 6.6 thick, centre-line radius 9 about y 78 on the wall)
+  springing from the wall at y ≈ 90 and returning into it behind the head at y ≈ 66; the head rides on its outer
+  face, its back 12 mm off the wall, its face ≈ 20–22.5 mm out; a ≤ 0.7 mm root pad, flush at its edges, floors the
+  gap behind it. Dark by geometry: cast shadows plus a per-vertex cavity (occlusion along the
+  normals and shelter from top light, traced against the lug and the wall: `lugCavity`), which the patina's recess
+  term darkens. Malachite-tinted mesh. Old lug mesh was clipped open at the back of its bounds; the new one is
+  closed with ≥ 3.5 mm margin.
+- **Shoulder head (round dsk-lug)**: the bulbous snout (to y ≈ 297) replaced by a short squared block with a flat
+  near-vertical front and a flat underside at y ≈ 311, clear above the boss band; coil horns crisper (spiral groove,
+  noise 0.75 → 0.32 mm).

@@ -45,9 +45,10 @@ src/kit/
     rounded.js          TRACED vocabulary: fat round-cornered strokes, plates, decorated plateau tops, pillow eyes (§ Rounded bands)
     lozenge.js          lattice grounds: diagonal lozenges / 回 squares, nested · squared · spiral · dot cells (§ Rounded bands)
     coilboss.js         coilBoss: the coiled-serpent boss 盘蛇枚 of Eastern Zhou bells (dome of stepped turns, hatching, beast head) (§ Coiled-serpent boss)
-    plates.js           tracedPlates: traced OUTLINES (tools/trace.py) → solid plates: shoulder, contour lines, sunk centre, top fill, bosses (§ Traced plates)
+    plates.js           tracedPlates: traced OUTLINES (tools/trace.py) → solid plates: shoulder, contour lines, sunk centre, top fill, bosses; sunkCartouche: sunk field, stepped rim, embossed ribbons, ring eyes (§ Traced plates)
     ribbon.js           cutRibbons: the Western Zhou CUT style — channel centre lines, spiral hollows, ringed eyes cut into one flat level (§ Ribbon relief)
     panchi.js           panchiBand: Eastern Zhou stamped interlace — one pattern-block unit tiled in rows of round ribs + knobs; plainCord, ropeCord (§ Panchi interlace)
+    weave.js            weaveFill: woven interlace — ribbons of n ribs with a real over-under, solid dragon heads, unit cells tiled (repeat / mirror / flip / rotate, whole repeats round a band) (§ Woven interlace)
     ridges.js           RidgeWork: décor in fat round RIDGES — quadSpiral (any slanted cell), ridgeBand (nested corners), hookEye, slitEye, scrollChain, ridgeBorder, ridgeGround; bladeWarp (§ Ridge work)
     motifs/
       taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
@@ -58,6 +59,7 @@ src/kit/
       rounded.js lozenge.js pillow.js   atlas sheets of the traced vocabulary (§ Rounded bands)
       phoenix.js straps.js              Western Zhou: the ribbon bird (cutRibbons) and crossing straps with pyramidal studs (§ Ribbon relief)
       panchi.js         Eastern Zhou: tiled panchi interlace between twisted / plain cords (§ Panchi interlace)
+      weave.js          atlas sheet of relief/weave.js: presets bo-top-band, bo-centre-panel, bo-band, bo-field, bo-base-band (Nezu bo), four-ribs, ring-row
       ridges.js         atlas sheet of relief/ridges.js + dasikongBlade (the Dasikong lei's blade, composed from the primitives)
       frieze.js         composed friezes & registers as atlas plaques (compose.js demos)
       list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
@@ -455,6 +457,24 @@ centre, a profile of the same distance: the groove channel is recorded) + option
 `pillowBoss` per boss. Plates also accept `[{ outer, holes }]` or bare outlines; holes cut through (even-odd).
 Worked example: `src/artifacts/nezu-fanglei/relief.js` (`TRACED`, `PLATES`, `faceToVessel`).
 
+**Sunk cartouches — `kit.sunkCartouche`** (same file; additive). The Western Zhou SUNK-THEN-EMBOSSED field: a closed
+outline whose floor drops `depth` below the wall, its edge stepping down through `rim.ribs` parallel ribs that follow
+the outline, and the figure raised back UP inside it as flat-topped ribbons (footprints on the floor: plates outlines,
+e.g. from a `band`-hint tracing) rising to `level` (0 = flush with the wall) over a soft `shoulder`; ring eyes (a ring
+round a domed centre, in their own recess: cut the recess out of the ribbons); `ground` = leiwen sunk into the floor
+that is left (skipped when its pitch is under `groundMinPx` px — phones / low q: the floor stays plain, its cavity
+still darkens). Writes RELATIVE heights (field += h ≤ level) and sets the groove channel on the floor; ONE pass for
+any number of cartouches (2 masks + 2 distance transforms over their bbox, + one leiwenFill).
+```js
+kit.sunkCartouche(panel, [{ field: { rrect: [20, 71, 115, 162], r: [24, 12, 14, 10] },   // or [[x, y]…] | { poly }
+  plates: RIB.plates, eyes: [{ c: [59, 129], r: 4.1 }] }, /* …more cartouches */], {
+  map, depth: 1.4, level: 0, shoulder: 0.7, rim: { ribs: 3, pitch: 1.25 } /* | false */,
+  eye: { ring: 1.3, ringTop: 0, gap: 0.45, dome: 0.5 }, ground: { pitch: 0.95, roundness: 0.9 } /* | false */ })
+// → { fieldArea, ribbonArea, coverage (ribbon tops + eye rings / field), ground, ms }
+```
+Worked example: `src/artifacts/nezu-fanghu/decor.js` (`SUNK`, `cartouchePair`); the ribbons are traced as `band`
+hints by `reference/nezu-fanghu/ribbons.py` (faces/dev-*.bird.json → dev-*.ribbons.json).
+
 ### Ribbon relief — the Western Zhou cut style (relief/ribbon.js; research/04 § Birds, § Straps and studs)
 
 Two centuries after Anyang (the Nezu phoenix fanghu 90097-98, 9th c. BC) the drawing changes hand: strap, cartouche
@@ -507,6 +527,15 @@ On a lathe, lay the band on two sectors with `map: 'true'` and pass `rowWidth: s
 each row then holds a whole number of cells per half turn and both sectors share one panel without a seam. Cost: ONE
 raise for all ribs + ONE for the knobs; the hu's 535 × 180 mm body band at 5 px/mm ≈ 1 s. Atlas: `panchi` (presets
 `nezu-hu`, `nezu-hu-band`, `thin-ribs`). Worked example: `src/artifacts/nezu-hu/decor.js`.
+
+**Median line** (optional, additive — omitted, panchiBand draws exactly what it drew before): `median: { width 0.45,
+depth 0.3, inset 0.5, profile 'v' | 'u', eye: { r 0.35 } | false }` cuts a fine groove down the centre line of every
+rib, so each band reads as a double line (the Nezu hu: band ≈ 2.4–2.8 mm, groove ≈ 0.45 mm). It follows each rib's own
+(filleted, wobbled) path, runs on through flat ends and joins, stops `inset` mm short of rounded ends and `knob + inset`
+short of knobs, and stays out of the pellets (beads); `eye` sinks a dot of the same depth in every knob. ONE extra sink
+for the whole band (≈ +0.3 s on the hu's body band). Resolution: keep the groove ≥ ≈ 1.5 px — 0.45 mm is 2.3 px at
+5 px/mm and 1.6 px on a 2048-capped phone panel; under that, widen it or leave it out. The geometry is displaced by the
+low-passed field, so the line lives in the normal map and the cavity / groove channels only.
 
 ### Ridge work — décor drawn in fat round ridges (relief/ridges.js)
 
@@ -587,6 +616,74 @@ Atlas `ridges` (sliders: ridge width, pitch, height, groove, crown, turns, lean,
 **Cost**: vector work ≈ 0.05–0.1 s per blade; one sink + one raise per ridge width over the bbox of the work. Resolution:
 the ridge is ≈ 0.78 mm — 3 px at 4 px/mm (the Dasikong body at q 1), 2.2 px at q 0.5 (ridges still separate, the
 crown is a 2-pixel bump: the normal map shows them as lines, not as rounded threads).
+
+### Woven interlace — ribbons of n ribs with a real over-under (relief/weave.js)
+
+The Spring and Autumn bell's panchi 蟠螭 décor (Nezu bo 90120, read at full resolution: unit-cell drawings in the
+bo-fix work notes, summarised below) is not drawn in thread lines. Every body is a flat raised RIBBON cut lengthwise into
+n equal RIBS (three on the bo), the ribs dark metal, the grooves and the ground packed with pale earth. Ribbons run in
+G-frames, S-links and interlocked rings; where two cross, the upper runs on unbroken and the lower is CUT, with a
+narrow shadow gap each side. Along a ring the over-under alternates. The heads are SOLID masses (no ribs) with a ringed
+eye, a crest stalk or crest hook, a snout rolled into a C, an ear hook and a neck stalk with a knob. The ground is plain.
+A design is a UNIT CELL plus a TILING RULE.
+
+```js
+kit.weaveFill(panel, rect, { unit: 'dragon' | 'scroll' | 'ring' | 'chain' | fn(L, T, params) → els,
+  sequence: [{ unit, h (weight), params }],         // instead of unit: a column of different cells, TOP → bottom
+  cell: [w, h] (mm), count: [nx, ny],                // default: as many as fit (rounded) — cells stretch to fill the rect
+  wrap: mm, phase: mm,                               // a CLOSED band: nx = round(wrap / w) (even when cells alternate), pitch adjusted
+                                                     //   so it closes; the rect is a window starting at `phase` along it
+  tiling: { x: 'repeat'|'mirror'|'flip'|'rotate', y: … },   // the transform applied to every second cell / row
+  shift (half-drop, × w per row), row0 (row parity offset), gapY (mm between rows), links: true (S-links between the
+  ports of cells one above the other: a column), map: ([x, y]) → panel (after tiling: true mm → panel, a mirrored side),
+  ribs: 3, rib: 1.7, groove: 0.55 (mm; ribbon width = ribs·rib + (ribs−1)·groove), height: 1.1, depth: 0.45 (groove),
+  gap: 0.55 (the shadow gap at a crossing), shoulder: 0.4,
+  params: { nest 0–2 (ribbons nested inside a frame), head (scale), headX, headY, crest 'stalk'|'hook',
+            closed (the frame runs on over the top and the crest crosses OVER it), link, two (scroll: two-start) },
+  clip: (ctx) => path }) → { cells, pitch, count, ms }
+kit.weaveTile(rect, sameOpts) → { els, cells, pitch, count }      // the elements only (draw them yourself, e.g. on two panels)
+kit.renderWeave(panel, els, { ribs, groove, height, depth, gap, shoulder, clip })   // any element list in panel mm
+kit.weaveCell(unit, L, T, params) → els          // one cell, local mm, origin bottom-left, y up (params.face −1: snout right)
+kit.dragonHead({ crest, crestLen, neckLen, z }) // the solid head in its 30 × 20 box, snout left
+kit.weaveEls() / weaveMerge(a, b) / weaveMap(els, f) / sLink(a, b, w) / ribbonWidth(ribs, rib, groove)
+kit.WEAVE_UNITS  kit.WEAVE_PRESETS  kit.WEAVE_DEFAULTS
+// els = { ribbons: [{ pts, w, z, ribs?, group? }], solids: [{ pts, w, z }], masses: [{ pts, z }], knobs: [{ c, r, z }],
+//         eyes: [{ c, r, line }], lines: [{ pts, w }] }   z = layer; strokes of one `group` never cut each other
+```
+**Over-under.** Layers render bottom-up. Before a layer is raised, every place where one of its strokes crosses a
+lower stroke has a window of it cleared to the ground: the stroke's width plus `gap` each side, as long as the lower
+ribbon is wide at that angle (centre lines are intersected; ribbons meeting end to end do not count). Then the layer is
+raised, and its ribs are cut as nested strokes (sink the middle band, raise its middle back; one pair of calls per two
+grooves). Cost per layer: one raise, one clamp if anything crosses, ⌈(n−1)/2⌉ sink + raise pairs; plus one sink for all
+eyes and incised lines. The bo's upper half-face (258 × 304 mm at 6 px/mm, ≈ 240 ribbons) takes ≈ 0.4 s per panel.
+
+**Units.** `dragon`: the head in a G-frame. The body ribbon runs round the cell, open at the top for the crest (or
+`closed`, crossed by it), with `nest` narrower ribbons inside along the bottom and one side that end in hooks, and the
+neck stalk OVER them. In link mode the innermost ribbon leaves through the bottom OVER the frame, toward the next cell.
+`scroll`: a ribbon rolled ≈ 1.05 turns round a knob (`two`: a second ribbon from the opposite corner into the same eye).
+`ring`: two arcs crossing into a pointed oval, over at the top and under at the bottom. `chain`: one site of
+interlocked C-rings. Its left ring is fed along the top edge, its right ring leaves along the bottom, and squared hooks
+fill the corners. Tiled with `x: 'flip'`, every ribbon becomes an S-link from site to site.
+
+**Presets (the Nezu bo; KIT units = true mm).** The atlas sheet `weave` has each as a preset at its matched size, plus
+sliders for cell size, rib count, rib width, groove, relief, gap, density (nest) and head size.
+
+| preset | zone | unit cell | tiling | ribbon |
+| --- | --- | --- | --- | --- |
+| `bo-top-band` | band round the top (431.5–450) | chain site 40 × 16.9 (measured 39–42): two rings R 5.5 interlocked (2e = 1.16 R) | x flip; a whole EVEN number of sites per face (the bo: 12 × 38.5) | 3 × 1.4 + 2 × 0.5 = 5.2 |
+| `bo-centre-panel` | the vertical panel (钲), each half one column ≈ 24 mm wide | 8 cells: scroll, 4 dragons, scroll (two-start), 2 dragons; gaps 6.5 | y rotate 180°, S-links; the two columns REPEAT (not mirrored) | 3 × 1.7 + 2 × 0.55 = 6.2 |
+| `bo-band` | strips between the boss rows (篆) | dragon ≈ 25–46 × 34.4 (cell borders traced), crossed ring 16 | mirrored about the face centre (snouts inward) | 3 × 1.75 + 2 × 0.6 = 6.45 |
+| `bo-field` | lower field (鼓) | dragon 62 × 31.6, 1 nested ribbon, crest hooked back over the head | y flip; straight repeat round the bell | 3 × 1.6 + 2 × 0.55 = 5.9 |
+| `bo-base-band` | the field's worn lowest row | as bo-field | (row0 = 3 to keep the flip) | 0.55 mm high, softer |
+
+**On a vessel.** Tile in TRUE mm and `map` into the panel (an angle-proportional panel: x · PANEL_W / (A(y) · arc)).
+For a straight repeat round a body whose left half-face mirrors one panel, draw a second panel for the left half with
+`map: ([x, y]) => [(W − x) · k, y]` and `phase − W`. The bronze then shows the pattern repeated, not mirrored, and with
+a whole number of repeats per face it closes round the vessel. Worked example: `src/artifacts/nezu-bo/decor.js`.
+**Resolution.** At 6 px/mm (the bo at q 1) a 1.7 mm rib is ≈ 10 px and a 0.55 mm groove ≈ 3.3 px. At q 0.5
+(4.2 px/mm) a rib is ≈ 7 px and a groove ≈ 2.3 px. A panel under 2048 px is not touched by the phone cap: the bo's
+304 mm upper panel at 6 px/mm is 1824 px. Below ≈ 2 px per groove (≈ 3.6 px/mm) the grooves fill in and a ribbon reads
+as one plateau. The heads, over-under gaps and frames still read, but the three ribs do not.
 
 ## relief/compose.js — laying out a mould section
 
@@ -999,7 +1096,7 @@ Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangdin
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom` · Examples `stanford-dragon` (cavity-driven corrosion on a scan),
-`suzanne`. A preset is applied over the PATINA_PARAMS defaults.
+`suzanne`, `utah-teapot`, `crt-computer`. A preset is applied over the PATINA_PARAMS defaults.
 
 Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
 `PATINA_PARAMS` (group, label, min/max/step, default, unit, hint),
@@ -1026,6 +1123,10 @@ apart (cuprite-red flanges on the Nezu zun); set later via `material.local.uMesh
 (cavity > 0.8) as arrises for wear, stands in for relief height on bare regions, and quiets the per-triangle screen-space
 curvature that a dense scan turns into facet noise. Both are compile-time defines: a material without them compiles the
 same shader as before (pixel-identical).
+`meshAge` (number, default none) multiplies the shared `age` dial for this one mesh, and `meshPolish` (0..1) replaces the
+shared `polish` for it: a part kept bright and clean while the rest of the vessel is fully aged — the polished bronze
+mirror face of `crt-computer` uses `{ meshAge: 0.12, meshPolish: 0.95 }`. Also a compile-time define (`PATINA_MESH_AGE`;
+`material.local.uMeshAge` / `uMeshPolish` change it later): materials without it compile the same shader as before.
 Plain meshes (legs, handles, flanges) get a cavity estimate from signed screen-space curvature
 (convex arris → edge/wear, concave crease → recess), undersides and inward faces; the inner wall
 of a decorated panel (uv = -1) is treated as interior. Each layer is one GLSL function

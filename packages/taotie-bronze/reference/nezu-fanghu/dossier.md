@@ -64,11 +64,17 @@ partly hidden, dark or worn (≈ ±10 %); **[inferred]** not visible.
 
 ## c. Décor (relief heights in mm; traced on faces/dev-*.jpg — photo-08 developed onto the model surface)
 
-The language is **not** Anyang taotie-and-leiwen. Strap, cartouche and bird share one flat level; the bird is drawn in
-FAT flat ribbons (3–6 mm) parted by wide round-shouldered channels (surface width 1.5–3 mm, depth ≈ 1.7) and a deeper
-border channel (≈ 2.8 wide, 2.2 deep) round each cartouche; a few hollows hold a fine spiral ground; the eyes are round
-domed bosses (Ø 8–8.5 on the belly, 7.8 in the neck frieze) in a sunk ring with a dot pupil. In the model the
-cartouche interior is lifted ≈ 1.3 mm as one cushion (photo-09 shows a step at the strap edges).
+The language is **not** Anyang taotie-and-leiwen: it is **sunk-then-embossed** (round 9 redo). Each cartouche is a
+field SUNK below the wall — ≈ 1.4 mm [est: the shadow under the cartouche's upper edge is 1.2–1.8 mm wide on
+dev-low.jpg (s 55–95, y 161.6–163.8) under a light ≈ 45° to the wall] — its edge stepping down through two or three
+parallel ribs at ≈ 1.3–1.5 mm pitch [measured: dark lines at s 17.1 / 18.4 / 23.2 / 24.7 across the inner edge, y
+157.5 / 158.6 at the top]; inside it the bird is EMBOSSED back up as flat-topped ribbons 3–6 mm wide [measured: e.g.
+3.4 and 4.4 mm plateaus at y 85–95, s 19–31] rising ≈ 1.4 mm from the floor to the wall's level [est: side shadows
+0.6–1.2 mm], soft shoulders, channels 1–2.5 mm between them; the remaining floor pockets hold fine spirals (≈ 0.9–1
+mm pitch); the eyes are a raised ring round a domed centre in their own small round recess (Ø 8–8.5 belly, 7.8 neck
+frieze). Model: `kit.sunkCartouche` (depth 1.4, 3 rim ribs × 1.25 mm, ribbons flush, 0.7 mm shoulders; neck frieze
+1.2 / 2 × 1.2; lid 1.0 / 2 × 0.8), ribbons traced as `band` hints by `ribbons.py` (faces/dev-<zone>.bird.json →
+dev-<zone>.ribbons.json, raised 68 % of the lower cartouche inside its rim, 57 % upper, 63 % frieze, 43 % lid).
 
 | zone | photograph | what [measured unless tagged] |
 | --- | --- | --- |
@@ -97,3 +103,11 @@ mirror pair, like the lower ones (photo-08 crop checked: the U crest is on the o
 see the final report of round 8 (r8-fanghu) and the compare images; in short: the ribbons read thinner and the
 channel network sparser than the photograph, the triangle and foot friezes are schematic, the crown cut-outs and
 the back are not modelled, scale is a guess.
+
+Round 9 (fanghu-bird): the body cartouches, the neck frieze and the lid cartouches redrawn in the bronze's own
+language — sunk field, stepped rim, embossed ribbons (kit.sunkCartouche) — from `band`-hint tracings of the lower,
+upper, frieze and lid birds (ribbons.py; the dev-*.trace.json channel tracings are kept as the earlier evidence and
+still drive the foot frieze and the triangles, which keep the cut-ribbon language). Still different: the ribbons are
+read off a ≈ 3.2 px/mm photograph (± 0.5 mm, and the lid ± 1.5 mm: soft and foreshortened); the ribbon tops carry no
+incised contour lines; the upper birds' crest plumes and tail bars are simplified; the floor spirals are the kit's
+packed leiwen (rounded), not the photograph's individual coils.

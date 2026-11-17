@@ -128,6 +128,9 @@ const shoulderPt = (t, off) => [SH.p[0] + SH.d[0] * t + SH.n[0] * off, SH.p[1] +
 // shank haunch → hock, then the foot hock → toes (tapering, its sole sinking onto the wall)
 const SHANK = makePath([[141, 260.5], [139.6, 254.6], [137, 249.6]], (f) => 6.2 - 0.9 * f)
 const FOOT = makePath([[137, 249.6], [131, 249.4], shoulderPt(5, 5.0), shoulderPt(11, 4.1), shoulderPt(15.6, 3.4)], (f) => 4.9 - 1.6 * f)
+// the thigh: the belly side of the hind quarter, a broad dark strap from under the chest straight down onto the foot
+// (photo: it closes the angle between body and foot; open ground only left of it, under the foreleg)
+const THIGH = makePath([[126.6, 284.5], [125.4, 276], [124.6, 268.5], [125.6, 262.5]], (f) => 4.4 + 0.6 * f)
 // the tail: out of the rump, rolled down and in, tight against the haunch
 const TAILP = makePath([[145.6, 264.8], [149.2, 261.6], [150, 257], [148.2, 253.4], [145.2, 253.4], [144.4, 256.2]], (f) => 2.5 - 0.9 * f)
 export const HANDLE = {
@@ -147,17 +150,21 @@ export function handleSDF() {
     const S = limb(SHANK, x, y, z, 5.6, 3.8)
     const F = limb(FOOT, x, y, z, 5.0, 3.2)
     const T = limb(TAILP, x, y, z, 2.6, 1.6)
+    const TH = limb(THIGH, x, y, z, 5.4, 3.8)
     d = smin(d, N.d, 2.2)
     d = smin(d, L.d, 1.2)
     d = smin(d, B.d, 1.4)
     // C-volute at the chest (the foreleg's shoulder joint)
     d = smin(d, sdRBox3(x - 124.6, y - 292.8, z, 5.6, 5.6, hz - 0.2, 4.4), 1.6)
     // the paw: a flattened pad pressed on the shoulder, toes forward (up the wall)
-    d = smin(d, sdEllipsoid(x - 108.9, y - 281.4, z, 3.0, 3.6, 4.6), 1.6)
+    d = smin(d, sdEllipsoid(x - 108.0, y - 281.8, z, 3.4, 3.8, 4.6), 1.6)
     // the haunch: a round thigh, fuller across than the body
     d = smin(d, sdEllipsoid(x - 140.8, y - 260.8, z, 8.4, 8.6, 6.8), 2.6)
     d = smin(d, S.d, 2.0)
     d = smin(d, F.d, 2.2)
+    d = smin(d, TH.d, 2.0)
+    // the flesh between thigh, shank and haunch (no daylight there on the bronze: a dark crease, not a hole)
+    d = smin(d, sdEllipsoid(x - 131.8, y - 259.6, z, 4.6, 6.6, 4.8), 2.0)
     // the sole: a flat pad along the wall under the foot (sunk 0.8 mm into it), blended into the foot
     const [sx, sy] = [x - SH.p[0], y - SH.p[1]]
     const st = sx * SH.d[0] + sy * SH.d[1], sn = sx * SH.n[0] + sy * SH.n[1]
@@ -227,14 +234,14 @@ function head(x, y, z) {
   for (const s of [-1, 1]) d = smin(d, sdEllipsoid(x - 126.6, y - 329.5, z - s * 5.6, 2.6, 3.6, 1.6), 1.2)
   // HORNS (hu-fix): a PAIR set side by side across the crown, left and right of the mid-line — short stout BOTTLE horns
   // (瓶形角: a stalk swelling to a rounded knob, photo-11: the left handle shows one knob ≈ 5 mm across in profile, the
-  // right handle the pair's two tips), ≈ 9 mm tall over the brow, leaning a little back and splaying apart
+  // right handle the pair's two tips), ≈ 6 mm tall over the brow (tips at y ≈ 338), leaning a little back and splaying apart
   for (const s of [-1, 1]) {
-    const a = [130.2, 331.6, s * 3.0], b = [129.0, 339.0, s * 4.9], c = [128.7, 340.6, s * 5.3]
+    const a = [130.4, 330.2, s * 2.9], b = [129.5, 336.2, s * 4.6], c = [129.2, 337.4, s * 5.0]
     let hd = sdCone(x, y, z, a, b, 2.1, 1.6)
-    hd = smin(hd, len3(x - c[0], y - c[1], z - c[2]) - 2.35, 1.6) // the bottle's knob
+    hd = smin(hd, sdEllipsoid(x - c[0], y - c[1], z - c[2], 2.0, 2.5, 2.0), 1.4) // the bottle's knob
     // two rings round the stalk
-    const v = (y - a[1]) - 2.6
-    if (v > -1.5 && v < 4.5) hd = smax(hd, -Math.max(Math.abs((((v % 2.4) + 2.4) % 2.4) - 1.2) - 0.3, -hd - 0.4), 0.25)
+    const v = (y - a[1]) - 1.6
+    if (v > -1.2 && v < 2.6) hd = smax(hd, -Math.max(Math.abs((((v % 2.4) + 2.4) % 2.4) - 1.2) - 0.3, -hd - 0.4), 0.25)
     d = smin(d, hd, 1.3)
   }
   return d

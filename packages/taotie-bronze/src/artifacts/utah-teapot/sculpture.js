@@ -135,13 +135,15 @@ export function handleHeadSDF({ at = HEAD_AT } = {}) {
   // local design, mm: t out along the handle, n up off the strap top, b across (symmetric)
   const k = 1.6
   const muzA = [6.2, 5.6, 0], muzB = [13.4, 3.4, 0]
-  const eye = [8.6, 7.9, 4.9], eyeR = 1.85
+  const eye = [8.5, 7.7, 5.0], eyeR = 2.15
   // ram horns (right side; mirrored): root on the crown, back over the temple, down behind the
-  // cheek and forward under the eye, the tip rolling up — a tight spiral lying along the head's side
+  // cheek and forward under the eye, the tip rolling in — a thick coil lying flat on a boss on the
+  // side of the head (so it reads as a solid coiled horn, not a loop)
   const horn = [
-    [4.6, 9.6, 4.4, 2.5], [2.2, 11.4, 6.4, 2.45], [-1.4, 11.0, 8.0, 2.3], [-3.4, 8.4, 8.8, 2.1],
-    [-3.2, 5.0, 9.1, 1.85], [-1.0, 2.9, 9.2, 1.6], [1.8, 3.0, 9.0, 1.35], [3.4, 4.8, 8.7, 1.15], [3.0, 6.6, 8.5, 0.95],
+    [4.0, 10.2, 4.6, 2.7], [1.6, 11.6, 6.6, 2.8], [-1.8, 11.0, 7.9, 2.6], [-3.6, 8.4, 8.5, 2.3], [-3.4, 5.0, 8.7, 2.0],
+    [-1.2, 3.2, 8.8, 1.8], [1.6, 3.6, 8.7, 1.6], [2.8, 5.6, 8.5, 1.4], [1.6, 7.4, 8.3, 1.2],
   ]
+  const hornBoss = [-0.4, 7.2, 7.9]
   const local = (t, n, b) => {
     const ab = Math.abs(b)
     // sleeve round the strap (strap centre at n = −hd), 1.8 mm proud (over the back band's 1.5 mm),
@@ -160,15 +162,16 @@ export function handleHeadSDF({ at = HEAD_AT } = {}) {
     d = smax(d, -sdEll(t - 17.2, n - 1.55, ab, 2.6, 0.5, 3.6), 0.5)
     // nostrils
     d = smax(d, -sdEll(t - 17.0, n - 4.0, ab - 1.6, 0.9, 0.75, 0.75), 0.4)
-    // brow ridge arching over both eyes
-    d = smin(d, sdTube(t, n, b, [[eye[0] - 0.4, eye[1] + 2.2, -6.0, 0.8], [eye[0] + 0.6, eye[1] + 2.8, 0, 0.95], [eye[0] - 0.4, eye[1] + 2.2, 6.0, 0.8]]), 0.9)
+    // brow ridges, one soft arch over each eye, meeting over the nose
+    d = smin(d, sdTube(t, n, ab, [[eye[0] - 1.6, eye[1] + 2.0, 6.6, 1.0], [eye[0] + 0.2, eye[1] + 2.5, eye[2], 1.25], [eye[0] + 1.0, eye[1] + 2.0, 1.6, 1.1], [eye[0] + 1.1, eye[1] + 1.8, 0, 1.0]]), 1.4)
     // eyes: bulging, looking out-and-sideways, with a sunk pupil
     {
       const ex = t - eye[0], ey = n - eye[1], ez = ab - eye[2]
       d = smin(d, sdEll(ex, ey, ez, eyeR * 1.15, eyeR * 0.9, eyeR), 0.7)
       d = smax(d, -sdEll(ex - eyeR * 0.75, ey, ez - eyeR * 0.55, eyeR * 0.42, eyeR * 0.4, eyeR * 0.42), 0.3)
     }
-    // horns
+    // horns: the coil on its boss
+    d = smin(d, sdEll(t - hornBoss[0], n - hornBoss[1], ab - hornBoss[2], 3.4, 3.4, 1.9), 1.2)
     d = smin(d, sdTube(t, n, ab, horn), 1.0)
     return d
   }

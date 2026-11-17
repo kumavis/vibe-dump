@@ -6,12 +6,12 @@
 //
 // Form (nezu-you/form.js): a ring foot with a flared plain base band and a frieze, a pear-shaped belly that
 // overhangs the foot, a straight neck, a lid with a decorated skirt, a flaring eave, a low conical top with
-// notched ridge flanges along the long axis, a ribbed bud knob and an upturned horn at each end. The bail is a
-// flat strap pivoting on two animal heads at the centres of the broad faces' necks (nezu-you/shell.js).
+// notched ridge flanges along the long axis, a mushroom knob (a spirally grooved cap on a short stalk) and an upturned
+// horn at each end. The bail is a flat strap pivoting on two ram heads in the round, standing ≈ 30 mm proud at the centres of the broad faces' necks (nezu-you/shell.js).
 // Décor (nezu-you/decor.js) is TRACED from the flattened faces of photo-31 (reference/nezu-you/faces/).
 
 import * as THREE from 'three'
-import { OVAL, RK, LV, BODY, LID, BAIL, bailHalfLength, knobSDF, hornSDF, pivotHeadSDF } from './nezu-you/form.js'
+import { OVAL, RK, LV, BODY, LID, BAIL, DECOR_SIZE, bailHalfLength, knobSDF, hornSDF, pivotHeadSDF } from './nezu-you/form.js'
 import { ovalShell, bailStrap } from './nezu-you/shell.js'
 import { bellyPanel, neckPanel, footPanel, skirtPanel, lidPanel, strapPanel } from './nezu-you/decor.js'
 
@@ -29,15 +29,17 @@ export default {
   designation: 'Important Art Object (重要美術品)',
   dimensions: { h: 390, w: 265, d: 263, inferred: true, note: 'inferred from the leiwen pitch on the photographs (±15 %): H with the bail upright; the label gives no dimensions' },
   blurb:
-    'A lidded wine bucket of oval section, carried by a flat strap handle that pivots on two horned animal heads and arches over the lid. ' +
-    'Fat, rounded masks in high relief fill the pear-shaped belly — great G-shaped horns, round boss eyes, hooked bodies — over a fine thunder-pattern ground, between dragon friezes on the neck, the lid and the foot; notched flanges run down the ends and the lid carries a ribbed bud knob and an upturned horn at each end. ' +
+    'A lidded wine bucket of oval section, carried by a flat strap handle that pivots on two bold ram heads and arches over the lid. ' +
+    'Fat, rounded masks in high relief fill the pear-shaped belly — great G-shaped horns, round boss eyes, hooked bodies — over a fine thunder-pattern ground, between dragon friezes on the neck, the lid and the foot; notched flanges run down the ends and the lid carries a grooved mushroom knob and an upturned horn at each end. ' +
     'Reconstructed from two of the project owner’s photographs: the size is inferred, and the back repeats the front.',
   defaultPatina: 'nezu-you',
   views: {
     // photo-31: the phone ≈ 1 m away at about the lid's height (fitted to the outline, dossier §b.1)
     front: { azimuth: 0, elevation: 5.5, fov: 24, fit: 0.86, target: [0, 195, 0], ref: 'front.jpg' },
-    // photo-32: from the front right, higher (≈ 18° at the foot); azimuth from where the pivot head lands (≈ 42°)
-    'three-quarter': { azimuth: 42, elevation: 16, fov: 24, fit: 0.86, target: [0, 192, 0], ref: 'three-quarter.jpg' },
+    // photo-32: from the front right, a little higher. Refitted (round you-form) on landmarks — the foot rim's low
+    // point and limbs, the eye boss, register lines on the facing meridian, both lid horns — and checked by blending
+    // the render on the photograph: azimuth 37.5° (was 42), elevation 9° (was 16); distance not separable, kept
+    'three-quarter': { azimuth: 37.5, elevation: 9, fov: 24, fit: 0.86, target: [0, 192, 0], ref: 'three-quarter.jpg' },
     end: { azimuth: 90, elevation: 6, fov: 24, fit: 0.9, target: [0, 195, 0] },
     back: { azimuth: 180, elevation: 6, fov: 24, fit: 0.9, target: [0, 195, 0] },
     top: { azimuth: 0, elevation: 88, fov: 24, fit: 0.9, target: [0, 200, 0] },
@@ -45,7 +47,7 @@ export default {
     'detail-eye': { azimuth: 0, elevation: 10, fov: 24, fit: 0.12, target: [46, 99, 118], ref: 'detail-eye.jpg' },
     'detail-head': { azimuth: 0, elevation: 6, fov: 24, fit: 0.17, target: [0, 192, 100], ref: 'detail-head.jpg' },
     'detail-strap': { azimuth: 0, elevation: 2, fov: 24, fit: 0.36, target: [0, 285, 110], ref: 'detail-strap.jpg' },
-    'detail-lid': { azimuth: 40, elevation: 18, fov: 24, fit: 0.36, target: [0, 290, 0], ref: 'detail-lid.jpg' },
+    'detail-lid': { azimuth: 37.5, elevation: 9, fov: 24, fit: 0.36, target: [0, 290, 0], ref: 'detail-lid.jpg' },
     'detail-foot': { azimuth: 0, elevation: 14, fov: 24, fit: 0.19, target: [0, 30, 84], ref: 'detail-foot.jpg' },
     // flat faces (KIT.md § Flat faces; reference/nezu-you/faces.json): down photo-31's own line of sight
     'face-belly': { face: { center: [0, 110, 108], normal: [0, 0.0958, 0.9954], up: [0, 0.9954, -0.0958], width: 250, height: 118 }, ref: 'faces/face-belly.jpg' },
@@ -72,10 +74,11 @@ export default {
     const registers = {}
     for (let i = 0; i < jobs.length; i++) {
       const [name, fn] = jobs[i]
+      const pin = DECOR_SIZE[name] // the décor's panel as it was before the form changed (form.js): same mm, laid 1:1 across
       registers[name] = {
-        y0: regs[name][0], y1: regs[name][1], map: 'true', fade: 1.0,
+        y0: regs[name][0], y1: regs[name][1], map: 'true', fade: 1.0, ...(pin ? { mapWidth: pin.width } : {}),
         relief: (k, size) => {
-          if (!panels[name]) panels[name] = fn(kit, { width: Math.max(size.widthBottom, size.widthTop, size.width), height: size.height }, { ppmm, seed: seed + i })
+          if (!panels[name]) panels[name] = fn(kit, pin || { width: Math.max(size.widthBottom, size.widthTop, size.width), height: size.height }, { ppmm, seed: seed + i })
           return panels[name]
         },
       }

@@ -10,7 +10,7 @@
 //        (kit.buildSurface geometries: body halves × registers, inner wall, lid, knob, spout tube,
 //        handle tube). reference/utah-teapot/check-form.mjs proves it against TeapotGeometry.
 // décor: utah-teapot/decor.js (one panel per register; the two broad faces share each panel).
-// sculpture: utah-teapot/sculpture.js (flanges on the ±Z axes, the handle's biting head).
+// sculpture: utah-teapot/sculpture.js (flanges on the ±Z axes, the ram's head crowning the handle).
 
 import * as THREE from 'three'
 import { buildShell, layout } from './utah-teapot/shell.js'
@@ -32,7 +32,7 @@ export default {
   dimensions: { w: 240, h: 117, d: 150, chosen: true },
   blurb:
     'The Utah teapot — Martin Newell’s 1975 model of his Melitta kettle, the most rendered object in computer graphics — exact to his Bézier patches in Blinn’s squashed proportions, re-imagined as a Shang pouring vessel. ' +
-    'Every band, mask, flange, beast head and crust on it comes from the Taotie Kit: a taotie on each broad face, kui dragons on the shoulder, cicada blades round the lid, a masked spout and a biting-head handle. ' +
+    'Every band, mask, flange, beast head and crust on it comes from the Taotie Kit: a taotie on each broad face, kui dragons on the shoulder, cicada blades round the lid, a masked spout and a handle crowned by a ram’s head. ' +
     'Its size (240 mm from spout to handle) is chosen, not measured; no such bronze was ever cast.',
   defaultPatina: 'utah-teapot',
   views: {
@@ -91,7 +91,7 @@ export default {
       groups[s.part].add(m)
     }
 
-    // ---- sculpture: flanges, the handle's head
+    // ---- sculpture: flanges, the handle's ram head
     await onProgress(0.86, 'flanges and head')
     const sc = SC.sculpture(kit, { q, seed, material: plain })
     for (const f of sc.flanges) object.add(f)

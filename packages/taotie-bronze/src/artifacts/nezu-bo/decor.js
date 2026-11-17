@@ -5,7 +5,7 @@
 // drawings in .work/bo-fix/weave-unit-*.png, summarised in KIT.md). One idiom throughout: flat raised ribbons of THREE
 // ribs (rib ≈ 1.6–1.75 mm, groove ≈ 0.55 mm), solid dragon heads with ringed eyes, crests, hooks and knobs, a plain
 // ground, and a real over-under where two bodies cross. Per zone:
-//   top band      a chain of interlocked C-rings, a site every ≈ 42 mm (true), sites flipped by turns — a straight
+//   top band      a chain of interlocked C-rings, 12 sites of 38.5 mm (true) per face, flipped by turns — a straight
 //                 repeat ROUND the bell (whole number of sites per face)
 //   centre panel  one column per half of eight cells (scroll, four dragons, scroll, two dragons), every second turned
 //                 180°, S-links between; the two columns REPEAT (photo-18: not mirrored)

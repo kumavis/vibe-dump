@@ -230,6 +230,7 @@ const mirrorDeco = (deco, axis) => {
   return {
     spirals: (deco.spirals || []).flatMap(([x, y, d, h = 1, a0]) => [[x, y, d, h, a0], [2 * axis - x, y, d, -h, a0 == null ? undefined : 180 - a0]]),
     lines: (deco.lines || []).flatMap((l) => [l, l.map(m)]),
+    coils: (deco.coils || []).flatMap((c) => [c, { ...c, box: [2 * axis - c.box[2], c.box[1], 2 * axis - c.box[0], c.box[3]], c: m(c.c), hand: -(c.hand ?? 1), a0: 180 - (c.a0 ?? 180) }]),
     pockets: (deco.pockets || []).flatMap((k) => [k, { ...k, pts: k.pts.map(m).reverse(), round: Array.isArray(k.round) ? [...k.round].reverse() : k.round }]),
   }
 }
@@ -297,14 +298,14 @@ export const MAIN_LONG = [
   {
     kind: 'plates', name: 'main', data: MAIN_LONG_PLATES, axis: 76,
     opts: { height: MAIN_HEIGHT, shoulder: 1.0, contour: { inset: 1.4, line: 0.62 }, depth: 0.55 },
-    line: 0.62, lineDepth: 0.5, spiral: { pitch: 1.3, ex: 3.0, rIn: 0.3 },
+    line: 0.6, lineDepth: 0.5, spiral: { pitch: 1.0, ex: 3.0, rIn: 0.3 }, // detail-face-long: ≈ 4 turns in a 7.5 mm spiral
+    pack: { rMin: 1.6, rMax: 3.6 }, packOpts: { pitch: 1.0, line: 0.58 }, // the rest of every top: round spirals largest-first (the bronze leaves no bare top)
     deco: {
       spirals: [
         [105.5, 77.2, 7.4, 1], [104.8, 66.4, 7.0, -1], [113.8, 80.8, 4.2, 1], [118.7, 81.2, 4.2, -1], [123.9, 81.2, 4.2, 1], [128.6, 81.0, 4.0, -1], // horn
-        [124.2, 69.8, 5.6, -1], // the horn's curl
         [130.3, 50.2, 5.6, 1], [129.6, 41.6, 3.2, -1], // ear
         [128.6, 26.8, 5.0, 1], [125.8, 9.0, 4.6, -1], // tail
-        [101.4, 21.0, 3.8, 1], [105.8, 21.2, 3.8, -1], [110.4, 21.2, 3.8, 1], [115.0, 21.0, 3.6, -1], [109.6, 12.2, 6.8, 1], // jaw row + curl
+        [101.4, 21.0, 3.8, 1], [105.8, 21.2, 3.8, -1], [110.4, 21.2, 3.8, 1], [115.0, 21.0, 3.6, -1], // jaw row
         [82.8, 80.4, 6.2, 1], [82.8, 71.6, 6.2, -1], [82.8, 63.2, 6.2, 1], [88.6, 52.6, 4.6, 1], // axial strip
         [82.6, 41.4, 6.0, -1], [82.6, 34.0, 6.0, 1], [82.6, 26.6, 6.0, -1], [82.6, 19.4, 6.0, 1], [83.2, 10.0, 6.4, -1],
       ],
@@ -313,6 +314,10 @@ export const MAIN_LONG = [
         ...[106, 110, 114, 118, 122, 126, 130].map((x) => [[x, 86.4], [x, 88.4]]), // ticks on the top band
         [[101.6, 52.6], [114.6, 52.6], [114.6, 47.6]], // brow
         ...[88.4, 89.8].map((y) => [[79.8, y], [86.2, y]]), // the axial strip's scored cap
+      ],
+      coils: [ // the horn and jaw curls: squared-round coils rolled in to an off-centre eye (detail-face-long)
+        { box: [120.2, 64.9, 129.3, 74.9], c: [123.4, 69.0], pitch: 1.3, hand: -1, a0: 0 },
+        { box: [103.5, 7.7, 115.7, 16.9], c: [108.6, 12.6], pitch: 1.3, hand: 1, a0: 180 },
       ],
       pockets: [
         { pts: [[119.6, 64.4], [129.8, 64.4], [129.8, 75.4], [119.6, 75.4]], round: [2.4, 2.4, 3.0, 3.0], depth: 0.5 },
@@ -625,6 +630,7 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
   if (els.length) kit.carve(panel, els, { height: L1, shoulder: 0.55, depth: 0.42, seed, irregularity: 0.8, contour: { inset: 0.8, line: 0.5 } })
   // traced plates (round 6): outlines → kit.tracedPlates, one call per group; hand line work clipped to the plates
   const pockets = []
+  const platePacks = [] // bare plate tops packed with round spirals (after the line work)
   const plateHand = [] // their own sink: the line work on a traced plate is bolder than the island grooves
   let groundOpts = {}
   for (const { s, P, ds } of plateLayers) {
@@ -645,6 +651,11 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
     const g = []
     for (const [x, y, dd, hd = 1, a0] of d.spirals) g.push(spiralPts(P([x, y]), dd * ds, hd, a0 ?? (hd > 0 ? 90 : 270), s.spiral))
     for (const l of d.lines) g.push(kit.shapes.fillet(l.map(P), 0.8, { step: 0.2 }))
+    for (const c of d.coils) {
+      const a = P([c.box[0], c.box[1]]), b = P([c.box[2], c.box[3]])
+      g.push(coilPts({ ...c, box: [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])], c: P(c.c), hand: c.hand ?? 1 }))
+    }
+    if (s.pack) platePacks.push({ items: rest.map((pl) => ({ is: { pts: pl.outer.map(P), r: 0, spirals: s.pack }, P: (q) => q })), level: s.opts.height, o: s.packOpts || {} })
     if (g.length) plateHand.push({ clipLoops: list.flatMap((pl) => [pl.outer, ...(pl.holes || [])]).map((L) => L.map(P)), g, line: s.line ?? LINE, depth: s.lineDepth ?? 0.42 })
     if (s.ground) groundOpts = { ...groundOpts, ...s.ground }
     for (const k of d.pockets) pockets.push({ pts: k.pts.map(P), round: k.round, depth: k.depth ?? 0.3 })
@@ -696,6 +707,9 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
       }
       ctx.restore()
     }, { depth, shoulder: line * 0.45, profile: 'u' })
+  }
+  for (const { items, level, o } of platePacks) {
+    carveSpirals(kit, panel, items, { pitch: 1.25, line: 0.48, depth: 0.45, rMax: 3.4, rMin: 1.5, gap: 0.15, margin: 0.3, shape: 3.0, seed: seed + 5, halfRect: halfRect ?? { x: 0, y: 0, w: W / 2, h: H }, ...o, level })
   }
   // 2b. whatever plateau top is still bare gets round spirals packed largest-first (the bronze leaves
   //     no blank top: detail-face-long) — the packer reads the field, so it avoids every groove cut above

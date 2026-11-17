@@ -5,10 +5,11 @@
 //
 // Form (nezu-bo/form.js): a bell of pointed-oval section standing on its flat mouth, its broad faces swelling a little,
 // widening from the flat top to the middle and near-straight below; hollow, the wall ≈ 7 mm at the mouth (inferred).
-// On the top the openwork crown (nezu-bo/crown.js): a plain bar loop between interlaced dragons, a flat plate with
-// real openings. On each face: the central panel (钲), beside it three rows of three coiled-serpent bosses (枚, true
-// geometry, nezu-bo/bosses.js) parted by two bands of interlace (篆), a twisted edge strip, a twisted band round the
-// top, and below a broad raised border the lower field (鼓) of interlaced dragons (nezu-bo/decor.js).
+// On the top the openwork crown (nezu-bo/crown.js): a plain bar loop over confronted openwork dragons — crooks, curls
+// and S-shapes, not arches (bo-fix) — a flat plate with real openings. On each face: the central panel (钲), beside it
+// three rows of three ROUND coiled-serpent bosses (枚, true geometry, nezu-bo/bosses.js) parted by two bands of
+// interlace (篆), a twisted edge strip, a chain of interlocked rings round the top, and below a broad raised border
+// the lower field (鼓) of interlaced dragons — all woven with the kit's relief/weave.js (nezu-bo/decor.js).
 
 import * as THREE from 'three'
 import { H, K, WALL, TOP, LAYOUT, PANEL_W, halfLength, sectionXZ, faceTheta, pointAt, normalAt } from './nezu-bo/form.js'

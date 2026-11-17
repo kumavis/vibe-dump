@@ -526,24 +526,39 @@ export const PATINA_PRESETS = {
   // so the masks read at a glance
   'utah-teapot': {
     age: 1, tin: 0.15, lead: 0.05, polish: 0.55, tarnish: 0.85, cuprite: 0.55, cupriteTone: 0.3, tinOxide: 0.9,
-    tinOxideTone: 0.8, nobleWarmth: 0.85, malachite: 0.15, carbonate: 0.1, azurite: 0.04, azuriteDepth: 0.7,
-    azuriteScale: 9, blueHabitat: 0.3, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.3, islands: 0.42,
-    malachiteScale: 1.3, crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 55, mottleScale: 9,
+    tinOxideTone: 0.8, nobleWarmth: 0.95, malachite: 0.08, carbonate: 0.1, azurite: 0.03, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0.3, turquoiseTone: 0.4, malachiteHue: 0.42, malachiteTone: 0.2, islands: 0.42,
+    malachiteScale: 1.3, crust: 0.25, chloride: 0.02, soot: 0, crevice: 0.75, patchScale: 55, mottleScale: 9,
     patchiness: 0.7, softness: 0.45, drift: 0.15, earth: 0.06, earthColor: '#5e4a36', calcite: 0.04, streaks: 0.06,
-    burialSide: 0.1, recessDirt: 0.55, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.22, dulling: 0.22,
-    tops: 0.6, topsTone: 0.4, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.8, grain: 0.5, tint: '#ece3d2',
+    burialSide: 0.1, recessDirt: 0.65, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.22, dulling: 0.22,
+    tops: 0.6, topsTone: 0.4, matte: 0.45, ledgeMatte: 0.6, nobleRelief: 0.8, grain: 0.5, tint: '#e6dccb',
   },
   // the CRT desktop as a Shang bronze (a kit showpiece): a dark olive-brown noble skin, malachite gathered in the
   // leiwen, the vent slots and the recesses round the masks; relief tops rubbed paler so the face reads at thumbnail
   // size. The mirror screen is kept bright by its own material (PatinaMaterial meshAge / meshPolish), not here.
   'crt-computer': {
     age: 1, tin: 0.16, lead: 0.05, polish: 0.5, tarnish: 0.85, cuprite: 0.5, cupriteTone: 0.25, tinOxide: 0.9,
-    tinOxideTone: 0.85, nobleWarmth: 0.7, malachite: 0.3, carbonate: 0.08, azurite: 0.03, azuriteDepth: 0.7,
-    azuriteScale: 9, blueHabitat: 0.2, turquoiseTone: 0.4, malachiteHue: 0.4, malachiteTone: 0.38, islands: 0.35,
-    malachiteScale: 1.4, crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 70, mottleScale: 10,
+    tinOxideTone: 0.85, nobleWarmth: 0.7, malachite: 0.17, carbonate: 0.08, azurite: 0.03, azuriteDepth: 0.7,
+    azuriteScale: 9, blueHabitat: 0.2, turquoiseTone: 0.4, malachiteHue: 0.4, malachiteTone: 0.38, islands: 0.22,
+    malachiteScale: 1.4, crust: 0.22, chloride: 0.02, soot: 0, crevice: 1, patchScale: 70, mottleScale: 10,
     patchiness: 0.6, softness: 0.5, drift: 0.15, earth: 0.05, earthColor: '#5e4a36', calcite: 0.03, streaks: 0.05,
     burialSide: 0.1, recessDirt: 0.5, interiorTone: 0.25, wax: 0.12, inlay: 0, wear: 0.24, dulling: 0.2,
     tops: 0.65, topsTone: 0.5, matte: 0.4, ledgeMatte: 0.6, nobleRelief: 0.85, grain: 0.5, tint: '#ebe2d0',
+  },
+  // the rigid airship (a kit showpiece): a pale excavated green-grey skin, malachite crust gathered on the upper hull
+  // where water would lie (up-facing, pale crust islands), darker and cleaner grey-olive metal under the hull and on
+  // the stand, the relief tops rubbed a little bright so the rings of masks and blades read at thumbnail size
+  'airship': {
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.45, tarnish: 0.6, cuprite: 0.45, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.05, nobleWarmth: 0.25, malachite: 0.4, carbonate: 0.05, azurite: 0, azuriteScale: 10,
+    blueHabitat: 0.3, turquoiseTone: 0.45, malachiteHue: 0.4, malachiteTone: 0.6, islands: 0.5, malachiteScale: 1.4,
+    crust: 0.3, chloride: 0.02, soot: 0, crevice: 1, patchScale: 110, mottleScale: 7, patchiness: 0.85, softness: 0.55,
+    drift: 0.25, earth: 0.08, earthColor: '#7a7466', calcite: 0.04, streaks: 0.06, burialSide: 0, recessDirt: 0.55,
+    interiorTone: 0.4, wax: 0.05, inlay: 0, inlayGround: 0, wear: 0.3, dulling: 0.3, tops: 0.75, topsTone: 0.65,
+    matte: 0.85, ledgeMatte: 0.9, nobleRelief: 0.75, tint: '#dfe3d6', upperTone: 1.1, upperHeight: 0.8,
+    lowerBody: 0.6, lowerHeight: 0.7, lowerColor: '#6f7468', speckle: 0.02, speckleScale: 1.2, speckleColor: '#6e4636',
+    crustIsles: 0.1, crustScale: 9, crustColor: '#9fb8a0', crustPlace: 0.9, pustules: 0.012, pustuleScale: 3,
+    pustuleColor: '#2f9a64', grain: 0.6,
   },
 }
 
@@ -552,7 +567,7 @@ export const PATINA_PRESET_GROUPS = {
   Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue', 'nezu-bu', 'nezu-fanglei-dasikong', 'nezu-fanghu', 'nezu-hu', 'nezu-bo'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
-  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot', 'crt-computer'],
+  Examples: ['stanford-dragon', 'suzanne', 'utah-teapot', 'crt-computer', 'airship'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)

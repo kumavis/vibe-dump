@@ -16,7 +16,7 @@ import { YC, REG, hullLayout, halfSurface, noseSurface, nosePanelMap, finOutline
 import * as D from './airship/decor.js'
 import * as P from './airship/parts.js'
 
-const T = [12, 130, 0] // the hull's middle, a little low: what the hero view looks at
+const T = [10, 112, 0] // the hull's middle, a little low: what the hero view looks at
 
 export default {
   id: 'airship',
@@ -35,12 +35,12 @@ export default {
     'Its size (420 mm long) is chosen; no such bronze was ever cast.',
   defaultPatina: 'airship',
   views: {
-    'three-quarter': { azimuth: 36, elevation: -4, fov: 24, fit: 0.98, target: T },
-    front: { azimuth: 0, elevation: 2, fov: 24, fit: 1.0, target: [2, 100, 0] },
-    back: { azimuth: 180, elevation: 2, fov: 24, fit: 1.0, target: [2, 100, 0] },
+    'three-quarter': { azimuth: 36, elevation: -4, fov: 24, fit: 0.7, target: T },
+    front: { azimuth: 0, elevation: 2, fov: 24, fit: 0.76, target: [2, 100, 0] },
+    back: { azimuth: 180, elevation: 2, fov: 24, fit: 0.76, target: [2, 100, 0] },
     side: { azimuth: 90, elevation: 3, fov: 24, fit: 0.5, target: [0, 108, 0] },
-    top: { azimuth: 0, elevation: 82, fov: 24, fit: 0.98, target: [2, 120, 0] },
-    'detail-nose': { azimuth: 62, elevation: 4, fov: 20, fit: 0.17, target: [196, YC, 0] },
+    top: { azimuth: 0, elevation: 82, fov: 24, fit: 0.76, target: [2, 120, 0] },
+    'detail-nose': { azimuth: 58, elevation: 4, fov: 20, fit: 0.2, target: [185, YC - 4, 0] },
     'detail-mask': { azimuth: 4, elevation: 4, fov: 20, fit: 0.24, target: [92, YC, 20] },
     'detail-tail': { azimuth: 28, elevation: 10, fov: 20, fit: 0.3, target: [-160, YC, 0] },
     'detail-gondola': { azimuth: 24, elevation: -12, fov: 20, fit: 0.17, target: [128, 120, 6] },
@@ -53,6 +53,9 @@ export default {
     const seed = 1929
     const plain = new kit.PatinaMaterial()
     const panels = {}
+    const timing = {}
+    let tLast = performance.now()
+    const mark = (k) => { const t = performance.now(); timing[k] = Math.round(t - tLast); tLast = t }
 
     // ---- layout: every panel's size before anything is drawn
     const L = hullLayout()
@@ -69,6 +72,7 @@ export default {
       const [name, fn] = jobs[i]
       await onProgress(0.02 + 0.62 * (i / jobs.length), name)
       panels[name] = fn()
+      mark('panel:' + name)
     }
 
     const mats = new Map()
@@ -90,7 +94,7 @@ export default {
     const body = new THREE.Group()
     body.name = 'hull'
     body.userData.part = 'body'
-    const nu = Math.round(154 * sq) // per half (11 per girder bay); the nose cap takes twice as many
+    const nu = Math.round(112 * sq) // per half (8 per girder bay); the nose cap takes twice as many
     for (const name of Object.keys(REG)) {
       const lay = L[name]
       const relief = panels[name] || null
@@ -103,7 +107,7 @@ export default {
         body.add(mesh(geo, relief, 'body', 'hull-nose'))
         continue
       }
-      const nv = Math.max(6, Math.round(lay.h * (name === 'tail' ? 0.9 : 1.15) * sq))
+      const nv = Math.max(6, Math.round(lay.h * (name === 'tail' ? 0.6 : 0.8) * sq))
       for (const side of [1, -1]) {
         const geo = kit.buildSurface({
           surface: halfSurface(lay, side), segments: [nu, nv], relief,
@@ -113,16 +117,22 @@ export default {
       }
     }
 
+    mark('hull')
     // ---- fins, flanges, cars
     await onProgress(0.74, 'fins')
     const fins = P.fins(kit, { q, relief: panels.fin, outline: L.fin.outline, holes: finHoles(), rect: FIN_RECT, material: matFor(panels.fin) })
+    mark('fins')
     await onProgress(0.78, 'flanges')
     const flanges = P.flanges(kit, { material: plain, seed: seed + 20 })
+    mark('flanges')
     await onProgress(0.8, 'control car')
     const gondola = P.gondola(kit, { q, material: plain, seed: seed + 30 })
+    mark('gondola')
     await onProgress(0.84, 'engine cars')
     const engines = P.engineCars(kit, { q, material: plain, seed: seed + 40 })
+    mark('engines')
     const mooring = P.noseAndTail(kit, { q, material: plain })
+    mark('mooring')
 
     // ---- the stand: foot and mast (a revolve, the slope decorated), the dragon, the cradle
     await onProgress(0.88, 'stand')
@@ -134,7 +144,7 @@ export default {
       const a = 2 * Math.PI * u
       out.pos.set(CRADLE.x + r * Math.sin(a), y, r * Math.cos(a))
     }
-    const nr = Math.round(240 * sq)
+    const nr = Math.round(180 * sq)
     const pieces = [[0, band[0], null], [band[0], band[1], panels.foot], [band[1], prof.length, null]]
     for (const [s0, s1, relief] of pieces) {
       const geo = kit.buildSurface({
@@ -148,11 +158,15 @@ export default {
       relief: panels.dragon, fade: { u0: 0.5, u1: 0.5, v0: 1.5, v1: 1.5 },
     })
     stand.add(mesh(dgeo, panels.dragon, 'stand', 'dragon'))
+    mark('stand-rev')
     stand.add(P.dragonHead(kit, { q, material: plain, seed: seed + 50 }))
+    mark('dragon-head')
     stand.add(P.cradle(kit, { q, material: plain, seed: seed + 60 }))
+    mark('cradle')
 
     const object = new THREE.Group()
     object.name = 'airship'
+    object.userData.timing = timing
     object.add(body, stand, gondola, ...fins, ...flanges, ...engines, ...mooring)
     await onProgress(1, 'done')
     return {

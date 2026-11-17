@@ -100,7 +100,8 @@ export function shoulderHeadSDF() {
         const pitch = 2.6
         const k = Math.round((r - 1.4 - (pitch * th) / (2 * Math.PI)) / pitch)
         const rs = 1.4 + (pitch * th) / (2 * Math.PI) + k * pitch
-        if (r < 9.6 && h > 1) d = smax(d, -(len2(r - rs, h - 5.4) - 0.55), 0.3)
+        const hs = Math.max(Math.sqrt(Math.max(0, 13.7 - (r - 5.4) ** 2)), 3.8 - (r * r) / 7) // the coil's face height
+        if (r < 9.6 && h > 1) d = smax(d, -(len2(r - rs, h - hs - 0.2) - 0.6), 0.3)
       }
       // eyes: round bulging domes in a raised rim, under the horns
       const ec = [sg * 10, 327.5, wallZ(327.5) + 10]
@@ -125,40 +126,45 @@ export function shoulderHeadSDF() {
     d += rough(x, y, z, 0.32, 0.35)
     return d
   }
-  return { sd, bounds: { min: [-31, 305, 88], max: [31, 348, 140] } }
+  return { sd, bounds: { min: [-31, 305, 96.5], max: [31, 348, 140] } }
 }
 
 // ------------------------------------------------------------------ shoulder loop handle (+X)
 
 /**
- * Round r8-dsk-fix, read off detail-handle (photo-34) and photo-03: a SLENDER round bar (Ø ≈ 10 mm) loops out from
- * under the beast head and down, and runs back into the wall; the head lies along the top of the loop, LONG and
- * snouted (≈ 30 mm), its flat brow rising to a raised horn at the back, the snout pointing out to x ≈ 153 and a
- * little down. Top ≈ y 331 (the first reading stood 14 mm too high and 9 mm too far out). −X: this one turned 180°.
+ * Round dsk-lug, re-read off photo-34 (full-resolution crop of the +X handle) and photo-03: the head is a LONG, narrow
+ * beast head lying along the top of the handle — its skull springs from the shoulder at x ≈ 125, its top line runs
+ * nearly level (y ≈ 331 → 329) out to a blunt, squarish SNOUT ending in a flat front at x ≈ 160 (mouth line low on it,
+ * two nostrils); a pair of pointed EARS rise and lean back from the crown at x ≈ 136 (the "horn" the photographs show
+ * at the back of the head); round eyes at x ≈ 147. Out of the underside of the jaw a round BAR (Ø ≈ 10 mm) drops,
+ * swelling outward to x ≈ 158 at y ≈ 302, and curves back into the wall at y ≈ 279. −X: this one turned 180°.
  */
 export function handleSDF() {
-  const sd = (X, Y, z) => {
-    // authored 3 mm higher and 0.5 mm further in than it stands (re-measured against detail-handle, photo-34)
-    const x = X - 0.5, y = Y + 3
-    const W = bodyW(clamp(Y, 270, 346)) - 0.5
-    // the loop bar
-    let d = sdTube(x, y, z, [[W - 6, 319, 0, 4.6], [143, 318, 0, 4.8], [150.5, 311, 0, 5.0], [152, 300, 0, 5.0], [148.5, 289, 0, 4.9], [141, 283, 0, 4.8], [W - 6, 280, 0, 4.6]])
-    // the head: a long low skull along the loop's top, the snout out at x ≈ 153
-    d = smin(d, sdEllipsoid(x - 139, y - 323.5, z, 14, 5.2, 7.2), 2.5)
-    d = smin(d, sdTube(x, y, z, [[140, 323.5, 0, 5.0], [151.5, 321.5, 0, 4.1]]), 2.2)
-    d = smin(d, len3(x - 152.2, y - 321, z) - 4.0, 1.5)
-    // the raised horn at the back of the head
-    d = smin(d, sdTube(x, y, z, [[131, 326, 0, 3.4], [128.5, 331.5, 0, 2.6], [131.5, 333, 0, 1.8]]), 1.8)
+  const sd = (x, y, z) => {
+    const W = bodyW(clamp(y, 270, 346)) - 0.5
+    // the bar
+    let d = sdTube(x, y, z, [[147, 321, 0, 4.6], [154.5, 313, 0, 5.0], [157.4, 302, 0, 5.2], [155.5, 290.5, 0, 5.0], [148.5, 282.5, 0, 4.8], [W - 6, 279, 0, 4.6]])
+    // the skull: a long rounded block tapering toward the snout
+    const f = clamp((x - 125) / 35, 0, 1)
+    const hy = 5.6 - 1.0 * f, hz = 6.0 - 1.2 * f
+    d = smin(d, sdRBox3(x - 141, (y - (326 - 0.6 * f)) * (5.6 / hy), z * (6 / hz), 17, 5.6, 6, 3.4), 1.6)
+    // the snout: a blunt squarish block, flat front at x ≈ 160
+    d = smin(d, sdRBox3(x - 154.5, y - 324.6, z, 6.2, 4.4, 4.6, 2.4), 1.4)
     for (const sg of [-1, 1]) {
-      d = smin(d, len3(x - 143.5, y - 325.5, z - sg * 5.3) - 2.0, 0.8) // eyes
-      d = smax(d, -(len3(x - 151, y - 324.5, z - sg * 3.3) - 1.0), 0.4) // nostrils
+      // pointed ears rising and leaning back from the crown
+      d = smin(d, sdTube(x, y, z, [[136, 330, sg * 3.4, 2.2], [134.5, 334.5, sg * 3.0, 1.2], [133.2, 337.2, sg * 2.6, 0.45]]), 1.2)
+      d = smin(d, sdEllipsoid(x - 147, y - 327.6, z - sg * 5.0, 1.9, 1.7, 1.3), 0.5) // eyes
+      d = smax(d, -sdEllipsoid(x - 160.6, y - 325.2, z - sg * 2.2, 1.2, 1.0, 1.0), 0.4) // nostrils
     }
-    d = smax(d, -smax(Math.abs(y - 319.6) - 0.5, Math.abs(x - 150) - 4, 0.3), 0.3) // mouth line
-    d += rough(x, y, z, 0.3, 0.25)
+    // brow ridge over the eyes
+    d = smin(d, sdTube(x, y, z, [[143, 329.8, -4.6, 1.1], [149, 329.6, 0, 1.2], [143, 329.8, 4.6, 1.1]]), 1.0)
+    // the mouth line along the snout's underside
+    d = smax(d, -Math.max(Math.abs(y - 321.6) - 0.4, Math.abs(x - 156.5) - 4.5), 0.3)
+    d += rough(x, y, z, 0.28, 0.25)
     d = Math.max(d, W - 9 - x)
     return d
   }
-  return { sd, bounds: { min: [118, 268, -14], max: [164, 336, 14] } }
+  return { sd, bounds: { min: [120, 270.5, -9.8], max: [166, 341, 9.8] } }
 }
 
 // ------------------------------------------------------------------ low lug (front)
@@ -189,33 +195,36 @@ function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
 
 /**
  * Round dsk-lug, re-read off photo-34 and photo-03 at full resolution (.work/dsk-lug): there is NO hole in the wall.
- * The dark patch above the head is the shade of a LOOP standing out of the wall and the gap behind the head it
- * carries: its upper edge is soft (a terminator rolling round the loop's top, lit and green above it — the plain
- * patch the photographs show between the blade's border strips), its lower edge is the head's crisp top; in photo-03
- * (camera further right and higher) the band shrinks and a dark crevice opens behind the head's right cheek, and
- * the head overlaps the blade's border strips, which run on behind it — the head stands ≈ 9 mm off the wall, its
- * face ≈ 18–21 mm out.
+ * The dark patch above the head is the shadowed gap behind a head that stands well out from the wall on a loop: its
+ * lower edge is crisp (the head's top), its upper edge soft (shadow, not a rim), fading into a plain lit patch; in
+ * photo-03 (camera further right and higher) the band changes size and a dark crevice opens behind the head's right
+ * cheek, and in both photographs the blade's border strips run on behind the head's flanks — the head stands ≈ 10–15 mm
+ * off the wall (± 50 %), its face ≈ 20 mm out. The photographs cannot strictly tell a loop from a solid stalk; a loop
+ * is the type's norm (and the sister nezu-fanglei's), so a loop is built.
  *
  * Built in a frame sheared onto the wall: (x, y, w = z − wallZ(y)), w = depth out of the wall (the wall here leans
  * back ≈ 16° as it descends; the error of the shear on distances is < 4 %).
- *  - the LOOP: a half ring standing on the wall, axis along x (the rope runs sideways), centre y 91, centre-line
- *    radius 10, a rounded strap ≈ 14 mm wide × 6.4 mm thick; it springs from the wall at y ≈ 104 and returns into it
- *    behind the head at y ≈ 78; its outer face stands 13 mm out.
- *  - the HEAD on the loop's lower front: ≈ 32 mm across its round top (y 84.5), tapering to a blunt muzzle and chin
- *    at y ≈ 37; a convex dome (back ≈ 9 mm, face to 20.5 mm out). A broad ∩ CRESCENT of horns over the top, cut with
- *    short strokes, a panel of small hooks inside it; the horns' inner ends sweep down into a stem; a lozenge on the
- *    brow, curled side ears, round domed eyes with curled lids set wide, curled nostril scrolls, a blunt muzzle.
- *  - a 1 mm root PAD on the wall behind the head and under the loop (the loop's cast root) — it carries the per-vertex
- *    cavity (lugCavity) that darkens the gap, as an occlusion term the plain wall panel cannot have.
+ *  - the LOOP: a ring standing on the wall, axis along x (the rope runs sideways), centre y 78, centre-line radius 9,
+ *    ≈ 13 mm wide × 6.6 mm thick; it springs from the wall at y ≈ 90, just above the head's top, swings out to 12 mm
+ *    and returns into the wall behind the head at y ≈ 66. Seen from the side it is the head's carrier; from the front
+ *    the head hides it.
+ *  - the HEAD on the ring's outer face: ≈ 32 mm across its round top (y 84.5), tapering to a blunt muzzle and chin
+ *    at y ≈ 39; a convex dome, its back 12 mm off the wall (10 at the chin), its face 20 mm (top) to 22.5 mm (brow) out.
+ *    A broad ∩ CRESCENT of horns over the top, cut with short strokes, a panel of small hooks inside it; the horns'
+ *    inner ends sweep down into a stem; a lozenge on the brow, curled side ears, round domed eyes in curled lids set
+ *    wide, curled nostril scrolls, a blunt muzzle with a mouth line.
+ *  - a ≤ 0.7 mm root PAD on the wall behind the head (flush at its edges): the floor of the gap. The dark patch is
+ *    what a camera above the head's top sees of that gap — in the head's cast shadow, and darkened by the per-vertex
+ *    cavity (lugCavity) that the plain wall panel cannot carry.
  */
 export function lugSDF() {
-  const YC = 80, RL = 8.5, TL = 3.0, XL = 6.2 // loop: centre, centre-line radius, half thickness, half width
-  const back = (x, y) => 9 + 2.5 * clamp((y - 45) / 30, 0, 1) + 2.5 * clamp((y - 78) / 6, 0, 1) + 1.3 * Math.min(1, (x / 15) ** 2)
+  const YC = 78, RL = 9, TL = 3.3, XL = 6.4 // loop: centre, centre-line radius, half thickness, half width
+  const back = (x, y) => 12 - 2 * clamp((52 - y) / 13, 0, 1) + 1.3 * Math.min(1, (x / 15) ** 2)
   // the head's front surface (w): a dome rolling back over the top and in to the chin; the muzzle's bulge
   const S = (x, y) => {
-    const dy = y - 60, L = dy > 0 ? 31 : 24
+    const dy = y - 58, L = dy > 0 ? 40 : 24
     const g = Math.sqrt(Math.max(0, 1 - (x / 18.5) ** 2 - (dy / L) ** 2))
-    return 9 + 4 * clamp((y - 45) / 33, 0, 1) + (12 - 2.5 * clamp((y - 45) / 33, 0, 1)) * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
+    return 12 - 2 * clamp((52 - y) / 13, 0, 1) + 10.5 * g + 1.3 * Math.exp(-((x / 7) ** 2) - ((y - 43) / 4) ** 2)
   }
   const hwAt = (y) => (y > 62 ? 12 + 3.6 * clamp((y - 62) / 4.5, 0, 1) : 8 + 4 * Math.pow(clamp((y - 44) / 18, 0, 1), 0.85))
   const outline = (x, y) => {
@@ -227,14 +236,15 @@ export function lugSDF() {
   const sd = (x, y, z) => {
     const w = z - wallZ(y)
     const ax = Math.abs(x)
-    // ---- the loop: a round-cornered ring standing out of the wall, the rope's way running sideways through it
+    // ---- the loop: a ring springing from the wall just above the head's top and returning into it behind the head,
+    //      the rope's way running sideways through it; the head rides on its outer face
     const rr = len2(y - YC, w) - RL
     const qx = ax - XL + 2.0, qr = Math.abs(rr) - TL + 1.6
     let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 1.8
     // ---- the root pad on the wall behind the head: the floor of the gap, flush at its edges (it carries the occlusion)
     {
-      const e = Math.max(ax / 13, Math.abs(y - 75) / 13)
-      d = Math.min(d, Math.max(ax - 13, Math.abs(y - 75) - 13, w - (0.7 - 1.2 * e * e)))
+      const e = Math.max(ax / 13.5, Math.abs(y - 72) / 19)
+      d = Math.min(d, Math.max(ax - 13.5, Math.abs(y - 72) - 19, w - (0.7 - 1.2 * e * e)))
     }
     // ---- the head
     const s0 = S(x, y), wb = back(x, y)
@@ -284,19 +294,33 @@ export function lugSDF() {
     // embedded 2.5 mm in the wall, no deeper
     return Math.max(d, -2.5 - w)
   }
-  return { sd, bounds: { min: [-20, 35, 80], max: [20, 95.5, 116.5] } }
+  // a cheap stand-in for occlusion rays (lugCavity): the loop and the head's bare dome, no décor
+  const proxy = (x, y, z) => {
+    const w = z - wallZ(y), ax = Math.abs(x)
+    const rr = len2(y - YC, w) - RL
+    const ring = Math.max(ax - XL, Math.abs(rr) - TL)
+    const head = Math.max(outline(x, y), w - S(x, y), back(x, y) - w)
+    return Math.min(ring, head) + 1.2 // shrunk: the décor and the soft unions stand proud of it
+  }
+  return { sd, proxy, bounds: { min: [-20, 35, 77.5], max: [20, 95, 118] } }
 }
 
 /**
- * Per-vertex `cavity` (0 recess → 1 exposed) for a mesh of `sdf` standing on the front wall: occlusion sampled along
- * each vertex normal and two tilted rays against the solid AND the wall (z = wallZ(y)). For a PatinaMaterial with
- * `cavityAttribute: true`: the gap behind the lug's head, the loop's underside and the root pad go dark by themselves.
+ * Per-vertex `cavity` (0 recess → 1 exposed) for the lug standing on the front wall, from two terms traced against the
+ * lug's proxy AND the wall (z = wallZ(y)): occlusion sampled along each vertex normal (and two tilted rays), and
+ * SHELTER from the museum's top light — the mean of n·l over seven directions round the zenith (elevation ≥ 60°),
+ * each blocked if the solid or the wall lies in its way. A face turned down, or tucked under the loop or behind the
+ * head, gets none. For a PatinaMaterial with `cavityAttribute: true` (the recess term darkens it: recessDirt).
  */
 export function lugCavity(geo, sdf) {
   const P = geo.attributes.position.array, N = geo.attributes.normal.array
-  const occ = (x, y, z) => Math.min(sdf.sd(x, y, z), (z - wallZ(y)) * 0.96)
+  const f = sdf.proxy || sdf.sd
+  const occ = (x, y, z) => Math.min(f(x, y, z), (z - wallZ(y)) * 0.96)
   const cav = new Float32Array(P.length / 3)
-  const steps = [1.5, 3.5, 7, 11.5]
+  const steps = [1.5, 3.5, 7, 11.5, 16]
+  const sky = [[0, 1, 0]]
+  for (let k = 0; k < 6; k++) { const az = (k * Math.PI) / 3; sky.push([0.5 * Math.sin(az), 0.866, 0.5 * Math.cos(az)]) }
+  const rays = [2, 5, 9, 15, 24]
   for (let i = 0, v = 0; i < P.length; i += 3, v++) {
     const x = P[i], y = P[i + 1], z = P[i + 2]
     let o = 0, wsum = 0
@@ -308,7 +332,19 @@ export function lugCavity(geo, sdf) {
         o += Math.max(0, (s - d) / s) * (1 / s ** 0.3); wsum += 1 / s ** 0.3
       }
     }
-    cav[v] = clamp(1 - 1.6 * (o / wsum), 0, 1)
+    const ao = clamp(1 - 1.6 * (o / wsum), 0, 1)
+    let vis = 0
+    const ox = x + N[i] * 1.5, oy = y + N[i + 1] * 1.5, oz = z + N[i + 2] * 1.5
+    for (const [lx, ly, lz] of sky) {
+      const dt = N[i] * lx + N[i + 1] * ly + N[i + 2] * lz
+      if (dt <= 0) continue
+      let free = true
+      for (const s of rays) if (occ(ox + lx * s, oy + ly * s, oz + lz * s) < 0.2) { free = false; break }
+      if (free) vis += dt
+    }
+    vis /= sky.length
+    const shelter = clamp(vis / 0.025, 0, 1) // the wall itself (leaning back, facing ≈ 16° down) sees ≈ 0.034: lit
+    cav[v] = clamp(1.35 * ao * (0.1 + 0.9 * shelter * shelter), 0, 1) // open faces ≈ 0.8, the kit's plain-mesh constant
   }
   geo.setAttribute('cavity', new THREE.BufferAttribute(cav, 1))
   return geo

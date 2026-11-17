@@ -465,19 +465,21 @@ export function weaveFill(panel, rect, o = {}) {
  * reproduced in KIT.md § Woven interlace).
  */
 export const WEAVE_PRESETS = {
-  // the band round the top: interlocked C-rings, a site every ≈ 42 mm (two rings ≈ 21 mm), flipped by turns so the
+  // the band round the top: interlocked C-rings, a site every ≈ 39–42 mm (two rings ≈ 20 mm; round the bo: 12 sites of
+  // 38.5 mm per face — an even number, as the flip needs), flipped by turns so the
   // links run top and bottom alternately; 3 ribs, ribbon ≈ 5.2 mm (the top band's ribbons are a little narrower)
-  'bo-top-band': { unit: 'chain', cell: [42, 17], tiling: { x: 'flip' }, ribs: 3, rib: 1.4, groove: 0.5, plaque: { w: 168, h: 21 } },
+  'bo-top-band': { unit: 'chain', cell: [40, 17], tiling: { x: 'flip' }, ribs: 3, rib: 1.4, groove: 0.5, plaque: { w: 168, h: 21 } },
   // the panel down the centre: one column of cells ≈ 27 mm wide — a big scroll on top, four dragons, a scroll, two
   // dragons — every second cell turned 180°, S-links between; the two columns are the same column REPEATED (not mirrored)
   'bo-centre-panel': {
     sequence: [{ unit: 'scroll', h: 0.62 }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'scroll', h: 0.62, params: { two: true } }, { unit: 'dragon' }, { unit: 'dragon' }],
-    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, params: { link: true, nest: 1, head: 0.95, headX: 0.12 }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
+    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, params: { link: true, nest: 1, head: 1.15, headX: 0.1 }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
   },
   // the strips between the boss rows: dragons in G-frames ≈ 35 × 34 mm facing the centre, the crest over the frame
-  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, params: { nest: 1, head: 1.1, closed: false }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
-  // the field: dragons in nested G-frames, cells 62 × 31.6 mm, rows flipped by turns, a straight repeat round the bell
-  'bo-field': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 2, head: 0.66, headX: 0.12, closed: true, crest: 'stalk' }, ribs: 3, rib: 1.6, groove: 0.55, plaque: { w: 186, h: 63 } },
+  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, params: { nest: 1, head: 1.2, closed: false }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
+  // the field: dragons in G-frames, cells 62 × 31.6 mm, the crest hooked back over the head (no stalk: the rows' stalks
+  // would line up into spines the bronze does not have), rows flipped by turns, a straight repeat round the bell
+  'bo-field': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 1, head: 0.92, headX: 0.16, closed: true, crest: 'hook' }, ribs: 3, rib: 1.6, groove: 0.55, plaque: { w: 186, h: 63 } },
   // the band round the base = the field's lowest row, worn almost flat on the bronze: lower and softer
-  'bo-base-band': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 2, head: 0.66, headX: 0.12, closed: true }, ribs: 3, rib: 1.6, groove: 0.55, height: 0.55, depth: 0.28, shoulder: 0.5, plaque: { w: 186, h: 32 } },
+  'bo-base-band': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 1, head: 0.92, headX: 0.16, closed: true, crest: 'hook' }, ribs: 3, rib: 1.6, groove: 0.55, height: 0.55, depth: 0.28, shoulder: 0.5, plaque: { w: 186, h: 32 } },
 }

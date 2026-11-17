@@ -336,7 +336,8 @@ export function carveSpirals(kit, panel, items, o = {}) {
   const gap = o.gap ?? 0.45, margin = o.margin ?? 0.42
   const hr = o.halfRect ?? { x: 0, y: 0, w: panel.width, h: panel.height }
   const rng = new kit.Rng(o.seed ?? 1)
-  const top = (x, y) => Math.abs(panel.heightAt(x, y) - L1) < 0.04
+  const level = o.level ?? L1 // the plateau height the packer looks for (traced plates stand higher than L1)
+  const top = (x, y) => Math.abs(panel.heightAt(x, y) - level) < 0.04
   // coils are rounded squares (superellipse exponent `shape`): test that footprint, and pack them by
   // Chebyshev distance, so they tile a band edge to edge the way the carvers filled every plateau
   const shape = o.shape ?? 3.2

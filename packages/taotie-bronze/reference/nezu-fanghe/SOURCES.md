@@ -55,11 +55,11 @@ before anything was measured. Two of the three are photographed; the third appea
 | photo-24 | B | spout face (−Z), elevated | wings; plumed band under the frieze |
 | photo-25 | A | handle face, lobes and frieze, close | notched horns at the top of the frame; same lobe masks as 42/45 |
 | photo-39 | A | −X side, ≈ 12° elevated | peg spout; jaw-headed handle |
-| photo-40 | A? (see below) | three-quarter from the handle-left corner | peg spout; notched horns; LID MIRRORED vs 43/44 |
-| photo-41 | A? (see below) | three-quarter from above, lid | peg spout; notched horn at the eave corner; LID MIRRORED vs 43/44 |
+| photo-40 | A | three-quarter from the handle-left corner | peg spout; notched horns (the lid is symmetric: see round 9) |
+| photo-41 | A | three-quarter from above the handle-left (−X +Z) corner, lid | peg spout; notched horn at the eave corner |
 | photo-42 | A | +X side, ≈ 20° elevated | peg spout; jaw-headed handle |
 | photo-43 | A | three-quarter from above | peg spout |
-| photo-44 | A | lid from above, spout root | peg; lid décor |
+| photo-44 | A | lid from above the handle-right (+X +Z) corner, spout root | peg; lid décor |
 | photo-45 | A | handle face close-up: horns, head, frieze, upper lobe masks | notched horns |
 
 **Round 8 — a lid conflict.** Read with the handle face as +Z, photos 43 and 44 put the crenellated ridge on the
@@ -70,10 +70,15 @@ the cushion's top silhouette from both sides (so it is close to the spine) and, 
 notched horns) or one pair was read wrongly; the model follows 39/42/43/44 (ridge x ≈ −28, hole x ≈ −22, spout
 root x ≈ −22), so its lid does not match the `three-quarter` reference (photo 40) on that point.
 
+**Round 9 — the conflict resolved.** The top is one face, symmetric about the spout → handle axis. Photo 41 is taken
+over the handle-LEFT corner and 44 over the handle-RIGHT corner, so each shows the near half: they are the two
+mirror halves of one symmetric face, not two mirrored lids. In both the ridge and the hole appear on the far side
+of the spine (parallax: they stand high), so both lie on the axis. Photos 40 and 41 are therefore vessel A too.
+
 **THE model is vessel A** (eight frames, including both side views, the handle close-ups and the lid). Vessel B
 is used as a labelled comparandum only for what A's frames do not show: A's spout (−Z) face is never seen head-on;
 photo 24 (B) shows that face exists with the same lobe masks and frieze heads, and A's back is built on that
-pattern WITHOUT B's extra plumed band. Vessel B's photographs are never a view's `ref`.
+pattern WITHOUT B's extra plumed band. Vessel B's photographs are never a view's `ref`, with one labelled exception (round 9, at the lead's request): `lid-axis.jpg`, the clearest view of the top's face scheme, which the set shares.
 
 ## Derived files (all: photograph by the project owner, Nezu Museum, Tokyo, 2026)
 
@@ -87,6 +92,7 @@ pattern WITHOUT B's extra plumed band. Vessel B's photographs are never a view's
 | `detail-lobe.jpg` | right lobe of the handle face | photo-25 | 850 850 1450 1750 |
 | `detail-spout.jpg` | spout, peg and flange | photo-42 | 850 50 1400 800 |
 | `detail-lid.jpg` | lid, hole, spout root | photo-44 | 0 950 1536 2048 |
+| `lid-axis.jpg` | the top seen from the handle end along the axis, view `lid-axis` — **VESSEL B** (the set shares the top's scheme; used as a labelled comparandum for the face layout, never measured) | photo-15 | 362 655 1078 1110 (blurred bystanders, the neighbouring he and the spout's upper part cropped out) |
 | `detail-leg.jpg` | legs and lobe bottoms | photo-42 | 350 1450 1150 1950 |
 | `faces/face-front.jpg` | handle face flattened onto the corner plane z = 105, 4 px/mm | photo-25 | homography, faces.json |
 | `faces/face-side.jpg` | +X face flattened onto x = 105, 3 px/mm | photo-42 | homography, faces.json |

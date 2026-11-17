@@ -7,13 +7,13 @@
 // Form (nezu-hu/form.js): a round, pear-shaped hu — a plain flaring ring foot over a narrow base band; a broad low
 // belly; a sloping shoulder; a tall plain neck flaring to an everted lip. Two feline-dragon handles stand on the
 // shoulder (nezu-hu/handles.js, sculpture). Décor (nezu-hu/decor.js): two bands of stamped panchi interlace — four
-// rows on the shoulder, nine on the body — between twisted ropes and plain cords; the neck is plain but for an
-// incised inscription on the front.
+// rows on the shoulder, nine on the body — between twisted ropes and plain cords, every band split by a fine median
+// line; the neck is plain but for an engraved inscription on the front (hand-traced, not transcribed).
 
 import * as THREE from 'three'
 import { LV, BODY } from './nezu-hu/form.js'
 import { bodyPanel, shoulderPanel, neckPanel } from './nezu-hu/decor.js'
-import { handleSDF } from './nezu-hu/handles.js'
+import { handleSDF, orientConsistently } from './nezu-hu/handles.js'
 
 export default {
   id: 'nezu-hu',
@@ -30,7 +30,7 @@ export default {
   dimensions: { h: 448, w: 341, d: 341, inferred: true, note: 'inferred (±20 %): the label gives no dimensions; scale from the stamped interlace and the inscription (dossier §b.2). H to the rim; W = D = the belly diameter (the handles stay inside it). Proportions are measured on the photograph through a fitted camera.' },
   blurb:
     'A pear-shaped wine flask of the Spring and Autumn period. Its shoulder and belly are covered in rows of tiny interlaced coiled serpents (panchi), pressed into the mould from one carved pattern block again and again, between twisted ropes; two feline dragons climb the shoulder as handles. ' +
-    'The tall plain neck carries an incised inscription. Reconstructed from one of the project owner’s photographs: the size is inferred, and the back repeats the front.',
+    'The front of the tall plain neck bears an engraved inscription of about 25 graphs in seven columns; the photograph shows where its strokes run but does not allow any graph to be read with confidence, so the model reproduces the visible strokes without a transcription. Every raised band of the interlace is split down its centre by a fine incised line. Reconstructed from one of the project owner’s photographs: the size is inferred, and the back repeats the front.',
   defaultPatina: 'nezu-hu',
   views: {
     // photo-11's own station: the fit is almost orthographic (dossier §b.1) — a long lens, 7.8° above the rim
@@ -44,6 +44,7 @@ export default {
     'detail-panchi': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.129, target: [5, 278, 107], ref: 'detail-panchi.jpg' },
     'detail-body': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.155, target: [4, 166, 167], ref: 'detail-body.jpg' },
     'detail-cord': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.06, target: [2, 231, 137], ref: 'detail-cord.jpg' },
+    'detail-inscription': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.206, target: [-5, 364, 90], ref: 'detail-inscription.jpg' },
     'detail-foot': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.172, target: [-56, 48, 126], ref: 'detail-foot.jpg' },
     // TMP-HUFIX
     'tmp-hR-front': { azimuth: 0, elevation: 7.8, fov: 6, fit: 0.2, target: [122, 292, 0] },
@@ -101,6 +102,7 @@ export default {
     const handleMat = new kit.PatinaMaterial()
     const voxel = Math.max(0.45, 0.6 / Math.sqrt(q))
     const hGeo = kit.meshSDF(handleSDF(), { voxel })
+    orientConsistently(hGeo) // one consistent outward winding (meshSDF's per-triangle gradient test flips a few in the grooves)
     const handles = []
     for (const az of [90, -90]) {
       const m = new THREE.Mesh(hGeo, handleMat)

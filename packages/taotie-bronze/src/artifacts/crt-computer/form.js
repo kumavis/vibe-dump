@@ -5,6 +5,7 @@
 // tube for the cable and an animalHead biting the keyboard. Units mm, Y up, front +Z (layout.js).
 
 import * as THREE from 'three'
+import { keyLayout } from './decor.js'
 import { UNIT, MON, BEZEL, SCREEN, FOOT, KEYB, KNOB_Y, KNOB_X, rrect, rrectSD, smooth } from './layout.js'
 
 const HALF_PI = Math.PI / 2
@@ -67,8 +68,8 @@ export function buildUnit(kit, panels, { q = 1, seed = 1987, plain, incise = 'au
   const body = kit.fangBody({
     ...o,
     material: plain,
-    density: 0.62 * Math.sqrt(q),
-    cells: { front: cell(panels.front, 0.95 * Math.sqrt(q)), right: cell(panels.side, 0.62 * Math.sqrt(q)), left: cell(panels.side, 0.62 * Math.sqrt(q)), back: cell(panels.back, 0.4 * Math.sqrt(q)) },
+    density: 0.4 * Math.sqrt(q),
+    cells: { front: cell(panels.front, 0.55 * Math.sqrt(q)), right: cell(panels.side, 0.4 * Math.sqrt(q)), left: cell(panels.side, 0.4 * Math.sqrt(q)), back: cell(panels.back, 0.3 * Math.sqrt(q)) },
   })
   body.position.y = UNIT.y0
   tag(body, 'body', 'unit-body')
@@ -79,8 +80,8 @@ export function buildUnit(kit, panels, { q = 1, seed = 1987, plain, incise = 'au
     outline: rrect([0, 0], lidW, lidD, 6),
     thickness: (x, y) => UNIT.lidT - 2 * Math.max(0, 2.2 + rrectSD(x, y, [0, 0], lidW, lidD, 6)) * 0.8,
     front: panels.lid ? { relief: panels.lid, rect: { x: -lidW / 2, y: -lidD / 2, w: lidW, h: lidD } } : null,
-    spacing: 14 / Math.sqrt(q), reliefSpacing: 2.6 / Math.sqrt(q),
-    refine: (x, y) => (rrectSD(x, y, [0, 0], lidW, lidD, 6) > -4 ? 3 : 99),
+    spacing: 18 / Math.sqrt(q), reliefSpacing: 7 / Math.sqrt(q),
+    refine: (x, y) => (rrectSD(x, y, [0, 0], lidW, lidD, 6) > -4 ? 8 : 99),
     material: panels.lid ? new kit.PatinaMaterial({ relief: panels.lid }) : plain,
     part: 'lid',
   })
@@ -124,7 +125,7 @@ export function buildUnit(kit, panels, { q = 1, seed = 1987, plain, incise = 'au
   drives.push(tag(eject, 'drives', 'eject'))
   const bay = kit.plate({
     outline: rrect([0, 0], 150, 40, 3),
-    thickness: 8, spacing: 8, reliefSpacing: 1.6 / Math.sqrt(q),
+    thickness: 8, spacing: 10, reliefSpacing: 3.5 / Math.sqrt(q),
     front: panels.bay ? { relief: panels.bay, rect: { x: -75, y: -20, w: 150, h: 40 } } : null,
     material: panels.bay ? new kit.PatinaMaterial({ relief: panels.bay }) : plain, part: 'drives',
   })
@@ -174,11 +175,11 @@ export function buildMonitor(kit, panels, { q = 1, seed = 1987, plain, incise = 
   const housing = kit.fangBody({
     ...o,
     material: plain,
-    density: 0.6 * sq,
+    density: 0.4 * sq,
     cells: {
-      front: rows(panels.top, 0.62), // the monitor's top
-      right: rows(panels.right, 0.6),
-      left: rows(panels.left, 0.6),
+      front: rows(panels.top, 0.42), // the monitor's top
+      right: rows(panels.right, 0.4),
+      left: rows(panels.left, 0.4),
       back: null, // the monitor's underside: plain
     },
   })
@@ -223,7 +224,7 @@ export function buildMonitor(kit, panels, { q = 1, seed = 1987, plain, incise = 
     outline: rrect([0, 0], bw, bh, MON.r + 4),
     thickness: (x, y) => 10 - 2 * Math.max(0, 2.5 + rrectSD(x, y, [0, 0], bw, bh, MON.r + 4)) * 0.8,
     front: panels.backCap ? { relief: panels.backCap, rect: { x: -bw / 2, y: -bh / 2, w: bw, h: bh } } : null,
-    spacing: 10, reliefSpacing: 2.4 / sq,
+    spacing: 14, reliefSpacing: 6 / sq,
     material: panels.backCap ? new kit.PatinaMaterial({ relief: panels.backCap }) : plain, part: 'body',
   })
   backCap.rotation.y = Math.PI
@@ -245,8 +246,8 @@ export function buildMonitor(kit, panels, { q = 1, seed = 1987, plain, incise = 
     holes: [rrect([0, dy], SW, SH, BEZEL.screenR, 8)],
     thickness: bezelT,
     front: panels.bezel ? { relief: panels.bezel, rect: { x: -BEZEL.w / 2, y: -BEZEL.h / 2, w: BEZEL.w, h: BEZEL.h } } : null,
-    spacing: 9, reliefSpacing: (q >= 1 ? 1.45 : 2.1) / Math.min(1.4, sq),
-    refine: (x, y) => (rrectSD(x, y, [0, 0], BEZEL.w, BEZEL.h, BEZEL.r) > -5 || rrectSD(x, y, [0, dy], SW, SH, BEZEL.screenR) < 9 ? 2.2 : 99),
+    spacing: 12, reliefSpacing: q >= 1 ? 3.6 : 5.5,
+    refine: (x, y) => (rrectSD(x, y, [0, 0], BEZEL.w, BEZEL.h, BEZEL.r) > -5 || rrectSD(x, y, [0, dy], SW, SH, BEZEL.screenR) < 9 ? 4.5 : 99),
     material: panels.bezel ? new kit.PatinaMaterial({ relief: panels.bezel }) : plain,
     part: 'bezel',
   })
@@ -255,11 +256,11 @@ export function buildMonitor(kit, panels, { q = 1, seed = 1987, plain, incise = 
 
   // the screen: a gently convex bronze mirror, plain and bright, its rim tucked behind the bezel
   const A = SW / 2 + SCREEN.over, B = SH / 2 + SCREEN.over
-  const mirror = new kit.PatinaMaterial({ meshAge: 0.22, meshPolish: 0.95 })
+  const mirror = new kit.PatinaMaterial({ meshAge: 0.12, meshPolish: 0.95 })
   const screen = kit.plate({
     outline: rrect([0, 0], 2 * A, 2 * B, BEZEL.screenR + SCREEN.over, 10),
     thickness: (x, y) => 2 + 2 * SCREEN.bulge * Math.max(0, 1 - (x / A) ** 2) * Math.max(0, 1 - (y / B) ** 2),
-    spacing: 6 / Math.sqrt(sq), material: mirror, part: 'screen',
+    spacing: 8 / Math.sqrt(sq), material: mirror, part: 'screen',
   })
   screen.position.set(0, MON.yc + dy, SCREEN.rimZ - 1)
   g.add(tag(screen, 'screen', 'screen'))
@@ -304,11 +305,16 @@ export function buildKeyboard(kit, panel, { q = 1, plain }) {
     outline: rrect([0, 0], w, d, r, 6),
     thickness: keyboardThickness(),
     front: panel ? { relief: panel, rect: { x: -w / 2, y: -d / 2, w, h: d } } : null,
-    spacing: 10, reliefSpacing: (q >= 1 ? 1.25 : 1.9) / Math.min(1.4, Math.sqrt(q)),
-    refine: (x, y) => (rrectSD(x, y, [0, 0], w, d, r) > -4 ? 2.2 : 99),
+    spacing: 14, reliefSpacing: q >= 1 ? 5.5 : 8,
     material: panel ? new kit.PatinaMaterial({ relief: panel }) : plain,
     part: 'keyboard',
   })
+  // the key-caps: real bosses standing on the deck, in the plate's own frame (front face +z)
+  const T = keyboardThickness()
+  const caps = keycaps(keyLayout().keys, (x, y) => T(x - w / 2, y - d / 2) / 2 - 0.9, { q })
+  const capMesh = new THREE.Mesh(caps, plain)
+  capMesh.position.set(-w / 2, -d / 2, 0)
+  plateMesh.add(capMesh)
   plateMesh.rotation.x = -HALF_PI
   // tilt so the underside lies flat: the plate is symmetric about its mid plane, so the top rises at twice that slope
   const tilt = new THREE.Group()
@@ -323,6 +329,62 @@ export function buildKeyboard(kit, panel, { q = 1, plain }) {
   g.updateMatrixWorld(true)
   tag(g, 'keyboard', 'keyboard')
   return { group: g, plate: plateMesh }
+}
+
+/**
+ * Merged key-cap geometry: each cap a superelliptic pillow (gently domed top, rounded shoulder, straight sides down
+ * into its seat) with a nipple on every ordinary key — the 乳钉 boss grid. keys: deck mm (origin front-left), z0(x, y):
+ * the deck surface under the key (plate frame, +z up off the deck).
+ */
+export function keycaps(keys, z0, { q = 1 } = {}) {
+  const nT = q >= 1 ? 28 : 20
+  const rings = [0, 0.07, 0.14, 0.22, 0.32, 0.46, 0.62, 0.78, 0.9, 0.97, 1]
+  const pos = [], idx = []
+  const H = 5.6, E = 6
+  for (const k of keys) {
+    const a = k.w / 2, b = k.h / 2
+    const base = z0(k.x, k.y)
+    const nip = k.kind === 'key'
+    const start = pos.length / 3
+    // the outline direction for each column (superellipse, exponent E)
+    const cols = []
+    for (let i = 0; i < nT; i++) {
+      const th = (2 * Math.PI * i) / nT
+      const c = Math.cos(th), s = Math.sin(th)
+      cols.push([Math.sign(c) * Math.abs(c) ** (2 / E), Math.sign(s) * Math.abs(s) ** (2 / E)])
+    }
+    const top = (rho, rx, ry) => {
+      let z = H - (k.kind === 'space' ? 0.4 : 0.9) * rho * rho - 1.6 * Math.max(0, rho - 0.86) ** 2 / 0.0196 * 0.6
+      const rr = Math.hypot(rx, ry)
+      if (nip) z += 1.5 * Math.max(0, 1 - (rr / 2.6) ** 2) ** 0.7
+      return z
+    }
+    // apex vertex, then rings, then two wall rows
+    pos.push(k.x, k.y, base + top(0, 0, 0))
+    for (let r = 1; r < rings.length; r++) {
+      const rho = rings[r]
+      for (const [cx, cy] of cols) {
+        const rx = cx * a * rho, ry = cy * b * rho
+        pos.push(k.x + rx, k.y + ry, base + top(rho, rx, ry))
+      }
+    }
+    for (const sink of [1.4, -0.4]) for (const [cx, cy] of cols) pos.push(k.x + cx * (a + 0.25 * (1.4 - sink)), k.y + cy * (b + 0.25 * (1.4 - sink)), base + sink)
+    const ringStart = (r) => start + 1 + (r - 1) * nT
+    for (let i = 0; i < nT; i++) idx.push(start, ringStart(1) + i, ringStart(1) + ((i + 1) % nT))
+    const nR = rings.length - 1 + 2
+    for (let r = 1; r < nR; r++) {
+      const r0 = ringStart(r), r1 = ringStart(r + 1)
+      for (let i = 0; i < nT; i++) {
+        const i1 = (i + 1) % nT
+        idx.push(r0 + i, r1 + i, r1 + i1, r0 + i, r1 + i1, r0 + i1)
+      }
+    }
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  geo.setIndex(idx)
+  geo.computeVertexNormals()
+  return geo
 }
 
 /** a point on the keyboard's top face (plate x, y → world), for the cable's head */
@@ -342,16 +404,16 @@ export function cablePath(head) {
   const ctrl = [
     [head.x, head.y, head.z],
     [head.x - 6, 12, zb - 15],
-    [head.x - 40, CABLE_R, zb - 22],
-    [-200, CABLE_R, zb - 20],
-    [-238, CABLE_R, zb - 30],
-    [-252, CABLE_R, 150],
-    [-236, CABLE_R, 92],
-    [-246, CABLE_R, 20],
-    [-236, CABLE_R, -50],
-    [-246, CABLE_R, -118],
-    [-232, CABLE_R, -168],
-    [-214, CABLE_R, -196],
+    [head.x - 40, CABLE_R + 0.6, zb - 22],
+    [-200, CABLE_R + 0.6, zb - 20],
+    [-238, CABLE_R + 0.6, zb - 30],
+    [-252, CABLE_R + 0.6, 150],
+    [-236, CABLE_R + 0.6, 92],
+    [-246, CABLE_R + 0.6, 20],
+    [-236, CABLE_R + 0.6, -50],
+    [-246, CABLE_R + 0.6, -118],
+    [-232, CABLE_R + 0.6, -168],
+    [-214, CABLE_R + 0.6, -196],
   ].map((p) => new THREE.Vector3(...p))
   return new THREE.CatmullRomCurve3(ctrl, false, 'centripetal')
 }

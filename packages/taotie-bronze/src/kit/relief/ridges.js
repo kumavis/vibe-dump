@@ -328,7 +328,7 @@ export class RidgeWork {
     const m0 = o.margin ?? P.pitch / 2
     if (o.turns && o.pitch == null) {
       const pitch = Math.max(P.width * 1.25, (Dmax - m0 - (o.hole ?? 0)) / (o.turns + 0.25))
-      P = ridgeProfile({ ...P, pitch, width: Math.min(P.width, pitch * 0.62) })
+      P = ridgeProfile({ ...P, pitch, width: pitch * (P.width / P.pitch) })
     }
     const pitch = P.pitch
     const inset = (m) => m0 + Math.floor(m / 4) * pitch
@@ -432,7 +432,7 @@ export class RidgeWork {
       this.slits.push({ pts: [[c[0] - ex[0] * L, c[1] - ex[1] * L], [c[0] + ex[0] * L, c[1] + ex[1] * L]], width: sl.width, depth: sl.depth })
     }
     if (o.ring) {
-      const rg = { ridges: 1, gap: P.pitch - P.width, ...(o.ring === true ? {} : o.ring) }
+      const rg = { ridges: 1, gap: (P.pitch - P.width) * 1.25, ...(o.ring === true ? {} : o.ring) }
       for (let i = 0; i < rg.ridges; i++) {
         const loop = shape(rg.gap + P.width / 2 + i * P.pitch)
         loop.push(loop[0].slice(), loop[1].slice())
