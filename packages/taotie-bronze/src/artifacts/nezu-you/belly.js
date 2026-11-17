@@ -42,26 +42,34 @@ export function bellyDesign(kit, hw) {
   const S = (pts, o) => kit.roundStroke(M(pts), { round: 0.55, inner: 0.2, ...o })
   const P = (pts, round) => kit.roundPoly(M(pts), { round })
 
-  // ---------------------------------------------------------------- the horn: one G mass, the slot a hole in it
+  // ---------------------------------------------------------------- the horn: TWO interlocking blocks (lead's review)
+  // A, the inner block, hooks down from the long top bar; B, the outer block, stands under the bar's end with its
+  // column rising beside it; the deep slot runs between the bar and B. Each block carries a strong internal hook cut
+  // deep (A: the hook dividing the block; B: a G-channel coiling in), plus the banded lines inside their edges.
   const horn = [
-    {
-      outer: P([[31.5, 71.5], [60.5, 69.5], [61, 92.5], [72, 93.5], [72, 75.5], [99.5, 75.5], [99.5, 110.5], [42, 110.5], [31.5, 100]],
-        [7, 3, 1.5, 1.5, 4, 6, 6, 7, 6]),
-      holes: [S([[52.5, 93.2], [58, 96.3], [64, 98.6], [71, 99.9], [86.5, 100.2], [89.6, 97.4], [89.8, 86]], { width: 3.4, start: 'round', end: 'round', round: 0.9, inner: 0.9 })],
-    },
+    { outer: P([[31.5, 71.5], [60.5, 69.5], [61, 94.5], [66.5, 100.5], [91.2, 100.5], [91.2, 110.5], [42, 110.5], [31.5, 100]], [7, 3, 2, 2, 2.5, 2, 7, 6]) },
+    { outer: P([[72.5, 75.5], [99.5, 75.5], [99.5, 110.5], [93, 110.5], [93, 98], [72.5, 98]], [4, 6, 5, 2, 1.5, 3]) },
   ]
-  // ---------------------------------------------------------------- the face bands
+  // ---------------------------------------------------------------- the face bands: BROAD plates, narrow channels
+  // measured on the averaged developed photograph (look/nb-avg.jpg): cheek bands ≈ 8.5–9.5 mm between their channels,
+  // jaw bands ≈ 6.5–7.5 mm, the brow ≈ 7 mm
   const bands = [
-    // brow: banded band from the centre to the end flange
-    { outer: S([[3.5, 51], [11, 58.5], [28, 64.6], [55, 67.2], [85, 67.6], [140, 70.2], [EDGE0 + 3, 71.4]], { width: [4.4, 5.6, 6.2, 6.4, 6.4, 6.2, 6], start: 'point', end: 'flat', round: 0.9, inner: 0.9 }) },
-    // cheek lancets, nested, sweeping down beside the centre
-    { outer: S([[34, 58.6], [26, 54], [21, 45], [19.6, 31], [21, 17.5]], { width: [3.8, 4.8, 5.2, 5.2, 4.6], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[25.5, 58.8], [17.5, 53], [13.4, 43], [12.6, 28], [14, 9]], { width: [3.8, 4.8, 5.2, 5.2, 4.6], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[16, 57.2], [10, 51.5], [6.6, 41], [6, 26], [6.6, 4]], { width: [3.6, 4.4, 4.8, 4.8, 4.4], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    // jaw: under the eye, the inner band hooked up beside it
-    { outer: S([[25, 22.6], [36, 21.2], [54, 15.4], [70, 15.6], [79.5, 21]], { width: [4.2, 5, 5.4, 5.4, 4.6], start: 'round', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 3.2 }, round: 0.9, inner: 0.9 }) },
-    { outer: S([[21.5, 13.4], [38, 11.6], [58, 8.4], [76, 8.8]], { width: [4, 5, 5, 4.4], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[24, 3.2], [48, 2.6], [72, 2.4]], { width: [3.2, 3.8, 3.4], start: 'round', end: 'round' }) },
+    // brow: from the centre to the end flange
+    { outer: S([[3.5, 51], [11, 58.3], [28, 64.4], [55, 67], [85, 67.4], [140, 70.2], [EDGE0 + 3, 71.4]], { width: [4.4, 6, 7, 7.2, 7.2, 7, 6.6], start: 'point', end: 'flat', round: 0.9, inner: 0.9 }) },
+    // the upper inner C-hook beside the centre, over the brow (nb-avg.jpg: x 6–21, y 76–106)
+    { outer: S([[27, 104.6], [10.6, 103], [8.6, 87.4], [13.2, 80.6]], { width: [6.4, 7.2, 7.2, 6.6], start: 'round', end: 'spiral', spiral: { turns: 0.9, dir: 1, R: 3.4 }, round: 0.9, inner: 0.9 }) },
+    // the row of small crest hooks along the top of the horn (photo-32)
+    { outer: S([[38.5, 113.9], [51, 113.9], [52.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
+    { outer: S([[56, 113.9], [69, 113.9], [70.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
+    { outer: S([[74, 113.9], [87, 113.9], [88.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
+    // cheek: three broad nested bands sweeping down beside the centre, the outer one hugging the eye's socket
+    { outer: S([[35, 55.6], [31, 52.4], [28.7, 44], [28.4, 30], [30.6, 20.6]], { width: [6.4, 8, 8.4, 8.4, 7.6], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
+    { outer: S([[25.5, 55.4], [21, 52], [18.9, 42], [18.6, 28], [19.6, 13.6]], { width: [6.4, 8.2, 8.6, 8.6, 8], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
+    { outer: S([[15.2, 53.6], [11, 50.4], [8.8, 41], [8.6, 26], [9, 5.2]], { width: [5.8, 7.8, 8.2, 8.2, 8], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
+    // jaw: broad bands under the eye, the upper one hooked up at its outer end
+    { outer: S([[33.5, 20.6], [45, 16.6], [60, 15.4], [72.5, 17], [79.5, 22.2]], { width: [5.6, 6.4, 6.6, 6.4, 5.6], start: 'round', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 3.2 }, round: 0.9, inner: 0.9 }) },
+    { outer: S([[24.5, 11.6], [40, 8.6], [60, 7.2], [79, 7.8]], { width: [6.4, 7, 7.2, 6.4], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
+    { outer: S([[18, 2], [48, 1.9], [80, 1.8]], { width: [3.4, 3.6, 3.4], start: 'round', end: 'round' }) },
     // post between the eye and the C-block
     { outer: P([[77.5, 30.5], [88, 32.5], [88, 62.4], [78.5, 63.4]], [2.5, 3, 3, 2.5]) },
   ]
@@ -94,11 +102,13 @@ export function bellyDesign(kit, hw) {
     return o
   }
   const lines = [
-    { c: rr(84, 88.4, 12.6, 13.6, 3.6), w: 0.8 },
-    { c: rr(84, 88.4, 7.4, 8, 2), w: 0.8 },
-    { c: [[82.4, 88.4], [85.6, 88.4]], w: 0.6 },
-    { c: [[46, 99], [45.2, 82], [48, 78.6], [53.6, 78.6], [56, 81.6], [54.4, 85], [50.4, 84.6]], w: 1.3, deep: true }, // the hook dividing the block
-    { c: [[97, 41], [96.5, 49.5], [101, 51.4], [104, 48], [101, 45.6]], w: 1.1, deep: true },
+    // the deep slot between the bar and B, and up between the bar's end and B's column (ground, sunk deep)
+    { c: [[62.6, 97.2], [66.8, 99.25], [92.1, 99.25], [92.1, 110.2]], w: 1.6, deep: true },
+    // A's internal hook, cut deep
+    { c: [[45.6, 101], [45, 82.4], [48, 78.4], [54, 78.4], [56.4, 81.8], [54.4, 85.4], [50.2, 84.8]], w: 1.9, deep: true },
+    // B's G-channel: in from the top-left corner under the slot, round and into the centre
+    { c: [[75.4, 94.6], [89.4, 94.6], [89.4, 79.4], [77.6, 79.4], [77.6, 90.4], [85.4, 90.4], [85.4, 84.6], [81.6, 84.6]], w: 1.8, deep: true },
+    { c: [[97, 41], [96.5, 49.5], [101, 51.4], [104, 48], [101, 45.6]], w: 1.4, deep: true },
   ].map((l) => ({ ...l, c: M(l.c) }))
   const eye = { c: [55, 39.6], d: 39, pupil: { c: [56.2, 43.2], r: 4.7 }, socket: 20.6 }
   const kuiEye = { c: out(160.5, 103), d: 9 }
@@ -142,7 +152,7 @@ export function drawBelly(kit, panel, size, { seed = 0 } = {}) {
       l.c.forEach(([x, y], i) => (i ? ctx.lineTo(cx + side * x, y) : ctx.moveTo(cx + side * x, y)))
       ctx.stroke()
     }
-  }, deep ? { depth: 1.2, shoulder: 0.45, profile: 'u' } : { depth: 0.45, shoulder: 0.22, profile: 'u' })
+  }, deep ? { depth: 1.7, shoulder: 0.55, profile: 'u' } : { depth: 0.45, shoulder: 0.22, profile: 'u' })
   // 3) the eyes: a broad flat-domed disc in a sunk socket ring, the pupil a deep pit
   for (const side of sides) {
     const e = D.eye, c = [cx + side * e.c[0], e.c[1]]
