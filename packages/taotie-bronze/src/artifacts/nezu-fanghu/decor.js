@@ -9,8 +9,14 @@
 // CUT into it as wide round-shouldered channels (kit.cutRibbons), hollows packed with fine spirals, round eye bosses.
 
 import FOOT from '../../../reference/nezu-fanghu/faces/dev-foot.trace.json'
-import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.ribbons.json'
-import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.ribbons.json'
+// The two body birds as the OWNER reads them (the earlier ribbons.py tracings, dev-low/dev-up.ribbons.json, cut the
+// birds into pieces and are no longer used here):
+//  lower — the owner's own outline drawn over photo-08 (reference/nezu-fanghu/owner-trace-phoenix.json): ONE broad
+//          raised bird filling the cartouche, the sunk parts only the narrow channels and bays between its parts;
+//  upper — the figure/ground map a classifier learnt from that outline and from the owner's corrections
+//          (tools/propose.py, tools/snap.py; owner-scribbles-1.json), read off the upper-left cartouche and mirrored.
+import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.owner.json'
+import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.machine.json'
 import FRIEZE_RIB from '../../../reference/nezu-fanghu/faces/dev-frieze.ribbons.json'
 import LID_RIB from '../../../reference/nezu-fanghu/faces/dev-lid.ribbons.json'
 import FOOT_RIB from '../../../reference/nezu-fanghu/faces/dev-foot.ribbons.json'
@@ -148,9 +154,11 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   // fields: the belly cartouches (sunk, the birds embossed in them); neck frieze; foot frieze
   // the four body cartouches of this side in ONE call: lower pair (confronted), upper pair
   const nar = side ? 0.85 : 1
-  const fitLow = refitter(Qh, 17 * nar, 19.6, () => 114.6), fitUp = refitter(Qh, 18 * nar, 20.6, (y) => lerpY(UP_OUTER, y))
+  const fitLow = refitter(Qh, 17 * nar, LOW_RIB.span[0], () => LOW_RIB.span[1]), fitUp = refitter(Qh, 18 * nar, 20.6, (y) => lerpY(UP_OUTER, y))
   const mapLow = ([s, y]) => [panelW / 2 + fitLow(s, y), arc(y) - a0], mapUp = ([s, y]) => [panelW / 2 + fitUp(s, y), arc(y) - a0]
-  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, map: mapLow, seed })
+  // lower birds: the field is the bird's own hull + a 1.2 mm moat (no stepped rim: the lines that follow its edge are
+  // drawn ON the bird, as the fine contour line set in from every edge)
+  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, rim: false, contour: { inset: 1.2, line: 0.55, depth: 0.22, maxHalf: 9 }, map: mapLow, seed })
   kit.sunkCartouche(p, cartouchePair(UP_RIB), { ...SUNK, map: mapUp, seed: seed + 1 })
   // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
   kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })
