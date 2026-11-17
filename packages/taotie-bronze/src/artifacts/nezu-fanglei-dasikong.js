@@ -207,7 +207,7 @@ export default {
     // the loop's shade and the gap behind the head). Its own occlusion as a per-vertex cavity; malachite-green tint.
     const lugSdf = lugSDF()
     const lug = mesh(lugCavity(kit.meshSDF(lugSdf, { voxel: voxel * 0.8 }), lugSdf), 'lug')
-    lug.material = new kit.PatinaMaterial({ cavityAttribute: true, meshTint: '#b4d2a6' })
+    lug.material = new kit.PatinaMaterial({ cavityAttribute: true, meshTint: '#93a88c' })
 
     await onProgress(1, 'done')
     void H

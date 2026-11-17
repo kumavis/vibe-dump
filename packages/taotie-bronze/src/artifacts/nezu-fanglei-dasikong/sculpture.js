@@ -218,7 +218,7 @@ function sdCurl2(px, py, cx, cy, R, w, gap, ga) {
  *    cavity (lugCavity) that the plain wall panel cannot carry.
  */
 export function lugSDF() {
-  const YC = 78, RL = 9, TL = 3.3, XL = 6.4 // loop: centre, centre-line radius, half thickness, half width
+  const YC = 71.5, RL = 9, TL = 3.3, XL = 6.4 // loop: centre, centre-line radius, half thickness, half width
   const back = (x, y) => 12 - 2 * clamp((52 - y) / 13, 0, 1) + 1.3 * Math.min(1, (x / 15) ** 2)
   // the head's front surface (w): a dome rolling back over the top and in to the chin; the muzzle's bulge
   const S = (x, y) => {
@@ -243,8 +243,8 @@ export function lugSDF() {
     let d = len2(Math.max(qx, 0), Math.max(qr, 0)) + Math.min(Math.max(qx, qr), 0) - 1.8
     // ---- the root pad on the wall behind the head: the floor of the gap, flush at its edges (it carries the occlusion)
     {
-      const e = Math.max(ax / 13.5, Math.abs(y - 72) / 19)
-      d = Math.min(d, Math.max(ax - 13.5, Math.abs(y - 72) - 19, w - (0.7 - 1.2 * e * e)))
+      const e = Math.max(ax / 13.5, Math.abs(y - 70) / 18)
+      d = Math.min(d, Math.max(ax - 13.5, Math.abs(y - 70) - 18, w - (0.7 - 1.2 * e * e)))
     }
     // ---- the head
     const s0 = S(x, y), wb = back(x, y)
@@ -252,19 +252,19 @@ export function lugSDF() {
     const raise = (f, ht, k = 0.5) => { h = smin(h, Math.max(f, w - (s0 + ht), wb + 1 - w), k) }
     const cut = (f, base, depth, k = 0.25) => { h = smax(h, -Math.max(f, base - depth - w), k) }
     // horn crescent: a broad ∩ band along the top, its arms down to y ≈ 66
-    const eOut = sdEllipse2(x, y - 70, 16.2, 14.5), eIn = sdEllipse2(x, y - 73.5, 10.6, 8.6)
+    const eOut = sdEllipse2(x, y - 70, 16.2, 14.5), eIn = sdEllipse2(x, y - 76, 8.4, 6.6)
     const cres = Math.max(eOut + 0.6, -eIn, 65.8 - y)
     raise(cres, 1.6, 0.6)
     // the horns' inner ends sweep down into a stem on the axis
-    const stem = Math.min(sdSeg2(ax, y, 10.0, 67.0, 1.2, 62.0, 1.2), sdSeg2(ax, y, 0, 72, 0, 60.8, 0.95))
+    const stem = Math.min(sdSeg2(ax, y, 8.5, 68.5, 1.2, 62.0, 1.3), sdSeg2(ax, y, 0, 70, 0, 60.8, 1.0))
     raise(stem, 1.3, 0.6)
     // short strokes across the horn arms
     if (cres < 1) {
       let st = Infinity
       for (const t of [-0.45, -0.17, 0.11, 0.39]) {
         const c = Math.cos(t), sn = Math.sin(t)
-        const px = 13.4 * c, py = 71.6 + 11.6 * sn
-        const nx = c / 13.4, ny = sn / 11.6, nl = len2(nx, ny)
+        const px = 12.6 * c, py = 71.6 + 11.0 * sn
+        const nx = c / 12.6, ny = sn / 11.0, nl = len2(nx, ny)
         st = Math.min(st, sdSeg2(ax, y, px - (nx / nl) * 1.4, py - (ny / nl) * 1.4, px + (nx / nl) * 1.1, py + (ny / nl) * 1.1, 0.33))
       }
       cut(st, s0 + 1.6, 0.55)
@@ -272,8 +272,8 @@ export function lugSDF() {
     // the panel inside the crescent: small hooks incised on it
     if (eIn < 1) {
       const hook = Math.min(
-        sdCurl2(ax, y, 3.4, 78.4, 1.6, 0.3, -2.4, 0.9), sdCurl2(ax, y, 6.9, 74.6, 1.5, 0.3, -0.7, 0.9),
-        sdSeg2(ax, y, 0, 81, 0, 72, 0.3), sdSeg2(ax, y, 1.4, 81.2, 5.2, 81.0, 0.3), sdSeg2(ax, y, 5.2, 78.0, 8.2, 78.8, 0.3))
+        sdCurl2(ax, y, 3.0, 79.0, 1.3, 0.28, -2.4, 0.9), sdCurl2(ax, y, 5.6, 76.0, 1.2, 0.28, -0.7, 0.9),
+        sdSeg2(ax, y, 0, 81.5, 0, 72, 0.28), sdSeg2(ax, y, 1.2, 81.4, 4.4, 81.0, 0.28))
       cut(hook, s0, 0.5)
     }
     // lozenge on the brow
@@ -302,7 +302,7 @@ export function lugSDF() {
     const head = Math.max(outline(x, y), w - S(x, y), back(x, y) - w)
     return Math.min(ring, head) + 1.2 // shrunk: the décor and the soft unions stand proud of it
   }
-  return { sd, proxy, bounds: { min: [-20, 35, 77.5], max: [20, 95, 118] } }
+  return { sd, proxy, bounds: { min: [-20, 35, 77], max: [20, 92, 118] } }
 }
 
 /**
