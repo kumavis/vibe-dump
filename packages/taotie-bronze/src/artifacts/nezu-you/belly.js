@@ -1,172 +1,91 @@
-// Nezu you 饕餮文卣 (90086) — the BELLY MASK, redrawn for the slimmed belly (365 × 119 mm developed).
+// Nezu you 饕餮文卣 (90086) — the BELLY MASK as FAT RAISED SLABS (the slab pass, from the project owner's own tracing).
 //
-// Read off photo-31 developed onto THIS form's belly register (.work/ridge-nezu-you/develop.py: x = developed mm from the
-// face's centre line, y = arc mm above the register's lower edge, 8 px/mm), both halves averaged after a 5.3 mm
-// centring shift (the fitted camera puts the left half ≈ 10 mm further out than the right), and checked against
-// photo-32 (three-quarter.jpg, the right half and the outer field seen from the front right).
+// The owner drew the mask's horn over photo-32 (reference/nezu-you/owner-trace-horn.json): ONE raised slab — a fat C,
+// a wide arch across the top, a blunt foot at the left, the right leg curling in to a hooked point — standing well
+// proud of a ground of fine squared spirals; the lines along it, the notches on its top edge and the small spiral in
+// its curl are INCISED into that one slab. The earlier readings (bundles of thinner bands) were rejected.
+// Every other slab was painted by eye on photo-32, snapped to the photograph's edges (tools/snap.py) and kept only if
+// tools/support.py finds the edge in the photograph (the gate): reference/nezu-you/slabs.json holds every outline
+// (photo-32 px and panel mm, the owner's marked), .work/slab-nezu-you/review.jpg shows them numbered on the photo.
 //
-// LANGUAGE (photo-31 enlarged, photo-32): this mask is drawn in BROAD HIGH PLATES, not thread bundles — round-shouldered
-// masses ≈ 3 mm proud with two incised lines running parallel inside every edge (the "banded" plates), a deep dark slot
-// in the horn, a flat-domed eye disc with a deep pupil in a sunk socket ring, the lower body band's top packed with
-// spirals, and every gap between them a ground of raised square spirals (≈ 1.2 mm pitch: the scale rests on it).
-// So: kit.tracedPlates on outlines built from kit.roundStroke / roundPoly (one creature = one continuous band or mass),
-// kit.pillowBoss for the eye, kit.ridgeGround (fat round threads) for the ground.
+// Frame: panel mm of the belly register (x = developed mm from the face's centre line, y = arc mm above the register's
+// lower edge), RIGHT half; the mask is mirror-symmetric about the centre flange (photo-31 developed), so the left half
+// is the mirror image. Passages the photograph does not settle (no edge where a slab would be: the post between the
+// eye and the C-block, the inner bands beside the centre flange, the side kui's upright bar, the far end of the outer
+// field) are left as spiral ground for the owner to draw.
 //
-// Elements (RIGHT half, mirrored; mm in the developed frame):
-//   horn   two interlocking blocks: A hooks down from the long top bar (a deep hook cut inside it), B stands under the
-//          bar's end with its column rising beside it (a deep G-channel coiling in); the deep slot runs between them
-//   brow   the long banded band under the horns, from the centre to the end flange
-//   eye    Ø 38 disc boss, pupil pit Ø 9.4, sunk socket ring
-//   cheek  three broad (≈ 8.5 mm) nested bands sweeping down beside the centre; the eye's socket rim; the C-hook over
-//          the brow; a row of small crest hooks over the horn
-//   jaw    two banded bands under the eye, the inner one hooked up at its outer end
-//   post   the upright plate between the eye and the outer C-block
-//   C-block the outer G-block beside the eye: a rounded block with a deep pocket and a coiled curl
-//   body   the lower body band running out to the end flange, its left end rolled into a curl, spirals on its top
-//   kui    the upright side kui under the end flange (photo-32): squared head with a round eye and a hooked snout,
-//          a fat body down the field ending in a rolled tail, two quills, a hooked lower jaw
-// The outer field (x > 100) is laid in a frame whose edge is the end flange at the register's widest row and is
-// squeezed per row onto the register's own half-width (the belly narrows to 142 mm at the bottom, 155 at the top):
-// control points are mapped, then the bands are built, so band widths stay constant.
+// Construction (KIT.md § Traced plates, § Ridge work):
+//   slabs     kit.tracedPlates on the outlines — a flat top on a rounded shoulder, an incised line running along
+//             inside every edge (two on the horn, which also carries its notches); the horn the proudest
+//   eye       a broad domed disc (kit.pillowBoss) standing on its socket slab, a sunk ring round it, a deep pupil
+//   C-block   its deep pocket sunk well below the ground
+//   body      the lower body slab carries fine spirals on its top (a leiwen fill)
+//   ground    kit.ridgeGround: fine raised squared spirals packed into everything that is not slab
 
-const EDGE0 = 178 // design frame: the outer field's edge (end flange, less its half thickness) at the widest row
+import SLABS from '../../../reference/nezu-you/slabs.json'
 
-/** the belly's design, right half. hw(y): the register's developed half-width at arc height y. */
-export function bellyDesign(kit, hw) {
-  const out = (x, y) => {
-    if (x <= 100) return [x, y]
-    const e = Math.max(110, hw(y) - 4.6)
-    return [100 + ((x - 100) * (e - 100)) / (EDGE0 - 100), y]
-  }
-  const M = (pts) => pts.map(([x, y]) => out(x, y))
-  const S = (pts, o) => kit.roundStroke(M(pts), { round: 0.55, inner: 0.2, ...o })
-  const P = (pts, round) => kit.roundPoly(M(pts), { round })
-
-  // ---------------------------------------------------------------- the horn: TWO interlocking blocks (lead's review)
-  // A, the inner block, hooks down from the long top bar; B, the outer block, stands under the bar's end with its
-  // column rising beside it; the deep slot runs between the bar and B. Each block carries a strong internal hook cut
-  // deep (A: the hook dividing the block; B: a G-channel coiling in), plus the banded lines inside their edges.
-  const horn = [
-    { outer: P([[31.5, 71.5], [60.5, 69.5], [61, 94.5], [66.5, 100.5], [91.2, 100.5], [91.2, 110.5], [42, 110.5], [31.5, 100]], [7, 3, 2, 2, 2.5, 2, 7, 6]) },
-    { outer: P([[72.5, 75.5], [99.5, 75.5], [99.5, 110.5], [93, 110.5], [93, 98], [72.5, 98]], [4, 6, 5, 2, 1.5, 3]) },
-  ]
-  // ---------------------------------------------------------------- the face bands: BROAD plates, narrow channels
-  // measured on the averaged developed photograph (look/nb-avg.jpg): cheek bands ≈ 8.5–9.5 mm between their channels,
-  // jaw bands ≈ 6.5–7.5 mm, the brow ≈ 7 mm
-  const bands = [
-    // brow: from the centre to the end flange
-    { outer: S([[3.5, 51], [11, 58.3], [28, 64.4], [55, 67], [85, 67.4], [140, 70.2], [EDGE0 + 3, 71.4]], { width: [4.4, 6, 7, 7.2, 7.2, 7, 6.6], start: 'point', end: 'flat', round: 0.9, inner: 0.9 }) },
-    // the upper inner C-hook beside the centre, over the brow (nb-avg.jpg: x 6–21, y 76–106)
-    { outer: S([[27, 104.6], [10.6, 103], [8.6, 87.4], [13.2, 80.6]], { width: [6.4, 7.2, 7.2, 6.6], start: 'round', end: 'spiral', spiral: { turns: 0.9, dir: 1, R: 3.4 }, round: 0.9, inner: 0.9 }) },
-    // the row of small crest hooks along the top of the horn (photo-32)
-    { outer: S([[38.5, 113.9], [51, 113.9], [52.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
-    { outer: S([[56, 113.9], [69, 113.9], [70.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
-    { outer: S([[74, 113.9], [87, 113.9], [88.6, 116.2]], { width: 3.6, start: 'round', end: 'round' }) },
-    // cheek: three broad nested bands sweeping down beside the centre, the outer one hugging the eye's socket
-    { outer: S([[35, 55.6], [31, 52.4], [28.7, 44], [28.4, 30], [30.6, 20.6]], { width: [6.4, 8, 8.4, 8.4, 7.6], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[25.5, 55.4], [21, 52], [18.9, 42], [18.6, 28], [19.6, 13.6]], { width: [6.4, 8.2, 8.6, 8.6, 8], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[15.2, 53.6], [11, 50.4], [8.8, 41], [8.6, 26], [9, 5.2]], { width: [5.8, 7.8, 8.2, 8.2, 8], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    // jaw: broad bands under the eye, the upper one hooked up at its outer end
-    { outer: S([[33.5, 20.6], [45, 16.6], [60, 15.4], [72.5, 17], [79.5, 22.2]], { width: [5.6, 6.4, 6.6, 6.4, 5.6], start: 'round', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 3.2 }, round: 0.9, inner: 0.9 }) },
-    { outer: S([[24.5, 11.6], [40, 8.6], [60, 7.2], [79, 7.8]], { width: [6.4, 7, 7.2, 6.4], start: 'round', end: 'round', round: 0.9, inner: 0.9 }) },
-    { outer: S([[18, 2], [48, 1.9], [80, 1.8]], { width: [3.4, 3.6, 3.4], start: 'round', end: 'round' }) },
-    // post between the eye and the C-block
-    { outer: P([[77.5, 30.5], [88, 32.5], [88, 62.4], [78.5, 63.4]], [2.5, 3, 3, 2.5]) },
-  ]
-  // the eye's socket rim: a plate ring round the disc (the cheek and jaw bands run into it)
-  const ring = (c, r) => Array.from({ length: 72 }, (_, i) => [c[0] + r * Math.cos((i * Math.PI) / 36), c[1] + r * Math.sin((i * Math.PI) / 36)])
-  bands.push({ outer: kit.roundPoly(M(ring([55, 39.6], 24.2)), { round: 0 }), holes: [kit.roundPoly(M(ring([55, 39.6], 20.4)), { round: 0 })] })
-  // the outer C-block: a rounded block with a deep pocket and a coiled curl
-  const cblock = [{
-    outer: P([[90.5, 36.5], [122, 36.5], [122, 62.6], [90.5, 62.6]], [4, 5, 5, 4]),
-    holes: [S([[118.5, 57.2], [101, 57.2], [99, 54.5]], { width: 5, start: 'round', end: 'round', round: 0.9, inner: 0.9 })],
-  }]
-  // the lower body band: rolled curl at its inner end, spirals on its top, out to the end flange
-  const body = [
-    { outer: S([[98, 25.6], [92.5, 28.8], [84.5, 26], [83, 19], [88, 15.2], [93, 17.6]], { width: [5, 5, 5, 5, 4.6, 4], start: 'flat', end: 'round', round: 1, inner: 0.9 }) },
-    { outer: P([[96.5, 13.6], [EDGE0 + 2, 15.4], [EDGE0 + 2, 33.2], [96.5, 31.2]], [3, 2, 2, 5]) },
-  ]
-  // the upright side kui under the end flange (photo-32)
-  const kui = [
-    { outer: P([[136, 91], [171, 91], [171, 114], [136, 114]], [4, 5, 5, 4]) }, // squared head
-    { outer: S([[137, 107], [128.5, 107], [127.5, 94]], { width: 5.4, start: 'flat', end: 'spiral', spiral: { turns: 0.85, dir: 1, R: 3 } }) }, // snout
-    { outer: S([[136, 86.5], [129, 82], [129.5, 74.5]], { width: 4.6, start: 'flat', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 2.8 } }) }, // lower jaw
-    { outer: S([[152, 89], [146.5, 70], [141, 52], [139.5, 38], [144, 24], [158, 21.5]], { width: [8.4, 8.6, 8.4, 8, 7.4, 6], start: 'flat', end: 'spiral', spiral: { turns: 1, dir: 1, R: 4.4, taper: 0.75 } }) }, // body → tail
-    { outer: S([[151, 65], [165, 64.5], [172, 72]], { width: 4.6, start: 'flat', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 2.8 } }) }, // quill
-    { outer: S([[146, 44], [163, 42.5], [171, 50]], { width: 4.6, start: 'flat', end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 2.8 } }) }, // quill
-  ]
-  // sunk lines on the plate tops: the island's rings, the block's hook, the C-block's curl
-  const rr = (cx, cy, w, h, r) => { // a closed rounded rectangle, as a polyline
-    const o = []
-    for (const [qx, qy, a0] of [[1, -1, -90], [1, 1, 0], [-1, 1, 90], [-1, -1, 180]]) {
-      for (let k = 0; k <= 6; k++) { const a = ((a0 + 15 * k) * Math.PI) / 180; o.push([cx + qx * (w / 2 - r) + r * Math.cos(a), cy + qy * (h / 2 - r) + r * Math.sin(a)]) }
-    }
-    o.push(o[0])
-    return o
-  }
-  const lines = [
-    // the deep slot between the bar and B, and up between the bar's end and B's column (ground, sunk deep)
-    { c: [[62.6, 97.2], [66.8, 99.25], [92.1, 99.25], [92.1, 110.2]], w: 1.6, deep: true },
-    // A's internal hook, cut deep
-    { c: [[45.6, 101], [45, 82.4], [48, 78.4], [54, 78.4], [56.4, 81.8], [54.4, 85.4], [50.2, 84.8]], w: 1.9, deep: true },
-    // B's G-channel: in from the top-left corner under the slot, round and into the centre
-    { c: [[75.4, 94.6], [89.4, 94.6], [89.4, 79.4], [77.6, 79.4], [77.6, 90.4], [85.4, 90.4], [85.4, 84.6], [81.6, 84.6]], w: 1.8, deep: true },
-    { c: [[97, 41], [96.5, 49.5], [101, 51.4], [104, 48], [101, 45.6]], w: 1.4, deep: true },
-  ].map((l) => ({ ...l, c: M(l.c) }))
-  const eye = { c: [55, 39.6], d: 39, pupil: { c: [56.2, 43.2], r: 4.7 }, socket: 20.6 }
-  const kuiEye = { c: out(160.5, 103), d: 9 }
-  return { horn, bands, cblock, body, kui, lines, eye, kuiEye }
+const SLAB = {
+  horn: { height: 3.2, shoulder: 1.1, pillow: 0.35, pillowWidth: 4 }, // the owner: "well proud"
+  face: { height: 2.7, shoulder: 1.0, pillow: 0.3, pillowWidth: 3.5 },
+  line: { inset: 1.5, line: 0.75 }, // the incised line along every slab edge
+  line2: { inset: 3.7, line: 0.65 }, // the horn's second line (its wide arch and the curl)
+  depth: 0.6,
 }
 
-const outlineOf = (kit, el) => kit.elementContour(el, 0)
+/** the belly slabs, right half, panel mm: { horn, slabs: [{ name, outline }], body, features } */
+export function bellyDesign() {
+  const horn = []
+  const slabs = []
+  let body = null
+  for (const s of SLABS.slabs) {
+    if (s.by === 'owner') horn.push(s.face_mm)
+    else if (s.name === 'body') body = s.face_mm
+    else slabs.push({ name: s.name, outline: s.face_mm })
+  }
+  return { horn, slabs, body, features: SLABS.features }
+}
 
 /** draw the belly into a panel (mm, y up, centre line at W/2) */
 export function drawBelly(kit, panel, size, { seed = 0 } = {}) {
   const W = panel.width, H = panel.height, cx = W / 2
   const hw = (y) => (size.widthAt ? size.widthAt(Math.max(0, Math.min(H, y))) / 2 : W / 2)
-  const D = bellyDesign(kit, hw)
+  const D = bellyDesign()
   const sides = [1, -1]
-  const toPanel = (side) => ([x, y]) => [cx + side * x, y]
-  const platesOf = (list) => {
-    const out = []
-    for (const side of sides) {
-      const T = toPanel(side)
-      for (const p of list) out.push({ outer: outlineOf(kit, p.outer).map(T), holes: (p.holes || []).map((h) => outlineOf(kit, h).map(T)) })
-    }
-    return out
-  }
-  // register top edge: a low rounded border band, and the sector edges stay plain under the flanges
+  const T = (side) => ([x, y]) => [cx + side * x, y]
+  const both = (list) => sides.flatMap((side) => list.map((o) => ({ outer: o.map(T(side)), holes: [] })))
+  // register top edge: a low rounded border band
   panel.raise((ctx) => ctx.fillRect(0, H - 2.3, W, 1.6), { height: 1.1, shoulder: 0.7, profile: 'plateau' })
-  // 1) the masses: banded plates (two incised lines inside every edge), proud with round shoulders
-  const banded = { contour: { inset: 1.35, line: 0.95 }, contour2: { inset: 3.05, line: 0.85 }, depth: 0.62 }
-  kit.tracedPlates(panel, platesOf(D.horn), { union: true, height: 3.0, shoulder: 1.5, pillow: 0.6, pillowWidth: 4.5, ...banded, seed })
-  kit.tracedPlates(panel, platesOf([...D.bands, ...D.cblock, ...D.kui, D.body[0]]), { union: true, height: 2.6, shoulder: 1.35, pillow: 0.45, pillowWidth: 3.5, ...banded, seed: seed + 1 })
-  kit.tracedPlates(panel, platesOf([D.body[1]]), { height: 2.6, shoulder: 1.0, contour: { inset: 1.2, line: 0.6 }, contour2: false, depth: 0.42,
-    fill: { kind: 'leiwen', inset: 2.3, pitch: 1.1, line: 0.5, cell: [4, 7.5], roundness: 0.35, pairs: 0.3, maxAspect: 1.6 }, seed: seed + 2 })
-  // 2) the deep slot and pocket: sunk well below the ground; the incised lines on the tops
-  const holes = []
-  for (const side of sides) for (const p of [...D.horn, ...D.cblock]) for (const h of p.holes || []) holes.push(outlineOf(kit, h).map(toPanel(side)))
-  panel.sink((ctx) => { ctx.beginPath(); for (const L of holes) { L.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath() } ctx.fill() }, { depth: 2.0, shoulder: 0.6, profile: 'u' })
-  for (const deep of [false, true]) panel.sink((ctx) => {
-    ctx.lineCap = 'round'; ctx.lineJoin = 'round'
-    for (const side of sides) for (const l of D.lines.filter((l) => !!l.deep === deep)) {
-      ctx.lineWidth = l.w
-      ctx.beginPath()
-      l.c.forEach(([x, y], i) => (i ? ctx.lineTo(cx + side * x, y) : ctx.moveTo(cx + side * x, y)))
-      ctx.stroke()
+
+  // 1) the slabs: the owner's horn (two incised lines along it), the face slabs (one line), the body (spirals on top)
+  kit.tracedPlates(panel, both(D.horn), { ...SLAB.horn, contour: SLAB.line, contour2: SLAB.line2, depth: SLAB.depth, seed })
+  kit.tracedPlates(panel, both(D.slabs.map((s) => s.outline)), { ...SLAB.face, contour: SLAB.line, contour2: false, depth: SLAB.depth, seed: seed + 1 })
+  if (D.body) kit.tracedPlates(panel, both([D.body]), { ...SLAB.face, height: 2.5, contour: { inset: 1.3, line: 0.7 }, contour2: false, depth: 0.5,
+    fill: { kind: 'leiwen', inset: 2.4, pitch: 1.1, line: 0.5, cell: [4, 7.5], roundness: 0.35, pairs: 0.3, maxAspect: 1.6 }, seed: seed + 2 })
+
+  // 2) incised detail on the tops: the horn's notches; the C-block's deep pocket
+  const F = D.features
+  panel.sink((ctx) => {
+    ctx.lineCap = 'round'; ctx.lineWidth = 1.1
+    for (const side of sides) for (const n of F.notches.face_mm) {
+      const [a, b] = n.map(T(side)); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke()
     }
-  }, deep ? { depth: 1.7, shoulder: 0.55, profile: 'u' } : { depth: 0.45, shoulder: 0.22, profile: 'u' })
-  // 3) the eyes: a broad flat-domed disc in a sunk socket ring, the pupil a deep pit
+  }, { depth: 0.8, shoulder: 0.3, profile: 'u' })
+  panel.sink((ctx) => {
+    ctx.beginPath()
+    for (const side of sides) { F.pocket.face_mm.map(T(side)).forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath() }
+    ctx.fill()
+  }, { depth: 1.8, shoulder: 0.6, profile: 'u' })
+
+  // 3) the eyes: a broad domed disc on its socket slab, a sunk ring round it, the pupil a deep pit
   for (const side of sides) {
-    const e = D.eye, c = [cx + side * e.c[0], e.c[1]]
-    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(c[0], c[1], e.socket + 0.45, 0, Math.PI * 2); ctx.arc(c[0], c[1], e.socket - 0.45, 0, Math.PI * 2, true); ctx.fill() }, { depth: 0.6, shoulder: 0.3, profile: 'u' })
-    kit.pillowBoss(panel, { c, w: e.d, h: e.d, round: 1, height: 4.2, crown: 0.42, slit: false, ring: false })
-    const pc = [cx + side * e.pupil.c[0], e.pupil.c[1]]
-    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(pc[0], pc[1], e.pupil.r, 0, Math.PI * 2); ctx.fill() }, { depth: 3.0, shoulder: e.pupil.r * 0.45, profile: 'u' })
-    const k = D.kuiEye, kc = [cx + side * k.c[0], k.c[1]]
-    kit.pillowBoss(panel, { c: kc, w: k.d, h: k.d, round: 1, height: 1.6, crown: 0.75, slit: false, ring: false, base: 'field' })
+    const e = F.eye, c = T(side)(e.c), d = 2 * e.r - 4
+    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(c[0], c[1], d / 2 + 0.9, 0, Math.PI * 2); ctx.arc(c[0], c[1], d / 2 + 0.1, 0, Math.PI * 2, true); ctx.fill() }, { depth: 0.6, shoulder: 0.3, profile: 'u' })
+    kit.pillowBoss(panel, { c, w: d, h: d, round: 1, height: 4.4, crown: 0.42, slit: false, ring: false })
+    const pc = T(side)(F.pupil.c)
+    panel.sink((ctx) => { ctx.beginPath(); ctx.arc(pc[0], pc[1], F.pupil.r, 0, Math.PI * 2); ctx.fill() }, { depth: 3.0, shoulder: F.pupil.r * 0.45, profile: 'u' })
   }
-  // 4) the ground: raised square spirals of one fat round thread, packed into everything left
+
+  // 4) the ground: fine raised square spirals of one round thread, packed into everything that is not slab
   const inside = (ctx) => {
     ctx.beginPath()
     for (let y = 0; y <= H; y += 2) ctx.lineTo(cx + hw(y) - 3.4, y)
